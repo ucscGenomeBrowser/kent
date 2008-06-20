@@ -246,3 +246,146 @@
     hgLoadMaf hivVax003Vax004 vax003BAaMaf
 
 #########################################################################
+# Process, check, correct and load VAX003 clinical tables
+
+    mkdir -p /data/home/fanhsu/medical/hiv/hivVax003Vax004/clinical
+    cd /data/home/fanhsu/medical/hiv/hivVax003Vax004/clinical
+
+# copy over original raw data files
+    
+    cp -p /cluster/store12/medical/vaxGen/fromEvie/VAX003/*.txt .
+    ls -l *.txt
+
+# shorten the file name and run processRaw to generate .sql def
+
+    cp "VAX003 RNACD4 match with sequence ID_20080501_EMZ18Jun.txt" VAX003_RNACD4080501.txt
+    processRaw VAX003_RNACD4080501.txt
+
+    hgsql hiv1 -e 'drop database  hivVax003Vax004Build'
+    hgsql hiv1 -e 'create database  hivVax003Vax004Build'
+
+# create hivVax003Vax004Build DB to be used in this build process
+    hgsql hiv1 -e 'create database hivVax003Vax004Build'
+
+# load raw demographic and RNACD3 data
+    hgsql hivVax003Vax004Build < GSID_DEMOG_SEQNO_003Raw.sql
+    hgsql hivVax003Vax004Build < VAX003_RNACD4080501Raw.sql
+
+    hgsql hivVax003Vax004Build -e \
+    'load data local infile "GSID_DEMOG_SEQNO_003.txt" into table GSID_DEMOG_SEQNO_003Raw ignore 1 lines'
+
+    hgsql hivVax003Vax004Build -e \
+    'load data local infile "VAX003_RNACD4080501.txt" into table VAX003_RNACD4080501Raw ignore 1 lines'
+
+# build initial gsidClinicRecTemp table ...
+
+    hgsql hivVax003Vax004Build -N -e \
+    'select "specId",GSID, MBLabcd, DRNACD4, "rna","cd4" from VAX003_RNACD4080501Raw' \
+    >gsidClinicRecTemp.tab
+
+    hgsql hivVax003Vax004Build -e 'drop table gsidClinicRecTemp'
+    getDbTableDef hiv1 gsidClinicRecTemp >gsidClinicRecTemp.sql
+    hgsql hivVax003Vax004Build < gsidClinicRecTemp.sql
+
+    hgsql hivVax003Vax004Build -e \
+    'load data local infile "gsidClinicRecTemp.tab" into table gsidClinicRecTemp'
+
+# build subjLabcode table ...
+
+    hgsql hivVax003Vax004Build -N -e \
+    'select GSID, MBLabcd from VAX003_RNACD4080501Raw where MBLabcd!=""' \
+    | sort -u > subjLabcode.tab
+
+    hgsql hivVax003Vax004Build -e "drop table subjLabcode"
+
+    getDbTableDef hiv1 subjLabcode > subjLabcode.sql
+    hgsql hivVax003Vax004Build < subjLabcode.sql
+    hgsql hivVax003Vax004Build -e \
+    'load data local infile "subjLabcode.tab" into table subjLabcode'
+
+# fill in labCode in gsidClinicRecTemp
+
+    hgsql hivVax003Vax004Build -e \
+    'update gsidClinicRecTemp t, subjLabcode l set t.labCode=l.labCode where t.subjId=l.subjId'
+
+# fill in specimenId
+    hgsql hivVax003Vax004Build -e \
+    'update gsidClinicRecTemp t, GSID_DEMOG_SEQNO_003Raw r set t.specimenId=r.SpecimenNumber where t.subjId=r.subjId and r.SpecimenNumber !=""'
+
+# fill in RNA 
+    hgsql hivVax003Vax004Build -e \
+    'update gsidClinicRecTemp t, VAX003_RNACD4080501Raw r set t.hivQuan=r.RNA where t.subjId=r.GSID and t.daysCollection=r.DRNACD4' 
+
+# fill in CD4
+    hgsql hivVax003Vax004Build -e \
+    'update gsidClinicRecTemp t, VAX003_RNACD4080501Raw r set t.cd4Count=r.CD4ABS where t.subjId=r.GSID and t.daysCollection=r.DRNACD4'
+
+# change RNA "399" to "200" (which will be displayed as "<400")
+    hgsql hivVax003Vax004Build -e \
+    'update gsidClinicRecTemp set hivQuan="200" where hivQuan = "399"'
+
+# update cd4 NULL ...
+    hgsql hivVax003Vax004Build -e \
+    'update gsidClinicRecTemp set cd4Count="NULL" where cd4Count="."'
+
+# Echo update daysCollection NULL ...
+    hgsql hivVax003Vax004Build -e \
+    'update gsidClinicRecTemp set daysCollection="NULL" where daysCollection="."'
+
+# build gsidClinicRecNew table
+
+    hgsql hivVax003Vax004Build -N -e 'select * from gsidClinicRecTemp ' \
+    |uniq |sed -e 's/NULL/-1/g'  > gsidClinicRecNew.tab
+
+    hgsql hivVax003Vax004Build -e 'drop table gsidClinicRecNew'
+    hgsql hivVax003Vax004Build < gsidClinicRecNew.sql
+    hgsql hivVax003Vax004Build -e \
+    'load data local infile "gsidClinicRecNew.tab" into table gsidClinicRecNew'
+
+# set NULLs
+
+    hgsql hivVax003Vax004Build -e \
+    'update gsidClinicRecNew set hivQuan=NULL where hivQuan=-1'
+    hgsql hivVax003Vax004Build -e \
+    'update gsidClinicRecNew set cd4Count=NULL where cd4Count=-1'
+
+    hgsql hivVax003Vax004Build -e \
+    'update gsidClinicRecNew set daysCollection=NULL where daysCollection=-1'
+
+    hgsql hivVax003Vax004Build -e \
+    'update gsidClinicRecNew set specimenId=NULL where specimenId="specId"'
+
+# build gsidClinicRecWithSeqNew table
+
+    hgsql hivVax003Vax004Build -N -e \
+    'select c.* from GSID_DEMOG_SEQNO_003Raw r,gsidClinicRecNew c where SequenceDataStatus="Sequence data exist" and r.subjId=c.subjId and r.labCode=c.labCode' \
+    |sort -u |sed -e 's/NULL/-1/g' >gsidClinicRecWithSeqNew.tmp
+
+    hgsql hivVax003Vax004Build -e 'drop table gsidClinicRecWithSeqNew'
+    hgsql hivVax003Vax004Build < gsidClinicRecWithSeqNew.sql
+    hgsql hivVax003Vax004Build -e \
+    'load data local infile "gsidClinicRecWithSeqNew.tmp" into table gsidClinicRecWithSeqNew'
+    rm gsidClinicRecWithSeqNew.tmp
+
+    hgsql hivVax003Vax004Build -e \
+    'update gsidClinicRecWithSeqNew set hivQuan=NULL where hivQuan=-1'
+    hgsql hivVax003Vax004Build -e \
+    'update gsidClinicRecWithSeqNew set cd4Count=NULL where cd4Count=-1'
+
+# compare with previous old data
+    hgsql hivVax003Vax004Build -N -e 'select * from gsidClinicRecWithSeqNew' |sort -u >j.n
+    hgsql hivVax003Vax004 -N -e 'select * from gsidClinicRecWithSeq'|sort -u  >j.o
+    diff j.o j.n |grep -v "GSID4" >j.diff
+
+# load the newly build data into hivVax003Vax004 tables
+
+    hgsql hivVax003Vax004 -e 'delete from gsidClinicRec where subjId like "GSID3%"'
+    hgsql hivVax003Vax004 -e 'delete from gsidClinicRecWithSeq where subjId like "GSID3%"'
+
+   hgsql hivVax003Vax004 -e \
+    "insert into gsidClinicRec select * from hivVax003Vax004Build.gsidClinicRecNew"
+
+    hgsql hivVax003Vax004 -e \
+    "insert into gsidClinicRecWithSeq select * from hivVax003Vax004Build.gsidClinicRecWithSeqNew"
+
+#########################################################################
