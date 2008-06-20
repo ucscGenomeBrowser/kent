@@ -1525,8 +1525,8 @@ identifier wormBaseId external=WormBase dependency
 "WormBase (C. elegans) ORF ID"
     $ce.sangerGene.name
     $gbd.ceBlastTab.target minCheck=0.90
-    #$ce.kimExpDistance.query
-    #$ce.kimExpDistance.target
+    $ce.kimExpDistance.query minCheck=0.68
+    $ce.kimExpDistance.target minCheck=0.66
     $ce.orfToGene.name
     $ce,!ce1.sangerBlastTab.query
     $ce,!ce1.sangerBlastTab.target
@@ -1546,6 +1546,14 @@ identifier wormBaseId external=WormBase dependency
     $ce,!ce2.rnBlastTab.query
     $ce.scBlastTab.query
     $ce.sangerGeneToWBGeneID.sangerGene
+
+identifier wormBasePseudoGene external=WormBase dependency
+"WormBase (C. elegans) pseudo genes"
+    $ce.sangerPseudoGene.name
+
+identifier wormBaseRnaGene external=WormBase dependency
+"WormBase (C. elegans) RNA genes"
+    $ce.sangerRnaGene.name
 
 identifier flyBaseRefId
 "FlyBase (Drosophila) Reference (Literature)"
