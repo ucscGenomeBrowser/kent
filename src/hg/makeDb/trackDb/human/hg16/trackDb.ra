@@ -633,7 +633,7 @@ dataVersion HapMap release 19
 type bed 4 +
 
     track hapmapLdYri
-    subTrack hapmapLd off
+    subTrack hapmapLd
     shortLabel LD YRI
     longLabel Linkage Disequilibrium for the Yoruba (YRI)
     priority 1
@@ -645,13 +645,13 @@ type bed 4 +
     priority 2
 
     track hapmapLdChb
-    subTrack hapmapLd off
+    subTrack hapmapLd
     shortLabel LD CHB
     longLabel Linkage Disequilibrium for the Han Chinese (CHB)
     priority 3
 
     track hapmapLdJpt
-    subTrack hapmapLd off
+    subTrack hapmapLd
     shortLabel LD JPT
     longLabel Linkage Disequilibrium for the Japanese from Tokyo (JPT)
     priority 4
