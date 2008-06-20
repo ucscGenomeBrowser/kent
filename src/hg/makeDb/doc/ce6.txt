@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.6 2008/06/18 23:43:20 hiram Exp $
+#  $Id: ce6.txt,v 1.7 2008/06/20 18:52:20 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -1985,5 +1985,183 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	enable this line in the ce6/trackDb.ra multiz6way track definition:
 # wiggle phastCons6way
     #	to get the graph to display in the genome browser
+
+############################################################################
+# ANNOTATE MULTIZ6WAY MAF AND LOAD TABLES (DONE - 2008-06-19 - Hiram)
+    ssh kolossus
+
+    mkdir /cluster/data/ce6/bed/multiz6way/anno
+    cd /cluster/data/ce6/bed/multiz6way/anno
+    #	these actually already all exist from previous multiple alignments
+    #	if there are done you will see an ls of them
+    #	or else the twoBitInfo command will be echoed, run it if you want
+    for DB in `cat ../species.lst`
+do
+    CDIR="/cluster/data/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+	echo "creating ${DB}.N.bed"
+	echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+	ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    mkdir maf run
+    cd run
+    rm -f sizes nBeds
+    for DB in `sed -e "s/ce6 //" ../../species.lst`
+do
+    echo "${DB} "
+    ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    cat << '_EOF_' > doAnno.csh
+#!/bin/csh -ef
+set dir = /cluster/data/ce6/bed/multiz6way
+set c = $1
+cat $dir/maf/${c}.maf | nice \
+    mafAddIRows -nBeds=nBeds stdin /cluster/data/ce6/ce6.2bit $2
+'_EOF_'
+    # << happy emacs
+    chmod +x doAnno.csh
+
+
+    cat << '_EOF_' > template
+#LOOP
+./doAnno.csh $(root1) {check out line+ ../maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cut -f1 /cluster/data/ce6/chrom.sizes > chrom.list
+    gensub2 chrom.list single template jobList
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:        217s       3.61m     0.06h    0.00d  0.000 y
+# IO & Wait Time:                    60s       1.01m     0.02h    0.00d  0.000 y
+# Average job time:                  40s       0.66m     0.01h    0.00d
+# Longest finished job:              55s       0.92m     0.02h    0.00d
+# Submission to last job:            58s       0.97m     0.02h    0.00d
+
+    # Load anno/maf
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/multiz6way/anno/maf
+    mkdir -p /gbdb/ce6/multiz6way/anno/maf
+    ln -s /cluster/data/ce6/bed/multiz6way/anno/maf/*.maf \
+      /gbdb/ce6/multiz6way/anno/maf
+    time nice -n +19 /cluster/bin/x86_64/hgLoadMaf \
+	-pathPrefix=/gbdb/ce6/multiz6way/anno/maf ce6 multiz6way
+# XXX problem: Can't hSetDb(ce6) after an hAllocConn(hg18), sorry.
+
+    #	Loaded 420764 mafs in 7 files from /gbdb/ce6/multiz6way/anno/maf
+    #	real    0m9.567s
+
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # machine and then load on hgwdev:
+    ssh kolossus
+    cd /cluster/data/ce6/bed/multiz6way/anno/maf
+    time cat *.maf | \
+    	nice -n +19 hgLoadMafSummary ce6 -minSize=30000 -mergeGap=1500 \
+	-maxSize=200000 -test multiz6waySummary stdin
+    #	Created 45771 summary blocks from 1051000 components
+    #	and 420693 mafs from stdin
+    #	real    0m16.138s
+
+    #	-rw-rw-r--  1  2111948 Jun 20 10:25 multiz6waySummary.tab
+
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/multiz6way/anno/maf
+    time nice -n +19 hgLoadSqlTab ce6 multiz6waySummary \
+	~/kent/src/hg/lib/mafSummary.sql multiz6waySummary.tab
+    #	real    0m0.645
+
+    #	Create per-chrom individual maf files for downloads
+    ssh kkstore02
+    cd /cluster/data/ce6/bed/multiz6way
+    mkdir mafDownloads
+    time for M in anno/maf/chr*.maf
+    do
+	B=`basename $M`
+	nice -n +19 cp -p ${M} mafDownloads/${B}
+	nice -n +19 gzip mafDownloads/${B}
+	echo ${B} done
+    done
+
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/multiz6way
+    #	redone 2007-12-21 to fix difficulty in mafFrags when ce6 was not the
+    #	first species listed
+    # upstream mafs 
+    #	There isn't any refGene table, trying sangerGene instead
+#!/bin/sh
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    nice -n +19 $HOME/bin/$MACHTYPE/featureBits -verbose=2 ce6 \
+        sangerGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | $HOME/kent/src/hg/ratStuff/mafFrags/mafFrags ce6 multiz6way \
+                stdin stdout -orgs=species.lst \
+        | gzip -c > mafDownloads/sangerGene.upstream${S}.maf.gz
+    echo "done sangerGene.upstream${S}.maf.gz"
+done
+
+    cd mafDownloads
+    md5sum *.gz > md5sum.txt
+
+    #	deliver to downloads
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/ce6/multiz6way
+    cd /usr/local/apache/htdocs/goldenPath/ce6/multiz6way
+    ln -s /cluster/data/ce6/bed/multiz6way/mafDownloads/* .
+
+#######################################################################
+# MULTIZ5WAY MAF FRAMES (DONE - 2007-05-03 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/ce6/bed/multiz6way/frames
+    cd /cluster/data/ce6/bed/multiz6way/frames
+    mkdir genes
+    # The following is adapted from the ce4 5-way sequence
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # using sangerGene for ce6
+    # using blastCe6SG for cb3, caePb2, caeRem3, caeJap1 priPac1
+    for qDB in ce6 cb3 caePb2 caeRem3 caeJap1 priPac1
+    do
+      if [ $qDB = "cb3" -o $qDB = "caePb2" -o $qDB = "caeRem3" -o $qDB = "caeJap1" -o $qDB = "priPac1" ]; then
+	geneTbl=blastCe6SG
+	  echo hgsql -N -e \"'select * from '$geneTbl\;\" ${qDB}
+	  hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 2-100 \
+		> /scratch/tmp/$qDB.tmp.psl
+	    mrnaToGene -allCds /scratch/tmp/$qDB.tmp.psl stdout \
+	  | genePredSingleCover stdin stdout | gzip -2c \
+	    > /scratch/tmp/$qDB.tmp.gz
+	  rm -f /scratch/tmp/$qDB.tmp.psl
+	  mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
+      elif [ $qDB = "ce6" ]; then
+	geneTbl=sangerGene
+	  echo hgsql -N -e \"'select * from '$geneTbl\;\" ${qDB}
+	  hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 1-10 \
+	  | genePredSingleCover stdin stdout | gzip -2c \
+	    > /scratch/tmp/$qDB.tmp.gz
+	  mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
+      fi
+    done
+
+    ssh kkstore06
+    cd /cluster/data/ce6/bed/multiz6way/frames
+    cat ../maf/*.maf | nice -n +19 genePredToMafFrames ce6 \
+	stdin stdout ce6 genes/ce6.gp.gz cb3 \
+	genes/cb3.gp.gz caePb2 genes/caePb2.gp.gz caeRem3 \
+	genes/caeRem3.gp.gz caeJap1 genes/caeJap1.gp.gz \
+	priPac1 genes/priPac1.gp.gz \
+	| gzip > multiz6way.mafFrames.gz
+
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/multiz6way/frames
+    nice -n +19 hgLoadMafFrames ce6 multiz6wayFrames multiz6way.mafFrames.gz
 
 ##########################################################################
