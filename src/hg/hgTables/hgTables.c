@@ -28,7 +28,7 @@
 #include "gvUi.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.162 2008/05/30 20:45:36 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.163 2008/06/20 23:18:40 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1242,7 +1242,17 @@ struct slName *fieldList = NULL, *dtfList = NULL, *field, *dtf;
 if (isCustomTrack(table))
     {
     struct customTrack *ct = lookupCt(table);
-    fieldList = getBedFields(ct->fieldCount);
+    if ((ct!= NULL) && (ct->dbTrackType != NULL) &&
+	    sameString(ct->dbTrackType, "maf"))
+	{
+	conn = sqlCtConn(TRUE);
+	fieldList = sqlListFields(conn, ct->dbTableName);
+	sqlDisconnect(&conn);
+	}
+    else
+	{
+	fieldList = getBedFields(ct->fieldCount);
+	}
     }
 else
     {
