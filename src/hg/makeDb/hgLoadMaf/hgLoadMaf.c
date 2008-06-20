@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.21 2008/06/14 14:17:56 braney Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.22 2008/06/20 21:21:08 braney Exp $";
 
 /* Command line options */
 
@@ -105,24 +105,8 @@ if (tmpDir == NULL)
 else
     f = hgCreateTabFile(tmpDir, table);
 
-if (maxNameLen)
-    indexLen = maxNameLen;
-else
-    indexLen = hGetMinIndexLength();
 
-if (loadFile != NULL)
-    {
-    if (!fileExists(loadFile))
-        errAbort("Load file %s doesn't exist\n", loadFile);
-    hSetDb(database);
-    splitPath(loadFile, extFileDir, file, ext);
-    strcat(file, ext);
-    fileList = listDirX(extFileDir, file, TRUE);
-    pathPrefix = extFileDir;
-    conn = hgStartUpdate();
-    scoredRefTableCreate(conn, table, indexLen);
-    }
-else if (testFile != NULL)
+if (testFile != NULL)
     {
     if (!fileExists(testFile))
         errAbort("Test file %s doesn't exist\n", testFile);
@@ -134,12 +118,31 @@ else if (testFile != NULL)
 else
     {
     hSetDb(database);
-    if (pathPrefix == NULL)
-        {
-        safef(extFileDir, sizeof(extFileDir), "/gbdb/%s/%s", database, table);
-        pathPrefix = extFileDir;
-        }
-    fileList = listDirX(pathPrefix, "*.maf", TRUE);
+    if (maxNameLen)
+	indexLen = maxNameLen;
+    else
+	indexLen = hGetMinIndexLength();
+
+    if (loadFile != NULL)
+	{
+	if (!fileExists(loadFile))
+	    errAbort("Load file %s doesn't exist\n", loadFile);
+	splitPath(loadFile, extFileDir, file, ext);
+	strcat(file, ext);
+	pathPrefix = extFileDir;
+	fileList = listDirX(pathPrefix, file, TRUE);
+	}
+    else
+	{
+	if (pathPrefix == NULL)
+	    {
+	    safef(extFileDir, sizeof(extFileDir), 
+		"/gbdb/%s/%s", database, table);
+	    pathPrefix = extFileDir;
+	    }
+	fileList = listDirX(pathPrefix, "*.maf", TRUE);
+	}
+
     conn = hgStartUpdate();
     scoredRefTableCreate(conn, table, indexLen);
     }
