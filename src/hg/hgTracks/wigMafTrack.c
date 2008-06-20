@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.130 2008/06/19 17:22:34 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.131 2008/06/20 22:57:37 braney Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -601,6 +601,12 @@ struct track *wigTrack = track->subtracks;
 
 struct mafPriv *mp = getMafPriv(track);
 mp->list = (char *)-1;   /* no maf's loaded or attempted to load */
+
+/* if we're out in summary view and rendering a custom
+ * track we force dense mode since we don't have
+ * a summary table (yet). */
+if ((winBaseCount >= MAF_SUMMARY_VIEW) && isCustomTrack(track->mapName))
+    track->visibility = tvDense; 
 
 /* Load up mafs and store in track so drawer doesn't have
  * to do it again. */
