@@ -216,7 +216,7 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1433 2008/06/18 21:33:21 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1434 2008/06/20 06:33:03 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18060,9 +18060,12 @@ if (cut)
 	    }
 	sqlFreeResult(&sr);
 	}    
-    puts("<BR><B>Download BED of enzymes in this browser range:</B>&nbsp");
-    printf("<A HREF=\"%s&g=%s&l=%s&r=%s&c=%s&doGetBed=all\">all enzymes</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, l, r, c);
-    printf("<A HREF=\"%s&g=%s&l=%s&r=%s&c=%s&doGetBed=%s\">just %s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, l, r, c, cut->name, cut->name);
+    if (c && o && t)
+        {
+	puts("<BR><B>Download BED of enzymes in this browser range:</B>&nbsp");
+	printf("<A HREF=\"%s&g=%s&l=%s&r=%s&c=%s&doGetBed=all\">all enzymes</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, l, r, c);
+	printf("<A HREF=\"%s&g=%s&l=%s&r=%s&c=%s&doGetBed=%s\">just %s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, l, r, c, cut->name, cut->name);
+	}
     }
 webIncludeHelpFile(CUTTERS_TRACK_NAME, TRUE);
 cutterFree(&cut);
