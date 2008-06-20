@@ -14,11 +14,15 @@ refreshNamedSessionCustomTracks: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/refreshNamedSessionCustomTracks $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/refreshNamedSessionCustomTracks${EXE}
 
-script:
-	chmod a+x refreshSledgeHammer.pl
-	rm -f ${SCRIPTS}/refreshSledgeHammer.pl
-	echo cp -p refreshSledgeHammer.pl ${SCRIPTS}
-	cp -p refreshSledgeHammer.pl ${SCRIPTS}
+SCRIPT_FILES = refreshSledgeHammer.pl makeExclusionList.pl
+
+scripts:
+	@for F in ${SCRIPT_FILES}; do \
+	    chmod +x $$F; \
+	    rm -f ${SCRIPTS}/$${F}; \
+	    echo cp -p $$F ${SCRIPTS}; \
+	    cp -p $$F ${SCRIPTS}; \
+	 done
 
 clean:
 	rm -f $O
