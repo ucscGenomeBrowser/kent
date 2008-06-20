@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/refreshNamedSessionCustomTracks/refreshSledgeHammer.pl instead.
 
-# $Id: refreshSledgeHammer.pl,v 1.1 2007/07/03 04:48:51 angie Exp $
+# $Id: refreshSledgeHammer.pl,v 1.2 2008/06/20 20:49:34 angie Exp $
 
 # Use the awesome power of Perl to force the access time of a file to be
 # updated when read (the NFS cache can prevent that and must be bypassed)
@@ -21,16 +21,14 @@ use strict;
 
 while (<>) {
   my $fileName;
-  if (/^Found live custom track: (\S+)/ ||
-      /^setting \w+File: (\S+)/) {
-    $fileName = $1;
-  } else {
-    next;
+  if (/^(Found live custom track: |setting \w+File: |\/)(\S+)/) {
+    $fileName = $2;
+    $fileName = $1 . $fileName if ($1 eq "/");
+    $fileName =~ s@^\.\./@/usr/local/apache/@;
+    sysopen(FH, $fileName, O_RDONLY | O_DIRECT)
+      || die "Can't open $fileName: $!\n";
+    <FH>;
+    close(FH);
   }
-  $fileName =~ s@^\.\./@/usr/local/apache/@;
-  sysopen(FH, $fileName, O_RDONLY | O_DIRECT)
-    || die "Can't open $fileName: $!";
-  <FH>;
-  close(FH);
 }
 
