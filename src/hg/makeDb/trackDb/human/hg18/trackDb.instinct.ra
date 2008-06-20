@@ -149,3 +149,16 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings wang2005ExpGroups
+
+track chin2006Exp
+shortLabel  Breast Cancer Gene Expression (Chin et. al Cancer Cell 2006)
+longLabel Breast Cancer Gene Expression (Chin et. al. Cancer Cell 2006)
+group x
+priority 45
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings chin2006ExpGroups
+
