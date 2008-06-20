@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.12 2008/06/18 23:49:32 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.13 2008/06/20 06:40:00 angie Exp $";
 
 #define CHROM_COLORS 26
 
@@ -8568,51 +8568,51 @@ return ((trackDbSetting(track->tdb, "subTrack") != NULL) ||
 	 !sameString(track->mapName, track->tdb->tableName)));
 }
 
-static void setSubtrackVisible(char *tableName, bool visible)
-/* Set tableName's _sel variable in cart. */
+static struct trackDb *getSubtrackTdb(struct track *subtrack)
+/* If subtrack->tdb is actually the composite tdb, return the tdb for
+ * the subtrack so we can see its settings. */
 {
-char option[64];
-safef(option, sizeof(option), "%s_sel", tableName);
-cartSetBoolean(cart, option, visible);
+if (sameString(subtrack->mapName, subtrack->tdb->tableName))
+    return subtrack->tdb;
+struct trackDb *subTdb;
+for (subTdb = subtrack->tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
+    if (sameString(subtrack->mapName, subTdb->tableName))
+	return subTdb;
+errAbort("Can't find tdb for subtrack %s -- was getSubtrackTdb called on "
+	 "non-subtrack?", subtrack->mapName);
+return NULL;
 }
 
-static void subtrackVisible(struct track *subtrack)
-/* Determine if subtrack should be displayed.  Save in cart */
+static bool subtrackEnabledInTdb(struct track *subtrack)
+/* Return TRUE unless the subtrack was declared with "subTrack ... off". */
 {
-char option[64];
+bool enabled = TRUE;
 char *words[2];
 char *setting;
-bool selected = TRUE;
-
-/* Note: this will only work when noInherit is used; otherwise subtrack 
- * inherits its parent's tdb: */
-if ((setting = trackDbSetting(subtrack->tdb, "subTrack")) != NULL)
+/* Get the actual subtrack tdb so we can see its subTrack setting (not 
+ * composite tdb's):  */
+struct trackDb *subTdb= getSubtrackTdb(subtrack);
+if ((setting = trackDbSetting(subTdb, "subTrack")) != NULL)
     {
     if (chopLine(cloneString(setting), words) >= 2)
         if (sameString(words[1], "off"))
-            selected = FALSE;
+            enabled = FALSE;
     }
+return enabled;
+}
+
+bool isSubtrackVisible(struct track *subtrack)
+/* Has this subtrack not been deselected in hgTrackUi or declared with
+ * "subTrack ... off"?  -- assumes composite track is visible. */
+{
+bool enabledInTdb = subtrackEnabledInTdb(subtrack);
+char option[64];
 safef(option, sizeof(option), "%s_sel", subtrack->mapName);
-selected = cartCgiUsualBoolean(cart, option, selected);
-setSubtrackVisible(subtrack->mapName, selected);
-}
-
-bool isSubtrackSelected(struct track *tg)
-/* Has this subtrack not been deselected in hgTrackUi? */
-{
-char option[64];
-safef(option, sizeof(option), "%s_sel", tg->mapName);
-return cartCgiUsualBoolean(cart, option, TRUE);
-}
-
-bool isSubtrackVisible(struct track *tg)
-/* Should this subtrack be displayed?  Check cart, not cgi, for selectedness 
- * because by this point we may have overridden CGI settings and saved into 
- * the cart. */
-{
-char option[64];
-safef(option, sizeof(option), "%s_sel", tg->mapName);
-return tg->visibility != tvHide && cartUsualBoolean(cart, option, TRUE);
+boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
+/* Remove redundant cart settings to avoid cart bloat. */
+if (cartOptionalString(cart, option) && enabled == enabledInTdb)
+    cartRemove(cart, option);
+return enabled;
 }
 
 static int subtrackCount(struct track *trackList)
@@ -8681,28 +8681,30 @@ return tg->limitedVis;
 void compositeTrackVis(struct track *track)
 /* set visibilities of subtracks */
 {
-int subtrackCt = 0;
 struct track *subtrack;
 
 if (track->visibility == tvHide)
     return;
 
-/* count number of visible subtracks for this track */
-for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    {
-    subtrackVisible(subtrack);
-    /* visibilities have not been set yet, so don't use isSubtrackVisible 
-     * which gates with visibility: */
-    if (isSubtrackSelected(subtrack))
-        subtrackCt++;
-    }
-/* if no subtracks are selected in cart, turn them all on */
+/* Count visible subtracks; if all subtracks are de-selected in cart,
+ * remove cart settings to restore trackDb defaults.  Otherwise use
+ * selections from cart. */
+int subtrackCt = subtrackCount(track->subtracks);
 if (subtrackCt == 0)
     for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-        setSubtrackVisible(subtrack->mapName, TRUE);
+	{
+	char option[64];
+	safef(option, sizeof(option), "%s_sel", subtrack->mapName);
+	cartRemove(cart, option);
+	}
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    if(!subtrack->limitedVisSet)
-        subtrack->visibility = track->visibility;
+    if (!subtrack->limitedVisSet)
+	{
+	if (isSubtrackVisible(subtrack))
+	    subtrack->visibility = track->visibility;
+	else
+	    subtrack->visibility = tvHide;
+	}
 }
 
 boolean colorsSame(struct rgbColor *a, struct rgbColor *b)
