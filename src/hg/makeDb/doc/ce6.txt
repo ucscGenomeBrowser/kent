@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.7 2008/06/20 18:52:20 hiram Exp $
+#  $Id: ce6.txt,v 1.8 2008/06/20 21:57:58 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -92,6 +92,11 @@ dbDbSpeciesDir worm
     time nice -n +19 doRepeatMasker.pl -bigClusterHub=pk \
 	-buildDir=/cluster/data/ce6/bed/repeatMasker ce6 > do.log 2>&1 &
     #	real    133m17.088s
+
+    #	from the do.log:
+    #	RepeatMasker version development-$Id:
+    #	RepeatMasker,v 1.20 2008/01/16 18:15:45 angie Exp $
+    #	CC   RELEASE 20071204;                                            *
 
 #########################################################################
 # SIMPLE REPEATS (DONE - 2008-05-30 - Hiram)
@@ -2164,4 +2169,41 @@ done
     cd /cluster/data/ce6/bed/multiz6way/frames
     nice -n +19 hgLoadMafFrames ce6 multiz6wayFrames multiz6way.mafFrames.gz
 
+##########################################################################
+#  verify all.joiner entries (DONE - 2008-06-20 - Hiram)
+    #	try to get joinerCheck tests clean output on these commands
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=ce6 -tableCoverage all.joiner
+    joinerCheck -database=ce6 -keys all.joiner
+    joinerCheck -database=ce6 -times all.joiner
+
+##########################################################################
+#  make downloads (DONE - 2008-06-20 - Hiram)
+    #	verify all tracks have html pages for their trackDb entries
+    cd /cluster/data/ce6
+    /cluster/bin/scripts/makeDownloads.pl ce6
+    #	fix the README files
+    #	re-build the upstream files:
+    cd /cluster/data/ce6/goldenPath/bigZips
+   for size in 1000 2000 5000
+do
+  echo $size
+  featureBits ce6 sangerGene:upstream:$size -fa=stdout \
+  | gzip -c > sangerGene.upstream$size.fa.gz
+done
+
+##########################################################################
+#  create pushQ entry (DONE - 2008-06-20 - Hiram)
+    #	verify all tracks have html pages for their trackDb entries
+    ssh hgwdev
+    cd /cluster/data/ce6/jkStuff
+    /cluster/bin/scripts/makePushQSql.pl ce6 > ce6.pushQ.sql
+ce6 does not have seq
+Could not tell (from trackDb, all.joiner and hardcoded lists of supporting
+and genbank tables) which tracks to assign these tables to:
+  blastSGPep01
+  blastSGRef01
+  multiz6wayFrames
+ 
 ##########################################################################
