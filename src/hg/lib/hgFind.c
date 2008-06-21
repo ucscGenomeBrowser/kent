@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.208 2008/05/19 18:34:17 larrym Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.209 2008/06/21 17:54:38 braney Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2881,6 +2881,11 @@ char *sqlRangeExp =
 		     "[[:space:]]*\\|[[:space:]]*"
 		     "([0-9,]+)$";
 
+char *singleBaseExp = 
+		     "^([[:alnum:]._\\-]+)"
+		     "[[:space:]]*:*[[:space:]]*"
+		     "([0-9,]+)$";
+
 static boolean chimpSpecialChrom(struct hgPositions *hgp, char **term, 
                                         char *hgAppName)
 /* special handling for newer chimp assemblies to warn user
@@ -2952,6 +2957,7 @@ regmatch_t substrs[4];
 boolean canonicalSpec = FALSE;
 boolean gbrowserSpec = FALSE;
 boolean lengthSpec = FALSE;
+boolean singleBaseSpec = FALSE;
 boolean relativeFlag = FALSE;
 int relStart = 0, relEnd = 0;
 
@@ -2985,6 +2991,8 @@ if ((canonicalSpec =
         matchRegexSubstr(term, lengthRangeExp, 
                                 substrs, ArraySize(substrs))) ||
     matchRegexSubstr(term, bedRangeExp, substrs, ArraySize(substrs)) ||
+    (singleBaseSpec = 
+	matchRegexSubstr(term, singleBaseExp, substrs, ArraySize(substrs))) ||
     matchRegexSubstr(term, sqlRangeExp, substrs, ArraySize(substrs)))
     {
     /* Since we got a match, substrs[1] is the chrom/term, [2] is relStart, 
@@ -2994,7 +3002,13 @@ if ((canonicalSpec =
     term[substrs[2].rm_eo] = 0;
     relStart = atoi(stripCommas(term+substrs[2].rm_so));
     term[substrs[3].rm_eo] = 0;
-    relEnd   = atoi(stripCommas(term+substrs[3].rm_so));
+    if (singleBaseSpec)
+	{
+	relEnd   = relStart;
+	relStart--;
+	}
+    else
+	relEnd   = atoi(stripCommas(term+substrs[3].rm_so));
     if (canonicalSpec || gbrowserSpec || lengthSpec)
 	relStart--;
     if (lengthSpec)
