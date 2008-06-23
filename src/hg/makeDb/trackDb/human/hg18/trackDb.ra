@@ -483,41 +483,43 @@ type bed 4 .
     priority 2
     color 153,0,0
 
-track pgYri
-shortLabel YRI SNPs
-longLabel YRI Population SNPs from HapMap
+track pgPop
+compositeTrack on
+shortLabel Population Vars
+longLabel Population Genome Variants
 group varRep
-priority 502
+priority 500.2
 visibility hide
 color 0,153,0
 type bed 4 .
 
-track pgCeu
-shortLabel CEU SNPs
-longLabel CEU Population SNPs from HapMap
-group varRep
-priority 502.1
-visibility hide
-color 0,153,0
-type bed 4 .
+    track pgYri
+    subTrack pgPop
+    shortLabel YRI SNPs
+    longLabel YRI Population SNPs from HapMap
+    group varRep
+    priority 1
+    
+    track pgCeu
+    subTrack pgPop
+    shortLabel CEU SNPs
+    longLabel CEU Population SNPs from HapMap
+    group varRep
+    priority 2
 
-track pgChb
-shortLabel CHB SNPs
-longLabel CHB Population SNPs from HapMap
-group varRep
-priority 502.2
-visibility hide
-color 0,153,0
-type bed 4 .
+    track pgChb
+    subTrack pgPop
+    shortLabel CHB SNPs
+    longLabel CHB Population SNPs from HapMap
+    group varRep
+    priority 3
 
-track pgJpt
-shortLabel JPT SNPs
-longLabel JPT Population SNPs from HapMap
-group varRep
-priority 502.3
-visibility hide
-color 0,153,0
-type bed 4 .
+    track pgJpt
+    subTrack pgPop
+    shortLabel JPT SNPs
+    longLabel JPT Population SNPs from HapMap
+    group varRep
+    priority 4
 
 track pgTest
 shortLabel Test SNPs
