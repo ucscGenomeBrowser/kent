@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.8 2008/06/20 21:57:58 hiram Exp $
+#  $Id: ce6.txt,v 1.9 2008/06/23 22:27:13 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -2206,4 +2206,91 @@ and genbank tables) which tracks to assign these tables to:
   blastSGRef01
   multiz6wayFrames
  
+#############################################################################
+#  Create 6-way downloads (DONE - 2008-06-23 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/ce6/goldenPath/multiz6way
+    mkdir /cluster/data/ce6/goldenPath/phastCons6way
+    cd /cluster/data/ce6/goldenPath/phastCons6way
+    ln -s ../../bed/multiz6way/phastCons6wayScores/*.gz .
+    ln -s ../../bed/multiz6way/cons/ave.cons.mod 6way.conserved.mod
+    ln -s ../../bed/multiz6way/cons/ave.noncons.mod 6way.non-conserved.mod
+    md5sum *.gz *.mod > md5sum.txt
+    #	copy a README and fix it up for here:
+    cp /usr/local/apache/htdocs/goldenPath/calJac1/phastCons9way/README.txt .
+
+    mkdir /cluster/data/ce6/goldenPath/multiz6way
+    cd /cluster/data/ce6/goldenPath/multiz6way
+    cp /usr/local/apache/htdocs/goldenPath/calJac1/multiz9way/README.txt .
+    # edit that README.txt to be correct for this 6-way alignment
+    ssh kkstore06
+    cd /cluster/data/ce6/goldenPath/multiz6way
+    ln -s ../../bed/multiz6way/6way.nh ./ce6.6way.nh
+
+    cp -p ../../bed/multiz6way//anno/maf/*.maf .
+    gzip *.maf
+
+    ssh hgwdev
+    cd /cluster/data/ce6/goldenPath/multiz6way
+    #	creating upstream files from sangerGene, bash script:
+    cat << '_EOF_' > mkUpstream.sh
+#!/bin/bash
+DB=ce6
+GENE=sangerGene
+NWAY=multiz6way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | $HOME/kent/src/hg/ratStuff/mafFrags/mafFrags ${DB} ${NWAY} \
+                stdin stdout \
+                -orgs=/cluster/data/${DB}/bed/${NWAY}/species.lst \
+        | gzip -c > upstream${S}.maf.gz
+    echo "done upstream${S}.maf.gz"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkUpstream.sh
+    time nice -n +19 ./mkUpstream.sh
+    #	real    119m5.562s
+# -rw-rw-r--  1   42975041 Mar 28 14:27 upstream1000.maf.gz
+# -rw-rw-r--  1   76363192 Mar 28 15:03 upstream2000.maf.gz
+# -rw-rw-r--  1  303870318 Mar 28 15:42 upstream5000.maf.gz
+
+    #	check the names in these upstream files to ensure sanity:
+    zcat upstream1000.maf.gz | grep "^s " | awk '{print $2}' \
+	| sort | uniq -c | sort -rn | less
+    #	should be a list of the other 4 species with a high count,
+    #	then sangerGene names, e.g.:
+    #	10134 priPac1
+    #	10134 cb3
+    #	10134 caeRem3
+    #	10134 caePb2
+    #	10134 caeJap1
+    #	    1 cTel55X.1a.1
+    #	    1 ZK993.1
+    #	    1 ZK973.9
+    #	    1 ZK973.8
+    #	    1 ZK973.3
+    #	... etc ...
+
+    ssh kkstore06
+    cd /cluster/data/ce6/goldenPath/multiz6way
+    md5sum *.gz *.nh > md5sum.txt
+
+    ssh hgwdev
+    cd /cluster/data/ce6/goldenPath/phastCons6way
+    mkdir /usr/local/apache/htdocs/goldenPath/ce6/phastCons6way
+    ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/ce6/phastCons6way
+
+    cd /cluster/data/ce6/goldenPath/multiz6way
+    mkdir /usr/local/apache/htdocs/goldenPath/ce6/multiz6way
+
+    ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/ce6/multiz6way
+    #	if your ln -s `pwd`/* made extra links to files you don't want there,
+    #	check the goldenPath locations and remove those extra links
+
 ##########################################################################
