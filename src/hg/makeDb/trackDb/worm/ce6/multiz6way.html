@@ -195,12 +195,17 @@ PhastCons measurements rely on a tree model containing the tree topology,
 branch lengths representing evolutionary distance at neutrally
 evolving sites, the background distribution of nucleotides, and a substitution
 rate matrix.  The
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/ce6/phastCons6way/6way.mod"
-TARGET=_blank>6-way tree model</A> for this track was constructed
-from the information in
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/ce6/phastCons6way/6way.conserved.mod"
+TARGET=_blank>6-way conserved tree model</A> and
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/ce6/phastCons6way/6way.non-conserved.mod"
+TARGET=_blank>6-way non-conserved tree model</A>
+for this track was constructed from the information in
 <A HREF="http://www.wormbook.org/chapters/www_phylogrhabditids/phylorhab.html"
 TARGET=_blank>Kiontke et. al. (2005)</A>
-with the branch length for P. pacificus arbitrarily set manually.
+with the branch length for P. pacificus arbitrarily set manually for
+the phastCons starting-tree model.  The branch lengths in the conserved and
+non-conserved tree models were produced by the phastCons tuning steps
+using <EM>phyloBoot</EM>.
 The phastCons parameters used for the conservation measurement
 were: expected-length=15 and target-coverage=0.55</P>
 
