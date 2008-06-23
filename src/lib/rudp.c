@@ -52,10 +52,14 @@
 #include <sys/time.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <pthread.h>
 #include "errabort.h"
+#include "hash.h"
+#include "dlist.h"
+#include "obscure.h"
 #include "rudp.h"
 
-static char const rcsid[] = "$Id: rudp.c,v 1.22 2008/06/14 01:22:26 galt Exp $";
+static char const rcsid[] = "$Id: rudp.c,v 1.23 2008/06/23 21:47:55 galt Exp $";
 
 #define MAX_TIME_OUT 999999
 
@@ -93,6 +97,9 @@ struct rudp *rudpNew(int socket)
 /* Wrap a rudp around a socket. Call rudpFree when done, or
  * rudpClose if you also want to close(socket). */
 {
+/* Note scope of variable and mutex are the same */
+static pthread_mutex_t rudpConnMutex = PTHREAD_MUTEX_INITIALIZER;
+static int nextRudpConnId=0;
 struct rudp *ru;
 assert(socket >= 0);
 AllocVar(ru);
@@ -100,12 +107,37 @@ ru->socket = socket;
 ru->rttVary = 250;	/* Initial variance 250 microseconds. */
 ru->timeOut = rudpCalcTimeOut(ru);
 ru->maxRetries = 7;
+ru->pid = getpid();
+pthread_mutex_lock( &rudpConnMutex );
+ru->connId = ++nextRudpConnId;
+pthread_mutex_unlock( &rudpConnMutex );
 return ru;
+}
+
+void freePacketSeen(struct packetSeen **pP)
+/* Free packet seen */
+{
+freez(pP);
 }
 
 void rudpFree(struct rudp **pRu)
 /* Free up rudp.  Note this does *not* close the associated socket. */
 {
+struct rudp *ru = *pRu;
+if (ru->recvHash)
+    {
+    struct dlNode *node;
+    while (!dlEmpty(ru->recvList))
+	{
+	node = dlPopHead(ru->recvList);
+	struct packetSeen *p = node->val;
+	freeMem(node);
+	hashRemove(ru->recvHash, p->recvHashKey);
+    	freePacketSeen(&p);
+	}
+    freeDlList(&ru->recvList);
+    hashFree(&ru->recvHash);
+    }
 freez(pRu);
 }
 
@@ -311,6 +343,8 @@ ru->resend = FALSE;
 assert(size <= rudpMaxSize);
 head = (struct rudpHeader *)outBuf;
 memcpy(head+1, message, size);
+head->pid = ru->pid;
+head->connId = ru->connId;
 head->id = ++ru->lastId;
 head->type = rudpData;
 
@@ -350,6 +384,27 @@ if (err >= 0)
     }
 ru->failCount += 1;
 return err;
+}
+
+void sweepOutOldPacketsSeen(struct rudp *ru, long now)
+/* Sweep out old packets seen, we can only remember so many. */
+{
+int period = 8;  /* seconds */
+struct dlNode *node;
+struct packetSeen *p;
+while (TRUE)
+    {
+    if (dlEmpty(ru->recvList))
+        break;
+    p = ru->recvList->head->val;
+    if (now - p->lastChecked < period)
+        break;
+    --ru->recvCount;
+    node = dlPopHead(ru->recvList);
+    freeMem(node);
+    hashRemove(ru->recvHash, p->recvHashKey);
+    freePacketSeen(&p);
+    }
 }
 
 
@@ -418,11 +473,46 @@ for (;;)
 	readSize = bufSize;
 	}
     memcpy(messageBuf, head+1, readSize);
+
+    /* check for duplicate packet */
+    if (!ru->recvHash)
+	{ /* take advantage of new auto-expanding hashes */
+	ru->recvHash = newHashExt(4, FALSE);  /* do not use local mem in hash */
+	ru->recvList = newDlList();
+	ru->recvCount = 0;
+	}
+    char hashKey[64];
+    char saiDottedQuad[17];
+    internetIpToDottedQuad(ntohl(sai.sin_addr.s_addr), saiDottedQuad);
+    safef(hashKey, sizeof(hashKey), "%s-%d-%d-%d" 
+    	, saiDottedQuad 
+        , head->pid              
+        , head->connId
+        , head->id
+      );		    
+    if (hashLookup(ru->recvHash, hashKey))
+	{
+	warn("duplicate packet filtered out: %s", hashKey);
+	continue;
+	}
+    long now = time(NULL);
+    struct packetSeen *p;
+    AllocVar(p);
+    AllocVar(p->node);
+    p->node->val = p;
+    p->recvHashKey = hashStoreName(ru->recvHash, hashKey);
+    p->lastChecked = now;
+    dlAddTail(ru->recvList, p->node);
+    ++ru->recvCount;
+   
+    sweepOutOldPacketsSeen(ru, now);
+
     ru->lastIdReceived = head->id;
     break;
     }
 return readSize;
 }
+
 
 int rudpReceiveFrom(struct rudp *ru, void *messageBuf, int bufSize, 
 	struct sockaddr_in *retFrom)

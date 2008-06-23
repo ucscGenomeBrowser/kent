@@ -54,6 +54,9 @@
 #include "internet.h"
 #endif
 
+#include "hash.h"
+#include "dlist.h"
+
 struct rudp
 /* A UDP socket and a little bit of stuff to help keep track
  * of how often we should resend unacknowledged messages. */
@@ -70,7 +73,12 @@ struct rudp
     bits32 lastId;	/* Id number of last message sent. */
     int maxRetries;	/* Maximum number of retries per message. */
     bits32 lastIdReceived; /* Id number of last message received. */
-    boolean resend;     /* TRUE if the packet is a re-send */ 
+    boolean resend;     /* TRUE if the packet is a re-send */
+    int pid;                 /* sender process id - helps filter out duplicate received packets */
+    int connId;              /* sender conn id - helps filter out duplicate received packets */
+    struct hash *recvHash;   /* hash of data received - helps filter out duplicate received packets */
+    struct dlList *recvList; /* list of data received - helps filter out duplicate received packets */
+    int recvCount;           /* number in list clean */
     };
 
 enum rudpType
@@ -89,6 +97,16 @@ struct rudpHeader
     bits8 reserved1;	/* Reserved, always zero for now. */
     bits8 reserved2;	/* Reserved, always zero for now. */
     bits8 reserved3;	/* Reserved, always zero for now. */
+    int pid;            /* sender process id - helps filter out duplicate received packets */
+    int connId;         /* sender conn id - helps filter out duplicate received packets */
+    };
+
+struct packetSeen
+/* A packet was last seen when? */
+    {
+    char *recvHashKey;          /* hash key */
+    time_t lastChecked;		/* Last time we checked machine in seconds past 1972 */
+    struct dlNode *node;        /* List node of packetSeen. */
     };
 
 typedef bits32 rudpHost;  /* The IP address (in host order) of another computer. */
