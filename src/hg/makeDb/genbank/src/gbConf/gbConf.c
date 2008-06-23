@@ -7,7 +7,7 @@
 #include "portable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: gbConf.c,v 1.3 2008/06/22 19:22:01 markd Exp $";
+static char const rcsid[] = "$Id: gbConf.c,v 1.4 2008/06/23 21:10:04 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -243,11 +243,8 @@ for (confEl = confEls; confEl != NULL; confEl = confEl->next)
 }
 
 static boolean matchingFilesExist(char *val, char *replacePre, char *replaceVal)
-/*  check for existing files specified by variable value. "no", or
- * missing files returns false */
+/* Check that files specified by variable value exist */
 {
-if (sameString(val, "no"))
-    return FALSE;
 char path[PATH_LEN];
 
 if ((replacePre != NULL) && startsWith(replacePre, val))
@@ -272,7 +269,7 @@ return have;
 static void checkForDbFile(struct gbConf *conf, char *db, char *baseName,
                            boolean varRequired, boolean fileRequired,
                            char *replacePre, char *replaceVal)
-/* check for existing of a file in the genome db with the specified
+/* Check for existing of a file in the genome db with the specified
  * base name.  Can be glob patterns or simple file names. */
 {
 char *val = gbConfGetDb(conf, db, baseName);
@@ -284,17 +281,20 @@ if (val == NULL)
         errCnt++;
         }
     }
-else if (!matchingFilesExist(val, replacePre, replaceVal))
+else if (sameString(val, "no"))
     {
     if (fileRequired)
         {
-        fprintf(stderr, "Error: missing required files: %s.%s = %s\n",
+        fprintf(stderr, "Error: required file specified as \"no\": %s.%s = %s\n",
                 db, baseName, val);
         errCnt++;
         }
-    else
-        verbose(2, "optional files don't exist: %s.%s = %s\n",
-                db, baseName, val);
+    }
+else if (!matchingFilesExist(val, replacePre, replaceVal))
+    {
+    fprintf(stderr, "Error: missing file(s): %s.%s = %s\n",
+            db, baseName, val);
+    errCnt++;
     }
 else
     {
