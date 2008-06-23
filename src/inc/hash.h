@@ -156,6 +156,7 @@ char *hashNextName(struct hashCookie *cookie);
 
 struct hash *newHashExt(int powerOfTwoSize, boolean useLocalMem);
 /* Returns new hash table. Uses local memory optionally. */
+#define hashNewExt(a) newHashExt(a)	/* Synonym */
 
 #define newHash(a) newHashExt(a, TRUE);
 /* Returns new hash table using local memory. */
