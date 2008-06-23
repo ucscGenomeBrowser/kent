@@ -12,6 +12,7 @@ struct hashEl
     struct hashEl *next;
     char *name;
     void *val;
+    bits32 hashVal;
     };
 
 struct hash
@@ -23,7 +24,11 @@ struct hash
     int size;			/* Size of table. */
     struct lm *lm;	/* Local memory pool. */
     int elCount;		/* Count of elements. */
+    boolean autoExpand;         /* Automatically expand hash */
+    float expansionFactor;      /* Expand when elCount > size*expansionFactor */
     };
+
+#define defaultExpansionFactor 1.0
 
 #define hashMaxSize 24
 
@@ -149,9 +154,15 @@ char *hashNextName(struct hashCookie *cookie);
 /* Return the next name in the hash table, or NULL if no more. Do not modify
  * hash table while this is being used. */
 
-struct hash *newHash(int powerOfTwoSize);
-/* Returns new hash table. */
+struct hash *newHashExt(int powerOfTwoSize, boolean useLocalMem);
+/* Returns new hash table. Uses local memory optionally. */
+
+#define newHash(a) newHashExt(a, TRUE);
+/* Returns new hash table using local memory. */
 #define hashNew(a) newHash(a)	/* Synonym */
+
+void hashResize(struct hash *hash, int powerOfTwoSize);
+/* Resize the hash to a new size */
 
 struct hash *hashFromSlNameList(void *list);
 /* Create a hash out of a list of slNames or any kind of list where the */

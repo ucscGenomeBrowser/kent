@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.39 2008/05/01 20:54:40 galt Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.40 2008/06/23 21:21:53 galt Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -35,8 +35,8 @@ static char const rcsid[] = "$Id: hash.c,v 1.39 2008/05/01 20:54:40 galt Exp $";
  * See the file "license.terms" (in the Tcl distribution) for complete
  * license (which is a BSD-style license).
  *
- * Since hashCrc() is used elsewhere in the code, it was left alone,
- * and a new function create for use in hash table.
+ * Since hashCrc() is in use elsewhere, 
+ * a new function hashString() was created for use in hash table.
  * -- markd
  */
 bits32 hashString(char *string)
@@ -112,14 +112,28 @@ return el;
 struct hashEl *hashAddN(struct hash *hash, char *name, int nameSize, void *val)
 /* Add name of given size to hash (no need to be zero terminated) */
 {
-struct hashEl *el = lmAlloc(hash->lm, sizeof(*el));
+struct hashEl *el;
+if (hash->lm) 
+    el = lmAlloc(hash->lm, sizeof(*el));
+else
+    AllocVar(el);
 int hashVal = (hashString(name)&hash->mask);
-el->name = lmAlloc(hash->lm, nameSize+1);
-memcpy(el->name, name, nameSize);
+if (hash->lm)
+    {
+    el->name = lmAlloc(hash->lm, nameSize+1);
+    memcpy(el->name, name, nameSize);
+    }
+else
+    el->name = cloneStringZ(name, nameSize);
 el->val = val;
 el->next = hash->table[hashVal];
+el->hashVal = hashVal;
 hash->table[hashVal] = el;
 hash->elCount += 1;
+if (hash->autoExpand && hash->elCount > (int)(hash->size * hash->expansionFactor))
+    {
+    hashResize(hash, digitsBaseTwo(hash->elCount));
+    }
 return el;
 }
 
@@ -144,6 +158,13 @@ if (hashRemove(hash, name) == NULL)
     errAbort("attempt to remove non-existant %s from hash", name);
 }
 
+void freeHashEl(struct hashEl *hel)
+/* Free hash element. Use only on non-local memory version. */
+{
+freeMem(hel->name);
+freeMem(hel);
+}
+
 void *hashRemove(struct hash *hash, char *name)
 /* Remove item of the given name from hash table. 
  * Returns value of removed item, or NULL if not in the table. */
@@ -158,7 +179,11 @@ if (hel == NULL)
     return NULL;
 ret = hel->val;
 if (slRemoveEl(pBucket, hel))
+    {
     hash->elCount -= 1;
+    if (!hash->lm)
+	freeHashEl(hel);
+    }
 return ret;
 }
 
@@ -298,8 +323,8 @@ for (i=0; i<hash->size; ++i)
 return sum;
 }
 
-struct hash *newHash(int powerOfTwoSize)
-/* Returns new hash table. */
+struct hash *newHashExt(int powerOfTwoSize, boolean useLocalMem)
+/* Returns new hash table. Uses local memory optionally. */
 {
 struct hash *hash = needMem(sizeof(*hash));
 int memBlockPower = 16;
@@ -314,11 +339,46 @@ if (powerOfTwoSize < 8)
     memBlockPower = 8;
 else if (powerOfTwoSize < 16)
     memBlockPower = powerOfTwoSize;
-hash->lm = lmInit(1<<memBlockPower);
+if (useLocalMem) 
+    hash->lm = lmInit(1<<memBlockPower);
 hash->mask = hash->size-1;
-hash->table = lmAlloc(hash->lm, sizeof(struct hashEl *) * hash->size);
+AllocArray(hash->table, hash->size);
+hash->autoExpand = TRUE;
+hash->expansionFactor = defaultExpansionFactor;   /* Expand when elCount > size*expansionFactor */
 return hash;
 }
+
+void hashResize(struct hash *hash, int powerOfTwoSize)
+/* Resize the hash to a new size */
+{
+int oldHashSize = hash->size;
+struct hashEl **oldTable = hash->table;
+
+if (powerOfTwoSize == 0)
+    powerOfTwoSize = 12;
+assert(powerOfTwoSize <= hashMaxSize && powerOfTwoSize > 0);
+hash->powerOfTwoSize = powerOfTwoSize;
+hash->size = (1<<powerOfTwoSize);
+hash->mask = hash->size-1;
+
+AllocArray(hash->table, hash->size);
+
+int i;
+struct hashEl *hel, *next;
+for (i=0; i<oldHashSize; ++i)
+    {
+    for (hel = oldTable[i]; hel != NULL; hel = next)
+	{
+	next = hel->next;
+	int hashVal = (hel->hashVal&hash->mask);
+	hel->next = hash->table[hashVal];
+	hash->table[hashVal] = hel;
+	}
+    }
+
+freeMem(oldTable);
+}
+
 
 struct hash *hashFromSlNameList(void *list)
 /* Create a hash out of a list of slNames or any kind of list where the */
@@ -480,7 +540,22 @@ void freeHash(struct hash **pHash)
 struct hash *hash = *pHash;
 if (hash == NULL)
     return;
-lmCleanup(&hash->lm);
+if (hash->lm)
+    lmCleanup(&hash->lm);
+else
+    {
+    int i;
+    struct hashEl *hel, *next;
+    for (i=0; i<hash->size; ++i)
+	{
+	for (hel = hash->table[i]; hel != NULL; hel = next)
+	    {
+	    next = hel->next;
+	    freeHashEl(hel);
+	    }
+	}
+    }
+freeMem(hash->table);
 freez(pHash);
 }
 
