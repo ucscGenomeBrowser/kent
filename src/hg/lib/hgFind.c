@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.209 2008/06/21 17:54:38 braney Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.210 2008/06/23 18:15:15 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2883,7 +2883,7 @@ char *sqlRangeExp =
 
 char *singleBaseExp = 
 		     "^([[:alnum:]._\\-]+)"
-		     "[[:space:]]*:*[[:space:]]*"
+		     "[[:space:]]*:[[:space:]]*"
 		     "([0-9,]+)$";
 
 static boolean chimpSpecialChrom(struct hgPositions *hgp, char **term, 
