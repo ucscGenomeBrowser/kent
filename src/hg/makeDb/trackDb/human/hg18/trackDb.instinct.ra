@@ -82,6 +82,17 @@ expScale 2.0
 expStep 0.2
 groupings ucsfNeveExpGroups
 
+track ucsfNeveCGH
+shortLabel Breast Cell Line CGH (Neve. et.al)
+longLabel breast cancer cell line CGH (Neve et.al.Cancer Cell 2006)
+group x
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.2
+groupings ucsfNeveCGHGroups
 
 #TCGA
 
@@ -161,4 +172,16 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings chin2006ExpGroups
+
+track chinSFGenomeBio2007
+shortLabel Breast Cancer Tumor CGH (ChinSF et al. 2007)
+longLabel Breast Cancer Tumor CGH (ChinSF et al. Genome Bio 2007)
+group x
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.2
+groupings chinSFGenomeBio2007Groups
 
