@@ -3,17 +3,45 @@
 This track shows a measure of evolutionary conservation in
 <I>C. elegans, C. remanei, C. briggsae, C. brenneri, C. japonica</I> and
 <I>P. pacificus</I> based on a phylogenetic hidden Markov model, phastCons
-(Siepel <em>et al.</em>, 2005).
+(Siepel <em>et al.</em>, 2005).  The multiple alignments were generated
+using multiz and other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/" 
+TARGET=_blank>Penn State Bioinformatics</A>
+comparative genomics alignment pipeline.
+The conservation measurements were created using the phastCons package from
+<A HREF="http://compgen.bscb.cornell.edu/~acs/software.html" TARGET=_blank>
+Adam Siepel</A> at Cornell University. </P>
 Multiz alignments of the following assemblies were used to generate this
 track:
-<UL>
-<LI>$organism (WS190) ($date, $db)
-<LI>C. remanei (May 2007, caeRem3)
-<LI>C. briggsae (Jan 2007, cb3)
-<LI>C. brenneri (Feb 2008, caePb2)
-<LI>C. japonica (Mar 2008, caeJap1)
-<LI>P. pacificus (Feb 2007, priPac1)
-</UL></P>
+<BLOCKQUOTE><TABLE BORDER=0 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH>
+    <TH>UCSC version</TH><TH>alignment type</TH><TH>repeats masked by</TH></TR>
+<TR ALIGN=left><TD>$organism (WS190)</TD><TD>Caenorhabditis elegans</TD>
+    <TD>$date</TD><TD>$db</TD><TD>reference species</TD>
+    <TD>repeat masker</TD></TR>
+<TR ALIGN=left><TD>C. remanei</TD><TD>Caenorhabditis remanei</TD>
+    <TD>May 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=caeRem3"
+    TARGET=_blank>caeRem3</A></TD><TD>chain net</TD>
+    <TD>window masker</TD></TR>
+<TR ALIGN=left><TD>C. briggsae</TD><TD>Caenorhabditis briggsae</TD>
+    <TD>Jan 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=cb3"
+    TARGET=_blank>cb3</A></TD><TD>chain net</TD>
+    <TD>repeat masker</TD></TR>
+<TR ALIGN=left><TD>C. brenneri</TD><TD>Caenorhabditis brenneri</TD>
+    <TD>Feb 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=caePb2"
+    TARGET=_blank>caePb2</A></TD><TD>chain net</TD>
+    <TD>window masker</TD></TR>
+<TR ALIGN=left><TD>C. japonica</TD><TD>Caenorhabditis japonica</TD>
+    <TD>Mar 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=caeJap1"
+    TARGET=_blank>caeJap1</A></TD><TD>chain net</TD>
+    <TD>window masker</TD></TR>
+<TR ALIGN=left><TD>P. pacificus</TD><TD>Pristionchus pacificus</TD>
+    <TD>May 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=priPac1"
+    TARGET=_blank>priPac1</A></TD><TD>chain net</TD>
+    <TD>window masker</TD></TR>
+</TABLE><BR>
+<B>Table 1.</B>
+<EM>Genome assemblies included in the 9-way Conservation track.</EM>
+</BLOCKQUOTE></P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
@@ -129,11 +157,52 @@ translation, depending on the species chosen:
 
 <H2>Methods</H2>
 <P> 
-Best-in-genome pairwise alignments were generated for each species
-using blastz, followed by chaining and netting.  The pairwise alignments
-were then multiply aligned using multiz, following the ordering of the
-species tree diagrammed above.  These alignments were then assigned
-conservation scores by phastCons.</P>
+Pairwise alignments with the $organism genome were generated for
+each species using blastz from repeat-masked or window-masker masked
+genomic sequence.
+Pairwise alignments were then linked into chains using a dynamic programming
+algorithm that finds maximally scoring chains of gapless subsections
+of the alignments organized in a kd-tree.
+The scoring matrix and parameters for pairwise alignment and chaining
+were tuned for each species based on phylogenetic distance from the reference.
+High-scoring chains were then placed along the genome, with
+gaps filled by lower-scoring chains, to produce an alignment net.
+For more information about the chaining and netting process and
+parameters for each species, see the description pages for the Chain and Net
+tracks.</P>
+
+<P>
+The resulting best-in-genome pairwise alignments
+were progressively aligned using multiz/autoMZ,
+following the tree topology diagrammed above, to produce multiple alignments.
+The multiple alignments were post-processed to
+add annotations indicating alignment gaps, genomic breaks,
+and base quality of the component sequences.
+The annotated multiple alignments, in MAF format, are available for
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/ce6/multiz6way"
+TARGET=_blank>bulk download</A>.
+An alignment summary table containing an entry for each
+alignment block in each species was generated to improve
+track display performance at large scales.
+Framing tables were constructed to enable
+visualization of codons in the multiple alignment display.</P>
+
+<P>
+Conservation scoring was performed using the PhastCons package (A. Siepel),
+which computes conservation based on a two-state phylogenetic hidden Markov
+model (HMM).
+PhastCons measurements rely on a tree model containing the tree topology,
+branch lengths representing evolutionary distance at neutrally
+evolving sites, the background distribution of nucleotides, and a substitution
+rate matrix.  The
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/ce6/phastCons6way/6way.mod"
+TARGET=_blank>6-way tree model</A> for this track was constructed
+from the information in
+<A HREF="http://www.wormbook.org/chapters/www_phylogrhabditids/phylorhab.html"
+TARGET=_blank>Kiontke et. al. (2005)</A>
+with the branch length for P. pacificus arbitrarily set manually.
+The phastCons parameters used for the conservation measurement
+were: expected-length=15 and target-coverage=0.55</P>
 
 <P>
 The phastCons program computes conservation scores based on a phylo-HMM, a
@@ -163,15 +232,18 @@ of improving the handling of alignment gaps.</P>
 <P>
 This track was created at UCSC using the following programs:
 <UL>
-<LI>
-Blastz by Scott Schwartz and Webb Miller of the 
-<A HREF="http://bio.cse.psu.edu/" TARGET=_blank>Penn State Bioinformatics 
-Group</A>. 
-<LI>
-AxtBest, axtChain, chainNet, netSyntenic, and netClass 
-by Jim Kent at UCSC. 
-<LI> PhastCons by Adam Siepel at UCSC. 
-<LI>"Wiggle track" plotting software by Hiram Clawson at UCSC.
+<LI> Alignment tools: blastz and multiz by Minmei Hou, Scott Schwartz and Webb
+Miller of the <A HREF="http://bio.cse.psu.edu/" 
+TARGET=_blank>Penn State Bioinformatics Group</A>
+<LI> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
+<LI> Conservation scoring: PhastCons, phyloFit, tree_doctor, msa_view by
+<A HREF="http://compgen.bscb.cornell.edu/~acs/software.html" 
+TARGET=_blank>Adam Siepel</A> while at UCSC, now at Cornell University
+<LI> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
+by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
+<LI> Tree image generator: phyloGif by Galt Barber, UCSC
+<LI> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle
+display), and Brian Raney (gap annotation and codon framing) at UCSC
 </UL>
 </P>
 
@@ -218,6 +290,15 @@ TARGET=_blank>Evolution's cauldron:
 duplication, deletion, and rearrangement in the mouse and human genomes</A>.
 <EM>Proc Natl Acad Sci U S A</EM>. 2003 Sep 30;100(20):11484-9.
 
+<H3>Multiz:</H3>
+<P>
+Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
+Baertsch R, Rosenbloom K, Clawson H, Green ED, <EM>et al.</EM>
+<A HREF="http://www.genome.org/cgi/content/abstract/14/4/708"
+TARGET=_blank>Aligning multiple genomic sequences with the threaded blockset aligner</A>.
+<EM>Genome Res</EM>. 2004 Apr;14(4):708-15.
+</P>
+
 <H3>Blastz:</H3>
 <P>
 Chiaromonte F, Yap VB, Miller W.
@@ -234,3 +315,10 @@ TARGET=_blank>Human-mouse alignments with BLASTZ</A>.
 <EM>Genome Res</EM>. 2003 Jan;13(1):103-7.
 </P>
 
+<H3>Phylogenetic Tree:</H3>
+<P>
+Kiontke K. and Fitch D. H. A.
+<A HREF="http://www.wormbook.org/chapters/www_phylogrhabditids/phylorhab.html"
+TARGET=_blank>The phylogenetic relationships of Caenorhabditis and other rhabditids</A>
+<EM>WormBook,</EM> ed. The <EM>C. elegans</EM> Research Community 2005 Aug 11
+</P>
