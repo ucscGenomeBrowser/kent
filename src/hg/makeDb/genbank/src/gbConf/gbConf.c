@@ -7,7 +7,7 @@
 #include "portable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: gbConf.c,v 1.4 2008/06/23 21:10:04 markd Exp $";
+static char const rcsid[] = "$Id: gbConf.c,v 1.5 2008/06/23 22:36:22 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -242,7 +242,7 @@ for (confEl = confEls; confEl != NULL; confEl = confEl->next)
     fprintf(fh, "%s = %s\n", confEl->name, (char*)confEl->val);
 }
 
-static boolean matchingFilesExist(char *val, char *replacePre, char *replaceVal)
+static boolean matchingFilesExist(char *db, char* varName, char *val, char *replacePre, char *replaceVal)
 /* Check that files specified by variable value exist */
 {
 char path[PATH_LEN];
@@ -255,29 +255,29 @@ if ((replacePre != NULL) && startsWith(replacePre, val))
 else
     safecpy(path, sizeof(path), val);
 
-char *slash = strrchr(path, '/');
-if (slash == NULL)
-    return fileExists(path);
-
-*slash = '\0';
-struct slName *hits = listDir(path, slash+1);
+char *name = strrchr(path, '/');
+if (name == NULL)
+    errAbort("must have absolute path: %s.%s = %s", db, varName, val);
+*name++ = '\0';
+struct slName *hits = listDir(path, name);
 boolean have = (hits != NULL);
 slFreeList(&hits);
+verbose(3, "%s.%s\t%s\t%s/%s\n", db, varName, (have ? "have" : "missing"), path, name);
 return have;
 }
 
-static void checkForDbFile(struct gbConf *conf, char *db, char *baseName,
+static void checkForDbFile(struct gbConf *conf, char *db, char *varName,
                            boolean varRequired, boolean fileRequired,
                            char *replacePre, char *replaceVal)
 /* Check for existing of a file in the genome db with the specified
  * base name.  Can be glob patterns or simple file names. */
 {
-char *val = gbConfGetDb(conf, db, baseName);
+char *val = gbConfGetDb(conf, db, varName);
 if (val == NULL)
     {
     if (varRequired)
         {
-        fprintf(stderr, "Error: missing required variable: %s.%s\n", db, baseName);
+        fprintf(stderr, "Error: missing required variable: %s.%s\n", db, varName);
         errCnt++;
         }
     }
@@ -286,20 +286,20 @@ else if (sameString(val, "no"))
     if (fileRequired)
         {
         fprintf(stderr, "Error: required file specified as \"no\": %s.%s = %s\n",
-                db, baseName, val);
+                db, varName, val);
         errCnt++;
-        }
+        } 
     }
-else if (!matchingFilesExist(val, replacePre, replaceVal))
+else if (!matchingFilesExist(db, varName, val, replacePre, replaceVal))
     {
     fprintf(stderr, "Error: missing file(s): %s.%s = %s\n",
-            db, baseName, val);
+            db, varName, val);
     errCnt++;
     }
 else
     {
     verbose(2, "%s files exist: %s.%s = %s\n", (fileRequired ? "required" : "optional"),
-            db, baseName, val);
+            db, varName, val);
     }
 }
 
