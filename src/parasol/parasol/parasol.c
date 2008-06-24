@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.43 2008/06/24 20:03:39 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.44 2008/06/24 20:12:35 galt Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 
@@ -37,6 +37,7 @@ errAbort(
   "    or \n"
   "   parasol add machine machineFullHostName cpus ramSizeMB localTempDir localDir localSizeMB switchName\n"
   "   parasol remove machine machineFullHostName \"reason why\"  - Remove machine from pool.\n"
+  "   parasol check dead - Check machines marked dead ASAP, some have been fixed.\n"
   "   parasol add spoke  - Add a new spoke daemon.\n"
   "   parasol [options] add job command-line   - Add job to list.\n"
   "         options: -out=out -in=in -dir=dir -results=file -verbose\n"
@@ -203,6 +204,13 @@ if (!sameString(response, "0"))
     errAbort("Couldn't clear sick nodes for %s %s\n", userName, results);
 dyStringFree(&dy);
 freez(&response);
+}
+
+void checkDeadNodesASAP()
+/* Tell hub to check dead nodes for signs of life ASAP. */
+{
+mustBeRoot();
+commandHub("checkDeadNodesASAP");
 }
 
 
@@ -407,6 +415,17 @@ else if (sameString(command, "clear"))
 	if (argc < 2)
 	    usage();
         clearSickBatch();
+	}
+    else
+        usage();
+    }
+else if (sameString(command, "check"))
+    {
+    if (sameString(subType, "dead"))
+	{
+	if (argc < 2)
+	    usage();
+        checkDeadNodesASAP();
 	}
     else
         usage();
