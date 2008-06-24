@@ -118,6 +118,9 @@ struct hash *chainReadAll(char *fileName);
 struct hash *chainReadAllWithMeta(char *fileName, FILE *f);
 /* Read chains into a hash keyed by id and outputs meta data */
 
+struct chain *chainFind(struct hash *hash, int id);
+/* Find chain in hash, return NULL if not found */
+
 struct chain *chainLookup(struct hash *hash, int id);
 /* Find chain in hash. */
 

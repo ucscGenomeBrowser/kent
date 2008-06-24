@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.25 2007/02/19 18:29:32 kent Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.26 2008/06/24 14:40:04 markd Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -402,6 +402,16 @@ hash = chainReadUsedSwapLf(fileName, FALSE, NULL, lf);
 lineFileClose(&lf);
 return hash;
 }
+
+
+struct chain *chainFind(struct hash *hash, int id)
+/* Find chain in hash, return NULL if not found */
+{
+char nameBuf[16];
+safef(nameBuf, sizeof(nameBuf), "%x", id);
+return hashFindVal(hash, nameBuf);
+}
+
 struct chain *chainLookup(struct hash *hash, int id)
 /* Find chain in hash. */
 {
