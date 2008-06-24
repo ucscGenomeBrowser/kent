@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.42 2008/06/24 20:00:53 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.43 2008/06/24 20:03:39 galt Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 
@@ -114,8 +114,7 @@ char *row[256];
 if (!commandHubExt(command, &pm, &pmm))
     errAbort("Couldn't send '%s' command to paraHub", command);
 
-///* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
-//pmmInit(&pmm, &pm, pm.ipAddress.sin_addr);
+/* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
 
 for (;;)
     {
@@ -310,7 +309,6 @@ struct paraMultiMessage pmm;
 struct jobInfo *jobList = NULL, *job;
 /* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
 commandHubExt("listJobs", &pm, &pmm);
-//pmmInit(&pmm, &pm, pm.ipAddress.sin_addr);
 for (;;)
     {
     if (!pmmReceive(&pmm, hubRudp))
