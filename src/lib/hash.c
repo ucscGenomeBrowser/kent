@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.40 2008/06/23 21:21:53 galt Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.41 2008/06/24 01:12:58 galt Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -117,7 +117,8 @@ if (hash->lm)
     el = lmAlloc(hash->lm, sizeof(*el));
 else
     AllocVar(el);
-int hashVal = (hashString(name)&hash->mask);
+el->hashVal = hashString(name);
+int hashVal = el->hashVal & hash->mask;
 if (hash->lm)
     {
     el->name = lmAlloc(hash->lm, nameSize+1);
@@ -127,12 +128,12 @@ else
     el->name = cloneStringZ(name, nameSize);
 el->val = val;
 el->next = hash->table[hashVal];
-el->hashVal = hashVal;
 hash->table[hashVal] = el;
 hash->elCount += 1;
 if (hash->autoExpand && hash->elCount > (int)(hash->size * hash->expansionFactor))
     {
-    hashResize(hash, digitsBaseTwo(hash->elCount));
+    /* double the size */
+    hashResize(hash, digitsBaseTwo(hash->size));
     }
 return el;
 }
@@ -370,7 +371,7 @@ for (i=0; i<oldHashSize; ++i)
     for (hel = oldTable[i]; hel != NULL; hel = next)
 	{
 	next = hel->next;
-	int hashVal = (hel->hashVal&hash->mask);
+	int hashVal = hel->hashVal & hash->mask;
 	hel->next = hash->table[hashVal];
 	hash->table[hashVal] = hel;
 	}
