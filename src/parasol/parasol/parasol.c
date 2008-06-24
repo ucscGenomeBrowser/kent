@@ -9,7 +9,7 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
-static char const rcsid[] = "$Id: parasol.c,v 1.41 2008/06/10 05:26:20 galt Exp $";
+static char const rcsid[] = "$Id: parasol.c,v 1.42 2008/06/24 20:00:53 galt Exp $";
 
 char *version = PARA_VERSION;   /* Version number. */
 
@@ -40,6 +40,8 @@ errAbort(
   "   parasol add spoke  - Add a new spoke daemon.\n"
   "   parasol [options] add job command-line   - Add job to list.\n"
   "         options: -out=out -in=in -dir=dir -results=file -verbose\n"
+  "   parasol [options] clear sick  - Clear sick stats on a batch.\n"
+  "         options: -results=file\n"
   "   parasol remove job id  - Remove job of given ID.\n"
   "   parasol ping [count]  - Ping hub server to make sure it's alive.\n"
   "   parasol remove jobs userName [jobPattern]  - Remove jobs submitted by user that\n"
@@ -48,7 +50,7 @@ errAbort(
   "   parasol [-extended] list jobs  - List jobs one per line.\n"
   "   parasol list users  - List users one per line.\n"
   "   parasol list batches  - List batches one per line.\n"
-  "   parasol list sick  - List sick nodes one per line.\n"
+  "   parasol list sick  - List nodes considered sick by all running batches, one per line.\n"
   "   parasol status  - Summarize status of machines, jobs, and spoke daemons.\n"
   , version
   );
@@ -160,15 +162,15 @@ void addJob(int argc, char *argv[], boolean printId)
 struct dyString *dy = newDyString(1024);
 char curDir[512];
 char defaultResults[512];
-char *in = optionVal("in", "/dev/null"), 
-     *out = optionVal("out", "/dev/null"), 
-     *dir = optionVal("dir", curDir),
-     *results = optionVal("results", defaultResults);
+char *in = optionVal("in", "/dev/null"); 
+char *out = optionVal("out", "/dev/null"); 
 char *jobIdString;
 int i;
 
 getcwd(curDir, sizeof(curDir));
-sprintf(defaultResults, "%s/results", curDir);
+safef(defaultResults, sizeof(defaultResults), "%s/results", curDir);
+char *dir = optionVal("dir", curDir);
+char *results = optionVal("results", defaultResults);
 dyStringPrintf(dy, "addJob %s %s %s %s %s", userName, dir, in, out, results);
 for (i=0; i<argc; ++i)
     dyStringPrintf(dy, " %s", argv[i]);
@@ -183,6 +185,28 @@ if (printId)
     }
 freez(&jobIdString);
 }
+
+
+void clearSickBatch()
+/* Tell hub to clear sick stats on a batch. */
+{
+struct dyString *dy = newDyString(1024);
+char curDir[512];
+char defaultResults[512];
+char *response;
+
+getcwd(curDir, sizeof(curDir));
+safef(defaultResults, sizeof(defaultResults), "%s/results", curDir);
+char *results = optionVal("results", defaultResults);
+dyStringPrintf(dy, "clearSickNodes %s %s", userName, results);
+response = hubCommandGetReciept(dy->string);
+if (!sameString(response, "0"))
+    errAbort("Couldn't clear sick nodes for %s %s\n", userName, results);
+dyStringFree(&dy);
+freez(&response);
+}
+
+
 
 void addSpoke()
 /* Tell hub to add a spoke. */
@@ -375,6 +399,17 @@ if (sameString(command, "add"))
 	}
     else if (sameString(subType, "spoke"))
         addSpoke();
+    else
+        usage();
+    }
+else if (sameString(command, "clear"))
+    {
+    if (sameString(subType, "sick"))
+	{
+	if (argc < 2)
+	    usage();
+        clearSickBatch();
+	}
     else
         usage();
     }
