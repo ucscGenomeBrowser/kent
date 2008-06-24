@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.124 2008/06/24 18:47:15 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.125 2008/06/24 18:59:02 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -3102,6 +3102,7 @@ for (i=0; i<recent; ++i)
 	freez(&startLine);
 	return FALSE;
 	}
+    /* Do not duplicate a result. Check if it already is in para.results */
     safef(resultsFile, sizeof(resultsFile), "%s/%s", rjm.dir, "para.results");
     er = getExistingResults(resultsFile, erHash, pErList);
     if (!hashLookup(er->hash, rjm.jobIdString))
