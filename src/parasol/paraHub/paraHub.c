@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.125 2008/06/24 18:59:02 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.126 2008/06/24 19:09:43 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -2947,7 +2947,7 @@ if (er == NULL)
     AllocVar(er);
     slAddHead(pErList, er);
     hashAddSaveName(erHash, fileName, er, &er->fileName);
-    er->hash = newHash(18);
+    er->hash = newHashExt(18, FALSE);
     readResults(fileName, er->hash);
     }
 return er;
@@ -3121,7 +3121,7 @@ void checkForJobsOnNodes()
 {
 struct machine *mach;
 int running = 0, finished = 0;
-struct hash *erHash = newHash(8);	/* A hash of existingResults */
+struct hash *erHash = newHashExt(8, FALSE); /* A hash of existingResults */
 struct existingResults *erList = NULL;
 
 logInfo("Checking for jobs already running on nodes");
