@@ -20,9 +20,8 @@ function matSelectViewForSubTracks(obj,view)
                     continue;
                 if(ele.name.indexOf("mat_") == 0 && ele.name.indexOf("_cb") == (ele.name.length - 3)) {
                     if(ele.checked) {
-                        ele.click();
-                        ele.click();
-                        //matSetCheckBoxesThatContain('id',ele.checked,false,"cb_"+ele.name.substring(4,ele.name.length - 3)+view+'_cb');
+                        clickIt(ele,true,true); // force a double click();
+                        //matSetCheckBoxesThatContain('id',true,false,"cb_"+ele.name.substring(4,ele.name.length - 3)+view+'_cb');
                     }
                 }
             }
@@ -49,7 +48,7 @@ function matSetCheckBoxesThatContain(nameOrId, state, force, sub1)
         if(debug)
             alert("matSetCheckBoxesThatContain is about to set the checkBoxes to "+state);
 
-        var views = getViewsSelected("dd_",true); // get views that are on
+        var views = getViewsSelected("_dd_",true); // get views that are on
         var list = document.getElementsByTagName('input');
         for (var ix=0;ix<list.length;ix++) {
             var ele = list[ix];
@@ -70,30 +69,15 @@ function matSetCheckBoxesThatContain(nameOrId, state, force, sub1)
             if(debug)
                 alert("matSetCheckBoxesThatContain found '"+sub1+"' in '"+identifier+"'.");
 
-            if(!state) { 
-                if(ele.checked != state) {
-                    ele.click();
-                } else if (force) {
-                    ele.click();
-                    ele.click();
-                }
+            if(!state) {
+                clickIt(ele,state,force);
             } else {
                 if(views.length == 0) {
-                    if(ele.checked != state) {
-                        ele.click();
-                    } else if (force) {
-                        ele.click();
-                        ele.click();
-                    }
+                    clickIt(ele,state,force);
                 } else {
                     for(var vIx=0;vIx<views.length;vIx++) {
                         if(identifier.indexOf("_"+views[vIx]+"_") >= 0) {
-                            if(ele.checked != state) {
-                                ele.click();
-                            } else if (force) {
-                                ele.click();
-                                ele.click();
-                            }
+                            clickIt(ele,state,force);
                             break;
                         }
                     }
@@ -108,6 +92,37 @@ function matSetCheckBoxesThatContain(nameOrId, state, force, sub1)
         // NS 4.x - I gave up trying to get this to work.
         if(debug)
            alert("matSetCheckBoxesThatContain is unimplemented for this browser");
+    }
+    return retval;
+}
+
+function showConfigControls(name)
+{
+// Will show wig configuration controls
+// Config controls not matching name will be hidden
+    var retval = false;
+    if (document.getElementsByTagName)
+    {
+        var list = document.getElementsByTagName('tr');
+        for (var ix=0;ix<list.length;ix++) {
+            var tblRow = list[ix];
+            if(tblRow.id.indexOf("tr_cfg_") == 0) {  // marked as tr containing a cfg's
+                if(tblRow.id.indexOf(name) == 7 && tblRow.style.display == 'none') {
+                    tblRow.style.display = '';
+                } else {
+                    tblRow.style.display = 'none';
+                }
+            }
+        }
+        retval = true;
+    }
+    else if (document.all) {
+        if(debug)
+            alert("showConfigControls is unimplemented for this browser");
+    } else {
+        // NS 4.x - I gave up trying to get this to work.
+        if(debug)
+           alert("showConfigControls is unimplemented for this browser");
     }
     return retval;
 }
