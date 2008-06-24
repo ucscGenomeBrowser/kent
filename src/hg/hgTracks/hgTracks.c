@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1486 2008/06/19 23:47:15 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1487 2008/06/24 19:05:01 braney Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3882,7 +3882,9 @@ if (stringVal == NULL || !isdigit(stringVal[0]))
     cartSetString(cart, var, stringVal);
     }
 x = atof(stringVal);
-return round(x*guideBases);
+int ret = round(x*guideBases);
+
+return (ret == 0) ? 1 : ret;
 }
 
 void handlePostscript()
@@ -4064,8 +4066,8 @@ if (winEnd < winStart)
     }
 else if (winStart == winEnd)
     {
-    winStart -= 1000;
-    winEnd += 1000;
+    winStart -= 1;
+    winEnd += 1;
     }
 
 if (winStart < 0)
