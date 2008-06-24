@@ -2,6 +2,16 @@
 
 var debug = false;
 
+function clickIt(obj,state,force)
+{
+// calls click() for an object, and click();click() if force
+    if(obj.checked != state) {
+        obj.click();
+    } else if (force) {
+        obj.click();    
+        obj.click();    //force onclick event
+    }
+}
 function setCheckBoxesWithPrefix(obj, prefix, state)
 {
 // Set all checkboxes with given prefix to state boolean
@@ -61,12 +71,7 @@ function setCheckBoxesThatContain(nameOrId, state, force, sub1)
             if(debug)
                 alert("setCheckBoxesContains found '"+sub1+"' in '"+identifier+"'.");
 
-            if(ele.checked != state) {
-                    ele.click();
-            } else if (force) {
-                ele.click();    
-                ele.click();    //force onclick event
-            }
+            clickIt(ele,state,force);
         }
         retval = true;
     } else if (document.all) {
@@ -84,6 +89,8 @@ function getViewsSelected(nameMatches,on)
 {
 // Returns an array of all views that are on or off (hide)
 // views are "select" drop downs containing 'hide','dense',...
+// To be clear, an array of strings with the view suffix are returned.  
+// name="broadChromatinChIPSeq_dd_WIN" nameMatches='_dd_' returns 'WIN'
    var views = new Array();
    
    if (document.getElementsByTagName) {
@@ -91,9 +98,10 @@ function getViewsSelected(nameMatches,on)
         var vIx=0;
         for (var ix=0;ix<list.length;ix++) {
             var ele = list[ix];
-            if(ele.name.indexOf(nameMatches) == 0) {
+            var nameIx = ele.name.indexOf(nameMatches);
+            if(nameIx >= 0) {
                 if((on && ele.selectedIndex>0) || (!on && ele.selectedIndex==0)) {
-                    views[vIx] = ele.name.substring(3,ele.name.length); 
+                    views[vIx] = ele.name.substring(nameIx+nameMatches.length,ele.name.length); 
                     vIx++;
                 }
             }
