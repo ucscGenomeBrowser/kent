@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.14 2008/06/23 15:07:46 giardine Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.15 2008/06/24 23:48:03 aamp Exp $";
 
 #define CHROM_COLORS 26
 
@@ -5902,6 +5902,7 @@ tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
+tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->freeItems = freeSimpleBed;
 }
 
