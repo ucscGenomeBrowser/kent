@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.126 2008/06/24 19:09:43 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.127 2008/06/24 20:20:57 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1419,6 +1419,21 @@ dlAddTail(busySpokes, node);
 spoke = node->val;
 spokeSendMessage(spoke, machine, message);
 return TRUE;
+}
+
+void checkDeadNodesASAP()
+/* Check dead nodes ASAP, some may have been fixed. 
+ * It tweaks the time since last check on all dead machines
+ * so that grave digger will send them resurrect messages
+ * to see if they are alive. */
+{
+struct dlNode *mNode;
+struct machine *machine;
+for (mNode = deadMachines->head; !dlEnd(mNode); mNode = mNode->next)
+    {
+    machine = mNode->val;
+    machine->lastChecked = now - MINUTE * machineCheckPeriod;
+    }
 }
 
 void checkPeriodically(struct dlList *machList, int period, char *checkMessage,
@@ -3238,6 +3253,8 @@ for (;;)
 	 nodeAlive(line);
     else if (sameWord(command, "checkIn"))
 	 nodeCheckIn(line);
+    else if (sameWord(command, "checkDeadNodesASAP"))
+	 checkDeadNodesASAP();
     else if (sameWord(command, "removeJob"))
 	 removeJobAcknowledge(line, pm);
     else if (sameWord(command, "chill"))
