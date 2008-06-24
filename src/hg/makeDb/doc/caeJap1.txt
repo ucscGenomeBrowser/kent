@@ -3,7 +3,7 @@
 # Caenorhabditis japonica
 #	Washington University School of Medicine GSC and Sanger Institute
 
-#  $Id: caeJap1.txt,v 1.7 2008/06/19 19:47:08 hiram Exp $
+#  $Id: caeJap1.txt,v 1.8 2008/06/24 23:13:16 hiram Exp $
 
 ########################################################################
 #  Download sequence (DONE - 2008-04-03 - Hiram)
@@ -563,3 +563,46 @@ chainOne $(path1)
     rm -rf /cluster/data/caeJap1/bed/tblastn.ce6SG/sgfa
 
 ###########################################################################
+#  verify all.joiner entries (DONE - 2008-06-20 - Hiram)
+    #	try to get joinerCheck tests clean output on these commands
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=caeJap1 -tableCoverage all.joiner
+    #	Error: caeJap1.intronEst tables not in .joiner file
+    #	it isn't clear how to get this to go away
+    joinerCheck -database=caeJap1 -keys all.joiner
+    joinerCheck -database=caeJap1 -times all.joiner
+
+##########################################################################
+#  make downloads (DONE - 2008-06-20 - Hiram)
+    #	verify all tracks have html pages for their trackDb entries
+    cd /cluster/data/caeJap1
+    /cluster/bin/scripts/makeDownloads.pl caeJap1
+    #	fix the README files
+    #	re-build the upstream files:
+    cd /cluster/data/caeJap1/goldenPath/bigZips
+   for size in 1000 2000 5000
+do
+  echo $size
+  featureBits caeJap1 sangerGene:upstream:$size -fa=stdout \
+  | gzip -c > sangerGene.upstream$size.fa.gz
+done
+
+    cp -p bed/windowMasker/cleanWMask.bed.gz \
+	goldenPath/bigZips/chromWMSdust.bed.gz
+
+##########################################################################
+#  create pushQ entry (DONE - 2008-06-20 - Hiram)
+    #	verify all tracks have html pages for their trackDb entries
+    ssh hgwdev
+    cd /cluster/data/caeJap1/jkStuff
+    /cluster/bin/scripts/makePushQSql.pl caeJap1 > caeJap1.pushQ.sql
+# caeJap1 does not have seq
+# caeJap1 does not have extFile
+    scp -p caeJap1.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < caeJap1.pushQ.sql
+    #	verify file sizes in the pushQ entries
+ 
+##########################################################################
