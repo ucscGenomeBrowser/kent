@@ -6,11 +6,12 @@
 #include "chain.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netChainSubset.c,v 1.11 2006/06/20 16:44:18 angie Exp $";
+static char const rcsid[] = "$Id: netChainSubset.c,v 1.12 2008/06/24 05:10:50 markd Exp $";
 
 char *type = NULL;
 boolean splitOnInsert = FALSE;
 boolean wholeChains = FALSE;
+boolean skipMissing = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -26,6 +27,8 @@ errAbort(
   "   -wholeChains - Write entire chain references by net, don't split\n"
   "    when a high-level net is encoundered.  This is useful when nets\n"
   "    have been filtered.\n"
+  "   -skipMissing - skip chains that are not found instead of generating\n"
+  "    an error.  Useful if chains have been filtered.\n"
   );
 }
 
@@ -34,9 +37,9 @@ struct optionSpec options[] = {
    {"type", OPTION_STRING},
    {"splitOnInsert", OPTION_BOOLEAN},
    {"wholeChains", OPTION_BOOLEAN},
+   {"skipMissing", OPTION_BOOLEAN},
    {NULL, 0},
 };
-
 
 void gapWrite(struct chain *chain, FILE *f)
 /* Write gaps to simple two column file. */
@@ -129,8 +132,13 @@ struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     if (fill->chainId)
-        convertFill(fill, 
-		chainLookup(chainHash, fill->chainId), f, gapFile);
+        {
+        struct chain *chain = skipMissing
+            ? chainFind(chainHash, fill->chainId)
+            : chainLookup(chainHash, fill->chainId);
+        if (chain != NULL)
+            convertFill(fill, chain, f, gapFile);
+        }
     if (fill->children)
         rConvert(fill->children, chainHash, f, gapFile);
     }
@@ -165,6 +173,8 @@ optionInit(&argc, argv, options);
 type = optionVal("type", type);
 splitOnInsert = optionExists("splitOnInsert");
 wholeChains = optionExists("wholeChains");
+skipMissing = optionExists("skipMissing");
+
 if (argc != 4)
     usage();
 netChainSubset(argv[1], argv[2], argv[3]);
