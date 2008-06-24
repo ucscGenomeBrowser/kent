@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.13 2008/06/15 15:40:22 braney Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.14 2008/06/24 18:49:17 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,6 +29,8 @@ errAbort(
   "   -extDel     - delete lines in extFile that fail file check\n"
   "               - otherwise just verbose(2) lines that would be deleted\n"
   "   -topDir     - directory name to prepend to file names in extFile\n"
+  "               - default is /usr/local/apache/trash\n"
+  "               - file names in extFile are typically: \"../trash/ct/...\"\n"
   "   -verbose=N - 2 == show arguments, dates, and dropped tables,\n"
   "              - 3 == show date information for all tables."
   );
@@ -55,7 +57,7 @@ static time_t dropTime = 0;
 
 static boolean extFileCheck = FALSE;
 static boolean extDel = FALSE;
-static char *topDir = NULL;
+static char *topDir = "/usr/local/apache/trash";
 
 void checkExtFile(struct sqlConnection *conn)
 /* check extFile table for files that have been removed */
@@ -305,13 +307,16 @@ else
 drop = optionExists("drop");
 historyToo = optionExists("historyToo");
 db = optionVal("db",db);
-verbose(2,"#	drop requested: %s\n", drop ? "TRUE" : "FALSE");
-verbose(2,"#	    historyToo: %s\n", historyToo ? "TRUE" : "FALSE");
-verbose(2,"#	database: %s\n", db);
-
 extFileCheck = optionExists("extFile");
 extDel = optionExists("extDel");
 topDir = optionVal("topDir", topDir);
+verbose(2,"#	drop requested: %s\n", drop ? "TRUE" : "FALSE");
+verbose(2,"#	    historyToo: %s\n", historyToo ? "TRUE" : "FALSE");
+verbose(2,"#	       extFile: %s\n", extFileCheck ? "TRUE" : "FALSE");
+verbose(2,"#	        extDel: %s\n", extDel ? "TRUE" : "FALSE");
+verbose(2,"#	        topDir: %s\n", topDir);
+verbose(2,"#	database: %s\n", db);
+
 dbTrash(db);
 return 0;
 }
