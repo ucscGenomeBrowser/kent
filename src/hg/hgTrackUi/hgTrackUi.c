@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.434 2008/05/31 15:25:51 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.435 2008/06/24 08:26:39 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2872,8 +2872,6 @@ else
         tdb->canPack, "normalText", trackDbSetting(tdb, "onlyVisibility"));
     }
 printf("&nbsp;");
-if (cartUsualBoolean(cart, "fastConfigureMode", FALSE))
-    cartSetString(cart, "hgTracksConfigPage", "configure");
 cgiMakeButton("Submit", "Submit");
 if (isCustomTrack(tdb->tableName))
     {

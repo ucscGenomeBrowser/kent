@@ -161,7 +161,7 @@ for (group = groupList; group != NULL; group = group->next)
         showedRuler = TRUE;
 	hPrintf("<TR>");
 	hPrintf("<TD>");
-        hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
+        hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s&hgTracksConfigPage=configure\">", hgTrackUiName(),
                 cartSessionVarName(), cartSessionId(cart),
                 chromName, RULER_TRACK_NAME);
         hPrintf("%s</A>", RULER_TRACK_LABEL);
@@ -233,7 +233,7 @@ for (group = groupList; group != NULL; group = group->next)
             /* indent members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 	if (track->hasUi)
-	    hPrintf("<A %s%s%s HREF=\"%s?%s=%u&g=%s\">", 
+	    hPrintf("<A %s%s%s HREF=\"%s?%s=%u&g=%s&hgTracksConfigPage=configure\">", 
                 tdb->parent ? "TITLE=\"Part of super track: " : "", 
                 tdb->parent ? tdb->parent->shortLabel : "",
                 tdb->parent ? "...\"" : "", hgTrackUiName(),
@@ -403,17 +403,6 @@ hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
 char *javascript="onClick=\"document.mainForm.hgTracksConfigPage.value='configure';document.mainForm.submit();\"";
-hCheckBoxJS("fastConfigureMode",
-	cartUsualBoolean(cart, "fastConfigureMode" , FALSE), javascript);
-hPrintf("</TD><TD>");
-char tracksHelp[256];
-safef(tracksHelp, sizeof(tracksHelp), "%s/%s", 
-	HELP_DIR, "hgTracksHelp.html#FastConfig");
-hPrintf("Fast configure mode (<A TARGET=_blank HREF=\"%s\">help</A>)",
-	tracksHelp);
-hPrintf("</TD></TR>\n");
-
-hPrintf("<TR><TD>");
 hCheckBoxJS(configPriorityOverride,
 	cartUsualBoolean(cart, configPriorityOverride , FALSE), javascript);
 hPrintf("</TD><TD>");
