@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.123 2008/06/13 08:52:47 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.124 2008/06/24 18:47:15 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -240,7 +240,7 @@ void updateUserSickNodes(struct user *user)
 struct dlNode *node;
 struct batch *batch;
 hashFree(&user->sickNodes);
-user->sickNodes = newHash(6);
+user->sickNodes = newHashExt(6, FALSE);
 node = user->curBatches->head; 
 if (!dlEnd(node))
     {
@@ -382,7 +382,7 @@ batch->user = user;
 batch->jobQueue = newDlList();
 batch->priority = NORMAL_PRIORITY;
 batch->maxJob = -1;
-batch->sickNodes = newHash(6);
+batch->sickNodes = newHashExt(6, FALSE);
 
 batch->cpu = defaultJobCpu;    /* number of cpuUnits in default job usage */  
 batch->ram = defaultJobRam;    /* number of ramUnits in default job usage */
@@ -436,7 +436,7 @@ if (user == NULL)
     dlAddTail(unqueuedUsers, user->node);
     user->curBatches = newDlList();
     user->oldBatches = newDlList();
-    user->sickNodes = newHash(6);
+    user->sickNodes = newHashExt(6, FALSE);
     }
 return user;
 }
@@ -2080,8 +2080,8 @@ struct batch *batch = findBatch(user, dir, TRUE);
 if (user == NULL) return -2;
 if (batch == NULL) return -2;
 hashFree(&batch->sickNodes);
+batch->sickNodes = newHashExt(6, FALSE);
 batch->continuousCrashCount = 0;  /* reset so user can retry */
-batch->sickNodes = newHash(6);
 needsPlanning = TRUE;
 updateUserSickNodes(user);
 logInfo("paraHub: User %s cleared sick nodes for batch %s", userName, dir);
