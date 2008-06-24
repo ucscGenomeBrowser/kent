@@ -423,7 +423,6 @@ trackDb setting.  This has not been entirely generalized -- use with care.
 
 For readability, please indent the subtrack entries in trackDb.ra by 4 spaces.
 
-
 Subtrack Groups
 ---------------
 To allow flexibility in user configuration of subtrack
@@ -444,48 +443,132 @@ Subgroups for a subtrack are set as so:
 
     subGroups grp1=val1 grp2=val2 ...
 
-Composite track Example
--------------------------
-track encodeDnaRep
+Composite Track ADDITIONAL OPTIONS
+----------------------------------
+
+MATRIX or DIMENSIONS
+--------------------
+Composite Tracks can be organized into a matrix of X and Y Dimensions of 
+subtracks.  This method of organization also may include a "Views" dimension.
+The organization is achieved with a dimensions setting which refers to 
+subgroups already defined. Example:
+    subGroup2 cell_type Cell_Type ES=ES MEF=MEF NP=NP EShyb=ES-hybrid
+    subGroup3 factor Factor K4=H3K4me3 K9=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3 PAN=pan-H3 WCE=WCE RPOL=RPol-II
+    dimensions dimensionX=cell_type dimensionY=factor 
+This will result in a composite track configuration page with a matrix of check boxes with
+'Cell Types' along the X axis and 'Factors' alnog the Y.  All individual subtracks will be
+displayed below, but the matix of check boxes will allow easy selection by types. 
+
+VIEWS
+-----
+A composite track may have subtracks with similar data subtracks which have different types or views.
+For instance, ChIP-seq tracks may cover raw aligns, a signal track and called peaks.  The aligns may be
+'bed 3', peaks 'bed 5 +' and signal 'wig'.  These views need different controls, though all signal 
+subtracks may share the same controls (based upon subgroups).  This organization is achieved with 
+the specilaized subgroup "views". Example:  
+    subGroup1 view Views HMM=Sites-HMM WIN=Sites-Windowing SIG=Signal_Densities ALN=Alignments
+where each view (HMM,WIN,SIG,ALN) will be controlled by a separate drop down (hide,dense,...) and
+auxilary controls.  All subtracks for a given view must be of the same track type.  Currently this
+feature is only enabled for a composite using dimensions.
+
+DIVIDERS
+--------
+In order to more easily recognize the organization of a large list of subtracks in a composite 
+configuration page, dividers can be places between different groups of subtracks. Example:
+    subGroup2 cell_type Cell_Type ES=ES MEF=MEF NP=NP EShyb=ES-hybrid
+    subGroup3 factor Factor K4=H3K4me3 K9=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3 PAN=pan-H3 WCE=WCE RPOL=RPol-II
+    dividers cell_type factor 
+This will place a simple dividing line anytime the cell_type or factor changes when listing 
+the subtracks on the subtrack configuration page.  In addition, alternate groups will be displayed 
+with slightly different background color.
+
+HIERARCHY
+---------
+This setting allows one more means of visually organizing many subtracks on the composite track 
+configuration page.  It is especially useful in easily distinguishing views which are likely
+to be different within a single group of subtracks.  Example:
+    hierarchy view HMM=0 WIN=0 SIG=1 ALN=2
+While a particular cell type and factor combination may be set of with dividers, between the
+dividers the HMM and WIN type subtracks have no indentation, while the signal track is indented by one
+and the alignment subtrack by two.
+
+EXAMPLE of Composite Track with ADITIONAL OPTIONS
+-------------------------------------------------
+track broadChromatinChIPSeq
 compositeTrack on
-shortLabel DNA Rep
-longLabel University of Virginia DNA Replication for ENCODE
-group encode
-priority 50.1
-color 10,130,10 
-altColor 50,50,50
-visibility hide
-subGroup1 celltype Cell_Type gm=GM06990 hela=HeLa
-subGroup2 timepoint Time_Point 0h=0-2hrs 2h=2-4hrs
+shortLabel Broad Chromatin ChIP-Seq 
+longLabel Broad Institute Chromatin State Mapping using ChIP-Seq
+group regulation
+subGroup1 view Views HMM=Sites-HMM WIN=Sites-Windowing SIG=Signal_Densities ALN=Alignments
+subGroup2 cell_type Cell_Type ES=ES MEF=MEF NP=NP EShyb=ES-hybrid
+subGroup3 factor Factor K4=H3K4me3 K9=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3 PAN=pan-H3 WCE=WCE RPOL=RPol-II
+dimensions dimensionX=cell_type dimensionY=factor 
+dividers cell_type factor 
+hierarchy view HMM=0 WIN=0 SIG=1 ALN=2
+priority 130
 type bed 3
 
-    track encodeDnaRep0
-    subTrack encodeDnaRep
-    shortLabel 0-2hr
-    longLabel Univ. Virginia Temporal Profiling of DNA Replication (GM06990 0-2 hrs) in ENCODE Regions
-    subGroups celltype=gm timepoint=0h
-    priority 1
+    track broadStemChipHmmSitesH3K4me3Es
+    shortLabel H3K4me3-ES HMM
+    longLabel Broad Stem Cell Chromatin IP Sites by HMM (H3K4me3 ab, Embryonic Stem (ES) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4 cell_type=ES view=HMM
+    type bed 3
+    color 25,25,150
+    noInherit off
+    priority 1.00
 
-    track encodeDnaRep2
-    subTrack encodeDnaRep off
-    shortLabel 2-4hr
-    longLabel Univ. Virginia Temporal Profiling of DNA Replication (GM06990 2-4 hrs) in ENCODE Regions
-    subGroups celltype=gm timepoint=2h
-    priority 2
+    track broadStemChipWinSitesH3K4me3Es
+    shortLabel H3K4me3-ES Win
+    longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K4me3 ab, Embryonic Stem (ES) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4 cell_type=ES view=WIN
+    type bed 5 +
+    useScore 1
+    color 25,25,150
+    noInherit off
+    priority 2.00
 
-    track encodeDnaRepHela0
-    subTrack encodeDnaRep
-    shortLabel 0-2hr
-    longLabel Univ. Virginia Temporal Profiling of DNA Replication (HeLa 0-2 hrs) in ENCODE Regions
-    subGroups celltype=hela timepoint=0h
-    priority 3
+    track broadStemChipSignalH3K4Es
+    shortLabel H3K4me3-ES Sig
+    longLabel Broad Stem Cell Chromatin IP Signal (H3K4me3 ab, Embryonic Stem (ES) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4 cell_type=ES view=SIG
+    type wig
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 100:32:8
+    color 25,150,25
+    noInherit on
+    priority 3.01
 
-    track encodeDnaHelaRep2
-    subTrack encodeDnaRep off
-    shortLabel 2-4hr
-    longLabel Univ. Virginia Temporal Profiling of DNA Replication (HeLa 2-4 hrs) in ENCODE Regions
-    subGroups celltype=hela timepoint=2h
-    priority 4
+    track broadStemChipAlignmentsH3K4Me3Es
+    shortLabel H3K4me3-ES Align
+    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Embryonic Stem (ES) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4 cell_type=ES view=ALN
+    type bed 9 +
+    useScore 1
+    noInherit off
+    priority 4.02
+
+    track broadStemChipWinSitesH3K4me3Mef
+    shortLabel H3K4me3-MEF Win
+    longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K4me3 ab, Embryonic Fibroblasts (MEF))
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4 cell_type=MEF view=WIN
+    type bed 5 +
+    useScore 1
+    color 25,25,150
+    noInherit off
+    priority 12.10
+     . . .
+     
+This example set up a composite track configuration page with an X and Y dimension matrix
+of check boxes for Cell Yypes by Factors.  Additionally, there are up to four views for 
+each cell_type/factor combination.  Each cell_type/factor set wil be set off by dividers
+and all subtracks belonging to the ALN view will be indented by two for easy visual
+identification.
 
 ---------------------
 
