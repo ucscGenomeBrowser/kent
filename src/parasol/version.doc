@@ -39,7 +39,7 @@
      Fixed bug in paraHub causing crash when using priorities.
      Made paraHub into a proper daemon which is better for normal usage.
      Added -log=path/logfile to paraHub and paraNode so that users
-     debugging without admin priveleges can see output.
+     debugging without admin privileges can see output.
      Added -debug option to paraHub so it won't demonize for debugging.
 
 11 - Added estimated completion time to para. -eta for time function.
@@ -48,7 +48,7 @@
      longest job to longest finished job. Fixed paraFormatIp to 
      return host instead of network order. Added reminder to 
      documentation that the machine names in .ms files should 
-     match the $HOST variables on the nodes.  Fixed parsol remove machine 
+     match the $HOST variables on the nodes.  Fixed parasol remove machine 
      so you don't have to do it twice, and so it logs user and requires
      a comment for the log so admin knows why it was removed.
 
@@ -218,10 +218,48 @@
         This version depends on a newer version of rudp in kent/src/lib,
         and we also updated the paraMessage to support pmm or parasol multi-messages.
         Much of this work had been done earlier and was just pulled in from
-        an old sandbox.
+        an old sandbox.  
+
+        Also added to rudp checking that the ack for rudpSend is coming
+        back from the right ip and port.  Dozens of bad ack cases like this were 
+	occurring per test run of 100,000 jobs.
 
         Fixed old bug in nodeAlive when jobid found in queue still.  This caused
         occasional strangeness like negative user runningCount, and that user 
         would hog the cluster.  Simply added code to change the counts in the
         opposite direction from requeueJob.
+
+        Added to rudp duplicate packet filtering.  Duplicate packets have 
+        always been possible and happening at a low rate.  There was no
+        protection from receiving duplicate packets/messages.  It was 
+        particularly a problem during hub restart when scanning all the nodes
+        for running jobs.  The duplicate packet filtering was realized by 
+        sending the process-id and the rudp-connection id (auto-incremented
+        in a thread-safe way) so that the receiver can maintain a hash-indexed
+        list of packets seen.  Duplicates are easily found and eliminated.
+        New info is added to end of list and inserted into the hash.
+        Old info is removed from the start of the list and removed from the hash.
+        It remembers packets for 8 seconds.  The code for removing duplicate 
+        packets in the pmm layer is now probably redundant but harmless.
+
+        This necessitated adding an option to the hash library to use regular 
+        heap memory instead of local stack-based memory.
+        Since we needed to automatically re-size the hash quickly,
+        we added resizing as a new hash capability and added a boolean flag for
+        automatic hash expansion.  Also added hashVal to hash element struct
+        so that the hashString call is avoided on hash resizing.
+
+
+        New command - added for checking dead nodes for resurrection ASAP.
+        This was requested by the admins, after they have fixed a problem
+        on a bunch of machines, and don't want to wait 20 minutes for 
+        gravedigger to get around to checking.
+          parasol check dead - Check machines marked dead ASAP, some have been fixed.
+  
+        New command - added a command for people NOT using the para client to clear
+        the sick statistics (e.g. sick batch and sick nodes) on their batch.
+        Kevin Karplus may start using parasol client to directly run jobs 
+	without using para client.  These users should be able to clear sick stats.
+          parasol [options] clear sick  - Clear sick stats on a batch.
+            options: -results=file
 
