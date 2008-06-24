@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.9 2008/06/23 22:27:13 hiram Exp $
+#  $Id: ce6.txt,v 1.10 2008/06/24 18:58:45 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -1226,17 +1226,12 @@ TMPDIR=/scratch/tmp
 
     #	rearrange to get Ce6 on top for the construction of the tree image
     #	in the 6-way description page.  This results in something like:
-((((
-    (briggsae_cb3:0.005000,remanei_caeRem3:0.003000):0.004000
-	,brenneri_caePb2:0.013000):0.002000,
-	    elegans_ce6:0.003000):0.001000,
-		japonica_caeJap1:0.023000):0.384000,
-		    pristiochus_priPac1:0.800000);
 
-((C._elegans_ce6:0.003000,
-    (((C._remanei_caeRem3:0.003000,C._briggsae_cb3:0.005000):0.004000,
-    C._brenneri_caePb2:0.013000):0.002000,
-	    C._japonica_caeJap1:0.023000):0.001000):0.384000,
+(((C._elegans_ce6:0.003000,
+    (C._brenneri_caePb2:0.013000,
+	(C._remanei_caeRem3:0.003000,C._briggsae_cb3:0.005000):0.004000)
+		:0.002000):0.001000,
+	    C._japonica_caeJap1:0.023000):0.384000,
 		P._pristiochus_priPac1:0.800000);
 
     /cluster/bin/phast/x86_64/all_dists 6way.nh > 6way.distances.txt
