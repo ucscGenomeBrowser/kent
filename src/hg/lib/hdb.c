@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.359 2008/06/16 15:09:55 giardine Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.360 2008/06/25 16:15:57 tdreszer Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3599,6 +3599,8 @@ else
 static void subtrackInherit(struct trackDb *subtrackTdb,
 			    struct trackDb *compositeTdb)
 {
+assert(subtrackTdb->parent == NULL || subtrackTdb->parent == compositeTdb);
+subtrackTdb->parent = compositeTdb;    
 if (!trackDbSetting(subtrackTdb, "noInherit"))
     {
     /* no longer necessary ? -- this is done in hgTrackDb now */
