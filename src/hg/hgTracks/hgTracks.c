@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1487 2008/06/24 19:05:01 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1488 2008/06/25 19:58:02 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1541,17 +1541,27 @@ for (track = trackList; track != NULL; track = track->next)
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
                 {
-		hashAddUnique(trackHash, subtrack->mapName, subtrack);
+                hashAddUnique(trackHash, subtrack->mapName, subtrack);
                 if (!isSubtrackVisible(subtrack))
                     continue;
-		if (!subtrack->limitedVisSet)
-		    {
-		    subtrack->visibility = track->visibility;
-		    subtrack->limitedVis = track->limitedVis;
-		    subtrack->limitedVisSet = TRUE;
-		    }
+                if (!subtrack->limitedVisSet)
+                    {
+                    subtrack->visibility = track->visibility;
+                    subtrack->limitedVis = track->limitedVis;
+                    subtrack->limitedVisSet = TRUE;
+                    }
+                // If the composite track has "view" based drop downs, set visibility based upon those
+                char *stView;
+                if(subgroupFind(subtrack->tdb,"view",&stView))
+                    {
+                    char ddName[128];
+                    safef(ddName,128,"%s_dd_%s",track->mapName,stView); // If not found takes "usual"
+                    subtrack->visibility = hTvFromString(cartUsualString(cart, ddName,hStringFromTv(subtrack->visibility)));
+                    subtrack->limitedVis = tvMin(track->visibility,subtrack->visibility);
+                    subgroupFree(&stView);
+                    }
                 }
-	    }
+            }
 	if (maxSafeHeight < (pixHeight+trackPlusLabelHeight(track,fontHeight)))
 	    {
 	    char numBuf[64];
