@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.10 2008/06/09 05:16:03 tdreszer Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.11 2008/06/25 17:11:43 tdreszer Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -3813,6 +3813,36 @@ zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
     # ssh -x kolossus nice /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain/netChains.csh
     
     ### Can't seem to get ahead!!!
+
+    ## Doing each step in netChains.csh manually...
+    
+    cd /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain
+
+    # Make nets ("noClass", i.e. without rmsk/class stats which are added later):
+    chainPreNet cavPor3.speTri0.all.chain.gz /cluster/data/cavPor3/chrom.sizes  /cluster/data/ speTri0/chrom.sizes stdout \
+     | chainNet stdin -minSpace=1 /cluster/data/cavPor3/chrom.sizes  /cluster/data/speTri0/chrom.sizes stdout /dev/null \
+     | netSyntenic stdin noClass.net
+    # Completed successfully
+
+    # Make liftOver chains:
+    netChainSubset -verbose=0 noClass.net cavPor3.speTri0.all.chain.gz netChainSubset.out
+    ll netChainSubset.out 
+    # -rw-rw-r--  1 tdreszer protein 73728 Jun  6 17:12 netChainSubset.out
+
+    chainStitchId netChainSubset.out chainStitchId.out
+    ll chainStitchId.out
+    # -rw-rw-r--  1 tdreszer protein 0 Jun  9 09:13 chainStitchId.out
+    # gzip -c chainStitchId.out > cavPor3.speTri0.over.chain.gz
+    # Duh: gzip: stdout: Broken pipe
+
+    # Okay, continuing with next step, ignoring the empty cavPor3.speTri0.over.chain.gz
+    # Make axtNet for download: one .axt for all of cavPor3.
+    mkdir ../axtNet
+    netToAxt -verbose=0 noClass.net cavPor3.speTri0.all.chain.gz \
+      /scratch/data/cavPor3/cavPor3.2bit /scratch/data/speTri0/speTri0.2bit stdout \
+      | axtSort stdin stdout \
+      | gzip -c > ../axtNet/cavPor3.speTri0.net.axt.gz
+
 
 
     ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Got here!
