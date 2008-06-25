@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.14 2008/05/06 23:38:23 angie Exp $
+# $Id: HgAutomate.pm,v 1.15 2008/06/25 16:08:23 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -55,9 +55,6 @@ use vars qw( %cluster %clusterFilesystem $defaultDbHost );
       'kk' =>
         { 'enabled' => 1, 'gigaHz' => 0.8, 'ram' => 1,
 	  'hostCount' => 600, },
-      'kki' =>
-        { 'enabled' => 1, 'gigaHz' => 2.2, 'ram' => 8,
-	  'hostCount' => 16, },
       'memk' =>
         { 'enabled' => 1, 'gigaHz' => 1.0, 'ram' => 32,
 	  'hostCount' => 32, },
@@ -76,7 +73,7 @@ my @allClusters = (keys %cluster);
       'iscratch' =>
         { root => '/iscratch/i', clusterLocality => 0.5,
 	  distrHost => ['kkr1u00'], distrCommand => 'iSync',
-	  inputFor => ['kk', 'kki', 'kk9'], outputFor => [], },
+	  inputFor => ['kk', 'kk9'], outputFor => [], },
       'san' =>
         { root => '/san/sanvol1/scratch', clusterLocality => 0.5,
 	  distrHost => ['pk', 'kkstore*'], distrCommand => '',
@@ -163,7 +160,7 @@ sub getWarnClusters {
     if ($isInput) {
       return @allClusters;
     } else {
-      return ('kki');
+      return ('memk');
     }
   }
 }
@@ -214,7 +211,7 @@ sub getWorkhorseLoads {
   confess "Too many arguments" if (scalar(@_) != 0);
   my %horses = ();
   foreach my $machLine ('kolossus',
-		    `ssh -x kki parasol list machines | grep idle`) {
+		    `ssh -x memk parasol list machines | grep idle`) {
     my $mach = $machLine;
     $mach =~ s/[\. ].*//;
     chomp $mach;

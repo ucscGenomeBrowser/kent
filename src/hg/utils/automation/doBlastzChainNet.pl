@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.20 2008/05/23 23:19:41 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.21 2008/06/25 16:08:23 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -74,7 +74,7 @@ my $stepper = new HgStepManager(
 
 # Option defaults:
 my $bigClusterHub = 'kk';
-my $smallClusterHub = 'kki';
+my $smallClusterHub = 'memk';
 my $dbHost = 'hgwdev';
 my $workhorse = 'kolossus';
 my $defaultChainLinearGap = "loose";
