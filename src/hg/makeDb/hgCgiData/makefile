@@ -16,5 +16,8 @@ beta::
 	chmod -R g+w ${CGI_BIN}-beta/hgCgiData
 	chmod -R a+rX ${CGI_BIN}-beta/hgCgiData
 
+compile::
+	# do nothing -- placeholder target so we don't get a warning from make
+
 clean::
 	# do nothing -- placeholder target so we don't get a warning from make
