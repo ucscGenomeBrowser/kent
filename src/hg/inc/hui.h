@@ -169,13 +169,14 @@ void hTvDropDownClassVisOnly(char *varName, enum trackVisibility vis,
 /* Make track visibility drop down for varName with style class,
 	and potentially limited to visOnly */
 
-void hTvDropDownClass(char *varName, enum trackVisibility vis, boolean canPack, char *class);
-/* Make track visibility drop down for varName with style class */
-
-void hTvDropDown(char *varName, enum trackVisibility vis, boolean canPack);
-/* Make track visibility drop down for varName 
- * uses style "normalText" */
-
+void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boolean canPack, char *class,char *javascript);
+/* Make track visibility drop down for varName with style class and javascript */
+#define hTvDropDownClass(varName,vis,canPack,class) \
+        hTvDropDownClassWithJavascript((varName),(vis),(canPack),(class),"")
+#define hTvDropDownWithJavascript(varName,vis,canPack,javascript) \
+        hTvDropDownClassWithJavascript((varName),(vis),(canPack),"normalText",(javascript))
+#define hTvDropDown(varName,vis,canPack) \
+        hTvDropDownClassWithJavascript((varName),(vis),(canPack),"normalText","")
 
 #define SUPERTRACK_DEFAULT_VIS  "hide"
 
@@ -786,5 +787,26 @@ boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
  *   -1 don't know (this function should determine)
  * If -1,i the subtracks field must be populated with the child trackDbs.
  * Returns false if not a supertrack */
+
+boolean subgroupFind(struct trackDb *childTrack, char *name,char **value);
+/* looks for a single tag in a childTrack's subGroups setting */
+
+void subgroupFree(char **value);
+/* frees subgroup memory */
+
+int tvConvertToNumericOrder(enum trackVisibility v);
+/* Convert the enum to numeric order of display power full=4,hide=0 */ 
+
+int tvCompare(enum trackVisibility a, enum trackVisibility b);
+/* enum trackVis isn't in numeric order by visibility, so compare
+ * symbolically: */
+
+enum trackVisibility tvMin(enum trackVisibility a, enum trackVisibility b);
+/* Return the less visible of a and b. */
+
+char *compositeViewControlNameFromTdb(struct trackDb *tdb);
+/* Returns a string with the composite view control name if one exists */
+void compositeViewControlNameFree(char **name);
+/* frees a string allocated by compositeViewControlNameFromTdb */
 
 #endif /* HUI_H */
