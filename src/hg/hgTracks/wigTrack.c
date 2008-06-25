@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.77 2008/05/23 22:14:58 angie Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.78 2008/06/25 19:57:26 tdreszer Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -212,6 +212,9 @@ else
 }
 #endif
 
+#define WIG_PACK_HEIGHT   (tl.fontHeight+1)
+#define WIG_SQUISH_HEIGHT 3
+
 int wigTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Wiggle track will use this to figure out the height they use
    as defined in the cart */
@@ -225,6 +228,7 @@ wigCart = (struct wigCartOptions *) tg->extraUiData;
  *	item, so there is nothing to do here, either it is the tvFull
  *	height as chosen by the user from TrackUi, or it is the dense
  *	mode.
+ *  ADDENDUM: wiggle options for squish and pack are being added.
  */
 /*	Wiggle tracks depend upon clipping.  They are reporting
  *	totalHeight artifically high by 1 so this will leave a
@@ -235,6 +239,10 @@ wigCart = (struct wigCartOptions *) tg->extraUiData;
  */
 if (vis == tvDense)
     tg->lineHeight = tl.fontHeight+1;
+else if (vis == tvPack)
+    tg->lineHeight = WIG_PACK_HEIGHT;
+else if (vis == tvSquish)
+    tg->lineHeight = WIG_SQUISH_HEIGHT;
 else if (vis == tvFull)
     tg->lineHeight = max(wigCart->minHeight, wigCart->defaultHeight);
 
@@ -840,7 +848,7 @@ for (x1 = 0; x1 < width; ++x1)
 	 *	about coordinates or height of line to draw.
 	 *	We are actually drawing single pixel wide lines here.
 	 */
-	if (vis == tvFull)
+	if (vis == tvFull || vis == tvPack)
 	    {
 	    if (lineBar == wiggleGraphBar)
 		{
@@ -850,8 +858,8 @@ for (x1 = 0; x1 < width; ++x1)
 		{	/*	draw a 3 pixel height box	*/
 		hvGfxBox(hvg, x1+xOff, yPointGraph, 1, 3, drawColor);
 		}
-	    }	/*	vis == tvFull	*/
-	else if (vis == tvDense)
+	    }	/*	vis == tvFull || vis == tvPack */
+	else if (vis == tvDense || vis == tvSquish)
 	    {
 	    double grayValue;
 	    int grayIndex;
@@ -866,7 +874,7 @@ for (x1 = 0; x1 < width; ++x1)
 	    boxHeight = tg->lineHeight;
 	    hvGfxBox(hvg, x1+xOff, yOff, 1,
 		boxHeight, drawColor);
-	    }	/*	vis == tvDense	*/
+	    }	/*	vis == tvDense || vis == tvSquish	*/
 	lastRealX = xOff + x1;
 	lastRealY = yOff + y1;
 	}	/*	if (preDraw[].count)	*/
@@ -1394,21 +1402,22 @@ int maxHeight = atoi(DEFAULT_HEIGHT_PER);
 int minHeight = MIN_HEIGHT_PER;
 
 AllocVar(wigCart);
+char *name = compositeViewControlNameFromTdb(tdb);
 
 /*	These Fetch functions look for variables in the cart bounded by
  *	limits specified in trackDb or returning defaults
  */
-wigCart->lineBar = wigFetchGraphType(tdb, (char **) NULL);
-wigCart->horizontalGrid = wigFetchHorizontalGrid(tdb, (char **) NULL);
+wigCart->lineBar = wigFetchGraphTypeWithCart(cart,tdb,name, (char **) NULL);
+wigCart->horizontalGrid = wigFetchHorizontalGridWithCart(cart,tdb,name, (char **) NULL);
 
-wigCart->autoScale = wigFetchAutoScale(tdb, (char **) NULL);
-wigCart->windowingFunction = wigFetchWindowingFunction(tdb, (char **) NULL);
-wigCart->smoothingWindow = wigFetchSmoothingWindow(tdb, (char **) NULL);
+wigCart->autoScale = wigFetchAutoScaleWithCart(cart,tdb,name, (char **) NULL);
+wigCart->windowingFunction = wigFetchWindowingFunctionWithCart(cart,tdb,name, (char **) NULL);
+wigCart->smoothingWindow = wigFetchSmoothingWindowWithCart(cart,tdb,name, (char **) NULL);
 
-wigFetchMinMaxPixels(tdb, &minHeight, &maxHeight, &defaultHeight);
-wigFetchYLineMarkValue(tdb, &yLineMark);
+wigFetchMinMaxPixelsWithCart(cart,tdb,name, &minHeight, &maxHeight, &defaultHeight);
+wigFetchYLineMarkValueWithCart(cart,tdb,name, &yLineMark);
 wigCart->yLineMark = yLineMark;
-wigCart->yLineOnOff = wigFetchYLineMark(tdb, (char **) NULL);
+wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,name, (char **) NULL);
 
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;
@@ -1417,7 +1426,7 @@ wigCart->minHeight = minHeight;
 if(trackDbSetting(tdb, "wigColorBy") != NULL)
     wigCart->colorTrack = trackDbSetting(tdb, "wigColorBy");
 
-wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
+wigFetchMinMaxYWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 track->minRange = minY;
 track->maxRange = maxY;
 
@@ -1443,4 +1452,5 @@ track->drawLeftLabels = wigLeftLabels;
 /*	the lfSubSample type makes the image map function correctly */
 track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 
+compositeViewControlNameFree(&name);
 }	/*	wigMethods()	*/
