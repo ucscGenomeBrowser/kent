@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1488 2008/06/25 19:58:02 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1489 2008/06/25 20:47:39 kuhn Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3529,8 +3529,8 @@ if (!hideControls)
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     hButton("hgt.dinkLR", " > ");
     hPrintf("</TD><TD COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
-    hWrites("Click on a feature for details."
-            "Click on base position to zoom in around cursor."
+    hWrites("Click on a feature for details. "
+            "Click on base position to zoom in around cursor. "
             "Click gray/blue bars on left for track options and descriptions." );
     hPrintf("</TD><TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
     hPrintf("move end<BR>");
