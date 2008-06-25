@@ -157,10 +157,12 @@ if($encInstance =~ /(_.*)/) {
 chdir($submitDir);
 
 # clean out any stuff from previous load
+# We assume unload program is in the same location as loader (fixes problem with misconfigured qateam environment).
 
-# XXXX change to ".pl" when ready
-if(system("doEncodeUnload.rb $submitType $submitDir")) {
-    die "expected error running doEncodeUnload.rb cleanup script";
+my $programDir = dirname($0);
+# XXXX change to "doEncodeUnload.pl" when ready
+if(system("$programDir/doEncodeUnload.rb $submitType $submitDir")) {
+    die "expected error running $programDir/doEncodeUnload.rb cleanup script";
 }
 
 if(!(-e $loadRa)) {
