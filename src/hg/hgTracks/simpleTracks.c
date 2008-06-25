@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.16 2008/06/25 18:25:46 giardine Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.17 2008/06/25 19:57:00 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 
@@ -8745,6 +8745,8 @@ else if (tg->bedSize == 5)
 else
     loader = bedLoad6;
 
+char *name = compositeViewControlNameFromTdb(tg->tdb);
+
 /* limit to a specified count of top scoring items.
  * If this is selected, it overrides selecting item by specified score */
 if ((setting = trackDbSetting(tg->tdb, "filterTopScorers")) != NULL)
@@ -8752,21 +8754,21 @@ if ((setting = trackDbSetting(tg->tdb, "filterTopScorers")) != NULL)
     wordCt = chopLine(cloneString(setting), words);
     if (wordCt >= 3)
         {
-        safef(option, sizeof(option), "%s.filterTopScorersOn", tg->mapName);
+        safef(option, sizeof(option), "%s.filterTopScorersOn", name);
         doScoreCtFilter =
             cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
-        safef(option, sizeof(option), "%s.filterTopScorersCt", tg->mapName);
+        safef(option, sizeof(option), "%s.filterTopScorersCt", name);
         scoreFilterCt = cartCgiUsualInt(cart, option, atoi(words[1]));
         topTable = words[2];
         /* if there are not too many rows in the table then can define */
         /* top table as the track or subtrack table */
         if (sameWord(topTable, "self"))
-            topTable = cloneString(tg->mapName);
+            topTable = cloneString(name);
         }
     }
 
 /* limit to items above a specified score */
-safef(option, sizeof(option), "%s.scoreFilter", tg->mapName);
+safef(option, sizeof(option), "%s.scoreFilter", name);
 optionScoreVal = trackDbSetting(tg->tdb, "scoreFilter");
 if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
@@ -8807,6 +8809,7 @@ slReverse(&list);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 tg->items = list;
+compositeViewControlNameFree(&name);
 }
 
 void bed8To12(struct bed *bed)
@@ -10785,31 +10788,6 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	subtrack->limitedVisSet = TRUE;
 	}
     }
-}
-
-static int tvCompare(enum trackVisibility a, enum trackVisibility b)
-/* enum trackVis isn't in numeric order by visibility, so compare
- * symbolically: */
-{
-if (a == b) return 0;
-if (a == tvFull) return -1;
-if (b == tvFull) return 1;
-if (a == tvPack) return -1;
-if (b == tvPack) return 1;
-if (a == tvSquish) return -1;
-if (b == tvSquish) return 1;
-if (a == tvDense) return -1;
-if (b == tvDense) return 1;
-return 0;
-}
-
-static enum trackVisibility tvMin(enum trackVisibility a, enum trackVisibility b)
-/* Return the less visible of a and b. */
-{
-if (tvCompare(a, b) >= 0)
-    return a;
-else
-    return b;
 }
 
 static int compositeTotalHeight(struct track *track, enum trackVisibility vis)
