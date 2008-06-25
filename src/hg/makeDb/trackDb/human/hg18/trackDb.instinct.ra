@@ -185,3 +185,15 @@ expScale 2.0
 expStep 0.2
 groupings chinSFGenomeBio2007Groups
 
+track naderi2007Exp
+shortLabel Breast Cancer Gene Expression (Naderi et al. Oncogene 2007)
+longLabel Breast Cancer Gene Expression (Naderi et al. Oncogene 2007)
+group x
+priority 46
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings naderi2007ExpGroups
+
