@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.19 2008/05/06 23:37:34 angie Exp $
+# $Id: makePushQSql.pl,v 1.20 2008/06/25 16:14:47 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -504,13 +504,12 @@ _EOF_
 } # printHeader
 
 
-sub printEntry($$$) {
+sub printEntry($$$$) {
   # Print out a single push queue entry (row of new table).
-  my ($entry, $id, $localDb) = @_;
+  my ($entry, $id, $localDb, $releaseLog) = @_;
   my $idStr = sprintf "%06d", $id;
   my $date = `date +%Y-%m-%d`;
   my $rank = $id;
-  my $releaseLog = "";
   my $size = 0;  # User will have to use qaPushq to update for now.
   chomp $date;
   print <<_EOF_
@@ -553,7 +552,7 @@ sub printSwaps($) {
 			     "chain/net download $downloads !\n");
 	  }
       }
-    &printEntry(\%entry, $id, $oDb);
+    &printEntry(\%entry, $id, $oDb, "$oO Chain and Net");
     ++$id;
     undef($dbTables);
     undef(%entry);
@@ -565,7 +564,7 @@ sub printAllEntries {
   my ($entries) = @_;
   my $id = 1;
   foreach my $entry (@{$entries}) {
-    &printEntry($entry, $id, $db);
+    &printEntry($entry, $id, $db, "");
     $id++;
   }
   &printSwaps($id);
