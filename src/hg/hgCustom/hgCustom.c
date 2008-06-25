@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.125 2008/06/04 16:31:08 hiram Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.126 2008/06/25 21:31:18 aamp Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -514,7 +514,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
             char *chrom = cloneString(pos);
             chopSuffixAt(chrom, ':');
             if (hgOfficialChromName(chrom))
-                printf("<TD><A HREF='%s?%s&position=%s' TITLE=%s>%s:</A></TD>", 
+                printf("<TD><A HREF='%s?%s&position=%s&hgTracksConfigPage=notSet' TITLE=%s>%s:</A></TD>", 
                     hgTracksName(), cartSidUrlString(cart),pos, pos, chrom);
             else
                 puts("<TD>&nbsp;</TD>");

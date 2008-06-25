@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1489 2008/06/25 20:47:39 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1490 2008/06/25 21:31:09 aamp Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4327,7 +4327,7 @@ hSetDb(database);
 hDefaultConnect();
 initTl();
 
-char *configPageCall = cartUsualString(cart, "hgTracksConfigPage", "notSet");
+char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 /* Do main display. */
 if (cartVarExists(cart, "chromInfoPage"))
     {
