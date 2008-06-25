@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.15 2008/06/24 23:48:03 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.16 2008/06/25 18:25:46 giardine Exp $";
 
 #define CHROM_COLORS 26
 
@@ -175,6 +175,7 @@ boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codons text in gen
 boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we can color each codon*/
 
 boolean withLeftLabels = TRUE;		/* Display left labels? */
+boolean withIndividualLabels = TRUE;    /* print labels on item-by-item basis (false to skip) */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
 boolean withNextExonArrows = FALSE;	/* Display next exon navigation buttons near center labels? */
@@ -2677,10 +2678,8 @@ if(tg->itemNameColor != NULL)
     color = tg->itemNameColor(tg, item, hvg);
 int y = yOff + tg->lineHeight * sn->row;
 tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
-/* addition for pgSnp tracks */
-if (tg->customPt && sameString(tg->customPt, "noLabel"))
-    withLabels = FALSE;
-//withLabels = (withLeftLabels && (vis == tvPack) && !tg->drawName);
+/* pgSnp tracks may change flags between items */
+withLabels = (withLeftLabels && withIndividualLabels && (vis == tvPack) && !tg->drawName);
 if (withLabels)
     {
     int nameWidth = mgFontStringWidth(font, name);
@@ -9342,7 +9341,7 @@ if (revCmplDisp)
 if ((!zoomedToBaseLevel && tg->customInt > 50)
     || vis == tvSquish || vis == tvDense || myItem->alleleCount > 2)
     { 
-    tg->customPt = NULL;
+    withIndividualLabels = TRUE; //haven't done label for this one
     bedDrawSimpleAt(tg, myItem, hvg, xOff, y, scale, font, color, vis);
     return;
     }
@@ -9460,7 +9459,7 @@ if (allWidth >= w || all2Width >= w || sameString(display, "freq"))
                 tg->mapItemName(tg, item), myItem->chromStart, myItem->chromEnd,
                 x1-allWidth-2, yCopy, allWidth+w, tg->heightPer);
     }
-tg->customPt = cloneString("noLabel");
+withIndividualLabels = FALSE; //turn labels off, done already
 }
 
 int pgSnpHeight (struct track *tg, enum trackVisibility vis)
