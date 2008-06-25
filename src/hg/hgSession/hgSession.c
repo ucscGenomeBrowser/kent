@@ -17,7 +17,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.37 2008/03/21 20:31:55 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.38 2008/06/25 21:04:18 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -480,6 +480,8 @@ cartRemovePrefix(cart, hgsDeletePrefix);
 cartRemovePrefix(cart, hgsDo);
 }
 
+void checkForCustomTracks(struct dyString *dyMessage);
+
 #define INITIAL_USE_COUNT 0
 char *doNewSession()
 /* Save current settings in a new named session.  
@@ -551,8 +553,9 @@ if (sqlTableExists(conn, namedSessionTable))
 	  getSessionLink(encUserName, encSessionName),
 	  getSessionEmailLink(encUserName, encSessionName));
     if (cartFindPrefix(cart, CT_FILE_VAR_PREFIX) != NULL)
+	{
 	dyStringPrintf(dyMessage,
-		"<P>Note: the session contains a reference to at least one "
+		"<P>The session contains a reference to at least one "
 		"custom track.  Custom tracks are "
 		"subject to an expiration policy described in the "
 		"<A HREF=\"../goldenPath/help/customTrack.html\" "
@@ -560,6 +563,8 @@ if (sqlTableExists(conn, namedSessionTable))
 		"In order to keep a custom track from expiring, you can "
 		"periodically view the custom track in the genome browser."
 		"</P>");
+	checkForCustomTracks(dyMessage);
+	}
     if (cartOptionalString(cart, "ss") != NULL)
 	dyStringPrintf(dyMessage,
 		"<P>Note: the session contains a reference to saved BLAT "
