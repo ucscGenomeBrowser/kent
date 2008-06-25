@@ -215,8 +215,9 @@
 #include "twoBit.h"
 #include "itemConf.h"
 #include "chromInfo.h"
+#include "gbWarn.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1434 2008/06/20 06:33:03 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1435 2008/06/25 01:51:08 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4694,6 +4695,40 @@ else
     return 0;
 }
 
+static struct gbWarn *checkGbWarn(struct sqlConnection *conn, char *acc)
+/* check if there is a gbWarn entry for this accession, return NULL if none */
+{
+struct gbWarn *gbWarn = NULL;
+if (hTableExists("gbWarn"))
+    gbWarn = sqlQueryObjs(conn, (sqlLoadFunc)gbWarnLoad, sqlQuerySingle,
+                          "SELECT * FROM gbWarn WHERE acc = \"%s\"", acc);
+return gbWarn;
+}
+
+static void printGbWarn(char *acc, struct gbWarn *gbWarn)
+/* print descriptive information about an accession in the gbWarn table */
+{
+char *msg = NULL;
+switch (gbWarn->reason) {
+case gbWarnInvitroNorm:
+    msg = "is from the InVitroGen/Genoscope full-length library.  Some of the entries "
+        "associated with this dataset appear to have been aligned to the reference "
+        "genome and the sequences subsequently modified to match the genome. This "
+        "process may have resulted in apparent high-quality alignments to pseudogenes.";
+    break;
+case gbWarnAthRage:
+    msg = "is from the Athersys RAGE library.  These sequences were created by inducing expression and may not "
+        "be an indication of in vivo expression.";
+    break;
+case gbWarnOrestes:
+    msg = "is from an ORESTES library.  This protocol includes a PCR step subject to genomic contamination.";
+    break;
+}
+assert(msg != NULL);
+char *msg2= "Care should be taken in using alignments of this sequence as evidence of transcription.";
+printf("<B>Warning:<font color=\"red\"> %s %s %s</font></B><BR>\n", acc, msg, msg2);
+}
+
 static void printRnaSpecs(struct trackDb *tdb, char *acc, struct psl *psl)
 /* Print auxiliarry info on RNA. */
 {
@@ -4718,6 +4753,7 @@ struct trackDb *tdbRgdEst;
 char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartUsualInt(cart, "t",0);
+struct gbWarn *gbWarn = checkGbWarn(conn, acc);
 
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
@@ -4793,6 +4829,8 @@ if (row != NULL)
     printf("\" TARGET=_blank>%s</A></H2>\n", acc);
 
     printf("<B>Description:</B> %s<BR>\n", description);
+    if (gbWarn != NULL)
+        printGbWarn(acc, gbWarn);
 
     medlineLinkedLine("Gene", geneName, geneName);
     medlineProductLinkedLine("Product", productName);
@@ -4871,6 +4909,7 @@ if (end != 0 && differentString(chrom,"0") && isNotEmpty(chrom))
     printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
     }
 
+gbWarnFree(&gbWarn);
 sqlFreeResult(&sr);
 freeDyString(&dy);
 hgFreeConn(&conn);
