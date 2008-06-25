@@ -172,35 +172,66 @@ void wigSetCart(struct track *track, char *dataID, void *dataValue);
 
 /*	in lib/wiggleCart.c	*/
 
-extern void wigFetchMinMaxY(struct trackDb *tdb, double *min,
-    double *max, double *tDbMin, double *tDbMax, int wordCount, char *words[]);
+extern void wigFetchMinMaxYWithCart(struct cart *cart, struct trackDb *tdb, char *name, 
+    double *min, double *max, double *tDbMin, double *tDbMax, int wordCount, char **words);
+#define wigFetchMinMaxY(tdb,min,max,tDbMin,tDbMax,wordCount,words) \
+        wigFetchMinMaxYWithCart(cart,(tdb),(tdb)->tableName,(min),(max),(tDbMin),(tDbMax),(wordCount),(words))
 /* return min,max Y ranges from trackDb or cart */
-extern void wigFetchMinMaxLimits(struct trackDb *tdb, double *min, double *max,
-    double *tDbMin, double *tDbMax);
+
+extern void wigFetchMinMaxLimitsWithCart(struct cart *cart, struct trackDb *tdb, char *name, 
+    double *min, double *max,double *tDbMin, double *tDbMax);
+#define wigFetchMinMaxLimits(tdb,min,max,tDbMin,tDbMax) \
+        wigFetchMinMaxLimitsWithCart(cart,(tdb),(tdb)->tableName,(min),(max),(tDbMin),(tDbMax))
 /* for bedGraph types, return min,max Y ranges from trackDb or cart */
-extern void wigFetchMinMaxPixels(struct trackDb *tdb, int *Min, int *Max,
-    int *Default);
+
+extern void wigFetchMinMaxPixelsWithCart(struct cart *cart, struct trackDb *tdb, char *name,
+    int *Min, int *Max, int *Default);
+#define wigFetchMinMaxPixels(tdb,Min,Max,Default) \
+        wigFetchMinMaxPixelsWithCart(cart,(tdb),(tdb)->tableName,(Min),(Max),(Default))
 /* return pixels heights allowable from trackDb or cart */
-extern enum wiggleGridOptEnum wigFetchHorizontalGrid(struct trackDb *tdb,
-    char **optString);
-/* return horizontalGrid setting	*/
-extern enum wiggleScaleOptEnum wigFetchAutoScale(struct trackDb *tdb,
-    char **optString);
-/* return autoScale setting	*/
-extern enum wiggleGraphOptEnum wigFetchGraphType(struct trackDb *tdb,
-	char **optString);
+
+extern enum wiggleGridOptEnum wigFetchHorizontalGridWithCart(struct cart *cart, 
+    struct trackDb *tdb, char *name,char **optString);
+#define wigFetchHorizontalGrid(tdb,optString) \
+        wigFetchHorizontalGridWithCart(cart,(tdb),(tdb)->tableName,(optString))
+/* return horizontalGrid setting    */
+
+extern enum wiggleScaleOptEnum wigFetchAutoScaleWithCart(struct cart *cart, 
+    struct trackDb *tdb, char *name, char **optString);
+#define wigFetchAutoScale(tdb,optString) \
+        wigFetchAutoScaleWithCart(cart,(tdb),(tdb)->tableName,(optString))
+/* return autoScale setting */
+
+extern enum wiggleGraphOptEnum wigFetchGraphTypeWithCart(struct cart *cart, 
+    struct trackDb *tdb, char *name, char **optString);
+#define wigFetchGraphType(tdb,optString) \
+        wigFetchGraphTypeWithCart(cart,(tdb),(tdb)->tableName,(optString))
 /* return graph type, line(points) or bar graph	*/
-extern enum wiggleWindowingEnum wigFetchWindowingFunction(struct trackDb *tdb,
-	char **optString);
+
+extern enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart(struct cart *cart, 
+    struct trackDb *tdb, char *name, char **optString);
+#define wigFetchWindowingFunction(tdb,optString) \
+        wigFetchWindowingFunctionWithCart(cart,(tdb),(tdb)->tableName,(optString))
 /* return windowing function, Maximum, Mean, Minimum */
-extern enum wiggleSmoothingEnum wigFetchSmoothingWindow(struct trackDb *tdb,
-	char **optString);
-/* return smoothing window size N: [0:16]	*/
-extern enum wiggleYLineMarkEnum wigFetchYLineMark(struct trackDb *tdb,
-    char **optString);
-/* return On/Off status of y= line marker	*/
-void wigFetchYLineMarkValue(struct trackDb *tdb, double *tDbYMark);
-/* return value for the y line marker to be drawn	*/
+
+extern enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart(struct cart *cart, 
+    struct trackDb *tdb, char *name, char **optString);
+#define wigFetchSmoothingWindow(tdb,optString) \
+        wigFetchSmoothingWindowWithCart(cart,(tdb),(tdb)->tableName,(optString))
+/* return smoothing window size N: [0:16]   */
+
+extern enum wiggleYLineMarkEnum wigFetchYLineMarkWithCart(struct cart *cart, 
+    struct trackDb *tdb, char *name, char **optString);
+#define wigFetchYLineMark(tdb,optString) \
+        wigFetchYLineMarkWithCart(cart,(tdb),(tdb)->tableName,(optString))
+/* return On/Off status of y= line marker   */
+
+extern void wigFetchYLineMarkValueWithCart(struct cart *cart,struct trackDb *tdb, 
+    char *name, double *tDbYMark );
+#define wigFetchYLineMarkValue(tdb,tDbYMark) \
+        wigFetchYLineMarkValueWithCart(cart,(tdb),(tdb)->tableName,(tDbYMark))
+/* return value for the y line marker to be drawn   */
+
 int *wiggleSpanList(struct trackDb *tdb);
 /******	spanList - fetch list of spans from trackDb *********************/
 

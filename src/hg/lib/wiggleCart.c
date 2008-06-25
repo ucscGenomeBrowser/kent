@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.14 2007/04/24 19:37:45 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.15 2008/06/25 16:13:14 tdreszer Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -83,8 +83,8 @@ wigDebugPrint("wigFetch");
  *		or viewLimits from custom tracks
  *		(both identifiers work from either custom or trackDb)
  *****************************************************************************/
-void wigFetchMinMaxY(struct trackDb *tdb, double *min, double *max,
-    double *tDbMin, double *tDbMax, int wordCount, char **words)
+void wigFetchMinMaxYWithCart(struct cart *theCart, struct trackDb *tdb, char *name, 
+    double *min, double *max, double *tDbMin, double *tDbMax, int wordCount, char **words)
 {
 char o4[MAX_OPT_STRLEN]; /* Option 4 - minimum Y axis value: .minY	*/
 char o5[MAX_OPT_STRLEN]; /* Option 5 - maximum Y axis value: .minY	*/
@@ -225,10 +225,10 @@ if (differentWord("NONE",tdbDefault))
     }
 
 /*	And finally, let's see if values are available in the cart */
-snprintf( o4, sizeof(o4), "%s.%s", tdb->tableName, MIN_Y);
-snprintf( o5, sizeof(o5), "%s.%s", tdb->tableName, MAX_Y);
-minY_str = cartOptionalString(cart, o4);
-maxY_str = cartOptionalString(cart, o5);
+snprintf( o4, sizeof(o4), "%s.%s", name, MIN_Y);
+snprintf( o5, sizeof(o5), "%s.%s", name, MAX_Y);
+minY_str = cartOptionalString(theCart, o4);
+maxY_str = cartOptionalString(theCart, o5);
 
 if (minY_str && maxY_str)	/*	if specified in the cart */
     {
@@ -260,7 +260,7 @@ correctOrder(*min,*max);
 
 freeMem(tdbDefault);
 freeMem(viewLimits);
-}	/*	void wigFetchMinMaxY()	*/
+}	/*	void wigFetchMinMaxYWithCart()	*/
 
 /*	Min, Max, Default Pixel height of track
  *	Limits may be defined in trackDb with the maxHeightPixels string,
@@ -268,7 +268,7 @@ freeMem(viewLimits);
  *	And default opening display limits may optionally be defined with the
  *		maxHeightPixels declaration from trackDb
  *****************************************************************************/
-void wigFetchMinMaxPixels(struct trackDb *tdb, int *Min, int *Max, int *Default)
+void wigFetchMinMaxPixelsWithCart(struct cart *theCart, struct trackDb *tdb, char *name,int *Min, int *Max, int *Default)
 {
 char option[MAX_OPT_STRLEN]; /* Option 1 - track pixel height:  .heightPer  */
 char *heightPer = NULL; /*	string from cart	*/
@@ -343,8 +343,8 @@ if (differentWord(DEFAULT_HEIGHT_PER,tdbDefault))
 	    break;
 	}
     }
-snprintf( option, sizeof(option), "%s.%s", tdb->tableName, HEIGHTPER);
-heightPer = cartOptionalString(cart, option);
+snprintf( option, sizeof(option), "%s.%s", name, HEIGHTPER);
+heightPer = cartOptionalString(theCart, option);
 /*      Clip the cart value to range [minHeightPixels:maxHeightPixels] */
 if (heightPer) defaultHeight = min( maxHeightPixels, atoi(heightPer));
 else defaultHeight = defaultHeightPixels;
@@ -355,7 +355,7 @@ defaultHeight = max(minHeightPixels, defaultHeight);
 *Min = minHeightPixels;
 
 freeMem(tdbDefault);
-}	/* void wigFetchMinMaxPixels()	*/
+}	/* void wigFetchMinMaxPixelsWithCart()	*/
 
 /*	A common operation for binary options (two values possible)
  *	check for trackDb.ra, then tdb->settings values
@@ -409,8 +409,8 @@ return(cloneString(ret));
 }
 
 /*	horizontalGrid - off by default **********************************/
-enum wiggleGridOptEnum wigFetchHorizontalGrid(struct trackDb *tdb,
-    char **optString)
+enum wiggleGridOptEnum wigFetchHorizontalGridWithCart(struct cart *theCart, 
+    struct trackDb *tdb, char *name,char **optString)
 {
 char *Default = wiggleGridEnumToString(wiggleHorizontalGridOff);
 char *notDefault = wiggleGridEnumToString(wiggleHorizontalGridOn);
@@ -418,8 +418,8 @@ char option[MAX_OPT_STRLEN]; /* .horizGrid  */
 char *horizontalGrid = NULL;
 enum wiggleGridOptEnum ret;
 
-snprintf( option, sizeof(option), "%s.%s", tdb->tableName, HORIZGRID );
-horizontalGrid = cloneString(cartOptionalString(cart, option));
+snprintf( option, sizeof(option), "%s.%s", name, HORIZGRID );
+horizontalGrid = cloneString(cartOptionalString(theCart, option));
 
 if (!horizontalGrid)	/*	if it is NULL	*/
     horizontalGrid = wigCheckBinaryOption(tdb,Default,notDefault,GRIDDEFAULT,
@@ -431,10 +431,11 @@ if (optString)
 ret = wiggleGridStringToEnum(horizontalGrid);
 freeMem(horizontalGrid);
 return(ret);
-}	/*	enum wiggleGridOptEnum wigFetchHorizontalGrid()	*/
+}	/*	enum wiggleGridOptEnum wigFetchHorizontalGridWithCart()	*/
 
 /******	autoScale - on by default ***************************************/
-enum wiggleScaleOptEnum wigFetchAutoScale(struct trackDb *tdb, char **optString)
+enum wiggleScaleOptEnum wigFetchAutoScaleWithCart(struct cart *theCart, 
+    struct trackDb *tdb, char *name, char **optString)
 {
 char *Default = wiggleScaleEnumToString(wiggleScaleAuto);
 char *notDefault = wiggleScaleEnumToString(wiggleScaleManual);
@@ -443,8 +444,8 @@ char *autoScale = NULL;
 enum wiggleScaleOptEnum ret;
 
 
-snprintf( option, sizeof(option), "%s.%s", tdb->tableName, AUTOSCALE );
-autoScale = cloneString(cartOptionalString(cart, option));
+snprintf( option, sizeof(option), "%s.%s", name, AUTOSCALE );
+autoScale = cloneString(cartOptionalString(theCart, option));
 
 if (!autoScale)	/*	if nothing from the Cart, check trackDb/settings */
     {
@@ -465,10 +466,11 @@ if (optString)
 ret = wiggleScaleStringToEnum(autoScale);
 freeMem(autoScale);
 return(ret);
-}	/*	enum wiggleScaleOptEnum wigFetchAutoScale()	*/
+}	/*	enum wiggleScaleOptEnum wigFetchAutoScaleWithCart()	*/
 
 /******	graphType - line(points) or bar graph *****************************/
-enum wiggleGraphOptEnum wigFetchGraphType(struct trackDb *tdb, char **optString)
+enum wiggleGraphOptEnum wigFetchGraphTypeWithCart(struct cart *theCart, 
+    struct trackDb *tdb, char *name, char **optString)
 {
 char *Default = wiggleGraphEnumToString(wiggleGraphBar);
 char *notDefault = wiggleGraphEnumToString(wiggleGraphPoints);
@@ -476,8 +478,8 @@ char option[MAX_OPT_STRLEN]; /* .lineBar  */
 char *graphType = NULL;
 enum wiggleGraphOptEnum ret;
 
-snprintf( option, sizeof(option), "%s.%s", tdb->tableName, LINEBAR );
-graphType = cloneString(cartOptionalString(cart, option));
+snprintf( option, sizeof(option), "%s.%s", name, LINEBAR );
+graphType = cloneString(cartOptionalString(theCart, option));
 
 if (!graphType)	/*	if nothing from the Cart, check trackDb/settings */
     graphType = wigCheckBinaryOption(tdb,Default,notDefault,GRAPHTYPEDEFAULT,
@@ -489,19 +491,19 @@ if (optString)
 ret = wiggleGraphStringToEnum(graphType);
 freeMem(graphType);
 return(ret);
-}	/*	enum wiggleGraphOptEnum wigFetchGraphType()	*/
+}	/*	enum wiggleGraphOptEnum wigFetchGraphTypeWithCart()	*/
 
 /******	windowingFunction - Maximum by default **************************/
-enum wiggleWindowingEnum wigFetchWindowingFunction(struct trackDb *tdb,
-	char **optString)
+enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart(struct cart *theCart, 
+    struct trackDb *tdb, char *name, char **optString)
 {
 char *Default = wiggleWindowingEnumToString(wiggleWindowingMax);
 char option[MAX_OPT_STRLEN]; /* .windowingFunction  */
 char *windowingFunction = NULL;
 enum wiggleWindowingEnum ret;
 
-snprintf( option, sizeof(option), "%s.%s", tdb->tableName, WINDOWINGFUNCTION );
-windowingFunction = cloneString(cartOptionalString(cart, option));
+snprintf( option, sizeof(option), "%s.%s", name, WINDOWINGFUNCTION );
+windowingFunction = cloneString(cartOptionalString(theCart, option));
 
 /*	If windowingFunction is a string, it came from the cart, otherwise
  *	see if it is specified in the trackDb option, finally
@@ -541,19 +543,19 @@ if (optString)
 ret = wiggleWindowingStringToEnum(windowingFunction);
 freeMem(windowingFunction);
 return(ret);
-}	/*	enum wiggleWindowingEnum wigFetchWindowingFunction() */
+}	/*	enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart() */
 
 /******	smoothingWindow - OFF by default **************************/
-enum wiggleSmoothingEnum wigFetchSmoothingWindow(struct trackDb *tdb,
-	char **optString)
+enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart(struct cart *theCart, 
+    struct trackDb *tdb, char *name, char **optString)
 {
 char * Default = wiggleSmoothingEnumToString(wiggleSmoothingOff);
 char option[MAX_OPT_STRLEN]; /* .smoothingWindow  */
 char * smoothingWindow = NULL;
 enum wiggleSmoothingEnum ret;
 
-snprintf( option, sizeof(option), "%s.%s", tdb->tableName, SMOOTHINGWINDOW );
-smoothingWindow = cloneString(cartOptionalString(cart, option));
+snprintf( option, sizeof(option), "%s.%s", name, SMOOTHINGWINDOW );
+smoothingWindow = cloneString(cartOptionalString(theCart, option));
 
 if (!smoothingWindow) /* if nothing from the Cart, check trackDb/settings */
     {
@@ -589,11 +591,11 @@ if (optString)
 ret = wiggleSmoothingStringToEnum(smoothingWindow);
 freeMem(smoothingWindow);
 return(ret);
-}	/*	enum wiggleSmoothingEnum wigFetchSmoothingWindow()	*/
+}	/*	enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart()	*/
 
 /*	yLineMark - off by default **********************************/
-enum wiggleYLineMarkEnum wigFetchYLineMark(struct trackDb *tdb,
-    char **optString)
+enum wiggleYLineMarkEnum wigFetchYLineMarkWithCart(struct cart *theCart, 
+    struct trackDb *tdb, char *name, char **optString)
 {
 char *Default = wiggleYLineMarkEnumToString(wiggleYLineMarkOff);
 char *notDefault = wiggleYLineMarkEnumToString(wiggleYLineMarkOn);
@@ -601,8 +603,8 @@ char option[MAX_OPT_STRLEN]; /* .yLineMark  */
 char *yLineMark = NULL;
 enum wiggleYLineMarkEnum ret;
 
-snprintf( option, sizeof(option), "%s.%s", tdb->tableName, YLINEONOFF );
-yLineMark = cloneString(cartOptionalString(cart, option));
+snprintf( option, sizeof(option), "%s.%s", name, YLINEONOFF );
+yLineMark = cloneString(cartOptionalString(theCart, option));
 
 if (!yLineMark)	/*	if nothing from the Cart, check trackDb/settings */
     yLineMark = wigCheckBinaryOption(tdb,Default,notDefault,YLINEONOFF,
@@ -614,14 +616,14 @@ if (optString)
 ret = wiggleYLineMarkStringToEnum(yLineMark);
 freeMem(yLineMark);
 return(ret);
-}	/*	enum wiggleYLineMarkEnum wigFetchYLineMark()	*/
+}	/*	enum wiggleYLineMarkEnum wigFetchYLineMarkWithCart()	*/
 
 /*	y= marker line value
  *	User requested value is defined in the cart
  *	A Default value can be defined as
  *		yLineMark declaration from trackDb
  *****************************************************************************/
-void wigFetchYLineMarkValue(struct trackDb *tdb, double *tDbYMark )
+void wigFetchYLineMarkValueWithCart(struct cart *theCart,struct trackDb *tdb, char *name, double *tDbYMark )
 {
 char option[MAX_OPT_STRLEN]; /* Option 11 - value from: .yLineMark */
 char *yLineMarkValue = NULL;  /*	string from cart	*/
@@ -650,8 +652,8 @@ if (sameWord("NONE",tdbDefault))
 yLineValue = 0.0;
 
 /*	Let's see if a value is available in the cart */
-snprintf( option, sizeof(option), "%s.%s", tdb->tableName, YLINEMARK);
-yLineMarkValue = cartOptionalString(cart, option);
+snprintf( option, sizeof(option), "%s.%s", name, YLINEMARK);
+yLineMarkValue = cartOptionalString(theCart, option);
 
 /*	if yLineMarkValue is non-Null, it is the requested value 	*/
 if (yLineMarkValue)
@@ -665,7 +667,7 @@ if (tDbYMark)
 	*tDbYMark = yLineValue;
 
 freeMem(tdbDefault);
-}	/*	void wigFetchYLineMarkValue()	*/
+}	/*	void wigFetchYLineMarkValueWithCart()	*/
 
 /*****************************************************************************
  *	Min, Max Y viewing limits
@@ -677,8 +679,8 @@ freeMem(tdbDefault);
  *		or viewLimits from custom tracks
  *		(both identifiers work from either custom or trackDb)
  *****************************************************************************/
-void wigFetchMinMaxLimits(struct trackDb *tdb, double *min, double *max,
-    double *tDbMin, double *tDbMax)
+void wigFetchMinMaxLimitsWithCart(struct cart *theCart, struct trackDb *tdb, char *name, 
+    double *min, double *max,double *tDbMin, double *tDbMax)
 {
 char o4[MAX_OPT_STRLEN]; /* Option 4 - minimum Y axis value: .minY	*/
 char o5[MAX_OPT_STRLEN]; /* Option 5 - maximum Y axis value: .minY	*/
@@ -828,10 +830,10 @@ if (differentWord("NONE",tdbDefault))
     }
 
 /*	And finally, let's see if values are available in the cart */
-snprintf( o4, sizeof(o4), "%s.%s", tdb->tableName, MIN_Y);
-snprintf( o5, sizeof(o5), "%s.%s", tdb->tableName, MAX_Y);
-minY_str = cartOptionalString(cart, o4);
-maxY_str = cartOptionalString(cart, o5);
+snprintf( o4, sizeof(o4), "%s.%s", name, MIN_Y);
+snprintf( o5, sizeof(o5), "%s.%s", name, MAX_Y);
+minY_str = cartOptionalString(theCart, o4);
+maxY_str = cartOptionalString(theCart, o5);
 
 if (minY_str && maxY_str)	/*	if specified in the cart */
     {
@@ -867,4 +869,4 @@ freeMem(tdbMin);
 freeMem(viewLimits);
 freeMem(settingsMax);
 freeMem(settingsMin);
-}	/*	void wigFetchMinMaxY()	*/
+}	/*	void wigFetchMinMaxYWithCart()	*/
