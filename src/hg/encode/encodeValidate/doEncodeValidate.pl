@@ -4,11 +4,11 @@
 #                       automated submission pipeline
 # Verifies that all files and metadata are present and of correct formats
 # Creates a load file (load.ra) and track configuration (trackDb.ra) for the datasets
-# Returns 0 if validation succeeds.
+# Returns 0 if validation succeeds and sends email to wrangler for given lab.
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.24 2008/06/13 01:16:52 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.25 2008/06/26 17:54:54 larrym Exp $
 
 use warnings;
 use strict;
@@ -26,9 +26,30 @@ use vars qw/
     $opt_verbose
     /;
 
+# Global constants
+our $fieldConfigFile = "fields.ra";
+our $vocabConfigFile = "cv.ra";
+our $labsConfigFile = "labs.ra";
+
+our $loadFile = "load.ra";
+our $trackFile = "trackDb.ra";
+
+# Global variables
+our $submitPath;        # full path of data submission directory
+our $configPath;        # full path of configuration directory
+our $outPath;           # full path of output directory
+our $pifFile;           # project information filename (most recent found in 
+                                # submission dir)
+our %pif;               # project information
+our %tracks;            # track information
+our %terms;             # controlled vocabulary
+
 sub usage {
     print STDERR <<END;
 usage: encodeValidate.pl submission-type project-submission-dir
+
+submission-type is currently ignored.
+
 options:
     -verbose num        Set verbose level to num (default 1).            -
     -configDir dir      Path of configuration directory, containing
@@ -64,11 +85,11 @@ sub readFile
 
 sub splitKeyVal
 {
-# split a line into key/value, using the FIRST tab in the line; we also trim key/value strings
+# split a line into key/value, using the FIRST white-space in the line; we also trim key/value strings
     my ($str) = @_;
     my $key = undef;
     my $val = undef;
-    if($str =~ /([^\t]+)\t(.+)/) {
+    if($str =~ /([^\s]+)\s+(.+)/) {
         $key = $1;
         $val = $2;
         $key =~ s/^\s+//;
@@ -79,39 +100,17 @@ sub splitKeyVal
     return ($key, $val);
 }
 
-# Global constants
-our $fieldConfigFile = "fields.ra";
-our $vocabConfigFile = "cv.ra";
-our $labsConfigFile = "labs.ra";
-
-our $loadFile = "load.ra";
-our $trackFile = "trackDb.ra";
-
-# Global variables
-our $submitPath;        # full path of data submission directory
-our $configPath;        # full path of configuration directory
-our $outPath;           # full path of output directory
-our $pifFile;           # project information filename (most recent found in 
-                                # submission dir)
-our %pif;               # project information
-our %tracks;            # track information
-our %terms;             # controlled vocabulary
-
 ############################################################################
 # Validators -- extend when adding new metadata fields
 
 # dispatch table
 our %validators = (
-    File_Name => \&validateFileName,
-    Part => \&validatePart,
-    Dataset_Name => \&validateDatasetName,
-    Assembly_REF => \&validateAssemblyREF,
-    Data_Type_REF => \&validateDataTypeREF,
-    Raw_Data_Acc_REF => \&validateRawDataAccREF,
-    Data_Version => \&validateDataVersion,
-    Cell_Line_REF => \&validateCellLineREF,
-    Gene_Type_REF => \&validateGeneTypeREF,
-    Antibody_REF => \&validateAntibodyREF,
+    files => \&validateFileName,
+    view => \&validateDatasetName,
+    labVersion => \&validateLabVersion,
+    cell => \&validateCellLine,
+    gene => \&validateGeneType,
+    antibody => \&validateAntibody,
     );
 
 # standard validators (required or optional for all projects)
@@ -119,17 +118,23 @@ sub validateFileName {
     # Validate array of filenames, ordered by part
     # Check files exist and are of correct data format
     my ($files, $track) = @_;
-    my @files = @{$files};
-    &HgAutomate::verbose(3, "     Track: $track    Files: " . join (' ', @files) . "\n");
-    for (my $i=0; $i < @files; $i++) {
-        my $file = $files[$i];
-        my $part = $i + 1;
-        defined($file) || die "ERROR: Dataset missing part \'$part\'\n";
+    my @newFiles;
+    for my $file (@{$files}) {
+        my @list = glob $file;
+        if(@list) {
+            push(@newFiles, @list);
+        } else {
+            die "ERROR: File '$file' does not exist (possibly bad glob)\n";
+        }
+    }
+    &HgAutomate::verbose(3, "     Track: $track    Files: " . join (' ', @newFiles) . "\n");
+    for my $file (@newFiles) {
         -e $file || die "ERROR: File \'$file\' does not exist\n";
         -s $file || die "ERROR: File \'$file\' is empty\n";
         -r $file || die "ERROR: File \'$file\' is not readable \n";
         &checkDataFormat($tracks{$track}->{'type'}, $file);
     }
+    $files = \@newFiles;
 }
 
 sub validatePart {
@@ -141,35 +146,35 @@ sub validateDatasetName {
     my ($val) = @_;
 }
 
-sub validateAssemblyREF {
+sub validateAssembly {
     my ($val) = @_;
-    $val =~ /hg1[78]/ || die "ERROR: Assembly REF \'$val\' is invalid (must be 'hg17' or 'hg18\')\n";
+    $val =~ /hg1[78]/ || die "ERROR: Assembly '$val' is invalid (must be 'hg17' or 'hg18')\n";
 }
 
-sub validateDataTypeREF {
+sub validateDataType {
     my ($val) = @_;
 }
 
-sub validateRawDataAccREF {
+sub validateRawDataAcc {
 # No validation
 }
 
-sub validateDataVersion {
+sub validateLabVersion {
 # No validation
 }
 
 # project-specific validators
-sub validateCellLineREF {
+sub validateCellLine {
     my ($val) = @_;
     defined($terms{'Cell Line'}{$val}) || die "ERROR: Cell line \'$val\' is not known \n";
 }
 
-sub validateGeneTypeREF {
+sub validateGeneType {
     my ($val) = @_;
     defined($terms{'Gene Type'}{$val}) || die "ERROR: Gene type \'$val\' is not known \n";
 }
 
-sub validateAntibodyREF {
+sub validateAntibody {
     my ($val) = @_;
     defined($terms{'Antibody'}{$val}) || die "ERROR: Antibody \'$val\' is not known \n";
 }
@@ -276,7 +281,9 @@ sub validateField {
     my ($type, $val, $arg) = @_;
     $type =~ s/ /_/g;
     &HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
-    $validators{$type}->($val, $arg);
+    if($validators{$type}) {
+        $validators{$type}->($val, $arg);
+    }
 }
 
 sub checkDataFormat {
@@ -325,6 +332,7 @@ sub getPif {
     $pifFile = &newestFile(glob "*.PIF");
     &HgAutomate::verbose(2, "Using newest PIF file \'$pifFile\'\n");
 
+
     %tracks = ();  # this is a global
     my $track;
 
@@ -342,14 +350,14 @@ sub getPif {
         if(!defined($key)) {
             next;
         }
-        if ($key ne "track") {
+        if ($key ne "view") {
             &HgAutomate::verbose(3, "PIF field: $key = $val\n");
             $pif{$key} = $val;
         } else {
             my %track = ();
             $track = $val;
             $tracks{$track} = \%track;
-            &HgAutomate::verbose(5, "  Found track: \'$track\'\n");
+            &HgAutomate::verbose(5, "  Found view: \'$track\'\n");
             while ($line = shift @{$lines}) {
                 $line =~ s/^ +//;
                 $line =~ s/ +$//;
@@ -368,10 +376,9 @@ sub getPif {
 
     # Validate fields
     defined($pif{'project'}) || die "ERROR: Project not defined\n"; 
-    $pif{'active'} =~ "yes" || 
-        die "ERROR: Project \'$pif{'project'}\' not yet active\n";
     defined(%tracks) ||
         die "ERROR: Tracks not defined for project \'$pif{'project'}\'in $pifFile \n";
+    validateAssembly($pif{assembly});
 
     foreach my $track (keys %tracks) {
         &HgAutomate::verbose(4, "  Track: $track\n");
@@ -382,7 +389,7 @@ sub getPif {
     }
 
     if (defined($pif{'variables'})) {
-        my @variables = split (/\s+/, $pif{'variables'});
+        my @variables = split (/\s*,\s*/, $pif{'variables'});
         my %variables;
         my $i = 0;
         foreach my $variable (@variables) {
@@ -518,8 +525,8 @@ my $lines = readFile($ddfFile);
 while(@{$lines}) {
     my $line = shift(@{$lines});
     # remove leading and trailing spaces and newline
-    $line =~ s/^ +//;
-    $line =~ s/ +$//;
+    $line =~ s/^\s+//;
+    $line =~ s/\s+$//;
     # ignore empty lines and comments
     next if $line =~ /^$/;
     next if $line =~ /^#/;
@@ -550,75 +557,45 @@ foreach my $field (keys %fields) {
 my $dataset;
 while (@{$lines}) {
     my $line = shift(@{$lines});
-    $line =~ s/^ +//;
-    $line =~ s/ +$//;
+    $line =~ s/^\s+//;
+    $line =~ s/\s+$//;
     next if $line =~ /^#/;
     next if $line =~ /^$/;
+
     my @fields = split('\t', $line);
-    my $fileField = $ddfHeader{'File Name'};
-    my $filename = $fields[$fileField];
-    my $partField = $ddfHeader{'Part'};
-    my $part = 1;
-    if (defined($partField)) {
-        validateField('Part', $fields[$partField]);
-        $part =  $fields[$partField];
-    }
-    $dataset = $fields[$ddfHeader{'Dataset Name'}];
-    my $offset = $part - 1;
-    if (defined($datasets{$dataset})) {
-        # add file to dataset, checking all fields with non-empty values 
-        # are identical (except 'Part', which must differ)
-        for ($i=0; $i < @fields; $i++) {
-            next if ($i == $fileField || $i == $partField);
-            $fields[$i] =~ $datasets{$dataset}->[$i] ||
-                die "ERROR: Dataset \'$dataset\' has differing \'$ddfHeader[$i]\' values\n";
-        }
-        !defined($datasets{$dataset}->[$fileField]->[$offset]) ||
-            die "ERROR: Dataset \'$dataset\' part \'$part\' has multiple files\n";
-        $datasets{$dataset}->[$fileField]->[$offset] = $filename;
-    } else {
-        # add dataset
-        my @filenames;
-        $filenames[$offset] = $filename;
-        $fields[$fileField] = \@filenames;
-        $datasets{$dataset} = \@fields;
-    }
+    my $fileField = $ddfHeader{files};
+    my $files = $fields[$fileField];
+    $dataset = $fields[$ddfHeader{view}];
+    my @filenames = split(',', $files);
+    $fields[$fileField] = \@filenames;
+    $datasets{$dataset} = \@fields;
 }
 
 # Validate files and metadata fields in all datasets using controlled
-# vocabulary.  Create .ra file for loader .
-&loadControlledVocab;
+# vocabulary.  Create load.ra file for loader and trackDb.ra file for wrangler.
+
+loadControlledVocab();
 open(LOADER_RA, ">$outPath/$loadFile") || die "SYS ERROR: Can't write \'$outPath/$loadFile\' file; error: $!\n";
 open(TRACK_RA, ">$outPath/$trackFile") || die "SYS ERROR: Can't write \'$outPath/$trackFile\' file; error: $!\n";
 foreach $dataset (keys %datasets) {
     my $datasetRef = $datasets{$dataset};
-    my $dataType = $datasetRef->[$ddfHeader{'Data Type REF'}];
-    my $tableType = $tracks{$dataType}->{'tableType'};
-    &HgAutomate::verbose(2, "  Dataset: $dataset\tTrack: $dataType\n");
+    my $view = $datasetRef->[$ddfHeader{view}];
+    my $tableType = $tracks{$view}->{'tableType'};
+    &HgAutomate::verbose(2, "  Dataset: $dataset\tTrack: $view\n");
     for ($i=0; $i < @ddfHeader; $i++) {
-        &validateField($ddfHeader[$i], $datasetRef->[$i], $dataType);
+        &validateField($ddfHeader[$i], $datasetRef->[$i], $view);
     }
 
     # Construct table name from track name and variables
-    my $trackName = "wgEncode" . $dataType;
+    my $trackName = "wgEncode$pif{project}$view";
     my $tableName = $trackName;
-    if(!defined($pif{shortLabelPrefix})) {
-        $pif{shortLabelPrefix} = "";
+    if(!defined($tracks{$view}->{shortLabelPrefix})) {
+        $tracks{$view}->{shortLabelPrefix} = "";
     }
-    if(!defined($pif{longLabelPrefix})) {
-        $pif{longLabelPrefix} = "";
-    }
-    if(!defined($tracks{$dataType}->{longLabelSuffix})) {
-        $tracks{$dataType}->{longLabelSuffix} = "";
-    }
-    if(!defined($tracks{$dataType}->{shortLabelSuffix})) {
-        $tracks{$dataType}->{shortLabelSuffix} = "";
-    }
-    my $shortLabel = $pif{shortLabelPrefix};
-    if($tracks{$dataType}->{shortLabelSuffix}) {
-        $shortLabel = $shortLabel ? "$shortLabel $tracks{$dataType}->{shortLabelSuffix}" : $tracks{$dataType}->{shortLabelSuffix};
-    }
-    my $longLabel = "ENCODE $pif{longLabelPrefix} $tracks{$dataType}->{longLabelSuffix}";
+    my $shortLabel = defined($tracks{$view}->{shortLabelPrefix}) ? $tracks{$view}->{shortLabelPrefix} : "";
+    my $longLabel = "ENCODE" . (defined($tracks{$view}->{longLabelPrefix}) ? " $tracks{$view}->{longLabelPrefix}" : "");
+    my $subGroups = "view=$view";
+    my $additional = "\n";
     if (defined($pif{variables})) {
         my @variables = @{$pif{variableArray}};
         my %hash = map { $_ => $datasetRef->[$ddfHeader{$_}] } @variables;
@@ -627,12 +604,12 @@ foreach $dataset (keys %datasets) {
         }
         my $shortSuffix;
         my $longSuffix;
-        if($hash{"Antibody REF"} && $hash{"Cell Line REF"}) {
-            $shortSuffix = "$hash{'Antibody REF'}/$hash{'Cell Line REF'}";
-            $longSuffix = "$hash{'Antibody REF'} in $hash{'Cell Line REF'} cells";
-        } elsif ($hash{"Cell Line REF"}) {
-            $shortSuffix = "$hash{'Cell Line REF'}";
-            $longSuffix = "in $hash{'Cell Line REF'} cells";
+        if($hash{antibody} && $hash{cell}) {
+            $shortSuffix = "$hash{antibody}/$hash{cell}";
+            $longSuffix = "$hash{antibody} in $hash{cell} cells";
+        } elsif ($hash{"cell"}) {
+            $shortSuffix = "$hash{cell}";
+            $longSuffix = "in $hash{cell} cells";
         }
         if($shortSuffix) {
             $shortLabel = $shortLabel ? "$shortLabel ($shortSuffix)" : $shortSuffix;
@@ -640,25 +617,33 @@ foreach $dataset (keys %datasets) {
         if($longSuffix) {
             $longLabel .= " ($longSuffix)";
         }
+        if($hash{antibody}) {
+            $subGroups .= " factor=$hash{antibody}";
+            $additional = "antibody\t$hash{antibody}\n" . $additional;
+        }
+        if($hash{cell}) {
+            $subGroups .= " cellType=$hash{cell}";
+            $additional = "cellType\t$hash{cell}\n" . $additional;
+        }
     }
-    # mysql doesn't allow hyphens in table names.
-    $tableName =~ s/-/_/g;
+    # mysql doesn't allow hyphens in table names and our naming convention doesn't allow underbars.
+    $tableName =~ s/[_-]//g;
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "track $trackName\n";
-    print LOADER_RA "type $tracks{$dataType}->{type}\n";
+    print LOADER_RA "type $tracks{$view}->{type}\n";
     print LOADER_RA "tableType $tableType\n" if defined($tableType);
-    print LOADER_RA "assembly $datasetRef->[$ddfHeader{'Assembly REF'}]\n";
-    print LOADER_RA "files @{$datasetRef->[$ddfHeader{'File Name'}]}\n";
+    print LOADER_RA "assembly $pif{assembly}\n";
+    print LOADER_RA "files @{$datasetRef->[$ddfHeader{files}]}\n";
     print LOADER_RA "\n";
 
-    # XXXX This is a work in progress; assign as subtracks?
     print TRACK_RA "track\t$tableName\n";
     print TRACK_RA "subTrack\t$trackName\n";
     print TRACK_RA "shortLabel\t$shortLabel\n";
     print TRACK_RA "longLabel\t$longLabel\n";
+    print TRACK_RA "subGroups\t$subGroups\n";
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time());
     print TRACK_RA sprintf("dateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
-    print TRACK_RA "\n";
+    print TRACK_RA $additional;
 
 }
 close(LOADER_RA);
