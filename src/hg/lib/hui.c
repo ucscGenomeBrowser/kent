@@ -16,7 +16,7 @@
 #include "obscure.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.101 2008/06/25 19:55:47 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.102 2008/06/26 15:01:45 tdreszer Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -2675,9 +2675,7 @@ void hCompositeUi(struct cart *cart, struct trackDb *tdb,
  * that have the same type.  If fakeSubmit is non-NULL, add a hidden
  * var with that name so it looks like it was pressed. */
 {
-int i;
 char javascript[JBUFSIZE];
-int nGroups;
 bool hasSubgroups = (trackDbSetting(tdb, "subGroup1") != NULL);
 boolean displayAll = 
     sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
@@ -2730,7 +2728,6 @@ if(primarySubtrack == NULL)
 }
 cartSaveSession(cart);
 cgiContinueHiddenVar("g");
-nGroups = i;
 if (displayAll)
     compositeUiAllSubtracks(cart, tdb, primarySubtrack);
 else
