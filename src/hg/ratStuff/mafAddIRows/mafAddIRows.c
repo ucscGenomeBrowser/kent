@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.16 2007/03/28 16:03:30 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.17 2008/06/26 17:39:40 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;
@@ -546,7 +546,8 @@ while (lineFileRow(lf, row))
     lastHel = hel;
     }
 
-slReverse(&bedHead->list);
+if (bedHead != NULL)
+    slReverse(&bedHead->list);
 lineFileClose(&lf);
 return hash;
 }
