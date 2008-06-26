@@ -4,25 +4,18 @@
 #   Name:  arbitrarily assigned
 #   REF:   must come from controlled vocabulary
 
-field File Name
+field files
 required yes
 happy no
 
-field Part 
-required no
-
-field Dataset Name
+field view
 required yes
 
-field Assembly REF
-required yes
-
-field Data Type REF
-required yes
-
-field Raw Data Acc REF
+field Raw accession
 required no
 
-field Data Version
+field labVersion
 required no
 
+field	accession
+required	no
