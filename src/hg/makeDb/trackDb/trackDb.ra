@@ -532,9 +532,7 @@ priority 36
     visibility hide
     transMapInfo transMapInfoSplicedEst
     transMapSrc hgFixed.transMapSrcSplicedEst
-    transMapGene hgFixed.transMapGeneSplicedEst
     baseColorDefault none
-    baseColorUseCds table hgFixed.transMapGeneSplicedEst
     baseColorUseSequence extFile hgFixed.transMapSeqSplicedEst hgFixed.transMapExtFileSplicedEst
     indelDoubleInsert on
     indelQueryInsert on
