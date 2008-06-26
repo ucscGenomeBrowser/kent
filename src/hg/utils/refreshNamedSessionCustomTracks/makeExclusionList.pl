@@ -3,11 +3,12 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/refreshNamedSessionCustomTracks/makeExclusionList.pl instead.
 
-# $Id: makeExclusionList.pl,v 1.2 2008/06/23 17:34:30 angie Exp $
+# $Id: makeExclusionList.pl,v 1.3 2008/06/26 18:35:09 angie Exp $
 
 # Scan the -verbose=4 output of refreshNamedSessionCustomTracks for
 # names of existing files that need to be ignored by the script that
-# cleans trash.  Write filenames out to an exclusion file.
+# cleans trash.  Write filenames out to an exclusion file.  Pass stdin
+# to stdout for further processing.
 
 use warnings;
 use strict;
@@ -25,6 +26,7 @@ while (<>) {
     $fileName =~ s@^\.\./@$outRoot/@;
     print OUT "$fileName\n";
   }
+  print;
 }
 
 close(OUT);
