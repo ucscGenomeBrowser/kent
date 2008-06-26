@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1490 2008/06/25 21:31:09 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1491 2008/06/26 21:16:49 hiram Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3542,9 +3542,9 @@ if (!hideControls)
 
     /* Display bottom control panel. */
     hButton("hgt.reset", "default tracks");
-    if (showTrackControls)
+    // if (showTrackControls)  - always show "hide all", Hiram 2008-06-26
 	{
-	hPrintf(" ");
+	hPrintf("&nbsp;");
 	hButton("hgt.hideAll", "hide all");
 	}
 
