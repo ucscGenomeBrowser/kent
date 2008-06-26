@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.85 2008/06/06 17:43:25 fanhsu Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.86 2008/06/26 18:17:59 galt Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -132,18 +132,17 @@ else
    }
 }
 
-struct cartDb *loadDbOverHash(struct sqlConnection *conn, char *table, int id, struct cart *cart)
+struct cartDb *loadDb(struct sqlConnection *conn, char *table, int id, boolean *found) 
 /* Load bits from database and save in hash. */
 {
 struct cartDb *cdb;
 char query[256];
+boolean result = TRUE;
 
-if ((cdb = cartDbLoadFromId(conn, table, id)) != NULL)
+cdb = cartDbLoadFromId(conn, table, id);
+if (!cdb)
     {
-    cartParseOverHash(cart, cdb->contents);
-    }
-else
-    {
+    result = FALSE;
     safef(query, sizeof(query), "INSERT %s VALUES(0,\"\",0,now(),now(),0)",
 	  table);
     sqlUpdate(conn, query);
@@ -152,6 +151,7 @@ else
         errAbort("Couldn't get cartDb for id=%d right after loading.  "
 		 "MySQL problem??", id);
     }
+*found = result;
 return cdb;
 }
 
@@ -452,14 +452,19 @@ struct cart *cartNew(unsigned int userId, unsigned int sessionId,
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
+boolean userIdFound = FALSE, sessionIdFound = FALSE;
 
 AllocVar(cart);
 cart->hash = newHash(12);
 cart->exclude = newHash(7);
 cart->userId = userId;
 cart->sessionId = sessionId;
-cart->userInfo = loadDbOverHash(conn, "userDb", userId, cart);
-cart->sessionInfo = loadDbOverHash(conn, "sessionDb", sessionId, cart);
+cart->userInfo = loadDb(conn, "userDb", userId, &userIdFound);
+cart->sessionInfo = loadDb(conn, "sessionDb", sessionId, &sessionIdFound);
+if (sessionIdFound)
+    cartParseOverHash(cart, cart->sessionInfo->contents);
+else if (userIdFound)
+    cartParseOverHash(cart, cart->userInfo->contents);
 
 loadCgiOverHash(cart, oldVars);
 
