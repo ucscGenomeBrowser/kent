@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.25 2008/06/26 17:54:54 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.26 2008/06/26 20:50:34 larrym Exp $
 
 use warnings;
 use strict;
@@ -216,7 +216,8 @@ sub validateBed {
         chomp;
         my @fields = split /\t/;
         $line++;
-        my $prefix = "Failed bed validation, line $line:";
+        next if(!@fields);
+        my $prefix = "Failed bed validation, file '$file'; line $line:";
         if(/^(track|browser)/) {
             ;
         } elsif(@fields < 5) {
@@ -436,11 +437,12 @@ sub readRaFile {
 ############################################################################
 # Main
 
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time());
 my $line;
 my $i;
 my @ddfHeader;	# list of field headers on the first line of DDF file
 my %ddfHeader = ();
-my %datasets = ();
+my @datasets = ();
 my $wd = `pwd`; chomp $wd;
 
 my $ok = GetOptions("configDir=s",
@@ -554,7 +556,6 @@ foreach my $field (keys %fields) {
 # The entry contains an array of fields that are the same as the DDF fields,
 # except when multiple files comprise one data set (multiple Parts).
 # In this case, all files are included in the File Name field, 
-my $dataset;
 while (@{$lines}) {
     my $line = shift(@{$lines});
     $line =~ s/^\s+//;
@@ -565,10 +566,13 @@ while (@{$lines}) {
     my @fields = split('\t', $line);
     my $fileField = $ddfHeader{files};
     my $files = $fields[$fileField];
-    $dataset = $fields[$ddfHeader{view}];
+    my $view = $fields[$ddfHeader{view}];
+    if(!$tracks{$view}) {
+        die "Undefined view '$view' in DDF";
+    }
     my @filenames = split(',', $files);
     $fields[$fileField] = \@filenames;
-    $datasets{$dataset} = \@fields;
+    push(@datasets, \@fields);
 }
 
 # Validate files and metadata fields in all datasets using controlled
@@ -577,11 +581,12 @@ while (@{$lines}) {
 loadControlledVocab();
 open(LOADER_RA, ">$outPath/$loadFile") || die "SYS ERROR: Can't write \'$outPath/$loadFile\' file; error: $!\n";
 open(TRACK_RA, ">$outPath/$trackFile") || die "SYS ERROR: Can't write \'$outPath/$trackFile\' file; error: $!\n";
-foreach $dataset (keys %datasets) {
-    my $datasetRef = $datasets{$dataset};
+my $priority = 0;
+foreach my $datasetRef (@datasets) {
+    $priority++;
     my $view = $datasetRef->[$ddfHeader{view}];
     my $tableType = $tracks{$view}->{'tableType'};
-    &HgAutomate::verbose(2, "  Dataset: $dataset\tTrack: $view\n");
+    &HgAutomate::verbose(2, "  View: $view\n");
     for ($i=0; $i < @ddfHeader; $i++) {
         &validateField($ddfHeader[$i], $datasetRef->[$i], $view);
     }
@@ -619,11 +624,11 @@ foreach $dataset (keys %datasets) {
         }
         if($hash{antibody}) {
             $subGroups .= " factor=$hash{antibody}";
-            $additional = "antibody\t$hash{antibody}\n" . $additional;
+            $additional = "\tantibody\t$hash{antibody}\n" . $additional;
         }
         if($hash{cell}) {
             $subGroups .= " cellType=$hash{cell}";
-            $additional = "cellType\t$hash{cell}\n" . $additional;
+            $additional = "\tcellType\t$hash{cell}\n" . $additional;
         }
     }
     # mysql doesn't allow hyphens in table names and our naming convention doesn't allow underbars.
@@ -636,15 +641,17 @@ foreach $dataset (keys %datasets) {
     print LOADER_RA "files @{$datasetRef->[$ddfHeader{files}]}\n";
     print LOADER_RA "\n";
 
-    print TRACK_RA "track\t$tableName\n";
-    print TRACK_RA "subTrack\t$trackName\n";
-    print TRACK_RA "shortLabel\t$shortLabel\n";
-    print TRACK_RA "longLabel\t$longLabel\n";
-    print TRACK_RA "subGroups\t$subGroups\n";
-    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time());
-    print TRACK_RA sprintf("dateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
+    print TRACK_RA "\ttrack\t$tableName\n";
+    print TRACK_RA "\tsubTrack\t$trackName\n";
+    print TRACK_RA "\tshortLabel\t$shortLabel\n";
+    print TRACK_RA "\tlongLabel\t$longLabel\n";
+    print TRACK_RA "\tsubGroups\t$subGroups\n";
+    print TRACK_RA "\ttype\t$tracks{$view}->{type}\n";
+    print TRACK_RA sprintf("\tdateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
+    print TRACK_RA "\tpriority\t$priority\n";
+    # noInherit is necessary b/c composite track will often have a different dummy type setting.
+    print TRACK_RA "\tnoInherit\ton\n";
     print TRACK_RA $additional;
-
 }
 close(LOADER_RA);
 close(TRACK_RA);
