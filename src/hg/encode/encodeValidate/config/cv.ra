@@ -64,3 +64,8 @@ term Pseudo
 type Gene Type
 description pseudogene
 
+term FOXP2
+type Antibody
+
+term SK-N-MC
+type Cell Line
