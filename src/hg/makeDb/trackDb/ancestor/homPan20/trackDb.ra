@@ -54,3 +54,18 @@ spectrum on
 type chain homIni20
 otherDb homIni20
 
+track buildMaf
+shortLabel Multiple Alignment
+longLabel Multiple Alignment
+group compGeno
+priority 110
+visibility pack
+type wigMaf 0.0 1.0
+#speciesTree ((echTel1,loxAfr1)afrothere,(dasNov1,((bosTau2, canFam2)laurasia,((oryCun1,(rn4,mm8)rodent)glire,(rheMac2,(panTro2,hg18)ape)primate)euArc)borEut13)nonAfro)eutherian;
+#speciesTarget human
+summary buildMafSummary
+speciesOrder hg18 panTro2 homIni20 ponAbe2
+# speciesOrder mouse/human chimp/human hg17 panTro1 rheMac1 oryCun1 rn3 mm6 bosTau1 canFam1 dasNov1 tenrec loxAfr1 
+# speciesOrder euArc primate ape hg18 panTro2 rheMac2 rn4 mm8 rodent oryCun1 glire bosTau2 canFam2 laurasia dasNov1 nonAfro echTel1 loxAfr1 afrothere eutherian
+speciesCodonDefault hg18
+# frames buildMafFrames
