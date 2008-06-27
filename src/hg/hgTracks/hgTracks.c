@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1491 2008/06/26 21:16:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1492 2008/06/27 19:33:07 galt Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2716,7 +2716,8 @@ char *orgEnc = cgiEncode(organism);
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../index.html?org=%s\" class=\"topbar\">Home</A></TD>", orgEnc);
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../index.html?org=%s&db=%s&%s=%s\" class=\"topbar\">Home</A></TD>", 
+    orgEnc, database, cartSessionVarName(), cartSessionId(cart));
 
 if (hIsGsidServer())
     {
@@ -2727,7 +2728,7 @@ if (hIsGsidServer())
     } 
 else
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Genomes</A></TD>", orgEnc, database);
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s&%s=%s\" class=\"topbar\">Genomes</A></TD>", orgEnc, database, cartSessionVarName(), cartSessionId(cart));
     }
 if (gotBlat)
     {
