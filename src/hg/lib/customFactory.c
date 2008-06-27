@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.79 2008/06/13 17:17:18 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.80 2008/06/27 21:55:37 braney Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1402,6 +1402,9 @@ while ((hel = hashNext(&hc)) != NULL)
 
 struct trackDb *tdb = track->tdb;
 struct hash *hash = tdb->settingsHash;
+if (hash == NULL) // make sure we have a settings hash
+    hash = tdb->settingsHash = newHash(7);
+
 char *val;
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
@@ -1511,7 +1514,7 @@ else
     char *ctDb = ctGenomeOrCurrent(track);
     track->maxChromName = hGetMinIndexLengthDb(ctDb);
     }
-if (!strstr(line, "tdbType"))
+if ((line != NULL) && !strstr(line, "tdbType"))
     {
     /* for "external" (user-typed) track lines, save for later display
      * in the manager CGI */
