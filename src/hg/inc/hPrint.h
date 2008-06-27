@@ -8,8 +8,12 @@
 #include "errabort.h"
 #include "cheapcgi.h"
 
-void hPrintf(char *format, ...);
+void hPrintf(char *format, ...)
 /* Printf that can be suppressed if not making html. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
 
 void hvPrintf(char *format, va_list args);
 /* Suppressable variable args printf. Check for write error so we can
@@ -70,8 +74,12 @@ void hDropListClassWithStyle(char *name, char *menu[], int menuSize,
 /* Make a drop-down list with names if not suppressed, 
  * using specified class and style */
 
-void hPrintComment(char *format, ...);
+void hPrintComment(char *format, ...)
 /* Function to print output as a comment so it is not seen in the HTML
  * output but only in the HTML source. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
 
 #endif /* HPRINT_H */
