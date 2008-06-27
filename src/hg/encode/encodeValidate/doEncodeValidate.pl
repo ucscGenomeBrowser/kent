@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.26 2008/06/26 20:50:34 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.27 2008/06/27 19:30:48 larrym Exp $
 
 use warnings;
 use strict;
@@ -610,7 +610,7 @@ foreach my $datasetRef (@datasets) {
         my $shortSuffix;
         my $longSuffix;
         if($hash{antibody} && $hash{cell}) {
-            $shortSuffix = "$hash{antibody}/$hash{cell}";
+            $shortSuffix = "$hash{antibody} $hash{cell}";
             $longSuffix = "$hash{antibody} in $hash{cell} cells";
         } elsif ($hash{"cell"}) {
             $shortSuffix = "$hash{cell}";
@@ -642,7 +642,7 @@ foreach my $datasetRef (@datasets) {
     print LOADER_RA "\n";
 
     print TRACK_RA "\ttrack\t$tableName\n";
-    print TRACK_RA "\tsubTrack\t$trackName\n";
+    print TRACK_RA "\tsubTrack\twgEncode$pif{project}\n";
     print TRACK_RA "\tshortLabel\t$shortLabel\n";
     print TRACK_RA "\tlongLabel\t$longLabel\n";
     print TRACK_RA "\tsubGroups\t$subGroups\n";
