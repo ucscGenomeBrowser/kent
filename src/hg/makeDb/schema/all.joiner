@@ -785,6 +785,12 @@ identifier affyU34A
     $rn.affyU34A.qName dupeOk
     $rn.knownToU34A.value
 
+identifier illuminaWG6
+"Illumina WG-6 3.0 Probe set identifiers"
+    $hg.illuminaProbes.name dupeOk
+    $hg.illuminaProbesAlign.qName full
+    $hg.illuminaProbesSeq.id minCheck=0.8
+
 identifier kimWormGeneId
 "Identifiers for Kim-lab worm genes"
     hgFixed.kimWormLifeAllRatio.name
@@ -2974,9 +2980,6 @@ tablesIgnored $hg
     geneTests
     genomicSuperDups
     haplotype
-    illuminaProbes
-    illuminaProbesAlign
-    illuminaProbesSeq
     kg2ToKg3
     nimhBipolarUs
     nimhBipolarDe
