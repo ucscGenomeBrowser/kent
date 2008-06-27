@@ -17,7 +17,7 @@
 #include "pbStamp.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbUtil.c,v 1.24 2008/02/11 22:04:45 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbUtil.c,v 1.25 2008/06/27 16:30:12 kuhn Exp $";
 
 void hWrites(char *string)
 /* Write string with no '\n' if not suppressed. */
@@ -820,7 +820,7 @@ if (proteinInSupportedGenome)
     }
 else
     {
-    hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGlobal/pbTracksHelp.shtml\"");
+    hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml\"");
     }
 
 hPrintf("TARGET=_blank>%s</A></TD>", wrapWhiteFont("Help"));

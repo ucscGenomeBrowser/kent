@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGlobal.c,v 1.39 2007/05/23 01:37:38 galt Exp $";
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.40 2008/06/27 16:30:12 kuhn Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -283,7 +283,7 @@ if (proteinInSupportedGenome)
     }
 else
     {
-    hPrintf("\n<A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGlobal/pbTracksHelp.shtml#histograms\" TARGET=_blank>");
+    hPrintf("\n<A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml#histograms\" TARGET=_blank>");
     }
 
 hPrintf("Explanation of Protein Property Histograms</A><BR>");
@@ -382,7 +382,7 @@ if (proteinInSupportedGenome)
     }
 else
     {
-    hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGlobal/pbTracksHelp.shtml\" TARGET=_blank>%s</A></TD>",
+    hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml\" TARGET=_blank>%s</A></TD>",
         wrapWhiteFont("Help"));
     }
     

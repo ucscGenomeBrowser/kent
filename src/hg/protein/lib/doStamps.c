@@ -14,7 +14,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: doStamps.c,v 1.4 2007/03/24 03:34:30 fanhsu Exp $";
+static char const rcsid[] = "$Id: doStamps.c,v 1.5 2008/06/27 16:30:12 kuhn Exp $";
 
 Color boundaryColor;
 
@@ -446,7 +446,7 @@ if (proteinInSupportedGenome)
     }
 else
     {
-    hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGlobal/pb%s.shtml\"", tagName);
+    hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pb%s.shtml\"", tagName);
     }
 
 hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
@@ -461,7 +461,7 @@ if (proteinInSupportedGenome)
     }
 else
     {
-    hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGlobal/pb%s.shtml\"", tagName);
+    hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pb%s.shtml\"", tagName);
     }
 
 hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
