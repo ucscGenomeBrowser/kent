@@ -256,38 +256,40 @@ wgEncode 1
     priority 2
     color 25,150,25
 
-        track wgEncodeStanfordChipSeq
-        superTrack on
-        shortLabel Stanford ChiP-Seq
-        longLabel Stanford ChiP-Seq
-        group regulation
-        priority 2000
-        wgEncode 1
-
-track wgEncodeStanfordChipSites
-superTrack wgEncodeStanfordChipSeq dense
+track wgEncodeStanfordChip
 compositeTrack on
 shortLabel Stanf ChIP Sites
 longLabel ENCODE Stanford ChIP-Seq Sites
-useScore 1
 group regulation
-type bed 5
+subGroup1 view Views Sites=Sites Counts=Counts
+subGroup2 cellType Cell_Type SK-N-MC=SK-N-MC
+subGroup3 factor Factor FOXP2=FOXP2
+dimensions dimensionX=cellType dimensionY=factor
+dividers cellType factor
+hierarchy view Sites=0 Counts=1
+priority	9999
+type bed 3
 
-track	wgEncodeStanfordChipSitesSK_N_MCFOXP2
-subTrack	wgEncodeStanfordChipSites
-shortLabel	FOXP2/SK-N-MC
-longLabel	ENCODE Stanford ChIP-Seq Sites (FOXP2 in SK-N-MC cells)
-dateSubmitted	2008-06-05
-
-track wgEncodeStanfordChipOverlaps
-superTrack wgEncodeStanfordChipSeq dense
-compositeTrack on
-shortLabel Stanf ChIP Overlaps
-longLabel Stanford ChIP-Seq Overlaps
-group regulation
-type wig
-
-track wgEncodeStanfordChipOverlapsSK_N_MCFOXP2
-subTrack wgEncodeStanfordChipOverlaps
-shortLabel FOXP2/SK-N-MC
-longLabel ENCODE Stanford ChIP-Seq Overlaps (FOXP2 in SK-N-MC cells)
+	track	wgEncodeStanfordChipSitesSK_N_MCFOXP2
+	subTrack	wgEncodeStanfordChip
+	shortLabel	FOXP2/SK-N-MC
+	longLabel	ENCODE Stanford ChIP-Seq Sites (FOXP2 in SK-N-MC cells)
+	subGroups	view=Sites factor=FOXP2 cellType=SK-N-MC
+	antibody FOXP2
+	cellLine SK-N-MC
+	dateSubmitted	2008-06-05
+	useScore	1
+	noInherit	on
+	type	bed 5 +
+        priority        1
+	
+	track wgEncodeStanfordChipCountsSK_N_MCFOXP2
+	subTrack wgEncodeStanfordChip
+	shortLabel FOXP2/SK-N-MC
+	longLabel ENCODE Stanford ChIP-Seq Counts (FOXP2 in SK-N-MC cells)
+	antibody FOXP2
+	cellLine SK-N-MC
+	subGroups	view=Counts factor=FOXP2 cellType=SK-N-MC
+	type	wig
+	noInherit	on
+        priority        2
