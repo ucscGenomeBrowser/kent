@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1492 2008/06/27 19:33:07 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1493 2008/06/27 19:51:52 galt Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2716,7 +2716,7 @@ char *orgEnc = cgiEncode(organism);
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../index.html?org=%s&db=%s&%s=%s\" class=\"topbar\">Home</A></TD>", 
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../index.html?org=%s&db=%s&%s=%u\" class=\"topbar\">Home</A></TD>", 
     orgEnc, database, cartSessionVarName(), cartSessionId(cart));
 
 if (hIsGsidServer())
@@ -2728,7 +2728,7 @@ if (hIsGsidServer())
     } 
 else
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s&%s=%s\" class=\"topbar\">Genomes</A></TD>", orgEnc, database, cartSessionVarName(), cartSessionId(cart));
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s&%s=%u\" class=\"topbar\">Genomes</A></TD>", orgEnc, database, cartSessionVarName(), cartSessionId(cart));
     }
 if (gotBlat)
     {
@@ -3621,14 +3621,14 @@ if (showTrackControls)
             hPrintf("<th align=\"left\" colspan=%d BGCOLOR=#536ED3>", 
 	    	    MAX_CONTROL_COLUMNS-1);
 	    }
-	hPrintf("<table width='100%'><tr><td align='left'>");
+	hPrintf("<table width='100%%'><tr><td align='left'>");
 	hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
         hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'><IMG height='18' width='18' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue'></A>&nbsp;&nbsp;",
                 hgTracksName(), cartSidUrlString(cart), 
                 collapseGroupVar(group->name),
                 otherState, group->name, 
                 group->name, group->name, indicatorImg, indicator);
-	hPrintf("</td><td align='center' width='100%'>\n");
+	hPrintf("</td><td align='center' width='100%%'>\n");
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
 	hPrintf("</td><td align='right'>\n");
 	hPrintf("<input type='submit' name='submit' value='refresh'>\n");
