@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.148 2008/06/26 08:25:28 aamp Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.149 2008/06/27 19:15:55 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -179,7 +179,7 @@ if (theCart)
     getDbAndGenome(theCart, &db, &theGenome, NULL);
     genomeEnc = cgiEncode(theGenome);
 
-    snprintf(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u", 
+    safef(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u", 
 	     orgCgiName, genomeEnc,
 	     dbCgiName, db,
 	     cartSessionVarName(), cartSessionId(theCart));
