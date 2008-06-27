@@ -7,7 +7,7 @@
 #include <direct.h>
 #include "portable.h"
 
-static char const rcsid[] = "$Id: oswin9x.c,v 1.8 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: oswin9x.c,v 1.9 2008/06/27 18:46:53 markd Exp $";
 
 /* Return how long the named file is in bytes. 
  * Return -1 if no such file. */
@@ -47,22 +47,15 @@ char *getCurrentDir()
 static char dir[_MAX_PATH];
 
 if( _getcwd( dir, _MAX_PATH ) == NULL )
-    {
-    warn("No current directory");
-    return NULL;
-    }
+    errnoAbort("can't get current directory");
 return dir;
 }
 
-boolean setCurrentDir(char *newDir)
-/* Set current directory.  Return FALSE if it fails. */
+void setCurrentDir(char *newDir)
+/* Set current directory.  Abort if it fails. */
 {
 if (_chdir(newDir) != 0)
-    {
-    warn("Unable to set dir %s", newDir);
-    return FALSE;
-    }
-return TRUE;
+    errnoAbort("can't to set current directory: %s", newDir);
 }
 
 struct slName *listDir(char *dir, char *pattern)

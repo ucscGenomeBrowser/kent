@@ -165,8 +165,7 @@ gffDir = argv[1];
 outName = argv[2];
 oldCloneHash = readOldC2c(argv[3]);
 c2c = mustOpen(outName, "w");
-if (!setCurrentDir(gffDir))
-    errAbort("Couldn't cd to %s", gffDir);
+setCurrentDir(gffDir);
 for (i=0; i<ArraySize(inNames); ++i)
     {
     inName = inNames[i];

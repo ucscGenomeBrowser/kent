@@ -1597,8 +1597,7 @@ if (argc < 2)
     usage();
 command = argv[1];
 if (argc >= 3)
-    if (!setCurrentDir(argv[2]))
-    	usage();
+    setCurrentDir(argv[2]);
 conn = sqlConnect(database);
 if (sameWord(command,"INIT"))
     {

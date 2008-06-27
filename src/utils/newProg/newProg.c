@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.25 2007/11/20 18:40:27 angie Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.26 2008/06/27 18:46:54 markd Exp $";
 
 boolean jkhgap = FALSE;
 boolean cgi = FALSE;
@@ -139,7 +139,7 @@ if (cgi)
     fprintf(f, "#include \"hui.h\"\n");
     }
 fprintf(f, "\n");
-fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.25 2007/11/20 18:40:27 angie Exp $\";\n");
+fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.26 2008/06/27 18:46:54 markd Exp $\";\n");
 fprintf(f, "\n");
 
 if (cgi)
@@ -250,24 +250,21 @@ safef(fileName, sizeof(fileName), "%s/%s.c", dirName, fileOnly);
 makeC(fileOnly, description, fileName);
 
 /* makefile is now constructed properly with ../.. paths */
-if (!setCurrentDir(dirName))
-    errAbort("Couldn't change dir to %s", dirName);
+setCurrentDir(dirName);
 makeMakefile(fileOnly, "makefile");
 
 if (cvs)
     {
     /* Set current directory.  Return FALSE if it fails. */
     printf("Adding %s to CVS\n", module);
-    if (!setCurrentDir(".."))
-        errAbort("Couldn't change dir to ..");
+    setCurrentDir("..");
     safef(command, sizeof(command), "cvs add %s", fileOnly);
     if (system(command) != 0)
         errAbort("system call '%s' returned non-zero", command);
     safef(command, sizeof(command), "cvs commit -m \"%s\" %s", description, fileOnly);
     if (system(command) != 0)
         errAbort("system call '%s' returned non-zero", command);
-    if (!setCurrentDir(dirName))
-        errAbort("Couldn't change dir to %s", dirName);
+    setCurrentDir(dirName);
     safef(command, sizeof(command), "cvs add %s.c makefile", fileOnly);
     if (system(command) != 0)
         errAbort("system call '%s' returned non-zero", command);

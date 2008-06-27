@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.31 2007/01/30 19:43:46 kate Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.32 2008/06/27 18:46:53 markd Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -67,27 +67,20 @@ nullPt[0] = 0;
 }
 
 char *getCurrentDir()
-/* Return current directory. */
+/* Return current directory.  Abort if it fails. */
 {
-static char dir[1024];
+static char dir[PATH_LEN];
 
 if (getcwd( dir, sizeof(dir) ) == NULL )
-    {
-    warn("No current directory");
-    return NULL;
-    }
+    errnoAbort("can't get current directory");
 return dir;
 }
 
-boolean setCurrentDir(char *newDir)
-/* Set current directory.  Return FALSE if it fails. */
+void setCurrentDir(char *newDir)
+/* Set current directory.  Abort if it fails. */
 {
 if (chdir(newDir) != 0)
-    {
-    warn("Unable to set dir %s", newDir);
-    return FALSE;
-    }
-return TRUE;
+    errnoAbort("can't to set current directory: %s", newDir);
 }
 
 struct slName *listDir(char *dir, char *pattern)

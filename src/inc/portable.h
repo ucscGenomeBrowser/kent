@@ -33,10 +33,10 @@ struct fileInfo *listDirX(char *dir, char *pattern, boolean fullPath);
  * resulting list with slFreeList. */
 
 char *getCurrentDir();
-/* Return current directory. */
+/* Return current directory.  Abort if it fails. */
 
-boolean setCurrentDir(char *newDir);
-/* Set current directory.  Return FALSE if it fails. */
+void setCurrentDir(char *newDir);
+/* Set current directory.  Abort if it fails. */
 
 boolean makeDir(char *dirName);
 /* Make dir.  Returns TRUE on success.  Returns FALSE
