@@ -58,7 +58,7 @@ carefulClose(&f);
 hPrintf("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Frameset//EN\">\n");
 hPrintf("<HTML><HEAD><TITLE>%s Regions &gt;= %g</TITLE></HEAD>\n",
 	gg->shortLabel, threshold);
-hPrintf("<FRAMESET COLS=\"19%,81%\">\n");
+hPrintf("<FRAMESET COLS=\"19%%,81%%\">\n");
 hPrintf("<FRAME SRC=\"%s\" NAME=\"%s\">\n", indexTn.forCgi, indexFrame);
 hPrintf("<FRAME SRC=");
 quotedBrowserUrl(stdout, bedList, gg);
