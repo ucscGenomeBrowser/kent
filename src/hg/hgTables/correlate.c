@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.65 2008/05/20 22:21:59 larrym Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.66 2008/06/28 17:17:57 galt Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -1640,8 +1640,8 @@ hPrintf("<TH>Track</TH>");
 hPrintf("<TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH><TH>Variance</TH>");
 hPrintf("<TH>Standard<BR>deviation</TH>");
 hPrintf("<TH COLSPAN=2>");
-hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=0 WIDTH=100%>", HG_COL_INSIDE);
-hPrintf("<TR WIDTH=100%><TH COLSPAN=2>Regression<BR>line<BR>");
+hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=0 WIDTH=100%%>", HG_COL_INSIDE);
+hPrintf("<TR WIDTH=100%%><TH COLSPAN=2>Regression<BR>line<BR>");
 hPrintf("y&nbsp;=&nbsp;m*x&nbsp;+&nbsp;b</TH></TR>");
 hPrintf("<TR><TH>m</TH><TH>b</TH></TR></TABLE>");
 hPrintf("</TH>");
