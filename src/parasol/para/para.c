@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.101 2008/06/10 05:26:19 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.102 2008/06/28 05:10:35 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -33,15 +33,14 @@ static struct optionSpec optionSpecs[] = {
     {"maxJob"   , OPTION_STRING},
     {"cpu"      , OPTION_FLOAT},
     {"ram"      , OPTION_STRING},
+    {"batch"    , OPTION_STRING},
+    {"jobCwd"   , OPTION_STRING},
     {NULL, 0}
 };
 
 char *version = PARA_VERSION;   /* Version number. */
 
 static int numHappyDots;       /* number of happy dots written */
-
-float cpuUsage = 0;
-long long ramUsage = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -64,6 +63,18 @@ errAbort(
   "         Default is RAM on node divided by number of cpus on node.\n"
   "         Shorthand expressions allow t,g,m,k for tera, giga, mega, kilo.\n"
   "         e.g. 4g = 4 Gigabytes.\n"
+  "      -batch=batchDir - specify the directory path that is used to store the\n"
+  "       batch control files.  The batchDir can be an absolute path or a path\n"
+  "       relative to the current directory.  The resulting path is use as the\n"
+  "       batch name.  The directory is created if it doesn't exist.  When\n"
+  "       creating a new batch, batchDir should not have been previously used as\n"
+  "       a batch name.  The batchDir must be writable by the paraHub process.\n"
+  "       This does not affect the working directory assigned to jobs.  In defaults\n"
+  "       to the directory where para is run.  If used, this option must be specified\n"
+  "       on all para commands for the  batch.  For example to run two batches in the\n"
+  "       same directory:\n"
+  "          para -batch=b1 make jobs1\n"
+  "          para -batch=b2 make jobs2\n"
   "para push \n"
   "   This pushes forward the batch of jobs by submitting jobs to parasol\n"
   "   It will limit parasol queue size to something not too big and\n"
@@ -93,6 +104,10 @@ errAbort(
   "      -maxJob=x  Limit the number of jobs the batch can run.\n"
   "         Specify number of jobs, for example 10 or 'unlimited'.\n"
   "         Default unlimited displays as -1.\n"
+  "      -jobCwd=dir - specify the directory path to use as the current working\n"
+  "       directory for each job.  The dir can be an absolute path or a path\n"
+  "       relative to the current directory. In defaults to the directory where\n"
+  "       para is run.\n"
   "para try \n"
   "   This is like para push, but only submits up to 10 jobs.\n"
   "para shove\n"
@@ -167,16 +182,22 @@ int sleepTime = 5*60;
 int delayTime = 0;
 int priority = NORMAL_PRIORITY;
 int maxJob  = -1;
+float cpuUsage = 0;
+long long ramUsage = 0;
+char *batchDir = NULL;
+char *jobCwd = NULL;
+char resultsName[PATH_LEN];
+char errDir[PATH_LEN];
 
 /* Some variable we might want to move to a config file someday. */
-char *tempName = "para.tmp";	/* Name for temp files. */
-char *resultsName = "para.results"; /* Name of results file. */
+char *resultsFileName = "para.results"; /* Name of results file. */
 char *statusCommand = "parasol pstat2";
 char *killCommand = "parasol remove job";
 
 boolean sickBatch = FALSE;
 
-char *bookMarkName = "para.bookmark";  /* name of bookmark file */
+char *bookMarkFileName = "para.bookmark";  /* name of bookmark file */
+char bookMarkName[PATH_LEN];  /* path to bookmark file */
 off_t bookMark = 0;  /* faster to resume from bookmark only reading new para.results */ 
 off_t resultsSize = 0;  /* where to stop reading results for the current cycle */
 
@@ -635,8 +656,7 @@ void readBookMark()
  * This should be called before reading the results file. */
 {
 /* a bookmark should not exist if results file does not exist */
-if (!fileExists(resultsName))
-  if (fileExists(bookMarkName))
+if ((!fileExists(resultsName)) && fileExists(bookMarkName))
     unlink(bookMarkName);
 /* read bookmark position */
 struct lineFile *lf = lineFileMayOpen(bookMarkName, TRUE);
@@ -788,11 +808,6 @@ return ret;
 boolean thisBatchRunning()
 /* Return true if this batch is running */
 {
-char batchDir[512];
-
-if (getcwd(batchDir, sizeof(batchDir)) == NULL)
-    errAbort("Couldn't get current directory");
-strcat(batchDir, "/");
 return batchRunning(batchDir);
 }
 
@@ -822,17 +837,14 @@ void sendSetPriorityMessage(int priority)
 /* Tell hub to change priority on batch */
 {
 struct dyString *dy = newDyString(1024);
-char curDir[512];
 char *result;
 if ((priority < 1) || (priority > MAX_PRIORITY))
     errAbort("Priority %d out of range, should be 1 to %d",priority,MAX_PRIORITY);
-if (getcwd(curDir, sizeof(curDir)) == NULL)
-    errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "setPriority %s %s/%s %d", getUser(), curDir, resultsName, priority);
+dyStringPrintf(dy, "setPriority %s %s %d", getUser(), resultsName, priority);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 if (result == NULL || sameString(result, "0"))
-    errAbort("Couldn't set priority for %s\n", curDir);
+    errAbort("Couldn't set priority for %s\n", batchDir);
 freez(&result);
 verbose(1, "Told hub to set priority %d\n",priority);
 }
@@ -866,17 +878,14 @@ void sendSetMaxJobMessage(int maxJob)
 /* Tell hub to change maxJob on batch */
 {
 struct dyString *dy = newDyString(1024);
-char curDir[512];
 char *result;
 if (maxJob <-1) 
     errAbort("maxJob %d out of range, should be >=-1", maxJob);
-if (getcwd(curDir, sizeof(curDir)) == NULL)
-    errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "setMaxJob %s %s/%s %d", getUser(), curDir, resultsName, maxJob);
+dyStringPrintf(dy, "setMaxJob %s %s %d", getUser(), resultsName, maxJob);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 if (result == NULL || sameString(result, "-2"))
-    errAbort("Couldn't set maxJob %d for %s\n", maxJob, curDir);
+    errAbort("Couldn't set maxJob %d for %s\n", maxJob, batchDir);
 freez(&result);
 verbose(1, "Told hub to set maxJob %d\n",maxJob);
 }
@@ -905,16 +914,17 @@ if (optionVal("maxNode",NULL)!=NULL)
 void paraCreate(char *batch, char *jobList)
 /* Create a batch database from a job list. */
 {
-char backup[512];
+char backup[PATH_LEN];
 struct jobDb *db;
 
 if (thisBatchRunning())
     errAbort("This batch is currently running.  Please para stop first.");
-makeDir("err");
+makeDir(batchDir);
+makeDir(errDir);
 db = parseJobList(jobList);
 
 doChecks(db, "in");
-sprintf(backup, "%s.bak", batch);
+safef(backup, sizeof(backup), "%s.bak", batch);
 atomicWriteBatch(db, backup);
 atomicWriteBatch(db, batch);
 verbose(1, "%d jobs written to %s\n", db->jobCount, batch);
@@ -946,15 +956,15 @@ jobDbFree(&db);
 freeHash(&hash);
 }
 
-boolean submitJob(struct job *job, char *curDir)
+boolean submitJob(struct job *job)
 /* Attempt to submit job. */
 {
 struct dyString *cmd = dyStringNew(1024);
 struct submission *sub;
 char *jobId = NULL;
 
-dyStringPrintf(cmd, "addJob2 %s %s /dev/null /dev/null %s/%s %f %lld %s",
- getUser(), curDir, curDir, resultsName, job->cpusUsed, job->ramUsed, job->command);
+dyStringPrintf(cmd, "addJob2 %s %s /dev/null /dev/null %s %f %lld %s",
+               getUser(), jobCwd, resultsName, job->cpusUsed, job->ramUsed, job->command);
 if (cmd->stringSize > rudpMaxSize)
     errAbort("The following string has %d bytes, but can only be %d:\n%s\n"
              "Please either shorten the current directory or the command line\n"
@@ -1011,7 +1021,6 @@ struct hash *hash = newHash(max(12,digitsBaseTwo(db->jobCount)-3));
 struct job *job;
 struct submission *sub;
 int queueSize = 0;
-char curDir[512];
 
 long killSeconds = killTime*60;
 long warnSeconds = warnTime*60;
@@ -1021,11 +1030,8 @@ time_t now = time(NULL);
 long time = clock1000();
 
 /* Get job list from paraHub. */
-if (getcwd(curDir, sizeof(curDir)) == NULL)
-    errAbort("Couldn't get current directory");
-
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, "pstat2 %s %s/%s", getUser(), curDir, resultsName);
+dyStringPrintf(dy, "pstat2 %s %s", getUser(), resultsName);
 struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
 dyStringFree(&dy);
 
@@ -1198,10 +1204,7 @@ void showSickNodes(boolean showSummary)
 {
 int count = 0;
 struct dyString *dy = newDyString(1024);
-char curDir[512];
-if (getcwd(curDir, sizeof(curDir)) == NULL)
-    errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "showSickNodes %s %s/%s", getUser(), curDir, resultsName);
+dyStringPrintf(dy, "showSickNodes %s %s", getUser(), resultsName);
 struct slRef *lineList = hubMultilineQuery(dy->string), *lineEl;
 for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     {
@@ -1295,11 +1298,8 @@ int queueSize;
 int pushCount = 0, retryCount = 0;
 int tryCount;
 boolean finished = FALSE;
-char curDir[512];
 long time = clock1000();
 
-if (getcwd(curDir, sizeof(curDir)) == NULL)
-    errAbort("Couldn't get current directory");
 queueSize = markQueuedJobs(db);
 
 markRunJobStatus(db);
@@ -1313,7 +1313,7 @@ if (!sickBatch)
 	    if (job->submissionCount < tryCount && 
 	       (job->submissionList == NULL || needsRerun(job->submissionList)))
 		{
-		if (!submitJob(job, curDir))
+		if (!submitJob(job))
 		    {
 		    finished = TRUE;
 		    break;
@@ -1607,8 +1607,8 @@ if (ru != NULL)
 void printErrFile(struct submission *sub)
 /* Print error file if it exists. */
 {
-char localName[64];
-sprintf(localName, "err/%s", sub->id);
+char localName[PATH_LEN];
+safef(localName, sizeof(localName), "%s/%s", errDir, sub->id);
 if (!fileExists(localName))
     {
     fetchFile(sub->host, sub->errFile, localName);
@@ -1745,15 +1745,12 @@ void sendChillMessage()
 /* Tell hub to chill out on job */
 {
 struct dyString *dy = newDyString(1024);
-char curDir[512];
 char *result;
-if (getcwd(curDir, sizeof(curDir)) == NULL)
-    errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "chill %s %s/%s", getUser(), curDir, resultsName);
+dyStringPrintf(dy, "chill %s %s", getUser(), resultsName);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 if (result == NULL || !sameString(result, "ok"))
-    errAbort("Couldn't chill %s\n", curDir);
+    errAbort("Couldn't chill %s\n", batchDir);
 freez(&result);
 verbose(1, "Told hub to chill out\n");
 }
@@ -1762,17 +1759,14 @@ void paraResetCounts()
 /* Send msg to hub to reset done and crashed counts on batch */
 {
 struct dyString *dy = newDyString(1024);
-char curDir[512];
 char *result;
-if (getcwd(curDir, sizeof(curDir)) == NULL)
-    errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "resetCounts %s %s/%s", getUser(), curDir, resultsName);
+dyStringPrintf(dy, "resetCounts %s %s", getUser(), resultsName);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 if (result == NULL || sameString(result, "-2"))
-    errAbort("Couldn't reset done and crashed counts on batch %s\n", curDir);
+    errAbort("Couldn't reset done and crashed counts on batch %s\n", batchDir);
 freez(&result);
-verbose(1, "Told hub to reset done and crashed counts on batch %s\n", curDir);
+verbose(1, "Told hub to reset done and crashed counts on batch %s\n", batchDir);
 }
 
 
@@ -1780,11 +1774,8 @@ void freeBatch()
 /* Send msg to hub to reset done and crashed counts on batch */
 {
 struct dyString *dy = newDyString(1024);
-char curDir[512];
 char *result;
-if (getcwd(curDir, sizeof(curDir)) == NULL)
-    errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "freeBatch %s %s/%s", getUser(), curDir, resultsName);
+dyStringPrintf(dy, "freeBatch %s %s", getUser(), resultsName);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 verbose(1, "Told hub to free all batch-related resources\n");
@@ -1807,15 +1798,12 @@ void clearSickNodes()
 /* Tell hub to clear sick nodes on batch */
 {
 struct dyString *dy = newDyString(1024);
-char curDir[512];
 char *result;
-if (getcwd(curDir, sizeof(curDir)) == NULL)
-    errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "clearSickNodes %s %s/%s", getUser(), curDir, resultsName);
+dyStringPrintf(dy, "clearSickNodes %s %s", getUser(), resultsName);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 if (!sameString(result, "0"))
-    errAbort("Couldn't clear sick nodes for %s\n", curDir);
+    errAbort("Couldn't clear sick nodes for %s\n", batchDir);
 freez(&result);
 verbose(1, "Told hub to clear sick nodes\n");
 }
@@ -2101,11 +2089,29 @@ if (timedCount > 0)
 atomicWriteBatch(db, batch);
 }
 
+static char *determineCwdOptDir(char *optName)
+/* determine batch or job directory from cwd and option */
+{
+char path[PATH_LEN];
+char *opt = optionVal(optName, NULL);
+if (opt == NULL)
+    safecpy(path, sizeof(path), getCurrentDir());
+else if (opt[0] != '/')
+    {
+    safecpy(path, sizeof(path), getCurrentDir());
+    safecat(path, sizeof(path), "/");
+    safecat(path, sizeof(path), opt);
+    }
+else
+    safecpy(path, sizeof(path), opt);
+return cloneString(path);
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *command;
-char *batch;
+char batch[PATH_LEN];
 long startTime = clock1000();
 
 optionInit(&argc, argv, optionSpecs);
@@ -2126,8 +2132,14 @@ if (cpuUsage < 0)
 ramUsage = parseRam(optionVal("ram","0"));
 if (ramUsage == -1)
     usage();
+batchDir = determineCwdOptDir("batch");
+jobCwd = determineCwdOptDir("jobCwd");
+safef(resultsName, sizeof(resultsName), "%s/%s", batchDir, resultsFileName);
+safef(errDir, sizeof(errDir), "%s/err", batchDir);
+safef(bookMarkName, sizeof(bookMarkName), "%s/%s", batchDir, bookMarkFileName);
+
 command = argv[1];
-batch = "batch";
+safef(batch, sizeof(batch), "%s/batch", batchDir);
 
 if (!sameWord(command,"create") && !sameWord(command,"make"))
     {
@@ -2136,9 +2148,6 @@ if (!sameWord(command,"create") && !sameWord(command,"make"))
     }
 
 pushWarnHandler(paraVaWarn);
-
-if (strchr(batch, '/') != NULL)
-    errAbort("para needs to be run in the same directory as the batch file.");
 
 readBookMark();  /* read the para.bookmark file to initialize bookmark */
 
