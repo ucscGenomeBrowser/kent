@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.17 2008/05/30 21:06:57 hiram Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.18 2008/06/28 16:45:17 galt Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -106,8 +106,7 @@ for (ref = ggList; ref != NULL; ref = ref->next)
 	hPrintf("<TR><TD><A HREF=\"../cgi-bin/hgGenome?%s&%s=on&g=%s\">",
 		cartSidUrlString(cart), hggConfigureOne, tmp);
 	freeMem(tmp);
-	hPrintf("%s", gg->shortLabel);
-	hPrintf("</A></TD>", gg->shortLabel);
+	hPrintf("%s</A></TD>", gg->shortLabel);
 	hPrintf("<TD>%s</TD></TR>\n", gg->longLabel);
 	}
     }
