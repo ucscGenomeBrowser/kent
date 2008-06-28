@@ -72,8 +72,7 @@ cgiMakeDropList(hggMarkerType, markerNames, ArraySize(markerNames),
     	cartUsualString(cart, hggMarkerType, markerNames[0]));
 hPrintf("<BR>\n");
 
-hPrintf(" column labels: ", colLabelNames, ArraySize(colLabelNames),
-	cartUsualString(cart, hggColumnLabels, colLabelNames[0]));
+hPrintf(" column labels: ");
 cgiMakeDropList(hggColumnLabels, colLabelNames, ArraySize(colLabelNames), 
 	cartUsualString(cart, hggColumnLabels, colLabelNames[0]));
 hPrintf("<BR>\n");

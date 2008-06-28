@@ -21,7 +21,7 @@
 #include "versionInfo.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.178 2008/05/08 18:44:31 hiram Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.179 2008/06/28 16:56:04 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -787,7 +787,7 @@ if (!columnSetting(col, "noKeys", NULL))
 	    advFilterKeyClearButton(col);
 	    hPrintf("<BR>\n");
 	    if (count == 1)
-		hPrintf("(There is currently 1 item in the list.)", count);
+		hPrintf("(There is currently 1 item in the list.)");
 	    else
 		hPrintf("(There are currently %d items in the list.)", count);
 	    }
@@ -1627,7 +1627,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 	    else
 		hPrintf("\t");
 	    if (val == NULL)
-		hPrintf("n/a", val);
+		hPrintf("n/a");
 	    else
 		hPrintf("%s", val);
 	    freez(&val);
