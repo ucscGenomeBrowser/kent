@@ -10,7 +10,7 @@
 #include "hgExp.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: microarray.c,v 1.11 2005/04/29 08:24:20 aamp Exp $";
+static char const rcsid[] = "$Id: microarray.c,v 1.12 2008/06/28 16:37:57 galt Exp $";
 
 struct expColumn
 /* An expression column. */
@@ -350,7 +350,7 @@ static void expColumnPrint(struct expColumn *col,
 /* Print out one expColumn. */
 {
 struct sqlConnection *fConn = sqlConnect("hgFixed");
-hPrintf("<H3>%s</H3>\n", hashMustFindVal(col->settings, "longLabel"));
+hPrintf("<H3>%s</H3>\n", (char *)hashMustFindVal(col->settings, "longLabel"));
 if (startsWith("expRatio", col->type))
     expRatioPrint(col, conn, fConn, geneId, useBlue);
 else if (startsWith("expMulti", col->type))
