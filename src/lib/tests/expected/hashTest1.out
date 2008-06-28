@@ -1,0 +1,62 @@
+apple=apple1
+cat=cat1
+dog=dog1
+elephant=elephant1
+frog=frog1
+frog=frog2
+frog=frog3
+frog=frog4
+girl=girl1
+house=house1
+infix=infix1
+jail=jail1
+kite=kite1
+kite=kite2
+kite=kite3
+lamb=lamb1
+mother=mother1
+nana=nana1
+nana=nana2
+ostrich=ostrich1
+pool=pool1
+yak=yak1
+yak=yak2
+zebra=zebra1
+-----------
+keys and values:
+apple apple1
+cat cat1
+dog dog1
+elephant elephant1
+frog frog4 frog3 frog2 frog1
+girl girl1
+house house1
+infix infix1
+jail jail1
+kite kite3 kite2 kite1
+lamb lamb1
+mother mother1
+nana nana2 nana1
+ostrich ostrich1
+pool pool1
+yak yak2 yak1
+zebra zebra1
+----RESIZED HASH-------
+keys and values:
+apple apple1
+cat cat1
+dog dog1
+elephant elephant1
+frog frog4 frog3 frog2 frog1
+girl girl1
+house house1
+infix infix1
+jail jail1
+kite kite3 kite2 kite1
+lamb lamb1
+mother mother1
+nana nana2 nana1
+ostrich ostrich1
+pool pool1
+yak yak2 yak1
+zebra zebra1

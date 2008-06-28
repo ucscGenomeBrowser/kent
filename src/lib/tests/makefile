@@ -6,7 +6,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
-    mimeTests base64Tests quotedPTests safeTest
+    mimeTests base64Tests quotedPTests safeTest hashTest
 	rm -r output
 	@echo tested all
 
@@ -189,6 +189,16 @@ ${BIN_DIR}/safeTester:  mkdirs safeTester.o ${MYLIBS}
 
 safeTest: ${BIN_DIR}/safeTester mkdirs
 	${BIN_DIR}/safeTester
+
+hashTest: hashTest1
+
+${BIN_DIR}/testHash:  mkdirs testHash.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/testHash testHash.o ${MYLIBS} $L
+
+hashTest1: ${BIN_DIR}/testHash mkdirs
+	${BIN_DIR}/testHash input/$@.txt > output/$@.out
+	diff expected/$@.out output/$@.out
+
 
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out
