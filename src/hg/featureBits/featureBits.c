@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.51 2008/06/09 18:03:38 angie Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.52 2008/06/29 16:02:24 markd Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -162,8 +162,16 @@ sqlDisconnect(&conn);
 return ret;
 }
 
+static boolean hasSuffixCompress(char *file, char *suffix, char *compSuffix)
+/* determine if file ends with .suffix.compSuffix */
+{
+char sbuf[64];
+safef(sbuf, sizeof(sbuf), "%s.%s", suffix, compSuffix);
+return endsWith(file, sbuf);
+}
+
 boolean isFileType(char *file, char *suffix)
-/* determine if file ends with .suffix, or .suffix.gz */
+/* determine if file ends with .suffix, or .suffix.{gz,Z,bz2} */
 {
 char cleaned[PATH_LEN], *p;
 
@@ -178,12 +186,14 @@ if (p != NULL)
 
 if (endsWith(cleaned, suffix))
     return TRUE;
+else if (hasSuffixCompress(cleaned, suffix, "gz"))
+    return TRUE;
+else if (hasSuffixCompress(cleaned, suffix, "Z"))
+    return TRUE;
+else if (hasSuffixCompress(cleaned, suffix, "bz2"))
+    return TRUE;
 else
-    {
-    char sbuf[64];
-    safef(sbuf, sizeof(sbuf), "%s.gz", suffix);
-    return endsWith(cleaned, sbuf);
-    }
+    return FALSE;
 }
 
 bool inclChrom(char *name)
