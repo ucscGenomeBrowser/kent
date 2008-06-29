@@ -263,3 +263,15 @@
           parasol [options] clear sick  - Clear sick stats on a batch.
             options: -results=file
 
+        Added option to para command, -batch, to allow specifying
+        a directory other then the current directory for storing
+        the parasol batch data files.  This allows running multiple
+        batches from the same directory
+
+        Added option to para command, -batch, to allow specifying
+        a directory other then the current directory for storing
+        the parasol batch data files.  This allows running multiple
+        batches from the same directory
+
+        Added option to para command, -jobCwd, to specify the current
+        working directory for jobs in a batch.
