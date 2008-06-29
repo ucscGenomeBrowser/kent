@@ -217,7 +217,7 @@
 #include "chromInfo.h"
 #include "gbWarn.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1435 2008/06/25 01:51:08 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1436 2008/06/29 16:26:16 kent Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -298,6 +298,12 @@ void printEntrezNucleotideUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
 fprintf(f, entrezFormat, "Nucleotide", accession, "GenBank");
+}
+
+void printEntrezEstUrl(FILE *f, char *accession)
+/* Print URL for Entrez browser on a nucleotide. */
+{
+fprintf(f, entrezFormat, "nucest", accession, "GenBank");
 }
 
 void printEntrezProteinUrl(FILE *f, char *accession)
@@ -4825,7 +4831,10 @@ if (row != NULL)
      * local variables.  There's still a few hoops to jump through to 
      * format this prettily on the web with hyperlinks to NCBI. */
     printf("<H2>Information on %s <A HREF=\"",  type);
-    printEntrezNucleotideUrl(stdout, acc);
+    if (isEst)
+	printEntrezEstUrl(stdout, acc);
+    else
+	printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A></H2>\n", acc);
 
     printf("<B>Description:</B> %s<BR>\n", description);
