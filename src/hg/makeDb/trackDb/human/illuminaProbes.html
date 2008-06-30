@@ -21,13 +21,17 @@ transcripts:
 <TR><TD><B>TOTAL</B></TD><TD>48,803</TD><TD>43,338</TD></TR>
 </TABLE>
 </P>
+
+<H2>Display</H2>
 <P>
 The track shows the location of the probes on the genome after the RNAs
 they correspond to were all aligned to the genome using BLAT.  Alignment
-scores range from 0 to 1000, where 1000 is a perfect score.  In the tracks
-display, darker browns are for higher-scoring alignments.  The alignment
-can be seen by clicking the &quot;View Alignment&quot; link above, but 
-ignore the part where it says &quot;cDNA&quot;.
+scores range from 0 to 1000, where 1000 is a perfect score.  In the 
+display, darker browns are for higher-scoring alignments.  
+</P>
+<P>Click on a probe track item to see detailed information about that probe ID.
+View the base-by-base alignment for that probe by clicking the 
+&quot;View Alignment&quot; link on the details page.
 </P>
 
 <H2>Methods</H2>
@@ -38,9 +42,9 @@ TARGET=_blank>GEO</A>
 (Gene Expression Omnibus), and the
 43,338 RNA sequences were collected from Genbank using NCBI's EUtils interface
 to Entrez.  These RNAs were aligned to the genome using BLAT, and 43,224 of them
-aligned well to 46,432 locations on the genome (the single best hit was taken
-except in 1,789 cases where the RNA mapped equally well to two or more 
-locations).  The probes were then aligned to their respective RNAs using BLAT,
+aligned well to 46,432 locations on the genome. The single best alignment was
+used, except in 1,789 cases where the RNA mapped equally well to two or more 
+locations.  The probes were then aligned to their respective RNAs using BLAT,
 and if a good alignment resulted, the probe was then mapped through to the
 genome using the combination of the probe-on-RNA and the RNA-on-genome
 alignments.  Of the 48,803 original probes, 40,852 map well
