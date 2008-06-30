@@ -89,6 +89,23 @@ freeMem(org);
 freeMem(sciName);
 }
 
+static char *chainSubsetDesc(enum transMapInfoChainSubset cs)
+/* get description for chain subset */
+{
+switch (cs)
+    {
+    case transMapInfoUnknown:
+        return "unknown";
+    case transMapInfoAll:
+        return "all";
+    case transMapInfoSyn:
+        return "syntenic";
+    case transMapInfoRbest:
+        return "reciprocal best";
+    }
+return NULL;
+}
+
 static void displayMapped(struct transMapBag *bag)
 /* display information about the mapping alignment */
 {
@@ -120,6 +137,8 @@ printf("<TR CLASS=\"transMapLeft\"><TD>Aligned<TD>%0.1f%%</TR>\n",
 // chain used in mapping
 printf("<TR CLASS=\"transMapLeft\"><TD>Chain ID<TD>%s</TR>\n",
        bag->info->mappingId);
+printf("<TR CLASS=\"transMapLeft\"><TD>Chain subset<TD>%s</TR>\n",
+       chainSubsetDesc(bag->info->chainSubset));
 printf("</TBODY></TABLE>\n");
 }
 

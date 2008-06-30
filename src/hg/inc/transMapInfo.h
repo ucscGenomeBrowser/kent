@@ -5,8 +5,15 @@
 #ifndef TRANSMAPINFO_H
 #define TRANSMAPINFO_H
 
-#define TRANSMAPINFO_NUM_COLS 4
+#define TRANSMAPINFO_NUM_COLS 5
 
+enum transMapInfoChainSubset
+    {
+    transMapInfoUnknown = 0,
+    transMapInfoAll = 1,
+    transMapInfoSyn = 2,
+    transMapInfoRbest = 3,
+    };
 struct transMapInfo
 /* genomeDB information about transMap alignments */
     {
@@ -15,6 +22,7 @@ struct transMapInfo
     char srcDb[17];	/* source db */
     char *srcId;	/* id of source alignment */
     char *mappingId;	/* id of chain used for mapping */
+    enum transMapInfoChainSubset chainSubset;	/* chain subset used */
     };
 
 void transMapInfoStaticLoad(char **row, struct transMapInfo *ret);
@@ -60,6 +68,7 @@ void transMapInfoOutput(struct transMapInfo *el, FILE *f, char sep, char lastSep
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct sqlConnection;
 struct transMapInfo *transMapInfoQuery(struct sqlConnection *conn,
                                        char *table, char *mappedId);
 /* load a single transMapInfo object for an mapped id from a table,

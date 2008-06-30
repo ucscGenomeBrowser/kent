@@ -8,7 +8,11 @@
 #include "jksql.h"
 #include "transMapInfo.h"
 
-static char const rcsid[] = "$Id: transMapInfo.c,v 1.3 2008/05/19 18:16:10 markd Exp $";
+static char const rcsid[] = "$Id: transMapInfo.c,v 1.4 2008/06/30 16:56:02 markd Exp $";
+
+/* definitions for chainSubset column */
+static char *values_chainSubset[] = {"unknown", "all", "syn", "rbest", NULL};
+static struct hash *valhash_chainSubset = NULL;
 
 void transMapInfoStaticLoad(char **row, struct transMapInfo *ret)
 /* Load a row from transMapInfo table into ret.  The contents of ret will
@@ -19,6 +23,7 @@ ret->mappedId = row[0];
 safecpy(ret->srcDb, sizeof(ret->srcDb), row[1]);
 ret->srcId = row[2];
 ret->mappingId = row[3];
+ret->chainSubset = sqlEnumParse(row[4], values_chainSubset, &valhash_chainSubset);
 }
 
 struct transMapInfo *transMapInfoLoad(char **row)
@@ -32,6 +37,7 @@ ret->mappedId = cloneString(row[0]);
 safecpy(ret->srcDb, sizeof(ret->srcDb), row[1]);
 ret->srcId = cloneString(row[2]);
 ret->mappingId = cloneString(row[3]);
+ret->chainSubset = sqlEnumParse(row[4], values_chainSubset, &valhash_chainSubset);
 return ret;
 }
 
@@ -41,7 +47,7 @@ struct transMapInfo *transMapInfoLoadAll(char *fileName)
 {
 struct transMapInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -59,7 +65,7 @@ struct transMapInfo *transMapInfoLoadAllByChar(char *fileName, char chopper)
 {
 struct transMapInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -84,6 +90,7 @@ ret->mappedId = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->srcDb, sizeof(ret->srcDb));
 ret->srcId = sqlStringComma(&s);
 ret->mappingId = sqlStringComma(&s);
+ret->chainSubset = sqlEnumComma(&s, values_chainSubset, &valhash_chainSubset);
 *pS = s;
 return ret;
 }
@@ -131,6 +138,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->mappingId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+sqlEnumPrint(f, el->chainSubset, values_chainSubset);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
