@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.21 2008/06/25 16:08:23 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.22 2008/06/30 18:28:44 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -1023,12 +1023,12 @@ over.chain file in the liftOver dir.";
   my $liftOverDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
   $bossScript->add(<<_EOF_
 mkdir -p $liftOverDir
-cp -p $altOver $liftOverDir/$over
 md5sum $tDb.$qDb.all.chain.gz $net > md5sum.txt
 _EOF_
   );
   if (! $isSelf) {
     $bossScript->add(<<_EOF_
+cp -p $altOver $liftOverDir/$over
 cd ..
 md5sum axtNet/*.gz >> axtChain/md5sum.txt
 _EOF_
