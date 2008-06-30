@@ -217,7 +217,7 @@
 #include "chromInfo.h"
 #include "gbWarn.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1436 2008/06/29 16:26:16 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1437 2008/06/30 20:51:19 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13077,6 +13077,13 @@ while (lineFileNext(lf, &line, &lineSize))
     }
 lineFileClose(&lf);
 
+if (variation == NULL)
+    {
+    printf("<P>Could not parse ambiguous SNP base out of dbSNP "
+	   "sequence, so can't display re-alignment of flanking sequences.\n");
+    return;
+    }
+
 /* trim */
 /* axtAffine has a limit of 100,000,000 bases for query x target */
 leftFlank = dyStringCannibalize(&seqDbSnp5);
@@ -13149,11 +13156,11 @@ printf("\n<BR><B>Re-alignment of the SNP's flanking sequences to the "
 printf("<PRE><B>Genomic sequence around %s (%s:%d-%d, %s strand):</B>\n",
        snp->name, snp->chrom, start+1, end,
        isRc ? "reverse complemented for -" : "+");
+int snpWidth = snp->chromEnd - snp->chromStart;
 writeSeqWithBreaks(stdout, seqNib->dna, genoLen5, lineWidth);
 printf("<B>");
 if (snp->chromEnd > snp->chromStart)
-    writeSeqWithBreaks(stdout, seqNib->dna + genoLen5,
-		       (snp->chromEnd - snp->chromStart), lineWidth);
+    writeSeqWithBreaks(stdout, seqNib->dna + genoLen5, snpWidth, lineWidth);
 else
     printf("-\n");
 printf("</B>");
@@ -13195,8 +13202,7 @@ if (seqDbSnp == NULL)
 seqDbSnp->size = strlen(seqDbSnp->dna);
 
 generateAlignment(seqNib, seqDbSnp, lineWidth, start, skipCount,
-		  genoLen5, genoLen5 + (snp->chromEnd - snp->chromStart),
-		  isRc);
+		  genoLen5, genoLen5 + snpWidth, isRc);
 }
 
 void doSnp(struct trackDb *tdb, char *itemName)
