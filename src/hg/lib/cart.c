@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.86 2008/06/26 18:17:59 galt Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.87 2008/06/30 20:14:29 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -42,6 +42,29 @@ else
     freeMem(hel->val);
     hel->val = val;
     }
+}
+
+void cartTrace(struct cart *cart, char *when)
+/* Write some properties of the cart to stderr for debugging. */
+{
+if (cfgOption("cart.trace") == NULL)
+    return;
+struct cartDb *u = cart->userInfo, *s = cart->sessionInfo;
+char *pixStr = hashFindVal(cart->hash, "pix");
+int pix = pixStr ? atoi(pixStr) : -1;
+char *cartHgsidStr = hashFindVal(cart->hash, "hgsid");
+int cartHgsid = cartHgsidStr ? atoi(cartHgsidStr) : -1;
+int cartHgsidWeird = (cartHgsid != -1 && cartHgsid != cart->sessionId);
+fprintf(stderr, "ASH: %25s: "
+	"u=%d u.i=%d%s u.l=%d u.c=%d "
+	"s=%d s.i=%d%s s.l=%d s.c=%d "
+	"p=%d c.s=%d%s %s\n",
+	when,
+	cart->userId, u->id, (cart->userId != u->id) ? "***" : "",
+	(int)strlen(u->contents), u->useCount,
+	cart->sessionId, s->id, (cart->sessionId != s->id) ? "***" : "",
+	(int)strlen(s->contents), s->useCount,
+	pix, cartHgsid, cartHgsidWeird ? "***" : "", cgiRemoteAddr());
 }
 
 boolean cartTablesOk(struct sqlConnection *conn)
@@ -465,6 +488,9 @@ if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
 else if (userIdFound)
     cartParseOverHash(cart, cart->userInfo->contents);
+char when[1024];
+safef(when, sizeof(when), "new for %d %d", userId, sessionId);
+cartTrace(cart, when);
 
 loadCgiOverHash(cart, oldVars);
 
@@ -482,6 +508,7 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	cartLoadUserSession(conn, otherUser, sessionName, cart,
 			    oldVars, hgsDoOtherUser);
 	hDisconnectCentral(&conn);
+	cartTrace(cart, "after cartLUS");
 	}
     else if (cartVarExists(cart, hgsDoLoadUrl))
 	{
@@ -489,6 +516,7 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	struct lineFile *lf = netLineFileOpen(url);
 	cartLoadSettings(lf, cart, oldVars, hgsDoLoadUrl);
 	lineFileClose(&lf);
+	cartTrace(cart, "after cartLS");
 	}
     }
 #endif /* GBROWSE */
@@ -576,6 +604,7 @@ void cartCheckout(struct cart **pCart)
 struct cart *cart = *pCart;
 if (cart != NULL)
     {
+    cartTrace(cart, "checkout");
     saveState(cart);
     cartDbFree(&cart->userInfo);
     cartDbFree(&cart->sessionInfo);
