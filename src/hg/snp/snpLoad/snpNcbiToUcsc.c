@@ -13,7 +13,7 @@
 #include "twoBit.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.6 2008/03/07 21:38:03 angie Exp $";
+static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.7 2008/06/30 20:52:53 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -736,7 +736,8 @@ if (sameString("MISSING", refNcbiEnc))
     writeError("Missing refNCBI");
     return expanded->string;
     }
-if (sameString(refNcbiEnc, "-") || !strchr(refNcbiEnc, '('))
+if (sameString(refNcbiEnc, "-") || !strchr(refNcbiEnc, '(') ||
+    stringIn("bp insertion", refNcbiEnc))
     {
     dyStringPrintf(expanded, "%s", refNcbiEnc);
     return expanded->string;
@@ -843,9 +844,10 @@ else
     {
     /* The range{Insertion,Substitution,Deletion} locTypes don't have a
      * constraint on size, but do need to be converted. */
-    if (strlen(refNCBI) != chrEnd - chrStart + 1)
+    if (!stringIn("bp insertion", refNCBI) &&
+	strlen(refNCBI) != chrEnd - chrStart + 1)
 	writeError("Unexpected coords for locType \"%s\" (%d) -- "
-		   "expected NCBI's chrEnd == chrStart + 1.",
+		   "expected NCBI's chrEnd == chrStart + strlen(refNCBI) - 1.",
 		   locType, locTypeNum);
     else
 	chrEnd ++;
@@ -876,6 +878,8 @@ if (chrSeq == NULL || !sameString(chr, prevChr))
 if (chrStart >= chrSize || chrEnd > chrSize)
     writeError("rs%d has coord > chromSize: %s:%d-%d, chromSize %d",
 	       rsId, chr, chrStart, chrEnd, chrSize);
+if (stringIn("bp insertion", refNCBI))
+    return refNCBI;
 if (snpSize > MAX_SNPSIZE)
     lineFileAbort(lf, "MAX_SNPSIZE %d exceeded: rs%d %s:%d-%d (%d)",
 		  MAX_SNPSIZE, rsId, chr, chrStart, chrEnd, snpSize);
@@ -979,10 +983,6 @@ safecpy(buf, sizeof(buf), observed);
 wordCount = chopString(buf, "/", words, ArraySize(words));
 if (wordCount < 2)
     {
-    errAbort("Oops, I thought we always had at least one slash here -- "
-	     "got observed=\"%s\" for this snp:"
-	     "\n%s\t%d\t%d\trs%d",
-	     observed, chr, chrStart, chrEnd, rsId);
     minLen = maxLen = strlen(observed);
     gotRefAllele = sameString(observed, refAllele);
     }
@@ -1091,7 +1091,7 @@ for (i = 0;  i < IUPAC_AMBIG_BASE_COUNT;  i++)
 /* class=single (1) is so restrictive, it's actually better to use the 
  * is*allelic routines. */
 const char *observedIndelFormat =
-    "^(-|[AGCT]+)(\\/["IUPAC" ]+)+$";
+    "^(-|[AGCT]+)(\\/["IUPAC" ]+)*$";
 const char *observedHetFormat =
     "^\\(HETEROZYGOUS\\)(\\/[ACGT])*$";
 const char *observedMicrosatFormat =
@@ -1101,9 +1101,7 @@ const char *observedNamedFormat =
     "[0-9]+ ?BP ((INDEL|INSERTION|DELETED))?\\)"
     "\\/-(\\/[ACGT]+)*$";
 const char *observedNamedOddballFormat =
-    "^\\(((LARGE (INSERTION|DELETION))|" /* with a space */
-    "[0-9]+ ?BP( ((TRIPLE )?ALU)| DEL)?|"/* might get an N-bp alu etc */
-    "ALU)\\)"		        /* or the whole thing might be just "(ALU)". */
+    "^\\([A-Z0-9 ]+\\)" /* there's all sorts of stuff in there now */
     "(\\/-)?(\\/[ACGT]+)*$";
 /* class=no-var (6): no SNPs use this class (intended for null results). */
 const char *observedMixedFormat =
