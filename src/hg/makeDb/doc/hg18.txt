@@ -21445,3 +21445,438 @@ EOF
 
 cut -f1,3 ../blatProbes/probes.tab > illuminaProbesSeq.tab
 hgLoadSqlTab hg18 illuminaProbesSeq{,.sql,.tab}
+
+
+############################################################################
+# dbSNP BUILD 129 (DONE 6/24/06 angie)
+    # Set up build directory
+    ssh kkstore06
+    mkdir -p /cluster/store3/dbSNP129/{human,shared}
+    ln -s /cluster/store3/dbSNP129 /cluster/data/dbSNP/129
+
+    # Get field encodings -- if there are changes or additions to the
+    # encoding of the corresponding fields, you might need to update
+    # snpNcbiToUcsc, hgTracks, hgc and hgTrackUi (see also
+    # hg/lib/snp125Ui.c).
+    cd /cluster/data/dbSNP/129/shared
+    alias wg wget --timestamping
+    set ftpSnpDb = ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/database
+    wg $ftpSnpDb/shared_data/LocTypeCode.bcp.gz
+    wg $ftpSnpDb/shared_data/SnpClassCode.bcp.gz
+    wg $ftpSnpDb/shared_data/SnpFunctionCode.bcp.gz
+    wg $ftpSnpDb/shared_data/SnpValidationCode.bcp.gz
+    # Here is another source -- it is not as up-to-date as the above, but
+    # our encodings (enums and sets in snp129.sql) are named more similar
+    # to those in the 2005 ASN:
+    # ftp://ftp.ncbi.nih.gov/snp/specs/docsum_2005.asn
+
+    ########################## DOWNLOAD #############################
+    cd /cluster/data/dbSNP/129/human
+    mkdir data schema rs_fasta
+    # Get data from NCBI (anonymous FTP)
+    wg ftp://ftp.ncbi.nih.gov/snp/00readme.txt
+    cd /cluster/data/dbSNP/129/human/data
+    # ContigLoc table has coords, orientation, loc_type, and refNCBI allele
+    wg $ftpSnpDb/organism_data/b129_SNPContigLoc_36_3.bcp.gz
+    wg $ftpSnpDb/organism_data/b129_SNPContigLocusId_36_3.bcp.gz
+    wg $ftpSnpDb/organism_data/b129_ContigInfo_36_3.bcp.gz
+    # MapInfo has alignment weights
+    wg $ftpSnpDb/organism_data/b129_SNPMapInfo_36_3.bcp.gz
+    # SNP has univar_id, validation status and heterozygosity
+    wg $ftpSnpDb/organism_data/SNP.bcp.gz
+
+    # Get schema
+    cd /cluster/data/dbSNP/129/human/schema
+    wg $ftpSnpDb/organism_schema/human_9606_table.sql.gz
+
+    # Get fasta files
+    # using headers of fasta files for molType, class, observed
+    cd /cluster/data/dbSNP/129/human/rs_fasta
+    wg ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/rs_fasta/\*.gz
+
+    ########################## LOAD NCBI TABLES #############################
+    # Simplify names of data files -- strip version & extras to get
+    # local canonical table names.
+    cd /cluster/data/dbSNP/129/human/data
+    foreach f (*.bcp.gz)
+      set new = `echo $f \
+                 | sed -e 's/^b129_SNP//; s/^b129_//; s/_36_3//; s/.bcp//;'`
+      mv $f $new
+      echo $new
+    end
+
+    # Extract just the tables that we need from the NCBI msSQL table
+    # creation file, and get CREATE statements from
+    # human_9606_table.sql for our 5 tables
+    cd /cluster/data/dbSNP/129/human/schema
+    zcat human_9606_table.sql.gz \
+    | perl -we '$/ = "\nGO\n\n\n"; \
+        while (<>) { \
+          next unless /^CREATE TABLE \[(b129_(SNP)?)?(ContigInfo|ContigLoc|ContigLocusId|MapInfo|SNP)(_36_3)?\]/; \
+          s/b129_(SNP)?//; s/_36_3//; \
+          s/[\[\]]//g;  s/GO\n\n/;/;  s/smalldatetime/datetime/g; \
+          s/ON PRIMARY//g;  s/COLLATE//g;  s/Latin1_General_BIN//g; \
+          s/IDENTITY (1, 1) NOT NULL /NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)/g; \
+          s/nvarchar/varchar/g;  s/set quoted/--set quoted/g; \
+          s/(image|varchar\s+\(\d+\))/BLOB/g; \
+          print; \
+        }' \
+      > table.sql
+
+    # load on kolossus or a small cluster machine (mysql5 is OK for this;
+    # in fact it's better than 4 because it has 'show warnings').
+    ssh kkr3u00
+    hgsql '' -e 'create database hg18snp129' 
+    cd /cluster/data/dbSNP/129/human/schema
+    hgsql hg18snp129 < table.sql
+    cd ../data
+
+    # Avoid wasting space by excluding mappings to non-reference contigs:
+    foreach t (ContigInfo MapInfo)
+      zcat $t.gz \
+      | egrep -vw '(Celera|HuRef|CRA_TCAGchr7v2)' \
+      | perl -wpe 's/(\d\d:\d\d:\d\d)\.0/$1/g;' \
+      | hgLoadSqlTab -oldTable hg18snp129 $t placeholder stdin
+    end
+    # Compare contig list between our ctgPos and reference contigs in
+    # ContigInfo:
+    ssh hgwdev-10 hgsql hg18 -N -B -e '"select contig from ctgPos;"' \
+    | sort > /tmp/1
+    hgsql hg18snp129 -NBe 'select distinct(group_label) from ContigInfo'
+    # --> reference, c5_H2, c6_COX, c6_QBL, c22_H2, DR53
+    # (HuRef, Celera, CRA_TCAGchr7v2 grepped out above)
+    hgsql hg18snp129 -N -B -e 'select contig_acc from ContigInfo \
+        where group_label in \
+        ("reference", "c5_H2", "c6_COX", "c6_QBL", "c22_H2");' | sort > /tmp/2
+    diff /tmp/1 /tmp/2 
+    # No diff.
+    # Make sure there are no orient != 0 contigs among those selected.
+    hgsql hg18snp129 -NBe \
+      'select count(*) from ContigInfo where orient != 0 and \
+         group_label in ("reference", "c5_H2", "c6_COX", "c6_QBL", "c22_H2");'
+#0
+
+    # ContigLoc is huge, and we want just the reference contig mappings.
+    # So, based on the reference & haplo ctg_id values in ContigInfo, 
+    # filter to get just the mappings for those contigs:
+    zcat ContigLoc.gz \
+    | awk '$3 <= 377 || $3 == 7015' \
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.0/$1/g;' \
+    | hgLoadSqlTab -oldTable hg18snp129 ContigLoc placeholder stdin
+    foreach t (ContigLocusId SNP)
+      zcat $t.gz \
+      | perl -wpe 's/(\d\d:\d\d:\d\d)\.0/$1/g;' \
+      | hgLoadSqlTab -oldTable hg18snp129 $t placeholder stdin
+    end
+    # There were some warnings (many cleared up by the perl substitution)
+    # but no rows were dropped.  'show warnings' after a manual 'load data'
+    # complains about missing values (OK when e.g. position is not known).
+    foreach t (ContigInfo ContigLoc ContigLocusId MapInfo SNP) 
+     echo -n "${t}:\t"
+      hgsql -N -B hg18snp129 -e 'select count(*) from '$t
+    end
+#ContigInfo:     379
+#ContigLoc:      15835019  (before filtering: 46913472)
+#ContigLocusId:  25496815
+#MapInfo:        14845535  (before filtering: 44627804)
+#SNP:    	 14708770
+
+    #################### EXTRACT INFO FROM NCBI TABLES ####################
+    mkdir -p /scratch/snp/129/human
+    cd /scratch/snp/129/human
+
+    time hgsql hg18snp129 -e \
+      'alter table ContigLoc  add index (ctg_id); \
+       alter table ContigInfo add index (ctg_id);'
+#0.002u 0.002s 2:14.79 0.0%      0+0k 0+0io 1pf+0w
+    # was ~12m on a run without trimming ContigLoc!
+
+    time hgsql hg18snp129 -e \
+      'alter table ContigInfo add index (group_label(9));'
+#0.005u 0.000s 0:00.16 0.0%      0+0k 0+0io 1pf+0w
+
+    # For joining files by shared column, we need a unique identifier in
+    # that shared column.  snp_id is not unique -- the same rsID can appear
+    # in both the reference assembly and on one of the others e.g. c6_COX.
+    # So concatenate the assembly identifier and snp_id to get hopefully
+    # unique label.
+    time hgsql hg18snp129 -NBe \
+      'select concat(ContigInfo.group_label, ".", snp_id), \
+              ContigInfo.contig_acc, asn_from, asn_to, \
+              loc_type, orientation, allele, phys_pos_from \
+       from ContigLoc, ContigInfo \
+       where ContigLoc.ctg_id = ContigInfo.ctg_id and ContigInfo.group_label \
+             in ("reference", "c5_H2", "c6_COX", "c6_QBL", "c22_H2");' \
+      | sort \
+      > ucscContigLoc.txt
+    # no time output because of the pipe... took 5 minutes.
+
+    # Are these IDs unique?
+    wc -l ucscContigLoc.txt
+#15835019 ucscContigLoc.txt
+    awk '{print $1;}' ucscContigLoc.txt | uniq | wc -l
+#14791529
+    # Nope.  Find non-unique IDs:
+    awk 'prev == $1 {print;} {prev = $1;}' ucscContigLoc.txt | head
+    grep ^c5_H2.10035195 ucscContigLoc.txt
+#c5_H2.10035195  NT_113801       639954  639954  2       0       G      69605321
+#c5_H2.10035195  NT_113801       660407  660407  2       0       G      69625774
+#c5_H2.10035195  NT_113801       911780  911780  2       1       C      69877147
+#c5_H2.10035195  NT_113801       933061  933061  2       1       C      69898428
+    # OK, they can be duplicated within the same contig.  See if we can 
+    # get by with anchoring everything to ucscContigLoc.txt.  But everybody
+    # else better have unique IDs!
+
+    # SNP -> valid, avHet, avHetSE
+    # SNP has only snp_id as identifier, nothing relating to assembly.
+    hgsql hg18snp129 -NBe \
+      'select snp_id, validation_status, avg_heterozygosity, het_se \
+       from SNP;' \
+    | sort \
+      > ucscSNP.txt
+    # Check ID uniqueness:
+    wc -l ucscSNP.txt
+#14708770 ucscSNP.txt
+    awk '{print $1;}' ucscSNP.txt | uniq | wc -l
+#14708770
+
+    # ContigLocusId -> func
+    # ContigLocusId has only snp_id as an identifier (it gives one 
+    # example contig if the SNP is on multiple contigs).  
+    # The sort options and awk are to convert multiple entries with different
+    # function classes for the same SNP into one entry per SNP with a list
+    # of function classes.
+    hgsql hg18snp129 -NBe \
+      'select snp_id, fxn_class from ContigLocusId;' \
+    | sort -u -k1,1 -k2,2n  \
+    | awk '{if (prevId == $1) { prevFunc = prevFunc $2 ","; } \
+            else { if (prevId) {print prevId "\t" prevFunc;} \
+                                prevFunc = $2 ","; }} \
+           {prevId = $1;} \
+           END {print prevId "\t" prevFunc;}' \
+      > ucscFunc.txt
+    # Check ID uniqueness:
+    wc -l ucscFunc.txt
+#6136008 ucscFunc.txt
+    awk '{print $1;}' ucscFunc.txt | sort -u | wc -l
+#6136008
+
+    # MapInfo -> weight
+    # MapInfo needs assembly+snp_ids in order to have unique IDs.
+    time hgsql hg18snp129 -e \
+      'alter table MapInfo add index (assembly(9));'
+#0.003u 0.003s 3:40.29 0.0%      0+0k 0+0io 1pf+0w
+    hgsql hg18snp129 -NBe \
+      'select concat(assembly, ".", snp_id), weight \
+             from MapInfo where assembly \
+             in ("reference", "c5_H2", "c6_COX", "c6_QBL", "c22_H2");' \
+      | sort \
+      > weight.txt
+    # ~1 minute
+    # Check ID uniqueness:
+    wc -l weight.txt
+#14791529 weight.txt
+    awk '{print $1;}' weight.txt | uniq | wc -l
+#14791529
+    awk '{print $2;}' weight.txt | sort -n | uniq -c
+#   40910 0
+#14326127 1
+#  157402 2
+#  256608 3
+#   10482 10
+    # SNPs w/weight 0 and 10 will be discarded later.
+
+    # fasta headers -> observed, molType, class
+    zcat /cluster/data/dbSNP/129/human/rs_fasta/rs_ch*.fas.gz \
+    | grep '^>gnl' \
+    | perl -wpe 's/^\S+rs(\d+) .*mol="(\w+)"\|class=(\d+)\|alleles="([^"]+)"\|build.*/$1\t$4\t$2\t$3/ || die "Parse error line $.:\n$_\n\t";' \
+    | sort \
+      > ucscGnl.txt
+    # ~5m
+    wc -l ucscGnl.txt
+#14708630 ucscGnl.txt
+    awk '{print $1;}' ucscGnl.txt | uniq | wc -l
+#14708630
+
+    ############### JOIN NCBI COLUMNS TO GET UCSC SNP COLUMNS ################
+    # Join files by ID.  Start with ContigLoc and MapInfo because they 
+    # share the concatenated assembly+snp_id IDs.
+    time join -a 1 -e MISSING -t '	' ucscContigLoc.txt weight.txt \
+      > ucscCL+w.txt
+#28.334u 4.730s 1:43.47 31.9%    0+0k 0+0io 0pf+0w
+    wc -l ucscCL+w.txt 
+#15835019 ucscCL+w.txt
+    # Same as ucscContigLoc.txt above, good.
+    # Any missing weights?
+    grep MISSING ucscCL+w.txt | head
+    # No output, good.
+
+    # Join the files with SNP-only IDs.
+    time join -e MISSING -t '	' ucscGnl.txt ucscSNP.txt \
+      > ucscG+S.txt
+#17.375u 2.127s 0:47.40 41.1%    0+0k 0+0io 0pf+0w
+    wc -l ucscG+S.txt
+#14708630 ucscG+S.txt
+    # Same as ucscGnl.txt -- somewhat less than ucscSNP.txt (14708770)...
+    grep MISSING ucscG+S.txt | wc -l
+#0
+    time join -a 1 -e MISSING -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,2.2 \
+      -t '	' ucscG+S.txt ucscFunc.txt \
+      > ucscG+S+F.txt
+#18.612u 2.334s 0:50.30 41.6%    0+0k 0+0io 0pf+0w
+    wc -l ucscG+S+F.txt
+#14708630 ucscG+S+F.txt
+    grep MISSING ucscG+S+F.txt | wc -l 
+#8572703
+    # Not surprising -- ucscFunc.txt has only 6136008 lines.
+    expr 14708630 - 6136008
+#8572622
+    # Not an exact match like in 128, but not too far off.
+
+    # Convert assembly+snp_id's to just snp_id (sorted) for final join.
+    perl -wpe 's/^\S+\.(\d+)/$1/;' ucscCL+w.txt \
+    | sort > ucscCL+w.snp_id.txt
+    awk '{print $1;}' ucscCL+w.snp_id.txt | uniq | wc -l
+#14626025
+    # Interesting... which snp_ids are missing from ContigLoc?
+    # (note: don't use sort -n | comm, it needs alphabetical sort!)
+    awk '{print $1;}' ucscCL+w.snp_id.txt | sort -u > /tmp/1
+    awk '{print $1;}' ucscGnl.txt | sort -u > /tmp/2
+    comm -13 /tmp/1 /tmp/2 > notInContigLoc.txt
+    comm -23 /tmp/1 /tmp/2 > notInSNP.txt
+    wc -l notIn*.txt
+# 83043 notInContigLoc.txt
+#   438 notInSNP.txt
+    # notInContigLoc could simply mean that they weren't mapped, which is OK.
+    # notInSNP is more concerning.
+    #Not deleted!: 52789237, 55664014, 61749732, 
+    #Invalid (not retired): 63751714, 63751902
+    # -- sent email to snp-admin at ncbi.
+
+    # Final join -- treat ContigLoc as authoritative (since it has coords).
+    # Arrange columns in same order as in the SNP table, with extras for
+    # checking at the end (phys_pos_from).
+    # chr chrS chrE name strand refN obs molT cls val aH aHSE fxn locT wt ...
+    time join -a 1 -e MISSING -t '	' \
+  -o '1.2 1.3 1.4 1.1 1.6 1.7 2.2 2.3 2.4 2.5 2.6 2.7 2.8 1.5 1.9 1.8' \
+      ucscCL+w.snp_id.txt ucscG+S+F.txt \
+      > ucscNcbiSnp.ctg.txt
+#41.204u 6.274s 1:05.99 71.9%    0+0k 0+0io 0pf+0w
+    wc -l ucscNcbiSnp.ctg.txt
+#15835019 ucscNcbiSnp.ctg.txt
+    grep MISSING ucscNcbiSnp.ctg.txt | awk '{print $4;}' | uniq | wc -l
+#8495168
+
+    # Lift the map contig coordinates to chrom coordinates (~2m);
+    time liftUp ucscNcbiSnp.bed \
+      /cluster/data/hg18/jkStuff/liftContigs.lft warn \
+      ucscNcbiSnp.ctg.txt
+#123.952u 7.587s 2:22.24 92.4%   0+0k 0+0io 5pf+0w
+    wc -l ucscNcbiSnp.bed
+#15835019 ucscNcbiSnp.bed
+
+    # At this point, move back from /scratch to /cluster/data.
+    nice gzip ucscNcbiSnp.bed
+    cp -p ucscNcbiSnp.bed.gz /cluster/data/dbSNP/129/human/
+    cp -p notIn* /cluster/data/dbSNP/129/human/
+
+    # Drum roll please... translate NCBI's encoding into UCSC's, and 
+    # perform a bunch of checks.  This is where developer involvement
+    # is most likely as NCBI extends the encodings used in dbSNP.
+    cd /cluster/data/dbSNP/129/human/
+    gunzip ucscNcbiSnp.bed.gz
+    time snpNcbiToUcsc ucscNcbiSnp.bed /cluster/data/hg18/hg18.2bit \
+      snp129
+#spaces stripped from observed:
+#chr12   5963395 5963395 rs41402545
+#count of snps with weight  0 = 63507
+#count of snps with weight  1 = 14375595
+#count of snps with weight  2 = 325745
+#count of snps with weight  3 = 924499
+#count of snps with weight 10 = 145673
+#Skipped 493 snp mappings due to errors -- see snp129Errors.bed
+#188.767u 12.867s 3:31.32 95.4%  0+0k 0+0io 1pf+0w
+    # More skipped snps than in 128, but same reason:
+    cut -f 5 snp129Errors.bed | sort | uniq -c
+#    493 Missing observed value (deleted SNP?).
+    cut -f 4 snp129Errors.bed | sort -u | sed -e 's/^rs//' > errIds.txt
+    comm -13 notInSNP.txt errIds.txt | wc -l
+#0
+    # So those are a subset of the notInSNP.txt ids, good.
+    wc -l snp*
+#  15625346 snp129.bed
+#        22 snp129.sql
+#       493 snp129Errors.bed
+#        18 snp129ExceptionDesc.tab
+#   2673142 snp129Exceptions.bed
+
+    # Make one big fasta file.
+    # It's a monster: 16G!  Can we split by hashing rsId?
+  # NOTE FOR NEXT TIME: do this on the fileserver!
+    zcat rs_fasta/rs_ch*.fas.gz \
+    | perl -wpe 's/^>gnl\|dbSNP\|(rs\d+) .*/>$1/ || ! /^>/ || die;' \
+      > snp129.fa
+    # Check for duplicates.
+    grep ^\>rs snp129.fa | sort > /scratch/tmp/seqHeaders
+    wc -l /scratch/tmp/seqHeaders
+#14708630 /scratch/tmp/seqHeaders
+    uniq /scratch/tmp/seqHeaders | wc -l
+#14708630
+    # Use hgLoadSeq to generate .tab output for sequence file offsets,
+    # and keep only the columns that we need: acc and file_offset.
+    # Index it and translate to snpSeq table format.
+    time hgLoadSeq -test placeholder snp129.fa
+#114.516u 37.585s 3:13.58 78.5%  0+0k 0+0io 6pf+0w
+    cut -f 2,6 seq.tab > snp129Seq.tab
+    rm seq.tab
+
+    ssh hgwdev
+    # Load up main track tables.
+    cd /cluster/data/dbSNP/129/human
+    time nice hgLoadBed -tab -noSort -onServer -tmpDir=/scratch/tmp \
+      hg18 snp129 -sqlTable=snp129.sql snp129.bed
+#72.099u 19.879s 9:31.43 16.0%   0+0k 0+0io 0pf+0w
+    sed -e 's/snp125/snp129/' ~/kent/src/hg/lib/snp125Exceptions.sql \
+      > snp129Exceptions.sql
+    time nice hgLoadBed -tab -onServer -tmpDir=/scratch/tmp \
+      hg18 snp129Exceptions -sqlTable=snp129Exceptions.sql \
+      snp129Exceptions.bed
+#13.125u 1.383s 1:15.39 19.2%    0+0k 0+0io 0pf+0w
+    sed -e 's/snp125/snp129/' ~/kent/src/hg/lib/snp125ExceptionDesc.sql \
+      > snp129ExceptionDesc.sql
+    hgLoadSqlTab hg18 snp129ExceptionDesc snp129ExceptionDesc.sql \
+      snp129ExceptionDesc.tab
+    # Load up sequences.
+    sed -e 's/snpSeq/snp129Seq/' ~/kent/src/hg/lib/snpSeq.sql \
+      > snp129Seq.sql
+    mkdir -p /gbdb/hg18/snp
+    ln -s /cluster/data/dbSNP/129/human/snp129.fa /gbdb/hg18/snp/snp129.fa
+    time nice hgLoadSqlTab hg18 snp129Seq snp129Seq.sql snp129Seq.tab
+#0.007u 0.006s 3:06.83 0.0%      0+0k 0+0io 0pf+0w
+
+    # Put in a link where one would expect to find the track build dir...
+    ln -s /cluster/data/dbSNP/129/human /cluster/data/hg18/bed/snp129
+
+    # Look at the breakdown of exception categories:
+    ssh kkr3u00
+    cd /cluster/data/dbSNP/129/human
+    cut -f 5 snp129Exceptions.bed | sort | uniq -c | sort -nr
+#1580567 MultipleAlignments
+# 628933 ObservedMismatch
+# 387233 SingleClassLongerSpan
+#  31425 SingleClassTriAllelic
+#  13247 ObservedTooLong
+#  11095 FlankMismatchGenomeShorter
+#  10365 SingleClassZeroSpan
+#   3345 SingleClassQuadAllelic
+#   3310 FlankMismatchGenomeLonger
+#   1397 DuplicateObserved
+#   1250 MixedObserved
+#    547 NamedDeletionZeroSpan
+#    296 FlankMismatchGenomeEqual
+#     93 ObservedContainsIupac
+#     35 NamedInsertionNonzeroSpan
+#      3 RefAlleleMismatch
+#      1 ObservedWrongFormat
+
+
