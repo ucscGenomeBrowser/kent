@@ -24374,7 +24374,7 @@ See hg18.txt for details.
 
 
 ############################################################################
-# KIDD/EICHLER DISCORDANT CLONE ENDS (DONE 5/28/08 angie)
+# KIDD/EICHLER DISCORDANT CLONE ENDS (DONE 6/10/08 angie)
     ssh kkstore02
     mkdir /cluster/data/hg17/bed/kiddEichlerDiscordant
     cd /cluster/data/hg17/bed/kiddEichlerDiscordant
@@ -24442,10 +24442,6 @@ See hg18.txt for details.
         if ($n =~ /transchr/) { \
           $bs = 1; \
           $#bSts = 0;  $#bSzs = 0; \
-        } \
-        if ($n =~ /transchr/) { \
-          $bs = 1; \
-          $#bSts = 0;  $#bSzs = 0; \
         } elsif ($n =~ /OEA/) { \
           $s--; # weird that this is required only for OEA here \
           die "$n: bSts[0] $bSts[0] != 0\n" if ($bSts[0] != 0); \
@@ -24491,4 +24487,31 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
 
 see doc/builds.txt for specific details.
+############################################################################
+
+
+############################################################################
+# KIDD/EICHLER VALIDATED SITES (DONE 6/11/08 angie)
+    ssh hgwdev
+    mkdir /cluster/data/hg17/bed/kiddEichlerValid
+    cd /cluster/data/hg17/bed/kiddEichlerValid
+    wget http://hgsv.washington.edu/general/download/validated_sites/Kidd_2008_sample_level_valided_sites.xls
+    # Open in Excel, save as Kidd_2008_sample_level_valided_sites.txt,
+    # move first 9 lines to Kidd_2008_sample_level_valided_sites.header.
+    # Split into one file per individual:
+    foreach id (Abc7 Abc8 Abc9 Abc10 Abc11 Abc12 Abc13 Abc14 G248)
+      set ID = `echo $id | tr 'a-z' 'A-Z'`
+      grep ${ID}_ Kidd_2008_sample_level_valided_sites.txt \
+      | perl -wpe 'chomp; s/\r//; ($c, $s, $e, $n, $t) = split; \
+        $rgb = ($n =~ /deletion/) ? "224,0,0" : \
+               ($n =~ /insertion/) ? "0,0,224" : \
+               ($n =~ /inversion/) ? "0,224,0" : "0,0,0"; \
+        $t =~ s/:/,/g; \
+        $n =~ s/^'$ID'_//;  $n = "$n,$t"; \
+        $_ = join("\t", $c, $s, $e, $n, "0", "+", $s, $e, $rgb) . \
+                  "\n";' \
+      | hgLoadBed -tab hg17 kiddEichlerValid$id stdin
+    end
+
+
 ############################################################################
