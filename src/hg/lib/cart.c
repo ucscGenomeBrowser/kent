@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.87 2008/06/30 20:14:29 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.88 2008/06/30 22:03:48 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -591,6 +591,9 @@ else
     {
     fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to cart on first use of %d from IP=%s\n",
     	encoded->stringSize, cart->userInfo->id, cgiRemoteAddr());
+    /* Do increment the useCount so that cookie-users don't get stuck here: */
+    updateOne(conn, "userDb", cart->userInfo, "", encoded->stringSize);
+    updateOne(conn, "sessionDb", cart->sessionInfo, "", encoded->stringSize);
     }
 
 /* Cleanup */
