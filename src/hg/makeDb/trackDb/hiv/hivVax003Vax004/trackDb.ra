@@ -59,7 +59,7 @@ track vax003AEAaCons
 shortLabel VAX003 AE Protein Conservation
 longLabel VAX003 AE Protein Sequence Conservation
 group compGeno
-priority 23.12
+priority 23.13
 visibility hide
 color 12,12,120
 maxHeightPixels 100:40:10
@@ -74,7 +74,7 @@ track vax003AEMaf
 shortLabel VAX003 AE MSA
 longLabel VAX003 AE DNA Multiple Sequence Alignment
 group compGeno
-priority 23.13
+priority 23.12
 msaTable vax003AEMsa
 onlyVisibility full
 visibility full
@@ -123,7 +123,7 @@ track vax003BAaCons
 shortLabel VAX003 B Protein Conservation
 longLabel VAX003 B Protein Sequence Conservation
 group compGeno
-priority 23.22
+priority 23.23
 msaTable vax003BMsa
 visibility hide
 color 12,12,120
@@ -139,7 +139,7 @@ track vax003BMaf
 shortLabel VAX003 B MSA
 longLabel VAX003 B DNA Multiple Sequence Alignment
 group compGeno
-priority 23.23
+priority 23.22
 msaTable vax003BMsa
 onlyVisibility full
 visibility hide
@@ -188,7 +188,7 @@ track vax004AaCons
 shortLabel VAX004 Protein Conservation
 longLabel VAX004 Protein Sequence Conservation
 group compGeno
-priority 24.12
+priority 24.13
 visibility hide
 color 12,12,120
 maxHeightPixels 100:40:10
@@ -203,7 +203,7 @@ track vax004Maf
 shortLabel VAX004 MSA
 longLabel VAX004 DNA Multiple Sequence Alignment
 group compGeno
-priority 24.13
+priority 24.12
 msaTable vax004Msa
 onlyVisibility full
 visibility hide
