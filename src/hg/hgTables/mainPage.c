@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.122 2008/05/27 23:48:28 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.123 2008/06/30 20:51:18 ann Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -807,8 +807,11 @@ hPrintf("</TABLE>\n");
 	maxOutput = cartUsualString(cart, name, maxOutMenu[0]);
 
 	hPrintf(
-	    "<I>Note: output is limited to %s lines returned.  Use the"
-	    " filter setting to change this limit.</I><BR>", maxOutput);
+	    "<I>Note: to return more than %s lines, change the filter setting"
+	    " (above). The entire data set may be available for download as"
+            " a very large file that contains the original data values (not"
+            " compressed into the wiggle format) -- see the Downloads page."
+            "</I><BR>", maxOutput);
 	}
     else
 	{
