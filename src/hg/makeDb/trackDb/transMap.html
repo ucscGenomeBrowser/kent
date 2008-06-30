@@ -3,8 +3,8 @@
 These tracks contain cDNA and gene alignments produced by
 the <em>TransMap</em> cross-species alignment algorithm
 from other vertebrate species in the UCSC Genome Browser.
-The alignments are created using syntenically filtered 
-BLASTZ alignment chains, resulting a prediction of the
+For closer evolutionary distances, the alignments are created using
+syntenically filtered BLASTZ alignment chains, resulting a prediction of the
 orthologous genes in $organism.
 </P>
 
@@ -31,12 +31,25 @@ for more information, click
     GenBank mRNAs, and GenBanks Spliced ESTs to their cognate genome, along
     with UCSC Genes, were used as available.
     <li> For all vertebrate assemblies that have BLASTZ alignment chains and
-      nets to the $organism $db genome, alignment chains identified as
-      syntenic using the <tt>netfilter -syn</tt> option are selected.
+      nets to the $organism $db genome, a subset of the alignment chains are
+      selected as follows:
+      <li> For organisms who's branch distance is no more than 0.5
+        (as computed by <tt>phyloFit</tt>, see Conservation track description for details)
+        use syntenic filtering.  If reciprocal best nets are available, use
+        them, otherwise select nets with the <tt>netfilter -syn</tt> command.
+        The chains that correspond to the nets are used for mapping.
+      <li> More distance species, where the determination of synteny is difficult,
+        use the full set of chains for mapping.2 This allows for more genes to
+        map at the expense of some mapping to paralogus regions.  The post
+        alignment filtering step will remove some of the duplications.
     <li> The <tt>pslMap</tt> program is used to do a base-level projection of
       the source transcript alignments via the syntenic chains to this genome.
-      to this genome, resulting in alignments of the source transcript to
-      the orthologous genome region.
+      to this genome, resulting in pairwise alignments of the source transcript to
+      the $organism genome.
+    <li> Filter the resulting alignments with <tt>pslCDnaFilter</tt>
+      with a global near-best criteria of 0.5% in finished genomes
+      (human and mouse) and 1.0% in other genomes.  Alignments
+      were less than 20% of the transcript mapped are discarded.
   </ol>
 </P>
 
