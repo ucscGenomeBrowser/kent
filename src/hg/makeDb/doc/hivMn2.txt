@@ -379,3 +379,24 @@ do1 vax004Msa
 # hgLoadPsl has some file permission problem.  Finish this by manually load the psl.tab file.
     hgsql hivmn2 -e 'load data local infile "psl.tab" into table vax003'
 
+#########################################################################
+# Build the gsidSubjSeq table (used by Table View).
+
+   gsidSubjSeq hivmn2 dnaSeqId > j.dna
+   gsidSubjSeq hivmn2 aaSeqId > j.aa
+
+   cut -f 1 j.dna >j.1
+   cut -f 1 j.aa  >j.2
+
+   cut -f 2 j.dna  >j.3
+   cut -f 2 j.aa   >j.4
+
+   paste j.1 j.3 j.4> gsidSubjSeq.tab
+
+   hgsql hivmn2 -e 'delete from gsidSubjSeq'
+   hgsql hivmn2 -e \
+   'load data local infile "gsidSubjSeq.tab" into table gsidSubjSeq'
+
+   rm j.1 j.2 j.3 j.4 j.dna j.aa
+#########################################################################
+
