@@ -14,4 +14,6 @@ MAILTO=genbank@cse.ucsc.edu
 0 0-14 * * 6,7	/cluster/data/genbank/etc/hgwdev-dbload -inclEsts
 # -extFileUpdate
 
+# wed 11pm, download and import ccds data
+0 11 * * 4	/cluster/data/genbank/etc/ccds-import
 

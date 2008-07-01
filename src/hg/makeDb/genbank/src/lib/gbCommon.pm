@@ -28,6 +28,7 @@ BEGIN {
                            findConf getConf getConfNo getDbConfUndef getDbConf
                            getDbConfNo splitSpaceList
                            getHgConf setupHgConf callMysql runMysqlDump runMysql
+                           haveMysqlDb haveMysqlTbl listMysqlTbls
                            getDownloadTimeFile getDownloadDir getRelDownloadDir
                            checkOnBuildServer);
     
@@ -613,6 +614,8 @@ sub getTmpDir($) {
     if (!defined($tmpDirs{$baseName})) {
         if (defined($main::ENV{TMPDIR})) {
             $tmpDirs{$baseName} = "$main::ENV{TMPDIR}/$baseName.$gbCommon::hostName.$$";
+        } elsif (-e "/scratch/tmp/") {
+            $tmpDirs{$baseName} = "/scratch/tmp/$baseName.$$";
         } else {
             $tmpDirs{$baseName} = "/var/tmp/$baseName.$$";
         }
@@ -862,6 +865,7 @@ sub getHgConf() {
 sub setupHgConf() {
     my $hgConf = getHgConf();
     $ENV{"HGDB_CONF"} = $hgConf;
+    return $hgConf;
 }
 
 # catch of .hg.conf users/password
@@ -925,6 +929,29 @@ sub runMysql($) {
     $main::ENV{MYSQL_PWD} = $pass;
     runProg("mysql -u$user $args");
 }
+
+# determine if a database exists
+sub haveMysqlDb($) {
+    my($db) = @_;
+    my $ret = callMysql("-Ne 'SHOW DATABASES LIKE \"$db\"'");
+    return ($ret ne "");
+}
+
+
+# determine if table exists in a database
+sub haveMysqlTbl($$) {
+    my($db,$tbl) = @_;
+    my $ret = callMysql("-Ne 'SHOW TABLES FROM $db LIKE \"$tbl\"'");
+    return ($ret ne "");
+}
+
+
+# get list of mysql tables
+sub listMysqlTbls($) {
+    my($db) = @_;
+    return split("\n", callMysql("-Ne 'SHOW TABLES' $db"));
+}
+
 
 # get the relative download directory for this genome.  It defaults to
 # the database name.  Older database have it configured.

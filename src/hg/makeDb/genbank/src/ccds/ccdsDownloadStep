@@ -1,30 +1,24 @@
 #!/usr/bin/perl
 #
-# mgcDownloadStep [-verbose] [-ftp-verbose]
+# ccdsDownloadStep [-verbose] [-ftp-verbose]
 #
-# Download MGC table dumps if new files are available, untar and process
-# with mgcImport.  Download is stored in a directory:
+# Download CCDS table dumps if new files are available
 #
-#   data/download/mgc/$year.$month.$day/
+# Download a lastest file in the form CCDS.20080630.tar.gz to
 #
-# with the date being the modification date for the download mgctables.tar
-# file.
+#   data/download/ccds/
 #
-# This also process data into
-#   data/processed/mgc/$year.$month.$day/
-#
-# Expects a file etc/mgc.conf which is a PERL script setting the
-# variables:  $main::mgcFtpHost, $main::mgcFtpUser, $main::mgcFtpPassword
+# Expects a file etc/ccds.conf which is a PERL script setting the
+# variables:  $main::ccdsFtpHost, $main::ccdsFtpUser, $main::ccdsFtpPassword
 #
 # -verbose - print details
 # -ftp-verbose - print details of interaction with ftp server
 #
-# $Id: ccdsDownloadStep,v 1.1 2006/04/14 23:38:34 markd Exp $
+# $Id: ccdsDownloadStep,v 1.2 2008/07/01 06:40:45 markd Exp $
 #
 use strict;
 use warnings;
 use File::Basename;
-use POSIX qw(strftime);
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use Net::FTP;
@@ -32,116 +26,45 @@ use gbCommon;
 use gbFtp;
 
 # Constants
-my $MGC_CONF = "etc/mgc.conf";
-my $MGC_TAR = "mgctables.tar";
+my $CCDS_CONF = "etc/ccds.conf";
 
-# list of files expected in downloaded tar file
-my @MGC_TABLE_TAR_FILES = ("clone.gz", "fullength.gz", "library.gz", "stage1.gz", "table.descriptions");
+# Get the ccds dump file name from the server
+sub getDumpFileName() {
+    # look for: CCDS.20080630.tar.gz
+    my @ftpFiles = ftpGetDirList("/");
+    my @dumpFiles;
 
-# Get the data string based on the modification date of the tables file
-# on the ftp servers.
-sub getDownloadDate() {
-    my $modDate = ftpGetModTime($MGC_TAR);
-    my $modDateStr = strftime("%Y.%m.%d", localtime($modDate));
-    if ($gbCommon::verbose) {
-        prMsg("ftp://$main::mgcFtpHost/$MGC_TAR modified on $modDateStr");
-    }
-    return $modDateStr;
-}
-
-# Download the tar file into a tmpdir under the download dir
-sub downloadTables($) {
-    my($downloadDir) = @_;
-    my $tableTar = "$downloadDir/tmp/$MGC_TAR";
-    unlink($tableTar);
-    makeFileDir($tableTar);
-    ftpGetOrCheck(0, $MGC_TAR, $tableTar);
-}
-
-# Extract tar file, verify contents and install them in download dir.
-sub extractTar($) {
-    my($downloadDir) = @_;
-    my $tmpDir = "$downloadDir/tmp";
-    my $oldDir = `pwd`;
-    chomp($oldDir);
-    chdir($tmpDir) || die("can't chdir($tmpDir)");
-    if ($gbCommon::verbose) {
-        prMsg("extracting MGC table files");
-    }
-
-    # FIXME: at one point, absolute paths were included in the tar (which get
-    # extract relatively.  Compensate for this by linking back to this dir)
-    my $tarOut = callProg("tar -xvf $MGC_TAR");
-    chomp($tarOut);
-    foreach my $path (split("\n", $tarOut)) {
-        if (dirname($path) ne ".") {
-            my $file = basename($path);
-            $path =~ s/^\///; # drop leading /
-            link($path, $file) || die("can't link $path $file");
+    foreach my $dumpFile (@ftpFiles) {
+        if ($dumpFile =~ /^CCDS\.[0-9]{8}\.tar\.gz$/) {
+            push(@dumpFiles, $dumpFile);
         }
     }
+    @dumpFiles = sort @dumpFiles;
 
-    # check files exist and can be read if gziped
-    foreach my $file (@MGC_TABLE_TAR_FILES) {
-        if (! -e $file) {
-            die("didn't find file $file in $tmpDir/$MGC_TAR");
-        }
-        if ($file =~ /\.gz$/) {
-            runProg("zcat $file >/dev/null");
-        }
+    if ($#dumpFiles < 0) {
+        die("can't find CCDS dump file, available files: " . join(" ", @ftpFiles));
     }
-
-    # Move files into place
-    my @fileList;
-    foreach my $file (@MGC_TABLE_TAR_FILES) {
-        renameFile($file, "../$file");
-        push(@fileList, "$downloadDir/$file");
-    }
-    chdir($oldDir) || die("can't chdir($oldDir)");
-    removeDir($tmpDir);
-    return @fileList;
+    return $dumpFiles[$#dumpFiles];
 }
 
 # Do download for the specified data dir, if it's not there.
 sub doDownload($) {
     my($downloadDir) = @_;
 
-    my $md5file = "$downloadDir/mgc.md5";
-    if (! -e $md5file) {
+    my $ftpDumpFile = getDumpFileName();
+    my $localDumpFile = $downloadDir . "/" . basename($ftpDumpFile);
+    
+    if (! -e $localDumpFile) {
         if ($gbCommon::verbose) {
-            prMsg("donwloading MGC tables in $downloadDir");
+            prMsg("downloading CCDS dump $ftpDumpFile to $downloadDir");
         }
         makeDir($downloadDir);
-        downloadTables($downloadDir);
-        my @mgcFiles = extractTar($downloadDir);
-        gbChmod(@mgcFiles);
-        md5Files($md5file, @mgcFiles);
+        ftpGetOrCheck(0, 0, $ftpDumpFile, $localDumpFile);
+        gbChmod($localDumpFile);
     } else {
+        ftpGetOrCheck(1, 0, $ftpDumpFile, $localDumpFile);  # compare sizes
         if ($gbCommon::verbose) {
-            prMsg("MGC tables already in $downloadDir");
-        }
-    }
-}
-
-# Process downloaded tables into status files for the specified directory,
-# if it's not already been done.
-sub doProcess($) {
-    my($downloadDir) = @_;
-    my $processedDir = "data/processed/mgc/" . basename($downloadDir);
-    my $md5file = "$processedDir/mgc.md5";
-    if (! -e $md5file) {
-        if ($gbCommon::verbose) {
-            prMsg("processing MGC tables in $processedDir");
-        }
-        makeDir($processedDir);
-        my @statusTabs = ("$processedDir/mgcStatus.tab.gz",
-                          "$processedDir/mgcFullStatus.tab.gz");
-        runProg("mgcImport $downloadDir " . join(" ", @statusTabs));
-        gbChmod(@statusTabs);
-        md5Files($md5file, @statusTabs);
-    } else {
-        if ($gbCommon::verbose) {
-            prMsg("MGC status files already in $processedDir");
+            prMsg("CCDS $ftpDumpFile already in $downloadDir");
         }
     }
 }
@@ -160,40 +83,32 @@ while (($#ARGV >= 0) && ($ARGV[0] =~/^-.*/)) {
 }
 
 if ($#ARGV >= 0) {
-    die("Wrong \# args: mgcDownloadStep [-verbose] [-ftp-verbose]");
+    die("Wrong \# args: ccdsDownloadStep [-verbose] [-ftp-verbose]");
 }
 
 # read ftp info from file
-$main::mgcFtpHost = undef;
-$main::mgcFtpUser = undef;
-$main::mgcFtpPassword = undef;
-eval(readFile($MGC_CONF));
-if (!(defined($main::mgcFtpHost))) {
-    gbError("$MGC_CONF must \$main::mgcFtpHost");
+$main::ccdsFtpHost = undef;
+$main::ccdsFtpUser = undef;
+$main::ccdsFtpPassword = undef;
+eval(readFile($CCDS_CONF));
+if (!(defined($main::ccdsFtpHost))) {
+    gbError("$CCDS_CONF must \$main::ccdsFtpHost");
 }
-if (!(defined($main::mgcFtpUser))) {
-    gbError("$MGC_CONF must \$main::mgcFtpUser");
+if (!(defined($main::ccdsFtpUser))) {
+    gbError("$CCDS_CONF must \$main::ccdsFtpUser");
 }
-if (!(defined($main::mgcFtpPassword))) {
-    gbError("$MGC_CONF must \$main::mgcFtpPassword");
+if (!(defined($main::ccdsFtpPassword))) {
+    gbError("$CCDS_CONF must \$main::ccdsFtpPassword");
 }
 
-
-# use different task dir to allow running parallel with genebank
-beginTask("mgcbuild", "download");
-ftpInit($main::mgcFtpHost, $main::mgcFtpUser, $main::mgcFtpPassword);
+# use different task dir to allow running parallel with genbank
+beginTask("ccdsdownload", "download");
+ftpInit($main::ccdsFtpHost, $main::ccdsFtpUser, $main::ccdsFtpPassword);
 ftpOpen();
 
-# get the download directory from the ftp file mod date and then
-# check a checksum file exists, indicating completion.
-my $dateStr = getDownloadDate();
-my $downloadDir = "data/download/mgc/$dateStr";
+my $downloadDir = "data/download/ccds";
 
 doDownload($downloadDir);
 ftpClose();
 
-# check if any download dirs need processed
-foreach my $downDir (glob("data/download/mgc/*.*.*")) {
-    doProcess($downDir);
-}
 endTask();

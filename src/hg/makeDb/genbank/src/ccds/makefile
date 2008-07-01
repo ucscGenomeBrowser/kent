@@ -3,7 +3,9 @@ include ${GBROOT}/common.mk
 
 PROGS = ${GB_BINARCH}/ccdsImport \
 	${GB_BINARCH}/ccdsMkTables \
-	${GB_BINARCH}/mkCcdsGeneMap
+	${GB_BINARCH}/mkCcdsGeneMap \
+	${GB_BINDIR}/ccdsDownloadStep \
+	${GB_BINDIR}/ccdsImportStep
 
 O = createTables.o createKeys.o ccdsLocationsJoin.o ccdsCommon.o
 

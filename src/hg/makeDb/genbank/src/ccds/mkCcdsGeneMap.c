@@ -15,7 +15,7 @@
 #include "bits.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: mkCcdsGeneMap.c,v 1.1 2005/04/09 03:49:25 markd Exp $";
+static char const rcsid[] = "$Id: mkCcdsGeneMap.c,v 1.2 2008/07/01 06:40:46 markd Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -27,10 +27,10 @@ static struct optionSpec optionSpecs[] =
     {"noopNoCcdsTbl", OPTION_BOOLEAN},
     {NULL, 0}
 };
-boolean keep = FALSE;    /* keep tab files after load */
-boolean loadDb = FALSE;  /* load database */
-boolean noopNoCcdsTbl = FALSE; /* skip if no CCDS table */
-float similarity = 0.95; /* fraction similarity */
+static boolean keep = FALSE;    /* keep tab files after load */
+static boolean loadDb = FALSE;  /* load database */
+static boolean noopNoCcdsTbl = FALSE; /* skip if no CCDS table */
+static float similarity = 0.95; /* fraction similarity */
 
 void usage(char *msg)
 /* Explain usage and exit. */

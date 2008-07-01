@@ -1,0 +1,16 @@
+#!/bin/bash -e
+
+# download and import of ccds data. runs on hgwdev, since there is
+# currently no database on genbank.
+
+set -e  # errors terminate
+trap "echo Error: `hostname` ccds import failed >&2; exit 1" ERR
+exec </dev/null
+
+# initialize
+gbRoot=/cluster/data/genbank
+cd $gbRoot
+. $gbRoot/lib/gbCommon.sh
+
+ccdsDownloadStep
+ccdsImportStep

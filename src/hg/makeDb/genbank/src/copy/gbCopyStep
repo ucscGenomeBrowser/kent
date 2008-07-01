@@ -19,7 +19,7 @@
 #   - buildRoot - gbRoot directory on buildServer
 #   - db1 - List of databses to update
 #
-# $Id: gbCopyStep,v 1.15 2008/01/30 08:15:31 markd Exp $
+# $Id: gbCopyStep,v 1.16 2008/07/01 06:40:46 markd Exp $
 #
 use strict;
 use warnings;
@@ -137,6 +137,23 @@ sub rsyncBuildFiles($$$$@) {
     }
 }
 
+# use rsync to get ccdsimport.time file.
+sub rsyncCcdsImportTimeFile($$$) {
+    my($rsyncPort, $buildServer, $buildRoot) = @_;
+
+    my $ccdsImportTime = "var/ccdsimport/ccdsimport.time";
+    makeFileDir($ccdsImportTime);
+    
+    my $remCcdsImportTime = "$buildServer:$buildRoot/$ccdsImportTime";
+
+    my $cmd = "rsync " . getRSyncPortOpt($rsyncPort) . " $remCcdsImportTime"
+        . " $ccdsImportTime";
+    my $stat = runProgNoAbort($cmd);
+    if ($stat != 0) {
+        prMsg("Note: can't rsync $remCcdsImportTime");
+    }
+}
+
 # Entry
 my $rsyncPort = "rsh";
 my $gbdbDir = "/gbdb";
@@ -179,6 +196,10 @@ if (defined($buildTimeTmp)
     # install time files.
     makeTimeFile($copyTime);
     renameFile($buildTimeTmp, $lastBuildTime);
+
+    # ccds time file; it will not be rsynced if a genbank build didn't happen,
+    # but let that slide to avoid adding a more complex script
+    rsyncCcdsImportTimeFile($rsyncPort, $buildServer, $buildRoot);
 
     endTask();
 } else {

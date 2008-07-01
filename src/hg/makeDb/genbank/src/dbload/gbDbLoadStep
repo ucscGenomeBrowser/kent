@@ -4,7 +4,7 @@
 #
 # Load databases on the current server.
 #
-# $Id: gbDbLoadStep,v 1.42 2008/01/19 23:05:33 markd Exp $
+# $Id: gbDbLoadStep,v 1.43 2008/07/01 06:40:46 markd Exp $
 #
 use strict;
 use warnings;
@@ -53,7 +53,6 @@ my $workDir;
 my %buildFullMgc;
 my %buildAllMgc;
 my $verboseArg;
-my $hostName;
 my @args;
 my $drop = 0;
 my $allowLargeDeletes = 0;
@@ -67,9 +66,9 @@ sub getVarReloadFile(;$) {
     my($db) = @_;
     my $rf;
     if (defined($db)) {
-        $rf  = "var/dbload/${hostName}/reload.${db}.acc";
+        $rf  = "var/dbload/$gbCommon::hostName/reload.${db}.acc";
     } else {
-        $rf  = "var/dbload/${hostName}/reload.acc";
+        $rf  = "var/dbload/$gbCommon::hostName/reload.acc";
     }
     if (-e $rf) {
         if (defined($reloadList)) {
@@ -180,7 +179,7 @@ sub loadOrfeome($) {
 # dump gbExtFile table, used to find releases that are no londer needed
 sub dumpExtFileTbl($) {
     my($db) = @_;
-    my $dumpFile = "$gbCommon::varDir/dbload/$hostName/extFile/" . getDateStamp() . "/$db.extFile.txt";
+    my $dumpFile = "$gbCommon::varDir/dbload/$gbCommon::hostName/extFile/" . getDateStamp() . "/$db.extFile.txt";
     makeFileDir($dumpFile);
     runMysql("-N -e 'select * from gbExtFile' $db >$dumpFile.tmp");
     renameFile("$dumpFile.tmp", $dumpFile);
@@ -234,8 +233,6 @@ sub dbLoad($) {
 
 
 # Entry
-$hostName = `hostname`;
-chomp($hostName);
 my $keep = 0;
 my $initialLoad = 0;
 my $gbdbGenBank;
@@ -296,7 +293,7 @@ if (defined($varReloadFile)) {
 
 # build standard set of arguments to pass
 if (!defined($workDir)) {
-    $workDir = "work/$hostName/dbload";
+    $workDir = "work/$gbCommon::hostName/dbload";
 }
 push(@args, "-workdir=$workDir");
 if ($initialLoad) {
@@ -330,7 +327,7 @@ if ($reload) {
     push(@args, "-reload");
 }
              
-beginTask("dbload/$hostName", "dbload");
+beginTask("dbload/$gbCommon::hostName", "dbload");
 setupHgConf();
 
 # load the database

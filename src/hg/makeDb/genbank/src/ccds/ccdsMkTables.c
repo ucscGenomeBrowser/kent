@@ -15,7 +15,7 @@
 #include <sys/types.h>
 #include <regex.h>
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.19 2008/04/06 00:39:43 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.20 2008/07/01 06:40:45 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -46,8 +46,10 @@ errAbort(
   "Usage:\n"
   "   ccdsMkTables [options] ccdsDb hgDb ncbiBuild ccdsInfoOut ccdsGeneOut\n"
   "\n"
-  "ccdsDb is the database created by ccdsImport, hgDb is the targeted\n"
-  "genome database, required even if tables are not being loaded.\n"
+  "ccdsDb is the database created by ccdsImport. If the name is in the form\n"
+  "'profile:ccdsDb', then hg.conf variables starting with 'profile.' are\n"
+  "used to open the database. hgDb is the targeted genome database, required\n"
+  "even if tables are not being loaded.\n"
   "ncbiBuild is the NCBI build number, such as 32.2.\n"
   "If -loadDb is specified, ccdsInfoOut and ccdsGeneOut are tables to load\n"
   "with the cddsInfo and genePred data.  If -loadDb is not specified, they\n"
@@ -696,12 +698,33 @@ if (!keep)
 sqlDisconnect(&conn);
 }
 
+static struct sqlConnection *ccdsSqlConn(char *ccdsDb)
+/* open ccds database, handle profile.db syntax */
+{
+char buf[256];
+safecpy(buf, sizeof(buf), ccdsDb);
+char *sep = strchr(buf, ':');
+char *profile, *db;
+if (sep == NULL)
+    {
+    profile = "db";
+    db = ccdsDb;
+    }
+else
+    {
+    profile = buf;
+    *sep = '\0';
+    db = sep+1;
+    }
+return sqlConnectProfile(profile, db);
+}
+
 static void ccdsMkTables(char *ccdsDb, char *hgDb, char *ncbiBuild, char *ccdsInfoOut, char *ccdsGeneOut)
 /* create tables for hg db from imported CCDS database */
 {
 if (verboseLevel() >= 2)
     sqlMonitorEnable(JKSQL_TRACE);
-struct sqlConnection *conn = sqlConnect(ccdsDb);
+struct sqlConnection *ccdsConn = ccdsSqlConn(ccdsDb);
 char ccdsInfoFile[PATH_LEN], ccdsInfoTbl[PATH_LEN];
 char ccdsGeneFile[PATH_LEN], ccdsGeneTbl[PATH_LEN];
 struct genomeInfo *genome = getGenomeInfo(hgDb, ncbiBuild);
@@ -711,12 +734,14 @@ hSetDb(hgDb);
 
 ccdsGetTblFileNames(ccdsInfoOut, ccdsInfoTbl, ccdsInfoFile);
 ccdsGetTblFileNames(ccdsGeneOut, ccdsGeneTbl, ccdsGeneFile);
-struct hash* ignoreTbl = buildIgnoreTbl(conn, genome);
 
-createCcdsInfo(conn, ccdsInfoFile, genome, ignoreTbl, infoCcds);
-createCcdsGene(conn, ccdsGeneFile, genome, ignoreTbl, geneCcds);
-sqlDisconnect(&conn);
+struct hash* ignoreTbl = buildIgnoreTbl(ccdsConn, genome);
+
+createCcdsInfo(ccdsConn, ccdsInfoFile, genome, ignoreTbl, infoCcds);
+createCcdsGene(ccdsConn, ccdsGeneFile, genome, ignoreTbl, geneCcds);
+sqlDisconnect(&ccdsConn);
 sqlMonitorDisable();
+
 gotCcdsValidate(infoCcds, geneCcds);
 
 if (loadDb)
