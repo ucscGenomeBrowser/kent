@@ -29,7 +29,7 @@
     set db=XXXX
     set ncbiBld=YYYYY
     # create and load ccdsGene and ccdsInfo tables from imported database
-    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds ${db} ccdsInfo ccdsGene
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds ${db} ${ncbiBld} ccdsInfo ccdsGene
 
     # ccdsKgMap
     /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -db=${db} -loadDb ccdsGene knownGene ccdsKgMap
