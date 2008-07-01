@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.89 2008/07/01 07:19:53 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.90 2008/07/01 16:22:34 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -623,10 +623,10 @@ void cartCheckout(struct cart **pCart)
 struct cart *cart = *pCart;
 if (cart != NULL)
     {
+    saveState(cart);
     struct sqlConnection *conn = cartDefaultConnector();
     cartTrace(cart, "checkout", conn);
     cartDefaultDisconnector(&conn);
-    saveState(cart);
     cartDbFree(&cart->userInfo);
     cartDbFree(&cart->sessionInfo);
     freeHash(&cart->hash);
