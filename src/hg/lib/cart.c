@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.90 2008/07/01 16:22:34 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.91 2008/07/01 16:51:06 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -52,9 +52,6 @@ if (cfgOption("cart.trace") == NULL)
 struct cartDb *u = cart->userInfo, *s = cart->sessionInfo;
 char *pixStr = hashFindVal(cart->hash, "pix");
 int pix = pixStr ? atoi(pixStr) : -1;
-char *cartHgsidStr = hashFindVal(cart->hash, "hgsid");
-int cartHgsid = cartHgsidStr ? atoi(cartHgsidStr) : -1;
-int cartHgsidWeird = (cartHgsid != -1 && cartHgsid != cart->sessionId);
 int uLen, sLen;
 if (conn != NULL)
     {
@@ -72,16 +69,16 @@ else
     uLen = strlen(u->contents);
     sLen = strlen(s->contents);
     }
-fprintf(stderr, "ASH: %25s: "
-	"u=%d u.i=%d%s u.l=%d u.c=%d "
-	"s=%d s.i=%d%s s.l=%d s.c=%d "
-	"p=%d c.s=%d%s %s\n",
+fprintf(stderr, "ASH: %22s: "
+	"u.i=%d u.l=%d u.c=%d s.i=%d s.l=%d s.c=%d "
+	"p=%d %s\n",
 	when,
-	cart->userId, u->id, (cart->userId != u->id) ? "***" : "",
-	uLen, u->useCount,
-	cart->sessionId, s->id, (cart->sessionId != s->id) ? "***" : "",
-	sLen, s->useCount,
-	pix, cartHgsid, cartHgsidWeird ? "***" : "", cgiRemoteAddr());
+	u->id, uLen, u->useCount, s->id, sLen, s->useCount,
+	pix, cgiRemoteAddr());
+if (cart->userId != 0 && u->id != cart->userId)
+    fprintf(stderr, "ASH: bad userId %d --> %d\n", cart->userId, u->id);
+if (cart->sessionId != 0 && s->id != cart->sessionId)
+    fprintf(stderr, "ASH: bad sessionId %d --> %d\n", cart->sessionId, s->id);
 }
 
 boolean cartTablesOk(struct sqlConnection *conn)
@@ -506,7 +503,7 @@ if (sessionIdFound)
 else if (userIdFound)
     cartParseOverHash(cart, cart->userInfo->contents);
 char when[1024];
-safef(when, sizeof(when), "new for %d %d", userId, sessionId);
+safef(when, sizeof(when), "open %d %d", userId, sessionId);
 cartTrace(cart, when, conn);
 
 loadCgiOverHash(cart, oldVars);
