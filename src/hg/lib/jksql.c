@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: jksql.c,v 1.110 2008/05/23 22:14:58 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.111 2008/07/01 06:42:37 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -489,18 +489,35 @@ struct sqlConnection *sqlConnect(char *database)
 return sqlConn(database, TRUE);
 }
 
-struct sqlConnection *sqlConnectReadOnly(char *database)
-/* Connect to database on default host as default user. */
+static char *getProfileCfgValue(char *profile, char *envVarSuffix, char *varSuffix)
+/* get the configuration var for the specified profile */
 {
-char* host = getCfgValue("HGDB_HOST", "ro.host");
-char* user = getCfgValue("HGDB_USER", "ro.user");
-char* password = getCfgValue("HGDB_PASSWORD", "ro.password");
+char envVar[256], var[256];
+safef(envVar, sizeof(envVar), "HGDB_%s_%s", profile, envVarSuffix);
+safef(var, sizeof(var), "%s.%s", profile, varSuffix);
+char *val = getCfgValue(envVar, var);
+if (val == NULL)
+    errAbort("can't get configuration variable %s or environment variable %s",
+             var, envVar);
+return val;
+}
 
-if(host == 0 || user == 0 || password == 0)
-    {
-    errAbort("Could not read hostname, user, or password to the database from configuration file.");
-    }
-return sqlConnectRemote(host, user, password, database);
+struct sqlConnection *sqlConnectProfile(char *profile, char *database)
+/* Connect to database using the specified profile.  The profile is the prefix
+ * to the host, user, and password variables in .hg.conf.  The environment
+ * variables HGDB_${profile}_HOST, HGDB_${profile}_USER,
+ * HGDB_${profile}_PASSWORD can override.  */ 
+{
+return sqlConnectRemote(getProfileCfgValue(profile, "HOST", "host"),
+                        getProfileCfgValue(profile, "USER", "user"),
+                        getProfileCfgValue(profile, "PASSWORD", "password"),
+                        database);
+}
+
+struct sqlConnection *sqlConnectReadOnly(char *database)
+/* Connect to database using ro profile in .hg.conf */ 
+{
+return sqlConnectProfile("ro", database);
 }
 
 void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args)
