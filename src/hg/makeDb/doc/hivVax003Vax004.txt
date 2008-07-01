@@ -388,4 +388,25 @@
     hgsql hivVax003Vax004 -e \
     "insert into gsidClinicRecWithSeq select * from hivVax003Vax004Build.gsidClinicRecWithSeqNew"
 
+
 #########################################################################
+# Build the gsidSubjSeq table (used by Table View).
+
+   gsidSubjSeq hivVax003Vax004 dnaSeqId > j.dna
+   gsidSubjSeq hivVax003Vax004 aaSeqId > j.aa
+
+   cut -f 1 j.dna >j.1
+   cut -f 1 j.aa  >j.2
+
+   cut -f 2 j.dna  >j.3
+   cut -f 2 j.aa   >j.4
+
+   paste j.1 j.3 j.4> gsidSubjSeq.tab
+
+   hgsql hivVax003Vax004 -e 'delete from gsidSubjSeq'
+   hgsql hivVax003Vax004 -e \
+   'load data local infile "gsidSubjSeq.tab" into table gsidSubjSeq'
+
+   rm j.1 j.2 j.3 j.4 j.dna j.aa
+#########################################################################
+
