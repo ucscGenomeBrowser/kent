@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.88 2008/06/30 22:03:48 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.89 2008/07/01 07:19:53 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -44,7 +44,7 @@ else
     }
 }
 
-void cartTrace(struct cart *cart, char *when)
+void cartTrace(struct cart *cart, char *when, struct sqlConnection *conn)
 /* Write some properties of the cart to stderr for debugging. */
 {
 if (cfgOption("cart.trace") == NULL)
@@ -55,15 +55,32 @@ int pix = pixStr ? atoi(pixStr) : -1;
 char *cartHgsidStr = hashFindVal(cart->hash, "hgsid");
 int cartHgsid = cartHgsidStr ? atoi(cartHgsidStr) : -1;
 int cartHgsidWeird = (cartHgsid != -1 && cartHgsid != cart->sessionId);
+int uLen, sLen;
+if (conn != NULL)
+    {
+    /* Since the content string is chopped, query for the actual length. */
+    char query[1024];
+    safef(query, sizeof(query), "select length(contents) from userDb "
+	  "where id = %d", u->id);
+    uLen = sqlQuickNum(conn, query);
+    safef(query, sizeof(query), "select length(contents) from sessionDb "
+	  "where id = %d", s->id);
+    sLen = sqlQuickNum(conn, query);
+    }
+else
+    {
+    uLen = strlen(u->contents);
+    sLen = strlen(s->contents);
+    }
 fprintf(stderr, "ASH: %25s: "
 	"u=%d u.i=%d%s u.l=%d u.c=%d "
 	"s=%d s.i=%d%s s.l=%d s.c=%d "
 	"p=%d c.s=%d%s %s\n",
 	when,
 	cart->userId, u->id, (cart->userId != u->id) ? "***" : "",
-	(int)strlen(u->contents), u->useCount,
+	uLen, u->useCount,
 	cart->sessionId, s->id, (cart->sessionId != s->id) ? "***" : "",
-	(int)strlen(s->contents), s->useCount,
+	sLen, s->useCount,
 	pix, cartHgsid, cartHgsidWeird ? "***" : "", cgiRemoteAddr());
 }
 
@@ -490,7 +507,7 @@ else if (userIdFound)
     cartParseOverHash(cart, cart->userInfo->contents);
 char when[1024];
 safef(when, sizeof(when), "new for %d %d", userId, sessionId);
-cartTrace(cart, when);
+cartTrace(cart, when, conn);
 
 loadCgiOverHash(cart, oldVars);
 
@@ -504,11 +521,11 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	{
 	char *otherUser = cartString(cart, hgsOtherUserName);
 	char *sessionName = cartString(cart, hgsOtherUserSessionName);
-	struct sqlConnection *conn = hConnectCentral();
-	cartLoadUserSession(conn, otherUser, sessionName, cart,
+	struct sqlConnection *conn2 = hConnectCentral();
+	cartLoadUserSession(conn2, otherUser, sessionName, cart,
 			    oldVars, hgsDoOtherUser);
-	hDisconnectCentral(&conn);
-	cartTrace(cart, "after cartLUS");
+	hDisconnectCentral(&conn2);
+	cartTrace(cart, "after cartLUS", conn);
 	}
     else if (cartVarExists(cart, hgsDoLoadUrl))
 	{
@@ -516,7 +533,7 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	struct lineFile *lf = netLineFileOpen(url);
 	cartLoadSettings(lf, cart, oldVars, hgsDoLoadUrl);
 	lineFileClose(&lf);
-	cartTrace(cart, "after cartLS");
+	cartTrace(cart, "after cartLS", conn);
 	}
     }
 #endif /* GBROWSE */
@@ -592,8 +609,7 @@ else
     fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to cart on first use of %d from IP=%s\n",
     	encoded->stringSize, cart->userInfo->id, cgiRemoteAddr());
     /* Do increment the useCount so that cookie-users don't get stuck here: */
-    updateOne(conn, "userDb", cart->userInfo, "", encoded->stringSize);
-    updateOne(conn, "sessionDb", cart->sessionInfo, "", encoded->stringSize);
+    updateOne(conn, "userDb", cart->userInfo, "", 0);
     }
 
 /* Cleanup */
@@ -607,7 +623,9 @@ void cartCheckout(struct cart **pCart)
 struct cart *cart = *pCart;
 if (cart != NULL)
     {
-    cartTrace(cart, "checkout");
+    struct sqlConnection *conn = cartDefaultConnector();
+    cartTrace(cart, "checkout", conn);
+    cartDefaultDisconnector(&conn);
     saveState(cart);
     cartDbFree(&cart->userInfo);
     cartDbFree(&cart->sessionInfo);
