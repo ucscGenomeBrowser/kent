@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.91 2008/07/01 16:51:06 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.92 2008/07/01 17:17:58 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -50,8 +50,9 @@ void cartTrace(struct cart *cart, char *when, struct sqlConnection *conn)
 if (cfgOption("cart.trace") == NULL)
     return;
 struct cartDb *u = cart->userInfo, *s = cart->sessionInfo;
-char *pixStr = hashFindVal(cart->hash, "pix");
-int pix = pixStr ? atoi(pixStr) : -1;
+char *pix = hashFindVal(cart->hash, "pix");
+char *textSize = hashFindVal(cart->hash, "textSize");
+char *trackControls = hashFindVal(cart->hash, "trackControlsOnMain");
 int uLen, sLen;
 if (conn != NULL)
     {
@@ -69,12 +70,18 @@ else
     uLen = strlen(u->contents);
     sLen = strlen(s->contents);
     }
+if (pix == NULL)
+    pix = "-";
+if (textSize == NULL)
+    textSize = "-";
+if (trackControls == NULL)
+    trackControls = "-";
 fprintf(stderr, "ASH: %22s: "
 	"u.i=%d u.l=%d u.c=%d s.i=%d s.l=%d s.c=%d "
-	"p=%d %s\n",
+	"p=%s f=%s t=%s %s\n",
 	when,
 	u->id, uLen, u->useCount, s->id, sLen, s->useCount,
-	pix, cgiRemoteAddr());
+	pix, textSize, trackControls, cgiRemoteAddr());
 if (cart->userId != 0 && u->id != cart->userId)
     fprintf(stderr, "ASH: bad userId %d --> %d\n", cart->userId, u->id);
 if (cart->sessionId != 0 && s->id != cart->sessionId)
