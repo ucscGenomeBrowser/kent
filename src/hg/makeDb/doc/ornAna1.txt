@@ -1379,3 +1379,13 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# XENO REFGENE - added xeno refGene (2008-06-03 markd)
+
+add to genbank.conf
+    ornAna1.refseq.mrna.xeno.load  = yes
+    ornAna1.refseq.mrna.xeno.loadDesc = yes
+
+    ssh genbank
+    cd /cluster/data/genbank
+    ((./bin/gbAlignStep -initial -srcDb=refseq ornAna1)|&mail markd&)
+############################################################################
