@@ -27,13 +27,13 @@ void sqlExecProg(char *prog, char **progArgs, int userArgc, char *userArgv[])
 {
 int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6;
 char **nargv, passArg[128], hostArg[128];
-safef(passArg, sizeof(passArg), "-p%s", cfgOption("db.password"));
-safef(hostArg, sizeof(hostArg), "-h%s", cfgOption("db.host"));
+safef(passArg, sizeof(passArg), "-p%s", cfgVal("db.password"));
+safef(hostArg, sizeof(hostArg), "-h%s", cfgVal("db.host"));
 AllocArray(nargv, nargc);
 
 nargv[j++] = prog;
 nargv[j++] = "-u";
-nargv[j++] = cfgOption("db.user");
+nargv[j++] = cfgVal("db.user");
 nargv[j++] = passArg;
 nargv[j++] = hostArg;
 if (progArgs != NULL)
