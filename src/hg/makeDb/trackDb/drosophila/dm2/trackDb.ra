@@ -286,11 +286,6 @@ autoScale off
 
     track bdtnpPolIIFdr25
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=25 factor=POLII
     shortLabel PolII AB FDR 25%
     longLabel RNA Polymerase II (PolII) antibody, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -307,11 +302,6 @@ autoScale off
 
     track bdtnpBcd1Fdr25
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=25 factor=BCD
     shortLabel bcd AB 1 FDR 25%
     longLabel bicoid (bcd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -320,11 +310,6 @@ autoScale off
 
     track bdtnpBcd2Fdr1
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=1 factor=BCD
     shortLabel bcd AB 2 FDR  1%
     longLabel bicoid (bcd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -333,11 +318,6 @@ autoScale off
 
     track bdtnpBcd2Fdr25
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=25 factor=BCD
     shortLabel bcd AB 2 FDR 25%
     longLabel bicoid (bcd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -354,11 +334,6 @@ autoScale off
 
     track bdtnpCad1Fdr25
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=25 factor=CAD
     shortLabel cad AB 1 FDR 25%
     longLabel caudal (cad) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -375,12 +350,6 @@ autoScale off
 
     track bdtnpGt2Fdr25
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
-    subGroups fdr=25 factor=GT
     shortLabel gt AB 2 FDR 25%
     longLabel giant (gt) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
     color 25,150,25
@@ -396,11 +365,6 @@ autoScale off
 
     track bdtnpHb1Fdr25
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=25 factor=HB
     shortLabel hb AB 1 FDR 25%
     longLabel hunchback (hb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -409,11 +373,6 @@ autoScale off
 
     track bdtnpHb2Fdr1
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=1 factor=HB
     shortLabel hb AB 2 FDR  1%
     longLabel hunchback (hb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -422,11 +381,6 @@ autoScale off
 
     track bdtnpHb2Fdr25
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=25 factor=HB
     shortLabel hb AB 2 FDR 25%
     longLabel hunchback (hb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -443,11 +397,6 @@ autoScale off
 
     track bdtnpKni1Fdr25
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=25 factor=KNI
     shortLabel kni AB 1 FDR 25%
     longLabel knirps (kni) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -456,11 +405,6 @@ autoScale off
 
     track bdtnpKni2Fdr1
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=1 factor=KNI
     shortLabel kni AB 2 FDR  1%
     longLabel knirps (kni) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -469,11 +413,6 @@ autoScale off
 
     track bdtnpKni2Fdr25
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=25 factor=KNI
     shortLabel kni AB 2 FDR 25%
     longLabel knirps (kni) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -490,11 +429,6 @@ autoScale off
 
     track bdtnpKr1Fdr25
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=25 factor=KR
     shortLabel Kr AB 1 FDR 25%
     longLabel Kruppel (Kr) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -503,11 +437,6 @@ autoScale off
 
     track bdtnpKr2Fdr1
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=1 factor=KR
     shortLabel Kr AB 2 FDR  1%
     longLabel Kruppel (Kr) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
@@ -516,11 +445,6 @@ autoScale off
 
     track bdtnpKr2Fdr25
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=25 factor=KR
     shortLabel Kr AB 2 FDR 25%
     longLabel Kruppel (Kr) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
@@ -537,11 +461,6 @@ autoScale off
 
     track bdtnpZ2Fdr25
     subTrack bdtnpChipper off
-    noInherit on
-    type wig 0.0 30.86
-    viewLimits 1:10
-    maxHeightPixels 100:25:15
-    autoScale off
     subGroups fdr=25 factor=Z
     shortLabel z AB 2 FDR 25%
     longLabel zeste (z) antibody 2, stage 11 embryos, False Discovery Rate (FDR) 25%
