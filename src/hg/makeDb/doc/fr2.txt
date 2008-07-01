@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.20 2008/05/25 20:11:50 markd Exp $"
+#       "$Id: fr2.txt,v 1.21 2008/07/01 16:53:00 markd Exp $"
 #
 
 ##########################################################################
@@ -1681,6 +1681,15 @@ plot "mostCons.histo.txt" using 2:3 title " # of elements" with boxes, \
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################
+############################################################################
+# TRANSMAP vertebrate.2008-06-07 build  (2008-06-30 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
 ############################################################################

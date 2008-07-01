@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.13 2008/05/25 20:11:48 markd Exp $"
+#	"$Id: bosTau4.txt,v 1.14 2008/07/01 16:52:59 markd Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -1715,6 +1715,15 @@ done
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################
+############################################################################
+# TRANSMAP vertebrate.2008-06-07 build  (2008-06-30 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
 ############################################################################

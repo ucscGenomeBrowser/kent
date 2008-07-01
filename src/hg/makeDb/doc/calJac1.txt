@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.15 2008/05/25 20:11:48 markd Exp $"
+#	"$Id: calJac1.txt,v 1.16 2008/07/01 16:52:59 markd Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -1608,6 +1608,15 @@ done
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################
+############################################################################
+# TRANSMAP vertebrate.2008-06-07 build  (2008-06-30 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
 ############################################################################

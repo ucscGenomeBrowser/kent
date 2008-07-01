@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.69 2008/06/08 16:38:52 kate Exp $"
+#	"$Id: mm9.txt,v 1.70 2008/07/01 16:53:01 markd Exp $"
 #
 
 #######################################################################
@@ -8207,6 +8207,15 @@ assemblies to the mouse genome (mm9, Mar. 2006):
 vertebrate-wide transMap alignments were built  Tracks are created and loaded
 by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
+
+see doc/builds.txt for specific details.
+############################################################################
+############################################################################
+# TRANSMAP vertebrate.2008-06-07 build  (2008-06-30 markd)
+
+vertebrate-wide transMap alignments were built  Tracks are created and loaded
+by a single Makefile. This is available from:
+   svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
 ############################################################################
