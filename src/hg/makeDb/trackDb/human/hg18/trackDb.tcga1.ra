@@ -55,6 +55,17 @@ expScale 3.0
 expStep 0.2
 groupings broadABIGroups
 
+track jhuUscIllMethyl
+shortLabel TCGA GBM JHU-USC DNA Methyl
+longLabel TCGA GBM JHU-USC DNA Methylation Array
+group x
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 3.0
+expStep 0.2
+groupings jhuUscIllMethylGroups
+
 track CaMPScoreExternal
 shortLabel CaMPScoreExternal 
 longLabel CaMPScoreExternal Science 2007 volelstein
