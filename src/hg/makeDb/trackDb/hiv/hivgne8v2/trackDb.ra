@@ -77,7 +77,7 @@ group compGeno
 priority 23.12
 msaTable vax003AEMsa
 onlyVisibility full
-visibility full
+visibility hide 
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
@@ -142,7 +142,7 @@ group compGeno
 priority 23.22
 msaTable vax003BMsa
 onlyVisibility full
-visibility hide
+visibility full 
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
