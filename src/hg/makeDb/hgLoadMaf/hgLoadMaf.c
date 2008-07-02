@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.22 2008/06/20 21:21:08 braney Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.23 2008/07/02 20:29:13 braney Exp $";
 
 /* Command line options */
 
@@ -33,6 +33,7 @@ static struct optionSpec optionSpecs[] = {
     {"tmpDir", OPTION_STRING},
     {"refDb", OPTION_STRING},
     {"maxNameLen", OPTION_INT},
+    {"defPos", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -44,6 +45,7 @@ static char *tmpDir = NULL;	    /* location to create a temporary file */
 char *loadFile;	                    /* file to read maf file from */
 char *refDb;	                    /* reference db (for custom tracks) */
 int maxNameLen = 0;	            /* maximum chrom name length */
+char *defPosFile;                   /* file to put default pos in */
 
 void usage()
 /* Explain usage and exit. */
@@ -64,6 +66,8 @@ errAbort(
   "   -loadFile=file   use file as input\n"
   "   -maxNameLen=N    specify max chromosome name length to avoid\n"
   "                    reference to chromInfo table\n"
+  "   -defPos=file     file to put default position in\n"
+  "                    default position is first block\n"
   "\n"
   "NOTE: The maf files need to be in chromosome coordinates,\n"
   "      the reference species must be the first component, and \n"
@@ -131,6 +135,8 @@ else
 	strcat(file, ext);
 	pathPrefix = extFileDir;
 	fileList = listDirX(pathPrefix, file, TRUE);
+	if (fileList == NULL)
+	    fileList = listDirX(".", file, TRUE);
 	}
     else
 	{
@@ -191,6 +197,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 		else 
 		    errAbort(msg);
 		}
+
 	    ZeroVar(&mr);
 	    mr.chrom = mc->src + dbNameLen + 1;
 	    mr.chromStart = mc->start;
@@ -199,6 +206,16 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 		reverseUnsignedRange(&mr.chromStart, &mr.chromEnd, mc->srcSize);
 	    mr.extFile = extId;
 	    mr.offset = offset;
+
+	    if (defPosFile != NULL)
+		{
+		FILE *f = mustOpen(defPosFile, "w");
+
+		fprintf(f, "%s:%d-%d\n",mr.chrom, mr.chromStart+1, mr.chromEnd);
+		fclose(f);
+
+		defPosFile = NULL;
+		}
 
 	    /* The maf scores are the sum of all pairwise
 	     * alignment scores.  If you have A,B,C,D
@@ -292,6 +309,7 @@ tmpDir = optionVal("tmpDir", NULL);
 loadFile = optionVal("loadFile", loadFile);
 refDb = optionVal("refDb", refDb);
 maxNameLen = optionInt("maxNameLen", maxNameLen);
+defPosFile = optionVal("defPos", defPosFile);
 
 if (argc != 3)
     usage();
