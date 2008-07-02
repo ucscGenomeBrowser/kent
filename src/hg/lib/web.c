@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.149 2008/06/27 19:15:55 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.150 2008/07/02 23:29:11 braney Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -92,6 +92,7 @@ char *scriptName = cgiScriptName();
 char *db = NULL;
 boolean isEncode = FALSE;
 boolean isGsid   = hIsGsidServer();
+boolean dbIsActive = hDbIsActive(hGetDb());
 
 if (scriptName == NULL)
     scriptName = cloneString("");
@@ -225,7 +226,7 @@ if (isGsid)
     printf("</TR></TABLE>");
     printf("</TD></TR></TABLE>\n");
     }
-else
+else if (dbIsActive)
 {
 
 puts(
