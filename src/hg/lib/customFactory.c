@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.80 2008/06/27 21:55:37 braney Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.81 2008/07/02 20:32:42 braney Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -996,10 +996,13 @@ customFactorySetupDbTrack(track);
 char *db = customTrackTempDb();
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/hgLoadMaf", "-verbose=0", NULL,  NULL,
-	NULL, NULL, NULL, NULL, NULL};
+	NULL, NULL, NULL, NULL, NULL, NULL};
 char **cmds[] = {cmd1, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
 struct stat statBuf;
+struct tempName tn;
+
+trashDirFile(&tn, "ct", "ct", ".pos");
 
 if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
@@ -1011,9 +1014,11 @@ cmd1[3] = dyStringCannibalize(&tmpDy);  tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-refDb=%s", hGetDb());
 cmd1[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0); 
 dyStringPrintf(tmpDy, "-maxNameLen=%d", track->maxChromName);
-cmd1[5] = dyStringCannibalize(&tmpDy);
-cmd1[6] = db;
-cmd1[7] = track->dbTableName;
+cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0); 
+dyStringPrintf(tmpDy, "-defPos=%s", tn.forCgi);
+cmd1[6] = dyStringCannibalize(&tmpDy);
+cmd1[7] = db;
+cmd1[8] = track->dbTableName;
 
 struct pipeline *dataPipe =  pipelineOpen(cmds, 
     pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile);
@@ -1024,6 +1029,15 @@ pipelineFree(&dataPipe);
 unlink(track->dbStderrFile);	/* no errors, not used */
 restorePrevEnv();			/* restore environment */
 track->wigFile = NULL;
+
+struct lineFile *lf = lineFileOpen(tn.forCgi, TRUE);
+char *line;
+int size;
+
+lineFileNeedNext(lf, &line, &size);
+lineFileClose(&lf);
+unlink(tn.forCgi);
+ctAddToSettings(track, "firstItemPos", cloneString(line));
 }
 
 static struct customTrack *mafLoader(struct customFactory *fac,  
