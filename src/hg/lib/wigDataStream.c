@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.82 2007/09/14 18:40:20 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.83 2008/07/02 23:14:23 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -1632,6 +1632,7 @@ if (bedList && *bedList)
 	bedPosition = min(winStart, bedStart);
 	bedStart = bedPosition;
 	boolPtr = bedArray;
+	bedEnd = filteredBed->chromEnd;
 	for (bed = filteredBed; bed; bed = bed->next)
 	    {
 	    unsigned long elSize = bed->chromEnd - bed->chromStart;
@@ -1641,8 +1642,8 @@ if (bedList && *bedList)
 	    boolPtr += elSize;
 	    bedPosition = (unsigned long)((void *)boolPtr - (void *)bedArray);
 	    bedMarked += elSize;	/*	number of bases marked	*/
+	    bedEnd = max(bedEnd, bed->chromEnd);
 	    }
-	bedEnd = bedPosition + bedStart;
 	bedExtent = bedEnd - bedStart;
 	verbose(VERBOSE_CHR_LEVEL,
 		"#\tbed range %lu = %lu - %lu, allocated %lu bytes\n",
