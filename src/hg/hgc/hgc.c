@@ -218,7 +218,7 @@
 #include "chromInfo.h"
 #include "gbWarn.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1439 2008/07/02 20:59:40 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1440 2008/07/02 23:33:58 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3477,12 +3477,16 @@ return dyStringCannibalize(&url);
 void doGetDna1()
 /* Do first get DNA dialog. */
 {
-struct hTableInfo *hti;
+struct hTableInfo *hti = NULL;
 char *tbl = cgiUsualString("table", "");
 char rootName[256];
 char parsedChrom[32];
-hParseTableName(tbl, rootName, parsedChrom);
-hti = hFindTableInfo(seqName, rootName);
+boolean dbIsActive = hDbIsActive(database); 
+if (dbIsActive)
+    {
+    hParseTableName(tbl, rootName, parsedChrom);
+    hti = hFindTableInfo(seqName, rootName);
+    }
 cartWebStart(cart, "Get DNA in Window");
 printf("<H2>Get DNA for </H2>\n");
 printf("<FORM ACTION=\"%s\">\n\n", hgcName());
@@ -3521,7 +3525,8 @@ if (!hIsGsidServer())
 hgSeqOptionsHtiCart(hti,cart);
 puts("<P>");
 cgiMakeButton("submit", "get DNA");
-cgiMakeButton("submit", EXTENDED_DNA_BUTTON);
+if (dbIsActive)
+    cgiMakeButton("submit", EXTENDED_DNA_BUTTON);
 puts("</FORM><P>");
 puts("Note: The \"Mask repeats\" option applies only to \"get DNA\", not to \"extended case/color options\". <P>");
 }
@@ -3993,6 +3998,7 @@ char *pos = NULL;
 char *chrom = NULL;
 int start = 0;
 int end = 0;
+boolean dbIsActive = hDbIsActive(database); 
 
 if (sameString(action, EXTENDED_DNA_BUTTON))
     {
@@ -4006,7 +4012,7 @@ if (tbl[0] == 0)
     {
     itemCount = 1;
     if ( NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))) &&
-         hgParseChromRange(pos, &chrom, &start, &end))
+         hgParseChromRangeDb(pos, &chrom, &start, &end, dbIsActive))
         {
         hgSeqRange(chrom, start, end, '?', "dna");
         }
@@ -19952,7 +19958,13 @@ hSetDb(database);
 protDbName = hPdbFromGdb(database);
 protDbConn = sqlConnect(protDbName);
 
-seqName = hgOfficialChromName(cartString(cart, "c"));
+boolean dbIsActive = hDbIsActive(database); 
+
+if (dbIsActive)
+    seqName = hgOfficialChromName(cartString(cart, "c"));
+else 
+    seqName = cartString(cart, "c");
+
 winStart = cartIntExp(cart, "l");
 winEnd = cartIntExp(cart, "r");
 
@@ -19977,7 +19989,7 @@ if (isCustomTrack(track))
 	    break;
     }
 
-if (!isCustomTrack(track)  || 
+if ((!isCustomTrack(track) && dbIsActive)  || 
 	((ct!= NULL) && (ct->dbTrackType != NULL) &&
 	    sameString(ct->dbTrackType, "maf")))
     {
