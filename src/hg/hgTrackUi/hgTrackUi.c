@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.435 2008/06/24 08:26:39 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.436 2008/07/02 20:59:40 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -267,7 +267,7 @@ void snp125Ui(struct trackDb *tdb)
 /* UI for dbSNP version 125 and later. */
 {
 char autoSubmit[2048];
-char *orthoTable = trackDbSetting(tdb, "chimpMacaqueOrthoTable");
+char *orthoTable = snp125OrthoTable(tdb, NULL);
 int version = snpVersion(tdb->tableName);
 
 if (isNotEmpty(orthoTable) && hTableExists(orthoTable))

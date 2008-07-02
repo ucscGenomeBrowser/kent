@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.137 2008/05/20 18:23:07 angie Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.138 2008/07/02 20:59:40 angie Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -322,8 +322,7 @@ struct slList        *snpItemList   = tg->items; /* list of SNPs */
 struct slList        *snpItem       = snpItemList;
 struct slList        *orthoItemList = NULL;      /* list of orthologous state info */
 struct slList        *orthoItem     = orthoItemList;
-char                 *orthoTable    = trackDbSetting(tg->tdb,
-						     "chimpMacaqueOrthoTable");
+char                 *orthoTable    = snp125OrthoTable(tg->tdb, NULL);
 struct sqlResult     *sr            = NULL;
 int                   cmp           = 0;
 struct dyString      *extra         = newDyString(256);
@@ -1053,7 +1052,7 @@ tg->itemNameColor = snpColor;
 
 void snp125Methods(struct track *tg)
 {
-char *orthoTable = trackDbSetting(tg->tdb, "chimpMacaqueOrthoTable");
+char *orthoTable  = snp125OrthoTable(tg->tdb, NULL);
 tg->drawItems     = snpDrawItems;
 tg->drawItemAt    = snp125DrawItemAt;
 tg->freeItems     = freeSnp125;

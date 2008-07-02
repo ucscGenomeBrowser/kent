@@ -1,8 +1,26 @@
-/* snp125Ui.c - char arrays for snp UI features */
+/* snp125Ui.c - enums & char arrays for snp UI features and shared util code */
 #include "snp125Ui.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: snp125Ui.c,v 1.30 2008/03/06 04:01:25 angie Exp $";
+static char const rcsid[] = "$Id: snp125Ui.c,v 1.31 2008/07/02 20:59:40 angie Exp $";
+
+char *snp125OrthoTable(struct trackDb *tdb, int *retSpeciesCount)
+/* Look for a setting that specifies a table with orthologous alleles.
+ * If retSpeciesCount is not null, set it to the number of other species
+ * whose alleles are in the table. Do not free the returned string. */
+{
+char *table = trackDbSetting(tdb, "chimpMacaqueOrthoTable");
+int speciesCount = 2;
+if (table == NULL)
+    {
+    table = trackDbSetting(tdb, "chimpOrangMacOrthoTable");
+    speciesCount = 3;
+    }
+if (retSpeciesCount != NULL)
+    *retSpeciesCount = speciesCount;
+return table;
+}
+
 
 boolean snp125ExtendedNames = TRUE;
 

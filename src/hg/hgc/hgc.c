@@ -71,6 +71,7 @@
 #include "cytoBand.h"
 #include "knownMore.h"
 #include "snp125.h"
+#include "snp125Ui.h"
 #include "snp.h"
 #include "snpMap.h"
 #include "snpExceptions.h"
@@ -217,7 +218,7 @@
 #include "chromInfo.h"
 #include "gbWarn.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1438 2008/07/02 00:11:18 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1439 2008/07/02 20:59:40 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13932,7 +13933,7 @@ hFreeConn(&conn);
 void printSnpOrthoSummary(struct trackDb *tdb, char *rsId, char *observed)
 /* helper function for printSnp125Info */
 {
-char *orthoTable = trackDbSetting(tdb, "chimpMacaqueOrthoTable");
+char *orthoTable = snp125OrthoTable(tdb, NULL);
 if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
     {
     struct sqlConnection *conn = hAllocConn();
@@ -14020,19 +14021,29 @@ void printSnpOrthoRows(struct trackDb *tdb, struct snp125 *snp)
 /* If a chimp+macaque ortho table was specified, print out the orthos
  * (if any), as rows of a 6-column table. */
 {
-char *orthoTable = trackDbSetting(tdb, "chimpMacaqueOrthoTable");
+int speciesCount = 0;
+char *orthoTable = snp125OrthoTable(tdb, &speciesCount);
 if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
     {
     struct sqlConnection *conn = hAllocConn();
     struct sqlResult *sr;
     char **row;
     char query[1024];
-    safef(query, sizeof(query),
-      "select chimpChrom, chimpStart, chimpEnd, chimpAllele, chimpStrand, "
-      "macaqueChrom, macaqueStart, macaqueEnd, macaqueAllele, macaqueStrand "
-      "from %s where chrom='%s' and bin=%d and chromStart=%d and name='%s'",
-	  orthoTable, seqName, binFromRange(snp->chromStart, snp->chromEnd),
-	  snp->chromStart, snp->name);
+    if (speciesCount == 2)
+	safef(query, sizeof(query),
+	 "select chimpChrom, chimpStart, chimpEnd, chimpAllele, chimpStrand, "
+	 "macaqueChrom, macaqueStart, macaqueEnd, macaqueAllele, macaqueStrand "
+	 "from %s where chrom='%s' and bin=%d and chromStart=%d and name='%s'",
+	 orthoTable, seqName, binFromRange(snp->chromStart, snp->chromEnd),
+	 snp->chromStart, snp->name);
+    else
+	safef(query, sizeof(query),
+	 "select chimpChrom, chimpStart, chimpEnd, chimpAllele, chimpStrand, "
+	 "orangChrom, orangStart, orangEnd, orangAllele, orangStrand, "
+	 "macaqueChrom, macaqueStart, macaqueEnd, macaqueAllele, macaqueStrand "
+	 "from %s where chrom='%s' and bin=%d and chromStart=%d and name='%s'",
+	 orthoTable, seqName, binFromRange(snp->chromStart, snp->chromEnd),
+	 snp->chromStart, snp->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -14044,12 +14055,36 @@ if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
 	char *chimpDb = trackDbSetting(tdb, "chimpDb");
 	printSnpOrthoOneRow("Chimp", chimpDb, chimpAllele, chimpStrand,
 			    chimpChrom, chimpStart, chimpEnd);
-	char *macaqueChrom = row[5];
-	int macaqueStart = sqlUnsigned(row[6]);
-	int macaqueEnd = sqlUnsigned(row[7]);
-	char *macaqueAllele = row[8];
-	char *macaqueStrand = row[9];
-	char *macaqueDb = trackDbSetting(tdb, "macaqueDb");
+	char *orangChrom, *orangAllele, *orangStrand, *orangDb;
+	int orangStart, orangEnd;
+	char *macaqueChrom, *macaqueAllele, *macaqueStrand, *macaqueDb;
+	int macaqueStart, macaqueEnd;
+	if (speciesCount == 2)
+	    {
+	    macaqueChrom = row[5];
+	    macaqueStart = sqlUnsigned(row[6]);
+	    macaqueEnd = sqlUnsigned(row[7]);
+	    macaqueAllele = row[8];
+	    macaqueStrand = row[9];
+	    macaqueDb = trackDbSetting(tdb, "macaqueDb");
+	    }
+	else
+	    {
+	    orangChrom = row[5];
+	    orangStart = sqlUnsigned(row[6]);
+	    orangEnd = sqlUnsigned(row[7]);
+	    orangAllele = row[8];
+	    orangStrand = row[9];
+	    orangDb = trackDbSetting(tdb, "orangDb");
+	    printSnpOrthoOneRow("Orangutan", orangDb, orangAllele, orangStrand,
+				orangChrom, orangStart, orangEnd);
+	    macaqueChrom = row[10];
+	    macaqueStart = sqlUnsigned(row[11]);
+	    macaqueEnd = sqlUnsigned(row[12]);
+	    macaqueAllele = row[13];
+	    macaqueStrand = row[14];
+	    macaqueDb = trackDbSetting(tdb, "macaqueDb");
+	    }
 	printSnpOrthoOneRow("Macaque", macaqueDb, macaqueAllele, macaqueStrand,
 			    macaqueChrom, macaqueStart, macaqueEnd);
 	sqlFreeResult(&sr);

@@ -1,8 +1,15 @@
-/* snp125Ui.h - enums and char arrays for snp125 UI features */
+/* snp125Ui.c - enums & char arrays for snp UI features and shared util code */
 #include "common.h"
 
 #ifndef SNP125UI_H
 #define SNP125UI_H
+
+#include "trackDb.h"
+
+char *snp125OrthoTable(struct trackDb *tdb, int *retSpeciesCount);
+/* Look for a setting that specifies a table with orthologous alleles.
+ * If retSpeciesCount is not null, set it to the number of other species
+ * whose alleles are in the table. Do not free the returned string. */
 
 extern boolean snp125ExtendedNames;
 
