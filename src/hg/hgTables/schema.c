@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.48 2008/05/27 23:48:28 hiram Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.49 2008/07/02 23:09:23 braney Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -472,6 +472,22 @@ hPrintf("<B>ChromGraph Custom Track ID:</B> %s<BR>\n", table);
 hPrintf("ChromGraph custom tracks are stored in a dense binary format.");
 }
 
+static void showSchemaCtMaf(char *table, struct customTrack *ct)
+/* Show schema on maf format custom track. */
+{
+hPrintf("<B>MAF Custom Track ID:</B> %s<BR>\n", table);
+hPrintf("For formatting information see: ");
+hPrintf("<A HREF=\"../goldenPath/help/customTrack.html#MAF\">MAF</A> ");
+hPrintf("format.");
+
+struct sqlConnection *conn = sqlCtConn(TRUE);
+webNewSection("Sample Rows");
+printSampleRows(10, conn, ct->dbTableName);
+printTrackHtml(ct->tdb);
+sqlDisconnect(&conn);
+}
+
+
 static void showSchemaCtBed(char *table, struct customTrack *ct)
 /* Show schema on bed format custom track. */
 {
@@ -485,7 +501,7 @@ showItemRgb=bedItemRgb(ct->tdb);	/* should we expect itemRgb */
 /* Find named custom track. */
 hPrintf("<B>Custom Track ID:</B> %s ", table);
 hPrintf("<B>Field Count:</B> %d<BR>", ct->fieldCount);
-hPrintf("On loading, all custom tracks are converted to ");
+hPrintf("For formatting information see: ");
 hPrintf("<A HREF=\"../goldenPath/help/customTrack.html#BED\">BED</A> ");
 hPrintf("format.");
 
@@ -526,6 +542,8 @@ else if (startsWithWord("chromGraph", type))
     showSchemaCtChromGraph(table, ct);
 else if (startsWithWord("bed", type) || startsWithWord("bedGraph", type))
     showSchemaCtBed(table, ct);
+else if (startsWithWord("maf", type))
+    showSchemaCtMaf(table, ct);
 else
     errAbort("Unrecognized customTrack type %s", type);
 }
