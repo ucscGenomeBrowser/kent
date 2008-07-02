@@ -21889,3 +21889,75 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+
+
+############################################################################
+# Nuclear Lamina (2008-06-16 mikep)
+#  "Domain organization of human chromosomes revealed by mapping of nuclear lamina interactions"
+# We received these files from authors of Guelen et al. Nature 2008
+# doi:10.138/nature06947
+    ssh hgwdev
+    mkdir /cluster/data/hg18/bed/nuclearLamina
+    cd /cluster/data/hg18/bed/nuclearLamina/
+    mv /var/ftp/encode/LADs_080513.bed.bz2 .
+    mv /var/ftp/encode/LaminB1_080513.wig.bz2 .
+    mv /var/ftp/encode/LaminB1_LAD.md5sum .
+    # to check the md5sum we need to unzip it to its original name, done on the NFS host for this directory
+    df -h .
+    #Filesystem            Size  Used Avail Use% Mounted on
+    #kkstore02-10:/export/cluster/store11
+    #                      1.8T  1.7T   94G  95% /cluster/store11
+    ssh kkstore02-10
+    cd /cluster/data/hg18/bed/nuclearLamina/
+    # check they are not too big to unzip, look ok
+    ll -h L*bz2
+    #-rw-r--r--  1 mikep protein 13K Jun 10 00:58 LADs_080513.bed.bz2
+    #-rw-r--r--  1 mikep protein 16M Jun 10 01:02 LaminB1_080513.wig.bz2
+    bunzip2 -dk L*bz2
+    md5sum -c LaminB1_LAD.md5sum
+    # all ok
+    # LADs_080513.bed: OK
+    # LaminB1_080513.wig: OK
+
+    # Description files were received via email and copied directly to this dir. 
+    # Needed to convert from mac to unix due to ^M chars:
+    mac2unix L*.html
+    # Checked files looked OK, needed to remove HTML tags such as: DOCTYPE <HTML> <BODY> </BODY> </HTML>
+    vi L*.html
+    # Now find the min/max/avg range of values from the wiggle file
+    egrep  "^[0-9]" LaminB1_080513.wig |ave -col=2 stdin
+    # Q1 -0.509000
+    # median -0.000000
+    # Q3 0.514000
+    # average -0.041192
+    # min -6.602000
+    # max 5.678000
+    # count 2909178
+    # total -119833.701411
+    # standard deviation 1.037038
+
+    # Now load the tracks on hgwdev
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/nuclearLamina/
+    # First two lines are custom track header
+    tail +3 LADs_080513.bed | hgLoadBed hg18 laminB1Lads stdin
+    # wigEncode the .wig and .wib files from the supplied wig ascii file, and symlink the .wib file from /gbdb
+    wigEncode LaminB1_080513.wig laminB1.wig laminB1.wib
+    ln -s /cluster/data/hg18/bed/nuclearLamina/laminB1.wib /gbdb/hg18/wib/
+    # Converted LaminB1_080513.wig, upper limit 5.68, lower limit -6.60
+    hgLoadWiggle hg18 laminB1 laminB1.wig
+    rm bed.tab wiggle.tab
+
+    # Create the track definitions in hg18
+    ssh hgwdev
+    # Make entries for: bed = "track laminB1Lads" wiggle = "track laminB1"
+    vi /cluster/home/mikep/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.ra
+    # copy the track descriptions over 
+    cp /cluster/data/hg18/bed/nuclearLamina/laminB1.html      /cluster/home/mikep/kent/src/hg/makeDb/trackDb/human/hg18/
+    cp /cluster/data/hg18/bed/nuclearLamina/laminB1Lads.html  /cluster/home/mikep/kent/src/hg/makeDb/trackDb/human/hg18/
+    cp /cluster/data/hg18/bed/nuclearLamina/laminB1Super.html /cluster/home/mikep/kent/src/hg/makeDb/trackDb/human/hg18/
+    cp /cluster/data/hg18/bed/nuclearLamina/laminB1Super.gif  /usr/local/apache/htdocs/images/
+    # update the tracks
+    cd /cluster/home/mikep/kent/src/hg/makeDb/trackDb
+    make
+

@@ -1456,7 +1456,7 @@ priority 63.5
 visibility hide
 color 200,80,0
 type bed 8 +
-urlLabel Laboratoire de Biologie Moléculaire Eucaryote:
+urlLabel Laboratoire de Biologie Molï¿½culaire Eucaryote:
 url http://www-snorna.biotoul.fr/plus.php?id=$$
 url2Label The miRNA Registry:
 url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
@@ -2735,3 +2735,38 @@ sGroup_mammal panTro2 ponAbe2 rheMac2 calJac1 otoGar1 tupBel1 mm9 rn4 canFam2
 speciesDefaultOff 
 treeImage phylo/hg18_multizPrimate.gif
 speciesCodonDefault hg18
+
+# laminB1 supertrack
+
+        track laminB1Super
+        superTrack on
+        shortLabel NKI Nuc Lamina
+        longLabel NKI Nuclear Lamina Associated Domains (LaminB1 DamID)
+        group regulation
+        priority 2100
+
+track laminB1Lads
+superTrack laminB1Super dense
+shortLabel  NKI LADs
+longLabel NKI LADs (Lamina Associated Domains)
+group regulation
+priority 2100.1
+visibility hide
+color 0,0,127
+type bed 3
+
+track laminB1
+superTrack laminB1Super dense
+shortLabel NKI LaminB1
+longLabel NKI LaminB1 DamID Map (log2-ratio scores)
+group regulation
+priority 2100.2
+visibility hide
+color 0,0,127
+maxHeightPixels 100:40:11
+autoScaleDefault Off
+windowingFunction mean
+smoothingWindow 2
+type wig -6.602 5.678
+spanList 60
+viewLimits -2:2
