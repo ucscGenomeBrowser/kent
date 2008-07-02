@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.78 2008/06/25 19:57:26 tdreszer Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.79 2008/07/02 20:33:56 tdreszer Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -212,8 +212,9 @@ else
 }
 #endif
 
-#define WIG_PACK_HEIGHT   (tl.fontHeight+1)
-#define WIG_SQUISH_HEIGHT 3
+#define WIG_PACK_HEIGHT   (tl.fontHeight)
+#define WIG_SQUISH_HEIGHT (((tl.fontHeight/2) & 1) ? (tl.fontHeight/2) : (tl.fontHeight/2) - 1)
+
 
 int wigTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Wiggle track will use this to figure out the height they use
