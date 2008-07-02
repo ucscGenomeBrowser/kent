@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.360 2008/06/25 16:15:57 tdreszer Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.361 2008/07/02 00:09:35 braney Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -388,6 +388,23 @@ safef(query, sizeof(query),
 genome = sqlQuickString(conn, query);
 hDisconnectCentral(&conn);
 return genome;
+}
+
+char *hDbForSciName(char *sciName)
+/* Get default db for scientific name */
+{
+char *db = NULL;
+char query[256];
+struct sqlConnection *centralConn = hConnectCentral();
+
+safef(query, sizeof(query),
+    "select defaultDb.name from dbDb,defaultDb "
+    "where dbDb.scientificName='%s' "
+    "and dbDb.name = defaultDb.name ", sciName);
+db = sqlQuickString(centralConn, query);
+hDisconnectCentral(&centralConn);
+
+return db;
 }
 
 char *hDbForTaxon(struct sqlConnection *conn, int taxon)
@@ -2335,6 +2352,12 @@ char *genome = hGenome(database);
 if (!genome)
     genome = hArchiveDbDbOptionalField(database, "genome");
 return genome;
+}
+
+char *hDbDbNibPath(char *database)
+/* return nibPath from dbDb for database */
+{
+return hDbDbOptionalField(database, "nibPath");
 }
 
 char *hGenome(char *database)
