@@ -350,6 +350,7 @@ autoScale off
 
     track bdtnpGt2Fdr25
     subTrack bdtnpChipper off
+    subGroups fdr=25 factor=GT
     shortLabel gt AB 2 FDR 25%
     longLabel giant (gt) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
     color 25,150,25
