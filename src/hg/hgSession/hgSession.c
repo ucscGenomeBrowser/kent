@@ -17,7 +17,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.38 2008/06/25 21:04:18 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.39 2008/07/02 00:03:42 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -437,7 +437,6 @@ void doMainPage(char *message)
 /* Login status/links and session controls. */
 {
 puts("Content-Type:text/html\n");
-jsInit();
 if (wikiLinkEnabled())
     {
     char *wikiUserName = wikiLinkUserName();
@@ -450,11 +449,13 @@ if (wikiLinkEnabled())
 	webNewSection("Updated Session");
 	puts(message);
 	}
+    jsInit();
     showSessionControls(wikiUserName, TRUE, TRUE);
     showLinkingTemplates(wikiUserName);
     }
 else
     {
+    jsInit();
     if (isNotEmpty(message))
 	{
 	cartWebStart(cart, "Updated Session");
