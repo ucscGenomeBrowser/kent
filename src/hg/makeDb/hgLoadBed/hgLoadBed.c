@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.56 2008/04/29 22:13:11 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.57 2008/07/02 19:21:42 angie Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -193,6 +193,9 @@ while (lineFileNextReal(lf, &line))
     }
 }
 
+#define writeFailed(fileName) { errAbort("Write to %s failed -- disk full?", fileName); }
+
+
 void writeBedTab(char *fileName, struct bedStub *bedList, int bedSize)
 /* Write out bed list to tab-separated file. */
 {
@@ -203,7 +206,8 @@ int i, wordCount;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
     if (!noBin)
-        fprintf(f, "%u\t", hFindBin(bed->chromStart, bed->chromEnd));
+        if (fprintf(f, "%u\t", hFindBin(bed->chromStart, bed->chromEnd)) <= 0)
+	    writeFailed(fileName);
     if (strictTab)
 	wordCount = chopTabs(bed->line, words);
     else
@@ -224,19 +228,27 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 		    errAbort("ERROR: expecting r,g,b specification, "
 				"found: '%s'", words[8]);
 		else
-		    fprintf(f,"%d", itemRgb);
+		    if (fprintf(f, "%d", itemRgb) <= 0)
+			writeFailed(fileName);
+
 		verbose(2, "itemRgb: %s, rgb: %#x\n", words[8], itemRgb);
 		}
 	    else
-		fputs(words[i], f);
+		if (fputs(words[i], f) == EOF)
+		    writeFailed(fileName);
 	    }
 	else
-	    fputs(words[i], f);
+	    if (fputs(words[i], f) == EOF)
+		writeFailed(fileName);
 
 	if (i == wordCount-1)
-	    fputc('\n', f);
+	    {
+	    if (fputc('\n', f) == EOF)
+		writeFailed(fileName);
+	    }
 	else
-	    fputc('\t', f);
+	    if (fputc('\t', f) == EOF)
+		writeFailed(fileName);
 	}
     }
 fclose(f);
