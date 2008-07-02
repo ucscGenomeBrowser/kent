@@ -122,6 +122,9 @@ char *hDefaultDb();
 char *hDbForTaxon(struct sqlConnection *conn, int taxon);
 /* Get database associated with NCBI taxon number if any. */
 
+char *hDbForSciName(char *sciName);
+/* Get default db for scientific name */
+
 char *hDefaultChrom();
 /* Return some sequence named in chromInfo from the current db, or NULL if db 
  * has no chromInfo. */
@@ -159,6 +162,7 @@ char *hGetDbUser();
 
 char *hGetDbPassword();
 /* Return the current database password. */
+
 
 struct sqlConnection *hAllocConn();
 /* Get free connection if possible. If not allocate a new one. */
@@ -484,6 +488,9 @@ struct dbDb *hArchiveDbDbList();
 
 int hDbDbCmpOrderKey(const void *va, const void *vb);
 /* Compare to sort based on order key */
+
+char *hDbDbNibPath(char *database);
+/* return nibPath from dbDb for database */
 
 struct sqlConnection *hMaybeConnectArchiveCentral();
 /* Connect to central database for archives.
