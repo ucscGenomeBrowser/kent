@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.31 2008/04/29 20:08:59 angie Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.32 2008/07/02 23:31:29 braney Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -346,7 +346,9 @@ if (seqStart < 0)
 	padding5 += seqStart;
     seqStart = 0;
     }
-if (seqEnd > chromSize)
+
+/* if we know the chromSize, don't pad out beyond it */
+if ((chromSize > 0) && (seqEnd > chromSize))
     {
     if (isRc)
 	padding5 += (chromSize - seqEnd);
@@ -514,7 +516,9 @@ if (size > 0)
 	size += start;
 	start = 0;
 	}
-    if (start + size > chromSize)
+
+/* if we know the chromSize, don't try to get more than's there */
+    if ((chromSize > 0) && (start + size > chromSize))
 	size = chromSize - start;
     if (*count > maxStartsOffset)
 	errAbort("addFeature: overflow (%d > %d)", *count, maxStartsOffset);
@@ -541,6 +545,7 @@ chromSize = hChromSize(chrom);
 maxStartsOffset = 0;
 addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 	   chromStart, chromEnd - chromStart, FALSE, FALSE);
+
 hgSeqRegions(chrom, strand, name, FALSE, count, starts, sizes, exonFlags,
 	     cdsFlags);
 }
