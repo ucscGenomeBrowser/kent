@@ -217,7 +217,7 @@
 #include "chromInfo.h"
 #include "gbWarn.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1437 2008/06/30 20:51:19 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1438 2008/07/02 00:11:18 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2517,6 +2517,13 @@ void linkToOtherBrowserExtra(char *otherDb, char *chrom, int start, int end, cha
 {
 printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&%s&position=%s%%3A%d-%d\">",
        hgTracksName(), otherDb, extra, chrom, start+1, end);
+}
+
+void linkToOtherBrowserSearch(char *otherDb, char *tag)
+/* Make anchor tag to open another browser window. */
+{
+printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&ct=&position=%s\">",
+       hgTracksName(), otherDb, tag);
 }
 
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end)
@@ -8804,6 +8811,14 @@ if (isXeno || isNewChimp(database))
     if (org == NULL)
         org = cloneString("unknown");
     printf("<B>Organism:</B> %s<BR>", org);
+    char *xenoDb = hDbForSciName(org);
+    if (xenoDb != NULL)
+	{
+	printf("<B>UCSC browser: </B> \n");
+	linkToOtherBrowserSearch(xenoDb, rl->mrnaAcc);
+	printf("%s on %s</B> \n",rl->mrnaAcc, xenoDb);
+	printf("</A><BR>");
+	}
     freeMem(org);
     }
 else
