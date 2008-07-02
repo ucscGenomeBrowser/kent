@@ -21880,6 +21880,357 @@ hgLoadSqlTab hg18 illuminaProbesSeq{,.sql,.tab}
 #      1 ObservedWrongFormat
 
 
+#######################################################################
+# SNPMASKED SEQUENCE FOR SNP129 (DONE 7/1/08 angie)
+    ssh kolossus
+    mkdir /cluster/data/hg18/snp129Mask
+    cd /cluster/data/hg18/snp129Mask
+
+    # Identify rsIds with various problems -- we will exclude those.
+    # MultipleAlignments is kinda broad because anything that maps on 
+    # both chrN and chrN_foo_hap1 will be excluded... similarly, extra
+    # matches on chrN_random might disqualify good matches on chrN.
+    # Well, erring on the side of caution is good.
+    awk '$5 ~ /^MultipleAlignments|ObservedTooLong|ObservedWrongFormat|ObservedMismatch|MixedObserved$/ {print $4;}' \
+      /cluster/data/dbSNP/129/human/snp129Exceptions.bed \
+      | sort -u \
+      > snp129ExcludeRsIds.txt
+    time grep -vFwf snp129ExcludeRsIds.txt \
+      /cluster/data/dbSNP/129/human/snp129.bed \
+      > snp129Cleaned.bed
+#154.384u 12.550s 3:09.01 88.3%  0+0k 0+0io 0pf+0w
+
+    # Substitutions: 
+    mkdir substitutions
+    snpMaskSingle snp129Cleaned.bed /cluster/data/hg18/hg18.2bit stdout \
+    | faSplit byname stdin substitutions/
+    # Also this warning about total size -- just means that some chroms
+    # didn't have any SNPS that survived the stringent filtering.
+    #-- 113 warnings about differing observed at same base positions 
+    #-- (113 distinct positions).  saved as diffObserved.txt.
+    #-- Spot-checking, I see a case (chr1|1476801|1476802) where two SNPs
+    #-- should have been merged -- their flanking sequences were just from
+    #-- diff. strands.  In another case (chr9|10122961|10122962), one of
+    #-- the mappings looks like an insertion instead of a substitution but
+    #-- the SNP's class is single, and one genomic base is mapped.
+    #-- IMO not serious to bother dbSNP about, they want to get on w/130.
+#Masked 10637395 snps in 10637306 out of 3091528550 genomic bases
+#/cluster/data/hg18/hg18.2bit has 3107677273 total bases, but the total number of bases in sequences for which we masked snps is 3091528550 (difference is 16148723)
+    # Make sure that sizes are identical, first diffs are normal -> IUPAC,
+    # and first diffs' case is preserved:
+    foreach f (substitutions/chr*.fa)
+      faCmp -softMask $f ../[1-9MXY]*/$f:t |& grep -v "that differ"
+    end
+#(output OK)
+    foreach f (substitutions/chr*.fa)
+      echo $f:t:r
+      mv $f $f:r.subst.fa
+      gzip $f:r.subst.fa
+    end
+
+    # Insertions:
+    mkdir insertions
+    snpMaskAddInsertions snp129Cleaned.bed /cluster/data/hg18/hg18.2bit stdout \
+    | faSplit byname stdin insertions/
+#Added 1617522 snps totaling 3251578 bases to 3085167749 genomic bases
+#/cluster/data/hg18/hg18.2bit has 3107677273 total bases, but the total number of bases in sequences for which we masked snps is 3085167749 (difference is 22509524)
+    # Again, that just means that some chroms didn't have filtered SNPs.
+    # Make sure that all sizes have increased relative to original:
+    foreach f (insertions/chr*.fa)
+      faCmp -softMask $f ../[1-9MXY]*/$f:t |& grep -v "that differ" \
+      |& perl -we '$_=<>; \
+           if (/^\w+ in \S+ has (\d+) bases.  \w+ in \S+ has (\d+) bases/) { \
+             if ($1 > $2) {print "OK: ins size $1 > $2\n";} \
+             else {die "ERROR: ins size $1 <= $2\n";} \
+           } else {die $_;}'
+    end
+#(output OK)
+    foreach f (insertions/chr*.fa)
+      mv $f $f:r.ins.fa
+      gzip $f:r.ins.fa
+    end
+
+    # Deletions:
+    mkdir deletions
+    snpMaskCutDeletions snp129Cleaned.bed /cluster/data/hg18/hg18.2bit stdout \
+    | faSplit byname stdin deletions/
+#Cut 1046324 snps totaling 2173708 bases from 3085167749 genomic bases
+#/cluster/data/hg18/hg18.2bit has 3107677273 total bases, but the total number of bases in sequences for which we masked snps is 3085167749 (difference is 22509524)
+    # Again, that just means that some chroms didn't have filtered SNPs.
+    # Make sure that all sizes have decreased relative to original:
+    foreach f (deletions/chr*.fa)
+      faCmp -softMask $f ../[1-9MXY]*/$f:t |& grep -v "that differ" \
+      |& perl -we '$_=<>; \
+           if (/^\w+ in \S+ has (\d+) bases.  \w+ in \S+ has (\d+) bases/) { \
+             if ($1 < $2) {print "OK: del size $1 < $2\n";} \
+             else {die "ERROR: del size $1 >= $2\n";} \
+           } else {die $_;}'
+    end
+#(output OK)
+    foreach f (deletions/chr*.fa)
+      mv $f $f:r.del.fa
+      gzip $f:r.del.fa
+    end
+
+    # Clean up and prepare for download:
+    gzip snp129Cleaned.bed
+    foreach d (substitutions insertions deletions)
+      pushd $d
+        md5sum *.gz > md5sum.txt
+      popd
+    end
+    # Make a README.txt in each subdir.
+
+    # Create download links on hgwdev.
+    # NOTE: Currently we offer only the substitutions.
+    # If we get any user requests, then maybe we can put the insertions
+    # and deletions out there.
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/hg18/snp129Mask
+    ln -s /cluster/data/hg18/snp129Mask/substitutions/* \
+      /usr/local/apache/htdocs/goldenPath/hg18/snp129Mask/
+## If there is user demand for ins & del, then start over with an empty
+## goldenPath/snp129Mask and do this:
+##    foreach type (substitutions insertions deletions)
+##      mkdir /usr/local/apache/htdocs/goldenPath/hg18/snp129Mask/$type
+##      ln -s /cluster/data/hg18/snp129Mask/$type/* \
+##        /usr/local/apache/htdocs/goldenPath/hg18/snp129Mask/$type/
+##    end
+
+
+#######################################################################
+# ORTHOLOGOUS ALLELES IN CHIMP AND MACAQUE FOR SNP129 (DONE 7/2/08 angie)
+    ssh kolossus
+    mkdir /cluster/data/hg18/bed/snp129Ortho
+    cd /cluster/data/hg18/bed/snp129Ortho
+
+    # Following Heather's lead in snp126orthos, filter SNPs to to keep
+    # only those with class=single, length=1, chrom!~random; 
+    # Exclude those with exceptions MultipleAlignments,
+    # SingleClassTriAllelic or SingleClassQuadAllelic.
+    # Unlike snp masking, we do not filter for weight -- don't know why.
+    awk '$5 ~ /^MultipleAlignments|SingleClassTriAllelic|SingleClassQuadAllelic/ {print $4;}' \
+      /cluster/data/dbSNP/129/human/snp129Exceptions.bed \
+    | sort -u \
+      > snp129ExcludeIds.txt
+    awk '$3-$2 == 1 && $1 !~ /_random/ && $11 == "single" {print;}' \
+      /cluster/data/dbSNP/129/human/snp129.bed \
+    | grep -vFwf snp129ExcludeIds.txt \
+      > snp129Simple.bed
+    # took ~3 minutes
+    wc -l snp129Simple.bed 
+#10633840 snp129Simple.bed
+
+    # Glom all human info that we need for the final table onto the 
+    # name, to sneak it through liftOver: rsId|chr|start|end|obs|ref|strand
+    awk 'BEGIN{OFS="\t";} \
+        {print $1, $2, $3, \
+               $4 "|" $1 "|" $2 "|" $3 "|" $9 "|" $8 "|" $6, \
+               0, $6;}' \
+      snp129Simple.bed > snp129ForLiftOver.bed
+
+    # Map coords to chimp using liftOver.
+    # I don't know why chimp took so much longer than macaque... the
+    # chimp .over has fewer chains and fewer bytes than the macaque .over.
+    mkdir run.liftOChimp
+    cd run.liftOChimp
+    mkdir split out
+    splitFile ../snp129ForLiftOver.bed 25000 split/chunk
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /cluster/data/hg18/bed/liftOver/hg18ToPanTro2.over.chain.gz \
+        \{check out exists out/panTro2.$f:t.bed\} out/hg18.$f:t.unmapped \
+        >> jobList
+    end
+    ssh pk
+    cd /cluster/data/hg18/bed/snp129Ortho/run.liftOChimp
+    para make jobList
+#Completed: 426 of 426 jobs
+#CPU time in finished jobs:      83616s    1393.60m    23.23h    0.97d  0.003 y
+#IO & Wait Time:                  1501s      25.02m     0.42h    0.02d  0.000 y
+#Average job time:                 200s       3.33m     0.06h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             574s       9.57m     0.16h    0.01d
+#Submission to last job:           939s      15.65m     0.26h    0.01d
+
+    # Map coords to orangutan using liftOver.
+    mkdir ../run.liftOPon
+    cd ../run.liftOPon
+    mkdir out
+    ln -s ../run.liftOChimp/split .
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /cluster/data/hg18/bed/liftOver/hg18ToPonAbe2.over.chain.gz \
+        \{check out exists out/ponAbe2.$f:t.bed\} out/hg18.$f:t.unmapped \
+        >> jobList
+    end
+    para make jobList
+#Completed: 426 of 426 jobs
+#CPU time in finished jobs:     171875s    2864.58m    47.74h    1.99d  0.005 y
+#IO & Wait Time:                  1767s      29.45m     0.49h    0.02d  0.000 y
+#Average job time:                 408s       6.79m     0.11h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            1268s      21.13m     0.35h    0.01d
+#Submission to last job:          1743s      29.05m     0.48h    0.02d
+
+    # Map coords to macaque using liftOver.
+    mkdir ../run.liftOMac
+    cd ../run.liftOMac
+    mkdir out
+    ln -s ../run.liftOChimp/split .
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /cluster/data/hg18/bed/liftOver/hg18ToRheMac2.over.chain.gz \
+        \{check out exists out/rheMac2.$f:t.bed\} out/hg18.$f:t.unmapped \
+        >> jobList
+    end
+    para make jobList
+#Completed: 426 of 426 jobs
+#CPU time in finished jobs:       6356s     105.93m     1.77h    0.07d  0.000 y
+#IO & Wait Time:                  1812s      30.21m     0.50h    0.02d  0.000 y
+#Average job time:                  19s       0.32m     0.01h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:              51s       0.85m     0.01h    0.00d
+#Submission to last job:           221s       3.68m     0.06h    0.00d
+
+    ssh kolossus
+    cd /cluster/data/hg18/bed/snp129Ortho
+    # Here is a script that looks up the base value in the ortho species
+    # and swizzles columns to prepare for the joining and re-swizzling
+    # of both ortho species' columns into the final product.  If it is
+    # used more than once, should be checked in, perhaps in hg/snp/snpLoad.
+    cat > getOrthoSeq.pl <<'_EOF_'
+#!/usr/bin/env perl
+# Dig up orthologous alleles and swizzle columns so the glommed name that
+# includes human position info etc. is first.  It will be used as a key for
+# joining up multiple other-species' ortho data.  Also swizzle columns so
+# that the remaining columns are in order of appearance in the final result,
+# snp129OrthoPanTro2RheMac2.  Upcase ortho alleles for consistency w/dbSNP.
+use warnings;
+use strict;
+
+my $twoBitFName = shift @ARGV
+  || die "usage: getOrthoSeq.pl orthoDb.2bit [file(s)]\n";
+
+sub getOChrSeq($$) {
+  # Slurp in fasta sequence using twoBitToFa.
+  my ($twoBitFName, $oChr) = @_;
+  open(P, "twoBitToFa -noMask $twoBitFName -seq=$oChr stdout |")
+    || die "Can't open pipe from twoBitToFa $twoBitFName -seq=$oChr: $!\n";
+  <P> =~ /^>\w+/
+    || die "Doesn't look like we got fasta -- first line is this:\n$_";
+  # From man perlfaq5: trick to slurp entire contents:
+  my $c = 0;
+  my $seq = do { local $/; my $data = <P>; $c = ($data =~ s/\n//g); $data; };
+  close(P);
+  return $seq;
+}
+
+my %rc = ( "a" => "t", "c" => "g", "g" => "c", "t" => "a",
+           "A" => "T", "C" => "G", "G" => "C", "T" => "A", );
+sub revComp($) {
+  # Reverse-complement fasta input.  (Pass through non-agtc chars.)
+  my ($seq) = @_;
+  my $rcSeq = reverse $seq;
+  for (my $i = 0;  $i < length($rcSeq);  $i++) {
+    my $base = substr($rcSeq, $i, 1);
+    my $cBase = $rc{$base} || $base;
+    substr($rcSeq, $i, 1, $cBase);
+  }
+  return $rcSeq;
+}
+
+my $prevOChr;
+my ($oChrSeq, $oChrSize);
+while (<>) {
+  chomp;
+  my ($oChr, $oStart, $oEnd, $nameGlom, undef, $oStrand) = split;
+  if (! defined $prevOChr || $oChr ne $prevOChr) {
+    $oChrSeq = &getOChrSeq($twoBitFName, $oChr);
+    $oChrSize = length($oChrSeq);
+  }
+  die "Coords out of range, input line $.: $oEnd > $oChr size $oChrSize\n\t"
+    if ($oEnd > $oChrSize);
+  my $oAllele = substr($oChrSeq, $oStart, $oEnd - $oStart);
+  $oAllele = &revComp($oAllele) if ($oStrand eq "-");
+  print join("\t", $nameGlom, $oChr, $oStart, $oEnd, $oAllele, $oStrand) .
+        "\n";
+  $prevOChr = $oChr;
+}
+'_EOF_'
+    # << emacs
+    chmod a+x getOrthoSeq.pl
+
+    # Concatenate the chimp results, sorting by chimp pos in order to
+    # efficiently access 2bit sequence in ./getOrthoSeq.  The output of
+    # that is then sorted by the glommed human info field, so that we
+    # can use join to combine chimp and macaque results in the next step.
+    # Ditto for macaque and orangutan.
+    sort -k1,1 -k2n,2n run.liftOChimp/out/panTro2.chunk*.bed \
+    | ./getOrthoSeq.pl /cluster/data/panTro2/panTro2.2bit \
+    | sort > panTro2.orthoGlom.txt
+    sort -k1,1 -k2n,2n run.liftOPon/out/ponAbe2.chunk*.bed \
+    | ./getOrthoSeq.pl /cluster/data/ponAbe2/ponAbe2.2bit \
+    | sort > ponAbe2.orthoGlom.txt
+    sort -k1,1 -k2n,2n run.liftOMac/out/rheMac2.chunk*.bed \
+    | ./getOrthoSeq.pl /cluster/data/rheMac2/rheMac2.2bit \
+    | sort > rheMac2.orthoGlom.txt
+    # The whole pipeline takes ~5-7 minutes each.
+    wc -l panTro2.orthoGlom.txt ponAbe2.orthoGlom.txt rheMac2.orthoGlom.txt
+#   9909458 panTro2.orthoGlom.txt
+#   9597270 ponAbe2.orthoGlom.txt
+#   8467866 rheMac2.orthoGlom.txt
+
+    # Use the glommed name field as a key to join up chimp and macaque
+    # allele data.  Include glommed name from both files because if only
+    # file 2 has a line for the key in 2.1, then 1.1 is empty.  Then plop
+    # in the orthoGlom fields from each file, which are in the same order
+    # as the chimp and macaque columns of snp129OrthoPanTro2RheMac2.
+    join -o '1.1 2.1 1.2 1.3 1.4 1.5 1.6 2.2 2.3 2.4 2.5 2.6' \
+      -a 1 -a 2 -e '?' \
+      panTro2.orthoGlom.txt ponAbe2.orthoGlom.txt \
+    | awk '{if ($1 != "?") { print $1, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12; } \
+            else           { print $2, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12; }}' \
+      > tmp.txt
+    join -o '1.1 2.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.2 2.3 2.4 2.5 2.6' \
+      -a 1 -a 2 -e '?' \
+      tmp.txt rheMac2.orthoGlom.txt \
+    | perl -wpe 'chomp; \
+        ($glom12, $glom3, $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand, \
+         $o3Chr, $o3Start, $o3End, $o3Al, $o3Strand) = split; \
+        $glomKey = ($glom12 ne "?") ? $glom12 : $glom3; \
+        ($rsId, $hChr, $hStart, $hEnd, $hObs, $hAl, $hStrand) = \
+          split(/\|/, $glomKey); \
+        $o1Start =~ s/^\?$/0/;  $o2Start =~ s/^\?$/0/;  $o3Start =~ s/^\?$/0/; \
+        $o1End   =~ s/^\?$/0/;  $o2End   =~ s/^\?$/0/;  $o3End   =~ s/^\?$/0/; \
+        print join("\t", $hChr, $hStart, $hEnd, $rsId, $hObs, $hAl, $hStrand, \
+                         $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+                         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand, \
+                         $o3Chr, $o3Start, $o3End, $o3Al, $o3Strand) . "\n"; \
+        s/^.*$//;' \
+    | sort -k1,1 -k2n,2n > snp129OrthoPt2Pa2Rm2.bed
+    # took ~6 minutes.
+    wc -l snp129OrthoPt2Pa2Rm2.bed
+#10325827 snp129OrthoPt2Pa2Rm2.bed
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/snp129Ortho
+    time nice hgLoadBed -tab -onServer -tmpDir=/scratch/tmp -renameSqlTable \
+      -sqlTable=$HOME/kent/src/hg/lib/snpOrthoPanPonRhe.sql \
+      hg18 snp129OrthoPt2Pa2Rm2 snp129OrthoPt2Pa2Rm2.bed
+#Loaded 10325827 elements of size 22
+#73.396u 10.864s 10:14.76 13.7%  0+0k 0+0io 0pf+0w
+
+    # Cleanup on fileserver:
+    cd /cluster/data/hg18/bed/snp129Ortho
+    nice gzip snp129Simple.bed snp129ExcludeIds.txt snp129ForLiftOver.bed
+    rm -r run*/split tmp.txt *.orthoGlom.txt
+
+
 ############################################################################
 # TRANSMAP vertebrate.2008-06-07 build  (2008-06-30 markd)
 
@@ -21961,3 +22312,5 @@ see doc/builds.txt for specific details.
     cd /cluster/home/mikep/kent/src/hg/makeDb/trackDb
     make
 
+
+############################################################################
