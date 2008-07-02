@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.79 2008/07/02 20:33:56 tdreszer Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.80 2008/07/02 20:44:50 tdreszer Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -212,8 +212,10 @@ else
 }
 #endif
 
-#define WIG_PACK_HEIGHT   (tl.fontHeight)
-#define WIG_SQUISH_HEIGHT (((tl.fontHeight/2) & 1) ? (tl.fontHeight/2) : (tl.fontHeight/2) - 1)
+#define FONT_HEIGHT       (tl.fontHeight)
+#define WIG_DENSE_HEIGHT  FONT_HEIGHT
+#define WIG_PACK_HEIGHT   FONT_HEIGHT
+#define WIG_SQUISH_HEIGHT (((FONT_HEIGHT/2) & 1) ? (FONT_HEIGHT/2) : (FONT_HEIGHT/2) - 1)
 
 
 int wigTotalHeight(struct track *tg, enum trackVisibility vis)
@@ -239,7 +241,7 @@ wigCart = (struct wigCartOptions *) tg->extraUiData;
  *	recorded properly in lineHeight, heightPer and height
  */
 if (vis == tvDense)
-    tg->lineHeight = tl.fontHeight+1;
+    tg->lineHeight = WIG_DENSE_HEIGHT;
 else if (vis == tvPack)
     tg->lineHeight = WIG_PACK_HEIGHT;
 else if (vis == tvSquish)
