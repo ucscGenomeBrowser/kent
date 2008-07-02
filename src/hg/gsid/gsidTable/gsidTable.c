@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.37 2008/04/27 01:52:55 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.38 2008/07/02 18:56:06 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -34,7 +34,6 @@ char *orderOn;		/* Current sorting column name. */
 int displayCount;	/* Number of items to display. */
 char *displayCountString; /* Ascii version of display count, including 'all'. */
 struct hash *oldCart;	/* Old cart hash. */
-//struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
 struct hash *columnHash;  /* Hash of active columns keyed by name. */
 int passedFilterCount;  /* number of subjects passing filter */
 
@@ -112,9 +111,7 @@ void makeTitle(char *title, char *helpName)
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>", title);
-hPrintf("<TD ALIGN=Right>", wrapWhiteFont(""));
-//hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/%s\">%s</A></TD>",
-//        helpName, wrapWhiteFont("Help"));
+hPrintf("<TD ALIGN=Right>%s", wrapWhiteFont(""));
 hPrintf("</TR></TABLE>");
 }
 
@@ -200,6 +197,7 @@ void doGetText(struct sqlConnection *conn, struct column *colList,
 struct subjInfo *si;
 struct column *col;
 boolean first = TRUE;
+char *chp, *chp9;
 
 if (subjList == NULL)
     {
@@ -236,7 +234,7 @@ for (si = subjList; si != NULL; si = si->next)
             else
                 hPrintf("\t");
             if (val == NULL)
-                hPrintf("n/a", val);
+                hPrintf("n/a");
             else
 		{
 		special = FALSE;
@@ -287,6 +285,22 @@ for (si = subjList; si != NULL; si = si->next)
 			hPrintf("&lt; 400");
 			special = TRUE;
 			}
+    		    }
+		if ((sameWord(col->name, "dnaSeqs")) || (sameWord(col->name, "aaSeqs")))
+    		    {
+      		    chp = val;
+		    chp = strstr(chp, "#35;");
+      		    while (chp != NULL)
+			{
+			chp = chp +strlen("#35;");
+			chp9 = strstr(chp, " ");
+			*chp9 = '\0';
+
+      			hPrintf("%s ", chp);
+			chp9++;
+			chp = strstr(chp9, "#35;");
+			}
+      		    special = TRUE;
     		    }
 
 		if (!special)
@@ -603,7 +617,7 @@ if (s == NULL)
 else
     {
     if (isSubjID)
-	hPrintf("<A HREF=\"gsidSubj?%s&hgs_subj=%s&submit=Go%21\">",cartSidUrlString(cart),s);
+	hPrintf("<A HREF=\"gsidSubj?%s&hgs_subj=%s&submit=Go%c21\">",cartSidUrlString(cart),s, '%');
     if (sameString(s,""))
 	{
 	freeMem(s);
@@ -845,7 +859,7 @@ if (!columnSetting(col, "noKeys", NULL))
             advFilterKeyClearButton(col);
             hPrintf("<BR>\n");
             if (count == 1)
-                hPrintf("(There is currently 1 item in the list.)", count);
+                hPrintf("(There is currently 1 item in the list.)");
             else
                 hPrintf("(There are currently %d items in the list.)", count);
             }
@@ -871,7 +885,6 @@ col->sortCmp = sortCmpString;
 col->cellPrint = cellSimplePrint;
 col->labelPrint = labelSimplePrint;
 col->tableColumns = oneColumn;
-//col->filterControls = col->filterDropDown ? dropDownAdvFilterControls : lookupAdvFilterControls;
 col->filterControls = lookupAdvFilterControls;
 col->advFilter = stringAdvFilter;
 }
@@ -886,7 +899,6 @@ safef(query, sizeof(query), col->query, si->fields[0]);
 answer = sqlQuickString(conn, query);
 if (answer == NULL) 
     {
-    //return(cloneString("N/A"));
     return(cloneString("-1"));
     }
 else 
@@ -971,7 +983,6 @@ if (!special)
     {
     hPrintf("%s", s);
     }
-hPrintf("</TD>");
 freeMem(s);
 }
 
@@ -1496,8 +1507,7 @@ else if (cartVarExists(cart, redirectName))
     else  /* if everything has been filtered out, we'll have to go back */
 	{
 	hPrintf("No subject(s) found with the filtering conditions specified.<br>");
-	hPrintf("Click <a href=\"gsidTable?gsidTable.do.advFilter=filter+%28now+on%29\">here</a> "
-	    "to return to Select Subjects.<br>");
+	hPrintf("Click <a href=\"gsidTable?gsidTable.do.advFilter=filter+%c28now+on%c29\">here</a> to return to Select Subjects.<br>", '%', '%');
 	}
     }
 else
