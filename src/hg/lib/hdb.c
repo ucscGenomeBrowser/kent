@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.361 2008/07/02 00:09:35 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.362 2008/07/02 23:30:39 braney Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1044,6 +1044,11 @@ if (startsWith("chr", table) || startsWith("Group", table))
 int hChromSize(char *chromName)
 /* Return size of chromosome. */
 {
+char *database = hGetDb();
+
+if (! hDbIsActive(database))
+    return 0;
+
 struct chromInfo *ci = mustGetChromInfo(hGetDb(), chromName);
 return ci->size;
 }
@@ -1058,8 +1063,18 @@ return ci->size;
 void hNibForChrom(char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome. */
 {
-struct chromInfo *ci = mustGetChromInfo(hGetDb(), chromName);
-safef(retNibName, HDB_MAX_PATH_STRING, "%s", ci->fileName);
+char *database = hGetDb();
+
+if (hDbIsActive(database))
+    {
+    struct chromInfo *ci = mustGetChromInfo(database, chromName);
+    safef(retNibName, HDB_MAX_PATH_STRING, "%s", ci->fileName);
+    }
+else
+    {
+    safef(retNibName, HDB_MAX_PATH_STRING, "%s/%s.2bit", 
+	hDbDbNibPath(database), database);
+    }
 }
 
 void hNibForChrom2(char *chromName, char retNibName[HDB_MAX_PATH_STRING])
