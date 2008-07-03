@@ -87,7 +87,7 @@
 #include "memalloc.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.27 2008/04/23 19:11:18 pchan Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.28 2008/07/03 08:36:40 lowe Exp $";
 
 extern char *uniprotFormat;
 
@@ -420,7 +420,7 @@ if (list != NULL)
 	description = sqlQuickString(spConn, query);
 	if (description == NULL)
 	    description = cloneString("n/a");
-	printf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	printf("<A HREF=\"http://pfam.sanger.ac.uk/family?acc=%s\" TARGET=_blank>", 
 	    el->name);
 	printf("%s</A> - %s<BR>\n", el->name, description);
 	freez(&description);
@@ -1571,7 +1571,7 @@ void doPfamHit(struct trackDb *tdb, char *hitName)
 	if (description == NULL)
 	    description = cloneString("n/a");
 	
-	printf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	printf("<A HREF=\"http://pfam.sanger.ac.uk/family?acc=%s\" TARGET=_blank>", 
 	       pfamHit->pfamAC );
 	printf("%s</A> - %s<BR><BR>\n", pfamHit->pfamAC, description);
 	freez(&description);
