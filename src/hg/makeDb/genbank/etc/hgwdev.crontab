@@ -15,5 +15,8 @@ MAILTO=genbank@cse.ucsc.edu
 # -extFileUpdate
 
 # wed 11pm, download and import ccds data
-0 11 * * 4	/cluster/data/genbank/etc/ccds-import
+#0 11 * * 4	/cluster/data/genbank/etc/ccds-import
+
+# TMP: update every night for testing
+0 11 * * *	/cluster/data/genbank/etc/ccds-import
 
