@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.17 2008/06/25 19:57:00 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.18 2008/07/03 22:06:17 angie Exp $";
 
 #define CHROM_COLORS 26
 
@@ -8607,6 +8607,8 @@ bool isSubtrackVisible(struct track *subtrack)
 /* Has this subtrack not been deselected in hgTrackUi or declared with
  * "subTrack ... off"?  -- assumes composite track is visible. */
 {
+if (subtrack->limitedVisSet && subtrack->limitedVis == tvHide)
+    return FALSE;
 bool enabledInTdb = subtrackEnabledInTdb(subtrack);
 char option[64];
 safef(option, sizeof(option), "%s_sel", subtrack->mapName);
