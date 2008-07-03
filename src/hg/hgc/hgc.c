@@ -217,8 +217,9 @@
 #include "itemConf.h"
 #include "chromInfo.h"
 #include "gbWarn.h"
+#include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1440 2008/07/02 23:33:58 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1441 2008/07/03 21:53:25 acs Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18205,6 +18206,83 @@ hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
+void mammalPsgTableRow(char *test, char *description, float pVal, unsigned isFdrSignificant)
+/* print single row of the overview table for mammal PSG track */
+{
+char *start = "";
+char *end = "";
+
+if (isFdrSignificant) 
+    {
+    start = "<b>";
+    end = "</b>";
+    }
+
+if (pVal<=1) 
+    {
+    printf("<tr><td>%s%s%s</td><td>%s%s%s</td><td>%s%.02g%s</tr>\n",
+	   start,test,end,
+	   start,description,end,
+	   start,pVal,end);
+    }
+}
+
+void doMammalPsg(struct trackDb *tdb, char *itemName) 
+/* create details page for mammalPsg track */
+{
+struct mammalPsg *mammalPsg = NULL;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char *bayesianFiguresUrl = "http://compgen.bscb.cornell.edu/projects/mammal-psg";
+
+genericHeader(tdb, itemName);
+sprintf(query, "select * from %s where name = '%s'", tdb->tableName, itemName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    mammalPsg = mammalPsgLoad(row);
+else
+    errAbort("Can't find item '%s'", itemName);
+
+sqlFreeResult(&sr);
+
+/* first print the same thing that you would print for ordinary bed track */
+bedPrintPos((struct bed *) mammalPsg,12,tdb);
+
+/* rows showing the results of individual likelihood ratio tests */
+printf("<p><b>Likelihood ratio tests for positive selection:</b></p>\n");
+printf("<p><table border=1>\n");
+printf("<tr><th>Test</th><th>Description</th><th>P-value</th>");
+mammalPsgTableRow("A","all branches",mammalPsg->lrtAllPValue,mammalPsg->lrtAllIsFdr);
+mammalPsgTableRow("B","branch leading to primates",mammalPsg->lrtPrimateBrPValue,mammalPsg->lrtPrimateBrIsFdr);
+mammalPsgTableRow("C","primate clade",mammalPsg->lrtPrimateClPValue,mammalPsg->lrtPrimateClIsFdr);
+mammalPsgTableRow("D","branch leading to rodents",mammalPsg->lrtRodentBrPValue,mammalPsg->lrtRodentBrIsFdr);
+mammalPsgTableRow("E","rodent clade",mammalPsg->lrtRodentClPValue,mammalPsg->lrtRodentClIsFdr);
+mammalPsgTableRow("F","human branch",mammalPsg->lrtHumanPValue,mammalPsg->lrtHumanIsFdr);
+mammalPsgTableRow("G","chimp branch",mammalPsg->lrtChimpPValue,mammalPsg->lrtChimpIsFdr);
+mammalPsgTableRow("H","branch leading to hominids",mammalPsg->lrtHominidPValue,mammalPsg->lrtHominidIsFdr);
+mammalPsgTableRow("I","macaque branch",mammalPsg->lrtMacaquePValue,mammalPsg->lrtMacaqueIsFdr);
+printf("</table></p>\n");
+printf("<p>(FDR significant P-value shown in boldface)</p>\n");
+
+/* pictures showing the Bayesian analysis */
+
+if (mammalPsg->bestHist > 0) 
+    {
+    printf("<p><b>Results of Bayesian analysis:</b><br>\n");
+    printf("<table border=0 cellpadding=20><tr>\n");
+    printf("<td align=center><b>Best model - posterior prob. %.2f</b><br>&nbsp;<br><img src=\"%s/model-%d-1.jpg\"></td>\n",
+	   mammalPsg->bestHistPP,bayesianFiguresUrl,mammalPsg->bestHist);
+    printf("<td align=center><b>2nd best - posterior prob. %.2f</b><br>&nbsp;<br><img src=\"%s/model-%d-1.jpg\"></td>\n",
+	   mammalPsg->nextBestHistPP,bayesianFiguresUrl,mammalPsg->nextBestHist);
+    printf("</tr></table></p>\n");
+    }
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void doDless(struct trackDb *tdb, char *itemName) 
 /* create details page for DLESS */
 {
@@ -20951,6 +21029,10 @@ else if (sameString("dless", track) || sameString("encodeDless", track))
     {
     doDless(tdb, item);
     }
+else if (sameString("mammalPsg", track)) 
+   {
+     doMammalPsg(tdb, item);
+   }
 else if (sameString("igtc", track))
     {
     doIgtc(tdb, item);

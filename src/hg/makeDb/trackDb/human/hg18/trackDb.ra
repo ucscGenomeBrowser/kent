@@ -2750,6 +2750,15 @@ speciesDefaultOff
 treeImage phylo/hg18_multizPrimate.gif
 speciesCodonDefault hg18
 
+track mammalPsg
+shortLabel Pos Sel Genes
+longLabel Positively Selected Genes (6 species)
+group compGeno
+priority 110
+visibility hide
+itemRgb on
+type bed 12 .
+
 # laminB1 supertrack
 
         track laminB1Super
@@ -2784,3 +2793,4 @@ smoothingWindow 2
 type wig -6.602 5.678
 spanList 60
 viewLimits -2:2
+>>>>>>> 1.291

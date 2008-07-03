@@ -1,0 +1,108 @@
+<H2>Description</H2>
+<P>
+This track shows the results of a genome-wide scan for positively selected
+genes (PSGs) based on multiple alignments of the human (hg18), chimp
+(panTro2), macaque (rheMac2), mouse (mm8), rat (rn4), and dog (canFam2)
+genome assemblies (Kosiol <em>et al.</em>, 2008).  The track displays
+the 16,529 high-confidence orthologs that were tested,
+and highlights those genes showing evidence of positive selection.
+It summarizes the results of nine different likelihood ratio tests (LRTs)
+for positive selection, as described below.  Four classes of genes are
+distinguished by score and color:</P>
+
+<ol>
+    <li> Genes with strong evidence of positive selection across species
+(score = 1000; shown in red).  These are the 400 genes
+whose <em>P</em>-values under test A (see below) meet the threshold
+required for a false discovery rate (FDR) of 0.05.
+
+    <li> Genes with strong evidence of positive selection on one or more
+    branches (score = 700; shown in purple).  These are the 144 additional
+    genes that meet the threshold for FDR < 0.05 under any of the branch-
+    and clade-specific tests B-I.
+
+    <li> Genes with weak evidence of positive selection on one or more
+    branches (score = 400; shown in blue).  These are the 1052 additional
+    genes whose nominal (unadjusted) <em>P</em>-values are < 0.05 under any
+    of tests A-I.
+
+    <li> Genes with no significant evidence of positive selection (score =
+    0; shown in black).  These are the remaining genes, having
+    nominal <em>P</em> &ge 0.05 under all of tests A-I.
+</ol>
+
+<P>In some cases, genes were truncated before testing to eliminate regions
+with frame-shift indels or nonconserved exon boundaries.  The track shows
+just the portions of the genes that were tested, rather than the full gene
+structures.</P>
+
+<P>The 544 genes in groups 1 and 2, above, were also subjected to a novel
+Bayesian analysis to determine their most likely "selection histories," or
+patterns of positive selection and non-selection on the branches of the
+six-species phylogeny.  These selection histories are described graphically
+on the details page, with red indicating branches under positive selection,
+and black indicating branches free from positive selection.</P>
+
+<H2>Schema and Identifiers</H2>
+
+<P>The <em>P</em>-values for all tests are stored in the browser database
+and can be incorporated into filters using the table browser.
+A <em>P</em>-value of 2 indicates that a test was not performed, due to
+insufficient data.  (For example, test G could not be performed if the
+chimp sequence was missing or did not pass the quality filters.)  The
+*isFdr columns indicate which genes are significant with FDR < 0.05 for
+each test.  Thus, filtering for lrtPrimateClPValue < 0.05 will retrieve all
+genes showing weak evidence of positive selection in the primate clade, and
+filtering for lrtRodentBrIsFdr = 1 will retrieve all genes showing strong
+evidence of positive selection on the branch to the rodents.
+</P>    
+
+<P>The original source of each gene structure (RefSeq, Vega, or UCSC) is
+  given in its identifier.  A suffix of ".inc" indicates that a gene was
+  truncated before testing. </P>
+
+
+<H2>Methods</H2>
+<P>
+Human genes from the RefSeq, Vega, and UCSC Genes sets were mapped onto
+multiz-based multiple alignments, then subjected to a strict set of filters
+to identify high-confidence one-to-one orthologs.  Each gene was required
+to be present in at least three species, and recently duplicated genes were
+removed (see Kosiol <em>et al.</em>, 2008 for details).  These orthologous
+genes were then examined for evidence of positive selection using a series
+of nine likehood ratio tests (LRTs) based on Yang and Nielsen's (2002)
+branch-site framework.  These LRTs essentially measure evidence for
+positive selection in terms of how much better the data is fit by a model
+that allows for positive selection (on particular branches of the tree)
+than by a model that allows only for purifying selection and neutral
+evolution.  LRTs were performed for positive selection on:</P>
+
+<ul>
+    <li> A: all branches
+    <li> B: branch to primates
+    <li> C: all branches in primate clade
+    <li> D: branch to rodents
+    <li> E: all branches in rodent clade
+    <li> F: branch to human 
+    <li> G: branch to chimp
+    <li> H: branch to hominids
+    <li> I: branch to macaque
+</ul>
+
+<P>The Bayesian analysis estimates a posterior distribution over all possible
+selection histories under a simple model that allows positive selection to
+switch on and off along the branches of the phylogeny.  The inference was
+performed by Gibbs sampling for just the 544 genes showing strong evidence of
+positive selection according to the LRTs.  </P>
+
+<P>See the <A HREF="http://compgen.bscb.cornell.edu/projects/mammal-psg/"
+              TARGET=_blank>Supplementary Website</A> for additional raw data.</P>
+
+<H2>References</H2>
+<P>
+Kosiol C, Vinar T, da Fonseca RR, Hubisz MJ, Bustamante CD, Nielsen R, Siepel A.Patterns of positive selection in six mammalian genomes.
+To appear in <em> PLoS Genetics.</em></P>
+<P>
+Yang Z, Nielsen R. <A HREF="http://mbe.oxfordjournals.org/cgi/content/full/19/6/908" TARGET=_blank> Codon substitution models for detecting molecular adaptation at individual sites along specific lineages.<A/>
+<em> Molecular Biology and Evolution.</em> 2002 June; 19: 908-917.</P>
+</P>
