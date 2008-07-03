@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1441 2008/07/03 21:53:25 acs Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1442 2008/07/03 22:54:25 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8471,7 +8471,7 @@ if (url != NULL && url[0] != 0)
     }
 }
 
-void doVax004(struct trackDb *tdb, char *item)
+void doVax003Vax004(struct trackDb *tdb, char *item)
 /* Put up VAX 004 info. */
 {
 char *id;
@@ -20619,9 +20619,9 @@ else if (sameWord(track, "uniGene_3"))
     {
     doUniGene3(tdb, item);
     }
-else if (sameWord(track, "vax004")) 
+else if (sameWord(track, "vax003") || sameWord(track, "vax004")) 
     {
-    doVax004(tdb, item);
+    doVax003Vax004(tdb, item);
     }
 else if (sameWord(track, "tigrGeneIndex"))
     {
