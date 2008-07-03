@@ -788,6 +788,9 @@ boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
  * If -1,i the subtracks field must be populated with the child trackDbs.
  * Returns false if not a supertrack */
 
+boolean dimensionsExist(struct trackDb *parentTdb);
+/* Does this parent track contain dimensions? */
+
 boolean subgroupFind(struct trackDb *childTrack, char *name,char **value);
 /* looks for a single tag in a childTrack's subGroups setting */
 
