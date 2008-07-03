@@ -30,7 +30,7 @@ struct hash
 
 #define defaultExpansionFactor 1.0
 
-#define hashMaxSize 30  
+#define hashMaxSize 28 
 
 struct hashCookie
 /* used by hashFirst/hashNext in tracking location in traversing hash */
