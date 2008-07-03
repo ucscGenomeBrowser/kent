@@ -22255,15 +22255,15 @@ see doc/builds.txt for specific details.
     mv /var/ftp/encode/LaminB1_LAD.md5sum .
     # to check the md5sum we need to unzip it to its original name, done on the NFS host for this directory
     df -h .
-    #Filesystem            Size  Used Avail Use% Mounted on
-    #kkstore02-10:/export/cluster/store11
-    #                      1.8T  1.7T   94G  95% /cluster/store11
+    # Filesystem            Size  Used Avail Use% Mounted on
+    # kkstore02-10:/export/cluster/store11
+    #                       1.8T  1.7T   94G  95% /cluster/store11
     ssh kkstore02-10
     cd /cluster/data/hg18/bed/nuclearLamina/
     # check they are not too big to unzip, look ok
     ll -h L*bz2
-    #-rw-r--r--  1 mikep protein 13K Jun 10 00:58 LADs_080513.bed.bz2
-    #-rw-r--r--  1 mikep protein 16M Jun 10 01:02 LaminB1_080513.wig.bz2
+    # -rw-r--r--  1 mikep protein 13K Jun 10 00:58 LADs_080513.bed.bz2
+    # -rw-r--r--  1 mikep protein 16M Jun 10 01:02 LaminB1_080513.wig.bz2
     bunzip2 -dk L*bz2
     md5sum -c LaminB1_LAD.md5sum
     # all ok
@@ -22299,18 +22299,16 @@ see doc/builds.txt for specific details.
     hgLoadWiggle hg18 laminB1 laminB1.wig
     rm bed.tab wiggle.tab
 
-    # Create the track definitions in hg18
+    ## Create the track definitions in hg18, copy them over, (these are my paths) and do make
+    ## Make entries for: bed = "track laminB1Lads" wiggle = "track laminB1"
     ssh hgwdev
-    # Make entries for: bed = "track laminB1Lads" wiggle = "track laminB1"
-    vi /cluster/home/mikep/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.ra
-    # copy the track descriptions over 
-    cp /cluster/data/hg18/bed/nuclearLamina/laminB1.html      /cluster/home/mikep/kent/src/hg/makeDb/trackDb/human/hg18/
-    cp /cluster/data/hg18/bed/nuclearLamina/laminB1Lads.html  /cluster/home/mikep/kent/src/hg/makeDb/trackDb/human/hg18/
-    cp /cluster/data/hg18/bed/nuclearLamina/laminB1Super.html /cluster/home/mikep/kent/src/hg/makeDb/trackDb/human/hg18/
-    cp /cluster/data/hg18/bed/nuclearLamina/laminB1Super.gif  /usr/local/apache/htdocs/images/
-    # update the tracks
-    cd /cluster/home/mikep/kent/src/hg/makeDb/trackDb
-    make
+    # vi /cluster/home/mikep/kent/src/hg/makeDb/trackDb/human/hg18/trackDb.ra
+    # cp /cluster/data/hg18/bed/nuclearLamina/laminB1.html      /cluster/home/mikep/kent/src/hg/makeDb/trackDb/human/hg18/
+    # cp /cluster/data/hg18/bed/nuclearLamina/laminB1Lads.html  /cluster/home/mikep/kent/src/hg/makeDb/trackDb/human/hg18/
+    # cp /cluster/data/hg18/bed/nuclearLamina/laminB1Super.html /cluster/home/mikep/kent/src/hg/makeDb/trackDb/human/hg18/
+    # cp /cluster/data/hg18/bed/nuclearLamina/laminB1Super.gif  /cluster/home/mikep/browser/images/
+    # cd /cluster/home/mikep/kent/src/hg/makeDb/trackDb
+    # make
 
 
 ############################################################################

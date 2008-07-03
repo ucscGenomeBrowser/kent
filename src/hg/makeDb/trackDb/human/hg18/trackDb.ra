@@ -2761,8 +2761,8 @@ speciesCodonDefault hg18
 
 track laminB1Lads
 superTrack laminB1Super dense
-shortLabel  NKI LADs
-longLabel NKI LADs (Lamina Associated Domains)
+shortLabel  NKI LADs (Tig3)
+longLabel NKI LADs (Lamina Associated Domains, Tig3 cells)
 group regulation
 priority 2100.1
 visibility hide
@@ -2771,8 +2771,8 @@ type bed 3
 
 track laminB1
 superTrack laminB1Super dense
-shortLabel NKI LaminB1
-longLabel NKI LaminB1 DamID Map (log2-ratio scores)
+shortLabel LaminB1 (Tig3)
+longLabel NKI LaminB1 DamID Map (log2-ratio scores, Tig3 cells)
 group regulation
 priority 2100.2
 visibility hide
