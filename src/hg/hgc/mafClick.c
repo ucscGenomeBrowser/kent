@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.50 2008/05/31 15:32:15 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.51 2008/07/03 00:09:02 braney Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -173,16 +173,27 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 
 	if (mc->text != NULL)
 	    {
-	    if ((lineStart == 0) && (hDbIsActive(dbOnly)))
+	    if (lineStart == 0) 
 		{
-		dyStringPrintf(dy, "%s Browser %s:%d-%d %c %*dbps",hOrganism(dbOnly),chrom, s+1, e, mc->strand,sizeChars, mc->size);
-		linkToOtherBrowserTitle(dbOnly, chrom, s, e, dy->string);
-		dyStringClear(dy);
-		dyStringPrintf(dy, "Get %s DNA %s:%d-%d %c %*dbps",hOrganism(dbOnly),chrom, s+1, e, mc->strand,sizeChars, mc->size);
-		fprintf(f, "B</A> ");
-		printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A> ",  dy->string,hgcName(),
-		   s, cgiEncode(chrom),
-		   chrom, s, e, dbOnly, revComp);
+		if (hDbIsActive(dbOnly))
+		    {
+		    dyStringPrintf(dy, "%s Browser %s:%d-%d %c %*dbps",hOrganism(dbOnly),chrom, s+1, e, mc->strand,sizeChars, mc->size);
+		    linkToOtherBrowserTitle(dbOnly, chrom, s, e, dy->string);
+		    dyStringClear(dy);
+		    fprintf(f, "B</A> ");
+		    }
+		else
+		    fprintf(f, "  ");
+
+		if (hDbExists(dbOnly))
+		    {
+		    dyStringPrintf(dy, "Get %s DNA %s:%d-%d %c %*dbps",hOrganism(dbOnly),chrom, s+1, e, mc->strand,sizeChars, mc->size);
+		    printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A> ",  dy->string,hgcName(),
+		       s, cgiEncode(chrom),
+		       chrom, s, e, dbOnly, revComp);
+		    }
+		else
+		    fprintf(f, "  ");
 		}
 	    else
 		{
@@ -205,7 +216,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 	    || ((mc->leftStatus == MAF_INSERT_STATUS) && (mc->rightStatus == MAF_INSERT_STATUS) )
 	    || ((mc->leftStatus == MAF_MISSING_STATUS) && (mc->rightStatus == MAF_MISSING_STATUS) ))
 		{
-		if ((lineStart == 0) && (hDbIsActive(dbOnly)))
+		if (lineStart == 0) 
 		    {
 		    int s = mc->start;
 		    int e = s + mc->rightLen;
@@ -214,10 +225,13 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		    if (mc->strand == '-')
 			reverseIntRange(&s, &e, mc->srcSize);
 
-		    dyStringPrintf(dy, "%s Browser %s:%d-%d %c %d bps Unaligned",hOrganism(dbOnly),chrom, s+1, e, mc->strand, e-s);
-		    linkToOtherBrowserTitle(dbOnly, chrom, s, e, dy->string);
-		    
-		    dyStringClear(dy);
+		    if ( hDbIsActive(dbOnly))
+			{
+			dyStringPrintf(dy, "%s Browser %s:%d-%d %c %d bps Unaligned",hOrganism(dbOnly),chrom, s+1, e, mc->strand, e-s);
+			linkToOtherBrowserTitle(dbOnly, chrom, s, e, dy->string);
+			
+			dyStringClear(dy);
+			}
 		    dyStringPrintf(dy, "Get %s DNA %s:%d-%d %c %d bps Unaligned",hOrganism(dbOnly),chrom, s+1, e, mc->strand, e-s);
 		    fprintf(f,"B</A> ");
 
@@ -284,9 +298,9 @@ if (haveInserts)
 
 	if (mc->rightStatus == MAF_INSERT_STATUS)
 	    {
+	    char *revComp = "";
 	    if (hDbIsActive(dbOnly))
 		{
-		char *revComp = "";
 		char strand = mc->strand;
 #ifdef REVERSESTRAND
 		if (cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
@@ -299,13 +313,13 @@ if (haveInserts)
 		fprintf(f, "</A>");
 		fprintf(f, " ");
 
-		printf("<A TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A> ",  hgcName(),
-		   s, cgiEncode(chrom),
-		   chrom,  s, e, dbOnly,revComp);
 		}
 	    else
-		fprintf(f, "    ");
+		fprintf(f, "  ");
 
+	    printf("<A TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A> ",  hgcName(),
+	       s, cgiEncode(chrom),
+	       chrom,  s, e, dbOnly,revComp);
 	    fprintf(f, "%*s %dbp\n", srcChars, org,mc->rightLen);
 	    }
 	}
@@ -884,7 +898,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 	    || ((mc->leftStatus == MAF_INSERT_STATUS) && (mc->rightStatus == MAF_INSERT_STATUS) )
 	    || ((mc->leftStatus == MAF_MISSING_STATUS) && (mc->rightStatus == MAF_MISSING_STATUS) ))
 		{
-		if ((lineStart == 0) && (hDbIsActive(dbOnly)))
+		if (lineStart == 0) 
 		    {
 		    int s = mc->start;
 		    int e = s + mc->rightLen;
