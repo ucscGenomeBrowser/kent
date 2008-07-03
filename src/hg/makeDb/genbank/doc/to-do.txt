@@ -987,6 +987,9 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - alignments that join tandem gene dups:
     mm8:NM_178882.2
+    hg18:chr22:37,706,098-37,778,547
+   hg18 BC029540.1 chrX:119,914,829-119,947,319
+
 
 - dropped by repeat masking.  Keep alignments to repeats only if there are
   just a small number of them
@@ -1064,10 +1067,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - is too much being lost from xeno alignments by throwing out PSLs with
   overlaping blocks?  Maybe fix psls rather than discard?
-
-- hg18 BC029540.1 chrX:119,914,829-119,947,319 multiple tandem dups, with
-  one alignment spans all, most likely a psl that links two genes.  Can
-  this be detected??
 
 - BC050659 misc_diff was not in ra file, thus not loaded.
 
