@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.57 2008/05/27 23:48:28 hiram Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.58 2008/07/03 00:49:25 braney Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -848,7 +848,13 @@ struct customTrack *ct = lookupCt(table);
 
 puts("<TABLE BORDER=0>");
 
-if (ct->wiggle)
+if ((ct->dbTrackType != NULL) && sameString(ct->dbTrackType, "maf"))
+    {
+    stringFilterOption(db, table, "chrom", " AND ");
+    numericFilterOption(db, table, "chromStart", "chromStart", " AND ");
+    numericFilterOption(db, table, "chromEnd", "chromEnd", " AND ");
+    }
+else if (ct->wiggle)
     {
     numericFilterOption("ct", table, filterDataValueVar, filterDataValueVar,"");
     if ((curTrack != NULL) && (curTrack->type != NULL))
