@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.436 2008/07/02 20:59:40 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.437 2008/07/03 17:51:43 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1923,10 +1923,18 @@ struct wigMafSpecies *wmSpecies, *wmSpeciesList = NULL;
 struct slName *speciesList = NULL;
 int group, prevGroup;
 int speciesCt = 0, groupCt = 1;
-int i;
+int i, j;
 char option[MAX_SP_SIZE];
 struct phyloTree *tree;
 struct consWiggle *consWig, *consWiggles = wigMafWiggles(tdb);
+
+struct sqlConnection *conn;
+char query[256];
+char **row;
+struct sqlResult *sr;
+char *chp;
+char trackName[255];
+boolean lineBreakJustPrinted;
 
 char buttonVar[64];
 int numberPerRow;
@@ -2056,7 +2064,8 @@ if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
 if (groupCt == 1)
     puts("\n<TABLE><TR>");
 group = -1;
-for (wmSpecies = wmSpeciesList, i = 0; wmSpecies != NULL; 
+lineBreakJustPrinted = FALSE;
+for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL; 
 		    wmSpecies = wmSpecies->next, i++)
     {
     char *label;
@@ -2065,6 +2074,7 @@ for (wmSpecies = wmSpeciesList, i = 0; wmSpecies != NULL;
     if (groupCt != 1 && group != prevGroup)
 	{
 	i = 0;
+	j = 0;
 	if (group != 0)
 	    puts("</TR></TABLE>\n");
         /* replace underscores in group names */
@@ -2077,17 +2087,69 @@ for (wmSpecies = wmSpeciesList, i = 0; wmSpecies != NULL;
 	numberPerRow = 6;
     else 
 	numberPerRow = 5;
-    if (i != 0 && (i % numberPerRow) == 0)
+    
+    /* new logic to decide if line break should be displayed here */
+    if ((j != 0 && (j % numberPerRow) == 0) && (lineBreakJustPrinted == FALSE))
+	{
 	puts("</TR><TR>");
-    puts("<TD>");
-    safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
-    cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
-    label = hOrganism(wmSpecies->name);
-    if (label == NULL)
-	label = wmSpecies->name;
-    //*label = tolower(*label);
-    printf ("%s<BR>", label);
-    puts("</TD>");
+    	lineBreakJustPrinted = TRUE;
+	}
+    
+    if (hIsGsidServer()) 
+    	{
+	/* for GSID maf, display only entries belong to the specific MSA selected */
+    	safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
+    	label = hOrganism(wmSpecies->name);
+    	if (label == NULL)
+		label = wmSpecies->name;
+    	
+	strcpy(trackName, tdb->tableName);	
+
+	/* try AaMaf first */
+	chp = strstr(trackName, "AaMaf");
+	/* if it is not a AaMaf track, try Maf next */
+	if (chp == NULL) chp = strstr(trackName, "Maf");
+
+	/* test if the entry actually is part of the specific maf track data */
+	if (chp != NULL)
+	    {
+	    *chp = '\0';
+	    safef(query, sizeof(query),
+	    "select id from %sMsa where id = 'ss.%s'", trackName, label);
+
+	    conn = hAllocConn();
+	    sr = sqlGetResult(conn, query);	    
+	    row = sqlNextRow(sr);
+
+	    /* offer it only if the entry is found in current maf data set */
+	    if (row != NULL)
+		{
+    		puts("<TD>");
+    		cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
+		printf ("%s", label);
+    		puts("</TD>");
+		fflush(stdout);
+		lineBreakJustPrinted = FALSE;
+		j++;
+		}
+	    sqlFreeResult(&sr);
+	    hFreeConn(&conn);
+	    }
+	}
+    else
+    	{
+    	puts("<TD>");
+    	safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
+    	cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
+    	label = hOrganism(wmSpecies->name);
+    	if (label == NULL)
+		label = wmSpecies->name;
+    	//*label = tolower(*label);
+    	printf ("%s<BR>", label);
+    	puts("</TD>");
+	lineBreakJustPrinted = FALSE;
+	j++;
+	}
     }
 puts("</TR></TABLE><BR>\n");
 
