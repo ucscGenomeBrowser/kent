@@ -22310,5 +22310,11 @@ see doc/builds.txt for specific details.
     # cd /cluster/home/mikep/kent/src/hg/makeDb/trackDb
     # make
 
+    # Add wig ascii track (+readme) to goldenPath so it can be downloaded
+    mkdir  /data/apache/htdocs/goldenPath/hg18/nuclearLamina
+    cp /cluster/data/hg18/bed/nuclearLamina/LaminB1_080513.wig.bz2 /data/apache/htdocs/goldenPath/hg18/nuclearLamina/hg18.laminB1.txt.bz2
+    cp /cluster/data/hg18/bed/nuclearLamina/goldenPath.README.txt  /data/apache/htdocs/goldenPath/hg18/nuclearLamina/README.txt
+
+    # Add both tracks to all.joiner under section: tablesIgnored $hg
 
 ############################################################################
