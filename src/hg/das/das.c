@@ -17,9 +17,9 @@
 #include "bed.h"
 #include "genePred.h"
 #include "trackTable.h"
-#include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.37 2008/04/29 06:19:28 markd Exp $";
+
+static char const rcsid[] = "$Id: das.c,v 1.38 2008/07/03 06:59:51 markd Exp $";
 
 static char *version = "1.00";
 static char *database = NULL;	
@@ -458,53 +458,44 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 return segmentList;
 }
 
-struct regExp
-/* A compiled regular expression. */
-    {
-    struct regExp *next;
-    char *exp;			/* Expression (uncompiled) */
-    regex_t compiled;		/* Compiled version of regExp. */
-    };
+struct filters
+/* hash tables of filter values. */
+{
+    struct hash *type;      // type filters, or NULL if no filters
+    struct hash *category;  // category filters, or NULL if no filters
+};
 
-static struct regExp *regExpFromCgiVar(char *cgiVar)
-/* Make up regExp list from cgiVars */
+static struct hash *filtersFromCgiVar(char *cgiVar)
+/* build hash of filters from a cgiVar name */
 {
 struct slName *nList = cgiStringList(cgiVar), *n;
-struct regExp *reList = NULL, *re;
+if (nList == NULL)
+    return NULL;  // no filters
+struct hash *filters = hashNew(10);
 for (n = nList; n != NULL; n = n->next)
-    {
-    AllocVar(re);
-    slAddHead(&reList, re);
-    re->exp = n->name;
-    if (regcomp(&re->compiled, n->name, REG_NOSUB))
-	earlyError(DAS_BAD_COMMAND_ARGS);
-    }
-slReverse(&reList);
-return reList;
+    hashStore(filters, n->name);
+return filters;
 }
 
-static boolean regExpFilter(struct regExp *reList, char *string)
-/* Return TRUE if string matches any of the regular expressions
- * on reList. */
+static struct filters *filtersNew()
+/* construct filters for type and category */
 {
-struct regExp *re;
-for (re = reList; re != NULL; re = re->next)
-    {
-    if (regexec(&re->compiled, string, 0, NULL, 0) == 0)
-        return TRUE;
-    }
-return FALSE;
+struct filters *filters;
+AllocVar(filters);
+filters->type = filtersFromCgiVar("type");
+filters->category = filtersFromCgiVar("category");
+return filters;
 }
 
-static boolean catTypeFilter(struct regExp *catExp, char *cat, struct regExp *typeExp, char *type)
+static boolean catTypeFilter(struct filters *filters, char *cat, char *type)
 /* Combined category/type filter. */
 {
-if (catExp != NULL && typeExp != NULL)
-    return regExpFilter(catExp,cat) || regExpFilter(typeExp, type);
-if (catExp != NULL)
-    return regExpFilter(catExp,cat);
-if (typeExp != NULL)
-    return regExpFilter(typeExp, type);
+if ((filters->category != NULL) && (filters->type != NULL))
+    return (hashLookup(filters->category,cat) != NULL) || (hashLookup(filters->type, type) != NULL);
+if (filters->category != NULL)
+    return (hashLookup(filters->category,cat) != NULL);
+if (filters->type != NULL)
+    return (hashLookup(filters->type, type) != NULL);
 return TRUE;
 }
 
@@ -515,10 +506,10 @@ return isNotEmpty(td->chromField) && isNotEmpty(td->startField)
     && isNotEmpty(td->endField);
 }
 
-static boolean trackFilter(struct regExp *catExp, struct regExp *typeExp, struct tableDef *td)
+static boolean trackFilter(struct filters *filters, struct tableDef *td)
 /* do track filtering. */
 {
-return tableDefFilter(td) && catTypeFilter(catExp, td->category, typeExp, td->name);
+return tableDefFilter(td) && catTypeFilter(filters, td->category, td->name);
 }
 
 static void doDsn(struct slName *dbList)
@@ -628,8 +619,7 @@ static void doTypes()
 {
 struct segment *segment, *segmentList = dasSegmentList(FALSE);
 struct tableDef *tdList = getTables(), *td;
-struct regExp *category = regExpFromCgiVar("category");
-struct regExp *type = regExpFromCgiVar("type");
+struct filters *filters = filtersNew();
 
 normalHeader();
 printf("<!DOCTYPE DASTYPES SYSTEM \"http://www.biodas.org/dtd/dastypes.dtd\">\n");
@@ -644,7 +634,7 @@ for (segment = segmentList;;)
 	    segment->seqName, segment->start+1, segment->end, version);
     for (td = tdList; td != NULL; td = td->next)
 	{
-	if (trackFilter(category, type, td))
+	if (trackFilter(filters, td))
 	    {
 	    int count = countFeatures(td, segment);
 	    printf("<TYPE id=\"%s\" category=\"%s\" ", td->name, td->category);
@@ -791,8 +781,7 @@ return ix;
 
 
 static void writeSegmentFeatures(struct segment *segment,
-                                 struct regExp *category,
-                                 struct regExp *type,
+                                 struct filters *filters,
                                  struct tableDef *tdList,
                                  struct hash *trackHash,
                                  struct sqlConnection *conn,
@@ -812,7 +801,7 @@ printf(
 struct tableDef *td;
 for (td = tdList; td != NULL; td = td->next)
     {
-    if (trackFilter(category, type, td))
+    if (trackFilter(filters, td))
         {
         int rowOffset;
         boolean hasBin;
@@ -874,8 +863,7 @@ static void doFeatures()
 struct segment *segmentList = dasSegmentList(TRUE), *segment;
 struct hash *trackHash = hashOfTracks();
 struct tableDef *tdList = getTables();
-struct regExp *category = regExpFromCgiVar("category");
-struct regExp *type = regExpFromCgiVar("type");
+struct filters *filters = filtersNew();
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn2 = hAllocConn();
 
@@ -887,7 +875,7 @@ printf(
 "<GFF version=\"1.0\" href=\"%s\">\n", currentUrl());
 
 for (segment = segmentList; segment != NULL; segment = segment->next)
-    writeSegmentFeatures(segment, category, type, tdList, trackHash, conn, conn2);
+    writeSegmentFeatures(segment, filters, tdList, trackHash, conn, conn2);
 
 /* Write out DAS footer. */
 printf("</GFF></DASGFF>\n");

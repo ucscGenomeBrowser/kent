@@ -21,7 +21,10 @@ test:	dsnTest \
 	entryPtsTest \
 	dnaTest \
 	typesTest \
-	featuresTest
+	featuresTest \
+	featuresTypeTest \
+	featuresTypeExactTest \
+	featuresType2Test
 
 dsnTest:
 	@${MAKE} doTest id=$@ request='${dasUrl}/dsn'
@@ -33,7 +36,17 @@ typesTest:
 	@${MAKE} doTest id=$@ request='${testUrl}/types?segment=${testSeg}'
 featuresTest:
 	@${MAKE} doTest id=$@ request='${testUrl}/features?segment=${testSeg}'
+featuresTypeTest:
+	@${MAKE} doTest id=$@ request='${testUrl}/features?segment=${testSeg}&type=transMapAlnMRna'
 
+# "phastConsElements28way" use to incorrectly match "phastConsElements28wayPlacMammal"
+# as well due use deprecated regular expressions
+featuresTypeExactTest:
+	@${MAKE} doTest id=$@ request='${testUrl}/features?segment=${testSeg}&type=phastConsElements28way'
+
+# two types
+featuresType2Test:
+	@${MAKE} doTest id=$@ request='${testUrl}/features?segment=${testSeg}&type=transMapAlnMRna&type=transMapAlnRefSeq'
 
 # recursive target, call with: id, request
 # saves response headers and body, then splits them, dropping date for easy diffing
