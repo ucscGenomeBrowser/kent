@@ -285,6 +285,7 @@ type bed 3
 	useScore	1
 	noInherit	on
 	type	bed 5 +
+    visibility dense
         priority        1
 	
 	track wgEncodeStanfordChipCountsSK_N_MCFOXP2
@@ -296,4 +297,5 @@ type bed 3
 	subGroups	view=Counts factor=FOXP2 cellType=SK-N-MC
 	type	wig
 	noInherit	on
+    visibility full
         priority        2
