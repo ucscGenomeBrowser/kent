@@ -16,7 +16,12 @@
 #include "obscure.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.102 2008/06/26 15:01:45 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.103 2008/07/03 20:31:57 tdreszer Exp $";
+
+#define MAX_SUBGROUP 9
+#define ADD_BUTTON_LABEL        "add" 
+#define CLEAR_BUTTON_LABEL      "clear" 
+#define JBUFSIZE 2048
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1580,7 +1585,91 @@ if (primarySubtrack)
 return type;
 }
 
-static boolean dimensionsExist(struct trackDb *parentTdb)
+typedef struct _dividers {
+    int count;
+    char**subgroups;
+} dividers_t;
+
+static dividers_t *dividersSettingGet(struct trackDb *parentTdb)
+/* Parses any dividers setting in parent of subtracks */
+{
+char *setting = trackDbSetting(parentTdb, "dividers");
+if(setting == NULL)
+    return NULL;
+    
+dividers_t *dividers = needMem(sizeof(dividers_t));
+dividers->subgroups = needMem(24*sizeof(char*));
+dividers->count = chopByWhite(cloneString(setting), dividers->subgroups,24);
+return dividers;
+}
+static void dividersFree(dividers_t **dividers)
+/* frees any previously obtained dividers setting */
+{
+if(dividers && *dividers)
+    {
+    freeMem((*dividers)->subgroups);
+    freez(dividers);
+    }
+}
+
+typedef struct _hierarchy {
+    int count;
+    char*subgroup;
+    char**membership;
+    int* indents;
+} hierarchy_t;
+
+static hierarchy_t *hierarchySettingGet(struct trackDb *parentTdb)
+/* Parses any list hierachy instructions setting in parent of subtracks */
+{
+int cnt,ix;
+char *setting = trackDbSetting(parentTdb, "hierarchy");
+if(setting == NULL)
+    return NULL;
+    
+char *words[64];
+cnt = chopByWhite(cloneString(setting), words,64);
+assert(cnt<=64);
+if(cnt <= 1)
+    {
+    freeMem(words[0]);
+    return NULL;
+    }
+    
+hierarchy_t *hierarchy = needMem(sizeof(hierarchy_t));
+hierarchy->membership  = needMem(cnt*sizeof(char*));
+hierarchy->indents     = needMem(cnt*sizeof(int));
+hierarchy->subgroup    = words[0];
+char *name,*value;
+for (ix = 1,hierarchy->count=0; ix < cnt; ix++)
+    {
+    if (parseAssignment(words[ix], &name, &value))
+        {
+        hierarchy->membership[hierarchy->count]  = name;
+        hierarchy->indents[hierarchy->count] = atoi(value);
+        hierarchy->count++;
+        }
+    }
+return hierarchy;  // NOTE cloneString:words[0]==*label[hCnt] and will be freed when *labels are freed
+}
+static void hierarchyFree(hierarchy_t **hierarchy)
+/* frees any previously obtained hierachy settings */
+{
+if(hierarchy && *hierarchy)
+    {
+    freeMem((*hierarchy)->subgroup);
+    freeMem((*hierarchy)->membership);
+    freez(hierarchy);
+    }
+}
+
+typedef struct _dimensions {
+    int count;
+    char**names;
+    char**subgroups;
+} dimensions_t;
+
+boolean dimensionsExist(struct trackDb *parentTdb)
 /* Does this parent track contain dimensions? */
 {
     return (trackDbSetting(parentTdb, "dimensions") != NULL);
@@ -1591,12 +1680,10 @@ static boolean dimensionsSubtrackOf(struct trackDb *childTdb)
     return (childTdb->parent != NULL && dimensionsExist(childTdb->parent));
 }
 
-static int dimensionSettingsGet(struct trackDb *parentTdb,char ***dimensions,char ***subgroups)
+static dimensions_t *dimensionSettingsGet(struct trackDb *parentTdb)
 /* Parses any dimemnions setting in parent of subtracks */
 {
-int cnt,ix,dIx=0;
-*dimensions = (void *)NULL;
-*subgroups  = (void *)NULL;
+int cnt,ix;
 char *setting = trackDbSetting(parentTdb, "dimensions");
 if(setting != NULL)
     {
@@ -1605,110 +1692,52 @@ if(setting != NULL)
     assert(cnt<=64);
     if(cnt > 0)
         {
-        *dimensions = needMem(cnt*sizeof(char*));
-        *subgroups  = needMem(cnt*sizeof(char*));
+        dimensions_t *dimensions = needMem(sizeof(dimensions_t));
+        dimensions->names     = needMem(cnt*sizeof(char*));
+        dimensions->subgroups = needMem(cnt*sizeof(char*));
         char *name,*value;
-        for (ix = 0,dIx=0; ix < cnt; ix++)
+        for (ix = 0,dimensions->count=0; ix < cnt; ix++)
             {
             if (parseAssignment(words[ix], &name, &value))
                 {
-                (*dimensions)[dIx] = name;
-                (*subgroups)[dIx]  = value;
-                dIx++;
+                dimensions->names[dimensions->count]     = name;
+                dimensions->subgroups[dimensions->count] = value;
+                dimensions->count++;
                 }
             }
+        return dimensions;  // NOTE cloneString:words[0]==dimensions->names[0] and will be freed when *dimemsions is freed
         }
     }
-return dIx;  // NOTE cloneString:words[0]==*dimensions[0] and will be freed when *dimemsions is freed
+return NULL;
 }
-static void dimensionsFree(char ***dimensions,char ***subgroups)
+static void dimensionsFree(dimensions_t **dimensions)
 /* frees any previously obtained dividers setting */
 {
 if(dimensions && *dimensions)
     {
-    freeMem((*dimensions)[0]); // NOTE cloneString:words[0]==*dimensions[0] and is freed now
+    freeMem((*dimensions)->names[0]); // NOTE cloneString:words[0]==(*dimensions)->names[0] and is freed now
+    freeMem((*dimensions)->names);
+    freeMem((*dimensions)->subgroups);
     freez(dimensions);
     }
-if(subgroups && *subgroups)
-    freez(subgroups);
-}
-
-static int dividersSettingGet(struct trackDb *parentTdb,char ***dividers)
-/* Parses any dividers setting in parent of subtracks */
-{
-int cnt=0;
-*dividers = (void *)NULL;
-char *setting = trackDbSetting(parentTdb, "dividers");
-if(setting != NULL)
-    {
-    *dividers = needMem(24*sizeof(char*));
-    cnt = chopByWhite(cloneString(setting), *dividers,24);
-    }
-return cnt;
-}
-static void dividersFree(char ***dividers)
-/* frees any previously obtained dividers setting */
-{
-if(dividers && *dividers)
-    freez(dividers);
-}
-
-static int hierarchySettingGet(struct trackDb *parentTdb,char ***labels,int **indents)
-/* Parses any list hierachy instructions setting in parent of subtracks */
-{
-int cnt,ix,hIx=0;
-*labels  = (void *)NULL;
-*indents = (void *)NULL;
-char *setting = trackDbSetting(parentTdb, "hierarchy");
-if(setting != NULL)
-    {
-    char *words[64];
-    cnt = chopByWhite(cloneString(setting), words,64);
-    assert(cnt<=64);
-    if(cnt > 1)
-        {
-        *labels  = needMem(cnt*sizeof(char*));
-        *indents = needMem(cnt*sizeof(int));
-        char *name,*value;
-        for (ix = 1,hIx=0; ix < cnt; ix++)
-            {
-            if (parseAssignment(words[ix], &name, &value))
-                {
-                (*labels)[hIx]  = name;
-                (*indents)[hIx] = atoi(value);
-                hIx++;
-                }
-            }
-        (*labels)[hIx] = words[0]; // so that it can be freed later 
-        }
-    }
-return hIx;  // NOTE cloneString:words[0]==*label[hCnt] and will be freed when *labels are freed
-}
-static void hierarchyFree(int hCnt,char***labels,int **indents)
-/* frees any previously obtained hierachy settings */
-{
-if(labels && *labels)
-    {
-    freeMem((*labels)[hCnt]); // NOTE cloneString:words[0]==*label[hCnt] and is freed now
-    freez(labels);
-    }
-if(indents && *indents)
-    freez(indents);
 }
 
 #define SUBGROUP_MAX 9
-static int subgroupMembersGet(struct trackDb *parentTdb, char *settingName,char **tag,char **title,char ***names,char ***values)
+
+typedef struct _members {
+    int count;
+    char * tag;
+    char * title;
+    char **names;
+    char **values;
+} members_t;
+
+static members_t *subgroupMembersGet(struct trackDb *parentTdb, char *settingName)
 /* Parse a subGroup setting line into tag,title, names(optional) and values(optional), returning the count of members or 0 */
 {
-int ix,cnt,members=0;
+int ix,cnt;
 char *target = NULL;
 
-*tag    = NULL;
-*title  = NULL;
-if(names != (void*)NULL)
-    *names  = NULL;
-if(values != (void*)NULL)
-    *values = NULL;
 char subGrp[16];
 if(sameStringN(settingName,"subGroup",8))
     target = cloneString(trackDbSetting(parentTdb, settingName));
@@ -1729,69 +1758,109 @@ if(target == NULL)
         }
     }
 if(target == NULL)
-    return 0;
+    return NULL;
 
 char *words[64];
 cnt = chopLine(target, words);
 assert(cnt <= 64);
-*tag = words[0];
-*title = strSwapChar(words[1],'_',' '); // Titles replace '_' with space
-if(names != (void*)NULL)
-    *names  = needMem(cnt*sizeof(char*));
-if(values != (void*)NULL)
-    *values = needMem(cnt*sizeof(char*));
-for (ix = 2,members=0; ix < cnt; ix++)
+members_t *members = needMem(sizeof(members_t));
+members->tag   = words[0];
+members->title = strSwapChar(words[1],'_',' '); // Titles replace '_' with space
+members->names = needMem(cnt*sizeof(char*));
+members->values = needMem(cnt*sizeof(char*));
+for (ix = 2,members->count=0; ix < cnt; ix++)
     {
     char *name,*value;
     if (parseAssignment(words[ix], &name, &value))
         {
-        if(names != (void*)NULL && *names != (void*)NULL)
-            (*names)[members] = name;
-        if(values != (void*)NULL && *values != (void*)NULL)
-            (*values)[members] = strSwapChar(value,'_',' ');
-        members++;
+        members->names[members->count]  = name;
+        members->values[members->count] = strSwapChar(value,'_',' ');
+        members->count++;
         }
     }
 return members;
 }
-
-static int subgroupMembersGetByDimension(struct trackDb *parentTdb, char dimension,char **tag,char **title,char ***names,char ***values)
+static members_t *subgroupMembersGetByDimension(struct trackDb *parentTdb, char dimension)
 /* Finds the dimension requested and return its associated 
  * subgroupMembership, returning the count of members or 0 */
 {
-int ix,sCnt=0;
-char **dimensions,**subgroups;
-*tag    = NULL;
-*title  = NULL;
-if(names != (void*)NULL)
-    *names  = NULL;
-if(names != (void*)NULL)
-    *values = NULL;
-int dCnt = dimensionSettingsGet(parentTdb,&dimensions,&subgroups);
-for(ix=0;ix<dCnt;ix++)
+int ix;
+dimensions_t *dimensions = dimensionSettingsGet(parentTdb);
+if(dimensions!=NULL)
     {
-    if(startsWith("dimension",dimensions[ix]) 
-    && strlen(dimensions[ix]) == 10
-    && lastChar(dimensions[ix]) == dimension)
+    for(ix=0;ix<dimensions->count;ix++)
         {
-        sCnt = subgroupMembersGet(parentTdb, subgroups[ix],tag,title,names,values);
-        break;
+        if(startsWith("dimension",dimensions->names[ix]) 
+        && strlen(dimensions->names[ix]) == 10
+        && lastChar(dimensions->names[ix]) == dimension)
+            {
+            members_t *members = subgroupMembersGet(parentTdb, dimensions->subgroups[ix]);
+            dimensionsFree(&dimensions);
+            return members;
+            }
         }
+    dimensionsFree(&dimensions);
     }
-if(dCnt>0)
-    dimensionsFree(&dimensions,&subgroups);
-return sCnt;
+return NULL;
 }
 
-static void subgroupMembersFree(char **tag,char **title,char ***names,char ***values)
+static void subgroupMembersFree(members_t **members)
 /* frees memory for subgroupMembers lists */
 {
-if(tag && *tag)
-    freez(tag); // checks for NULL and sets to NULL after free
-if(names && *names)
-    freez(names);
-if(values && *values)
-    freez(values);
+if(members && *members)
+    {
+    freeMem((*members)->tag);
+    freeMem((*members)->names);
+    freeMem((*members)->values);
+    freez(members);
+    }
+}
+
+typedef struct _membership {
+    int count;
+    char **subgroups;
+    char **membership;
+} membership_t;
+
+static membership_t *subgroupMembershipGet(struct trackDb *childTdb)
+/* gets all the subgroup membership for a child track */
+{
+int ix,cnt;
+char *name,*value;
+    
+char *subGroups = trackDbSetting(childTdb, "subGroups");
+if(subGroups == NULL)
+    return NULL;
+
+char *words[64];
+cnt = chopLine(cloneString(subGroups), words);
+assert(cnt <= 64);
+
+membership_t *membership = needMem(sizeof(membership_t));
+membership->subgroups    = needMem((cnt+1)*sizeof(char*));
+membership->membership   = needMem(cnt*sizeof(char*));
+for (ix = 0,membership->count=0; ix < cnt; ix++)
+    {
+    if (parseAssignment(words[ix], &name, &value))
+        {
+        membership->subgroups[membership->count]  = name;
+        membership->membership[membership->count] = strSwapChar(value,'_',' ');
+        membership->count++;
+        }
+    }
+   membership->subgroups[membership->count] = words[0]; // so that it can be freed later 
+return membership;
+}
+static void subgroupMembershipFree(membership_t **membership)
+/* frees subgroupMembership memory */
+{
+if(membership && *membership)
+    {
+    freeMem((*membership)->subgroups[(*membership)->count]); // NOTE cloneString:words[0]==membership->subgroups[membership->count] and is freed now
+    freeMem((*membership)->subgroups);
+    freeMem((*membership)->membership);
+    freez(membership);
+    }
 }
 
 boolean subgroupFind(struct trackDb *childTdb, char *name,char **value)
@@ -1818,55 +1887,6 @@ if(value && *value)
     freez(value);
 }
 
-static int subgroupMembershipGet(struct trackDb *childTdb, char ***names,char ***values)
-/* gets all the subgroup membership for a child track */
-{
-int ix,members,cnt;
-char *name,*value;
-    
-if(names != (void*)NULL)
-    *names = NULL;
-if(values != (void*)NULL)
-    *values = NULL;
-char *subGroups = trackDbSetting(childTdb, "subGroups");
-if(subGroups == NULL)
-    return 0;
-
-char *words[64];
-cnt = chopLine(cloneString(subGroups), words);
-assert(cnt <= 64);
-if(names != (void*)NULL)
-    {
-    *names  = needMem((cnt+1)*sizeof(char*));
-    }
-if(values != (void*)NULL)
-    *values = needMem(cnt*sizeof(char*));
-for (ix = 0,members=0; ix < cnt; ix++)
-    {
-    if (parseAssignment(words[ix], &name, &value))
-        {
-        if(names != (void*)NULL && *names != (void*)NULL)
-            (*names)[members] = name;
-        if(values != (void*)NULL && *values != (void*)NULL)
-            (*values)[members] = strSwapChar(value,'_',' ');
-        members++;
-        }
-    }
-   if(names != (void*)NULL && *names != (void*)NULL)
-        (*names)[members] = words[0]; // so that it can be freed later 
-return members;
-}
-static void subgroupMembershipFree(int members,char ***names,char ***values)
-/* frees subgroupMembership memory */
-{
-if(names && *names)
-    {
-    freeMem((*names)[members]); // NOTE cloneString:words[0]==*names[gCnt] and is freed now
-    freez(names);
-    }
-if(values && *values)
-    freez(values);
-}
 
 #define COLOR_BG_DEFAULT        "#FFFEE8"
 #define COLOR_BG_ALTDEFAULT      "#FFF9D2"
@@ -1874,8 +1894,169 @@ if(values && *values)
 #define COLOR_BG_ALTDEFAULT_IX  1
 #define COLOR_DARKGREEN         "#008800"
 #define COLOR_DARKBLUE          "#000088"
+#define DIVIDING_LINE "<TR valign=\"CENTER\" line-height=\"1\" BGCOLOR=\"%s\"><TH colspan=\"5\" align=\"CENTER\"><hr noshade color=\"%s\" width=\"100%%\"></TD></TR>\n"                
+#define DIVIDER_PRINT(color) printf(DIVIDING_LINE,COLOR_BG_DEFAULT,(color))
+
+static char *checkBoxIdMakeForTrack(struct trackDb *tdb,boolean isMatrix,char *tagX,char *tagY,membership_t *membership)
+/* Creates an 'id' string for subtrack checkbox in style that matrix understand: "cb_dimX_dimY_view_cb" */
+{
+int ix;
+#define CHECKBOX_ID_SZ 128
+char *id = needMem(CHECKBOX_ID_SZ);
+if(isMatrix)
+    {  // What is wanted: id="cb_ES_K4_SIG_cb"
+    safecpy(id,CHECKBOX_ID_SZ,"cb_");
+    if(tagX != NULL)
+        {
+        ix = stringArrayIx(tagX, membership->subgroups, membership->count);
+        if(ix >= 0)
+            safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
+        }
+    if(tagY != NULL)
+        {
+        ix = stringArrayIx(tagY, membership->subgroups, membership->count);
+        if(ix >= 0)
+            safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
+        }
+    ix = stringArrayIx("view", membership->subgroups, membership->count);
+    if(ix >= 0)
+        safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
+    safecat(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "cb");
+    }
+if(strlen(id) <= 5)
+    safef(id, CHECKBOX_ID_SZ, "cb_%s", tdb->shortLabel);
+return id;    
+}
+static void checkBoxIdFree(char**id)
+/* Frees 'id' string */
+{
+if(id && *id)
+    freez(id);
+}
+
+static boolean divisionIfNeeded(char **lastDivide,dividers_t *dividers,membership_t *membership)
+/* Keeps track of location within subtracks in order to provide requested division lines */
+{
+boolean division = FALSE;
+if(dividers)
+    {
+    if(lastDivide != NULL)
+        {
+        int ix;
+        for(ix=0;ix<dividers->count;ix++)
+            {
+            int sIx = stringArrayIx(dividers->subgroups[ix],membership->subgroups, membership->count);
+            if((lastDivide[ix] == (void*)NULL && sIx >= 0)
+            || (lastDivide[ix] != (void*)NULL && sIx <  0)
+            || (strcmp(lastDivide[ix],membership->membership[sIx]) != 0) )
+                {
+                division = TRUE;
+                if(lastDivide[ix] != (void*)NULL)
+                    freeMem(lastDivide[ix]);
+                lastDivide[ix] = ( sIx<0 ? (void*)NULL : cloneString(membership->membership[sIx]) );
+                }
+            }
+        }
+    if(division)
+        DIVIDER_PRINT(COLOR_DARKGREEN);
+    }
+return division;
+}
+
+static void indentIfNeeded(hierarchy_t*hierarchy,membership_t *membership)
+/* inserts any needed indents */
+{
+int indent = 0;
+if(hierarchy && hierarchy->count>0)
+    {
+    int ix;
+    for(ix=0;ix<membership->count;ix++)
+        {
+        int iIx = stringArrayIx(membership->membership[ix], hierarchy->membership, hierarchy->count);
+        if(iIx >= 0)
+            {
+            indent = hierarchy->indents[iIx];
+            break;  // Only one
+            }
+        }
+    }
+for(;indent>0;indent--) 
+    puts ("&nbsp;&nbsp;&nbsp;"); 
+}
+
+static int daysOfMonth(struct tm *tp) 
+{
+int days=0;
+switch(tp->tm_mon)
+    {
+    case 3:
+    case 5:
+    case 8:
+    case 10:    days = 30;   break;
+    case 1:     days = 28;   
+                if( (tp->tm_year % 4) == 0 
+                && ((tp->tm_year % 20) != 0 || (tp->tm_year % 100) == 0) )
+                    days = 29;
+                break;
+    default:    days = 31;   break;
+    }
+return days; 
+}
+
+static void dateAdd(struct tm *tp,int addYears,int addMonths,int addDays)
+/* Add years,months,days to a date */
+{
+tp->tm_mday  += addDays;
+tp->tm_mon   += addMonths;
+tp->tm_year  += addYears;
+int dom=28;
+while( (tp->tm_mon >11  || tp->tm_mon <0) 
+    || (tp->tm_mday>dom || tp->tm_mday<1) )
+    {
+    if(tp->tm_mon>11)   // First month: tm.tm_mon is 0-11 range   
+        {
+        tp->tm_year += 1;
+        tp->tm_mon  -= 12; 
+        }
+    else if(tp->tm_mon<0)
+        {
+        tp->tm_year -= 1;
+        tp->tm_mon  += 12; 
+        }
+    else
+        { 
+        dom = daysOfMonth(tp);
+        if(tp->tm_mday>dom)
+            {
+            tp->tm_mday -= dom;
+            tp->tm_mon  += 1;
+            dom = daysOfMonth(tp);
+            }
+        else if(tp->tm_mday < 1)
+            {
+            tp->tm_mon  -= 1;
+            dom = daysOfMonth(tp);
+            tp->tm_mday -= dom;
+            }
+        }
+    }
+}
+static char *dateAddToAndFormat(char *date,char *format,int addYears,int addMonths,int addDays)
+/* Add years,months,days to a formatted date and returns the new date as a string on the stack 
+*  format is a strptime/strftime format: %F = yyyy-mm-dd */
+{
+char *newDate = needMem(12);
+struct tm tp;
+if(strptime (date,format, &tp))
+    {
+    dateAdd(&tp,addYears,addMonths,addDays); // tp.tm_year only contains years since 1900
+    strftime(newDate,12,format,&tp);
+    }
+return newDate;  // newDate is never freed!
+}
+
 static void compositeUiSubtracks(struct cart *cart, struct trackDb *parentTdb,
-				 boolean selectedOnly, char *primarySubtrack)
+                 boolean selectedOnly, char *primarySubtrack)
 /* Show checkboxes for subtracks. */
 {
 struct trackDb *subtrack;
@@ -1886,22 +2067,50 @@ char *colors[2]   = { COLOR_BG_DEFAULT,
                       COLOR_BG_ALTDEFAULT };
 int colorIx = COLOR_BG_DEFAULT_IX; // Start with non-default allows alternation
 
-char **dividers;
 char **lastDivide = NULL;
-int ix;
-int dCnt = dividersSettingGet(parentTdb,&dividers);
-if(dCnt> 0) 
-    lastDivide = needMem(sizeof(char*)*dCnt);
-char **hLabels;
-int *hIndents;
-int hCnt = hierarchySettingGet(parentTdb,&hLabels,&hIndents);
-char *tagX,*titleX;
-char *tagY,*titleY;
-subgroupMembersGetByDimension(parentTdb,'X',&tagX,&titleX,NULL,NULL);
-subgroupMembersGetByDimension(parentTdb,'Y',&tagY,&titleY,NULL,NULL);
-boolean isMatrix = (tagX || tagY);
+dividers_t *dividers = dividersSettingGet(parentTdb);
+if(dividers) 
+    lastDivide = needMem(sizeof(char*)*dividers->count);
+hierarchy_t *hierarchy = hierarchySettingGet(parentTdb);
+members_t *dimensionX=subgroupMembersGetByDimension(parentTdb,'X');
+members_t *dimensionY=subgroupMembersGetByDimension(parentTdb,'Y');
+boolean isMatrix = (dimensionX || dimensionY);
 
 puts("\n<TABLE CELLSPACING=\"2\" CELLPADDING=\"1\" border=\"0\" >");
+
+#define SHOW_RESTRICTED_COLUMN
+#define TREAT_SUBMITTED_AS_RESTRICTED
+#ifdef SHOW_RESTRICTED_COLUMN
+if (!primarySubtrack && isMatrix)
+    {
+    char javascript[JBUFSIZE];
+    boolean displayAll = sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
+    boolean restrictions = FALSE;
+    for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        {
+        if(trackDbSetting(subtrack, "dateReleased") 
+#ifdef TREAT_SUBMITTED_AS_RESTRICTED
+        || trackDbSetting(subtrack, "dateSubmitted")
+#endif//def TREAT_SUBMITTED_AS_RESTRICTED
+          )
+            {
+            restrictions = TRUE;
+            break;
+            }
+        }
+    
+    puts("<TR><TD colspan=\"3\"><B>Show checkboxes for:</B>&nbsp;");
+    safef(javascript, sizeof(javascript), "onclick=\"showSubTrackCheckBoxes(true);\"");
+    cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
+    puts("Only selected subtracks &nbsp;");
+    safef(javascript, sizeof(javascript), "onclick=\"showSubTrackCheckBoxes(false);\"");
+    cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
+    puts("All subtracks&nbsp;&nbsp;&nbsp;&nbsp;</TD>");
+    puts("<TH align=\"center\" nowrap>&nbsp;Table&nbsp;</TH>");
+    if(restrictions)
+        puts("<TH align=\"center\" nowrap>&nbsp;Restricted Until&nbsp;</TH></TR>");
+    }
+#endif//def SHOW_RESTRICTED_COLUMN
 
 slSort(&(parentTdb->subtracks), trackDbCmp);
 
@@ -1919,7 +2128,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         }
     alreadySet = cartUsualBoolean(cart, option, alreadySet);
     isPrimary = (primarySubtrack &&
-		 sameString(subtrack->tableName, primarySubtrack));
+         sameString(subtrack->tableName, primarySubtrack));
 
     if (primarySubtrack)
         {
@@ -1945,95 +2154,64 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             if(selectedOnly && !alreadySet)
                 continue;
             }
-        char **subgroups,**membership;
-        int sCnt = subgroupMembershipGet(subtrack,&subgroups,&membership);
+        membership_t *membership = subgroupMembershipGet(subtrack);    
         if (hTableExists(subtrack->tableName))
             {
-            char id[64] = "";
-            if(isMatrix)
-                {  // What is wanted: id="cb_ES_K4_SIG_cb"
-                safecpy(id,sizeof(id),"cb_");
-                if(tagX != NULL)
-                    {
-                    ix = stringArrayIx(tagX, subgroups, sCnt);
-                    if(ix >= 0)
-                        safef(id+strlen(id), sizeof(id)-strlen(id), "%s_", membership[ix]);
-                    }
-                if(tagY != NULL)
-                    {
-                    ix = stringArrayIx(tagY, subgroups, sCnt);
-                    if(ix >= 0)
-                        safef(id+strlen(id), sizeof(id)-strlen(id), "%s_", membership[ix]);
-                    }
-                ix = stringArrayIx("view", subgroups, sCnt);
-                if(ix >= 0)
-                    safef(id+strlen(id), sizeof(id)-strlen(id), "%s_", membership[ix]);
-                safecat(id+strlen(id), sizeof(id)-strlen(id), "cb");
-                }
-            if(strlen(id) <= 5)
-                safef(id, sizeof(id), "cb_%s", subtrack->shortLabel);
-
-            boolean division = FALSE;
-            if(lastDivide != NULL)
-                {
-                for(ix=0;ix<dCnt;ix++)
-                    {
-                    int sIx = stringArrayIx(dividers[ix],subgroups, sCnt);
-                    if((lastDivide[ix] == (void*)NULL && sIx >= 0)
-                    || (lastDivide[ix] != (void*)NULL && sIx <  0)
-                    || (strcmp(lastDivide[ix],membership[sIx]) != 0) )
-                        {
-                        division = TRUE;
-                        if(lastDivide[ix] != (void*)NULL)
-                            freeMem(lastDivide[ix]);
-                        lastDivide[ix] = ( sIx<0 ? (void*)NULL : cloneString(membership[sIx]) );
-                        }
-                    }
-                }
-            int indent = 0;
-            if(hCnt>0)
-                {
-                for(ix=0;ix<sCnt;ix++)
-                    {
-                    int iIx = stringArrayIx(membership[ix], hLabels, hCnt);
-                    if(iIx >= 0)
-                        indent = hIndents[iIx];
-                    }
-                }
-            if(division)
-                {
+            if( divisionIfNeeded(lastDivide,dividers,membership) )
                 colorIx = (colorIx == COLOR_BG_DEFAULT_IX ? COLOR_BG_ALTDEFAULT_IX : COLOR_BG_DEFAULT_IX);
-#define DIVIDING_LINE "<TR valign=\"CENTER\" line-height=\"1\" BGCOLOR=\"%s\"><TH colspan=\"4\" align=\"CENTER\"><hr noshade color=\"%s\" width=\"100%%\"></TD></TR>\n"                
-#define DIVIDER_PRINT(color) printf(DIVIDING_LINE,COLOR_BG_DEFAULT,(color))
-                DIVIDER_PRINT(COLOR_DARKGREEN);
-                }
 
+            char *id = checkBoxIdMakeForTrack(subtrack,isMatrix,(dimensionX?dimensionX->tag:NULL),(dimensionY?dimensionY->tag:NULL),membership);    
             printf("<TR BGCOLOR=\"%s\" id=\"tr_%s\" valign=\"CENTER\">\n<TD>",colors[colorIx],id);
             if(isMatrix) // TODO Remove this check when show/hide subtracks by js no longer restricted to cfgByMatrix
                 cgiMakeCheckBoxIdAndJS(option,alreadySet,id,"onclick=\"hideOrShowSubtrack(this);\"");
             else
                 cgiMakeCheckBoxWithId(option,alreadySet,id);
+            checkBoxIdFree(&id);
             printf ("</TD><TD nowrap=\"true\">");
-            for(;indent>0;indent--) 
-                puts ("&nbsp;&nbsp;&nbsp;"); 
+            
+            indentIfNeeded(hierarchy,membership);
             printf ("%s&nbsp;</TD><TD nowrap=\"true\">&nbsp;%s", subtrack->shortLabel, subtrack->longLabel);
             puts("</TD><TD nowrap=\"true\">&nbsp;");
-#define SCHEMA_LINK "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=_BLANK> View table schema</A>\n"
+#ifdef SHOW_RESTRICTED_COLUMN
+    #define SCHEMA_LINK "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=_BLANK>view schema</A>\n"
+    #define RESTRICTED_USE_LINK "<A HREF=\"http://genome.cse.ucsc.edu/FAQ/FAQcite\" TARGET=_BLANK>%s</A>\n"
+#else//ifndef SHOW_RESTRICTED_COLUMN
+    #define SCHEMA_LINK "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=_BLANK>View table schema</A>\n"
+    #define RESTRICTED_USE_LINK "<A HREF=\"http://genome.cse.ucsc.edu/FAQ/FAQcite\" TARGET=_BLANK>Restricted Until: %s</A>\n"
+#endif//ndef SHOW_RESTRICTED_COLUMN
             printf(SCHEMA_LINK, hGetDb(), parentTdb->grp, parentTdb->tableName, subtrack->tableName);
+            char *displayDate = NULL;
+            if(trackDbSetting(subtrack, "dateReleased"))
+                {
+                displayDate = strSwapChar(cloneString(trackDbSetting(subtrack, "dateReleased")),' ',0);   // Truncate time
+                printf("</TD><TD align=\"CENTER\" BGCOLOR=\"%s\">&nbsp;&nbsp;",COLOR_BG_DEFAULT);
+                printf(RESTRICTED_USE_LINK,dateAddToAndFormat(displayDate,"%F",0,9,0));
+                }
+            else if(trackDbSetting(subtrack, "dateSubmitted"))
+                {
+                displayDate = strSwapChar(cloneString(trackDbSetting(subtrack, "dateSubmitted")),' ',0);   // Truncate time
+#ifdef TREAT_SUBMITTED_AS_RESTRICTED
+                printf("</TD><TD align=\"CENTER\" BGCOLOR=\"%s\">&nbsp;&nbsp;",COLOR_BG_DEFAULT);
+                printf(RESTRICTED_USE_LINK,dateAddToAndFormat(displayDate,"%F",0,9,0));
+#else//ifndef TREAT_SUBMITTED_AS_RESTRICTED
+                printf("</TD><TD align=\"LEFT\" BGCOLOR=\"%s\">&nbsp;&nbsp;Initially Submitted: %s\n",COLOR_BG_DEFAULT,displayDate);
+#endif//ndef TREAT_SUBMITTED_AS_RESTRICTED
+                }
             puts("&nbsp;</TD></TR>");
             }
-        subgroupMembershipFree(sCnt,&subgroups,&membership);
+        subgroupMembershipFree(&membership);
         } 
     }
-if(!primarySubtrack && isMatrix && parentTdb->subtracks != NULL && dCnt>0)
+if(!primarySubtrack && isMatrix && parentTdb->subtracks != NULL && dividers)
     DIVIDER_PRINT(COLOR_DARKGREEN);
 puts("</TABLE>");
 puts("<P>");
-subgroupMembersFree(&tagX,&titleX,NULL,NULL);
-subgroupMembersFree(&tagY,&titleY,NULL,NULL);
+subgroupMembersFree(&dimensionX);
+subgroupMembersFree(&dimensionY);
 dividersFree(&dividers);
-hierarchyFree(hCnt,&hLabels,&hIndents);  
+hierarchyFree(&hierarchy);  
 }
+
 
 static void compositeUiAllSubtracks(struct cart *cart, struct trackDb *tdb,
 				    char *primarySubtrack)
@@ -2048,11 +2226,6 @@ static void compositeUiSelectedSubtracks(struct cart *cart, struct trackDb *tdb,
 {
 compositeUiSubtracks(cart, tdb, TRUE, primarySubtrack);
 }
-
-#define MAX_SUBGROUP 9
-#define ADD_BUTTON_LABEL        "add" 
-#define CLEAR_BUTTON_LABEL      "clear" 
-#define JBUFSIZE 2048
 
 static void makeAddClearSubmitTweak(char javascript[JBUFSIZE], char *formName,
 				    char *buttonVar, char *label)
@@ -2247,83 +2420,72 @@ char javascript[JBUFSIZE];
 #endif//ndef VIEW_CFG_TITLELINK
 #define MAKE_CFG_LINK(name,title) printf(CFG_LINK, (name),(name),(name),(title))
 
-char *tagV,*titleV;
-char **nameV,**valueV;
-int membersOfV = subgroupMembersGet(parentTdb,"view",&tagV,&titleV,&nameV,&valueV);
-if(membersOfV <= 0)
+members_t *membersOfView = subgroupMembersGet(parentTdb,"view");
+if(membersOfView == NULL)
     return FALSE;
     
-// Should create an aray of subTrackDbs to build appropriate controls
-struct trackDb **subtrkCfg = needMem(sizeof(struct trackDb *)*membersOfV);
-int cntOfCfgs;
-for (subtrack = parentTdb->subtracks,cntOfCfgs=0; subtrack != NULL; subtrack = subtrack->next)
+    
+// Should create an array of matchedSubtracks to build appropriate controls
+boolean configurable[membersOfView->count];
+memset(configurable,FALSE,sizeof(configurable));
+boolean makeCfgRows = FALSE; 
+struct trackDb **matchedSubtracks = needMem(sizeof(struct trackDb *)*membersOfView->count);
+for (ix = 0; ix < membersOfView->count; ix++)
     {
-    char *stView;
-    if(subgroupFind(subtrack,"view",&stView))
+    for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
         {
-        // identify view, set ptr for appropriate view, when all are set, break;
-        for (ix = 0; ix < membersOfV; ix++)
+        char *stView;
+        if(!subgroupFind(subtrack,"view",&stView))
+            continue;
+        if(differentString(stView,membersOfView->names[ix]))
+            continue;
+        matchedSubtracks[ix] = subtrack;
+        if(sameString("wig",    matchedSubtracks[ix]->type) 
+        || sameString("bed 5 +",matchedSubtracks[ix]->type)) // TODO: Only these are configurable so far
             {
-            if(!differentString(stView,nameV[ix]) && subtrkCfg[ix] == NULL)
-                {
-                    subtrkCfg[ix] = subtrack;
-                    cntOfCfgs++;
-                    break;
-                }
+            configurable[ix] = TRUE;
+            makeCfgRows = TRUE;
             }
-        }
-        if(cntOfCfgs == membersOfV)
-            break; 
-    }
-// Now check for configurable types    
-for (ix = 0; ix < membersOfV; ix++)
-    {
-    if(subtrkCfg[ix] != NULL)
-        {
-        if(differentString(subtrkCfg[ix]->type,"wig") && differentString(subtrkCfg[ix]->type,"bed 5 +"))
-            {
-            subtrkCfg[ix] = NULL;
-            cntOfCfgs--;
-            }
+        break;
         }
     }
 
-printf("<EM><B>Select %s:</EM></B><BR>\n", titleV);
+printf("<EM><B>Select %s:</EM></B><BR>\n", membersOfView->title);
 puts("<TABLE><TR align=\"LEFT\">");
-for (ix = 0; ix < membersOfV; ix++)
+for (ix = 0; ix < membersOfView->count; ix++)
     {
 #ifdef VIEW_CFG_TITLELINK
     printf("<TD>");
-    if(subtrkCfg[ix] != NULL)
-        MAKE_CFG_LINK(nameV[ix],valueV[ix]);
+    if(configurable[ix])
+        MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix]);
     else
-        printf("<B>%s</B>\n",valueV[ix]);
+        printf("<B>%s</B>\n",membersOfView->values[ix]);
 #else//ifndef VIEW_CFG_TITLELINK
-    printf("<B>%s</B>\n",valueV[ix]);
+    printf("<B>%s</B>\n",membersOfView->values[ix]);
 #endif//ndef VIEW_CFG_TITLELINK
     puts("</TD>");
     
-    safef(objName, sizeof(objName), "%s_dd_%s", parentTdb->tableName,nameV[ix]);
+    safef(objName, sizeof(objName), "%s_dd_%s", parentTdb->tableName,membersOfView->names[ix]);
     enum trackVisibility tv = 
-        hTvFromString(cartUsualString(cart, objName,hStringFromTv(parentTdb->visibility)));
+        hTvFromString(cartUsualString(cart, objName,hStringFromTv(matchedSubtracks[ix]? matchedSubtracks[ix]->visibility: 0)));
 
-    safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'_%s');\"", nameV[ix]);
+    safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'_%s');\"", membersOfView->names[ix]);
 
     printf("<TD>");
     hTvDropDownWithJavascript(objName, tv, parentTdb->canPack,javascript);
     puts(" &nbsp; &nbsp; &nbsp;</TD>");
     }
 puts("</TR>");
-if(cntOfCfgs>0)
+if(makeCfgRows)
     {
 #ifndef VIEW_CFG_TITLELINK
     printf("<TR>");
     for (ix = 0; ix < membersOfV; ix++)
         {
-            if(subtrkCfg[ix] != NULL)
+            if(matchedSubtracks[ix] != NULL)
                 {
                 printf("<TD colspan=\"2\"><i>");
-                MAKE_CFG_LINK(nameV[ix],valueV[ix]);
+                MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix]);
                 puts("</i></TD>");
                 }
             else
@@ -2332,19 +2494,19 @@ if(cntOfCfgs>0)
     puts("</TR>");
 #endif//ndef VIEW_CFG_TITLELINK
     puts("</TABLE><TABLE>");
-    for (ix = 0; ix < membersOfV; ix++)
+    for (ix = 0; ix < membersOfView->count; ix++)
         {
-            if(subtrkCfg[ix] != NULL)
+            if(matchedSubtracks[ix] != NULL)
                 {
-                printf("<TR id=\"tr_cfg_%s\" style=\"display:none\"><TD>&nbsp;&nbsp;&nbsp;&nbsp;</TD><TD>",nameV[ix]);
+                printf("<TR id=\"tr_cfg_%s\" style=\"display:none\"><TD>&nbsp;&nbsp;&nbsp;&nbsp;</TD><TD>",membersOfView->names[ix]);
                 printf("<TABLE CELLSPACING=\"3\" CELLPADDING=\"0\" border=\"4\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>\n",
                        COLOR_DARKBLUE,COLOR_DARKBLUE);
                 printf("<TABLE border=\"0\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>",COLOR_BG_ALTDEFAULT,COLOR_BG_ALTDEFAULT);
-                printf("<CENTER><B>%s Configuration</B></CENTER>\n",valueV[ix]);
-                safef(objName, sizeof(objName), "%s_%s", parentTdb->tableName,nameV[ix]);
-                if(!differentString(subtrkCfg[ix]->type,"wig"))
-                    wigCfgUi(cart,subtrkCfg[ix],objName);
-                else if(!differentString(subtrkCfg[ix]->type,"bed 5 +"))
+                printf("<CENTER><B>%s Configuration</B></CENTER>\n",membersOfView->values[ix]);
+                safef(objName, sizeof(objName), "%s_%s", parentTdb->tableName,membersOfView->names[ix]);
+                if(!differentString(matchedSubtracks[ix]->type,"wig"))
+                    wigCfgUi(cart,matchedSubtracks[ix],objName);
+                else if(!differentString(matchedSubtracks[ix]->type,"bed 5 +"))
                     scoreCfgUi(cart,parentTdb, 1000,objName);
                 puts("</td></tr></table></td></tr></table>");
                 puts("</TD></TR>");
@@ -2352,7 +2514,8 @@ if(cntOfCfgs>0)
         }
     }
 puts("</TABLE><BR>");
-subgroupMembersFree(&tagV,&titleV,&nameV,&valueV);
+subgroupMembersFree(&membersOfView);
+freeMem(matchedSubtracks);
 return TRUE;
 }
 
@@ -2365,72 +2528,70 @@ char javascript[JBUFSIZE];
 char option[64];
 boolean alreadySet = TRUE;
 struct trackDb *subtrack;
-char *tagX,*titleX;
-char **nameX,**valueX;
-char *tagY,*titleY;
-char **nameY,**valueY;
-int membersOfX=0,membersOfY=0,ixX,ixY,subTrkCount;
     
 if(!dimensionsExist(parentTdb))
     return FALSE;
 
-membersOfX = subgroupMembersGetByDimension(parentTdb,'X',&tagX,&titleX,&nameX,&valueX);
-membersOfY = subgroupMembersGetByDimension(parentTdb,'Y',&tagY,&titleY,&nameY,&valueY);
-if(membersOfX == 0 && membersOfY == 0) // Must be an X or Y dimension
+hCompositeDisplayViewDropDowns(cart,parentTdb);  // If there is a view dimension, it is at top
+
+int ixX,ixY;
+members_t *dimensionX = subgroupMembersGetByDimension(parentTdb,'X');
+members_t *dimensionY = subgroupMembersGetByDimension(parentTdb,'Y');
+if(dimensionX == NULL && dimensionY == NULL) // Must be an X or Y dimension
     return FALSE;
-    
+
 // use array of char determine all the cells (in X,Y dimensions) that are actually populated
 char *value;
-char cells[membersOfX+1][membersOfY+1]; // If membersOfX or Y==0 then there needs to be atleast one element in dimension
+int sizeOfX = dimensionX?dimensionX->count:1; 
+int sizeOfY = dimensionY?dimensionY->count:1; 
+char cells[sizeOfX][sizeOfY]; // There needs to be atleast one element in dimension
 memset(cells, 0, sizeof(cells));
-for (subtrack = parentTdb->subtracks,subTrkCount=0; subtrack != NULL; subtrack = subtrack->next,subTrkCount++)
+for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    ixX= (membersOfX == 0?0:-1);
-    ixY= (membersOfY == 0?0:-1);
-    if(membersOfX > 0 && subgroupFind(subtrack,tagX,&value))
+    ixX = (dimensionX ? -1 : 0 );
+    ixY = (dimensionY ? -1 : 0 );
+    if(dimensionX && subgroupFind(subtrack,dimensionX->tag,&value))
         {
-        ixX = stringArrayIx(value,nameX,membersOfX);
+        ixX = stringArrayIx(value,dimensionX->names,dimensionX->count);
         subgroupFree(&value);
         }
-    if(membersOfY > 0 && subgroupFind(subtrack,tagY,&value))
+    if(dimensionY && subgroupFind(subtrack,dimensionY->tag,&value))
         {
-        ixY = stringArrayIx(value,nameY,membersOfY);
+        ixY = stringArrayIx(value,dimensionY->names,dimensionY->count);
         subgroupFree(&value);
         }
     if(ixX > -1 && ixY > -1)
         cells[ixX][ixY]++;
     }
-
-hCompositeDisplayViewDropDowns(cart,parentTdb);  // If there is a view dimension, it is at top
     
     // Regardless of whethere there is a dimension X or Y, there will be 'all' buttons
     puts("<B>Select subtracks:</B><BR>");
     printf("<TABLE CELLSPACING=\"3\" CELLPADDING=\"0\" border=\"4\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>\n",COLOR_DARKGREEN,COLOR_DARKGREEN);
     printf("<TABLE border=\"0\" bgcolor=\"%s\" borderColor=\"%s\">\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
-
+    
     printf("<TR ALIGN=CENTER BGCOLOR=\"%s\">\n",COLOR_BG_ALTDEFAULT);
 #define PM_BUTTON  "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG height=18 width=18 onclick=\"return (setCheckBoxesThatContain('name',%s,true,'%s','%s') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
 #define  PLUS_BUTTON(anc,str1,str2) printf(PM_BUTTON, (anc),(anc),"true",(str1),(str2),(anc),"add_sm.gif","+")
 #define MINUS_BUTTON(anc,str1,str2) printf(PM_BUTTON, (anc),(anc),"false",(str1),(str2),(anc),"remove_sm.gif","-")
-    if(membersOfX > 0 && membersOfY > 0)
+    if(dimensionX && dimensionY)
         {
         printf("<TH ALIGN=LEFT WIDTH=\"100\">All&nbsp;&nbsp;");
         PLUS_BUTTON(  "plus_all","mat_","_cb");
         MINUS_BUTTON("minus_all","mat_","_cb");
         puts("</TH>");
         }
-    else if(membersOfX > 0)
-        printf("<TH WIDTH=\"100\"><EM><B>%s</EM></B></TH>", titleX);
-    else //if(membersOfY > 0)
-        printf("<TH ALIGN=RIGHT WIDTH=\"100\"><EM><B>%s</EM></B></TH>", titleY);
+    else if(dimensionX) 
+        printf("<TH WIDTH=\"100\"><EM><B>%s</EM></B></TH>", dimensionX->title);
+    else //if(dimensionY)
+        printf("<TH ALIGN=RIGHT WIDTH=\"100\"><EM><B>%s</EM></B></TH>", dimensionY->title);
     
     // If there is an X dimension, then titles go across the top
-    if(membersOfX > 0)
+    if(dimensionX)
         {
-        if(membersOfY > 0)
-            printf("<TH WIDTH=\"100\"><EM><B>%s</EM></B></TH>", titleX);
-        for (ixX = 0; ixX < membersOfX; ixX++)
-            printf("<TH WIDTH=\"100\">%s</TH>",valueX[ixX]);
+        if(dimensionY)
+            printf("<TH WIDTH=\"100\"><EM><B>%s</EM></B></TH>", dimensionX->title);
+        for (ixX = 0; ixX < dimensionX->count; ixX++)
+            printf("<TH WIDTH=\"100\">%s</TH>",dimensionX->values[ixX]);
         }
     else
         {
@@ -2442,16 +2603,16 @@ hCompositeDisplayViewDropDowns(cart,parentTdb);  // If there is a view dimension
     puts("</TR>\n");
     
     // If there are both X and Y dimensions, then there is a row of buttons in X
-    if(membersOfX > 0 && membersOfY > 0)
+    if(dimensionX && dimensionY)
         {
-        printf("<TR ALIGN=CENTER BGCOLOR=\"#FFF9D2\"><TH ALIGN=RIGHT><EM><B>%s</EM></B></TH><TD>&nbsp;</TD>", titleY);
-        for (ixX = 0; ixX < membersOfX; ixX++)    // Special row of +- +- +-
+        printf("<TR ALIGN=CENTER BGCOLOR=\"#FFF9D2\"><TH ALIGN=RIGHT><EM><B>%s</EM></B></TH><TD>&nbsp;</TD>", dimensionY->title);
+        for (ixX = 0; ixX < dimensionX->count; ixX++)    // Special row of +- +- +-
             {
             puts("<TD>");
-            safef(option, sizeof(option), "mat_%s_", nameX[ixX]);
-            safef(objName, sizeof(objName), "plus_%s_all", nameX[ixX]);
+            safef(option, sizeof(option), "mat_%s_", dimensionX->names[ixX]);
+            safef(objName, sizeof(objName), "plus_%s_all", dimensionX->names[ixX]);
             PLUS_BUTTON(  objName,option,"_cb");
-            safef(objName, sizeof(objName), "minus_%s_all", nameX[ixX]);
+            safef(objName, sizeof(objName), "minus_%s_all", dimensionX->names[ixX]);
             MINUS_BUTTON(objName,option,"_cb");
             puts("</TD>");    
             }
@@ -2459,48 +2620,50 @@ hCompositeDisplayViewDropDowns(cart,parentTdb);  // If there is a view dimension
         }
     
     // Now the Y by X matrix
-    for (ixY = 0; ixY <= membersOfY; ixY++)
+    for (ixY = 0; ixY < sizeOfY; ixY++)
         {
+        assert(!dimensionY || ixY < dimensionY->count);    
         printf("<TR ALIGN=CENTER BGCOLOR=\"#FFF9D2\">");
-        if(membersOfY == 0) // 'All' buttons go here if no Y dimension
+        if(dimensionY == NULL) // 'All' buttons go here if no Y dimension
             {
             printf("<TH ALIGN=CENTER WIDTH=\"100\">");
             PLUS_BUTTON(  "plus_all","mat_","_cb");
             MINUS_BUTTON("minus_all","mat_","_cb");
             puts("</TH>");
             }
-        else if(ixY < membersOfY)
-            printf("<TH ALIGN=RIGHT>%s</TH>\n",valueY[ixY]);
+        else if(ixY < dimensionY->count)
+            printf("<TH ALIGN=RIGHT>%s</TH>\n",dimensionY->values[ixY]);
         else
             break;
         
-        if(membersOfX > 0 && membersOfY > 0) // Both X and Y, then column of buttons
+        if(dimensionX && dimensionY) // Both X and Y, then column of buttons
             {
             puts("<TD>");    
-            safef(option, sizeof(option), "_%s_cb", nameY[ixY]);    
-            safef(objName, sizeof(objName), "plus_all_%s", nameY[ixY]);
+            safef(option, sizeof(option), "_%s_cb", dimensionY->names[ixY]);    
+            safef(objName, sizeof(objName), "plus_all_%s", dimensionY->names[ixY]);
             PLUS_BUTTON(  objName,"mat_",option);
-            safef(objName, sizeof(objName), "minus_all_%s", nameY[ixY]);
+            safef(objName, sizeof(objName), "minus_all_%s", dimensionY->names[ixY]);
             MINUS_BUTTON(objName,"mat_",option);
             puts("</TD>");
             }
-        for (ixX = 0; ixX <= membersOfX; ixX++)
+        for (ixX = 0; ixX < sizeOfX; ixX++)
             {
-            if(membersOfX > 0 && ixX == membersOfX)
+            assert(!dimensionX || ixX < dimensionX->count);    
+            if(dimensionX && ixX == dimensionX->count)
                 break; 
             if(cells[ixX][ixY] > 0)
                 {
-                if(membersOfX > 0 && membersOfY > 0)
+                if(dimensionX && dimensionY)
                     {
-                    safef(objName, sizeof(objName), "mat_%s_%s_cb", nameX[ixX],nameY[ixY]);
+                    safef(objName, sizeof(objName), "mat_%s_%s_cb", dimensionX->names[ixX],dimensionY->names[ixY]);
                     safef(javascript, sizeof(javascript), "onclick=\"matSetCheckBoxesThatContain('id',this.checked,true,'cb_%s_%s_');\"", 
-                          nameX[ixX],nameY[ixY]);
+                          dimensionX->names[ixX],dimensionY->names[ixY]);
                     }
                 else
                     {
-                    safef(objName, sizeof(objName), "mat_%s_cb", (membersOfX > 0 ? nameX[ixX] : nameY[ixY]));
+                    safef(objName, sizeof(objName), "mat_%s_cb", (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
                     safef(javascript, sizeof(javascript), "onclick=\"matSetCheckBoxesThatContain('id',this.checked,true,'cb_%s_');\"", 
-                          (membersOfX > 0 ? nameX[ixX] : nameY[ixY]));
+                          (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
                     }
                 alreadySet = cartUsualBoolean(cart, objName, alreadySet);
                 puts("<TD>");
@@ -2514,8 +2677,8 @@ hCompositeDisplayViewDropDowns(cart,parentTdb);  // If there is a view dimension
         }
     puts("</TABLE>");
     puts("</TD></TR></TABLE>");
-    subgroupMembersFree(&tagX,&titleX,&nameX,&valueX);
-    subgroupMembersFree(&tagY,&titleY,&nameY,&valueY);
+    subgroupMembersFree(&dimensionX);
+    subgroupMembersFree(&dimensionY);
     puts("<BR>\n");
     return TRUE;
 }
@@ -2699,7 +2862,11 @@ if (!hasSubgroups || !isMatrix || primarySubtrack)
 else 
     hCompositeUiByMatrix(cart,tdb,formName);
 
+#ifdef SHOW_RESTRICTED_COLUMN
+if(primarySubtrack == NULL && isMatrix == FALSE)
+#else//ifndef SHOW_RESTRICTED_COLUMN
 if(primarySubtrack == NULL)
+#endif//ndef SHOW_RESTRICTED_COLUMN
     {
     puts("<TABLE><TR><TD><B>Show checkboxes for:</B></TD><TD>");
     if (formName)
