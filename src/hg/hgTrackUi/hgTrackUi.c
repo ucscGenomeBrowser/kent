@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.437 2008/07/03 17:51:43 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.438 2008/07/03 20:34:18 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2973,11 +2973,13 @@ else
     else if (tdb->subtracks != NULL && !tdb->isSuper)
 	{
 	/* handle multi-word subTrack settings: */
-	char *words[2];
-	if ((chopLine(cloneString(tdb->subtracks->tableName), words) > 0) &&
-	    hTableOrSplitExists(words[0]))
-	    printf(SCHEMA_LINK,
-               database, tdb->grp, tdb->tableName, tdb->subtracks->tableName);
+    if(!dimensionsExist(tdb))
+        {
+        char *words[2];
+        if ((chopLine(cloneString(tdb->subtracks->tableName), words) > 0) &&
+            hTableOrSplitExists(words[0]))
+            printf(SCHEMA_LINK,database, tdb->grp, tdb->tableName, tdb->subtracks->tableName);
+            }
 	}
 
     /* Print data version trackDB setting, if any */
