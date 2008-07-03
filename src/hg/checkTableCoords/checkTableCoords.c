@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.16 2007/04/30 22:24:04 angie Exp $";
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.17 2008/07/03 22:57:07 angie Exp $";
 
 /* Default parameter values */
 char *db = NULL;                        /* first arg */
@@ -84,6 +84,19 @@ errAbort(
 );
 }
 
+
+int testChromSize(char *chrom)
+/* hChromSize recently got more picky (gates with hDbIsActive), so roll our
+ * own so that we can use the test database for testing. */
+{
+struct sqlConnection *conn = hAllocConn();
+char query[1024];
+safef(query, sizeof(query), "select size from chromInfo where chrom = '%s'",
+      chrom);
+int size = sqlQuickNum(conn, query);
+hFreeConn(&conn);
+return size;
+}
 
 struct slName *getTableNames(struct sqlConnection *conn)
 /* Return a list of names of tables that have not been excluded by 
@@ -465,7 +478,7 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
 		    gotError |= checkSplitTableOnlyChrom(bedList, table, hti,
 							 tableChrom);
 		gotError |= checkStartEnd(bedList, table, hti,
-					  hChromSize(chrom));
+					  testChromSize(chrom));
 		if (hti->hasCDS)
 		    gotError |= checkCDSStartEnd(bedList, table, hti);
 		if (hti->hasBlocks && !ignoreBlocks)
