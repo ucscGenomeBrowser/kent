@@ -222,10 +222,10 @@ type bed 3
 useScore 1
 origAssembly hg18
 subGroup1 view Views PK=Peaks SIG=Signal_Densities
-subGroup2 cell_type Cell_Type G878=GM12878 
+subGroup2 cellType Cell_Type G878=GM12878 
 #subGroup3 factor Factor K4=H3K4me3 K9=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3 PAN=pan-H3 WCE=WCE RPOL=RPol-II
-dimensions dimensionX=cell_type 
-#dividers cell_type 
+dimensions dimensionX=cellType 
+#dividers cellType 
 #hierarchy view HMM=0 WIN=0 SIG=1 ALN=2
 dataVersion ENCODE Submitted June 2008
 wgEncode 1
@@ -236,18 +236,20 @@ wgEncode 1
     subTrack wgEncodeDukeDnase
     shortLabel DNase GM12878 Pk
     longLabel ENCODE - Duke DNaseI Hypersensitivity Peaks (cell line GM12878)
-    subGroups cell_type=G878 view=PK
+    subGroups cellType=G878 view=PK
     type bed 5 +
     useScore 1
     noInherit off
     priority 1
     color 25,25,150
+    visibility dense
+    dateSubmitted   2008-06-07 10:27:26
 
     track wgEncodeDukeDnaseSignalGM12878
     subTrack wgEncodeDukeDnase
     shortLabel DNase GM12878 Sig
     longLabel ENCODE - Duke DNaseI Hypersensitivity Signal (cell line GM12878)
-    subGroups cell_type=G878 view=SIG
+    subGroups cellType=G878 view=SIG
     type wig
     yLineOnOff On
     yLineMark 1.0
@@ -255,6 +257,8 @@ wgEncode 1
     noInherit on
     priority 2
     color 25,150,25
+    visibility full
+    dateSubmitted   2008-06-07 10:27:26
 
 track wgEncodeStanfordChip
 compositeTrack on
