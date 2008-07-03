@@ -6,8 +6,8 @@
 SHELL=/bin/sh
 MAILTO=genbank@cse.ucsc.edu
 
-# build genbank 9pm, to try to get hgwbeta started by midnight
-5 0 * * *	/cluster/data/genbank/etc/build-genbank
+# build genbank 8pm, to try to get hgwbeta started by midnight
+0 20 * * *	/cluster/data/genbank/etc/build-genbank
 
 # try MGC status info daily at 3am.  Updated Wednesday 2 am EST, we check
 # every day in case of failures.
