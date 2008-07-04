@@ -1,10 +1,10 @@
 CREATE TABLE gsidClinicRec (
-  specimenId varchar(255) NOT NULL default '',
-  subjId varchar(255) NOT NULL default '',
-  labCode varchar(255) NOT NULL default '',
-  daysCollection int(11) NOT NULL default '0',
-  hivQuan int(10) NOT NULL default '0',
-  cd4Count int(10) NOT NULL default '0',
+  specimenId varchar(255) NULL,
+  subjId varchar(255) NULL,
+  labCode varchar(255) NULL,
+  daysCollection int(11) NULL,
+  hivQuan int(10) NULL,
+  cd4Count int(10) NULL,
   KEY specimenId (specimenId),
   KEY subjId (subjId)
 ) TYPE=MyISAM;
