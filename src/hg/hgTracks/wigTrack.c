@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.80 2008/07/02 20:44:50 tdreszer Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.81 2008/07/04 08:08:08 hiram Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -223,6 +223,7 @@ int wigTotalHeight(struct track *tg, enum trackVisibility vis)
    as defined in the cart */
 {
 struct wigCartOptions *wigCart;
+int saveHeight = tg->height;
 
 wigCart = (struct wigCartOptions *) tg->extraUiData;
 
@@ -252,7 +253,13 @@ else if (vis == tvFull)
 tg->heightPer = tg->lineHeight;
 tg->height = tg->lineHeight;
 
-return tg->height + 1;
+if (saveHeight == tg->height + 1)
+    {
+    tg->height = saveHeight;
+    return tg->height;
+    }
+else
+    return tg->height + 1;
 }
 
 static void wigSetItemData(struct track *tg, struct wigItem *wi,
