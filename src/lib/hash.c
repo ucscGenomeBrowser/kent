@@ -1,4 +1,5 @@
-/* Hash.c - implements hashing. 
+/* Hash - a simple hash table that provides name/value pairs, supports
+ * automatic rehashing, and multiple key values (LIFO).
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
@@ -9,7 +10,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.42 2008/06/27 23:49:00 galt Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.43 2008/07/05 20:20:49 markd Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -72,7 +73,9 @@ return shiftAcc + addAcc;
 
 struct hashEl *hashLookup(struct hash *hash, char *name)
 /* Looks for name in hash table. Returns associated element,
- * if found, or NULL if not. */
+ * if found, or NULL if not.  If there are multiple entries
+ * for name, the last one added is returned (LIFO behavior).
+ */
 {
 struct hashEl *el = hash->table[hashString(name)&hash->mask];
 while (el != NULL)
@@ -97,7 +100,9 @@ return hashLookup(hash, s);
 
 struct hashEl *hashLookupNext(struct hashEl *hashEl)
 /* Find the next occurance of name that may occur in the table multiple times,
- * or NULL if not found. */
+ * or NULL if not found.  Use hashLookup to find the first occurrence.  Elements
+ * are returned in LIFO order.
+ */
 {
 struct hashEl *el = hashEl->next;
 while (el != NULL)
@@ -139,7 +144,11 @@ return el;
 }
 
 struct hashEl *hashAdd(struct hash *hash, char *name, void *val)
-/* Add new element to hash table. */
+/* Add new element to hash table.  If an item with name, already exists,
+ * a new item is added in a LIFO manner.  The last item of a given name
+ * is the one returned by the hashLookup functions.  hashLookupNext must
+ * be used to find the previous entries.
+ */
 {
 return hashAddN(hash, name, strlen(name), val);
 }
@@ -168,7 +177,10 @@ freeMem(hel);
 
 void *hashRemove(struct hash *hash, char *name)
 /* Remove item of the given name from hash table. 
- * Returns value of removed item, or NULL if not in the table. */
+ * Returns value of removed item, or NULL if not in the table.
+ * If their are multiple entries for name, the last one added
+ * is removed (LIFO behavior).
+ */
 {
 struct hashEl *hel;
 void *ret;
