@@ -1,5 +1,53 @@
-/* Hash - a simple hash table that provides name/value pairs, supports
- * automatic rehashing, and multiple key values (LIFO).
+/* Hash - a simple hash table that provides name/value pairs. 
+ * The most common usage is to create a hash as so:
+ *    struct hash *hash = hashNew(0);
+ * to add elements to a hash as so:
+ *    hashAdd(hash, name, value);
+ * and to retrieve a named element as so:
+ *    value = hashFindVal(hash, name);
+ * The hashFindVal function will return NULL if the name does not
+ * appear in the hash.  Alternatively you can use:
+ *    value = hashMustFindVal(hash, name);
+ * which will abort if name is not in the hash.
+ *
+ * The hash does support multiple values for the same key.  To use
+ * this functionality, try the loop:
+ *     struct hashEl *hel;
+ *     for (hel = hashLookup(hash, name); hel != NULL; hel = hashLookupNext(hel))
+ *         {
+ *         value = hel->val;
+ *         // Further processing here.
+ * The order of elements retrieved this way will be most-recently-added first.
+ * The hashLookup function is _slightly_ faster than the hashFindVal function,
+ * so sometimes it is used just to test for the presence of an element in the
+ * hash when not interested in the value associated with it.
+ *
+ * One can iterate through all the elements in a hash in three ways.  One can
+ * get a list of all things in the hash as so:
+ *     struct hashEl *hel, *helList = hashElListHash(hash);
+ *     for (hel = helList; hel != NULL; hel = hel->next)
+ *        {
+ *        value = hel->val;
+ *        // Further processing of value here. 
+ *        }
+ *     hashElFreeList(&helList);
+ * One can avoid the overhead of creating a list by using an iterator object
+ * and function:
+ *    struct hashEl *hel;
+ *    struct hashCookie cookie = hashFirst(hash);
+ *    while ((hel = hashNext(&cookie)) != NULL)
+ *        {
+ *        value = hel->val;
+ * Finally one can use hashTraverseEls of hashTraverseVals with a callback 
+ * function that takes a hashEl, or the void *value as parameter respectively.
+ *
+ * When done with a hash do:
+ *     hashFree(&hash);
+ *
+ * There are various other functions involving hashes in this module as well
+ * that provide various short cuts.  For information on these and additional
+ * details of the functions described, please read the full hash.h file, and
+ * if so inclined the hash.c file as well.
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */

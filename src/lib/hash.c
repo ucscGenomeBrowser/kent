@@ -1,5 +1,4 @@
-/* Hash - a simple hash table that provides name/value pairs, supports
- * automatic rehashing, and multiple key values (LIFO).
+/* Hash.c - implements hashing.  See hash.h for usage comments.
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
@@ -10,7 +9,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.43 2008/07/05 20:20:49 markd Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.44 2008/07/06 09:07:19 kent Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
