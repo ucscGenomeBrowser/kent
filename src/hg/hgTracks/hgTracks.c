@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1494 2008/07/07 16:15:49 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1495 2008/07/07 18:44:54 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2953,6 +2953,7 @@ for (grp = grps; grp != NULL; grp = grp->next)
     group->label = cloneString(grp->label);
     group->defaultPriority = grp->priority;
     group->priority = priority;
+    group->defaultIsClosed = grp->defaultIsClosed;
     slAddHead(&list, group);
     hashAdd(hash, grp->name, group);
     }
@@ -3217,10 +3218,10 @@ safef(varName, sizeof(varName),
 return (cloneString(varName));
 }
 
-boolean isCollapsedGroup(char *name)
+boolean isCollapsedGroup(struct group *grp)
 /* Determine if group is collapsed */
 {
-return cartUsualInt(cart, collapseGroupVar(name), 0);
+return cartUsualInt(cart, collapseGroupVar(grp->name), 0);
 }
 
 void collapseGroupGoodies(boolean isOpen, boolean wantSmallImage,
@@ -3399,7 +3400,7 @@ for (group = groupList; group != NULL; group = group->next)
         int looper;
         for(looper=1;looper<=2;looper++) 
             {
-            boolean isOpen = !isCollapsedGroup(group->name);
+            boolean isOpen = !isCollapsedGroup(group);
             char buf[1000];
             safef(buf, sizeof(buf), "<input type='hidden' name=\"%s\" id=\"%s_%d\" value=\"%s\">\n", collapseGroupVar(group->name), collapseGroupVar(group->name), looper, isOpen ? "0" : "1");
             dyStringAppend(looper == 1 ? trackGroupsHidden1 : trackGroupsHidden2, buf);
@@ -3614,7 +3615,7 @@ if (showTrackControls)
         char *otherState;
         char *indicator;
         char *indicatorImg;
-        boolean isOpen = !isCollapsedGroup(group->name);
+        boolean isOpen = !isCollapsedGroup(group);
         collapseGroupGoodies(isOpen, TRUE, &indicatorImg, 
                                 &indicator, &otherState);
 	hPrintf("<TR>");
@@ -3679,6 +3680,8 @@ if (showTrackControls)
 	    if (track->hasUi)
 		{
 		char *encodedMapName = cgiEncode(track->mapName);
+                if(trackDbSetting(track->tdb, "wgEncode") != NULL)
+                    hPrintf("<img src='../images/encode.ico'>\n");
 		hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
 		    cartSessionVarName(), cartSessionId(cart),
 		    chromName, encodedMapName);

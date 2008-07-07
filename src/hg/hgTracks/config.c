@@ -90,7 +90,7 @@ for (group = groupList; group != NULL; group = group->next)
     char *otherState;
     char *indicator;
     char *indicatorImg;
-    boolean isOpen = !isCollapsedGroup(group->name);
+    boolean isOpen = !isCollapsedGroup(group);
     collapseGroupGoodies(isOpen, FALSE, &indicatorImg, 
                             &indicator, &otherState);
     hTableStart();

@@ -234,6 +234,7 @@ struct group
     float priority;        /* Display order, 0 is on top. */
     float defaultPriority; /* original priority before reordering */
     struct trackRef *trackList;  /* List of tracks. */
+    boolean defaultIsClosed;
     };
 
 struct simpleFeature
@@ -988,7 +989,7 @@ void bed8To12(struct bed *bed);
 char *collapseGroupVar(char *name);
 /* Construct cart variable name for collapsing group */
 
-boolean isCollapsedGroup(char *name);
+boolean isCollapsedGroup(struct group *grp);
 /* Determine if group is collapsed */
 
 void collapseGroupGoodies(boolean isOpen, boolean wantSmallImage,
