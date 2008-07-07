@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1442 2008/07/03 22:54:25 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1443 2008/07/07 19:31:11 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18235,7 +18235,7 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-char *bayesianFiguresUrl = "http://compgen.bscb.cornell.edu/projects/mammal-psg";
+char *bayesianFiguresUrl = "../images/mammalPsg";
 
 genericHeader(tdb, itemName);
 sprintf(query, "select * from %s where name = '%s'", tdb->tableName, itemName);
