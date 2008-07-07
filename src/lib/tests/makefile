@@ -38,7 +38,7 @@ pipelineTests: 	pipelineWrite pipelineWriteMult pipelineWriteFd \
 
 pipelineWrite: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
-	zcat output/$@.out.gz > output/$@.out
+	gunzip -c output/$@.out.gz > output/$@.out
 	diff -b input/simple1.txt output/$@.out
 
 # add come junk to make sure output gets truncated
@@ -49,7 +49,7 @@ pipelineWriteMult: ${BIN_DIR}/pipelineTester mkdirs
 
 pipelineWriteFd: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -fdApi -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
-	zcat output/$@.out.gz > output/$@.out
+	gunzip -c output/$@.out.gz > output/$@.out
 	diff -b input/simple1.txt output/$@.out
 
 pipelineRead: ${BIN_DIR}/pipelineTester mkdirs
