@@ -3,13 +3,14 @@
 # Lab info	
 lab	Crawford
 project	DukeDNaseSeq
-variables	Cell_Line_REF
-active	yes
+variables	cell
+assembly	hg18
 
-# Tracks	
-track	DukeDnaseSignal
-type	wig 
+# Tracks
 
-track	DukeDnasePeaks
+view	Signal
+type	wig
+required	yes
+
+view	Sites
 type	bed 5 +
-tableType	bed5FloatScore
