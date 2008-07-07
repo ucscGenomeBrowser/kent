@@ -183,3 +183,14 @@ BASE=/cluster/data/dp4/bed/blastz.droWil1.2006-10-02
     ln -s blastz.droWil1.2006-10-02 /cluster/data/dp4/bed/blastz.droWil1
 
 
+#########################################################################
+# SWAP DM3 CHAIN/NET (DONE 6/30/08 angie)
+    ssh kkstore05
+    mkdir /cluster/data/dp4/bed/blastz.dm3.swap
+    cd /cluster/data/dp4/bed/blastz.dm3.swap
+    doBlastzChainNet.pl -swap \
+      /cluster/data/dm3/bed/blastz.dp4.2006-12-04/DEF >& do.log &
+    tail -f do.log
+    ln -s blastz.dm3.swap /cluster/data/dp4/bed/blastz.dm3
+
+
