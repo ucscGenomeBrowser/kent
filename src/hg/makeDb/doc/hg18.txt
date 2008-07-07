@@ -22318,3 +22318,10 @@ see doc/builds.txt for specific details.
     # Add both tracks to all.joiner under section: tablesIgnored $hg
 
 ############################################################################
+##### Positively Selected Genes (Pos Sel Genes)  (braney - DONE - 2008-07-07)
+
+    # get SQL data (mammalPsq.sql) from Adam Siepel
+    #    and Tomas Vinar (acs4@cornell.edu)
+    hgsql hg18 < mammalPsg.sql
+
+##########
