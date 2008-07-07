@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.82 2008/07/07 18:04:10 braney Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.83 2008/07/07 23:10:23 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1160,7 +1160,13 @@ dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-chromInfoDb=%s", hGetDb());
 cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-cmd2[5] = "-pathPrefix=.";
+/* a system could be using /trash/ absolute reference, and nothing to do with
+ *	local references, so don't confuse it with ./ a double // will work
+ */
+if (startsWith("/", trashDir()))
+    cmd2[5] = "-pathPrefix=/";
+else
+    cmd2[5] = "-pathPrefix=.";
 cmd2[6] = db;
 cmd2[7] = track->dbTableName;
 /* the "/dev/null" file isn't actually used for anything, but it is used
