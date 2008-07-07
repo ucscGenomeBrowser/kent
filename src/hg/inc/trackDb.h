@@ -41,20 +41,43 @@ struct trackDb
     unsigned char canPack;	/* 1 if can pack track display, 0 otherwise */
     char *settings;	/* Name/value pairs for track-specific stuff */
     struct hash *settingsHash;  /* Hash for settings. Not saved in database.
-                                 * Don't use directly, rely on trackDbSetting
-				 * to access. */
+                                 * Don't use directly, rely on trackDbSetting to access. */
     /* additional info, determined from settings */
-    struct trackDb *subtracks;  /* not null if composite track.  May be populated
-                                 *  if this is a supertrack */
-    /* for supertracks */
-    boolean isSuper;            /* true if this is a supertrack */
-    boolean isShow;             /* true if this is a supertrack with 
-                                                pseudo-vis 'show' */
-    /* for supertrack members */
-    char *parentName;           /* set if this ia a supertrack member */
-    struct trackDb *parent;     /* may be set if this is a supertrack member -- use
-                                 * later for arbitrary hierarchies */
+    char treeNodeType;          /* bit map containing defining supertrack, composite and children of same (may be parent & child) */
+    struct trackDb *parent;     /* set for all subtracks of composite or superTracks */
+    struct trackDb *subtracks;  /* not null if composite or supertrack. */
+    char *parentName;           /* set if this is a supertrack member */
+    boolean isShow;             /* for supertracks tracks: true if this is a supertrack with pseudo-vis 'show' */
     };
+    
+#define SUPERTRACK_MASK                 0x10
+#define COMPOSITE_MASK                  0x20
+#define SUPERTRACK_CHILD_MASK           0x01
+#define COMPOSITE_CHILD_MASK            0x02
+#define PARENT_MASK                     0xF0
+#define CHILD_MASK                      0x0F
+#define TREETYPE_MASK                   0xFF
+#define PARENT_NODE(nodeType)           ((nodeType) & PARENT_MASK)
+#define CHILD_NODE(nodeType)            ((nodeType) & CHILD_MASK)
+#define SUPERTRACK_NODE(nodeType)       (((nodeType) & SUPERTRACK_MASK) == SUPERTRACK_MASK)
+#define COMPOSITE_NODE(nodeType)        (((nodeType) & COMPOSITE_MASK ) == COMPOSITE_MASK )
+#define SUPERTRACK_CHILD_NODE(nodeType) (((nodeType) & SUPERTRACK_CHILD_MASK) == SUPERTRACK_CHILD_MASK)
+#define COMPOSITE_CHILD_NODE(nodeType)  (((nodeType) & COMPOSITE_CHILD_MASK ) == COMPOSITE_CHILD_MASK )
+#define INDEPENDENT_NODE(nodeType)      (((nodeType) & TREETYPE_MASK ) == 0 )
+#define IS_PARENT(tdb)                  ((tdb)->subtracks)    
+#define IS_CHILD(tdb)                   ((tdb)->parent)    
+#define IS_SUPERTRACK(tdb)              (IS_PARENT(tdb) && SUPERTRACK_NODE((tdb)->treeNodeType))
+#define IS_COMPOSITE(tdb)               (IS_PARENT(tdb) && COMPOSITE_NODE((tdb)->treeNodeType))
+#define IS_SUPERTRACK_CHILD(tdb)        (IS_CHILD(tdb) && SUPERTRACK_CHILD_NODE((tdb)->treeNodeType))
+#define IS_COMPOSITE_CHILD(tdb)         (IS_CHILD(tdb) && COMPOSITE_CHILD_NODE((tdb)->treeNodeType))
+#define TREE_LEAF(tdb)                  (CHILD_NODE((tdb)->treeNodeType)  && IS_PARENT(tdb) == FALSE)
+#define TREE_ROOT(tdb)                  (PARENT_NODE((tdb)->treeNodeType) && IS_CHILD(tdb)  == FALSE)
+#define TREE_BRANCH(tdb)                (!INDEPENDENT_NODE((tdb)->treeNodeType) && IS_PARENT(tdb) && IS_CHILD(tdb))
+#define IS_SUPER(tdb)                   SUPERTRACK_NODE((tdb)->treeNodeType)
+#define MARK_AS_SUPERTRACK(tdb)         ((tdb)->treeNodeType |= SUPERTRACK_MASK)
+#define MARK_AS_COMPOSITE(tdb)          ((tdb)->treeNodeType |= COMPOSITE_MASK)
+#define MARK_AS_SUPERTRACK_CHILD(tdb)   ((tdb)->treeNodeType |= SUPERTRACK_CHILD_MASK)
+#define MARK_AS_COMPOSITE_CHILD(tdb)    ((tdb)->treeNodeType |= COMPOSITE_CHILD_MASK )
 
 struct trackDb *trackDbLoad(char **row);
 /* Load a trackDb from row fetched with select * from trackDb

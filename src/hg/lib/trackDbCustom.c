@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.37 2007/11/27 01:57:18 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.38 2008/07/07 16:14:47 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -401,9 +401,9 @@ return matchingSettings;
 
 bool trackDbIsComposite(struct trackDb *tdb)
 /* Determine if this is a populated composite track. This is currently defined
- * as a top-level dummy track, with a list of subtracks of the same type */
+ * as a top-level dummy track, with a list of subtracks of the same type */ // TODO: inaccurate definition
 {
-    return (tdb->subtracks && differentString(tdb->type, "wigMaf"));
+    return (tdb->subtracks && differentString(tdb->type, "wigMaf"));  // TODO: This doesn't distinguish between superTrack and composite track
 }
 
 bool trackDbHasCompositeSetting(struct trackDb *tdb)
@@ -472,6 +472,9 @@ void trackDbSuperMemberSettings(struct trackDb *tdb)
 struct superTrackInfo *stInfo = getSuperTrackInfo(tdb);
 tdb->parentName = cloneString(stInfo->parentName);
 tdb->visibility = stInfo->defaultVis;
+MARK_AS_SUPERTRACK_CHILD(tdb);
+if(tdb->parent)
+    MARK_AS_SUPERTRACK(tdb->parent);
 freeMem(stInfo);
 }
 
@@ -490,7 +493,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         continue;
     if (stInfo->isSuper)
         {
-        tdb->isSuper = TRUE;
+        MARK_AS_SUPERTRACK(tdb);
         tdb->isShow = stInfo->isShow;
         if (!hashLookup(superHash, tdb->tableName))
             hashAdd(superHash, tdb->tableName, tdb);

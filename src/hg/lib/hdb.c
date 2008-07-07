@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.362 2008/07/02 23:30:39 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.363 2008/07/07 16:14:31 tdreszer Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3638,7 +3638,10 @@ static void subtrackInherit(struct trackDb *subtrackTdb,
 			    struct trackDb *compositeTdb)
 {
 assert(subtrackTdb->parent == NULL || subtrackTdb->parent == compositeTdb);
-subtrackTdb->parent = compositeTdb;    
+subtrackTdb->parent = compositeTdb;
+//subtrackTdb->parentName = compositeTdb->tableName; // TODO: Currently superTracks may be distinguished by this
+MARK_AS_COMPOSITE(compositeTdb);
+MARK_AS_COMPOSITE_CHILD(subtrackTdb);
 if (!trackDbSetting(subtrackTdb, "noInherit"))
     {
     /* no longer necessary ? -- this is done in hgTrackDb now */
@@ -3740,7 +3743,7 @@ struct trackDb *nextTdb;
 while (tdbList != NULL)
     {
     tdb = slPopHead(&tdbList);
-    if (tdb->isSuper)
+    if (IS_SUPER(tdb))
 	{
         /* save supertrack entries, but don't add to list */
 	hLookupStringsInTdb(tdb, database);
@@ -3867,7 +3870,7 @@ return trackTdb;
 void hTrackDbLoadSuper(struct trackDb *tdb)
 /* Populate child trackDbs of this supertrack */
 {
-if (!tdb || !tdb->isSuper)
+if (!tdb || !IS_SUPER(tdb))
     return;
 
 struct sqlConnection *conn = hAllocConn();

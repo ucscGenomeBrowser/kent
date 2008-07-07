@@ -16,7 +16,7 @@
 #include "obscure.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.103 2008/07/03 20:31:57 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.104 2008/07/07 16:14:47 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -1677,7 +1677,7 @@ boolean dimensionsExist(struct trackDb *parentTdb)
 static boolean dimensionsSubtrackOf(struct trackDb *childTdb)
 /* Does this child belong to a parent  with dimensions? */
 {
-    return (childTdb->parent != NULL && dimensionsExist(childTdb->parent));
+    return (IS_COMPOSITE_CHILD(childTdb) && dimensionsExist(childTdb->parent));
 }
 
 static dimensions_t *dimensionSettingsGet(struct trackDb *parentTdb)
@@ -2912,7 +2912,7 @@ boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
  * If -1,i the subtracks field must be populated with the child trackDbs.
  * Returns false if not a supertrack */
 {
-if (!tdb->isSuper)
+if (!IS_SUPERTRACK(tdb))
     return FALSE;
 
 /* determine if supertrack is show/hide */
@@ -2968,7 +2968,6 @@ else
 char *compositeViewControlNameFromTdb(struct trackDb *tdb)
 /* Returns a string with the composite view control name if one exists */
 {
-int len;
 char *stView;
 char *name;
 char *parentName = trackDbSetting(tdb, "subTrack");
@@ -2976,17 +2975,14 @@ if(parentName
 && dimensionsSubtrackOf(tdb) // TODO: Remove when no longer restricted to dimensions
 && subgroupFind(tdb,"view",&stView))  
     {
-    len = strlen(parentName) + 10;
+    int len = strlen(parentName) + strlen(stView) + 3;
     name = needMem(len);
     safef(name,len,"%s_%s",parentName,stView);
     subgroupFree(&stView);
     }
 else
-    {
-    len = strlen(tdb->tableName) + 10;
-    name = needMem(len);
-    safef(name,len,"%s",tdb->tableName);
-    }
+    name = cloneString(tdb->tableName);
+
 return name;
 }
 void compositeViewControlNameFree(char **name)

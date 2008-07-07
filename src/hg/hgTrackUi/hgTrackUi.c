@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.438 2008/07/03 20:34:18 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.439 2008/07/07 16:15:23 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2886,9 +2886,9 @@ else if (tdb->type != NULL)
 	}
     freeMem(typeLine);
     }
-if (tdb->isSuper)
+if (IS_SUPERTRACK(tdb))
     superTrackUi(tdb);
-else if (trackDbSetting(tdb, "compositeTrack"))
+else if (IS_COMPOSITE(tdb))
     hCompositeUi(cart, tdb, NULL, NULL, MAIN_FORM);
 }
 
@@ -2898,11 +2898,12 @@ void trackUi(struct trackDb *tdb)
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
-printf("<H1>%s%s</H1>\n", tdb->longLabel, tdb->isSuper ? " Tracks" : "");
+printf("<H1>%s%s</H1>\n", tdb->longLabel, IS_SUPER(tdb) ? " Tracks" : "");
 
 /* Print link for supertrack */
-if (tdb->parentName)
+if (IS_SUPERTRACK_CHILD(tdb))
     {
+    assert((tdb->parentName));
     struct trackDb *superTdb = hTrackDbForTrack(tdb->parentName);
     if (superTdb)
         {
@@ -2919,7 +2920,7 @@ if (isCustomTrack(tdb->tableName) && sameString(tdb->type, "maf"))
 
 /* Display visibility menu */
 printf("<B>Display&nbsp;mode:&nbsp;</B>");
-if (tdb->isSuper)
+if (IS_SUPER(tdb))
     {
     /* This is a supertrack -- load its members and show hide/show dropdown */
     hTrackDbLoadSuper(tdb);
@@ -2970,7 +2971,7 @@ else
 	    tableName = "all_mrna";
         printf(SCHEMA_LINK, database, tdb->grp, tableName, tableName);
         }
-    else if (tdb->subtracks != NULL && !tdb->isSuper)
+    else if (IS_COMPOSITE(tdb))
 	{
 	/* handle multi-word subTrack settings: */
     if(!dimensionsExist(tdb))
@@ -3097,10 +3098,13 @@ if (super)
     /* configured as a supertrack member in trackDb */
     tdb->parent = hTrackDbForTrack(super);
     if (tdb->parent)
+        {
         /* the supertrack is also configured, so use supertrack defaults */
+        MARK_AS_SUPERTRACK(tdb->parent);
         trackDbSuperMemberSettings(tdb);
+        }
     }
-char *title = (tdb->isSuper ? "Super-track Settings" : "Track Settings");
+char *title = (IS_SUPER(tdb) ? "Super-track Settings" : "Track Settings");
 cartWebStart(cart, "%s %s", tdb->shortLabel, title);
 trackUi(tdb);
 printf("<BR>\n");

@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1493 2008/06/27 19:51:52 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1494 2008/07/07 16:15:49 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -151,9 +151,9 @@ if (dif < 0)
 if (dif == 0.0)
     {
     /* assure super tracks appear ahead of their members if same pri */
-    if (a->track->tdb && a->track->tdb->isSuper)
+    if (a->track->tdb && IS_SUPER(a->track->tdb))
         return 0;
-    if (b->track->tdb && b->track->tdb->isSuper)
+    if (b->track->tdb && IS_SUPER(b->track->tdb))
         return 1;
    return 0;
    }
@@ -206,10 +206,11 @@ for (group = groupList; group != NULL; group = group->next)
 	    if (changeVis == -1)
                 {
                 /* restore defaults */
-                if (tdb->parentName)
+                if (IS_SUPERTRACK_CHILD(tdb))
                     {
                     /* removing the supertrack parent's cart variables
                      * restores defaults */
+                    assert(tdb->parentName != NULL);
                     cartRemove(cart, tdb->parentName);
                     if (withPriorityOverride)
                         {
@@ -232,8 +233,9 @@ for (group = groupList; group != NULL; group = group->next)
             else
                 {
                 /* change to specified visibility */
-                if (tdb->parent)
+                if (IS_SUPERTRACK_CHILD(tdb))
                     {
+                    assert(tdb->parent != NULL);
                     /* Leave supertrack members alone -- only change parent */
                     struct trackDb *parentTdb = tdb->parent;
                     if ((changeVis == tvHide && !parentTdb->isShow) ||
@@ -2658,10 +2660,13 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
                             else
                                 cartSetString(cart, tg->mapName, command);
                             /* hide or show supertrack enclosing this track */
-                            if (tg->tdb->parentName)
+                            if (IS_SUPERTRACK_CHILD(tg->tdb))
+                                {
+                                assert(tg->tdb->parentName != NULL);
                                 cartSetString(cart, tg->tdb->parentName,
                                             (sameString(command, "hide") ? 
                                                 "hide" : "show"));
+                                }
                             }
                         }
 		    }
@@ -2910,7 +2915,7 @@ static boolean superTrackHasVisibleMembers(struct trackDb *tdb)
 /* Determine if any member tracks are visible -- currently 
  * recording this in the parent's visibility setting */
 {
-if (!tdb->isSuper)
+if (!IS_SUPER(tdb))
     return FALSE;
 return (tdb->visibility != tvHide);
 }
@@ -2973,8 +2978,9 @@ for (track = *pTrackList; track != NULL; track = track->next)
             else
                 track->defaultGroupName = cloneString("other");
             }
-        if (track->tdb->parent)
+        if (IS_SUPERTRACK_CHILD(track->tdb))
             {
+            assert(track->tdb->parentName != NULL);
             /* supertrack member must be in same group as its super */
             /* determine supertrack group */
             safef(cartVar, sizeof(cartVar), "%s.group",track->tdb->parentName);
@@ -3062,8 +3068,9 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
     AllocVar(ref);
     ref->track = track;
     slAddHead(&newList, ref);
-    if (track->tdb->parent)
+    if (IS_SUPERTRACK_CHILD(track->tdb))
         {
+        assert(track->tdb->parentName != NULL);
         if (hTvFromString(cartUsualString(cart, track->mapName,
                         hStringFromTv(track->tdb->visibility))) != tvHide)
             setSuperTrackHasVisibleMembers(track->tdb->parent);
@@ -3129,12 +3136,13 @@ hButton(var, paddedLabel);
 void limitSuperTrackVis(struct track *track)
 /* Limit track visibility by supertrack parent */
 {
-struct trackDb *parent = track->tdb->parent;
-if (!parent)
-    return;
-if (sameString("hide", cartUsualString(cart, parent->tableName,
-                                parent->isShow ? "show" : "hide")))
-    track->visibility = tvHide;
+if(IS_SUPERTRACK_CHILD(track->tdb))
+    {
+    assert(track->tdb->parent != NULL);
+    if (sameString("hide", cartUsualString(cart, track->tdb->parent->tableName,
+                                    track->tdb->parent->isShow ? "show" : "hide")))
+        track->visibility = tvHide;
+    }
 }
 
 struct track *getTrackList( struct group **pGroupList, int vis)
@@ -3354,7 +3362,7 @@ else if (cgiVarExists("hgt.prevItem"))
 for (track = trackList; track != NULL; track = track->next)
     {
     /* adjust track visibility based on supertrack just before load loop */
-    if (track->tdb->parent)
+    if (IS_SUPERTRACK_CHILD(track->tdb))
         limitSuperTrackVis(track);
 
     /* remove cart priority variables if they are set  
@@ -3664,7 +3672,7 @@ if (showTrackControls)
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
             struct track *track = tr->track;
-            if (track->tdb->parentName)
+            if (IS_SUPERTRACK_CHILD(track->tdb))
                 /* don't display supertrack members */
                 continue;
 	    myControlGridStartCell(cg, isOpen, group->name);
@@ -3677,7 +3685,7 @@ if (showTrackControls)
 		freeMem(encodedMapName);
 		}
             hPrintf(" %s", track->shortLabel);
-            if (track->tdb->isSuper)
+            if (IS_SUPER(track->tdb))
                 hPrintf("...");
 	    hPrintf("<BR> ");
 	    if (track->hasUi)
@@ -3685,7 +3693,7 @@ if (showTrackControls)
 
 	    if (hTrackOnChrom(track->tdb, chromName)) 
 		{
-                if (track->tdb->isSuper)
+                if (IS_SUPER(track->tdb))
                     superTrackDropDown(cart, track->tdb,
                                         superTrackHasVisibleMembers(track->tdb));
                 else
@@ -3979,8 +3987,8 @@ if (isGenome(position) || NULL ==
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
     char *trackName = hgp->tableList->name;
-    char *parent = hGetParent(trackName);
-    if (parent)
+    char *parent = hGetParent(trackName); // This only works for a composite track (not superTrack)
+    if (parent)                           // TODO: Therefore I wonder about the need for this code.
         trackName = cloneString(parent);
     char *vis = cartOptionalString(cart, trackName);
     if (vis == NULL || differentString(vis, "full"))
