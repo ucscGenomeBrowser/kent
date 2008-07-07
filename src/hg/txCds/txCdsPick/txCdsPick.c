@@ -157,13 +157,17 @@ for (tx = txList; tx != NULL; tx = tx->next)
 return hash;
 }
 
-void transferExceptions(char *inName, char *refSeqName,
+void transferExceptions(char *inName, char *inSource, struct hash *pepToRefHash,
 	char *outName, FILE *f)
 /* Write out exceptions attatched to inName to file, this time
  * attached to outName. */
 {
-if (refSeqName != NULL && refSeqName[0] != 0)
-    inName = refSeqName;
+if (sameString(inSource, "ccds") || startsWith("RefPep", inSource))
+    {
+    char *refName = hashFindVal(pepToRefHash, inName);
+    if (refName != NULL)
+        inName = refName;
+    }
 if (hashLookup(selenocysteineHash, inName))
     fprintf(f, "%s\tselenocysteine\tyes\n", outName);
 if (hashLookup(altStartHash, inName))
@@ -213,7 +217,8 @@ while (lineFileRow(lf, row))
 		    if (pick.refProt[0] == 0)
 			{
 			pick.refProt = cds->accession;
-			pick.refSeq = hashMustFindVal(pepToRefHash, cds->accession);
+			if (pick.refSeq[0] == 0)
+			    pick.refSeq = hashMustFindVal(pepToRefHash, cds->accession);
 			}
 		    }
 		else if (startsWith("RefSeq", source))
@@ -252,7 +257,7 @@ while (lineFileRow(lf, row))
 	    }
 
 	if (exceptionsOut)
-	    transferExceptions(bestCds->accession, pick.refSeq,
+	    transferExceptions(bestCds->accession, bestCds->source, pepToRefHash,
 	    	bed->name, exceptionsOut);
 	}
     else
