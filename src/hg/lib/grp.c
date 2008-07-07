@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: grp.c,v 1.5 2005/10/05 12:04:25 aamp Exp $";
+static char const rcsid[] = "$Id: grp.c,v 1.6 2008/07/07 18:12:38 larrym Exp $";
 
 void grpStaticLoad(char **row, struct grp *ret)
 /* Load a row from grp table into ret.  The contents of ret will
@@ -18,9 +18,10 @@ void grpStaticLoad(char **row, struct grp *ret)
 ret->name = row[0];
 ret->label = row[1];
 ret->priority = atof(row[2]);
+ret->defaultIsClosed = row[3] ? TRUE : FALSE;
 }
 
-struct grp *grpLoad(char **row)
+static struct grp *grpLoad(char **row, int fieldCount)
 /* Load a grp from row fetched with select * from grp
  * from database.  Dispose of this with grpFree(). */
 {
@@ -30,6 +31,11 @@ AllocVar(ret);
 ret->name = cloneString(row[0]);
 ret->label = cloneString(row[1]);
 ret->priority = atof(row[2]);
+// We tolerate installations where grp table does not have a defaultIsClosed field.
+if(fieldCount >= 4)
+    ret->defaultIsClosed = (isNotEmpty(row[3]) && *row[3] == '1') ? TRUE : FALSE;
+else
+    ret->defaultIsClosed = FALSE;
 return ret;
 }
 
@@ -39,11 +45,12 @@ struct grp *grpLoadAll(char *fileName)
 {
 struct grp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[4];
+row[3] = NULL; // tolerate missing optional defaultIsClosed
 
 while (lineFileRow(lf, row))
     {
-    el = grpLoad(row);
+    el = grpLoad(row, ArraySize(row));
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -57,12 +64,17 @@ struct grp *grpCommaIn(char **pS, struct grp *ret)
  * return a new grp */
 {
 char *s = *pS;
+int count = countChars(s, ',');
 
 if (ret == NULL)
     AllocVar(ret);
 ret->name = sqlStringComma(&s);
 ret->label = sqlStringComma(&s);
 ret->priority = sqlFloatComma(&s);
+if(count > 3)
+    ret->defaultIsClosed = sqlFloatComma(&s) ? TRUE : FALSE;
+else
+    ret->defaultIsClosed = FALSE;
 *pS = s;
 return ret;
 }
@@ -81,7 +93,7 @@ char **row;
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = grpLoad(row);
+    el = grpLoad(row, sqlCountColumns(sr));
     slAddHead(&list, el);
     }
 slReverse(&list);
@@ -126,6 +138,8 @@ fprintf(f, "%s", el->label);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%f", el->priority);
+fputc(sep,f);
+fprintf(f, "%d", el->defaultIsClosed);
 fputc(lastSep,f);
 }
 

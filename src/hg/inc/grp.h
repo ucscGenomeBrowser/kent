@@ -12,15 +12,12 @@ struct grp
     char *name;	/* Group name.  Connects with trackDb.grp */
     char *label;	/* Label to display to user */
     float priority;	/* 0 is top */
+    boolean defaultIsClosed; /* true if group is closed by default in hgTracks (this column is optional, and may be missing in some installations. */
     };
 
 void grpStaticLoad(char **row, struct grp *ret);
 /* Load a row from grp table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
-
-struct grp *grpLoad(char **row);
-/* Load a grp from row fetched with select * from grp
- * from database.  Dispose of this with grpFree(). */
 
 struct grp *grpLoadAll(char *fileName);
 /* Load all grp from a tab-separated file.
