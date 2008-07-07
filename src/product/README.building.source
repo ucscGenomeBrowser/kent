@@ -13,6 +13,15 @@ To build the source tree.
 	since this is used as an argument on the command line to gcc
 	which will not work with the - signs in the strings.
 
+	To determine the machine cpu type of your computer, try
+	one of these uname command options:
+	$ uname -m
+	$ uname -p
+	$ uname -a
+
+	Remember to set this in your .bashrc or .tcshrc home directory
+	environment files so it will be set properly at your next login.
+
 	The browser code has not been tested by UCSC outside a
 	Redhat Linux on Intel environment.  Other users do report
 	successful operation on other systems.
@@ -119,4 +128,4 @@ make: *** [aliType.o] Error 1
     include the -Wno-unused-variable option in the build.
 
 ====================================================================
-This file last updated: $Date: 2008/05/16 23:32:55 $
+This file last updated: $Date: 2008/07/07 16:04:07 $
