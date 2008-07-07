@@ -22323,5 +22323,7 @@ see doc/builds.txt for specific details.
     # get SQL data (mammalPsq.sql) from Adam Siepel
     #    and Tomas Vinar (acs4@cornell.edu)
     hgsql hg18 < mammalPsg.sql
+    echo "alter table mammalPsg add index (chrom(7));" | hgsql hg18
+
 
 ##########
