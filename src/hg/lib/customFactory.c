@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.81 2008/07/02 20:32:42 braney Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.82 2008/07/07 18:04:10 braney Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1798,6 +1798,12 @@ while ((line = customPpNextReal(cpp)) != NULL)
         {
 	if (!ctConn || !ctDbTableExists(ctConn, track->dbTableName))
 	    continue;
+	if ( startsWith("maf", track->tdb->type))
+	    {
+	    if (!verifyMafExists(ctConn, track->dbTableName))
+		continue;
+	    }
+
 	track->wiggle = startsWith("wig ", track->tdb->type);
 	if (track->wiggle)
 	    {
