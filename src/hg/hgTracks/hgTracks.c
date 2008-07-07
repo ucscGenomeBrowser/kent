@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1495 2008/07/07 18:44:54 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1496 2008/07/07 18:55:05 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3221,7 +3221,7 @@ return (cloneString(varName));
 boolean isCollapsedGroup(struct group *grp)
 /* Determine if group is collapsed */
 {
-return cartUsualInt(cart, collapseGroupVar(grp->name), 0);
+return cartUsualInt(cart, collapseGroupVar(grp->name), grp->defaultIsClosed);
 }
 
 void collapseGroupGoodies(boolean isOpen, boolean wantSmallImage,
