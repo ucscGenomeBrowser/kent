@@ -57,6 +57,7 @@ set wgs $rn,$panTro,$galGal,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryLat,
 set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce
 
 # Define organism databases for which we build a SNP track:
+set snpDb129 hg18
 set snpDb128 hg18,mm9
 set snpDb127 hg18,bosTau3
 set snpDb126 hg18,mm8
@@ -1938,6 +1939,17 @@ identifier snpExceptions128
     $gbd.snp128ExceptionDesc.exception
     $gbd.snp128Exceptions.exception
 
+identifier snpName129
+"dbSNP version 129 rs* identifiers"
+    $gbd.snp129.name dupeOk
+    $gbd.snp129Exceptions.name minCheck=.99
+    $gbd.snp129Seq.acc minCheck=.99
+
+identifier snpExceptions129
+"Annotations of unusual conditions in dbSNP version 129"
+    $gbd.snp129ExceptionDesc.exception
+    $gbd.snp129Exceptions.exception
+
 identifier snpArrayHg17
 "SNP array track for hg17"
     hg17.snp125.name dupeOk
@@ -1970,6 +1982,11 @@ identifier snpOrtho128
 "Ortho SNPs for hg18 only (dbSNP 128)"
     hg18.snp128.name dupeOk
     hg18.snp128OrthoPanTro2RheMac2.name 
+
+identifier snpOrtho129
+"Ortho SNPs for hg18 only (dbSNP 129)"
+    hg18.snp129.name dupeOk
+    hg18.snp129OrthoPt2Pa2Rm2.name 
 
 # Other NCBI Identifiers
 
