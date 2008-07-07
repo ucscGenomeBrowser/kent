@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1443 2008/07/07 19:31:11 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1444 2008/07/07 21:39:02 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16868,6 +16868,8 @@ else
 	struct sqlConnection *conn = sqlCtConn(TRUE);
 	struct sqlResult *sr = NULL;
 	int rcCount = 0;
+	int start = cartInt(cart, "o");
+	int end = cartInt(cart, "t");
 
 	if (ct->fieldCount < 4)
 	    safef(where, sizeof(where), "chromStart = '%d'", start);
@@ -16877,7 +16879,7 @@ else
 	    safef(where, sizeof(where), "name = '%s'", safeName);
 	    freeMem(safeName);
 	    }
-	sr = hRangeQuery(conn, ct->dbTableName, seqName, winStart, winEnd,
+	sr = hRangeQuery(conn, ct->dbTableName, seqName, start, end,
                      where, &rowOffset);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
