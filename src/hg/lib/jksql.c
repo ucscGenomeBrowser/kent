@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: jksql.c,v 1.111 2008/07/01 06:42:37 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.112 2008/07/08 07:54:21 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -816,12 +816,19 @@ struct sqlResult *sr;
 boolean ret = TRUE;
 safef(query, sizeof(query), "select * from %s limit 1,1", table);
 if ((sr = sqlUseOrStore(sc, query, mysql_use_result, FALSE)) == NULL)
+    {
+    fprintf(stderr, "ASH: Got nothing from select on %s.%s.  pid=%d\n",
+	    sc->conn->db, table, getpid());
     /* An error here is OK if and only if the table exists and is empty: */
     return (sqlTableSizeIfExists(sc, table) == 0);
+    }
 else
     /* Discard row, but see if we get an error while reading it. */
     sqlMaybeNextRow(sr, &ret);
 sqlFreeResult(&sr);
+if (ret == FALSE)
+    fprintf(stderr, "ASH: Error reading result of select on %s.%s!  pid=%d\n",
+	    sc->conn->db, table, getpid());
 return ret;
 }
 
