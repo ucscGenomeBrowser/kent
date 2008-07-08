@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.22 2007/05/14 21:34:45 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.23 2008/07/08 04:44:41 hiram Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
@@ -251,7 +251,12 @@ for (wiggle = wiggleList; wiggle != NULL; wiggle = wiggle->next)
 		    break;
 		case 7:
 		    if (pathPrefix )
-			fprintf(f,"%s/", pathPrefix );
+			{
+			if (endsWith(pathPrefix, "/"))
+			    fprintf(f,"%s", pathPrefix );
+			else
+			    fprintf(f,"%s/", pathPrefix );
+			}
 		    else
 			fprintf(f,"/gbdb/%s/wib/", database );
 		    fputs(words[i], f);
