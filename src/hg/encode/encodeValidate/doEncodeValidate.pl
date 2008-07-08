@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.27 2008/06/27 19:30:48 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.28 2008/07/08 00:23:25 larrym Exp $
 
 use warnings;
 use strict;
@@ -378,7 +378,10 @@ sub getPif {
     # Validate fields
     defined($pif{'project'}) || die "ERROR: Project not defined\n"; 
     defined(%tracks) ||
-        die "ERROR: Tracks not defined for project \'$pif{'project'}\'in $pifFile \n";
+        die "ERROR: Tracks not defined for project \'$pif{'project'}\' in $pifFile \n";
+    if(!defined($pif{assembly})) {
+        die "ERROR: assembly not defined for project \'$pif{'project'}\' in $pifFile\n";
+    }
     validateAssembly($pif{assembly});
 
     foreach my $track (keys %tracks) {
@@ -532,6 +535,9 @@ while(@{$lines}) {
     # ignore empty lines and comments
     next if $line =~ /^$/;
     next if $line =~ /^#/;
+    if($line !~ /\t/) {
+        die "ERROR: The DDF header has no tabs; the DDF is required to be tab delimited";
+    }
     @ddfHeader = split(/\t/, $line);
     for ($i=0; $i < @ddfHeader; $i++) {
         $ddfHeader{$ddfHeader[$i]} = $i;
@@ -563,6 +569,9 @@ while (@{$lines}) {
     next if $line =~ /^#/;
     next if $line =~ /^$/;
 
+    if($line !~ /\t/) {
+        die "ERROR: DDF entry has no tabs; the DDF is required to be tab delimited";
+    }
     my @fields = split('\t', $line);
     my $fileField = $ddfHeader{files};
     my $files = $fields[$fileField];
@@ -628,7 +637,7 @@ foreach my $datasetRef (@datasets) {
         }
         if($hash{cell}) {
             $subGroups .= " cellType=$hash{cell}";
-            $additional = "\tcellType\t$hash{cell}\n" . $additional;
+            $additional = "\tcell\t$hash{cell}\n" . $additional;
         }
     }
     # mysql doesn't allow hyphens in table names and our naming convention doesn't allow underbars.
@@ -651,6 +660,19 @@ foreach my $datasetRef (@datasets) {
     print TRACK_RA "\tpriority\t$priority\n";
     # noInherit is necessary b/c composite track will often have a different dummy type setting.
     print TRACK_RA "\tnoInherit\ton\n";
+    my %visibility = (Align => 'hide', Signal => 'full', Sites => 'dense');
+    if($visibility{$view}) {
+        print TRACK_RA "\tvisibility\t$visibility{$view}\n";
+    }
+    if($tracks{$view}->{type} eq 'wig') {
+        print TRACK_RA <<END;
+	yLineOnOff	On
+	yLineMark	1.0
+	maxHeightPixels	100:32:8
+END
+    } elsif($tracks{$view}->{type} eq 'bed 5 +') {
+        print TRACK_RA "\tuseScore\t1\n";
+    }
     print TRACK_RA $additional;
 }
 close(LOADER_RA);
