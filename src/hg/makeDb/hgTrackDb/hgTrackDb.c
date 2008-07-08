@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.36 2008/03/01 00:23:00 jzhu Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.37 2008/07/08 05:28:55 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -50,6 +50,7 @@ static struct optionSpec optionSpecs[] = {
     {"local", OPTION_BOOLEAN},
     {"hideFirst", OPTION_BOOLEAN},
     {"release", OPTION_STRING},
+    {NULL,      0}
 };
 
 static char *raName = "trackDb.ra";
