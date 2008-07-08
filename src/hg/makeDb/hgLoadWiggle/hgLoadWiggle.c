@@ -13,11 +13,12 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.23 2008/07/08 04:44:41 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.24 2008/07/08 16:05:26 hiram Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
 static boolean noLoad = FALSE;		/* Do not load table, create tab file */
+static boolean noHistory = FALSE;	/* Do not add history table comments */
 static boolean strictTab = FALSE;	/* Separate on tabs. */
 static boolean oldTable = FALSE;	/* Don't redo table. */
 static char *pathPrefix = NULL;	/* path prefix instead of /gbdb/hg16/wib */
@@ -33,6 +34,7 @@ static struct optionSpec optionSpecs[] = {
     {"tab", OPTION_BOOLEAN},
     {"noBin", OPTION_BOOLEAN},
     {"noLoad", OPTION_BOOLEAN},
+    {"noHistory", OPTION_BOOLEAN},
     {"oldTable", OPTION_BOOLEAN},
     {"pathPrefix", OPTION_STRING},
     {"chromInfoDb", OPTION_STRING},
@@ -51,6 +53,7 @@ errAbort(
   "options:\n"
   "   -noBin\tsuppress bin field\n"
   "   -noLoad\tdo not load table, only create .tab file\n"
+  "   -noHistory\tdo not add history table comments (for custom tracks)\n"
   "   -oldTable\tadd to existing table\n"
   "   -tab\t\tSeparate by tabs rather than space\n"
   "   -pathPrefix=<path>\t.wib file path prefix to use "
@@ -362,7 +365,8 @@ if (! noLoad)
 	safef(comment, sizeof(comment),
 	    "new wiggle table %s from %s/%s with wib path %s", track,
 		getCurrentDir(), tab, pathAdded);
-    hgHistoryComment(conn, comment);
+    if (! noHistory)
+	hgHistoryComment(conn, comment);
     verbose(2, "#\t%s\n", comment);
     sqlDisconnect(&conn);
     /*	if temp dir specified, unlink file to make it disappear */
@@ -416,6 +420,7 @@ if (argc < 4)
     usage();
 noBin = optionExists("noBin");
 noLoad = optionExists("noLoad");
+noHistory = optionExists("noHistory");
 strictTab = optionExists("tab");
 oldTable = optionExists("oldTable");
 pathPrefix = optionVal("pathPrefix",NULL);
@@ -423,9 +428,10 @@ chromInfoDb = optionVal("chromInfoDb",NULL);
 maxChromNameLength = optionInt("maxChromNameLength",0);
 tmpDir = optionVal("tmpDir", tmpDir);
 
-verbose(2, "noBin: %s, noLoad: %s, tab: %s, oldTable: %s\n",
+verbose(2, "noBin: %s, noLoad: %s, noHistory: %s, tab: %s, oldTable: %s\n",
 	noBin ? "TRUE" : "FALSE",
 	noLoad ? "TRUE" : "FALSE",
+	noHistory ? "TRUE" : "FALSE",
 	strictTab ? "TRUE" : "FALSE",
 	oldTable ? "TRUE" : "FALSE");
 if (pathPrefix)
