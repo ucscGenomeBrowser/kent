@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: clinical.c,v 1.9 2008/03/04 23:51:08 fanhsu Exp $";
+static char const rcsid[] = "$Id: clinical.c,v 1.10 2008/07/08 16:47:30 fanhsu Exp $";
 
 static boolean clinicalExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -48,7 +48,29 @@ subjId);
 
 sr = sqlMustGetResult(conn, bigQuery);
 row = sqlNextRow(sr);
+
+/* special processing if this subject does not have any clinical data */    
+if (row == NULL) 
+    {
+    /*specimenId     = row[0];
+    labCode        = row[1];
+    daysCollection = row[2];
+    hivQuan        = row[3];
+    cd4Count       = row[4];
+    */
+
+    daysCollection = naString;
+    hivQuan = naString;
+    cd4Count = naString;
     
+    printf("<TR>");
+    printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", daysCollection);
+    printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", hivQuan);
+    
+    printf("<TD align=right BGCOLOR=\"#D9F8E4\">%s</TD>\n", cd4Count);
+    printf("</TR>");
+    }
+
 while (row != NULL) 
     {
     specimenId     = row[0];
