@@ -2753,7 +2753,7 @@ speciesCodonDefault hg18
 track mammalPsg
 shortLabel Pos Sel Genes
 longLabel Positively Selected Genes (6 species)
-group compGeno
+group genes
 priority 110
 visibility hide
 itemRgb on
