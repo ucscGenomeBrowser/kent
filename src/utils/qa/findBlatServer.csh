@@ -28,7 +28,7 @@ if ( $#argv < 1 || $#argv > 3 ) then
   echo
   exit
 else
-  set db={$argv[1]}%
+  set db={$argv[1]}%   # support wildcard
   set host=$argv[1]
 endif
 
@@ -53,17 +53,14 @@ if ( $#argv == 3 ) then
   set machine=$argv[3]
 endif
 
-if ( "hgwbeta" == $machine ) then
+echo $machine | grep hgwbeta > /dev/null
+if ( ! $status ) then
   set machine='-h hgwbeta hgcentralbeta'
-else
-  if ( "hgwdev" == $machine ) then
+endif
+  
+echo $machine | grep hgwdev > /dev/null
+if ( ! $status ) then
     set machine='hgcentraltest'
-  else
-    echo "\n only hgwbeta or hgwdev are allowed as machine names \n"
-    echo $0
-    $0
-    exit 1
-  endif
 endif
 
 if ( all == "$db" ) then
@@ -73,10 +70,10 @@ endif
 # find out if user specified host or db
 echo $host | grep blat > /dev/null
 if ( $status ) then
-  hgsql $machine -e "SELECT DISTINCT db, host FROM blatServers \   
-    WHERE db LIKE '$db' ORDER BY '$order' $limit"
+  hgsql $machine -e "SELECT DISTINCT db, host \
+    FROM blatServers WHERE db LIKE '$db' ORDER BY '$order' $limit"
 else
-  hgsql $machine -e "SELECT DISTINCT db, host FROM blatServers \
-    WHERE host = '$host' ORDER BY '$order'"
+  hgsql $machine -e "SELECT DISTINCT db, host \
+    FROM blatServers WHERE host = '$host' ORDER BY '$order'"
 endif
 
