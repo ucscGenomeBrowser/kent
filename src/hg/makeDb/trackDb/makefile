@@ -51,6 +51,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	monDom1 monDom4 \
 	anoCar1 \
 	galGal2 galGal3 \
+	taeGut1 \
 	xenTro1 xenTro2 \
 	tetNig1 \
 	oryLat1 \
