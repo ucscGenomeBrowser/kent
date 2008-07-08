@@ -436,7 +436,7 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 
 track transMap
-superTrack on hide
+superTrack on
 shortLabel TransMap
 longLabel TransMap Alignments
 group genes
