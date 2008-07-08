@@ -2243,7 +2243,7 @@ _EOF_
 
 #########################################################################
 # ORegAnno - Open Regulatory Annotations 
-# latest update Oct 26, 2007
+# update Oct 26, 2007; July 7, 2008
 # loaded by Belinda Giardine, in same manner as hg18 ORegAnno track
 
 

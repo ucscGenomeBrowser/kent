@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.70 2008/07/01 16:53:01 markd Exp $"
+#	"$Id: mm9.txt,v 1.71 2008/07/08 13:35:04 giardine Exp $"
 #
 
 #######################################################################
@@ -8219,3 +8219,9 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+
+#########################################################################
+# ORegAnno - Open Regulatory Annotations
+# loaded July 7, 2008
+# loaded by Belinda Giardine, in same manner as hg18 ORegAnno track
+
