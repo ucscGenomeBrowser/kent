@@ -24,6 +24,8 @@ GENERAL INSTALL INSTRUCTIONS
      http://hgdownload.cse.ucsc.edu/admin/jksrc.zip
    Note futher documentation for the build process in your
    unpacked source tree in src/product/README.*
+   Especially note README.building.source and the "Known problems"
+   for typical situations you may encounter.
 2. Check that the environment variable MACHTYPE
    exists on your system.  It should on Unix.  
    (And making this on non-Unix systems is beyond
@@ -37,6 +39,9 @@ GENERAL INSTALL INSTRUCTIONS
        export MACHTYPE
    or under tcsh as so:
        setenv MACHTYPE something
+   To determine what your system reports itself as, try the
+   uname options:  'uname -m' or 'uname -p' or 'uname -a'
+   on your command line.
 3. Make the directory ~/bin/$MACHTYPE which is
    where the (non-web) executables will go.
    Add this directory to your path.
@@ -312,4 +317,4 @@ return twoBit;
 }
 
 ====================================================================
-This file last updated: $Date: 2007/05/12 06:34:10 $
+This file last updated: $Date: 2008/07/08 15:56:36 $
