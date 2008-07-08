@@ -3200,3 +3200,5 @@ tablesIgnored hg17
 tablesIgnored canFam2
     uncertified
 
+tablesIgnored equCab2
+    ctgPos2
