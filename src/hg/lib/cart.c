@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.92 2008/07/01 17:17:58 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.93 2008/07/08 07:52:34 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -78,14 +78,16 @@ if (trackControls == NULL)
     trackControls = "-";
 fprintf(stderr, "ASH: %22s: "
 	"u.i=%d u.l=%d u.c=%d s.i=%d s.l=%d s.c=%d "
-	"p=%s f=%s t=%s %s\n",
+	"p=%s f=%s t=%s pid=%d %s\n",
 	when,
 	u->id, uLen, u->useCount, s->id, sLen, s->useCount,
-	pix, textSize, trackControls, cgiRemoteAddr());
+	pix, textSize, trackControls, getpid(), cgiRemoteAddr());
 if (cart->userId != 0 && u->id != cart->userId)
-    fprintf(stderr, "ASH: bad userId %d --> %d\n", cart->userId, u->id);
+    fprintf(stderr, "ASH: bad userId %d --> %d!  pid=%d\n",
+	    cart->userId, u->id, getpid());
 if (cart->sessionId != 0 && s->id != cart->sessionId)
-    fprintf(stderr, "ASH: bad sessionId %d --> %d\n", cart->sessionId, s->id);
+    fprintf(stderr, "ASH: bad sessionId %d --> %d!  pid=%d\n",
+	    cart->sessionId, s->id, getpid());
 }
 
 boolean cartTablesOk(struct sqlConnection *conn)
@@ -93,9 +95,17 @@ boolean cartTablesOk(struct sqlConnection *conn)
  * doesn't do us any good). */
 {
 if (!sqlTableOk(conn, "userDb"))
+    {
+    fprintf(stderr, "ASH: cartTablesOk failed on %s.userDb!  pid=%d\n",
+	    sqlGetDatabase(conn), getpid());
     return FALSE;
+    }
 if (!sqlTableOk(conn, "sessionDb"))
+    {
+    fprintf(stderr, "ASH: cartTablesOk failed on %s.sessionDb!  pid=%d\n",
+	    sqlGetDatabase(conn), getpid());
     return FALSE;
+    }
 return TRUE;
 }
 
