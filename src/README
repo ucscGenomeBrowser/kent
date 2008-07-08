@@ -27,21 +27,25 @@ GENERAL INSTALL INSTRUCTIONS
    Especially note README.building.source and the "Known problems"
    for typical situations you may encounter.
 2. Check that the environment variable MACHTYPE
-   exists on your system.  It should on Unix.  
+   exists on your system.  It should exist on Unix/Linux.  
    (And making this on non-Unix systems is beyond
-   the scope of this README).  For a Linux 
-   system MACHTYPE will probably be 'i386', for
-   and Alpha it will be 'alpha', for a Sun
-   probably 'sparc'.  If necessary set up
-   this environment variable.  Do this under the
-   bash shell as so:
+   the scope of this README).  The default MACHTYPE is often a
+   long string: "i386-redhat-linux-gnu"
+   which will not function correctly in this build environment.
+   It needs to be something simple such as one of:
+	i386 i686 sparc alpha x86_64 ppc etc ...
+   with no other alpha characters such as: -
+   To determine what your system reports itself as, try the
+   uname options:  'uname -m' or 'uname -p' or 'uname -a'
+   on your command line.  If necessary set this environment variable.
+   Do this under the bash shell as so:
        MACHTYPE=something
        export MACHTYPE
    or under tcsh as so:
        setenv MACHTYPE something
-   To determine what your system reports itself as, try the
-   uname options:  'uname -m' or 'uname -p' or 'uname -a'
-   on your command line.
+   and place this setting in your home directory .bashrc or .tcshrc
+   environment files so it will be set properly the next time you
+   login.  Remember to "export" it as show here for the bash shell.
 3. Make the directory ~/bin/$MACHTYPE which is
    where the (non-web) executables will go.
    Add this directory to your path.
@@ -317,4 +321,4 @@ return twoBit;
 }
 
 ====================================================================
-This file last updated: $Date: 2008/07/08 15:56:36 $
+This file last updated: $Date: 2008/07/08 21:23:25 $
