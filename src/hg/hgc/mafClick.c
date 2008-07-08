@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.51 2008/07/03 00:09:02 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.52 2008/07/08 21:01:54 braney Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -230,10 +230,12 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 			dyStringPrintf(dy, "%s Browser %s:%d-%d %c %d bps Unaligned",hOrganism(dbOnly),chrom, s+1, e, mc->strand, e-s);
 			linkToOtherBrowserTitle(dbOnly, chrom, s, e, dy->string);
 			
+			fprintf(f,"B</A> ");
 			dyStringClear(dy);
 			}
+		    else
+			fprintf(f,"  ");
 		    dyStringPrintf(dy, "Get %s DNA %s:%d-%d %c %d bps Unaligned",hOrganism(dbOnly),chrom, s+1, e, mc->strand, e-s);
-		    fprintf(f,"B</A> ");
 
 		    printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A>  ", dy->string,  hgcName(),
 		       s, cgiEncode(chrom),
