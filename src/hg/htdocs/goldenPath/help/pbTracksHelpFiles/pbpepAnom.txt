@@ -1,8 +1,0 @@
-<!------------Description---------->
-This track displays amino acids within the protein sequence that differ
-significantly in abundance from their average occurrence genome-wide. 
-Amino acids present in excess or deficiency are denoted by red blocks above or
-below the center line, respectively. 
-<P>
-See the <A HREF="pbpepAnomalies.shtml">Amino Acid Anomalies histogram</A> to view amino 
-acid abundances in this assembly.
