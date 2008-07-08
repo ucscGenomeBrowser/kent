@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.363 2008/07/07 16:14:31 tdreszer Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.364 2008/07/08 07:51:40 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -673,6 +673,8 @@ if (centralCc == NULL)
 	{
 	centralCc = getCentralCcFromCfg("backupcentral");
 	conn = sqlAllocConnection(centralCc);
+	fprintf(stderr, "ASH: hConnectCentral failed over to backupcentral!  "
+		"pid=%d\n", getpid());
 	if (!cartTablesOk(conn))
 	    errAbort("Cannot access cart tables in central (nor backupcentral) "
 		     "database.  Please check central and backupcentral "
