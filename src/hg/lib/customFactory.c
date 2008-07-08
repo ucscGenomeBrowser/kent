@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.83 2008/07/07 23:10:23 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.84 2008/07/08 16:24:04 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -233,7 +233,7 @@ char *db = customTrackTempDb();
 /* running the single command:
  *	hgLoadBed -customTrackLoader -tmpDir=/data/tmp
  *		-maxChromNameLength=${nameLength} db tableName stdin
- * -customTrackLoader turns on options: -noNameIx -ignoreEmpty
+ * -customTrackLoader turns on options: -noNameIx -noHistory -ignoreEmpty
  *	-allowStartEqualEnd -allowNegativeScores -verbose=0
  */
 struct dyString *tmpDy = newDyString(0);
@@ -1135,16 +1135,16 @@ static struct pipeline *wigLoaderPipe(struct customTrack *track)
 /*	Run the two commands in a pipeline:
  *	loader/wigEncode -verbose=0 -wibSizeLimit=300000000 stdin stdout \
  *	    ${wibFile} | \
- *	loader/hgLoadWiggle -verbose=0 -tmpDir=/data/tmp \
+ *	loader/hgLoadWiggle -verbose=0 -noHistory -tmpDir=/data/tmp \
  *	    -maxChromNameLength=${nameLength} -chromInfoDb=${database} \
- *	    -pathPrefix=. ${db} ${table} stdin
+ *	    -pathPrefix=[.|/] ${db} ${table} stdin
  */
 char *db = customTrackTempDb();
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/wigEncode", "-verbose=0", "-wibSizeLimit=300000000", 
 	"stdin", "stdout", NULL, NULL};
-char *cmd2[] = {"loader/hgLoadWiggle", "-verbose=0", NULL, NULL, NULL, NULL,
-	NULL, NULL, "stdin", NULL};
+char *cmd2[] = {"loader/hgLoadWiggle", "-verbose=0", "-noHistory", NULL, NULL,
+	NULL, NULL, NULL, NULL, "stdin", NULL};
 char **cmds[] = {cmd1, cmd2, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
 struct stat statBuf;
@@ -1155,20 +1155,20 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd2[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "-chromInfoDb=%s", hGetDb());
+dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+dyStringPrintf(tmpDy, "-chromInfoDb=%s", hGetDb());
+cmd2[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 /* a system could be using /trash/ absolute reference, and nothing to do with
  *	local references, so don't confuse it with ./ a double // will work
  */
 if (startsWith("/", trashDir()))
-    cmd2[5] = "-pathPrefix=/";
+    cmd2[6] = "-pathPrefix=/";
 else
-    cmd2[5] = "-pathPrefix=.";
-cmd2[6] = db;
-cmd2[7] = track->dbTableName;
+    cmd2[6] = "-pathPrefix=.";
+cmd2[7] = db;
+cmd2[8] = track->dbTableName;
 /* the "/dev/null" file isn't actually used for anything, but it is used
  * in the pipeLineOpen to properly get a pipe started that isn't simply
  * to STDOUT which is what a NULL would do here instead of this name.
