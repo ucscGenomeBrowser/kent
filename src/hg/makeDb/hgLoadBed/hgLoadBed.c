@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.57 2008/07/02 19:21:42 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.58 2008/07/08 16:08:58 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -20,6 +20,7 @@ boolean hasBin = FALSE;		/* Input bed file includes bin. */
 boolean strictTab = FALSE;	/* Separate on tabs. */
 boolean oldTable = FALSE;	/* Don't redo table. */
 boolean noLoad = FALSE;		/* Do not load DB or remove tab file */
+boolean noHistory = FALSE;	/* Do not add history table comments */
 boolean itemRgb = TRUE;		/* parse field nine as r,g,b when commas seen */
 boolean notItemRgb = FALSE;	/* do NOT parse field nine as r,g,b */
 boolean noStrict = FALSE;	/* skip the coord sanity checks */
@@ -49,6 +50,7 @@ static struct optionSpec optionSpecs[] = {
     {"tab", OPTION_BOOLEAN},
     {"hasBin", OPTION_BOOLEAN},
     {"noLoad", OPTION_BOOLEAN},
+    {"noHistory", OPTION_BOOLEAN},
     {"bedGraph", OPTION_INT},
     {"notItemRgb", OPTION_BOOLEAN},
     {"noStrict", OPTION_BOOLEAN},
@@ -81,6 +83,7 @@ errAbort(
   "   -tab  Separate by tabs rather than space\n"
   "   -hasBin   Input bed file starts with a bin field.\n"
   "   -noLoad  - Do not load database and do not clean up tab files\n"
+  "   -noHistory  - Do not add history table comments (for custom tracks)\n"
   "   -notItemRgb  - Do not parse column nine as r,g,b when commas seen (bacEnds)\n"
   "   -bedGraph=N - wiggle graph column N of the input file as float dataValue\n"
   "               - bedGraph N is typically 4: -bedGraph=4\n"
@@ -93,7 +96,7 @@ errAbort(
   "   -noStrict  - don't perform coord sanity checks\n"
   "              - by default we abort when: chromStart > chromEnd\n"
   "   -allowNegativeScores  - sql definition of score column is int, not unsigned\n"
-  "   -customTrackLoader  - turns on: -noNameIx, -ignoreEmpty,\n"
+  "   -customTrackLoader  - turns on: -noNameIx, -noHistory, -ignoreEmpty,\n"
   "                         -allowNegativeScores -verbose=0\n"
   "   -verbose=N - verbose level for extra information to STDERR\n"
   "   -local - connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"
@@ -270,7 +273,6 @@ struct sqlConnection *conn;
 struct dyString *dy = newDyString(1024);
 char *tab = (char *)NULL;
 int loadOptions = (optionExists("onServer") ? SQL_TAB_FILE_ON_SERVER : 0);
-char comment[256];
 
 if ( ! noLoad )
     conn = sqlConnect(database);
@@ -392,11 +394,15 @@ if ( ! noLoad )
     else
 	sqlLoadTabFile(conn, tab, track, loadOptions);
 
-    /* add a comment to the history table and finish up connection */
-    safef(comment, sizeof(comment),
-	"Add %d element(s) from bed list to %s table",
-	    slCount(bedList), track);
-    hgHistoryComment(conn, comment);
+    if (! noHistory)
+	{
+	char comment[256];
+	/* add a comment to the history table and finish up connection */
+	safef(comment, sizeof(comment),
+	    "Add %d element(s) from bed list to %s table",
+		slCount(bedList), track);
+	hgHistoryComment(conn, comment);
+	}
     sqlDisconnect(&conn);
     /*	if temp dir specified, unlink file to make it disappear */
     if ((char *)NULL != tmpDir)
@@ -471,6 +477,7 @@ sqlTable = optionVal("sqlTable", sqlTable);
 renameSqlTable = optionExists("renameSqlTable");
 hasBin = optionExists("hasBin");
 noLoad = optionExists("noLoad");
+noHistory = optionExists("noHistory");
 bedGraph = optionInt("bedGraph",0);
 notItemRgb = optionExists("notItemRgb");
 if (notItemRgb) itemRgb = FALSE;
@@ -487,6 +494,7 @@ localDb = optionExists("local");
 if (customTrackLoader)
     {
     ignoreEmpty = TRUE;
+    noHistory = TRUE;
     nameIx = FALSE;
     allowNegativeScores = TRUE;
     verboseSetLevel(0);
