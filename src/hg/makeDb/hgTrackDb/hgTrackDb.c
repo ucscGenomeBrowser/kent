@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.37 2008/07/08 05:28:55 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.38 2008/07/08 05:38:50 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -495,6 +495,8 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     usage();
 raName = optionVal("raName", raName);
+if (strchr(raName, '/') != NULL)
+    errAbort("-raName value should be a file name without directories");
 release = optionVal("release", release);
 localDb = optionExists("local");
 
