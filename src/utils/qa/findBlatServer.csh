@@ -10,20 +10,26 @@
 ################################
 
 set db=''
-set order=''
+set host=''
+set machine='-h genome-centdb hgcentral'
+set order='db'
 set limit=''
 
-if ( $#argv < 1 || $#argv > 2 ) then
+if ( $#argv < 1 || $#argv > 3 ) then
   echo
   echo " gets info about which blat server hosts which genome(s)"
   echo
-  echo " usage:  db | all  [db | host]"
-  echo "   first parameter is required: one specific db or all databases"
-  echo "   second parameter is optional: order by db or by host (blatServer)"
+  echo " usage:  db | host | all  [db | host] [machine]"
+  echo "   first parameter required: one specific db or host or all dbs"
+  echo "   second parameter optional: order by db or by host (blatServer)"
+  echo "     defaults to order by db"
+  echo "   third parameter optional: specify machine"
+  echo "     defaults to RR"
   echo
   exit
 else
-  set db=$argv[1]
+  set db={$argv[1]}%
+  set host=$argv[1]
 endif
 
 if ( "$HOST" != "hgwdev" ) then
@@ -31,15 +37,46 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-if ( $#argv == 2 ) then
- set order=$argv[2]
+if ( $#argv > 1 ) then
+  set order=$argv[2]
+  if ( $order != "host" && $order != "db" ) then
+    set machine=$argv[2]
+    set order='db'
+  endif
+endif
+
+# echo "order   $order"
+# echo "machine $machine"
+
+# set host for non-RR machines
+if ( $#argv == 3 ) then
+  set machine=$argv[3]
+endif
+
+if ( "hgwbeta" == $machine ) then
+  set machine='-h hgwbeta hgcentralbeta'
+else
+  if ( "hgwdev" == $machine ) then
+    set machine='hgcentraltest'
+  else
+    echo "\n only hgwbeta or hgwdev are allowed as machine names \n"
+    echo $0
+    $0
+    exit 1
+  endif
 endif
 
 if ( all == "$db" ) then
- set db='%'
-else
- set limit="LIMIT 1"
+  set db='%'
 endif
 
-hgsql -h genome-centdb hgcentral -e "SELECT db, host FROM blatServers WHERE db LIKE '$db' ORDER BY '$order' $limit"
+# find out if user specified host or db
+echo $host | grep blat > /dev/null
+if ( $status ) then
+  hgsql $machine -e "SELECT DISTINCT db, host FROM blatServers \   
+    WHERE db LIKE '$db' ORDER BY '$order' $limit"
+else
+  hgsql $machine -e "SELECT DISTINCT db, host FROM blatServers \
+    WHERE host = '$host' ORDER BY '$order'"
+endif
 
