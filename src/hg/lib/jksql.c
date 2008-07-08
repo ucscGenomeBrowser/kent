@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: jksql.c,v 1.112 2008/07/08 07:54:21 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.113 2008/07/08 18:31:26 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -417,6 +417,10 @@ if (mysql_real_connect(
     if (abort)
 	errAbort("Couldn't connect to database %s on %s as %s.\n%s", 
 	    database, host, user, mysql_error(conn));
+    else
+	fprintf(stderr, "ASH: Couldn't connect to database %s on %s as %s.  "
+		"pid=%d\nASH: mysql: %s  pid=%d\n", 
+	    database, host, user, getpid(), mysql_error(conn), getpid());
     return NULL;
     }
 #ifdef GBROWSE
