@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.23 2008/07/02 20:29:13 braney Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.24 2008/07/09 18:56:43 braney Exp $";
 
 /* Command line options */
 
@@ -34,6 +34,7 @@ static struct optionSpec optionSpecs[] = {
     {"refDb", OPTION_STRING},
     {"maxNameLen", OPTION_INT},
     {"defPos", OPTION_STRING},
+    {"custom", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -46,6 +47,7 @@ char *loadFile;	                    /* file to read maf file from */
 char *refDb;	                    /* reference db (for custom tracks) */
 int maxNameLen = 0;	            /* maximum chrom name length */
 char *defPosFile;                   /* file to put default pos in */
+boolean isCustom;                   /* we're loading a custom track */
 
 void usage()
 /* Explain usage and exit. */
@@ -68,6 +70,8 @@ errAbort(
   "                    reference to chromInfo table\n"
   "   -defPos=file     file to put default position in\n"
   "                    default position is first block\n"
+  "   -custom          loading a custom track, don't use history\n"
+  "                    or extFile tables\n"
   "\n"
   "NOTE: The maf files need to be in chromosome coordinates,\n"
   "      the reference species must be the first component, and \n"
@@ -149,7 +153,11 @@ else
 	fileList = listDirX(pathPrefix, "*.maf", TRUE);
 	}
 
-    conn = hgStartUpdate();
+    if (isCustom)
+	conn = sqlConnect(database);
+    else
+	conn = hgStartUpdate();
+
     scoredRefTableCreate(conn, table, indexLen);
     }
 if (fileList == NULL)
@@ -165,7 +173,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     int warnCount = 0;
     int dbNameLen = strlen(refDb);
     HGID extId;
-    if (testFile != NULL)
+    if ((testFile != NULL) || isCustom)
         extId = 0;
     else
         extId = hgAddToExtFile(fileName, conn);
@@ -276,7 +284,8 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 
     if (errMsg)
 	{
-	hgPurgeExtFile(extId,  conn);
+	if (!isCustom)
+	    hgPurgeExtFile(extId,  conn);
 	errAbort(errMsg);
 	}
 
@@ -291,7 +300,11 @@ if (tmpDir == NULL)
 else
     hgLoadTabFile(conn, tmpDir, table, &f);
 verbose(1, "Loaded %ld mafs in %d files from %s\n", mafCount, slCount(fileList), pathPrefix);
-hgEndUpdate(&conn, "Add %ld mafs in %d files from %s\n", mafCount, slCount(fileList), pathPrefix);
+if (isCustom)
+    sqlDisconnect(&conn);
+else
+    hgEndUpdate(&conn, "Add %ld mafs in %d files from %s\n", mafCount, slCount(fileList), pathPrefix);
+
 /*	if temp dir specified, unlink file to make it disappear */
 if ((char *)NULL != tmpDir)
     hgUnlinkTabFile(tmpDir, table);
@@ -302,6 +315,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 warnOption = optionExists("warn");
+isCustom = optionExists("custom");
 warnVerboseOption = optionExists("WARN");
 testFile = optionVal("test", NULL);
 pathPrefix = optionVal("pathPrefix", NULL);
