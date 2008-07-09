@@ -195,13 +195,13 @@ for (group = groupList; group != NULL; group = group->next)
         for (tr = group->trackList; tr != NULL; tr = tr->next)
             {
             struct track *track = tr->track;
-            if (IS_SUPERTRACK_CHILD(track->tdb))
+            if (tdbIsSuperTrackChild(track->tdb))
                 /* ignore supertrack member tracks till supertrack is found */
                 continue;
             AllocVar(ref);
             ref->track = track;
             slAddTail(&refList, ref);
-            if (IS_SUPER(track->tdb))
+            if (tdbIsSuper(track->tdb))
                 {
                 struct trackRef *tr2;
                 for (tr2 = group->trackList; tr2 != NULL; tr2 = tr2->next)
@@ -227,7 +227,7 @@ for (group = groupList; group != NULL; group = group->next)
 
 	hPrintf("<TR>");
 	hPrintf("<TD NOWRAP>");
-        if (IS_SUPERTRACK_CHILD(tdb))
+        if (tdbIsSuperTrackChild(tdb))
             /* indent members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 	if (track->hasUi)
@@ -237,13 +237,13 @@ for (group = groupList; group != NULL; group = group->next)
                 tdb->parent ? "...\"" : "", hgTrackUiName(),
 		cartSessionVarName(), cartSessionId(cart), track->mapName);
         hPrintf(" %s", track->shortLabel);
-        if (IS_SUPER(track->tdb))
+        if (tdbIsSuper(track->tdb))
             hPrintf("...");
 	if (track->hasUi)
 	    hPrintf("</A>");
 	hPrintf("</TD>");
         hPrintf("<TD NOWRAP>");
-        if (IS_SUPERTRACK_CHILD(tdb))
+        if (tdbIsSuperTrackChild(tdb))
             /* indent members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 
@@ -251,7 +251,7 @@ for (group = groupList; group != NULL; group = group->next)
 	   message for the user. */
 	if (hTrackOnChrom(track->tdb, chromName))
 	    {
-            if (IS_SUPER(track->tdb))
+            if (tdbIsSuper(track->tdb))
                 {
                 /* supertrack dropdown is hide/show */
                 superTrackDropDown(cart, track->tdb, 1);
@@ -279,7 +279,7 @@ for (group = groupList; group != NULL; group = group->next)
             hPrintf("</TD>");
             hPrintf("<TD>\n");
             /* suppress group pull-down for supertrack members */
-            if (IS_SUPERTRACK_CHILD(track->tdb))
+            if (tdbIsSuperTrackChild(track->tdb))
                 hPrintf("&nbsp");
             else
                 {

@@ -44,8 +44,8 @@ struct trackDb
                                  * Don't use directly, rely on trackDbSetting to access. */
     /* additional info, determined from settings */
     char treeNodeType;          /* bit map containing defining supertrack, composite and children of same (may be parent & child) */
-    struct trackDb *parent;     /* set for all subtracks of composite or superTracks */
-    struct trackDb *subtracks;  /* not null if composite or supertrack. */
+    struct trackDb *parent;     /* parent of composite or superTracks */
+    struct trackDb *subtracks;  /* children of composite (TODO: or supertrack) */
     char *parentName;           /* set if this is a supertrack member */
     boolean isShow;             /* for supertracks tracks: true if this is a supertrack with pseudo-vis 'show' */
     };
@@ -66,19 +66,37 @@ struct trackDb
 #define INDEPENDENT_NODE(nodeType)      (((nodeType) & TREETYPE_MASK ) == 0 )
 #define IS_PARENT(tdb)                  ((tdb)->subtracks)    
 #define IS_CHILD(tdb)                   ((tdb)->parent)    
-#define IS_SUPER(tdb)                   SUPERTRACK_NODE((tdb)->treeNodeType)
-//#define IS_SUPERTRACK(tdb)              (IS_PARENT(tdb) && IS_SUPER(tdb))
-#define IS_SUPERTRACK(tdb)              IS_SUPER(tdb)
-#define IS_COMPOSITE(tdb)               (IS_PARENT(tdb) && COMPOSITE_NODE((tdb)->treeNodeType))
-#define IS_SUPERTRACK_CHILD(tdb)        (IS_CHILD(tdb) && SUPERTRACK_CHILD_NODE((tdb)->treeNodeType))
-#define IS_COMPOSITE_CHILD(tdb)         (IS_CHILD(tdb) && COMPOSITE_CHILD_NODE((tdb)->treeNodeType))
-#define TREE_LEAF(tdb)                  (CHILD_NODE((tdb)->treeNodeType)  && IS_PARENT(tdb) == FALSE)
-#define TREE_ROOT(tdb)                  (PARENT_NODE((tdb)->treeNodeType) && IS_CHILD(tdb)  == FALSE)
-#define TREE_BRANCH(tdb)                (!INDEPENDENT_NODE((tdb)->treeNodeType) && IS_PARENT(tdb) && IS_CHILD(tdb))
-#define MARK_AS_SUPERTRACK(tdb)         ((tdb)->treeNodeType |= SUPERTRACK_MASK)
-#define MARK_AS_COMPOSITE(tdb)          ((tdb)->treeNodeType |= COMPOSITE_MASK)
-#define MARK_AS_SUPERTRACK_CHILD(tdb)   ((tdb)->treeNodeType |= SUPERTRACK_CHILD_MASK)
-#define MARK_AS_COMPOSITE_CHILD(tdb)    ((tdb)->treeNodeType |= COMPOSITE_CHILD_MASK )
+#define IS_TREE_LEAF(tdb)               (CHILD_NODE((tdb)->treeNodeType)  && IS_PARENT(tdb) == FALSE)
+#define IS_TREE_ROOT(tdb)               (PARENT_NODE((tdb)->treeNodeType) && IS_CHILD(tdb)  == FALSE)
+#define IS_TREE_BRANCH(tdb)             (!INDEPENDENT_NODE((tdb)->treeNodeType) && IS_PARENT(tdb) && IS_CHILD(tdb))
+#define IS_INDEPENDENT(tdb)             (INDEPENDENT_NODE((tdb)->treeNodeType) && !IS_PARENT(tdb) && !IS_CHILD(tdb))    
+    
+inline boolean tdbIsSuper(struct trackDb *tdb);
+/* Is this trackDb struct marked as a supertrack ? */
+
+inline boolean tdbIsSuperTrack(struct trackDb *tdb);
+/* Is this trackDb struct marked as a supertrack with children ? */
+
+inline boolean tdbIsComposite( struct trackDb *tdb);
+/* Is this trackDb struct marked as a composite with children ?  */
+
+inline boolean tdbIsSuperTrackChild(struct trackDb *tdb);
+/* Is this trackDb struct marked as a child of a supertrack ?  */
+
+inline boolean tdbIsCompositeChild(struct trackDb *tdb);
+/* Is this trackDb struct marked as a child of a composite track ?  */
+
+inline void tdbMarkAsSuperTrack(struct trackDb *tdb);
+/* Marks a trackDb struct as a supertrack */
+
+inline void tdbMarkAsComposite( struct trackDb *tdb);
+/* Marks a trackDb struct as a composite track  */
+
+inline void tdbMarkAsSuperTrackChild(struct trackDb *tdb);
+/* Marks a trackDb struct as a child of a supertrack  */
+
+inline void tdbMarkAsCompositeChild( struct trackDb *tdb);
+/* Marks a trackDb struct as a child of a composite track  */
 
 struct trackDb *trackDbLoad(char **row);
 /* Load a trackDb from row fetched with select * from trackDb
@@ -160,11 +178,8 @@ struct hashEl *trackDbSettingsLike(struct trackDb *tdb, char *wildStr);
  * characters).  Free the result with hashElFreeList. */
 
 bool trackDbIsComposite(struct trackDb *tdb);
-/* Determine if this is a populated composite track. This is currently defined
- * as a top-level dummy track, with a list of subtracks of the same type */
-
-bool trackDbHasCompositeSetting(struct trackDb *tdb);
-/* Determine if this has a trackDb setting indicating it is a composite */
+/* Determine if this is a populated composite track. This is defined
+ * as a track that contains other tracks which are only individually configured on hgTrackUi */ 
 
 char *trackDbGetSupertrackName(struct trackDb *tdb);
 /* Find name of supertrack if this track is a member */

@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.38 2008/07/07 16:14:47 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.39 2008/07/09 14:32:33 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -400,16 +400,10 @@ return matchingSettings;
 }
 
 bool trackDbIsComposite(struct trackDb *tdb)
-/* Determine if this is a populated composite track. This is currently defined
- * as a top-level dummy track, with a list of subtracks of the same type */ // TODO: inaccurate definition
+/* Determine if this is a populated composite track. This is defined
+ * as a track that contains other tracks which are only individually configured on hgTrackUi */ 
 {
-    return (tdb->subtracks && differentString(tdb->type, "wigMaf"));  // TODO: This doesn't distinguish between superTrack and composite track
-}
-
-bool trackDbHasCompositeSetting(struct trackDb *tdb)
-/* Determine if this has a trackDb setting indicating it is a composite */
-{
-    return (trackDbSetting(tdb, "compositeTrack") != NULL);
+    return tdbIsComposite(tdb);// && differentString(tdb->type, "wigMaf"));  // TODO: wigMaf ???
 }
 
 struct superTrackInfo {
@@ -472,9 +466,13 @@ void trackDbSuperMemberSettings(struct trackDb *tdb)
 struct superTrackInfo *stInfo = getSuperTrackInfo(tdb);
 tdb->parentName = cloneString(stInfo->parentName);
 tdb->visibility = stInfo->defaultVis;
-MARK_AS_SUPERTRACK_CHILD(tdb);
+tdbMarkAsSuperTrackChild(tdb);
 if(tdb->parent)
-    MARK_AS_SUPERTRACK(tdb->parent);
+    {
+    tdbMarkAsSuperTrack(tdb->parent);
+    //if(tdb->parent->subtracks || tdb->next == NULL)  // TODO: Currently supertracks do not contain an array of subtracks!
+    //   slAddHead(&tdb->parent->subtracks, tdb);
+    }
 freeMem(stInfo);
 }
 
@@ -493,7 +491,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         continue;
     if (stInfo->isSuper)
         {
-        MARK_AS_SUPERTRACK(tdb);
+        tdbMarkAsSuperTrack(tdb);
         tdb->isShow = stInfo->isShow;
         if (!hashLookup(superHash, tdb->tableName))
             hashAdd(superHash, tdb->tableName, tdb);
@@ -532,4 +530,41 @@ if (origAssembly)
         }
     }
 }
+
+inline boolean tdbIsSuper(struct trackDb *tdb)
+/* Is this trackDb struct marked as a supertrack ? */
+{ return SUPERTRACK_NODE(tdb->treeNodeType); }
+
+inline boolean tdbIsSuperTrack(struct trackDb *tdb) 
+/* Is this trackDb struct marked as a supertrack ? */
+{ return /*tdb->subtracks &&*/ SUPERTRACK_NODE(tdb->treeNodeType); }  // TODO: superTrack code needs rewite to contain it's children
+//{ return /*tdb->track->subtracks &&*/ SUPERTRACK_NODE(tdb->treeNodeType); }  // TODO: superTrack code needs rewite to contain it's children
+
+inline boolean tdbIsComposite( struct trackDb *tdb) 
+/* Is this trackDb struct marked as a composite with children ?  */
+{ return tdb->subtracks && COMPOSITE_NODE( tdb->treeNodeType); }
+
+inline boolean tdbIsSuperTrackChild(struct trackDb *tdb) 
+/* Is this trackDb struct marked as a child of a supertrack ?  */
+{ return tdb->parent && SUPERTRACK_CHILD_NODE(tdb->treeNodeType); }
+
+inline boolean tdbIsCompositeChild(struct trackDb *tdb)  
+/* Is this trackDb struct marked as a child of a composite track ?  */
+{ return tdb->parent && COMPOSITE_CHILD_NODE( tdb->treeNodeType); }
+
+inline void tdbMarkAsSuperTrack(struct trackDb *tdb)      
+/* Marks a trackDb struct as a supertrack */
+{ tdb->treeNodeType |= SUPERTRACK_MASK;       }
+
+inline void tdbMarkAsComposite( struct trackDb *tdb)      
+/* Marks a trackDb struct as a composite track  */
+{ tdb->treeNodeType |= COMPOSITE_MASK;        }
+
+inline void tdbMarkAsSuperTrackChild(struct trackDb *tdb) 
+/* Marks a trackDb struct as a child of a supertrack  */
+{ tdb->treeNodeType |= SUPERTRACK_CHILD_MASK; }
+
+inline void tdbMarkAsCompositeChild( struct trackDb *tdb) 
+/* Marks a trackDb struct as a child of a composite track  */
+{ tdb->treeNodeType |= COMPOSITE_CHILD_MASK;  }
 

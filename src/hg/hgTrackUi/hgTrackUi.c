@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.439 2008/07/07 16:15:23 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.440 2008/07/09 14:37:46 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2648,7 +2648,7 @@ struct trackDb *tdb;
 printf("<P><TABLE CELLPADDING=2>");
 for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     {
-    if (!hTableOrSplitExists(tdb->tableName) && !trackDbHasCompositeSetting(tdb))
+    if (!hTableOrSplitExists(tdb->tableName) && !trackDbIsComposite(tdb))
         continue;
     printf("<TR>");
     printf("<TD NOWRAP><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>", 
@@ -2886,9 +2886,9 @@ else if (tdb->type != NULL)
 	}
     freeMem(typeLine);
     }
-if (IS_SUPERTRACK(tdb))
+if (tdbIsSuperTrack(tdb))
     superTrackUi(tdb);
-else if (IS_COMPOSITE(tdb))
+else if (tdbIsComposite(tdb))
     hCompositeUi(cart, tdb, NULL, NULL, MAIN_FORM);
 }
 
@@ -2898,10 +2898,10 @@ void trackUi(struct trackDb *tdb)
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
-printf("<H1>%s%s</H1>\n", tdb->longLabel, IS_SUPER(tdb) ? " Tracks" : "");
+printf("<H1>%s%s</H1>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
 /* Print link for supertrack */
-if (IS_SUPERTRACK_CHILD(tdb))
+if (tdbIsSuperTrackChild(tdb))
     {
     assert((tdb->parentName));
     struct trackDb *superTdb = hTrackDbForTrack(tdb->parentName);
@@ -2920,7 +2920,7 @@ if (isCustomTrack(tdb->tableName) && sameString(tdb->type, "maf"))
 
 /* Display visibility menu */
 printf("<B>Display&nbsp;mode:&nbsp;</B>");
-if (IS_SUPER(tdb))
+if (tdbIsSuper(tdb))
     {
     /* This is a supertrack -- load its members and show hide/show dropdown */
     hTrackDbLoadSuper(tdb);
@@ -2971,7 +2971,7 @@ else
 	    tableName = "all_mrna";
         printf(SCHEMA_LINK, database, tdb->grp, tableName, tableName);
         }
-    else if (IS_COMPOSITE(tdb))
+    else if (tdbIsComposite(tdb))
 	{
 	/* handle multi-word subTrack settings: */
     if(!dimensionsExist(tdb))
@@ -3100,11 +3100,11 @@ if (super)
     if (tdb->parent)
         {
         /* the supertrack is also configured, so use supertrack defaults */
-        MARK_AS_SUPERTRACK(tdb->parent);
+        tdbMarkAsSuperTrack(tdb->parent);
         trackDbSuperMemberSettings(tdb);
         }
     }
-char *title = (IS_SUPER(tdb) ? "Super-track Settings" : "Track Settings");
+char *title = (tdbIsSuper(tdb) ? "Super-track Settings" : "Track Settings");
 cartWebStart(cart, "%s %s", tdb->shortLabel, title);
 trackUi(tdb);
 printf("<BR>\n");
