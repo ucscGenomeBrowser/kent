@@ -66,6 +66,28 @@ expScale 1.0
 expStep 0.1
 groupings broadABIGroups
 
+track wustlABI
+shortLabel TCGA GBM wustlABI
+longLabel TCGA GBM wustl ABI Tumor Sequencing
+group x
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings wustlABIGroups
+
+track hgscABI
+shortLabel TCGA GBM hgscABI
+longLabel TCGA GBM hgsc ABI Tumor Sequencing
+group x
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings hgscABIGroups
+
 track broadABIBase
 shortLabel TCGA GBM broadABIBase
 longLabel TCGA GBM Broad ABI Base Tumor Sequencing
