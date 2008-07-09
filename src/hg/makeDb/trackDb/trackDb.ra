@@ -440,7 +440,7 @@ superTrack on
 shortLabel TransMap
 longLabel TransMap Alignments
 group genes
-priority 36
+priority 37.001
 
     track transMapAlnUcscGenes
     superTrack transMap pack
@@ -448,7 +448,7 @@ priority 36
     longLabel TransMap UcscGenes Gene Mappings
     group genes
     type psl
-    priority 36.1
+    priority 37.002
     color 0,100,0
     visibility pack
     transMapInfo transMapInfoUcscGenes
@@ -475,7 +475,7 @@ priority 36
     longLabel TransMap RefSeq Gene Mappings
     group genes
     type psl
-    priority 36.2
+    priority 37.003
     color 0,100,0
     visibility pack
     transMapInfo transMapInfoRefSeq
@@ -501,7 +501,7 @@ priority 36
     longLabel TransMap GenBank mRNA Mappings
     group genes
     type psl
-    priority 36.3
+    priority 37.004
     color 0,100,0
     visibility pack
     transMapInfo transMapInfoMRna
@@ -527,7 +527,7 @@ priority 36
     longLabel TransMap Spliced EST Mappings
     group genes
     type psl
-    priority 36.4
+    priority 37.005
     color 0,100,0
     visibility hide
     transMapInfo transMapInfoSplicedEst
