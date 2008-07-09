@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.44 2008/07/06 09:07:19 kent Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.45 2008/07/09 19:43:17 galt Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -389,7 +389,11 @@ for (i=0; i<oldHashSize; ++i)
     }
 /* restore original list order */
 for (i=0; i<hash->size; ++i)
-    slReverse(&hash->table[i]);
+    {
+    struct hashEl *hel = hash->table[i];
+    if (hel != NULL && hel->next != NULL)	    
+	slReverse(&hash->table[i]);
+    }
 freeMem(oldTable);
 }
 
