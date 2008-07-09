@@ -1,6 +1,6 @@
 /* trashDir.c - temporary file creation and directory creation in /trash */
 
-static char const rcsid[] = "$Id: trashDir.c,v 1.5 2007/03/31 16:48:10 markd Exp $";
+static char const rcsid[] = "$Id: trashDir.c,v 1.6 2008/07/09 22:55:35 angie Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -37,3 +37,29 @@ else
     safef(prefix, sizeof(prefix), "%s/%s", dirName,base);
 makeTempName(tn, prefix, suffix);
 }
+
+void copyFileToTrash(char **pFileName, char *dirName, char *base, char *suffix)
+/* If *pFileName is not NULL and exists, then create a new file in the
+ * given dirName of trash/ with the given base and suffix, copy *pFileName's
+ * contents to it, and set *pFileName to the new filename. */
+{
+if (pFileName != NULL && *pFileName != NULL)
+    {
+    if (fileExists(*pFileName))
+	{
+	FILE *fIn = mustOpen(*pFileName, "r");
+        struct tempName tn;
+	trashDirFile(&tn, dirName, base, suffix);
+        char *newFileName = tn.forCgi;
+	FILE *fOut = mustOpen(newFileName, "w");
+	unsigned char buf[16 * 1024];
+	size_t sz;
+	while ((sz = fread(buf, sizeof(buf[0]), ArraySize(buf), fIn)) > 0)
+	    fwrite(buf, sizeof(buf[0]), sz, fOut);
+	fclose(fOut);
+	fclose(fIn);
+	*pFileName = cloneString(newFileName);
+	}
+    }
+}
+
