@@ -8,7 +8,8 @@
  * The hashFindVal function will return NULL if the name does not
  * appear in the hash.  Alternatively you can use:
  *    value = hashMustFindVal(hash, name);
- * which will abort if name is not in the hash.
+ * which will abort if name is not in the hash.  When done with a hash do:
+ *     hashFree(&hash);
  *
  * The hash does support multiple values for the same key.  To use
  * this functionality, try the loop:
@@ -38,11 +39,8 @@
  *    while ((hel = hashNext(&cookie)) != NULL)
  *        {
  *        value = hel->val;
- * Finally one can use hashTraverseEls of hashTraverseVals with a callback 
+ * Finally one can use hashTraverseEls or hashTraverseVals with a callback 
  * function that takes a hashEl, or the void *value as parameter respectively.
- *
- * When done with a hash do:
- *     hashFree(&hash);
  *
  * There are various other functions involving hashes in this module as well
  * that provide various short cuts.  For information on these and additional
