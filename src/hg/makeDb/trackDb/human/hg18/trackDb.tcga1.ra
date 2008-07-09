@@ -33,6 +33,17 @@ expScale 1.0
 expStep 0.1
 groupings uncAgiExpGroups
 
+name uncHmiRNA
+shortLabel TCGA GBM UNC miRNA
+longLabel TCGA GBM UNC H-miRNA
+group x
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings uncHmiRNAGroups
+
 track broadAffyExp
 shortLabel TCGA GBM broadAffyExp
 longLabel TCGA GBM Broad Affymetrix Expression array U133A
