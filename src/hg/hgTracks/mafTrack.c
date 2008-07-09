@@ -15,7 +15,7 @@
 #include "mafTrack.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.60 2008/05/31 14:16:15 braney Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.61 2008/07/09 18:41:57 braney Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -196,16 +196,7 @@ struct sqlConnection *conn = NULL;
 struct mafPriv *mp = getMafPriv(tg);
 
 if (mp->ct != NULL)
-    {
-    struct customTrack *ct = mp->ct;
-    tg->mapName = ct->dbTableName;
-    conn = sqlCtConn(TRUE);
-    struct sqlConnection *conn2 = sqlCtConn(TRUE);
-    mafList = mafLoadInRegion2(conn, conn2, ct->dbTableName, chromName, 
-	winStart, winEnd);
-    sqlDisconnect(&conn2);
-    sqlDisconnect(&conn);
-    }
+    errAbort("this maf path not supported for custom maf tracks");
 else
     {
     conn = hAllocConn();
