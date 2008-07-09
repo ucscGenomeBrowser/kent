@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.210 2008/06/23 18:15:15 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.211 2008/07/09 20:36:51 markd Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1272,7 +1272,7 @@ fprintf(f, "<H2>%s</H2>", table->description);
 fprintf(f, "This aligns in multiple positions.  Click on a hyperlink to ");
 fprintf(f, "go to tracks display at a particular alignment.<BR>");
 
-fprintf(f, "<TT><PRE>");
+fprintf(f, "<PRE>");
 fprintf(f, " SIZE IDENTITY CHROMOSOME STRAND  START     END       cDNA   START  END  TOTAL\n");
 fprintf(f, "------------------------------------------------------------------------------\n");
 }
@@ -1280,7 +1280,7 @@ fprintf(f, "--------------------------------------------------------------------
 static void mrnaHtmlEnd(struct hgPosTable *table, FILE *f)
 /* Print end to mrna alignment positions. */
 {
-fprintf(f, "</TT></PRE>");
+fprintf(f, "</PRE>");
 }
 
 static void mrnaHtmlOnePos(struct hgPosTable *table, struct hgPos *pos, FILE *f)
@@ -2423,7 +2423,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	if (table->htmlStart) 
 	    table->htmlStart(table, f);
 	else
-	    fprintf(f, "<H2>%s</H2><PRE><TT>\n", table->description);
+	    fprintf(f, "<H2>%s</H2><PRE>\n", table->description);
 	for (pos = table->posList; pos != NULL; pos = pos->next)
 	    {
 	    if (table->htmlOnePos)
@@ -2458,7 +2458,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	if (table->htmlEnd) 
 	    table->htmlEnd(table, f);
 	else
-	    fprintf(f, "</PRE></TT>\n");
+	    fprintf(f, "</PRE>\n");
 	}
     }
 
