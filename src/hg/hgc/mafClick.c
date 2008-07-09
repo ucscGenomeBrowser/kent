@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.52 2008/07/08 21:01:54 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.53 2008/07/09 18:43:42 braney Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -432,7 +432,7 @@ capAliTextOnTrack(maf, dbOnly, chrom, track, onlyCds);
 
 static struct mafAli *mafOrAxtLoadInRegion2(struct sqlConnection *conn, 
 	struct sqlConnection *conn2, struct trackDb *tdb, 
-	char *chrom, int start, int end, char *axtOtherDb)
+	char *chrom, int start, int end, char *axtOtherDb, char *file)
 {
 if (axtOtherDb != NULL)
     {
@@ -444,7 +444,8 @@ if (axtOtherDb != NULL)
     return mafList;
     }
 else
-    return mafLoadInRegion2(conn, conn2, tdb->tableName, chrom, start, end);
+    return mafLoadInRegion2(conn, conn2, tdb->tableName, chrom, 
+	start, end, file);
 }
 
 /* Load mafs from region, either from maf or axt file. */
@@ -489,7 +490,7 @@ hgcPathAndSettings(), table, table, chrom,
 winStart, winEnd, winStart, database, tdb->tableName, label);
 }
 
-static void mafOrAxtClick2(struct sqlConnection *conn, struct sqlConnection *conn2, struct trackDb *tdb, char *axtOtherDb)
+static void mafOrAxtClick2(struct sqlConnection *conn, struct sqlConnection *conn2, struct trackDb *tdb, char *axtOtherDb, char *fileName)
 /* Display details for MAF or AXT tracks. */
 {
 hgBotDelay();
@@ -532,7 +533,7 @@ else
 	}
 
     mafList = mafOrAxtLoadInRegion2(conn,conn2, tdb, seqName, winStart, winEnd, 
-    	axtOtherDb);
+    	axtOtherDb, fileName);
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
     
     safef(option, sizeof(option), "%s.speciesOrder", tdb->tableName);
@@ -729,7 +730,7 @@ static void mafOrAxtClick(struct sqlConnection *conn, struct trackDb *tdb, char 
 {
 struct sqlConnection *conn2 = hAllocConn();
 
-mafOrAxtClick2(conn, conn2, tdb, axtOtherDb);
+mafOrAxtClick2(conn, conn2, tdb, axtOtherDb, NULL);
 
 hFreeConn(&conn2);
 }
@@ -1230,7 +1231,11 @@ else
 void customMafClick(struct sqlConnection *conn, struct sqlConnection *conn2, 
     struct trackDb *tdb)
 {
-mafOrAxtClick2(conn, conn2, tdb, NULL);
+struct hash *settings = tdb->settingsHash;
+char *fileName;
+if ((fileName = hashFindVal(settings, "mafFile")) == NULL)
+    errAbort("cannot find custom maf file setting");
+mafOrAxtClick2(conn, conn2, tdb, NULL, fileName);
 }
 
 void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 

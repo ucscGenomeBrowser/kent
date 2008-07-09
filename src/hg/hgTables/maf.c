@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.13 2008/05/31 13:54:29 braney Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.14 2008/07/09 18:44:15 braney Exp $";
 
 boolean isMafTable(char *database, struct trackDb *track, char *table)
 /* Return TRUE if table is maf. */
@@ -46,11 +46,20 @@ textOpen();
 struct sqlConnection *ctConn = NULL;
 struct sqlConnection *ctConn2 = NULL;
 struct customTrack *ct = NULL;
+char *mafFile = NULL;
+
 if (isCustomTrack(table))
     {
     ctConn = sqlCtConn(TRUE);
     ctConn2 = sqlCtConn(TRUE);
     ct = lookupCt(table);
+    struct hash *settings = track->settingsHash;
+    if ((mafFile = hashFindVal(settings, "mafFile")) == NULL)
+	{
+	/* this shouldn't happen */
+	printf("cannot find custom track file %s\n", mafFile);
+	return;
+	}
     }
 
 mafWriteStart(stdout, NULL);
@@ -77,7 +86,7 @@ for (region = regionList; region != NULL; region = region->next)
 				      bed->chromStart, bed->chromEnd);
 	else
 	    mafList = mafLoadInRegion2(ctConn, ctConn2, ct->dbTableName, 
-		    bed->chrom, bed->chromStart, bed->chromEnd);
+		    bed->chrom, bed->chromStart, bed->chromEnd, mafFile);
 	for (maf = mafList; maf != NULL; maf = maf->next)
 	    {
 	    struct mafAli *subset = mafSubset(maf, dbChrom, 
