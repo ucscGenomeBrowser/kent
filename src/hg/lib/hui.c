@@ -16,7 +16,7 @@
 #include "obscure.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.104 2008/07/07 16:14:47 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.105 2008/07/09 14:43:37 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -1677,7 +1677,7 @@ boolean dimensionsExist(struct trackDb *parentTdb)
 static boolean dimensionsSubtrackOf(struct trackDb *childTdb)
 /* Does this child belong to a parent  with dimensions? */
 {
-    return (IS_COMPOSITE_CHILD(childTdb) && dimensionsExist(childTdb->parent));
+    return (tdbIsCompositeChild(childTdb) && dimensionsExist(childTdb->parent));
 }
 
 static dimensions_t *dimensionSettingsGet(struct trackDb *parentTdb)
@@ -1924,7 +1924,7 @@ if(isMatrix)
     safecat(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "cb");
     }
 if(strlen(id) <= 5)
-    safef(id, CHECKBOX_ID_SZ, "cb_%s", tdb->shortLabel);
+    safef(id, CHECKBOX_ID_SZ, "cb_%s", tdb->tableName);
 return id;    
 }
 static void checkBoxIdFree(char**id)
@@ -2912,7 +2912,7 @@ boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
  * If -1,i the subtracks field must be populated with the child trackDbs.
  * Returns false if not a supertrack */
 {
-if (!IS_SUPERTRACK(tdb))
+if (!tdbIsSuperTrack(tdb))
     return FALSE;
 
 /* determine if supertrack is show/hide */
