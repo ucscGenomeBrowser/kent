@@ -24,7 +24,7 @@ groupings harvardCGHGroups
 
 track uncAgiExp
 shortLabel TCGA GBM uncAgiExp
-longLabel TCGA GBM unc Agilent Expression array 4x44k
+longLabel TCGA GBM UNC Agilent custom expression array G4502A
 group x
 visibility hide
 type expRatio
