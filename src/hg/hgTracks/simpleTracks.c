@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.18 2008/07/03 22:06:17 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.19 2008/07/09 14:37:16 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 
@@ -8555,7 +8555,7 @@ bool isCompositeTrack(struct track *track)
  * subtracks but aren't composites */
 {
 if (track->tdb)
-    return (track->subtracks != NULL && trackDbIsComposite(track->tdb));
+    return (track->subtracks != NULL && tdbIsComposite(track->tdb));
 return FALSE;
 }
 
