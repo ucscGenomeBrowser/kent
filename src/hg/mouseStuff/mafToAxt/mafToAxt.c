@@ -42,7 +42,40 @@ if (stripDb)
 	errAbort("No db. found in %s", name);
     name = afterDb+1;
     }
-return cloneString(name);
+return name;
+}
+
+void doAllQueries(struct mafComp *components, char *qName, 
+    struct axt *template, FILE *f)
+{
+struct mafComp *comp;
+struct axt thisAxt;
+struct axt *axt = &thisAxt;
+
+for (comp = components; comp != NULL; comp = comp->next)
+    {
+    if (comp->text == NULL)
+	continue;
+
+    if( startsWith( qName, comp->src ))
+	{
+	thisAxt = *template;
+
+	axt->qName = stripDbFromName(comp->src);
+	axt->qStrand = comp->strand;
+	axt->qStart = comp->start;
+	axt->qEnd = comp->start + comp->size;
+	axt->qSym = comp->text;
+	if (strlen( axt->tSym  ) == strlen( axt->qSym )) 
+	    axt->symCount = strlen( axt->tSym );
+	else
+	    {
+	    errAbort("Target and query sequences are different"
+		     "lengths\n%s\n%s\n\n", axt->tSym, axt->qSym );
+	    }
+	axtWrite(axt,f);
+	}
+    }
 }
 
 void mafToAxt(char *in, char *tName, char *qName, char *out)
@@ -53,53 +86,32 @@ FILE *f = mustOpen(out, "w");
 struct mafAli *ali;
 struct mafComp *comp;
 boolean tIsFirst = sameString(tName, "first");
+struct axt *axt;
+
+AllocVar(axt);
 
 while ((ali = mafNext(mp)) != NULL)
     {
-    struct axt *axt;
-    AllocVar(axt);
-    axt->score = ali->score;
     for (comp = ali->components; comp != NULL; comp = comp->next)
 	{
 	if( (tIsFirst && comp == ali->components) || startsWith( tName, comp->src ) )
 	    {
-	    axt->tName = stripDbFromName(comp->src);
-	    cloneString(tName);	
-	    axt->tStrand = comp->strand;
-		    axt->tStart = comp->start;
-		    axt->tEnd = comp->start + comp->size;
-		    axt->tSym = comp->text;
-		    comp->text = NULL;
+	    if (comp->text == NULL)
+		continue;
 
+	    axt->score = ali->score;
+	    axt->tName = stripDbFromName(comp->src);
+	    axt->tStrand = comp->strand;
+	    axt->tStart = comp->start;
+	    axt->tEnd = comp->start + comp->size;
+	    axt->tSym = comp->text;
 
 	    if( axt->tStrand != '+' )
 		errAbort("Target sequence not on positive strand.\n");
-	    }
-	else if( startsWith( qName, comp->src ))
-	    {
-	    axt->qName = stripDbFromName(comp->src);
-	    axt->qStrand = comp->strand;
-	    axt->qStart = comp->start;
-	    axt->qEnd = comp->start + comp->size;
-	    axt->qSym = comp->text;
-	    comp->text = NULL;
-	    }
-	}
 
-    if( axt->tSym == NULL || axt->qSym == NULL )
-	{
-	axtFree(&axt);
-	continue;
+	    doAllQueries(ali->components, qName, axt, f);
+	    }
 	}
-    if (strlen( axt->tSym  ) == strlen( axt->qSym )) 
-	axt->symCount = strlen( axt->tSym );
-    else
-	{
-	errAbort("Target and query sequences are different"
-		 "lengths\n%s\n%s\n\n", axt->tSym, axt->qSym );
-	}
-    axtWrite(axt,f);
-    axtFree(&axt);
     mafAliFree(&ali);
     }
 
