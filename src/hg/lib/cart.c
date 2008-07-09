@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.93 2008/07/08 07:52:34 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.94 2008/07/09 22:56:36 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -261,9 +261,16 @@ for (el = elList; el != NULL; el = el->next)
 	 * the user. */
 	if (ctList)
 	    {
+	    struct customTrack *ct;
 	    static struct tempName tn;
 	    char *ctFileVar = el->name;
 	    char *ctFileName;
+	    for (ct = ctList;  ct != NULL;  ct = ct->next)
+		{
+		copyFileToTrash(&(ct->htmlFile), "ct", CT_PREFIX, ".html");
+		copyFileToTrash(&(ct->wibFile), "ct", CT_PREFIX, ".wib");
+		copyFileToTrash(&(ct->wigFile), "ct", CT_PREFIX, ".wig");
+		}
 	    trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
 	    ctFileName = tn.forCgi;
 	    cartSetString(cart, ctFileVar, ctFileName);
