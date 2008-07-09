@@ -122,9 +122,6 @@ void ctTouchLastUse(struct sqlConnection *conn, char *table,
  * for status==FALSE - delete entry for table from metaInfo table
  */
 
-boolean verifyMafExists(struct sqlConnection *conn, char *table);
-/* given a ct database maf table, see if the maf file is there */
-
 boolean verifyWibExists(struct sqlConnection *conn, char *table);
 /* given a ct database wiggle table, see if the wib file is there */
 
