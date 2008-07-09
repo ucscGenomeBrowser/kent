@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.131 2008/06/20 22:57:37 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.132 2008/07/09 18:42:57 braney Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -80,10 +80,10 @@ return (((struct wigMafItem *)item)->group % 2 ?
 }
 
 static struct mafAli *wigMafLoadInRegion(struct sqlConnection *conn, 
-    struct sqlConnection *conn2, char *table, char *chrom, int start, int end)
+    struct sqlConnection *conn2, char *table, char *chrom, int start, int end, char *file)
 /* Load mafs from region */
 {
-    return mafLoadInRegion2(conn, conn2, table, chrom, start, end);
+    return mafLoadInRegion2(conn, conn2, table, chrom, start, end, file);
 }
 
 static struct wigMafItem *newMafItem(char *s, int g, boolean lowerFirstChar)
@@ -336,6 +336,16 @@ if (mp == NULL)
 return mp;
 }
 
+char *getCustomMafFile(struct track *track)
+{
+struct hash *settings = track->tdb->settingsHash;
+char *fileName = NULL;
+
+if ((fileName = hashFindVal(settings, "mafFile")) == NULL)
+    errAbort("cannot find custom maf setting");
+return fileName;
+}
+
 static void loadMafsToTrack(struct track *track)
 /* load mafs in region to track custom pointer */
 {
@@ -357,10 +367,12 @@ if (winBaseCount > MAF_SUMMARY_VIEW)
  */
 if (mp->ct)
     {
+    char *fileName = getCustomMafFile(track);
+
     conn = sqlCtConn(TRUE);
     conn2 = sqlCtConn(TRUE);
     mp->list = wigMafLoadInRegion(conn, conn2, mp->ct->dbTableName,
-				chromName, winStart - 2 , winEnd + 2);
+				chromName, winStart - 2 , winEnd + 2, fileName);
     sqlDisconnect(&conn);
     sqlDisconnect(&conn2);
     }
@@ -369,7 +381,7 @@ else
     conn = hAllocConn();
     conn2 = hAllocConn();
     mp->list = wigMafLoadInRegion(conn, conn2, track->mapName, 
-				chromName, winStart - 2 , winEnd + 2);
+				chromName, winStart - 2 , winEnd + 2, NULL);
     hFreeConn(&conn);
     hFreeConn(&conn2);
     }
@@ -547,10 +559,11 @@ if (winBaseCount < MAF_SUMMARY_VIEW)
 
     if (mp->ct)
 	{
+	char *fileName = getCustomMafFile(track);
 	conn = sqlCtConn(TRUE);
 	conn2 = sqlCtConn(TRUE);
 	mp->list = wigMafLoadInRegion(conn, conn2, mp->ct->dbTableName,
-					    chromName, winStart, winEnd);
+					chromName, winStart, winEnd, fileName);
 	sqlDisconnect(&conn);
 	sqlDisconnect(&conn2);
 	}
@@ -559,7 +572,7 @@ if (winBaseCount < MAF_SUMMARY_VIEW)
 	conn = hAllocConn();
 	conn2 = hAllocConn();
 	mp->list = wigMafLoadInRegion(conn, conn2, track->mapName, 
-					    chromName, winStart, winEnd);
+					chromName, winStart, winEnd, NULL);
 	hFreeConn(&conn);
 	hFreeConn(&conn2);
 	}
@@ -1447,11 +1460,11 @@ if ((retValue = lookupCodon(codon)) == 0)
 return retValue;
 }
 
-static void translateCodons(struct sqlConnection *conn, struct sqlConnection *conn2, char *tableName, char *compName, DNA *dna, int start, int length, int frame, 
-				char strand,int prevEnd, int nextStart,
-				bool alreadyComplemented,
-				int x, int y, int width, int height, 
-				struct hvGfx *hvg)
+static void translateCodons(struct sqlConnection *conn, 
+    struct sqlConnection *conn2, char *tableName, char *compName, 
+    DNA *dna, int start, int length, int frame, char strand,
+    int prevEnd, int nextStart, bool alreadyComplemented,
+    int x, int y, int width, int height, struct hvGfx *hvg, char *mafFile)
 {
 int size = length;
 DNA *ptr;
@@ -1517,7 +1530,7 @@ else if (frame && (prevEnd != -1))
     switch(frame)
 	{
 	case 1:
-	    ali = mafLoadInRegion2(conn, conn2, tableName, chromName, prevEnd , prevEnd + 1  );
+	    ali = mafLoadInRegion2(conn, conn2, tableName, chromName, prevEnd , prevEnd + 1, mafFile  );
 	    if (ali != NULL)
 		{
 		sub = mafSubset(ali, masterChrom, prevEnd , prevEnd + 1  );
@@ -1543,14 +1556,14 @@ else if (frame && (prevEnd != -1))
 	    if (strand == '-')
 		{
 		ali = mafLoadInRegion2(conn, conn2, tableName, chromName, 
-			    prevEnd, prevEnd + 2);
+			    prevEnd, prevEnd + 2, mafFile);
 		if (ali != NULL)
 		    sub = mafSubset(ali, masterChrom, prevEnd, prevEnd + 2  );
 		}
 	    else
 		{
 		ali = mafLoadInRegion2(conn, conn2, tableName, chromName, 
-			    prevEnd - 1, prevEnd + 1);
+			    prevEnd - 1, prevEnd + 1, mafFile);
 		if (ali != NULL)
 		    sub = mafSubset(ali, masterChrom, prevEnd - 1, prevEnd + 1);
 		}
@@ -1623,7 +1636,7 @@ if (length && (nextStart != -1))
     if (strand == '-')
 	{
 	ali = mafLoadInRegion2(conn, conn2, tableName, chromName, 
-		    nextStart - 2 + length, nextStart + 1 );
+		    nextStart - 2 + length, nextStart + 1, mafFile );
 	if (ali != NULL)
 	    sub = mafSubset(ali, masterChrom, 
 		nextStart - 2 + length, nextStart + 1);
@@ -1631,7 +1644,7 @@ if (length && (nextStart != -1))
     else
 	{
 	ali = mafLoadInRegion2(conn, conn2, tableName, chromName, 
-				nextStart , nextStart + 2 );
+				nextStart , nextStart + 2, mafFile );
 	if (ali != NULL)
 	    sub = mafSubset(ali, masterChrom, nextStart , nextStart + 2);
 	}
@@ -1741,6 +1754,7 @@ int mafOrig = 0;
 int mafOrigOffset = 0;
 char query[256];
 struct mafPriv *mp = getMafPriv(track);
+char *mafFile = NULL;
 struct sqlConnection *conn2 = NULL;
 struct sqlConnection *conn3 = NULL;
 char *tableName = NULL;
@@ -1750,6 +1764,7 @@ if (mp->ct != NULL)
     conn2 = sqlCtConn(TRUE);
     conn3 = sqlCtConn(TRUE);
     tableName = mp->ct->dbTableName;
+    mafFile = getCustomMafFile(track);
     }
 else
     {
@@ -2222,7 +2237,7 @@ tryagain:
 
 	    translateCodons(conn2, conn3, tableName, mi->db, line, start , 
 		w, frame, mf.strand[0],mf.prevFramePos,mf.nextFramePos,
-		complementBases, x, y, width, mi->height,  hvg);
+		complementBases, x, y, width, mi->height,  hvg, mafFile);
 	    
 	    }
 	sqlFreeResult(&sr);
