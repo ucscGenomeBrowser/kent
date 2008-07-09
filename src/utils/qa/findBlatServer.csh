@@ -13,7 +13,6 @@ set db=''
 set host=''
 set machine='-h genome-centdb hgcentral'
 set order='db'
-set limit=''
 
 if ( $#argv < 1 || $#argv > 3 ) then
   echo
@@ -63,17 +62,21 @@ if ( ! $status ) then
     set machine='hgcentraltest'
 endif
 
-if ( all == "$db" ) then
+if ( all% == "$db" ) then
   set db='%'
 endif
 
-# find out if user specified host or db
+# echo "order   $order"
+# echo "machine $machine"
+# echo "host    $host   "
+# echo "db      $db     "
+
+# find out if user has specified host or db
 echo $host | grep blat > /dev/null
 if ( $status ) then
   hgsql $machine -e "SELECT DISTINCT db, host \
-    FROM blatServers WHERE db LIKE '$db' ORDER BY '$order' $limit"
+    FROM blatServers WHERE db LIKE '$db' ORDER BY '$order'"
 else
   hgsql $machine -e "SELECT DISTINCT db, host \
     FROM blatServers WHERE host = '$host' ORDER BY '$order'"
 endif
-
