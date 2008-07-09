@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.172 2008/07/07 18:04:10 braney Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.173 2008/07/09 18:40:39 braney Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -115,38 +115,6 @@ else
 	CT_META_INFO, table);
     sqlUpdate(conn,query);
     }
-}
-
-boolean verifyMafExists(struct sqlConnection *conn, char *table)
-/* given a ct database maf table, see if the maf file is there */
-{
-char query[1024];
-struct sqlResult *sr = NULL;
-char **row = NULL;
-int extFile = 0;
-boolean isGood = FALSE;
-
-safef(query, sizeof(query), "SELECT extFile FROM %s LIMIT 1", table);
-sr = sqlGetResult(conn,query);
-row = sqlNextRow(sr);
-if (row)
-    extFile = sqlUnsigned(row[0]);
-
-sqlFreeResult(&sr);
-
-if (extFile == 0)
-    return FALSE;
-
-safef(query, sizeof(query), "SELECT path FROM extFile where id = '%d'", 
-    extFile);
-sr = sqlGetResult(conn,query);
-row = sqlNextRow(sr);
-
-if ((row) && (fileExists(row[0])))
-    isGood = TRUE;
-
-sqlFreeResult(&sr);
-return isGood;
 }
 
 boolean verifyWibExists(struct sqlConnection *conn, char *table)

@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.84 2008/07/08 16:24:04 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.85 2008/07/09 18:40:39 braney Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -995,8 +995,8 @@ customFactorySetupDbTrack(track);
 
 char *db = customTrackTempDb();
 struct dyString *tmpDy = newDyString(0);
-char *cmd1[] = {"loader/hgLoadMaf", "-verbose=0", NULL,  NULL,
-	NULL, NULL, NULL, NULL, NULL, NULL};
+char *cmd1[] = {"loader/hgLoadMaf", "-verbose=0", "-custom",  NULL,
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 char **cmds[] = {cmd1, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
 struct stat statBuf;
@@ -1008,17 +1008,17 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-loadFile=%s", mafFile);
-cmd1[3] = dyStringCannibalize(&tmpDy);  tmpDy = newDyString(0);
+cmd1[4] = dyStringCannibalize(&tmpDy);  tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-refDb=%s", hGetDb());
-cmd1[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0); 
-dyStringPrintf(tmpDy, "-maxNameLen=%d", track->maxChromName);
 cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0); 
+dyStringPrintf(tmpDy, "-maxNameLen=%d", track->maxChromName);
+cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0); 
 dyStringPrintf(tmpDy, "-defPos=%s", tn.forCgi);
-cmd1[6] = dyStringCannibalize(&tmpDy);
-cmd1[7] = db;
-cmd1[8] = track->dbTableName;
+cmd1[7] = dyStringCannibalize(&tmpDy);
+cmd1[8] = db;
+cmd1[9] = track->dbTableName;
 
 struct pipeline *dataPipe =  pipelineOpen(cmds, 
     pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile);
@@ -1806,7 +1806,11 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	    continue;
 	if ( startsWith("maf", track->tdb->type))
 	    {
-	    if (!verifyMafExists(ctConn, track->dbTableName))
+	    struct hash *settings = track->tdb->settingsHash;
+	    char *fileName;
+	    if ((fileName = hashFindVal(settings, "mafFile")) == NULL)
+		continue;
+	    if (!fileExists(fileName))
 		continue;
 	    }
 

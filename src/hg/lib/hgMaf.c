@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgMaf.c,v 1.10 2008/05/31 13:44:21 braney Exp $";
+static char const rcsid[] = "$Id: hgMaf.c,v 1.11 2008/07/09 18:40:39 braney Exp $";
 
 int mafCmp(const void *va, const void *vb)
 /* Compare to sort based on start of first component. */
@@ -25,7 +25,8 @@ return a->components->start - b->components->start;
 
 
 struct mafAli *mafLoadInRegion2(struct sqlConnection *conn, 
-    struct sqlConnection *conn2, char *table, char *chrom, int start, int end)
+    struct sqlConnection *conn2, char *table, char *chrom, 
+    int start, int end, char *file)
 /* Return list of alignments in region. */
 {
 char **row;
@@ -34,6 +35,9 @@ struct mafAli *maf, *mafList = NULL;
 struct mafFile *mf = NULL;
 int rowOffset;
 
+if (file != NULL)
+    mf = mafOpen(file);
+
 struct sqlResult *sr = hRangeQuery(conn, table, chrom, 
     start, end, NULL, &rowOffset);
 
@@ -41,6 +45,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct scoredRef ref;
     scoredRefStaticLoad(row + rowOffset, &ref);
+    if ((file != NULL) && (ref.extFile != 0))
+	errAbort("expect extFile to be zero if file specified\n");
+
     if (ref.extFile != extFileId)
 	{
 	char *path = hExtFileNameC(conn2, "extFile", ref.extFile);
@@ -67,7 +74,8 @@ struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end)
 {
 struct sqlConnection *conn2 = hgAllocConn();
-struct mafAli *ret = mafLoadInRegion2(conn, conn2, table, chrom, start, end);
+struct mafAli *ret = mafLoadInRegion2(conn, conn2, table, chrom, 
+    start, end,NULL);
 hgFreeConn(&conn2);
 return ret;
 }
