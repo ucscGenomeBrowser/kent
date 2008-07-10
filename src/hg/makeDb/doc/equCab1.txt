@@ -1110,4 +1110,18 @@ done
     featureBits equCab1 -enrichment refGene:CDS geneid
 # refGene:CDS 0.015%, geneid 1.608%, both 0.013%, cover 86.04%, enrich 53.52x
 
+#########################################################################
+# EQUCAB1->EQUCAB2 LIFTOVER (DONE - 2008-07-08 - larrym)
+    ssh kkstore02
+    cd /cluster/data/equCab1
+    cp -p /cluster/data/equCab2/equCab2.2bit /cluster/bluearc/equCab2
+
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug equCab1 equCab2
+    # Real run:
+    cd /cluster/data/equCab1/bed/blat.equCab2.2008-07-08
+    doSameSpeciesLiftOver.pl equCab1 equCab2 >& do.log &
+    tail -f do.log
+    rm -f /cluster/bluearc/equCab2/equCab2.2bit
+
 ##########################################################################
