@@ -18,7 +18,7 @@ if ( $#argv < 1 || $#argv > 3 ) then
   echo
   echo " gets info about which blat server hosts which genome(s)"
   echo
-  echo " usage:  db | host | all  [db | host] [machine]"
+  echo " usage:  db|host|all  [db|host]  [machine]"
   echo "   first parameter required: one specific db or host or all dbs"
   echo "   second parameter optional: order by db or by host (blatServer)"
   echo "     defaults to order by db"
