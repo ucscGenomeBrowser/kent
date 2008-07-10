@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.16 2008/07/01 16:53:00 markd Exp $"
+#	"$Id: equCab2.txt,v 1.17 2008/07/10 17:57:32 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.16 2008/07/01 16:53:00 markd Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.17 2008/07/10 17:57:32 larrym Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -1692,3 +1692,83 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+
+##########################################################################
+#  verify all.joiner entries (DONE - 2008-07-08 - larrym)
+    #	try to get joinerCheck tests clean output on these commands
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=equCab2 -tableCoverage all.joiner
+    joinerCheck -database=equCab2 -keys all.joiner
+    joinerCheck -database=equCab2 -times all.joiner
+
+##########################################################################
+#  make downloads (DONE - 2008-07-08 - larrym)
+    #	verify all tracks have html pages for their trackDb entries
+    cd /cluster/data/equCab2
+    /cluster/bin/scripts/makeDownloads.pl equCab2
+    #	fix the README files
+    #	re-build the upstream files:
+    cd /cluster/data/equCab2/goldenPath/bigZips
+   for size in 1000 2000 5000
+do
+  echo $size
+  featureBits equCab2 ensGene:upstream:$size -fa=stdout \
+  | gzip -c > ensGene.upstream$size.fa.gz
+done
+
+##########################################################################
+#  create pushQ entry (WORKING - 2008-07-08 - larrym)
+    #	verify all tracks have html pages for their trackDb entries
+    ssh hgwdev
+    cd /cluster/data/equCab2/jkStuff
+    /cluster/bin/scripts/makePushQSql.pl equCab2 > equCab2.pushQ.sql
+# equCab2 does not have seq
+    scp -p equCab2.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < equCab2.pushQ.sql
+    #	verify file sizes in the pushQ entries
+
+#  *** All done!
+#  *** Please edit the output to ensure correctness before using.
+#  *** 1. Resolve any warnings output by this script.
+#  *** 2. Remove any entries which should not be pushed.
+#  *** 3. Add tables associated with the main track table (e.g. *Pep tables
+#         for gene prediction tracks).
+#  *** 4. Add files associated with tracks.  First, look at the results
+#         of this query:
+#           hgsql equCab2 -e 'select distinct(path) from extFile'
+#         Then, look at file(s) named in each of the following wiggle tables:
+#           hgsql equCab2 -e 'select distinct(file) from phastCons6way'
+#           hgsql equCab2 -e 'select distinct(file) from gc5Base'
+#           hgsql equCab2 -e 'select distinct(file) from quality'
+#         Files go in the second field after tables (it's tables, cgis, files).
+#  *** 5. This script currently does not recognize composite tracks.  If equCab2
+#         has any composite tracks, you should manually merge the separate
+#         per-table entries into one entry.
+#  *** 6. Make sure that qapushq does not already have a table named equCab2:
+#           ssh hgwbeta hgsql qapushq -NBe "'desc equCab2;'"ssh hgwbeta hgsql qapushq -NBe "'desc equCab2;'"
+#         You *should* see this error:
+#           ERROR 1146 at line 1: Table 'qapushq.equCab2' doesn't exist
+#         If it already has that table, talk to QA and figure out whether
+#         it can be dropped or fixed up (by sql or the Push Queue web app).
+#  *** When everything is complete and correct, use hgsql on hgwbeta to
+#      execute the sql file.  Then use the Push Queue web app to check the
+#      contents of all entries.
+#  *** If you haven't already, please add equCab2 to makeDb/schema/all.joiner !
+#      It should be in both $gbd and $chainDest.
+XXXX TODO
+#  *** When equCab2 is on the RR (congrats!), please doBlastz -swap if you haven't
+#      already, and add Push Queue entries for those other databases' chains
+#      and nets to equCab2.
+
+Added following files to pushQ entry:
+
+/gbdb/equCab2/multiz6way/maf/chr*.maf
+/gbdb/equCab2/multiz6way/anno/maf/chr*.maf
+/gbdb/equCab2/multiz6way/phastCons6way.wib
+/gbdb/equCab2/wib/gc5Base.wib
+/gbdb/equCab2/wib/qual.wib
+
+##########################################################################
