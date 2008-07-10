@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.440 2008/07/09 14:37:46 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.441 2008/07/10 17:35:30 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -501,7 +501,7 @@ safef(var, sizeof(var), "%s_trm", tdb->tableName);
 cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldTrmDefault)); 
 printf("&nbsp;Trim to triangle<BR>\n");
 
-if (trackDbIsComposite(tdb))
+if (tdbIsComposite(tdb))
     {
     struct trackDb *subTdb;
     printf("<BR>&nbsp;&nbsp;&nbsp;");
@@ -564,7 +564,7 @@ if (tdb->type && sameString(tdb->type, "ld2"))
     printf("&nbsp;In dense mode, shade gaps between markers by T-int<BR>\n");
     }
 
-if (trackDbIsComposite(tdb))
+if (tdbIsComposite(tdb))
     printf("<BR><B>Populations:</B>\n");
 }
 
@@ -1538,7 +1538,7 @@ if (scoreCtString != NULL)
     puts("&nbsp; <B> Show only items in top-scoring </B>");
     cgiMakeTextVar(option, scoreFilterCt, 5);
     /* Only check size of table if track does not have subtracks */
-    if (!trackDbIsComposite(tdb))
+    if (!tdbIsComposite(tdb))
         printf("&nbsp; (range: 1 to 100000, total items: %d)",
                 getTableSize(tdb->tableName));
     }
@@ -2648,7 +2648,7 @@ struct trackDb *tdb;
 printf("<P><TABLE CELLPADDING=2>");
 for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     {
-    if (!hTableOrSplitExists(tdb->tableName) && !trackDbIsComposite(tdb))
+    if (!hTableOrSplitExists(tdb->tableName) && !tdbIsComposite(tdb))
         continue;
     printf("<TR>");
     printf("<TD NOWRAP><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>", 
@@ -3096,7 +3096,7 @@ char *super = trackDbGetSupertrackName(tdb);
 if (super)
     {
     /* configured as a supertrack member in trackDb */
-    tdb->parent = hTrackDbForTrack(super);
+    tdb->parent = hTrackDbForTrack(super);    // TODO: Parent will not point to children
     if (tdb->parent)
         {
         /* the supertrack is also configured, so use supertrack defaults */

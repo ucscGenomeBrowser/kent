@@ -28,7 +28,7 @@
 #include "gvUi.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.163 2008/06/20 23:18:40 braney Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.164 2008/07/10 17:36:17 tdreszer Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -177,7 +177,7 @@ if (isCustomTrack(table))
     struct customTrack *ct = lookupCt(table);
     tdb = ct->tdb;
     }
-else if (track && trackDbIsComposite(track))
+else if (track && tdbIsComposite(track))
     {
     struct trackDb *subTdb;
     for (subTdb=track->subtracks; subTdb != NULL; subTdb = subTdb->next)
@@ -786,7 +786,7 @@ if (trackDupe != NULL && trackDupe[0] != 0)
             hashAdd(uniqHash, wig->table, NULL);
             }
 	}
-    if (trackDbIsComposite(track))
+    if (tdbIsComposite(track))
         {
         struct trackDb *subTdb;
         struct slName *subList = NULL;
@@ -837,7 +837,7 @@ if (useJoiner)
     slNameSort(&nameList);
     }
 name = slNameNew(trackTable);
-if (!trackDbIsComposite(track))
+if (!tdbIsComposite(track))
     /* suppress for composite tracks -- only the subtracks have tables */
     slAddHead(&nameList, name);
 addTablesAccordingToTrackType(&nameList, uniqHash, track);

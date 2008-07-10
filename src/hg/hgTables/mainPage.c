@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.123 2008/06/30 20:51:18 ann Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.124 2008/07/10 17:36:39 tdreszer Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -685,7 +685,7 @@ hPrintf("</TD></TR>\n");
 }
 
 /* Composite track subtrack merge line. */
-if (curTrack && trackDbIsComposite(curTrack))
+if (curTrack && tdbIsComposite(curTrack))
     {
     hPrintf("<TR><TD><B>subtrack merge:</B>\n");
     if (anySubtrackMerge(database, curTable))
@@ -731,7 +731,7 @@ if (correlateTrackTableOK(curTrack, curTable))
 	struct grp *selGroup = findSelectedGroup(groupList, hgtaCorrelateGroup);
 	struct trackDb *tdb2 = findSelectedTrack(fullTrackList, selGroup,
 		hgtaCorrelateTrack);
-	if (trackDbIsComposite(tdb2))
+	if (tdbIsComposite(tdb2))
 	    {
 	    struct trackDb *subTdb;
 	    for (subTdb=tdb2->subtracks; subTdb != NULL; subTdb=subTdb->next)

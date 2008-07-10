@@ -349,7 +349,7 @@ if (trackDupe != NULL && trackDupe[0] != 0)
             hashAdd(uniqHash, wig->table, NULL);
             }
         }
-    if (trackDbIsComposite(track))
+    if (tdbIsComposite(track))
         {
         struct trackDb *subTdb;
         struct slName *subList = NULL;
@@ -406,7 +406,7 @@ if (useJoiner)
     }
 
 name = slNameNew(trackTable);
-if (!trackDbIsComposite(track))
+if (!tdbIsComposite(track))
     /* suppress for composite tracks -- only the subtracks have tables */
     slAddHead(&nameList, name);
 
@@ -655,7 +655,7 @@ if (isCustomTrack(table))
     struct customTrack *ct = lookupCt(table);
     tdb = ct->tdb;
     }
-else if (track && trackDbIsComposite(track))
+else if (track && tdbIsComposite(track))
     {
     struct trackDb *subTdb;
     for (subTdb=track->subtracks; subTdb != NULL; subTdb = subTdb->next)
