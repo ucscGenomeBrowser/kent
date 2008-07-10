@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.46 2008/07/10 23:51:02 markd Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.47 2008/07/10 23:51:13 markd Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -146,7 +146,7 @@ struct hashEl *hashAdd(struct hash *hash, char *name, void *val)
 /* Add new element to hash table.  If an item with name, already exists, a new
  * item is added in a LIFO manner.  The last item added for a given name is
  * the one returned by the hashLookup functions.  hashLookupNext must be used
- * to find the previous entries.
+ * to find the preceding entries for a name.
  */
 {
 return hashAddN(hash, name, strlen(name), val);
