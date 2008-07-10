@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.39 2008/07/09 14:32:33 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.40 2008/07/10 17:38:37 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -399,13 +399,6 @@ while (hel != NULL)
 return matchingSettings;
 }
 
-bool trackDbIsComposite(struct trackDb *tdb)
-/* Determine if this is a populated composite track. This is defined
- * as a track that contains other tracks which are only individually configured on hgTrackUi */ 
-{
-    return tdbIsComposite(tdb);// && differentString(tdb->type, "wigMaf"));  // TODO: wigMaf ???
-}
-
 struct superTrackInfo {
     boolean isSuper;
     boolean isShow;
@@ -470,7 +463,7 @@ tdbMarkAsSuperTrackChild(tdb);
 if(tdb->parent)
     {
     tdbMarkAsSuperTrack(tdb->parent);
-    //if(tdb->parent->subtracks || tdb->next == NULL)  // TODO: Currently supertracks do not contain an array of subtracks!
+    //if(tdb->parent->subtracks || tdb->next == NULL)  // TODO: Currently supertracks Sometimes don't contain their subtracks!
     //   slAddHead(&tdb->parent->subtracks, tdb);
     }
 freeMem(stInfo);
@@ -505,8 +498,12 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     stInfo = getSuperTrackInfo(tdb);
     if (!stInfo)
         continue;
-    if (!stInfo->isSuper && hashLookup(superHash, stInfo->parentName))
-        trackDbSuperMemberSettings(tdb);
+    if(!stInfo->isSuper)
+        {
+        tdb->parent = hashFindVal(superHash, stInfo->parentName); // TODO: Parent wont contain children: and can't in this list!
+        if (tdb->parent)
+            trackDbSuperMemberSettings(tdb);
+        }
     freeMem(stInfo);
     }
 }
@@ -533,24 +530,23 @@ if (origAssembly)
 
 inline boolean tdbIsSuper(struct trackDb *tdb)
 /* Is this trackDb struct marked as a supertrack ? */
-{ return SUPERTRACK_NODE(tdb->treeNodeType); }
+{ return tdb && SUPERTRACK_NODE(tdb->treeNodeType); }
 
 inline boolean tdbIsSuperTrack(struct trackDb *tdb) 
 /* Is this trackDb struct marked as a supertrack ? */
-{ return /*tdb->subtracks &&*/ SUPERTRACK_NODE(tdb->treeNodeType); }  // TODO: superTrack code needs rewite to contain it's children
-//{ return /*tdb->track->subtracks &&*/ SUPERTRACK_NODE(tdb->treeNodeType); }  // TODO: superTrack code needs rewite to contain it's children
+{ return tdb && /*tdb->subtracks &&*/ SUPERTRACK_NODE(tdb->treeNodeType); }  // TODO: superTrack code needs rewrite to contain it's children
 
 inline boolean tdbIsComposite( struct trackDb *tdb) 
 /* Is this trackDb struct marked as a composite with children ?  */
-{ return tdb->subtracks && COMPOSITE_NODE( tdb->treeNodeType); }
+{ return tdb && tdb->subtracks && COMPOSITE_NODE( tdb->treeNodeType); }
 
 inline boolean tdbIsSuperTrackChild(struct trackDb *tdb) 
 /* Is this trackDb struct marked as a child of a supertrack ?  */
-{ return tdb->parent && SUPERTRACK_CHILD_NODE(tdb->treeNodeType); }
+{ return tdb && tdb->parent && SUPERTRACK_CHILD_NODE(tdb->treeNodeType); }
 
 inline boolean tdbIsCompositeChild(struct trackDb *tdb)  
 /* Is this trackDb struct marked as a child of a composite track ?  */
-{ return tdb->parent && COMPOSITE_CHILD_NODE( tdb->treeNodeType); }
+{ return tdb && tdb->parent && COMPOSITE_CHILD_NODE( tdb->treeNodeType); }
 
 inline void tdbMarkAsSuperTrack(struct trackDb *tdb)      
 /* Marks a trackDb struct as a supertrack */

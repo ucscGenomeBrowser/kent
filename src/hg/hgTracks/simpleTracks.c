@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.19 2008/07/09 14:37:16 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.20 2008/07/10 17:34:22 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 
@@ -468,8 +468,8 @@ if (track != NULL)
 	boolean on =  sameWord(centerLabelsDense, "on") && withCenterLabels;
 	return on;
 	}
-    else if (((limitVisibility(track) == tvDense) && isSubtrack(track)) ||
-	     ((limitVisibility(track) != tvDense) && isCompositeTrack(track)))
+    else if (((limitVisibility(track) == tvDense) && tdbIsCompositeChild(track->tdb))
+         ||	 ((limitVisibility(track) != tvDense) && tdbIsComposite(     track->tdb)))
 	return FALSE;
     }
 return withCenterLabels;
@@ -1977,7 +1977,7 @@ for (track = trackList; track != NULL; track = track->next)
 	{
 	track->ixColor = hvGfxFindRgb(hvg, &track->color);
 	track->ixAltColor = hvGfxFindRgb(hvg, &track->altColor);
-        if (isCompositeTrack(track))
+        if (tdbIsComposite(track->tdb))
             {
 	    struct track *subtrack;
             for (subtrack = track->subtracks; subtrack != NULL;
@@ -8548,28 +8548,6 @@ tg->drawItems = drawEranModule;
 }
 #endif /* GBROWSE */
 
-bool isCompositeTrack(struct track *track)
-/* Determine if this is a composite track. This is currently defined
- * as a top-level dummy track, with a list of subtracks of the same type.
- * Need to check trackDb, as we need to ignore wigMaf's which have
- * subtracks but aren't composites */
-{
-if (track->tdb)
-    return (track->subtracks != NULL && tdbIsComposite(track->tdb));
-return FALSE;
-}
-
-boolean isSubtrack(struct track *track)
-/* Return TRUE if track is a subtrack of a composite track. */
-/* Subtracks usually inherit their parent track's tdb, so their tdbs may 
- * appear composite, but their mapNames will not be the same as tdb->tableName 
- * in that case. */
-{
-return ((trackDbSetting(track->tdb, "subTrack") != NULL) ||
-	(trackDbIsComposite(track->tdb) &&
-	 !sameString(track->mapName, track->tdb->tableName)));
-}
-
 static struct trackDb *getSubtrackTdb(struct track *subtrack)
 /* If subtrack->tdb is actually the composite tdb, return the tdb for
  * the subtrack so we can see its settings. */
@@ -8647,7 +8625,7 @@ if (!tg->limitedVisSet)
 	tg->limitedVis = tvHide;
 	return tvHide;
 	}
-    if (isCompositeTrack(tg))
+    if (tdbIsComposite(tg->tdb))
 	{
 	struct track *subtrack;
         maxHeight = maxHeight * subtrackCount(tg->subtracks);

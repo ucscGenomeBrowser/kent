@@ -928,18 +928,6 @@ void makeCompositeTrack(struct track *track, struct trackDb *tdb);
 /* Construct track subtrack list from trackDb entry.
  * Sets up color gradient in subtracks if requested */
 
-bool isCompositeTrack(struct track *track);
-/* Determine if this is a composite track. This is currently defined
- * as a top-level dummy track, with a list of subtracks of the same type.
- * Need to check trackDb, as we need to ignore wigMaf's which have
- * subtracks but aren't composites */
-
-boolean isSubtrack(struct track *track);
-/* Return TRUE if track is a subtrack of a composite track. */
-/* Subtracks usually inherit their parent track's tdb, so their tdbs may 
- * appear composite, but their mapNames will not be the same as tdb->tableName 
- * in that case. */
-
 bool isSubtrackVisible(struct track *tg);
 /* Should this subtrack be displayed? */
 

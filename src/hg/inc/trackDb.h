@@ -45,7 +45,7 @@ struct trackDb
     /* additional info, determined from settings */
     char treeNodeType;          /* bit map containing defining supertrack, composite and children of same (may be parent & child) */
     struct trackDb *parent;     /* parent of composite or superTracks */
-    struct trackDb *subtracks;  /* children of composite (TODO: or supertrack) */
+    struct trackDb *subtracks;  /* children of composite (TODO: or supertrack) */ // NOTE: can only be on one sl at a time!
     char *parentName;           /* set if this is a supertrack member */
     boolean isShow;             /* for supertracks tracks: true if this is a supertrack with pseudo-vis 'show' */
     };
@@ -176,10 +176,6 @@ char *trackDbSettingOrDefault(struct trackDb *tdb, char *name, char *defaultVal)
 struct hashEl *trackDbSettingsLike(struct trackDb *tdb, char *wildStr);
 /* Return a list of settings whose names match wildStr (may contain wildcard 
  * characters).  Free the result with hashElFreeList. */
-
-bool trackDbIsComposite(struct trackDb *tdb);
-/* Determine if this is a populated composite track. This is defined
- * as a track that contains other tracks which are only individually configured on hgTrackUi */ 
 
 char *trackDbGetSupertrackName(struct trackDb *tdb);
 /* Find name of supertrack if this track is a member */
