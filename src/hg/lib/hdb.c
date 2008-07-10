@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.365 2008/07/09 14:32:45 tdreszer Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.366 2008/07/10 17:29:08 tdreszer Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3780,7 +3780,7 @@ for (tdb = tdbFullList; nextTdb != NULL; tdb = nextTdb)
 		subtrackInherit(tdb, compositeTdb);
                 /* should be a short list -- we can shortcut and add to tail
                  * rather than reversing later */
-                slAddTail(&compositeTdb->subtracks, tdb);
+                slAddTail(&compositeTdb->subtracks, tdb);  // TODO: slAddHead then rely upon slSort 
                 }
             }
         }
@@ -3880,9 +3880,13 @@ char where[256];
 safef(where, sizeof(where),
    "settings rlike '^(.*\n)?superTrack %s([ \n].*)?$' order by priority desc",
     tdb->tableName);
-tdb->subtracks = loadAndLookupTrackDb(conn, where);
-for (tdb = tdb->subtracks; tdb != NULL; tdb = tdb->next)
-    trackDbSuperMemberSettings(tdb);
+tdb->subtracks = loadAndLookupTrackDb(conn, where);       // TODO: Straighten out when super points to children and when not!
+struct trackDb *subTdb;
+for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
+    {
+    subTdb->parent = tdb;
+    trackDbSuperMemberSettings(subTdb);
+    }
 hFreeConn(&conn);
 }
 
