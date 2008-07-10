@@ -16,7 +16,7 @@
 #include "obscure.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.105 2008/07/09 14:43:37 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.106 2008/07/10 17:30:23 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -1408,7 +1408,7 @@ for (trackEl = trackList; trackEl != NULL; trackEl = trackEl->next)
     struct trackDb *tdb = trackEl->val;
     char *dupe = cloneString(tdb->type);
     char *type = firstWordInLine(dupe);
-    if ((sameString(type, "genePred")) && (!sameString(tdb->tableName, "tigrGeneIndex") && !trackDbIsComposite(tdb)))
+    if ((sameString(type, "genePred")) && (!sameString(tdb->tableName, "tigrGeneIndex") && !tdbIsComposite(tdb)))
 	{
 	AllocVar(name);
 	name->name = tdb->tableName;
@@ -1628,8 +1628,8 @@ if(setting == NULL)
     return NULL;
     
 char *words[64];
-cnt = chopByWhite(cloneString(setting), words,64);
-assert(cnt<=64);
+cnt = chopLine(cloneString(setting), words);
+assert(cnt<=ArraySize(words));
 if(cnt <= 1)
     {
     freeMem(words[0]);
@@ -1688,8 +1688,8 @@ char *setting = trackDbSetting(parentTdb, "dimensions");
 if(setting != NULL)
     {
     char *words[64];
-    cnt = chopByWhite(cloneString(setting),words,64);
-    assert(cnt<=64);
+    cnt = chopLine(cloneString(setting),words);
+    assert(cnt<=ArraySize(words));
     if(cnt > 0)
         {
         dimensions_t *dimensions = needMem(sizeof(dimensions_t));
@@ -1762,7 +1762,7 @@ if(target == NULL)
 
 char *words[64];
 cnt = chopLine(target, words);
-assert(cnt <= 64);
+assert(cnt <= ArraySize(words));
 members_t *members = needMem(sizeof(members_t));
 members->tag   = words[0];
 members->title = strSwapChar(words[1],'_',' '); // Titles replace '_' with space
@@ -1834,7 +1834,7 @@ if(subGroups == NULL)
 
 char *words[64];
 cnt = chopLine(cloneString(subGroups), words);
-assert(cnt <= 64);
+assert(cnt <= ArraySize(words));
 
 membership_t *membership = needMem(sizeof(membership_t));
 membership->subgroups    = needMem((cnt+1)*sizeof(char*));
@@ -2399,7 +2399,7 @@ if (scoreCtString != NULL)
     puts("&nbsp; <B> Show only items in top-scoring </B>");
     cgiMakeTextVar(option, scoreFilterCt, 5);
     /* Only check size of table if track does not have subtracks */
-    if (!trackDbIsComposite(parentTdb))
+    if (!tdbIsComposite(parentTdb))
         printf("&nbsp; (range: 1 to 100000, total items: %d)",
                 getTableSize(parentTdb->tableName));
     }
@@ -2504,9 +2504,9 @@ if(makeCfgRows)
                 printf("<TABLE border=\"0\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>",COLOR_BG_ALTDEFAULT,COLOR_BG_ALTDEFAULT);
                 printf("<CENTER><B>%s Configuration</B></CENTER>\n",membersOfView->values[ix]);
                 safef(objName, sizeof(objName), "%s_%s", parentTdb->tableName,membersOfView->names[ix]);
-                if(!differentString(matchedSubtracks[ix]->type,"wig"))
+                if(sameString(matchedSubtracks[ix]->type,"wig"))
                     wigCfgUi(cart,matchedSubtracks[ix],objName);
-                else if(!differentString(matchedSubtracks[ix]->type,"bed 5 +"))
+                else if(sameString(matchedSubtracks[ix]->type,"bed 5 +"))
                     scoreCfgUi(cart,parentTdb, 1000,objName);
                 puts("</td></tr></table></td></tr></table>");
                 puts("</TD></TR>");
