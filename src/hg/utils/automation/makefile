@@ -29,6 +29,7 @@ SCRIPT_FILES = \
 	extractNestedRepeats.pl \
 	EnsGeneAutomate.pm \
 	HgAutomate.pm \
+	HgDb.pm \
 	HgRemoteScript.pm \
 	HgStepManager.pm \
 	liftRMAlign.pl \
@@ -38,5 +39,6 @@ SCRIPT_FILES = \
 	monthlyUpdateIgtc.csh \
 	simplePartition.pl \
 	partitionSequence.pl \
+	RAFile.pm \
 	updateIgtc.pl
 
