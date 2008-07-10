@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.138 2008/07/02 20:59:40 angie Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.139 2008/07/10 17:33:08 tdreszer Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -1551,7 +1551,7 @@ char *ldVal;
 int   yVisOffset;
 if (vis == tvDense)
     {
-    if (withCenterLabels && !trackDbIsComposite(tg->tdb))
+    if (withCenterLabels && !tdbIsComposite(tg->tdb))
 	yVisOffset = tg->heightPer;
     else
 	yVisOffset = 0;

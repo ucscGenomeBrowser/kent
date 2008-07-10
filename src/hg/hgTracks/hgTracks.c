@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1497 2008/07/09 14:36:34 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1498 2008/07/10 17:33:41 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -322,7 +322,7 @@ int trackPlusLabelHeight(struct track *track, int fontHeight)
 int y = track->totalHeight(track, track->limitedVis);
 if (isWithCenterLabels(track))
     y += fontHeight;
-if (isCompositeTrack(track))
+if (tdbIsComposite(track->tdb))
     {
     struct track *subtrack;
     for (subtrack = track->subtracks;  subtrack != NULL;
@@ -1383,7 +1383,7 @@ switch (track->limitedVis)
     case tvFull:
 	if (!nextItemCompatible(track))
 	    {
-	    if (isCompositeTrack(track))
+	    if (tdbIsComposite(track->tdb))
 		{
 		struct track *subtrack;
 		for (subtrack = track->subtracks;  subtrack != NULL;
@@ -1400,7 +1400,7 @@ switch (track->limitedVis)
     case tvDense:
 	if (isWithCenterLabels(track))
 	    y += fontHeight;
-	if (isCompositeTrack(track))
+	if (tdbIsComposite(track->tdb))
 	    mapHeight = track->height;
 	else
 	    mapHeight = track->lineHeight;
@@ -1537,7 +1537,7 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     if (track->limitedVis != tvHide)
 	{
-        if (isCompositeTrack(track))
+        if (tdbIsComposite(track->tdb))
             {
             struct track *subtrack;
             for (subtrack = track->subtracks; subtrack != NULL;
@@ -1702,7 +1702,7 @@ if (withLeftLabels)
         {
 	if (track->limitedVis == tvHide)
 	    continue;
-        if (isCompositeTrack(track))
+        if (tdbIsComposite(track->tdb))
             {
 	    struct track *subtrack;
 	    if (isWithCenterLabels(track))
@@ -1953,7 +1953,7 @@ if (withCenterLabels)
         struct track *subtrack;
 	if (track->limitedVis == tvHide)
 	    continue;
-        if (isCompositeTrack(track))
+        if (tdbIsComposite(track->tdb))
             {
 	    if (isWithCenterLabels(track))
 		y = doCenterLabels(track, track, hvg, font, y)
@@ -1985,7 +1985,7 @@ if (withCenterLabels)
 	{
 	if (track->limitedVis == tvHide)
             continue;
-        if (isCompositeTrack(track))
+        if (tdbIsComposite(track->tdb))
             {
             struct track *subtrack;
 	    if (isWithCenterLabels(track))
@@ -2009,7 +2009,7 @@ if (withLeftLabels)
 	{
 	if (track->limitedVis == tvHide)
             continue;
-	if (isCompositeTrack(track))
+	if (tdbIsComposite(track->tdb))
 	    {
 	    struct track *subtrack;
 	    if (isWithCenterLabels(track))
@@ -3186,7 +3186,7 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     if (s != NULL)
 	track->visibility = hTvFromString(s);
-    if (isCompositeTrack(track) && track->visibility != tvHide)
+    if (tdbIsComposite(track->tdb) && track->visibility != tvHide)
 	{
 	struct trackDb *parent = track->tdb->parent;
 	char *parentShow = NULL;
@@ -3728,7 +3728,7 @@ if (showTrackControls)
 	    {
 	    if (track->visibility == tvHide)
                 continue;
-            if (isCompositeTrack(track))
+            if (tdbIsComposite(track->tdb))
                 {
                 struct track *subtrack;
                 for (subtrack = track->subtracks; subtrack != NULL; 
