@@ -24,22 +24,24 @@ else
   set run=$argv[1]
 endif
 
+set unlock=`hgsql -h hgwbeta -Ne "SELECT qid FROM pushQ \
+  WHERE lockDateTime != '' or lockUser != ''" qapushq`
+if ( '' == "$unlock" ) then
+  echo "\n no locks to unlock\n"  
+  exit 0
+endif
+
 if ( 'go' == $run ) then
   hgsql -h hgwbeta -e "SELECT qid, lockUser, lockDateTime FROM pushQ \
   WHERE lockDateTime != '' or lockUser != ''" qapushq
+  exit 0
 else 
-  if ( 'real' == $run ) then
-    set unlock=`hgsql -h hgwbeta -Ne "SELECT qid FROM pushQ \
-    WHERE lockDateTime != '' or lockUser != ''" qapushq`
-    if ( '' != "$unlock" ) then
-      foreach lock ( $unlock )
-        hgsql -h hgwbeta -e "UPDATE pushQ SET lockUser = '', lockDateTime = '' \
-        WHERE qid = '$lock'" qapushq
-        echo "\nunlocking qid: $lock"
-      end
-    else
-      echo "\n no locks to unlock\n"  
-    endif
+  if ( 'real' == $run && '' != "$unlock" ) then
+    foreach lock ( $unlock )
+      hgsql -h hgwbeta -e "UPDATE pushQ SET lockUser = '', lockDateTime = '' \
+      WHERE qid = '$lock'" qapushq
+      echo "\nunlocking qid: $lock"
+    end
   else
     echo "\n  not a valid argument\n"
     echo "${0}:"
