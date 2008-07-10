@@ -1,0 +1,68 @@
+
+# $Id: nemVec1.txt,v 1.1 2008/07/10 15:32:14 kord Exp $
+# $Source: /projects/compbio/cvsroot/kent/src/hg/makeDb/doc/nemVec1.txt,v $
+
+#######################################################################
+# CREATE BUILD DIRECTORY (DONE 7/1/08 kord) 
+
+# what store?
+ssh hgwdev
+df -h            
+# Filesystem            Size  Used Avail Use% Mounted on
+# /dev/sda3             9.7G  5.9G  3.3G  65% /
+# /dev/sda1              99M   36M   58M  39% /boot
+# none                   16G     0   16G   0% /dev/shm
+# /dev/sda5              20G   15G  3.5G  81% /scratch
+# /dev/sdd1             1.5T  626G  767G  45% /data
+# /dev/sde1             2.0T  1.8T  120G  94% /data/mysql
+# kkhome-10:/export/cluster/home
+#                       766G  415G  291G  59% /cluster/home
+# ...
+# kkstore06-10:/export/cluster/store3
+#                       2.3T  1.9T  302G  87% /cluster/store3
+# ...
+ssh kkstore06
+mkdir /cluster/store3/nemVec1
+ln -s /cluster/store3/nemVec1 /cluster/data/nemVec1
+
+#######################################################################
+# DOWNLOAD THE ASSEMBLY (STARTED 7/1/08 kord)
+ssh kkstore06
+mkdir /cluster/data/nemVec1/downloads
+cd /cluster/data/nemVec1/downloads
+
+# http://genome.jgi-psf.org/Nemve1/Nemve1.download.ftp.html
+# Unmasked
+wget --timestamp \
+ftp://ftp.jgi-psf.org/pub/JGI_data/Nematostella_vectensis/v1.0/assembly/Nemve1.fasta.gz
+faSize Nemve1.fasta.gz
+# 356613585 bases (59221913 N's 297391672 real 297391672 upper 0 lower) in 10804 sequences in 1 files
+# Total size: mean 33007.6 sd 149445.1 min 626 (scaffold_6071) max 3256212 (scaffold_1) median 6708
+# N count: mean 5481.5 sd 10915.3
+# U count: mean 27526.1 sd 141670.8
+# L count: mean 0.0 sd 0.0
+# %0.00 masked total, %0.00 masked real
+
+# Masked
+wget --timestamp \
+ftp://ftp.jgi-psf.org/pub/JGI_data/Nematostella_vectensis/v1.0/assembly/Nemve1.allmasked.gz
+faSize Nemve1.allmasked.gz
+# 356613585 bases (59221913 N's 297391672 real 216553990 upper 80837682 lower) in 10804 sequences in 1 files
+# Total size: mean 33007.6 sd 149445.1 min 626 (scaffold_6071) max 3256212 (scaffold_1) median 6708
+# N count: mean 5481.5 sd 10915.3
+# U count: mean 20043.9 sd 107371.3
+# L count: mean 7482.2 sd 35162.7
+# %22.67 masked total, %27.18 masked real
+
+# Tandemly repated
+wget --timestamp \
+ftp://ftp.jgi-psf.org/pub/JGI_data/Nematostella_vectensis/annotation/v1.0/NvTRjug.fasta.gz
+faSize NvTRjug.fasta.gz
+# 14414 bases (0 N's 14414 real 14414 upper 0 lower) in 10 sequences in 1 files
+# Total size: mean 1441.4 sd 2104.8 min 191 (GTGTTTGTGGTGTTTTjuggernaut) max 7162 (AAAAAAAAATCGAACAjuggernaut) median 786
+# N count: mean 0.0 sd 0.0
+# U count: mean 1441.4 sd 2104.8
+# L count: mean 0.0 sd 0.0
+# %0.00 masked total, %0.00 masked real
+
+
