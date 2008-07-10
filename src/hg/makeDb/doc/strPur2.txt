@@ -1,4 +1,4 @@
-# $Id: strPur2.txt,v 1.4 2007/10/12 03:09:37 braney Exp $
+# $Id: strPur2.txt,v 1.5 2008/07/10 15:25:17 kord Exp $
 # $Source: /projects/compbio/cvsroot/kent/src/hg/makeDb/doc/strPur2.txt,v $
 
 # Strongylocentrus purpuratus -- Spur 2.1 assembly September, 2006
@@ -887,7 +887,7 @@ cd /cluster/home/kord/kent/src/hg/makeDb/trackDb
 make update DB=strPur2
 
 ###########################################################################
-# BLASTZ/CHAIN/NET Ciona Intestinalis (ci2) 
+# BLASTZ/CHAIN/NET Ciona intestinalis (ci2) 
 # Started 2007/Aug/20 kord
 ssh hgwdev
 cd /cluster/data/strPur2/bed
@@ -1085,6 +1085,19 @@ hgsql strPur2
 cat fb.strPur2.chainCi2Link.txt
 # 40755914 bases of 810038660 (5.031%) in intersection
 
+# adding strPur2 chains to ci2 (kober 2007/09/03
+mkdir /cluster/data/ci2/bed/blastz.strPur2.swap
+cd /cluster/data/ci2/bed/blastz.strPur2.swap
+
+nohup doBlastzChainNet.pl -bigCluster pk -smallCluster pk -swap \
+/cluster/data/strPur2/bed/blastz.ci2/DEF > swap.log 2>&1 &
+
+# This output turned out to be a bug:
+#165638509 bases of 141233565 (117.280%) in intersection
+
+# but Angie was able to fix it:
+nice featureBits ci2 chainStrPur2Link
+#26885895 bases of 141233565 (19.036%) in intersection
 
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK
@@ -1496,3 +1509,45 @@ chainOne $(path1)
     rm -rf /cluster/bluearc/strPur2/bed/tblastn.hg18KG/blastOut
 #end tblastn
 #####################################################################
+
+#####################################################################
+# CREATE LIFTOVER FROM strPur2 TO strPur1
+# DONE 2008-Apr-1 kord
+
+# strPur2 -> /cluster/store4/strPur2
+# kkstore06-10:/export/cluster/store4 2.3T  2.0T  191G  92% /cluster/store4
+
+ssh kkstore06
+mkdir /cluster/data/strPur2/bed/blat.strPur1
+cd /cluster/data/strPur2/bed/blat.strPur1
+
+nice time doSameSpeciesLiftOver.pl strPur2 strPur1 \
+    -bigClusterHub pk \
+    -ooc /cluster/bluearc/strPur2/11.ooc \
+    -buildDir /cluster/data/strPur2/bed/blat.strPur1 >do.log 2>&1 &
+
+ssh pk 
+cd /cluster/data/strPur2/bed/blat.strPur1/run.blat
+date;parasol list batches
+#Tue Apr  1 09:22:40 PDT 2008
+##user     run   wait   done crash pri max batch
+#kord      394  32638    768     0  10  -1 /cluster/store4/strPur2/bed/blat.strPur1/run.blat/
+
+#*** All done!
+#*** Steps were performed in /cluster/data/strPur2/bed/blat.strPur1
+#*** Test installation (/gbdb, goldenPath, hgLiftover operation) on hgwdev.
+#
+#1.19user 0.70system 11:45:39elapsed 0%CPU (0avgtext+0avgdata 0maxresident)k
+#0inputs+0outputs (8major+30321minor)pagefaults 0swaps
+
+# remove the symbolic link to liftOver chains and copy over the file
+rm ../liftOver/strPur2ToStrPur1.over.chain.gz
+cp -p strPur2ToStrPur1.over.chain.gz ../liftOver/
+
+# a link in /usr/local/apache/htdocs/goldenPath/strPur2/liftOver
+# has already been made to this file and md5sum.txt needs to be updated
+ssh hgwdev 
+cd /usr/local/apache/htdocs/goldenPath/strPur2/liftOver
+md5sum *.gz > md5sum.txt
+
+

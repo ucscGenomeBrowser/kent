@@ -1340,3 +1340,44 @@ chainOne $(path1)
     rm -rf /cluster/bluearc/strPur1/bed/tblastn.hg18KG/blastOut
 #end tblastn
 ##########################################################################
+
+##########################################################################
+# CREATE LIFTOVER FROM strPur1 TO strPur2
+# STARTED 2008-03-31 kord
+
+# strPur1 -> /cluster/store5/strPur1
+# kkstore02-10:/export/cluster/store5 1.5T  1.1T  308G  78% /cluster/store5
+
+ssh kkstore02
+mkdir /cluster/data/strPur1/bed/blat.strPur2
+cd /cluster/data/strPur1/bed/blat.strPur2
+
+nice time doSameSpeciesLiftOver.pl strPur1 strPur2 \
+    -bigClusterHub pk \
+    -ooc /cluster/bluearc/strPur1/11.ooc \
+    -buildDir /cluster/data/strPur1/bed/blat.strPur2 >do.log 2>&1 &
+
+
+ssh pk
+cd /cluster/data/strPur1/bed/blat.strPur2/run.blat
+parasol list batches
+#user     run   wait   done crash pri max batch
+#kord      396  28560   2904     0  10  -1 /cluster/store5/strPur1/bed/blat.strPur2/run.blat/
+
+# *** All done!
+# *** Steps were performed in /cluster/data/strPur1/bed/blat.strPur2
+# *** Test installation (/gbdb, goldenPath, hgLiftover operation) on hgwdev.
+#
+# 1.71user 0.69system 5:50:08elapsed 0%CPU (0avgtext+0avgdata 0maxresident)k
+# 0inputs+0outputs (9major+29957minor)pagefaults 0swaps
+
+# remove the symbolic link to liftOver chains and copy over the file
+rm ../liftOver/strPur1ToStrPur2.over.chain.gz
+cp -p strPur1ToStrPur2.over.chain.gz ../liftOver/
+
+# a link in /usr/local/apache/htdocs/goldenPath/strPur2/liftOver
+# has already been made to this file and md5sum.txt needs to be updated
+ssh hgwdev 
+cd /usr/local/apache/htdocs/goldenPath/strPur1/liftOver
+md5sum *.gz > md5sum.txt
+
