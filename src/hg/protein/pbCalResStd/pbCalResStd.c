@@ -1,6 +1,6 @@
 /* pbCalResStd- Calculate the avg frequency and standard deviation of each AA residue for the proteins in a specific genome*/
 
-#define MAXN 100000
+#define MAXN 1000000
 #define MAXRES 23
 
 #include "common.h"
