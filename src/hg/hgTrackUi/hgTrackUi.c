@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.441 2008/07/10 17:35:30 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.442 2008/07/11 05:12:39 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1915,6 +1915,12 @@ char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
 char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
 char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
 char *framesTable = trackDbSetting(tdb, "frames");
+char *firstCase = trackDbSetting(tdb, ITEM_FIRST_CHAR_CASE);
+bool lowerFirstChar = TRUE;
+if (firstCase != NULL)
+    {
+    if (sameWord(firstCase, "noChange")) lowerFirstChar = FALSE;
+    }
 char *species[MAX_SP_SIZE];
 char *groups[20];
 char sGroup[24];
@@ -2101,8 +2107,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     	safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
     	label = hOrganism(wmSpecies->name);
     	if (label == NULL)
-		label = wmSpecies->name;
-    	
+            label = wmSpecies->name;
 	strcpy(trackName, tdb->tableName);	
 
 	/* try AaMaf first */
@@ -2144,7 +2149,8 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     	label = hOrganism(wmSpecies->name);
     	if (label == NULL)
 		label = wmSpecies->name;
-    	//*label = tolower(*label);
+        if (lowerFirstChar)
+            *label = tolower(*label);
     	printf ("%s<BR>", label);
     	puts("</TD>");
 	lineBreakJustPrinted = FALSE;
