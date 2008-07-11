@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.127 2008/06/24 20:20:57 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.128 2008/07/11 21:54:15 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -169,7 +169,7 @@ struct rudp *rudpOut;	/* Our rUDP socket. */
 // TODO make commandline param options to override defaults for unit sizes?
 /*  using machines list spec info for defaults */
 int cpuUnit = 1;                   /* 1 CPU */
-long ramUnit = 512 * 1024 * 1024;  /* 500 MB */
+long long ramUnit = 512 * 1024 * 1024;  /* 500 MB */
 int defaultJobCpu = 1;        /* number of cpuUnits in default job usage */  
 int defaultJobRam = 1;        /* number of ramUnits in default job usage */
 /* for the resource array dimensions */
@@ -577,7 +577,7 @@ void readTotalMachineResources(struct machine *machine, int *cpuReturn, int *ram
 {
 int c = 0, r = 0;
 c = machine->machSpec->cpus / cpuUnit; 
-r = ((long)machine->machSpec->ramSize * 1024 * 1024) / ramUnit; 
+r = ((long long)machine->machSpec->ramSize * 1024 * 1024) / ramUnit; 
 *cpuReturn = c;
 *ramReturn = r;
 }
@@ -630,6 +630,12 @@ if (pEl)
 return NULL;
 }
 
+int scoreCost(struct batch *batch)
+/* calculate score cost of using resources */
+{
+return max(batch->cpu * defaultJobRam, batch->ram * defaultJobCpu);
+}
+
 void allocateResourcesToMachine(struct machine *mach, 
     struct batch *batch, struct user *user, int *pC, int *pR)
 /* Allocate Resources to machine*/
@@ -641,9 +647,10 @@ void allocateResourcesToMachine(struct machine *mach,
 ++batch->planCount;
 ++user->planCount;
 /* incrementally update score for batches and users */
-// TODO scoring that accounts the resources more carefully, e.g. actual ram.
-batch->planScore += 1 * batch->priority;
-user->planScore += 1 * user->priority;
+/* scoring that accounts the resources carefully, e.g. actual ram and cpu. */
+int cost = scoreCost(batch);
+batch->planScore += cost * batch->priority;
+user->planScore += cost * user->priority;
 
 /*  add batch to plannedBatches queue */
 refAdd(&mach->plannedBatches, batch);
@@ -667,7 +674,7 @@ logInfo("executing new plan");
 if (pm)
     {
     pmClear(pm);
-    pmPrintf(pm, "cpuUnit=%d, ramUnit=%ld", cpuUnit, ramUnit); 
+    pmPrintf(pm, "cpuUnit=%d, ramUnit=%lld", cpuUnit, ramUnit); 
     pmSend(pm, rudpOut);
     pmClear(pm);
     pmPrintf(pm, "job default units: Cpu=%d, ram=%d", defaultJobCpu, defaultJobRam); 
@@ -678,7 +685,7 @@ if (pm)
     pmSendString(pm, rudpOut, "-----"); 
     }
 
-if (pm) pmSendString(pm, rudpOut, "about to initialize cpu/ram 2d arrays"); 
+//if (pm) pmSendString(pm, rudpOut, "about to initialize cpu/ram 2d arrays"); 
 
 /* Initialize Resource Arrays for CPU and RAM */
 /* allocate memory like a 2D array */
@@ -688,7 +695,7 @@ AllocArray(perCpu, maxCpuInCluster+1);
 for (c = 1; c <= maxCpuInCluster; ++c)
   AllocArray(perCpu[c], maxRamInCluster+1);  
 
-if (pm) pmSendString(pm, rudpOut, "about to add machines resources to cpu/ram arrays");
+//if (pm) pmSendString(pm, rudpOut, "about to add machines resources to cpu/ram arrays");
 
 
 resetUsersForPlanning();
@@ -720,9 +727,9 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 		{
 		if (pm) 
 		    {
-		    pmClear(pm);
-		    pmPrintf(pm, "preserving batch %s on machine %s", batch->name, mach->name);
-		    pmSend(pm, rudpOut);
+		    //pmClear(pm);
+		    //pmPrintf(pm, "preserving batch %s on machine %s", batch->name, mach->name);
+		    //pmSend(pm, rudpOut);
 		    }
 		allocateResourcesToMachine(mach, batch, user, &r, &c);
 		}
@@ -730,10 +737,10 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 
 	if (pm) 
 	    {
-	    pmClear(pm);
-	    pmPrintf(pm, "machSpec (%s) cpus:%d ramSize=%d"
-		, mach->name, mach->machSpec->cpus, mach->machSpec->ramSize);
-	    pmSend(pm, rudpOut);
+	    //pmClear(pm);
+	    //pmPrintf(pm, "machSpec (%s) cpus:%d ramSize=%d"
+		//, mach->name, mach->machSpec->cpus, mach->machSpec->ramSize);
+	    //pmSend(pm, rudpOut);
 	    }
      
 
@@ -741,9 +748,9 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 	    {
 	    if (pm) 
 		{
-		pmClear(pm);
-		pmPrintf(pm, "IGNORING mach: %s c=%d cpu units; r=%d ram units", mach->name, c, r);
-		pmSend(pm, rudpOut);
+		//pmClear(pm);
+		//pmPrintf(pm, "IGNORING mach: %s c=%d cpu units; r=%d ram units", mach->name, c, r);
+		//pmSend(pm, rudpOut);
 		}
 	    }
 	else
@@ -781,9 +788,9 @@ while(TRUE)
 
     if (pm) 
 	{
-	pmClear(pm);
-	pmPrintf(pm, "lucky user: %s; lucky batch=%s", user->name, batch->name);
-	pmSend(pm, rudpOut);
+	//pmClear(pm);
+	//pmPrintf(pm, "lucky user: %s; lucky batch=%s", user->name, batch->name);
+	//pmSend(pm, rudpOut);
 	}
      
     /* find machine with adequate resources in resource array (if any) */
@@ -833,19 +840,19 @@ while(TRUE)
 
 	if (pm) 
 	    {
-	    pmClear(pm);
-	    pmPrintf(pm, "found hardware cpu %d ram %d in machine %s c=%d r=%d batch=%s", 
-		batch->cpu, batch->ram, mach->name, c, r, batch->name);
-	    pmSend(pm, rudpOut);
+	    //pmClear(pm);
+	    //pmPrintf(pm, "found hardware cpu %d ram %d in machine %s c=%d r=%d batch=%s", 
+		//batch->cpu, batch->ram, mach->name, c, r, batch->name);
+	    //pmSend(pm, rudpOut);
 	    }
 
 	allocateResourcesToMachine(mach, batch, user, &r, &c);
 
 	if (pm) 
 	    {
-	    pmClear(pm);
-	    pmPrintf(pm, "remaining hardware c=%d r=%d", c, r);
-	    pmSend(pm, rudpOut);
+	    //pmClear(pm);
+	    //pmPrintf(pm, "remaining hardware c=%d r=%d", c, r);
+	    //pmSend(pm, rudpOut);
 	    }
      
 	if (c < 1 || r < 1)
@@ -859,10 +866,10 @@ while(TRUE)
 
 	if (pm) 
 	    {
-	    pmClear(pm);
-	    pmPrintf(pm, "no suitable machines left, removing from planning:  user %s; lucky batch %s", 
-		user->name, batch->name);
-	    pmSend(pm, rudpOut);
+	    //pmClear(pm);
+	    //pmPrintf(pm, "no suitable machines left, removing from planning:  user %s; lucky batch %s", 
+		//user->name, batch->name);
+	    //pmSend(pm, rudpOut);
 	    }
 
 	/* no suitable machine found */
@@ -2872,7 +2879,10 @@ while (lineFileRow(lf, row))
 	{
 	firstTime = FALSE;
 	cpuUnit = 1;       /* 1 CPU */
-	ramUnit = ((long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus;
+	ramUnit = ((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus;
+	defaultJobCpu = 1;        /* number of cpuUnits in default job usage */  
+	/* number of ramUnits in default job usage, resolves to just 1 currently */
+	defaultJobRam = (((long long)machine->machSpec->ramSize * 1024 * 1024) / machine->machSpec->cpus) / ramUnit;
 	}
 
     int c = 0, r = 0;
