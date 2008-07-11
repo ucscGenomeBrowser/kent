@@ -1,6 +1,6 @@
 /* pbCalResStdGlobal- Calculate the avg frequency and standard deviation of each AA residue for the proteins for all proteins */
 
-#define MAXN 4000000
+#define MAXN 10000000
 #define MAXRES 23
 
 #include "common.h"
