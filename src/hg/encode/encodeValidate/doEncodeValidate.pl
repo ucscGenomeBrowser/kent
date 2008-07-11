@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.28 2008/07/08 00:23:25 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.29 2008/07/11 17:16:03 larrym Exp $
 
 use warnings;
 use strict;
@@ -30,9 +30,9 @@ use vars qw/
 our $fieldConfigFile = "fields.ra";
 our $vocabConfigFile = "cv.ra";
 our $labsConfigFile = "labs.ra";
-
 our $loadFile = "load.ra";
 our $trackFile = "trackDb.ra";
+our $pifVersion = 0.2;
 
 # Global variables
 our $submitPath;        # full path of data submission directory
@@ -43,6 +43,7 @@ our $pifFile;           # project information filename (most recent found in
 our %pif;               # project information
 our %tracks;            # track information
 our %terms;             # controlled vocabulary
+our %labs;
 
 sub usage {
     print STDERR <<END;
@@ -148,7 +149,7 @@ sub validateDatasetName {
 
 sub validateAssembly {
     my ($val) = @_;
-    $val =~ /hg1[78]/ || die "ERROR: Assembly '$val' is invalid (must be 'hg17' or 'hg18')\n";
+    $val =~ /^hg1[78]$/ || die "ERROR: Assembly '$val' is invalid (must be 'hg17' or 'hg18')\n";
 }
 
 sub validateDataType {
@@ -376,11 +377,20 @@ sub getPif {
     }
 
     # Validate fields
-    defined($pif{'project'}) || die "ERROR: Project not defined\n"; 
-    defined(%tracks) ||
-        die "ERROR: Tracks not defined for project \'$pif{'project'}\' in $pifFile \n";
-    if(!defined($pif{assembly})) {
-        die "ERROR: assembly not defined for project \'$pif{'project'}\' in $pifFile\n";
+    my @pifRequired = qw(project pifVersion assembly lab);
+    for my $field (@pifRequired) {
+        if(!defined($pif{$field})) {
+            die "ERROR: $field not defined in PIF '$pifFile'\n";
+        }
+    }
+    if($pif{pifVersion} ne $pifVersion) {
+        die "ERROR: pifVersion '$pif{pifVersion}' does not match current version: $pifVersion\n";
+    }
+    if(!keys(%tracks)) {
+        die "ERROR: no tracks defined for project \'$pif{project}\' in PIF '$pifFile'\n";
+    }
+    if(!defined($labs{$pif{lab}})) {
+        die "ERROR: invalid lab '$pif{lab}' for project \'$pif{project}\' in PIF '$pifFile'\n";
     }
     validateAssembly($pif{assembly});
 
@@ -409,7 +419,8 @@ sub getPif {
 }
 
 sub readRaFile {
-    # Read records from a .ra file into a hash of hashes and return it.
+# Read records from a .ra file into a hash of hashes and return it.
+# $type is the used as the primary key and as the key of the returned hash.
     my ($file, $type) = @_;
     open(RA, $file) || 
         die "ERROR: Can't open RA file \'$file\'\n";
@@ -500,6 +511,11 @@ chdir $submitPath ||
 mkdir $outPath || 
     die ("SYS ERR: Can't create out directory \'$outPath\': $OS_ERROR\n");
 
+if(-e "$configPath/$labsConfigFile") {
+    # tolerate missing labs.ra in dev trees.
+    %labs = &readRaFile("$configPath/$labsConfigFile", "lab");
+}
+
 # Locate project information (PIF) file and verify that project is
 #  ready for submission
 %pif = &getPif();
@@ -507,12 +523,6 @@ mkdir $outPath ||
 # Gather fields defined for DDF file. File is in 
 # ra format:  field <name>, required <true|false>
 my %fields = &readRaFile("$configPath/$fieldConfigFile", "field");
-
-my %labs;
-if(-e "$configPath/$labsConfigFile") {
-    # tolerate missing labs.ra in dev trees.
-    %labs = &readRaFile("$configPath/$labsConfigFile", "lab");
-}
 
 # Add required fields for this -- the variables in the PIF file
 if (defined($pif{'variables'})) {
