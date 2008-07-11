@@ -1,8 +1,10 @@
 /* pbCalDistGlobal - Create tab delimited data files to be used by Proteome Browser stamps */
 #include "common.h"
+#include "hash.h"
 #include "hCommon.h"
 #include "hdb.h"
 #include "spDb.h"
+#include "linefile.h"
 
 #define MAX_PROTEIN_CNT 10000000
 
@@ -85,6 +87,16 @@ carefulClose(&o3);
 return(highestCnt);
 }
 
+int hashCountMatches(struct hash *hash, char *key)
+/* Return numbers of hits to key in hash. */
+{
+int count = 0;
+struct hashEl *hel;
+for (hel = hashLookup(hash, key); hel != NULL; hel = hashLookupNext(hel))
+    ++count;
+return count;
+}
+
 double molWt[MAX_PROTEIN_CNT];
 double pI[MAX_PROTEIN_CNT];
 double aaLenDouble[MAX_PROTEIN_CNT];
@@ -99,7 +111,6 @@ struct sqlConnection *conn2, *conn3;
 char query2[256];
 struct sqlResult *sr2;
 char **row2;
-char cond_str[255];
 char *proteinDatabaseName;	/* example: sp031112 */
 char *protDbName;		/* example: proteins031112 */
 FILE *o2;
@@ -108,7 +119,6 @@ char *aaSeq;
 char *chp;
 int i, j, len;
 int cCnt;
-char *answer3;
 double hydroSum;
 int aaResCnt[30];
 double aaResCntDouble[30];
@@ -174,15 +184,26 @@ icnt = jExon = pcnt = 0;
 pIcnt = 0;
 molWtCnt = 0;
 
+/* Build up hash of swInterPro accessions.  We'll use this to count domains. */
+struct hash *swInterProHash = hashNew(23);
+    {
+    struct sqlResult *sr = sqlGetResult(conn3, "select accession from swInterPro");
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        hashAdd(swInterProHash, row[0], NULL);
+    sqlFreeResult(&sr);
+    }
+
 safef(query2, sizeof(query2), 
 "select info.acc, molWeight, aaSize, protein.val, Pi from %s.info, %s.protein, %s.pepPi where info.acc=protein.acc and pepPi.accession=protein.acc", 
       proteinDatabaseName, proteinDatabaseName, database);
 
 sr2  = sqlMustGetResult(conn2, query2);
-row2 = sqlNextRow(sr2);
-
-while (row2 != NULL)
+while ((row2 = sqlNextRow(sr2)) != NULL)
     {
+    if (molWtCnt >= MAX_PROTEIN_CNT)
+       errAbort("Too many proteins - please set MAX_PROTEIN_CNT to be more than %d\n", 
+       	MAX_PROTEIN_CNT);
     accession = row2[0];   
     molWt[molWtCnt] = (double)(atof(row2[1]));
     molWtCnt++;
@@ -193,18 +214,10 @@ while (row2 != NULL)
     pIcnt++;
     
     /* count InterPro domains */
-    safef(cond_str, sizeof(cond_str), "accession='%s'", accession);
-    answer3 = sqlGetField(conn3, protDbName, "swInterPro", "count(*)", cond_str);
-    if (answer3 != NULL)
-	{
-	interProCount = interProCount + atoi(answer3);
-	interProCountDouble[ipcnt] = (double)(atoi(answer3));
-	ipcnt++;
-	}
-    else
-	{
-	printf("%s is not in  InterPro DB.\n", accession);fflush(stdout);
-	}
+    int interProDomains  = hashCountMatches(swInterProHash, accession);
+    interProCount += interProDomains;
+    interProCountDouble[ipcnt] = interProDomains;
+    ++ipcnt;
     
     len  = aaSize;
 
@@ -222,7 +235,7 @@ while (row2 != NULL)
 	    }
 	if (!aaResFound)
 	    {
-	    errAbort("%c %d not a valid AA residue in %s:\n%s\n", *chp, *chp, accession, aaSeq);
+	    warn("%c %d not a valid AA residue in %s:\n%s\n", *chp, *chp, accession, aaSeq);
 	    }
 	chp++;
 	}
@@ -253,8 +266,6 @@ while (row2 != NULL)
 	printf("%d done.\n", icnt);fflush(stdout);
 	system("date");
 	}
-    
-    row2 = sqlNextRow(sr2);
     }
 sqlFreeResult(&sr2);
 sqlDisconnect(&conn2);
