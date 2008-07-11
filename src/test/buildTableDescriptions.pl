@@ -353,8 +353,7 @@ my @auxDbs = ('hgFixed', 'proteome');
 my @dbs = (defined $opt_db) ? split(',', $opt_db) :
                               (&getActiveDbs($hgConf), @auxDbs);
 foreach my $db (@dbs) {
-  if (($db !~ /^\w\w\d+$/ && $db !~ /^\w\w\w\w\w\w\d+$/ &&
-       $db !~ /^caePb\d+$/ && $db ne 'hiv1' &&
+  if (($db !~ /^(\w\w\d+|\w\w\w\w\w\w\d+|caePb\d+|hiv.*)$/ &&
        (scalar(grep {$_ eq $db} @auxDbs) == 0)) ||
       $db =~ /^zoo/) {
     print "Skipping database $db.\n";
