@@ -129,8 +129,8 @@
         Fixed minor bug in new parasol add machine command.
 
 12.04 - Added the ability to specify job usage with para create and para make 
-	commandline options such as -cpu=2 -ram=2000000000 which would generate 
-	cpu and ram usage values in every row of the batch.
+        commandline options such as -cpu=2 -ram=2000000000 which would generate 
+        cpu and ram usage values in every row of the batch.
 
         Clauses like {use cpu 2} {use ram 2000000000} can also be put
         directly in the spec file.  If both are used, the commandline options take
@@ -150,7 +150,7 @@
         basic support for hog jobs and supporting only uniform clusters
         with machines all of the same type.  
 
-	Also fixed a bug in freeBatch related to resultQueues.
+        Also fixed a bug in freeBatch related to resultQueues.
 
 12.05   Fixed bug in para times, para status, and para problems due to the 
         para.bookmark optimization.  These commands still used fields in
@@ -159,7 +159,7 @@
 
         Also removed the unused para time option -eta.
 
-	Also there no need to return the resultsHash now.  It previously had a bug 
+        Also there no need to return the resultsHash now.  It previously had a bug 
         in para shove causing a leak because resultsHash was not being freed.
         Now it is freed at the end of the routine, and it is not returned,
         so the bug is gone.
@@ -197,11 +197,11 @@
         until a batch either runs out of jobs, or a new batch starts, or some
         other event disturbs the equilibrium. 
 
-	To help prevent slow jobs from hogging the cluster during the shift from 
-	one equilibrium plan to another, a choke prevents jobs from running until 
-	the runningCount is less than the planCount.
+        To help prevent slow jobs from hogging the cluster during the shift from 
+        one equilibrium plan to another, a choke prevents jobs from running until 
+        the runningCount is less than the planCount.
         Also, for really slow jobs run with maxJob (aka maxNode) setting, 
-	the system does a prescan allocating them to the exact same nodes
+        the system does a prescan allocating them to the exact same nodes
         so that they are handled more smoothly.
 
 	For the parasol list batches command, new columns showing cpu, ram, and 
@@ -222,7 +222,7 @@
 
         Also added to rudp checking that the ack for rudpSend is coming
         back from the right ip and port.  Dozens of bad ack cases like this were 
-	occurring per test run of 100,000 jobs.
+        occurring per test run of 100,000 jobs.
 
         Fixed old bug in nodeAlive when jobid found in queue still.  This caused
         occasional strangeness like negative user runningCount, and that user 
@@ -259,7 +259,7 @@
         New command - added a command for people NOT using the para client to clear
         the sick statistics (e.g. sick batch and sick nodes) on their batch.
         Kevin Karplus may start using parasol client to directly run jobs 
-	without using para client.  These users should be able to clear sick stats.
+        without using para client.  These users should be able to clear sick stats.
           parasol [options] clear sick  - Clear sick stats on a batch.
             options: -results=file
 
@@ -270,3 +270,7 @@
 
         Added option to para command, -jobCwd, to specify the current
         working directory for jobs in a batch.
+
+        Added actual cost per job instead of just assuming 1. 
+        In allocating node resources to batches, it now charges more 
+        for jobs that use more ram and/or cpu.
