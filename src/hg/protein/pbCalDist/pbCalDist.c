@@ -270,7 +270,7 @@ while (row2 != NULL)
 	    }
 	if (!aaResFound)
 	    {
-	    errAbort("%c %d not a valid AA residue in %s:\n%s\n", *chp, *chp, accession, aaSeq);
+	    warn("%c %d not a valid AA residue in %s:\n%s", *chp, *chp, accession, aaSeq);
 	    }
 	chp++;
 	}
