@@ -1,0 +1,47 @@
+#!/bin/tcsh -efx
+# Script to create a relational version of UniProt database.  Should be run on
+# hgwdef.
+
+# Set up working directory
+mkdir -p /cluster/store11/swissprot/080707/build
+ln -s /cluster/store11/swissprot/080707 /cluster/store5/swissprot/080707
+
+# Download swissprot. This will take about 90 minutes.
+cd /cluster/store5/swissprot/080707/build
+wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz
+wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.dat.gz
+wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot_varsplic.fasta.gz
+
+# Turn flat file into relational tab-separated files.  The -dupeOk flag was
+# needed this time for spToDb since their were things in swissProt that had
+# not been removed from trEMBL.   This step takes about 20 minutes.
+zcat *.dat.gz | spToDb stdin ../tabFiles
+
+# Create the database.  
+hgsql mysql <<end
+create database sp080707;
+end
+
+# Load it up with table definitions from source directory
+hgsql sp080707 < ~/kent/src/hg/protein/spToDb/spDb.sql
+
+# Load up the data from tab files.  This takes about an hour.
+cd /cluster/store5/swissprot/080707/tabFiles
+foreach i (*.txt)
+    hgsqlimport --local sp080707 $i
+end
+
+# Add varsplice info 
+zcat ../build/uniprot_sprot_varsplic.fasta.gz | spDbAddVarSplice sp080707 stdin .
+hgLoadSqlTab sp080707 -append varProtein /dev/null varProtein.txt
+hgLoadSqlTab sp080707 -append protein /dev/null varProtein.txt
+hgLoadSqlTab sp080707 -append varAcc /dev/null varAcc.txt
+hgLoadSqlTab sp080707 -append displayId /dev/null varDisplayId.txt
+hgLoadSqlTab sp080707 -append accToTaxon /dev/null varAccToTaxon.txt
+hgLoadSqlTab sp080707 -append geneLogic /dev/null varGeneLogic.txt
+hgLoadSqlTab sp080707 -append gene /dev/null varGene.txt
+hgLoadSqlTab sp080707 -append description /dev/null varDescription.txt
+
+# Zip up tab files for people who prefer them to database.
+gzip *.txt
+
