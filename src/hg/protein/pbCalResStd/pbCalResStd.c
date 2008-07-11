@@ -230,6 +230,9 @@ while (row2 != NULL)
 	fprintf(fh[j], "%15.7f\t%s\n", freq[icnt][j], accession);fflush(fh[j]);
 	}
     icnt++;
+    if (icnt >= MAXN)
+	errAbort("Too many proteins - please set MAXN to be more than %d\n", MAXN);
+		
 skip:
     row2 = sqlNextRow(sr2);
     }
