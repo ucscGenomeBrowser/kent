@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: synonym.c,v 1.4 2007/09/12 22:39:49 fanhsu Exp $";
+static char const rcsid[] = "$Id: synonym.c,v 1.5 2008/07/11 22:00:58 hiram Exp $";
 
 static void printOurMrnaUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
@@ -212,7 +212,10 @@ else
 	safef(query, sizeof(query), "select mRNA from kgXref where kgID='%s'", id);
 	mrnaAcc = emptyForNull(sqlQuickString(conn, query));
 	}
-    hPrintf("<B>UCSC ID:</B> %s<BR>", id);
+    if (sameWord(genome, "C. elegans"))
+	hPrintf("<B>WormBase ID:</B> %s<BR>", id);
+    else
+	hPrintf("<B>UCSC ID:</B> %s<BR>", id);
     }
     
 if (refSeqAcc[0] != 0)
