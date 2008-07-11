@@ -46,6 +46,7 @@ DIRS = \
 	kgXref \
 	kgXref2 \
 	pbCalDist \
+	pbCalDistGlobal \
 	pbCalPi \
 	pbCalResStd \
 	pbHgnc \
