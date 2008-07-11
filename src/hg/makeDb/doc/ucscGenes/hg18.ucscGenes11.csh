@@ -65,6 +65,7 @@ mkdir -p $dir
 cd $dir
 
 if (0) then  # BRACKET
+endif # BRACKET
 
 
 # Get Genbank info
@@ -893,7 +894,6 @@ hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSupe
 #/cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=$db -loadDb ccdsGene knownGene ccdsKgMap
 /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
 
-endif # BRACKET
 
 # Map old to new mapping
 hgsql $db -N -e 'select * from knownGene' > knownGeneOld.gp
@@ -913,7 +913,6 @@ cat j.tmp|sort -u  >kgSpAlias.tab
     rm j.tmp
 
 hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql ./kgSpAlias.tab
-exit # BRACKET
 
 # RE-BUILD HG18 PROTEOME BROWSER TABLES (DONE, Fan, 4/2/07). 
 
@@ -926,50 +925,50 @@ exit # BRACKET
 
 # Create the working directory
 
-    ssh hgwdev
-    cd /cluster/data/$db/bed/ucsc.10
-    mkdir pb
-    cd pb
+mkdir -p $dir/pb
+cd $dir/pb
+
 
 # Build the pepMwAa table
 
-  hgsql $pbDb -N -e \
-"select info.acc, molWeight, aaSize from $spDb.info, $spDb.accToTaxon where accToTaxon.taxon=$taxon and accToTaxon.acc = info.acc" > pepMwAa.tab
+hgsql $spDb -N -e \
+"select info.acc, molWeight, aaSize from info, accToTaxon where accToTaxon.taxon=$taxon and accToTaxon.acc = info.acc" > pepMwAa.tab
 
 hgLoadSqlTab $tempDb pepMwAa ~/kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
 
-o Build the pepPi table
+# Build the pepPi table
 
-    hgsql $pbDb -e \
-    "select info.acc from $spDb.info, $spDb.accToTaxon where accToTaxon.taxon=$taxon and accToTaxon.acc = info.acc" > protAcc.lis
+hgsql $spDb -e \
+    "select info.acc from info, accToTaxon where accToTaxon.taxon=$taxon and accToTaxon.acc = info.acc" > protAcc.lis
 
-    hgsql $tempDb -N -e 'select proteinID from knownGene where proteinID like "%-%"' | sort -u >> protAcc.lis
+hgsql $tempDb -N -e 'select proteinID from knownGene where proteinID like "%-%"' | sort -u >> protAcc.lis
 
-    pbCalPi protAcc.lis $spDb pepPi.tab
-    hgLoadSqlTab $tempDb pepPi ~/kent/src/hg/lib/pepPi.sql ./pepPi.tab
+pbCalPi protAcc.lis $spDb pepPi.tab
+hgLoadSqlTab $tempDb pepPi ~/kent/src/hg/lib/pepPi.sql ./pepPi.tab
 
 # Calculate and load pep distributions
 
-    pbCalDist $spDb $pbDb $taxon $tempDb 
-    hgLoadSqlTab $tempDb pepExonCntDist ~/kent/src/hg/lib/pepExonCntDist.sql ./pepExonCntDist.tab
-    hgLoadSqlTab $tempDb pepCCntDist ~/kent/src/hg/lib/pepCCntDist.sql ./pepCCntDist.tab
-    hgLoadSqlTab $tempDb pepHydroDist ~/kent/src/hg/lib/pepHydroDist.sql ./pepHydroDist.tab
-    hgLoadSqlTab $tempDb pepMolWtDist ~/kent/src/hg/lib/pepMolWtDist.sql ./pepMolWtDist.tab
-    hgLoadSqlTab $tempDb pepResDist ~/kent/src/hg/lib/pepResDist.sql ./pepResDist.tab
-    hgLoadSqlTab $tempDb pepIPCntDist ~/kent/src/hg/lib/pepIPCntDist.sql ./pepIPCntDist.tab
-    hgLoadSqlTab $tempDb pepPiDist ~/kent/src/hg/lib/pepPiDist.sql ./pepPiDist.tab
+pbCalDist $spDb $pbDb $taxon $tempDb 
+hgLoadSqlTab $tempDb pepExonCntDist ~/kent/src/hg/lib/pepExonCntDist.sql ./pepExonCntDist.tab
+hgLoadSqlTab $tempDb pepCCntDist ~/kent/src/hg/lib/pepCCntDist.sql ./pepCCntDist.tab
+hgLoadSqlTab $tempDb pepHydroDist ~/kent/src/hg/lib/pepHydroDist.sql ./pepHydroDist.tab
+hgLoadSqlTab $tempDb pepMolWtDist ~/kent/src/hg/lib/pepMolWtDist.sql ./pepMolWtDist.tab
+hgLoadSqlTab $tempDb pepResDist ~/kent/src/hg/lib/pepResDist.sql ./pepResDist.tab
+hgLoadSqlTab $tempDb pepIPCntDist ~/kent/src/hg/lib/pepIPCntDist.sql ./pepIPCntDist.tab
+hgLoadSqlTab $tempDb pepPiDist ~/kent/src/hg/lib/pepPiDist.sql ./pepPiDist.tab
 
 
 # Calculate frequency distributions
 
-    pbCalResStd $spDb $taxon $tempDb
+pbCalResStd $spDb $taxon $tempDb
 
 # Create pbAnomLimit and pbResAvgStd tables
 
-    hgLoadSqlTab $tempDb pbAnomLimit ~/kent/src/hg/lib/pbAnomLimit.sql ./pbAnomLimit.tab
+hgLoadSqlTab $tempDb pbAnomLimit ~/kent/src/hg/lib/pbAnomLimit.sql ./pbAnomLimit.tab
 
-    hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd.tab
+hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd.tab
 
 # The old pbStamp table seems OK, so no adjustment needed.
 
 
+exit # BRACKET
