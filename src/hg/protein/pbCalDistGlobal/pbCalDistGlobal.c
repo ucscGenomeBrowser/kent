@@ -4,7 +4,7 @@
 #include "hdb.h"
 #include "spDb.h"
 
-#define MAX_PROTEIN_CNT 4000000
+#define MAX_PROTEIN_CNT 10000000
 
 void usage()
 /* Explain usage and exit. */
