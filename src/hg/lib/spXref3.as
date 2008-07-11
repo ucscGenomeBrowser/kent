@@ -6,7 +6,7 @@ table spXref3
 	string division;	"SWISS-PROT division"
 	int    bioentryID;	"Biosql bioentry ID"
 	int    biodatabaseID;   "Biosql biodatabase ID"
-	string description;	"Description"
+	lstring description;	"Description"
 	string hugoSymbol;	"HUGO Gene Nomenclature Committee (HGNC) gene symbol"
 	string hugoDesc;	"HGNC gene description"
 	)
