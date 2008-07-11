@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.367 2008/07/11 15:18:24 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.368 2008/07/11 22:50:44 hiram Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1391,8 +1391,8 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     {
-    fprintf(stderr, "Database inconsistency with id %u in %s\n", extFileId, hGetDbName());
-    errAbort("Database inconsistency - no external file with id %u", extFileId);
+    errAbort("Database inconsistency table '%s.%s' no ext file with id %u",
+	hGetDbName(), extFileTable, extFileId);
     }
 path = cloneString(row[0]);
 dbSize = sqlLongLong(row[1]);
