@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.366 2008/07/10 17:29:08 tdreszer Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.367 2008/07/11 15:18:24 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -4629,7 +4629,7 @@ row = sqlNextRow(sr);
 	    
 if (row != NULL)
     {
-    answer = strdup(row[0]);
+    answer = cloneString(row[0]);
     }
 
 sqlFreeResult(&sr);

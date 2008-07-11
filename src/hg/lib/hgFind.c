@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.211 2008/07/09 20:36:51 markd Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.212 2008/07/11 15:18:24 kent Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -427,7 +427,7 @@ if (hTableExists("refLink"))
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
-        result = strdup(row[0]);
+        result = cloneString(row[0]);
         }
     else
         {
@@ -456,7 +456,7 @@ dyStringPrintf(query, "SELECT mrnaID FROM spMrna WHERE spID='%s'", proteinID);
 sr = sqlGetResult(conn, query->string);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    result = strdup(row[0]);
+    result = cloneString(row[0]);
     }
 else
     {
