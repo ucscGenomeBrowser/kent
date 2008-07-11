@@ -96,23 +96,20 @@ double interProCountDouble[MAX_PROTEIN_CNT];
 int main(int argc, char *argv[])
 {
 struct sqlConnection *conn2, *conn3;
-char query[256], query2[256], query3[256];
-struct sqlResult *sr, *sr2, *sr3;
-char **row, **row2, **row3;
-char *r1, *r2, *r3, *r4;
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
 char cond_str[255];
 char *proteinDatabaseName;	/* example: sp031112 */
 char *protDbName;		/* example: proteins031112 */
-char emptyStr[1] = {""};
-FILE *o1, *o2, *o3, *o4, *o5;
+FILE *o2;
 char *accession;
 char *aaSeq;
 char *chp;
 int i, j, len;
 int cCnt;
-char *answer, *answer3;
+char *answer3;
 double hydroSum;
-char *kgId;
 int aaResCnt[30];
 double aaResCntDouble[30];
 char aaAlphabet[30];
@@ -126,10 +123,7 @@ int aaSize;
 double aa_hydro[256];
 int icnt, jExon, pcnt;
 int ipcnt={0};
-char *exonCnt;
-int pfamCount;
 int interProCount;
-struct slName *taxonList, *name;
 if (argc != 3) usage();
 
 strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
