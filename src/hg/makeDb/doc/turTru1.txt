@@ -1,0 +1,178 @@
+# for emacs: -*- mode: sh; -*-
+
+# Tursiops truncatus  Bottle-nosed dolphin
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE braney 2008-07-11)
+    ssh kkstore05
+    mkdir /cluster/store12/turTru1
+    ln -s /cluster/store12/turTru1 /cluster/data
+    mkdir /cluster/data/turTru1/broad
+    cd /cluster/data/turTru1/broad
+
+    wget --timestamping \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/bottlenosedDolphin/assembly.agp \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/bottlenosedDolphin/assembly.bases.gz \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/bottlenosedDolphin/assembly.quals.gz 
+
+
+qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin turTru1.qual.qac
+
+    wget --timestamping \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/bottlenosedDolphin/BasicStats.out
+
+
+# --------------------------------------------------------------------------------
+# Fri Sep 14 06:24:58 2007 run (pid=10185), using Fri Sep  7 11:08:37 EDT 2007
+# make
+# BasicStats PRE=/wga/dev/WGAdata DATA=projects/Tursiops RUN=run/work
+\
+#           SUBDIR=assisted_2.13 QUAL_STATS=True OUTFILE=BasicStats.out
+#	   --------------------------------------------------------------------------------
+#
+#	   Supercontigs having < 3 reads or < 1kb sequence are ignored.
+#	   1367 gaps <= -1000; 0 gaps <= -10000; 0 gaps <= -100000
+#	   fraction of gaps < -10kb or more than 4 deviations below zero:
+#	   0.00268%
+#	   0 gaps > 10kb, 0 gaps > 50kb, 0 gaps > 200kb, 0 gaps > 1Mb
+#	   92.32% of reads were used in the assembly (93.54% of bases, 92.89%
+#	   of Q20 bases)
+#	   0% of reads were used multiply in the assembly
+#	   430731 contigs, having N50 length 9845
+#	   total contig length: 2275033792, spanning 2487223073 bases (with
+#	   8.53% in gaps)
+#	   95332 supercontigs, having N50 length 159345 (not including gaps)
+#	   57.5% of assembly in supers of size < 200000 (1430068338 bases)
+#	   Assembly base coverage: 3.24X.  Assembly Q20 coverage:  2.98X.
+#	   99.99% of bases have q >= 1
+#	   98.33% of bases have q >= 20
+#	   96.3% of bases have q >= 30
+#	   94.21% of bases have q >= 40
+#	   91.6% of bases have q >= 50
+
+   cut -f 1 assembly.agp | uniq -c | wc -l 
+   # Number of scaffolds: 116471
+
+
+#########################################################################
+# Create .ra file and run makeGenomeDb.pl
+    ssh kkstore05
+    cd /cluster/data/turTru1
+cat << _EOF_ >turTru1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db turTru1
+clade mammal
+genomeCladePriority 35
+scientificName  Tursiops truncatus
+commonName Dolphin
+assemblyDate Feb. 2008
+assemblyLabel Broad Institute turTru1 
+orderKey 236.5
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/turTru1/broad/assembly.bases.gz
+agpFiles /cluster/data/turTru1/broad/assembly.agp
+qualFiles /cluster/data/turTru1/broad/turTru1.qual.qac
+dbDbSpeciesDir dolphin
+_EOF_
+
+# use 'screen' make sure on kkstore05
+    makeGenomeDb.pl -verbose=2 turTru1.config.ra > makeGenomeDb.out 2>&1 &
+
+# 'ctl-a ctl -d' returns to previous shell
+cut -f 2 chrom.sizes | ave stdin
+# Q1 7169.500000
+# median 13298.000000
+# Q3 55788.500000
+# average 866164.007952
+# min 3002.000000
+# max 88675666.000000
+# count 3144
+# total 2723219641.000000
+# standard deviation 5316243.688364
+
+
+#########################################################################
+# REPEATMASKER (DONE braney 2008-07-11)
+    ssh kkstore05
+    screen # use a screen to manage this job
+    mkdir /cluster/data/turTru1/bed/repeatMasker
+    cd /cluster/data/turTru1/bed/repeatMasker
+    doRepeatMasker.pl -buildDir=/cluster/data/turTru1/bed/repeatMasker \
+        turTru1 > do.log 2>&1 &
+
+    # Note: can run simpleRepeats simultaneously
+    #### When done with RM:
+    ssh pk
+    para time
+
+#    Completed: 6258 of 6258 jobs
+#    CPU time in finished jobs:   20645642s  344094.03m  5734.90h  238.95d
+#    0.655 y
+#    IO & Wait Time:                120642s    2010.71m    33.51h    1.40d
+#    0.004 y
+#    Average job time:                3318s      55.31m     0.92h    0.04d
+#    Longest finished job:            9661s     161.02m     2.68h    0.11d
+#    Submission to last job:         66905s    1115.08m    18.58h    0.77d
+
+
+    time nice -n +19 featureBits turTru1 rmsk > fb.turTru1.rmsk.txt 2>&1 &
+    # 1006823376 bases of 2298455021 (43.804%) in intersection
+
+    # RepeatMasker and lib version from do.log:
+    #    Jun 13 2008 (open-3-2-5) version of RepeatMasker
+    # CC   RELEASE 20080611;  
+
+
+#########################################################################
+# SIMPLE REPEATS TRF (DONE braney 2008-07-11)
+    ssh kkstore05
+    screen # use a screen to manage this job
+    mkdir /cluster/data/turTru1/bed/simpleRepeat
+    cd /cluster/data/turTru1/bed/simpleRepeat
+    # 
+    doSimpleRepeat.pl -buildDir=/cluster/data/turTru1/bed/simpleRepeat \
+	turTru1 > do.log 2>&1 &
+
+    #### When done
+    ssh pk
+    para time
+    # Completed: 51 of 51 jobs
+    # CPU time in finished jobs:      24985s     416.41m     6.94h    0.29d
+    # 0.001 y
+    # IO & Wait Time:                   101s       1.69m     0.03h    0.00d
+    # 0.000 y
+    # Average job time:                 492s       8.20m     0.14h    0.01d
+    # Longest finished job:            3887s      64.78m     1.08h    0.04d
+    # Submission to last job:          3911s      65.18m     1.09h    0.05d
+
+    featureBits turTru1 simpleRepeat
+    # 36542185 bases of 2298455021 (1.590%) in intersection
+
+    #	after RM run is done, add this mask:
+    cd /cluster/data/turTru1
+    twoBitMask turTru1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed turTru1.2bit
+
+    twoBitToFa turTru1.2bit stdout | faSize stdin
+
+    # 2519061163 bases (220606142 N's 2298455021 real 1293632105 upper
+    # 1004822916 lower) in 116471 sequences in 1 files
+    # Total size: mean 21628.2 sd 63794.4 min 336 (scaffold_16) max 1406907
+    # (scaffold_109916) median 1593
+    # N count: mean 1894.1 sd 4764.6
+    # U count: mean 11106.9 sd 36345.8
+    # L count: mean 8627.2 sd 23828.2
+    # %39.89 masked total, %43.72 masked real
+
+    twoBitToFa turTru1.rmsk.2bit stdout | faSize stdin
+    # 2519061163 bases (220606142 N's 2298455021 real 1294208094 upper
+    # 1004246927 lower) in 116471 sequences in 1 files
+    # Total size: mean 21628.2 sd 63794.4 min 336 (scaffold_16) max 1406907
+    # (scaffold_109916) median 1593
+    # N count: mean 1894.1 sd 4764.6
+    # U count: mean 11111.8 sd 36361.5
+    # L count: mean 8622.3 sd 23813.1
+    # %39.87 masked total, %43.69 masked real
+
+    # Link to it from /gbdb
+    ln -s /cluster/data/turTru1/turTru1.2bit /gbdb/turTru1/turTru1.2bit
+
