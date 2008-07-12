@@ -545,6 +545,39 @@ priority 37.001
     searchMethod prefix
     searchPriority 2.31
 
+track reconTransMap
+superTrack on
+shortLabel Recon TransMap
+longLabel Reconstruction TransMap Alignments
+group genes
+priority 38.001
+
+    track reconTransMapAlnRefSeq
+    superTrack transMap pack
+    shortLabel Recon TransMap RefGene
+    longLabel Reconstruction TransMap RefSeq Gene Mappings
+    group genes
+    type psl
+    priority 38.003
+    color 0,100,0
+    visibility pack
+    transMapInfo reconTransMapInfoRefSeq
+    transMapSrc hgFixed.reconTransMapSrcRefSeq
+    transMapGene hgFixed.reconTransMapGeneRefSeq
+    baseColorDefault diffCodons
+    baseColorUseCds table hgFixed.reconTransMapGeneRefSeq
+    baseColorUseSequence extFile hgFixed.reconTransMapSeqRefSeq hgFixed.reconTransMapExtFileRefSeq
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    showCdsAllScales .
+
+    searchTable reconTransMapRefSeq
+    searchType psl
+    searchMethod prefix
+    searchPriority 2.31
+
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
