@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1444 2008/07/07 21:39:02 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1445 2008/07/12 05:44:44 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -20133,7 +20133,7 @@ else if (sameWord(track, G_CREATE_WIKI_ITEM))
     {
     doCreateWikiItem(item, seqName, winStart, winEnd);
     }
-else if (startsWith("transMapAln", track))
+else if (startsWith("transMapAln", track) || startsWith("reconTransMapAln", track))
     transMapClickHandler(tdb, item);
 else if (startsWith("hgcTransMapCdnaAli", track))
     {
