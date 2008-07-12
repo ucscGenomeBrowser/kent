@@ -553,7 +553,7 @@ group genes
 priority 38.001
 
     track reconTransMapAlnRefSeq
-    superTrack transMap pack
+    superTrack reconTransMap pack
     shortLabel Recon TransMap RefGene
     longLabel Reconstruction TransMap RefSeq Gene Mappings
     group genes
