@@ -91,7 +91,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	sacCer1 \
 	sc1 \
 	gliRes13 homIni13 homIni14 priMat13 canHg12 borEut13 \
-	rodEnt13 euaGli13 catArr1
+	rodEnt13 euaGli13 catArr1 homPan20 homIni20
 
 MGC_DBS = \
 	hg16 hg17 hg18\
