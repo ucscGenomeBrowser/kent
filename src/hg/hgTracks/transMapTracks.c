@@ -153,4 +153,6 @@ registerTrackHandler("transMapAlnRefSeq", transMapMethods);
 registerTrackHandler("transMapAlnMRna", transMapMethods);
 registerTrackHandler("transMapAlnSplicedEst", transMapMethods);
 registerTrackHandler("transMapAlnUcscGenes", transMapMethods);
+// reconstruction
+registerTrackHandler("reconTransMapAlnRefSeq", transMapMethods);
 }
