@@ -142,7 +142,7 @@ If we change our template file to read:
 
  #LOOP
 
- /cluster/bin/blat $(path1) $(path2) {check out line+ out/(root1)_$(root2)} 
+ /cluster/bin/blat $(path1) $(path2) {check out line+ out/$(root1)_$(root2)} 
 
  #ENDLOOP
 
@@ -155,7 +155,44 @@ It's possible to put checks on input files as well.
 <br>
 <br>
 
-Since this is a job liable to take more than a day,  
+RESOURCES
+<br>
+The default job resources are 1 cpu and the amount of ram
+a typical node has divided by the number of cpus.
+<br>
+You can however specify the resources that your batch needs in two ways.
+If the cluster can find machines with sufficient
+resources, it will allocate them to your batch.
+<br>
+One convenient method of specifying required batch resources is
+to use command line options to "para make" or "para create".
+<br>
+To run a batch of jobs needing 2GB and 1CPU, do "para make -ram-2g -cpu=1 spec".
+For specifying ram you may use t for terabyte, g for gigabyte, m for megabyte, 
+k for kilobyte. You may also just use the entire number 
+as in 2000000000 for 2GB.
+<br>
+<br>
+The other way is to use additional per-job optional clauses in the job-spec
+using the "use" clause.  You can specify the number of cpus and the amount
+of ram that is needed.  
+<br>
+We can change our template file to read:
+<pre>
+
+ #LOOP
+
+ /cluster/bin/blat $(path1) $(path2) out/$(root1)_$(root2) {use cpu 1} {use ram 2g}
+
+ #ENDLOOP
+
+</pre>
+then Parasol will ensure that your batch jobs get 1 CPU and 2GB ram.
+These "use" clauses may be combined with the other clauses the system supports.
+<br>
+<br>
+
+If this is a job liable to take more than a day,  
 rather than running 'para make',  
 I like to take a more interactive approach as follows:
 <pre>
@@ -189,17 +226,26 @@ just hit [control-C]; to stop the shoving.
  
 
 Typically there are three types of problems you encounter with a big batch of jobs.  
+<br>
 The most common problem is a new bug in the program you're running, 
 which causes all or most of your jobs to crash.  
-Doing a "para try" will usually find these problems without wasting a lot of cluster time.  
+Doing a "para try" will usually find these problems without wasting a lot of cluster time.
+If 25 of your jobs crash in a row, the batch will be considered sick, the batch queue 
+will be flushed, no further jobs from that batch may be pushed, and the sick batch 
+status will be returned to the para client.
+After fixing the problem, do "para clearSickNodes" to reset the sick batch status.
 <br>
 Another common problem is when one of the machines in the cluster is acting flaky for some reason 
-- often because it is having an i/o problem of some sort.   
-When a "para check" shows that some jobs are crashing this is the first thing to check.  
-Do a "para problems" to get a report on the jobs that are having troubles, 
-and see if they are all on the same host.  
+- often because it is having an i/o problem of some sort.
+The hub remembers which nodes appear to be sick and after 3 consecutive crashes,
+the batch considers the node sick and stops scheduling jobs on it from the batch.
+If you think the node has been fixed and want to try it again
+you can run para clearSickNodes to reset the sick nodes' status.
+Do "parasol list sick" to list any machines that are considered sick
+by all currently running batches.  
+Do a "para showSickNodes" to get a report on the nodes that are having trouble with your batch.
 If so tell the system administrators about the problem.  
-They can use the "parasol remove machine" command to remove the machine from parasol service 
+The "parasol remove machine" command should be used to remove the machine from parasol service 
 until the problem can be fixed.  
 <br>
 The third common problem is due to rarely-manifesting bugs in your code.  
@@ -587,107 +633,121 @@ In general this summary will be more up to date than the descriptions here.
 </pre>
 <h4>Command Line</h4>
 <pre>
-    usage:
-	para command [command-specific arguments]
+usage:
+
+   para [options] command [command-specific arguments]
 
 The commands are:
- 
 
 para create jobList
-   This makes the job-tracking database. jobList is a text file with a
-   command line for each job on a separate line.  See below for 
-   further description of the jobList.  The 'in' checks in the
-   jobList will be performed at this time. The output is a file
-   called "batch" that para uses to schedule the jobs.
-
+   This makes the job-tracking database from a text file with the
+   command line for each job on a separate line.
+   options:
+      -cpu=N  Number of CPUs used by the jobs, default 1.
+      -ram=N  Number of bytes of RAM used by the jobs.
+         Default is RAM on node divided by number of cpus on node.
+         Shorthand expressions allow t,g,m,k for tera, giga, mega, kilo.
+         e.g. 4g = 4 Gigabytes.
+      -batch=batchDir - specify the directory path that is used to store the
+       batch control files.  The batchDir can be an absolute path or a path
+       relative to the current directory.  The resulting path is use as the
+       batch name.  The directory is created if it doesn't exist.  When
+       creating a new batch, batchDir should not have been previously used as
+       a batch name.  The batchDir must be writable by the paraHub process.
+       This does not affect the working directory assigned to jobs.  In defaults
+       to the directory where para is run.  If used, this option must be specified
+       on all para commands for the  batch.  For example to run two batches in the
+       same directory:
+          para -batch=b1 make jobs1
+          para -batch=b2 make jobs2
 para push
-   This pushes forward the batch of jobs, submitting jobs to parasol.
+   This pushes forward the batch of jobs by submitting jobs to parasol
    It will limit parasol queue size to something not too big and
    retry failed jobs.
    options:
       -retries=N  Number of retries per job - default 4.
       -maxQueue=N  Number of jobs to allow on parasol queue.
-                  Default 200000.
-      -minPush=N  Minimum number of jobs to queue - default 1.  
-                  Overrides maxQueue.
+         Default 1000000.
+      -minPush=N  Minimum number of jobs to queue.
+         Default 1.  Overrides maxQueue.
       -maxPush=N  Maximum number of jobs to queue - default 100000.
       -warnTime=N  Number of minutes job runs before hang warning.
-                  Default 4320 (3 days).
-      -killTime=N  Number of minutes job runs before push kills it 
-                  Default 20160 (2 weeks).
+         Default 4320 (3 days).
+      -killTime=N  Number of minutes hung job runs before push kills it.
+         By default kill off for backwards compatibility.
       -delayTime=N  Number of seconds to delay before submitting next job
-               to minimize i/o load at startup - default 0.
-      -eta  Show estimated time to completion with 'time' function.
-            This is a rough estimated based on average job time and jobs left.
+         to minimize i/o load at startup - default 0.
       -priority=x  Set batch priority to high, medium, or low.
-                  Default medium (use high only with approval).
-                  If needed, use with make, push, create, shove, or try.
-                  Or, set batch priority to a specific numeric value - default 10.
-                  1 is emergency high priority,
-	          10 is normal medium,
-	          100 is low for bottomfeeders.
-	          Setting priority higher than normal (1-9) will be logged.
-		  Please keep low priority jobs short, they won't be pre-empted.
-      -maxNode=x  Limit the number of nodes the batch can use.
-         Specify number of nodes, e.g 10, or 'unlimited'.
+         Default medium (use high only with approval).
+         If needed, use with make, push, create, shove, or try.
+         Or, set batch priority to a specific numeric value - default 10.
+         1 is emergency high priority,
+         10 is normal medium,
+         100 is low for bottomfeeders.
+         Setting priority higher than normal (1-9) will be logged.
+         Please keep low priority jobs short, they won't be pre-empted.
+      -maxJob=x  Limit the number of jobs the batch can run.
+         Specify number of jobs, for example 10 or 'unlimited'.
          Default unlimited displays as -1.
-
-	       
-
+      -jobCwd=dir - specify the directory path to use as the current working
+       directory for each job.  The dir can be an absolute path or a path
+       relative to the current directory. In defaults to the directory where
+       para is run.
 para try
    This is like para push, but only submits up to 10 jobs.
-
 para shove
    Push jobs in this database until all are done or one fails after N retries.
-
 para make jobList
    Create database and run all jobs in it if possible.  If one job
-   crashes repeatedly this will fail.  Suitable for inclusion in 
-   makefiles.  Same as a 'create' followed by a 'shove'.
-
+   fails repeatedly this will fail.  Suitable for inclusion in makefiles.
+   Same as a 'create' followed by a 'shove'.
 para check
    This checks on the progress of the jobs.
-
 para stop
    This stops all the jobs in the batch.
-
 para chill
    Tells system to not launch more jobs in this batch, but
    does not stop jobs that are already running.
-
 para finished
    List jobs that have finished.
-
 para hung
-   List hung jobs in the batch.
-
+   List hung jobs in the batch (running > killTime).
+para slow
+   List slow jobs in the batch (running > warnTime).
 para crashed
    List jobs that crashed or failed output checks the last time they were run.
-
 para failed
    List jobs that crashed after repeated restarts.
-
+para status
+   List individual job status, including times.
 para problems
-   List jobs that had problems (even if successfully rerun). 
+   List jobs that had problems (even if successfully rerun).
    Includes host info.
-
 para running
    Print info on currently running jobs.
-
+para hippos time
+   Print info on currently running jobs taking > 'time' (minutes) to run.
 para time
    List timing information.
-   with option: -eta also show estimated time to completion.
-      
 para recover jobList newJobList
    Generate a job list by selecting jobs from an existing list where
    the `check out' tests fail.
-
 para priority 999
    Set batch priority. Values explained under 'push' options above.
+para maxJob 999
+   Set batch maxJob. Values explained under 'push' options above.
+para resetCounts
+   Set batch done and crash counters to 0.
+para freeBatch
+   Free all batch info on hub.  Works only if batch has nothing queued or running.
+para showSickNodes
+   Show sick nodes which have failed when running this batch.
+para clearSickNodes
+   Clear sick nodes statistics and consecutive crash counts of batch.
 
-para maxNode 999
-   Set batch maxNode. Values explained under 'push' options above.
-	 
+Common options
+   -verbose=1 - set verbosity level.
+
 </pre>
 <h4>
 Para Job Lists
@@ -726,6 +786,19 @@ Here's an example of a blat job spec:
   blat {check in line+ human.fa} {check in line+ mouse1.fa} {check out line+ hm1.psl}
 
   blat {check in line+ human.fa} {check in line+ mouse2.fa} {check out line+ hm2.psl}
+
+You may also specify ram and/or cpu resources in your spec,
+although using para command line options might be easier.
+   {use ram 2g}
+or
+   {use ram 2000000000}
+  Allowed RAM abbreviations are 
+    t terabyte
+    g gigabyte
+    m megabyte
+    k kilobyte
+You may specify cpus needed in a "use" clause.
+   {use cpu 1}
 
 Currently it's not possible to redirect input or output in a job list.
 But you may be able to run a shell so as to pass it a delimited command-line that has redirection.
@@ -806,8 +879,14 @@ or any of the 'parasol list' commands though,
 and may find these useful to find out how busy the computer cluster is.
 
    parasol add machine machineName tempDir  - Add new machine to pool.
+    or 
+   parasol add machine machineFullHostName cpus ramSizeMB localTempDir localDir localSizeMB switchName
+         using the same machine resource parameters that the configuration file uses.
 
    parasol remove machine machineName "reason why" - Remove machine from pool.
+
+   parasol check dead - Check machines marked dead ASAP, some have been fixed.
+         Useful only for administrators.
 
    parasol add spoke  - Add a new spoke daemon.
 
@@ -830,12 +909,14 @@ and may find these useful to find out how busy the computer cluster is.
 
    parasol list machines  - List machines in pool.
 
-   parasol list jobs  - List jobs one per line.
+   parasol [-extended] list jobs  - List jobs one per line.
 
    parasol list users  - List users one per line.  
           Monitor user priorities and see how many jobs each user has running.
 
    parasol list batches  - List batches one per line.
+
+   parasol list sick  - List nodes considered sick by all running batches, one per line.
 
    parasol status  - Print status of machines, jobs, and spokes. 
 
@@ -996,7 +1077,7 @@ paraNodeStatus
 paraNodeStatus - Check status of paraNode on a list of machines.
 
 usage:
-    paraStat machineList
+    paraNodeStatus machineList
 
 options:
     -retries=N  Number of retries to get in touch with machine.
