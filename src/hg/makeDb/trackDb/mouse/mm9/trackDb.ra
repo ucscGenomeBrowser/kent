@@ -19,6 +19,18 @@ visibility hide
 type bed 3 +
 
 track jaxQTLLift
+shortLabel MGI QTL LiftO
+longLabel Mouse Genome Informatics Quantitative Trait Loci ***Lifted from NCBI 36 (mm8)***
+group map
+priority 21.11
+visibility hide
+color 200,100,0
+type bed 6 +
+url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+urlLabel MGI QTL Detail: 
+release alpha
+
+track jaxQTLLift
 shortLabel MGI QTL
 longLabel Mouse Genome Informatics Quantitative Trait Loci ***Lifted from NCBI 36 (mm8)***
 group map
@@ -28,6 +40,20 @@ color 200,100,0
 type bed 6 +
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail: 
+release beta
+
+track jaxRepTranscriptLift
+shortLabel MGI RepTrns LftO
+longLabel Mouse Genome Informatics Representative Transcript ***Lifted from NCBI36 (mm8)***
+group phenoAllele
+visibility hide
+color 0,0,150
+priority 70.01
+type genePred
+url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=$$
+urlLabel MGI Gene Detail: 
+baseColorUseCds none
+release alpha
 
 track jaxRepTranscriptLift
 shortLabel MGI Rep Transcript
@@ -40,6 +66,19 @@ type genePred
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=$$
 urlLabel MGI Gene Detail: 
 baseColorUseCds none
+release beta
+
+track jaxPhenotypeLift
+shortLabel MGI Pheno LiftO
+longLabel Mouse Genome Informatics Phenotype ***Lifted from NCBI 36 (mm8)***
+group phenoAllele
+visibility hide
+color 190,110,0
+priority 71.01
+type bed 12 +
+url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
+urlLabel MGI Phenotypic Allele(s): 
+release alpha
 
 track jaxPhenotypeLift
 shortLabel MGI Phenotype
@@ -51,6 +90,20 @@ priority 71
 type bed 12 +
 url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
 urlLabel MGI Phenotypic Allele(s): 
+release beta
+
+track jaxAlleleLift
+shortLabel MGI Allele LiftO
+longLabel Mouse Genome Informatics Allele ***Lifted from NCBI 36 (mm8)***
+group phenoAllele
+visibility hide
+color 200, 0, 110
+altColor 200, 0, 110
+priority 72.01
+type bed 12 +
+url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
+urlLabel MGI Phenotypic Allele: 
+release alpha
 
 track jaxAlleleLift
 shortLabel MGI Allele
@@ -63,6 +116,7 @@ priority 72
 type bed 12 +
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
 urlLabel MGI Phenotypic Allele: 
+release beta
 
 track chainSelf
 shortLabel Self Chain 
