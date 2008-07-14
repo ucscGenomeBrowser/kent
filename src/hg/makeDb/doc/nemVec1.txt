@@ -1,9 +1,12 @@
 
-# $Id: nemVec1.txt,v 1.1 2008/07/10 15:32:14 kord Exp $
+# Nematostella vectensis DOE JGI Nemve1
+
+# $Id: nemVec1.txt,v 1.2 2008/07/14 21:58:15 kord Exp $
 # $Source: /projects/compbio/cvsroot/kent/src/hg/makeDb/doc/nemVec1.txt,v $
 
 #######################################################################
-# CREATE BUILD DIRECTORY (DONE 7/1/08 kord) 
+# CREATE BUILD DIRECTORY 
+# (DONE 2008-Jul-01 - Kord) 
 
 # what store?
 ssh hgwdev
@@ -26,11 +29,22 @@ mkdir /cluster/store3/nemVec1
 ln -s /cluster/store3/nemVec1 /cluster/data/nemVec1
 
 #######################################################################
-# DOWNLOAD THE ASSEMBLY (STARTED 7/1/08 kord)
+# DOWNLOAD THE ASSEMBLY 
+# (DONE - 2008-Jul-05 - Kord)
 ssh kkstore06
+cd /cluster/data/nemVec1
+mkdir jkStuff
+mkdir bed
+
 mkdir /cluster/data/nemVec1/downloads
 cd /cluster/data/nemVec1/downloads
 
+# GenBank WGS sequences and Scaffolds:
+# http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&val=ABAV01000000
+# WGS         ABAV01000001-ABAV01059149
+# WGS_SCAFLD  DS469507-DS480310
+
+# JGI supplied contigs
 # http://genome.jgi-psf.org/Nemve1/Nemve1.download.ftp.html
 # Unmasked
 wget --timestamp \
@@ -64,5 +78,65 @@ faSize NvTRjug.fasta.gz
 # U count: mean 1441.4 sd 2104.8
 # L count: mean 0.0 sd 0.0
 # %0.00 masked total, %0.00 masked real
+
+#######################################################################
+# run the makeGenomeDb procedure to create the db and unmasked sequence
+# (DONE - 2008-Jul-14 - Kord)
+
+# create a new genomeClade?
+# Nope - Jim doesn't want one-browser clades in the menu
+# So, its into "other" for Nematostella until Hydra magnipapillata is done
+
+# gnerate a fake AGP for use in downstream tools
+ssh kkstore06
+cd /cluster/data/nemVec1/downloads
+hgFakeAgp -minContigGap=50 Nemve1.fasta.gz nemVec1.agp
+
+cat << _EOF_ > nemVec1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db nemVec1 
+# new clade? cnidarian 
+clade other
+genomeCladePriority 18
+scientificName Nematostella vectensis
+commonName Starlet sea anemone
+assemblyDate Jun. 2007
+assemblyLabel US DOE JGI-PGF Nemve1
+orderKey 227
+mitoAcc none
+fastaFiles /cluster/data/nemVec1/downloads/Nemve1.fasta.gz
+agpFiles   /cluster/data/nemVec1/downloads/nemVec1.agp
+# qualFiles /dev/null
+dbDbSpeciesDir other
+_EOF_
+
+# run just to the AGP to make sure things are sane first
+nice time -p makeGenomeDb.pl nemVec1.config.ra -stop agp \
+    |tee -a jkStuff/makeGenomeDb.ajp 2>&1
+
+# now, contining to make the Db and all
+time -p nice -n +19 makeGenomeDb.pl nemVec1.config.ra -continue db \
+    >jkStuff/makeGenomeDb.log 2>&1
+# real 223.58
+# user 0.20
+# sys 0.16
+
+
+cd /cluster/data/nemVec1/TemporaryTrackDbCheckout/kent/src/hg/makeDb/trackDb/other/nemVec1
+# Updated the html
+# description.html /cluster/data/nemVec1/html/{trackDb.ra,gap.html,gold.html}
+
+ cd ../.. 
+ # (to trackDb/) and
+# - edit makefile to add nemVec1 to DBS.
+# - (if necessary) cvs add other
+# - cvs add other/nemVec1
+# - cvs add other/nemVec1/*.{ra,html}
+# - cvs ci -m "Added nemVec1 to DBS." makefile
+# - cvs ci -m "Initial descriptions for nemVec1." other/nemVec1
+# - (if necessary) cvs ci other
+# - Run make update DBS=nemVec1 and make alpha when done.
+# - (optional) Clean up /cluster/data/nemVec1/TemporaryTrackDbCheckout
+# -  cvsup your ~/kent/src/hg/makeDb/trackDb and make future edits there.
 
 
