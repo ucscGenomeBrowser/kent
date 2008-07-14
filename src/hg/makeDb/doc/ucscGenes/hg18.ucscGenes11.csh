@@ -1013,3 +1013,9 @@ hgsql -e "drop table history" $tempDb
 # Swap in new tables, moving old tables to backup database.
 sudo ~kent/bin/swapInMysqlTempDb $tempDb $db ${db}Backup
 
+# Update database links.
+sudo rm /var/lib/mysql/uniProt
+sudo ln -s /var/lib/mysql/$spDb /var/lib/mysql/uniProt
+sudo rm /var/lib/mysql/proteome
+sudo ln -s /var/lib/mysql/$pbDb /var/lib/mysql/proteome
+hgsqladmin flush-tables
