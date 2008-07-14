@@ -112,6 +112,7 @@ hgMapViaSwissProt $db knownGene name proteinID Pfam knownToPfam
 hgMapToGene $db HInvGeneMrna knownGene knownToHInv
 hgMapToGene $db allenBrainAli -type=psl knownGene knownToAllenBrain 
 hgMapToGene $db ensGene knownGene knownToEnsembl
+hgMapToGene $db snp129 knownGene knownToCdsSnp -all -cds
 
 
 ########################################################################
@@ -119,7 +120,7 @@ hgMapToGene $db ensGene knownGene knownToEnsembl
 
 # Create a table that maps between known genes and 
 # the nice affyUcla expression data.
-hgMapToGene "-type=bed 12" $db affyUcla knownGene knownToU133
+hgMapToGene "-type=bed 12" $db affyUclaNorm knownGene knownToU133
 
 # Create expression distance table.  This will take about an hour.
 cd ~/src/hg/near/hgExpDistance
@@ -465,6 +466,9 @@ priority 9.2
 
 ###############################################################
 # Affy All Exon GeneSorter column. (DONE Andy, 2008-03-17)
+# NOTE - in future doing this in genome database rather than 
+# hgFixed, since it needs to change with each gene build....
+# Doing so as part of UCSC Genes update, Jim Kent, 2008-07-14)
 
 ssh hgwdev
 cd /cluster/data/hg18/bed
@@ -478,10 +482,12 @@ echo "select * from affyHumanExon" | \
    hgsql hgFixed | tail +2 > expData.txt
 affyAllExonGSColumn expData.txt ids.txt column.txt
 hgLoadSqlTab hgFixed affyHumanExonGs expData.sql column.txt
-hgRatioMicroarray -clump=affyHumanExon.ra -minAbsVal=0.01 \
+hgRatioMicroarray -database=hgFixed -clump=affyHumanExon.ra -minAbsVal=0.01 \
    affyHumanExonGs affyHumanExonGsRatio
 hgMedianMicroarray hgFixed affyHumanExonGs affyHumanExonExps \
    affyHumanExon.ra affyHumanExonGsMedian affyHumanExonMedianExps
 hgMedianMicroarray hgFixed affyHumanExonGsRatio \
    affyHumanExonExps affyHumanExon.ra affyHumanExonGsRatioMedian \
    affyHumanExonMedianExps
+hgExpDistance hgFixed affyHumanExonGsRatioMedian \
+   affyHumanExonGsMedianExps affyHumanExonGsRatioMedianDist
