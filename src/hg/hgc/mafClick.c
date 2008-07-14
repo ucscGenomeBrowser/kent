@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.53 2008/07/09 18:43:42 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.54 2008/07/14 19:29:04 kate Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -635,32 +635,61 @@ else
 	boolean onlyCds = sameWord(codeVarVal, "coding");
 #endif
         /* add links for conservation score statistics */
-        boolean first = TRUE;
         consWiggles = wigMafWiggles(tdb);
-        for (consWig = consWiggles; consWig != NULL; 
-                consWig = consWig->next)
+        int wigCount = slCount(consWiggles);
+        if (wigCount == 1)
             {
-            if (first)
-                printf("\n<P>");
-            if (sameString(consWig->leftLabel, DEFAULT_CONS_LABEL))
-                conservationStatsLink(tdb, 
-                        "Conservation score statistics", consWig->table);
-            else
+            conservationStatsLink(tdb, 
+                        "Conservation score statistics", 
+                                consWiggles->table);
+            }
+        else if (wigCount > 1)
+            {
+            /* multiple wiggles. List all that have been turned on with
+             * checkboxes */
+
+            /* Scan for cart variables -- do any exist, are any turned on ? */
+            boolean wigSet = FALSE;
+            boolean wigOn = FALSE;
+            for (consWig = consWiggles; consWig != NULL; 
+                        consWig = consWig->next)
                 {
-                if (!cartCgiUsualBoolean(cart, 
-                    wigMafWiggleVar(tdb, consWig), FALSE))
-                        continue;
-                if (first)
+                char *wigVar = wigMafWiggleVar(tdb, consWig);
+                if (cartVarExists(cart, wigVar))
                     {
-                    printf("\n<P>Conservation score statistics:");
-                    first = FALSE;
+                    wigSet = TRUE;
+                    if (cartBoolean(cart, wigVar))
+                        wigOn = TRUE;
                     }
-                printf("&nbsp;&nbsp;");
-                subChar(consWig->uiLabel, '_', ' ');
-                conservationStatsLink(tdb, 
-                    consWig->uiLabel, consWig->table);
                 }
-	    }
+            /* If there are no cart vars, turn on the first (default) wig */
+            if (!wigSet)
+                {
+                cartSetBoolean(cart, wigMafWiggleVar(tdb, consWiggles), TRUE);
+                wigOn = TRUE;
+                }
+            if (wigOn)
+                {
+                boolean first = TRUE;
+                for (consWig = consWiggles; consWig != NULL; 
+                            consWig = consWig->next)
+                    {
+                    if (first)
+                        {
+                        printf("Conservation score statistics:");
+                        first = FALSE;
+                        }
+                    if (cartUsualBoolean(cart, wigMafWiggleVar(tdb, consWig),
+                                            FALSE))
+                        {
+                        printf("&nbsp;&nbsp;");
+                        subChar(consWig->uiLabel, '_', ' ');
+                        conservationStatsLink(tdb, 
+                            consWig->uiLabel, consWig->table);
+                        }
+                    }
+                }
+            }
         puts("</P>\n");
 
 #ifdef ADDEXONCAPITAL
