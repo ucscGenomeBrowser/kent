@@ -398,5 +398,190 @@ do1 vax004Msa
    'load data local infile "gsidSubjSeq.tab" into table gsidSubjSeq'
 
    rm j.1 j.2 j.3 j.4 j.dna j.aa
+
 #########################################################################
+# RE-BUILD CONSERVATION AND MSA TRACKS FOR vax003AE
+
+# COPY OVER shortened MSA sequences from hivVax003Vax003
+
+    mkdir -p /cluster/store12/medical/hiv/hivmn2/msaNew/AE
+    cd /cluster/store12/medical/hiv/hivmn2/msaNew/AE
+
+    hgsql hivmn2 -e "delete from vax003AEMsa"
+    hgsql hivmn2 -e "insert into vax003AEMsa select * from hivVax003Vax003.vax003AEMsa"
+
+# CREATE CONSERVATION TRACKS FOR AE STRAIN
+
+    mkdir -p /cluster/store12/medical/hiv/hivmn2/conservationNew/AE
+    cd /cluster/store12/medical/hiv/hivmn2/conservationNew/AE
+
+# create the .wig file and .fa file of the consensus sequence.
+    gsidMsa hivmn2 vax003AEMsa MN_D533-gp120 166 vax003AECons.wig vax003AEConsensus.fa
+
+# encode and load the wig file
+    wigEncode vax003AECons.wig stdout vax003AECons.wib \
+    | hgLoadWiggle hivmn2 vax003AECons stdin
+
+# copy .wib file to /gbdb
+    mkdir -p /gbdb/hivmn2/wib
+    cp vax003AECons.wib /gbdb/hivmn2/wib
+
+# do the same for protein conservationNew track
+
+    mkdir aa
+    cd aa
+
+# create .wig file
+    gsidAaMsa2 hivmn2 vax003AEMsa MN_D533-gp120 166 vax003AEAaCons.wig vax003AEAaConsensus.fa
+
+# encode and load the .wib file   
+    wigEncode vax003AEAaCons.wig stdout vax003AEAaCons.wib \
+    | hgLoadWiggle hivmn2 vax003AEAaCons stdin
+
+    cp vax003AEAaCons.wib /gbdb/hivmn2/wib
+
+# CREATE MAF TRACKS FOR vax003AE STRAIN
+
+    mkdir -p /cluster/store12/medical/hiv/hivmn2/msaNew/AE
+    cd /cluster/store12/medical/hiv/hivmn2/msaNew/AE
+
+# create a script file, doall
+
+    hgsql hivmn2 -N -e \
+    'select id from vax003AEMsa where id like "%T%"'\
+    |sed -e 's/ss/do1 ss/g' >doall
+
+# create one line script file, do1, with the following line in it:
+
+    hgsql hivmn2 -N -e  "select id, seq from vax003AEMsa where id='${1}'"
+
+    chmod +x do*
+
+# run the script to get the .tab file with all MSA sequences of VAX004
+    doall >mn2.tab
+# convert .tab into .fa file
+    tabToFa mn2
+
+# grab the base alignment sequence
+    echo ">hivmn2" >mn2.aln
+    hgsql hivmn2 -N -e 'select seq from vax003AEMsa where id="MN_D533-gp120"'  >> mn2.aln
+
+# prepare an interium file, jjAll.mfa
+    cat mn2.aln mn2.fa >jjAll.mfa
+    echo = >>jjAll.mfa
+
+# Run xmfaToMafMn2AE to create a precursor file for the final .maf
+
+    xmfaToMafMn2AE jjAll.mfa j.out  org1=hivmn2
+    cat j.out|sed -e 's/\./_/g'|sed -e 's/_chr/\.chr/g' >chr1.tmp
+
+    rm jjAll.mfa j.out
+
+    cat chr1.tmp |sed -e 's/ss_T/T/g' >chr1.maf
+
+# copy .maf to /gbdb.
+
+    mkdir -p  /gbdb/hivmn2/vax003AEMaf
+    cp chr1.maf /gbdb/hivmn2/vax003AEMaf -p
+    echo before load
+    hgLoadMaf hivmn2 vax003AEMaf
+
+# create another copy for protein MAF.
+
+    mkdir -p  /gbdb/hivmn2/vax003AEAaMaf 
+    cp -p chr1.maf /gbdb/hivmn2/vax003AEAaMaf
+    hgLoadMaf hivmn2 vax003AEAaMaf
+
+#########################################################################
+# RE-BUILD CONSERVATION AND MSA TRACKS FOR vax003B
+
+# COPY OVER shortened MSA sequences from hivVax003Vax004
+
+    mkdir -p /cluster/store12/medical/hiv/hivmn2/msaNew/B
+    cd /cluster/store12/medical/hiv/hivmn2/msaNew/B
+
+    hgsql hivmn2 -e "delete from vax003BMsa"
+    hgsql hivmn2 -e "insert into vax003BMsa select * from hivVax003Vax004.vax003BMsa"
+
+# CREATE CONSERVATION TRACKS FOR B STRAIN
+
+    mkdir -p /cluster/store12/medical/hiv/hivmn2/conservationNew/B
+    cd /cluster/store12/medical/hiv/hivmn2/conservationNew/B
+
+# create the .wig file and .fa file of the consensus sequence.
+    gsidMsa hivmn2 vax003BMsa MN_D533-gp120 166 vax003BCons.wig vax003BConsensus.fa
+
+# encode and load the wig file
+    wigEncode vax003BCons.wig stdout vax003BCons.wib \
+    | hgLoadWiggle hivmn2 vax003BCons stdin
+
+# copy .wib file to /gbdb
+    mkdir -p /gbdb/hivmn2/wib
+    cp vax003BCons.wib /gbdb/hivmn2/wib
+
+# do the same for protein conservationNew track
+
+    mkdir aa
+    cd aa
+
+# create .wig file
+    gsidAaMsa2 hivmn2 vax003BMsa MN_D533-gp120 166 vax003BAaCons.wig vax003BAaConsensus.fa
+
+# encode and load the .wib file   
+    wigEncode vax003BAaCons.wig stdout vax003BAaCons.wib \
+    | hgLoadWiggle hivmn2 vax003BAaCons stdin
+
+    cp vax003BAaCons.wib /gbdb/hivmn2/wib
+
+# CREATE MAF TRACKS FOR vax003B STRAIN
+
+    mkdir -p /cluster/store12/medical/hiv/hivmn2/msaNew/B
+    cd /cluster/store12/medical/hiv/hivmn2/msaNew/B
+
+# create a script file, doall
+
+    hgsql hivmn2 -N -e \
+    'select id from vax003BMsa where id like "%T%"'\
+    |sed -e 's/ss/do1 ss/g' >doall
+
+# create one line script file, do1, with the following line in it:
+
+    hgsql hivmn2 -N -e  "select id, seq from vax003BMsa where id='${1}'"
+
+    chmod +x do*
+
+# run the script to get the .tab file with all MSA sequences of VAX004
+    doall >mn2.tab
+# convert .tab into .fa file
+    tabToFa mn2
+
+# grab the base alignment sequence
+    echo ">hivmn2" >mn2.aln
+    hgsql hivmn2 -N -e 'select seq from vax003BMsa where id="MN_D533-gp120"'  >> mn2.aln
+
+# prepare an interium file, jjAll.mfa
+    cat mn2.aln mn2.fa >jjAll.mfa
+    echo = >>jjAll.mfa
+
+# Run xmfaToMafMn2B to create a precursor file for the final .maf
+
+    xmfaToMafMn1 jjAll.mfa j.out  org1=hivmn2
+    cat j.out|sed -e 's/\./_/g'|sed -e 's/_chr/\.chr/g' >chr1.tmp
+
+    rm jjAll.mfa j.out
+
+    cat chr1.tmp |sed -e 's/ss_T/T/g' >chr1.maf
+
+# copy .maf to /gbdb.
+
+    mkdir -p  /gbdb/hivmn2/vax003BMaf
+    cp chr1.maf /gbdb/hivmn2/vax003BMaf -p
+    echo before load
+    hgLoadMaf hivmn2 vax003BMaf
+
+# create another copy for protein MAF.
+
+    mkdir -p  /gbdb/hivmn2/vax003BAaMaf 
+    cp -p chr1.maf /gbdb/hivmn2/vax003BAaMaf
+    hgLoadMaf hivmn2 vax003BAaMaf
 
