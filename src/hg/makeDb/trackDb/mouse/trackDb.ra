@@ -52,6 +52,17 @@ type bed 6 +
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail: 
 
+track jaxQtl
+shortLabel MGI QTL
+longLabel Quantitative Trait Loci From Jackson Laboratory / Mouse Genome Informatics
+group map
+priority 21.1
+visibility hide
+color 200,100,0
+type bed 6 +
+url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+urlLabel MGI QTL Detail: 
+
 track jaxQTL2
 shortLabel MGI QTL
 longLabel Quantitative Trait Loci From Jackson Laboratory / Mouse Genome Informatics
