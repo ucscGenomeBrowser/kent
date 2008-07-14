@@ -20,8 +20,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K4 cell_type=ES view=HMM
     type bed 3
-    color 25,25,150
     noInherit off
+    color 0,150,0
+    altcolor 0,255,0
     visibility dense
     priority 1
 
@@ -31,9 +32,10 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K4 cell_type=ES view=WIN
     type bed 5 +
-    useScore 1
-    color 25,25,150
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,150,0
+    altcolor 255,255,255
     visibility dense
     priority 2
 
@@ -43,11 +45,13 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K4 cell_type=ES view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 0,150,0
+    altcolor 0,255,0
     visibility full
     priority 3
 
@@ -57,8 +61,10 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K4 cell_type=ES view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,150,0
+    altcolor 0,255,0
     visibility hide
     priority 4
 
@@ -68,9 +74,10 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K4 cell_type=MEF view=WIN
     type bed 5 +
-    useScore 1
-    color 25,25,150
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,150,0
+    altcolor 0,255,0
     visibility dense
     priority 12
 
@@ -80,11 +87,13 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K4 cell_type=MEF view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 0,150,0
+    altcolor 0,255,0
     visibility full
     priority 13
 
@@ -94,8 +103,10 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K4 cell_type=MEF view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,150,0
+    altcolor 0,255,0
     visibility hide
     priority 14
 
@@ -105,9 +116,10 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K4 cell_type=NP view=WIN
     type bed 5 +
-    useScore 1
-    color 25,25,150
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,150,0
+    altcolor 0,255,0
     visibility dense
     priority 22
 
@@ -117,11 +129,13 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K4 cell_type=NP view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 0,150,0
+    altcolor 0,255,0
     visibility full
     priority 23
 
@@ -131,8 +145,10 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K4 cell_type=NP view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,150,0
+    altcolor 0,255,0
     visibility hide
     priority 24
     
@@ -142,11 +158,13 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K4 cell_type=EShyb view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 0,150,0
+    altcolor 0,255,0
     visibility full
     priority 33
     
@@ -156,8 +174,10 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K4 cell_type=EShyb view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,150,0
+    altcolor 0,255,0
     visibility hide
     priority 34
 
@@ -167,8 +187,8 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K9 cell_type=ES view=HMM
     type bed 3
-    color 25,25,150
     noInherit off
+    color 100,0,0
     visibility dense
     priority 41
 
@@ -178,9 +198,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K9 cell_type=ES view=WIN
     type bed 5 +
-    useScore 1
-    color 25,25,150
-    noInherit off
+    spectrum on
+    noInherit on
+    color 100,0,0
     visibility dense
     priority 42
 
@@ -190,11 +210,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K9 cell_type=ES view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 100,0,0
     visibility full
     priority 43
     
@@ -204,8 +225,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K9 cell_type=ES view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 100,0,0
     visibility hide
     priority 44
 
@@ -215,9 +237,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K9 cell_type=MEF view=WIN
     type bed 5 +
-    useScore 1
-    color 25,25,150
-    noInherit off
+    spectrum on
+    noInherit on
+    color 100,0,0
     visibility dense
     priority 52
 
@@ -227,11 +249,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K9 cell_type=MEF view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 100,0,0
     visibility full
     priority 53
     
@@ -241,8 +264,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K9 cell_type=MEF view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 100,0,0
     visibility hide
     priority 54
 
@@ -252,9 +276,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K9 cell_type=NP view=WIN
     type bed 5 +
-    useScore 1
-    color 25,25,150
-    noInherit off
+    spectrum on
+    noInherit on
+    color 100,0,0
     visibility dense
     priority 62
 
@@ -264,11 +288,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K9 cell_type=NP view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 100,0,0
     visibility full
     priority 63
 
@@ -278,8 +303,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K9 cell_type=NP view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 100,0,0
     visibility hide
     priority 64
 
@@ -289,11 +315,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K9 cell_type=EShyb view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 100,0,0
     visibility full
     priority 73
 
@@ -303,8 +330,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K9 cell_type=EShyb view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 100,0,0
     visibility hide
     priority 74
 
@@ -314,8 +342,8 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K20 cell_type=ES view=HMM
     type bed 3
-    color 25,25,150
     noInherit off
+    color 150,0,0
     visibility dense
     priority 81
 
@@ -325,11 +353,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K20 cell_type=ES view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 150,0,0
     visibility full
     priority 83
 
@@ -339,8 +368,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K20 cell_type=ES view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 150,0,0
     visibility hide
     priority 84
 
@@ -350,8 +380,8 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K27 cell_type=ES view=HMM
     type bed 3
-    color 25,25,150
     noInherit off
+    color 255,0,0
     visibility dense
     priority 91
 
@@ -361,9 +391,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K27 cell_type=ES view=WIN
     type bed 5 +
-    useScore 1
-    color 25,25,150
-    noInherit off
+    spectrum on
+    noInherit on
+    color 255,0,0
     visibility dense
     priority 92
 
@@ -373,11 +403,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K27 cell_type=ES view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 255,0,0
     visibility full
     priority 93
 
@@ -387,8 +418,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K27 cell_type=ES view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 255,0,0
     visibility hide
     priority 94
 
@@ -398,9 +430,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K27 cell_type=MEF view=WIN
     type bed 5 +
-    useScore 1
-    color 25,25,150
-    noInherit off
+    spectrum on
+    noInherit on
+    color 255,0,0
     visibility dense
     priority 102
 
@@ -410,11 +442,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K27 cell_type=MEF view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 255,0,0
     visibility full
     priority 103
 
@@ -424,8 +457,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K27 cell_type=MEF view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 255,0,0
     visibility hide
     priority 104
 
@@ -435,9 +469,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K27 cell_type=NP view=WIN
     type bed 5 +
-    useScore 1
-    color 25,25,150
-    noInherit off
+    spectrum on
+    noInherit on
+    color 255,0,0
     visibility dense
     priority 112
 
@@ -447,11 +481,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K27 cell_type=NP view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 255,0,0
     visibility full
     priority 113
 
@@ -461,8 +496,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K27 cell_type=NP view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 255,0,0
     visibility hide
     priority 114
 
@@ -472,8 +508,8 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K36 cell_type=ES view=HMM
     type bed 3
-    color 25,25,150
     noInherit off
+    color 0,0,150
     visibility dense
     priority 121
     
@@ -483,11 +519,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K36 cell_type=ES view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 0,0,150
     visibility full
     priority 123
 
@@ -497,8 +534,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K36 cell_type=ES view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,0,150
     visibility hide
     priority 124
 
@@ -508,11 +546,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K36 cell_type=MEF view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 0,0,150
     visibility full
     priority 133
 
@@ -522,8 +561,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K36 cell_type=MEF view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,0,150
     visibility hide
     priority 134
 
@@ -533,11 +573,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K36 cell_type=NP view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 0,0,150
     visibility full
     priority 143
 
@@ -547,8 +588,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K36 cell_type=NP view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,0,150
     visibility hide
     priority 144
 
@@ -558,11 +600,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K36 cell_type=EShyb view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 0,0,150
     visibility full
     priority 153
 
@@ -572,8 +615,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups factor=K36 cell_type=EShyb view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,0,150
     visibility hide
     priority 154
 
@@ -583,11 +627,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups cell_type=ES factor=PAN view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color  0,0,0
     visibility full
     priority 163
 
@@ -597,8 +642,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups cell_type=ES factor=PAN view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color  0,0,0
     visibility hide
     priority 164
 
@@ -608,8 +654,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups cell_type=ES factor=WCE view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,0,0
     visibility hide
     priority 174
 
@@ -619,8 +666,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups cell_type=MEF factor=WCE view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,0,0
     visibility hide
     priority 184
 
@@ -630,8 +678,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups cell_type=NP factor=WCE view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,0,0
     visibility hide
     priority 194
 
@@ -641,11 +690,12 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups cell_type=ES factor=RPOL view=SIG
     type wig
+    autoscale off
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
-    color 25,150,25
     noInherit on
+    color 0,100,0
     visibility full
     priority 203
     
@@ -655,7 +705,8 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups cell_type=ES factor=RPOL view=ALN
     type bed 9 +
-    useScore 1
-    noInherit off
+    spectrum on
+    noInherit on
+    color 0,100,0
     visibility hide
     priority 204
