@@ -1011,5 +1011,5 @@ hgsqladmin create ${db}Backup
 hgsql -e "drop table history" $tempDb
 
 # Swap in new tables, moving old tables to backup database.
-sudo swapInMysqlTempDb $tempDb $db ${db}Backup
+sudo ~kent/bin/swapInMysqlTempDb $tempDb $db ${db}Backup
 
