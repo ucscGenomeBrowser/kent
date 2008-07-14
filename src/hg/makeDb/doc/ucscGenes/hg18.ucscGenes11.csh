@@ -28,6 +28,9 @@ set yeastDb = sacCer1
 # make tempDb same as db.
 set tempDb = tmpFoo2
 
+# Table for SNPs
+set snpTable = snp129
+
 # Public version number
 set lastVer = 3
 set curVer = 4
@@ -658,13 +661,34 @@ if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
     hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
+    hgMapToGene $db -tempDb=$tempDb affyUclaNorm knownGene knownToU133
     hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
+    hgMapToGene $db -tempDb=$tempDb $snpTable knownGene knownToCdsSnp -all -cds
     knownToHprd $tempDb /cluster/data/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
     time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
 	    hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
     time hgExpDistance $tempDb hgFixed.gnfHumanAtlas2MedianRatio \
 	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
 	-lookup=knownToGnfAtlas2
+    # All exon array.
+    mkdir affyAllExon
+    cd affyAllExon
+    overlapSelect -inFmt=genePred -selectFmt=bed -idOutput \
+       ../../affyHumanExon/affyHuEx1.bed ../ucscGenes.gp ids.txt
+    echo "select * from affyHumanExon" | hgsql hgFixed | tail +2 > expData.txt
+    affyAllExonGSColumn expData.txt ids.txt column.txt
+    hgLoadSqlTab $tempDb affyHumanExonGs ~/kent/src/hg/lib/expData.sql column.txt
+    ln -s ~/kent/src/hg/makeDb/hgRatioMicroarray/affyHumanExon.ra .
+    hgRatioMicroarray -database=$tempDb -clump=affyHumanExon.ra -minAbsVal=0.01 \
+       affyHumanExonGs affyHumanExonGsRatio
+    hgMedianMicroarray $tempDb affyHumanExonGs affyHumanExonExps \
+       affyHumanExon.ra affyHumanExonGsMedian affyHumanExonMedianExps
+    hgMedianMicroarray $tempDb affyHumanExonGsRatio \
+       affyHumanExonExps affyHumanExon.ra affyHumanExonGsRatioMedian \
+       affyHumanExonMedianExps
+    hgExpDistance tmpFoo2 affyHumanExonGsRatioMedian \
+       affyHumanExonGsMedianExps affyHumanExonGsRatioMedianDist
+
 endif
 if ($db =~ mm*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1m knownGene knownToGnf1m
@@ -972,3 +996,20 @@ hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd
 
 
 exit # BRACKET
+
+# NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
+# You'll need superuser powers for this step.....
+
+# Save old known genes and kgXref tables
+sudo ~kent/bin/copyMysqlTable $db knownGene $tempDb knownGeneOld$lastVer
+sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kxXrefOld$lastVer
+
+# Create backup database
+hgsqladmin create ${db}Backup
+
+# Drop tempDb history table, we don't want to swap it in!
+hgsql -e "drop table history" $tempDb
+
+# Swap in new tables, moving old tables to backup database.
+sudo swapInMysqlTempDb $tempDb $db ${db}Backup
+
