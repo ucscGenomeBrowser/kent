@@ -2271,19 +2271,19 @@ identifier allenBrainProbe
 
 identifier jaxRepTranscriptName external=MGI
 "Jackson Labs/MGI Allele name: representative transcript ID"
-    mm6,mm8.jaxRepTranscript.name dupeOk
-    mm6,mm8.jaxRepTranscriptAlias.name
+    $mm.jaxRepTranscript.name dupeOk
+    $mm.jaxRepTranscriptAlias.name
 
 identifier jaxAlleleName external=MGI
 "Jackson Labs/MGI Allele name: concatenated representative transcript ID and allele ID"
-    mm6,mm8.jaxAllele.name dupeOk
-    mm6,mm8.jaxAlleleInfo.name
-    mm6,mm8.jaxAllelePheno.allele
+    $mm.jaxAllele.name dupeOk
+    $mm.jaxAlleleInfo.name
+    $mm.jaxAllelePheno.allele
 
 identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"
-    mm6,mm8.jaxPhenotype.name dupeOk
-    mm6,mm8.jaxPhenotypeAlias.name
+    $mm.jaxPhenotype.name dupeOk
+    $mm.jaxPhenotypeAlias.name
     mm8.jaxAllelePheno.transcript minCheck=0.9
     mm6.jaxAllelePheno.transcript minCheck=0.8
 
@@ -2797,6 +2797,7 @@ tablesIgnored $gbd
     phastCons%way
     phastConsElements%way
     jaxQTL
+    jaxQtl
     jaxQtlAsIs
     jaxQtlPadded
 
