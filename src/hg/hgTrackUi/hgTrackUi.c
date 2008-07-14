@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.442 2008/07/11 05:12:39 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.443 2008/07/14 19:27:59 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1957,8 +1957,8 @@ if (consWiggles && consWiggles->next)
     boolean first = TRUE;
     for (consWig = consWiggles; consWig != NULL; consWig = consWig->next)
         {
-        safef(option, sizeof(option), "%s.cons.%s", tdb->tableName,consWig->leftLabel);
-        cgiMakeCheckBox(option, cartUsualBoolean(cart, option, first));
+        char *wigVar = wigMafWiggleVar(tdb, consWig);
+        cgiMakeCheckBox(wigVar, cartUsualBoolean(cart, wigVar, first));
         first = FALSE;
         subChar(consWig->uiLabel, '_', ' ');
         printf ("%s&nbsp;", consWig->uiLabel);

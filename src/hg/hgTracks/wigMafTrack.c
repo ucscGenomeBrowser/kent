@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.132 2008/07/09 18:42:57 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.133 2008/07/14 19:27:59 kate Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -2434,7 +2434,6 @@ void wigMafMethods(struct track *track, struct trackDb *tdb,
 struct track *wigTrack;
 int i;
 char *savedType;
-char option[64];
 struct dyString *wigType;
 struct consWiggle *consWig, *consWigList = NULL;
 
@@ -2463,9 +2462,8 @@ for (consWig = consWigList; consWig != NULL; consWig = consWig->next)
     {
     if (differentString(consWig->leftLabel, DEFAULT_CONS_LABEL))
         {
-        safef(option, sizeof option, "%s.cons.%s", 
-                tdb->tableName, consWig->leftLabel);
-        if (!cartCgiUsualBoolean(cart, option, first))
+        char *wigVar = wigMafWiggleVar(tdb, consWig);
+        if (!cartCgiUsualBoolean(cart, wigVar, first))
             continue;
         }
     first = FALSE;
