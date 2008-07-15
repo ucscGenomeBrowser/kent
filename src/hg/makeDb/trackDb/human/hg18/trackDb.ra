@@ -1118,7 +1118,7 @@ priority 290
 visibility hide
 color 100,50,0
 altColor 255,240,200
-matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrix 16 100,-300,-150,-300,-300,100,-300,-150,-150,-300,100,-300,-300,-150,-300,100 
 matrixHeader A, C, G, T
 spectrum on
 type chain panTro2
