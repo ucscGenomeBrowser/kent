@@ -464,10 +464,10 @@ priority 37.001
     showDiffBasesMaxZoom 100
     showCdsAllScales .
 
-    searchTable transMapUcscGenes
-    searchType psl
-    searchMethod prefix
-    searchPriority 2.31
+searchTable transMapAlnUcscGenes
+searchType psl
+searchMethod prefix
+searchPriority 2.31
 
     track transMapAlnRefSeq
     superTrack transMap pack
@@ -490,10 +490,10 @@ priority 37.001
     showDiffBasesMaxZoom 100
     showCdsAllScales .
 
-    searchTable transMapRefSeq
-    searchType psl
-    searchMethod prefix
-    searchPriority 2.31
+searchTable transMapAlnRefSeq
+searchType psl
+searchMethod prefix
+searchPriority 2.31
 
     track transMapAlnMRna
     superTrack transMap pack
@@ -516,10 +516,10 @@ priority 37.001
     showDiffBasesMaxZoom 100
     showCdsAllScales .
 
-    searchTable transMapMRna
-    searchType psl
-    searchMethod prefix
-    searchPriority 2.31
+searchTable transMapAlnMRna
+searchType psl
+searchMethod prefix
+searchPriority 2.31
 
     track transMapAlnSplicedEst
     superTrack transMap hide
@@ -540,10 +540,10 @@ priority 37.001
     showDiffBasesMaxZoom 100
     showCdsAllScales .
 
-    searchTable transMapSplicedEst
-    searchType psl
-    searchMethod prefix
-    searchPriority 2.31
+searchTable transMapAlnSplicedEst
+searchType psl
+searchMethod prefix
+searchPriority 2.31
 
 track reconTransMap
 superTrack on
@@ -573,10 +573,10 @@ priority 38.001
     showDiffBasesMaxZoom 100
     showCdsAllScales .
 
-    searchTable reconTransMapRefSeq
-    searchType psl
-    searchMethod prefix
-    searchPriority 2.31
+searchTable reconTransMapAlnRefSeq
+searchType psl
+searchMethod prefix
+searchPriority 2.31
 
 track genieAlt
 shortLabel AltGenie
