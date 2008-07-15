@@ -445,7 +445,7 @@ priority 37.001
     track transMapAlnUcscGenes
     superTrack transMap pack
     shortLabel TransMap UCSC Genes
-    longLabel TransMap UcscGenes Gene Mappings
+    longLabel TransMap UCSC Gene Mappings
     group genes
     type psl
     priority 37.002
