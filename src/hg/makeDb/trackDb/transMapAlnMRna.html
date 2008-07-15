@@ -1,8 +1,11 @@
 <H2>Description</H2>
 <P>
-These track contains GenBank mRNA alignments produced by
+This track contains GenBank mRNA alignments produced by
 the <em>TransMap</em> cross-species alignment algorithm
 from other vertebrate species in the UCSC Genome Browser.
+For closer evolutionary distances, the alignments are created using
+syntenically filtered BLASTZ alignment chains, resulting in a prediction of the
+orthologous genes in $organism.
 </P>
 
 <!-- everything below here common to all transMap*.html pages -->
@@ -13,7 +16,7 @@ This track follows the display conventions for
 TARGET=_blank>PSL alignment tracks</A>. </P>
 <P>
 This track may also be configured to display codon coloring, a feature that
-allows the user to quickly compare mRNAs against the genomic sequence. For more 
+allows the user to quickly compare cDNAs against the genomic sequence. For more 
 information about this option, click 
 <A HREF="../goldenPath/help/hgCodonColoringMrna.html" TARGET=_blank>here</A>.
 Several types of alignment gap may also be colored; 
@@ -24,49 +27,51 @@ for more information, click
 <H2>Methods</H2>
 <P>
   <ol>
-    <li> Source transcript alignments are obtained from vertebrate organisms
-    in the UCSC Genome Browser Database. BLAT alignments of RefSeq Genes,
-    GenBank mRNAs, and GenBanks Spliced ESTs to their cognate genome, along
-    with UCSC Genes, were used as available.
-    <li> For all vertebrate assemblies that have BLASTZ alignment chains and
-      nets to the $organism $db genome, a subset of the alignment chains are
+    <li> Source transcript alignments were obtained from vertebrate organisms
+    in the UCSC Genome Browser Database. BLAT alignments of RefSeq Genes, GenBank 
+    mRNAs, and GenBank Spliced ESTs to the cognate genome, along with UCSC Genes,
+    were used as available.
+    <li> For all vertebrate assemblies that had BLASTZ alignment chains and
+      nets to the $organism ($db) genome, a subset of the alignment chains were
       selected as follows:
-      <li> For organisms who's branch distance is no more than 0.5
-        (as computed by <tt>phyloFit</tt>, see Conservation track description for details)
-        use syntenic filtering.  If reciprocal best nets are available, use
-        them, otherwise select nets with the <tt>netfilter -syn</tt> command.
-        The chains that correspond to the nets are used for mapping.
-      <li> More distance species, where the determination of synteny is difficult,
-        use the full set of chains for mapping.2 This allows for more genes to
-        map at the expense of some mapping to paralogus regions.  The post
-        alignment filtering step will remove some of the duplications.
-    <li> The <tt>pslMap</tt> program is used to do a base-level projection of
-      the source transcript alignments via the syntenic chains to this genome.
+      <ul>
+      <li> For organisms whose branch distance is no more than 0.5
+        (as computed by <tt>phyloFit</tt>, see Conservation track description for details),
+        syntenic filtering was used.  Reciprocal best nets were used if available;
+        otherwise, nets were selected with the <tt>netfilter -syn</tt> command.
+        The chains corresponding to the selected nets were used for mapping.
+      <li> For more distance species, where the determination of synteny is difficult,
+        the full set of chains was used for mapping. This allows for more genes to
+        map at the expense of some mapping to paralogus regions.  The
+        post-alignment filtering step removes some of the duplications.
+    </ul>
+    <li> The <tt>pslMap</tt> program was used to do a base-level projection of
+      the source transcript alignments via the syntenic chains
       to this genome, resulting in pairwise alignments of the source transcript to
       the $organism genome.
-    <li> Filter the resulting alignments with <tt>pslCDnaFilter</tt>
+    <li> The resulting alignments were filtered with <tt>pslCDnaFilter</tt>
       with a global near-best criteria of 0.5% in finished genomes
       (human and mouse) and 1.0% in other genomes.  Alignments
-      were less than 20% of the transcript mapped are discarded.
+      where less than 20% of the transcript mapped were discarded.
   </ol>
 </P>
 
 <P>
-To ensure unique identifiers for each alignment, cDNA and gene accessions are
+To ensure unique identifiers for each alignment, cDNA and gene accessions were
 made unique by appending a suffix for each location in the source genome and
 again for each mapped location in the destination genome.  The format is:
 <pre>
    accession.version-srcUniq.destUniq
 </pre>
 
-Were <tt>srcUniq</tt> is a number added to make the each source alignment unique, and
+Where <tt>srcUniq</tt> is a number added to make each source alignment unique, and
 <tt>destUniq</tt> is added to give the subsequent TransMap alignments unique
 identifiers.
 </P>
 <P>
-For example, in the cow bosTau4 genome, there are two alignments of mRNA <tt>BC149621.1</tt>.
+For example, in the cow (bosTau4) genome, there are two alignments of mRNA <tt>BC149621.1</tt>.
 These are assigned the identifiers <tt>BC149621.1-1</tt> and <tt>BC149621.1-2</tt>.
-When these are mapped to the human hg18 genome, <tt>BC149621.1-1</tt> maps to a single
+When these are mapped to the human (hg18) genome, <tt>BC149621.1-1</tt> maps to a single
 location and is given the identifier <tt>BC149621.1-1.1</tt>.  However, <tt>BC149621.1-2</tt>
 maps to two locations, resulting in <tt>BC149621.1-2.1</tt> and <tt>BC149621.1-2.2</tt>.  Note
 that multiple TransMap mappings are usually the result of tandem duplications, where both
