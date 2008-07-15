@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.29 2008/07/11 17:16:03 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.30 2008/07/15 22:28:30 larrym Exp $
 
 use warnings;
 use strict;
@@ -334,10 +334,6 @@ sub getPif {
     $pifFile = &newestFile(glob "*.PIF");
     &HgAutomate::verbose(2, "Using newest PIF file \'$pifFile\'\n");
 
-
-    %tracks = ();  # this is a global
-    my $track;
-
     my $lines = readFile($pifFile);
     while (@{$lines}) {
         my $line = shift @{$lines};
@@ -357,7 +353,7 @@ sub getPif {
             $pif{$key} = $val;
         } else {
             my %track = ();
-            $track = $val;
+            my $track = $val;
             $tracks{$track} = \%track;
             &HgAutomate::verbose(5, "  Found view: \'$track\'\n");
             while ($line = shift @{$lines}) {
@@ -387,7 +383,7 @@ sub getPif {
         die "ERROR: pifVersion '$pif{pifVersion}' does not match current version: $pifVersion\n";
     }
     if(!keys(%tracks)) {
-        die "ERROR: no tracks defined for project \'$pif{project}\' in PIF '$pifFile'\n";
+        die "ERROR: no views defined for project \'$pif{project}\' in PIF '$pifFile'\n";
     }
     if(!defined($labs{$pif{lab}})) {
         die "ERROR: invalid lab '$pif{lab}' for project \'$pif{project}\' in PIF '$pifFile'\n";
@@ -448,15 +444,26 @@ sub readRaFile {
     return %ra;
 }
 
+sub ddfKey
+{
+# return key for given DDF line (e.g. "antibody=$antibody;cell=$cell" for ChIP-Seq data)
+    my ($fields, $ddfHeader) = @_;
+    if (defined($pif{variables})) {
+        return join(";", map("$_=" . $fields->[$ddfHeader->{$_}], sort @{$pif{variableArray}}));
+    } else {
+        die "ERROR: no key defined for this PIF";
+    }
+}
+
 ############################################################################
 # Main
 
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time());
-my $line;
 my $i;
 my @ddfHeader;	# list of field headers on the first line of DDF file
 my %ddfHeader = ();
-my @datasets = ();
+my @ddfLines = ();
+my %ddfSets = ();	# info about DDF entries broken down by ddfKey
 my $wd = `pwd`; chomp $wd;
 
 my $ok = GetOptions("configDir=s",
@@ -568,10 +575,9 @@ foreach my $field (keys %fields) {
         die "ERROR: DDF header is missing required field \'$field\'\n"; 
 }
 
-# Process lines in DDF file.  Create dataset hash with one entry per dataset.
-# The entry contains an array of fields that are the same as the DDF fields,
-# except when multiple files comprise one data set (multiple Parts).
-# In this case, all files are included in the File Name field, 
+# Process lines in DDF file. Create a hash with one entry per line;
+# the entry is an array of field values.
+
 while (@{$lines}) {
     my $line = shift(@{$lines});
     $line =~ s/^\s+//;
@@ -591,23 +597,36 @@ while (@{$lines}) {
     }
     my @filenames = split(',', $files);
     $fields[$fileField] = \@filenames;
-    push(@datasets, \@fields);
+    push(@ddfLines, \@fields);
+
+    $ddfSets{ddfKey(\@fields, \%ddfHeader)}{VIEWS}{$view} = 1;
 }
 
-# Validate files and metadata fields in all datasets using controlled
+# die if there are missing required views
+for my $key (keys %ddfSets) {
+    for my $view (keys %tracks) {
+        if($tracks{$view}->{required} eq 'yes') {
+            if(!defined($ddfSets{$key}{VIEWS}{$view})) {
+                die "ERROR: view '$view' missing for DDF entry '$key'";
+            }
+        }
+    }
+}
+
+# Validate files and metadata fields in all ddfLines using controlled
 # vocabulary.  Create load.ra file for loader and trackDb.ra file for wrangler.
 
 loadControlledVocab();
 open(LOADER_RA, ">$outPath/$loadFile") || die "SYS ERROR: Can't write \'$outPath/$loadFile\' file; error: $!\n";
 open(TRACK_RA, ">$outPath/$trackFile") || die "SYS ERROR: Can't write \'$outPath/$trackFile\' file; error: $!\n";
 my $priority = 0;
-foreach my $datasetRef (@datasets) {
+foreach my $ddfLine (@ddfLines) {
     $priority++;
-    my $view = $datasetRef->[$ddfHeader{view}];
-    my $tableType = $tracks{$view}->{'tableType'};
-    &HgAutomate::verbose(2, "  View: $view\n");
+    my $view = $ddfLine->[$ddfHeader{view}];
+    my $tableType = $tracks{$view}->{tableType};
+    HgAutomate::verbose(2, "  View: $view\n");
     for ($i=0; $i < @ddfHeader; $i++) {
-        &validateField($ddfHeader[$i], $datasetRef->[$i], $view);
+        &validateField($ddfHeader[$i], $ddfLine->[$i], $view);
     }
 
     # Construct table name from track name and variables
@@ -622,9 +641,9 @@ foreach my $datasetRef (@datasets) {
     my $additional = "\n";
     if (defined($pif{variables})) {
         my @variables = @{$pif{variableArray}};
-        my %hash = map { $_ => $datasetRef->[$ddfHeader{$_}] } @variables;
+        my %hash = map { $_ => $ddfLine->[$ddfHeader{$_}] } @variables;
         for my $var (@variables) {
-            $tableName = $tableName . $datasetRef->[$ddfHeader{$var}];
+            $tableName = $tableName . $ddfLine->[$ddfHeader{$var}];
         }
         my $shortSuffix;
         my $longSuffix;
@@ -657,7 +676,7 @@ foreach my $datasetRef (@datasets) {
     print LOADER_RA "type $tracks{$view}->{type}\n";
     print LOADER_RA "tableType $tableType\n" if defined($tableType);
     print LOADER_RA "assembly $pif{assembly}\n";
-    print LOADER_RA "files @{$datasetRef->[$ddfHeader{files}]}\n";
+    print LOADER_RA "files @{$ddfLine->[$ddfHeader{files}]}\n";
     print LOADER_RA "\n";
 
     print TRACK_RA "\ttrack\t$tableName\n";
