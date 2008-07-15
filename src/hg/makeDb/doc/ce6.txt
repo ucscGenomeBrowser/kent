@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.10 2008/06/24 18:58:45 hiram Exp $
+#  $Id: ce6.txt,v 1.11 2008/07/15 18:37:45 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -2289,3 +2289,139 @@ done
     #	check the goldenPath locations and remove those extra links
 
 ##########################################################################
+#  Make protein blast runs for Gene Sorter and Known Genes on Hg18
+    ssh hgwdev
+    mkdir /cluster/data/ce6/bed/hgNearBlastp
+    cd /cluster/data/ce6/bed/hgNearBlastp
+    # Make sure there are no joinerCheck errors at this point, because 
+    # if left here they can spread via doHgNearBlastp:
+    runJoiner.csh ce6 sangerPep
+#	ce6.kimExpDistance.query - hits 13356000 of 19134000 ok
+#	ce6.kimExpDistance.target - hits 12973822 of 19134000 ok
+#	ce6.orfToGene.name - hits 30296 of 30296 ok
+#	ce6.sangerBlastTab.query - hits 1255312 of 1255312 ok
+#	ce6.sangerBlastTab.target - hits 1255312 of 1255312 ok
+#	ce6.sangerCanonical.transcript - hits 20051 of 20051 ok
+#	ce6.sangerIsoforms.transcript - hits 30296 of 30296 ok
+#	ce6.sangerLinks.orfName - hits 30115 of 30115 ok
+#	ce6.sangerPep.name - hits 23771 of 23771 ok
+#	ce6.sangerToRefSeq.name - hits 29995 of 29995 ok
+#	ce6.sangerGeneToWBGeneID.sangerGene - hits 30115 of 30115 ok
+
+    pepPredToFa ce6 sangerPep ce6.sangerPep.faa
+    cat << '_EOF_' > config.ra
+# Latest human vs. this ce6 worm for Human Gene Sorter
+
+targetGenesetPrefix known
+targetDb hg18
+queryDbs ce6
+
+hg18Fa /cluster/data/hg18/bed/ucsc.10/ucscGenes.faa
+ce6Fa /cluster/data/ce6/bed/hgNearBlastp/ce6.sangerPep.faa
+
+buildDir /cluster/data/ce6/bed/hgNearBlastp
+scratchDir /cluster/data/ce6/bed/hgNearBlastp/tmpHgNearBlastp
+'_EOF_'
+
+    time nice -n +19 /cluster/bin/scripts/doHgNearBlastp.pl -workhorse=hgwdev \
+	-noLoad -verbose=2 config.ra > do.log 2>&1 &
+
+##########################################################################
+## creating xxBlastTab tables (DONE - 2008-07-11 - Hiram)
+    # Make sure there are no joinerCheck errors at this point, because 
+    # if left here they can spread via doHgNearBlastp:
+    ssh hgwdev
+    runJoiner.csh ce6 sangerPep
+# ce6.kimExpDistance.query - hits 13356000 of 19134000 ok
+# ce6.kimExpDistance.target - hits 12973822 of 19134000 ok
+# ce6.orfToGene.name - hits 30296 of 30296 ok
+# ce6.sangerBlastTab.query - hits 1255312 of 1255312 ok
+# ce6.sangerBlastTab.target - hits 1255312 of 1255312 ok
+# ce6.sangerCanonical.transcript - hits 20051 of 20051 ok
+# ce6.sangerIsoforms.transcript - hits 30296 of 30296 ok
+# ce6.sangerLinks.orfName - hits 30115 of 30115 ok
+# ce6.sangerPep.name - hits 23771 of 23771 ok
+# ce6.sangerToRefSeq.name - hits 29995 of 29995 ok
+# ce6.sangerGeneToWBGeneID.sangerGene - hits 30115 of 30115 ok
+
+    ssh hgwdev
+    mkdir /cluster/data/ce6/bed/hgNearBlastp/080711
+    cd /cluster/data/ce6/bed/hgNearBlastp/080711
+    # Get the proteins used by the other hgNear organisms:
+    pepPredToFa hg18 knownGenePep hg18.known.faa
+    pepPredToFa mm9 knownGenePep mm9.known.faa
+    pepPredToFa rn4 knownGenePep rn4.known.faa
+    pepPredToFa danRer5 ensPep danRer5.ensPep.faa
+    pepPredToFa dm3 flyBasePep dm3.flyBasePep.faa
+    pepPredToFa ce6 sangerPep ce6.sangerPep.faa
+    pepPredToFa sacCer1 sgdPep sacCer1.sgdPep.faa
+    # sanity check, number of lines in each faa file
+    wc -l *.faa
+    #	244343 ce6.sangerPep.faa
+    #	345537 danRer5.ensPep.faa
+    #	268201 dm3.flyBasePep.faa
+    #	526563 hg18.known.faa
+    #	453565 mm9.known.faa
+    #	86220 rn4.known.faa
+    #	64956 sacCer1.sgdPep.faa
+
+    # sanity check, count the number of protein sequences in each
+    for F in *.faa
+do
+    echo -n "${F} "
+    grep "^>" ${F} | wc -l
+done
+# ce6.sangerPep.faa 23771
+# danRer5.ensPep.faa 31743
+# dm3.flyBasePep.faa 20736
+# hg18.known.faa 45480
+# mm9.known.faa 39489
+# rn4.known.faa 8160
+# sacCer1.sgdPep.faa 5766
+
+    cd /cluster/data/ce6/bed/hgNearBlastp
+    cat << '_EOF_' > config.ra
+# Latest worm vs. other Gene Sorter orgs:
+# human, mouse, rat, zebrafish, fly, yeast
+
+targetGenesetPrefix sanger
+targetDb ce6
+queryDbs hg18 mm9 rn4 danRer5 dm3 sacCer1
+recipBest hg18 mm9 rn4 danRer5 dm3 sacCer1
+
+ce6Fa     /cluster/data/ce6/bed/hgNearBlastp/080711/ce6.sangerPep.faa
+hg18Fa    /cluster/data/ce6/bed/hgNearBlastp/080711/hg18.known.faa
+mm9Fa     /cluster/data/ce6/bed/hgNearBlastp/080711/mm9.known.faa
+rn4Fa     /cluster/data/ce6/bed/hgNearBlastp/080711/rn4.known.faa
+danRer5Fa /cluster/data/ce6/bed/hgNearBlastp/080711/danRer5.ensPep.faa
+dm3Fa     /cluster/data/ce6/bed/hgNearBlastp/080711/dm3.flyBasePep.faa
+sacCer1Fa /cluster/data/ce6/bed/hgNearBlastp/080711/sacCer1.sgdPep.faa
+
+buildDir /cluster/data/ce6/bed/hgNearBlastp/080711
+scratchDir /san/sanvol1/scratch/ce6HgNearBlastp
+'_EOF_'
+    # << happy emacs
+
+    # Run this in a screen since it is going to take awhile
+    # Run with -noLoad so we can eyeball files.
+    # Later overload other databases' dmBlastTab tables.
+    ssh kkstore06
+    screen
+    cd 
+    time nice -n +19 doHgNearBlastp.pl -workhorse=hgwdev -clusterHub=pk \
+	-noLoad config.ra > do.log 2>&1 &
+    # watch progress in do.log
+
+    #	load the blast tabs into ce6
+
+    ssh hgwdev
+    cd /cluster/data/ce6/bed/hgNearBlastp/080711
+    for D in danRer5 dm3 hg18 mm9 rn4 sacCer1
+do
+    cd run.ce6.$D
+    grep hgLoadBlastTab loadPairwise.csh
+    ./loadPairwise.csh
+    cd ..
+done
+
+#############################################################################
