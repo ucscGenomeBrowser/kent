@@ -2190,6 +2190,14 @@ spectrum on
 type netAlign ornAna1 chainOrnAna1Pre
 otherDb ornAna1
 
+track atomHomIni20_1
+shortLabel atomHomIni20_1
+longLabel atomHomIni20_1 (ponAbe2=green,homIni20=blue,homPan20=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6
+
 track atom13480779
 shortLabel atom13480779 
 longLabel atom13480779 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)

@@ -72,3 +72,11 @@ searchType genePred
 termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
 searchPriority 50
 
+track atomHomIni20_1
+shortLabel atomHomIni20_1
+longLabel atomHomIni20_1 (ponAbe2=green,homIni20=blue,homPan20=brick,panTro2=dk blue,hg18=dk green)
+group x
+priority 1.1
+visibility hide
+type bed 6
+
