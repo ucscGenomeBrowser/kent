@@ -1,17 +1,17 @@
 <uniProt>
   <displayId val="104K_THEAN">
-    <info isCurated="1" aaSize="893" molWeight="101921" createDate="2006-04-18" seqDate="2005-07-05" annDate="2007-01-09" organelle="0"/>
-    <taxon binomial="Theileria annulata" toGenus="Eukaryota; Alveolata; Apicomplexa; Piroplasmida; Theileriidae; Theileria."/>
-    <description>104 kDa microneme-rhoptry antigen precursor (p104).</description>
+    <info isCurated="1" aaSize="893" molWeight="101921" createDate="2006-04-18" seqDate="2005-07-05" annDate="2008-06-10" organelle="0"/>
+    <taxon binomial="Theileria annulata" toGenus="Eukaryota; Alveolata; Apicomplexa; Aconoidasida; Piroplasmida; Theileriidae; Theileria."/>
+    <description>104 kDa microneme/rhoptry antigen precursor (p104).</description>
   </displayId>
   <displayId val="104K_THEPA">
-    <info isCurated="1" aaSize="924" molWeight="103626" createDate="1990-04-01" seqDate="1990-04-01" annDate="2007-01-09" organelle="0"/>
-    <taxon binomial="Theileria parva" toGenus="Eukaryota; Alveolata; Apicomplexa; Piroplasmida; Theileriidae; Theileria."/>
-    <description>104 kDa microneme-rhoptry antigen precursor (p104).</description>
+    <info isCurated="1" aaSize="924" molWeight="103626" createDate="1990-04-01" seqDate="1990-04-01" annDate="2008-06-10" organelle="0"/>
+    <taxon binomial="Theileria parva" toGenus="Eukaryota; Alveolata; Apicomplexa; Aconoidasida; Piroplasmida; Theileriidae; Theileria."/>
+    <description>104 kDa microneme/rhoptry antigen precursor (p104).</description>
   </displayId>
   <displayId val="108_SOLLC">
-    <info isCurated="1" aaSize="102" molWeight="10576" createDate="1999-07-15" seqDate="1996-11-01" annDate="2006-10-31" organelle="0"/>
-    <taxon binomial="Solanum lycopersicum" toGenus="Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta; Spermatophyta; Magnoliophyta; eudicotyledons; core eudicotyledons; asterids; lamiids; Solanales; Solanaceae; Solanum; Lycopersicon."/>
+    <info isCurated="1" aaSize="102" molWeight="10576" createDate="1999-07-15" seqDate="1996-11-01" annDate="2007-07-24" organelle="0"/>
+    <taxon binomial="Solanum lycopersicum" toGenus="Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta; Spermatophyta; Magnoliophyta; eudicotyledons; core eudicotyledons; asterids; lamiids; Solanales; Solanaceae; Solanoideae; Solaneae; Solanum; Lycopersicon."/>
     <description>Protein 108 precursor.</description>
   </displayId>
 </uniProt>
