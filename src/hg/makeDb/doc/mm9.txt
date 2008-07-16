@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.71 2008/07/08 13:35:04 giardine Exp $"
+#	"$Id: mm9.txt,v 1.72 2008/07/16 20:42:41 angie Exp $"
 #
 
 #######################################################################
@@ -8200,6 +8200,7 @@ assemblies to the mouse genome (mm9, Mar. 2006):
     _ ground squirrel    Spermophilus tridecemlineatus  Jun. 2006, speTri0
 
 'EOF'
+# << emacs
 
 ############################################################################
 # TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
@@ -8225,3 +8226,161 @@ see doc/builds.txt for specific details.
 # loaded July 7, 2008
 # loaded by Belinda Giardine, in same manner as hg18 ORegAnno track
 
+
+############################################################################
+# JAX/MGI TRACKS (DONE 7/14/08 angie)
+    ssh kkstore06
+    mkdir -p /cluster/data/mm9/bed/jax/2008_07
+    cd /cluster/data/mm9/bed/jax/2008_07
+    wget ftp://ftp.informatics.jax.org/pub/gbrowse/\*
+    wget ftp://ftp.informatics.jax.org/pub/reports/MGI_PhenotypicAllele.rpt
+    # Jax Rep Transcript track
+    # SEQ_RepTransGenomic_rpt.gff --> jaxRepTranscript{,Alias}
+    # -- names like AK016604_4933401J01Rik, NM_001011874_AY534250
+    # -- aliases ~ MGI:\d+
+    # Use simple perl script to uniquify transcript names and make alias.tab.
+    # Inspired by the mm6 version, but format has changed.
+    /cluster/data/mm8/bed/jax//2007_07/parseRepTranscript.pl \
+      SEQ_RepTransGenomic_rpt.gff \
+    | sed -e 's/^/chr/' \
+      > jaxRepTranscript.gff
+
+    # Jax Allele track
+    # AL_*.gff --> jaxAllele{,Info}
+    # -- bed12Source -- add type from filename
+    # -- names like NM_011283_Rp1h<tm1Jnz>, XM_129721_Slc9a2<tm1Ges>
+    # -- Info: name, mgiID, source {"Gene trapped", ...}
+    rm -f jaxAllele.bed jaxAlleleInfo.tab fixJaxAllele.sql
+    foreach f (AL*.gff)
+      set type = `echo $f:t:r \
+        | sed -e 's/AL_//; s/GTRAP/GeneTrapped/; s/IND/Induced/; \
+            s/OTHER/Other/; s/SPON/Spontaneous/; s/TARG/Targeted/; \
+            s/TRANS/Transgenic/;'`
+      /cluster/data/mm8/bed/jax//2007_09/parseAllele.pl $f \
+      | ldHgGene mm9 placeholder stdin -nobin -out=stdout \
+      | /cluster/bin/scripts/genePredToBed \
+      | sed -e 's/^/chr/; s/$/'"\t$type"'/;' \
+      >> jaxAllele.bed
+    end
+    # This round's formatting inconsistencies:
+#source not given for NM_010230_Fmn1<ld-Is(17_In2)1Gso>
+#source not given for NM_015770_a<jIs(17_In2)1Gso>
+#source not given for NM_009521_Wnt3<In(11Trp53_11Wnt3)8Brd>
+#source not given for NM_001127233_Trp53<In(11Trp53_11Wnt3)8Brd>
+#source not given for NM_029931_Mllt3<T(4Mllt3_9Mll)1Thr>
+
+    # Jax Phenotype track
+    # MP_*.gff --> jaxPhenotype{,Alias}
+    # -- bed12Source -- add type from filename
+    # -- names like NM_001001488_Atp8b1
+    rm -f jaxPhenotype.bed jaxPhenotypeAlias.tab fixJaxPhenotype.sql
+    foreach f (MP_*.gff)
+      set type = `echo $f:t:r \
+        | perl -wpe 's/MP_[0-9]*_//; s/[_-](\w)/\u$1/g; s/^(\w)/\u$1/; \
+                    s@AdiposeTissue@Adipose@; \
+                    s@BehaviorNeurological@Behavior@; \
+                    s@CardiovascularSystem@Cardiovascular@; \
+                    s@DigestiveAlimentary@Digestive@; \
+                    s@EndocrineExocrineGland@Gland@; \
+                    s@GrowthSize@Growth Size@; \
+                    s@HearingEar@Hearing/Ear@; \
+                    s@HematopoieticSystem@Hematopoietic@; \
+                    s@HomeostasisMetabolism@Homeostasis@; \
+                    s@ImmuneSystem@Immune@; \
+                    s@LethalityEmbryonicPerinatal@Embryonic Lethal@; \
+                    s@LethalityPostnatal@Postnatal Lethal@; \
+                    s@LifeSpanPostWeaningAging@Life Span@; \
+                    s@LimbsDigitsTail@Limbs and Tail@; \
+                    s@LiverBiliarySystem@Liver and Bile@; \
+                    s@NervousSystem@Nervous System@; \
+                    s@RenalUrinarySystem@Renal/Urinary@; \
+                    s@ReproductiveSystem@Reproductive@; \
+                    s@RespiratorySystem@Respiratory@; \
+                    s@SkinCoatNails@Skin/Coat/Nails@; \
+                    s@TasteOlfaction@Taste/Smell@; \
+                    s@TouchVibrissae@Touch@; \
+                    s@Tumorigenesis@Tumorigenesis@; \
+                    s@VisionEye@Vision/Eye@;'`
+      echo $type
+      /cluster/data/mm8/bed/jax/2006_10/parsePhenotype.pl $f \
+      | ldHgGene mm9 placeholder stdin -nobin -out=stdout \
+      | /cluster/bin/scripts/genePredToBed \
+      | sed -e 's/^/chr/; s@$@'"\t$type"'@;' \
+      >> jaxPhenotype.bed
+    end
+    sort -u jaxPhenotypeAlias.tab > tmp
+    mv tmp jaxPhenotypeAlias.tab
+
+    # Jax QTL track
+    # QTL*.gff --> jaxQtl2 (or 3?)... but we're missing MIT SSLP marker
+    # and CM distance for 2, or those plus flanking markers for 3...
+    perl -wpe 'chomp; s/\s*$//; \
+      ($c, undef, undef, $start, $end, undef, $strand, undef, $info) = \
+        split("\t"); \
+      if ($info =~ /QTL (\S+); Dbxref "(MGI:\d+)"; Alias .*; Note "([^"]+)"/) { \
+        ($name, $mgiID, $desc) = ($1, $2, $3); \
+      } else { die "parse\n$info"; } \
+      if ($start > $end) { $tmp = $end; $end = $start; $start = $tmp; } \
+      $start-- unless $start == 0; \
+      s/^.*$/chr$c\t$start\t$end\t$name\t1000\t$strand\t\t$mgiID\t$desc\t0.0\n/;' \
+      MGI_QTL.gff > jaxQtl.bed
+
+    # Extract phenotype-allele relationships:
+    # Make a file for the one code not already in a filename:
+    cp /dev/null MP_0003012_no_phenotypic_analysis
+    # Wrote a script to extract the phenotype-allele relationships --
+    # it uses the filenames to map MP:* codes to our phenotype names.
+    /cluster/data/mm8/bed/jax/2007_07/parsePhenotypicAllele.pl \
+      MGI_PhenotypicAllele.rpt > jaxAllelePheno.tab
+    # The file "err" has messages about missing data (no gene name in 
+    # PhenotypicAllele.rpt, or gene/mgiId not found in jaxAlleleInfo).
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/jax/2008_07
+    # jaxRepTranscript
+    ldHgGene mm9 jaxRepTranscript jaxRepTranscript.gff
+    hgsql mm9 < fixJaxRepTranscript.sql
+    sed -e 's/genericAlias/jaxRepTranscriptAlias/g' \
+      ~/kent/src/hg/lib/genericAlias.sql > jaxRepTranscriptAlias.sql 
+    hgLoadSqlTab mm9 jaxRepTranscriptAlias \
+      jaxRepTranscriptAlias.sql jaxRepTranscriptAlias.tab
+    # jaxAllele
+    sed -e 's/bed12Source/jaxAllele/g' \
+      $HOME/kent/src/hg/lib/bed12Source.sql > jaxAllele.sql
+    hgLoadBed -sqlTable=jaxAllele.sql mm9 jaxAllele jaxAllele.bed
+    hgsql mm9 < fixJaxAllele.sql
+    hgLoadSqlTab mm9 jaxAlleleInfo \
+      ~/kent/src/hg/lib/jaxAlleleInfo.sql jaxAlleleInfo.tab
+    # jaxPhenotype
+    sed -e 's/bed12Source/jaxPhenotype/g' \
+      $HOME/kent/src/hg/lib/bed12Source.sql > jaxPhenotype.sql
+    hgLoadBed -tab -sqlTable=jaxPhenotype.sql mm9 jaxPhenotype jaxPhenotype.bed
+    hgsql mm9 < fixJaxPhenotype.sql
+    sed -e 's/genericAlias/jaxPhenotypeAlias/' \
+      ~/kent/src/hg/lib/genericAlias.sql > jaxPhenotypeAlias.sql
+    hgLoadSqlTab mm9 jaxPhenotypeAlias \
+      jaxPhenotypeAlias.sql jaxPhenotypeAlias.tab
+    # jaxQtl
+    hgLoadBed -tab -notItemRgb -noBin \
+      -sqlTable=$HOME/kent/src/hg/lib/jaxQtl.sql \
+      mm9 jaxQtl jaxQtl.bed
+    checkTableCoords -verbose=2 mm9 jaxQtl
+#mm9.jaxQtl item Ath13 chr14:51915898-165887941: chromEnd > chromSize 125194864
+#mm9.jaxQtl item Ity2 chr11:145756703-145756947: chromEnd > chromSize 121843856
+    perl -wpe 's/^(\w+)\t(\d+)$/ \
+      delete from jaxQtl where chrom="$1" and chromStart >= $2; \
+      update jaxQtl set chromEnd = $2 where chrom="$1" and chromEnd > $2;/' \
+      ../../../chrom.sizes \
+    | hgsql mm9
+    checkTableCoords -verbose=2 mm9 jaxQtl
+    # phenotype-allele relationships
+    hgLoadSqlTab mm9 jaxAllelePheno \
+      ~/kent/src/hg/lib/jaxAllelePheno.sql jaxAllelePheno.tab
+
+    # Check joiner:
+    runJoiner.csh mm9 jaxAllele
+    runJoiner.csh mm9 jaxPhenotype
+
+
+############################################################################
