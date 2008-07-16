@@ -123,11 +123,11 @@ static void loadTransMap(struct track *tg)
 /* Load up transMap alignments. */
 {
 loadXenoPsl(tg);
-if (!((tg->visibility == tvDense) || (tg->visibility == tvSquish)))
+enum trackVisibility vis = limitVisibility(tg);
+if (!((vis == tvDense) || (vis == tvSquish)))
     lookupTransMapLabels(tg);
-if (tg->visibility != tvDense)
+if (vis != tvDense)
     slSort(&tg->items, linkedFeaturesCmpStart);
-limitVisibility(tg);
 }
 
 static char *transMapGetItemDataName(struct track *tg, char *itemName)
