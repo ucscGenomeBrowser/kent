@@ -36,7 +36,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.79 2008/05/29 20:25:28 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.80 2008/07/16 03:49:22 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -938,7 +938,6 @@ static struct simpleFeature *splitByCodon( char *chrom,
     struct dnaSeq *codonDna = NULL;
     char partialCodonSeq[4];
     char theRestOfCodon[4];
-    char tempCodonSeq[4];
     int currentSize, base;
     int i;
 
@@ -1072,12 +1071,19 @@ static struct simpleFeature *splitByCodon( char *chrom,
                 getCodonDna(theRestOfCodon, chrom, frame, starts, ends, 
                         blockCount, cdsStart, cdsEnd, i, !posStrand, NULL);
 
+                /* This code doesn't really work right in all cases of a
+                 * one-base blocks. It broke with some TransMap alignments
+                 * with indels around the one base.  This code is fragile, so
+                 * just work around it by truncating the sequence.
+                 */
+                char tempCodonSeq[8];
                 if(posStrand)
-                    safef(tempCodonSeq, 4, "%s%s", partialCodonSeq, 
+                    safef(tempCodonSeq, sizeof(tempCodonSeq), "%s%s", partialCodonSeq, 
                             theRestOfCodon);
                 else
-                    safef(tempCodonSeq, 4, "%s%s", theRestOfCodon, 
+                    safef(tempCodonSeq, sizeof(tempCodonSeq), "%s%s", theRestOfCodon, 
                             partialCodonSeq );
+                tempCodonSeq[4] = '\0';  // no more than 3 bases
 
                 sf->grayIx = ((posStrand && currentEnd <= cdsEnd) || 
                              (!posStrand && currentStart >= cdsStart))?
