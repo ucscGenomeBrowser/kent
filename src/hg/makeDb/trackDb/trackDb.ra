@@ -461,7 +461,6 @@ priority 37.001
     indelDoubleInsert on
     indelQueryInsert on
     showDiffBasesAllScales .
-    showDiffBasesMaxZoom 100
     showCdsAllScales .
     maxItems 300
 
@@ -488,7 +487,6 @@ searchPriority 2.31
     indelDoubleInsert on
     indelQueryInsert on
     showDiffBasesAllScales .
-    showDiffBasesMaxZoom 100
     showCdsAllScales .
     maxItems 300
 
@@ -515,7 +513,6 @@ searchPriority 2.31
     indelDoubleInsert on
     indelQueryInsert on
     showDiffBasesAllScales .
-    showDiffBasesMaxZoom 100
     showCdsAllScales .
     maxItems 300
 
@@ -540,8 +537,6 @@ searchPriority 2.31
     indelDoubleInsert on
     indelQueryInsert on
     showDiffBasesAllScales .
-    showDiffBasesMaxZoom 100
-    showCdsAllScales .
     maxItems 300
 
 searchTable transMapAlnSplicedEst
@@ -574,7 +569,6 @@ priority 38.001
     indelDoubleInsert on
     indelQueryInsert on
     showDiffBasesAllScales .
-    showDiffBasesMaxZoom 100
     showCdsAllScales .
     maxItems 300
 
