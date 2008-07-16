@@ -444,7 +444,7 @@ priority 37.001
 
     track transMapAlnUcscGenes
     superTrack transMap pack
-    shortLabel TransMap UCSC Genes
+    shortLabel TransMap UCSC
     longLabel TransMap UCSC Gene Mappings
     group genes
     type psl
@@ -463,6 +463,7 @@ priority 37.001
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
     showCdsAllScales .
+    maxItems 300
 
 searchTable transMapAlnUcscGenes
 searchType psl
@@ -489,6 +490,7 @@ searchPriority 2.31
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
     showCdsAllScales .
+    maxItems 300
 
 searchTable transMapAlnRefSeq
 searchType psl
@@ -515,6 +517,7 @@ searchPriority 2.31
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
     showCdsAllScales .
+    maxItems 300
 
 searchTable transMapAlnMRna
 searchType psl
@@ -523,7 +526,7 @@ searchPriority 2.31
 
     track transMapAlnSplicedEst
     superTrack transMap hide
-    shortLabel TransMap Spliced ESTs
+    shortLabel TransMap ESTs
     longLabel TransMap Spliced EST Mappings
     group genes
     type psl
@@ -539,6 +542,7 @@ searchPriority 2.31
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
     showCdsAllScales .
+    maxItems 300
 
 searchTable transMapAlnSplicedEst
 searchType psl
@@ -572,6 +576,7 @@ priority 38.001
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
     showCdsAllScales .
+    maxItems 300
 
 searchTable reconTransMapAlnRefSeq
 searchType psl
