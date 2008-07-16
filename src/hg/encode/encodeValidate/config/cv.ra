@@ -47,6 +47,10 @@ lineage ectoderm
 karyotype normal
 tier 2
 
+term SK-N-MC
+type Cell Line
+tier 3
+
 # Gene types
 term Known
 type Gene Type
@@ -64,8 +68,43 @@ term Pseudo
 type Gene Type
 description pseudogene
 
+# Antibodies
 term FOXP2
 type Antibody
+targetDescription transcriptional repressor, involved in development of speech
+antibodyDescription rabbit polyclonal
+vendorName Abcam
+vendorId ab16046
+orderUrl http://www.abcam.com/index.html?datasheet=16046
 
-term SK-N-MC
-type Cell Line
+term H3K9me3
+type Antibody
+antibodyDescription rabbit polyclonal, ChIP grade
+vendorName Abcam
+vendorId ab8898
+orderUrl http://www.abcam.com/index.html?datasheet=8898
+
+term KAP1
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription KRAB Associated Protein 1, helps regulate transcriptional repression
+vendorName Abcam
+vendorId ab10483
+orderUrl http://www.abcam.com/index.html?datasheet=10483
+
+term Pol2
+type Antibody
+targetDescription RNA Polymerase II
+antibodyDescription mouse monoclonal
+vendorName Covance
+vendorId MMS-126R
+orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
+
+term STAT1
+type Antibody
+targetDescription transcription factor, activated by interferon signalling
+antibodyDescription rabbit polyclonal
+vendorName Santa Cruz Biotech
+vendorId sc-345
+orderUrl http://www.scbt.com/product.php?datasheet=345
+
