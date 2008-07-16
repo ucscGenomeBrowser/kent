@@ -36,7 +36,7 @@ struct transMapBag
     struct transMapInfo *info;    // addition information about mapping
     struct transMapSrc *src;      // source information
     struct transMapGene *gene;    // gene information
-    boolean srcDbExists;          // source database exists
+    boolean srcDbIsActive;        // source database is active
 };
 
 static struct transMapBag *transMapBagLoad(struct sqlConnection *conn,
@@ -61,7 +61,7 @@ char *transMapGeneTbl = trackDbSetting(tdb, transMapGeneTblSetting);
 if (transMapGeneTbl != NULL)
     bag->gene = transMapGeneQuery(conn, transMapGeneTbl,
                                   bag->info->srcDb, transMapIdToAcc(bag->info->srcId));
-bag->srcDbExists = sqlDatabaseExists(bag->info->srcDb);
+bag->srcDbIsActive = hDbIsActive(bag->info->srcDb);
 return bag;
 }
 
@@ -84,7 +84,10 @@ static void prOrgScientific(char *db)
 {
 char *org = hOrganism(db);
 char *sciName = hScientificName(db);
-printf("%s (%s)", org, sciName);
+if ((org != NULL) && (sciName != NULL))
+    printf("%s (%s)", org, sciName);
+else
+    printf("%s", db);
 freeMem(org);
 freeMem(sciName);
 }
@@ -150,16 +153,16 @@ printf("<CAPTION>Source Alignment</CAPTION>\n");
 printf("<TBODY>\n");
 // organism/assembly
 printf("<TR CLASS=\"transMapLeft\"><TD>Organism<TD>");
-if (bag->srcDbExists)
+if (bag->srcDbIsActive)
     prOrgScientific(bag->info->srcDb);
 else
-    printf("n/a");
+    printf("%s", bag->info->srcDb);
 printf("</TR>\n");
 printf("<TR CLASS=\"transMapLeft\"><TD>Genome<TD>%s</TR>\n", bag->info->srcDb);
 
 // position
 printf("<TR CLASS=\"transMapLeft\"><TD>Position\n");
-if (bag->srcDbExists)
+if (bag->srcDbIsActive)
     printf("<TD CLASS=\"transMapNoWrap\"><A HREF=\"%s?db=%s&position=%s:%d-%d\" target=_blank>"
            "%s:%d-%d</A>",
            hgTracksName(), bag->src->db,
