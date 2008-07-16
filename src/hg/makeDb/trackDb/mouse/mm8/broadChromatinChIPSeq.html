@@ -1,95 +1,189 @@
 <H2>Description</H2>
-These tracks contain the supplementary data for Mikkelsen et al. <A HREF="http://www.nature.com/nature/journal/v448/n7153/abs/nature06008.html">
-Genome-wide maps of chromatin state in pluripotent and lineage-committed cells</A>. <i>Nature</i> <B>448</B>:553-560 August 2 2007. 
+The tracks contain chromatin-state maps generated at the Broad Institute using ChIP-Seq.
 
 <P><BLOCKQUOTE><TABLE BORDER=0 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
 <TR><TH ALIGN="left">Sites by HMM      <TD>Enriched intervals inferred by an HMM</TR>
-<TR><TH ALIGN="left">Sites by Windowing<TD>Enirhced intervals inferred by fixed-size windows</TR>
+<TR><TH ALIGN="left">Sites by Windowing<TD>Enriched intervals inferred by fixed-size windows</TR>
 <TR><TH ALIGN="left">Signal Densities  <TD>ChIP-Seq fragment densities analyzed</TR>
 <TR><TH ALIGN="left">Alignments        <TD>Sequences and coordinates of uniquely aligned reads</TR>
+
 </TABLE></BLOCKQUOTE></P>
 
 <H3>Sites by HMM</H3>
 These subtracks contain the coordinates of intervals enriched 
 for <B>H3K4Me3</B>, <B>H3K9Me3</B>, <B>H3K27Me3</B>, <B>H3K36Me3</B> or
-<B>H4K20Me3</B> in mouse <B>ES</B> cells, as determined by a supervised
-Hidden Markov Model. 
+<B>H4K20Me3</B> in mouse <B>ES</B> cells, as determined by a
+Hidden Markov Model. Prior to analysis, the fragment densities were
+discretized into four classes (<i>masked</i>, <i>sub-threshold</i>, <i>near-threshold</i>,
+<i>above-threshold</i>), which were defined for each sample by supervised
+training on a 10 Mb subset of the genome.
+
 
 <H3>Sites by Windowing</H3>
 These subtracks contain the coordinates of intervals significantly 
-enriched for <B>H3K4Me3</B> or <B>H3K27Me3</B> in <B>ES</B> cells, 
-neural progenitors (<B>NP</B>) and embryonic fibroblasts (<B>MEF</B>). 
-Intervals were obtained by merging 1-kb windows with nominal p-values of < 10^-5. 
+enriched for <B>H3K4Me3</B>, <B>H3K4me2</B>, <B>H3K4me1</B> or <B>H3K27Me3</B> in <B>ES</B> cells, 
+ES-derived neural progenitors (<B>NP</B>), whole brain tissue and embryonic fibroblasts (<B>MEF</B>). 
+Intervals were obtained by comparing the average densitity of a 1-kb
+window to the cumulative density distribution expected from randomly
+aligning reads across the unique portion of the reference
+genome, and merging any overlapping windows with nominal p-values of < 10<sup>-5</sup>.
+
 <P>
 The coordinates indicate the beginning of the 
-first window and the end of the last window. A fourth column was also
-added, which indicates the maximal fragment density within each interval.
+first window and the end of the last window. The fourth column
+indicates the maximal fragment density within each interval.
 </P><P>
-<B>H3K9Me3</B> enriched sites have been added. These
-sites correspond to a somewhat more permissive threshold than the 
+<B>H3K9Me3</B> enriched sites have been added since the initial
+publication of this data. These sites correspond to a somewhat more permissive threshold than the
 HMM-based sites analyzed in the manuscript. The maximum fragment
 density can be used to rank the sites by confidence.
 </P>
 
 <H3>Signal Densities</H3>
 These subtracks contains the ChIP-Seq fragment densities
-analyzed in the paper. There are wiggle subtrack represents the 
-density of <B>antibody</B> enriched fragments in <B>celltype</B>
-at 25 bp resolution across the mouse genome.
+analyzed in the paper. They represent the density of <B>antibody</B> 
+enriched fragments in <B>celltype</B> at 25 bp resolution across the mouse genome.
+
 <P>
 A non-negative value indicates the number of uniquely aligned 
 fragments oriented towards, and within 300 bp of, a particular 
 position. Reads within 200 bp add 1 to the density, and reads 
 within 300 bp add 0.25. (This is an approximation of the expected
-number of fragments overlapping the postion, since the exact length
+number of fragments overlapping the position, since the exact length
 of each is unknown).
 </P><P>
 A value of -1 indicates a masked position.
 </P>
 
 <H3>Alignments</H3>
-These subtracks contain the SMS sequence data and their alignment 
-coordiantes on the mouse reference genome (UCSC version mm8).
+These subtracks contain alignment coordinates of the ChIP-Seq reads on 
+the mouse reference genome (UCSC version mm8).
 
+<P><BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0 CELLPADDING="3" BORDERCOLOR="#aaaaaa">
+<TR><TH ALIGN="left">SAMPLE     <TH ALIGN="left" colspan="20">ANTIBODIES          </TR>
+<TR nowrap><TD>ES cells                  <TD>Whole cell extract (unenriched input)<TD>pan-H3<TD>H3K4Me3<TD>H3K4Me2<TD>H3K4Me1<TD>H3K27Me3<TD>H3K36Me3<TD>H3K9Me3<TD>H4K20Me3<TD>RNA polymerase II </TR>
+<TR nowrap><TD>ES hybrid cells (129/CAST)<TD>&nbsp;                               <TD>&nbsp;<TD>H3K4Me3<TD>&nbsp; <TD>&nbsp; <TD>H3K36Me3<TD>&nbsp;  <TD>H3K9Me3<TD>&nbsp;  <TD>&nbsp;            </TR>
+<TR nowrap><TD>MEF                       <TD>Whole cell extract (unenriched input)<TD>&nbsp;<TD>H3K4Me3<TD>&nbsp; <TD>&nbsp; <TD>H3K27Me3<TD>H3K36Me3<TD>H3K9Me3<TD>&nbsp;  <TD>&nbsp;            </TR>
+<TR nowrap><TD>NP cells                  <TD>Whole cell extract (unenriched input)<TD>&nbsp;<TD>H3K4Me3<TD>H3K4Me2<TD>H3K4Me1<TD>H3K27Me3<TD>H3K36Me3<TD>H3K9Me3<TD>&nbsp;  <TD>&nbsp;            </TR>
+<TR nowrap><TD>Whole brain               <TD>&nbsp;                               <TD>&nbsp;<TD>H3K4Me3<TD>H3K4Me2<TD>&nbsp; <TD>H3K27Me3<TD>&nbsp;  <TD>&nbsp; <TD>&nbsp;  <TD>&nbsp;            </TR>
+</TABLE></BLOCKQUOTE></P>
+<!--
 <P><BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0 BORDERCOLOR="#aaaaaa">
 <TR><TH ALIGN="left" Width="60%">SAMPLE     <TH ALIGN="left">ANTIBODY          </TR>
+<TR><TD>ES cells   <TD>Whole cell extract (unenriched input)</TR>
+<TR><TD>ES cells   <TD>pan-H3            </TR>
+
 <TR><TD>ES cells   <TD>H3K4Me3           </TR>
+<TR><TD>ES cells   <TD>H3K4Me2           </TR>
+<TR><TD>ES cells   <TD>H3K4Me1           </TR>
 <TR><TD>ES cells   <TD>H3K27Me3          </TR>
 <TR><TD>ES cells   <TD>H3K36Me3          </TR>
 <TR><TD>ES cells   <TD>H3K9Me3           </TR>
+
 <TR><TD>ES cells   <TD>H4K20Me3          </TR>
-<TR><TD>MEF        <TD>H3K4Me3           </TR>
-<TR><TD>MEF        <TD>H3K27Me3          </TR>
-<TR><TD>MEF        <TD>H3K36Me3          </TR>
-<TR><TD>MEF        <TD>H3K9Me3           </TR>
-<TR><TD>NP cells   <TD>H3K4Me3           </TR>
-<TR><TD>NP cells   <TD>H3K27Me3          </TR>
-<TR><TD>NP cells   <TD>H3K36Me3          </TR>
-<TR><TD>NP cells   <TD>H3K9Me3           </TR>
-<TR><TD>ES cells   <TD>pan-H3            </TR>
-<TR><TD>ES cells   <TD>Whole cell extract</TR>
-<TR><TD>MEF        <TD>Whole cell extract</TR>
-<TR><TD>NP cells   <TD>Whole cell extract</TR>
 <TR><TD>ES cells   <TD>RNA polymerase II </TR>
 <TR><TD>ES hybrid cells (129/CAST)<TD>H3K4Me3   </TR>
 <TR><TD>ES hybrid cells (129/CAST)<TD>H3K36Me3  </TR>
 <TR><TD>ES hybrid cells (129/CAST)<TD>H3K9Me3   </TR>
-</TABLE></BLOCKQUOTE></P>
+<TR><TD>MEF        <TD>Whole cell extract (unenriched input)</TR>
 
+<TR><TD>MEF        <TD>H3K4Me3           </TR>
+<TR><TD>MEF        <TD>H3K27Me3          </TR>
+<TR><TD>MEF        <TD>H3K36Me3          </TR>
+<TR><TD>MEF        <TD>H3K9Me3           </TR>
+<TR><TD>NP cells   <TD>Whole cell extract (unenriched input)</TR>
+<TR><TD>NP cells   <TD>H3K4Me3           </TR>
+
+<TR><TD>NP cells   <TD>H3K4Me2           </TR>
+<TR><TD>NP cells   <TD>H3K4Me1           </TR>
+<TR><TD>NP cells   <TD>H3K27Me3          </TR>
+<TR><TD>NP cells   <TD>H3K36Me3          </TR>
+<TR><TD>NP cells   <TD>H3K9Me3           </TR>
+<TR><TD>Whole brain<TD>H3K4Me3           </TR>
+
+<TR><TD>Whole brain<TD>H3K4Me2           </TR>
+<TR><TD>Whole brain<TD>H3K27Me3          </TR>
+</TABLE></BLOCKQUOTE></P>
+-->
 <H2>Methods</H2>
-<H3>Growth protocol</H3> 	
-Cells was cultured under standard conditions. (see <A HREF="http://www.nature.com/nature/journal/v454/n7200/abs/nature07056.html">Mikkelsen, 2008</a>)
+<H3>Growth protocol</H3>    
+V6.5 murine ES cells (genotype 129SvJae X C57BL/6; male; passages
+10-15) and hybrid murine ES cells (genotype 129SvJae X
+<i>M. m. castaneus</i> F1; male; passages 4-6) were cultivated in 5%
+CO at 37C on irradiated MEFs in DMEM containing 15% FCS, LIF,
+penicillin/streptomycin, L-glutamine, nonessential amino-acids and
+2-mercaptoethanol. Cells were subjected to at least 2-3 passages on
+0.2% gelatin under feeder-free conditions prior to analysis. V6.5 ES
+cells were differentiated into neural progenitor (NP) cells through
+embryoid body formation for 4 days and selection in ITSFn media for
+5-7 days, and maintained by FGF2 and EGF2. Mouse embryonic fibroblasts
+(genotype 129SvJae X C57BL/6; male; E13.5; passages 4-6) were grown in
+DMEM with 10% fetal bovine serum and penicillin/streptomycin at 37C,
+5% CO2. Primary tissues were isolated from 4-6 weeks old male
+129SvJae/C57BL/6 mice.
 
 <H3>Extraction protocol</H3>
-Described in <A HREF="http://www.nature.com/nature/journal/v448/n7153/abs/nature06008.html"> Mikkelsen et al., Nature 2007.</A> Briefly, chromatin was fixed in 1% formaldehyde, sheared to 200-700bp using a Bioruptor (Diagenode), immunoprecipitated using the indicated antisera, purified and sequenced using Illumina Genome Analyzers as recommended by the manufacturer.
-  	
-<H3>Data processing</H3>
-Described in <A HREF="http://www.nature.com/nature/journal/v454/n7200/abs/nature07056.html"> Mikkelsen et al, 2008.</A> Briefly, sequence reads from each IP experiment were aligned to the mouse reference genome (mm8), and all uniquely aligned reads (within >2 mismatches) were kept. Read densities were computed by counting the number of reads (extended to 300 bp) overlapping each position in the genome (at 25bp resolution).
 
+Cells and homogenized tissues were fixed in 1% formaldehyde and
+resuspended in lysis buffer. Chromatin was sheared to
+200-700bp using a Branson 250 Sonifier or Diagenode Bioruptor. Solubilized 
+chromatin was immunoprecipitated with antibodies against H3K4me3
+(Abcam 8580), H3K9me3 (Abcam 8898), H3K27me3 (Upstate 07-449),
+H3K36me3 (Abcam 9050), H4K20me3 (Upstate 07-463), pan-H3 (Abcam 1791)
+or RNA polymerase II (Covance MMS-126R). Antibody-chromatin complexes
+were pulled-down using protein A-sepharose (or anti-IgM-conjugated
+agarose for RNA polymerase II), washed and then eluted. After
+cross-link reversal and proteinase K treatment, immunoprecipitated DNA
+was extracted with phenol-chloroform, ethanol precipitated, treated
+with RNAse and purified. One to ten nanograms of DNA were
+end-repaired, adapter-ligated and sequenced by Illumina Genome
+Analyzers as recommended by the manufacturer.
+    
+<H3>Data processing</H3>
+Sequence reads from each IP experiment were aligned to the mouse
+reference genome (mm8) using the ARACHNE computational
+pipeline. First, a table was pre-computed to associated all possible 12-mers with all of
+their occurrences in the genome. For each ChIP-Seq read (forward
+and revere complement orientation), each potential start point was
+then found and the number of mismatches in the corresponding gap-free
+alignment was computed. All uniquely aligned reads (defined as the
+second to best alignment having >2 mismatches more than the best
+alignment, and the total mismatch count being <=6) were kept. If
+multiple reads aligned to the same starting position, only one were
+kept. Fragment densities were computed by counting the number of reads
+(extended to 300 bp) overlapping each position in the genome (at 25bp
+resolution). Non-unique positions in the reference genome
+were pre-computed by aligning every 27-mer in the genome to the whole
+genome and masking positions that did not meet the uniqueness criteria
+defined above.
+
+<H2>Credits</H2>
+The ChIP-Seq data were generated at the <A
+HREF="http://www.broad.mit.edu">Broad Institute</A> and in the <A
+HREF="http://www.massgeneral.org/pathology/staff/bernstein.htm">Bradley E. Bernstein lab</A> at Massachusetts General
+Hospital/Harvard Medical School, in collaboration with the <A
+HREF="http://www.wi.mit.edu/research/faculty/jaenisch.html">Rudolf
+Jaenisch lab</A> at the Whitehead Institute. 
+
+<P>Data generation was supported by funds from the NHGRI, the NCI, the
+Burroughs Wellcome Fund, Massachusetts General Hospital and the Broad Institute.
+</P>
+
+<H2>References</H2>
 
 <P>
-Source: <A HREF="http://www.broad.mit.edu/seq_platform/chip/">http://www.broad.mit.edu/seq_platform/chip/</A>
-</P><P>
-Contact: <A HREF="mailto:tarjei@broad.mit.edu">Tarjei Mikkelsen (tarjei@broad.mit.edu)</A>.
-</P>
+Mikkelsen TS, Ku M, Jaffe DB, Issac B, Lieberman E, Giannoukos G, Alvarez P,
+Brockman W, Kim TK, Koche RP <em> et al</em>.
+<A HREF="http://www.nature.com/nature/journal/v448/n7153/abs/nature06008.html" 
+TARGET=_blank>Genome-wide maps of chromatin state in pluripotent and 
+lineage-committed cells</A>.
+<em>Nature</em>. 2007 Aug 2;448, 553-60. </P>
+
+<P>
+Meissner A, Mikkelsen TS, Gu H, Wernig M, Hanna J, Sivachenko A, Zhang
+X, <em> et al</em>.
+<A HREF="http://www.nature.com/nature/journal/vaop/ncurrent/abs/nature07107.html"
+TARGET=_blank>Genome-scale DNA methylation maps of pluripotent and
+differentiated cells</A>.
+<em>Nature</em>. 2008 AOP July 6</P>
 
