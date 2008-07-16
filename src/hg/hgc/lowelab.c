@@ -87,7 +87,7 @@
 #include "memalloc.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.28 2008/07/03 08:36:40 lowe Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.29 2008/07/16 07:26:52 pchan Exp $";
 
 extern char *uniprotFormat;
 
@@ -2044,6 +2044,7 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
     struct minGeneInfo *ginfo;
     char *blastpTarget[2];
     char *clades[2];
+    int cladePortionCount = 0;
     char genome[50] = "";
     char clade[50] = "";
     unsigned int hitStart = 0;
@@ -2091,12 +2092,15 @@ void printBlastpResult(struct sqlConnection *conn, struct blastTab *blastpHitsLi
 
         if ((strcmp(genome , "") != 0) && (strcmp(clade, "") != 0))
         {
-            parseDelimitedString(clade, '-', clades, 2);       
+            cladePortionCount = parseDelimitedString(clade, '-', clades, 2);       
     
             printf("<tr style=\"vertical-align: top;\">\n");
            
             printf("<td><a name=\"%s:%s:%u-%u\"><i>%s</i></td>\n", blastpTarget[1], tChrom, tStart, tEnd, genome);
-            printf("<td>%s<br>%s</td>\n", clades[0], clades[1]);
+	    if (cladePortionCount == 1)
+	        printf("<td>%s</td>\n", clades[0]);
+	    else if (cladePortionCount == 2)
+	        printf("<td>%s<br>%s</td>\n", clades[0], clades[1]);
             
             /* Get target gene position from refSeq */
             strcpy(refSeq, blastpTarget[0]);
