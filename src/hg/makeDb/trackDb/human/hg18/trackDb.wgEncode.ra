@@ -230,13 +230,13 @@ dimensions dimensionX=cellType
 dataVersion ENCODE Submitted June 2008
 wgEncode 1
 dateSubmitted June 2008
-wgEncode 1
 
     track wgEncodeDukeDnasePeaksGM12878
     subTrack wgEncodeDukeDnase
     shortLabel DNase GM12878 Pk
     longLabel ENCODE - Duke DNaseI Hypersensitivity Peaks (cell line GM12878)
     subGroups cellType=G878 view=PK
+    cellLine GM12878
     type bed 5 +
     useScore 1
     noInherit off
@@ -250,6 +250,7 @@ wgEncode 1
     shortLabel DNase GM12878 Sig
     longLabel ENCODE - Duke DNaseI Hypersensitivity Signal (cell line GM12878)
     subGroups cellType=G878 view=SIG
+    cellLine GM12878
     type wig
     yLineOnOff On
     yLineMark 1.0
@@ -262,8 +263,8 @@ wgEncode 1
 
 track wgEncodeStanfordChip
 compositeTrack on
-shortLabel Stanf ChIP Sites
-longLabel ENCODE Stanford ChIP-Seq Sites
+shortLabel Stanf ChIP
+longLabel ENCODE Stanford ChIP-Seq
 group regulation
 subGroup1 view Views Sites=Sites Counts=Counts
 subGroup2 cellType Cell_Type SK-N-MC=SK-N-MC
@@ -271,8 +272,9 @@ subGroup3 factor Factor FOXP2=FOXP2
 dimensions dimensionX=cellType dimensionY=factor
 dividers cellType factor
 hierarchy view Sites=0 Counts=1
-priority	9999
+priority	511
 type bed 3
+wgEncode 1
 
 	track	wgEncodeStanfordChipSitesSK_N_MCFOXP2
 	subTrack	wgEncodeStanfordChip
@@ -285,17 +287,17 @@ type bed 3
 	useScore	1
 	noInherit	on
 	type	bed 5 +
-    visibility dense
+	visibility dense
         priority        1
 	
 	track wgEncodeStanfordChipCountsSK_N_MCFOXP2
 	subTrack wgEncodeStanfordChip
 	shortLabel FOXP2/SK-N-MC
 	longLabel ENCODE Stanford ChIP-Seq Counts (FOXP2 in SK-N-MC cells)
-	antibody FOXP2
+`	antibody FOXP2
 	cellLine SK-N-MC
 	subGroups	view=Counts factor=FOXP2 cellType=SK-N-MC
 	type	wig
 	noInherit	on
-    visibility full
+	visibility full
         priority        2
