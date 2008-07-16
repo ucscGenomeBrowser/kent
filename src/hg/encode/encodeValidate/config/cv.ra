@@ -1,8 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
-
 # Cell types
-
 term GM12878
 description lymphoblastoid
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&PgId=166
