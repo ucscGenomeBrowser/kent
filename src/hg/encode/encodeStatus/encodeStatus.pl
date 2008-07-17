@@ -4,8 +4,12 @@
 # Requires that the new status be the correct one to follow the
 # existing status.  Statuses that can be changed manually do not
 # overlap statuses set by the pipeline automation.
+#
+# TODO
+#
+# When status changes to "approved", create a pushQ entry, using the tables listed in load.ra
 
-# $Id: encodeStatus.pl,v 1.1 2008/07/10 23:53:17 larrym Exp $
+# $Id: encodeStatus.pl,v 1.2 2008/07/17 18:36:56 larrym Exp $
 
 use warnings;
 use strict;
@@ -16,7 +20,8 @@ use HgDb;
 
 # Last status set by pipeline
 my $LOADED_STATUS = "loaded";
-# These status are set by DCC staff currently, and must be used in this order
+
+# statuses after $LOADED_STATUS are set by DCC staff currently, and must be used in this order
 my @statuses = ($LOADED_STATUS, "displayed", "approved", "reviewing", "released");
 
 my $instance = 'prod';
@@ -99,7 +104,7 @@ usage: encodeStatus [-instance=instanceName] [-force] project-id|project-name [s
 valid statuses: $valid
 
 -instance	Default instance is 'prod'
--force		Use if you want to set a status that is no normally allowed (e.g. to reset
+-force		Use if you want to set a status that is not normally allowed (e.g. to reset
 		to an earlier status).
 END
     exit(1);
