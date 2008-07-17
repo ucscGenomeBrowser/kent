@@ -10,9 +10,10 @@
 #include "hui.h"
 #include "ra.h"
 #include "hash.h"
+#include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.40 2008/07/10 17:38:37 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.41 2008/07/17 22:54:45 markd Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -375,6 +376,16 @@ char *trackDbSettingOrDefault(struct trackDb *tdb, char *name, char *defaultVal)
 {
     char *val = trackDbSetting(tdb, name);
     return (val == NULL ? defaultVal : val);
+}
+
+float trackDbFloatSettingOrDefault(struct trackDb *tdb, char *name, float defaultVal)
+/* Return setting, convert to a float, or defaultVal if none exists */
+{
+    char *val = trackDbSetting(tdb, name);
+    if (val == NULL)
+        return defaultVal;
+    else
+        return sqlFloat(trimSpaces(val));
 }
 
 struct hashEl *trackDbSettingsLike(struct trackDb *tdb, char *wildStr)

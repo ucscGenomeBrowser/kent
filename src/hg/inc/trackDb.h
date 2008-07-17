@@ -180,6 +180,9 @@ struct hashEl *trackDbSettingsLike(struct trackDb *tdb, char *wildStr);
 char *trackDbGetSupertrackName(struct trackDb *tdb);
 /* Find name of supertrack if this track is a member */
 
+float trackDbFloatSettingOrDefault(struct trackDb *tdb, char *name, float defaultVal);
+/* Return setting, convert to a float, or defaultVal if none exists */
+
 void trackDbSuperMemberSettings(struct trackDb *tdb);
 /* Set fields in trackDb to indicate this is a member of a
  * supertrack. */
