@@ -40,15 +40,15 @@ for more information, click
         syntenic filtering was used.  Reciprocal best nets were used if available;
         otherwise, nets were selected with the <tt>netfilter -syn</tt> command.
         The chains corresponding to the selected nets were used for mapping.
-      <li> For more distance species, where the determination of synteny is difficult,
+      <li> For more distant species, where the determination of synteny is difficult,
         the full set of chains was used for mapping. This allows for more genes to
         map at the expense of some mapping to paralogus regions.  The
         post-alignment filtering step removes some of the duplications.
     </ul>
     <li> The <tt>pslMap</tt> program was used to do a base-level projection of
-      the source transcript alignments via the syntenic chains
-      to this genome, resulting in pairwise alignments of the source transcript to
-      the $organism genome.
+      the source transcript alignments via the selected chains
+      to the $organism genome, resulting in pairwise alignments of the source transcripts to
+      the genome.
     <li> The resulting alignments were filtered with <tt>pslCDnaFilter</tt>
       with a global near-best criteria of 0.5% in finished genomes
       (human and mouse) and 1.0% in other genomes.  Alignments
