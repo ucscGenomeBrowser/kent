@@ -3,6 +3,10 @@
 #include "dbLoadPartitions.h"
 #include "dbLoadOptions.h"
 #include "gbIndex.h"
+#include "gbDefs.h"
+#include "gbRelease.h"
+#include "portable.h"
+
 static void getSelPartitions(struct dbLoadOptions* options,
                              struct gbIndex* index,
                              unsigned srcDb,
@@ -39,3 +43,15 @@ return selectList;
 }
 
 
+boolean dbLoadNonCoding(char *db, struct gbSelect* select)
+/* determine if non-protein coding sequences should be loaded for this
+ * partition */
+{
+static char *host = NULL;
+if (host == NULL)
+    host = getHost();
+// FIXME tmp hack for hgwdev hg18 only
+return (select->release->srcDb == GB_REFSEQ)
+    && sameString(host, "hgwdev")
+    && sameString(db, "hg18");
+}
