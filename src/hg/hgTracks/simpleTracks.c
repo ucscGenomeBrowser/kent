@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.21 2008/07/16 19:12:22 braney Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.22 2008/07/17 18:37:16 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 
@@ -224,7 +224,12 @@ rgbColor.b = (rgbColor.b+255)/2;
 return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
-
+boolean trackIsCompositeWithSubtracks(struct track *track)
+/* Temporary function until all composite tracks point to their own children */
+{
+return (tdbIsComposite(track->tdb) && track->subtracks != NULL);
+}
+        
 Color slightlyLighterColor(struct hvGfx *hvg, Color color)
 /* Get slightly lighter shade of a color */ 
 {
@@ -469,7 +474,7 @@ if (track != NULL)
 	return on;
 	}
     else if (((limitVisibility(track) == tvDense) && tdbIsCompositeChild(track->tdb))
-         ||	 ((limitVisibility(track) != tvDense) && tdbIsComposite(     track->tdb)))
+         ||	 ((limitVisibility(track) != tvDense) && trackIsCompositeWithSubtracks(track)))
 	return FALSE;
     }
 return withCenterLabels;
@@ -8625,35 +8630,24 @@ if (!tg->limitedVisSet)
 	tg->limitedVis = tvHide;
 	return tvHide;
 	}
-    if (tdbIsComposite(tg->tdb))
+    if (trackIsCompositeWithSubtracks(tg))  //TODO: Change when tracks->subtracks are always set for composite
 	{
 	struct track *subtrack;
-        maxHeight = maxHeight * subtrackCount(tg->subtracks);
+    int subCnt = subtrackCount(tg->subtracks);
+    maxHeight = maxHeight * max(subCnt,1);
 	for (subtrack = tg->subtracks;  subtrack != NULL;
 	     subtrack = subtrack->next)
 	    limitVisibility(subtrack);
 	}
-    h = tg->totalHeight(tg, vis);
-    if (h > maxHeight)
+    while((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
         {
-	if (vis == tvFull && tg->canPack)
-	    vis = tvPack;
-	else if (vis == tvPack)
-	    vis = tvSquish;
-	else
-	    vis = tvDense;
-	h = tg->totalHeight(tg, vis);
-	if (h > maxHeight && vis == tvPack)
-	    {
-	    vis = tvSquish;
-	    h = tg->totalHeight(tg, vis);
-	    }
-	if (h > maxHeight)
-	    {
-	    vis = tvDense;
-	    h = tg->totalHeight(tg, vis);
-	    }
-	}
+        if (vis == tvFull && tg->canPack)
+            vis = tvPack;
+        else if (vis == tvPack)
+            vis = tvSquish;
+        else
+            vis = tvDense;
+        }
     tg->height = h;
     tg->limitedVis = vis;
     }

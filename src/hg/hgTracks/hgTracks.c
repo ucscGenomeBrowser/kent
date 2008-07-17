@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1498 2008/07/10 17:33:41 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1499 2008/07/17 18:37:46 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1383,7 +1383,7 @@ switch (track->limitedVis)
     case tvFull:
 	if (!nextItemCompatible(track))
 	    {
-	    if (tdbIsComposite(track->tdb))
+        if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
 		{
 		struct track *subtrack;
 		for (subtrack = track->subtracks;  subtrack != NULL;
@@ -1702,7 +1702,7 @@ if (withLeftLabels)
         {
 	if (track->limitedVis == tvHide)
 	    continue;
-        if (tdbIsComposite(track->tdb))
+        if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
             {
 	    struct track *subtrack;
 	    if (isWithCenterLabels(track))
@@ -1953,7 +1953,7 @@ if (withCenterLabels)
         struct track *subtrack;
 	if (track->limitedVis == tvHide)
 	    continue;
-        if (tdbIsComposite(track->tdb))
+        if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
             {
 	    if (isWithCenterLabels(track))
 		y = doCenterLabels(track, track, hvg, font, y)
@@ -1985,7 +1985,7 @@ if (withCenterLabels)
 	{
 	if (track->limitedVis == tvHide)
             continue;
-        if (tdbIsComposite(track->tdb))
+        if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
             {
             struct track *subtrack;
 	    if (isWithCenterLabels(track))
@@ -2009,7 +2009,7 @@ if (withLeftLabels)
 	{
 	if (track->limitedVis == tvHide)
             continue;
-	if (tdbIsComposite(track->tdb))
+    if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
 	    {
 	    struct track *subtrack;
 	    if (isWithCenterLabels(track))
@@ -3728,7 +3728,7 @@ if (showTrackControls)
 	    {
 	    if (track->visibility == tvHide)
                 continue;
-            if (tdbIsComposite(track->tdb))
+            if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
                 {
                 struct track *subtrack;
                 for (subtrack = track->subtracks; subtrack != NULL; 
