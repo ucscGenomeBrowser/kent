@@ -461,8 +461,9 @@ priority 37.001
     indelDoubleInsert on
     indelQueryInsert on
     showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     showCdsAllScales .
-    maxItems 300
+    showCdsMaxZoom 10000.0
 
 searchTable transMapAlnUcscGenes
 searchType psl
@@ -487,8 +488,9 @@ searchPriority 2.31
     indelDoubleInsert on
     indelQueryInsert on
     showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     showCdsAllScales .
-    maxItems 300
+    showCdsMaxZoom 10000.0
 
 searchTable transMapAlnRefSeq
 searchType psl
@@ -513,8 +515,9 @@ searchPriority 2.31
     indelDoubleInsert on
     indelQueryInsert on
     showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     showCdsAllScales .
-    maxItems 300
+    showCdsMaxZoom 10000.0
 
 searchTable transMapAlnMRna
 searchType psl
@@ -537,7 +540,7 @@ searchPriority 2.31
     indelDoubleInsert on
     indelQueryInsert on
     showDiffBasesAllScales .
-    maxItems 300
+    showDiffBasesMaxZoom 10000.0
 
 searchTable transMapAlnSplicedEst
 searchType psl
@@ -569,8 +572,9 @@ priority 38.001
     indelDoubleInsert on
     indelQueryInsert on
     showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
     showCdsAllScales .
-    maxItems 300
+    showCdsMaxZoom 10000.0
 
 searchTable reconTransMapAlnRefSeq
 searchType psl
