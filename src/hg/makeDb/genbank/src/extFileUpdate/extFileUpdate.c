@@ -17,7 +17,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: extFileUpdate.c,v 1.10 2007/07/08 06:53:54 markd Exp $";
+static char const rcsid[] = "$Id: extFileUpdate.c,v 1.11 2008/07/17 17:47:24 markd Exp $";
 
 /*
  * Algorithm:
@@ -331,7 +331,7 @@ gbVerbEnter(3, "update %s", gbSelectDesc(select));
 outdatedSeqs = getOutdatedSeqs(conn, select, extFiles);
 if (outdatedSeqs != NULL)
     {
-    struct seqTbl *seqTbl = seqTblNew(conn, "/var/tmp", (gbVerbose >= 4));
+    struct seqTbl *seqTbl = seqTblNew(conn, "/data/tmp", (gbVerbose >= 4));
     struct raInfoTbl *rit = loadPartRaInfo(extFileTbl, select);
     struct outdatedSeq *os;
     for (os = outdatedSeqs; os != NULL; os = os->next)
