@@ -390,6 +390,10 @@ Some settings used by various tracks:
       zoomed at no more than basesPerPixel (a float).  Setting to 0.0 disables
       showing indels.
     o showCdsAllScales . - show CDS for PSL tracks at all zoom levels.
+    o showCdsMaxZoom basesPerPixel - only CDS for PSL tracks at if currently
+      zoomed at no more than basesPerPixel (a float). showCdsAllScales should
+      be set and showDiffBasesMaxZoom should be set to a value not more
+      than showCdsMaxZoom  to make this useful.
 
 Note: We have a restriction on table names: Track names (i.e. table
 names, but omitting any chr*_ prefix) should not contain any

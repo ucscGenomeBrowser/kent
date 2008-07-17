@@ -16,7 +16,7 @@
 #include "obscure.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.106 2008/07/10 17:30:23 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.107 2008/07/17 22:56:45 markd Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -861,13 +861,10 @@ boolean apropos = indelAppropriate(tdb);
 if (apropos && (basesPerPixel > 0.0))
     {
     // check indel max zoom
-    char *setting = trackDbSetting(tdb, "showIndelMaxZoom");
-    if (setting != NULL)
-        {
-        float showIndelMaxZoom = sqlFloat(trimSpaces(setting));
-        if ((basesPerPixel > showIndelMaxZoom) || (showIndelMaxZoom == 0.0))
-            apropos = FALSE;
-        }
+    float showIndelMaxZoom = trackDbFloatSettingOrDefault(tdb, "showIndelMaxZoom", -1.0);
+    if ((showIndelMaxZoom >= 0)
+        && ((basesPerPixel > showIndelMaxZoom) || (showIndelMaxZoom == 0.0)))
+        apropos = FALSE;
     }
 
 if (retDoubleInsert)

@@ -36,7 +36,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.80 2008/07/16 03:49:22 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.81 2008/07/17 22:56:45 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -657,6 +657,7 @@ enum baseColorDrawOpt baseColorGetDrawOpt(struct track *tg)
 /* Determine what base/codon coloring option (if any) has been selected 
  * in trackDb/cart, and gate with zoom level. */
 {
+// N.B. the way the option is chosen has become insanely complex
 enum baseColorDrawOpt ret = baseColorDrawOff;
 
 if (cart == NULL || tg == NULL || tg->tdb == NULL)
@@ -665,10 +666,31 @@ if (cart == NULL || tg == NULL || tg->tdb == NULL)
 ret = baseColorDrawOptEnabled(cart, tg->tdb);
 boolean showDiffBasesAllScales =
     (trackDbSetting(tg->tdb, "showDiffBasesAllScales") != NULL);
-boolean showCdsAllScales =
-    (trackDbSetting(tg->tdb, "showCdsAllScales") != NULL);
-enum baseColorDrawOpt zoomOutDefault
-    = showCdsAllScales ? baseColorDrawCds : baseColorDrawOff;
+float showDiffBasesMaxZoom =
+    trackDbFloatSettingOrDefault(tg->tdb, "showDiffBasesMaxZoom", -1.0);
+if ((showDiffBasesMaxZoom >= 0)
+    && ((basesPerPixel > showDiffBasesMaxZoom) || (showDiffBasesMaxZoom == 0.0)))
+    showDiffBasesAllScales = FALSE;
+enum baseColorDrawOpt zoomOutDefault = baseColorDrawOff;
+if (trackDbSetting(tg->tdb, "showCdsAllScales") != NULL)
+    {
+    float showCdsMaxZoom = trackDbFloatSettingOrDefault(tg->tdb, "showCdsMaxZoom", -1.0);
+    if ((showCdsMaxZoom < 0.0)
+        || ((basesPerPixel <= showCdsMaxZoom) && (showCdsMaxZoom != 0.0)))
+        zoomOutDefault = baseColorDrawCds;
+#if 0
+    /* FIXME: this doesn't actually work, it enables maxItems, but then
+     * doesn't does into dense at all. need to figure this out, but in the
+     * mean time, just usine showCdsMaxZoom to keep performance sane */
+    // don't show CDS if in dense or squish
+    if (zoomOutDefault == baseColorDrawCds)
+        {
+        enum trackVisibility vis = limitVisibility(tg);
+        if ((vis == tvDense) || (vis == tvSquish))
+            zoomOutDefault = baseColorDrawOff;
+        }
+#endif
+    }
 
 /* Gate with zooming constraints: */
 if (!zoomedToCdsColorLevel && (ret == baseColorDrawGenomicCodons ||
@@ -1450,13 +1472,10 @@ void baseColorOverdrawDiff(struct track *tg,  struct linkedFeatures *lf,
 boolean enabled = TRUE;
 
 // check max zoom
-char *setting = trackDbSetting(tg->tdb, "showDiffBasesMaxZoom");
-if (setting != NULL)
-    {
-    float showDiffBasesMaxZoom = sqlFloat(trimSpaces(setting));
-    if ((basesPerPixel > showDiffBasesMaxZoom) || (showDiffBasesMaxZoom == 0.0))
-        enabled = FALSE;
-    }
+float showDiffBasesMaxZoom = trackDbFloatSettingOrDefault(tg->tdb, "showDiffBasesMaxZoom", -1.0);
+if ((showDiffBasesMaxZoom >= 0.0)
+    && ((basesPerPixel > showDiffBasesMaxZoom) || (showDiffBasesMaxZoom == 0.0)))
+    enabled = FALSE;
 
 if (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel && enabled)
     {
