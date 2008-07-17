@@ -3,7 +3,7 @@
 track mskccCGH
 shortLabel TCGA GBM mskccCGH
 longLabel TCGA GBM mskcc CGH array 244A 
-group x
+group tcga
 visibility hide
 type expRatio
 logicalDb localDb
@@ -14,7 +14,7 @@ groupings mskccCGHGroups
 track harvardCGH
 shortLabel TCGA GBM harvardCGH
 longLabel TCGA GBM harvard CGH array 244A 
-group x
+group tcga
 visibility hide
 type expRatio
 logicalDb localDb
@@ -25,7 +25,7 @@ groupings harvardCGHGroups
 track uncAgiExp
 shortLabel TCGA GBM uncAgiExp
 longLabel TCGA GBM UNC Agilent custom expression array G4502A
-group x
+group tcga
 visibility hide
 type expRatio
 logicalDb localDb
@@ -36,7 +36,7 @@ groupings uncAgiExpGroups
 name uncHmiRNA
 shortLabel TCGA GBM UNC miRNA
 longLabel TCGA GBM UNC H-miRNA
-group x
+group tcga
 visibility hide
 type expRatio
 logicalDb localDb
@@ -47,7 +47,7 @@ groupings uncHmiRNAGroups
 track broadAffyExp
 shortLabel TCGA GBM broadAffyExp
 longLabel TCGA GBM Broad Affymetrix Expression array U133A
-group x
+group tcga
 visibility hide
 type expRatio
 logicalDb localDb
@@ -58,7 +58,7 @@ groupings broadAffyExpGroups
 track broadABI
 shortLabel TCGA GBM broadABI
 longLabel TCGA GBM Broad ABI Tumor Sequencing
-group x
+group tcga
 visibility hide
 type expRatio
 logicalDb localDb
@@ -69,7 +69,7 @@ groupings broadABIGroups
 track wustlABI
 shortLabel TCGA GBM wustlABI
 longLabel TCGA GBM wustl ABI Tumor Sequencing
-group x
+group tcga
 visibility hide
 type expRatio
 logicalDb localDb
@@ -80,7 +80,7 @@ groupings wustlABIGroups
 track hgscABI
 shortLabel TCGA GBM hgscABI
 longLabel TCGA GBM hgsc ABI Tumor Sequencing
-group x
+group tcga
 visibility hide
 type expRatio
 logicalDb localDb
@@ -91,7 +91,7 @@ groupings hgscABIGroups
 track broadABIBase
 shortLabel TCGA GBM broadABIBase
 longLabel TCGA GBM Broad ABI Base Tumor Sequencing
-group x
+group tcga
 visibility hide
 type expRatio
 logicalDb localDb
@@ -102,7 +102,7 @@ groupings broadABIBaseGroups
 track jhuUscIllMethyl
 shortLabel TCGA GBM JHU-USC DNA Methyl
 longLabel TCGA GBM JHU-USC DNA Methylation Array
-group x
+group tcga
 visibility hide
 type expRatio
 logicalDb localDb
@@ -113,8 +113,30 @@ groupings jhuUscIllMethylGroups
 track CaMPScoreExternal
 shortLabel CaMPScoreExternal 
 longLabel CaMPScoreExternal Science 2007 volelstein
-group x
+group tcga
 visibility hide
 type bed
+
+track broadABI
+shortLabel TCGA GBM Broad ABI Mutation
+longLabel TCGA GBM Broad ABI Mutation
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 3.0
+expStep 0.2
+groupings broadABIGroups
+
+track lblHuEx1
+shortLabel TCGA GBM LBL Human Exon Array 1.0
+longLabel TCGA GBM LBL Human Exon Array 1.0
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 3.0
+expStep 0.2
+groupings lblHuEx1Groups
 
 
