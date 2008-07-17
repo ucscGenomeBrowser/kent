@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.30 2008/07/15 22:28:30 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.31 2008/07/17 18:48:16 larrym Exp $
 
 use warnings;
 use strict;
@@ -19,6 +19,7 @@ use File::stat;
 use Getopt::Long;
 use English;
 use Carp qw(cluck);
+use Cwd;
 
 use vars qw/
     $opt_configDir
@@ -44,6 +45,7 @@ our %pif;               # project information
 our %tracks;            # track information
 our %terms;             # controlled vocabulary
 our %labs;
+our %fields;
 
 sub usage {
     print STDERR <<END;
@@ -373,12 +375,9 @@ sub getPif {
     }
 
     # Validate fields
-    my @pifRequired = qw(project pifVersion assembly lab);
-    for my $field (@pifRequired) {
-        if(!defined($pif{$field})) {
-            die "ERROR: $field not defined in PIF '$pifFile'\n";
-        }
-    }
+    my @tmp = keys %pif;
+    validateFieldList(\@tmp, \%fields, 'pifHeader', "in PIF '$pifFile'");
+
     if($pif{pifVersion} ne $pifVersion) {
         die "ERROR: pifVersion '$pif{pifVersion}' does not match current version: $pifVersion\n";
     }
@@ -444,6 +443,30 @@ sub readRaFile {
     return %ra;
 }
 
+sub validateFieldList {
+# validate the entries in a RA record or DDF header using labs.ra as our schema
+    my ($fields, $schema, $file, $errStrSuffix) = @_;
+    my %hash = map {$_ => 1} @{$fields};
+    my @errors;
+
+    # look for missing required fields
+    for my $field (keys %{$schema}) {
+        if($schema->{$field}{file} eq $file && $schema->{$field}{required} eq 'yes' && !defined($hash{$field})) {
+            push(@errors, "field '$field' not defined");
+        }
+    }
+
+    # now look for fields in list that aren't in schema
+    for my $field (@{$fields}) {
+        if(!defined($schema->{$field}{file}) || $schema->{$field}{file} ne $file) {
+            push(@errors, "invalid field '$field'");
+        }
+    }
+    if(@errors) {
+        die "ERROR: " . join("; ", @errors) . " $errStrSuffix\n";
+    }
+}
+
 sub ddfKey
 {
 # return key for given DDF line (e.g. "antibody=$antibody;cell=$cell" for ChIP-Seq data)
@@ -464,7 +487,7 @@ my @ddfHeader;	# list of field headers on the first line of DDF file
 my %ddfHeader = ();
 my @ddfLines = ();
 my %ddfSets = ();	# info about DDF entries broken down by ddfKey
-my $wd = `pwd`; chomp $wd;
+my $wd = cwd();
 
 my $ok = GetOptions("configDir=s",
                     "outDir=s",
@@ -523,18 +546,20 @@ if(-e "$configPath/$labsConfigFile") {
     %labs = &readRaFile("$configPath/$labsConfigFile", "lab");
 }
 
+
+# Gather fields defined for DDF file. File is in 
+# ra format:  field <name>, required <true|false>
+%fields = readRaFile("$configPath/$fieldConfigFile", "field");
+
 # Locate project information (PIF) file and verify that project is
 #  ready for submission
 %pif = &getPif();
 
-# Gather fields defined for DDF file. File is in 
-# ra format:  field <name>, required <true|false>
-my %fields = &readRaFile("$configPath/$fieldConfigFile", "field");
-
 # Add required fields for this -- the variables in the PIF file
-if (defined($pif{'variables'})) {
-    foreach my $variable (keys %{$pif{'variableHash'}}) {
-        $fields{$variable}->{'required'} = 'yes';
+if (defined($pif{variables})) {
+    for my $variable (keys %{$pif{variableHash}}) {
+        $fields{$variable}->{required} = 'yes';
+        $fields{$variable}->{file} = 'ddf';
     }
 }
 
@@ -562,18 +587,7 @@ while(@{$lines}) {
     last;
 }
 
-# Validate DDF header -- assure field is recognized
-foreach my $field (@ddfHeader) {
-    defined($fields{$field}) || die "ERROR: Header \'$field\' is unknown\n"; 
-    delete($fields{$field});
-}
-
-# Check that all required fields are present in DDF header -- any
-# not yet deleted that are marked required but have not been found in header
-foreach my $field (keys %fields) {
-    $fields{$field}->{'required'} eq "yes" && 
-        die "ERROR: DDF header is missing required field \'$field\'\n"; 
-}
+validateFieldList(\@ddfHeader, \%fields, 'ddf', "in DDF '$ddfFile'");
 
 # Process lines in DDF file. Create a hash with one entry per line;
 # the entry is an array of field values.
