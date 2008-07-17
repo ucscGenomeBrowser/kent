@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.102 2008/06/28 05:10:35 markd Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.103 2008/07/17 21:53:23 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -69,7 +69,7 @@ errAbort(
   "       batch name.  The directory is created if it doesn't exist.  When\n"
   "       creating a new batch, batchDir should not have been previously used as\n"
   "       a batch name.  The batchDir must be writable by the paraHub process.\n"
-  "       This does not affect the working directory assigned to jobs.  In defaults\n"
+  "       This does not affect the working directory assigned to jobs.  It defaults\n"
   "       to the directory where para is run.  If used, this option must be specified\n"
   "       on all para commands for the  batch.  For example to run two batches in the\n"
   "       same directory:\n"
@@ -106,7 +106,7 @@ errAbort(
   "         Default unlimited displays as -1.\n"
   "      -jobCwd=dir - specify the directory path to use as the current working\n"
   "       directory for each job.  The dir can be an absolute path or a path\n"
-  "       relative to the current directory. In defaults to the directory where\n"
+  "       relative to the current directory. It defaults to the directory where\n"
   "       para is run.\n"
   "para try \n"
   "   This is like para push, but only submits up to 10 jobs.\n"
