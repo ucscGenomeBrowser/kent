@@ -218,6 +218,9 @@ struct track
 
 typedef void (*TrackHandler)(struct track *tg);
 
+boolean trackIsCompositeWithSubtracks(struct track *track);
+/* Temporary function until all composite tracks point to their own children */
+
 struct trackRef 
 /* A reference to a track. */
     {
