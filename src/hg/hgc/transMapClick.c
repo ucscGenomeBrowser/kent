@@ -87,7 +87,7 @@ char *sciName = hScientificName(db);
 if ((org != NULL) && (sciName != NULL))
     printf("%s (%s)", org, sciName);
 else
-    printf("%s", db);
+    printf("n/a");
 freeMem(org);
 freeMem(sciName);
 }
@@ -153,17 +153,15 @@ printf("<CAPTION>Source Alignment</CAPTION>\n");
 printf("<TBODY>\n");
 // organism/assembly
 printf("<TR CLASS=\"transMapLeft\"><TD>Organism<TD>");
-if (bag->srcDbIsActive)
-    prOrgScientific(bag->info->srcDb);
-else
-    printf("%s", bag->info->srcDb);
+prOrgScientific(bag->info->srcDb);
 printf("</TR>\n");
 printf("<TR CLASS=\"transMapLeft\"><TD>Genome<TD>%s</TR>\n", bag->info->srcDb);
 
 // position
 printf("<TR CLASS=\"transMapLeft\"><TD>Position\n");
+printf("<TD CLASS=\"transMapNoWrap\">");
 if (bag->srcDbIsActive)
-    printf("<TD CLASS=\"transMapNoWrap\"><A HREF=\"%s?db=%s&position=%s:%d-%d\" target=_blank>"
+    printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\" target=_blank>"
            "%s:%d-%d</A>",
            hgTracksName(), bag->src->db,
            bag->src->chrom, bag->src->chromStart, bag->src->chromEnd,
