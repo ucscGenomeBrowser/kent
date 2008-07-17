@@ -110,12 +110,27 @@ expScale 3.0
 expStep 0.2
 groupings jhuUscIllMethylGroups
 
-track CaMPScoreExternal
-shortLabel CaMPScoreExternal 
-longLabel CaMPScoreExternal Science 2007 volelstein
+track stanfordHap550AtomSeg
+shortLabel TCGA Stanford CNV
+longLabel TCGA Stanford Illumina 550K Chip CNV
 group tcga
 visibility hide
-type bed
+type expRatio
+logicalDb localDb
+expScale 3.0
+expStep 0.2
+groupings stanfordHap550AtomSegGroups
+
+track stanfordHap550SnpSeg
+shortLabel TCGA Stanford CNV
+longLabel TCGA Stanford Illumina 550K Chip CNV on SNP
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 3.0
+expStep 0.2
+groupings stanfordHap550SnpSegGroups
 
 track broadABI
 shortLabel TCGA GBM Broad ABI Mutation
@@ -139,4 +154,9 @@ expScale 3.0
 expStep 0.2
 groupings lblHuEx1Groups
 
-
+track CaMPScoreExternal
+shortLabel CaMPScoreExternal 
+longLabel CaMPScoreExternal Science 2007 volelstein
+group tcga
+visibility hide
+type bed
