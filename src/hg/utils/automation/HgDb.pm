@@ -5,7 +5,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgDb.pm instead.
 
-# $Id: HgDb.pm,v 1.2 2008/07/10 23:51:18 larrym Exp $
+# $Id: HgDb.pm,v 1.3 2008/07/17 18:30:53 larrym Exp $
 
 package HgDb;
 
@@ -26,42 +26,36 @@ sub new
 # $args{USER}, $args{PASSWORD} and $args{HOST} are optional (and override .hg.conf values)
     my ($class, %args) = (@_);
     my $ref = {};
-    my $db = $args{DB} or die "Missing \$args{DB}";
+    if(!defined($args{DB})) {
+        die "Missing \$args{DB}";
+    }
     my $dsn = "DBI:mysql:$args{DB}";
     my $confFile = "$ENV{HOME}/.hg.conf";
     if(! -e $confFile) {
         die "Cannot locate conf file: '$confFile'";
     }
     open(CONF, $confFile);
-    my $conf = join("", <CONF>);
+    for (<CONF>) {
+        next if /^#/;
+        if(/^include/) {
+            # XXXX TODO: support "include ../cgi-bin/hg.conf"
+            die "include ... syntax not currently supported";
+        }
+        for my $name (qw(host user password)) {
+            if(/^db\.$name\s*=\s*(.+)/) {
+                $ref->{uc($name)} = $1;
+            }
+        }
+    }
     close(CONF);
-    my ($host, $user, $password);
-    if($conf =~ /db\.host=(.*)/) {
-        $host = $1;
+    for (keys %args) {
+        # %args override values in conf file.
+        $ref->{$_} = $args{$_};
     }
-    if($args{HOST}) {
-        $host = $args{HOST};
+    if($ref->{HOST}) {
+        $dsn .= ";host=$ref->{HOST}";
     }
-    if($conf =~ /db\.user=(.*)/) {
-        $user = $1;
-    }
-    if($args{USER}) {
-        $host = $args{USER};
-    }
-    if($conf =~ /db\.password=(.*)/) {
-        $password = $1;
-    }
-    if($args{PASSWORD}) {
-        $host = $args{PASSWORD};
-    }
-    if($host) {
-        $dsn .= ";host=$host";
-    }
-    my $dbh = DBI->connect($dsn, $user, $password) or die "Couldn't connect to db: $db";
-    $ref->{DBH} = $dbh;
-    $ref->{HOST} = $host;
-    $ref->{USER} = $user;
-    $ref->{PASSWORD} = $password;
+    $ref->{DBH} = DBI->connect($dsn, $ref->{USER}, $ref->{PASSWORD}) or die "Couldn't connect to db: $ref->{DB}";
     bless $ref, 'HgDb';
     return $ref;
 }
