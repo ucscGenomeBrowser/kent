@@ -18,14 +18,13 @@ databases=`gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs`
 gbdb=/export/gbdb
 
 # location of the genbank root and files on the remote build server
-gbBuildServer=genbank
+gbBuildServer=genbank-10
 rsyncPort="rsh"
 gbBuildRoot=/cluster/data/genbank
 
 # Checking for an existing lock file, Silently exits if lock file exists
 # and is less than one day old,  error if older.
 gbCheckLock $gbRoot/var/copy/run/copy.lock
-
 
 gbCopyStep -rsyncPort=$rsyncPort -gbdb=$gbdb $gbBuildServer $gbBuildRoot $databases
 
