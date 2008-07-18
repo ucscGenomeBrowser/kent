@@ -132,6 +132,17 @@ expScale 3.0
 expStep 0.2
 groupings stanfordHap550SnpSegGroups
 
+track stanfordHap550SnpLogR
+shortLabel TCGA Stanford SNP LogR
+longLabel TCGA Stanford Illumina 550K Chip SNP LogR
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 3.0
+expStep 0.2
+groupings stanfordHap550SnpLogRGroups
+
 track broadABI
 shortLabel TCGA GBM Broad ABI Mutation
 longLabel TCGA GBM Broad ABI Mutation
