@@ -2813,3 +2813,18 @@ smoothingWindow 2
 type wig -6.602 5.678
 spanList 60
 viewLimits -2:2
+
+track mafHomPan20
+shortLabel HomPan20 Alignment
+longLabel HomPan20 Alignment
+group x
+priority 110
+visibility hide
+type wigMaf 0.0 1.0
+#speciesTree ((echTel1,loxAfr1)afrothere,(dasNov1,((bosTau2, canFam2)laurasia,((oryCun1,(rn4,mm8)rodent)glire,(rheMac2,(panTro2,hg18)ape)primate)euArc)borEut13)nonAfro)eutherian;
+#speciesTarget human
+summary mafHomPan20Summary
+speciesOrder homPan20 panTro2 homIni20 ponAbe2
+# speciesOrder mouse/human chimp/human hg17 panTro1 rheMac1 oryCun1 rn3 mm6 bosTau1 canFam1 dasNov1 tenrec loxAfr1 
+# speciesOrder euArc primate ape hg18 panTro2 rheMac2 rn4 mm8 rodent oryCun1 glire bosTau2 canFam2 laurasia dasNov1 nonAfro echTel1 loxAfr1 afrothere eutherian
+speciesCodonDefault hg18
