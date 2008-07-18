@@ -78,6 +78,7 @@ orderUrl http://www.abcam.com/index.html?datasheet=16046
 term H3K9me3
 type Antibody
 antibodyDescription rabbit polyclonal, ChIP grade
+targetDescription Histone H3 (tri methyl K9), a marker of silenced chromatin
 vendorName Abcam
 vendorId ab8898
 orderUrl http://www.abcam.com/index.html?datasheet=8898
@@ -93,7 +94,7 @@ orderUrl http://www.abcam.com/index.html?datasheet=10483
 term Pol2
 type Antibody
 targetDescription RNA Polymerase II
-antibodyDescription mouse monoclonal
+antibodyDescription mouse monoclonal, clone 8WG16
 vendorName Covance
 vendorId MMS-126R
 orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
@@ -101,8 +102,114 @@ orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
 term STAT1
 type Antibody
 targetDescription transcription factor, activated by interferon signalling
-antibodyDescription rabbit polyclonal
+antibodyDescription rabbit polyclonal to STAT1 (alpha) p-91 (C-24)
 vendorName Santa Cruz Biotech
 vendorId sc-345
 orderUrl http://www.scbt.com/product.php?datasheet=345
+
+term H3K4me3
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H3 (tri methyl K4)
+orderUrl http://www.abcam.com/index.html?datasheet=8580
+vendorName Abcam 
+vendorId ab8580
+
+term H3K4me2 
+type Antibody
+antibodyDescription rabbit polyclonal 
+targetDescription Histone H3 (di methyl K4) 
+orderUrl http://www.abcam.com/index.html?datasheet=7766 
+vendorName Abcam 
+vendorId ab7766
+
+term H3K4me1 
+type Antibody
+antibodyDescription rabbit polyclonal 
+targetDescription Histone H3 (mono methyl K4) 
+orderUrl http://www.abcam.com/index.html?datasheet=8895 
+vendorName Abcam 
+vendorId ab8895 
+
+term H3K27me3 
+type Antibody
+antibodyDescription rabbit polyclonal 
+targetDescription Histone H3 (tri-methyl K27) 
+orderUrl http://www.millipore.com/catalogue/item/07-449 
+vendorName Millipore 
+vendorId 07-449 
+
+term H3K36me3 
+type Antibody
+antibodyDescription rabbit polyclonal 
+targetDescription Histone H3 (tri-methyl K36) 
+orderUrl http://www.abcam.com/index.html?datasheet=9050 
+vendorName Abcam 
+vendorId ab9050
+
+term H3K9me1 
+type Antibody
+antibodyDescription rabbit polyclonal 
+targetDescription Histone H3 (mono-methyl K9) 
+orderUrl http://www.abcam.com/index.html?datasheet=8896 
+vendorName Abcam 
+vendorId ab8896
+
+term H4K20me1 
+type Antibody
+antibodyDescription rabbit polyclonal 
+targetDescription Histone H4 (mono-methyl K20) 
+orderUrl http://www.abcam.com/index.html?datasheet=9051 
+vendorName Abcam 
+vendorId ab9051
+
+term H3K9ac 
+type Antibody
+antibodyDescription rabbit polyclonal 
+targetDescription Histone H3 (acetyl K9) 
+orderUrl http://www.abcam.com/index.html?datasheet=4441 
+vendorName Abcam 
+vendorId ab4441 
+
+term H3K27ac 
+type Antibody
+antibodyDescription rabbit polyclonal 
+targetDescription Histone H3 (acetyl K27) 
+orderUrl http://www.abcam.com/index.html?datasheet=4729 
+vendorName Abcam 
+vendorId ab4729 
+
+term CTCF 
+type Antibody
+antibodyDescription rabbit polyclonal 
+targetDescription CTCF zinc finger transcription factor 
+orderUrl http://www.millipore.com/catalogue/item/07-729 
+VendorName Millipore 
+VenorId 07-729
+
+term Pol2(b)  
+type Antibody
+antibodyDescription mouse monoclonal, clone CTD4H8 
+targetDescription RNA polymerase II 
+orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P 
+vendorName Covance 
+vendorId MMS-128P
+
+term CtBP1  
+type Antibody
+antibodyDescription mouse monoclonal 
+targetDescription C-terminal binding protein 1 
+type Antibody
+orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229303  
+vendorName BD Biosciences 
+vendorId 612042 
+
+term CtBP2  
+type Antibody
+antibodyDescription mouse monoclonal 
+targetDescription C-terminal binding protein 2 
+type Antibody
+orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229326 
+vendorName BD Biosciences 
+vendorId 612044 
 
