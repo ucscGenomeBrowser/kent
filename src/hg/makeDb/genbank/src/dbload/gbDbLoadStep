@@ -4,7 +4,7 @@
 #
 # Load databases on the current server.
 #
-# $Id: gbDbLoadStep,v 1.44 2008/07/01 07:57:54 markd Exp $
+# $Id: gbDbLoadStep,v 1.45 2008/07/18 04:44:43 markd Exp $
 #
 use strict;
 use warnings;
@@ -251,10 +251,7 @@ sub dbLoad($) {
 
     my $ccdsNcbiBuild = getDbConfUndef($db, "ccds.ncbiBuild");
     if (defined($ccdsNcbiBuild)) {
-        # FIXME: tmp hack to test only on hgwdev
-        if ($gbCommon::hostName eq "hgwdev") {
-            ccdsUpdate($db, $ccdsNcbiBuild);
-        }
+        ccdsUpdate($db, $ccdsNcbiBuild);
     }
     dumpExtFileTbl($db);
 }
