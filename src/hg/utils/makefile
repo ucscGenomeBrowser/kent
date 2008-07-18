@@ -1,6 +1,6 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.10 2008/02/23 01:24:07 angie Exp $
+# 	$Id: makefile,v 1.11 2008/07/18 04:37:03 markd Exp $
 
 include ../../inc/common.mk
 
@@ -60,5 +60,6 @@ BAD_DIRS= \
 	jkShell \
 	dnsInfo \
 	wigAsciiToBinary \
+	positionalTblCheck \
 	cCp
 
