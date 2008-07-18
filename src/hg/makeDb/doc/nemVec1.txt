@@ -1,12 +1,11 @@
 
 # Nematostella vectensis DOE JGI Nemve1
 
-# $Id: nemVec1.txt,v 1.2 2008/07/14 21:58:15 kord Exp $
+# $Id: nemVec1.txt,v 1.3 2008/07/18 21:42:32 kord Exp $
 # $Source: /projects/compbio/cvsroot/kent/src/hg/makeDb/doc/nemVec1.txt,v $
 
 #######################################################################
-# CREATE BUILD DIRECTORY 
-# (DONE 2008-Jul-01 - Kord) 
+# CREATE BUILD DIRECTORY (DONE 2008-Jul-01 - Kord) 
 
 # what store?
 ssh hgwdev
@@ -29,8 +28,7 @@ mkdir /cluster/store3/nemVec1
 ln -s /cluster/store3/nemVec1 /cluster/data/nemVec1
 
 #######################################################################
-# DOWNLOAD THE ASSEMBLY 
-# (DONE - 2008-Jul-05 - Kord)
+# DOWNLOAD THE ASSEMBLY (DONE - 2008-Jul-05 - Kord)
 ssh kkstore06
 cd /cluster/data/nemVec1
 mkdir jkStuff
@@ -138,5 +136,181 @@ cd /cluster/data/nemVec1/TemporaryTrackDbCheckout/kent/src/hg/makeDb/trackDb/oth
 # - Run make update DBS=nemVec1 and make alpha when done.
 # - (optional) Clean up /cluster/data/nemVec1/TemporaryTrackDbCheckout
 # -  cvsup your ~/kent/src/hg/makeDb/trackDb and make future edits there.
+
+#######################################################################
+# REPEATMASKER (DONE - 2008-Jul-16 - Kord)
+
+ssh kkstore06
+screen
+mkdir /cluster/data/nemVec1/bed/repeatMasker
+cd /cluster/data/nemVec1/bed/repeatMasker
+time -p nice -n +19 doRepeatMasker.pl -bigClusterHub=pk \
+    -buildDir=/cluster/data/nemVec1/bed/repeatMasker nemVec1 > do.log 2>&1 &
+
+# versions from the do.log
+# grep version of RepeatMasker$ /scratch/data/RepeatMasker/RepeatMasker
+#      Jun 13 2008 (open-3-2-5) version of RepeatMasker
+# grep RELEASE /scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
+# CC   RELEASE 20080611;  
+
+ssh pk
+cd /cluster/data/nemVec1/bed/repeatMasker/run.cluster
+para time > para.time 2>&1
+exit
+
+ssh kkstore06
+cd /cluster/data/nemVec1/bed/repeatMasker
+cat run.cluster/para.time
+# 879 jobs in batch
+# 29017 jobs (including everybody's) in Parasol queue or running.
+# Checking finished jobs
+# Completed: 879 of 879 jobs
+# CPU time in finished jobs:    3593738s   59895.63m   998.26h   41.59d  0.114 y
+# IO & Wait Time:                 44003s     733.38m    12.22h    0.51d  0.001 y
+# Average job time:                4138s      68.97m     1.15h    0.05d
+# Longest finished job:            9437s     157.28m     2.62h    0.11d
+# Submission to last job:         75500s    1258.33m    20.97h    0.87d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+# continue the script after fixing crashed and failed cluster jobs
+date > run.cluster/run.time
+time -p nice -n +19 doRepeatMasker.pl -bigClusterHub=pk \
+    -buildDir=/cluster/data/nemVec1/bed/repeatMasker \
+    -continue cat nemVec1 > do-cat.log 2>&1 &
+
+#  *** All done!
+#  *** Steps were performed in /cluster/data/nemVec1/bed/repeatMasker
+#  *** Please check the log file to see if hgLoadOut had warnings that we
+#      should pass on to Arian and Robert.
+#  *** Please also spot-check some repeats in the browser, run twoBitToFa on
+#      a portion of nemVec1.2bit to make sure there's some masking, etc.
+
+#######################################################################
+# SIMPLE REPEATS (DONe - 2008-Jul-16 - Kord)
+ssh kkstore06
+screen
+ssh memk parasol status
+# CPUs free: 20
+# CPUs busy: 0
+# CPUs dead: 8
+# Jobs running:  0
+# Jobs waiting:  0
+# Jobs finished: 6334
+# Jobs crashed:  88
+# Spokes free: 30
+# Spokes busy: 0
+# Spokes dead: 0
+# Active batches: 0
+# Total batches: 26
+# Active users: 0
+# Total users: 7
+# Days up: 27.866007
+# Version: 11
+mkdir /cluster/data/nemVec1/bed/simpleRepeat
+cd /cluster/data/nemVec1/bed/simpleRepeat
+time nice -n +19 doSimpleRepeat.pl -smallClusterHub=memk \
+    -buildDir=/cluster/data/nemVec1/bed/simpleRepeat nemVec1 > do.log 2>&1 &
+# generated a permissions error on mkdir /san/sanvol1
+# So, I'll run it on kk with the new parasol version (12.08)
+time nice -n +19 doSimpleRepeat.pl -smallClusterHub=kk \
+    -buildDir=/cluster/data/nemVec1/bed/simpleRepeat nemVec1 > do.log 2>&1 &
+#real    342m39.774s
+
+wc -l /san/sanvol1/scratch/nemVec1/TrfPart/00*/00*.lst
+#    24 /san/sanvol1/scratch/nemVec1/TrfPart/000/000.lst
+#    40 /san/sanvol1/scratch/nemVec1/TrfPart/001/001.lst
+#    62 /san/sanvol1/scratch/nemVec1/TrfPart/002/002.lst
+#   102 /san/sanvol1/scratch/nemVec1/TrfPart/003/003.lst
+#   201 /san/sanvol1/scratch/nemVec1/TrfPart/004/004.lst
+#  1016 /san/sanvol1/scratch/nemVec1/TrfPart/005/005.lst
+#  5428 /san/sanvol1/scratch/nemVec1/TrfPart/006/006.lst
+#  3931 /san/sanvol1/scratch/nemVec1/TrfPart/007/007.lst
+# 10804 total
+
+ssh kk
+cd /cluster/data/nemVec1/bed/simpleRepeat/run.cluster
+para time > para.time 2>&1
+exit
+cd /cluster/data/nemVec1/bed/simpleRepeat
+cat run.cluster/para.time
+# 8 jobs in batch
+# 2 jobs (including everybody's) in Parasol queue or running.
+# Checking finished jobs
+# Completed: 7 of 8 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      11930s     198.84m     3.31h    0.14d  0.000 y
+# IO & Wait Time:                  9131s     152.18m     2.54h    0.11d  0.000 y
+# Average job time:                3009s      50.15m     0.84h    0.03d
+# Longest finished job:            9775s     162.92m     2.72h    0.11d
+# Submission to last job:         20268s     337.80m     5.63h    0.23d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+ssh kk
+cd /cluster/data/nemVec1/bed/simpleRepeat/run.cluster
+para crashed
+# 8 jobs in batch
+# 2 jobs (including everybody's) in Parasol queue or running.
+# Checking finished jobs
+# ./TrfRun.csh /san/sanvol1/scratch/nemVec1/TrfPart/003/003.lst.bed
+
+# generate new list
+cp para.time para.time.orig
+cp jobList jobList.orig
+# remove the other jobs from the list and recreate batch
+rm para.bookmark
+para make jobList
+
+# pick up where we left off...
+time nice -n +19 doSimpleRepeat.pl -smallClusterHub=kk \
+    -continue trf \
+    -buildDir=/cluster/data/nemVec1/bed/simpleRepeat nemVec1 > do3.log 2>&1 &
+
+# pick up where we left off... the right way...
+time nice -n +19 doSimpleRepeat.pl -smallClusterHub=kk \
+    -continue filter \
+    -buildDir=/cluster/data/nemVec1/bed/simpleRepeat nemVec1 > do4.log 2>&1 &
+
+
+#######################################################################
+# MASK SEQUENCE WITH RM+TRF (DONE - 2008-Jul-16 - Kord)
+
+ssh kolossus
+cd /cluster/data/nemVec1
+twoBitMask nemVec1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed nemVec1.2bit
+# ignornig extra BED column warnin
+twoBitToFa nemVec1.2bit stdout | faSize stdin
+# 356613585 bases (59221913 N's 297391672 real 257024600 upper 40367072 lower) in 10804 sequences in 1 files
+# Total size: mean 33007.6 sd 149445.1 min 626 (scaffold_6071) max 3256212 (scaffold_1) median 6708
+# N count: mean 5481.5 sd 10915.3
+# U count: mean 23789.8 sd 125342.3
+# L count: mean 3736.3 sd 17397.9
+# %11.32 masked total, %13.57 masked real
+
+# set the symlink on hgwdev to /gbdb/nemVec1
+ssh hgwdev
+cd /gbdb/nemVec1
+ln -s /cluster/data/nemVec1/nemVec1.2bit .
+
+#######################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2008-Jul-16 - Kord)
+
+ssh kkstore06
+cd /cluster/data/nemVec1
+blat nemVec1.2bit /dev/null /dev/null -tileSize=11 \
+    -makeOoc=jkStuff/11.ooc -repMatch=300
+# Wrote 1377 overused 11-mers to jkStuff/11.ooc
+
+#   copy all of this stuff to the Iservers
+ssh kkr1u00
+mkdir -p /iscratch/i/nemVec1
+cd /iscratch/i/nemVec1
+cp -p /cluster/data/nemVec1/nemVec1.2bit .
+cp -p /cluster/data/nemVec1/jkStuff/11.ooc .
+cp -p /cluster/data/nemVec1/chrom.sizes .
+exit
+cp -p jkStuff/11.ooc /san/sanvol1/scratch/nemVec1
+
+#######################################################################
+# GENBANK AUTO-UPDATE (STARTED - 2008-Jul-17 - Kord)
 
 
