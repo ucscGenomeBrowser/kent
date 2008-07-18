@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.22 2008/07/17 18:37:16 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.23 2008/07/18 21:34:42 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 
@@ -10855,6 +10855,7 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
 	{
 	/* install parent's track handler */
 	subtrack = trackFromTrackDb(tdb);
+    subtrack->tdb = subTdb;
 	handler = lookupTrackHandler(tdb->tableName);
 	}
     else 
