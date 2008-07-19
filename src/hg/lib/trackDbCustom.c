@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.41 2008/07/17 22:54:45 markd Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.42 2008/07/19 00:08:47 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -539,39 +539,4 @@ if (origAssembly)
     }
 }
 
-inline boolean tdbIsSuper(struct trackDb *tdb)
-/* Is this trackDb struct marked as a supertrack ? */
-{ return tdb && SUPERTRACK_NODE(tdb->treeNodeType); }
-
-inline boolean tdbIsSuperTrack(struct trackDb *tdb) 
-/* Is this trackDb struct marked as a supertrack ? */
-{ return tdb && /*tdb->subtracks &&*/ SUPERTRACK_NODE(tdb->treeNodeType); }  // TODO: superTrack code needs rewrite to contain it's children
-
-inline boolean tdbIsComposite( struct trackDb *tdb) 
-/* Is this trackDb struct marked as a composite with children ?  */
-{ return tdb && tdb->subtracks && COMPOSITE_NODE( tdb->treeNodeType); }
-
-inline boolean tdbIsSuperTrackChild(struct trackDb *tdb) 
-/* Is this trackDb struct marked as a child of a supertrack ?  */
-{ return tdb && tdb->parent && SUPERTRACK_CHILD_NODE(tdb->treeNodeType); }
-
-inline boolean tdbIsCompositeChild(struct trackDb *tdb)  
-/* Is this trackDb struct marked as a child of a composite track ?  */
-{ return tdb && tdb->parent && COMPOSITE_CHILD_NODE( tdb->treeNodeType); }
-
-inline void tdbMarkAsSuperTrack(struct trackDb *tdb)      
-/* Marks a trackDb struct as a supertrack */
-{ tdb->treeNodeType |= SUPERTRACK_MASK;       }
-
-inline void tdbMarkAsComposite( struct trackDb *tdb)      
-/* Marks a trackDb struct as a composite track  */
-{ tdb->treeNodeType |= COMPOSITE_MASK;        }
-
-inline void tdbMarkAsSuperTrackChild(struct trackDb *tdb) 
-/* Marks a trackDb struct as a child of a supertrack  */
-{ tdb->treeNodeType |= SUPERTRACK_CHILD_MASK; }
-
-inline void tdbMarkAsCompositeChild( struct trackDb *tdb) 
-/* Marks a trackDb struct as a child of a composite track  */
-{ tdb->treeNodeType |= COMPOSITE_CHILD_MASK;  }
 
