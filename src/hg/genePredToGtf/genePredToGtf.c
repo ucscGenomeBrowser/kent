@@ -8,7 +8,7 @@
 #include "genePred.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: genePredToGtf.c,v 1.12 2008/07/19 00:40:40 markd Exp $";
+static char const rcsid[] = "$Id: genePredToGtf.c,v 1.13 2008/07/19 05:55:39 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -104,12 +104,6 @@ static boolean inExon(struct genePred *gp, int iExon, int pos)
 return ((gp->exonStarts[iExon] <= pos) && (pos <= gp->exonEnds[iExon]));
 }
 
-static boolean validExonIdx(struct genePred *gp, int iExon)
-/* is an exon index valid? */
-{
-return (0 <= iExon) && (iExon < gp->exonCount);
-}
-
 static int movePos(struct genePred *gp, int pos, int dist)
 /* Move a position in an exon by dist, which is positive to move forward, and
  * negative to move backwards. Introns are skipped.  Error if can't move
@@ -132,18 +126,25 @@ if (iExon > gp->exonCount)
 // adjust by distance
 int left = intAbs(dist);
 int dir = (dist >= 0) ? 1 : -1;
-while (validExonIdx(gp, iExon) && (left > 0))
+while ((0 <= iExon) && (iExon < gp->exonCount) && (left > 0))
     {
     if (inExon(gp, iExon, pos+dir))
-        {
         pos += dir;
-        left--;
+    else if (dir >= 0)
+        {
+        // move to next exon
+        iExon++;
+        if (iExon < gp->exonCount)
+            pos = gp->exonStarts[iExon];
         }
     else
         {
-        // move to next exon
-        iExon += dir;
+        // move to previous
+        iExon--;
+        if (iExon >= 0)
+            pos = (gp->exonStarts[iExon]+gp->exonEnds[iExon])-1;
         }
+    left--;
     }
 if (left > 0)
     errAbort("can't move %d by %d and be an exon of %s %s:%d-%d",
@@ -346,7 +347,7 @@ int firstUtrEnd = gp->cdsStart, lastUtrStart = gp->cdsEnd;
 int cdsStart = gp->cdsStart, cdsEnd = gp->cdsEnd;
 if ((strand == '+') && codonComplete(&lastCodon))
     cdsEnd = lastUtrStart = movePos(gp, lastUtrStart, -3);
-if ((strand == '-') && codonComplete(&lastCodon))
+if ((strand == '-') && codonComplete(&firstCodon))
     cdsStart = firstUtrEnd = movePos(gp, cdsStart, 3);
 
 if (addComments)
