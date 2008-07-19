@@ -3,9 +3,16 @@ include ../../../inc/common.mk
 DIFF = diff -u
 genePredToGtf = ${BINDIR}/genePredToGtf
 
+# special cases:
+#   - NM_021209 has a spliced start codon
+#   - NM_001018001 marked 3' incomplete, positive strand
+#   - D31736 marked 3' incomplete, negative strand.  CDS only contains
+#     start codon.
+
+
 test: \
-	basicSimpleTest utrSimpleTest stopBetweenSimpleTest honorSimpleTest \
-	basicTest utrTest stopBetweenTest honorTest
+	basicSimpleTest utrSimpleTest \
+	basicTest utrTest honorTest
 
 # tests using basic genePred
 basicSimpleTest: mkout
@@ -16,14 +23,6 @@ utrSimpleTest: mkout
 	${genePredToGtf} -utr -source=test file input/simple.gp output/$@.gtf
 	${DIFF} expected/$@.gtf output/$@.gtf
 
-stopBetweenSimpleTest: mkout
-	${genePredToGtf} -stopBetweenCdsUtr -utr -source=test file input/simple.gp output/$@.gtf
-	${DIFF} expected/$@.gtf output/$@.gtf
-
-honorSimpleTest: mkout
-	${genePredToGtf} -honorCdsStat -utr -source=test file input/simple.gp output/$@.gtf
-	${DIFF} expected/$@.gtf output/$@.gtf
-
 
 # tests using extended genePred
 basicTest: mkout
@@ -32,10 +31,6 @@ basicTest: mkout
 
 utrTest: mkout
 	${genePredToGtf} -utr -source=test file input/extended.gp output/$@.gtf
-	${DIFF} expected/$@.gtf output/$@.gtf
-
-stopBetweenTest: mkout
-	${genePredToGtf} -stopBetweenCdsUtr -utr -source=test file input/extended.gp output/$@.gtf
 	${DIFF} expected/$@.gtf output/$@.gtf
 
 honorTest: mkout
