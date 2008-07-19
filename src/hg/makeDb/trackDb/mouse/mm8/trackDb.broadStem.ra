@@ -6,44 +6,237 @@ shortLabel Broad Chromatin ChIP-Seq
 longLabel Broad Institute Chromatin State Mapping using ChIP-Seq
 group regulation
 subGroup1 view Views HMM=Sites-HMM WIN=Sites-Windowing SIG=Signal_Densities ALN=Alignments
-subGroup2 cell_type Cell_Type ES=ES MEF=MEF NP=NP EShyb=ES-hybrid
-subGroup3 factor Factor K4=H3K4me3 K9=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3 PAN=pan-H3 WCE=WCE RPOL=RPol-II
+subGroup2 cell_type Cell_Type ES=ES MEF=MEF NP=NP EShyb=ES-hybrid BRAIN=Brain
+subGroup3 factor Factor K4m1=H3K4me1 K4m2=H3K4me2 K4m3=H3K4me3 K9m3=H3K9me3 K20m3=H4K20me3 K27m3=H3K27me3 K36m3=H3K36me3 PAN=pan-H3 WCE=WCE RPOL=RPol-II
 dimensions dimensionX=cell_type dimensionY=factor 
 dividers cell_type factor 
 hierarchy view HMM=0 WIN=0 SIG=1 ALN=2
 priority 130
 type bed 3
 
+    track broadStemChipWinSitesH3K4me1Es
+    shortLabel H3K4me1-ES Win
+    longLabel Broad Stem Cell Chromatin IP Sites by Window (H3K4me1 ab, Embryonic Stem (ES) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m1 cell_type=ES view=WIN
+    type bed 5 +
+    #spectrum on
+    noInherit on
+    color 0,110,0
+    visibility dense
+    priority 2
+    
+    track broadStemChipSignalH3K4me1Es
+    shortLabel H3K4me1-ES Sig
+    longLabel Broad Stem Cell Chromatin IP Signal (H3K4me1 ab, Embryonic Stem (ES) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m1 cell_type=ES view=SIG
+    type wig
+    autoscale off
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 100:32:8
+    noInherit on
+    color 0,110,0
+    visibility full
+    priority 3
+
+    track broadStemChipAlignmentsH3K4me1Es
+    shortLabel H3K4me1-ES Align
+    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me1 ab, Embryonic Stem (ES) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m1 cell_type=ES view=ALN
+    type bed 9 +
+    #spectrum on
+    noInherit on
+    color 0,110,0
+    visibility hide
+    priority 4
+
+    track broadStemChipWinSitesH3K4me1Np
+    shortLabel H3K4me1-Np Win
+    longLabel Broad Stem Cell Chromatin IP Sites by Window (H3K4me1 ab, Neural Progenitor (NP) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m1 cell_type=NP view=WIN
+    type bed 5 +
+    #spectrum on
+    noInherit on
+    color 0,110,0
+    visibility dense
+    priority 12
+    
+    track broadStemChipSignalH3K4me1Np
+    shortLabel H3K4me1-Np Sig
+    longLabel Broad Stem Cell Chromatin IP Signal (H3K4me1 ab, Neural Progenitor (NP) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m1 cell_type=NP view=SIG
+    type wig
+    autoscale off
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 100:32:8
+    noInherit on
+    color 0,110,0
+    visibility full
+    priority 13
+
+    track broadStemChipAlignmentsH3K4me1Np
+    shortLabel H3K4me1-Np Align
+    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me1 ab, Neural Progenitor (NP) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m1 cell_type=NP view=ALN
+    type bed 9 +
+    #spectrum on
+    noInherit on
+    color 0,110,0
+    visibility hide
+    priority 14
+
+    track broadStemChipWinSitesH3K4me2Es
+    shortLabel H3K4me2-ES Win
+    longLabel Broad Stem Cell Chromatin IP Sites by Window (H3K4me2 ab, Embryonic Stem (ES) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m2 cell_type=ES view=WIN
+    type bed 5 +
+    #spectrum on
+    noInherit on
+    color 0,130,0
+    visibility dense
+    priority 22
+    
+    track broadStemChipSignalH3K4me2Es
+    shortLabel H3K4me2-ES Sig
+    longLabel Broad Stem Cell Chromatin IP Signal (H3K4me2 ab, Embryonic Stem (ES) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m2 cell_type=ES view=SIG
+    type wig
+    autoscale off
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 100:32:8
+    noInherit on
+    color 0,130,0
+    visibility full
+    priority 23
+
+    track broadStemChipAlignmentsH3K4me2Es
+    shortLabel H3K4me2-ES Align
+    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me2 ab, Embryonic Stem (ES) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m2 cell_type=ES view=ALN
+    type bed 9 +
+    #spectrum on
+    noInherit on
+    color 0,130,0
+    visibility hide
+    priority 24
+
+    track broadStemChipWinSitesH3K4me2Np
+    shortLabel H3K4me2-Np Win
+    longLabel Broad Stem Cell Chromatin IP Sites by Window (H3K4me2 ab, Neural Progenitor (NP) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m2 cell_type=NP view=WIN
+    type bed 5 +
+    #spectrum on
+    noInherit on
+    color 0,130,0
+    visibility dense
+    priority 32
+    
+    track broadStemChipSignalH3K4me2Np
+    shortLabel H3K4me2-Np Win
+    longLabel Broad Stem Cell Chromatin IP Signal (H3K4me2 ab, Neural Progenitor (NP) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m2 cell_type=NP view=SIG
+    type wig
+    autoscale off
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 100:32:8
+    noInherit on
+    color 0,130,0
+    visibility full
+    priority 33
+
+    track broadStemChipAlignmentsH3K4me2Np
+    shortLabel H3K4me2-Np Win
+    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me2 ab, Neural Progenitor (NP) cells)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m2 cell_type=NP view=ALN
+    type bed 9 +
+    #spectrum on
+    noInherit on
+    color 0,130,0
+    visibility hide
+    priority 34
+
+    track broadStemChipWinSitesH3K4me2Brain
+    shortLabel H3K4me2-Brain Win
+    longLabel Broad Stem Cell Chromatin IP Sites By Window (H3K4me2 ab, Whole Brain)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m2 cell_type=BRAIN view=WIN
+    type bed 5 +
+    #spectrum on
+    noInherit on
+    color 0,130,0
+    visibility dense
+    priority 42
+    
+    track broadStemChipSignalH3K4me2Brain
+    shortLabel H3K4me2-Brain Sig
+    longLabel Broad Stem Cell Chromatin IP Signal (H3K4me2 ab, Whole Brain)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m2 cell_type=BRAIN view=SIG
+    type wig
+    autoscale off
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 100:32:8
+    noInherit on
+    color 0,130,0
+    visibility full
+    priority 43
+
+    track broadStemChipAlignmentsH3K4me2Brain
+    shortLabel H3K4me2-Brain Align
+    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me2 ab, Whole Brain)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m2 cell_type=BRAIN view=ALN
+    type bed 9 +
+    #spectrum on
+    noInherit on
+    color 0,130,0
+    visibility hide
+    priority 44
+    
     track broadStemChipHmmSitesH3K4me3Es
     shortLabel H3K4me3-ES HMM
     longLabel Broad Stem Cell Chromatin IP Sites by HMM (H3K4me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cell_type=ES view=HMM
+    subGroups factor=K4m3 cell_type=ES view=HMM
     type bed 3
     noInherit off
     color 0,150,0
-    altcolor 0,255,0
     visibility dense
-    priority 1
+    priority 51
 
     track broadStemChipWinSitesH3K4me3Es
     shortLabel H3K4me3-ES Win
     longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K4me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cell_type=ES view=WIN
+    subGroups factor=K4m3 cell_type=ES view=WIN
     type bed 5 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,150,0
-    altcolor 255,255,255
     visibility dense
-    priority 2
+    priority 52
 
     track broadStemChipSignalH3K4Es
     shortLabel H3K4me3-ES Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K4me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cell_type=ES view=SIG
+    subGroups factor=K4m3 cell_type=ES view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -51,41 +244,38 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,150,0
-    altcolor 0,255,0
     visibility full
-    priority 3
+    priority 53
 
     track broadStemChipAlignmentsH3K4Me3Es
     shortLabel H3K4me3-ES Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cell_type=ES view=ALN
+    subGroups factor=K4m3 cell_type=ES view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,150,0
-    altcolor 0,255,0
     visibility hide
-    priority 4
+    priority 54
 
     track broadStemChipWinSitesH3K4me3Mef
     shortLabel H3K4me3-MEF Win
     longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K4me3 ab, Embryonic Fibroblasts (MEF))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cell_type=MEF view=WIN
+    subGroups factor=K4m3 cell_type=MEF view=WIN
     type bed 5 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,150,0
-    altcolor 0,255,0
     visibility dense
-    priority 12
+    priority 62
 
     track broadStemChipSignalH3K4Mef
     shortLabel H3K4me3-MEF Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K4me3 ab, Embryonic Fibroblasts (MEF))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cell_type=MEF view=SIG
+    subGroups factor=K4m3 cell_type=MEF view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -93,41 +283,38 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,150,0
-    altcolor 0,255,0
     visibility full
-    priority 13
+    priority 63
 
     track broadStemChipAlignmentsH3K4Me3Mef
     shortLabel H3K4me3-MEF Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Embryonic Fibroblasts (MEF))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cell_type=MEF view=ALN
+    subGroups factor=K4m3 cell_type=MEF view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,150,0
-    altcolor 0,255,0
     visibility hide
-    priority 14
+    priority 64
 
     track broadStemChipWinSitesH3K4me3Np
     shortLabel H3K4me3-Np Win
     longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K4me3 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cell_type=NP view=WIN
+    subGroups factor=K4m3 cell_type=NP view=WIN
     type bed 5 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,150,0
-    altcolor 0,255,0
     visibility dense
-    priority 22
+    priority 72
 
     track broadStemChipSignalH3K4Np
     shortLabel H3K4me3-NP Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K4me3 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cell_type=NP view=SIG
+    subGroups factor=K4m3 cell_type=NP view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -135,28 +322,26 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,150,0
-    altcolor 0,255,0
     visibility full
-    priority 23
+    priority 73
 
     track broadStemChipAlignmentsH3K4Me3Np
     shortLabel H3K4Me3me3-NP Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cell_type=NP view=ALN
+    subGroups factor=K4m3 cell_type=NP view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,150,0
-    altcolor 0,255,0
     visibility hide
-    priority 24
+    priority 74
     
     track broadStemChipSignalH3K4EsHyb
     shortLabel H3K4me3-ES-hyb Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K4me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cell_type=EShyb view=SIG
+    subGroups factor=K4m3 cell_type=EShyb view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -164,51 +349,88 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,150,0
-    altcolor 0,255,0
     visibility full
-    priority 33
+    priority 83
     
     track broadStemChipAlignmentsH3K4Me3EsHyb
     shortLabel H3K4me3-ES-hyb Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cell_type=EShyb view=ALN
+    subGroups factor=K4m3 cell_type=EShyb view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,150,0
-    altcolor 0,255,0
     visibility hide
-    priority 34
+    priority 84
+
+    track broadStemChipWinSitesH3K4me3Brain
+    shortLabel H3K4me3-Brain Win
+    longLabel Broad Stem Cell Chromatin IP Sites By Window (H3K4me3 ab, Whole Brain)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m3 cell_type=BRAIN view=WIN
+    type bed 5 +
+    #spectrum on
+    noInherit on
+    color 0,150,0
+    visibility dense
+    priority 92
+    
+    track broadStemChipSignalH3K4me3Brain
+    shortLabel H3K4me3-Brain Sig
+    longLabel Broad Stem Cell Chromatin IP Signal (H3K4me3 ab, Whole Brain)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m3 cell_type=BRAIN view=SIG
+    type wig
+    autoscale off
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 100:32:8
+    noInherit on
+    color 0,150,0
+    visibility full
+    priority 93
+
+    track broadStemChipAlignmentsH3K4me3Brain
+    shortLabel H3K4me3-Brain Align
+    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Whole Brain)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K4m3 cell_type=BRAIN view=ALN
+    type bed 9 +
+    #spectrum on
+    noInherit on
+    color 0,150,0
+    visibility hide
+    priority 94
 
     track broadStemChipHmmSitesH3K9me3Es
     shortLabel H3K9me3-ES HMM
     longLabel Broad Stem Cell Chromatin IP Sites by HMM (H3K9me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K9 cell_type=ES view=HMM
+    subGroups factor=K9m3 cell_type=ES view=HMM
     type bed 3
     noInherit off
     color 100,0,0
     visibility dense
-    priority 41
+    priority 101
 
     track broadStemChipWinSitesH3K9me3Es
     shortLabel H3K9me3-ES Win
     longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K9me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K9 cell_type=ES view=WIN
+    subGroups factor=K9m3 cell_type=ES view=WIN
     type bed 5 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 100,0,0
     visibility dense
-    priority 42
+    priority 102
 
     track broadStemChipSignalH3K9Es
     shortLabel H3K9me3-ES Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K9me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K9 cell_type=ES view=SIG
+    subGroups factor=K9m3 cell_type=ES view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -217,37 +439,37 @@ type bed 3
     noInherit on
     color 100,0,0
     visibility full
-    priority 43
+    priority 103
     
     track broadStemChipAlignmentsH3K9Me3Es
     shortLabel H3K9me3-ES Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K9me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K9 cell_type=ES view=ALN
+    subGroups factor=K9m3 cell_type=ES view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 100,0,0
     visibility hide
-    priority 44
+    priority 104
 
     track broadStemChipWinSitesH3K9me3Mef
     shortLabel H3K9me3-MEF Win
     longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K9me3 ab, Embryonic Fibroblasts (MEF))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K9 cell_type=MEF view=WIN
+    subGroups factor=K9m3 cell_type=MEF view=WIN
     type bed 5 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 100,0,0
     visibility dense
-    priority 52
+    priority 112
 
     track broadStemChipSignalH3K9Mef
     shortLabel H3K9me3-MEF Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K9me3 ab, Embryonic Fibroblasts (MEF))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K9 cell_type=MEF view=SIG
+    subGroups factor=K9m3 cell_type=MEF view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -256,37 +478,37 @@ type bed 3
     noInherit on
     color 100,0,0
     visibility full
-    priority 53
+    priority 113
     
     track broadStemChipAlignmentsH3K9Me3Mef
     shortLabel H3K9me3-MEF Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K9me3 ab, Embryonic Fibroblasts (MEF))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K9 cell_type=MEF view=ALN
+    subGroups factor=K9m3 cell_type=MEF view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 100,0,0
     visibility hide
-    priority 54
+    priority 114
 
     track broadStemChipWinSitesH3K9me3Np
     shortLabel H3K9me3-NP Win
     longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K9me3 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K9 cell_type=NP view=WIN
+    subGroups factor=K9m3 cell_type=NP view=WIN
     type bed 5 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 100,0,0
     visibility dense
-    priority 62
+    priority 122
 
     track broadStemChipSignalH3K9Np
     shortLabel H3K9me3-NP Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K9me3 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K9 cell_type=NP view=SIG
+    subGroups factor=K9m3 cell_type=NP view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -295,25 +517,25 @@ type bed 3
     noInherit on
     color 100,0,0
     visibility full
-    priority 63
+    priority 123
 
     track broadStemChipAlignmentsH3K9Me3Np
     shortLabel H3K9me3-NP Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K9me3 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K9 cell_type=NP view=ALN
+    subGroups factor=K9m3 cell_type=NP view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 100,0,0
     visibility hide
-    priority 64
+    priority 124
 
     track broadStemChipSignalH3K9EsHyb
     shortLabel H3K9me3-ES-hyb Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K9me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K9 cell_type=EShyb view=SIG
+    subGroups factor=K9m3 cell_type=EShyb view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -322,36 +544,36 @@ type bed 3
     noInherit on
     color 100,0,0
     visibility full
-    priority 73
+    priority 133
 
     track broadStemChipAlignmentsH3K9Me3EsHyb
     shortLabel H3K9me3-ES-hyb Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K9me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K9 cell_type=EShyb view=ALN
+    subGroups factor=K9m3 cell_type=EShyb view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 100,0,0
     visibility hide
-    priority 74
+    priority 134
 
     track broadStemChipHmmSitesH3K20me3Es
     shortLabel H3K20me3-ES HMM
     longLabel Broad Stem Cell Chromatin IP Sites by HMM (H3K20me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K20 cell_type=ES view=HMM
+    subGroups factor=K20m3 cell_type=ES view=HMM
     type bed 3
     noInherit off
     color 150,0,0
     visibility dense
-    priority 81
+    priority 141
 
     track broadStemChipSignalH4K20Es
     shortLabel H4K20me3-ES Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H4K20me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K20 cell_type=ES view=SIG
+    subGroups factor=K20m3 cell_type=ES view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -360,48 +582,48 @@ type bed 3
     noInherit on
     color 150,0,0
     visibility full
-    priority 83
+    priority 143
 
     track broadStemChipAlignmentsH4K20Me3Es
     shortLabel H4K20me3-ES Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H4K20me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K20 cell_type=ES view=ALN
+    subGroups factor=K20m3 cell_type=ES view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 150,0,0
     visibility hide
-    priority 84
+    priority 144
 
     track broadStemChipHmmSitesH3K27me3Es
     shortLabel H3K27me3-ES HMM
     longLabel Broad Stem Cell Chromatin IP Sites by HMM (H3K27me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K27 cell_type=ES view=HMM
+    subGroups factor=K27m3 cell_type=ES view=HMM
     type bed 3
     noInherit off
     color 255,0,0
     visibility dense
-    priority 91
+    priority 151
 
     track broadStemChipWinSitesH3K27me3Es
     shortLabel H3K27me3-ES Win
     longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K27me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K27 cell_type=ES view=WIN
+    subGroups factor=K27m3 cell_type=ES view=WIN
     type bed 5 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 255,0,0
     visibility dense
-    priority 92
+    priority 152
 
     track broadStemChipSignalH3K27Es
     shortLabel H3K27me3-ES Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K27me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K27 cell_type=ES view=SIG
+    subGroups factor=K27m3 cell_type=ES view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -410,37 +632,37 @@ type bed 3
     noInherit on
     color 255,0,0
     visibility full
-    priority 93
+    priority 153
 
     track broadStemChipAlignmentsH3K27Me3Es
     shortLabel H3K27me3-ES Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K27me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K27 cell_type=ES view=ALN
+    subGroups factor=K27m3 cell_type=ES view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 255,0,0
     visibility hide
-    priority 94
+    priority 154
 
     track broadStemChipWinSitesH3K27me3Mef
     shortLabel H3K27me3-MEF Win
     longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K27me3 ab, Embryonic Fibroblasts (MEF))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K27 cell_type=MEF view=WIN
+    subGroups factor=K27m3 cell_type=MEF view=WIN
     type bed 5 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 255,0,0
     visibility dense
-    priority 102
+    priority 162
 
     track broadStemChipSignalH3K27Mef
     shortLabel H3K27me3-MEF Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K27me3 ab, Embryonic Fibroblasts (MEF))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K27 cell_type=MEF view=SIG
+    subGroups factor=K27m3 cell_type=MEF view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -449,37 +671,37 @@ type bed 3
     noInherit on
     color 255,0,0
     visibility full
-    priority 103
+    priority 163
 
     track broadStemChipAlignmentsH3K27Me3Mef
     shortLabel H3K27me3-MEF Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K27me3 ab, Embryonic Fibroblasts (MEF))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K27 cell_type=MEF view=ALN
+    subGroups factor=K27m3 cell_type=MEF view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 255,0,0
     visibility hide
-    priority 104
+    priority 164
 
     track broadStemChipWinSitesH3K27me3Np
     shortLabel H3K27me3-NP Win
     longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K27me3 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K27 cell_type=NP view=WIN
+    subGroups factor=K27m3 cell_type=NP view=WIN
     type bed 5 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 255,0,0
     visibility dense
-    priority 112
+    priority 172
 
     track broadStemChipSignalH3K27Np
     shortLabel H3K27me3-NP Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K27me3 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K27 cell_type=NP view=SIG
+    subGroups factor=K27m3 cell_type=NP view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -488,36 +710,75 @@ type bed 3
     noInherit on
     color 255,0,0
     visibility full
-    priority 113
+    priority 173
 
     track broadStemChipAlignmentsH3K27Me3Np
     shortLabel H3K27me3-NP Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K27me3 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K27 cell_type=NP view=ALN
+    subGroups factor=K27m3 cell_type=NP view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 255,0,0
     visibility hide
-    priority 114
+    priority 174
 
+    track broadStemChipWinSitesH3K27me3Brain
+    shortLabel H3K27me3-Brain Win
+    longLabel Broad Stem Cell Chromatin IP Sites By Window (H3K27me3 ab, Whole Brain)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K27m3 cell_type=BRAIN view=WIN
+    type bed 5 +
+    #spectrum on
+    noInherit on
+    color 255,0,0
+    visibility dense
+    priority 182
+    
+    track broadStemChipSignalH3K27me3Brain
+    shortLabel H3K27me3-Brain Sig
+    longLabel Broad Stem Cell Chromatin IP Signal (H3K27me3 ab, Whole Brain)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K27m3 cell_type=BRAIN view=SIG
+    type wig
+    autoscale off
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 100:32:8
+    noInherit on
+    color 255,0,0
+    visibility full
+    priority 183
+
+    track broadStemChipAlignmentsH3K27me3Brain
+    shortLabel H3K27me3-Brain Align
+    longLabel Broad Stem Cell Chromatin IP Alignments (H3K27me3 ab, Whole Brain)
+    subTrack broadChromatinChIPSeq
+    subGroups factor=K27m3 cell_type=BRAIN view=ALN
+    type bed 9 +
+    #spectrum on
+    noInherit on
+    color 255,0,0
+    visibility hide
+    priority 184
+    
     track broadStemChipHmmSitesH3K36me3Es
     shortLabel H3K36me3-ES HMM
     longLabel Broad Stem Cell Chromatin IP Sites by HMM (H3K36me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K36 cell_type=ES view=HMM
+    subGroups factor=K36m3 cell_type=ES view=HMM
     type bed 3
     noInherit off
     color 0,0,150
     visibility dense
-    priority 121
+    priority 191
     
     track broadStemChipSignalH3K36Es
     shortLabel H3K36me3-ES Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K36me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K36 cell_type=ES view=SIG
+    subGroups factor=K36m3 cell_type=ES view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -526,25 +787,25 @@ type bed 3
     noInherit on
     color 0,0,150
     visibility full
-    priority 123
+    priority 193
 
     track broadStemChipAlignmentsH3K36Me3Es
     shortLabel H3K36me3-ES Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K36me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K36 cell_type=ES view=ALN
+    subGroups factor=K36m3 cell_type=ES view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,0,150
     visibility hide
-    priority 124
+    priority 194
 
     track broadStemChipSignalH3K36Mef
     shortLabel H3K36me3-MEF Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K36me3 ab, Embryonic Fibroblasts (MEF))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K36 cell_type=MEF view=SIG
+    subGroups factor=K36m3 cell_type=MEF view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -553,25 +814,25 @@ type bed 3
     noInherit on
     color 0,0,150
     visibility full
-    priority 133
+    priority 203
 
     track broadStemChipAlignmentsH3K36Me3Mef
     shortLabel H3K36me3-MEF Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K36me3 ab, Embryonic Fibroblasts (MEF))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K36 cell_type=MEF view=ALN
+    subGroups factor=K36m3 cell_type=MEF view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,0,150
     visibility hide
-    priority 134
+    priority 204
 
     track broadStemChipSignalH3K36Np
     shortLabel H3K36me3-NP Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K36me3 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K36 cell_type=NP view=SIG
+    subGroups factor=K36m3 cell_type=NP view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -580,25 +841,25 @@ type bed 3
     noInherit on
     color 0,0,150
     visibility full
-    priority 143
+    priority 213
 
     track broadStemChipAlignmentsH3K36Me3Np
     shortLabel H3K36me3-NP Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K36me3 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K36 cell_type=NP view=ALN
+    subGroups factor=K36m3 cell_type=NP view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,0,150
     visibility hide
-    priority 144
+    priority 214
 
     track broadStemChipSignalH3K36EsHyb
     shortLabel H3K36me3-ES-hyb Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K36me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K36 cell_type=EShyb view=SIG
+    subGroups factor=K36m3 cell_type=EShyb view=SIG
     type wig
     autoscale off
     yLineOnOff On
@@ -607,19 +868,19 @@ type bed 3
     noInherit on
     color 0,0,150
     visibility full
-    priority 153
+    priority 223
 
     track broadStemChipAlignmentsH3K36Me3EsHyb
     shortLabel H3K36me3-ES-hyb Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K36me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
     subTrack broadChromatinChIPSeq
-    subGroups factor=K36 cell_type=EShyb view=ALN
+    subGroups factor=K36m3 cell_type=EShyb view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,0,150
     visibility hide
-    priority 154
+    priority 224
 
     track broadStemChipSignalH3Es
     shortLabel pan-H3 ES Sig
@@ -634,7 +895,7 @@ type bed 3
     noInherit on
     color  0,0,0
     visibility full
-    priority 163
+    priority 233
 
     track broadStemChipAlignmentsH3panEs
     shortLabel pan-H3 ES Align
@@ -642,11 +903,11 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups cell_type=ES factor=PAN view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color  0,0,0
     visibility hide
-    priority 164
+    priority 234
 
     track broadStemChipAlignmentsWceEs
     shortLabel WCE ES Align
@@ -654,11 +915,11 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups cell_type=ES factor=WCE view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,0,0
     visibility hide
-    priority 174
+    priority 244
 
     track broadStemChipAlignmentsWceMef
     shortLabel WCE MEF Align
@@ -666,11 +927,11 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups cell_type=MEF factor=WCE view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,0,0
     visibility hide
-    priority 184
+    priority 254
 
     track broadStemChipAlignmentsWceNp
     shortLabel WCE NP Align
@@ -678,11 +939,11 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups cell_type=NP factor=WCE view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,0,0
     visibility hide
-    priority 194
+    priority 264
 
     track broadStemChipSignalRpolEs
     shortLabel RPolII ES Sig
@@ -697,7 +958,7 @@ type bed 3
     noInherit on
     color 0,100,0
     visibility full
-    priority 203
+    priority 273
     
     track broadStemChipAlignmentsRPolEs
     shortLabel RPolII ES Align
@@ -705,8 +966,9 @@ type bed 3
     subTrack broadChromatinChIPSeq
     subGroups cell_type=ES factor=RPOL view=ALN
     type bed 9 +
-    spectrum on
+    #spectrum on
     noInherit on
     color 0,100,0
     visibility hide
-    priority 204
+    priority 274
+
