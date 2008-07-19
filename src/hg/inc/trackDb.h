@@ -5,6 +5,7 @@
 #ifndef TRACKDB_H
 #define TRACKDB_H
 
+#include "common.h"
 #ifndef JKSQL_H
 #include "jksql.h"
 #endif
@@ -64,39 +65,66 @@ struct trackDb
 #define SUPERTRACK_CHILD_NODE(nodeType) (((nodeType) & SUPERTRACK_CHILD_MASK) == SUPERTRACK_CHILD_MASK)
 #define COMPOSITE_CHILD_NODE(nodeType)  (((nodeType) & COMPOSITE_CHILD_MASK ) == COMPOSITE_CHILD_MASK )
 #define INDEPENDENT_NODE(nodeType)      (((nodeType) & TREETYPE_MASK ) == 0 )
-#define IS_PARENT(tdb)                  ((tdb)->subtracks)    
-#define IS_CHILD(tdb)                   ((tdb)->parent)    
-#define IS_TREE_LEAF(tdb)               (CHILD_NODE((tdb)->treeNodeType)  && IS_PARENT(tdb) == FALSE)
-#define IS_TREE_ROOT(tdb)               (PARENT_NODE((tdb)->treeNodeType) && IS_CHILD(tdb)  == FALSE)
-#define IS_TREE_BRANCH(tdb)             (!INDEPENDENT_NODE((tdb)->treeNodeType) && IS_PARENT(tdb) && IS_CHILD(tdb))
-#define IS_INDEPENDENT(tdb)             (INDEPENDENT_NODE((tdb)->treeNodeType) && !IS_PARENT(tdb) && !IS_CHILD(tdb))    
+//#define tdbIsParent(tdb)              ((tdb)->subtracks)    
+//#define tdbIsChild(tdb)               ((tdb)->parent   )    
+//#define tdbIsTreeLeaf(tdb)            ( CHILD_NODE((tdb)->treeNodeType) && !tdbIsParent(tdb))
+//#define tdbIsTreeRoot(tdb)            (PARENT_NODE((tdb)->treeNodeType) && !tdbIsChild(tdb) )
+//#define tdbIsTreeBranch(tdb)          (!INDEPENDENT_NODE((tdb)->treeNodeType) &&  tdbIsParent(tdb) &&  tdbIsChild(tdb))
+//#define tdbIsNotInTree(tdb)           ( INDEPENDENT_NODE((tdb)->treeNodeType) && !tdbIsParent(tdb) && !tdbIsChild(tdb))    
     
-inline boolean tdbIsSuper(struct trackDb *tdb);
+INLINE boolean tdbIsSuper(struct trackDb *tdb)
 /* Is this trackDb struct marked as a supertrack ? */
+{ 
+return tdb && SUPERTRACK_NODE(tdb->treeNodeType);
+}
 
-inline boolean tdbIsSuperTrack(struct trackDb *tdb);
-/* Is this trackDb struct marked as a supertrack with children ? */
+INLINE boolean tdbIsSuperTrack(struct trackDb *tdb) 
+/* Is this trackDb struct marked as a supertrack ? */
+{
+return tdb && /*tdb->subtracks &&*/ SUPERTRACK_NODE(tdb->treeNodeType); // TODO: superTrack code needs rewrite to contain it's children
+}
 
-inline boolean tdbIsComposite( struct trackDb *tdb);
+INLINE boolean tdbIsComposite( struct trackDb *tdb) 
 /* Is this trackDb struct marked as a composite with children ?  */
+{ 
+return tdb && tdb->subtracks && COMPOSITE_NODE( tdb->treeNodeType);
+}
 
-inline boolean tdbIsSuperTrackChild(struct trackDb *tdb);
+INLINE boolean tdbIsSuperTrackChild(struct trackDb *tdb) 
 /* Is this trackDb struct marked as a child of a supertrack ?  */
+{
+return tdb && tdb->parent && SUPERTRACK_CHILD_NODE(tdb->treeNodeType);
+}
 
-inline boolean tdbIsCompositeChild(struct trackDb *tdb);
+INLINE boolean tdbIsCompositeChild(struct trackDb *tdb)  
 /* Is this trackDb struct marked as a child of a composite track ?  */
+{ 
+return tdb && tdb->parent && COMPOSITE_CHILD_NODE( tdb->treeNodeType);
+}
 
-inline void tdbMarkAsSuperTrack(struct trackDb *tdb);
+INLINE void tdbMarkAsSuperTrack(struct trackDb *tdb)      
 /* Marks a trackDb struct as a supertrack */
+{
+tdb->treeNodeType |= SUPERTRACK_MASK;
+}
 
-inline void tdbMarkAsComposite( struct trackDb *tdb);
+INLINE void tdbMarkAsComposite( struct trackDb *tdb)      
 /* Marks a trackDb struct as a composite track  */
+{
+tdb->treeNodeType |= COMPOSITE_MASK;
+}
 
-inline void tdbMarkAsSuperTrackChild(struct trackDb *tdb);
+INLINE void tdbMarkAsSuperTrackChild(struct trackDb *tdb) 
 /* Marks a trackDb struct as a child of a supertrack  */
+{
+tdb->treeNodeType |= SUPERTRACK_CHILD_MASK;
+}
 
-inline void tdbMarkAsCompositeChild( struct trackDb *tdb);
+INLINE void tdbMarkAsCompositeChild( struct trackDb *tdb) 
 /* Marks a trackDb struct as a child of a composite track  */
+{ 
+tdb->treeNodeType |= COMPOSITE_CHILD_MASK;
+}
 
 struct trackDb *trackDbLoad(char **row);
 /* Load a trackDb from row fetched with select * from trackDb
