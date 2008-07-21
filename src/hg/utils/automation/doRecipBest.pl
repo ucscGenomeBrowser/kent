@@ -6,7 +6,7 @@
 # This script should probably be folded back into doBlastzChainNet.pl
 # eventually.
 
-# $Id: doRecipBest.pl,v 1.10 2008/05/06 17:02:27 hiram Exp $
+# $Id: doRecipBest.pl,v 1.11 2008/07/21 18:07:16 braney Exp $
 
 use Getopt::Long;
 use warnings;
@@ -169,16 +169,13 @@ set qChCov = `awk '{print \$19;}' $qDb.$tDb.rbest.chain.psl | sed -e 's/,/\\n/g'
 set tNetCov = `awk 'BEGIN {N = 0;} {N += (\$3 - \$2);} END {printf "\%d\\n", N;}' $tDb.$qDb.rbest.net.bed`
 set qNetCov = `awk 'BEGIN {N = 0;} {N += (\$3 - \$2);} END {printf "\%d\\n", N;}' $qDb.$tDb.rbest.net.bed`
 if (\$tChCov != \$qChCov) then
-  echo "Error: $tDb rbest chain coverage \$tChCov != $qDb \$qChCov"
-  exit 1
+  echo "Warning: $tDb rbest chain coverage \$tChCov != $qDb \$qChCov"
 endif
 if (\$tNetCov != \$qNetCov) then
-  echo "Error: $tDb rbest net coverage \$tNetCov != $qDb \$qNetCov"
-  exit 1
+  echo "Warning: $tDb rbest net coverage \$tNetCov != $qDb \$qNetCov"
 endif
 if (\$tChCov != \$tNetCov) then
-  echo "Error: $tDb rbest chain coverage \$tChCov != net cov \$tNetCov"
-  exit 1
+  echo "Warning: $tDb rbest chain coverage \$tChCov != net cov \$tNetCov"
 endif
 
 mkdir experiments
