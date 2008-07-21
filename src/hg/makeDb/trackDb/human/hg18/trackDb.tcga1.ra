@@ -1,118 +1,167 @@
-#TCGA
+#TCGA 
 
-track mskccCGH
-shortLabel TCGA GBM mskccCGH
-longLabel TCGA GBM mskcc CGH array 244A 
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 0.5
-expStep 0.05
-groupings mskccCGHGroups
-
-track harvardCGH
-shortLabel TCGA GBM harvardCGH
-longLabel TCGA GBM harvard CGH array 244A 
+# Mutation Data
+track hgscABI_SomaticNS
+shortLabel GBM Baylor ABI Som. Non-Silent
+longLabel TCGA GBM Baylor ABI Somatic Non-Silent
 group tcga
 visibility hide
 type expRatio
 logicalDb localDb
 expScale 1.0
 expStep 0.1
-groupings harvardCGHGroups
+groupings hgscABI_SomaticNSGroups
+priority 1.0
 
-track uncAgiExp
-shortLabel TCGA GBM uncAgiExp
-longLabel TCGA GBM UNC Agilent custom expression array G4502A
+track hgscABI_SomaticS
+shortLabel GBM Baylor ABI Som. Silent
+longLabel TCGA GBM Baylor ABI Somatic Silent
 group tcga
 visibility hide
 type expRatio
 logicalDb localDb
 expScale 1.0
 expStep 0.1
-groupings uncAgiExpGroups
+groupings hgscABI_SomaticSGroups
+priority 1.1
 
-name uncHmiRNA
-shortLabel TCGA GBM UNC miRNA
-longLabel TCGA GBM UNC H-miRNA
+track hgscABI_GermlineNS
+shortLabel GBM Baylor ABI Germ. Non-Silent
+longLabel TCGA GBM Baylor ABI Germline Non-Silent
 group tcga
 visibility hide
 type expRatio
 logicalDb localDb
 expScale 1.0
 expStep 0.1
-groupings uncHmiRNAGroups
+groupings hgscABI_GermlineNSGroups
+priority 1.2
 
-track broadAffyExp
-shortLabel TCGA GBM broadAffyExp
-longLabel TCGA GBM Broad Affymetrix Expression array U133A
+track hgscABI_GermlineS
+shortLabel GBM Baylor ABI Germ. Silent
+longLabel TCGA GBM Baylor ABI Germline Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings hgscABI_GermlineSGroups
+priority 1.3
+
+track broadABI_SomaticNS
+shortLabel GBM Broad ABI Som. Non-Silent
+longLabel TCGA GBM Broad ABI Som. Non-Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings broadABI_SomaticNSGroups
+priority 1.4
+
+track broadABI_SomaticS
+shortLabel GBM Broad ABI Som. Silent
+longLabel TCGA GBM Broad ABI Somatic Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings broadABI_SomaticSGroups
+priority 1.5
+
+track broadABI_GermlineNS
+shortLabel GBM Broad ABI Germ. Non-Silent
+longLabel TCGA GBM Broad ABI Germline Non-Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings broadABI_GermlineNSGroups
+priority 1.6
+
+track broadABI_GermlineS
+shortLabel GBM Broad ABI Germ. Silent
+longLabel TCGA GBM Broad ABI Germline Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings broadABI_GermlineSGroups
+priority 1.7
+
+track wustlABI_SomaticNS
+shortLabel GBM WUSTL ABI Som. Non-Silent
+longLabel TCGA GBM WUSTL ABI Somatic Non-Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings wustlABI_SomaticNSGroups
+priority 1.8
+
+track wustlABI_SomaticS
+shortLabel GBM WUSTL ABI Som. Silent
+longLabel TCGA GBM WUSTL ABI Somatic Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings wustlABI_SomaticSGroups
+priority 1.9
+
+track wustlABI_GermlineNS
+shortLabel GBM WUSTL ABI Germ. Non-Silent
+longLabel TCGA GBM WUSTL ABI Germline Non-Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings wustlABI_SomaticNSGroups
+priority 2.0
+
+track wustlABI_GermlineS
+shortLabel GBM WUSTL ABI Germ. Silent
+longLabel TCGA GBM WUSTL ABI Germline Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings wustlABI_GermlineSGroups
+priority 2.1
+
+
+# CNV
+track broadSNP6
+shortLabel GBM Broad CNV
+longLabel TCGA GBM Broad CNV SNP 6.0
 group tcga
 visibility hide
 type expRatio
 logicalDb localDb
 expScale 3.0
 expStep 0.2
-groupings broadAffyExpGroups
-
-track broadABI
-shortLabel TCGA GBM broadABI
-longLabel TCGA GBM Broad ABI Tumor Sequencing
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.1
-groupings broadABIGroups
-
-track wustlABI
-shortLabel TCGA GBM wustlABI
-longLabel TCGA GBM wustl ABI Tumor Sequencing
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.1
-groupings wustlABIGroups
-
-track hgscABI
-shortLabel TCGA GBM hgscABI
-longLabel TCGA GBM hgsc ABI Tumor Sequencing
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.1
-groupings hgscABIGroups
-
-track broadABIBase
-shortLabel TCGA GBM broadABIBase
-longLabel TCGA GBM Broad ABI Base Tumor Sequencing
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.1
-groupings broadABIBaseGroups
-
-track jhuUscIllMethyl
-shortLabel TCGA GBM JHU-USC DNA Methyl
-longLabel TCGA GBM JHU-USC DNA Methylation Array
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 3.0
-expStep 0.2
-groupings jhuUscIllMethylGroups
+groupings broadSNP6Groups
+priority 3.0
 
 track stanfordHap550AtomSeg
-shortLabel TCGA Stanford CNV
-longLabel TCGA Stanford Illumina 550K Chip CNV
+shortLabel GBM Stanford CNV Atom Seg.
+longLabel TCGA GBM Stanford Illumina 550K Chip CNV
 group tcga
 visibility hide
 type expRatio
@@ -120,10 +169,11 @@ logicalDb localDb
 expScale 3.0
 expStep 0.2
 groupings stanfordHap550AtomSegGroups
+priority 3.1
 
 track stanfordHap550SnpSeg
-shortLabel TCGA Stanford CNV
-longLabel TCGA Stanford Illumina 550K Chip CNV on SNP
+shortLabel GBM Stanford CNV SNP Seg.
+longLabel TCGA GBM Stanford Illumina 550K Chip CNV on SNP
 group tcga
 visibility hide
 type expRatio
@@ -131,10 +181,11 @@ logicalDb localDb
 expScale 3.0
 expStep 0.2
 groupings stanfordHap550SnpSegGroups
+priority 3.2
 
 track stanfordHap550SnpLogR
-shortLabel TCGA Stanford SNP LogR
-longLabel TCGA Stanford Illumina 550K Chip SNP LogR
+shortLabel GBM Stanford SNP LogR
+longLabel TCGA GBM Stanford Illumina 550K Chip SNP LogR
 group tcga
 visibility hide
 type expRatio
@@ -142,20 +193,47 @@ logicalDb localDb
 expScale 3.0
 expStep 0.2
 groupings stanfordHap550SnpLogRGroups
+priority 3.3
 
-track broadABI
-shortLabel TCGA GBM Broad ABI Mutation
-longLabel TCGA GBM Broad ABI Mutation
+track harvardCGH
+shortLabel GBM Harvard CGH
+longLabel TCGA GBM Harvard CGH Array 244A 
 group tcga
 visibility hide
 type expRatio
 logicalDb localDb
-expScale 3.0
+expScale 1.0
+expStep 0.1
+groupings harvardCGHGroups
+priority 3.4
+
+track mskccCGH
+shortLabel GBM MSKCC CGH
+longLabel TCGA GBM MSKCC CGH Array 244A 
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 0.5
+expStep 0.05
+groupings mskccCGHGroups
+priority 3.5
+
+# Expression Data
+track broadAffyExp
+shortLabel GBM Broad Expression
+longLabel TCGA GBM Broad Affymetrix Expression Array U133A
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 4.0
 expStep 0.2
-groupings broadABIGroups
+groupings broadAffyExpGroups
+priority 4.0
 
 track lblHuEx1
-shortLabel TCGA GBM LBL Human Exon Array 1.0
+shortLabel GBM LBL Exon Array 1.0
 longLabel TCGA GBM LBL Human Exon Array 1.0
 group tcga
 visibility hide
@@ -164,10 +242,52 @@ logicalDb localDb
 expScale 3.0
 expStep 0.2
 groupings lblHuEx1Groups
+priority 4.1
 
-track CaMPScoreExternal
-shortLabel CaMPScoreExternal 
-longLabel CaMPScoreExternal Science 2007 volelstein
+track uncAgiExp
+shortLabel GBM UNC Expression
+longLabel TCGA GBM UNC Agilent Expression Array G4502A
 group tcga
 visibility hide
-type bed
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings uncAgiExpGroups
+priority 4.2
+
+# miRNA data
+name uncHmiRNA
+shortLabel GBM UNC miRNA
+longLabel TCGA GBM UNC H-miRNA Array
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings uncHmiRNAGroups
+priority 5.0
+
+# Methylation Data
+track jhuUscIllMethyl
+shortLabel GBM JHU-USC Methyl
+longLabel TCGA GBM JHU-USC Methylation Array
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 3.0
+expStep 0.2
+groupings jhuUscIllMethylGroups
+priority 6.0
+
+
+# Misc.
+#track CaMPScoreExternal
+#shortLabel CaMPScoreExternal 
+#longLabel CaMPScoreExternal Science 2007 volelstein
+#group tcga
+#visibility hide
+#type bed
+#priority 7.0
