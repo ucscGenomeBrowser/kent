@@ -1,21 +1,38 @@
-# Fields (columns) in ENCODE metadata files
-
-# Naming conventions:
-#   Name:  arbitrarily assigned
-#   REF:   must come from controlled vocabulary
+# Fields (columns) in ENCODE metadata files (PIF and DDF)
+# file should be "pifHeader", "viewList" or "ddf"
 
 field files
+file ddf
 required yes
-happy no
 
 field view
+file ddf
 required yes
 
-field Raw accession
-required no
-
 field labVersion
+file ddf
 required no
 
-field	accession
-required	no
+field accession
+file ddf
+required no
+
+field project
+file pifHeader
+required yes
+
+field pifVersion
+file pifHeader
+required yes
+
+field assembly
+file pifHeader
+required yes
+
+field lab
+file pifHeader
+required yes
+
+field variables
+file pifHeader
+required no
