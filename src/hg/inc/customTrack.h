@@ -30,6 +30,8 @@
 
 struct customTrack
 /* A custom track.  */
+/* NOTE: if you add any *File members to struct customTrack, please update 
+ * cart.c cartCopyCustomTracks() accordingly! */
     {
     struct customTrack *next;	/* Next in list. */
     struct trackDb *tdb;	/* TrackDb description of track. */
