@@ -1,6 +1,55 @@
 #TCGA 
 
 # Mutation Data
+
+track allABI_SomaticNS
+shortLabel GBM All ABI Som. Non-Silent
+longLabel TCGA GBM All ABI Somatic Non-Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings allABI_SomaticNSGroups
+priority 0.05
+
+track allABI_SomaticS
+shortLabel GBM All ABI Som. Silent
+longLabel TCGA GBM All ABI Somatic Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings allABI_SomaticSGroups
+priority 0.1
+
+track allABI_GermlineNS
+shortLabel GBM All ABI Germ. Non-Silent
+longLabel TCGA GBM All ABI Germline Non-Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings allABI_GermlineNSGroups
+priority 0.2
+
+track allABI_GermlineS
+shortLabel GBM All ABI Germ. Silent
+longLabel TCGA GBM All ABI Germline Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings allABI_GermlineSGroups
+priority 0.3
+
 track hgscABI_SomaticNS
 shortLabel GBM Baylor ABI Som. Non-Silent
 longLabel TCGA GBM Baylor ABI Somatic Non-Silent
