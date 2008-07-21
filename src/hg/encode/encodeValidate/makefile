@@ -6,6 +6,7 @@ SCRIPT_FILES = \
 	doEncodeValidate.pl
 CONFIG_FILES = \
 	fields.ra \
+	labs.ra \
 	cv.ra
 
 PIPELINE_PATH=/cluster/data/encode/pipeline
