@@ -21119,17 +21119,19 @@ TMPDIR=/scratch/tmp
     hgLoadGenePred -genePredExt hg18 vegaGene not.pseudo.gp
     hgLoadGenePred -genePredExt hg18 vegaPseudoGene pseudo.gp
 
+
 ############################################################################
-# DGV V4 (DATABASE OF GENOMIC VARIANTS) (DONE 5/9/08 angie)
+# DGV V5 (DATABASE OF GENOMIC VARIANTS) (DONE 7/16/08 angie)
+# (replaces DGV V4 done 5/9/08)
     ssh hgwdev
-    mkdir /cluster/data/hg18/bed/dgv.v4
-    cd /cluster/data/hg18/bed/dgv.v4
+    mkdir /cluster/data/hg18/bed/dgv.v5
+    cd /cluster/data/hg18/bed/dgv.v5
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg18.v4.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg18.v5.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg18.v4.txt
+      http://projects.tcag.ca/variation/downloads/indel.hg18.v5.txt
     # shuffle fields into bed8+
-    foreach f (*.v4.txt)
+    foreach f (*.v5.txt)
       tail +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
@@ -21151,8 +21153,11 @@ TMPDIR=/scratch/tmp
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
+    hgsql hg18 -e 'rename table dgv to dgvV4'
     hgLoadBed hg18 dgv *.bed \
       -onServer -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
+#Loaded 27799 elements of size 15
+
 
 ############################################################################
 # AGILENT CGH PROBES (AND MM8, RN4) (Done 2008-05-13, Andy)
