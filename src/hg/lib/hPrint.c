@@ -87,6 +87,13 @@ if (!suppressHtml)
     cgiMakeButton(name, label);
 }
 
+void hButtonWithMsg(char *name, char *label, char *msg)
+/* Write out button with msg if not suppressed. */
+{
+if (!suppressHtml)
+    cgiMakeButtonWithMsg(name, label, msg);
+}
+
 void hOnClickButton(char *command, char *label)
 /* Write out push button if not suppressed. */
 {

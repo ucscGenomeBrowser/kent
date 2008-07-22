@@ -44,6 +44,9 @@ void hWrites(char *string);
 void hButton(char *name, char *label);
 /* Write out button if not suppressed. */
 
+void hButtonWithMsg(char *name, char *label, char *msg);
+/* Write out button with msg if not suppressed. */
+
 void hOnClickButton(char *command, char *label);
 /* Write out push button if not suppressed. */
 
