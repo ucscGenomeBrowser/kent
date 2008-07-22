@@ -13,6 +13,10 @@
 # requires the xmlproc_val command from the xmlproc package.
 #
 
+# to test timing, try sometime like:
+#  (hgsql -e 'flush tables'; time  wget -nv --save-headers -O output/typesTest.das 'http://hgwdev-markd.cse.ucsc.edu/cgi-bin/das/hg18/types?segment=22')>&log
+
+
 sandbox=-${USER}
 dasUrl = http://hgwdev${sandbox}.cse.ucsc.edu/cgi-bin/das
 testDb = hg18

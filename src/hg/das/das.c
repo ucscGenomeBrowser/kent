@@ -19,7 +19,12 @@
 #include "trackTable.h"
 
 
-static char const rcsid[] = "$Id: das.c,v 1.40 2008/07/22 17:53:34 markd Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.41 2008/07/22 18:14:30 markd Exp $";
+
+/* Including the count in the types response can be very slow for large
+ * regions and is optional.  Inclusion of count if controlled by this compile-
+ * time option. */
+#define TYPES_RETURN_COUNT 0
 
 static char *version = "1.00";
 static char *database = NULL;	
@@ -638,13 +643,14 @@ for (segment = segmentList;;)
 	{
 	if (trackFilter(filters, td))
 	    {
-	    int count = countFeatures(td, segment);
-	    printf("<TYPE id=\"%s\" category=\"%s\" ", td->name, td->category);
+	    printf("<TYPE id=\"%s\" category=\"%s\"", td->name, td->category);
 	    if (td->method != NULL)
-		printf("method=\"%s\" ", td->method);
-	    printf(">");
-	    printf("%d", count);
-	    printf("</TYPE>\n");
+		printf(" method=\"%s\"", td->method);
+            if (TYPES_RETURN_COUNT)
+                printf(">%d</TYPE>\n", countFeatures(td, segment));
+            else
+                printf("/>\n");
+                
 	    }
 	}
     printf("</SEGMENT>\n");
