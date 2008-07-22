@@ -19,7 +19,7 @@
 #include "trackTable.h"
 
 
-static char const rcsid[] = "$Id: das.c,v 1.38 2008/07/03 06:59:51 markd Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.39 2008/07/22 17:18:18 markd Exp $";
 
 static char *version = "1.00";
 static char *database = NULL;	
@@ -490,8 +490,10 @@ return filters;
 static boolean catTypeFilter(struct filters *filters, char *cat, char *type)
 /* Combined category/type filter. */
 {
+/* spec doesn't says if both category and type results a AND or OR, so we
+ * treat it as an AND, as this seems more usefully. */
 if ((filters->category != NULL) && (filters->type != NULL))
-    return (hashLookup(filters->category,cat) != NULL) || (hashLookup(filters->type, type) != NULL);
+    return (hashLookup(filters->category,cat) != NULL) && (hashLookup(filters->type, type) != NULL);
 if (filters->category != NULL)
     return (hashLookup(filters->category,cat) != NULL);
 if (filters->type != NULL)
