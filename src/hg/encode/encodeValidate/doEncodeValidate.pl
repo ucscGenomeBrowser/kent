@@ -8,13 +8,14 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.31 2008/07/17 18:48:16 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.32 2008/07/22 22:34:25 larrym Exp $
 
 use warnings;
 use strict;
 
 use lib "/cluster/bin/scripts";
 use HgAutomate;
+use HgDb;
 use File::stat;
 use Getopt::Long;
 use English;
@@ -39,13 +40,7 @@ our $pifVersion = 0.2;
 our $submitPath;        # full path of data submission directory
 our $configPath;        # full path of configuration directory
 our $outPath;           # full path of output directory
-our $pifFile;           # project information filename (most recent found in 
-                                # submission dir)
-our %pif;               # project information
-our %tracks;            # track information
 our %terms;             # controlled vocabulary
-our %labs;
-our %fields;
 
 sub usage {
     print STDERR <<END;
@@ -120,7 +115,7 @@ our %validators = (
 sub validateFileName {
     # Validate array of filenames, ordered by part
     # Check files exist and are of correct data format
-    my ($files, $track) = @_;
+    my ($files, $track, $pif) = @_;
     my @newFiles;
     for my $file (@{$files}) {
         my @list = glob $file;
@@ -135,7 +130,7 @@ sub validateFileName {
         -e $file || die "ERROR: File \'$file\' does not exist\n";
         -s $file || die "ERROR: File \'$file\' is empty\n";
         -r $file || die "ERROR: File \'$file\' is not readable \n";
-        &checkDataFormat($tracks{$track}->{'type'}, $file);
+        &checkDataFormat($pif->{TRACKS}{$track}{type}, $file);
     }
     $files = \@newFiles;
 }
@@ -280,13 +275,13 @@ sub validateMappedReads {
 ############################################################################
 # Misc subroutines
 
-sub validateField {
+sub validateDdfField {
     # validate value for type of field
-    my ($type, $val, $arg) = @_;
+    my ($type, $val, $pif, $track) = @_;
     $type =~ s/ /_/g;
     &HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
     if($validators{$type}) {
-        $validators{$type}->($val, $arg);
+        $validators{$type}->($val, $track, $pif);
     }
 }
 
@@ -299,8 +294,7 @@ sub checkDataFormat {
         $format = $1;
         $type = $2;
     }
-    $formatCheckers{$format} || 
-        die "ERROR: Data format \'$format\' in PIF file \'$pifFile\' is unknown\n";
+    $formatCheckers{$format} || die "ERROR: Data format \'$format\' is unknown\n";
     $formatCheckers{$format}->($file, $type);
 }
 
@@ -329,11 +323,17 @@ sub newestFile {
     return $newestFile;
 }
 
-sub getPif {
+sub getPif
+{
+# Return PIF hash; hash keys are RA style plus an additional TRACKS key which is a nested hash for
+# the track list at the end of the PIF file.
+    my ($labs, $fields) = @_;
+
     # Read info from Project Information File.  Verify required fields
     # are present and that the project is marked active.
     my %pif = ();
-    $pifFile = &newestFile(glob "*.PIF");
+    $pif{TRACKS} = {};
+    my $pifFile = &newestFile(glob "*.PIF");
     &HgAutomate::verbose(2, "Using newest PIF file \'$pifFile\'\n");
 
     my $lines = readFile($pifFile);
@@ -356,7 +356,7 @@ sub getPif {
         } else {
             my %track = ();
             my $track = $val;
-            $tracks{$track} = \%track;
+            $pif{TRACKS}->{$track} = \%track;
             &HgAutomate::verbose(5, "  Found view: \'$track\'\n");
             while ($line = shift @{$lines}) {
                 $line =~ s/^ +//;
@@ -375,23 +375,23 @@ sub getPif {
     }
 
     # Validate fields
-    my @tmp = keys %pif;
-    validateFieldList(\@tmp, \%fields, 'pifHeader', "in PIF '$pifFile'");
+    my @tmp = grep(!/^TRACKS$/, keys %pif);
+    validateFieldList(\@tmp, $fields, 'pifHeader', "in PIF '$pifFile'");
 
     if($pif{pifVersion} ne $pifVersion) {
         die "ERROR: pifVersion '$pif{pifVersion}' does not match current version: $pifVersion\n";
     }
-    if(!keys(%tracks)) {
+    if(!keys(%{$pif{TRACKS}})) {
         die "ERROR: no views defined for project \'$pif{project}\' in PIF '$pifFile'\n";
     }
-    if(!defined($labs{$pif{lab}})) {
+    if(!defined($labs->{$pif{lab}})) {
         die "ERROR: invalid lab '$pif{lab}' for project \'$pif{project}\' in PIF '$pifFile'\n";
     }
     validateAssembly($pif{assembly});
 
-    foreach my $track (keys %tracks) {
+    foreach my $track (keys %{$pif{TRACKS}}) {
         &HgAutomate::verbose(4, "  Track: $track\n");
-        my %track = %{$tracks{$track}};
+        my %track = %{$pif{TRACKS}->{$track}};
         foreach my $key (keys %track) {
             &HgAutomate::verbose(4, "    Setting: $key   Value: $track{$key}\n");
         }
@@ -470,9 +470,9 @@ sub validateFieldList {
 sub ddfKey
 {
 # return key for given DDF line (e.g. "antibody=$antibody;cell=$cell" for ChIP-Seq data)
-    my ($fields, $ddfHeader) = @_;
-    if (defined($pif{variables})) {
-        return join(";", map("$_=" . $fields->[$ddfHeader->{$_}], sort @{$pif{variableArray}}));
+    my ($fields, $ddfHeader, $pif) = @_;
+    if (defined($pif->{variables})) {
+        return join(";", map("$_=" . $fields->[$ddfHeader->{$_}], sort @{$pif->{variableArray}}));
     } else {
         die "ERROR: no key defined for this PIF";
     }
@@ -541,6 +541,7 @@ chdir $submitPath ||
 mkdir $outPath || 
     die ("SYS ERR: Can't create out directory \'$outPath\': $OS_ERROR\n");
 
+my %labs;
 if(-e "$configPath/$labsConfigFile") {
     # tolerate missing labs.ra in dev trees.
     %labs = &readRaFile("$configPath/$labsConfigFile", "lab");
@@ -549,11 +550,13 @@ if(-e "$configPath/$labsConfigFile") {
 
 # Gather fields defined for DDF file. File is in 
 # ra format:  field <name>, required <true|false>
-%fields = readRaFile("$configPath/$fieldConfigFile", "field");
+my %fields = readRaFile("$configPath/$fieldConfigFile", "field");
 
 # Locate project information (PIF) file and verify that project is
 #  ready for submission
-%pif = &getPif();
+my %pif = getPif(\%labs, \%fields);
+
+my $db = HgDb->new(DB => $pif{assembly});
 
 # Add required fields for this -- the variables in the PIF file
 if (defined($pif{variables})) {
@@ -606,20 +609,20 @@ while (@{$lines}) {
     my $fileField = $ddfHeader{files};
     my $files = $fields[$fileField];
     my $view = $fields[$ddfHeader{view}];
-    if(!$tracks{$view}) {
+    if(!$pif{TRACKS}->{$view}) {
         die "Undefined view '$view' in DDF";
     }
     my @filenames = split(',', $files);
     $fields[$fileField] = \@filenames;
     push(@ddfLines, \@fields);
 
-    $ddfSets{ddfKey(\@fields, \%ddfHeader)}{VIEWS}{$view} = 1;
+    $ddfSets{ddfKey(\@fields, \%ddfHeader, \%pif)}{VIEWS}{$view} = 1;
 }
 
 # die if there are missing required views
 for my $key (keys %ddfSets) {
-    for my $view (keys %tracks) {
-        if($tracks{$view}->{required} eq 'yes') {
+    for my $view (keys %{$pif{TRACKS}}) {
+        if($pif{TRACKS}->{$view}{required} eq 'yes') {
             if(!defined($ddfSets{$key}{VIEWS}{$view})) {
                 die "ERROR: view '$view' missing for DDF entry '$key'";
             }
@@ -637,20 +640,20 @@ my $priority = 0;
 foreach my $ddfLine (@ddfLines) {
     $priority++;
     my $view = $ddfLine->[$ddfHeader{view}];
-    my $tableType = $tracks{$view}->{tableType};
+    my $tableType = $pif{TRACKS}->{$view}{tableType};
     HgAutomate::verbose(2, "  View: $view\n");
     for ($i=0; $i < @ddfHeader; $i++) {
-        &validateField($ddfHeader[$i], $ddfLine->[$i], $view);
+        validateDdfField($ddfHeader[$i], $ddfLine->[$i], \%pif, $view);
     }
 
     # Construct table name from track name and variables
     my $trackName = "wgEncode$pif{project}$view";
     my $tableName = $trackName;
-    if(!defined($tracks{$view}->{shortLabelPrefix})) {
-        $tracks{$view}->{shortLabelPrefix} = "";
+    if(!defined($pif{TRACKS}->{$view}{shortLabelPrefix})) {
+        $pif{TRACKS}->{$view}{shortLabelPrefix} = "";
     }
-    my $shortLabel = defined($tracks{$view}->{shortLabelPrefix}) ? $tracks{$view}->{shortLabelPrefix} : "";
-    my $longLabel = "ENCODE" . (defined($tracks{$view}->{longLabelPrefix}) ? " $tracks{$view}->{longLabelPrefix}" : "");
+    my $shortLabel = defined($pif{TRACKS}->{$view}{shortLabelPrefix}) ? $pif{TRACKS}->{$view}{shortLabelPrefix} : "";
+    my $longLabel = "ENCODE" . (defined($pif{TRACKS}->{$view}{longLabelPrefix}) ? " $pif{TRACKS}->{$view}{longLabelPrefix}" : "");
     my $subGroups = "view=$view";
     my $additional = "\n";
     if (defined($pif{variables})) {
@@ -685,9 +688,17 @@ foreach my $ddfLine (@ddfLines) {
     }
     # mysql doesn't allow hyphens in table names and our naming convention doesn't allow underbars.
     $tableName =~ s/[_-]//g;
+
+    # Is this really an error?
+    my $sth = $db->execute("select count(*) from trackDb where tableName = ?", $tableName);
+    my @row = $sth->fetchrow_array();
+    if(@row && $row[0]) {
+        die "view '$view' has already been loaded";
+    }
+
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "track $trackName\n";
-    print LOADER_RA "type $tracks{$view}->{type}\n";
+    print LOADER_RA "type $pif{TRACKS}->{$view}{type}\n";
     print LOADER_RA "tableType $tableType\n" if defined($tableType);
     print LOADER_RA "assembly $pif{assembly}\n";
     print LOADER_RA "files @{$ddfLine->[$ddfHeader{files}]}\n";
@@ -698,7 +709,7 @@ foreach my $ddfLine (@ddfLines) {
     print TRACK_RA "\tshortLabel\t$shortLabel\n";
     print TRACK_RA "\tlongLabel\t$longLabel\n";
     print TRACK_RA "\tsubGroups\t$subGroups\n";
-    print TRACK_RA "\ttype\t$tracks{$view}->{type}\n";
+    print TRACK_RA "\ttype\t$pif{TRACKS}->{$view}{type}\n";
     print TRACK_RA sprintf("\tdateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
     print TRACK_RA "\tpriority\t$priority\n";
     # noInherit is necessary b/c composite track will often have a different dummy type setting.
@@ -707,13 +718,13 @@ foreach my $ddfLine (@ddfLines) {
     if($visibility{$view}) {
         print TRACK_RA "\tvisibility\t$visibility{$view}\n";
     }
-    if($tracks{$view}->{type} eq 'wig') {
+    if($pif{TRACKS}->{$view}{type} eq 'wig') {
         print TRACK_RA <<END;
 	yLineOnOff	On
 	yLineMark	1.0
 	maxHeightPixels	100:32:8
 END
-    } elsif($tracks{$view}->{type} eq 'bed 5 +') {
+    } elsif($pif{TRACKS}->{$view}{type} eq 'bed 5 +') {
         print TRACK_RA "\tuseScore\t1\n";
     }
     print TRACK_RA $additional;
