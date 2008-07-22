@@ -19,7 +19,7 @@
 #include "trackTable.h"
 
 
-static char const rcsid[] = "$Id: das.c,v 1.39 2008/07/22 17:18:18 markd Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.40 2008/07/22 17:53:34 markd Exp $";
 
 static char *version = "1.00";
 static char *database = NULL;	
@@ -522,7 +522,7 @@ struct slName *db;
 normalHeader();
 printf(
 "<!DOCTYPE DASDSN SYSTEM \"http://www.biodas.org/dtd/dasdsn.dtd\">\n"
-" <DASDSN>\n");
+"<DASDSN>\n");
 for (db = dbList; db != NULL; db = db->next)
     {
     char *freeze = hFreezeFromDb(db->name);
@@ -532,12 +532,12 @@ for (db = dbList; db != NULL; db = db->next)
     printf("   <DSN>\n");
     printf("     <SOURCE id=\"%s\" version=\"%s\">%s at UCSC</SOURCE>\n", 
     	db->name, version, freeze);
+    printf("     <DESCRIPTION>%s %s Genome at UCSC</DESCRIPTION>\n", organism, freeze);
     printf("     <MAPMASTER>http://genome.cse.ucsc.edu:80/cgi-bin/das/%s</MAPMASTER>\n",
         db->name);
-    printf("     <DESCRIPTION>%s %s Genome at UCSC</DESCRIPTION>\n", organism, freeze);
     printf("   </DSN>\n");
     }
-printf(" </DASDSN>\n");
+printf("</DASDSN>\n");
 }
 
 static int countFeatures(struct tableDef *td, struct segment *segmentList)
@@ -626,7 +626,7 @@ struct filters *filters = filtersNew();
 normalHeader();
 printf("<!DOCTYPE DASTYPES SYSTEM \"http://www.biodas.org/dtd/dastypes.dtd\">\n");
 printf("<DASTYPES>\n");
-printf("<GFF version=\"1.2\" summary=\"yes\" href=\"%s\">\n", currentUrl());
+printf("<GFF version=\"1.2\" href=\"%s\">\n", currentUrl());
 for (segment = segmentList;;)
     {
     if (segment == NULL)

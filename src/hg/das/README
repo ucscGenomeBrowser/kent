@@ -8,4 +8,9 @@ DAS alignment extension:
 
 
 Issues with UCSC server:
-   - 
+   - assignment of category and method is a hard-coded heuristic and
+     essentially broken.
+
+General DAS issues:
+   - spec doesn't define how specifying both type and category filter show
+     behave.

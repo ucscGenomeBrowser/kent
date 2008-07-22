@@ -8,7 +8,9 @@
 #   mv output expected
 #   make test sandbox=-myname  # test with hgwdev-myname
 #
-# to compare results
+# to compare results.
+#
+# requires the xmlproc_val command from the xmlproc package.
 #
 
 sandbox=-${USER}
@@ -55,9 +57,9 @@ doTest:
 	wget -nv --save-headers -O output/${id}.das '${request}'
 	@awk '/^Date:/{next} {print $$0} /^$$/{exit}' output/${id}.das > output/${id}.hdrs
 	@awk 'on{print $$0} /^$$/{on=1}' output/${id}.das > output/${id}.xml
+	xmlproc_val output/${id}.xml
 	@if [ -e expected/${id}.hdrs ] ; then diff expected/${id}.hdrs output/${id}.hdrs ; else echo "NOTE: no expected/${id}.hdrs" ; fi
 	@if [ -e expected/${id}.xml ] ; then diff expected/${id}.xml output/${id}.xml ; else echo "NOTE: no expected/${id}.xml" ; fi
-	./dasXmlCheck output/${id}.xml
 
 clean:
 	rm -rf output
