@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.32 2008/07/22 22:34:25 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.33 2008/07/22 23:38:50 larrym Exp $
 
 use warnings;
 use strict;
@@ -99,7 +99,17 @@ sub splitKeyVal
 }
 
 ############################################################################
-# Validators -- extend when adding new metadata fields
+# Validators for DDF columns -- extend when adding new metadata fields
+#
+# validators die if they encounter errors.
+#
+# validator callbacks are called thus:
+#
+# validator(value, track, pif);
+#
+# value is value in DDF column
+# track is track/view value
+# pif is pif hash
 
 # dispatch table
 our %validators = (
@@ -135,11 +145,6 @@ sub validateFileName {
     $files = \@newFiles;
 }
 
-sub validatePart {
-    my ($val) = @_;
-    $val >= 0 && $val < 100 || die "ERROR: Part \'$val\' is invalid (must be 0-100)\n";
-}
-
 sub validateDatasetName {
     my ($val) = @_;
 }
@@ -162,6 +167,7 @@ sub validateLabVersion {
 }
 
 # project-specific validators
+
 sub validateCellLine {
     my ($val) = @_;
     defined($terms{'Cell Line'}{$val}) || die "ERROR: Cell line \'$val\' is not known \n";
@@ -277,7 +283,7 @@ sub validateMappedReads {
 
 sub validateDdfField {
     # validate value for type of field
-    my ($type, $val, $pif, $track) = @_;
+    my ($type, $val, $track, $pif) = @_;
     $type =~ s/ /_/g;
     &HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
     if($validators{$type}) {
@@ -415,7 +421,8 @@ sub getPif
 
 sub readRaFile {
 # Read records from a .ra file into a hash of hashes and return it.
-# $type is the used as the primary key and as the key of the returned hash.
+# $type is the used as the primary key in the ra file.
+# The primary key values are used as the hash key values in the returned hash.
     my ($file, $type) = @_;
     open(RA, $file) || 
         die "ERROR: Can't open RA file \'$file\'\n";
@@ -482,7 +489,6 @@ sub ddfKey
 # Main
 
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time());
-my $i;
 my @ddfHeader;	# list of field headers on the first line of DDF file
 my %ddfHeader = ();
 my @ddfLines = ();
@@ -584,7 +590,7 @@ while(@{$lines}) {
         die "ERROR: The DDF header has no tabs; the DDF is required to be tab delimited";
     }
     @ddfHeader = split(/\t/, $line);
-    for ($i=0; $i < @ddfHeader; $i++) {
+    for (my $i=0; $i < @ddfHeader; $i++) {
         $ddfHeader{$ddfHeader[$i]} = $i;
     }
     last;
@@ -630,6 +636,8 @@ for my $key (keys %ddfSets) {
     }
 }
 
+# XXXX create missing views (e.g. ChIP-Seq Signal)
+
 # Validate files and metadata fields in all ddfLines using controlled
 # vocabulary.  Create load.ra file for loader and trackDb.ra file for wrangler.
 
@@ -642,8 +650,8 @@ foreach my $ddfLine (@ddfLines) {
     my $view = $ddfLine->[$ddfHeader{view}];
     my $tableType = $pif{TRACKS}->{$view}{tableType};
     HgAutomate::verbose(2, "  View: $view\n");
-    for ($i=0; $i < @ddfHeader; $i++) {
-        validateDdfField($ddfHeader[$i], $ddfLine->[$i], \%pif, $view);
+    for (my $i=0; $i < @ddfHeader; $i++) {
+        validateDdfField($ddfHeader[$i], $ddfLine->[$i], $view, \%pif);
     }
 
     # Construct table name from track name and variables
