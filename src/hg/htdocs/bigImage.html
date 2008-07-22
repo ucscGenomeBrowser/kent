@@ -1,0 +1,1098 @@
+<html>
+<head>
+
+<title>visiGene bigImage</title>
+
+<style>
+
+table  { border-collapse: collapse; border-spacing: 0; }
+tr, th, td { padding: 0px; }
+
+</style>
+
+</head>
+
+
+
+<SCRIPT LANGUAGE="javascript" TYPE="text/javascript">
+
+function showBrowser() {
+    window.status=navigator.appName+' '+navigator.appVersion;
+}
+
+var isSafari = (navigator.userAgent.toLowerCase().indexOf("safari") >= 0);
+
+// magnification for over-zoom-in.  as if there were a level -1.
+m = 1;
+maxmag = 8;  // max magnification  (doubles each time: 1,2,4,8)
+
+// number of zoom levels, level 0 = no zoom, numLevels-1=max zoom out=6
+numLevels=7;
+
+myClip = document.getElementById("myClip");
+
+myImg = document.getElementById("myImg");
+
+myCover = document.getElementById("myCover");
+
+
+// original width and height of picture
+wOrig = new Array(numLevels);
+hOrig = new Array(numLevels);
+wOrig[0] = 7248;
+hOrig[0] = 3780;
+
+// size of subImages (tiles)
+wSub = 512; //240; //300;
+hSub = 512; //240; //300;
+
+// width of last column of tiles (since we are scaling tiles by setting width)
+wSubEdge = new Array(numLevels);
+wSubEdge[0] = wSub;  
+hSubEdge = new Array(numLevels);  // safari
+hSubEdge[0] = hSub;  
+
+// number of extra cell rows and columns to cover in view window myClip
+wdl = wdr = 2;  
+hdl = hdr = 1;
+
+picName="T12832210aa";
+picExt =".jpg";
+
+// number of rows and columns in table
+wCnt = new Array(numLevels);
+hCnt = new Array(numLevels);
+
+z = 1;  // accumulated zoom factor at level 0
+wSmallDelta = hSmallDelta =  50;
+hSmallDelta = hSmallDelta =  50;
+wBigDelta   = hBigDelta   = 300;
+hBigDelta   = hBigDelta   = 300;
+dr = 5;  // amount to scroll
+
+marginLeft = 5;
+marginTop = 5;
+
+// clip size (changes with window resize)
+wc = 800;
+hc = 600;
+
+// minimum number of tiles required to cover view area wcXhc
+wt = Math.ceil(wc/wSub) + 1;
+ht = Math.ceil(hc/hSub) + 1;
+
+
+
+// position in original picture space, not scaled by zoom
+x = 0;   
+y = 0; 
+
+// target coords (scrolls so that x,y approaches goal x,y
+xx = 0;
+yy = 0;
+
+// mouse position
+mousex = 0;
+mousey = 0;
+mouseDrag = false;
+mouseAction = false;
+mouseDragX = mousex;
+mouseDragY = mousey;
+
+// hash of visible IMGs in use
+vis = new Object;
+
+// stack of invisible IMGs heap available for use
+invistop=-1;
+invis=new Array();
+
+// cells are pointers to the IMG objects (we can walk through entire list)
+cells = new Array();
+
+var qsParm = new Array();
+
+//function to retrieve and parse parms:
+function qs() {
+var query = window.location.search.substring(1);
+var parms = query.split('&');
+for (var i=0; i<parms.length; i++) {
+   var pos = parms[i].indexOf('=');
+   if (pos > 0) {
+      var key = parms[i].substring(0,pos);
+      var val = parms[i].substring(pos+1);
+      qsParm[key] = val;
+      }
+   }
+}
+//assign default values and read parms in
+//e.g. qsParm['url'] = "junk.jpg";
+qs();  // init parm array from cmdline
+
+
+function placeTile(cell) {
+
+var wSize = wSub;
+var hSize = hSub;
+if ((cell.r != -1) && (cell.c != -1)) {
+    
+    if (cell.c+1==wCnt[l])
+	{
+	wSize = wSubEdge[l];
+	}
+    if (cell.r+1==hCnt[l])
+	{
+	hSize = hSubEdge[l];
+	}
+    // safari seems to need both width and height specified.
+    // I wanted to use the style so I could express both properties at once,
+    // but it doesn't seem to work when we magnify it (m > 1)
+    cell.width  = wSize*m;
+    cell.height = hSize*m;  //safari
+    //cell.style='width:'+wSize*m+';'+'height:'+hSize*m+';';
+    //'width:100%; height: auto;';
+    
+    cell.style.top  = cell.r*hSub*m;
+    cell.style.left = cell.c*wSub*m;
+    	    
+//alert('onTileLoad: cell.r,cell.c='+cell.r+','+cell.c+'  m='+m+' wCnt[l]='+wCnt[l]+' cell.width='+cell.width);
+}		
+}
+
+function onTileLoad(theImage) {  
+// does this work in all browsers we need to cover?
+// it seems to get around the FireFox bug where initial screen refreshes
+// were happening in wrong order leaving screen dirt.
+if (!theImage) var theImage = window.event;
+//alert('this='+this);
+//alert('theImage='+theImage);
+//var cell = document.getElementById(e.target);
+var cell = this;
+placeTile(cell);
+}
+
+
+function makeLevel(doHTML) { // make table of tiles large enough to cover view area wc,wh 
+
+var html = '';
+var r=0;
+var c=0;
+var cnt=0;
+
+if (doHTML) {  // since this may be expensive for old machines, skip if just a zoom rather than resize
+    html = '';
+    for(r=0; r<ht; r++) {
+	for(c=0; c<wt; c++) {
+	    html += '<IMG ID="myImg_'+cnt+'" src="images/dot_clear.gif" STYLE="position:absolute;left:-10000px;top:-10000px;">';
+	    cnt++;
+	}
+    }   
+    myImg.innerHTML=html;  // big initialization
+}
+
+myImg.style.width  = wOrig[l]*m;
+myImg.style.height = hOrig[l]*m;
+
+// hash of visible IMGs in use
+vis = new Object;
+// stack of invisible IMGs heap available for use
+invistop=-1;
+invis=new Array();
+// cells are pointers to the IMG objects (we can walk through entire list)
+cells = new Array();
+
+cnt=0;
+
+for(r=0; r<ht; r++) {
+    for(c=0; c<wt; c++) {
+	var cell = document.getElementById("myImg_"+cnt);
+	var cstr = "images/dot_clear.gif";
+	cell.style.top  = -hc-hSub*m; // move it off screen to hide  -hc
+	cell.style.left = -wc-wSub*m; // -wc
+	cell.r = -1;  // used to identify current position role
+	cell.c = -1;
+	cells[cells.length] = cell;  // save an array as a list of all IMGs
+	invis[invis.length] = cell;  // list of all invisible IMGs avail for reuse - all cells start out available
+	cell.onload = onTileLoad;
+	cell.path=cstr;    // if the property does not exist it will be created
+	cell.src=cstr; 
+	cnt++;
+    }
+}
+invistop=invis.length-1;  // point to top actual element
+
+// probably skip this as i would have to do all r,c in hCnt,wCnt to be worth using
+//theStatus[somevar] = null;   // just initialize so that it will at least exist on startup.
+
+}
+
+
+function scrollMe() {
+var m = 0;
+var dist = 0;
+var dx = 0;
+var dy = 0;
+var drz = Math.round(dr/z);  // scale up to larger motions in absolute x,y on smaller image
+
+if (typeof(y) != "number") {
+    alert('typeof(y) != "number": type='+typeof(y)+' value='+y);	
+}
+
+if ((x != xx) || (y != yy)) {
+    dist = Math.sqrt((yy-y)*(yy-y)+(xx-x)*(xx-x));
+    if (dist < drz) {
+	x = xx;
+      	y = yy;
+    } else {
+	if (xx==x) {
+	    dx = 0;
+	    dy = drz;
+    	    if (yy<y) dy *= -1;
+	} else {
+	    m = (yy-y)/(xx-x);
+    	    dx = Math.sqrt((drz*drz)/(m*m+1));
+    	    if (xx<x) dx *= -1;
+	    dy = m * dx;
+	}
+	x += dx;
+	y += dy;
+    }
+    updatePos();
+}
+}
+
+
+function updatePos() {
+
+var c = Math.floor(x*z/(hSub*m));
+var r = Math.floor(y*z/(wSub*m));
+var rr = 0;
+var cc = 0;
+var cell = null;
+var cstr = "";
+var i = 0;
+var cntinv = 0;
+var cntvis = 0;
+
+wdl = Math.ceil((wc/2-(x*z)%(wSub*m))/(wSub*m)); if(wdl<0)wdl=0;
+hdl = Math.ceil((hc/2-(y*z)%(hSub*m))/(hSub*m)); if(hdl<0)hdl=0;
+
+wdr = Math.ceil((wc/2-wSub+(x*z)%(wSub*m))/(wSub*m)); if(wdr<0)wdr=0;
+hdr = Math.ceil((hc/2-hSub+(y*z)%(hSub*m))/(hSub*m)); if(hdr<0)hdr=0;
+
+// pre-fetch over-border adjustment:
+//wdl++;hdl++;wdr++;hdr++;
+
+//alert('x,y='+x+','+y+'  c,r='+c+' '+r); //debug
+//alert('wc,hc='+wc+','+hc+'  wdl,wdr,hdl,hdr='+wdl+' '+wdr+','+hdl+' '+hdr); //debug
+
+
+// for each cell add to invisible stack (an array) if not visible (and remove from visible hash?)
+// else add to visible hash (as an object "property") (if not already present).
+
+//debug
+//alert("cells.length="+cells.length+"  invistop="+invistop);
+
+for(i=0;i<cells.length;i++) {
+    var cell = cells[i];
+    if ((cell.r != -1) && // just ignore -1 it is already invisible
+    (
+    (cell.r<r-hdl) || 
+    (cell.c<c-wdl) ||
+    (cell.r>r+hdr) || 
+    (cell.c>c+wdr)
+    )
+    ) {  // it was visible, but now becomes invisible
+	invistop++;              // point to new top element position
+	invis[invistop] = cell;  // add to list of invisible IMGs avail for reuse
+	vis[""+cell.r+"_"+cell.c] = null;     // erase id from hash of visible cell.ids
+	cstr = "images/dot_clear.gif";
+	cell.path=cstr;
+	//cell.src=cstr; // causes IE flashes, don't even need it so skip it
+	cell.r = -1;
+	cell.c = -1;
+	cell.style.top  = -hc-hSub*m; // move it off screen to hide
+	cell.style.left = -wc-wSub*m;
+	cntinv++;  // debug
+    }
+}
+
+//alert("new invistop="+invistop);
+
+// Then, loop again, for each position for wCnt*hCnt,
+// if it is in visible hash, do not update.  Else draw
+// from top of invisible stack and assign new position,.src.
+// Anything remaining on the stack is truly not visible,
+// move it to -wSub,-hSub to hide it.
+
+for(rr=r-hdl;rr-r<=hdr;rr++) {
+    for(cc=c-wdl;cc-c<=wdr;cc++) {
+	if ((rr>=0) && (rr<hCnt[l]) && (cc>=0) && (cc<wCnt[l])) {
+	    cell = vis[""+rr+"_"+cc];
+	    if (!cell) {  
+		//-- if it is not present, recycle from invisible list, add to visible list, set properties
+	        if (invistop < 0) { alert("invis stack underflow - not enough IMGs!"); return; }
+		cell = invis[invistop];
+		invistop--;
+		cell.r = rr;
+		cell.c = cc;
+		vis[""+cell.r+"_"+cell.c] = cell;  // add to visible hash
+		cstr = String(rr*wCnt[l]+cc);
+		while (cstr.length<3) cstr='0'+cstr;
+		cstr = ''+picName+'_'+l+'_'+cstr+picExt;
+
+		//debug
+		//alert("rr,cc="+rr+","+cc+" path="+cstr+"  l="+l+" wCnt[l]="+wCnt[l]);
+		
+		cell.path=cstr;
+		cell.src=cstr;
+
+		if (isSafari)
+    		    placeTile(cell);  // safari hack
+		
+		cntvis++;
+		
+	    }
+	}
+    }
+}
+
+//alert("new invistop="+invistop);
+
+//-- moving the entire div should be the last thing we do
+myImg.style.left=wc/2 - x*z;
+myImg.style.top =hc/2 - y*z;
+
+//alert("myClip.style.left="+myClip.style.left+",  myClip.style.top="+myClip.style.top);
+//alert("myImg.style.left="+myImg.style.left+",  myImg.style.top="+myImg.style.top);
+
+if ((cntinv > 0) || (cntvis > 0))
+    window.status='cntinv='+cntinv+'  and cntvis='+cntvis;
+
+thumbFollow();
+
+if ((x != xx) || (y != yy)) setTimeout('scrollMe()',100);
+
+}
+
+
+function getInnerSize(dim) {  
+// note: screen.availWidth works for both IE and Mozilla (but not in a frame?)
+var myWidth = 0, myHeight = 0;
+if( typeof( window.innerWidth ) == 'number' ) {
+  myWidth = window.innerWidth; 
+  myHeight = window.innerHeight;
+} else if( document.documentElement && 
+           (document.documentElement.clientWidth ||document.documentElement.clientHeight ) ) {
+  myWidth = document.documentElement.clientWidth; 
+  myHeight = document.documentElement.clientHeight;
+} else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+  myWidth = document.body.clientWidth; 
+  myHeight = document.body.clientHeight;
+}  
+
+//debug safari
+//if (myWidth==0) myWidth=320;
+//if (myHeight==0) myHeight=200;
+
+if (dim=="w") return myWidth
+else        return myHeight;
+}
+
+
+function windowResize() {
+
+//window.onresize=null;  // this really screws up Safari, don't do it!
+
+wc = getInnerSize("w") - 2*marginLeft;
+hc = getInnerSize("h") - 2*marginTop;
+
+myClip.style.width  = wc;
+myClip.style.height = hc;
+
+myCover.style.width  = wc;
+myCover.style.height = hc;
+
+wSmallDelta = Math.round(wc/16);
+hSmallDelta = Math.round(hc/16);
+wBigDelta   = Math.round(wc/4);
+hBigDelta   = Math.round(hc/4);
+
+// minimum number of tiles required to cover view area wc X hc
+wt = Math.ceil(wc/(wSub*m)) + 1;
+ht = Math.ceil(hc/(hSub*m)) + 1;
+
+// increase number of tiles so that we get a sort of pre-fetch buffer going
+//wt+=2;
+//ht+=2;
+ 
+makeLevel(true);
+updatePos();
+
+//window.onresize=windowResize;   // this really screws up Safari, don't do it!
+}
+
+function getThumb() {
+var result = null;
+if (typeof(parent.parent) != 'undefined')
+ if (typeof(parent.parent.list) != 'undefined')
+  if (typeof(parent.parent.list.document) != 'undefined') {
+    var imgs = parent.parent.list.document.getElementsByTagName('img');
+    var target = picName.replace("full","200");
+    target = target.substring(0,target.lastIndexOf("/"));
+    target = target+picExt;
+    target = target.substring(target.indexOf("/visiGene"));
+    //alert('imgs.length='+imgs.length+' target='+target);
+    for (var i = 0; i < imgs.length; ++i) {
+	var src = imgs[i].src;
+	src = src.substring(src.indexOf("/visiGene"));
+	if (src == target) {
+	    result = imgs[i];
+	    break;
+	}
+    }
+    
+  }
+return result;
+}
+
+
+function init() {
+
+if (!myClip)
+    myClip = document.getElementById("myClip");
+
+if (!myCover)
+    myCover = document.getElementById("myCover");
+
+picName  = qsParm['url'];
+wOrig[0] = parseInt(qsParm['w']);
+hOrig[0] = parseInt(qsParm['h']);
+
+//debug
+//alert('w,h='+wOrig[0]+','+hOrig[0]+' picName='+picName);
+
+//debug
+//alert('isSafari='+isSafari);
+
+for (l=1;l<numLevels;l++) 
+    {
+    wOrig[l] = wOrig[l-1]/2;
+    hOrig[l] = hOrig[l-1]/2;
+    }
+
+for (l=0;l<numLevels;l++) 
+    {
+    wCnt[l] = Math.ceil(wOrig[l]/wSub);
+    hCnt[l] = Math.ceil(hOrig[l]/hSub);
+    }    
+
+for (l=0;l<numLevels;l++) 
+    {
+    wSubEdge[l] = wOrig[l] % wSub;
+    if (wSubEdge[l] == 0)
+	wSubEdge[l] = wSub;  
+    hSubEdge[l] = hOrig[l] % hSub;
+    if (hSubEdge[l] == 0)
+	hSubEdge[l] = hSub;  
+    }
+
+var html = '';
+
+myClip.style.left = marginLeft;
+myClip.style.top  = marginTop;
+
+myCover.style.left = marginLeft;
+myCover.style.top  = marginTop;
+
+// one DIV for all levels
+html += '<DIV ID="myImg'+'" STYLE="position:absolute;left:1000;top:0;z-index:1;" ></DIV>';
+myClip.innerHTML=html;  
+
+if (!myImg)
+    myImg = document.getElementById("myImg");
+
+l=0;
+z=1;
+wc = getInnerSize("w") - 2*marginLeft;
+hc = getInnerSize("h") - 2*marginTop;
+
+//debug
+//alert('wc='+wc+' marginLeft='+marginLeft+'location.href='+location.href);
+
+//debug
+//alert(document.parent.bigImg.src);
+//alert('test:'+typeof(parent.bigImg.width));
+
+if (wc <= 0) /* safari bug work-around, just make it reload again */
+    {
+    location.href=location.href;
+    return;
+    }
+
+while ((wOrig[l] > wc || hOrig[l] > hc) && (l+1) < numLevels)
+    {
+    l++;
+    z = z * 0.5;
+    }
+
+x = wOrig[0]/2;
+y = hOrig[0]/2;
+xx = x;
+yy = y;
+
+windowResize();
+
+if (window.focus) window.focus();
+
+}
+
+
+function thumbFollow() {
+
+//debug
+var thumb = getThumb();
+var tox = 0;
+var toy = 0;
+
+if (typeof(parent) == 'undefined') return;
+if (typeof(parent.parent) == 'undefined') return;
+if (typeof(parent.parent.list) == 'undefined') return;
+if (typeof(parent.parent.list.document) == 'undefined') return;
+
+var pclip = parent.parent.list.document.getElementById('perspClip');  // use to clip
+var persp = parent.parent.list.document.getElementById('perspective');  // use to position
+var pbox = parent.parent.list.document.getElementById('perspBox');  // make box using 1x1 transparent gif with border
+
+if (pclip == null) return;
+if (persp == null) return;
+if (pbox  == null) return;
+
+if (thumb == null) { // no thumb to follow with, so hide box and exit
+    pclip.style.left = -1000;
+    pclip.style.top = -1000;
+    return;
+}    
+
+var wt = thumb.offsetWidth;
+var ht = thumb.offsetHeight;
+
+//alert('img'
+//   +'\nthumb.width='+thumb.width
+//   +'\nthumb.left='+thumb.left
+//   +'\nthumb.style.left='+thumb.style.left
+//   +'\nthumb.offsetWidth='+thumb.offsetWidth
+//   +'\nthumb.offsetLeft='+thumb.offsetLeft
+//   +'\nthumb.offsetTop='+thumb.offsetTop
+//   +'\nthumb.offsetParent='+thumb.offsetParent
+//   +'\nthumb.src='+thumb.src);
+
+tox += thumb.offsetLeft;
+toy += thumb.offsetTop;
+
+//tox += thumb.offsetLeft+thumb.style.borderWidth;
+//toy += thumb.offsetTop+thumb.style.borderWidth;
+
+thumb = thumb.offsetParent;
+
+//alert('cell'
+//   +'\nthumb.width='+thumb.width
+//   +'\nthumb.left='+thumb.left
+//   +'\nthumb.style.left='+thumb.style.left
+//   +'\nthumb.offsetWidth='+thumb.offsetWidth
+//   +'\nthumb.offsetLeft='+thumb.offsetLeft
+//   +'\nthumb.offsetTop='+thumb.offsetTop
+//   +'\nthumb.offsetParent='+thumb.offsetParent
+//   +'\nthumb.src='+thumb.src);
+
+tox += thumb.offsetLeft;
+toy += thumb.offsetTop;
+
+thumb = thumb.offsetParent;
+
+//alert('table'
+//   +'\nthumb.width='+thumb.width
+//   +'\nthumb.left='+thumb.left
+//   +'\nthumb.style.left='+thumb.style.left
+//   +'\nthumb.offsetWidth='+thumb.offsetWidth
+//   +'\nthumb.offsetLeft='+thumb.offsetLeft
+//   +'\nthumb.offsetTop='+thumb.offsetTop
+//   +'\nthumb.offsetParent='+thumb.offsetParent
+//   +'\nthumb.src='+thumb.src);
+
+tox += thumb.offsetLeft;
+toy += thumb.offsetTop;
+   
+//alert('tox='+tox+' toy='+toy);
+//alert('persp.style.left='+persp.style.left+' persp.style.top='+persp.style.top);
+
+var wp = wc/z * wt/wOrig[0];
+var hp = hc/z * ht/hOrig[0];
+
+// set the width and height box, i.e. the 1x1 transparent gif with border
+pbox.width  = wp;
+pbox.height = hp;
+
+// use persp div to position the "box"
+persp.style.left = 0 - wp/2 + x*wt/wOrig[0];
+persp.style.top  = 0 - hp/2 + y*ht/hOrig[0];
+
+// position clipping div over the thumbnail
+pclip.style.left = tox;
+pclip.style.top  = toy;
+pclip.style.width = wt;
+pclip.style.height  = ht;
+
+}
+
+function moveRight(delta) {
+xx = xx + delta/z;
+if (xx > wOrig[0]) xx = wOrig[0];
+updatePos();
+}
+
+function moveLeft(delta) {
+xx = xx - delta/z;
+if (xx < 0) xx = 0;
+updatePos();
+}
+
+function moveUp(delta) {
+yy = yy - delta/z;
+if (yy < 0) yy = 0;
+updatePos();
+}
+
+function moveDown(delta) {
+yy = yy + delta/z;
+if (yy > hOrig[0]) yy = hOrig[0];
+updatePos();
+}
+
+function zoomIn(zoomout) {
+if (zoomout) {
+    if ((l<=0) && (m>=maxmag)) return;  // do not zoom too far out
+    if (l<=0)
+	m*=2;
+    else
+    	l--;
+    z*=2;
+} else {
+    if (l>=numLevels-1) return;  // do not zoom too far in
+    if (m>1)
+	m/=2;
+    else
+    	l++;
+    z/=2;
+}
+makeLevel(false);
+updatePos();
+}
+
+function cancelKey(e) {
+    if (e.preventDefault) {
+	e.preventDefault();
+	return false;
+    }
+    else {
+	e.keyCode = 0;
+	e.returnValue = false;
+    }
+}
+
+function keyPress(e)
+{  // trapping keyPress seems to be necessary only for old Mozilla browsers
+   // because normally suppressing the keyDown event should prevent keyPress from happening at all,
+   // but old Mozilla browsers ignore this canceling.
+var code;
+var result = false;
+if (!e) var e = window.event;
+if (e.keyCode) code = e.keyCode;
+else if (e.which) code = e.which;
+var character = String.fromCharCode(code);
+
+//alert('code='+code+' Character was ' + character);
+
+//debug
+//window.status='keypress: code='+code+' Character was ' + character;
+//return;
+
+if (character == '+') zoomIn(true);   // +   // bugfix for FF Mac
+if (character == '-') zoomIn(false);  // -   // bugfix for FF Mac
+
+if ((code == 32) // suppress for mozilla  ; else 
+ || (code == 39) // moveRight(wSmallDelta); else 
+ || (code == 37) // moveLeft (wSmallDelta); else
+ || (code == 38) // moveUp   (hSmallDelta); else
+ || (code == 40) // moveDown (hSmallDelta); else
+ || (code == 35) // moveRight(wBigDelta  ); else // end 
+ || (code == 36) // moveLeft (wBigDelta  ); else // home
+ || (code == 33) // moveUp   (hBigDelta  ); else // pgup
+ || (code == 34) // moveDown (hBigDelta  ); else // pgdn
+ || (code == 43) || ((code == 107) || (code == 187) || ((code == 61))) //  zoomIn(true); else // + 
+ || (code == 45) || ((code == 109) || (code == 189)) //  zoomIn(false); else // - 
+) result = false;
+else result = true;
+if (!result) {
+    cancelKey(e);
+    if (e.preventBubble)
+	e.preventBubble();
+    return false;
+}
+
+//debug
+//if (result) {
+//    alert('code='+code);
+//    alert('Character was ' + character);
+//}
+
+}
+
+function keyDown(e)
+{
+var code;
+var result = false;
+if (!e) var e = window.event;
+if (e.keyCode) code = e.keyCode;
+else if (e.which) code = e.which;
+//var character = String.fromCharCode(code);
+//alert('Character was ' + character);
+//window.status='Character was ' + character;
+window.status='Character was ' + code;
+
+//debug
+//alert('Code was '+code + ' e.charCode='+e.charCode + ' e.ctrlKey='+e.ctrlKey + ' e.shiftKey='+e.shiftKey + ' e.type='+e.type);
+//return;
+
+//debug
+//alert('code='+code);
+//cancelKey(e);
+//if (e.preventBubble)
+//    e.preventBubble();
+//return false;
+
+if (code == 32) { /* do nothing - suppress for mozilla */ } else 
+if (code == 39) moveRight(wSmallDelta); else 
+if (code == 37) moveLeft (wSmallDelta); else
+if (code == 38) moveUp   (hSmallDelta); else
+if (code == 40) moveDown (hSmallDelta); else
+if (code == 35) moveRight(wBigDelta  ); else // end 
+if (code == 36) moveLeft (wBigDelta  ); else // home
+if (code == 33) moveUp   (hBigDelta  ); else // pgup
+if (code == 34) moveDown (hBigDelta  ); else // pgdn
+//disable for FF Mac bugfix, "-" key now trapped in keyPress
+//if ((code == 43) || (code == 107) || (code == 187) || ((code == 61)))  zoomIn(true); else // + 
+//if ((code == 45) || (code == 109) || (code == 189))  zoomIn(false); else // -   
+// else
+result = true;
+window.status=window.status+' result='+result;  // debug
+if (!result) {
+    window.status=window.status+' canceling event'; //debug
+    cancelKey(e);
+    return false;
+}
+return result;
+}
+
+function checkMouseRange() {
+if (mousex < 0) mousex = -1;
+if (mousey < 0) mousey = -1;
+if (mousex >= wOrig[0]) mousex = -1;
+if (mousey >= hOrig[0]) mousey = -1;
+if ((mousex == -1) || (mousey == -1)) {
+    mousex = -1;
+    mousey = -1;
+}
+}    
+
+function falseFunc(e) { return false; } 
+
+function mouseMove(e) {
+//document.onmousemove = falseFunc;  // disable move event
+var posx = 0;
+var posy = 0;
+if (!e) var e = window.event;
+if (mouseAction) {
+    mouseAction = false; // move cancels the click action
+    document.body.style.cursor="move";
+}    
+
+if (e.pageX || e.pageY) {
+    posx = e.pageX;
+    posy = e.pageY;
+}
+else if (e.clientX || e.clientY) {
+    // do not use scroll info because of our special handling
+    posx = e.clientX; // + document.body.scrollLeft; 
+    posy = e.clientY; // + document.body.scrollTop;
+}
+posx = posx - marginLeft;
+posy = posy - marginTop;
+
+//if (posx < 0) posx = -1;
+//if (posy < 0) posy = -1;
+//if (posx >= wc) posx = -1;
+//if (posy >= hc) posy = -1;
+
+window.status='posx,posy='+posx+','+posy;
+
+//mousex = -1;
+//mousey = -1;
+//if ((posx >= 0) && (posy >= 0)) {
+    mousex = x+(posx - wc/2)/z;
+    mousey = y+(posy - hc/2)/z;
+//    checkMouseRange();
+//}    
+
+
+window.status='mousex,mousey='+mousex+','+mousey+'  mouseDrag='+mouseDrag;
+
+if (mouseDrag) {
+    //if ((mousex > 0) && (mousey > 0)) {
+        var tempx = x + mouseDragX-mousex;
+        var tempy = y + mouseDragY-mousey;
+	if (tempx < 0) tempx = 0;
+	if (tempy < 0) tempy = 0;
+	if (tempx >= wOrig[0]) tempx = wOrig[0]-1;
+	if (tempy >= hOrig[0]) tempy = hOrig[0]-1;
+	x = tempx;
+	y = tempy;
+	xx = x;
+	yy = y;
+	updatePos();
+    //} else {
+	//mouseUp(e);
+    //}
+}
+
+
+//document.onmousemove = mouseMove;  // re-enable
+
+//e.preventDefault();  // this works to prevent things like dragging in mozilla and safari
+return false;
+}
+
+function dblClick(e) {
+//debug testing singleclick action
+// dont need double click
+if (!e) var e = window.event;
+//alert('dblClick() event called!');
+//clickAction();
+if (e.preventDefault) 
+    e.preventDefault();
+return false;
+}
+
+function clickAction(reverse) {
+if ((mousex > 0) && (mousey > 0)) {
+    var dx = mousex - x;
+    var dy = mousey - y;
+    if (!reverse) {
+    	x = mousex;
+    	y = mousey;
+	xx = x;
+    	yy = y;
+	updatePos();
+    }
+    // now must set new mouse position since no move event yet
+    // i.e. if user dblClicks in exactly the same spot, mousex and mousey
+    // are still pointing to the old coordinates even though the pictures has shifted.
+    mousex = mousex + dx;
+    mousey = mousey + dy;
+    checkMouseRange();
+
+    if (reverse) 
+	zoomIn(false);
+    else 
+	zoomIn(true);
+}
+
+}
+
+function mouseDown(e) {
+if (!e) var e = window.event;
+checkMouseRange();
+if ((mousex > 0) && (mousey > 0)) {
+    mouseDrag = true;
+    mouseAction = true;
+    mouseDragX = mousex;
+    mouseDragY = mousey;
+    window.status='mouseDrag='+mouseDrag;
+}
+//e.preventDefault();  // this works to prevent things like dragging in mozilla and safari but messes up window focus, drats!
+if (window.focus) window.focus();   // in case the windows has lost focus, so we will receive keypresses, if browser supports
+return false;
+}
+
+
+function mouseUp(e) {
+var clickType=1;
+if (!e) var e = window.event;
+if (mouseAction) {
+    if (e.which)
+	clickType = e.which;
+    if (e.button)
+	clickType = e.button;
+
+	//debug
+	//alert('clickType='+clickType);
+	
+    clickAction(clickType>1);
+}    
+mouseAction = false;
+mouseDrag = false;
+document.body.style.cursor="default";
+window.status='mouseDrag='+mouseDrag;
+//e.preventDefault();  // this works to prevent things like dragging in mozilla and safari
+return false;
+}
+
+
+function zoomer(cmd) {
+if (cmd=="in") {
+	zoomIn(true);
+}
+if (cmd=="out") {
+	zoomIn(false);
+}
+if (cmd=="fit") {
+    //alert('l='+l+' m='+m+' z='+z+' wc='+wc+' hc='+hc);
+    x = wOrig[0]/2;
+    y = hOrig[0]/2;
+    xx = x;
+    yy = y;
+    updatePos();
+    while ((wOrig[l]*m <= wc || hOrig[l]*m <= hc) && m < 8) {
+	zoomIn(true);
+    }
+    while ((wOrig[l]*m > wc || hOrig[l]*m > hc) && (l+1) < numLevels) {
+	zoomIn(false);
+    }
+}	
+if (cmd=="full") {
+    //alert('l='+l+' m='+m+' z='+z);
+    while (l > 0)
+	zoomIn(true);
+    while (m > 1)
+	zoomIn(false);
+}
+
+return false;
+}
+
+
+function mouseOut(e) {
+if (!e) var e = window.event;
+var tg = (window.event) ? e.srcElement : e.target;
+//window.status='tg.nodeName='+tg.nodeName;
+var reltg = (e.relatedTarget) ? e.relatedTarget : e.toElement;
+if (!reltg) { // apparently FF and IE return null when goes outside window!
+    mouseAction=false;
+    mouseUp(e);
+    return;	
+}    
+//alert('tg.nodeName='+tg.nodeName+'  reltg.nodeName='+reltg.nodeName);
+//window.status='  reltg.nodeName='+reltg.nodeName;
+//while (reltg != tg && reltg.nodeName != 'BODY')
+//	reltg= reltg.parentNode
+//if (reltg== tg) return;
+// Mouseout took place when mouse actually left layer
+// Handle event
+//mouseAction=false;
+//mouseUp(e);
+}
+
+function dragStart(e) {
+if (!e) var e = window.event;
+// suppress!
+if (e.preventDefault) 
+    e.preventDefault();
+if (e.preventBubble)
+    e.preventBubble();
+e.cancelBubble = true;
+e.returnValue = false;
+return false;
+}
+
+function contextMenu(e) {
+dragStart(e);
+return false;
+}
+
+
+// Additional code for NS
+if (navigator.appName=="Netscape") {
+    // need for old Mozilla browsers
+    //alert('Netscape event handling!');
+    document.addEventListener("keydown", keyDown, true);
+    document.addEventListener("keypress", keyPress, true);
+    document.addEventListener("dblclick", dblClick, true); 
+    document.addEventListener("mouseup", mouseUp, true); 
+    document.addEventListener("mousedown", mouseDown, true);
+   
+    // safari
+    document.addEventListener("dragstart", dragStart, true);
+    document.addEventListener("drag", dragStart, true);
+    
+} else {
+    document.onkeydown = keyDown;
+    document.onkeypress = keyPress;
+    document.ondragstart = dragStart;
+    document.ondblclick  = dblClick; 
+    document.onmouseup   = mouseUp;
+    document.onmousedown = mouseDown;
+}
+
+document.onmousemove = mouseMove;
+document.onmouseout  = mouseOut;
+document.oncontextmenu = contextMenu;
+
+//document.body.ondrag = function () { return false; };
+//document.body.onselectstart = function () { return false; };
+//document.ondrag = function () { return false; };
+//document.onselectstart = function () { return false; };
+
+
+window.onresize=windowResize;
+
+//window.captureEvent(Event.RESIZE)  // old NN 4 style
+
+</SCRIPT>
+
+<body
+onLoad="showBrowser();init();return true;" STYLE="overflow: hidden ! important" 
+>
+
+<!--
+
+myCover empty div with higher z-index appears to defeat the icky auto-drag in safari and mozilla.
+(Hope it works in ff and ie too.)
+(Any text or an image placed in myCover div will hover over our image.)
+
+
+why does safari hang on resize?
+
+STYLE="border:thin;position:absolute;left:60;top:60;width:750;height:600;overflow:hidden!important;z-index:1;filter:alpha(opacity=50%);" 
+<IMG SRC="http://hgwdev-galt.cse.ucsc.edu/images/thelastphotoievertook.jpg">
+
+This is good for making the IE hover-icons, at least reduces it to only one in upper-left corner.
+However it messes up Safari.  However the div in Safari at least still helps reduce dragging problems!
+<IMG SRC="/images/dot_clear.gif" width="100%" height="100%">
+
+visibility:hidden;
+
+-->
+
+<DIV
+ID="myClip"
+STYLE="position:absolute;left:1000;top:0;z-index:1;"
+>
+</DIV>
+
+<DIV
+ID="myCover"
+STYLE="position:absolute;left:1000;top:0;z-index:2;"
+>
+</DIV>
+
+</body>
+</html>
