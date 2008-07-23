@@ -7,20 +7,15 @@ TEST_INSTALL_DIR = /cluster/data/encode/pipeline/tests
 
 all: test
 
-test: dnase dnaseBig genes bed3 dnaseHuge
+test: duke
 
 duke: output
 	${PROG} x input/duke -configDir=../config -outDir=output/duke
-	diff output/duke/validateWig.out expected/duke
-	diff output/duke/validateBed.out expected/duke
-	diff output/duke/load.ra expected/duke
+	diff output/duke/load.ra expected/duke/load.ra
+# Can't diff trackDb.ra, because dateSubmitted will be different
+#	diff output/duke/trackDb.ra expected/duke
 
-# problems in duke submission archive:
-# comment line began with double quote (problem in sample)
-# Raw Data Acc REF header with empty values in columns
-# PIF and DDF files not at top level in archive
-# Missing eol on PIF file (check sample)
-# Peaks file was missing 'name' column
+# Obsolete tests
 
 dnase: output
 	${PROG} x input/dnase -configDir=../config -outDir=output/dnase
