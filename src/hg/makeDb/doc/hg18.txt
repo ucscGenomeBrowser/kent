@@ -22331,7 +22331,7 @@ see doc/builds.txt for specific details.
     echo "alter table mammalPsg add index (chrom(7));" | hgsql hg18
 
 ####################################################################
-# UPDATE UNIGENE/SAGE TRACK (DONE - 2008-07-24 Fan)
+# UPDATE UNIGENE/SAGE TRACK (DONE - 2008-07-23 Fan)
 
 # Create the uniGene alignments 
 
