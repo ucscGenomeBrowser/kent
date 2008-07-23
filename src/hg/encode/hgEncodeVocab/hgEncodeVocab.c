@@ -9,7 +9,7 @@
 #include "ra.h"
 
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.1 2008/07/23 18:12:01 kate Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.2 2008/07/23 18:51:12 kate Exp $";
 
 /* Replace these with CGI variables */
 #define CV_FILE "/cluster/data/encode/pipeline/encpipeline_beta/config/cv.ra"
@@ -34,7 +34,8 @@ struct slList *termList = NULL;
 struct hash *ra;
 int total = 0;
 puts("<TABLE BORDER=1 BGCOLOR=#FFFEE8 CELLSPACING=0 CELLPADDING=2>\n");
-puts("<TR style=\"background:#EFEED8\"><TH>Term</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH></TR>\n");
+puts("<TR style=\"background:#D9E4F8\"><TH>Term</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH></TR>\n");
+
 while ((hEl = hashNext(&hc)) != NULL)
     {
     ra = (struct hash *)hEl->val;
