@@ -184,7 +184,7 @@ type Antibody
 antibodyDescription rabbit polyclonal 
 targetDescription CTCF zinc finger transcription factor 
 orderUrl http://www.millipore.com/catalogue/item/07-729 
-VendorName Millipore 
+vendorName Millipore 
 VendorId 07-729
 
 term Pol2(b)  
