@@ -199,7 +199,6 @@ term CtBP1
 type Antibody
 antibodyDescription mouse monoclonal 
 targetDescription C-terminal binding protein 1 
-type Antibody
 orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229303  
 vendorName BD Biosciences 
 vendorId 612042 
@@ -208,7 +207,6 @@ term CtBP2
 type Antibody
 antibodyDescription mouse monoclonal 
 targetDescription C-terminal binding protein 2 
-type Antibody
 orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229326 
 vendorName BD Biosciences 
 vendorId 612044 
