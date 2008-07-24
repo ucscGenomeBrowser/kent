@@ -199,6 +199,7 @@ term CtBP1
 type Antibody
 antibodyDescription mouse monoclonal 
 targetDescription C-terminal binding protein 1 
+type Antibody
 orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229303  
 vendorName BD Biosciences 
 vendorId 612042 
@@ -207,7 +208,57 @@ term CtBP2
 type Antibody
 antibodyDescription mouse monoclonal 
 targetDescription C-terminal binding protein 2 
+type Antibody
 orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229326 
 vendorName BD Biosciences 
 vendorId 612044 
+
+# localization
+term nucleus
+type localization
+description Large membrane bound part of cell containing chromosomes and the bulk of the cell's DNA
+termId GO:0005634
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005634
+
+term cytosol
+type localization
+description The fluid between the cells outer membrane and the nucleus
+termId GO:0005829
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005829
+
+term polysomes
+type localization
+description Strands of mRNA with ribosomes attatched
+termId GO:0005844
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005844
+
+term chromatin
+type localization
+description Nuclear DNA and associated proteins
+termId GO:0000790
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0000790
+
+term nucleolus
+type localization
+description The part of the nucleus where ribosomal RNA is actively transcribed
+termId GO:0005730
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005730
+
+# RNA extracts
+term short
+type rnaExtract
+description RNA shorter than 200 nt
+
+term longPolyA
+type rnaExtract
+description Poly(A)+ RNA longer than 200 nt
+
+term longNonPolyA
+type rnaExtract
+description Poly(A)- RNA longer than 200 nt
+
+term proteinRnaExtracts
+type rnaExtract
+description RNA associated with RNA binding proteins 
+
 
