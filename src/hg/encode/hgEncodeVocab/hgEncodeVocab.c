@@ -17,7 +17,7 @@
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.3 2008/07/24 23:25:26 mikep Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.4 2008/07/24 23:41:15 mikep Exp $";
 
 /* Default location, can specify as cgi var: ra=cv.ra */
 
@@ -54,7 +54,7 @@ else if (!strcmp(type,"Gene Type"))
     }
 else if (!strcmp(type,"Cell Line"))
     {
-    puts("  <TH>Term</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Order URL</TH><TD>Term ID</TD>");
+    puts("  <TH>Term</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Order URL</TH><TH>Term ID</TH>");
     }
 else 
     errAbort("Error: Unrecognised type (%s)\n", type);
