@@ -6278,8 +6278,8 @@ BASE=/cluster/data/hg18/bed/blastz.rn4.2006-02-17
 # rebuilt below: RE-BUILD WGRNA TRACK (DONE, 2006-05-15, Fan)
 # rebuilt below: RE-BUILD WGRNA TRACK (DONE, 2007-02-09, Fan)
 # rebuilt below: RE-BUILD WGRNA TRACK AGAIN (DONE, 2007-02-12, Fan)
-# rebuilt below: RE-BUILD WGRNA TRACK (DONE, 2007-05-31, Fan)
-# rebuilt below: RE-BUILD WGRNA TRACK (DONE, 2007-10-05, Fan)
+# rebuilt below: RE-BUILD WGRNA TRACK       (DONE, 2007-05-31, Fan)
+# rebuilt below: RE-BUILD WGRNA TRACK       (DONE, 2007-10-05, Fan)
 
   ssh hgwdev
   cd /cluster/data/hg18/bed
@@ -6299,9 +6299,9 @@ BASE=/cluster/data/hg18/bed/blastz.rn4.2006-02-17
 # RE-BUILD WGRNA TRACK (DONE, 2006-05-15, Fan)
 # rebuilt below: RE-BUILD WGRNA TRACK (DONE, 2007-02-09, Fan)
 # rebuilt below: RE-BUILD WGRNA TRACK AGAIN (DONE, 2007-02-12, Fan)
-# rebuilt below: RE-BUILD WGRNA TRACK (DONE, 2007-05-31, Fan)
-# rebuilt below: RE-BUILD WGRNA TRACK (DONE, 2007-10-05, Fan)
-# rebuilt below: RE-BUILD WGRNA TRACK (DONE, 2008-05-29, Fan)
+# rebuilt below: RE-BUILD WGRNA TRACK       (DONE, 2007-05-31, Fan)
+# rebuilt below: RE-BUILD WGRNA TRACK       (DONE, 2007-10-05, Fan)
+# rebuilt below: RE-BUILD WGRNA TRACK       (DONE, 2008-05-29, Fan)
 
     ssh hgwdev
     cd /cluster/data/hg18/bed
