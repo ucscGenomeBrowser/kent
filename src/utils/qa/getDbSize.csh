@@ -26,9 +26,9 @@ if ( $#argv < 1 || $#argv > 2 ) then
   echo "    from hgwbeta only."
   echo "  opitonally suppresses size of indices."
   echo
-  echo "    usage:  database | all | filename [noIndex]"
-  echo "           defaults to hgwbeta"
-  echo '           "filename" refers to list of dbs'
+  echo "    usage:  database|all|filename [noIndex]"
+  echo "         defaults to hgwbeta"
+  echo '         "filename" refers to list of dbs'
   echo
   exit
 else
