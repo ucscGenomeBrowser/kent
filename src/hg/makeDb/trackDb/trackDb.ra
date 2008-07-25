@@ -541,6 +541,7 @@ searchPriority 2.31
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
+    release alpha
 
 searchTable transMapAlnSplicedEst
 searchType psl
