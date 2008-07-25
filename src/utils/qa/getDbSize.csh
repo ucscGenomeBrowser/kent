@@ -76,10 +76,10 @@ endif
 # print headers
 echo
 if ( "index" == $index ) then
-  echo "db" "Gbytes" "index" | awk '{printf ("%7s %5s %5s\n", $1, $2, $3)}'
+  echo "db" "Gb" "index" | awk '{printf ("%7s %6s %5s\n", $1, $2, $3)}'
   echo "======= ====== =====" 
 else
-  echo "db" "Gbytes" | awk '{printf ("%7s %5s\n", $1, $2)}'
+  echo "db" "Gb" | awk '{printf ("%7s %6s\n", $1, $2)}'
   echo "======= ======" 
 endif
 
@@ -103,16 +103,19 @@ end
 # print totals
 if ( "true" == $list ) then
   if ( "index" == $index ) then
-    echo "\n total = $totSize  $totIndexSize "
+    echo
+    echo "total" "=" $totSize $totIndexSize \
+      | awk '{printf ("%5s %1s %6s %5s\n", $1, $2, $3, $4)}'
+
   else
-    echo "\n total = $totSize Gbytes "
+    echo "\n total = $totSize Gb "
   endif
 endif
 #print grand total if index
 
 if ( "index" == $index ) then
   echo
-  echo "combined $totSize  $totIndexSize Gbytes" | awk '{print $1, $2+$3, $4}'
+  echo "combined $totSize  $totIndexSize Gb" | awk '{print $1, $2+$3, $4}'
 endif
 
 echo
