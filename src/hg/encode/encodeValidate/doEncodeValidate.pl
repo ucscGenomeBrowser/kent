@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.33 2008/07/22 23:38:50 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.34 2008/07/26 02:11:55 larrym Exp $
 
 use warnings;
 use strict;
@@ -16,6 +16,7 @@ use strict;
 use lib "/cluster/bin/scripts";
 use HgAutomate;
 use HgDb;
+use SafePipe;
 use File::stat;
 use Getopt::Long;
 use English;
@@ -194,17 +195,16 @@ our %formatCheckers = (
     mappedReads => \&validateMappedReads,
     );
 
-sub validateWig {
+sub validateWig
+{
     my ($file) = @_;
-    my $outFile = "validateWig.out";
     my $filePath = "$submitPath/$file";
-    my $err = system (
-        "cd $outPath; head -10 $filePath | wigEncode stdin /dev/null /dev/null >$outFile 2>&1");
-    if ($err) {
+
+    my @cmds = ("head -10 $filePath", "wigEncode stdin /dev/null /dev/null");
+    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null");
+    if(my $err = $safe->exec()) {
         print STDERR  "ERROR: File \'$file\' failed wiggle validation\n";
-        open(ERR, "$outPath/$outFile") || die "ERROR: Can't open wiggle validation file \'$outPath/$outFile\': $!\n";
-        my @err = <ERR>;
-        die "@err\n";
+        die "ERROR: " . $safe->stderr();
     } else {
         &HgAutomate::verbose(2, "File \'$file\' passed wiggle validation\n");
     }
@@ -489,8 +489,8 @@ sub ddfKey
 # Main
 
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time());
-my @ddfHeader;	# list of field headers on the first line of DDF file
-my %ddfHeader = ();
+my @ddfHeader;		# list of field headers on the first line of DDF file
+my %ddfHeader = ();	# convenience hash version of @ddfHeader
 my @ddfLines = ();
 my %ddfSets = ();	# info about DDF entries broken down by ddfKey
 my $wd = cwd();
@@ -621,9 +621,10 @@ while (@{$lines}) {
     my @filenames = split(',', $files);
     $fields[$fileField] = \@filenames;
     push(@ddfLines, \@fields);
-
-    $ddfSets{ddfKey(\@fields, \%ddfHeader, \%pif)}{VIEWS}{$view} = 1;
+    $ddfSets{ddfKey(\@fields, \%ddfHeader, \%pif)}{VIEWS}{$view} = \@fields;
 }
+
+my $tmpCount = 1;
 
 # die if there are missing required views
 for my $key (keys %ddfSets) {
@@ -634,9 +635,27 @@ for my $key (keys %ddfSets) {
             }
         }
     }
-}
 
-# XXXX create missing views (e.g. ChIP-Seq Signal)
+    # create missing optional views (e.g. ChIP-Seq Signal)
+    if(defined($ddfSets{$key}{VIEWS}{Alignments}) && !defined($ddfSets{$key}{VIEWS}{Signal})) {
+        my @alignmentFields = @{$ddfSets{$key}{VIEWS}{Alignments}};
+        my @fields = @alignmentFields;
+        $fields[$ddfHeader{view}] = 'Signal';
+        $ddfSets{$key}{VIEWS}{'Signal'} = \@fields;
+        my $outFile = "createWig.out";
+        my $files = join(",", @{$alignmentFields[$ddfHeader{files}]});
+        my $tmpFile = "autoCreated$tmpCount.bed";
+        $tmpCount++;
+        my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $pif{assembly} stdin");
+        my $safe = SafePipe->new(CMDS => \@cmds);
+        if(my $err = $safe->exec()) {
+            print STDERR  "ERROR: failed creation of wiggle for $key\n";
+            die "ERROR: " . $safe->stderr();
+        }
+        $fields[$ddfHeader{files}] = [$tmpFile];
+        push(@ddfLines, \@fields);
+    }
+}
 
 # Validate files and metadata fields in all ddfLines using controlled
 # vocabulary.  Create load.ra file for loader and trackDb.ra file for wrangler.
