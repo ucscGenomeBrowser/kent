@@ -7,7 +7,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/SafePipe.pm instead.
 
-# $Id: SafePipe.pm,v 1.1 2008/07/26 02:10:00 larrym Exp $
+# $Id: SafePipe.pm,v 1.2 2008/07/26 23:47:15 larrym Exp $
 
 package SafePipe;
 
@@ -63,33 +63,35 @@ sub exec
 # for success. Individual statuses are available via statuses method.
     my ($obj) = @_;
     my $errFile = "/tmp/SafePipe$$.err";
-    `rm $errFile` if(-e $errFile);
+    unlink($errFile);
     my $stdoutCreated = 0;
     my $stdoutFile = $obj->{STDOUT};
-    if(!(defined($stdoutFile) && -e $stdoutFile)) {
+    if(!(defined($stdoutFile))) {
         $stdoutFile = "/tmp/SafePipe$$.out";
         $stdoutCreated = 1;
+        unlink($stdoutFile);
     }
     my $cmd = join(" 2>> $errFile | ", @{$obj->{CMDS}});
     $cmd .= " > $stdoutFile 2>> $errFile; echo \${PIPESTATUS[@]}";
     $obj->{CMD} = $cmd;
-
     my $output = `$cmd`;
-    open(ERR, $errFile) || die "ERROR: Can't open error file \'$errFile\': $!\n";
-    $obj->{STDERR} = join("", <ERR>);
-    close(ERR);
-    `rm $errFile`;
-    if($stdoutCreated) {
-        open(OUT, $stdoutFile) || die "ERROR: Can't open stdout file \'$stdoutFile\': $!\n";
-        $obj->{STDOUT} = join("", <OUT>);
-        close(OUT);
-        `rm $stdoutFile`;
-    }
+
+    # get individual statuses by parsing PIPESTATUS list
     my @list = split(/\s+/, $output);
     print STDERR "cmd: $cmd; output: $output\n" if($obj->{DEBUG});
     $obj->{STATUSES} = \@list;
     $obj->{SUM} = 0;
-    $obj->{SUM} += $_ for (@list);
+    $obj->{SUM} += abs for (@list);
+    open(ERR, $errFile) || die "ERROR: Can't open error file \'$errFile\': $!\n";
+    $obj->{STDERR} = join("", <ERR>);
+    close(ERR);
+    unlink($errFile);
+    if($stdoutCreated) {
+        open(OUT, $stdoutFile) || die "ERROR: Can't open stdout file \'$stdoutFile\': $!\n";
+        $obj->{STDOUT} = join("", <OUT>);
+        close(OUT);
+        unlink($stdoutFile);
+    }
     return $obj->{SUM};
 }
 
