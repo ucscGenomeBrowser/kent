@@ -46,7 +46,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	equCab1 \
 	equCab2 \
 	turTru1 vicPac1 pteVam1 tarSyr1 \
-	dipOrd1 proCav1 \
+	dipOrd1 proCav1 ochPri2 \
 	dasNov1 \
 	loxAfr1 \
 	echTel1 \
