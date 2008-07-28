@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.22 2008/06/30 18:28:44 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.23 2008/07/28 04:15:09 kate Exp $
 
 # to-do items:
 # - lots of testing
@@ -1439,8 +1439,11 @@ rm -fr $runDir/chain
 _EOF_
       );
   } else {
+# scaffold-based assembly
+# filter net for synteny and create syntenic net mafs
     $bossScript->add(<<_EOF_
-netToAxt $tDb.$qDb.net.gz $tDb.$qDb.all.chain.gz \\
+netFilter -syn $tDb.$qDb.net.gz | gzip -c > $tDb.$qDb.syn.net.gz
+netToAxt $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz \\
     $defVars{'SEQ1_DIR'} $defVars{'SEQ2_DIR'} stdout \\
   | axtSort stdin stdout \\
   | axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. stdin \\
