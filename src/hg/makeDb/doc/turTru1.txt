@@ -176,3 +176,8 @@ cut -f 2 chrom.sizes | ave stdin
     # Link to it from /gbdb
     ln -s /cluster/data/turTru1/turTru1.2bit /gbdb/turTru1/turTru1.2bit
 
+    # mkdir /san/sanvol1/scratch/turTru1
+    cp /cluster/data/turTru1/turTru1.2bit /san/sanvol1/scratch/turTru1
+    cp /cluster/data/turTru1/chrom.sizes /san/sanvol1/scratch/turTru1
+
+
