@@ -9,7 +9,7 @@
 #include "localmem.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: extFileTbl.c,v 1.7 2006/03/16 21:36:46 markd Exp $";
+static char const rcsid[] = "$Id: extFileTbl.c,v 1.8 2008/07/28 17:28:48 markd Exp $";
 
 /*
  * Note: this use immediate inserts rather than batch, because the tables
@@ -106,8 +106,8 @@ else
     char query[PATH_LEN+64];
     off_t size = fileSize(path);
     HGID id;
-    if (size <= 0)
-        errAbort("attempt to add non-existent or empty file to gbExtFile table: %s",
+    if (size < 0)
+        errAbort("attempt to add non-existent file to gbExtFile table: %s",
                  path);
     id = hgGetMaxId(conn, EXT_FILE_TBL) + 1;
     safef(query, sizeof(query), "INSERT INTO gbExtFile VALUES(%d, '%s', %llu)",
