@@ -22442,7 +22442,7 @@ _EOF_
 
     ln -s blastz.turTru1.2008-07-11 /cluster/data/hg18/bed/blastz.turTru1
 
-    featureBits hg18 -chrom=chr1 chainEquCab2Link
+    featureBits hg18 chainTurTru1Link
     # 1400537230 bases of 2881515245 (48.604%) in intersection
 
     cd /cluster/data/hg18/bed/blastz.turTru1.2008-07-11
@@ -22450,7 +22450,7 @@ _EOF_
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 turTru1 > rbest.log 2>&1 &
 
 #############################################################################
-# BLASTZ/CHAIN/NET pteVam1 (working
+# BLASTZ/CHAIN/NET pteVam1 (DONE braney 2008-07-28)
     ssh kkstore02
     screen #	use screen to control this multi-day job
     mkdir /cluster/data/hg18/bed/blastz.pteVam1.2008-07-13
@@ -22494,8 +22494,8 @@ _EOF_
     cd ..
     ln -s blastz.pteVam1.2008-07-13 /cluster/data/hg18/bed/blastz.pteVam1
 
-    featureBits hg18 -chrom=chr1 chainPteVam1Link
-    # 100304112 bases of 224999719 (44.580%) in intersection
+    featureBits hg18 chainPteVam1Link
+    # 1312925830 bases of 2881515245 (45.564%) in intersection
 
     cd /cluster/data/hg18/bed/blastz.pteVam1.2008-07-13
 
