@@ -91,7 +91,7 @@ sub loadBed
     #TEST by replacing "cat" with  "head -1000 -q"
     my $cmd = "cat $fileList | egrep -v '^track|browser' | hgLoadBed $encodeDb $tableName stdin -tmpDir=out > out/loadBed.out 2>&1";
 
-    print STDERR "loadBed: cmd: $cmd\n";
+    print STDERR "loadBed: cmd: $cmd\n" if($debug);
 
     if(system($cmd)) {
         print STDERR "ERROR: File(s) $fileList failed bed load.\n";
@@ -146,8 +146,7 @@ sub loadBed5Plus
 
 my $wd = cwd();
 
-my $ok = GetOptions("configDir=s", "noEmail", "outDir=s", "verbose=i");
-usage() if (!$ok);
+GetOptions("configDir=s", "noEmail", "outDir=s", "verbose=i") || usage();
 $opt_verbose = 1 if (!defined $opt_verbose);
 $opt_noEmail = 0 if (!defined $opt_noEmail);
 
@@ -195,8 +194,8 @@ chdir($submitDir);
 
 my $programDir = dirname($0);
 # XXXX change to "doEncodeUnload.pl" when ready
-if(system("$programDir/doEncodeUnload.rb $submitType $submitDir")) {
-    die "expected error running $programDir/doEncodeUnload.rb cleanup script";
+if(system("$programDir/doEncodeUnload.pl $submitType $submitDir")) {
+    die "expected error running $programDir/doEncodeUnload.pl cleanup script";
 }
 
 if(!(-e $loadRa)) {
@@ -222,30 +221,30 @@ print STDERR "\n" if($debug);
 for my $key (keys %ra) {
     my $h = $ra{$key};
     my $tablenameExt = $h->{tablename} . "${encInstance}_$encProject";
-    if($debug == 2) {
-        print STDERR "keyword: $key\n";
-        for my $field (qw(tablename type tableType assembly files tablenameExt)) {
-            if($h->{$field}) {
-                print STDERR "$field: " . $h->{$field} . "\n";
-            }
+
+    my $str = "\nkeyword: $key\n";
+    for my $field (qw(tablename type tableType assembly files tablenameExt)) {
+        if($h->{$field}) {
+            $str .= "$field: " . $h->{$field} . "\n";
         }
-        print STDERR "\n";
     }
+    $str .= "\n";
+    HgAutomate::verbose(3, $str);
 
     # temporary work-around (XXXX, galt why is this "temporary?").
-
     $encodeDb = $h->{assembly};
 
-    if($h->{type} eq "genePred") {
+    my $type = $h->{type};
+    if($type eq "genePred") {
         loadGene($tablenameExt, $h->{files});
-    } elsif ($h->{type} eq "wig") {
+    } elsif ($type eq "wig") {
         loadWig($tablenameExt, $h->{files});
-    } elsif ($h->{type} eq "bed 5 +") {
+    } elsif ($type eq "bed 5 +") {
         loadBed5Plus($tablenameExt, $h->{files}, $h->{tableType});
-    } elsif (($h->{type} eq "bed 3") || ($h->{type} eq "bed 4") || ($h->{type} eq "bed 4") || ($h->{type} eq "bed 5") || ($h->{type} eq "bed 6")) {
+    } elsif (($type eq "bed 3") || ($type eq "bed 4") || ($type eq "bed 4") || ($type eq "bed 5") || ($type eq "bed 6")) {
         loadBed($tablenameExt, $h->{files});
     } else {
-        die "ERROR: unknown type: $h->{type} in load.ra\n";
+        die "ERROR: unknown type: $type in load.ra\n";
     }
     print STDERR "\n" if($debug);
 }
