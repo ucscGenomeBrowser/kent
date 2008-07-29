@@ -38,7 +38,7 @@ my $debug = 0;
 sub usage
 {
     die <<END
-usage: doEncodeLoad.rb submission_type project_submission_dir
+usage: doEncodeLoad.pl submission_type project_submission_dir
 
 Assumes existence of a file called: project_submission_dir/$loadRa
 END
@@ -179,17 +179,17 @@ print STDERR "Loading project in directory $submitDir\n" if($debug);
 
 # Load files listed in load.ra
 
-my @ra = RAFile::readRaFile($loadRa);
+my %ra = RAFile::readRaFile($loadRa, 'tablename');
 
-print STDERR "$loadRa has: " . scalar(@ra) . " records\n" if($debug);
+print STDERR "$loadRa has: " . scalar(keys %ra) . " records\n" if($debug);
 
 print STDERR "\n" if($debug);
 
-for my $ele (@ra) {
-    my $h = $ele->{HASH};
+for my $key (keys %ra) {
+    my $h = $ra{$key};
     my $tablenameExt = $h->{tablename} . "${encInstance}_$encProject";
     if($debug == 2) {
-        print STDERR "keyword: $ele->{KEYWORD}\n";
+        print STDERR "keyword: $key\n";
         for my $field (qw(tablename type tableType assembly files tablenameExt)) {
             if($h->{$field}) {
                 print STDERR "$field: " . $h->{$field} . "\n";
