@@ -17,7 +17,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.39 2008/07/02 00:03:42 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.40 2008/07/29 20:28:58 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -51,6 +51,7 @@ void welcomeUser(char *wikiUserName)
 char *wikiHost = wikiLinkHost();
 
 cartWebStart(cart, "Welcome %s", wikiUserName);
+jsInit();
 printf("If you are not %s (on the wiki at "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>%s</A>) "
        "and would like to sign out or change identity, \n",
@@ -66,6 +67,7 @@ void offerLogin()
 char *wikiHost = wikiLinkHost();
 
 cartWebStart(cart, "Sign in to UCSC Genome Bioinformatics");
+jsInit();
 printf("Signing in enables you to save current settings into a "
        "named session, and then restore settings from the session later.\n"
        "If you wish, you can share named sessions with other users.\n");
@@ -83,7 +85,7 @@ void showCartLinks()
 char *session = cartSidUrlString(cart);
 char returnAddress[512];
 
-safef(returnAddress, sizeof(returnAddress), "/cgi-bin/hgSession?%s", session);
+safef(returnAddress, sizeof(returnAddress), "../cgi-bin/hgSession?%s", session);
 printf("<A HREF=\"../cgi-bin/cartReset?%s&destination=%s\">Click here to "
        "reset</A> the browser user interface settings to their defaults.\n",
        session, cgiEncodeFull(returnAddress));
@@ -371,7 +373,14 @@ char *formMethod = cartUsualString(cart, "formMethod", "POST");
 if (webStarted)
     webNewSection("Session Management");
 else
+    {
     cartWebStart(cart, "Session Management");
+    jsInit();
+    }
+
+printf("See the <A HREF=\"../goldenPath/help/hgSessionHelp.html\" "
+       "TARGET=_BLANK>Sessions User's Guide</A> "
+       "for more information about this tool.<P/>\n");
 
 showCartLinks();
 
@@ -449,16 +458,15 @@ if (wikiLinkEnabled())
 	webNewSection("Updated Session");
 	puts(message);
 	}
-    jsInit();
     showSessionControls(wikiUserName, TRUE, TRUE);
     showLinkingTemplates(wikiUserName);
     }
 else
     {
-    jsInit();
     if (isNotEmpty(message))
 	{
 	cartWebStart(cart, "Updated Session");
+	jsInit();
 	puts(message);
 	showSessionControls(NULL, FALSE, TRUE);
 	}
