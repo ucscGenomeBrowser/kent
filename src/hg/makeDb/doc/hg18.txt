@@ -11748,7 +11748,9 @@ hgLoadSqlTab -oldTable hgFixed gvAttr ~/humPhen/kent/src/hg/lib/gv.sql gvAttrIPN
 
 ##########################################################################
 # ORegAnno: oreganno, oregannoAttr, oregannoLink
-# Belinda Giardine  August 3, 2007, updated Oct 26, 2007, updated July 7, 2008
+# Belinda Giardine  August 3, 2007
+#             updated Oct 26, 2007
+#             updated July 7, 2008
 # This has regulatory annotations from ORegAnno.
 # Get updated file from ORegAnno wiki page
 #    http://www.bcgsc.ca/wiki/display/oreganno/DataFiles
