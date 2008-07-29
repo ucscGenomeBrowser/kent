@@ -33,7 +33,7 @@ hgsql proteins080707 -e 'load data local infile "hgncXref.tab" into table hgncXr
 # Actually, they have automated this task, so we no longer need to notify
 # them. (ASZ: 02-04-2008). 
 
-# make sure the pfamXref program is available:
+# make sure the pfamXref program is available:
 cd /cluster/data/proteins/080707/build
 
 # FIRST BUILD spXref2 and spXref3 tables.
@@ -77,6 +77,23 @@ hgLoadSqlTab proteins080707 spXref3B ~/kent/src/hg/lib/spXref3.sql spXref3.tab
 # of the same accession does have non-empty HUGO symbols.
 hgsql proteins080707 -e 'delete spXref3 from spXref3 a, spXref3B b where a.accession=b.accession and a.hugoSymbol="" and b.hugoSymbol!=""'
 
+######################################################################
+# BUILD spXref2 TABLE (DONE, Fan, 07/29/08)
+
+/cluster/home/fanhsu/bin/x86_64/spToSpXref2 080707 >spXref2.tab
+
+hgsql proteins080707 < ~/src/hg/lib/spXref2.sql
+
+# load the big table, ~63 million records
+hgsql proteins080707 -e 'load data local infile "spXref2.tab" into table spXref2'
+
+# create the indices, took about 40 minutes for each index. 
+
+hgsql proteins080707 -e 'create index displayID on spXref2(displayID)'
+hgsql proteins080707 -e 'create index extAC on spXref2(extAC)'
+hgsql proteins080707 -e 'create index accession on spXref2(accession)'
+
+########################################################################
 # Build spOrganism table
 hgsql sp080707 -N -e 'select d.val, taxon from displayId d, accToTaxon t where d.acc=t.acc ' >spOrganism.tab
 
