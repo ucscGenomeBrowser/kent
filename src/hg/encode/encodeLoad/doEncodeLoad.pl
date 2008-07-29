@@ -5,7 +5,7 @@
 # Reads load.ra for information about what to do
 
 # Writes error or log information to STDOUT
-# Returns 0 if load succeeds.
+# Returns 0 if load succeeds and sends email to wrangler for given lab.
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
@@ -18,14 +18,21 @@
 use warnings;
 use strict;
 
+use Getopt::Long;
+use Cwd;
 use File::Temp;
 use File::Basename;
+
 use lib "/cluster/bin/scripts";
+use Encode;
 use RAFile;
+
+use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose/;
 
 my $loadRa = "out/load.ra";
 my $unloadRa = "out/unload.ra";
 my $submitDir = "";
+my $submitFQP;
 my $submitType = "";
 my $tempDir = "/data/tmp";
 my $encodeDb = "hg18";
@@ -137,6 +144,13 @@ sub loadBed5Plus
 ############################################################################
 # Main
 
+my $wd = cwd();
+
+my $ok = GetOptions("configDir=s", "noEmail", "outDir=s", "verbose=i");
+usage() if (!$ok);
+$opt_verbose = 1 if (!defined $opt_verbose);
+$opt_noEmail = 0 if (!defined $opt_noEmail);
+
 # Change dir to submission directory obtained from command-line
 
 if(@ARGV != 2) {
@@ -145,6 +159,26 @@ if(@ARGV != 2) {
 
 $submitType = $ARGV[0];	# currently not used
 $submitDir = $ARGV[1];
+if ($submitDir =~ /^\//) {
+    $submitFQP = $submitDir;
+} else {
+    $submitFQP = "$wd/$submitDir";
+}
+
+my $configPath;
+if (defined $opt_configDir) {
+    if ($opt_configDir =~ /^\//) {
+        $configPath = $opt_configDir;
+    } else {
+        $configPath = "$wd/$opt_configDir";
+    }
+} else {
+    $configPath = "$submitDir/../config"
+}
+
+my %labs = Encode::getLabs($configPath);
+my %fields = Encode::getFields($configPath);
+my %pif = Encode::getPif($submitDir, \%labs, \%fields);
 
 $encInstance = dirname($submitDir);
 $encProject = basename($submitDir);
@@ -214,6 +248,13 @@ for my $key (keys %ra) {
         die "ERROR: unknown type: $h->{type} in load.ra\n";
     }
     print STDERR "\n" if($debug);
+}
+
+# Send "data is ready" email to email contact assigned to $pif{lab}
+
+if($labs{$pif{lab}} && $labs{$pif{lab}}->{wranglerEmail} && !$opt_noEmail) {
+    my $email = $labs{$pif{lab}}->{wranglerEmail};
+    `echo "dir: $submitFQP" | /bin/mail -s "ENCODE data from $pif{lab} lab is ready" $email`;
 }
 
 exit(0);
