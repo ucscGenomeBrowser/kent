@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.12 2008/01/03 20:45:18 ann Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.13 2008/07/29 19:15:56 kent Exp $";
 
 char *samGenomeDb(char *proteinId)
 /* Determin if a protein belongs to a genome DB that has SAM results */
@@ -99,7 +99,7 @@ if (kgVersion == KG_III)
 	    char query[256];
 	    char *description;
 	    safef(query, sizeof(query), 
-	          "select description from %s.pfamDesc where acc='%s'", database, el->name);
+	          "select description from %s.pfamDesc where pfamAC='%s'", database, el->name);
 	    description = sqlQuickString(hgConn, query);
 	    if (description == NULL)
 	    	description = cloneString("n/a");
