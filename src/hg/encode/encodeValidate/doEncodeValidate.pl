@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.37 2008/07/29 20:03:48 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.38 2008/07/29 21:50:27 larrym Exp $
 
 use warnings;
 use strict;
@@ -135,20 +135,32 @@ sub validateAntibody {
 }
 
 ############################################################################
-# Format checkers - extend when adding new data format
+# Format checkers - check file format for given types; extend when adding new 
+# data formats
+#
+# Some of the checkers use regular expressions to validate syntax of the files.
+# Others pass first 10 lines to utility loaders; the later has:
+# advantages:
+# 	checks semantics as well as syntax
+# disadvantages;
+# 	only checks the beginning of the file
+# 	but some of the loaders tolerate (but give incorrect results) for invalid files
 
 # dispatch table
 our %formatCheckers = (
     wig => \&validateWig,
     bed => \&validateBed,
     genePred => \&validateGene,
-    mappedReads => \&validateMappedReads,
+    tagAlignment => \&validateTagAlignment,
+    encodePeaks => \&validateEncodePeaks,
     );
+
+my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|))";
 
 sub validateWig
 {
-    my ($file) = @_;
-    my $filePath = "$submitPath/$file";
+    my ($path, $file, $type) = @_;
+    my $filePath = "$path/$file";
 
     my @cmds = ("head -10 $filePath", "wigEncode stdin /dev/null /dev/null");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null");
@@ -162,13 +174,13 @@ sub validateWig
 
 sub validateBed {
 # Validate each line of a bed 5 or greater file.
-    my ($file, $type) = @_;
-    my $filePath = "$submitPath/$file";
+    my ($path, $file, $type) = @_;
+    my $filePath = "$path/$file";
     my $line = 0;
     open(FILE, $filePath) or die "Couldn't open file: $filePath; error: $!\n";
     while(<FILE>) {
         chomp;
-        my @fields = split /\t/;
+        my @fields = split /\s+/;
         $line++;
         next if(!@fields);
         my $prefix = "Failed bed validation, file '$file'; line $line:";
@@ -197,9 +209,9 @@ sub validateBed {
 }
 
 sub validateGene {
-    my ($file, $type) = @_;
+    my ($path, $file, $type) = @_;
     my $outFile = "validateGene.out";
-    my $filePath = "$submitPath/$file";
+    my $filePath = "$path/$file";
     my $err = system (
         "cd $outPath; egrep -v '^track|browser' $filePath | ldHgGene -out=genePred.tab -genePredExt hg18 testTable stdin >$outFile 2>&1");
     if ($err) {
@@ -212,19 +224,36 @@ sub validateGene {
     }
 }
 
-sub validateMappedReads {
-    my ($file, $type) = @_;
-    my $filePath = "$submitPath/$file";
+sub validateTagAlignment
+{
+    my ($path, $file, $type) = @_;
+    my $filePath = "$path/$file";
     my $line = 0;
-    open(FILE, $filePath) or die "Couldn't open file: $filePath; error: $!\n";
+    open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
     while(<FILE>) {
         $line++;
-        if(!(/chr(\d+|M|X|Y)\t\d+\t\d+\t[ATCG]+\t\d+\t[+-]\t.*/)) {
-            die "Line number $line is invalid\nline: $_";
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[ATCG]+\s+\d+\s+[+-]$/)) {
+            die "Line number $line in file '$file' is invalid\nline: $_";
         }
     }
     close(FILE);
-    HgAutomate::verbose(2, "File \'$file\' passed mappedReads validation\n");
+    HgAutomate::verbose(2, "File \'$file\' passed tagAlignment validation\n");
+}
+
+sub validateEncodePeaks
+{
+    my ($path, $file, $type) = @_;
+    my $filePath = "$path/$file";
+    my $line = 0;
+    open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
+    while(<FILE>) {
+        $line++;
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+$floatRegEx\s+$floatRegEx\s+\d+$/)) {
+            die "Line number $line in file '$file' is invalid\nline: $_";
+        }
+    }
+    close(FILE);
+    HgAutomate::verbose(2, "File \'$file\' passed encodePeaks validation\n");
 }
 
 
@@ -251,7 +280,7 @@ sub checkDataFormat {
         $type = $2;
     }
     $formatCheckers{$format} || die "ERROR: Data format \'$format\' is unknown\n";
-    $formatCheckers{$format}->($file, $type);
+    $formatCheckers{$format}->($submitPath, $file, $type);
 }
 
 sub ddfKey
@@ -271,7 +300,7 @@ sub ddfKey
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time());
 my @ddfHeader;		# list of field headers on the first line of DDF file
 my %ddfHeader = ();	# convenience hash version of @ddfHeader
-my @ddfLines = ();
+my @ddfLines = ();	# each line in DDF (except for fields header)
 my %ddfSets = ();	# info about DDF entries broken down by ddfKey
 my $wd = cwd();
 
@@ -333,7 +362,7 @@ my %pif = Encode::getPif($submitDir, \%labs, \%fields);
 
 my $db = HgDb->new(DB => $pif{assembly});
 
-# Add required fields for this -- the variables in the PIF file
+# Add the variables in the PIF file to the required fields list
 if (defined($pif{variables})) {
     for my $variable (keys %{$pif{variableHash}}) {
         $fields{$variable}->{required} = 'yes';
