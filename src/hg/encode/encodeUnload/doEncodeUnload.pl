@@ -10,7 +10,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at: ~/kent/src/hg/encode/encodeUnload/doEncodeUnload.pl
 #
-# $Id: doEncodeUnload.pl,v 1.2 2008/07/29 22:56:08 larrym Exp $
+# $Id: doEncodeUnload.pl,v 1.3 2008/07/29 23:08:14 larrym Exp $
 
 use warnings;
 use strict;
@@ -24,8 +24,6 @@ use HgDb;
 use HgAutomate;
 
 use vars qw/$opt_verbose/;
-
-my $debug = 0;
 
 sub usage
 {
@@ -49,7 +47,7 @@ sub unloadWig
     # remove symlink
     my $file = "/gbdb/$assembly/wib/$tableName.wib";
     if(-e $file) {
-        print STDERR "removing wib '$file'\n" if($debug);
+        HgAutomate::verbose(3, "removing wib '$file'\n");
         if(system("rm -f $file")) {
             die "unexpected error removing symlink $file";
         }
@@ -92,15 +90,15 @@ my $db;
 for my $key (keys %ra) {
     my $h = $ra{$key};
     my $tablenameExt = $h->{tablename} . "${encInstance}_$encProject";
-    if($debug == 2) {
-        print STDERR "keyword: $key\n";
-        for my $field (qw(tablename type tableType assembly files tablenameExt)) {
-            if($h->{$field}) {
-                print STDERR "$field: " . $h->{$field} . "\n";
-            }
+
+    my $str = "\nkeyword: $key\n";
+    for my $field (qw(tablename type tableType assembly files tablenameExt)) {
+        if($h->{$field}) {
+            $str .= "$field: " . $h->{$field} . "\n";
         }
-        print STDERR "\n";
     }
+    $str .= "\n";
+    HgAutomate::verbose(3, $str);
 
     my $assembly = $h->{assembly};
     if(!defined($db)) {
@@ -109,9 +107,10 @@ for my $key (keys %ra) {
 
     HgAutomate::verbose(2, "Dropping table '$tablenameExt'\n");
 
-    if($h->{type} eq "genePred" || $h->{type} =~ /^bed/) {
+    my $type = $h->{type};
+    if($type eq "genePred" || $type =~ /^bed/ || $type eq 'encodePeaks' || $type eq 'tagAlignment') {
         genericUnload($assembly, $db, $tablenameExt);
-    } elsif ($h->{type} eq "wig") {
+    } elsif ($type eq "wig") {
         unloadWig($assembly, $db, $tablenameExt);
     } else {
         die "ERROR: unknown type: $h->{type} in load.ra\n";
