@@ -1,0 +1,173 @@
+# for emacs: -*- mode: sh; -*-
+
+# microbat (  Myotis lucifugus )
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE braney 2008-07-11)
+    ssh kkstore05
+    mkdir /cluster/store12/myoLuc1
+    ln -s /cluster/store12/myoLuc1 /cluster/data
+    mkdir /cluster/data/myoLuc1/broad
+    cd /cluster/data/myoLuc1/broad
+
+    wget --timestamping \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/microbat/myoLuc1/assembly.agp \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/microbat/myoLuc1/assembly.bases.gz \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/microbat/myoLuc1/assembly.quals.gz 
+
+
+qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin myoLuc1.qual.qac
+
+    wget --timestamping \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/microbat/myoLuc1/BasicStats.out
+
+# --------------------------------------------------------------------------------
+# Thu Mar 02 15:01:30 2006 run, based on Tue Feb 28 15:18:13 EST 2006 make
+# BasicStats PRE=/wga/dev1/WGAdata DATA=projects/Bat RUN=run/work
+\
+#           SUBDIR=assisted_5 QUAL_STATS=True
+#--------------------------------------------------------------------------------
+#
+#Supercontigs having < 3 reads or < 1kb sequence are ignored.
+#8056 gaps <= -1000; 2733 gaps <= -10000; 4 gaps <= -100000
+#fraction of gaps < -10kb or more than 4 deviations below zero: 1.76%
+#33071 gaps > 10kb, 15 gaps > 50kb, 0 gaps > 200kb, 0 gaps > 1Mb
+#81% of reads were used in the assembly (84.16% of bases, 85.3% of Q20 bases)
+#0% of reads were used multiply in the assembly
+#584023 contigs, having N50 length 3206
+#total contig length: 1617176597, spanning 2780941149 bases (with 41.8% in
+#gaps)
+#136582 supercontigs, having N50 length 53069 (not including gaps)
+#76.6% of assembly in supers of size < 200000 (2131474931 bases)
+#Assembly base coverage: 1.72X.  Assembly Q20 coverage:  1.48X.
+#99.75% of bases have q >= 1
+#95.27% of bases have q >= 20
+#89.72% of bases have q >= 30
+#82.51% of bases have q >= 40
+#72.94% of bases have q >= 50
+
+   cut -f 1 assembly.agp | uniq -c | wc -l 
+   # Number of scaffolds: 193323
+
+
+#########################################################################
+# Create .ra file and run makeGenomeDb.pl
+    ssh kkstore05
+    cd /cluster/data/myoLuc1
+cat << _EOF_ >myoLuc1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db myoLuc1
+clade mammal
+genomeCladePriority 35
+scientificName  Myotis lucifugus
+commonName Microbat
+assemblyDate Mar. 2006
+assemblyLabel Broad Institute myoLuc1 
+orderKey 236.5
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/myoLuc1/broad/assembly.bases.gz
+agpFiles /cluster/data/myoLuc1/broad/assembly.agp
+qualFiles /cluster/data/myoLuc1/broad/myoLuc1.qual.qac
+dbDbSpeciesDir microbat
+_EOF_
+
+# use 'screen' make sure on kkstore05
+    makeGenomeDb.pl -verbose=2 myoLuc1.config.ra > makeGenomeDb.out 2>&1 &
+
+# 'ctl-a ctl -d' returns to previous shell
+cut -f 2 chrom.sizes | ave stdin
+# Q1 1154.000000
+# median 2190.000000
+# Q3 7139.000000
+# average 14742.433953
+# min 200.000000
+# max 1293446.000000
+# count 193323
+# total 2850051559.000000
+# standard deviation 41575.958603
+
+#########################################################################
+# REPEATMASKER (DONE braney 2008-07-29)
+    ssh kkstore05
+    screen # use a screen to manage this job
+    mkdir /cluster/data/myoLuc1/bed/repeatMasker
+    cd /cluster/data/myoLuc1/bed/repeatMasker
+    doRepeatMasker.pl -buildDir=/cluster/data/myoLuc1/bed/repeatMasker \
+        myoLuc1 > do.log 2>&1 &
+
+    # Note: can run simpleRepeats simultaneously
+    #### When done with RM:
+    ssh pk
+    para time
+# Completed: 6580 of 6580 jobs
+# CPU time in finished jobs:   16608254s  276804.23m  4613.40h  192.23d  0.527 y
+# IO & Wait Time:                 77692s    1294.87m    21.58h    0.90d  0.002 y
+# Average job time:                2536s      42.26m     0.70h    0.03d
+# Longest finished job:            6707s     111.78m     1.86h    0.08d
+# Submission to last job:        138115s    2301.92m    38.37h    1.60d
+
+
+    time nice -n +19 featureBits myoLuc1 rmsk > fb.myoLuc1.rmsk.txt 2>&1 &
+# 416753531 bases of 1673855868 (24.898%) in intersection
+
+    # RepeatMasker and lib version from do.log:
+    #    Jun 13 2008 (open-3-2-5) version of RepeatMasker
+    # CC   RELEASE 20080611;  
+
+
+#########################################################################
+# SIMPLE REPEATS TRF (DONE braney 2008-07-29)
+    ssh kkstore05
+    screen # use a screen to manage this job
+    mkdir /cluster/data/myoLuc1/bed/simpleRepeat
+    cd /cluster/data/myoLuc1/bed/simpleRepeat
+    # 
+    doSimpleRepeat.pl -buildDir=/cluster/data/myoLuc1/bed/simpleRepeat \
+	myoLuc1 > do.log 2>&1 &
+
+    #### When done
+    ssh pk
+    para time
+# Completed: 58 of 58 jobs
+# CPU time in finished jobs:      36439s     607.32m    10.12h    0.42d  0.001 y
+# IO & Wait Time:                   211s       3.52m     0.06h    0.00d  0.000 y
+# Average job time:                 632s      10.53m     0.18h    0.01d
+# Longest finished job:            5886s      98.10m     1.64h    0.07d
+# Submission to last job:          6114s     101.90m     1.70h    0.07d
+
+    featureBits myoLuc1 simpleRepeat
+# 33491779 bases of 1673855868 (2.001%) in intersection
+
+    #	after RM run is done, add this mask:
+    cd /cluster/data/myoLuc1
+    twoBitMask myoLuc1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed myoLuc1.2bit
+
+    twoBitToFa myoLuc1.2bit stdout | faSize stdin
+# 2850051559 bases (1176195691 N's 1673855868 real 1256986222 upper 416869646
+# lower) in 193323 sequences in 1 files
+# Total size: mean 14742.4 sd 41576.1 min 200 (scaffold_48228) max 1293446
+# (scaffold_148345) median 2190
+# N count: mean 6084.1 sd 18925.1
+# U count: mean 6502.0 sd 18734.7
+# L count: mean 2156.3 sd 6031.6
+# %14.63 masked total, %24.90 masked real
+
+    twoBitToFa myoLuc1.rmsk.2bit stdout | faSize stdin
+# 2850051559 bases (1176195691 N's 1673855868 real 1257573734 upper 416282134
+# lower) in 193323 sequences in 1 files
+# Total size: mean 14742.4 sd 41576.1 min 200 (scaffold_48228) max 1293446
+# (scaffold_148345) median 2190
+# N count: mean 6084.1 sd 18925.1
+# U count: mean 6505.0 sd 18741.6
+# L count: mean 2153.3 sd 6025.1
+# %14.61 masked total, %24.87 masked real
+
+    # Link to it from /gbdb
+    ssh hgwdev
+    ln -s /cluster/data/myoLuc1/myoLuc1.2bit /gbdb/myoLuc1/myoLuc1.2bit
+
+    # mkdir /san/sanvol1/scratch/myoLuc1
+    cp /cluster/data/myoLuc1/myoLuc1.2bit /san/sanvol1/scratch/myoLuc1
+    cp /cluster/data/myoLuc1/chrom.sizes /san/sanvol1/scratch/myoLuc1
+
+
