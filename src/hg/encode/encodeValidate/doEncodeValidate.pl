@@ -4,40 +4,33 @@
 #                       automated submission pipeline
 # Verifies that all files and metadata are present and of correct formats
 # Creates a load file (load.ra) and track configuration (trackDb.ra) for the datasets
-# Returns 0 if validation succeeds and sends email to wrangler for given lab.
+# Returns 0 if validation succeeds
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.36 2008/07/29 18:52:08 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.37 2008/07/29 20:03:48 larrym Exp $
 
 use warnings;
 use strict;
 
-use lib "/cluster/bin/scripts";
-use HgAutomate;
-use HgDb;
-use RAFile;
-use SafePipe;
 use File::stat;
 use Getopt::Long;
 use English;
 use Carp qw(cluck);
 use Cwd;
 
+use lib "/cluster/bin/scripts";
+use Encode;
+use HgAutomate;
+use HgDb;
+use RAFile;
+use SafePipe;
+
 use vars qw/
     $opt_configDir
-    $opt_noEmail
     $opt_outDir
     $opt_verbose
     /;
-
-# Global constants
-our $fieldConfigFile = "fields.ra";
-our $vocabConfigFile = "cv.ra";
-our $labsConfigFile = "labs.ra";
-our $loadFile = "load.ra";
-our $trackFile = "trackDb.ra";
-our $pifVersion = 0.2;
 
 # Global variables
 our $submitPath;        # full path of data submission directory
@@ -52,7 +45,6 @@ usage: encodeValidate.pl submission-type project-submission-dir
 submission-type is currently ignored.
 
 options:
-    -noEmail	        Suppress email to wrangler
     -verbose num        Set verbose level to num (default 1).            -
     -configDir dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
@@ -60,46 +52,6 @@ options:
                         (default: submission-dir/out)
 END
 exit 1;
-}
-
-sub readFile
-{
-# Return lines from given file, with EOL chomp'ed off.
-# Handles either Unix or Mac EOL characters.
-# Reads whole file into memory, so should NOT be used for huge files.
-    my ($file) = @_;
-    my $oldEOL = $/;
-    open(FILE, $file) or die "ERROR: Can't open file \'$file\'\n";
-    my @lines = <FILE>;
-    if(@lines == 1 && $lines[0] =~ /\r/) {
-        # rewind and re-read as a Mac file - obviously, this isn't the most efficient way to do this.
-        seek(FILE, 0, 0);
-        $/ = "\r";
-        @lines = <FILE>;
-    }
-    for (@lines) {
-        chomp;
-    }
-    close(FILE);
-    $/ = $oldEOL;
-    return \@lines;
-}
-
-sub splitKeyVal
-{
-# split a line into key/value, using the FIRST white-space in the line; we also trim key/value strings
-    my ($str) = @_;
-    my $key = undef;
-    my $val = undef;
-    if($str =~ /([^\s]+)\s+(.+)/) {
-        $key = $1;
-        $val = $2;
-        $key =~ s/^\s+//;
-        $key =~ s/\s+$//;
-        $val =~ s/^\s+//;
-        $val =~ s/\s+$//;
-    }
-    return ($key, $val);
 }
 
 ############################################################################
@@ -151,11 +103,6 @@ sub validateFileName {
 
 sub validateDatasetName {
     my ($val) = @_;
-}
-
-sub validateAssembly {
-    my ($val) = @_;
-    $val =~ /^hg1[78]$/ || die "ERROR: Assembly '$val' is invalid (must be 'hg17' or 'hg18')\n";
 }
 
 sub validateDataType {
@@ -307,145 +254,6 @@ sub checkDataFormat {
     $formatCheckers{$format}->($file, $type);
 }
 
-sub loadControlledVocab {
-    %terms = ();
-    my %termRa = RAFile::readRaFile("$configPath/$vocabConfigFile", "term");
-    foreach my $term (keys %termRa) {
-        my $type = $termRa{$term}->{type};
-        $terms{$type}->{$term} = $termRa{$term};
-    }
-}
-
-sub newestFile {
-  # Get the most recently modified file from a list
-    my @files = @_;
-    my $newestTime = 0;
-    my $newestFile = "";
-    my $file = "";
-    foreach $file (@files) {
-        my $fileTime = (stat($file))->mtime;
-        if ($fileTime > $newestTime) {
-            $newestTime = $fileTime;
-            $newestFile = $file;
-        }
-    }
-    return $newestFile;
-}
-
-sub getPif
-{
-# Return PIF hash; hash keys are RA style plus an additional TRACKS key which is a nested hash for
-# the track list at the end of the PIF file.
-    my ($labs, $fields) = @_;
-
-    # Read info from Project Information File.  Verify required fields
-    # are present and that the project is marked active.
-    my %pif = ();
-    $pif{TRACKS} = {};
-    my $pifFile = &newestFile(glob "*.PIF");
-    &HgAutomate::verbose(2, "Using newest PIF file \'$pifFile\'\n");
-
-    my $lines = readFile($pifFile);
-    while (@{$lines}) {
-        my $line = shift @{$lines};
-        # strip leading and trailing spaces
-        $line =~ s/^ +//;
-        $line =~ s/ +$//;
-        # ignore comments and blank lines
-        next if $line =~ /^#/;
-        next if $line =~ /^$/;
-
-        my ($key, $val) = splitKeyVal($line);
-        if(!defined($key)) {
-            next;
-        }
-        if ($key ne "view") {
-            &HgAutomate::verbose(3, "PIF field: $key = $val\n");
-            $pif{$key} = $val;
-        } else {
-            my %track = ();
-            my $track = $val;
-            $pif{TRACKS}->{$track} = \%track;
-            &HgAutomate::verbose(5, "  Found view: \'$track\'\n");
-            while ($line = shift @{$lines}) {
-                $line =~ s/^ +//;
-                $line =~ s/ +$//;
-                next if $line =~ /^#/;
-                next if $line =~ /^$/;
-                if ($line =~ /^track/) {
-                    unshift @{$lines}, $line;
-                    last;
-                }
-                my ($key, $val) = splitKeyVal($line);
-                $track{$key} = $val;
-                &HgAutomate::verbose(5, "    Property: $key = $val\n");
-            }
-        }
-    }
-
-    # Validate fields
-    my @tmp = grep(!/^TRACKS$/, keys %pif);
-    validateFieldList(\@tmp, $fields, 'pifHeader', "in PIF '$pifFile'");
-
-    if($pif{pifVersion} ne $pifVersion) {
-        die "ERROR: pifVersion '$pif{pifVersion}' does not match current version: $pifVersion\n";
-    }
-    if(!keys(%{$pif{TRACKS}})) {
-        die "ERROR: no views defined for project \'$pif{project}\' in PIF '$pifFile'\n";
-    }
-    if(!defined($labs->{$pif{lab}})) {
-        die "ERROR: invalid lab '$pif{lab}' for project \'$pif{project}\' in PIF '$pifFile'\n";
-    }
-    validateAssembly($pif{assembly});
-
-    foreach my $track (keys %{$pif{TRACKS}}) {
-        &HgAutomate::verbose(4, "  Track: $track\n");
-        my %track = %{$pif{TRACKS}->{$track}};
-        foreach my $key (keys %track) {
-            &HgAutomate::verbose(4, "    Setting: $key   Value: $track{$key}\n");
-        }
-    }
-
-    if (defined($pif{'variables'})) {
-        my @variables = split (/\s*,\s*/, $pif{'variables'});
-        my %variables;
-        my $i = 0;
-        foreach my $variable (@variables) {
-            # replace underscore with space
-            $variable =~ s/_/ /g;
-            $variables[$i++] = $variable;
-            $variables{$variable} = 1;
-        }
-        $pif{'variableHash'} = \%variables;
-        $pif{'variableArray'} = \@variables;
-    }
-    return %pif;
-}
-
-sub validateFieldList {
-# validate the entries in a RA record or DDF header using labs.ra as our schema
-    my ($fields, $schema, $file, $errStrSuffix) = @_;
-    my %hash = map {$_ => 1} @{$fields};
-    my @errors;
-
-    # look for missing required fields
-    for my $field (keys %{$schema}) {
-        if($schema->{$field}{file} eq $file && $schema->{$field}{required} eq 'yes' && !defined($hash{$field})) {
-            push(@errors, "field '$field' not defined");
-        }
-    }
-
-    # now look for fields in list that aren't in schema
-    for my $field (@{$fields}) {
-        if(!defined($schema->{$field}{file}) || $schema->{$field}{file} ne $file) {
-            push(@errors, "invalid field '$field'");
-        }
-    }
-    if(@errors) {
-        die "ERROR: " . join("; ", @errors) . " $errStrSuffix\n";
-    }
-}
-
 sub ddfKey
 {
 # return key for given DDF line (e.g. "antibody=$antibody;cell=$cell" for ChIP-Seq data)
@@ -468,12 +276,11 @@ my %ddfSets = ();	# info about DDF entries broken down by ddfKey
 my $wd = cwd();
 
 my $ok = GetOptions("configDir=s",
-                    "noEmail",
                     "outDir=s",
                     "verbose=i",
                     );
-&usage() if (!$ok);
-&usage() if (scalar(@ARGV) < 2);
+usage() if (!$ok);
+usage() if (scalar(@ARGV) < 2);
 
 # Get command-line args
 my $submitType = $ARGV[0];	# currently not used
@@ -481,7 +288,6 @@ my $submitDir = $ARGV[1];
 
 # Get general options
 $opt_verbose = 1 if (!defined $opt_verbose);
-$opt_noEmail = 0 if (!defined $opt_noEmail);
 
 # Determine submission, configuration, and output directory paths
 &HgAutomate::verbose(2, "Validating submission in directory \'$submitDir\'\n");
@@ -521,20 +327,9 @@ chdir $submitPath ||
 mkdir $outPath || 
     die ("SYS ERR: Can't create out directory \'$outPath\': $OS_ERROR\n");
 
-my %labs;
-if(-e "$configPath/$labsConfigFile") {
-    # tolerate missing labs.ra in dev trees.
-    %labs = RAFile::readRaFile("$configPath/$labsConfigFile", "lab");
-}
-
-
-# Gather fields defined for DDF file. File is in 
-# ra format:  field <name>, required <true|false>
-my %fields = RAFile::readRaFile("$configPath/$fieldConfigFile", "field");
-
-# Locate project information (PIF) file and verify that project is
-#  ready for submission
-my %pif = getPif(\%labs, \%fields);
+my %labs = Encode::getLabs($configPath);
+my %fields = Encode::getFields($configPath);
+my %pif = Encode::getPif($submitDir, \%labs, \%fields);
 
 my $db = HgDb->new(DB => $pif{assembly});
 
@@ -547,9 +342,9 @@ if (defined($pif{variables})) {
 }
 
 # Open dataset descriptor file (DDF)
-my $ddfFile = &newestFile(glob "*.DDF");
+my $ddfFile = Encode::newestFile(glob "*.DDF");
 &HgAutomate::verbose(2, "Using newest DDF file \'$ddfFile\'\n");
-my $lines = readFile($ddfFile);
+my $lines = Encode::readFile($ddfFile);
 
 # Get header containing column names
 while(@{$lines}) {
@@ -570,7 +365,7 @@ while(@{$lines}) {
     last;
 }
 
-validateFieldList(\@ddfHeader, \%fields, 'ddf', "in DDF '$ddfFile'");
+Encode::validateFieldList(\@ddfHeader, \%fields, 'ddf', "in DDF '$ddfFile'");
 
 # Process lines in DDF file. Create a hash with one entry per line;
 # the entry is an array of field values.
@@ -634,9 +429,9 @@ for my $key (keys %ddfSets) {
 # Validate files and metadata fields in all ddfLines using controlled
 # vocabulary.  Create load.ra file for loader and trackDb.ra file for wrangler.
 
-loadControlledVocab();
-open(LOADER_RA, ">$outPath/$loadFile") || die "SYS ERROR: Can't write \'$outPath/$loadFile\' file; error: $!\n";
-open(TRACK_RA, ">$outPath/$trackFile") || die "SYS ERROR: Can't write \'$outPath/$trackFile\' file; error: $!\n";
+%terms = Encode::getControlledVocab($configPath);
+open(LOADER_RA, ">$outPath/$Encode::loadFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::loadFile\' file; error: $!\n";
+open(TRACK_RA, ">$outPath/$Encode::trackFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::trackFile\' file; error: $!\n";
 my $priority = 0;
 foreach my $ddfLine (@ddfLines) {
     $priority++;
@@ -732,12 +527,5 @@ END
 }
 close(LOADER_RA);
 close(TRACK_RA);
-
-# Send "data is ready" email to email contact assigned to $pif{lab}
-
-if($labs{$pif{lab}} && $labs{$pif{lab}}->{wranglerEmail} && !$opt_noEmail) {
-    my $email = $labs{$pif{lab}}->{wranglerEmail};
-    `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $pif{lab} lab is ready" $email`;
-}
 
 exit 0;
