@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.35 2008/07/29 00:38:06 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.36 2008/07/29 18:52:08 larrym Exp $
 
 use warnings;
 use strict;
@@ -16,6 +16,7 @@ use strict;
 use lib "/cluster/bin/scripts";
 use HgAutomate;
 use HgDb;
+use RAFile;
 use SafePipe;
 use File::stat;
 use Getopt::Long;
@@ -308,9 +309,9 @@ sub checkDataFormat {
 
 sub loadControlledVocab {
     %terms = ();
-    my %termRa = &readRaFile("$configPath/$vocabConfigFile", "term");
+    my %termRa = RAFile::readRaFile("$configPath/$vocabConfigFile", "term");
     foreach my $term (keys %termRa) {
-        my $type = $termRa{$term}->{'type'};
+        my $type = $termRa{$term}->{type};
         $terms{$type}->{$term} = $termRa{$term};
     }
 }
@@ -421,37 +422,6 @@ sub getPif
     return %pif;
 }
 
-sub readRaFile {
-# Read records from a .ra file into a hash of hashes and return it.
-# $type is the used as the primary key in the ra file.
-# The primary key values are used as the hash key values in the returned hash.
-    my ($file, $type) = @_;
-    open(RA, $file) || 
-        die "ERROR: Can't open RA file \'$file\'\n";
-    my @lines = <RA>;
-    my %ra = ();
-    my $raKey = undef;
-    foreach my $line (@lines) {
-        $line =~ s/^\s+//;
-        $line =~ s/\s+$//;
-        if ($line =~ /^$/) {
-            $raKey = undef;
-            next;
-        }
-        next if $line =~ /^#/;
-        chomp $line;
-        if ($line =~ m/^$type\s+(.*)/) {
-            $raKey = $1;
-        } else {
-            defined($raKey) || die "ERROR: Missing $type before $line\n";
-            my ($key, $val) = split('\s+', $line, 2);
-            $ra{$raKey}->{$key} = $val;
-        }
-    }
-    close(RA);
-    return %ra;
-}
-
 sub validateFieldList {
 # validate the entries in a RA record or DDF header using labs.ra as our schema
     my ($fields, $schema, $file, $errStrSuffix) = @_;
@@ -554,13 +524,13 @@ mkdir $outPath ||
 my %labs;
 if(-e "$configPath/$labsConfigFile") {
     # tolerate missing labs.ra in dev trees.
-    %labs = &readRaFile("$configPath/$labsConfigFile", "lab");
+    %labs = RAFile::readRaFile("$configPath/$labsConfigFile", "lab");
 }
 
 
 # Gather fields defined for DDF file. File is in 
 # ra format:  field <name>, required <true|false>
-my %fields = readRaFile("$configPath/$fieldConfigFile", "field");
+my %fields = RAFile::readRaFile("$configPath/$fieldConfigFile", "field");
 
 # Locate project information (PIF) file and verify that project is
 #  ready for submission
