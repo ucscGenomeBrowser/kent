@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.34 2008/07/26 02:11:55 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.35 2008/07/29 00:38:06 larrym Exp $
 
 use warnings;
 use strict;
@@ -25,6 +25,7 @@ use Cwd;
 
 use vars qw/
     $opt_configDir
+    $opt_noEmail
     $opt_outDir
     $opt_verbose
     /;
@@ -50,6 +51,7 @@ usage: encodeValidate.pl submission-type project-submission-dir
 submission-type is currently ignored.
 
 options:
+    -noEmail	        Suppress email to wrangler
     -verbose num        Set verbose level to num (default 1).            -
     -configDir dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
@@ -496,6 +498,7 @@ my %ddfSets = ();	# info about DDF entries broken down by ddfKey
 my $wd = cwd();
 
 my $ok = GetOptions("configDir=s",
+                    "noEmail",
                     "outDir=s",
                     "verbose=i",
                     );
@@ -508,6 +511,7 @@ my $submitDir = $ARGV[1];
 
 # Get general options
 $opt_verbose = 1 if (!defined $opt_verbose);
+$opt_noEmail = 0 if (!defined $opt_noEmail);
 
 # Determine submission, configuration, and output directory paths
 &HgAutomate::verbose(2, "Validating submission in directory \'$submitDir\'\n");
@@ -761,7 +765,7 @@ close(TRACK_RA);
 
 # Send "data is ready" email to email contact assigned to $pif{lab}
 
-if($labs{$pif{lab}} && $labs{$pif{lab}}->{wranglerEmail}) {
+if($labs{$pif{lab}} && $labs{$pif{lab}}->{wranglerEmail} && !$opt_noEmail) {
     my $email = $labs{$pif{lab}}->{wranglerEmail};
     `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $pif{lab} lab is ready" $email`;
 }
