@@ -10,13 +10,12 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at: ~/kent/src/hg/encode/encodeUnload/doEncodeUnload.pl
 #
-# $Id: doEncodeUnload.pl,v 1.1 2008/07/29 22:45:09 larrym Exp $
+# $Id: doEncodeUnload.pl,v 1.2 2008/07/29 22:56:08 larrym Exp $
 
 use warnings;
 use strict;
 
 use Getopt::Long;
-use File::Temp;
 use File::Basename;
 
 use lib "/cluster/bin/scripts";
@@ -36,42 +35,16 @@ END
     exit(1);
 }
 
-sub tableExist
-{
-    my ($db, $tableName) = @_;
-    my $retval = 0;
-    my $sth = $db->execute("show tables like ?", $tableName);
-    my @row = $sth->fetchrow_array();
-    if(@row && $row[0]) {
-        $retval = 1 ;
-    }
-    return $retval;
-}
-
-sub dropTable
-{
-    my ($db, $tableName) = @_;
-    $db->execute("drop table $tableName") || die "Couldn't drop table '$tableName'";
-}
-
-sub dropTableIfExist
-{
-    my ($db, $tableName) = @_;
-    if(tableExist($db, $tableName)) {
-        dropTable($db, $tableName);
-    }
-}
-
 sub genericUnload
 {
     my ($assembly, $db, $tableName) = @_;
-    dropTableIfExist($db, $tableName);
+    $db->dropTableIfExist($tableName);
 }
 
 sub unloadWig
 {
     my ($assembly, $db, $tableName) = @_;
-    dropTableIfExist($db, $tableName);
+    $db->dropTableIfExist($tableName);
 
     # remove symlink
     my $file = "/gbdb/$assembly/wib/$tableName.wib";
@@ -111,7 +84,7 @@ if(!(-e $unloadRa)) {
   exit(0);
 }
 
-HgAutomate::verbose(1, "Unloading project in directory $submitDir\n");
+HgAutomate::verbose(2, "Unloading project in directory $submitDir\n");
 
 # Unload resources listed in unload.ra
 my %ra = RAFile::readRaFile($unloadRa, 'tablename');
@@ -133,6 +106,8 @@ for my $key (keys %ra) {
     if(!defined($db)) {
         $db = HgDb->new(DB => $assembly);
     }
+
+    HgAutomate::verbose(2, "Dropping table '$tablenameExt'\n");
 
     if($h->{type} eq "genePred" || $h->{type} =~ /^bed/) {
         genericUnload($assembly, $db, $tablenameExt);
