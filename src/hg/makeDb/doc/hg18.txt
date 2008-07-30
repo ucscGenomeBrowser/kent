@@ -22504,11 +22504,11 @@ _EOF_
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 pteVam1 > rbest.log 2>&1 &
 
 #############################################################################
-# BLASTZ/CHAIN/NET vicPac1 (working
+# BLASTZ/CHAIN/NET vicVic1 (working
     ssh kkstore02
     screen #	use screen to control this multi-day job
-    mkdir /cluster/data/hg18/bed/blastz.vicPac1.2008-07-13
-    cd /cluster/data/hg18/bed/blastz.vicPac1.2008-07-13
+    mkdir /cluster/data/hg18/bed/blastz.vicVic1.2008-07-13
+    cd /cluster/data/hg18/bed/blastz.vicVic1.2008-07-13
     cat << _EOF_ > DEF
 # Human vs. Alpaca
 
@@ -22521,13 +22521,13 @@ SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
 # QUERY: Alpaca
-SEQ2_DIR=/san/sanvol1/scratch/vicPac1/vicPac1.2bit
-SEQ2_LEN=/san/sanvol1/scratch/vicPac1/chrom.sizes
+SEQ2_DIR=/san/sanvol1/scratch/vicVic1/vicVic1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/vicVic1/chrom.sizes
 SEQ2_CHUNK=20000000
 SEQ2_LIMIT=100
 SEQ2_LAP=0
 
-BASE=/cluster/data/hg18/bed/blastz.vicPac1.2008-07-13
+BASE=/cluster/data/hg18/bed/blastz.vicVic1.2008-07-13
 TMPDIR=/scratch/tmp
 _EOF_
 
@@ -22536,29 +22536,29 @@ _EOF_
     time doBlastzChainNet.pl `pwd`/DEF \
 	-verbose=2 -bigClusterHub=pk  \
       -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/vicPac1/blastz.hg18 > do.log 2>&1 &
+      -blastzOutRoot /cluster/bluearc/vicVic1/blastz.hg18 > do.log 2>&1 &
 
     # para got changed, had to recover and restart
 
     nice doBlastzChainNet.pl `pwd`/DEF \
 	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
       -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/vicPac1/blastz.hg18 > do2.log 2>&1 &
+      -blastzOutRoot /cluster/bluearc/vicVic1/blastz.hg18 > do2.log 2>&1 &
 
     # memk died on chr19 in chainRun (ran on kolossus)
     nice doBlastzChainNet.pl `pwd`/DEF \
 	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=chainMerge \
       -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/vicPac1/blastz.hg18 > do3.log 2>&1 &
+      -blastzOutRoot /cluster/bluearc/vicVic1/blastz.hg18 > do3.log 2>&1 &
 
-    ln -s blastz.vicPac1.2008-07-13 /cluster/data/hg18/bed/blastz.vicPac1
+    ln -s blastz.vicVic1.2008-07-13 /cluster/data/hg18/bed/blastz.vicVic1
 
     featureBits hg18 chainVicPac1Link
     # 1139695079 bases of 2881515245 (39.552%) in intersection
 
-    cd /cluster/data/hg18/bed/blastz.vicPac1.2008-07-13
+    cd /cluster/data/hg18/bed/blastz.vicVic1.2008-07-13
 
-    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 vicPac1 > rbest.log 2>&1 &
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 vicVic1 > rbest.log 2>&1 &
 
 ######
 #############################################################################
