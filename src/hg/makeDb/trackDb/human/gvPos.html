@@ -1,3 +1,6 @@
+<A HREF="http://phencode.bx.psu.edu/phencode/pui.html">Return to PhenCode</A><BR>
+<A HREF="http://phencode.bx.psu.edu/cgi-bin/phencode/advanced-query">Return to PhenCode advanced query page</A>
+<BR>
 <H2>Disclaimer</H2>
 <P>
 PhenCode is intended for research purposes only. Although the data are freely
@@ -7,30 +10,29 @@ purpose. This information requires expertise to interpret properly; clinical
 diagnosis and/or treatment recommendations should be made only by medical 
 professionals. 
 <H4>
-<A HREF="http://phencode.bx.psu.edu/phencode/disclaimer.html" target="_blank">
+<A HREF="http://phencode.bx.psu.edu/phencode/disclaimer.html">
 Terms and Conditions of Use</A></H4>
 </P>
 
 <H2>Description</H2>
 <P>
-This track is a result of the <A HREF="http://phencode.bx.psu.edu/phencode/"
-target="_blank">PhenCode project</A>.  It consolidates variants
+This track is a result of the <A HREF="http://www.bx.psu.edu/phencode/"
+>PhenCode project</A>.  It consolidates variants
 from many curated locus-specific databases.
-<!-- and one genome-wide database. -->
 Rich genotype and phenotype information is provided. This version includes
 entries from the databases listed in the Methods section below.  
-This covers approximately 1/3 the loci listed on the 
+This covers approximately 1/3 of the loci listed on the 
 <A HREF="http://www.hgvs.org/dblist/glsdb.html">HGVS database listing</A>.
 The coverage of the genome can be viewed using 
-<A HREF="../cgi-bin/hgGenome?hgGenome_group=phenDis&hgGenome_track=gvPos&hgGenome_table=gvPos&hgGenome_dataSetName=Locus+Variants&hgGenome_bedConvertType=coverage&hgGenome_dataSetDescription=Locus+Variants&hgGenome_doSubmitImport=1&hgGenome_graphColor_1_1=blue&hgGenome_graph_1_1=ct_LocusVariants1">Genome Graphs</A>.
+<A HREF="http://genome.ucsc.edu/cgi-bin/hgGenome?hgGenome_group=phenDis&hgGenome_track=ct_PhenCodeLSDB&hgGenome_table=ct_PhenCodeLSDB&hgGenome_dataSetName=Locus+Variants&hgGenome_bedConvertType=coverage&hgGenome_dataSetDescription=Locus+Variants&hgGenome_doSubmitImport=1&hgGenome_graphColor_1_1=blue&hgGenome_graph_1_1=ct_LocusVariants1">Genome Graphs</A>.
+The coverage shown is using the selections made before loading this track.
 Work is in progress to add more locus-specific databases.
 </P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-This track is color-coded by the mutation type.
-<!-- or phenotype association. --> <BR><BR>
-The default colors for mutation type are:
+This track is color-coded by the mutation type.<BR><BR>
+The colors for mutation type are:
 <UL>
 <LI>
 substitution = <font color="#CC00FF">purple</font>
@@ -45,43 +47,11 @@ complex = <font color="#643200">brown</font>
 <LI>
 unknown = black
 </UL>
-<!--
-The default colors for phenotype association are:
-<UL>
-<LI>
-phenotype-associated = <font color="#DD0000">red</font>
-<LI>
-not phenotype-associated = <font color="#009900">green</font>
-<LI>
-phenotype association unknown = <font color="GRAY">gray</font>
-</UL>
--->
-The color choices are configurable using the drop-down menus on the Track
-Settings page.
 </P>
 <P>
-By default, items are labeled with the Human Genome Variation Society (HGVS) 
-name.  Additionally, the Browser can be configured to display the common name
-(if available) or both labels using the <em>Label</em> checkboxes at the 
-top of the Track Settings page.</P>
-<P>
-All mutation types and locations
-<!--, and data sources, except for the UniProt (Swiss-Prot/TrEMBL) data source, -->
-are included in the default
-display. To filter the display based on one or more of these characteristics,
-check the appropriate boxes in the exclusion lists on the 
-Track Settings page.
+Items are labeled with the Human Genome Variation Society (HGVS) 
+name.  
 </P>
-<!--
-<p><A name="phenoassoc"></A>
-Variants with phenotype associations that have been determined by a database
-curator are listed as <em>phenotype-associated</em> or <em>not
-phenotype-associated</em>. Variants with phenotype associations that have not
-been determined by a curator are classified as <em>unknown</em>, and no
-disease association is listed.
-</p>
--->
-
 <A NAME="source"></A>
 <H2>Methods</H2>
 <P>
@@ -89,7 +59,7 @@ The data shown in this track were obtained from the following variant sources:
 <UL>
 <LI>
 <A HREF="http://www.molgen.ua.ac.be/ADMutations/" TARGET=_blank>
-Alzheimer Disease & Frontotemporal Dementia Mutation Database</A> (AD&amp;FTDMD) -
+Alzheimer Disease & Frontotemporal Dementia Mutation Database</A> (AD&FTDMD) -
 mutations in several genes.
 <LI>
 <A HREF="http://www.sesep.uvsq.fr/Database.html" TARGET=_blank>
@@ -125,8 +95,12 @@ TARGET=_blank>Autosomal dominant osteopetrosis, type 2</A> (CLCN7base) - mutatio
 <A HREF="http://www.dbpex.org/" TARGET=_blank>PEX Gene Database</A> (dbPEX) - 
 mutations in the PEX genes.
 <LI>
+<A HREF="http://falcon.roswellpark.org:9090/">A database of retrotransposon insertion polymorphisms in humans</A> (dbRIP)
+<LI>
 <A HREF="http://bioinf.uta.fi/F12base/" TARGET=_blank>Hereditary angioedema type III</A> (F12base) -
 mutations in the F12 gene.
+<LI>
+<A HREF="http://www.rockefeller.edu/fanconi/mutate/" TARGET=_blank>Fanconi Anemia Mutation Database</A> (Fanconi) - mutations in Fanconi anemia genes.
 <LI>
 <A HREF="http://www.angis.org.au/Databases/Heart/" TARGET=_blank>FHC Mutation Database</A>
 (FHCDB) - mutations in various genes known to cause familial hypertrophic cardiomyopathy.
@@ -154,6 +128,9 @@ TARGET=_blank>Kinase mutation database</A> (KinMutBase) - mutations in protein k
 <A HREF="http://www.ssi.dk/graphics/html/lqtsdb/lqtsdb.htm" TARGET=_blank>Long QT Syndrome Database</A>
 (LQTSdb) - mutations associated with Long QT syndrome.
 <LI>
+<A HREF="http://www.med.mun.ca/MMRvariants" TARGET=_blank>Mismatch Repair Genes Variant Database</A> 
+(MMR) - mutations in the mismatch repair genes
+<LI>
 <A HREF="http://bioinf.uta.fi/OSTM1base/"
 TARGET=_blank>Autosomal recessive osteopetrosis</A> (OSTM1base) - mutations in the OSTM1 gene.
 <LI>
@@ -165,14 +142,10 @@ in the phenylalanine hydroxylase (PAH) gene.
 <LI>
 <A HREF="http://www.retina-international.org/sci-news/mutation.htm" TARGET=_blank>RISN Mutation Database</A>(RISN) - mutations in genes underlying retinal disorders.
 <LI>
+<A HREF="http://rpgr.hgu.mrc.ac.uk/" TARGET=_blank>RPGR Database</a>(RPGR) - mutations in the RPGR gene.
+<LI>
 SRD5A2 - mutations in the steroid-5-alpha-reductase, alpha polypeptide 2
 (3-oxo-5 alpha-steroid delta 4-dehydrogenase alpha 2) gene.
-<!--
-<LI>
-<A HREF="http://www.expasy.org/sprot/" TARGET=_blank>UniProt 
-(Swiss-Prot/TrEMBL)</A> (SP) - 
-genome-wide variants within coding regions of UCSC Known Genes.
--->
 <LI>
 <A HREF="http://www.x-ald.nl/" TARGET=_blank>X-linked Adrenoleukodystrophy Database</A> (X-ALD) - mutations in the ABCD1 gene.
 <!--
@@ -209,7 +182,7 @@ Santa Cruz, California
 </DL> 
 <H4>Cooperating databases</H4>
 <DL>
-<DT>AD&amp;FTD Mutation Database:
+<DT>AD&FTD Mutation Database:
 <DD>Marc Cruts,
 Flanders Institute for Biotechnology and
 University of Antwerp, Belgium
@@ -243,7 +216,7 @@ Institute of Medical Technology, University of Tampere, Tampere, Finland
 McGill University, Montreal, Quebec, Canada
 <BR><BR>
 <DT>CBS:
-<DD>Jan P. Kraus and Miroslav Janosik,
+<DD>Jan P. Kraus and Miroslav Janosik, 
 University of Colorado School of Medicine, Aurora, Colorado<BR>
 Viktor Kozich,
 Institute of Inherited Metabolic Diseases,
@@ -252,8 +225,8 @@ Czech Republic
 <BR><BR>
 <DT>
 CFMDB:
-<A HREF ="http://www.genet.sickkids.on.ca/cftr/" BORDER = 0 TARGET=_blank><IMG 
- SRC="/images/logos/cftrlogo.png" ALIGN = TOP ALT = ""></A>
+<A HREF ="http://www.genet.sickkids.on.ca/cftr/" TARGET=_blank><IMG 
+ SRC="http://phencode.bx.psu.edu/phencode/logos/cftrlogo.png" ALIGN = TOP ALT = "" BORDER=0></A>
 <DD>Julian Zielenski and Richard Sang,
 The Hospital for Sick Children, Genetics and Genomic Biology, Toronto,
 Ontario, Canada
@@ -264,18 +237,27 @@ Institute of Medical Technology, University of Tampere, Tampere, Finland
 <BR><BR>
 <DT>
 dbPEX:
-<A HREF ="http://www.dbpex.org/" BORDER = 0 TARGET=_blank><IMG SRC="/images/logos/dbPEX.logo.2006.png" ALIGN = TOP ALT = ""></A>
+<A HREF ="http://www.dbpex.org/" TARGET=_blank><IMG SRC="http://phencode.bx.psu.edu/phencode/logos/dbPEX.logo.2006.png" ALIGN = TOP ALT = "" BORDER=0></A>
 <DD>Nancy Braverman, Institute of Genetic Medicine and Dept. of Pediatrics,
 Johns Hopkins Medical Center, Baltimore, MD<BR>
 Steven Steinberg, Dept.of Neurology,
 Johns Hopkins University School of Medicine, Baltimore, MD
 <BR><BR>
+<DT>dbRIP:
+<A HREF="http://falcon.roswellpark.org:9090/" TARGET=_blank><IMG SRC="http://phencode.bx.psu.edu/phencode/logos/dbRIP_header_sm.png" ALIGN=TOP ALT="" BORDER=0></A>
+<DD>Ping Liang, Roswell Park Cancer Institute, Buffalo, New York<BR>
+Mark Batzer, Louisiana State University, Baton Rouge, LA
+<BR><BR>
 <DT>F12base:
 <DD>Mauno Vihinen,
 Institute of Medical Technology, University of Tampere, Tampere, Finland
 <BR><BR>
+<DT>Fanconi:
+<DD>Arleen D. Auerbach, Francis Lach, 
+The Rockefeller University, New York, NY
+<BR><BR>
 <DT> FHC Mutation Database, version 1.1:
-<A HREF = "http://www.angis.org.au/Databases/Heart/" BORDER = 0 TARGET=_blank><IMG SRC="/images/logos/FHCmutDb.png" ALIGN=TOP ALT=""></A>
+<A HREF = "http://www.angis.org.au/Databases/Heart/" TARGET=_blank><IMG SRC="http://phencode.bx.psu.edu/phencode/logos/FHCmutDb.png" ALIGN=TOP ALT="" BORDER=0></A>
 <DD>This project is a collaborative effort among the Department of Molecular and
 Clinical Genetics and Department of Cardiology at the Royal Prince Alfred
 Hospital, and the Australian National Genomic Information Services. The
@@ -292,9 +274,8 @@ The University of Sydney,
 NSW 2006 Australia
 <BR><BR>
 <DT> HbVar:
-<A HREF ="http://globin.bx.psu.edu/hbvar/menu.html" BORDER = 0 
-  TARGET=_blank><IMG 
-  SRC="/images/logos/HbVarLogo2.png" ALIGN = TOP ALT = ""></A>
+<A HREF ="http://globin.bx.psu.edu/hbvar/menu.html" TARGET=_blank><IMG 
+  SRC="http://phencode.bx.psu.edu/phencode/logos/HbVarLogo2.jpg" ALIGN = TOP ALT = "" BORDER=0></A>
 <DD>George Patrinos, Erasmus University, Rotterdam, Netherlands<br>
  Henri Wajcman, Hospital Henri Mondor, Creteil, France<br>
  David H.K. Chui, Boston University, Boston, Massachusetts<br>
@@ -303,9 +284,8 @@ NSW 2006 Australia
   Macedonia
 <BR><BR>
 <DT> HIFD:
-<A HREF="http://www.interfil.org/"><IMG
-SRC="/images/logos/HIFDlogo.png" ALIGN = TOP ALT = ""
-BORDER=0></A>
+<A HREF="http://www.interfil.org/"><IMG 
+SRC="http://phencode.bx.psu.edu/phencode/logos/HIFDlogo.png" ALIGN = TOP ALT = "" BORDER=0></A>
 <DD>Lim Yun Ping, Centre for Molecular Medicine and the Bioinformatics Institute, Singapore
 <BR><BR>
 <DT>IARC TP53:
@@ -315,8 +295,8 @@ Group of Molecular Carcinogenesis and Biomarkers,
 France
 <BR><BR>
 <DT>IDbases:
-<A HREF ="http://bioinf.uta.fi/base_root/" BORDER = 0 TARGET=_blank><IMG 
-  SRC="/images/logos/ID-bases-logo.jpg" ALIGN = TOP ALT = ""></A>
+<A HREF ="http://bioinf.uta.fi/base_root/" TARGET=_blank><IMG 
+  SRC="http://phencode.bx.psu.edu/phencode/logos/ID-bases-logo.jpg" ALIGN = TOP ALT = "" BORDER=0></A>
 <DD>Anne Durandy,
   Michael Hershfield,
   Laszlo Marodi,
@@ -332,13 +312,13 @@ France
 
 <BR><BR>
 <DT>IPNMDB:
-<A HREF="http://www.molgen.ua.ac.be/CMTMutations/" BORDER = 0 TARGET=_blank><IMG
-SRC="/images/logos/logo_UA_U_kl_sm.jpg" ALIGN = TOP ALT = ""></A>
+<A HREF="http://www.molgen.ua.ac.be/CMTMutations/" TARGET=_blank><IMG
+SRC="http://phencode.bx.psu.edu/phencode/logos/logo_UA_U_kl_sm.jpg" ALIGN = TOP ALT = "" BORDER=0></A>
 <DD>Eva Nelis, VIB - Department of Molecular Genetics, University of Antwerp, Antwerpen, Belgium
 
 <BR><BR>
 <DT>ISTH SSC VWF:
-<A HREF="http://www.vwf.group.shef.ac.uk/" BORDER=0 TARGET=_blank><IMG SRC="/images/logos/ISTH_Logo_sm.jpg" ALIGN=TOP ALT=""></A>
+<A HREF="http://www.vwf.group.shef.ac.uk/" TARGET=_blank><IMG SRC="http://phencode.bx.psu.edu/phencode/logos/ISTH_Logo_sm.jpg" ALIGN=TOP ALT="" BORDER=0></A>
 <DD>Dan Hampshire, Anne Goodeve, Nick Beauchamp, David Lillicrap,
 Ross MacLachlan,
 The University of Sheffield, United Kingdom
@@ -352,18 +332,26 @@ Mauno Vihinen,
 Institute of Medical Technology, University of Tampere, Tampere, Finland
 
 <BR><BR>
-<DT>LQTSdb:
-<A HREF="http://www.ssi.dk/graphics/html/lqtsdb/lqtsdb.htm" BORDER = 0 TARGET=_blank><IMG
-SRC="/images/logos/lqtslogo.png" ALIGN = TOP ALT = ""></A>
-<DD>Michael Christiansen, Lars Allan Larsen, and Paal Skytt Andersen,
-Molecular Cardiology Group, Statens Serum Institut, Denmark
-
-<BR><BR>
 <DT>LMDp:
 <DD>Johan T. den Dunnen,
   Leiden University Medical Center, Leiden, Nederland<br>
   See also the database tool <A HREF="http://www.LOVD.nl"
   TARGET=_blank>LOVD</A>
+
+<BR><BR>
+<DT>LQTSdb:
+<A HREF="http://www.ssi.dk/graphics/html/lqtsdb/lqtsdb.htm" TARGET=_blank><IMG
+SRC="http://phencode.bx.psu.edu/phencode/logos/lqtslogo.png" ALIGN = TOP ALT = "" BORDER=0></A>
+<DD>Michael Christiansen, Lars Allan Larsen, and Paal Skytt Andersen,
+Molecular Cardiology Group, Statens Serum Institut, Denmark
+
+<BR><BR>
+<DT>MMR:
+<A HREF="http://www.med.mun.ca/MMRvariants" TARGET=_blank><IMG SRC="http://phencode.bx.psu.edu/phencode/logos/mmrLogo.png" ALIGN = TOP ALT = " " BORDER=0></A>
+<DD>Michael O. Woods,
+Faculty of Medicine, HSC,
+Memorial University of Newfoundland,
+St. John's, NL, Canada
 
 <BR><BR>
 <DT>OSTM1base:
@@ -372,36 +360,34 @@ Institute of Medical Technology, University of Tampere, Tampere, Finland
 
 <BR><BR>
 <DT>PAHdb:
-<A HREF ="http://www.pahdb.mcgill.ca/" BORDER = 0 TARGET=_blank><IMG 
- SRC="/images/logos/PAHLogoSmall.png" ALIGN = TOP ALT = ""></A>
+<A HREF ="http://www.pahdb.mcgill.ca/" TARGET=_blank><IMG 
+ SRC="http://phencode.bx.psu.edu/phencode/logos/PAHLogoSmall.png" ALIGN = TOP ALT = "" BORDER=0></A>
 <DD>Charles R. Scriver, McGill University, Montreal Children's Hospital
   Research Institute, Montreal, Quebec, Canada
 <BR><BR>
-<DT>RettBASE: <A HREF="http://mecp2.chw.edu.au/" BORDER = 0 TARGET=_blank><IMG 
- SRC="/images/logos/irsaSmall.jpg" ALIGN = TOP ALT = ""></A>
+<DT>RettBASE: <A HREF="http://mecp2.chw.edu.au/" TARGET=_blank><IMG 
+ SRC="http://phencode.bx.psu.edu/phencode/logos/irsaSmall.jpg" ALIGN = TOP ALT = "" BORDER=0></A>
 <DD>John Christodoulou,
 Gladys Ho,
 Andrew Grimm (previous database coordinator),
 Children's Hospital at Westmead, Sydney and
 University of Sydney, Australia
 <BR><BR>
-<DT>RISN: <A HREF="http://www.retina-international.org/sci-news/mutation.htm" BORDER=0 TARGET=_blank><IMG
- SRC="/images/logos/rispot.jpg" ALIGN=TOP ALT=""></A>
+<DT>RISN: <A HREF="http://www.retina-international.org/sci-news/mutation.htm" TARGET=_blank><IMG
+ SRC="http://phencode.bx.psu.edu/phencode/logos/rispot.jpg" ALIGN=TOP ALT="" BORDER=0></A>
 <DD>Markus Preising, 
 Molecular Genetics Laboratory,
 University of Regensburg, Bavaria, Germany 
 <BR><BR>
-<DT>Gene srd5a2:
+<DT>RPGR:
+<DD>Xinhua Shu and Alan Wright
+<BR><BR>
+<DT>SRD5A2:
 <DD>Juergen Reichardt, University of Sydney, Sydney, Australia<br>
   Nick Makridakis, University of Southern California, Los Angeles, California
 <BR><BR>
-<!--
-<DT>UniProt (Swiss-Prot/TrEMBL):
-<A HREF="http://www.expasy.org/sprot/" BORDER=0 TARGET=_blank><IMG SRC="/images/logos/uniprot.jpg" ALIGN=TOP ALT=""></A>
-<DD>Swiss Institute of Bioinformatics, Geneva, Switzerland
-<BR><BR>
--->
-<DT>X-ALD: 
+<DT>X-ALD: <A HREF="http://www.x-ald.nl/" TARGET=_blank><IMG
+ SRC="http://phencode.bx.psu.edu/phencode/logos/xaldlogo.jpg" ALIGN=TOP ALT="" BORDER=0></A>
 <DD>Stephan Kemp,
 Academic Medical Center/Emma Children's Hospital,
 Amsterdam, The Netherlands
