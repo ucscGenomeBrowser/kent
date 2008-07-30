@@ -339,3 +339,67 @@ url http://vega.sanger.ac.uk/Mus_musculus/transview?transcript=$$
     longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
     priority 2
     color 30,130,210
+
+track woldRnaSeqSignal
+compositeTrack on
+shortLabel RNA-Seq Sig
+longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal
+group regulation
+priority 100.1
+type wig .04 60949
+defaultViewLimits 1 15
+spanList 1
+autoScaleDefault off
+windowingFunction mean
+maxHeightPixels 64:25:16
+
+    track woldRnaSeqSignalBrain1
+    subTrack woldRnaSeqSignal
+    shortLabel Brain Rep1
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Brain (Replicate 1)
+    priority 1
+    color 200,128,0
+
+    track woldRnaSeqSignalBrain2
+    subTrack woldRnaSeqSignal
+    shortLabel Brain Rep2
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Brain (Replicate 2)
+    priority 2
+    color 200,128,0
+
+    track woldRnaSeqSignalLiver1
+    subTrack woldRnaSeqSignal
+    shortLabel Liver Rep1
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Liver (Replicate 1)
+    priority 3
+    color 0,155,128
+
+    track woldRnaSeqSignalLiver2
+    subTrack woldRnaSeqSignal
+    shortLabel Liver Rep2
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Liver (Replicate 2)
+    priority 4
+    color 0,155,128
+
+    track woldRnaSeqSignalMuscle1
+    subTrack woldRnaSeqSignal
+    shortLabel Muscle Rep1
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Muscle (Replicate 1)
+    priority 5
+    color 155,0,128
+
+    track woldRnaSeqSignalMuscle2
+    subTrack woldRnaSeqSignal
+    shortLabel Muscle Rep2
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Muscle (Replicate 2)
+    color 155,0,128
+    priority 6
+
+track woldRnaSeqSplices
+compositeTrack on
+shortLabel Wold RNA-Seq Splices
+longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splices
+group regulation
+priority 100.2
+type bed 12 .
+
