@@ -3,7 +3,7 @@
 include ../../../inc/common.mk
 
 SCRIPT_FILES = \
-	doEncodeLoad.rb
+	doEncodeLoad.pl
 
 all:
 	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts scripts
@@ -17,5 +17,5 @@ scripts:
 	done
 
 test:
-	doEncodeLoad.rb load /cluster/store3/encpipeline_dev/43
+	doEncodeLoad.pl load /cluster/store3/encpipeline_dev/43
 
