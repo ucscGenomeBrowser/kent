@@ -122,7 +122,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.7 2008/05/27 09:22:01 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.7.4.1 2008/07/30 23:52:54 angie Exp $";
 
 #define CHROM_COLORS 26
 
@@ -598,6 +598,26 @@ void mapBoxHc(struct hvGfx *hvg, int start, int end, int x, int y, int width, in
  * program. */
 {
 mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, track, item, statusLine, NULL, FALSE, NULL);
+}
+
+int trackPlusLabelHeight(struct track *track, int fontHeight)
+/* Return the sum of heights of items in this track (or subtrack as it may be) 
+ * and the center label(s) above the items (if any). */
+{
+int y = track->totalHeight(track, track->limitedVis);
+if (isWithCenterLabels(track))
+    y += fontHeight;
+if (isCompositeTrack(track))
+    {
+    struct track *subtrack;
+    for (subtrack = track->subtracks;  subtrack != NULL;
+	 subtrack = subtrack->next)
+	{
+	if (isSubtrackVisible(subtrack) && isWithCenterLabels(subtrack))
+	    y += fontHeight;
+	}
+    }
+return y;
 }
 
 double scaleForPixels(double pixelWidth)

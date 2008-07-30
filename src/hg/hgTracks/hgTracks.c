@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1483 2008/06/03 23:37:52 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1483.2.1 2008/07/30 23:52:52 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -311,26 +311,6 @@ void smallBreak()
 /* Draw small horizontal break */
 {
 hPrintf("<FONT SIZE=1><BR></FONT>\n");
-}
-
-int trackPlusLabelHeight(struct track *track, int fontHeight)
-/* Return the sum of heights of items in this track (or subtrack as it may be) 
- * and the center label(s) above the items (if any). */
-{
-int y = track->totalHeight(track, track->limitedVis);
-if (isWithCenterLabels(track))
-    y += fontHeight;
-if (isCompositeTrack(track))
-    {
-    struct track *subtrack;
-    for (subtrack = track->subtracks;  subtrack != NULL;
-	 subtrack = subtrack->next)
-	{
-	if (isSubtrackVisible(subtrack) && isWithCenterLabels(subtrack))
-	    y += fontHeight;
-	}
-    }
-return y;
 }
 
 void drawColoredButtonBox(struct hvGfx *hvg, int x, int y, int w, int h, 

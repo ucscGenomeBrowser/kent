@@ -451,6 +451,10 @@ void mapStatusMessage(char *format, ...);
 /* Write out stuff that will cause a status message to
  * appear when the mouse is over this box. */
 
+int trackPlusLabelHeight(struct track *track, int fontHeight);
+/* Return the sum of heights of items in this track (or subtrack as it may be) 
+ * and the center label(s) above the items (if any). */
+
 double scaleForWindow(double width, int seqStart, int seqEnd);
 /* Return the scale for the window. */
 
