@@ -1,7 +1,0 @@
-#transId	geneId	source	chrom	start	end	strand	proteinId	geneName	transcriptName
-CG31949-RA	CG31949	flybase	chr2L	2300118	2300717	+			
-CG15357-RA	CG15357	flybase	chr2L	1945304	1945589	-			
-CG17650-RA	CG17650	flybase	chr2L	1758285	1759078	-			
-CG13950-RA	CG13950	flybase	chr2L	860320	861696	+			
-CG17242-RA	CG17242	flybase	chr2L	2268355	2269093	-			
-CG31774-RA	CG31774	flybase	chr2L	3905512	3947160	-			
