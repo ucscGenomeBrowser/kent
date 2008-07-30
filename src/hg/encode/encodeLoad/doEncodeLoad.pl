@@ -35,7 +35,6 @@ my $submitDir = "";
 my $submitFQP;
 my $submitType = "";
 my $tempDir = "/data/tmp";
-my $encodeDb = "hg18";
 my $encInstance = "";
 my $encProject = "";
 my $sqlCreate = "/cluster/bin/sqlCreate";
@@ -53,16 +52,17 @@ END
 
 sub dieFile
 {
+# read contents of $file and print it in a die message.
     my ($file) = @_;
     open(FILE, $file);
-    die join("", <FILE>);
+    die join("", <FILE>) . "\n";
 }
 
 sub loadGene
 {
-    my ($tableName, $fileList) = @_;
+    my ($assembly, $tableName, $fileList) = @_;
 
-    if(system("cat $fileList | egrep -v '^track|browser' | ldHgGene -genePredExt $encodeDb $tableName stdin > out/loadGene.out 2>&1")) {
+    if(system("cat $fileList | egrep -v '^track|browser' | ldHgGene -genePredExt $assembly $tableName stdin > out/loadGene.out 2>&1")) {
         print STDERR "ERROR: File(s) '$fileList' failed gene load.\n";
         dieFile("out/loadGene.out");
     } else {
@@ -73,11 +73,11 @@ sub loadGene
 
 sub loadWig
 {
-    my ($tableName, $fileList) = @_;
+    my ($assembly, $tableName, $fileList) = @_;
 
-    if(system( "cat $fileList | wigEncode stdin stdout $tableName.wib | hgLoadWiggle -pathPrefix=/gbdb/$encodeDb/wib -tmpDir=$tempDir $encodeDb $tableName stdin > out/loadWig.out 2>&1") ||
-       system( "rm -f /gbdb/$encodeDb/wib/$tableName.wib") ||
-       system( "ln -s $tableName.wib /gbdb/$encodeDb/wib")) {
+    if(system( "cat $fileList | wigEncode stdin stdout $tableName.wib | hgLoadWiggle -pathPrefix=/gbdb/$assembly/wib -tmpDir=$tempDir $assembly $tableName stdin > out/loadWig.out 2>&1") ||
+       system( "rm -f /gbdb/$assembly/wib/$tableName.wib") ||
+       system( "ln -s $submitFQP/$tableName.wib /gbdb/$assembly/wib")) {
        print STDERR "ERROR: File(s) $fileList failed wiggle load.\n";
        dieFile("out/loadWig.out")
    } else {
@@ -87,14 +87,14 @@ sub loadWig
 
 sub loadBed
 {
-    my ($tableName, $fileList) = @_;
+    my ($assembly, $tableName, $fileList) = @_;
     #TEST by replacing "cat" with  "head -1000 -q"
-    my $cmd = "cat $fileList | egrep -v '^track|browser' | hgLoadBed $encodeDb $tableName stdin -tmpDir=out > out/loadBed.out 2>&1";
+    my $cmd = "cat $fileList | egrep -v '^track|browser' | hgLoadBed $assembly $tableName stdin -tmpDir=out > out/loadBed.out 2>&1";
 
     print STDERR "loadBed: cmd: $cmd\n" if($debug);
 
     if(system($cmd)) {
-        print STDERR "ERROR: File(s) $fileList failed bed load.\n";
+        print STDERR "ERROR: File(s) $fileList failed bed load:\n\n";
         dieFile("out/loadBed.out");
     } else {
         print "$fileList Loaded into $tableName\n";
@@ -103,37 +103,40 @@ sub loadBed
 }
 
 
-sub loadBed5Plus
+sub loadBedFromSchema
 {
-    my ($tableName, $fileList, $sqlTable) = @_;
+    my ($assembly, $tableName, $fileList, $sqlTable) = @_;
 
+    if(!(-e "$sqlCreate/${sqlTable}.sql")) {
+        die "SQL schema '$sqlCreate/${sqlTable}.sql' does not exist\n";
+    }
     if(!(open(SQL, "$sqlCreate/${sqlTable}.sql"))) {
-        die "$sqlCreate/${sqlTable}.sql not found; error: $!";
+        die "Cannot open SQL schema '$sqlCreate/${sqlTable}.sql'; error: $!\n";
     }
 
+    # create temporary copy of schema file with "CREATE TABLE $tableName"
     my $sql = join("", <SQL>);
     if(!($sql =~ s/$sqlTable/$tableName/g)) {
-        die "sql names do not match for substitution: $sqlTable $tableName";
+        die "sql names do not match for substitution: $sqlTable $tableName\n";
     }
 
-    print STDERR "loadBed5Plus: $sql\n" if($debug);
+    print STDERR "loadBedFromSchema: $sql\n" if($debug);
 
     my ($fh, $tempFile) = File::Temp::tempfile("sqlXXXX", UNLINK => 1);
-    print STDERR "tempFile: $tempFile\n" if($debug);
+    print STDERR "sql schema tempFile: $tempFile\n" if($debug);
     $fh->print($sql);
 
     #TEST by replacing "cat" with  "head -1000 -q"
     
-    my $cmd = "cat $fileList | egrep -v '^track|browser' | hgLoadBed $encodeDb $tableName stdin -tmpDir=out -sqlTable=$tempFile > out/loadBed.out 2>&1";
+    my $cmd = "cat $fileList | egrep -v '^track|browser' | hgLoadBed $assembly $tableName stdin -tmpDir=out -sqlTable=$tempFile > out/loadBed.out 2>&1";
 
     print STDERR "cmd: $cmd\n" if($debug);
 
     if(system($cmd)) {
-        print STDERR "ERROR: File(s) $fileList failed bed load.\n";
+        print STDERR "ERROR: File(s) $fileList failed bed load:\n\n";
         dieFile("out/loadBed.out");
     } else {
         print "$fileList Loaded into $tableName\n";
-        #debug restore: File.delete "out/bed.tab"
     }
     $fh->close();
     unlink($tempFile);
@@ -182,7 +185,7 @@ my %pif = Encode::getPif($submitDir, \%labs, \%fields);
 $encInstance = dirname($submitDir);
 $encProject = basename($submitDir);
 
-# XXXX what is this for?
+# yank out "beta" from encinstance_beta
 if($encInstance =~ /(_.*)/) {
     $encInstance = $1;
 }
@@ -193,9 +196,8 @@ chdir($submitDir);
 # We assume unload program is in the same location as loader (fixes problem with misconfigured qateam environment).
 
 my $programDir = dirname($0);
-# XXXX change to "doEncodeUnload.pl" when ready
 if(system("$programDir/doEncodeUnload.pl $submitType $submitDir")) {
-    die "expected error running $programDir/doEncodeUnload.pl cleanup script";
+    die "expected error running $programDir/doEncodeUnload.pl cleanup script\n";
 }
 
 if(!(-e $loadRa)) {
@@ -205,7 +207,7 @@ if(!(-e $loadRa)) {
 #TODO change to : FileUtils.cp $loadRa, $unloadRa
 # XXXX shouldn't we do the cp AFTER we finish everything else successfully?
 if(system("cp $loadRa $unloadRa")) {
-    die "Cannot: cp $loadRa $unloadRa";
+    die "Cannot: cp $loadRa $unloadRa\n";
 }
 
 print STDERR "Loading project in directory $submitDir\n" if($debug);
@@ -220,7 +222,7 @@ print STDERR "\n" if($debug);
 
 for my $key (keys %ra) {
     my $h = $ra{$key};
-    my $tablenameExt = $h->{tablename} . "${encInstance}_$encProject";
+    my $tablename = $h->{tablename} . "${encInstance}_$encProject";
 
     my $str = "\nkeyword: $key\n";
     for my $field (qw(tablename type tableType assembly files tablenameExt)) {
@@ -232,17 +234,17 @@ for my $key (keys %ra) {
     HgAutomate::verbose(3, $str);
 
     # temporary work-around (XXXX, galt why is this "temporary?").
-    $encodeDb = $h->{assembly};
-
+    my $assembly = $h->{assembly};
     my $type = $h->{type};
+    my $files = $h->{files};
     if($type eq "genePred") {
-        loadGene($tablenameExt, $h->{files});
+        loadGene($assembly, $tablename, $files);
     } elsif ($type eq "wig") {
-        loadWig($tablenameExt, $h->{files});
-    } elsif ($type eq "bed 5 +") {
-        loadBed5Plus($tablenameExt, $h->{files}, $h->{tableType});
+        loadWig($assembly, $tablename, $files);
+    } elsif ($type eq "encodePeaks" || $type eq 'tagAlignments' || $type eq "bed5FloatScore") {
+        loadBedFromSchema($assembly, $tablename, $files, $type);
     } elsif (($type eq "bed 3") || ($type eq "bed 4") || ($type eq "bed 4") || ($type eq "bed 5") || ($type eq "bed 6")) {
-        loadBed($tablenameExt, $h->{files});
+        loadBed($assembly, $tablename, $files);
     } else {
         die "ERROR: unknown type: $type in load.ra\n";
     }
