@@ -19,7 +19,13 @@ if ((strchr(tblFile, '/') != NULL) || (strchr(tblFile, '.') != NULL))
 else
     {
     if (tabFile != NULL)
-        safef(tabFile, PATH_LEN, "%s.tab", tblFile);
+        {
+        char *tmpDir = getenv("TMPDIR");
+        if (tmpDir != NULL)
+            safef(tabFile, PATH_LEN, "%s/%s.tab", tmpDir, tblFile);
+        else
+            safef(tabFile, PATH_LEN, "%s.tab", tblFile);
+        }
     if (table != NULL)
         safef(table, PATH_LEN, "%s", tblFile);
     }

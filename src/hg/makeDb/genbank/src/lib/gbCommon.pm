@@ -82,6 +82,18 @@ BEGIN {
     umask 0002;
         
     @gbCommon::savedArgv = @ARGV;
+
+
+    # setup TMPDIR if not set
+    if (!defined($main::ENV{TMPDIR})) {
+        if (-e "/data/tmp/") {
+            $main::ENV{TMPDIR} = "/data/tmp";
+        } elsif (-e "/scratch/tmp/") {
+            $main::ENV{TMPDIR} = "/scratch/tmp";
+        } else {
+            $main::ENV{TMPDIR} = "/var/tmp";
+        }
+    }
 }
 
 # Enable to track programs execution for debugging.
@@ -606,14 +618,17 @@ sub inListRef($$) {
     return 0;
 }
 
-# get a temporary directory for this process, either in /var/tmp or
-# a specified in the TMPDIR env
+# get a temporary directory for this process, either in /data/tmp,
+# /scratch/tmp, or /var/tmp or a specified in the TMPDIR env
 sub getTmpDir($) {
     my($baseName) = @_;
 
+    # note that TMPDIR is now set as part of his module being initialized
     if (!defined($tmpDirs{$baseName})) {
         if (defined($main::ENV{TMPDIR})) {
             $tmpDirs{$baseName} = "$main::ENV{TMPDIR}/$baseName.$gbCommon::hostName.$$";
+        } elsif (-e "/data/tmp/") {
+            $tmpDirs{$baseName} = "/data/tmp/$baseName.$$";
         } elsif (-e "/scratch/tmp/") {
             $tmpDirs{$baseName} = "/scratch/tmp/$baseName.$$";
         } else {
