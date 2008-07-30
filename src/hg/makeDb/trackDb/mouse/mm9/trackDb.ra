@@ -349,7 +349,7 @@ priority 100.1
 type wig .04 60949
 viewLimits 1:10
 spanList 1
-autoScaleDefault off
+autoScaleDefault on
 windowingFunction mean
 maxHeightPixels 64:25:16
 
