@@ -55,10 +55,10 @@ color 50,130,0
 type genePred
 
 track blastHg17KG
-shortLabel Human Proteins
+shortLabel Human Proteins (hg17)
 longLabel Human(hg17) proteins mapped by chained tBLASTn
 group genes
-priority 30
+priority 250.3
 visibility pack
 colorChromDefault off
 type psl protein

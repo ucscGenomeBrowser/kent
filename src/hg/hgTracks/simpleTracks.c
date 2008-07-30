@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.23 2008/07/18 21:34:42 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.24 2008/07/28 20:47:06 giardine Exp $";
 
 #define CHROM_COLORS 26
 
@@ -319,7 +319,7 @@ int maxItems = maxItemsInFullTrack;
 char *maxItemsString = trackDbSetting(tg->tdb, "maxItems");
 if (maxItemsString != NULL)
     maxItems = sqlUnsigned(maxItemsString);
-return maxItems * tl.fontHeight;
+return maxItems * tl.fontHeight; //tg->lineHeight; ?
 }
 
 static int maxItemsToOverflow(struct track *tg)
@@ -1392,11 +1392,11 @@ for (cnt = 0; cnt < oregannoTypeSize; cnt++)
         sameString(oregannoTypeDbValue[cnt], attr->attrVal))
         {
         oregannoAttrFree(&attr);
-        return FALSE;
+        return TRUE; /* include this type */
         }
     }
 oregannoAttrFree(&attr);
-return TRUE;
+return FALSE;
 }
 
 void loadOreganno (struct track *tg)

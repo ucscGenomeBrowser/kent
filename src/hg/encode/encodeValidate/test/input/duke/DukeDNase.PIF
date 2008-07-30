@@ -5,12 +5,14 @@ lab	Crawford
 project	DukeDNaseSeq
 variables	cell
 assembly	hg18
+pifVersion	0.2
 
 # Tracks
 
 view	Signal
 type	wig
-required	yes
+required	no
 
 view	Sites
 type	bed 5 +
+required	yes

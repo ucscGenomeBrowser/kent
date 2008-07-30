@@ -26,6 +26,7 @@ priority 21.11
 visibility hide
 color 200,100,0
 type bed 6 +
+noScoreFilter .
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail: 
 release alpha
@@ -38,6 +39,7 @@ priority 21.1
 visibility hide
 color 200,100,0
 type bed 6 +
+noScoreFilter .
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail: 
 release beta
@@ -76,6 +78,7 @@ visibility hide
 color 190,110,0
 priority 71.01
 type bed 12 +
+noScoreFilter .
 url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
 urlLabel MGI Phenotypic Allele(s): 
 release alpha
@@ -88,6 +91,7 @@ visibility hide
 color 190,110,0
 priority 71
 type bed 12 +
+noScoreFilter .
 url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
 urlLabel MGI Phenotypic Allele(s): 
 release beta
@@ -101,6 +105,7 @@ color 200, 0, 110
 altColor 200, 0, 110
 priority 72.01
 type bed 12 +
+noScoreFilter .
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
 urlLabel MGI Phenotypic Allele: 
 release alpha
@@ -114,6 +119,7 @@ color 200, 0, 110
 altColor 200, 0, 110
 priority 72
 type bed 12 +
+noScoreFilter .
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
 urlLabel MGI Phenotypic Allele: 
 release beta

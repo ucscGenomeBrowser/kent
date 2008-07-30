@@ -2,9 +2,9 @@ include ../../inc/common.mk
 
 CVSUP = cvs -q update 
 
-# recursive target to do install to DEST, with extra excludes EXCL
-# this queries CVS to find out the list of files to install, so
-# avoid the usual crud that collects in directories.
+# recursive target to do install to DEST, with extra excludes EXCL.
+
+JS_FILES=ajax.js hgTracks.js hui.js utils.js
 
 user:
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}
@@ -26,4 +26,4 @@ install:
 
 doInstall:
 	@mkdir -p ${DEST}/
-	rsync -t -r --relative --exclude='makefile' ${EXCL} `cvsFiles` ${DEST}/
+	rsync -t -r --relative --exclude='makefile' ${EXCL} ${JS_FILES} ${DEST}/

@@ -5,7 +5,7 @@
 # Reads load.ra for information about what to do
 
 # Writes error or log information to STDOUT
-# Returns 0 if load succeeds.
+# Returns 0 if load succeeds and sends email to wrangler for given lab.
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
@@ -18,14 +18,21 @@
 use warnings;
 use strict;
 
+use Getopt::Long;
+use Cwd;
 use File::Temp;
 use File::Basename;
+
 use lib "/cluster/bin/scripts";
+use Encode;
 use RAFile;
+
+use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose/;
 
 my $loadRa = "out/load.ra";
 my $unloadRa = "out/unload.ra";
 my $submitDir = "";
+my $submitFQP;
 my $submitType = "";
 my $tempDir = "/data/tmp";
 my $encodeDb = "hg18";
@@ -38,7 +45,7 @@ my $debug = 0;
 sub usage
 {
     die <<END
-usage: doEncodeLoad.rb submission_type project_submission_dir
+usage: doEncodeLoad.pl submission_type project_submission_dir
 
 Assumes existence of a file called: project_submission_dir/$loadRa
 END
@@ -84,7 +91,7 @@ sub loadBed
     #TEST by replacing "cat" with  "head -1000 -q"
     my $cmd = "cat $fileList | egrep -v '^track|browser' | hgLoadBed $encodeDb $tableName stdin -tmpDir=out > out/loadBed.out 2>&1";
 
-    print STDERR "loadBed: cmd: $cmd\n";
+    print STDERR "loadBed: cmd: $cmd\n" if($debug);
 
     if(system($cmd)) {
         print STDERR "ERROR: File(s) $fileList failed bed load.\n";
@@ -137,6 +144,12 @@ sub loadBed5Plus
 ############################################################################
 # Main
 
+my $wd = cwd();
+
+GetOptions("configDir=s", "noEmail", "outDir=s", "verbose=i") || usage();
+$opt_verbose = 1 if (!defined $opt_verbose);
+$opt_noEmail = 0 if (!defined $opt_noEmail);
+
 # Change dir to submission directory obtained from command-line
 
 if(@ARGV != 2) {
@@ -145,6 +158,26 @@ if(@ARGV != 2) {
 
 $submitType = $ARGV[0];	# currently not used
 $submitDir = $ARGV[1];
+if ($submitDir =~ /^\//) {
+    $submitFQP = $submitDir;
+} else {
+    $submitFQP = "$wd/$submitDir";
+}
+
+my $configPath;
+if (defined $opt_configDir) {
+    if ($opt_configDir =~ /^\//) {
+        $configPath = $opt_configDir;
+    } else {
+        $configPath = "$wd/$opt_configDir";
+    }
+} else {
+    $configPath = "$submitDir/../config"
+}
+
+my %labs = Encode::getLabs($configPath);
+my %fields = Encode::getFields($configPath);
+my %pif = Encode::getPif($submitDir, \%labs, \%fields);
 
 $encInstance = dirname($submitDir);
 $encProject = basename($submitDir);
@@ -161,8 +194,8 @@ chdir($submitDir);
 
 my $programDir = dirname($0);
 # XXXX change to "doEncodeUnload.pl" when ready
-if(system("$programDir/doEncodeUnload.rb $submitType $submitDir")) {
-    die "expected error running $programDir/doEncodeUnload.rb cleanup script";
+if(system("$programDir/doEncodeUnload.pl $submitType $submitDir")) {
+    die "expected error running $programDir/doEncodeUnload.pl cleanup script";
 }
 
 if(!(-e $loadRa)) {
@@ -179,41 +212,48 @@ print STDERR "Loading project in directory $submitDir\n" if($debug);
 
 # Load files listed in load.ra
 
-my @ra = RAFile::readRaFile($loadRa);
+my %ra = RAFile::readRaFile($loadRa, 'tablename');
 
-print STDERR "$loadRa has: " . scalar(@ra) . " records\n" if($debug);
+print STDERR "$loadRa has: " . scalar(keys %ra) . " records\n" if($debug);
 
 print STDERR "\n" if($debug);
 
-for my $ele (@ra) {
-    my $h = $ele->{HASH};
+for my $key (keys %ra) {
+    my $h = $ra{$key};
     my $tablenameExt = $h->{tablename} . "${encInstance}_$encProject";
-    if($debug == 2) {
-        print STDERR "keyword: $ele->{KEYWORD}\n";
-        for my $field (qw(tablename type tableType assembly files tablenameExt)) {
-            if($h->{$field}) {
-                print STDERR "$field: " . $h->{$field} . "\n";
-            }
+
+    my $str = "\nkeyword: $key\n";
+    for my $field (qw(tablename type tableType assembly files tablenameExt)) {
+        if($h->{$field}) {
+            $str .= "$field: " . $h->{$field} . "\n";
         }
-        print STDERR "\n";
     }
+    $str .= "\n";
+    HgAutomate::verbose(3, $str);
 
     # temporary work-around (XXXX, galt why is this "temporary?").
-
     $encodeDb = $h->{assembly};
 
-    if($h->{type} eq "genePred") {
+    my $type = $h->{type};
+    if($type eq "genePred") {
         loadGene($tablenameExt, $h->{files});
-    } elsif ($h->{type} eq "wig") {
+    } elsif ($type eq "wig") {
         loadWig($tablenameExt, $h->{files});
-    } elsif ($h->{type} eq "bed 5 +") {
+    } elsif ($type eq "bed 5 +") {
         loadBed5Plus($tablenameExt, $h->{files}, $h->{tableType});
-    } elsif (($h->{type} eq "bed 3") || ($h->{type} eq "bed 4") || ($h->{type} eq "bed 4") || ($h->{type} eq "bed 5") || ($h->{type} eq "bed 6")) {
+    } elsif (($type eq "bed 3") || ($type eq "bed 4") || ($type eq "bed 4") || ($type eq "bed 5") || ($type eq "bed 6")) {
         loadBed($tablenameExt, $h->{files});
     } else {
-        die "ERROR: unknown type: $h->{type} in load.ra\n";
+        die "ERROR: unknown type: $type in load.ra\n";
     }
     print STDERR "\n" if($debug);
+}
+
+# Send "data is ready" email to email contact assigned to $pif{lab}
+
+if($labs{$pif{lab}} && $labs{$pif{lab}}->{wranglerEmail} && !$opt_noEmail) {
+    my $email = $labs{$pif{lab}}->{wranglerEmail};
+    `echo "dir: $submitFQP" | /bin/mail -s "ENCODE data from $pif{lab} lab is ready" $email`;
 }
 
 exit(0);

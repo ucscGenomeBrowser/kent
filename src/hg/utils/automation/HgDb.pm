@@ -5,7 +5,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgDb.pm instead.
 
-# $Id: HgDb.pm,v 1.3 2008/07/17 18:30:53 larrym Exp $
+# $Id: HgDb.pm,v 1.4 2008/07/29 22:57:08 larrym Exp $
 
 package HgDb;
 
@@ -68,6 +68,32 @@ sub execute
     my $sth = $db->{DBH}->prepare($query) or die "prepare for query '$query' failed; error: " . $db->{DBH}->errstr;
     my $rv = $sth->execute(@params) or die "execute for query '$query' failed; error: " . $db->{DBH}->errstr;
     return $sth;
+}
+
+sub tableExist
+{
+    my ($db, $tableName) = @_;
+    my $retval = 0;
+    my $sth = $db->execute("show tables like ?", $tableName);
+    my @row = $sth->fetchrow_array();
+    if(@row && $row[0]) {
+        $retval = 1 ;
+    }
+    return $retval;
+}
+
+sub dropTable
+{
+    my ($db, $tableName) = @_;
+    $db->execute("drop table $tableName") || die "Couldn't drop table '$tableName'";
+}
+
+sub dropTableIfExist
+{
+    my ($db, $tableName) = @_;
+    if(tableExist($db, $tableName)) {
+        dropTable($db, $tableName);
+    }
 }
 
 1;

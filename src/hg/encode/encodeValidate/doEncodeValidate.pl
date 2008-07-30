@@ -4,22 +4,27 @@
 #                       automated submission pipeline
 # Verifies that all files and metadata are present and of correct formats
 # Creates a load file (load.ra) and track configuration (trackDb.ra) for the datasets
-# Returns 0 if validation succeeds and sends email to wrangler for given lab.
+# Returns 0 if validation succeeds
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.31 2008/07/17 18:48:16 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.38 2008/07/29 21:50:27 larrym Exp $
 
 use warnings;
 use strict;
 
-use lib "/cluster/bin/scripts";
-use HgAutomate;
 use File::stat;
 use Getopt::Long;
 use English;
 use Carp qw(cluck);
 use Cwd;
+
+use lib "/cluster/bin/scripts";
+use Encode;
+use HgAutomate;
+use HgDb;
+use RAFile;
+use SafePipe;
 
 use vars qw/
     $opt_configDir
@@ -27,25 +32,11 @@ use vars qw/
     $opt_verbose
     /;
 
-# Global constants
-our $fieldConfigFile = "fields.ra";
-our $vocabConfigFile = "cv.ra";
-our $labsConfigFile = "labs.ra";
-our $loadFile = "load.ra";
-our $trackFile = "trackDb.ra";
-our $pifVersion = 0.2;
-
 # Global variables
 our $submitPath;        # full path of data submission directory
 our $configPath;        # full path of configuration directory
 our $outPath;           # full path of output directory
-our $pifFile;           # project information filename (most recent found in 
-                                # submission dir)
-our %pif;               # project information
-our %tracks;            # track information
 our %terms;             # controlled vocabulary
-our %labs;
-our %fields;
 
 sub usage {
     print STDERR <<END;
@@ -63,48 +54,18 @@ END
 exit 1;
 }
 
-sub readFile
-{
-# Return lines from given file, with EOL chomp'ed off.
-# Handles either Unix or Mac EOL characters.
-# Reads whole file into memory, so should NOT be used for huge files.
-    my ($file) = @_;
-    my $oldEOL = $/;
-    open(FILE, $file) or die "ERROR: Can't open file \'$file\'\n";
-    my @lines = <FILE>;
-    if(@lines == 1 && $lines[0] =~ /\r/) {
-        # rewind and re-read as a Mac file - obviously, this isn't the most efficient way to do this.
-        seek(FILE, 0, 0);
-        $/ = "\r";
-        @lines = <FILE>;
-    }
-    for (@lines) {
-        chomp;
-    }
-    close(FILE);
-    $/ = $oldEOL;
-    return \@lines;
-}
-
-sub splitKeyVal
-{
-# split a line into key/value, using the FIRST white-space in the line; we also trim key/value strings
-    my ($str) = @_;
-    my $key = undef;
-    my $val = undef;
-    if($str =~ /([^\s]+)\s+(.+)/) {
-        $key = $1;
-        $val = $2;
-        $key =~ s/^\s+//;
-        $key =~ s/\s+$//;
-        $val =~ s/^\s+//;
-        $val =~ s/\s+$//;
-    }
-    return ($key, $val);
-}
-
 ############################################################################
-# Validators -- extend when adding new metadata fields
+# Validators for DDF columns -- extend when adding new metadata fields
+#
+# validators die if they encounter errors.
+#
+# validator callbacks are called thus:
+#
+# validator(value, track, pif);
+#
+# value is value in DDF column
+# track is track/view value
+# pif is pif hash
 
 # dispatch table
 our %validators = (
@@ -120,7 +81,7 @@ our %validators = (
 sub validateFileName {
     # Validate array of filenames, ordered by part
     # Check files exist and are of correct data format
-    my ($files, $track) = @_;
+    my ($files, $track, $pif) = @_;
     my @newFiles;
     for my $file (@{$files}) {
         my @list = glob $file;
@@ -135,23 +96,13 @@ sub validateFileName {
         -e $file || die "ERROR: File \'$file\' does not exist\n";
         -s $file || die "ERROR: File \'$file\' is empty\n";
         -r $file || die "ERROR: File \'$file\' is not readable \n";
-        &checkDataFormat($tracks{$track}->{'type'}, $file);
+        &checkDataFormat($pif->{TRACKS}{$track}{type}, $file);
     }
     $files = \@newFiles;
 }
 
-sub validatePart {
-    my ($val) = @_;
-    $val >= 0 && $val < 100 || die "ERROR: Part \'$val\' is invalid (must be 0-100)\n";
-}
-
 sub validateDatasetName {
     my ($val) = @_;
-}
-
-sub validateAssembly {
-    my ($val) = @_;
-    $val =~ /^hg1[78]$/ || die "ERROR: Assembly '$val' is invalid (must be 'hg17' or 'hg18')\n";
 }
 
 sub validateDataType {
@@ -167,6 +118,7 @@ sub validateLabVersion {
 }
 
 # project-specific validators
+
 sub validateCellLine {
     my ($val) = @_;
     defined($terms{'Cell Line'}{$val}) || die "ERROR: Cell line \'$val\' is not known \n";
@@ -183,27 +135,38 @@ sub validateAntibody {
 }
 
 ############################################################################
-# Format checkers - extend when adding new data format
+# Format checkers - check file format for given types; extend when adding new 
+# data formats
+#
+# Some of the checkers use regular expressions to validate syntax of the files.
+# Others pass first 10 lines to utility loaders; the later has:
+# advantages:
+# 	checks semantics as well as syntax
+# disadvantages;
+# 	only checks the beginning of the file
+# 	but some of the loaders tolerate (but give incorrect results) for invalid files
 
 # dispatch table
 our %formatCheckers = (
     wig => \&validateWig,
     bed => \&validateBed,
     genePred => \&validateGene,
-    mappedReads => \&validateMappedReads,
+    tagAlignment => \&validateTagAlignment,
+    encodePeaks => \&validateEncodePeaks,
     );
 
-sub validateWig {
-    my ($file) = @_;
-    my $outFile = "validateWig.out";
-    my $filePath = "$submitPath/$file";
-    my $err = system (
-        "cd $outPath; head -10 $filePath | wigEncode stdin /dev/null /dev/null >$outFile 2>&1");
-    if ($err) {
+my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|))";
+
+sub validateWig
+{
+    my ($path, $file, $type) = @_;
+    my $filePath = "$path/$file";
+
+    my @cmds = ("head -10 $filePath", "wigEncode stdin /dev/null /dev/null");
+    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null");
+    if(my $err = $safe->exec()) {
         print STDERR  "ERROR: File \'$file\' failed wiggle validation\n";
-        open(ERR, "$outPath/$outFile") || die "ERROR: Can't open wiggle validation file \'$outPath/$outFile\': $!\n";
-        my @err = <ERR>;
-        die "@err\n";
+        die "ERROR: " . $safe->stderr();
     } else {
         &HgAutomate::verbose(2, "File \'$file\' passed wiggle validation\n");
     }
@@ -211,13 +174,13 @@ sub validateWig {
 
 sub validateBed {
 # Validate each line of a bed 5 or greater file.
-    my ($file, $type) = @_;
-    my $filePath = "$submitPath/$file";
+    my ($path, $file, $type) = @_;
+    my $filePath = "$path/$file";
     my $line = 0;
     open(FILE, $filePath) or die "Couldn't open file: $filePath; error: $!\n";
     while(<FILE>) {
         chomp;
-        my @fields = split /\t/;
+        my @fields = split /\s+/;
         $line++;
         next if(!@fields);
         my $prefix = "Failed bed validation, file '$file'; line $line:";
@@ -246,9 +209,9 @@ sub validateBed {
 }
 
 sub validateGene {
-    my ($file, $type) = @_;
+    my ($path, $file, $type) = @_;
     my $outFile = "validateGene.out";
-    my $filePath = "$submitPath/$file";
+    my $filePath = "$path/$file";
     my $err = system (
         "cd $outPath; egrep -v '^track|browser' $filePath | ldHgGene -out=genePred.tab -genePredExt hg18 testTable stdin >$outFile 2>&1");
     if ($err) {
@@ -261,32 +224,49 @@ sub validateGene {
     }
 }
 
-sub validateMappedReads {
-    my ($file, $type) = @_;
-    my $filePath = "$submitPath/$file";
+sub validateTagAlignment
+{
+    my ($path, $file, $type) = @_;
+    my $filePath = "$path/$file";
     my $line = 0;
-    open(FILE, $filePath) or die "Couldn't open file: $filePath; error: $!\n";
+    open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
     while(<FILE>) {
         $line++;
-        if(!(/chr(\d+|M|X|Y)\t\d+\t\d+\t[ATCG]+\t\d+\t[+-]\t.*/)) {
-            die "Line number $line is invalid\nline: $_";
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[ATCG]+\s+\d+\s+[+-]$/)) {
+            die "Line number $line in file '$file' is invalid\nline: $_";
         }
     }
     close(FILE);
-    HgAutomate::verbose(2, "File \'$file\' passed mappedReads validation\n");
+    HgAutomate::verbose(2, "File \'$file\' passed tagAlignment validation\n");
+}
+
+sub validateEncodePeaks
+{
+    my ($path, $file, $type) = @_;
+    my $filePath = "$path/$file";
+    my $line = 0;
+    open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
+    while(<FILE>) {
+        $line++;
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+$floatRegEx\s+$floatRegEx\s+\d+$/)) {
+            die "Line number $line in file '$file' is invalid\nline: $_";
+        }
+    }
+    close(FILE);
+    HgAutomate::verbose(2, "File \'$file\' passed encodePeaks validation\n");
 }
 
 
 ############################################################################
 # Misc subroutines
 
-sub validateField {
+sub validateDdfField {
     # validate value for type of field
-    my ($type, $val, $arg) = @_;
+    my ($type, $val, $track, $pif) = @_;
     $type =~ s/ /_/g;
     &HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
     if($validators{$type}) {
-        $validators{$type}->($val, $arg);
+        $validators{$type}->($val, $track, $pif);
     }
 }
 
@@ -299,180 +279,16 @@ sub checkDataFormat {
         $format = $1;
         $type = $2;
     }
-    $formatCheckers{$format} || 
-        die "ERROR: Data format \'$format\' in PIF file \'$pifFile\' is unknown\n";
-    $formatCheckers{$format}->($file, $type);
-}
-
-sub loadControlledVocab {
-    %terms = ();
-    my %termRa = &readRaFile("$configPath/$vocabConfigFile", "term");
-    foreach my $term (keys %termRa) {
-        my $type = $termRa{$term}->{'type'};
-        $terms{$type}->{$term} = $termRa{$term};
-    }
-}
-
-sub newestFile {
-  # Get the most recently modified file from a list
-    my @files = @_;
-    my $newestTime = 0;
-    my $newestFile = "";
-    my $file = "";
-    foreach $file (@files) {
-        my $fileTime = (stat($file))->mtime;
-        if ($fileTime > $newestTime) {
-            $newestTime = $fileTime;
-            $newestFile = $file;
-        }
-    }
-    return $newestFile;
-}
-
-sub getPif {
-    # Read info from Project Information File.  Verify required fields
-    # are present and that the project is marked active.
-    my %pif = ();
-    $pifFile = &newestFile(glob "*.PIF");
-    &HgAutomate::verbose(2, "Using newest PIF file \'$pifFile\'\n");
-
-    my $lines = readFile($pifFile);
-    while (@{$lines}) {
-        my $line = shift @{$lines};
-        # strip leading and trailing spaces
-        $line =~ s/^ +//;
-        $line =~ s/ +$//;
-        # ignore comments and blank lines
-        next if $line =~ /^#/;
-        next if $line =~ /^$/;
-
-        my ($key, $val) = splitKeyVal($line);
-        if(!defined($key)) {
-            next;
-        }
-        if ($key ne "view") {
-            &HgAutomate::verbose(3, "PIF field: $key = $val\n");
-            $pif{$key} = $val;
-        } else {
-            my %track = ();
-            my $track = $val;
-            $tracks{$track} = \%track;
-            &HgAutomate::verbose(5, "  Found view: \'$track\'\n");
-            while ($line = shift @{$lines}) {
-                $line =~ s/^ +//;
-                $line =~ s/ +$//;
-                next if $line =~ /^#/;
-                next if $line =~ /^$/;
-                if ($line =~ /^track/) {
-                    unshift @{$lines}, $line;
-                    last;
-                }
-                my ($key, $val) = splitKeyVal($line);
-                $track{$key} = $val;
-                &HgAutomate::verbose(5, "    Property: $key = $val\n");
-            }
-        }
-    }
-
-    # Validate fields
-    my @tmp = keys %pif;
-    validateFieldList(\@tmp, \%fields, 'pifHeader', "in PIF '$pifFile'");
-
-    if($pif{pifVersion} ne $pifVersion) {
-        die "ERROR: pifVersion '$pif{pifVersion}' does not match current version: $pifVersion\n";
-    }
-    if(!keys(%tracks)) {
-        die "ERROR: no views defined for project \'$pif{project}\' in PIF '$pifFile'\n";
-    }
-    if(!defined($labs{$pif{lab}})) {
-        die "ERROR: invalid lab '$pif{lab}' for project \'$pif{project}\' in PIF '$pifFile'\n";
-    }
-    validateAssembly($pif{assembly});
-
-    foreach my $track (keys %tracks) {
-        &HgAutomate::verbose(4, "  Track: $track\n");
-        my %track = %{$tracks{$track}};
-        foreach my $key (keys %track) {
-            &HgAutomate::verbose(4, "    Setting: $key   Value: $track{$key}\n");
-        }
-    }
-
-    if (defined($pif{'variables'})) {
-        my @variables = split (/\s*,\s*/, $pif{'variables'});
-        my %variables;
-        my $i = 0;
-        foreach my $variable (@variables) {
-            # replace underscore with space
-            $variable =~ s/_/ /g;
-            $variables[$i++] = $variable;
-            $variables{$variable} = 1;
-        }
-        $pif{'variableHash'} = \%variables;
-        $pif{'variableArray'} = \@variables;
-    }
-    return %pif;
-}
-
-sub readRaFile {
-# Read records from a .ra file into a hash of hashes and return it.
-# $type is the used as the primary key and as the key of the returned hash.
-    my ($file, $type) = @_;
-    open(RA, $file) || 
-        die "ERROR: Can't open RA file \'$file\'\n";
-    my @lines = <RA>;
-    my %ra = ();
-    my $raKey = undef;
-    foreach my $line (@lines) {
-        $line =~ s/^\s+//;
-        $line =~ s/\s+$//;
-        if ($line =~ /^$/) {
-            $raKey = undef;
-            next;
-        }
-        next if $line =~ /^#/;
-        chomp $line;
-        if ($line =~ m/^$type\s+(.*)/) {
-            $raKey = $1;
-        } else {
-            defined($raKey) || die "ERROR: Missing $type before $line\n";
-            my ($key, $val) = split('\s+', $line, 2);
-            $ra{$raKey}->{$key} = $val;
-        }
-    }
-    close(RA);
-    return %ra;
-}
-
-sub validateFieldList {
-# validate the entries in a RA record or DDF header using labs.ra as our schema
-    my ($fields, $schema, $file, $errStrSuffix) = @_;
-    my %hash = map {$_ => 1} @{$fields};
-    my @errors;
-
-    # look for missing required fields
-    for my $field (keys %{$schema}) {
-        if($schema->{$field}{file} eq $file && $schema->{$field}{required} eq 'yes' && !defined($hash{$field})) {
-            push(@errors, "field '$field' not defined");
-        }
-    }
-
-    # now look for fields in list that aren't in schema
-    for my $field (@{$fields}) {
-        if(!defined($schema->{$field}{file}) || $schema->{$field}{file} ne $file) {
-            push(@errors, "invalid field '$field'");
-        }
-    }
-    if(@errors) {
-        die "ERROR: " . join("; ", @errors) . " $errStrSuffix\n";
-    }
+    $formatCheckers{$format} || die "ERROR: Data format \'$format\' is unknown\n";
+    $formatCheckers{$format}->($submitPath, $file, $type);
 }
 
 sub ddfKey
 {
 # return key for given DDF line (e.g. "antibody=$antibody;cell=$cell" for ChIP-Seq data)
-    my ($fields, $ddfHeader) = @_;
-    if (defined($pif{variables})) {
-        return join(";", map("$_=" . $fields->[$ddfHeader->{$_}], sort @{$pif{variableArray}}));
+    my ($fields, $ddfHeader, $pif) = @_;
+    if (defined($pif->{variables})) {
+        return join(";", map("$_=" . $fields->[$ddfHeader->{$_}], sort @{$pif->{variableArray}}));
     } else {
         die "ERROR: no key defined for this PIF";
     }
@@ -482,10 +298,9 @@ sub ddfKey
 # Main
 
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time());
-my $i;
-my @ddfHeader;	# list of field headers on the first line of DDF file
-my %ddfHeader = ();
-my @ddfLines = ();
+my @ddfHeader;		# list of field headers on the first line of DDF file
+my %ddfHeader = ();	# convenience hash version of @ddfHeader
+my @ddfLines = ();	# each line in DDF (except for fields header)
 my %ddfSets = ();	# info about DDF entries broken down by ddfKey
 my $wd = cwd();
 
@@ -493,8 +308,8 @@ my $ok = GetOptions("configDir=s",
                     "outDir=s",
                     "verbose=i",
                     );
-&usage() if (!$ok);
-&usage() if (scalar(@ARGV) < 2);
+usage() if (!$ok);
+usage() if (scalar(@ARGV) < 2);
 
 # Get command-line args
 my $submitType = $ARGV[0];	# currently not used
@@ -541,21 +356,13 @@ chdir $submitPath ||
 mkdir $outPath || 
     die ("SYS ERR: Can't create out directory \'$outPath\': $OS_ERROR\n");
 
-if(-e "$configPath/$labsConfigFile") {
-    # tolerate missing labs.ra in dev trees.
-    %labs = &readRaFile("$configPath/$labsConfigFile", "lab");
-}
+my %labs = Encode::getLabs($configPath);
+my %fields = Encode::getFields($configPath);
+my %pif = Encode::getPif($submitDir, \%labs, \%fields);
 
+my $db = HgDb->new(DB => $pif{assembly});
 
-# Gather fields defined for DDF file. File is in 
-# ra format:  field <name>, required <true|false>
-%fields = readRaFile("$configPath/$fieldConfigFile", "field");
-
-# Locate project information (PIF) file and verify that project is
-#  ready for submission
-%pif = &getPif();
-
-# Add required fields for this -- the variables in the PIF file
+# Add the variables in the PIF file to the required fields list
 if (defined($pif{variables})) {
     for my $variable (keys %{$pif{variableHash}}) {
         $fields{$variable}->{required} = 'yes';
@@ -564,9 +371,9 @@ if (defined($pif{variables})) {
 }
 
 # Open dataset descriptor file (DDF)
-my $ddfFile = &newestFile(glob "*.DDF");
+my $ddfFile = Encode::newestFile(glob "*.DDF");
 &HgAutomate::verbose(2, "Using newest DDF file \'$ddfFile\'\n");
-my $lines = readFile($ddfFile);
+my $lines = Encode::readFile($ddfFile);
 
 # Get header containing column names
 while(@{$lines}) {
@@ -581,13 +388,13 @@ while(@{$lines}) {
         die "ERROR: The DDF header has no tabs; the DDF is required to be tab delimited";
     }
     @ddfHeader = split(/\t/, $line);
-    for ($i=0; $i < @ddfHeader; $i++) {
+    for (my $i=0; $i < @ddfHeader; $i++) {
         $ddfHeader{$ddfHeader[$i]} = $i;
     }
     last;
 }
 
-validateFieldList(\@ddfHeader, \%fields, 'ddf', "in DDF '$ddfFile'");
+Encode::validateFieldList(\@ddfHeader, \%fields, 'ddf', "in DDF '$ddfFile'");
 
 # Process lines in DDF file. Create a hash with one entry per line;
 # the entry is an array of field values.
@@ -606,51 +413,72 @@ while (@{$lines}) {
     my $fileField = $ddfHeader{files};
     my $files = $fields[$fileField];
     my $view = $fields[$ddfHeader{view}];
-    if(!$tracks{$view}) {
+    if(!$pif{TRACKS}->{$view}) {
         die "Undefined view '$view' in DDF";
     }
     my @filenames = split(',', $files);
     $fields[$fileField] = \@filenames;
     push(@ddfLines, \@fields);
-
-    $ddfSets{ddfKey(\@fields, \%ddfHeader)}{VIEWS}{$view} = 1;
+    $ddfSets{ddfKey(\@fields, \%ddfHeader, \%pif)}{VIEWS}{$view} = \@fields;
 }
+
+my $tmpCount = 1;
 
 # die if there are missing required views
 for my $key (keys %ddfSets) {
-    for my $view (keys %tracks) {
-        if($tracks{$view}->{required} eq 'yes') {
+    for my $view (keys %{$pif{TRACKS}}) {
+        if($pif{TRACKS}->{$view}{required} eq 'yes') {
             if(!defined($ddfSets{$key}{VIEWS}{$view})) {
                 die "ERROR: view '$view' missing for DDF entry '$key'";
             }
         }
+    }
+
+    # create missing optional views (e.g. ChIP-Seq Signal)
+    if(defined($ddfSets{$key}{VIEWS}{Alignments}) && !defined($ddfSets{$key}{VIEWS}{Signal})) {
+        my @alignmentFields = @{$ddfSets{$key}{VIEWS}{Alignments}};
+        my @fields = @alignmentFields;
+        $fields[$ddfHeader{view}] = 'Signal';
+        $ddfSets{$key}{VIEWS}{'Signal'} = \@fields;
+        my $outFile = "createWig.out";
+        my $files = join(",", @{$alignmentFields[$ddfHeader{files}]});
+        my $tmpFile = "autoCreated$tmpCount.bed";
+        $tmpCount++;
+        my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $pif{assembly} stdin");
+        my $safe = SafePipe->new(CMDS => \@cmds);
+        if(my $err = $safe->exec()) {
+            print STDERR  "ERROR: failed creation of wiggle for $key\n";
+            die "ERROR: " . $safe->stderr();
+        }
+        $fields[$ddfHeader{files}] = [$tmpFile];
+        push(@ddfLines, \@fields);
     }
 }
 
 # Validate files and metadata fields in all ddfLines using controlled
 # vocabulary.  Create load.ra file for loader and trackDb.ra file for wrangler.
 
-loadControlledVocab();
-open(LOADER_RA, ">$outPath/$loadFile") || die "SYS ERROR: Can't write \'$outPath/$loadFile\' file; error: $!\n";
-open(TRACK_RA, ">$outPath/$trackFile") || die "SYS ERROR: Can't write \'$outPath/$trackFile\' file; error: $!\n";
+%terms = Encode::getControlledVocab($configPath);
+open(LOADER_RA, ">$outPath/$Encode::loadFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::loadFile\' file; error: $!\n";
+open(TRACK_RA, ">$outPath/$Encode::trackFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::trackFile\' file; error: $!\n";
 my $priority = 0;
 foreach my $ddfLine (@ddfLines) {
     $priority++;
     my $view = $ddfLine->[$ddfHeader{view}];
-    my $tableType = $tracks{$view}->{tableType};
+    my $tableType = $pif{TRACKS}->{$view}{tableType};
     HgAutomate::verbose(2, "  View: $view\n");
-    for ($i=0; $i < @ddfHeader; $i++) {
-        &validateField($ddfHeader[$i], $ddfLine->[$i], $view);
+    for (my $i=0; $i < @ddfHeader; $i++) {
+        validateDdfField($ddfHeader[$i], $ddfLine->[$i], $view, \%pif);
     }
 
     # Construct table name from track name and variables
     my $trackName = "wgEncode$pif{project}$view";
     my $tableName = $trackName;
-    if(!defined($tracks{$view}->{shortLabelPrefix})) {
-        $tracks{$view}->{shortLabelPrefix} = "";
+    if(!defined($pif{TRACKS}->{$view}{shortLabelPrefix})) {
+        $pif{TRACKS}->{$view}{shortLabelPrefix} = "";
     }
-    my $shortLabel = defined($tracks{$view}->{shortLabelPrefix}) ? $tracks{$view}->{shortLabelPrefix} : "";
-    my $longLabel = "ENCODE" . (defined($tracks{$view}->{longLabelPrefix}) ? " $tracks{$view}->{longLabelPrefix}" : "");
+    my $shortLabel = defined($pif{TRACKS}->{$view}{shortLabelPrefix}) ? $pif{TRACKS}->{$view}{shortLabelPrefix} : "";
+    my $longLabel = "ENCODE" . (defined($pif{TRACKS}->{$view}{longLabelPrefix}) ? " $pif{TRACKS}->{$view}{longLabelPrefix}" : "");
     my $subGroups = "view=$view";
     my $additional = "\n";
     if (defined($pif{variables})) {
@@ -685,9 +513,17 @@ foreach my $ddfLine (@ddfLines) {
     }
     # mysql doesn't allow hyphens in table names and our naming convention doesn't allow underbars.
     $tableName =~ s/[_-]//g;
+
+    # Is this really an error?
+    my $sth = $db->execute("select count(*) from trackDb where tableName = ?", $tableName);
+    my @row = $sth->fetchrow_array();
+    if(@row && $row[0]) {
+        die "view '$view' has already been loaded";
+    }
+
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "track $trackName\n";
-    print LOADER_RA "type $tracks{$view}->{type}\n";
+    print LOADER_RA "type $pif{TRACKS}->{$view}{type}\n";
     print LOADER_RA "tableType $tableType\n" if defined($tableType);
     print LOADER_RA "assembly $pif{assembly}\n";
     print LOADER_RA "files @{$ddfLine->[$ddfHeader{files}]}\n";
@@ -698,7 +534,7 @@ foreach my $ddfLine (@ddfLines) {
     print TRACK_RA "\tshortLabel\t$shortLabel\n";
     print TRACK_RA "\tlongLabel\t$longLabel\n";
     print TRACK_RA "\tsubGroups\t$subGroups\n";
-    print TRACK_RA "\ttype\t$tracks{$view}->{type}\n";
+    print TRACK_RA "\ttype\t$pif{TRACKS}->{$view}{type}\n";
     print TRACK_RA sprintf("\tdateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
     print TRACK_RA "\tpriority\t$priority\n";
     # noInherit is necessary b/c composite track will often have a different dummy type setting.
@@ -707,25 +543,18 @@ foreach my $ddfLine (@ddfLines) {
     if($visibility{$view}) {
         print TRACK_RA "\tvisibility\t$visibility{$view}\n";
     }
-    if($tracks{$view}->{type} eq 'wig') {
+    if($pif{TRACKS}->{$view}{type} eq 'wig') {
         print TRACK_RA <<END;
 	yLineOnOff	On
 	yLineMark	1.0
 	maxHeightPixels	100:32:8
 END
-    } elsif($tracks{$view}->{type} eq 'bed 5 +') {
+    } elsif($pif{TRACKS}->{$view}{type} eq 'bed 5 +') {
         print TRACK_RA "\tuseScore\t1\n";
     }
     print TRACK_RA $additional;
 }
 close(LOADER_RA);
 close(TRACK_RA);
-
-# Send "data is ready" email to email contact assigned to $pif{lab}
-
-if($labs{$pif{lab}} && $labs{$pif{lab}}->{wranglerEmail}) {
-    my $email = $labs{$pif{lab}}->{wranglerEmail};
-    `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $pif{lab} lab is ready" $email`;
-}
 
 exit 0;

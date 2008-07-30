@@ -1,0 +1,180 @@
+# for emacs: -*- mode: sh; -*-
+
+# Tarsier syrichta
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE braney 2008-07-11)
+    ssh kkstore05
+    mkdir /cluster/store12/tarSyr1
+    ln -s /cluster/store12/tarSyr1 /cluster/data
+    mkdir /cluster/data/tarSyr1/broad
+    cd /cluster/data/tarSyr1/broad
+
+    wget --timestamping \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/tarsier/assembly.agp \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/tarsier/assembly.bases.gz \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/tarsier/assembly.quals.gz 
+
+
+qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin tarSyr1.qual.qac
+
+    wget --timestamping \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/tarsier/BasicStats.out
+
+
+# --------------------------------------------------------------------------------
+# Fri Jul 04 11:25:33 2008 run (pid=13467) using Thu Jun 26 06:49:09 EDT 2008
+# make
+# BasicStats PRE=/seq/assembly_analysis/ DATA=projects/LowCoverage/Tarsius
+# \
+# RUN=run/work SUBDIR=assembly.8_FinalizeAssembly QUAL_STATS=True
+# \
+# OUTFILE=BasicStats.out
+# # --------------------------------------------------------------------------------
+# 
+# Supercontigs having < 3 reads or < 1kb sequence are
+# ignored.
+# 239 gaps <= -1000; 0 gaps <= -10000; 0 gaps <= -100000
+# fraction of gaps < -10kb or more than 4 deviations below
+# zero: 0.519%
+# 48 gaps > 10kb, 0 gaps > 50kb, 0 gaps > 200kb, 0 gaps >
+# 1Mb
+# 72.86% of reads were used in the assembly (75.84% of
+# bases, 77.3% of Q20 bases)
+# 0% of reads were used multiply in the assembly
+# 1044723 contigs, having N50 length 3157
+# total contig length: 2627536014, spanning 3032285294
+# bases (with 13.3% in gaps)
+# 500238 supercontigs, having N50 length 11476 (not
+# including gaps)
+# 99.9% of assembly in supers of size < 200000 (3029245249
+# bases)
+# Assembly base coverage: 2.92X.  Assembly Q20 coverage:
+# 2.66X.
+# 99.98% of bases have q >= 1
+# 96.97% of bases have q >= 20
+# 94.13% of bases have q >= 30
+# 90.74% of bases have q >= 40
+# 87.35% of bases have q >= 50
+# 
+
+   cut -f 1 assembly.agp | uniq -c | wc -l 
+   # Number of scaffolds: 659020
+
+
+#########################################################################
+# Create .ra file and run makeGenomeDb.pl
+    ssh kkstore05
+    cd /cluster/data/tarSyr1
+cat << _EOF_ >tarSyr1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db tarSyr1
+clade mammal
+genomeCladePriority 35
+scientificName  Tarsier syrichta
+commonName Tarsier
+assemblyDate Jul. 2008
+assemblyLabel Broad Institute tarSyr1 
+orderKey 236.5
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/tarSyr1/broad/assembly.bases.gz
+agpFiles /cluster/data/tarSyr1/broad/assembly.agp
+qualFiles /cluster/data/tarSyr1/broad/tarSyr1.qual.qac
+dbDbSpeciesDir tarsier
+_EOF_
+
+# use 'screen' make sure on kkstore05
+    makeGenomeDb.pl -verbose=2 tarSyr1.config.ra > makeGenomeDb.out 2>&1 &
+
+# 'ctl-a ctl -d' returns to previous shell
+cut -f 2 chrom.sizes | ave stdin
+# Q1 7169.500000
+# median 13298.000000
+# Q3 55788.500000
+# average 866164.007952
+# min 3002.000000
+# max 88675666.000000
+# count 3144
+# total 2723219641.000000
+# standard deviation 5316243.688364
+
+
+#########################################################################
+# REPEATMASKER (DONE braney 2008-07-11)
+    ssh kkstore05
+    screen # use a screen to manage this job
+    mkdir /cluster/data/tarSyr1/bed/repeatMasker
+    cd /cluster/data/tarSyr1/bed/repeatMasker
+    /cluster/bin/scripts/doRepeatMasker.pl -species "tarsier" \
+	-buildDir=/cluster/data/tarSyr1/bed/repeatMasker    \
+	tarSyr1 > do.log 2>&1 &
+
+# new parasol, lots of crashes, no times
+
+    /cluster/bin/scripts/doRepeatMasker.pl -species "tarsier" \
+	-continue cat -buildDir=/cluster/data/tarSyr1/bed/repeatMasker    \
+	tarSyr1 > do2.log 2>&1 &
+
+
+    time nice -n +19 featureBits tarSyr1 rmsk > fb.tarSyr1.rmsk.txt 2>&1 &
+    # 1154651023 bases of 2771976320 (41.654%) in intersection
+
+
+#########################################################################
+# SIMPLE REPEATS TRF (DONE braney 2008-07-11)
+    ssh kkstore05
+    screen # use a screen to manage this job
+    mkdir /cluster/data/tarSyr1/bed/simpleRepeat
+    cd /cluster/data/tarSyr1/bed/simpleRepeat
+    # 
+    doSimpleRepeat.pl -buildDir=/cluster/data/tarSyr1/bed/simpleRepeat \
+	tarSyr1 > do.log 2>&1 &
+
+    #### When done
+    ssh pk
+    para time
+    # Completed: 51 of 51 jobs
+    # CPU time in finished jobs:      24985s     416.41m     6.94h    0.29d
+    # 0.001 y
+    # IO & Wait Time:                   101s       1.69m     0.03h    0.00d
+    # 0.000 y
+    # Average job time:                 492s       8.20m     0.14h    0.01d
+    # Longest finished job:            3887s      64.78m     1.08h    0.04d
+    # Submission to last job:          3911s      65.18m     1.09h    0.05d
+
+    featureBits tarSyr1 simpleRepeat
+    # 50851363 bases of 2771976320 (1.834%) in intersection
+
+    #	after RM run is done, add this mask:
+    cd /cluster/data/tarSyr1
+    twoBitMask tarSyr1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed tarSyr1.2bit
+
+    twoBitToFa tarSyr1.2bit stdout | faSize stdin
+#    3183347966 bases (411371646 N's 2771976320 real 1619032005 upper
+#    1152944315 lower) in 659020 sequences in 1 files
+#    Total size: mean 4830.4 sd 8873.5 min 600 (scaffold_659019) max 329427
+#    (scaffold_0) median 1645
+#    N count: mean 624.2 sd 1398.1
+#    U count: mean 2456.7 sd 5229.3
+#    L count: mean 1749.5 sd 2909.8
+#    %36.22 masked total, %41.59 masked real
+
+    twoBitToFa tarSyr1.rmsk.2bit stdout | faSize stdin
+# 3183347966 bases (411371646 N's 2771976320 real 1619660149 upper 1152316171
+# lower) in 659020 sequences in 1 files
+# Total size: mean 4830.4 sd 8873.5 min 600 (scaffold_659019) max 329427
+# (scaffold_0) median 1645
+# N count: mean 624.2 sd 1398.1
+# U count: mean 2457.7 sd 5230.7
+# L count: mean 1748.5 sd 2908.4
+# %36.20 masked total, %41.57 masked real
+
+
+    # Link to it from /gbdb
+    ln -s /cluster/data/tarSyr1/tarSyr1.2bit /gbdb/tarSyr1/tarSyr1.2bit
+
+    # mkdir /san/sanvol1/scratch/tarSyr1
+    cp /cluster/data/tarSyr1/tarSyr1.2bit /san/sanvol1/scratch/tarSyr1
+    cp /cluster/data/tarSyr1/chrom.sizes /san/sanvol1/scratch/tarSyr1
+
+

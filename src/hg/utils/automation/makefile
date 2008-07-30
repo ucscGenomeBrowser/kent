@@ -27,6 +27,7 @@ SCRIPT_FILES = \
 	doSameSpeciesLiftOver.pl \
 	ensVersions \
 	extractNestedRepeats.pl \
+	Encode.pm \
 	EnsGeneAutomate.pm \
 	HgAutomate.pm \
 	HgDb.pm \
@@ -40,5 +41,6 @@ SCRIPT_FILES = \
 	simplePartition.pl \
 	partitionSequence.pl \
 	RAFile.pm \
+	SafePipe.pm \
 	updateIgtc.pl
 

@@ -261,6 +261,9 @@ while ((row2 = sqlNextRow(sr2)) != NULL)
     avgHydro[icnt] = hydroSum/(double)len;
 
     icnt++;
+    if (icnt >= MAX_PROTEIN_CNT)
+            errAbort("Too many proteins - please set MAX_PROTEIN_CNT to be more than %d\n", MAX_PROTEIN_CNT);
+    
     if ((icnt % 10000) == 0)
         {
 	printf("%d done.\n", icnt);fflush(stdout);

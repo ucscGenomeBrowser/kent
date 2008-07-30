@@ -48,6 +48,7 @@ group map
 priority 21.1
 visibility hide
 color 200,100,0
+noScoreFilter .
 type bed 6 +
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail: 
@@ -60,6 +61,7 @@ priority 21.1
 visibility hide
 color 200,100,0
 type bed 6 +
+noScoreFilter .
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail: 
 
@@ -82,6 +84,7 @@ priority 21.1
 visibility hide
 color 200,100,0
 type bed 8 +
+noScoreFilter .
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 urlLabel MGI QTL Detail: 
 
@@ -198,6 +201,7 @@ visibility hide
 color 190,110,0
 priority 71
 type bed 12 +
+noScoreFilter .
 url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
 urlLabel MGI Phenotypic Allele(s): 
 
@@ -210,6 +214,7 @@ color 200, 0, 110
 altColor 200, 0, 110
 priority 72
 type bed 12 +
+noScoreFilter .
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
 urlLabel MGI Phenotypic Allele: 
 

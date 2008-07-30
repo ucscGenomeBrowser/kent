@@ -3096,7 +3096,9 @@ chainOne $(path1)
     sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/tetNig1/bed/tblastn.hg18KG/unliftBlastHg18KG.psl
     cd ..
     pslCheck unliftBlastHg18KG.psl
-    liftUp blastHg18KG.psl ../../randomContigs/tetNig1.randomContigs.lift carry unliftBlastHg18KG.psl
+    liftUp -nohead temp.psl ../../randomContigs/tetNig1.randomContigs.lift carry unliftBlastHg18KG.psl
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n temp.psl > blastHg18KG.psl
+    rm temp.psl
 
     # load table 
     ssh hgwdev

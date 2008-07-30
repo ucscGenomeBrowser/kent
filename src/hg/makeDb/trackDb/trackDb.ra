@@ -541,6 +541,7 @@ searchPriority 2.31
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
+    release alpha
 
 searchTable transMapAlnSplicedEst
 searchType psl
@@ -2764,7 +2765,7 @@ type netAlign bosTau1 chainBosTau1
 otherDb bosTau1
 
 track chainEquCab2
-shortLabel $o_db Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 240
@@ -2778,7 +2779,7 @@ type chain equCab2
 otherDb equCab2
 
 track netEquCab2
-shortLabel $o_db Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 240.1
@@ -3212,7 +3213,7 @@ type netAlign calJac1 chainCalJac1
 otherDb calJac1
 
 track chainEquCab1
-shortLabel $o_Organism Chain
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 235
@@ -3226,7 +3227,7 @@ type chain equCab1
 otherDb equCab1
 
 track netEquCab1
-shortLabel $o_Organism Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 235.1
