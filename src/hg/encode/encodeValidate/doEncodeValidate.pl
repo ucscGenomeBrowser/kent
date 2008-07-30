@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.38 2008/07/29 21:50:27 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.39 2008/07/30 19:49:52 larrym Exp $
 
 use warnings;
 use strict;
@@ -187,19 +187,19 @@ sub validateBed {
         if(/^(track|browser)/) {
             ;
         } elsif(@fields < 5) {
-            die "$prefix not enough fields; " . scalar(@fields) . " present; at least 5 are required";
+            die "$prefix not enough fields; " . scalar(@fields) . " present; at least 5 are required\n";
         } elsif ($fields[0] !~ /^chr(\d+|M|X|Y)$/) {
-            die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name";
+            die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
         } elsif ($fields[1] !~ /^\d+$/) {
-            die "$prefix field 2 value ($fields[1]) is invalid; value must be a positive number";
+            die "$prefix field 2 value ($fields[1]) is invalid; value must be a positive number\n";
         } elsif ($fields[2] !~ /^\d+$/) {
-            die "$prefix field 3 value ($fields[2]) is invalid; value must be a positive number";
+            die "$prefix field 3 value ($fields[2]) is invalid; value must be a positive number\n";
         } elsif ($fields[2] < $fields[1]) {
-            die "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])";
+            die "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])\n";
         } elsif ($fields[4] !~ /^\d+$/ && $fields[4] !~ /^\d+\.\d+$/) {
-            die "$prefix field 5 value ($fields[4]) is invalid; value must be a positive number";
+            die "$prefix field 5 value ($fields[4]) is invalid; value must be a positive number\n";
         } elsif ($fields[4] < 0 || $fields[4] > 1000) {
-            die "$prefix field 5 value ($fields[4]) is invalid; score must be 0-1000";
+            die "$prefix field 5 value ($fields[4]) is invalid; score must be 0-1000\n";
         } else {
             ;
         }
@@ -233,7 +233,7 @@ sub validateTagAlignment
     while(<FILE>) {
         $line++;
         if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[ATCG]+\s+\d+\s+[+-]$/)) {
-            die "Line number $line in file '$file' is invalid\nline: $_";
+            die "Line number $line in file '$file' is invalid\nline: $_\n";
         }
     }
     close(FILE);
@@ -249,7 +249,7 @@ sub validateEncodePeaks
     while(<FILE>) {
         $line++;
         if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+$floatRegEx\s+$floatRegEx\s+\d+$/)) {
-            die "Line number $line in file '$file' is invalid\nline: $_";
+            die "Line number $line in file '$file' is invalid\nline: $_\n";
         }
     }
     close(FILE);
@@ -290,7 +290,7 @@ sub ddfKey
     if (defined($pif->{variables})) {
         return join(";", map("$_=" . $fields->[$ddfHeader->{$_}], sort @{$pif->{variableArray}}));
     } else {
-        die "ERROR: no key defined for this PIF";
+        die "ERROR: no key defined for this PIF\n";
     }
 }
 
@@ -385,7 +385,7 @@ while(@{$lines}) {
     next if $line =~ /^$/;
     next if $line =~ /^#/;
     if($line !~ /\t/) {
-        die "ERROR: The DDF header has no tabs; the DDF is required to be tab delimited";
+        die "ERROR: The DDF header has no tabs; the DDF is required to be tab delimited\n";
     }
     @ddfHeader = split(/\t/, $line);
     for (my $i=0; $i < @ddfHeader; $i++) {
@@ -407,14 +407,14 @@ while (@{$lines}) {
     next if $line =~ /^$/;
 
     if($line !~ /\t/) {
-        die "ERROR: DDF entry has no tabs; the DDF is required to be tab delimited";
+        die "ERROR: DDF entry has no tabs; the DDF is required to be tab delimited\n";
     }
     my @fields = split('\t', $line);
     my $fileField = $ddfHeader{files};
     my $files = $fields[$fileField];
     my $view = $fields[$ddfHeader{view}];
     if(!$pif{TRACKS}->{$view}) {
-        die "Undefined view '$view' in DDF";
+        die "Undefined view '$view' in DDF\n";
     }
     my @filenames = split(',', $files);
     $fields[$fileField] = \@filenames;
@@ -429,7 +429,7 @@ for my $key (keys %ddfSets) {
     for my $view (keys %{$pif{TRACKS}}) {
         if($pif{TRACKS}->{$view}{required} eq 'yes') {
             if(!defined($ddfSets{$key}{VIEWS}{$view})) {
-                die "ERROR: view '$view' missing for DDF entry '$key'";
+                die "ERROR: view '$view' missing for DDF entry '$key'\n";
             }
         }
     }
@@ -465,7 +465,6 @@ my $priority = 0;
 foreach my $ddfLine (@ddfLines) {
     $priority++;
     my $view = $ddfLine->[$ddfHeader{view}];
-    my $tableType = $pif{TRACKS}->{$view}{tableType};
     HgAutomate::verbose(2, "  View: $view\n");
     for (my $i=0; $i < @ddfHeader; $i++) {
         validateDdfField($ddfHeader[$i], $ddfLine->[$i], $view, \%pif);
@@ -518,13 +517,12 @@ foreach my $ddfLine (@ddfLines) {
     my $sth = $db->execute("select count(*) from trackDb where tableName = ?", $tableName);
     my @row = $sth->fetchrow_array();
     if(@row && $row[0]) {
-        die "view '$view' has already been loaded";
+        die "view '$view' has already been loaded\n";
     }
 
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "track $trackName\n";
     print LOADER_RA "type $pif{TRACKS}->{$view}{type}\n";
-    print LOADER_RA "tableType $tableType\n" if defined($tableType);
     print LOADER_RA "assembly $pif{assembly}\n";
     print LOADER_RA "files @{$ddfLine->[$ddfHeader{files}]}\n";
     print LOADER_RA "\n";
