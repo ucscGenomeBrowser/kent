@@ -863,3 +863,29 @@ name Omicia
 label Omicia
 url http://www.omicia.com:9080/omiminfo?omim_allele=%s
 acc yes
+
+name TP53
+label IARC TP53
+url http://www-p53.iarc.fr/MutantDetail.asp?Mutant=%s
+acc yes
+needsEncoded yes
+
+name MMR
+label MMR
+url http://chromium.liacs.nl/LOVD2/variants.php?select_db=%s
+acc yes
+
+name RPGR
+label RPGR
+url https://rpgr.hgu.mrc.ac.uk/search.php?select_db=RPGR&srch=%s
+acc yes
+
+name dbRIP
+label dbRIP
+url http://falcon.roswellpark.org/cgi-bin/searchRIP.cgi?submit=Search&databaseId=%s
+acc yes
+
+name Fanconi
+label Fanconi
+url http://chromium.liacs.nl/LOVD2/FANC/variants.php?select_db=%s
+acc yes
