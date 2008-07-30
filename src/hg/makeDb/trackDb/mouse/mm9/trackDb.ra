@@ -347,7 +347,7 @@ longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal
 group regulation
 priority 100.1
 type wig .04 60949
-defaultViewLimits 1 15
+viewLimits 1:10
 spanList 1
 autoScaleDefault off
 windowingFunction mean
