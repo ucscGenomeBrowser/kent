@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.38 2008/07/08 05:38:50 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.39 2008/07/31 01:00:33 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -74,6 +74,8 @@ if (strict)
     struct trackDb *strictList = NULL;
     struct hash *compositeHash = hashNew(0);
     struct trackDb *compositeList = NULL;
+    struct hash *superHash = hashNew(0);
+    struct trackDb *superList = NULL;
     char *setting;
     for (td = tdList; td != NULL; td = tdNext)
         {
@@ -90,6 +92,13 @@ if (strict)
                 chopLine(cloneString(setting), words);
                 hashStore(compositeHash, words[0]);
                 }
+            else if ((setting = trackDbSetting(td, "superTrack")) != NULL)
+                {
+                /* note super track member tracks with tables so we can later add 
+                 * the super track trackdb */
+                chopLine(cloneString(setting), words);
+                hashStore(superHash, words[0]);
+                }
             }
 	else
 	    {
@@ -99,7 +108,7 @@ if (strict)
                 }
             else if (sameOk("on", trackDbSetting(td, "superTrack")))
                 {
-                slAddHead(&strictList, td);
+                slAddHead(&superList, td);
                 }
             else
                 {
@@ -114,6 +123,23 @@ if (strict)
         {
         tdNext = td->next;
         if (hashLookup(compositeHash, td->tableName))
+            {
+	    slAddHead(&strictList, td);
+            if (trackDbSetting(td, "superTrack"))
+                {
+                /* note that this is part of a super track so the
+                 * super track will be added to the strict list */
+                hashStore(superHash, cloneString(td->tableName));
+                }
+            }
+        }
+    hashFree(&compositeHash);
+
+    /* add all super tracks that have a member (simple or composite) with a table */
+    for (td = superList; td != NULL; td = tdNext)
+        {
+        tdNext = td->next;
+        if (hashLookup(superHash, td->tableName))
             {
 	    slAddHead(&strictList, td);
             }
