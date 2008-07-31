@@ -44,9 +44,6 @@ if ( $#argv > 1 ) then
   endif
 endif
 
-# echo "order   $order"
-# echo "machine $machine"
-
 # set host for non-RR machines
 if ( $#argv == 3 ) then
   set machine=$argv[3]
@@ -60,6 +57,11 @@ endif
 echo $machine | grep hgwdev > /dev/null
 if ( ! $status ) then
     set machine='hgcentraltest'
+endif
+
+echo $machine | egrep -i "hgw[1-8]|rr" > /dev/null
+if ( ! $status ) then
+  set machine='-h genome-centdb hgcentral'
 endif
 
 if ( all% == "$db" ) then
