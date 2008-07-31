@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1445.4.2 2008/07/31 06:43:35 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1445.4.3 2008/07/31 20:41:50 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7973,8 +7973,8 @@ if (url != NULL && url[0] != 0)
         printf("<li>%s", row[0]);
         row = sqlNextRow(sr);
         }
-    hFreeConn(&conn);
     sqlFreeResult(&sr);
+    hFreeConn(&conn);
     
     printf("</UL>"); 
 
