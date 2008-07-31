@@ -5,6 +5,13 @@ priority 120
 track blatFr1
 priority 120.1 
 
+# horse
+track chainEquCab2
+priority 253
+
+track netEquCab2
+priority 253.1
+
 # marmoset
 track chainCalJac1
 priority 200
