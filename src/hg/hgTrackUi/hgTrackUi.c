@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.444 2008/07/28 20:44:25 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.445 2008/07/31 00:41:33 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2925,7 +2925,10 @@ if (isCustomTrack(tdb->tableName) && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
 
 /* Display visibility menu */
-printf("<B>Display&nbsp;mode:&nbsp;</B>");
+if (tdbIsComposite(tdb) && dimensionsExist(tdb))
+    printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
+else    
+    printf("<B>Display&nbsp;mode:&nbsp;</B>");
 if (tdbIsSuper(tdb))
     {
     /* This is a supertrack -- load its members and show hide/show dropdown */
