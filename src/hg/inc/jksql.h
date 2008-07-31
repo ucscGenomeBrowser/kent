@@ -38,12 +38,16 @@ struct sqlConnection *sqlMayConnect(char *database);
 /* Connect to database on default host as default user. 
  * Return NULL (don't abort) on failure. */
 
-struct sqlConnection *sqlConnectProfile(char *profile, char *database);
+struct sqlConnection *sqlConnectProfile(char *profileName, char *database);
 /* Connect to database using the specified profile.  The profile is the prefix
  * to the host, user, and password variables in .hg.conf.  For the default
  * profile of "db", the environment variables HGDB_HOST, HGDB_USER, and
  * HGDB_PASSWORD can override.
  */ 
+
+struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database);
+/* Connect to database using the specified profile, return NULL if
+ * connection failed.  */
 
 struct sqlConnection *sqlConnectReadOnly(char *database);
 /* Connect to database using ro profile in .hg.conf */ 
@@ -51,6 +55,10 @@ struct sqlConnection *sqlConnectReadOnly(char *database);
 struct sqlConnection *sqlConnectRemote(char *host, 
 	char *user, char *password, char *database);
 /* Connect to database somewhere as somebody. */
+
+struct sqlConnection *sqlMayConnectRemote(char *host, 
+       char *user, char *password, char *database);
+/* Connect to database somewhere as somebody, return NULL can't connect */
 
 struct sqlConnection *sqlConnRemote(char *host, 
 				    char *user, char *password, char *database, boolean abort);

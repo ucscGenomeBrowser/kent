@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: jksql.c,v 1.113.6.1 2008/07/31 02:24:31 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.113.6.2 2008/07/31 15:08:24 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -43,8 +43,7 @@ struct sqlProfile
     char *host;     // host name for database server
     char *user;     // database server user name
     char *password; // database server password
-    struct slName *dbs; // database associated with profile, or NULL if no
-                        // specific database is associated
+    struct slName *dbs; // database associated with profile, can be NULL
     };
 
 struct sqlConnection
@@ -98,6 +97,7 @@ struct sqlProfile *sp;
 AllocVar(sp);
 sp->name = cloneString(profileName);
 sp->host = cloneString(host);
+sp->user = cloneString(user);
 sp->password = cloneString(password);
 return sp;
 }
@@ -114,22 +114,13 @@ slSafeAddHead(&sp->dbs, slNameNew(db));
 }
 
 static void sqlProfileCreate(char *profileName, char *host, char *user,
-                             char *password, char *dbs)
+                             char *password)
 /* create a profile and add to global data structures */
 {
 struct sqlProfile *sp = sqlProfileNew(profileName, host, user, password);
 hashAdd(profiles, sp->name, sp);
 if (sameString(sp->name, defaultProfileName))
     defaultProfile = sp;  // save default
-
-// add dbs list if specified
-if (dbs != NULL)
-    {
-    struct slName *db, *dbNames = slNameListFromString(dbs, ',');
-    for (db = dbNames; db != NULL; db = db->next)
-        sqlProfileAssocDb(sp, db->name);
-    slFreeList(&dbNames);
-    }
 }
 
 static void sqlProfileAddProfIf(char *profileName)
@@ -139,7 +130,6 @@ static void sqlProfileAddProfIf(char *profileName)
 char *host = getCfgPreVal(profileName, "host");
 char *user = getCfgPreVal(profileName, "user");
 char *password = getCfgPreVal(profileName, "password");
-char *dbs = getCfgPreVal(profileName, "db");
 
 if ((host != NULL) && (user != NULL) && (password != NULL))
     {
@@ -150,7 +140,7 @@ if ((host != NULL) && (user != NULL) && (password != NULL))
         user = envOverride("HGDB_USER", user);
         password = envOverride("HGDB_PASSWORD", password);
         }
-    sqlProfileCreate(profileName, host, user, password, dbs);
+    sqlProfileCreate(profileName, host, user, password);
     }
 }
 
@@ -176,7 +166,7 @@ static void sqlProfileAddDb(char *db, char *profileName)
 struct sqlProfile *sp = hashFindVal(profiles, profileName);
 if (sp == NULL)
     errAbort("can't find profile %s for database %s in hg.conf", profileName, db);
-hashAdd(dbToProfile, db, sp);
+sqlProfileAssocDb(sp, db);
 }
 
 static void sqlProfileAddDbs(struct slName *cnames)
@@ -195,7 +185,6 @@ for (cname = cnames; cname != NULL; cname = cname->next)
         }
     }
 }
-
 
 static void sqlProfileLoad()
 /* load the profiles from config */
@@ -225,7 +214,10 @@ static struct sqlProfile* sqlProfileFindByDatabase(char *database)
 /* find a profile using database as profile name, return the default if not
  * found */
 {
-return hashFindVal(dbToProfile, database);
+struct sqlProfile *sp = hashFindVal(dbToProfile, database);
+if (sp == NULL)
+    sp = defaultProfile;
+return sp;
 }
 
 struct sqlProfile* sqlProfileGet(char *profileName, char *database)
@@ -664,6 +656,13 @@ struct sqlConnection *sqlConnectRemote(char *host,
 return sqlConnRemote(host, user, password, database, TRUE);
 }
 
+struct sqlConnection *sqlMayConnectRemote(char *host, 
+	char *user, char *password, char *database)
+/* Connect to database somewhere as somebody, return NULL can't connect */
+{
+return sqlConnRemote(host, user, password, database, FALSE);
+}
+
 #ifndef GBROWSE
 struct sqlConnection *sqlCtConn(boolean abort)
 /* Connect to customTrash database, optionally abort on failure */
@@ -689,13 +688,8 @@ struct sqlConnection *sqlConn(char *database, boolean abort)
 /* Connect to database on default host as default user. 
  * Optionally abort on failure. */
 {
-char* host = cfgOptionEnv("HGDB_HOST", "db.host");
-char* user = cfgOptionEnv("HGDB_USER", "db.user");
-char* password = cfgOptionEnv("HGDB_PASSWORD", "db.password");
-
-if(host == 0 || user == 0 || password == 0)
-    sqlConnectReadOnly(database);
-return sqlConnRemote(host, user, password, database, abort);
+struct sqlProfile* sp = sqlProfileMustGet(NULL, database);
+return sqlConnRemote(sp->host, sp->user, sp->password, database, abort);
 }
 
 struct sqlConnection *sqlMayConnect(char *database)
@@ -711,35 +705,29 @@ struct sqlConnection *sqlConnect(char *database)
 return sqlConn(database, TRUE);
 }
 
-static char *getProfileCfgValue(char *profile, char *envVarSuffix, char *varSuffix)
-/* get the configuration var for the specified profile */
-{
-char envVar[256], var[256];
-safef(envVar, sizeof(envVar), "HGDB_%s_%s", profile, envVarSuffix);
-safef(var, sizeof(var), "%s.%s", profile, varSuffix);
-char *val = cfgOptionEnv(envVar, var);
-if (val == NULL)
-    errAbort("can't get configuration variable %s or environment variable %s",
-             var, envVar);
-return val;
-}
-
-struct sqlConnection *sqlConnectProfile(char *profile, char *database)
+struct sqlConnection *sqlConnectProfile(char *profileName, char *database)
 /* Connect to database using the specified profile.  The profile is the prefix
  * to the host, user, and password variables in .hg.conf.  For the default
  * profile of "db", the environment variables HGDB_HOST, HGDB_USER, and
  * HGDB_PASSWORD can override.
  */ 
 {
-return sqlConnectRemote(getProfileCfgValue(profile, "HOST", "host"),
-                        getProfileCfgValue(profile, "USER", "user"),
-                        getProfileCfgValue(profile, "PASSWORD", "password"),
-                        database);
+struct sqlProfile* sp = sqlProfileGet(profileName, database);
+return sqlConnectRemote(sp->host, sp->user, sp->password, database);
+}
+
+struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database)
+/* Connect to database using the specified profile, return NULL if
+ * connection failed.  */
+{
+struct sqlProfile* sp = sqlProfileGet(profileName, database);
+return sqlMayConnectRemote(sp->host, sp->user, sp->password, database);
 }
 
 struct sqlConnection *sqlConnectReadOnly(char *database)
 /* Connect to database using ro profile in .hg.conf */ 
 {
+// FIXME: obsolete 
 return sqlConnectProfile("ro", database);
 }
 
@@ -849,7 +837,7 @@ res = sqlGetResult(sc, query);
 while ((row=sqlNextRow(res)))
     {
     if (sameWord(*row, "1"))
-        printf("Advisory lock created\n");
+        break;
     else if (sameWord(*row, "0"))
         errAbort("Attempt to GET_LOCK timed out.\nAnother client may have locked this name, %s\n.", name);
     else if (*row == NULL)
