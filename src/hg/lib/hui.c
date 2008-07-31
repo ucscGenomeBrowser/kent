@@ -16,7 +16,7 @@
 #include "obscure.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.107 2008/07/17 22:56:45 markd Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.108 2008/07/31 00:39:39 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -2203,6 +2203,8 @@ if(!primarySubtrack && isMatrix && parentTdb->subtracks != NULL && dividers)
     DIVIDER_PRINT(COLOR_DARKGREEN);
 puts("</TABLE>");
 puts("<P>");
+if(isMatrix)
+    puts("<script>matInitializeMatrix();</script>");
 subgroupMembersFree(&dimensionX);
 subgroupMembersFree(&dimensionY);
 dividersFree(&dividers);
@@ -2437,7 +2439,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
         if(differentString(stView,membersOfView->names[ix]))
             continue;
         matchedSubtracks[ix] = subtrack;
-        if(sameString("wig",    matchedSubtracks[ix]->type) 
+        if(startsWith("wig",    matchedSubtracks[ix]->type) 
         || sameString("bed 5 +",matchedSubtracks[ix]->type)) // TODO: Only these are configurable so far
             {
             configurable[ix] = TRUE;
@@ -2501,9 +2503,9 @@ if(makeCfgRows)
                 printf("<TABLE border=\"0\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>",COLOR_BG_ALTDEFAULT,COLOR_BG_ALTDEFAULT);
                 printf("<CENTER><B>%s Configuration</B></CENTER>\n",membersOfView->values[ix]);
                 safef(objName, sizeof(objName), "%s_%s", parentTdb->tableName,membersOfView->names[ix]);
-                if(sameString(matchedSubtracks[ix]->type,"wig"))
+                if(startsWith("wig",matchedSubtracks[ix]->type))
                     wigCfgUi(cart,matchedSubtracks[ix],objName);
-                else if(sameString(matchedSubtracks[ix]->type,"bed 5 +"))
+                else if(sameString("bed 5 +",matchedSubtracks[ix]->type))
                     scoreCfgUi(cart,parentTdb, 1000,objName);
                 puts("</td></tr></table></td></tr></table>");
                 puts("</TD></TR>");

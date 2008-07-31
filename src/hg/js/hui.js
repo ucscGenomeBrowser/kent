@@ -37,6 +37,25 @@ function matSelectViewForSubTracks(obj,view)
     }
 }
 
+function matInitializeMatrix()
+{
+// Called at Onload to coordinate all subtracks with the matrix of check boxes
+    if (document.getElementsByTagName) {
+        var list = document.getElementsByTagName('input');
+        for (var ix=0;ix<list.length;ix++) {
+            var ele = list[ix];
+            if(ele.type.match("checkbox") != null
+            && ele.name.indexOf("mat_") == 0 
+            && ele.name.indexOf("_cb") == (ele.name.length - 3)) {
+                clickIt(ele,ele.checked,true); // force a double click();
+            }
+        }
+    }
+    else if(debug) {
+        alert("matInitializeMatrix is unimplemented for this browser)");
+    }
+}
+
 function matSetCheckBoxesThatContain(nameOrId, state, force, sub1)
 {
 // Set all checkboxes which contain 1 or more given substrings in NAME or ID to state boolean
