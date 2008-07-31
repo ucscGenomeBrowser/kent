@@ -1,3 +1,9 @@
+track chainEquCab2
+priority 225
+
+track netEquCab2
+priority 225.1
+
 track chainPonAbe2
 priority 240
 
