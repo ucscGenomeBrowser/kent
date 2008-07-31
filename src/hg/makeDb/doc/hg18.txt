@@ -22504,7 +22504,7 @@ _EOF_
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 pteVam1 > rbest.log 2>&1 &
 
 #############################################################################
-# BLASTZ/CHAIN/NET vicVic1 (working
+# BLASTZ/CHAIN/NET vicVic1 (DONE braney 2008-07-30)
     ssh kkstore02
     screen #	use screen to control this multi-day job
     mkdir /cluster/data/hg18/bed/blastz.vicVic1.2008-07-13
@@ -22745,7 +22745,7 @@ _EOF_
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 proCav1 > rbest.log 2>&1 &
 
 #############################################################################
-# BLASTZ/CHAIN/NET ochPri2 (working
+# BLASTZ/CHAIN/NET ochPri2 (DONE braney 2008-07-30)
     ssh kkstore02
     screen #	use screen to control this multi-day job
     mkdir /cluster/data/hg18/bed/blastz.ochPri2.2008-07-29
@@ -22780,19 +22780,20 @@ _EOF_
       -chainMinScore=3000 -chainLinearGap=medium \
       -blastzOutRoot /cluster/bluearc/ochPri2/blastz.hg18 > do.log 2>&1 &
 
-# Completed: 726225 of 726225 jobs
-# CPU time in finished jobs:   15086026s  251433.77m  4190.56h  174.61d  0.478 y
-# IO & Wait Time:               2524564s   42076.06m   701.27h   29.22d  0.080 y
-# Average job time:                  24s       0.40m     0.01h    0.00d
-# Longest finished job:             809s      13.48m     0.22h    0.01d
-# Submission to last job:         59736s     995.60m    16.59h    0.69d
+# Completed: 654120 of 654120 jobs
+# CPU time in finished jobs:   14082913s  234715.22m  3911.92h  163.00d  0.447 y
+# IO & Wait Time:               2257180s   37619.67m   626.99h   26.12d  0.072 y
+# Average job time:                  25s       0.42m     0.01h    0.00d
+# Longest finished job:             292s       4.87m     0.08h    0.00d
+# Submission to last job:         59396s     989.93m    16.50h    0.69d
 
     nice doBlastzChainNet.pl `pwd`/DEF \
 	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
       -chainMinScore=3000 -chainLinearGap=medium \
       -blastzOutRoot /cluster/bluearc/ochPri2/blastz.hg18 > do2.log 2>&1 &
 
-    # memk died on chr19 in chainRun (ran on kolossus)
+    # memk cluster couldn't find san for chainRun, ran on pk
+
     nice doBlastzChainNet.pl `pwd`/DEF \
 	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=chainMerge \
       -chainMinScore=3000 -chainLinearGap=medium \
@@ -22800,8 +22801,8 @@ _EOF_
 
     ln -s `pwd`/blastz.ochPri2.2008-07-29 /cluster/data/hg18/bed/blastz.ochPri2
 
-    featureBits hg18 chainDipOrd1Link
-    # 787795764 bases of 2881515245 (27.340%) in intersection
+    featureBits hg18 chainOchPri2Link
+# 806073890 bases of 2881515245 (27.974%) in intersection
 
     cd /cluster/data/hg18/bed/blastz.ochPri2.2008-07-29
 
