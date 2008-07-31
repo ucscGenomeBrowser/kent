@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: testSearch.c,v 1.6 2007/03/26 18:15:11 heather Exp $";
+static char const rcsid[] = "$Id: testSearch.c,v 1.6.68.1 2008/07/31 05:21:41 markd Exp $";
 
 /* Need to get a cart in order to use hgFind. */
 struct cart *cart = NULL;
@@ -256,9 +256,8 @@ struct searchTestCase *morphOutput = NULL;
 
 while (testCaseList)
     {
-    hSetDb(testCaseList->database);
     verbose(1, "database = %s, searchTerm = %s\n", testCaseList->database, testCaseList->searchTerm);
-    hgpList = hgPositionsFind(testCaseList->searchTerm, "", "hgTracks", cart, FALSE);
+    hgpList = hgPositionsFind(testCaseList->database, testCaseList->searchTerm, "", "hgTracks", cart, FALSE);
     /* handle cases where there are no expected matches */
     if (testCaseList->posCount == 0)
         {

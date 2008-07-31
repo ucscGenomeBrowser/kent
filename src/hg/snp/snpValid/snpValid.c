@@ -277,7 +277,7 @@ struct snp *readSnp(char *chrom)
 {
 struct snp *list=NULL, *el;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, observed, locType "
@@ -447,8 +447,6 @@ if (!hDbIsActive(db))
     return;
     }
 
-hSetDb(db);
-
 Org = hOrganism(db);
 
 simpleDnaScheme = axtScoreSchemeSimpleDna(matchScore, misMatchScore, gapOpenPenalty, gapExtendPenalty);
@@ -464,7 +462,7 @@ openExOuts(db);  /* open separate files for each snp class of Exception of inter
 printf("maxFlank = %d \n",maxFlank);
 printf("threshold = %d \n",threshold);
 
-cns = hAllChromNames();
+cns = hAllChromNamesDb(db);
 for (cn = cns; cn != NULL; cn = cn->next)
     {
     struct dnaSeq *chromSeq = NULL;
@@ -495,7 +493,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 
     uglyf("beginning chrom %s \n",cn->name);
    
-    chromSeq = hLoadChrom(cn->name);
+    chromSeq = hLoadChrom(db, cn->name);
     printf("chrom %s :  size (%u) \n",cn->name,chromSeq->size);
     
     snps = readSnp(cn->name);

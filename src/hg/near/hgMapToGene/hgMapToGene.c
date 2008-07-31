@@ -11,7 +11,7 @@
 #include "hgConfig.h"
 
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.14.68.1 2008/07/31 02:24:44 markd Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.14.68.2 2008/07/31 05:21:39 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -348,9 +348,9 @@ if (!createOnly)
     for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	{
 	verbose(2, "%s\n", chrom->name);
-	oneChromStrandTrackToGene(conn, tConn, chrom->name, '+', geneTable, geneTableType,  
+	oneChromStrandTrackToGene(database, conn, tConn, chrom->name, '+', geneTable, geneTableType,  
 	    otherTable, otherType, dupeHash, doAll, lookupHash, f);
-	oneChromStrandTrackToGene(conn, tConn, chrom->name, '-', geneTable, geneTableType,
+	oneChromStrandTrackToGene(database, conn, tConn, chrom->name, '-', geneTable, geneTableType,
 	    otherTable, otherType, dupeHash, doAll, lookupHash, f);
 	}
     hashFree(&dupeHash);
@@ -415,7 +415,7 @@ if(geneTableType == NULL)
     
 if (!startsWith("genePred", geneTableType) && !startsWith("bed", geneTableType))
     errAbort("%s is neither a genePred or bed type track", geneTrack);
-hgMapTableToGene(conn, tConn, geneTrack, geneTableType, track, type, newTable, lookupHash);
+hgMapTableToGene(database, conn, tConn, geneTrack, geneTableType, track, type, newTable, lookupHash);
 sqlDisconnect(&conn);
 sqlDisconnect(&tConn);
 }

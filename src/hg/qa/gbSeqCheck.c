@@ -26,7 +26,7 @@ struct extFileId *readSeq()
 {
 struct extFileId *list=NULL, *el;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int count = 0;
@@ -57,7 +57,7 @@ void gbSeqCheck()
 struct extFileId *idList = NULL;
 struct extFileId *id1 = NULL;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 
@@ -94,12 +94,11 @@ int main(int argc, char *argv[])
 if (argc != 2)
     usage();
 database = argv[1];
-hSetDb(database);
 
 // check for table existence
-if (!hTableExistsDb(database, "gbSeq"))
+if (!hTableExists(database, "gbSeq"))
     errAbort("no gbSeq table");
-if (!hTableExistsDb(database, "gbExtFile"))
+if (!hTableExists(database, "gbExtFile"))
     errAbort("no gbExtFile table");
 
 gbSeqCheck();

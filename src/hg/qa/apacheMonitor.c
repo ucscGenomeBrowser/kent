@@ -5,7 +5,7 @@
 #include "hgRelate.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: apacheMonitor.c,v 1.11.68.1 2008/07/31 02:24:54 markd Exp $";
+static char const rcsid[] = "$Id: apacheMonitor.c,v 1.11.68.2 2008/07/31 05:21:40 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -150,7 +150,7 @@ if (sameString(machine, "hgw8"))
 void printDatabaseTime()
 {
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 
@@ -168,7 +168,7 @@ int getUnixTimeNow()
 /* ask the database for it's unix time (seconds since Jan. 1, 1970) */
 {
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int ret = 0;
@@ -190,7 +190,7 @@ void readLogs(int secondsNow, boolean write500)
 {
 char fileName[255];
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int startTime = secondsNow - (minutes * 60);
@@ -227,7 +227,7 @@ void printBots(int secondsNow)
 /* who is faster than a hit every 5 seconds on average? */
 {
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int startTime = secondsNow - (minutes * 60);
@@ -251,7 +251,7 @@ hFreeConn(&conn);
 void desc500(int secondsNow)
 {
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int startTime = secondsNow - (minutes * 60);
@@ -336,7 +336,7 @@ void store500(int timeNow)
 char localfileName[255];
 char fullfileName[255];
 char tableName[255];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 FILE *f;
 
 /* open the file because hgLoadNamedTabFile closes it */
@@ -370,6 +370,7 @@ host = argv[1];
 database = argv[2];
 minutes = atoi(argv[3]);
 
+// FIXME: no idea why this is being done,
 user = cfgOptionEnv("HGDB_USER", "db.user");
 password = cfgOptionEnv("HGDB_PASSWORD", "db.password");
 

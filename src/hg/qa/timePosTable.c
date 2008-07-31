@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: timePosTable.c,v 1.3 2008/02/29 18:57:38 markd Exp $";
+static char const rcsid[] = "$Id: timePosTable.c,v 1.3.24.1 2008/07/31 05:21:41 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -240,7 +240,6 @@ if (argc != 3)
     usage();
 char *db = argv[1];
 char *table = argv[2];
-hSetDb(db);
 timePosTable(db, table,
              optionInt("minSize", 10000),
              optionInt("maxSize", 1000000),

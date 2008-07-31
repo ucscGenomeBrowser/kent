@@ -84,8 +84,8 @@ struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean 
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  Track does not have to be for hGetDb(). */
 
-void customFactoryTestExistence(char *fileName, boolean *retGotLive,
-				boolean *retGotExpired);
+void customFactoryTestExistence(char *genomeDb, char *fileName,
+                                boolean *retGotLive, boolean *retGotExpired);
 /* Test existence of custom track fileName.  If it exists, parse it just 
  * enough to tell whether it refers to database tables and if so, whether 
  * they are alive or have expired.  If they are live, touch them to keep 
@@ -130,8 +130,8 @@ char *ctGenome(struct customTrack *ct);
 char *ctOrigTrackLine(struct customTrack *ct);
 /* return initial setting by user for track line */
 
-void customTrackUpdateFromConfig(struct customTrack *ct, char *config,
-                                struct slName **retBrowserLines);
+void customTrackUpdateFromConfig(struct customTrack *ct, char *genomeDb,
+                                 char *config, struct slName **retBrowserLines);
 /* update custom track from config containing track line and browser lines 
  * Return browser lines */
 

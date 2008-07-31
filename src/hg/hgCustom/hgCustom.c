@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.126.8.1 2008/07/31 02:24:02 markd Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.126.8.2 2008/07/31 05:21:36 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1094,7 +1094,7 @@ else
                 struct errCatch *catch = errCatchNew();
                 if (errCatchStart(catch))
                     {
-                    customTrackUpdateFromConfig(ct, trackConfig, &browserLines);
+                    customTrackUpdateFromConfig(ct, database, trackConfig, &browserLines);
                     ctUpdated = TRUE;
                     }
                 errCatchEnd(catch);

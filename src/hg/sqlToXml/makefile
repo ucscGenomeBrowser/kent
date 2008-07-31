@@ -15,4 +15,4 @@ clean:
 	rm -f test/*/out.*
 
 test::
-	doTest
+	./doTest

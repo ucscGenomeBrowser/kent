@@ -43,6 +43,7 @@ static struct optionSpec optionSpecs[] = {
     {"aggregate", OPTION_BOOLEAN},
     {NULL, 0}
 };
+
 /* incompatible with aggregate */
 static char *aggIncompatible[] =
 {

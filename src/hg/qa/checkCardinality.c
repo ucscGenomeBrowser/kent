@@ -35,7 +35,7 @@ struct table *getTables()
 /* Get results from 'show tables' */
 {
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int count = 0;
@@ -65,7 +65,7 @@ void addRowcount()
 /* get the size of each table */
 {
 struct table *table1 = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
 for (table1 = tableList; table1 != NULL; table1 = table1->next)
     {
@@ -79,7 +79,7 @@ void reviewIndexes()
 {
 struct table *table1 = NULL;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 
@@ -109,7 +109,6 @@ int main(int argc, char *argv[])
 if (argc != 2)
     usage();
 database = argv[1];
-hSetDb(database);
 tableList = getTables();
 addRowcount();
 slSort(&tableList, tableCmp);

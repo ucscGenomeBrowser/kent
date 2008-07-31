@@ -45,7 +45,7 @@ test:
 	cd tests && ${MAKE} test
 
 clean:
-	rm -f ${O} $(MACHTYPE)/jkweb.a
+	rm -f ${O} $(MACHTYPE)/*.a
 	cd tests && ${MAKE} clean
 
 tags:

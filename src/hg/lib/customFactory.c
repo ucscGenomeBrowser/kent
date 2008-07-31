@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.85.4.1 2008/07/31 02:24:27 markd Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.85.4.2 2008/07/31 05:21:38 markd Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -150,20 +150,13 @@ track->dbTrack = TRUE;
 sqlDisconnect(&ctConn);
 }
 
-char *ctGenomeOrCurrent(struct customTrack *ct)
+static char *ctGenomeOrCurrent(struct customTrack *ct, char *genomeDb)
 /* return database setting */
 {
-// FIXME: don't understand this
-#if 0
 char *ctDb = ctGenome(ct);
 if (ctDb == NULL)
-    ctDb = hGetDb();
+    ctDb = genomeDb;
 return ctDb;
-#else
-char *ctDb = ctGenome(ct);
-assert(ctDb != NULL);
-return ctDb;
-#endif
 }
 
 static boolean sameType(char *a, char *b)
@@ -208,7 +201,7 @@ if (line == NULL)
 char *dupe = cloneString(line);
 char *row[bedKnownFields+1];
 int wordCount = chopLine(dupe, row);
-char *ctDb = ctGenomeOrCurrent(track);
+char *ctDb = ctGenomeOrCurrent(track, genomeDb);
 boolean isBed = rowIsBed(row, wordCount, ctDb);
 freeMem(dupe);
 if (isBed)
@@ -502,7 +495,7 @@ static struct customTrack *bedLoader(struct customFactory *fac,
 /* Load up bed data until get next track line. */
 {
 char *line;
-char *db = ctGenomeOrCurrent(track);
+char *db = ctGenomeOrCurrent(track, genomeDb);
 while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     char *row[bedKnownFields];
@@ -748,7 +741,7 @@ static struct customTrack *gffLoader(struct customFactory *fac,
 /* Load up gff data until get next track line. */
 {
 char *line;
-char *ctDb = ctGenomeOrCurrent(track);
+char *ctDb = ctGenomeOrCurrent(track, genomeDb);
 while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     char *row[9];
@@ -938,7 +931,7 @@ static struct customTrack *pslLoader(struct customFactory *fac,
 {
 char *line;
 boolean pslIsProt = FALSE;
-char *ctDb = ctGenomeOrCurrent(track);
+char *ctDb = ctGenomeOrCurrent(track, genomeDb);
 while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     /* Skip over pslLayout version lines noting if they are
@@ -1414,6 +1407,7 @@ if ((wordCount != 3) || (!isdigit(row[0][0]) || !isdigit(row[1][0]) || !isdigit(
 }
 
 static void customTrackUpdateFromSettings(struct customTrack *track, 
+                                          char *genomeDb,
 					  char *line, int lineIx)
 /* replace settings in track with those from new track line */
 {
@@ -1538,7 +1532,7 @@ if ((val = hashFindVal(hash, "maxChromName")) != NULL)
     track->maxChromName = sqlSigned(val);
 else
     {
-    char *ctDb = ctGenomeOrCurrent(track);
+    char *ctDb = ctGenomeOrCurrent(track, genomeDb);
     track->maxChromName = hGetMinIndexLengthDb(ctDb);
     }
 if ((line != NULL) && !strstr(line, "tdbType"))
@@ -1612,8 +1606,8 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 return NULL;
 }
 
-void customTrackUpdateFromConfig(struct customTrack *ct, char *config,
-                                struct slName **retBrowserLines)
+void customTrackUpdateFromConfig(struct customTrack *ct, char *genomeDb,
+                                 char *config, struct slName **retBrowserLines)
 /* update custom track from config containing track line and browser lines 
  * Return browser lines */
 {
@@ -1624,7 +1618,7 @@ char *line;
 struct slName *browserLines = NULL;
 while (lineFileNextReal(lf, &line))
     if (startsWithWord("track", line))
-        customTrackUpdateFromSettings(ct, line, 1);
+        customTrackUpdateFromSettings(ct, genomeDb, line, 1);
     else if (startsWithWord("browser", line))
         slNameAddTail(&browserLines, line);
     else
@@ -1661,7 +1655,7 @@ for (bl = ctBrowserLines(ct); bl != NULL; bl = bl->next)
 return (dyStringCannibalize(&ds));
 }
 
-static struct customTrack *trackLineToTrack(char *line, int lineIx)
+static struct customTrack *trackLineToTrack(char *genomeDb, char *line, int lineIx)
 /* Convert a track specification line to a custom track structure. */
 {
 /* Make up basic track with associated tdb.  Fill in settings
@@ -1670,7 +1664,7 @@ struct customTrack *track;
 AllocVar(track);
 struct trackDb *tdb = customTrackTdbDefault();	
 track->tdb = tdb;
-customTrackUpdateFromSettings(track, line, lineIx);
+customTrackUpdateFromSettings(track, genomeDb, line, lineIx);
 return track;
 }
 
@@ -1773,7 +1767,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
     //char *type = NULL;
     if (startsWithWord("track", line))
         {
-	track = trackLineToTrack(line, cpp->fileStack->lineIx);
+	track = trackLineToTrack(genomeDb, line, cpp->fileStack->lineIx);
         }
     else if (trackList == NULL)
     /* In this case we handle simple files with a single track
@@ -1783,7 +1777,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
         safef(defaultLine, sizeof defaultLine, 
                         "track name='%s' description='%s'",
                         CT_DEFAULT_TRACK_NAME, CT_DEFAULT_TRACK_DESCR);
-        track = trackLineToTrack(defaultLine, 1);
+        track = trackLineToTrack(genomeDb, defaultLine, 1);
         customPpReuse(cpp, line);
 	}
     else
@@ -1796,19 +1790,14 @@ while ((line = customPpNextReal(cpp)) != NULL)
 
     /* verify database for custom track */
     char *ctDb = ctGenome(track);
-#if 0
-    // FIXME: don't understand this
     if (mustBeCurrentDb)
 	{
 	if (ctDb == NULL)
-	    ctDb = hGetDb();
-	else if (differentString(ctDb, hGetDb()))
+	    ctDb = genomeDb;
+	else if (differentString(ctDb, genomeDb))
 	    errAbort("can't load %s data into %s custom tracks",
-		     ctDb, hGetDb());
+		     ctDb, genomeDb);
 	}
-#else
-    assert(ctDb != NULL);
-#endif
     struct customTrack *oneList = NULL, *oneTrack;
 
     if (track->dbDataLoad)
@@ -1986,7 +1975,7 @@ hashElFreeList(&fileSettings);
 return isLive;
 }
 
-void customFactoryTestExistence(char *fileName, boolean *retGotLive,
+void customFactoryTestExistence(char *genomeDb, char *fileName, boolean *retGotLive,
 				boolean *retGotExpired)
 /* Test existence of custom track fileName.  If it exists, parse it just 
  * enough to tell whether it refers to database tables and if so, whether 
@@ -2026,7 +2015,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 
     if (startsWithWord("track", line))
         {
-	track = trackLineToTrack(line, cpp->fileStack->lineIx);
+	track = trackLineToTrack(genomeDb, line, cpp->fileStack->lineIx);
         }
     else if (trackList == NULL)
 	/* In this case we handle simple files with a single track
@@ -2036,7 +2025,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
         safef(defaultLine, sizeof defaultLine, 
 	      "track name='%s' description='%s'",
 	      CT_DEFAULT_TRACK_NAME, CT_DEFAULT_TRACK_DESCR);
-        track = trackLineToTrack(defaultLine, 1);
+        track = trackLineToTrack(genomeDb, defaultLine, 1);
         customPpReuse(cpp, line);
 	}
     else

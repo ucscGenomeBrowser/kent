@@ -11,7 +11,7 @@
 #include "hgMaf.h"
 
 
-static char const rcsid[] = "$Id: mafFrags.c,v 1.6 2007/12/14 23:00:12 kent Exp $";
+static char const rcsid[] = "$Id: mafFrags.c,v 1.6.32.1 2008/07/31 05:21:41 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -160,7 +160,6 @@ struct slName *orgList = NULL;
 struct lineFile *lf = lineFileOpen(bedFile, TRUE);
 FILE *f = mustOpen(mafFile, "w");
 
-hSetDb(database);
 if (optionExists("orgs"))
     {
     char *orgFile = optionVal("orgs", NULL);

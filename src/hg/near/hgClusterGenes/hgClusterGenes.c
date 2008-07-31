@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.11.124.1 2008/07/31 02:24:43 markd Exp $";
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.11.124.2 2008/07/31 05:21:39 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -388,12 +388,12 @@ if (optionExists("chrom"))
     chromList = slNameNew(optionVal("chrom", NULL));
 else
     chromList = hAllChromNamesDb(database);
-conn = hAllocConn();
+conn = hAllocConn(database);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    clusterGenesOnStrand(conn, geneTable, chrom->name, '+', 
+    clusterGenesOnStrand(database, conn, geneTable, chrom->name, '+', 
     	clusterFile, canFile);
-    clusterGenesOnStrand(conn, geneTable, chrom->name, '-', 
+    clusterGenesOnStrand(database, conn, geneTable, chrom->name, '-', 
     	clusterFile, canFile);
     }
 createClusterTable(conn, clusterTable, longestName);
