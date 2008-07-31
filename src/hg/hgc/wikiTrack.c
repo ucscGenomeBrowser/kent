@@ -16,7 +16,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.48 2008/06/17 21:51:22 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.48.8.1 2008/07/31 02:24:22 markd Exp $";
 
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
@@ -507,7 +507,7 @@ pos = stripCommas(cartOptionalString(cart, "getDnaPos"));
 if (NULL == pos)
     errAbort("create new wiki item: called incorrectly, without getDnaPos");
 
-hgParseChromRange(pos, &chrName, &itemStart, &itemEnd);
+hgParseChromRange(database, pos, &chrName, &itemStart, &itemEnd);
 
 safef(descriptionKey,ArraySize(descriptionKey),
 	"GenomeAnnotation:%s-%d", database, 0);

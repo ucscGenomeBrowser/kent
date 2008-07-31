@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.173 2008/07/09 18:40:39 braney Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.173.4.1 2008/07/31 02:24:27 markd Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -279,7 +279,7 @@ for (track = trackList; track != NULL; track = track->next)
     }
 }
 
-void customTrackHandleLift(struct customTrack *ctList)
+void customTrackHandleLift(char *db, struct customTrack *ctList)
 /* lift any tracks with contig coords */
 {
 if (!customTrackNeedsLift(ctList))
@@ -288,7 +288,7 @@ if (!customTrackNeedsLift(ctList))
 /* Load up hash of contigs and lift up tracks. */
 struct hash *ctgHash = newHash(0);
 struct ctgPos *ctg, *ctgList = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = sqlGetResult(conn, "select * from ctgPos");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -513,7 +513,7 @@ if (ferror(f))
 trackDbFree(&def);
 }
 
-void customTracksSaveFile(struct customTrack *trackList, char *fileName)
+void customTracksSaveFile(char *genomeDb, struct customTrack *trackList, char *fileName)
 /* Save out custom tracks. This is just used internally 
  * and by testing programs */
 {
@@ -538,7 +538,7 @@ for (track = trackList; track != NULL; track = track->next)
     if (track->wigAscii)
         {
         /* HACK ALERT - calling private method function in customFactory.c */
-        track->maxChromName = hGetMinIndexLength(); /* for the loaders */
+        track->maxChromName = hGetMinIndexLength(genomeDb); /* for the loaders */
         wigLoaderEncoding(track, track->wigAscii, ctDbUseAll());
         ctAddToSettings(track, "tdbType", track->tdb->type);
         }
@@ -574,7 +574,7 @@ dyStringFree(&ds);
 carefulClose(&f);
 }
 
-void customTracksSaveCart(struct cart *cart, struct customTrack *ctList)
+void customTracksSaveCart(char *genomeDb, struct cart *cart, struct customTrack *ctList)
 /* Save custom tracks to trash file for database in cart */
 {
 char *ctFileName = NULL;
@@ -589,7 +589,7 @@ if (ctList)
         ctFileName = tn.forCgi;
         cartSetString(cart, ctFileVar, ctFileName);
         }
-    customTracksSaveFile(ctList, ctFileName);
+    customTracksSaveFile(genomeDb, ctList, ctFileName);
     }
 else
     {
@@ -641,7 +641,7 @@ if (!ctFile || !fileExists(ctFile))
 return cfgModTime() > fileModTime(ctFile);
 }
 
-struct customTrack *customTracksParseCartDetailed(struct cart *cart,
+struct customTrack *customTracksParseCartDetailed(char *genomeDb, struct cart *cart,
 					  struct slName **retBrowserLines,
 					  char **retCtFileName,
                                           struct customTrack **retReplacedCts,
@@ -738,7 +738,7 @@ if (isNotEmpty(customText))
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
-        newCts = customFactoryParse(customText, FALSE, &browserLines);
+        newCts = customFactoryParse(genomeDb, customText, FALSE, &browserLines);
         if (html)
             {
             for (ct = newCts; ct != NULL; ct = ct->next)
@@ -746,7 +746,7 @@ if (isNotEmpty(customText))
                     ct->tdb->html = cloneString(html);
             freez(&html);
             }
-        customTrackHandleLift(newCts);
+        customTrackHandleLift(genomeDb, newCts);
         }
     errCatchEnd(errCatch);
     if (errCatch->gotError)
@@ -784,7 +784,7 @@ if (customTracksExist(cart, &ctFileName))
     if (errCatchStart(errCatch))
         {
         ctList = 
-            customFactoryParse(ctFileName, TRUE, retBrowserLines);
+            customFactoryParse(genomeDb, ctFileName, TRUE, retBrowserLines);
         }
     errCatchEnd(errCatch);
     if (errCatch->gotError)
@@ -847,7 +847,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         changedCt = TRUE;
         }
 if (newCts || removedCt || changedCt || ctConfigUpdate(ctFileName))
-    customTracksSaveCart(cart, ctList);
+    customTracksSaveCart(genomeDb, cart, ctList);
 
 cartRemove(cart, CT_CUSTOM_TEXT_ALT_VAR);
 cartRemove(cart, CT_CUSTOM_TEXT_VAR);
@@ -869,14 +869,14 @@ if (retErr)
 return ctList;
 }
 
-struct customTrack *customTracksParseCart(struct cart *cart,
+struct customTrack *customTracksParseCart(char *genomeDb, struct cart *cart,
 					  struct slName **retBrowserLines,
 					  char **retCtFileName)
 /* Parse custom tracks from cart variables */
 {
 char *err = NULL;
 struct customTrack *ctList = 
-    customTracksParseCartDetailed(cart, retBrowserLines, retCtFileName, 
+    customTracksParseCartDetailed(genomeDb, cart, retBrowserLines, retCtFileName, 
                                         NULL, NULL, &err);
 if (err)
     warn("%s", err);

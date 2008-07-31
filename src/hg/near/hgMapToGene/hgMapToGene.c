@@ -11,7 +11,7 @@
 #include "hgConfig.h"
 
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.14 2007/03/18 00:04:19 kent Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.14.68.1 2008/07/31 02:24:44 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -164,7 +164,7 @@ if (val != NULL)
     fprintf(f, "%s\t%s\n", key, val);
 }
 
-void oneChromStrandTrackToGene(struct sqlConnection *conn, struct sqlConnection *tConn,
+void oneChromStrandTrackToGene(char *database, struct sqlConnection *conn, struct sqlConnection *tConn,
 			     char *chrom, char strand,
 			     char *geneTable, char *geneTableType, 
 			     char *otherTable,  char *otherType,
@@ -173,7 +173,7 @@ void oneChromStrandTrackToGene(struct sqlConnection *conn, struct sqlConnection 
 /* Find most overlapping bed for each genePred in one
  * strand of a chromosome, and write it to file.  */
 {
-int chromSize = hChromSize(chrom);
+int chromSize = hChromSize(database, chrom);
 struct binKeeper *bk = binKeeperNew(0, chromSize);
 struct sqlResult *sr;
 char extraBuf[256], *extra = NULL, **row;
@@ -326,7 +326,7 @@ sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }
 
-void hgMapTableToGene(struct sqlConnection *conn, struct sqlConnection *tConn,
+void hgMapTableToGene(char *database, struct sqlConnection *conn, struct sqlConnection *tConn,
 	char *geneTable, char *geneTableType,
 	char *otherTable, char *otherType, char *outTable,
 	struct hash *lookupHash)
@@ -344,7 +344,7 @@ if (!createOnly)
     {
     struct hash *dupeHash = newHash(16);
     f = hgCreateTabFile(tempDir, outTable);
-    chromList = hAllChromNames();
+    chromList = hAllChromNamesDb(database);
     for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	{
 	verbose(2, "%s\n", chrom->name);
@@ -404,7 +404,6 @@ char *type = optionVal("type", NULL);
 char *lookupFile = optionVal("lookup", NULL);
 struct hash *lookupHash = NULL;
 char *geneTableType = optionVal("geneTableType", NULL);
-hSetDb(database);
 if (lookupFile != NULL)
     lookupHash = hashTwoColumns(lookupFile);
 if (type == NULL)

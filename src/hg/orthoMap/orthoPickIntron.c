@@ -58,7 +58,7 @@ chosen if it is overlapped by any transcript evidence. </li>
 #include "dnautil.h"
 #include "orthoEval.h"
 #include "rbTree.h"
-static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.7 2003/09/14 23:15:02 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.7.310.1 2008/07/31 02:24:46 markd Exp $";
 
 struct intronEv
 /** Data about one intron. */
@@ -205,10 +205,10 @@ if(iv->inCodInt)
 return score;
 }
 
-boolean checkMgcPicks(struct intronEv *iv)
+boolean checkMgcPicks(char *db, struct intronEv *iv)
 /** Try to look up an mgc pick in this area. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset = 0;
@@ -239,10 +239,10 @@ hFreeConn(&conn);
 return foundSome;
 }
 
-boolean coordOverlappedByTable(char *chrom, int start, int end, char *table)
+boolean coordOverlappedByTable(char *db, char *chrom, int start, int end, char *table)
 /** Return TRUE if there is a record overlapping. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset = 0;
@@ -255,30 +255,30 @@ hFreeConn(&conn);
 return foundSome;
 }
 
-boolean isOverlappedByTable(struct intronEv *iv, char *table)
+boolean isOverlappedByTable(char *db, struct intronEv *iv, char *table)
 /** Return TRUE if there is a record overlapping. */
 {
-return coordOverlappedByTable(iv->chrom, iv->e1S, iv->e2E, table);
+return coordOverlappedByTable(db, iv->chrom, iv->e1S, iv->e2E, table);
 }
 
-boolean isOverlappedByRefSeq(struct intronEv *iv)
+boolean isOverlappedByRefSeq(char *db, struct intronEv *iv)
 {
-return isOverlappedByTable(iv, "refGene");
+return isOverlappedByTable(db, iv, "refGene");
 }
 
-boolean isOverlappedByMgcBad(struct intronEv *iv)
+boolean isOverlappedByMgcBad(char *db, struct intronEv *iv)
 {
-return isOverlappedByTable(iv, "chuckMgcBad");
+return isOverlappedByTable(db, iv, "chuckMgcBad");
 }
 
-boolean isOverlappedByEst(struct intronEv *iv)
+boolean isOverlappedByEst(char *db, struct intronEv *iv)
 {
-return isOverlappedByTable(iv, "est");
+return isOverlappedByTable(db, iv, "est");
 }
 
-boolean isOverlappedByMRna(struct intronEv *iv)
+boolean isOverlappedByMRna(char *db, struct intronEv *iv)
 {
-return isOverlappedByTable(iv, "mrna");
+return isOverlappedByTable(db, iv, "mrna");
 }
 
 int intronEvalCmp(const void *va, const void *vb)
@@ -327,7 +327,7 @@ if(diff == 0)
 return diff;
 }
 
-boolean isUniqueCoordAndAgx(struct intronEv *iv, struct hash *posHash, struct hash *agxHash)
+boolean isUniqueCoordAndAgx(char *db, struct intronEv *iv, struct hash *posHash, struct hash *agxHash)
 /** Return TRUE if iv isn't in posHash and agxHash.
    Return FALSE otherwise. */
 {
@@ -366,7 +366,7 @@ else
     unique = FALSE;
 
 if(unique)
-    unique = !checkMgcPicks(iv);
+    unique = !checkMgcPicks(db, iv);
 
 return unique;
 }
@@ -437,7 +437,6 @@ if(htmlFileName == NULL || orthoEvalFile == NULL || db == NULL ||
    bedFileName == NULL || orthoBedFileName == NULL )
     errAbort("Missing parameters. Use -help for usage.");
 
-hSetDb(db);
 warn("Loading orthoEvals.");
 evList = orthoEvalLoadAll(orthoEvalFile);
 warn("Creating intron records");
@@ -464,11 +463,11 @@ warn("Filtering");
 safef(buff, sizeof(buff), "tmp");
 for(iv = ivList; iv != NULL && maxPicks > 0; iv = iv->next)
     {
-    if(isUniqueCoordAndAgx(iv, posHash, agxHash) && iv->support == 0 && !isOverlappedByRefSeq(iv) &&
-       ! isOverlappedByEst(iv) && ! isOverlappedByMRna(iv))
+    if(isUniqueCoordAndAgx(db, iv, posHash, agxHash) && iv->support == 0 && !isOverlappedByRefSeq(db, iv) &&
+       ! isOverlappedByEst(db, iv) && ! isOverlappedByMRna(db, iv))
 	{
-	boolean twinScan = (coordOverlappedByTable(iv->chrom, iv->e1S, iv->e1E, "mgcTSExpPcr") &&
-			    coordOverlappedByTable(iv->chrom, iv->e2S, iv->e2E, "mgcTSExpPcr"));
+	boolean twinScan = (coordOverlappedByTable(db, iv->chrom, iv->e1S, iv->e1E, "mgcTSExpPcr") &&
+			    coordOverlappedByTable(db, iv->chrom, iv->e2S, iv->e2E, "mgcTSExpPcr"));
 	bed = bedForIv(iv);
 	if(sameString(buff, "tmp"))
 	    safef(buff, sizeof(buff), "%s:%d-%d", bed->chrom, bed->chromStart-50, bed->chromEnd+50);

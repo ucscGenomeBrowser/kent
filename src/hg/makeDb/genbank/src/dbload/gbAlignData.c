@@ -29,7 +29,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.29 2008/03/29 04:46:51 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.29.20.1 2008/07/31 02:24:33 markd Exp $";
 
 /* objects handling table loads */
 static struct gbAlignTblSet *alignTblSet = NULL;
@@ -269,14 +269,14 @@ gbGeneTblSetFree(&geneTblSet);
 gbAlignTblSetFree(&alignTblSet);
 }
 
-static void deleteGenBankChromAligns(struct sqlConnection *conn,
+static void deleteGenBankChromAligns(char *db, struct sqlConnection *conn,
                                      struct sqlDeleter* deleter,
                                      unsigned type, char *typeStr)
 /* delete outdated genbank alignments from per-chrom tables. */
 {
 struct slName* chrom;
 char table[64];
-for (chrom = getChromNames(); chrom != NULL; chrom = chrom->next)
+for (chrom = getChromNames(db); chrom != NULL; chrom = chrom->next)
     {
     safef(table, sizeof(table), "%s_%s", chrom->name, typeStr);
     sqlDeleterDel(deleter, conn, table, "qName");
@@ -288,7 +288,7 @@ for (chrom = getChromNames(); chrom != NULL; chrom = chrom->next)
     }
 }
 
-static void deleteGenBankAligns(struct sqlConnection *conn,
+static void deleteGenBankAligns(char *db, struct sqlConnection *conn,
                                 struct sqlDeleter* deleter, unsigned type,
                                 struct dbLoadOptions* options)
 /* delete outdated genbank alignments from the database. */
@@ -301,7 +301,7 @@ safef(table, sizeof(table), "all_%s", typeStr);
 sqlDeleterDel(deleter, conn, table, "qName");
 
 if (options->flags & DBLOAD_PER_CHROM_ALIGN)
-    deleteGenBankChromAligns(conn, deleter, type, typeStr);
+    deleteGenBankChromAligns(db, conn, deleter, type, typeStr);
 else 
     {
     if (type == GB_EST)
@@ -338,7 +338,7 @@ sqlDeleterDel(deleter, conn, "xenoRefFlat", "name");
 sqlDeleterDel(deleter, conn, "mrnaOrientInfo", "name");
 }
 
-void gbAlignDataDeleteFromTables(struct sqlConnection *conn,
+void gbAlignDataDeleteFromTables(char *db, struct sqlConnection *conn,
                                  unsigned srcDb, unsigned type,
                                  struct sqlDeleter* deleter,
                                  struct dbLoadOptions* options)
@@ -347,10 +347,10 @@ void gbAlignDataDeleteFromTables(struct sqlConnection *conn,
 if (srcDb == GB_REFSEQ)
     deleteRefSeqAligns(conn, deleter);
 else
-    deleteGenBankAligns(conn, deleter, type, options);
+    deleteGenBankAligns(db, conn, deleter, type, options);
 }
 
-void gbAlignDataDeleteOutdated(struct sqlConnection *conn,
+void gbAlignDataDeleteOutdated(char *db, struct sqlConnection *conn,
                                struct gbSelect* select, 
                                struct gbStatusTbl* statusTbl,
                                struct dbLoadOptions* options,
@@ -378,7 +378,7 @@ for (status = statusTbl->orphanList; status != NULL; status = status->next)
     status->numAligns = 0;
     }
 
-gbAlignDataDeleteFromTables(conn, select->release->srcDb, select->type,
+gbAlignDataDeleteFromTables(db, conn, select->release->srcDb, select->type,
                             deleter, options);
 
 sqlDeleterFree(&deleter);
@@ -399,7 +399,7 @@ if (select->orgCats & GB_XENO)
     }
 }
 
-static void removeGenBankMrna(struct sqlConnection *conn, struct gbSelect* select,
+static void removeGenBankMrna(char *db, struct sqlConnection *conn, struct gbSelect* select,
                               struct sqlDeleter* deleter)
 /* delete all genbank mRNA alignments */
 {
@@ -409,7 +409,7 @@ if (select->orgCats & GB_NATIVE)
     char table[64];
     sqlDropTable(conn, "all_mrna");
     sqlDeleterDel(deleter, conn, "mrnaOrientInfo", "name");
-    for (chrom = getChromNames(); chrom != NULL; chrom = chrom->next)
+    for (chrom = getChromNames(db); chrom != NULL; chrom = chrom->next)
         {
         safef(table, sizeof(table), "%s_mrna", chrom->name);
         sqlDropTable(conn, table);
@@ -426,7 +426,7 @@ if (select->orgCats & GB_XENO)
     
 }
 
-void gbAlignRemove(struct sqlConnection *conn, struct dbLoadOptions* options,
+void gbAlignRemove(char *db, struct sqlConnection *conn, struct dbLoadOptions* options,
                    struct gbSelect* select, struct sqlDeleter* deleter)
 /* Delete all alignments for the selected categories.  Used when reloading
  * alignments.*/
@@ -438,7 +438,7 @@ if (select->type & GB_EST)
 if (select->release->srcDb & GB_REFSEQ)
     removeRefSeq(conn, select, deleter);
 if (select->release->srcDb & GB_GENBANK)
-    removeGenBankMrna(conn, select, deleter);
+    removeGenBankMrna(db, conn, select, deleter);
 }
 
 struct slName* gbAlignDataListTables(struct sqlConnection *conn)

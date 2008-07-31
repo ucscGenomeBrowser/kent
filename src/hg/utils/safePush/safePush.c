@@ -9,7 +9,7 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: safePush.c,v 1.7 2007/05/07 17:28:03 hiram Exp $";
+static char const rcsid[] = "$Id: safePush.c,v 1.7.60.1 2008/07/31 02:24:54 markd Exp $";
 
 /* Command line flags - all default to false. */
 boolean oldOk, chrom, prefix, allTables, allDatabases, test;
@@ -390,8 +390,8 @@ allDatabases = optionExists("allDatabases");
 test = optionExists("test");
 list = optionVal("list", NULL);
 singleOp = optionVal("single", NULL);
-user = getCfgValue("HGDB_USER", "db.user");
-password = getCfgValue("HGDB_PASSWORD", "db.password");
+user = cfgOptionEnv("HGDB_USER", "db.user");
+password = cfgOptionEnv("HGDB_PASSWORD", "db.password");
 
 safePush(argv[1], argv[2], argv[3]);
 return 0;

@@ -91,7 +91,7 @@ else
     genome = strdup(answer);
     }
 
-if (!hTableExistsDb(database, "knownGene"))
+if (!hTableExists(database, "knownGene"))
     {
     fprintf(stderr,"Database %s currently does not have UCSC Known Genes.", database);
     exit(1);
@@ -106,9 +106,9 @@ hDisconnectCentral(&connCentral);
 safef(command, sizeof(command), "mkdir -p knownGeneList/%s/%d", database, topLevel);
 system(command);
 
-conn = hAllocConn();
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn = hAllocConn(database);
+conn2= hAllocConn(database);
+conn3= hAllocConn(database);
 
 newPage  = TRUE;
 

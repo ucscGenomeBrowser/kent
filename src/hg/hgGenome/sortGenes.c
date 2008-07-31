@@ -50,7 +50,7 @@ for (bed = bedList; bed != NULL; )
     {
     /* Make binKeeper and stuff in all regions in this chromosome into it. */
     char *chrom = bed->chrom;
-    int chromSize = hChromSize(chrom);
+    int chromSize = hChromSize(database, chrom);
     struct binKeeper *bk = binKeeperNew(0, chromSize);
     while (bed != NULL && sameString(chrom, bed->chrom))
 	{

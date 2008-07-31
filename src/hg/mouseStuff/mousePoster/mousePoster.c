@@ -26,7 +26,7 @@
 #include "hCommon.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: mousePoster.c,v 1.7 2006/06/20 16:44:17 angie Exp $";
+static char const rcsid[] = "$Id: mousePoster.c,v 1.7.106.1 2008/07/31 02:24:42 markd Exp $";
 
 /* Which database to use */
 char *database = "mm2";
@@ -509,7 +509,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
 	       *s = 0;
 	    kg->name = cloneString(geneName);
 	    kg->acc = cloneString(gp->name);
-	    kg->chrom = hgOfficialChromName(chrom);
+	    kg->chrom = hgOfficialChromName(sqlGetDatabase(conn), chrom);
 	    kg->start = gp->cdsStart;
 	    kg->end = gp->cdsEnd;
 	    dlAddValTail(geneList, kg);
@@ -1077,7 +1077,7 @@ void oneChrom(char *chrom, struct sqlConnection *conn,
 	FILE *f)
 /* Get info for one chromosome.  */
 {
-int chromSize = hChromSize(chrom);
+int chromSize = hChromSize(database, chrom);
 struct chromGaps *cg = NULL;
 char axtFile[512];
 
@@ -1150,7 +1150,6 @@ struct hash *stockHash = newHash(0);
 struct hash *misplacedHash = newHash(0);
 
 dupeFile = mustOpen(dupeFileName, "w");
-hSetDb(database);
 makeDiseaseStockHash(conn, diseaseStockHash, diseaseHash, stockHash);
 makeResolvedDupes(resolvedDupHash, &rdList);
 makeMisplaced(misplacedHash, resolvedDupHash);

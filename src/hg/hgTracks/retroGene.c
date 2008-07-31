@@ -1,7 +1,7 @@
 
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.12 2008/02/20 00:42:27 markd Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.12.26.1 2008/07/31 02:24:15 markd Exp $";
 
 struct linkedFeatures *lfFromRetroGene(struct retroMrnaInfo *pg)
 /* Return a linked feature from a retroGene. */
@@ -42,7 +42,7 @@ void lfRetroGene(struct track *tg)
 {
 struct linkedFeatures *lfList = NULL, *lf;
 struct retroMrnaInfo *pg = NULL, *list = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -76,7 +76,7 @@ void lookupRetroNames(struct track *tg)
 /* This converts the accession to a gene name where possible. */
 {
 struct linkedFeatures *lf;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 boolean isNative = sameString(tg->mapName, "pseudoGeneLink") ;
 boolean isRetroNative = sameString(tg->mapName, "retroMrnaInfo");
 char *refGeneLabel = cartUsualString(cart, (isNative ? "pseudoGeneLink.label" : (isRetroNative ? "retroMrnaInfo.label" : "xenoRefGene.label")), "gene") ;
@@ -174,18 +174,18 @@ if  (useAcc || useGeneName)
 char *geneSymbol = NULL;
 if (lf->extra != NULL) 
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct retroMrnaInfo *r = lf->extra;
     char cond_str[512];
     if (r != NULL)
         {
-        if ((useGeneName) && hTableExists("kgXref") )
+        if ((useGeneName) && hTableExists(database, "kgXref") )
             {
             char *gene = NULL;
             char cond_str[256];
             char *geneSymbol;
             safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
-            geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
+            geneSymbol = sqlGetField(database, "kgXref", "geneSymbol", cond_str);
 
             if (geneSymbol != NULL)
                 gene = cloneString(geneSymbol);
@@ -196,10 +196,10 @@ if (lf->extra != NULL)
                     dyStringAppendC(name, '/');
                 }
             }
-        if ((useGeneName) && hTableExists("refLink") )
+        if ((useGeneName) && hTableExists(database, "refLink") )
             {
             safef(cond_str, sizeof(cond_str), "mrnaAcc = '%s'", r->refSeq);
-            geneSymbol = sqlGetField(conn, database, "refLink", "name", cond_str);
+            geneSymbol = sqlGetField(database, "refLink", "name", cond_str);
             if (geneSymbol != NULL)
                 {
                 dyStringAppend(name, geneSymbol);

@@ -770,7 +770,7 @@ char *acemblyEnumToString(enum acemblyOptEnum x);
 void acemblyDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
-void hCompositeUi(struct cart *cart, struct trackDb *tdb,
+void hCompositeUi(char *db, struct cart *cart, struct trackDb *tdb,
 		  char *primarySubtrack, char *fakeSubmit, char *formName);
 /* UI for composite tracks: subtrack selection.  If primarySubtrack is
  * non-NULL, don't allow it to be cleared and only offer subtracks

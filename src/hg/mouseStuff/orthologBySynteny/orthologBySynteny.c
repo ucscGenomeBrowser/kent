@@ -13,7 +13,7 @@
 #include "gff.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: orthologBySynteny.c,v 1.9 2006/06/20 16:32:01 angie Exp $";
+static char const rcsid[] = "$Id: orthologBySynteny.c,v 1.9.106.1 2008/07/31 02:24:43 markd Exp $";
 
 #define INTRON 10 
 #define CODINGA 11 
@@ -122,7 +122,7 @@ struct lineFile *lf ;
 struct axt *axt = NULL, *axtList = NULL;
 struct axtInfo *ai = NULL;
 struct sqlResult *sr;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 char **row;
 
 if (alignment != NULL)
@@ -675,7 +675,7 @@ void mustGetMrnaStartStop( char *acc, unsigned *cdsStart, unsigned *cdsEnd )
 	char **row;
 
 	/* Get cds start and stop, if available */
-	conn = hAllocConn();
+	conn = hAllocConn(db);
 	sprintf(query, "select cds from mrna where acc = '%s'", acc);
 	sr = sqlGetResult(conn, query);
 	assert((row = sqlNextRow(sr)) != NULL);
@@ -697,8 +697,8 @@ char *syntenicGene = optionVal("track", "knownGene");
 boolean psl = optionExists("psl");
 boolean gff = optionExists("gff");
 struct chain *aChain;
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn2();
+struct sqlConnection *conn = hAllocConn(db);
+struct sqlConnection *conn2 = hAllocConn(db2);
 struct sqlResult *sr;
 char **row;
 char query[512];
@@ -832,7 +832,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-hFreeConn2(&conn2);
+hFreeConn(&conn2);
 }
 
 void orthologBySyntenyChrom(char *geneTable, char *netTable, char *chrom, struct hash *chainHash)
@@ -850,10 +850,8 @@ struct hash *chainHash;
 optionHash(&argc, argv);
 if (argc != 7)
     usage();
-hSetDb(argv[1]);
-hSetDb2(argv[2]);
-db = hGetDb();
-db2 = hGetDb2();
+db = argv[1];
+db2 = argv[2];
 chainHash = allChains(argv[6]);
 orthologBySyntenyChrom(argv[3], argv[4], argv[5], chainHash);
 return 0;

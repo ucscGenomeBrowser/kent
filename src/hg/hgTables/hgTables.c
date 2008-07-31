@@ -28,7 +28,7 @@
 #include "gvUi.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.164 2008/07/10 17:36:17 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.164.4.1 2008/07/31 02:24:07 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -195,7 +195,7 @@ return(tdb);
 static struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
 {
-struct trackDb *list = hTrackDb(NULL), *tdb;
+struct trackDb *list = hTrackDb(database, NULL), *tdb;
 struct customTrack *ctList, *ct;
 
 /* Change the mrna track to all_mrna to avoid confusion elsewhere. */
@@ -242,7 +242,7 @@ return dif;
 struct region *getRegionsFullGenome()
 /* Get a region list that covers all of each chromosome. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct region *region, *regionList = NULL;
@@ -294,7 +294,7 @@ struct hgPositions *hgp = NULL;
 char retAddr[512];
 char position[512];
 safef(retAddr, sizeof(retAddr), "%s", getScriptName());
-hgp = findGenomePosWeb(range, &region->chrom, &region->start, &region->end,
+hgp = findGenomePosWeb(database, range, &region->chrom, &region->start, &region->end,
 	cart, TRUE, retAddr);
 if (hgp != NULL && hgp->singlePos != NULL)
     {
@@ -346,9 +346,9 @@ else if (sameString(regionType, hgtaRegionTypeRange))
     boolean parseOk = FALSE;
     regionList = AllocVar(region);
     if (! strchr(range, ':'))
-	parseOk = ((region->chrom = hgOfficialChromName(range)) != NULL);
+	parseOk = ((region->chrom = hgOfficialChromName(database, range)) != NULL);
     else
-	parseOk = hgParseChromRange(range, &region->chrom, &region->start,
+	parseOk = hgParseChromRange(database, range, &region->chrom, &region->start,
 				    &region->end);
     if (! parseOk)
 	{
@@ -475,7 +475,7 @@ char *chromTable(struct sqlConnection *conn, char *table)
 /* Get chr1_table if it exists, otherwise table. 
  * You can freeMem this when done. */
 {
-char *chrom = hDefaultChrom();
+char *chrom = hDefaultChrom(database);
 if (sqlTableExists(conn, table))
     return cloneString(table);
 else
@@ -685,7 +685,7 @@ for (track = trackList; track != NULL; track = track->next)
     }
 
 /* Scan through group table, putting in ones where we have data. */
-groupsAll = hLoadGrps();
+groupsAll = hLoadGrps(database);
 for (group = slPopHead(&groupsAll); group != NULL; group = slPopHead(&groupsAll))
     {
     if (hashLookup(groupsInTrackList, group->name))
@@ -777,7 +777,7 @@ if (trackDupe != NULL && trackDupe[0] != 0)
                 }
 	    }
         /* include conservation wiggle tables */
-        struct consWiggle *wig, *wiggles = wigMafWiggles(track);
+        struct consWiggle *wig, *wiggles = wigMafWiggles(database, track);
         slReverse(&wiggles);
         for (wig = wiggles; wig != NULL; wig = wig->next)
             {
@@ -923,13 +923,13 @@ else if (track != NULL)
  * use the first field. */
 if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos))
     {
-    struct sqlConnection *conn = hAllocOrConnect(db);
+    struct sqlConnection *conn = hAllocConn(db);
     struct slName *fieldList = sqlListFields(conn, table);
     if (fieldList == NULL)
 	errAbort("getIdField: Can't find fields of table %s", table);
     idField = cloneString(fieldList->name);
     slFreeList(&fieldList);
-    hFreeOrDisconnect(&conn);
+    hFreeConn(&conn);
     }
 return idField;
 }
@@ -1311,7 +1311,7 @@ for (region = regionList; region != NULL; region = region->next)
 	{
 	char *name;
         int start = max(0,bed->chromStart+1-outputPad);
-        int end = min(hChromSize(bed->chrom),bed->chromEnd+outputPad);
+        int end = min(hChromSize(database, bed->chrom),bed->chromEnd+outputPad);
 	safef(posBuf, sizeof(posBuf), "%s:%d-%d",
 		    bed->chrom, start, end);
 	/* Construct browser anchor URL with tracks we're looking at open. */
@@ -1324,9 +1324,9 @@ for (region = regionList; region != NULL; region = region->next)
         else
 	    hPrintf("<A HREF=\"%s?db=%s", hgTracksName(), database);
 	hPrintf("&position=%s", posBuf);
-	hPrintf("&%s=%s", table, hTrackOpenVis(table));
+	hPrintf("&%s=%s", table, hTrackOpenVis(database, table));
 	if (table2 != NULL)
-	    hPrintf("&%s=%s", table2, hTrackOpenVis(table2));
+	    hPrintf("&%s=%s", table2, hTrackOpenVis(database, table2));
 	hPrintf("\" TARGET=_blank>");
 	name = bed->name;
 	if (bed->name == NULL)
@@ -1432,8 +1432,8 @@ if (!sameString(curGroup->name, "allTables"))
 else
     {
     struct trackDb *cTdb = NULL;
-    track = hTrackDbForTrack(table);
-    cTdb = hCompositeTrackDbForSubtrack(track);
+    track = hTrackDbForTrack(database, table);
+    cTdb = hCompositeTrackDbForSubtrack(database, track);
     if (cTdb)
 	track = cTdb;
     }
@@ -1648,8 +1648,8 @@ if (sameString(curGroup->name, "allTables"))
 curTable = findSelectedTable(conn, curTrack, hgtaTable);
 if (curTrack == NULL)
     {
-    struct trackDb *tdb = hTrackDbForTrack(curTable);
-    struct trackDb *cTdb = hCompositeTrackDbForSubtrack(tdb);
+    struct trackDb *tdb = hTrackDbForTrack(database, curTable);
+    struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
     if (cTdb)
 	curTrack = cTdb;
     else
@@ -1676,8 +1676,7 @@ cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 allJoiner = joinerRead("all.joiner");
 getDbGenomeClade(cart, &database, &genome, &clade, oldVars);
 freezeName = hFreezeFromDb(database);
-hSetDb(database);
-conn = hAllocConn();
+conn = hAllocConn(database);
 
 if (lookupPosition())
     {

@@ -20,7 +20,7 @@ struct customFactory
     char *name;		/* Name - psl, bed, wig, chromGraph, etc. */
 
     boolean (*recognizer)(struct customFactory *fac,
-    	struct customPp *cpp, char *type, 
+    	char *genomeDb, struct customPp *cpp, char *type, 
     	struct customTrack *track);
     /* Called by custom tracks framework.  Track line if any will
      * be read in already and parsed into type and track.
@@ -29,7 +29,8 @@ struct customFactory
      * This routine is allowed to fill in some of track structure if
      * it returns TRUE. */
 
-    struct customTrack * (*loader)(struct customFactory *fac, 
+     struct customTrack * (*loader)(struct customFactory *fac, 
+        char *genomeDb,                             
     	struct hash *chromHash,  /* Hash to store chrom names, filled in here */
     	struct customPp *cpp, 	 /* Source of input */
 	struct customTrack *track, /* Skeleton of track, filled in here */
@@ -64,7 +65,7 @@ void customFactorySetupDbTrack(struct customTrack *track);
 
 /*** Interface to custom factory system. ***/
 
-struct customFactory *customFactoryFind(struct customPp *cpp,
+struct customFactory *customFactoryFind(char *genomeDb, struct customPp *cpp,
 	char *type, struct customTrack *track);
 /* Figure out factory that can handle this track.  The track is
  * loaded from the track line if any, and type is the type element
@@ -73,12 +74,12 @@ struct customFactory *customFactoryFind(struct customPp *cpp,
 void customFactoryAdd(struct customFactory *fac);
 /* Add factory to global custom track factory list. */
 
-struct customTrack *customFactoryParse(char *text, boolean isFile,
+struct customTrack *customFactoryParse(char *genomeDb, char *text, boolean isFile,
 	struct slName **retBrowserLines);
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  Die if the track is not for hGetDb(). */
 
-struct customTrack *customFactoryParseAnyDb(char *text, boolean isFile,
+struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean isFile,
 					    struct slName **retBrowserLines);
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  Track does not have to be for hGetDb(). */

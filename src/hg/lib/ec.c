@@ -5,11 +5,14 @@
 #include "ecAttribute.h"
 #include "ecAttributeCode.h"
 
+// FIXME: 2008-07-29: no `ec' databases on hgwdev, just delete this module
+// and friends.
+
 void getEcHtml(char *ecNumber)
 /* fetch ec codes and descriptions and output html */
 {
 char query[1024];
-struct sqlConnection *conn = hAllocOrConnect("ec");
+struct sqlConnection *conn = hAllocConn("ec");
 char *level1 = NULL;
 char *level2 = NULL;
 char *level3 = NULL;
@@ -42,13 +45,13 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *attrDesc = NULL;
-    struct sqlConnection *conn2 = hAllocOrConnect("ec");
+    struct sqlConnection *conn2 = hAllocConn("ec");
     ecAttributeStaticLoad(row, &attr);
     safef(query,sizeof(query), "select description from ecAttributeCode where type = \"%s\" ",attr.type);
     attrDesc = sqlQuickString(conn2, query);
     if (differentString(attr.type, "DR"))
         printf("<B>EC %s:</B> %s<BR>", attrDesc != NULL ? attrDesc : "n/a",attr.description);
-    hFreeOrDisconnect(&conn2);
+    hFreeConn(&conn2);
     }
-
+hFreeConn(&conn);
 }

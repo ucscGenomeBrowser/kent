@@ -11,9 +11,6 @@
 #define hCytoBandDbIsDmel(db) (startsWith("dm", db))
 /* We have to treat drosophila differently in some places. */
 
-#define hCytoBandIsDmel() (hCytoBandDbIsDmel(hGetDb()))
-/* We have to treat drosophila differently in some places. */
-
 Color hCytoBandColor(struct cytoBand *band, struct hvGfx *hvg, boolean isDmel,
 	Color aColor, Color bColor, Color *shades, int maxShade);
 /* Return appropriate color for band. */

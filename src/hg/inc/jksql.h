@@ -40,9 +40,10 @@ struct sqlConnection *sqlMayConnect(char *database);
 
 struct sqlConnection *sqlConnectProfile(char *profile, char *database);
 /* Connect to database using the specified profile.  The profile is the prefix
- * to the host, user, and password variables in .hg.conf.  The environment
- * variables HGDB_${profile}_HOST, HGDB_${profile}_USER,
- * HGDB_${profile}_PASSWORD can override.  */ 
+ * to the host, user, and password variables in .hg.conf.  For the default
+ * profile of "db", the environment variables HGDB_HOST, HGDB_USER, and
+ * HGDB_PASSWORD can override.
+ */ 
 
 struct sqlConnection *sqlConnectReadOnly(char *database);
 /* Connect to database using ro profile in .hg.conf */ 
@@ -59,10 +60,10 @@ struct sqlConnection *sqlConnRemote(char *host,
 struct sqlConnection *sqlCtConn(boolean abort);
 /* Connect to customTrash database, optionally abort on failure */
 
-struct hash *sqlHashOfDatabases();
+struct hash *sqlHashOfDatabases(void);
 /* Get hash table with names of all databases that are online. */
 
-struct slName *sqlListOfDatabases();
+struct slName *sqlListOfDatabases(void);
 /* Get list of all databases that are online. */
 
 void sqlDisconnect(struct sqlConnection **pSc);
@@ -80,7 +81,7 @@ struct slName *sqlListTables(struct sqlConnection *conn);
 struct slName *sqlListFields(struct sqlConnection *conn, char *table);
 /* Return list of fields in table. */
 
-struct hash *sqlAllFields();
+struct hash *sqlAllFields(void);
 /* Get hash of all fields in database.table.field format.  */
 
 struct sqlConnCache *sqlNewConnCache(char *database);
@@ -301,7 +302,7 @@ void sqlAbort(struct sqlConnection  *sc, char *format, ...);
 /* Printf formatted error message that adds on sql 
  * error message and abort. */
 
-void sqlCleanupAll();
+void sqlCleanupAll(void);
 /* Cleanup all open connections and resources. */
 
 char *connGetDatabase(struct sqlConnCache *conn);
@@ -339,7 +340,7 @@ void sqlMonitorSetIndent(unsigned indent);
  * trace, which can be helpful in making voluminous trace info almost
  * readable. */
 
-void sqlMonitorDisable();
+void sqlMonitorDisable(void);
 /* Disable tracing or profiling of SQL queries. */
 
 int sqlDateToUnixTime(char *sqlDate);
@@ -446,10 +447,5 @@ char *sqlTempTableName(struct sqlConnection *conn, char *prefix);
  * table name encorperates the host, pid, and time, which helps insure
  * uniqueness between different processes at least.  FreeMem the result
  * when you are done. */
-
-char* getCfgValue(char* envName, char* cfgName);
-/* get a configuration value, from either the environment or the cfg file,
- * with the env take precedence.
- */
 
 #endif /* JKSQL_H */

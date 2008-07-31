@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.54 2008/07/14 19:29:04 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.54.4.1 2008/07/31 02:24:21 markd Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -439,7 +439,7 @@ if (axtOtherDb != NULL)
     struct hash *qSizeHash = hChromSizeHash(axtOtherDb);
     struct mafAli *mafList = axtLoadAsMafInRegion(conn, tdb->tableName,
     	chrom, start, end,
-	database, axtOtherDb, hChromSize(chrom), qSizeHash);
+	database, axtOtherDb, hChromSize(database, chrom), qSizeHash);
     hashFree(&qSizeHash);
     return mafList;
     }
@@ -459,7 +459,7 @@ if (axtOtherDb != NULL)
     struct hash *qSizeHash = hChromSizeHash(axtOtherDb);
     struct mafAli *mafList = axtLoadAsMafInRegion(conn, tdb->tableName,
     	chrom, start, end,
-	database, axtOtherDb, hChromSize(chrom), qSizeHash);
+        database, axtOtherDb, hChromSize(database, chrom), qSizeHash);
     hashFree(&qSizeHash);
     return mafList;
     }
@@ -635,7 +635,7 @@ else
 	boolean onlyCds = sameWord(codeVarVal, "coding");
 #endif
         /* add links for conservation score statistics */
-        consWiggles = wigMafWiggles(tdb);
+        consWiggles = wigMafWiggles(database, tdb);
         int wigCount = slCount(consWiggles);
         if (wigCount == 1)
             {
@@ -757,7 +757,7 @@ else
 
 static void mafOrAxtClick(struct sqlConnection *conn, struct trackDb *tdb, char *axtOtherDb)
 {
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn(database);
 
 mafOrAxtClick2(conn, conn2, tdb, axtOtherDb, NULL);
 
@@ -1178,7 +1178,7 @@ else
 	boolean onlyDiff = sameWord(showVarVal, "diff");
         /* add links for conservation score statistics */
         boolean first = TRUE;
-        consWiggles = wigMafWiggles(tdb);
+        consWiggles = wigMafWiggles(database, tdb);
         for (consWig = consWiggles; consWig != NULL; 
                 consWig = consWig->next)
             {

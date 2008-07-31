@@ -17,7 +17,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.51 2007/07/13 22:56:44 angie Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.51.50.1 2008/07/31 02:24:52 markd Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -194,7 +194,7 @@ protSeqLen = strlen(protSeq);
 
 iypos = 15; 
 doTracks(proteinID, mrnaID, protSeq, &iypos, psOutput);
-if (!hTableExistsDb(database, "pbStamp")) goto histDone; 
+if (!hTableExists(database, "pbStamp")) goto histDone; 
 
 pbScale = 3;
 pixWidth = 765;
@@ -366,9 +366,8 @@ cart = theCart;
 
 getDbAndGenome(cart, &database, &organism, oldVars);
 
-hSetDb(database);
 /* if kgProtMap2 table exists, this means we are doing KG III */
-if (hTableExists("kgProtMap2")) 
+if (hTableExists(database, "kgProtMap2")) 
     {
     kgVersion = KG_III;
     strcpy(kgProtMapTableName, "kgProtMap2");
@@ -383,7 +382,7 @@ else
     hgDebug = FALSE;
 
 hDefaultConnect();
-conn  = hAllocConn();
+conn  = hAllocConn(database);
 
 hgsid     = cartOptionalString(cart, "hgsid");
 if (hgsid != NULL)
@@ -400,11 +399,11 @@ proteinID = cartOptionalString(cart, "proteinID");
 /* check proteinID to see if it is a valid SWISS-PROT/TrEMBL accession or display ID */
 /* then assign the accession number to global variable proteinID */
 safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
-proteinAC = sqlGetField(conn, protDbName, "spXref3", "accession", cond_str);
+proteinAC = sqlGetField(protDbName, "spXref3", "accession", cond_str);
 if (proteinAC == NULL)
     {
     safef(cond_str, sizeof(cond_str), "displayID='%s'", proteinID);
-    proteinAC = sqlGetField(conn, protDbName, "spXref3", "accession", cond_str);
+    proteinAC = sqlGetField(protDbName, "spXref3", "accession", cond_str);
     if (proteinAC == NULL)
 	{
 	errAbort("'%s' does not seem to be a valid SWISS-PROT/TrEMBL protein ID.", proteinID);
@@ -418,13 +417,13 @@ if (proteinAC == NULL)
 else
     {
     safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
-    protDisplayID = sqlGetField(conn, protDbName, "spXref3", "displayID", cond_str);
+    protDisplayID = sqlGetField(protDbName, "spXref3", "displayID", cond_str);
     }
 
 if (spFindAcc(spConn, proteinID) == NULL)
     {
     safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
-    answer = sqlGetField(conn, protDbName, "spXref3", "biodatabaseID", cond_str);
+    answer = sqlGetField(protDbName, "spXref3", "biodatabaseID", cond_str);
     if (sameWord(answer, "3"))
         {
         errAbort("The corresponding protein %s is no longer available from Swiss-Prot/TrEMBL.", 
@@ -449,16 +448,16 @@ else
 if (kgVersion == KG_III)
     {
     safef(cond_str, sizeof(cond_str), "spID='%s'", proteinID);
-    mrnaID = sqlGetField(conn, database, "kgXref", "kgId", cond_str);
+    mrnaID = sqlGetField(database, "kgXref", "kgId", cond_str);
     }
 else
     {
     safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
-    mrnaID = sqlGetField(conn, database, "knownGene", "name", cond_str);
+    mrnaID = sqlGetField(database, "knownGene", "name", cond_str);
     }
 
 safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
-description = sqlGetField(NULL, protDbName, "spXref3", "description", cond_str);
+description = sqlGetField(protDbName, "spXref3", "description", cond_str);
 
 /* obtain previous genome position range selected by the Genome Browser user */
 positionStr = cloneString(cartOptionalString(cart, "position"));

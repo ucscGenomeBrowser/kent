@@ -44,7 +44,7 @@ database         = cloneString(argv[1]);
 proteinFileName  = cloneString(argv[2]);
 outputFileName   = cloneString(argv[3]);
 
-conn = hAllocConn();
+conn = hAllocConn(database);
 
 o1 = mustOpen(outputFileName, "w");
     
@@ -69,7 +69,7 @@ while (fgets(line, 1000, inf) != NULL)
     id = strdup(id);
         
     sprintf(cond_str, "proteinID = '%s'", id);
-    answer = sqlGetField(conn, database, "knownGene", "name", cond_str);
+    answer = sqlGetField(database, "knownGene", "name", cond_str);
     kgID = NULL;
     if (answer != NULL)
 	{

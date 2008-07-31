@@ -21,7 +21,7 @@
 #include "versionInfo.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.179 2008/06/28 16:56:04 galt Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.179.6.1 2008/07/31 02:24:44 markd Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -731,7 +731,7 @@ struct searchResult *lookupTypeSimpleSearch(struct column *col,
 {
 struct dyString *query = dyStringNew(512);
 char *searchHow = columnSetting(col, "search", "exact");
-struct sqlConnection *searchConn = hAllocConn();
+struct sqlConnection *searchConn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct searchResult *resList = NULL, *res;
@@ -861,7 +861,7 @@ if (isNotEmpty(xrefLookup))
 	    xrefDb = hDefaultDbForGenome(xrefOrg);
 	else
 	    xrefDb = cloneString(database);
-	struct sqlConnection *xrefConn = hAllocOrConnect(xrefDb);
+	struct sqlConnection *xrefConn = hAllocConn(xrefDb);
 	if (sqlTableExists(xrefConn, xrefTable))
 	    {
 	    /* These are the column settings that will be used by 
@@ -872,7 +872,7 @@ if (isNotEmpty(xrefLookup))
 	    hashAdd(col->settings, "xrefNameField", xrefNameField);
 	    hashAdd(col->settings, "xrefAliasField", xrefAliasField);
 	    }
-	hFreeOrDisconnect(&xrefConn);
+	hFreeConn(&xrefConn);
 	}
     }
 }
@@ -1745,7 +1745,7 @@ gp->name = cloneString(cartString(cart, idVarName));
 cartSetString(cart, searchVarName, gp->name);
 if (cartVarExists(cart, idPosVarName))
     {
-    hgParseChromRange(cartString(cart, idPosVarName),
+    hgParseChromRange(database, cartString(cart, idPosVarName),
     	&gp->chrom, &gp->start, &gp->end);
     gp->chrom = cloneString(gp->chrom);
     }
@@ -1880,12 +1880,11 @@ cart = theCart;
 
 getDbAndGenome(cart, &database, &genome, oldVars);
 makeSureDbHasHgNear();
-hSetDb(database);
 getGenomeSettings();
-conn = hAllocConn();
+conn = hAllocConn(database);
 
 /* if kgProtMap2 table exists, this means we are doing KG III */
-if (hTableExists("kgProtMap2")) kgVersion = KG_III;
+if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;
 
 /* Get groupOn.  Revert to default if no advanced filter. */
 groupOn = cartUsualString(cart, groupVarName, "expression");

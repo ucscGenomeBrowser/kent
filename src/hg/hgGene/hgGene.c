@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.108 2008/02/19 16:47:21 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.108.26.1 2008/07/31 02:24:03 markd Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -526,7 +526,7 @@ struct sqlResult *sr;
 char **row;
 struct genePred *gp = NULL;
 
-hFindSplitTable(curGeneChrom, track, table, &hasBin);
+hFindSplitTable(sqlGetDatabase(conn), curGeneChrom, track, table, &hasBin);
 safef(query, sizeof(query), 
 	"select * from %s where name = '%s' "
 	"and chrom = '%s' and txStart=%d and txEnd=%d"
@@ -549,26 +549,26 @@ struct trackDb *tdb, *tdb2;
 cartWebStart(cart, "Methods, Credits, and Use Restrictions");
 
 /* default is knownGene */
-tdb = hTrackDbForTrack("knownGene");
+tdb = hTrackDbForTrack(database, "knownGene");
 
 /* deal with special genomes that do not have knownGene */
 if (sameWord(genome, "D. melanogaster"))
     {
-    tdb = hTrackDbForTrack("bdgpGene");
+    tdb = hTrackDbForTrack(database, "bdgpGene");
     }
 if (sameWord(genome, "C. elegans"))
     {
-    tdb = hTrackDbForTrack("sangerGene");
+    tdb = hTrackDbForTrack(database, "sangerGene");
     }
 if (sameWord(genome, "S. cerevisiae"))
     {
-    tdb = hTrackDbForTrack("sgdGene");
+    tdb = hTrackDbForTrack(database, "sgdGene");
     }
 if (sameWord(genome, "Danio rerio"))
     {
-    tdb = hTrackDbForTrack("ensGene");
+    tdb = hTrackDbForTrack(database, "ensGene");
     }
-tdb2 = hTrackDbForTrack(genomeSetting("knownGene"));
+tdb2 = hTrackDbForTrack(database, genomeSetting("knownGene"));
 hPrintf("%s", tdb2->html);
 
 cartWebEnd();
@@ -581,12 +581,11 @@ void cartMain(struct cart *theCart)
 struct sqlConnection *conn = NULL;
 cart = theCart;
 getDbAndGenome(cart, &database, &genome, oldVars);
-hSetDb(database);
 
 /* if kgProtMap2 table exists, this means we are doing KG III */
-if (hTableExists("kgProtMap2")) kgVersion = KG_III;
+if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;
 
-conn = hAllocConn();
+conn = hAllocConn(database);
 curGeneId = cartString(cart, hggGene);
 getGenomeSettings();
 getGenePosition(conn);

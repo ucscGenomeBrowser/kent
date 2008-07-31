@@ -10,7 +10,7 @@
 #include "hgRelate.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.7 2007/07/17 08:31:49 aamp Exp $";
+static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.7.50.1 2008/07/31 02:24:36 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -181,9 +181,8 @@ if (doLoad)
     struct sqlConnection *conn;
 
     /* Set up connection to database and create main table. */
-    hSetDb(db);
-    conn = hAllocConn();
-    dyStringPrintf(dy, createString, track, hGetMinIndexLength());
+    conn = hAllocConn(db);
+    dyStringPrintf(dy, createString, track, hGetMinIndexLength(db));
     sqlRemakeTable(conn, track, dy->string);
 
     /* Load main table and clean up file handle. */

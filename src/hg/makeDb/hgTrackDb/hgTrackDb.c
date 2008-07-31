@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.38 2008/07/08 05:38:50 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.38.6.1 2008/07/31 02:24:39 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -78,7 +78,7 @@ if (strict)
     for (td = tdList; td != NULL; td = tdNext)
         {
         tdNext = td->next;
-        if (hTableOrSplitExists(td->tableName))
+        if (hTableOrSplitExists(database, td->tableName))
             {
             if (verboseLevel() > 2)
                 printf("%s table exists\n", td->tableName);
@@ -413,7 +413,6 @@ snprintf(tab, sizeof(tab), "%s.tab", trackDbName);
 sprintf(rootDir, "%s", hgRoot);
 sprintf(orgDir, "%s/%s", hgRoot, org);
 sprintf(asmDir, "%s/%s/%s", hgRoot, org, database);
-hSetDb(database);
 layerOn(strict, database, asmDir, uniqHash, htmlHash, FALSE, &tdList);
 layerOn(strict, database, orgDir, uniqHash, htmlHash, FALSE, &tdList);
 layerOn(strict, database, rootDir, uniqHash, htmlHash, TRUE, &tdList);

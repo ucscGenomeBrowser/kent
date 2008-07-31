@@ -8,7 +8,7 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.23 2007/12/20 01:01:40 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.23.36.1 2008/07/31 02:24:02 markd Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -29,6 +29,7 @@ static void domainsPrint(struct section *section,
 	struct sqlConnection *conn, char *geneId)
 /* Print out protein domains. */
 {
+char *db = sqlGetDatabase(conn);
 struct slName *el, *list;
 list = spExtDbAcc1List(spConn, swissProtAcc, "Interpro");
 if (list != NULL)
@@ -50,9 +51,9 @@ if (list != NULL)
 	//hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
 	//hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
         char interPro[256];
-        char *pdb = hPdbFromGdb(hGetDb());
+        char *pdb = hPdbFromGdb(db);
         safef(interPro, 128, "%s.interProXref", pdb);
-            if (hTableExists(interPro))
+        if (hTableExists(db, interPro))
                 {
                 safef(query, sizeof(query),
                         "select description from %s where accession = '%s' and interProId = '%s'",

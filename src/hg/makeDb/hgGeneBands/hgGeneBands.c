@@ -9,7 +9,7 @@
 #include "refLink.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: hgGeneBands.c,v 1.3 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: hgGeneBands.c,v 1.3.338.1 2008/07/31 02:24:36 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,10 +21,10 @@ errAbort(
   );
 }
 
-void printBands(struct refLink *rl, FILE *f)
+void printBands(char *database, struct refLink *rl, FILE *f)
 /* Print name of genes and bands it occurs on. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct genePred *gp;
@@ -39,7 +39,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     ++count;
     gp = genePredLoad(row);
-    if (hChromBand(gp->chrom, (gp->txStart + gp->txEnd)/2, band))
+    if (hChromBand(database, gp->chrom, (gp->txStart + gp->txEnd)/2, band))
         dyStringPrintf(bands, "%s,", band);
     else
         dyStringPrintf(bands, "n/a,");
@@ -55,7 +55,7 @@ hFreeConn(&conn);
 void hgGeneBands(char *database, char *outFile)
 /* hgGeneBands - Find bands for all genes. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct refLink rl;
@@ -65,7 +65,7 @@ sr = sqlGetResult(conn, "select * from refLink");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     refLinkStaticLoad(row, &rl);
-    printBands(&rl, f);
+    printBands(database, &rl, f);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -77,7 +77,6 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc != 3)
     usage();
-hSetDb(argv[1]);
 hgGeneBands(argv[1], argv[2]);
 return 0;
 }

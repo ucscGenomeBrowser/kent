@@ -36,11 +36,11 @@ gdb   = argv[1];
    
 outputFile = fopen(argv[2], "w");
 
-conn  = hAllocConn();
-conn2 = hAllocConn();
-conn3 = hAllocConn();
-conn4 = hAllocConn();
-conn5 = hAllocConn();
+conn  = hAllocConn(gdb);
+conn2 = hAllocConn(gdb);
+conn3 = hAllocConn(gdb);
+conn4 = hAllocConn(gdb);
+conn5 = hAllocConn(gdb);
 	
 /* loop over all gene symbols in GAD */	
 sprintf(query2,"select distinct geneSymbol from %s.gadAll where association='Y'", gdb);

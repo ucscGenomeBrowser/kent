@@ -15,7 +15,7 @@
 #include "gbSql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.18 2007/01/21 04:20:59 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.18.76.1 2008/07/31 02:24:35 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -314,9 +314,7 @@ void mgcDbLoad(char *database, char *mgcStatusTabFile)
 /* Load the database with the MGC tables. */
 {
 gbVerbEnter(1, "Loading MGC tables");
-hSetDb(database);
-struct sqlConnection *conn = hAllocConn();
-
+struct sqlConnection *conn = hAllocConn(database);
 buildMgcTbls(conn, mgcStatusTabFile);
 installMgcTbls(conn);
 
@@ -335,8 +333,7 @@ gbVerbLeave(1, "Loading MGC tables");
 void mgcDropTables(char *database)
 /* drop all MGC-related tables. */
 {
-hSetDb(database);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 gbVerbEnter(1, "droping MGC tables");
 
 tblBldDropTables(conn, mgcFullTables, TBLBLD_REAL_TABLE|TBLBLD_TMP_TABLE|TBLBLD_OLD_TABLE);

@@ -12,7 +12,7 @@
 #include "affyAllExonProbe.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.19 2008/04/04 17:24:14 fanhsu Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.19.18.1 2008/07/31 02:24:18 markd Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max, boolean redGreen)
 /* Return the correct color for a given score */
@@ -212,7 +212,7 @@ return bedList;
 static struct bed * loadMsBed(char *table, char *chrom, uint start, uint end)
 /* load every thing from a bed 15 table in the given range */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -232,7 +232,7 @@ return bedList;
 static struct bed * loadMsBedAll(char *table)
 /* load every thing from a bed 15 table */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct bed *bedList = NULL, *bed;

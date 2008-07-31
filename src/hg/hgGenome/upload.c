@@ -187,9 +187,9 @@ if (val[0] != 0)
 void updateCustomTracks(struct customTrack *upList) 
 /* Update custom tracks file with current upload data */
 {
-struct customTrack *oldList = customTracksParseCart(cart, NULL, NULL);
+struct customTrack *oldList = customTracksParseCart(database, cart, NULL, NULL);
 struct customTrack *outList = customTrackAddToList(oldList, upList, NULL, FALSE);
-customTracksSaveCart(cart, outList);
+customTracksSaveCart(database, cart, outList);
 hPrintf("These data are now available in the drop-down menus on the ");
 hPrintf("main page for graphing.<BR>");
 }
@@ -205,7 +205,7 @@ addIfNonempty(settings, hggMaxVal, "maxVal");
 addIfNonempty(settings, hggMaxGapToFill, "maxGapToFill");
 addIfNonempty(settings, hggLabelVals, "linesAt");
 
-struct customTrack *trackList = chromGraphParser(cpp,
+struct customTrack *trackList = chromGraphParser(database, cpp,
 	cartUsualString(cart, hggFormatType, formatNames[0]),
 	cartUsualString(cart, hggMarkerType, cgfMarkerGenomic),
 	cartUsualString(cart, hggColumnLabels, colLabelNames[0]), 

@@ -454,14 +454,14 @@ int tooBig = (winBaseCount > cloneFragMaxWin);
 int hilight = MG_CYAN;
 int unfinished = MG_GRAY;
 Color standard = color;
-boolean gotTiling = hTableExists("tilingPath");
+boolean gotTiling = hTableExists(database, "tilingPath");
 struct sqlConnection *conn = NULL;
 int bgColor;
 char accOnly[64];
 boolean nofrag = (strcmp("Clone Coverage/Fragment Position", tg->longLabel));
 
 if (gotTiling)
-    conn = hAllocConn();
+    conn = hAllocConn(database);
 for (ci = tg->items; ci != NULL; ci = ci->next)
     {
     bgColor = light;
@@ -521,7 +521,7 @@ void loadRealiClonesInWindow()
 if (realiCloneList == NULL)
     {
     char query[256];
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr = NULL;
     char **row;
     struct cloneInfo *ci;
@@ -606,7 +606,7 @@ void glLoadInWindow()
 {
 if (glCloneList == NULL)
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr = NULL;
     char **row;
     struct cloneInfo *ci;

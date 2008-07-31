@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.81 2008/07/04 08:08:08 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.81.6.1 2008/07/31 02:24:17 markd Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -395,7 +395,7 @@ void wigLoadItems(struct track *tg)
  *	rows will need to be loaded at any one time.
  */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -466,7 +466,7 @@ sqlFreeResult(&sr);
 if (itemsLoaded < 1)
     {
     tg->items = (struct wigItem *)NULL;
-    hFreeOrDisconnect(&conn);
+    hFreeConn(&conn);
     return;
     }
 
@@ -523,7 +523,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
 sqlFreeResult(&sr);
-hFreeOrDisconnect(&conn);
+hFreeConn(&conn);
 
 slReverse(&wiList);
 tg->items = wiList;

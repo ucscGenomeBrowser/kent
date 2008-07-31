@@ -12,7 +12,7 @@
 #include "liftUp.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netClass.c,v 1.21 2008/02/28 17:22:43 hiram Exp $";
+static char const rcsid[] = "$Id: netClass.c,v 1.21.24.1 2008/07/31 02:24:42 markd Exp $";
 
 /* Command line switches. */
 char *tNewR = NULL;
@@ -139,7 +139,7 @@ void getSeqGapsUnsplit(struct sqlConnection *conn, struct hash *chromHash)
 {
 struct rbTreeNode **stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
 struct rbTree *tree = rbTreeNewDetailed(simpleRangeCmp, qLm, stack);
-int rowOffset = hOffsetPastBin(NULL, "gap");
+int rowOffset = hOffsetPastBin(sqlGetDatabase(conn), NULL, "gap");
 struct sqlResult *sr;
 char **row;
 char *prevChrom = NULL;

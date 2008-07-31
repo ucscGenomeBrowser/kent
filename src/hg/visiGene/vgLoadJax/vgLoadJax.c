@@ -958,13 +958,14 @@ char inFull[PATH_LEN];
 char *jaxPath = "inSitu/Mouse/jax";
 char inJax[PATH_LEN];
 
-/* won't work yet
+#ifdef UNUSED
+/* won't work yet */
 char* host = "genome-test";
-char* user = getCfgValue("HGDB_USER", "db.user");
-char* password = getCfgValue("HGDB_PASSWORD", "db.password");
+char* user = cfgOptionEnv("HGDB_USER", "db.user");
+char* password = cfgOptionEnv("HGDB_PASSWORD", "db.password");
 
 connSp = sqlConnRemote(host, user, password, "uniProt", TRUE); // true=abort-on-error 
-*/
+#endif
 
 safef(inFull, sizeof(inFull), "%s/full", visiGeneDir);
 safef(inJax, sizeof(inJax), "%s/%s", inFull, jaxPath);

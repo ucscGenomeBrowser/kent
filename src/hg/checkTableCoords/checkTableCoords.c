@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.17 2008/07/03 22:57:07 angie Exp $";
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.17.6.1 2008/07/31 02:23:58 markd Exp $";
 
 /* Default parameter values */
 char *db = NULL;                        /* first arg */
@@ -89,7 +89,7 @@ int testChromSize(char *chrom)
 /* hChromSize recently got more picky (gates with hDbIsActive), so roll our
  * own so that we can use the test database for testing. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 char query[1024];
 safef(query, sizeof(query), "select size from chromInfo where chrom = '%s'",
       chrom);
@@ -158,7 +158,7 @@ boolean reportErrors(char *errFormat, char *table, int numErrors)
 {
 boolean gotError = (numErrors != 0);
 if (gotError)
-    printf(errFormat, hGetDb(), table, numErrors);
+    printf(errFormat, db, table, numErrors);
 return gotError;
 }
 
@@ -411,13 +411,12 @@ int checkTableCoords(char *db)
 /* Check several invariants (see comments in check*() above), 
  * summarize errors, return nonzero if there are errors. */
 {
-struct sqlConnection *conn = hAllocOrConnect(db);
+struct sqlConnection *conn = hAllocConn(db);
 struct slName *tableList = NULL, *curTable = NULL;
 struct slName *allChroms = NULL;
 boolean gotError = FALSE;
 
-hSetDb(db);
-allChroms = hAllChromNames();
+allChroms = hAllChromNamesDb(db);
 if (theTable == NULL)
     tableList = getTableNames(conn);
 else if (sqlTableExists(conn, theTable))
@@ -433,8 +432,8 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
     char *table = curTable->name;
     char tableChrom[32], trackName[128], tableChromPrefix[33];
     boolean gotError = FALSE;
-    hParseTableName(table, trackName, tableChrom);
-    hti = hFindTableInfo(tableChrom, trackName);
+    hParseTableName(db, table, trackName, tableChrom);
+    hti = hFindTableInfo(db, tableChrom, trackName);
     if (hti != NULL && hti->isPos)
 	{
 	/* watch out for presence of both split and non-split tables; 
@@ -450,7 +449,7 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
         /* items with bad chrom will be invisible to hGetBedRange(), so 
 	 * catch them here by SQL query. */
 	/* The SQL query is too huge for scaffold-based db's, check count: */
-	if (hChromCount() <= HDB_MAX_SEQS_FOR_SPLIT)
+	if (hChromCount(db) <= HDB_MAX_SEQS_FOR_SPLIT)
 	    {
 	    if (isNotEmpty(hti->chromField))
 		{
@@ -473,7 +472,7 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
 	    for (chromPtr=chromList; chromPtr != NULL; chromPtr=chromPtr->next)
 		{
 		char *chrom = chromPtr->name;
-		struct bed *bedList = hGetBedRange(table, chrom, 0, 0, NULL);
+		struct bed *bedList = hGetBedRange(db, table, chrom, 0, 0, NULL);
 		if (hti->isSplit && isNotEmpty(hti->chromField))
 		    gotError |= checkSplitTableOnlyChrom(bedList, table, hti,
 							 tableChrom);

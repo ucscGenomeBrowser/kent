@@ -12,7 +12,7 @@
 #include "axt.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: regionPicker.c,v 1.10 2006/06/20 16:37:00 angie Exp $";
+static char const rcsid[] = "$Id: regionPicker.c,v 1.10.106.1 2008/07/31 02:24:43 markd Exp $";
 
 /* Command line overridable variables. */
 char *clRegion = "genome";
@@ -91,7 +91,7 @@ double genoCuts[strataCount] = {0.5, 0.8, 1.0};
 #define geneScale 5  /* Spread gene density from 0-20% instead of 0-100% */
 
 
-struct region *loadRegionFile(char *fileName)
+struct region *loadRegionFile(char *database, char *fileName)
 /* Load up list of regions from a file. */
 {
 struct region *regionList = NULL, *region;
@@ -101,7 +101,7 @@ while (lineFileRow(lf, row))
     {
     AllocVar(region);
     region->name = cloneString(row[0]);
-    if (!hgParseChromRange(row[1], &region->chrom, 
+    if (!hgParseChromRange(database, row[1], &region->chrom, 
     		&region->start, &region->end))
 	errAbort("Bad range %s\n", row[1]);
     slAddHead(&regionList, region);
@@ -249,19 +249,19 @@ for (bigStart = chromStart; bigStart < chromEnd;  bigStart += bigStepSize)
     }
 }
 
-void maskFeatures(struct sqlConnection *conn, char *chrom, int chromSize, Bits *maskBits)
+void maskFeatures(char *database, struct sqlConnection *conn, char *chrom, int chromSize, Bits *maskBits)
 /* Mask out bits we're not interested in for conservation. */
 {
-fbOrTableBits(maskBits, "gap", chrom, chromSize, conn);
-fbOrTableBits(maskBits, "refGene:exon:12", chrom, chromSize, conn);
-fbOrTableBits(maskBits, "mrna:exon:12", chrom, chromSize, conn);
-fbOrTableBits(maskBits, "ensGene:exon:12", chrom, chromSize, conn);
-fbOrTableBits(maskBits, "softberryGene:exon:12", chrom, chromSize, conn);
-fbOrTableBits(maskBits, "twinscan:exon:12", chrom, chromSize, conn);
-fbOrTableBits(maskBits, "xenoMrna:exon:12", chrom, chromSize, conn);
-fbOrTableBits(maskBits, "intronEst:exon:12", chrom, chromSize, conn);
-fbOrTableBits(maskBits, "anyMrnaCov", chrom, chromSize, conn);
-fbOrTableBits(maskBits, "rmsk", chrom, chromSize, conn);
+fbOrTableBits(database, maskBits, "gap", chrom, chromSize, conn);
+fbOrTableBits(database, maskBits, "refGene:exon:12", chrom, chromSize, conn);
+fbOrTableBits(database, maskBits, "mrna:exon:12", chrom, chromSize, conn);
+fbOrTableBits(database, maskBits, "ensGene:exon:12", chrom, chromSize, conn);
+fbOrTableBits(database, maskBits, "softberryGene:exon:12", chrom, chromSize, conn);
+fbOrTableBits(database, maskBits, "twinscan:exon:12", chrom, chromSize, conn);
+fbOrTableBits(database, maskBits, "xenoMrna:exon:12", chrom, chromSize, conn);
+fbOrTableBits(database, maskBits, "intronEst:exon:12", chrom, chromSize, conn);
+fbOrTableBits(database, maskBits, "anyMrnaCov", chrom, chromSize, conn);
+fbOrTableBits(database, maskBits, "rmsk", chrom, chromSize, conn);
 printf("%s: %d bits masked\n", chrom, bitCountRange(maskBits, 0, chromSize));
 }
 
@@ -311,13 +311,13 @@ while ((axt = axtRead(lf)) != NULL)
 lineFileClose(&lf);
 }
 
-void statsOnSpan(struct sqlConnection *conn, struct region *r,
+void statsOnSpan(char *database, struct sqlConnection *conn, struct region *r,
 	char *axtBestDir, struct stats *stats, FILE *f, 
 	struct scoredWindow **pWinList)
 /* Gather region info on one chromosome/region. */
 {
 char *chrom = r->chrom;
-int chromSize = hChromSize(chrom);
+int chromSize = hChromSize(database, chrom);
 Bits *maskBits = bitAlloc(chromSize);
 Bits *aliBits = bitAlloc(chromSize);
 Bits *matchBits = bitAlloc(chromSize);
@@ -327,19 +327,19 @@ Bits *geneBits = bitAlloc(chromSize);
  * where bases align, and where bases align and match.
  * Zero both bitmaps in areas that are transcribed. */
 setAliBits(axtBestDir, chrom, chromSize, aliBits, matchBits);
-maskFeatures(conn, chrom, chromSize, maskBits);
+maskFeatures(database, conn, chrom, chromSize, maskBits);
 bitNot(maskBits, chromSize);
 bitAnd(aliBits, maskBits, chromSize);
 bitAnd(matchBits, maskBits, chromSize);
 
 /* Set up maskBits to have 0's on gaps in genome */
 bitClear(maskBits, chromSize);
-fbOrTableBits(maskBits, "gap", chrom, chromSize, conn);
+fbOrTableBits(database, maskBits, "gap", chrom, chromSize, conn);
 bitNot(maskBits, chromSize);
 
 /* Set up bitmap for Ensemble or mRNA. */
-fbOrTableBits(geneBits, "ensGene", chrom, chromSize, conn);
-fbOrTableBits(geneBits, "mrna", chrom, chromSize, conn);
+fbOrTableBits(database, geneBits, "ensGene", chrom, chromSize, conn);
+fbOrTableBits(database, geneBits, "mrna", chrom, chromSize, conn);
 
 /* Calculate various stats on windows. */
 addToStats(stats, aliBits, matchBits, geneBits, maskBits, r, f, pWinList);
@@ -444,7 +444,7 @@ struct chromCounts
     int count;		/* Count for this chromosome. */
     };
 
-void countChromWindows(struct scoredWindow *winList, FILE *f)
+void countChromWindows(char *database, struct scoredWindow *winList, FILE *f)
 /* Go through winList and count up how many hit each chromosome. */
 {
 struct chromCounts *ccList = NULL, *cc;
@@ -460,7 +460,7 @@ for (win = winList; win != NULL; win = win->next)
 	AllocVar(cc);
 	slAddHead(&ccList, cc);
 	hashAddSaveName(hash, chrom, cc, &cc->name);
-	cc->chromSize = hChromSize(chrom);
+	cc->chromSize = hChromSize(database, chrom);
 	}
     cc->count += 1;
     }
@@ -502,7 +502,7 @@ struct region *avoidList = NULL, *avoid;
 
 /* Get list of regions to avoid */
 if (avoidFile != NULL)
-    avoidList = loadRegionFile(avoidFile);
+    avoidList = loadRegionFile(database, avoidFile);
 
 if (htmlOutput != NULL)
     {
@@ -594,10 +594,10 @@ if (html)
 }
 
 
-struct hash *getChromLimits()
+struct hash *getChromLimits(char *database)
 /* Get hash full of chromosome limits. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(8);
@@ -652,14 +652,13 @@ struct scoredWindow *winList = NULL;
 struct hash *chromLimitHash = NULL;
 
 AllocVar(stats);
-hSetDb(database);
-chromLimitHash = getChromLimits();
+chromLimitHash = getChromLimits(database);
 
 /* Figure out which regions to process from command line.
  * By default will do whole genome. */
 if (sameWord(clRegion, "genome"))
     {
-    allChroms = hAllChromNames();
+    allChroms = hAllChromNamesDb(database);
     for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
         {
 	if (!endsWith(chrom->name, "_random"))
@@ -668,7 +667,7 @@ if (sameWord(clRegion, "genome"))
 	    region->name = cloneString(chrom->name);
 	    region->chrom = cloneString(chrom->name);
 	    region->start = 0;
-	    region->end = hChromSize(chrom->name);
+	    region->end = hChromSize(database, chrom->name);
 	    slAddHead(&regionList, region);
 	    }
 	}
@@ -680,30 +679,30 @@ else if (startsWith("chr", clRegion) && strchr(clRegion, ':') == NULL)
     region->name = cloneString(clRegion);
     region->chrom = cloneString(clRegion);
     region->start = 0;
-    region->end = hChromSize(clRegion);
+    region->end = hChromSize(database, clRegion);
     slAddHead(&regionList, region);
     }
 else 
     {
-    regionList = loadRegionFile(clRegion);
+    regionList = loadRegionFile(database, clRegion);
     }
 
 
 /* Gather statistics one region at a time and then
  * print them. */
-conn = hAllocConn();
+conn = hAllocConn(database);
 for (region = regionList; region != NULL; region = region->next)
      {
      printf("Processing %s %s:%d-%d\n", region->name,
      	region->chrom, region->start, region->end);
-     statsOnSpan(conn, region, axtBestDir, stats, f, &winList);
+     statsOnSpan(database, conn, region, axtBestDir, stats, f, &winList);
      }
 fprintf(f, "\n");
 reportStats(stats, f);
 fprintf(f, "\n");
 
 uglyf("Got %d windows with no gaps\n", slCount(winList));
-countChromWindows(winList, f);
+countChromWindows(database, winList, f);
 outputPicks(winList, database, chromLimitHash, stats, f);
 }
 

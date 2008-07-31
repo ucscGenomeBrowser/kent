@@ -80,8 +80,8 @@ safef(proteinsDB, sizeof(proteinsDB), "proteins%s", proteinDataDate);
 o3 = fopen("j.dat", "w");
 o7 = fopen("jj.dat", "w");
 
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn2= hAllocConn(genomeDBname);
+conn3= hAllocConn(genomeDBname);
     
 inf  = mustOpen("sorted.lis", "r");
 
@@ -239,10 +239,10 @@ while (fgets(line_in, 10000, inf) != NULL)
 	    cdsLen = aalen;
 
             safef(cond_str, sizeof(cond_str), "val='%s'", proteinID);
-            acc = sqlGetField(conn3, spDB, "displayId", "acc", cond_str);
+            acc = sqlGetField(spDB, "displayId", "acc", cond_str);
 
             safef(cond_str, sizeof(cond_str), "acc='%s'", acc);
-            aaStr=sqlGetField(conn3, spDB, "protein", "val", cond_str);
+            aaStr=sqlGetField(spDB, "protein", "val", cond_str);
     	    aaLen = strlen(aaStr);
 
             if ((cdsLen >  50) || ((cdsLen * 100)/aaLen > 50))

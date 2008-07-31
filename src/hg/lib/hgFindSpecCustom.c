@@ -14,7 +14,7 @@
 #include <regex.h>
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.14 2007/04/21 00:00:48 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.14.68.1 2008/07/31 02:24:30 markd Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -243,7 +243,7 @@ if (isNotEmpty(hfs->xrefQuery) &&
 }
 
 
-static void hgFindSpecPolish(struct hgFindSpec *hfs)
+static void hgFindSpecPolish(char *db, struct hgFindSpec *hfs)
 /* Fill in missing values with defaults, check for consistency. */
 {
 /* At least one of {searchName, searchTable} must be defined. */
@@ -283,7 +283,7 @@ if (hfs->searchPriority == 0.0)
 if (hfs->searchDescription == NULL)
     {
     char buf[512];
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(db);
     struct trackDb *tdb = hMaybeTrackInfo(conn, hfs->searchTable);
     hFreeConn(&conn);
     if (tdb != NULL)
@@ -345,7 +345,7 @@ else	/* Add to settings. */
     }
 }
 
-struct hgFindSpec *hgFindSpecFromRa(char *raFile)
+struct hgFindSpec *hgFindSpecFromRa(char *db, char *raFile)
 /* Load track info from ra file into list. */
 {
 static boolean reEntered = FALSE;
@@ -376,7 +376,7 @@ for (;;)
 	     * multiple times and get too many backslash-escapes. */
 	    boolean reBak = reEntered;
 	    reEntered = TRUE;
-            struct hgFindSpec *incHfs = hgFindSpecFromRa(incFile);
+            struct hgFindSpec *incHfs = hgFindSpecFromRa(db, incFile);
 	    reEntered = reBak;
             hfsList = slCat(hfsList, incHfs);
             }
@@ -414,7 +414,7 @@ if (! reEntered)
     {
     for (hfs = hfsList; hfs != NULL; hfs = hfs->next)
 	{
-	hgFindSpecPolish(hfs);
+	hgFindSpecPolish(db, hfs);
 	}
     }
 slReverse(&hfsList);
@@ -450,7 +450,7 @@ char *hgFindSpecSettingOrDefault(struct hgFindSpec *hfs, char *name,
     return (val == NULL ? defaultVal : val);
 }
 
-static struct slName *hgFindSpecNameList()
+static struct slName *hgFindSpecNameList(char *db)
 /* Return the hgFindSpec table name(s) to use (based on trackDb name). */
 {
 struct slName *trackDbList = hTrackDbList();
@@ -459,7 +459,7 @@ struct slName *tdbName;
 for (tdbName = trackDbList; tdbName != NULL; tdbName = tdbName->next)
     {
     char *subbed = replaceChars(tdbName->name, "trackDb", "hgFindSpec");
-    if (hTableExists(subbed))
+    if (hTableExists(db, subbed))
 	slNameAddHead(&specNameList, subbed);
     freez(&subbed);
     }
@@ -479,13 +479,13 @@ while ((cur != NULL) && (!sameString(cur->searchName, spec->searchName)))
 return (cur) ? TRUE : FALSE;
 }
 
-struct hgFindSpec *hgFindSpecGetSpecs(boolean shortCircuit)
+struct hgFindSpec *hgFindSpecGetSpecs(char *db, boolean shortCircuit)
 /* Load all short-circuit (or not) search specs from the current db, sorted by 
  * searchPriority. */
 {
 struct hgFindSpec *hfsList = NULL;
-struct sqlConnection *conn = hAllocConn();
-struct slName *hgFindSpecList = hgFindSpecNameList();
+struct sqlConnection *conn = hAllocConn(db);
+struct slName *hgFindSpecList = hgFindSpecNameList(db);
 struct slName *oneSpec;
 for (oneSpec = hgFindSpecList; oneSpec != NULL; oneSpec = oneSpec->next)
     {
@@ -509,14 +509,15 @@ hFreeConn(&conn);
 return(hfsList);
 }
 
-void hgFindSpecGetAllSpecs(struct hgFindSpec **retShortCircuitList,
+void hgFindSpecGetAllSpecs(char *db, 
+                           struct hgFindSpec **retShortCircuitList,
 			   struct hgFindSpec **retAdditiveList)
 /* Load all search specs from the current db, separated according to 
  * shortCircuit and sorted by searchPriority. */
 {
 struct hgFindSpec *shortList = NULL, *longList = NULL;
-struct sqlConnection *conn = hAllocConn();
-struct slName *hgFindSpecList = hgFindSpecNameList();
+struct sqlConnection *conn = hAllocConn(db);
+struct slName *hgFindSpecList = hgFindSpecNameList(db);
 struct slName *oneSpec;
 for (oneSpec = hgFindSpecList; oneSpec != NULL; oneSpec = oneSpec->next)
     {

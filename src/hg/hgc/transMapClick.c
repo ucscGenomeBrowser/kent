@@ -197,7 +197,7 @@ printAlignmentsSimple(bag->psl, start, "hgcTransMapCdnaAli", tdb->tableName, bag
 void transMapClickHandler(struct trackDb *tdb, char *mappedId)
 /* Handle click on a transMap tracks */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct transMapBag *bag = transMapBagLoad(conn, tdb, mappedId, TRUE);
 
 genericHeader(tdb, mappedId);
@@ -241,7 +241,7 @@ return seq;
 void transMapShowCdnaAli(struct trackDb *tdb, char *mappedId)
 /* Show alignment for mappedId, mostly ripped off from htcCdnaAli */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct transMapBag *bag = transMapBagLoad(conn, tdb, mappedId, FALSE);
 struct genbankCds cds;
 if ((bag->gene == NULL) || (strlen(bag->gene->cds) == 0)

@@ -22,7 +22,7 @@
 
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.1 2007/06/05 23:48:09 galt Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.1.58.1 2008/07/31 02:24:05 markd Exp $";
 
 
 boolean isWiggle(char *db, char *table)
@@ -89,7 +89,7 @@ if (isCustom)
 else
     {
     boolean hasBin = FALSE;
-    if (hFindSplitTable(chrom, table, splitTableOrFileName, &hasBin))
+    if (hFindSplitTable(database, chrom, table, splitTableOrFileName, &hasBin))
 	{
 	wds->getData(wds, database, splitTableOrFileName, operations);
 	}

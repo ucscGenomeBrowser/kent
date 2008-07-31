@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.143 2008/05/31 15:59:25 braney Exp $
+# 	$Id: makefile,v 1.143.10.1 2008/07/31 02:23:57 markd Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -23,20 +23,6 @@ TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
 BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp
 
 
-all::    cgi utils
-
-hgLib:
-	@./sqlEnvTest.sh
-	cd lib && ${MAKE}
-
-utils:	hgLib
-	@for D in $(USE_DIRS) x; do \
-            if test "$$D" != "x" ; then \
-                ( cd $$D && echo $$D && $(MAKE) ) ;\
-                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-            fi ;\
-	done
-
 # List of directories to build
 USE_DIRS = $(UTIL_DIRS)
 
@@ -50,64 +36,6 @@ BAD_DIRS = \
 	synMap \
 	encode \
 	wikiPlot 
-
-# Compile only, the cgi's for those builds without write access
-#	to apache cgi-bin directories  (this compiles and links executables)
-
-compile:	hgLib
-	@for D in ${BROWSER_BINS} ${BROWSER_LOADERS}; do \
-		(cd $${D} && ${MAKE} compile;) \
-	done
-
-# Build cgi's
-#   cgi: Destination for the binaries is /usr/local/apache/cgi-bin-${USER}
-
-cgi:	hgLib
-	@for D in ${BROWSER_BINS}; do \
-		(cd $${D} && ${MAKE};) \
-	done
-	@for D in ${BROWSER_LOADERS}; do \
-		(cd $${D} && ${MAKE} cgi;) \
-	done
-
-#   alpha: Destination for the binaries is /usr/local/apache/cgi-bin/
-
-alpha:	hgLib
-	@for D in ${BROWSER_BINS} ${BROWSER_LOADERS}; do \
-		(cd $${D} && ${MAKE} alpha;) \
-	done
-
-#   beta: Destination for the binaries is /usr/local/apache/cgi-bin-beta/
-
-beta:	hgLib
-	@for D in ${BROWSER_BINS} ${BROWSER_LOADERS}; do \
-		(cd $${D} && ${MAKE} beta;) \
-	done
-
-# install: Destination for the binaries is ${DESTDIR}/usr/local/apache/cgi-bin
-
-install:	hgLib
-	@for D in ${BROWSER_BINS} ${BROWSER_LOADERS}; do \
-		(cd $${D} && ${MAKE} install;) \
-	done
-
-clean::
-	cd lib && ${MAKE} clean
-	@for D in ${BROWSER_BINS} ${BROWSER_LOADERS}; do \
-		(cd $${D} && ${MAKE} clean;) \
-	done
-	touch non-empty-rm.o
-	- find . -name \*.o -print | xargs rm
-
-clean_utils::
-	@for D in ${UTIL_DIRS}; do \
-		(cd $${D} && ${MAKE} clean;) \
-	done
-
-test::	${TEST_DIRS:%=%.test}
-
-%.test: hgLib
-	cd $* && ${MAKE} test
 
 UTIL_DIRS = \
 	affyTransciptome \
@@ -264,4 +192,67 @@ UTIL_DIRS = \
 	visiGene/knownToVisiGene \
 	xmlCat \
 	xmlToSql
+
+
+all::    cgi utils
+
+hgLib:
+	@./sqlEnvTest.sh
+	cd lib && ${MAKE}
+
+utils: $(USE_DIRS:%=%.utils)
+%.utils: hgLib
+	( cd $* && echo $* && $(MAKE) )
+
+# Compile only, the cgi's for those builds without write access
+#	to apache cgi-bin directories  (this compiles and links executables)
+
+compile: ${BROWSER_BINS:%=%.compile} ${BROWSER_LOADERS:%=%.compile}
+%.compile: hgLib
+	( cd $* && echo $* && $(MAKE) compile)
+
+# Build cgi's
+#   cgi: Destination for the binaries is /usr/local/apache/cgi-bin-${USER}
+
+cgi: ${BROWSER_BINS:%=%.bins} ${BROWSER_LOADERS:%=%.cgi}
+%.bins: hgLib
+	( cd $* && echo $* && $(MAKE) )
+%.cgi: hgLib
+	( cd $* && echo $* && $(MAKE) cgi)
+
+#   alpha: Destination for the binaries is /usr/local/apache/cgi-bin/
+
+alpha:	 ${BROWSER_BINS:%=%.alpha} ${BROWSER_LOADERS:%=%.alpha}
+%.alpha: hgLib
+	( cd $* && echo $* && $(MAKE) alpha)
+
+#   beta: Destination for the binaries is /usr/local/apache/cgi-bin-beta/
+
+beta: ${BROWSER_BINS:%=%.beta} ${BROWSER_LOADERS:%=%.beta}
+%.beta: hgLib
+	( cd $* && echo $* && $(MAKE) beta)
+
+# install: Destination for the binaries is ${DESTDIR}/usr/local/apache/cgi-bin
+
+install: ${BROWSER_BINS:%=%.install} ${BROWSER_LOADERS:%=%.install}
+%.install: hgLib
+	( cd $* && echo $* && $(MAKE) install)
+
+clean::
+	cd lib && ${MAKE} clean
+	@for D in ${BROWSER_BINS} ${BROWSER_LOADERS}; do \
+		(cd $${D} && ${MAKE} clean;) \
+	done
+	touch non-empty-rm.o
+	- find . -name \*.o -print | xargs rm
+
+clean_utils::
+	@for D in ${UTIL_DIRS}; do \
+		(cd $${D} && ${MAKE} clean;) \
+	done
+
+test::	${TEST_DIRS:%=%.test}
+
+%.test: hgLib
+	cd $* && ${MAKE} test
 

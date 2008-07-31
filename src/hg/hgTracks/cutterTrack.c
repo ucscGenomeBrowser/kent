@@ -30,7 +30,7 @@ else
     y += (heightPer >> 1) - 1;
     if (color)
 	{
-	struct sqlConnection *conn = hAllocOrConnect("hgFixed");
+	struct sqlConnection *conn = hAllocConn("hgFixed");
 	struct cutter *cut;
 	char query[80];
 	char strand = bed->strand[0];
@@ -87,7 +87,7 @@ else
 	    mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
 		     tg->mapName, tg->mapItemName(tg, bed), NULL);
 	    }
-	hFreeOrDisconnect(&conn);
+	hFreeConn(&conn);
 	cutterFree(&cut);
 	}
     }
@@ -101,9 +101,9 @@ struct dnaSeq *windowDna = NULL;
 struct bed *bedList = NULL;
 int winSize = winEnd - winStart;
 
-conn = hAllocOrConnect("hgFixed");
+conn = hAllocConn("hgFixed");
 cutters = cutterLoadByQuery(conn, "select * from cutters");
-windowDna = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
+windowDna = hDnaFromSeq(database, chromName, winStart, winEnd, dnaUpper);
 
 /* Do different things based on window size. */
 
@@ -142,7 +142,7 @@ if (winSize < 250000)
     }
 cutterFreeList(&cutters);
 freeDnaSeq(&windowDna);
-hFreeOrDisconnect(&conn);
+hFreeConn(&conn);
 }
 
 struct track *cuttersTg()

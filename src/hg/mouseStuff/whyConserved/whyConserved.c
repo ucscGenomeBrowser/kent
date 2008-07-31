@@ -8,7 +8,7 @@
 #include "bits.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: whyConserved.c,v 1.3 2003/05/06 07:22:29 kate Exp $";
+static char const rcsid[] = "$Id: whyConserved.c,v 1.3.338.1 2008/07/31 02:24:43 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,7 +21,7 @@ errAbort(
   );
 }
 
-void explainSome(Bits *homo, Bits *once, Bits *bits, char *chrom, int chromSize, 
+void explainSome(char *database, Bits *homo, Bits *once, Bits *bits, char *chrom, int chromSize, 
 	struct sqlConnection *conn, char *trackSpec, char *homologyTrack)
 /* Explain some of homology. */
 {
@@ -31,7 +31,7 @@ homoSize = bitCountRange(homo, 0, chromSize);
 bitClear(bits, chromSize);
 if (trackSpec != NULL)
     {
-    fbOrTableBits(bits, trackSpec, chrom, chromSize, conn);
+    fbOrTableBits(database, bits, trackSpec, chrom, chromSize, conn);
     trackSize = bitCountRange(bits, 0, chromSize);
     bitAnd(bits, homo, chromSize);
     andSize = bitCountRange(bits, 0, chromSize);
@@ -122,16 +122,15 @@ Bits *homo = NULL;
 Bits *bits = NULL;
 Bits *once = NULL;
 
-hSetDb(database);
-conn = hAllocConn();
-chromSize = hChromSize(chrom);
+conn = hAllocConn(database);
+chromSize = hChromSize(database, chrom);
 
 homo = bitAlloc(chromSize);
 bits = bitAlloc(chromSize);
 once = bitAlloc(chromSize);
 
 /* Get homology bitmap and set once mask to be the same. */
-fbOrTableBits(homo, homologyTrack, chrom, chromSize, conn);
+fbOrTableBits(database, homo, homologyTrack, chrom, chromSize, conn);
 bitOr(once, homo, chromSize);
 
 /* printHeader */
@@ -144,16 +143,16 @@ printf("%-21s %8s %8s %5s %6s  %6s %5s  %5s \n",
 printf("-----------------------------------------------------------------------------\n");
 
 /* Whittle awway at homology... */
-explainSome(homo, once, bits, chrom, chromSize, conn, NULL, homologyTrack);
-explainSome(homo, once, bits, chrom, chromSize, conn, "sanger22:CDS", NULL);
-explainSome(homo, once, bits, chrom, chromSize, conn, "refGene:CDS", NULL);
-explainSome(homo, once, bits, chrom, chromSize, conn, "est", NULL);
-explainSome(homo, once, bits, chrom, chromSize, conn, "intronEst:exon", NULL);
-explainSome(homo, once, bits, chrom, chromSize, conn, "blatMouse:exon", NULL);
-explainSome(homo, once, bits, chrom, chromSize, conn, "xenoMrna:exon", NULL);
-explainSome(homo, once, bits, chrom, chromSize, conn, "xenoEst:exon", NULL);
-explainSome(homo, once, bits, chrom, chromSize, conn, "genscan:exon", NULL);
-explainSome(homo, once, bits, chrom, chromSize, conn, "exoFish", NULL);
+explainSome(database, homo, once, bits, chrom, chromSize, conn, NULL, homologyTrack);
+explainSome(database, homo, once, bits, chrom, chromSize, conn, "sanger22:CDS", NULL);
+explainSome(database, homo, once, bits, chrom, chromSize, conn, "refGene:CDS", NULL);
+explainSome(database, homo, once, bits, chrom, chromSize, conn, "est", NULL);
+explainSome(database, homo, once, bits, chrom, chromSize, conn, "intronEst:exon", NULL);
+explainSome(database, homo, once, bits, chrom, chromSize, conn, "blatMouse:exon", NULL);
+explainSome(database, homo, once, bits, chrom, chromSize, conn, "xenoMrna:exon", NULL);
+explainSome(database, homo, once, bits, chrom, chromSize, conn, "xenoEst:exon", NULL);
+explainSome(database, homo, once, bits, chrom, chromSize, conn, "genscan:exon", NULL);
+explainSome(database, homo, once, bits, chrom, chromSize, conn, "exoFish", NULL);
 hFreeConn(&conn);
 }
 

@@ -468,7 +468,7 @@ while ((psl = pslNext(lf)) != NULL)
 	}
    
     sprintf(cond_str, "extAC='%s'", psl->qName);
-    answer = sqlGetField(conn, proteinDB, "spXref2", "displayID", cond_str);
+    answer = sqlGetField(proteinDB, "spXref2", "displayID", cond_str);
 	       
     if (answer == NULL)
 	{
@@ -564,7 +564,6 @@ if (strstr(database, "Temp") == NULL)
     {
     errAbort("hgKgMrna is meant to load mrna data into a Temporary database only, exiting ...\n");
     }
-hgSetDb(database);
 processRefSeq(faFile, raFile, pslFile, loc2refFile, pepFile, mim2locFile);
 }
 

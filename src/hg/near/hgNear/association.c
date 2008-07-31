@@ -384,7 +384,7 @@ struct dyString *query = dyStringNew(512);
 struct sqlResult *sr;
 char **row;
 struct searchResult *resList = NULL, *res;
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn(database);
 
 dyStringPrintf(query, col->invQueryOne, search);
 sr = sqlGetResult(conn, query->string);

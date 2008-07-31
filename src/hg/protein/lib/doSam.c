@@ -3,17 +3,17 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: doSam.c,v 1.6 2005/07/09 05:17:16 markd Exp $";
+static char const rcsid[] = "$Id: doSam.c,v 1.6.154.1 2008/07/31 02:24:49 markd Exp $";
 
 char *getSgdId(char *protId, char *database)
 /* Get SGD gene ID from a Swiss-Prot ID */
 {
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn(database);
 char condStr[256];
 char *sgdId;
 
 sprintf(condStr, "proteinId='%s'", protId);
-sgdId = sqlGetField(conn2, database, "sgdGene", "name", condStr);
+sgdId = sqlGetField(database, "sgdGene", "name", condStr);
 hFreeConn(&conn2);
 return(sgdId);
 }
@@ -25,7 +25,7 @@ char *itemName = NULL;
 char query2[256];
 struct sqlResult *sr2;
 char **row2;
-struct sqlConnection *conn, *conn2 = hAllocConn();
+struct sqlConnection *conn, *conn2 = hAllocConn(database);
 char condStr[256];
 char *chp;
 
@@ -69,7 +69,7 @@ if (sameWord(database, "sacCer1"))
 if (itemName == NULL) return;
 
 sprintf(condStr, "proteinId='%s'", itemName);
-samSubDir = sqlGetField(conn2, database, "samSubdir", "subdir", condStr);
+samSubDir = sqlGetField(database, "samSubdir", "subdir", condStr);
 if (samSubDir == NULL) return;
 
 hPrintf("<B>UCSC ");
@@ -89,7 +89,7 @@ hPrintf(" TARGET=_blank>%s</A> (pdf)<BR>\n", itemName);
 
 hPrintf("<B>&nbsp;&nbsp;&nbsp;&nbsp;Close Homologs:</B> \n");
 
-conn2= hAllocConn();
+conn2= hAllocConn(database);
 sprintf(query2,
     "select homologID,eValue,SCOPdomain,chain from %s.protHomolog where proteinID='%s' and evalue <= 0.01 order by evalue;",
     database, itemName);

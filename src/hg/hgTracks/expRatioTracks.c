@@ -30,7 +30,7 @@ struct hash *getClinicalData(char *tableName)
 {
 struct hash *ret = NULL;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct simpleClinical *clinicalItem = NULL;
@@ -1207,7 +1207,7 @@ logicalDb = trackDbSetting(tg->tdb, "logicalDb");
 if (logicalDb == NULL)
     {
     isRegularDb = TRUE;
-    conn = hAllocConn();
+    conn = hAllocConn(database);
     }
 else
     {

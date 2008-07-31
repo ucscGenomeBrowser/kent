@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.18 2008/06/03 23:17:56 markd Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.18.12.1 2008/07/31 02:24:29 markd Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -183,6 +183,16 @@ if (val == NULL)
 return val;
 }
 
+char *cfgOptionEnv(char *envName, char* name)
+/* get a configuration optional value, from either the environment or the cfg
+ * file, with the env take precedence.  Return NULL if not found */
+{
+char *val = getenv(envName);
+if (val == NULL || (strlen(val) == 0))
+    val = cfgOption(name);
+return val;
+}
+
 char *cfgVal(char *name)
 /* Return option with given name.  Squawk and die if it
  * doesn't exist. */
@@ -191,6 +201,19 @@ char *val = cfgOption(name);
 if (val == NULL)
     errAbort("%s doesn't exist in hg.conf file", name);
 return val;
+}
+
+struct slName *cfgNames()
+/* get list of names in config file. slFreeList when finished */
+{
+if(cfgOptionsHash == NULL)
+    initConfig();
+struct slName *names = NULL;
+struct hashCookie cookie = hashFirst(cfgOptionsHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    slSafeAddHead(&names, slNameNew(hel->name));
+return names;
 }
 
 unsigned long cfgModTime()

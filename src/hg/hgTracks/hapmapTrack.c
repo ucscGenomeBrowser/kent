@@ -134,7 +134,7 @@ return TRUE;
 static void hapmapLoadSimple(struct track *tg)
 /* load data, no filters */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int rowOffset = 1;
@@ -512,14 +512,14 @@ return ret;
 static void hapmapLoad(struct track *tg)
 /* load filtered data */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int rowOffset;
 
 loadFilters();
 
-if (allDefaults() || !hTableExists("hapmapAllelesSummary")) 
+if (allDefaults() || !hTableExists(database, "hapmapAllelesSummary")) 
     {
     hapmapLoadSimple(tg);
     return;

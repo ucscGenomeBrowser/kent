@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.11 2006/02/13 20:12:08 angie Exp $";
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.11.124.1 2008/07/31 02:24:43 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -294,7 +294,7 @@ dyStringFree(&dy);
 int clusterId = 0;	/* Assign a unique id to each cluster. */
 int longestName = 1;	/* Longest gene name. */
 
-void clusterGenesOnStrand(struct sqlConnection *conn,
+void clusterGenesOnStrand(char *database, struct sqlConnection *conn,
 	char *geneTable, char *chrom, char strand, 
 	FILE *clusterFile, FILE *canFile)
 /* Scan through genes on this strand, cluster, and write clusters to file. */
@@ -339,7 +339,7 @@ if (!noProt)
     }
 
 slReverse(&gpList);
-clusterList = makeCluster(gpList, hChromSize(chrom));
+clusterList = makeCluster(gpList, hChromSize(database, chrom));
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
     {
     struct hashEl *helList = hashElListHash(cluster->geneHash);
@@ -384,11 +384,10 @@ FILE *clusterFile = hgCreateTabFile(".", clusterTable);
 FILE *canFile = hgCreateTabFile(".", cannonicalTable);
 struct sqlConnection *conn;
 
-hSetDb(database);
 if (optionExists("chrom"))
     chromList = slNameNew(optionVal("chrom", NULL));
 else
-    chromList = hAllChromNames();
+    chromList = hAllChromNamesDb(database);
 conn = hAllocConn();
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {

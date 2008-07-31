@@ -12,7 +12,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.46 2008/05/23 22:14:58 angie Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.46.14.1 2008/07/31 02:24:33 markd Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -766,7 +766,7 @@ struct wiggleData *wigFetchData(char *db, char *table, char *chromName,
 		    unsigned maxBedElements, struct wiggleStats **wsList)
 /*  return linked list of wiggle data between winStart, winEnd */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 int rowOffset;

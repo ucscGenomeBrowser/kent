@@ -44,8 +44,8 @@ sprintf(proteinsDB, "proteins%s", proteinDataDate);
 
 o2 = mustOpen("spXref3Var.tab", "w");
 
-conn  = hAllocConn();
-conn2 = hAllocConn();
+conn  = hAllocConn(hDefaultDb());
+conn2 = hAllocConn(hDefaultDb());
 
 bioentryId = 9000000;	/* to differentiate with regular proteins */
 
@@ -65,9 +65,9 @@ while (row2 != NULL)
     
     /* duplicate the following info from its parent protein */
     sprintf(cond_str, "accession='%s'", parAcc);
-    division   = sqlGetField(conn, proteinsDB, "spXref3", "division", cond_str);
-    hugoSymbol = sqlGetField(conn, proteinsDB, "spXref3", "hugoSymbol", cond_str);
-    hugoDesc   = sqlGetField(conn, proteinsDB, "spXref3", "hugoDesc", cond_str);
+    division   = sqlGetField(proteinsDB, "spXref3", "division", cond_str);
+    hugoSymbol = sqlGetField(proteinsDB, "spXref3", "hugoSymbol", cond_str);
+    hugoDesc   = sqlGetField(proteinsDB, "spXref3", "hugoDesc", cond_str);
     
     fprintf(o2, "%s\t%s\t%s\t%d\t%s\t%s\t%s\t%s\n", acc, displayId, 
 	    division, bioentryId, bioDatabase, desc, hugoSymbol, hugoDesc);

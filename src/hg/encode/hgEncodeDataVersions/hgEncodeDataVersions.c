@@ -10,7 +10,7 @@
 #include "cart.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: hgEncodeDataVersions.c,v 1.4 2007/07/17 17:27:28 angie Exp $";
+static char const rcsid[] = "$Id: hgEncodeDataVersions.c,v 1.4.50.1 2008/07/31 02:23:58 markd Exp $";
 
 /* Global variables */
 struct cart *cart;
@@ -48,14 +48,14 @@ const struct trackRef *b = *((struct trackRef **)vb);
 return (a->track->priority - b->track->priority);
 }
 
-struct group *groupTracks(struct trackDb *tracks)
+struct group *groupTracks(char *db, struct trackDb *tracks)
 /* Make up groups and assign tracks to groups. */
 {
 struct trackDb *track;
 struct trackRef *tr;
 struct group *group, *groups = NULL;
 struct grp *grp;
-struct grp *grps = hLoadGrps();
+struct grp *grps = hLoadGrps(db);
 struct hash *groupHash = newHash(8);
 
 /* Sort groups by priority */
@@ -99,9 +99,8 @@ struct group *group, *groups = NULL;
 cart = theCart;
 cartWebStart(cart, "ENCODE Track Data Versions (%s)", db);
 getDbAndGenome(cart, &db, &ignored, NULL);
-hSetDb(db);
-tracks = hTrackDb(NULL);
-groups = groupTracks(tracks);
+tracks = hTrackDb(db, NULL);
+groups = groupTracks(db, tracks);
 for (group = groups; group != NULL; group = group->next)
     {
     if (group->tracks == NULL || !startsWith("encode", group->name))

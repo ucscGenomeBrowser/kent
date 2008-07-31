@@ -12,7 +12,7 @@
 #include "psl.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: getFeatDna.c,v 1.9 2006/04/09 20:09:01 angie Exp $";
+static char const rcsid[] = "$Id: getFeatDna.c,v 1.9.116.1 2008/07/31 02:24:01 markd Exp $";
 
 /* Variables set explicitly or optionally from command line. */
 char *database = NULL;		/* Which database? */
@@ -114,7 +114,7 @@ void chromFeatDna(char *table, char *chrom, FILE *f)
  * for blocks of lower upper case and output them. If not merging
  * then just output dna for features directly. */
 struct dyString *query = newDyString(512);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char chromField[32], startField[32], endField[32];
@@ -126,18 +126,18 @@ char nibFileName[512];
 FILE *nibFile = NULL;
 int nibSize;
 
-if (!hFindChromStartEndFields(table, chromField, startField, endField))
+if (!hFindChromStartEndFields(database, table, chromField, startField, endField))
     errAbort("Couldn't find chrom/start/end fields in table %s", table);
 
 if (merge >= 0)
     {
-    seq = hLoadChrom(chrom);
+    seq = hLoadChrom(database, chrom);
     dna = seq->dna;
     size = seq->size;
     }
 else
     {
-    hNibForChrom(chrom, nibFileName);
+    hNibForChrom(database, chrom, nibFileName);
     nibOpenVerify(nibFileName, &nibFile, &nibSize);
     }
 
@@ -272,13 +272,13 @@ void getFeatDna(char *table, char *chrom, char *outName)
 {
 char chrTableBuf[256];
 struct slName *chromList = NULL, *chromEl;
-boolean chromSpecificTable = !hTableExists(table);
+boolean chromSpecificTable = !hTableExists(database, table);
 char *chrTable = (chromSpecificTable ? chrTableBuf : table);
 FILE *f = mustOpen(outName, "w");
 boolean toStdout = (sameString(outName, "stdout"));
 
 if (sameWord(chrom, "all"))
-    chromList = hAllChromNames();
+    chromList = hAllChromNamesDb(database);
 else
     chromList = newSlName(chrom);
 
@@ -288,7 +288,7 @@ for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
     if (chromSpecificTable)
         {
 	sprintf(chrTable, "%s_%s", chrom, table);
-	if (!hTableExists(table))
+	if (!hTableExists(database, table))
 	    errAbort("table %s (and %s) don't exist in %s", table, 
 	         chrTable, database);
 	}
@@ -313,7 +313,6 @@ where = cgiOptionalString("where");
 breakUp = cgiBoolean("breakUp");
 merge = cgiUsualInt("merge", merge);
 database = argv[1];
-hSetDb(database);
 getFeatDna(argv[2], argv[3], argv[4]);
 return 0;
 }

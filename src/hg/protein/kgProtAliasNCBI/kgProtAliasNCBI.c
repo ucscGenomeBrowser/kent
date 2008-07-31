@@ -37,8 +37,8 @@ if (argc != 3) usage();
 database  = cloneString(argv[1]);
 ro_db  = cloneString(argv[2]);
 
-conn = hAllocConn();
-conn2= hAllocConn();
+conn = hAllocConn(database);
+conn2= hAllocConn(database);
 o2 = fopen("jj.dat", "w");
 
 sprintf(query2,"select name, proteinID from %s.knownGene;", database);
@@ -51,7 +51,7 @@ while (row2 != NULL)
 
     // get RefSeq protein AC numbers (NP_xxxxx) if they exist
     sprintf(cond_str, "kgID='%s'", kgID);
-    proteinAC = sqlGetField(conn, database, "kgXref", "protAcc", cond_str);
+    proteinAC = sqlGetField(database, "kgXref", "protAcc", cond_str);
     if (proteinAC != NULL)
 	{
 	if (strlen(proteinAC) > 0)

@@ -105,10 +105,10 @@ struct pgCodon
     int regEnd;
     };
 
-struct pgCodon *fetchCodons (struct bed *gene, unsigned chrStart, unsigned chrEnd);
+struct pgCodon *fetchCodons (char *db, struct bed *gene, unsigned chrStart, unsigned chrEnd);
 /* get codon sequence to compute aa changes */
 
-void printSeqCodDisplay (struct pgSnp *item);
+void printSeqCodDisplay (char *db, struct pgSnp *item);
 /* print the display of sequence changes for a coding variant */
 
 #endif /* PGSNP_H */

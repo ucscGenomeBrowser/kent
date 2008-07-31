@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.23 2008/06/14 14:15:29 braney Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.23.8.1 2008/07/31 02:24:30 markd Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -39,30 +39,6 @@ static char historyCreate[] =
   "what varchar(255) not null,"        /* What they did. */
   "modTime timestamp not null,"        /* Modification time. */
   "errata varchar(255) )";            /* Deleted data */
-
-void hgSetDb(char *dbName)
-/* Set the database name. */
-{
-hSetDb(dbName);
-}
-
-char *hgGetDb()
-/* Return the current database name. */
-{
-return hGetDb();
-}
-
-struct sqlConnection *hgAllocConn()
-/* Get free connection if possible. If not allocate a new one. */
-{
-return hAllocConn();
-}
-
-void hgFreeConn(struct sqlConnection **pConn)
-/* Put back connection for reuse. */
-{
-hFreeConn(pConn);
-}
 
 HGID hgIdQuery(struct sqlConnection *conn, char *query)
 /* Return first field of first table as HGID. 0 return ok. */
@@ -150,11 +126,11 @@ sqlUpdate(conn,query->string);
 dyStringFree(&query); 
 }
 
-struct sqlConnection *hgStartUpdate()
+struct sqlConnection *hgStartUpdate(char *db)
 /* Open and connection and get next global id from the history table */
 {
 static boolean initialized = FALSE;
-struct sqlConnection *conn = sqlConnect(hgGetDb());
+struct sqlConnection *conn = sqlConnect(db);
 
 if (!initialized)
     {

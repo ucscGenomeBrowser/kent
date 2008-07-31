@@ -35,9 +35,9 @@ if (argc != 3)  usage();
 kgTempDbName    = argv[1];
 roDbName 	= argv[2];
 
-conn = hAllocConn();
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn = hAllocConn(roDbName);
+conn2= hAllocConn(roDbName);
+conn3= hAllocConn(roDbName);
 
 o1 = fopen("j.dat",  "w");
 o2 = fopen("jj.dat", "w");
@@ -51,7 +51,7 @@ while (row != NULL)
     refAC = row[1];
 	
     sprintf(cond_str, "refseq='%s'", refAC);
-    locusID = sqlGetField(conn3, "entrez", "entrezRefProt", "geneID", cond_str);
+    locusID = sqlGetField("entrez", "entrezRefProt", "geneID", cond_str);
     if (locusID != NULL)
 	{
         sprintf(query3, "select * from %s.keggList where locusID = '%s'", kgTempDbName, locusID);

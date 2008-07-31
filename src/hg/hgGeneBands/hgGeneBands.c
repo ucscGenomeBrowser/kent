@@ -5,7 +5,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgGeneBands.c,v 1.4 2005/09/30 19:44:23 heather Exp $";
+static char const rcsid[] = "$Id: hgGeneBands.c,v 1.4.142.1 2008/07/31 02:24:04 markd Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -24,7 +24,7 @@ errAbort(
 char *getAltName(char *name)
 /* query refLink */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[512];
 struct sqlResult *sr;
 char **row;
@@ -46,7 +46,7 @@ return altName;
 struct genePred *readGenes(char *chrom)
 /* Slurp in the genes for one chrom */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct genePred *list=NULL, *el;
 char query[512];
 struct sqlResult *sr;

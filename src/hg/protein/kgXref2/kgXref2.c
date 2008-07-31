@@ -50,9 +50,9 @@ int main(int argc, char *argv[])
     safef(spDb, sizeof(spDb), "sp%s",  protDbDate);
     safef(proteinsDb, sizeof(proteinsDb), "proteins%s", protDbDate);
 
-    conn = hAllocConn();
-    conn2= hAllocConn();
-    conn3= hAllocConn();
+    conn = hAllocConn(ro_DB);
+    conn2= hAllocConn(ro_DB);
+    conn3= hAllocConn(ro_DB);
 
     o1 = mustOpen("j.dat", "w");
 
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 	protAcc		= strdup("");
 
         sprintf(cond_str, "displayID='%s'", kgProteinID);
-        spID = sqlGetField(conn, proteinsDb, "spXref3", "accession", cond_str);
+        spID = sqlGetField(proteinsDb, "spXref3", "accession", cond_str);
     
         /* process variant splice proteins */
 	if (spID == NULL)
@@ -80,11 +80,11 @@ int main(int argc, char *argv[])
             sprintf(cond_str, "varAcc='%s'", kgProteinID);
 	    spID = kgProteinID;
 	    
-            parSpID = sqlGetField(conn, proteinsDb, "splicProt", "parAcc", cond_str);
+            parSpID = sqlGetField(proteinsDb, "splicProt", "parAcc", cond_str);
 	    if (parSpID != NULL)
 	    	{
         	sprintf(cond_str, "accession='%s'", parSpID);
-        	protDisplayId = sqlGetField(conn, proteinsDb, "spXref3", "displayID", cond_str);
+        	protDisplayId = sqlGetField(proteinsDb, "spXref3", "displayID", cond_str);
 		}
 	    else
 	    	{
@@ -98,23 +98,23 @@ int main(int argc, char *argv[])
 	    }
 	/* use description for the protein as default, replace it with HUGO desc if available. */
 	sprintf(cond_str, "displayID='%s'", protDisplayId);
-        desc  = sqlGetField(conn, proteinsDb, "spXref3", "description", cond_str);
+        desc  = sqlGetField(proteinsDb, "spXref3", "description", cond_str);
         
         if (strstr(kgID, "NM_") != NULL)
             {
 	    leg = 1;
             /* special processing for RefSeq DNA based genes */
             sprintf(cond_str, "mrnaAcc = '%s'", kgID);
-            refSeqName = sqlGetField(conn3, ro_DB, "refLink", "name", cond_str);
+            refSeqName = sqlGetField(ro_DB, "refLink", "name", cond_str);
             if (refSeqName != NULL)
                 {
                 geneSymbol = cloneString(refSeqName);
 		refseqID   = kgID;
             	sprintf(cond_str, "mrnaAcc = '%s'", kgID);
-            	desc = sqlGetField(conn3, ro_DB, "refLink", "product", cond_str);
+            	desc = sqlGetField(ro_DB, "refLink", "product", cond_str);
 		
 		sprintf(cond_str, "mrnaAcc='%s'", refseqID);
-        	answer = sqlGetField(conn3, ro_DB, "refLink", "protAcc", cond_str);
+        	answer = sqlGetField(ro_DB, "refLink", "protAcc", cond_str);
         	if (answer != NULL)
             	    {
 	    	    protAcc = strdup(answer);
@@ -124,14 +124,14 @@ int main(int argc, char *argv[])
         else
             {
             sprintf(cond_str, "displayID = '%s'", protDisplayId);
-            hugoID = sqlGetField(conn, proteinsDb, "spXref3", "hugoSymbol", cond_str);
+            hugoID = sqlGetField(proteinsDb, "spXref3", "hugoSymbol", cond_str);
             if (!((hugoID == NULL) || (*hugoID == '\0')) )
                 {
 		leg = 21;
                 geneSymbol = cloneString(hugoID);
 
             	sprintf(cond_str, "displayID = '%s'", protDisplayId);
-            	desc = sqlGetField(conn, proteinsDb, "spXref3", "hugoDesc", cond_str);
+            	desc = sqlGetField(proteinsDb, "spXref3", "hugoDesc", cond_str);
 		if (desc == NULL) 
 		    {
 		    printf("%s/%s don't have hugo desc ...\n", kgProteinID, protDisplayId);
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 	    refseqID = emptyStr;
 	    protAcc  = emptyStr;
             sprintf(cond_str, "mrna = '%s'", kgID);
-            answer = sqlGetField(conn, ro_DB, "mrnaRefseq", "refseq", cond_str);
+            answer = sqlGetField(ro_DB, "mrnaRefseq", "refseq", cond_str);
 	    if (answer != NULL) 
 	    	{
 		refseqID = answer;
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
 		if (strlen(refseqID) != 0)
 			{
 			sprintf(cond_str, "mrnaAcc = '%s'", refseqID);
-			answer = sqlGetField(conn3, ro_DB, "refLink", "name", cond_str);
+			answer = sqlGetField(ro_DB, "refLink", "name", cond_str);
 			if (answer != NULL) 
 				{
 				leg = 24;

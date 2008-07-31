@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgDeleteChrom.c,v 1.1 2004/02/09 22:37:47 angie Exp $";
+static char const rcsid[] = "$Id: hgDeleteChrom.c,v 1.1.278.1 2008/07/31 02:24:35 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,13 +29,13 @@ static struct optionSpec options[] = {
 void hgDeleteChrom(char *db, int chromCount, char *chromNames[])
 /* hgDeleteChrom - output SQL commands to delete chrom(s) from db. */
 {
-struct sqlConnection *conn = hAllocOrConnect(db);
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int i;
 for (i=0;  i < chromCount;  i++)
     {
-    char *chrom = hgOfficialChromName(chromNames[i]);
+    char *chrom = hgOfficialChromName(db, chromNames[i]);
     if (chrom == NULL)
 	errAbort("Error: \"%s\" is not a chromosome in %s.",
 		 chromNames[i], db);
@@ -68,7 +68,7 @@ for (i=0;  i < chromCount;  i++)
 	}
     sqlFreeResult(&sr);
     }
-hFreeOrDisconnect(&conn);
+hFreeConn(&conn);
 }
 
 int main(int argc, char *argv[])
@@ -77,7 +77,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc < 3)
     usage();
-hSetDb(argv[1]);
 hgDeleteChrom(argv[1], argc-2, argv+2);
 return 0;
 }

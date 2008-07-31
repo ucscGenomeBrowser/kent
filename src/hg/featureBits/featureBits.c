@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.52 2008/06/29 16:02:24 markd Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.52.6.1 2008/07/31 02:23:59 markd Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -424,7 +424,7 @@ else
     errAbort("can't determine file type of: %s", track);
 }
 
-void orTable(Bits *acc, char *track, char *chrom, 
+void orTable(char *database, Bits *acc, char *track, char *chrom, 
 	int chromSize, struct sqlConnection *conn)
 /* Or in table if it exists.  Else do nothing. */
 {
@@ -439,22 +439,21 @@ if (s != NULL)
     }
 else
     {
-    char *db=hGetDb();
     boolean hasBin;
     int minFeatureSize = optionInt("minFeatureSize", 0);
-    boolean isSplit = hFindSplitTable(chrom, t, table, &hasBin);
-    boolean isFound = hTableExistsDb(db, table);
-    verbose(3,"orTable: db: %s isFound: %s isSplit: %s %s %s %s\n", db,
+    boolean isSplit = hFindSplitTable(database, chrom, t, table, &hasBin);
+    boolean isFound = hTableExists(database, table);
+    verbose(3,"orTable: db: %s isFound: %s isSplit: %s %s %s %s\n", database,
 	isFound ? "TRUE" : "FALSE",
 	    isSplit ? "TRUE" : "FALSE", chrom, t, table );
     if (isFound)
-	fbOrTableBitsQueryMinSize(acc, track, chrom, chromSize, conn, where,
+	fbOrTableBitsQueryMinSize(database, acc, track, chrom, chromSize, conn, where,
 		   TRUE, TRUE, minFeatureSize);
     }
 }
 
 
-void chromFeatureBits(struct sqlConnection *conn,
+void chromFeatureBits(struct sqlConnection *conn,char *database, 
 	char *chrom, int tableCount, char *tables[],
 	FILE *bedFile, FILE *faFile, FILE *binFile,
         struct bed *bedRegionList, FILE *bedOutFile,
@@ -481,7 +480,7 @@ for (i=0; i<tableCount; ++i)
 	}
     if (i == 0)
         {
-	orTable(acc, table, chrom, chromSize, conn);
+	orTable(database, acc, table, chrom, chromSize, conn);
 	if (not)
 	   bitNot(acc, chromSize);
 	if (retFirstTableBits != NULL)
@@ -490,7 +489,7 @@ for (i=0; i<tableCount; ++i)
     else
 	{
 	bitClear(bits, chromSize);
-	orTable(bits, table, chrom, chromSize, conn);
+	orTable(database, bits, table, chrom, chromSize, conn);
 	if (not)
 	   bitNot(bits, chromSize);
 	if (i == 1 && retSecondTableBits != NULL)
@@ -508,7 +507,7 @@ if (notResults)
 if (bedFile != NULL || faFile != NULL)
     {
     minSize = optionInt("minSize", minSize);
-    bitsToBed(acc, chrom, chromSize, bedFile, faFile, minSize);
+    bitsToBed(database, acc, chrom, chromSize, bedFile, faFile, minSize);
     }
 if (binFile != NULL)
     {
@@ -523,7 +522,7 @@ bitFree(&bits);
 }
 
 void chromFeatureSeq(struct sqlConnection *conn, 
-	char *chrom, char *trackSpec,
+	char *database, char *chrom, char *trackSpec,
 	FILE *bedFile, FILE *faFile,
 	int *retItemCount, int *retBaseCount)
 /* Write out sequence file for features from one chromosome.
@@ -543,8 +542,8 @@ s = strchr(t, '.');
 if (s != NULL)
     errAbort("Sorry, only database (not file) tracks allowed with "
              "fa output unless you use faMerge");
-isSplit = hFindSplitTable(chrom, t, table, &hasBin);
-fbList = fbGetRangeQuery(trackSpec, chrom, 0, hChromSize(chrom),
+isSplit = hFindSplitTable(database, chrom, t, table, &hasBin);
+fbList = fbGetRangeQuery(database, trackSpec, chrom, 0, hChromSize(database, chrom),
 			 where, TRUE, TRUE);
 for (fb = fbList; fb != NULL; fb = fb->next)
     {
@@ -559,7 +558,7 @@ for (fb = fbList; fb != NULL; fb = fb->next)
 	}
     if (faFile != NULL)
         {
-	struct dnaSeq *seq = hDnaFromSeq(chrom, s, e, dnaLower);
+	struct dnaSeq *seq = hDnaFromSeq(database, chrom, s, e, dnaLower);
 	if (fb->strand == '-')
 	    reverseComplement(seq->dna, seq->size);
 	faWriteNext(faFile, fb->name, seq->dna, seq->size);
@@ -584,7 +583,7 @@ int gapCount = 0;
 ret = newHash(0);
 
 /*	If not split, read in whole gulp, create per-chrom hash of sizes */
-if (hTableExistsDb(db, "gap"))
+if (hTableExists(db, "gap"))
     {
     char *prevChrom = NULL;
     int totalGapsThisChrom = 0;
@@ -691,7 +690,7 @@ else
 return chromSize - totalGaps;
 }
 
-void checkInputExists(struct sqlConnection *conn,
+void checkInputExists(struct sqlConnection *conn,char *database, 
 	struct chromInfo *chromInfoList, int tableCount, char *tables[])
 /* check input tables/files exist, especially to handle split tables */
 {
@@ -740,7 +739,7 @@ for (i=0; i<tableCount; ++i)
 	    else
 		{
 		boolean hasBin;
-		if (hFindSplitTable(cInfo->chrom, t, table, &hasBin))
+		if (hFindSplitTable(database, cInfo->chrom, t, table, &hasBin))
 		    {
 		    found = TRUE;
 		    break;
@@ -776,7 +775,6 @@ struct bed *bedRegionList = NULL;
 boolean faIndependent = FALSE;
 struct chromInfo *cInfo;
 
-hSetDb(database);
 if (bedName)
     bedFile = mustOpen(bedName, "w");
 if (binName)
@@ -801,8 +799,8 @@ if (chromSizes != NULL)
 else
     chromInfoList = createChromInfoList(clChrom, database);
 
-conn = hAllocConn();
-checkInputExists(conn, chromInfoList, tableCount, tables);
+conn = hAllocConn(database);
+checkInputExists(conn, database, chromInfoList, tableCount, tables);
 
 if (!faIndependent)
     {
@@ -841,7 +839,7 @@ if (!faIndependent)
 	    int chromBitSize;
 	    int chromSize = cInfo->size;
 	    verbose(3,"chromFeatureBits(%s)\n", cInfo->chrom);
-	    chromFeatureBits(conn, cInfo->chrom, tableCount, tables,
+	    chromFeatureBits(conn, database, cInfo->chrom, tableCount, tables,
 		bedFile, faFile, binFile, bedRegionList, bedRegionOutFile, 
 		chromSize, &chromBitSize, pFirstTableBits, pSecondTableBits
 		);
@@ -887,7 +885,7 @@ else
         {
 	if (inclChrom(cInfo->chrom))
 	    {
-	    chromFeatureSeq(conn, cInfo->chrom, tables[0],
+	    chromFeatureSeq(conn, database, cInfo->chrom, tables[0],
 		    bedFile, faFile, &itemCount, &baseCount);
 	    totalBases += countBases(conn, cInfo->chrom, baseCount, database);
 	    totalItems += itemCount;

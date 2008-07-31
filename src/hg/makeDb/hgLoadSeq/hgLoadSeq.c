@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.13 2007/09/05 04:30:58 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.13.44.1 2008/07/31 02:24:37 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -153,8 +153,7 @@ FILE *seqTab;
 
 if (!test)
     {
-    hgSetDb(database);
-    conn = hgStartUpdate();
+    conn = hgStartUpdate(database);
     char query[1024];
     safef(query, sizeof(query), seqTableCreate, seqTbl);
     sqlMaybeMakeTable(conn, seqTbl, query);

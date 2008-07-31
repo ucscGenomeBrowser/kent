@@ -37,9 +37,9 @@ char *desc;
 if (argc != 2) usage();
 dbName = argv[1];
 
-conn = hAllocConn();
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn = hAllocConn(dbName);
+conn2= hAllocConn(dbName);
+conn3= hAllocConn(dbName);
 
 o1 = fopen("j.dat",  "w");
 o2 = fopen("jj.dat", "w");
@@ -67,7 +67,7 @@ while (row2 != NULL)
 	if (chp != NULL) *chp = '\0';
     
 	sprintf(cond_str, "name='%s'", gbAC);
-        kgID = sqlGetField(conn3, dbName, "knownGene", "name", cond_str);
+        kgID = sqlGetField(dbName, "knownGene", "name", cond_str);
 	if (kgID != NULL)
 	    {
             sprintf(query3, "select * from %sTemp.keggList where locusID = '%s'", dbName, locusID);

@@ -4,6 +4,12 @@
  * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
  *****************************************************************************/
 /* jksql.c - Stuff to manage interface with SQL database. */
+
+/*
+ * Configuration:
+ */
+
+
 #include "common.h"
 #include "portable.h"
 #include "errabort.h"
@@ -17,7 +23,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: jksql.c,v 1.113 2008/07/08 18:31:26 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.113.6.1 2008/07/31 02:24:31 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -28,6 +34,18 @@ static long sqlTotalQueries = 0;            /* total number of queries */
 static boolean monitorHandlerSet = FALSE;   /* is exit handler installed? */
 static unsigned traceIndent = 0;            /* how much to indent */
 static char * indentStr = "                                                       ";
+
+struct sqlProfile
+/* a configuration profile for connecting to a server */
+{
+    struct sqlProfile *next;
+    char *name;     // name of profile
+    char *host;     // host name for database server
+    char *user;     // database server user name
+    char *password; // database server password
+    struct slName *dbs; // database associated with profile, or NULL if no
+                        // specific database is associated
+    };
 
 struct sqlConnection
 /* This is an item on a list of sql open connections. */
@@ -48,15 +66,206 @@ struct sqlResult
 
 static struct dlList *sqlOpenConnections;
 
-char* getCfgValue(char* envName, char* cfgName)
-/* get a configuration value, from either the environment or the cfg file,
- * with the env take precedence.
- */
+static char *defaultProfileName = "db";           // name of default profile
+static struct hash *profiles = NULL;              // profiles parsed from hg.conf, by name
+static struct sqlProfile *defaultProfile = NULL;  // default profile, also in profiles list
+static struct hash* dbToProfile = NULL;           // db to sqlProfile
+
+static char *getCfgPreVal(char *prefix, char *suffix)
+/* lookup a configuration value for prefix.suffix, or NULL if not found */
+{
+char name[256];
+safef(name, sizeof(name), "%s.%s", prefix, suffix);
+return cfgOption(name);
+}
+
+static char *envOverride(char *envName, char *defaultVal)
+/* look up envName in environment, if it exists and is non-empty, return its
+ * value, otherwise return defaultVal */
 {
 char *val = getenv(envName);
-if (val == NULL || (0 == strlen(val)))
-    val = cfgOption(cfgName);
-return val;
+if (isEmpty(val))
+    return defaultVal;
+else
+    return val;
+}
+
+static struct sqlProfile *sqlProfileNew(char *profileName, char *host, char *user,
+                                        char *password)
+/* create a new profile object */
+{
+struct sqlProfile *sp;
+AllocVar(sp);
+sp->name = cloneString(profileName);
+sp->host = cloneString(host);
+sp->password = cloneString(password);
+return sp;
+}
+
+static void sqlProfileAssocDb(struct sqlProfile *sp, char *db)
+/* associate a db with a profile */
+{
+struct sqlProfile *sp2 = hashFindVal(dbToProfile, db);
+if (sp2 != NULL)
+    errAbort("databases %s already associated with profile %s, trying to associated it with %s",
+             db, sp2->name, sp->name);
+hashAdd(dbToProfile, db, sp);
+slSafeAddHead(&sp->dbs, slNameNew(db));
+}
+
+static void sqlProfileCreate(char *profileName, char *host, char *user,
+                             char *password, char *dbs)
+/* create a profile and add to global data structures */
+{
+struct sqlProfile *sp = sqlProfileNew(profileName, host, user, password);
+hashAdd(profiles, sp->name, sp);
+if (sameString(sp->name, defaultProfileName))
+    defaultProfile = sp;  // save default
+
+// add dbs list if specified
+if (dbs != NULL)
+    {
+    struct slName *db, *dbNames = slNameListFromString(dbs, ',');
+    for (db = dbNames; db != NULL; db = db->next)
+        sqlProfileAssocDb(sp, db->name);
+    slFreeList(&dbNames);
+    }
+}
+
+static void sqlProfileAddProfIf(char *profileName)
+/* check if a config prefix is a profile, and if so, add a
+ * sqlProfile object for it */
+{
+char *host = getCfgPreVal(profileName, "host");
+char *user = getCfgPreVal(profileName, "user");
+char *password = getCfgPreVal(profileName, "password");
+char *dbs = getCfgPreVal(profileName, "db");
+
+if ((host != NULL) && (user != NULL) && (password != NULL))
+    {
+    /* for the default profile, allow environment variable override */
+    if (sameString(profileName, defaultProfileName))
+        {
+        host = envOverride("HGDB_HOST", host);
+        user = envOverride("HGDB_USER", user);
+        password = envOverride("HGDB_PASSWORD", password);
+        }
+    sqlProfileCreate(profileName, host, user, password, dbs);
+    }
+}
+
+static void sqlProfileAddProfs(struct slName *cnames)
+/* load the profiles from list of config names */
+{
+struct slName *cname;
+for (cname = cnames; cname != NULL; cname = cname->next)
+    {
+    char *dot1 = strchr(cname->name, '.'); // first dot in name
+    if ((dot1 != NULL) && sameString(dot1, ".host"))
+        {
+        *dot1 = '\0';
+        sqlProfileAddProfIf(cname->name);
+        *dot1 = '.';
+        }
+    }
+}
+
+static void sqlProfileAddDb(char *db, char *profileName)
+/* add a mapping of db to profile */
+{
+struct sqlProfile *sp = hashFindVal(profiles, profileName);
+if (sp == NULL)
+    errAbort("can't find profile %s for database %s in hg.conf", profileName, db);
+hashAdd(dbToProfile, db, sp);
+}
+
+static void sqlProfileAddDbs(struct slName *cnames)
+/* add mappings of db to profile from ${db}.${profile} entries */
+{
+struct slName *cname;
+for (cname = cnames; cname != NULL; cname = cname->next)
+    {
+    char *dot1 = strchr(cname->name, '.'); // first dot in name
+    if ((dot1 != NULL) && sameString(dot1, ".profile"))
+        {
+        char *profileName = cfgVal(cname->name);
+        *dot1 = '\0';
+        sqlProfileAddDb(cname->name,  profileName);
+        *dot1 = '.';
+        }
+    }
+}
+
+
+static void sqlProfileLoad()
+/* load the profiles from config */
+{
+profiles = hashNew(8);
+dbToProfile = hashNew(12);
+struct slName *cnames = cfgNames();
+sqlProfileAddProfs(cnames);
+sqlProfileAddDbs(cnames);
+slFreeList(&cnames);
+}
+
+static struct sqlProfile* sqlProfileFindByName(char *profileName, char *database)
+/* find a profile by name, checking that database matches if found */
+{
+struct sqlProfile* sp = hashFindVal(profiles, profileName);
+if (sp == NULL)
+    return NULL;
+if ((database != NULL) && (sp->dbs != NULL) && !slNameInList(sp->dbs, database))
+    errAbort("attempt to obtain SQL profile %s for database %s, "
+             "which is not associate with this database-specific profile",
+             profileName, database);
+return sp;
+}
+
+static struct sqlProfile* sqlProfileFindByDatabase(char *database)
+/* find a profile using database as profile name, return the default if not
+ * found */
+{
+return hashFindVal(dbToProfile, database);
+}
+
+struct sqlProfile* sqlProfileGet(char *profileName, char *database)
+/* lookup a profile using the profile resolution algorithm:
+ *  - If a profile is specified:
+ *     - search hg.conf for the profile, if found:
+ *       - if database is specified, then either
+ *           - the profile should not specify a database
+ *           - the database must match the database in the profile
+ *  - If a profile is not specified:
+ *     - search hg.conf for a profile with the same name as the database
+ *     - if there is no profile named the same as the database, use
+ *       the default profile of "db"
+ * return NULL if not found.
+ */
+{
+assert((profileName != NULL) || (database != NULL));
+if (profiles == NULL)
+    sqlProfileLoad();
+if (profileName != NULL)
+    return sqlProfileFindByName(profileName, database);
+else
+    return sqlProfileFindByDatabase(database);
+}
+
+struct sqlProfile* sqlProfileMustGet(char *profileName, char *database)
+/* lookup a profile using the profile resolution algorithm or die trying */
+{
+struct sqlProfile* sp = sqlProfileGet(profileName, database);
+if (sp == NULL)
+    {
+    if (profileName == NULL)
+        errAbort("can't find database %s in hg.conf, should have a default named \"db\"",
+                 database);
+    else if (database == NULL)
+        errAbort("can't find profile %s in hg.conf", profileName);
+    else
+        errAbort("can't find profile %s for database %s in hg.conf", profileName, database);
+    }
+return sp;
 }
 
 static void monitorInit()
@@ -423,6 +632,14 @@ if (mysql_real_connect(
 	    database, host, user, getpid(), mysql_error(conn), getpid());
     return NULL;
     }
+#if 1
+/* make sure the db is correct in the connect, think usually happens if there is 
+ * a mismatch between MySQL library and code. */
+if (((conn->db != NULL) && !sameString(database, conn->db))
+   || ((conn->db == NULL) && (database != NULL)))
+   errAbort("apparent mismatch between mysql.h used to compile jksql.c and libmysqlclient");
+#else
+// FIXME: delete this if above works
 #ifdef GBROWSE
     /* Apparently, when this code runs inside of a perl extension (perl
      * also happens to be using mysql), conn->db gets garbage.
@@ -430,6 +647,7 @@ if (mysql_real_connect(
     if (!conn->db || !sameString(database, conn->db))
 	conn->db = cloneString(database);
 #endif /* GBROWSE */
+#endif
 if (monitorFlags & JKSQL_TRACE)
     monitorPrint(sc, "SQL_CONNECT", "%s %s", host, user);
 
@@ -471,9 +689,9 @@ struct sqlConnection *sqlConn(char *database, boolean abort)
 /* Connect to database on default host as default user. 
  * Optionally abort on failure. */
 {
-char* host = getCfgValue("HGDB_HOST", "db.host");
-char* user = getCfgValue("HGDB_USER", "db.user");
-char* password = getCfgValue("HGDB_PASSWORD", "db.password");
+char* host = cfgOptionEnv("HGDB_HOST", "db.host");
+char* user = cfgOptionEnv("HGDB_USER", "db.user");
+char* password = cfgOptionEnv("HGDB_PASSWORD", "db.password");
 
 if(host == 0 || user == 0 || password == 0)
     sqlConnectReadOnly(database);
@@ -499,7 +717,7 @@ static char *getProfileCfgValue(char *profile, char *envVarSuffix, char *varSuff
 char envVar[256], var[256];
 safef(envVar, sizeof(envVar), "HGDB_%s_%s", profile, envVarSuffix);
 safef(var, sizeof(var), "%s.%s", profile, varSuffix);
-char *val = getCfgValue(envVar, var);
+char *val = cfgOptionEnv(envVar, var);
 if (val == NULL)
     errAbort("can't get configuration variable %s or environment variable %s",
              var, envVar);
@@ -508,9 +726,10 @@ return val;
 
 struct sqlConnection *sqlConnectProfile(char *profile, char *database)
 /* Connect to database using the specified profile.  The profile is the prefix
- * to the host, user, and password variables in .hg.conf.  The environment
- * variables HGDB_${profile}_HOST, HGDB_${profile}_USER,
- * HGDB_${profile}_PASSWORD can override.  */ 
+ * to the host, user, and password variables in .hg.conf.  For the default
+ * profile of "db", the environment variables HGDB_HOST, HGDB_USER, and
+ * HGDB_PASSWORD can override.
+ */ 
 {
 return sqlConnectRemote(getProfileCfgValue(profile, "HOST", "host"),
                         getProfileCfgValue(profile, "USER", "user"),
@@ -1387,9 +1606,9 @@ return cache;
 struct sqlConnCache *sqlNewConnCache(char *database)
 /* Return a new connection cache. */
 {
-char* host = getCfgValue("HGDB_HOST", "db.host");
-char* user = getCfgValue("HGDB_USER", "db.user");
-char* password = getCfgValue("HGDB_PASSWORD", "db.password");
+char* host = cfgOptionEnv("HGDB_HOST", "db.host");
+char* user = cfgOptionEnv("HGDB_USER", "db.user");
+char* password = cfgOptionEnv("HGDB_PASSWORD", "db.password");
 if (password == NULL || user == NULL || host == NULL)
     errAbort("Could not read hostname, user, or password to the database from configuration file.");
 return sqlNewRemoteConnCache(database, host, user, password);

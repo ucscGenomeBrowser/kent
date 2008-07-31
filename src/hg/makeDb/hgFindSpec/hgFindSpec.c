@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: hgFindSpec.c,v 1.7 2008/03/01 00:23:25 jzhu Exp $";
+static char const rcsid[] = "$Id: hgFindSpec.c,v 1.7.24.1 2008/07/31 02:24:35 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,20 +49,20 @@ void addVersion(boolean strict, char *database, char *dirName, char *raName,
 struct hgFindSpec *hfsList = NULL, *hfs = NULL;
 struct hgFindSpec *hfsNext = NULL;
 
-hfsList = hgFindSpecFromRa(raName);
+hfsList = hgFindSpecFromRa(database, raName);
 if (strict) 
     {
     for (hfs = hfsList; hfs != NULL; hfs = hfsNext)
         {
 	hfsNext = hfs->next;
-        if (! hTableOrSplitExists(hfs->searchTable))
+        if (! hTableOrSplitExists(database, hfs->searchTable))
             {
 	    if (verboseLevel() > 1)
 		printf("%s missing\n", hfs->searchTable);
             slRemoveEl(&hfsList, hfs);
             }
 	else if (hfs->xrefTable[0] != 0 &&
-	    ! hTableOrSplitExists(hfs->xrefTable))
+                 ! hTableOrSplitExists(database, hfs->xrefTable))
 	    {
 	    if (verboseLevel() > 1)
 		printf("%s (xref) missing\n", hfs->xrefTable);
@@ -198,7 +198,6 @@ snprintf(tab, sizeof(tab), "%s.tab", hgFindSpecName);
 sprintf(rootDir, "%s", hgRoot);
 sprintf(orgDir, "%s/%s", hgRoot, org);
 sprintf(asmDir, "%s/%s/%s", hgRoot, org, database);
-hSetDb(database);
 layerOn(strict, database, asmDir, uniqHash, htmlHash, FALSE, &hfsList);
 layerOn(strict, database, orgDir, uniqHash, htmlHash, FALSE, &hfsList);
 layerOn(strict, database, rootDir, uniqHash, htmlHash, TRUE, &hfsList);

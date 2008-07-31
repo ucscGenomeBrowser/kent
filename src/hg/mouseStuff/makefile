@@ -2,14 +2,6 @@
 
 include ../../inc/common.mk
 
-all:
-	@for D in ${USE_DIRS} x; do \
-	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && ${MAKE} ) ;\
-	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-	    fi ;\
-	    done
-
 # List of directories to build
 USE_DIRS = ${DIRS}
 
@@ -60,7 +52,6 @@ DIRS = \
 	mafFetch \
 	mafRanges \
 	mafToAxt \
-	mmUnmix \
 	mousePoster \
 	netChainSubset \
 	netClass \
@@ -82,7 +73,9 @@ DIRS = \
 	subsetTraces \
 	whyConserved 
 
-clean::
-	@for D in ${DIRS}; do \
-		(cd $${D} && ${MAKE} clean;) \
-	done
+all: ${USE_DIRS:%=%.all}
+%.all:
+	( cd $* && echo $* && ${MAKE} )
+
+clean:: ${USE_DIRS:%=%.all}
+	(cd $* && ${MAKE} clean)

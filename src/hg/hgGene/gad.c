@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: gad.c,v 1.7 2008/03/05 01:15:39 fanhsu Exp $";
+static char const rcsid[] = "$Id: gad.c,v 1.7.22.1 2008/07/31 02:24:03 markd Exp $";
 
 static boolean gadExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -23,7 +23,7 @@ if (sqlTableExists(conn, "gadAll") == TRUE)
     {
     safef(condStr, sizeof(condStr), 
     "k.kgId='%s' and k.geneSymbol = g.geneSymbol", geneId);
-    geneSymbol = sqlGetField(conn, database, "kgXref k, gadAll g", "k.geneSymbol", condStr);
+    geneSymbol = sqlGetField(database, "kgXref k, gadAll g", "k.geneSymbol", condStr);
     if (geneSymbol != NULL) return(TRUE);
     }
 return(FALSE);
@@ -51,7 +51,7 @@ if (url != NULL && url[0] != 0)
     {
     safef(condStr, sizeof(condStr), 
     "k.kgId='%s' and k.geneSymbol = g.geneSymbol", geneId);
-    itemName = sqlGetField(conn, database, "kgXref k, gadAll g", "k.geneSymbol", condStr);
+    itemName = sqlGetField(database, "kgXref k, gadAll g", "k.geneSymbol", condStr);
     showCompleteGadList = FALSE;
     if (cgiOptionalString("showAllRef") != NULL)
     	{

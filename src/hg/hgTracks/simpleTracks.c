@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.24 2008/07/28 20:47:06 giardine Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.24.2.1 2008/07/31 02:24:16 markd Exp $";
 
 #define CHROM_COLORS 26
 
@@ -1166,7 +1166,7 @@ int cnt = 0;
 struct gvAttr *attr = NULL;
 char query[256];
 char *escId = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
 if (el->id != NULL)
     escId = sqlEscapeString(el->id);
@@ -1202,7 +1202,7 @@ void lookupGvName(struct track *tg)
 /* give option on which name to display */
 {
 struct gvPos *el;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 boolean useHgvs = FALSE;
 boolean useId = FALSE;
 boolean useCommon = FALSE;
@@ -1272,8 +1272,8 @@ void loadGV(struct track *tg)
 /* Load human mutation with filter */
 {
 struct gvPos *list = NULL;
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
 struct sqlResult *sr;
 struct gvSrc *srcList = NULL;
 char **row;
@@ -1372,7 +1372,7 @@ boolean oregannoFilterType (struct oreganno *el)
 int cnt = 0;
 struct oregannoAttr *attr = NULL;
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
 safef(query, sizeof(query), "select * from oregannoAttr where id = '%s' and attribute = 'type'", el->id);
 attr = oregannoAttrLoadByQuery(conn, query);
@@ -1403,7 +1403,7 @@ void loadOreganno (struct track *tg)
 /* loads the oreganno track */
 {
 struct oreganno *list = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -1604,7 +1604,7 @@ for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
         items = loadOregannoAsBed(tg, chromName, start, end);
     else
 #endif /* GBROWSE */
-	items = hGetBedRange(tg->mapName, chromName, start, end, NULL);
+	items = hGetBedRange(database, tg->mapName, chromName, start, end, NULL);
     /* If we got something, or weren't able to search as big as we wanted to */
     /* (in case we're at the end of the chrom).  */
     if ((items != NULL) || (size < sizeWanted))
@@ -1714,7 +1714,7 @@ void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the the thing loaded in (1). */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
@@ -3195,7 +3195,7 @@ return lfFromBedExtra(bed, 0, 1000);
 struct linkedFeaturesSeries *lfsFromBed(struct lfs *lfsbed)
 /* Create linked feature series object from database bed record */ 
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row, rest[32];
 int rowOffset, i;
@@ -3234,7 +3234,7 @@ return lfs;
 struct linkedFeaturesSeries *lfsFromBedsInRange(char *table, int start, int end, char *chromName)
 /* Return linked features from range of table. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
@@ -3290,7 +3290,7 @@ else
 static void loadDbRIP(struct track *tg)
 /*	retroposons tracks load methods	*/
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -3679,7 +3679,7 @@ struct linkedFeatures *lfFromGenePredInRange(struct track *tg, char *table,
 /* Return linked features from range of a gene prediction table. */
 {
 struct linkedFeatures *lfList = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 lfList = connectedLfFromGenePredInRange(tg, conn, table, chrom, start, end);
 hFreeConn(&conn);
 return lfList;
@@ -3737,7 +3737,7 @@ boolean sameClass = TRUE;
 classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
 
 AllocVar(classString);
-if (classTable != NULL && hTableExists(classTable))
+if (classTable != NULL && hTableExists(database, classTable))
     {
     classString = addSuffix(table, ".type");
     if (sameString(table, "acembly"))
@@ -3749,7 +3749,7 @@ if (classTable != NULL && hTableExists(classTable))
         }
     else if (classType == NULL)
         return TRUE;
-    conn = hAllocConn();
+    conn = hAllocConn(database);
     safef(query, sizeof(query),
          "select class from %s where name = \"%s\"", classTable, lf->name);
     sr = sqlGetResult(conn, query);
@@ -3770,7 +3770,7 @@ void loadGenePredWithName2(struct track *tg)
 /* Convert gene pred in window to linked feature. Include alternate name
  * in "extra" field (usually gene name)*/
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->mapName,
                                         chromName, winStart, winEnd, TRUE);
 hFreeConn(&conn);
@@ -3783,9 +3783,9 @@ void lookupKnownNames(struct linkedFeatures *lfList)
 {
 struct linkedFeatures *lf;
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
-if (hTableExists("knownMore"))
+if (hTableExists(database, "knownMore"))
     {
     struct knownMore *km;
     struct sqlResult *sr;
@@ -3807,7 +3807,7 @@ if (hTableExists("knownMore"))
 	sqlFreeResult(&sr);
 	}
     }
-else if (hTableExists("knownInfo"))
+else if (hTableExists(database, "knownInfo"))
     {
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
@@ -3878,7 +3878,7 @@ void lookupHg17KgNames(struct linkedFeatures *lfList)
 /* This converts the known gene ID to a gene symbol */
 {
 struct linkedFeatures *lf;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *geneSymbol;
 char *protDisplayId;
 char *mimId;
@@ -3899,7 +3899,7 @@ boolean useMimId = sameString(hg17KgLabel, "OMIM ID")
 
 boolean useAll = sameString(hg17KgLabel, "all");
 	
-if (hTableExists("kgXref"))
+if (hTableExists(database, "kgXref"))
     {
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
@@ -3907,7 +3907,7 @@ if (hTableExists("kgXref"))
     	if (useGeneSymbol)
             {
             sprintf(cond_str, "kgID='%s'", lf->name);
-            geneSymbol = sqlGetField(conn, "hg17", "kgXref", "geneSymbol", cond_str);
+            geneSymbol = sqlGetField("hg17", "kgXref", "geneSymbol", cond_str);
             if (geneSymbol != NULL)
             	{
             	dyStringAppend(name, geneSymbol);
@@ -3922,10 +3922,10 @@ if (hTableExists("kgXref"))
     	if (useProtDisplayId)
             {
 	    safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
-            protDisplayId = sqlGetField(conn, "hg17", "kgXref", "spDisplayID", cond_str);
+            protDisplayId = sqlGetField("hg17", "kgXref", "spDisplayID", cond_str);
             dyStringAppend(name, protDisplayId);
 	    }
-        if (useMimId && hTableExists("refLink"))
+        if (useMimId && hTableExists(database, "refLink"))
             {
             safef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
             mimId = sqlQuickString(conn, cond_str);
@@ -3986,7 +3986,7 @@ void lookupKnownGeneNames(struct linkedFeatures *lfList)
 /* This converts the known gene ID to a gene symbol */
 {
 struct linkedFeatures *lf;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *geneSymbol;
 char *protDisplayId;
 char *mimId;
@@ -4001,7 +4001,7 @@ struct hashEl *knownGeneLabels = cartFindPrefix(cart, "knownGene.label");
 struct hashEl *label;
 boolean labelStarted = FALSE;
 	
-if (hTableExists("kgXref"))
+if (hTableExists(database, "kgXref"))
     {
     char omimLabel[48];
     safef(omimLabel, sizeof(omimLabel), "omim%s", cartString(cart, "db"));
@@ -4042,7 +4042,7 @@ if (hTableExists("kgXref"))
     	if (useGeneSymbol)
             {
             sprintf(cond_str, "kgID='%s'", lf->name);
-            geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
+            geneSymbol = sqlGetField(database, "kgXref", "geneSymbol", cond_str);
             if (geneSymbol != NULL)
             	{
             	dyStringAppend(name, geneSymbol);
@@ -4066,11 +4066,11 @@ if (hTableExists("kgXref"))
             else 
                 {
 	        safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
-                protDisplayId = sqlGetField(conn, database, "kgXref", "spDisplayID", cond_str);
+                protDisplayId = sqlGetField(database, "kgXref", "spDisplayID", cond_str);
                 dyStringAppend(name, protDisplayId);
                 }
 	    }
-        if (useMimId && hTableExists("refLink")) 
+        if (useMimId && hTableExists(database, "refLink")) 
             {
             if (labelStarted) dyStringAppendC(name, '/');
             else labelStarted = TRUE;
@@ -4131,10 +4131,10 @@ if (!showNoncoding)
 if (!showSpliceVariants)
     {
     char *canonicalTable = trackDbSettingOrDefault(tdb, "canonicalTable", "knownCanonical");
-    if (hTableExists(canonicalTable))
+    if (hTableExists(database, canonicalTable))
         {
 	/* Create hash of items in canonical table in region. */
-	struct sqlConnection *conn = hAllocConn();
+	struct sqlConnection *conn = hAllocConn(database);
 	struct hash *hash = hashNew(0);
 	char query[512];
 	safef(query, sizeof(query), 
@@ -4165,7 +4165,7 @@ int col = tg->ixColor;
 struct rgbColor *normal = &(tg->color);
 struct rgbColor lighter;
 struct rgbColor lightest;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -4197,10 +4197,10 @@ col = hvGfxFindColorIx(hvg, lightest.r, lightest.g, lightest.b);
 
 /* set color first according to RefSeq status (if there is a corresponding RefSeq) */
 sprintf(cond_str, "name='%s' ", lf->name);
-refAcc = sqlGetField(conn, database, "refGene", "name", cond_str);
+refAcc = sqlGetField(database, "refGene", "name", cond_str);
 if (refAcc != NULL)
     {
-    if (hTableExists("refSeqStatus"))
+    if (hTableExists(database, "refSeqStatus"))
     	{
     	sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'", refAcc);
     	sr = sqlGetResult(conn, query);
@@ -4222,11 +4222,11 @@ if (refAcc != NULL)
     
 /* set to dark blue if there is a corresponding Swiss-Prot protein */
 sprintf(cond_str, "name='%s'", (char *)(lf->name));
-proteinID= sqlGetField(conn, database, "knownGene", "proteinID", cond_str);
+proteinID= sqlGetField(database, "knownGene", "proteinID", cond_str);
 if (proteinID != NULL && protDbName != NULL)
     {
     sprintf(cond_str, "displayID='%s' AND biodatabaseID=1 ", proteinID);
-    ans= sqlGetField(conn, protDbName, "spXref2", "displayID", cond_str);
+    ans= sqlGetField(protDbName, "spXref2", "displayID", cond_str);
     if (ans != NULL) 
     	{
     	col = tg->ixColor;
@@ -4237,7 +4237,7 @@ if (proteinID != NULL && protDbName != NULL)
 if (protDbName != NULL)
     {
     sprintf(cond_str, "sp='%s'", proteinID);
-    pdbID= sqlGetField(conn, protDbName, "pdbSP", "pdb", cond_str);
+    pdbID= sqlGetField(protDbName, "pdbSP", "pdb", cond_str);
     }
 
 if (pdbID != NULL) 
@@ -4254,11 +4254,11 @@ Color knownGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color for a known gene item - looking it up in table in
  * newer versions, and calculating it on fly in later versions. */
 {
-if (hTableExists("kgColor"))
+if (hTableExists(database, "kgColor"))
     {
     struct linkedFeatures *lf = item;
     int colIx = MG_BLUE;
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     char query[512];
     safef(query, sizeof(query), "select r,g,b from kgColor where kgID='%s'", 
     	lf->name);
@@ -4289,39 +4289,38 @@ char *superfamilyName(struct track *tg, void *item)
 {
 char *name;
 char *proteinName;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char conditionStr[256];
 
 struct bed *sw = item;
 
 // This is necessary because Ensembl kept changing their xref table definition
 sprintf(conditionStr, "transcript_name='%s'", sw->name);
-if (hTableExists("ensGeneXref"))
+if (hTableExists(database, "ensGeneXref"))
     {
-    proteinName = sqlGetField(conn, database, "ensGeneXref", "translation_name", conditionStr);
+    proteinName = sqlGetField(database, "ensGeneXref", "translation_name", conditionStr);
     }
-else if (hTableExists("ensemblXref2"))
+else if (hTableExists(database, "ensemblXref2"))
     {
-    proteinName = sqlGetField(conn, database, "ensemblXref2", "translation_name", conditionStr);
+    proteinName = sqlGetField(FALSE, "ensemblXref2", "translation_name", conditionStr);
     }
 else
-    {
-    if (hTableExists("ensemblXref"))
+    {if (hTableExists(database,  "ensemblXref"))
     	{
-    	proteinName = sqlGetField(conn, database, "ensemblXref", "translation_name", conditionStr);
+    	proteinName = sqlGetField(database, "ensemblXref", "translation_name", conditionStr);
     	}
     else
 	{
-	if (hTableExists("ensTranscript"))
+	if (hTableExists(database,  "ensTranscript"))
 	    {
-	    proteinName = sqlGetField(conn,database,"ensTranscript","translation_name",conditionStr);
+	    proteinName = sqlGetField(database,"ensTranscript","translation_name",conditionStr);
 	    }
 	else
 	    {
-	    if (hTableExists("ensemblXref3"))
+	    if (hTableExists(database,  "ensemblXref3"))
     		{
 		sprintf(conditionStr, "transcript='%s'", sw->name);
-    		proteinName = sqlGetField(conn, database, "ensemblXref3", "protein", conditionStr);
+    		proteinName = sqlGetField(database, "ensemblXref3", "protein", conditionStr);
     		}
 	    else
 	    	{
@@ -4346,39 +4345,39 @@ char *superfamilyMapName(struct track *tg, void *item)
 {
 char *name;
 char *proteinName;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char conditionStr[256];
 
 struct bed *sw = item;
 
 // This is necessary because Ensembl kept changing their xref table definition
 sprintf(conditionStr, "transcript_name='%s'", sw->name);
-if (hTableExists("ensGeneXref"))
+if (hTableExists(database,  "ensGeneXref"))
     {
-    proteinName = sqlGetField(conn, database, "ensGeneXref", "translation_name", conditionStr);
+    proteinName = sqlGetField(database, "ensGeneXref", "translation_name", conditionStr);
     }
-else if (hTableExists("ensemblXref2"))
+else if (hTableExists(database,  "ensemblXref2"))
     {
-    proteinName = sqlGetField(conn, database, "ensemblXref2", "translation_name", conditionStr);
+    proteinName = sqlGetField(database, "ensemblXref2", "translation_name", conditionStr);
     }
 else
     {
-    if (hTableExists("ensemblXref"))
+    if (hTableExists(database,  "ensemblXref"))
 	{
-    	proteinName = sqlGetField(conn, database, "ensemblXref", "translation_name", conditionStr);
+    	proteinName = sqlGetField(database, "ensemblXref", "translation_name", conditionStr);
     	}
     else
         {
-        if (hTableExists("ensTranscript"))
+        if (hTableExists(database,  "ensTranscript"))
             {
-            proteinName = sqlGetField(conn,database,"ensTranscript","translation_name",conditionStr);
+            proteinName = sqlGetField(database,"ensTranscript","translation_name",conditionStr);
             }
         else
             {
-	    if (hTableExists("ensemblXref3"))
+	    if (hTableExists(database,  "ensemblXref3"))
     		{
 		sprintf(conditionStr, "transcript='%s'", sw->name);
-    		proteinName = sqlGetField(conn, database, "ensemblXref3", "protein", conditionStr);
+    		proteinName = sqlGetField(database, "ensemblXref3", "protein", conditionStr);
     		}
 	    else
 	    	{
@@ -4413,7 +4412,7 @@ char **row;
 char *chp;
 int i;
 
-conn = hAllocConn();
+conn = hAllocConn(database);
 sprintf(query, 
 	"select description from sfDescription where name='%s';", 
 	sw->name);
@@ -4569,7 +4568,7 @@ char *chp;
 char *diseaseClassCode;
 
 int i=0;
-conn = hAllocConn();
+conn = hAllocConn(database);
 
 sprintf(query, "select distinct diseaseClassCode from gadAll where geneSymbol='%s' and association = 'Y' order by diseaseClassCode", item->name);
 sr = sqlMustGetResult(conn, query);
@@ -4618,7 +4617,7 @@ char **row;
 char *chp;
 int i=0;
 
-conn = hAllocConn();
+conn = hAllocConn(database);
 
 sprintf(query, "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen", item->name);
 sr = sqlMustGetResult(conn, query);
@@ -4752,13 +4751,12 @@ if (color)
     if (tg->drawName && vis != tvSquish)
 	{
 	/* get description from rgdQtlLink table */
-	struct sqlConnection *conn = hAllocConn();
+	struct sqlConnection *conn = hAllocConn(database);
 	char cond_str[256];
 	char linkTable[256];
 	safef(linkTable, sizeof(linkTable), "%sLink", tg->mapName);
 	safef(cond_str, sizeof(cond_str), "name='%s'", tg->itemName(tg, bed));
-        char *s = sqlGetField(conn, database, linkTable, "description",
-			      cond_str);
+        char *s = sqlGetField(database, linkTable, "description", cond_str);
 	hFreeConn(&conn);
 	if (s == NULL)
 	    s = bed->name;
@@ -4854,7 +4852,7 @@ char *getGeneName(struct sqlConnection *conn, char *acc)
 {
 static char nameBuf[256];
 char query[256], *name = NULL;
-if (hTableExists("refLink"))
+if (hTableExists(database,  "refLink"))
     {
     sprintf(query, "select name from refLink where mrnaAcc = '%s'", acc);
     name = sqlQuickQuery(conn, query, nameBuf, sizeof(nameBuf));
@@ -4895,7 +4893,7 @@ void lookupRefNames(struct track *tg)
 /* This converts the refSeq accession to a gene name where possible. */
 {
 struct linkedFeatures *lf;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 boolean isNative = sameString(tg->mapName, "refGene");
 boolean labelStarted = FALSE;
 boolean useGeneName = FALSE; 
@@ -5007,12 +5005,12 @@ if (blastRef != NULL)
     if ((table = strchr(thisDb, '.')) != NULL)
 	{
 	*table++ = 0;
-	if (hTableExistsDb(thisDb, table))
+	if (hTableExists(thisDb, table))
 	    {
 	    char query[256];
 	    struct sqlResult *sr;
 	    char **row;
-	    struct sqlConnection *conn = hAllocConn();
+	    struct sqlConnection *conn = hAllocConn(database);
 	    boolean added = FALSE;
 	    char *ptr;
 		
@@ -5135,12 +5133,12 @@ switch(colorMode)
 	    if ((table = strchr(thisDb, '.')) != NULL)
 		{
 		*table++ = 0;
-		if (hTableExistsDb(thisDb, table))
+		if (hTableExists(thisDb, table))
 		    {
 		    char query[256];
 		    struct sqlResult *sr;
 		    char **row;
-		    struct sqlConnection *conn = hAllocConn();
+		    struct sqlConnection *conn = hAllocConn(database);
 
 		    if ((pos = strchr(acc, '.')) != NULL)
 			*pos = 0;
@@ -5191,7 +5189,7 @@ Color refGeneColorByStatus(struct track *tg, char *name, struct hvGfx *hvg)
 int col = tg->ixColor;
 struct rgbColor *normal = &(tg->color);
 struct rgbColor lighter, lightest;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -5238,7 +5236,7 @@ if (lf->itemAttr != NULL)
  * Predicted, Inferred(other) -> lightest 
  * If no refSeqStatus, color it normally. 
  */
-if (hTableExists("refSeqStatus"))
+if (hTableExists(database,  "refSeqStatus"))
     return refGeneColorByStatus(tg, lf->name, hvg);
 else
     return(tg->ixColor);
@@ -5260,11 +5258,11 @@ char condStr[256];
 char *bioType;
 struct linkedFeatures *lf = item;
 int i = 0;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
 /* Find the biotype for this item */
 sprintf(condStr, "name='%s'", lf->name);
-bioType = sqlGetField(conn, database, "ensGeneNonCoding", "biotype", condStr);
+bioType = sqlGetField(database, "ensGeneNonCoding", "biotype", condStr);
 hFreeConn(&conn);
 
 /* check for this type in the array and use its index to find whether this
@@ -5308,11 +5306,11 @@ Color hColor;
 struct sqlConnection *conn;
 char *name;
 
-conn = hAllocConn();
+conn = hAllocConn(database);
 hColor = hvGfxFindColorIx(hvg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
 name = tg->itemName(tg, item);
 sprintf(condStr, "name='%s'", name);
-bioType = sqlGetField(conn, database, "ensGeneNonCoding", "biotype", condStr);
+bioType = sqlGetField(database, "ensGeneNonCoding", "biotype", condStr);
 
 if (sameWord(bioType, "miRNA"))    color = MG_RED;
 if (sameWord(bioType, "misc_RNA")) color = MG_BLACK;
@@ -5358,7 +5356,7 @@ void orientEsts(struct track *tg)
 /* Orient ESTs from the estOrientInfo table.  */
 {
 struct linkedFeatures *lf = NULL, *lfList = tg->items;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int rowOffset = 0;
@@ -5366,7 +5364,7 @@ struct estOrientInfo ei;
 int estOrient = 0;
 struct hash *orientHash = NULL;
 
-if((lfList != NULL) && hTableExists("estOrientInfo"))
+if((lfList != NULL) && hTableExists(database,  "estOrientInfo"))
     {
     /* First load up a hash with the orientations. That
        way we only query the database once rather than
@@ -5441,7 +5439,7 @@ struct linkedFeatures *lf = item;
 Color col = tg->ixColor;
 struct rgbColor *normal = &(tg->color);
 struct rgbColor lighter, lightest;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -5467,9 +5465,9 @@ boolean fieldExists = FALSE;
  * others e.g. UNCLASSIFIED will be gray.
  */
 
-if (hTableExists("vegaInfo"))
+if (hTableExists(database,  "vegaInfo"))
     dyStringPrintf(dy, "%s", "vegaInfo");
-else if (sameWord(organism, "Zebrafish") && hTableExists("vegaInfoZfish"))
+else if (sameWord(organism, "Zebrafish") && hTableExists(database, "vegaInfoZfish"))
     dyStringPrintf(dy, "%s", "vegaInfoZfish");
 if (dy != NULL)
     infoTable = dyStringCannibalize(&dy);
@@ -5546,9 +5544,9 @@ struct linkedFeatures *lf = item;
 char *name = cloneString(lf->name);
 char infoTable[128];
 safef(infoTable, sizeof(infoTable), "%sInfo", tg->mapName);
-if (hTableExists(infoTable))
+if (hTableExists(database,  infoTable))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     char *symbol = NULL;
     char *ptr = strchr(name, '-');
     char query[256];
@@ -5584,9 +5582,9 @@ char *flyBaseGeneName(struct track *tg, void *item)
 struct linkedFeatures *lf = item;
 char *name = cloneString(lf->name);
 char *infoTable = trackDbSettingOrDefault(tg->tdb, "symbolTable", "");
-if (isNotEmpty(infoTable) && hTableExists(infoTable))
+if (isNotEmpty(infoTable) && hTableExists(database,  infoTable))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     char *symbol = NULL;
     char query[256];
     char buf[64];
@@ -5612,7 +5610,7 @@ tg->itemName = flyBaseGeneName;
 char *sgdGeneName(struct track *tg, void *item)
 /* Return sgdGene symbol. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct linkedFeatures *lf = item;
 char *name = lf->name;
 char *symbol = NULL;
@@ -5638,7 +5636,7 @@ void bedLoadItemByQuery(struct track *tg, char *table,
 /* Generic tg->item loader. If query is NULL use generic
  hRangeQuery(). */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int rowOffset = 0;
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -5924,7 +5922,7 @@ return TRUE;
 void loadTfbsConsSites(struct track *tg)
 /* Load conserved binding site track, all items that meet the cutoff. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -5949,7 +5947,7 @@ tg->items = list;
 
 void loadTfbsCons(struct track *tg)
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -6419,7 +6417,7 @@ char *rgdGeneItemName(struct track *tg, void *item)
 /* Return name of RGD gene track item. */
 {
 static char name[32];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct dyString *ds = newDyString(256);
 struct linkedFeatures *lf = item;
 
@@ -6439,7 +6437,7 @@ tg->itemName = rgdGeneItemName;
 void loadGcPercent(struct track *tg)
 /* Load up simpleRepeats from database table to track items. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 struct gcPercent *itemList = NULL, *item;
@@ -6947,7 +6945,7 @@ char *xenoMrnaName(struct track *tg, void *item)
 {
 struct linkedFeatures *lf = item;
 char *name = lf->name;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *org = getOrganism(conn, name);
 hFreeConn(&conn);
 if (org == NULL)
@@ -7000,9 +6998,9 @@ char *desc;
 struct bed *it = item;
 struct sqlConnection *conn;
 
-conn = hAllocConn();
+conn = hAllocConn(database);
 sprintf(condStr, "interProId='%s' limit 1", it->name);
-desc = sqlGetField(conn, "proteome", "interProXref", "description", condStr);
+desc = sqlGetField("proteome", "interProXref", "description", condStr);
 hFreeConn(&conn);
 return(desc);
 }
@@ -7217,12 +7215,12 @@ Color hColor;
 struct sqlConnection *conn;
 char *name;
 
-conn = hAllocConn();
+conn = hAllocConn(database);
 hColor = hvGfxFindColorIx(hvg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
 
 name = tg->itemName(tg, item);
 sprintf(condStr, "name='%s'", name);
-rnaType = sqlGetField(conn, database, "ncRna", "type", condStr);
+rnaType = sqlGetField(database, "ncRna", "type", condStr);
 
 if (sameWord(rnaType, "miRNA"))    color = MG_RED;
 if (sameWord(rnaType, "misc_RNA")) color = MG_BLACK;
@@ -7254,12 +7252,12 @@ struct rgbColor hAcaColor = {0, 128, 0}; /* darker green */
 struct sqlConnection *conn;
 char *name;
 
-conn = hAllocConn();
+conn = hAllocConn(database);
 hColor = hvGfxFindColorIx(hvg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
 
 name = tg->itemName(tg, item);
 sprintf(condStr, "name='%s'", name);
-rnaType = sqlGetField(conn, database, "wgRna", "type", condStr);
+rnaType = sqlGetField(database, "wgRna", "type", condStr);
 if (sameWord(rnaType, "miRna"))   color = MG_RED;
 if (sameWord(rnaType, "HAcaBox")) color = hColor;
 if (sameWord(rnaType, "CDBox"))   color = MG_BLUE;
@@ -7421,7 +7419,7 @@ else
 void stsMapMethods(struct track *tg)
 /* Make track for sts markers. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 if (sqlCountColumnsInTable(conn, "stsMap") == 26) 
     {
     tg->loadItems = loadStsMap;
@@ -8025,7 +8023,7 @@ cartSetInt(cart, "cbrWaba.end", winEnd);
 void bactigLoad(struct track *tg)
 /* Load up bactigs from database table to track items. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 struct bactigPos *bactigList = NULL, *bactig;
@@ -8188,7 +8186,7 @@ return lf;
 struct linkedFeatures *lfFromPslsWScoresInRange(char *table, int start, int end, char *chromName, boolean isXeno, float maxScore)
 /* Return linked features from range of table with the scores scaled appropriately */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
@@ -8369,7 +8367,7 @@ int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
 Color col;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
@@ -8471,14 +8469,14 @@ static void drawTriangle(struct track *tg, int seqStart, int seqEnd,
 /* In dense mode try and draw golden background for promoter regions. */
 if (vis == tvDense)
     {
-    if (hTableExists("rnaCluster"))
+    if (hTableExists(database,  "rnaCluster"))
         {
 	int heightPer = tg->heightPer;
 	Color gold = hvGfxFindColorIx(hvg, 250,190,60);
 	int promoSize = 1000;
 	int rowOffset;
 	double scale = scaleForPixels(width);
-	struct sqlConnection *conn = hAllocConn();
+	struct sqlConnection *conn = hAllocConn(database);
 	struct sqlResult *sr = hRangeQuery(conn, "rnaCluster", chromName, 
 		winStart - promoSize, winEnd + promoSize, NULL, &rowOffset);
 	char **row;
@@ -8521,13 +8519,13 @@ static void drawEranModule(struct track *tg, int seqStart, int seqEnd,
 /* In dense mode try and draw golden background for promoter regions. */
 if (vis == tvDense)
     {
-    if (hTableExists("esRegUpstreamRegion"))
+    if (hTableExists(database,  "esRegUpstreamRegion"))
         {
 	int heightPer = tg->heightPer;
 	Color gold = hvGfxFindColorIx(hvg, 250,190,60);
 	int rowOffset;
 	double scale = scaleForPixels(width);
-	struct sqlConnection *conn = hAllocConn();
+	struct sqlConnection *conn = hAllocConn(database);
 	struct sqlResult *sr = hRangeQuery(conn, "esRegUpstreamRegion", 
 		chromName, winStart, winEnd, 
 		NULL, &rowOffset);
@@ -8695,7 +8693,7 @@ void loadSimpleBed(struct track *tg)
 {
 struct bed *(*loader)(char **row);
 struct bed *bed, *list = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -8748,13 +8746,13 @@ if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
 optionScore = cartUsualInt(cart, option, optionScore);
 
-if (doScoreCtFilter && (topTable != NULL) && hTableExists(topTable))
+if (doScoreCtFilter && (topTable != NULL) && hTableExists(database,  topTable))
     {
     safef(query, sizeof(query), 
                 "select * from %s order by score desc limit %d", 
                                 topTable, scoreFilterCt);
     sr = sqlGetResult(conn, query);
-    rowOffset = hOffsetPastBin(hDefaultChrom(), topTable);
+    rowOffset = hOffsetPastBin(database, hDefaultChrom(database), topTable);
     }
 else if (optionScore > 0 && tg->bedSize >= 5)
     {
@@ -8809,7 +8807,7 @@ if ((bed->thickEnd != 0) &&
 void loadBed9(struct track *tg)
 /* Convert bed 9 info in window to linked feature.  (to handle itemRgb)*/
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -8863,7 +8861,7 @@ tg->items = lfList;
 void loadBed8(struct track *tg)
 /* Convert bed 8 info in window to linked feature. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -9065,7 +9063,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 void loadGappedBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -9123,7 +9121,7 @@ void loadValAl(struct track *tg)
 {
 struct linkedFeatures *lfList = NULL, *lf;
 struct bed *bed, *list = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -9458,7 +9456,7 @@ void loadPgSnp(struct track *tg)
 /* Load up pgSnp (personal genome SNP) type tracks */
 {
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 safef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart < %d and chromEnd > %d", tg->mapName, chromName, winEnd, winStart);
 tg->items = pgSnpLoadByQuery(conn, query);
 /* base coloring/display decision on count of items */
@@ -9615,7 +9613,7 @@ tg->drawItemAt = triangleDrawAt;
 void loadColoredExonBed(struct track *tg)
 /* Load the items into a linkedFeaturesSeries. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -9764,7 +9762,7 @@ char *classes[20];
 char gClass[64];
 char *classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
 struct linkedFeatures *lf = item;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row = NULL;
 char query[256];
@@ -9784,7 +9782,7 @@ if (geneClasses)
    gClassesClone = cloneString(geneClasses);
    classCt = chopLine(gClassesClone, classes);
    }
-if (hTableExists(classTable))
+if (hTableExists(database, classTable))
    {
    safef(query, sizeof(query), 
         "select class from %s where name = \"%s\"", classTable, lf->name);   
@@ -9892,7 +9890,7 @@ tg->subType = lfNoIntronLines;
 void loadDless(struct track *tg) 
 /* Load dless items */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct dless *dless, *list = NULL;
 struct sqlResult *sr;
 char **row;
@@ -10004,7 +10002,7 @@ Color gvColorByCount(struct track *tg, void *item, struct hvGfx *hvg)
 /* color items by whether they are single position or multiple */
 {
 struct gvPos *el = item;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *escId = NULL;
 char *multColor = NULL, *singleColor = NULL;
 int num = 0;
@@ -10067,7 +10065,7 @@ Color gvColorByDisease(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct gvPos *el = item;
 struct gvAttr *attr = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *escId = NULL;
 char *useColor = NULL;
 int index = -1;
@@ -10118,7 +10116,7 @@ Color gvColorByType(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct gvPos *el = item;
 struct gv *details = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *typeColor = NULL;
 int index = 5;
 char *escId = NULL; 
@@ -10178,7 +10176,7 @@ Color oregannoColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct oreganno *el = item;
 struct oregannoAttr *details = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *escId = NULL; 
 char query[256];
 Color itemColor = MG_BLACK;
@@ -10251,7 +10249,7 @@ void loadProtVar(struct track *tg)
 /* Load UniProt Variants with labels */
 {
 struct protVarPos *list = NULL, *el;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -10348,7 +10346,7 @@ void loadBed12Source(struct track *tg)
  * Sort items by source. */
 {
 struct linkedFeatures *list = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int rowOffset = 0;
@@ -10506,7 +10504,7 @@ boolean complementBases = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VA
 if (!zoomedToBaseLevel)
 	return;
 
-conn = hAllocConn();
+conn = hAllocConn(database);
 safef(query, sizeof(query), 
 	"select offset,fileName from %s where chrom = '%s'", tg->mapName,chromName);
 sr = sqlGetResult(conn, query);

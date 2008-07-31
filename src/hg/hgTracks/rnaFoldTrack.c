@@ -10,7 +10,7 @@
 #include "rnaSecStr.h"
 #include "rnautil.h"
 
-static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.5 2008/02/20 00:42:28 markd Exp $";
+static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.5.26.1 2008/07/31 02:24:16 markd Exp $";
 
 
 void bedLoadItemBySqlResult(struct track *tg, struct sqlResult *sr, int rowOffset, ItemLoader loader)
@@ -52,7 +52,7 @@ safef(extraWhere, size, "score >= %d",optionScore);
 void loadRnaSecStr(struct track *tg)
 /* Load up rnaSecStr from database table to track items. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int rowOffset = 0;
 struct sqlResult *sr = NULL;
 char extraWhere[128];

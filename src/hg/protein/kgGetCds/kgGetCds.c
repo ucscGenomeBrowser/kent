@@ -7,7 +7,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: kgGetCds.c,v 1.4 2006/07/14 16:32:16 angie Exp $";
+static char const rcsid[] = "$Id: kgGetCds.c,v 1.4.102.1 2008/07/31 02:24:48 markd Exp $";
 
 char cdsBloc[2000][30];
 void usage(char *msg)
@@ -44,9 +44,9 @@ int  i;
 char *chp;
 char *isCurated;
 
-conn2= hAllocConn();
-conn3= hAllocConn();
-conn4= hAllocConn();
+conn2= hAllocConn(kgTempDb);
+conn3= hAllocConn(kgTempDb);
+conn4= hAllocConn(kgTempDb);
 
 safef(query2, sizeof(query2), "select * from %s.kgCandidate where alignID='%s'", kgTempDb, alignID);
 sr2 = sqlMustGetResult(conn2, query2);
@@ -89,7 +89,7 @@ while (row2 != NULL)
 	if (chp == NULL)
 	    {
             safef(condStr, sizeof(condStr), "acc='%s'", protAcc);
-	    isCurated = sqlGetField(conn4, spDb, "info", "isCurated", condStr);
+	    isCurated = sqlGetField(spDb, "info", "isCurated", condStr);
 	    if (sameWord(isCurated, "1"))
 	    	{
 		protDbId = 1;

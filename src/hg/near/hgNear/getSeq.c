@@ -14,7 +14,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.10 2008/01/23 18:12:00 angie Exp $";
+static char const rcsid[] = "$Id: getSeq.c,v 1.10.28.1 2008/07/31 02:24:44 markd Exp $";
 
 static void printNameAndDescription(struct sqlConnection *conn, 
 	struct genePos *gp, struct column *nameCol, struct column *descCol)
@@ -43,7 +43,7 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 struct genePos *gp;
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn(database);
 char *tableName = genomeSetting(tableId);
 struct column *descCol = findNamedColumn("description");
 struct column *nameCol = findNamedColumn("name");
@@ -85,15 +85,16 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 struct genePos *gp;
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn(database);
 struct column *descCol = findNamedColumn("description");
 struct column *nameCol = findNamedColumn("name");
 char *table = genomeSetting(tableId);
-boolean hasBin = hOffsetPastBin(NULL, table);
+boolean hasBin = hOffsetPastBin(database, NULL, table);
 
 hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
     {
+
     char *id = gp->name;
     safef(query, sizeof(query), 
     	"select * from %s where name='%s'"
@@ -104,7 +105,7 @@ for (gp = geneList; gp != NULL; gp = gp->next)
         {
 	struct genePred *gene = genePredLoad(row+hasBin);
 	struct bed *bed = bedFromGenePred(gene);
-	struct dnaSeq *seq = hSeqForBed(bed);
+	struct dnaSeq *seq = hSeqForBed(database, bed);
 	hPrintf(">%s (predicted mRNA)", id);
 	printNameAndDescription(conn2, gp, nameCol, descCol);
 	hPrintf("\n");
@@ -148,14 +149,14 @@ if (gp->strand[0] == '-')
     {
     int start = gp->txEnd - downSize;
     int end = gp->txEnd + upSize;
-    seq = hChromSeq(gp->chrom, start, end);
+    seq = hChromSeq(database, gp->chrom, start, end);
     reverseComplement(seq->dna, seq->size);
     }
 else
     {
     int start = gp->txStart - upSize;
     int end = gp->txStart + downSize;
-    seq = hChromSeq(gp->chrom, start, end);
+    seq = hChromSeq(database, gp->chrom, start, end);
     }
 return seq;
 }
@@ -169,13 +170,13 @@ char **row;
 char query[256];
 struct genePos *gp;
 char *table = genomeSetting("geneTable");
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn(database);
 int upSize = cartInt(cart, proUpSizeVarName);
 int downSize = cartInt(cart, proDownSizeVarName);
 boolean fiveOnly = cartBoolean(cart, proIncludeFiveOnly);
 struct column *descCol = findNamedColumn("description");
 struct column *nameCol = findNamedColumn("name");
-boolean hasBin = hOffsetPastBin(NULL, table);
+boolean hasBin = hOffsetPastBin(database, NULL, table);
 
 hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
@@ -209,7 +210,7 @@ static void getGenomic(struct sqlConnection *conn,
 	struct column *colList, struct genePos *geneList)
 /* Put up dialog to get genomic sequence. */
 {
-struct hTableInfo *hti = hFindTableInfo(NULL, genomeSetting("geneTable"));
+struct hTableInfo *hti = hFindTableInfo(database, NULL, genomeSetting("geneTable"));
 hPrintf("<H2>Get Genomic Sequence Near Gene</H2>");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
 cartSaveSession(cart);
@@ -224,12 +225,12 @@ void doGetGenomicSeq(struct sqlConnection *conn, struct column *colList,
 /* Retrieve genomic sequence sequence according to options. */
 {
 char *table = genomeSetting("geneTable");
-struct hTableInfo *hti = hFindTableInfo(NULL, table);
+struct hTableInfo *hti = hFindTableInfo(database, NULL, table);
 struct genePos *gp;
 char query[256];
 struct sqlResult *sr;
 char **row;
-boolean hasBin = hOffsetPastBin(NULL, table);
+boolean hasBin = hOffsetPastBin(database, NULL, table);
 
 hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)

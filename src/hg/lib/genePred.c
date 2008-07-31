@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.99 2008/02/26 01:32:23 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.99.26.1 2008/07/31 02:24:28 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1154,7 +1154,8 @@ safecat(sqlCmd, sizeof(sqlCmd), ")");
 return cloneString(sqlCmd);
 }
 
-struct genePred *getOverlappingGene(struct genePred **list, char *table, char *chrom, int cStart, int cEnd, char *name, int *retOverlap)
+// FIXME: this really doesn't belong in this module
+struct genePred *getOverlappingGene(char *db, struct genePred **list, char *table, char *chrom, int cStart, int cEnd, char *name, int *retOverlap)
 {
 /* read all genes from a table find the gene with the biggest overlap. 
    Cache the list of genes to so we only read it once */
@@ -1174,7 +1175,7 @@ if (*list == NULL)
     {
     printf("Loading Predictions from %s\n",table);
     AllocVar(*list);
-    conn = hAllocConn();
+    conn = hAllocConn(db);
     AllocVar(gene);
     safef(query, sizeof(query), "select * from %s", table);
     sr = sqlGetResult(conn, query);

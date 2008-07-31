@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.38 2006/03/03 22:27:10 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.38.120.1 2008/07/31 02:24:38 markd Exp $";
 
 /* Command line switches. */
 static boolean doAscii = TRUE;	/*	do not output ascii data */
@@ -264,11 +264,11 @@ for (i=0; i<trackCount; ++i)
 	     *	no need to print stats until all done.
 	     */
 	    if (doStats && (!chromPtr) && (trackCount == 1))
-		wds->statsOut(wds, "stdout", TRUE, htmlOut, TRUE, FALSE);
+		wds->statsOut(wds, db, "stdout", TRUE, htmlOut, TRUE, FALSE);
 	    if (doBed)
 		wds->bedOut(wds, "stdout", TRUE);
 	    if (rawDataOut || doAscii)
-		wds->asciiOut(wds, "stdout", TRUE, rawDataOut);
+		wds->asciiOut(wds, db, "stdout", TRUE, rawDataOut);
 	    }
 	wds->freeBed(wds);
 	wds->freeAscii(wds);
@@ -311,7 +311,7 @@ if (doHistogram)
 /* when working through a chrom list, or track list, stats only at the end */
 if (doStats && (chromList || (trackCount > 1)))
     {
-    wds->statsOut(wds, "stdout", TRUE, htmlOut, TRUE, FALSE);
+    wds->statsOut(wds, db, "stdout", TRUE, htmlOut, TRUE, FALSE);
     wds->freeStats(wds);
     }
 endClock = clock1000();

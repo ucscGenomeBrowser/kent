@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.13 2008/07/29 19:15:56 kent Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.13.2.1 2008/07/31 02:24:51 markd Exp $";
 
 char *samGenomeDb(char *proteinId)
 /* Determin if a protein belongs to a genome DB that has SAM results */
@@ -19,7 +19,7 @@ char condStr[128];
 char *taxon;
 
 safef(condStr, sizeof(condStr), "acc='%s'", proteinId);
-taxon = sqlGetField(NULL, UNIPROT_DB_NAME, "accToTaxon", "taxon", condStr);
+taxon = sqlGetField(UNIPROT_DB_NAME, "accToTaxon", "taxon", condStr);
 if (taxon == NULL) return(NULL);
 
 if (sameWord(taxon, "4932")) 
@@ -53,7 +53,7 @@ char *kgId = NULL;
 /* But, it is better to cover most of them, than none at all */
 
 safef(condStr, sizeof(condStr), "variant='%s'", swissProtAcc);
-parentId = sqlGetField(NULL, PROTEOME_DB_NAME, "spVariant", "parent", condStr);
+parentId = sqlGetField(PROTEOME_DB_NAME, "spVariant", "parent", condStr);
 
 list = spExtDbAcc1List(spConn, parentId, "Interpro");
 if (list != NULL)
@@ -86,7 +86,7 @@ if (kgVersion == KG_III)
     hgConn = sqlConnect(database);
    
     safef(condStr, sizeof(condStr), "spId='%s'", swissProtAcc);
-    kgId = sqlGetField(hgConn, database, "kgXref", "kgId", condStr);
+    kgId = sqlGetField(database, "kgXref", "kgId", condStr);
    
     /* Do Pfam domains here. */
     list = NULL;

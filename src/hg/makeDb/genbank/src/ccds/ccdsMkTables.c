@@ -15,7 +15,7 @@
 #include <sys/types.h>
 #include <regex.h>
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.20 2008/07/01 06:40:45 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.20.6.1 2008/07/31 02:24:33 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -681,7 +681,7 @@ sqlLoadTabFile(conn, ccdsInfoFile, ccdsInfoTmpTbl, SQL_TAB_FILE_ON_SERVER);
 
 safef(ccdsGeneTmpTbl, sizeof(ccdsGeneTmpTbl), "%s_tmp", ccdsGeneTbl);
 ccdsGeneSql = genePredGetCreateSql(ccdsGeneTmpTbl, genePredAllFlds,
-                                   genePredWithBin, hGetMinIndexLength());
+                                   genePredWithBin, hGetMinIndexLength(hgDb));
 sqlRemakeTable(conn, ccdsGeneTmpTbl, ccdsGeneSql);
 freeMem(ccdsInfoSql);
 freeMem(ccdsGeneSql);
@@ -730,7 +730,6 @@ char ccdsGeneFile[PATH_LEN], ccdsGeneTbl[PATH_LEN];
 struct genomeInfo *genome = getGenomeInfo(hgDb, ncbiBuild);
 struct hash *infoCcds = hashNew(20);
 struct hash *geneCcds = hashNew(20);
-hSetDb(hgDb);
 
 ccdsGetTblFileNames(ccdsInfoOut, ccdsInfoTbl, ccdsInfoFile);
 ccdsGetTblFileNames(ccdsGeneOut, ccdsGeneTbl, ccdsGeneFile);

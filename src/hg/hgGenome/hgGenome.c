@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.61 2007/11/16 14:52:55 aamp Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.61.36.1 2008/07/31 02:24:04 markd Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -64,7 +64,7 @@ struct genoGraph *getUserGraphs()
 /* Get list of all user graphs */
 {
 struct genoGraph *list = NULL, *gg;
-struct customTrack *ct, *ctList = customTracksParseCart(cart, NULL, NULL);
+struct customTrack *ct, *ctList = customTracksParseCart(database, cart, NULL, NULL);
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     struct trackDb *tdb = ct->tdb;
@@ -89,7 +89,7 @@ struct genoGraph *getCompGraphs(struct sqlConnection *conn)
 /* Get graphs defined in database that are part of a composite. */
 {
 struct genoGraph *list = NULL, *gg;
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn(database);
 struct slName *compositeGGList = NULL, *comp;
 
 /* Get initial information from metaChromGraph table */
@@ -99,7 +99,7 @@ if (sqlTableExists(conn, "metaChromGraph"))
 /* Build a hash of genoGraphs out of composite trackDbs and fill in from cart. */
 for (comp = compositeGGList; comp != NULL; comp = comp->next)
     {
-    struct trackDb *tdb = hTrackDbForTrack(comp->name);
+    struct trackDb *tdb = hTrackDbForTrack(database, comp->name);
     if (tdb)
 	{
 	struct chromGraphSettings *cgs = chromGraphSettingsGet(comp->name, conn2, tdb, cart);
@@ -124,7 +124,7 @@ struct genoGraph *getDbGraphs(struct sqlConnection *conn)
 /* it's a subGraph. */
 {
 struct genoGraph *list = NULL, *gg;
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 
@@ -147,8 +147,8 @@ slReverse(&list);
 /* Where possible fill in additional info from trackDb. */
 for (gg = list; gg != NULL; gg = gg->next)
     {
-    struct trackDb *tdb = hTrackDbForTrack(gg->name);
-    struct trackDb *compTdb = hCompositeTrackDbForSubtrack(tdb);
+    struct trackDb *tdb = hTrackDbForTrack(database, gg->name);
+    struct trackDb *compTdb = hCompositeTrackDbForSubtrack(database, tdb);
     gg->isSubGraph = (compTdb != NULL) ? TRUE : FALSE;
     gg->isComposite = FALSE;
     if (tdb != NULL)
@@ -434,7 +434,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     int start = bed->chromStart + atStart;
     if (start < 0) start = 0;
     int end = bed->chromEnd + atEnd;
-    int chromEnd = hChromSize(bed->chrom);
+    int chromEnd = hChromSize(database, bed->chrom);
     if (end > chromEnd) end = chromEnd;
     bed->chromStart = start;
     bed->chromEnd = end;
@@ -461,7 +461,7 @@ void dispatchPage()
 /* Look at command variables in cart and figure out which
  * page to draw. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 if (cartVarExists(cart, hggConfigure))
     {
     configurePage();
@@ -532,10 +532,9 @@ void dispatchLocation()
 {
 struct sqlConnection *conn = NULL;
 getDbAndGenome(cart, &database, &genome, oldVars);
-hSetDb(database);
 cartSetString(cart, "db", database); /* Some custom tracks code needs this */
 withLabels = cartUsualBoolean(cart, hggLabels, TRUE);
-conn = hAllocConn();
+conn = hAllocConn(database);
 getGenoGraphs(conn);
 
 /* Handle cases that just want a HTTP Location line: */

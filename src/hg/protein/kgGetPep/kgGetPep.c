@@ -44,8 +44,8 @@ proteinDataDate = argv[1];
  
 inf = fopen("mrna.lis", "r");
 
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn2= hAllocConn(hDefaultDb());
+conn3= hAllocConn(hDefaultDb());
     
 o3 = fopen("mrnaPep.tab", "w");
 while (fgets(line, 100, inf) != NULL)

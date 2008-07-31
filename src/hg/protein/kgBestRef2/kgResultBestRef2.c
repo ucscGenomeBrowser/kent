@@ -82,10 +82,6 @@ kgTempDb = argv[2];
 genomeReadOnly = argv[3];
 protRefTableName = argv[4];
 
-// make sure db connection goes to correct genome
-// hRnaSeqAndIdx() needs this.
-hSetDb(genomeReadOnly);
-
 sprintf(spDB, "sp%s", proteinDataDate);
 sprintf(proteinsDB, "proteins%s", proteinDataDate);
 sprintf(gbTempDB, "%sTemp", kgTempDb);
@@ -97,8 +93,8 @@ o3  = fopen("kgBestRef.out",   "w");
 if ((FILE *) NULL == o3)
     errAbort("ERROR: Can not open output file: kgBestRef.out");
 
-conn = hAllocConn();
-conn3= hAllocConn();
+conn = hAllocConn(genomeReadOnly);
+conn3= hAllocConn(genomeReadOnly);
    
 proteinCount = 0; 
 snprintf(dirName, (size_t) sizeof(dirName), "%s", "./clusterRun" );
@@ -122,7 +118,7 @@ while (row != NULL)
     if ((float)match/(float)protSize > 0.3)
     	{
         sprintf(condStr, "acc='%s'", mrnaAcc);
-        mrnaDate = sqlGetField(conn3, genomeReadOnly, "gbCdnaInfo", "moddate", condStr);
+        mrnaDate = sqlGetField(genomeReadOnly, "gbCdnaInfo", "moddate", condStr);
 	if (mrnaDate != NULL)
 	{
         months = cal_months(mrnaDate);

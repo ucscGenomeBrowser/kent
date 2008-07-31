@@ -17,7 +17,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.40 2008/07/29 20:28:58 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.40.2.1 2008/07/31 02:24:06 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -326,8 +326,9 @@ if (isNotEmpty(userName))
     printf("<TR><TD colspan=4>Save current settings as named session:"
 	   "</TD></TR>\n"
 	   "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>name:</TD><TD>\n");
+    // FIXME cartUsualString use to take hGetDb(), not sure if NULL is right
     cgiMakeOnKeypressTextVar(hgsNewSessionName,
-			     cartUsualString(cart, "db", hGetDb()),
+			     cartUsualString(cart, "db", NULL),
 			     20, jsPressOnEnter(hgsDoNewSession));
     printf("&nbsp;&nbsp;&nbsp;");
     cgiMakeCheckBox(hgsNewSessionShare,

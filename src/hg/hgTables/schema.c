@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.49 2008/07/02 23:09:23 braney Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.49.6.1 2008/07/31 02:24:08 markd Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -573,7 +573,7 @@ struct trackDb *tdb = NULL;
 char parseBuf[256];
 dbOverrideFromTable(parseBuf, &db, &table);
 htmlOpen("Schema for %s", table);
-tdb = hTrackDbForTrack(table);
+tdb = hTrackDbForTrack(database, table);
 showSchema(db, tdb, table);
 htmlClose();
 }
@@ -587,7 +587,7 @@ if (sameString(curTrack->tableName, curTable))
     return TRUE;
 else if (startsWith("wigMaf", curTrack->type))
     {
-    struct consWiggle *wig, *wiggles = wigMafWiggles(curTrack);
+    struct consWiggle *wig, *wiggles = wigMafWiggles(database, curTrack);
     for (wig = wiggles; wig != NULL; wig = wig->next)
         if (sameString(curTable, wig->table))
             return TRUE;

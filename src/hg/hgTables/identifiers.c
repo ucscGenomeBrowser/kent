@@ -15,7 +15,7 @@
 #include "wikiTrack.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.23 2008/05/30 18:38:45 hiram Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.23.10.1 2008/07/31 02:24:07 markd Exp $";
 
 
 static boolean forCurTable()
@@ -275,7 +275,7 @@ else if (sameWord(curTable, WIKI_TRACK_TABLE))
 else if (strchr(curTable, '.'))
     tableList = slNameNew(curTable);
 else
-    tableList = hSplitTableNames(curTable);
+    tableList = hSplitTableNames(database, curTable);
 idField = getIdField(actualDb, curTrack, curTable, hti);
 if (idField != NULL)
     addPrimaryIdsToHash(alternateConn, matchHash, idField, tableList, lm);

@@ -15,7 +15,7 @@
 #include "mafTrack.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.61 2008/07/09 18:41:57 braney Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.61.4.1 2008/07/31 02:24:14 markd Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -62,7 +62,7 @@ if (isAxt)
     struct hash *qSizeHash = hChromSizeHash(tg->otherDb);
     struct mafAli *mafList = 
             axtLoadAsMafInRegion(conn, tg->mapName, chrom, start, end,
-                        database, tg->otherDb, hChromSize(chrom), qSizeHash);
+                                 database, tg->otherDb, hChromSize(database, chrom), qSizeHash);
     hashFree(&qSizeHash);
     return mafList;
     }
@@ -199,7 +199,7 @@ if (mp->ct != NULL)
     errAbort("this maf path not supported for custom maf tracks");
 else
     {
-    conn = hAllocConn();
+    conn = hAllocConn(database);
 
     /* Load up mafs and store in track so drawer doesn't have
      * to do it again. */
@@ -486,7 +486,7 @@ static void mafDrawOverview(struct track *tg, int seqStart, int seqEnd,
 {
 char **row;
 int rowOffset;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName, 
     seqStart, seqEnd, NULL, &rowOffset);
 double scale = scaleForPixels(width);
@@ -696,7 +696,7 @@ static void mafDrawDetails(struct track *tg, int seqStart, int seqEnd,
 /* Draw wiggle/density plot based on scoring things on the fly. */
 {
 struct mafAli *mafList;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct mafItem *miList = tg->items, *mi = miList;
 char *suffix;
 struct mafPriv *mp = getMafPriv(tg);
@@ -724,7 +724,7 @@ if (vis == tvFull)
             *suffix == 0)
                 suffix = tg->mapName;
         safef(mafTable, sizeof(mafTable), "%s_%s", mi->name, suffix);
-        if (!hTableExistsDb(database, mafTable))
+        if (!hTableExists(database, mafTable))
             continue;
         mafList = mafLoadInRegion(conn, mafTable, chromName, seqStart, seqEnd);
         /* display pairwise alignments in this region in dense format */
@@ -792,7 +792,7 @@ insertLine = lines[0];
 selfLine = lines[1];
 
 /* Load up self-line with DNA */
-seq = hChromSeq(chromName, seqStart, seqEnd);
+seq = hChromSeq(database, chromName, seqStart, seqEnd);
 memcpy(selfLine, seq->dna, winBaseCount);
 toUpperN(selfLine, winBaseCount);
 freeDnaSeq(&seq);

@@ -8,7 +8,7 @@
 #include "hgRelate.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.8 2008/02/26 01:32:24 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.8.24.1 2008/07/31 02:24:36 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -50,12 +50,12 @@ errAbort("%s\n"
          msg);
 }
 
-void setupTable(struct sqlConnection *conn, char *table)
+void setupTable(char *db, struct sqlConnection *conn, char *table)
 /* create a psl table as needed */
 {
 unsigned sqlOpts = gBin ? genePredWithBin : 0;
 unsigned fldOpts =  gGenePredExt ? genePredAllFlds : 0;
-char* sqlCmd = genePredGetCreateSql(table, fldOpts, sqlOpts, hGetMinIndexLength());
+char* sqlCmd = genePredGetCreateSql(table, fldOpts, sqlOpts, hGetMinIndexLength(db));
 sqlRemakeTable(conn, table, sqlCmd);
 freez(&sqlCmd);
 }
@@ -139,10 +139,9 @@ struct sqlConnection *conn = sqlConnect(db);
 char *tmpDir = ".";
 FILE *tabFh = hgCreateTabFile(tmpDir, table);
 
-hSetDb(db);
 mkTabFile(db, genes, tabFh);
 genePredFreeList(&genes);
-setupTable(conn, table);
+setupTable(db, conn, table);
 hgLoadTabFile(conn, tmpDir, table, &tabFh);
 sqlDisconnect(&conn);
 hgRemoveTabFile(tmpDir, table);

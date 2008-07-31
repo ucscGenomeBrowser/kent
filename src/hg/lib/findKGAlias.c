@@ -25,7 +25,7 @@ struct kgAlias *findKGAlias(char *dataBase, char *spec, char *mode)
  *   mode "P" is for Prefix match
  * it returns a link list of kgAlias nodes, which contain kgID and Alias */
 {
-struct sqlConnection *conn  = hAllocConn();
+struct sqlConnection *conn  = hAllocConn(dataBase);
 struct dyString      *ds    = newDyString(256);
 struct kgAlias *kaList 	    = NULL;
 char   fullTableName[256];

@@ -51,12 +51,11 @@ tempKgDb   = argv[1];
 roDbName  = argv[2];
 protDbDate = argv[3];
 
-hSetDb(roDbName);
 sprintf(proteinsDbName, "proteins%s", protDbDate);
 sprintf(spDbName,   "sp%s", protDbDate);
 
-conn= hAllocConn();
-conn2= hAllocConn();
+conn= hAllocConn(roDbName);
+conn2= hAllocConn(roDbName);
 sprintf(query2,"select name, proteinID from %s.knownGene;", roDbName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
@@ -66,16 +65,16 @@ while (row2 != NULL)
     proteinID = row2[1];
     
     sprintf(cond_str, "val = '%s';", proteinID);
-    protAcc = sqlGetField(conn, spDbName, "displayId", "acc", cond_str);
+    protAcc = sqlGetField(spDbName, "displayId", "acc", cond_str);
     if (protAcc != NULL)
     	{
     	sprintf(cond_str, "acc = '%s';", protAcc);
-    	seq = sqlGetField(conn, spDbName, "protein", "val", cond_str);
+    	seq = sqlGetField(spDbName, "protein", "val", cond_str);
 	}
     else
     	{
     	sprintf(cond_str, "acc = '%s';", proteinID);
-    	seq = sqlGetField(conn, spDbName, "varProtein", "val", cond_str);
+    	seq = sqlGetField(spDbName, "varProtein", "val", cond_str);
     	if (seq == NULL)
     	    {
 	    fprintf(stderr, 
@@ -88,14 +87,14 @@ while (row2 != NULL)
 
     sprintf(cond_str, "name = '%s';", kgID);
         
-    seq = sqlGetField(conn, tempKgDb, "mrnaSeq", "seq", cond_str);
+    seq = sqlGetField(tempKgDb, "mrnaSeq", "seq", cond_str);
     if (seq != NULL)
     	{
         fprintf(o2, "%s\t%s\n", kgID, seq);fflush(o1);
         }
     else
         {
-	kgSeq = hGenBankGetMrna(kgID, NULL);
+	kgSeq = hGenBankGetMrna(roDbName, kgID, NULL);
 	   
 	if (kgSeq != NULL)
 	    {

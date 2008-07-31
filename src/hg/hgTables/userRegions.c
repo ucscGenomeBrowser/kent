@@ -15,7 +15,7 @@
 #include "obscure.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: userRegions.c,v 1.12 2008/05/01 23:42:45 angie Exp $";
+static char const rcsid[] = "$Id: userRegions.c,v 1.12.14.1 2008/07/31 02:24:08 markd Exp $";
 
 void doSetUserRegions(struct sqlConnection *conn)
 /* Respond to set regions button. */
@@ -50,7 +50,7 @@ htmlClose();
 static boolean illegalCoordinate(char *chrom, int start, int end)
 /* verify start and end are legal for this chrom */
 {
-int maxEnd = hChromSize(chrom);
+int maxEnd = hChromSize(database, chrom);
 if (start < 0)
     {
     warn("chromStart (%d) less than zero", start);
@@ -88,7 +88,7 @@ while (0 != (wordCount = lineFileChopNext(lf, words, ArraySize(words))))
     char *regionName = NULL;
     /*	might be something of the form: chrom:start-end optionalRegionName */
     if (((1 == wordCount) || (2 == wordCount)) &&
-	    hgParseChromRangeDb(words[0], &chromName,
+	    hgParseChromRangeDb(database, words[0], &chromName,
 		&chromStart, &chromEnd, FALSE))
 	{
 	if (2 == wordCount)
@@ -106,7 +106,7 @@ while (0 != (wordCount = lineFileChopNext(lf, words, ArraySize(words))))
 	}
     else
 	{
-	chromName = hgOfficialChromName(words[0]);
+	chromName = hgOfficialChromName(database, words[0]);
 	chromStart = sqlSigned(words[1]);
 	chromEnd = sqlSigned(words[2]);
 	if (wordCount > 3)

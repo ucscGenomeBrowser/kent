@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.66 2008/06/28 17:17:57 galt Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.66.6.1 2008/07/31 02:24:07 markd Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -185,7 +185,7 @@ if (startsWith("wigMaf ",tdb->type))
     if (table == NULL)
         /* don't care about table */
         return TRUE;
-    struct consWiggle *wig, *wigs = wigMafWiggles(tdb);
+    struct consWiggle *wig, *wigs = wigMafWiggles(database, tdb);
     if (!wigs)
         return FALSE;
     /* check if table is one of the wiggles */
@@ -240,7 +240,7 @@ for (tdb = fullTrackList; tdb != NULL; tdb = tdb->next)
 
 if (grpList)
     {
-    groupsAll = hLoadGrps();
+    groupsAll = hLoadGrps(database);
     for (group = slPopHead(&groupsAll); group != NULL;
 		group = slPopHead(&groupsAll))
 	{
@@ -417,7 +417,7 @@ else if (startsWith("wig",tdb->type))
     {
     if (startsWith("wigMaf",tdb->type))
 	{
-        struct consWiggle *wig, *wiggles = wigMafWiggles(tdb);
+        struct consWiggle *wig, *wiggles = wigMafWiggles(database, tdb);
         if (!wiggles)
             /* should have found this earlier (correlateOK) */
             errAbort("No conservation wiggle found for track %s",
@@ -1561,22 +1561,22 @@ if (chromStart || chromEnd)
 	hPrintf("&position=%s", posBuf);
 	if ((compositeTable1 != NULL)&&differentWord(table1, compositeTable1))
 	    {
-	    hPrintf("&%s=%s", compositeTable1, hTrackOpenVis(compositeTable1));
+	    hPrintf("&%s=%s", compositeTable1, hTrackOpenVis(database, compositeTable1));
 	    hPrintf("&%s_sel=1", table1);
 	    }
 	else
-	    hPrintf("&%s=%s", table1, hTrackOpenVis(table1));
+	    hPrintf("&%s=%s", table1, hTrackOpenVis(database, table1));
 	if (table2 != NULL)
 	    {
 	    if ((compositeTable2 != NULL)
 			&&differentWord(table2, compositeTable2))
 		{
 		hPrintf("&%s=%s", compositeTable2,
-			hTrackOpenVis(compositeTable2));
+			hTrackOpenVis(database, compositeTable2));
 		hPrintf("&%s_sel=1", table2);
 		}
 	    else
-		hPrintf("&%s=%s", table2, hTrackOpenVis(table2));
+		hPrintf("&%s=%s", table2, hTrackOpenVis(database, table2));
 	    }
 	hPrintf("\" TARGET=_blank>");
 	if (name)

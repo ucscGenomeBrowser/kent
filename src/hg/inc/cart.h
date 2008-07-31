@@ -427,11 +427,11 @@ void cartLoadSettings(struct lineFile *lf, struct cart *cart,
  * If non-NULL, actionVar is a cartRemove wildcard string specifying the
  * CGI action variable that sent us here. */
 
-char *cartGetOrderFromFile(struct cart *cart, char *speciesUseFile);
+char *cartGetOrderFromFile(char *genomeDb, struct cart *cart, char *speciesUseFile);
 /* Look in a cart variable that holds the filename that has a list of 
  * species to show in a maf file */
 
-char *cartGetOrderFromFileAndMsaTable(struct cart *cart, char *speciesUseFile, char *msaTable);
+char *cartGetOrderFromFileAndMsaTable(char *genomeDb, struct cart *cart, char *speciesUseFile, char *msaTable);
 /* Look in a cart variable that holds the filename that has a list of 
  * species to show in a maf file */
 #endif /* CART_H */

@@ -309,7 +309,7 @@ struct group *groupList = NULL;
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 
 /* Get track list and group them. */
-ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
+ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
 trackList = getTrackList(&groupList, vis);
 
 /* The ideogram for some reason is considered a track.

@@ -53,7 +53,7 @@ return el;
 }
 
 static boolean chromGraphRecognizer(struct customFactory *fac,
-	struct customPp *cpp, char *type, 
+	char *genomeDb, struct customPp *cpp, char *type, 
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a chromGraph track */
 {
@@ -557,7 +557,7 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     ci = hashFindVal(chromHash, chrom);
     if (ci == NULL)
 	cppAbort(cpp, "Chromosome %s not found in this assembly (%s).", 
-		 chrom, hGetDb());
+		 chrom, sqlGetDatabase(conn));
     if (start >= ci->size)
 	{
 	cppAbort(cpp, "Chromosome %s is %d bases long, but got coordinate %d.",
@@ -763,7 +763,7 @@ else if (sameString(markerType, cgfMarkerSnp))
     {
     char *snpTable = findSnpTable(conn);
     if (snpTable == NULL)
-        errAbort("No SNP table in %s", hGetDb());
+        errAbort("No SNP table in %s", sqlGetDatabase(conn));
     char *query = "select chrom,chromStart,name from %s";
     ok = mayProcessDb(conn, cpp, colCount, formatType, 
 	    firstLineLabels, fileList, snpTable, 
@@ -830,7 +830,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     }
 }
 
-struct customTrack *chromGraphParser(struct customPp *cpp,
+struct customTrack *chromGraphParser(char *genomeDb, struct customPp *cpp,
 	char *formatType, char *markerType, char *columnLabels,
 	char *name, char *description, struct hash *settings,
 	boolean report)
@@ -846,7 +846,7 @@ if (preview == NULL)
     return NULL;
 
 /* Figure out format type - scanning preview if it isn't well defined. */
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(genomeDb);
 int colCount;
 
 if (sameString(formatType, cgfFormatGuess))
@@ -945,7 +945,7 @@ return outputTracks;
 
 
 static struct customTrack *chromGraphLoader(struct customFactory *fac,  
-	struct hash *chromHash, struct customPp *cpp, struct customTrack *track, 
+	char *genomeDb, struct hash *chromHash, struct customPp *cpp, struct customTrack *track, 
 	boolean dbRequested)
 /* Load up chromGraph data until get next track line. */
 {
@@ -961,7 +961,7 @@ if (binaryFileName != NULL)
     else
         return NULL;
     }
-return chromGraphParser(cpp, 
+return chromGraphParser(genomeDb, cpp, 
     trackDbSettingOrDefault(tdb, "formatType", cgfFormatGuess),
     trackDbSettingOrDefault(tdb, "markerType", cgfMarkerGuess),
     trackDbSettingOrDefault(tdb, "columnLabels", cgfColLabelGuess),

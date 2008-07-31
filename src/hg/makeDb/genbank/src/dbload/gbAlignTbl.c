@@ -120,7 +120,7 @@ static void createPslTable(struct sqlConnection *conn, char* table,
                            unsigned pslOptions, boolean large)
 /* create a PSL table. will create an over 4gb table if in large is set */
 {
-int tNameIdxLen = (pslOptions & PSL_TNAMEIX) ? hGetMinIndexLength() : 0;
+int tNameIdxLen = (pslOptions & PSL_TNAMEIX) ? hGetMinIndexLength(sqlGetDatabase(conn)) : 0;
 char *sqlCmd = pslGetCreateSql(table, pslOptions, tNameIdxLen);
 char extra[64];
 
@@ -145,7 +145,7 @@ static void createPerChromPslTables(char* rootTable, struct sqlConnection* conn)
 {
 struct slName* chrom;
 char table[64];
-for (chrom = getChromNames(); chrom != NULL; chrom = chrom->next)
+for (chrom = getChromNames(sqlGetDatabase(conn)); chrom != NULL; chrom = chrom->next)
     {
     safef(table, sizeof(table), "%s_%s", chrom->name, rootTable);
     if (!sqlTableExists(conn, table))
@@ -352,7 +352,7 @@ return NULL;
 static void createOiTable(struct sqlConnection *conn, char* table)
 /* create an orientInfo table */
 {
-char *sql = estOrientInfoGetCreateSql(table, hGetMinIndexLength());
+char *sql = estOrientInfoGetCreateSql(table, hGetMinIndexLength(sqlGetDatabase(conn)));
 sqlRemakeTable(conn, table, sql);
 freez(&sql);
 }

@@ -107,7 +107,7 @@ lf->extra = dyStringCannibalize(&label);
 static void lookupTransMapLabels(struct track *tg)
 /* This converts the transMap ids to labels. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *transMapInfoTbl = trackDbRequiredSetting(tg->tdb, transMapInfoTblSetting);
 char *transMapGeneTbl = trackDbSetting(tg->tdb, transMapGeneTblSetting);
 

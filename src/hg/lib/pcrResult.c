@@ -7,7 +7,7 @@
 #include "targetDb.h"
 #include "pcrResult.h"
 
-static char const rcsid[] = "$Id: pcrResult.c,v 1.8 2008/05/05 23:31:07 angie Exp $";
+static char const rcsid[] = "$Id: pcrResult.c,v 1.8.16.1 2008/07/31 02:24:31 markd Exp $";
 
 char *pcrResultCartVar(char *db)
 /* Returns the cart variable name for PCR result track info for db. 
@@ -20,7 +20,7 @@ return buf;
 
 #define setPtIfNotNull(pt, val) if (pt != NULL) *pt = val
 
-boolean pcrResultParseCart(struct cart *cart, char **retPslFile,
+boolean pcrResultParseCart(char *db, struct cart *cart, char **retPslFile,
 			   char **retPrimerFile,
 			   struct targetDb **retTarget)
 /* Parse out hgPcrResult cart variable into components and make sure
@@ -49,7 +49,7 @@ char *primerFile = words[1];
 char *targetName = (wordCount > 2) ? words[2] : NULL;
 struct targetDb *target = NULL;
 if (isNotEmpty(targetName))
-    target = targetDbLookup(hGetDb(), targetName);
+    target = targetDbLookup(db, targetName);
 
 if (!fileExists(pslFile) || !fileExists(primerFile) ||
     (wordCount > 2 && target == NULL))

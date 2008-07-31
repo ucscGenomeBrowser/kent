@@ -11,17 +11,17 @@
 #include "hgFindSpec.h"
 #endif
 
-struct hgPositions *hgPositionsFind(char *query, char *extraCgi, 
+struct hgPositions *hgPositionsFind(char *db, char *query, char *extraCgi, 
 	char *hgAppName, struct cart *cart, boolean multiTerm);
 /* Return table of positions that match query or NULL if none such. */
 
-struct hgPositions *findGenomePos(char *spec, char **retChromName, int *retWinStart, int *retWinEnd, struct cart *cart);
+struct hgPositions *findGenomePos(char *db, char *spec, char **retChromName, int *retWinStart, int *retWinEnd, struct cart *cart);
 /* Search for positions in genome that match user query.   
  * Return an hgp if the query results in a unique position.  
  * Otherwise display list of positions, put # of positions in retWinStart,
  * and return NULL. */
 
-struct hgPositions *findGenomePosWeb(char *spec, char **retChromName, 
+struct hgPositions *findGenomePosWeb(char *db, char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd, struct cart *cart,
 	boolean useWeb, char *hgAppName);
 /* Search for positions in genome that match user query.   

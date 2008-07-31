@@ -19,7 +19,7 @@
 #include "trackTable.h"
 
 
-static char const rcsid[] = "$Id: das.c,v 1.41 2008/07/22 18:14:30 markd Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.41.4.1 2008/07/31 02:23:58 markd Exp $";
 
 /* Including the count in the types response can be very slow for large
  * regions and is optional.  Inclusion of count if controlled by this compile-
@@ -178,7 +178,7 @@ static char *chromNumberToName(char *seqName)
 char *official = NULL;
 char chrName[128];
 safef(chrName, sizeof(chrName), "chr%s", seqName);
-official = hgOfficialChromName(chrName);
+official = hgOfficialChromName(database, chrName);
 if (official == NULL)
     official = seqName;
 return(official);
@@ -208,7 +208,7 @@ return ok;
 static struct hash *mkTrackTypeHash()
 /* build a hash of track name to type */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct hash *hash = hashNew(10);
 struct slName *trackDb, *trackDbs = hTrackDbList();
 for (trackDb = trackDbs; trackDb != NULL; trackDb = trackDb->next)
@@ -244,7 +244,7 @@ return hashLookup(hash, name) != NULL;
 static struct tableDef *getTables()
 /* Get all tables. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct hash *hash = newHash(0);
 struct hash *skipHash = newHash(7);
 struct tableDef *tdList = NULL, *td;
@@ -271,7 +271,7 @@ sr = sqlGetResult(conn, "show tables");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     table = root = row[0];
-    if (hFindFieldsAndBin(table, chromField, startField, endField, &hasBin))
+    if (hFindFieldsAndBin(database, table, chromField, startField, endField, &hasBin))
 	{
 	isSplit = tableIsSplit(table);
 	if (isSplit)
@@ -400,7 +400,7 @@ if (segList != NULL)
 	if (partCount == 1)
 	    {
 	    start = 0;
-	    end = hChromSize(seq);
+	    end = hChromSize(database, seq);
 	    wholeThing = TRUE;
 	    }
 	else if (partCount == 3)
@@ -449,7 +449,7 @@ else
 	wholeThing = FALSE;
 	}
     else
-        end = hChromSize(seq);
+        end = hChromSize(database, seq);
     if (start > end)
 	earlyError(DAS_COORDINATE_ERROR);
     segmentList = segmentNew(seq, start, end, wholeThing, seqName);
@@ -457,7 +457,7 @@ else
 /* Check all segments are chromosomes. */
 for (segment = segmentList; segment != NULL; segment = segment->next)
     {
-    if (hgOfficialChromName(segment->seq) == NULL)
+    if (hgOfficialChromName(database, segment->seq) == NULL)
         earlyError(DAS_BAD_REFERENCE_OBJECT);
     }
 return segmentList;
@@ -550,7 +550,7 @@ static int countFeatures(struct tableDef *td, struct segment *segmentList)
 {
 struct segment *segment;
 int acc = 0;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char chrTable[256];
 char query[512];
 struct slName *n;
@@ -781,7 +781,7 @@ static int fieldIndex(char *table, char *field)
 /* Returns index of field in a row from table, or -1 if it 
  * doesn't exist. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int ix = sqlFieldIndex(conn, table, field);
 hFreeConn(&conn);
 return ix;
@@ -817,7 +817,7 @@ for (td = tdList; td != NULL; td = td->next)
         char **row;
 
         verbose(2, "track %s\n", td->name);
-        hFindSplitTable(seq, td->name, table, &hasBin);
+        hFindSplitTable(database, seq, td->name, table, &hasBin);
         struct trackTable *tt = hashFindVal(trackHash, td->name);
         struct sqlResult *sr = hRangeQuery(conn, td->name, seq, start, end, NULL, &rowOffset);
         // FIXME: should use trackDb to determine type, as field names are
@@ -872,8 +872,8 @@ struct segment *segmentList = dasSegmentList(TRUE), *segment;
 struct hash *trackHash = hashOfTracks();
 struct tableDef *tdList = getTables();
 struct filters *filters = filtersNew();
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
 
 /* Write out DAS features header. */
 normalHeader();
@@ -904,7 +904,7 @@ char **row;
 struct chromInfo *ci;
 
 normalHeader();
-conn = hAllocConn();
+conn = hAllocConn(database);
 printf("<!DOCTYPE DASEP SYSTEM \"http://www.biodas.org/dtd/dasep.dtd\">\n");
 printf("<DASEP>\n");
 printf("<ENTRY_POINTS href=\"%s\" version=\"7.00\">\n",
@@ -947,7 +947,7 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
     printf("<DNA length=\"%d\">\n", segment->end - segment->start);
 
     /* Write out DNA. */
-    seq = hDnaFromSeq(segment->seq, segment->start, segment->end, dnaLower);
+    seq = hDnaFromSeq(database, segment->seq, segment->start, segment->end, dnaLower);
     if (seq == NULL)
         errAbort("Couldn't fetch %s\n", segment->seq);
     size = seq->size;
@@ -977,7 +977,6 @@ if (sameString(dataSource, "dsn"))
 else if (slNameFind(dbList, dataSource) != NULL && hDbIsActive(dataSource))
     {
     database = dataSource;
-    hSetDb(dataSource);
     if (sameString(command, "entry_points"))
         doEntryPoints();
     else if (sameString(command, "dna"))

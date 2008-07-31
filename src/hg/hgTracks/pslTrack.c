@@ -84,7 +84,7 @@ andLogic = sameString(type, "and");
 
 /* Make a pass though each filter, and start setting up search for
  * those that have some text. */
-conn = hAllocConn();
+conn = hAllocConn(database);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
     {
     fil->pattern = cartUsualString(cart, fil->key, "");
@@ -396,7 +396,7 @@ struct gsidSubj *subj;
 
 if (!gsidSelectedSubjListLoaded) initializeGsidSubjList();
 
-conn= hAllocConn();
+conn= hAllocConn(database);
 
 sprintf(query,"select subjId from gsIdXref where dnaSeqId='%s'", seqId);
 sr = sqlMustGetResult(conn, query);
@@ -516,7 +516,7 @@ static void lfFromPslsInRange(struct track *tg, int start, int end,
 	char *chromName, boolean isXeno, boolean nameGetsPos, int sizeMul)
 /* Return linked features from range of table. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 connectedLfFromPslsInRange(conn, tg, start, end, chromName, 
 	isXeno, nameGetsPos, sizeMul);
 hFreeConn(&conn);

@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGlobal.c,v 1.40 2008/06/27 16:30:12 kuhn Exp $";
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.40.6.1 2008/07/31 02:24:52 markd Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -198,14 +198,14 @@ hPrintf("Organism: ");
 sciName    = NULL;
 commonName = NULL;
 safef(cond_str, sizeof(cond_str),"accession='%s'", proteinID);
-answer = sqlGetField(conn, PROTEOME_DB_NAME, "spXref3", "division", cond_str);
+answer = sqlGetField(PROTEOME_DB_NAME, "spXref3", "division", cond_str);
 if (answer != NULL)
     {
     safef(cond_str, sizeof(cond_str), "id=%s and nameType='scientific name'", answer);
-    sciName = sqlGetField(conn, PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
+    sciName = sqlGetField(PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
     
     safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", answer);
-    commonName = sqlGetField(conn, PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
+    commonName = sqlGetField(PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
     }
 if (sciName != NULL)
     {
@@ -228,7 +228,7 @@ fflush(stdout);
 
 iypos = 15; 
 doTracks(proteinID, mrnaID, protSeq, &iypos, psOutput);
-if (!hTableExistsDb(database, "pbStamp")) goto histDone; 
+if (!hTableExists(database, "pbStamp")) goto histDone; 
 
 pbScale = 3;
 pixWidth = 765;
@@ -529,17 +529,17 @@ else
         {
         spConn = sqlConnect(database);
         safef(cond_str, sizeof(cond_str), "alias='%s'", queryID);
-        proteinID = sqlGetField(spConn, database, "kgSpAlias", "spID", cond_str);
+        proteinID = sqlGetField(database, "kgSpAlias", "spID", cond_str);
     	
         safef(cond_str, sizeof(cond_str), "spID='%s'", proteinID);
-        answer = sqlGetField(spConn, database, "kgXref", "spDisplayID", cond_str);
+        answer = sqlGetField(database, "kgXref", "spDisplayID", cond_str);
     	
 	safef(cond_str, sizeof(cond_str), "proteinID='%s'", answer);
-    	chromStr    = sqlGetField(spConn, database, "knownGene", "chrom", cond_str);
+    	chromStr    = sqlGetField(database, "knownGene", "chrom", cond_str);
 	if (chromStr)
 	    {
-	    cdsStartStr = sqlGetField(spConn, database, "knownGene", "cdsStart", cond_str);
-	    cdsEndStr   = sqlGetField(spConn, database, "knownGene", "cdsEnd", cond_str);
+	    cdsStartStr = sqlGetField(database, "knownGene", "cdsStart", cond_str);
+	    cdsEndStr   = sqlGetField( database, "knownGene", "cdsEnd", cond_str);
 	    safef(posStr, sizeof(posStr), "%s:%s-%s", chromStr, cdsStartStr, cdsEndStr);
 	    positionStr = strdup(posStr);
 	    cartSetString(cart, "position", positionStr);
@@ -552,9 +552,7 @@ else
 proteinInSupportedGenome, proteinID, database, organism, protDbName);fflush(stdout);
 */
 
-hSetDb(database);
-
-if (hTableExists("kgProtMap2"))
+if (hTableExists(database, "kgProtMap2"))
     {
     kgVersion = KG_III;
     strcpy(kgProtMapTableName, "kgProtMap2");
@@ -566,7 +564,7 @@ if(sameString(debugTmp, "on"))
 else
     hgDebug = FALSE;
 hDefaultConnect();
-conn  = hAllocConn();
+conn  = hAllocConn(database);
 hgsid     = cartOptionalString(cart, "hgsid");
 if (hgsid != NULL)
     {
@@ -580,11 +578,11 @@ else
 /* check proteinID to see if it is a valid SWISS-PROT/TrEMBL accession or display ID */
 /* then assign the accession number to global variable proteinID */
 safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
-proteinAC = sqlGetField(conn, protDbName, "spXref3", "accession", cond_str);
+proteinAC = sqlGetField(protDbName, "spXref3", "accession", cond_str);
 if (proteinAC == NULL)
     {
     safef(cond_str, sizeof(cond_str), "displayID='%s'", proteinID);
-    proteinAC = sqlGetField(conn, protDbName, "spXref3", "accession", cond_str);
+    proteinAC = sqlGetField(protDbName, "spXref3", "accession", cond_str);
     if (proteinAC == NULL)
 	{
 	errAbort("'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or gene symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> to start another query."
@@ -599,7 +597,7 @@ if (proteinAC == NULL)
 else
     {
     safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
-    protDisplayID = sqlGetField(conn, protDbName, "spXref3", "displayID", cond_str);
+    protDisplayID = sqlGetField(protDbName, "spXref3", "displayID", cond_str);
     }
     
 if (proteinInSupportedGenome)
@@ -607,12 +605,12 @@ if (proteinInSupportedGenome)
     if (kgVersion == KG_III)
     	{
     	safef(cond_str, sizeof(cond_str), "spId='%s'", proteinID);
-    	mrnaID = sqlGetField(conn, database, "kgXref", "kgId", cond_str);
+    	mrnaID = sqlGetField(database, "kgXref", "kgId", cond_str);
 	}
     else
     	{
     	safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
-    	mrnaID = sqlGetField(conn, database, "knownGene", "name", cond_str);
+    	mrnaID = sqlGetField(database, "knownGene", "name", cond_str);
     	}
     }
 else
@@ -622,7 +620,7 @@ else
     }
 
 safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
-description = sqlGetField(NULL, protDbName, "spXref3", "description", cond_str);
+description = sqlGetField(protDbName, "spXref3", "description", cond_str);
 
 if (positionStr != NULL)
     {

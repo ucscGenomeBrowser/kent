@@ -215,7 +215,7 @@ for(i= 0; i <  ag->edgeCount; i++)
 void altGraphXLoadItems(struct track *tg)
 /* Load the altGraphX data to a track. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int rowOffSet;
 char **row;
 struct altGraphX *ag=NULL, *agList=NULL;
@@ -290,7 +290,7 @@ return tg->height;
 static void altGraphXLoadItemsPack(struct track *tg)
 /* load the altGraphX data to a track and caclulate full height. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int rowOffSet;
 char **row;
 struct altGraphX *ag=NULL, *agList=NULL;

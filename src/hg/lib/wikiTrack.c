@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.21 2008/06/17 21:51:22 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.21.8.1 2008/07/31 02:24:33 markd Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -774,7 +774,7 @@ if (!(wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2)))
 	recreateHeader = TRUE;
 	}
     snprintf(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
-    newPos = addCommasToPos(position);
+    newPos = addCommasToPos(database, position);
     
     if (extraHeader)
 	{
@@ -912,7 +912,7 @@ else
 	recreateHeader = TRUE;
 	}
     snprintf(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
-    newPos = addCommasToPos(position);
+    newPos = addCommasToPos(database, position);
     if (extraHeader)
 	{
 	dyStringPrintf(content, "%s\n%s\n",

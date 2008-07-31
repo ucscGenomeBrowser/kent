@@ -75,7 +75,7 @@
 #include "errabort.h"
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.29 2008/02/23 15:49:55 braney Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.29.24.1 2008/07/31 02:23:57 markd Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -377,7 +377,7 @@ slFreeList(&beList);
 return alreadySeen;
 }
 
-struct altGraphX *agFromAlignments(struct ggMrnaAli *maList, struct dnaSeq *seq, struct sqlConnection *conn,
+struct altGraphX *agFromAlignments(char *db, struct ggMrnaAli *maList, struct dnaSeq *seq, struct sqlConnection *conn,
 				   int chromStart, int chromEnd, FILE *out )
 /** Custer overlaps from maList into altGraphX structure. */
 {
@@ -399,10 +399,10 @@ for(mc = mcList; mc != NULL; mc = mc->next)
     {
     if(optionExists("consensus"))
 	{
-	gg = ggGraphConsensusCluster(mc, ci, tissLibHash, !optionExists("skipTissues"));
+	gg = ggGraphConsensusCluster(db, mc, ci, tissLibHash, !optionExists("skipTissues"));
 	}
     else
-	gg = ggGraphCluster(mc,ci);
+	gg = ggGraphCluster(db, mc,ci);
     assert(checkEvidenceMatrix(gg));
     ag = ggToAltGraphX(gg);
     if(ag != NULL)
@@ -683,7 +683,7 @@ struct psl *getPsls(struct genePred *gp, struct sqlConnection *conn)
 return getPslsInRange(gp->chrom, gp->txStart, gp->txEnd, conn);
 }
 
-struct dnaSeq *dnaFromChrom(char *chrom, int chromStart, int chromEnd, enum dnaCase seqCase)
+struct dnaSeq *dnaFromChrom(char *db, char *chrom, int chromStart, int chromEnd, enum dnaCase seqCase)
 /** Return the dna for the chromosome region specified. */
 {
 struct dnaSeq *seq = NULL;
@@ -693,11 +693,11 @@ if(chromNib != NULL)
 				     chromStart, chromEnd - chromStart);
     }
 else
-    seq = hDnaFromSeq(chrom, chromStart, chromEnd, seqCase);
+    seq = hDnaFromSeq(db, chrom, chromStart, chromEnd, seqCase);
 return seq;
 }
 
-struct altGraphX *agFromGp(struct genePred *gp, struct sqlConnection *conn, 
+struct altGraphX *agFromGp(char *db, struct genePred *gp, struct sqlConnection *conn, 
 			   int maxGap, FILE *out)
 /** Create an altGraphX record by clustering psl records within coordinates
     specified by genePred record. */
@@ -724,7 +724,7 @@ expandToMaxAlignment(pslList, chrom, &chromStart, &chromEnd);
 verbose(3, "  expanded to %s:%d-%d\n", chrom, chromStart, chromEnd);
 
 /* get the sequence */
-genoSeq = dnaFromChrom(chrom, chromStart, chromEnd, dnaLower);
+genoSeq = dnaFromChrom(db, chrom, chromStart, chromEnd, dnaLower);
 
 for(psl = pslList; psl != NULL; psl = pslNext)
     {
@@ -762,7 +762,7 @@ verbose(3, "  got %d in ma on same strand\n", slCount(maSameStrand));
 /* If there is a cluster to work with create an geneGraph */
 if(maSameStrand != NULL)
     {
-    ag = agFromAlignments(maSameStrand, genoSeq, conn, chromStart, chromEnd,  out);
+    ag = agFromAlignments(db, maSameStrand, genoSeq, conn, chromStart, chromEnd,  out);
     }
 else
     {
@@ -822,14 +822,14 @@ for (gp = list; gp != NULL; gp = gp->next)
 return TRUE;
 }
 
-void createAltSplices(char *outFile,  boolean memTest)
+void createAltSplices(char *db, char *outFile,  boolean memTest)
 /* Top level routine, gets genePredictions and runs through them to 
    build altSplice graphs. */
 {
 struct genePred *gp = NULL, *gpList = NULL;
 struct altGraphX *ag=NULL;
 FILE *out = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 char *gpFile = NULL;
 char *bedFile = NULL;
 int count =0;
@@ -890,7 +890,7 @@ for(gp = gpList; gp != NULL && count < 5; )
     {
     dotForUser();
     fflush(stderr);
-    ag = agFromGp(gp, conn, 5, out); /* memory held in binKeeper. Free
+    ag = agFromGp(db, gp, conn, 5, out); /* memory held in binKeeper. Free
 				      * later. */
     if (memTest != TRUE) 
 	gp = gp->next;
@@ -931,7 +931,6 @@ if(optionExists("help"))
 db = optionVal("db", NULL);
 if(db == NULL)
     errAbort("Must set -db flag. Try -help for usage.");
-hSetDb(db);
 if(optionExists("killList"))
     initKillList();
 outFile = optionVal("agxOut", NULL);
@@ -947,7 +946,7 @@ weightMrna = optionExists("weightMrna");
 if(memTest == TRUE)
     warn("Testing for memory leaks, use top to monitor and CTRL-C to stop.");
 uniqPos = newHash(10);
-createAltSplices(outFile, memTest );
+createAltSplices(db, outFile, memTest );
 return 0;
 }
 

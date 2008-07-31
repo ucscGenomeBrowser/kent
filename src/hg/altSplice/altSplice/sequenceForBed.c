@@ -47,8 +47,6 @@ assert(db);
 assert(bedFile);
 assert(fastaFile);
 
-hSetDb(db);
-
 warn("Reading beds.");
 bedList = bedLoadAll(bedFile);
 dotForUserInit(slCount(bedList)/20 + 1);
@@ -58,7 +56,7 @@ warn("Writing sequences.");
 for(bed = bedList; bed != NULL; bed = bed->next) 
     {
     dotForUser();
-    seq = hSeqForBed(bed);
+    seq = hSeqForBed(db, bed);
     if (keepName)
 	safef(nameBuff, sizeof(nameBuff), "%s %s:%d-%d %s strand", bed->name, 
 	      bed->chrom, bed->chromStart, bed->chromEnd, bed->strand);

@@ -9,7 +9,7 @@
 #include "axt.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: axtForEst.c,v 1.5 2006/04/06 15:59:47 angie Exp $";
+static char const rcsid[] = "$Id: axtForEst.c,v 1.5.116.1 2008/07/31 02:23:59 markd Exp $";
 
 char *clChrom = "all";
 char *track = "est";
@@ -237,11 +237,11 @@ for (i=0; i<size; ++i)
 return count;
 }
 
-void outputOne(struct psl *psl, struct binKeeper *bk, FILE *f)
+void outputOne(char *database, struct psl *psl, struct binKeeper *bk, FILE *f)
 /* Output mouse/human version of one EST. */
 {
-struct dnaSeq *estSeq = hExtSeq(psl->qName);
-struct dnaSeq *genoSeq = hChromSeq(psl->tName, psl->tStart, psl->tEnd);
+struct dnaSeq *estSeq = hExtSeq(database, psl->qName);
+struct dnaSeq *genoSeq = hChromSeq(database, psl->tName, psl->tStart, psl->tEnd);
 struct dyString *q = newDyString(2*psl->qSize);
 struct dyString *t = newDyString(2*psl->qSize);
 int qSize = psl->qSize;
@@ -313,11 +313,11 @@ freeDnaSeq(&estSeq);
 freeDnaSeq(&genoSeq);
 }
 
-void oneChrom(char *chrom, struct sqlConnection *conn, 
+void oneChrom(char *database, char *chrom, struct sqlConnection *conn, 
 	struct hash *libEstHash, char *inAxtFile, FILE *f)
 /* Process one chromosome */
 {
-int chromSize = hChromSize(chrom);
+int chromSize = hChromSize(database, chrom);
 struct binKeeper *bk = binKeeperNew(0, chromSize);
 struct axt *inAxtList = readInAxt(inAxtFile, bk);
 struct psl *psl;
@@ -335,7 +335,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (libEstHash == NULL || hashLookup(libEstHash, psl->qName))
         {
 	++libCount;
-	outputOne(psl, bk, f); 
+	outputOne(database,psl, bk, f); 
 	}
     pslFree(&psl);
     }
@@ -355,8 +355,7 @@ char inAxtFile[512];
 struct sqlConnection *conn;
 struct hash *libEstHash = NULL;
 
-hSetDb(database);
-conn = hAllocConn();
+conn = hAllocConn(database);
 if (estLibrary != NULL)
    libEstHash = makeLibEstHash(conn, estLibrary);
 track = optionVal("track", track);
@@ -364,14 +363,14 @@ estLibrary = optionVal("lib", estLibrary);
 clChrom = optionVal("chrom", clChrom);
 isRefSeq = optionExists("refSeq");
 if (sameWord(clChrom, "all"))
-    chromList = hAllChromNames();
+    chromList = hAllChromNamesDb(database);
 else
     chromList = newSlName(clChrom);
 for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
     {
     char *chrom = chromEl->name;
     sprintf(inAxtFile, "%s/%s.axt", axtDir, chrom);
-    oneChrom(chrom, conn, libEstHash, inAxtFile, f);
+    oneChrom(database, chrom, conn, libEstHash, inAxtFile, f);
     }
 hFreeConn(&conn);
 }

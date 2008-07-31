@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.10 2005/10/28 16:38:54 kent Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.10.138.1 2008/07/31 02:24:06 markd Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -167,6 +167,7 @@ return primary;
 void doSubtrackMergeMore(struct sqlConnection *conn)
 /* Respond to subtrack merge create/edit button */
 {
+char *db = sqlGetDatabase(conn);
 struct trackDb *primary = getPrimaryTdb();
 char *dbTable = getDbTable(database, curTable);
 
@@ -181,7 +182,7 @@ cartSaveSession(cart);
 cgiMakeHiddenVar(hgtaNextSubtrackMergePrimary, dbTable);
 
 hPrintf("<H3>Select a subset of subtracks to merge:</H3>\n");
-hCompositeUi(cart, curTrack, curTable, hgtaDoSubtrackMergePage, "mainForm");
+hCompositeUi(db, cart, curTrack, curTable, hgtaDoSubtrackMergePage, "mainForm");
 
 hPrintf("<H3>Select a merge operation:</H3>\n");
 if (isWiggle(database, curTable) || isBedGraph(curTable))

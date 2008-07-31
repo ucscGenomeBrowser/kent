@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.83 2008/07/02 23:14:23 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.83.6.1 2008/07/31 02:24:32 markd Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -2001,7 +2001,7 @@ carefulClose(&fh);
 return (linesOut);
 }	/*	static void bedOut()	*/
 
-static void statsOut(struct wiggleDataStream *wds, char *fileName,
+static void statsOut(struct wiggleDataStream *wds, char *db, char *fileName,
     boolean sort, boolean htmlOut, boolean withHeader,
 	boolean leaveTableOpen)
 /*	print to fileName the statistics */
@@ -2030,7 +2030,7 @@ if (wds->stats)
 	    else
 		{
 		if (! wds->isFile)
-		    chromSize = hChromSize(stats->chrom);
+		    chromSize = hChromSize(db, stats->chrom);
 		}
 
 
@@ -2099,7 +2099,7 @@ else
 carefulClose(&fh);
 }	/*	static void statsOut()	*/
 
-static int asciiOut(struct wiggleDataStream *wds, char *fileName, boolean sort,
+static int asciiOut(struct wiggleDataStream *wds, char *db, char *fileName, boolean sort,
 	boolean rawDataOut)
 /*	print to fileName the ascii data values	*/
 {

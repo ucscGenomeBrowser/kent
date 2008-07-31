@@ -14,7 +14,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: doStamps.c,v 1.5 2008/06/27 16:30:12 kuhn Exp $";
+static char const rcsid[] = "$Id: doStamps.c,v 1.5.6.1 2008/07/31 02:24:49 markd Exp $";
 
 Color boundaryColor;
 
@@ -217,9 +217,9 @@ ix	= stampPictPtr->xOrig;
 iy	= stampPictPtr->yOrig;
 
 safef(cond_str, sizeof(cond_str), "AA='%c'", aaChar);
-answer = sqlGetField(NULL, database, "pbAnomLimit", "pctLow", cond_str);
+answer = sqlGetField(database, "pbAnomLimit", "pctLow", cond_str);
 pctLow    = (double)(atof(answer));
-answer = sqlGetField(NULL, database, "pbAnomLimit", "pctHi", cond_str);
+answer = sqlGetField(database, "pbAnomLimit", "pctHi", cond_str);
 pctHi    = (double)(atof(answer));
    
 calStampXY(stampPictPtr, (txmax-txmin)/2.0, tymax, &xx, &yy);
@@ -278,9 +278,9 @@ iy	= stampPictPtr->yOrig;
 
 aaChar = aaAlphabet[iTarget];
 safef(cond_str, sizeof(cond_str), "AA='%c'", aaChar);
-answer = sqlGetField(NULL, database, "pbAnomLimit", "pctLow", cond_str);
+answer = sqlGetField(database, "pbAnomLimit", "pctLow", cond_str);
 pctLow    = (double)(atof(answer));
-answer = sqlGetField(NULL, database, "pbAnomLimit", "pctHi", cond_str);
+answer = sqlGetField(database, "pbAnomLimit", "pctHi", cond_str);
 pctHi    = (double)(atof(answer));
 
 yScale = (double)(120)/8.0;
@@ -405,7 +405,7 @@ char **row2;
 struct pbStamp *pbStampPtr;
 int i;
 
-conn2= hAllocConn();
+conn2= hAllocConn(database);
 safef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", database, stampName);
 //safef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", "proteins060115", stampName);
     	
@@ -694,12 +694,12 @@ boundaryColor = vgFindColorIx(g_vg, 170, 170, 170);
 /* draw pI stamp */
 
 safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
-answer = sqlGetField(NULL, database, "pepPi", "count(*)", cond_str);
+answer = sqlGetField(database, "pepPi", "count(*)", cond_str);
 
 /* either 0 or multiple rows are not valid */
 if (strcmp(answer, "1") == 0)
     {
-    answer = sqlGetField(NULL, database, "pepPi", "pI", cond_str);
+    answer = sqlGetField(database, "pepPi", "pI", cond_str);
     pI     = (double)atof(answer);
     stampDataPtr = getStampData("pepPi");
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
@@ -722,7 +722,7 @@ else
 
 /* draw Mol Wt stamp */
 safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
-answer = sqlGetField(NULL, database, "pepMwAa", "MolWeight", cond_str);
+answer = sqlGetField(database, "pepMwAa", "MolWeight", cond_str);
 if (answer != NULL)
     {
     safef(valStr2, sizeof(valStr2), "%s Da", answer);
@@ -762,7 +762,7 @@ else
     {
     safef(cond_str, sizeof(cond_str), "qName='%s'", proteinID);
     }
-answer = sqlGetField(NULL, database, kgProtMapTableName, "blockCount", cond_str);
+answer = sqlGetField(database, kgProtMapTableName, "blockCount", cond_str);
 if (answer != NULL)
     {
     valStr       = cloneString(answer);
@@ -796,7 +796,7 @@ yPosition = yPosition + 170;
 
 /* draw family size stamp */
 safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
-answer = sqlGetField(NULL, protDbName, "swInterPro", "count(*)", cond_str);
+answer = sqlGetField(protDbName, "swInterPro", "count(*)", cond_str);
 if (answer != NULL)
     {
     valStr       = cloneString(answer);

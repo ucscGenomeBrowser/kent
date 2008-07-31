@@ -7,7 +7,7 @@
 #include "imageClone.h"
 #include "stanMad.h"
 
-static char const rcsid[] = "$Id: findStanAlignments.c,v 1.5 2004/06/08 00:32:59 kate Exp $";
+static char const rcsid[] = "$Id: findStanAlignments.c,v 1.5.244.1 2008/07/31 02:24:43 markd Exp $";
 
 void usage() 
 {
@@ -175,9 +175,8 @@ struct stanMad *smList = NULL, *sm = NULL;
 FILE *out = mustOpen(pslOut, "w");
 int count =0;
 struct sqlConnection *conn = NULL;
-hSetDb(db);
 warn("Getting sql Connection...");
-conn = hAllocConn();
+conn = hAllocConn(db);
 warn("Reading in image clones...");
 readInImageHash(iHash, image);
 warn("Loading Stanford Alignments..");

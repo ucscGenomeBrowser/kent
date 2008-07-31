@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.150 2008/07/02 23:29:11 braney Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.150.6.1 2008/07/31 02:24:32 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -92,7 +92,7 @@ char *scriptName = cgiScriptName();
 char *db = NULL;
 boolean isEncode = FALSE;
 boolean isGsid   = hIsGsidServer();
-boolean dbIsActive = hDbIsActive(hGetDb());
+boolean dbIsActive = hDbIsActive(db);
 
 if (scriptName == NULL)
     scriptName = cloneString("");
@@ -284,7 +284,7 @@ else
 	(endsWith(scriptName, "hgc") || endsWith(scriptName, "hgTrackUi") ||
 	 endsWith(scriptName, "hgGene")))
 	{
-	struct trackDb *tdb = hTrackDbForTrack(table);
+	struct trackDb *tdb = hTrackDbForTrack(db, table);
 	if (tdb != NULL)
 	    printf("       <A HREF=\"../cgi-bin/hgTables%s&hgta_doMainPage=1&"
 		   "hgta_group=%s&hgta_track=%s&hgta_table=%s\" "
@@ -578,25 +578,6 @@ va_end(args);
 exit(0);
 }
 
-static boolean haveDatabase(char *db)
-/* check if the database server has the specified database */
-{
-/* list of databases that actually exists (not really worth hashing) */
-static struct hash* validDatabases = NULL;
-if (validDatabases == NULL)
-    {
-    struct sqlConnection *sc = hAllocConn();
-    struct slName* allDatabases = sqlGetAllDatabase(sc);
-    struct slName* dbName = allDatabases;
-    validDatabases = hashNew(8);
-    for (; dbName != NULL; dbName = dbName->next)
-        hashAdd(validDatabases, dbName->name, NULL);
-    hFreeConn(&sc);
-    slFreeList(&allDatabases);
-    }
-return (hashLookup(validDatabases, db) != NULL);
-}
-
 void printCladeListHtml(char *genome, char *onChangeText)
 /* Make an HTML select input listing the clades. */
 {
@@ -645,7 +626,7 @@ char *cgiName;
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
     if (!hashFindVal(hash, cur->genome) &&
-	(!doCheck || haveDatabase(cur->name)))
+	(!doCheck || sqlDatabaseExists(cur->name)))
         {
         hashAdd(hash, cur->genome, cur);
         orgList[numGenomes] = cur->genome;
@@ -765,7 +746,7 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 
     if (allowInactive ||
         ((cur->active || sameWord(cur->name, db)) 
-                && haveDatabase(cur->name)))
+                && sqlDatabaseExists(cur->name)))
         {
         assemblyList[numAssemblies] = cur->description;
         values[numAssemblies] = cur->name;
@@ -840,7 +821,7 @@ void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript)
 /* Find all the organisms/assemblies that are referenced in axtInfo, 
  * and print the dropdown list. */
 {
-struct dbDb *dbList = hGetAxtInfoDbs();
+struct dbDb *dbList = hGetAxtInfoDbs(dbCgi);
 char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
@@ -872,55 +853,7 @@ cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly,
 		    javascript);
 }
 
-#ifndef GBROWSE
-void printAlignmentListHtml(char *db, char *alCgiName, char *selected)
-{
-/* Find all the alignments (from axtInfo) that pertain to the selected
- * genome.  Prints to stdout the HTML to render a dropdown list
- * containing a list of the possible alignments to choose from.
- */
-char *alignmentList[128];
-char *values[128];
-int numAlignments = 0;
-struct axtInfo *alignList = NULL;
-struct axtInfo *cur = NULL;
-char *organism = hOrganism(db);
-
-alignList = hGetAxtAlignments(db);
-
-for (cur = alignList; ((cur != NULL) && (numAlignments < 128)); cur = cur->next)
-    {
-    /* If we are looking at a zoo database then show the zoo database list */
-    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
-        strstrNoCase(cur->species, "zoo"))
-        {
-        alignmentList[numAlignments] = cur->alignment;
-        values[numAlignments] = cur->alignment;
-        numAlignments++;
-        }
-    else if (
-             !strstrNoCase(cur->species, "zoo") &&
-             (strstrNoCase(cur->species, db)))
-        {
-        alignmentList[numAlignments] = cur->alignment;
-        values[numAlignments] = cur->alignment;
-        numAlignments++;
-        }
-
-
-    /* Save a pointer to the current alignment */
-    if (selected == NULL)
-        if (strstrNoCase(db, cur->species))
-           {
-           selected = cur->alignment;
-           }
-    }
-cgiMakeDropListFull(alCgiName, alignmentList, values, numAlignments, selected, NULL);
-}
-#endif /* GBROWSE */
-
-char *getDbForGenome(char *genome, struct cart *cart)
-{
+static char *getDbForGenome(char *genome, struct cart *cart)
 /*
   Function to find the default database for the given Genome.
 It looks in the cart first and then, if that database's Genome matches the 
@@ -931,12 +864,23 @@ param Genome - The Genome for which to find a database
 param cart - The cart to use to first search for a suitable database name
 return - The database matching this Genome type
 */
+{
+
+#if 0//FIXME: this is weird, as it uses hGetDb to get the default
 char *retDb = cartUsualString(cart, dbCgiName, hGetDb());
 
 if (!hDbExists(retDb))
     {
     retDb = hDefaultDb();
     }
+#else
+char *retDb = cartUsualString(cart, dbCgiName, NULL);
+
+if ((retDb == NULL) || !hDbExists(retDb))
+    {
+    retDb = hDefaultDb();
+    }
+#endif
 
 /* If genomes don't match, then get the default db for that genome */
 if (differentWord(genome, hGenome(retDb)))

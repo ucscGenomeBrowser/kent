@@ -9,7 +9,7 @@ struct metaDataTbls;
 struct gbSelect;
 struct dbLoadOptions;
 
-int chkAlignTables(struct gbSelect* select, struct sqlConnection* conn,
+int chkAlignTables(char *db, struct gbSelect* select, struct sqlConnection* conn,
                    struct metaDataTbls* metaDataTbls, struct dbLoadOptions *options);
 /* Verify all of the alignment-related tables. */
 

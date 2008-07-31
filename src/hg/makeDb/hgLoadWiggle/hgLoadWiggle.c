@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.24 2008/07/08 16:05:26 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.24.6.1 2008/07/31 02:24:38 markd Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
@@ -290,8 +290,7 @@ char *tab = (char *)NULL;
 
 if (! noLoad)
     {
-    hSetDb(database);
-    conn = hAllocConn();
+    conn = hAllocConn(database);
     verbose(1, "Connected to database %s for track %s\n", database, track);
     }
 
@@ -308,7 +307,7 @@ if ((!oldTable) && (!noLoad))
     if (maxChromNameLength)
 	indexLen = maxChromNameLength;
     else
-	indexLen = hGetMinIndexLength();
+	indexLen = hGetMinIndexLength(database);
     verbose(2, "INDEX chrom length: %d\n", indexLen);
 
     /* Create definition statement. */

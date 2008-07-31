@@ -11,7 +11,7 @@
 #include "ggMrnaAli.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: clusterRna.c,v 1.15 2006/04/07 15:25:18 angie Exp $";
+static char const rcsid[] = "$Id: clusterRna.c,v 1.15.116.1 2008/07/31 02:24:00 markd Exp $";
 
 /* Global variables set for sorting alignments. */
 char *clusterStrand = NULL;
@@ -72,7 +72,7 @@ struct psl *pslList = NULL, *psl;
 int rowOffset;
 struct sqlResult *sr;
 char **row;
-struct hTableInfo *hti = hFindTableInfo(chromName, table);
+struct hTableInfo *hti = hFindTableInfo(sqlGetDatabase(conn), chromName, table);
 if(hti == NULL)
     errAbort("clusterRna::loadPsl() - Table %s doesn't exist for chrom %s.", table, chromName);
 sr = hChromQuery(conn, table, chromName, NULL, &rowOffset);
@@ -865,7 +865,7 @@ char *orientTable = optionVal("orient", "estOrientInfo");
 char *mRnaOrientTable = optionVal("mRNAOrient", "mrnaOrientInfo");
 char *mRnaExclude = optionVal("mrnaExclude", NULL);
 
-chrom = hLoadChrom(chromName);
+chrom = hLoadChrom(sqlGetDatabase(conn), chromName);
 verbose(1, "Loaded %d bases in %s\n", chrom->size, chromName);
 
 /* If we got an exclusion list of accessions to avoid, filter them out. */
@@ -974,16 +974,15 @@ FILE *estOutFile = mustOpen(estOut, "w");
 FILE *groupOutFile = NULL;
 char *group = optionVal("group", NULL);
 
-hSetDb(database);
 if (optionExists("chrom"))
     chromList = slNameNew(optionVal("chrom", NULL));
 else
     {
-    chromList = hAllChromNames();
+    chromList = hAllChromNamesDb(database);
     if (optionExists("MGC"))
         errAbort("Currently MGC can't be used except with chrom option");
     }
-conn = hAllocConn();
+conn = hAllocConn(database);
 if (group != NULL)
     groupOutFile = mustOpen(group, "w");
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)

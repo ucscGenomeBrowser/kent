@@ -28,8 +28,7 @@ struct sqlConnection *conn;
 
 if (!hDbExists(db))
     errAbort("Non-existent database: %s", db);
-hSetDb(db);
-tables = hSplitTableNames(oldRoot);
+tables = hSplitTableNames(db, oldRoot);
 if (!tables)
     errAbort("Can't find table: %s\n", oldRoot);
 conn = sqlConnect(db);

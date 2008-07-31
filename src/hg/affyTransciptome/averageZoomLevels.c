@@ -5,7 +5,7 @@
 #include "options.h"
 #include <string.h>
 
-static char const rcsid[] = "$Id: averageZoomLevels.c,v 1.5 2003/05/06 07:22:13 kate Exp $";
+static char const rcsid[] = "$Id: averageZoomLevels.c,v 1.5.338.1 2008/07/31 02:23:57 markd Exp $";
 
 
 #define MAX_WINDOW_SIZE  2000
@@ -161,7 +161,6 @@ FILE *out = NULL;
 int i;
 
 
-hSetDb(db);
 warn("Loading file %s\n", inputFile);
 if( useMax )
     warn("Using MAX option not MEAN!!!\n");
@@ -178,7 +177,7 @@ for(currentZoom = 1; currentZoom <= maxZoom; currentZoom *= mag)
     warn("Opened file: %s", buff);
     while(boundarySamp != NULL)
 	{
-	chromSize = hChromSize(boundarySamp->chrom);
+	chromSize = hChromSize(db, boundarySamp->chrom);
 	uglyf("%s size %d\n", boundarySamp->chrom, chromSize);
 	binSize = chromSize/(currentZoom == 1 ? MAX_WINDOW_SIZE : MAX_WINDOW_SIZE * currentZoom);
 	if (binSize < 1)

@@ -38,8 +38,9 @@
 #include "wikiLink.h"
 #include "jsHelper.h"
 #include "mafTrack.h"
+#include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1499 2008/07/17 18:37:46 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1499.4.1 2008/07/31 02:24:13 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -395,7 +396,7 @@ static void drawBases(struct hvGfx *hvg, int x, int y, int width, int height,
 struct dnaSeq *seq;
 
 if (thisSeq == NULL)
-   seq = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
+    seq = hDnaFromSeq(database, chromName, winStart, winEnd, dnaUpper);
 else
     seq = thisSeq;
 
@@ -428,7 +429,7 @@ for(track = trackList; track != NULL; track = track->next)
     {
     if(sameString(track->mapName, "cytoBandIdeo"))
 	{
-	if (hTableExists(track->mapName))
+	if (hTableExists(database, track->mapName))
 	    return track;
 	else
 	    return NULL;
@@ -581,15 +582,15 @@ void pcrResultLoad(struct track *tg)
 {
 char *pslFileName, *primerFileName;
 struct targetDb *target;
-if (! pcrResultParseCart(cart, &pslFileName, &primerFileName, &target))
+if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target))
     return;
 
 struct psl *pslList = pslLoadAll(pslFileName), *psl;
 struct linkedFeatures *itemList = NULL;
 if (target != NULL)
     {
-    int rowOffset = hOffsetPastBin(chromName, target->pslTable);
-    struct sqlConnection *conn = hAllocConn();
+    int rowOffset = hOffsetPastBin(database, chromName, target->pslTable);
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
     char query[2048];
@@ -846,7 +847,7 @@ char *dnaInWindow()
 {
 static struct dnaSeq *seq = NULL;
 if (seq == NULL)
-    seq = hDnaFromSeq(chromName, winStart, winEnd, dnaLower);
+    seq = hDnaFromSeq(database, chromName, winStart, winEnd, dnaLower);
 return seq->dna;
 }
 
@@ -1764,9 +1765,9 @@ if (rulerMode != tvHide)
 	if(freezeName == NULL)
 	    freezeName = "Unknown";
 	if (baseShowPos&&baseShowAsm)
-    	    safef(txt,sizeof(txt),"%s %s   %s (%s bp)",organism,freezeName,addCommasToPos(position),numBuf);
+    	    safef(txt,sizeof(txt),"%s %s   %s (%s bp)",organism,freezeName,addCommasToPos(database, position),numBuf);
 	else if (baseShowPos)
-    	    safef(txt,sizeof(txt),"%s (%s bp)",addCommasToPos(position),numBuf);
+    	    safef(txt,sizeof(txt),"%s (%s bp)",addCommasToPos(database, position),numBuf);
 	else
     	    safef(txt,sizeof(txt),"%s %s",organism,freezeName);
 	hvGfxTextCentered(hvg, insideX, y, insideWidth, showPosHeight, 
@@ -1865,9 +1866,9 @@ if (rulerMode != tvHide)
         /* get sequence, with leading & trailing 3 bases
          * used for amino acid translation */
         start = max(winStart - 3, 0);
-        chromSize = hChromSize(chromName);
+        chromSize = hChromSize(database, chromName);
         end = min(winEnd + 3, chromSize);
-        extraSeq = hDnaFromSeq(chromName, start, end, dnaUpper);
+        extraSeq = hDnaFromSeq(database, chromName, start, end, dnaUpper);
         if (start != winStart - 3 || end != winEnd + 3)
             {
             /* at chromosome boundaries, pad with N's to assure
@@ -2068,7 +2069,7 @@ if (sameWord(scientificName, "Takifugu rubripes"))
     {
     /* for Fugu, must give scaffold, not chr coordinates */
     /* Also, must give "chrom" as "scaffold_N", name below. */
-    if (!hScaffoldPos(chromName, winStart, winEnd,
+    if (!hScaffoldPos(database, chromName, winStart, winEnd,
                         &name, &start, &end))
         /* position doesn't appear on Ensembl browser.
          * Ensembl doesn't show scaffolds < 2K */
@@ -2142,7 +2143,7 @@ struct trackDb *tdb, *tdbList = NULL;
 struct track *track;
 TrackHandler handler;
 
-tdbList = hTrackDb(chromName);
+tdbList = hTrackDb(database, chromName);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     track = trackFromTrackDb(tdb);
@@ -2199,7 +2200,7 @@ if (ct->dbTrack)
             continue;
 	slAddHead(&list, bed);
 	}
-    hFreeOrDisconnect(&conn);
+    hFreeConn(&conn);
     }
 else
     {
@@ -2253,7 +2254,7 @@ if (ct->dbTrack)
 	    }
 	slAddHead(&lfList, lf);
 	}
-    hFreeOrDisconnect(&conn);
+    hFreeConn(&conn);
     }
 else
     {
@@ -2308,7 +2309,7 @@ if (ct->dbTrack)
 	lf = lfFromBed(bed);
 	slAddHead(&lfList, lf);
 	}
-    hFreeOrDisconnect(&conn);
+    hFreeConn(&conn);
     }
 else
     {
@@ -2364,7 +2365,7 @@ if (ct->dbTrack)
 	    }
 	slAddHead(&lfList, lf);
 	}
-    hFreeOrDisconnect(&conn);
+    hFreeConn(&conn);
     }
 else
     {
@@ -2411,7 +2412,7 @@ if (ct->dbTrack)
 	lfs = lfsFromColoredExonBed(bed);
 	slAddHead(&lfsList, lfs);
 	}
-    hFreeOrDisconnect(&conn);
+    hFreeConn(&conn);
     }
 else
     {
@@ -2468,7 +2469,7 @@ if (ct->dbTrack)
     if ((struct sqlConnection *)NULL == conn)
 	errAbort("can not connect to customTracks DB");
     else
-	hFreeOrDisconnect(&conn);
+	hFreeConn(&conn);
     }
 
 useItemRgb = bedItemRgb(tdb);
@@ -2576,7 +2577,7 @@ char *getPositionFromCustomTracks()
 char *pos = NULL;
 struct slName *bl = NULL;
 
-ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
+ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
 
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {
@@ -2676,9 +2677,9 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    {
 	    if (wordCount < 3)
 	        errAbort("Expecting 3 words in browser position line");
-	    if (!hgIsChromRange(words[2])) 
+	    if (!hgIsChromRange(database, words[2])) 
 	        errAbort("browser position needs to be in chrN:123-456 format");
-	    hgParseChromRange(words[2], &chromName, &winStart, &winEnd);
+	    hgParseChromRange(database, words[2], &chromName, &winStart, &winEnd);
 
             /*Fix a start window of -1 that is returned when a custom track position
               begins at 0
@@ -2707,9 +2708,9 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 boolean restrictionEnzymesOk()
 /* Check to see if it's OK to do restriction enzymes. */
 {
-return (hTableExistsDb("hgFixed", "cutters") &&
-	hTableExistsDb("hgFixed", "rebaseRefs") &&
-	hTableExistsDb("hgFixed", "rebaseCompanies"));
+return (hTableExists("hgFixed", "cutters") &&
+	hTableExists("hgFixed", "rebaseRefs") &&
+	hTableExists("hgFixed", "rebaseCompanies"));
 }
 
 void hotLinks()
@@ -2772,14 +2773,14 @@ if (liftOverChainForDb(database) != NULL)
     }
 
 /* see if hgFixed.trackVersion exists */
-boolean trackVersionExists = hTableExistsDb("hgFixed", "trackVersion");
+boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
 char ensVersionString[256];
 char ensDateReference[256];
 ensVersionString[0] = 0;
 ensDateReference[0] = 0;
 if (trackVersionExists)
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     char query[256];
     safef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' order by updateTime DESC limit 1", database);
     struct sqlResult *sr = sqlGetResult(conn, query);
@@ -2930,7 +2931,7 @@ struct group *group, *list = NULL;
 struct hash *hash = newHash(8);
 struct track *track;
 struct trackRef *tr;
-struct grp* grps = hLoadGrps();
+struct grp* grps = hLoadGrps(database);
 struct grp *grp;
 char cartVar[512];
 
@@ -3156,7 +3157,7 @@ registerTrackHandlers();
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
 loadFromTrackDb(&trackList);
-if (pcrResultParseCart(cart, NULL, NULL, NULL))
+if (pcrResultParseCart(database, cart, NULL, NULL, NULL))
     slSafeAddHead(&trackList, pcrResultTg());
 if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
 slSafeAddHead(&trackList, oligoMatchTg());
@@ -3492,7 +3493,7 @@ if (!hideControls)
     /* Make line that says position. */
 	{
 	char buf[256];
-	char *survey = getCfgValue("HGDB_SURVEY", "survey");
+	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
         char *javascript = "onchange=\"document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;\"";
         if (containsStringNoCase(database, "zoo"))
             {
@@ -3503,7 +3504,7 @@ if (!hideControls)
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
 	hWrites("position/search ");
-	hTextVar("position", addCommasToPos(position), 30);
+	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hWrites(" ");
 	hButton("submit", "jump");
@@ -3980,22 +3981,22 @@ if (sameString(position, ""))
 chromName = NULL;
 winStart = 0;
 if (isGenome(position) || NULL ==
-    (hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart)))
+    (hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart)))
     {
     if (winStart == 0)	/* number of positions found */
-	hgp = findGenomePos(defaultPosition, &chromName, &winStart, &winEnd,
+	hgp = findGenomePos(database, defaultPosition, &chromName, &winStart, &winEnd,
 			    cart);
     }
 
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
     char *trackName = hgp->tableList->name;
-    char *parent = hGetParent(trackName); // This only works for a composite track (not superTrack)
+    char *parent = hGetParent(database, trackName); // This only works for a composite track (not superTrack)
     if (parent)                           // TODO: Therefore I wonder about the need for this code.
         trackName = cloneString(parent);
     char *vis = cartOptionalString(cart, trackName);
     if (vis == NULL || differentString(vis, "full"))
-	cartSetString(cart, trackName, hTrackOpenVis(trackName));
+	cartSetString(cart, trackName, hTrackOpenVis(database, trackName));
     }
 
 /* After position is found set up hash of matches that should
@@ -4009,7 +4010,7 @@ if (NULL == chromName)
     return;
     }
 
-seqBaseCount = hChromSize(chromName);
+seqBaseCount = hChromSize(database, chromName);
 winBaseCount = winEnd - winStart;
 
 /* Figure out basic dimensions of display.  This
@@ -4137,14 +4138,14 @@ cgiTableRowEnd();
 void chromInfoRowsChrom()
 /* Make table rows of chromosomal chromInfo name & size, sorted by name. */
 {
-struct slName *chromList = hAllChromNames();
+struct slName *chromList = hAllChromNamesDb(database);
 struct slName *chromPtr = NULL;
 long long total = 0;
 
 slSort(&chromList, chrSlNameCmp);
 for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
-    unsigned size = hChromSize(chromPtr->name);
+    unsigned size = hChromSize(database, chromPtr->name);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
     printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
@@ -4165,7 +4166,7 @@ slFreeList(&chromList);
 void chromInfoRowsNonChrom(int limit)
 /* Make table rows of non-chromosomal chromInfo name & size, sorted by size. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 long long total = 0;
@@ -4255,7 +4256,7 @@ void chromInfoPage()
 /* Show list of chromosomes (or scaffolds, etc) on which this db is based. */
 {
 char *position = cartUsualString(cart, "position", hDefaultPos(database));
-char *defaultChrom = hDefaultChrom();
+char *defaultChrom = hDefaultChrom(database);
 struct dyString *title = dyStringNew(512);
 dyStringPrintf(title, "%s %s (%s) Browser Sequences",
 	       hOrganism(database), hFreezeFromDb(database), database);
@@ -4266,7 +4267,7 @@ cartSaveSession(cart);
 puts("Enter a position, or click on a sequence name to view the entire "
      "sequence in the genome browser.<P>");
 puts("position ");
-hTextVar("position", addCommasToPos(position), 30);
+hTextVar("position", addCommasToPos(database, position), 30);
 cgiMakeButton("Submit", "submit");
 puts("<P>");
 
@@ -4281,7 +4282,7 @@ cgiTableFieldEnd();
 cgiTableRowEnd();
 
 if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) &&
-    hChromCount() < 100)
+    hChromCount(database) < 100)
     chromInfoRowsChrom();
 else
     chromInfoRowsNonChrom(1000);
@@ -4334,8 +4335,6 @@ if(sameString(debugTmp, "on"))
 else
     hgDebug = FALSE;
 
-hSetDb(database);
-
 hDefaultConnect();
 initTl();
 
@@ -4370,7 +4369,7 @@ else if (cartVarExists(cart, configDefaultAll))
 else if (cartVarExists(cart, configHideAllGroups))
     {
     cartRemove(cart, configHideAllGroups);
-    struct grp *grp = NULL, *grps = hLoadGrps();
+    struct grp *grp = NULL, *grps = hLoadGrps(database);
     for (grp = grps; grp != NULL; grp = grp->next)
         collapseGroup(grp->name, TRUE);
     configPageSetTrackVis(-2);
@@ -4378,7 +4377,7 @@ else if (cartVarExists(cart, configHideAllGroups))
 else if (cartVarExists(cart, configShowAllGroups))
     {
     cartRemove(cart, configShowAllGroups);
-    struct grp *grp = NULL, *grps = hLoadGrps();
+    struct grp *grp = NULL, *grps = hLoadGrps(database);
     for (grp = grps; grp != NULL; grp = grp->next)
         collapseGroup(grp->name, FALSE);
     configPageSetTrackVis(-2);
@@ -4387,7 +4386,7 @@ else if (cartVarExists(cart, configHideEncodeGroups))
     {
     /* currently not used */
     cartRemove(cart, configHideEncodeGroups);
-    struct grp *grp = NULL, *grps = hLoadGrps();
+    struct grp *grp = NULL, *grps = hLoadGrps(database);
     for (grp = grps; grp != NULL; grp = grp->next)
         if (startsWith("encode", grp->name))
             collapseGroup(grp->name, TRUE);
@@ -4397,7 +4396,7 @@ else if (cartVarExists(cart, configShowEncodeGroups))
     {
     /* currently not used */
     cartRemove(cart, configShowEncodeGroups);
-    struct grp *grp = NULL, *grps = hLoadGrps();
+    struct grp *grp = NULL, *grps = hLoadGrps(database);
     for (grp = grps; grp != NULL; grp = grp->next)
         if (startsWith("encode", grp->name))
             collapseGroup(grp->name, FALSE);

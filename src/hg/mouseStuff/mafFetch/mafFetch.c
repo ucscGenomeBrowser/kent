@@ -6,7 +6,7 @@
 #include "maf.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: mafFetch.c,v 1.3 2005/10/20 17:17:20 markd Exp $";
+static char const rcsid[] = "$Id: mafFetch.c,v 1.3.138.1 2008/07/31 02:24:42 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -63,7 +63,7 @@ slUniqify(&refs, cmpScoredRef, scoredRefFree);
 return refs;
 }
 
-static void copyMafs(struct sqlConnection *conn,
+static void copyMafs(char *db, struct sqlConnection *conn,
                      struct scoredRef *refs, FILE *outFh)
 /* copy mafs */
 {
@@ -78,7 +78,7 @@ for (ref = refs; ref != NULL; ref = ref->next)
     if ((maf == NULL) || (extFile != ref->extFile))
         {
         mafFileFree(&mf);
-        mf = mafOpen(hExtFileName("extFile", ref->extFile));
+        mf = mafOpen(hExtFileName(db, "extFile", ref->extFile));
         extFile = ref->extFile;
         if (recCnt == 0)
             mafWriteStart(outFh, mf->scoring);
@@ -102,16 +102,15 @@ struct sqlConnection *conn;
 struct scoredRef *refs;
 FILE *outFh;
 
-hSetDb(db);
 beds = bedLoadNAll(overBed, 3);
 slSort(&beds, bedCmp);
 
-conn = hAllocConn();
+conn = hAllocConn(db);
 refs = loadMafRefs(conn, table, beds);
 bedFreeList(&beds);
 
 outFh = mustOpen(mafOut, "w");
-copyMafs(conn, refs, outFh);
+copyMafs(db, conn, refs, outFh);
 carefulClose(&outFh);
 
 scoredRefFreeList(&refs);

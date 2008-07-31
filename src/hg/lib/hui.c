@@ -16,7 +16,7 @@
 #include "obscure.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.107 2008/07/17 22:56:45 markd Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.107.4.1 2008/07/31 02:24:30 markd Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -1483,7 +1483,7 @@ struct hash *makeTrackHashWithComposites(char *database, char *chrom,
 /* Make hash of trackDb items for this chromosome, including composites,
    not just the subtracks. */
 {
-struct trackDb *tdbs = hTrackDb(chrom);
+struct trackDb *tdbs = hTrackDb(database, chrom);
 struct hash *trackHash = newHash(7);
 
 while (tdbs != NULL)
@@ -2052,7 +2052,7 @@ if(strptime (date,format, &tp))
 return newDate;  // newDate is never freed!
 }
 
-static void compositeUiSubtracks(struct cart *cart, struct trackDb *parentTdb,
+static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
                  boolean selectedOnly, char *primarySubtrack)
 /* Show checkboxes for subtracks. */
 {
@@ -2137,7 +2137,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             printf ("</TD><TD>%s [selected on main page]</TD></TR>\n",
                 subtrack->longLabel);
             }
-        else if (sameString(primaryType, subtrack->type) && hTableExists(subtrack->tableName))
+        else if (sameString(primaryType, subtrack->type) && hTableExists(db, subtrack->tableName))
             {
             puts("<TR><TD>");
             cgiMakeCheckBox(option, alreadySet);
@@ -2152,7 +2152,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 continue;
             }
         membership_t *membership = subgroupMembershipGet(subtrack);    
-        if (hTableExists(subtrack->tableName))
+        if (hTableExists(db, subtrack->tableName))
             {
             if( divisionIfNeeded(lastDivide,dividers,membership) )
                 colorIx = (colorIx == COLOR_BG_DEFAULT_IX ? COLOR_BG_ALTDEFAULT_IX : COLOR_BG_DEFAULT_IX);
@@ -2176,7 +2176,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     #define SCHEMA_LINK "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=_BLANK>View table schema</A>\n"
     #define RESTRICTED_USE_LINK "<A HREF=\"http://genome.cse.ucsc.edu/FAQ/FAQcite\" TARGET=_BLANK>Restricted Until: %s</A>\n"
 #endif//ndef SHOW_RESTRICTED_COLUMN
-            printf(SCHEMA_LINK, hGetDb(), parentTdb->grp, parentTdb->tableName, subtrack->tableName);
+            printf(SCHEMA_LINK, db, parentTdb->grp, parentTdb->tableName, subtrack->tableName);
             char *displayDate = NULL;
             if(trackDbSetting(subtrack, "dateReleased"))
                 {
@@ -2210,18 +2210,18 @@ hierarchyFree(&hierarchy);
 }
 
 
-static void compositeUiAllSubtracks(struct cart *cart, struct trackDb *tdb,
+static void compositeUiAllSubtracks(char *db, struct cart *cart, struct trackDb *tdb,
 				    char *primarySubtrack)
 /* Show checkboxes for all subtracks, not just selected ones. */
 {
-compositeUiSubtracks(cart, tdb, FALSE, primarySubtrack);
+compositeUiSubtracks(db, cart, tdb, FALSE, primarySubtrack);
 }
 
-static void compositeUiSelectedSubtracks(struct cart *cart, struct trackDb *tdb,
+static void compositeUiSelectedSubtracks(char *db, struct cart *cart, struct trackDb *tdb,
 					 char *primarySubtrack)
 /* Show checkboxes only for selected subtracks. */
 {
-compositeUiSubtracks(cart, tdb, TRUE, primarySubtrack);
+compositeUiSubtracks(db, cart, tdb, TRUE, primarySubtrack);
 }
 
 static void makeAddClearSubmitTweak(char javascript[JBUFSIZE], char *formName,
@@ -2355,7 +2355,7 @@ puts("</TD></TR></TABLE>");
 freeMem(typeLine);
 }
 
-void scoreCfgUi(struct cart *cart, struct trackDb *parentTdb, int maxScore, char *name)
+void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, int maxScore, char *name)
 /* Put up UI for filtering bed track based on a score */
 {
 char option[256];
@@ -2398,11 +2398,11 @@ if (scoreCtString != NULL)
     /* Only check size of table if track does not have subtracks */
     if (!tdbIsComposite(parentTdb))
         printf("&nbsp; (range: 1 to 100000, total items: %d)",
-                getTableSize(parentTdb->tableName));
+               getTableSize(db, parentTdb->tableName));
     }
 }
 
-static boolean hCompositeDisplayViewDropDowns(struct cart *cart, struct trackDb *parentTdb)
+static boolean hCompositeDisplayViewDropDowns(char *db, struct cart *cart, struct trackDb *parentTdb)
 /* UI for composite view drop down selections. */
 {
 int ix;
@@ -2504,7 +2504,7 @@ if(makeCfgRows)
                 if(sameString(matchedSubtracks[ix]->type,"wig"))
                     wigCfgUi(cart,matchedSubtracks[ix],objName);
                 else if(sameString(matchedSubtracks[ix]->type,"bed 5 +"))
-                    scoreCfgUi(cart,parentTdb, 1000,objName);
+                    scoreCfgUi(db, cart,parentTdb, 1000,objName);
                 puts("</td></tr></table></td></tr></table>");
                 puts("</TD></TR>");
                 }
@@ -2516,7 +2516,7 @@ freeMem(matchedSubtracks);
 return TRUE;
 }
 
-static boolean hCompositeUiByMatrix(struct cart *cart, struct trackDb *parentTdb, char *formName)
+static boolean hCompositeUiByMatrix(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
 /* UI for composite tracks: matrix of checkboxes. */
 {
 //int ix;
@@ -2529,7 +2529,7 @@ struct trackDb *subtrack;
 if(!dimensionsExist(parentTdb))
     return FALSE;
 
-hCompositeDisplayViewDropDowns(cart,parentTdb);  // If there is a view dimension, it is at top
+hCompositeDisplayViewDropDowns(db, cart,parentTdb);  // If there is a view dimension, it is at top
 
 int ixX,ixY;
 members_t *dimensionX = subgroupMembersGetByDimension(parentTdb,'X');
@@ -2828,7 +2828,7 @@ for (i = 0; i < MAX_SUBGROUP; i++)
     return TRUE;
 }
 
-void hCompositeUi(struct cart *cart, struct trackDb *tdb,
+void hCompositeUi(char *db, struct cart *cart, struct trackDb *tdb,
 		  char *primarySubtrack, char *fakeSubmit, char *formName)
 /* UI for composite tracks: subtrack selection.  If primarySubtrack is
  * non-NULL, don't allow it to be cleared and only offer subtracks
@@ -2845,7 +2845,7 @@ boolean isMatrix = dimensionsExist(tdb);
 puts("<P>");
 if (slCount(tdb->subtracks) < MANY_SUBTRACKS && !hasSubgroups)
     {
-    compositeUiAllSubtracks(cart, tdb, primarySubtrack);
+    compositeUiAllSubtracks(db, cart, tdb, primarySubtrack);
     return;
     }
 if (fakeSubmit)
@@ -2857,7 +2857,7 @@ jsIncludeFile("hui.js",NULL);
 if (!hasSubgroups || !isMatrix || primarySubtrack)
     hCompositeUiNoMatrix(cart,tdb,primarySubtrack,formName);
 else 
-    hCompositeUiByMatrix(cart,tdb,formName);
+    hCompositeUiByMatrix(db, cart,tdb,formName);
 
 #ifdef SHOW_RESTRICTED_COLUMN
 if(primarySubtrack == NULL && isMatrix == FALSE)
@@ -2893,9 +2893,9 @@ if(primarySubtrack == NULL)
 cartSaveSession(cart);
 cgiContinueHiddenVar("g");
 if (displayAll)
-    compositeUiAllSubtracks(cart, tdb, primarySubtrack);
+    compositeUiAllSubtracks(db, cart, tdb, primarySubtrack);
 else
-    compositeUiSelectedSubtracks(cart, tdb, primarySubtrack);
+    compositeUiSelectedSubtracks(db, cart, tdb, primarySubtrack);
 }
 
 boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,

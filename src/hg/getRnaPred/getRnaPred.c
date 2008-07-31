@@ -10,7 +10,7 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.21 2008/06/08 19:26:43 markd Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.21.10.1 2008/07/31 02:24:01 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -81,10 +81,10 @@ char *suffix = "";
 int maxSize = -1;
 char *genomeSeqs = NULL;
 
-struct nibTwoCache *getNibTwoCacheFromDb()
+struct nibTwoCache *getNibTwoCacheFromDb(char *db)
 /* get the nib or two-bit cache from database */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 char nibTwoPath[PATH_LEN];
 struct nibTwoCache *nibTwoCache;
 
@@ -105,29 +105,29 @@ hFreeConn(&conn);
 return nibTwoCache;
 }
 
-struct nibTwoCache *getNibTwoCache()
+struct nibTwoCache *getNibTwoCache(char *db)
 /* get the nib or two-bit cache */
 {
 if (genomeSeqs != NULL)
     return nibTwoCacheNew(genomeSeqs);
 else
-    return getNibTwoCacheFromDb();
+    return getNibTwoCacheFromDb(db);
 }
 
-struct dnaSeq *fetchDna(char *seqName, int start, int end, enum dnaCase dnaCase)
+struct dnaSeq *fetchDna(char *db, char *seqName, int start, int end, enum dnaCase dnaCase)
 /* Fetch DNA sequence, with caching of opens */
 {
 static struct nibTwoCache *nibTwoCache = NULL;
 struct dnaSeq *dna;
 if (nibTwoCache == NULL)
-    nibTwoCache = getNibTwoCache();
+    nibTwoCache = getNibTwoCache(db);
 dna = nibTwoCacheSeqPart(nibTwoCache, seqName, start, (end-start), NULL);
 if (dnaCase == dnaLower)
     tolowers(dna->dna);
 return dna;
 }
 
-boolean hasWeirdSplice(struct genePred *gp)
+boolean hasWeirdSplice(char *db, struct genePred *gp)
 /* see if a gene has weird splice sites */
 {
 int i;
@@ -139,7 +139,7 @@ for (i=1; (i<gp->exonCount) && !gotOdd; ++i)
     int size = end - start;
     if (size > 0)
         {
-        struct dnaSeq *seq = fetchDna(gp->chrom, start, end, dnaLower);
+        struct dnaSeq *seq = fetchDna(db, gp->chrom, start, end, dnaLower);
         DNA *s = seq->dna;
         DNA *e = seq->dna + seq->size;
         uglyf("%s %c%c/%c%c\n", gp->name, s[0], s[1], e[-2], e[-1]);
@@ -203,7 +203,7 @@ if (cdsFh != NULL)
     fprintf(cdsFh,"%s\t%d\t%d\n", gp->name, cdsStart+1, cdsEnd);
 }
 
-void writePsl(struct genePred *gp, FILE* pslFh)
+void writePsl(char *db, struct genePred *gp, FILE* pslFh)
 /* create a PSL for the virtual mRNA */
 {
 int rnaSize = genePredBases(gp);
@@ -219,7 +219,7 @@ psl.qSize = rnaSize;
 psl.qStart = 0;
 psl.qEnd = rnaSize;
 psl.tName = gp->chrom;
-psl.tSize =  hChromSize(gp->chrom);
+psl.tSize =  hChromSize(db, gp->chrom);
 psl.tStart = gp->txStart;
 psl.tEnd = gp->txEnd;
 
@@ -286,7 +286,7 @@ cdsBuf->string[ip] = '\0';
 faWriteNext(faFh, name, cdsBuf->string, strlen(cdsBuf->string));
 }
 
-void processGenePred(struct genePred *gp, struct dyString *dnaBuf, 
+void processGenePred(char *db, struct genePred *gp, struct dyString *dnaBuf, 
                      struct dyString *cdsBuf, struct dyString *indBuf,
                      FILE* faFh, FILE* cdsFh, FILE* pslFh)
 /* output genePred DNA, check for weird splice sites if requested */
@@ -294,7 +294,6 @@ void processGenePred(struct genePred *gp, struct dyString *dnaBuf,
 int i;
 char name[1024];
 int index = 0;
-char *db = hGetDb();
 
 /* Load exons one by one into dna string. */
 dyStringClear(dnaBuf);
@@ -312,7 +311,7 @@ for (i=0; i<gp->exonCount; ++i)
         warn("%d sized exon in %s\n", size, gp->name);
     else
         {
-        struct dnaSeq *seq = fetchDna(gp->chrom, start, end, (keepMasking ? dnaMixed : dnaLower));
+        struct dnaSeq *seq = fetchDna(db, gp->chrom, start, end, (keepMasking ? dnaMixed : dnaLower));
         dyStringAppendN(dnaBuf, seq->dna, size);
         freeDnaSeq(&seq);
         }
@@ -357,17 +356,17 @@ else
                 dnaBuf->stringSize);
 
 if (pslFh != NULL)
-    writePsl(gp, pslFh);
+    writePsl(db, gp, pslFh);
 }
 
-void getRnaForTable(char *table, char *chrom, struct dyString *dnaBuf, 
+void getRnaForTable(char *db, char *table, char *chrom, struct dyString *dnaBuf, 
                     struct dyString *cdsBuf, struct dyString *indBuf,
                     FILE *faFh, FILE *cdsFh, FILE* pslFh)
 /* get RNA for a genePred table */
 {
 int rowOffset;
 char **row;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 
 if (!sqlTableExists(conn, table))
@@ -382,29 +381,29 @@ while ((row = sqlNextRow(sr)) != NULL)
       gp = genePredExtLoad(row+rowOffset, GENEPREDX_NUM_COLS);
     else
       gp = genePredLoad(row+rowOffset);
-    if ((!weird) || hasWeirdSplice(gp))
-        processGenePred(gp, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
+    if ((!weird) || hasWeirdSplice(db, gp))
+        processGenePred(db, gp, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
     genePredFree(&gp);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void getRnaForTables(char *table, char *chrom, struct dyString *dnaBuf, 
+void getRnaForTables(char *db, char *table, char *chrom, struct dyString *dnaBuf, 
                      struct dyString *cdsBuf, struct dyString *indBuf,
                      FILE *faFh, FILE *cdsFh, FILE* pslFh)
 /* get RNA for one for possibly splite genePred table */
 {
 struct slName* chroms = NULL, *chr;
 if (sameString(chrom, "all"))
-    chroms = hAllChromNames();
+    chroms = hAllChromNamesDb(db);
 else
     chroms = slNameNew(chrom);
 for (chr = chroms; chr != NULL; chr = chr->next)
-    getRnaForTable(table, chr->name, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
+    getRnaForTable(db, table, chr->name, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
 }
 
-void getRnaForFile(char *table, char *chrom, struct dyString *dnaBuf, 
+void getRnaForFile(char *db, char *table, char *chrom, struct dyString *dnaBuf, 
                    struct dyString *cdsBuf, struct dyString *indBuf,
                    FILE *faFh, FILE* cdsFh, FILE* pslFh)
 /* get RNA for a genePred file */
@@ -421,13 +420,13 @@ while (lineFileNextRowTab(lf, row, genePredExt ?
     else 
       gp = genePredLoad(row);
     if (all || sameString(gp->chrom, chrom))
-        processGenePred(gp, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
+        processGenePred(db, gp, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
     genePredFree(&gp);
     }
 lineFileClose(&lf); 
 }
 
-void getRnaPred(char *database, char *table, char *chrom, char *faOut)
+void getRnaPred(char *db, char *table, char *chrom, char *faOut)
 /* getRna - Get RNA for gene predictions and write to file. */
 {
 struct dyString *dnaBuf = dyStringNew(16*1024);
@@ -445,12 +444,11 @@ if (pslOut != NULL)
     pslFh = mustOpen(pslOut, "w");
 if (exonIndices)
    indBuf = dyStringNew(512);
-hSetDb(database);
 
 if (fileExists(table))
-    getRnaForFile(table, chrom, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
+    getRnaForFile(db, table, chrom, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
 else
-    getRnaForTables(table, chrom, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
+    getRnaForTables(db, table, chrom, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
 
 dyStringFree(&dnaBuf);
 dyStringFree(&cdsBuf);

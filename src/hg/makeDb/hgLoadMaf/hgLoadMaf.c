@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.24 2008/07/09 18:56:43 braney Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.24.4.1 2008/07/31 02:24:37 markd Exp $";
 
 /* Command line options */
 
@@ -125,11 +125,10 @@ if (testFile != NULL)
     }
 else
     {
-    hSetDb(database);
     if (maxNameLen)
 	indexLen = maxNameLen;
     else
-	indexLen = hGetMinIndexLength();
+	indexLen = hGetMinIndexLength(database);
 
     if (loadFile != NULL)
 	{

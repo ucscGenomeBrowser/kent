@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.58 2008/07/08 16:08:58 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.58.6.1 2008/07/31 02:24:36 markd Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -318,13 +318,12 @@ else if (!oldTable)
     {
     int minLength;
 
-    hSetDb(database);
     if (noLoad)
 	minLength=6;
     else if (maxChromNameLength)
 	minLength = maxChromNameLength;
     else
-	minLength = hGetMinIndexLength();
+	minLength = hGetMinIndexLength(database);
     verbose(2, "INDEX chrom length: %d\n", minLength);
 
     /* Create definition statement. */

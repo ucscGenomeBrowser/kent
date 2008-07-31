@@ -186,13 +186,11 @@ proteinDataDate = argv[1];
 genomeDBname    = argv[2];
 genomeReadOnly = argv[3];
 
-hSetDb(genomeReadOnly);
-
 o3 = fopen("j.dat", "w");
 o4 = fopen("jj.dat", "w");
 o5 = fopen("align.lis", "w");
     
-conn2= hAllocConn();
+conn2= hAllocConn(genomeReadOnly);
 
 inf   = mustOpen("best.lis", "r");
 alignmentID = 0;
@@ -204,14 +202,14 @@ while (fgets(line, 1000, inf) != NULL)
     priority = 0;
     sprintf(cond_str, "sp='%s'", proteinName);
     sprintf(proteinsDB, "proteins%s", proteinDataDate);
-    pdbID= sqlGetField(conn2, proteinsDB, "pdbSP", "pdb", cond_str);
+    pdbID= sqlGetField(proteinsDB, "pdbSP", "pdb", cond_str);
     if (pdbID != NULL)
 	{
 	priority = priority + PDB_YES;
 	}
 	
     sprintf(cond_str, "displayID='%s'", proteinName);
-    proteinDbSource  = sqlGetField(conn2, proteinsDB, "spXref2", "biodatabaseID", cond_str);
+    proteinDbSource  = sqlGetField(proteinsDB, "spXref2", "biodatabaseID", cond_str);
     if (proteinDbSource == NULL)
 	{
 	printf("No proteinDbSource found for %s, skipping it ... \n", proteinName);

@@ -17,7 +17,7 @@
 #include "pbStamp.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbUtil.c,v 1.25 2008/06/27 16:30:12 kuhn Exp $";
+static char const rcsid[] = "$Id: pbUtil.c,v 1.25.6.1 2008/07/31 02:24:51 markd Exp $";
 
 void hWrites(char *string)
 /* Write string with no '\n' if not suppressed. */
@@ -97,8 +97,8 @@ aa_hydro['V'] =  4.200;
 /* ?? Asx: -3.500 Glx: -3.500  Xaa: -0.490 ?? */
 
 /* get average frequency distribution for each AA residue */
-conn= hAllocConn();
-if (!hTableExistsDb(database, "pbResAvgStd"))
+conn= hAllocConn(database);
+if (!hTableExists(database, "pbResAvgStd"))
     {
     *hasResFreq = 0;
     return;
@@ -147,7 +147,7 @@ int i,len;
 char *seq;
 char *protDbDate;
 
-conn= hAllocConn();
+conn= hAllocConn(database);
 
 /* Figure out which is the appropriate DB to use, 
    either spXXXXXX (for PB supported GB) so that we can handle TrEMBL-NEW entries
@@ -260,7 +260,7 @@ int hggEnd     = 0;
 char *hggGene  = NULL;
 char *hggChrom = NULL;
 
-conn= hAllocConn();
+conn= hAllocConn(database);
 
 /* NOTE: the query below may not always return single answer, */
 /* and kgProtMap and knownGene alignments may not be identical, so pick the closest one. */
@@ -553,12 +553,12 @@ char *hggChrom, *hggStart, *hggEnd;
 char *displayId;
 
 safef(cond_str, sizeof(cond_str), "kgId='%s' and spID='%s'", mrnaID, spAcc);
-displayId  = sqlGetField(NULL, database, "kgXref", "spDisplayID", cond_str);
+displayId  = sqlGetField(database, "kgXref", "spDisplayID", cond_str);
 /* Feed hgGene with chrom, txStart, and txEnd data, otherwise it would use whatever are in the cart */
 safef(cond_str, sizeof(cond_str), "name='%s'", mrnaID);
-hggChrom = sqlGetField(NULL, database, "knownGene", "chrom", cond_str);
-hggStart = sqlGetField(NULL, database, "knownGene", "txStart", cond_str);
-hggEnd   = sqlGetField(NULL, database, "knownGene", "txEnd", cond_str);
+hggChrom = sqlGetField(database, "knownGene", "chrom", cond_str);
+hggStart = sqlGetField(database, "knownGene", "txStart", cond_str);
+hggEnd   = sqlGetField(database, "knownGene", "txEnd", cond_str);
 if (mrnaID != NULL)
     {
     hPrintf("\n<LI>Gene Details Page - ");
@@ -581,8 +581,8 @@ void doPathwayLinks(char *spAcc, char *mrnaName)
 /* Show pathway links */
 /* spAcc is a place holder for future extension */
 {
-struct sqlConnection *conn  = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn  = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -593,10 +593,10 @@ char *geneSymbol;
 char *cgapID, *biocMapID;
 boolean hasPathway;
 
-if (hTableExistsDb(database, "kgXref"))
+if (hTableExists(database, "kgXref"))
     {
     safef(cond_str, sizeof(cond_str), "kgID='%s'", mrnaName);
-    geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
+    geneSymbol = sqlGetField(database, "kgXref", "geneSymbol", cond_str);
     if (geneSymbol == NULL)
         {
         geneSymbol = mrnaName;
@@ -615,7 +615,7 @@ cgapID     = NULL;
 if (sqlTableExists(conn, "cgapBiocPathway"))
     {
     safef(cond_str, sizeof(cond_str), "alias='%s'", geneSymbol);
-    cgapID = sqlGetField(conn2, database, "cgapAlias", "cgapID", cond_str);
+    cgapID = sqlGetField(database, "cgapAlias", "cgapID", cond_str);
 
     if (cgapID != NULL)
 	{
@@ -635,7 +635,7 @@ if (sqlTableExists(conn, "cgapBiocPathway"))
 	    biocMapID = row[0];
 	    hPrintf("<LI>BioCarta - &nbsp");
 	    safef(cond_str, sizeof(cond_str), "mapID=%c%s%c", '\'', biocMapID, '\'');
-	    mapDescription = sqlGetField(conn2, database, "cgapBiocDesc", "description",cond_str);
+	    mapDescription = sqlGetField(database, "cgapBiocDesc", "description",cond_str);
 	    hPrintf("<A HREF = \"");
 	    hPrintf("http://cgap.nci.nih.gov/Pathways/BioCarta/%s", biocMapID);
 	    hPrintf("\" TARGET=_blank>%s</A> - %s <BR>\n", biocMapID, mapDescription);
@@ -665,7 +665,7 @@ if (sqlTableExists(conn, "keggPathway"))
 	    mapID   = row[2];
 	    hPrintf("<LI>KEGG - &nbsp");
 	    safef(cond_str, sizeof(cond_str), "mapID=%c%s%c", '\'', mapID, '\'');
-	    mapDescription = sqlGetField(conn2, database, "keggMapDesc", "description", cond_str);
+	    mapDescription = sqlGetField(database, "keggMapDesc", "description", cond_str);
 	    hPrintf("<A HREF = \"");
 	    hPrintf("http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s", mapID, locusID);
 	    hPrintf("\" TARGET=_blank>%s</A> - %s <BR>\n",mapID, mapDescription);
@@ -694,7 +694,7 @@ if (sqlTableExists(conn, "bioCycPathway"))
 	    mapID   = row[2];
 	    hPrintf("<LI>BioCyc - &nbsp");
 	    safef(cond_str, sizeof(cond_str), "mapID=%c%s%c", '\'', mapID, '\'');
-	    mapDescription = sqlGetField(conn2, database, "bioCycMapDesc", "description", cond_str);
+	    mapDescription = sqlGetField(database, "bioCycMapDesc", "description", cond_str);
 	    hPrintf("<A HREF = \"");
 
 	    hPrintf("http://biocyc.org/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2",
@@ -765,7 +765,7 @@ while (row3 != NULL)
     conn = sqlConnect(gDatabase);
     safef(cond_str, sizeof(cond_str), 
     	  "alias='%s'", queryID);
-    answer = sqlGetField(conn, gDatabase, "kgSpAlias", "count(distinct spID)", cond_str);
+    answer = sqlGetField(gDatabase, "kgSpAlias", "count(distinct spID)", cond_str);
     sqlDisconnect(&conn); 
 
     if ((answer != NULL) && (!sameWord(answer, "0")))
@@ -859,7 +859,7 @@ while (row3 != NULL)
 
     conn = sqlConnect(gDatabase);
     safef(cond_str, sizeof(cond_str), "alias='%s' and spID != ''", queryID);
-    answer = sqlGetField(conn, gDatabase, "kgSpAlias", "count(distinct spID)", cond_str);
+    answer = sqlGetField(gDatabase, "kgSpAlias", "count(distinct spID)", cond_str);
     if ((answer != NULL) && (!sameWord(answer, "0")))
 	{
 	/* display organism name */
@@ -881,9 +881,9 @@ while (row3 != NULL)
 	    {
    	    spID = row[0];
     	    safef(cond_str, sizeof(cond_str), "accession='%s'", spID);
-    	    displayID = sqlGetField(proteinsConn, protDbName, "spXref3", "displayID", cond_str);
+    	    displayID = sqlGetField(protDbName, "spXref3", "displayID", cond_str);
     	    safef(cond_str, sizeof(cond_str), "accession='%s'", spID);
-    	    desc = sqlGetField(proteinsConn, protDbName, "spXref3", "description", cond_str);
+    	    desc = sqlGetField(protDbName, "spXref3", "description", cond_str);
 
 	    /* display a protein */
 	    hPrintf(
@@ -969,7 +969,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 	    if (!skipIt) 
 	    	{
     		safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", taxonId);
-    		answer = sqlGetField(conn, PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
+    		answer = sqlGetField(PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
 		hPrintf("<FONT SIZE=3><B>");
 		hPrintf("<A href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>%s</A>",
            		cgiEncode(protOrg), protOrg);

@@ -10,7 +10,7 @@
 #include "altGraphX.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: altSplice.c,v 1.10 2008/02/22 07:33:49 markd Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.10.24.1 2008/07/31 02:24:02 markd Exp $";
 
 static int gpBedBasesShared(struct genePred *gp, struct bed *bed)
 /* Return number of bases genePred and bed share. */
@@ -142,7 +142,7 @@ struct altGraphX *ag;
 char table[64];
 boolean hasBin;
 
-hFindSplitTable(curGeneChrom, "altGraphX", table, &hasBin);
+hFindSplitTable(sqlGetDatabase(conn), curGeneChrom, "altGraphX", table, &hasBin);
 safef(query, sizeof(query), "select * from %s where name='%s'", table, altId);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)

@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.170 2007/10/31 18:03:44 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.170.38.1 2008/07/31 02:24:08 markd Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -1070,7 +1070,7 @@ struct hashEl *fixedPosTableList = NULL;
 struct hashEl *fixedNonposTableList = NULL;
 
 /* get table names from the database */
-conn = hAllocConn();
+conn = hAllocConn(database);
 getTableNames(database, conn, &posTableList, &nonposTableList);
 hFreeConn(&conn);
 /* get table names from hgFixed too */

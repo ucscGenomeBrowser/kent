@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.85 2008/07/09 18:40:39 braney Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.85.4.1 2008/07/31 02:24:27 markd Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -55,11 +55,11 @@ if (line != NULL && startsWithWord("track", line))
 return line;
 }
 
-void customFactoryCheckChromNameDb(char *db, char *word, struct lineFile *lf)
+void customFactoryCheckChromNameDb(char *genomeDb, char *word, struct lineFile *lf)
 /* Make sure it's a chromosome or a contig.  Well, at the moment,
  * just make sure it's a chromosome. */
 {
-if (!hgIsOfficialChromNameDb(db, word))
+if (!hgIsOfficialChromNameDb(genomeDb, word))
     lineFileAbort(lf, "%s not a chromosome (note: chrom names are case sensitive)", word);
 }
 
@@ -96,7 +96,7 @@ static void restorePrevEnv()
 /* while fiddling with environment for pipeline loaders, restore environment */
 {
 /* can not eliminate the variables from the environment, but can make
- * them be empty strings.  This will be good enough for getCfgValue()
+ * them be empty strings.  This will be good enough for cfgOptionEnv()
  * in hdb.c and jksql.c
  */
 if (saveHost)
@@ -153,10 +153,17 @@ sqlDisconnect(&ctConn);
 char *ctGenomeOrCurrent(struct customTrack *ct)
 /* return database setting */
 {
+// FIXME: don't understand this
+#if 0
 char *ctDb = ctGenome(ct);
 if (ctDb == NULL)
     ctDb = hGetDb();
 return ctDb;
+#else
+char *ctDb = ctGenome(ct);
+assert(ctDb != NULL);
+return ctDb;
+#endif
 }
 
 static boolean sameType(char *a, char *b)
@@ -189,7 +196,7 @@ return wordCount >= 3 && wordCount <= bedKnownFields
 }
 
 static boolean bedRecognizer(struct customFactory *fac,
-	struct customPp *cpp, char *type, 
+	char *genomeDb, struct customPp *cpp, char *type, 
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a bed track */
 {
@@ -211,19 +218,19 @@ return isBed;
 }
 
 static boolean microarrayRecognizer(struct customFactory *fac,
-	struct customPp *cpp, char *type, 
+	char *genomeDb, struct customPp *cpp, char *type, 
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a microarray track */
 {
-return bedRecognizer(fac, cpp, type, track) && (track->fieldCount == 15);
+return bedRecognizer(fac, genomeDb, cpp, type, track) && (track->fieldCount == 15);
 }
 
 static boolean coloredExonRecognizer(struct customFactory *fac,
-	struct customPp *cpp, char *type, 
+	char *genomeDb, struct customPp *cpp, char *type, 
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a colored-exon track */
 {
-return bedRecognizer(fac, cpp, type, track) && (track->fieldCount >= 14);
+return bedRecognizer(fac, genomeDb, cpp, type, track) && (track->fieldCount >= 14);
 }
 
 static struct pipeline *bedLoaderPipe(struct customTrack *track)
@@ -490,7 +497,7 @@ return bed;
 }
 
 static struct customTrack *bedLoader(struct customFactory *fac,  
-	struct hash *chromHash,
+	char *genomeDb, struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 /* Load up bed data until get next track line. */
 {
@@ -510,12 +517,12 @@ return bedFinish(track, dbRequested);
 }
 
 static struct customTrack *bedGraphLoader(struct customFactory *fac,  
-	struct hash *chromHash,
+	char *genomeDb, struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 /* Load up bedGraph data until get next track line. */
 {
 char buf[20];
-bedLoader(fac, chromHash, cpp, track, dbRequested);
+bedLoader(fac, genomeDb, chromHash, cpp, track, dbRequested);
 
 /* Trailing period in "bedGraph N ." confuses bedGraphMethods, so replace type */
 freeMem(track->tdb->type);
@@ -525,11 +532,11 @@ return track;
 }
 
 static struct customTrack *microarrayLoader(struct customFactory *fac,  
-	struct hash *chromHash,
+	char *genomeDb, struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 /* Load up microarray data until get next track line. */
 {
-struct customTrack *ct = bedLoader(fac, chromHash, cpp, track, dbRequested);
+struct customTrack *ct = bedLoader(fac, genomeDb, chromHash, cpp, track, dbRequested);
 freeMem(track->tdb->type);
 /* /\* freeMem(track->dbTrackType); *\/ */
 track->tdb->type = cloneString("array");
@@ -538,11 +545,11 @@ return ct;
 }
 
 static struct customTrack *coloredExonLoader(struct customFactory *fac,  
-	struct hash *chromHash,
+	char *genomeDb, struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 /* Load up microarray data until get next track line. */
 {
-struct customTrack *ct = bedLoader(fac, chromHash, cpp, track, dbRequested);
+struct customTrack *ct = bedLoader(fac, genomeDb, chromHash, cpp, track, dbRequested);
 freeMem(track->tdb->type);
 track->tdb->type = cloneString("coloredExon");
 return ct;
@@ -585,7 +592,7 @@ static struct customFactory coloredExonFactory =
 
 /*** GFF/GTF Factory - converts to BED ***/
 
-static boolean rowIsGff(char **row, int wordCount)
+static boolean rowIsGff(char *db, char **row, int wordCount)
 /* Return TRUE if format of this row is consistent with being a .gff */
 {
 boolean isGff = FALSE;
@@ -598,7 +605,7 @@ if (wordCount >= 8 && wordCount <= 9)
         {
 	if (strand[1] == 0)
 	    {
-	    if (hgIsOfficialChromName(row[0]))
+	    if (hgIsOfficialChromName(db, row[0]))
 	        {
 		if (isdigit(row[3][0]) && isdigit(row[4][0]))
 		    isGff = TRUE;
@@ -610,7 +617,7 @@ return isGff;
 }
 
 static boolean gffRecognizer(struct customFactory *fac,
-	struct customPp *cpp, char *type, 
+	char *genomeDb, struct customPp *cpp, char *type, 
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a gff track */
 {
@@ -622,7 +629,7 @@ if (line == NULL)
 char *dupe = cloneString(line);
 char *row[10];
 int wordCount = chopTabs(dupe, row);
-boolean isGff = rowIsGff(row, wordCount);
+boolean isGff = rowIsGff(genomeDb, row, wordCount);
 if (isGff)
     track->gffHelper = gffFileNew("custom input");
 freeMem(dupe);
@@ -631,7 +638,7 @@ return isGff;
 }
 
 static boolean gtfRecognizer(struct customFactory *fac,
-	struct customPp *cpp, char *type, 
+	char *genomeDb, struct customPp *cpp, char *type, 
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a gtf track.
    First run the GFF recognizer, then check for GTF group syntax */
@@ -641,7 +648,7 @@ if (type != NULL && !sameType(type, fac->name))
     return FALSE;
 /* GTF is an extension of GFF, so run the GFF recognizer first.
  * This will also create a GFF file handle for the track */
-if (!gffRecognizer(fac, cpp, type, track))
+if (!gffRecognizer(fac, genomeDb, cpp, type, track))
     return FALSE;
 char *line = customPpNextReal(cpp);
 if (gffHasGtfGroup(line))
@@ -736,7 +743,7 @@ return bedList;
 }
 
 static struct customTrack *gffLoader(struct customFactory *fac,  
-	struct hash *chromHash,
+	char *genomeDb, struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 /* Load up gff data until get next track line. */
 {
@@ -822,7 +829,7 @@ return TRUE;
 }
 
 static boolean pslRecognizer(struct customFactory *fac,
-	struct customPp *cpp, char *type, 
+	char *genomeDb, struct customPp *cpp, char *type, 
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a bed track */
 {
@@ -925,7 +932,7 @@ return bed;
 }
 
 static struct customTrack *pslLoader(struct customFactory *fac,  
-	struct hash *chromHash,
+	char *genomeDb, struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 /* Load up psl data until get next track line. */
 {
@@ -967,7 +974,7 @@ static struct customFactory pslFactory =
     };
 
 static boolean mafRecognizer(struct customFactory *fac,
-	struct customPp *cpp, char *type, 
+	char *genomeDb, struct customPp *cpp, char *type, 
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a maf track */
 {
@@ -988,12 +995,12 @@ customPpReuse(cpp, line);
 return isMaf;
 }
 
-static void mafLoaderBuildTab(struct customTrack *track, char *mafFile)
+static void mafLoaderBuildTab(char *genomeDb, struct customTrack *track, char *mafFile)
 /* build maf tab file and load in database */
 {
 customFactorySetupDbTrack(track);
 
-char *db = customTrackTempDb();
+char *ctDb = customTrackTempDb();
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/hgLoadMaf", "-verbose=0", "-custom",  NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL};
@@ -1011,13 +1018,13 @@ dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-loadFile=%s", mafFile);
 cmd1[4] = dyStringCannibalize(&tmpDy);  tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "-refDb=%s", hGetDb());
+dyStringPrintf(tmpDy, "-refDb=%s", genomeDb);
 cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0); 
 dyStringPrintf(tmpDy, "-maxNameLen=%d", track->maxChromName);
 cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0); 
 dyStringPrintf(tmpDy, "-defPos=%s", tn.forCgi);
 cmd1[7] = dyStringCannibalize(&tmpDy);
-cmd1[8] = db;
+cmd1[8] = ctDb;
 cmd1[9] = track->dbTableName;
 
 struct pipeline *dataPipe =  pipelineOpen(cmds, 
@@ -1041,7 +1048,7 @@ ctAddToSettings(track, "firstItemPos", cloneString(line));
 }
 
 static struct customTrack *mafLoader(struct customFactory *fac,  
-	struct hash *chromHash,
+	char *genomeDb, struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 {
 FILE *f;
@@ -1101,7 +1108,7 @@ else
 
     carefulClose(&f);
 
-    mafLoaderBuildTab(track, mafFile);
+    mafLoaderBuildTab(genomeDb, track, mafFile);
     }
 char tdbType[256];
 safef(tdbType, sizeof(tdbType), "maf");
@@ -1122,7 +1129,7 @@ static struct customFactory mafFactory =
 /*** Wig Factory - for wiggle tracks ***/
 
 static boolean wigRecognizer(struct customFactory *fac,
-	struct customPp *cpp, char *type, 
+	char *genomeDb, struct customPp *cpp, char *type, 
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a wig track */
 {
@@ -1158,7 +1165,7 @@ dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "-chromInfoDb=%s", hGetDb());
+dyStringPrintf(tmpDy, "-chromInfoDb=%s", db);
 cmd2[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 /* a system could be using /trash/ absolute reference, and nothing to do with
  *	local references, so don't confuse it with ./ a double // will work
@@ -1281,7 +1288,7 @@ track->tdb->type = cloneString(tdbType);
 }
 
 static struct customTrack *wigLoader(struct customFactory *fac,  
-	struct hash *chromHash,
+	char *genomeDb, struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 /* Load up wiggle data until get next track line. */
 {
@@ -1372,7 +1379,7 @@ if (factoryList == NULL)
     }
 }
 
-struct customFactory *customFactoryFind(struct customPp *cpp,
+struct customFactory *customFactoryFind(char *genomeDb, struct customPp *cpp,
 	char *type, struct customTrack *track)
 /* Figure out factory that can handle this track.  The track is
  * loaded from the track line if any, and type is the type element
@@ -1381,7 +1388,7 @@ struct customFactory *customFactoryFind(struct customPp *cpp,
 struct customFactory *fac;
 customFactoryInit();
 for (fac = factoryList; fac != NULL; fac = fac->next)
-    if (fac->recognizer(fac, cpp, type, track))
+    if (fac->recognizer(fac, genomeDb, cpp, type, track))
 	break;
 return fac;
 }
@@ -1731,7 +1738,8 @@ if (setting)
 return trackDbSetting(ct->tdb, "genome");
 }
 
-static struct customTrack *customFactoryParseOptionalDb(char *text,
+// FIXME: is this really needed any more??
+static struct customTrack *customFactoryParseOptionalDb(char *genomeDb, char *text,
 	boolean isFile, struct slName **retBrowserLines,
 	boolean mustBeCurrentDb)
 /* Parse text into a custom set of tracks.  Text parameter is a
@@ -1788,6 +1796,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
 
     /* verify database for custom track */
     char *ctDb = ctGenome(track);
+#if 0
+    // FIXME: don't understand this
     if (mustBeCurrentDb)
 	{
 	if (ctDb == NULL)
@@ -1796,6 +1806,9 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	    errAbort("can't load %s data into %s custom tracks",
 		     ctDb, hGetDb());
 	}
+#else
+    assert(ctDb != NULL);
+#endif
     struct customTrack *oneList = NULL, *oneTrack;
 
     if (track->dbDataLoad)
@@ -1829,7 +1842,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
         {
 	/* Load track from appropriate factory */
         char *type = track->tdb->type;
-	struct customFactory *fac = customFactoryFind(cpp, type, track);
+	struct customFactory *fac = customFactoryFind(genomeDb, cpp, type, track);
 	if (fac == NULL)
 	    {
 	    struct lineFile *lf = cpp->fileStack;
@@ -1858,7 +1871,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
                 (startsWith("http://", lf->fileName) || 
                  startsWith("ftp://", lf->fileName)))
             dataUrl = cloneString(lf->fileName);
-	oneList = fac->loader(fac, chromHash, cpp, track, dbTrack);
+	oneList = fac->loader(fac, genomeDb, chromHash, cpp, track, dbTrack);
 	/* Save a few more settings. */
 	for (oneTrack = oneList; oneTrack != NULL; oneTrack = oneTrack->next)
 	    {
@@ -1920,20 +1933,21 @@ sqlDisconnect(&ctConn);
 return trackList;
 }
 
-struct customTrack *customFactoryParse(char *text, boolean isFile,
+struct customTrack *customFactoryParse(char *genomeDb, char *text, boolean isFile,
 	struct slName **retBrowserLines)
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  Die if the track is not for hGetDb(). */
 {
-return customFactoryParseOptionalDb(text, isFile, retBrowserLines, TRUE);
+return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, TRUE);
 }
 
-struct customTrack *customFactoryParseAnyDb(char *text, boolean isFile,
+// FIXME: needed any more
+struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean isFile,
 					    struct slName **retBrowserLines)
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  Track does not have to be for hGetDb(). */
 {
-return customFactoryParseOptionalDb(text, isFile, retBrowserLines, FALSE);
+return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, FALSE);
 }
 
 static void readAndIgnore(char *fileName)

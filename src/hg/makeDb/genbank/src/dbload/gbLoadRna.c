@@ -32,7 +32,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.37 2008/03/29 04:46:51 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.37.20.1 2008/07/31 02:24:34 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -141,7 +141,7 @@ gbVerbEnter(3, "delete outdated");
 
 /* first the alignments */
 gbVerbMsg(4, "delete outdated alignments");
-gbAlignDataDeleteOutdated(conn, select, statusTbl, &gOptions, tmpDir);
+gbAlignDataDeleteOutdated(gDatabase, conn, select, statusTbl, &gOptions, tmpDir);
 
 /* now drop metadata entries */
 gbVerbMsg(4, "delete outdated metadata");
@@ -374,7 +374,7 @@ if ((gOptions.flags & DBLOAD_INITIAL) == 0)
 void databaseUpdate(struct gbSelect* select)
 /* update the database from genbank state on disk */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(gDatabase);
 struct gbStatusTbl* statusTbl;
 boolean maxShrinkageExceeded;
 char typePrefix[32], tmpDir[PATH_LEN];
@@ -463,7 +463,7 @@ if (select->type & GB_EST)
 deleter = gbBuildStateReloadDeleter(conn, select,  tmpDir);
 if (deleter != NULL)
     {
-    gbAlignRemove(conn, &gOptions, select, deleter);
+    gbAlignRemove(gDatabase, conn, &gOptions, select, deleter);
     gbMetaDataRemove(conn, &gOptions, select, deleter);
     sqlDeleterDel(deleter, conn, "gbStatus", "acc");
     }
@@ -513,7 +513,7 @@ checkForStop();  /* database committed */
 void loadDelayedTables()
 /* If we are delaying table load, now is the time */
 {
-struct sqlConnection* conn = hAllocConn();
+struct sqlConnection* conn = hAllocConn(gDatabase);
 if (gPendingStatusUpdates == NULL)
     errAbort("no data update were found to loaded with -initialLoad");
 
@@ -534,7 +534,7 @@ hFreeConn(&conn);
 void cleanExtFileTable()
 /* clean up extFile table if we change references for any seq */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(gDatabase);
 gbVerbEnter(3, "cleaning extFileTbl");
 extFileTblClean(conn, (gbVerbose >= 4));
 gbVerbLeave(3, "cleaning extFileTbl");
@@ -557,7 +557,7 @@ if (gReload && (gOptions.flags & DBLOAD_DRY_RUN))
     errAbort("can't specify both -reload and -dryRun");
 
 gbVerbEnter(1, "gbLoadRna");
-conn = hAllocConn();
+conn = hAllocConn(gDatabase);
 gbLockDb(conn, NULL);
 
 if (gOptions.flags & DBLOAD_INITIAL)
@@ -567,7 +567,7 @@ if (gOptions.flags & DBLOAD_INITIAL)
 if (((gOptions.flags & DBLOAD_DRY_RUN) == 0) && (reloadList != NULL))
     {
     gbAlignDataInit(gWorkDir, &gOptions, conn);
-    gbReloadDelete(reloadList, &gOptions, gWorkDir);
+    gbReloadDelete(gDatabase, reloadList, &gOptions, gWorkDir);
     }
 
 selectList = dbLoadPartitionsGet(&gOptions, index);
@@ -576,7 +576,7 @@ if ((gOptions.flags & DBLOAD_INITIAL) && (selectList == NULL))
 
 /* clean up any ignored entries before setting anything up */
 gbVerbEnter(3, "delete ignored");
-gbIgnoredDelete(selectList, gForceIgnoreDelete, &gOptions, gWorkDir);
+gbIgnoredDelete(gDatabase, selectList, gForceIgnoreDelete, &gOptions, gWorkDir);
 gbVerbLeave(3, "delete ignored");
 
 /* loaded table to track updates that have been processed */
@@ -628,8 +628,7 @@ struct slName *tables, *tbl;
 struct sqlConnection *conn;
 
 gbVerbEnter(1, "dropAll");
-hgSetDb(database);
-conn = hAllocConn();
+conn = hAllocConn(gDatabase);
 gbLockDb(conn, NULL);
 
 tables = getTableList(conn);
@@ -673,8 +672,7 @@ struct slName *tables, *tbl;
 struct sqlConnection *conn;
 
 gbVerbEnter(1, "copyAll");
-hgSetDb(srcDb);
-conn = hAllocConn();
+conn = hAllocConn(srcDb);
 gbLockDb(conn, srcDb);
 gbLockDb(conn, destDb);
 
@@ -702,8 +700,7 @@ struct dyString* sqlCmd = dyStringNew(256);
 char *sep;
 
 gbVerbEnter(1, "moveAll");
-hgSetDb(srcDb);
-conn = hAllocConn();
+conn = hAllocConn(srcDb);
 gbLockDb(conn, srcDb);
 gbLockDb(conn, destDb);
 
@@ -880,8 +877,6 @@ else
         gGbdbGenBank = "/gbdb/genbank";
     gWorkDir = optionVal("workdir", "work/load");
 
-    hgSetDb(gDatabase);
-    hSetDb(gDatabase);
     if (gOptions.flags & DBLOAD_DRY_RUN)
         printf("*** using dry run mode ***\n");
     gbLoadRna(reloadList);

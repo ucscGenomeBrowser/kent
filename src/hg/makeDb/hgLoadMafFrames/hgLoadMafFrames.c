@@ -7,7 +7,7 @@
 #include "pipeline.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadMafFrames.c,v 1.2 2006/08/04 06:00:20 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadMafFrames.c,v 1.2.100.1 2008/07/31 02:24:37 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -54,9 +54,8 @@ safef(tabFile, sizeof(tabFile), "%s.tab", table);
 processFrameFiles(tabFile, numFramesFiles, framesFiles);
 
 /* create table */
-hSetDb(db);
-conn = hAllocConn();
-createSql = mafFramesGetSql(table, 0, hGetMinIndexLength());
+conn = hAllocConn(db);
+createSql = mafFramesGetSql(table, 0, hGetMinIndexLength(db));
 sqlRemakeTable(conn, table, createSql);
 freez(&createSql);
 

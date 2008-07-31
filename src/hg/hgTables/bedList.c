@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.59 2008/05/27 23:48:27 hiram Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.59.10.1 2008/07/31 02:24:06 markd Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -493,8 +493,9 @@ boolean doGetBedOrCt(struct sqlConnection *conn, boolean doCt,
 		     boolean doCtFile, boolean redirectToGb)
 /* Actually output bed or custom track. Return TRUE unless no results. */
 {
+char *db = sqlGetDatabase(conn);
 char *table = curTable;
-struct hTableInfo *hti = getHti(database, table);
+struct hTableInfo *hti = getHti(db, table);
 struct featureBits *fbList = NULL, *fbPtr;
 struct customTrack *ctNew = NULL;
 boolean doCtHdr = (cartUsualBoolean(cart, hgtaPrintCustomTrackHeaders, FALSE) 
@@ -618,7 +619,7 @@ for (region = regionList; region != NULL; region = region->next)
 	else
 	    {
 	    safef(fbTQ, sizeof(fbTQ), "%s:%s", hti->rootName, fbQual);
-	    fbList = fbFromBed(fbTQ, hti, bedList, 0, 0, FALSE, FALSE);
+	    fbList = fbFromBed(db, fbTQ, hti, bedList, 0, 0, FALSE, FALSE);
 	    if (fields >= 6)
 		fields = 6;
 	    else if (fields >= 4)
@@ -693,7 +694,7 @@ else if (doCt)
 		/* create an otherwise empty wds so we can print out the list */
 		wds = wiggleDataStreamNew();
 		wds->ascii = wigDataList;
-		wigDataSize = wds->asciiOut(wds, ctNew->wigAscii, TRUE, FALSE);
+		wigDataSize = wds->asciiOut(wds, db, ctNew->wigAscii, TRUE, FALSE);
 #if defined(DEBUG)    /*      dbg     */
 		/* allow file readability for debug */
 		chmod(ctNew->wigAscii, 0666);
@@ -707,7 +708,7 @@ else if (doCt)
 
 	slAddHead(&ctList, ctNew);
 	/* Save the custom tracks out to file (overwrite the old file): */
-        customTracksSaveCart(cart, ctList);
+        customTracksSaveCart(db, cart, ctList);
 	}
     /*  Put up redirect-to-browser page. */
     if (redirectToGb)
@@ -751,7 +752,7 @@ else if (doDataPoints)
 	struct wiggleDataStream *wds = NULL;
 	wds = wiggleDataStreamNew();
 	wds->ascii = wigDataList;
-	wds->asciiOut(wds, "stdout", TRUE, FALSE);
+	wds->asciiOut(wds, db, "stdout", TRUE, FALSE);
 	wiggleDataStreamFree(&wds);
 	}
     }

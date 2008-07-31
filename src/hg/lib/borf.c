@@ -12,7 +12,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: borf.c,v 1.6 2006/04/14 20:14:34 sugnet Exp $";
+static char const rcsid[] = "$Id: borf.c,v 1.6.120.1 2008/07/31 02:24:26 markd Exp $";
 static char *_bestOrfExe = "/projects/compbio/bin/bestorf.linux/bestorf";
 static char *_bestOrfParam = "/projects/compbio/bin/bestorf.linux/hume.dat";
 
@@ -270,7 +270,7 @@ lineFileClose(&lf);
 return borf;
 }
 
-struct borf *borfFromGenomeBed(struct bed *bed)
+struct borf *borfFromGenomeBed(char *db, struct bed *bed)
 /* borfBig - Run Victor Solovyev's bestOrf on a genome bed's coordinates. */
 {
 static char *tmpFa = NULL;
@@ -283,7 +283,7 @@ if(tmpFa == NULL)
     tmpFa = cloneString(rTempName("/tmp", "borf", ".fa"));
 if(tmpOrf == NULL)
     tmpOrf = cloneString(rTempName("/tmp","borf", ".out"));
-seq = hSeqForBed(bed);
+seq = hSeqForBed(db, bed);
 faWrite(tmpFa, seq->name, seq->dna, seq->size);
 dyStringClear(cmd);
 dyStringPrintf(cmd, "%s %s %s > %s", _bestOrfExe, _bestOrfParam, tmpFa, tmpOrf);

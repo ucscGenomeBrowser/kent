@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: gpToGtf.c,v 1.3 2003/05/06 07:22:19 kate Exp $";
+static char const rcsid[] = "$Id: gpToGtf.c,v 1.3.338.1 2008/07/31 02:24:01 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,12 +21,12 @@ errAbort(
   );
 }
 
-void gtfFromTable(char *table, FILE *f)
+void gtfFromTable(char *database, char *table, FILE *f)
 /* Convert table to GTF file. */
 {
-int rowOffset = hIsBinned(table);
+int rowOffset = hIsBinned(database, table);
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct genePred *gp;
@@ -63,11 +63,10 @@ void gpToGtf(char *database, char *table, char *fileName)
 {
 FILE *f = mustOpen(fileName, "w");
 time_t now = time(NULL);
-hSetDb(database);
-if (!hTableExists(table))
+if (!hTableExists(database, table))
     errAbort("%s doesn't exist in %s", table, database);
 fprintf(f, "# GTF Conversion of UCSC table %s.%s, %s.\n", database, table, ctime(&now));
-gtfFromTable(table, f);
+gtfFromTable(database, table, f);
 }
 
 int main(int argc, char *argv[])

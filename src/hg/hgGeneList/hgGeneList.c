@@ -51,8 +51,8 @@ hDisconnectCentral(&connCentral);
 
 printf("<H2>%s Genome (%s Assembly)</H2>\n", genome, genomeDesc);
 
-conn = hAllocConn();
-conn2= hAllocConn();
+conn = hAllocConn(database);
+conn2= hAllocConn(database);
 
 sprintf(query2,"select kgID from %s.kgXref order by geneSymbol;",
 	database);

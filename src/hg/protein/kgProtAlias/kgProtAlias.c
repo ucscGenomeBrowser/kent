@@ -43,8 +43,8 @@ int main(int argc, char *argv[])
     sprintf(spDB, "sp%s", argv[2]);
     sprintf(proteinDB, "proteins%s", argv[2]);
 
-    conn = hAllocConn();
-    conn2= hAllocConn();
+    conn = hAllocConn(database);
+    conn2= hAllocConn(database);
 
     o1 = fopen("j.dat", "w");
 
@@ -61,13 +61,13 @@ int main(int argc, char *argv[])
 	fprintf(o1, "%s\t%s\t%s\n", kgID, displayID, displayID);
        
         sprintf(cond_str, "displayID = '%s'", displayID);
-        proteinAC = sqlGetField(conn, proteinDB, "spXref3", "accession", cond_str);
+        proteinAC = sqlGetField(proteinDB, "spXref3", "accession", cond_str);
         if (proteinAC != NULL)
 		{
 		fprintf(o1, "%s\t%s\t%s\n", kgID, displayID, proteinAC);
         
 		sprintf(cond_str, "acc = '%s' and extDb=1", proteinAC);
-        	ncbiProtAc = sqlGetField(conn, spDB, "extDbRef", "extAcc2", cond_str);
+        	ncbiProtAc = sqlGetField(spDB, "extDbRef", "extAcc2", cond_str);
 		if (ncbiProtAc != NULL)
 		    {
 		    chp = strstr(ncbiProtAc, ".");

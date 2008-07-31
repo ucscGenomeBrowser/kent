@@ -72,7 +72,7 @@ int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
 Color col;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
@@ -136,7 +136,7 @@ else
     boolean hasBin;
     struct dyString *query = newDyString(1024);
     /* Do black and white on single track.  Fetch less than we need from database. */
-    if (hFindSplitTable(chromName, tg->mapName, table, &hasBin))
+    if (hFindSplitTable(database, chromName, tg->mapName, table, &hasBin))
         {
 	dyStringPrintf(query, "select genoStart,genoEnd from %s where ", table);
 	if (hasBin)

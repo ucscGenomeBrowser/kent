@@ -49,14 +49,14 @@ proteinDataDate = argv[1];
 
 o1 = fopen("spXref3.tab", "w");
 
-conn = hAllocConn();
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn = hAllocConn(hDefaultDb());
+conn2= hAllocConn(hDefaultDb());
+conn3= hAllocConn(hDefaultDb());
    
 sprintf(proteinDatabaseName, "biosql%s", proteinDataDate);
 sprintf(cond_str, "term_name = 'description'");
-ontology_term_id = sqlGetField(conn, proteinDatabaseName, "ontology_term", 
-				     "ontology_term_id", cond_str); 
+ontology_term_id = sqlGetField(proteinDatabaseName, "ontology_term", 
+                               "ontology_term_id", cond_str); 
 
 sprintf(proteinDatabaseName, "proteins%s", proteinDataDate);
 sprintf(query2,"select * from biosql%s.bioentry;", proteinDataDate);
@@ -76,8 +76,8 @@ while (row2 != NULL)
 	    proteinDataDate, bioentry_id, ontology_term_id);
 
     sprintf(cond_str, "swissprot='%s'", accession);
-    hugoSymbol = sqlGetField(conn3, proteinDatabaseName, "hugo", "symbol", cond_str);
-    hugoDesc = sqlGetField(conn3, proteinDatabaseName, "hugo", "name", cond_str);
+    hugoSymbol = sqlGetField(proteinDatabaseName, "hugo", "symbol", cond_str);
+    hugoDesc = sqlGetField(proteinDatabaseName, "hugo", "name", cond_str);
 
     if (hugoSymbol==NULL) hugoSymbol = empty_str;
     if (hugoDesc==NULL)   hugoDesc   = empty_str;

@@ -72,7 +72,7 @@ static void wabaLoad(struct track *tg)
 {
 char table[64];
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 struct wabaChromHit *wch, *wchList = NULL;

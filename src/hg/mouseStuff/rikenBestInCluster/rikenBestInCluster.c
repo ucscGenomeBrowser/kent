@@ -9,7 +9,7 @@
 #include "rikenCluster.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: rikenBestInCluster.c,v 1.3 2003/05/06 07:22:29 kate Exp $";
+static char const rcsid[] = "$Id: rikenBestInCluster.c,v 1.3.338.1 2008/07/31 02:24:43 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,12 +23,12 @@ errAbort(
   );
 }
 
-struct hash *hashBorf()
+struct hash *hashBorf(char *database)
 /* Return hash of rikenBorf. */
 {
 struct hash *hash = newHash(16);
 struct borf *borf;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 
@@ -43,12 +43,12 @@ hFreeConn(&conn);
 return hash;
 }
 
-struct hash *hashOrient()
+struct hash *hashOrient(char *database)
 /* Return hash of rikenOrientInfo. */
 {
 struct hash *hash = newHash(16);
 struct estOrientInfo *eoi;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset = 1;
@@ -92,15 +92,15 @@ if (bestBorf != NULL)
     }
 }
 
-void rikenBestInCluster(char *fileName)
+void rikenBestInCluster(char *database, char *fileName)
 /* rikenBestInCluster - Find best looking in Riken cluster. */
 {
 FILE *f = mustOpen(fileName, "w");
-struct hash *borfHash = hashBorf();
-struct hash *orientHash = hashOrient();
+struct hash *borfHash = hashBorf(database);
+struct hash *orientHash = hashOrient(database);
 /* Return hash of rikenOrientInfo. */
 struct rikenUcscCluster *rc;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset = 1;
@@ -122,7 +122,6 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc != 3)
     usage();
-hSetDb(argv[1]);
-rikenBestInCluster(argv[2]);
+rikenBestInCluster(argv[1], argv[2]);
 return 0;
 }

@@ -162,12 +162,6 @@ void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript);
 /* Find all the organisms/assemblies that are referenced in axtInfo, 
  * and print the dropdown list. */
 
-void printAlignmentListHtml(char *db, char *alCgiName, char *selected);
-/* Find all the alignments (from axtInfo) that pertain to the selected
- * genome.  Prints to stdout the HTML to render a dropdown list
- * containing a list of the possible alignments to choose from.
- */
-
 void printBlatAssemblyListHtml(char *curDb);
 /*
 Prints to stdout the HTML to render a dropdown list containing a list of the possible

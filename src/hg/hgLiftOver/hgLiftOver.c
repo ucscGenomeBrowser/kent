@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.59 2008/05/14 01:04:41 pauline Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.59.12.1 2008/07/31 02:24:05 markd Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -455,7 +455,7 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
 	{
 	/* minSizeT here and in liftOverChain.c/h has been renamed minChainT in liftOver.c */
 	/* ignore multiple, it must be false when position is used */
-	ct = liftOverPositions(oldTn.forCgi, chainHash, 
+	ct = liftOverPositions(db, oldTn.forCgi, chainHash, 
 			minMatch, minBlocks, 0, minSizeQ,
 			minSizeT, 0, 
 			fudgeThick, mapped, unmapped, FALSE, NULL, &errCt);

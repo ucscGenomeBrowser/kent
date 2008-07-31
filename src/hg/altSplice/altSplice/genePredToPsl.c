@@ -56,7 +56,7 @@ psl->blockCount = gp->exonCount;
 return psl;
 }
 
-int chromSize(char *string)
+int chromSize(char *db, char *string)
 /* Return the chromosome size of a given chromosome. */
 {
 static struct hash *chromSizes = NULL;
@@ -65,7 +65,7 @@ if(chromSizes == NULL)
     chromSizes = newHash(5);
 if(hashFindVal(chromSizes, string) == NULL)
     {
-    int chrom = hChromSize(string);
+    int chrom = hChromSize(db, string);
     char buff[256];
     safef(buff, sizeof(buff), "%d", chrom);
     hashAdd(chromSizes, string, cloneString(buff));
@@ -75,13 +75,13 @@ else
     return atoi(hashFindVal(chromSizes, string));
 }
 
-void pslListFromGenePred(struct genePred *gpList, FILE *out) 
+void pslListFromGenePred(char *db, struct genePred *gpList, FILE *out) 
 {
 struct genePred *gp = NULL;
 struct psl *psl=NULL;
 for(gp=gpList; gp != NULL; gp=gp->next)
     {
-    int size = chromSize(gp->chrom);
+    int size = chromSize(db, gp->chrom);
     psl = pslFromGenePred(gp, size);
     pslTabOut(psl, out);
     }
@@ -120,14 +120,14 @@ optionInit(&argc, argv, NULL);
 if(argc !=4)
     usage();
 warn("Loading gene predictions.");
-hSetDb(argv[1]);
+char *db = argv[1];
 if(optionExists("bedFormat")) 
     gpList = gpFromBedFile(argv[2]);
 else
     gpList = genePredLoadAll(argv[2]);
 out = mustOpen(argv[3],"w");
 warn("Doing conversion.");
-pslListFromGenePred(gpList, out);
+pslListFromGenePred(db, gpList, out);
 carefulClose(&out);
 warn("Done.");
 return 0;

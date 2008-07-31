@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.18 2007/03/29 22:32:10 fanhsu Exp $";
+static char const rcsid[] = "$Id: pathways.c,v 1.18.68.1 2008/07/31 02:24:03 markd Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -128,7 +128,7 @@ char *eventID;
 if (!sqlTableExists(conn, "kgXref")) return;
 
 safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
-spID = sqlGetField(conn, database, "kgXref", "spID", condStr);
+spID = sqlGetField(database, "kgXref", "spID", condStr);
 if (spID != NULL)
     {
     /* convert splice variant UniProt ID to its main root ID */
@@ -139,7 +139,7 @@ if (spID != NULL)
     "<BR>Protein %s (<A href=\"http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID=%s\" TARGET=_blank>Reactome details)</A> participates in the following event(s):<BR><BR>" 
     , spID, spID);
 
-    conn2= hAllocConn();
+    conn2= hAllocConn(database);
     safef(query2,sizeof(query2), 
     	  "select eventID, eventDesc from proteome.spReactomeEvent where spID='%s'", spID);
     sr2 = sqlMustGetResult(conn2, query2);
@@ -221,7 +221,7 @@ char *origSpID;
 if (!sqlTableExists(conn, "kgXref")) return(0);
 
 safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
-spID = sqlGetField(conn, database, "kgXref", "spID", condStr);
+spID = sqlGetField(database, "kgXref", "spID", condStr);
 if (spID != NULL)
     {
     origSpID = cloneString(spID);

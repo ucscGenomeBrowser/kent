@@ -83,8 +83,6 @@ kgTempDb = argv[2];
 genomeReadOnly = argv[3];
 protMrnaTableName = argv[4];
 
-hSetDb(genomeReadOnly);
-
 sprintf(spDB, "sp%s", proteinDataDate);
 sprintf(proteinsDB, "proteins%s", proteinDataDate);
 sprintf(gbTempDB, "%sTemp", kgTempDb);
@@ -99,8 +97,8 @@ o7  = fopen("best.lis",    "w");
 if ((FILE *) NULL == o7)
     errAbort("ERROR: Can not open output file: best.lis");
 
-conn = hAllocConn();
-conn3= hAllocConn();
+conn = hAllocConn(genomeReadOnly);
+conn3= hAllocConn(genomeReadOnly);
    
 proteinCount = 0; 
 snprintf(dirName, (size_t) sizeof(dirName), "%s", "./clusterRun" );
@@ -124,7 +122,7 @@ while (row != NULL)
     if ((float)match/(float)protSize > 0.3)
     	{
         sprintf(condStr, "acc='%s'", mrnaAcc);
-        mrnaDate = sqlGetField(conn3, genomeReadOnly, "gbCdnaInfo", "moddate",
+        mrnaDate = sqlGetField(genomeReadOnly, "gbCdnaInfo", "moddate",
 			       condStr);
 	if (mrnaDate != NULL)
 	   {

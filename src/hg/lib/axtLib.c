@@ -157,7 +157,7 @@ char *getAxtFileName(char *chrom, char *toDb, char *alignment, char *fromDb)
 {
 char query[256];
 struct sqlResult *sr;
-struct sqlConnection *conn = hAllocConnDb(fromDb);
+struct sqlConnection *conn = hAllocConn(fromDb);
 char **row;
 struct axtInfo *ai = NULL;
 

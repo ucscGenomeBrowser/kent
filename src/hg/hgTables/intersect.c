@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.41 2008/05/30 22:25:55 hiram Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.41.10.1 2008/07/31 02:24:07 markd Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -46,7 +46,7 @@ if (specd)
     {
     char *table = cartString(cart, hgtaIntersectTable);
     if ((isCustomTrack(table) && lookupCt(table) != NULL) ||
-	hTableOrSplitExists(table) || sameWord(table, WIKI_TRACK_TABLE))
+	hTableOrSplitExists(database, table) || sameWord(table, WIKI_TRACK_TABLE))
 	return TRUE;
     else
 	{
@@ -468,7 +468,7 @@ struct lm *lm2 = lmInit(64*1024);
 struct bed *bedList2 = getFilteredBeds(conn, table2, region, lm2, NULL);
 /* Set up some other local vars. */
 struct hTableInfo *hti1 = getHti(database, table1);
-int chromSize = hChromSize(region->chrom);
+int chromSize = hChromSize(database, region->chrom);
 Bits *bits2 = bitAlloc(chromSize+8);
 boolean isBpWise = (sameString("and", op) || sameString("or", op));
 struct bed *intersectedBedList = NULL;
@@ -562,7 +562,7 @@ if (! anySubtrackMerge(db, table))
 else
     {
     struct hTableInfo *hti = getHti(database, table);
-    int chromSize = hChromSize(region->chrom);
+    int chromSize = hChromSize(database, region->chrom);
     Bits *bits1 = NULL;
     Bits *bits2 = NULL;
     struct bed *bedMerged = NULL;
