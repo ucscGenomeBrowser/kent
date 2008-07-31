@@ -5,7 +5,7 @@
 #include "options.h"
 #include <string.h>
 
-static char const rcsid[] = "$Id: averageZoomLevels.c,v 1.5.338.1 2008/07/31 02:23:57 markd Exp $";
+static char const rcsid[] = "$Id: averageZoomLevels.c,v 1.5.338.2 2008/07/31 06:43:34 markd Exp $";
 
 
 #define MAX_WINDOW_SIZE  2000
@@ -150,13 +150,11 @@ void averageZoomLevels(int mag, int maxZoom, char *db,
 {
 int currentZoom = 0;
 struct bin **pBin = NULL;
-struct bin *bin = NULL;
 int binCount = 0;
 int binSize = 0;
 unsigned int chromSize = 0;
 struct sample *sampList = NULL, *samp = NULL, *boundarySamp = NULL;
 char *buff = NULL;
-int maxDensity = 0;
 FILE *out = NULL;
 int i;
 

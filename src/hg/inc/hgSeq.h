@@ -25,11 +25,11 @@ int hgSeqItemsInRange(char *db, char *table, char *chrom, int chromStart,
 /* Print out dna sequence of all items (that match sqlConstraints, if nonNULL) 
    in the given range in table.  Return the number of items. */
 
-void hgSeqRange(char *chrom, int chromStart, int chromEnd, char strand,
+void hgSeqRange(char *db, char *chrom, int chromStart, int chromEnd, char strand,
 		char *name);
 /* Print out dna sequence of the given range. */
 
-int hgSeqBed(struct hTableInfo *hti, struct bed *bedList);
+int hgSeqBed(char *db, struct hTableInfo *hti, struct bed *bedList);
 /* Print out dna sequence from the current database of all items in bedList.  
  * hti describes the bed-compatibility level of bedList items.  
  * Returns number of FASTA records printed out. */

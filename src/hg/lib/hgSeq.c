@@ -10,8 +10,9 @@
 #include "fa.h"
 #include "genePred.h"
 #include "bed.h"
+#include "hgSeq.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.32.6.1 2008/07/31 02:24:30 markd Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.32.6.2 2008/07/31 06:43:37 markd Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 

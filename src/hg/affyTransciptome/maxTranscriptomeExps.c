@@ -1,7 +1,7 @@
 #include "common.h"
 #include "sample.h"
 
-static char const rcsid[] = "$Id: maxTranscriptomeExps.c,v 1.3 2003/05/06 07:22:13 kate Exp $";
+static char const rcsid[] = "$Id: maxTranscriptomeExps.c,v 1.3.338.1 2008/07/31 06:43:34 markd Exp $";
 
 
 void usage()
@@ -37,7 +37,7 @@ struct sample **pSampList = NULL;
 struct sample *s1;
 struct sample *maxListSamp  = NULL;
 struct sample *maxSamp = NULL;
-int i,j,k;
+int i;
 int count =0;
 FILE *out = NULL;
 AllocArray(pSampList, numFiles);

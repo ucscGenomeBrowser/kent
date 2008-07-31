@@ -58,5 +58,3 @@ STRINGIFY = ${BINDIR}/stringify
 
 %.o: %.c
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
-
-

@@ -14,7 +14,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.10.28.1 2008/07/31 02:24:44 markd Exp $";
+static char const rcsid[] = "$Id: getSeq.c,v 1.10.28.2 2008/07/31 06:43:39 markd Exp $";
 
 static void printNameAndDescription(struct sqlConnection *conn, 
 	struct genePos *gp, struct column *nameCol, struct column *descCol)
@@ -243,7 +243,7 @@ for (gp = geneList; gp != NULL; gp = gp->next)
         {
 	struct genePred *gene = genePredLoad(row+hasBin);
 	struct bed *bed = bedFromGenePred(gene);
-	hgSeqBed(hti, bed);
+	hgSeqBed(database, hti, bed);
 	bedFree(&bed);
 	genePredFree(&gene);
 	}

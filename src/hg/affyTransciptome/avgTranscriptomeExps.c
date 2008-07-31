@@ -2,7 +2,7 @@
 #include "sample.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: avgTranscriptomeExps.c,v 1.4 2003/05/06 07:22:13 kate Exp $";
+static char const rcsid[] = "$Id: avgTranscriptomeExps.c,v 1.4.338.1 2008/07/31 06:43:34 markd Exp $";
 
 boolean doAll = FALSE;
 char *suffix = NULL;
@@ -42,8 +42,9 @@ switch(num)
     case 11 : 
 	return cloneString("U-87MG");
     default:
-	errAbort("Don't recognize num %d");
+	errAbort("Don't recognize num %d", num);
     }
+return NULL;
 }
 
 struct sample *avgSamples(struct sample *s1,
@@ -79,7 +80,7 @@ return ret;
 
 void avgTranscriptomeExps()
 {
-struct sample *sList = NULL, *s = NULL;
+struct sample *s = NULL;
 struct sample *s1,*s2,*s3;
 struct sample *sList1, *sList2, *sList3 = NULL;
 struct sample **sArray1, **sArray2, **sArray3 = NULL;
