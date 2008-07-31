@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.24.2.1 2008/07/31 02:24:16 markd Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.24.2.2 2008/07/31 18:20:40 markd Exp $";
 
 #define CHROM_COLORS 26
 
@@ -4442,8 +4442,8 @@ for (i=0; i<sfCnt; i++)
     chp = chp+strlen(sfDesc[i]);
     }
 
-hFreeConn(&conn);
 sqlFreeResult(&sr);
+hFreeConn(&conn);
     
 return(sfBuffer);
 }
