@@ -3,6 +3,11 @@
 	chmod a+x ${AOUT}
 	mv ${AOUT} ../cgi-bin/test.cgi
 
+testGenomeRangeTree: ../lib/$(MACHTYPE)/jkweb.a testGenomeRangeTree.c
+	${CC} ${COPT} ${CFLAGS} -I../inc testGenomeRangeTree.c ../lib/$(MACHTYPE)/jkweb.a -lm -o testGenomeRangeTree
+	chmod a+x testGenomeRangeTree
+	./testGenomeRangeTree
+
 test:
 	./hgTest.pl -v -db hg13 | tee $(HOST).hg13.log  2>&1
 	./hgTest.pl -v -db hg12 | tee $(HOST).hg12.log  2>&1

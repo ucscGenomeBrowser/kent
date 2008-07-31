@@ -36,7 +36,9 @@ while ((existing = rbTreeRemove(tree, &tempR)) != NULL)
      tempR.start = min(tempR.start, existing->start);
      tempR.end = max(tempR.end, existing->end);
      }
-struct range *r = lmCloneMem(tree->lm, &tempR, sizeof(tempR));
+struct range *r = lmAlloc(tree->lm, sizeof(*r)); /* alloc new zeroed range */
+r->start = tempR.start;
+r->end = tempR.end;
 rbTreeAdd(tree, r);
 return r;
 }
@@ -79,7 +81,10 @@ tempR.start = start;
 tempR.end = end;
 r = rbTreeFind(tree, &tempR);
 if (r != NULL && r->start <= start && r->end >= end)
+    {
+    r->next = NULL; /* this can be set by previous calls to the List functions */
     return r;
+    }
 return NULL;
 }
 
@@ -113,6 +118,8 @@ for (range  = rangeTreeAllOverlapping(tree, start, end); range != NULL; range = 
 	best = range;
 	}
     }
+if (best)
+    best->next = NULL; /* could be set by calls to List functions */
 return best;
 }
 
