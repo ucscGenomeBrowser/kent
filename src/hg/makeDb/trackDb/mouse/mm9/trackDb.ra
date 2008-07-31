@@ -403,3 +403,44 @@ group regulation
 priority 100.2
 type bed 12 .
 
+    track woldRnaSeqSplicesBrain1
+    subTrack woldRnaSeqSplices
+    shortLabel Brain Rep1
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Brain (Replicate 1)
+    priority 1
+    color 200,128,0
+
+    track woldRnaSeqSplicesBrain2
+    subTrack woldRnaSeqSplices
+    shortLabel Brain Rep2
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Brain (Replicate 2)
+    priority 2
+    color 200,128,0
+
+    track woldRnaSeqSplicesLiver1
+    subTrack woldRnaSeqSplices
+    shortLabel Liver Rep1
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Liver (Replicate 1)
+    priority 3
+    color 0,155,128
+
+    track woldRnaSeqSplicesLiver2
+    subTrack woldRnaSeqSplices
+    shortLabel Liver Rep2
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Liver (Replicate 2)
+    priority 4
+    color 0,155,128
+
+    track woldRnaSeqSplicesMuscle1
+    subTrack woldRnaSeqSplices
+    shortLabel Muscle Rep1
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Muscle (Replicate 1)
+    priority 5
+    color 155,0,128
+
+    track woldRnaSeqSplicesMuscle2
+    subTrack woldRnaSeqSplices
+    shortLabel Muscle Rep2
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Muscle (Replicate 2)
+    priority 6
+    color 155,0,128
