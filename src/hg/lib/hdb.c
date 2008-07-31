@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.368 2008/07/11 22:50:44 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.369 2008/07/31 16:47:59 braney Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1046,11 +1046,6 @@ if (startsWith("chr", table) || startsWith("Group", table))
 int hChromSize(char *chromName)
 /* Return size of chromosome. */
 {
-char *database = hGetDb();
-
-if (! hDbIsActive(database))
-    return 0;
-
 struct chromInfo *ci = mustGetChromInfo(hGetDb(), chromName);
 return ci->size;
 }
