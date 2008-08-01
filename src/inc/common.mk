@@ -25,6 +25,10 @@ ifeq (${HG_WARN},)
   endif
 endif
 
+# this is to hack around many make files not including HG_WARN in
+# the link line
+CFLAGS += ${HG_WARN}
+
 ifeq (${SCRIPTS},)
     SCRIPTS=/cluster/bin/scripts
 endif
