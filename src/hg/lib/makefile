@@ -27,7 +27,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     dv.o dvBed.o dvXref2.o \
     easyGene.o ec.o ecCode.o ecAttribute.o ecAttributeCode.o \
     encode/encodeErge.o encode/encodeErgeHssCellLines.o \
-    encode/encodeHapMapAlleleFreq.o encode/encodeIndels.o \
+    encode/encodeHapMapAlleleFreq.o encode/encodeIndels.o encode/encodePeak.o \
     encode/encodeRegionInfo.o encode/encodeRegionInfoCustom.o encode/encodeRna.o \
     encode/encodeStanfordPromoters.o encode/encodeStanfordPromotersAverage.o \
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
@@ -59,7 +59,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     minChromSize.o minGeneInfo.o mrnaMisMatch.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
     netAlign.o nonCodingUi.o omimTitle.o ooUtils.o orthoAlleles.o \
-    pbStamp.o pcrResult.o peak.o pepPred.o plasEndPairs.o \
+    pbStamp.o pcrResult.o pepPred.o plasEndPairs.o \
     polyGenotype.o protFeat.o pscreen.o \
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \

@@ -1,4 +1,4 @@
-table peak
+table encodePeak
 "Peaks format (BED 3+)"
 (
     string chrom;        "Reference sequence chromosome or scaffold"
