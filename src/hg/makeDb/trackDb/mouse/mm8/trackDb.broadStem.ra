@@ -144,7 +144,7 @@ type bed 3
     priority 32
     
     track broadStemChipSignalH3K4me2Np
-    shortLabel H3K4me2-Np Win
+    shortLabel H3K4me2-Np Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K4me2 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
     subGroups factor=K4m2 cell_type=NP view=SIG
@@ -159,7 +159,7 @@ type bed 3
     priority 33
 
     track broadStemChipAlignmentsH3K4me2Np
-    shortLabel H3K4me2-Np Win
+    shortLabel H3K4me2-Np Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me2 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
     subGroups factor=K4m2 cell_type=NP view=ALN
