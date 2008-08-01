@@ -28,7 +28,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     easyGene.o ec.o ecCode.o ecAttribute.o ecAttributeCode.o \
     encode/encodeErge.o encode/encodeErgeHssCellLines.o \
     encode/encodeHapMapAlleleFreq.o encode/encodeIndels.o \
-    encode/encodeRegionInfo.o encodeRegionInfoCustom.o encode/encodeRna.o \
+    encode/encodeRegionInfo.o encode/encodeRegionInfoCustom.o encode/encodeRna.o \
     encode/encodeStanfordPromoters.o encode/encodeStanfordPromotersAverage.o \
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
     est3.o estOrientInfo.o \
