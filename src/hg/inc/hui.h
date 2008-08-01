@@ -812,4 +812,10 @@ char *compositeViewControlNameFromTdb(struct trackDb *tdb);
 void compositeViewControlNameFree(char **name);
 /* frees a string allocated by compositeViewControlNameFromTdb */
 
+void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed);
+/* UI for the wiggle track */
+
+void scoreCfgUi(struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
+/* Put up UI for filtering bed track based on a score */
+        
 #endif /* HUI_H */

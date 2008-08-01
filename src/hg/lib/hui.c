@@ -16,7 +16,7 @@
 #include "obscure.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.108 2008/07/31 00:39:39 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.109 2008/08/01 23:30:58 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -2254,7 +2254,7 @@ safef(javascript, JBUFSIZE*sizeof(char),
 #define MANY_SUBTRACKS  8
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
-static void wigCfgUi(struct cart *cart, struct trackDb *parentTdb,char *name)
+void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed)
 /* UI for the wiggle track */
 {
 char *typeLine = NULL;  /*  to parse the trackDb type line  */
@@ -2277,7 +2277,18 @@ int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int minHeightPixels = MIN_HEIGHT_PER;
 boolean bedGraph = FALSE;   /*  working on bedGraph type ? */
 
-typeLine = cloneString(parentTdb->type);
+if(boxed)
+    {
+    printf("<TABLE CELLSPACING=\"3\" CELLPADDING=\"0\" border=\"4\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>\n",
+            COLOR_DARKBLUE,COLOR_DARKBLUE);
+    printf("<TABLE border=\"0\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>",COLOR_BG_ALTDEFAULT,COLOR_BG_ALTDEFAULT);
+    if(title)
+        printf("<CENTER><B>%s Configuration</B></CENTER>\n",title);
+    }
+else if(title)
+    printf("<P><B>%s</B>\n",title );
+
+typeLine = cloneString(tdb->type);
 wordCount = chopLine(typeLine,words);
 
 if (sameString(words[0],"bedGraph"))
@@ -2294,18 +2305,18 @@ snprintf( &options[11][0], 256, "%s.%s", name, SMOOTHINGWINDOW );
 snprintf( &options[12][0], 256, "%s.%s", name, YLINEMARK );
 snprintf( &options[13][0], 256, "%s.%s", name, YLINEONOFF );
 
-wigFetchMinMaxPixelsWithCart(cart,parentTdb,name,&minHeightPixels, &maxHeightPixels, &defaultHeight);
+wigFetchMinMaxPixelsWithCart(cart,tdb,name,&minHeightPixels, &maxHeightPixels, &defaultHeight);
 if (bedGraph)
-    wigFetchMinMaxLimitsWithCart(cart,parentTdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY);
+    wigFetchMinMaxLimitsWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY);
 else
-    wigFetchMinMaxYWithCart(cart,parentTdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
-(void) wigFetchHorizontalGridWithCart(cart,parentTdb,name, &horizontalGrid);
-(void) wigFetchAutoScaleWithCart(cart,parentTdb,name, &autoScale);
-(void) wigFetchGraphTypeWithCart(cart,parentTdb,name, &lineBar);
-(void) wigFetchWindowingFunctionWithCart(cart,parentTdb,name, &windowingFunction);
-(void) wigFetchSmoothingWindowWithCart(cart,parentTdb,name, &smoothingWindow);
-(void) wigFetchYLineMarkWithCart(cart,parentTdb,name, &yLineMarkOnOff);
-wigFetchYLineMarkValueWithCart(cart,parentTdb,name, &yLineMark);
+    wigFetchMinMaxYWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
+(void) wigFetchHorizontalGridWithCart(cart,tdb,name, &horizontalGrid);
+(void) wigFetchAutoScaleWithCart(cart,tdb,name, &autoScale);
+(void) wigFetchGraphTypeWithCart(cart,tdb,name, &lineBar);
+(void) wigFetchWindowingFunctionWithCart(cart,tdb,name, &windowingFunction);
+(void) wigFetchSmoothingWindowWithCart(cart,tdb,name, &smoothingWindow);
+(void) wigFetchYLineMarkWithCart(cart,tdb,name, &yLineMarkOnOff);
+wigFetchYLineMarkValueWithCart(cart,tdb,name, &yLineMark);
 
 puts("<TABLE BORDER=0><TR><TD ALIGN=LEFT>");
 
@@ -2350,14 +2361,20 @@ puts("<b>Draw indicator line at y&nbsp;=&nbsp;</b>&nbsp;");
 cgiMakeDoubleVar(&options[12][0], yLineMark, 6);
 printf("&nbsp;&nbsp;");
 wiggleYLineMarkDropDown(&options[13][0], yLineMarkOnOff);
-printf("</TD><TD align=\"RIGHT\"><A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",
-    WIGGLE_HELP_PAGE);
-puts("</TD></TR></TABLE>");
+if(boxed)
+    printf("</TD><TD align=\"RIGHT\">");
+else    
+    puts("</TD></TR></TABLE>");
+printf("<A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",WIGGLE_HELP_PAGE);
+if(boxed)
+    puts("</TD></TR></TABLE>");
 
 freeMem(typeLine);
+if(boxed)
+    puts("</td></tr></table></td></tr></table>");
 }
 
-void scoreCfgUi(struct cart *cart, struct trackDb *parentTdb, int maxScore, char *name)
+void scoreCfgUi(struct cart *cart, struct trackDb *parentTdb, char *name,char *title, int maxScore,boolean boxed)
 /* Put up UI for filtering bed track based on a score */
 {
 char option[256];
@@ -2372,11 +2389,24 @@ char *scoreCtString = trackDbSetting(parentTdb, "filterTopScorers");
 char *scoreFilterCt = NULL;
 bool doScoreCtFilter = FALSE;
 
+if(boxed)
+    {
+    printf("<TABLE CELLSPACING=\"3\" CELLPADDING=\"0\" border=\"4\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>\n",
+            COLOR_DARKBLUE,COLOR_DARKBLUE);
+    printf("<TABLE border=\"0\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>",COLOR_BG_ALTDEFAULT,COLOR_BG_ALTDEFAULT);
+    if(title)
+        printf("<CENTER><B>%s Configuration</B></CENTER>\n",title);
+    }
+else if(title)
+    printf("<p><B>%s &nbsp;</b>",title );
+else
+    printf("<p>");
+
 /* initial value of score theshold is 0, unless
  * overridden by the scoreFilter setting in the track */
 if (scoreValString != NULL)
     scoreVal = atoi(scoreValString);
-printf("<p><b>Show only items with score at or above:</b> ");
+printf("<b>Show only items with score at or above:</b> ");
 snprintf(option, sizeof(option), "%s.scoreFilter", name);
 scoreSetting = cartUsualInt(cart,  option,  scoreVal);
 cgiMakeIntVar(option, scoreSetting, 11);
@@ -2402,6 +2432,8 @@ if (scoreCtString != NULL)
         printf("&nbsp; (range: 1 to 100000, total items: %d)",
                 getTableSize(parentTdb->tableName));
     }
+if(boxed)
+    puts("</td></tr></table></td></tr></table>");
 }
 
 static boolean hCompositeDisplayViewDropDowns(struct cart *cart, struct trackDb *parentTdb)
@@ -2425,8 +2457,11 @@ if(membersOfView == NULL)
     
     
 // Should create an array of matchedSubtracks to build appropriate controls
-boolean configurable[membersOfView->count];
-memset(configurable,FALSE,sizeof(configurable));
+#define CFG_NOT      0x00
+#define CFG_BEDSCORE 0x01
+#define CFG_WIG      0x02
+char configurable[membersOfView->count];
+memset(configurable,CFG_NOT,sizeof(configurable));
 boolean makeCfgRows = FALSE; 
 struct trackDb **matchedSubtracks = needMem(sizeof(struct trackDb *)*membersOfView->count);
 for (ix = 0; ix < membersOfView->count; ix++)
@@ -2439,12 +2474,21 @@ for (ix = 0; ix < membersOfView->count; ix++)
         if(differentString(stView,membersOfView->names[ix]))
             continue;
         matchedSubtracks[ix] = subtrack;
-        if(startsWith("wig",    matchedSubtracks[ix]->type) 
-        || sameString("bed 5 +",matchedSubtracks[ix]->type)) // TODO: Only these are configurable so far
+        if(startsWith("wig",    matchedSubtracks[ix]->type))
+            configurable[ix] = CFG_WIG;
+        else if(sameWord("bed5FloatScore",matchedSubtracks[ix]->type)
+             || sameWord("bed5FloatScoreWithFdr",matchedSubtracks[ix]->type))
+            configurable[ix] = CFG_BEDSCORE;
+        else if(startsWith("bed ",matchedSubtracks[ix]->type)) // TODO: Only these are configurable so far
             {
-            configurable[ix] = TRUE;
-            makeCfgRows = TRUE;
+            char *words[3];
+            chopLine(cloneString(matchedSubtracks[ix]->type), words);
+            if (atoi(words[1]) < 5 || trackDbSetting(subtrack, "noScoreFilter"))
+                break;
+            configurable[ix] = CFG_BEDSCORE;
             }
+        if(configurable[ix] != CFG_NOT)
+            makeCfgRows = TRUE;
         break;
         }
     }
@@ -2455,7 +2499,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
     {
 #ifdef VIEW_CFG_TITLELINK
     printf("<TD>");
-    if(configurable[ix])
+    if(configurable[ix] != CFG_NOT)
         MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix]);
     else
         printf("<B>%s</B>\n",membersOfView->values[ix]);
@@ -2498,17 +2542,16 @@ if(makeCfgRows)
             if(matchedSubtracks[ix] != NULL)
                 {
                 printf("<TR id=\"tr_cfg_%s\" style=\"display:none\"><TD>&nbsp;&nbsp;&nbsp;&nbsp;</TD><TD>",membersOfView->names[ix]);
-                printf("<TABLE CELLSPACING=\"3\" CELLPADDING=\"0\" border=\"4\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>\n",
-                       COLOR_DARKBLUE,COLOR_DARKBLUE);
-                printf("<TABLE border=\"0\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>",COLOR_BG_ALTDEFAULT,COLOR_BG_ALTDEFAULT);
-                printf("<CENTER><B>%s Configuration</B></CENTER>\n",membersOfView->values[ix]);
                 safef(objName, sizeof(objName), "%s_%s", parentTdb->tableName,membersOfView->names[ix]);
-                if(startsWith("wig",matchedSubtracks[ix]->type))
-                    wigCfgUi(cart,matchedSubtracks[ix],objName);
-                else if(sameString("bed 5 +",matchedSubtracks[ix]->type))
-                    scoreCfgUi(cart,parentTdb, 1000,objName);
-                puts("</td></tr></table></td></tr></table>");
-                puts("</TD></TR>");
+                if(configurable[ix] == CFG_WIG)
+                    wigCfgUi(cart,matchedSubtracks[ix],objName,membersOfView->values[ix],TRUE);
+                else if(configurable[ix] == CFG_BEDSCORE)
+                    {
+                    if(trackDbSetting(matchedSubtracks[ix], "scoreFilterMax")) 
+                        scoreCfgUi(cart,parentTdb,objName,membersOfView->values[ix],sqlUnsigned(trackDbSetting(matchedSubtracks[ix], "scoreFilterMax")),TRUE);
+                    else
+                        scoreCfgUi(cart,parentTdb,objName,membersOfView->values[ix], 1000,TRUE);
+                    }
                 }
         }
     }
