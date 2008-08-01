@@ -3640,7 +3640,7 @@ searchType bed
 semiShortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
-searchPriority 12.994
+searchPriority 12.993
 padding 250
 
 searchTable ensGene
