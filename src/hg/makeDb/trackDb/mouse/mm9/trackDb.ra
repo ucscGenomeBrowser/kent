@@ -340,107 +340,165 @@ url http://vega.sanger.ac.uk/Mus_musculus/transview?transcript=$$
     priority 2
     color 30,130,210
 
-track woldRnaSeqSignal
+track woldRnaSeq
 compositeTrack on
-shortLabel Wold RNA-Seq Sig
-longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal
+shortLabel CalTech RNA-Seq
+longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq
 group regulation
-priority 100.1
-type wig .04 60949
-viewLimits 1:10
-spanList 1
-autoScaleDefault on
-windowingFunction mean
-maxHeightPixels 64:25:16
-
-    track woldRnaSeqSignalBrain1
-    subTrack woldRnaSeqSignal
-    shortLabel Brain Rep1
-    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Brain (Replicate 1)
-    priority 1
-    color 200,128,0
-
-    track woldRnaSeqSignalBrain2
-    subTrack woldRnaSeqSignal
-    shortLabel Brain Rep2
-    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Brain (Replicate 2)
-    priority 2
-    color 200,128,0
-
-    track woldRnaSeqSignalLiver1
-    subTrack woldRnaSeqSignal
-    shortLabel Liver Rep1
-    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Liver (Replicate 1)
-    priority 3
-    color 0,155,128
-
-    track woldRnaSeqSignalLiver2
-    subTrack woldRnaSeqSignal
-    shortLabel Liver Rep2
-    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Liver (Replicate 2)
-    priority 4
-    color 0,155,128
-
-    track woldRnaSeqSignalMuscle1
-    subTrack woldRnaSeqSignal
-    shortLabel Muscle Rep1
-    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Muscle (Replicate 1)
-    priority 5
-    color 155,0,128
-
-    track woldRnaSeqSignalMuscle2
-    subTrack woldRnaSeqSignal
-    shortLabel Muscle Rep2
-    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Muscle (Replicate 2)
-    color 155,0,128
-    priority 6
-
-track woldRnaSeqSplices
-compositeTrack on
-shortLabel Wold RNA-Seq Splices
-longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splices
-group regulation
-priority 100.2
-type bed 12 .
+priority 100
+subGroup1 view Views SPLC=Splices SIG=Signal_Densities
+subGroup2 rep Replicate R1=1 R2=2 
+subGroup3 cellType Cell_Type BRAIN=Brain LVR=Liver MSCL=Muscle
+dimensions dimensionY=cellType dimensionX=rep
+dividers cellType
+type bed 3
 
     track woldRnaSeqSplicesBrain1
-    subTrack woldRnaSeqSplices
-    shortLabel Brain Rep1
+    subTrack woldRnaSeq
+    shortLabel Wold Brain Rep1
     longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Brain (Replicate 1)
     priority 1
+    subGroups cellType=BRAIN rep=R1 view=SPLC
     color 200,128,0
+    noInherit on
+    type bed 12 .
+
+    track woldRnaSeqSignalBrain1
+    subTrack woldRnaSeq
+    shortLabel Wold Brain Rep1
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Brain (Replicate 1)
+    priority 2
+    subGroups cellType=BRAIN rep=R1 view=SIG
+    color 200,128,0
+    noInherit on
+    type wig .04 60949
+    viewLimits 1:10
+    spanList 1
+    autoScaleDefault on
+    windowingFunction mean
+    maxHeightPixels 64:25:16
 
     track woldRnaSeqSplicesBrain2
-    subTrack woldRnaSeqSplices
-    shortLabel Brain Rep2
+    subTrack woldRnaSeq
+    shortLabel Wold Brain Rep2
     longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Brain (Replicate 2)
-    priority 2
+    priority 3
+    subGroups cellType=BRAIN rep=R2 view=SPLC
     color 200,128,0
+    noInherit on
+    type bed 12 .
+
+    track woldRnaSeqSignalBrain2
+    subTrack woldRnaSeq
+    shortLabel Wold Brain Rep2
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Brain (Replicate 2)
+    priority 4
+    subGroups cellType=BRAIN rep=R2 view=SIG
+    color 200,128,0
+    noInherit on
+    type wig .04 60949
+    viewLimits 1:10
+    spanList 1
+    autoScaleDefault on
+    windowingFunction mean
+    maxHeightPixels 64:25:16
 
     track woldRnaSeqSplicesLiver1
-    subTrack woldRnaSeqSplices
-    shortLabel Liver Rep1
+    subTrack woldRnaSeq
+    shortLabel Wold Liver Rep1
     longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Liver (Replicate 1)
-    priority 3
+    priority 5
+    subGroups cellType=LVR rep=R1 view=SPLC
     color 0,155,128
+    noInherit on
+    type bed 12 .
+
+    track woldRnaSeqSignalLiver1
+    subTrack woldRnaSeq
+    shortLabel Wold Liver Rep1
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Liver (Replicate 1)
+    priority 6
+    subGroups cellType=LVR rep=R1 view=SIG
+    color 0,155,128
+    noInherit on
+    type wig .04 60949
+    viewLimits 1:10
+    spanList 1
+    autoScaleDefault on
+    windowingFunction mean
+    maxHeightPixels 64:25:16
 
     track woldRnaSeqSplicesLiver2
-    subTrack woldRnaSeqSplices
-    shortLabel Liver Rep2
+    subTrack woldRnaSeq
+    shortLabel Wold Liver Rep2
     longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Liver (Replicate 2)
-    priority 4
+    priority 7
+    subGroups cellType=LVR rep=R2 view=SPLC
     color 0,155,128
+    noInherit on
+    type bed 12 .
+
+    track woldRnaSeqSignalLiver2
+    subTrack woldRnaSeq
+    shortLabel Wold Liver Rep2
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Liver (Replicate 2)
+    priority 8
+    subGroups cellType=LVR rep=R2 view=SIG
+    color 0,155,128
+    noInherit on
+    type wig .04 60949
+    viewLimits 1:10
+    spanList 1
+    autoScaleDefault on
+    windowingFunction mean
+    maxHeightPixels 64:25:16
 
     track woldRnaSeqSplicesMuscle1
-    subTrack woldRnaSeqSplices
-    shortLabel Muscle Rep1
+    subTrack woldRnaSeq
+    shortLabel Wold Muscle Rep1
     longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Muscle (Replicate 1)
-    priority 5
+    priority 9
+    subGroups cellType=MSCL rep=R1 view=SPLC
     color 155,0,128
+    noInherit on
+    type bed 12 .
+
+    track woldRnaSeqSignalMuscle1
+    subTrack woldRnaSeq
+    shortLabel Wold Muscle Rep1
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Muscle (Replicate 1)
+    priority 10
+    subGroups cellType=MSCL rep=R1 view=SIG
+    color 155,0,128
+    noInherit on
+    type wig .04 60949
+    viewLimits 1:10
+    spanList 1
+    autoScaleDefault on
+    windowingFunction mean
+    maxHeightPixels 64:25:16
 
     track woldRnaSeqSplicesMuscle2
-    subTrack woldRnaSeqSplices
-    shortLabel Muscle Rep2
+    subTrack woldRnaSeq
+    shortLabel Wold Muscle Rep2
     longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Splice Junctions, Muscle (Replicate 2)
-    priority 6
+    priority 11
+    subGroups cellType=MSCL rep=R2 view=SPLC
     color 155,0,128
+    noInherit on
+    type bed 12 .
+
+    track woldRnaSeqSignalMuscle2
+    subTrack woldRnaSeq
+    shortLabel Wold Muscle Rep2
+    longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq, Normalized Signal, Muscle (Replicate 2)
+    priority 12
+    subGroups cellType=MSCL rep=R2 view=SIG
+    color 155,0,128
+    noInherit on
+    type wig .04 60949
+    viewLimits 1:10
+    spanList 1
+    autoScaleDefault on
+    windowingFunction mean
+    maxHeightPixels 64:25:16
