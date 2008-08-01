@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.445 2008/07/31 00:41:33 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.446 2008/08/01 23:36:21 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1497,53 +1497,6 @@ filterSetting = cartUsualString(cart, filterVar, filterVal);
 cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
 }
 
-void scoreUi(struct trackDb *tdb, int maxScore)
-/* Put up UI for filtering bed track based on a score */
-{
-char option[256];
-
-char *scoreValString = trackDbSetting(tdb, "scoreFilter");
-int scoreSetting;
-int scoreVal = 0;
-char *words[2];
-
-/* filter top-scoring N items in track */
-char *scoreCtString = trackDbSetting(tdb, "filterTopScorers");
-char *scoreFilterCt = NULL;
-bool doScoreCtFilter = FALSE;
-
-/* initial value of score theshold is 0, unless
- * overridden by the scoreFilter setting in the track */
-if (scoreValString != NULL)
-    scoreVal = atoi(scoreValString);
-printf("<p><b>Show only items with score at or above:</b> ");
-snprintf(option, sizeof(option), "%s.scoreFilter", tdb->tableName);
-scoreSetting = cartUsualInt(cart,  option,  scoreVal);
-cgiMakeIntVar(option, scoreSetting, 11);
-printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
-
-if (scoreCtString != NULL)
-    {
-    /* show only top-scoring items. This option only displayed if trackDb
-     * setting exists.  Format:  filterTopScorers <on|off> <count> <table> */
-    chopLine(cloneString(scoreCtString), words);
-    safef(option, sizeof(option), "%s.filterTopScorersOn", tdb->tableName);
-    doScoreCtFilter =
-        cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
-    puts("<P>");
-    cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, doScoreCtFilter));
-    safef(option, sizeof(option), "%s.filterTopScorersCt", tdb->tableName);
-    scoreFilterCt = cartCgiUsualString(cart, option, words[1]);
-
-    puts("&nbsp; <B> Show only items in top-scoring </B>");
-    cgiMakeTextVar(option, scoreFilterCt, 5);
-    /* Only check size of table if track does not have subtracks */
-    if (!tdbIsComposite(tdb))
-        printf("&nbsp; (range: 1 to 100000, total items: %d)",
-                getTableSize(tdb->tableName));
-    }
-}
-
 void crossSpeciesUi(struct trackDb *tdb)
 /* Put up UI for selecting rainbow chromosome color or intensity score. */
 {
@@ -1568,7 +1521,6 @@ void transRegCodeUi(struct trackDb *tdb)
 /* Put up UI for transcriptional regulatory code - not
  * much more than score UI. */
 {
-scoreUi(tdb, 1000);
 printf("%s",
 	"<P>The scoring ranges from 0 to 1000 and is based on the number of lines "
 	"of evidence that support the motif being active.  Each of the two "
@@ -1683,116 +1635,13 @@ if (chainDbNormScoreAvailable(chromosome, tdb->tableName, NULL))
 
     freeMem (colorOpt);
     filterByChrom(tdb);
-    scoreUi(tdb, 2000000000);
+    scoreCfgUi(cart,tdb,tdb->tableName,NULL,2000000000,FALSE);
     }
 else
     crossSpeciesUi(tdb);
 
 }
 
-void wigUi(struct trackDb *tdb)
-/* UI for the wiggle track */
-{
-char *typeLine = NULL;	/*	to parse the trackDb type line	*/
-char *words[8];		/*	to parse the trackDb type line	*/
-int wordCount = 0;	/*	to parse the trackDb type line	*/
-char options[14][256];	/*	our option strings here	*/
-double minY;		/*	from trackDb or cart	*/
-double maxY;		/*	from trackDb or cart	*/
-double tDbMinY;		/*	data range limits from trackDb type line */
-double tDbMaxY;		/*	data range limits from trackDb type line */
-int defaultHeight;	/*	pixels per item	*/
-char *horizontalGrid = NULL;	/*	Grid lines, off by default */
-char *lineBar;	/*	Line or Bar graph */
-char *autoScale;	/*	Auto scaling on or off */
-char *windowingFunction;	/*	Maximum, Mean, or Minimum */
-char *smoothingWindow;	/*	OFF or [2:16] */
-char *yLineMarkOnOff;	/*	user defined Y marker line to draw */
-double yLineMark;		/*	from trackDb or cart	*/
-int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
-int minHeightPixels = MIN_HEIGHT_PER;
-boolean bedGraph = FALSE;	/*	working on bedGraph type ? */
-
-typeLine = cloneString(tdb->type);
-wordCount = chopLine(typeLine,words);
-
-if (sameString(words[0],"bedGraph"))
-    bedGraph = TRUE;
-
-snprintf( &options[0][0], 256, "%s.%s", tdb->tableName, HEIGHTPER );
-snprintf( &options[4][0], 256, "%s.%s", tdb->tableName, MIN_Y );
-snprintf( &options[5][0], 256, "%s.%s", tdb->tableName, MAX_Y );
-snprintf( &options[7][0], 256, "%s.%s", tdb->tableName, HORIZGRID );
-snprintf( &options[8][0], 256, "%s.%s", tdb->tableName, LINEBAR );
-snprintf( &options[9][0], 256, "%s.%s", tdb->tableName, AUTOSCALE );
-snprintf( &options[10][0], 256, "%s.%s", tdb->tableName, WINDOWINGFUNCTION );
-snprintf( &options[11][0], 256, "%s.%s", tdb->tableName, SMOOTHINGWINDOW );
-snprintf( &options[12][0], 256, "%s.%s", tdb->tableName, YLINEMARK );
-snprintf( &options[13][0], 256, "%s.%s", tdb->tableName, YLINEONOFF );
-
-wigFetchMinMaxPixels(tdb, &minHeightPixels, &maxHeightPixels, &defaultHeight);
-if (bedGraph)
-    wigFetchMinMaxLimits(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY);
-else
-    wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
-(void) wigFetchHorizontalGrid(tdb, &horizontalGrid);
-(void) wigFetchAutoScale(tdb, &autoScale);
-(void) wigFetchGraphType(tdb, &lineBar);
-(void) wigFetchWindowingFunction(tdb, &windowingFunction);
-(void) wigFetchSmoothingWindow(tdb, &smoothingWindow);
-(void) wigFetchYLineMark(tdb, &yLineMarkOnOff);
-wigFetchYLineMarkValue(tdb, &yLineMark);
-
-printf("<TABLE BORDER=0><TR><TD ALIGN=LEFT>\n");
-
-if (bedGraph)
-printf("<b>Type of graph:&nbsp;</b>");
-else
-printf("<b>Type of graph:&nbsp;</b>");
-wiggleGraphDropDown(&options[8][0], lineBar);
-printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
-
-printf("<b>y&nbsp;=&nbsp;0.0 line:&nbsp;</b>");
-wiggleGridDropDown(&options[7][0], horizontalGrid);
-printf(" </TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
-
-printf("<b>Track height:&nbsp;</b>");
-cgiMakeIntVar(&options[0][0], defaultHeight, 5);
-printf("&nbsp;pixels&nbsp;&nbsp;(range:&nbsp;%d&nbsp;to&nbsp;%d)",
-	minHeightPixels, maxHeightPixels);
-printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
-
-printf("<b>Vertical viewing range</b>:&nbsp;&nbsp;\n<b>min:&nbsp;</b>");
-cgiMakeDoubleVar(&options[4][0], minY, 6);
-printf("&nbsp;&nbsp;&nbsp;&nbsp;<b>max:&nbsp;</b>");
-cgiMakeDoubleVar(&options[5][0], maxY, 6);
-printf("\n&nbsp; &nbsp;(range: &nbsp;%g&nbsp;to&nbsp;%g)",
-    tDbMinY, tDbMaxY);
-printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
-
-printf("<b>Data view scaling:&nbsp;</b>");
-wiggleScaleDropDown(&options[9][0], autoScale);
-printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
-
-printf("<b>Windowing function:&nbsp;</b>");
-wiggleWindowingDropDown(&options[10][0], windowingFunction);
-printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
-
-printf("<b>Smoothing window:&nbsp;</b>");
-wiggleSmoothingDropDown(&options[11][0], smoothingWindow);
-printf("&nbsp;pixels");
-printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
-
-printf("<b>Draw indicator line at y&nbsp;=&nbsp;</b>&nbsp;\n");
-cgiMakeDoubleVar(&options[12][0], yLineMark, 6);
-printf("&nbsp;&nbsp;");
-wiggleYLineMarkDropDown(&options[13][0], yLineMarkOnOff);
-printf("</TD></TR></TABLE>\n");
-printf("<BR><A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",
-	WIGGLE_HELP_PAGE);
-
-freeMem(typeLine);
-}
 
 void chromGraphUi(struct trackDb *tdb)
 /* UI for the wiggle track */
@@ -1906,7 +1755,7 @@ struct wigMafSpecies
 
 void wigMafUi(struct trackDb *tdb)
 /* UI for maf/wiggle track
- * NOTE: calls wigUi */
+ * NOTE: calls wigCfgUi */
 {
 char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
 char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
@@ -2258,8 +2107,7 @@ else
 
 if (trackDbSetting(tdb, CONS_WIGGLE) != NULL)
     {
-    puts("<P><B>Conservation graph:</B>" );
-    wigUi(tdb);
+    wigCfgUi(cart,tdb,tdb->tableName,"Conservation graph:",FALSE);
     }
 }
 
@@ -2324,8 +2172,7 @@ tnfgVis = hTvFromString(visString);
 printf("<b>Transfrags Display Mode: </b>");
 hTvDropDown("hgt.affyPhase2.tnfg", tnfgVis, TRUE);
 
-printf("<p><b><u>Graph Plotting options:</u></b><br>");
-wigUi(tdb);
+wigCfgUi(cart,tdb,tdb->tableName,"<u>Graph Plotting options:</u>",FALSE);
 printf("<p><b><u>View/Hide individual cell lines:</u></b>");
 }
 
@@ -2760,7 +2607,7 @@ else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG")
 else if (sameString(track, "hgPcrResult"))
     pcrResultUi(tdb);
 else if (startsWith("bedGraph", tdb->type))
-	wigUi(tdb);
+    wigCfgUi(cart,tdb,tdb->tableName,NULL,FALSE);
 else if (startsWith("maf", tdb->type))
     wigMafUi(tdb);
 else if (startsWith("wig", tdb->type))
@@ -2768,7 +2615,7 @@ else if (startsWith("wig", tdb->type))
         if (startsWith("wigMaf", tdb->type))
             wigMafUi(tdb);
         else
-            wigUi(tdb);
+            wigCfgUi(cart,tdb,tdb->tableName,NULL,FALSE);
         }
 else if (startsWith("chromGraph", tdb->type))
         chromGraphUi(tdb);
@@ -2873,15 +2720,15 @@ else if (tdb->type != NULL)
 		!startsWith("encodeGencodeIntron", track))
 		{
 		if (trackDbSetting(tdb, "scoreFilterMax"))
-		    scoreUi(tdb,
-			sqlUnsigned(trackDbSetting(tdb, "scoreFilterMax")));
+            scoreCfgUi(cart,tdb,tdb->tableName,NULL,
+                sqlUnsigned(trackDbSetting(tdb, "scoreFilterMax")),FALSE);
 		else
-		    scoreUi(tdb, 1000);
+            scoreCfgUi(cart,tdb,tdb->tableName,NULL,1000,FALSE);
 		}
 	    }
         else if (sameWord(words[0], "bed5FloatScore") || 
                 sameWord(words[0], "bed5FloatScoreWithFdr"))
-            scoreUi(tdb, 1000);
+            scoreCfgUi(cart,tdb,tdb->tableName,NULL,1000,FALSE);
 	else if (sameWord(words[0], "psl"))
 	    {
 	    if (wordCount == 3)
