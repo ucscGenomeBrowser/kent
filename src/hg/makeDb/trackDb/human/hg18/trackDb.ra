@@ -2059,6 +2059,13 @@ type bed 4 .
     type bed 6 +
     priority 8
 
+    track snpArrayIllumina1M
+    subTrack snpArray
+    shortLabel Illumina 1M
+    longLabel Illumina Human Hap 1M
+    type bed 6 +
+    priority 9
+			
  
 track divMKAR
 shortLabel Recent Selection NC

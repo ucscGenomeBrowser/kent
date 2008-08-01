@@ -22946,3 +22946,47 @@ _EOF_
 
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 loxAfr2 > rbest.log 2>&1 &
 
+#############################################################################
+# BUILD snpArrayIllumina1M SUB-TRACK (DONE 8/1/08, Fan)
+
+# Received raw data file Illumina_Human1M-duoV3_SNPlist_Strand_Location.csv
+# from Illumina,  Luana Galver (lgalver at illumina.com).
+
+    mkdir -p /cluster/store11/gs.19/build36/bed/snp/illumina/1M
+    cd /cluster/store11/gs.19/build36/bed/snp/illumina/1M
+
+    cat Illumina_Human1M-duoV3_SNPlist_Strand_Location.csv |\
+    sed -e 's/,/\t/g' >1M.tab
+
+    hgsql hg18 < ~src/hg/lib/snpArrayIllumina1MRaw.sql
+    hgsql hg18 -e 'load data local infile "1M.tab" into table snpArrayIllumina1MRaw'
+
+    ~/src/hg/snp/snpLoad/illuminaLookup1M hg18 snpArrayIllumina1MRaw snp128
+    
+# The illuminaLookup1M generate two files:
+#
+#	illuminaLookup1M.out  contains all Illumina 1M probes found in snp128
+#	illuminaLookup1M.err  contains all Illumina 1M probes not found in snp128
+	
+    mv illuminaLookup.out illuminaLookup1Ma.out
+
+    cut -f 1 illuminaLookup.err >j.1
+    cat j.1 |sed -e 's/chrMt/chrM/' |\
+    sed -e 's/XY/X/'  >j.chr
+
+    cut -f 2-5 illuminaLookup.err >j.2
+
+    cut -f 6 illuminaLookup.err >j.3
+    cat j.3 |sed -e 's/F/+/' |sed -e 's/R/-/' >j.strand
+
+    cut -f 7 illuminaLookup.err |sed -e "s/\[//" |sed -e "s/\]//" >j.observed
+
+    paste j.chr j.2 j.strand j.observed >illuminaLookup1Mb.out
+
+# combine two parts
+    cat illuminaLookup1Ma.out illuminaLookup1Mb.out >snpArrayIllumina1M.tab
+
+# load the table 
+    hgLoadBed hg18 snpArrayIllumina1M snpArrayIllumina1M.tab -tab -sqlTable=snpArrayIllumina1M.sql
+#############################################################################
+
