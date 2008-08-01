@@ -54,7 +54,7 @@
 #include "rnaGene.h"
 #include "tRNAs.h"
 #include "gbRNAs.h"
-#include "encodeRna.h"
+#include "encode/encodeRna.h"
 #include "hgMaf.h"
 #include "maf.h"
 #include "stsMarker.h"
@@ -153,13 +153,13 @@
 #include "flyBase2004Xref.h"
 #include "affy10KDetails.h"
 #include "affy120KDetails.h"
-#include "encodeRegionInfo.h"
-#include "encodeErge.h"
-#include "encodeErgeHssCellLines.h"
-#include "encodeStanfordPromoters.h"
-#include "encodeStanfordPromotersAverage.h"
-#include "encodeIndels.h"
-#include "encodeHapMapAlleleFreq.h"
+#include "encode/encodeRegionInfo.h"
+#include "encode/encodeErge.h"
+#include "encode/encodeErgeHssCellLines.h"
+#include "encode/encodeStanfordPromoters.h"
+#include "encode/encodeStanfordPromotersAverage.h"
+#include "encode/encodeIndels.h"
+#include "encode/encodeHapMapAlleleFreq.h"
 #include "hapmapSnps.h"
 #include "hapmapAllelesOrtho.h"
 #include "hapmapAllelesSummary.h"
@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1445 2008/07/12 05:44:44 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1446 2008/08/01 17:49:15 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */

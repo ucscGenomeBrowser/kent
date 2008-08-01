@@ -1,0 +1,22 @@
+table encodePrimateAlleles
+"Primate (chimp and macaque) alleles for ENCODE resequencing SNPs"
+    (
+    string chrom;	 "Reference sequence chromosome or scaffold"
+    uint   chromStart;   "Start position in chrom"
+    uint   chromEnd;	 "End position in chrom"
+    string name;	 "Name of SNP - rsId or temporary name"
+    uint   score;        "0"
+    char   strand;       "+ or -"
+    char   refAllele;    "A, C, G, or T"
+    char   otherAllele;  "A, C, G, or T"
+    string chimpChrom;   "Chimp Chromosome"
+    uint   chimpPos;     "End position in himpChrom"
+    char   chimpStrand;  "+ or - or ."
+    string chimpAllele;  "A, C, G, T, a, c, g, t, or ."
+    uint   chimpQual;    "Chimp quality score"
+    string rhesusChrom;  "Rhesus Chromosome"
+    uint   rhesusPos;    "End position in rhesusChrom"
+    char   rhesusStrand; "+ or - or ."
+    string rhesusAllele; "A, C, G, T, a, c, g, t, or ."
+    uint   rhesusQual;   "Rhesus quality score"
+    )

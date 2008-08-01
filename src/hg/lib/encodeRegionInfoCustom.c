@@ -4,9 +4,9 @@
 #include "common.h"
 #include "jksql.h"
 #include "hdb.h"
-#include "encodeRegionInfo.h"
+#include "encode/encodeRegionInfo.h"
 
-static char const rcsid[] = "$Id: encodeRegionInfoCustom.c,v 1.2 2006/03/09 18:26:57 angie Exp $";
+static char const rcsid[] = "$Id: encodeRegionInfoCustom.c,v 1.3 2008/08/01 17:48:43 aamp Exp $";
 
 char *getEncodeRegionDescr(char *name)
 /* Get descriptive text for a region */

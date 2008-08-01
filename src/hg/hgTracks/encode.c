@@ -4,7 +4,7 @@
 #include "hCommon.h"
 #include "hdb.h"
 #include "hgTracks.h"
-#include "encodeRna.h"
+#include "encode/encodeRna.h"
 #include "encode.h"
 
 
