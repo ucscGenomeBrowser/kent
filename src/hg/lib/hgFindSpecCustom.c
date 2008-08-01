@@ -14,7 +14,7 @@
 #include <regex.h>
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.14.68.1 2008/07/31 02:24:30 markd Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.14.68.2 2008/08/01 21:41:03 markd Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -479,33 +479,66 @@ while ((cur != NULL) && (!sameString(cur->searchName, spec->searchName)))
 return (cur) ? TRUE : FALSE;
 }
 
+static int hgFindSpecPriCmp(const void *va, const void *vb)
+/* Compare to sort by assending searchPriority. */
+{
+const struct hgFindSpec *a = *((struct hgFindSpec **)va);
+const struct hgFindSpec *b = *((struct hgFindSpec **)vb);
+float diff = a->searchPriority - b->searchPriority;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
+else
+    return 0;
+}
+
+static struct hgFindSpec *loadFindSpecsTbl(char *db, char *tblSpec, char *where)
+/* Load find specs for the given where and a given tblSpec. where can be
+ * NULL. */
+{
+struct hgFindSpec *hfsList = NULL;
+struct sqlConnection *conn = hAllocConn(db);
+char query[512];
+if (where != NULL)
+    safef(query, sizeof(query), "select * from %s where %s", tblSpec, where);
+else
+    safef(query, sizeof(query), "select * from %s", tblSpec);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hgFindSpec *hfs = hgFindSpecLoad(row);
+    if (!haveSpecAlready(hfsList, hfs))
+        slAddHead(&hfsList, hfs);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return(hfsList);
+}
+
+static struct hgFindSpec *loadFindSpecs(char *db, char *where)
+/* Load find specs for the given where. */
+{
+struct hgFindSpec *hfsList = NULL;
+struct slName *hgFindSpecList = hgFindSpecNameList(db);
+struct slName *oneSpec;
+
+for (oneSpec = hgFindSpecList; oneSpec != NULL; oneSpec = oneSpec->next)
+    hfsList = slCat(hfsList, loadFindSpecsTbl(db, oneSpec->name, where));
+slSort(&hfsList, hgFindSpecPriCmp);
+return(hfsList);
+}
+
+
 struct hgFindSpec *hgFindSpecGetSpecs(char *db, boolean shortCircuit)
 /* Load all short-circuit (or not) search specs from the current db, sorted by 
  * searchPriority. */
 {
-struct hgFindSpec *hfsList = NULL;
-struct sqlConnection *conn = hAllocConn(db);
-struct slName *hgFindSpecList = hgFindSpecNameList(db);
-struct slName *oneSpec;
-for (oneSpec = hgFindSpecList; oneSpec != NULL; oneSpec = oneSpec->next)
-    {
-    struct sqlResult *sr = NULL;
-    char **row = NULL;
-    char query[512];
-    /* Descending order, then slAddHead --> correct order out. */
-    safef(query, sizeof(query),
-	  "select * from %s where shortCircuit = %d order by searchPriority desc",
-	  oneSpec->name, shortCircuit);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	struct hgFindSpec *hfs = hgFindSpecLoad(row);
-	if (!haveSpecAlready(hfsList, hfs))
-	    slAddHead(&hfsList, hfs);
-	}
-    sqlFreeResult(&sr);
-    }
-hFreeConn(&conn);
+char where[64];
+safef(where, sizeof(where), "shortCircuit = %d", shortCircuit);
+struct hgFindSpec *hfsList = loadFindSpecs(db, where);
+slSort(&hfsList, hgFindSpecPriCmp);
 return(hfsList);
 }
 
@@ -515,37 +548,28 @@ void hgFindSpecGetAllSpecs(char *db,
 /* Load all search specs from the current db, separated according to 
  * shortCircuit and sorted by searchPriority. */
 {
+struct hgFindSpec *hfs, *hfsList = loadFindSpecs(db, NULL);
 struct hgFindSpec *shortList = NULL, *longList = NULL;
-struct sqlConnection *conn = hAllocConn(db);
-struct slName *hgFindSpecList = hgFindSpecNameList(db);
-struct slName *oneSpec;
-for (oneSpec = hgFindSpecList; oneSpec != NULL; oneSpec = oneSpec->next)
+
+while ((hfs = slPopHead(&hfsList)) != NULL)
     {
-    struct sqlResult *sr = NULL;
-    char **row = NULL;
-    char query[512];
-    /* Descending order, then slAddHead --> correct order out. */
-    safef(query, sizeof(query),
-	  "select * from %s order by searchPriority desc",
-	  oneSpec->name);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	struct hgFindSpec *hfs = hgFindSpecLoad(row);	
-	if ((hfs->shortCircuit)	&& (!haveSpecAlready(shortList, hfs)))
-	    slAddHead(&shortList, hfs);
-	else if (!haveSpecAlready(longList, hfs))
-	    slAddHead(&longList, hfs);
-	}
-    sqlFreeResult(&sr);
+    if (hfs->shortCircuit)
+        slAddHead(&shortList, hfs);
+    else 
+        slAddHead(&longList, hfs);
     }
-hFreeConn(&conn);
 if (retShortCircuitList != NULL)
+    {
+    slSort(&shortList, hgFindSpecPriCmp);
     *retShortCircuitList = shortList;
+    }
 else
     hgFindSpecFreeList(&shortList);
 if (retAdditiveList != NULL)
+    {
+    slSort(&longList, hgFindSpecPriCmp);
     *retAdditiveList = longList;
+    }
 else
     hgFindSpecFreeList(&longList);
 }
