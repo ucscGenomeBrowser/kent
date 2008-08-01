@@ -3875,7 +3875,7 @@ searchType bed
 semiShortCircuit 1
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+)
-searchPriority 16.994
+searchPriority 16.993
 padding 250
 
 searchTable genieAlt
