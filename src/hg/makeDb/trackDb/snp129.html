@@ -179,10 +179,11 @@ TARGET=_BLANK>ftp://ftp.ncbi.nih.gov/snp/organisms/</A>
   </UL>
 </P>
 
-<H2>Orthologous Alleles (human only)</H2>
+<H2>Orthologous Alleles (human assemblies only)</H2>
 <P>
 Beginning with the March 2006 human assembly, we provide a related table that 
 contains orthologous alleles in the chimpanzee and rhesus macaque assemblies.
+Beginning with dbSNP build 129, the orangutan assembly is also included.
 We use our liftOver utility to identify the orthologous alleles.  The candidate human SNPs are 
 a filtered list that meet the criteria:
 <UL>
@@ -197,7 +198,7 @@ In some cases the orthologous allele is unknown; these are set to 'N'.
 If a lift was not possible, we set the orthologous allele to '?' and the orthologous start and end 
 position to 0 (zero).
 
-<H2>Masked FASTA Files (human only)</H2>
+<H2>Masked FASTA Files (human assemblies only)</H2>
 
 FASTA files that have been modified to use IUPAC ambiguous nucleotide characters at
 each base covered by a single-base substitution are available for download
