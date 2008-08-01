@@ -10,7 +10,7 @@
 #include "cart.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: hgEncodeDataVersions.c,v 1.4.50.1 2008/07/31 02:23:58 markd Exp $";
+static char const rcsid[] = "$Id: hgEncodeDataVersions.c,v 1.4.50.2 2008/08/01 06:10:40 markd Exp $";
 
 /* Global variables */
 struct cart *cart;
@@ -97,7 +97,7 @@ struct trackRef *tr;
 struct group *group, *groups = NULL;
 
 cart = theCart;
-cartWebStart(cart, "ENCODE Track Data Versions (%s)", db);
+cartWebStart(cart, NULL, "ENCODE Track Data Versions (%s)", db);
 getDbAndGenome(cart, &db, &ignored, NULL);
 tracks = hTrackDb(db, NULL);
 groups = groupTracks(db, tracks);

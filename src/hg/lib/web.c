@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.150.6.1 2008/07/31 02:24:32 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.150.6.2 2008/08/01 06:10:53 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -82,16 +82,17 @@ webPushErrHandlers();
 }
 
 static void webStartWrapperDetailedInternal(struct cart *theCart,
-	char *headerText, char *textOutBuf,
+	char *db, char *headerText, char *textOutBuf,
 	boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader,
 	boolean withHtmlHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
 char uiState[256];
 char *scriptName = cgiScriptName();
-char *db = NULL;
 boolean isEncode = FALSE;
 boolean isGsid   = hIsGsidServer();
+if (db == NULL)
+    db = hDefaultDb();
 boolean dbIsActive = hDbIsActive(db);
 
 if (scriptName == NULL)
@@ -405,8 +406,8 @@ webPushErrHandlers();
 webHeadAlreadyOutputed = TRUE;
 }	/*	static void webStartWrapperDetailedInternal()	*/
 
-void webStartWrapperDetailedArgs(struct cart *theCart, char *headerText,
-	char *format, va_list args, boolean withHttpHeader,
+void webStartWrapperDetailedArgs(struct cart *theCart, char *db,
+	char *headerText, char *format, va_list args, boolean withHttpHeader,
 	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
@@ -417,62 +418,62 @@ va_copy(argscp,args);
 vasafef(textOutBuf, sizeof(textOutBuf), format, argscp);
 va_end(argscp);
 
-webStartWrapperDetailedInternal(theCart, headerText, textOutBuf,
+webStartWrapperDetailedInternal(theCart, db, headerText, textOutBuf,
 	withHttpHeader, withLogo, skipSectionHeader, withHtmlHeader);
 }
 
-void webStartWrapperDetailedNoArgs(struct cart *theCart, char *headerText,
-	char *format, boolean withHttpHeader,
+void webStartWrapperDetailedNoArgs(struct cart *theCart, char *db,
+	char *headerText, char *format, boolean withHttpHeader,
 	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
 char textOutBuf[512];
 
 safef(textOutBuf, sizeof(textOutBuf), format);
-webStartWrapperDetailedInternal(theCart, headerText, textOutBuf,
+webStartWrapperDetailedInternal(theCart, db, headerText, textOutBuf,
 	withHttpHeader, withLogo, skipSectionHeader, withHtmlHeader);
 }
 
-void webStartWrapperGatewayHeader(struct cart *theCart, char *headerText,
-    char *format, va_list args, boolean withHttpHeader,
+void webStartWrapperGatewayHeader(struct cart *theCart, char *db,
+	char *headerText, char *format, va_list args, boolean withHttpHeader,
 	boolean withLogo, boolean skipSectionHeader)
 {
-webStartWrapperDetailedArgs(theCart, headerText, format, args, withHttpHeader,
+webStartWrapperDetailedArgs(theCart, db, headerText, format, args, withHttpHeader,
 	withLogo, skipSectionHeader, TRUE);
 }
 
-void webStartWrapperGateway(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
+void webStartWrapperGateway(struct cart *theCart, char *db, char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
-webStartWrapperGatewayHeader(theCart, "", format, args, withHttpHeader,
+webStartWrapperGatewayHeader(theCart, db, "", format, args, withHttpHeader,
 			     withLogo, skipSectionHeader);
 }
 
-void webStartWrapper(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo)
+void webStartWrapper(struct cart *theCart, char *db, char *format, va_list args, boolean withHttpHeader, boolean withLogo)
     /* allows backward compatibility with old webStartWrapper that doesn't contain the "skipHeader" arg */
 	/* output a CGI and HTML header with the given title in printf format */
 {
-webStartWrapperGatewayHeader(theCart, "", format, args, withHttpHeader,
+webStartWrapperGatewayHeader(theCart, db, "", format, args, withHttpHeader,
 			     withLogo, FALSE);
 }	
 
-void webStart(struct cart *theCart, char *format, ...)
+void webStart(struct cart *theCart, char *db, char *format, ...)
 /* Print out pretty wrapper around things when not
  * from cart. */
 {
 va_list args;
 va_start(args, format);
-webStartWrapper(theCart, format, args, TRUE, TRUE);
+webStartWrapper(theCart, db, format, args, TRUE, TRUE);
 va_end(args);
 }
 
-void webStartHeader(struct cart *theCart, char *headerText, char *format, ...)
+void webStartHeader(struct cart *theCart, char *db, char *headerText, char *format, ...)
 /* Print out pretty wrapper around things when not from cart. 
  * Include headerText in the html header. */
 {
 va_list args;
 va_start(args, format);
-webStartWrapperGatewayHeader(theCart, headerText, format, args, TRUE, TRUE,
+webStartWrapperGatewayHeader(theCart, db, headerText, format, args, TRUE, TRUE,
 			     FALSE);
 va_end(args);
 }
@@ -546,7 +547,7 @@ void webVaWarn(char *format, va_list args)
  * the fancy form. */
 {
 if (! webHeadAlreadyOutputed)
-    webStart(errCart, "Error");
+    webStart(errCart, NULL, "Error");
 htmlVaWarn(format, args);
 printf("\n<!-- HGERROR -->\n");
 printf("\n\n");
@@ -562,7 +563,7 @@ va_start(args, format);
 
 /* output the header */
 if(!webHeadAlreadyOutputed)
-	webStart(errCart, title);
+    webStart(errCart, NULL, title);
 
 /* in text mode, have a different error */
 if(webInTextMode)

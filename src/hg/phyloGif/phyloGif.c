@@ -66,7 +66,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.17 2007/05/23 23:19:03 galt Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.17.58.1 2008/08/01 06:10:54 markd Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -393,7 +393,7 @@ if (useCart)
 	{
     	printf("Content-type: text/html\r\n");
 	printf("\r\n");
-	cartWebStart(cart, "%s", "phyloGif Interactive Phylogenetic Tree Gif Maker");
+	cartWebStart(cart, NULL, "%s", "phyloGif Interactive Phylogenetic Tree Gif Maker");
 	puts("<form method=\"GET\" action=\"phyloGif\" name=\"mainForm\">");
 	cartSaveSession(cart);
 	puts("<table>");

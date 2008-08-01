@@ -330,7 +330,7 @@ dyStringPrintf(title, "Configure Image");
 
 
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=POST>\n", hgTracksName());
-webStartWrapperDetailedNoArgs(cart, "", title->string, FALSE, FALSE, FALSE, FALSE);
+webStartWrapperDetailedNoArgs(cart, database, "", title->string, FALSE, FALSE, FALSE, FALSE);
 cartSaveSession(cart);
 
 hPrintf("<INPUT TYPE=HIDDEN NAME=\"hgTracksConfigPage\" VALUE=\"\">");

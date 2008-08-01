@@ -50,7 +50,7 @@ void uploadPage()
 /* Put up initial upload page. */
 {
 char *oldFileName = cartUsualString(cart, hggUploadFile "__filename", "");
-cartWebStart(cart, "Upload Data to Genome Graphs");
+cartWebStart(cart, database, "Upload Data to Genome Graphs");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">");
 cartSaveSession(cart);
 hPrintf("name of data set: ");
@@ -225,7 +225,7 @@ if (isNotEmpty(fileText))
   rawText = fileText; 
 int rawTextSize = strlen(rawText);
 struct errCatch *errCatch = errCatchNew();
-cartWebStart(cart, "Data Upload Complete (%d bytes)", rawTextSize);
+cartWebStart(cart, database, "Data Upload Complete (%d bytes)", rawTextSize);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\">");
 cartSaveSession(cart);
 if (errCatchStart(errCatch))

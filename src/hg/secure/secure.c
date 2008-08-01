@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: secure.c,v 1.6 2003/11/03 16:25:17 angie Exp $";
+static char const rcsid[] = "$Id: secure.c,v 1.6.296.1 2008/08/01 06:10:56 markd Exp $";
 
 
 /* GLOBAL DECLARATIONS */
@@ -106,7 +106,7 @@ if (isValidKey(key))
     }
 else
     {
-    cartWebStart(theCart, "SECURE CGI \n");
+    cartWebStart(theCart, database, "SECURE CGI \n");
     cartRemove(cart, "key");
     printf("INVALID KEY\n");
     cartWebEnd();

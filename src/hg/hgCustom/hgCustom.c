@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.126.8.2 2008/07/31 05:21:36 markd Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.126.8.3 2008/08/01 06:10:42 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -787,7 +787,7 @@ void doAddCustom(char *err)
 /* display form for adding custom tracks.
  * Include error message, if any */
 {
-cartWebStart(cart, "Add Custom Tracks");
+cartWebStart(cart, database, "Add Custom Tracks");
 addCustomForm(NULL, err);
 helpCustom();
 cartWebEnd(cart);
@@ -798,7 +798,7 @@ void doUpdateCustom(struct customTrack *ct, char *err)
  * Include error message, if any */
 {
 char *longLabel = htmlEncode(ct->tdb->longLabel);
-cartWebStart(cart, "Update Custom Track: %s [%s]", 
+cartWebStart(cart, database, "Update Custom Track: %s [%s]", 
         longLabel, database);
 freeMem(longLabel);
 cartSetString(cart, hgCtDocText, ct->tdb->html);
@@ -811,7 +811,7 @@ void doManageCustom(char *warn)
 /* display form for deleting & updating custom tracks.
  * Include warning message, if any */
 {
-cartWebStart(cart, "Manage Custom Tracks");
+cartWebStart(cart, database, "Manage Custom Tracks");
 manageCustomForm(warn);
 webNewSection("Managing Custom Tracks");
 webIncludeHelpFile("customTrackManage", FALSE);

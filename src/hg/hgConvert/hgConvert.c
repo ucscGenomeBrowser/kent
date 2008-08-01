@@ -18,7 +18,7 @@
 #include "liftOverChain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.28.34.1 2008/07/31 02:24:02 markd Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.28.34.2 2008/08/01 06:10:41 markd Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -53,7 +53,7 @@ void askForDestination(struct liftOverChain *liftOver, char *fromPos,
 {
 struct dbDb *dbList;
 
-cartWebStart(cart, "Convert %s to New Assembly", fromPos);
+cartWebStart(cart, database, "Convert %s to New Assembly", fromPos);
 
 /* create HMTL form */
 puts("<FORM ACTION=\"../cgi-bin/hgConvert\" NAME=\"mainForm\">\n");
@@ -263,7 +263,7 @@ int start, end;
 int origSize;
 struct chain *chainList, *chain;
 
-cartWebStart(cart, "%s %s %s to %s %s", fromDb->organism, fromDb->description,
+cartWebStart(cart, database, "%s %s %s to %s %s", fromDb->organism, fromDb->description,
 	fromPos, toDb->organism, toDb->description);
 if (!hgParseChromRange(database, fromPos, &chrom, &start, &end))
     errAbort("position %s is not in chrom:start-end format", fromPos);

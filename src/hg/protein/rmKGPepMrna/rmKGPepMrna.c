@@ -120,9 +120,9 @@ fprintf(stderr, "kgID: %s not in knownGenePep or knownGene\n", kgID);
     row2 = sqlNextRow(sr2);
     }
 
+sqlFreeResult(&sr2);
 hFreeConn(&conn);
 hFreeConn(&conn2);
-sqlFreeResult(&sr2);
 
 fclose(o1);
 fclose(o2);

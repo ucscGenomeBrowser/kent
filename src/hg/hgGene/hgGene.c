@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.108.26.1 2008/07/31 02:24:03 markd Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.108.26.2 2008/08/01 06:10:42 markd Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -546,7 +546,7 @@ void doKgMethod(struct sqlConnection *conn)
 {
 struct trackDb *tdb, *tdb2;
 
-cartWebStart(cart, "Methods, Credits, and Use Restrictions");
+cartWebStart(cart, database, "Methods, Credits, and Use Restrictions");
 
 /* default is knownGene */
 tdb = hTrackDbForTrack(database, "knownGene");
@@ -615,7 +615,7 @@ else if (cartVarExists(cart, hggDoOtherProteinAli))
 else
     {
     /* Default case - start fancy web page. */
-    cartWebStart(cart, "%s Gene %s (%s) Description and Page Index", 
+    cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index", 
     	genome, curGeneName, curGeneId);
     webMain(conn);
     cartWebEnd();

@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: doSam.c,v 1.6.154.1 2008/07/31 02:24:49 markd Exp $";
+static char const rcsid[] = "$Id: doSam.c,v 1.6.154.2 2008/08/01 06:10:55 markd Exp $";
 
 char *getSgdId(char *protId, char *database)
 /* Get SGD gene ID from a Swiss-Prot ID */
@@ -153,8 +153,8 @@ while (row2 != NULL)
     skip:
     row2 = sqlNextRow(sr2);
     }
-hFreeConn(&conn2);
 sqlFreeResult(&sr2);
+hFreeConn(&conn2);
 
 if (homologCount == 0)
     {

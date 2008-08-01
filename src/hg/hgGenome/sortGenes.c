@@ -26,7 +26,7 @@ struct colTrack
 void sortGenes(struct sqlConnection *conn)
 /* Put up sort gene page. */
 {
-cartWebStart(cart, "Finding Candidate Genes for Gene Sorter");
+cartWebStart(cart, database, "Finding Candidate Genes for Gene Sorter");
 if (!hgNearOk(database))
     errAbort("Sorry, gene sorter not available for this database.");
 

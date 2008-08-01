@@ -17,7 +17,7 @@
 #include "pbStamp.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbUtil.c,v 1.25.6.1 2008/07/31 02:24:51 markd Exp $";
+static char const rcsid[] = "$Id: pbUtil.c,v 1.25.6.2 2008/08/01 06:10:55 markd Exp $";
 
 void hWrites(char *string)
 /* Write string with no '\n' if not suppressed. */
@@ -191,8 +191,8 @@ else
     {
     seq = NULL;
     }
-hFreeConn(&conn);
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 	  
 return(seq);
 }
@@ -319,8 +319,8 @@ while (row != NULL)
     row = sqlNextRow(sr);
     }
 
-hFreeConn(&conn);
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 
 exonIndex 	   = 0;
 

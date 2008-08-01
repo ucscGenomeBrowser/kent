@@ -15,7 +15,7 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: doTracks.c,v 1.18.6.1 2008/07/31 02:24:50 markd Exp $";
+static char const rcsid[] = "$Id: doTracks.c,v 1.18.6.2 2008/08/01 06:10:55 markd Exp $";
 
 int prevGBOffsetSav;
 char trackOffset[20];
@@ -954,10 +954,10 @@ skip:
     row2 = sqlNextRow(sr2);
     }
 	
+sqlFreeResult(&sr2);
 hFreeConn(&conn);
 hFreeConn(&conn2);
 hFreeConn(&conn3);
-sqlFreeResult(&sr2);
 return(sfCnt);
 }
     
@@ -1082,9 +1082,9 @@ while (row != NULL)
     row = sqlNextRow(sr);
     }
 
+sqlFreeResult(&sr);
 hFreeConn(&conn);
 hFreeConn(&conn2);
-sqlFreeResult(&sr);
   
 return(ii);
 }

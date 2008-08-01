@@ -129,7 +129,7 @@ char **row;
 struct bed *hit = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 
-cartWebStart(cart, "Regulatory Motif Info");
+cartWebStart(cart, database, "Regulatory Motif Info");
 genericBedClick(conn, tdb, item, start, 6);
 
 sprintf(query, 
@@ -274,7 +274,7 @@ char **row;
 struct sqlConnection *conn = hAllocConn(database);
 struct transRegCode *trc = NULL;
 
-cartWebStart(cart, "Regulatory Code Info");
+cartWebStart(cart, database, "Regulatory Code Info");
 sprintf(query, 
 	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	table, item, seqName, start);
@@ -543,7 +543,7 @@ int rowOffset = hOffsetPastBin(database, seqName, tdb->tableName);
 struct sqlConnection *conn = hAllocConn(database);
 struct transRegCodeProbe *probe = NULL;
 
-cartWebStart(cart, "CHIP/CHIP Probe Info");
+cartWebStart(cart, database, "CHIP/CHIP Probe Info");
 safef(query, sizeof(query), "select * from %s where name = '%s'",
 	tdb->tableName, item);
 sr = sqlGetResult(conn, query);

@@ -87,7 +87,7 @@
 #include "memalloc.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.29.4.1 2008/07/31 02:24:20 markd Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.29.4.2 2008/08/01 06:10:49 markd Exp $";
 
 extern char *uniprotFormat;
 
@@ -2168,7 +2168,7 @@ void doBlastP(struct trackDb *tdb, char *targetName)
     struct bed *blastpTrack;
     struct blastTab *blastpHitsList;
  
-    cartWebStart(cart, "%s", "BlastP Alignment Hits");
+    cartWebStart(cart, database, "%s", "BlastP Alignment Hits");
     
     blastpTrack = getBlastpTrackRecord(conn, tdb, targetName);
     printQueryGeneInfo(conn, blastpTrack, queryName, &querySeqLength);
@@ -2505,7 +2505,7 @@ void doRNAHybridization(struct trackDb *tdb, char *itemName)
   int i;
 
 
-  cartWebStart(cart, "%s", "RNAHybridization Sites");
+  cartWebStart(cart, database, "%s", "RNAHybridization Sites");
   
   if (hTableExists(database, rnaHybridizationTable))
     {

@@ -25,7 +25,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.25.14.1 2008/07/31 02:24:06 markd Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.25.14.2 2008/08/01 06:10:44 markd Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -617,7 +617,7 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 dnaUtilOpen();
-cartWebStart(cart, "UCSC In-Silico PCR");
+cartWebStart(cart, NULL, "UCSC In-Silico PCR");
 dispatch();
 cartWebEnd();
 }

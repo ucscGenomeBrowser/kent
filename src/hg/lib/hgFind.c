@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.212.4.1 2008/07/31 02:24:29 markd Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.212.4.2 2008/08/01 06:10:52 markd Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2410,7 +2410,7 @@ char *extraCgi = hgp->extraCgi;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
 
 if (useWeb)
-    webStart(cart, "Select Position");
+    webStart(cart, db, "Select Position");
 
 for (table = hgp->tableList; table != NULL; table = table->next)
     {

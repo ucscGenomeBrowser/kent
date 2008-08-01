@@ -317,11 +317,15 @@ void cartHtmlEnd();
 /* Write out HTML footer and get rid or error handler. Needed with cartEmptyShell,
  * but not cartHtmlShell. */
 
-void cartWebStart(struct cart *theCart, char *format, ...);
+void cartWebStart(struct cart *theCart, char *db, char *format, ...)
 /* Print out pretty wrapper around things when working
  * from cart. Balance this with cartWebEnd. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 3, 4)))
+#endif
+;
 
-void cartVaWebStart(struct cart *cart, char *format, va_list args);
+void cartVaWebStart(struct cart *cart, char *db, char *format, va_list args);
 /* Print out pretty wrapper around things when working
  * from cart. */
 

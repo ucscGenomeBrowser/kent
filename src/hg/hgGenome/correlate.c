@@ -114,7 +114,7 @@ webPrintLinkCellEnd();
 void correlatePage(struct sqlConnection *conn)
 /* Put up correlation page. */
 {
-cartWebStart(cart, "Correlations of all pairs of graphs");
+cartWebStart(cart, database, "Correlations of all pairs of graphs");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=GET>\n");
 cartSaveSession(cart);
 struct slRef *ggRefList = ggAllVisible(conn);

@@ -302,7 +302,7 @@ webPrintLinkCell(val);
 static void prInitialSection(struct cloneInfo *ci, char *collection)
 /* start page and print initial section */
 {
-cartWebStart(cart, "%s Clone %s.%d", collection, ci->acc, ci->version);
+cartWebStart(cart, database, "%s Clone %s.%d", collection, ci->acc, ci->version);
 printf("<B>%s</B>\n", ci->geneName);
 printf("<BR>%s\n", ci->desc);
 if (ci->refSeqAccv != NULL)

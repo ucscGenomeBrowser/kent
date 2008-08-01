@@ -84,7 +84,7 @@ void mainPage(struct sqlConnection *conn, int id, char *geneName)
 {
 struct slInt *thumbList = NULL, *thumb;
 
-cartWebStart(cart, "UCSC BioImage Browser on %s", geneName);
+cartWebStart(cart, NULL, "UCSC BioImage Browser on %s", geneName);
 printf("<A HREF=\"");
 printf("../cgi-bin/hgBioImage?%s=%d&%s=on", hgbiId, id, hgbiDoFullSize);
 printf("\">");

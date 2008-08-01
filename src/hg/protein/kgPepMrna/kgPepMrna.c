@@ -108,9 +108,9 @@ while (row2 != NULL)
     row2 = sqlNextRow(sr2);
     }
 
+sqlFreeResult(&sr2);
 hFreeConn(&conn);
 hFreeConn(&conn2);
-sqlFreeResult(&sr2);
 
 fclose(o1);
 fclose(o2);

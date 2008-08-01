@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: jksql.c,v 1.113.6.2 2008/07/31 15:08:24 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.113.6.3 2008/08/01 06:10:52 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -559,6 +559,7 @@ return fullHash;
 void sqlCleanupAll()
 /* Cleanup all open connections and resources. */
 {
+// FIXME: include profiles; or is this ever used???
 if (sqlOpenConnections)
     {
     struct dlNode *conNode, *conNext;
@@ -624,22 +625,14 @@ if (mysql_real_connect(
 	    database, host, user, getpid(), mysql_error(conn), getpid());
     return NULL;
     }
-#if 1
-/* make sure the db is correct in the connect, think usually happens if there is 
- * a mismatch between MySQL library and code. */
+
+/* Make sure the db is correct in the connect, think usually happens if there
+ * is a mismatch between MySQL library and code.  If this happens, please
+ * figure out what is going on.  Contact markd if you need help. */
 if (((conn->db != NULL) && !sameString(database, conn->db))
    || ((conn->db == NULL) && (database != NULL)))
    errAbort("apparent mismatch between mysql.h used to compile jksql.c and libmysqlclient");
-#else
-// FIXME: delete this if above works
-#ifdef GBROWSE
-    /* Apparently, when this code runs inside of a perl extension (perl
-     * also happens to be using mysql), conn->db gets garbage.
-     * So just coerce it to what we will expect it to be later. */
-    if (!conn->db || !sameString(database, conn->db))
-	conn->db = cloneString(database);
-#endif /* GBROWSE */
-#endif
+
 if (monitorFlags & JKSQL_TRACE)
     monitorPrint(sc, "SQL_CONNECT", "%s %s", host, user);
 

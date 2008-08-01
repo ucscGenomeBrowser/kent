@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.123 2008/05/02 21:27:41 lowe Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.123.14.1 2008/08/01 06:10:41 markd Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -261,7 +261,7 @@ if(feelingLucky)
        results. */
     else 
 	{
-	cartWebStart(cart, "%s BLAT Results", organism);
+	cartWebStart(cart, database, "%s BLAT Results", organism);
 	showAliPlaces(pslName, faName, database, qType, tType, organism, FALSE);
 	cartWebEnd();
 	}
@@ -436,7 +436,7 @@ boolean feelingLucky = cgiBoolean("Lucky");
 
 getDbAndGenome(cart, &db, &genome, oldVars);
 if(!feelingLucky)
-    cartWebStart(cart, "%s BLAT Results", organism);
+    cartWebStart(cart, db, "%s BLAT Results", organism);
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
     {
@@ -771,7 +771,7 @@ if (isEmpty(userSeq))
     }
 if (isEmpty(userSeq) || orgChange)
     {
-    cartWebStart(theCart, "%s BLAT Search", organism);
+    cartWebStart(theCart, db, "%s BLAT Search", organism);
     askForSeq(organism,db);
     cartWebEnd();
     }

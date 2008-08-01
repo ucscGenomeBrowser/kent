@@ -33,9 +33,9 @@ int iCnt = 1;
 
 cart = theCart;
 if (hIsMgcServer())
-    cartWebStart(theCart, "MGC Known Genes List \n");
+    cartWebStart(theCart, database, "MGC Known Genes List \n");
 else
-    cartWebStart(theCart, "UCSC Known Genes List \n");
+    cartWebStart(theCart, database, "UCSC Known Genes List \n");
 
 getDbAndGenome(cart, &database, &genome, oldVars);
 if (!hTableExistsDb(database, "knownGene"))

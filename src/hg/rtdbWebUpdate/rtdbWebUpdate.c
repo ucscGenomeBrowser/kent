@@ -86,7 +86,7 @@ char *rtdbPort = cfgOption("rtdb.port");
 char *rtdbChoices = cfgOption("rtdb.databases");
 struct slName *dbs = slNameListFromComma(rtdbChoices);
 cart = theCart;
-cartWebStart(cart, "MGC RTDB Update");
+cartWebStart(cart, database, "MGC RTDB Update");
 if (!rtdbServer)
     errAbort("rtdb.update not defined in the hg.conf file. "
 	     "Chances are this CGI isn't meant for this machine.");

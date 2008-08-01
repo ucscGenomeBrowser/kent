@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1499.4.1 2008/07/31 02:24:13 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1499.4.2 2008/08/01 06:10:45 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4260,7 +4260,7 @@ char *defaultChrom = hDefaultChrom(database);
 struct dyString *title = dyStringNew(512);
 dyStringPrintf(title, "%s %s (%s) Browser Sequences",
 	       hOrganism(database), hFreezeFromDb(database), database);
-webStartWrapperDetailedNoArgs(cart, "", title->string, FALSE, FALSE, FALSE, FALSE);
+webStartWrapperDetailedNoArgs(cart, database, "", title->string, FALSE, FALSE, FALSE, FALSE);
 printf("<FORM ACTION=\"%s\" NAME=\"posForm\" METHOD=GET>\n", hgTracksName());
 cartSaveSession(cart);
 

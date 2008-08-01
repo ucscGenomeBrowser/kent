@@ -170,7 +170,7 @@ char query[256];
 int geneId, taxon;
 char *probeType;
 
-webStartWrapperDetailedNoArgs(cart, "", "Probe Information",
+webStartWrapperDetailedNoArgs(cart, NULL, "", "Probe Information",
         FALSE, FALSE, FALSE, TRUE);
 
 /* Get gene ID. */

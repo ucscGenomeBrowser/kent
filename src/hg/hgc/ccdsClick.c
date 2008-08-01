@@ -314,7 +314,7 @@ ccdsInfoMRnaSort(&rsCcds);
 ccdsInfoMRnaSort(&vegaCcds);
 ccdsInfoMRnaSort(&ensCcds);
 
-cartWebStart(cart, "CCDS Gene");
+cartWebStart(cart, database, "CCDS Gene");
 
 printf("<H2>Consensus CDS Gene %s</H2>\n", ccdsId);
 

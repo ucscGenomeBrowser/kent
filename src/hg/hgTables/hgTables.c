@@ -28,7 +28,7 @@
 #include "gvUi.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.164.4.1 2008/07/31 02:24:07 markd Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.164.4.2 2008/08/01 06:10:44 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -71,7 +71,7 @@ static void vaHtmlOpen(char *format, va_list args)
 /* Start up a page that will be in html format. */
 {
 puts("Content-Type:text/html\n");
-cartVaWebStart(cart, format, args);
+cartVaWebStart(cart, database, format, args);
 }
 
 void htmlOpen(char *format, ...)

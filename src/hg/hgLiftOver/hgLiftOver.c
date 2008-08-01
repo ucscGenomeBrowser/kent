@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.59.12.2 2008/07/31 05:21:37 markd Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.59.12.3 2008/08/01 06:10:44 markd Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -391,7 +391,7 @@ if (cartOptionalString(cart, "SubmitFile"))
 else
     userData = cartOptionalString(cart, HGLFT_USERDATA_VAR);
 dataFormat = cartCgiUsualString(cart, HGLFT_DATAFORMAT_VAR, DEFAULT_FORMAT);
-cartWebStart(cart, "Lift Genome Annotations");
+cartWebStart(cart, NULL, "Lift Genome Annotations");
 
 getDbAndGenome(cart, &db, &organism, oldVars);
 

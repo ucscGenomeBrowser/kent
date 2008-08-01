@@ -9,12 +9,12 @@
 #include "txInfo.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: info.c,v 1.2 2007/04/18 22:25:11 kent Exp $";
+static char const rcsid[] = "$Id: info.c,v 1.2.64.1 2008/08/01 06:10:42 markd Exp $";
 
 void doTxInfoDescription(struct sqlConnection *conn)
 /* Put up info on fields in txInfo table. */
 {
-cartWebStart(cart, "Gene Model Information Table Fields");
+cartWebStart(cart, database, "Gene Model Information Table Fields");
 printf("%s",
 "<UL>\n"
 "<LI><B>category</B> - This is either <i>coding</i>, <i>noncoding</i>,\n"

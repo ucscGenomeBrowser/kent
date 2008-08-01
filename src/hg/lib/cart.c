@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.94.4.1 2008/07/31 02:24:26 markd Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.94.4.2 2008/08/01 06:10:51 markd Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1210,22 +1210,22 @@ pushWarnHandler(htmlVaWarn);
 htmStart(stdout, title);
 }
 
-void cartVaWebStart(struct cart *cart, char *format, va_list args)
+void cartVaWebStart(struct cart *cart, char *db, char *format, va_list args)
 /* Print out pretty wrapper around things when working
  * from cart. */
 {
 pushWarnHandler(htmlVaWarn);
-webStartWrapper(cart, format, args, FALSE, FALSE);
+webStartWrapper(cart, db, format, args, FALSE, FALSE);
 inWeb = TRUE;
 }
 
-void cartWebStart(struct cart *cart, char *format, ...)
+void cartWebStart(struct cart *cart, char *db, char *format, ...)
 /* Print out pretty wrapper around things when working
  * from cart. */
 {
 va_list args;
 va_start(args, format);
-cartVaWebStart(cart, format, args);
+cartVaWebStart(cart, db, format, args);
 va_end(args);
 }
 

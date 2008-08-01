@@ -12,23 +12,24 @@ void webSetStyle(char *style);
 void webStartText();
 /* output the head for a text page */
 
-void webStart(struct cart *theCart, char* format,...);
+void webStart(struct cart *theCart, char *db, char* format,...);
 /* output a CGI and HTML header with the given title in printf format */
 
-void webStartHeader(struct cart *theCart, char *header, char* format,...);
+void webStartHeader(struct cart *theCart, char *db, char *header, char* format,...);
 /* output a CGI and HTML header with the given title in printf format */
 
-void webStartWrapper(struct cart *theCart, char *format, va_list args, boolean withHttpHeader,
+void webStartWrapper(struct cart *theCart, char *db, char *format, va_list args, boolean withHttpHeader,
 	boolean withLogo);
 /* output a CGI and HTML header with the given title in printf format */
 
-void webStartWrapperDetailedArgs(struct cart *theCart, char *headerText,
-	char *format, va_list args, boolean withHttpHeader,
+void webStartWrapperDetailedArgs(struct cart *theCart, char *db,
+	char *headerText, char *format, va_list args, boolean withHttpHeader,
 	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader);
 /* output a CGI and HTML header with the given title in printf format with
  * quite a few options.  See also next: */
-void webStartWrapperDetailedNoArgs(struct cart *theCart, char *headerText,
-	char *format, boolean withHttpHeader,
+
+void webStartWrapperDetailedNoArgs(struct cart *theCart, char *db,
+	char *headerText, char *format, boolean withHttpHeader,
 	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader);
 /* output a CGI and HTML header with the given title in printf format with
  * quite a few options.  Same as above without va_list args */

@@ -900,7 +900,7 @@ boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
 struct hTableInfo *hti = NULL;
 
 
-cartWebStart(cart, "Import Table to Genome Graphs");
+cartWebStart(cart, database, "Import Table to Genome Graphs");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" NAME=\"mainForm\" METHOD=\"POST\">");
 cartSaveSession(cart);
 
@@ -1422,7 +1422,7 @@ boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
         isChromGraphCt = FALSE;
 struct hTableInfo *hti = NULL;
 
-cartWebStart(cart, "Table Import in Progress ");
+cartWebStart(cart, database, "Table Import in Progress ");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\">");
 cartSaveSession(cart);
 

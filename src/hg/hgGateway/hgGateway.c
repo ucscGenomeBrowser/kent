@@ -15,7 +15,7 @@
 #include "customTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.108.4.1 2008/07/31 02:24:02 markd Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.108.4.2 2008/08/01 06:10:42 markd Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -223,9 +223,9 @@ if (! hDbIsActive(db))
     }
 scientificName = hScientificName(db);
 if (hIsGsidServer())
-    cartWebStart(theCart, "GSID %s Sequence View (UCSC Genome Browser) Gateway \n", organism);
+    cartWebStart(theCart, db, "GSID %s Sequence View (UCSC Genome Browser) Gateway \n", organism);
 else if (hIsMgcServer())
-    cartWebStart(theCart, "MGC/ORFeome %s Genome Browser Gateway \n", organism);
+    cartWebStart(theCart, db, "MGC/ORFeome %s Genome Browser Gateway \n", organism);
 else
     {
     char buffer[128];
@@ -241,7 +241,7 @@ else
 	else
 	    safef(buffer, sizeof(buffer), "(<I>%s</I>) ", scientificName);
 	}
-    cartWebStart(theCart, "%s %s%s Gateway\n", organism, buffer, browserName);
+    cartWebStart(theCart, db, "%s %s%s Gateway\n", organism, buffer, browserName);
     htmlDoEscape();
     }
 hgGateway();
