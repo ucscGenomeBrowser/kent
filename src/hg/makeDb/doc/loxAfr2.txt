@@ -1,0 +1,164 @@
+# for emacs: -*- mode: sh; -*-
+
+# elephant ( Loxodonta africana)
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE braney 2008-07-11)
+    ssh kkstore05
+    mkdir /cluster/store12/loxAfr2
+    ln -s /cluster/store12/loxAfr2 /cluster/data
+    mkdir /cluster/data/loxAfr2/broad
+    cd /cluster/data/loxAfr2/broad
+
+    wget --timestamping \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/elephant/loxAfr2/assembly.agp \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/elephant/loxAfr2/assembly.bases.gz \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/elephant/loxAfr2/assembly.quals.gz 
+
+
+qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin loxAfr2.qual.qac
+
+    wget --timestamping \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/elephant/loxAfr2/BasicStats.out
+
+# no BasicStats.out
+
+   cut -f 1 assembly.agp | uniq -c | wc -l 
+   # Number of scaffolds: 225381
+
+
+#########################################################################
+# Create .ra file and run makeGenomeDb.pl
+    ssh kkstore05
+    cd /cluster/data/loxAfr2
+cat << _EOF_ >loxAfr2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db loxAfr2
+clade mammal
+genomeCladePriority 35
+scientificName Loxodonta africana
+commonName Elephant
+assemblyDate Jul. 2008
+assemblyLabel Broad Institute loxAfr2 
+orderKey 346.1
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/loxAfr2/broad/assembly.bases.gz
+agpFiles /cluster/data/loxAfr2/broad/assembly.agp
+qualFiles /cluster/data/loxAfr2/broad/loxAfr2.qual.qac
+dbDbSpeciesDir elephant
+_EOF_
+
+# use 'screen' make sure on kkstore05
+    makeGenomeDb.pl -verbose=2 loxAfr2.config.ra > makeGenomeDb.out 2>&1 &
+
+    # when done
+    cut -f 2 chrom.sizes | ave stdin
+
+# Q1 2133.000000
+# median 5499.000000
+# Q3 13596.000000
+# average 18503.996362
+# min 600.000000
+# max 644881.000000
+# count 225381
+# total 4170449204.000000
+# standard deviation 35139.935085
+
+#########################################################################
+# REPEATMASKER (DONE braney 2008-08-01)
+    ssh kkstore05
+    screen # use a screen to manage this job
+    mkdir /cluster/data/loxAfr2/bed/repeatMasker
+    cd /cluster/data/loxAfr2/bed/repeatMasker
+    doRepeatMasker.pl -buildDir=/cluster/data/loxAfr2/bed/repeatMasker \
+        loxAfr2 > do.log 2>&1 &
+
+    # Note: can run simpleRepeats simultaneously
+    #### When done with RM:
+    ssh pk
+    para time
+
+# Completed: 7645 of 7682 jobs
+# Crashed: 37 jobs
+# CPU time in finished jobs:   18488414s  308140.24m  5135.67h  213.99d  0.586 y
+# IO & Wait Time:                361502s    6025.03m   100.42h    4.18d  0.011 y
+# Average job time:                2466s      41.09m     0.68h    0.03d
+# Longest finished job:            7651s     127.52m     2.13h    0.09d
+# Submission to last job:        143942s    2399.03m    39.98h    1.67d
+
+# 37 crashed jobs were had zero length lift files
+
+    cd /cluster/data/loxAfr2/bed/repeatMasker
+    doRepeatMasker.pl -buildDir=/cluster/data/loxAfr2/bed/repeatMasker \
+        loxAfr2 -continue cat > do2.log 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/loxAfr2/bed/repeatMasker
+
+    time nice -n +19 featureBits loxAfr2 rmsk > fb.loxAfr2.rmsk.txt 2>&1 &
+    # 896671905 bases of 2445008360 (36.674%) in intersection
+
+    # RepeatMasker and lib version from do.log:
+    #    Jun 13 2008 (open-3-2-5) version of RepeatMasker
+    # CC   RELEASE 20080611;  
+
+
+#########################################################################
+# SIMPLE REPEATS TRF (DONE braney 2008-08-01 )
+    ssh kkstore05
+    screen # use a screen to manage this job
+    mkdir /cluster/data/loxAfr2/bed/simpleRepeat
+    cd /cluster/data/loxAfr2/bed/simpleRepeat
+    # 
+    doSimpleRepeat.pl -buildDir=/cluster/data/loxAfr2/bed/simpleRepeat \
+	loxAfr2 > do.log 2>&1 &
+
+    ssh pk
+    para time
+# Completed: 84 of 84 jobs
+# CPU time in finished jobs:      50429s     840.49m    14.01h    0.58d  0.002 y
+# IO & Wait Time:                  3593s      59.88m     1.00h    0.04d  0.000 y
+# Average job time:                 643s      10.72m     0.18h    0.01d
+# Longest finished job:            7392s     123.20m     2.05h    0.09d
+# Submission to last job:         18570s     309.50m     5.16h    0.21d
+
+  doSimpleRepeat.pl -buildDir=/cluster/data/loxAfr2/bed/simpleRepeat \
+        loxAfr2 -continue filter > do2.log 2>&1 &
+
+    featureBits loxAfr2 simpleRepeat
+    # 41339993 bases of 2445008360 (1.691%) in intersection
+
+    #	after RM run is done, add this mask:
+    cd /cluster/data/loxAfr2
+    twoBitMask loxAfr2.rmsk.2bit -add bed/simpleRepeat/trfMask.bed loxAfr2.2bit
+
+    twoBitToFa loxAfr2.2bit stdout | faSize stdin
+# 4170449204 bases (1725440844 N's 2445008360 real 1555788874 upper 889219486
+# lower) in 225381 sequences in 1 files
+# Total size: mean 18504.0 sd 35140.0 min 600 (scaffold_225380) max 644881
+# (scaffold_0) median 5499
+# N count: mean 7655.7 sd 14579.2
+# U count: mean 6902.9 sd 16238.5
+# L count: mean 3945.4 sd 8717.0
+# %21.32 masked total, %36.37 masked real
+
+    twoBitToFa loxAfr2.rmsk.2bit stdout | faSize stdin
+
+# 4170449204 bases (1725440844 N's 2445008360 real 1556969489 upper 888038871
+# lower) in 225381 sequences in 1 files
+# Total size: mean 18504.0 sd 35140.0 min 600 (scaffold_225380) max 644881
+# (scaffold_0) median 5499
+# N count: mean 7655.7 sd 14579.2
+# U count: mean 6908.2 sd 16252.6
+# L count: mean 3940.2 sd 8715.0
+# %21.29 masked total, %36.32 masked real
+
+    ssh hgwdev
+    # Link to it from /gbdb
+    ln -s /cluster/data/loxAfr2/loxAfr2.2bit /gbdb/loxAfr2/loxAfr2.2bit
+
+    # mkdir /san/sanvol1/scratch/loxAfr2
+    cp /cluster/data/loxAfr2/loxAfr2.2bit /san/sanvol1/scratch/loxAfr2
+    cp /cluster/data/loxAfr2/chrom.sizes /san/sanvol1/scratch/loxAfr2
+
+
