@@ -241,6 +241,6 @@ struct slName *getChromNames(char *db)
 {
 static struct slName* chroms = NULL;
 if (chroms == NULL)
-    chroms = hAllChromNamesDb(db);
+    chroms = hAllChromNames(db);
 return chroms;
 }

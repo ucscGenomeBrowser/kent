@@ -77,7 +77,7 @@ if (isPositional)
     {
     /* Check for missing split tables before querying: */
     char *db = sqlGetDatabase(conn);
-    struct hTableInfo *hti = hFindTableInfoDb(db, chrom, table);
+    struct hTableInfo *hti = hFindTableInfo(db, chrom, table);
     if (hti == NULL)
         return NULL;
     else if (hti->isSplit)
@@ -123,7 +123,7 @@ else
         track = table + strlen("chrN_");
     else
         track = table;
-    hti = hFindTableInfoDb(db, NULL, track);
+    hti = hFindTableInfo(db, NULL, track);
     }
 return(hti);
 }
@@ -849,7 +849,7 @@ for (name = nameList; name != NULL; name = next)
 	    continue;  /* filter out anything starting with database, e.g. db.name (like Locus Variants) */
     if (!isCt)  /* all custom tracks are positional */
 	{
-    	struct hTableInfo *hti = hFindTableInfoDb(database, NULL, name->name);
+    	struct hTableInfo *hti = hFindTableInfo(database, NULL, name->name);
 	if (!hti)
 	    continue;  /* filter out tables that don't exist anymore */
 	if (!htiIsPositional(hti))

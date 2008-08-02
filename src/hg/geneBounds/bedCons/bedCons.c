@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bedCons.c,v 1.4.116.1 2008/07/31 02:24:00 markd Exp $";
+static char const rcsid[] = "$Id: bedCons.c,v 1.4.116.2 2008/08/02 04:06:19 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -229,7 +229,7 @@ struct hash *otherHash = makeOtherHash(database, "mouseChrom");
 if (optionExists("chrom"))
     chromList = newSlName(optionVal("chrom", NULL));
 else
-    chromList = hAllChromNamesDb(database);
+    chromList = hAllChromNames(database);
 AllocVar(stats);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {

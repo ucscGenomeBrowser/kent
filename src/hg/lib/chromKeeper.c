@@ -14,7 +14,7 @@ void chromKeeperInit(char *db)
 {
 struct slName *names = NULL, *name = NULL;
 int count=0;
-names = hAllChromNamesDb(db);
+names = hAllChromNames(db);
 chromCount = slCount(names);
 assert(chromNames == NULL && chromRanges == NULL);
 AllocArray(chromNames, chromCount);

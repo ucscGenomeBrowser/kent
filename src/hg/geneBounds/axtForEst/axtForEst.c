@@ -9,7 +9,7 @@
 #include "axt.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: axtForEst.c,v 1.5.116.1 2008/07/31 02:23:59 markd Exp $";
+static char const rcsid[] = "$Id: axtForEst.c,v 1.5.116.2 2008/08/02 04:06:18 markd Exp $";
 
 char *clChrom = "all";
 char *track = "est";
@@ -363,7 +363,7 @@ estLibrary = optionVal("lib", estLibrary);
 clChrom = optionVal("chrom", clChrom);
 isRefSeq = optionExists("refSeq");
 if (sameWord(clChrom, "all"))
-    chromList = hAllChromNamesDb(database);
+    chromList = hAllChromNames(database);
 else
     chromList = newSlName(clChrom);
 for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)

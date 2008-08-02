@@ -22,7 +22,7 @@
 #include "trashDir.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.59.10.1 2008/07/31 02:24:06 markd Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.59.10.2 2008/08/02 04:06:22 markd Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -221,7 +221,7 @@ int fieldCount;
 boolean isPsl, isGenePred, isBedWithBlocks;
 boolean pslKnowIfProtein = FALSE, pslIsProtein = FALSE;
 
-hti = hFindTableInfoDb(db, region->chrom, table);
+hti = hFindTableInfo(db, region->chrom, table);
 if (hti == NULL)
     errAbort("Could not find table info for table %s.%s", db,table);
 
@@ -721,7 +721,7 @@ else if (doCt)
 	safef(headerText, sizeof(headerText),
 	      "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
 	      redirDelay, browserUrl);
-	webStartHeader(cart, headerText,
+	webStartHeader(cart, database, headerText,
 		       "Table Browser: %s %s: %s", hOrganism(database), 
 		       freezeName, "get custom track");
 	if (doDataPoints)

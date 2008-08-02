@@ -14,7 +14,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.12.26.1 2008/07/31 02:24:34 markd Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.12.26.2 2008/08/02 04:06:31 markd Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -135,7 +135,7 @@ else
 
 gbVerbEnter(3, "chkPslTable %s", table);
 
-tableInfo = hFindTableInfoDb(select->release->genome->database, chrom, table);
+tableInfo = hFindTableInfo(select->release->genome->database, chrom, table);
 if (tableInfo == NULL)
     {
     /* If all table, require it */

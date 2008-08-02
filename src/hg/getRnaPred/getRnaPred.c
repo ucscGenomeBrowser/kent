@@ -10,7 +10,7 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.21.10.1 2008/07/31 02:24:01 markd Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.21.10.2 2008/08/02 04:06:20 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -396,7 +396,7 @@ void getRnaForTables(char *db, char *table, char *chrom, struct dyString *dnaBuf
 {
 struct slName* chroms = NULL, *chr;
 if (sameString(chrom, "all"))
-    chroms = hAllChromNamesDb(db);
+    chroms = hAllChromNames(db);
 else
     chroms = slNameNew(chrom);
 for (chr = chroms; chr != NULL; chr = chr->next)

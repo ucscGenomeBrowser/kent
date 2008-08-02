@@ -36,7 +36,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.81.4.1 2008/07/31 02:24:10 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.81.4.2 2008/08/02 04:06:24 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -824,7 +824,7 @@ int nwords = chopByWhite(buf->string, words, ArraySize(words));
 if ((nwords != ArraySize(words)) || !sameString(words[0], "extFile"))
     errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE,
              seqSource);
-return hDnaSeqGet(NULL, name, words[1], words[2]);
+return hDnaSeqGet(database, name, words[1], words[2]);
 }
 
 static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf,

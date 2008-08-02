@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgChroms.c,v 1.3 2006/04/13 22:08:39 krish Exp $";
+static char const rcsid[] = "$Id: hgChroms.c,v 1.3.114.1 2008/08/02 04:06:20 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -45,7 +45,7 @@ return  !((noRandom && (endsWith(chrom->name, "_random")
 void hgChroms(char *db)
 /* hgChroms - print chromosomes for a genome. */
 {
-struct slName *chrom, *chroms = hAllChromNamesDb(db);
+struct slName *chrom, *chroms = hAllChromNames(db);
 for (chrom = chroms; chrom != NULL; chrom = chrom->next)
     {
     if (inclChrom(chrom))

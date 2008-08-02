@@ -165,10 +165,6 @@ boolean hgIsOfficialChromName(char *db, char *name);
 /* Determine if name is exact (case-sensitive) match with
  * a chromosome in the current assembly */
 
-boolean hgIsOfficialChromNameDb(char *db, char *name);
-/* Determine if name is exact (case-sensitive) match with
- * a chromosome in the given assembly */
-
 boolean hgNearOk(char *database);
 /* Return TRUE if ok to put up familyBrowser (hgNear) 
  * on this database. */
@@ -194,9 +190,6 @@ void hParseTableName(char *db, char *table, char trackName[HDB_MAX_TABLE_STRING]
 		     char chrom[HDB_MAX_CHROM_STRING]);
 /* Parse an actual table name like "chr17_random_blastzWhatever" into 
  * the track name (blastzWhatever) and chrom (chr17_random). */
-
-int hdbChromSize(char *db, char *chromName);
-/* Get chromosome size from given database . */
 
 int hChromSize(char *db, char *chromName);
 /* Return size of chromosome. */
@@ -247,7 +240,7 @@ struct dnaSeq *hLoadChrom(char *db, char *chromName);
 void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING]);
 /* Get .nib file associated with chromosome. */
 
-struct slName *hAllChromNamesDb(char *db);
+struct slName *hAllChromNames(char *db);
 /* Get list of all chromosomes in database. */
 
 char *hExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId);
@@ -343,16 +336,9 @@ struct bed *hGetBedRange(char *db, char *table, char *chrom, int chromStart,
 			 int chromEnd, char *sqlConstraints);
 /* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
  * in the given range in table.  If chromEnd is 0, omit the range (whole chrom).
- * WARNING: this does not use the bin column and maybe slower than you would like.
- */
-
-struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,
-			   int chromEnd, char *sqlConstraints);
-/* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
- * in the given range in table.  If chromEnd is 0, omit the range (whole chrom).
  * WARNING: this does not use the bin column and maybe slower than you would like.*/
 
-struct bed *hGetFullBedDb(char *db, char *table);
+struct bed *hGetFullBed(char *db, char *table);
 /* Return a genome-wide bed list of the table. */
 /* WARNING: This isn't designed for CGI use. It's a looped call to */
 /* hGetBedRange() which has its own warning. */
@@ -424,21 +410,12 @@ void hTrackDbLoadSuper(char *db, struct trackDb *tdb);
 /* Populate child trackDbs of this supertrack */
 
 struct hTableInfo *hFindTableInfo(char *db, char *chrom, char *rootName);
-/* Find table information.  Return NULL if no table. */
-
-struct hTableInfo *hFindTableInfoDb(char *db, char *chrom, char *rootName);
 /* Find table information in specified db.  Return NULL if no table. */
 
 int hTableInfoBedFieldCount(struct hTableInfo *hti);
 /* Return number of BED fields needed to save hti. */
 
 boolean hFindChromStartEndFields(char *db, char *table, 
-	char retChrom[HDB_MAX_FIELD_STRING],
-	char retStart[HDB_MAX_FIELD_STRING],
-	char retEnd[HDB_MAX_FIELD_STRING]);
-/* Given a table return the fields for selecting chromosome, start, and end. */
-
-boolean hFindChromStartEndFieldsDb(char *db, char *table, 
 	char retChrom[HDB_MAX_FIELD_STRING],
 	char retStart[HDB_MAX_FIELD_STRING],
 	char retEnd[HDB_MAX_FIELD_STRING]);
@@ -482,11 +459,6 @@ boolean hFindSplitTable(char *db, char *chrom, char *rootName,
 	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin);
 /* Find name of table that may or may not be split across chromosomes. 
  * Return FALSE if table doesn't exist.  */
-
-boolean hFindSplitTableDb(char *db, char *chrom, char *rootName, 
-	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin);
-/* Find name of table in a given database that may or may not 
- * be split across chromosomes. Return FALSE if table doesn't exist.  */
 
 struct slName *hSplitTableNames(char *db, char *rootName);
 /* Return a list of all split tables for rootName, or of just rootName if not 
@@ -732,11 +704,6 @@ char *sqlGetField(char *db, char *tblName, char *fldName,
 /* Return a single field from the database, table name, field name, and a
    condition string */
 
-char *sqlGetFieldDb(char *dbName, char *tblName, char *fldName, 
-  	          char *condition);
-/* Return a single field from the database, given database name, 
-   table name, field name, and a condition string */
-
 struct hash *hChromSizeHash(char *db);
 /* Get hash of chromosome sizes for database.  Just hashFree it when done. */
 
@@ -773,12 +740,6 @@ struct grp* hLoadGrps(char *db);
  * sorted by priority. */
 
 int hGetMinIndexLength(char *db);
-/* get the minimum index size for the database that won't smoosh together chromNames
- * such that any group of smooshed entries has a cumulative size greater than the
- * the largest chromosome.  Allow one exception cuz we're nice
- */
-
-int hGetMinIndexLengthDb(char *db);
 /* get the minimum index size for the given database that won't smoosh
  * together chromNames such that any group of smooshed entries has a
  * cumulative size greater than the the largest chromosome.  Allow one

@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.173.4.1 2008/07/31 02:24:27 markd Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.173.4.2 2008/08/02 04:06:29 markd Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -914,6 +914,7 @@ void  customTrackDump(struct customTrack *track)
 {
 if (track->tdb)
     printf("settings: %s<BR>\n", track->tdb->settings);
+printf("genome db: %s<BR>\n", track->genomeDb);
 printf("bed count: %d<BR>\n", slCount(track->bedList));
 printf("field count: %d<BR>\n", track->fieldCount);
 printf("maxChromName: %d<BR>\n", track->maxChromName);

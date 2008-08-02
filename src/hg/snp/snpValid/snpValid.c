@@ -462,7 +462,7 @@ openExOuts(db);  /* open separate files for each snp class of Exception of inter
 printf("maxFlank = %d \n",maxFlank);
 printf("threshold = %d \n",threshold);
 
-cns = hAllChromNamesDb(db);
+cns = hAllChromNames(db);
 for (cn = cns; cn != NULL; cn = cn->next)
     {
     struct dnaSeq *chromSeq = NULL;

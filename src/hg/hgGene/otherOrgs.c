@@ -10,7 +10,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.21.40.1 2008/07/31 02:24:03 markd Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.21.40.2 2008/08/02 04:06:21 markd Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -139,8 +139,8 @@ if (id != NULL)
 	return id;
     else
 	{
-	struct hTableInfo *hti = hFindTableInfoDb(otherOrg->db, NULL,
-						  otherOrg->geneTable);
+	struct hTableInfo *hti = hFindTableInfo(otherOrg->db, NULL,
+					        otherOrg->geneTable);
 	if (hti != NULL)
 	    {
 	    char *pos = NULL;

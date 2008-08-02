@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgDeleteChrom.c,v 1.1.278.1 2008/07/31 02:24:35 markd Exp $";
+static char const rcsid[] = "$Id: hgDeleteChrom.c,v 1.1.278.2 2008/08/02 04:06:31 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,9 +49,9 @@ for (i=0;  i < chromCount;  i++)
 	struct hTableInfo *hti = NULL;
 	if (sscanf(table, "chr%32[^_]_random_%128s", tChrom, rootName) == 2 ||
 	    sscanf(table, "chr%32[^_]_%128s", tChrom, rootName) == 2)
-	    hti = hFindTableInfoDb(db, chrom, rootName);
+	    hti = hFindTableInfo(db, chrom, rootName);
 	else
-	    hti = hFindTableInfoDb(db, chrom, table);;
+	    hti = hFindTableInfo(db, chrom, table);;
 	if (hti->isPos)
 	    {
 	    if (hti->isSplit)

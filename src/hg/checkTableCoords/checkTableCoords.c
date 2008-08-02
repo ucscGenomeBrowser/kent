@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.17.6.1 2008/07/31 02:23:58 markd Exp $";
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.17.6.2 2008/08/02 04:06:18 markd Exp $";
 
 /* Default parameter values */
 char *db = NULL;                        /* first arg */
@@ -416,7 +416,7 @@ struct slName *tableList = NULL, *curTable = NULL;
 struct slName *allChroms = NULL;
 boolean gotError = FALSE;
 
-allChroms = hAllChromNamesDb(db);
+allChroms = hAllChromNames(db);
 if (theTable == NULL)
     tableList = getTableNames(conn);
 else if (sqlTableExists(conn, theTable))

@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.36.10.1 2008/07/31 02:24:07 markd Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.36.10.2 2008/08/02 04:06:22 markd Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -68,6 +68,7 @@ tdb->url = ctUrl;
 
 AllocVar(ct);
 ct->tdb = tdb;
+ct->genomeDb = cloneString(database);
 ct->fieldCount = fields;
 ct->needsLift = FALSE;
 ct->fromPsl = FALSE;

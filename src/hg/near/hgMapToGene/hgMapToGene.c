@@ -11,7 +11,7 @@
 #include "hgConfig.h"
 
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.14.68.2 2008/07/31 05:21:39 markd Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.14.68.3 2008/08/02 04:06:33 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -344,7 +344,7 @@ if (!createOnly)
     {
     struct hash *dupeHash = newHash(16);
     f = hgCreateTabFile(tempDir, outTable);
-    chromList = hAllChromNamesDb(database);
+    chromList = hAllChromNames(database);
     for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	{
 	verbose(2, "%s\n", chrom->name);

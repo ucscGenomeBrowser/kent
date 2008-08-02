@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.14 2006/09/08 15:04:24 angie Exp $";
+static char const rcsid[] = "$Id: sqlToXml.c,v 1.14.94.1 2008/08/02 04:06:34 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -362,7 +362,7 @@ void rSqlToXml(struct sqlConnCache *cc, char *table, char *entryField,
 	FILE *f, int depth)
 /* Recursively output XML */
 {
-struct sqlConnection *conn = sqlAllocConnection(cc);
+struct sqlConnection *conn = sqlConnCacheAlloc(cc);
 struct sqlResult *sr;
 char **row;
 struct typedField *col, *colList = hashMustFindVal(tableHash, table);
@@ -452,7 +452,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 sqlFreeResult(&sr);
-sqlFreeConnection(cc, &conn);
+sqlConnCacheDealloc(cc, &conn);
 }
 
 
@@ -460,8 +460,8 @@ void sqlToXml(char *database, char *dumpSpec, char *outputXml)
 /* sqlToXml - Given a database, .as file, .joiner file, and a sql select 
  * statement, dump out results as XML. */
 {
-struct sqlConnCache *cc = sqlNewConnCache(database);
-struct sqlConnection *conn = sqlAllocConnection(cc);
+struct sqlConnCache *cc = sqlConnCacheNew(database);
+struct sqlConnection *conn = sqlConnCacheAlloc(cc);
 struct hash *tableHash = tablesAndFields(conn);
 struct specTree *tree = specTreeLoad(dumpSpec, tableHash);
 FILE *f = mustOpen(outputXml, "w");
@@ -486,7 +486,7 @@ if (maxList > 0)
 
 if (!sqlTableExists(conn, table))
     errAbort("No table %s in %s", table, database);
-sqlFreeConnection(cc, &conn);
+sqlConnCacheDealloc(cc, &conn);
 
 verbose(1, "%d tables in %s\n",
 	tableHash->elCount,  database);

@@ -35,6 +35,7 @@ struct customTrack
     {
     struct customTrack *next;	/* Next in list. */
     struct trackDb *tdb;	/* TrackDb description of track. */
+    char *genomeDb;             /* Genome database the track is associated */
     struct bed *bedList;	/* List of beds. */
     int fieldCount;		/* Number of fields in bed. */
     int maxChromName;		/* max chromName length	*/

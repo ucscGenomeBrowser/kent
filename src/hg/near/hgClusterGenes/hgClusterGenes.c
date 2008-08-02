@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.11.124.2 2008/07/31 05:21:39 markd Exp $";
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.11.124.3 2008/08/02 04:06:33 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -387,7 +387,7 @@ struct sqlConnection *conn;
 if (optionExists("chrom"))
     chromList = slNameNew(optionVal("chrom", NULL));
 else
-    chromList = hAllChromNamesDb(database);
+    chromList = hAllChromNames(database);
 conn = hAllocConn(database);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {

@@ -9,7 +9,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: expToRna.c,v 1.3.338.1 2008/07/31 02:24:00 markd Exp $";
+static char const rcsid[] = "$Id: expToRna.c,v 1.3.338.2 2008/08/02 04:06:20 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -101,7 +101,7 @@ FILE *f = mustOpen(outName, "w");
 if (chrom != NULL)
     chromList = newSlName(chrom);
 else
-    chromList = hAllChromNamesDb(database);
+    chromList = hAllChromNames(database);
 for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
     {
     chrom = chromEl->name;

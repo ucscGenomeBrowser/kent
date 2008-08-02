@@ -13,7 +13,7 @@
 #include "bed.h"
 #include "blatStats.h"
 
-static char const rcsid[] = "$Id: knownVsBlat.c,v 1.14.106.1 2008/07/31 02:24:41 markd Exp $";
+static char const rcsid[] = "$Id: knownVsBlat.c,v 1.14.106.2 2008/08/02 04:06:33 markd Exp $";
 
 /* Variables that can be set from command line. */
 int dotEvery = 0;	/* How often to print I'm alive dots. */
@@ -702,7 +702,7 @@ FILE *f = mustOpen(output, "w");
 
 nmToGeneHash = makeNmToGeneHash(database);
 if (sameWord(clChrom, "all"))
-    allChroms = hAllChromNamesDb(database);
+    allChroms = hAllChromNames(database);
 else
     allChroms = newSlName(clChrom);
 slReverse(&allChroms);

@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.368.4.1 2008/07/31 02:24:28 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.368.4.2 2008/08/02 04:06:29 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -57,12 +57,12 @@ static struct sqlConnCache *centralArchiveCc = NULL;
 static struct sqlConnCache *cartCc = NULL;  /* cache for cart; normally same as centralCc */
 static struct sqlConnCache *localCc = NULL;  /* cache for TCGA DB connection */
 
-static char *hdbHost = NULL;
 #if 0 // FIXME tmp hack
+static char *hdbHost = NULL;
 static char *hdbName = NULL;
-#endif
 static char *hdbUser = NULL;
 static char *hdbPassword = NULL;
+#endif
 static char *hdbTrackDb = NULL;
 
 static struct chromInfo *lookupChromInfo(char *db, char *chrom)
@@ -129,7 +129,7 @@ if (ci == NULL)
 return ci;
 }
 
-char *hgOfficialChromNameDb(char *db, char *name)
+char *hgOfficialChromName(char *db, char *name)
 /* Returns "canonical" name of chromosome or NULL
  * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
@@ -144,38 +144,24 @@ else
     return NULL;
 }
 
-char *hgOfficialChromName(char *db, char *name)
-/* Returns "canonical" name of chromosome or NULL
- * if not a chromosome. (Case-insensitive search w/sameWord()) */
-{
-return hgOfficialChromNameDb(db, name);
-}
-
-boolean hgIsOfficialChromNameDb(char *db, char *name)
+boolean hgIsOfficialChromName(char *db, char *name)
 /* Determine if name is exact (case-sensitive) match with
  * a chromosome in the given assembly */
 {
 char *chrom;
-return ((chrom = hgOfficialChromNameDb(db, name)) != NULL &&
+return ((chrom = hgOfficialChromName(db, name)) != NULL &&
 	sameString(name, chrom));
 }
 
 
-boolean hgIsOfficialChromName(char *db, char *name)
-/* Determine if name is exact (case-sensitive) match with
- * a chromosome in the current assembly */
-{
-return hgIsOfficialChromNameDb(db, name);
-}
-
-int hGetMinIndexLengthDb(char *db)
+int hGetMinIndexLength(char *db)
 /* get the minimum index size for the given database that won't smoosh 
  * together chromNames. */
 {
 static boolean minLen = 0;
 if (minLen <= 0)
     {
-    struct slName *nameList = hAllChromNamesDb(db);
+    struct slName *nameList = hAllChromNames(db);
     struct slName *name, *last;
     int len = 4;
     slSort(&nameList, slNameCmp);
@@ -195,16 +181,10 @@ if (minLen <= 0)
 return minLen;
 }
 
-int hGetMinIndexLength(char *db)
-/* get the minimum index size for the database that won't smoosh 
- * together chromNames. */
-{
-return hGetMinIndexLengthDb(db);
-}
-
 void hDefaultConnect()
 /* read in the connection options from config file */
 {
+#if 0 // FIXME: delete
 hdbHost 	= cfgOptionEnv("HGDB_HOST", "db.host");
 hdbUser 	= cfgOptionEnv("HGDB_USER", "db.user");
 hdbPassword	= cfgOptionEnv("HGDB_PASSWORD", "db.password");
@@ -212,6 +192,7 @@ if (hdbTrackDb == NULL)
     hdbTrackDb      = cfgOptionEnv("HGDB_TRACKDB", "db.trackDb");
 if(hdbHost == NULL || hdbUser == NULL || hdbPassword == NULL)
     errAbort("cannot read in connection setting from configuration file.");
+#endif
 }
 
 static char *hTrackDbPath()
@@ -243,13 +224,13 @@ hdbTrackDb = cloneString(trackDbName);
 void hSetDbConnect(char* host, char *db, char *user, char *password)
 /* set the connection information for the database */
 {
+#if 0 // FIXME tmp hack
 // FIXME: why
     hdbHost = cloneString(host);
-#if 0 // FIXME tmp hack
     hdbName = cloneString(db);
-#endif
     hdbUser = cloneString(user);
     hdbPassword = cloneString(password);
+#endif
 }
 boolean hArchiveDbExists(char *database)
 /*
@@ -454,14 +435,14 @@ return count;
 struct sqlConnection *hAllocConn(char *db)
 /* Get free connection if possible. If not allocate a new one. */
 {
+#if 0 // FIXME tmp hack
 if (hdbHost == NULL)
     hDefaultConnect();
-#if 0 // FIXME tmp hack
 if (hdbCc == NULL)
     hdbCc = sqlNewRemoteConnCache(hdbName, hdbHost, hdbUser, hdbPassword);
 return sqlAllocConnection(hdbCc);
 #else
-return sqlConnectRemote(hdbHost, hdbUser, hdbPassword, db);
+return sqlConnect(db);
 #endif
 }
 
@@ -494,7 +475,7 @@ password = cfgOption(setting);
 
 if (database == NULL || host == NULL || user == NULL || password == NULL)
     errAbort("Please set %s options in the hg.conf file.", prefix);
-return sqlNewRemoteConnCache(database, host, user, password);
+return sqlConnCacheNewRemote(database, host, user, password);
 }
 
 struct sqlConnection *hConnectCentral()
@@ -506,11 +487,11 @@ struct sqlConnection *conn = NULL;
 if (centralCc == NULL)
     {
     centralCc = getCentralCcFromCfg("central");
-    conn = sqlMayAllocConnection(centralCc, FALSE);
+    conn = sqlConnCacheMayAlloc(centralCc, FALSE);
     if (conn == NULL || !cartTablesOk(conn))
 	{
 	centralCc = getCentralCcFromCfg("backupcentral");
-	conn = sqlAllocConnection(centralCc);
+	conn = sqlConnCacheAlloc(centralCc);
 	fprintf(stderr, "ASH: hConnectCentral failed over to backupcentral!  "
 		"pid=%d\n", getpid());
 	if (!cartTablesOk(conn))
@@ -521,7 +502,7 @@ if (centralCc == NULL)
 	}
     }
 else
-    conn = sqlAllocConnection(centralCc);
+    conn = sqlConnCacheAlloc(centralCc);
 return(conn);
 }
 
@@ -593,6 +574,7 @@ struct sqlConnection *hConnectLocal()
  * not specific to a particular genome lives.  No database is specified 
  * Free this up with hDisconnectCentral(). */
 {
+// FIXME: delete this???
 struct sqlConnection *conn = NULL;
 if (localCc == NULL)
     localCc = getCentralCcFromCfg("localDb");
@@ -601,7 +583,7 @@ if (localCc == NULL)
     {
     errAbort("problem encountered trying to connect to tcga DB");
     }
-conn = sqlMayAllocConnection(localCc, FALSE);
+conn = sqlConnCacheMayAlloc(localCc, FALSE);
 if (conn == NULL)
     {
     errAbort("Could not connect to tcga DB");
@@ -612,13 +594,13 @@ return(conn);
 void hDisconnectLocal(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
-sqlFreeConnection(localCc, pConn);
+sqlConnCacheDealloc(localCc, pConn);
 }
 
 void hDisconnectCentral(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
-sqlFreeConnection(centralCc, pConn);
+sqlConnCacheDealloc(centralCc, pConn);
 }
 
 struct sqlConnection *hConnectArchiveCentral()
@@ -628,11 +610,11 @@ struct sqlConnection *hConnectArchiveCentral()
 struct sqlConnection *conn = NULL;
 if (centralArchiveCc == NULL)
     centralArchiveCc = getCentralCcFromCfg("archivecentral");
-conn = sqlMayAllocConnection(centralArchiveCc, FALSE);
+conn = sqlConnCacheMayAlloc(centralArchiveCc, FALSE);
 if (conn == NULL)
     {
     centralArchiveCc = getCentralCcFromCfg("archivebackup");
-    conn = sqlAllocConnection(centralArchiveCc);
+    conn = sqlConnCacheAlloc(centralArchiveCc);
     }
 return(conn);
 }
@@ -640,7 +622,7 @@ return(conn);
 void hDisconnectArchiveCentral(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
-sqlFreeConnection(centralArchiveCc, pConn);
+sqlConnCacheDealloc(centralArchiveCc, pConn);
 }
 
 struct sqlConnection *hConnectCart()
@@ -661,7 +643,7 @@ if (cartCc == NULL)
 
         if (database == NULL || host == NULL || user == NULL || password == NULL)
             errAbort("Must specify either all or none of the cart options in the hg.conf file.");
-        cartCc = sqlNewRemoteConnCache(database, host, user, password);
+        cartCc = sqlConnCacheNewRemote(database, host, user, password);
         }
     else
         {
@@ -675,13 +657,13 @@ if (cartCc == NULL)
         cartCc = centralCc;
         }
     }
-return sqlAllocConnection(cartCc);
+return sqlConnCacheAlloc(cartCc);
 }
 
 void hDisconnectCart(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
-sqlFreeConnection(cartCc, pConn);
+sqlConnCacheDealloc(cartCc, pConn);
 }
 
 
@@ -803,19 +785,13 @@ if (tableNames != NULL)
 return NULL;
 }
 
-boolean hTableOrSplitExistsDb(char *db, char *track)
+boolean hTableOrSplitExists(char *db, char *track)
 /* Return TRUE if track table (or split table) exists in db. */
 {
 if (!sqlDatabaseExists(db))
     return FALSE;
 struct hash *hash = tableListHash(db);
 return (hashLookup(hash, track) != NULL);
-}
-
-boolean hTableOrSplitExists(char *db, char *track)
-/* Return TRUE if table (or a chrN_table) exists in database. */
-{
-return hTableOrSplitExistsDb(db, track);
 }
 
 void hParseTableName(char *db, char *table, char trackName[HDB_MAX_TABLE_STRING],
@@ -1078,7 +1054,7 @@ int size = hChromSize(db, chromName);
 return hDnaFromSeq(db, chromName, 0, size, dnaLower);
 }
 
-struct slName *hAllChromNamesDb(char *db)
+struct slName *hAllChromNames(char *db)
 /* Get list of all chromosome names in database. */
 {
 struct slName *list = NULL;
@@ -1596,8 +1572,8 @@ hFreeConn(&conn);
 return desc;
 }
 
-struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,
-			   int chromEnd, char *sqlConstraints)
+struct bed *hGetBedRange(char *db, char *table, char *chrom, int chromStart,
+			 int chromEnd, char *sqlConstraints)
 /* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
  * in the given range in table.  If chromEnd is 0, omit the range (whole chrom).
  * WARNING: this does not use the bin column and maybe slower than you would like. */
@@ -1621,7 +1597,7 @@ boolean gotWhere = FALSE;
 
 /* Caller can give us either a full table name or root table name. */
 hParseTableName(db, table, rootName, parsedChrom);
-hti = hFindTableInfoDb(db, chrom, rootName);
+hti = hFindTableInfo(db, chrom, rootName);
 if (hti == NULL)
     errAbort("Could not find table info for table %s (%s)",
 	     rootName, table);
@@ -1836,17 +1812,7 @@ return(bedList);
 }
 
 
-struct bed *hGetBedRange(char *db, char *table, char *chrom, int chromStart,
-			 int chromEnd, char *sqlConstraints)
-/* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
- * in the given range in table.
- * WARNING: this does not use the bin column and maybe slower than you would like. */
-{
-return(hGetBedRangeDb(db, table, chrom, chromStart, chromEnd,
-		      sqlConstraints));
-}
-
-struct bed *hGetFullBedDb(char *db, char *table)
+struct bed *hGetFullBed(char *db, char *table)
 /* Return a genome-wide bed list of the table. */
 /* WARNING: This isn't designed for CGI use. It's a looped call to */
 /* hGetBedRange() which has its own warning. */
@@ -1856,7 +1822,7 @@ struct slName *chrom;
 struct bed *list = NULL;
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    struct bed *bedList = hGetBedRangeDb(db, table, chrom->name, 0, 0, NULL);
+    struct bed *bedList = hGetBedRange(db, table, chrom->name, 0, 0, NULL);
     list = slCat(list, bedList);
     }
 slFreeList(&chromList);
@@ -2574,7 +2540,7 @@ boolean hHasField(char *db, char *table, char *field)
 return hFieldIndex(db, table, field) >= 0;
 }
 
-boolean hFieldHasIndexDb(char *db, char *table, char *field)
+boolean hFieldHasIndex(char *db, char *table, char *field)
 /* Return TRUE if a SQL index exists for table.field. */
 {
 struct sqlConnection *conn = hAllocConn(db);
@@ -2598,13 +2564,7 @@ hFreeConn(&conn);
 return(gotIndex);
 }
 
-boolean hFieldHasIndex(char *db, char *table, char *field)
-/* Return TRUE if a SQL index exists for table.field. */
-{
-return(hFieldHasIndexDb(db, table, field));
-}
-
-boolean hFindBed12FieldsAndBinDb(char *db, char *table, 
+boolean hFindBed12FieldsAndBin(char *db, char *table, 
 	char retChrom[HDB_MAX_FIELD_STRING],
 	char retStart[HDB_MAX_FIELD_STRING],
 	char retEnd[HDB_MAX_FIELD_STRING],
@@ -2766,12 +2726,12 @@ char retCount[HDB_MAX_FIELD_STRING];
 char retStarts[HDB_MAX_FIELD_STRING];
 char retEndsSizes[HDB_MAX_FIELD_STRING];
 char retSpan[HDB_MAX_FIELD_STRING];
-return hFindBed12FieldsAndBinDb(db, table,
-				retChrom, retStart, retEnd,
-				retName, retScore, retStrand,
-				retCdsStart, retCdsEnd,
-				retCount, retStarts, retEndsSizes,
-				retSpan, retBinned);
+return hFindBed12FieldsAndBin(db, table,
+			      retChrom, retStart, retEnd,
+			      retName, retScore, retStrand,
+			      retCdsStart, retCdsEnd,
+			      retCount, retStarts, retEndsSizes,
+			      retSpan, retBinned);
 }
 
 boolean hFindChromStartEndFields(char *db, char *table, 
@@ -2789,46 +2749,16 @@ char retStarts[HDB_MAX_FIELD_STRING];
 char retEndsSizes[HDB_MAX_FIELD_STRING];
 char retSpan[HDB_MAX_FIELD_STRING];
 boolean isBinned;
-return hFindBed12FieldsAndBinDb(db, table,
-				retChrom, retStart, retEnd,
-				retName, retScore, retStrand,
-				retCdsStart, retCdsEnd,
-				retCount, retStarts, retEndsSizes,
-				retSpan, &isBinned);
+return hFindBed12FieldsAndBin(db, table,
+			      retChrom, retStart, retEnd,
+			      retName, retScore, retStrand,
+			      retCdsStart, retCdsEnd,
+			      retCount, retStarts, retEndsSizes,
+			      retSpan, &isBinned);
 }
 
 
-boolean hFindChromStartEndFieldsDb(char *db, char *table, 
-	char retChrom[HDB_MAX_FIELD_STRING],
-	char retStart[HDB_MAX_FIELD_STRING], char retEnd[HDB_MAX_FIELD_STRING])
-/* Given a table return the fields for selecting chromosome, start, and end. */
-{
-char retName[HDB_MAX_FIELD_STRING];
-char retScore[HDB_MAX_FIELD_STRING];
-char retStrand[HDB_MAX_FIELD_STRING];
-char retCdsStart[HDB_MAX_FIELD_STRING];
-char retCdsEnd[HDB_MAX_FIELD_STRING];
-char retCount[HDB_MAX_FIELD_STRING];
-char retStarts[HDB_MAX_FIELD_STRING];
-char retEndsSizes[HDB_MAX_FIELD_STRING];
-char retSpan[HDB_MAX_FIELD_STRING];
-boolean isBinned;
-return hFindBed12FieldsAndBinDb(db, table,
-				retChrom, retStart, retEnd,
-				retName, retScore, retStrand,
-				retCdsStart, retCdsEnd,
-				retCount, retStarts, retEndsSizes,
-				retSpan, &isBinned);
-}
-
-int hdbChromSize(char *db, char *chromName)
-/* Get chromosome size from given database . */
-{
-// FIXME: delete this function
-return hChromSize(db, chromName);
-}
-
-struct hTableInfo *hFindTableInfoDb(char *db, char *chrom, char *rootName)
+struct hTableInfo *hFindTableInfo(char *db, char *chrom, char *rootName)
 /* Find table information.  Return NULL if no table.  */
 {
 static struct hash *dbHash = NULL;	/* Values are hashes of tables. */
@@ -2864,7 +2794,7 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
     AllocVar(hti);
     hashAddSaveName(hash, rootName, hti, &hti->rootName);
     hti->isSplit = isSplit;
-    hti->isPos = hFindBed12FieldsAndBinDb(db, fullName,
+    hti->isPos = hFindBed12FieldsAndBin(db, fullName,
 	hti->chromField, hti->startField, hti->endField,
 	hti->nameField, hti->scoreField, hti->strandField,
 	hti->cdsStartField, hti->cdsEndField,
@@ -2927,19 +2857,12 @@ else
 
 
 
-struct hTableInfo *hFindTableInfo(char *db, char *chrom, char *rootName)
-/* Find table information.  Return NULL if no table. */
-{
-return hFindTableInfoDb(db, chrom, rootName);
-}
-
-
-boolean hFindSplitTableDb(char *db, char *chrom, char *rootName, 
+boolean hFindSplitTable(char *db, char *chrom, char *rootName, 
 	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin)
 /* Find name of table in a given database that may or may not 
  * be split across chromosomes. Return FALSE if table doesn't exist.  */
 {
-struct hTableInfo *hti = hFindTableInfoDb(db, chrom, rootName);
+struct hTableInfo *hti = hFindTableInfo(db, chrom, rootName);
 if (hti == NULL)
     return FALSE;
 if (retTableBuf != NULL)
@@ -2954,14 +2877,6 @@ if (retTableBuf != NULL)
 if (hasBin != NULL)
     *hasBin = hti->hasBin;
 return TRUE;
-}
-
-boolean hFindSplitTable(char *db, char *chrom, char *rootName, 
-	char retTableBuf[HDB_MAX_TABLE_STRING], boolean *hasBin)
-/* Find name of table that may or may not be split across chromosomes. 
- * Return FALSE if table doesn't exist.  */
-{
-return hFindSplitTableDb(db, chrom, rootName, retTableBuf, hasBin);
 }
 
 struct slName *hSplitTableNames(char *db, char *rootName)
@@ -3114,7 +3029,7 @@ struct sqlResult *hExtendedRangeQuery(
 /* Range query with lots of options. */
 {
 char *db = sqlGetDatabase(conn);
-struct hTableInfo *hti = hFindTableInfoDb(db, chrom, rootTable);
+struct hTableInfo *hti = hFindTableInfo(db, chrom, rootTable);
 struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(1024);
 char *table = NULL;
@@ -3207,7 +3122,7 @@ struct sqlResult *hExtendedChromQuery(
  * with lots of options. */
 {
 char *db = sqlGetDatabase(conn);
-struct hTableInfo *hti = hFindTableInfoDb(db, chrom, rootTable);
+struct hTableInfo *hti = hFindTableInfo(db, chrom, rootTable);
 struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(1024);
 int rowOffset = 0;
@@ -3558,12 +3473,12 @@ boolean hgParseChromRangeDb(char *db, char *spec, char **retChromName,
 /* Parse something of form chrom:start-end into pieces. 
  * if haveDb then check with chromInfo for names */
 {
-//FIXMEL haveDb is trouble
+//FIXMEL haveDb is trouble, split this up
 char *chrom, *start, *end;
 char buf[256];
 int iStart, iEnd;
 
-strncpy(buf, spec, 256);
+safecpy(buf, sizeof(buf), spec);
 stripChar(buf, ',');
 chrom = buf;
 start = strchr(chrom, ':');
@@ -3622,62 +3537,6 @@ boolean hgIsChromRange(char *db, char *spec)
 {
 return hgParseChromRange(db, spec, NULL, NULL, NULL);
 }
-
-#ifdef UNUSED
-boolean hgParseContigRange(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Parse something of form contig:start-end into pieces. */
-{
-char *contig, *start,*end;
-char buf[256];
-char contigName[256];
-int iStart, iEnd;
-size_t colinspot;
-char *chrom;
-int contigstart,contigend;
-int spot;
-
-strncpy(buf, spec, 256);
-contig = buf;
-start = strchr(contig, ':');
-if (start == NULL)
-    return FALSE;
-if (startsWith("ctg",contig) == FALSE && startsWith("NT_", contig) == FALSE)
-    return FALSE;
-spot = strcspn(contig,":");
-strncpy(contigName,contig,spot);
-contigName[spot] = '\0';
-*start++ = 0;
-end = strchr(start, '-');
-if (end == NULL)
-    return FALSE;
-else
-*end++ = 0;
-contig = trimSpaces(contig);
-start = trimSpaces(start);
-end = trimSpaces(end);
-if (!isdigit(start[0]))
-    return FALSE;
-if (!isdigit(end[0]))
-    return FALSE;
-iStart = atoi(start)-1;
-iEnd = atoi(end);
-if (retChromName != NULL)
-    *retChromName = chrom;
-if (retWinStart != NULL)
-    *retWinStart = contigstart + iStart;
-if (retWinEnd != NULL)
-    *retWinEnd = contigstart + iEnd;
-return TRUE; 
-}
-
-boolean hgIsContigRange(char *spec)
-/* Returns TRUE if spec is chrom:N-M for some human
- * chromosome chrom and some N and M. */
-{
-return hgParseContigRange(spec, NULL, NULL, NULL);
-}  
-#endif /* UNUSED */
 
 struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName)
 /* Load trackDb object for a track. If track is composite, its subtracks

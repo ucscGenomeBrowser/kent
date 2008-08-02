@@ -7,7 +7,7 @@
 #include "hgFind.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgGetAnn.c,v 1.5.228.1 2008/07/31 02:24:05 markd Exp $";
+static char const rcsid[] = "$Id: hgGetAnn.c,v 1.5.228.2 2008/08/02 04:06:21 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -194,7 +194,7 @@ posTab->name = "chromInfo";
 posTab->description = "all rows";
 positions->tableList = posTab;
 
-for (chrom = hAllChromNamesDb(db); chrom != NULL; chrom = chrom->next)
+for (chrom = hAllChromNames(db); chrom != NULL; chrom = chrom->next)
     {
     struct hgPos *pos;
     AllocVar(pos);
@@ -445,7 +445,7 @@ else
     {
     /* got to try each chrom */
     struct slName *chrom;
-    for (chrom = hAllChromNamesDb(db); chrom != NULL; chrom = chrom->next)
+    for (chrom = hAllChromNames(db); chrom != NULL; chrom = chrom->next)
         {
         char *table = getTableName(chrom->name, tableInfo);
         if (hTableExists(db, table))

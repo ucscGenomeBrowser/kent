@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hgFindSpec.h"
 
-static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.11.102.1 2008/07/31 02:23:58 markd Exp $";
+static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.11.102.2 2008/08/02 04:06:17 markd Exp $";
 
 char *database = NULL;
 /* Need to get a cart in order to use hgFind. */
@@ -276,7 +276,7 @@ boolean doCheckIndexes()
 {
 struct hgFindSpec *shortList = NULL, *longList = NULL, *wholeList = NULL;
 struct hgFindSpec *hfs = NULL;
-struct slName *allChroms = hAllChromNamesDb(database);
+struct slName *allChroms = hAllChromNames(database);
 boolean gotError = FALSE;
 
 hgFindSpecGetAllSpecs(database, &shortList, &longList);

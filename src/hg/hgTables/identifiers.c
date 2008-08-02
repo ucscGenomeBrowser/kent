@@ -15,7 +15,7 @@
 #include "wikiTrack.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.23.10.1 2008/07/31 02:24:07 markd Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.23.10.2 2008/08/02 04:06:24 markd Exp $";
 
 
 static boolean forCurTable()
@@ -66,7 +66,7 @@ static struct slName *getExamples(struct sqlConnection *conn,
 /* Return a list of several example values of table.field. */
 {
 char fullTable[HDB_MAX_TABLE_STRING];
-if (! hFindSplitTableDb(database, NULL, table, fullTable, NULL))
+if (! hFindSplitTable(database, NULL, table, fullTable, NULL))
     safef(fullTable, sizeof(fullTable), table);
 return sqlRandomSampleConn(conn, fullTable, field, count);
 }

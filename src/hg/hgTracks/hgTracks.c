@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1499.4.2 2008/08/01 06:10:45 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1499.4.3 2008/08/02 04:06:25 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4138,7 +4138,7 @@ cgiTableRowEnd();
 void chromInfoRowsChrom()
 /* Make table rows of chromosomal chromInfo name & size, sorted by name. */
 {
-struct slName *chromList = hAllChromNamesDb(database);
+struct slName *chromList = hAllChromNames(database);
 struct slName *chromPtr = NULL;
 long long total = 0;
 

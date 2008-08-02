@@ -11,7 +11,7 @@
 #include "ggMrnaAli.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: clusterRna.c,v 1.15.116.1 2008/07/31 02:24:00 markd Exp $";
+static char const rcsid[] = "$Id: clusterRna.c,v 1.15.116.2 2008/08/02 04:06:19 markd Exp $";
 
 /* Global variables set for sorting alignments. */
 char *clusterStrand = NULL;
@@ -978,7 +978,7 @@ if (optionExists("chrom"))
     chromList = slNameNew(optionVal("chrom", NULL));
 else
     {
-    chromList = hAllChromNamesDb(database);
+    chromList = hAllChromNames(database);
     if (optionExists("MGC"))
         errAbort("Currently MGC can't be used except with chrom option");
     }

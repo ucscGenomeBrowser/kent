@@ -275,7 +275,7 @@ struct slName *chrom;
 if (gChroms != NULL)
     chroms = gChroms;
 else
-    chroms = hAllChromNamesDb(db);
+    chroms = hAllChromNames(db);
 slNameSort(&chroms);
 
 for (chrom = chroms; chrom != NULL; chrom = chrom->next)

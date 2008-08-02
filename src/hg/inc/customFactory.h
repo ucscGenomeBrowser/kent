@@ -20,7 +20,7 @@ struct customFactory
     char *name;		/* Name - psl, bed, wig, chromGraph, etc. */
 
     boolean (*recognizer)(struct customFactory *fac,
-    	char *genomeDb, struct customPp *cpp, char *type, 
+    	struct customPp *cpp, char *type, 
     	struct customTrack *track);
     /* Called by custom tracks framework.  Track line if any will
      * be read in already and parsed into type and track.
@@ -30,7 +30,6 @@ struct customFactory
      * it returns TRUE. */
 
      struct customTrack * (*loader)(struct customFactory *fac, 
-        char *genomeDb,                             
     	struct hash *chromHash,  /* Hash to store chrom names, filled in here */
     	struct customPp *cpp, 	 /* Source of input */
 	struct customTrack *track, /* Skeleton of track, filled in here */

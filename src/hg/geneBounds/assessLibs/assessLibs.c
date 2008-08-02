@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: assessLibs.c,v 1.6.116.1 2008/07/31 02:23:59 markd Exp $";
+static char const rcsid[] = "$Id: assessLibs.c,v 1.6.116.2 2008/08/02 04:06:18 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -221,7 +221,7 @@ struct hash *libHash;
  * list of all chromosome. */
 chrom = cgiOptionalString("chrom");
 if (chrom == NULL)
-    chromList = hAllChromNamesDb(database);
+    chromList = hAllChromNames(database);
 else
     chromList = newSlName(chrom);
 

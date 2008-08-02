@@ -92,27 +92,27 @@ struct slName *sqlListFields(struct sqlConnection *conn, char *table);
 struct hash *sqlAllFields(void);
 /* Get hash of all fields in database.table.field format.  */
 
-struct sqlConnCache *sqlNewConnCache(char *database);
+struct sqlConnCache *sqlConnCacheNew(char *database);
 /* Return a new connection cache. (Useful if going to be
  * doing lots of different queries in different routines
  * to same database - reduces connection overhead.) */
 
-struct sqlConnCache *sqlNewRemoteConnCache(char *database, 
+struct sqlConnCache *sqlConnCacheNewRemote(char *database, 
 	char *host, char *user, char *password);
 /* Set up a cache on a remote database. */
 
-void sqlFreeConnCache(struct sqlConnCache **pCache);
+void sqlConnCacheFree(struct sqlConnCache **pCache);
 /* Dispose of a connection cache. */
 
-struct sqlConnection *sqlMayAllocConnection(struct sqlConnCache *cache,
-					    boolean mustConnect);
+struct sqlConnection *sqlConnCacheMayAlloc(struct sqlConnCache *cache,
+					   boolean mustConnect);
 /* Allocate a cached connection. errAbort if too many open connections.  
  * errAbort if mustConnect and connection fails. */
 
-struct sqlConnection *sqlAllocConnection(struct sqlConnCache *cache);
+struct sqlConnection *sqlConnCacheAlloc(struct sqlConnCache *cache);
 /* Allocate a cached connection. */
 
-void sqlFreeConnection(struct sqlConnCache *cache,struct sqlConnection **pConn);
+void sqlConnCacheDealloc(struct sqlConnCache *cache,struct sqlConnection **pConn);
 /* Free up a cached connection. */
 
 void sqlUpdate(struct sqlConnection *conn, char *query);
@@ -313,8 +313,10 @@ void sqlAbort(struct sqlConnection  *sc, char *format, ...);
 void sqlCleanupAll(void);
 /* Cleanup all open connections and resources. */
 
+#if 0 //FIXME:
 char *connGetDatabase(struct sqlConnCache *conn);
 /* return database for a connection cache */
+#endif
 
 boolean sqlWildcardIn(char *s);
 /* Return TRUE if there is a sql wildcard char in string. */

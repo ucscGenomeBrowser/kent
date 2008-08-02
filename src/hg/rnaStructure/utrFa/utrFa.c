@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: utrFa.c,v 1.1.302.1 2008/07/31 05:21:41 markd Exp $";
+static char const rcsid[] = "$Id: utrFa.c,v 1.1.302.2 2008/08/02 04:06:34 markd Exp $";
 
 int minSize = 16;
 
@@ -145,7 +145,7 @@ conn = hAllocConn(database);
 if (optionExists("chrom"))
     chromList = slNameNew(optionVal("chrom", NULL));
 else
-    chromList = hAllChromNamesDb(database);
+    chromList = hAllChromNames(database);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     warn("%s", chrom->name);

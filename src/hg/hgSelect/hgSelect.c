@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: hgSelect.c,v 1.1.100.1 2008/07/31 02:24:06 markd Exp $";
+static char const rcsid[] = "$Id: hgSelect.c,v 1.1.100.2 2008/08/02 04:06:22 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -128,7 +128,7 @@ static void selectFromSplitTable(char *db, char *table, struct hTableInfo *tblIn
                                  struct sqlConnection *conn, FILE *outFh)
 /* select from a split table */
 {
-struct slName *chroms = hAllChromNamesDb(db);
+struct slName *chroms = hAllChromNames(db);
 struct slName *chrom;
 char chromTable[256];
 for (chrom = chroms; chrom != NULL ; chrom = chrom->next)

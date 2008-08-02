@@ -12,7 +12,7 @@
 #include "psl.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: getFeatDna.c,v 1.9.116.1 2008/07/31 02:24:01 markd Exp $";
+static char const rcsid[] = "$Id: getFeatDna.c,v 1.9.116.2 2008/08/02 04:06:20 markd Exp $";
 
 /* Variables set explicitly or optionally from command line. */
 char *database = NULL;		/* Which database? */
@@ -278,7 +278,7 @@ FILE *f = mustOpen(outName, "w");
 boolean toStdout = (sameString(outName, "stdout"));
 
 if (sameWord(chrom, "all"))
-    chromList = hAllChromNamesDb(database);
+    chromList = hAllChromNames(database);
 else
     chromList = newSlName(chrom);
 

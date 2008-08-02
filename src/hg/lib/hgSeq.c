@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "hgSeq.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.32.6.2 2008/07/31 06:43:37 markd Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.32.6.3 2008/08/02 04:06:30 markd Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -229,7 +229,7 @@ if ((table == NULL) || (table[0] == 0))
 else
     {
     hParseTableName(db, table, rootName, chrom);
-    hti = hFindTableInfoDb(db, chrom, rootName);
+    hti = hFindTableInfo(db, chrom, rootName);
     if (hti == NULL)
 	webAbort("Error", "Could not find table info for table %s (%s)",
 		 rootName, table);
@@ -249,7 +249,7 @@ char **row;
 struct hTableInfo *hti = NULL;
 
 conn = hAllocConn(db);
-hti = hFindTableInfoDb(db, chrom, "rmsk");
+hti = hFindTableInfo(db, chrom, "rmsk");
 
 if (hti == NULL)
     {
@@ -265,7 +265,7 @@ if (hti == NULL)
 	repeatTable = cloneString("windowmaskerSdust");
 	}
     /* if there isn't a rmsk track, look for the repeats bed file */
-    bedList = hGetBedRangeDb(db, repeatTable, chrom, chromStart, chromEnd, NULL);
+    bedList = hGetBedRange(db, repeatTable, chrom, chromStart, chromEnd, NULL);
     for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 	{
 	if (bedItem->chromEnd > chromEnd) bedItem->chromEnd = chromEnd;
@@ -847,12 +847,12 @@ char parsedChrom[32];
 int itemCount;
 
 hParseTableName(db, table, rootName, parsedChrom);
-hti = hFindTableInfoDb(db, chrom, rootName);
+hti = hFindTableInfo(db, chrom, rootName);
 if (hti == NULL)
     webAbort("Error", "Could not find table info for table %s (%s)",
 	     rootName, table);
-bedList = hGetBedRangeDb(db, table, chrom, chromStart, chromEnd,
-			 sqlConstraints);
+bedList = hGetBedRange(db, table, chrom, chromStart, chromEnd,
+		       sqlConstraints);
 
 itemCount = hgSeqBed(db, hti, bedList);
 bedFreeList(&bedList);

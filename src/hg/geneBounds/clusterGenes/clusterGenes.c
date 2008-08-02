@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.39.50.1 2008/07/31 02:24:00 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.39.50.2 2008/08/02 04:06:19 markd Exp $";
 
 /* Notes:
  *  strand is passed as '*' when -ignoreStrand is specified.
@@ -292,7 +292,7 @@ else
         if (tr->isDb)
         anyDb = TRUE;
     if (anyDb)
-        chroms = slNameCloneList(hAllChromNamesDb(sqlGetDatabase(conn)));
+        chroms = slNameCloneList(hAllChromNames(sqlGetDatabase(conn)));
     else
         chroms = getFileTracksChroms(tracks);
     }

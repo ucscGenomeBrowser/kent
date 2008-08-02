@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.38.120.1 2008/07/31 02:24:38 markd Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.38.120.2 2008/08/02 04:06:32 markd Exp $";
 
 /* Command line switches. */
 static boolean doAscii = TRUE;	/*	do not output ascii data */
@@ -179,7 +179,7 @@ else
     {
     if (db && !bedFile)
 	{
-	chromList = hAllChromNamesDb(db);
+	chromList = hAllChromNames(db);
 	slReverse(&chromList);
 	}
     else

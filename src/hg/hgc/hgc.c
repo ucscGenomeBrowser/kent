@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1445.4.4 2008/08/01 06:10:47 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1445.4.5 2008/08/02 04:06:26 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2500,7 +2500,7 @@ char **row;
 int rowOffset;
 struct chain *chain;
 
-if (!hFindSplitTableDb(db, seqName, track, table, &rowOffset))
+if (!hFindSplitTable(db, seqName, track, table, &rowOffset))
     errAbort("No %s track in database %s for %s", track, db, seqName);
 snprintf(query, sizeof(query), 
 	 "select * from %s where id = %d", table, id);
@@ -10855,7 +10855,7 @@ if (sqlQuickQuery(conn2, query, qNibFile, sizeof(qNibFile)) == NULL)
     errAbort("Sequence chr1 isn't in chromInfo");
 
 /* get gp */
-if (!hFindSplitTableDb(db2, qChrom, track, table, &hasBin))
+if (!hFindSplitTable(db2, qChrom, track, table, &hasBin))
     errAbort("htcPseudoGene: table %s not found.\n",track);
 else if (sameString(track, "mrna"))
     {

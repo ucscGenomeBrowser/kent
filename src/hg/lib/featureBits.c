@@ -13,7 +13,7 @@
 #include "featureBits.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.29.42.1 2008/07/31 02:24:27 markd Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.29.42.2 2008/08/02 04:06:29 markd Exp $";
 
 /* By default, clip features to the search range.  It's important to clip 
  * when featureBits output will be used to populate Bits etc.  But allow 
@@ -133,7 +133,7 @@ return fetchQualifiers("utr5", qualifier, extra, retSize);
 boolean fbUnderstandTrack(char *db, char *track)
 /* Return TRUE if can turn track into a set of ranges or bits. */
 {
-struct hTableInfo *hti = hFindTableInfoDb(db, NULL, track);
+struct hTableInfo *hti = hFindTableInfo(db, NULL, track);
 
 if (hti == NULL)
     return FALSE;
@@ -306,7 +306,7 @@ fbOptionsHtiCart(hti, NULL);
 void fbOptions(char *db, char *track)
 /* Print out an HTML table with radio buttons for featureBits options. */
 {
-struct hTableInfo *hti = hFindTableInfoDb(db, NULL, track);
+struct hTableInfo *hti = hFindTableInfo(db, NULL, track);
 if (hti == NULL)
     errAbort("Could not find table info for table %s in database %s",
 	     track, db);
@@ -615,11 +615,11 @@ char *tQ, *track, *qualifier, *extra;
 
 tQ = cloneString(trackQualifier);
 parseTrackQualifier(tQ, &track, &qualifier, &extra);
-hti = hFindTableInfoDb(db, NULL, track);
+hti = hFindTableInfo(db, NULL, track);
 if (hti == NULL)
     errAbort("Could not find table info for table %s in database %s",
 	     track, db);
-bedList = hGetBedRangeDb(db, track, chrom, chromStart, chromEnd,
+bedList = hGetBedRange(db, track, chrom, chromStart, chromEnd,
 			 sqlConstraints);
 fbList = fbFromBed(db, trackQualifier, hti, bedList, chromStart, chromEnd,
 		   clipToWindow, filterOutNoUTR);

@@ -77,7 +77,7 @@ for (axt = *axtList; axt != NULL; axt = axt->next)
     if (sameString(axt->qName , "gap"))
         qSize = axt->qEnd;
     else
-        qSize = hdbChromSize(queryDb, axt->qName);
+        qSize = hChromSize(queryDb, axt->qName);
 
     reverseComplement(axt->qSym, axt->symCount);
     reverseComplement(axt->tSym, axt->symCount);

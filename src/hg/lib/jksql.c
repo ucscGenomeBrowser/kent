@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: jksql.c,v 1.113.6.3 2008/08/01 06:10:52 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.113.6.4 2008/08/02 04:06:30 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -33,7 +33,7 @@ static long long sqlTotalTime = 0;          /* total real milliseconds */
 static long sqlTotalQueries = 0;            /* total number of queries */
 static boolean monitorHandlerSet = FALSE;   /* is exit handler installed? */
 static unsigned traceIndent = 0;            /* how much to indent */
-static char * indentStr = "                                                       ";
+static char *indentStr = "                                                       ";
 
 struct sqlProfile
 /* a configuration profile for connecting to a server */
@@ -237,6 +237,7 @@ struct sqlProfile* sqlProfileGet(char *profileName, char *database)
 assert((profileName != NULL) || (database != NULL));
 if (profiles == NULL)
     sqlProfileLoad();
+
 if (profileName != NULL)
     return sqlProfileFindByName(profileName, database);
 else
@@ -1571,7 +1572,7 @@ struct sqlConnCache
     boolean connUsed[maxConn];                  /* Tracks used conns. */
     };
 
-struct sqlConnCache *sqlNewRemoteConnCache(char *database, 
+struct sqlConnCache *sqlConnCacheNewRemote(char *database, 
 	char *host, char *user, char *password)
 /* Set up a cache on a remote database. */
 {
@@ -1584,7 +1585,7 @@ cache->password = cloneString(password);
 return cache;
 }
 
-struct sqlConnCache *sqlNewConnCache(char *database)
+struct sqlConnCache *sqlConnCacheNew(char *database)
 /* Return a new connection cache. */
 {
 char* host = cfgOptionEnv("HGDB_HOST", "db.host");
@@ -1592,10 +1593,10 @@ char* user = cfgOptionEnv("HGDB_USER", "db.user");
 char* password = cfgOptionEnv("HGDB_PASSWORD", "db.password");
 if (password == NULL || user == NULL || host == NULL)
     errAbort("Could not read hostname, user, or password to the database from configuration file.");
-return sqlNewRemoteConnCache(database, host, user, password);
+return sqlConnCacheNewRemote(database, host, user, password);
 }
 
-void sqlFreeConnCache(struct sqlConnCache **pCache)
+void sqlConnCacheFree(struct sqlConnCache **pCache)
 /* Dispose of a connection cache. */
 {
 struct sqlConnCache *cache;
@@ -1612,8 +1613,8 @@ if ((cache = *pCache) != NULL)
     }
 }
 
-struct sqlConnection *sqlMayAllocConnection(struct sqlConnCache *cache,
-					    boolean mustConnect)
+struct sqlConnection *sqlConnCacheMayAlloc(struct sqlConnCache *cache,
+					   boolean mustConnect)
 /* Allocate a cached connection. errAbort if too many open connections.  
  * errAbort if mustConnect and connection fails. */
 {
@@ -1641,13 +1642,13 @@ if (cache->connArray[connAlloced] != NULL)
 return cache->connArray[connAlloced];
 }
 
-struct sqlConnection *sqlAllocConnection(struct sqlConnCache *cache)
+struct sqlConnection *sqlConnCacheAlloc(struct sqlConnCache *cache)
 /* Allocate a cached connection. */
 {
-return sqlMayAllocConnection(cache, TRUE);
+return sqlConnCacheMayAlloc(cache, TRUE);
 }
 
-void sqlFreeConnection(struct sqlConnCache *cache, struct sqlConnection **pConn)
+void sqlConnCacheDealloc(struct sqlConnCache *cache, struct sqlConnection **pConn)
 /* Free up a cached connection. */
 {
 struct sqlConnection *conn;
@@ -1762,11 +1763,13 @@ sqlDisconnect(&conn);
 return list;
 }
 
+#if 0 //FIXME:
 char *connGetDatabase(struct sqlConnCache *conn)
 /* return database for a connection cache */
 {
 return conn->database;
 }
+#endif
 
 boolean sqlWildcardIn(char *s)
 /* Return TRUE if there is a sql wildcard char in string. */

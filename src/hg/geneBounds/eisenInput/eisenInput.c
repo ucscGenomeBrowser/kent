@@ -11,7 +11,7 @@
 #include "refLink.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: eisenInput.c,v 1.4.116.1 2008/07/31 02:24:00 markd Exp $";
+static char const rcsid[] = "$Id: eisenInput.c,v 1.4.116.2 2008/08/02 04:06:19 markd Exp $";
 
 /* Some variables we should probably let people set from the
  * command line. */
@@ -317,7 +317,7 @@ for (er = erList; er != NULL; er = er->next)
     }
 
 /* Do it chromosome by chromosome. */
-chromList = hAllChromNamesDb(database);
+chromList = hAllChromNames(database);
 for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
     {
     chrom = chromEl->name;

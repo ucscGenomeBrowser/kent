@@ -28,7 +28,7 @@
 #include "gvUi.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.164.4.2 2008/08/01 06:10:44 markd Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.164.4.3 2008/08/02 04:06:22 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -393,7 +393,7 @@ if (isPositional)
     {
     /* Check for missing split tables before querying: */
     char *db = sqlGetDatabase(conn);
-    struct hTableInfo *hti = hFindTableInfoDb(db, region->chrom, table);
+    struct hTableInfo *hti = hFindTableInfo(db, region->chrom, table);
     if (hti == NULL)
 	return NULL;
     else if (hti->isSplit)
@@ -532,7 +532,7 @@ else
 	track = table + strlen("chrN_");
     else
 	track = table;
-    hti = hFindTableInfoDb(db, NULL, track);
+    hti = hFindTableInfo(db, NULL, track);
     }
 return(hti);
 }
@@ -561,7 +561,7 @@ if (sqlTableExists(conn, "chromInfo"))
     struct hTableInfo *hti;
     sqlQuickQuery(conn, "select chrom from chromInfo limit 1", 
 	chromName, sizeof(chromName));
-    hti = hFindTableInfoDb(db, chromName, table);
+    hti = hFindTableInfo(db, chromName, table);
     if (hti != NULL)
 	{
 	result = htiIsPositional(hti);

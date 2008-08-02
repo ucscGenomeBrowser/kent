@@ -12,7 +12,7 @@
 #include "axt.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: regionPicker.c,v 1.10.106.1 2008/07/31 02:24:43 markd Exp $";
+static char const rcsid[] = "$Id: regionPicker.c,v 1.10.106.2 2008/08/02 04:06:33 markd Exp $";
 
 /* Command line overridable variables. */
 char *clRegion = "genome";
@@ -658,7 +658,7 @@ chromLimitHash = getChromLimits(database);
  * By default will do whole genome. */
 if (sameWord(clRegion, "genome"))
     {
-    allChroms = hAllChromNamesDb(database);
+    allChroms = hAllChromNames(database);
     for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
         {
 	if (!endsWith(chrom->name, "_random"))
