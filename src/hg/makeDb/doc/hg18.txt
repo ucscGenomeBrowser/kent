@@ -22818,7 +22818,7 @@ _EOF_
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 ochPri2 > rbest.log 2>&1 &
 
 #############################################################################
-# BLASTZ/CHAIN/NET myoLuc1 (working.....
+# BLASTZ/CHAIN/NET myoLuc1 (DONE braney 2008-08-02)
     ssh kkstore02
     screen #	use screen to control this multi-day job
     mkdir /cluster/data/hg18/bed/blastz.myoLuc1.2008-07-31
@@ -22854,29 +22854,26 @@ _EOF_
       -chainMinScore=3000 -chainLinearGap=medium \
       -blastzOutRoot /cluster/bluearc/myoLuc1/blastz.hg18 > do.log 2>&1 &
 
-# Completed: 654120 of 654120 jobs
-# CPU time in finished jobs:   14082913s  234715.22m  3911.92h  163.00d  0.447 y
-# IO & Wait Time:               2257180s   37619.67m   626.99h   26.12d  0.072 y
-# Average job time:                  25s       0.42m     0.01h    0.00d
-# Longest finished job:             292s       4.87m     0.08h    0.00d
-# Submission to last job:         59396s     989.93m    16.50h    0.69d
+# Completed: 98879 of 99144 jobs
+# Crashed: 56 jobs
+# Other count: 209 jobs
+# CPU time in finished jobs:    2327505s   38791.75m   646.53h   26.94d  0.074 y
+# IO & Wait Time:                340164s    5669.40m    94.49h    3.94d  0.011 y
+# Average job time:                  27s       0.45m     0.01h    0.00d
+# Longest finished job:            1034s      17.23m     0.29h    0.01d
+# Submission to last job:         56968s     949.47m    15.82h    0.66d
+
+# do remaining jobs on kolossus
 
     nice doBlastzChainNet.pl `pwd`/DEF \
 	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
       -chainMinScore=3000 -chainLinearGap=medium \
       -blastzOutRoot /cluster/bluearc/myoLuc1/blastz.hg18 > do2.log 2>&1 &
 
-    # memk cluster couldn't find san for chainRun, ran on pk
-
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=chainMerge \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/myoLuc1/blastz.hg18 > do3.log 2>&1 &
-
     ln -s `pwd`/blastz.myoLuc1.2008-07-31 /cluster/data/hg18/bed/blastz.myoLuc1
 
-    featureBits hg18 chainOchPri2Link
-# 806073890 bases of 2881515245 (27.974%) in intersection
+    featureBits hg18 chainMyoLuc1Link
+# 952177725 bases of 2881515245 (33.044%) in intersection
 
     cd /cluster/data/hg18/bed/blastz.myoLuc1.2008-07-31
 
@@ -22918,12 +22915,7 @@ _EOF_
       -chainMinScore=3000 -chainLinearGap=medium \
       -blastzOutRoot /cluster/bluearc/loxAfr2/blastz.hg18 > do.log 2>&1 &
 
-# Completed: 654120 of 654120 jobs
-# CPU time in finished jobs:   14082913s  234715.22m  3911.92h  163.00d  0.447 y
-# IO & Wait Time:               2257180s   37619.67m   626.99h   26.12d  0.072 y
-# Average job time:                  25s       0.42m     0.01h    0.00d
-# Longest finished job:             292s       4.87m     0.08h    0.00d
-# Submission to last job:         59396s     989.93m    16.50h    0.69d
+# had to run some jobs on memk
 
     nice doBlastzChainNet.pl `pwd`/DEF \
 	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
