@@ -6,12 +6,11 @@
 #include "options.h"
 #include "bed.h"
 #include "binRange.h"
-#include "rangeTree.h"
 #include "sqlNum.h"
 #include "minChromSize.h"
 #include "txCommon.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.16 2008/06/13 00:11:21 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.17 2008/08/02 21:40:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
