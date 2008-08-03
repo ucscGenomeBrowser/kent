@@ -22880,7 +22880,7 @@ _EOF_
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 myoLuc1 > rbest.log 2>&1 &
 
 #############################################################################
-# BLASTZ/CHAIN/NET loxAfr2 (working.....
+# BLASTZ/CHAIN/NET loxAfr2 (DONE braney 2008-08-03)
     ssh kkstore02
     screen #	use screen to control this multi-day job
     mkdir /cluster/data/hg18/bed/blastz.loxAfr2.2008-08-01
@@ -22922,17 +22922,17 @@ _EOF_
       -chainMinScore=3000 -chainLinearGap=medium \
       -blastzOutRoot /cluster/bluearc/loxAfr2/blastz.hg18 > do2.log 2>&1 &
 
-    # memk cluster couldn't find san for chainRun, ran on pk
+    # netChainSubset barfed with memory error (skipped over chains)
 
     nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=chainMerge \
+	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=load \
       -chainMinScore=3000 -chainLinearGap=medium \
       -blastzOutRoot /cluster/bluearc/loxAfr2/blastz.hg18 > do3.log 2>&1 &
 
     ln -s `pwd`/blastz.loxAfr2.2008-08-01 /cluster/data/hg18/bed/blastz.loxAfr2
 
-    featureBits hg18 chainOchPri2Link
-# 806073890 bases of 2881515245 (27.974%) in intersection
+    featureBits hg18 chainLoxAfr2Link
+# 1025499138 bases of 2881515245 (35.589%) in intersection
 
     cd /cluster/data/hg18/bed/blastz.loxAfr2.2008-08-01
 
@@ -22980,5 +22980,135 @@ _EOF_
 
 # load the table 
     hgLoadBed hg18 snpArrayIllumina1M snpArrayIllumina1M.tab -tab -sqlTable=snpArrayIllumina1M.sql
+
 #############################################################################
+# BLASTZ/CHAIN/NET dasNov2 (working.....
+    ssh kkstore02
+    screen #	use screen to control this multi-day job
+    mkdir /cluster/data/hg18/bed/blastz.dasNov2.2008-08-02
+    cd /cluster/data/hg18/bed/blastz.dasNov2.2008-08-02
+    cat << _EOF_ > DEF
+# Human vs. Armadillo
+
+BLASTZ_M=50
+BLASTZ=/cluster/home/braney/bin/x86_64/lastz
+
+# TARGET: Human Hg18 (whole chroms)
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes 
+SEQ1_CHUNK=200000000
+SEQ1_LAP=0
+
+# QUERY: Armadillo
+SEQ2_DIR=/san/sanvol1/scratch/dasNov2/dasNov2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/dasNov2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.dasNov2.2008-08-02
+TMPDIR=/scratch/tmp
+_EOF_
+
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk  \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/dasNov2/blastz.hg18 > do.log 2>&1 &
+
+# had to run some jobs on memk
+
+    nice doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/dasNov2/blastz.hg18 > do2.log 2>&1 &
+
+    # netChainSubset barfed with memory error (PATH error)
+
+    nice doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=load \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/dasNov2/blastz.hg18 > do3.log 2>&1 &
+
+    ln -s `pwd`/blastz.dasNov2.2008-08-02 /cluster/data/hg18/bed/blastz.dasNov2
+
+    featureBits hg18 chainLoxAfr2Link
+# 1025499138 bases of 2881515245 (35.589%) in intersection
+
+    cd /cluster/data/hg18/bed/blastz.dasNov2.2008-08-02
+
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 dasNov2 > rbest.log 2>&1 &
+
+#############################################################################
+# BLASTZ/CHAIN/NET micMur1 (working
+    ssh kkstore02
+    screen #	use screen to control this multi-day job
+    mkdir /cluster/data/hg18/bed/blastz.micMur1.2008-08-03
+    cd /cluster/data/hg18/bed/blastz.micMur1.2008-08-03
+    cat << _EOF_ > DEF
+# Human vs. Mouse lemur
+
+BLASTZ_M=50
+BLASTZ_T=2
+BLASTZ=/cluster/home/braney/bin/x86_64/lastz
+
+# TARGET: Human Hg18 (whole chroms)
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes 
+SEQ1_CHUNK=200000000
+SEQ1_LAP=0
+
+# QUERY: Mouse lemur
+SEQ2_DIR=/san/sanvol1/scratch/micMur1/micMur1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/micMur1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.micMur1.2008-08-03
+TMPDIR=/scratch/tmp
+_EOF_
+
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk  \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/micMur1/blastz.hg18 > do.log 2>&1 &
+
+# Completed: 98879 of 99144 jobs
+# Crashed: 56 jobs
+# Other count: 209 jobs
+# CPU time in finished jobs:    2327505s   38791.75m   646.53h   26.94d  0.074 y
+# IO & Wait Time:                340164s    5669.40m    94.49h    3.94d  0.011 y
+# Average job time:                  27s       0.45m     0.01h    0.00d
+# Longest finished job:            1034s      17.23m     0.29h    0.01d
+# Submission to last job:         56968s     949.47m    15.82h    0.66d
+
+# do remaining jobs on kolossus
+
+    nice doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/micMur1/blastz.hg18 > do2.log 2>&1 &
+
+    ln -s `pwd`/blastz.micMur1.2008-08-03 /cluster/data/hg18/bed/blastz.micMur1
+
+    featureBits hg18 chainMyoLuc1Link
+# 952177725 bases of 2881515245 (33.044%) in intersection
+
+    cd /cluster/data/hg18/bed/blastz.micMur1.2008-08-03
+
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 micMur1 > rbest.log 2>&1 &
+
+#######################################################
+## 42-way multiz
+
+mkdir /cluster/data/hg18/bed/multiz42way
+cd /cluster/data/hg18/bed/multiz42way
+cp /cluster/data/mm9/bed/multiz30way/mm9.guess.30way.nh .
+
+# get mammal tree from Michele Clamp (clamp.nh)
+# edit into noLance.nh the clamp tree and 30way tree
 
