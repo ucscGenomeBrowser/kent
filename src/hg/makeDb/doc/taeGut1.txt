@@ -22,10 +22,8 @@
     cat *qual | sed 's/Chr/chr/'  | qaToQac stdin  stdout | qacAgpLift -mScore=98 ../assembly.agp stdin ../taeGut1.qual.qac
     cd ..
 
-
    cut -f 1 assembly.agp | uniq -c | wc -l 
    # Number of scaffolds: 69
-
 
 #########################################################################
 # Create .ra file and run makeGenomeDb.pl (DONE braney 2008-07-08)
@@ -148,4 +146,89 @@ cut -f 2 chrom.sizes | ave stdin
     mkdir -p /cluster/bluearc/scratch/data/taeGut1
     cp taeGut1.2bit taeGut1.11.ooc chrom.sizes /cluster/bluearc/scratch/data/taeGut1
     # request admins to sync these to pk
+
+#########################################################################
+## Create a lift file for genbank work(DONE braney 2008-08-02)
+    ssh kkstore03
+    cd /cluster/data/taeGut1
+    cat  fromWustl/assembly.agp |  /cluster/bin/scripts/agpToLift -revStrand > jkStuff/liftAll.lft
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE braney 2008-08-02) 
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add taeGut1 
+
+# taeGut1
+taeGut1.serverGenome = /cluster/data/taeGut1/taeGut1.2bit
+taeGut1.clusterGenome = /scratch/data/taeGut1/taeGut1.2bit
+taeGut1.ooc = /scratch/data/taeGut1/11.ooc
+taeGut1.align.unplacedChroms = chrUn,chr*_random
+taeGut1.lift = /cluster/data/taeGut1/jkStuff/liftAll.lft
+taeGut1.refseq.mrna.native.pslCDnaFilter  =
+${ordered.refseq.mrna.native.pslCDnaFilter}
+taeGut1.refseq.mrna.xeno.pslCDnaFilter    =
+${ordered.refseq.mrna.xeno.pslCDnaFilter}
+taeGut1.genbank.mrna.native.pslCDnaFilter =
+${ordered.genbank.mrna.native.pslCDnaFilter}
+taeGut1.genbank.mrna.xeno.pslCDnaFilter   =
+${ordered.genbank.mrna.xeno.pslCDnaFilter}
+taeGut1.genbank.est.native.pslCDnaFilter  =
+${ordered.genbank.est.native.pslCDnaFilter}
+taeGut1.refseq.mrna.native.load = yes
+taeGut1.refseq.mrna.xeno.load = yes
+taeGut1.genbank.mrna.xeno.load = yes
+taeGut1.downloadDir = taeGut1
+
+    cvs ci -m "Added taeGut1." etc/genbank.conf
+
+    # add taeGut to src/lib/gbGenome.c
+    cvs ci -m "Added taeGut" src/lib/gbGenome.c
+
+    # update /cluster/data/genbank/:
+    make etc-update 
+
+    ssh genbank
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial taeGut1 &
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad taeGut1
+
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add taeGut1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added taeGut1 - zebra finch" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+############################################################################
+## Default position  (DONE braney 2008-08-02)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrZ:56,293,325-56,333,199"
+	where name="taeGut1";' hgcentraltest
+
+############################################################################
+# MAKE DOWNLOADABLE FILES (DONE braney 2008-08-02)
+    ssh kkstore03
+    screen
+    cd /cluster/data/taeGut1
+    # edited makeDownloads.pl to take out repeat masker files
+    makeDownloads.pl taeGut1 > downloads.log 2>&1 &
+
+##########################################################################
+## Creating pushQ (working...
+    ssh hgwdev
+    mkdir /cluster/data/taeGut1/pushQ
+    cd /cluster/data/taeGut1/pushQ
+    /cluster/bin/scripts/makePushQSql.pl taeGut1 > taeGut1.sql 2> stderr.out
+    ## check the stderr.out for anything that needs to be fixed
+    ## copy taeGut1.sql to hgwbeta:/tmp
+    ## then on hgwbeta
+    hgsql qapushq < taeGut1.sql
 
