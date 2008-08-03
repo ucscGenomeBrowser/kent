@@ -91,7 +91,7 @@ _EOF_
     cd /cluster/data/dasNov2/bed/repeatMasker
 
     time nice -n +19 featureBits dasNov2 rmsk > fb.dasNov2.rmsk.txt 2>&1 &
-    # 1006823376 bases of 2298455021 (43.804%) in intersection
+# 886641222 bases of 2371518823 (37.387%) in intersection
 
     # RepeatMasker and lib version from do.log:
     #    Jun 13 2008 (open-3-2-5) version of RepeatMasker
