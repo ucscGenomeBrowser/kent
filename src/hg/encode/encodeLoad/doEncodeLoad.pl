@@ -40,6 +40,10 @@ my $encInstance = "";
 my $encProject = "";
 my $sqlCreate = "/cluster/bin/sqlCreate";
 
+# Add type names to this list for types that can be loaded via .sql files (e.g. bed5FloatScore.sql)
+# You also have to make sure the .sql file is copied into the $sqlCreate directory.
+my @extendedTypes = ("encodePeak", "tagAlign", "bed5FloatScore");
+
 my $debug = 0;
 
 sub usage
@@ -239,13 +243,14 @@ for my $key (keys %ra) {
     my $assembly = $h->{assembly};
     my $type = $h->{type};
     my $files = $h->{files};
+    my %extendedTypes = map { $_ => 1 } @extendedTypes;
     if($type eq "genePred") {
         loadGene($assembly, $tablename, $files, \%pushQ);
     } elsif ($type eq "wig") {
         loadWig($assembly, $tablename, $files, \%pushQ);
-    } elsif ($type eq "encodePeaks" || $type eq 'tagAlignments' || $type eq "bed5FloatScore") {
+    } elsif ($extendedTypes{$type}) {
         loadBedFromSchema($assembly, $tablename, $files, $type, \%pushQ);
-    } elsif (($type eq "bed 3") || ($type eq "bed 4") || ($type eq "bed 4") || ($type eq "bed 5") || ($type eq "bed 6")) {
+    } elsif ($type =~ /^bed(3|4|5|6)$/) {
         loadBed($assembly, $tablename, $files, \%pushQ);
     } else {
         die "ERROR: unknown type: $type in $Encode::loadFile\n";
