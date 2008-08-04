@@ -85,6 +85,7 @@ shortLabel Human/Mouse/Rat
 longLabel Human/Mouse(mm3)/Rat(rn2) Alignments
 group compGeno
 priority 101
+speciesOrder mm3 rn2
 visibility full
 type maf
 
