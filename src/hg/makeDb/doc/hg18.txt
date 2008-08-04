@@ -22939,7 +22939,7 @@ _EOF_
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 loxAfr2 > rbest.log 2>&1 &
 
 #############################################################################
-# BUILD snpArrayIllumina1M SUB-TRACK (DONE 8/1/08, Fan)
+# BUILD snpArrayIllumina1M SUB-TRACK (DONE 8/4/08, Fan)
 
 # Received raw data file Illumina_Human1M-duoV3_SNPlist_Strand_Location.csv
 # from Illumina,  Luana Galver (lgalver at illumina.com).
@@ -22953,12 +22953,12 @@ _EOF_
     hgsql hg18 < ~src/hg/lib/snpArrayIllumina1MRaw.sql
     hgsql hg18 -e 'load data local infile "1M.tab" into table snpArrayIllumina1MRaw'
 
-    ~/src/hg/snp/snpLoad/illuminaLookup1M hg18 snpArrayIllumina1MRaw snp128
+    ~/src/hg/snp/snpLoad/illuminaLookup1M hg18 snpArrayIllumina1MRaw snp129
     
 # The illuminaLookup1M generate two files:
 #
-#	illuminaLookup1M.out  contains all Illumina 1M probes found in snp128
-#	illuminaLookup1M.err  contains all Illumina 1M probes not found in snp128
+#	illuminaLookup1M.out  contains all Illumina 1M probes found in snp129
+#	illuminaLookup1M.err  contains all Illumina 1M probes not found in snp129
 	
     mv illuminaLookup.out illuminaLookup1Ma.out
 
