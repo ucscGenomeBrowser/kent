@@ -29,7 +29,15 @@ field assembly
 file pifHeader
 required yes
 
+field grant
+file pifHeader
+required yes
+
 field lab
+file pifHeader
+required yes
+
+field dataType
 file pifHeader
 required yes
 
