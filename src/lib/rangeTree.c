@@ -36,11 +36,11 @@ return a;
 }
 
 
-struct range *rangeTreeAddVal(struct rbTree *tree, int start, int end, void *val, void *(*addVal)(void *existing, void *new) )
+struct range *rangeTreeAddVal(struct rbTree *tree, int start, int end, void *val, void *(*mergeVals)(void *existing, void *new) )
 /* Add range to tree, merging with existing ranges if need be. 
  * If this is a new range, set the value to this val.
- * If there are existing items for this range, and if addVal function is not null, 
- * apply addVal to the existing values and this new val, storing the result as the val
+ * If there are existing items for this range, and if mergeVals function is not null, 
+ * apply mergeVals to the existing values and this new val, storing the result as the val
  * for this range (see rangeTreeAddValCount() and rangeTreeAddValList() below for examples). */
 {
 struct range *r, *existing;
@@ -52,8 +52,8 @@ while ((existing = rbTreeRemove(tree, r)) != NULL)
     {
     r->start = min(r->start, existing->start);
     r->end = max(r->end, existing->end);
-    if (addVal)
-	r->val = addVal(existing->val, r->val);
+    if (mergeVals)
+	r->val = mergeVals(existing->val, r->val);
     }
 rbTreeAdd(tree, r);
 return r;

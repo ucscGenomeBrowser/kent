@@ -52,12 +52,12 @@ struct range *genomeRangeTreeAdd(struct genomeRangeTree *tree, char *chrom, int 
 /* Add range to tree, merging with existing ranges if need be. 
  * Adds new rangeTree if chrom not found. */
 
-struct range *genomeRangeTreeAddVal(struct genomeRangeTree *tree, char *chrom, int start, int end, void *val, void *(*addVal)(void *existing, void*new));
+struct range *genomeRangeTreeAddVal(struct genomeRangeTree *tree, char *chrom, int start, int end, void *val, void *(*mergeVals)(void *existing, void*new));
 /* Add range to tree, merging with existing ranges if need be. 
  * Adds new rangeTree if chrom not found. 
  * If this is a new range, set the value to this val.
- * If there are existing items for this range, and if addVal function is not null, 
- * apply addVal to the existing values and this new val, storing the result as the val
+ * If there are existing items for this range, and if mergeVals function is not null, 
+ * apply mergeVals to the existing values and this new val, storing the result as the val
  * for this range (see rangeTreeAddValCount() and rangeTreeAddValList() below for examples). */
 
 struct range *genomeRangeTreeAddValCount(struct genomeRangeTree *tree, char *chrom, int start, int end);
