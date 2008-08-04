@@ -5,7 +5,7 @@
 # Reads load.ra for information about what to do
 
 # Writes error or log information to STDOUT
-# Returns 0 if load succeeds and sends email to wrangler for given lab.
+# Returns 0 if load succeeds and sends email to wrangler for lab specified in the PIF
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
@@ -26,6 +26,7 @@ use File::Basename;
 use lib "/cluster/bin/scripts";
 use Encode;
 use RAFile;
+use SafePipe;
 
 use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose/;
 
@@ -75,36 +76,34 @@ sub loadWig
 {
     my ($assembly, $tableName, $fileList) = @_;
 
-    if(system( "cat $fileList | wigEncode stdin stdout $tableName.wib | hgLoadWiggle -pathPrefix=/gbdb/$assembly/wib -tmpDir=$tempDir $assembly $tableName stdin > out/loadWig.out 2>&1") ||
-       system( "rm -f /gbdb/$assembly/wib/$tableName.wib") ||
-       system( "ln -s $submitFQP/$tableName.wib /gbdb/$assembly/wib")) {
-       print STDERR "ERROR: File(s) $fileList failed wiggle load.\n";
-       dieFile("out/loadWig.out")
-   } else {
-       print "$fileList Loaded into $tableName\n";
-   }
+    my @cmds = ("cat $fileList", "wigEncode stdin stdout $tableName.wib", "hgLoadWiggle -pathPrefix=/gbdb/$assembly/wib -tmpDir=$tempDir $assembly $tableName stdin");
+    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
+    if(my $err = $safe->exec()) {
+        die("ERROR: File(s) $fileList failed wiggle load:\n" . $safe->stderr() . "\n");
+    } elsif (system( "rm -f /gbdb/$assembly/wib/$tableName.wib") ||
+             system( "ln -s $submitFQP/$tableName.wib /gbdb/$assembly/wib")) {
+        die("ERROR: failed wiggle ln\n");
+    } else {
+        print "$fileList Loaded into $tableName\n";
+    }
 }
 
 sub loadBed
 {
     my ($assembly, $tableName, $fileList) = @_;
     #TEST by replacing "cat" with  "head -1000 -q"
-    my $cmd = "cat $fileList | egrep -v '^track|browser' | hgLoadBed $assembly $tableName stdin -tmpDir=out > out/loadBed.out 2>&1";
-
-    print STDERR "loadBed: cmd: $cmd\n" if($debug);
-
-    if(system($cmd)) {
-        print STDERR "ERROR: File(s) $fileList failed bed load:\n\n";
-        dieFile("out/loadBed.out");
+    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=out");
+    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
+    if(my $err = $safe->exec()) {
+        die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
     } else {
         print "$fileList Loaded into $tableName\n";
-        #debug restore: File.delete "out/bed.tab";
     }
 }
 
-
 sub loadBedFromSchema
 {
+# Load bed using a .sql file
     my ($assembly, $tableName, $fileList, $sqlTable) = @_;
 
     if(!(-e "$sqlCreate/${sqlTable}.sql")) {
@@ -127,14 +126,11 @@ sub loadBedFromSchema
     $fh->print($sql);
 
     #TEST by replacing "cat" with  "head -1000 -q"
-    
-    my $cmd = "cat $fileList | egrep -v '^track|browser' | hgLoadBed $assembly $tableName stdin -tmpDir=out -sqlTable=$tempFile > out/loadBed.out 2>&1";
+    my @cmds = ("egrep -v '^track|browser' $fileList", "hgLoadBed $assembly $tableName stdin -tmpDir=out -sqlTable=$tempFile");
+    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
 
-    print STDERR "cmd: $cmd\n" if($debug);
-
-    if(system($cmd)) {
-        print STDERR "ERROR: File(s) $fileList failed bed load:\n\n";
-        dieFile("out/loadBed.out");
+    if(my $err = $safe->exec()) {
+        die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
     } else {
         print "$fileList Loaded into $tableName\n";
     }
