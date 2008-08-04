@@ -24,24 +24,68 @@ else
     return 0;
 }
 
-struct range *rangeTreeAdd(struct rbTree *tree, int start, int end)
-/* Add range to tree, merging with existing ranges if need be. */
+
+static void *sumInt(void *a, void *b)
+/* Local function used by rangeTreeAddValCount, which sums two ints a and b, 
+ * referenced by void pointers, returning the result in a */
 {
-struct range tempR, *existing;
-tempR.start = start;
-tempR.end = end;
-tempR.val = NULL;
-while ((existing = rbTreeRemove(tree, &tempR)) != NULL)
-     {
-     tempR.start = min(tempR.start, existing->start);
-     tempR.end = max(tempR.end, existing->end);
-     }
-struct range *r = lmAlloc(tree->lm, sizeof(*r)); /* alloc new zeroed range */
-r->start = tempR.start;
-r->end = tempR.end;
+int *i, *j;
+i = a; j = b;
+*i += *j;
+return a;
+}
+
+
+struct range *rangeTreeAddVal(struct rbTree *tree, int start, int end, void *val, void *(*addVal)(void *existing, void *new) )
+/* Add range to tree, merging with existing ranges if need be. 
+ * If this is a new range, set the value to this val.
+ * If there are existing items for this range, and if addVal function is not null, 
+ * apply addVal to the existing values and this new val, storing the result as the val
+ * for this range (see rangeTreeAddValCount() and rangeTreeAddValList() below for examples). */
+{
+struct range *r, *existing;
+r = lmAlloc(tree->lm, sizeof(*r)); /* alloc new zeroed range */
+r->start = start;
+r->end = end;
+r->val = val;
+while ((existing = rbTreeRemove(tree, r)) != NULL)
+    {
+    r->start = min(r->start, existing->start);
+    r->end = max(r->end, existing->end);
+    if (addVal)
+	r->val = addVal(existing->val, r->val);
+    }
 rbTreeAdd(tree, r);
 return r;
 }
+
+
+struct range *rangeTreeAdd(struct rbTree *tree, int start, int end)
+/* Add range to tree, merging with existing ranges if need be. */
+{
+    return rangeTreeAddVal(tree, start, end, NULL, NULL);
+}
+
+
+struct range *rangeTreeAddValCount(struct rbTree *tree, int start, int end)
+/* Add range to tree, merging with existing ranges if need be. 
+ * Set range val to count of elements in the range. Counts are pointers to 
+ * ints allocated in tree localmem */
+{
+    int *a = lmAlloc(tree->lm, sizeof(*a)); /* keep the count in localmem */
+    *a = 1;
+    return rangeTreeAddVal(tree, start, end, (void *)a, sumInt);
+}
+
+
+struct range *rangeTreeAddValList(struct rbTree *tree, int start, int end, void *val)
+/* Add range to tree, merging with existing ranges if need be. 
+ * Add val to the list of values (if any) in each range.
+ * val must be valid argument to slCat (ie, be a struct with a 'next' pointer as its first member) */
+{
+    return rangeTreeAddVal(tree, start, end, val, slCat);
+}
+
 
 boolean rangeTreeOverlaps(struct rbTree *tree, int start, int end)
 /* Return TRUE if start-end overlaps anything in tree */

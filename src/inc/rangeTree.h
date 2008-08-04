@@ -30,8 +30,26 @@ int rangeCmp(void *va, void *vb);
 /* Return -1 if a before b,  0 if a and b overlap,
  * and 1 if a after b. */
 
+
+struct range *rangeTreeAddVal(struct rbTree *tree, int start, int end, void *val, void *(*addVal)(void *existing, void *new) );
+/* Add range to tree, merging with existing ranges if need be. 
+ * If this is a new range, set the value to this val.
+ * If there are existing items for this range, and if addVal function is not null, 
+ * apply addVal to the existing values and this new val, storing the result as the val
+ * for this range (see rangeTreeAddValCount() and rangeTreeAddValList() below for examples). */
+
 struct range *rangeTreeAdd(struct rbTree *tree, int start, int end);
 /* Add range to tree, merging with existing ranges if need be. */
+
+struct range *rangeTreeAddValCount(struct rbTree *tree, int start, int end);
+/* Add range to tree, merging with existing ranges if need be. 
+ * Set range val to count of elements in the range. Counts are pointers to 
+ * ints allocated in tree localmem */
+
+struct range *rangeTreeAddValList(struct rbTree *tree, int start, int end, void *val);
+/* Add range to tree, merging with existing ranges if need be. 
+ * Add val to the list of values (if any) in each range.
+ * val must be valid argument to slCat (ie, be a struct with a 'next' pointer as its first member) */
 
 boolean rangeTreeOverlaps(struct rbTree *tree, int start, int end);
 /* Return TRUE if start-end overlaps anything in tree */

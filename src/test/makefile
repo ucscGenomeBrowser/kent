@@ -6,7 +6,7 @@
 testGenomeRangeTree: ../lib/$(MACHTYPE)/jkweb.a testGenomeRangeTree.c
 	${CC} ${COPT} ${CFLAGS} -I../inc testGenomeRangeTree.c ../lib/$(MACHTYPE)/jkweb.a -lm -o testGenomeRangeTree
 	chmod a+x testGenomeRangeTree
-	./testGenomeRangeTree
+	./testGenomeRangeTree -verbose=0
 
 test:
 	./hgTest.pl -v -db hg13 | tee $(HOST).hg13.log  2>&1

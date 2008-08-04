@@ -222,8 +222,41 @@ else
 void testOverlaps()
 {
 /* Overlaps 
- * ranges: chr1:1-10  10-15  20-30 ; chr2:1-10
+ * ranges: chr1:1-10,val=3  10-15,val=1  20-30,val=1 ; chr2:1-10
  */
+t1 = genomeRangeTreeNew();
+r1 = genomeRangeTreeAddValCount(t1,"chr1", 1,10);
+r1 = genomeRangeTreeAddValCount(t1,"chr1", 1, 5);
+r1 = genomeRangeTreeAddValCount(t1,"chr1", 3, 6);
+r1 = genomeRangeTreeAddValCount(t1,"chr1",10,15);
+r1 = genomeRangeTreeAddValCount(t1,"chr1",20,30);
+r1 = genomeRangeTreeAdd(t1,"chr2", 1,10);
+/* Check all ranges there */
+r1 = genomeRangeTreeList(t1,"chr1");
+if (!r1)
+    errAbort("Error: genomeRangeTreeList(t1,chr1) returned null list\n");
+else
+    verbose(1,"OK: genomeRangeTreeList(t1,chr1) #a1\n");
+if (slCount(r1) != 3)
+    errAbort("Error: genomeRangeTreeList(t1,chr1) returned wrong number of values (got %d, wanted %d)\n", slCount(r1),3);
+else
+    verbose(1,"OK: genomeRangeTreeList(t1,chr1) #a2\n");
+r1 = genomeRangeTreeList(t1,"chr2");
+if (!r1)
+    errAbort("Error: genomeRangeTreeList(t1,chr2) returned null list\n");
+else
+    verbose(1,"OK: genomeRangeTreeList(t1,chr2) #a3\n");
+if (slCount(r1) != 1)
+    errAbort("Error: genomeRangeTreeList(t1,chr2) returned wrong number of values (got %d, wanted %d)\n", slCount(r1),1);
+else
+    verbose(1,"OK: genomeRangeTreeList(t1,chr2) #a4\n");
+r1 = genomeRangeTreeList(t1,"chr3");
+if (r1)
+    errAbort("Error: genomeRangeTreeList(t1,chr2) returned non-null list\n");
+else
+    verbose(1,"OK: genomeRangeTreeList(t1,chr3) #a5\n");
+
+/* Check overlap */
 if (genomeRangeTreeOverlaps(t1,"chr3",1,100)) /* no overlap */
     errAbort("Error: genomeRangeTreeOverlaps(t1,chr3,1,100) should not overlap\n");
 else
@@ -270,11 +303,15 @@ if (!r1) /* overlap */
     errAbort("Error: genomeRangeTreeFindEnclosing(t1,chr1,12,13) enclosed by (10-15)\n");
 else
     verbose(1,"OK: genomeRangeTreeFindEnclosing(t1,chr1,12,13) enclosed by (10-15)\n");
-if ( r1->start!=10 || r1->end!=15 || r1->val) /* no overlap */
-    errAbort("Error: genomeRangeTreeFindEnclosing(t1,chr1,12,13) enclosed wrong [got (%d,%d,%p), wanted (10,15,(nil))\n",r1->start,r1->end,r1->val);
+if ( r1->start!=10 || r1->end!=15 || !r1->val) /* no overlap */
+    errAbort("Error: genomeRangeTreeFindEnclosing(t1,chr1,12,13) enclosed wrong [got (%d,%d,%p), wanted (10,15,0xNNNNNNNN)\n",r1->start,r1->end,r1->val);
 else
-    verbose(1,"OK: genomeRangeTreeFindEnclosing(t1,chr1,12,13) enclosed by (10,15,(nil))\n");
-if ( r1->next) /* THIS SHOULD BE ZERO I THINK, MAYBE SEMANTIC PROBLEM IN RANGETREE.C */
+    verbose(1,"OK: genomeRangeTreeFindEnclosing(t1,chr1,12,13) enclosed by (10,15,0xNNNNNNNN)\n");
+if ( *((int *)r1->val) != 1) /* count of ranges in the enclosing range 10-15 */
+    errAbort("Error: genomeRangeTreeFindEnclosing(t1,chr1,12,13) enclosed wrong [got (%d,%d,(%d)), wanted (10,15,(1))\n",r1->start,r1->end,*((int *)r1->val));
+else
+    verbose(1,"OK: genomeRangeTreeFindEnclosing(t1,chr1,12,13) enclosed by 1 value (10,15,(1))\n");
+if ( r1->next) /* this should be zero */
     errAbort("Error: genomeRangeTreeFindEnclosing(t1,chr1,12,13) enclosed wrong [got (%p,%d,%d,%p), wanted ((nil),10,15,(nil))\n",r1->next,r1->start,r1->end,r1->val);
 else
     verbose(1,"OK: genomeRangeTreeFindEnclosing(t1,chr1,12,13) enclosed by ((nil),01,15,(nil))\n");
@@ -284,6 +321,7 @@ if (r1) /* no overlap */
     errAbort("Error: genomeRangeTreeAllOverlapping(t1,chr3,1,2) should not be overlapping\n");
 else
     verbose(1,"OK: genomeRangeTreeAllOverlapping(t1,chr3,1,2) not overlapping \n");
+
 r1 = genomeRangeTreeAllOverlapping(t1, "chr2",1,2);
 if ( !r1 || r1->next || r1->start!=1 || r1->end!=10 || r1->val) 
     errAbort("Error: genomeRangeTreeAllOverlapping(t1,chr1,12,13) all overlapping wrong [got (%p,%d,%d,%p), wanted ((nill),1,10,(nil))\n",r1->start,r1->end,r1->val);
@@ -296,20 +334,24 @@ if (!r1)
 else
     verbose(1,"OK: genomeRangeTreeAllOverlapping(t1,chr1,2,22) overlapping \n");
 
-if ( !r1 || !r1->next || r1->start!=1 || r1->end!=10 || r1->val) 
-    errAbort("Error: genomeRangeTreeAllOverlapping(t1,chr1,2,22) all overlapping wrong [got (%p,%d,%d,%p), wanted (0xNNNNNNNN,1,10,(nil))\n",r1->next,r1->start,r1->end,r1->val);
+if ( !r1 || !r1->next || r1->start!=1 || r1->end!=10 || !r1->val) 
+    errAbort("Error: genomeRangeTreeAllOverlapping(t1,chr1,2,22) all overlapping wrong [got (%p,%d,%d,%p), wanted (0xNNNNNNNN,1,10,0xNNNNNNNN)\n",r1->next,r1->start,r1->end,r1->val);
 else
     verbose(1,"OK: genomeRangeTreeAllOverlapping(t1,chr1,2,22) overlapping (1,10)\n");
+if ( *((int *)r1->val) != 3) 
+    errAbort("Error: genomeRangeTreeAllOverlapping(t1,chr1,2,22) all overlapping wrong [got (%p,%d,%d,%p->%d), wanted (0xNNNNNNNN,1,10,0xNNNNNNNN -> 3)\n",r1->next,r1->start,r1->end,r1->val,*((int *)r1->val));
+else
+    verbose(1,"OK: genomeRangeTreeAllOverlapping(t1,chr1,2,22) overlapping 3 values (1,10)\n");
 
 r1 = r1->next;
-if ( !r1 || !r1->next || r1->start!=10 || r1->end!=15 || r1->val) 
-    errAbort("Error: genomeRangeTreeAllOverlapping(t1,chr1,2,22) all overlapping wrong [got (%p,%d,%d,%p), wanted (0xNNNNNNNN,10,15,(nil))\n",r1->next,r1->start,r1->end,r1->val);
+if ( !r1 || !r1->next || r1->start!=10 || r1->end!=15 || !r1->val || *((int *)r1->val) != 1) 
+    errAbort("Error: genomeRangeTreeAllOverlapping(t1,chr1,2,22) all overlapping wrong [got (%p,%d,%d,%p->%d), wanted (0xNNNNNNNN,10,15,0xNNNNNNNN->1)\n",r1->next,r1->start,r1->end,r1->val,*((int *)r1->val));
 else
     verbose(1,"OK: genomeRangeTreeAllOverlapping(t1,chr1,2,22) overlapping (10,15)\n");
 
 r1 = r1->next;
-if ( !r1 || r1->next || r1->start!=20 || r1->end!=30 || r1->val) 
-    errAbort("Error: genomeRangeTreeAllOverlapping(t1,chr1,2,22) all overlapping wrong [got (%p,%d,%d,%p), wanted ((nil),20,30,(nil))\n",r1->next,r1->start,r1->end,r1->val);
+if ( !r1 || r1->next || r1->start!=20 || r1->end!=30 || !r1->val || *((int *)r1->val) != 1) 
+    errAbort("Error: genomeRangeTreeAllOverlapping(t1,chr1,2,22) all overlapping wrong [got (%p,%d,%d,%p->%d), wanted ((nil),20,30,0xNNNNNNNN->1)\n",r1->next,r1->start,r1->end,r1->val,*((int *)r1->val));
 else
     verbose(1,"OK: genomeRangeTreeAllOverlapping(t1,chr1,2,22) overlapping (20,30)\n");
 
@@ -334,8 +376,8 @@ if (!r1)
     errAbort("Error: genomeRangeTreeMaxOverlapping(t1,chr1,9,22) should be overlapping\n");
 else
     verbose(1,"OK: genomeRangeTreeMaxOverlapping(t1,chr1,9,22) overlapping \n");
-if ( r1->next || r1->start!=10 || r1->end!=15 || r1->val) 
-    errAbort("Error: genomeRangeTreeMaxOverlapping(t1,chr1,9,22) max overlapping wrong [got (%p,%d,%d,%p), wanted ((nil),10,15,(nil))\n",r1->next,r1->start,r1->end,r1->val);
+if ( r1->next || r1->start!=10 || r1->end!=15 || !r1->val || *((int *)r1->val) != 1) 
+    errAbort("Error: genomeRangeTreeMaxOverlapping(t1,chr1,9,22) max overlapping wrong [got (%p,%d,%d,%p->%d), wanted ((nil),10,15,0xNNNNNNNN->1)\n",r1->next,r1->start,r1->end,r1->val,*((int *)r1->val));
 else
     verbose(1,"OK: genomeRangeTreeMaxOverlapping(t1,chr1,9,22) overlapping (10,15)\n");
 
@@ -355,6 +397,80 @@ if ( n != 1)
 else
     verbose(1,"OK: genomeRangeTreeOverlapSize(t1,chr2,9,22) overlapping 1\n");
 }
+
+
+void testAddVar()
+{
+/* Overlaps 
+ * ranges: chr1:1-10,val=3  10-15,val=1  20-30,val=1 ; chr2:1-10
+ */
+t1 = genomeRangeTreeNew();
+r1 = genomeRangeTreeAddValCount(t1,"chr1", 1,10);
+if (!r1)
+    errAbort("Error: genomeRangeTreeAddValCount(t1,chr1,1,10) returned null \n");
+else
+    verbose(1,"OK: genomeRangeTreeAddValCount(t1,chr1,1,10) #1\n");
+if (*(int *)r1->val != 1)
+    errAbort("Error: genomeRangeTreeAddValCount(t1,chr1,1,10) got val=%d, wanted val=1\n",*(int *)r1->val);
+else
+    verbose(1,"OK: genomeRangeTreeAddValCount(t1,chr1,1,10) #2 val=1\n");
+
+r1 = genomeRangeTreeAddValCount(t1,"chr1", 1, 5);
+if (!r1)
+    errAbort("Error: genomeRangeTreeAddValCount(t1,chr1,1,5) returned null \n");
+else
+    verbose(1,"OK: genomeRangeTreeAddValCount(t1,chr1,1,5) #3\n");
+if (*(int *)r1->val != 2)
+    errAbort("Error: genomeRangeTreeAddValCount(t1,chr1,1,5) got val=%d, wanted val=2\n",*(int *)r1->val);
+else
+    verbose(1,"OK: genomeRangeTreeAddValCount(t1,chr1,1,5) #4 val=2\n");
+
+r1 = genomeRangeTreeAddValCount(t1,"chr1", 3, 6);
+if (!r1)
+    errAbort("Error: genomeRangeTreeAddValCount(t1,chr1,3,6) returned null \n");
+else
+    verbose(1,"OK: genomeRangeTreeAddValCount(t1,chr1,3,6) #5\n");
+if (*(int *)r1->val != 3)
+    errAbort("Error: genomeRangeTreeAddValCount(t1,chr1,3,6) got val=%d, wanted val=3\n",*(int *)r1->val);
+else
+    verbose(1,"OK: genomeRangeTreeAddValCount(t1,chr1,3,6) #6 val=3\n");
+
+/* Test adding lists to lists */
+struct slName *n1 = slNameListFromString("jim,fred,bob", ',');
+struct slName *n2 = slNameListFromString("sam,max", ',');
+struct slName *n3 = slNameListFromString("neddy", ',');
+
+r1 = genomeRangeTreeAddValList(t1,"chr2",1,9,n1);
+if (slCount(r1->val) != 3)
+    errAbort("Error: genomeRangeTreeAddValList(t1,chr2,1,9,[jim,fred,bob]) got=%d elements, wanted=3\n",slCount(r1->val));
+else
+    verbose(1,"OK: genomeRangeTreeAddValList(t1,chr2,1,9) #1 list=3\n");
+if (!sameString(slNameListToString(r1->val,','), "jim,fred,bob"))
+    errAbort("Error: genomeRangeTreeAddValCount(t1,chr2,1,9,[jim,fred,bob]) -> [%s]\n",slNameListToString(r1->val,','));
+else
+    verbose(1,"OK: genomeRangeTreeAddValCount(t1,chr2,1,9) #2 [%s]\n",slNameListToString(r1->val,','));
+
+r1 = genomeRangeTreeAddValList(t1,"chr2",2,3,n2);
+if (slCount(r1->val) != 5)
+    errAbort("Error: genomeRangeTreeAddValList(t1,chr2,2,3,[sam,max]) got=%d elements, wanted=5\n",slCount(r1->val));
+else
+    verbose(1,"OK: genomeRangeTreeAddValList(t1,chr2,2,3) #3 list=5\n");
+if (!sameString(slNameListToString(r1->val,','), "jim,fred,bob,sam,max"))
+    errAbort("Error: genomeRangeTreeAddValCount(t1,chr2,2,3,[sam,max]) -> [%s]\n",slNameListToString(r1->val,','));
+else
+    verbose(1,"OK: genomeRangeTreeAddValCount(t1,chr2,2,3) #4 [%s]\n",slNameListToString(r1->val,','));
+
+r1 = genomeRangeTreeAddValList(t1,"chr2",6,7,n3);
+if (slCount(r1->val) != 6)
+    errAbort("Error: genomeRangeTreeAddValList(t1,chr2,6,7,[neddy]) got=%d elements, wanted=6\n",slCount(r1->val));
+else
+    verbose(1,"OK: genomeRangeTreeAddValList(t1,chr2,6,7) #5 list=6\n");
+if (!sameString(slNameListToString(r1->val,','), "jim,fred,bob,sam,max,neddy"))
+    errAbort("Error: genomeRangeTreeAddValCount(t1,chr2,6,7,[neddy]) -> [%s]\n",slNameListToString(r1->val,','));
+else
+    verbose(1,"OK: genomeRangeTreeAddValCount(t1,chr2,6,7) #6 [%s]\n",slNameListToString(r1->val,','));
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -363,6 +479,7 @@ verboseSetLevel(optionInt("verbose",0));
 
 testNewAndFind();
 testAddAndList();
+testAddVar();
 testOverlaps();
 
 verbose(1,"genomeRangeTree OK\n");

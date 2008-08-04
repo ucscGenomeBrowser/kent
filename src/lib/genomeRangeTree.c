@@ -33,11 +33,41 @@ if (hel->val == NULL) /* need to add a new rangeTree */
 return (struct rbTree *)hel->val;
 }
 
+
 struct range *genomeRangeTreeAdd(struct genomeRangeTree *tree, char *chrom, int start, int end)
 /* Add range to tree, merging with existing ranges if need be. 
  * Adds new rangeTree if chrom not found. */
 {
 return rangeTreeAdd(genomeRangeTreeFindOrAddRangeTree(tree,chrom), start, end);
+}
+
+struct range *genomeRangeTreeAddVal(struct genomeRangeTree *tree, char *chrom, int start, int end, void *val, void *(*addVal)(void *existing, void*new))
+/* Add range to tree, merging with existing ranges if need be. 
+ * Adds new rangeTree if chrom not found. 
+ * If this is a new range, set the value to this val.
+ * If there are existing items for this range, and if addVal function is not null, 
+ * apply addVal to the existing values and this new val, storing the result as the val
+ * for this range (see rangeTreeAddValCount() and rangeTreeAddValList() below for examples). */
+{
+return rangeTreeAddVal(genomeRangeTreeFindOrAddRangeTree(tree,chrom), start, end, val, addVal);
+}
+
+struct range *genomeRangeTreeAddValCount(struct genomeRangeTree *tree, char *chrom, int start, int end)
+/* Add range to tree, merging with existing ranges if need be. 
+ * Adds new rangeTree if chrom not found. 
+ * Set range val to count of elements in the range. Counts are pointers to 
+ * ints allocated in tree localmem */
+{
+return rangeTreeAddValCount(genomeRangeTreeFindOrAddRangeTree(tree,chrom), start, end);
+}
+
+struct range *genomeRangeTreeAddValList(struct genomeRangeTree *tree, char *chrom, int start, int end, void *val)
+/* Add range to tree, merging with existing ranges if need be. 
+ * Adds new rangeTree if chrom not found. 
+ * Add val to the list of values (if any) in each range.
+ * val must be valid argument to slCat (ie, be a struct with a 'next' pointer as its first member) */
+{
+return rangeTreeAddValList(genomeRangeTreeFindOrAddRangeTree(tree,chrom), start, end, val);
 }
 
 boolean genomeRangeTreeOverlaps(struct genomeRangeTree *tree, char *chrom, int start, int end)
