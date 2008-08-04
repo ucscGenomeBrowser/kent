@@ -30,8 +30,8 @@ use SafePipe;
 
 use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose/;
 
-my $loadRa = "out/load.ra";
-my $unloadRa = "out/unload.ra";
+my $loadRa = "out/$Encode::loadFile";
+my $unloadRa = "out/$Encode::unloadFile";
 my $submitDir = "";
 my $submitFQP;
 my $submitType = "";
@@ -61,7 +61,7 @@ sub dieFile
 
 sub loadGene
 {
-    my ($assembly, $tableName, $fileList) = @_;
+    my ($assembly, $tableName, $fileList, $pushQ) = @_;
 
     if(system("cat $fileList | egrep -v '^track|browser' | ldHgGene -genePredExt $assembly $tableName stdin > out/loadGene.out 2>&1")) {
         print STDERR "ERROR: File(s) '$fileList' failed gene load.\n";
@@ -70,11 +70,12 @@ sub loadGene
         print "$fileList Loaded into $tableName\n";
         # debug restore: File.delete "genePred.tab";
     }
+    push(@{$pushQ->{TABLES}}, $tableName);
 }
 
 sub loadWig
 {
-    my ($assembly, $tableName, $fileList) = @_;
+    my ($assembly, $tableName, $fileList, $pushQ) = @_;
 
     my @cmds = ("cat $fileList", "wigEncode stdin stdout $tableName.wib", "hgLoadWiggle -pathPrefix=/gbdb/$assembly/wib -tmpDir=$tempDir $assembly $tableName stdin");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
@@ -86,11 +87,13 @@ sub loadWig
     } else {
         print "$fileList Loaded into $tableName\n";
     }
+    push(@{$pushQ->{TABLES}}, $tableName);
+    push(@{$pushQ->{FILES}}, "$submitFQP/$tableName.wib");
 }
 
 sub loadBed
 {
-    my ($assembly, $tableName, $fileList) = @_;
+    my ($assembly, $tableName, $fileList, $pushQ) = @_;
     #TEST by replacing "cat" with  "head -1000 -q"
     my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=out");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
@@ -99,12 +102,13 @@ sub loadBed
     } else {
         print "$fileList Loaded into $tableName\n";
     }
+    push(@{$pushQ->{TABLES}}, $tableName);
 }
 
 sub loadBedFromSchema
 {
 # Load bed using a .sql file
-    my ($assembly, $tableName, $fileList, $sqlTable) = @_;
+    my ($assembly, $tableName, $fileList, $sqlTable, $pushQ) = @_;
 
     if(!(-e "$sqlCreate/${sqlTable}.sql")) {
         die "SQL schema '$sqlCreate/${sqlTable}.sql' does not exist\n";
@@ -137,6 +141,7 @@ sub loadBedFromSchema
     $fh->close();
     unlink($tempFile);
     close(SQL);
+    push(@{$pushQ->{TABLES}}, $tableName);
 }
 
 
@@ -211,6 +216,7 @@ print STDERR "Loading project in directory $submitDir\n" if($debug);
 # Load files listed in load.ra
 
 my %ra = RAFile::readRaFile($loadRa, 'tablename');
+my %pushQ;
 
 print STDERR "$loadRa has: " . scalar(keys %ra) . " records\n" if($debug);
 
@@ -234,15 +240,15 @@ for my $key (keys %ra) {
     my $type = $h->{type};
     my $files = $h->{files};
     if($type eq "genePred") {
-        loadGene($assembly, $tablename, $files);
+        loadGene($assembly, $tablename, $files, \%pushQ);
     } elsif ($type eq "wig") {
-        loadWig($assembly, $tablename, $files);
+        loadWig($assembly, $tablename, $files, \%pushQ);
     } elsif ($type eq "encodePeaks" || $type eq 'tagAlignments' || $type eq "bed5FloatScore") {
-        loadBedFromSchema($assembly, $tablename, $files, $type);
+        loadBedFromSchema($assembly, $tablename, $files, $type, \%pushQ);
     } elsif (($type eq "bed 3") || ($type eq "bed 4") || ($type eq "bed 4") || ($type eq "bed 5") || ($type eq "bed 6")) {
-        loadBed($assembly, $tablename, $files);
+        loadBed($assembly, $tablename, $files, \%pushQ);
     } else {
-        die "ERROR: unknown type: $type in load.ra\n";
+        die "ERROR: unknown type: $type in $Encode::loadFile\n";
     }
     print STDERR "\n" if($debug);
 }
@@ -253,5 +259,14 @@ if($labs{$pif{lab}} && $labs{$pif{lab}}->{wranglerEmail} && !$opt_noEmail) {
     my $email = $labs{$pif{lab}}->{wranglerEmail};
     `echo "dir: $submitFQP" | /bin/mail -s "ENCODE data from $pif{lab} lab is ready" $email`;
 }
+
+open(PUSHQ, ">out/$Encode::pushQFile") || die "SYS ERROR: Can't write \'out/$Encode::pushQFile\' file; error: $!\n";
+HgAutomate::verbose(2, "pushQ tables: " . join(",", @{$pushQ{TABLES}}) . "\n");
+# figure out appropriate syntax for pushQ entries
+print PUSHQ "tables: " . join(",", @{$pushQ{TABLES}}) . "\n";
+if(defined($pushQ{FILES}) && @{$pushQ{FILES}}) {
+    print PUSHQ "files: " . join(",", @{$pushQ{FILES}}) . "\n";
+}
+close(PUSHQ);
 
 exit(0);
