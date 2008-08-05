@@ -23162,7 +23162,7 @@ _EOF_
     nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 speTri1 > rbest.log 2>&1 &
 
 #############################################################################
-# BLASTZ/CHAIN/NET choHof1 (working
+# BLASTZ/CHAIN/NET choHof1 (DONE braney 2008-08-05)
     ssh kkstore02
     screen #	use screen to control this multi-day job
     mkdir /cluster/data/hg18/bed/blastz.choHof1.2008-08-04
@@ -23208,26 +23208,27 @@ _EOF_
     nice doBlastzChainNet.pl `pwd`/DEF \
 	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=load \
       -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/speTri1/blastz.hg18 > do3.log 2>&1 &
+      -blastzOutRoot /cluster/bluearc/choHof1/blastz.hg18 > do3.log 2>&1 &
 
     ssh hgwdev
     cd /cluster/data/hg18/bed
     ln -s `pwd`/blastz.choHof1.2008-08-04 /cluster/data/hg18/bed/blastz.choHof1
 
-    featureBits hg18 chainMyoLuc1Link
-# 952177725 bases of 2881515245 (33.044%) in intersection
+    featureBits hg18 chainChoHof1Link
+# 994528760 bases of 2881515245 (34.514%) in intersection
 
+    ssh kkstore02
     cd /cluster/data/hg18/bed/blastz.choHof1.2008-08-04
 
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 choHof1 > rbest.log 2>&1 &
 
 #######################################################
-## 42-way multiz
+## 44-way multiz (braney working....
 
-mkdir /cluster/data/hg18/bed/multiz42way
-cd /cluster/data/hg18/bed/multiz42way
+mkdir /cluster/data/hg18/bed/multiz44way
+cd /cluster/data/hg18/bed/multiz44way
 cp /cluster/data/mm9/bed/multiz30way/mm9.guess.30way.nh .
 
 # get mammal tree from Michele Clamp (clamp.nh)
-# edit into noLance.nh the clamp tree and 30way tree
+# that I re-rooted
 
