@@ -12,7 +12,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.30 2006/03/18 02:16:53 angie Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.31 2008/08/05 17:54:00 kuhn Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -42,6 +42,7 @@ errAbort(
   "options:\n"
   "   cookies=cookie.txt - Cookies is a two column file\n"
   "           containing <cookieName><space><value><newLine>\n"
+  "note: url will need to be in quotes if it contains an ampersand."
   );
 }
 
@@ -322,7 +323,7 @@ struct htmlCookie *cookies = NULL;
 
 if (cookieFile != NULL)
     cookies = readCookies(cookieFile);
-fullText = htmlSlurpWithCookies(url, cookies);
+    fullText = htmlSlurpWithCookies(url, cookies);
 if (sameString(command, "getAll"))
     mustWrite(stdout, fullText, strlen(fullText));
 else if (sameString(command, "ok"))
