@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.3 2008/08/04 18:27:32 larrym Exp $
+# $Id: Encode.pm,v 1.4 2008/08/05 00:09:12 larrym Exp $
 
 package Encode;
 
@@ -213,8 +213,8 @@ sub getPif
     if(!keys(%{$pif{TRACKS}})) {
         die "ERROR: no views defined for project \'$pif{project}\' in PIF '$pifFile'\n";
     }
-    if(!defined($labs->{$pif{lab}})) {
-        die "ERROR: invalid lab '$pif{lab}' for project \'$pif{project}\' in PIF '$pifFile'\n";
+    if(!defined($labs->{$pif{grant}})) {
+        die "ERROR: invalid lab '$pif{grant}' in PIF '$pifFile'\n";
     }
     validateAssembly($pif{assembly});
 
