@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.13 2008/07/11 23:44:20 tdreszer Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.14 2008/08/05 17:20:06 kuhn Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -605,7 +605,7 @@ _EOF_
     # ranOk: 10
     # total jobs in batch: 11
 
-    ######## After breaking faild chunks by sequence, the 7 culprit scaffolds are knownd:
+    ######## After breaking failed chunks by sequence, the 7 culprit scaffolds are known:
     # faCount /san/sanvol1/scratch/cavPor3/hardChunks/c_rt19_0010.fa
     # faCount /san/sanvol1/scratch/cavPor3/hardChunks/c_rt151_0010.fa
     # faCount /san/sanvol1/scratch/cavPor3/hardChunks/c_rt111_0010.fa
