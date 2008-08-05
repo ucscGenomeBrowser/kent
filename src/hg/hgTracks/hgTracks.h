@@ -1006,6 +1006,10 @@ struct dyString *uiStateUrlPart(struct track *toggleGroup);
 boolean nextItemCompatible(struct track *tg);
 /* Check to see if we draw nextPrev item buttons on a track. */
 
+void linkedFeaturesLabelNextPrevItem(struct track *tg, boolean next);
+/* Default next-gene function for linkedFeatures.  Changes winStart/winEnd
+ * and updates position in cart. */
+
 void createHgFindMatchHash();
 /* Read from the cart the string assocated with matches and 
    put the matching items into a hash for highlighting later. */

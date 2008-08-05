@@ -28,4 +28,7 @@ char *encodeRnaName(struct track *tg, void *item);
 void encodeRnaMethods(struct track *tg);
 /* Make track for rna genes . */
 
+void encodePeakMethods(struct track *tg);
+/* Methods for ENCODE peak track uses mostly linkedFeatures. */
+
 #endif /* ENCODE_H */

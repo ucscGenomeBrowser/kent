@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.24 2008/07/28 20:47:06 giardine Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.25 2008/08/05 12:33:55 aamp Exp $";
 
 #define CHROM_COLORS 26
 
@@ -1750,7 +1750,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	{
 	struct linkedFeatures *lf = lfFromWhatever(item);
 	slAddHead(&lfList, lf);
-	freeWhatever(&item);
+	if (freeWhatever)
+	    freeWhatever(&item);
 	}
     }
 sqlFreeResult(&sr);
@@ -10701,6 +10702,10 @@ else if (sameWord(type, "axt"))
 else if (sameWord(type, "expRatio"))
     {
     expRatioMethodsFromDotRa(track);
+    }
+else if (sameWord(type, "encodePeak"))
+    {
+    encodePeakMethods(track);
     }
 else if (sameWord(type, "bed5FloatScore") || 
          sameWord(type, "bedFloatScoreWithFdr"))
