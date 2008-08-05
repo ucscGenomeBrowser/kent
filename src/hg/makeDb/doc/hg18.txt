@@ -23101,7 +23101,7 @@ _EOF_
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 micMur1 > rbest.log 2>&1 &
 
 #############################################################################
-# BLASTZ/CHAIN/NET speTri1 (working
+# BLASTZ/CHAIN/NET speTri1 (DONE braney 2008-08-05)
     ssh kkstore02
     screen #	use screen to control this multi-day job
     mkdir /cluster/data/hg18/bed/blastz.speTri1.2008-08-04
@@ -23136,30 +23136,30 @@ _EOF_
       -chainMinScore=3000 -chainLinearGap=medium \
       -blastzOutRoot /cluster/bluearc/speTri1/blastz.hg18 > do.log 2>&1 &
 
-# Completed: 98879 of 99144 jobs
-# Crashed: 56 jobs
-# Other count: 209 jobs
-# CPU time in finished jobs:    2327505s   38791.75m   646.53h   26.94d  0.074 y
-# IO & Wait Time:                340164s    5669.40m    94.49h    3.94d  0.011 y
-# Average job time:                  27s       0.45m     0.01h    0.00d
-# Longest finished job:            1034s      17.23m     0.29h    0.01d
-# Submission to last job:         56968s     949.47m    15.82h    0.66d
-
-# do remaining jobs on kolossus
+# did crashed jobs on memk
 
     nice doBlastzChainNet.pl `pwd`/DEF \
 	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
       -chainMinScore=3000 -chainLinearGap=medium \
       -blastzOutRoot /cluster/bluearc/speTri1/blastz.hg18 > do2.log 2>&1 &
 
+# had to run netChains.csh by hand due to PATH problem
+    nice doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=load \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/speTri1/blastz.hg18 > do3.log 2>&1 &
+
+    ssh hgwdev 
+    cd /cluster/data/hg18/bed
     ln -s `pwd`/blastz.speTri1.2008-08-04 /cluster/data/hg18/bed/blastz.speTri1
 
-    featureBits hg18 chainMyoLuc1Link
-# 952177725 bases of 2881515245 (33.044%) in intersection
+    featureBits hg18 chainSpeTri1Link
+# 1032377454 bases of 2881515245 (35.828%) in intersection
 
+    ssh kkstore02
     cd /cluster/data/hg18/bed/blastz.speTri1.2008-08-04
 
-    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 speTri1 > rbest.log 2>&1 &
+    nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 speTri1 > rbest.log 2>&1 &
 
 #############################################################################
 # BLASTZ/CHAIN/NET choHof1 (working
@@ -23197,22 +23197,21 @@ _EOF_
       -chainMinScore=3000 -chainLinearGap=medium \
       -blastzOutRoot /cluster/bluearc/choHof1/blastz.hg18 > do.log 2>&1 &
 
-# Completed: 98879 of 99144 jobs
-# Crashed: 56 jobs
-# Other count: 209 jobs
-# CPU time in finished jobs:    2327505s   38791.75m   646.53h   26.94d  0.074 y
-# IO & Wait Time:                340164s    5669.40m    94.49h    3.94d  0.011 y
-# Average job time:                  27s       0.45m     0.01h    0.00d
-# Longest finished job:            1034s      17.23m     0.29h    0.01d
-# Submission to last job:         56968s     949.47m    15.82h    0.66d
-
-# do remaining jobs on kolossus
+# did crashed jobs on memk
 
     nice doBlastzChainNet.pl `pwd`/DEF \
 	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
       -chainMinScore=3000 -chainLinearGap=medium \
       -blastzOutRoot /cluster/bluearc/choHof1/blastz.hg18 > do2.log 2>&1 &
 
+# had to run netChains.csh by hand due to PATH problem
+    nice doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=load \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      -blastzOutRoot /cluster/bluearc/speTri1/blastz.hg18 > do3.log 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed
     ln -s `pwd`/blastz.choHof1.2008-08-04 /cluster/data/hg18/bed/blastz.choHof1
 
     featureBits hg18 chainMyoLuc1Link
