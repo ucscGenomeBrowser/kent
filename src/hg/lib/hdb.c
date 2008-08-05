@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.368.4.2 2008/08/02 04:06:29 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.368.4.3 2008/08/05 07:11:20 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -49,20 +49,16 @@ static char const rcsid[] = "$Id: hdb.c,v 1.368.4.2 2008/08/02 04:06:29 markd Ex
 #endif
 
 
-#if 0 // FIXME tmp hack
 static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
-#endif
 static struct sqlConnCache *centralCc = NULL;
+static char *centralDb = NULL;
 static struct sqlConnCache *centralArchiveCc = NULL;
 static struct sqlConnCache *cartCc = NULL;  /* cache for cart; normally same as centralCc */
+static char *cartDb = NULL;
+// FIXME: need to understand if this can be done with profiles
 static struct sqlConnCache *localCc = NULL;  /* cache for TCGA DB connection */
+static char *localDb = NULL;
 
-#if 0 // FIXME tmp hack
-static char *hdbHost = NULL;
-static char *hdbName = NULL;
-static char *hdbUser = NULL;
-static char *hdbPassword = NULL;
-#endif
 static char *hdbTrackDb = NULL;
 
 static struct chromInfo *lookupChromInfo(char *db, char *chrom)
@@ -181,20 +177,6 @@ if (minLen <= 0)
 return minLen;
 }
 
-void hDefaultConnect()
-/* read in the connection options from config file */
-{
-#if 0 // FIXME: delete
-hdbHost 	= cfgOptionEnv("HGDB_HOST", "db.host");
-hdbUser 	= cfgOptionEnv("HGDB_USER", "db.user");
-hdbPassword	= cfgOptionEnv("HGDB_PASSWORD", "db.password");
-if (hdbTrackDb == NULL)
-    hdbTrackDb      = cfgOptionEnv("HGDB_TRACKDB", "db.trackDb");
-if(hdbHost == NULL || hdbUser == NULL || hdbPassword == NULL)
-    errAbort("cannot read in connection setting from configuration file.");
-#endif
-}
-
 static char *hTrackDbPath()
 /* return the space-separated list of the track database from the config file. Freez when done */
 {
@@ -217,21 +199,9 @@ return list;
 void hSetTrackDbName(char *trackDbName)
 /* Override the hg.conf db.trackDb setting. */
 {
-// FIXME: why needed??
 hdbTrackDb = cloneString(trackDbName);
 }
 
-void hSetDbConnect(char* host, char *db, char *user, char *password)
-/* set the connection information for the database */
-{
-#if 0 // FIXME tmp hack
-// FIXME: why
-    hdbHost = cloneString(host);
-    hdbName = cloneString(db);
-    hdbUser = cloneString(user);
-    hdbPassword = cloneString(password);
-#endif
-}
 boolean hArchiveDbExists(char *database)
 /*
   Function to check if this is a valid db name in the dbDbArch table 
@@ -435,47 +405,41 @@ return count;
 struct sqlConnection *hAllocConn(char *db)
 /* Get free connection if possible. If not allocate a new one. */
 {
-#if 0 // FIXME tmp hack
-if (hdbHost == NULL)
-    hDefaultConnect();
 if (hdbCc == NULL)
-    hdbCc = sqlNewRemoteConnCache(hdbName, hdbHost, hdbUser, hdbPassword);
-return sqlAllocConnection(hdbCc);
-#else
-return sqlConnect(db);
-#endif
+    hdbCc = sqlConnCacheNew();
+return sqlConnCacheAlloc(hdbCc, db);
 }
 
 void hFreeConn(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
-#if 0 // FIXME tmp hack
-
-if (hdbCc != NULL)
-    sqlFreeConnection(hdbCc, pConn);
-#else
-sqlDisconnect(pConn);
-#endif
+sqlConnCacheDealloc(hdbCc, pConn);
 }
 
-static struct sqlConnCache *getCentralCcFromCfg(char *prefix)
-/* Given a prefix for config settings for a central database connection, 
- * get the settings and make a connection cache for that database. */
+static void hCentralMkCache()
+/* create the central database cache, trying to connect to the 
+ * database and failing over if needed */
 {
-char *database, *host, *user, *password;
-char setting[128];
-safef(setting, sizeof(setting), "%s.db", prefix);
-database = cfgOption(setting);
-safef(setting, sizeof(setting), "%s.host", prefix);
-host = cfgOption(setting);
-safef(setting, sizeof(setting), "%s.user", prefix);
-user = cfgOption(setting);
-safef(setting, sizeof(setting), "%s.password", prefix);
-password = cfgOption(setting);
-
-if (database == NULL || host == NULL || user == NULL || password == NULL)
-    errAbort("Please set %s options in the hg.conf file.", prefix);
-return sqlConnCacheNewRemote(database, host, user, password);
+// FIXME: can db be moved back to profile???
+centralDb = cfgOption2("central", "db");
+centralCc = sqlConnCacheNewProfile("central");
+struct sqlConnection *conn = sqlConnCacheMayAlloc(centralCc, centralDb);
+if ((conn == NULL) || !cartTablesOk(conn))
+    {
+    fprintf(stderr, "ASH: hConnectCentral failed over to backupcentral!  "
+            "pid=%d\n", getpid());
+    sqlConnCacheDealloc(centralCc, &conn);
+    sqlConnCacheFree(&centralCc);
+    centralDb = cfgOption2("backupcentral", "database");
+    centralCc = sqlConnCacheNewProfile("backupcentral");
+    conn = sqlConnCacheAlloc(centralCc, centralDb);
+    if (!cartTablesOk(conn))
+        errAbort("Cannot access cart tables in central (nor backupcentral) "
+                 "database.  Please check central and backupcentral "
+                 "settings in the hg.conf file and the databases they "
+                 "specify.");
+    }
+sqlConnCacheDealloc(centralCc, &conn);
 }
 
 struct sqlConnection *hConnectCentral()
@@ -483,29 +447,18 @@ struct sqlConnection *hConnectCentral()
  * not specific to a particular genome lives.  Free this up
  * with hDisconnectCentral(). */
 {
-struct sqlConnection *conn = NULL;
 if (centralCc == NULL)
-    {
-    centralCc = getCentralCcFromCfg("central");
-    conn = sqlConnCacheMayAlloc(centralCc, FALSE);
-    if (conn == NULL || !cartTablesOk(conn))
-	{
-	centralCc = getCentralCcFromCfg("backupcentral");
-	conn = sqlConnCacheAlloc(centralCc);
-	fprintf(stderr, "ASH: hConnectCentral failed over to backupcentral!  "
-		"pid=%d\n", getpid());
-	if (!cartTablesOk(conn))
-	    errAbort("Cannot access cart tables in central (nor backupcentral) "
-		     "database.  Please check central and backupcentral "
-		     "settings in the hg.conf file, and the databases they "
-		     "specify.");
-	}
-    }
-else
-    conn = sqlConnCacheAlloc(centralCc);
-return(conn);
+    hCentralMkCache();
+return sqlConnCacheAlloc(centralCc, centralDb);
 }
 
+void hDisconnectCentral(struct sqlConnection **pConn)
+/* Put back connection for reuse. */
+{
+sqlConnCacheDealloc(centralCc, pConn);
+}
+
+#if 0 // FIXME:
 struct sqlConnection *hConnectLogicalDb(char *dbName)
 /* connect to a logical database (as specified in hg.conf), disconnect it using sqlDisconnect(&conn) */
 {
@@ -529,7 +482,7 @@ db = cfgOption(setting);
 if (host == NULL || user == NULL || password == NULL)
     errAbort("Please set logical database %s options in the hg.conf file.", prefix);
 
-conn = sqlConnRemote(host, user, password, db, FALSE);
+conn = sqlMayConnectRemote(host, user, password, db);
 if (conn == NULL) 
     {
     errAbort("<br>hConnectLogical failed trying to connect to %s.\n", prefix);
@@ -540,6 +493,7 @@ if (conn == NULL)
 
 return conn;
 }
+#endif
 
 struct sqlConnection *hConnectLocalDb(char *database)
 /* Connect to local database where user info and other info
@@ -561,7 +515,7 @@ password = cfgOption(setting);
 if (host == NULL || user == NULL || password == NULL)
     errAbort("Please set %s options in the hg.conf file.", prefix);
 
-conn = sqlConnRemote(host, user, password, database, FALSE);
+conn = sqlMayConnectRemote(host, user, password, database);
 
 if (conn == NULL)
     return NULL;
@@ -574,21 +528,12 @@ struct sqlConnection *hConnectLocal()
  * not specific to a particular genome lives.  No database is specified 
  * Free this up with hDisconnectCentral(). */
 {
-// FIXME: delete this???
-struct sqlConnection *conn = NULL;
-if (localCc == NULL)
-    localCc = getCentralCcFromCfg("localDb");
-
 if (localCc == NULL)
     {
-    errAbort("problem encountered trying to connect to tcga DB");
+    localDb = cfgOption("localDb.db");
+    localCc = sqlConnCacheNewProfile("localDb");
     }
-conn = sqlConnCacheMayAlloc(localCc, FALSE);
-if (conn == NULL)
-    {
-    errAbort("Could not connect to tcga DB");
-    }
-return(conn);
+return sqlConnCacheAlloc(localCc, localDb);
 }
 
 void hDisconnectLocal(struct sqlConnection **pConn)
@@ -597,26 +542,25 @@ void hDisconnectLocal(struct sqlConnection **pConn)
 sqlConnCacheDealloc(localCc, pConn);
 }
 
-void hDisconnectCentral(struct sqlConnection **pConn)
-/* Put back connection for reuse. */
-{
-sqlConnCacheDealloc(centralCc, pConn);
-}
-
 struct sqlConnection *hConnectArchiveCentral()
 /* Connect to central database for archives.
  * Free this up with hDisconnectCentralArchive(). */
 {
+#if 0 // FIXME
 struct sqlConnection *conn = NULL;
 if (centralArchiveCc == NULL)
     centralArchiveCc = getCentralCcFromCfg("archivecentral");
-conn = sqlConnCacheMayAlloc(centralArchiveCc, FALSE);
+conn = sqlConnCacheMayAlloc(centralArchiveCc);
 if (conn == NULL)
     {
     centralArchiveCc = getCentralCcFromCfg("archivebackup");
     conn = sqlConnCacheAlloc(centralArchiveCc);
     }
 return(conn);
+#else
+errAbort("hConnectArchiveCentral called");
+return NULL;
+#endif
 }
 
 void hDisconnectArchiveCentral(struct sqlConnection **pConn)
@@ -625,39 +569,38 @@ void hDisconnectArchiveCentral(struct sqlConnection **pConn)
 sqlConnCacheDealloc(centralArchiveCc, pConn);
 }
 
+static void hCartMkCache()
+/* Create the cart connection cache.  Defaults to the central connection
+ * unless cart.db or cart.host are configured. */
+{
+if ((cfgOption("cart.db") != NULL) || (cfgOption("cart.host") != NULL)
+    || (cfgOption("cart.user") != NULL) || (cfgOption("cart.password") != NULL))
+    {
+    /* use explict cart options */
+    cartDb = cfgOption("cart.db");
+    if ((cartDb == NULL) || (cfgOption("cart.host") == NULL)
+        || (cfgOption("cart.user") == NULL) || (cfgOption("cart.password") == NULL))
+        errAbort("Must specify either all or none of the cart options in the hg.conf file.");
+    cartCc = sqlConnCacheNewProfile("cart");
+    }
+else
+    {
+    /* use centralCc */
+    if (centralCc == NULL)
+        hCentralMkCache();
+    cartCc = centralCc;
+    cartDb = centralDb;
+    }
+}
+
 struct sqlConnection *hConnectCart()
 /* Connect to cart database.  Defaults to the central connection
  * unless cart.db or cart.host are configured. Free this
  * up with hDisconnectCart(). */
 {
 if (cartCc == NULL)
-    {
-    if ((cfgOption("cart.db") != NULL) || (cfgOption("cart.host") != NULL)
-        || (cfgOption("cart.user") != NULL) || (cfgOption("cart.password") != NULL))
-        {
-        /* use explict cart options */
-        char *database = cfgOption("cart.db");
-        char *host = cfgOption("cart.host");
-        char *user = cfgOption("cart.user");
-        char *password = cfgOption("cart.password");;
-
-        if (database == NULL || host == NULL || user == NULL || password == NULL)
-            errAbort("Must specify either all or none of the cart options in the hg.conf file.");
-        cartCc = sqlConnCacheNewRemote(database, host, user, password);
-        }
-    else
-        {
-        /* use centralCc */
-        if (centralCc == NULL)
-            {
-            /* force creation of central cache */
-            struct sqlConnection *conn = hConnectCentral();
-            hDisconnectCentral(&conn);
-            }
-        cartCc = centralCc;
-        }
-    }
-return sqlConnCacheAlloc(cartCc);
+    hCartMkCache();
+return sqlConnCacheAlloc(cartCc, cartDb);
 }
 
 void hDisconnectCart(struct sqlConnection **pConn)
@@ -665,7 +608,6 @@ void hDisconnectCart(struct sqlConnection **pConn)
 {
 sqlConnCacheDealloc(cartCc, pConn);
 }
-
 
 boolean hCanHaveSplitTables(char *db)
 /* Return TRUE if split tables are allowed in database. */

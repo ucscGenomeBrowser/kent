@@ -5,7 +5,7 @@
 #include "hgRelate.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: apacheMonitor.c,v 1.11.68.2 2008/07/31 05:21:40 markd Exp $";
+static char const rcsid[] = "$Id: apacheMonitor.c,v 1.11.68.3 2008/08/05 07:11:25 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -369,12 +369,6 @@ if (argc != 4)
 host = argv[1];
 database = argv[2];
 minutes = atoi(argv[3]);
-
-// FIXME: no idea why this is being done,
-user = cfgOptionEnv("HGDB_USER", "db.user");
-password = cfgOptionEnv("HGDB_PASSWORD", "db.password");
-
-hSetDbConnect(host, database, user, password);
 
 printDatabaseTime();
 timeNow = getUnixTimeNow();

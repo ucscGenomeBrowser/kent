@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.94.4.2 2008/08/01 06:10:51 markd Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.94.4.3 2008/08/05 07:11:19 markd Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -561,7 +561,7 @@ if (exclude != NULL)
 	cartExclude(cart, ex);
     }
 
-sqlDisconnect(&conn);
+cartDefaultDisconnector(&conn);
 return cart;
 }
 

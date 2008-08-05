@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1445.4.5 2008/08/02 04:06:26 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1445.4.6 2008/08/05 07:11:16 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -20027,8 +20027,6 @@ struct trackDb *tdb = NULL;
 getDbAndGenome(cart, &database, &genome, NULL);
 organism = hOrganism(database);
 scientificName = hScientificName(database);
-
-hDefaultConnect(); 	/* set up default connection settings */
 
 protDbName = hPdbFromGdb(database);
 protDbConn = sqlConnect(protDbName);

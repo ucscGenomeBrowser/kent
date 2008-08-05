@@ -1262,16 +1262,7 @@ int main(int argc, char *argv[])
   struct lineFile *ff, *cf, *bef, *bpf, *sf, *cpf;
   FILE *of, *af;
   char filename[PATH_LEN], *db, *stsName=NULL, *pslName=NULL;
-  char *user, *password;
 
-  /* try read-only first */
-  user = cfgOption("ro.user");
-  if (user == NULL) 
-    user = cfgOption("db.user");
-  password = cfgOption("ro.password");
-  if (password == NULL)
-    password = cfgOption("db.password");
-  
   optionInit(&argc, argv, optionSpecs);
   if (argc < 4)
     {
@@ -1286,8 +1277,6 @@ int main(int argc, char *argv[])
       return 1;
     }
   db = argv[1];
-  if (getenv("HGDB_HOST") == NULL)
-   hSetDbConnect("localhost", db, user, password);
 
   ff = lineFileOpen(argv[2], FALSE);
   cf = lineFileOpen(argv[3], FALSE);

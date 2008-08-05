@@ -82,9 +82,6 @@ struct hTableInfo
     char *type;			/* A guess at the trackDb type for this. */
     };
 
-void hDefaultConnect(void);
-/* read the default settings from the config file */
-
 struct slName *hTrackDbList(void);
 /* Return list of trackDb tables from the config file.  Free list when done. */
 
@@ -93,9 +90,6 @@ void hSetTrackDbName(char *trackDbName);
 
 char *hPdbFromGdb(char *genomeDb);
 /* return the name of the proteome database given the genome database name */
-
-void hSetDbConnect(char* host, char *db, char *user, char *password);
-/* set the connection information for the database */
 
 boolean hArchiveDbExists(char *database);
 /* Function to check if this is a valid db name in the dbDbArch table 

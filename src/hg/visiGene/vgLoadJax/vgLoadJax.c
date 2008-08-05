@@ -964,7 +964,7 @@ char* host = "genome-test";
 char* user = cfgOptionEnv("HGDB_USER", "db.user");
 char* password = cfgOptionEnv("HGDB_PASSWORD", "db.password");
 
-connSp = sqlConnRemote(host, user, password, "uniProt", TRUE); // true=abort-on-error 
+connSp = sqlConnectRemote(host, user, password, "uniProt");
 #endif
 
 safef(inFull, sizeof(inFull), "%s/full", visiGeneDir);

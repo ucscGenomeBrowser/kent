@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1499.4.3 2008/08/02 04:06:25 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1499.4.4 2008/08/05 07:11:14 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -4335,7 +4335,6 @@ if(sameString(debugTmp, "on"))
 else
     hgDebug = FALSE;
 
-hDefaultConnect();
 initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");

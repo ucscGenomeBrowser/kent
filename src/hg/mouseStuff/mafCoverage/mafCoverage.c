@@ -14,7 +14,7 @@
 
 #define MAXALIGN 30  /* max number of species to align */
 #define DEFCOUNT 3   /* require 3 species to match before counting as covered */
-static char const rcsid[] = "$Id: mafCoverage.c,v 1.6.70.1 2008/07/31 02:24:41 markd Exp $";
+static char const rcsid[] = "$Id: mafCoverage.c,v 1.6.70.2 2008/08/05 07:11:23 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -181,7 +181,6 @@ void getChromSizes(char *database, struct hash **retHash,
  * gaps. */
 {
 struct sqlConnection *conn = hAllocConn(database);
-//struct sqlConnection *conn = sqlConnectReadOnly(hGetDb());
 struct chromInfo *ci, *ciList = getAllChromInfo(database);
 struct sqlResult *sr;
 char **row;
@@ -282,7 +281,6 @@ void restrictGaps(char *database, UBYTE *cov, int size, char *chrom)
 {
 int rowOffset;
 struct sqlConnection *conn = hAllocConn(database);
-//struct sqlConnection *conn = sqlConnectReadOnly(hGetDb());
 struct sqlResult *sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
 char **row;
 int s,e;

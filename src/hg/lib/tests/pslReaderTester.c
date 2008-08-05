@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: pslReaderTester.c,v 1.3 2006/07/19 15:19:54 markd Exp $";
+static char const rcsid[] = "$Id: pslReaderTester.c,v 1.3.108.1 2008/08/05 07:11:21 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -69,7 +69,7 @@ void readTableTask(char *db, char *table)
 /* Implements the readTable task */
 {
 FILE *outFh = NULL;
-struct sqlConnection *conn = sqlConnectReadOnly(db);
+struct sqlConnection *conn = sqlConnect(db);
 struct pslReader* pr = pslReaderQuery(conn, table, gWhere);
 struct psl* psl;
 int numRows = 0;

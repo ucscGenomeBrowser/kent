@@ -1212,7 +1212,9 @@ if (logicalDb == NULL)
 else
     {
     isRegularDb = FALSE;
+#if 0 // FIXME
     conn = hConnectLogicalDb(logicalDb);
+#endif
     }
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)

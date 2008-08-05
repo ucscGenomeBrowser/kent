@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.18.12.1 2008/07/31 02:24:29 markd Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.18.12.2 2008/08/05 07:11:20 markd Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -173,11 +173,33 @@ if(cfgOptionsHash == NULL)
 return hashFindVal(cfgOptionsHash, name);
 }
 
-char* cfgOptionDefault(char* name, char* def)
+char *cfgOptionDefault(char* name, char* def)
 /* Return the option with the given name or the given default 
  * if it doesn't exist. */
 {
 char *val = cfgOption(name);
+if (val == NULL)
+    val = def;
+return val;
+}
+
+char *cfgOption2(char *prefix, char *suffix)
+/* Return the option with the given two-part name, formed from prefix.suffix.
+ * Return NULL if it doesn't exist. */
+{
+/* initilize the config hash if it is not */
+if(cfgOptionsHash == NULL)
+    initConfig();
+char name[256];
+safef(name, sizeof(name), "%s.%s", prefix, suffix);
+return hashFindVal(cfgOptionsHash, name);
+}
+
+char* cfgOptionDefault2(char *prefix, char *suffix, char* def)
+/* Return the option with the given two-part name, formed from prefix.suffix,
+ * or the given default if it doesn't exist. */
+{
+char *val = cfgOption2(prefix, suffix);
 if (val == NULL)
     val = def;
 return val;

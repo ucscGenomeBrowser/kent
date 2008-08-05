@@ -39,31 +39,30 @@ struct sqlConnection *sqlMayConnect(char *database);
  * Return NULL (don't abort) on failure. */
 
 struct sqlConnection *sqlConnectProfile(char *profileName, char *database);
-/* Connect to database using the specified profile.  The profile is the prefix
- * to the host, user, and password variables in .hg.conf.  For the default
- * profile of "db", the environment variables HGDB_HOST, HGDB_USER, and
- * HGDB_PASSWORD can override.
+/* Connect to profile or database using the specified profile.  Can specify
+ * profileName, database, or both. The profile is the prefix to the host,
+ * user, and password variables in .hg.conf.  For the default profile of "db",
+ * the environment variables HGDB_HOST, HGDB_USER, and HGDB_PASSWORD can
+ * override.
  */ 
 
 struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database);
-/* Connect to database using the specified profile, return NULL if
- * connection failed.  */
+/* Connect to profile or database using the specified profile. Can specify
+ * profileName, database, or both. The profile is the prefix to the host,
+ * user, and password variables in .hg.conf.  For the default profile of "db",
+ * the environment variables HGDB_HOST, HGDB_USER, and HGDB_PASSWORD can
+ * override.  Return NULL if connection fails.
+ */ 
 
-struct sqlConnection *sqlConnectReadOnly(char *database);
-/* Connect to database using ro profile in .hg.conf */ 
+struct sqlConnection *sqlConnectRemote(char *host, char *user, char *password,
+                                       char *database);
+/* Connect to database somewhere as somebody. Database maybe NULL to
+ * just connect to the server. Abort on error. */
 
-struct sqlConnection *sqlConnectRemote(char *host, 
-	char *user, char *password, char *database);
-/* Connect to database somewhere as somebody. */
-
-struct sqlConnection *sqlMayConnectRemote(char *host, 
-       char *user, char *password, char *database);
-/* Connect to database somewhere as somebody, return NULL can't connect */
-
-struct sqlConnection *sqlConnRemote(char *host, 
-				    char *user, char *password, char *database, boolean abort);
-/* Connect to database somewhere as somebody.  
- * If abort is set display error message and abort on error. */
+struct sqlConnection *sqlMayConnectRemote(char *host, char *user, char *password,
+                                          char *database);
+/* Connect to database somewhere as somebody. Database maybe NULL to
+ * just connect to the server.  Return NULL can't connect */
 
 struct sqlConnection *sqlCtConn(boolean abort);
 /* Connect to customTrash database, optionally abort on failure */
@@ -92,24 +91,28 @@ struct slName *sqlListFields(struct sqlConnection *conn, char *table);
 struct hash *sqlAllFields(void);
 /* Get hash of all fields in database.table.field format.  */
 
-struct sqlConnCache *sqlConnCacheNew(char *database);
+struct sqlConnCache *sqlConnCacheNew();
 /* Return a new connection cache. (Useful if going to be
  * doing lots of different queries in different routines
  * to same database - reduces connection overhead.) */
 
-struct sqlConnCache *sqlConnCacheNewRemote(char *database, 
-	char *host, char *user, char *password);
+struct sqlConnCache *sqlConnCacheNewRemote(char *host, char *user,
+                                           char *password);
 /* Set up a cache on a remote database. */
+
+struct sqlConnCache *sqlConnCacheNewProfile(char *profileName);
+/* Return a new connection cache associated with the particular profile. */
 
 void sqlConnCacheFree(struct sqlConnCache **pCache);
 /* Dispose of a connection cache. */
 
 struct sqlConnection *sqlConnCacheMayAlloc(struct sqlConnCache *cache,
-					   boolean mustConnect);
-/* Allocate a cached connection. errAbort if too many open connections.  
- * errAbort if mustConnect and connection fails. */
+                                           char *database);
+/* Allocate a cached connection. errAbort if too many open connections,
+ * return NULL if can't connect to server. */
 
-struct sqlConnection *sqlConnCacheAlloc(struct sqlConnCache *cache);
+struct sqlConnection *sqlConnCacheAlloc(struct sqlConnCache *cache,
+                                        char *database);
 /* Allocate a cached connection. */
 
 void sqlConnCacheDealloc(struct sqlConnCache *cache,struct sqlConnection **pConn);
@@ -312,11 +315,6 @@ void sqlAbort(struct sqlConnection  *sc, char *format, ...);
 
 void sqlCleanupAll(void);
 /* Cleanup all open connections and resources. */
-
-#if 0 //FIXME:
-char *connGetDatabase(struct sqlConnCache *conn);
-/* return database for a connection cache */
-#endif
 
 boolean sqlWildcardIn(char *s);
 /* Return TRUE if there is a sql wildcard char in string. */

@@ -53,7 +53,7 @@ return el;
 }
 
 static boolean chromGraphRecognizer(struct customFactory *fac,
-	char *genomeDb, struct customPp *cpp, char *type, 
+	struct customPp *cpp, char *type, 
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a chromGraph track */
 {
@@ -945,7 +945,7 @@ return outputTracks;
 
 
 static struct customTrack *chromGraphLoader(struct customFactory *fac,  
-	char *genomeDb, struct hash *chromHash, struct customPp *cpp, struct customTrack *track, 
+	struct hash *chromHash, struct customPp *cpp, struct customTrack *track, 
 	boolean dbRequested)
 /* Load up chromGraph data until get next track line. */
 {
@@ -961,7 +961,7 @@ if (binaryFileName != NULL)
     else
         return NULL;
     }
-return chromGraphParser(genomeDb, cpp, 
+return chromGraphParser(track->genomeDb, cpp, 
     trackDbSettingOrDefault(tdb, "formatType", cgfFormatGuess),
     trackDbSettingOrDefault(tdb, "markerType", cgfMarkerGuess),
     trackDbSettingOrDefault(tdb, "columnLabels", cgfColLabelGuess),

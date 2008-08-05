@@ -268,8 +268,8 @@ static void orientEstsTbl(char *db, char *estTable, FILE *outPslFh,
                           FILE *disorientedFh, FILE *infoFh)
 /* orient ESTs from a table */
 {
-struct sqlConnection *conn = sqlConnectReadOnly(db);
-struct sqlConnection *conn2 = sqlConnectReadOnly(db);
+struct sqlConnection *conn = sqlConnect(db);
+struct sqlConnection *conn2 = sqlConnect(db);
 struct slName *chroms = NULL;
 struct slName *chrom;
 if (gChroms != NULL)
@@ -289,7 +289,7 @@ static void orientEstsFile(char *db, char *estFile, FILE *outPslFh,
                            FILE *disorientedFh, FILE *infoFh)
 /* orient ESTs on one chromsome */
 {
-struct sqlConnection *conn = sameString(db, "no") ? NULL : sqlConnectReadOnly(db);
+struct sqlConnection *conn = sameString(db, "no") ? NULL : sqlConnect(db);
 struct psl *psl;
 struct hash *orientHash = (gEstOrientInfoFile != NULL)
     ? loadOrientInfoFile(gEstOrientInfoFile)

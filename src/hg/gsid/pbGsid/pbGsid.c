@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGsid.c,v 1.2 2008/04/14 21:30:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbGsid.c,v 1.2.18.1 2008/08/05 07:11:13 markd Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -472,7 +472,6 @@ if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
 else
     hgDebug = FALSE;
-hDefaultConnect();
 conn  = hAllocConn();
 hgsid     = cartOptionalString(cart, "hgsid");
 if (hgsid != NULL)

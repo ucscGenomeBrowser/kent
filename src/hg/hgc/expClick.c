@@ -12,7 +12,7 @@
 #include "affyAllExonProbe.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.19.18.1 2008/07/31 02:24:18 markd Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.19.18.2 2008/08/05 07:11:15 markd Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max, boolean redGreen)
 /* Return the correct color for a given score */
@@ -189,6 +189,7 @@ printf("</td></tr></table>");
 printf("</basefont>");
 }
 
+#if 0 // FIXME
 static struct bed * loadMsBedFromLogicalDb(char *table, char *chrom, uint start, uint end, 
 			       struct sqlConnection *logicalDbConn)
 /* load every thing from a bed 15 table in the given range, via a logical DB connection */
@@ -208,6 +209,7 @@ sqlDisconnect(&logicalDbConn);
 slReverse(&bedList);
 return bedList;
 }
+#endif
 
 static struct bed * loadMsBed(char *table, char *chrom, uint start, uint end)
 /* load every thing from a bed 15 table in the given range */
@@ -427,8 +429,10 @@ if (!ct)
     logicalDb = trackDbSetting(tdb, "logicalDb");
     if (logicalDb != NULL)
 	{
+#if 0 // FIXME
         bedList = loadMsBedFromLogicalDb(tdb->tableName, seqName, winStart, winEnd, 
 			     hConnectLogicalDb(logicalDb));
+#endif
     	}
     else
 	{
