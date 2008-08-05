@@ -11,12 +11,36 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.32 2008/07/02 23:31:29 braney Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.33 2008/08/05 14:36:41 braney Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
  * every call to addFeature. */
 static int chromSize = 0;
+
+/* get chrom size if there's a database out there,
+ * otherwise just return 0 */
+int hgSeqChromSize(char *chromName)
+{
+int thisSize = 0;
+
+/* since we might not have a database, let's be
+ * careful about calling hdb routines */
+char *thisDb = hGetDb();
+
+/* first check to see if we can connect to the database */
+struct sqlConnection *conn = sqlMayConnect(thisDb);
+
+if (conn != NULL)
+    {
+    sqlDisconnect(&conn);
+
+    /* we know there is a db out there */
+    thisSize = hChromSize(chromName);
+    }
+
+return thisSize;
+}
 
 void hgSeqFeatureRegionOptions(struct cart *cart, boolean canDoUTR,
 			       boolean canDoIntrons)
@@ -315,7 +339,7 @@ char recName[256];
 int seqStart, seqEnd;
 int offset, cSize;
 int i;
-int chromSize = hChromSize(chrom);
+int chromSize = hgSeqChromSize(chrom);
 boolean isRc     = (strand == '-') || cgiBoolean("hgSeq.revComp");
 boolean maskRep  = cgiBoolean("hgSeq.maskRepeats");
 int padding5     = cgiOptionalInt("hgSeq.padding5", 0);
@@ -531,6 +555,7 @@ if (size > 0)
 }
 
 
+
 void hgSeqRange(char *chrom, int chromStart, int chromEnd, char strand,
 		char *name)
 /* Print out dna sequence for the given range. */
@@ -541,7 +566,8 @@ unsigned sizes[1];
 boolean exonFlags[1];
 boolean cdsFlags[1];
 
-chromSize = hChromSize(chrom);
+chromSize = hgSeqChromSize(chrom);
+
 maxStartsOffset = 0;
 addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 	   chromStart, chromEnd - chromStart, FALSE, FALSE);
@@ -599,7 +625,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
     if (bedItem->blockCount == 0) /* An intersection may have made hti unreliable. */
         canDoIntrons = FALSE;
     rowCount++;
-    chromSize = hChromSize(bedItem->chrom);
+    chromSize = hgSeqChromSize(bedItem->chrom);
     // bed: translate relative starts to absolute starts
     for (i=0;  i < bedItem->blockCount;  i++)
 	{
