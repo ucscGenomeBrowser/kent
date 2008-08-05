@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1499 2008/07/17 18:37:46 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1500 2008/08/05 22:20:58 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1006,7 +1006,7 @@ if (track->drawLeftLabels != NULL)
  *	totalHeight artifically high by 1 so this will leave a
  *	blank area one pixel high below the track.
  */
-if (sameString("wig",track->tdb->type))
+if (sameString("wig",track->tdb->type) || sameString("bedGraph",track->tdb->type))
     hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight-1);
 else
     hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
