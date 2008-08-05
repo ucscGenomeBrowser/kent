@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.39 2008/07/30 19:49:52 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.40 2008/08/05 00:08:24 larrym Exp $
 
 use warnings;
 use strict;
@@ -150,6 +150,7 @@ sub validateAntibody {
 our %formatCheckers = (
     wig => \&validateWig,
     bed => \&validateBed,
+    bed5FloatScore => \&validateBed,
     genePred => \&validateGene,
     tagAlignment => \&validateTagAlignment,
     encodePeaks => \&validateEncodePeaks,
@@ -182,11 +183,12 @@ sub validateBed {
         chomp;
         my @fields = split /\s+/;
         $line++;
-        next if(!@fields);
+        my $fieldCount = @fields;
+        next if(!$fieldCount);
         my $prefix = "Failed bed validation, file '$file'; line $line:";
         if(/^(track|browser)/) {
             ;
-        } elsif(@fields < 5) {
+        } elsif($fieldCount < 5) {
             die "$prefix not enough fields; " . scalar(@fields) . " present; at least 5 are required\n";
         } elsif ($fields[0] !~ /^chr(\d+|M|X|Y)$/) {
             die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
@@ -200,6 +202,10 @@ sub validateBed {
             die "$prefix field 5 value ($fields[4]) is invalid; value must be a positive number\n";
         } elsif ($fields[4] < 0 || $fields[4] > 1000) {
             die "$prefix field 5 value ($fields[4]) is invalid; score must be 0-1000\n";
+        } elsif ($type eq 'bed5FloatScore' && $fieldCount < 6) {
+            die "$prefix field 6 invalid; bed5FloatScore requires 6 fields";
+        } elsif ($type eq 'bed5FloatScore' && $fields[5] !~ /^$floatRegEx^/) {
+            die "$prefix field 6 value '$fields[5]' is invalid; must be a float\n";
         } else {
             ;
         }
@@ -274,10 +280,9 @@ sub checkDataFormat {
     # validate file type
     my ($format, $file) = @_;
     &HgAutomate::verbose(3, "Checking data format for $file: $format\n");
-    my $type = "";
+    my $type = $format;
     if ($format =~ m/(bed) (\d+)/) {
         $format = $1;
-        $type = $2;
     }
     $formatCheckers{$format} || die "ERROR: Data format \'$format\' is unknown\n";
     $formatCheckers{$format}->($submitPath, $file, $type);
@@ -356,6 +361,7 @@ chdir $submitPath ||
 mkdir $outPath || 
     die ("SYS ERR: Can't create out directory \'$outPath\': $OS_ERROR\n");
 
+# labs is now in fact the list of grants (labs are w/n grants, and are not currently validated).
 my %labs = Encode::getLabs($configPath);
 my %fields = Encode::getFields($configPath);
 my %pif = Encode::getPif($submitDir, \%labs, \%fields);
@@ -411,7 +417,12 @@ while (@{$lines}) {
     }
     my @fields = split('\t', $line);
     my $fileField = $ddfHeader{files};
+    # die if file list has any suspicious characters in it (b/c this will be used in shell commands).
     my $files = $fields[$fileField];
+    my $regex = "\`\|\\\|\|\"\|\'";
+    if($files =~ /($regex)/) {
+        die("files list '$files' has invalid characters; files cannot contain following characters: \"'`|\n");
+    }
     my $view = $fields[$ddfHeader{view}];
     if(!$pif{TRACKS}->{$view}) {
         die "Undefined view '$view' in DDF\n";
@@ -455,6 +466,13 @@ for my $key (keys %ddfSets) {
     }
 }
 
+my $compositeTrack = "wgEncode$pif{lab}$pif{dataType}";
+my $sth = $db->execute("select count(*) from trackDb where tableName = ?", $compositeTrack);
+my @row = $sth->fetchrow_array();
+if(!(@row && $row[0])) {
+    die "Missing composite track '$compositeTrack'; please contact your data wrangler\n";
+}
+
 # Validate files and metadata fields in all ddfLines using controlled
 # vocabulary.  Create load.ra file for loader and trackDb.ra file for wrangler.
 
@@ -471,7 +489,7 @@ foreach my $ddfLine (@ddfLines) {
     }
 
     # Construct table name from track name and variables
-    my $trackName = "wgEncode$pif{project}$view";
+    my $trackName = "$compositeTrack$view";
     my $tableName = $trackName;
     if(!defined($pif{TRACKS}->{$view}{shortLabelPrefix})) {
         $pif{TRACKS}->{$view}{shortLabelPrefix} = "";
@@ -528,7 +546,7 @@ foreach my $ddfLine (@ddfLines) {
     print LOADER_RA "\n";
 
     print TRACK_RA "\ttrack\t$tableName\n";
-    print TRACK_RA "\tsubTrack\twgEncode$pif{project}\n";
+    print TRACK_RA "\tsubTrack\t$compositeTrack\n";
     print TRACK_RA "\tshortLabel\t$shortLabel\n";
     print TRACK_RA "\tlongLabel\t$longLabel\n";
     print TRACK_RA "\tsubGroups\t$subGroups\n";
