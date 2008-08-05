@@ -261,7 +261,7 @@ dateSubmitted June 2008
     visibility full
     dateSubmitted   2008-06-07 10:27:26
 
-track wgEncodeStanfordChip
+track wgEncodeStanfordChipSeq
 compositeTrack on
 shortLabel Stanf ChIP
 longLabel ENCODE Stanford ChIP-Seq
@@ -276,10 +276,10 @@ priority	511
 type bed 3
 wgEncode 1
 
-	track	wgEncodeStanfordChipSitesSK_N_MCFOXP2
-	subTrack	wgEncodeStanfordChip
+	track	wgEncodeStanfordChipPeaksSK_N_MCFOXP2
+	subTrack	wgEncodeStanfordChipSeq
 	shortLabel	FOXP2/SK-N-MC
-	longLabel	ENCODE Stanford ChIP-Seq Sites (FOXP2 in SK-N-MC cells)
+	longLabel	ENCODE Stanford ChIP-Seq Peaks (FOXP2 in SK-N-MC cells)
 	subGroups	view=Sites factor=FOXP2 cellType=SK-N-MC
 	antibody FOXP2
 	cellLine SK-N-MC
@@ -291,7 +291,7 @@ wgEncode 1
         priority        1
 	
 	track wgEncodeStanfordChipCountsSK_N_MCFOXP2
-	subTrack wgEncodeStanfordChip
+	subTrack wgEncodeStanfordChipSeq
 	shortLabel FOXP2/SK-N-MC
 	longLabel ENCODE Stanford ChIP-Seq Counts (FOXP2 in SK-N-MC cells)
 `	antibody FOXP2
@@ -301,3 +301,4 @@ wgEncode 1
 	noInherit	on
 	visibility full
         priority        2
+        zeroBackground	215,215,215
