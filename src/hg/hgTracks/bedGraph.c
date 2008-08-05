@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.10 2008/05/23 22:14:58 angie Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.11 2008/08/05 22:20:18 larrym Exp $";
 
 struct bedGraphItem
 /* A bedGraph track item. */
@@ -39,38 +39,6 @@ static char *bedGraphName(struct track *tg, void *item)
 {
 struct bedGraphItem *bg = item;
 return bg->name;
-}
-
-int bedGraphTotalHeight(struct track *tg, enum trackVisibility vis)
-/* Wiggle track will use this to figure out the height they use
-   as defined in the cart */
-{
-struct wigCartOptions *wigCart;
-
-wigCart = (struct wigCartOptions *) tg->extraUiData;
-
-/*
- *	A track is just one
- *	item, so there is nothing to do here, either it is the tvFull
- *	height as chosen by the user from TrackUi, or it is the dense
- *	mode.
- */
-/*	Wiggle tracks depend upon clipping.  They are reporting
- *	totalHeight artifically high by 1 so this will leave a
- *	blank area one pixel high below the track.  hgTracks will set
- *	our clipping rectangle one less than what we report here to get
- *	this accomplished.  In the meantime our actual drawing height is
- *	recorded properly in lineHeight, heightPer and height
- */
-if (vis == tvDense)
-    tg->lineHeight = tl.fontHeight+1;
-else if (vis == tvFull)
-    tg->lineHeight = max(wigCart->minHeight, wigCart->defaultHeight);
-
-tg->heightPer = tg->lineHeight;
-tg->height = tg->lineHeight;
-
-return tg->height + 1;
 }
 
 void ctBedGraphLoadItems(struct track *tg)
@@ -418,7 +386,7 @@ track->freeItems = bedGraphFreeItems;
 track->drawItems = bedGraphDrawItems;
 track->itemName = bedGraphName;
 track->mapItemName = bedGraphName;
-track->totalHeight = bedGraphTotalHeight;
+track->totalHeight = wigTotalHeight;
 track->itemHeight = tgFixedItemHeight;
 
 track->itemStart = tgItemNoStart;
