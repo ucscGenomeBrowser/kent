@@ -17,10 +17,6 @@ field accession
 file ddf
 required no
 
-field project
-file pifHeader
-required yes
-
 field pifVersion
 file pifHeader
 required yes
