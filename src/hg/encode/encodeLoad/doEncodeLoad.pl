@@ -71,7 +71,7 @@ sub loadGene
         print STDERR "ERROR: File(s) '$fileList' failed gene load.\n";
         dieFile("out/loadGene.out");
     } else {
-        print "$fileList Loaded into $tableName\n";
+        print "$fileList loaded into $tableName\n";
         # debug restore: File.delete "genePred.tab";
     }
     push(@{$pushQ->{TABLES}}, $tableName);
@@ -82,14 +82,17 @@ sub loadWig
     my ($assembly, $tableName, $fileList, $pushQ) = @_;
 
     my @cmds = ("cat $fileList", "wigEncode stdin stdout $tableName.wib", "hgLoadWiggle -pathPrefix=/gbdb/$assembly/wib -tmpDir=$tempDir $assembly $tableName stdin");
-    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
+    my $stderrFile = "out/$tableName.err";
+    unlink($stderrFile);
+    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", STDERR => $stderrFile, DEBUG => $debug);
     if(my $err = $safe->exec()) {
-        die("ERROR: File(s) $fileList failed wiggle load:\n" . $safe->stderr() . "\n");
+        print STDERR "ERROR: File(s) $fileList failed wiggle load:\n\n";
+        dieFile($stderrFile);
     } elsif (system( "rm -f /gbdb/$assembly/wib/$tableName.wib") ||
              system( "ln -s $submitFQP/$tableName.wib /gbdb/$assembly/wib")) {
         die("ERROR: failed wiggle ln\n");
     } else {
-        print "$fileList Loaded into $tableName\n";
+        print "$fileList loaded into $tableName\n";
     }
     push(@{$pushQ->{TABLES}}, $tableName);
     push(@{$pushQ->{FILES}}, "$submitFQP/$tableName.wib");
@@ -104,7 +107,7 @@ sub loadBed
     if(my $err = $safe->exec()) {
         die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
     } else {
-        print "$fileList Loaded into $tableName\n";
+        print "$fileList loaded into $tableName\n";
     }
     push(@{$pushQ->{TABLES}}, $tableName);
 }
@@ -140,7 +143,7 @@ sub loadBedFromSchema
     if(my $err = $safe->exec()) {
         die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
     } else {
-        print "$fileList Loaded into $tableName\n";
+        print "$fileList loaded into $tableName\n";
     }
     $fh->close();
     unlink($tempFile);
@@ -250,7 +253,7 @@ for my $key (keys %ra) {
         loadWig($assembly, $tablename, $files, \%pushQ);
     } elsif ($extendedTypes{$type}) {
         loadBedFromSchema($assembly, $tablename, $files, $type, \%pushQ);
-    } elsif ($type =~ /^bed(3|4|5|6)$/) {
+    } elsif ($type =~ /^bed (3|4|5|6)$/) {
         loadBed($assembly, $tablename, $files, \%pushQ);
     } else {
         die "ERROR: unknown type: $type in $Encode::loadFile\n";
