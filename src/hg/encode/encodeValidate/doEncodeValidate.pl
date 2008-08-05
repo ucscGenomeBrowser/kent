@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.40 2008/08/05 00:08:24 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.41 2008/08/05 18:07:55 larrym Exp $
 
 use warnings;
 use strict;
@@ -427,7 +427,15 @@ while (@{$lines}) {
     if(!$pif{TRACKS}->{$view}) {
         die "Undefined view '$view' in DDF\n";
     }
-    my @filenames = split(',', $files);
+    my @filenames;
+    for(split(',', $files)) {
+        # Use glob explicitly so our error messages have the list of files actually used.
+        if(my @glob = glob) {
+            push(@filenames, @glob);
+        } else {
+            push(@filenames, $_);
+        }
+    }
     $fields[$fileField] = \@filenames;
     push(@ddfLines, \@fields);
     $ddfSets{ddfKey(\@fields, \%ddfHeader, \%pif)}{VIEWS}{$view} = \@fields;
@@ -452,7 +460,7 @@ for my $key (keys %ddfSets) {
         $fields[$ddfHeader{view}] = 'Signal';
         $ddfSets{$key}{VIEWS}{'Signal'} = \@fields;
         my $outFile = "createWig.out";
-        my $files = join(",", @{$alignmentFields[$ddfHeader{files}]});
+        my $files = join(" ", @{$alignmentFields[$ddfHeader{files}]});
         my $tmpFile = "autoCreated$tmpCount.bed";
         $tmpCount++;
         my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $pif{assembly} stdin");
