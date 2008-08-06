@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.41 2008/08/05 18:07:55 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.42 2008/08/06 19:47:46 larrym Exp $
 
 use warnings;
 use strict;
@@ -43,6 +43,8 @@ sub usage {
 usage: encodeValidate.pl submission-type project-submission-dir
 
 submission-type is currently ignored.
+
+Current pifVersion is: $Encode::pifVersion
 
 options:
     -verbose num        Set verbose level to num (default 1).            -
@@ -303,8 +305,8 @@ sub ddfKey
 # Main
 
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time());
-my @ddfHeader;		# list of field headers on the first line of DDF file
-my %ddfHeader = ();	# convenience hash version of @ddfHeader
+my @ddfHeader;		# list of field names on the first line of DDF file
+my %ddfHeader = ();	# convenience hash version of @ddfHeader (maps name to field index)
 my @ddfLines = ();	# each line in DDF (except for fields header)
 my %ddfSets = ();	# info about DDF entries broken down by ddfKey
 my $wd = cwd();
@@ -376,14 +378,25 @@ if (defined($pif{variables})) {
     }
 }
 
+# make replicate column required when appropriate.
+my $hasReplicates = 0;
+for my $view (keys %{$pif{TRACKS}}) {
+    $hasReplicates += $pif{TRACKS}->{$view}{hasReplicates};
+}
+if($hasReplicates) {
+    $fields{replicate}->{required} = 'yes';
+}
+
 # Open dataset descriptor file (DDF)
 my $ddfFile = Encode::newestFile(glob "*.DDF");
 &HgAutomate::verbose(2, "Using newest DDF file \'$ddfFile\'\n");
 my $lines = Encode::readFile($ddfFile);
 
+my $ddfLineNumber = 0;
 # Get header containing column names
 while(@{$lines}) {
     my $line = shift(@{$lines});
+    $ddfLineNumber++;
     # remove leading and trailing spaces and newline
     $line =~ s/^\s+//;
     $line =~ s/\s+$//;
@@ -403,17 +416,21 @@ while(@{$lines}) {
 Encode::validateFieldList(\@ddfHeader, \%fields, 'ddf', "in DDF '$ddfFile'");
 
 # Process lines in DDF file. Create a hash with one entry per line;
-# the entry is an array of field values.
+# the entry is an array of field values (XXXX code would be cleaner if
+# value was changed to hash).
 
 while (@{$lines}) {
     my $line = shift(@{$lines});
+    $ddfLineNumber++;
+    my $errorPrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
+
     $line =~ s/^\s+//;
     $line =~ s/\s+$//;
     next if $line =~ /^#/;
     next if $line =~ /^$/;
 
     if($line !~ /\t/) {
-        die "ERROR: DDF entry has no tabs; the DDF is required to be tab delimited\n";
+        die "$errorPrefix line has no tabs; the DDF is required to be tab delimited\n";
     }
     my @fields = split('\t', $line);
     my $fileField = $ddfHeader{files};
@@ -421,11 +438,17 @@ while (@{$lines}) {
     my $files = $fields[$fileField];
     my $regex = "\`\|\\\|\|\"\|\'";
     if($files =~ /($regex)/) {
-        die("files list '$files' has invalid characters; files cannot contain following characters: \"'`|\n");
+        die("$errorPrefix files list '$files' has invalid characters; files cannot contain following characters: \"'`|\n");
     }
     my $view = $fields[$ddfHeader{view}];
     if(!$pif{TRACKS}->{$view}) {
-        die "Undefined view '$view' in DDF\n";
+        die "$errorPrefix undefined view '$view' in DDF\n";
+    }
+    if($fields{replicate}->{required} eq 'yes') {
+        my $replicate = $fields[$ddfHeader{replicate}];
+        if($pif{TRACKS}->{$view}{hasReplicates} && (!defined($replicate) || !length($replicate))) {
+            die "$errorPrefix missing replicate number for view '$view'";
+        }
     }
     my @filenames;
     for(split(',', $files)) {
