@@ -3,7 +3,7 @@
 # zebra finch ( Taeniopygia guttata )
 
 #########################################################################
-# DOWNLOAD SEQUENCE (DONE braney 2008-07-08)
+# DOWNLOAD SEQUENCE (DONE braney 2008-08-05)
     ssh kkstore03
     mkdir /cluster/store7/taeGut1
     ln -s /cluster/store7/taeGut1 /cluster/data
@@ -16,17 +16,17 @@
     mkdir tmp
     cd tmp
     tar xvf ../*.tar
-    cat *.fa | sed 's/Chr/chr/'|  gzip -c > ../assembly.bases.gz
-    cat *.agp | sed 's/Chr/chr/' > ../assembly.agp
+    cat *.fa | sed 's/Chr/chr/' | sed 's/LG/chrLG/' |  gzip -c > ../assembly.bases.gz
+    cat *.agp | sed 's/Chr/chr/' | sed 's/LG/chrLG/' > ../assembly.agp
     # some scaffolds missing quality values
-    cat *qual | sed 's/Chr/chr/'  | qaToQac stdin  stdout | qacAgpLift -mScore=98 ../assembly.agp stdin ../taeGut1.qual.qac
+    cat *qual | sed 's/Chr/chr/' | sed 's/LG/chrLG/'  | qaToQac stdin  stdout | qacAgpLift -mScore=98 ../assembly.agp stdin ../taeGut1.qual.qac
     cd ..
 
    cut -f 1 assembly.agp | uniq -c | wc -l 
    # Number of scaffolds: 69
 
 #########################################################################
-# Create .ra file and run makeGenomeDb.pl (DONE braney 2008-07-08)
+# Create .ra file and run makeGenomeDb.pl (DONE braney 2008-08-05)
     ssh kkstore03
     cd /cluster/data/taeGut1
 cat << _EOF_ >taeGut1.config.ra
@@ -63,7 +63,7 @@ cut -f 2 chrom.sizes | ave stdin
 
 
 #########################################################################
-# SIMPLE REPEATS TRF (DONE braney 2008-07-16)
+# SIMPLE REPEATS TRF (DONE braney 2008-08-05)
     ssh kkstore03
     screen # use a screen to manage this job
     mkdir /cluster/data/taeGut1/bed/simpleRepeat
@@ -83,7 +83,7 @@ cut -f 2 chrom.sizes | ave stdin
     ln -s /cluster/data/taeGut1/taeGut1.2bit /gbdb/taeGut1/taeGut1.2bit
 
 #########################################################################
-# Run WindowMasker (DONE braney  2008-07-30)
+# Run WindowMasker (DONE braney  2008-08-05)
     ssh kkstore03
     screen
     mkdir /cluster/data/taeGut1/bed/windowMasker
@@ -100,7 +100,7 @@ cut -f 2 chrom.sizes | ave stdin
     #	eliminate the gaps from the masking
     featureBits taeGut1 -not gap -bed=notGap.bed
     featureBits taeGut1 windowmaskerSdust
-    # 260083327 bases of 1222864691 (21.268%) in intersection
+# 260083327 bases of 1222864691 (21.268%) in intersection
 
     time nice -n +19 featureBits taeGut1 windowmaskerSdust notGap.bed \
         -bed=stdout | gzip -c > cleanWMask.bed.gz
@@ -131,13 +131,13 @@ cut -f 2 chrom.sizes | ave stdin
     ln -s /cluster/data/taeGut1/taeGut1.2bit /gbdb/taeGut1
 
 #########################################################################
-# Create OOC file for genbank runs (DONE braney 2008-07-08)
+# Create OOC file for genbank runs (DONE braney 2008-08-05)
 # use same repMatch value as bosTau2
     ssh kkstore03
     cd /cluster/data/taeGut1
     blat taeGut1.2bit /dev/null /dev/null -tileSize=11 \
     	-makeOoc=taeGut1.11.1005.ooc -repMatch=1005
-# -rw-rw-r--  1 braney protein 6368 Jul 30 16:02 taeGut1.11.1005.ooc
+# -rw-rw-r--  1 braney protein 6368 Aug  5 14:31 taeGut1.11.1005.ooc
 
     blat taeGut1.2bit /dev/null /dev/null -tileSize=11 \
 	-makeOoc=taeGut1.11.ooc -repMatch=1024
@@ -148,13 +148,13 @@ cut -f 2 chrom.sizes | ave stdin
     # request admins to sync these to pk
 
 #########################################################################
-## Create a lift file for genbank work(DONE braney 2008-08-02)
+## Create a lift file for genbank work(DONE braney 2008-08-05)
     ssh kkstore03
     cd /cluster/data/taeGut1
     cat  fromWustl/assembly.agp |  /cluster/bin/scripts/agpToLift -revStrand > jkStuff/liftAll.lft
 
 #########################################################################
-# GENBANK AUTO UPDATE (DONE braney 2008-08-02) 
+# GENBANK AUTO UPDATE (DONE braney 2008-08-06) 
     # align with latest genbank process.
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -208,19 +208,33 @@ taeGut1.downloadDir = taeGut1
     make etc-update
 
 ############################################################################
-## Default position  (DONE braney 2008-08-02)
+## Default position  (DONE braney 2008-08-06)
     ssh hgwdev
     hgsql -e 'update dbDb set defaultPos="chrZ:56,293,325-56,333,199"
 	where name="taeGut1";' hgcentraltest
 
 ############################################################################
-# MAKE DOWNLOADABLE FILES (DONE braney 2008-08-02)
+# MAKE DOWNLOADABLE FILES (restarted braney 2008-08-02)
     ssh kkstore03
     screen
     cd /cluster/data/taeGut1
     # edited makeDownloads.pl to take out repeat masker files
-    makeDownloads.pl taeGut1 > downloads.log 2>&1 &
+    # makeDownloads.pl taeGut1 > downloads.log 2>&1 &
+    /cluster/bin/scripts/fripple taeGut1 > downloads.log 2>&1 &
 
+############################################################################
+## Adding a Photograph, from Art Arnold in email (restarted braney 2008-08-03)
+    mkdir /cluster/data/taeGut1/photograph
+    cd /cluster/data/taeGut1/photograph
+    ls -l Taeniopygia_guttata.jpg
+# -rw-rw-r--  1 braney protein 16160 Aug  4 09:43 Taeniopygia_guttata.jpg
+
+    #	check this .jpg file into the browser doc source tree
+    cvs add -kb Taeniopygia_guttata.jpg
+    cvs commit Taeniopygia_guttata.jpg
+    cp -p Taeniopygia_guttata.jpg /usr/local/apache/htdocs/images
+
+############################################################################
 ##########################################################################
 ## Creating pushQ (working...
     ssh hgwdev
@@ -230,5 +244,12 @@ taeGut1.downloadDir = taeGut1
     ## check the stderr.out for anything that needs to be fixed
     ## copy taeGut1.sql to hgwbeta:/tmp
     ## then on hgwbeta
+    scp taeGut1.sql hgwbeta.cse.ucsc.edu:/tmp
+    ssh hgwbeta
+    cd /tmp
     hgsql qapushq < taeGut1.sql
+
+*** If you haven't already, please add taeGut1 to makeDb/schema/all.joiner !
+     It should be in both $gbd and $chainDest.
+
 
