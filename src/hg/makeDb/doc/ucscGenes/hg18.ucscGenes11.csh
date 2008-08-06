@@ -27,6 +27,7 @@ set yeastDb = sacCer1
 # If rebuilding on an existing assembly make tempDb some bogus name like tmpFoo2, otherwise 
 # make tempDb same as db.
 set tempDb = tmpFoo2
+set bioCycTempDb = tmpBioCyc$db
 
 # Table for SNPs
 set snpTable = snp129
@@ -48,6 +49,12 @@ set fishFa = /cluster/data/$fishDb/bed/blastp/ensembl.faa
 set flyFa = /cluster/data/$flyDb/bed/flybase5.3/flyBasePep.fa
 set wormFa = /cluster/data/$wormDb/bed/blastp/wormPep170.faa
 set yeastFa = /cluster/data/$yeastDb/bed/blastp/sgdPep.faa
+
+# Other files needed
+  # For bioCyc pathways - best to update these following build instructions in
+  # hg18.txt
+set bioCycPathways = /cluster/data/hg18/bed/ucsc.10/bioCyc/pathways.col
+set bioCycGenes = /cluster/data/hg18/bed/ucsc.10/bioCyc/genes.col
 
 # Tracks
 set multiz = multiz28way
@@ -937,6 +944,15 @@ cat j.tmp|sort -u  >kgSpAlias.tab
     rm j.tmp
 
 hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql ./kgSpAlias.tab
+
+# Do BioCyc Pathways build
+    mkdir $dir/bioCyc
+    cd $dir/bioCyc
+    grep -v '^#' $bioCycPathways > pathways.tab
+    grep -v '^#' $bioCycGenes > genes.tab
+    kgBioCyc1 genes.tab pathways.tab $db bioCycPathway.tab bioCycMapDesc.tab
+    hgLoadSqlTab $tempDb bioCycPathway ~/kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
+    hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
 # RE-BUILD HG18 PROTEOME BROWSER TABLES (DONE, Fan, 4/2/07). 
 

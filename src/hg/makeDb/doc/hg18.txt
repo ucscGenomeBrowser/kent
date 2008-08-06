@@ -16175,6 +16175,21 @@ TMPDIR=/scratch/tmp
     hgLoadSqlTab hg18 bioCycPathway ~/kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
     hgLoadSqlTab hg18 bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
     
+##########################################################################
+# PARTIAL UPDATE OF BIOCYCTABLES NEEDED BY hgGene (DONE 8/05/08 JK)
+# Note, ideally would get new data from bioCyc, but they never sent me the
+# URL for the files though I filled out their web form a week ago.  So reusing the
+# 3/27/07 pathways.col and genes.col files.  I did write a new kbBioCyc1 to do
+# the actual load, and it is on the new UCSC genes.  It looks to be a slight
+# improvement.  About 10% more genes in pathways.
+    mkdir /cluster/data/hg18/bed/ucsc.11/bioCyc
+    cd /cluster/data/hg18/bed/ucsc.11/bioCyc
+    grep -v '^#' /cluster/data/hg18/bed/ucsc.10/bioCyc/pathways.col > pathways.tab
+    grep -v '^#' /cluster/data/hg18/bed/cusc.10/bioCyc/genes.col > genes.tab
+    kgBioCyc1 genes.tab pathways.tab $db bioCycPathway.tab bioCycMapDesc.tab
+    hgLoadSqlTab hg18 bioCycPathway ~/kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
+    hgLoadSqlTab hg18 bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
+
 ###########################################################################
 # SwitchDB TSS Track (DONE 2007-04-12 Andy)
 
