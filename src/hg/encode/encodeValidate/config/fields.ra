@@ -17,6 +17,14 @@ field accession
 file ddf
 required no
 
+field replicate
+file ddf
+required no
+
+field softwareVersion
+file ddf
+required no
+
 field pifVersion
 file pifHeader
 required yes
