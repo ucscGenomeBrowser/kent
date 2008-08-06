@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.42 2008/08/06 19:47:46 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.43 2008/08/06 21:50:21 larrym Exp $
 
 use warnings;
 use strict;
@@ -29,6 +29,7 @@ use SafePipe;
 use vars qw/
     $opt_configDir
     $opt_outDir
+    $opt_validatePif
     $opt_verbose
     /;
 
@@ -47,6 +48,7 @@ submission-type is currently ignored.
 Current pifVersion is: $Encode::pifVersion
 
 options:
+    -validatePif	exit after validating PIF file
     -verbose num        Set verbose level to num (default 1).            -
     -configDir dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
@@ -313,6 +315,7 @@ my $wd = cwd();
 
 my $ok = GetOptions("configDir=s",
                     "outDir=s",
+                    "validatePif",
                     "verbose=i",
                     );
 usage() if (!$ok);
@@ -367,6 +370,11 @@ mkdir $outPath ||
 my %labs = Encode::getLabs($configPath);
 my %fields = Encode::getFields($configPath);
 my %pif = Encode::getPif($submitDir, \%labs, \%fields);
+
+if($opt_validatePif) {
+    print STDERR "PIF is valid\n";
+    exit(0);
+}
 
 my $db = HgDb->new(DB => $pif{assembly});
 
@@ -511,22 +519,36 @@ if(!(@row && $row[0])) {
 open(LOADER_RA, ">$outPath/$Encode::loadFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::loadFile\' file; error: $!\n";
 open(TRACK_RA, ">$outPath/$Encode::trackFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::trackFile\' file; error: $!\n";
 my $priority = 0;
+$ddfLineNumber = 1;
 foreach my $ddfLine (@ddfLines) {
+    my $errorPrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
     $priority++;
     my $view = $ddfLine->[$ddfHeader{view}];
     HgAutomate::verbose(2, "  View: $view\n");
     for (my $i=0; $i < @ddfHeader; $i++) {
         validateDdfField($ddfHeader[$i], $ddfLine->[$i], $view, \%pif);
     }
-
+    my $replicate;
+    if($hasReplicates && $pif{TRACKS}->{$view}{hasReplicates}) {
+        $replicate = $ddfLine->[$ddfHeader{replicate}];
+        if(defined($replicate) && $replicate > 0) {
+        } else {
+            die "$errorPrefix invalid or missing replicate value\n";
+        }
+    }
     # Construct table name from track name and variables
-    my $trackName = "$compositeTrack$view";
-    my $tableName = $trackName;
+    my $tableName = "$compositeTrack$view";
+    if(defined($replicate)) {
+        $tableName .= "Rep$replicate";
+    }
     if(!defined($pif{TRACKS}->{$view}{shortLabelPrefix})) {
         $pif{TRACKS}->{$view}{shortLabelPrefix} = "";
     }
     my $shortLabel = defined($pif{TRACKS}->{$view}{shortLabelPrefix}) ? $pif{TRACKS}->{$view}{shortLabelPrefix} : "";
     my $longLabel = "ENCODE" . (defined($pif{TRACKS}->{$view}{longLabelPrefix}) ? " $pif{TRACKS}->{$view}{longLabelPrefix}" : "");
+    if(defined($replicate)) {
+        $longLabel .= " Replicate $replicate";
+    }
     my $subGroups = "view=$view";
     my $additional = "\n";
     if (defined($pif{variables})) {
@@ -570,7 +592,6 @@ foreach my $ddfLine (@ddfLines) {
     }
 
     print LOADER_RA "tablename $tableName\n";
-    print LOADER_RA "track $trackName\n";
     print LOADER_RA "type $pif{TRACKS}->{$view}{type}\n";
     print LOADER_RA "assembly $pif{assembly}\n";
     print LOADER_RA "files @{$ddfLine->[$ddfHeader{files}]}\n";
