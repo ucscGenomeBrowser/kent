@@ -23,7 +23,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: jksql.c,v 1.113.6.5 2008/08/05 07:11:20 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.113.6.6 2008/08/06 17:39:36 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -39,11 +39,11 @@ struct sqlProfile
 /* a configuration profile for connecting to a server */
 {
     struct sqlProfile *next;
-    char *name;     // name of profile
-    char *host;     // host name for database server
-    char *user;     // database server user name
-    char *password; // database server password
-    struct slName *dbs; // database associated with profile, can be NULL
+    char *name;         // name of profile
+    char *host;         // host name for database server
+    char *user;         // database server user name
+    char *password;     // database server password
+    struct slName *dbs; // database associated with profile, can be NULL.
     };
 
 struct sqlConnection
@@ -69,14 +69,6 @@ static char *defaultProfileName = "db";           // name of default profile
 static struct hash *profiles = NULL;              // profiles parsed from hg.conf, by name
 static struct sqlProfile *defaultProfile = NULL;  // default profile, also in profiles list
 static struct hash* dbToProfile = NULL;           // db to sqlProfile
-
-static char *getCfgPreVal(char *prefix, char *suffix)
-/* lookup a configuration value for prefix.suffix, or NULL if not found */
-{
-char name[256];
-safef(name, sizeof(name), "%s.%s", prefix, suffix);
-return cfgOption(name);
-}
 
 static char *envOverride(char *envName, char *defaultVal)
 /* look up envName in environment, if it exists and is non-empty, return its
@@ -127,9 +119,9 @@ static void sqlProfileAddProfIf(char *profileName)
 /* check if a config prefix is a profile, and if so, add a
  * sqlProfile object for it */
 {
-char *host = getCfgPreVal(profileName, "host");
-char *user = getCfgPreVal(profileName, "user");
-char *password = getCfgPreVal(profileName, "password");
+char *host = cfgOption2(profileName, "host");
+char *user = cfgOption2(profileName, "user");
+char *password = cfgOption2(profileName, "password");
 
 if ((host != NULL) && (user != NULL) && (password != NULL))
     {
@@ -1655,7 +1647,33 @@ for (scce = cache->entries; scce != NULL; scce = scce->next)
 return NULL;
 }
 
+static struct sqlConnCacheEntry *sqlConnCacheAddNew(struct sqlConnCache *cache,
+                                                    char *profileName,
+                                                    char *database,
+                                                    boolean abort)
+/* create and add a new connect to the cache */
+{
+struct sqlConnection *conn;
+if (cache->entryCnt >= sqlConnCacheMax)
+    errAbort("Too many open sqlConnections for cache");
+if (cache->host != NULL)
+    conn = sqlConnRemote(cache->host, cache->user,
+                         cache->password, database, abort);
+else
+    {
+    struct sqlProfile *sp = cache->profile;
+    if (sp == NULL)
+        {
+        char *profileName = (database == NULL) ? "db" : NULL;
+        sp = sqlProfileMustGet(profileName, database);
+        }
+    conn = sqlConnProfile(sp, database, abort);
+    }
+return sqlConnCacheAdd(cache, conn);
+}
+
 static struct sqlConnection *sqlConnCacheDoAlloc(struct sqlConnCache *cache,
+                                                 char *profileName,
                                                  char *database,
                                                  boolean abort)
 /* Allocate a cached connection. errAbort if too many open connections.  
@@ -1663,25 +1681,7 @@ static struct sqlConnection *sqlConnCacheDoAlloc(struct sqlConnCache *cache,
 {
 struct sqlConnCacheEntry *scce = sqlConnCacheFindFree(cache, database);
 if (scce == NULL)
-    {
-    if (cache->entryCnt >= sqlConnCacheMax)
-        errAbort("Too many open sqlConnections to %s for cache", cache->host); // FIXME: host maybe NULL
-    struct sqlConnection *conn;
-    if (cache->host != NULL)
-        conn = sqlConnRemote(cache->host, cache->user,
-                             cache->password, database, abort);
-    else
-        {
-        struct sqlProfile *sp = cache->profile;
-        if (sp == NULL)
-            {
-            char *profileName = (database == NULL) ? "db" : NULL;
-            sp = sqlProfileMustGet(profileName, database);
-            }
-        conn = sqlConnProfile(sp, database, abort);
-        }
-    scce = sqlConnCacheAdd(cache, conn);
-    }
+    scce = sqlConnCacheAddNew(cache, profileName, database, abort);
 scce->inUse = TRUE;
 return scce->conn;
 }
@@ -1691,14 +1691,22 @@ struct sqlConnection *sqlConnCacheMayAlloc(struct sqlConnCache *cache,
 /* Allocate a cached connection. errAbort if too many open connections,
  * return NULL if can't connect to server. */
 {
-return sqlConnCacheDoAlloc(cache, database, FALSE);
+return sqlConnCacheDoAlloc(cache, NULL, database, FALSE);
 }
 
 struct sqlConnection *sqlConnCacheAlloc(struct sqlConnCache *cache,
                                         char *database)
 /* Allocate a cached connection. */
 {
-return sqlConnCacheDoAlloc(cache, database, TRUE);
+return sqlConnCacheDoAlloc(cache, NULL, database, TRUE);
+}
+
+struct sqlConnection *sqlConnCacheProfileAlloc(struct sqlConnCache *cache,
+                                               char *profileName,
+                                               char *database)
+/* Allocate a cached connection given a profile and/or database. */
+{
+return sqlConnCacheDoAlloc(cache, profileName, database, TRUE);
 }
 
 void sqlConnCacheDealloc(struct sqlConnCache *cache, struct sqlConnection **pConn)

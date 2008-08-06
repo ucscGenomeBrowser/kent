@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.368.4.3 2008/08/05 07:11:20 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.368.4.4 2008/08/06 17:39:35 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -410,10 +410,31 @@ if (hdbCc == NULL)
 return sqlConnCacheAlloc(hdbCc, db);
 }
 
+struct sqlConnection *hAllocConnProfile(char *profileName, char *db)
+/* Get free connection, specifying a profile and/or a database. If none
+ * is available, allocate a new one. */
+{
+if (hdbCc == NULL)
+    hdbCc = sqlConnCacheNew();
+return sqlConnCacheProfileAlloc(hdbCc, profileName, db);
+}
+
+struct sqlConnection *hAllocConnTrack(char *db, struct trackDb *tdb)
+/* Get free connection for accessing tables associated with the specified
+ * track and database. If none is available, allocate a new one. */
+{
+// FIXME: dbProfile is the preferred name, phase out logicalDb
+char *profileName = trackDbSetting(tdb, "dbProfile");
+if (profileName == NULL)
+    profileName = trackDbSetting(tdb, "logicalDb");
+return hAllocConnProfile(profileName, db);
+}
+
 void hFreeConn(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
-sqlConnCacheDealloc(hdbCc, pConn);
+if (*pConn != NULL)  // don't use hdbCc if never allocated
+    sqlConnCacheDealloc(hdbCc, pConn);
 }
 
 static void hCentralMkCache()
@@ -455,7 +476,8 @@ return sqlConnCacheAlloc(centralCc, centralDb);
 void hDisconnectCentral(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
-sqlConnCacheDealloc(centralCc, pConn);
+if (*pConn != NULL)
+    sqlConnCacheDealloc(centralCc, pConn);
 }
 
 #if 0 // FIXME:
@@ -539,7 +561,8 @@ return sqlConnCacheAlloc(localCc, localDb);
 void hDisconnectLocal(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
-sqlConnCacheDealloc(localCc, pConn);
+if (*pConn != NULL)
+    sqlConnCacheDealloc(localCc, pConn);
 }
 
 struct sqlConnection *hConnectArchiveCentral()
@@ -566,7 +589,8 @@ return NULL;
 void hDisconnectArchiveCentral(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
-sqlConnCacheDealloc(centralArchiveCc, pConn);
+if (*pConn != NULL)
+    sqlConnCacheDealloc(centralArchiveCc, pConn);
 }
 
 static void hCartMkCache()
@@ -606,7 +630,8 @@ return sqlConnCacheAlloc(cartCc, cartDb);
 void hDisconnectCart(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
-sqlConnCacheDealloc(cartCc, pConn);
+if (*pConn != NULL)
+    sqlConnCacheDealloc(cartCc, pConn);
 }
 
 boolean hCanHaveSplitTables(char *db)

@@ -12,7 +12,7 @@
 #include "affyAllExonProbe.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.19.18.2 2008/08/05 07:11:15 markd Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.19.18.3 2008/08/06 17:39:34 markd Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max, boolean redGreen)
 /* Return the correct color for a given score */
@@ -189,32 +189,10 @@ printf("</td></tr></table>");
 printf("</basefont>");
 }
 
-#if 0 // FIXME
-static struct bed * loadMsBedFromLogicalDb(char *table, char *chrom, uint start, uint end, 
-			       struct sqlConnection *logicalDbConn)
-/* load every thing from a bed 15 table in the given range, via a logical DB connection */
-{
-struct sqlResult *sr;
-char **row;
-int rowOffset;
-struct bed *bedList = NULL, *bed;
-sr = hRangeQuery(logicalDbConn, table, chrom, start, end, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    bed = bedLoadN(row+rowOffset, 15);
-    slAddHead(&bedList, bed);
-    }
-sqlFreeResult(&sr);
-sqlDisconnect(&logicalDbConn);
-slReverse(&bedList);
-return bedList;
-}
-#endif
-
-static struct bed * loadMsBed(char *table, char *chrom, uint start, uint end)
+static struct bed *loadMsBed(struct trackDb *tdb, char *table, char *chrom, uint start, uint end)
 /* load every thing from a bed 15 table in the given range */
 {
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = hAllocConnTrack(database, tdb);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -281,7 +259,7 @@ erList = loadExpRecord(expTable, "hgFixed");
 if (all) 
     bedList = loadMsBedAll(bedTable);
 else 
-    bedList = loadMsBed(bedTable, seqName, winStart, winEnd); 
+    bedList = loadMsBed(tdb, bedTable, seqName, winStart, winEnd); 
 
 /* Print out a header row */
 printf("<HTML><BODY><PRE>\n");
@@ -417,7 +395,6 @@ char *itemName = cgiUsualString("i2","none");
 char *expName = (item == NULL) ? itemName : item;
 boolean redGreen = TRUE;
 char colorVarName[256];
-char *logicalDb = NULL;
 
 safef(colorVarName, sizeof(colorVarName), "%s.color", tdb->tableName);
 if (!sameString(cartUsualString(cart, colorVarName, "redGreen"), "redGreen"))
@@ -425,20 +402,7 @@ if (!sameString(cartUsualString(cart, colorVarName, "redGreen"), "redGreen"))
 if (!ct)
     {
     genericHeader(tdb, itemName);
-    
-    logicalDb = trackDbSetting(tdb, "logicalDb");
-    if (logicalDb != NULL)
-	{
-#if 0 // FIXME
-        bedList = loadMsBedFromLogicalDb(tdb->tableName, seqName, winStart, winEnd, 
-			     hConnectLogicalDb(logicalDb));
-#endif
-    	}
-    else
-	{
-        bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
-    	}
-
+    bedList = loadMsBed(tdb, tdb->tableName, seqName, winStart, winEnd);
     }
 else if (ct->dbTrack)
     bedList = ctLoadMultScoresBedDb(ct, seqName, winStart, winEnd);

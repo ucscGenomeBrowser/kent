@@ -1192,30 +1192,14 @@ for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
 void loadMultScoresBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
-struct sqlConnection *conn;
+// FIXME: dbProfile would be a better name
+struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
 int itemCount =0;
 struct bed *bedList = NULL, *bed;
 enum trackVisibility vis = tg->visibility;
-char *logicalDb;
-boolean isRegularDb; 
-
-logicalDb = trackDbSetting(tg->tdb, "logicalDb");
-
-if (logicalDb == NULL)
-    {
-    isRegularDb = TRUE;
-    conn = hAllocConn(database);
-    }
-else
-    {
-    isRegularDb = FALSE;
-#if 0 // FIXME
-    conn = hConnectLogicalDb(logicalDb);
-#endif
-    }
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1224,14 +1208,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     itemCount++;
     }
 sqlFreeResult(&sr);
-if (isRegularDb)
-    {
-    hFreeConn(&conn);
-    }
-else
-    {
-    sqlDisconnect(&conn);
-    }
+hFreeConn(&conn);
 slReverse(&bedList);
 
 #ifdef NEVER

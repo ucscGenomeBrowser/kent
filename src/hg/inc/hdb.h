@@ -120,6 +120,14 @@ int hChromCount(char *db);
 struct sqlConnection *hAllocConn(char *db);
 /* Get free connection if possible. If not allocate a new one. */
 
+struct sqlConnection *hAllocConnProfile(char *profileName, char *db);
+/* Get free connection, specifying a profile and/or a database. If none
+ * is available, allocate a new one. */
+
+struct sqlConnection *hAllocConnTrack(char *db, struct trackDb *tdb);
+/* Get free connection for accessing tables associated with the specified
+ * track and database. If none is available, allocate a new one. */
+
 void hFreeConn(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
