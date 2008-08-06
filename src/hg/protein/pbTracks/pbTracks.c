@@ -17,7 +17,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.51 2007/07/13 22:56:44 angie Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.52 2008/08/06 19:51:17 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -71,8 +71,8 @@ char *protSeq;
 int  protSeqLen;
 
 char aaChar[20];
-float aa_hydro[255];
-int aa_attrib[255];
+float aa_hydro[256];
+int aa_attrib[256];
 char aa[100000];
 
 struct vGfx *g_vg;
