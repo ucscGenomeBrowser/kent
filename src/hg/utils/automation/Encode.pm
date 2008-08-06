@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.4 2008/08/05 00:09:12 larrym Exp $
+# $Id: Encode.pm,v 1.5 2008/08/06 19:44:30 larrym Exp $
 
 package Encode;
 
@@ -22,11 +22,11 @@ our $loadFile = "load.ra";
 our $unloadFile = "unload.ra";
 our $trackFile = "trackDb.ra";
 our $pushQFile = "pushQ.sql";
+our $pifVersion = "0.2.2";
 
-my $fieldConfigFile = "fields.ra";
-my $vocabConfigFile = "cv.ra";
-my $labsConfigFile = "labs.ra";
-my $pifVersion = 0.2;
+our $fieldConfigFile = "fields.ra";
+our $vocabConfigFile = "cv.ra";
+our $labsConfigFile = "labs.ra";
 
 sub newestFile
 {
@@ -179,10 +179,7 @@ sub getPif
         if(!defined($key)) {
             next;
         }
-        if ($key ne "view") {
-            &HgAutomate::verbose(3, "PIF field: $key = $val\n");
-            $pif{$key} = $val;
-        } else {
+        if ($key eq "view") {
             my %track = ();
             my $track = $val;
             $pif{TRACKS}->{$track} = \%track;
@@ -192,7 +189,7 @@ sub getPif
                 $line =~ s/ +$//;
                 next if $line =~ /^#/;
                 next if $line =~ /^$/;
-                if ($line =~ /^track/) {
+                if ($line =~ /^view/) {
                     unshift @{$lines}, $line;
                     last;
                 }
@@ -200,6 +197,11 @@ sub getPif
                 $track{$key} = $val;
                 &HgAutomate::verbose(5, "    Property: $key = $val\n");
             }
+            $track{required} = lc($track{required}) eq 'yes' ? 1 : 0;
+            $track{hasReplicates} = lc($track{hasReplicates}) eq 'yes' ? 1 : 0;
+        } else {
+            &HgAutomate::verbose(3, "PIF field: $key = $val\n");
+            $pif{$key} = $val;
         }
     }
 
