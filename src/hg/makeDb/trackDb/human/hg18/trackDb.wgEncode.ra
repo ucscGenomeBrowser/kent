@@ -261,10 +261,10 @@ dateSubmitted June 2008
     visibility full
     dateSubmitted   2008-06-07 10:27:26
 
-track wgEncodeStanfordChipSeq
+track wgEncodeHudsonAlphaChipSeq
 compositeTrack on
-shortLabel Stanf ChIP
-longLabel ENCODE Stanford ChIP-Seq
+shortLabel HudsonAlpha ChIP
+longLabel ENCODE HudsonAlpha ChIP-Seq
 group regulation
 subGroup1 view Views Sites=Sites Counts=Counts
 subGroup2 cellType Cell_Type SK-N-MC=SK-N-MC
@@ -276,10 +276,10 @@ priority	511
 type bed 3
 wgEncode 1
 
-	track	wgEncodeStanfordChipPeaksSK_N_MCFOXP2
-	subTrack	wgEncodeStanfordChipSeq
+	track	wgEncodeHudsonAlphaChipPeaksSK_N_MCFOXP2
+	subTrack	wgEncodeHudsonAlphaChipSeq
 	shortLabel	FOXP2/SK-N-MC
-	longLabel	ENCODE Stanford ChIP-Seq Peaks (FOXP2 in SK-N-MC cells)
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Peaks (FOXP2 in SK-N-MC cells)
 	subGroups	view=Sites factor=FOXP2 cellType=SK-N-MC
 	antibody FOXP2
 	cellLine SK-N-MC
@@ -290,10 +290,10 @@ wgEncode 1
 	visibility dense
         priority        1
 	
-	track wgEncodeStanfordChipCountsSK_N_MCFOXP2
-	subTrack wgEncodeStanfordChipSeq
+	track wgEncodeHudsonAlphaChipCountsSK_N_MCFOXP2
+	subTrack wgEncodeHudsonAlphaChipSeq
 	shortLabel FOXP2/SK-N-MC
-	longLabel ENCODE Stanford ChIP-Seq Counts (FOXP2 in SK-N-MC cells)
+	longLabel ENCODE HudsonAlpha ChIP-Seq Counts (FOXP2 in SK-N-MC cells)
 `	antibody FOXP2
 	cellLine SK-N-MC
 	subGroups	view=Counts factor=FOXP2 cellType=SK-N-MC
