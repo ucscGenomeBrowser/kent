@@ -18810,6 +18810,9 @@ ignore 1 lines'
 ############################################################################
 # dbSNP BUILD 128 (DONE 1/22/08 angie)
 # updated snp128ExceptionDesc (tweaked wording) 3/7/08
+# 8/7/08: Regenerated snp128.sql with only those enum/set values that are
+# actually used (except always keep unknown, the default) and reloaded snp128.
+# No data change -- just the sql field definitions for enums and sets.
     # Set up build directory
     ssh kkstore06
     mkdir -p /cluster/store3/dbSNP128/{human,shared}
@@ -19155,6 +19158,9 @@ ignore 1 lines'
     # is most likely as NCBI extends the encodings used in dbSNP.
     cd /cluster/data/dbSNP/128/human/
     gunzip ucscNcbiSnp.bed.gz
+    # Re-ran this command 8/7/08 to get new snp128.sql that includes
+    # only those enum/set values that are actually used.  No other output
+    # files changed.
     time snpNcbiToUcsc ucscNcbiSnp.bed /cluster/data/hg18/hg18.2bit \
       snp128
 #spaces stripped from observed:
@@ -19165,7 +19171,7 @@ ignore 1 lines'
 #count of snps with weight  3 = 335214
 #count of snps with weight 10 = 34818
 #Skipped 167 snp mappings due to errors -- see snp128Errors.bed
-#174.562u 11.361s 3:33.59 87.0%  0+0k 0+0io 1pf+0w
+#176.712u 17.466s 3:34.82 90.3%  0+0k 0+0io 0pf+0w
     # The 167 errors are all for SNPs for which we don't have fasta,
     # so we also don't have observed, class, or molType.  I spot-checked
     # a few, and they have been deleted from dbSNP.  Nothing to show,
@@ -19203,12 +19209,16 @@ ignore 1 lines'
     ssh hgwdev
     # Load up main track tables.
     cd /cluster/data/dbSNP/128/human
-    time nice hgLoadBed -tab -noSort -onServer -tmpDir=/scratch/tmp \
+    # Re-ran this command 8/7/08 to get new snp128.sql that includes
+    # only those enum/set values that are actually used.  No data values
+    # changed.  Removed -noSort because Brooke had spotted some entries
+    # sorted by chromEnd instead of chromStart.
+    time nice hgLoadBed -tab -onServer -tmpDir=/data/tmp \
       hg18 snp128 -sqlTable=snp128.sql snp128.bed
-#56.893u 15.473s 7:21.99 16.3%   0+0k 0+0io 3pf+0w
+#78.060u 13.298s 7:32.71 20.1%   0+0k 0+0io 0pf+0w
     sed -e 's/snp125/snp128/' ~/kent/src/hg/lib/snp125Exceptions.sql \
       > snp128Exceptions.sql
-    time nice hgLoadBed -tab -onServer -tmpDir=/scratch/tmp \
+    time nice hgLoadBed -tab -onServer -tmpDir=/data/tmp \
       hg18 snp128Exceptions -sqlTable=snp128Exceptions.sql \
       snp128Exceptions.bed
 #5.915u 0.492s 0:28.69 22.3%     0+0k 0+0io 0pf+0w
@@ -19539,7 +19549,7 @@ while (<>) {
     sed -e 's/snpOrthoPanTroRheMac/snp128OrthoPanTro2RheMac2/' \
       ~/kent/src/hg/lib/snpOrthoPanTroRheMac.sql \
       > snp128OrthoPanTro2RheMac2.sql
-    time nice hgLoadBed -tab -onServer -tmpDir=/scratch/tmp \
+    time nice hgLoadBed -tab -onServer -tmpDir=/data/tmp \
       hg18 snp128OrthoPanTro2RheMac2 -sqlTable=snp128OrthoPanTro2RheMac2.sql \
       snp128OrthoPanTro2RheMac2.bed
 #Loaded 8770301 elements of size 17
@@ -21470,7 +21480,13 @@ hgLoadSqlTab hg18 illuminaProbesSeq{,.sql,.tab}
 
 
 ############################################################################
-# dbSNP BUILD 129 (DONE 6/24/06 angie)
+# dbSNP BUILD 129 (DONE 6/24/08 angie)
+# 8/6/08: Regenerated snp129.sql with only those enum/set values that are
+# actually used (except always keep unknown, the default) and reloaded snp129.
+# No data change -- just the sql field definitions for enums and sets.
+# 8/7/08: Swapped molType values cDNA <--> genomic in snp129 because they
+# were swapped in the fasta headers.
+
     # Set up build directory
     ssh kkstore06
     mkdir -p /cluster/store3/dbSNP129/{human,shared}
@@ -21807,8 +21823,19 @@ hgLoadSqlTab hg18 illuminaProbesSeq{,.sql,.tab}
     # is most likely as NCBI extends the encodings used in dbSNP.
     cd /cluster/data/dbSNP/129/human/
     gunzip ucscNcbiSnp.bed.gz
+    # Re-ran this command 8/6/08 to get new snp129.sql that includes
+    # only those enum/set values that are actually used.  No other output
+    # files changed.
     time snpNcbiToUcsc ucscNcbiSnp.bed /cluster/data/hg18/hg18.2bit \
       snp129
+    # 8/7/08: added the awk command to unswap the molType values that
+    # were swapped in dbSNP 129 fasta headers:
+    # DO NOT USE THIS COMMAND NEXT TIME UNLESS NECESSARY AGAIN:
+    awk 'BEGIN{OFS="\t";} \
+         {if      ($8 == "genomic") {$8 = "cDNA";} \
+          else if ($8 == "cDNA") {$8 = "genomic";} \
+          print;}' ucscNcbiSnp.bed \
+    | snpNcbiToUcsc stdin /cluster/data/hg18/hg18.2bit snp129
 #spaces stripped from observed:
 #chr12   5963395 5963395 rs41402545
 #count of snps with weight  0 = 63507
@@ -21817,7 +21844,7 @@ hgLoadSqlTab hg18 illuminaProbesSeq{,.sql,.tab}
 #count of snps with weight  3 = 924499
 #count of snps with weight 10 = 145673
 #Skipped 493 snp mappings due to errors -- see snp129Errors.bed
-#188.767u 12.867s 3:31.32 95.4%  0+0k 0+0io 1pf+0w
+#210.328u 10.793s 4:04.99 90.2%  0+0k 0+0io 0pf+0w
     # More skipped snps than in 128, but same reason:
     cut -f 5 snp129Errors.bed | sort | uniq -c
 #    493 Missing observed value (deleted SNP?).
@@ -21855,12 +21882,17 @@ hgLoadSqlTab hg18 illuminaProbesSeq{,.sql,.tab}
     ssh hgwdev
     # Load up main track tables.
     cd /cluster/data/dbSNP/129/human
-    time nice hgLoadBed -tab -noSort -onServer -tmpDir=/scratch/tmp \
+    # Re-ran this command 8/6/08 to get new snp129.sql that includes
+    # only those enum/set values that are actually used.  No data values
+    # changed.  Removed -noSort because Brooke had spotted some entries
+    # sorted by chromEnd instead of chromStart.
+    # Re-ran 8/7/08 to pick up corrected molType column in snp129.bed.
+    time nice hgLoadBed -tab -onServer -tmpDir=/data/tmp \
       hg18 snp129 -sqlTable=snp129.sql snp129.bed
-#72.099u 19.879s 9:31.43 16.0%   0+0k 0+0io 0pf+0w
+#100.406u 22.673s 9:44.17 21.0%  0+0k 0+0io 0pf+0w
     sed -e 's/snp125/snp129/' ~/kent/src/hg/lib/snp125Exceptions.sql \
       > snp129Exceptions.sql
-    time nice hgLoadBed -tab -onServer -tmpDir=/scratch/tmp \
+    time nice hgLoadBed -tab -onServer -tmpDir=/data/tmp \
       hg18 snp129Exceptions -sqlTable=snp129Exceptions.sql \
       snp129Exceptions.bed
 #13.125u 1.383s 1:15.39 19.2%    0+0k 0+0io 0pf+0w
@@ -22241,7 +22273,7 @@ while (<>) {
 
     ssh hgwdev
     cd /cluster/data/hg18/bed/snp129Ortho
-    time nice hgLoadBed -tab -onServer -tmpDir=/scratch/tmp -renameSqlTable \
+    time nice hgLoadBed -tab -onServer -tmpDir=/data/tmp -renameSqlTable \
       -sqlTable=$HOME/kent/src/hg/lib/snpOrthoPanPonRhe.sql \
       hg18 snp129OrthoPt2Pa2Rm2 snp129OrthoPt2Pa2Rm2.bed
 #Loaded 10325827 elements of size 22
