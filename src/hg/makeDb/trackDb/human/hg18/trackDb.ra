@@ -1994,6 +1994,7 @@ chimpDb panTro2
 macaqueDb rheMac2
 type bed 6 +
 
+release beta
 track snpArray
 compositeTrack on
 shortLabel SNP Arrays
@@ -2058,6 +2059,73 @@ type bed 4 .
     longLabel Illumina Human Hap 300v3
     type bed 6 +
     priority 8
+			
+release alpha
+track snpArray
+compositeTrack on
+shortLabel SNP Arrays
+longLabel SNP Genotyping Arrays
+group varRep
+priority 101
+visibility hide
+type bed 4 .
+html snpArrayWith1M.html
+
+    track snpArrayAffy6
+    subTrack snpArray
+    shortLabel Affy SNP 6.0
+    longLabel Affymetrix SNP 6.0 
+    type bed 6 +
+    priority 1
+
+    track snpArrayAffy6SV
+    subTrack snpArray
+    shortLabel Affy SNP 6.0 SV
+    longLabel Affymetrix SNP 6.0 Structural Variation
+    type bed 6 +
+    priority 2
+
+    track snpArrayAffy5
+    subTrack snpArray
+    shortLabel Affy SNP 5.0
+    longLabel Affymetrix SNP 5.0 
+    type bed 6 +
+    priority 3
+
+    track snpArrayAffy250Nsp
+    subTrack snpArray
+    shortLabel Affy 250KNsp
+    longLabel Affymetrix GeneChip Human Mapping 250K Nsp 
+    type bed 6 +
+    priority 4
+
+    track snpArrayAffy250Sty
+    subTrack snpArray
+    shortLabel Affy 250KSty
+    longLabel Affymetrix GeneChip Human Mapping 250K Sty 
+    type bed 6 +
+    priority 5
+
+    track snpArrayIllumina650
+    subTrack snpArray
+    shortLabel Illumina 650
+    longLabel Illumina Human Hap 650v3
+    type bed 6 +
+    priority 6
+
+    track snpArrayIllumina550
+    subTrack snpArray
+    shortLabel Illumina 550
+    longLabel Illumina Human Hap 550v3
+    type bed 6 +
+    priority 7
+
+    track snpArrayIllumina300
+    subTrack snpArray
+    shortLabel Illumina 300
+    longLabel Illumina Human Hap 300v3
+    type bed 6 +
+    priority 8
 
     track snpArrayIllumina1M
     subTrack snpArray
@@ -2066,7 +2134,6 @@ type bed 4 .
     type bed 6 +
     priority 9
 			
- 
 track divMKAR
 shortLabel Recent Selection NC
 longLabel Recent selection in non-coding regions
