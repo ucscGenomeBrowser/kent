@@ -9,11 +9,15 @@ DOWNLOAD_DIR = /usr/local/apache/htdocs/encode/tests
 
 all: test
 
-test: duke
+test: chipseq
+
+chipseq: output
+	${PROG} x input/chipseq -configDir=../config -outDir=output/chipseq
+	diff output/chipseq/load.ra expected/chipseq/load.ra
 
 # duke is an example of DNase-Seq
 duke: output
-	${PROG} -noEmail x input/duke -configDir=../config -outDir=output/duke
+	${PROG} x input/duke -configDir=../config -outDir=output/duke
 	diff output/duke/load.ra expected/duke/load.ra
 # Can't diff trackDb.ra, because dateSubmitted will be different
 #	diff output/duke/trackDb.ra expected/duke
@@ -26,4 +30,3 @@ clean:
 
 install:
 	(cd input/duke; tar cvfz ${DOWNLOAD_DIR}/dnase.good.tar.gz --exclude=CVS --exclude=out *)
-
