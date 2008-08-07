@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.173.4.3 2008/08/07 16:02:44 markd Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.173.4.4 2008/08/07 17:02:35 markd Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -104,7 +104,6 @@ if (status)
     else
 	{
 	sqlFreeResult(&sr);
-        fprintf(stderr, "INSERT METAINFO: %s\n", sqlGetDatabase(conn)); // FIXME:
 	safef(query, sizeof(query), "INSERT %s VALUES(\"%s\",1,now())",
 	    CT_META_INFO, table);
 	sqlUpdate(conn,query);
