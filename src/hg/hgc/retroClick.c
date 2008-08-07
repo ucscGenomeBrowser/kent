@@ -34,6 +34,7 @@ struct mappingInfo
     char seqId[ID_BUFSZ];      /* id used to look up sequence, different than
                                 * srcAcc if multiple levels of mappings have
                                 * been done */
+    char suffix[ID_BUFSZ];
     char *sym;                 /* src gene symbol and desc */
     char *desc;
     short gbCurVer;            /* version from genbank table */
@@ -118,6 +119,9 @@ static struct mappingInfo *mappingInfoNew(struct sqlConnection *conn,
 {
 struct mappingInfo *mi;
 int preLen;
+char *suffix = containsStringNoCase(tbl,"Info");
+if (suffix != NULL)
+    suffix +=4;
 AllocVar(mi);
 
 if (startsWith("retroAnc", tbl))
@@ -140,8 +144,12 @@ else if (startsWith("Mrna", tbl+preLen))
 else
     errAbort("can't determine source gene set from table: %s", tbl);
 #endif
-
-mi->pg = sqlQueryObjs(conn, (sqlLoadFunc)retroMrnaInfoLoad, sqlQueryMust|sqlQuerySingle,
+if (suffix != NULL)
+    mi->pg = sqlQueryObjs(conn, (sqlLoadFunc)retroMrnaInfoLoad, sqlQueryMust|sqlQuerySingle,
+                      "select * from %s%sInfo%s where name='%s'", mi->tblPre, mi->geneSet, suffix,
+                       mappedId);
+else
+    mi->pg = sqlQueryObjs(conn, (sqlLoadFunc)retroMrnaInfoLoad, sqlQueryMust|sqlQuerySingle,
                       "select * from %s%sInfo where name='%s'", mi->tblPre, mi->geneSet,
                        mappedId);
 parseSrcId(mi);
@@ -745,10 +753,11 @@ void retroShowCdnaAli(char *mappedId)
 /* Show alignment for accession, mostly ripped off from htcCdnaAli */
 {
 char *track = cartString(cart, "aliTrack");
+char *table = cartString(cart, "table");
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *defDbConn = NULL;
-struct mappingInfo *mi = mappingInfoNew(conn, track, mappedId);
+struct mappingInfo *mi = mappingInfoNew(conn, table, mappedId);
 struct genbankCds cds = getCds(conn, mi);
 struct psl *psl;
 struct dnaSeq *rnaSeq;
@@ -766,9 +775,9 @@ if (startsWith("August",mi->geneSet))
     safef(acc, sizeof(acc), "aug-%s.T1",mi->seqId);
 else
     safef(acc, sizeof(acc), "%s",mi->seqId);
-//safef(acc, sizeof(acc), "bz-%s",mi->seqId);
 //defDbConn = sqlConnect(hDefaultDb());
-if (hRnaSeqAndIdx(acc, &rnaSeq, NULL, NULL, conn) < 0)
+rnaSeq = hDnaSeqGet(conn, acc, "retroSeq", "retroExtFile");
+if (rnaSeq == NULL)
     errAbort("can't get mRNA sequence from %s prefix %s for %s", 
             hGetDbName(), mi->geneSet, acc);
 sqlDisconnect(&defDbConn);
