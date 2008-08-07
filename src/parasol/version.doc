@@ -278,3 +278,5 @@
 
 12.09   Fixed typo in para usage message "in defaults" should be "it defaults"
         for MarkD's new feature.
+
+        Added more time info to err message in para.c for "Strange time in ..."
