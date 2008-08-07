@@ -8,7 +8,7 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.23 2007/12/20 01:01:40 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.24 2008/08/07 17:15:29 fanhsu Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -74,11 +74,10 @@ if (list != NULL)
     hPrintf("<BR>\n");
     slFreeList(&list);
     }
-
 if (kgVersion == KG_III)
     {
     /* Do Pfam domains here. */
-    list = getDomainList(conn, geneId,  "Pfam");
+    list = getPfamDomainList(conn, geneId);
     if (list != NULL)
     	{
     	hPrintf("<B>Pfam Domains:</B><BR>");
@@ -87,7 +86,7 @@ if (kgVersion == KG_III)
 	    char query[256];
 	    char *description;
 	    safef(query, sizeof(query), 
-	          "select description from pfamDesc where acc='%s'", el->name);
+	          "select description from pfamDesc where pfamAC='%s'", el->name);
 	    description = sqlQuickString(conn, query);
 	    if (description == NULL)
 	    	description = cloneString("n/a");
