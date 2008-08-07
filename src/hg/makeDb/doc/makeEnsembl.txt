@@ -4,6 +4,175 @@
 #	genome browsers.  The end of this file has a historical record of
 #	Robert's experiments with an automated process.
 ############################################################################
+
+#############################################################################
+#############################################################################
+# ensembl 50 updates (DONE - 2009-08-07 - Hiram)
+    #	When a new Ensembl release is available.  Some manual work needs
+    #	to be done to src/hg/utils/automation/EnsGeneAutomate.pm
+    #	to specify the files for each release.
+    #	Fixups:
+    #	version correspondence with their date strings:
+    #	add $verToDate[##] = "monYYYY"; 
+    #	add new ## to @versionList
+    #	create lists for FtpFileNames_##, FtpPeptideFileNames_## and
+    #	FtpMySqlFileNames_##
+    #	and associated reference pointers to those specific new lists
+    #	These lists relate our database names with their file names.
+    #	This could perhaps be done in an automated fashion by scanning
+    #	their FTP directories and relating their scientific names to
+    #	our names.  However, there is a difficulty involved even if that
+    #	could be done.  And that is, the exact correspondence between
+    #	which genome version they are annotating vs. the genome version
+    #	we have here.  I prefer to do this manually once at the beginning.
+    #	It can be argued this could be error prone since it is manually
+    #	done.  But, for now it is good enough for me.  If someone else wants
+    #	to take on this task, and it would actually be interesting, be my guest.
+    #	new Dbs at Ensembl for build 50:
+    #	bosTau4, ce6, tetNig2 (ucsc is tetNig1)
+    #	new Dbs here for build 50
+    #	micMur1 myoLuc1 ochPri2 speTri1
+    #	any new Dbs listed above will need to be run manually the first time
+    #	to debug their <db>.ensGene.ra configuration file in /cluster/data/<db>
+    #	no Db here:
+    #	aedAeg0 dm5 monDom5 sorAra0 tetNig2
+
+    #	The following three shell scripts can be run to make up the
+    #	three different lists.  All that needs to be filled in are the
+    #	UCSC database names.  For the gtf file names:
+
+echo "user anonymous qa@ucsc
+cd pub/release-50/gtf
+ls -lR gtfFiles.fl
+bye" > gtf50.rsp
+
+ftp -n -v -i ftp.ensembl.org < gtf50.rsp
+
+awk '
+BEGIN { D = "" }
+/^\.\// { D = $0 }
+/^-/ { printf "%s/%s\n", D, $9 }
+' gtfFiles.fl | sed -e "s#:/#/#; s#^./#'abcDef0' => '#; s/$/',/"
+
+    #	for the peptide names:
+
+echo "user anonymous qa@ucsc
+cd pub/release-50/fasta
+ls -lR pepFiles.fl
+bye" > pep50.rsp
+
+ftp -n -v -i ftp.ensembl.org < pep50.rsp
+awk '
+BEGIN { D = "" }
+/^\.\// { D = $0 }
+/^-/ { printf "%s/%s\n", D, $9 }
+' pepFiles.fl | sed -e "s#:/#/#; s#^./#'abcDef0' => '#; s/$/',/" \
+    | grep pep.all.fa.gz
+
+    #	for the MySQL directory names:
+echo "user anonymous qa@ucsc
+cd pub/release-50/mysql
+ls -lR mysqlFiles.fl
+bye" > mysql50.rsp
+
+ftp -n -v -i ftp.ensembl.org < mysql50.rsp
+
+awk '
+BEGIN { D = "" }
+/^\.\// { D = $0 }
+/seq_region.txt/ { printf "%s\n", D }
+' mysqlFiles.fl | sed -e "s#:##g; s#^./#'abcDef0' => '#; s/$/',/" \
+        | grep _core_
+
+    #	quick verification that all the UCSC database names were entered
+    #	correctly, the counts on each name should all be == 3
+    egrep "_50_|\.50\." EnsGeneAutomate.pm | awk '{print $1}' | sort | uniq -c
+
+    #	to see which DBs can be run:
+    cd ~/kent/src/hg/utils/automation
+    ./ensVersions 50 | grep -v "NOT FOUND" | sort
+
+    #	manually running mm9 to see if it works:
+    cd /cluster/data/mm9
+    $HOME/kent/src/hg/utils/automation/doEnsGeneUpdate.pl \
+            -verbose=2 -ensVersion=50 mm9.ensGene.ra > ensGene50.log 2>&1
+
+    #	This run reports completion as follows:
+############################################################################
+#  mm9 - Mouse - Ensembl Genes version 50 (DONE - 2008-08-07 - hiram)
+    ssh kkstore06
+    cd /cluster/data/mm9
+    cat << '_EOF_' > mm9.ensGene.ra
+# required db variable
+db mm9
+# optional liftRandoms yes/no or absent
+liftRandoms yes
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/"
+# optionally update the knownToEnsembl table after ensGene updated
+knownToEnsembl yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=50 mm9.ensGene.ra
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/ensGene.50
+    featureBits mm9 ensGene
+    # 60671138 bases of 2620346127 (2.315%) in intersection
+
+############################################################################
+#  bosTau4 - Cow - Ensembl Genes (DONE - 2008-04-22 - hiram)
+#	This one had to be done manually.  They have a mistake
+#	in their gtf file.  A single line has a gene name in the
+#	chromosome column.  The lifting business for chrUn seems to
+#	be unnecessary as it was done for bosTau3.  It looks like
+#	they properly have their chrUn names the same as ours
+    ssh hgwdev
+    cd /cluster/data/bosTau4
+
+    ssh kkstore05
+    cd /cluster/data/bosTau4
+    cat << '_EOF_' > bosTau4.ensGene.ra
+# required db variable
+db bosTau4
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9UX][0-9n]*\)/chr\1/"
+# cause SQL tables to be fetched to see if chrUn can be fixed up
+# geneScaffolds yes
+'_EOF_'
+#  << happy emacs
+    $HOME/kent/src/hg/utils/automation/doEnsGeneUpdate.pl \
+	-verbose=2 -ensVersion=50 -stop=process bosTau4.ensGene.ra \
+	> ensGene50.process.log 2>&1
+    #	the load step is broken due to the single bogus name.
+    #	strip it out by fixing the load script to grep it out
+
+    #	the fixed step:
+zcat process/bosTau4.allGenes.gp.gz | grep -v AAFC03011182 \
+    | hgLoadGenePred  -genePredExt bosTau4 \
+    ensGene stdin >& loadGenePred.errors.txt
+
+
+    $HOME/kent/src/hg/utils/automation/doEnsGeneUpdate.pl \
+	-continue=load -ensVersion=50 bosTau4.ensGene.ra \
+	> ensGene50.load.log 2>&1
+
+    $HOME/kent/src/hg/utils/automation/doEnsGeneUpdate.pl \
+	-continue=cleanup -ensVersion=50 bosTau4.ensGene.ra \
+	> ensGene50.cleanup.log 2>&1
+
+    ssh hgwdev
+    cd /cluster/data/bosTau4/bed/ensGene.50
+    featureBits bosTau4 ensGene
+    # 41259085 bases of 2731830700 (1.510%) in intersection
+
+############################################################################
+
+
+#############################################################################
+#############################################################################
 # ensembl 49 updates (DONE - 2009-03-31 - Hiram)
 
 #	hg18 and loxAfr1 were done manually to verify operations, then,
