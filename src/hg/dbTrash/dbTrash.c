@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.14 2008/06/24 18:49:17 hiram Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.14.6.1 2008/08/07 18:27:39 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -116,10 +116,11 @@ struct slName *tableNames = NULL;	/*	subject to age limits	*/
 struct hash *expiredHash = newHash(10);
 struct hash *notExpiredHash = newHash(10);
 
+// FIXME: this could be done by adding customTrash.profile = customTrack to hg.conf
 if (differentWord(db,CUSTOM_TRASH))
     conn = sqlConnect(db);
 else
-    conn = sqlCtConn(TRUE);
+    conn = sqlConnectProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 
 if (extFileCheck)
     checkExtFile(conn);
