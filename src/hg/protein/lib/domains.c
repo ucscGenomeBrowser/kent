@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.13 2008/07/29 19:15:56 kent Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.14 2008/08/07 17:25:56 fanhsu Exp $";
 
 char *samGenomeDb(char *proteinId)
 /* Determin if a protein belongs to a genome DB that has SAM results */
@@ -90,7 +90,7 @@ if (kgVersion == KG_III)
    
     /* Do Pfam domains here. */
     list = NULL;
-    if (kgId != NULL) list = getDomainList(hgConn, kgId,  "Pfam");
+    if (kgId != NULL) list = getPfamDomainList(hgConn, kgId);
     if (list != NULL)
     	{
     	hPrintf("<B>Pfam Domains:</B><BR>");
