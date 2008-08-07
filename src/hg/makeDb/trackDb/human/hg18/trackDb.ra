@@ -2129,7 +2129,7 @@ html snpArrayWith1M.html
 
     track snpArrayIllumina1M
     subTrack snpArray
-    shortLabel Illumina Human1M-Duo
+    shortLabel Illumina 1M-Duo
     longLabel Illumina Human1M-Duo
     type bed 6 +
     priority 9
