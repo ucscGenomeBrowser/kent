@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.103 2008/07/17 21:53:23 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.104 2008/08/07 21:21:00 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1111,7 +1111,7 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
 		sub->host = cloneString(host);
 		duration = now - sub->startTime;
                 if (duration < 0)
-		    warn("Strange start time in jobId %s: %u", jobId, sub->startTime);
+		    warn("Strange start time in jobId %s: %u (now=%u)", jobId, sub->startTime, (unsigned int) now);
                 else
 		    {
 		    if (duration > killSeconds && killSeconds > 0)
