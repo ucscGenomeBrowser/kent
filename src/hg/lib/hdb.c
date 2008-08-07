@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.368.4.5 2008/08/07 16:02:44 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.368.4.6 2008/08/07 18:28:07 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -480,48 +480,12 @@ if (*pConn != NULL)
     sqlConnCacheDealloc(centralCc, pConn);
 }
 
-#if 0 // FIXME:
-struct sqlConnection *hConnectLogicalDb(char *dbName)
-/* connect to a logical database (as specified in hg.conf), disconnect it using sqlDisconnect(&conn) */
-{
-// FIXME: drop
-struct sqlConnection *conn = NULL;
-char *host, *user, *password, *db;
-
-char setting[128];
-char *prefix;
-
-prefix = dbName;
-safef(setting, sizeof(setting), "%s.host", prefix);
-host = cfgOption(setting);
-safef(setting, sizeof(setting), "%s.user", prefix);
-user = cfgOption(setting);
-safef(setting, sizeof(setting), "%s.password", prefix);
-password = cfgOption(setting);
-safef(setting, sizeof(setting), "%s.db", prefix);
-db = cfgOption(setting);
-    
-if (host == NULL || user == NULL || password == NULL)
-    errAbort("Please set logical database %s options in the hg.conf file.", prefix);
-
-conn = sqlMayConnectRemote(host, user, password, db);
-if (conn == NULL) 
-    {
-    errAbort("<br>hConnectLogical failed trying to connect to %s.\n", prefix);
-    }
-
-if (conn == NULL)
-    return NULL;
-
-return conn;
-}
-#endif
-
 struct sqlConnection *hConnectLocalDb(char *database)
 /* Connect to local database where user info and other info
  * not specific to a particular genome lives.  Free this up
  * with sqlDisconnect(&conn). */
 {
+// FIXME: drop this
 struct sqlConnection *conn = NULL;
 char *host, *user, *password;
 
