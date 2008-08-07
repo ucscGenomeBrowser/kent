@@ -14,7 +14,7 @@
 #include "twoBit.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: clusterPsl.c,v 1.9.70.1 2008/07/31 02:24:00 markd Exp $";
+static char const rcsid[] = "$Id: clusterPsl.c,v 1.9.70.2 2008/08/07 16:02:37 markd Exp $";
 
 int maxMergeGap = 5;
 char *prefix = "c";
@@ -214,8 +214,6 @@ struct ggMrnaCluster *mcList = ggClusterMrna(ci);
 struct ggMrnaCluster *mc;
 for (mc = mcList; mc != NULL; mc = mc->next)
     {
-    // FIXME: not sure how this worked, as ggGraphConsensusCluster wants to talk
-    // to a database, but this program doesn't take a databases
     struct geneGraph *gg = ggGraphConsensusCluster(NULL, mc, ci, NULL, FALSE);
     struct altGraphX *ag = ggToAltGraphX(gg);
     if (ag != NULL)

@@ -15,7 +15,7 @@
 #include "hdb.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.25.78.1 2008/07/31 02:24:28 markd Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.25.78.2 2008/08/07 16:02:44 markd Exp $";
 
 static int maxEvidence = 500;
 
@@ -1298,8 +1298,9 @@ return total;
 		
 struct geneGraph *ggGraphConsensusCluster(char *genomeDb, struct ggMrnaCluster *mc, struct ggMrnaInput *ci, 
 					  struct hash *tissLibHash, boolean fillInEvidence)
-/* Make up a gene transcript graph out of the ggMrnaCluster. Only
- extending truncated exons to consensus splice sites. */
+/* Make up a gene transcript graph out of the ggMrnaCluster. Only extending
+ * truncated exons to consensus splice sites.  If fillInEvidence is FALSE,
+ * genomeDb can be NULL.*/
 {
 struct sqlConnection *conn = NULL;
 struct geneGraph *gg = makeInitialGraph(mc, ci);

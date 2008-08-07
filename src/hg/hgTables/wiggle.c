@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.64.12.1 2008/07/31 02:24:08 markd Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.64.12.2 2008/08/07 16:02:39 markd Exp $";
 
 extern char *maxOutMenu[];
 
@@ -539,12 +539,12 @@ if (isCustom)
 	    wds->setSpanConstraint(wds,spanConstraint);
 	else
 	    {
-	    struct sqlConnection *trashConn = sqlCtConn(TRUE);
+	    struct sqlConnection *trashConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 	    struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	    unsigned span = minSpan(trashConn, splitTableOrFileName,
 		region->chrom, region->start, region->end, cart, tdb);
 	    wds->setSpanConstraint(wds, span);
-	    sqlDisconnect(&trashConn);
+	    hFreeConn(&trashConn);
 	    }
 	valuesMatched = getWigglePossibleIntersection(wds, region,
 	    CUSTOM_TRASH, table2, &intersectBedList,
@@ -718,7 +718,7 @@ else
         {
         struct customTrack *ct = lookupCt(table);
         tdb = ct->tdb;
-        conn = sqlCtConn(TRUE);
+        conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
         }
     else
         {
@@ -727,6 +727,8 @@ else
     struct trackTable *tt1 = trackTableNew(tdb, table, conn);
     dv = dataVectorFetchOneRegion(tt1, region, conn);
     intersectDataVector(table, dv, region, conn);
+    if (isCustomTrack(table))
+        hFreeConn(&conn);
     }
 return dv;
 }
@@ -861,7 +863,7 @@ if (isCustom)
     if (ct->dbTrack)
 	{
 	unsigned span = 0;
-	struct sqlConnection *trashConn = sqlCtConn(TRUE);
+	struct sqlConnection *trashConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 	struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	valuesMatched = getWigglePossibleIntersection(wds, region,
 	    CUSTOM_TRASH, table2, &intersectBedList,
@@ -869,7 +871,7 @@ if (isCustom)
 	span = minSpan(trashConn, splitTableOrFileName, region->chrom,
 	    region->start, region->end, cart, tdb);
 	wds->setSpanConstraint(wds, span);
-	sqlDisconnect(&trashConn);
+	hFreeConn(&trashConn);
 	}
     else
 	valuesMatched = getWigglePossibleIntersection(wds, region, NULL, table2,
@@ -1044,7 +1046,7 @@ for (region = regionList; region != NULL; region = region->next)
 	{
 	if (ct->dbTrack)
 	    {
-	    struct sqlConnection *trashConn = sqlCtConn(TRUE);
+	    struct sqlConnection *trashConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 	    struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	    span = minSpan(trashConn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, tdb);
@@ -1052,7 +1054,7 @@ for (region = regionList; region != NULL; region = region->next)
 	    valuesMatched = getWigglePossibleIntersection(wds, region,
 		CUSTOM_TRASH, table2, &intersectBedList,
 		    splitTableOrFileName, operations);
-	    sqlDisconnect(&trashConn);
+	    hFreeConn(&trashConn);
 	    }
 	else
 	    {

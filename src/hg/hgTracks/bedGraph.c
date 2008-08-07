@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.10.14.1 2008/07/31 02:24:10 markd Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.10.14.2 2008/08/07 16:02:39 markd Exp $";
 
 struct bedGraphItem
 /* A bedGraph track item. */
@@ -109,7 +109,7 @@ if (tg->customPt)
     {
     struct customTrack *ct = (struct customTrack *) tg->customPt;
     tableName = ct->dbTableName;
-    conn = sqlCtConn(TRUE);
+    conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     }
 else 
 #endif /* GBROWSE */

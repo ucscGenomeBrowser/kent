@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1445.4.6 2008/08/05 07:11:16 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1445.4.7 2008/08/07 16:02:41 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4366,7 +4366,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 char query[512];
                 int rowOffset;
                 char **row;
-                struct sqlConnection *conn = sqlCtConn(TRUE);
+                struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
                 struct sqlResult *sr = NULL;
 
                 safef(query, sizeof(query), "select * from %s", ct->dbTableName);
@@ -4382,7 +4382,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                         }
                     }
                 sqlFreeResult(&sr);
-                sqlDisconnect(&conn);
+                hFreeConn(&conn);
                 }
             else
                 {
@@ -16825,9 +16825,9 @@ else if (ct->wiggle)
     {
     if (ct->dbTrack)
 	{
-	struct sqlConnection *conn = sqlCtConn(TRUE);
+	struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 	genericWiggleClick(conn, ct->tdb, fileItem, start);
-	sqlDisconnect(&conn);
+	hFreeConn(&conn);
 	}
     else
 	genericWiggleClick(NULL, ct->tdb, fileItem, start);
@@ -16845,14 +16845,14 @@ else if (ct->dbTrack && startsWith("bedGraph", ct->dbTrackType))
     }
 else if (ct->dbTrack && sameString(ct->dbTrackType, "maf"))
     {
-    struct sqlConnection *conn = sqlCtConn(TRUE);
-    struct sqlConnection *conn2 = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+    struct sqlConnection *conn2 = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     char *saveName = ct->tdb->tableName;
     ct->tdb->tableName = ct->dbTableName;
     customMafClick(conn, conn2, ct->tdb);
     ct->tdb->tableName = saveName;
-    sqlDisconnect(&conn2);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn2);
+    hFreeConn(&conn);
     }
 else
     {
@@ -16861,7 +16861,7 @@ else
 	char where[512];
 	int rowOffset;
 	char **row;
-	struct sqlConnection *conn = sqlCtConn(TRUE);
+	struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 	struct sqlResult *sr = NULL;
 	int rcCount = 0;
 	int start = cartInt(cart, "o");
@@ -16884,7 +16884,7 @@ else
 	    ++rcCount;
 	    }
 	sqlFreeResult(&sr);
-	sqlDisconnect(&conn);
+	hFreeConn(&conn);
 	}
     if (ct->fieldCount < 4)
 	{
@@ -16899,11 +16899,11 @@ else
 		TRUE, NULL);
 	if (ct->dbTrack)
 	    {
-	    struct sqlConnection *conn = sqlCtConn(TRUE);
+	    struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 	    char *date = firstWordInLine(sqlTableUpdate(conn, ct->dbTableName));
 	    if (date != NULL)
 		printf("<B>Data last updated:</B> %s<BR>\n", date);
-	    sqlDisconnect(&conn);
+	    hFreeConn(&conn);
 	    }
 	printTrackHtml(ct->tdb);
 	return;
@@ -16926,7 +16926,7 @@ else
     }
 if (ct->dbTrack)
     {
-    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     char *date = firstWordInLine(sqlTableUpdate(conn, ct->dbTableName));
     if (date != NULL)
 	printf("<B>Data last updated:</B> %s<BR>\n", date);

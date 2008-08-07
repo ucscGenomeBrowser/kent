@@ -114,6 +114,8 @@ char *customTrackTableFromLabel(char *label);
 
 #define CUSTOM_TRASH	"customTrash"
 /*	custom tracks database name	*/
+#define CUSTOM_TRACKS_PROFILE	"customTracks"
+/*	custom tracks database profile	*/
 #define CT_META_INFO	"metaInfo"
 /*	table name in customTrash for last accessed memory and other data */
 #define CT_EXTFILE	"extFile"

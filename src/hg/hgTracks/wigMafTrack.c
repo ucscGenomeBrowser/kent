@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.133.4.1 2008/07/31 02:24:17 markd Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.133.4.2 2008/08/07 16:02:40 markd Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -369,12 +369,12 @@ if (mp->ct)
     {
     char *fileName = getCustomMafFile(track);
 
-    conn = sqlCtConn(TRUE);
-    conn2 = sqlCtConn(TRUE);
+    conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+    conn2 = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     mp->list = wigMafLoadInRegion(conn, conn2, mp->ct->dbTableName,
 				chromName, winStart - 2 , winEnd + 2, fileName);
-    sqlDisconnect(&conn);
-    sqlDisconnect(&conn2);
+    hFreeConn(&conn);
+    hFreeConn(&conn2);
     }
 else
     {
@@ -560,12 +560,12 @@ if (winBaseCount < MAF_SUMMARY_VIEW)
     if (mp->ct)
 	{
 	char *fileName = getCustomMafFile(track);
-	conn = sqlCtConn(TRUE);
-	conn2 = sqlCtConn(TRUE);
+	conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+	conn2 = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 	mp->list = wigMafLoadInRegion(conn, conn2, mp->ct->dbTableName,
 					chromName, winStart, winEnd, fileName);
-	sqlDisconnect(&conn);
-	sqlDisconnect(&conn2);
+	hFreeConn(&conn);
+	hFreeConn(&conn2);
 	}
     else
 	{
@@ -1024,12 +1024,12 @@ static void drawScoreOverviewCT(char *tableName,
 	Color color, Color altColor,
 	enum trackVisibility vis)
 {
-struct sqlConnection *conn = sqlCtConn(TRUE);
+struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 
 drawScoreOverviewC(conn, tableName, height, seqStart, seqEnd, 
 	hvg, xOff, yOff, width, font, color, altColor, vis);
 
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 }
 
 
@@ -1761,8 +1761,8 @@ char *tableName = NULL;
 
 if (mp->ct != NULL)
     {
-    conn2 = sqlCtConn(TRUE);
-    conn3 = sqlCtConn(TRUE);
+    conn2 = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+    conn3 = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     tableName = mp->ct->dbTableName;
     mafFile = getCustomMafFile(track);
     }
@@ -2315,16 +2315,8 @@ for (i=0; i<lineCount-1; ++i)
     freeMem(lines[i]);
 freez(&lines);
 */
-if (mp->ct != NULL)
-    {
-    sqlDisconnect(&conn2);
-    sqlDisconnect(&conn3);
-    }
-else
-    {
-    hFreeConn(&conn2);
-    hFreeConn(&conn3);
-    }
+hFreeConn(&conn2);
+hFreeConn(&conn3);
 hashFree(&miHash);
 return y;
 }

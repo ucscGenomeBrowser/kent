@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.49.6.1 2008/07/31 02:24:08 markd Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.49.6.2 2008/08/07 16:02:38 markd Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -480,11 +480,11 @@ hPrintf("For formatting information see: ");
 hPrintf("<A HREF=\"../goldenPath/help/customTrack.html#MAF\">MAF</A> ");
 hPrintf("format.");
 
-struct sqlConnection *conn = sqlCtConn(TRUE);
+struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 webNewSection("Sample Rows");
 printSampleRows(10, conn, ct->dbTableName);
 printTrackHtml(ct->tdb);
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 }
 
 
@@ -507,11 +507,11 @@ hPrintf("format.");
 
 if (ct->dbTrack)
     {
-    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     webNewSection("Sample Rows");
     printSampleRows(10, conn, ct->dbTableName);
     printTrackHtml(ct->tdb);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     }
 else
     {

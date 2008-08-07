@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.173.4.2 2008/08/02 04:06:29 markd Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.173.4.3 2008/08/07 16:02:44 markd Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -104,6 +104,7 @@ if (status)
     else
 	{
 	sqlFreeResult(&sr);
+        fprintf(stderr, "INSERT METAINFO: %s\n", sqlGetDatabase(conn)); // FIXME:
 	safef(query, sizeof(query), "INSERT %s VALUES(\"%s\",1,now())",
 	    CT_META_INFO, table);
 	sqlUpdate(conn,query);
@@ -157,8 +158,7 @@ boolean status = dbExists;
 
 if (! checked)
     {
-    struct sqlConnection *conn = sqlCtConn(FALSE);
-
+    struct sqlConnection *conn = sqlMayConnectProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     checked = TRUE;
     if ((struct sqlConnection *)NULL == conn)
 	status = FALSE;
@@ -175,9 +175,9 @@ if (! checked)
     }
 else if (dbExists && ((char *)NULL != tableName))
     {
-    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     status = ctDbTableExists(conn, tableName);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     }
 
 return(status);

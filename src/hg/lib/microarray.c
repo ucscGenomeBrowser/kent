@@ -821,7 +821,7 @@ struct bed *ctLoadMultScoresBedDb(struct customTrack *ct, char *chrom, int start
 {
 int rowOffset;
 char **row;
-struct sqlConnection *conn = sqlCtConn(TRUE);
+struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 struct sqlResult *sr;
 struct bed *bed, *bedList = NULL;
 sr = hRangeQuery(conn, ct->dbTableName, chrom, start, end,

@@ -19,11 +19,8 @@
 #include "jksql.h"
 #include "sqlNum.h"
 #include "hgConfig.h"
-#ifndef GBROWSE
-#include "customTrack.h"
-#endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: jksql.c,v 1.113.6.6 2008/08/06 17:39:36 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.113.6.7 2008/08/07 16:02:45 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -652,27 +649,6 @@ struct sqlConnection *sqlMayConnectRemote(char *host, char *user, char *password
 return sqlConnRemote(host, user, password, database, FALSE);
 }
 
-#ifndef GBROWSE
-struct sqlConnection *sqlCtConn(boolean abort)
-/* Connect to customTrash database, optionally abort on failure */
-{
-char *host = cfgOptionDefault("customTracks.host", NULL);
-char *user = cfgOptionDefault("customTracks.user", NULL);
-char *password = cfgOptionDefault("customTracks.password", NULL);
-
-if (host && user && password)
-    return sqlConnRemote(host, user, password, CUSTOM_TRASH, abort);
-else
-    {
-    if (abort)
-	errAbort("can not find customTracks DB conn info in hg.conf");
-    else
-	return NULL;
-    }
-return NULL;
-}
-#endif /* GBROWSE */
-
 static struct sqlConnection *sqlConnProfile(struct sqlProfile* sp, char *database, boolean abort)
 /* Connect to database using the profile.  Database maybe NULL to connect to
  * the server. Optionally abort on failure. */
@@ -702,6 +678,8 @@ struct sqlConnection *sqlConnectProfile(char *profileName, char *database)
  */ 
 {
 struct sqlProfile* sp = sqlProfileGet(profileName, database);
+// FIXME:
+fprintf(stderr, "sqlConnectProfile %s %s: %s %s\n", profileName, database, sp->name, sp->user);
 return sqlConnectRemote(sp->host, sp->user, sp->password, database);
 }
 
@@ -714,6 +692,8 @@ struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database)
  */ 
 {
 struct sqlProfile* sp = sqlProfileGet(profileName, database);
+// FIXME:
+fprintf(stderr, "sqlMayConnectProfile %s %s: %s %s\n", profileName, database, sp->name, sp->user);
 return sqlMayConnectRemote(sp->host, sp->user, sp->password, database);
 }
 
@@ -1663,10 +1643,10 @@ else
     {
     struct sqlProfile *sp = cache->profile;
     if (sp == NULL)
-        {
-        char *profileName = (database == NULL) ? "db" : NULL;
         sp = sqlProfileMustGet(profileName, database);
-        }
+    // FIXME:
+    fprintf(stderr, "sqlConnCacheMax %s %s: %s %s\n", profileName, database, sp->name, sp->user);
+    
     conn = sqlConnProfile(sp, database, abort);
     }
 return sqlConnCacheAdd(cache, conn);
@@ -1713,15 +1693,23 @@ void sqlConnCacheDealloc(struct sqlConnCache *cache, struct sqlConnection **pCon
 /* Free up a cached connection. */
 {
 struct sqlConnection *conn = *pConn;
-// find entry
-struct sqlConnCacheEntry *scce;
-for (scce = cache->entries; (scce != NULL) && (scce->conn != conn); scce = scce->next)
-    continue;
+if (conn != NULL)
+    {
+    struct sqlConnCacheEntry *scce;
+    for (scce = cache->entries; (scce != NULL) && (scce->conn != conn); scce = scce->next)
+        continue;
 if (scce ==  NULL)
-    errAbort("sqlConnCacheDealloc called on cache (%s) that doesn't contain "
-             "the given connection", cache->host);  // FIXME: host maybe NULL
-scce->inUse = FALSE;
-*pConn = NULL;
+    {// FIXME:
+    char cmd[256];
+    safef(cmd, sizeof(cmd), "pstack %d >/var/tmp/stack.out", getpid());
+    system(cmd);
+    }
+    if (scce ==  NULL)
+        errAbort("sqlConnCacheDealloc called on cache that doesn't contain "
+                 "the given connection");
+    scce->inUse = FALSE;
+    *pConn = NULL;
+    }
 }
 
 char *sqlEscapeString2(char *to, const char* from)

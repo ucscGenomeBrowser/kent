@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.83.6.1 2008/07/31 02:24:32 markd Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.83.6.2 2008/08/07 16:02:46 markd Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -407,7 +407,7 @@ else
     if (!wds->conn)
 	{
 	if (sameString(CUSTOM_TRASH,wds->db) && ctDbAvailable(wds->tblName))
-	    wds->conn = sqlCtConn(TRUE);
+	    wds->conn = sqlConnectProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 	else
 	    wds->conn = sqlConnect(wds->db);
 	}

@@ -14,7 +14,7 @@
 
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.2.58.1 2008/07/31 02:24:04 markd Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.2.58.2 2008/08/07 16:02:37 markd Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -224,7 +224,7 @@ if (ct->dbTrack)
     char query[512];
     int rowOffset = 0;
     char **row;
-    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     struct sqlResult *sr = NULL;
 
     safef(query, sizeof(query), "select * from %s where chrom='%s'", ct->dbTableName, chrom);
@@ -238,7 +238,7 @@ if (ct->dbTrack)
 	slAddHead(pBedList, copy);
 	}
     sqlFreeResult(&sr);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     }
 else
     {

@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.36.10.2 2008/08/02 04:06:22 markd Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.36.10.3 2008/08/07 16:02:38 markd Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -553,7 +553,7 @@ if (ct->dbTrack)
     char query[512];
     int rowOffset;
     char **row;
-    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     struct sqlResult *sr = NULL;
 
     safef(query, sizeof(query), "select * from %s", ct->dbTableName);
@@ -571,7 +571,7 @@ if (ct->dbTrack)
 	    }
 	}
     sqlFreeResult(&sr);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     }
 else
     {

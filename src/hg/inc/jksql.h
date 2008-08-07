@@ -64,9 +64,6 @@ struct sqlConnection *sqlMayConnectRemote(char *host, char *user, char *password
 /* Connect to database somewhere as somebody. Database maybe NULL to
  * just connect to the server.  Return NULL can't connect */
 
-struct sqlConnection *sqlCtConn(boolean abort);
-/* Connect to customTrash database, optionally abort on failure */
-
 struct hash *sqlHashOfDatabases(void);
 /* Get hash table with names of all databases that are online. */
 

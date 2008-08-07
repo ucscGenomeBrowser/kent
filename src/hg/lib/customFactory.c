@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.85.4.3 2008/08/02 04:06:28 markd Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.85.4.4 2008/08/07 16:02:44 markd Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -138,7 +138,7 @@ void customFactorySetupDbTrack(struct customTrack *track)
 struct tempName tn;
 char prefix[16];
 static int dbTrackCount = 0;
-struct sqlConnection *ctConn = sqlCtConn(TRUE);
+struct sqlConnection *ctConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 ++dbTrackCount;
 safef(prefix, sizeof(prefix), "t%d", dbTrackCount);
 track->dbTableName = sqlTempTableName(ctConn, prefix);
@@ -1244,7 +1244,7 @@ if (dbRequested)
     track->wigFile = NULL;
 
     /* Figure out lower and upper limits with db query */
-    struct sqlConnection *ctConn = sqlCtConn(TRUE);
+    struct sqlConnection *ctConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     char buf[64];
     wigDbGetLimits(ctConn, track->dbTableName, 
 	    &upperLimit, &lowerLimit, &span);
@@ -1749,7 +1749,7 @@ struct sqlConnection *ctConn = NULL;
 char *loadedFromUrl = NULL;
 boolean dbTrack = ctDbUseAll();
 if (dbTrack)
-    ctConn = sqlCtConn(TRUE);
+    ctConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 
 struct lineFile *lf = customLineFile(text, isFile);
 
@@ -2002,7 +2002,7 @@ struct customPp *cpp = customPpNew(lf);
 lf = NULL;
 
 if (dbTrack)
-    ctConn = sqlCtConn(TRUE);
+    ctConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 
 /* Loop through this once for each track. */
 while ((line = customPpNextReal(cpp)) != NULL)

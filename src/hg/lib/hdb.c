@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.368.4.4 2008/08/06 17:39:35 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.368.4.5 2008/08/07 16:02:44 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -657,7 +657,7 @@ boolean ordinaryDb = TRUE;
 #ifndef GBROWSE
 if (sameString(CUSTOM_TRASH,db) && ctDbAvailable(NULL))
     {
-    conn = sqlCtConn(TRUE);
+    conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     ordinaryDb = FALSE;
     }
 else
@@ -2560,7 +2560,7 @@ if (sameString(CUSTOM_TRASH,db))
     {
     if(! ctDbAvailable(table))
 	return FALSE;
-    conn = sqlCtConn(TRUE);
+    conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     }
 else
 #endif /* GBROWSE */

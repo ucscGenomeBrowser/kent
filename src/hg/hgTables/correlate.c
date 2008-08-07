@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.66.6.1 2008/07/31 02:24:07 markd Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.66.6.2 2008/08/07 16:02:38 markd Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -344,7 +344,7 @@ if (startsWith("bedGraph", tdb->type))
      */
     if (isCustomDbTable)
         {
-	conn = sqlCtConn(TRUE);
+	conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
         freeMem(table->actualTable);
         table->actualTable = cloneString(ct->dbTableName);
         }
@@ -380,7 +380,7 @@ if (startsWith("bedGraph", tdb->type))
 	    }
 	sqlFreeResult(&sr);
 	if (isCustomDbTable)
-	    sqlDisconnect(&conn);
+	    hFreeConn(&conn);
 	}
     }
 else if (sameString("cpgIsland", tdb->tableName))
@@ -586,7 +586,7 @@ char *dbTableName = table->actualTable;
 if (NULL != table->dbTableName)
     {
     dbTableName = table->dbTableName;
-    conn = sqlCtConn(TRUE);
+    conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     }
 
 /*	cookedBedList can read anything but bedGraph, so read bedGraph
@@ -639,7 +639,7 @@ else
     bedList=cookedBedList(conn, table->actualTable, region, lm, &bedFieldCount);
     }
 if (NULL != table->dbTableName)
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
 
 slSort(&bedList, bedLineCmp);   /* make sure it is sorted by chrom,chromStart*/
 
@@ -800,7 +800,7 @@ if (table->isWig)
     if (NULL != table->dbTableName)
 	{
 	dbTableName = table->dbTableName;
-	conn = sqlCtConn(TRUE);
+	conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 	}
 
     /*	we still do not have a proper minSpan finder for custom tracks */
@@ -852,6 +852,9 @@ if (table->isWig)
     }
 else
     correlateReadBed(table, vector, region, conn);
+
+if (table->dbTableName != NULL)
+    hFreeConn(&conn);
 
 endTime = clock1000();
 

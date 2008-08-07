@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1499.4.4 2008/08/05 07:11:14 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1499.4.5 2008/08/07 16:02:39 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2188,7 +2188,8 @@ if (ct->dbTrack)
     int fieldCount = ct->fieldCount;
     int rowOffset;
     char **row;
-    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn = 
+        hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     struct sqlResult *sr = NULL;
 
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
@@ -2235,7 +2236,7 @@ if (ct->dbTrack)
     {
     int rowOffset;
     char **row;
-    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     struct sqlResult *sr = NULL;
 
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
@@ -2295,7 +2296,7 @@ if (ct->dbTrack)
     int fieldCount = ct->fieldCount;
     int rowOffset;
     char **row;
-    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     struct sqlResult *sr = NULL;
 
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
@@ -2347,7 +2348,7 @@ if (ct->dbTrack)
     int fieldCount = ct->fieldCount;
     int rowOffset;
     char **row;
-    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     struct sqlResult *sr = NULL;
 
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
@@ -2402,7 +2403,7 @@ if (ct->dbTrack)
     int fieldCount = ct->fieldCount;
     int rowOffset;
     char **row;
-    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
     struct sqlResult *sr = NULL;
     sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
 		     NULL, &rowOffset);
@@ -2465,11 +2466,9 @@ char *type = nextWord(&typeParam);
 
 if (ct->dbTrack)
     {
-    struct sqlConnection *conn = sqlCtConn(FALSE);
-    if ((struct sqlConnection *)NULL == conn)
-	errAbort("can not connect to customTracks DB");
-    else
-	hFreeConn(&conn);
+    // make sure we can connect
+    struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+    hFreeConn(&conn);
     }
 
 useItemRgb = bedItemRgb(tdb);

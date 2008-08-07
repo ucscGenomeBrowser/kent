@@ -28,7 +28,7 @@
 #include "gvUi.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.164.4.3 2008/08/02 04:06:22 markd Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.164.4.4 2008/08/07 16:02:38 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1245,9 +1245,9 @@ if (isCustomTrack(table))
     if ((ct!= NULL) && (ct->dbTrackType != NULL) &&
 	    sameString(ct->dbTrackType, "maf"))
 	{
-	conn = sqlCtConn(TRUE);
+	conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
 	fieldList = sqlListFields(conn, ct->dbTableName);
-	sqlDisconnect(&conn);
+	hFreeConn(&conn);
 	}
     else
 	{
