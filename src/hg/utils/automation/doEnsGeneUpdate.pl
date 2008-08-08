@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.16 2008/04/03 23:56:32 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.17 2008/08/08 20:58:55 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -187,14 +187,16 @@ sub doLoad {
   my $thisGenePred = "$buildDir" . "/process/$db.allGenes.gp.gz";
   my $prevGenePred = "$previousBuildDir" . "/process/$db.allGenes.gp.gz";
   my $identicalToPrevious = 0;
-  my $thisGenePredSum = `zcat $thisGenePred | sum`;
-  chomp $thisGenePredSum;
-  my $prevGenePredSum = `zcat $prevGenePred | sum`;
-  chomp $prevGenePredSum;
-  print STDERR "prev: $prevGenePredSum, this: $thisGenePredSum\n";
-  if ($prevGenePredSum eq $thisGenePredSum) {
-    print STDERR "previous genes same as new genes";
-    $identicalToPrevious = 1;
+  if ( -f $prevGenePred ) {
+      my $thisGenePredSum = `zcat $thisGenePred | sum`;
+      chomp $thisGenePredSum;
+      my $prevGenePredSum = `zcat $prevGenePred | sum`;
+      chomp $prevGenePredSum;
+      print STDERR "prev: $prevGenePredSum, this: $thisGenePredSum\n";
+      if ($prevGenePredSum eq $thisGenePredSum) {
+	print STDERR "previous genes same as new genes";
+	$identicalToPrevious = 1;
+      }
   }
 
   if ($identicalToPrevious ) {
@@ -456,7 +458,7 @@ sub doMakeDoc {
 
   print <<_EOF_
 ############################################################################
-#  $db - $organism - Ensembl Genes (DONE - $updateTime - $ENV{'USER'})
+#  $db - $organism - Ensembl Genes version $ensVersion  (DONE - $updateTime - $ENV{'USER'})
     ssh $fileServer
     cd /cluster/data/$db
     cat << '_EOF_' > $db.ensGene.ra
