@@ -18813,6 +18813,9 @@ ignore 1 lines'
 # 8/7/08: Regenerated snp128.sql with only those enum/set values that are
 # actually used (except always keep unknown, the default) and reloaded snp128.
 # No data change -- just the sql field definitions for enums and sets.
+# QA NOTE: used sudo mytouch on the snp128 table to reset the timestamp to
+# .2008-01-22 00:00:00 (was .2008-08-07 16:08:27 after Angie's re-load) in
+# order to keep joinerCheck happy and avoid confusion. (8/8/08 brooke)
     # Set up build directory
     ssh kkstore06
     mkdir -p /cluster/store3/dbSNP128/{human,shared}
@@ -21486,6 +21489,10 @@ hgLoadSqlTab hg18 illuminaProbesSeq{,.sql,.tab}
 # No data change -- just the sql field definitions for enums and sets.
 # 8/7/08: Swapped molType values cDNA <--> genomic in snp129 because they
 # were swapped in the fasta headers.
+# QA NOTE: used sudo mytouch to change timestamps on all downstream snp129
+# tables (snp129Exceptions, snp129ExceptionDesc, snp129OrthoPt2Pa2Rm2,
+# snp129Seq) to .2008-08-08 00:00:00 to avoid unwarranted joinerCheck
+# time discrepancy errors. (8/8/08, brooke)
 
     # Set up build directory
     ssh kkstore06
