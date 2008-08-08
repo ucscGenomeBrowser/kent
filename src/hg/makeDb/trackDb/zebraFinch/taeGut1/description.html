@@ -1,24 +1,24 @@
 <!-- Display image in righthand corner -->
 <TABLE ALIGN=RIGHT BORDER=0 WIDTH=185>
   <TR><TD ALIGN=RIGHT>
-    <A HREF="*** link to sequencing center's project page"
+    <A HREF="http://genome.wustl.edu/genome.cgi?GENOME=Taeniopygia%20guttata"
     TARGET=_blank>
-    <IMG SRC="/images/Taeniopygia_guttata.jpg" WIDTH=*** HEIGHT=*** ALT="Zebra finch"></A>
+    <IMG SRC="/images/Taeniopygia_guttata.jpg" WIDTH=300 HEIGHT=300 ALT="Zebra finch"></A>
   </TD></TR>
   <TR><TD ALIGN=RIGHT> 
     <FONT SIZE=-1><em>Taeniopygia guttata</em><BR> 
     </FONT>
     <FONT SIZE=-2> 
-      Photo courtesy of ***
-      (<A HREF="*** link to source" 
-      TARGET=_blank>***source</A>)
+      Photo courtesy of Dr. Art Arnold
+	(<A HREF="http://www.physci.ucla.edu/html/arnold.htm" 
+      TARGET=_blank>UCLA Department of Physiological Science</A>)
     </FONT>
   </TD></TR>
 </TABLE>
 
 <P>
 The Jul. 2008 <em>Taeniopygia guttata</em> draft assembly 
-(Washington University taeGut1) was produced by the *** sequencing center.
+(taeGut1) was produced by the Washington University Genome Sequencing Center.
 
 <H3>Sample position queries</H3>
 <P>
@@ -93,30 +93,120 @@ Zebra finch genome.  See the
 <HR>
 <H3>Assembly details</H3>
 <P>
-The genome has been sequenced to ***X coverage.
-Approximately 88% of the sequence has been anchored to chromosomes, 
-which include autosomes 1-24, 26-28, and 32, and sex chromosomes W and Z. 
-(In contrast to mammals, the female chicken is heterogametic (ZW) and the 
-male is homogametic (ZZ).) 
-The remaining unanchored contigs that could be localized to a chromosome 
-have been concatenated into the virtual 
-chromosomes &quot;chr*_random&quot;, separated by gaps of 10,000 bp. 
-Unanchored contigs that could not be localized to a chromosome 
-have been concatenated into the virtual 
-chromosome &quot;chrUn&quot;, separated by gaps of 1,000 bp in order 
-to reduce the total size of chrUn. 
-The chicken 
-mitochondrial sequence is also available as the virtual chromosome 
-&quot;chrM&quot;. 
+The zebra finch DNA for shotgun sequencing, and for BAC and cosmid
+libraries, derived from a single male (Black 17) domesticated zebra
+finch from the laboratory of Arthur P. Arnold in the Department of
+Physiological Science at UCLA, Los Angeles, CA, USA. The parents of
+this male hatched in the same clutch in an aviary of group-housed
+zebra finches, and therefore may have been brother-sister.  A male BAC
+library was constructed from the same bird by Barbara Blackmon at the
+Clemson University Genomics Institute (this library is NOT the same as
+the BAC library available from the Arizona Genome Institute) made from
+several individual females. The initial assembly was generated using
+PCAP (Huang et al., 2006) from ~6X coverage in whole-genome shotgun
+reads, a combination of plasmid, fosmid and bacterial artificial
+chromosome (BAC)-end read pairs.  The sequence of 35 finished BAC
+clones were incorporated into the final assembly. The T. guttata
+physical map contains 108,725 clones for a ~10X depth of coverage and
+is contained in 2,724 contigs.
+<P>
+Of the 1.2 Gb genome, 1.0Gb was ordered and oriented along 33 zebra
+finch chromosomes and 1 linkage group.  An additional 36 Mb was
+localized to specific chromosomes or linkage groups, but was not
+ordered and oriented. For the initial PCAP assembly, there were 92,299
+major contigs (126,053 total contigs) with an N50 contig length of
+39kb (n=8,037). There were 37,252 major supercontigs (37,698 total
+supercontigs) with the N50 supercontig length of 10.4Mb (n=29).
+<P>
+The zebra finch chromosomes were named based on their homologous
+chromosomes in Gallus gallus.  For those chromosomes where multiple
+zebra finch chromosomes correspond to a single chicken chromosome, a
+letter was appended to the chromosome name.  The lookup table can be
+found below for cross-referencing the Gallus gallus homologous names
+with the current naming convention for the zebra finch.  All
+unanchored supercontigs have been concatenated into chromosome
+"chrUn", separated by gaps of 25 bp. On all other chromosomes, unknown
+gap sizes between supercontigs have been set to 100 bp.
+<P>
+To create chromosomal sequences, data from the Sheffield Linkage Map
+and the physical map were integrated with the WGS assembly data. Using
+sequence comparison, T. guttata SNP marker sequences were assigned to
+contigs (contiguous stretches of DNA) in the WGS assembly. Based on
+these marker assignments, the supercontigs (sets of ordered/oriented
+contigs linked by virtue of read pairing data) were assigned to a
+chromosome based on a majority rule (>50% of markers assigned to the
+same chromosome). The supercontigs were initially positioned along
+chromosomes based on their median marker position, and initially
+oriented based on relative marker order along the supercontig.  The
+physical map was also linked to the sequence assembly by using BAC end
+sequence links and in silico digests of the assembly to create
+"ultracontigs", ordered/oriented lists of "supercontigs". Following
+these initial placements, the WGS assembly read pairing data were
+used, where possible, to aid in orientation and confirm order. For the
+Z chromosome, marker order was also determined by FISH (Art Arnold,
+personal commuication) and integrated again with the linkage map, physical
+map and assembly.  All discrepancies betwen the various maps
+were manually reviewed and a combined super/ultracontig order was
+established based on reconciling the data from the Sheffield, assembly 
+and physical maps. Available EST data were also used in reviewing the assembly.
+Alignments with the chicken genome were also examined and used as aid
+in orientation particularly when available other zebra finch-specific
+data were inconclusive. The location of the centromere is known only for the Z
+chromosome. Thus no other centromeres were placed in the current
+chromosomal assemblies.
+
+<P>
+<pre>
+Cross-reference of zebra finch chromosome names used for this release, chicken and
+finch chromosome name suggested by Itoh et al, 2005*.
+
+TGU	GGA	Itoh et al., 2005
+Tgu1	1	3
+Tgu1A	1	4
+Tgu1B	1	NA
+Tgu2	2	1
+Tgu3	3	2
+Tgu4	4	5
+Tgu4A	4	microchromosome
+Tgu5	5	6
+Tgu6	6	7
+Tgu7	7	8
+Tgu8	8	9
+Tgu9	9	10
+Tgu10	10	NA
+Tgu11	11	NA
+Tgu12	12	NA
+Tgu13	13	NA
+Tgu14	14	NA
+Tgu15	15	NA
+Tgu16	16	NA
+Tgu17	17	NA
+Tgu18	18	NA
+Tgu19	19	NA
+Tgu20	20	NA
+Tgu21	21	NA
+Tgu22	22	NA
+Tgu23	23	NA
+Tgu24	24	NA
+Tgu25	25	NA
+Tgu26	26	NA
+Tgu27	27	NA
+Tgu28	28	NA
+TguLGE22	LGE22C19W28_E50C23 	NA
+TguLGE22A	LGE22C19W28_E50C23 	NA
+Tgun2	NA	NA
+Tgun5	NA	NA
+TguZ	Z	Z
+
+*Itoh Y, Arnold AP (2005)    Chromosomal polymorphism and comparative painting analysis in the zebra finch.
+Chromosome Res. 2005;13(1):47-56.
+</pre>
 </P>
-
-
 <P>
 Bulk downloads of the sequence and annotation data are available via 
 the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/taeGut1/">FTP
 server</A> or the <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#zebra_finch">Downloads</A> page. 
 
-  *** Developer -- remove this if no conditions for use:
 These data have
 <A HREF="../goldenPath/credits.html#zebra_finch_use">specific 
 conditions for use</A>. 
