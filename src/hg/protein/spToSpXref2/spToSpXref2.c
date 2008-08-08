@@ -25,8 +25,6 @@ struct sqlConnection *conn, *conn2;
 char query[256], query2[256];
 struct sqlResult *sr, *sr2;
 char **row, **row2;
-char proteinDatabaseName[255];
-char proteinsDB[255];
 FILE *o1;
 char *proteinDataDate;
 char *bioDatabase, *bioentryID;
@@ -45,8 +43,6 @@ optionHash(&argc, argv);
 if (argc != 2) usage();
 
 proteinDataDate = argv[1];
-safef(proteinDatabaseName, sizeof(proteinDatabaseName), "sp%s", proteinDataDate);
-safef(proteinsDB, sizeof(proteinsDB), "proteins%s", proteinDataDate);
 
 o1 = mustOpen("temp_spXref2.dat", "w");
 
