@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.143 2008/05/31 15:59:25 braney Exp $
+# 	$Id: makefile,v 1.144 2008/08/08 22:10:40 larrym Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -28,6 +28,7 @@ all::    cgi utils
 hgLib:
 	@./sqlEnvTest.sh
 	cd lib && ${MAKE}
+	cd protein/lib && ${MAKE}
 
 utils:	hgLib
 	@for D in $(USE_DIRS) x; do \
