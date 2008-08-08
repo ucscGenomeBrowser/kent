@@ -202,7 +202,7 @@ if(dirname($submitDir) =~ /(_.*)/) {
     $tableSuffix = "$1_" . basename($submitDir);;
 } else {
     $tableSuffix = "_" . basename($submitDir);;
-}    
+}
 
 chdir($submitDir);
 
@@ -283,9 +283,14 @@ for my $key (keys %ra) {
 
 # Send "data is ready" email to email contact assigned to $pif{lab}
 
-if($labs{$pif{lab}} && $labs{$pif{lab}}->{wranglerEmail} && !$opt_noEmail) {
-    my $email = $labs{$pif{lab}}->{wranglerEmail};
-    `echo "dir: $submitFQP" | /bin/mail -s "ENCODE data from $pif{lab} lab is ready" $email`;
+if($labs{$pif{grant}} && $labs{$pif{grant}}->{wranglerEmail}) {
+    if(!$opt_noEmail) {
+        my $email = $labs{$pif{grant}}->{wranglerEmail};
+        `echo "dir: $submitFQP" | /bin/mail -s "ENCODE data from $pif{lab} lab is ready" $email`;
+    }
+} else {
+    # XXXX Should this be fatal? Or s/d we send email to encode alias?
+    # die "No wrangler is configured for '$pif{grant}'\n";
 }
 
 open(PUSHQ, ">out/$Encode::pushQFile") || die "SYS ERROR: Can't write \'out/$Encode::pushQFile\' file; error: $!\n";
