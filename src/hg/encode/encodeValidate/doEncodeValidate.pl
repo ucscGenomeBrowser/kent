@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.45 2008/08/08 20:43:19 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.46 2008/08/08 21:38:43 larrym Exp $
 
 use warnings;
 use strict;
@@ -519,10 +519,11 @@ for my $key (keys %ddfSets) {
 
     # create missing optional views (e.g. ChIP-Seq Signal)
     if(defined($ddfSets{$key}{VIEWS}{Alignments}) && !defined($ddfSets{$key}{VIEWS}{RawSignal})) {
+        my $newView = 'RawSignal';
         my @alignmentFields = @{$ddfSets{$key}{VIEWS}{Alignments}};
         my @fields = @alignmentFields;
-        $fields[$ddfHeader{view}] = 'Signal';
-        $ddfSets{$key}{VIEWS}{'Signal'} = \@fields;
+        $fields[$ddfHeader{view}] = $newView;
+        $ddfSets{$key}{VIEWS}{$newView} = \@fields;
         my $outFile = "createWig.out";
         my $files = join(" ", @{$alignmentFields[$ddfHeader{files}]});
         my $tmpFile = "autoCreated$tmpCount.bed";
@@ -631,30 +632,33 @@ foreach my $ddfLine (@ddfLines) {
     print LOADER_RA "files @{$ddfLine->[$ddfHeader{files}]}\n";
     print LOADER_RA "\n";
 
-    print TRACK_RA "\ttrack\t$tableName\n";
-    print TRACK_RA "\tsubTrack\t$compositeTrack\n";
-    print TRACK_RA "\tshortLabel\t$shortLabel\n";
-    print TRACK_RA "\tlongLabel\t$longLabel\n";
-    print TRACK_RA "\tsubGroups\t$subGroups\n";
-    print TRACK_RA "\ttype\t$pif{TRACKS}->{$view}{type}\n";
-    print TRACK_RA sprintf("\tdateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
-    print TRACK_RA "\tpriority\t$priority\n";
-    # noInherit is necessary b/c composite track will often have a different dummy type setting.
-    print TRACK_RA "\tnoInherit\ton\n";
-    my %visibility = (Align => 'hide', Signal => 'full', Sites => 'dense');
-    if($visibility{$view}) {
-        print TRACK_RA "\tvisibility\t$visibility{$view}\n";
-    }
-    if($pif{TRACKS}->{$view}{type} eq 'wig') {
-        print TRACK_RA <<END;
+    if($view ne 'RawData') {
+        # XXXX Make the decision about which views have tracks more sophisticated
+        print TRACK_RA "\ttrack\t$tableName\n";
+        print TRACK_RA "\tsubTrack\t$compositeTrack\n";
+        print TRACK_RA "\tshortLabel\t$shortLabel\n";
+        print TRACK_RA "\tlongLabel\t$longLabel\n";
+        print TRACK_RA "\tsubGroups\t$subGroups\n";
+        print TRACK_RA "\ttype\t$pif{TRACKS}->{$view}{type}\n";
+        print TRACK_RA sprintf("\tdateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
+        print TRACK_RA "\tpriority\t$priority\n";
+        # noInherit is necessary b/c composite track will often have a different dummy type setting.
+        print TRACK_RA "\tnoInherit\ton\n";
+        my %visibility = (Align => 'hide', RawWignal => 'hide', Signal => 'full', Sites => 'dense');
+        if($visibility{$view}) {
+            print TRACK_RA "\tvisibility\t$visibility{$view}\n";
+        }
+        if($pif{TRACKS}->{$view}{type} eq 'wig') {
+            print TRACK_RA <<END;
 	spanList	1
 	windowingFunction	mean
 	maxHeightPixels	100:16:16
 END
-    } elsif($pif{TRACKS}->{$view}{type} eq 'bed 5 +') {
-        print TRACK_RA "\tuseScore\t1\n";
+	} elsif($pif{TRACKS}->{$view}{type} eq 'bed 5 +') {
+		print TRACK_RA "\tuseScore\t1\n";
+	}
+        print TRACK_RA $additional;
     }
-    print TRACK_RA $additional;
 }
 close(LOADER_RA);
 close(TRACK_RA);
