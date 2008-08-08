@@ -39,7 +39,7 @@
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 #define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.447 2008/08/06 18:02:16 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.448 2008/08/08 19:30:18 baertsch Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2570,7 +2570,7 @@ else if (sameString(track, "knownGene"))
         knownGeneUI(tdb);
 else if (sameString(track, "hg17Kg"))
         hg17KgUI(tdb);
-else if (sameString(track, "pseudoGeneLink"))
+else if (sameString(track, "pseudoGeneLink") || startsWith("retroMrnaInfo", track))
         retroGeneUI(tdb);
 else if (sameString(track, "ensGeneNonCoding"))
         ensemblNonCodingUI(tdb);
