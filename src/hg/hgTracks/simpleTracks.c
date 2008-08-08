@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.25 2008/08/05 12:33:55 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.26 2008/08/08 18:50:17 baertsch Exp $";
 
 #define CHROM_COLORS 26
 
@@ -11138,6 +11138,7 @@ registerTrackHandler("pseudoGeneLink", retroGeneMethods);
 registerTrackHandler("pseudoGeneLink2", retroGeneMethods);
 registerTrackHandler("retroMrnaInfo", retroGeneMethods);
 registerTrackHandler("retroMrnaInfo2", retroGeneMethods);
+registerTrackHandler("retroMrnaInfo3", retroGeneMethods);
 registerTrackHandler("bdgpGene", bdgpGeneMethods);
 registerTrackHandler("bdgpNonCoding", bdgpGeneMethods);
 registerTrackHandler("bdgpLiftGene", bdgpGeneMethods);
