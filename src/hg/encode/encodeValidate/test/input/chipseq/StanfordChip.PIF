@@ -1,0 +1,39 @@
+# Project Information File for Duke Dnase project		
+
+# Lab info		
+grant	Myers
+lab	HudsonAlpha
+dataType	ChipSeq
+variables	cell, antibody
+assembly	hg18
+pifVersion      0.2.2
+
+# Track/view definition
+view             Alignments
+longLabelPrefix  HudsonAlpha ChIP-Seq Sites
+type             tagAlign
+hasReplicates    yes
+required         yes
+
+view             RawSignal
+longLabelPrefix  HudsonAlpha ChIP-Seq Raw Signal
+type             wig
+hasReplicates    yes
+required         no
+
+view             Signal
+longLabelPrefix  HudsonAlpha ChIP/Seq Signal
+type             wig
+hasReplicates    no
+required         yes
+
+view             Peaks
+longLabelPrefix  HudsonAlpha ChIP/Seq Peaks
+type             encodePeak
+hasReplicates    no
+required         yes
+
+view             RawData
+type             fastq
+hasReplicates    yes 
+required         yes
