@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.5 2008/08/06 19:44:30 larrym Exp $
+# $Id: Encode.pm,v 1.6 2008/08/08 20:49:56 larrym Exp $
 
 package Encode;
 
@@ -27,6 +27,11 @@ our $pifVersion = "0.2.2";
 our $fieldConfigFile = "fields.ra";
 our $vocabConfigFile = "cv.ra";
 our $labsConfigFile = "labs.ra";
+
+our $sqlCreate = "/cluster/bin/sqlCreate";
+# Add type names to this list for types that can be loaded via .sql files (e.g. bed5FloatScore.sql)
+# You also have to make sure the .sql file is copied into the $sqlCreate directory.
+our @extendedTypes = ("encodePeak", "tagAlign", "bed5FloatScore");
 
 sub newestFile
 {
@@ -71,7 +76,7 @@ sub validateFieldList {
 
     # look for missing required fields
     for my $field (keys %{$schema}) {
-        if($schema->{$field}{file} eq $file && $schema->{$field}{required} eq 'yes' && !defined($hash{$field})) {
+        if($schema->{$field}{file} eq $file && $schema->{$field}{required} && !defined($hash{$field})) {
             push(@errors, "field '$field' not defined");
         }
     }
@@ -139,7 +144,15 @@ sub getFields
 # Gather fields defined for DDF file. File is in 
 # ra format:  field <name>, required <true|false>
     my ($configPath) = @_;
-    return RAFile::readRaFile("$configPath/$fieldConfigFile", "field");
+    my %fields = RAFile::readRaFile("$configPath/$fieldConfigFile", "field");
+    # For convenience, convert "required" to a real boolean (1 or 0);
+    for my $key (keys %fields) {
+        if(exists($fields{$key}->{required})) {
+            my $val = $fields{$key}->{required};
+            $fields{$key}->{required} = lc($val) eq 'yes' ? 1 : 0;
+        }
+    }
+    return %fields;
 }
 
 sub validateAssembly {
@@ -163,9 +176,9 @@ sub getPif
     chdir($submitDir);
     my $pifFile = newestFile(glob "*.PIF");
     &HgAutomate::verbose(2, "Using newest PIF file \'$pifFile\'\n");
+    my $lines = readFile("$pifFile");
     chdir($wd);
 
-    my $lines = readFile("$submitDir/$pifFile");
     while (@{$lines}) {
         my $line = shift @{$lines};
         # strip leading and trailing spaces
