@@ -10,7 +10,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at: ~/kent/src/hg/encode/encodeUnload/doEncodeUnload.pl
 #
-# $Id: doEncodeUnload.pl,v 1.3 2008/07/29 23:08:14 larrym Exp $
+# $Id: doEncodeUnload.pl,v 1.4 2008/08/08 20:48:22 larrym Exp $
 
 use warnings;
 use strict;
@@ -66,20 +66,22 @@ if(@ARGV != 2) {
 }
 
 my $submitType = $ARGV[0];	# currently not used
-my $submitDir = $ARGV[1];
+my $submitDir = $ARGV[1];	# directory where data files are
 
-my $encInstance = dirname($submitDir);
-my $encProject = basename($submitDir);
-
-if($encInstance =~ /(_.*)/) {
-    $encInstance = $1;
+my $tableSuffix = "";
+# yank out "beta" from encinstance_beta
+if(dirname($submitDir) =~ /(_.*)/) {
+    $tableSuffix = "$1_" . basename($submitDir);;
+} else {
+    $tableSuffix = "_" . basename($submitDir);;
 }
 
 chdir($submitDir) || die "Couldn't chdir to '$submitDir'";
 
 my $unloadRa = 'out/unload.ra';
 if(!(-e $unloadRa)) {
-  exit(0);
+    HgAutomate::verbose(2, "Skipping unload b/c '$unloadRa' doesn't exist\n");
+    exit(0);
 }
 
 HgAutomate::verbose(2, "Unloading project in directory $submitDir\n");
@@ -89,10 +91,10 @@ my %ra = RAFile::readRaFile($unloadRa, 'tablename');
 my $db;
 for my $key (keys %ra) {
     my $h = $ra{$key};
-    my $tablenameExt = $h->{tablename} . "${encInstance}_$encProject";
+    my $tablename = $h->{tablename} . $tableSuffix;
 
     my $str = "\nkeyword: $key\n";
-    for my $field (qw(tablename type tableType assembly files tablenameExt)) {
+    for my $field (qw(tablename type assembly files)) {
         if($h->{$field}) {
             $str .= "$field: " . $h->{$field} . "\n";
         }
@@ -105,13 +107,16 @@ for my $key (keys %ra) {
         $db = HgDb->new(DB => $assembly);
     }
 
-    HgAutomate::verbose(2, "Dropping table '$tablenameExt'\n");
+    HgAutomate::verbose(2, "Dropping table '$tablename'\n");
 
+    my %extendedTypes = map { $_ => 1 } @Encode::extendedTypes;
     my $type = $h->{type};
-    if($type eq "genePred" || $type =~ /^bed/ || $type eq 'encodePeaks' || $type eq 'tagAlignment') {
-        genericUnload($assembly, $db, $tablenameExt);
+    if($type eq "genePred" || $type =~ /^bed/ || $extendedTypes{$type}) {
+        genericUnload($assembly, $db, $tablename);
     } elsif ($type eq "wig") {
-        unloadWig($assembly, $db, $tablenameExt);
+        unloadWig($assembly, $db, $tablename);
+    } elsif ($type eq "fastq") {
+        ;
     } else {
         die "ERROR: unknown type: $h->{type} in load.ra\n";
     }
