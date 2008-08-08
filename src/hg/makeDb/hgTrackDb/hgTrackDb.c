@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.39 2008/07/31 01:00:33 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.40 2008/08/08 00:29:55 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -125,11 +125,12 @@ if (strict)
         if (hashLookup(compositeHash, td->tableName))
             {
 	    slAddHead(&strictList, td);
-            if (trackDbSetting(td, "superTrack"))
+            if ((setting = trackDbSetting(td, "superTrack")) != NULL)
                 {
                 /* note that this is part of a super track so the
                  * super track will be added to the strict list */
-                hashStore(superHash, cloneString(td->tableName));
+                chopLine(cloneString(setting), words);
+                hashStore(superHash, words[0]);
                 }
             }
         }
@@ -144,7 +145,7 @@ if (strict)
 	    slAddHead(&strictList, td);
             }
         }
-    hashFree(&compositeHash);
+    hashFree(&superHash);
 
     /* No need to slReverse, it's sorted later. */
     tdList = strictList;

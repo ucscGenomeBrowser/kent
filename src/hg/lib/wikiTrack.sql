@@ -20,7 +20,7 @@ CREATE TABLE wikiTrack (
     lastModifiedDate varchar(255) not null,	# date item last updated
     descriptionKey varchar(255) not null,	# name of wiki description page
     id int unsigned not null auto_increment,	# auto-increment item ID
-    geneSymbol varchar(255) not null,	# knownGene kgXref geneSymbol name
+    geneSymbol varchar(255) null,	# knownGene kgXref geneSymbol name
               #Indices
     PRIMARY KEY(id),
     INDEX chrom (db,bin,chrom),

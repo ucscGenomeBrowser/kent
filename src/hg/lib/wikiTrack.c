@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.21 2008/06/17 21:51:22 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.22 2008/08/07 16:53:41 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -380,6 +380,15 @@ if (validDb && wikiLinkEnabled() &&
 	{
 	    userName = wikiUser;	/* save result for next time */
 	}
+    /* see if table exists, create it if it is not yet there */
+    struct sqlConnection *wikiConn = wikiConnect();
+    if (! sqlTableExists(wikiConn,WIKI_TRACK_TABLE))
+	{
+	char *query = wikiTrackGetCreateSql(WIKI_TRACK_TABLE);
+	sqlUpdate(wikiConn, query);
+	freeMem(query);
+	}
+    wikiDisconnect(&wikiConn);
     status = TRUE; /* system is enabled */
     }
 if (wikiUserName)
@@ -406,7 +415,7 @@ static char *createString =
     "lastModifiedDate varchar(255) not null,\n"
     "descriptionKey varchar(255) not null,\n"
     "id int unsigned not null auto_increment,\n"
-    "geneSymbol varchar(255) not null,\n"
+    "geneSymbol varchar(255) null,\n"
     "PRIMARY KEY(id),\n"
     "INDEX chrom (db,bin,chrom),\n"
     "INDEX name (db,name),\n"

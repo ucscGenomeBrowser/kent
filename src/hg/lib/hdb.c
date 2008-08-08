@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.369 2008/07/31 16:47:59 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.370 2008/08/07 17:13:03 fanhsu Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -4924,6 +4924,7 @@ freez(&dbBOrg);
 return result;
 }
 
+/* PLEASE NOTE: USE getPfamDomainList() FOR PFAM DOMAINS */
 struct slName *getDomainList(struct sqlConnection *conn, char *ucscGeneId,
 	char *domainDb)
 /* Get list of accessions from external database associated with 
@@ -4940,6 +4941,24 @@ safef(query, sizeof(query),
     "select acc from ucsc%s u, %sDesc p"
     " where ucscId  = '%s' and u.domainName=p.name "
     , domainDb, lowerCaseName, ucscGeneId);
+return sqlQuickList(conn, query);
+}
+
+struct slName *getPfamDomainList(struct sqlConnection *conn, char *ucscGeneId)
+/* Get list of accessions from external database associated with 
+ * Pfam protein domain entity.  */
+{
+char query[255];
+char lowerCaseName[255];
+
+/* Capitalize first character for description table name */
+safef(lowerCaseName, sizeof(lowerCaseName), "pfam");
+lowerCaseName[0] = tolower(lowerCaseName[0]);
+
+safef(query, sizeof(query), 
+    "select value from knownToPfam k, %sDesc p"
+    " where name = '%s' and value=p.pfamAC "
+    , lowerCaseName, ucscGeneId);
 return sqlQuickList(conn, query);
 }
 
