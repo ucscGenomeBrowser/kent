@@ -1,7 +1,7 @@
 
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.12 2008/02/20 00:42:27 markd Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.13 2008/08/08 22:47:34 baertsch Exp $";
 
 struct linkedFeatures *lfFromRetroGene(struct retroMrnaInfo *pg)
 /* Return a linked feature from a retroGene. */
@@ -78,7 +78,7 @@ void lookupRetroNames(struct track *tg)
 struct linkedFeatures *lf;
 struct sqlConnection *conn = hAllocConn();
 boolean isNative = sameString(tg->mapName, "pseudoGeneLink") ;
-boolean isRetroNative = sameString(tg->mapName, "retroMrnaInfo");
+boolean isRetroNative = startsWith("retroMrnaInfo", tg->mapName);
 char *refGeneLabel = cartUsualString(cart, (isNative ? "pseudoGeneLink.label" : (isRetroNative ? "retroMrnaInfo.label" : "xenoRefGene.label")), "gene") ;
 boolean useGeneName = sameString(refGeneLabel, "gene")
     || sameString(refGeneLabel, "both");
@@ -161,9 +161,11 @@ char *retroName(struct track *tg, void *item)
 /* Get name to use for retroGene item. */
 {
 struct linkedFeatures *lf = item;
+char cartvar[512];
 boolean isNative = sameString(tg->mapName, "pseudoGeneLink") ;
-boolean isRetroNative = sameString(tg->mapName, "retroMrnaInfo");
-char *refGeneLabel = cartUsualString(cart, (isNative ? "pseudoGeneLink.label" : (isRetroNative ? "retroMrnaInfo.label" : "xenoRefGene.label")), "gene") ;
+boolean isRetroNative = startsWith( "retroMrnaInfo", tg->mapName);
+safef(cartvar, sizeof(cartvar), "%s.label", (isNative ? "pseudoGeneLink.label" : (isRetroNative ? tg->mapName : "xenoRefGene.label")));
+char *refGeneLabel = cartUsualString(cart, cartvar, "gene") ;
 boolean useGeneName = sameString(refGeneLabel, "gene")
     || sameString(refGeneLabel, "both");
 boolean useAcc = sameString(refGeneLabel, "accession")
