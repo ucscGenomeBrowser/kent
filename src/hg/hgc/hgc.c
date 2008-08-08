@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1446 2008/08/01 17:49:15 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1447 2008/08/08 23:59:56 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6330,7 +6330,6 @@ void htcCdnaAliInWindow(char *acc)
 {
 char query[256];
 char table[64];
-char accTmp[64];
 struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
@@ -6434,15 +6433,13 @@ else
     wholePsl = pslLoad(row+hasBin);
     sqlFreeResult(&sr);
 
-    /* get bz rna snapshot for blastz alignments */
-    if (sameString("mrnaBlastz", track) || sameString("pseudoMrna", track))
+    if (startsWith("retroMrnaAli", track) || sameString("pseudoMrna", track))
 	{
 	struct sqlConnection *conn = hAllocConn();
-	unsigned retId = 0;
-	char *gbdate = NULL;
-	safef(accTmp, sizeof(accTmp),"bz-%s",acc);
-	if (hRnaSeqAndIdx(accTmp, &rnaSeq, &retId, gbdate, conn) == -1)
-	    rnaSeq = hRnaSeq(acc);
+        char *suffix = strstr(acc, ".");
+        if (suffix != NULL)
+            *suffix = '\0';
+        rnaSeq = hDnaSeqGet(conn, acc, "retroSeq", "retroExtFile");
 	hFreeConn(&conn);
 	}
     else if (sameString("HInvGeneMrna", track))
