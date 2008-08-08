@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: pgSnp.c,v 1.2 2008/06/17 21:49:52 giardine Exp $";
+static char const rcsid[] = "$Id: pgSnp.c,v 1.3 2008/08/08 22:20:26 giardine Exp $";
 
 void pgSnpStaticLoad(char **row, struct pgSnp *ret)
 /* Load a row from pgSnp table into ret.  The contents of ret will
@@ -383,6 +383,8 @@ strcpy(resultPtr, old); //end
 return result;
 }
 
+void aaProperties (char *aa1, char *aa2);
+
 void printSeqCodDisplay (struct pgSnp *item)
 /* print the display of sequence changes for a coding variant */
 {
@@ -467,6 +469,8 @@ for (el = th; el != NULL; el = el->next)
                     {
                     printf("&nbsp;&nbsp;&nbsp;&nbsp;%s &gt; %s<BR>\n",
                         origAa->dna, repAa->dna);
+                    if (differentString(origAa->dna, repAa->dna))
+                        aaProperties(origAa->dna, repAa->dna);
                     }
                 else if ((countChars(rep2, '-')) % 3 != 0)
                     {
@@ -479,5 +483,94 @@ for (el = th; el != NULL; el = el->next)
 if (!found)
     printf("None found<BR>\n");
 bedFreeList(&list);
+}
+
+char *aaPolarity (char *aa) 
+/* return the polarity of the amino acid */
+{
+if (sameString(aa, "A") ||
+    sameString(aa, "G") ||
+    sameString(aa, "I") ||
+    sameString(aa, "L") ||
+    sameString(aa, "M") ||
+    sameString(aa, "F") ||
+    sameString(aa, "P") ||
+    sameString(aa, "W") ||
+    sameString(aa, "V"))
+    return cloneString("nonpolar");
+return cloneString("polar");
+}
+
+char *aaAcidity (char *aa) 
+/* return the acidity */
+{
+if (sameString(aa, "R")) 
+    return cloneString("basic (strongly)");
+else if (sameString(aa, "H"))
+    return cloneString("basic (weakly)");
+else if (sameString(aa, "K"))
+    return cloneString("basic");
+else if (sameString(aa, "D") ||
+         sameString(aa, "E"))
+    return cloneString("acidic");
+else 
+    return cloneString("neutral");
+}
+
+float aaHydropathy (char *aa) 
+/* return the hydropathy */
+{
+if (sameString(aa, "A"))
+    return 1.8;
+if (sameString(aa, "R"))
+    return -4.5;
+if (sameString(aa, "N"))
+    return -3.5;
+if (sameString(aa, "D"))
+    return -3.5;
+if (sameString(aa, "C"))
+    return 2.5;
+if (sameString(aa, "E"))
+    return -3.5;
+if (sameString(aa, "Q"))
+    return -3.5;
+if (sameString(aa, "G"))
+    return -0.4;
+if (sameString(aa, "H"))
+    return -3.2;
+if (sameString(aa, "I"))
+    return 4.5;
+if (sameString(aa, "L"))
+    return 3.8;
+if (sameString(aa, "K"))
+    return -3.9;
+if (sameString(aa, "M"))
+    return 1.9;
+if (sameString(aa, "F"))
+    return 2.8;
+if (sameString(aa, "P"))
+    return -1.6;
+if (sameString(aa, "S"))
+    return -0.8;
+if (sameString(aa, "T"))
+    return -0.7;
+if (sameString(aa, "W"))
+    return -0.9;
+if (sameString(aa, "Y"))
+    return -1.3;
+if (sameString(aa, "V"))
+    return 4.2;
+return 0;
+}
+
+void aaProperties (char *aa1, char *aa2)
+/* print amino acid properties for these amino acids */
+{
+printf("<table border=\"1\"><caption>Amino acid properties</caption><tr><td>&nbsp;</td><td>%s</td><td>%s</td></tr>\n", aa1, aa2);
+printf("<tr><td>polarity</td><td>%s</td><td>%s</td></tr>\n", aaPolarity(aa1), aaPolarity(aa2));
+printf("<tr><td>acidity</td><td>%s</td><td>%s</td></tr>\n", aaAcidity(aa1), aaAcidity(aa2));
+printf("<tr><td>hydropathy</td><td>%1.1f</td><td>%1.1f</td></tr></table>\n",
+    aaHydropathy(aa1), aaHydropathy(aa2));
+printf("<br>");
 }
 
