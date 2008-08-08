@@ -37,20 +37,24 @@ my $submitFQP;
 my $submitType = "";
 my $tempDir = "/data/tmp";
 my $encInstance = "";
-my $sqlCreate = "/cluster/bin/sqlCreate";
-
-# Add type names to this list for types that can be loaded via .sql files (e.g. bed5FloatScore.sql)
-# You also have to make sure the .sql file is copied into the $sqlCreate directory.
-my @extendedTypes = ("encodePeak", "tagAlign", "bed5FloatScore");
 
 my $debug = 0;
 
 sub usage
 {
     die <<END
-usage: doEncodeLoad.pl submission_type project_submission_dir
+usage: doEncodeLoad.pl submission-type submission-dir
 
-Assumes existence of a file called: project_submission_dir/$loadRa
+submission-type is currently ignored.
+
+Requires file called: submission-dir/$loadRa
+
+options:
+    -verbose num        Set verbose level to num (default 1).
+    -configDir dir      Path of configuration directory, containing
+                        metadata .ra files (default: submission-dir/../config)
+    -outDir dir         Path of output directory, for validation files
+                        (default: submission-dir/out)
 END
 }
 
@@ -116,11 +120,11 @@ sub loadBedFromSchema
 # Load bed using a .sql file
     my ($assembly, $tableName, $fileList, $sqlTable, $pushQ) = @_;
 
-    if(!(-e "$sqlCreate/${sqlTable}.sql")) {
-        die "SQL schema '$sqlCreate/${sqlTable}.sql' does not exist\n";
+    if(!(-e "$Encode::sqlCreate/${sqlTable}.sql")) {
+        die "SQL schema '$Encode::sqlCreate/${sqlTable}.sql' does not exist\n";
     }
-    if(!(open(SQL, "$sqlCreate/${sqlTable}.sql"))) {
-        die "Cannot open SQL schema '$sqlCreate/${sqlTable}.sql'; error: $!\n";
+    if(!(open(SQL, "$Encode::sqlCreate/${sqlTable}.sql"))) {
+        die "Cannot open SQL schema '$Encode::sqlCreate/${sqlTable}.sql'; error: $!\n";
     }
 
     # create temporary copy of schema file with "CREATE TABLE $tableName"
@@ -159,13 +163,16 @@ my $wd = cwd();
 GetOptions("configDir=s", "noEmail", "outDir=s", "verbose=i") || usage();
 $opt_verbose = 1 if (!defined $opt_verbose);
 $opt_noEmail = 0 if (!defined $opt_noEmail);
+if($opt_outDir) {
+    $loadRa = "$opt_outDir/$Encode::loadFile";
+    $unloadRa = "$opt_outDir/$Encode::unloadFile";
+}
 
 # Change dir to submission directory obtained from command-line
 
 if(@ARGV != 2) {
     usage();
 }
-
 $submitType = $ARGV[0];	# currently not used
 $submitDir = $ARGV[1];
 if ($submitDir =~ /^\//) {
@@ -203,7 +210,15 @@ chdir($submitDir);
 # We assume unload program is in the same location as loader (fixes problem with misconfigured qateam environment).
 
 my $programDir = dirname($0);
-if(system("$programDir/doEncodeUnload.pl $submitType $submitDir")) {
+my $unloader = "$programDir/doEncodeUnload.pl";
+if(!(-e $unloader)) {
+    # let's us use this in cvs tree
+    $unloader = "$wd/../encodeUnload/doEncodeUnload.pl";
+}
+if(!(-e $unloader)) {
+    die "Can't find unloader ($unloader)\n";
+}
+if(system("$unloader $submitType $submitDir")) {
     die "unload script failed\n";
 }
 
@@ -247,7 +262,7 @@ for my $key (keys %ra) {
     my $type = $h->{type};
     my $files = $h->{files};
     my @files = split(/\s+/, $files);
-    my %extendedTypes = map { $_ => 1 } @extendedTypes;
+    my %extendedTypes = map { $_ => 1 } @Encode::extendedTypes;
     if($type eq "genePred") {
         loadGene($assembly, $tablename, $files, $pushQ);
     } elsif ($type eq "wig") {
