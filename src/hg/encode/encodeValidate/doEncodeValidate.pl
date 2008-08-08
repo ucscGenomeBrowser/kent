@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.43 2008/08/06 21:50:21 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.44 2008/08/08 01:58:36 larrym Exp $
 
 use warnings;
 use strict;
@@ -156,8 +156,9 @@ our %formatCheckers = (
     bed => \&validateBed,
     bed5FloatScore => \&validateBed,
     genePred => \&validateGene,
-    tagAlignment => \&validateTagAlignment,
-    encodePeaks => \&validateEncodePeaks,
+    tagAlign => \&validateTagAlign,
+    encodePeak => \&validateEncodePeak,
+    fastq => \&validateFastQ,
     );
 
 my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|))";
@@ -234,7 +235,7 @@ sub validateGene {
     }
 }
 
-sub validateTagAlignment
+sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
     my $filePath = "$path/$file";
@@ -242,15 +243,15 @@ sub validateTagAlignment
     open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
     while(<FILE>) {
         $line++;
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[ATCG]+\s+\d+\s+[+-]$/)) {
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[ATCG\.]+\s+\d+\s+[+-]$/)) {
             die "Line number $line in file '$file' is invalid\nline: $_\n";
         }
     }
     close(FILE);
-    HgAutomate::verbose(2, "File \'$file\' passed tagAlignment validation\n");
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
 }
 
-sub validateEncodePeaks
+sub validateEncodePeak
 {
     my ($path, $file, $type) = @_;
     my $filePath = "$path/$file";
@@ -258,14 +259,46 @@ sub validateEncodePeaks
     open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
     while(<FILE>) {
         $line++;
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+$floatRegEx\s+$floatRegEx\s+\d+$/)) {
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+$floatRegEx\s+$floatRegEx\s+-?\d+$/)) {
             die "Line number $line in file '$file' is invalid\nline: $_\n";
         }
     }
     close(FILE);
-    HgAutomate::verbose(2, "File \'$file\' passed encodePeaks validation\n");
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
 }
 
+sub validateFastQ
+{
+    # Syntax per http://maq.sourceforge.net/fastq.shtml
+    my ($path, $file, $type) = @_;
+    my $filePath = "$path/$file";
+    my $line = 0;
+    open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
+    my $state = 'firstLine';
+    my $seqName;
+    my $seqNameRegEx = "[A-Za-z0-9_.:-]+";
+    my $seqRegEx = "[A-Za-z\n\.~]+";
+    my $qualRegEx = "[!-~\n]+";
+    my $states = {firstLine => {REGEX => "\@($seqNameRegEx)", NEXT => 'seqLine'},
+                  seqLine => {REGEX => $seqRegEx, NEXT => 'plusLine'},
+                  plusLine => {REGEX => "\\\+([A-Za-z0-9_.:-]*)", NEXT => 'qualLine'},
+                  qualLine => {REGEX => $qualRegEx, NEXT => 'firstLine'}};
+    while(<FILE>) {
+        $line++;
+        my $regex = $states->{$state}{REGEX};
+        if(/^${regex}$/) {
+	        $seqName = $1 if($state eq 'firstLine');
+                if($state eq 'plusLine' && defined($1) && $1 && $1 ne $seqName) {
+                    die "Line number $line in file '$file' is invalid;\nseqence name '$1' does not match previous seqence name '$seqName'\nline: $_\n";
+                }
+	        $state = $states->{$state}{NEXT};
+        } else {
+	         die "Line number $line in file '$file' is invalid (expecting $state)\nline: $_\n";
+        }
+    }
+    close(FILE);
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+}
 
 ############################################################################
 # Misc subroutines
@@ -357,7 +390,7 @@ if (defined $opt_outDir) {
 } else {
     $outPath = "$submitDir/out"
 }
-&HgAutomate::verbose(4, "Output directory path: \'$outPath\'\n");
+&HgAutomate::verbose(4, "Output directory path: '$outPath'; submitPath: '$submitPath'\n");
 
 # Change dir to submission directory 
 chdir $submitPath ||
@@ -381,7 +414,7 @@ my $db = HgDb->new(DB => $pif{assembly});
 # Add the variables in the PIF file to the required fields list
 if (defined($pif{variables})) {
     for my $variable (keys %{$pif{variableHash}}) {
-        $fields{$variable}->{required} = 'yes';
+        $fields{$variable}->{required} = 1;
         $fields{$variable}->{file} = 'ddf';
     }
 }
@@ -392,7 +425,7 @@ for my $view (keys %{$pif{TRACKS}}) {
     $hasReplicates += $pif{TRACKS}->{$view}{hasReplicates};
 }
 if($hasReplicates) {
-    $fields{replicate}->{required} = 'yes';
+    $fields{replicate}->{required} = 1;
 }
 
 # Open dataset descriptor file (DDF)
@@ -452,7 +485,7 @@ while (@{$lines}) {
     if(!$pif{TRACKS}->{$view}) {
         die "$errorPrefix undefined view '$view' in DDF\n";
     }
-    if($fields{replicate}->{required} eq 'yes') {
+    if($fields{replicate}->{required}) {
         my $replicate = $fields[$ddfHeader{replicate}];
         if($pif{TRACKS}->{$view}{hasReplicates} && (!defined($replicate) || !length($replicate))) {
             die "$errorPrefix missing replicate number for view '$view'";
@@ -477,7 +510,7 @@ my $tmpCount = 1;
 # die if there are missing required views
 for my $key (keys %ddfSets) {
     for my $view (keys %{$pif{TRACKS}}) {
-        if($pif{TRACKS}->{$view}{required} eq 'yes') {
+        if($pif{TRACKS}->{$view}{required}) {
             if(!defined($ddfSets{$key}{VIEWS}{$view})) {
                 die "ERROR: view '$view' missing for DDF entry '$key'\n";
             }
@@ -485,7 +518,7 @@ for my $key (keys %ddfSets) {
     }
 
     # create missing optional views (e.g. ChIP-Seq Signal)
-    if(defined($ddfSets{$key}{VIEWS}{Alignments}) && !defined($ddfSets{$key}{VIEWS}{Signal})) {
+    if(defined($ddfSets{$key}{VIEWS}{Alignments}) && !defined($ddfSets{$key}{VIEWS}{RawSignal})) {
         my @alignmentFields = @{$ddfSets{$key}{VIEWS}{Alignments}};
         my @fields = @alignmentFields;
         $fields[$ddfHeader{view}] = 'Signal';
@@ -495,7 +528,7 @@ for my $key (keys %ddfSets) {
         my $tmpFile = "autoCreated$tmpCount.bed";
         $tmpCount++;
         my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $pif{assembly} stdin");
-        my $safe = SafePipe->new(CMDS => \@cmds);
+        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
         if(my $err = $safe->exec()) {
             print STDERR  "ERROR: failed creation of wiggle for $key\n";
             die "ERROR: " . $safe->stderr();
@@ -521,6 +554,7 @@ open(TRACK_RA, ">$outPath/$Encode::trackFile") || die "SYS ERROR: Can't write \'
 my $priority = 0;
 $ddfLineNumber = 1;
 foreach my $ddfLine (@ddfLines) {
+    $ddfLineNumber++;
     my $errorPrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
     $priority++;
     my $view = $ddfLine->[$ddfHeader{view}];
