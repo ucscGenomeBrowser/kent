@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.44 2008/08/08 01:58:36 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.45 2008/08/08 20:43:19 larrym Exp $
 
 use warnings;
 use strict;
@@ -388,7 +388,7 @@ if (defined $opt_outDir) {
         $outPath = "$wd/$opt_outDir";
     }
 } else {
-    $outPath = "$submitDir/out"
+    $outPath = "$submitPath/out"
 }
 &HgAutomate::verbose(4, "Output directory path: '$outPath'; submitPath: '$submitPath'\n");
 
@@ -647,9 +647,9 @@ foreach my $ddfLine (@ddfLines) {
     }
     if($pif{TRACKS}->{$view}{type} eq 'wig') {
         print TRACK_RA <<END;
-	yLineOnOff	On
-	yLineMark	1.0
-	maxHeightPixels	100:32:8
+	spanList	1
+	windowingFunction	mean
+	maxHeightPixels	100:16:16
 END
     } elsif($pif{TRACKS}->{$view}{type} eq 'bed 5 +') {
         print TRACK_RA "\tuseScore\t1\n";
