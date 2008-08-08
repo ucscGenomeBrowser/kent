@@ -458,7 +458,7 @@ if (pslList != NULL && *table )
             mi->gbAcc);
     }
 else
-    printf("missing alignment %s %s %d-%d from table %s<br>\n",
+    printf("missing alignment %s chr %s:%d-%d from table %s<br>\n",
              mi->gbAcc, pg->gChrom, pg->gStart, pg->gEnd, table);
 }
 
@@ -491,7 +491,10 @@ float coverFactor = 0;
 float maxOverlap = 0, rawScore = 0;
 //struct genePred *overlappingGene = NULL;
 //int geneOverlap = 0;
-safef(alignTbl, sizeof(alignTbl), "%s%sAli", mi->tblPre, mi->geneSet);
+if (mi->suffix == NULL)
+    safef(alignTbl, sizeof(alignTbl), "%s%sAli", mi->tblPre, mi->geneSet);
+else
+    safef(alignTbl, sizeof(alignTbl), "%s%sAli%s", mi->tblPre, mi->geneSet, mi->suffix);
 //printf("<TABLE class=\"transMap\">\n");
 //printf("<THEAD>\n");
 //printf("<TR><TH>          <TH>database    <TH COLSPAN=2>%s</TR>\n", hGetDb());
