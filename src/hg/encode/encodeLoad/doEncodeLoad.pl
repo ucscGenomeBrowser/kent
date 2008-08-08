@@ -37,7 +37,6 @@ my $submitFQP;
 my $submitType = "";
 my $tempDir = "/data/tmp";
 my $encInstance = "";
-my $encProject = "";
 my $sqlCreate = "/cluster/bin/sqlCreate";
 
 # Add type names to this list for types that can be loaded via .sql files (e.g. bed5FloatScore.sql)
@@ -126,7 +125,7 @@ sub loadBedFromSchema
 
     # create temporary copy of schema file with "CREATE TABLE $tableName"
     my $sql = join("", <SQL>);
-    if(!($sql =~ s/$sqlTable/$tableName/g)) {
+    if(!($sql =~ s/CREATE TABLE $sqlTable/CREATE TABLE $tableName/g)) {
         die "sql names do not match for substitution: $sqlTable $tableName\n";
     }
 
@@ -137,7 +136,7 @@ sub loadBedFromSchema
     $fh->print($sql);
 
     #TEST by replacing "cat" with  "head -1000 -q"
-    my @cmds = ("egrep -v '^track|browser' $fileList", "hgLoadBed $assembly $tableName stdin -tmpDir=out -sqlTable=$tempFile");
+    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=out -sqlTable=$tempFile");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
 
     if(my $err = $safe->exec()) {
@@ -190,13 +189,13 @@ my %labs = Encode::getLabs($configPath);
 my %fields = Encode::getFields($configPath);
 my %pif = Encode::getPif($submitDir, \%labs, \%fields);
 
-$encInstance = dirname($submitDir);
-$encProject = basename($submitDir);
-
+my $tableSuffix = "";
 # yank out "beta" from encinstance_beta
-if($encInstance =~ /(_.*)/) {
-    $encInstance = $1;
-}
+if(dirname($submitDir) =~ /(_.*)/) {
+    $tableSuffix = "$1_" . basename($submitDir);;
+} else {
+    $tableSuffix = "_" . basename($submitDir);;
+}    
 
 chdir($submitDir);
 
@@ -205,11 +204,11 @@ chdir($submitDir);
 
 my $programDir = dirname($0);
 if(system("$programDir/doEncodeUnload.pl $submitType $submitDir")) {
-    die "expected error running $programDir/doEncodeUnload.pl cleanup script\n";
+    die "unload script failed\n";
 }
 
 if(!(-e $loadRa)) {
-    die "unexpected error: load.ra not found\n";
+    die "ERROR: load.ra not found\n";
 }
 
 #TODO change to : FileUtils.cp $loadRa, $unloadRa
@@ -223,7 +222,8 @@ print STDERR "Loading project in directory $submitDir\n" if($debug);
 # Load files listed in load.ra
 
 my %ra = RAFile::readRaFile($loadRa, 'tablename');
-my %pushQ;
+my $pushQ = {};
+$pushQ->{TABLES} = [];
 
 print STDERR "$loadRa has: " . scalar(keys %ra) . " records\n" if($debug);
 
@@ -231,10 +231,10 @@ print STDERR "\n" if($debug);
 
 for my $key (keys %ra) {
     my $h = $ra{$key};
-    my $tablename = $h->{tablename} . "${encInstance}_$encProject";
+    my $tablename = $h->{tablename} . $tableSuffix;
 
     my $str = "\nkeyword: $key\n";
-    for my $field (qw(tablename type tableType assembly files tablenameExt)) {
+    for my $field (qw(tablename type assembly files)) {
         if($h->{$field}) {
             $str .= "$field: " . $h->{$field} . "\n";
         }
@@ -246,15 +246,20 @@ for my $key (keys %ra) {
     my $assembly = $h->{assembly};
     my $type = $h->{type};
     my $files = $h->{files};
+    my @files = split(/\s+/, $files);
     my %extendedTypes = map { $_ => 1 } @extendedTypes;
     if($type eq "genePred") {
-        loadGene($assembly, $tablename, $files, \%pushQ);
+        loadGene($assembly, $tablename, $files, $pushQ);
     } elsif ($type eq "wig") {
-        loadWig($assembly, $tablename, $files, \%pushQ);
+        loadWig($assembly, $tablename, $files, $pushQ);
     } elsif ($extendedTypes{$type}) {
-        loadBedFromSchema($assembly, $tablename, $files, $type, \%pushQ);
+        loadBedFromSchema($assembly, $tablename, $files, $type, $pushQ);
     } elsif ($type =~ /^bed (3|4|5|6)$/) {
-        loadBed($assembly, $tablename, $files, \%pushQ);
+        loadBed($assembly, $tablename, $files, $pushQ);
+    } elsif ($type eq "fastq") {
+        # XXXX anything else? Should we rename file(s) (or soft link) to get
+        # consistent naming?
+        push(@{$pushQ->{FILES}}, map("$submitDir/$_", @files));
     } else {
         die "ERROR: unknown type: $type in $Encode::loadFile\n";
     }
@@ -269,11 +274,12 @@ if($labs{$pif{lab}} && $labs{$pif{lab}}->{wranglerEmail} && !$opt_noEmail) {
 }
 
 open(PUSHQ, ">out/$Encode::pushQFile") || die "SYS ERROR: Can't write \'out/$Encode::pushQFile\' file; error: $!\n";
-HgAutomate::verbose(2, "pushQ tables: " . join(",", @{$pushQ{TABLES}}) . "\n");
+HgAutomate::verbose(2, "pushQ tables: " . join(",", @{$pushQ->{TABLES}}) . "\n");
+HgAutomate::verbose(2, "pushQ files: " . join(",", @{$pushQ->{FILES}}) . "\n");
 # figure out appropriate syntax for pushQ entries
-print PUSHQ "tables: " . join(",", @{$pushQ{TABLES}}) . "\n";
-if(defined($pushQ{FILES}) && @{$pushQ{FILES}}) {
-    print PUSHQ "files: " . join(",", @{$pushQ{FILES}}) . "\n";
+print PUSHQ "tables: " . join(",", @{$pushQ->{TABLES}}) . "\n";
+if(defined($pushQ->{FILES}) && @{$pushQ->{FILES}}) {
+    print PUSHQ "files: " . join(",", @{$pushQ->{FILES}}) . "\n";
 }
 close(PUSHQ);
 
