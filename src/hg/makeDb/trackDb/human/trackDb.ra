@@ -189,9 +189,9 @@ color 12,12,120
 type genePred
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
-track retroMrnaInfo
-shortLabel Retroposed Genes 2.0
-longLabel Retroposed Genes, Including Pseudogenes [retroMrnaInfo]
+track retroMrnaInfo3
+shortLabel Retroposed Genes 3.0
+longLabel Retroposed Genes, Including Pseudogenes August 2008 [retroMrnaInfo3]
 group genes
 priority 37.12
 visibility hide
