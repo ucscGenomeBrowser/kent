@@ -22387,7 +22387,7 @@ see doc/builds.txt for specific details.
     echo "alter table mammalPsg add index (chrom(7));" | hgsql hg18
 
 ####################################################################
-# UPDATE UNIGENE/SAGE TRACK (DONE - 2008-07-23 Fan)
+# UPDATE UNIGENE/SAGE TRACK (DONE - 2008-08-09 Fan)
 
 # Create the uniGene alignments 
 
@@ -22453,6 +22453,10 @@ Estimated complete:                 0s       0.00m     0.00h    0.00d
     cp -p /san/sanvol1/scratch/hg18/uniGene/hg18.uniGene.pslReps.psl .
 
     hgLoadPsl -table=uniGene_3 hg18 hg18.uniGene.pslReps.psl
+
+# load the sequence with -replace option
+
+    hgLoadSeq -replace hg18 /gbdb/hg18/uniGene/Hs.seq.uniq.simpleHeader.fa
 
 #############################################################################
 # BLASTZ/CHAIN/NET turTru1 (DONE braney 2008-07-28)
