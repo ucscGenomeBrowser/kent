@@ -76,7 +76,7 @@ void customFactoryAdd(struct customFactory *fac);
 struct customTrack *customFactoryParse(char *genomeDb, char *text, boolean isFile,
 	struct slName **retBrowserLines);
 /* Parse text into a custom set of tracks.  Text parameter is a
- * file name if 'isFile' is set.  Die if the track is not for hGetDb(). */
+ * file name if 'isFile' is set.  Die if the track is not for genomeDb. */
 
 struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean isFile,
 					    struct slName **retBrowserLines);

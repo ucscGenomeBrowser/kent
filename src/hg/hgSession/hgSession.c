@@ -17,7 +17,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.40.2.3 2008/08/01 06:10:44 markd Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.40.2.4 2008/08/09 04:40:30 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -622,7 +622,6 @@ if (helList != NULL)
 	    }
 	else
 	    {
-            // FIXME: this needs a genome database, but don't have one here
 	    customFactoryTestExistence(NULL, hel->val,
 				       &thisGotLiveCT, &thisGotExpiredCT);
 	    }

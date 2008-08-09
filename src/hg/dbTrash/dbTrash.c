@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.14.6.1 2008/08/07 18:27:39 markd Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.14.6.2 2008/08/09 04:40:29 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -101,7 +101,6 @@ slFreeList(&list);
 void dbTrash(char *db)
 /* dbTrash - drop tables from a database older than specified N hours. */
 {
-struct sqlConnection *conn = NULL;
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -115,12 +114,7 @@ unsigned long long totalSize = 0;
 struct slName *tableNames = NULL;	/*	subject to age limits	*/
 struct hash *expiredHash = newHash(10);
 struct hash *notExpiredHash = newHash(10);
-
-// FIXME: this could be done by adding customTrash.profile = customTrack to hg.conf
-if (differentWord(db,CUSTOM_TRASH))
-    conn = sqlConnect(db);
-else
-    conn = sqlConnectProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+struct sqlConnection *conn = sqlConnect(db);
 
 if (extFileCheck)
     checkExtFile(conn);

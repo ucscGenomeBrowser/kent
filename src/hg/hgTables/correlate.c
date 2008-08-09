@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.66.6.2 2008/08/07 16:02:38 markd Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.66.6.3 2008/08/09 04:40:31 markd Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -344,7 +344,7 @@ if (startsWith("bedGraph", tdb->type))
      */
     if (isCustomDbTable)
         {
-	conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+	conn = hAllocConn(CUSTOM_TRASH);
         freeMem(table->actualTable);
         table->actualTable = cloneString(ct->dbTableName);
         }
@@ -586,7 +586,7 @@ char *dbTableName = table->actualTable;
 if (NULL != table->dbTableName)
     {
     dbTableName = table->dbTableName;
-    conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+    conn = hAllocConn(CUSTOM_TRASH);
     }
 
 /*	cookedBedList can read anything but bedGraph, so read bedGraph
@@ -800,7 +800,7 @@ if (table->isWig)
     if (NULL != table->dbTableName)
 	{
 	dbTableName = table->dbTableName;
-	conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+	conn = hAllocConn(CUSTOM_TRASH);
 	}
 
     /*	we still do not have a proper minSpan finder for custom tracks */

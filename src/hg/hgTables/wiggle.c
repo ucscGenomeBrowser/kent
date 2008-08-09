@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.64.12.2 2008/08/07 16:02:39 markd Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.64.12.3 2008/08/09 04:40:32 markd Exp $";
 
 extern char *maxOutMenu[];
 
@@ -539,7 +539,7 @@ if (isCustom)
 	    wds->setSpanConstraint(wds,spanConstraint);
 	else
 	    {
-	    struct sqlConnection *trashConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+	    struct sqlConnection *trashConn = hAllocConn(CUSTOM_TRASH);
 	    struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	    unsigned span = minSpan(trashConn, splitTableOrFileName,
 		region->chrom, region->start, region->end, cart, tdb);
@@ -718,7 +718,7 @@ else
         {
         struct customTrack *ct = lookupCt(table);
         tdb = ct->tdb;
-        conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+        conn = hAllocConn(CUSTOM_TRASH);
         }
     else
         {
@@ -863,7 +863,7 @@ if (isCustom)
     if (ct->dbTrack)
 	{
 	unsigned span = 0;
-	struct sqlConnection *trashConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+	struct sqlConnection *trashConn = hAllocConn(CUSTOM_TRASH);
 	struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	valuesMatched = getWigglePossibleIntersection(wds, region,
 	    CUSTOM_TRASH, table2, &intersectBedList,
@@ -1046,7 +1046,7 @@ for (region = regionList; region != NULL; region = region->next)
 	{
 	if (ct->dbTrack)
 	    {
-	    struct sqlConnection *trashConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+	    struct sqlConnection *trashConn = hAllocConn(CUSTOM_TRASH);
 	    struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	    span = minSpan(trashConn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, tdb);

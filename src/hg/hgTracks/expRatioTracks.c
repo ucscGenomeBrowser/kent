@@ -1192,7 +1192,6 @@ for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
 void loadMultScoresBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
-// FIXME: dbProfile would be a better name
 struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
 struct sqlResult *sr;
 char **row;

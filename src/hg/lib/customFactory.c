@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.85.4.4 2008/08/07 16:02:44 markd Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.85.4.5 2008/08/09 04:40:38 markd Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -138,7 +138,7 @@ void customFactorySetupDbTrack(struct customTrack *track)
 struct tempName tn;
 char prefix[16];
 static int dbTrackCount = 0;
-struct sqlConnection *ctConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+struct sqlConnection *ctConn = hAllocConn(CUSTOM_TRASH);
 ++dbTrackCount;
 safef(prefix, sizeof(prefix), "t%d", dbTrackCount);
 track->dbTableName = sqlTempTableName(ctConn, prefix);
@@ -1244,7 +1244,7 @@ if (dbRequested)
     track->wigFile = NULL;
 
     /* Figure out lower and upper limits with db query */
-    struct sqlConnection *ctConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+    struct sqlConnection *ctConn = hAllocConn(CUSTOM_TRASH);
     char buf[64];
     wigDbGetLimits(ctConn, track->dbTableName, 
 	    &upperLimit, &lowerLimit, &span);
@@ -1733,7 +1733,6 @@ if (setting)
 return trackDbSetting(ct->tdb, "genome");
 }
 
-// FIXME: is this really needed any more??
 static struct customTrack *customFactoryParseOptionalDb(char *genomeDb, char *text,
 	boolean isFile, struct slName **retBrowserLines,
 	boolean mustBeCurrentDb)
@@ -1749,7 +1748,7 @@ struct sqlConnection *ctConn = NULL;
 char *loadedFromUrl = NULL;
 boolean dbTrack = ctDbUseAll();
 if (dbTrack)
-    ctConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+    ctConn = hAllocConn(CUSTOM_TRASH);
 
 struct lineFile *lf = customLineFile(text, isFile);
 
@@ -1926,12 +1925,11 @@ return trackList;
 struct customTrack *customFactoryParse(char *genomeDb, char *text, boolean isFile,
 	struct slName **retBrowserLines)
 /* Parse text into a custom set of tracks.  Text parameter is a
- * file name if 'isFile' is set.  Die if the track is not for hGetDb(). */
+ * file name if 'isFile' is set.  Die if the track is not for genomeDb. */
 {
 return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, TRUE);
 }
 
-// FIXME: needed any more
 struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean isFile,
 					    struct slName **retBrowserLines)
 /* Parse text into a custom set of tracks.  Text parameter is a
@@ -2002,7 +2000,7 @@ struct customPp *cpp = customPpNew(lf);
 lf = NULL;
 
 if (dbTrack)
-    ctConn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+    ctConn = hAllocConn(CUSTOM_TRASH);
 
 /* Loop through this once for each track. */
 while ((line = customPpNextReal(cpp)) != NULL)

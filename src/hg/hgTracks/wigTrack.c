@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.81.6.2 2008/08/07 16:02:41 markd Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.81.6.3 2008/08/09 04:40:35 markd Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -426,7 +426,7 @@ struct customTrack *ct = NULL;
 if (tg->customPt != (void *)NULL)
     {
     hFreeConn(&conn);
-    conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+    conn = hAllocConn(CUSTOM_TRASH);
     ct = tg->customPt;
     dbTableName = ct->dbTableName;
     tdb = ct->tdb;

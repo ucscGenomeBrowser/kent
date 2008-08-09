@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.133.4.2 2008/08/07 16:02:40 markd Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.133.4.3 2008/08/09 04:40:35 markd Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -369,8 +369,8 @@ if (mp->ct)
     {
     char *fileName = getCustomMafFile(track);
 
-    conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
-    conn2 = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+    conn = hAllocConn(CUSTOM_TRASH);
+    conn2 = hAllocConn(CUSTOM_TRASH);
     mp->list = wigMafLoadInRegion(conn, conn2, mp->ct->dbTableName,
 				chromName, winStart - 2 , winEnd + 2, fileName);
     hFreeConn(&conn);
@@ -560,8 +560,8 @@ if (winBaseCount < MAF_SUMMARY_VIEW)
     if (mp->ct)
 	{
 	char *fileName = getCustomMafFile(track);
-	conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
-	conn2 = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+	conn = hAllocConn(CUSTOM_TRASH);
+	conn2 = hAllocConn(CUSTOM_TRASH);
 	mp->list = wigMafLoadInRegion(conn, conn2, mp->ct->dbTableName,
 					chromName, winStart, winEnd, fileName);
 	hFreeConn(&conn);
@@ -1024,7 +1024,7 @@ static void drawScoreOverviewCT(char *tableName,
 	Color color, Color altColor,
 	enum trackVisibility vis)
 {
-struct sqlConnection *conn = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 
 drawScoreOverviewC(conn, tableName, height, seqStart, seqEnd, 
 	hvg, xOff, yOff, width, font, color, altColor, vis);
@@ -1761,8 +1761,8 @@ char *tableName = NULL;
 
 if (mp->ct != NULL)
     {
-    conn2 = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
-    conn3 = hAllocConnProfile(CUSTOM_TRACKS_PROFILE, CUSTOM_TRASH);
+    conn2 = hAllocConn(CUSTOM_TRASH);
+    conn3 = hAllocConn(CUSTOM_TRASH);
     tableName = mp->ct->dbTableName;
     mafFile = getCustomMafFile(track);
     }

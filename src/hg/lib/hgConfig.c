@@ -1,12 +1,14 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.18.12.2 2008/08/05 07:11:20 markd Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.18.12.3 2008/08/09 04:40:40 markd Exp $";
 
 #include "common.h"
+#include "hgConfig.h"
 #include "hash.h"
 #include "cheapcgi.h"
 #include "portable.h"
 #include "linefile.h"
+#include "customTrack.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -154,6 +156,23 @@ while(lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 }
 
+static void addConfigIfUndef(char *prefix, char *suffix, char *value)
+/* if the specified config item doesn't exist, add it */
+{
+char name[256];
+safef(name, sizeof(name), "%s.%s", prefix, suffix);
+if (cfgOption(name) == NULL)
+    hashAdd(cfgOptionsHash, name, cloneString(value));
+}
+
+
+static void hackConfig()
+/* Add in some pre-defined profile mappings if needed.  This was added to make
+ * older conf files compatible with the db profile paradigm */
+{
+addConfigIfUndef(CUSTOM_TRASH, "profile", CUSTOM_TRACKS_PROFILE);
+}
+
 static void initConfig()
 /* create and initilize the config hash */
 {
@@ -161,6 +180,7 @@ char filename[PATH_LEN];
 cfgOptionsHash = newHash(6);
 getConfigFile(filename);
 parseConfigFile(filename, 0);
+hackConfig();
 }
 
 char* cfgOption(char* name)
