@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1447 2008/08/08 23:59:56 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1448 2008/08/09 23:22:00 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3529,6 +3529,7 @@ cgiMakeButton("submit", "get DNA");
 if (dbIsActive)
     cgiMakeButton("submit", EXTENDED_DNA_BUTTON);
 puts("</FORM><P>");
+if (dbIsActive)
 puts("Note: The \"Mask repeats\" option applies only to \"get DNA\", not to \"extended case/color options\". <P>");
 }
 
