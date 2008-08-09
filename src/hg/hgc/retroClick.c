@@ -120,9 +120,12 @@ static struct mappingInfo *mappingInfoNew(struct sqlConnection *conn,
 struct mappingInfo *mi;
 int preLen;
 char *suffix = containsStringNoCase(tbl,"Info");
-if (suffix != NULL)
-    suffix +=4;
 AllocVar(mi);
+if (suffix != NULL)
+    {
+    suffix +=4;
+    safef(mi->suffix,ID_BUFSZ,"%s",suffix);
+    }
 
 if (startsWith("retroAnc", tbl))
     strcpy(mi->tblPre, "retroAnc");
@@ -652,7 +655,7 @@ static void displayAligns(struct sqlConnection *conn, struct mappingInfo *mi)
 int start = cartInt(cart, "o");
 char alignTbl[128];
 struct psl *psl;
-safef(alignTbl, sizeof(alignTbl), "%s%sAli", mi->tblPre, mi->geneSet);
+safef(alignTbl, sizeof(alignTbl), "%s%sAli%s", mi->tblPre, mi->geneSet,mi->suffix);
 
 /* this should only ever have one alignment */
 psl = getAlignments(conn, alignTbl, mi->pg->name);
