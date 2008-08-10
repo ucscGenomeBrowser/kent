@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "retroMrnaInfo.h"
 
-static char const rcsid[] = "$Id: retroMrnaInfo.c,v 1.2 2008/03/18 05:11:24 baertsch Exp $";
+static char const rcsid[] = "$Id: retroMrnaInfo.c,v 1.3 2008/08/10 00:06:48 baertsch Exp $";
 
 int sqlSignedForgiving(char *s)
 /* Convert string to signed integer.  Unlike atol assumes 
@@ -590,3 +590,13 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct retroMrnaInfo *retroMrnaInfoQuery(struct sqlConnection *conn,
+                                       char *table, char *mappedId)
+/* load a single transMapInfo object for an mapped id from a table,
+ * or error if not found */
+{
+return sqlQueryObjs(conn, (sqlLoadFunc)retroMrnaInfoLoad,
+                    sqlQuerySingle,
+                    "SELECT * FROM %s WHERE name = \"%s\"",
+                    table, mappedId);
+}
