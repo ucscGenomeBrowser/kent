@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1448 2008/08/09 23:22:00 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1449 2008/08/10 01:17:52 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -20162,7 +20162,7 @@ else if (startsWith("pseudoMrna",track ) || startsWith("pseudoGeneLink",track )
     {
     doPseudoPsl(tdb, item);
     }
-else if (startsWith("retroMrna",track ) || startsWith("retroAugust",track ))
+else if (startsWith("retroMrna",track ) || startsWith("retroAugust",track )|| startsWith("retroCds",track ))
     {
     retroClickHandler(tdb, item);
     }

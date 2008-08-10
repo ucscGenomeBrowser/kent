@@ -189,7 +189,6 @@ safef(srcGeneUrl, sizeof(srcGeneUrl),
 printf("<TABLE class=\"transMap\">\n");
 printf("<CAPTION>Source gene</CAPTION>\n");
 printf("<TBODY>\n");
-//printf("<TR CLASS=\"transMapLeft\"><TD>%s", mi->pg->srcDb);
 printf("<TD CLASS=\"transMapNoWrap\"><A HREF=\"%s\" target=_blank>%s</A>", srcGeneUrl, mi->pg->name);
 if (mi->desc == NULL)
     printf("<TD>&nbsp;<TD>gene no longer in source database");
@@ -217,12 +216,6 @@ printf("<TR><TH>Rhesus<TD>%d</TR>\n", pg->overlapRhesus);
 printf("</TBODY></TABLE>\n");
 }
 
-//static void prGeneMappingRow(char *label, unsigned origCnt, unsigned mapCnt)
-///* display one row in the gene mapping table */
-//{
-//float frac = (origCnt == 0) ? 0.0 : ((float)mapCnt)/origCnt;
-//printf("<TR><TH>%s<TD>%d<TD>%d<TD>%0.2f</TR>\n", label, origCnt, mapCnt, frac);
-//}
 static struct psl *loadPslRangeT(char *table, char *qName, char *tName, int tStart, int tEnd)
 /* Load a list of psls given qName tName tStart tEnd */
 {
@@ -285,7 +278,6 @@ for (i = 0 ; i < psl->blockCount ; i++)
     {
     int qs = psl->qStarts[i];
     int qe = psl->qStarts[i] + psl->blockSizes[i];
-    //int ts = psl->tStarts[i] ;
     int te = psl->tStarts[i] + psl->blockSizes[i];
     int tdiff = 0;
     int qdiff = 0;
@@ -352,11 +344,6 @@ for (i = 0 ; i < psl->blockCount ; i++)
         }
     printf(", ");
     }
-//if (nestedPsl != NULL)
-//    {
-//    printf("</td></TR>\n");  
-//    printf("<TR><TH>Introns Procesed Out / Introns Present <TD>Line to be removed %d / %d\n", intronsSpliced, intronsPresent);
-//    }
 }
 
 struct psl *pslFromGenePred(struct genePred *gp, int targetSize)
@@ -492,19 +479,10 @@ char alignTbl[128];
 struct psl *psl, *pslList = NULL;
 float coverFactor = 0;
 float maxOverlap = 0, rawScore = 0;
-//struct genePred *overlappingGene = NULL;
-//int geneOverlap = 0;
 if (mi->suffix == NULL)
     safef(alignTbl, sizeof(alignTbl), "%s%sAli", mi->tblPre, mi->geneSet);
 else
     safef(alignTbl, sizeof(alignTbl), "%s%sAli%s", mi->tblPre, mi->geneSet, mi->suffix);
-//printf("<TABLE class=\"transMap\">\n");
-//printf("<THEAD>\n");
-//printf("<TR><TH>          <TH>database    <TH COLSPAN=2>%s</TR>\n", hGetDb());
-//printf("<TR><TH>          <TH>exonCount <TH>exon Coverage<TH>score</TR>\n");
-//printf("</THEAD><TBODY>\n");
-//printf("<TR><TH>%s<TD>%d<TD>%d<TD>%d</TR>\n", pg->name, pg->exonCount, pg->exonCover, pg->score);
-//printf("</TBODY></TABLE>\n");
 printf("<TABLE class=\"transMap\">\n");
 printf("<CAPTION>Retrogene stats</CAPTION>\n");
 printf("<THEAD>\n");
@@ -518,12 +496,10 @@ printf("<TR><TH>Score <TD>%d (range from 0 - %d)</TR>\n",
         pg->score,
         sqlQuickNum(conn, "select max(score) from retroMrnaInfo") );
 printf("<TR><TH>Alignment Coverage of parent gene (Bases&nbsp;matching Parent) <TD>%d %% &nbsp;(%d bp) </TR>\n", pg->coverage, pg->matches);
-//printf("<TR><TH>Conserved Introns<TD>%d</TR>\n",  pg->conservedIntrons);
 printf("<TR><TH>Introns Procesed Out <TD>%d out of %d (%d exons covered)\n", pg->processedIntrons, pg->parentSpliceCount/2, pg->exonCover);
 printf("<TR><TH>Introns Present<TD>%d\n", pg->intronCount);
 printf("<TR><TH>Conserved Splice Sites<TD>%d</TR>\n",  pg->conservedSpliceSites);
 printf("<TR><TH>Parent Splice Sites<TD>%d</TR>\n",  pg->parentSpliceCount);
-//printf("<TR><TH>Exons&nbsp;Processed<TD>[obselete not used in score function]&nbsp;%d&nbsp;out&nbsp;of&nbsp;%d (exons covered) </TR>\n" ,pg->exonCover - pg->conservedSpliceSites, pg->exonCover);
 printf("<TR><TH>Introns Bases<TD>%d</TR>\n",  pg->oldIntronCount*10);
 psl = getAlignments(conn, alignTbl, mi->pg->name);
 if (psl != NULL)
@@ -551,9 +527,6 @@ rawScore = wt[0]*pg->milliBad+
 pslList = getParentAligns(conn, mi, &table);
 if (psl != NULL)
     {
-//    printf("<TR><TH>Raw Blocks from retro:tgaps <TD>\n");
-//    printBlocks(psl, 0, NULL);
-//    printf("</td></TR>\n");  
     printf("<TR><TH>Blocks in retro:gap%%/intronsSpliced <TD>\n");
     printBlocks(psl, MAXBLOCKGAP, pslList);
     printf("</td></TR>\n");  
@@ -627,9 +600,6 @@ if ( differentString("none",pg->overName) &&
     if (sqlQuickString(conn, query) != NULL)
         printf("<TR><TH>Frame of retro %s (start)<TD>%s</TR>\n",  
             pg->overName, sqlQuickString(conn, query));
-//    else
-//        printf("<TR><TH>Frame of retro %s (start)<TD>%s</TR>\n",  
-//            pg->overName, query);
     }
 
 name = cloneString(pg->name);
@@ -642,9 +612,6 @@ if (hTableExists("rbRetroParent"))
     if ( sqlQuickString(conn, query) != NULL)
         printf("<TR><TH>Frames of mapped parent %s (start)<TD>%s</TR>\n",  
             name, sqlQuickString(conn, query));
-//    else
-//        printf("<TR><TH>Frames of mapped parent %s (start)<TD>%s</TR>\n",  
-//                pg->refSeq, query);
     }
 printf("</TBODY></TABLE>\n");
 }
@@ -780,12 +747,15 @@ psl = loadAlign(conn, mi, start);
 if (startsWith("August",mi->geneSet))
     safef(acc, sizeof(acc), "aug-%s.T1",mi->seqId);
 else
-    safef(acc, sizeof(acc), "%s",mi->seqId);
-//defDbConn = sqlConnect(hDefaultDb());
+    safef(acc, sizeof(acc), "%s.%d",mi->seqId, mi->gbCurVer);
 rnaSeq = hDnaSeqGet(conn, acc, "retroSeq", "retroExtFile");
 if (rnaSeq == NULL)
-    errAbort("can't get mRNA sequence from %s prefix %s for %s", 
+    {
+    rnaSeq = hDnaSeqGet(conn, acc, "seq", "extFile");
+    if (rnaSeq == NULL)
+        errAbort("can't get mRNA sequence from %s prefix %s for %s from retroSeq", 
             hGetDbName(), mi->geneSet, acc);
+    }
 sqlDisconnect(&defDbConn);
 
 showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL, cds.start, cds.end);
