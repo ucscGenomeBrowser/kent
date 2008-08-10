@@ -139,5 +139,9 @@ void retroMrnaInfoOutput(struct retroMrnaInfo *el, FILE *f, char sep, char lastS
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-#endif /* RETROMRNAINFO_H */
 
+struct retroMrnaInfo *retroMrnaInfoQuery(struct sqlConnection *conn,
+                                       char *table, char *mappedId);
+/* load a single transMapInfo object for an mapped id from a table,
+ * or error if not found */
+#endif /* RETROMRNAINFO_H */
