@@ -490,12 +490,12 @@ printf("</THEAD><TBODY>\n");
 if (sameString(pg->type, "singleExon"))
     printf("<TR><TH>Type of Parent<TD>%s</tr>\n",pg->type);
 else 
-    printf("<TR><TH>Type of RetroGene<TD>%s</TR>\n",pg->type);
+    printf("<TR><TH>Expression of Retrocopy<TD>%s</TR>\n",pg->type);
 printf("<TR><TH>Score <TD>%d (range from 0 - %d)</TR>\n",  
         pg->score,
         sqlQuickNum(conn, "select max(score) from retroMrnaInfo") );
 printf("<TR><TH>Alignment Coverage of parent gene (Bases&nbsp;matching Parent) <TD>%d %% &nbsp;(%d bp) </TR>\n", pg->coverage, pg->matches);
-printf("<TR><TH>Introns Procesed Out <TD>%d out of %d (%d exons covered)\n", pg->processedIntrons, (pg->parentSpliceCount/2)-1, pg->exonCover);
+printf("<TR><TH>Introns Procesed Out <TD>%d out of %d (%d exons covered)\n", pg->processedIntrons, (pg->parentSpliceCount/2), pg->exonCover);
 printf("<TR><TH>Possible Introns (or gaps) in Retro<TD>%d\n", pg->intronCount);
 printf("<TR><TH>Conserved Splice Sites<TD>%d</TR>\n",  pg->conservedSpliceSites);
 printf("<TR><TH>Parent Splice Sites<TD>%d</TR>\n",  pg->parentSpliceCount);
@@ -539,12 +539,15 @@ if (pslList != NULL)
     pslFreeList(&pslList);
     }
 #endif
-printf("<TR><TH>Length of PolyA Tail<TD>%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp </TR><TR><TH>PolyA %% identity(position)<TD>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
-printf("&nbsp;(%d&nbsp;bp&nbsp;from&nbsp;end&nbsp;of&nbsp;retrogene)<br>\n",pg->polyAstart);
+printf("<TR><TH>Length of PolyA Tail<TD>%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp </TR><TR><TH>PolyA Tail %% A's(position)<TD>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
+if (pg->polyAstart < 0)
+    printf("&nbsp;(%d&nbsp;bp&nbsp;before&nbsp;end&nbsp;of&nbsp;retrocopy)<br>\n",-(pg->polyAstart));
+else
+    printf("&nbsp;(%d&nbsp;bp&nbsp;past&nbsp;end&nbsp;of&nbsp;retrocopy)<br>\n",pg->polyAstart);
 
-printf("<tr><th>Expression evidence<td>");
+printf("<tr><th>mRNA expression evidence<td>");
 if (!sameString(pg->overName, "none"))
-    printf("Bases&nbsp;overlapping:&nbsp;%s&nbsp;(%d&nbsp;bp)\n", pg->overName, pg->maxOverlap);
+    printf("%s&nbsp;(overlap:&nbsp;&nbsp;%d&nbsp;bp)\n", pg->overName, pg->maxOverlap);
 else
     printf("No&nbsp;overlapping");
 printf("<TR><TH>bestorf score (>50 is good)<TD>%4.0f</td></TR>\n",pg->posConf);
