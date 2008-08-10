@@ -443,7 +443,7 @@ static void displayParentAligns(struct mappingInfo *mi, struct psl *pslList, cha
 struct retroMrnaInfo *pg = mi->pg;
 if (pslList != NULL && *table )
     {
-    printf("<H3>Parent Locus/Parent mRNA Alignments table %s</H3>", table);
+    printf("<H3>Parent Locus/Parent mRNA Alignments </H3>");
     printAlignments(pslList, pslList->tStart, "htcCdnaAli", table, \
             mi->gbAcc);
     }
@@ -473,10 +473,9 @@ struct retroMrnaInfo *pg = mi->pg;
 int overlapOrtholog = max(pg->overlapMouse, pg->overlapDog);
 double  wt[12];     /* weights on score function*/
 char query[512];
-char *table;
 char *name;
 char alignTbl[128];
-struct psl *psl, *pslList = NULL;
+struct psl *psl;
 float coverFactor = 0;
 float maxOverlap = 0, rawScore = 0;
 if (mi->suffix == NULL)
@@ -524,7 +523,9 @@ rawScore = wt[0]*pg->milliBad+
                 wt[8]*((pg->coverage/100.0)*(1.0-coverFactor)*300.0)+
                 wt[9]*(pg->tReps*10)+ 
                 wt[10]*pg->oldIntronCount;
-pslList = getParentAligns(conn, mi, &table);
+#ifdef debug
+char table[512];
+struct psl *pslList = getParentAligns(conn, mi, &table);
 if (psl != NULL)
     {
     printf("<TR><TH>Blocks in retro:gap%%/intronsSpliced <TD>\n");
@@ -538,6 +539,7 @@ if (pslList != NULL)
     printf("</td></TR>\n");  
     pslFreeList(&pslList);
     }
+#endif
 printf("<TR><TH>Length of PolyA Tail<TD>%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp </TR><TR><TH>PolyA %% identity(position)<TD>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
 printf("&nbsp;(%d&nbsp;bp&nbsp;from&nbsp;end&nbsp;of&nbsp;retrogene)<br>\n",pg->polyAstart);
 
@@ -547,7 +549,7 @@ if (!sameString(pg->overName, "none"))
 else
     printf("No&nbsp;overlapping");
 printf("<TR><TH>bestorf score (>50 is good)<TD>%4.0f</td></TR>\n",pg->posConf);
-
+#ifdef score
 printf("<TR><TH>score function<TD>1:xon %d %4.1f conSS %d 2: ax %4.1f 3: pA %4.1f 4: net + %4.1f max (%d, %d) 5: procIntrons %d %4.1f 6:in.cnt %d -%4.1f 7:overlap - %4.1f  8:cov %d*(qe %d- qsz %d)/%d=%4.1f 9:tRep - %4.1f 10:oldintron %d %4.1f </td></TR>\n",
                 pg->exonCover,
                 wt[1]*(log(pg->exonCover+1)/log(2))*200 , 
@@ -578,6 +580,7 @@ printf("<TR><TH>score function<TD>%4.1f+ %4.1f+ %4.1f+ %4.1f+ %4.1f - %4.1f - %4
                 wt[10]*pg->oldIntronCount, rawScore , rawScore/3.0);
 if (pg->kaku > 0 && pg->kaku < 1000000)
     printf("<TR><TH>KA/KU mutation rate in non-syn sites vs utr with repect to parent gene<TD>%4.2f</TR>\n",  pg->kaku);
+#endif
 #ifdef xxx
 safef(query, sizeof(query), "select * from refGene where chrom = '%d' and txEnd > %d and txStart %d and name = '%s'", 
         pg->chrom, pg->gStart, pg->gEnd , pg->overName );
@@ -616,6 +619,32 @@ if (hTableExists("rbRetroParent"))
 printf("</TBODY></TABLE>\n");
 }
 
+void printRetroAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
+		     char *typeName, char *itemIn)
+/* Print list of mRNA alignments. */
+{
+if (pslList == NULL || typeName == NULL)
+    return;
+printAlignmentsSimple(pslList, startFirst, hgcCommand, typeName, itemIn);
+
+struct psl *psl = pslList;
+for (psl = pslList; psl != NULL; psl = psl->next)
+    {
+    if ( pslTrimToTargetRange(psl, winStart, winEnd) != NULL 
+	&& 
+	!startsWith("xeno", typeName)
+	&& !(startsWith("user", typeName) && pslIsProtein(psl))
+	&& psl->tStart == startFirst
+	)
+	{
+        char otherString[512];
+	safef(otherString, sizeof(otherString), "%d&aliTrack=%s",
+	      psl->tStart, typeName);
+	}
+    }
+
+}
+
 static void displayAligns(struct sqlConnection *conn, struct mappingInfo *mi)
 /* display cDNA alignments */
 {
@@ -627,7 +656,7 @@ safef(alignTbl, sizeof(alignTbl), "%s%sAli%s", mi->tblPre, mi->geneSet,mi->suffi
 /* this should only ever have one alignment */
 psl = getAlignments(conn, alignTbl, mi->pg->name);
 printf("<H3>Retro Locus/Parent mRNA Alignments</H3>");
-printAlignments(psl, start, "hgcRetroCdnaAli", alignTbl, mi->pg->name);
+printRetroAlignments(psl, start, "hgcRetroCdnaAli", alignTbl, mi->pg->name);
 pslFreeList(&psl);
 }
 
