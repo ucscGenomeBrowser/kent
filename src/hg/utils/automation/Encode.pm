@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.6 2008/08/08 20:49:56 larrym Exp $
+# $Id: Encode.pm,v 1.7 2008/08/10 00:45:36 larrym Exp $
 
 package Encode;
 
@@ -69,10 +69,13 @@ sub splitKeyVal
 
 
 sub validateFieldList {
-# validate the entries in a RA record or DDF header using labs.ra as our schema
+# validate the entries in a RA record or DDF header using fields.ra
+# $file s/d be 'ddf' or 'pifHeader'
+
     my ($fields, $schema, $file, $errStrSuffix) = @_;
     my %hash = map {$_ => 1} @{$fields};
     my @errors;
+    die "file '$file' is invalid\n" if($file ne 'ddf' && $file ne 'pifHeader');
 
     # look for missing required fields
     for my $field (keys %{$schema}) {
@@ -117,6 +120,7 @@ sub readFile
 
 sub getLabs
 {
+# This lab corresponds to the "grant" in the PIF file (these are different for historical reasons).
     my ($configPath) = @_;
     my %labs;
     if(-e "$configPath/$labsConfigFile") {
@@ -145,6 +149,7 @@ sub getFields
 # ra format:  field <name>, required <true|false>
     my ($configPath) = @_;
     my %fields = RAFile::readRaFile("$configPath/$fieldConfigFile", "field");
+
     # For convenience, convert "required" to a real boolean (1 or 0);
     for my $key (keys %fields) {
         if(exists($fields{$key}->{required})) {
@@ -157,7 +162,9 @@ sub getFields
 
 sub validateAssembly {
     my ($val) = @_;
-    $val =~ /^hg1[78]$/ || die "ERROR: Assembly '$val' is invalid (must be 'hg17' or 'hg18')\n";
+    if($val ne 'hg18') {
+        die "ERROR: Assembly '$val' is invalid (must be 'hg18')\n";
+    }
 }
 
 sub getPif
@@ -241,8 +248,8 @@ sub getPif
         }
     }
 
-    if (defined($pif{'variables'})) {
-        my @variables = split (/\s*,\s*/, $pif{'variables'});
+    if (defined($pif{variables})) {
+        my @variables = split (/\s*,\s*/, $pif{variables});
         my %variables;
         my $i = 0;
         foreach my $variable (@variables) {
@@ -251,8 +258,8 @@ sub getPif
             $variables[$i++] = $variable;
             $variables{$variable} = 1;
         }
-        $pif{'variableHash'} = \%variables;
-        $pif{'variableArray'} = \@variables;
+        $pif{variableHash} = \%variables;
+        $pif{variableArray} = \@variables;
     }
     return %pif;
 }
