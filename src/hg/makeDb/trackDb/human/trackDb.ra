@@ -189,15 +189,45 @@ color 12,12,120
 type genePred
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
-track retroMrnaInfo3
-shortLabel Retroposed Genes 3.0
-longLabel Retroposed Genes, Including Pseudogenes August 2008 [retroMrnaInfo3]
+track retroMrnaInfo
+shortLabel Retroposed Genes 2.0c
+longLabel Retroposed Genes, Including Pseudogenes [retroMrnaInfo]
 group genes
 priority 37.12
 visibility hide
 nextItemButton on 
 spectrum on
 type bed 12 .
+
+track retroMrnaInfo3
+shortLabel Retroposed Genes 2.0d
+longLabel Retroposed Genes, Including Pseudogenes August 2008 [retroMrnaInfo3]
+group genes
+priority 37.13
+visibility hide
+nextItemButton on 
+spectrum on
+type bed 12 .
+
+track retroCdsAli3
+shortLabel Retroposed Genes 3.0
+longLabel Retroposed Genes, Including Pseudogenes August 2008 [retroCdsAli3]
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility pack
+retroMrnaInfo retroMrnaInfo3
+#transMapTypeDesc UCSC retrocopies
+baseColorDefault diffCodons
+baseColorUseCds table retroCds
+baseColorUseSequence extFile retroSeq retroExtFile 
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
 
 track sanger20
 shortLabel Sanger 20
