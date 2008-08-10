@@ -495,11 +495,10 @@ printf("<TR><TH>Score <TD>%d (range from 0 - %d)</TR>\n",
         pg->score,
         sqlQuickNum(conn, "select max(score) from retroMrnaInfo") );
 printf("<TR><TH>Alignment Coverage of parent gene (Bases&nbsp;matching Parent) <TD>%d %% &nbsp;(%d bp) </TR>\n", pg->coverage, pg->matches);
-printf("<TR><TH>Introns Procesed Out <TD>%d out of %d (%d exons covered)\n", pg->processedIntrons, pg->parentSpliceCount/2, pg->exonCover);
+printf("<TR><TH>Introns Procesed Out <TD>%d out of %d (%d exons covered)\n", pg->processedIntrons, (pg->parentSpliceCount/2)-1, pg->exonCover);
 printf("<TR><TH>Introns Present<TD>%d\n", pg->intronCount);
 printf("<TR><TH>Conserved Splice Sites<TD>%d</TR>\n",  pg->conservedSpliceSites);
 printf("<TR><TH>Parent Splice Sites<TD>%d</TR>\n",  pg->parentSpliceCount);
-printf("<TR><TH>Introns Bases<TD>%d</TR>\n",  pg->oldIntronCount*10);
 psl = getAlignments(conn, alignTbl, mi->pg->name);
 if (psl != NULL)
     {
