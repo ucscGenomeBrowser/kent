@@ -16,6 +16,8 @@
 #include "retroMrnaInfo.h"
 #endif /* RETROGENE_H */
 
+#define retroInfoTblSetting    "retroMrnaInfo"
+
 extern char *protDbName;               /* Name of proteome database for this genome. */
 struct linkedFeatures *lfFromRetroGene(struct retroMrnaInfo *pg);
 /* Return a linked feature from a retroGene. */

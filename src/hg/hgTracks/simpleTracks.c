@@ -112,6 +112,7 @@
 #include "omicia.h"
 #include "nonCodingUi.h"
 #include "transMapTracks.h"
+#include "retroTracks.h"
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
@@ -123,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.26 2008/08/08 18:50:17 baertsch Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.27 2008/08/10 01:11:06 baertsch Exp $";
 
 #define CHROM_COLORS 26
 
@@ -11134,11 +11135,6 @@ registerTrackHandler("sanger22pseudo", sanger22Methods);
 registerTrackHandler("vegaGene", vegaMethods);
 registerTrackHandler("vegaPseudoGene", vegaMethods);
 registerTrackHandler("vegaGeneZfish", vegaMethods);
-registerTrackHandler("pseudoGeneLink", retroGeneMethods);
-registerTrackHandler("pseudoGeneLink2", retroGeneMethods);
-registerTrackHandler("retroMrnaInfo", retroGeneMethods);
-registerTrackHandler("retroMrnaInfo2", retroGeneMethods);
-registerTrackHandler("retroMrnaInfo3", retroGeneMethods);
 registerTrackHandler("bdgpGene", bdgpGeneMethods);
 registerTrackHandler("bdgpNonCoding", bdgpGeneMethods);
 registerTrackHandler("bdgpLiftGene", bdgpGeneMethods);
@@ -11297,6 +11293,7 @@ registerTrackHandler("protVarPos", protVarMethods);
 registerTrackHandler("oreganno", oregannoMethods);
 registerTrackHandler("encodeDless", dlessMethods);
 transMapRegisterTrackHandlers();
+retroRegisterTrackHandlers();
 registerTrackHandler("retroposons", dbRIPMethods);
 registerTrackHandler("kiddEichlerDisc", kiddEichlerMethods);
 registerTrackHandler("kiddEichlerValid", kiddEichlerMethods);

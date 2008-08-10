@@ -36,7 +36,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.81 2008/07/17 22:56:45 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.82 2008/08/10 01:11:06 baertsch Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -543,6 +543,7 @@ struct cdsSpec *cdsSpec
 hFreeConn(&conn);
 if (cdsSpec != NULL)
     genbankCdsParse(cdsSpec->cds, cds);
+if (cds != NULL)
 cdsSpecFreeList(&cdsSpec);
 }
 
@@ -845,6 +846,8 @@ else if (sameString(seqSource, PCR_RESULT_TRACK_NAME))
     mrnaSeq = maybeGetPcrResultSeq(lf);
 #endif /* GBROWSE */
 else if (startsWith("extFile", seqSource))
+    mrnaSeq = maybeGetExtFileSeq(seqSource, name);
+else if (endsWith("ExtFile", seqSource))
     mrnaSeq = maybeGetExtFileSeq(seqSource, name);
 else
     mrnaSeq = hGenBankGetMrna(name, NULL);
