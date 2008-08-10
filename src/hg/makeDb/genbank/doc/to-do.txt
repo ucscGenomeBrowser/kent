@@ -1148,3 +1148,13 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - dm3:AF181625, dm3:AF067153 trans-spliced genes were part of transcript is
    discarded by filtering.
+
+- hg18 BC166696 - looks like linker should have been removed.
+ misc_feature    4034..4046
+                     /note="linker at the 3' end of the ORF that includes stop
+                     codon TAG and Sfi I linker"
+
+- hg18:chr15:63,701,323-63,735,652d /  SLC24A1 NM_004727.2
+  - genome has 1-base insertion (error); frame rendered is wrong
+    due to micro-indel merging.
+
