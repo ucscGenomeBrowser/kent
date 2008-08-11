@@ -1,7 +1,7 @@
 
 # Nematostella vectensis DOE JGI Nemve1
 
-# $Id: nemVec1.txt,v 1.4 2008/08/02 00:27:36 kord Exp $
+# $Id: nemVec1.txt,v 1.5 2008/08/11 21:09:27 kord Exp $
 # $Source: /projects/compbio/cvsroot/kent/src/hg/makeDb/doc/nemVec1.txt,v $
 
 #######################################################################
@@ -344,8 +344,8 @@ cvsup
 
 # nemVec1 (Starlet Sea Anemone)
 nemVec1.serverGenome = /cluster/data/nemVec1/nemVec1.2bit
-nemVec1.clusterGenome = /iscratch/i/nemVec1/nemVec1.2bit
-nemVec1.ooc = /iscratch/i/nemVec1/11.ooc
+nemVec1.clusterGenome = /san/sanvol1/scratch/nemVec1/nemVec1.2bit
+nemVec1.ooc = /san/sanvol1/scratch/nemVec1/11.ooc
 # pslCDnaFilter lines should have ordered instead of finished 
 # (only human and mouse are finished)
 nemVec1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
@@ -361,6 +361,8 @@ nemVec1.genbank.est.native.load = yes
 nemVec1.genbank.est.xeno.load = no
 nemVec1.genbank.mrna.native.load = no
 nemVec1.genbank.mrna.xeno.load = yes 
+nemVec1.refseq.mrna.xeno.load = yes
+nemVec1.refseq.mrna.native.load = no
 nemVec1.perChromTables = no
 nemVec1.downloadDir = nemVec1
 
@@ -377,8 +379,165 @@ time nice -n +19 ./bin/gbAlignStep -initial nemVec1 &
 # no species defined for database "nemVec1"; edit gbGenome.c to add definition
 
 # update gbGenome.c
+ssh hgwdev
+cd ~/kent/src/hg/makeDb/genbank/
+cvsup
+vi src/lib/gbGenome.c
+# added:
+# static char *strPurNames[] = {"Strongylocentrotus purpuratus", NULL};
+#     {"nemVec", nemVecNames},
+cvs com -m "nemVec" gbGenome.c
+make install-server
+exit
 
 # delete previous failed run
 rm -rf /cluster/data/genbank/build/work/initial.nemVec1/align
 
 time nice -n +19 ./bin/gbAlignStep -initial nemVec1 &
+# logFile: var/build/logs/2008.08.08-15:13:58.nemVec1.initalign.log
+# real    51m43.328s
+# user    37m44.638s
+# sys     11m55.862s
+# updated job database on disk
+# total sick machines: 7 failures: 25
+# Sick batch! Correct problem and then run para clearSickNodes.
+# command failed: ssh -x pk cd /cluster/data/genbank/build/work/initial.nemVec1/align\; para make 
+# -maxPush=200000 align.jobs </dev/null at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 251. at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 251.
+# command failed: gbAlignRun -workdir=/cluster/data/genbank/build/work/initial.nemVec1/align  at /
+# cluster/genbank/genbank/bin/../lib/gbCommon.pm line 251. at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 251.
+
+ssh pk 
+cd /cluster/genbank/genbank/build/work/initial.nemVec1/align
+para check
+# 41202 jobs in batch
+# 21831 jobs (including everybody's) in Parasol queue or running.
+# Sick Batch: consecutive crashes (32) >= sick batch threshold (25)
+# Checking finished jobs
+# unsubmitted jobs: 35835
+# crashed: 32
+# total jobs in batch: 41202
+# total sick machines: 7 failures: 25
+# Sick batch! Correct problem and then run para clearSickNodes.
+
+# It looks like all are sick nodes
+para problems | egrep failure | awk '{print $3}' | sort | uniq -c
+# 32 crash
+para try
+# 41202 jobs in batch
+# 21559 jobs (including everybody's) in Parasol queue or running.
+# Checking finished jobs
+# updated job database on disk
+# Pushed Jobs: 10
+
+# Can't open /iscratch/i/nemVec1/nemVec1.2bit to read: No such file or directory
+
+para problem | egrep 2bit | egrep Can | wc -l
+#  41202 jobs in batch
+#  20652 jobs (including everybody's) in Parasol queue or running.
+#  Checking finished jobs
+#  52
+
+ssh hgwdev
+ls -l /iscratch/i/nemVec1/nemVec1.2bit
+# -rw-rw-r--  1 kord protein 91277763 Jul 16 21:25 /iscratch/i/nemVec1/nemVec1.2bit
+
+# rsync to the iservers - this takes a long time these days
+# iservers no available?
+
+# Using /san/sanvol1/scratch/nemVec1/
+cp /cluster/data/nemVec1/nemVec1.2bit /san/sanvol1/scratch/nemVec1/
+cp /cluster/data/nemVec1/jkStuff/11.ooc /san/sanvol1/scratch/nemVec1/
+ssh kkr10u26.kilokluster.ucsc.edu "ls -l /san/sanvol1/scratch/nemVec1/"
+total 89708
+# -rw-rw-r--  1 kord protein    63112 Aug 11 10:10 11.ooc
+# drwxrwxr-x  4 kord protein    38912 Jul 16 10:29 RMPart
+# drwxrwxr-x  4 kord protein     2048 Jul 16 21:01 TrfPart
+# -rw-rw-r--  1 kord protein 91277763 Aug 11 10:10 nemVec1.2bit
+
+# Updated kent/src/hg/makeDb/genbank/etc/genbank.conf with new paths (and updated
+# doc above)
+cd /cluster/home/kord/kent/src/hg/makeDb/genbank
+vi etc/genbank.conf
+cvs com -m "updated nemVec1 2bit and ooc path" etc/genbank.conf 
+make etc-update
+
+ssh genbank
+screen
+cd /cluster/data/genbank
+egrep nemVec etc/genbank.conf
+# nemVec1 (Starlet Sea Anemone)
+# nemVec1.serverGenome = /cluster/data/nemVec1/nemVec1.2bit
+# nemVec1.clusterGenome = /san/sanvol1/scratch/nemVec1/nemVec1.2bit
+# nemVec1.ooc = /san/sanvol1/scratch/nemVec1/11.ooc
+# ...
+rm -rf /cluster/data/genbank/build/work/initial.nemVec1/align
+time nice -n +19 ./bin/gbAlignStep -initial nemVec1 &
+# logFile: var/build/logs/2008.08.11-10:15:07.nemVec1.initalign.log
+# real    52m22.977s
+# user    38m37.753s
+# sys 12m28.625s
+# updated job database on disk
+# total sick machines: 3 failures: 10
+# Sick batch! Correct problem and then run para clearSickNodes.
+# command failed: ssh -x pk cd /cluster/data/genbank/build/work/initial.nemVec1/align\; para make -maxPush=200000 align.jobs </dev/null at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 251. at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 251.
+# command failed: gbAlignRun -workdir=/cluster/data/genbank/build/work/initial.nemVec1/align  at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 251. at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 251.
+para problems
+# nill
+para clearSickNodes
+# Told hub to clear sick nodes
+para try
+parasol list batches
+#user     run   wait   done crash pri max cpu  ram  plan min batch
+# kord        1      0      9    65  10  -1   1  2.0g    0   0 /cluster/genbank/genbank/build/work/initial.nemVec1/align/
+
+para check
+# 41526 jobs in batch
+# 243011 jobs (including everybody's) in Parasol queue or running.
+# Checking finished jobs
+# unsubmitted jobs: 41516
+# ranOk: 10
+# total jobs in batch: 41526
+
+para push
+# 41526 jobs in batch
+# 242964 jobs (including everybody's) in Parasol queue or running.
+# Checking finished jobs
+# ...
+
+parasol list batches
+#user     run   wait   done crash pri max cpu  ram  plan min batch
+kord      390  38499   2637    65  10  -1   1  2.0g  390   0 /cluster/genbank/genbank/build/work/initial.nemVec1/align/
+para check
+# 41526 jobs in batch
+# 242557 jobs (including everybody's) in Parasol queue or running.
+# Checking finished jobs
+# ...
+# ranOk: 41526
+# total jobs in batch: 41526
+
+# when the blat runs are done, finish up the gbAlignStep
+time nice -n +19 ./bin/gbAlignStep -initial -continue=finish nemVec1 &
+# logFile: var/build/logs/2008.08.11-11:55:31.nemVec1.initalign.log
+# real    54m55.941s
+# user    38m11.286s
+# sys     15m36.247s
+# genbank 2008.08.11-12:50:27 nemVec1.initalign: finish
+
+ssh hgwdev
+cd /cluster/data/genbank
+time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad nemVec1
+# logFile: var/dbload/hgwdev/logs/2008.08.11-13:08:47.dbload.log
+# real    22m17.933s
+# user    9m14.590s
+# sys     3m20.555s
+
+# enable daily alignment and update of hgwdev
+cd ~/kent/src/hg/makeDb/genbank
+cvsup 
+# add nemVec1 to:
+    etc/align.dbs
+    etc/hgwdev.dbs
+cvs ci -m "Added N. vectensis" \
+    etc/align.dbs etc/hgwdev.dbs
+make etc-update
+
