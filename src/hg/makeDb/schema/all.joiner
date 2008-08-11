@@ -2013,6 +2013,7 @@ identifier unigeneId2 external=UniGene
     $gbd.seq.acc
     $galGal.uniGene_gg.qName
     $danRer.uniGene_dr.qName
+    $hg.uniGene_3.qName
 
 # BGI SNP Identifiers
 
