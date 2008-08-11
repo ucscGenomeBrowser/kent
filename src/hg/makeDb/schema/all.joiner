@@ -2015,6 +2015,19 @@ identifier unigeneId2 external=UniGene
     $danRer.uniGene_dr.qName
     $hg.uniGene_3.qName
 
+identifier kiddEichlerId external=EichlerLab
+"Clone accession used in Kidd..Eichler '08"
+    $hg.kiddEichlerToNcbi.name
+    $hg.kiddEichlerDiscAbc7.name chopAfter=, minCheck=0.80
+    $hg.kiddEichlerDiscAbc8.name chopAfter=, minCheck=0
+    $hg.kiddEichlerDiscAbc9.name chopAfter=,
+    $hg.kiddEichlerDiscAbc10.name chopAfter=,
+    $hg.kiddEichlerDiscAbc11.name chopAfter=,
+    $hg.kiddEichlerDiscAbc12.name chopAfter=,
+    $hg.kiddEichlerDiscAbc13.name chopAfter=,
+    $hg.kiddEichlerDiscAbc14.name chopAfter=,
+    $hg.kiddEichlerDiscG248.name chopAfter=, chopBefore=_ minCheck=0.01
+
 # BGI SNP Identifiers
 
 identifier bgiSnpId external=BGI
