@@ -919,3 +919,64 @@ nameTranslation "s/^\([0-9UX][0-9n]*\)/chr\1/; /^MT/d"
     # 39278215 bases of 2731807384 (1.438%) in intersection
 
 ############################################################################
+# SELF BLASTZ (DONE - 2008-06-30 - Hiram)
+    #	do not want the noise from the contigs
+    ssh kkstore05
+    screen # use a screen to manage this multi-day job
+    mkdir /cluster/data/bosTau3/noContigs
+    cd /cluster/data/bosTau3/noContigs
+    cut -f1 ../chrom.sizes | grep -v chrUn | while read C
+do
+    echo "twoBitToFa -seq=${C} ../bosTau3.2bit ${C}.fa"
+    twoBitToFa -seq=${C} ../bosTau3.2bit ${C}.fa
+done
+    faToTwoBit chr*.fa bosTau3.noContigs.2bit
+
+    twoBitToFa bosTau3.noContigs.2bit stdout | faSize stdin
+# 2434234369 bases (141856351 N's 2292378018 real
+#	1246068866 upper 1046309152 lower) in 30 sequences in 1 files
+# %42.98 masked total, %45.64 masked real
+
+    grep -v chrUn ../chrom.sizes | ave -col=2 stdin
+# count 30
+# total 2434234369.000000
+
+    twoBitInfo bosTau3.noContigs.2bit stdout | sort -k2nr \
+	> bosTau3.noContigs.chrom.sizes
+    cp -p bosTau3.noContigs.2bit /cluster/bluearc/scratch/data/bosTau3
+    cp -p bosTau3.noContigs.chrom.sizes /cluster/bluearc/scratch/data/bosTau3
+
+    mkdir /cluster/data/bosTau3/bed/blastzSelf.2008-08-30
+    cd /cluster/data/bosTau3/bed
+    ln -s blastzSelf.2008-08-30 blastzSelf
+    cd blastzSelf.2008-08-30
+
+    cat << '_EOF_' > DEF
+BLASTZ_M=400
+
+# TARGET: Cow bosTau3
+SEQ1_DIR=/cluster/bluearc/scratch/data/bosTau3/bosTau3.noContigs.2bit
+SEQ1_LEN=/cluster/bluearc/scratch/data/bosTau3/bosTau3.noContigs.chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau3
+SEQ2_DIR=/cluster/bluearc/scratch/data/bosTau3/bosTau3.noContigs.2bit
+SEQ2_LEN=/cluster/bluearc/scratch/data/bosTau3/bosTau3.noContigs.chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/bosTau3/bed/blastzSelf.2008-08-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    cd /cluster/data/bosTau3/bed/blastzSelf.2008-08-30
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	failed during loading
+XXXX - running 2008-06-30 11:49
+    #	real    3537m49.719s
+
+############################################################################

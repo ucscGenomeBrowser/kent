@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.14 2008/07/01 16:52:59 markd Exp $"
+#	"$Id: bosTau4.txt,v 1.15 2008/08/11 21:00:37 hiram Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -1717,6 +1717,69 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-05-20
 
 see doc/builds.txt for specific details.
+
+############################################################################
+# SELF BLASTZ (DONE - 2008-06-27 - Hiram)
+    #	do not want the noise from the contigs
+    ssh kkstore06
+    screen # use a screen to manage this multi-day job
+    mkdir /cluster/data/bosTau4/noContigs
+    cd /cluster/data/bosTau4/noContigs
+    cut -f1 ../chrom.sizes | grep -v chrUn | while read C
+do
+    echo "twoBitToFa -seq=${C} ../bosTau4.2bit ${C}.fa"
+    twoBitToFa -seq=${C} ../bosTau4.2bit ${C}.fa
+done
+    faToTwoBit chr*.fa bosTau4.noContigs.2bit
+
+    twoBitToFa bosTau4.noContigs.2bit stdout | faSize stdin
+# 2634429662 bases (167456864 N's 2466972798 real
+#	1326108891 upper 1140863907 lower) in 31 sequences in 1 files
+# %43.31 masked total, %46.25 masked real
+    grep -v chrUn ../chrom.sizes | ave -col=2 stdin
+# count 31
+# total 2634429662.000000
+
+    twoBitInfo bosTau4.noContigs.2bit stdout | sort -k2nr \
+	> bosTau4.noContigs.chrom.sizes
+    cp -p bosTau4.noContigs.2bit /cluster/bluearc/scratch/data/bosTau4
+    cp -p bosTau4.noContigs.chrom.sizes /cluster/bluearc/scratch/data/bosTau4
+
+    mkdir /cluster/data/bosTau4/bed/blastzSelf.2008-08-27
+    cd /cluster/data/bosTau4/bed
+    ln -s blastzSelf.2008-08-27 blastzSelf
+    cd blastzSelf.2008-08-27
+
+    cat << '_EOF_' > DEF
+BLASTZ_M=400
+
+# TARGET: Cow bosTau4
+SEQ1_DIR=/cluster/bluearc/scratch/data/bosTau4/bosTau4.noContigs.2bit
+SEQ1_LEN=/cluster/bluearc/scratch/data/bosTau4/bosTau4.noContigs.chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau4
+SEQ2_DIR=/cluster/bluearc/scratch/data/bosTau4/bosTau4.noContigs.2bit
+SEQ2_LEN=/cluster/bluearc/scratch/data/bosTau4/bosTau4.noContigs.chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/bosTau4/bed/blastzSelf.2008-08-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    cd /cluster/data/bosTau4/bed/blastzSelf.2008-08-27
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	real    3537m49.719s
+    #	had to fix a slight problem in the make downloads step, then:
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	-continue=cleanup `pwd`/DEF > cleanup.out 2>&1 &
+
 ############################################################################
 ############################################################################
 # TRANSMAP vertebrate.2008-06-07 build  (2008-06-30 markd)
