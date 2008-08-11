@@ -1,7 +1,7 @@
 
 # Nematostella vectensis DOE JGI Nemve1
 
-# $Id: nemVec1.txt,v 1.5 2008/08/11 21:09:27 kord Exp $
+# $Id: nemVec1.txt,v 1.6 2008/08/11 23:11:59 kord Exp $
 # $Source: /projects/compbio/cvsroot/kent/src/hg/makeDb/doc/nemVec1.txt,v $
 
 #######################################################################
@@ -333,7 +333,7 @@ exit
 cp -p jkStuff/11.ooc /san/sanvol1/scratch/nemVec1
 
 #######################################################################
-# GENBANK AUTO-UPDATE (STARTED - 2008-Jul-17 - Kord)
+# GENBANK AUTO-UPDATE ( DONE - 2008-Aug-11 - Kord )
 
 # alingn with latest genbank process
 ssh hgwdev
@@ -540,4 +540,151 @@ cvsup
 cvs ci -m "Added N. vectensis" \
     etc/align.dbs etc/hgwdev.dbs
 make etc-update
+
+#######################################################################
+# make downloads (DONE 2008-Aug-11 Kord)
+
+# verify all tracks have html pages for their trackDb entries
+cd /cluster/data/nemVec1
+ln -s /cluster/data/nemVec1/bed/repeatMasker/nemVec1.fa.out
+nice time /cluster/bin/scripts/makeDownloads.pl nemVec1
+
+#   Edit these files
+#       /cluster/data/nemVec1/goldenPath/database/README.txt
+#       /cluster/data/nemVec1/goldenPath/bigZips/README.txt
+
+#######################################################################
+# GENSCAN PREDICTIONS (DONE 2008-Aug-11 - Kord) 
+
+ssh hgwdev
+mkdir /cluster/data/nemVec1/bed/genscan
+cd /cluster/data/nemVec1/bed/genscan
+
+mkdir gtf pep subopt
+cvs co hg3rdParty/genscanlinux
+
+# generate hard-masked sequence
+ssh kkstore06
+cd /cluster/data/nemVec1/bed/genscan
+zcat /cluster/data/nemVec1/goldenPath/bigZips/nemVec1.fa.gz \
+| maskOutFa stdin hard nemVec1.hardmask.fa
+
+# split into 2Mb files
+mkdir split
+cd split
+faSplit about ../nemVec1.hardmask.fa 2000000 split &
+
+# generate file list and check that no files are completely masked
+cd ..
+for f in `find ./split -name "*fa"`; 
+do 
+    egrep '[ACGT]' $f > /dev/null; 
+    if [ $? == 0 ]; then  
+       echo $f >> genome.list
+    fi
+done
+wc -l genome.list 
+# 157 genome.list
+
+# use kk
+ssh kk
+parasol status
+# CPUs total: 62
+# CPUs free: 62
+# CPUs busy: 0
+# Nodes total: 31
+# ...
+cd /cluster/data/nemVec1/bed/genscan
+cat << _EOF_ > gsub
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+_EOF_
+
+# ended up using pk instead of kk
+ssh pk
+/parasol/bin/gensub2 genome.list single gsub jobList
+para create jobList
+# Checking input files
+# .......
+# 157 jobs written to /cluster/store3/nemVec1/bed/genscan/batch
+
+para try
+# 157 jobs in batch
+# 218392 jobs (including everybody's) in Parasol queue or running.
+# Checking finished jobs
+# updated job database on disk
+# Pushed Jobs: 10
+
+para check
+# 157 jobs in batch
+# 218209 jobs (including everybody's) in Parasol queue or running.
+# Checking finished jobs
+# unsubmitted jobs: 147
+# ranOk: 10
+# total jobs in batch: 157
+
+para push
+# 157 jobs in batch
+# 218193 jobs (including everybody's) in Parasol queue or running.
+# Checking finished jobs
+# .......
+# updated job database on disk
+# Pushed Jobs: 147
+
+para check
+# 157 jobs in batch
+# 217861 jobs (including everybody's) in Parasol queue or running.
+# Checking finished jobs
+# ......................
+# ranOk: 157
+# total jobs in batch: 157
+
+para time > para.time 2>&1
+cat para.time 
+# 157 jobs in batch
+# 217819 jobs (including everybody's) in Parasol queue or running.
+# Checking finished jobs
+# Completed: 157 of 157 jobs
+# CPU time in finished jobs:       8635s     143.92m     2.40h    0.10d  0.000 y
+# IO & Wait Time:                   499s       8.31m     0.14h    0.01d  0.000 y
+# Average job time:                  58s       0.97m     0.02h    0.00d
+# Longest finished job:             101s       1.68m     0.03h    0.00d
+# Submission to last job:           303s       5.05m     0.08h    0.00d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+# Concatenate
+ssh kkstore06
+cd /cluster/data/nemVec1/bed/genscan
+cat gtf/*gtf > genscan.gtf
+cat pep/*pep > genscan.pep
+cat subopt/*.bed > genscanSubopt.bed
+
+# Load into the databse
+ssh hgwdev
+cd /cluster/data/nemVec1/bed/genscan
+ldHgGene -gtf nemVec1 genscan genscan.gtf
+# Reading genscan.gtf
+# Read 30239 transcripts in 183271 lines in 1 files
+#   30239 groups 7812 seqs 1 sources 1 feature types
+# 30239 gene predictions
+
+hgPepPred nemVec1 generic genscanPep genscan.pep
+# Processing genscan.pep
+
+hgLoadBed nemVec1 genscanSubopt genscanSubopt.bed
+# Reading genscanSubopt.bed
+# Loaded 131648 elements of size 6
+# Sorted
+# Creating table definition for genscanSubopt
+# Saving bed.tab
+# Loading nemVec1
+
+featureBits nemVec1 genscan
+# 43681106 bases of 297398104 (14.688%) in intersection
+featureBits nemVec1 genscanSubopt
+# 22102365 bases of 297398104 (7.432%) in intersection
+featureBits nemVec1 genscan rmsk
+# 630 bases of 297398104 (0.000%) in intersection
+
 
