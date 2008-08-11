@@ -127,6 +127,14 @@ done > ensGene.update.50.log
     #	ornAna1 is a bit wierd.  Ensembl seems to have Contigs that we do not.
     #	gasAcu1 and oryLat1 needed special lifts
 
+    #	To finalize the build, update the "current" status in the trackVersion
+    #	table in hgFixed
+     hgsql -e \
+'update trackVersion set dateReference="mar2008" where version="49";' hgFixed
+     hgsql -e \
+'update trackVersion set dateReference="current" where version="50";' hgFixed
+
+
     #	to establish a new ensGene.ra file, start out with simply:
 # required db variable
 db newDb
