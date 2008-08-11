@@ -1,7 +1,7 @@
 
 # Nematostella vectensis DOE JGI Nemve1
 
-# $Id: nemVec1.txt,v 1.6 2008/08/11 23:11:59 kord Exp $
+# $Id: nemVec1.txt,v 1.7 2008/08/11 23:51:00 kord Exp $
 # $Source: /projects/compbio/cvsroot/kent/src/hg/makeDb/doc/nemVec1.txt,v $
 
 #######################################################################
@@ -686,5 +686,23 @@ featureBits nemVec1 genscanSubopt
 # 22102365 bases of 297398104 (7.432%) in intersection
 featureBits nemVec1 genscan rmsk
 # 630 bases of 297398104 (0.000%) in intersection
+
+
+#######################################################################
+# Updating the description with an image (DONE 2008-Aug-11 - Kord)
+
+# checking out the browser CVS tree
+ssh hgwdev
+cvs co browser/images
+
+# add the image
+cd browser/images
+mv ~/Nematostella_vectensis.jpg .
+cvs add ~/Nematostella_vectensis.jpg
+cvs com ~/Nematostella_vectensis.jpg
+
+# update the description page
+cd ~/kent/src/hg/makeDb/trackDb
+cvs com description.html
 
 
