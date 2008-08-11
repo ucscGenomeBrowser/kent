@@ -24336,17 +24336,18 @@ See hg18.txt for details.
 
 
 ############################################################################
-# DGV V4 (DATABASE OF GENOMIC VARIANTS) (DONE 5/9/08 angie)
+# DGV V5 (DATABASE OF GENOMIC VARIANTS) (DONE 8/11/08 angie)
+# (replaces DGV V4 done 5/9/08)
     ssh hgwdev
-    mkdir /cluster/data/hg17/bed/dgv.v4
-    cd /cluster/data/hg17/bed/dgv.v4
+    mkdir /cluster/data/hg17/bed/dgv.v5
+    cd /cluster/data/hg17/bed/dgv.v5
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg17.v4.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg17.v5.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg17.v4.txt
+      http://projects.tcag.ca/variation/downloads/indel.hg17.v5.txt
     # shuffle fields into bed8+ (input has some start coords==0, but min 
     # size of 99 not 100 implies most coords are 1-based):
-    foreach f (*.v4.txt)
+    foreach f (*.v5.txt)
       tail +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
@@ -24375,6 +24376,7 @@ See hg18.txt for details.
 
 ############################################################################
 # KIDD/EICHLER DISCORDANT CLONE ENDS (DONE 6/10/08 angie)
+# 8/11/08: Added kiddEichlerToNcbi (ID xref table).
     ssh kkstore02
     mkdir /cluster/data/hg17/bed/kiddEichlerDiscordant
     cd /cluster/data/hg17/bed/kiddEichlerDiscordant
@@ -24477,6 +24479,83 @@ See hg18.txt for details.
                         $bs, $bSz, $bSt) . "\n";' G248discordant.txt \
     | hgLoadBed -tab hg17 kiddEichlerDiscG248 \
         stdin
+
+    # 8/11/08: get clone ID -> NCBI acc mapping.
+    ssh kkstore02
+    mkdir /cluster/data/hg17/bed/kiddEichlerDiscordant/cloneIds
+    cd /cluster/data/hg17/bed/kiddEichlerDiscordant/cloneIds
+    # Saved off emailed file from Jeff Kidd to clones_used_3nov.txt.accessions;
+    # get trace archive trace names for end reads:
+    foreach n (7 8 9 10 11 12 13 14)
+      wget http://hgsv.washington.edu/general/download/clone_mapping/ABC$n/ABC$n.conversion.gz
+    end
+    # That file is not available for G248.
+    gunzip *.gz
+    # Combine the relevant data from the .conversion files; keep only those
+    # IDs that are used in the tracks.
+    cut -f 4 ../bd35/*discordant.txt \
+    | egrep -v '^(#chrom|track)' \
+    | sed -e 's/,.*//' \
+    | sort -u > discIds.txt
+    perl -wpe 's/^OurClone.*\n// || s/^\d+_(HUMAN|\d+_).*\n$// || \
+      s/^(\d+_)?(ABC|G)(\d+)(_\d\d?)?(_\d\d?)?_0*(\d+?_[A-Z]\d\d?)\.(F|FORWARD|R|REVERSE)\.\d+\t(\w+)$/$2$3_$6\t$7\t$8/ || \
+      warn "Parse line $.:\n$_";' \
+      *.conversion \
+    | sort > allEnds.tab
+    grep -wFf discIds.txt allEnds.tab > discEnds.txt
+    wc -l discIds.txt allEnds.tab discEnds.txt 
+#   223052 discIds.txt
+# 14166657 allEnds.tab
+#   397446 discEnds.txt
+    # discEnds.txt has 2 lines (forward & reverse) for most of its ids...
+    # ideally we would see 2*(223052) lines in discEnds.txt.
+    # Get a list of which discordant clone IDs don't have ends in *.conv*:
+    cut -f 1 allEnds.tab | uniq > all.tmp
+    comm -23 discIds.txt all.tmp > discNotInConv.txt
+    wc -l discNotInConv.txt
+#103479 discNotInConv.txt
+    cat > combine.pl <<'_EOF_'
+#!/usr/bin/perl -w
+use strict;
+my ($cloneFile, $endsFile) = @ARGV;
+open(CLONES, $cloneFile) || die "Can't open $cloneFile: $!\n";
+my %idInfo;
+while(<CLONES>) {
+  (s/^(\d+_)?(ABC|G)(\d+)(_\d\d?)?(_\d\d?)?_0*(\d+?_[A-Z]\d\d?)\t(\w+)$/$2$3_$6\t$7/ && m/^(\w+)\t(\w+)/) || \
+  m/^(G248\w+)\t(\w+)$/ || die "Parse line $.:$_";
+  my ($id, $acc) = ($1, $2);
+  $idInfo{$id}->[0] = $acc;
+}
+close(CLONES);
+open(ENDS, $endsFile) || die "Can't open $endsFile: $!\n";
+while (<ENDS>) {
+  chomp; my ($id, $dir, $traceName) = split("\t");
+  if ($dir =~ /^F/) {
+    $idInfo{$id}->[1] = $traceName;
+  } elsif ($dir =~ /^R/) {
+    $idInfo{$id}->[2] = $traceName;
+  } else { die "What is this \$dir: $dir ?\n"; }
+}
+close(ENDS);
+foreach my $id (sort keys %idInfo) {
+  my $infoRef = $idInfo{$id};
+  $infoRef->[0] = '' if (! defined $infoRef->[0]);
+  $infoRef->[1] = '' if (! defined $infoRef->[1]);
+  $infoRef->[2] = '' if (! defined $infoRef->[2]);
+  print join("\t", $id, @{$infoRef}) . "\n";
+}
+'_EOF_'
+    # << emacs
+    chmod a+x combine.pl
+    combine.pl clones_used_3nov.txt.accessions discEnds.txt \
+    | sort > kiddEichlerToNcbi.txt
+    # Load table:
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/kiddEichlerDiscordant/cloneIds
+    hgLoadSqlTab hg17 kiddEichlerToNcbi \
+      $HOME/kent/src/hg/lib/kiddEichlerToNcbi.sql kiddEichlerToNcbi.txt
+    # Add to makeDb/schema/all.joiner, then check:
+    runJoiner.csh hg17 kiddEichlerToNcbi $HOME/kent/src/hg/makeDb/schema
 
 
 ############################################################################
