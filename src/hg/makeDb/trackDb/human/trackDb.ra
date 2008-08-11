@@ -741,6 +741,24 @@ noScoreFilter .
 exonArrows off
 urlLabel DGV Browser and Report: 
 url http://projects.tcag.ca/variation/cgi-bin/tbrowse/xview?source=$D&view=variation&id=Variation_$$
+dataVersion v5
+release alpha
+
+track dgv
+shortLabel DGV Struct Var
+longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
+group varRep
+priority 144.8
+visibility hide
+color 0,100,0
+itemRgb on
+type bed 9 +
+noScoreFilter .
+exonArrows off
+urlLabel DGV Browser and Report: 
+url http://projects.tcag.ca/variation/cgi-bin/tbrowse/xview?source=$D&view=variation&id=Variation_$$
+dataVersion v4
+release beta
 
 track kiddEichlerDisc
 compositeTrack on
