@@ -11,7 +11,7 @@
 #include "net.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.7 2008/07/31 21:59:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.8 2008/08/11 23:24:12 fanhsu Exp $";
 
 static boolean sequenceExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -83,7 +83,7 @@ while (row != NULL)
     hPrintf("<A NAME=\"%s\">\n", seqId);
     hPrintf("<pre>\n");
     hPrintf("%c%s", '>', seqId);
-    hPrintf("%c%s", '|', subjId);
+    hPrintf("%c%s", ':', subjId);
     chp = seq;
     for (i=0; i<l; i++)
 	{
