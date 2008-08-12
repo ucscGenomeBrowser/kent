@@ -199,9 +199,9 @@ nextItemButton on
 spectrum on
 type bed 12 .
 
-track retroMrnaInfo3
+track ucscRetroInfo3
 shortLabel Retroposed Genes 2.0d
-longLabel Retroposed Genes, Including Pseudogenes August 2008 [retroMrnaInfo3]
+longLabel Retroposed Genes, Including Pseudogenes August 2008 [ucscRetroInfo3]
 group genes
 priority 37.13
 visibility hide
@@ -209,15 +209,15 @@ nextItemButton on
 spectrum on
 type bed 12 .
 
-track retroCdsAli3
+track ucscRetroAli3
 shortLabel Retroposed Genes 3.0
-longLabel Retroposed Genes, Including Pseudogenes August 2008 [retroCdsAli3]
+longLabel Retroposed Genes, Including Pseudogenes August 2008 [ucscRetroAli3]
 group genes
 type psl
 priority 37.14
 color 20,0,250
 visibility pack
-retroMrnaInfo retroMrnaInfo3
+retroMrnaInfo ucscRetroInfo3
 #transMapTypeDesc UCSC retrocopies
 baseColorDefault diffCodons
 baseColorUseCds table retroCds
