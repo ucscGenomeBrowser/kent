@@ -18,11 +18,11 @@ all: test
 
 test:
 	for dir in $(DIRS); do \
-		${PROG} -configDir=../config x input/$$dir; \
+		${PROG} -configDir=../config x input/$$dir && \
 		diff input/$$dir/out/load.ra expected/$$dir/load.ra; \
-		grep -v dateSubmitted input/$$dir/out/trackDb.ra > ${TMP_FILE_1}; \
-		grep -v dateSubmitted expected/$$dir/trackDb.ra > ${TMP_FILE_2}; \
-		diff ${TMP_FILE_1} ${TMP_FILE_2}; \
+		grep -v dateSubmitted input/$$dir/out/trackDb.ra > ${TMP_FILE_1} && \
+		grep -v dateSubmitted expected/$$dir/trackDb.ra > ${TMP_FILE_2} && \
+		diff ${TMP_FILE_1} ${TMP_FILE_2} && \
 		rm ${TMP_FILE_1} ${TMP_FILE_2}; \
         done
 
