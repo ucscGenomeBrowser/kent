@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-L = -lm ${MYSQLLIBS}
+L = -lm -lpthread ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
@@ -21,4 +21,4 @@ hgExpDistance_fq: $O ${MYLIBS}
 	${STRIP} ${BINDIR}/hgExpDistance_fq1${EXE}
 
 clean::
-	rm -f ${O} hgExpDistance
+	rm -f ${O} hgExpDistance.o hgExpDistance
