@@ -1,10 +1,12 @@
 #!/usr/bin/env tclsh
-set usage {extFileTool cmd
+set usage {extFileTool [options] cmd
     Tool for running various extFile management tools.
 
     cmd is one of:
        - update - run update and generated extFile dumps
        - dump - generate extFile dumps
+    Options
+      -db=db - Update only this database.  Maybe repeated.
 }
 
 proc report {stat msg} {
@@ -49,34 +51,52 @@ proc extFileDump {dbs logFh} {
     }
 }
 
+# load the list of databases for the specified host
+proc loadDbs {host} {
+    switch -glob $host {
+        hgwdev {
+            set dbFile etc/hgwdev.dbs
+        }
+        hgwbeta {
+            set dbFile etc/hgwbeta.dbs
+        }
+        hgw[0-9]* {
+            set dbFile etc/rr.dbs
+        }
+        error "don't know how to handle $host"
+    }
+    return [split [exec fgrep -v "#"  $dbFile] \n]
+}
+
+set dbs {}
+while {[string match -* [lindex $argv 0]]} {
+    set opt [lindex $argv 0]
+    set argv [lrange $argv 1 end]
+    switch -glob -- $opt {
+        -db=* {
+            lappend dbs [string range $opt 4 end]
+        }
+        default {
+            error "unknown option: $opt \n$usage"
+        }
+    }
+}
+
 if {[llength $argv] != 1} {
     error "wrong number of args: \n$usage"
 }
 set cmd [lindex $argv 0]
 set host [lindex [split [exec hostname] .] 0]
-switch -glob $host {
-    hgwdev {
-        set dbFile etc/hgwdev.dbs
-    }
-    hgwbeta {
-        set dbFile etc/hgwbeta.dbs
-    }
-    hgw[0-9]* {
-        set dbFile etc/rr.dbs
-    }
-    mgc {
-        set dbFile etc/rr.dbs
-    }
-    error "don't know how to handle $host"
-}
+
 if {$host == "hgwdev"} {
     cd /cluster/data/genbank
 } else {
     cd /genbank
 }
-
+if {[llength $dbs] == 0} {
+    set dbs [loadDbs $host]
+}
 set logFh [open misc/$host.$cmd.log w]
-set dbs [split [exec fgrep -v "#"  $dbFile] \n]
 
 if {[catch {
     switch $cmd {
