@@ -513,3 +513,16 @@ car->opts = opts;
 car->data = catr;
 return car;
 }
+
+int chromAnnRefLocCmp(const void *va, const void *vb)
+/* Compare location of two chromAnnRef objects. */
+{
+const struct chromAnnRef *a = *((struct chromAnnRef **)va);
+const struct chromAnnRef *b = *((struct chromAnnRef **)vb);
+int diff = strcmp(a->ref->chrom, b->ref->chrom);
+if (diff == 0)
+    diff = a->ref->start - b->ref->start;
+if (diff == 0)
+    diff = a->ref->end - b->ref->end;
+return diff;
+}

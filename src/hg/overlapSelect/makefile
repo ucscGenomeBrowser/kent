@@ -5,8 +5,8 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 
-H = rowReader.h chromAnn.h selectTable.h coordCols.h
-O = rowReader.o chromAnn.o selectTable.o coordCols.o overlapSelect.o
+H = rowReader.h chromAnn.h chromAnnMap.h selectTable.h coordCols.h
+O = rowReader.o chromAnn.o chromAnnMap.o selectTable.o coordCols.o  overlapSelect.o
 B =  ${BINDIR}/overlapSelect
 
 $B: overlapSelect

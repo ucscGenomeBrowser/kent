@@ -33,6 +33,13 @@ struct chromAnn
     boolean used;    /* flag to indicated that this chromAnn has been used */
 };
 
+struct chromAnnRef
+/* chromAnn reference list element */
+{
+    struct chromAnnRef *next;
+    struct chromAnn *ref;
+};
+
 struct chromAnnBlk
 /* specifies a range to select */
 {
@@ -75,5 +82,34 @@ struct chromAnnReader *chromAnnChainReaderNew(char *fileName, unsigned opts);
 
 struct chromAnnReader *chromAnnTabReaderNew(char *fileName, struct coordCols* cols, unsigned opts);
 /* construct a reader for an arbitrary tab file */
+
+INLINE struct chromAnnRef *chromAnnRefNew(struct chromAnn *chromAnn)
+/* construct a new chromAnnRef */
+{
+struct chromAnnRef *car;
+AllocVar(car);
+car->ref = chromAnn;
+return car;
+}
+
+INLINE boolean chromAnnOnList(struct chromAnnRef *refList, struct chromAnn *chromAnn)
+/* check in chromAnn is on list */
+{
+struct chromAnnRef *ref;
+for (ref = refList; ref != NULL; ref = ref->next)
+    if (ref->ref == chromAnn)
+        return TRUE;
+return FALSE;
+}
+
+INLINE void chromAnnRefAdd(struct chromAnnRef **refList, struct chromAnn *chromAnn)
+/* add a chromAnn to the list, if it isn't already there  */
+{
+if (!chromAnnOnList(*refList, chromAnn))
+    slSafeAddHead(refList, chromAnnRefNew(chromAnn));
+}
+
+int chromAnnRefLocCmp(const void *va, const void *vb);
+/* Compare location of two chromAnnRef objects. */
 
 #endif

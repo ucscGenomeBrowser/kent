@@ -5,6 +5,8 @@
 #include "binRange.h"
 #include "hash.h"
 struct chromAnnReader;
+struct chromAnnRef;
+#include "chromAnnMap.h"
 
 enum selectOpts
 /* selection table options */
@@ -33,14 +35,6 @@ struct overlapAggStats
     unsigned inBases;         // number of possible bases to overlap
 };
 
-struct selectTableIter
-/* iterator over select table */
-{
-    struct hashCookie hashCookie;
-    struct binKeeper *currentBin;
-    struct binKeeperCookie binCookie;
-};
-
 struct coordCols;
 struct lineFile;
 struct chromAnn;
@@ -61,18 +55,15 @@ float selectFracSimilarity(struct chromAnn *ca1, struct chromAnn *ca2,
 
 boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
                            struct overlapCriteria *criteria,
-                           struct slRef **overlappingRecs);
+                           struct chromAnnRef **overlappingRecs);
 /* Determine if a range is overlapped.  If overlappingRecs is not null, a list
  * of the of selected records is returned.  Free with slFreelList. */
 
 struct overlapAggStats selectAggregateOverlap(unsigned opts, struct chromAnn *inCa);
 /* Compute the aggregate overlap of a chromAnn */
 
-struct selectTableIter selectTableFirst();
+struct chromAnnMapIter selectTableFirst();
 /* iterator over select table */
-
-struct chromAnn *selectTableNext(struct selectTableIter *iter);
-/* next element in select table */
 
 void selectTableFree();
 /* free selectTable structures. */

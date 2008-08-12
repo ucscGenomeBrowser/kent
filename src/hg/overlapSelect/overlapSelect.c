@@ -157,26 +157,26 @@ return (ca->name == NULL) ? "<unknown>" : ca->name;
 }
 
 static void outputMerge(struct chromAnn* inCa, FILE *outFh,
-                        struct slRef *overlappingRecs)
+                        struct chromAnnRef *overlappingRecs)
 /* output for the -mergeOutput option; pairs of inRec and overlap */
 {
-struct slRef *selectCaRef;
+struct chromAnnRef *selectCaRef;
 for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
     {
-    struct chromAnn *selectCa = selectCaRef->val;
+    struct chromAnn *selectCa = selectCaRef->ref;
     inCa->recWrite(inCa, outFh, '\t');
     selectCa->recWrite(selectCa, outFh, '\n');
     }
 }
 
 static void outputIds(struct chromAnn* inCa, FILE *outFh,
-                      struct slRef *overlappingRecs)
+                      struct chromAnnRef *overlappingRecs)
 /* output for the -idOutput option; pairs of inRec and overlap ids */
 {
-struct slRef *selectCaRef;
+struct chromAnnRef *selectCaRef;
 for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
     {
-    struct chromAnn *selectCa = selectCaRef->val;
+    struct chromAnn *selectCa = selectCaRef->ref;
     fprintf(outFh, "%s\t%s\n", getPrintId(inCa), getPrintId(selectCa));
     }
 }
@@ -185,7 +185,7 @@ for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaR
 static char *statsFmt = "%s\t%s\t%0.3g\t%0.3g\t%d\t%0.3g\n";
 
 static void outputStats(struct chromAnn* inCa, FILE *outFh,
-                        struct slRef *overlappingRecs)
+                        struct chromAnnRef *overlappingRecs)
 /* output for the -statOutput option; pairs of inRec and overlap ids */
 {
 if (overlappingRecs == NULL)
@@ -193,10 +193,10 @@ if (overlappingRecs == NULL)
     // -statsOutputAll and nothing overlapping
     fprintf(outFh, statsFmt, getPrintId(inCa), "", 0.0, 0.0, 0, 0.0);
     }
-struct slRef *selectCaRef;
+struct chromAnnRef *selectCaRef;
 for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
     {
-    struct chromAnn *selectCa = selectCaRef->val;
+    struct chromAnn *selectCa = selectCaRef->ref;
     unsigned overBases = selectOverlapBases(inCa, selectCa);
     fprintf(outFh, statsFmt, getPrintId(inCa), getPrintId(selectCa),
             selectFracOverlap(inCa, overBases), selectFracOverlap(selectCa, overBases), overBases,
@@ -207,9 +207,9 @@ for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaR
 static void outputStatsSelNotUsed(FILE *outFh)
 /* output stats for select chromAnns that were not used */
 {
-struct selectTableIter iter = selectTableFirst();
+struct chromAnnMapIter iter = selectTableFirst();
 struct chromAnn *selCa;
-while ((selCa = selectTableNext(&iter)) != NULL)
+while ((selCa = chromAnnMapIterNext(&iter)) != NULL)
     {
     if (!selCa->used)
         fprintf(outFh, statsFmt, "", getPrintId(selCa), 0.0, 0.0, 0, 0.0);
@@ -220,13 +220,14 @@ static void doItemOverlap(struct chromAnn* inCa, FILE *outFh, FILE *dropFh)
 /* Do individual item overlap process of chromAnn object given the criteria,
  * and if so output */
 {
-struct slRef *overlappingRecs = NULL;
-struct slRef **overlappingRecsPtr = NULL;  /* used to indicate if recs should be collected */
-boolean overlaps = FALSE;
+struct chromAnnRef *overlappingRecs = NULL;
+struct chromAnnRef **overlappingRecsPtr = NULL;  /* used to indicate if recs should be collected */
 if (mergeOutput || idOutput || statsOutput)
     overlappingRecsPtr = &overlappingRecs;
 
-overlaps = selectIsOverlapped(selectOpts, inCa, &criteria, overlappingRecsPtr);
+boolean overlaps = selectIsOverlapped(selectOpts, inCa, &criteria, overlappingRecsPtr);
+if (overlappingRecsPtr != NULL)
+    slSort(overlappingRecsPtr, chromAnnRefLocCmp);
 if (((nonOverlapping) ? !overlaps : overlaps) || outputAll)
     {
     if (mergeOutput)

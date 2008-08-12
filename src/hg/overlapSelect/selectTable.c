@@ -4,26 +4,31 @@
 #include "common.h"
 #include "selectTable.h"
 #include "rowReader.h"
-#include "chromBins.h"
-#include "binRange.h"
 #include "bits.h"
-#include "hash.h"
 #include "chromAnn.h"
+#include "chromAnnMap.h"
 #include "verbose.h"
 
-/* global, per-chrom binKeepers of * chromAnn objects */
-static struct chromBins* selectBins = NULL;
+static struct chromAnnMap* selectMap = NULL; // select object map
 
-static struct binKeeper *selectBinsGet(char *chrom, boolean create)
-/* get chromosome binKeeper, optionally creating if it doesn't exist */
+static void selectMapEnsure()
+/* create select map if it doesn't exist */
 {
-if (selectBins == NULL)
-    {
-    if (!create)
-        return NULL;
-    selectBins = chromBinsNew((chromBinsFreeFunc*)chromAnnFree);
-    }
-return chromBinsGet(selectBins, chrom, create);
+if (selectMap == NULL)
+    selectMap = chromAnnMapNew();
+}
+
+struct chromAnnMapIter selectTableFirst()
+/* iterator over select table */
+{
+selectMapEnsure();
+return chromAnnMapFirst(selectMap);
+}
+
+void selectTableFree()
+/* free selectTable structures. */
+{
+chromAnnMapFree(&selectMap);
 }
 
 static void selectDumpChromAnn(struct chromAnn *ca, char *label)
@@ -42,24 +47,17 @@ if (verboseLevel() >= 2)
     }
 }
 
-static void selectAddChromAnn(struct chromAnn *ca)
-/* Add a chromAnn to the select table */
-{
-struct binKeeper* bins = selectBinsGet(ca->chrom, TRUE);
-selectDumpChromAnn(ca, "selectAddChromAnn");
-/* don't add zero-length, they can't select */
-if (ca->start < ca->end)
-    binKeeperAdd(bins, ca->start, ca->end, ca);
-else
-    chromAnnFree(&ca);
-}
-
 void selectTableAddRecords(struct chromAnnReader *car)
 /* add records to the select table */
 {
+selectMapEnsure();
+
 struct chromAnn* ca;
 while ((ca = car->caRead(car)) != NULL)
-    selectAddChromAnn(ca);
+    {
+    selectDumpChromAnn(ca, "selectAddChromAnn");
+    chromAnnMapAdd(selectMap, ca);
+    }
 }
 
 static boolean isSelfMatch(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa)
@@ -191,15 +189,12 @@ if (!anyCriteria)
 return overlapped && !notOverlapped;
 }
 
-static void addOverlapRecs(struct slRef **overlappingRecs, struct slRef *newRecs)
+static void addOverlapRecs(struct chromAnnRef **overlappingRecs, struct chromAnnRef *newRecs)
 /* add overlapping records that are not dups */
 {
-struct slRef *orl;
+struct chromAnnRef *orl;
 for (orl = newRecs; orl != NULL; orl = orl->next)
-    {
-    if (!refOnList(*overlappingRecs, orl->val))
-        refAdd(overlappingRecs, orl->val);
-    }
+    chromAnnRefAdd(overlappingRecs, orl->ref);
 }
 static boolean selectOverlappingEntry(unsigned opts, struct chromAnn *inCa,
                                       struct chromAnn* selCa, struct overlapCriteria *criteria)
@@ -222,26 +217,25 @@ return overlapped;
 }
 
 static boolean selectWithOverlapping(unsigned opts, struct chromAnn *inCa,
-                                     struct binElement* overlapping,
+                                     struct chromAnnRef* overlapping,
                                      struct overlapCriteria *criteria,
-                                     struct slRef **overlappingRecs)
+                                     struct chromAnnRef **overlappingRecs)
 /* given a list of overlapping elements, see if inCa is selected, optionally returning
  * the list of selected records */
 {
 boolean anyHits = FALSE;
-struct slRef *curOverRecs = NULL;  /* don't add til; the end */
-struct binElement* o;
+struct chromAnnRef *curOverRecs = NULL;  /* don't add til; the end */
+struct chromAnnRef *selCa;
 
 /* check each overlapping chomAnn */
-for (o = overlapping; o != NULL; o = o->next)
+for (selCa = overlapping; selCa != NULL; selCa = selCa->next)
     {
-    struct chromAnn* selCa = o->val;
-    if (selectOverlappingEntry(opts, inCa, selCa, criteria))
+    if (selectOverlappingEntry(opts, inCa, selCa->ref, criteria))
         {
         anyHits = TRUE;
-        selCa->used = TRUE;
+        selCa->ref->used = TRUE;
         if (overlappingRecs != NULL)
-            refAdd(&curOverRecs, selCa);
+            chromAnnRefAdd(&curOverRecs, selCa->ref);
         else
             break;  /* only need one overlap */
         }
@@ -258,16 +252,16 @@ return anyHits;
 
 boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
                            struct overlapCriteria *criteria,
-                           struct slRef **overlappingRecs)
+                           struct chromAnnRef **overlappingRecs)
 /* Determine if a range is overlapped.  If overlappingRecs is not null, a list
  * of the of selected records is returned.  Free with slFreelList. */
 {
+selectMapEnsure();
 selectDumpChromAnn(inCa, "selectIsOverlapped");
 boolean hit = FALSE;
-struct binKeeper* bins = selectBinsGet(inCa->chrom, FALSE);
-if (bins != NULL)
+struct chromAnnRef *overlapping = chromAnnMapFindOverlap(selectMap, inCa);
+if (overlapping != NULL)
     {
-    struct binElement* overlapping = binKeeperFind(bins, inCa->start, inCa->end);
     hit = selectWithOverlapping(opts, inCa, overlapping, criteria, overlappingRecs);
     slFreeList(&overlapping);
     }
@@ -296,26 +290,23 @@ for (ca1Blk = ca1->blocks; ca1Blk != NULL; ca1Blk = ca1Blk->next)
 }
 
 static void computeAggregateOverlap(unsigned opts, struct chromAnn *inCa,
-                                    struct binElement* overlapping,
+                                    struct chromAnnRef* overlapping,
                                     struct overlapAggStats *stats)
 /* Compute the aggregate overlap */
 {
 
 int mapOff = inCa->start;
 int mapLen = (inCa->end - inCa->start);
-Bits *overMap;
-struct binElement* o;
 assert(mapLen >= 0);
 if (mapLen == 0)
     return;  /* no CDS */
 
-overMap = bitAlloc(mapLen);
-
-for (o = overlapping; o != NULL; o = o->next)
+Bits *overMap = bitAlloc(mapLen);
+struct chromAnnRef *selCa;
+for (selCa = overlapping; selCa != NULL; selCa = selCa->next)
     {
-    struct chromAnn* selCa = o->val;
-    if (passCriteria(opts, inCa, selCa))
-        addToAggregateMap(overMap, mapOff, inCa, selCa);
+    if (passCriteria(opts, inCa, selCa->ref))
+        addToAggregateMap(overMap, mapOff, inCa, selCa->ref);
     }
 stats->inOverBases = bitCountRange(overMap, 0, mapLen);
 bitFree(&overMap);
@@ -325,65 +316,15 @@ stats->inOverlap = ((float)stats->inOverBases) / ((float)inCa->totalSize);
 struct overlapAggStats selectAggregateOverlap(unsigned opts, struct chromAnn *inCa)
 /* Compute the aggregate overlap of a chromAnn */
 {
-struct binKeeper* bins = selectBinsGet(inCa->chrom, FALSE);
+selectMapEnsure();
 struct overlapAggStats stats;
 ZeroVar(&stats);
 stats.inBases = inCa->totalSize;
-if (bins != NULL)
-    {
-    struct binElement* overlapping = binKeeperFind(bins, inCa->start, inCa->end);
-    computeAggregateOverlap(opts, inCa, overlapping, &stats);
-    slFreeList(&overlapping);
-    }
+struct chromAnnRef *overlapping = chromAnnMapFindOverlap(selectMap, inCa);
+computeAggregateOverlap(opts, inCa, overlapping, &stats);
+slFreeList(&overlapping);
 verbose(2, "selectAggregateOverlap: %s: %s %d-%d, %c => %0.3g\n", inCa->name, inCa->chrom, inCa->start, inCa->end,
         ((inCa->strand == '\0') ? '?' : inCa->strand), stats.inOverlap);
 return stats;
-}
-
-struct selectTableIter selectTableFirst()
-/* iterator over select table */
-{
-struct selectTableIter iter;
-ZeroVar(&iter);
-return iter;
-}
-
-static boolean nextBin(struct selectTableIter *iter)
-/* advance to next bin */
-{
-struct hashEl *hel = hashNext(&iter->hashCookie);
-if (hel == NULL)
-    return FALSE;
-iter->currentBin = hel->val;
-iter->binCookie = binKeeperFirst(iter->currentBin);
-return TRUE;
-}
-
-struct chromAnn *selectTableNext(struct selectTableIter *iter)
-/* next element in select table */
-{
-if (selectBins == NULL)
-    return NULL;
-if (iter->currentBin == NULL)
-    {
-    iter->hashCookie = hashFirst(selectBins->chromTbl);
-    if (!nextBin(iter))
-        return NULL;
-    }
-while (TRUE)
-    {
-    struct binElement* bel = binKeeperNext(&iter->binCookie);
-    if (bel != NULL)
-        return bel->val;
-    if (!nextBin(iter))
-        return NULL;
-    }
-}
-
-
-void selectTableFree()
-/* free selectTable structures. */
-{
-chromBinsFree(&selectBins);
 }
 
