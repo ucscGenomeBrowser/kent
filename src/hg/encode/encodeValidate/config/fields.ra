@@ -1,5 +1,5 @@
-# Fields (columns) in ENCODE metadata files (PIF and DDF)
-# file should be "pifHeader", "viewList" or "ddf"
+# Fields (columns) in ENCODE metadata files (DAF and DDF)
+# file should be "dafHeader", "viewList" or "ddf"
 
 field files
 file ddf
@@ -25,26 +25,26 @@ field softwareVersion
 file ddf
 required no
 
-field pifVersion
-file pifHeader
+field dafVersion
+file dafHeader
 required yes
 
 field assembly
-file pifHeader
+file dafHeader
 required yes
 
 field grant
-file pifHeader
+file dafHeader
 required yes
 
 field lab
-file pifHeader
+file dafHeader
 required yes
 
 field dataType
-file pifHeader
+file dafHeader
 required yes
 
 field variables
-file pifHeader
+file dafHeader
 required no
