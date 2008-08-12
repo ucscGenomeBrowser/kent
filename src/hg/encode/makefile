@@ -28,7 +28,7 @@ all:
 
 install: 
 	@for D in ${PIPELINE_DIRS}; do \
-		(cd $${D} && ${MAKE};) \
+		(cd $${D} && ${MAKE} install;) \
 	done
 
 pipeline:
