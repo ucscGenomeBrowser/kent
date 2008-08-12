@@ -3,48 +3,60 @@
 
 field files
 file ddf
+type string
 required yes
 
 field view
 file ddf
+type string
 required yes
 
 field labVersion
 file ddf
+type string
 required no
 
 field accession
 file ddf
+type string
 required no
 
 field replicate
 file ddf
+type int
 required no
 
 field softwareVersion
 file ddf
+type string
 required no
 
 field dafVersion
 file dafHeader
+type string
 required yes
 
 field assembly
 file dafHeader
+type string
 required yes
 
 field grant
 file dafHeader
+type string
 required yes
 
 field lab
 file dafHeader
+type string
 required yes
 
 field dataType
 file dafHeader
+type string
 required yes
 
 field variables
 file dafHeader
+type string
 required no
