@@ -14,7 +14,7 @@
 #include <regex.h>
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.14.68.2 2008/08/01 21:41:03 markd Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.14.68.3 2008/08/12 23:35:35 markd Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -498,12 +498,13 @@ static struct hgFindSpec *loadFindSpecsTbl(char *db, char *tblSpec, char *where)
  * NULL. */
 {
 struct hgFindSpec *hfsList = NULL;
-struct sqlConnection *conn = hAllocConn(db);
+char *tbl;
+struct sqlConnection *conn = hAllocConnProfileTbl(db, tblSpec, &tbl);
 char query[512];
 if (where != NULL)
-    safef(query, sizeof(query), "select * from %s where %s", tblSpec, where);
+    safef(query, sizeof(query), "select * from %s where %s", tbl, where);
 else
-    safef(query, sizeof(query), "select * from %s", tblSpec);
+    safef(query, sizeof(query), "select * from %s", tbl);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)

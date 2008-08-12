@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.18.12.3 2008/08/09 04:40:40 markd Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.18.12.4 2008/08/12 23:35:35 markd Exp $";
 
 #include "common.h"
 #include "hgConfig.h"
@@ -165,12 +165,25 @@ if (cfgOption(name) == NULL)
     hashAdd(cfgOptionsHash, name, cloneString(value));
 }
 
+static boolean haveProfile(char *profileName)
+/* see if we appear to have the profile.  Can't do this in
+ * actual profile code, since it wants the config object that is being
+ * hacked */
+{
+return (cfgOption2(profileName, "host") != NULL) && (cfgOption2(profileName, "user") != NULL)
+    && (cfgOption2(profileName, "password") != NULL);
 
-static void hackConfig()
+}
+
+
+static void hackConfigProfiles()
 /* Add in some pre-defined profile mappings if needed.  This was added to make
  * older conf files compatible with the db profile paradigm */
 {
-addConfigIfUndef(CUSTOM_TRASH, "profile", CUSTOM_TRACKS_PROFILE);
+/* add mapping of customTrash database to profile if we have customTracks 
+ * profile defined */
+if (haveProfile(CUSTOM_TRACKS_PROFILE))
+    addConfigIfUndef(CUSTOM_TRASH, "profile", CUSTOM_TRACKS_PROFILE);
 }
 
 static void initConfig()
@@ -180,7 +193,7 @@ char filename[PATH_LEN];
 cfgOptionsHash = newHash(6);
 getConfigFile(filename);
 parseConfigFile(filename, 0);
-hackConfig();
+hackConfigProfiles();
 }
 
 char* cfgOption(char* name)

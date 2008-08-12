@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.368.4.7 2008/08/09 04:40:40 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.368.4.8 2008/08/12 23:35:35 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -60,6 +60,15 @@ static struct sqlConnCache *localCc = NULL;  /* cache for TCGA DB connection */
 static char *localDb = NULL;
 
 static char *hdbTrackDb = NULL;
+
+/* cached list of tables in databases.  This keeps a hash of databases to
+ * hashes of track/table name to slName list of actual table names, which
+ * might be split.  Since individual tables can be mapped to different
+ * profiles, and this information is only available when processing trackDb,
+ * another table is kept to determine if these need to be checked.
+ */
+static struct hash *tableList = NULL; // db to track to tables
+static struct hash *tableListProfChecked = NULL;  // profile:db that have been check
 
 static struct chromInfo *lookupChromInfo(char *db, char *chrom)
 /* Query db.chromInfo for the first entry matching chrom. */
@@ -178,7 +187,8 @@ return minLen;
 }
 
 static char *hTrackDbPath()
-/* return the space-separated list of the track database from the config file. Freez when done */
+/* return the comma-separated list of the track database from the config
+ * file. Freez when done */
 {
 if(hdbTrackDb == NULL)
     hdbTrackDb = cfgOptionEnv("HGDB_TRACKDB", "db.trackDb");
@@ -419,15 +429,40 @@ if (hdbCc == NULL)
 return sqlConnCacheProfileAlloc(hdbCc, profileName, db);
 }
 
-struct sqlConnection *hAllocConnTrack(char *db, struct trackDb *tdb)
-/* Get free connection for accessing tables associated with the specified
- * track and database. If none is available, allocate a new one. */
+static char *getTrackProfileName(struct trackDb *tdb)
+/* f a profile is associated with a track, return it, otherwise NULL */
 {
 // FIXME: dbProfile is the preferred name, phase out logicalDb
 char *profileName = trackDbSetting(tdb, "dbProfile");
 if (profileName == NULL)
     profileName = trackDbSetting(tdb, "logicalDb");
-return hAllocConnProfile(profileName, db);
+return profileName;
+}
+
+struct sqlConnection *hAllocConnTrack(char *db, struct trackDb *tdb)
+/* Get free connection for accessing tables associated with the specified
+ * track and database. If none is available, allocate a new one. */
+{
+return hAllocConnProfile(getTrackProfileName(tdb), db);
+}
+
+struct sqlConnection *hAllocConnProfileTbl(char *db, char *spec, char **tableRet)
+/* Allocate a connection to db, spec can either be in the form `table' or
+ * `profile.table'.  If it contains profile, connect via that profile.  Also
+ * returns pointer to table in spec string. */
+{
+char buf[512], *profile = NULL, *sep;
+sep = strchr(spec, ':');
+if (sep != NULL)
+    {
+    *tableRet = sep+1;
+    safecpy(buf, sizeof(buf), spec);
+    buf[(sep-spec)] = '\0';
+    profile = buf;
+    }
+else
+    *tableRet = spec;
+return hAllocConnProfile(profile, db);
 }
 
 void hFreeConn(struct sqlConnection **pConn)
@@ -607,30 +642,16 @@ hFreeConn(&conn);
 return (count >= 0 && count <= HDB_MAX_SEQS_FOR_SPLIT);
 }
 
-static struct hash *buildTableListHash(char *db)
-/* Return a hash that maps a track/table name (unsplit) to an slName list 
+static void tableListHashAdd(struct hash *dbTblHash, char *profile, char *db)
+/* Add to a hash that maps a track/table name (unsplit) to an slName list 
  * of actual table names (possibly split) -- we can compute this once and 
  * cache it to save a lot of querying if we will check existence of 
  * lots of tables. */
 {
-struct hash *hash = hashNew(14);
-struct sqlConnection *conn = NULL;
-struct slName *allTables = NULL;
-boolean ordinaryDb = TRUE;
+struct sqlConnection *conn = hAllocConnProfile(profile, db);
+struct slName *allTables =  sqlListTables(conn);
 
-#ifndef GBROWSE
-if (sameString(CUSTOM_TRASH,db) && ctDbAvailable(NULL))
-    {
-    conn = hAllocConn(CUSTOM_TRASH);
-    ordinaryDb = FALSE;
-    }
-else
-#endif /* GBROWSE */
-    conn = hAllocConn(db);
-
-allTables = sqlListTables(conn);
-
-if (ordinaryDb && hCanHaveSplitTables(db))
+if (!sameString(CUSTOM_TRASH,db) && hCanHaveSplitTables(db))
     {
     /* Consolidate split tables into one list per track: */
     struct slName *tbl = NULL, *nextTbl = NULL;
@@ -642,9 +663,9 @@ if (ordinaryDb && hCanHaveSplitTables(db))
 	nextTbl = tbl->next;
 	tbl->next = NULL;
 	hParseTableName(db, tbl->name, trackName, chrom);
-	tHel = hashLookup(hash, trackName);
+	tHel = hashLookup(dbTblHash, trackName);
 	if (tHel == NULL)
-	    hashAdd(hash, trackName, tbl);
+	    hashAdd(dbTblHash, trackName, tbl);
 	else if (! sameString(tbl->name, trackName))
 	    slAddHead(&(tHel->val), tbl);
 	}
@@ -657,37 +678,51 @@ else
 	{
 	nextTbl = tbl->next;
 	tbl->next = NULL;
-	hashAdd(hash, tbl->name, tbl);
+	hashAdd(dbTblHash, tbl->name, tbl);
 	}
     }
 hFreeConn(&conn);
-return hash;
 }
 
-static struct hash *tableListHash(char *db)
+static struct hash *tableListGetDbHash(char *db)
 /* Retrieve (or build if necessary) the cached hash of split-consolidated 
  * tables for db. */
 {
-static struct hash *dbToTables = NULL;
-struct hashEl *dHel = NULL;
-if (dbToTables == NULL)
-    dbToTables = hashNew(0);
-dHel = hashLookup(dbToTables, db);
-if (dHel == NULL)
+struct hashEl *dbHel = NULL;
+if (tableList == NULL)
+    tableList = hashNew(0);
+dbHel = hashLookup(tableList, db);
+if (dbHel == NULL)
     {
-    struct hash *tableHash = buildTableListHash(db);
-    hashAdd(dbToTables, db, tableHash);
-    return tableHash;
+    struct hash *dbTblHash = hashNew(14);
+    dbHel = hashAdd(tableList, db, dbTblHash);
+
+    // fill in from default profile for database
+    tableListHashAdd(dbTblHash, NULL, db);
     }
-else
-    return (struct hash *)(dHel->val);
+return dbHel->val;
 }
 
+static void tableListProcessTblProfile(char *profile, char *db)
+/* Process a profile associated with a table in the database.  This
+ * adds the profile if its not already been done. */
+{
+assert(profile != NULL);
+if (tableListProfChecked == NULL)
+    tableListProfChecked = hashNew(0);
+char key[512];
+safef(key, sizeof(key), "%s:%s", profile, db);
+if (hashLookup(tableListProfChecked, key) == NULL)
+    {
+    // first time for this profile/db
+    tableListHashAdd(tableListGetDbHash(db), profile, db);
+    }
+}
 
 boolean hTableExists(char *db, char *table)
 /* Return TRUE if a table exists in db. */
 {
-struct hash *hash = tableListHash(db);
+struct hash *hash = tableListGetDbHash(db);
 struct slName *tableNames = NULL, *tbl = NULL;
 char trackName[HDB_MAX_TABLE_STRING];
 char chrom[HDB_MAX_CHROM_STRING];
@@ -708,7 +743,7 @@ char *hTableForTrack(char *db, char *trackName)
 /* Return a table for a track in db. Returns one of the split
  * tables, or main table if not split */
 {
-struct hash *hash = tableListHash(db);
+struct hash *hash = tableListGetDbHash(db);
 struct slName *tableNames = NULL;
 tableNames = (struct slName *)hashFindVal(hash, trackName);
 if (tableNames != NULL)
@@ -721,7 +756,7 @@ boolean hTableOrSplitExists(char *db, char *track)
 {
 if (!sqlDatabaseExists(db))
     return FALSE;
-struct hash *hash = tableListHash(db);
+struct hash *hash = tableListGetDbHash(db);
 return (hashLookup(hash, track) != NULL);
 }
 
@@ -2519,20 +2554,9 @@ char **row;
 struct hash *hash = newHash(5);
 boolean gotIt = TRUE, binned = FALSE;
 
-#ifndef GBROWSE
-if (sameString(CUSTOM_TRASH,db))
-    {
-    if(! ctDbAvailable(table)) // FIXME: don't need this special case
-	return FALSE;
-    conn = hAllocConn(CUSTOM_TRASH);
-    }
-else
-#endif /* GBROWSE */
-    {
-    if (! hTableExists(db, table))
-	return FALSE;
-    conn = hAllocConn(db);
-    }
+if (! hTableExists(db, table))
+    return FALSE;
+conn = hAllocConn(db);
 
 /* Set field names to empty strings */
 retEnd[0] = 0;
@@ -2817,7 +2841,7 @@ struct slName *hSplitTableNames(char *db, char *rootName)
 struct hash *hash = NULL;
 struct hashEl *hel = NULL;
 
-hash = tableListHash(db);
+hash = tableListGetDbHash(db);
 hel = hashLookup(hash, rootName);
 if (hel == NULL)
     return NULL;
@@ -3108,7 +3132,7 @@ if (tdb->restrictCount > 0 && chrom != NULL)
 return chromOk;
 }
 
-boolean hasTrackDbAlready(struct trackDb *tdb, struct trackDb *list)
+static boolean hasTrackDbAlready(struct trackDb *tdb, struct trackDb *list)
 /* Return true if the given list already has the given track (check names) */
 {
 struct trackDb *check;
@@ -3118,40 +3142,51 @@ for (check = list; check != NULL; check = check->next)
 return FALSE;
 }
 
-static struct trackDb *loadTrackDb(struct sqlConnection *conn, char *where)
+static boolean loadOneTrackDb(char *db, char *where, char *tblSpec,
+                              struct trackDb **tdbList)
+/* Load a trackDb table, including handling profiles:tbl. Returns
+ * TRUE if table exists */
+{
+char *tbl;
+boolean exists;
+struct sqlConnection *conn = hAllocConnProfileTbl(db, tblSpec, &tbl);
+if ((exists = sqlTableExists(conn, tbl)))
+    {
+    struct trackDb *oneTable = trackDbLoadWhere(conn, tbl, where), *oneRow;
+    while ((oneRow = slPopHead(&oneTable)) != NULL)
+        {
+        if (!hasTrackDbAlready(oneRow, *tdbList))
+            {
+            slAddHead(tdbList, oneRow);
+            // record for use in check available tracks
+            char *profileName = getTrackProfileName(oneRow);
+            if (profileName != NULL)
+                tableListProcessTblProfile(profileName, db);
+        }
+        else
+            trackDbFree(&oneRow);
+        }
+    }
+hFreeConn(&conn);
+return exists;
+}
+
+static struct trackDb *loadTrackDb(char *db, char *where)
 /* Load each trackDb table. */
 {
-boolean trackDbNotFound = TRUE;
 struct trackDb *tdbList = NULL;
 struct slName *tableList = hTrackDbList(), *one;
-while ((one = (struct slName *)slPopHead(&tableList)) != NULL)
+boolean foundOne = FALSE;
+for (one = tableList; one != NULL; one = one->next)
     {
-    if (sqlTableExists(conn, one->name))
-        {
-	trackDbNotFound = FALSE;
-        struct trackDb *oneTable = trackDbLoadWhere(conn, one->name, where), *oneRow;
-	while ((oneRow = slPopHead(&oneTable)) != NULL)
-	    {
-	    if (!hasTrackDbAlready(oneRow, tdbList))
-		slAddHead(&tdbList, oneRow);
-	    else
-		trackDbFree(&oneRow);
-	    }
-        }
-    slNameFree(&one);
+    if (loadOneTrackDb(db, where, one->name, &tdbList))
+        foundOne = TRUE;
     }
-if (trackDbNotFound)
-    {
-    struct dyString *tableNames = newDyString(256);
-    struct slName *tableList = hTrackDbList(), *one;
-    while ((one = (struct slName *)slPopHead(&tableList)) != NULL)
-        {
-        dyStringPrintf(tableNames,"%s,", one->name);
-        slNameFree(&one);
-        }
-    errAbort("can not find %s.%s check db.trackDb specification in hg.conf",
-             sqlGetDatabase(conn) ,dyStringCannibalize(&tableNames));
-    }
+if (!foundOne)
+    errAbort("can not find any trackDb tables for %s, check db.trackDb specification in hg.conf",
+             db);
+slNameFreeList(&tableList);
+
 /* fill in supertrack fields, if any in settings */
 trackDbSuperSettings(tdbList);
 return tdbList;
@@ -3163,13 +3198,7 @@ static void processTrackDb(char *database, struct trackDb *tdb, char *chrom,
  * add it to the list, otherwise free it */
 {
 hLookupStringsInTdb(tdb, database);
-if ((!tdb->private || privateHost) &&
-    hTableForTrack(database, tdb->tableName) != NULL
-#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
-	&& !sameString(splitTable, "mrna") /* Long ago we reused this name badly. */
-#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
-    )
-
+if ((!tdb->private || privateHost) && hTableForTrack(database, tdb->tableName) != NULL)
     slAddHead(tdbRetList, tdb);
 else
     trackDbFree(&tdb);
@@ -3212,10 +3241,7 @@ struct trackDb *hTrackDb(char *db, char *chrom)
  * the supertrack trackDb subtrack fields are not set here (would be
  * incompatible with the returned list) */
 {
-/* get connection for trackDb depending if host is specified in hg.conf */
-struct sqlConnection *conn = hAllocConn(db);
-
-struct trackDb *tdbList = loadTrackDb(conn, NULL);
+struct trackDb *tdbList = loadTrackDb(db, NULL);
 struct trackDb *tdbFullList = NULL, *tdbSubtrackedList = NULL;
 struct trackDb *tdbRetList = NULL;
 boolean privateHost = hIsPrivateHost();
@@ -3281,7 +3307,6 @@ for (nextTdb = tdb = tdbSubtrackedList; nextTdb != NULL; tdb = nextTdb)
 	slAddHead(&tdbRetList, tdb);
 	}
     }
-hFreeConn(&conn);
 slSort(&tdbRetList, trackDbCmp);
 
 /* Add parent pointers to supertrack members */
@@ -3299,7 +3324,7 @@ static struct trackDb *loadAndLookupTrackDb(struct sqlConnection *conn,
 					    char *where)
 /* Load trackDb object(s). Nothing done for composite tracks here. */
 {
-struct trackDb *tdb, *tdbs = loadTrackDb(conn, where);
+struct trackDb *tdb, *tdbs = loadTrackDb(sqlGetDatabase(conn), where);
 for (tdb = tdbs; tdb != NULL; tdb = tdb->next)
     hLookupStringsInTdb(tdb, sqlGetDatabase(conn));
 return tdbs;

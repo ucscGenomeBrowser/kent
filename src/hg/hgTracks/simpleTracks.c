@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.24.2.2 2008/07/31 18:20:40 markd Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.24.2.3 2008/08/12 23:35:32 markd Exp $";
 
 #define CHROM_COLORS 26
 
@@ -8693,7 +8693,7 @@ void loadSimpleBed(struct track *tg)
 {
 struct bed *(*loader)(char **row);
 struct bed *bed, *list = NULL;
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
 struct sqlResult *sr;
 char **row;
 int rowOffset;

@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.113.6.7 2008/08/07 16:02:45 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.113.6.8 2008/08/12 23:35:36 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -62,7 +62,7 @@ struct sqlResult
 
 static struct dlList *sqlOpenConnections;
 
-static char *defaultProfileName = "db";           // name of default profile
+char *defaultProfileName = "db";                  // name of default profile
 static struct hash *profiles = NULL;              // profiles parsed from hg.conf, by name
 static struct sqlProfile *defaultProfile = NULL;  // default profile, also in profiles list
 static struct hash* dbToProfile = NULL;           // db to sqlProfile
@@ -209,7 +209,7 @@ if (sp == NULL)
 return sp;
 }
 
-struct sqlProfile* sqlProfileGet(char *profileName, char *database)
+static struct sqlProfile* sqlProfileGet(char *profileName, char *database)
 /* lookup a profile using the profile resolution algorithm:
  *  - If a profile is specified:
  *     - search hg.conf for the profile, if found:
@@ -233,7 +233,7 @@ else
     return sqlProfileFindByDatabase(database);
 }
 
-struct sqlProfile* sqlProfileMustGet(char *profileName, char *database)
+static struct sqlProfile* sqlProfileMustGet(char *profileName, char *database)
 /* lookup a profile using the profile resolution algorithm or die trying */
 {
 struct sqlProfile* sp = sqlProfileGet(profileName, database);
@@ -249,6 +249,7 @@ if (sp == NULL)
     }
 return sp;
 }
+
 
 static void monitorInit(void)
 /* initialize monitoring on the first call */
@@ -1644,9 +1645,6 @@ else
     struct sqlProfile *sp = cache->profile;
     if (sp == NULL)
         sp = sqlProfileMustGet(profileName, database);
-    // FIXME:
-    fprintf(stderr, "sqlConnCacheMax %s %s: %s %s\n", profileName, database, sp->name, sp->user);
-    
     conn = sqlConnProfile(sp, database, abort);
     }
 return sqlConnCacheAdd(cache, conn);

@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.66.6.3 2008/08/09 04:40:31 markd Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.66.6.4 2008/08/12 23:35:32 markd Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -329,11 +329,8 @@ table->dbTableName = NULL;
 if (isCustomTrack(table->actualTable))
     {
     ct = lookupCt(table->actualTable);
-    if (ctDbAvailable(ct->dbTableName))
-	{
-	table->dbTableName = ct->dbTableName;
-	isCustomDbTable = TRUE;
-	}
+    table->dbTableName = ct->dbTableName;
+    isCustomDbTable = TRUE;
     }
 
 if (startsWith("bedGraph", tdb->type))

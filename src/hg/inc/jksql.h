@@ -31,6 +31,8 @@
 #include "hash.h"
 #endif
 
+extern char *defaultProfileName;  // name of default profile
+
 struct sqlConnection *sqlConnect(char *database);
 /* Connect to database on default host as default user. */
 

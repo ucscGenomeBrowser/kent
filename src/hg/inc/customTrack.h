@@ -133,11 +133,6 @@ boolean verifyWibExists(struct sqlConnection *conn, char *table);
 boolean ctDbTableExists(struct sqlConnection *conn, char *table);
 /* verify if custom trash db table exists, touch access stats */
 
-boolean ctDbAvailable(char *tableName);
-/*	determine if custom tracks database is available
- *	and if tableName non-NULL, verify table exists
- */
-
 boolean ctDbUseAll();
 /* check if hg.conf says to try DB loaders for all incoming data tracks */
 

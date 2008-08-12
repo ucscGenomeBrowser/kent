@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.173.4.5 2008/08/09 04:40:39 markd Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.173.4.6 2008/08/12 23:35:34 markd Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -146,42 +146,6 @@ ctTouchLastUse(conn, table, status);
 return status;
 }
 
-boolean ctDbAvailable(char *tableName)
-/*	determine if custom tracks database is available
- *	and if tableName non-NULL, verify table exists
- */
-{
-static boolean dbExists = FALSE;
-static boolean checked = FALSE;
-boolean status = dbExists;
-
-if (! checked)
-    {
-    struct sqlConnection *conn = sqlMayConnect(CUSTOM_TRASH);
-    checked = TRUE;
-    if ((struct sqlConnection *)NULL == conn)
-	status = FALSE;
-    else
-	{
-	status = TRUE;
-	dbExists = TRUE;
-	if (tableName)
-	    {
-	    status = ctDbTableExists(conn, tableName);
-	    }
-	sqlDisconnect(&conn);
-	}
-    }
-else if (dbExists && ((char *)NULL != tableName))
-    {
-    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    status = ctDbTableExists(conn, tableName);
-    hFreeConn(&conn);
-    }
-
-return(status);
-}
-
 boolean ctDbUseAll()
 /* check if hg.conf says to try DB loaders for all incoming data tracks */
 {
@@ -190,12 +154,9 @@ static boolean enabled = FALSE;
 
 if (!checked)
     {
-    if (ctDbAvailable((char *)NULL))	/* must have DB for this to work */
-	{
-	char *val = cfgOptionDefault("customTracks.useAll", NULL);
-	if (val != NULL)
-	    enabled = sameString(val, "yes");
-	}
+    char *val = cfgOptionDefault("customTracks.useAll", NULL);
+    if (val != NULL)
+        enabled = sameString(val, "yes");
     checked = TRUE;
     }
 return enabled;
