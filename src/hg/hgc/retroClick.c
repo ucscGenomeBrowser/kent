@@ -120,33 +120,33 @@ static struct mappingInfo *mappingInfoNew(struct sqlConnection *conn,
 struct mappingInfo *mi;
 int preLen;
 char *suffix = containsStringNoCase(tbl,"Info");
+int suffixLen = 4;
 AllocVar(mi);
-if (suffix != NULL)
-    {
-    suffix +=4;
-    safef(mi->suffix,ID_BUFSZ,"%s",suffix);
-    }
-
 if (startsWith("retroAnc", tbl))
     strcpy(mi->tblPre, "retroAnc");
 else if (startsWith("retroOld", tbl))
     strcpy(mi->tblPre, "retroOld");
-else
+else if (startsWith("retro", tbl))
     strcpy(mi->tblPre, "retro");
+else
+    {
+    strcpy(mi->tblPre, "ucsc");
+    suffix = containsStringNoCase(tbl,"Ali");
+    suffixLen = 3;
+    }
+if (suffix != NULL)
+    {
+    suffix +=suffixLen;
+    safef(mi->suffix,ID_BUFSZ,"%s",suffix);
+    }
+
 preLen = strlen(mi->tblPre);
 if (startsWith("retroAugust", tbl))
     strcpy(mi->geneSet, "August");
-else
-    strcpy(mi->geneSet, "Mrna");
-#ifdef junk
-
-if (startsWith("Ref", tbl+preLen))
-    strcpy(mi->geneSet, "Ref");
-else if (startsWith("Mrna", tbl+preLen))
+else if (startsWith("retro", tbl))
     strcpy(mi->geneSet, "Mrna");
 else
-    errAbort("can't determine source gene set from table: %s", tbl);
-#endif
+    strcpy(mi->geneSet, "Retro");
 if (suffix != NULL)
     mi->pg = sqlQueryObjs(conn, (sqlLoadFunc)retroMrnaInfoLoad, sqlQueryMust|sqlQuerySingle,
                       "select * from %s%sInfo%s where name='%s'", mi->tblPre, mi->geneSet, suffix,
@@ -741,7 +741,10 @@ struct sqlResult *sr;
 char **row;
 struct psl *psl;
 
-safef(rootTable, sizeof(rootTable), "%s%sAli", mi->tblPre, mi->geneSet);
+if (mi->suffix == NULL)
+    safef(rootTable, sizeof(rootTable), "%s%sAli", mi->tblPre, mi->geneSet);
+else
+    safef(rootTable, sizeof(rootTable), "%s%sAli%s", mi->tblPre, mi->geneSet,mi->suffix);
 hFindSplitTable(seqName, rootTable, table, &hasBin);
 
 safef(query, sizeof(query), "select * from %s where qName = '%s' and tStart = %d",

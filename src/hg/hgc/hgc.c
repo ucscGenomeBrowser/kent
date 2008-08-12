@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1450 2008/08/12 18:43:04 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1451 2008/08/12 22:18:09 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6434,7 +6434,7 @@ else
     wholePsl = pslLoad(row+hasBin);
     sqlFreeResult(&sr);
 
-    if (startsWith("retroMrnaAli", track) || sameString("pseudoMrna", track))
+    if (startsWith("ucscRetroAli", track) || startsWith("retroMrnaAli", track) || sameString("pseudoMrna", track))
 	{
 	struct sqlConnection *conn = hAllocConn();
         char *suffix = strstr(acc, ".");
@@ -20214,7 +20214,7 @@ else if (startsWith("pseudoMrna",track ) || startsWith("pseudoGeneLink",track )
     {
     doPseudoPsl(tdb, item);
     }
-else if (startsWith("retroMrna",track ) || startsWith("retroAugust",track )|| startsWith("retroCds",track ))
+else if (startsWith("retroMrna",track ) || startsWith("retroAugust",track )|| startsWith("retroCds",track )|| startsWith("ucscRetro",track ))
     {
     retroClickHandler(tdb, item);
     }
