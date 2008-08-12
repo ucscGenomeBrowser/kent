@@ -81,5 +81,70 @@ struct rbTree *rangeTreeNewDetailed(struct lm *lm, struct rbTreeNode *stack[128]
  * where you want a lot of trees, and don't want the overhead for each one. 
  * Note, to clean these up, just do freez(&rbTree) rather than rbFreeTree(&rbTree). */
 
+struct range rangeReadOne(FILE *f, boolean isSwapped);
+/* Returns a single range from the file.
+ * Returns range start and end. 
+ * Does not read val. */
+
+void rangeWriteOne(struct range *r, FILE *f);
+/* Write out one range structure to binary file f.
+ * This only writes start and size. */
+
+struct range rangeReadOneWithVal(FILE *f, boolean isSwapped, void *(*valReadOne)(FILE *f, boolean isSwapped));
+/* Read one range structure from binary file f, including range val.
+ * Returns start, end.
+ * valWriteOne should point to a function which writes the value (not called if null).
+ * Returns val if valWriteOne is not null */
+
+void rangeWriteOneWithVal(struct range *r, FILE *f, void (*valWriteOne)(void *val, FILE *f));
+/* Write out one range structure to binary file f.
+ * Writes start and size.
+ * valWriteOne should point to a function which writes the value (not called if null). */
+
+void rangeTreeReadNodes(FILE *f, struct rbTree *rt, int numNodes, boolean isSwapped);
+/* Reads numNodes ranges from the file and adds them to rangeTree rt.
+ * Does not read range val.  */
+
+void rangeTreeWriteNodes(struct rbTree *tree, FILE *f);
+/* Write out one rangeTree structure to binary file f. 
+ * Note this does not include the name, which is stored only in index. 
+ * Ranges are written in start sequence (depth-first tree traversal).
+ * Writes start and size but not val. 
+ * Not thread-safe. */
+
+void rangeTreeReadNodesWithVal(FILE *f, struct rbTree *rt, int numNodes, boolean isSwapped, void *(*valReadOne)(FILE *f, boolean isSwapped));
+/* Reads numNodes ranges from the file and adds them to rangeTree rt.
+ * If rt contains no nodes, and since rangeTree was saved to disk 
+ * implying its ranges are already non-overlapping, it is safe 
+ * to use a mergeVal function which simply assigns the stored value 
+ * to the range since the existing val must always be null.
+ * Produces an error if the rt contains nodes already. */
+
+void rangeTreeReadNodesWithValMerge(FILE *f, struct rbTree *rt, int numNodes, boolean isSwapped, void *(*valReadOne)(FILE *f, boolean isSwapped), void *(*mergeVals)(void *existing, void *new) );
+/* Reads numNodes ranges from the file and adds them to rangeTree rt.
+ * Reads range values using valReadOne function, if function is non-null.
+ * Input rangeTree rt could already have nodes, so mergeVals is called 
+ * to merge values read from disk to values in the tree.  */
+
+void rangeTreeWriteNodesWithVal(struct rbTree *tree, FILE *f, void (*valWriteOne)(void *val, FILE *f));
+/* Write out one rangeTree structure to binary file f. 
+ * Note this does not include the name, which is stored only in index. 
+ * Ranges are written in start sequence (depth-first tree traversal).
+ * Writes start and size.
+ * valWriteOne should be a function which writes the range val. Not called if null.
+ * Not thread-safe. */
+
+int rangeTreeSizeInFile(struct rbTree *tree);
+/* Returns size of rangeTree written in binary file format.
+ * Includes start and size. 
+ * Does not include val. */
+
+int rangeTreeSizeInFileWithVal(struct rbTree *tree, int (*rangeValSizeInFile)(void *val));
+/* Returns size of rangeTree written in binary file format.
+ * Includes start, size, and val. 
+ * rangeValSizeInFile should refer to a function which calculates the size of the val 
+ * in a binary file. Not called if null. */
+
+
 #endif /* RANGETREE_H */
 

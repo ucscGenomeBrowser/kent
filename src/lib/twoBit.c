@@ -9,7 +9,7 @@
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.22 2006/07/31 22:18:22 angie Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.23 2008/08/12 07:04:35 mikep Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -272,16 +272,6 @@ if (tbf != NULL)
     /* The indexList is allocated out of the hash's memory pool. */
     freez(pTbf);
     }
-}
-
-static bits32 readBits32(FILE *f, boolean isSwapped)
-/* Read and optionally byte-swap 32 bit entity. */
-{
-bits32 val;
-mustReadOne(f, val);
-if (isSwapped) 
-    val = byteSwap32(val);
-return val;
 }
 
 struct twoBitFile *twoBitOpen(char *fileName)

@@ -939,6 +939,9 @@ int  positiveRangeIntersection(int start1, int end1, int start2, int end2);
 bits32 byteSwap32(bits32 a);
 /* Swap from intel to sparc order of a 32 bit quantity. */
 
+bits32 readBits32(FILE *f, boolean isSwapped);
+/* Read and optionally byte-swap 32 bit entity. */
+
 void removeReturns(char* dest, char* src);
 /* Removes the '\r' character from a string.
  * the source and destination strings can be the same, 

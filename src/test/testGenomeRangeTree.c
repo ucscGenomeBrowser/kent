@@ -8,9 +8,9 @@ struct genomeRangeTree *t1, *t2;
 struct rbTree *rt1, *rt2;
 struct range *r1, *r2;
 int n;
+FILE *f;
 
 static struct optionSpec optionSpecs[] = {
-    {"verbose", OPTION_INT},
     {NULL, 0}
 };
 
@@ -471,16 +471,63 @@ else
     verbose(1,"OK: genomeRangeTreeAddValCount(t1,chr2,6,7) #6 [%s]\n",slNameListToString(r1->val,','));
 }
 
+void testReadWrite()
+{
+t1 = genomeRangeTreeNew();
+genomeRangeTreeAdd(t1,"chr1", 3,10);
+genomeRangeTreeAdd(t1,"chr1", 1, 9);
+genomeRangeTreeAdd(t1,"chr1",20,30);
+genomeRangeTreeAdd(t1,"chr2",2,3);
+f = mustOpen("out/testGenomeRangeTree.out","w");
+genomeRangeTreeWriteOne(t1,f);
+carefulClose(&f);
+verbose(1,"OK: genomeRangeTreeWriteOne() \n");
+
+t2 = genomeRangeTreeRead("out/testGenomeRangeTree.out");
+if (!t2)
+    errAbort("Error: genomeRangeTreeRead() returned null\n");
+else
+    verbose(1,"OK: genomeRangeTreeRead() #1\n");
+if (t2->hash->elCount != 2)
+    errAbort("Error: genomeRangeTreeRead() wrong # chroms (got [%s], expected 2 [chr1,chr2])\n", slNameListToString((struct slName *)hashElListHash(t2->hash),','));
+else
+    verbose(1,"OK: genomeRangeTreeRead() #2 chrom chr1 \n");
+r1 = genomeRangeTreeList(t1,"chr1");
+if (slCount(r1) != 2)
+    errAbort("Error: genomeRangeTreeRead() wrong # ranges (got %d, expected 2)\n", slCount(r1));
+else
+    verbose(1,"OK: genomeRangeTreeRead() #3 range count\n");
+if (!r1->next || r1->start != 1 || r1->end != 10 || r1->val)
+    errAbort("Error: genomeRangeTreeRead() wrong range1 (got (%p,%d,%d,%p), expected (0xNNNNNNNN,1,10,null))\n", r1->next, r1->start, r1->end, r1->val);
+else
+    verbose(1,"OK: genomeRangeTreeRead() #4 range1 \n");
+r1 = r1->next;
+if (r1->next || r1->start != 20 || r1->end != 30 || r1->val)
+    errAbort("Error: genomeRangeTreeRead() wrong range2 (got (%p,%d,%d,%p), expected (null,20,30,null))\n", r1->next, r1->start, r1->end, r1->val);
+else
+    verbose(1,"OK: genomeRangeTreeRead() #5 range2 \n");
+
+r1 = genomeRangeTreeList(t1,"chr2");
+if (slCount(r1) != 1)
+    errAbort("Error: genomeRangeTreeRead() wrong # ranges (got %d, expected 1)\n", slCount(r1));
+else
+    verbose(1,"OK: genomeRangeTreeRead() #3 range count\n");
+if (r1->next || r1->start != 2 || r1->end != 3 || r1->val)
+    errAbort("Error: genomeRangeTreeRead() wrong range2 (got (%p,%d,%d,%p), expected (null,2,3,null))\n", r1->next, r1->start, r1->end, r1->val);
+else
+    verbose(1,"OK: genomeRangeTreeRead() #6 range3 \n");
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
-verboseSetLevel(optionInt("verbose",0));
 
 testNewAndFind();
 testAddAndList();
 testAddVar();
 testOverlaps();
+testReadWrite();
 
 verbose(1,"genomeRangeTree OK\n");
 return EXIT_SUCCESS;

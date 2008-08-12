@@ -69,6 +69,12 @@
 #define chromGraphSwapSig 0x1C422845
 /* Signature of byte-swapped chromGraph binary data file */
 
+#define genomeRangeTreeSig     0xf7fb8104
+/* Signature of genomeRangeTree binary data file */
+
+#define genomeRangeTreeSwapSig 0x0481fbf7
+/* Signature of genomeRangeTree binary data file */
+
 #endif /* SIG_H */
 
 

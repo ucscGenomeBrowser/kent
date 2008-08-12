@@ -3,10 +3,21 @@
 	chmod a+x ${AOUT}
 	mv ${AOUT} ../cgi-bin/test.cgi
 
+testRangeTree: ../lib/$(MACHTYPE)/jkweb.a testRangeTree.c
+	${CC} ${COPT} ${CFLAGS} -I../inc testRangeTree.c ../lib/$(MACHTYPE)/jkweb.a -lm -o testRangeTree
+	chmod a+x testRangeTree
+	./testRangeTree -verbose=0
+	hexdump -f out/testRangeTree.fmt out/testRangeTree.out > out/testRangeTree.hexdump2
+	diff out/testRangeTree.hexdump out/testRangeTree.hexdump2
+	rm out/testRangeTree.out out/testRangeTree.hexdump2 testRangeTree
+
 testGenomeRangeTree: ../lib/$(MACHTYPE)/jkweb.a testGenomeRangeTree.c
 	${CC} ${COPT} ${CFLAGS} -I../inc testGenomeRangeTree.c ../lib/$(MACHTYPE)/jkweb.a -lm -o testGenomeRangeTree
 	chmod a+x testGenomeRangeTree
 	./testGenomeRangeTree -verbose=0
+	hexdump -n 58 -f out/testGenomeRangeTree.fmt out/testGenomeRangeTree.out > out/testGenomeRangeTree.hexdump2
+	diff out/testGenomeRangeTree.hexdump out/testGenomeRangeTree.hexdump2
+	rm out/testGenomeRangeTree.out out/testGenomeRangeTree.hexdump2 testGenomeRangeTree
 
 test:
 	./hgTest.pl -v -db hg13 | tee $(HOST).hg13.log  2>&1

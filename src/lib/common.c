@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.117 2008/05/31 07:39:20 galt Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.118 2008/08/12 07:04:35 mikep Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1852,6 +1852,16 @@ v.bytes[2] = u.bytes[1];
 v.bytes[3] = u.bytes[0];
 return v.whole;
 }
+
+bits32 readBits32(FILE *f, boolean isSwapped)
+/* Read and optionally byte-swap 32 bit entity. */
+{   
+bits32 val;
+mustReadOne(f, val);
+if (isSwapped)
+    val = byteSwap32(val);
+return val;
+}   
 
 void removeReturns(char *dest, char *src) 
 /* Removes the '\r' character from a string.

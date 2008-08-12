@@ -8,18 +8,20 @@
  * number of scaffolds. See rangeTree for more information. */
 
 #include "common.h"
+#include "sig.h"
 #include "localmem.h"
 #include "rbTree.h"
 #include "hash.h"
 #include "rangeTree.h"
 #include "genomeRangeTree.h"
+#include <limits.h>
 
 
 struct rbTree *genomeRangeTreeFindRangeTree(struct genomeRangeTree *tree, char *chrom)
 /* Find the rangeTree for this chromosome, if any. Returns NULL if chrom not found.
  * Free with genomeRangeTreeFree. */
 {
-return (struct rbTree *)hashFindVal(tree->hash, chrom);
+return hashFindVal(tree->hash, chrom);
 }
 
 struct rbTree *genomeRangeTreeFindOrAddRangeTree(struct genomeRangeTree *tree, char *chrom)
@@ -29,7 +31,7 @@ struct rbTree *genomeRangeTreeFindOrAddRangeTree(struct genomeRangeTree *tree, c
 struct hashEl *hel;
 hel = hashStore(tree->hash, chrom);
 if (hel->val == NULL) /* need to add a new rangeTree */
-    hel->val = (void *)rangeTreeNewDetailed(tree->lm, tree->stack);
+    hel->val = rangeTreeNewDetailed(tree->lm, tree->stack);
 return (struct rbTree *)hel->val;
 }
 
@@ -137,11 +139,150 @@ t->lm = lmInit(0);
 return t;
 }
 
-void genomeRangeTreeFree(struct genomeRangeTree **tree)
+void genomeRangeTreeFree(struct genomeRangeTree **pTree)
 /* Free up genomeRangeTree.  */
 {
-lmCleanup(&((*tree)->lm));  /* clean up all the memory for all nodes for all trees */
-freeHash(&((*tree)->hash)); /* free the hash table including names (trees are freed by lmCleanup) */
-freez(tree);                /* free this */
+lmCleanup(&((*pTree)->lm));  /* clean up all the memory for all nodes for all trees */
+freeHash(&((*pTree)->hash)); /* free the hash table including names (trees are freed by lmCleanup) */
+freez(pTree);                /* free this */
 }
+
+void genomeRangeTreeWriteOne(struct genomeRangeTree *tree, FILE *f)
+/* Write out genomeRangeTree including: 
+ * header portion
+ * index of chromosomes
+ * data for each range tree */
+{
+bits32 sig = genomeRangeTreeSig;
+bits32 version = 0;
+bits32 numChroms = tree->hash->elCount;
+bits32 valDataSize = 0; /* zero for no data, (later: -ve for variable size, +ve specifies fixed size */
+bits32 valDataType = 0; /* unused (later: signature for type ) */
+bits32 reserved1 = 0;
+bits32 reserved2 = 0;
+/* Figure out location of first byte past header (location of the index). */
+bits32 headerLen = sizeof(sig) + sizeof(version) + sizeof(headerLen) + sizeof(numChroms)
+    + sizeof(valDataSize) + sizeof(valDataType) + sizeof(reserved1) + sizeof(reserved2);
+bits32 offset = 0;
+bits32 nodes = 0;
+long long counter = 0; /* check for 32 bit overflow */
+struct hashEl *el, *elList;
+
+/* Write out fixed parts of header. */
+writeOne(f, sig);
+writeOne(f, version);
+writeOne(f, headerLen);
+writeOne(f, numChroms);
+writeOne(f, valDataSize);
+writeOne(f, valDataType);
+writeOne(f, reserved1);
+writeOne(f, reserved2);
+
+/* Figure out location of first byte past index (location of the data).
+ * Each index entry contains 4 bytes of offset information
+ * and the name of the sequence, which is variable length. */
+offset = headerLen;
+
+/* get a sorted list of all chroms */
+elList = hashElListHash(tree->hash);
+slNameSort((struct slName **)&elList);
+
+for ( el = elList ; el ; el = el->next )
+    {
+    int nameLen = strlen(el->name);
+    if (nameLen > 255)
+        errAbort("name %s too long", el->name);
+    /* index is list of triples: (name nodes offset) */
+    offset += nameLen + 1 + sizeof(nodes) + sizeof(offset);
+    }
+
+/* Write out index. */
+for (el = elList; el ; el = el->next)
+    {
+    int size = rangeTreeSizeInFile(el->val);
+    nodes = ((struct rbTree *)el->val)->n;
+    writeString(f, el->name);
+    writeOne(f, nodes);
+    writeOne(f, offset);
+    offset += size;
+    counter += (long long)size;
+    if (counter > UINT_MAX )
+        errAbort("Error in %s, index overflow at %s. The genomeRangeTree format "
+                "does not support trees larger than %dGb, \n"
+                "please split up into smaller files.\n", __FILE__, 
+                el->name, UINT_MAX/1000000000);
+    }
+
+/* Write out trees. */
+for (el = elList; el ; el = el->next)
+    {
+    rangeTreeWriteNodes(el->val,f);
+    }
+hashElFreeList(&elList);
+}
+
+struct genomeRangeTree *genomeRangeTreeRead(char *fileName)
+/* Open file, read in header, index, and trees.  
+ * Squawk and die if there is a problem. */
+{
+bits32 sig, version, headerLen, numChroms, valDataSize, valDataType, reserved1, reserved2;
+boolean isSwapped = FALSE;
+int i;
+struct genomeRangeTree *tree;
+FILE *f = mustOpen(fileName, "rb");
+struct chromInfo {
+    struct chromInfo *next;
+    char *name;
+    bits32 nodes;
+    bits32 offset;
+    } *chromList = NULL, *chrom;
+
+/* Allocate header verify signature, and read in
+ * the constant-length bits. */
+tree = genomeRangeTreeNew();
+mustReadOne(f, sig);
+if (sig == genomeRangeTreeSwapSig)
+    isSwapped = TRUE;
+else if (sig != genomeRangeTreeSig)
+    errAbort("%s doesn't have a valid genomeRangeTreeSig", fileName);
+version = readBits32(f, isSwapped);
+if (version != 0)
+    {
+    errAbort("Can only handle version 0 of this file. This is version %d", (int)version);
+    }
+headerLen = readBits32(f, isSwapped);
+numChroms = readBits32(f, isSwapped);
+valDataSize = readBits32(f, isSwapped);
+valDataType = readBits32(f, isSwapped);
+reserved1 = readBits32(f, isSwapped);
+reserved2 = readBits32(f, isSwapped);
+if (valDataSize != 0)
+    errAbort("Can only handle valDataSize of 0. This has %d.\n", (int)valDataSize);
+if (valDataType != 0)
+    errAbort("Can only handle valDataType of 0. This has %d.\n", (int)valDataType);
+
+/* Read in index. */
+for (i=0; i < numChroms ; ++i)
+    {
+    char name[256];
+    if (!fastReadString(f, name))
+        errAbort("%s is truncated", fileName);
+    AllocVar(chrom);
+    chrom->name = cloneString(name);
+    chrom->nodes = readBits32(f, isSwapped);
+    chrom->offset = readBits32(f, isSwapped);
+    slSafeAddHead(&chromList, chrom);
+    }
+slReverse(chromList);
+
+/* Read in nodes one tree at a time */
+for (chrom = chromList ; chrom ; chrom = chrom->next)
+    {
+    rangeTreeReadNodes(f, genomeRangeTreeFindOrAddRangeTree(tree, chrom->name), chrom->nodes, isSwapped);
+    }
+
+carefulClose(&f);
+return tree;
+}
+
 

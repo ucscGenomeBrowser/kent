@@ -37,7 +37,7 @@ struct genomeRangeTree *genomeRangeTreeNewSize(int hashPowerOfTwoSize);
 /* Create a new, empty, genomeRangeTree. 
  * Free with genomeRangeTreeFree. */
 
-void genomeRangeTreeFree(struct genomeRangeTree **tree);
+void genomeRangeTreeFree(struct genomeRangeTree **pTree);
 /* Free up genomeRangeTree. */
 
 struct rbTree *genomeRangeTreeFindRangeTree(struct genomeRangeTree *tree, char *chrom);
@@ -96,6 +96,16 @@ struct range *genomeRangeTreeMaxOverlapping(struct genomeRangeTree *tree, char *
 struct range *genomeRangeTreeList(struct genomeRangeTree *tree, char *chrom);
 /* Return list of all ranges in single rangeTree in order.  Not thread safe. 
  * No need to free this when done, memory is local to tree. */
+
+struct genomeRangeTree *genomeRangeTreeRead(char *fileName);
+/* Open file, read in header, index, and trees.  
+ * Squawk and die if there is a problem. */
+
+void genomeRangeTreeWriteOne(struct genomeRangeTree *tree, FILE *f);
+/* Write out genomeRangeTree including: 
+ * header portion
+ * index of chromosomes
+ * data for each range tree */
 
 #endif /* GENOMERANGETREE_H */
 
