@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.9 2008/08/12 23:10:41 larrym Exp $
+# $Id: Encode.pm,v 1.10 2008/08/12 23:28:56 larrym Exp $
 
 package Encode;
 
@@ -208,7 +208,9 @@ sub getDaf
     $daf{TRACKS} = {};
     my $wd = cwd();
     chdir($submitDir);
-    my $dafFile = newestFile(glob "*.DAF");
+    my @glob = glob "*.DAF";
+    push(@glob, glob "*.daf");
+    my $dafFile = newestFile(@glob);
     if(!(-e $dafFile)) {
         die "Can't find the DAF file\n";
     }
