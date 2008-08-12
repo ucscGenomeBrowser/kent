@@ -213,7 +213,7 @@ my $programDir = dirname($0);
 my $unloader = "$programDir/doEncodeUnload.pl";
 if(!(-e $unloader)) {
     # let's us use this in cvs tree
-    $unloader = "$wd/../encodeUnload/doEncodeUnload.pl";
+    $unloader = "$wd/doEncodeUnload.pl";
 }
 if(!(-e $unloader)) {
     die "Can't find unloader ($unloader)\n";
@@ -286,7 +286,7 @@ for my $key (keys %ra) {
 if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
     if(!$opt_noEmail) {
         my $email = $grants->{$daf->{grant}}{wranglerEmail};
-        `echo "dir: $submitFQP" | /bin/mail -s "ENCODE data from $daf->{lab} lab is ready" $email`;
+        `echo "dir: $submitFQP" | /bin/mail -s "ENCODE data from $daf->{grant}/$daf->{lab} lab is ready" $email`;
     }
 } else {
     # XXXX Should this be fatal? Or s/d we send email to encode alias?
