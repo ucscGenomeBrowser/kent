@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.48 2008/08/12 23:09:19 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.49 2008/08/12 23:29:12 larrym Exp $
 
 use warnings;
 use strict;
@@ -429,7 +429,9 @@ if($hasReplicates) {
 }
 
 # Open dataset descriptor file (DDF)
-my $ddfFile = Encode::newestFile(glob "*.DDF");
+my @glob = glob "*.DDF";
+push(@glob, glob "*.ddf");
+my $ddfFile = Encode::newestFile(@glob);
 &HgAutomate::verbose(2, "Using newest DDF file \'$ddfFile\'\n");
 my $lines = Encode::readFile($ddfFile);
 
