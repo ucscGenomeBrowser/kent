@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.47 2008/08/12 20:46:31 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.48 2008/08/12 23:09:19 larrym Exp $
 
 use warnings;
 use strict;
@@ -330,7 +330,7 @@ sub ddfKey
 # return key for given DDF line (e.g. "antibody=$antibody;cell=$cell" for ChIP-Seq data)
     my ($fields, $ddfHeader, $daf) = @_;
     if (defined($daf->{variables})) {
-        return join(";", map("$_=" . $fields->[$ddfHeader->{$_}], sort @{$daf->{variableArray}}));
+        return join(";", map("$_=" . $fields->{$_}, sort @{$daf->{variableArray}}));
     } else {
         die "ERROR: no key defined for this DAF\n";
     }
@@ -414,8 +414,8 @@ my $db = HgDb->new(DB => $daf->{assembly});
 # Add the variables in the DAF file to the required fields list
 if (defined($daf->{variables})) {
     for my $variable (keys %{$daf->{variableHash}}) {
-        $fields->{$variable}->{required} = 1;
-        $fields->{$variable}->{file} = 'ddf';
+        $fields->{$variable}{required} = 1;
+        $fields->{$variable}{file} = 'ddf';
     }
 }
 
@@ -425,7 +425,7 @@ for my $view (keys %{$daf->{TRACKS}}) {
     $hasReplicates += $daf->{TRACKS}{$view}{hasReplicates};
 }
 if($hasReplicates) {
-    $fields->{replicate}->{required} = 1;
+    $fields->{replicate}{required} = 1;
 }
 
 # Open dataset descriptor file (DDF)
@@ -454,11 +454,10 @@ while(@{$lines}) {
     last;
 }
 
-Encode::validateFieldList(\@ddfHeader, $fields, 'ddf', "in DDF '$ddfFile'");
+Encode::validateFieldList(\@ddfHeader, $fields, 'ddf', "ERROR in DDF '$ddfFile':");
 
-# Process lines in DDF file. Create a hash with one entry per line;
-# the entry is an array of field values (XXXX code would be cleaner if
-# value was changed to hash).
+# Process lines in DDF file. Create a list with one entry per line;
+# the entry is field/value hash (fields per @ddfHeader).
 
 while (@{$lines}) {
     my $line = shift(@{$lines});
@@ -473,20 +472,26 @@ while (@{$lines}) {
     if($line !~ /\t/) {
         die "$errorPrefix line has no tabs; the DDF is required to be tab delimited\n";
     }
-    my @fields = split('\t', $line);
-    my $fileField = $ddfHeader{files};
+    my $i = 0;
+    my %line;
+    for my $val (split('\t', $line)) {
+        $line{$ddfHeader[$i]} = $val;
+        $i++;
+    }
+    Encode::validateValueList(\%line, $fields, 'ddf', $errorPrefix);
+
     # die if file list has any suspicious characters in it (b/c this will be used in shell commands).
-    my $files = $fields[$fileField];
+    my $files = $line{files};
     my $regex = "\`\|\\\|\|\"\|\'";
     if($files =~ /($regex)/) {
         die("$errorPrefix files list '$files' has invalid characters; files cannot contain following characters: \"'`|\n");
     }
-    my $view = $fields[$ddfHeader{view}];
+    my $view = $line{view};
     if(!$daf->{TRACKS}{$view}) {
         die "$errorPrefix undefined view '$view' in DDF\n";
     }
-    if($fields->{replicate}->{required}) {
-        my $replicate = $fields[$ddfHeader{replicate}];
+    if($fields->{replicate}{required}) {
+        my $replicate = $line{replicate};
         if($daf->{TRACKS}{$view}{hasReplicates} && (!defined($replicate) || !length($replicate))) {
             die "$errorPrefix missing replicate number for view '$view'";
         }
@@ -500,9 +505,9 @@ while (@{$lines}) {
             push(@filenames, $_);
         }
     }
-    $fields[$fileField] = \@filenames;
-    push(@ddfLines, \@fields);
-    $ddfSets{ddfKey(\@fields, \%ddfHeader, $daf)}{VIEWS}{$view} = \@fields;
+    $line{files} = \@filenames;
+    push(@ddfLines, \%line);
+    $ddfSets{ddfKey(\%line, \%ddfHeader, $daf)}{VIEWS}{$view} = \%line;
 }
 
 my $tmpCount = 1;
@@ -517,15 +522,14 @@ for my $key (keys %ddfSets) {
         }
     }
 
-    # create missing optional views (e.g. ChIP-Seq Signal)
+    # create missing optional views (e.g. ChIP-Seq RawSignal)
     if(defined($ddfSets{$key}{VIEWS}{Alignments}) && !defined($ddfSets{$key}{VIEWS}{RawSignal})) {
         my $newView = 'RawSignal';
-        my @alignmentFields = @{$ddfSets{$key}{VIEWS}{Alignments}};
-        my @fields = @alignmentFields;
-        $fields[$ddfHeader{view}] = $newView;
-        $ddfSets{$key}{VIEWS}{$newView} = \@fields;
-        my $outFile = "createWig.out";
-        my $files = join(" ", @{$alignmentFields[$ddfHeader{files}]});
+        my $alignmentLine = $ddfSets{$key}{VIEWS}{Alignments};
+        my %line = %{$alignmentLine};
+        $line{view} = $newView;
+        $ddfSets{$key}{VIEWS}{$newView} = \%line;
+        my $files = join(" ", @{$alignmentLine->{files}});
         my $tmpFile = "autoCreated$tmpCount.bed";
         $tmpCount++;
         my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $daf->{assembly} stdin");
@@ -534,8 +538,8 @@ for my $key (keys %ddfSets) {
             print STDERR  "ERROR: failed creation of wiggle for $key\n";
             die "ERROR: " . $safe->stderr();
         }
-        $fields[$ddfHeader{files}] = [$tmpFile];
-        push(@ddfLines, \@fields);
+        $line{files} = [$tmpFile];
+        push(@ddfLines, \%line);
     }
 }
 
@@ -558,14 +562,14 @@ foreach my $ddfLine (@ddfLines) {
     $ddfLineNumber++;
     my $errorPrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
     $priority++;
-    my $view = $ddfLine->[$ddfHeader{view}];
+    my $view = $ddfLine->{view};
     HgAutomate::verbose(2, "  View: $view\n");
-    for (my $i=0; $i < @ddfHeader; $i++) {
-        validateDdfField($ddfHeader[$i], $ddfLine->[$i], $view, $daf);
+    for my $field (keys %{$ddfLine}) {
+        validateDdfField($field, $ddfLine->{$field}, $view, $daf);
     }
     my $replicate;
     if($hasReplicates && $daf->{TRACKS}{$view}{hasReplicates}) {
-        $replicate = $ddfLine->[$ddfHeader{replicate}];
+        $replicate = $ddfLine->{replicate};
         if(defined($replicate) && $replicate > 0) {
         } else {
             die "$errorPrefix invalid or missing replicate value\n";
@@ -588,9 +592,9 @@ foreach my $ddfLine (@ddfLines) {
     my $additional = "\n";
     if (defined($daf->{variables})) {
         my @variables = @{$daf->{variableArray}};
-        my %hash = map { $_ => $ddfLine->[$ddfHeader{$_}] } @variables;
+        my %hash = map { $_ => $ddfLine->{$_} } @variables;
         for my $var (@variables) {
-            $tableName = $tableName . $ddfLine->[$ddfHeader{$var}];
+            $tableName = $tableName . $ddfLine->{$var};
         }
         my $shortSuffix;
         my $longSuffix;
@@ -629,7 +633,7 @@ foreach my $ddfLine (@ddfLines) {
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "type $daf->{TRACKS}{$view}{type}\n";
     print LOADER_RA "assembly $daf->{assembly}\n";
-    print LOADER_RA "files @{$ddfLine->[$ddfHeader{files}]}\n";
+    print LOADER_RA "files @{$ddfLine->{files}}\n";
     print LOADER_RA "\n";
 
     if($view ne 'RawData') {
