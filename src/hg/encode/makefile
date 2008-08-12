@@ -4,7 +4,7 @@
 
 DIRS = \
 	hgEncodeDataVersions \
-	mkEncodeFrameset 
+	mkEncodeFrameset \
 	hgEncodeVocab \
 
 # broken
@@ -14,8 +14,7 @@ DIRS = \
 # List of pipeline dirs
 PIPELINE_DIRS = \
         encodeValidate \
-        encodeLoad \
-        encodeUnload
+        encodeLoad
 
 USE_DIRS = $(DIRS)
 
@@ -28,9 +27,9 @@ all:
 	    done
 
 install: 
-	chmod +x *.csh *.pl
-	cp -p *.csh *.pl /cluster/data/encode/bin/scripts
+	@for D in ${PIPELINE_DIRS}; do \
+		(cd $${D} && ${MAKE};) \
+	done
 
 pipeline:
 	@${MAKE} --no-print-directory USE_DIRS="${PIPELINE_DIRS}" all
-	
