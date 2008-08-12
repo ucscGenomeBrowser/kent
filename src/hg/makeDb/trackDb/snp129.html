@@ -62,13 +62,25 @@ build 129, available from
       <B>Function</B>: Predicted functional role 
 	(<I>each variant may have more than one functional role</I>)<BR>
       <UL>
-        <LI><B>Locus Region</B> - variation within 2000 bases of gene, but not in transcript (includes locus, gene-segment, near-gene-3, near-gene-5)
-        <LI><B>Coding - Synonymous</B> - no change in peptide for allele with respect to reference assembly
-        <LI><B>Coding - Non-Synonymous</B> - change in peptide for allele with respect to reference assembly (includes coding-nonsynon, nonsense, missense, frameshift)
-        <LI><B>Untranslated</B> - variation in transcript, but not in coding region interval (includes untranslated, untranslated-3, untranslated-5)
+        <LI><B>Locus Region</B> - variation within 2000 bases of gene, but not 
+	    in transcript (in build 127 and before, the keyword was 
+	    <TT>locus</TT>, but since build 128, the more specific terms 
+	    <TT>near-gene-3</TT> and <TT>near-gene-5</TT> are used)
+        <LI><B>Coding - Synonymous</B> - no change in peptide for allele with 
+	    respect to reference assembly (<TT>coding-synon</TT>)
+        <LI><B>Coding - Non-Synonymous</B> - change in peptide for allele with 
+	    respect to reference assembly (<TT>coding-nonsynon</TT> in build 
+	    127; <TT>nonsense</TT>, <TT>missense</TT>, <TT>frameshift</TT> 
+	    since build 128)
+        <LI><B>Untranslated</B> - variation in transcript, but not in coding 
+	    region interval (<TT>untranslated</TT> in build 127; 
+	    <TT>untranslated-3</TT>, <TT>untranslated-5</TT> since build 128)
         <LI><B>Intron</B> - variation in intron, but not in first two or last two bases of intron
-        <LI><B>Splice Site</B> - variation in first two or last two bases of intron (includes splice-site, splice-3, splice-5)
-        <LI><B>Reference (coding)</B> - allele observed in a coding region of the reference sequence
+        <LI><B>Splice Site</B> - variation in first two or last two bases of 
+	    intron (<TT>splice-site</TT> in build 127; <TT>splice-3</TT>, 
+	    <TT>splice-5</TT> since build 128)
+        <LI><B>Reference (coding)</B> - allele observed in a coding region of 
+	    the reference sequence (<TT>cds-reference</TT>)
         <LI><B>Unknown</B> - no known functional classification
       </UL>
     </LI>
