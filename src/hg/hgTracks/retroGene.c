@@ -2,7 +2,7 @@
 #include "retroGene.h"
 #include "transMapStuff.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.14 2008/08/10 01:11:06 baertsch Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.15 2008/08/12 22:18:41 baertsch Exp $";
 
 /* bit set of labels to use */
 enum {useOrgCommon = 0x01,
@@ -125,7 +125,7 @@ char *retroName(struct track *tg, void *item)
 struct linkedFeatures *lf = item;
 char cartvar[512];
 boolean isNative = sameString(tg->mapName, "pseudoGeneLink") ;
-boolean isRetroNative = startsWith( "retroMrnaInfo", tg->mapName);
+boolean isRetroNative = startsWith( "ucscRetro", tg->mapName) || startsWith( "retroMrnaInfo", tg->mapName);
 safef(cartvar, sizeof(cartvar), "%s.label", (isNative ? "pseudoGeneLink.label" : (isRetroNative ? tg->mapName : "xenoRefGene.label")));
 char *refGeneLabel = cartUsualString(cart, cartvar, "gene") ;
 boolean useGeneName = sameString(refGeneLabel, "gene")
@@ -291,6 +291,8 @@ registerTrackHandler("pseudoGeneLink2", retroGeneMethods);
 registerTrackHandler("retroMrnaInfo", retroGeneMethods);
 registerTrackHandler("retroMrnaInfo2", retroGeneMethods);
 registerTrackHandler("retroMrnaInfo3", retroGeneMethods);
+registerTrackHandler("ucscRetroInfo3", retroGeneMethods);
 registerTrackHandler("retroCdsAli", retroAliMethods);
 registerTrackHandler("retroCdsAli3", retroAliMethods);
+registerTrackHandler("ucscRetroAli3", retroAliMethods);
 }
