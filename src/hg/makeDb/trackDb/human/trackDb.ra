@@ -774,6 +774,8 @@ url http://mrhgsv.gs.washington.edu/cgi-bin/hgc?i=$$&c=$S&l=$[&r=$]&db=$D&positi
 # the chromEnd coords on their site are 1 greater than last block end...
 # this is a hint to hgc to add 1 to t when forming a link to their site.
 endFudge 1
+ncbiAccXref kiddEichlerToNcbi
+pairedEndUrlFormat http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?&cmd=retrieve&val=CENTER_NAME%%3D'ABC'%%20and%%20LIBRARY_ID%%3D'%s'%%20and%%20TRACE_NAME%%3D'%s'&retrieve=Submit
 
     track kiddEichlerDiscAbc14
     subTrack kiddEichlerDisc
