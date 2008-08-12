@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1449 2008/08/10 01:17:52 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1450 2008/08/12 18:43:04 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19953,6 +19953,57 @@ dyStringFree(&dy);
 
 #define KIDD_EICHLER_DISC_PREFIX "kiddEichlerDisc"
 
+void printKiddEichlerNcbiLinks(struct trackDb *tdb, char *item)
+/* If we have a table that maps kiddEichler IDs to NCBI IDs, print links. */
+{
+char *ncbiAccXref = trackDbSetting(tdb, "ncbiAccXref");
+if (isNotEmpty(ncbiAccXref) && hTableExists(ncbiAccXref))
+    {
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    char *cloneName = cloneString(item);
+    char *postUnderscore = strchr(cloneName, '_');
+    char query[512];
+    if (startsWith("WIBR2-", cloneName) && postUnderscore != NULL)
+	cloneName = postUnderscore+1;
+    chopPrefixAt(cloneName, ',');
+    safef(query, sizeof(query),
+	  "select cloneAcc, endF, endR from %s where name = '%s'",
+	  ncbiAccXref, cloneName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	if (isNotEmpty(row[0]))
+	    printf("<B>Clone Report and Sequence (NCBI Nucleotide): </B>"
+		   "<A HREF=\"%s\" TARGET=_BLANK>%s</A><BR>\n",
+		   getEntrezNucleotideUrl(row[0]), row[0]);
+	char *endUrlFormat = trackDbSetting(tdb, "pairedEndUrlFormat");
+	char *libId = cloneName;
+	if (startsWith("G248", libId))
+	    libId[strlen("G248")] = '\0';
+	else if (startsWith("ABC", libId))
+	    chopPrefixAt(libId, '_');
+	if (endUrlFormat && differentStringNullOk(row[1], "0"))
+	    {
+	    printf("<B>Forward End Read (NCBI Trace Archive): </B>"
+		   "<A HREF=\"");
+	    printf(endUrlFormat, libId, row[1]);
+	    printf("\" TARGET=_BLANK>%s</A><BR>\n", row[1]);
+	    }
+	if (endUrlFormat && differentStringNullOk(row[2], "0"))
+	    {
+	    printf("<B>Reverse End Read (NCBI Trace Archive): </B>"
+		   "<A HREF=\"");
+	    printf(endUrlFormat, libId, row[2]);
+	    printf("\" TARGET=_BLANK>%s</A><BR>\n", row[2]);
+	    }
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+}
+
 void doKiddEichlerDisc(struct trackDb *tdb, char *item)
 /* Discordant clone end mappings from Kidd..Eichler 2008. */
 {
@@ -19998,6 +20049,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	  "%s&o=%d&t=%d&g=%s_discordant&%s_discordant=full",
 	  cgiEncode(item), start, endForUrl, sampleName, sampleName);
     printCustomUrlWithLabel(tdb, itemPlus, item, "url", FALSE);
+    printKiddEichlerNcbiLinks(tdb, bed->name);
     printf("<B>Score:</B> %d<BR>\n", bed->score);
     printPosOnChrom(bed->chrom, bed->chromStart, bed->chromEnd, bed->strand,
 		    TRUE, bed->name);
