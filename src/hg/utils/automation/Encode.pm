@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.8 2008/08/12 20:46:51 larrym Exp $
+# $Id: Encode.pm,v 1.9 2008/08/12 23:10:41 larrym Exp $
 
 package Encode;
 
@@ -71,8 +71,8 @@ sub splitKeyVal
 sub validateFieldList {
 # validate the entries in a RA record or DDF header using fields.ra
 # $file s/d be 'ddf' or 'dafHeader'
-
-    my ($fields, $schema, $file, $errStrSuffix) = @_;
+# die's if any errors are found.
+    my ($fields, $schema, $file, $errStrPrefix) = @_;
     my %hash = map {$_ => 1} @{$fields};
     my @errors;
     die "file '$file' is invalid\n" if($file ne 'ddf' && $file ne 'dafHeader');
@@ -91,7 +91,34 @@ sub validateFieldList {
         }
     }
     if(@errors) {
-        die "ERROR: " . join("; ", @errors) . " $errStrSuffix\n";
+        die $errStrPrefix . " " . join("; ", @errors) . " \n";
+    }
+}
+
+sub validateValueList {
+# validate hash of values using fields.ra; $file s/d be 'ddf' or 'dafHeader'
+# die's if any errors are found.
+    my ($values, $schema, $file, $errStrPrefix) = @_;
+    my @errors;
+    for my $field (keys %{$values}) {
+        my $val = $values->{$field};
+        if(defined($schema->{$field}{file}) && $schema->{$field}{file} eq $file) {
+            my $type = $schema->{$field}{type} || 'string';
+            if($type eq 'bool') {
+                if(lc($val) ne 'yes' && lc($val) ne 'no') {
+                    push(@errors, "invalid boolean; field '$field', value '$val'; value must be 'yes' or 'no'");
+                } else {
+                    $values->{$field} = lc($val) eq 'yes' ? 1 : 0;
+                }
+            } elsif($type eq 'int') {
+                if($val !~ /^\d+$/) {
+                    push(@errors, "invalid integer; field '$field', value '$val'");
+                }
+            }
+        }
+    }
+    if(@errors) {
+        die $errStrPrefix . " " . join("; ", @errors) . " \n";
     }
 }
 
@@ -182,6 +209,9 @@ sub getDaf
     my $wd = cwd();
     chdir($submitDir);
     my $dafFile = newestFile(glob "*.DAF");
+    if(!(-e $dafFile)) {
+        die "Can't find the DAF file\n";
+    }
     &HgAutomate::verbose(2, "Using newest DAF file \'$dafFile\'\n");
     my $lines = readFile("$dafFile");
     chdir($wd);
@@ -227,7 +257,7 @@ sub getDaf
 
     # Validate fields
     my @tmp = grep(!/^TRACKS$/, keys %daf);
-    validateFieldList(\@tmp, $fields, 'dafHeader', "in DAF '$dafFile'");
+    validateFieldList(\@tmp, $fields, 'dafHeader', "ERROR in DAF '$dafFile':");
 
     if($daf{dafVersion} ne $dafVersion) {
         die "ERROR: dafVersion '$daf{dafVersion}' does not match current version: $dafVersion\n";
