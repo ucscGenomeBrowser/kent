@@ -6,7 +6,7 @@ lab	HudsonAlpha
 dataType	ChipSeq
 variables	cell, antibody
 assembly	hg18
-pifVersion      0.2.2
+dafVersion      0.2.2
 
 # Track/view definition
 view             Alignments
