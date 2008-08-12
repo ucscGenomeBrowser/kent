@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.7 2008/08/10 00:45:36 larrym Exp $
+# $Id: Encode.pm,v 1.8 2008/08/12 20:46:51 larrym Exp $
 
 package Encode;
 
@@ -22,7 +22,7 @@ our $loadFile = "load.ra";
 our $unloadFile = "unload.ra";
 our $trackFile = "trackDb.ra";
 our $pushQFile = "pushQ.sql";
-our $pifVersion = "0.2.2";
+our $dafVersion = "0.2.2";
 
 our $fieldConfigFile = "fields.ra";
 our $vocabConfigFile = "cv.ra";
@@ -70,12 +70,12 @@ sub splitKeyVal
 
 sub validateFieldList {
 # validate the entries in a RA record or DDF header using fields.ra
-# $file s/d be 'ddf' or 'pifHeader'
+# $file s/d be 'ddf' or 'dafHeader'
 
     my ($fields, $schema, $file, $errStrSuffix) = @_;
     my %hash = map {$_ => 1} @{$fields};
     my @errors;
-    die "file '$file' is invalid\n" if($file ne 'ddf' && $file ne 'pifHeader');
+    die "file '$file' is invalid\n" if($file ne 'ddf' && $file ne 'dafHeader');
 
     # look for missing required fields
     for my $field (keys %{$schema}) {
@@ -118,16 +118,16 @@ sub readFile
     return \@lines;
 }
 
-sub getLabs
+sub getGrants
 {
-# This lab corresponds to the "grant" in the PIF file (these are different for historical reasons).
+# The grants are called "labs" in the labs.ra file (for historical reasons).
     my ($configPath) = @_;
-    my %labs;
+    my %grants;
     if(-e "$configPath/$labsConfigFile") {
         # tolerate missing labs.ra in dev trees.
-        %labs = RAFile::readRaFile("$configPath/$labsConfigFile", "lab");
+        %grants = RAFile::readRaFile("$configPath/$labsConfigFile", "lab");
     }
-    return %labs;
+    return \%grants;
 }
 
 sub getControlledVocab
@@ -157,7 +157,7 @@ sub getFields
             $fields{$key}->{required} = lc($val) eq 'yes' ? 1 : 0;
         }
     }
-    return %fields;
+    return \%fields;
 }
 
 sub validateAssembly {
@@ -167,23 +167,23 @@ sub validateAssembly {
     }
 }
 
-sub getPif
+sub getDaf
 {
-# Return PIF hash, using newest PIF file found in $submitDir.
+# Return reference to DAF hash, using newest DAF file found in $submitDir.
 # hash keys are RA style plus an additional TRACKS key which is a nested hash for
-# the track list at the end of the PIF file; e.g.:
+# the track list at the end of the DAF file; e.g.:
 # (lab => 'Myers', TRACKS => {'Alignments => {}, Signal => {}})
-    my ($submitDir, $labs, $fields) = @_;
+    my ($submitDir, $grants, $fields) = @_;
 
     # Read info from Project Information File.  Verify required fields
     # are present and that the project is marked active.
-    my %pif = ();
-    $pif{TRACKS} = {};
+    my %daf = ();
+    $daf{TRACKS} = {};
     my $wd = cwd();
     chdir($submitDir);
-    my $pifFile = newestFile(glob "*.PIF");
-    &HgAutomate::verbose(2, "Using newest PIF file \'$pifFile\'\n");
-    my $lines = readFile("$pifFile");
+    my $dafFile = newestFile(glob "*.DAF");
+    &HgAutomate::verbose(2, "Using newest DAF file \'$dafFile\'\n");
+    my $lines = readFile("$dafFile");
     chdir($wd);
 
     while (@{$lines}) {
@@ -202,7 +202,7 @@ sub getPif
         if ($key eq "view") {
             my %track = ();
             my $track = $val;
-            $pif{TRACKS}->{$track} = \%track;
+            $daf{TRACKS}->{$track} = \%track;
             &HgAutomate::verbose(5, "  Found view: \'$track\'\n");
             while ($line = shift @{$lines}) {
                 $line =~ s/^ +//;
@@ -220,36 +220,36 @@ sub getPif
             $track{required} = lc($track{required}) eq 'yes' ? 1 : 0;
             $track{hasReplicates} = lc($track{hasReplicates}) eq 'yes' ? 1 : 0;
         } else {
-            &HgAutomate::verbose(3, "PIF field: $key = $val\n");
-            $pif{$key} = $val;
+            &HgAutomate::verbose(3, "DAF field: $key = $val\n");
+            $daf{$key} = $val;
         }
     }
 
     # Validate fields
-    my @tmp = grep(!/^TRACKS$/, keys %pif);
-    validateFieldList(\@tmp, $fields, 'pifHeader', "in PIF '$pifFile'");
+    my @tmp = grep(!/^TRACKS$/, keys %daf);
+    validateFieldList(\@tmp, $fields, 'dafHeader', "in DAF '$dafFile'");
 
-    if($pif{pifVersion} ne $pifVersion) {
-        die "ERROR: pifVersion '$pif{pifVersion}' does not match current version: $pifVersion\n";
+    if($daf{dafVersion} ne $dafVersion) {
+        die "ERROR: dafVersion '$daf{dafVersion}' does not match current version: $dafVersion\n";
     }
-    if(!keys(%{$pif{TRACKS}})) {
-        die "ERROR: no views defined for project \'$pif{project}\' in PIF '$pifFile'\n";
+    if(!keys(%{$daf{TRACKS}})) {
+        die "ERROR: no views defined for project \'$daf{project}\' in DAF '$dafFile'\n";
     }
-    if(!defined($labs->{$pif{grant}})) {
-        die "ERROR: invalid lab '$pif{grant}' in PIF '$pifFile'\n";
+    if(!defined($grants->{$daf{grant}})) {
+        die "ERROR: invalid lab '$daf{grant}' in DAF '$dafFile'\n";
     }
-    validateAssembly($pif{assembly});
+    validateAssembly($daf{assembly});
 
-    foreach my $track (keys %{$pif{TRACKS}}) {
+    foreach my $track (keys %{$daf{TRACKS}}) {
         &HgAutomate::verbose(4, "  Track: $track\n");
-        my %track = %{$pif{TRACKS}->{$track}};
+        my %track = %{$daf{TRACKS}->{$track}};
         foreach my $key (keys %track) {
             &HgAutomate::verbose(4, "    Setting: $key   Value: $track{$key}\n");
         }
     }
 
-    if (defined($pif{variables})) {
-        my @variables = split (/\s*,\s*/, $pif{variables});
+    if (defined($daf{variables})) {
+        my @variables = split (/\s*,\s*/, $daf{variables});
         my %variables;
         my $i = 0;
         foreach my $variable (@variables) {
@@ -258,10 +258,10 @@ sub getPif
             $variables[$i++] = $variable;
             $variables{$variable} = 1;
         }
-        $pif{variableHash} = \%variables;
-        $pif{variableArray} = \@variables;
+        $daf{variableHash} = \%variables;
+        $daf{variableArray} = \@variables;
     }
-    return %pif;
+    return \%daf;
 }
 
 1;

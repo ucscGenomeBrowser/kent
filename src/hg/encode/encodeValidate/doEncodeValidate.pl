@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.46 2008/08/08 21:38:43 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.47 2008/08/12 20:46:31 larrym Exp $
 
 use warnings;
 use strict;
@@ -29,7 +29,7 @@ use SafePipe;
 use vars qw/
     $opt_configDir
     $opt_outDir
-    $opt_validatePif
+    $opt_validateDaf
     $opt_verbose
     /;
 
@@ -45,10 +45,10 @@ usage: encodeValidate.pl submission-type project-submission-dir
 
 submission-type is currently ignored.
 
-Current pifVersion is: $Encode::pifVersion
+Current dafVersion is: $Encode::dafVersion
 
 options:
-    -validatePif	exit after validating PIF file
+    -validateDaf	exit after validating DAF file
     -verbose num        Set verbose level to num (default 1).            -
     -configDir dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
@@ -65,11 +65,11 @@ exit 1;
 #
 # validator callbacks are called thus:
 #
-# validator(value, track, pif);
+# validator(value, track, daf);
 #
 # value is value in DDF column
 # track is track/view value
-# pif is pif hash
+# daf is daf hash
 
 # dispatch table
 our %validators = (
@@ -85,7 +85,7 @@ our %validators = (
 sub validateFileName {
     # Validate array of filenames, ordered by part
     # Check files exist and are of correct data format
-    my ($files, $track, $pif) = @_;
+    my ($files, $track, $daf) = @_;
     my @newFiles;
     for my $file (@{$files}) {
         my @list = glob $file;
@@ -100,7 +100,7 @@ sub validateFileName {
         -e $file || die "ERROR: File \'$file\' does not exist\n";
         -s $file || die "ERROR: File \'$file\' is empty\n";
         -r $file || die "ERROR: File \'$file\' is not readable \n";
-        &checkDataFormat($pif->{TRACKS}{$track}{type}, $file);
+        &checkDataFormat($daf->{TRACKS}{$track}{type}, $file);
     }
     $files = \@newFiles;
 }
@@ -305,11 +305,11 @@ sub validateFastQ
 
 sub validateDdfField {
     # validate value for type of field
-    my ($type, $val, $track, $pif) = @_;
+    my ($type, $val, $track, $daf) = @_;
     $type =~ s/ /_/g;
     &HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
     if($validators{$type}) {
-        $validators{$type}->($val, $track, $pif);
+        $validators{$type}->($val, $track, $daf);
     }
 }
 
@@ -328,11 +328,11 @@ sub checkDataFormat {
 sub ddfKey
 {
 # return key for given DDF line (e.g. "antibody=$antibody;cell=$cell" for ChIP-Seq data)
-    my ($fields, $ddfHeader, $pif) = @_;
-    if (defined($pif->{variables})) {
-        return join(";", map("$_=" . $fields->[$ddfHeader->{$_}], sort @{$pif->{variableArray}}));
+    my ($fields, $ddfHeader, $daf) = @_;
+    if (defined($daf->{variables})) {
+        return join(";", map("$_=" . $fields->[$ddfHeader->{$_}], sort @{$daf->{variableArray}}));
     } else {
-        die "ERROR: no key defined for this PIF\n";
+        die "ERROR: no key defined for this DAF\n";
     }
 }
 
@@ -348,7 +348,7 @@ my $wd = cwd();
 
 my $ok = GetOptions("configDir=s",
                     "outDir=s",
-                    "validatePif",
+                    "validateDaf",
                     "verbose=i",
                     );
 usage() if (!$ok);
@@ -400,32 +400,32 @@ mkdir $outPath ||
     die ("SYS ERR: Can't create out directory \'$outPath\': $OS_ERROR\n");
 
 # labs is now in fact the list of grants (labs are w/n grants, and are not currently validated).
-my %labs = Encode::getLabs($configPath);
-my %fields = Encode::getFields($configPath);
-my %pif = Encode::getPif($submitDir, \%labs, \%fields);
+my $grants = Encode::getGrants($configPath);
+my $fields = Encode::getFields($configPath);
+my $daf = Encode::getDaf($submitDir, $grants, $fields);
 
-if($opt_validatePif) {
-    print STDERR "PIF is valid\n";
+if($opt_validateDaf) {
+    print STDERR "DAF is valid\n";
     exit(0);
 }
 
-my $db = HgDb->new(DB => $pif{assembly});
+my $db = HgDb->new(DB => $daf->{assembly});
 
-# Add the variables in the PIF file to the required fields list
-if (defined($pif{variables})) {
-    for my $variable (keys %{$pif{variableHash}}) {
-        $fields{$variable}->{required} = 1;
-        $fields{$variable}->{file} = 'ddf';
+# Add the variables in the DAF file to the required fields list
+if (defined($daf->{variables})) {
+    for my $variable (keys %{$daf->{variableHash}}) {
+        $fields->{$variable}->{required} = 1;
+        $fields->{$variable}->{file} = 'ddf';
     }
 }
 
 # make replicate column required when appropriate.
 my $hasReplicates = 0;
-for my $view (keys %{$pif{TRACKS}}) {
-    $hasReplicates += $pif{TRACKS}->{$view}{hasReplicates};
+for my $view (keys %{$daf->{TRACKS}}) {
+    $hasReplicates += $daf->{TRACKS}{$view}{hasReplicates};
 }
 if($hasReplicates) {
-    $fields{replicate}->{required} = 1;
+    $fields->{replicate}->{required} = 1;
 }
 
 # Open dataset descriptor file (DDF)
@@ -454,7 +454,7 @@ while(@{$lines}) {
     last;
 }
 
-Encode::validateFieldList(\@ddfHeader, \%fields, 'ddf', "in DDF '$ddfFile'");
+Encode::validateFieldList(\@ddfHeader, $fields, 'ddf', "in DDF '$ddfFile'");
 
 # Process lines in DDF file. Create a hash with one entry per line;
 # the entry is an array of field values (XXXX code would be cleaner if
@@ -482,12 +482,12 @@ while (@{$lines}) {
         die("$errorPrefix files list '$files' has invalid characters; files cannot contain following characters: \"'`|\n");
     }
     my $view = $fields[$ddfHeader{view}];
-    if(!$pif{TRACKS}->{$view}) {
+    if(!$daf->{TRACKS}{$view}) {
         die "$errorPrefix undefined view '$view' in DDF\n";
     }
-    if($fields{replicate}->{required}) {
+    if($fields->{replicate}->{required}) {
         my $replicate = $fields[$ddfHeader{replicate}];
-        if($pif{TRACKS}->{$view}{hasReplicates} && (!defined($replicate) || !length($replicate))) {
+        if($daf->{TRACKS}{$view}{hasReplicates} && (!defined($replicate) || !length($replicate))) {
             die "$errorPrefix missing replicate number for view '$view'";
         }
     }
@@ -502,15 +502,15 @@ while (@{$lines}) {
     }
     $fields[$fileField] = \@filenames;
     push(@ddfLines, \@fields);
-    $ddfSets{ddfKey(\@fields, \%ddfHeader, \%pif)}{VIEWS}{$view} = \@fields;
+    $ddfSets{ddfKey(\@fields, \%ddfHeader, $daf)}{VIEWS}{$view} = \@fields;
 }
 
 my $tmpCount = 1;
 
 # die if there are missing required views
 for my $key (keys %ddfSets) {
-    for my $view (keys %{$pif{TRACKS}}) {
-        if($pif{TRACKS}->{$view}{required}) {
+    for my $view (keys %{$daf->{TRACKS}}) {
+        if($daf->{TRACKS}{$view}{required}) {
             if(!defined($ddfSets{$key}{VIEWS}{$view})) {
                 die "ERROR: view '$view' missing for DDF entry '$key'\n";
             }
@@ -528,7 +528,7 @@ for my $key (keys %ddfSets) {
         my $files = join(" ", @{$alignmentFields[$ddfHeader{files}]});
         my $tmpFile = "autoCreated$tmpCount.bed";
         $tmpCount++;
-        my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $pif{assembly} stdin");
+        my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $daf->{assembly} stdin");
         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
         if(my $err = $safe->exec()) {
             print STDERR  "ERROR: failed creation of wiggle for $key\n";
@@ -539,7 +539,7 @@ for my $key (keys %ddfSets) {
     }
 }
 
-my $compositeTrack = "wgEncode$pif{lab}$pif{dataType}";
+my $compositeTrack = "wgEncode$daf->{lab}$daf->{dataType}";
 my $sth = $db->execute("select count(*) from trackDb where tableName = ?", $compositeTrack);
 my @row = $sth->fetchrow_array();
 if(!(@row && $row[0])) {
@@ -561,10 +561,10 @@ foreach my $ddfLine (@ddfLines) {
     my $view = $ddfLine->[$ddfHeader{view}];
     HgAutomate::verbose(2, "  View: $view\n");
     for (my $i=0; $i < @ddfHeader; $i++) {
-        validateDdfField($ddfHeader[$i], $ddfLine->[$i], $view, \%pif);
+        validateDdfField($ddfHeader[$i], $ddfLine->[$i], $view, $daf);
     }
     my $replicate;
-    if($hasReplicates && $pif{TRACKS}->{$view}{hasReplicates}) {
+    if($hasReplicates && $daf->{TRACKS}{$view}{hasReplicates}) {
         $replicate = $ddfLine->[$ddfHeader{replicate}];
         if(defined($replicate) && $replicate > 0) {
         } else {
@@ -576,18 +576,18 @@ foreach my $ddfLine (@ddfLines) {
     if(defined($replicate)) {
         $tableName .= "Rep$replicate";
     }
-    if(!defined($pif{TRACKS}->{$view}{shortLabelPrefix})) {
-        $pif{TRACKS}->{$view}{shortLabelPrefix} = "";
+    if(!defined($daf->{TRACKS}{$view}{shortLabelPrefix})) {
+        $daf->{TRACKS}{$view}{shortLabelPrefix} = "";
     }
-    my $shortLabel = defined($pif{TRACKS}->{$view}{shortLabelPrefix}) ? $pif{TRACKS}->{$view}{shortLabelPrefix} : "";
-    my $longLabel = "ENCODE" . (defined($pif{TRACKS}->{$view}{longLabelPrefix}) ? " $pif{TRACKS}->{$view}{longLabelPrefix}" : "");
+    my $shortLabel = defined($daf->{TRACKS}{$view}{shortLabelPrefix}) ? $daf->{TRACKS}{$view}{shortLabelPrefix} : "";
+    my $longLabel = "ENCODE" . (defined($daf->{TRACKS}{$view}{longLabelPrefix}) ? " $daf->{TRACKS}{$view}{longLabelPrefix}" : "");
     if(defined($replicate)) {
         $longLabel .= " Replicate $replicate";
     }
     my $subGroups = "view=$view";
     my $additional = "\n";
-    if (defined($pif{variables})) {
-        my @variables = @{$pif{variableArray}};
+    if (defined($daf->{variables})) {
+        my @variables = @{$daf->{variableArray}};
         my %hash = map { $_ => $ddfLine->[$ddfHeader{$_}] } @variables;
         for my $var (@variables) {
             $tableName = $tableName . $ddfLine->[$ddfHeader{$var}];
@@ -627,8 +627,8 @@ foreach my $ddfLine (@ddfLines) {
     }
 
     print LOADER_RA "tablename $tableName\n";
-    print LOADER_RA "type $pif{TRACKS}->{$view}{type}\n";
-    print LOADER_RA "assembly $pif{assembly}\n";
+    print LOADER_RA "type $daf->{TRACKS}{$view}{type}\n";
+    print LOADER_RA "assembly $daf->{assembly}\n";
     print LOADER_RA "files @{$ddfLine->[$ddfHeader{files}]}\n";
     print LOADER_RA "\n";
 
@@ -639,7 +639,7 @@ foreach my $ddfLine (@ddfLines) {
         print TRACK_RA "\tshortLabel\t$shortLabel\n";
         print TRACK_RA "\tlongLabel\t$longLabel\n";
         print TRACK_RA "\tsubGroups\t$subGroups\n";
-        print TRACK_RA "\ttype\t$pif{TRACKS}->{$view}{type}\n";
+        print TRACK_RA "\ttype\t$daf->{TRACKS}{$view}{type}\n";
         print TRACK_RA sprintf("\tdateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
         print TRACK_RA "\tpriority\t$priority\n";
         # noInherit is necessary b/c composite track will often have a different dummy type setting.
@@ -648,13 +648,13 @@ foreach my $ddfLine (@ddfLines) {
         if($visibility{$view}) {
             print TRACK_RA "\tvisibility\t$visibility{$view}\n";
         }
-        if($pif{TRACKS}->{$view}{type} eq 'wig') {
+        if($daf->{TRACKS}{$view}{type} eq 'wig') {
             print TRACK_RA <<END;
 	spanList	1
 	windowingFunction	mean
 	maxHeightPixels	100:16:16
 END
-	} elsif($pif{TRACKS}->{$view}{type} eq 'bed 5 +') {
+	} elsif($daf->{TRACKS}{$view}{type} eq 'bed 5 +') {
 		print TRACK_RA "\tuseScore\t1\n";
 	}
         print TRACK_RA $additional;

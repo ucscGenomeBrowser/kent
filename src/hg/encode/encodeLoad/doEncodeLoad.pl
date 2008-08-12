@@ -5,7 +5,7 @@
 # Reads load.ra for information about what to do
 
 # Writes error or log information to STDOUT
-# Returns 0 if load succeeds and sends email to wrangler for lab specified in the PIF
+# Returns 0 if load succeeds and sends email to wrangler for lab specified in the DAF
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
@@ -192,9 +192,9 @@ if (defined $opt_configDir) {
     $configPath = "$submitDir/../config"
 }
 
-my %labs = Encode::getLabs($configPath);
-my %fields = Encode::getFields($configPath);
-my %pif = Encode::getPif($submitDir, \%labs, \%fields);
+my $grants = Encode::getGrants($configPath);
+my $fields = Encode::getFields($configPath);
+my $daf = Encode::getDaf($submitDir, $grants, $fields);
 
 my $tableSuffix = "";
 # yank out "beta" from encinstance_beta
@@ -281,16 +281,16 @@ for my $key (keys %ra) {
     print STDERR "\n" if($debug);
 }
 
-# Send "data is ready" email to email contact assigned to $pif{lab}
+# Send "data is ready" email to email contact assigned to $daf{lab}
 
-if($labs{$pif{grant}} && $labs{$pif{grant}}->{wranglerEmail}) {
+if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
     if(!$opt_noEmail) {
-        my $email = $labs{$pif{grant}}->{wranglerEmail};
-        `echo "dir: $submitFQP" | /bin/mail -s "ENCODE data from $pif{lab} lab is ready" $email`;
+        my $email = $grants->{$daf->{grant}}{wranglerEmail};
+        `echo "dir: $submitFQP" | /bin/mail -s "ENCODE data from $daf->{lab} lab is ready" $email`;
     }
 } else {
     # XXXX Should this be fatal? Or s/d we send email to encode alias?
-    # die "No wrangler is configured for '$pif{grant}'\n";
+    # die "No wrangler is configured for '$daf->{grant}'\n";
 }
 
 open(PUSHQ, ">out/$Encode::pushQFile") || die "SYS ERROR: Can't write \'out/$Encode::pushQFile\' file; error: $!\n";
