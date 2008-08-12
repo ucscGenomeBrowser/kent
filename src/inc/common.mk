@@ -37,6 +37,10 @@ endif
 ifeq (${BINDIR},)
     BINDIR = ${HOME}/bin/${MACHTYPE}
 endif
+ifeq (${ENCODE_PIPELINE_BIN},)
+    ENCODE_PIPELINE_BIN=/cluster/encodeftp/bin
+endif
+
 MKDIR=mkdir -p
 ifeq (${STRIP},)
    STRIP=strip
