@@ -70,12 +70,15 @@ cat spXref3a.tab  spXref3b.tab  spXref3av.tab spXref3bv.tab >spXref3.tab
 # load into the spXref3 table
 hgLoadSqlTab proteins080707 spXref3 ~/kent/src/hg/lib/spXref3.sql spXref3.tab
 
-# load the same data into a second table
+# load the same data into a second temp table
 hgLoadSqlTab proteins080707 spXref3B ~/kent/src/hg/lib/spXref3.sql spXref3.tab
 
 # remove records that have empty HUGO symbol, yet other records 
 # of the same accession does have non-empty HUGO symbols.
 hgsql proteins080707 -e 'delete spXref3 from spXref3 a, spXref3B b where a.accession=b.accession and a.hugoSymbol="" and b.hugoSymbol!=""'
+
+# Drop temp table
+hgsql proteins080707 -e "drop table spXref3B"
 
 ######################################################################
 # BUILD spXref2 TABLE (DONE, Fan, 07/29/08)
