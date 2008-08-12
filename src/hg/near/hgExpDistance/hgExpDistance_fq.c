@@ -1,6 +1,6 @@
-/* hgExpDistance_fq2 - Create table that measures expression distance between 
+/* hgExpDistance_fq1 - Create table that measures expression distance between 
    pairs. Multi-threaded version that uses a synQueue within the spawning 
-   thread to write distances to the filehandle - with defined queue element */
+   thread to write distances to the filehandle */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -24,7 +24,7 @@ pthread_mutex_t mutexDotOut;
 int numThreads;
 int dotEvery = 0;
 
-static char const rcsid[] = "$Id: hgExpDistance_fq2.c,v 1.1 2008/08/11 16:28:58 lslater Exp $";
+static char const rcsid[] = "$Id: hgExpDistance_fq.c,v 1.1 2008/08/12 03:05:38 lslater Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -98,13 +98,6 @@ struct microDataDistance
     char *name1;
     char *name2;
     float distance;
-};
-
-struct queueEl
-{
-    struct microDataDistance *mDDArray;
-    int elNum;
-    struct microDataDistance *mDD;
 };
 
 int cmpMicroDataDistance(const void *va, const void *vb)
@@ -250,7 +243,6 @@ void *computeDistance(void *thread_ID)
 struct microDataDistance *geneDistArray = NULL;
 struct microDataDistance *geneDistPtr;	
 struct microData *curGene;
-struct queueEl *qEl = NULL;
 int baseGenesPerThread, genesPerThread, rmdrPerThread, rmdr, xtra;
 int subListSize; 
 int geneIx;
@@ -272,30 +264,26 @@ curGene = geneList;
 for (i = 0; i < offset*genesPerThread; i++)
 	curGene = curGene->next;
 
+AllocArray(geneDistArray, geneCount);
+
 /* compute the pairwise experiment distances */
 for (i = 0; i < subListSize; i++, curGene = curGene->next)
     {
-    AllocArray(geneDistArray, geneCount);
-
     calcDistances(geneDistArray, curGene, geneList, weights);
     qsort(geneDistArray, geneCount, sizeof(geneDistArray[0]), 
 							cmpMicroDataDistance);
     /* Print out closest GENEDISTS distances in tab file. */
     geneDistPtr = geneDistArray;
     for (geneIx=0; geneIx < GENEDISTS && geneIx < geneCount; 
-						++geneIx, geneDistPtr++) {
-	AllocVar( qEl );
-	qEl->mDDArray = geneDistArray;
-	qEl->elNum = geneIx;
-	qEl->mDD = geneDistPtr;
-
-	synQueuePut( synQ, qEl );
-    }
+						++geneIx, geneDistPtr++)
+	synQueuePut( synQ, CloneVar( geneDistPtr ) );
 
     pthread_mutex_lock( &mutexDotOut );
     dotOut();
     pthread_mutex_unlock( &mutexDotOut );
     }
+
+freeMem( geneDistArray );
 
 pthread_exit(NULL);
 }
@@ -318,9 +306,7 @@ int *threadID = NULL;
 void *status;
 char *tempDir = ".";
 int numDistsWritten, maxDistsToWrite; 
-struct queueEl *queEl = NULL;	
-int lastElNum;
-struct microDataDistance *geneDistPtr = NULL;
+struct microDataDistance *geneDistPtr = NULL;	
 FILE *f = NULL;
 
 /* Get list/hash of all items with expression values. */
@@ -388,24 +374,21 @@ for (t = 0; t < numThreads; t++) {
 } 
 
 /* this thread will write to the file from the queue */
-if (geneCount < GENEDISTS) {
+if (geneCount < GENEDISTS)
 	maxDistsToWrite = geneCount * geneCount;
-	lastElNum = geneCount-1;
-}
-else {
+else
 	maxDistsToWrite = geneCount * GENEDISTS;
-	lastElNum = GENEDISTS-1;
-}
 numDistsWritten = 0;
 while (numDistsWritten < maxDistsToWrite) {
-	queEl = (struct queueEl *)synQueueGet( synQ );
-	geneDistPtr = queEl->mDD;
-	fprintf(f, "%s\t%s\t%f\n", geneDistPtr->name1, 
+	geneDistPtr = (struct microDataDistance *)synQueueGet( synQ );
+	if (geneDistPtr != NULL)
+		fprintf(f, "%s\t%s\t%f\n", geneDistPtr->name1, 
 				geneDistPtr->name2, geneDistPtr->distance);
+	else
+		errAbort("ERROR: writing distance %d to file\n", 
+							numDistsWritten);
 	numDistsWritten++;
-	if (queEl->elNum == lastElNum)
-		freeMem( queEl->mDDArray );
-	freeMem( queEl );
+	freeMem( geneDistPtr );
 }
 
 /* synchronize all threads */
