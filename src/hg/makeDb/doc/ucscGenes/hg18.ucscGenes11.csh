@@ -55,6 +55,9 @@ set yeastFa = /cluster/data/$yeastDb/bed/blastp/sgdPep.faa
   # hg18.txt
 set bioCycPathways = /cluster/data/hg18/bed/ucsc.10/bioCyc/pathways.col
 set bioCycGenes = /cluster/data/hg18/bed/ucsc.10/bioCyc/genes.col
+   # For KEGG - update this following build instructions in hg18.txt
+set keggList /cluster/data/hg18/bed/ucsc.10/kegg/keggList.tab
+
 
 # Tracks
 set multiz = multiz28way
@@ -945,15 +948,6 @@ cat j.tmp|sort -u  >kgSpAlias.tab
 
 hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql ./kgSpAlias.tab
 
-# Do BioCyc Pathways build
-    mkdir $dir/bioCyc
-    cd $dir/bioCyc
-    grep -v '^#' $bioCycPathways > pathways.tab
-    grep -v '^#' $bioCycGenes > genes.tab
-    kgBioCyc1 genes.tab pathways.tab $db bioCycPathway.tab bioCycMapDesc.tab
-    hgLoadSqlTab $tempDb bioCycPathway ~/kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
-    hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
-
 # RE-BUILD HG18 PROTEOME BROWSER TABLES (DONE, Fan, 4/2/07). 
 
 # These are instructions for building tables 
@@ -1010,6 +1004,37 @@ hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd
 
 # The old pbStamp table seems OK, so no adjustment needed.
 
+# Do BioCyc Pathways build
+    mkdir $dir/bioCyc
+    cd $dir/bioCyc
+    grep -v '^#' $bioCycPathways > pathways.tab
+    grep -v '^#' $bioCycGenes > genes.tab
+    kgBioCyc1 genes.tab pathways.tab $db bioCycPathway.tab bioCycMapDesc.tab
+    hgLoadSqlTab $tempDb bioCycPathway ~/kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
+    hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
+
+# Do KEGG Pathways build
+    mkdir $dir/kegg
+    cd $dir/kegg
+    kgAttachKegg $db $keggList keggPathway.tab
+    hgLoadSqlTab $tempDb keggPathway ~/src/hg/lib/keggPathway.sql ./keggPathway.tab
+
+# Do CGAP tables 
+
+    mkdir $dir/cgap
+    cd $dir/cgap
+    
+    wget --timestamping -O Hs_GeneData.dat "ftp://ftp1.nci.nih.gov/pub/CGAP/Hs_GeneData.dat"
+    hgCGAP Hs_GeneData.dat
+        
+    cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab|sort -u > cgapAlias.tab
+    hgLoadSqlTab $tempDb cgapAlias ~/kent/src/hg/lib/cgapAlias.sql ./cgapAlias.tab
+
+    hgLoadSqlTab $tempDb cgapBiocPathway ~/kent/src/hg/lib/cgapBiocPathway.sql ./cgapBIOCARTA.tab
+
+    cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
+    hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
+			    
 
 exit # BRACKET
 

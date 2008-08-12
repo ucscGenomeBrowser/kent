@@ -12577,112 +12577,6 @@ exit ${RET}
     #	combine into a single result
     pslSort dirs raw.psl tmp psl/*/*
 
-    #######################################################################
-    # and the last bunch are clones that nothing is known about and they have
-    # trouble with the process
-    cd /san/sanvol1/scratch/hg18/coverage.2006-10-23
-    cat << '_EOF_' > splitLastOnes.sh
-#!/bin/sh
-
-D=lastOnesSplit
-export D
-
-mkdir -p ${D}
-mkdir -p ${D}/pieces
-mkdir -p ${D}/onePiece
-
-find ../coverage/lastOnes/sequence -type f | while read F
-do
-    BN=`basename "${F}"`
-    outSplit="${D}/pieces/${BN}"
-    outNotSplit="${D}/onePiece/${BN}"
-    Ncount=`faSize "${F}" | sed -e "s/N's.*//; s/.* bases (//;"`
-    if [ "${Ncount}" -gt 99 ]; then
-        echo "gapSplit -minGap=100 ${F} ${outSplit}"
-        gapSplit -minGap=100 ${F} stdout | gzip > ${outSplit}
-        faSize "${F}"
-        faSize "${outSplit}"
-    else
-        echo "# N's: ${Ncount} - ${BN}"
-        cp -p ${F} ${outNotSplit}
-    fi
-done
-'_EOF_'
-# << happy emacs
-    chmod +x splitLastOnes.sh
-    ./splitLastOnes.sh > last.out 2>&1
-    cd lastOnesSplit
-    find ./pieces/*.fa.gz ./onePiece/*.fa.gz | while read F
-do
-    zcat "${F}"
-done | gzip > all.fa.gz
-    mkdir split
-    faSplit about all.fa.gz 1000000 split/f_
-    cd split
-    gzip f_*.fa
-
-    mkdir /san/sanvol1/scratch/hg18/coverage.2006-10-23/runLastOnes
-    cd /san/sanvol1/scratch/hg18/coverage.2006-10-23/runLastOnes
-    ls ../lastOnesSplit/split > query.list
-    ls -1S /san/sanvol1/scratch/hg18/coverage/maskedContigs/?/* \
-	| sed -e "s#/san/sanvol1/scratch/hg18/coverage/maskedContigs/##" \
-	> contig.list
-    ls -1S /san/sanvol1/scratch/hg18/coverage/maskedContigs/??/* \
-	| sed -e "s#/san/sanvol1/scratch/hg18/coverage/maskedContigs/##" \
-	>> contig.list
-    ls -1S /san/sanvol1/scratch/hg18/coverage/maskedContigs/?_*/* \
-	| sed -e "s#/san/sanvol1/scratch/hg18/coverage/maskedContigs/##" \
-	>> contig.list
-    ls -1S /san/sanvol1/scratch/hg18/coverage/maskedContigs/??_*/* \
-	| sed -e "s#/san/sanvol1/scratch/hg18/coverage/maskedContigs/##" \
-	>> contig.list
-
-    cat << '_EOF_' > template
-#LOOP
-./runBlat.csh $(path1) $(root2) {check out line+ psl/$(root1)/$(root2).psl}
-#ENDLOOP
-'_EOF_'
-# << happy emacs
-
-    cat << '_EOF_' > runBlat.csh
-#!/bin/csh -fe
-set target = /san/sanvol1/scratch/hg18/coverage/maskedContigs/$1.fa.gz
-set query = /san/sanvol1/scratch/hg18/coverage.2006-10-23/lastOnesSplit/split/$2.fa.gz
-set contig = $target:t:r:r
-set targetPiece = $query:t:r:r
-set result = psl/$contig/$targetPiece.psl
-set scrTmp = "/scratch/tmp/$contig/$targetPiece"
-set ooc = /san/sanvol1/scratch/hg18/coverage/contigOoc/$contig.10.ooc
-mkdir -p "$scrTmp"
-zcat $target > $scrTmp/$contig.fa
-zcat $query > $scrTmp/$targetPiece.fa
-cp -p $ooc $scrTmp/10.ooc
-pushd $scrTmp
-pwd
-ls -l
-blat -minIdentity=98 -fastMap -tileSize=10 -t=dna -q=dna -ooc=10.ooc $contig.fa $targetPiece.fa $targetPiece.psl
-popd
-mkdir -p psl/$contig
-cp -p $scrTmp/$targetPiece.psl $result
-rm $scrTmp/*
-rmdir $scrTmp
-rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
-'_EOF_'
-# << happy emacs
-
-    gensub2 contig.list query.list template jobList
-    para create jobList
-    para try; para check; para push ... etc ...
-    para time
-# Completed: 709470 of 709506 jobs
-# Crashed: 36 jobs
-# CPU time in finished jobs:   31417237s  523620.61m  8727.01h  363.63d  0.996 y
-# IO & Wait Time:               2093806s   34896.77m   581.61h   24.23d  0.066 y
-# Average job time:                  47s       0.79m     0.01h    0.00d
-# Longest finished job:           55643s     927.38m    15.46h    0.64d
-    #	Some of these jobs just will not complete.  They are huge
-    #	scaffolds from the Celera assembly and they do not align very well at
-    #	all to the contigs.
 
     #	combine into a single result
     time pslSort dirs raw.psl tmp psl/*
@@ -16002,6 +15896,26 @@ ldHgGene -predTab hg18 acescan acescan.hg18.gp
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab hg18 cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 			    
+##############################################################################
+# UPDATE CGAP TABLES (DONE, 8/05/08, JK)
+
+    cd /cluster/data/hg18/bed/ucsc.11
+    mkdir cgap
+    cd cgap
+    
+    wget --timestamping -O Hs_GeneData.dat "ftp://ftp1.nci.nih.gov/pub/CGAP/Hs_GeneData.dat"
+    hgCGAP Hs_GeneData.dat
+        
+    cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab|sort -u > cgapAlias.tab
+    hgLoadSqlTab hg18 cgapAlias ~/kent/src/hg/lib/cgapAlias.sql ./cgapAlias.tab
+
+    hgLoadSqlTab hg18 cgapBiocPathway ~/kent/src/hg/lib/cgapBiocPathway.sql ./cgapBIOCARTA.tab
+
+    cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
+    hgLoadSqlTab hg18 cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
+			    
+
+
 
 ##############################################################################
 ## BLASTZ HUMAN HG18 (DONE - 2007-03-26 - Hiram)
@@ -16141,6 +16055,14 @@ TMPDIR=/scratch/tmp
 
     hgLoadSqlTab hg18 keggPathway ~/src/hg/lib/keggPathway.sql ./keggPathway.tab
     hgLoadSqlTab hg18 keggMapDesc ~/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
+
+##############################################################################
+# REATTACH KEGG TO KNOWN GENES.  (DONE, 8/12/08, JK)
+
+    mkdir -p /cluster/data/hg18/bed/ucsc.11/kegg
+    cd /cluster/data/hg18/bed/ucsc.11/kegg
+    kgAttachKegg hg18 ../../ucsc.10/kegg/keggList.tab keggPathway.tab
+    hgLoadSqlTab hg18 keggPathway ~/src/hg/lib/keggPathway.sql ./keggPathway.tab
 
 ##############################################################################
 # UPDATE BIOCYCTABLES NEEDED BY hgGene (DONE 3/27/07 Fan)
