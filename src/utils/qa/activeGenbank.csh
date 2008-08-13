@@ -8,7 +8,7 @@
 ################################
 
 # these are assemblies that are too old for nightly genbank updates
-set exceptions='ce1|hg15|rn2'
+set exceptions='ce1|hg15|rn2|mm5|mm6'
 
 # usage statement
 if ( $argv != go ) then
