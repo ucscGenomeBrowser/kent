@@ -647,18 +647,6 @@ hgLoadSqlTab $tempDb kgProtAlias ~/kent/src/hg/lib/kgProtAlias.sql ucscGenes.pro
 # Load up kgProtMap2 table that says where exons are in terms of CDS
 hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 
-# Make full text index.  Takes a minute or so.  After this the genome browser
-# tracks display will work including the position search.  The genes details
-# page, gene sorter, and proteome browser still need more tables.
-mkdir index
-
-mkdir /gbdb/$tempDb
-cd index
-hgKgGetText $tempDb knownGene.text -summaryTable=$db.refSeqSummary
-ixIxx knownGene.text knownGene.ix knownGene.ixx
-ln -s $dir/index/knownGene.ix  /gbdb/$tempDb/knownGene.ix
-ln -s $dir/index/knownGene.ixx /gbdb/$tempDb/knownGene.ixx
-
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
 hgMapToGene $db -tempDb=$tempDb allenBrainAli -type=psl knownGene knownToAllenBrain
 hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl
@@ -816,8 +804,8 @@ cd $dir
 mkdir -p rnaStruct
 cd rnaStruct
 mkdir -p utr3/split utr5/split utr3/fold utr5/fold
-utrFa $tempDb knownGene utr3 utr3/utr.fa
-utrFa $tempDb knownGene utr5 utr5/utr.fa
+utrFa $db knownGene utr3 utr3/utr.fa
+utrFa $db knownGene utr5 utr5/utr.fa
 
 # Split up files and make files that define job.
 faSplit sequence utr3/utr.fa 10000 utr3/split/s
@@ -1019,6 +1007,11 @@ hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd
     kgAttachKegg $db $keggList keggPathway.tab
     hgLoadSqlTab $tempDb keggPathway ~/src/hg/lib/keggPathway.sql ./keggPathway.tab
 
+# Make spMrna table (useful still?)
+   cd $dir
+   hgsql $db -N -e "select spDisplayID,kgID from kgXref where spDisplayID != ''" > spMrna.tab;
+   hgLoadSqlTab $tempDb spMrna ~/kent/src/hg/lib/spMrna.sql spMrna.tab
+
 # Do CGAP tables 
 
     mkdir $dir/cgap
@@ -1060,3 +1053,33 @@ sudo ln -s /var/lib/mysql/$spDb /var/lib/mysql/uniProt
 sudo rm /var/lib/mysql/proteome
 sudo ln -s /var/lib/mysql/$pbDb /var/lib/mysql/proteome
 hgsqladmin flush-tables
+
+# Make full text index.  Takes a minute or so.  After this the genome browser
+# tracks display will work including the position search.  The genes details
+# page, gene sorter, and proteome browser still need more tables.
+mkdir $dir/index
+cd $dir/index
+hgKgGetText $db knownGene.text 
+ixIxx knownGene.text knownGene.ix knownGene.ixx
+rm -f /gbdb/$db/knownGene.ix /gbdb/$db/knownGene.ixx
+ln -s $dir/index/knownGene.ix  /gbdb/$db/knownGene.ix
+ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
+
+# Build known genes list for google
+ make knownGeneLists.html ${db}GeneList.html mm5GeneList.html rm3GeneList.html
+
+    cd /cluster/data/$db/bed
+    rm -rf knownGeneList/$db
+
+# Run hgKnownGeneList to generate the tree of HTML pages
+# under ./knownGeneList/hg18 
+
+    hgKnownGeneList $db
+
+# copy over to /usr/local/apache/htdocs
+    
+    rm -rf /usr/local/apache/htdocs/knownGeneList/$db
+    mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
+    cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
+
+#
