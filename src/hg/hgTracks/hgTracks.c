@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1500 2008/08/05 22:20:58 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1501 2008/08/13 01:40:20 galt Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -802,6 +802,7 @@ tg->exonArrows = TRUE;
 /* better to create the tdb first, then use trackFromTrackDb */
 AllocVar(tdb);
 tdb->tableName = cloneString(tg->mapName);
+tdb->visibility = tg->visibility;
 tdb->shortLabel = cloneString(tg->shortLabel);
 tdb->longLabel = cloneString(tg->longLabel);
 tdb->grp = cloneString(tg->groupName);
@@ -961,6 +962,7 @@ tg->defaultGroupName = cloneString(tg->groupName);
 
 AllocVar(tdb);
 tdb->tableName = cloneString(tg->mapName);
+tdb->visibility = tg->visibility;
 tdb->shortLabel = cloneString(tg->shortLabel);
 tdb->longLabel = cloneString(tg->longLabel);
 tdb->grp = cloneString(tg->groupName);
