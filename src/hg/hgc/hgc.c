@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1452 2008/08/13 21:42:39 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1453 2008/08/13 21:50:08 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19967,8 +19967,8 @@ if (isNotEmpty(ncbiAccXref) && hTableExists(ncbiAccXref))
     char query[512];
     /* In kiddEichlerDiscG248, all clone names have a WIBR2-\w+_ prefix
      * before the G248\w+ clone name given in the files used to make this
-     * table -- skip that part if necessary.  All names' ,.* suffixes
-     * need to be stripped. */
+     * table, e.g. WIBR2-1962P18_G248P85919H9,transchrm_chr4 -- skip that
+     * prefix.  Then strip all kiddEichlerDisc* names' ,.* suffixes. */
     if (startsWith("WIBR2-", cloneName) && postUnderscore != NULL)
 	cloneName = postUnderscore+1;
     chopPrefixAt(cloneName, ',');
