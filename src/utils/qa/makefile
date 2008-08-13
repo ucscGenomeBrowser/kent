@@ -2,6 +2,7 @@ include ../../inc/common.mk
 # ${SCRIPTS} is /cluster/bin/scripts (defined in kent/src/inc/common.mk)
 
 install:
+	cp -p --remove-destination activeGenbank.csh       ${SCRIPTS}
 	cp -p --remove-destination allowTraffic.csh        ${SCRIPTS}
 	cp -p --remove-destination backupCentral.csh       ${SCRIPTS}
 	cp -p --remove-destination bigPush.csh             ${SCRIPTS}
