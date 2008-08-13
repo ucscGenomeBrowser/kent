@@ -1,6 +1,7 @@
 /* hgExpDistance_fm - Create table that measures expression distance between 
    pairs. Multi-threaded version that uses a mutex to control file handle
    access. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -22,7 +23,7 @@ pthread_mutex_t mutexfilehandle;
 int numThreads;
 int dotEvery = 0;
 
-static char const rcsid[] = "$Id: hgExpDistance_fm.c,v 1.1 2008/08/11 16:26:31 lslater Exp $";
+static char const rcsid[] = "$Id: hgExpDistance_fm.c,v 1.2 2008/08/13 22:03:28 lslater Exp $";
 
 void usage()
 /* Explain usage and exit. */
