@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.370 2008/08/07 17:13:03 fanhsu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.371 2008/08/13 16:03:51 braney Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1071,6 +1071,18 @@ else
     {
     safef(retNibName, HDB_MAX_PATH_STRING, "%s/%s.2bit", 
 	hDbDbNibPath(database), database);
+    if (!fileExists(retNibName))
+	{
+	/* if 2bit file isn't there, try up one directory */
+	safef(retNibName, HDB_MAX_PATH_STRING, "%s/../%s.2bit", 
+	    hDbDbNibPath(database), database);
+	if (!fileExists(retNibName))
+	    {
+	    /* still no 2bit, let's just try to find a nib */
+	    safef(retNibName, HDB_MAX_PATH_STRING, "%s/%s.nib", 
+		hDbDbNibPath(database), chromName);
+	    }
+	}
     }
 }
 
