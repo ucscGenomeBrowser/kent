@@ -48,6 +48,7 @@ graph
 has an edge for each exon or intron, and a vertex for each splice site, start, 
 and end.
 Each RNA that contributes to an edge is kept as evidence for that edge.
+Gene models from the Consensus CDS project (CCDS) are also added to the graph.
 <LI>A similar splicing graph is created in the mouse, based on mouse RNA and 
 ESTs. If
 the mouse graph has an edge that is orthologous to an edge in the human graph, 
@@ -69,7 +70,8 @@ presence of a Kozak consensus sequence at the start codon, and the length of
 the orthologous predicted protein in other species.
 As negative evidence it considers nonsense-mediated decay and start codons in 
 any frame upstream of the predicted start codon. For RefSeq transcripts 
-the RefSeq protein prediction is used.
+the RefSeq protein prediction is used directly instead of this procedure.  For CCDS proteins 
+the CCDS protein is used directly.
 <LI>The corresponding UniProt protein is found, if any.
 <LI>The transcript is assigned a permanent "uc" accession.
 </OL>
