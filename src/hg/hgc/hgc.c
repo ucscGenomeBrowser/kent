@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1451 2008/08/12 22:18:09 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1452 2008/08/13 21:42:39 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -19965,6 +19965,10 @@ if (isNotEmpty(ncbiAccXref) && hTableExists(ncbiAccXref))
     char *cloneName = cloneString(item);
     char *postUnderscore = strchr(cloneName, '_');
     char query[512];
+    /* In kiddEichlerDiscG248, all clone names have a WIBR2-\w+_ prefix
+     * before the G248\w+ clone name given in the files used to make this
+     * table -- skip that part if necessary.  All names' ,.* suffixes
+     * need to be stripped. */
     if (startsWith("WIBR2-", cloneName) && postUnderscore != NULL)
 	cloneName = postUnderscore+1;
     chopPrefixAt(cloneName, ',');
@@ -19979,6 +19983,8 @@ if (isNotEmpty(ncbiAccXref) && hTableExists(ncbiAccXref))
 		   "<A HREF=\"%s\" TARGET=_BLANK>%s</A><BR>\n",
 		   getEntrezNucleotideUrl(row[0]), row[0]);
 	char *endUrlFormat = trackDbSetting(tdb, "pairedEndUrlFormat");
+	/* Truncate cloneName to get library name: ABC* are followed by _,
+	 * G248 are not. */
 	char *libId = cloneName;
 	if (startsWith("G248", libId))
 	    libId[strlen("G248")] = '\0';
