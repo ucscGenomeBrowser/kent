@@ -978,7 +978,11 @@
 	      <A HREF="http://genome.ucsc.edu/FAQ/FAQformat#format4">GTF</A> or 
 	      <A HREF="http://genome.ucsc.edu/FAQ/FAQformat#format1">BED</A> conventions,
 	      select the corresponding option in the <TT><B>output 
-	      format</B></TT> list. If you select BED format, you will be
+	      format</B></TT> list. Note that when you select GTF, the table browser
+	      translates the output into this format. For tables that lack feature
+	      designations, all records are arbitrarily assigned the feature "exon" to
+	      conform to GTF specifications.  
+	      If you select BED format, you will be
 	      presented with the option to include and configure a custom track
 	      header and options for organizing the data. When you have finished
 	      the configuration -- or to accept the default options -- click
