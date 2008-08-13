@@ -9,6 +9,27 @@
         priority 10.3
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
+# other entries for this supertrack are up-level
+track encodeGencodeRaceFrags
+superTrack encodeGencodeSuper
+compositeTrack on
+shortLabel Gencode RACEfrags
+longLabel 5' RACE-Array experiments on Gencode loci
+dataVersion Mar 2007
+group encodeGenes
+priority 10.5
+chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type genePred
+autoTranslate 0
+origAssembly hg17
+
+    track encodeGencodeRaceFragsPrimer
+    subTrack encodeGencodeRaceFrags
+    shortLabel RACEfrags Primer
+    longLabel Gencode 5' RACE primer
+    priority 1
+
 # supertrack for EGASP
         track encodeEgaspSuper
         superTrack on
@@ -18,6 +39,30 @@
         group encodeGenes
         priority 12.0
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
+# other entries for this supertrack are up-level
+track encodeEgaspFull
+superTrack encodeEgaspSuper dense
+compositeTrack on
+shortLabel EGASP Full
+longLabel ENCODE Gene Prediction Workshop (EGASP) All ENCODE Regions
+group encodeGenes
+priority 12.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type genePred
+cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
+origAssembly hg17
+dataVersion ENCODE June 2005 Freeze
+
+    track encodeEgaspFullAceview
+    subTrack encodeEgaspFull
+    shortLabel AceView
+    longLabel AceView Gene Predictions
+    color 22,150,20
+    priority 1
 
 track encodeEvoFold
 shortLabel UCSC EvoFold

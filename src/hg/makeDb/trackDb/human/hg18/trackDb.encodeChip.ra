@@ -9,6 +9,29 @@
         priority 43.0
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
+# other entries for this supertrack are up-level
+track encodeAffyChIpHl60SitesStrict
+superTrack encodeAffyChipSuper dense
+shortLabel Affy Strict Sites
+longLabel Affymetrix ChIP-chip (HL-60 and ME-180 cells) Strict Sites
+compositeTrack on
+subGroup1 factor Factor H3K9K14ac2=H3K9K14ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
+subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
+group encodeChip
+priority 43.9
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type bed 3 .
+origAssembly hg17
+dataVersion ENCODE Oct 2005 Freeze
+
+    track encodeAffyChIpHl60SitesStrictH3K9K14DHr00
+    subTrack encodeAffyChIpHl60SitesStrict
+    subGroups factor=H3K9K14ac2 time=0h
+    shortLabel Affy H3K9ac2 0h
+    longLabel Affymetrix ChIP-chip (H3K9K14ac2, retinoic acid-treated HL-60, 0hrs) Strict Sites
+    color 225,0,0
+    priority 1
+
 #track encodeGisChipPetAll
 #compositeTrack on
 #shortLabel GIS ChIP-PET
@@ -704,6 +727,34 @@ origAssembly hg17
         group encodeChip
         priority 55.0
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
+# other entries for this supertrack are up-level
+track encodeStanfordChip
+superTrack encodeStanfordChipSuper dense
+compositeTrack on
+visibility full
+shortLabel Stanf ChIP
+longLabel Stanford ChIP-chip (HCT116, Jurkat, K562 cells;  Sp1, Sp3 ChIP)
+group encodeChip
+priority 55.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+color 120,0,20
+altColor 150,0,25
+maxHeightPixels 128:16:16
+autoScale off
+minLimit 0
+maxLimit 114
+viewLimits 0:10
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+
+    track encodeStanfordChipHCT116Sp1
+    subTrack encodeStanfordChip
+    shortLabel Stan HCT116 Sp1
+    longLabel Stanford ChIP-chip (HCT116 cells, Sp1 ChIP)
+    priority 1
 
 # Davis supertrack
 
