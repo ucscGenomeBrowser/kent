@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.38 2008/07/02 18:56:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.39 2008/08/13 20:30:35 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -704,7 +704,7 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word;
 while (lineFileNext(lf, &line, NULL))
     {
-    while ((word = nextWord(&line)) != NULL)
+    while ((word = nextQuotedWord(&line)) != NULL)
 	{
 	touppers(word);
         hashAdd(hash, word, NULL);
