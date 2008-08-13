@@ -115,6 +115,8 @@ if (optionExists("initialLoad"))
     options.flags |= DBLOAD_INITIAL|DBLOAD_GO_FASTER;
 if (optionExists("allowLargeDeletes"))
     options.flags |= DBLOAD_LARGE_DELETES;
+if (optionExists("byPassGbLoaded"))
+    options.flags |= DBLOAD_BYPASS_GBLOADED;
 if (optionExists("extFileUpdate"))
     {
     options.flags |= DBLOAD_EXT_FILE_UPDATE;

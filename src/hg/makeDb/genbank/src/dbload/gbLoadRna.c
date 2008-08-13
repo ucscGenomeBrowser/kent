@@ -32,7 +32,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.37 2008/03/29 04:46:51 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.38 2008/08/13 02:37:50 genbank Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -52,6 +52,7 @@ static struct optionSpec optionSpecs[] = {
     {"initialLoad", OPTION_BOOLEAN},
     {"maxShrinkage", OPTION_FLOAT},
     {"allowLargeDeletes", OPTION_BOOLEAN},
+    {"byPassGbLoaded", OPTION_BOOLEAN},
     {"gbdbGenBank", OPTION_STRING},
     {"forceIgnoreDelete", OPTION_BOOLEAN},
     {"rebuildDerived", OPTION_BOOLEAN},
