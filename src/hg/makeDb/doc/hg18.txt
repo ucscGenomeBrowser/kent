@@ -23212,3 +23212,42 @@ cp /cluster/data/mm9/bed/multiz30way/mm9.guess.30way.nh .
 # get mammal tree from Michele Clamp (clamp.nh)
 # that I re-rooted
 
+#######################################################
+# UW nucleosome occupancy predictions  (2008-08-13 markd)
+# contact  William Stafford Noble <noble@gs.washington.edu>
+    # obtain data:
+    mkdir -p /cluster/data/hg18/bed/uwNucOcc
+    cd /cluster/data/hg18/bed/uwNucOcc
+    http://USER:PASS@noble.gs.washington.edu/~noble/proj/dennis/results/2008-08-11/ucsc.tgz
+    mkdir wig
+    cd wig
+    tar -zxf ../ucsc.tgz
+    cd ..
+    rm  ucsc.tgz
+
+    # encode and load wiggles
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/uwNucOcc 
+    zcat ../wig/a375/a375.chr*.wig.gz|wigEncode stdin uwNucOccA375.wig uwNucOccA375.wib
+    # Converted stdin, upper limit 9.88, lower limit -5.19
+
+    zcat ../wig/dennis/dennis.chr*.wig.gz|wigEncode stdin uwNucOccDennis.wig uwNucOccDennis.wib
+    # Converted stdin, upper limit 8.26, lower limit -9.68
+
+    zcat ../wig/mec/mec.chr*.wig.gz|wigEncode stdin uwNucOccMec.wig uwNucOccMec.wib
+    # Converted stdin, upper limit 5.05, lower limit -9.86
+
+    # link-n-load
+    ssh hgwdev
+    cd cluster/data/hg18/bed/uwNucOcc/wib
+    ln -s /cluster/data/hg18/bed/uwNucOcc/wib/uwNucOccA375.wib /gbdb/hg18/wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 uwNucOccA375 uwNucOccA375.wig
+
+    ln -s /cluster/data/hg18/bed/uwNucOcc/wib/uwNucOccDennis.wib /gbdb/hg18/wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 uwNucOccDennis uwNucOccDennis.wig
+
+    ln -s /cluster/data/hg18/bed/uwNucOcc/wib/uwNucOccMec.wib /gbdb/hg18/wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 uwNucOccMec uwNucOccMec.wig
+
+    rm wiggle.tab
+#######################################################
