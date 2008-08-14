@@ -1,0 +1,67 @@
+<h1>Description</h1>
+
+<p>
+Inside the nucleus, DNA is wrapped into a complex molecular structure
+called chromatin, whose fundamental unit is approximately 150bp of DNA
+organized around the eight-histone protein complex known as the
+nucleosome.  This track contains predicted nucleosome occupancy scores
+produced by a model that was trained  using data from the MEC cell line
+from Ozsolak et al. (2007).  This cell line was prepared with strong
+MNase digestion.  This model excels at recognizing regions of high
+accessibility to MNase cleavage; i.e., positions that are frequently
+nucleosome-free.
+
+
+<h1>Display Conventions and Configuration</h1>
+
+<p>
+The output of the SVM is a unitless discriminant score.  In the
+browser, the score of a 50-mer is assigned to its 26th base.
+Canonically, a score of 0 indicates an uncertain assignment; a score
+of 1.0 corresponds to a confident prediction for being in the positive
+class (i.e., a position of frequent nucleosome occupancy), and a score
+of -1.0 corresponds to a confident prediction for being in the
+negative class.</p>
+
+<h1>Methods</h1>
+
+<p>For a given microarray experiment, we identify the 1000 50bp probes
+with the highest log intensity ratios.  These comprise our positive
+training samples.  In a similar fashion, we generate negative training
+samples with the lowest log intensity ratios.  Each 50-mer in the
+training set is converted into a 2772-element vector of k-mer
+frequencies for <i>k</i>=1 up to 6 (collapsing reverse complements).
+A linear SVM is then trained to discriminate between the two classes.
+The SVM regularization parameter is selected by evaluating the entire
+regularization path on a held-out portion of the training data set.
+After training, each 50-mer in the human genome is converted to the
+2772-element representation and scored using the trained SVM.</p>
+
+<p>
+Detailed methods are given in Gupta <i>et al.</i> (2008), and
+supplementary data is available
+<a href="http://noble.gs.washington.edu/proj/nucsvm">here</a>.</p>
+
+<h1>Credits</h1>
+
+<p>
+This track was produced at the University of Washington by Shobhit
+Gupta (and William Stafford Noble (noble@gs.washington.edu).</p>
+
+<h1>References</h1>
+
+<p>
+F Ozsolak and JS Song and XS Liu and DE Fisher.  "High-throughput
+mapping of the chromatin structure of human promoters."  <i>Nature
+Biotechnology</i>.  25(2):244-248, 2007.</p>
+
+<p>
+JH Dennis, H-Y Fan, SR Reynolds, G Yuan, J Meldrim, DJ Richter, DG
+Peterson, OJ Rando, WS Noble and RE Kingston.  "Independent and
+complementary methods for large-scale structural analysis of mammalian
+chromatin."  <i>Genome Research.</i> 17(6):928-939, 2007.</p>
+
+<p>
+S Gupta, J Dennis, RE Thurman, R Kingston, JA Stamatoyannopoulos and
+WS Noble.  "Predicting human nucleosome occupancy from primary
+sequence."  <i>PLoS Computational Biology</i>.  To appear.</p>

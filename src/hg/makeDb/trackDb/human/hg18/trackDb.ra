@@ -2902,3 +2902,38 @@ speciesOrder homPan20 panTro2 homIni20 ponAbe2
 # speciesOrder mouse/human chimp/human hg17 panTro1 rheMac1 oryCun1 rn3 mm6 bosTau1 canFam1 dasNov1 tenrec loxAfr1 
 # speciesOrder euArc primate ape hg18 panTro2 rheMac2 rn4 mm8 rodent oryCun1 glire bosTau2 canFam2 laurasia dasNov1 nonAfro echTel1 loxAfr1 afrothere eutherian
 speciesCodonDefault hg18
+
+track uwNucOcc
+superTrack on
+shortLabel Nucleosome Occupancy
+longLabel UW Nucleosome Occupancy
+group regulation
+priority 2200.1
+
+    track uwNucOccA375
+    superTrack uwNucOcc full
+    shortLabel A375
+    longLabel UW Nucleosome Occupancy - A375
+    group regulation
+    priority 2200.2
+    visibility hide
+    type wig
+
+    track uwNucOccDennis
+    superTrack uwNucOcc full
+    shortLabel Dennis
+    longLabel UW Nucleosome Occupancy - Dennis
+    group regulation
+    priority 2200.3
+    visibility hide
+    type wig
+
+    track uwNucOccMec
+    superTrack uwNucOcc full
+    shortLabel MEC
+    longLabel UW Nucleosome Occupancy - MEC
+    group regulation
+    priority 2200.4
+    visibility hide
+    type wig
+
