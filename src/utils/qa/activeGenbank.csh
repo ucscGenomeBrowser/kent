@@ -28,7 +28,7 @@ endif
   endif
 
 # this is the list of DBs on the RR getting genbank updates
-cat ~/kent/src/hg/makeDb/genbank/etc/rr.dbs | sort | sed -e "s/^#.*//g" \
+cat ~/kent/src/hg/makeDb/genbank/etc/rr.dbs | sort | sed -e '/^#/ d' \
 > XXgenbankDbsXX
 
 # this is the list of active DBs on the RR
