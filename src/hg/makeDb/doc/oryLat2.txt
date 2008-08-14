@@ -1,0 +1,285 @@
+# for emacs: -*- mode: sh; -*-
+
+#	The UCSC build oryLat1 had a broken chrUn sequence
+#	It had been put together incorrectly here.
+#	This oryLat2 build is for the same sequence as was in oryLat1
+#	but re-worked to fix our chrUn so we can make it correspond
+#	to the Ensembl sequence.  
+
+# This file describes browser build for the Medaka
+# genome, Oryzias latipes, October 2005, MEDAKA1 from
+#	Institute of Genetics (NIG) and the University of Tokyo
+#	NIG: http://dolphin.lab.nig.ac.jp/medaka/
+#	UTGB: http://medaka.utgenome.org/o
+#	Data release policy: http://medaka.utgenome.org/#policy
+#	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
+#
+#	"$Id: oryLat2.txt,v 1.1 2008/08/14 22:48:16 hiram Exp $"
+#
+###########################################################################
+
+    ssh kkstore04
+    mkdir /cluster/store9/oryLat2
+    ln -s /cluster/store9/oryLat2 /cluster/data/oryLat2
+    mkdir /cluster/data/oryLat2/download
+
+#	The following note was received from Bronwen Aken at Ensembl
+#	describing the AGP files they used in their assembly:
+
+#    The medaka assembly that we've used consists of:
+#    - contigs as the basic unit of assembly
+#    - scaffolds that are made up of contigs
+#    - ultracontigs that are made up of scaffolds but can't be placed on a 
+#    chromosome
+#    - chromsomes that are made up of scaffolds
+#    
+#    I have attached 4 gzipped AGP files and they correspond to the above 
+#    four levels of assembly. The first three files were given to us by 
+#    University of Tokyo. The assembly shown in these files, called 
+#    HdrR_200510, was not submitted to a public repository. The next 
+#    assembly, version 1.0, is the one with modified gap sizes. Version 1.0 
+#    is the assembly used by UCSC and it has been submitted to Genbank/DDBJ/EMBL
+#    
+#    
+#    The files are:
+#    (i) 200510.chr.agp.txt.gz
+#    This file specifies where scaffolds are found on a chromosome and how 
+#    big the gap is between each scaffold
+#    
+#    (ii) 200510.ultracontig.agp.txt.gz
+#    This file specifies where scaffolds are found on an ultracontig and how 
+#    big the gap is between each scaffold
+#    
+#    (iii) 200510.scaffold.agp.txt.gz
+#    This file specifies where contigs are found on a scaffold and how big 
+#    the gap is between each contig
+#    
+#    (iv) contig_fake_scaffolds.agp.txt.gz
+#    There were 92 contigs that did not occur in any of the above agp files. 
+#    We made our own agp file for them, to put them onto their own scaffolds. 
+#    This was done because Ensembl defines 'toplevel' sequence from which we 
+#    do our analyses. (In the toplevel sequence for a genome, every contig 
+#    must occur exactly once.)
+#    
+#    Hope that helps,
+#    Bronwen
+#
+#	These four agp files were extracted from email and dropped into:
+#	/cluster/data/oryLat2/download
+
+	wget --timestamping \
+"ftp://ftp.ensembl.org/pub/release-50/fasta/oryzias_latipes/dna/Oryzias_latipes.MEDAKA1.50.dna.toplevel.fa.gz" \
+-O ensembl.MEDAKA1.50.dna.toplevel.fa.gz
+
+	wget --timestamping \
+"ftp://ftp.ensembl.org/pub/release-50/fasta/oryzias_latipes/dna/Oryzias_latipes.MEDAKA1.50.dna.nonchromosomal.fa.gz" \
+-O ensembl.MEDAKA1.50.dna.nonchromosomal.fa.gz
+
+for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
+do
+	wget --timestamping \
+"ftp://ftp.ensembl.org/pub/release-50/fasta/oryzias_latipes/dna/Oryzias_latipes.MEDAKA1.50.dna.chromosome.$C.fa.gz" \
+-O ensembl.MEDAKA1.50.dna.chromosome.$C.fa.gz
+	echo  ensembl.MEDAKA1.50.dna.chromosome.$C.fa.gz
+done
+
+#  Taking a look at those AGP files from Bronwen and these fasta files.
+#	Determined that all of the DNA is actually in the single file
+#	ensembl.MEDAKA1.50.dna.toplevel.fa.gz
+#	And a combination of bits from the four AGP files gets a complete
+#	AGP file to match this fasta file,
+#	all of: 200510.chr.agp.txt.gz
+#	Then, 79 sequences from: 200510.ultracontig.agp.txt.gz
+#	Then, 7001 sequences from: 200510.scaffold.agp.txt.gz
+#	and the entire contents of: contig_fake_scaffolds.agp.txt.gz
+#	The specifications from 200510.chr.agp.txt.gz had gaps at the
+#	ends of most chromosomes but there were no N's at that location
+#	within the fasta file, so, edit the resulting conglomerate AGP
+#	file to remove those gaps at the ends.  Can now pass the
+#	test for checkAgpAndFa.  It would be tough to create a chrUn
+#	sequence, so, let's try it without
+
+##############################################################################
+    ssh hgwdev
+    cd /cluster/data/oryLat2
+    #	the config.ra script pretty much specifies everything
+    cat << '_EOF_' >  oryLat2.ra
+db oryLat2
+scientificName Oryzias latipes
+assemblyDate Oct. 2005
+assemblyLabel MEDAKA1
+#       Just above oryLat1
+orderKey 474
+#       NC_004387
+mitoAcc 25057156
+fastaFiles /cluster/data/oryLat2/ucsc/ucsc.source.fa
+dbDbSpeciesDir medaka
+agpFiles /cluster/data/oryLat2/ucsc/chromUltraScaff.agp
+commonName Medaka
+clade Vertebrate
+genomeCladePriority 105
+'_EOF_'
+    # << happy emacs
+
+    makeGenomeDb.pl oryLat2.ra -stop=agp -workhorse=hgwdev
+    makeGenomeDb.pl oryLat2.ra -continue=db -workhorse=hgwdev
+    #	That worked just fine.
+
+###############################################################################
+#  Quick check to see if the Ensembl genes will now map properly to
+#	this sequence:
+#  oryLat2 - Medaka - Ensembl Genes version 50  (DONE - 2008-08-12 - hiram)
+    ssh kkstore04
+    cd /cluster/data/oryLat2
+    cat << '_EOF_' > oryLat2.ensGene.ra
+# required db variable
+db oryLat2
+# optional nameTranslation, the sed command that will transform
+# Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^MT/chrM/"
+# ignore 2,687 genes that haven't lifted properly yet
+# skipInvalid yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=50 oryLat2.ensGene.ra
+    ssh hgwdev
+    cd /cluster/data/oryLat2/bed/ensGene.50
+    featureBits oryLat2 ensGene
+    # 32418913 bases of 700386597 (4.629%) in intersection
+
+#########################################################################
+# REPEATMASKER (DONE - 2008-08-12 - Hiram)
+    ssh kkstore04
+    screen	#	use a screen to manage this long running job
+    mkdir /cluster/data/oryLat2/bed/repeatMasker
+    cd /cluster/data/oryLat2/bed/repeatMasker
+    # Run -debug to create the dir structure and preview the scripts:
+    time nice -n +19 doRepeatMasker.pl oryLat2 -workhorse=kolossus \
+	-buildDir=/cluster/data/oryLat2/bed/repeatMasker \
+	-bigClusterHub=pk -smallClusterHub=memk > do.log 2>&1
+    #	RM version from the log:
+    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.1 2008/08/14 22:48:16 hiram Exp $
+    #	CC   RELEASE 20080801
+    #   about 40 minutes run time
+
+    # Calculate coverage to compare with other masking efforts
+    featureBits oryLat2 rmsk
+    #	23161223 bases of 700386597 (3.307%) in intersection
+
+#########################################################################
+# SIMPLE REPEATS (TRF) (DONE 2008-08-12 - Hiram)
+    ssh kolossus
+    screen	#	use a screen to manage this long running job
+    mkdir /cluster/data/oryLat2/bed/simpleRepeat
+    cd /cluster/data/oryLat2/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl \
+	-buildDir=/cluster/data/oryLat2/bed/simpleRepeat \
+	oryLat2 -smallClusterHub=memk -workhorse=kolossus > do.log 2>&1 &
+    #	real    19m50.401s
+
+    cat fb.simpleRepeat
+    #	13229585 bases of 700386597 (1.889%) in intersectio
+
+#########################################################################
+# windowMasker (DONE 2008-08-12,14 - Hiram)
+    ssh kolossus
+    screen	#	use a screen to manage this long running job
+    mkdir /cluster/data/oryLat2/bed/windowMasker
+    cd /cluster/data/oryLat2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl \
+	-buildDir=/cluster/data/oryLat2/bed/windowMasker \
+	-workhorse=kolossus oryLat2 > do.log 2>&1 &
+    #	real    99m18.161s
+
+    twoBitToFa oryLat2.wmsk.sdust.2bit stdout | faSize stdin
+    #	869000216 bases (168613619 N's 700386597 real 468915765 upper
+    #	231470832 lower) in 7189 sequences in 1 files
+    #	%26.64 masked total, %33.05 masked real
+
+    #	load this initial data to get ready to clean it
+    ssh hgwdev
+    cd /cluster/data/oryLat2/bed/windowMasker
+    hgLoadBed oryLat2 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 4784449 elements of size 3
+
+    #	eliminate the gaps from the masking
+    featureBits oryLat2 -not gap -bed=notGap.bed
+    #	700386597 bases of 700386597 (100.000%) in intersection
+    featureBits oryLat2 windowmaskerSdust
+    #	400084451 bases of 700386597 (57.123%) in intersection
+
+    time nice -n +19 featureBits oryLat2 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	real    6m31.017s
+    #	231470832 bases of 700386597 (33.049%) in intersection
+
+    #	reload track to get it clean
+    hgLoadBed oryLat2 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 4798190 elements of size 4
+
+
+    featureBits oryLat2 windowmaskerSdust
+    #	231470832 bases of 700386597 (33.049%) in intersection
+
+    #	mask the sequence with this clean mask
+    cd /cluster/data/oryLat2
+    zcat bed/windowMasker/cleanWMask.bed.gz \
+	| twoBitMask oryLat2.unmasked.2bit stdin \
+	    -type=.bed oryLat2.WMSdust.2bit
+    twoBitToFa oryLat2.WMSdust.2bit stdout | faSize stdin \
+        > oryLat2.WMSdust.faSize.txt
+    cat oryLat2.WMSdust.faSize.txt
+    #	869000216 bases (168613619 N's 700386597 real 468915765 upper
+    #	231470832 lower) in 7189 sequences in 1 files
+    #	%26.64 masked total, %33.05 masked real
+
+    #	Add trfMask:
+    twoBitMask oryLat2.WMSdust.2bit \
+	-add bed/simpleRepeat/trfMask.bed oryLat2.2bit
+    # You can safely ignore the warning about extra BED columns
+    twoBitToFa oryLat2.2bit stdout | faSize stdin \
+        > oryLat2.faSize.txt
+    cat oryLat2.faSize.txt
+    #	869000216 bases (168613619 N's 700386597 real 468647738 upper
+    #	231738859 lower) in 7189 sequences in 1 files
+    #	%26.67 masked total, %33.09 masked real
+    #	This becomes our masked genome sequence:
+    ln -s `pwd`/oryLat2.2bit /gbdb/oryLat2
+
+#############################################################################
+#  Verify all N's in sequence are marked in the gap track
+#	(DONE - 2008-08-14 - Hiram)
+    ssh kkstore04
+    mkdir /cluster/data/oryLat2/bed/gap
+    cd /cluster/data/oryLat2/bed/gap
+    time nice -n +19 findMotif -strand=+ -verbose=4 -motif=gattaca \
+	../../oryLat2.unmasked.2bit > oryLat2.Ns.txt 2>&1
+    #	real    0m13.949
+    grep "^#GAP " oryLat2.Ns.txt | sed -e "s/#GAP //" \
+	| sort -k1,1 -k2,2n > oryLat2.Ns.bed
+    #	what are their sizes like:
+    ave -col=5 oryLat2.Ns.bed
+Q1 10.000000
+median 10.000000
+Q3 285.000000
+average 1324.922554
+min 10.000000
+max 5149430.000000
+count 127263
+total 168613619.000000
+standard deviation 26497.729501
+
+    ssh hgwdev
+    cd /cluster/data/oryLat2/bed/gap
+    hgsql -N -e "select chrom,chromStart,chromEnd from gap;" oryLat2 \
+	| awk '{print $1,$2,$3}' | sort -k1,1 -k2,2n | sum
+    #	00926  2904
+    awk '{print $1,$2,$3}'  oryLat2.Ns.bed | sort -k1,1 -k2,2n | sum
+    #	00926  2904
+
+    #	Identical sums.  All N's are included in the gaps.
+
+    #	same exact definition.  If they were not, would have to figure
+    #	out where the Ns were that were not in gaps, and add them to
+    #	the gap table.  This can be achieved with featureBits.
