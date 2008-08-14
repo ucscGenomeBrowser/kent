@@ -1,15 +1,15 @@
 <H2>Description</H2>
 <P>
 This track contains tBLASTn alignments of the peptides from the WormBase
-genes annotations on <em>C. elegans</em> version WS190 (UCSC ce6)</P>
+gene annotations on <em>C. elegans</em> version WS190 (UCSC ce6).</P>
 
 <H2>Methods</H2>
 First, the predicted proteins from the <em>C. elegans</em> WormBase Genes track
 were aligned to the <em>C. elegans</em> genome using the blat program to
 discover exon boundaries.  Next, the amino acid sequences that make up each
-exon were aligned with the $organism sequence using the tBLASTn program.
-Finally, the putative $organism exons were chained together using a 
-maximum gap size of 50,000 but no gap penalty. The single best exon 
+exon were aligned with the <em>$organism</em> sequence using the tBLASTn 
+program. Finally, the putative <em>$organism</em> exons were chained together 
+using a maximum gap size of 50,000 but no gap penalty. The single best exon 
 chains extending over more than 60% of the query protein were included. Exon 
 chains that extended over 60% of the query and matched at least 60% of the 
 protein's amino acids were also included.</P>
