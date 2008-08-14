@@ -45,10 +45,6 @@ lineage ectoderm
 karyotype normal
 tier 2
 
-term SK-N-MC
-type Cell Line
-tier 3
-
 # Gene types
 term Known
 type Gene Type
