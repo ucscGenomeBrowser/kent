@@ -11,7 +11,7 @@ track encodeTbaConsDec07
 superTrack encodeTbaDec07
 compositeTrack on
 shortLabel TBA Cons Elements
-longLabel Conserved Elements in TBA 36-Vertebrate Alignments in the ENCODE Regions
+longLabel Conserved Elements in TBA Alignments of 36 Vertebrates in the ENCODE Regions
 type bed 3
 group encodeCompAndVar
 priority 10.2
