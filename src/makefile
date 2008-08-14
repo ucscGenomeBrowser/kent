@@ -1,6 +1,6 @@
 all: utils cgi blatSuite
 
-alpha: clean cgi-alpha blatSuite
+alpha: clean utils-alpha cgi-alpha blatSuite
 
 beta: check-beta clean cgi-beta
 
@@ -94,6 +94,16 @@ utils: libs
             fi ;\
 	done
 	cd utils && ${MAKE}
+	cd hg && ${MAKE} utils
+
+utils-alpha: libs
+	@for D in $(DIRS) x; do \
+            if test "$$D" != "x" ; then \
+                ( cd $$D && echo $$D && $(MAKE) ) ;\
+                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
+            fi ;\
+	done
+	cd utils && ${MAKE} alpha
 	cd hg && ${MAKE} utils
 
 DIRS = ameme blat cdnaAli index reformat xenoAli \
