@@ -1,10 +1,41 @@
 # ENCODE Comparative Genomics track group
 
-track encodeTbaAlignDec07
-shortLabel 36-Way TBA Align
-longLabel TBA Alignments of 36 Vertebrates in the ENCODE Regions
+        track encodeTbaDec07
+        superTrack on
+        shortLabel 36-Way TBA
+        longLabel TBA Alignments and Conservation of 36 Vertebrates in the ENCODE Regions
+        group encodeCompAndVar
+        priority 1
+
+track encodeTbaConsDec07
+superTrack encodeTbaDec07
+compositeTrack on
+shortLabel TBA Cons Elements
+longLabel Conserved Elements in TBA 36-Vertebrate Alignments in the ENCODE Regions
+type bed 3
 group encodeCompAndVar
-priority 70.1
+priority 10.2
+
+    track encodeTbaBinConsDec07
+    subTrack encodeTbaConsDec07
+    shortLabel BinCons
+    longLabel Conserved Elements in TBA Alignments of 36 Vertebrates in the ENCODE Regions, BinCons Method
+    noInherit on
+    type bed 4
+    color 0, 10, 100
+    priority 1
+
+    track encodeTbaChaiConsDec07
+    subTrack encodeTbaConsDec07
+    shortLabel Chai
+    longLabel Conserved Elements in TBA Alignments of 36 Vertebrates in the ENCODE Regions, Chai Method
+    color 100, 10, 0
+    priority 2
+
+track encodeTbaAlignDec07
+superTrack encodeTbaDec07
+shortLabel TBA Alignments
+longLabel TBA Alignments of 36 Vertebrates in the ENCODE Regions
 color 0, 10, 100
 altColor 1,128,0
 type wigMaf 0.0 1.0
@@ -21,6 +52,8 @@ sGroup_vertebrate galGal3
 #treeImage phylo/encodeSpecies37.gif
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion Dec 2007
+group encodeCompAndVar
+priority 10.2
 
 track encodeTbaAlignSep07
 shortLabel Sep07 TBA Align

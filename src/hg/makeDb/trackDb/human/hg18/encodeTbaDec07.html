@@ -1,0 +1,134 @@
+<H2>Description</H2>
+<P>
+This super-track contains tracks that display human-centric multiple sequence alignments 
+and conservation in the 
+ENCODE regions for the 36 vertebrates included in the 
+<A TARGET=_BLANK HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encode/alignments/DEC-2007/">December 2007 ENCODE MSA freeze</A>,
+based on comparative sequence data generated for the ENCODE project
+as well as whole-genome assemblies residing at UCSC, as listed:
+<UL>
+	<LI>human (March 2006, hg18)
+	<LI>armadillo (NISC)
+	<LI>baboon (NISC)
+	<LI>cat (NISC) 
+	<LI>chicken (galGal3)
+	<LI>chimp (Mar 2006, panTro2)
+	<LI>colobus_monkey (NISC)
+	<LI>cow (Aug 2006, bosTau3)
+	<LI>dog (May 2005, canFam2)
+	<LI>dusky_titi (NISC)
+	<LI>elephant (NISC)
+	<LI>flying_fox (NISC)
+	<LI>galago (NISC)
+	<LI>gibbon (NISC)
+	<LI>guinea_pig (NISC)
+	<LI>hedgehog (NISC)
+	<LI>horse (NISC) 
+	<LI>macaque (Jan 2006, rheMac2)
+	<LI>marmoset (NISC)
+	<LI>monodelphis (Jan 2006, monDom4)
+	<LI>mouse (Jul 2007, mm9)
+	<LI>mouse_lemur (NISC)
+	<LI>orangutan   (Jul 2007, ponAbe2)
+	<LI>owl_monkey (NISC)
+	<LI>platypus (NISC)
+	<LI>rabbit (NISC)
+	<LI>rat (Nov 2004, rn4)
+	<LI>rfbat (NISC)
+	<LI>rock_hyrax (NISC)
+	<LI>sbbat (NISC)
+	<LI>shrew (NISC)
+	<LI>squirrel_monkey (NISC)
+	<LI>st_squirrel (NISC)
+	<LI>tenrec (NISC)
+	<LI>tree shrew (NISC)
+	<LI>vervet (NISC)
+</UL>
+The alignments in this track were generated using the
+<b>Threaded Blockset Aligner (TBA)</b>.
+The conservation tracks, <b>BinCons</b> and <b>Chai</b>, display conserved elements for these alignments based on 
+various conservation methods.
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+In full display mode, this track shows pairwise alignments
+of each species aligned to the human genome.  
+In dense mode, the alignments are depicted using a gray-scale
+density gradient.  The checkboxes in the track configuration section allow
+the exclusion of species from the pairwise display.
+<P>
+When zoomed-in to the base-display level, the track shows the base
+composition of each alignment. The numbers and symbols on the 
+&quot;Gaps&quot; line indicate the lengths of gaps in the human sequence at those
+alignment positions relative to the longest non-human sequence. If there is
+sufficient space in the display, the size of the gap is shown; if not, and if
+the gap size is a multiple of 3, a &quot;*&quot; is displayed, 
+otherwise &quot;+&quot; is shown.
+To view detailed information about the
+alignments at a specific position, zoom in the display to 30,000 or fewer 
+bases, then click on the alignment.  </P>
+
+<H2>Methods</H2>
+
+
+<b>TBA</b> was used to align sequences in the December 2007 ENCODE sequence data 
+freeze. Multiple alignments were seeded from a series of combinatorial pairwise 
+blastz alignments (not referenced to any one species). The specific 
+combinations were determined by the
+<A HREF="/goldenPath/hg18/encode/alignments/DEC-2007/phylo/tree_4d.tba.v2.nh"
+TARGET=_blank>species guide tree</A>. 
+The resulting multiple alignments were projected onto the human reference
+sequence. 
+<b>BinCons</b> is a binomial-based method that calculates a conservation score in sliding windows across an alignment. 
+It uses 4D degenerate sites to calculate a neutral substitution rate for each species, and normalizes for phylogenetic bias. 
+Regions reported here exceed a 5% False Discovery Rate threshold, using a window size of 7 bases.
+<b>Chai</b> is a new DNA structure-informed constraint detection algorithm that
+uses hydroxyl radical cleavage patterns as a measure of DNA structure.
+Regions reported here exceed a 5% False Discovery Rate threshold.
+
+<H2>Credits</H2>
+<P>
+The TBA multiple alignments were created by Gayle McEwen & Elliott Margulies of NHGRI.  
+<P>
+BinCons was developed by Elliott Margulies (Margulies et al. 2003).
+<P>
+Chai was developed by Steve Parker & Tom Tullius (Boston University), Elliott Margulies(NHGRI) and Loren Hansen (NCBI).
+</P>
+<P>
+The programs Blastz and TBA, which were used to generate the alignments, were
+provided by Minmei Hou, Scott Schwartz and Webb Miller of the 
+<A HREF="http://bio.cse.psu.edu/" TARGET=_blank>Penn State Bioinformatics 
+Group</A>.</P>
+<P>The phylogenetic tree is based on Murphy et al. (2001).
+</P>
+
+<H2>References</H2>
+<P>
+Blanchette, M., Kent, W.J., Reimer, C., Elnitski, L., Smit, A.,
+Roskin, K., Baertsch, R., Rosenbloom, K.R., Clawson, H. <em>et al.</em>
+<A HREF="http://dx.doi.org/10.1101/gr.1933104"
+TARGET=_blank>Aligning Multiple Genomic Sequences With the Threaded Blockset 
+Aligner</A>.
+<em>Genome Res</em> <B>14</B>(4), 708-15 (2004).</P>
+<P>
+Chiaromonte, F., Yap, V.B., and Miller, W. 
+<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11928468&dopt=Abstract" 
+TARGET=_blank>Scoring pairwise genomic sequence alignments</A>.
+<em>Pac Symp Biocomput</em> 2002, 115-26 (2002).</P>
+<P>
+Margulies, E.H., Blanchette, M., NISC Comparative Sequencing Program, 
+Haussler, D. and Green, E.D. 
+<A HREF="http://dx.doi.org/10.1101/gr.1602203"
+TARGET=_blank>Identification and characterization of multi-species conserved 
+sequences</A>. 
+<em>Genome Res.</em> <B>13</B>, 2507-18 (2003). </P>
+<P>
+Murphy, W.J., et al.
+<A HREF="http://www.sciencemag.org/cgi/content/abstract/294/5550/2348"
+TARGET=_blank>Resolution of the early placental mammal radiation using Bayesian phylogenetics</A>.  <em>Science</em> <B>294</B>(5550), 2348-51 (2001).</P>
+<P>
+Schwartz, S., Kent, W.J., Smit, A., Zhang, Z., Baertsch, R., Hardison, R., 
+Haussler, D. and Miller, W.
+<A HREF="http://www.genome.org/cgi/content/abstract/13/1/103" 
+TARGET=_blank>Human-Mouse Alignments with BLASTZ</A>.
+<em>Genome Res</em> <B>13</B>(1), 103-7 (2003).</P>
