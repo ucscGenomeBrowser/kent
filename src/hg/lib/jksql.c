@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.113.6.8 2008/08/12 23:35:36 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.113.6.9 2008/08/14 15:54:14 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1551,6 +1551,7 @@ struct sqlConnCacheEntry
 /* an entry in the cache */
 {
     struct sqlConnCacheEntry *next;
+    struct sqlProfile *profile;      /* profile for connection, can be NULL if host is explicit */
     struct sqlConnection *conn;      /* connection */
     boolean inUse;                   /* is this in use? */
 };
@@ -1601,11 +1602,13 @@ if ((cache = *pCache) != NULL)
 }
 
 static struct sqlConnCacheEntry *sqlConnCacheAdd(struct sqlConnCache *cache,
+                                                 struct sqlProfile *profile,
                                                  struct sqlConnection *conn)
 /* create and add a new cache entry */
 {
 struct sqlConnCacheEntry *scce;
 AllocVar(scce);
+scce->profile = profile;
 scce->conn = conn;
 slAddHead(&cache->entries, scce);
 cache->entryCnt++;
@@ -1613,14 +1616,15 @@ return scce;
 }
 
 static struct sqlConnCacheEntry *sqlConnCacheFindFree(struct sqlConnCache *cache,
+                                                      struct sqlProfile *profile,
                                                       char *database)
-/* find a free entry associated with database, which can be NULL. Return NULL
- * if no entries are available. */
+/* find a free entry associated with profile and database. Return NULL if no
+ * entries are available. */
 {
 struct sqlConnCacheEntry *scce;
 for (scce = cache->entries; scce != NULL; scce = scce->next)
     {
-    if ((!scce->inUse)
+    if (!scce->inUse && (profile == scce->profile)
         && (((database == NULL) && (scce->conn->conn->db == NULL))
             || sameString(database, scce->conn->conn->db)))
         return scce;
@@ -1629,7 +1633,7 @@ return NULL;
 }
 
 static struct sqlConnCacheEntry *sqlConnCacheAddNew(struct sqlConnCache *cache,
-                                                    char *profileName,
+                                                    struct sqlProfile *profile,
                                                     char *database,
                                                     boolean abort)
 /* create and add a new connect to the cache */
@@ -1641,13 +1645,8 @@ if (cache->host != NULL)
     conn = sqlConnRemote(cache->host, cache->user,
                          cache->password, database, abort);
 else
-    {
-    struct sqlProfile *sp = cache->profile;
-    if (sp == NULL)
-        sp = sqlProfileMustGet(profileName, database);
-    conn = sqlConnProfile(sp, database, abort);
-    }
-return sqlConnCacheAdd(cache, conn);
+    conn = sqlConnProfile(profile, database, abort);
+return sqlConnCacheAdd(cache, profile, conn);
 }
 
 static struct sqlConnection *sqlConnCacheDoAlloc(struct sqlConnCache *cache,
@@ -1657,9 +1656,24 @@ static struct sqlConnection *sqlConnCacheDoAlloc(struct sqlConnCache *cache,
 /* Allocate a cached connection. errAbort if too many open connections.  
  * errAbort if abort and connection fails. */
 {
-struct sqlConnCacheEntry *scce = sqlConnCacheFindFree(cache, database);
+struct sqlProfile *profile = NULL;
+if ((cache->host != NULL) && (profileName != NULL))
+    errAbort("can't specify profileName (%s) when sqlConnCache is create with a specific host (%s)",
+             profileName, cache->host);
+if ((profileName != NULL) && (cache->profile != NULL)
+    && !sameString(profileName, cache->profile->name))
+    errAbort("profile name %s doesn't match profile associated with sqlConnCache %s",
+             profileName, cache->profile->name);
+if (cache->profile != NULL)
+    profile = cache->profile;
+else
+    profile = sqlProfileMustGet(profileName, database);
+#if 0
+fprintf(stderr, "sqlConnCacheDoAlloc %s %s\n", ((profile != NULL) ? profile->name: NULL), database); // FIXME:
+#endif
+struct sqlConnCacheEntry *scce = sqlConnCacheFindFree(cache, profile, database);
 if (scce == NULL)
-    scce = sqlConnCacheAddNew(cache, profileName, database, abort);
+    scce = sqlConnCacheAddNew(cache, profile, database, abort);
 scce->inUse = TRUE;
 return scce->conn;
 }

@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.368.4.9 2008/08/14 01:29:48 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.368.4.10 2008/08/14 15:54:13 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -53,6 +53,7 @@ static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connect
 static struct sqlConnCache *centralCc = NULL;
 static char *centralDb = NULL;
 static struct sqlConnCache *centralArchiveCc = NULL;
+static char *centralArchiveDb = NULL;
 static struct sqlConnCache *cartCc = NULL;  /* cache for cart; normally same as centralCc */
 static char *cartDb = NULL;
 static char *hdbTrackDb = NULL;
@@ -472,7 +473,6 @@ static void hCentralMkCache()
 /* create the central database cache, trying to connect to the 
  * database and failing over if needed */
 {
-// FIXME: can db be moved back to profile???
 centralDb = cfgOption2("central", "db");
 centralCc = sqlConnCacheNewProfile("central");
 struct sqlConnection *conn = sqlConnCacheMayAlloc(centralCc, centralDb);
@@ -511,25 +511,31 @@ if (*pConn != NULL)
     sqlConnCacheDealloc(centralCc, pConn);
 }
 
+static void hArchiveCentralMkCache()
+/* create the archive central database cache, trying to connect to the
+ * database and failing over if needed */
+{
+centralArchiveDb = cfgOption2("archivecentral", "db");
+centralArchiveCc = sqlConnCacheNewProfile("archivecentral");
+struct sqlConnection *conn = sqlConnCacheMayAlloc(centralArchiveCc, centralArchiveDb);
+if (conn == NULL)
+    {
+    sqlConnCacheDealloc(centralArchiveCc, &conn);
+    sqlConnCacheFree(&centralArchiveCc);
+    centralDb = cfgOption2("archivebackup", "database");
+    centralCc = sqlConnCacheNewProfile("archivebackup");
+    conn = sqlConnCacheAlloc(centralCc, centralDb);
+    }
+sqlConnCacheDealloc(centralCc, &conn);
+}
+
 struct sqlConnection *hConnectArchiveCentral()
 /* Connect to central database for archives.
  * Free this up with hDisconnectCentralArchive(). */
 {
-#if 0 // FIXME
-struct sqlConnection *conn = NULL;
 if (centralArchiveCc == NULL)
-    centralArchiveCc = getCentralCcFromCfg("archivecentral");
-conn = sqlConnCacheMayAlloc(centralArchiveCc);
-if (conn == NULL)
-    {
-    centralArchiveCc = getCentralCcFromCfg("archivebackup");
-    conn = sqlConnCacheAlloc(centralArchiveCc);
-    }
-return(conn);
-#else
-errAbort("hConnectArchiveCentral called");
-return NULL;
-#endif
+    hArchiveCentralMkCache();
+return sqlConnCacheAlloc(centralArchiveCc, centralArchiveDb);
 }
 
 void hDisconnectArchiveCentral(struct sqlConnection **pConn)
@@ -1132,7 +1138,6 @@ static bioSeq *seqMustGet(char *db, char *acc, boolean isDna, char *seqTbl, char
 /* Return sequence from the specified seq and extFile tables.
  * Return Abort if not found. */
 {
-// FIXME, more trouble
 bioSeq *seq = seqGet(db, acc, isDna, seqTbl, extFileTbl);
 if (seq == NULL)
     errAbort("can't find \"%s\" in seq table %s.%s", acc, db, seqTbl);
@@ -3371,12 +3376,12 @@ if (sTdb != NULL)
 return cTdb;
 }
 
-boolean hgParseChromRangeDb(char *db, char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd, boolean haveDb)
+boolean hgParseChromRange(char *db, char *spec, char **retChromName, 
+	int *retWinStart, int *retWinEnd)
 /* Parse something of form chrom:start-end into pieces. 
- * if haveDb then check with chromInfo for names */
+ * if db != NULL then check with chromInfo for names */
 {
-//FIXMEL haveDb is trouble, split this up
+boolean haveDb = (db != NULL);
 char *chrom, *start, *end;
 char buf[256];
 int iStart, iEnd;
@@ -3425,14 +3430,6 @@ if (retWinEnd != NULL)
     *retWinEnd = iEnd;
 return TRUE;
 }
-
-boolean hgParseChromRange(char *db, char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Parse something of form chrom:start-end into pieces. */
-{
-return hgParseChromRangeDb(db, spec, retChromName, retWinStart, retWinEnd, TRUE);
-}
-
 
 boolean hgIsChromRange(char *db, char *spec)
 /* Returns TRUE if spec is chrom:N-M for some human
@@ -4108,7 +4105,7 @@ if (position == NULL)
     return NULL;
 
 buffer[sizeof(buffer) - 1] = 0;
-if (!hgParseChromRangeDb(db, position, &chromName, &winStart, &winEnd, FALSE))
+if (!hgParseChromRange(NULL, position, &chromName, &winStart, &winEnd))
     strncpy(buffer, position, sizeof(buffer) - 1);
 else
     {

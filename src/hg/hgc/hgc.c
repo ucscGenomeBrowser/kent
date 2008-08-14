@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1445.4.8 2008/08/09 04:40:36 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1445.4.9 2008/08/14 15:54:11 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4011,7 +4011,7 @@ if (tbl[0] == 0)
     {
     itemCount = 1;
     if ( NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))) &&
-         hgParseChromRangeDb(database, pos, &chrom, &start, &end, dbIsActive))
+         hgParseChromRange((dbIsActive ? database : NULL), pos, &chrom, &start, &end))
         {
         hgSeqRange(database, chrom, start, end, '?', "dna");
         }

@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.38.18.1 2008/07/31 02:24:31 markd Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.38.18.2 2008/08/14 15:54:14 markd Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -1097,7 +1097,7 @@ bedFile = mustOpen(bedTn.forCgi, "w");
 while (lineFileNextReal(lf, &line))
     {
     line = stripCommas(line);
-    if (hgParseChromRangeDb(NULL, line, &chrom, &start, &end, FALSE))
+    if (hgParseChromRange(NULL, line, &chrom, &start, &end))
         fprintf(bedFile, "%s\t%d\t%d\n", chrom, start, end);
     else
         {

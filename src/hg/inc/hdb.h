@@ -528,12 +528,7 @@ int hOffsetPastBin(char *db, char *chrom, char *table);
 boolean hgParseChromRange(char *db, char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd);
 /* Parse something of form chrom:start-end into pieces. 
- * assumes a current database */
-
-boolean hgParseChromRangeDb(char *db, char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd, boolean haveDb);
-/* Parse something of form chrom:start-end into pieces. 
- * if haveDb then check with chromInfo for names */
+ * if db != NULL then check with chromInfo for names */
 
 boolean hgIsChromRange(char *db, char *spec);
 /* Returns TRUE if spec is chrom:N-M for some human
