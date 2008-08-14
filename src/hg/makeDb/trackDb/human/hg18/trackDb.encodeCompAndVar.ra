@@ -19,7 +19,7 @@ priority 10.2
     track encodeTbaBinConsDec07
     subTrack encodeTbaConsDec07
     shortLabel BinCons
-    longLabel Conserved Elements in TBA Alignments of 36 Vertebrates in the ENCODE Regions, BinCons Method
+    longLabel Conserved Elements in 36-Way TBA Alignments in the ENCODE Regions, BinCons Method
     noInherit on
     type bed 4
     color 0, 10, 100
@@ -28,7 +28,7 @@ priority 10.2
     track encodeTbaChaiConsDec07
     subTrack encodeTbaConsDec07
     shortLabel Chai
-    longLabel Conserved Elements in TBA Alignments of 36 Vertebrates in the ENCODE Regions, Chai Method
+    longLabel Conserved Elements in 36-Way TBA Alignments in the ENCODE Regions, Chai Method
     color 100, 10, 0
     priority 2
 
