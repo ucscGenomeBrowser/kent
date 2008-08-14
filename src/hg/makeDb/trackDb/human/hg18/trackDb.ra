@@ -2672,7 +2672,7 @@ track omicia
 compositeTrack on
 shortLabel Omicia OMIM
 longLabel Omicia OMIM mapping, Early Access R1
-visibility pack
+visibility hide
 group phenDis
 priority 50
 exonArrows off

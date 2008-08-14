@@ -216,7 +216,7 @@ group genes
 type psl
 priority 37.14
 color 20,0,250
-visibility pack
+visibility hide
 retroMrnaInfo ucscRetroInfo3
 #transMapTypeDesc UCSC retrocopies
 baseColorDefault diffCodons
