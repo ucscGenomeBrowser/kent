@@ -2906,14 +2906,14 @@ speciesCodonDefault hg18
 track uwNucOcc
 superTrack on
 shortLabel Nucleosome Occupancy
-longLabel UW Nucleosome Occupancy
+longLabel UW Predicted Nucleosome Occupancy
 group regulation
 priority 2200.1
 
     track uwNucOccA375
     superTrack uwNucOcc full
     shortLabel A375
-    longLabel UW Nucleosome Occupancy - A375
+    longLabel UW Predicted Nucleosome Occupancy - A375
     group regulation
     priority 2200.2
     visibility hide
@@ -2922,7 +2922,7 @@ priority 2200.1
     track uwNucOccDennis
     superTrack uwNucOcc full
     shortLabel Dennis
-    longLabel UW Nucleosome Occupancy - Dennis
+    longLabel UW Predicted Nucleosome Occupancy - Dennis
     group regulation
     priority 2200.3
     visibility hide
@@ -2931,7 +2931,7 @@ priority 2200.1
     track uwNucOccMec
     superTrack uwNucOcc full
     shortLabel MEC
-    longLabel UW Nucleosome Occupancy - MEC
+    longLabel UW Predicted Nucleosome Occupancy - MEC
     group regulation
     priority 2200.4
     visibility hide
