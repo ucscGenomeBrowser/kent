@@ -23227,7 +23227,7 @@ cp /cluster/data/mm9/bed/multiz30way/mm9.guess.30way.nh .
 
     # encode and load wiggles
     ssh kkstore02
-    cd /cluster/data/hg18/bed/uwNucOcc 
+    cd /cluster/data/hg18/bed/uwNucOcc/wib
     zcat ../wig/a375/a375.chr*.wig.gz|wigEncode stdin uwNucOccA375.wig uwNucOccA375.wib
     # Converted stdin, upper limit 9.88, lower limit -5.19
 
