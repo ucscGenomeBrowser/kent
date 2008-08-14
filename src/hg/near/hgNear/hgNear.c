@@ -21,7 +21,7 @@
 #include "versionInfo.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.179 2008/06/28 16:56:04 galt Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.180 2008/08/14 18:00:20 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -339,7 +339,7 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word;
 while (lineFileNext(lf, &line, NULL))
     {
-    while ((word = nextWord(&line)) != NULL)
+    while ((word = nextQuotedWord(&line)) != NULL)
 	{
 	touppers(word);
         hashAdd(hash, word, NULL);
