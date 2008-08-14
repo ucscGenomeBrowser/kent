@@ -141,15 +141,6 @@ struct sqlConnection *hConnectCentral(void);
  * not specific to a particular genome lives.  Free this up
  * with hDisconnectCentral(). */
 
-struct sqlConnection *hConnectLocalDb(char *database);
-/* connect to local database , put back using sqlDisconnect(&Conn) */
-
-struct sqlConnection *hConnectLocal(void);
-/* connect to local host, no database is specified*/
-
-void hDisconnectLocal(struct sqlConnection **pConn);
-/* Put back connection for reuse. */
-
 void hDisconnectCentral(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 

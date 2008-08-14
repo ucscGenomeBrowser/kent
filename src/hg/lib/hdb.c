@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.368.4.8 2008/08/12 23:35:35 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.368.4.9 2008/08/14 01:29:48 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -55,10 +55,6 @@ static char *centralDb = NULL;
 static struct sqlConnCache *centralArchiveCc = NULL;
 static struct sqlConnCache *cartCc = NULL;  /* cache for cart; normally same as centralCc */
 static char *cartDb = NULL;
-// FIXME: need to understand if this can be done with profiles
-static struct sqlConnCache *localCc = NULL;  /* cache for TCGA DB connection */
-static char *localDb = NULL;
-
 static char *hdbTrackDb = NULL;
 
 /* cached list of tables in databases.  This keeps a hash of databases to
@@ -513,55 +509,6 @@ void hDisconnectCentral(struct sqlConnection **pConn)
 {
 if (*pConn != NULL)
     sqlConnCacheDealloc(centralCc, pConn);
-}
-
-struct sqlConnection *hConnectLocalDb(char *database)
-/* Connect to local database where user info and other info
- * not specific to a particular genome lives.  Free this up
- * with sqlDisconnect(&conn). */
-{
-// FIXME: drop this
-struct sqlConnection *conn = NULL;
-char *host, *user, *password;
-
-char setting[128];
-char *prefix = "localDb";
-safef(setting, sizeof(setting), "%s.host", prefix);
-host = cfgOption(setting);
-safef(setting, sizeof(setting), "%s.user", prefix);
-user = cfgOption(setting);
-safef(setting, sizeof(setting), "%s.password", prefix);
-password = cfgOption(setting);
-    
-if (host == NULL || user == NULL || password == NULL)
-    errAbort("Please set %s options in the hg.conf file.", prefix);
-
-conn = sqlMayConnectRemote(host, user, password, database);
-
-if (conn == NULL)
-    return NULL;
-
-return conn;
-}
-
-struct sqlConnection *hConnectLocal()
-/* Connect to local host where user info and other info
- * not specific to a particular genome lives.  No database is specified 
- * Free this up with hDisconnectCentral(). */
-{
-if (localCc == NULL)
-    {
-    localDb = cfgOption("localDb.db");
-    localCc = sqlConnCacheNewProfile("localDb");
-    }
-return sqlConnCacheAlloc(localCc, localDb);
-}
-
-void hDisconnectLocal(struct sqlConnection **pConn)
-/* Put back connection for reuse. */
-{
-if (*pConn != NULL)
-    sqlConnCacheDealloc(localCc, pConn);
 }
 
 struct sqlConnection *hConnectArchiveCentral()

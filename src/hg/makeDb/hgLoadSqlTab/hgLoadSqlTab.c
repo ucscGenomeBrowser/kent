@@ -9,7 +9,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadSqlTab.c,v 1.6 2008/03/03 20:52:19 jzhu Exp $";
+static char const rcsid[] = "$Id: hgLoadSqlTab.c,v 1.6.24.1 2008/08/14 01:29:50 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,7 +25,6 @@ errAbort(
 "  -warn - warn instead of abort on mysql errors or warnings\n"
 "  -notOnServer - file is *not* in a directory that the mysql server can see\n"
 "  -oldTable|-append - add to existing table\n"
-"  -local - connect to host defined as localDb.XXX variables in .hg.conf.\n"
   );
 }
 
@@ -34,7 +33,6 @@ static struct optionSpec options[] = {
     {"notOnServer", OPTION_BOOLEAN},
     {"oldTable", OPTION_BOOLEAN},
     {"append", OPTION_BOOLEAN},
-    {"local", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
@@ -74,14 +72,7 @@ void hgLoadSqlTab(char *database, char *table, char *createFile,
 		  int inCount, char *inNames[])
 /* hgLoadSqlTab - Load table into database from SQL and text files. */
 {
-/* Connect to host defined as localDb.XXX variables in .hg.conf.*/ 
-boolean localDb = optionExists("local");
-
-struct sqlConnection *conn = NULL;
-if (localDb)
-    conn = hConnectLocalDb(database);
-else 
-    conn = sqlConnect(database);
+struct sqlConnection *conn = sqlConnect(database);
 
 char comment[256];
 int loadOptions = 0;

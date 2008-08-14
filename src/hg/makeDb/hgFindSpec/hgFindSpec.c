@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: hgFindSpec.c,v 1.7.24.1 2008/07/31 02:24:35 markd Exp $";
+static char const rcsid[] = "$Id: hgFindSpec.c,v 1.7.24.2 2008/08/14 01:29:49 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,7 +25,6 @@ errAbort(
   "\n"
   "Options:\n"
   "   -strict		Add spec to hgFindSpec only if its table(s) exist.\n"
-  "   -local - connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"
   "   -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
   "   for the ra files.\n" 
   );
@@ -34,11 +33,9 @@ errAbort(
 static struct optionSpec optionSpecs[] = {
     {"raName", OPTION_STRING},
     {"strict", OPTION_BOOLEAN},
-	{"local", OPTION_BOOLEAN},
 };
 
 static char *raName = "trackDb.ra";
-boolean localDb=FALSE;              /* Connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"*/ 
 
 void addVersion(boolean strict, char *database, char *dirName, char *raName, 
     struct hash *uniqHash,
@@ -217,11 +214,7 @@ if (verboseLevel() > 0)
     {
     char *create, *end;
     char query[256];
-    struct sqlConnection *conn = NULL;
-    if (!localDb)
-	conn = sqlConnect(database);
-    else
-	conn = hConnectLocalDb(database);
+    struct sqlConnection *conn = sqlConnect(database);
 
     /* Load in table definition. */
     readInGulp(sqlFile, &create, NULL);
@@ -281,7 +274,6 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     usage();
 raName = optionVal("raName", raName);
-localDb = optionExists("local");
 adjustTrackDbName(argv[3]);
 hgFindSpec(argv[1], argv[2], argv[3], argv[4], argv[5],
            optionExists("strict"));

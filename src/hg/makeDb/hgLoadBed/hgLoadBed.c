@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.58.6.1 2008/07/31 02:24:36 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.58.6.2 2008/08/14 01:29:49 markd Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -33,10 +33,9 @@ char *tmpDir = (char *)NULL;	/* location to create a temporary file */
 boolean nameIx = TRUE;	        /* FALSE == do not create the name index */
 boolean ignoreEmpty = FALSE;	/* TRUE == empty input files are not an error */
 boolean allowNegativeScores = FALSE;	/* TRUE == score column set to int */
-boolean customTrackLoader = FALSE; /*TRUE == turn on all custom track options*/
-boolean localDb = FALSE;        /* Connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"*/ 
-/* turns on: noNameIx, ignoreEmpty, allowNegativeScores
-	-verbose=0 */
+boolean customTrackLoader = FALSE; /*TRUE == turn on all custom track options
+                                    * turns on: noNameIx, ignoreEmpty, allowNegativeScores
+                                    * -verbose=0 */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -61,7 +60,6 @@ static struct optionSpec optionSpecs[] = {
     {"ignoreEmpty", OPTION_BOOLEAN},
     {"allowNegativeScores", OPTION_BOOLEAN},
     {"customTrackLoader", OPTION_BOOLEAN},
-    {"local", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -99,7 +97,6 @@ errAbort(
   "   -customTrackLoader  - turns on: -noNameIx, -noHistory, -ignoreEmpty,\n"
   "                         -allowNegativeScores -verbose=0\n"
   "   -verbose=N - verbose level for extra information to STDERR\n"
-  "   -local - connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"
   );
 }
 
@@ -276,9 +273,6 @@ int loadOptions = (optionExists("onServer") ? SQL_TAB_FILE_ON_SERVER : 0);
 
 if ( ! noLoad )
     conn = sqlConnect(database);
-
-if (localDb)
-    conn = hConnectLocalDb(database);
 
 if ((char *)NULL != tmpDir)
     tab = cloneString(rTempName(tmpDir,"loadBed",".tab"));
@@ -487,9 +481,8 @@ nameIx = ! optionExists("noNameIx");
 ignoreEmpty = optionExists("ignoreEmpty");
 allowNegativeScores = optionExists("allowNegativeScores");
 customTrackLoader = optionExists("customTrackLoader");
-localDb = optionExists("local");
 /* turns on: noNameIx, ignoreEmpty, allowNegativeScores
-	-verbose=0 */
+ * -verbose=0 */
 if (customTrackLoader)
     {
     ignoreEmpty = TRUE;
