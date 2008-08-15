@@ -1761,7 +1761,7 @@ identifier ensemblProteinId3 external=Ensembl
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
-    $gbd,!felCat3.ensGene.name chopAfter=.
+    $gbd,!felCat3.ensGene.name,!ce6.ensGene.name chopAfter=.
     $gbd.superfamily.name
     $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
     mm3.ensemblXref.transcript_name chopAfter=. minCheck=0.20
@@ -1784,6 +1784,12 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $danRer.mmBlastTab.query
     $danRer.rnBlastTab.query
     $danRer.scBlastTab.query
+
+identifier ensemblTranscriptIdCe external=Ensembl dependency
+"Ensembl Transcript ID for C. elegans"
+    $ce.ensGene.name chopAfter=. dupeOk
+    $ce.ensGtp.transcript chopAfter=. minCheck=0.98
+    $ce.ensPep.name chopAfter=. minCheck=0.98
 
 identifier ensemblTranscriptIdFelCat external=Ensembl dependency
 "Ensembl Transcript ID for felCat"
