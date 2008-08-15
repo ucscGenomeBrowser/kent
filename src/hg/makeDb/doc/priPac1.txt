@@ -3,7 +3,7 @@
 # Pristionchus pacificus
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: priPac1.txt,v 1.15 2008/06/18 23:44:01 hiram Exp $
+#  $Id: priPac1.txt,v 1.16 2008/08/15 21:53:32 hiram Exp $
 ###########################################################################
 ## Download sequence - (DONE - 2007-02-25 - Hiram)
     ssh kkstore02
@@ -849,8 +849,9 @@ chainOne $(path1)
     # load table 
     ssh hgwdev
     cd /cluster/data/priPac1/bed/tblastn.ce6SG
-    liftUp -type=.psl stdout ../../jkStuff/priPac1.supercontigs.lift \
-	error blastCe6SG.psl | hgLoadPsl -table=blastCe6SG priPac1 stdin
+    liftUp -nohead -type=.psl stdout ../../jkStuff/priPac1.supercontigs.lift \
+	error blastCe6SG.psl | sort -k14,14 -k16,16n \
+	| hgLoadPsl -table=blastCe6SG priPac1 stdin
 
     # check coverage
     featureBits priPac1 blastCe6SG 

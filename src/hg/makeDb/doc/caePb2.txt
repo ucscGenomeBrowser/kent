@@ -713,8 +713,9 @@ chainOne $(path1)
     # load table 
     ssh hgwdev
     cd /cluster/data/caePb2/bed/tblastn.ce6SG
-    liftUp -type=.psl stdout ../../jkStuff/caePb2.supercontigs.lift \
-	error blastCe6SG.psl | hgLoadPsl -table=blastCe6SG caePb2 stdin
+    liftUp -nohead -type=.psl stdout ../../jkStuff/caePb2.supercontigs.lift \
+	error blastCe6SG.psl | sort -k14,14 -k16,16n \
+	| hgLoadPsl -table=blastCe6SG caePb2 stdin
     hgLoadPsl caePb2 blastCe6SG.psl
 
     # check coverage

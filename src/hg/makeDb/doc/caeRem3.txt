@@ -4,7 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
-#  $Id: caeRem3.txt,v 1.5 2008/06/18 23:40:49 hiram Exp $
+#  $Id: caeRem3.txt,v 1.6 2008/08/15 21:53:32 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-22 - Hiram)
@@ -661,8 +661,9 @@ chainOne $(path1)
     # load table 
     ssh hgwdev
     cd /cluster/data/caeRem3/bed/tblastn.ce6SG
-    liftUp -type=.psl stdout ../../downloads/caeRem3.chrUn.lift \
-	error blastCe6SG.psl | hgLoadPsl -table=blastCe6SG caeRem3 stdin
+    liftUp -nohead -type=.psl stdout ../../downloads/caeRem3.chrUn.lift \
+	error blastCe6SG.psl | sort -k14,14 -k16,16n \
+	| hgLoadPsl -table=blastCe6SG caeRem3 stdin
 
     # check coverage
     featureBits caeRem3 blastCe6SG 
