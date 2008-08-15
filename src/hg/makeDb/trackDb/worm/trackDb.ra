@@ -336,6 +336,13 @@ shortCircuit 1
 termRegex cel-(mir|let|lin|lsy)-.+
 searchPriority 18.5
 
+searchName ensemblWormGenes
+searchTable ensGene
+searchType genePred
+searchMethod fuzzy
+shortCircuit 1
+searchPriority 18
+
 searchName sangerGenePrefix
 searchTable sangerGene
 searchMethod fuzzy
