@@ -2912,7 +2912,7 @@ priority 2200.1
 
     track uwNucOccA375
     superTrack uwNucOcc full
-    shortLabel A375
+    shortLabel Nucl Occ: A375
     longLabel UW Predicted Nucleosome Occupancy - A375
     group regulation
     priority 2200.2
@@ -2921,7 +2921,7 @@ priority 2200.1
 
     track uwNucOccDennis
     superTrack uwNucOcc full
-    shortLabel Dennis
+    shortLabel Nucl Occ: Dennis
     longLabel UW Predicted Nucleosome Occupancy - Dennis
     group regulation
     priority 2200.3
@@ -2930,7 +2930,7 @@ priority 2200.1
 
     track uwNucOccMec
     superTrack uwNucOcc full
-    shortLabel MEC
+    shortLabel Nucl Occ: MEC
     longLabel UW Predicted Nucleosome Occupancy - MEC
     group regulation
     priority 2200.4
