@@ -14,7 +14,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat2.txt,v 1.2 2008/08/14 23:40:37 hiram Exp $"
+#	"$Id: oryLat2.txt,v 1.3 2008/08/15 17:37:07 hiram Exp $"
 #
 ###########################################################################
 
@@ -158,7 +158,7 @@ nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^MT/chrM/"
 	-buildDir=/cluster/data/oryLat2/bed/repeatMasker \
 	-bigClusterHub=pk -smallClusterHub=memk > do.log 2>&1
     #	RM version from the log:
-    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.2 2008/08/14 23:40:37 hiram Exp $
+    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.3 2008/08/15 17:37:07 hiram Exp $
     #	CC   RELEASE 20080801
     #   about 40 minutes run time
 
@@ -337,13 +337,14 @@ oryLat2.downloadDir = oryLat2
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial oryLat2 &
     #	logFile: var/build/logs/2008.08.14-16:39:51.oryLat2.initalign.log
-XXX - running 2008-08-14 16:40
+    #	real    304m52.587s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad oryLat2
-    #	real    17m10.400s
+    #	logFile: var/dbload/hgwdev/logs/2008.08.15-10:06:43.dbload.log
+    #	real    10m58.023s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -353,13 +354,3 @@ XXX - running 2008-08-14 16:40
         etc/hgwdev.dbs
     cvs ci -m "Added oryLat2." etc/align.dbs etc/hgwdev.dbs
     make etc-update
-
-   # add Xeno refseqs (2007-04-12 markd)
-   # add this to genbank.com:
-   oryLat2.refseq.mrna.xeno.load = yes
-
-   ssk kkstore02
-   cd /cluster/data/genbank
-   (./bin/gbAlignStep -initial -srcDb=refseq oryLat2)|&mail markd&
-   (./bin/gbDbLoadStep -srcDb=refseq oryLat2)|&mail markd&
-
