@@ -2019,7 +2019,7 @@ identifier kiddEichlerId external=EichlerLab
 "Clone accession used in Kidd..Eichler '08"
     $hg.kiddEichlerToNcbi.name
     $hg.kiddEichlerDiscAbc7.name chopAfter=, minCheck=0.80
-    $hg.kiddEichlerDiscAbc8.name chopAfter=, minCheck=0
+    $hg.kiddEichlerDiscAbc8.name chopAfter=,
     $hg.kiddEichlerDiscAbc9.name chopAfter=,
     $hg.kiddEichlerDiscAbc10.name chopAfter=,
     $hg.kiddEichlerDiscAbc11.name chopAfter=,
