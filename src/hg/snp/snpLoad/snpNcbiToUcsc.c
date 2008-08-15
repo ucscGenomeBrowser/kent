@@ -13,7 +13,7 @@
 #include "twoBit.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.7 2008/06/30 20:52:53 angie Exp $";
+static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.8 2008/08/15 17:46:49 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -97,6 +97,8 @@ char *classStrings[] = {
     "insertion",	/* SNP is an insertion; reference has deletion */
     "deletion",		/* SNP is a deletion; reference has insertion */
 };
+boolean classStringsUsed[MAX_CLASS+2+1];
+
 
 /* These strings and their positions must correspond to the values in
  * $ftpBcp/LocTypeCode.bcp.gz 
@@ -135,6 +137,7 @@ char *locTypeStrings[] = {
     "rangeSubstitution",/* code: EqualOnCtg	ASN: range-exact */
     "rangeDeletion",	/* code: ShorterOnCtg	ASN: range-del */
 };
+boolean locTypeStringsUsed[MAX_LOCTYPE+1];
 
 /* These strings and their positions must correspond to the values in
  * $ftpBcp/SnpValidationCode.bcp.gz / ASN. */
@@ -147,6 +150,7 @@ char *validBitStrings[] = {
 "by-2hit-2allele",
 "by-hapmap",
 };
+boolean validBitStringsUsed[VALID_BITS];
 
 /* These strings and their positions must correspond to the values in
  * $ftpBcp/SnpFunctionCode.bcp.gz / ASN (but ASN doesn't have
@@ -198,21 +202,66 @@ char *functionStrings[] = {
 /* 74 */ NULL,
 /* 75 */ "splice-5",
 };
+boolean functionStringsUsed[MAX_FUNC+1];
 
 #define MAX_WEIGHT 10
 
-void writeCodes(FILE *f, char *strings[], int count)
+#define MAX_MOLTYPE 3
+char *molTypeStrings[] = {
+    "unknown",
+    "genomic",
+    "cDNA",
+    "mito"
+};
+boolean molTypeStringsUsed[MAX_MOLTYPE+1];
+
+void initStringsUsed()
+/* Set the arrays of flags that indicate whether an encoding has been used. */
+{
+int i;
+for (i = 0;  i < MAX_MOLTYPE+1;  i++)
+    molTypeStringsUsed[i] = FALSE;
+for (i = 0;  i < MAX_CLASS+2+1;  i++)
+    classStringsUsed[i] = FALSE;
+for (i = 0;  i < MAX_LOCTYPE+1;  i++)
+    locTypeStringsUsed[i] = FALSE;
+for (i = 0;  i < VALID_BITS;  i++)
+    validBitStringsUsed[i] = FALSE;
+for (i = 0;  i < MAX_FUNC+1;  i++)
+    functionStringsUsed[i] = FALSE;
+}
+
+void tallyMoltype(struct lineFile *lf, char *molType)
+/* Keep track of what molTypes are actually used. */
+{
+int i;
+for (i = 0;  i < MAX_MOLTYPE+1;  i++)
+    if (sameString(molType, molTypeStrings[i]))
+	{
+	molTypeStringsUsed[i] = TRUE;
+	return;
+	}
+if (sameString(molType, "MISSING"))
+    molTypeStringsUsed[0] = TRUE;
+else
+    lineFileAbort(lf, "Unrecognized molType %s", molType);
+}
+
+void writeCodes(FILE *f, char *strings[], boolean stringsUsed[], int count)
 /* Print out a comma-sep list of single-quoted values from one of the
  * above arrays. */
 {
 int i;
+boolean needComma = FALSE;
 for (i = 0;  i < count;  i++)
     {
-    if (i == 0 && isNotEmpty(strings[i]) && !sameString(strings[i], "unknown"))
+    if (i == 0 && differentStringNullOk(strings[i], "unknown"))
 	fprintf(f, "'unknown',");
-    if (isEmpty(strings[i]))
-	continue;
-    fprintf(f, "%s'%s'", (i > 0 ? "," : ""), strings[i]);
+    if (isNotEmpty(strings[i]) && stringsUsed[i])
+	{
+	fprintf(f, "%s'%s'", (needComma ? "," : ""), strings[i]);
+	needComma = TRUE;
+	}
     }
 }
 
@@ -231,32 +280,32 @@ fprintf(f,
 "  chromEnd int(10) unsigned NOT NULL default '0',\n"
 "  name varchar(15) NOT NULL default '',\n"
 "  score smallint(5) unsigned NOT NULL default '0',\n"
-"  strand enum('?','+','-') NOT NULL default '?',\n"
+"  strand enum('+','-') default NULL,\n"
 "  refNCBI blob NOT NULL,\n"
 "  refUCSC blob NOT NULL,\n"
 "  observed varchar(255) NOT NULL default '',\n"
-"  molType enum('unknown','genomic','cDNA','mito') "
-           "NOT NULL default 'unknown',\n",
-	outRoot);
+"  molType enum(", outRoot);
+writeCodes(f, molTypeStrings, molTypeStringsUsed, MAX_MOLTYPE+1);
 fprintf(f,
+") default NULL,\n"
 "  class enum(");
-writeCodes(f, classStrings, MAX_CLASS+2+1);
+writeCodes(f, classStrings, classStringsUsed, MAX_CLASS+2+1);
 fprintf(f,
 ") NOT NULL default 'unknown',\n"
 "  valid set(");
-writeCodes(f, validBitStrings, VALID_BITS+1);
+writeCodes(f, validBitStrings, validBitStringsUsed, VALID_BITS+1);
 fprintf(f,
 ") NOT NULL default 'unknown',\n"
 "  avHet float NOT NULL default '0',\n"
 "  avHetSE float NOT NULL default '0',\n"
 "  func set(");
-writeCodes(f, functionStrings, MAX_FUNC+1);
+writeCodes(f, functionStrings, functionStringsUsed, MAX_FUNC+1);
 fprintf(f,
 ") NOT NULL default 'unknown',\n"
 "  locType enum(");
-writeCodes(f, locTypeStrings, MAX_LOCTYPE+1);
+writeCodes(f, locTypeStrings, locTypeStringsUsed, MAX_LOCTYPE+1);
 fprintf(f,
-") NOT NULL default 'unknown',\n"
+") default NULL,\n"
 "  weight int(10) unsigned NOT NULL default '0',\n"
 "  INDEX name (name),\n"
 "  INDEX chrom (chrom,bin)\n"
@@ -542,6 +591,7 @@ if (classNum > MAX_CLASS)
 		  "If %d is valid now, "UPDATE_CODE,
 		  classNum, MAX_CLASS, classNum);
 safef(class, classSize, "%s", classStrings[classNum]);
+classStringsUsed[classNum] = TRUE;
 }
 
 void processValid(struct lineFile *lf, int validNum,
@@ -568,7 +618,10 @@ else
     for (bit = VALID_BITS - 1;  bit >= 0;  bit--)
 	{
 	if ((validNum >> bit) & 0x1)
+	    {
 	    dyStringPrintf(validList, "%s,", validBitStrings[bit]);
+	    validBitStringsUsed[bit] = TRUE;
+	    }
 	}
     }
 safef(valid, validSize, "%s", validList->string);
@@ -589,7 +642,10 @@ if (funcList == NULL)
 dyStringClear(funcList);
 
 if (sameString("MISSING", funcCode))
+    {
     dyStringAppend(funcList, functionStrings[0]);
+    functionStringsUsed[0] = TRUE;
+    }
 else
     {
     unsigned codes[MAX_FUNC+1];
@@ -602,6 +658,7 @@ else
 			  "If %d is valid now, "UPDATE_CODE,
 			  codes[i], MAX_FUNC, codes[i]);
 	dyStringPrintf(funcList, "%s,", functionStrings[codes[i]]);
+	functionStringsUsed[codes[i]] = TRUE;
 	}
     }
 safef(func, funcSize, "%s", funcList->string);
@@ -623,6 +680,7 @@ if (locTypeNum > MAX_LOCTYPE)
 		  "If %d is valid now, "UPDATE_CODE,
 		  locTypeNum, MAX_LOCTYPE, locTypeNum);
 safef(locType, locTypeSize, "%s", locTypeStrings[locTypeNum]);
+locTypeStringsUsed[locTypeNum] = TRUE;
 }
 
 void compileRegex(regex_t *regCompiled, const char *regexStr, int flags)
@@ -1292,13 +1350,21 @@ if (!sameString(locType, "rangeInsertion") &&
     !sameString(locType, "rangeDeletion"))
     {
     if (obsMaxLen < span)
+	{
 	/* All observed alleles (except observed refAllele) are shorter
 	 * than the genomic segment ==> SNP is a deletion. */
 	safecpy(class, classSize, "deletion");
+	classStringsUsed[stringArrayIx("deletion", classStrings,
+				       ArraySize(classStrings))] = TRUE;
+	}
     else if (obsMinLen > span)
+	{
 	/* All observed alleles (except observed refAllele) are longer
 	 * than the genomic segment ==> SNP is an insertion. */
 	safecpy(class, classSize, "insertion");
+	classStringsUsed[stringArrayIx("insertion", classStrings,
+				       ArraySize(classStrings))] = TRUE;
+	}
     if (sameString(locType, "between") && !sameString(class, "insertion"))
 	lineFileAbort(lf, "locType \"between\" should be identified "
 		      "as an insertion here.");
@@ -1466,6 +1532,7 @@ safef(outFileName, sizeof(outFileName), "%s.bed", outRoot);
 FILE *f = mustOpen(outFileName, "w");
 
 initErrException(outRoot);
+initStringsUsed();
 memset(weightHisto, 0, sizeof(weightHisto));
 
 while ((wordCount = lineFileChopTab(lf, row)) > 0)
@@ -1537,7 +1604,10 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
 	!skipIt)
 	checkCluster(lf, strand, observed);
     if (! skipIt)
+	{
 	storeMapping();
+	tallyMoltype(lf, molType);
+	}
 
     if (! skipIt)
 	{
