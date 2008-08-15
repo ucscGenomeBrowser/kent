@@ -45,6 +45,14 @@ lineage ectoderm
 karyotype normal
 tier 2
 
+term NT2/D1
+type Cell Line
+description malignant pluripotent embryonal carcinoma (Ntera2)
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1973&Template=cellBiology
+lineage ectoderm
+karyotype cancer
+tier 3
+
 # Gene types
 term Known
 type Gene Type
