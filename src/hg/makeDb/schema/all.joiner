@@ -1587,7 +1587,7 @@ identifier flyBaseGeneId external=FlyBase
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
     $dm,!dm1.flyBase2004Xref.fbgn minCheck=0.90
     $dm,!dm1.pscreen.geneIds comma minCheck=0.95
-    $gbd,!hg17,!hg18,!danRer3,!mm5,!mm6,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!sacCer1.dmBlastTab.target minCheck=0.90
+    $gbd,!hg17,!hg18,!danRer3,!mm5,!mm6,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!sacCer1.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
@@ -1761,7 +1761,7 @@ identifier ensemblProteinId3 external=Ensembl
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
-    $gbd,!felCat3.ensGene.name,!ce6.ensGene.name chopAfter=.
+    $gbd,!ce6,!felCat3.ensGene.name chopAfter=.
     $gbd.superfamily.name
     $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
     mm3.ensemblXref.transcript_name chopAfter=. minCheck=0.20
