@@ -340,14 +340,14 @@ searchName ensemblWormGenes
 searchTable ensGene
 searchType genePred
 searchMethod fuzzy
-shortCircuit 1
+# shortCircuit 1
 searchPriority 18
 
 searchName sangerGenePrefix
 searchTable sangerGene
 searchMethod fuzzy
 searchType genePred
-shortCircuit 1
+# shortCircuit 1
 searchPriority 19
 
 searchName sangerGeneOrf
