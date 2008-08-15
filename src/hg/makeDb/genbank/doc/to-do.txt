@@ -988,7 +988,8 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 - alignments that join tandem gene dups:
     mm8:NM_178882.2
     hg18:chr22:37,706,098-37,778,547
-   hg18 BC029540.1 chrX:119,914,829-119,947,319
+    hg18 BC029540.1 chrX:119,914,829-119,947,319
+    mm9:chr7:91,891,203-92,412,482 (really bad)
 
 
 - dropped by repeat masking.  Keep alignments to repeats only if there are
