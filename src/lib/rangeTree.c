@@ -227,6 +227,41 @@ writeOne(f, start);
 writeOne(f, size);
 }
 
+void rangeReadArray(FILE *f, struct rangeStartSize *r, int n, boolean isSwapped)
+/* Read 'n' elements of range array (start,size) from file 'f'. */
+{
+mustRead(f, r, n*sizeof(*r));
+if (isSwapped)
+    {
+    while (n)
+	{
+	r->start = byteSwap32(r->start);
+	r->size = byteSwap32(r->size);
+	--n;
+	r++;
+	}
+    }
+}
+
+void rangeWriteArray(struct rangeStartSize *r, int n, FILE *f)
+/* Write 'n' elements of range array (start,size) to file 'f'. */
+{
+mustWrite(f, r, n*sizeof(*r));
+}
+
+void rangeReadWriteN(FILE *inF, int n, boolean isSwapped, FILE *outF)
+/* Read 'n' ranges in from file 'inF' and write them to file 'outF'.
+ * Reads and writes ranges one at a time. */
+{
+int i;
+struct range r;
+for (i=0 ; i<n ; ++i )
+    {
+    r = rangeReadOne(inF, isSwapped);
+    rangeWriteOne(&r, outF);
+    }
+}
+
 struct range rangeReadOneWithVal(FILE *f, boolean isSwapped, void *(*valReadOne)(FILE *f, boolean isSwapped))
 /* Read one range structure from binary file f, including range val.
  * Returns start, end.
@@ -372,5 +407,83 @@ tempValSize = 0;
 tempFuncRangeValSize = rangeValSizeInFile;
 rbTreeTraverse(tree, rangeValSize);
 return rangeTreeSizeInFile(tree) + tempValSize;
+}
+
+int rangeTreeFileMerge(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, FILE *of)
+/* Merge n1 ranges from array of 'n1' ranges (start,size) in r1 with 
+ * 'n2' ranges (start,size) in r2, writing them to output file 'of'. 
+ * Note that the ranges are as stored on disk (start,size) not (start,end).
+ * Writes the ranges one-by-one.
+ * Returns number of nodes in merged file. */
+{
+int r1end, r2end, nodes = 0;
+/* loop around merging while we have ranges in both lists */
+while ( n1 > 0 && n2 > 0)
+    {
+    r1end = r1->start+r1->size;
+    r2end = r2->start+r2->size;
+    /* check which should be merged or output */
+    if ( r1end <= r2->start ) /* r1 is upstream, write it and get next one */
+	{
+	mustWrite(of, r1, sizeof(*r1));
+	++nodes;
+	--n1;
+	++r1;
+	}
+    else if (r2end <= r1->start) /* r2 is upstream, write it and get next one */
+	{
+	mustWrite(of, r2, sizeof(*r2));
+	++nodes;
+	--n2;
+	++r2;
+	}
+    else /* overlap */
+	{ 
+	if (r2->start >= r1->start) /* 1 is before 2 */
+	    {
+	    if (r2end <= r1end) /* 2 is inside 1, read next r2 */
+		{
+		--n2;
+		++r2;
+		}
+	    else /* extend 2 to start of 1, read next r1  */
+		{
+		r2->start = r1->start;
+		--n1;
+		++r1;
+		}
+	    }
+	else /* 2 is before 1 */
+	    {
+	    if (r1end <= r2end) /* 1 is inside 2, read next r1 */
+		{
+		--n1;
+		++r1;
+		}
+	    else /* extend 2 to end of 1, read next r2  */
+		{
+		r1->start = r2->start;
+		--n2;
+		++r2;
+		}
+	    }
+	}
+    }
+/* write out any remaining nodes that are either in n1 or n2 */
+while (n1)
+    {
+    mustWrite(of, r1, sizeof(*r1));
+    ++nodes;
+    --n1;
+    ++r1;
+    }
+while (n2)
+    {
+    mustWrite(of, r2, sizeof(*r2));
+    ++nodes;
+    --n2;
+    ++r2;
+    }
+return nodes;
 }
 

@@ -20,6 +20,13 @@ struct range
     void *val;		/* Some value associated with range. */
     };
 
+struct rangeStartSize
+/* A utility struct for reading and writing arrays of ranges to/from disk */
+    {
+    bits32 start;
+    bits32 size;
+    };
+
 struct rbTree *rangeTreeNew();
 /* Create a new, empty, rangeTree.  Free with rbFreeTree. */
 
@@ -90,6 +97,16 @@ void rangeWriteOne(struct range *r, FILE *f);
 /* Write out one range structure to binary file f.
  * This only writes start and size. */
 
+void rangeReadArray(FILE *f, struct rangeStartSize *r, int n, boolean isSwapped);
+/* Read 'n' elements of range array (start,size) from file 'f'. */
+
+void rangeWriteArray(struct rangeStartSize *r, int n, FILE *f);
+/* Write 'n' elements of range array (start,size) to file 'f'. */
+
+void rangeReadWriteN(FILE *inF, int n, boolean isSwapped, FILE *outF);
+/* Read 'n' ranges in from file 'inF' and write them to file 'outF'.
+ * Reads and writes ranges one at a time. */
+
 struct range rangeReadOneWithVal(FILE *f, boolean isSwapped, void *(*valReadOne)(FILE *f, boolean isSwapped));
 /* Read one range structure from binary file f, including range val.
  * Returns start, end.
@@ -144,6 +161,12 @@ int rangeTreeSizeInFileWithVal(struct rbTree *tree, int (*rangeValSizeInFile)(vo
  * Includes start, size, and val. 
  * rangeValSizeInFile should refer to a function which calculates the size of the val 
  * in a binary file. Not called if null. */
+
+int rangeTreeFileMerge(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, FILE *of);
+/* Merge n1 ranges from array of 'n1' ranges (start,size) in r1 with 
+ * 'n2' ranges (start,size) in r2, writing them to output file 'of'. 
+ * Note that the ranges are as stored on disk (start,size) not (start,end).
+ * Returns number of nodes in merged file. */
 
 
 #endif /* RANGETREE_H */

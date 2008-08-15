@@ -16,8 +16,13 @@ testGenomeRangeTree: ../lib/$(MACHTYPE)/jkweb.a testGenomeRangeTree.c
 	chmod a+x testGenomeRangeTree
 	./testGenomeRangeTree -verbose=0
 	hexdump -n 58 -f out/testGenomeRangeTree.fmt out/testGenomeRangeTree.out > out/testGenomeRangeTree.hexdump2
-	diff out/testGenomeRangeTree.hexdump out/testGenomeRangeTree.hexdump2
-	rm out/testGenomeRangeTree.out out/testGenomeRangeTree.hexdump2 testGenomeRangeTree
+	diff --brief out/testGenomeRangeTree.hexdump out/testGenomeRangeTree.hexdump2
+	diff --brief out/testGenomeRangeTree.bama out/testGenomeRangeTree.out
+	diff --brief out/testGenomeRangeTree.bama out/testGenomeRangeTree.out2
+	diff --brief out/testGenomeRangeTreeOr1.bama     out/testGenomeRangeTreeOr1.out
+	diff --brief out/testGenomeRangeTreeOr2.bama     out/testGenomeRangeTreeOr2.out
+	diff --brief out/testGenomeRangeTreeOr_1or2.bama out/testGenomeRangeTreeOr_1or2.out
+	rm out/*.out out/*.out2 out/testGenomeRangeTree.hexdump2 testGenomeRangeTree
 
 test:
 	./hgTest.pl -v -db hg13 | tee $(HOST).hg13.log  2>&1

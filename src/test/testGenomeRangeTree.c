@@ -5,6 +5,7 @@
 /* Test program for genomeRangeTree library functions (author: mikep) */
 
 struct genomeRangeTree *t1, *t2;
+struct genomeRangeTreeFile *tf1, *tf2;
 struct rbTree *rt1, *rt2;
 struct range *r1, *r2;
 int n;
@@ -17,6 +18,7 @@ static struct optionSpec optionSpecs[] = {
 
 void testNewAndFind()
 {
+verbose(1,"testNewAndFind()\n");
 t1 = genomeRangeTreeNew();
 if (!t1) 
     errAbort("Error: genomeRangeTreeNew() failed\n");
@@ -102,6 +104,7 @@ else
 
 void testAddAndList()
 {
+verbose(1,"testAddAndList()\n");
 t1 = genomeRangeTreeNew();
 if (!t1) 
     errAbort("Error: genomeRangeTreeNew() failed\n");
@@ -221,6 +224,7 @@ else
 
 void testOverlaps()
 {
+verbose(1,"testOverlaps()\n");
 /* Overlaps 
  * ranges: chr1:1-10,val=3  10-15,val=1  20-30,val=1 ; chr2:1-10
  */
@@ -401,6 +405,7 @@ else
 
 void testAddVar()
 {
+verbose(1,"testAddVar()\n");
 /* Overlaps 
  * ranges: chr1:1-10,val=3  10-15,val=1  20-30,val=1 ; chr2:1-10
  */
@@ -473,16 +478,36 @@ else
 
 void testReadWrite()
 {
+verbose(1,"testReadWrite()\n");
 t1 = genomeRangeTreeNew();
 genomeRangeTreeAdd(t1,"chr1", 3,10);
 genomeRangeTreeAdd(t1,"chr1", 1, 9);
 genomeRangeTreeAdd(t1,"chr1",20,30);
 genomeRangeTreeAdd(t1,"chr2",2,3);
-f = mustOpen("out/testGenomeRangeTree.out","w");
-genomeRangeTreeWriteOne(t1,f);
-carefulClose(&f);
-verbose(1,"OK: genomeRangeTreeWriteOne() \n");
+if (t1->hash->elCount != 2 || genomeRangeTreeFindRangeTree(t1, "chr1")->n != 2 || genomeRangeTreeFindRangeTree(t1, "chr2")->n != 1)
+    errAbort("Error: genomeRangeTreeAdd(chr1:1-10,chr1:20-30,chr2:2-3) failed\n");
+else
+    verbose(1,"OK: genomeRangeTreeAdd(chr1:1-10,chr1:20-30,chr2:2-3) \n");
 
+tf1 = genomeRangeTreeFileNew(t1, "out/testGenomeRangeTree.out");
+if (!tf1)
+    errAbort("Error: genomeRangeTreeFileNew() returned null\n");
+else
+    verbose(1,"OK: genomeRangeTreeFileNew() #1\n");
+
+genomeRangeTreeFileWriteHeader(tf1);
+verbose(1,"OK: genomeRangeTreeFileWriteHeader() #1\n");
+
+genomeRangeTreeFileWriteData(tf1);
+verbose(1,"OK: genomeRangeTreeFileWriteData() #1\n");
+
+genomeRangeTreeFileFree(&tf1);
+if (tf1)
+    errAbort("Error: genomeRangeTreeFileFree() failed\n");
+else
+    verbose(1,"OK: genomeRangeTreeFileFree() #1\n");
+
+/* genomeRangeTreeRead */
 t2 = genomeRangeTreeRead("out/testGenomeRangeTree.out");
 if (!t2)
     errAbort("Error: genomeRangeTreeRead() returned null\n");
@@ -516,6 +541,140 @@ if (r1->next || r1->start != 2 || r1->end != 3 || r1->val)
     errAbort("Error: genomeRangeTreeRead() wrong range2 (got (%p,%d,%d,%p), expected (null,2,3,null))\n", r1->next, r1->start, r1->end, r1->val);
 else
     verbose(1,"OK: genomeRangeTreeRead() #6 range3 \n");
+
+/* now write it to another file and see if they are the same */
+genomeRangeTreeWrite(t2, "out/testGenomeRangeTree.out2");
+verbose(1,"OK: genomeRangeTreeWrite(t2, out/testGenomeRangeTree.out2) \n");
+
+/* genomeRangeTreeFileReadHeader */
+tf1 = genomeRangeTreeFileReadHeader("out/testGenomeRangeTree.out");
+if (!tf1)
+    errAbort("Error: genomeRangeTreeFileReadHeader() failed\n", slCount(r1));
+else
+    verbose(1,"OK: genomeRangeTreeFileReadHeader() #1\n");
+if (slCount(tf1->chromList) != 2 || !tf1->file || (tf1->sig != 0xf7fb8104 &&  tf1->sig != 0x0481fbf7) 
+    || tf1->headerLen != 32 || tf1->numChroms != 2)
+    errAbort("Error: genomeRangeTreeFileReadHeader() failed. got=(%d,%p,(%x),%d,%d), expecting=(2,0xNNNNNNNN,(0xf7fb8104 or 0x0481fbf7), 32, 2).\n", slCount(r1), tf1->file, tf1->sig, tf1->headerLen,  tf1->numChroms);
+else
+    verbose(1,"OK: genomeRangeTreeReadHeader() #2\n");
+
+/* genomeRangeTreeFileReadData */
+t2 = genomeRangeTreeFileReadData(tf1);
+if (!t2)
+    errAbort("Error: genomeRangeTreeFileReadData() returned null\n");
+else
+    verbose(1,"OK: genomeRangeTreeFileReadData() #1\n");
+if (t2->hash->elCount != 2)
+    errAbort("Error: genomeRangeTreeFileReadData() wrong # chroms (got [%s], expected 2 [chr1,chr2])\n", slNameListToString((struct slName *)hashElListHash(t2->hash),','));
+else
+    verbose(1,"OK: genomeRangeTreeFileReadData() #2 chrom chr1 \n");
+r1 = genomeRangeTreeList(t1,"chr1");
+if (slCount(r1) != 2)
+    errAbort("Error: genomeRangeTreeFileReadData() wrong # ranges (got %d, expected 2)\n", slCount(r1));
+else
+    verbose(1,"OK: genomeRangeTreeFileReadData() #3 range count\n");
+if (!r1->next || r1->start != 1 || r1->end != 10 || r1->val)
+    errAbort("Error: genomeRangeTreeFileReadData() wrong range1 (got (%p,%d,%d,%p), expected (0xNNNNNNNN,1,10,null))\n", r1->next, r1->start, r1->end, r1->val);
+else
+    verbose(1,"OK: genomeRangeTreeFileReadData() #4 range1 \n");
+r1 = r1->next;
+if (r1->next || r1->start != 20 || r1->end != 30 || r1->val)
+    errAbort("Error: genomeRangeTreeFileReadData() wrong range2 (got (%p,%d,%d,%p), expected (null,20,30,null))\n", r1->next, r1->start, r1->end, r1->val);
+else
+    verbose(1,"OK: genomeRangeTreeFileReadData() #5 range2 \n");
+
+r1 = genomeRangeTreeList(t1,"chr2");
+if (slCount(r1) != 1)
+    errAbort("Error: genomeRangeTreeFileReadData() wrong # ranges (got %d, expected 1)\n", slCount(r1));
+else
+    verbose(1,"OK: genomeRangeTreeFileReadData() #3 range count\n");
+if (r1->next || r1->start != 2 || r1->end != 3 || r1->val)
+    errAbort("Error: genomeRangeTreeFileReadData() wrong range2 (got (%p,%d,%d,%p), expected (null,2,3,null))\n", r1->next, r1->start, r1->end, r1->val);
+else
+    verbose(1,"OK: genomeRangeTreeFileReadData() #6 range3 \n");
+
+}
+
+void testBaseMaskAndOr()
+{
+t1 = genomeRangeTreeNew();
+genomeRangeTreeAdd(t1,"chr1", 3,10);
+genomeRangeTreeAdd(t1,"chr1", 1, 9);
+genomeRangeTreeAdd(t1,"chr1", 5, 6);
+genomeRangeTreeAdd(t1,"chr1",20,22);
+genomeRangeTreeAdd(t1,"chr1",26,28);
+genomeRangeTreeAdd(t1,"chr1",21,27);
+genomeRangeTreeAdd(t1,"chr1",27,30);
+genomeRangeTreeAdd(t1,"chr2",2,3);
+genomeRangeTreeAdd(t1,"chr3",0xaabbcc,0xaabbcc+0x012345);
+if (differentString(genomeRangeTreeToString(t1)->string, "[tree [chr1: (1,10) (20,30)] [chr2: (2,3)] [chr3: (11189196,11263761)]]"))
+    errAbort("Error: testBaseMaskAndOr #1 tree doesnt match (got=%s, wanted=%s)\n", genomeRangeTreeToString(t1)->string, "[tree [chr1: (1,10) (20,30)] [chr2: (2,3)] [chr3: (11189196,11263761)]]");
+else
+    verbose(1,"OK: testBaseMaskAndOr #1 tree=%s\n", genomeRangeTreeToString(t1)->string);
+genomeRangeTreeWrite(t1, "out/testGenomeRangeTreeOr1.out");
+verbose(1,"OK: genomeRangeTreeWrite() \n");
+genomeRangeTreeFree(&t1);
+verbose(1,"OK: genomeRangeTreeFree()\n");
+t1 = genomeRangeTreeRead("out/testGenomeRangeTreeOr1.out");
+if (differentString(genomeRangeTreeToString(t1)->string, "[tree [chr1: (1,10) (20,30)] [chr2: (2,3)] [chr3: (11189196,11263761)]]"))
+    errAbort("Error: out/testGenomeRangeTreeOr1.out tree doesnt match (got=%s, wanted=%s)\n", genomeRangeTreeToString(t1)->string, "[tree [chr1: (1,10) (20,30)] [chr2: (2,3)] [chr3: (11189196,11263761)]]");
+else
+    verbose(1,"OK: out/testGenomeRangeTreeOr1.out tree=%s\n", genomeRangeTreeToString(t1)->string);
+if (t1->hash->elCount != 3 || genomeRangeTreeFindRangeTree(t1, "chr1")->n != 2 || genomeRangeTreeFindRangeTree(t1, "chr2")->n != 1 ||  genomeRangeTreeFindRangeTree(t1, "chr3")->n != 1)
+    errAbort("Error: genomeRangeTreeAdd(chr1:1-10,chr1:20-30,chr2:2-3,chr3:11189196-11263761) failed\n");
+else
+    verbose(1,"OK: genomeRangeTreeAdd(chr1:1-10,chr1:20-30,chr2:2-3,chr3:11189196-11263761) \n");
+
+t2 = genomeRangeTreeNew();
+genomeRangeTreeAdd(t2,"chr1", 1,10);
+genomeRangeTreeAdd(t2,"chr1",20,30);
+genomeRangeTreeAdd(t2,"chr2",2,3);
+genomeRangeTreeAdd(t2,"chr4",15,255+15);
+genomeRangeTreeAdd(t2,"chr5",0x123456,0x123456+0x234567);
+genomeRangeTreeWrite(t2, "out/testGenomeRangeTreeOr2.out");
+t2 = genomeRangeTreeRead("out/testGenomeRangeTreeOr2.out");
+if (differentString(genomeRangeTreeToString(t2)->string, "[tree [chr1: (1,10) (20,30)] [chr2: (2,3)] [chr4: (15,270)] [chr5: (1193046,3504573)]]"))
+    errAbort("Error: out/testGenomeRangeTreeOr2.out doesnt match (got=%s, wanted=%s)\n", genomeRangeTreeToString(t2)->string,  "[tree [chr1: (1,10) (20,30)] [chr2: (2,3)] [chr4: (15,270)] [chr5: (1193046,3504573)]]");
+else
+    verbose(1,"OK: out/testGenomeRangeTreeOr2.out tree=%s\n", genomeRangeTreeToString(t2)->string);
+
+tf1 = genomeRangeTreeFileReadHeader("out/testGenomeRangeTreeOr1.out");
+if (!tf1 || tf1->numChroms != 3)
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out) failed\n");
+else
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out) tf1=%p\n", tf1);
+if (!tf1->chromList )
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out) failed (tf1->chromList=%p)\n", tf1->chromList);
+else
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out)\n");
+if (slCount(tf1->chromList) != 3 )
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out) failed (slCount=%d)\n", slCount(tf1->chromList));
+else
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out)\n");
+if (differentString("chr1",tf1->chromList->name) || differentString("chr2",tf1->chromList->next->name)
+    || differentString("chr3",tf1->chromList->next->next->name))
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out) failed (name1=%s, name2=%s, name3=%s)\n", tf1->chromList->name, tf1->chromList->next->name, tf1->chromList->next->next->name);
+else
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out) (name1=%s, name2=%s, name3=%s)\n", tf1->chromList->name, tf1->chromList->next->name, tf1->chromList->next->next->name);
+
+tf2 = genomeRangeTreeFileReadHeader("out/testGenomeRangeTreeOr2.out");
+if (!tf2 || tf2->numChroms != 4 || !tf2->chromList)
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr2.out) failed (tf2=%p)\n");
+else
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr2.out) tf2=%p\n", tf2);
+if (slCount(tf2->chromList) != 4 )
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr2.out) failed (slCount=%d)\n", slCount(tf2->chromList));
+else
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr2.out)\n");
+if (differentString("chr1",tf2->chromList->name) || differentString("chr2",tf2->chromList->next->name)\
+    || differentString("chr4",tf2->chromList->next->next->name) || differentString("chr5",tf2->chromList->next->next->next->name))
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr2.out) failed (name1=%s, name2=%s, name3=%s, name4=%s)\n", tf2->chromList->name, tf2->chromList->next->name, tf2->chromList->next->next->name, tf2->chromList->next->next->next->name);
+else
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr2.out) (name1=%s, name2=%s, name3=%s, name4=%s)\n", tf2->chromList->name, tf2->chromList->next->name, tf2->chromList->next->next->name, tf2->chromList->next->next->next->name);
+
+genomeRangeTreeFileOr(tf1, tf2, "out/testGenomeRangeTreeOr_1or2.out");
+verbose(1,"OK: genomeRangeTreeFileOr(tf1, tf2, out/testGenomeRangeTreeOr_1or2.out)\n");
+
 }
 
 int main(int argc, char *argv[])
@@ -528,6 +687,7 @@ testAddAndList();
 testAddVar();
 testOverlaps();
 testReadWrite();
+testBaseMaskAndOr();
 
 verbose(1,"genomeRangeTree OK\n");
 return EXIT_SUCCESS;
