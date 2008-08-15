@@ -4,7 +4,8 @@ CVSUP = cvs -q update
 
 # recursive target to do install to DEST, with extra excludes EXCL.
 
-JS_FILES=ajax.js hgTracks.js hui.js utils.js
+JQUERY_FILES=jquery-1.2.6.pack.js jquery.js jquery.tablednd.js
+JS_FILES=ajax.js hgTracks.js hui.js utils.js ${JQUERY_FILES}
 
 user:
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}
