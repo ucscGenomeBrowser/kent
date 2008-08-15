@@ -24486,15 +24486,18 @@ See hg18.txt for details.
     cd /cluster/data/hg17/bed/kiddEichlerDiscordant/cloneIds
     # Saved off emailed file from Jeff Kidd to clones_used_3nov.txt.accessions;
     # get trace archive trace names for end reads:
-    foreach n (7 8 9 10 11 12 13 14)
+    foreach n (7 9 10 11 12 13 14)
       wget http://hgsv.washington.edu/general/download/clone_mapping/ABC$n/ABC$n.conversion.gz
     end
+    # ABC8 has _a and _b files:
+    wget http://hgsv.washington.edu/general/download/clone_mapping/ABC8/ABC8_a.conversion.gz
+    wget http://hgsv.washington.edu/general/download/clone_mapping/ABC8/ABC8_b.conversion.gz
     # That file is not available for G248.
     gunzip *.gz
     # Combine the relevant data from the .conversion files; keep only those
     # IDs that are used in the tracks.
     cut -f 4 ../bd35/*discordant.txt \
-    | egrep -v '^(#chrom|track)' \
+    | egrep -v '^(#chrom|track|name)' \
     | sed -e 's/,.*//' \
     | sort -u > discIds.txt
     perl -wpe 's/^OurClone.*\n// || s/^\d+_(HUMAN|\d+_).*\n$// || \
@@ -24504,16 +24507,16 @@ See hg18.txt for details.
     | sort > allEnds.tab
     grep -wFf discIds.txt allEnds.tab > discEnds.txt
     wc -l discIds.txt allEnds.tab discEnds.txt 
-#   223052 discIds.txt
-# 14166657 allEnds.tab
-#   397446 discEnds.txt
+#   223051 discIds.txt
+# 17498527 allEnds.tab
+#   573974 discEnds.txt
     # discEnds.txt has 2 lines (forward & reverse) for most of its ids...
-    # ideally we would see 2*(223052) lines in discEnds.txt.
+    # ideally we would see 2*(223051) lines in discEnds.txt.
     # Get a list of which discordant clone IDs don't have ends in *.conv*:
     cut -f 1 allEnds.tab | uniq > all.tmp
     comm -23 discIds.txt all.tmp > discNotInConv.txt
     wc -l discNotInConv.txt
-#103479 discNotInConv.txt
+#16318 discNotInConv.txt
     cat > combine.pl <<'_EOF_'
 #!/usr/bin/perl -w
 use strict;
@@ -24540,8 +24543,8 @@ close(ENDS);
 foreach my $id (sort keys %idInfo) {
   my $infoRef = $idInfo{$id};
   $infoRef->[0] = '' if (! defined $infoRef->[0]);
-  $infoRef->[1] = '' if (! defined $infoRef->[1]);
-  $infoRef->[2] = '' if (! defined $infoRef->[2]);
+  $infoRef->[1] = 0 if (! defined $infoRef->[1]);
+  $infoRef->[2] = 0 if (! defined $infoRef->[2]);
   print join("\t", $id, @{$infoRef}) . "\n";
 }
 '_EOF_'
