@@ -1,24 +1,29 @@
 <!-- Display image in righthand corner -->
-<TABLE ALIGN=RIGHT BORDER=0 WIDTH=185>
+<TABLE ALIGN=RIGHT BORDER=0 WIDTH=315 HEIGHT=185>
   <TR><TD ALIGN=RIGHT>
-    <A HREF="*** link to sequencing center's project page"
+    <A HREF="http://dolphin.lab.nig.ac.jp/"
     TARGET=_blank>
-    <IMG SRC="/images/Oryzias_latipes.jpg" WIDTH=*** HEIGHT=*** ALT="Medaka"></A>
+    <IMG SRC="/images/Oryzias_latipes.jpg" WIDTH=300 HEIGHT=123 ALT="Medaka"></A>
   </TD></TR>
   <TR><TD ALIGN=RIGHT> 
     <FONT SIZE=-1><em>Oryzias latipes</em><BR> 
     </FONT>
     <FONT SIZE=-2> 
-      Photo courtesy of ***
-      (<A HREF="*** link to source" 
-      TARGET=_blank>***source</A>)
+      Photo courtesy of
+      (<A HREF="http://mlab.cb.k.u-tokyo.ac.jp/index_eng.html" 
+      TARGET=_blank>Shinichi Morishita</A>)
     </FONT>
   </TD></TR>
 </TABLE>
 
 <P>
-The Oct. 2005 <em>Oryzias latipes</em> draft assembly 
-(MEDAKA1) was produced by the *** sequencing center.
+The Apr. 2006 <em>Oryzias latipes</em> Version 1.0 draft assembly 
+was produced by the
+<A HREF="http://dolphin.lab.nig.ac.jp/"
+TARGET=_blank>National Institute of Genetics</A> (NIG)
+and the <A HREF="http://medaka.utgenome.org/"
+TARGET=_blank>University of Tokyo</A>, Japan. This assembly is
+equivalent to the Ensembl Oct. 2005 MEDAKA1 assembly.</P>
 
 <H3>Sample position queries</H3>
 <P>
@@ -26,7 +31,7 @@ A genome position can be specified by the accession number of a
 sequenced genomic region, an mRNA or EST, a chromosomal coordinate
 range, or keywords from the GenBank description of an mRNA. The
 following list shows examples of valid position queries for the
-Medaka genome.  See the
+medaka genome.  See the
 <A HREF="../goldenPath/help/hgTracksHelp.html"
     TARGET=_blank>User's Guide</A> for more information.
 <P>
@@ -35,28 +40,28 @@ Medaka genome.  See the
         <TH WIDTH=14>&nbsp;</TH>
        	<TH ALIGN=LEFT>Genome Browser Response:</TH></TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD VALIGN=Top>chrZ</TD>
+    <TR><TD VALIGN=Top>chr23</TD>
         <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays all of chromosome Z</TD>
+       	<TD VALIGN=Top>Displays all of chromosome 23</TD>
     </TR>
-    <TR><TD VALIGN=Top>chr3:1-1000000</TD>
+    <TR><TD VALIGN=Top>chr3:1-1,000,000</TD>
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Displays first million bases of chr 3</TD>
     </TR>
-    <TR><TD VALIGN=Top NOWRAP>chr3:1000000+2000</TD>
+    <TR><TD VALIGN=Top NOWRAP>chr3:19,840,000+100,000</TD>
        	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays a region of chr 3 that spans 2000 bases, starting with position 1000000 </TD>
+	<TD VALIGN=Top>Displays a region of chr 3 that spans 100,000 bases, starting with position 19,840,000 </TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>BX950328</TD>
+    <TR><TD VALIGN=Top>AY158893</TD>
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Displays region of mRNA with GenBank accession
-		number BX950328</TD>
+		number AY158893</TD>
     </TR>
-    <TR><TD VALIGN=Top>BU335953</TD>
+    <TR><TD VALIGN=Top>BJ733542</TD>
         <TD WIDTH=14>&nbsp;</TD>
       	<TD VALIGN=Top>Displays region of EST with GenBank accession
-		BU335953 on chr Z</TD>
+		BJ733542 on chr 6</TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
     <TR><TD VALIGN=Top>pseudogene mRNA</TD>
@@ -79,51 +84,37 @@ Medaka genome.  See the
         <TD WIDTH=14>&nbsp;</TD>
 	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zhang</TD>
     </TR>
-    <TR><TD VALIGN=Top>Taguchi,T.</TD>
+    <TR><TD VALIGN=Top>Takeda,H.</TD>
         <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs deposited by co-author T. Taguchi</TD>
+       	<TD VALIGN=Top>Lists mRNAs deposited by co-author H. Takeda</TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
     <TR><TD COLSPAN="3"> Use this last format for author queries. Although
-	GenBank requires the search format <em>Taguchi T</em>, internally it
-	uses the format <em>Taguchi,T.</em>.</TD>
+	GenBank requires the search format <em>Takeda H</em>, internally it
+	uses the format <em>Takeda,H.</em>.</TD>
     </TR>
 </TABLE>
 
 <HR>
 <H3>Assembly details</H3>
 <P>
-The genome has been sequenced to ***X coverage.
-Approximately 88% of the sequence has been anchored to chromosomes, 
-which include autosomes 1-24, 26-28, and 32, and sex chromosomes W and Z. 
-(In contrast to mammals, the female chicken is heterogametic (ZW) and the 
-male is homogametic (ZZ).) 
-The remaining unanchored contigs that could be localized to a chromosome 
-have been concatenated into the virtual 
-chromosomes &quot;chr*_random&quot;, separated by gaps of 10,000 bp. 
-Unanchored contigs that could not be localized to a chromosome 
-have been concatenated into the virtual 
-chromosome &quot;chrUn&quot;, separated by gaps of 1,000 bp in order 
-to reduce the total size of chrUn. 
-The chicken 
-mitochondrial sequence is also available as the virtual chromosome 
-&quot;chrM&quot;. 
+This assembly has been sequenced to 10.6X coverage.
+It consists of approximately 700.4 Mb (excluding gaps) on 24 chromosomes, 
+chr1 - chr24.
+There are also 7,164 scaffold and ultracontigs of unplaced sequence.
+The medaka mitochondrial sequence is also available as the virtual chromosome 
+&quot;chrM&quot; (GenBank accession: NC_004387).
 </P>
-
-
 <P>
 Bulk downloads of the sequence and annotation data are available via 
-the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/oryLat2/">FTP
-server</A> or the <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#medaka">Downloads</A> page. 
-
-  *** Developer -- remove this if no conditions for use:
-These data have
-<A HREF="../goldenPath/credits.html#medaka_use">specific 
-conditions for use</A>. 
-
+the Genome Browser
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/oryLat1/">FTP server</A> or 
+the <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#medaka">Downloads</A>
+page. These data have <A HREF="http://medaka.utgenome.org/#policy"
+TARGET=_blank>specific conditions for use</A>. </P>
+<P>
 The Medaka browser annotation tracks were generated by UCSC and 
 collaborators worldwide. See the 
 <A HREF="/goldenPath/credits.html#medaka_credits">Credits</A> 
 page for a detailed list of the organizations and individuals who contributed 
-to the success of this release. 
-</P>
+to this release.  </P>
