@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1453 2008/08/13 21:50:08 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1454 2008/08/15 20:20:36 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7661,9 +7661,13 @@ char ensUrl[256];
 
 /* shortItemName is the name without the "." + version */ 
 shortItemName = cloneString(itemName);
-chp = strstr(shortItemName, ".");
-if (chp != NULL) 
-    *chp = '\0';
+/* ensembl gene names are different from their usual naming scheme on ce6 */
+if (! startsWith("ce6", database))
+    {
+    chp = strstr(shortItemName, ".");
+    if (chp != NULL) 
+	*chp = '\0';
+    }
 genomeStrEnsembl = ensOrgNameFromScientificName(scientificName);
 if (genomeStrEnsembl == NULL)
     {
