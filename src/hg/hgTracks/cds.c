@@ -18,6 +18,7 @@
 #include "twoBit.h"
 #include "hgTracks.h"
 #include "cdsSpec.h"
+#include "axt.h"
 
 /*
  * WARNING: this code is incomprehensible:
@@ -36,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.82 2008/08/10 01:11:06 baertsch Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.83 2008/08/16 21:03:26 baertsch Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -91,7 +92,12 @@ static char const rcsid[] = "$Id: cds.c,v 1.82 2008/08/10 01:11:06 baertsch Exp 
 #define CDS_ALT_START_G  0 
 #define CDS_ALT_START_B  128
 
-#define CDS_NUM_COLORS 11
+#define CDS_SYN_PROT    11   /* yellow, protein seq change "synonymous" ie I->V , R->K etc */
+#define CDS_SYN_PROT_R  255 
+#define CDS_SYN_PROT_G  215 
+#define CDS_SYN_PROT_B  0
+
+#define CDS_NUM_COLORS 12
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -403,6 +409,11 @@ else if (grayIx == -3)
       color = cdsColor[CDS_STOP];
     sprintf(codon,"*");
     }
+else if (grayIx == -4)
+    {
+    color = cdsColor[CDS_SYN_PROT];
+    sprintf(codon,"*");
+    }
 #ifdef LOWELAB
 else if(grayIx == - 'V')
    {
@@ -486,6 +497,21 @@ else
 }
 
 
+static boolean protEquivalent(int aa1, int aa2)
+/* returns TRUE if amino acids have a positive blosum62 score
+   i.e. I, V or R, K
+   else FALSE
+   */
+{
+static struct axtScoreScheme *ss;
+if (ss == NULL)
+    ss = axtScoreSchemeProteinDefault();
+if ((ss->matrix[aa1][aa2]) > 0)
+    return TRUE;
+else
+    return FALSE;
+}
+
 static int setColorByDiff(DNA *rna, char genomicCodon, bool codonFirstColor)
 /* Difference ==> red, otherwise keep the alternating shades. */
 {
@@ -497,7 +523,12 @@ if (rnaCodon == '\0')
     rnaCodon = '*';
 
 if (genomicCodon != 'X' && genomicCodon != rnaCodon)
-    return(-3);    //red (reusing stop codon color)
+    {
+    if (protEquivalent(genomicCodon, rnaCodon))
+        return(-4);     // yellow, "synonymous" protein 
+    else
+        return(-3);    //red (reusing stop codon color)
+    }
 else if (codonFirstColor)
     return(genomicCodon - 'A' + 1);
 else
@@ -885,6 +916,9 @@ cdsColor[CDS_POLY_A] = hvGfxFindColorIx(hvg,CDS_POLY_A_R,
 cdsColor[CDS_ALT_START] = hvGfxFindColorIx(hvg,CDS_ALT_START_R,
 					    CDS_ALT_START_G, 
 					    CDS_ALT_START_B);
+cdsColor[CDS_SYN_PROT] = hvGfxFindColorIx(hvg,CDS_SYN_PROT_R,
+					    CDS_SYN_PROT_G, 
+					    CDS_SYN_PROT_B);
 }
 
 
