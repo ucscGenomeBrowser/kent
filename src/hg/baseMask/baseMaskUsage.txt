@@ -1,0 +1,11 @@
+baseMask [options] in1.bama in2.bama o.bama
+
+process two baseMasks creating a new baseMask o.bama
+
+Options:
+  -or        : 'or' the basemasks together (union).
+               (output file will have all chroms in 
+               either file, and all ranges will be merged.
+  -and       : 'and' the basemasks together (intersection).
+               (not yet implemented)
+  -verbose=n : verbose > 0 prints some details.

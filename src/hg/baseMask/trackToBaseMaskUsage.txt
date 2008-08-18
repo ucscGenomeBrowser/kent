@@ -1,0 +1,8 @@
+trackToBaseMask [options] database track o.bama
+
+Create baseMask from track in database.
+Reads track from database and creates genomeRangeTree.
+Tree is serialized to output file o.bama.
+
+Options:
+  -verbose=n - verbose > 1 prints some details.

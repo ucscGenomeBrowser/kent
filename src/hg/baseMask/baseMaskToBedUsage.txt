@@ -1,0 +1,7 @@
+baseMaskToBed [options] in.bama out.bed
+
+Create bed file from baseMask file.
+Writes 3-columns bed file to out.bed.
+
+Options:
+  -verbose=n - verbose > 1 prints some details.
