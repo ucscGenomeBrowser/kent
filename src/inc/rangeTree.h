@@ -64,7 +64,15 @@ boolean rangeTreeOverlaps(struct rbTree *tree, int start, int end);
 int rangeTreeOverlapSize(struct rbTree *tree, int start, int end);
 /* Return the total size of intersection between interval
  * from start to end, and items in range tree. Sadly not
- * thread-safe. */
+ * thread-safe.
+ * On 32 bit machines be careful not to overflow
+ * range of start, end or total size return value. */
+
+int rangeTreeOverlapTotalSize(struct rbTree *tree);
+/* Return the total size of all ranges in range tree.
+ * Sadly not thread-safe. 
+ * On 32 bit machines be careful not to overflow
+ * range of start, end or total size return value. */
 
 struct range *rangeTreeFindEnclosing(struct rbTree *tree, int start, int end);
 /* Find item in range tree that encloses range between start and end 

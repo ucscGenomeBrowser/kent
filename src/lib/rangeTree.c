@@ -8,6 +8,7 @@
  * changed by various function calls. */
 
 #include "common.h"
+#include "limits.h"
 #include "localmem.h"
 #include "rbTree.h"
 #include "rangeTree.h"
@@ -183,7 +184,9 @@ totalOverlap += positiveRangeIntersection(r->start, r->end,
 int rangeTreeOverlapSize(struct rbTree *tree, int start, int end)
 /* Return the total size of intersection between interval
  * from start to end, and items in range tree. Sadly not
- * thread-safe. */
+ * thread-safe. 
+ * On 32 bit machines be careful not to overflow
+ * range of start, end or total size return value. */
 {
 struct range tempR;
 tempR.start = overlapStart = start;
@@ -193,6 +196,14 @@ rbTreeTraverseRange(tree, &tempR, &tempR, addOverlap);
 return totalOverlap;
 }
 
+int rangeTreeOverlapTotalSize(struct rbTree *tree)
+/* Return the total size of all ranges in range tree.
+ * Sadly not thread-safe. 
+ * On 32 bit machines be careful not to overflow
+ * range of start, end or total size return value. */
+{
+return rangeTreeOverlapSize(tree, INT_MIN, INT_MAX);
+}
 
 struct rbTree *rangeTreeNew()
 /* Create a new, empty, rangeTree. */
