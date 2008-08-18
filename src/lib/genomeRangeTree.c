@@ -186,7 +186,7 @@ struct dyString *genomeRangeTreeToString(struct genomeRangeTree *tree)
  * Not thread-safe; uses globals */
 {
 struct hashEl *chrom, *chromList = hashElListHash(tree->hash);
-slSort(&chromList, hashElCmp); /* numeric sort */
+slSort(&chromList, hashElCmp); /* alpha sort on chrom */
 dyStringFree(&tmpTreeToString);
 tmpTreeToString = newDyString(0);
 dyStringAppend(tmpTreeToString, "[tree");
@@ -197,6 +197,7 @@ for (chrom = chromList ; chrom ; chrom = chrom->next)
     dyStringAppend(tmpTreeToString, "]");
     }
 dyStringAppend(tmpTreeToString, "]");
+hashElFreeList(&chromList);
 return tmpTreeToString;
 }
 
