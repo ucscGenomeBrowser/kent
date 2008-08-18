@@ -493,7 +493,7 @@ else
     printf("<TR><TH>Expression of Retrocopy<TD>%s</TR>\n",pg->type);
 printf("<TR><TH>Score <TD>%d (range from 0 - %d)</TR>\n",  
         pg->score,
-        sqlQuickNum(conn, "select max(score) from retroMrnaInfo") );
+        sqlQuickNum(conn, "select max(score) from ucscRetroInfo") );
 printf("<TR><TH>Alignment Coverage of parent gene (Bases&nbsp;matching Parent) <TD>%d %% &nbsp;(%d bp) </TR>\n", pg->coverage, pg->matches);
 printf("<TR><TH>Introns Procesed Out <TD>%d out of %d (%d exons covered)\n", pg->processedIntrons, (pg->parentSpliceCount/2), pg->exonCover);
 printf("<TR><TH>Possible Introns (or gaps) in Retro<TD>%d\n", pg->intronCount);
