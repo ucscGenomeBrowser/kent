@@ -1,8 +1,11 @@
-trackToBaseMask [options] database track o.bama
+trackToBaseMask [options] database track [o.bama]
 
 Create baseMask from track in database.
 Reads track from database and creates genomeRangeTree.
-Tree is serialized to output file o.bama.
+Prints sum of sizes of all non-overlapping ranges and 
+total size of all chromosomes for database to stderr.
+Optionally write tree to output file o.bama, if specified.
 
 Options:
-  -verbose=n - verbose > 1 prints some details.
+  -quiet     : do not print sizes to stderr.
+  -verbose=n : verbose > 1 prints some details.
