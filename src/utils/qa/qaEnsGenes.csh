@@ -187,6 +187,12 @@ foreach db ($dbs)
  echo
 
  echo "\n\n----------------------"
+ echo "check that the ensGene track is sorted by chrom:"
+ echo "positionalTblCheck -verbose=2 $db ensGene\n"
+ positionalTblCheck -verbose=2 $db ensGene
+ echo
+
+ echo "\n\n----------------------"
  echo "run Joiner Check. look for errors in the following two lines only:"
  echo "ensPep.name and ensGtp.transcript"
  echo "\nrunning joinerCheck for $db on ensemblTranscriptId:"
@@ -204,6 +210,17 @@ foreach db ($dbs)
   echo "instead of 'ENS', the ensGenes in this table look like this:"
   hgsql -Ne "SELECT name FROM ensGene WHERE name NOT LIKE 'ENS%' LIMIT 3" $db
  endif
+
+ echo "\n\n----------------------"
+ echo "A few tracks have another table or two associated with them.  For"
+ echo "example, when Ensembl uses different scaffold names than we do, there"
+ echo "should be a translation table called: ensembleGeneScaffold.  This"
+ echo "table supports a separate track called: Ensembl Assembly."
+ echo "Assemblies with a UCSC Gene track should also have a table called:"
+ echo "knownToEnsembl. Here's what this assembly has:"
+ echo
+ hgsql -Ne "SHOW TABLES LIKE 'ensemblGeneScaffold'" $db
+ hgsql -Ne "SHOW TABLES LIKE 'knownToEnsembl'" $db
 
 end # huge loop through each database
 
