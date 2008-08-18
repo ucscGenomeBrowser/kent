@@ -2,7 +2,7 @@
 #include "retroGene.h"
 #include "transMapStuff.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.15 2008/08/12 22:18:41 baertsch Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.16 2008/08/18 07:46:02 baertsch Exp $";
 
 /* bit set of labels to use */
 enum {useOrgCommon = 0x01,
@@ -294,5 +294,6 @@ registerTrackHandler("retroMrnaInfo3", retroGeneMethods);
 registerTrackHandler("ucscRetroInfo3", retroGeneMethods);
 registerTrackHandler("retroCdsAli", retroAliMethods);
 registerTrackHandler("retroCdsAli3", retroAliMethods);
+registerTrackHandler("ucscRetroAli", retroAliMethods);
 registerTrackHandler("ucscRetroAli3", retroAliMethods);
 }
