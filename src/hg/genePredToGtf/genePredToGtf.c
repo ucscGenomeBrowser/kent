@@ -8,7 +8,7 @@
 #include "genePred.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: genePredToGtf.c,v 1.14 2008/08/08 05:29:19 markd Exp $";
+static char const rcsid[] = "$Id: genePredToGtf.c,v 1.15 2008/08/18 20:51:54 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -174,21 +174,18 @@ static void writeCodon(FILE *f, char *source, char *name, char *geneName,
                        struct codonCoords *codon)
 /* write the location of a codon to the GTF, if it is non-zero and complete */
 {
-if (codonComplete(codon))
-    {
-    writeGtfLine(f, source, name, geneName, chrom, strand, type, 
-                 codon->start1, codon->end1, codon->iExon1, 0);
+writeGtfLine(f, source, name, geneName, chrom, strand, type, 
+             codon->start1, codon->end1, codon->iExon1, 0);
         
-    if (codon->start2 < codon->end2)
-        writeGtfLine(f, source, name, geneName, chrom, strand, type, 
-                     codon->start2, codon->end2, codon->iExon2, 
-                     (codon->end1-codon->start1));
-    }
+if (codon->start2 < codon->end2)
+    writeGtfLine(f, source, name, geneName, chrom, strand, type, 
+                 codon->start2, codon->end2, codon->iExon2, 
+                 (codon->end1-codon->start1));
 }
 
 static struct codonCoords findFirstCodon(struct genePred *gp, int *frames)
-/* get the coordinates of the first codon. It must be in correct frame, or
- * zero is returned. */
+/* get the coordinates of the first codon (start or stop). It must be in
+ * correct frame, or zero is returned. */
 {
 if (honorCdsStat && (gp->optFields & genePredCdsStatFld)
     && (gp->cdsStartStat != cdsComplete))
@@ -231,8 +228,8 @@ return codon;
 }
 
 static struct codonCoords findLastCodon(struct genePred *gp, int *frames)
-/* get the coordinates of the last codon. It must be in correct frame, or
- * zero is returned. */
+/* get the coordinates of the last codon (start or stop). It must be in
+ * correct frame, or zero is returned. */
 {
 if (honorCdsStat && (gp->optFields & genePredCdsStatFld)
     && (gp->cdsEndStat != cdsComplete))
@@ -342,13 +339,14 @@ int *frames = (gp->optFields & genePredExonFramesFld) ? gp->exonFrames : calcFra
 struct codonCoords firstCodon = findFirstCodon(gp, frames);
 struct codonCoords lastCodon = findLastCodon(gp, frames);
 
-// figure out bounds of CDS and UTR regions, moving stop codon to UTR.
+// figure out bounds of CDS and UTR regions, moving stop codon to outside of
+// CDS.
 int firstUtrEnd = gp->cdsStart, lastUtrStart = gp->cdsEnd;
 int cdsStart = gp->cdsStart, cdsEnd = gp->cdsEnd;
 if ((strand == '+') && codonComplete(&lastCodon))
-    cdsEnd = lastUtrStart = movePos(gp, lastUtrStart, -3);
+    cdsEnd = movePos(gp, lastUtrStart, -3);
 if ((strand == '-') && codonComplete(&firstCodon))
-    cdsStart = firstUtrEnd = movePos(gp, cdsStart, 3);
+    cdsStart = movePos(gp, cdsStart, 3);
 
 if (addComments)
     fprintf(f, "###\n# %s %s:%d-%d (%s) CDS: %d-%d\n#\n",
@@ -366,17 +364,21 @@ for (i=0; i<gp->exonCount; ++i)
     }
 if (gp->strand[0] == '+')
     {
-    writeCodon(f, source, name, geneName, chrom, strand, "start_codon", 
-               &firstCodon);
-    writeCodon(f, source, name, geneName, chrom, strand, "stop_codon",
-               &lastCodon);
+    if (codonComplete(&firstCodon))
+        writeCodon(f, source, name, geneName, chrom, strand, "start_codon", 
+                   &firstCodon);
+    if (codonComplete(&lastCodon))
+        writeCodon(f, source, name, geneName, chrom, strand, "stop_codon",
+                   &lastCodon);
     }
 else
     {
-    writeCodon(f, source, name, geneName, chrom, strand, "start_codon",
-               &lastCodon);
-    writeCodon(f, source, name, geneName, chrom, strand, "stop_codon",
-               &firstCodon);
+    if (codonComplete(&firstCodon))
+        writeCodon(f, source, name, geneName, chrom, strand, "start_codon",
+                   &lastCodon);
+    if (codonComplete(&lastCodon))
+        writeCodon(f, source, name, geneName, chrom, strand, "stop_codon",
+                   &firstCodon);
     }
 if (!(gp->optFields & genePredExonFramesFld))
     freeMem(frames);
