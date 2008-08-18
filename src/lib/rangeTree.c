@@ -437,35 +437,45 @@ while ( n1 > 0 && n2 > 0)
 	--n2;
 	++r2;
 	}
-    else /* overlap */
+    else 
+    /* Overlap: keep the one with rightmost end, and extend its start position
+     * to the left if need be. Note that the next element from this rangeTree 
+     * will not overlap. 
+     * Read the next element from the other rangeTree as it may overlap. 
+     * If they both end on the same base, output the largest of the two
+     * and read in the next from each rangeTree. */
 	{ 
-	if (r2->start >= r1->start) /* 1 is before 2 */
+	if (r1end > r2end) /* 1 is rightmost, set lowest start, fix size, and read next r2 */
 	    {
-	    if (r2end <= r1end) /* 2 is inside 1, read next r2 */
-		{
-		--n2;
-		++r2;
-		}
-	    else /* extend 2 to start of 1, read next r1  */
-		{
-		r2->start = r1->start;
-		--n1;
-		++r1;
-		}
-	    }
-	else /* 2 is before 1 */
-	    {
-	    if (r1end <= r2end) /* 1 is inside 2, read next r1 */
-		{
-		--n1;
-		++r1;
-		}
-	    else /* extend 2 to end of 1, read next r2  */
+	    if (r2->start < r1->start)
 		{
 		r1->start = r2->start;
-		--n2;
-		++r2;
+		r1->size = r1end - r1->start;
 		}
+	    --n2;
+	    ++r2;
+	    }
+	else if (r2end > r1end) /* 2 is rightmost, set lowest start, fix size, and read next r1 */
+	    {
+	    if (r1->start < r2->start)
+		{
+		r2->start = r1->start;
+		r2->size = r2end - r2->start;
+		}
+	    --n1;
+	    ++r1;
+	    }
+	else /* 1 and 2 both end on same base, write out left-most one */
+	    {
+	    if (r1->start <= r2->start)
+		mustWrite(of, r1, sizeof(*r1));
+	    else
+		mustWrite(of, r2, sizeof(*r2));
+	    ++nodes;
+	    --n1;
+	    ++r1;
+	    --n2;
+	    ++r2;
 	    }
 	}
     }
