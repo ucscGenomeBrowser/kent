@@ -23250,4 +23250,46 @@ cp /cluster/data/mm9/bed/multiz30way/mm9.guess.30way.nh .
     hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 uwNucOccMec uwNucOccMec.wig
 
     rm wiggle.tab
-#######################################################
+
+#########################################################################
+# BLASTZ/CHAIN/NET oryLat2 (DONE - 2006-12-14 - Hiram)
+    ssh kkstore02
+    screen	# use a screen to manage this longish running job
+    mkdir /cluster/data/hg18/bed/blastzOryLat2.2008-08-19
+    cd /cluster/data/hg18/bed/blastzOryLat2.2008-08-19
+    cat << '_EOF_' > DEF
+# Human vs. Medaka
+BLASTZ=/cluster/bin/penn/x86_64/lastz
+
+# typical parameters for a genome that is distant from human
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg18, randoms complete, as they are, no contig confusion
+SEQ1_DIR=/scratch/data/hg18/hg18.2bit
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: Medaka oryLat2 (40M chunks covers the largest chroms in one gulp)
+SEQ2_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ2_LEN=/scratch/data/oryLat2/chrom.sizes
+SEQ2_CHUNK=40000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzOryLat2.2008-08-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -verbose=2 > do.log 2>&1 &
+XXX - running 2008-08-19 16:42
+    #	real    318m45.339s
