@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.17 2008/07/10 17:57:32 larrym Exp $"
+#	"$Id: equCab2.txt,v 1.18 2008/08/19 22:48:54 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.17 2008/07/10 17:57:32 larrym Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.18 2008/08/19 22:48:54 larrym Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -1718,7 +1718,7 @@ do
 done
 
 ##########################################################################
-#  create pushQ entry (WORKING - 2008-07-08 - larrym)
+#  create pushQ entry (DONE - 2008-07-08 - larrym)
     #	verify all tracks have html pages for their trackDb entries
     ssh hgwdev
     cd /cluster/data/equCab2/jkStuff
@@ -1772,3 +1772,158 @@ Added following files to pushQ entry:
 /gbdb/equCab2/wib/qual.wib
 
 ##########################################################################
+
+##########################################################################
+# Fix duplicate scaffold_34 (WORKING - 2008-08-19 - larrym)
+
+insert into dbDb (name, description, nibPath, organism, defaultPos, active, genome, scientificName) values ('equCab2Copy', 'Sep. 2007 (test)', '/gbdb/equCab2Copy', 'Horse', 'chr11:52,970,942-52,973,091', 1, 'Horse', 'Equus caballus');
+
+chr27:
+
+    scaffold_24 - chr27:1-39960074
+    scaffold_34 - chr27:39961075-65921033
+
+The region to delete starts at the gap precediing scaffold_34:
+
+    chr27: 39960074 (zero based)
+
+65921033 - 39960075 + 1 = 25960959 bp's being deleted.
+
+Tables that cross gap:
+
+    quality
+    nscanGene
+    ...
+
+Tracks to ignore while testing:
+
+    oligoMatch (Short Match)
+
+a lot of tables are split, so I will have to write some C to do this:
+
+run delete program (test/test.c):
+
+#table:chromName:number rows deleted
+blastHg18KG:tName:1138
+chr27_chainCanFam2:tName:94250
+chr27_chainGalGal3:tName:30247
+chr27_chainHg18:tName:82111
+chr27_chainMm9:tName:108140
+chr27_chainOrnAna1:tName:49989
+chr27_est:tName:823
+chr27_gap:chrom:499
+chr27_gold:chrom:499
+chr27_intronEst:tName:429
+chr27_mrna:tName:27
+chr27_rmsk:genoName:37468
+ctgPos2:chrom:1
+ensGene:chrom:0
+fixedStep:chrom:0
+gc5Base:chrom:5052
+multiz6way:chrom:71172
+nestedRepeats:chrom:3894
+netCanFam2:tName:37661
+netGalGal3:tName:4908
+netHg18:tName:31495
+netMm9:tName:49546
+netOrnAna1:tName:8094
+nscanGene:chrom:351
+phastConsElements6way:chrom:13664
+quality:chrom:25353
+refGene:chrom:7
+simpleRepeat:chrom:2933
+testBed:chrom:0
+transMapAlnMRna:tName:8972
+transMapAlnRefSeq:tName:933
+transMapAlnSplicedEst:tName:177200
+transMapAlnUcscGenes:tName:1713
+xenoMrna:tName:21370
+
+
+Things that apparently didn't get covered by the script:
+
+    multiz6wayFrames, multiz6waySummary, phastCons6way
+
+do manually:
+
+delete from multiz6wayFrames where chrom = 'chr27' and chromStart >= 39960074;
+delete from multiz6waySummary where chrom = 'chr27' and chromStart >= 39960074;
+delete from phastCons6way where  chrom = 'chr27' and (chromStart >= 39960074 || (chromStart < 39960074 && chromEnd >= 39960074));
+delete from all_mrna where tName = 'chr27' and tStart >= 39960074;
+27 rows
+delete from all_est where tName = 'chr27' and tStart >= 39960074;
+823 rows
+delete from estOrientInfo where chrom = 'chr27' and chromStart >= 39960074;
+823 rows
+delete from refSeqAli where tName = 'chr27' and tStart >= 39960074;
+7 rows
+select * from ensGene where chrom = 'chr27' and txStart >= 39960074;
+0 rows
+delete from refFlat where chrom = 'chr27' and txStart >= 39960074;
+7 rows
+delete from mrnaOrientInfo where chrom = 'chr27' and chromStart >= 39960074;
+34 rows
+
+
+sanity check:
+
+    dbSnoop equCab2Copy stdout | grep ^2008 | egrep -v 'chr[0-9MX]+_' | grep -v trackDb | grep -v hgFindSpec | grep -v chrUn | sort
+
+Truncate chromInfo:
+
+    update chromInfo set size = 39960074 where chrom = 'chr27';
+
+# re-build 2bit files:
+
+seqList.txt:
+chr1
+...
+chr27:0-39960074
+chr28
+...
+chrX
+chrUn
+chrM
+
+mv equCab2.2bit equCab2.2bit.bak
+mv equCab2.rmsk.2bit equCab2.rmsk.2bit.bak
+mv equCab2.unmasked.2bit equCab2.unmasked.2bit.bak
+mv equCab2.UnScaffolds.2bit equCab2.UnScaffolds.2bit.bak
+
+twoBitToFa -seqList=seqList.txt equCab2.2bit.bak equCab2.fa
+faSize equCab2.fa
+2484532062 bases (55741889 N's 2428790173 real 1433784199 upper 995005974 lower) in 34 sequences in 1 files
+
+2510493021 - 25960959 == 2484532062
+
+agrees!
+
+# twoBitToFa is putting in "chr27:0-39960074, so we have to fix that up with the perl -ne
+# all commands run on kkstore05:
+
+twoBitToFa -seqList=seqList.txt equCab2.2bit.bak stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.2bit
+twoBitToFa -seqList=seqList.txt equCab2.rmsk.2bit.bak stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.rmsk.2bit
+twoBitToFa -seqList=seqList.txt equCab2.unmasked.2bit.bak stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.unmasked.2bit
+twoBitToFa -seqList=seqList.txt equCab2.UnScaffolds.2bit.bak stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.UnScaffolds.2bit
+
+2nd run of test:
+overlaps:       gc5Base chrom   chromStart      1
+overlaps:       quality chrom   chromStart      1
+overlaps:       nscanGene       chrom   txStart 1
+overlaps:       xenoMrna        tName   tStart  2
+overlaps:       blastHg18KG     tName   tStart  1
+overlaps:       nscanGene       chrom   txStart 1
+
+Sent email to cluster-admin to reload blat from 2bit file.
+
+# XXXX Don't know what to do with these
+select * from gc5Base where chrom = 'chr27' and chromStart < 39960074 && chromEnd > 39960074;
+select * from quality where chrom = 'chr27' and chromStart < 39960074 && chromEnd > 39960074;
+
+delete from xenoMrna where tName = 'chr27' and tStart < 39960074 && tEnd > 39960074;
+2 rows
+delete from blastHg18KG where tName = 'chr27' and tStart < 39960074 && tEnd > 39960074;
+1 row
+1 overlapping row in nscanGene:
+delete from nscanGene where chrom = 'chr27' and txStart < 39960074 and txEnd > 39960074;
+1 row
