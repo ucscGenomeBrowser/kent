@@ -50,3 +50,24 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
+track ctgPos2
+shortLabel Scaffolds
+longLabel Assembly Scaffolds and Ultracontigs
+group map
+priority 10
+visibility hide
+type ctgPos
+
+searchTable gold
+searchMethod exact
+searchType gold
+shortCircuit 1
+termRegex contig[0-9]+
+searchPriority 8
+
+searchTable ctgPos2
+searchMethod exact
+shortCircuit 1
+termRegex scaffold[0-9]+|ultracontig[0-9]+_scaffold[0-9]+
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
