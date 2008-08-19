@@ -12,17 +12,24 @@
 #include "geneSimilarities.h"
 
 static char *findRefSeqSummary(struct sqlConnection *conn,
-                               struct geneSimilarities *refSeqs)
-/* Given similar refseq genes, find the first one with a refseq
- * summary and return that summary, or NULL if not found */
+                               struct geneSimilarities *refSeqs,
+                               char **sumAccv)
+/* Given similar refseq genes, find the first one with a RefSeq
+ * summary and return that summary, or NULL if not found.  Also returns
+ * accv of matched */
 {
+char buf[GENBANK_ACC_BUFSZ];
 struct geneSim *rs;
 for (rs = refSeqs->genes; rs != NULL; rs = rs->next)
     {
-    char *sum = getRefSeqSummary(conn, rs->gene->name);
+    char *sum = getRefSeqSummary(conn, genbankDropVer(buf, rs->gene->name));
     if (sum != NULL)
+        {
+        *sumAccv = cloneString(rs->gene->name);
         return sum;
+        }
     }
+*sumAccv = NULL;
 return NULL;
 }
 
@@ -130,6 +137,7 @@ printf("http://mblab.wustl.edu/cgi-bin/mgc.cgi?acc=%s&action=cloneRpt&alignment=
 struct cloneInfo
 /* Information on a MGC or ORFeome clone collected from various tables */
 {
+    boolean isMgc;    // is this MGC or ORFeome
     char *acc;
     int start;
     char *table;
@@ -148,9 +156,10 @@ struct cloneInfo
     int imageId;
     int mgcId;
     int gi;
-    char *refSeqAccv;  // RefSeq info
-    char refSeqAcc[GENBANK_ACC_BUFSZ];
-    char *refSeqSum;
+    char *refSeqAccv;     // best RefSeq acc.version, or NULL
+    char *refSeqSum;      // RefSeq from best matching RefSeq with summary, or NULL.
+    char *refSeqSumAccv;  // accv for summary, maybe different than best match
+    struct geneSimilarities *refSeqs;  // most similar RefSeqs, with name set to acc.version
 };
 
 static boolean isInMBLabValidDb(char *acc)
@@ -213,18 +222,24 @@ sqlFreeResult(&sr);
 static void getRefSeqInfo(struct sqlConnection *conn, struct cloneInfo *ci)
 /* fill in refSeq info */
 {
-struct geneSimilarities *refSeqs
-    = geneSimilaritiesBuildAt(conn, TRUE, ci->acc, seqName, ci->start,
-                              ci->table, "refGene");
-if (refSeqs->genes != NULL)
+ci->refSeqs = geneSimilaritiesBuildAt(conn, TRUE, ci->acc, seqName, ci->start,
+                                      ci->table, "refGene");
+// replace accession in gene names with accession.version
+struct geneSim *gs;
+for (gs = ci->refSeqs->genes; gs != NULL; gs = gs->next)
+    {
+    char *accv = getAccVersion(conn, gs->gene->name);
+    freeMem(gs->gene->name);
+    gs->gene->name = accv;
+    }
+
+if (ci->refSeqs->genes != NULL)
     {
     // use first one (highest similarity)
-    struct geneSim *refSeq = refSeqs->genes;
-    safecpy(ci->refSeqAcc, sizeof(ci->refSeqAcc), refSeq->gene->name);
-    ci->refSeqAccv = getAccVersion(conn, ci->refSeqAcc);
-    ci->refSeqSum = findRefSeqSummary(conn, refSeqs);
+    ci->refSeqAccv = cloneString(ci->refSeqs->genes->gene->name);
+    // get summary for first one with summary
+    ci->refSeqSum = findRefSeqSummary(conn, ci->refSeqs, &ci->refSeqSumAccv);
     }
-geneSimilaritiesFree(&refSeqs);
 }
 
 static void parseCloneField(struct cloneInfo *ci)
@@ -270,11 +285,39 @@ if (sqlTableExists(conn, "refGene"))
 return ci;
 }
 
+static void cloneInfoFree(struct cloneInfo **ciPtr)
+/* free a cloneInfo object */
+{
+struct cloneInfo *ci = *ciPtr;
+if (ci != NULL)
+    {
+    freeMem(ci->acc);
+    freeMem(ci->table);
+    freeMem(ci->desc);
+    freeMem(ci->organism);
+    freeMem(ci->tissue);
+    freeMem(ci->library);
+    freeMem(ci->development);
+    freeMem(ci->geneName);
+    freeMem(ci->productName);
+    freeMem(ci->moddate);
+    freeMem(ci->clone);
+    freeMem(ci->cds);
+    freeMem(ci->keyword);
+    freeMem(ci->refSeqAccv);
+    freeMem(ci->refSeqSum);
+    geneSimilaritiesFree(&ci->refSeqs);
+    freeMem(ci);
+    *ciPtr = NULL;
+    }
+}
+
 static struct cloneInfo *mgcCloneInfoLoad(struct sqlConnection *conn, char *acc,
                                           int start)
 /* Load MGC clone information */
 {
 struct cloneInfo *ci = cloneInfoLoad(conn, acc, start, "mgcGenes");
+ci->isMgc = TRUE;
 if (ci->mgcId == 0)
     errAbort("no MGC:nnnn entry in mrnaClone table for MGC clone %s", acc);
 if (ci->imageId == 0)
@@ -287,10 +330,12 @@ static struct cloneInfo *orfeomeCloneInfoLoad(struct sqlConnection *conn, char *
 /* Load ORFeome clone information */
 {
 struct cloneInfo *ci = cloneInfoLoad(conn, acc, start, "orfeomeGenes");
+ci->isMgc = FALSE;
 if (ci->imageId == 0)
     errAbort("no IMAGE:nnnn entry in mrnaClone table for ORRFeome clone %s", acc);
 return ci;
 }
+
 
 static void prCellLabelVal(char *label, char *val)
 /* print label and value as adjacent cells  */
@@ -308,7 +353,12 @@ printf("<BR>%s\n", ci->desc);
 if (ci->refSeqAccv != NULL)
     printf("<BR><B>RefSeq</B>: %s\n", ci->refSeqAccv);
 if (ci->refSeqSum != NULL)
-    printf("<BR><B>RefSeq Summary</B>: %s\n", ci->refSeqSum);
+    {
+    printf("<BR><B>RefSeq Summary</B>:");
+    if (!sameString(ci->refSeqSumAccv, ci->refSeqAccv))
+        printf(" <EM>(summary from %s)</EM>:", ci->refSeqAccv); // no summary for best match
+    printf(" %s\n", ci->refSeqSum);
+    }
 }
 
 static void prCloneInfo(struct cloneInfo *ci)
@@ -563,8 +613,8 @@ static void prRefSeqLinks(struct cloneInfo *ci)
 webPrintLinkTableNewRow();
 webPrintLinkCellStart();
 printf("<a href=\"");
-printEntrezNucleotideUrl(stdout, ci->refSeqAcc);
-printf("\" TARGET=_blank>RefSeq %s</a>", ci->refSeqAcc);
+printEntrezNucleotideUrl(stdout, ci->refSeqAccv);
+printf("\" TARGET=_blank>RefSeq %s</a>", ci->refSeqAccv);
 webPrintLinkCellEnd();
 }
 
@@ -657,6 +707,47 @@ prMgcCloneLinks(conn, mgcDb, ci);
 printf("</tr></table>\n");
 }
 
+static void prRefSeqSim(struct cloneInfo *ci, struct geneSim *gs)
+/* print similarity information for a given RefSeq */
+{
+webPrintLinkTableNewRow();
+// RefSeq acc and link
+webPrintLinkCellStart();
+printf("<a href=\"");
+printEntrezNucleotideUrl(stdout, gs->gene->name);
+printf("\" TARGET=_blank>%s</a>", gs->gene->name);
+webPrintLinkCellEnd();
+
+// link to browser
+webPrintLinkCellStart();
+printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\" target=_blank>%s:%d-%d</A>",
+       hgTracksPathAndSettings(), database,
+       gs->gene->chrom, gs->gene->txStart+1, gs->gene->txEnd,
+       gs->gene->chrom, gs->gene->txStart+1, gs->gene->txEnd);
+webPrintLinkCellEnd();
+
+// similarity
+webPrintLinkCellStart();
+printf("%0.2f%%", 100.0*gs->sim);
+webPrintLinkCellEnd();
+}
+
+static void prRefSeqSims(struct cloneInfo *ci)
+/* print similarity information for RefSeqs */
+{
+webNewSection("RefSeq CDS similarity with %s clone %s", 
+              (ci->isMgc ? mgcDbName() : "ORFeome"), ci->acc);
+webPrintLinkTableStart();
+webPrintLabelCell("RefSeq");
+webPrintLabelCell("Position");
+webPrintLabelCell("CDS similarity");
+struct geneSim *gs;
+for (gs = ci->refSeqs->genes; gs != NULL; gs = gs->next)
+    prRefSeqSim(ci, gs);
+webPrintLinkTableEnd();
+}
+
+
 void doMgcGenes(struct trackDb *tdb, char *acc)
 /* Process click on a mgcGenes track. */
 {
@@ -671,11 +762,14 @@ printMgcHomeUrl(&mgcDb);
 printf("\" TARGET=_blank>%s</A>\n", mgcDb.title);
 
 prMgcInfoLinks(conn, acc, &mgcDb, ci);
+if (ci->refSeqs->genes != NULL)
+    prRefSeqSims(ci);
 prSeqLinks(conn, tdb->tableName, acc);
 prAligns(conn, "mgcFullMrna", acc, start);
 prMiscDiffs(conn, acc);
 prMethodsLink(conn, tdb->tableName);
 
+cloneInfoFree(&ci);
 hFreeConn(&conn);
 }
 
@@ -731,10 +825,12 @@ printf("<BR><B>Clone Source</B>: <A href=\"http://www.orfeomecollaboration.org/\
        " TARGET=_blank>ORFeome collaboration</A>\n");
 
 prOrfeomeInfoLinks(conn, acc, ci);
+if (ci->refSeqs->genes != NULL)
+    prRefSeqSims(ci);
 prSeqLinks(conn, tdb->tableName, acc);
 prAligns(conn, "orfeomeMrna", acc, start);
 prMiscDiffs(conn, acc);
 prMethodsLink(conn, tdb->tableName);
-
+cloneInfoFree(&ci);
 hFreeConn(&conn);
 }
