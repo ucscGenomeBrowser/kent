@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.126 2008/06/25 21:31:18 aamp Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.127 2008/08/19 22:22:18 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -107,7 +107,8 @@ else
   " <A TARGET=_BLANK HREF='../goldenPath/help/bedgraph.html'>BEDGRAPH</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GFF'>GFF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GTF'>GTF</A>,\n"
-  " <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>,\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/maf.html'>MAF</A>\n"
   " or <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#PSL'>PSL</A>\n"
   " formats. To configure the display, set\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#TRACK'>track</A>\n"
