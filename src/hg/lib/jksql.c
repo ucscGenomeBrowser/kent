@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.113.6.9 2008/08/14 15:54:14 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.113.6.10 2008/08/19 07:39:12 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -192,10 +192,12 @@ static struct sqlProfile* sqlProfileFindByName(char *profileName, char *database
 struct sqlProfile* sp = hashFindVal(profiles, profileName);
 if (sp == NULL)
     return NULL;
+#if 0 // FIXME: this breaks with hgHeatMap
 if ((database != NULL) && (sp->dbs != NULL) && !slNameInList(sp->dbs, database))
     errAbort("attempt to obtain SQL profile %s for database %s, "
              "which is not associate with this database-specific profile",
              profileName, database);
+#endif
 return sp;
 }
 
@@ -679,8 +681,9 @@ struct sqlConnection *sqlConnectProfile(char *profileName, char *database)
  */ 
 {
 struct sqlProfile* sp = sqlProfileGet(profileName, database);
-// FIXME:
+#if 0// FIXME:
 fprintf(stderr, "sqlConnectProfile %s %s: %s %s\n", profileName, database, sp->name, sp->user);
+#endif
 return sqlConnectRemote(sp->host, sp->user, sp->password, database);
 }
 
@@ -693,8 +696,9 @@ struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database)
  */ 
 {
 struct sqlProfile* sp = sqlProfileGet(profileName, database);
-// FIXME:
+#if 0// FIXME:
 fprintf(stderr, "sqlMayConnectProfile %s %s: %s %s\n", profileName, database, sp->name, sp->user);
+#endif
 return sqlMayConnectRemote(sp->host, sp->user, sp->password, database);
 }
 
@@ -1615,18 +1619,36 @@ cache->entryCnt++;
 return scce;
 }
 
+static boolean sqlConnCacheEntryDbMatch(struct sqlConnCacheEntry *scce,
+                                        char *database)
+/* does a database match the one in the connection cache */
+{
+return ((database == NULL) && (scce->conn->conn->db == NULL))
+    || sameString(database, scce->conn->conn->db);
+}
+
+static void sqlConnCacheEntrySetDb(struct sqlConnCacheEntry *scce,
+                                   char *database)
+/* set the connect cache and connect to the specified database */
+{
+if (mysql_select_db(scce->conn->conn, database) != 0)
+    errAbort("Couldn't set connection database to %s\n%s", 
+             database, mysql_error(scce->conn->conn));
+}
+
 static struct sqlConnCacheEntry *sqlConnCacheFindFree(struct sqlConnCache *cache,
                                                       struct sqlProfile *profile,
-                                                      char *database)
+                                                      char *database,
+                                                      boolean matchDatabase)
 /* find a free entry associated with profile and database. Return NULL if no
- * entries are available. */
+ * entries are available.  Will attempt to match database if requested, this
+ * includes connections to no database (database==NULL). */
 {
 struct sqlConnCacheEntry *scce;
 for (scce = cache->entries; scce != NULL; scce = scce->next)
     {
     if (!scce->inUse && (profile == scce->profile)
-        && (((database == NULL) && (scce->conn->conn->db == NULL))
-            || sameString(database, scce->conn->conn->db)))
+        && ((!matchDatabase) || sqlConnCacheEntryDbMatch(scce, database)))
         return scce;
     }
 return NULL;
@@ -1656,6 +1678,7 @@ static struct sqlConnection *sqlConnCacheDoAlloc(struct sqlConnCache *cache,
 /* Allocate a cached connection. errAbort if too many open connections.  
  * errAbort if abort and connection fails. */
 {
+// obtain profile
 struct sqlProfile *profile = NULL;
 if ((cache->host != NULL) && (profileName != NULL))
     errAbort("can't specify profileName (%s) when sqlConnCache is create with a specific host (%s)",
@@ -1671,9 +1694,19 @@ else
 #if 0
 fprintf(stderr, "sqlConnCacheDoAlloc %s %s\n", ((profile != NULL) ? profile->name: NULL), database); // FIXME:
 #endif
-struct sqlConnCacheEntry *scce = sqlConnCacheFindFree(cache, profile, database);
+
+// try getting an entry, first trying to find one for this database, then
+// look for any database, then add a new one
+struct sqlConnCacheEntry *scce
+    = sqlConnCacheFindFree(cache, profile, database, TRUE);
 if (scce == NULL)
-    scce = sqlConnCacheAddNew(cache, profile, database, abort);
+    {
+    scce = sqlConnCacheFindFree(cache, profile, database, FALSE);
+    if (scce != NULL)
+        sqlConnCacheEntrySetDb(scce, database);
+    else
+        scce = sqlConnCacheAddNew(cache, profile, database, abort);
+    }
 scce->inUse = TRUE;
 return scce->conn;
 }
@@ -1710,12 +1743,6 @@ if (conn != NULL)
     struct sqlConnCacheEntry *scce;
     for (scce = cache->entries; (scce != NULL) && (scce->conn != conn); scce = scce->next)
         continue;
-if (scce ==  NULL)
-    {// FIXME:
-    char cmd[256];
-    safef(cmd, sizeof(cmd), "pstack %d >/var/tmp/stack.out", getpid());
-    system(cmd);
-    }
     if (scce ==  NULL)
         errAbort("sqlConnCacheDealloc called on cache that doesn't contain "
                  "the given connection");
