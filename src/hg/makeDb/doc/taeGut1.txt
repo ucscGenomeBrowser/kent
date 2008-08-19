@@ -236,20 +236,137 @@ taeGut1.downloadDir = taeGut1
 
 ############################################################################
 ##########################################################################
-## Creating pushQ (working...
+## Creating pushQ (DONE - braney - 2008-08-06 )
     ssh hgwdev
     mkdir /cluster/data/taeGut1/pushQ
     cd /cluster/data/taeGut1/pushQ
     /cluster/bin/scripts/makePushQSql.pl taeGut1 > taeGut1.sql 2> stderr.out
     ## check the stderr.out for anything that needs to be fixed
-    ## copy taeGut1.sql to hgwbeta:/tmp
-    ## then on hgwbeta
     scp taeGut1.sql hgwbeta.cse.ucsc.edu:/tmp
     ssh hgwbeta
     cd /tmp
     hgsql qapushq < taeGut1.sql
 
-*** If you haven't already, please add taeGut1 to makeDb/schema/all.joiner !
-     It should be in both $gbd and $chainDest.
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2008-08-09 - braney)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("taeGut1", "blat2", "17782", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("taeGut1", "blat2", "17783", "0", "1");' \
+	    hgcentraltest
 
 
+############################################################################
+# BAC ends    (working braney...)
+
+    ssh kkstore03
+    mkdir /cluster/data/taeGut1/bed/bacEnds
+    cd /cluster/data/taeGut1/bed/bacEnds
+    mkdir fromWustl
+    cd fromWustl
+    wget "http://genome.wustl.edu/pub/organism/Other_Vertebrates/Taeniopygia_guttata/end_sequences/bac_ends.fa.gz"
+    gunzip *
+
+    ssh hgwdev
+    mkdir -p /gbdb/taeGut1/bacEnds
+    ln -s `pwd`/bac_ends.fa /gbdb/taeGut1/bacEnds
+    cd /tmp
+    hgLoadSeq taeGut1 /gbdb/taeGut1/bacEnds/bac_ends.fa
+
+    ssh kkstore03
+    cd /cluster/data/taeGut1/bed/bacEnds
+    rm -rf /san/sanvol1/scratch/taeGut1.splitEnds
+    mkdir -p /san/sanvol1/scratch/taeGut1.splitEnds
+    faSplit sequence fromWustl/bac_ends.fa 400 /san/sanvol1/scratch/taeGut1.splitEnds/x
+
+    mkdir run.blat
+    cd run.blat
+    ls /san/sanvol1/scratch/taeGut1.splitEnds/*.fa > inSeq.lst
+    rm -rf /cluster/bluearc/taeGut1.blatEnds
+    mkdir -p /cluster/bluearc/taeGut1.blatEnds
+
+    for i in `cat inSeq.lst`
+    do
+	f=`basename $i .fa`.psl
+	echo /cluster/bin/x86_64/blat /scratch/data/taeGut1/taeGut1.2bit  \
+	  -ooc=/scratch/data/taeGut1/taeGut1.11.ooc -tileSize=11 \
+	    $i {check out line+ /cluster/bluearc/taeGut1.blatEnds/$f}
+    done > jobList
+
+    ssh memk
+    cd /cluster/data/taeGut1/bed/bacEnds/run.blat
+    para create jobList
+    para time
+
+# CPU time in finished jobs:     124366s    2072.77m    34.55h    1.44d  0.004 y
+# IO & Wait Time:                   865s      14.41m     0.24h    0.01d  0.000 y
+# Average job time:                 383s       6.38m     0.11h    0.00d
+# Longest finished job:             557s       9.28m     0.15h    0.01d
+# Submission to last job:          4817s      80.28m     1.34h    0.06d
+
+    ssh kkstore03
+    cd /cluster/data/taeGut1/bed/bacEnds
+    for i in /cluster/bluearc/taeGut1.blatEnds/*.psl; do tail +6 $i; done | pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons stdin bacEnds.psl /dev/null
+
+    cat fromWustl/bac_ends.fa | awk '/>/ {print $1}'  | \
+	tr -d '>'| sed 's/\./ /' | \
+    awk '{clones[$1] = $2 " " clones[$1] } \
+	END {for (i in clones) print i, clones[i]}' | \
+    awk 'BEGIN {OFS="\t"} \
+	{first="";second=""; \ 
+	 for(ii=2; ii <= NF ; ii++) \
+	    {if (($ii == "b1") || ($ii == "b2")) \
+		first=$1 "." $ii "," first; \
+	     if (($ii == "g1") || ($ii == "g2")) \
+		second=$1 "." $ii "," second;} 
+	 print first,second,$1}' | \
+    awk '{if (NF == 3) print}' > allPairs.txt
+
+    time /cluster/bin/x86_64/pslPairs -tInsert=10000 \
+      -minId=0.91 -noBin -min=25000 \
+      -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+      -mismatch -verbose bacEnds.psl allPairs.txt \
+        all_bacends bacEnds
+
+    # Filter by score and sort by {chrom,chromStart}:
+    awk '$5 >= 300 {print;}' bacEnds.pairs | sort -k1,2n > bacEndPairs.bed
+    cat bacEnds.{slop,short,long,mismatch,orphan} \
+    | awk '$5 >= 300 {print;}' | sort -k1,2n > bacEndPairsBad.bed
+
+    #	CHECK bacEndPairs.bed ID's to make sure they have no blanks in them
+    awk '{print $5}' bacEndPairs.bed | sort -u
+
+    /cluster/bin/scripts/extractPslLoad -noBin bacEnds.psl bacEndPairs.bed \
+      bacEndPairsBad.bed \
+    | sorttbl tname tstart | headchg -del \
+    > bacEnds.load.psl
+    wc -l bacEnds.*
+#   526720 bacEnds.load.psl
+#       65 bacEnds.long
+#     1412 bacEnds.mismatch
+#    33163 bacEnds.orphan
+#   111379 bacEnds.pairs
+#   625401 bacEnds.psl
+#      530 bacEnds.short
+#      312 bacEnds.slop
+#  1298982 total
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/taeGut1/bed/bacEnds
+    hgLoadBed -notItemRgb taeGut1 bacEndPairs bacEndPairs.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+    # note - the "Bad" track isn't pushed to RR, just used for assembly QA.
+    hgLoadBed -notItemRgb taeGut1 bacEndPairsBad bacEndPairsBad.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    hgLoadPsl taeGut1 -table=all_bacends bacEnds.load.psl
+
+    featureBits taeGut1 all_bacends
+# 154544748 bases of 1222864691 (12.638%) in intersection
+    featureBits taeGut1 bacEndPairs
+# 118749166 bases of 1222864691 (9.711%) in intersection
+    featureBits taeGut1 bacEndPairsBad
+# 21778830 bases of 1222864691 (1.781%) in intersection
