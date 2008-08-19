@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.5 2007/08/17 19:55:37 hiram Exp $
+# $Id: blastz-run-ucsc,v 1.6 2008/08/19 16:03:24 braney Exp $
 
 use Getopt::Long;
 use strict;
@@ -357,7 +357,7 @@ sub plainBlastz {
   # just run blastz -- target and query can have "[$start,$end]" specifiers
   # where $start is 1-based.  Put output in file name $raw.
   my ($target, $query, $options, $raw) = @_;
-  my $blastz = $defVars{'BLASTZ'} || "blastz";
+  my $blastz = $defVars{'BLASTZ'} || "lastz";
   #  these variables will be 1 if there is zero usable sequence
   #  this could be a more extensive check than just for zero.
   my $targetNoSequence = 0;
