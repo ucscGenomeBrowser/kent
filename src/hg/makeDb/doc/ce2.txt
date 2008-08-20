@@ -1363,6 +1363,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
    hgCeOrfToGene ce2 gene_names.txt sangerGene orfToGene
                                                                                 
 # DOWNLOAD WORMBASE FOR WS120 RELEASE (DONE, 2004-04-23, hartera)
+# REMOVED acedb DIRECTORY AS NO LONGER NEEDED (DONE, 2008-08-18, hartera)
     ssh eieio
     mkdir -p /cluster/store7/acedb
     cd /cluster/store7/acedb
@@ -1370,6 +1371,10 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
         ftp://ftp.sanger.ac.uk/pub/wormbase/FROZEN_RELEASES/WS120/
     gunzip *.gz
     tar xvf *.tar
+
+    # 2008-08-18, hartera. Remove the acedb directory.
+    cd /cluster/store7
+    rm -rf acedb
 
 # CREATE SANGER LINKS TABLE FROM WORMBASE INFO (used by hgGene and hgNear)
 # (DONE, 2004-05-03, hartera)
