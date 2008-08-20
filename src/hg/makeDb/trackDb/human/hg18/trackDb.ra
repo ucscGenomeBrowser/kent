@@ -1,6 +1,5 @@
 #include trackDb.encode.ra
 #include trackDb.wgEncode.ra
-#include trackDb.instinct.ra
 
 track clonePos
 priority 14
