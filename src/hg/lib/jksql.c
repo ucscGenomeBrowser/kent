@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.113.6.10 2008/08/19 07:39:12 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.113.6.11 2008/08/20 04:14:23 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -192,7 +192,7 @@ static struct sqlProfile* sqlProfileFindByName(char *profileName, char *database
 struct sqlProfile* sp = hashFindVal(profiles, profileName);
 if (sp == NULL)
     return NULL;
-#if 0 // FIXME: this breaks with hgHeatMap
+#if UNUSED // FIXME: this breaks hgHeatMap, remove when logicalDb removed
 if ((database != NULL) && (sp->dbs != NULL) && !slNameInList(sp->dbs, database))
     errAbort("attempt to obtain SQL profile %s for database %s, "
              "which is not associate with this database-specific profile",

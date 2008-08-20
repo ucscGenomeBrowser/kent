@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.368.4.10 2008/08/14 15:54:13 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.368.4.11 2008/08/20 04:14:22 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -427,13 +427,11 @@ return sqlConnCacheProfileAlloc(hdbCc, profileName, db);
 }
 
 static char *getTrackProfileName(struct trackDb *tdb)
-/* f a profile is associated with a track, return it, otherwise NULL */
+/* get profile is associated with a track, return it, otherwise NULL */
 {
-// FIXME: dbProfile is the preferred name, phase out logicalDb
-char *profileName = trackDbSetting(tdb, "dbProfile");
-if (profileName == NULL)
-    profileName = trackDbSetting(tdb, "logicalDb");
-return profileName;
+// FIXME: logicalDb will not work in the long term, remove when this
+// functionality is dropped
+return trackDbSetting(tdb, "logicalDb");
 }
 
 struct sqlConnection *hAllocConnTrack(char *db, struct trackDb *tdb)
