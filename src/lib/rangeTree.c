@@ -249,7 +249,7 @@ if (isSwapped)
 	r->start = byteSwap32(r->start);
 	r->size = byteSwap32(r->size);
 	--n;
-	r++;
+	++r;
 	}
     }
 }
@@ -258,6 +258,18 @@ void rangeWriteArray(struct rangeStartSize *r, int n, FILE *f)
 /* Write 'n' elements of range array (start,size) to file 'f'. */
 {
 mustWrite(f, r, n*sizeof(*r));
+}
+
+unsigned rangeArraySize(struct rangeStartSize *r, int n)
+/* calculate the total size of the array */
+{
+unsigned size = 0;
+int i;
+for ( i = 0 ; i<n ; ++i )
+    {
+    size += r[i].size;
+    }
+return size;
 }
 
 void rangeReadWriteN(FILE *inF, int n, boolean isSwapped, FILE *outF)
@@ -420,14 +432,104 @@ rbTreeTraverse(tree, rangeValSize);
 return rangeTreeSizeInFile(tree) + tempValSize;
 }
 
-int rangeTreeFileMerge(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, FILE *of)
-/* Merge n1 ranges from array of 'n1' ranges (start,size) in r1 with 
- * 'n2' ranges (start,size) in r2, writing them to output file 'of'. 
- * Note that the ranges are as stored on disk (start,size) not (start,end).
- * Writes the ranges one-by-one.
- * Returns number of nodes in merged file. */
+unsigned rangeTreeFileIntersection(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, int *n, boolean saveMem)
+/* Create intersection of array of 'n1' ranges (start,size) in r1 with 
+ * 'n2' ranges (start,size) in r2, saving them in array r and returning 
+ * the number of merged ranges in n.
+ * Note that the ranges are as stored on disk (start,size), 
+ * not as in the rangeTree (start,end).
+ * Free array with freez(&r)
+ * Returns total size of ranges in r. If no ranges, returns NULL in r. */
 {
-int r1end, r2end, nodes = 0;
+int r1end, r2end, i = 0;
+unsigned size = 0;
+struct rangeStartSize *r = NULL;
+int rSize = max(n1,n2); /* max size needed is larger of two */
+AllocArray(r, rSize);
+/* loop around merging while we have ranges in both lists */
+while ( n1 > 0 && n2 > 0)
+    {
+    r1end = r1->start+r1->size;
+    r2end = r2->start+r2->size;
+    /* check which should be merged or output */
+    if ( r1end <= r2->start ) /* r1 is upstream, get next one */
+	{
+	--n1;
+	++r1;
+	}
+    else if (r2end <= r1->start) /* r2 is upstream, get next one */
+	{
+	--n2;
+	++r2;
+	}
+    else 
+    /* Overlap: take the max(start) and min(end) as the intersection */
+    /* Overlap: keep the one with rightmost end, and extend its start position
+     * to the left if need be. Note that the next element from this rangeTree 
+     * will not overlap. 
+     * Read the next element from the other rangeTree as it may overlap. 
+     * If they both end on the same base, output the largest of the two
+     * and read in the next from each rangeTree. */
+	{ 
+	if (r1end > r2end) /* 1 is rightmost, get highest start, fix size, and read next r2 */
+	    {
+	    r[i].start = max(r1->start,r2->start);
+	    r[i].size = r2end - r[i].start;
+	    size += r[i].size;
+	    ++i;
+	    --n2;
+	    ++r2;
+	    }
+	else if (r2end > r1end) /* 2 is rightmost, set lowest start, fix size, and read next r1 */
+	    {
+	    r[i].start = max(r1->start,r2->start);
+	    r[i].size = r1end - r[i].start;
+	    size += r[i].size;
+	    ++i;
+	    --n1;
+	    ++r1;
+	    }
+	else /* 1 and 2 both end on same base, write out smallest one, and read both */
+	    {
+	    r[i].start = max(r1->start,r2->start);
+            r[i].size = r1end - r[i].start;
+            size += r[i].size;
+            ++i;
+	    --n1;
+	    ++r1;
+	    --n2;
+	    ++r2;
+	    }
+	}
+    }
+*n = i;
+if (*n == 0) /* if no results, free this memory */
+    freez(&r);
+else if (saveMem && *n < rSize/2) /* we seriously overestimated mem reqts so free it up */
+    {
+    struct rangeStartSize *r0 = CloneArray(r, *n);
+    freez(&r);
+    r = r0;
+    }
+*pRange = r;
+return size;
+}
+
+unsigned rangeTreeFileUnion(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, int *n, boolean saveMem)
+/* Create union of array of 'n1' ranges (start,size) in r1 with 
+ * 'n2' ranges in r2, saving them in array r and returning 
+ * the number of merged ragnes in n. 
+ * Note that the ranges are as stored on disk (start,size)
+ * not as in the rangeTree (start,end).
+ * Free array with freez(&r)
+ * Returns total size of ranges in r. */
+{
+int r1end, r2end;
+unsigned size = 0;
+struct rangeStartSize *r = NULL;
+int i = 0;
+int rSize = n1 + n2; /* worst case these dont overlap at all */
+AllocArray(r, rSize);
 /* loop around merging while we have ranges in both lists */
 while ( n1 > 0 && n2 > 0)
     {
@@ -436,15 +538,19 @@ while ( n1 > 0 && n2 > 0)
     /* check which should be merged or output */
     if ( r1end <= r2->start ) /* r1 is upstream, write it and get next one */
 	{
-	mustWrite(of, r1, sizeof(*r1));
-	++nodes;
+	r[i].start = r1->start;
+	r[i].size = r1->size;
+	size += r[i].size;
+	++i;
 	--n1;
 	++r1;
 	}
     else if (r2end <= r1->start) /* r2 is upstream, write it and get next one */
 	{
-	mustWrite(of, r2, sizeof(*r2));
-	++nodes;
+	r[i].start = r2->start;
+	r[i].size = r2->size;
+	size += r[i].size;
+	++i;
 	--n2;
 	++r2;
 	}
@@ -479,10 +585,18 @@ while ( n1 > 0 && n2 > 0)
 	else /* 1 and 2 both end on same base, write out left-most one */
 	    {
 	    if (r1->start <= r2->start)
-		mustWrite(of, r1, sizeof(*r1));
+		{
+		r[i].start = r1->start;
+		r[i].size = r1->size;
+		size += r[i].size;
+		}
 	    else
-		mustWrite(of, r2, sizeof(*r2));
-	    ++nodes;
+		{
+		r[i].start = r2->start;
+		r[i].size = r2->size;
+		size += r[i].size;
+		}
+	    ++i;
 	    --n1;
 	    ++r1;
 	    --n2;
@@ -493,18 +607,142 @@ while ( n1 > 0 && n2 > 0)
 /* write out any remaining nodes that are either in n1 or n2 */
 while (n1)
     {
-    mustWrite(of, r1, sizeof(*r1));
-    ++nodes;
+    r[i].start = r1->start;
+    r[i].size = r1->size;
+    size += r[i].size;
+    ++i;
     --n1;
     ++r1;
     }
 while (n2)
     {
-    mustWrite(of, r2, sizeof(*r2));
-    ++nodes;
+    r[i].start = r2->start;
+    r[i].size = r2->size;
+    size += r[i].size;
+    ++i;
     --n2;
     ++r2;
     }
-return nodes;
+if (i == 0) /* if no results, free this memory */
+    freez(&r);
+else if (saveMem && i < rSize/2) /* we seriously overestimated mem reqts so free it up */
+    {
+    struct rangeStartSize *r0 = CloneArray(r, i);
+    freez(&r);
+    r = r0;
+    }
+*n = i;
+*pRange = r;
+return size;
 }
+
+
+unsigned rangeTreeFileUnionToFile(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, FILE *of, int *n)
+/* Create union of array of 'n1' ranges (start,size) in r1 with 
+ * 'n2' ranges in r2, writing them to output file 'of' and returning 
+ * the number of merged ranges written in 'n'. 
+ * Note that the ranges are as stored on disk (start,size)
+ * not as in the rangeTree (start,end).
+ * Writes the ranges one-by-one.
+ * Returns total size of ranges in merged file. */
+{
+int r1end, r2end;
+unsigned size = 0;
+*n = 0;
+/* loop around merging while we have ranges in both lists */
+while ( n1 > 0 && n2 > 0)
+    {
+    r1end = r1->start+r1->size;
+    r2end = r2->start+r2->size;
+    /* check which should be merged or output */
+    if ( r1end <= r2->start ) /* r1 is upstream, write it and get next one */
+	{
+	if (of)
+	    mustWrite(of, r1, sizeof(*r1));
+	size += r1->size;
+	++(*n);
+	--n1;
+	++r1;
+	}
+    else if (r2end <= r1->start) /* r2 is upstream, write it and get next one */
+	{
+	if (of)
+	    mustWrite(of, r2, sizeof(*r2));
+	size += r2->size;
+	++(*n);
+	--n2;
+	++r2;
+	}
+    else 
+    /* Overlap: keep the one with rightmost end, and extend its start position
+     * to the left if need be. Note that the next element from this rangeTree 
+     * will not overlap. 
+     * Read the next element from the other rangeTree as it may overlap. 
+     * If they both end on the same base, output the largest of the two
+     * and read in the next from each rangeTree. */
+	{ 
+	if (r1end > r2end) /* 1 is rightmost, set lowest start, fix size, and read next r2 */
+	    {
+	    if (r2->start < r1->start)
+		{
+		r1->start = r2->start;
+		r1->size = r1end - r1->start;
+		}
+	    --n2;
+	    ++r2;
+	    }
+	else if (r2end > r1end) /* 2 is rightmost, set lowest start, fix size, and read next r1 */
+	    {
+	    if (r1->start < r2->start)
+		{
+		r2->start = r1->start;
+		r2->size = r2end - r2->start;
+		}
+	    --n1;
+	    ++r1;
+	    }
+	else /* 1 and 2 both end on same base, write out left-most one */
+	    {
+	    if (r1->start <= r2->start)
+		{
+		if (of)
+		    mustWrite(of, r1, sizeof(*r1));
+		size += r1->size;
+		}
+	    else
+		{
+		if (of)
+		    mustWrite(of, r2, sizeof(*r2));
+		size += r2->size;
+		}
+	    ++(*n);
+	    --n1;
+	    ++r1;
+	    --n2;
+	    ++r2;
+	    }
+	}
+    }
+/* write out any remaining nodes that are either in n1 or n2 */
+while (n1)
+    {
+    if (of)
+	mustWrite(of, r1, sizeof(*r1));
+    size += r1->size;
+    ++(*n);
+    --n1;
+    ++r1;
+    }
+while (n2)
+    {
+    if (of)
+	mustWrite(of, r2, sizeof(*r2));
+    size += r2->size;
+    ++(*n);
+    --n2;
+    ++r2;
+    }
+return size;
+}
+
 

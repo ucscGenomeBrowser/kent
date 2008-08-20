@@ -111,6 +111,9 @@ void rangeReadArray(FILE *f, struct rangeStartSize *r, int n, boolean isSwapped)
 void rangeWriteArray(struct rangeStartSize *r, int n, FILE *f);
 /* Write 'n' elements of range array (start,size) to file 'f'. */
 
+unsigned rangeArraySize(struct rangeStartSize *r, int n);
+/* calculate the total size of the array */
+
 void rangeReadWriteN(FILE *inF, int n, boolean isSwapped, FILE *outF);
 /* Read 'n' ranges in from file 'inF' and write them to file 'outF'.
  * Reads and writes ranges one at a time. */
@@ -170,12 +173,32 @@ int rangeTreeSizeInFileWithVal(struct rbTree *tree, int (*rangeValSizeInFile)(vo
  * rangeValSizeInFile should refer to a function which calculates the size of the val 
  * in a binary file. Not called if null. */
 
-int rangeTreeFileMerge(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, FILE *of);
-/* Merge n1 ranges from array of 'n1' ranges (start,size) in r1 with 
- * 'n2' ranges (start,size) in r2, writing them to output file 'of'. 
- * Note that the ranges are as stored on disk (start,size) not (start,end).
- * Returns number of nodes in merged file. */
+unsigned rangeTreeFileIntersection(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, int *n, boolean saveMem);
+/* Create intersection of array of 'n1' ranges (start,size) in r1 with 
+ * 'n2' ranges in r2, saving them in array r and returning 
+ * the number of merged ranges in n.
+ * Note that the ranges are as stored on disk (start,size), 
+ * not as in the rangeTree (start,end).
+ * Free array with freez(&r)
+ * Returns total size of ranges in r. */
 
+unsigned rangeTreeFileUnion(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, int *n, boolean saveMem);
+/* Create union of array of 'n1' ranges (start,size) in r1 with 
+ * 'n2' ranges in r2, saving them in array r and returning 
+ * the number of merged ragnes in n. 
+ * Note that the ranges are as stored on disk (start,size)
+ * not as in the rangeTree (start,end).
+ * Free array with freez(&r)
+ * Returns total size of ranges in r. */
+
+unsigned rangeTreeFileUnionToFile(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, FILE *of, int *n);
+/* Create union of array of 'n1' ranges (start,size) in r1 with 
+ * 'n2' ranges in r2, writing them to output file 'of' and returning 
+ * the number of merged ranges written in 'n'. 
+ * Note that the ranges are as stored on disk (start,size)
+ * not as in the rangeTree (start,end).
+ * Writes the ranges one-by-one.
+ * Returns total size of ranges in merged file. */
 
 #endif /* RANGETREE_H */
 

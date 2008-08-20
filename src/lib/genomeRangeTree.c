@@ -59,7 +59,7 @@ struct hashEl *hel;
 hel = hashStore(tree->hash, chrom);
 if (hel->val == NULL) /* need to add a new rangeTree */
     hel->val = rangeTreeNewDetailed(tree->lm, tree->stack);
-return (struct rbTree *)hel->val;
+return hel->val;
 }
 
 struct range *genomeRangeTreeAdd(struct genomeRangeTree *tree, char *chrom, int start, int end)
@@ -207,14 +207,18 @@ return tmpTreeToString;
 
 struct genomeRangeTreeFile *genomeRangeTreeFileNew(struct genomeRangeTree *tree, char *fileName)
 /* Create a genomeRangeTreeFile to save a genomeRangeTree in 'fileName'. 
- * Opens the file.
+ * Opens the file, does not write the header.
  * To write the header data only use: genomeRangeTreeFileWriteHeader().
- * To write the data portion only use: genomeRangeTreeFileWriteData(). */
+ * To write the data portion only use: genomeRangeTreeFileWriteData(). 
+ * If fileName is null, does not open any file. */
 {
 struct genomeRangeTreeFile *tf;
 AllocVar(tf);
-tf->name = cloneString(fileName);
-tf->file = mustOpen(fileName, "wb");
+if (fileName)
+    {
+    tf->name = cloneString(fileName);
+    tf->file =  mustOpen(fileName, "wb");
+    }
 tf->tree = tree;
 tf->sig = genomeRangeTreeSig;
 tf->version = 0;
@@ -399,7 +403,7 @@ for ( chrom = f->chromList ; chrom ; chrom = chrom->next)
     }
 }
 
-struct genomeRangeTree * genomeRangeTreeFileFree(struct genomeRangeTreeFile **pFile)
+struct genomeRangeTree *genomeRangeTreeFileFree(struct genomeRangeTreeFile **pFile)
 /* Free up the resources associated with a genomeRangeTreeFile.
  * Close the file.
  * Return the genomeRangeTree. */
@@ -407,7 +411,8 @@ struct genomeRangeTree * genomeRangeTreeFileFree(struct genomeRangeTreeFile **pF
 struct genomeRangeTreeFile *f = *pFile;
 struct genomeRangeTree *tree = f->tree;
 freez(&(f->name));
-carefulClose(&(f->file));
+if (f->file)
+    carefulClose(&(f->file));
 hashElFreeList(&(f->chromList));
 hashFree(&(f->nodes));
 hashFree(&(f->offset));
@@ -415,23 +420,27 @@ freez(pFile);
 return tree;
 }
 
-void genomeRangeTreeFileOr(struct genomeRangeTreeFile *tf1, struct genomeRangeTreeFile *tf2, char *outFile)
-/* Combine two saved genomeRangeTrees in a logical 'or' through a linear file scan.
+void genomeRangeTreeFileUnionDetailed(struct genomeRangeTreeFile *tf1, struct genomeRangeTreeFile *tf2, char *outFile, int *numChroms, int *nodes, unsigned *size, boolean saveMem, boolean orDirectToFile)
+/* Create union of two saved genomeRangeTrees through a linear file scan.
  * Writes resulting genomeRangeTree to outFile. 
  * The resulting file cannot be safely read until the operation is complete. The header
  * information at the beginning of the file has to be updated after all the data is written
- * since the final merged rangeTree sizes are not known until the ranges are merged.
+ * since the number of nodes in the final merged rangeTree is not known until the ranges are merged.
  * To enforce this, the header is written with a zero initial 'sig' field so that it cannot
  * be read as a genomeRangeTree file. The header information and 'sig' is re-written with 
- * correct data at the end of the process via an 'fseek' operation to the beginning of the file.  */
+ * correct data at the end of the process via an 'fseek' operation to the beginning of the file. 
+ * If outFile is null, does not output the file. 
+ * The number of nodes in the resulting tree is returned in n.
+ * If size is not NULL, this will return the total size of the resulting ranges (adds 'n' 
+ * calculations to run time of program). */
 {
 struct genomeRangeTree *tree = genomeRangeTreeNew();
 struct hashEl *c1, *c2;
 struct genomeRangeTreeFile *tf;
 struct rangeStartSize *r1, *r2;
-
-int res, nodes1, nodes2;
-
+int res, nodes1, nodes2, i=0;
+if (size)
+    *size = 0;
 /* Add all chroms to the tree and write the header */
 for (c1 = tf1->chromList ; c1 ; c1=c1->next)
     {
@@ -447,7 +456,8 @@ for (c2 = tf2->chromList ; c2 ; c2=c2->next)
  * will need to be re-written at the end to update the
  * chrom node and offset information. */
 tf = genomeRangeTreeFileNew(tree, outFile);
-genomeRangeTreeFileWriteHeaderDetailed(tf, TRUE); 
+if (tf->file)
+    genomeRangeTreeFileWriteHeaderDetailed(tf, TRUE); 
 
 /* loop through the chromosomes merging the rangeTrees */
 c1 = tf1->chromList;
@@ -462,7 +472,11 @@ while (c1 && c2) /* at least one chrom in each tree */
 	hashAddInt(tf->nodes, c1->name, nodes1);
 	AllocArray(r1, nodes1);
 	rangeReadArray(tf1->file, r1, nodes1, tf1->isSwapped);
-	rangeWriteArray(r1, nodes1, tf->file);
+	if (tf->file)
+	    rangeWriteArray(r1, nodes1, tf->file);
+	if (size)
+	    *size += rangeArraySize(r1, nodes1);
+	i += nodes1;
 	freez(&r1);
 	c1 = c1->next; 
 	}
@@ -471,7 +485,11 @@ while (c1 && c2) /* at least one chrom in each tree */
 	hashAddInt(tf->nodes, c2->name, nodes2);
 	AllocArray(r2, nodes2);
 	rangeReadArray(tf2->file, r1, nodes2, tf2->isSwapped);
-	rangeWriteArray(r2, nodes2, tf->file);
+	if (tf->file)
+	    rangeWriteArray(r2, nodes2, tf->file);
+	if (size)
+	    *size += rangeArraySize(r2, nodes2);
+	i += nodes2;
 	freez(&r2);
 	c2 = c2->next;
 	}
@@ -482,7 +500,22 @@ while (c1 && c2) /* at least one chrom in each tree */
 	rangeReadArray(tf1->file, r1, nodes1, tf1->isSwapped);
 	rangeReadArray(tf2->file, r2, nodes2, tf2->isSwapped);
 	/* merge and store the total nodes after merging */
-	hashAddInt(tf->nodes, c1->name, rangeTreeFileMerge(r1, r2, nodes1, nodes2, tf->file));
+	int n0;
+	unsigned s0;
+	if (orDirectToFile)
+	    s0 = rangeTreeFileUnionToFile(r1, r2, nodes1, nodes2, tf->file, &n0);
+	else
+	    {
+	    struct rangeStartSize *r;
+	    s0 = rangeTreeFileUnion(r1, r2, nodes1, nodes2, &r, &n0, saveMem);
+	    if (tf->file && n0 > 0)
+		rangeWriteArray(r, n0, tf->file);
+	    freez(&r);
+	    }
+	if (size)
+	    (*size) += s0;
+	i += n0;
+	hashAddInt(tf->nodes, c1->name, n0);
 	freez(&r1);
 	freez(&r2);
 	c1 = c1->next;
@@ -497,7 +530,11 @@ while (c1)
     hashAddInt(tf->nodes, c1->name, nodes1);
     AllocArray(r1, nodes1);
     rangeReadArray(tf1->file, r1, nodes1, tf1->isSwapped);
-    rangeWriteArray(r1, nodes1, tf->file);
+    if (tf->file)
+	rangeWriteArray(r1, nodes1, tf->file);
+    if (size)
+	*size += rangeArraySize(r1, nodes1);
+    i += nodes1;
     freez(&r1);
     c1 = c1->next;
     }
@@ -507,11 +544,14 @@ while (c2)
     hashAddInt(tf->nodes, c2->name, nodes2);
     AllocArray(r2, nodes2);
     rangeReadArray(tf2->file, r2, nodes2, tf2->isSwapped);
-    rangeWriteArray(r2, nodes2, tf->file);
+    if (tf->file)
+	rangeWriteArray(r2, nodes2, tf->file);
+    if (size)
+	*size += rangeArraySize(r2, nodes2);
+    i += nodes2;
     freez(&r2);
     c2 = c2->next;
     }
-
 /* Re-calculate the offset for each chrom.
  * We could skip the first loop (code duplication in genomeRangeTreeFileNew) 
  * if we stored the indexLen in the header as well.
@@ -530,9 +570,130 @@ for (chrom = tf->chromList ; chrom ; chrom = chrom->next )
     offset += size;
     }
 /* Now go back and rewrite the header, and close the file */
-if (fseek(tf->file, 0, SEEK_SET))
+if (tf->file && fseek(tf->file, 0, SEEK_SET))
     errAbort("couldnt fseek(f,0,SEEK_SET) to rewrite header: errno(%d) = %s\n", errno, strerror(errno));
-genomeRangeTreeFileWriteHeader(tf);
+if (tf->file)
+    genomeRangeTreeFileWriteHeader(tf);
+*nodes = i;
+*numChroms = tf->numChroms;
+genomeRangeTreeFileFree(&tf);
+}
+
+void genomeRangeTreeFileUnion(struct genomeRangeTreeFile *tf1, struct genomeRangeTreeFile *tf2, char *outFile)
+/* Combine two saved genomeRangeTrees in a logical 'or' through a linear file scan.
+ * Writes resulting genomeRangeTree to outFile. 
+ * The resulting file cannot be safely read until the operation is complete. The header
+ * information at the beginning of the file has to be updated after all the data is written
+ * since the final merged rangeTree sizes are not known until the ranges are merged.
+ * To enforce this, the header is written with a zero initial 'sig' field so that it cannot
+ * be read as a genomeRangeTree file. The header information and 'sig' is re-written with 
+ * correct data at the end of the process via an 'fseek' operation to the beginning of the file. 
+ * If outFile is null, does not output the file. */
+{
+int nodes, numChroms;
+genomeRangeTreeFileUnionDetailed(tf1, tf2, outFile, &numChroms, &nodes, NULL, FALSE, FALSE);
+}
+
+void genomeRangeTreeFileIntersectionDetailed(struct genomeRangeTreeFile *tf1, struct genomeRangeTreeFile *tf2, char *outFile, int *numChroms, int *nodes, unsigned *size, boolean saveMem)
+/* Create intersection genomeRangeTree from two saved genomeRangeTrees in a logical 'and' through a linear file scan.
+ * Writes resulting genomeRangeTree to outFile if outFile is non-null.
+ * The resulting file cannot be safely read until the operation is complete. The header
+ * information at the beginning of the file has to be updated after all the data is written
+ * since the final merged rangeTree sizes are not known until the ranges are merged.
+ * To enforce this, the header is written with a zero initial 'sig' field so that it cannot
+ * be read as a genomeRangeTree file. The header information and 'sig' is re-written with 
+ * correct data at the end of the process via an 'fseek' operation to the beginning of the file. */
+{
+struct genomeRangeTree *tree = genomeRangeTreeNew();
+struct hashEl *c1, *c2;
+struct hash *ranges = hashNew(0), *nodeCounts = hashNew(0);
+struct genomeRangeTreeFile *tf;
+struct rangeStartSize *r1, *r2, *r;
+int res, nodes1, nodes2, i = 0;
+
+if (size)
+    *size = 0;
+/* loop through the chromosomes merging the rangeTrees */
+c1 = tf1->chromList;
+c2 = tf2->chromList;
+while (c1 && c2) /* at least one chrom in each tree */
+    {
+    res = strcmp(c1->name, c2->name);
+    nodes1 = hashIntVal(tf1->nodes, c1->name);
+    nodes2 = hashIntVal(tf2->nodes, c2->name);
+    if (res < 0) /* chrom1 < chrom2 so skip chrom1 */
+	{
+	c1 = c1->next; 
+	}
+    else if (res > 0) /* chrom2 < chrom1 so skip chrom2 */
+	{
+	c2 = c2->next;
+	}
+    else /* res == 0 so both chroms the same and need to merge */
+	{
+	AllocArray(r1, nodes1);
+	AllocArray(r2, nodes2);
+	rangeReadArray(tf1->file, r1, nodes1, tf1->isSwapped);
+	rangeReadArray(tf2->file, r2, nodes2, tf2->isSwapped);
+	/* store the intersected nodes */
+	unsigned s0;
+	int n0;
+	s0 = rangeTreeFileIntersection(r1, r2, nodes1, nodes2, &r, &n0, saveMem);
+	/* if non-null intersection then remember chrom, array of ranges and number of nodes */
+	if (n0>0)
+	    {
+	    genomeRangeTreeFindOrAddRangeTree(tree, c1->name);
+	    hashAddUnique(ranges, c1->name, r);
+	    hashAddInt(nodeCounts, c1->name, n0);
+	    if (size)
+		*size += s0;
+	    i += n0;
+	    }
+	freez(&r1);
+	freez(&r2);
+	c1 = c1->next;
+	c2 = c2->next;
+	}
+    }
+/* write header with chroms */
+tf = genomeRangeTreeFileNew(tree, outFile);
+if (tf->file)
+    genomeRangeTreeFileWriteHeaderDetailed(tf, TRUE); 
+freeHash(&(tf->nodes));
+tf->nodes = nodeCounts;
+
+/* Re-calculate the offset for each chrom.
+ * We could skip the first loop (code duplication in genomeRangeTreeFileNew) 
+ * if we stored the indexLen in the header as well.
+ * We would then only have to recalculate the offsets for each chrom. */
+bits32 offset = tf->headerLen;
+struct hashEl *chrom;
+for (chrom = tf->chromList ; chrom ; chrom = chrom->next )
+    {
+    int nameLen = strlen(chrom->name);
+    offset += nameLen + 1 + sizeof(offset) + sizeof(offset); /* name + nodes + offset */
+    }
+for (chrom = tf->chromList ; chrom ; chrom = chrom->next )
+    {
+    int size = 2*sizeof(bits32)*hashIntVal(tf->nodes, chrom->name);
+    hashAddInt(tf->offset, chrom->name, offset);
+    offset += size;
+    }
+/* Now go back and rewrite the header, data, and close the file */
+if (tf->file)
+    {
+    if (fseek(tf->file, 0, SEEK_SET))
+	errAbort("couldnt fseek(f,0,SEEK_SET) to rewrite header: errno(%d) = %s\n", errno, strerror(errno));
+    genomeRangeTreeFileWriteHeader(tf);
+    for (chrom = tf->chromList ; chrom ; chrom = chrom->next )
+	{
+	struct rangeStartSize *r = hashMustFindVal(ranges, chrom->name);
+	rangeWriteArray(r, hashIntVal(tf->nodes, chrom->name), tf->file);
+	freez(&r);
+	}
+    }
+*nodes = i;
+*numChroms = tf->numChroms;
 genomeRangeTreeFileFree(&tf);
 }
 

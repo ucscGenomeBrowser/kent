@@ -175,12 +175,26 @@ void genomeRangeTreeFileWriteHeader(struct genomeRangeTreeFile *f);
 void genomeRangeTreeFileWriteData(struct genomeRangeTreeFile *f);
 /* Write out genomeRangeTree data for each chromosome in chroms. */
 
-struct genomeRangeTree * genomeRangeTreeFileFree(struct genomeRangeTreeFile **pFile);
+struct genomeRangeTree *genomeRangeTreeFileFree(struct genomeRangeTreeFile **pFile);
 /* Free up the resources associated with a genomeRangeTreeFile.
  * Close the file.
  * Return the genomeRangeTree. */
 
-void genomeRangeTreeFileOr(struct genomeRangeTreeFile *tf1, struct genomeRangeTreeFile *tf2, char *outFile);
+void genomeRangeTreeFileUnionDetailed(struct genomeRangeTreeFile *tf1, struct genomeRangeTreeFile *tf2, char *outFile, int *numChroms, int *nodes, unsigned *size, boolean saveMem, boolean orDirectToFile);
+/* Create union of two saved genomeRangeTrees through a linear file scan.
+ * Writes resulting genomeRangeTree to outFile. 
+ * The resulting file cannot be safely read until the operation is complete. The header
+ * information at the beginning of the file has to be updated after all the data is written
+ * since the number of nodes in the final merged rangeTree is not known until the ranges are merged.
+ * To enforce this, the header is written with a zero initial 'sig' field so that it cannot
+ * be read as a genomeRangeTree file. The header information and 'sig' is re-written with 
+ * correct data at the end of the process via an 'fseek' operation to the beginning of the file. 
+ * If outFile is null, does not output the file. 
+ * The number of nodes in the resulting tree is returned in n.
+ * If size is not NULL, this will return the total size of the resulting ranges (adds 'n' 
+ * calculations to run time of program). */
+
+void genomeRangeTreeFileUnion(struct genomeRangeTreeFile *tf1, struct genomeRangeTreeFile *tf2, char *outFile);
 /* Combine two saved genomeRangeTrees in a logical 'or' through a linear file scan.
  * Writes resulting genomeRangeTree to outFile. 
  * The resulting file cannot be safely read until the operation is complete. The header
@@ -188,7 +202,20 @@ void genomeRangeTreeFileOr(struct genomeRangeTreeFile *tf1, struct genomeRangeTr
  * since the final merged rangeTree sizes are not known until the ranges are merged.
  * To enforce this, the header is written with a zero initial 'sig' field so that it cannot
  * be read as a genomeRangeTree file. The header information and 'sig' is re-written with 
- * correct data at the end of the process via an 'fseek' operation to the beginning of the file.  */
+ * correct data at the end of the process via an 'fseek' operation to the beginning of the file. 
+ * If outFile is null, does not output the file. */
+
+void genomeRangeTreeFileIntersectionDetailed(struct genomeRangeTreeFile *tf1, struct genomeRangeTreeFile *tf2, char *outFile, int *numChroms, int *nodes, unsigned *size, boolean saveMem);
+/* Create intersection genomeRangeTree from two saved genomeRangeTrees in a logical 'and' through a linear file scan.
+ * Writes resulting genomeRangeTree to outFile if outFile is non-null.
+ * Returns number of nodes in n.
+ * Returns total size of ranges if size is non-null.
+ * The resulting file cannot be safely read until the operation is complete. The header
+ * information at the beginning of the file has to be updated after all the data is written
+ * since the final merged rangeTree sizes are not known until the ranges are merged.
+ * To enforce this, the header is written with a zero initial 'sig' field so that it cannot
+ * be read as a genomeRangeTree file. The header information and 'sig' is re-written with 
+ * correct data at the end of the process via an 'fseek' operation to the beginning of the file. */
 
 
 #endif /* GENOMERANGETREE_H */
