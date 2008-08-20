@@ -1,11 +1,19 @@
-baseMask [options] in1.bama in2.bama o.bama
+baseMask [options] in1.bama in2.bama [o.bama]
 
-process two baseMasks creating a new baseMask o.bama
+Process two baseMasks in1.bama and in2.bama. 
+Create output baseMask file o.bama, if specified.
 
 Options:
   -or        : 'or' the basemasks together (union).
                (output file will have all chroms in 
-               either file, and all ranges will be merged.
+               either file, and all ranges will be merged.)
   -and       : 'and' the basemasks together (intersection).
-               (not yet implemented)
+               (output file will have the subset of chroms and 
+               bases, or ranges, common to both files.)
+  -quiet     : Do not calculate or output the base cover
+               statistics. Might be slightly faster.
+  -saveMem   : Try and reduce memory usage. Might be slightly
+               slower.
+  -orDirectToFile : Write 'or' directly to file range by range,
+               bypassing buffering. Might be slower.
   -verbose=n : verbose > 0 prints some details.

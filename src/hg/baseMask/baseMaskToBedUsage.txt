@@ -4,4 +4,7 @@ Create bed file from baseMask file.
 Writes 3-columns bed file to out.bed.
 
 Options:
-  -verbose=n - verbose > 1 prints some details.
+  -id        : Add unique identifier in name field.
+  -merge     : Merge together adjacent bed records. 
+               (Otherwise sequential ranges may be adjacent.)
+  -verbose=n : verbose > 1 prints some details.

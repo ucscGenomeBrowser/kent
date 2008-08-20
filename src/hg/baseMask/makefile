@@ -11,6 +11,8 @@ B = trackToBaseMask   bedToBaseMask   baseMaskToBed   baseMask
 #	@${MKDIR} `dirname $B`
 #	cp -f trackToBaseMask $B
 
+all: $B
+
 trackToBaseMask: trackToBaseMaskUsage.msg trackToBaseMask.o ${MYLIBS} 
 	${CC} ${COPT} ${CFLAGS} -o trackToBaseMask trackToBaseMask.o ${MYLIBS} ${MYSQLLIBS} $L
 
@@ -25,7 +27,6 @@ baseMask: baseMaskUsage.msg baseMask.o ${MYLIBS}
 
 *.o: *.c
 
-all: $B
 
 # create usage msg from text
 baseMaskUsage.msg: baseMaskUsage.txt

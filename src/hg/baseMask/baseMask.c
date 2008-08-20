@@ -14,6 +14,9 @@
 static struct optionSpec optionSpecs[] = {
     {"and", OPTION_BOOLEAN},
     {"or", OPTION_BOOLEAN},
+    {"quiet", OPTION_BOOLEAN},
+    {"saveMem", OPTION_BOOLEAN},
+    {"orDirectToFile", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -22,7 +25,7 @@ void usage(char *msg)
 /* usage message and abort */
 {
 static char *usageMsg =
-#include "baseMaskUsage.msg"
+#include "baseMaskUsage.msg" 
     ;
 errAbort("%s:  %s", msg, usageMsg);
 }
@@ -33,28 +36,38 @@ int main(int argc, char** argv)
 char *baseMask1, *baseMask2, *obama;
 struct genomeRangeTreeFile *tf1, *tf2;
 struct genomeRangeTree *t1, *t2;
+unsigned size = 0;
+int nodes, numChroms;
 optionInit(&argc, argv, optionSpecs);
 boolean and = optionExists("and");
 boolean or = optionExists("or");
-if (argc != 4)
+boolean quiet = optionExists("quiet");
+boolean saveMem = optionExists("saveMem");
+boolean orDirectToFile = optionExists("orDirectToFile");
+if (argc < 3 || argc > 4)
     usage("wrong # args");
 if ((and && or) || (!and && !or))
     usage("specify one of the options: -and or -or\n");
 
 baseMask1 = argv[1];
 baseMask2 = argv[2];
-obama = argv[3];
+obama = (argc == 3 ? NULL : argv[3]);
 
 tf1 = genomeRangeTreeFileReadHeader(baseMask1);
 tf2 = genomeRangeTreeFileReadHeader(baseMask2);
 if (and)
     {
-    errAbort("Not implemented\n");
-    //genomeRangeTreeFileAnd(tf1, tf2, obama);
+    genomeRangeTreeFileIntersectionDetailed(tf1, tf2, obama, &numChroms, &nodes, 
+	(quiet ? NULL : &size), saveMem);
+    if (!quiet)
+	fprintf(stderr, "%d bases in %d ranges in %d chroms in intersection\n", size, nodes, numChroms);
     }
 else if (or)
     {
-    genomeRangeTreeFileOr(tf1, tf2, obama);
+    genomeRangeTreeFileUnionDetailed(tf1, tf2, obama, &numChroms, &nodes, 
+	(quiet ? NULL : &size), saveMem, orDirectToFile);
+    if (!quiet)
+	fprintf(stderr, "%d bases in %d ranges in %d chroms in union\n", size, nodes, numChroms);
     }
 t1 = genomeRangeTreeFileFree(&tf1);
 genomeRangeTreeFree(&t1);
@@ -62,3 +75,4 @@ t2 = genomeRangeTreeFileFree(&tf2);
 genomeRangeTreeFree(&t2);
 return 0;
 }
+
