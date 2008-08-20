@@ -101,7 +101,7 @@ double n = cgiDouble("n");
 doGraph(mu, lambda, n);
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 dnaUtilOpen();
 if (argc == 2 && sameWord(argv[1], "test") )

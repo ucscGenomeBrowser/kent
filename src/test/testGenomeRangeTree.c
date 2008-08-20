@@ -611,15 +611,15 @@ if (differentString(genomeRangeTreeToString(t1)->string, "[tree [chr1: (1,10) (2
     errAbort("Error: testBaseMaskAndOr #1 tree doesnt match (got=%s, wanted=%s)\n", genomeRangeTreeToString(t1)->string, "[tree [chr1: (1,10) (20,30)] [chr2: (2,3)] [chr3: (11189196,11263761)]]");
 else
     verbose(1,"OK: testBaseMaskAndOr #1 tree=%s\n", genomeRangeTreeToString(t1)->string);
-genomeRangeTreeWrite(t1, "out/testGenomeRangeTreeOr1.out");
+genomeRangeTreeWrite(t1, "out/testGenomeRangeTreeUnion1.out");
 verbose(1,"OK: genomeRangeTreeWrite() \n");
 genomeRangeTreeFree(&t1);
 verbose(1,"OK: genomeRangeTreeFree()\n");
-t1 = genomeRangeTreeRead("out/testGenomeRangeTreeOr1.out");
+t1 = genomeRangeTreeRead("out/testGenomeRangeTreeUnion1.out");
 if (differentString(genomeRangeTreeToString(t1)->string, "[tree [chr1: (1,10) (20,30)] [chr2: (2,3)] [chr3: (11189196,11263761)]]"))
-    errAbort("Error: out/testGenomeRangeTreeOr1.out tree doesnt match (got=%s, wanted=%s)\n", genomeRangeTreeToString(t1)->string, "[tree [chr1: (1,10) (20,30)] [chr2: (2,3)] [chr3: (11189196,11263761)]]");
+    errAbort("Error: out/testGenomeRangeTreeUnion1.out tree doesnt match (got=%s, wanted=%s)\n", genomeRangeTreeToString(t1)->string, "[tree [chr1: (1,10) (20,30)] [chr2: (2,3)] [chr3: (11189196,11263761)]]");
 else
-    verbose(1,"OK: out/testGenomeRangeTreeOr1.out tree=%s\n", genomeRangeTreeToString(t1)->string);
+    verbose(1,"OK: out/testGenomeRangeTreeUnion1.out tree=%s\n", genomeRangeTreeToString(t1)->string);
 if (t1->hash->elCount != 3 || genomeRangeTreeFindRangeTree(t1, "chr1")->n != 2 || genomeRangeTreeFindRangeTree(t1, "chr2")->n != 1 ||  genomeRangeTreeFindRangeTree(t1, "chr3")->n != 1)
     errAbort("Error: genomeRangeTreeAdd(chr1:1-10,chr1:20-30,chr2:2-3,chr3:11189196-11263761) failed\n");
 else
@@ -631,49 +631,49 @@ genomeRangeTreeAdd(t2,"chr1",20,30);
 genomeRangeTreeAdd(t2,"chr2",2,3);
 genomeRangeTreeAdd(t2,"chr4",15,255+15);
 genomeRangeTreeAdd(t2,"chr5",0x123456,0x123456+0x234567);
-genomeRangeTreeWrite(t2, "out/testGenomeRangeTreeOr2.out");
-t2 = genomeRangeTreeRead("out/testGenomeRangeTreeOr2.out");
+genomeRangeTreeWrite(t2, "out/testGenomeRangeTreeUnion2.out");
+t2 = genomeRangeTreeRead("out/testGenomeRangeTreeUnion2.out");
 if (differentString(genomeRangeTreeToString(t2)->string, "[tree [chr1: (1,10) (20,30)] [chr2: (2,3)] [chr4: (15,270)] [chr5: (1193046,3504573)]]"))
-    errAbort("Error: out/testGenomeRangeTreeOr2.out doesnt match (got=%s, wanted=%s)\n", genomeRangeTreeToString(t2)->string,  "[tree [chr1: (1,10) (20,30)] [chr2: (2,3)] [chr4: (15,270)] [chr5: (1193046,3504573)]]");
+    errAbort("Error: out/testGenomeRangeTreeUnion2.out doesnt match (got=%s, wanted=%s)\n", genomeRangeTreeToString(t2)->string,  "[tree [chr1: (1,10) (20,30)] [chr2: (2,3)] [chr4: (15,270)] [chr5: (1193046,3504573)]]");
 else
-    verbose(1,"OK: out/testGenomeRangeTreeOr2.out tree=%s\n", genomeRangeTreeToString(t2)->string);
+    verbose(1,"OK: out/testGenomeRangeTreeUnion2.out tree=%s\n", genomeRangeTreeToString(t2)->string);
 
-tf1 = genomeRangeTreeFileReadHeader("out/testGenomeRangeTreeOr1.out");
+tf1 = genomeRangeTreeFileReadHeader("out/testGenomeRangeTreeUnion1.out");
 if (!tf1 || tf1->numChroms != 3)
-    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out) failed\n");
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion1.out) failed\n");
 else
-    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out) tf1=%p\n", tf1);
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion1.out) tf1=%p\n", tf1);
 if (!tf1->chromList )
-    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out) failed (tf1->chromList=%p)\n", tf1->chromList);
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion1.out) failed (tf1->chromList=%p)\n", tf1->chromList);
 else
-    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out)\n");
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion1.out)\n");
 if (slCount(tf1->chromList) != 3 )
-    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out) failed (slCount=%d)\n", slCount(tf1->chromList));
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion1.out) failed (slCount=%d)\n", slCount(tf1->chromList));
 else
-    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out)\n");
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion1.out)\n");
 if (differentString("chr1",tf1->chromList->name) || differentString("chr2",tf1->chromList->next->name)
     || differentString("chr3",tf1->chromList->next->next->name))
-    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out) failed (name1=%s, name2=%s, name3=%s)\n", tf1->chromList->name, tf1->chromList->next->name, tf1->chromList->next->next->name);
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion1.out) failed (name1=%s, name2=%s, name3=%s)\n", tf1->chromList->name, tf1->chromList->next->name, tf1->chromList->next->next->name);
 else
-    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr1.out) (name1=%s, name2=%s, name3=%s)\n", tf1->chromList->name, tf1->chromList->next->name, tf1->chromList->next->next->name);
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion1.out) (name1=%s, name2=%s, name3=%s)\n", tf1->chromList->name, tf1->chromList->next->name, tf1->chromList->next->next->name);
 
-tf2 = genomeRangeTreeFileReadHeader("out/testGenomeRangeTreeOr2.out");
+tf2 = genomeRangeTreeFileReadHeader("out/testGenomeRangeTreeUnion2.out");
 if (!tf2 || tf2->numChroms != 4 || !tf2->chromList)
-    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr2.out) failed (tf2=%p)\n");
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion2.out) failed (tf2=%p)\n");
 else
-    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr2.out) tf2=%p\n", tf2);
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion2.out) tf2=%p\n", tf2);
 if (slCount(tf2->chromList) != 4 )
-    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr2.out) failed (slCount=%d)\n", slCount(tf2->chromList));
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion2.out) failed (slCount=%d)\n", slCount(tf2->chromList));
 else
-    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr2.out)\n");
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion2.out)\n");
 if (differentString("chr1",tf2->chromList->name) || differentString("chr2",tf2->chromList->next->name)\
     || differentString("chr4",tf2->chromList->next->next->name) || differentString("chr5",tf2->chromList->next->next->next->name))
-    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr2.out) failed (name1=%s, name2=%s, name3=%s, name4=%s)\n", tf2->chromList->name, tf2->chromList->next->name, tf2->chromList->next->next->name, tf2->chromList->next->next->next->name);
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion2.out) failed (name1=%s, name2=%s, name3=%s, name4=%s)\n", tf2->chromList->name, tf2->chromList->next->name, tf2->chromList->next->next->name, tf2->chromList->next->next->next->name);
 else
-    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeOr2.out) (name1=%s, name2=%s, name3=%s, name4=%s)\n", tf2->chromList->name, tf2->chromList->next->name, tf2->chromList->next->next->name, tf2->chromList->next->next->next->name);
+    verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion2.out) (name1=%s, name2=%s, name3=%s, name4=%s)\n", tf2->chromList->name, tf2->chromList->next->name, tf2->chromList->next->next->name, tf2->chromList->next->next->next->name);
 
-genomeRangeTreeFileOr(tf1, tf2, "out/testGenomeRangeTreeOr_1or2.out");
-verbose(1,"OK: genomeRangeTreeFileOr(tf1, tf2, out/testGenomeRangeTreeOr_1or2.out)\n");
+genomeRangeTreeFileUnion(tf1, tf2, "out/testGenomeRangeTreeUnion_1or2.out");
+verbose(1,"OK: genomeRangeTreeFileOr(tf1, tf2, out/testGenomeRangeTreeUnion_1or2.out)\n");
 
 }
 

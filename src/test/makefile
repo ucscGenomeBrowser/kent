@@ -1,3 +1,5 @@
+include ../inc/common.mk
+
 ../cgi-bin/test.cgi: ../lib/$(MACHTYPE)/jkweb.a test.c
 	${CC} ${COPT} ${CFLAGS} -I../inc test.c ../lib/$(MACHTYPE)/jkweb.a -lm
 	chmod a+x ${AOUT}
@@ -19,9 +21,9 @@ testGenomeRangeTree: ../lib/$(MACHTYPE)/jkweb.a testGenomeRangeTree.c
 	diff --brief out/testGenomeRangeTree.hexdump out/testGenomeRangeTree.hexdump2
 	diff --brief out/testGenomeRangeTree.bama out/testGenomeRangeTree.out
 	diff --brief out/testGenomeRangeTree.bama out/testGenomeRangeTree.out2
-	diff --brief out/testGenomeRangeTreeOr1.bama     out/testGenomeRangeTreeOr1.out
-	diff --brief out/testGenomeRangeTreeOr2.bama     out/testGenomeRangeTreeOr2.out
-	diff --brief out/testGenomeRangeTreeOr_1or2.bama out/testGenomeRangeTreeOr_1or2.out
+	diff --brief out/testGenomeRangeTreeUnion1.bama     out/testGenomeRangeTreeUnion1.out
+	diff --brief out/testGenomeRangeTreeUnion2.bama     out/testGenomeRangeTreeUnion2.out
+	diff --brief out/testGenomeRangeTreeUnion_1or2.bama out/testGenomeRangeTreeUnion_1or2.out
 	rm out/*.out out/*.out2 out/testGenomeRangeTree.hexdump2 testGenomeRangeTree
 
 test:
@@ -32,4 +34,10 @@ test:
 	./hgTest.pl -v -db mm2  | tee $(HOST).mm2.log   2>&1
 	./hgTest.pl -v -db mm1  | tee $(HOST).mm1.log   2>&1
 	./hgTest.pl -v -db rn1  | tee $(HOST).rn1.log   2>&1
+
+#mkout:
+#	@${MKDIR} out
+
+clean:
+	
 
