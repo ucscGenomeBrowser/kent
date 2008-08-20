@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: pgSnp.c,v 1.4 2008/08/11 14:24:13 giardine Exp $";
+static char const rcsid[] = "$Id: pgSnp.c,v 1.5 2008/08/20 15:35:40 giardine Exp $";
 
 void pgSnpStaticLoad(char **row, struct pgSnp *ret)
 /* Load a row from pgSnp table into ret.  The contents of ret will
@@ -573,18 +573,19 @@ char *acid2 = aaAcidity(aa2);
 float hyd1 = aaHydropathy(aa1);
 float hyd2 = aaHydropathy(aa2);
 printf("<table border=\"1\"><caption>Amino acid properties</caption><tr><td>&nbsp;</td><td>%s</td><td>%s</td></tr>\n", aa1, aa2);
-if (differentString(pol1, pol2))
-    printf("<tr bgcolor=\"white\"><td>polarity</td><td>%s</td><td>%s</td></tr>\n", pol1, pol2);
-else 
+/* take out highlights, not sure what is significant change for hydropathy */
+//if (differentString(pol1, pol2))
+    //printf("<tr bgcolor=\"white\"><td>polarity</td><td>%s</td><td>%s</td></tr>\n", pol1, pol2);
+//else 
     printf("<tr><td>polarity</td><td>%s</td><td>%s</td></tr>\n", pol1, pol2);
-if (differentString(acid1, acid2) && 
-    (!startsWith("basic", acid1) || !startsWith("basic", acid2)) )
-    printf("<tr bgcolor=\"white\"><td>acidity</td><td>%s</td><td>%s</td></tr>\n", acid1, acid2);
-else 
+//if (differentString(acid1, acid2) && 
+    //(!startsWith("basic", acid1) || !startsWith("basic", acid2)) )
+    //printf("<tr bgcolor=\"white\"><td>acidity</td><td>%s</td><td>%s</td></tr>\n", acid1, acid2);
+//else 
     printf("<tr><td>acidity</td><td>%s</td><td>%s</td></tr>\n", acid1, acid2);
-if ((hyd1 < 0 && hyd2 > 0) || (hyd1 > 0 && hyd2 < 0))
-    printf("<tr bgcolor=\"white\"><td>hydropathy</td><td>%1.1f</td><td>%1.1f</td></tr></table>\n", hyd1, hyd2);
-else 
+//if ((hyd1 < 0 && hyd2 > 0) || (hyd1 > 0 && hyd2 < 0))
+    //printf("<tr bgcolor=\"white\"><td>hydropathy</td><td>%1.1f</td><td>%1.1f</td></tr></table>\n", hyd1, hyd2);
+//else 
     printf("<tr><td>hydropathy</td><td>%1.1f</td><td>%1.1f</td></tr></table>\n", hyd1, hyd2);
 printf("<br>");
 }
