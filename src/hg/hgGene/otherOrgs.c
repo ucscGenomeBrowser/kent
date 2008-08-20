@@ -10,7 +10,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.21 2007/10/25 21:34:06 rhead Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.22 2008/08/20 04:15:48 markd Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -135,7 +135,8 @@ static char *otherOrgPosition(struct otherOrg *otherOrg,
 char *id = otherOrgId(otherOrg, conn, geneId);
 if (id != NULL)
     {
-    if (otherOrg->db == NULL || otherOrg->geneTable == NULL)
+    if (otherOrg->db == NULL || otherOrg->geneTable == NULL
+        || !sqlDatabaseExists(otherOrg->db))
 	return id;
     else
 	{
@@ -172,7 +173,8 @@ static char *otherOrgProteinId(struct otherOrg *otherOrg, struct sqlConnection *
 {
 char *otherId = otherOrgId(otherOrg, conn, geneId);
 char *protId = NULL;
-if (otherOrg->db != NULL && otherId != NULL && otherOrg->idToProtIdSql != NULL)
+if (otherOrg->db != NULL && otherId != NULL && otherOrg->idToProtIdSql != NULL
+    && sqlDatabaseExists(otherOrg->db))
     {
     struct sqlConnection *conn = sqlConnect(otherOrg->db);
     char query[512];
@@ -195,7 +197,7 @@ static char *otherOrgExternalId(struct otherOrg *otherOrg, char *localId)
 char *otherId = NULL;
 if (localId != NULL)
     {
-    if (otherOrg->otherIdSql)
+    if (otherOrg->otherIdSql && sqlDatabaseExists(otherOrg->db))
 	{
 	struct sqlConnection *conn = sqlConnect(otherOrg->db);
 	char query[512];
