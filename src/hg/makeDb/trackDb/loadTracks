@@ -111,6 +111,7 @@ loadDbTracks() {
 		rm -f /gbdb/$db/html/description.html
 	    fi
 	fi
+        rm -f /gbdb/$db/html/description.html
         cp -p $dbpath/description.html /gbdb/$db/html/description.html
     fi
     if [ -n "$grpSql" ] ; then
