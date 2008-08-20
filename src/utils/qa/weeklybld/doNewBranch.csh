@@ -104,6 +104,13 @@ if ( $status ) then
 endif
 
 echo
+#echo debug: disabled build utils on beta
+./buildUtils.csh
+if ( $status ) then
+    exit 1
+endif
+
+echo
 # build branch sandbox on beta
 #echo debug: disabled build branch sandbox on beta
 ./buildBeta.csh
