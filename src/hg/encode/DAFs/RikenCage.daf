@@ -1,0 +1,69 @@
+# Data Agreement File for CAGE project $Revision: 1.1 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# Lab and general info
+grant             Gingeras
+lab               Riken
+dataType          Cage
+variables         cell, localization, rnaExtract
+assembly          hg18
+dafVersion        0.2.2
+
+# Track/view definition
+view             PlusTSS
+longLabelPrefix  RIKEN CAGE Plus Strand Predicted Start Sites
+type             bedGraph
+required         yes
+hasReplicates    no
+
+view             MinusTSS
+longLabelPrefix  RIKEN CAGE Minus Strand Predicted Start Sites
+type             bedGraph
+required         yes
+hasReplicates    no
+
+view             PlusSignal
+longLabelPrefix  RIKEN CAGE Plus Strand Signal
+type             wig
+required         yes
+hasReplicates    no
+
+view             MinusSignal
+longLabelPrefix  RIKEN CAGE Minus Strand Signal
+type             wig
+required         yes
+hasReplicates    no
+
+view             PlusRawSignal
+longLabelPrefix  RIKEN CAGE Plus Strand Raw Signal
+type             wig
+required         no
+hasReplicates    yes
+
+view             MinusRawSignal
+longLabelPrefix  RIKEN CAGE Minus Strand Raw Signal
+type             wig
+required         no
+hasReplicates    yes
+
+view             Alignments
+longLabelPrefix  RIKEN CAGE Tags
+type             tagAlign
+required         yes
+hasReplicates    yes
+
+====== IF YOU CAN SUPPLY FASTQ, WE USE THIS: ===
+view             Fastq
+type             download
+required         yes
+
+====== OTHERWISE WE DO SOMETHING LIKE THIS: ===
+view             ColorSpaceFasta
+type             download
+required         yes
+
+view             FastaQuality
+type             download
+required         yes
