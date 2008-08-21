@@ -476,18 +476,6 @@ bedSort $table.hg18.wig stdout | /cluster/data/encode/bin/scripts/trimOverlap.pl
 mv tmp $table.hg18.wig
 wigEncode $table.hg18.wig $table.tab $table.wib
 
-#############################################################################
-# Stanford NRSF ChIP-seq (DONE, Heather, July 2007)
-
-ssh hgwdev
-cd /cluster/data/encode/stanford/2007-03-14
-liftOver fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.bed core.unmapped
-liftOver control_fix.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.control.bed control.unmapped
-hgLoadBed hg18 encodeStanfordNRSFEnriched hg18.bed -tab
-hgLoadBed hg18 encodeStanfordNRSFControl hg18.control.bed -tab
-
-
-
 ##########################################################################
 # Boston University ORChID track - (2007-06-29 ting)
 #	data developer contact:  Steve Parker parker@bu.edu
@@ -955,6 +943,7 @@ vi ${HOME}/kent/src/hg/makeDb/trackDb/human/hg18/encodeYaleRnaSuper.html
 # TBA alignments from Margulies lab, NHGRI (2008-2-20 kate)
 #  Submitted by Gayle McEwen (mceweng@mail.nih.gov), from their DEC-07 freeze
 #  Requested doc update (README & track description) from Elliott on 2/20
+# Conservation  scores: (BinCons and ChaiCons provided 3/24/08
 
     ssh kkstore03
     cd /cluster/data/encode/TBA
@@ -1050,8 +1039,8 @@ cat > doAnno.csh << 'EOF'
     rm -f $gdir/*.maf
     mkdir -p $gdir
     ln -s $mdir/*.maf $gdir
-    hgLoadMaf -pathPrefix=$gdir -WARN hg18 encodeTbaAlignDec07 >&! load.log
-    cat *.maf | hgLoadMafSummary hg18 encodeTbaSummaryDec07 stdin
+    hgLoadMaf -pathPrefix=$gdir -WARN hg18 encodeTbaAlignDec07 >&! load.log &
+    cat *.maf | hgLoadMafSummary hg18 encodeTbaSummaryDec07 stdin 
     cd ..
 
     #Created 141213 summary blocks from 8144409 components and 389847 mafs from stdin
@@ -1148,20 +1137,65 @@ cat > getGenes.csh << 'EOF'
     mkdir -p DEC-07/lab
     cd DEC-07/lab
     wget -nd ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/encode/freeze/DEC-2007/DEC-2007.tar.gz
-    # GOT HERE
 
+    # Received README.txt for sequence freeze
+    # and encodeTbaAlign.html update from Gayle McEwen, 6/12/08
+    cp encodeTbaAlign_DEC-2007.html ~/kent/src/hg/makeDb/trackDb/human/hg18/encodeTbaAlignDec07.html
+    # checkin to CVS
+
+    cd ..
     mkdir downloads
     cd downloads
-    cp /cluster/data/encode/downloads/msa/DEC-2005/README.txt .
-
-    # edit as needed
     ln -s /cluster/data/encode/MSA/DEC-07/lab/DEC-2007.tar.gz  .
-    ln -s /cluster/data/encode/MSA/DEC-07/lab/seq/metadata.txt .
     ln -s /cluster/data/encode/MSA/DEC-07/lab/seq sequences
+
+    # Received species tree from Gayle 8/08
+    cp ../lab/conserved.mod tree_4d.tba.nh
+    # edit to remove phastCons-specific header
+    cp ../lab/tree_Dec2007.nh species37.nh
+    # Create tree image with phyloGif -- use 1024 height, preserve underscores
+    # encode_37way.gif
+    cp encode_37way.gif ~/browser/images/phylo/
+    # checkin to CVS
+    cp ../lab/README_DEC-2007.txt README.txt
+    # fix typo -- it's the Dec not Sep freeze
+    # edit DIRECTORY structure section a bit to reflect this downloads organiatoin
 
     # post for download 
     ssh hgwdev
     cd /usr/local/apache/htdocs/goldenPath/hg18/encode
-    mkdir -p MSA
-    cd MSA
-    ln -s /cluster/data/encode/MSA/DEC-07/downloads DEC-2007
+    mkdir -p MSA/DEC-2007
+    cd MSA/DEC-2007
+    ln -s /cluster/data/encode/MSA/DEC-07/downloads/{README.txt,DEC-2007.tar.gz} .
+    ln -s /cluster/data/encode/MSA/DEC-07/downloads/{tree_4d.tba.nh,species37.nh} .
+    cp ~/browser/images/phylo/encode_37way.gif .
+
+    # Conservation
+    mkdir -p ChaiCons/2008-03-24/lab BinCons/2008-03-24/lab
+    # copy files from Gayle McEwan email
+
+    # binCons files are formatted <region> start end name score,
+    # where score is always 1000
+    # Lift these to hg18 coordinates, and remove score field.
+
+    echo "select chromStart, name, chromEnd-chromStart, chrom from encodeRegions" | hgsql -N hg18 | sed 's/$/\t30000000/' > /cluster/data/encode/MSA/encodeRegions.lft
+
+    liftUp ChaiCons.bed /cluster/data/encode/MSA/encodeRegions.lft warn lab/CHAI.bed
+    wc -l ChaiCons.bed lab/CHAI.bed
+     #208916 ChaiCons.bed
+     #208916 lab/CHAI.bed
+    hgLoadBed hg18 encodeTbaChaiConsDec07 ChaiCons.bed
+    # Loaded 208916 elements of size 3
+
+    cd ../../BinCons/2008-03-24
+    liftUp -type=.bed stdout /cluster/data/encode/MSA/encodeRegions.lft warn lab/BINCONS.bed |\
+        sed 's/1000$//' > BinCons.bed
+
+    wc -l BinCons.bed lab/BINCONS.bed
+    # 117793 BinCons.bed
+    # 117836 lab/BINCONS.bed
+    # difference due to blank lines in source file:
+    grep '^$' lab/* | wc -l
+    # 43
+    hgLoadBed hg18 encodeTbaBinConsDec07 BinCons.bed
+    
