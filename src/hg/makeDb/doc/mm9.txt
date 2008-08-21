@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.72 2008/07/16 20:42:41 angie Exp $"
+#	"$Id: mm9.txt,v 1.73 2008/08/21 19:40:44 larrym Exp $"
 #
 
 #######################################################################
@@ -8384,3 +8384,45 @@ see doc/builds.txt for specific details.
 
 
 ############################################################################
+
+##########################################################################
+# Fix equCab2 nets and chains to remove duplicate scaffold_34 (DONE - 2008-08-19 - larrym)
+
+fixChainNetEquCab2 hg18
+
+deleted:	3100 from chr1_chainEquCab2
+deleted:	7362 from chr10_chainEquCab2
+deleted:	8472 from chr11_chainEquCab2
+deleted:	1078 from chr12_chainEquCab2
+deleted:	2227 from chr13_chainEquCab2
+deleted:	2 from chr13_random_chainEquCab2
+deleted:	3605 from chr14_chainEquCab2
+deleted:	6773 from chr15_chainEquCab2
+deleted:	3400 from chr16_chainEquCab2
+deleted:	0 from chr16_random_chainEquCab2
+deleted:	3741 from chr17_chainEquCab2
+deleted:	3 from chr17_random_chainEquCab2
+deleted:	334 from chr18_chainEquCab2
+deleted:	5620 from chr19_chainEquCab2
+deleted:	5 from chr1_random_chainEquCab2
+deleted:	23003 from chr2_chainEquCab2
+deleted:	1265 from chr3_chainEquCab2
+deleted:	0 from chr3_random_chainEquCab2
+deleted:	2567 from chr4_chainEquCab2
+deleted:	0 from chr4_random_chainEquCab2
+deleted:	967 from chr5_chainEquCab2
+deleted:	0 from chr5_random_chainEquCab2
+deleted:	3419 from chr6_chainEquCab2
+deleted:	10493 from chr7_chainEquCab2
+deleted:	0 from chr7_random_chainEquCab2
+deleted:	1284 from chr8_chainEquCab2
+deleted:	1 from chr8_random_chainEquCab2
+deleted:	10185 from chr9_chainEquCab2
+deleted:	1 from chr9_random_chainEquCab2
+deleted:	4 from chrM_chainEquCab2
+deleted:	8 from chrUn_random_chainEquCab2
+deleted:	1585 from chrX_chainEquCab2
+deleted:	3 from chrX_random_chainEquCab2
+deleted:	19 from chrY_chainEquCab2
+deleted:	70 from chrY_random_chainEquCab2
+deleted:	18173 from netEquCab2
