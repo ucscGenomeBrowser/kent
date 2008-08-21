@@ -16,7 +16,7 @@ if ( $argv != go ) then
   echo " Finds diffs between active DBs and DBs getting genbank updates."
   echo " Only works for RR databases."
   echo
-  echo "  usage: go"
+  echo "  usage: activeGenbank.csh go"
   echo
   exit
 endif
