@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1454 2008/08/15 20:20:36 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1455 2008/08/21 18:03:52 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15106,7 +15106,8 @@ if (row != NULL)
             else
                 printf("<H2>%s</H2>\n", clone);
             }
-        else if (sameString("Dog", organism))
+        else if (sameString("Dog", organism) || 
+	         sameString("Zebra finch", organism))
             {
             printf("<H2><A HREF=");
             printTraceUrl(stdout, "clone_id", clone);
@@ -15202,7 +15203,8 @@ if (row != NULL)
                     }
                 sqlFreeResult(&sr2);
                 } 
-            else if (sameString("Dog", organism))
+            else if (sameString("Dog", organism) || 
+		     sameString("Zebra finch", organism))
                 {
                 printf("<H3><A HREF=");
                 printTraceUrl(stdout, "trace_name", lfs->lfNames[i]);
