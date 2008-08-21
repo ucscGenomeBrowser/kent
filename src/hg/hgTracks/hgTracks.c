@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1502 2008/08/14 20:59:52 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1503 2008/08/21 22:07:38 aamp Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2095,8 +2095,6 @@ struct hashEl *hels;
 struct hashEl *hel;
 char prefix[64];
 /* First check if the click was from hgGenome.  If not, leave. */
-if (!cgiVarExists("hgGenomeClick"))
-    return;
 /* get the names of the tracks in the cart */
 safef(prefix, sizeof(prefix), "%s_", hggGraphPrefix);
 hels = cartFindPrefix(cart, prefix);
@@ -2155,7 +2153,8 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         if (handler != NULL)
             handler(track);
         }
-    makeHgGenomeTrackVisible(track);
+    if (cgiVarExists("hgGenomeClick"))
+	makeHgGenomeTrackVisible(track);
     if (track->loadItems == NULL)
         warn("No load handler for %s; possible missing trackDb `type' or `subTrack' attribute", tdb->tableName);
     else if (track->drawItems == NULL)
