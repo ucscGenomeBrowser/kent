@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.10 2008/08/12 23:28:56 larrym Exp $
+# $Id: Encode.pm,v 1.11 2008/08/22 20:17:06 larrym Exp $
 
 package Encode;
 
@@ -294,6 +294,18 @@ sub getDaf
         $daf{variableArray} = \@variables;
     }
     return \%daf;
+}
+
+sub compositeTrackName
+{
+    my ($daf) = @_;
+    return "wgEncode$daf->{lab}$daf->{dataType}";
+}
+
+sub downloadDir
+{
+    my ($daf) = @_;
+    return "/usr/local/apache/htdocs/goldenPath/$daf->{assembly}/" . compositeTrackName($daf);
 }
 
 1;
