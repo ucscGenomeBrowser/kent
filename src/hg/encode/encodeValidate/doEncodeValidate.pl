@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.49 2008/08/12 23:29:12 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.50 2008/08/22 20:27:10 larrym Exp $
 
 use warnings;
 use strict;
@@ -168,6 +168,7 @@ sub validateWig
     my ($path, $file, $type) = @_;
     my $filePath = "$path/$file";
 
+    # XXXX why not do the whole thing, rather than just 10 lines?
     my @cmds = ("head -10 $filePath", "wigEncode stdin /dev/null /dev/null");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null");
     if(my $err = $safe->exec()) {
@@ -196,6 +197,8 @@ sub validateBed {
         } elsif($fieldCount < 5) {
             die "$prefix not enough fields; " . scalar(@fields) . " present; at least 5 are required\n";
         } elsif ($fields[0] !~ /^chr(\d+|M|X|Y)$/) {
+            # I have seen non-standard chrom names (e.g. "chr2_hap2" from Wold) and we want
+            # to make sure we don't import those.
             die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
         } elsif ($fields[1] !~ /^\d+$/) {
             die "$prefix field 2 value ($fields[1]) is invalid; value must be a positive number\n";
@@ -545,7 +548,7 @@ for my $key (keys %ddfSets) {
     }
 }
 
-my $compositeTrack = "wgEncode$daf->{lab}$daf->{dataType}";
+my $compositeTrack = Encode::compositeTrackName($daf);
 my $sth = $db->execute("select count(*) from trackDb where tableName = ?", $compositeTrack);
 my @row = $sth->fetchrow_array();
 if(!(@row && $row[0])) {
@@ -563,6 +566,7 @@ $ddfLineNumber = 1;
 foreach my $ddfLine (@ddfLines) {
     $ddfLineNumber++;
     my $errorPrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
+    # XXXX force priorities to be based on order of views in the DAF rather than their order in DDF
     $priority++;
     my $view = $ddfLine->{view};
     HgAutomate::verbose(2, "  View: $view\n");
@@ -632,14 +636,18 @@ foreach my $ddfLine (@ddfLines) {
         die "view '$view' has already been loaded\n";
     }
 
+    # XXXX Move the decision about which views have tracks into the DAF?
+    my $downloadOnly = $view eq 'RawData' || $view eq 'Alignments' ? 1 : 0;
+
     print LOADER_RA "tablename $tableName\n";
+    print LOADER_RA "view $view\n";
     print LOADER_RA "type $daf->{TRACKS}{$view}{type}\n";
     print LOADER_RA "assembly $daf->{assembly}\n";
     print LOADER_RA "files @{$ddfLine->{files}}\n";
+    print LOADER_RA "downloadOnly $downloadOnly\n";
     print LOADER_RA "\n";
 
-    if($view ne 'RawData') {
-        # XXXX Make the decision about which views have tracks more sophisticated
+    if(!$downloadOnly) {
         print TRACK_RA "\ttrack\t$tableName\n";
         print TRACK_RA "\tsubTrack\t$compositeTrack\n";
         print TRACK_RA "\tshortLabel\t$shortLabel\n";
