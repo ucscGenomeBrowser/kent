@@ -17,7 +17,6 @@
 #include "dystring.h"
 #include <limits.h>
 
-
 struct genomeRangeTree *genomeRangeTreeNewSize(int hashPowerOfTwoSize)
 /* Create a new, empty, genomeRangeTree. 
  * Free with genomeRangeTreeFree. */
@@ -437,7 +436,6 @@ void genomeRangeTreeFileUnionDetailed(struct genomeRangeTreeFile *tf1, struct ge
 struct genomeRangeTree *tree = genomeRangeTreeNew();
 struct hashEl *c1, *c2;
 struct genomeRangeTreeFile *tf;
-struct rangeStartSize *r1, *r2;
 int res, nodes1, nodes2, i=0;
 if (size)
     *size = 0;
@@ -469,47 +467,52 @@ while (c1 && c2) /* at least one chrom in each tree */
     nodes2 = hashIntVal(tf2->nodes, c2->name);
     if (res < 0) /* chrom1 < chrom2 so write out chrom1 directly */
 	{
+	struct rangeStartSize *r1;
 	hashAddInt(tf->nodes, c1->name, nodes1);
 	AllocArray(r1, nodes1);
 	rangeReadArray(tf1->file, r1, nodes1, tf1->isSwapped);
 	if (tf->file)
-	    rangeWriteArray(r1, nodes1, tf->file);
+		rangeWriteArray(r1, nodes1, tf->file);
 	if (size)
-	    *size += rangeArraySize(r1, nodes1);
-	i += nodes1;
+		*size += rangeArraySize(r1, nodes1);
 	freez(&r1);
+	i += nodes1;
 	c1 = c1->next; 
 	}
     else if (res > 0) /* chrom2 < chrom1 so write out chrom2 directly */
 	{
+	struct rangeStartSize *r2;
 	hashAddInt(tf->nodes, c2->name, nodes2);
 	AllocArray(r2, nodes2);
-	rangeReadArray(tf2->file, r1, nodes2, tf2->isSwapped);
+	rangeReadArray(tf2->file, r2, nodes2, tf2->isSwapped);
 	if (tf->file)
-	    rangeWriteArray(r2, nodes2, tf->file);
+		rangeWriteArray(r2, nodes2, tf->file);
 	if (size)
-	    *size += rangeArraySize(r2, nodes2);
-	i += nodes2;
+		*size += rangeArraySize(r2, nodes2);
 	freez(&r2);
+	i += nodes2;
 	c2 = c2->next;
 	}
     else /* res == 0 so both chroms the same and need to merge */
 	{
+	struct rangeStartSize *r1, *r2;
 	AllocArray(r1, nodes1);
 	AllocArray(r2, nodes2);
 	rangeReadArray(tf1->file, r1, nodes1, tf1->isSwapped);
 	rangeReadArray(tf2->file, r2, nodes2, tf2->isSwapped);
 	/* merge and store the total nodes after merging */
-	int n0;
-	unsigned s0;
+	int n0=0;
+	unsigned s0=0;
 	if (orDirectToFile)
 	    s0 = rangeTreeFileUnionToFile(r1, r2, nodes1, nodes2, tf->file, &n0);
 	else
 	    {
-	    struct rangeStartSize *r;
+	    struct rangeStartSize *r=NULL;
 	    s0 = rangeTreeFileUnion(r1, r2, nodes1, nodes2, &r, &n0, saveMem);
 	    if (tf->file && n0 > 0)
+		{
 		rangeWriteArray(r, n0, tf->file);
+		}
 	    freez(&r);
 	    }
 	if (size)
@@ -526,6 +529,7 @@ while (c1 && c2) /* at least one chrom in each tree */
 /* directly write out any remaining chromosomes, either c1 or c2 */
 while (c1)
     {
+    struct rangeStartSize *r1;
     nodes1 = hashIntVal(tf1->nodes, c1->name);
     hashAddInt(tf->nodes, c1->name, nodes1);
     AllocArray(r1, nodes1);
@@ -540,6 +544,7 @@ while (c1)
     }
 while (c2)
     {
+    struct rangeStartSize *r2;
     nodes2 = hashIntVal(tf2->nodes, c2->name);
     hashAddInt(tf->nodes, c2->name, nodes2);
     AllocArray(r2, nodes2);
@@ -608,7 +613,6 @@ struct genomeRangeTree *tree = genomeRangeTreeNew();
 struct hashEl *c1, *c2;
 struct hash *ranges = hashNew(0), *nodeCounts = hashNew(0);
 struct genomeRangeTreeFile *tf;
-struct rangeStartSize *r1, *r2, *r;
 int res, nodes1, nodes2, i = 0;
 
 if (size)
@@ -624,20 +628,36 @@ while (c1 && c2) /* at least one chrom in each tree */
     if (res < 0) /* chrom1 < chrom2 so skip chrom1 */
 	{
 	c1 = c1->next; 
+	if (c1 && fseek(tf1->file, hashIntVal(tf1->offset, c1->name), SEEK_SET) != 0)
+	    errAbort("could not seek to pos %d in chrom %s in file %s : error(%d) %s\n", 
+		hashIntVal(tf1->offset, c1->name), c1->name, tf1->name, errno, strerror(errno));
+	//struct rangeStartSize *r1;
+	//AllocArray(r1, nodes1);
+	//rangeReadArray(tf1->file, r1, nodes1, tf1->isSwapped);
+	//freez(&r1);
 	}
     else if (res > 0) /* chrom2 < chrom1 so skip chrom2 */
 	{
 	c2 = c2->next;
+	if (c2 && fseek(tf2->file, hashIntVal(tf2->offset, c2->name), SEEK_SET) != 0 )
+	    errAbort("could not seek to pos %d in chrom %s in file %s : error(%d) %s\n", 
+		hashIntVal(tf2->offset, c2->name), c2->name, tf2->name, errno, strerror(errno));
+	//struct rangeStartSize *r2; /* Need to read this chrom to move the file pointer */
+	//AllocArray(r2, nodes2);
+	//rangeReadArray(tf2->file, r2, nodes2, tf2->isSwapped);
+	//freez(&r2);
 	}
     else /* res == 0 so both chroms the same and need to merge */
 	{
+	struct rangeStartSize *r1, *r2;
 	AllocArray(r1, nodes1);
 	AllocArray(r2, nodes2);
 	rangeReadArray(tf1->file, r1, nodes1, tf1->isSwapped);
 	rangeReadArray(tf2->file, r2, nodes2, tf2->isSwapped);
 	/* store the intersected nodes */
 	unsigned s0;
-	int n0;
+	int n0=0;
+	struct rangeStartSize *r = NULL;
 	s0 = rangeTreeFileIntersection(r1, r2, nodes1, nodes2, &r, &n0, saveMem);
 	/* if non-null intersection then remember chrom, array of ranges and number of nodes */
 	if (n0>0)
