@@ -33,8 +33,8 @@ use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose/;
 my $loadRa = "out/$Encode::loadFile";
 my $unloadRa = "out/$Encode::unloadFile";
 my $submitDir = "";
-my $submitFQP;
-my $submitType = "";
+my $submitPath;			# full path of data submission directory
+my $submitType = "";		# currently ignored
 my $tempDir = "/data/tmp";
 my $encInstance = "";
 
@@ -91,14 +91,14 @@ sub loadWig
     if(my $err = $safe->exec()) {
         print STDERR "ERROR: File(s) $fileList failed wiggle load:\n\n";
         dieFile($stderrFile);
-    } elsif (system( "rm -f /gbdb/$assembly/wib/$tableName.wib") ||
-             system( "ln -s $submitFQP/$tableName.wib /gbdb/$assembly/wib")) {
+    } elsif (system("rm -f /gbdb/$assembly/wib/$tableName.wib") ||
+             system("ln -s $submitPath/$tableName.wib /gbdb/$assembly/wib")) {
         die("ERROR: failed wiggle ln\n");
     } else {
         print "$fileList loaded into $tableName\n";
     }
     push(@{$pushQ->{TABLES}}, $tableName);
-    push(@{$pushQ->{FILES}}, "$submitFQP/$tableName.wib");
+    push(@{$pushQ->{FILES}}, "$submitPath/$tableName.wib");
 }
 
 sub loadBed
@@ -176,9 +176,9 @@ if(@ARGV != 2) {
 $submitType = $ARGV[0];	# currently not used
 $submitDir = $ARGV[1];
 if ($submitDir =~ /^\//) {
-    $submitFQP = $submitDir;
+    $submitPath = $submitDir;
 } else {
-    $submitFQP = "$wd/$submitDir";
+    $submitPath = "$wd/$submitDir";
 }
 
 my $configPath;
@@ -195,6 +195,11 @@ if (defined $opt_configDir) {
 my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
 my $daf = Encode::getDaf($submitDir, $grants, $fields);
+my $email;
+
+if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
+    $email = $grants->{$daf->{grant}}{wranglerEmail};
+}
 
 my $tableSuffix = "";
 # yank out "beta" from encinstance_beta
@@ -244,6 +249,12 @@ print STDERR "$loadRa has: " . scalar(keys %ra) . " records\n" if($debug);
 
 print STDERR "\n" if($debug);
 
+my $compositeTrack = Encode::compositeTrackName($daf);
+my $downloadDir = Encode::downloadDir($daf);
+if(! -d $downloadDir) {
+    die "download dir for 'compositeTrack' is not properly configured; please contact your wrangler at: $email\n";
+}
+
 for my $key (keys %ra) {
     my $h = $ra{$key};
     my $tablename = $h->{tablename} . $tableSuffix;
@@ -263,7 +274,21 @@ for my $key (keys %ra) {
     my $files = $h->{files};
     my @files = split(/\s+/, $files);
     my %extendedTypes = map { $_ => 1 } @Encode::extendedTypes;
-    if($type eq "genePred") {
+
+    if ($h->{downloadOnly}) {
+        # soft link file(s) into download dir
+        my $target = "$downloadDir/$tablename.$type";
+        unlink($target);
+        if(@files == 1) {
+            !system("/bin/ln -s $submitPath/$files[0] $target") || die "link failed: $?\n";
+        } else {
+            # have to make a concatenated copy of multiple files
+            my $cmd = "cat " . join(" ", @files) . " > $tablename.$type";
+            !system($cmd) || die "system '$cmd' failed: $?\n";
+            !system("/bin/ln -s $submitPath/$tablename.$type $target") || die "link failed: $?\n";
+        }
+        push(@{$pushQ->{FILES}}, $target);
+    } elsif($type eq "genePred") {
         loadGene($assembly, $tablename, $files, $pushQ);
     } elsif ($type eq "wig") {
         loadWig($assembly, $tablename, $files, $pushQ);
@@ -271,10 +296,6 @@ for my $key (keys %ra) {
         loadBedFromSchema($assembly, $tablename, $files, $type, $pushQ);
     } elsif ($type =~ /^bed (3|4|5|6)$/) {
         loadBed($assembly, $tablename, $files, $pushQ);
-    } elsif ($type eq "fastq") {
-        # XXXX anything else? Should we rename file(s) (or soft link) to get
-        # consistent naming?
-        push(@{$pushQ->{FILES}}, map("$submitDir/$_", @files));
     } else {
         die "ERROR: unknown type: $type in $Encode::loadFile\n";
     }
@@ -283,10 +304,9 @@ for my $key (keys %ra) {
 
 # Send "data is ready" email to email contact assigned to $daf{lab}
 
-if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
+if($email) {
     if(!$opt_noEmail) {
-        my $email = $grants->{$daf->{grant}}{wranglerEmail};
-        `echo "dir: $submitFQP" | /bin/mail -s "ENCODE data from $daf->{grant}/$daf->{lab} lab is ready" $email`;
+        `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $daf->{grant}/$daf->{lab} lab is ready" $email`;
     }
 } else {
     # XXXX Should this be fatal? Or s/d we send email to encode alias?
