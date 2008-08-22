@@ -4,7 +4,10 @@ BASEMASK = ../baseMask -verbose=0
 BASEMASKTOBED = ../baseMaskToBed -verbose=0 
 BEDTOBASEMASK = ../bedToBaseMask -verbose=0 
 TRACKTOBASEMASK = ../trackToBaseMask -verbose=0 
+FEATUREBITS = featureBits -countGaps
+BEDSORT = bedSort
 DIFF = diff 
+TIME = time
 
 test:   bedToBaseMaskTests \
 	baseMaskToBedTests \
@@ -46,7 +49,27 @@ baseMaskToBedTests: mkout
 	${DIFF} --brief test1and2.fb.bed output/test1and2.idmerge.bed
 
 trackToBaseMaskTests: mkout
-#	${TRACKTOBASEMASK} 
+	${TIME} ${FEATUREBITS} hg18 knownGene -bed=output/knownGene.fb.bed
+	# takes a few minutes for the next few featureBits commands
+	${TIME} ${FEATUREBITS} hg18 rmsk      -bed=output/rmsk.fb.bed
+	${TIME} ${FEATUREBITS} hg18     knownGene rmsk -bed=output/knownGene_and_rmsk.fb.bed
+	${TIME} ${FEATUREBITS} hg18 -or knownGene rmsk -bed=output/knownGene_or_rmsk.fb.bed
+	${BEDSORT} output/knownGene.fb.bed          output/knownGene.fb.bed
+	${BEDSORT} output/rmsk.fb.bed               output/rmsk.fb.bed
+	${BEDSORT} output/knownGene_and_rmsk.fb.bed output/knownGene_and_rmsk.fb.bed
+	${BEDSORT} output/knownGene_or_rmsk.fb.bed  output/knownGene_or_rmsk.fb.bed
+	${TIME} ${TRACKTOBASEMASK} hg18 knownGene   output/knownGene.bama
+	${TIME} ${BASEMASKTOBED}   -id -merge       output/knownGene.bama output/knownGene.bm.bed
+	${DIFF} --brief output/knownGene.fb.bed output/knownGene.bm.bed
+	${TIME} ${TRACKTOBASEMASK} hg18 rmsk       output/rmsk.bama
+	${TIME} ${BASEMASKTOBED}   -id -merge      output/rmsk.bama output/rmsk.bm.bed
+	${DIFF} --brief output/rmsk.fb.bed         output/rmsk.bm.bed
+	${TIME} ${BASEMASK} -and output/knownGene.bama output/rmsk.bama    output/knownGene_and_rmsk.bama
+	${TIME} ${BASEMASKTOBED} -id -merge output/knownGene_and_rmsk.bama output/knownGene_and_rmsk.bm.bed
+	${DIFF} --brief output/knownGene_and_rmsk.fb.bed                   output/knownGene_and_rmsk.bm.bed
+	${TIME} ${BASEMASK} -or  output/knownGene.bama output/rmsk.bama    output/knownGene_or_rmsk.bama
+	${TIME} ${BASEMASKTOBED} -id -merge output/knownGene_or_rmsk.bama  output/knownGene_or_rmsk.bm.bed
+	${DIFF} --brief output/knownGene_or_rmsk.fb.bed                    output/knownGene_or_rmsk.bm.bed
 
 baseMaskTests: mkout bedToBaseMaskTests baseMaskToBedTests
 	${BASEMASK} -or output/test1.bama        output/test2.bama 2>output/test1or2.stderr

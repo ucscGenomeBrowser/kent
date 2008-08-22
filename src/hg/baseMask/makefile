@@ -7,10 +7,6 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = trackToBaseMask.o bedToBaseMask.o baseMaskToBed.o baseMask.o
 B = trackToBaseMask   bedToBaseMask   baseMaskToBed   baseMask
 
-#$B: trackToBaseMask
-#	@${MKDIR} `dirname $B`
-#	cp -f trackToBaseMask $B
-
 all: $B
 
 trackToBaseMask: trackToBaseMaskUsage.msg trackToBaseMask.o ${MYLIBS} 
@@ -53,5 +49,7 @@ test:
 	cd tests && ${MAKE} test
 
 clean:
-	rm -f $O $B baseMaskUsage.msg trackToBaseMaskUsage.msg bedToBaseMaskUsage.msg baseMaskToBedUsage.msg
+	rm -f $O $B
+	rm -f baseMaskUsage.msg trackToBaseMaskUsage.msg bedToBaseMaskUsage.msg baseMaskToBedUsage.msg
 	cd tests && ${MAKE} clean
+
