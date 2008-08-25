@@ -920,7 +920,7 @@ hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSupe
 # Map old to new mapping
 hgsql $db -N -e 'select * from knownGene' > knownGeneOld.gp
 genePredToBed knownGeneOld.gp >knownGeneOld.bed
-cat refSeq/*.bed mrna/*.bed | txGeneExplainUpdate1 knownGeneOld.bed ucscGenes.bed stdin abWalk.bed kgOldToNew.bed
+txGeneExplainUpdate2 knownGeneOld.bed ucscGenes.bed kgOldToNew.bed
 hgLoadSqlTab $tempDb kg${lastVer}ToKg${curVer} ~/kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.bed
 
 # Build kgSpAlias table, which combines content of both kgAlias and kgProtAlias tables.
