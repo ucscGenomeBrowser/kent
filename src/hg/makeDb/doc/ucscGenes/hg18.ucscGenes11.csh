@@ -56,7 +56,7 @@ set yeastFa = /cluster/data/$yeastDb/bed/blastp/sgdPep.faa
 set bioCycPathways = /cluster/data/hg18/bed/ucsc.10/bioCyc/pathways.col
 set bioCycGenes = /cluster/data/hg18/bed/ucsc.10/bioCyc/genes.col
    # For KEGG - update this following build instructions in hg18.txt
-set keggList /cluster/data/hg18/bed/ucsc.10/kegg/keggList.tab
+set keggList = /cluster/data/hg18/bed/ucsc.10/kegg/keggList.tab
 
 
 # Tracks
@@ -832,7 +832,7 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make spec"
     hgLoadRnaFold $tempDb foldUtr5 fold
     cd ../utr3
     hgLoadRnaFold -warnEmpty $tempDb foldUtr3 fold
-# There are a four warnings on empty files.  Seems to be a problem in
+# There are a five warnings on empty files.  Seems to be a problem in
 # RNAfold, so not easy for us to fix. Consequence is not too bad, just a
 # few 3' UTRs will be missing annotation.
 
