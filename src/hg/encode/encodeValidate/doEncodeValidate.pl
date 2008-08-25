@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.50 2008/08/22 20:27:10 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.51 2008/08/25 22:30:27 larrym Exp $
 
 use warnings;
 use strict;
@@ -27,6 +27,7 @@ use RAFile;
 use SafePipe;
 
 use vars qw/
+    $opt_allowReloads
     $opt_configDir
     $opt_outDir
     $opt_validateDaf
@@ -48,10 +49,11 @@ submission-type is currently ignored.
 Current dafVersion is: $Encode::dafVersion
 
 options:
-    -validateDaf	exit after validating DAF file
-    -verbose num        Set verbose level to num (default 1).            -
+    -allowReloads       Allow reloads of existing tables
     -configDir dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
+    -validateDaf	exit after validating DAF file
+    -verbose num        Set verbose level to num (default 1).            -
     -outDir dir         Path of output directory, for validation files
                         (default: submission-dir/out)
 END
@@ -157,7 +159,7 @@ our %formatCheckers = (
     bed5FloatScore => \&validateBed,
     genePred => \&validateGene,
     tagAlign => \&validateTagAlign,
-    encodePeak => \&validateEncodePeak,
+    narrowPeak => \&validateNarrowPeak,
     fastq => \&validateFastQ,
     );
 
@@ -254,7 +256,7 @@ sub validateTagAlign
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
 }
 
-sub validateEncodePeak
+sub validateNarrowPeak
 {
     my ($path, $file, $type) = @_;
     my $filePath = "$path/$file";
@@ -262,7 +264,7 @@ sub validateEncodePeak
     open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
     while(<FILE>) {
         $line++;
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+$floatRegEx\s+$floatRegEx\s+-?\d+$/)) {
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+$floatRegEx\s+$floatRegEx\s+\d+$/)) {
             die "Line number $line in file '$file' is invalid\nline: $_\n";
         }
     }
@@ -349,7 +351,8 @@ my @ddfLines = ();	# each line in DDF (except for fields header)
 my %ddfSets = ();	# info about DDF entries broken down by ddfKey
 my $wd = cwd();
 
-my $ok = GetOptions("configDir=s",
+my $ok = GetOptions("allowReloads",
+                    "configDir=s",
                     "outDir=s",
                     "validateDaf",
                     "verbose=i",
@@ -569,6 +572,8 @@ foreach my $ddfLine (@ddfLines) {
     # XXXX force priorities to be based on order of views in the DAF rather than their order in DDF
     $priority++;
     my $view = $ddfLine->{view};
+    my $type = $daf->{TRACKS}{$view}{type};
+
     HgAutomate::verbose(2, "  View: $view\n");
     for my $field (keys %{$ddfLine}) {
         validateDdfField($field, $ddfLine->{$field}, $view, $daf);
@@ -629,11 +634,12 @@ foreach my $ddfLine (@ddfLines) {
     # mysql doesn't allow hyphens in table names and our naming convention doesn't allow underbars.
     $tableName =~ s/[_-]//g;
 
-    # Is this really an error?
-    my $sth = $db->execute("select count(*) from trackDb where tableName = ?", $tableName);
-    my @row = $sth->fetchrow_array();
-    if(@row && $row[0]) {
-        die "view '$view' has already been loaded\n";
+    if(!$opt_allowReloads) {
+        my $sth = $db->execute("desc $tableName");
+        my @row = $sth->fetchrow_array();
+        if(@row && $row[0]) {
+            die "view '$view' has already been loaded as track '$tableName'; please contact your wrangler if you need to reload this data\n";
+        }
     }
 
     # XXXX Move the decision about which views have tracks into the DAF?
@@ -641,7 +647,7 @@ foreach my $ddfLine (@ddfLines) {
 
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "view $view\n";
-    print LOADER_RA "type $daf->{TRACKS}{$view}{type}\n";
+    print LOADER_RA "type $type\n";
     print LOADER_RA "assembly $daf->{assembly}\n";
     print LOADER_RA "files @{$ddfLine->{files}}\n";
     print LOADER_RA "downloadOnly $downloadOnly\n";
@@ -653,7 +659,7 @@ foreach my $ddfLine (@ddfLines) {
         print TRACK_RA "\tshortLabel\t$shortLabel\n";
         print TRACK_RA "\tlongLabel\t$longLabel\n";
         print TRACK_RA "\tsubGroups\t$subGroups\n";
-        print TRACK_RA "\ttype\t$daf->{TRACKS}{$view}{type}\n";
+        print TRACK_RA "\ttype\t$type\n";
         print TRACK_RA sprintf("\tdateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
         print TRACK_RA "\tpriority\t$priority\n";
         # noInherit is necessary b/c composite track will often have a different dummy type setting.
@@ -662,13 +668,13 @@ foreach my $ddfLine (@ddfLines) {
         if($visibility{$view}) {
             print TRACK_RA "\tvisibility\t$visibility{$view}\n";
         }
-        if($daf->{TRACKS}{$view}{type} eq 'wig') {
+        if($type eq 'wig') {
             print TRACK_RA <<END;
 	spanList	1
 	windowingFunction	mean
 	maxHeightPixels	100:16:16
 END
-	} elsif($daf->{TRACKS}{$view}{type} eq 'bed 5 +') {
+	} elsif($type eq 'bed 5 +') {
 		print TRACK_RA "\tuseScore\t1\n";
 	}
         print TRACK_RA $additional;
