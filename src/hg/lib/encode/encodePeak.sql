@@ -5,14 +5,15 @@
 
 #Peaks format (BED 3+)
 CREATE TABLE encodePeak (
-    bin smallint unsigned not null,  # bin for speed
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     signalValue float not null,	# Measurement of average enrichment for the region
-    pValue float not null,
+    pValue float not null,	# Statistical significance of signal value (-log10)
     peak int not null,	
+    blockCount int unsigned not null,	# Number of blocks
+    blockSizes longblob not null,	# Comma separated list of block sizes
+    chromStarts longblob not null,	# Start positions relative to chromStart
               #Indices
-    INDEX chrom (chrom(8), bin),
     INDEX chromStart (chrom(8), chromStart)
 );

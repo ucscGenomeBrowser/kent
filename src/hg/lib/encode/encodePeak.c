@@ -6,22 +6,10 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "encode/encodePeak.h"
+#include "hdb.h"
+#include "encodePeak.h"
 
-static char const rcsid[] = "$Id: encodePeak.c,v 1.1 2008/08/01 18:42:34 aamp Exp $";
-
-void encodePeakStaticLoad(char **row, struct encodePeak *ret)
-/* Load a row from encodePeak table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
-{
-
-ret->chrom = row[0];
-ret->chromStart = sqlUnsigned(row[1]);
-ret->chromEnd = sqlUnsigned(row[2]);
-ret->signalValue = sqlFloat(row[3]);
-ret->pValue = sqlFloat(row[4]);
-ret->peak = sqlSigned(row[5]);
-}
+static char const rcsid[] = "$Id: encodePeak.c,v 1.2 2008/08/25 21:35:48 aamp Exp $";
 
 struct encodePeak *encodePeakLoad(char **row)
 /* Load a encodePeak from row fetched with select * from encodePeak
@@ -30,12 +18,23 @@ struct encodePeak *encodePeakLoad(char **row)
 struct encodePeak *ret;
 
 AllocVar(ret);
+ret->blockCount = sqlUnsigned(row[6]);
 ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->signalValue = sqlFloat(row[3]);
 ret->pValue = sqlFloat(row[4]);
 ret->peak = sqlSigned(row[5]);
+{
+int sizeOne;
+sqlUnsignedDynamicArray(row[7], &ret->blockSizes, &sizeOne);
+assert(sizeOne == ret->blockCount);
+}
+{
+int sizeOne;
+sqlUnsignedDynamicArray(row[8], &ret->chromStarts, &sizeOne);
+assert(sizeOne == ret->blockCount);
+}
 return ret;
 }
 
@@ -45,7 +44,7 @@ struct encodePeak *encodePeakLoadAll(char *fileName)
 {
 struct encodePeak *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -63,7 +62,7 @@ struct encodePeak *encodePeakLoadAllByChar(char *fileName, char chopper)
 {
 struct encodePeak *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -90,6 +89,29 @@ ret->chromEnd = sqlUnsignedComma(&s);
 ret->signalValue = sqlFloatComma(&s);
 ret->pValue = sqlFloatComma(&s);
 ret->peak = sqlSignedComma(&s);
+ret->blockCount = sqlUnsignedComma(&s);
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->blockSizes, ret->blockCount);
+for (i=0; i<ret->blockCount; ++i)
+    {
+    ret->blockSizes[i] = sqlUnsignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->chromStarts, ret->blockCount);
+for (i=0; i<ret->blockCount; ++i)
+    {
+    ret->chromStarts[i] = sqlUnsignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
 *pS = s;
 return ret;
 }
@@ -102,6 +124,8 @@ struct encodePeak *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
+freeMem(el->blockSizes);
+freeMem(el->chromStarts);
 freez(pEl);
 }
 
@@ -134,8 +158,45 @@ fputc(sep,f);
 fprintf(f, "%g", el->pValue);
 fputc(sep,f);
 fprintf(f, "%d", el->peak);
+fputc(sep,f);
+fprintf(f, "%u", el->blockCount);
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->blockCount; ++i)
+    {
+    fprintf(f, "%u", el->blockSizes[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->blockCount; ++i)
+    {
+    fprintf(f, "%u", el->chromStarts[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+int encodePeakNumFields(char *trackName)
+/* Just quickly count th number of fields. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct slName *fieldNames = sqlFieldNames(conn, trackName);
+int numFields = slCount(fieldNames);
+hFreeConn(&conn);
+if (sameString(fieldNames->name, "bin"))
+    numFields--;
+slFreeList(&fieldNames);
+return numFields;
+}
 

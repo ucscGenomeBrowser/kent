@@ -62,5 +62,19 @@ void encodePeakOutput(struct encodePeak *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+/* Handy little enum for classification of the different peak types. */
+enum encodePeakType
+{
+    narrowPeak = 1,
+    broadPeak = 2,
+    gappedPeak = 3,
+    encodePeak5 = 4,
+    encodePeak6 = 5,
+    encodePeak9 = 6
+};
+
+int encodePeakNumFields(char *trackName);
+/* Just quickly count th number of fields. */
+
 #endif /* ENCODEPEAK_H */
 
