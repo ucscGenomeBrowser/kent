@@ -423,7 +423,7 @@ type bedGraph 4
 
 track knownGene
 shortLabel UCSC Genes
-longLabel UCSC Gene Predictions Based on RefSeq, UniProt, GenBank, and Comparative Genomics
+longLabel UCSC Genes Based on RefSeq, UniProt, GenBank, CCDS and Comparative Genomics
 group genes
 priority 34
 visibility pack
@@ -445,16 +445,16 @@ visibility hide
 color 90,0,150
 type bed 6 .
 
-track knownGeneOld2
-shortLabel Old Known Genes
-longLabel Previous Version of  UCSC Known Genes
+track knownGeneOld3
+shortLabel Old UCSC Genes
+longLabel Previous Version of  UCSC Genes
 group genes
 priority 34.1
 visibility hide
 color 82,82,160
 type genePred 
 hgsid on
-oldToNew kg2ToKg3
+oldToNew kg3ToKg4
 baseColorUseCds given
 baseColorDefault genomicCodons
 
@@ -2353,7 +2353,7 @@ sourceTable jkTestChipExps
 
 track jkgInputRefSeq
 shortLabel RefSeq Input
-longLabel JKG Input RefSeq Alignments Take 9
+longLabel JKG Input RefSeq Alignments Take 11
 group jkX
 priority 1
 visibility hide
@@ -2362,7 +2362,7 @@ type psl .
 
 track jkgRefSeqUnusual
 shortLabel RefSeq Unusual
-longLabel JKG Unusual conditions in RefSeq alignments Take 9
+longLabel JKG Unusual conditions in RefSeq alignments Take 11
 group jkX
 priority 1.1
 visibility hide
@@ -2371,7 +2371,7 @@ type bed 4 +
 
 track jkgInputMrna
 shortLabel mRNA Input
-longLabel JKG Input RefSeq Alignments (Snapshot of DB Feb 21 2007) Take 9
+longLabel JKG Input mRNA Alignments (Snapshot of DB Feb 21 2007) Take 11
 group jkX
 priority 2
 visibility hide
@@ -2380,7 +2380,7 @@ type psl .
 
 track jkgAntibodyBed
 shortLabel Antibody Frags
-longLabel JKG Antibody fragments filtered out of mRNA Take 9
+longLabel JKG Antibody fragments filtered out of mRNA Take 11
 group jkX
 priority 2.1
 visibility hide
@@ -2389,7 +2389,7 @@ type bed 12 .
 
 track jkgRefSeqBed
 shortLabel RefSeq BED
-longLabel JKG RefSeq merged at short breaks, broken at long non-intron break Take 9
+longLabel JKG RefSeq merged at short breaks, broken at long non-intron break Take 11
 group jkX
 priority 3
 visibility hide
@@ -2398,7 +2398,7 @@ type bed 12 .
 
 track jkgMrnaBed
 shortLabel mRNA BED
-longLabel JKG mRNA merged at short breaks, broken at long non-intron break Take 9
+longLabel JKG mRNA merged at short breaks, broken at long non-intron break Take 11
 group jkX
 priority 4
 visibility hide
@@ -2407,7 +2407,7 @@ type bed 12 .
 
 track jkgNativeGraph
 shortLabel Native Graph 
-longLabel JKG Transcription Graph for mRNA and RefSeq Take 9
+longLabel JKG Transcription Graph for mRNA and RefSeq Take 11
 group jkX
 priority 5
 visibility hide
@@ -2415,7 +2415,7 @@ type altGraphX
 
 track jkgOrthoExons
 shortLabel Ortho Exon
-longLabel JKG Exons Supported by Orthologous Mouse Transcription Graph Take 9
+longLabel JKG Exons Supported by Orthologous Mouse Transcription Graph Take 11
 group jkX
 priority 6
 visibility hide
@@ -2424,7 +2424,7 @@ type bed 6 .
 
 track jkgOrthoIntrons
 shortLabel Ortho Intron
-longLabel JKG Introns Supported by Orthologous Mouse Transcription Graph Take 9
+longLabel JKG Introns Supported by Orthologous Mouse Transcription Graph Take 11
 group jkX
 priority 7
 visibility hide
@@ -2433,7 +2433,7 @@ type bed 6 .
 
 track jkgEstExons
 shortLabel EST Exon
-longLabel JKG Exons supported by at least 2 ESTs Take 9
+longLabel JKG Exons supported by at least 2 ESTs Take 11
 group jkX
 priority 7.1
 visibility hide
@@ -2442,7 +2442,7 @@ type bed 6 .
 
 track jkgEstIntrons
 shortLabel EST Intron
-longLabel JKG Introns supported by at least 2 ESTs Take 9
+longLabel JKG Introns supported by at least 2 ESTs Take 11
 group jkX
 priority 7.2
 visibility hide
@@ -2451,7 +2451,7 @@ type bed 6 .
 
 track jkgTxWalkPrelim
 shortLabel txWalkPrelim
-longLabel JKG txWalk Transcripts  Preliminary Take 9
+longLabel JKG txWalk Transcripts  Preliminary Take 11
 group jkX
 priority 9
 visibility hide
@@ -2460,7 +2460,7 @@ type bed 12 .
 
 track jkgTxWalk
 shortLabel txWalk
-longLabel JKG txWalk Transcripts  Take 9
+longLabel JKG txWalk Transcripts  Take 11
 group jkX
 priority 10
 visibility hide
@@ -2469,7 +2469,7 @@ type bed 12 .
 
 track jkgAltSplice
 shortLabel AltSplice
-longLabel JKG Alternative Splicing Events in txWalk Take 9
+longLabel JKG Alternative Splicing Events in txWalk Take 11
 group jkX
 priority 10.5
 visibility hide
@@ -2478,7 +2478,7 @@ type bed 6 .
 
 track jkgTxCdsPick
 shortLabel txCdsPick
-longLabel JKG CDS Mappings of txWalk Transcripts Take 9
+longLabel JKG CDS Mappings of txWalk Transcripts Take 11
 group jkX
 priority 11
 visibility hide
@@ -2489,7 +2489,7 @@ txInfo jkgTxInfo
 
 track jkgTxCdsRepick
 shortLabel txCdsRepick
-longLabel JKG CDS Re-Mappings of txWalk Transcripts Take 9
+longLabel JKG CDS Re-Mappings of txWalk Transcripts Take 11
 group jkX
 priority 12
 visibility hide
@@ -2500,7 +2500,7 @@ txInfo jkgTxInfo
 
 track jkgUcscGenes
 shortLabel txUcscGenes
-longLabel JKG UCSC Known Genes After Weeding Take 9
+longLabel JKG UCSC Known Genes After Weeding Take 11
 group jkX
 priority 12.5
 visibility hide
@@ -2511,7 +2511,7 @@ txInfo jkgTxInfo
 
 track jkgNoncoding
 shortLabel Noncoding Genes
-longLabel JKG Noncoding Genes Take 9
+longLabel JKG Noncoding Genes Take 11
 group jkX
 priority 13
 visibility hide
