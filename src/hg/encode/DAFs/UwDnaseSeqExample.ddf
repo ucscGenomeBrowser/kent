@@ -1,0 +1,8 @@
+files	view	cell	accession	softwareVersion	replicate
+dnase.bed	Peak	K562	GEO123	peakCaller_1.0_or_whatever	
+dnase.wig	Signal	K562	GEO123	peakCaller_1.0_or_whatever	
+rep1.wig	RawSignal	K562	GEO123	peakCaller_1.0_or_whatever	1
+rep2.wig	RawSignal	K562	GEO123	peakCaller_1.0_or_whatever	2
+bckgrd3.wig	RawSignal	K562	GEO123	peakCaller_1.0_or_whatever	
+tagalign.bed	Alignments	K562	GEO123	ELAN_2.0_or_whatever	
+dnase.fastq	download	K562	GEO123		
