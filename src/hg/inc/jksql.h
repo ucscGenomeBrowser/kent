@@ -287,6 +287,9 @@ int sqlFieldIndex(struct sqlConnection *conn, char *table, char *field);
 /* Returns index of field in a row from table, or -1 if it 
  * doesn't exist. */
 
+struct slName *sqlFieldNames(struct sqlConnection *conn, char *table);
+/* Returns field names from a table. */
+
 unsigned int sqlLastAutoId(struct sqlConnection *conn);
 /* Return last automatically incremented id inserted into database. */
 

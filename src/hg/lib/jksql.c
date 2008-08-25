@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: jksql.c,v 1.113 2008/07/08 18:31:26 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.114 2008/08/25 21:54:40 aamp Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1341,6 +1341,21 @@ sqlFreeResult(&sr);
 return ix;
 }
 
+struct slName *sqlFieldNames(struct sqlConnection *conn, char *table)
+/* Returns field names from a table. */
+{
+struct slName *list = NULL;
+char query[256];
+struct sqlResult *sr;
+char **row;
+safef(query, sizeof(query), "describe %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    slNameAddHead(&list, row[0]);
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
+}
 
 unsigned int sqlLastAutoId(struct sqlConnection *conn)
 /* Return last automatically incremented id inserted into database. */
