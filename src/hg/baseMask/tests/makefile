@@ -80,6 +80,8 @@ baseMaskTests: mkout bedToBaseMaskTests baseMaskToBedTests
 	${BASEMASK} -or -quiet output/test1ranges.bama output/test2ranges.bama output/test1or2ranges.bama2
 	${BASEMASK} -and -quiet output/test1.bama       output/test2.bama output/test1and2.bama
 	${BASEMASK} -and -quiet output/test1ranges.bama output/test2ranges.bama output/test1and2ranges.bama2
+	${BASEMASK}  output/test1or2ranges.bama2  2>output/test1or2ranges2.stderr
+	${BASEMASK}  output/test1and2ranges.bama2 2>output/test1and2ranges2.stderr
 	${BASEMASKTOBED} output/test1or2.bama        output/test1or2.bed2
 	${BASEMASKTOBED} output/test1or2ranges.bama2 output/test1or2ranges.bed2
 	${BASEMASKTOBED} output/test1and2.bama        output/test1and2.bed2
@@ -88,6 +90,8 @@ baseMaskTests: mkout bedToBaseMaskTests baseMaskToBedTests
 	${DIFF} test1or2.stderr  output/test1or2ranges.stderr
 	${DIFF} test1and2.stderr output/test1and2.stderr
 	${DIFF} test1and2.stderr output/test1and2ranges.stderr
+	${DIFF} test1or2ranges.stderr  output/test1or2ranges2.stderr
+	${DIFF} test1and2ranges.stderr output/test1and2ranges2.stderr
 	${DIFF} --brief test1or2ranges.bama  output/test1or2.bama
 	${DIFF} --brief test1or2ranges.bama  output/test1or2ranges.bama2
 	${DIFF} --brief test1and2ranges.bama output/test1and2.bama 

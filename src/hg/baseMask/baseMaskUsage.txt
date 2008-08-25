@@ -1,6 +1,10 @@
-baseMask [options] in1.bama in2.bama [o.bama]
+baseMask [options] in1.bama [in2.bama [o.bama]]
 
-Process two baseMasks in1.bama and in2.bama. 
+Process baseMasks. 
+If only one file in1.bama is specified, report bases covered statistics.
+If two baseMasks in1.bama and in2.bama are specified then combine them using
+options '-or' or '-and' (union or intersection), and report the resulting
+bases covered.
 Create output baseMask file o.bama, if specified.
 
 Options:
@@ -15,5 +19,5 @@ Options:
   -saveMem   : Try and reduce memory usage. Might be slightly
                slower.
   -orDirectToFile : Write 'or' directly to file range by range,
-               bypassing buffering. Might be slower.
+               bypassing whole chromosome buffering. Might be slower.
   -verbose=n : verbose > 0 prints some details.
