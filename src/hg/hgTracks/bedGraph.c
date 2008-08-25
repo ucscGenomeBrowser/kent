@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.11 2008/08/05 22:20:18 larrym Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.12 2008/08/25 20:55:38 kate Exp $";
 
 struct bedGraphItem
 /* A bedGraph track item. */
@@ -336,28 +336,29 @@ int maxHeight = atoi(DEFAULT_HEIGHT_PER);
 int minHeight = MIN_HEIGHT_PER;
 
 AllocVar(wigCart);
+char *name = compositeViewControlNameFromTdb(tdb);
 
 /*	These Fetch functions look for variables in the cart bounded by
  *	limits specified in trackDb or returning defaults
  */
-wigCart->lineBar = wigFetchGraphType(tdb, (char **) NULL);
-wigCart->horizontalGrid = wigFetchHorizontalGrid(tdb, (char **) NULL);
+wigCart->lineBar = wigFetchGraphTypeWithCart(cart, tdb, name, (char **) NULL);
+wigCart->horizontalGrid = wigFetchHorizontalGridWithCart(cart, tdb, name, (char **) NULL);
 
-wigCart->autoScale = wigFetchAutoScale(tdb, (char **) NULL);
-wigCart->windowingFunction = wigFetchWindowingFunction(tdb, (char **) NULL);
-wigCart->smoothingWindow = wigFetchSmoothingWindow(tdb, (char **) NULL);
+wigCart->autoScale = wigFetchAutoScaleWithCart(cart, tdb, name,(char **) NULL);
+wigCart->windowingFunction = wigFetchWindowingFunctionWithCart(cart, tdb, name,(char **) NULL);
+wigCart->smoothingWindow = wigFetchSmoothingWindowWithCart(cart, tdb, name,(char **) NULL);
 
-wigFetchMinMaxPixels(tdb, &minHeight, &maxHeight, &defaultHeight);
-wigFetchYLineMarkValue(tdb, &yLineMark);
+wigFetchMinMaxPixelsWithCart(cart, tdb, name,&minHeight, &maxHeight, &defaultHeight);
+wigFetchYLineMarkValueWithCart(cart, tdb, name,&yLineMark);
 wigCart->yLineMark = yLineMark;
-wigCart->yLineOnOff = wigFetchYLineMark(tdb, (char **) NULL);
+wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart, tdb, name,(char **) NULL);
 
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;
 wigCart->minHeight = minHeight;
 
-/*wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);*/
-wigFetchMinMaxLimits(tdb, &minY, &maxY, (double *)NULL, (double *)NULL);
+/*wigFetchMinMaxYWithCart(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);*/
+wigFetchMinMaxLimitsWithCart(cart, tdb, name,&minY, &maxY, (double *)NULL, (double *)NULL);
 
 switch (wordCount)
     {

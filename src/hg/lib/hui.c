@@ -16,7 +16,7 @@
 #include "obscure.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.109 2008/08/01 23:30:58 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.110 2008/08/25 20:55:37 kate Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -2474,15 +2474,17 @@ for (ix = 0; ix < membersOfView->count; ix++)
         if(differentString(stView,membersOfView->names[ix]))
             continue;
         matchedSubtracks[ix] = subtrack;
-        if(startsWith("wig",    matchedSubtracks[ix]->type))
+        if(startsWith("wig", matchedSubtracks[ix]->type))
             configurable[ix] = CFG_WIG;
-        else if(sameWord("bed5FloatScore",matchedSubtracks[ix]->type)
+        else if(startsWith("bedGraph", matchedSubtracks[ix]->type))
+            configurable[ix] = CFG_WIG;
+        else if(sameWord("bed5FloatScore", matchedSubtracks[ix]->type)
              || sameWord("bed5FloatScoreWithFdr",matchedSubtracks[ix]->type))
             configurable[ix] = CFG_BEDSCORE;
-        else if(startsWith("bed ",matchedSubtracks[ix]->type)) // TODO: Only these are configurable so far
+        else if(startsWith("bed ", matchedSubtracks[ix]->type)) // TODO: Only these are configurable so far
             {
             char *words[3];
-            chopLine(cloneString(matchedSubtracks[ix]->type), words);
+            chopLine(cloneString( matchedSubtracks[ix]->type), words);
             if (atoi(words[1]) < 5 || trackDbSetting(subtrack, "noScoreFilter"))
                 break;
             configurable[ix] = CFG_BEDSCORE;
