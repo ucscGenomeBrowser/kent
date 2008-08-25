@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.11 2008/08/22 20:17:06 larrym Exp $
+# $Id: Encode.pm,v 1.12 2008/08/25 22:26:38 larrym Exp $
 
 package Encode;
 
@@ -31,7 +31,7 @@ our $labsConfigFile = "labs.ra";
 our $sqlCreate = "/cluster/bin/sqlCreate";
 # Add type names to this list for types that can be loaded via .sql files (e.g. bed5FloatScore.sql)
 # You also have to make sure the .sql file is copied into the $sqlCreate directory.
-our @extendedTypes = ("encodePeak", "tagAlign", "bed5FloatScore");
+our @extendedTypes = ("narrowPeak", "broadPeak", "gappedPeak", "tagAlign", "pairedTagAlign", "bed5FloatScore");
 
 sub newestFile
 {
