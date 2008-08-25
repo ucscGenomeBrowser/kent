@@ -5,7 +5,7 @@
 #ifndef ENCODEPEAK_H
 #define ENCODEPEAK_H
 
-#define ENCODEPEAK_NUM_COLS 6
+#define ENCODEPEAK_NUM_COLS 9
 
 struct encodePeak
 /* Peaks format (BED 3+) */
@@ -17,11 +17,10 @@ struct encodePeak
     float signalValue;	/* Measurement of average enrichment for the region */
     float pValue;	/* Statistical significance of signal value (-log10) */
     int peak;	/* Point-source called for this peak; 0-based offset from chromStart (use -1 if no point-source called) */
+    unsigned blockCount;	/* Number of blocks */
+    unsigned *blockSizes;	/* Comma separated list of block sizes */
+    unsigned *chromStarts;	/* Start positions relative to chromStart */
     };
-
-void encodePeakStaticLoad(char **row, struct encodePeak *ret);
-/* Load a row from encodePeak table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
 
 struct encodePeak *encodePeakLoad(char **row);
 /* Load a encodePeak from row fetched with select * from encodePeak

@@ -7,9 +7,9 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "hdb.h"
-#include "encodePeak.h"
+#include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encodePeak.c,v 1.2 2008/08/25 21:35:48 aamp Exp $";
+static char const rcsid[] = "$Id: encodePeak.c,v 1.3 2008/08/25 21:46:51 aamp Exp $";
 
 struct encodePeak *encodePeakLoad(char **row)
 /* Load a encodePeak from row fetched with select * from encodePeak
