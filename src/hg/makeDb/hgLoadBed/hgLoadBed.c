@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.58 2008/07/08 16:08:58 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.59 2008/08/25 21:00:07 aamp Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -25,9 +25,12 @@ boolean itemRgb = TRUE;		/* parse field nine as r,g,b when commas seen */
 boolean notItemRgb = FALSE;	/* do NOT parse field nine as r,g,b */
 boolean noStrict = FALSE;	/* skip the coord sanity checks */
 int bedGraph = 0;		/* bedGraph column option, non-zero means yes */
+int bedPlus = 0;                /* force bedSize instead of guessing */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 boolean renameSqlTable = FALSE;	/* Rename table created with -sqlTable to */
                                 /*     to match track */
+boolean trimSqlTable = FALSE;   /* If we're loading fewer columns than defined */
+                                /* in the SQL table, trim off extra columns */
 int maxChromNameLength = 0;	/* specify to avoid chromInfo */
 char *tmpDir = (char *)NULL;	/* location to create a temporary file */
 boolean nameIx = TRUE;	        /* FALSE == do not create the name index */
@@ -47,11 +50,13 @@ static struct optionSpec optionSpecs[] = {
     {"onServer", OPTION_BOOLEAN},
     {"sqlTable", OPTION_STRING},
     {"renameSqlTable", OPTION_BOOLEAN},
+    {"trimSqlTable", OPTION_BOOLEAN},
     {"tab", OPTION_BOOLEAN},
     {"hasBin", OPTION_BOOLEAN},
     {"noLoad", OPTION_BOOLEAN},
     {"noHistory", OPTION_BOOLEAN},
     {"bedGraph", OPTION_INT},
+    {"bedPlus", OPTION_INT},
     {"notItemRgb", OPTION_BOOLEAN},
     {"noStrict", OPTION_BOOLEAN},
     {"nostrict", OPTION_BOOLEAN},
@@ -80,6 +85,7 @@ errAbort(
   "             the mysql server can access.\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
   "   -renameSqlTable Rename table created with -sqlTable to match track\n"
+  "   -trimSqlTable \n"
   "   -tab  Separate by tabs rather than space\n"
   "   -hasBin   Input bed file starts with a bin field.\n"
   "   -noLoad  - Do not load database and do not clean up tab files\n"
@@ -219,7 +225,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
         {
 	/*	new definition for old "reserved" field, now itemRgb */
 	/*	and when itemRgb, it is a comma separated string r,g,b */
-	if (itemRgb && (i == 8))
+	if (itemRgb && (i == 8) && ((bedPlus >= 8) || (bedPlus == 0)))
 	    {
 	    char *comma;
 	    /*  Allow comma separated list of rgb values here   */
@@ -266,6 +272,56 @@ else
     dyStringAppend(dy, colDefinition);
 }
 
+static boolean colAlreadyThere(struct sqlConnection *conn, char *tableName, char *col)
+/* Check to see if there's a field in the table already */
+{
+char existsSql[128];
+safef(existsSql, sizeof(existsSql), "desc %s %s", tableName, col);
+return sqlExists(conn, existsSql);
+}
+
+static void addBinToEmptyTable(struct sqlConnection *conn, char *tableName)
+/* Add bin field and corresponding index. */
+{
+if (!colAlreadyThere(conn, tableName, "bin"))
+    {
+    char addBinSql[256];
+    char addIndexSql[256];
+    safef(addBinSql, sizeof(addBinSql), "alter table %s add column bin smallint unsigned not null first;", tableName);
+    sqlUpdate(conn, addBinSql);
+    /* add related index */
+    if (colAlreadyThere(conn, tableName, "chrom"))
+	safef(addIndexSql, sizeof(addIndexSql), "create index binChrom on %s (chrom,bin)", tableName);
+    else
+	safef(addIndexSql, sizeof(addIndexSql), "create index bin on %s (bin)", tableName);
+    sqlUpdate(conn, addIndexSql);
+    }
+}
+
+static void adjustSqlTableColumns(struct sqlConnection *conn, char *tableName, int bedSize)
+/* Go through and drop columns to fit the file it the -trimSqlTable option is used. */
+/* Otherwise the data is unloadable. */
+{
+struct slName *fieldNames = sqlFieldNames(conn, tableName);
+int numFields = slCount(fieldNames) - 1; /* (subtract bin) */
+if (numFields != bedSize)
+    {
+    struct slName *oneName;
+    int i;
+    if (!trimSqlTable || (bedSize > numFields))
+	errAbort(".sql table has wrong number of columns in the definition. Try -trimSqlTable");
+    slReverse(&fieldNames);
+    for (oneName = fieldNames, i = 0; (i < numFields - bedSize) 
+	     && (oneName != NULL); i++, oneName = oneName->next)
+	{
+	char query[256];
+	safef(query, sizeof(query), "alter table %s drop column %s", tableName, oneName->name);
+	sqlUpdate(conn, query);
+	} 
+    }
+slFreeList(&fieldNames);
+}
+
 static void loadDatabase(char *database, char *track, int bedSize, struct bedStub *bedList)
 /* Load database from bedList. */
 {
@@ -291,7 +347,6 @@ if (sqlTable != NULL && !oldTable)
     /* Read from file. */
     char *sql, *s;
     readInGulp(sqlTable, &sql, NULL);
-
     /* Chop off end-of-statement semicolon if need be. */
     s = strchr(sql, ';');
     if (s != NULL) *s = 0;
@@ -310,8 +365,11 @@ if (sqlTable != NULL && !oldTable)
             }
         verbose(1, "Creating table definition for %s\n", track);
         sqlRemakeTable(conn, track, sql);
-        }
-
+        if (!noBin) 
+	    addBinToEmptyTable(conn, track);
+	adjustSqlTableColumns(conn, track, bedSize);
+	}
+    
     freez(&sql);
     }
 else if (!oldTable)
@@ -475,10 +533,14 @@ strictTab = optionExists("tab");
 oldTable = optionExists("oldTable");
 sqlTable = optionVal("sqlTable", sqlTable);
 renameSqlTable = optionExists("renameSqlTable");
+trimSqlTable = optionExists("trimSqlTable");
 hasBin = optionExists("hasBin");
 noLoad = optionExists("noLoad");
 noHistory = optionExists("noHistory");
 bedGraph = optionInt("bedGraph",0);
+bedPlus = optionInt("bedPlus", 0);
+if ((bedPlus > 0) && ((bedPlus < 3) || (bedPlus > 15)))
+    usage();
 notItemRgb = optionExists("notItemRgb");
 if (notItemRgb) itemRgb = FALSE;
 maxChromNameLength = optionInt("maxChromNameLength",0);
