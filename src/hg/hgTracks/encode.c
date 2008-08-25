@@ -102,47 +102,136 @@ tg->itemColor = encodeRnaColor;
 tg->itemNameColor = encodeRnaColor;
 }
 
-struct slList *encodePeakAlmostLoadItems(char **row)
-/* Sort of an intermediary function to accommodate some */
-/* general linkedFeatures loader. */
+void allEncodePeakLoadItems(struct track *tg)
+/* Just call the flexible linkedFeatures loader with a few custom fns. */
 {
-return (struct slList *)encodePeakLoad(row);
+enum encodePeakType peakType = tg->customInt;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int rowOffset;
+struct linkedFeatures *lfList = NULL;
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {  
+    struct linkedFeatures *lf;
+    int peak = -1;
+    char **rowPastOffset = row + rowOffset;
+    AllocVar(lf);
+    /* Get the first three fields... that's essentially universal. */
+    lf->start = sqlUnsigned(rowPastOffset[1]);
+    lf->end = sqlUnsigned(rowPastOffset[2]);
+    if ((peakType == narrowPeak) || (peakType == broadPeak) || (peakType == gappedPeak))
+	{
+	safecpy(lf->name, sizeof(lf->name), rowPastOffset[3]);
+	lf->score = (float)sqlUnsigned(rowPastOffset[4]);
+	lf->orientation = orientFromChar(rowPastOffset[5][0]);
+	}
+    else 
+	lf->score = 1000;
+    if (peakType == narrowPeak)
+	peak = sqlSigned(rowPastOffset[8]);
+    else if ((peakType == encodePeak6) || (peakType == encodePeak9))
+	peak = sqlSigned(rowPastOffset[5]);
+    /* zero is the first base in a peak. */
+    if (peak > -1)
+	{
+	lf->tallStart = lf->start + peak;
+	lf->tallEnd = lf->tallStart + 1;
+	}
+    /* Load blocks. */
+    if ((peakType == gappedPeak) || (peakType == encodePeak9))
+	{
+	int blocksOffset = 6;
+	int i;
+	int numBlocks = 0;
+	int *blockSizes, *chromStarts;
+	int sizeOne;
+	struct simpleFeature *sfList;
+	if (peakType == gappedPeak)
+	    blocksOffset = 9;
+	numBlocks = sqlUnsigned(rowPastOffset[blocksOffset]);
+	sqlSignedDynamicArray(rowPastOffset[blocksOffset+1], &blockSizes, &sizeOne);
+	if (sizeOne != numBlocks)
+	    errAbort("wrong number of blockSizes in track %s", tg->mapName);
+	sqlSignedDynamicArray(rowPastOffset[blocksOffset+2], &chromStarts, &sizeOne);
+	if (sizeOne != numBlocks)
+	    errAbort("wrong number of chromStarts in track %s", tg->mapName);
+	for (i = 0; i < numBlocks; i++)
+	    {
+	    struct simpleFeature *sf;
+	    AllocVar(sf);
+	    sf->start = chromStarts[i];
+	    sf->end = chromStarts[i] + blockSizes[i];
+	    slAddHead(&sfList, sf);
+	    }
+	slReverse(&sfList);
+ 	lf->components = sfList;
+	}
+    slAddHead(&lfList, lf);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
+tg->items = lfList;
 }
 
-struct linkedFeatures *lfFromEncodePeak(struct slList *item)
-/* converts encode peaksbed to linkedFeatures, and also puts */
-/* that info in itemRgb in the extra field so we can use it later. */
-/* (used by loadLinkedFeaturesWithLoaders). */
+void narrowPeakLoadItems(struct track *tg)
+/* reverts to allEncodePeakLoadItems after checking the size. */
 {
-struct encodePeak *peak = (struct encodePeak *)item;
-struct linkedFeatures *lf;
-struct simpleFeature *sf;
-AllocVar(lf);
-lf->start = peak->chromStart;
-lf->end = peak->chromEnd;
-if (peak->peak >= 0)
-    {
-    lf->tallStart = peak->chromStart + peak->peak;
-    lf->tallEnd = lf->tallStart + 1;
-    AllocVar(sf);
-    sf->start = lf->tallStart;
-    sf->end = lf->tallEnd;
-    lf->components = sf;
-    lf->codons = CloneVar(sf);
-    }
-else 
-    {
-    lf->tallStart = lf->tallEnd = 0;
-    lf->components = lf->codons = NULL;
-    }
-return lf;
+enum encodePeakType pt = narrowPeak;
+int numFields = encodePeakNumFields(tg->mapName);
+if (numFields == 9)
+    pt = narrowPeak;
+else
+    errAbort("track %s has wrong number of fields for narrowPeak type\n", tg->mapName);
+tg->customInt = pt;
+allEncodePeakLoadItems(tg);
+}
+
+void broadPeakLoadItems(struct track *tg)
+/* reverts to allEncodePeakLoadItems after checking the size. */
+{
+enum encodePeakType pt = broadPeak;
+int numFields = encodePeakNumFields(tg->mapName);
+if (numFields == 8)
+    pt = broadPeak;
+else
+    errAbort("track %s has wrong number of fields for broadPeak type\n", tg->mapName);
+tg->customInt = pt;
+allEncodePeakLoadItems(tg);
+}
+
+void gappedPeakLoadItems(struct track *tg)
+/* reverts to allEncodePeakLoadItems after checking the size. */
+{
+enum encodePeakType pt = gappedPeak;
+int numFields = encodePeakNumFields(tg->mapName);
+if (numFields == 14)
+    pt = gappedPeak;
+else
+    errAbort("track %s has wrong number of fields for gappedPeak type\n", tg->mapName);
+tg->customInt = pt;
+allEncodePeakLoadItems(tg);
 }
 
 void encodePeakLoadItems(struct track *tg)
-/* Just call the flexible linkedFeatures loader with a few custom fns. */
+/* Determine the size of the table i.e. number of fields, then call the */
+/* appropriate loader */
 {
-loadLinkedFeaturesWithLoaders(tg, encodePeakAlmostLoadItems, lfFromEncodePeak,
-			      NULL, NULL, NULL, NULL);
+enum encodePeakType pt = 0;
+int numFields = encodePeakNumFields(tg->mapName);
+if (numFields == 5)
+    pt = encodePeak5;
+else if (numFields == 6)
+    pt = encodePeak6;
+else if (numFields == 9)
+    pt = encodePeak9;
+else 
+    errAbort("track %s has wrong number of fields (%d) for the encodePeak type\n", tg->mapName, numFields);
+tg->customInt = pt;
+allEncodePeakLoadItems(tg);
 }
 
 static void encodePeakDrawAt(struct track *tg, void *item,
@@ -155,13 +244,32 @@ struct linkedFeatures *lf = item;
 int heightPer = tg->heightPer;
 int shortOff = heightPer/4;
 int shortHeight = heightPer - 2*shortOff;
-Color rangeColor = blackIndex();
+Color rangeColor = shadesOfGray[grayInRange(lf->score, 1, 1000)];
 Color peakColor = getOrangeColor();
-drawScaledBox(hvg, lf->start, lf->end, scale, xOff, y+shortOff, 
-	      shortHeight, rangeColor);
+if (lf->components)
+    {
+    struct simpleFeature *sf;
+    drawScaledBox(hvg, lf->start, lf->end, scale, xOff, y+(heightPer/2), 1, rangeColor);
+    for (sf = lf->components; sf != NULL; sf = sf->next)
+	drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y+shortOff, 
+		      shortHeight, rangeColor);	
+    }
+else 
+    drawScaledBox(hvg, lf->start, lf->end, scale, xOff, y+shortOff, 
+		  shortHeight, rangeColor);
 if ((lf->tallEnd > 0) && (lf->tallStart < lf->end))
     drawScaledBox(hvg, lf->tallStart, lf->tallEnd, scale, xOff, y, 
 		  heightPer, peakColor);
+}
+
+char *encodePeakItemName(struct track *tg, void *item)
+/* Get rid of the '.' names */
+{
+struct linkedFeatures *lf = item;
+if (lf->name && sameString(lf->name, "."))
+    return "";
+else 
+    return lf->name;
 }
 
 void encodePeakMethods(struct track *tg)
@@ -171,4 +279,26 @@ linkedFeaturesMethods(tg);
 tg->loadItems = encodePeakLoadItems;
 tg->drawItemAt = encodePeakDrawAt;
 tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->itemName = encodePeakItemName;
+tg->canPack = TRUE;
+}
+
+/* These next three are all straight forward.  Not much individuality in the family.  */
+
+void narrowPeakMethods(struct track *tg)
+{
+encodePeakMethods(tg);
+tg->loadItems = narrowPeakLoadItems;
+}
+
+void broadPeakMethods(struct track *tg)
+{
+encodePeakMethods(tg);
+tg->loadItems = broadPeakLoadItems;
+}
+
+void gappedPeakMethods(struct track *tg)
+{
+encodePeakMethods(tg);
+tg->loadItems = gappedPeakLoadItems;
 }

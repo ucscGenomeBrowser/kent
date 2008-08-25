@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.27 2008/08/10 01:11:06 baertsch Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.28 2008/08/25 21:36:48 aamp Exp $";
 
 #define CHROM_COLORS 26
 
@@ -10707,6 +10707,18 @@ else if (sameWord(type, "expRatio"))
 else if (sameWord(type, "encodePeak"))
     {
     encodePeakMethods(track);
+    }
+else if (sameWord(type, "narrowPeak"))
+    {
+    narrowPeakMethods(track);
+    }
+else if (sameWord(type, "broadPeak"))
+    {
+    broadPeakMethods(track);
+    }
+else if (sameWord(type, "gappedPeak"))
+    {
+    gappedPeakMethods(track);
     }
 else if (sameWord(type, "bed5FloatScore") || 
          sameWord(type, "bedFloatScoreWithFdr"))
