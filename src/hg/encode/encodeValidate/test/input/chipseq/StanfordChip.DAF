@@ -1,4 +1,4 @@
-# Project Information File for Duke Dnase project		
+# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments
 
 # Lab info		
 grant	Myers
@@ -11,7 +11,7 @@ dafVersion      0.2.2
 # Track/view definition
 view             Peaks
 longLabelPrefix  HudsonAlpha ChIP/Seq Peaks
-type             encodePeak
+type             narrowPeak
 hasReplicates    no
 required         yes
 
