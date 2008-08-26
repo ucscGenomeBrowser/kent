@@ -20,7 +20,6 @@ use strict;
 
 use Getopt::Long;
 use Cwd;
-use File::Temp;
 use File::Basename;
 
 use lib "/cluster/bin/scripts";
@@ -124,24 +123,8 @@ sub loadBedFromSchema
     if(!(-e "$Encode::sqlCreate/${sqlTable}.sql")) {
         die "SQL schema '$Encode::sqlCreate/${sqlTable}.sql' does not exist\n";
     }
-    if(!(open(SQL, "$Encode::sqlCreate/${sqlTable}.sql"))) {
-        die "Cannot open SQL schema '$Encode::sqlCreate/${sqlTable}.sql'; error: $!\n";
-    }
 
-    # create temporary copy of schema file with "CREATE TABLE $tableName"
-    my $sql = join("", <SQL>);
-    if(!($sql =~ s/CREATE TABLE $sqlTable/CREATE TABLE $tableName/g)) {
-        die "sql names do not match for substitution: $sqlTable $tableName\n";
-    }
-
-    print STDERR "loadBedFromSchema: $sql\n" if($debug);
-
-    my ($fh, $tempFile) = File::Temp::tempfile("sqlXXXX", UNLINK => 1);
-    print STDERR "sql schema tempFile: $tempFile\n" if($debug);
-    $fh->print($sql);
-
-    #TEST by replacing "cat" with  "head -1000 -q"
-    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=out -sqlTable=$tempFile");
+    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=out -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
 
     if(my $err = $safe->exec()) {
@@ -149,9 +132,6 @@ sub loadBedFromSchema
     } else {
         print "$fileList loaded into $tableName\n";
     }
-    $fh->close();
-    unlink($tempFile);
-    close(SQL);
     push(@{$pushQ->{TABLES}}, $tableName);
 }
 
@@ -328,10 +308,10 @@ if($email && $email =~ /([^@]+)/) {
     $wranglerName = 'encode';
 }
 
-my $tables = join(",", @{$pushQ->{TABLES}});
+my $tables = join("\\n", @{$pushQ->{TABLES}});
 my $files = "";
 if(defined($pushQ->{FILES}) && @{$pushQ->{FILES}}) {
-    $files = join(",", @{$pushQ->{FILES}});
+    $files = join("\\n", @{$pushQ->{FILES}});
 }
 
 my ($shortLabel, $longLabel);
@@ -353,10 +333,9 @@ print PUSHQ <<_EOF_;
 LOCK TABLES pushQ WRITE;
 SELECT \@rank := max(rank)+1 FROM pushQ WHERE priority = 'A';
 SELECT \@pid := right(concat("00000",convert(max(qid)+1,CHAR)),6) FROM pushQ;
-INSERT INTO pushQ VALUES (\@pid,'','A',\@rank,now(),'Y','$shortLabel','$daf->{assembly}','$tables','','$files',0,'hgwdev','N','','N','N','','$wranglerName','','$daf->{grant}','','','N',now(),'',0,'','','$releaseLog','');
+INSERT INTO pushQ VALUES (\@pid,'','A',\@rank,now(),'Y','$shortLabel','$daf->{assembly}','$tables','','$files',0,'hgwdev','N','','N','N','','$wranglerName','','$daf->{grant}/$daf->{lab}','','','N',now(),'',0,'','','$releaseLog','');
 UNLOCK TABLES;
 _EOF_
-
 close(PUSHQ);
 
 exit(0);
