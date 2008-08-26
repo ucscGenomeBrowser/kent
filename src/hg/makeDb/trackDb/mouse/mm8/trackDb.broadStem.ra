@@ -10,7 +10,8 @@ subGroup1 view View HMM=Sites-HMM WIN=Sites-Windowing DEN=Density_Signal
 subGroup2 CEL Sample ES=ES EShyb=ES-hybrid MEF=MEF NP=NP WBR=Whole_Brain
 #subGroup3 FAC Epitope K04m1=H3K4me1 K04m2=H3K4me2 K04m3=H3K4me3 K09m3=H3K9me3 K20m3=H4K20me3 K27m3=H3K27me3 K36m3=H3K36me3 PAN=pan-H3 RPOL=RPol-II WCE=WCE
 subGroup3 FAC Epitope K04m1=H3K4me1 K04m2=H3K4me2 K04m3=H3K4me3 K09m3=H3K9me3 K20m3=H4K20me3 K27m3=H3K27me3 K36m3=H3K36me3 PAN=pan-H3 RPOL=RPol-II
-dimensions dimensionX=CEL dimensionY=FAC 
+dimensions dimensionX=CEL dimensionY=FAC
+#sortOrder CEL=+ FAC=+ view=-
 dividers CEL FAC 
 hierarchy view HMM=0 WIN=0 DEN=1 ALN=2
 priority 130
@@ -173,7 +174,7 @@ type bed 3
 #    priority 34
 
     track broadStemChipWinSitesH3K4me2Brain
-    shortLabel H3K4me2 Brain Win
+    shortLabel H3K4me2 WB Win
     longLabel Broad Stem Cell Chromatin IP Sites By Window (H3K4me2 ab, Whole Brain)
     subTrack broadChromatinChIPSeq
     subGroups FAC=K04m2 CEL=WBR view=WIN
@@ -185,7 +186,7 @@ type bed 3
     priority 42
     
     track broadStemChipSignalH3K4me2Brain
-    shortLabel H3K4me2 Brain Sig
+    shortLabel H3K4me2 WB Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K4me2 ab, Whole Brain)
     subTrack broadChromatinChIPSeq
     subGroups FAC=K04m2 CEL=WBR view=DEN
@@ -200,7 +201,7 @@ type bed 3
     priority 43
 
 #    track broadStemChipAlignmentsH3K4me2Brain
-#    shortLabel H3K4me2 Brain Align
+#    shortLabel H3K4me2 WB Align
 #    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me2 ab, Whole Brain)
 #    subTrack broadChromatinChIPSeq
 #    subGroups FAC=K04m2 CEL=WBR view=ALN
@@ -340,7 +341,7 @@ type bed 3
 #    priority 74
     
     track broadStemChipSignalH3K4EsHyb
-    shortLabel H3K4me3 ES-hyb Sig
+    shortLabel H3K4me3 ESh Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K4me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
     subTrack broadChromatinChIPSeq
     subGroups FAC=K04m3 CEL=EShyb view=DEN
@@ -355,7 +356,7 @@ type bed 3
     priority 83
     
 #    track broadStemChipAlignmentsH3K4Me3EsHyb
-#    shortLabel H3K4me3 ES-hyb Align
+#    shortLabel H3K4me3 ESh Aln
 #    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
 #    subTrack broadChromatinChIPSeq
 #    subGroups FAC=K04m3 CEL=EShyb view=ALN
@@ -367,7 +368,7 @@ type bed 3
 #    priority 84
 
     track broadStemChipWinSitesH3K4me3Brain
-    shortLabel H3K4me3 Brain Win
+    shortLabel H3K4me3 WB Win
     longLabel Broad Stem Cell Chromatin IP Sites By Window (H3K4me3 ab, Whole Brain)
     subTrack broadChromatinChIPSeq
     subGroups FAC=K04m3 CEL=WBR view=WIN
@@ -379,7 +380,7 @@ type bed 3
     priority 92
     
     track broadStemChipSignalH3K4me3Brain
-    shortLabel H3K4me3 Brain Sig
+    shortLabel H3K4me3 WB Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K4me3 ab, Whole Brain)
     subTrack broadChromatinChIPSeq
     subGroups FAC=K04m3 CEL=WBR view=DEN
@@ -394,7 +395,7 @@ type bed 3
     priority 93
 
 #    track broadStemChipAlignmentsH3K4me3Brain
-#    shortLabel H3K4me3 Brain Align
+#    shortLabel H3K4me3 WB Align
 #    longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Whole Brain)
 #    subTrack broadChromatinChIPSeq
 #    subGroups FAC=K04m3 CEL=WBR view=ALN
@@ -534,7 +535,7 @@ type bed 3
 #    priority 124
 
     track broadStemChipSignalH3K9EsHyb
-    shortLabel H3K9me3 ES-hyb Sig
+    shortLabel H3K9me3 ESh Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K9me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
     subTrack broadChromatinChIPSeq
     subGroups FAC=K09m3 CEL=EShyb view=DEN
@@ -549,7 +550,7 @@ type bed 3
     priority 133
 
 #    track broadStemChipAlignmentsH3K9Me3EsHyb
-#    shortLabel H3K9me3 ES-hyb Align
+#    shortLabel H3K9me3 ESh Align
 #    longLabel Broad Stem Cell Chromatin IP Alignments (H3K9me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
 #    subTrack broadChromatinChIPSeq
 #    subGroups FAC=K09m3 CEL=EShyb view=ALN
@@ -727,7 +728,7 @@ type bed 3
 #    priority 174
 
     track broadStemChipWinSitesH3K27me3Brain
-    shortLabel H3K27me3 Brain Win
+    shortLabel H3K27me3 WB Win
     longLabel Broad Stem Cell Chromatin IP Sites By Window (H3K27me3 ab, Whole Brain)
     subTrack broadChromatinChIPSeq
     subGroups FAC=K27m3 CEL=WBR view=WIN
@@ -739,7 +740,7 @@ type bed 3
     priority 182
     
     track broadStemChipSignalH3K27me3Brain
-    shortLabel H3K27me3 Brain Sig
+    shortLabel H3K27me3 WB Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K27me3 ab, Whole Brain)
     subTrack broadChromatinChIPSeq
     subGroups FAC=K27m3 CEL=WBR view=DEN
@@ -754,7 +755,7 @@ type bed 3
     priority 183
 
 #    track broadStemChipAlignmentsH3K27me3Brain
-#    shortLabel H3K27me3 Brain Align
+#    shortLabel H3K27me3 WB Align
 #    longLabel Broad Stem Cell Chromatin IP Alignments (H3K27me3 ab, Whole Brain)
 #    subTrack broadChromatinChIPSeq
 #    subGroups FAC=K27m3 CEL=WBR view=ALN
@@ -858,7 +859,7 @@ type bed 3
 #    priority 214
 
     track broadStemChipSignalH3K36EsHyb
-    shortLabel H3K36me3 ES-hyb Sig
+    shortLabel H3K36me3 ESh Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K36me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
     subTrack broadChromatinChIPSeq
     subGroups FAC=K36m3 CEL=EShyb view=DEN
@@ -873,7 +874,7 @@ type bed 3
     priority 223
 
 #    track broadStemChipAlignmentsH3K36Me3EsHyb
-#    shortLabel H3K36me3 ES-hyb Align
+#    shortLabel H3K36me3 ESh Align
 #    longLabel Broad Stem Cell Chromatin IP Alignments (H3K36me3 ab, Hybrid Embryonic Stem (ES-hybrid) cells (129/CAST))
 #    subTrack broadChromatinChIPSeq
 #    subGroups FAC=K36m3 CEL=EShyb view=ALN
