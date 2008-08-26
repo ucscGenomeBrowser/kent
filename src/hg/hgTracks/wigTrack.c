@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.81 2008/07/04 08:08:08 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.82 2008/08/26 19:26:43 tdreszer Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -1273,12 +1273,12 @@ if (withCenterLabels)
 	centerOffset = fontHeight;
 
 /*	We only do Dense and Full	*/
-if (tg->visibility == tvDense)
+if (tg->limitedVis == tvDense)
     {
     hvGfxTextRight(hvg, xOff, yOff+centerOffset, width - 1, height-centerOffset,
 	tg->ixColor, font, tg->shortLabel);
     }
-else if (tg->visibility == tvFull)
+else if (tg->limitedVis == tvFull)
     {
     int centerLabel = (height/2)-(fontHeight/2);
     int labelWidth = 0;
