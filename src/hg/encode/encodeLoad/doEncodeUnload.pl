@@ -10,7 +10,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at: ~/kent/src/hg/encode/encodeUnload/doEncodeUnload.pl
 #
-# $Id: doEncodeUnload.pl,v 1.1 2008/08/12 18:16:42 larrym Exp $
+# $Id: doEncodeUnload.pl,v 1.2 2008/08/26 00:17:59 larrym Exp $
 
 use warnings;
 use strict;
@@ -68,10 +68,14 @@ if(@ARGV != 2) {
 my $submitType = $ARGV[0];	# currently not used
 my $submitDir = $ARGV[1];	# directory where data files are
 
+# Add a suffix for non-production loads (to avoid loading over existing tables).
+
 my $tableSuffix = "";
-# yank out "beta" from encinstance_beta
-if(dirname($submitDir) =~ /(_.*)/) {
-    $tableSuffix = "$1_" . basename($submitDir);;
+if(dirname($submitDir) =~ /_(.*)/) {
+    if($1 ne 'prod') {
+	# yank out "beta" from encinstance_beta
+        $tableSuffix = "_$1_" . basename($submitDir);;
+    }
 } else {
     $tableSuffix = "_" . basename($submitDir);;
 }
