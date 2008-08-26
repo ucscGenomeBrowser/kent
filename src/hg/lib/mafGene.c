@@ -154,12 +154,12 @@ for(ali = list; ali; ali = ali->next)
     }
 if(size != end - start)
     {
-    printf("want %s %d %d size %d\n",chrom, start, end, size);
+    printf("want %s %d %d size %d got %d\n",chrom, start, end, end-start, size);
     for(ali = list; ali; ali = ali->next)
 	{
 	printf("start %d end %d\n",ali->components->start, ali->components->start  + ali->components->size);
 	}
-    errAbort("size not equal end - start");
+    warn("size not equal end - start");
     }
 
 hFreeConn(&conn);
@@ -203,7 +203,7 @@ return siList;
 
 
 static void outSpeciesExons(FILE *f, char *dbName, struct speciesInfo *si, 
-    struct exonInfo *giList)
+    struct exonInfo *giList, boolean doBlank)
 {
 int exonNum = 1;
 struct dnaSeq thisSeq;
@@ -269,7 +269,7 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	thisSeq.dna = exonBuffer;
 	thisSeq.size = ptr - exonBuffer;
 	outSeq =  doTranslate(&thisSeq, 0,  0, FALSE);
-	if (!allDashes(outSeq->dna))
+	if (doBlank || !allDashes(outSeq->dna))
 	    {
 	    fprintf(f, ">%s_%s_%d_%d %d %d %d %s",
 		gi->name, 
@@ -292,7 +292,7 @@ fprintf(f, "\n");
 }
 
 static void outSpeciesExonsNoTrans(FILE *f, char *dbName, struct speciesInfo *si, 
-    struct exonInfo *giList)
+    struct exonInfo *giList, boolean doBlank)
 {
 int exonNum = 1;
 int exonCount = 0;
@@ -330,7 +330,7 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	    if (*ptr != '-')
 		break;
 
-	if (start == end)
+	if (!doBlank && (start == end))
 	    {
 	    siTemp->curPosString = siTemp->curPosString->next;
 	    continue;
@@ -399,14 +399,18 @@ return bigBuffer;
 
 /* output a particular species sequence to the file stream */
 static void writeOutSpecies(FILE *f, char *dbName, struct speciesInfo *si, 
-    struct exonInfo *giList, boolean inExons, boolean noTrans)
+    struct exonInfo *giList, unsigned options)
 {
+boolean inExons = options & MAFGENE_EXONS;
+boolean noTrans = options & MAFGENE_NOTRANS;
+boolean doBlank = options & MAFGENE_OUTBLANK;
+
 if (inExons)
     {
     if (noTrans)
-	outSpeciesExonsNoTrans(f, dbName, si, giList);
+	outSpeciesExonsNoTrans(f, dbName, si, giList, doBlank);
     else
-	outSpeciesExons(f, dbName, si, giList);
+	outSpeciesExons(f, dbName, si, giList, doBlank);
     return;
     }
 
@@ -421,7 +425,7 @@ if (noTrans)
     {
     for(; si ; si = si->next)
 	{
-	if (!allDashes(si->nucSequence))
+	if (doBlank || !allDashes(si->nucSequence))
 	    {
 	    //fprintf(f, ">%s_%s %d %s.%s:%d-%d %c",
 	    fprintf(f, ">%s_%s %d %s",
@@ -440,7 +444,7 @@ else
     for(; si ; si = si->next)
 	{
 	translateProtein(si);
-	if (!allDashes(si->aaSequence))
+	if (doBlank || !allDashes(si->aaSequence))
 	    {
 	    //fprintf(f, ">%s_%s %d %s.%s:%d-%d %c",
 	    fprintf(f, ">%s_%s %d %s",
@@ -755,9 +759,10 @@ return giList;
 }
 
 void mafGeneOutPred(FILE *f, struct genePred *pred, char *dbName, 
-    char *mafTable,  struct slName *speciesNameList, boolean inExons,
-    boolean noTrans)
+    char *mafTable,  struct slName *speciesNameList, unsigned options) 
 {
+boolean inExons = options & MAFGENE_EXONS;
+
 if (pred->cdsStart == pred->cdsEnd)
     return;
 
@@ -776,7 +781,7 @@ struct speciesInfo *si = speciesList;
 for(; si ; si = si->next)
     si->curPosString = si->posStrings;
 
-writeOutSpecies(f, dbName, speciesList, giList, inExons, noTrans);
+writeOutSpecies(f, dbName, speciesList, giList, options);
 
 freeSpeciesInfo(speciesList);
 freeGIList(giList);
