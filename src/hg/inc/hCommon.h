@@ -25,6 +25,9 @@ char *hgTablesName();
 char *hgCustomName();
 /* Relative URL to custom tracks manager. */
 
+char *hgPalName();
+/* Relative URL to click processing program. */
+
 void fragToCloneName(char *fragName, char cloneName[128]);
 /* Convert fragment name to clone name. */
 
