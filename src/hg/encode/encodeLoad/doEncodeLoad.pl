@@ -265,7 +265,7 @@ if(! -d $downloadDir) {
 for my $key (keys %ra) {
     my $h = $ra{$key};
     my $tablename = $h->{tablename} . $tableSuffix;
-    $labels{$h->{shortLabel}} = 1;
+    $labels{$h->{pushQDescription}} = 1;
 
     my $str = "\nkeyword: $key\n";
     for my $field (qw(tablename type assembly files)) {
@@ -328,15 +328,8 @@ if($email && $email =~ /([^@]+)/) {
     $wranglerName = 'encode';
 }
 
-my $qapushqSql = 'ssh -x hgwbeta hgsql -N qapushq';
-my $rankQuery = 'select rank from pushQ order by rank desc limit 1';
-my $rank = `echo $rankQuery | $qapushqSql`;
-$rank += 1;
-
-my $date = `date +%Y-%m-%d`;
-chomp($date);
 my $tables = join(",", @{$pushQ->{TABLES}});
-my $files;
+my $files = "";
 if(defined($pushQ->{FILES}) && @{$pushQ->{FILES}}) {
     $files = join(",", @{$pushQ->{FILES}});
 }
@@ -349,18 +342,20 @@ if(@row) {
     $longLabel = $row[1];
 }
 
-# XXXX add variable stuff
 my $releaseLog = "$longLabel: " . join(", ", keys %labels);
 
 HgAutomate::verbose(2, "pushQ tables: $tables\n");
 HgAutomate::verbose(2, "pushQ files: $files\n");
 
 open(PUSHQ, ">out/$Encode::pushQFile") || die "SYS ERROR: Can't write \'out/$Encode::pushQFile\' file; error: $!\n";
-print PUSHQ <<_EOF_
+print PUSHQ <<_EOF_;
 -- New entry in Main Push Queue, to alert QA to existence of new tables:
-INSERT INTO pushQ SELECT right(concat("00000",convert(max(qid)+1,CHAR)),6),'','A',$rank,'$date','Y','$shortLabel','$daf->{assembly}','$tables','','$files',0,'hgwdev','N','','N','N','','$wranglerName','','$daf->{grant}','','','N','$date','',0,'','','$releaseLog','' from pushQ;
+LOCK TABLES pushQ WRITE;
+SELECT \@rank := max(rank)+1 FROM pushQ WHERE priority = 'A';
+SELECT \@pid := right(concat("00000",convert(max(qid)+1,CHAR)),6) FROM pushQ;
+INSERT INTO pushQ VALUES (\@pid,'','A',\@rank,now(),'Y','$shortLabel','$daf->{assembly}','$tables','','$files',0,'hgwdev','N','','N','N','','$wranglerName','','$daf->{grant}','','','N',now(),'',0,'','','$releaseLog','');
+UNLOCK TABLES;
 _EOF_
-  ;
 
 close(PUSHQ);
 
