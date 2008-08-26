@@ -82,7 +82,7 @@ To build the source tree.
 
 	[NOTE:  These 'make' commands assume gnu make is being used]
 
-5.  After source tree updates, the make sequence is:
+6.  After source tree updates, the make sequence is:
 	$ cd kent/src
 	$ make clean
 	$ make libs
@@ -136,4 +136,4 @@ make: *** [aliType.o] Error 1
     include the -Wno-unused-variable option in the build.
 
 ====================================================================
-This file last updated: $Date: 2008/08/26 16:19:31 $
+This file last updated: $Date: 2008/08/26 16:20:01 $
