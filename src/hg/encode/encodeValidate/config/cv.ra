@@ -7,6 +7,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&P
 type Cell Line
 karyotype relatively normal
 lineage mesoderm
+termId BTO:0000773
 tier 1
 
 term K562
@@ -15,34 +16,43 @@ orderUrl http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL
 type Cell Line
 karyotype cancer
 lineage mesoderm
+termId BTO:0000664
 tier 1
 
 term HepG2
 description liver carcinoma
 type Cell Line
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
 lineage endoderm
 karyotype cancer
+termId BTO:0000559
 tier 2
 
 term HeLaS3
 description cervical carcinoma
 type Cell Line
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
 lineage ectoderm
 karyotype cancer
+termId BTO:0000568
 tier 2
 
 term HUVEC
 description umbilical vein endothelial
 type Cell Line
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA1B392C76A4F18C7C001A4B525E10&layout=6_1_65_52_7&uiarea=2)/.do
 lineage mesoderm
 karyotype normal
+termId BTO:0001949
 tier 2
 
 term Keratinocyte
 type Cell Line
 description keratinocyte
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(isQuery=yes&xcm=lonza_b2b&query=CC2501&layout=6_1_65_52_7&uiarea=2&carea=DCEA1F8CCA53E1F18C7C001A4B525E10)/.do
 lineage ectoderm
 karyotype normal
+termId BTO:0000375
 tier 2
 
 term NT2/D1
@@ -51,6 +61,16 @@ description malignant pluripotent embryonal carcinoma (Ntera2)
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1973&Template=cellBiology
 lineage ectoderm
 karyotype cancer
+termId BTO:0000946
+tier 3
+
+term GM18507
+type Cell Line
+description lymphoblastoid 
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18507
+lineage mesoderm
+karyotype relatively normal
+termId BTO:0000773
 tier 3
 
 # Gene types
