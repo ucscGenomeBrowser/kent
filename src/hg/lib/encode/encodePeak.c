@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encodePeak.c,v 1.3 2008/08/25 21:46:51 aamp Exp $";
+static char const rcsid[] = "$Id: encodePeak.c,v 1.4 2008/08/26 11:22:35 aamp Exp $";
 
 struct encodePeak *encodePeakLoad(char **row)
 /* Load a encodePeak from row fetched with select * from encodePeak
@@ -200,3 +200,27 @@ slFreeList(&fieldNames);
 return numFields;
 }
 
+enum encodePeakType encodePeakInferType(struct trackDb *tdb)
+/* Given the trackDb figure out the peak type. Returns zero on error. */ 
+{
+int numFields = encodePeakNumFields(tdb->tableName);
+if (!tdb->type)
+    errAbort("unknown type in table %s", tdb->tableName);
+if (sameString(tdb->type, "encodePeak"))
+    {
+    switch (numFields)
+	{
+	case 5: return encodePeak5;
+        case 6: return encodePeak6;
+        case 9: return encodePeak9;
+        default: return 0;
+	}
+    }
+else if ((sameString(tdb->type, "narrowPeak") && (numFields == 9)))
+    return narrowPeak;
+else if ((sameString(tdb->type, "broadPeak") && (numFields == 8)))
+    return broadPeak;
+else if ((sameString(tdb->type, "gappedPeak") && (numFields == 14)))
+    return gappedPeak;
+return 0;
+}
