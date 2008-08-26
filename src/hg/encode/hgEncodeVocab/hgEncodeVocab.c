@@ -17,11 +17,11 @@
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.4 2008/07/24 23:41:15 mikep Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.5 2008/08/26 19:15:54 tdreszer Exp $";
 
 /* Default location, can specify as cgi var: ra=cv.ra */
 
-#define CV_FILE "/cluster/data/encode/pipeline/encpipeline_beta/config/cv.ra"
+#define CV_FILE "/cluster/data/encode/pipeline/encpipeline_prod/config/cv.ra"
 
 
 int termCmp(const void *va, const void *vb)
