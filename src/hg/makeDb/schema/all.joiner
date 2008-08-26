@@ -1233,22 +1233,27 @@ identifier knownGeneId dependency
     hg15,hg16,hg17.pseudoGeneLink.kgName minCheck=0.18 exclude=noKg
     $kgDb.foldUtr3.name
     $kgDb.foldUtr5.name
-    $kgDb.gnfU95Distance.query
-    $kgDb.gnfU95Distance.target
+    $hg.gnfU95Distance.query
+    $hg.gnfU95Distance.target
     $kgDb.gnfAtlas2Distance.query
     $kgDb.gnfAtlas2Distance.target
+    $hg.affyHumanExonGs.name
+    $hg.affyHumanExonGsMedian.name
+    $hg.affyHumanExonRatioMedian.name
+    $hg.affyHumanExonGsRatioMedianDist.query
+    $hg.affyHumanExonGsRatioMedianDist.target
     $kgDb.affyGnfU74ADistance.query
     $kgDb.affyGnfU74ADistance.target
     $kgDb.affyGnfU74BDistance.query
     $kgDb.affyGnfU74BDistance.target
     $kgDb.affyGnfU74CDistance.query
     $kgDb.affyGnfU74CDistance.target
-    $kgDb.humanNormalDistance.query
-    $kgDb.humanNormalDistance.target
+    $hg.humanNormalDistance.query
+    $hg.humanNormalDistance.target
     $kgDb.mouseLandscapeDistance.query minCheck=0.94
     $kgDb.mouseLandscapeDistance.target minCheck=0.94
-    $kgDb.gladHumESDistance.query
-    $kgDb.gladHumESDistance.target
+    $hg.gladHumESDistance.query
+    $hg.gladHumESDistance.target
     $kgDb.keggPathway.kgID
     $kgDb.kgAlias.kgID
     $kgDb.kgProtAlias.kgID
@@ -1261,30 +1266,41 @@ identifier knownGeneId dependency
     $kgDb.knownGeneMrna.name full
     $kgDb,!hg18,!mm9.knownGeneLink.name
     $kgDb.knownIsoforms.transcript full
+    $kgDb.knownToAllenBrain.name
     $kgDb.knownToCdsSnp.name
     $kgDb.knownToEnsembl.name
+    $kgDb.knownToGnf1h.name
+    $kgDb.knownToGnfAtlas2.name
+    $kgDb.knownToHInv.name
+    $kgDb.knownToHprd.name
     $kgDb.knownToLocusLink.name
     $kgDb.knownToPfam.name
     $kgDb.knownToRefSeq.name
     $kgDb.knownToSuper.gene
-    $kgDb.knownToHprd.name
-    $kgDb.knownToGnfAtlas2.name
+    $kgDb.knownToTreefam.name
     $kgDb.knownToU133.name
-    $kgDb.knownToU95.name
     $kgDb.knownToU133Plus2.name
-    $kgDb.knownToAllenBrain.name
+    $kgDb.knownToU95.name
+    $kgDb.knownToVisiGene.name
     $kgDb.refSeqKg.kgId minCheck=0.50
     $kgDb.rankProp.query
     $kgDb.rankProp.target
     $kgDb.pPsiBlast.kgId1
     $kgDb.pPsiBlast.kgId2
-    $kgDb.knownToVisiGene.name
     $ccdsDb.ccdsKgMap.geneId
     $kgDb2.knownGenePep.name full
     $kgDb3.knownGenePep.name
     $kgDb3.knownCanonical.protein exclude=
     $kgDb3.kgProtMap2.qName 
-    $kgDb3.kgColor.kgID full
+    $hg.humanHprdP2P.query
+    $hg.humanHprdP2P.target
+    $hg.humanVidalP2P.query
+    $hg.humanVidalP2P.target
+    $hg.humanWankerP2P.query
+    $hg.humanWankerP2P.target
+    $kgDb.kgColor.kgID full
+    $kgDb.kg2ToKg3.newId
+    $kgDb.kg3ToKg4.newId
 
 identifier knownGeneOld2Id dependency 
 "Old knownGene (KGII) and kgXref tables kept after KGIII implementation"
