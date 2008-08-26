@@ -13,8 +13,9 @@ DIRS = \
 
 # List of pipeline dirs
 PIPELINE_DIRS = \
-        encodeValidate \
-        encodeLoad
+        encodeLoad \
+        encodeStatus \
+        encodeValidate
 
 USE_DIRS = $(DIRS)
 
