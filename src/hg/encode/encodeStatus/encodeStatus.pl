@@ -5,11 +5,7 @@
 # existing status.  Statuses that can be changed manually do not
 # overlap statuses set by the pipeline automation.
 #
-# TODO
-#
-# When status changes to "approved", create a pushQ entry, using the tables listed in load.ra
-
-# $Id: encodeStatus.pl,v 1.2 2008/07/17 18:36:56 larrym Exp $
+# $Id: encodeStatus.pl,v 1.3 2008/08/26 22:36:17 larrym Exp $
 
 use warnings;
 use strict;
@@ -17,6 +13,7 @@ use strict;
 use Getopt::Long;
 use lib "/cluster/bin/scripts";
 use HgDb;
+use Encode;
 
 # Last status set by pipeline
 my $LOADED_STATUS = "loaded";
@@ -32,59 +29,59 @@ if (@ARGV < 1 || @ARGV > 2) {
     usage();
 }
 
-my $pipelineDb = "encpipeline_$instance";
+my $pipelineDb = Encode::pipelineDb($instance);
 my $project = $ARGV[0];
 my $newStatus = $ARGV[1];
 my $isName = $project !~ /^\d+$/;
 
 my $db = HgDb->new(DB => $pipelineDb);
-
-if (!defined($newStatus)) {
-    my $sth;
-    if ($isName) {
-        $sth = $db->execute("SELECT status, id FROM projects WHERE name=?", $project);
-    } else {
-        $sth = $db->execute("SELECT status, name FROM projects WHERE id=?", $project);
-    }
-    my $projectInfo;
-    if(my @row = $sth->fetchrow_array()) {
-        $projectInfo = $row[0];
-    }
-    if (!defined($projectInfo)) {
-        usage("ERROR: Project '$project' not found\n");
-    }
-    print "$projectInfo\n";
-    exit 0;
-}
-
-# Change project status in database
 my $sth;
 if ($isName) {
-    $sth = $db->execute("SELECT status FROM projects WHERE name=?", $project);
+    $sth = $db->execute("SELECT status, id FROM projects WHERE name = ?", $project);
 } else {
-    $sth = $db->execute("SELECT status FROM projects WHERE id=?", $project);
+    $sth = $db->execute("SELECT status, id FROM projects WHERE id = ?", $project);
 }
-my $oldStatus;
+my ($oldStatus, $id);
 if(my @row = $sth->fetchrow_array()) {
     $oldStatus = $row[0];
+    $id = $row[1];
 }
+
 if (!defined($oldStatus)) {
     usage("ERROR: Project '$project' not found in instance '$instance'\n");
 }
 
-for my $i (1 .. @statuses - 1) {
+my $dir = Encode::projectDir($instance, $id);
+if(!(-d $dir)) {
+    die "Can't find project dir '$dir'";
+}
+
+if (!defined($newStatus)) {
+    print "$oldStatus\n";
+    exit 0;
+}
+
+for my $i (0 .. @statuses - 1) {
     my $s = $statuses[$i];
     if ($s eq $newStatus) {
-        if ($oldStatus ne $statuses[$i - 1] && !$force) {
+        if ($newStatus ne $LOADED_STATUS && ($oldStatus ne $statuses[$i - 1] && !$force)) {
             usage("ERROR: New status '$newStatus' cannot follow '$oldStatus'\n");
         }
-        my $sth;
-        if ($isName) {
-            $db->execute("UPDATE projects SET status=? WHERE name=?", $newStatus, $project);
-        } else {
-            $db->execute("UPDATE projects SET status=? WHERE id=?", $newStatus, $project);
-        }
+        $db->execute("UPDATE projects SET status = ? WHERE id = ?", $newStatus, $id);
         print "Project '$project' successfully updated from '$oldStatus' to '$newStatus'\n";
+        if($newStatus eq 'approved') {
+            my $pushQFile = "$dir/out/$Encode::pushQFile";
+            if(-e $pushQFile) {
+                # We probably s/d change the code to just run this once we enter production phase (if $instance eq 'prod')
+                print <<END;
+You must execute this command to add the pushQ entry:
+
+cat $pushQFile | ssh -x hgwbeta hgsql -N qapushq
+END
+            } else {
+                die "Can't find pushQFile '$pushQFile'";
+            }
+        }
         exit 0;
     }
 }
