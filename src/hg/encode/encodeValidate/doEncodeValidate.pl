@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.51 2008/08/25 22:30:27 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.52 2008/08/26 22:57:20 larrym Exp $
 
 use warnings;
 use strict;
@@ -601,6 +601,7 @@ foreach my $ddfLine (@ddfLines) {
     }
     my $subGroups = "view=$view";
     my $additional = "\n";
+    my $pushQDescription = "";
     if (defined($daf->{variables})) {
         my @variables = @{$daf->{variableArray}};
         my %hash = map { $_ => $ddfLine->{$_} } @variables;
@@ -610,9 +611,11 @@ foreach my $ddfLine (@ddfLines) {
         my $shortSuffix;
         my $longSuffix;
         if($hash{antibody} && $hash{cell}) {
+            $pushQDescription = "$hash{antibody} in $hash{cell}";
             $shortSuffix = "$hash{antibody} $hash{cell}";
             $longSuffix = "$hash{antibody} in $hash{cell} cells";
         } elsif ($hash{"cell"}) {
+            $pushQDescription = "$hash{cell}";
             $shortSuffix = "$hash{cell}";
             $longSuffix = "in $hash{cell} cells";
         }
@@ -635,10 +638,10 @@ foreach my $ddfLine (@ddfLines) {
     $tableName =~ s/[_-]//g;
 
     if(!$opt_allowReloads) {
-        my $sth = $db->execute("desc $tableName");
+        my $sth = $db->execute("select count(*) from trackDb where tableName = ?", $tableName);
         my @row = $sth->fetchrow_array();
         if(@row && $row[0]) {
-            die "view '$view' has already been loaded as track '$tableName'; please contact your wrangler if you need to reload this data\n";
+            die "view '$view' has already been loaded as track '$tableName'\nPlease contact your wrangler if you need to reload this data\n";
         }
     }
 
@@ -651,6 +654,7 @@ foreach my $ddfLine (@ddfLines) {
     print LOADER_RA "assembly $daf->{assembly}\n";
     print LOADER_RA "files @{$ddfLine->{files}}\n";
     print LOADER_RA "downloadOnly $downloadOnly\n";
+    print LOADER_RA "pushQDescription $pushQDescription\n";
     print LOADER_RA "\n";
 
     if(!$downloadOnly) {
