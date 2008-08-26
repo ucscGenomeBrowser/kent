@@ -1,4 +1,4 @@
-/* Handle details page for CGAP SAGE track. */
+/* Handle details page for ENCODE tracks. */
 
 #include "common.h"
 #include "cart.h"
