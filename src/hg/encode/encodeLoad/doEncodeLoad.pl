@@ -27,6 +27,7 @@ use lib "/cluster/bin/scripts";
 use Encode;
 use RAFile;
 use SafePipe;
+use HgDb;
 
 use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose/;
 
@@ -195,16 +196,22 @@ if (defined $opt_configDir) {
 my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
 my $daf = Encode::getDaf($submitDir, $grants, $fields);
+my $db = HgDb->new(DB => $daf->{assembly});
 my $email;
+my %labels;
 
 if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
     $email = $grants->{$daf->{grant}}{wranglerEmail};
 }
 
+# Add a suffix for non-production loads (to avoid loading over existing tables).
+
 my $tableSuffix = "";
-# yank out "beta" from encinstance_beta
-if(dirname($submitDir) =~ /(_.*)/) {
-    $tableSuffix = "$1_" . basename($submitDir);;
+if(dirname($submitDir) =~ /_(.*)/) {
+    if($1 ne 'prod') {
+        # yank out "beta" from encinstance_beta
+        $tableSuffix = "_$1_" . basename($submitDir);;
+    }
 } else {
     $tableSuffix = "_" . basename($submitDir);;
 }
@@ -258,6 +265,7 @@ if(! -d $downloadDir) {
 for my $key (keys %ra) {
     my $h = $ra{$key};
     my $tablename = $h->{tablename} . $tableSuffix;
+    $labels{$h->{shortLabel}} = 1;
 
     my $str = "\nkeyword: $key\n";
     for my $field (qw(tablename type assembly files)) {
@@ -313,14 +321,47 @@ if($email) {
     # die "No wrangler is configured for '$daf->{grant}'\n";
 }
 
-open(PUSHQ, ">out/$Encode::pushQFile") || die "SYS ERROR: Can't write \'out/$Encode::pushQFile\' file; error: $!\n";
-HgAutomate::verbose(2, "pushQ tables: " . join(",", @{$pushQ->{TABLES}}) . "\n");
-HgAutomate::verbose(2, "pushQ files: " . join(",", @{$pushQ->{FILES}}) . "\n");
-# figure out appropriate syntax for pushQ entries
-print PUSHQ "tables: " . join(",", @{$pushQ->{TABLES}}) . "\n";
-if(defined($pushQ->{FILES}) && @{$pushQ->{FILES}}) {
-    print PUSHQ "files: " . join(",", @{$pushQ->{FILES}}) . "\n";
+my $wranglerName;
+if($email && $email =~ /([^@]+)/) {
+    $wranglerName = $1;
+} else {
+    $wranglerName = 'encode';
 }
+
+my $qapushqSql = 'ssh -x hgwbeta hgsql -N qapushq';
+my $rankQuery = 'select rank from pushQ order by rank desc limit 1';
+my $rank = `echo $rankQuery | $qapushqSql`;
+$rank += 1;
+
+my $date = `date +%Y-%m-%d`;
+chomp($date);
+my $tables = join(",", @{$pushQ->{TABLES}});
+my $files;
+if(defined($pushQ->{FILES}) && @{$pushQ->{FILES}}) {
+    $files = join(",", @{$pushQ->{FILES}});
+}
+
+my ($shortLabel, $longLabel);
+my $sth = $db->execute("select shortLabel, longLabel from trackDb where tableName = ?", $compositeTrack);
+my @row = $sth->fetchrow_array();
+if(@row) {
+    $shortLabel = $row[0];
+    $longLabel = $row[1];
+}
+
+# XXXX add variable stuff
+my $releaseLog = "$longLabel: " . join(", ", keys %labels);
+
+HgAutomate::verbose(2, "pushQ tables: $tables\n");
+HgAutomate::verbose(2, "pushQ files: $files\n");
+
+open(PUSHQ, ">out/$Encode::pushQFile") || die "SYS ERROR: Can't write \'out/$Encode::pushQFile\' file; error: $!\n";
+print PUSHQ <<_EOF_
+-- New entry in Main Push Queue, to alert QA to existence of new tables:
+INSERT INTO pushQ SELECT right(concat("00000",convert(max(qid)+1,CHAR)),6),'','A',$rank,'$date','Y','$shortLabel','$daf->{assembly}','$tables','','$files',0,'hgwdev','N','','N','N','','$wranglerName','','$daf->{grant}','','','N','$date','',0,'','','$releaseLog','' from pushQ;
+_EOF_
+  ;
+
 close(PUSHQ);
 
 exit(0);
