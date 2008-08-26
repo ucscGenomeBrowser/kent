@@ -14,7 +14,7 @@
 #include "mafGene.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgPal.c,v 1.1 2008/08/26 22:17:38 braney Exp $";
+static char const rcsid[] = "$Id: hgPal.c,v 1.2 2008/08/26 22:56:45 braney Exp $";
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
@@ -97,6 +97,8 @@ sprintf(query, "select tableName from trackDb where type like 'wigMaf%%'");
 char *checked = NULL;
 struct slName *speciesList = NULL;
 int ii;
+
+slAddHead(&speciesList, slNameNew(database));
 
 printf("MAF table: \n");
 sr = sqlGetResult(conn, query);
@@ -181,7 +183,7 @@ for (group = 0; group < groupCt; group++)
     for (ii = 0; ii < speciesCt; ii++)
         {
 //	printf("looking at %s\n", species[ii]);
-        slAddTail(&speciesList, slNameNew(cloneString(species[ii])));
+        slAddTail(&speciesList, slNameNew(species[ii]));
         }
     }
 struct slName *sl;
