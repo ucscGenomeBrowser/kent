@@ -3,27 +3,13 @@
 include ../../../inc/common.mk
 
 SCRIPT_FILES = \
-	encodeStatus.csh
+	encodeStatus.pl
 
-PIPELINE_DIR=encpipeline_beta
-
-all:  
-	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts scripts
-
-alpha: scripts config
+install: 
+	@${MAKE} --no-print-directory SCRIPTS=${ENCODE_PIPELINE_BIN} scripts
 
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
 	    chmod +x $$F; \
-            cp -upv $$F ${SCRIPTS}; \
+            perl -c $$F && cp -upv $$F ${SCRIPTS}; \
 	done
-
-config: force
-	mkdir -p ${PIPELINE_PATH}/${PIPELINE_DIR}/config
-	cp -up config/{fields,cv}.ra ${PIPELINE_PATH}/${PIPELINE_DIR}/config
-
-test: force
-	cd test && ${MAKE}
-
-force:
-
