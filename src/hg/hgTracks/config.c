@@ -139,7 +139,7 @@ for (group = groupList; group != NULL; group = group->next)
         hDoubleVar(pname, (double)group->priority, 4);
         hPrintf("</TH>\n");
         if (isOpen)
-            hPrintf("<TH align=CENTER BGCOLOR=#536ED3><B>&nbsp;%s</B> ", wrapWhiteFont("Group</TH>"));
+            hPrintf("<TH align=CENTER BGCOLOR=#536ED3><B>&nbsp;%s</B></TH> ", wrapWhiteFont("Group"));
         hPrintf("\n");
         }
     hPrintf("</TR>\n");
