@@ -16,7 +16,7 @@
 #include "verbose.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.104 2008/08/07 21:21:00 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.105 2008/08/26 23:35:38 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -729,6 +729,32 @@ verbose(2, "readBatch time: %.2f seconds\n", (clock1000() - time) / 1000.0);
 return db;
 }
 
+
+boolean pmSendStringWithRetries(struct paraMessage *pm, struct rudp *ru, char *string)
+/* Send out given message strng.  Print warning message and return FALSE if
+ * there is a problem. Try up to 5 times sleeping for 60 seconds in between.
+ * This is an attempt to help automated processes. */
+{
+int tries = 0;
+#define PMSENDSLEEP 60
+#define PMSENDMAXTRIES 5
+boolean result = FALSE;
+while (TRUE)
+    {
+    result = pmSendString(pm, ru, string);
+    if (result)
+	break;
+    warn("pmSendString timed out!");
+    ++tries;
+    if (tries >= PMSENDMAXTRIES)
+	break;
+    warn("pmSendString: will sleep %d seconds and retry", PMSENDSLEEP);
+    sleep(PMSENDSLEEP);
+    }
+return result;
+}
+
+
 char *hubSingleLineQuery(char *query)
 /* Send message to hub and get single line response.
  * This should be freeMem'd when done. */
@@ -737,7 +763,7 @@ struct rudp *ru = rudpMustOpen();
 struct paraMessage pm;
 
 pmInitFromName(&pm, "localhost", paraHubPort);
-if (!pmSendString(&pm, ru, query))
+if (!pmSendStringWithRetries(&pm, ru, query))
     noWarnAbort();
 if (!pmReceive(&pm, ru))
     noWarnAbort();
@@ -758,7 +784,7 @@ int count = 0;
 pmInitFromName(&pm, "localhost", paraHubPort);
 /* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
 pmmInit(&pmm, &pm, pm.ipAddress.sin_addr);
-if (!pmSendString(&pm, ru, query))
+if (!pmSendStringWithRetries(&pm, ru, query))
     noWarnAbort();
 for (;;)
     {
@@ -1359,6 +1385,22 @@ struct jobDb *db = paraCycle(batch);
 jobDbFree(&db);
 }
 
+
+void clearSickNodes()
+/* Tell hub to clear sick nodes on batch */
+{
+struct dyString *dy = newDyString(1024);
+char *result;
+dyStringPrintf(dy, "clearSickNodes %s %s", getUser(), resultsName);
+result = hubSingleLineQuery(dy->string);
+dyStringFree(&dy);
+if (!sameString(result, "0"))
+    errAbort("Couldn't clear sick nodes for %s\n", batchDir);
+freez(&result);
+verbose(1, "Told hub to clear sick nodes\n");
+}
+
+
 void paraShove(char *batch)
 /* Push batch of jobs and keep pushing until it's finished, polling
  * parasol every 5 minutes. */
@@ -1369,6 +1411,9 @@ struct submission *sub;
 int maxSleep = 5*60;
 int curSleep = 15;
 time_t start = time(NULL), now;
+int sickBatchTries = 0;
+#define MAXSICKBATCHTRIES 3
+#define SICKBATCHSLEEP 10*60
 
 for (;;)
     {
@@ -1397,10 +1442,22 @@ for (;;)
     fflush(stdout);
     fflush(stderr);
     if (sickBatch)
-	break;
-    sleep(curSleep);
-    if (curSleep < maxSleep)
-        curSleep += 15;
+	{
+	++sickBatchTries;
+	if (sickBatchTries >= MAXSICKBATCHTRIES)
+    	    break;
+	warn("Sick batch! will sleep %d minutes, clear sick nodes and retry", SICKBATCHSLEEP/60);
+	sleep(SICKBATCHSLEEP);
+	sickBatch = FALSE;
+        clearSickNodes(); 
+	}
+    else
+	{
+	sickBatchTries = 0;
+	sleep(curSleep);
+	if (curSleep < maxSleep)
+	    curSleep += 15;
+	}
     now = time(NULL);
     verbose(1, "================\n");
     verbose(1, "Checking job status %d minutes after launch\n",  round((now-start)/60.0));
@@ -1792,21 +1849,6 @@ if (sameOk(result, "0"))
 freez(&result);
 }
 
-
-
-void clearSickNodes()
-/* Tell hub to clear sick nodes on batch */
-{
-struct dyString *dy = newDyString(1024);
-char *result;
-dyStringPrintf(dy, "clearSickNodes %s %s", getUser(), resultsName);
-result = hubSingleLineQuery(dy->string);
-dyStringFree(&dy);
-if (!sameString(result, "0"))
-    errAbort("Couldn't clear sick nodes for %s\n", batchDir);
-freez(&result);
-verbose(1, "Told hub to clear sick nodes\n");
-}
 
 
 void paraCheck(char *batch)

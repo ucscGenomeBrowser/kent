@@ -280,3 +280,7 @@
         for MarkD's new feature.
 
         Added more time info to err message in para.c for "Strange time in ..."
+
+        Added retry with sleep for pmSendString and sickBatch based on feedback
+        from MarkD with 2 genbank para make failures, and Brian with flakey SAN.
+
