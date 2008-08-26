@@ -19,12 +19,12 @@ To build the source tree.
 	$ uname -p
 	$ uname -a
 
-	Remember to set this in your .bashrc or .tcshrc home directory
+	Remember to set this MACHTYPE in your .bashrc or .tcshrc home directory
 	environment files so it will be set properly at your next login.
 
 	The browser code has not been tested by UCSC outside a
-	Redhat Linux on Intel environment.  Other users do report
-	successful operation on other systems.
+	CentOS Linux on Intel or AMD Opteron environment.
+	Other users do report successful operation on other systems.
 
 2.  Create a directory where binaries will be moved to during
 	the build of the source tree:
@@ -38,8 +38,9 @@ To build the source tree.
 	mysql is installed.  The above example is typical.
 	If your system does not have this set of include files
 	or this static client.a file, you may need to install
-	the mysql-devel RPM to obtain the mysql development
-	environment.  With that RPM installed, this command:
+	the mysql-devel package to obtain the mysql development
+	environment.  (http://dev.mysql.com/downloads/)
+	With that package installed, this command:
 		mysql_config --libs
 	will display the appropriate libraries to link with
 	for your system configuration.  And:
@@ -51,7 +52,14 @@ To build the source tree.
 4.  In the source tree, perform the following:
 	$ cd kent/src
 	$ make libs
-	$ cd hg
+	At this point, you can build utilities in other parts of
+	the source tree if that is your goal.  Go to the directory
+	of the utility command you want to build and run a 'make'
+	in that directory.  The resulting binary will be placed
+	in $HOME/bin/$MACHTYPE
+
+5.  To continue building the CGI binaries
+	$ cd kent/src/hg
 	$ make compile
 	$ make install DESTDIR=/destination/prefix
 
@@ -128,4 +136,4 @@ make: *** [aliType.o] Error 1
     include the -Wno-unused-variable option in the build.
 
 ====================================================================
-This file last updated: $Date: 2008/07/07 16:04:07 $
+This file last updated: $Date: 2008/08/26 16:19:31 $
