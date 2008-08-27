@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.12 2008/08/25 20:55:38 kate Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.13 2008/08/27 23:06:37 kate Exp $";
 
 struct bedGraphItem
 /* A bedGraph track item. */
@@ -357,7 +357,6 @@ wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;
 wigCart->minHeight = minHeight;
 
-/*wigFetchMinMaxYWithCart(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);*/
 wigFetchMinMaxLimitsWithCart(cart, tdb, name,&minY, &maxY, (double *)NULL, (double *)NULL);
 
 switch (wordCount)
