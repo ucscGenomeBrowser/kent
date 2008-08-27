@@ -23,17 +23,20 @@ errAbort(
   "options:\n"
   "   -table=XXX - give another name to table other than knownToVisiGene\n"
   "   -visiDb=XXX - use a VisiGene database other than 'visiGene'\n"
+  "   -probesDb=database - use given database for probes (default is to use database)\n"
   );
 }
 
 char *outTable = "knownToVisiGene";
 char *visiDb = "visiGene";
+char *probesDb;
 boolean vgProbes = FALSE;
 boolean vgAllProbes = FALSE;
 
 static struct optionSpec options[] = {
    {"table", OPTION_STRING},
    {"visiDb", OPTION_STRING},
+   {"probesDb", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -221,8 +224,10 @@ struct genePred *knownList = NULL, *known;
 struct hash *dupeHash = newHash(17);
 
 
-vgProbes = sqlTableExists(hConn,"vgProbes");
-vgAllProbes = sqlTableExists(hConn,"vgAllProbes");
+probesDb  = optionVal("probesDb", database);
+struct sqlConnection *probesConn = sqlConnect(probesDb);
+vgProbes = sqlTableExists(probesConn,"vgProbes");
+vgAllProbes = sqlTableExists(probesConn,"vgAllProbes");
 
 /* Go through and make up hashes of images keyed by various fields. */
 sr = sqlGetResult(iConn,
@@ -275,9 +280,9 @@ verbose(2, "Got %d known genes\n", slCount(knownList));
 
 /* Build up hashes from knownGene to other things. */
 if (vgProbes)
-    bestProbeOverlap(hConn, "vgProbes", knownList, knownToProbeHash);
+    bestProbeOverlap(probesConn, "vgProbes", knownList, knownToProbeHash);
 if (vgAllProbes)
-    bestProbeOverlap(hConn, "vgAllProbes", knownList, knownToAllProbeHash);
+    bestProbeOverlap(probesConn, "vgAllProbes", knownList, knownToAllProbeHash);
 
 foldIntoHash(hConn, "knownToLocusLink", "name", "value", knownToLocusLinkHash, NULL, FALSE);
 foldIntoHash(hConn, "knownToRefSeq", "name", "value", knownToRefSeqHash, NULL, FALSE);
