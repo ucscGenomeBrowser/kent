@@ -6,7 +6,7 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: kgBioCyc1.c,v 1.1 2008/08/06 01:16:16 kent Exp $";
+static char const rcsid[] = "$Id: kgBioCyc1.c,v 1.2 2008/08/27 22:34:32 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -165,7 +165,7 @@ while ((wordCount = lineFileChopNextTab(lf, words, ArraySize(words))) > 0)
         {
 	/* The lines with no genes in the pathway seem to be missing some tabs.... */
 	if (!allBlank(words, 2, wordCount))
-	    errAbort("Expecting %d words got %d line %d of %s, skipping", 
+	    errAbort("Expecting %d words got %d line %d of %s.", 
 		    firstWordCount, wordCount, lf->lineIx, lf->fileName);
 	continue;
 	}
