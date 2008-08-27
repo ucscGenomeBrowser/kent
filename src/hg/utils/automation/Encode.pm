@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.12 2008/08/25 22:26:38 larrym Exp $
+# $Id: Encode.pm,v 1.13 2008/08/27 00:06:19 larrym Exp $
 
 package Encode;
 
@@ -143,6 +143,18 @@ sub readFile
     close(FILE);
     $/ = $oldEOL;
     return \@lines;
+}
+
+sub pipelineDb
+{
+    my ($instance) = @_;
+    return "encpipeline_$instance";
+}
+
+sub projectDir
+{
+    my ($instance, $id) = @_;
+    return "/cluster/data/encode/pipeline/encpipeline_$instance/$id";
 }
 
 sub getGrants
