@@ -145,6 +145,8 @@ row2 = sqlNextRow(sr2);
 
 while (row2 != NULL)
     {
+    if (icnt >= MAXN)
+        errAbort("too many proteins, please increase value of MAXN beyond %d", MAXN);
     accession = row2[0];   
     aaSeq     = row2[1];
     
