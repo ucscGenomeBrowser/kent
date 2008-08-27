@@ -39,7 +39,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1503 2008/08/21 22:07:38 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1504 2008/08/27 19:19:38 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2141,12 +2141,15 @@ struct track *track;
 TrackHandler handler;
 
 tdbList = hTrackDb(chromName);
+tdbSortPrioritiesFromCart(cart, &tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
-    if (slCount(tdb->subtracks) != 0)
+    if (slCount(tdb->subtracks) != 0) {
+        tdbSortPrioritiesFromCart(cart, &(tdb->subtracks));
         makeCompositeTrack(track, tdb);
+        }
     else
         {
         handler = lookupTrackHandler(tdb->tableName);
@@ -2984,20 +2987,20 @@ for (track = *pTrackList; track != NULL; track = track->next)
             /* supertrack member must be in same group as its super */
             /* determine supertrack group */
             safef(cartVar, sizeof(cartVar), "%s.group",track->tdb->parentName);
-            groupName = cloneString(
+            groupName = cloneString(                                              //1
                     cartUsualString(cart, cartVar, track->tdb->parent->grp));
-            track->tdb->parent->grp = cloneString(groupName);
+            track->tdb->parent->grp = cloneString(groupName);                     //2
             }
         else
             {
             /* get group */
             safef(cartVar, sizeof(cartVar), "%s.group",track->mapName);
-            groupName = cloneString(
+            groupName = cloneString(                                              //1
                     cartUsualString(cart, cartVar, track->defaultGroupName));
             }
         if (vis == -1)
-            groupName = track->defaultGroupName;
-        track->groupName = cloneString(groupName);
+            groupName = track->defaultGroupName;                                  //0
+        track->groupName = cloneString(groupName);  // wasting a few clones!      //3
         if (sameString(groupName, track->defaultGroupName))
             cartRemove(cart, cartVar);
 

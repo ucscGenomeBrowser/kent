@@ -8,7 +8,7 @@
 #include "hvGfx.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: oneTrack.c,v 1.1 2008/05/23 22:08:33 angie Exp $";
+static char const rcsid[] = "$Id: oneTrack.c,v 1.2 2008/08/27 19:16:57 tdreszer Exp $";
 
 void oneTrackInit()
 /* Set up global variables using cart settings and initialize libs. */
@@ -44,6 +44,9 @@ char *visStr = cloneString(
 	cartUsualString(cart, trackName, hTrackOpenVis(trackName)) );
 cartSetString(cart, trackName, visStr);
 struct trackDb *tdb = hTrackDbForTrack(trackName);
+tdbSortPrioritiesFromCart(cart, &tdb);
+if(tdb->subtracks)
+    tdbSortPrioritiesFromCart(cart, &(tdb->subtracks));
 struct track *tg = trackFromTrackDb(tdb);
 tg->visibility = hTvFromString(visStr);
 trackList = tg;

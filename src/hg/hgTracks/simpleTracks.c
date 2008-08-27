@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.28 2008/08/25 21:36:48 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.29 2008/08/27 19:16:10 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 
@@ -10954,10 +10954,13 @@ track->altColor.b = tdb->altColorB;
 track->lineHeight = tl.fontHeight+1;
 track->heightPer = track->lineHeight - 1;
 track->private = tdb->private;
+track->defaultPriority = tdb->priority;
+char lookUpName[128];
+safef(lookUpName, sizeof(lookUpName), "%s.priority", tdb->tableName);
+tdb->priority = cartUsualDouble(cart, lookUpName, tdb->priority);
 track->priority = tdb->priority;
 track->groupName = cloneString(tdb->grp);
 /* save default priority and group so we can reset it later */
-track->defaultPriority = tdb->priority;
 track->defaultGroupName = cloneString(tdb->grp);
 track->canPack = tdb->canPack;
 if (tdb->useScore)
