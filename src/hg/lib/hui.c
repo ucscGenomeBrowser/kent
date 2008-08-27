@@ -16,7 +16,7 @@
 #include "obscure.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.110 2008/08/25 20:55:37 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.111 2008/08/27 19:12:24 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -1877,6 +1877,18 @@ if(value != (void*)NULL)
     *value = firstWordInLine(cloneString(found+strlen(name)+1));
 return TRUE;
 }
+boolean subgroupFindTitle(struct trackDb *parentTdb, char *name,char **value)
+/* looks for a a subgroup matching the name and returns the title if found */
+{
+if(value != (void*)NULL)
+    *value = NULL;
+members_t*members=subgroupMembersGet(parentTdb, name);
+if(members==NULL)
+    return FALSE;
+*value = cloneString(members->title);
+subgroupMembersFree(&members);
+return TRUE;
+}
 void subgroupFree(char **value)
 /* frees subgroup memory */
 {
@@ -1884,9 +1896,75 @@ if(value && *value)
     freez(value);
 }
 
+typedef struct _sortOrder {
+    int count;
+    char*sortOrder;
+    char*htmlId;
+    char**column;
+    char**title;
+    boolean* forward;
+    int*  order;  // 1 based 
+} sortOrder_t;
+
+static sortOrder_t *sortOrderGet(struct cart *cart,struct trackDb *parentTdb)
+/* Parses any list sort order instructions for parent of subtracks (from cart or trackDb) */
+// Some trickiness here.  sortOrder->sortOrder is from cart (changed by user action), as is sortOrder->order, 
+//                        But columns are in original tdb order (unchanging)!
+{
+int ix;
+if(trackDbSetting(parentTdb, "sortOrder") == NULL) // Must be in trackDb or not a sortable table
+    return NULL;
+    
+sortOrder_t *sortOrder = needMem(sizeof(sortOrder_t));
+sortOrder->htmlId = needMem(strlen(parentTdb->tableName)+15);
+safef(sortOrder->htmlId, (strlen(parentTdb->tableName)+15), "%s.sortOrder", parentTdb->tableName);
+char *setting = trackDbSetting(parentTdb, "sortOrder");
+char *cartSetting = cartCgiUsualString(cart, sortOrder->htmlId, setting);
+sortOrder->sortOrder = cloneString(cartSetting);
+sortOrder->column  = needMem(12*sizeof(char*)); // There aren't going to be more than 3 or 4!
+sortOrder->count   = chopByWhite(cloneString(setting), sortOrder->column,12);
+sortOrder->title   = needMem(sortOrder->count*sizeof(char*));
+sortOrder->forward = needMem(sortOrder->count*sizeof(boolean));
+sortOrder->order   = needMem(sortOrder->count*sizeof(int));
+for (ix = 0; ix < sortOrder->count; ix++)
+    {
+    strSwapChar(sortOrder->column[ix],'=',0);  // Don't want CEL=+ but CEL
+    char *pos = stringIn(sortOrder->column[ix], cartSetting); // tdb substring found in cart current order string
+    assert(pos != NULL && pos[strlen(sortOrder->column[ix])] == '=');
+    int ord=1;
+    char* pos2 = cartSetting;
+    for(;*pos2 && pos2 < pos;pos2++)
+        {
+        if(*pos2 == '=')
+            ord++;
+        }
+    sortOrder->forward[ix] = (pos[strlen(sortOrder->column[ix]) + 1] == '+');
+    sortOrder->order[ix] = ord;
+    subgroupFindTitle(parentTdb,sortOrder->column[ix],&(sortOrder->title[ix]));
+    }
+return sortOrder;  // NOTE cloneString:words[0]==*sortOrder->column[0] and will be freed when sortOrder is freed
+}
+static void sortOrderFree(sortOrder_t **sortOrder)
+/* frees any previously obtained sortOrder settings */
+{
+if(sortOrder && *sortOrder)
+    {
+    int ix;
+    for(ix=0;ix<(*sortOrder)->count;ix++) { subgroupFree(&((*sortOrder)->title[ix])); }
+    freeMem((*sortOrder)->sortOrder);
+    freeMem((*sortOrder)->htmlId);
+    freeMem((*sortOrder)->column);
+    freeMem((*sortOrder)->forward);
+    freeMem((*sortOrder)->order);
+    freez(sortOrder);
+    }
+}
+
+
 
 #define COLOR_BG_DEFAULT        "#FFFEE8"
-#define COLOR_BG_ALTDEFAULT      "#FFF9D2"
+#define COLOR_BG_ALTDEFAULT     "#FFF9D2"
+#define COLOR_BG_GHOST          "#EEEEEE"
 #define COLOR_BG_DEFAULT_IX     0
 #define COLOR_BG_ALTDEFAULT_IX  1
 #define COLOR_DARKGREEN         "#008800"
@@ -1894,32 +1972,31 @@ if(value && *value)
 #define DIVIDING_LINE "<TR valign=\"CENTER\" line-height=\"1\" BGCOLOR=\"%s\"><TH colspan=\"5\" align=\"CENTER\"><hr noshade color=\"%s\" width=\"100%%\"></TD></TR>\n"                
 #define DIVIDER_PRINT(color) printf(DIVIDING_LINE,COLOR_BG_DEFAULT,(color))
 
-static char *checkBoxIdMakeForTrack(struct trackDb *tdb,boolean isMatrix,char *tagX,char *tagY,membership_t *membership)
+static char *checkBoxIdMakeForTrack(struct trackDb *tdb,char *tagX,char *tagY,membership_t *membership)
 /* Creates an 'id' string for subtrack checkbox in style that matrix understand: "cb_dimX_dimY_view_cb" */
 {
 int ix;
 #define CHECKBOX_ID_SZ 128
 char *id = needMem(CHECKBOX_ID_SZ);
-if(isMatrix)
-    {  // What is wanted: id="cb_ES_K4_SIG_cb"
-    safecpy(id,CHECKBOX_ID_SZ,"cb_");
-    if(tagX != NULL)
-        {
-        ix = stringArrayIx(tagX, membership->subgroups, membership->count);
-        if(ix >= 0)
-            safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
-        }
-    if(tagY != NULL)
-        {
-        ix = stringArrayIx(tagY, membership->subgroups, membership->count);
-        if(ix >= 0)
-            safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
-        }
-    ix = stringArrayIx("view", membership->subgroups, membership->count);
+// What is wanted: id="cb_ES_K4_SIG_cb"
+safecpy(id,CHECKBOX_ID_SZ,"cb_");
+if(tagX != NULL)
+    {
+    ix = stringArrayIx(tagX, membership->subgroups, membership->count);
     if(ix >= 0)
         safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
-    safecat(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "cb");
     }
+if(tagY != NULL)
+    {
+    ix = stringArrayIx(tagY, membership->subgroups, membership->count);
+    if(ix >= 0)
+        safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
+    }
+ix = stringArrayIx("view", membership->subgroups, membership->count);   // view is a known tagname
+if(ix >= 0)
+    safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
+safecat(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "cb");
+// If all else fails:
 if(strlen(id) <= 5)
     safef(id, CHECKBOX_ID_SZ, "cb_%s", tdb->tableName);
 return id;    
@@ -2052,32 +2129,63 @@ if(strptime (date,format, &tp))
 return newDate;  // newDate is never freed!
 }
 
+void tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList)
+/* Updates the tdb_>priority from cart then sorts the list anew */
+{
+char htmlIdentifier[128];
+struct trackDb *tdb;    
+for (tdb = *tdbList; tdb != NULL; tdb = tdb->next)
+    {
+        safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", tdb->tableName);
+        tdb->priority = (float)cartUsualDouble(cart, htmlIdentifier, tdb->priority);
+    }
+slSort(tdbList, trackDbCmp);
+}
+        
 static void compositeUiSubtracks(struct cart *cart, struct trackDb *parentTdb,
                  boolean selectedOnly, char *primarySubtrack)
 /* Show checkboxes for subtracks. */
 {
 struct trackDb *subtrack;
 char *primaryType = getPrimaryType(primarySubtrack, parentTdb);
-char option[64];
+char htmlIdentifier[128];
 char *words[5];
 char *colors[2]   = { COLOR_BG_DEFAULT,
                       COLOR_BG_ALTDEFAULT };
 int colorIx = COLOR_BG_DEFAULT_IX; // Start with non-default allows alternation
 
+// Look for dividers, heirarchy, dimensions, sort and dragAndDrop!
 char **lastDivide = NULL;
 dividers_t *dividers = dividersSettingGet(parentTdb);
 if(dividers) 
     lastDivide = needMem(sizeof(char*)*dividers->count);
 hierarchy_t *hierarchy = hierarchySettingGet(parentTdb);
-members_t *dimensionX=subgroupMembersGetByDimension(parentTdb,'X');
-members_t *dimensionY=subgroupMembersGetByDimension(parentTdb,'Y');
-boolean isMatrix = (dimensionX || dimensionY);
 
-puts("\n<TABLE CELLSPACING=\"2\" CELLPADDING=\"1\" border=\"0\" >");
+enum
+{
+    dimX=0,
+    dimY=1,
+    dimV=2,
+    dimMax=3
+};
+members_t* dimensions[dimMax];
+dimensions[dimX]=subgroupMembersGetByDimension(parentTdb,'X');
+dimensions[dimY]=subgroupMembersGetByDimension(parentTdb,'Y');
+dimensions[dimV]=subgroupMembersGet(parentTdb,"view");
+boolean isMatrix = (dimensions[dimX] || dimensions[dimY]);
+int dimCount=0,di;
+for(di=0;di<dimMax;di++) { if(dimensions[di]) dimCount++; }
+sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
+boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
 
-#define SHOW_RESTRICTED_COLUMN
-#define TREAT_SUBMITTED_AS_RESTRICTED
-#ifdef SHOW_RESTRICTED_COLUMN
+// Now we can start in on the table of subtracks
+printf("\n<TABLE CELLSPACING='2' CELLPADDING='1' border='0'");
+if(sortOrder != NULL)
+    printf(" id='%s.sortable'",parentTdb->tableName);
+if(useDragAndDrop)
+    printf(" class='tableWithDragAndDrop'");
+puts("><THEAD>");
+
 if (!primarySubtrack && isMatrix)
     {
     char javascript[JBUFSIZE];
@@ -2086,6 +2194,7 @@ if (!primarySubtrack && isMatrix)
     for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
         {
         if(trackDbSetting(subtrack, "dateReleased") 
+#define TREAT_SUBMITTED_AS_RESTRICTED
 #ifdef TREAT_SUBMITTED_AS_RESTRICTED
         || trackDbSetting(subtrack, "dateSubmitted")
 #endif//def TREAT_SUBMITTED_AS_RESTRICTED
@@ -2096,34 +2205,62 @@ if (!primarySubtrack && isMatrix)
             }
         }
     
-    puts("<TR><TD colspan=\"3\"><B>Show checkboxes for:</B>&nbsp;");
+    printf("<TR");
+    if(useDragAndDrop)
+        printf(" id=\"noDrag\" class='nodrop nodrag'");
+    printf("><TD colspan='%d'><B>Show checkboxes for:</B>&nbsp;",(sortOrder != NULL?sortOrder->count+2:3));
     safef(javascript, sizeof(javascript), "onclick=\"showSubTrackCheckBoxes(true);\"");
     cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
     puts("Only selected subtracks &nbsp;");
     safef(javascript, sizeof(javascript), "onclick=\"showSubTrackCheckBoxes(false);\"");
     cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
     puts("All subtracks&nbsp;&nbsp;&nbsp;&nbsp;</TD>");
+    
+    if(sortOrder != NULL)   // Add some sort buttons
+        {
+        puts("<TD colspan=5>&nbsp;</TD></TR>");
+        printf("<TR id=\"%s.sortTr\" class='nodrop nodrag'>\n",parentTdb->tableName);     // class='nodrop nodrag'
+        printf("<TD>&nbsp;<INPUT TYPE=HIDDEN NAME='%s' id='%s' VALUE=\"%s\"></TD>", sortOrder->htmlId, sortOrder->htmlId,sortOrder->sortOrder); // keeing track of priority
+        // Columns in tdb order (unchanging), sort in cart order (changed by user action)
+        int sIx=0;
+        for(sIx=0;sIx<sortOrder->count;sIx++)
+            {
+            printf ("<TH id='%s.%s.sortTh' abbr='%c' onMouseOver=\"hintOverSortableColumnHeader(this)\" nowrap><A HREF='#nowhere' onclick=\"tableSortAtButtonPress(this,'%s');return false;\">%s</A><sup>%s%d</sup></TH>",
+                parentTdb->tableName,sortOrder->column[sIx],(sortOrder->forward[sIx]?'-':'+'),sortOrder->column[sIx],sortOrder->title[sIx],(sortOrder->forward[sIx]?"&darr;":"&uarr;"),sortOrder->order[sIx]);
+            }
+        puts("<TD>&nbsp;</TD>");
+        }
+    
     puts("<TH align=\"center\" nowrap>&nbsp;Table&nbsp;</TH>");
     if(restrictions)
         puts("<TH align=\"center\" nowrap>&nbsp;Restricted Until&nbsp;</TH></TR>");
     }
-#endif//def SHOW_RESTRICTED_COLUMN
 
-slSort(&(parentTdb->subtracks), trackDbCmp);
+if(sortOrder != NULL || useDragAndDrop)  
+    {
+    tdbSortPrioritiesFromCart(cart, &(parentTdb->subtracks)); // preserves user's prev sort/drags
+    puts("</THEAD><TBODY id='sortable_tbody'>");
+    }
+else
+    {
+    slSort(&(parentTdb->subtracks), trackDbCmp);  // straight from trackDb.ra
+    puts("</THEAD><TBODY>");
+    }
 
 for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     boolean alreadySet = TRUE;
     boolean isPrimary = FALSE;
     char *setting;
+    int ix;
 
-    safef(option, sizeof(option), "%s_sel", subtrack->tableName);
+    safef(htmlIdentifier, sizeof(htmlIdentifier), "%s_sel", subtrack->tableName);
     if ((setting = trackDbSetting(subtrack, "subTrack")) != NULL)
         {
         if (chopLine(cloneString(setting), words) >= 2)
             alreadySet = differentString(words[1], "off");
         }
-    alreadySet = cartUsualBoolean(cart, option, alreadySet);
+    alreadySet = cartUsualBoolean(cart, htmlIdentifier, alreadySet);
     isPrimary = (primarySubtrack &&
          sameString(subtrack->tableName, primarySubtrack));
 
@@ -2132,7 +2269,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         if (isPrimary)
             {
             puts("<TR><TD>");
-            cgiMakeHiddenBoolean(option, TRUE);
+            cgiMakeHiddenBoolean(htmlIdentifier, TRUE);
             puts("[on] ");
             printf ("</TD><TD>%s [selected on main page]</TD></TR>\n",
                 subtrack->longLabel);
@@ -2140,42 +2277,64 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         else if (sameString(primaryType, subtrack->type) && hTableExists(subtrack->tableName))
             {
             puts("<TR><TD>");
-            cgiMakeCheckBox(option, alreadySet);
+            cgiMakeCheckBox(htmlIdentifier, alreadySet);
             printf ("</TD><TD>%s</TD></TR>\n", subtrack->longLabel);
             }
         }
     else
         {
-        if(!isMatrix) // TODO Remove this check when show/hide subtracks by js no longer restricted to cfgByMatrix
-            {
-            if(selectedOnly && !alreadySet)
-                continue;
-            }
-        membership_t *membership = subgroupMembershipGet(subtrack);    
+        membership_t *membership = subgroupMembershipGet(subtrack);
         if (hTableExists(subtrack->tableName))
             {
-            if( divisionIfNeeded(lastDivide,dividers,membership) )
-                colorIx = (colorIx == COLOR_BG_DEFAULT_IX ? COLOR_BG_ALTDEFAULT_IX : COLOR_BG_DEFAULT_IX);
+            if(sortOrder == NULL && !useDragAndDrop)
+                {
+                if( divisionIfNeeded(lastDivide,dividers,membership) )
+                    colorIx = (colorIx == COLOR_BG_DEFAULT_IX ? COLOR_BG_ALTDEFAULT_IX : COLOR_BG_DEFAULT_IX);
+                }
+            char *id = checkBoxIdMakeForTrack(subtrack,(dimensions[dimX]?dimensions[dimX]->tag:NULL),
+                                                       (dimensions[dimY]?dimensions[dimY]->tag:NULL),membership); // view is known tag
+            printf("<TR BGCOLOR=\"%s\"",colors[colorIx]);
+            if(sortOrder != NULL || useDragAndDrop)
+                printf(" onmouseover=\"hintForDraggableRow(this)\"");
 
-            char *id = checkBoxIdMakeForTrack(subtrack,isMatrix,(dimensionX?dimensionX->tag:NULL),(dimensionY?dimensionY->tag:NULL),membership);    
-            printf("<TR BGCOLOR=\"%s\" id=\"tr_%s\" valign=\"CENTER\">\n<TD>",colors[colorIx],id);
-            if(isMatrix) // TODO Remove this check when show/hide subtracks by js no longer restricted to cfgByMatrix
-                cgiMakeCheckBoxIdAndJS(option,alreadySet,id,"onclick=\"hideOrShowSubtrack(this);\"");
-            else
-                cgiMakeCheckBoxWithId(option,alreadySet,id);
+            printf(" id=\"tr_%s\" valign=\"CENTER\" nowrap>\n<TD>",id);
+            cgiMakeCheckBoxIdAndJS(htmlIdentifier,alreadySet,id,"onclick=\"hideOrShowSubtrack(this);\" onmouseover=\"this.style.cursor='default';\"");
             checkBoxIdFree(&id);
-            printf ("</TD><TD nowrap=\"true\">");
+            if(sortOrder != NULL || useDragAndDrop)
+                {
+                safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", subtrack->tableName);
+                float priority = (float)cartUsualDouble(cart, htmlIdentifier, subtrack->priority);
+                printf("<INPUT TYPE=HIDDEN NAME='%s' id='%s' VALUE=\"%.0f\">", htmlIdentifier, htmlIdentifier, priority); // keeing track of priority
+                }
+
+            printf ("&nbsp;</TD>");
             
-            indentIfNeeded(hierarchy,membership);
-            printf ("%s&nbsp;</TD><TD nowrap=\"true\">&nbsp;%s", subtrack->shortLabel, subtrack->longLabel);
-            puts("</TD><TD nowrap=\"true\">&nbsp;");
-#ifdef SHOW_RESTRICTED_COLUMN
-    #define SCHEMA_LINK "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=_BLANK>view schema</A>\n"
-    #define RESTRICTED_USE_LINK "<A HREF=\"http://genome.cse.ucsc.edu/FAQ/FAQcite\" TARGET=_BLANK>%s</A>\n"
-#else//ifndef SHOW_RESTRICTED_COLUMN
-    #define SCHEMA_LINK "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=_BLANK>View table schema</A>\n"
-    #define RESTRICTED_USE_LINK "<A HREF=\"http://genome.cse.ucsc.edu/FAQ/FAQcite\" TARGET=_BLANK>Restricted Until: %s</A>\n"
-#endif//ndef SHOW_RESTRICTED_COLUMN
+            if(isMatrix && sortOrder != NULL) // TODO this needs to be changed to sortOrder->columns which are subGroups
+                {
+                for(di=dimX;di<dimMax;di++)
+                    {
+                    if(dimensions[di])
+                        {
+                        ix = stringArrayIx(dimensions[di]->tag, membership->subgroups, membership->count);
+                        if(ix >= 0)
+                            {
+                            ix = stringArrayIx(membership->membership[ix], dimensions[di]->names, dimensions[di]->count);
+                            printf ("<TH id='%s' abbr='%s' STYLE='font-weight:normal' align='left'>%s</TH>",
+                                    dimensions[di]->tag,dimensions[di]->names[ix],dimensions[di]->values[ix]);
+                            }
+                        }
+                    }
+                }
+            else
+                {
+                printf ("<TD nowrap='true'>");
+                indentIfNeeded(hierarchy,membership);
+                printf ("%s&nbsp;</TD>", subtrack->shortLabel);
+                }
+            printf ("<TD nowrap='true'>&nbsp;&nbsp;%s</TD>", subtrack->longLabel);
+            puts("<TD nowrap='true'>&nbsp;");
+#define SCHEMA_LINK "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=_BLANK>view schema</A>\n"
+#define RESTRICTED_USE_LINK "<A HREF=\"http://genome.cse.ucsc.edu/FAQ/FAQcite\" TARGET=_BLANK>%s</A>\n"
             printf(SCHEMA_LINK, hGetDb(), parentTdb->grp, parentTdb->tableName, subtrack->tableName);
             char *displayDate = NULL;
             if(trackDbSetting(subtrack, "dateReleased"))
@@ -2199,14 +2358,19 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         subgroupMembershipFree(&membership);
         } 
     }
-if(!primarySubtrack && isMatrix && parentTdb->subtracks != NULL && dividers)
-    DIVIDER_PRINT(COLOR_DARKGREEN);
+puts("</TBODY><TFOOT></TFOOT>");
+if(isMatrix && (sortOrder == NULL && !useDragAndDrop))
+    {
+    if(!primarySubtrack && isMatrix && parentTdb->subtracks != NULL && dividers)
+        DIVIDER_PRINT(COLOR_DARKGREEN);
+    }
 puts("</TABLE>");
 puts("<P>");
 if(isMatrix)
-    puts("<script>matInitializeMatrix();</script>");
-subgroupMembersFree(&dimensionX);
-subgroupMembersFree(&dimensionY);
+    puts("<script type='text/javascript'>matInitializeMatrix();</script>");
+for(di=dimX;di<dimMax;di++)
+    subgroupMembersFree(&dimensions[di]);
+sortOrderFree(&sortOrder);
 dividersFree(&dividers);
 hierarchyFree(&hierarchy);  
 }
@@ -2237,18 +2401,6 @@ safef(javascript, JBUFSIZE*sizeof(char),
       "document.%s.submit();",
       formName, cgiScriptName(), formName, buttonVar, label,
       formName);
-}
-
-static void makeRadioSubmitTweak(char javascript[JBUFSIZE], char *formName)
-/* safef into javascript a sequence of commands that will force a refresh 
- * of this same form, updating the values of whatever variables are necessary 
- * to say what we want to do. */
-{
-// TODO Remove this subroutine when show/hide subtracks by js no longer restricted to cfgByMatrix
-safef(javascript, JBUFSIZE*sizeof(char), 
-      "onclick=\"document.%s.action = '%s'; "
-      "document.%s.submit();\"",
-      formName, cgiScriptName(), formName);
 }
 
 #define MANY_SUBTRACKS  8
@@ -2443,12 +2595,7 @@ int ix;
 struct trackDb *subtrack;
 char objName[64];
 char javascript[JBUFSIZE];
-#define VIEW_CFG_TITLELINK
-#ifdef VIEW_CFG_TITLELINK
-    #define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"Configure View Settings\">%s</A></B>\n"
-#else//ifndef VIEW_CFG_TITLELINK
-    #define CFG_LINK  "<A NAME=\"a_cfg_%s\"></A><A HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\">Configure %s</A>\n"
-#endif//ndef VIEW_CFG_TITLELINK
+#define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"Configure View Settings\">%s</A></B>\n"
 #define MAKE_CFG_LINK(name,title) printf(CFG_LINK, (name),(name),(name),(title))
 
 members_t *membersOfView = subgroupMembersGet(parentTdb,"view");
@@ -2499,15 +2646,11 @@ printf("<EM><B>Select %s:</EM></B><BR>\n", membersOfView->title);
 puts("<TABLE><TR align=\"LEFT\">");
 for (ix = 0; ix < membersOfView->count; ix++)
     {
-#ifdef VIEW_CFG_TITLELINK
     printf("<TD>");
     if(configurable[ix] != CFG_NOT)
         MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix]);
     else
         printf("<B>%s</B>\n",membersOfView->values[ix]);
-#else//ifndef VIEW_CFG_TITLELINK
-    printf("<B>%s</B>\n",membersOfView->values[ix]);
-#endif//ndef VIEW_CFG_TITLELINK
     puts("</TD>");
     
     safef(objName, sizeof(objName), "%s_dd_%s", parentTdb->tableName,membersOfView->names[ix]);
@@ -2523,21 +2666,6 @@ for (ix = 0; ix < membersOfView->count; ix++)
 puts("</TR>");
 if(makeCfgRows)
     {
-#ifndef VIEW_CFG_TITLELINK
-    printf("<TR>");
-    for (ix = 0; ix < membersOfV; ix++)
-        {
-            if(matchedSubtracks[ix] != NULL)
-                {
-                printf("<TD colspan=\"2\"><i>");
-                MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix]);
-                puts("</i></TD>");
-                }
-            else
-                printf("<TD colspan=\"2\">&nbsp;</TD>\n");
-        }
-    puts("</TR>");
-#endif//ndef VIEW_CFG_TITLELINK
     puts("</TABLE><TABLE>");
     for (ix = 0; ix < membersOfView->count; ix++)
         {
@@ -2748,6 +2876,8 @@ bool hasSubgroups = (trackDbSetting(parentTdb, "subGroup1") != NULL);
 if(dimensionsExist(parentTdb))
     return FALSE;
 
+//hCompositeDisplayViewDropDowns(cart,parentTdb);  // TODO Experimental so far
+
 puts ("<TABLE>");
 if (hasSubgroups)
     {
@@ -2899,6 +3029,13 @@ if (fakeSubmit)
     cgiMakeHiddenVar(fakeSubmit, "submit");
     
 jsIncludeFile("utils.js",NULL);
+
+if(sameOk("subTracks",trackDbSetting(tdb, "dragAndDrop")))
+    {
+    jsIncludeFile("jquery.js", NULL);
+    jsIncludeFile("jquery.tablednd.js", NULL);
+    printf("<style type='text/css'>.tDnD_whileDrag {background-color: %s;}</style>",COLOR_BG_GHOST);
+    }
 jsIncludeFile("hui.js",NULL);
 
 if (!hasSubgroups || !isMatrix || primarySubtrack)
@@ -2906,25 +3043,17 @@ if (!hasSubgroups || !isMatrix || primarySubtrack)
 else 
     hCompositeUiByMatrix(cart,tdb,formName);
 
-#ifdef SHOW_RESTRICTED_COLUMN
 if(primarySubtrack == NULL && isMatrix == FALSE)
-#else//ifndef SHOW_RESTRICTED_COLUMN
-if(primarySubtrack == NULL)
-#endif//ndef SHOW_RESTRICTED_COLUMN
     {
     puts("<TABLE><TR><TD><B>Show checkboxes for:</B></TD><TD>");
     if (formName)
         {
-        if(isMatrix) // TODO Remove this check when show/hide subtracks by js no longer restricted to cfgByMatrix
-            safef(javascript, sizeof(javascript), "onclick=\"showSubTrackCheckBoxes(true);\"");
-        else
-        makeRadioSubmitTweak(javascript, formName);
+        safef(javascript, sizeof(javascript), "onclick=\"showSubTrackCheckBoxes(true);\"");
         
         cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,
                                     javascript);
         puts("Only selected subtracks</TD><TD>");
-        if(isMatrix) // TODO Remove this check when show/hide subtracks by js no longer restricted to cfgByMatrix
-            safef(javascript, sizeof(javascript), "onclick=\"showSubTrackCheckBoxes(false);\"");
+        safef(javascript, sizeof(javascript), "onclick=\"showSubTrackCheckBoxes(false);\"");
         cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,
                     javascript);
         }
