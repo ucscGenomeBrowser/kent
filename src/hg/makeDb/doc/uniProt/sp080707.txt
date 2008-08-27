@@ -42,6 +42,10 @@ hgLoadSqlTab sp080707 -append geneLogic /dev/null varGeneLogic.txt
 hgLoadSqlTab sp080707 -append gene /dev/null varGene.txt
 hgLoadSqlTab sp080707 -append description /dev/null varDescription.txt
 
+# Add table descriptions
+makeTableDescriptions sp080707 ~/kent/src/hg/protein/spToDb/spDbTables.as
+
 # Zip up tab files for people who prefer them to database.
 gzip *.txt
+
 
