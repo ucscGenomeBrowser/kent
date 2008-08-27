@@ -68,7 +68,8 @@ if ( $status ) then
  exit 1
 endif
 echo "buildCvsReports.csh done on hgwdev, sending email..."
-echo "Ready for pairings (day 2, CVS reports completed for v$BRANCHNN preview)." | mail -s "Ready for pairings (day 2, CVS reports completed for v$BRANCHNN preview)." $USER donnak kate
+echo "Ready for pairings (day 2, CVS reports completed for v$BRANCHNN preview)." | mail -s "Ready for pairings (day 2, CVS reports completed for v$BRANCHNN
+preview)." $USER donnak kate kuhn
 
 
 #---------------------
