@@ -1248,8 +1248,6 @@ identifier knownGeneId dependency
     $kgDb.affyGnfU74BDistance.target
     $kgDb.affyGnfU74CDistance.query
     $kgDb.affyGnfU74CDistance.target
-    $hg.humanNormalDistance.query
-    $hg.humanNormalDistance.target
     $kgDb.mouseLandscapeDistance.query minCheck=0.94
     $kgDb.mouseLandscapeDistance.target minCheck=0.94
     $hg.gladHumESDistance.query
@@ -2640,7 +2638,6 @@ type exprBed
 type expDistance
     $hg.gnfAtlas2Distance
     $hg.gnfU95Distance
-    $hg.humanNormalDistance
     $mm.affyGnfU74ADistance
     $mm.affyGnfU74BDistance
     $mm.affyGnfU74CDistance
