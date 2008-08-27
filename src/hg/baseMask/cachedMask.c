@@ -23,7 +23,8 @@ static struct optionSpec optionSpecs[] = {
 
 
 void trackToBaseMask(char *db, char *track, char *obama, boolean quiet);
-char *firstChrom(char *db);
+char *chromTable(struct sqlConnection *conn, char *table);
+/* chromTable copied verbatim from hgTables.c, could be libraryised */
 
 
 void usage(char *msg)
@@ -58,7 +59,7 @@ else
     errAbort("invalid track name %s (must be 'table' or 'db.table')\n", track);
 }
 
-char *cacheTrack(char *cacheDir, char *chromDb, char *db, char *table, boolean quiet)
+char *cacheTrack(char *cacheDir, char *chromDb, char *db, char *tableName, boolean quiet)
 /* Return the file name of the cached baseMask for the specified table and db.
  * The chromInfo table is read from chromDb database.
  * The cached file will be saved in the directory cacheDir/db.
@@ -72,23 +73,19 @@ char *cacheTrack(char *cacheDir, char *chromDb, char *db, char *table, boolean q
 {
 char *file, *t = NULL;
 int n, nDir, n0;
-struct sqlConnection *conn = hAllocOrConnect(db);
+/* get either tableName or chr1_tableName */
+struct sqlConnection *conn = hAllocOrConnect(chromDb);
+char *table = chromTable(conn, tableName); 
+sqlDisconnect(&conn);
+/* connect to database and get last update time for table */
+conn = hAllocOrConnect(db);
 if (sqlTableExists(conn, table))
     t = sqlTableUpdate(conn, table); /* format %4d-%2d-%2d %2d:%2d:%2d */
-/* If there is no track, maybe it is a split table by chrom so just pick the first chrom and look for that */
 else
-    {
-    char chrTable[1024];
-    char *chrom = firstChrom(chromDb);
-    if (!chrom)
-	errAbort("cant find a chrom in %s database\n", chromDb);
-    safef(chrTable, 1024, "%s_%s", chrom, table);
-    if (sqlTableExists(conn, chrTable))
-	t = sqlTableUpdate(conn, chrTable); /* format %4d-%2d-%2d %2d:%2d:%2d */
-    else
-	errAbort("cant find table %s in %s database\n", chrTable, db);
-    }
-subChar(t, ' ', '_'); /* remove ugly chars from file name */
+    errAbort("cant find table %s in %s database (using chromosomes from %s)\n", table, db, chromDb);
+sqlDisconnect(&conn);
+/* generate bama file name and cache table if necessary */
+subChar(t, ' ', '_'); /* remove ugly chars from time as it will form file name */
 subChar(t, ':', '-');
 nDir = strlen(cacheDir)+1+strlen(db)+1; /* directory */
 n = nDir+strlen(table)+1+strlen(t)+strlen(".bama")+1;
@@ -111,9 +108,6 @@ if (!fileExists(file))
     {
     trackToBaseMask(db, table, file, quiet);
     }
-/* Do we need to close this database handle? Not sure if alloc or connect can use handles cached for
- * other databases.
- * Note that if we called trackToBaseMask, it closed the handle itself. */
 return file;
 }
 

@@ -4,19 +4,23 @@
 #include "chromInfo.h"
 #include "genomeRangeTree.h"
 
-char *firstChrom(char *db)
+
+char *chromTable(struct sqlConnection *conn, char *table)
+/* Copied verbatim from hgTables.c, could be libraryised */
+/* Get chr1_table if it exists, otherwise table. 
+ * You can freeMem this when done. */
 {
-struct sqlConnection *conn = sqlConnect(db);
-struct sqlResult *sr = sqlGetResult(conn, "select * from chromInfo limit 1");
-char **row;
-char *chrom;
-if ((row = sqlNextRow(sr)) == NULL || !row[0])
-    errAbort("no chroms in database %s\n", db);
-chrom = cloneString(row[0]);
-sqlFreeResult(&sr);
-sqlDisconnect(&conn);
-return chrom;
+char *chrom = hDefaultChrom();
+if (sqlTableExists(conn, table))
+    return cloneString(table);
+else
+    {
+    char buf[256];
+    safef(buf, sizeof(buf), "%s_%s", chrom, table);
+    return cloneString(buf);
+    }
 }
+
 
 static struct chromInfo *createChromInfoList(char *name, char *database)
 /* Load up all chromosome infos. 
