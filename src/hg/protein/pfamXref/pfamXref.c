@@ -49,10 +49,10 @@ outputFileName2  = cloneString(argv[4]);
 
 conn = hAllocConn();
 	
-o1 = fopen(outputFileName, "w");
-o2 = fopen("jj.dat", "w");
+o1 = mustOpen(outputFileName, "w");
+o2 = mustOpen("jj.dat", "w");
     
-if ((inf = fopen(proteinFileName, "r")) == NULL)
+if ((inf = mustOpen(proteinFileName, "r")) == NULL)
     {		
     fprintf(stderr, "Can't open file %s.\n", proteinFileName);
     exit(8);
@@ -96,7 +96,6 @@ while (!done)
     desc = chp;
 
     fprintf(o1, "%s\t%s\t%s\n", pfamAC, pfamID, desc);
-    fflush(o1); 
 
     /* work on "#=GS ... AC ... " lines to get SWISS-PROT accession number */
 
@@ -152,8 +151,8 @@ while (!done)
 	    }
 	} 
     }
-fclose(o1);
-fclose(o2);
+carefulClose(&o1);
+carefulClose(&o2);
 hFreeConn(&conn);
 
 sprintf(cond_str, "cat jj.dat | sort | uniq >%s",outputFileName2);
