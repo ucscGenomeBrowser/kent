@@ -1297,8 +1297,9 @@ identifier knownGeneId dependency
     $hg.humanWankerP2P.query
     $hg.humanWankerP2P.target
     $kgDb.kgColor.kgID full
-    $kgDb.kg2ToKg3.newId
-    $kgDb.kg3ToKg4.newId
+    $kgDb.kg2ToKg3.newId minCheck=0.5 exclude=
+    $kgDb.kg3ToKg4.oldId minCheck=0.5
+    $kgDb.kg3ToKg4.newId exclude=
 
 identifier knownGeneOld2Id dependency 
 "Old knownGene (KGII) and kgXref tables kept after KGIII implementation"
@@ -1872,7 +1873,7 @@ identifier cgapMapId
 identifier cgapAlias
 "NCI Cancer Genome Annotation Project Alias"
     $gbd.cgapAlias.alias dupeOk
-    $gbd,!mm5,!hg15,!hg16.knownGene.name minCheck=0.50
+    $gbd,!mm5,!hg15,!hg16.knownGene.name minCheck=0.20
 
 identifier cgapMapIdHg15
 "NCI Cancer Genome Annotation Project Map ID for hg15"
@@ -3034,7 +3035,6 @@ tablesIgnored $hg
     geneTests
     genomicSuperDups
     haplotype
-    kg2ToKg3
     laminB1
     laminB1Lads
     mammalPsg
