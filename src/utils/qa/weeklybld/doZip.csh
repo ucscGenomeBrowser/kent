@@ -26,3 +26,5 @@ scp -p $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" qateam@hgdownload:/mirrordata/apa
 echo "updating jksrc.zip symlink"
 ssh qateam@hgdownload "cd /mirrordata/apache/htdocs/admin/;ln -s jksrc.v${BRANCHNN}.zip jksrc.zip"
 
+echo "scp-ing js/*.js files to hgdownload"
+scp -p $BUILDDIR/v${BRANCHNN}_branch/kent/src/hg/js/*.js qateam@hgdownload:/mirrordata/apache/htdocs/js
