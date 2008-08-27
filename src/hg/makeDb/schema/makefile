@@ -19,5 +19,6 @@ DIRS = \
 	joinerCheck \
 	joinableFields \
 	makeTableDescriptions \
+	dbFindFieldsWith \
 	dbSnoop
 	
