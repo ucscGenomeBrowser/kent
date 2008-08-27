@@ -6,10 +6,11 @@
 #include "hash.h"
 #include "bed.h"
 #include "jksql.h"
-#include "txCommon.h"
+#include "binRange.h"
+#include "chromBins.h"
 
 
-static char const rcsid[] = "$Id: freen.c,v 1.83 2008/04/28 13:08:46 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.84 2008/08/27 22:34:06 kent Exp $";
 
 void usage()
 {
@@ -20,10 +21,9 @@ errAbort("freen - test some hairbrained thing.\n"
 void freen(char *id)
 /* Test some hair-brained thing. */
 {
-int x = atoi(id);
-char buf[16];
-txGeneAccFromId(x, buf);
-printf("%s\n", buf);
+struct chromBins *chromBins = chromBinsNew(NULL);
+struct binKeeper *bk = chromBinsGet(chromBins, "chr1", TRUE);
+printf("%d bins\n", bk->binCount);
 }
 
 int main(int argc, char *argv[])
