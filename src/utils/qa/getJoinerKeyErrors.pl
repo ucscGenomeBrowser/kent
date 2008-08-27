@@ -14,7 +14,7 @@ use File::Copy;
 
 
 if ($#ARGV != 0) { die
-"\nUSAGE: $0 /cluster/store9/qa/joinerCheck/keys/YYYYMM 
+"\nUSAGE: $0 /hive/groups/qa/joinerCheck/keys/YYYYMM 
 	run on dev, use path exactly as shown in usage (YYYYMM ex: 200503)
         parses output of 'joinerCheck -keys' and captures errors and associated lines
 	parses all files in dir, input/ingored file names are listed in output file report 
@@ -29,7 +29,7 @@ print STDERR "PROCESSING: $0 program started, locating directory & input files\n
 
 # get input file names     
 chomp($in_dir = $ARGV[0]);
-if ($in_dir =~ /\/cluster\/store9\/qa\/joinerCheck\/keys\/[0-9]{6}/) {
+if ($in_dir =~ /\/hive\/groups\/qa\/joinerCheck\/keys\/[0-9]{6}/) {
    $path = $in_dir;
 }  else {
    die "ERROR: Path to directory incorrectly formatted $in_dir\n";
