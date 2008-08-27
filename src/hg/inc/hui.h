@@ -818,4 +818,7 @@ void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,bool
 void scoreCfgUi(struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
         
+void tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
+/* Updates the tdb_>priority from cart then sorts the list anew */
+
 #endif /* HUI_H */
