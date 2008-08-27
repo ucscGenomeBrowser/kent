@@ -30,6 +30,8 @@ static char *usageMsg =
 errAbort("%s:  %s", msg, usageMsg);
 }
 
+//int sqlTableUpdateTime(struct sqlConnection *conn, char *table)
+
 void genomeRangeTreeStats(char *fileName, int *numChroms, int *nodes, int *size)
 {
 struct genomeRangeTreeFile *tf = genomeRangeTreeFileReadHeader(fileName);
