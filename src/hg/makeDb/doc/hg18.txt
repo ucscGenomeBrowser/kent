@@ -5814,7 +5814,7 @@ o Build the pepPi table
      ln -s /cluster/store11/kg/kgHg18A/index/knownGene.ix  /gbdb/hg18/knownGene.ix
      ln -s /cluster/store11/kg/kgHg18A/index/knownGene.ixx /gbdb/hg18/knownGene.ixx
 
-# BUILD KNOWN GENE LIST FOR GOOGLE.  
+# BUILD KNOWN GENE LIST FOR GOOGLE.  (REDONE 8/12/08 JK)
 # make knownGeneLists.html hg18GeneList.html mm5GeneList.html rm3GeneList.html
 
     cd /cluster/data/hg18/bed
@@ -16063,6 +16063,12 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/hg18/bed/ucsc.11/kegg
     kgAttachKegg hg18 ../../ucsc.10/kegg/keggList.tab keggPathway.tab
     hgLoadSqlTab hg18 keggPathway ~/src/hg/lib/keggPathway.sql ./keggPathway.tab
+
+
+##############################################################################
+# REATTACH SPMRNA TABLE TO KNOWN GENES.  (DONE, 8/12/08, JK)
+   hgsql hg18 -N -e "select spDisplayID,kgID from kgXref where spDisplayID != ''" > spMrna.tab;
+   hgLoadSqlTab hg18 spMrna ~/kent/src/hg/lib/spMrna.sql spMrna.tab
 
 ##############################################################################
 # UPDATE BIOCYCTABLES NEEDED BY hgGene (DONE 3/27/07 Fan)
