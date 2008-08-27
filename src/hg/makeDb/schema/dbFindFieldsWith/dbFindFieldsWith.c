@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: dbFindFieldsWith.c,v 1.1 2008/08/26 01:42:25 kent Exp $";
+static char const rcsid[] = "$Id: dbFindFieldsWith.c,v 1.2 2008/08/27 19:06:12 kent Exp $";
 
 int maxRows = 100;
 
@@ -20,6 +20,10 @@ errAbort(
   "   dbFindFieldsWith db regExp outputFile\n"
   "options:\n"
   "   -maxRows=%d\n"
+  "Example - to find tables in go that contain _exactly_ the word 'kinase'\n"
+  "    dbFindFieldsWith go '^kinase$' outputFile\n"
+  "Example - to find tables in hg18 that contain a known gene id\n"
+  "    dbFindFieldsWith hg18 '^uc[0-9][0-9][0-9][a-z][a-z][a-z].[0-9]+$' output\n"
   , maxRows
   );
 }
@@ -57,8 +61,18 @@ for (table = tableList; table != NULL; table = table->next)
     if (sr != NULL)
 	{
 	int colCount = sqlCountColumns(sr);
+
+	/* Get labels for columns */
+	char **labels;
+	AllocArray(labels, colCount);
+	int i;
+	for (i=0; i<colCount; ++i)
+	    labels[i] = sqlFieldName(sr);
+
+	/* Get flags that say which fields we've reported. */
+	bool *flags;
+	AllocArray(flags, colCount);
 	char **row;
-	boolean gotAny = FALSE;
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    int i;
@@ -69,16 +83,18 @@ for (table = tableList; table != NULL; table = table->next)
 		     {
 		     if (regexec(&re, row[i], 0, NULL, 0) == 0)
 			 {
-			 fprintf(f, "%s\t%s\t%s\n", table->name, sqlColumnName(sr, i), row[i]);
-			 gotAny = TRUE;
-			 break;
+			 if (!flags[i])
+			     {
+			     flags[i] = TRUE;
+			     fprintf(f, "%s\t%s\t%s\n", table->name, labels[i], row[i]);
+			     }
 			 }
 		     }
 		 }
-	    if (gotAny)
-	        break;
 	    }
 	sqlFreeResult(&sr);
+	freez(&flags);
+	freez(&labels);
 	}
     }
 carefulClose(&f);
