@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1456 2008/08/26 11:22:39 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1457 2008/08/27 03:40:03 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5094,8 +5094,7 @@ else if (stringIn("estFiltered",track))
     type = "EST";
     table = track;
     }
-else if (stringIn("est", track) || stringIn("Est", track) ||
-         (stringIn("mgc", track) && stringIn("Picks", track)))
+else if (stringIn("est", track) || stringIn("Est", track))
     {
     type = "EST";
     table = "all_est";
@@ -15574,18 +15573,6 @@ sqlFreeResult(&sr);
 hgFreeConn(&conn);
 } 
 
-void doMgcMrna(char *track, char *acc)
-/* Redirects to genbank record */
-{
-printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT>\n");
-printf("location.replace('");
-printEntrezNucleotideUrl(stdout, acc);
-puts("');"); 
-printf("</SCRIPT> <NOSCRIPT> No JavaScript support. Click <B><A HREF=\"");
-printEntrezNucleotideUrl(stdout, acc);
-puts("\" TARGET=_BLANK>continue</A></B> for the requested GenBank report. </NOSCRIPT>");
-}
-
 void doProbeDetails(struct trackDb *tdb, char *item)
 {
 struct sqlConnection *conn = hAllocConn();
@@ -20217,11 +20204,7 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
          sameWord(track, "xenoBlastzMrna") || sameWord(track, "sim4") ||
          sameWord(track, "xenoEst") || sameWord(track, "psu") ||
          sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
-	 sameWord(track, "blatzHg17KG") || sameWord(track, "mapHg17KG") ||
-         sameWord(track, "mgcIncompleteMrna") ||
-         sameWord(track, "mgcFailedEst") ||
-         sameWord(track, "mgcPickedEst") ||
-         sameWord(track, "mgcUnpickedEst") 
+	 sameWord(track, "blatzHg17KG") || sameWord(track, "mapHg17KG")
          )
     {
     doHgRna(tdb, item);
@@ -20367,11 +20350,11 @@ else if (sameWord(track, "mappedRefSeq"))
     {
     doRefGene(tdb, item);
     }
-else if (sameWord(track, "mgcGenes"))
+else if (sameWord(track, "mgcGenes") || sameWord(track, "mgcFullMrna"))
     {
     doMgcGenes(tdb, item);
     }
-else if (sameWord(track, "orfeomeGenes"))
+else if (sameWord(track, "orfeomeGenes") || sameWord(track, "orfeomeMrna"))
     {
     doOrfeomeGenes(tdb, item);
     }
@@ -20695,10 +20678,6 @@ else if (sameWord(track, "vax003") || sameWord(track, "vax004"))
 else if (sameWord(track, "tigrGeneIndex"))
     {
     doTigrGeneIndex(tdb, item);
-    }
-else if (sameWord(track, "mgc_mrna"))
-    {
-    doMgcMrna(track, item);
     }
 else if ((sameWord(track, "bacEndPairs")) || (sameWord(track, "bacEndPairsBad")) || (sameWord(track, "bacEndPairsLong")) || (sameWord(track, "bacEndSingles")))
     {

@@ -765,7 +765,11 @@ prMgcInfoLinks(conn, acc, &mgcDb, ci);
 if (ci->refSeqs->genes != NULL)
     prRefSeqSims(ci);
 prSeqLinks(conn, tdb->tableName, acc);
-prAligns(conn, "mgcFullMrna", acc, start);
+ // FIXME: tmp until change to psl complete
+if (startsWith("psl", tdb->type))
+    prAligns(conn, tdb->tableName, acc, start);
+else
+    prAligns(conn, "mgcFullMrna", acc, start);
 prMiscDiffs(conn, acc);
 prMethodsLink(conn, tdb->tableName);
 
@@ -828,7 +832,11 @@ prOrfeomeInfoLinks(conn, acc, ci);
 if (ci->refSeqs->genes != NULL)
     prRefSeqSims(ci);
 prSeqLinks(conn, tdb->tableName, acc);
-prAligns(conn, "orfeomeMrna", acc, start);
+ // FIXME: tmp until change to psl complete
+if (startsWith("psl", tdb->type))
+    prAligns(conn, tdb->tableName, acc, start);
+else
+    prAligns(conn, "orfeomeMrna", acc, start);
 prMiscDiffs(conn, acc);
 prMethodsLink(conn, tdb->tableName);
 cloneInfoFree(&ci);

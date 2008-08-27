@@ -411,6 +411,26 @@ type genePred xenoRefPep xenoRefMrna
 
 # Don't change default visibility of mgcGenes; it is open
 # by default at the request of Francis Collins
+track mgcFullMrna
+#track mgcGenes
+shortLabel MGC Genes
+longLabel Mammalian Gene Collection Full ORF mRNAs
+group genes
+priority 36
+visibility pack
+color 34,139,34
+type psl
+baseColorDefault diffCodons
+baseColorUseCds genbank
+baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+release alpha
+
 track mgcGenes
 shortLabel MGC Genes
 longLabel Mammalian Gene Collection Full ORF mRNAs
@@ -419,8 +439,29 @@ priority 36
 visibility pack
 color 34,139,34
 type genePred
+release beta
 
 # keep adjacent to MGC
+track orfeomeMrna
+#track orfeomeGenes
+shortLabel ORFeome Clones
+longLabel ORFeome Collaboration Gene Clones
+group genes
+priority 36.1
+visibility hide
+color 34,139,34
+type psl
+baseColorDefault diffCodons
+baseColorUseCds genbank
+baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+release alpha
+
 track orfeomeGenes
 shortLabel ORFeome Clones
 longLabel ORFeome Collaboration Gene Clones
@@ -434,6 +475,7 @@ cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
 baseColorUseCds given
 baseColorDefault genomicCodons
+release beta
 
 track transMap
 superTrack on
