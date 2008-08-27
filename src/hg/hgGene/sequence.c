@@ -15,7 +15,7 @@
 #include "hCommon.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.23 2008/05/05 20:55:46 galt Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.24 2008/08/27 17:49:26 kent Exp $";
 
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
@@ -49,6 +49,7 @@ static void printSeqLink(struct sqlConnection *conn, char *geneId,
 /* Print out link to mRNA or protein. */
 {
 char *table = genomeSetting(tableId);
+boolean gotHyperlink = FALSE;
 webPrintWideCellStart(colCount, HG_COL_TABLE);
 if (sqlTableExists(conn, table))
     {
@@ -60,8 +61,11 @@ if (sqlTableExists(conn, table))
 	hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=1&hgg_gene=%s\" class=\"toc\">",
 	       cartSidUrlString(cart), command, geneId);
 	hPrintf("%s</A>", label);
+	gotHyperlink = TRUE;
 	}
     }
+if (!gotHyperlink)
+    hPrintf("%s", label);
 webPrintLinkCellEnd();
 }
 
@@ -89,11 +93,17 @@ safef(query, sizeof(query),
 	"select length(seq) from %s where name='%s'" , table,  geneId);
 int protSize = sqlQuickNum(conn, query);
 if (protSize > 0)
+    {
     safef(title, sizeof(title), "Protein (%d aa)", protSize);
+    printSeqLink(conn, geneId, "knownGenePep", hggDoGetProteinSeq,
+	    title, 1);
+    }
 else
-    title[0] = 0;
-printSeqLink(conn, geneId, "knownGenePep", hggDoGetProteinSeq,
-	title, 1);
+    {
+    webPrintLinkCellStart();
+    hPrintf("No protein");
+    webPrintLinkCellEnd();
+    }
 }
 
 
