@@ -3,7 +3,7 @@
 #include "linefile.h"
 #define MAXCOLS 10000
 
-static char const rcsid[] = "$Id: colCount.c,v 1.1 2003/05/13 18:43:15 baertsch Exp $";
+static char const rcsid[] = "$Id: colCount.c,v 1.2 2008/08/27 23:02:15 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,7 +18,6 @@ void colCount(char *fileName)
 /* colCount - find freq of char in each column. */
 {
 struct lineFile *lf;
-int wordCount;
 static float totalA[MAXCOLS];
 static float totalC[MAXCOLS];
 static float totalT[MAXCOLS];
@@ -66,7 +65,7 @@ while (lineFileNext(lf, &line, &lineSize) )
                  totalT[i]++;
                  total[i]++;
                  break;
-            otherwise :
+            default :
                  totalOther[i]++;
                  break;
             }
