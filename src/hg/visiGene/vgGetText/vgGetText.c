@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: vgGetText.c,v 1.13 2007/03/27 00:09:18 galt Exp $";
+static char const rcsid[] = "$Id: vgGetText.c,v 1.14 2008/08/27 23:00:40 kent Exp $";
 
 char *db = "visiGene";
 
@@ -262,12 +262,17 @@ struct sqlConnection *imageConn = sqlConnect(db);
 struct sqlResult *sr;
 char **row;
 
+verbose(2, "hashComplexTables\n");
 hashComplexTables(conn);
+verbose(2, "makeKnownGeneHashes\n");
 makeKnownGeneHashes(knownDbCount, knownDbs);
 sr = sqlGetResult(imageConn, 
     "select id from image");
 while ((row = sqlNextRow(sr)) != NULL)
+    {
+    verbose(3, "imageText on %s\n", row[0]);
     imageText(conn, row[0], f);
+    }
 sqlFreeResult(&sr);
 carefulClose(&f);
 }
