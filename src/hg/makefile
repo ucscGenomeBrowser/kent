@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.144 2008/08/08 22:10:40 larrym Exp $
+# 	$Id: makefile,v 1.145 2008/08/27 22:27:13 kent Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -199,6 +199,7 @@ UTIL_DIRS = \
 	near/pepPredToFa \
 	near/hgNearTest \
 	near/hgNetDist \
+	near/knownToHprd \
 	nci60 \
 	orthoMap \
 	overlapSelect \
