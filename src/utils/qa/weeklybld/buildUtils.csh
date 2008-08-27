@@ -50,10 +50,14 @@ echo "Symlink Trick."
 echo
 echo "Building src utils."
 cd $base/kent/src
+echo "Before make utils"
 make $MAKEPARAMS utils >& make.utils.log
+echo "After make utils"
 make $MAKEPARAMS blatSuite >>& make.utils.log
+echo "After make blatSuite"
 sed -i -e "s/-DJK_WARN//g" make.utils.log
 sed -i -e "s/-Werror//g" make.utils.log
+sed -i -e "s/gbWarn//g" make.utils.log
 #-- to check for errors: 
 set res = `/bin/egrep -i "error|warn" make.utils.log`
 set wc = `echo "$res" | wc -w` 

@@ -38,13 +38,13 @@ if ( $err ) then
     set returnCode=1
 endif
 
-#echo "disabled doSearchRobot.csh"
-./doSearchRobot.csh
-set err = $status
-if ( $err ) then
-    echo "error running doSearchRobot.csh: $err" 
-    set returnCode=1
-endif
+echo "disabled doSearchRobot.csh"
+#./doSearchRobot.csh
+#set err = $status
+#if ( $err ) then
+#    echo "error running doSearchRobot.csh: $err" 
+#    set returnCode=1
+#endif
 
 
 # note TrackCheck and LiftOver robots use java and ant, so it will not work on beta, 

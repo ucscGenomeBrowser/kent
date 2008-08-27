@@ -29,7 +29,7 @@ sed -i -e "s/-DJK_WARN//g" make.log
 sed -i -e "s/-Werror//g" make.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
-set res = `/bin/egrep -i "error|warn" make.log`
+set res = `/bin/egrep -i "error|warn" make.log | grep -v gbWarn`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
     echo "errs found:"

@@ -132,6 +132,8 @@ endif
 
 echo
 
+# XXXX put in a wait here?
+
 if ( -e CvsReports.ok ) then
     echo "CVS Reports finished ok."
 else
