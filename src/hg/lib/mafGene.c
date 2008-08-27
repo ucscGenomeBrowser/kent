@@ -109,10 +109,64 @@ seq->size = actualSize;
 return seq;
 }
 
+static struct mafAli *getRefAli(char *database, char *chrom, int start, int end)
+{
+struct mafAli *ali;
+struct mafComp *comp;
+char buffer[1024];
 
+AllocVar(ali);
+AllocVar(comp);
+ali->components = comp;
+ali->textSize = end - start;
 
+safef(buffer, sizeof buffer, "%s.%s", database, chrom);
+comp->src = cloneString(buffer);
+comp->start = start;
+comp->strand = '+';
+comp->size = end - start;
+struct dnaSeq *seq = hChromSeqMixed(chrom, start , end);
+comp->text = cloneString(seq->dna);
+freeDnaSeq(&seq);
+//printf("getRefAli %s %s %d %d %s\n", database, chrom, start, end, comp->text);
 
-static struct mafAli *getAliForRange(char *mafTable, 
+return ali;
+}
+
+/* make sure we have the whole range even if
+ * there isn't a maf loaded in this region
+ */
+static struct mafAli *padOutAli(struct mafAli *list, char *database, 
+    char *chrom, int start, int end)
+{
+if (list == NULL)
+    {
+    struct mafAli *ali = getRefAli(database, chrom, start, end);
+    return ali;
+    }
+
+int aliStart = list->components->start;
+if (start != aliStart)
+    {
+    struct mafAli *ali = getRefAli(database, chrom, start, aliStart);
+    slAddHead(&list, ali);
+    }
+
+struct mafAli *last = list;
+for(; last->next; last = last->next)
+    ;
+
+int aliEnd = last->components->start + last->components->size;
+if (end != aliEnd)
+    {
+    struct mafAli *ali = getRefAli(database, chrom, aliEnd, end);
+    slAddTail(&list, ali);
+    }
+
+return list;
+}
+
+static struct mafAli *getAliForRange(char *database, char *mafTable, 
     char *chrom, int start, int end)
 {
 struct sqlConnection *conn = hAllocConn();
@@ -121,6 +175,8 @@ struct mafAli *aliAll = mafLoadInRegion(conn, mafTable,
 struct mafAli *ali;
 struct mafAli *list = NULL;
 struct mafAli *nextAli;
+
+hFreeConn(&conn);
 
 for(ali = aliAll; ali; ali = nextAli)
     {
@@ -147,22 +203,7 @@ for(ali = aliAll; ali; ali = nextAli)
     }
 slReverse(&list);
 
-int size = 0;
-for(ali = list; ali; ali = ali->next)
-    {
-    size += ali->components->size;
-    }
-if(size != end - start)
-    {
-    printf("want %s %d %d size %d got %d\n",chrom, start, end, end-start, size);
-    for(ali = list; ali; ali = ali->next)
-	{
-	printf("start %d end %d\n",ali->components->start, ali->components->start  + ali->components->size);
-	}
-    warn("size not equal end - start");
-    }
-
-hFreeConn(&conn);
+list = padOutAli(list, database, chrom, start, end);
 
 return list;
 }
@@ -573,9 +614,7 @@ for(; comp; comp = comp->next)
 	    if (*mptr++ != '-')
 		{
 		if (cptr != NULL)
-		    {
 		    *sptr++ = *cptr++;
-		    }
 		}
 	    else 
 		cptr++;
@@ -608,7 +647,6 @@ for(; gi; gi = gi->next)
     int thisSize = 0;
     struct mafAli *ali = gi->ali;
 
-    //printf("exon %d\n", exonCount++);
     for(; ali; ali = ali->next)
 	{
 	int newStart = copyAli(siHash, ali, start);
@@ -697,7 +735,8 @@ for(; list ; list = giNext)
     }
 }
  
-static struct exonInfo *buildGIList(struct genePred *pred, char *mafTable)
+static struct exonInfo *buildGIList(char *database, struct genePred *pred, 
+    char *mafTable)
 {
 struct exonInfo *giList = NULL;
 unsigned *exonStart = pred->exonStarts;
@@ -738,7 +777,8 @@ for(; exonStart < lastStart; exonStart++, exonEnd++, frames++)
     AllocVar(gi);
     gi->frame = *frames;
     gi->name = pred->name;
-    gi->ali = getAliForRange(mafTable, pred->chrom, thisStart, thisEnd);
+    gi->ali = getAliForRange(database, mafTable, pred->chrom, 
+	thisStart, thisEnd);
     gi->chromStart = thisStart;
     gi->chromEnd = thisEnd;
     gi->exonStart = start;
@@ -766,7 +806,7 @@ boolean inExons = options & MAFGENE_EXONS;
 if (pred->cdsStart == pred->cdsEnd)
     return;
 
-struct exonInfo *giList = buildGIList(pred, mafTable);
+struct exonInfo *giList = buildGIList(dbName, pred, mafTable);
 
 if (giList == NULL)
     return;
