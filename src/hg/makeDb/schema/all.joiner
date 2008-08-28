@@ -1112,7 +1112,8 @@ identifier nativeEstAccession typeOf=estAccession
 "Genbank Native (same organism as database) EST accession"
     $gbd.all_est.qName dupeOk
     $gbd.est.qName $split full 
-    $gbd.intronEst.qName $split
+    $gbd,!caeJap1.intronEst.qName $split
+    caeJap1.intronEst.qName 
     $gbd.estOrientInfo.name full 
 
 identifier xenoEstAccession typeOf=estAccession
