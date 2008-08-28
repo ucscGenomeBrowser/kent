@@ -1,5 +1,5 @@
 #!/bin/sh
-# Start Tcl from a cluter bin directory \
+# Start Tcl from a compbio bin directory \
 exec /cluster/bin/tcl/`uname -m`/bin/tclsh8.4 $0 ${1+"$@"}
 package require Tclx
 
@@ -7,8 +7,7 @@ package require Tclx
 # Program to build the cvs-reports directory.
 #
 
-#set CVS_REPORTS_DIR /cluster/store3/cvs-reports
-set CVS_REPORTS_DIR /cluster/store3/cvs-reports/onlyjust
+set CVS_REPORTS_DIR /hive/groups/qa/cvs-reports/onlyjust
 
 set CVS_WORK_DIR $CVS_REPORTS_DIR/kent
 set CVS_REPORTS $CVS_REPORTS_DIR/cvs-reports

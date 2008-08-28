@@ -66,11 +66,9 @@ if {($whichReport != "branch") && ($whichReport != "review")} {
     puts stderr "   branchVersion is v${BRANCHNN} e.g. v144"
     exit 1
 }
-#dont use
-#set CVS_REPORTS_DIR /cluster/store8/cvs-reports/onlyjust
 
 # this is the base
-set CVS_REPORTS_BASE /cluster/store8/cvs-reports/
+set CVS_REPORTS_BASE /hive/groups/qa/cvs-reports/
 set CVS_REPORTS_DIR $CVS_REPORTS_BASE/$whichReport
 
 # this is the cvs sandbox used (now shared by branch and review versions of cvs-reports)
