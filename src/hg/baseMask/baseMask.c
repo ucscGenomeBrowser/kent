@@ -27,7 +27,7 @@ void usage(char *msg)
 static char *usageMsg =
 #include "baseMaskUsage.msg" 
     ;
-errAbort("%s:  %s", msg, usageMsg);
+errAbort("%s\n%s", msg, usageMsg);
 }
 
 //int sqlTableUpdateTime(struct sqlConnection *conn, char *table)
@@ -69,7 +69,9 @@ boolean saveMem = optionExists("saveMem");
 boolean orDirectToFile = optionExists("orDirectToFile");
 --argc;
 ++argv;
-if (argc < 1 || argc > 3)
+if (argc==0)
+    usage("");
+if (argc > 3)
     usage("wrong # args\n");
 if (argc == 1 && (and || or))
     usage("specify second file for options: -and or -or\n");

@@ -29,7 +29,7 @@ void usage(char *msg)
 static char *usageMsg =
 #include "trackToBaseMaskUsage.msg"
     ;
-errAbort("%s:  %s", msg, usageMsg);
+errAbort("%s\n%s", msg, usageMsg);
 }
 
 /* entry */
@@ -37,11 +37,15 @@ int main(int argc, char** argv)
 {
 char *db, *track, *obama;
 optionInit(&argc, argv, optionSpecs);
-if (argc < 3 || argc > 4)
+--argc;
+++argv;
+if (argc == 0)
+    usage("");
+if (argc < 2 || argc > 3)
     usage("wrong # args");
-db = argv[1];
-track = argv[2];
-obama = (argc == 3 ? NULL : argv[3]);
+db = argv[0];
+track = argv[1];
+obama = (argc == 2 ? NULL : argv[2]);
 
 trackToBaseMask(db, track, obama, optionExists("quiet"));
 return 0;

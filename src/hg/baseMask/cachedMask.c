@@ -1,9 +1,14 @@
 /* cachedMask - cache and then process baseMasks - 'and' or 'or' two baseMasks together */
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
 #include "common.h"
 #include "hdb.h"
 #include "genomeRangeTree.h"
 #include "options.h"
+
+//#define MJP verbose(1,"%s[%3d]: ", __func__, __LINE__);
 
 /* FIXME:
  * - would be nice to be able to specify ranges in the same manner
@@ -18,6 +23,7 @@ static struct optionSpec optionSpecs[] = {
     {"quiet", OPTION_BOOLEAN},
     {"saveMem", OPTION_BOOLEAN},
     {"orDirectToFile", OPTION_BOOLEAN},
+    {"logTimes", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -33,7 +39,7 @@ void usage(char *msg)
 static char *usageMsg =
 #include "cachedMaskUsage.msg" 
     ;
-errAbort("%s:  %s", msg, usageMsg);
+errAbort("%s\n%s", msg, usageMsg);
 }
 
 void splitDbTable(char *chromDb, char *track, char **pDb, char **pTable)
@@ -59,55 +65,92 @@ else
     errAbort("invalid track name %s (must be 'table' or 'db.table')\n", track);
 }
 
-char *cacheTrack(char *cacheDir, char *chromDb, char *db, char *tableName, boolean quiet)
+char *cacheTrack(char *cacheDir, char *chromDb, char *db, char *tableName, boolean quiet, boolean logUpdateTimes)
 /* Return the file name of the cached baseMask for the specified table and db.
  * The chromInfo table is read from chromDb database.
- * The cached file will be saved in the directory cacheDir/db.
- * The file name will be table.{TableUpdateTime}.bama where {TableUpdateTime} 
- * is the time the table was last updated as reported by mysql in the format
- * "YYYY-MM-DD_HH-MM-SS".
- * Old cached tables are not deleted.
+ * The cached file will be saved in the file cacheDir/db/table.bama 
+ * If logUpdateTimes is true then the table and cache update times will be
+ * appended to cacheDir/db/table.bama.log
  * The bama file is written as a temp file then moved to the final name as 
  * an atomic operation. 
- * Return value must be freed with freez(). */
+ * Return value must be freed with freeMem(). */
 {
-char *file, *t = NULL;
+char *file, *logFile=NULL, *timeString = NULL;
 int n, nDir, n0;
 /* get either tableName or chr1_tableName */
 struct sqlConnection *conn = hAllocOrConnect(chromDb);
-char *table = chromTable(conn, tableName); 
+char *chrTable = chromTable(conn, tableName); 
 sqlDisconnect(&conn);
 /* connect to database and get last update time for table */
 conn = hAllocOrConnect(db);
-if (sqlTableExists(conn, table))
-    t = sqlTableUpdate(conn, table); /* format %4d-%2d-%2d %2d:%2d:%2d */
+if (sqlTableExists(conn, chrTable))
+    timeString = sqlTableUpdate(conn, chrTable); /* format %4d-%2d-%2d %2d:%2d:%2d */
 else
-    errAbort("cant find table %s in %s database (using chromosomes from %s)\n", table, db, chromDb);
+    errAbort("cant find table %s or %s in %s database (using chromosomes from %s)\n", tableName, chrTable, db, chromDb);
 sqlDisconnect(&conn);
+int timeInt = sqlDateToUnixTime(timeString);
 /* generate bama file name and cache table if necessary */
-subChar(t, ' ', '_'); /* remove ugly chars from time as it will form file name */
-subChar(t, ':', '-');
 nDir = strlen(cacheDir)+1+strlen(db)+1; /* directory */
-n = nDir+strlen(table)+1+strlen(t)+strlen(".bama")+1;
-AllocArray(file, n);
+n = nDir+strlen(tableName)+strlen(".bama")+1;
+AllocArray(file, n); 
 if (!fileExists(cacheDir)) /* if cache dir does not exist, abort */
-    errAbort("cache directory [%s] does not exist\n", cacheDir);
+    errAbort("cache directory [%s] does not exist (chromDb=%s,db=%s,table=%s)\n", cacheDir, chromDb, db, tableName);
 n0 = safef(file, n, "%s/%s/",cacheDir,db);
 if (nDir != n0)
     errAbort("error: safef did not write all bytes (wrote %d, expected %d) [%s]", n0, nDir, file);
 if (!fileExists(file)) /* if cacheDir/db does not exist, make it */
-    {
     makeDirs(file);
-    }
-safecat(file, n, table);
-safecat(file, n, ".");
-safecat(file, n, t);
+safecat(file, n, tableName);
 safecat(file, n, ".bama");
-/* if file does not exist, cache it */
-if (!fileExists(file))
+/* if file exists and is older than the table, no need to update it */
+struct stat statBuf;
+statBuf.st_mtime = -1;
+if (fileExists(file))
     {
-    trackToBaseMask(db, table, file, quiet);
+    if (stat(file,&statBuf)==-1)
+	errnoAbort("could not stat file %s\n", file);
+    if (statBuf.st_mtime > timeInt)
+	{
+	freeMem(timeString);
+	return file;
+	}
     }
+/* otherwise create a new temp bama file and the rename it to the real one */
+char tmpFile[512];
+safef(tmpFile, sizeof(tmpFile), "%s/%s/%sXXXXXX", cacheDir, db, tableName);
+int fd = mkstemp(tmpFile); 
+if (fd==-1)
+    errAbort("could not create temp file %s\n", tmpFile);
+if (close(fd) != 0)
+    errnoAbort("could not close temp file %s\n", tmpFile);
+trackToBaseMask(db, tableName, tmpFile, TRUE);
+if (rename(tmpFile, file))
+    errnoAbort("could not rename temp file %s -> %s\n", tmpFile, file);
+if (logUpdateTimes)
+    {
+    char buf[512], newTimeBuf[80], oldTimeBuf[80];
+    time_t now = time(NULL);
+    struct tm  *ts = localtime(&now);
+    if (!strftime(newTimeBuf, sizeof(newTimeBuf), "%Y-%m-%d %H:%M:%S", ts))
+	errAbort("error in strftime newTimeBuf\n");
+    if (statBuf.st_mtime < 0)
+	oldTimeBuf[0]=0;
+    else
+	{
+	struct tm *ts = localtime(&statBuf.st_mtime);
+	if (!strftime(oldTimeBuf, sizeof(oldTimeBuf), "%Y-%m-%d %H:%M:%S", ts))
+	    errAbort("error in strftime oldTimeBuf\n");
+	}
+    safef(buf, sizeof(buf), "new_cache=[%s] tableUpdateTime=[%s] old_cache=[%s]\n", newTimeBuf, timeString, oldTimeBuf);
+    AllocArray(logFile, n+4);
+    safecat(logFile, n+4, file);
+    safecat(logFile, n+4, ".log");
+    FILE *f = mustOpen(logFile, "a");
+    mustWrite(f, buf, strlen(buf));
+    carefulClose(&f);
+    freeMem(logFile);
+    }
+freeMem(timeString);
 return file;
 }
 
@@ -146,9 +189,12 @@ boolean and = optionExists("and");
 boolean or = optionExists("or");
 boolean quiet = optionExists("quiet");
 boolean saveMem = optionExists("saveMem");
+boolean logTimes = optionExists("logTimes");
 boolean orDirectToFile = optionExists("orDirectToFile");
 --argc;
 ++argv;
+if (argc == 0)
+    usage("");
 if (argc < 3 || argc > 5)
     usage("wrong # args\n");
 if (argc == 3 && (and || or))
@@ -168,7 +214,7 @@ if (argc == 3)
     {
     /* cache the track if it is not there already */
     splitDbTable(chromDb, track1, &db1, &table1);
-    baseMask1 = cacheTrack(cacheDir, chromDb, db1, table1, TRUE);
+    baseMask1 = cacheTrack(cacheDir, chromDb, db1, table1, TRUE, logTimes);
     if (!quiet)
 	{
 	genomeRangeTreeStats(baseMask1, &numChroms, &nodes, &size);
@@ -180,8 +226,8 @@ else
     /* cache the tracks if they are not there already */
     splitDbTable(chromDb, track1, &db1, &table1);
     splitDbTable(chromDb, track2, &db2, &table2);
-    baseMask1 = cacheTrack(cacheDir, chromDb, db1, table1, TRUE);
-    baseMask2 = cacheTrack(cacheDir, chromDb, db2, table2, TRUE);
+    baseMask1 = cacheTrack(cacheDir, chromDb, db1, table1, TRUE, logTimes);
+    baseMask2 = cacheTrack(cacheDir, chromDb, db2, table2, TRUE, logTimes);
     tf1 = genomeRangeTreeFileReadHeader(baseMask1);
     tf2 = genomeRangeTreeFileReadHeader(baseMask2);
     if (and)

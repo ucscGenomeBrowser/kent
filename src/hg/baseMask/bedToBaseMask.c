@@ -41,7 +41,7 @@ void usage(char *msg)
 static char *usageMsg =
 #include "bedToBaseMaskUsage.msg"
     ;
-errAbort("%s:  %s", msg, usageMsg);
+errAbort("%s\n%s", msg, usageMsg);
 }
 
 /* entry */
@@ -49,10 +49,14 @@ int main(int argc, char** argv)
 {
 char *bedFile, *obama;
 optionInit(&argc, argv, optionSpecs);
-if (argc != 3)
+--argc;
+++argv;
+if (argc == 0)
+    usage("");
+if (argc != 2)
     usage("wrong # args");
-bedFile = argv[1];
-obama = argv[2];
+bedFile = argv[0];
+obama = argv[1];
 
 bedToBaseMask(bedFile, obama);
 return 0;

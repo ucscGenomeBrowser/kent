@@ -96,19 +96,23 @@ void usage(char *msg)
 static char *usageMsg =
 #include "baseMaskToBedUsage.msg"
     ;
-errAbort("%s:  %s", msg, usageMsg);
+errAbort("%s\n%s", msg, usageMsg);
 }
 
 /* entry */
 int main(int argc, char** argv)
 {
 optionInit(&argc, argv, optionSpecs);
-if (argc != 3)
+--argc;
+++argv;
+if (argc == 0)
+    usage("");
+if (argc != 2)
     usage("wrong # args");
 boolean merge = optionExists("merge");
 gId = optionExists("id");
-char *inBama = argv[1];
-char *outBed = argv[2];
+char *inBama = argv[0];
+char *outBed = argv[1];
 
 baseMaskToBed(inBama, outBed, merge);
 return 0;
