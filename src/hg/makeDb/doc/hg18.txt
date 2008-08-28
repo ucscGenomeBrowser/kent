@@ -23258,7 +23258,7 @@ cp /cluster/data/mm9/bed/multiz30way/mm9.guess.30way.nh .
     rm wiggle.tab
 
 #########################################################################
-# BLASTZ/CHAIN/NET oryLat2 (DONE - 2006-12-14 - Hiram)
+# BLASTZ/CHAIN/NET oryLat2 (DONE - 2008-08-19,25 - Hiram)
     ssh kkstore02
     screen	# use a screen to manage this longish running job
     mkdir /cluster/data/hg18/bed/blastzOryLat2.2008-08-19
@@ -23297,5 +23297,20 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=5000 -chainLinearGap=loose \
 	-qRepeats=windowmaskerSdust \
 	-bigClusterHub=pk -verbose=2 > do.log 2>&1 &
-XXX - running 2008-08-19 16:42
-    #	real    318m45.339s
+    cat fb.hg18.chainOryLat2Link.txt
+    #	52713428 bases of 2881515245 (1.829%) in intersection
+    cd /cluster/data/hg18/bed
+    ln -s blastzOryLat2.2008-08-19 blastz.oryLat2
+
+    
+    #	That is OK, now for the swap:
+    mkdir /cluster/data/oryLat2/bed/blastz.hg18.swap
+    cd /cluster/data/oryLat2/bed/blastz.hg18.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/hg18/bed/blastzOryLat2.2008-08-19/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk > swap.log 2>&1 &
+    #	real    17m9.675s
+    cat fb.oryLat2.chainHg18Link.txt
+    #	46961822 bases of 700386597 (6.705%) in intersection

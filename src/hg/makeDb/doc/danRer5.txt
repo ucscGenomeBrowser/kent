@@ -3104,4 +3104,30 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
+
 ############################################################################
+# SWAP BLASTZ Medaka oryLat2 (DONE - 2008-08-28 - Hiram)
+    cd /cluster/data/oryLat2/bed/blastzDanRer5.2008-08-27
+    cat fb.oryLat2.chainDanRer5Link.txt 
+    #	138070427 bases of 700386597 (19.713%) in intersection
+
+    #	and for the swap
+    mkdir /cluster/data/danRer5/bed/blastz.oryLat2.swap
+    cd /cluster/data/danRer5/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/oryLat2/bed/blastzDanRer5.2008-08-27/DEF \
+	-swap -tRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    58m15.303s
+    #	had to finish the load nets manually, mistakenly included
+    #	-qRepeats=windowmaskerSdust when that is not valid for danRer5
+    cat fb.danRer5.chainOryLat2Link.txt
+    #	158709399 bases of 1435609608 (11.055%) in intersection
+
+    #	Then, continuing:
+    doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/oryLat2/bed/blastzDanRer5.2008-08-27/DEF \
+	-continue=download -swap -tRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > download.log 2>&1 &
+
+#########################################################################

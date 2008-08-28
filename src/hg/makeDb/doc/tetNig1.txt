@@ -3119,4 +3119,24 @@ chainOne $(path1)
     rm -rf /cluster/data/tetNig1/bed/tblastn.hg18KG/blastOut
     rm -rf /cluster/bluearc/tetNig1/bed/tblastn.hg18KG/blastOut
 #end tblastn
+
+##########################################################################
+# SWAP BLASTZ Medaka oryLat2 (DONE - 2008-08-27 - Hiram)
+    ssh kkstore03	# not too important since everything moved to hive
+    screen # use screen to control this job
+    cd /cluster/data/oryLat2/bed/blastz.tetNig1.2008-08-26
+    cat fb.oryLat2.chainTetNig1Link.txt
+    #	163171121 bases of 700386597 (23.297%) in intersection
+
+    #	And, for the swap:
+    mkdir /cluster/data/tetNig1/bed/blastz.oryLat2.swap
+    cd /cluster/data/tetNig1/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/oryLat2/bed/blastz.tetNig1.2008-08-26/DEF \
+	-swap -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    22m48.350s
+    cat fb.tetNig1.chainOryLat2Link.txt
+    #	139059872 bases of 342403326 (40.613%) in intersection
+
 ##########################################################################

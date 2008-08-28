@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.17 2008/07/01 16:53:02 markd Exp $"
+#       "$Id: petMar1.txt,v 1.18 2008/08/28 21:18:57 hiram Exp $"
 #
 
 ##########################################################################
@@ -1694,4 +1694,25 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
+
+############################################################################
+# SWAP BLASTZ Medaka oryLat2 (DONE - 2008-08-27 - Hiram
+    ssh kkstore01	# not too important since everything moved to hive
+    screen # use screen to control this job
+    cd /cluster/data/oryLat2/bed/blastz.petMar1.2008-08-26
+    cat fb.oryLat2.chainPetMar1Link.txt
+    #	41568923 bases of 700386597 (5.935%) in intersection
+
+    #	And, for the swap:
+    mkdir /cluster/data/petMar1/bed/blastz.oryLat2.swap
+    cd /cluster/data/petMar1/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/oryLat2/bed/blastz.petMar1.2008-08-26/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-smallClusterHub=pk -bigClusterHub=kk > swap.log 2>&1 &
+    #	real    52m27.942s
+    cat fb.petMar1.chainOryLat2Link.txt
+    #	39181422 bases of 831696438 (4.711%) in intersection
+
 ############################################################################

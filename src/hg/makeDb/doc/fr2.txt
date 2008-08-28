@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.21 2008/07/01 16:53:00 markd Exp $"
+#       "$Id: fr2.txt,v 1.22 2008/08/28 21:18:58 hiram Exp $"
 #
 
 ##########################################################################
@@ -1692,4 +1692,24 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
+
+############################################################################
+# SWAP BLASTZ Medaka oryLat2 (DONE - 2008-08-27 - Hiram)
+    ssh kkstore04	# not too important since everything moved to the hive
+    screen	# use a screen to control this job
+    cd /cluster/data/oryLat2/bed/blastz.fr2.2008-08-25
+    cat fb.oryLat2.chainFr2Link.txt
+    #	180945351 bases of 700386597 (25.835%) in intersection
+
+    mkdir /cluster/data/fr2/bed/blastz.oryLat2.swap
+    cd /cluster/data/fr2/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/oryLat2/bed/blastz.fr2.2008-08-25/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-smallClusterHub=pk -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    24m32.826s
+    cat fb.fr2.chainOryLat2Link.txt
+    #	153621820 bases of 393312790 (39.058%) in intersection
+
 ############################################################################

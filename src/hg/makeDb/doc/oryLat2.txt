@@ -14,7 +14,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat2.txt,v 1.3 2008/08/15 17:37:07 hiram Exp $"
+#	"$Id: oryLat2.txt,v 1.4 2008/08/28 21:18:59 hiram Exp $"
 #
 ###########################################################################
 
@@ -158,7 +158,7 @@ nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^MT/chrM/"
 	-buildDir=/cluster/data/oryLat2/bed/repeatMasker \
 	-bigClusterHub=pk -smallClusterHub=memk > do.log 2>&1
     #	RM version from the log:
-    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.3 2008/08/15 17:37:07 hiram Exp $
+    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.4 2008/08/28 21:18:59 hiram Exp $
     #	CC   RELEASE 20080801
     #   about 40 minutes run time
 
@@ -343,7 +343,7 @@ oryLat2.downloadDir = oryLat2
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad oryLat2
-    #	logFile: var/dbload/hgwdev/logs/2008.08.15-10:06:43.dbload.log
+    #	logFile: var/dbload/hgwdev/logs/2008.08.15-11:36:18.dbload.log
     #	real    10m58.023s
 
     # enable daily alignment and update of hgwdev
@@ -354,3 +354,345 @@ oryLat2.downloadDir = oryLat2
         etc/hgwdev.dbs
     cvs ci -m "Added oryLat2." etc/align.dbs etc/hgwdev.dbs
     make etc-update
+
+##########################################################################
+## BLASTZ swap from Human Hg18 to Medaka OryLat2 (DONE - 2008-08-25 - Hiram)
+    ssh kkstore02	# not too important since everything moved to the hive
+    screen	# use a screen to control this job
+    cd /cluster/data/hg18/bed/blastzOryLat2.2008-08-19
+    cat fb.hg18.chainOryLat2Link.txt
+    #	52713428 bases of 2881515245 (1.829%) in intersection
+    
+    #	That is OK, now for the swap:
+    mkdir /cluster/data/oryLat2/bed/blastz.hg18.swap
+    cd /cluster/data/oryLat2/bed/blastz.hg18.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/hg18/bed/blastzOryLat2.2008-08-19/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk > swap.log 2>&1 &
+    #	real    17m9.675s
+    cat fb.oryLat2.chainHg18Link.txt
+    #	46961822 bases of 700386597 (6.705%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET FR2 (DONE - 2008-08-25,27 - Hiram)
+##  align to fr2 scaffolds, results lifted to fr2 chrUn coordinates
+    ssh kkstore04	# not too important since everything moved to the hive
+    screen	# use a screen to control this job
+    mkdir /cluster/data/oryLat2/bed/blastz.fr2.2008-08-25
+    cd /cluster/data/oryLat2/bed/blastz.fr2.2008-08-25
+    cat << '_EOF_' > DEF
+# Medaka vs. Fugu
+
+# Using the "nearby" organism settings
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Medaka oryLat2 (40M chunks covers the largest chrom in one gulp)
+SEQ1_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ1_LEN=/scratch/data/oryLat2/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=200
+SEQ1_LAP=10000
+
+# QUERY: Fugu fr2
+#       Align to the scaffolds, results lifed up to chrUn.sdTrf coordinates
+SEQ2_DIR=/scratch/data/fr2/fr2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/fr2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/fr2/fr2.scaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/fr2/fr2.scaffolds.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/fr2/liftAll.lft
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/oryLat2/bed/blastz.fr2.2008-08-25
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -bigClusterHub=pk  > do.log 2>&1 &
+    #	real    0m42.311s
+    #	problems on pk, finish the kluster run manually, then continuing:
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-smallClusterHub=pk -continue=cat -verbose=2 -bigClusterHub=pk \
+	> cat.log 2>&1 &
+    #	real    230m12.868s
+    cat fb.oryLat2.chainFr2Link.txt
+    #	180945351 bases of 700386597 (25.835%) in intersection
+
+    mkdir /cluster/data/fr2/bed/blastz.oryLat2.swap
+    cd /cluster/data/fr2/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/oryLat2/bed/blastz.fr2.2008-08-25/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-smallClusterHub=pk -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    24m32.826s
+    cat fb.fr2.chainOryLat2Link.txt
+    #	153621820 bases of 393312790 (39.058%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET Medaka oryLat2 (DONE - 2008-08-26,27 - Hiram)
+#	with contigs for Lamprey
+    ssh kkstore01	# not too important since everything moved to hive
+    screen # use screen to control this job
+    mkdir /cluster/data/oryLat2/bed/blastz.petMar1.2008-08-26
+    cd /cluster/data/oryLat2/bed/blastz.petMar1.2008-08-26
+
+    cat << '_EOF_' > DEF
+# Medaka vs. Lamprey
+
+# using the "close" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Medaka oryLat2 (40M chunks covers the largest chrom in one gulp)
+SEQ1_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ1_LEN=/scratch/data/oryLat2/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=200
+SEQ1_LAP=10000
+
+# QUERY: Lamprey petMar1, sequence is in contigs
+SEQ2_DIR=/scratch/data/petMar1/petMar1.2bit
+SEQ2_LEN=/scratch/data/petMar1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=150
+SEQ2_LAP=0
+
+BASE=/cluster/data/oryLat2/bed/blastz.petMar1.2008-08-26
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > do.log 2>&1 &
+    #	real    736m11.276s
+    cat fb.oryLat2.chainPetMar1Link.txt
+    #	41568923 bases of 700386597 (5.935%) in intersection
+
+    #	And, for the swap:
+    mkdir /cluster/data/petMar1/bed/blastz.oryLat2.swap
+    cd /cluster/data/petMar1/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/oryLat2/bed/blastz.petMar1.2008-08-26/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-smallClusterHub=pk -bigClusterHub=kk > swap.log 2>&1 &
+    #	real    52m27.942s
+    cat fb.petMar1.chainOryLat2Link.txt
+    #	39181422 bases of 831696438 (4.711%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET Stickleback gasAcu1 (DONE - 2008-08-26,27 - Hiram)
+#	with contigs for chrUn in Stickleback
+    ssh kkstore02	# not too important since everything moved to hive
+    screen # use screen to control this job
+    mkdir /cluster/data/oryLat2/bed/blastz.gasAcu1.2008-08-26
+    cd /cluster/data/oryLat2/bed/blastz.gasAcu1.2008-08-26
+
+    cat << '_EOF_' > DEF
+# Medaka vs. Stickleback
+
+# using the "close" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Medaka oryLat2 (40M chunks covers the largest chrom in one gulp)
+SEQ1_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ1_LEN=/scratch/data/oryLat2/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=200
+SEQ1_LAP=10000
+
+# QUERY: Stickleback gasAcu1, chrUn is in contigs, lifted to chrUn
+SEQ2_DIR=/scratch/data/gasAcu1/gasAcu1.2bit
+SEQ2_LEN=/cluster/data/gasAcu1/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.randomContigs.sdTrf.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.randomContigs.sdTrf.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/gasAcu1/chrUn.extraCloneGap.lift
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=150
+SEQ2_LAP=0
+
+BASE=/cluster/data/oryLat2/bed/blastz.gasAcu1.2008-08-26
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > do.log 2>&1 &
+    #	real    698m10.533s
+    cat fb.oryLat2.chainGasAcu1Link.txt
+    #	211589769 bases of 700386597 (30.210%) in intersection
+
+    #	And, for the swap:
+    mkdir /cluster/data/gasAcu1/bed/blastz.oryLat2.swap
+    cd /cluster/data/gasAcu1/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium -swap \
+	/cluster/data/oryLat2/bed/blastz.gasAcu1.2008-08-26/DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    31m44.711s
+    cat fb.gasAcu1.chainOryLat2Link.txt
+    #	189793612 bases of 446627861 (42.495%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET tetNig1 (DONE - 2008-08-26,27 - Hiram)
+    ssh kkstore03	# not too important since everything moved to hive
+    screen # use screen to control this job
+    mkdir /cluster/data/oryLat2/bed/blastz.tetNig1.2008-08-26
+    cd /cluster/data/oryLat2/bed/blastz.tetNig1.2008-08-26
+    cat << '_EOF_' > DEF
+# Medaka vs. Tetraodon
+
+# using the "close" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Medaka oryLat2 (40M chunks covers the largest chrom in one gulp)
+SEQ1_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ1_LEN=/scratch/data/oryLat2/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=200
+SEQ1_LAP=10000
+
+# QUERY: Tetraodon tetNig1
+SEQ2_DIR=/cluster/data/tetNig1/tetNig1.sdTrf.2bit
+SEQ2_LEN=/cluster/data/tetNig1/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/tetNig1/tetNig1.randomContigs.sdTrf.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/tetNig1/tetNig1.randomContigs.sdTrf.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/tetNig1/tetNig1.randomContigs.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/oryLat2/bed/blastz.tetNig1.2008-08-26
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > do.log 2>&1 &
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF \
+	-continue=cat -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > cat.log 2>&1 &
+    #	had to finish netChains.csh manually since SEQ2_DIR was incorrect
+    #	continuing:
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF \
+	-continue=load -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > load.log 2>&1 &
+    #	real    10m42.744s
+    cat fb.oryLat2.chainTetNig1Link.txt
+    #	163171121 bases of 700386597 (23.297%) in intersection
+
+    #	And, for the swap:
+    mkdir /cluster/data/tetNig1/bed/blastz.oryLat2.swap
+    cd /cluster/data/tetNig1/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/oryLat2/bed/blastz.tetNig1.2008-08-26/DEF \
+	-swap -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    22m48.350s
+    cat fb.tetNig1.chainOryLat2Link.txt
+    #	139059872 bases of 342403326 (40.613%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET danRer5 (DONE - 2008-08-27,28 - Hiram)
+    ssh kkstore01	# not too important since everything moved to hive
+    screen # use screen to control this job
+    mkdir /cluster/data/oryLat2/bed/blastzDanRer5.2008-08-27
+    cd /cluster/data/oryLat2/bed/blastzDanRer5.2008-08-27
+    cat << '_EOF_' > DEF
+# Medaka vs. Zebrafish
+
+# using the "close" genome alignment parameters
+#	see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Medaka oryLat2 (40M chunks covers the largest chrom in one gulp)
+SEQ1_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ1_LEN=/scratch/data/oryLat2/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=200
+SEQ1_LAP=10000
+
+# Query - zebrafish (danRer5) 
+SEQ2_DIR=/scratch/data/danRer5/danRer5.2bit
+SEQ2_LEN=/scratch/data/danRer5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/oryLat2/bed/blastzDanRer5.2008-08-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF \
+	-verbose=2 -tRepeats=windowmaskerSdust \
+	-smallClusterHub=pk -bigClusterHub=pk > do.log 2>&1 &
+    #	continuing after kluster difficulties
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF \
+	-continue=cat -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > cat.log 2>&1 &
+    #	real    744m38.748s
+    cat fb.oryLat2.chainDanRer5Link.txt 
+    #	138070427 bases of 700386597 (19.713%) in intersection
+
+    #	and for the swap
+    mkdir /cluster/data/danRer5/bed/blastz.oryLat2.swap
+    cd /cluster/data/danRer5/bed/blastz.oryLat2.swap
+    time doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/oryLat2/bed/blastzDanRer5.2008-08-27/DEF \
+	-swap -tRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    58m15.303s
+    #	had to finish the load nets manually, mistakenly included
+    #	-qRepeats=windowmaskerSdust when that is not valid for danRer5
+    cat fb.danRer5.chainOryLat2Link.txt
+    #	158709399 bases of 1435609608 (11.055%) in intersection
+
+    #	Then, continuing:
+    doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/oryLat2/bed/blastzDanRer5.2008-08-27/DEF \
+	-continue=download -swap -tRepeats=windowmaskerSdust \
+	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > download.log 2>&1 &
+
+#########################################################################

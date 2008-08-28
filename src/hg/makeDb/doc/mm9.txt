@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.73 2008/08/21 19:40:44 larrym Exp $"
+#	"$Id: mm9.txt,v 1.74 2008/08/28 21:18:58 hiram Exp $"
 #
 
 #######################################################################
@@ -8426,3 +8426,78 @@ deleted:	3 from chrX_random_chainEquCab2
 deleted:	19 from chrY_chainEquCab2
 deleted:	70 from chrY_random_chainEquCab2
 deleted:	18173 from netEquCab2
+
+#########################################################################
+# BLASTZ/CHAIN/NET oryLat2 (DONE - 2008-08-25,27 - Hiram)
+    ssh kkstore06
+    screen	# use a screen to manage this longish running job
+    mkdir /cluster/data/mm9/bed/blastzOryLat2.2008-08-25
+    cd /cluster/data/mm9/bed/blastzOryLat2.2008-08-25
+    cat << '_EOF_' > DEF
+# Mouse vs. Medaka
+BLASTZ=/cluster/bin/penn/x86_64/lastz
+
+# typical parameters for a genome that is distant from human
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: Medaka oryLat2 (40M chunks covers the largest chroms in one gulp)
+SEQ2_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ2_LEN=/scratch/data/oryLat2/chrom.sizes
+SEQ2_CHUNK=40000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm9/bed/blastzOryLat2.2008-08-25
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -verbose=2 > do.log 2>&1 &
+    #	real    124m28.816s
+    #	problems with memk today, continuing:
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-continue=cat -qRepeats=windowmaskerSdust \
+	-smallClusterHub=pk -bigClusterHub=pk -verbose=2 > cat.log 2>&1 &
+    #	the kluster is acting up, took several attempts to get one of the
+    #	simple cat jobs done, not sure why it was having trouble, continuing:
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-continue=chainRun -qRepeats=windowmaskerSdust \
+	-smallClusterHub=pk -bigClusterHub=pk -verbose=2 > chainRun.log 2>&1 &
+    time doBlastzChainNet.pl `pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -continue=chainMerge -qRepeats=windowmaskerSdust \
+	-smallClusterHub=pk -bigClusterHub=pk -verbose=2 > chainMerge.log 2>&1 &
+    #	real    14m58.355s
+    cat fb.mm9.chainOryLat2Link.txt
+    #	50975949 bases of 2620346127 (1.945%) in intersection
+
+    cd /cluster/data/mm9/bed
+    ln -s blastzOryLat2.2008-08-25 blastz.oryLat2
+    
+    #	That is OK, now for the swap:
+    mkdir /cluster/data/oryLat2/bed/blastz.mm9.swap
+    cd /cluster/data/oryLat2/bed/blastz.mm9.swap
+    time doBlastzChainNet.pl -verbose=2 -swap \
+	/cluster/data/mm9/bed/blastzOryLat2.2008-08-25/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-qRepeats=windowmaskerSdust \
+	-smallClusterHub=pk -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    15m26.642s
+    cat fb.oryLat2.chainMm9Link.txt
+    #	45837267 bases of 700386597 (6.545%) in intersection
