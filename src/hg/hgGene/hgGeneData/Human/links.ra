@@ -93,7 +93,7 @@ name HInv
 shortLabel H-INV
 tables knownToHInv
 idSql select HInv.mrnaAcc from HInv, knownToHInv where knownToHInv.name = '%s' and HInv.geneId = knownToHInv.value
-url https://www.jbirc.jbic.or.jp/hinv/soup/pub_Detail.pl?acc_id=%s
+url http://h-invitational.jp/hinv/spsoup/transcript_view?hit_id=%s
 priority 10
 
 name protBrowser
