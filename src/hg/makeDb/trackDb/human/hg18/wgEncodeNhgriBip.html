@@ -1,0 +1,79 @@
+<h2> Description </h2>
+<p>Bidirectional promoters are the regulatory regions that fall between 
+pairs of genes, where the 5? ends of the genes within a pair are positioned 
+in close proximity to one another. This spacing facilitates the initiation 
+of transcription of both genes, creating two transcription forks that advance 
+in opposite directions. The formal definition of a bidirectional promoter 
+requires that the transcription initiation sites are separated by no more than 
+1,000 bp from one another. Using these criteria we have comprehensively annotated 
+the human and mouse genomes for the presence of bidirectional promoters, using 
+in silico approaches  . The identification of these promoters is contingent 
+upon the presence of adjacent, oppositely oriented pairs of genes, because few 
+distinguishing features are available to uniquely identify bidirectional promoters 
+de novo. Genomic annotations used for our identification phase include (1) curated 
+protein-coding gene annotations, (2) spliced ESTs and (3) 5? ?end-capped? transcript 
+data, e.g., Cap-Analysis of Gene Expression Database (i.e., CAGE). The annotations 
+for protein coding genes are strongly supported and therefore provide a high quality 
+dataset for mapping bidirectional promoters. In contrast, bidirectional promoters 
+supported by RNA evidence alone (as in (2)) have varying levels of evidence, ranging 
+from one characterized transcript to hundreds of them. For this reason, dataset 
+(3) - the CAGE data - provide a stringent level of validation for the start sites 
+of the EST transcripts. As a large class of regulatory sequences, bidirectional 
+promoters exemplify a rich source of unexplored biological information in the human 
+genome. When compared to the mouse genome, these promoters are identifiable as truly 
+orthologous locations, being maintained in regions of conserved synteny (including both 
+genes and the intervening promoter region) that have undergone no rearrangements since 
+the last common ancestor of mammals, and in some cases fish. We use this approach to 
+annotate orthologous bidirectional promoters in nonhuman species as genomic annotations 
+become available.
+</p>
+
+<h2> Methods </h2>
+
+<h3> Assigning Orthologous Regions </h3>
+<p>A multi-stage approach to mapping orthology at bidirectional promoters was developed. 
+Orthology assignments are strongest in coding regions. Therefore we began by mapping 
+single human genes regulated by bidirectional promoters from the Known Genes annotations 
+onto the mouse genome. Orthology assignments were determined using the  ?chains and nets? 
+data from the UCSC Human Genome Browser mysql tables. Chains in the Genome Browser represent 
+sequences of gapless aligned blocks. Nets provide a hierarchical ordering of those chains. 
+Level 1 chains contain the longest, best-scoring sequence chains that span any selected region. 
+Subsequent levels in the net represent the results of rearrangements, duplications, insertions 
+and deletions that may have disrupted the presence of conserved synteny derived from an ancestral 
+sequence. 
+</p>
+
+<h3> Confirming Orthologous Genes </h3>
+<p>After determining the orthology assignments using the UCSC chains and nets data, we used the 
+Known Gene annotations or spliced ESTs to search the identity of genes within the corresponding 
+region. Known Genes represent protein-coding genes and therefore can be verified by chains and 
+nets alignments, followed by confirmation of protein identity in both species. Spliced ESTs carry 
+less descriptive information than protein coding genes and therefore were validated in the second 
+species by their presence in an orthologous region, showing conserved synteny of the two genes within 
+a pair, and meeting the criteria of less than 1,000 bp of intergenic distance between those transcripts.  
+Our method for mapping bidirectional promoters in spliced EST datasets is described in more detail 
+in a previous publication . If the program verified evidence for orthology and conserved-syntenic gene 
+arrangement, then the orthologous bidirectional promoter was confirmed. After orthologous assignments 
+were confirmed for pairs of human genes, the reciprocal assignments were analyzed from mouse to human.
+</p>
+
+<h2> Credits </h2>
+
+<p>These data were produced by the 
+<a href="http://www.genome.gov/12514761" title="http://www.genome.gov/12514761" rel="nofollow">Elnitski lab</a> at NHGRI, NIH.
+</p>
+
+<h2> References </h2>
+<p>Yang MQ, Elnitski L: 
+ <a href="http://www.springerlink.com/content/q86486k52kr84j06/" title="http://www.springerlink.com/content/q86486k52kr84j06/" rel="nofollow">
+ A computational study of bidirectional promoters in the human genome</a>. <i>Springer Lecture Series: Notes in Bioinformatics</i> 2007.
+
+</p><p>Yang MQ, Elnitski L: Orthology of Bidirectional Promoters Enables Use of a Multiple Class Predictor for Discriminating Functional Elements in the Human Genome. <i>
+ BMC Genomics</i>.
+</p><p>Yang MQ, Koehly L, Elnitski L: 
+ <a href="http://www.ploscompbiol.org/article/info:doi/10.1371/journal.pcbi.0030072" title="http://www.ploscompbiol.org/article/info:doi/10.1371/journal.pcbi.0030072" rel="nofollow">
+ Comprehensive annotation of human bidirectional promoters identifies co-regulatory relationships among somatic breast and ovarian cancer genes</a>. <i>PLOS Computational Biolog</i>y 2007.
+</p><p>Yang MQ, Taylor J, Elnitski L. 
+ <a href="http://www.biomedcentral.com/1471-2105/9/S6/S9" title="http://www.biomedcentral.com/1471-2105/9/S6/S9" rel="nofollow">
+ Comparative analyses of bidirectional promoters in vertebrates</a>. <i>BMC Bioinformatics</i> May 2008.
+</p>
