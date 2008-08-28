@@ -7,5 +7,7 @@ total size of all chromosomes for database to stderr.
 Optionally write tree to output file o.bama, if specified.
 
 Options:
-  -quiet     : do not print sizes to stderr.
-  -verbose=n : verbose > 1 prints some details.
+  -chromDb=db : Specify alternate database to find chromInfo table
+                (table might be in a different database)
+  -quiet      : do not print sizes to stderr.
+  -verbose=n  : verbose > 1 prints some details.

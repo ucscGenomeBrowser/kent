@@ -1,5 +1,6 @@
 include ../../inc/common.mk
 
+XINC = -I$(MYSQLINC)
 L = -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
@@ -10,7 +11,7 @@ B = cachedMask trackToBaseMask bedToBaseMask baseMaskToBed baseMask
 all: $B
 
 cachedMask: cachedMaskUsage.msg commonBaseMask.o cachedMask.o ${MYLIBS} 
-	${CC} ${COPT} ${CFLAGS} -o cachedMask commonBaseMask.o cachedMask.o ${MYLIBS} ${MYSQLLIBS} $L
+	${CC} ${COPT} ${CFLAGS} ${XINC} -o cachedMask commonBaseMask.o cachedMask.o ${MYLIBS} ${MYSQLLIBS} $L
 
 trackToBaseMask: trackToBaseMaskUsage.msg commonBaseMask.o trackToBaseMask.o ${MYLIBS} 
 	${CC} ${COPT} ${CFLAGS} -o trackToBaseMask commonBaseMask.o trackToBaseMask.o ${MYLIBS} ${MYSQLLIBS} $L

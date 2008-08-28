@@ -5,8 +5,9 @@
 #include "hdb.h"
 //#include "sig.h"
 #include "chromInfo.h"
-#include "genomeRangeTree.h"
 #include "options.h"
+#include "genomeRangeTree.h"
+#include "commonBaseMask.h"
 
 /* FIXME:
  * - would be nice to be able to specify ranges in the same manner
@@ -16,11 +17,10 @@
  */
 
 static struct optionSpec optionSpecs[] = {
+    {"chromDb", OPTION_STRING},
     {"quiet", OPTION_BOOLEAN},
     {NULL, 0}
 };
-
-void trackToBaseMask(char *db, char *track, char *obama, boolean quiet);
 
 
 void usage(char *msg)
@@ -35,7 +35,7 @@ errAbort("%s\n%s", msg, usageMsg);
 /* entry */
 int main(int argc, char** argv)
 {
-char *db, *track, *obama;
+char *db, *track, *obama, *chromDb;
 optionInit(&argc, argv, optionSpecs);
 --argc;
 ++argv;
@@ -46,7 +46,8 @@ if (argc < 2 || argc > 3)
 db = argv[0];
 track = argv[1];
 obama = (argc == 2 ? NULL : argv[2]);
+chromDb = optionVal("chromDb",db);
 
-trackToBaseMask(db, track, obama, optionExists("quiet"));
+trackToBaseMask(db, track, chromDb, obama, optionExists("quiet"));
 return 0;
 }
