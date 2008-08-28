@@ -203,7 +203,7 @@
 				When available, this section displays one or more 3-D structures of the protein from 
 				the PDB. Click on a structure number to display the associated PDB record.
 				<LI>
-				<B><A HREF="http://alto.compbio.ucsf.edu/modbase-cgi/index.cgi" 
+				<B><A HREF="http://modbase.compbio.ucsf.edu/modbase-cgi/index.cgi" 
 				TARGET=_blank>ModBase</A>:</B> This section displays front, top, 
 				and Side views of the predicted comparative 3-D structure of the protein
 				obtained from UCSF's ModBase. Click on the protein accession number or 
