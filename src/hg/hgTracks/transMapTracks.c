@@ -64,8 +64,8 @@ for (label = labels; label != NULL; label = label->next)
 return labelSet;
 }
 
-static void getItemLabel(struct sqlConnection *conn,
-                         char *transMapInfoTbl, char *transMapGeneTbl,
+static void getItemLabel(struct sqlConnection *conn, char *transMapInfoTbl, 
+                         struct sqlConnection *geneConn, char *transMapGeneTbl,
                          unsigned labelSet,
                          struct linkedFeatures *lf)
 /* get label for a transMap item */
@@ -78,9 +78,12 @@ if (labelSet & (useOrgCommon|useOrgAbbrv|useOrgDb|useGene))
     info = transMapInfoQuery(conn, transMapInfoTbl, lf->name);
     srcDbExists = sqlDatabaseExists(info->srcDb);
     }
-if ((labelSet & useGene) && (transMapGeneTbl != NULL))
-    gene = transMapGeneQuery(conn, transMapGeneTbl,
+if ((labelSet & useGene) && (geneConn != NULL))
+    {
+    gene = transMapGeneQuery(geneConn, transMapGeneTbl,
                              info->srcDb, transMapIdToAcc(info->srcId));
+    hFreeConn(&geneConn);
+    }
 
 struct dyString *label = dyStringNew(64);
 if (labelSet & useOrgAbbrv && srcDbExists)
@@ -110,12 +113,17 @@ static void lookupTransMapLabels(struct track *tg)
 struct sqlConnection *conn = hAllocConn(database);
 char *transMapInfoTbl = trackDbRequiredSetting(tg->tdb, transMapInfoTblSetting);
 char *transMapGeneTbl = trackDbSetting(tg->tdb, transMapGeneTblSetting);
+struct sqlConnection *geneConn = NULL;
+if (transMapGeneTbl != NULL)
+    geneConn = hAllocConnDbTbl(transMapGeneTbl, &transMapGeneTbl, database);
+    
 
 struct linkedFeatures *lf;
 unsigned labelSet = getLabelTypes(tg);
 
 for (lf = tg->items; lf != NULL; lf = lf->next)
-    getItemLabel(conn, transMapInfoTbl, transMapGeneTbl, labelSet, lf);
+    getItemLabel(conn, transMapInfoTbl, geneConn, transMapGeneTbl, labelSet, lf);
+hFreeConn(&geneConn);
 hFreeConn(&conn);
 }
 

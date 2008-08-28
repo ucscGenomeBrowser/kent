@@ -36,7 +36,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.81.4.2 2008/08/02 04:06:24 markd Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.81.4.3 2008/08/28 17:21:21 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -534,7 +534,7 @@ char *p = skipToSpaces(baseColorSetting);
 char *cdsSpecTbl = skipLeadingSpaces(p);
 if (*cdsSpecTbl == '\0')
     errAbort("%s table requires a table name as an argument", BASE_COLOR_USE_CDS);
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = hAllocConnDbTbl(cdsSpecTbl, &cdsSpecTbl, database);
 // allow multiple, but only use the first, since transMapGene table might have
 // multiple entries for same gene from different source dbs.
 struct cdsSpec *cdsSpec

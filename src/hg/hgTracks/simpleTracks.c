@@ -123,7 +123,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.24.2.3 2008/08/12 23:35:32 markd Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.24.2.4 2008/08/28 17:21:22 markd Exp $";
 
 #define CHROM_COLORS 26
 
@@ -5010,7 +5010,7 @@ if (blastRef != NULL)
 	    char query[256];
 	    struct sqlResult *sr;
 	    char **row;
-	    struct sqlConnection *conn = hAllocConn(database);
+	    struct sqlConnection *conn = hAllocConn(thisDb);
 	    boolean added = FALSE;
 	    char *ptr;
 		

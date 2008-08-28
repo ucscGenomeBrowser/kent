@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1499.4.6 2008/08/09 04:40:33 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1499.4.7 2008/08/28 17:21:21 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2779,7 +2779,7 @@ ensVersionString[0] = 0;
 ensDateReference[0] = 0;
 if (trackVersionExists)
     {
-    struct sqlConnection *conn = hAllocConn(database);
+    struct sqlConnection *conn = hAllocConn("hgFixed");
     char query[256];
     safef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' order by updateTime DESC limit 1", database);
     struct sqlResult *sr = sqlGetResult(conn, query);

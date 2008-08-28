@@ -60,7 +60,7 @@ void transMapGeneOutput(struct transMapGene *el, FILE *f, char sep, char lastSep
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct transMapGene *transMapGeneQuery(struct sqlConnection *conn,
+struct transMapGene *transMapGeneQuery(struct sqlConnection *geneConn,
                                        char *table, char *srcDb, char *srcId);
 /* load a single transMapSrc object for an srcDb and srcId from a table,
  * or return NULL if not found */

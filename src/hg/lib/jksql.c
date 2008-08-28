@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.113.6.11 2008/08/20 04:14:23 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.113.6.12 2008/08/28 17:21:30 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -192,7 +192,7 @@ static struct sqlProfile* sqlProfileFindByName(char *profileName, char *database
 struct sqlProfile* sp = hashFindVal(profiles, profileName);
 if (sp == NULL)
     return NULL;
-#if UNUSED // FIXME: this breaks hgHeatMap, remove when logicalDb removed
+#if UNUSED // FIXME: this breaks hgHeatMap, enable when logicalDb removed
 if ((database != NULL) && (sp->dbs != NULL) && !slNameInList(sp->dbs, database))
     errAbort("attempt to obtain SQL profile %s for database %s, "
              "which is not associate with this database-specific profile",
@@ -681,9 +681,6 @@ struct sqlConnection *sqlConnectProfile(char *profileName, char *database)
  */ 
 {
 struct sqlProfile* sp = sqlProfileGet(profileName, database);
-#if 0// FIXME:
-fprintf(stderr, "sqlConnectProfile %s %s: %s %s\n", profileName, database, sp->name, sp->user);
-#endif
 return sqlConnectRemote(sp->host, sp->user, sp->password, database);
 }
 
@@ -696,9 +693,6 @@ struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database)
  */ 
 {
 struct sqlProfile* sp = sqlProfileGet(profileName, database);
-#if 0// FIXME:
-fprintf(stderr, "sqlMayConnectProfile %s %s: %s %s\n", profileName, database, sp->name, sp->user);
-#endif
 return sqlMayConnectRemote(sp->host, sp->user, sp->password, database);
 }
 
@@ -1691,9 +1685,6 @@ if (cache->profile != NULL)
     profile = cache->profile;
 else
     profile = sqlProfileMustGet(profileName, database);
-#if 0
-fprintf(stderr, "sqlConnCacheDoAlloc %s %s\n", ((profile != NULL) ? profile->name: NULL), database); // FIXME:
-#endif
 
 // try getting an entry, first trying to find one for this database, then
 // look for any database, then add a new one

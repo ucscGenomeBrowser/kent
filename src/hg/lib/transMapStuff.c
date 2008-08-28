@@ -2,6 +2,8 @@
  * tracks in the browser CGIs */
 #include "common.h"
 #include "transMapStuff.h"
+#include "trackDb.h"
+#include "hdb.h"
 
 char *transMapIdToAcc(char *id)
 /* remove all unique suffixes (starting with last `-') from any TransMap 

@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.150.6.2 2008/08/01 06:10:53 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.150.6.3 2008/08/28 17:21:31 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -867,21 +867,12 @@ return - The database matching this Genome type
 */
 {
 
-#if 0//FIXME: this is weird, as it uses hGetDb to get the default
-char *retDb = cartUsualString(cart, dbCgiName, hGetDb());
-
-if (!hDbExists(retDb))
-    {
-    retDb = hDefaultDb();
-    }
-#else
 char *retDb = cartUsualString(cart, dbCgiName, NULL);
 
 if ((retDb == NULL) || !hDbExists(retDb))
     {
     retDb = hDefaultDb();
     }
-#endif
 
 /* If genomes don't match, then get the default db for that genome */
 if (differentWord(genome, hGenome(retDb)))

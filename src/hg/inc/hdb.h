@@ -130,8 +130,13 @@ struct sqlConnection *hAllocConnTrack(char *db, struct trackDb *tdb);
 
 struct sqlConnection *hAllocConnProfileTbl(char *db, char *spec, char **tableRet);
 /* Allocate a connection to db, spec can either be in the form `table' or
- * `profile.table'.  If it contains profile, connect via that profile.  Also
+ * `profile:table'.  If it contains profile, connect via that profile.  Also
  * returns pointer to table in spec string. */
+
+struct sqlConnection *hAllocConnDbTbl(char *spec, char **tableRet, char *defaultDb);
+/* Allocate a connection to db and table, spec is in form `db.table'; if
+ * defaultDb is not NULL, 'table' can also be used.  Also returns pointer to
+ * table in spec string. */
 
 void hFreeConn(struct sqlConnection **pConn);
 /* Put back connection for reuse. */

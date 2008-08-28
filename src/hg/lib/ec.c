@@ -5,9 +5,6 @@
 #include "ecAttribute.h"
 #include "ecAttributeCode.h"
 
-// FIXME: 2008-07-29: no `ec' databases on hgwdev, just delete this module
-// and friends.
-
 void getEcHtml(char *ecNumber)
 /* fetch ec codes and descriptions and output html */
 {

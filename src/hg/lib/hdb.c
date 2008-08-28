@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.368.4.11 2008/08/20 04:14:22 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.368.4.12 2008/08/28 17:21:30 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -438,16 +438,17 @@ struct sqlConnection *hAllocConnTrack(char *db, struct trackDb *tdb)
 /* Get free connection for accessing tables associated with the specified
  * track and database. If none is available, allocate a new one. */
 {
+// FIXME: this will go away
 return hAllocConnProfile(getTrackProfileName(tdb), db);
 }
 
 struct sqlConnection *hAllocConnProfileTbl(char *db, char *spec, char **tableRet)
 /* Allocate a connection to db, spec can either be in the form `table' or
- * `profile.table'.  If it contains profile, connect via that profile.  Also
+ * `profile:table'.  If it contains profile, connect via that profile.  Also
  * returns pointer to table in spec string. */
 {
-char buf[512], *profile = NULL, *sep;
-sep = strchr(spec, ':');
+char buf[512], *profile = NULL;
+char *sep = strchr(spec, ':');
 if (sep != NULL)
     {
     *tableRet = sep+1;
@@ -458,6 +459,31 @@ if (sep != NULL)
 else
     *tableRet = spec;
 return hAllocConnProfile(profile, db);
+}
+
+struct sqlConnection *hAllocConnDbTbl(char *spec, char **tableRet, char *defaultDb)
+/* Allocate a connection to db and table, spec is in form `db.table'; if
+ * defaultDb is not NULL, 'table' can also be used.  Also returns pointer to
+ * table in spec string. */
+{
+char buf[512], *sep, *db;
+sep = strchr(spec, '.');
+if (sep == NULL)
+    {
+    if (defaultDb == NULL)
+        errAbort("no defaultDb, expected db.table, got %s", spec);
+    else
+        db = defaultDb;
+    *tableRet = spec;
+    }
+else
+    {
+    *tableRet = sep+1;
+    safecpy(buf, sizeof(buf), spec);
+    buf[(sep-spec)] = '\0';
+    db = buf;
+    }
+return hAllocConn(db);
 }
 
 void hFreeConn(struct sqlConnection **pConn)
@@ -3991,7 +4017,6 @@ char *sqlGetField(char *db, char *tblName, char *fldName,
 /* Return a single field from the database, table name, field name, and a
    condition string */
 {
-// FIXME: function should be renamed 
 struct sqlConnection *conn = hAllocConn(db);
 char query[256];
 struct sqlResult *sr;
