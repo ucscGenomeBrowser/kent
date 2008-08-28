@@ -11,7 +11,8 @@ subGroup2 CEL Sample ES=ES EShyb=ES-hybrid MEF=MEF NP=NP WBR=Whole_Brain
 #subGroup3 FAC Epitope K04m1=H3K4me1 K04m2=H3K4me2 K04m3=H3K4me3 K09m3=H3K9me3 K20m3=H4K20me3 K27m3=H3K27me3 K36m3=H3K36me3 PAN=pan-H3 RPOL=RPol-II WCE=WCE
 subGroup3 FAC Epitope K04m1=H3K4me1 K04m2=H3K4me2 K04m3=H3K4me3 K09m3=H3K9me3 K20m3=H4K20me3 K27m3=H3K27me3 K36m3=H3K36me3 PAN=pan-H3 RPOL=RPol-II
 dimensions dimensionX=CEL dimensionY=FAC
-#sortOrder CEL=+ FAC=+ view=-
+sortOrder CEL=+ FAC=+ view=-
+dragAndDrop subTracks
 dividers CEL FAC 
 hierarchy view HMM=0 WIN=0 DEN=1 ALN=2
 priority 130
