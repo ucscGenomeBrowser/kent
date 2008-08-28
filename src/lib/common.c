@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.118 2008/08/12 07:04:35 mikep Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.119 2008/08/28 22:01:09 mikep Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1624,7 +1624,12 @@ void mustRead(FILE *file, void *buf, size_t size)
 /* Read from a file or squawk and die. */
 {
 if (size != 0 && fread(buf, size, 1, file) != 1)
-    errAbort("Error reading %lld bytes: %s", (long long)size, strerror(ferror(file)));
+    {
+    if (ferror(file))
+	errAbort("Error reading %lld bytes: %s", (long long)size, strerror(ferror(file)));
+    else
+	errAbort("End of file reading %lld bytes", (long long)size);
+    }
 }
 
 void writeString(FILE *f, char *s)
