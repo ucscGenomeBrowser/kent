@@ -1,3 +1,9 @@
+track chainOryLat2
+priority 280
+
+track netOryLat2
+priority 280.1
+
 track chainAnoCar1
 priority 275.5
 
