@@ -20,6 +20,12 @@ track netGasAcu1
 priority 136.1
 
 # medaka
+track chainOryLat2
+priority 138
+
+track netOryLat2
+priority 138.1
+
 track netOryLat1
 priority 138.1
 
