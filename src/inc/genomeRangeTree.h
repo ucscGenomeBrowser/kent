@@ -217,6 +217,9 @@ void genomeRangeTreeFileIntersectionDetailed(struct genomeRangeTreeFile *tf1, st
  * be read as a genomeRangeTree file. The header information and 'sig' is re-written with 
  * correct data at the end of the process via an 'fseek' operation to the beginning of the file. */
 
+void genomeRangeTreeFileStats(char *fileName, int *numChroms, int *nodes, int *size);
+/* Calculates the number of chroms, ranges, and total size of ranges in the genomeRangeTree file.
+ * Performs a linear scan of the file. */
 
 #endif /* GENOMERANGETREE_H */
 

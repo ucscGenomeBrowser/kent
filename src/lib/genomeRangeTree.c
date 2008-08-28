@@ -717,3 +717,26 @@ if (tf->file)
 genomeRangeTreeFileFree(&tf);
 }
 
+void genomeRangeTreeFileStats(char *fileName, int *numChroms, int *nodes, int *size)
+/* Calculates the number of chroms, ranges, and total size of ranges in the genomeRangeTree file.
+ * Performs a linear scan of the file. */
+{
+struct genomeRangeTreeFile *tf = genomeRangeTreeFileReadHeader(fileName);
+struct hashEl *c;
+int n;
+*size = 0;
+*nodes = 0;
+*numChroms = tf->numChroms;
+for (c = tf->chromList ; c ; c = c->next)
+    {
+    struct rangeStartSize *r;
+    n = hashIntVal(tf->nodes, c->name);
+    *nodes += n;
+    AllocArray(r, n);
+    rangeReadArray(tf->file, r, n, tf->isSwapped);
+    *size += rangeArraySize(r, n);
+    freez(&r);
+    }
+genomeRangeTreeFileFree(&tf);
+}
+
