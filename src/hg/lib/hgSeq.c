@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "hgSeq.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.32.6.3 2008/08/02 04:06:30 markd Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.32.6.4 2008/08/28 17:51:53 markd Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -301,6 +301,11 @@ static void hgSeqConcatRegionsDb(char *db, char *chrom, char strand, char *name,
 			  boolean *exonFlags, boolean *cdsFlags)
 /* Concatenate and print out dna for a series of regions. */
 {
+// Note: this code use to generate different sequence ids if the global
+// database in hdb was different than the db parameter.  This functionality
+// has been removed since the global database was removed and it didn't
+// appear to be used.
+
 struct dnaSeq *rSeq = NULL;
 struct dnaSeq *cSeq = NULL;
 char recName[256];
@@ -350,14 +355,8 @@ if ((chromSize > 0) && (seqEnd > chromSize))
     }
 if (seqEnd <= seqStart)
     {
-    printf("# Null range for %s%s%s_%s (range=%s:%d-%d 5'pad=%d 3'pad=%d)\n",
+    printf("# Null range for %s_%s (range=%s:%d-%d 5'pad=%d 3'pad=%d)\n",
 	   db, 
-#if 0 // FIXME: I think this is always true
-	   (sameString(db, hGetDb()) ? "" : "_"),
-	   (sameString(db, hGetDb()) ? "" : hGetDb()),
-#else
-      "", "",
-#endif
 	   name,
 	   chrom, seqStart+1, seqEnd,
 	   padding5, padding3);
@@ -417,15 +416,9 @@ if (isRc)
     reverseComplement(cSeq->dna, cSeq->size);
 
 safef(recName, sizeof(recName),
-      "%s%s%s_%s range=%s:%d-%d 5'pad=%d 3'pad=%d "
+      "%s_%s range=%s:%d-%d 5'pad=%d 3'pad=%d "
       "strand=%c repeatMasking=%s",
       db, 
-#if 0 // FIXME: I think this is always true
-	(sameString(db, hGetDb()) ? "" : "_"),
-	(sameString(db, hGetDb()) ? "" : hGetDb()),
-#else
-      "", "",
-#endif
       name,
       chrom, seqStart+1, seqEnd,
       padding5, padding3,
