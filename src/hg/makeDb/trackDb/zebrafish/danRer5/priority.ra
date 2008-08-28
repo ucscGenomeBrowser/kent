@@ -7,6 +7,12 @@ priority 99
 track netHg18
 priority 99.1
 
+track chainOryLat2
+priority 110
+
+track netOryLat2
+priority 110.1
+
 track chainOryLat1
 priority 110
 
