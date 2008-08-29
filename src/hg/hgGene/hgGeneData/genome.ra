@@ -8,6 +8,7 @@ nameSql select geneSymbol from kgXref where kgID = '%s'
 proteinSql select spId from kgXref where kgID = '%s'
 descriptionSql select description from kgXref where kgID = '%s'
 knownGene knownGene
+kgAlias kgAlias
 knownGenePep knownGenePep
 knownToRef knownToRefSeq
 pfamDescSql select description from proteome.pfamDesc where pfamAC='%s'

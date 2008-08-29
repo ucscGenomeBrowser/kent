@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.108 2008/02/19 16:47:21 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.109 2008/08/29 19:19:09 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -464,6 +464,31 @@ printIndex(sectionList);
 printSections(sectionList, conn, curGeneId);
 }
 
+static char *findGeneId(struct sqlConnection *conn, char *name)
+/* Given some sort of gene name, see if it is in our primary gene table, and if not
+ * look it up in alias table if we have one. */
+{
+/* Just check if it's in the main gene table, and if so return input name. */
+char *mainTable = genomeSetting("knownGene");
+char query[256];
+safef(query, sizeof(query), "select count(*) from %s where name = '%s'", mainTable, name);
+if (sqlQuickNum(conn, query) > 0)
+    return name;
+
+char *alias = genomeOptionalSetting("kgAlias");
+if (alias != NULL && sqlTableExists(conn, alias))
+     {
+     safef(query, sizeof(query), "select kgID from %s where alias = '%s'", alias, name);
+     char *id = sqlQuickString(conn, query);
+     if (id == NULL)
+         errAbort("Couldn't find %s in %s.%s or %s.%s", name, database, mainTable, database, alias);
+     return id;
+     }
+else
+     errAbort("Couldn't find %s in %s.%s", name, database, mainTable);
+return NULL;
+}
+
 static void getGenePosition(struct sqlConnection *conn)
 /* Get gene position - from cart if it looks valid,
  * otherwise from database. */
@@ -587,8 +612,8 @@ hSetDb(database);
 if (hTableExists("kgProtMap2")) kgVersion = KG_III;
 
 conn = hAllocConn();
-curGeneId = cartString(cart, hggGene);
 getGenomeSettings();
+curGeneId = findGeneId(conn, cartString(cart, hggGene));
 getGenePosition(conn);
 curGenePred = getCurGenePred(conn);
 curGeneName = getGeneName(curGeneId, conn);
