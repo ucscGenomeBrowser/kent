@@ -370,3 +370,64 @@ taeGut1.downloadDir = taeGut1
 # 118749166 bases of 1222864691 (9.711%) in intersection
     featureBits taeGut1 bacEndPairsBad
 # 21778830 bases of 1222864691 (1.781%) in intersection
+
+#########################################################################
+# PRODUCING GENSCAN PREDICTIONS (DONE 2008-08-29 braney)
+    ssh hgwdev
+    mkdir /cluster/data/taeGut1/bed/genscan
+    cd /cluster/data/taeGut1/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+    ssh swarm
+    cd /cluster/data/taeGut1/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt fasta
+
+    for i in ../../goldenPath/chromosomes/*.gz
+    do
+	echo $i
+	maskOutFa $i hard fasta/`basename $i .gz`
+    done
+
+    ls fasta/*.fa > genome.lst
+    wc -l genome.lst
+# 70 genome.lst
+
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 genome.lst single gsub jobList
+    para make jobList
+    para time
+#Completed: 255 of 259 jobs
+#Crashed: 4 jobs
+#CPU time in finished jobs:      82258s    1370.97m    22.85h    0.95d  0.003 y
+#IO & Wait Time:                  1053s      17.55m     0.29h    0.01d  0.000 y
+#Average job time:                 327s       5.45m     0.09h    0.00d
+#Longest finished job:           20131s     335.52m     5.59h    0.23d
+#Submission to last job:         23171s     386.18m     6.44h    0.27d
+
+    # two jobs crashed due to genscan running out of memory, re-run it 
+    # with "-window=1200000" instead of "-window=2400000".
+    para crashed | sed 's/2400000/1200000/' > crash.jobs
+    para create -batch=crashBatch crash.jobs
+    para push -batch=crashBatch
+
+    # Convert these to chromosome level files as so:
+    cat gtf/*.gtf > genscan.gtf
+    cat subopt/*.bed > genscanSubopt.bed 
+    cat pep/*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/taeGut1/bed/genscan
+    ldHgGene taeGut1 genscan genscan.gtf
+    hgPepPred taeGut1 generic genscanPep genscan.pep
+    hgLoadBed taeGut1 genscanSubopt genscanSubopt.bed
+
+    # cleanup
+    rm -rf fasta
