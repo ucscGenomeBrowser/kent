@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.52 2008/08/26 22:57:20 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.53 2008/08/29 17:14:18 larrym Exp $
 
 use warnings;
 use strict;
@@ -137,7 +137,9 @@ sub validateGeneType {
 
 sub validateAntibody {
     my ($val) = @_;
-    defined($terms{'Antibody'}{$val}) || die "ERROR: Antibody \'$val\' is not known \n";
+    if(!($val eq 'input' || $val eq 'control' || defined($terms{'Antibody'}{$val}))) {
+        die "ERROR: Antibody \'$val\' is not known \n";
+    }
 }
 
 ############################################################################
