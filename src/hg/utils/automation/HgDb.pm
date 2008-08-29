@@ -5,7 +5,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgDb.pm instead.
 
-# $Id: HgDb.pm,v 1.4 2008/07/29 22:57:08 larrym Exp $
+# $Id: HgDb.pm,v 1.5 2008/08/29 22:16:10 larrym Exp $
 
 package HgDb;
 
@@ -66,8 +66,24 @@ sub execute
 # Returns $sth
     my ($db, $query, @params) = (@_);
     my $sth = $db->{DBH}->prepare($query) or die "prepare for query '$query' failed; error: " . $db->{DBH}->errstr;
-    my $rv = $sth->execute(@params) or die "execute for query '$query' failed; error: " . $db->{DBH}->errstr;
+    if(!$sth->execute(@params)) {
+        die "execute for query '$query' failed; error: " . $db->{DBH}->errstr;
+    }
     return $sth;
+}
+
+sub quickQuery
+{
+# Execute given query with @params substituted for placeholders in the query.
+# Returns first field in first row.
+# Return undef if query comes up empty.
+    my ($db, $query, @params) = (@_);
+    my $sth = $db->{DBH}->prepare($query) or die "prepare for query '$query' failed; error: " . $db->{DBH}->errstr;
+    if(!$sth->execute(@params)) {
+        die "execute for query '$query' failed; error: " . $db->{DBH}->errstr;
+    }
+    my @row = $sth->fetchrow_array();
+    return @row ? $row[0] : undef;
 }
 
 sub tableExist
