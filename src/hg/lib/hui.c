@@ -15,8 +15,11 @@
 #include "chainCart.h"
 #include "obscure.h"
 #include "wiggle.h"
+#include "phyloTree.h"
+#include "hgMaf.h"
+#include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.111 2008/08/27 19:12:24 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.112 2008/08/29 20:55:04 kate Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -2406,6 +2409,31 @@ safef(javascript, JBUFSIZE*sizeof(char),
 #define MANY_SUBTRACKS  8
 
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
+
+static void cfgBeginBoxAndTitle(boolean boxed, char *title)
+/* Handle start of box and title for individual track type settings */
+{
+if (boxed)
+    {
+    printf("<TABLE CELLSPACING=\"3\" CELLPADDING=\"0\" border=\"4\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>\n",
+            COLOR_DARKBLUE, COLOR_DARKBLUE);
+    printf("<TABLE border=\"0\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>", COLOR_BG_ALTDEFAULT, COLOR_BG_ALTDEFAULT);
+    if (title)
+        printf("<CENTER><B>%s Configuration</B></CENTER>\n", title);
+    }
+else if (title)
+    printf("<p><B>%s &nbsp;</b>", title );
+else
+    printf("<p>");
+}
+
+static void cfgEndBox(boolean boxed)
+/* Handle end of box and title for individual track type settings */
+{
+if (boxed)
+    puts("</td></tr></table></td></tr></table>");
+}
+
 void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed)
 /* UI for the wiggle track */
 {
@@ -2429,16 +2457,7 @@ int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int minHeightPixels = MIN_HEIGHT_PER;
 boolean bedGraph = FALSE;   /*  working on bedGraph type ? */
 
-if(boxed)
-    {
-    printf("<TABLE CELLSPACING=\"3\" CELLPADDING=\"0\" border=\"4\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>\n",
-            COLOR_DARKBLUE,COLOR_DARKBLUE);
-    printf("<TABLE border=\"0\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>",COLOR_BG_ALTDEFAULT,COLOR_BG_ALTDEFAULT);
-    if(title)
-        printf("<CENTER><B>%s Configuration</B></CENTER>\n",title);
-    }
-else if(title)
-    printf("<P><B>%s</B>\n",title );
+cfgBeginBoxAndTitle(boxed, title);
 
 typeLine = cloneString(tdb->type);
 wordCount = chopLine(typeLine,words);
@@ -2522,11 +2541,10 @@ if(boxed)
     puts("</TD></TR></TABLE>");
 
 freeMem(typeLine);
-if(boxed)
-    puts("</td></tr></table></td></tr></table>");
+cfgEndBox(boxed);
 }
 
-void scoreCfgUi(struct cart *cart, struct trackDb *parentTdb, char *name,char *title, int maxScore,boolean boxed)
+void scoreCfgUi(struct cart *cart, struct trackDb *parentTdb, char *name, char *title,  int maxScore, boolean boxed)
 /* Put up UI for filtering bed track based on a score */
 {
 char option[256];
@@ -2541,18 +2559,7 @@ char *scoreCtString = trackDbSetting(parentTdb, "filterTopScorers");
 char *scoreFilterCt = NULL;
 bool doScoreCtFilter = FALSE;
 
-if(boxed)
-    {
-    printf("<TABLE CELLSPACING=\"3\" CELLPADDING=\"0\" border=\"4\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>\n",
-            COLOR_DARKBLUE,COLOR_DARKBLUE);
-    printf("<TABLE border=\"0\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>",COLOR_BG_ALTDEFAULT,COLOR_BG_ALTDEFAULT);
-    if(title)
-        printf("<CENTER><B>%s Configuration</B></CENTER>\n",title);
-    }
-else if(title)
-    printf("<p><B>%s &nbsp;</b>",title );
-else
-    printf("<p>");
+cfgBeginBoxAndTitle(boxed, title);
 
 /* initial value of score theshold is 0, unless
  * overridden by the scoreFilter setting in the track */
@@ -2584,11 +2591,379 @@ if (scoreCtString != NULL)
         printf("&nbsp; (range: 1 to 100000, total items: %d)",
                 getTableSize(parentTdb->tableName));
     }
-if(boxed)
-    puts("</td></tr></table></td></tr></table>");
 }
 
-static boolean hCompositeDisplayViewDropDowns(struct cart *cart, struct trackDb *parentTdb)
+void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db)
+/* UI for maf/wiggle track
+ * NOTE: calls wigCfgUi */
+{
+struct wigMafSpecies 
+    {
+    struct wigMafSpecies *next;
+    char *name;
+    int group;
+    };
+
+#define MAX_SP_SIZE 2000
+
+cfgBeginBoxAndTitle(boxed, title);
+
+char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
+char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
+char *speciesTree = trackDbSetting(tdb, SPECIES_TREE_VAR);
+char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
+char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
+char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
+char *framesTable = trackDbSetting(tdb, "frames");
+char *firstCase = trackDbSetting(tdb, ITEM_FIRST_CHAR_CASE);
+bool lowerFirstChar = TRUE;
+if (firstCase != NULL)
+    {
+    if (sameWord(firstCase, "noChange")) lowerFirstChar = FALSE;
+    }
+char *species[MAX_SP_SIZE];
+char *groups[20];
+char sGroup[24];
+char *treeImage = NULL;
+struct wigMafSpecies *wmSpecies, *wmSpeciesList = NULL;
+struct slName *speciesList = NULL;
+int group, prevGroup;
+int speciesCt = 0, groupCt = 1;
+int i, j;
+char option[MAX_SP_SIZE];
+struct phyloTree *tree;
+struct consWiggle *consWig, *consWiggles = wigMafWiggles(tdb);
+
+struct sqlConnection *conn;
+char query[256];
+char **row;
+struct sqlResult *sr;
+char *chp;
+char trackName[255];
+boolean lineBreakJustPrinted;
+
+char buttonVar[64];
+int numberPerRow;
+boolean isWigMafProt = FALSE;
+
+if (strstr(tdb->type, "wigMafProt")) isWigMafProt = TRUE;
+
+puts("<TABLE><TR><TD>");
+
+if (consWiggles && consWiggles->next)
+    {
+    /* check for alternate conservation wiggles -- create checkboxes */
+    puts("<P STYLE=\"margin-top:10;\"><B>Conservation:</B>" );
+    boolean first = TRUE;
+    for (consWig = consWiggles; consWig != NULL; consWig = consWig->next)
+        {
+        char *wigVar = wigMafWiggleVar(tdb, consWig);
+        cgiMakeCheckBox(wigVar, cartUsualBoolean(cart, wigVar, first));
+        first = FALSE;
+        subChar(consWig->uiLabel, '_', ' ');
+        printf ("%s&nbsp;", consWig->uiLabel);
+        }
+    }
+
+/* determine species and groups for pairwise -- create checkboxes */
+if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
+    {
+    if (isCustomTrack(tdb->tableName))
+	return;
+    errAbort("Track %s missing required trackDb setting: speciesOrder, speciesGroups, or speciesUseFile", tdb->tableName);
+    }
+
+if (speciesGroup)
+    groupCt = chopLine(speciesGroup, groups);
+
+if (speciesUseFile)
+    {
+    if ((speciesGroup != NULL) || (speciesOrder != NULL))
+	errAbort("Can't specify speciesUseFile and speciesGroup or speciesOrder");
+    speciesOrder = cartGetOrderFromFile(cart, speciesUseFile);
+    }
+
+for (group = 0; group < groupCt; group++)
+    {
+    if (groupCt != 1 || !speciesOrder)
+        {
+        safef(sGroup, sizeof sGroup, "%s%s", 
+                                SPECIES_GROUP_PREFIX, groups[group]);
+        speciesOrder = trackDbRequiredSetting(tdb, sGroup);
+        }
+    speciesCt = chopLine(speciesOrder, species);
+    for (i = 0; i < speciesCt; i++)
+        {
+        AllocVar(wmSpecies);
+        wmSpecies->name = cloneString(species[i]);
+        wmSpecies->group = group;
+        slAddHead(&wmSpeciesList, wmSpecies);
+        slAddTail(&speciesList, slNameNew(cloneString(species[i])));
+        }
+    }
+slReverse(&wmSpeciesList);
+
+puts("\n<P STYLE=><B>Pairwise alignments:</B>&nbsp;");
+
+cgiContinueHiddenVar("g");
+jsInit();
+
+char prefix[512];
+safef(prefix, sizeof prefix, "%s.", tdb->tableName);
+char *defaultOffSpecies = trackDbSetting(tdb, "speciesDefaultOff");
+if (defaultOffSpecies)
+    {
+    safecpy(buttonVar, sizeof buttonVar, "set_defaults_button");
+    /* make button and turn on all species (if button was pressed) */
+    jsMakeSetClearButton(cart, "mainForm", buttonVar, JS_DEFAULTS_BUTTON_LABEL,
+			 prefix, speciesList, NULL, FALSE, TRUE);
+    if (isNotEmpty(cgiOptionalString(buttonVar)))
+        {
+        char *words[MAX_SP_SIZE];
+        int wordCt = chopLine(defaultOffSpecies, words);
+        /* turn off those that are default off */
+        int i;
+        for (i = 0; i < wordCt; i++)
+            {
+            safef(option, sizeof(option), "%s%s", prefix, words[i]);
+            cartSetBoolean(cart, option, FALSE);
+            }
+        }
+    }
+
+puts("&nbsp;");
+safef(buttonVar, sizeof buttonVar, "%s", "set_all_button");
+jsMakeSetClearButton(cart, "mainForm", buttonVar, JS_SET_ALL_BUTTON_LABEL,
+		     prefix, speciesList, NULL, FALSE, TRUE);
+puts("&nbsp;");
+safef(buttonVar, sizeof buttonVar, "%s", "clear_all_button");
+jsMakeSetClearButton(cart, "mainForm", buttonVar, JS_CLEAR_ALL_BUTTON_LABEL,
+		      prefix, speciesList, NULL, FALSE, FALSE);
+
+if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
+    {
+    char buffer[128];
+    char *nodeNames[512];
+    int numNodes = 0;
+    char *path, *orgName;
+    int ii;
+
+    safef(buffer, sizeof(buffer), "%s.vis",tdb->tableName);
+    cartMakeRadioButton(cart, buffer,"useTarg", "useTarg");
+    printf("Show shortest path to target species:  ");
+    path = phyloNodeNames(tree);
+    numNodes = chopLine(path, nodeNames);
+    for(ii=0; ii < numNodes; ii++)
+	{
+	if ((orgName = hOrganism(nodeNames[ii])) != NULL)
+	    nodeNames[ii] = orgName;
+	nodeNames[ii][0] = toupper(nodeNames[ii][0]);
+	}
+
+    cgiMakeDropList(SPECIES_HTML_TARGET, nodeNames, numNodes,
+	cartUsualString(cart, SPECIES_HTML_TARGET, speciesTarget));
+    puts("<br>");
+    cartMakeRadioButton(cart,buffer,"useCheck", "useTarg");
+    printf("Show all species checked : ");
+    }
+
+if (groupCt == 1)
+    puts("\n<TABLE><TR>");
+group = -1;
+lineBreakJustPrinted = FALSE;
+for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL; 
+		    wmSpecies = wmSpecies->next, i++)
+    {
+    char *label;
+    prevGroup = group;
+    group = wmSpecies->group;
+    if (groupCt != 1 && group != prevGroup)
+	{
+	i = 0;
+	j = 0;
+	if (group != 0)
+	    puts("</TR></TABLE>\n");
+        /* replace underscores in group names */
+        subChar(groups[group], '_', ' ');
+	printf("<P>&nbsp;&nbsp;<B><EM>%s</EM></B>", groups[group]);
+
+	puts("\n<TABLE><TR>");
+	}
+    if (hIsGsidServer()) 
+	numberPerRow = 6;
+    else 
+	numberPerRow = 5;
+    
+    /* new logic to decide if line break should be displayed here */
+    if ((j != 0 && (j % numberPerRow) == 0) && (lineBreakJustPrinted == FALSE))
+	{
+	puts("</TR><TR>");
+    	lineBreakJustPrinted = TRUE;
+	}
+    
+    if (hIsGsidServer()) 
+    	{
+	/* for GSID maf, display only entries belong to the specific MSA selected */
+    	safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
+    	label = hOrganism(wmSpecies->name);
+    	if (label == NULL)
+            label = wmSpecies->name;
+	strcpy(trackName, tdb->tableName);	
+
+	/* try AaMaf first */
+	chp = strstr(trackName, "AaMaf");
+	/* if it is not a AaMaf track, try Maf next */
+	if (chp == NULL) chp = strstr(trackName, "Maf");
+
+	/* test if the entry actually is part of the specific maf track data */
+	if (chp != NULL)
+	    {
+	    *chp = '\0';
+	    safef(query, sizeof(query),
+	    "select id from %sMsa where id = 'ss.%s'", trackName, label);
+
+	    conn = hAllocConn();
+	    sr = sqlGetResult(conn, query);	    
+	    row = sqlNextRow(sr);
+
+	    /* offer it only if the entry is found in current maf data set */
+	    if (row != NULL)
+		{
+    		puts("<TD>");
+    		cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
+		printf ("%s", label);
+    		puts("</TD>");
+		fflush(stdout);
+		lineBreakJustPrinted = FALSE;
+		j++;
+		}
+	    sqlFreeResult(&sr);
+	    hFreeConn(&conn);
+	    }
+	}
+    else
+    	{
+    	puts("<TD>");
+    	safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
+    	cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
+    	label = hOrganism(wmSpecies->name);
+    	if (label == NULL)
+		label = wmSpecies->name;
+        if (lowerFirstChar)
+            *label = tolower(*label);
+    	printf ("%s<BR>", label);
+    	puts("</TD>");
+	lineBreakJustPrinted = FALSE;
+	j++;
+	}
+    }
+puts("</TR></TABLE><BR>\n");
+
+if (isWigMafProt) 
+    puts("<B>Multiple alignment amino acid-level:</B><BR>" );
+else 
+    puts("<B>Multiple alignment base-level:</B><BR>" );
+safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_DOT_VAR);
+cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
+
+if (isWigMafProt) 
+    puts("Display amino acids identical to reference as dots<BR>" );
+else
+    puts("Display bases identical to reference as dots<BR>" );
+
+safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
+cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, TRUE));
+
+char *irowStr = trackDbSetting(tdb, "irows");
+boolean doIrows = (irowStr == NULL) || !sameString(irowStr, "off");
+if (isCustomTrack(tdb->tableName) || doIrows)
+    puts("Display chains between alignments<BR>");
+else
+    {
+    if (isWigMafProt) 
+	puts("Display unaligned amino acids with spanning chain as 'o's<BR>");
+    else
+	puts("Display unaligned bases with spanning chain as 'o's<BR>");
+    }
+safef(option, sizeof option, "%s.%s", tdb->tableName, "codons");
+if (framesTable)
+    {
+    char *nodeNames[512];
+    char buffer[128];
+
+    printf("<BR><B>Codon Translation:</B><BR>");
+    printf("Default species to establish reading frame: ");
+    nodeNames[0] = db;
+    for (wmSpecies = wmSpeciesList, i = 1; wmSpecies != NULL; 
+			wmSpecies = wmSpecies->next, i++)
+	{
+	nodeNames[i] = wmSpecies->name;
+	}
+    cgiMakeDropList(SPECIES_CODON_DEFAULT, nodeNames, i,
+	cartUsualString(cart, SPECIES_CODON_DEFAULT, defaultCodonSpecies));
+    puts("<br>");
+    safef(buffer, sizeof(buffer), "%s.codons",tdb->tableName);
+    cartMakeRadioButton(cart, buffer,"codonNone", "codonDefault");
+    printf("No codon translation<BR>");
+    cartMakeRadioButton(cart, buffer,"codonDefault", "codonDefault");
+    printf("Use default species reading frames for translation<BR>");
+    cartMakeRadioButton(cart, buffer,"codonFrameNone", "codonDefault");
+    printf("Use reading frames for species if available, otherwise no translation<BR>");
+    cartMakeRadioButton(cart, buffer,"codonFrameDef", "codonDefault");
+    printf("Use reading frames for species if available, otherwise use default species<BR>");
+    }
+else
+    {
+    /* Codon highlighting does not apply to wigMafProt type */
+    if (!strstr(tdb->type, "wigMafProt"))
+	{
+    	puts("<P><B>Codon highlighting:</B><BR>" );
+
+#ifdef GENE_FRAMING
+
+    	safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_FRAME_VAR);
+    	char *currentCodonMode = cartCgiUsualString(cart, option, MAF_FRAME_GENE);
+
+    	/* Disable codon highlighting */
+   	 cgiMakeRadioButton(option, MAF_FRAME_NONE, 
+		    sameString(MAF_FRAME_NONE, currentCodonMode));
+    	puts("None &nbsp;");
+
+    	/* Use gene pred */
+    	cgiMakeRadioButton(option, MAF_FRAME_GENE, 
+			    sameString(MAF_FRAME_GENE, currentCodonMode));
+    	puts("CDS-annotated frame based on");
+    	safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_GENEPRED_VAR);
+    	genePredDropDown(cart, makeTrackHash(db, chromosome), NULL, option);
+
+#else
+    	snprintf(option, sizeof(option), "%s.%s", tdb->tableName, BASE_COLORS_VAR);
+    	puts ("&nbsp; Alternate colors every");
+    	cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
+    	puts ("bases<BR>");
+    	snprintf(option, sizeof(option), "%s.%s", tdb->tableName, 
+			    BASE_COLORS_OFFSET_VAR);
+    	puts ("&nbsp; Offset alternate colors by");
+    	cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
+    	puts ("bases<BR>");
+#endif
+	}
+    }
+
+treeImage = trackDbSetting(tdb, "treeImage");
+if (treeImage)
+    printf("</TD><TD><IMG ALIGN=TOP SRC=\"../images/%s\"></TD></TR></TABLE>", treeImage);
+else
+    puts("</TD></TR></TABLE>");
+
+if (trackDbSetting(tdb, CONS_WIGGLE) != NULL)
+    {
+    wigCfgUi(cart,tdb,tdb->tableName,"Conservation graph:",FALSE);
+    }
+cfgEndBox(boxed);
+}
+
+static boolean hCompositeDisplayViewDropDowns(struct cart *cart, struct trackDb *parentTdb, char *db)
 /* UI for composite view drop down selections. */
 {
 int ix;
@@ -2607,6 +2982,8 @@ if(membersOfView == NULL)
 #define CFG_NOT      0x00
 #define CFG_BEDSCORE 0x01
 #define CFG_WIG      0x02
+#define CFG_WIGMAF   0x03
+
 char configurable[membersOfView->count];
 memset(configurable,CFG_NOT,sizeof(configurable));
 boolean makeCfgRows = FALSE; 
@@ -2621,7 +2998,9 @@ for (ix = 0; ix < membersOfView->count; ix++)
         if(differentString(stView,membersOfView->names[ix]))
             continue;
         matchedSubtracks[ix] = subtrack;
-        if(startsWith("wig", matchedSubtracks[ix]->type))
+        if(startsWith("wigMaf", matchedSubtracks[ix]->type))
+            configurable[ix] = CFG_WIGMAF;
+        else if(startsWith("wig", matchedSubtracks[ix]->type))
             configurable[ix] = CFG_WIG;
         else if(startsWith("bedGraph", matchedSubtracks[ix]->type))
             configurable[ix] = CFG_WIG;
@@ -2675,6 +3054,8 @@ if(makeCfgRows)
                 safef(objName, sizeof(objName), "%s_%s", parentTdb->tableName,membersOfView->names[ix]);
                 if(configurable[ix] == CFG_WIG)
                     wigCfgUi(cart,matchedSubtracks[ix],objName,membersOfView->values[ix],TRUE);
+                else if(configurable[ix] == CFG_WIGMAF)
+                    wigMafCfgUi(cart,matchedSubtracks[ix],objName,membersOfView->values[ix],TRUE, db);
                 else if(configurable[ix] == CFG_BEDSCORE)
                     {
                     if(trackDbSetting(matchedSubtracks[ix], "scoreFilterMax")) 
@@ -2691,7 +3072,7 @@ freeMem(matchedSubtracks);
 return TRUE;
 }
 
-static boolean hCompositeUiByMatrix(struct cart *cart, struct trackDb *parentTdb, char *formName)
+static boolean hCompositeUiByMatrix(struct cart *cart, struct trackDb *parentTdb, char *formName, char *db)
 /* UI for composite tracks: matrix of checkboxes. */
 {
 //int ix;
@@ -2704,7 +3085,7 @@ struct trackDb *subtrack;
 if(!dimensionsExist(parentTdb))
     return FALSE;
 
-hCompositeDisplayViewDropDowns(cart,parentTdb);  // If there is a view dimension, it is at top
+hCompositeDisplayViewDropDowns(cart,parentTdb,db);  // If there is a view dimension, it is at top
 
 int ixX,ixY;
 members_t *dimensionX = subgroupMembersGetByDimension(parentTdb,'X');
@@ -3006,7 +3387,7 @@ for (i = 0; i < MAX_SUBGROUP; i++)
 }
 
 void hCompositeUi(struct cart *cart, struct trackDb *tdb,
-		  char *primarySubtrack, char *fakeSubmit, char *formName)
+		  char *primarySubtrack, char *fakeSubmit, char *formName, char *db)
 /* UI for composite tracks: subtrack selection.  If primarySubtrack is
  * non-NULL, don't allow it to be cleared and only offer subtracks
  * that have the same type.  If fakeSubmit is non-NULL, add a hidden
@@ -3041,7 +3422,7 @@ jsIncludeFile("hui.js",NULL);
 if (!hasSubgroups || !isMatrix || primarySubtrack)
     hCompositeUiNoMatrix(cart,tdb,primarySubtrack,formName);
 else 
-    hCompositeUiByMatrix(cart,tdb,formName);
+    hCompositeUiByMatrix(cart,tdb,formName,db);
 
 if(primarySubtrack == NULL && isMatrix == FALSE)
     {
