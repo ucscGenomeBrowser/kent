@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.134 2008/08/29 20:56:40 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.135 2008/08/29 22:25:20 kate Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -619,12 +619,12 @@ mp->list = (char *)-1;   /* no maf's loaded or attempted to load */
  * track we force dense mode since we don't have
  * a summary table (yet). */
 if ((winBaseCount >= MAF_SUMMARY_VIEW) && isCustomTrack(track->mapName))
-    track->limitedVis = tvDense; 
+    track->visibility = tvDense; 
 
 /* Load up mafs and store in track so drawer doesn't have
  * to do it again. */
 /* Make up tracks for display. */
-if (track->limitedVis == tvFull || track->limitedVis == tvPack)
+if (track->visibility == tvFull || track->visibility == tvPack)
     {
     if (isBaseLevel)
 	{
@@ -636,7 +636,7 @@ if (track->limitedVis == tvFull || track->limitedVis == tvPack)
 	miList = loadPairwiseItems(track);
 	}
     }
-else if (track->limitedVis == tvSquish)
+else if (track->visibility == tvSquish)
     {
     if (!wigTrack)
         {
