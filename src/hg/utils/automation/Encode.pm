@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.13 2008/08/27 00:06:19 larrym Exp $
+# $Id: Encode.pm,v 1.14 2008/08/29 22:00:27 larrym Exp $
 
 package Encode;
 
@@ -229,6 +229,7 @@ sub getDaf
     &HgAutomate::verbose(2, "Using newest DAF file \'$dafFile\'\n");
     my $lines = readFile("$dafFile");
     chdir($wd);
+    my $order = 1;
 
     while (@{$lines}) {
         my $line = shift @{$lines};
@@ -246,6 +247,8 @@ sub getDaf
         if ($key eq "view") {
             my %track = ();
             my $track = $val;
+            # remember track of order, so we can prioritize tracks correctly
+            $track{order} = $order++;
             $daf{TRACKS}->{$track} = \%track;
             &HgAutomate::verbose(5, "  Found view: \'$track\'\n");
             while ($line = shift @{$lines}) {
