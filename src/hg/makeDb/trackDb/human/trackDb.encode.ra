@@ -664,7 +664,7 @@ baseColorDefault genomicCodons
     track encodePseudogeneGIS
     subTrack encodePseudogene
     shortLabel GIS Pseudogenes
-    longLabel Genome Institute of Singapore (GIS) Pseudogenes 
+    longLabel Gene Identification Signature (GIS) Pseudogenes 
     priority 6
 
 track encodeAffyEncode25bpProbes
