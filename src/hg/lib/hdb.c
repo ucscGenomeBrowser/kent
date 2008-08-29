@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.368.4.12 2008/08/28 17:21:30 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.368.4.13 2008/08/29 00:06:57 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -4333,6 +4333,7 @@ struct slName *getDomainList(struct sqlConnection *conn, char *ucscGeneId,
 /* Get list of accessions from external database associated with 
  * protein domain entity.  The db parameter can be "Pfam", "Scop", etc. */
 {
+#if 0 // FIXME: code has changed in the head, disable until merge
 char query[255];
 char lowerCaseName[255];
 
@@ -4345,6 +4346,9 @@ safef(query, sizeof(query),
     " where ucscId  = '%s' and u.domainName=p.name "
     , domainDb, lowerCaseName, ucscGeneId);
 return sqlQuickList(conn, query);
+#else
+return NULL;
+#endif
 }
 
 boolean isUnknownChrom(char *dataBase, char *chromName)
