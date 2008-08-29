@@ -11,8 +11,9 @@
 #include <termios.h>
 #include "portable.h"
 #include "portimpl.h"
+#include "wait.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.32 2008/06/27 18:46:53 markd Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.32.6.1 2008/08/29 20:01:09 markd Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -342,4 +343,58 @@ struct stat buf;
 if (fstat(fd, &buf) < 0)
     errnoAbort("fstat failed");
 return S_ISFIFO(buf.st_mode);
+}
+
+static void execPStack(pid_t ppid)
+/* exec pstack on the specified pid */
+{
+char *cmd[3], pidStr[32];
+safef(pidStr, sizeof(pidStr), "%d", ppid);
+cmd[0] = "pstack";
+cmd[1] = pidStr;
+cmd[2] = NULL;
+
+// redirect stdout to stderr
+if (dup2(1, 2) < 0)
+    errAbort("dup2 failed");
+
+execvp(cmd[0], cmd);
+errAbort("exec failed: %s", cmd[0]);
+}
+
+void vaDumpStack(char *format, va_list args)
+/* debugging function to run the pstack program on the current process. In
+ * prints a message, following by a new line, and then the stack track.
+ * For debugging purposes only.  */
+{
+fprintf(stderr, format, args);
+fputc('\n', stderr);
+fflush(stderr);
+pid_t ppid = getpid();
+pid_t pid = fork();
+if (pid < 0)
+    errnoAbort("can't fork");
+if (pid == 0)
+    execPStack(ppid);
+int wstat;
+if (waitpid(pid, &wstat, 0) < 0)
+    errnoAbort("waitpid failed");
+if (WIFEXITED(wstat))
+    {
+    if (WEXITSTATUS(wstat) != 0)
+        errAbort("pstack failed");
+    }
+else if (WIFSIGNALED(wstat))
+    errAbort("pstack signaled %d", WTERMSIG(wstat));
+}
+
+void dumpStack(char *format, ...)
+/* debugging function to run the pstack program on the current process. In
+ * prints a message, following by a new line, and then the stack track.
+ * For debugging purposes only.  */
+{
+va_list args;
+va_start(args, format);
+vaDumpStack(format, args);
+va_end(args);
 }
