@@ -1302,6 +1302,11 @@ identifier knownGeneId dependency
     $kgDb.kg3ToKg4.oldId minCheck=0.5
     $kgDb.kg3ToKg4.newId exclude=
 
+identifier knownGeneOld3Id dependency 
+"Previous UCSC Gene build"
+    $kgDb.knownGeneOld3.name
+    $kgDb.kg3ToKg4.oldId full
+
 identifier knownGeneOld2Id dependency 
 "Old knownGene (KGII) and kgXref tables kept after KGIII implementation"
     $kgDb.knownGeneOld2.name dupeOk
