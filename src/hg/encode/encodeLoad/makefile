@@ -11,13 +11,16 @@ all:
 alpha: scripts
 
 install: 
-	@${MAKE} --no-print-directory SCRIPTS=${ENCODE_PIPELINE_BIN} scripts
+	@${MAKE} --no-print-directory SCRIPTS=${ENCODE_PIPELINE_BIN} scripts schemas
 
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
 	    chmod +x $$F; \
             perl -c $$F && cp -upv $$F ${SCRIPTS}; \
 	done
+
+schemas: 
+	./installSqlSchemas.pl
 
 test:
 	doEncodeLoad.pl load /cluster/store3/encpipeline_dev/43
