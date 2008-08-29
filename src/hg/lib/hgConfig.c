@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.18.12.4 2008/08/12 23:35:35 markd Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.18.12.5 2008/08/29 21:57:27 markd Exp $";
 
 #include "common.h"
 #include "hgConfig.h"
@@ -48,10 +48,12 @@ return FALSE;
 
 static void checkConfigPerms(char *filename)
 /* get that we are either a CGI or that the config file is only readable by 
- * the user, or doesn't exist */
+ * the user, or doesn't exist.  Specifying HGDB_CONF also disables perms
+ * check to make debugging and having CGIs run loaders easier */
 {
 struct stat statBuf;
-if ((!isBrowserCgi()) && (stat(filename, &statBuf) == 0))
+if ((!isBrowserCgi()) && isEmpty(getenv("HGDB_CONF"))
+    && (stat(filename, &statBuf) == 0))
     {
     if ((statBuf.st_mode & (S_IRWXG|S_IRWXO)) != 0)
         errAbort("config file %s allows group or other access, must only allow user access",
@@ -62,20 +64,22 @@ if ((!isBrowserCgi()) && (stat(filename, &statBuf) == 0))
 static void getConfigFile(char filename[PATH_LEN])
 /* get path to .hg.conf file to use */
 {
-if (!isBrowserCgi())
+if (!isEmpty(getenv("HGDB_CONF")))
     {
-    /* Check for explictly specified file in env, otherwise use one in home */
-    if (getenv("HGDB_CONF") != NULL)
-        strcpy(filename, getenv("HGDB_CONF"));
-    else
-        safef(filename, PATH_LEN, "%s/%s",
-	      getenv("HOME"), USER_CONFIG_FILE);
-    checkConfigPerms(filename);
+    // use environment variable
+    strcpy(filename, getenv("HGDB_CONF"));
     }
-else	/* on the web, read from global config file */
+else if (isBrowserCgi())
     {
+    /* on the web, read from global config file */
     safef(filename, PATH_LEN, "%s/%s",
 	  GLOBAL_CONFIG_PATH, GLOBAL_CONFIG_FILE);
+    }
+else
+    {
+    /*use one in home */
+    safef(filename, PATH_LEN, "%s/%s",
+          getenv("HOME"), USER_CONFIG_FILE);
     }
 }
 

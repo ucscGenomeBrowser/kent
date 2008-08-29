@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.113.6.12 2008/08/28 17:21:30 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.113.6.13 2008/08/29 21:57:27 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -47,9 +47,11 @@ struct sqlConnection
 /* This is an item on a list of sql open connections. */
     {
     MYSQL *conn;		    /* Connection. */
+    struct sqlProfile *profile;     /* profile, or NULL if not opened via a profile */
     struct dlNode *node;	    /* Pointer to list node. */
     struct dlList *resultList;	    /* Any open results. */
     boolean hasHardLock;	    /* TRUE if table has a non-advisory lock. */
+    boolean inCache;                /* debugging flag to indicate its in a cache */
     };
 
 struct sqlResult
@@ -418,6 +420,8 @@ struct sqlConnection *sc = *pSc;
 long deltaTime;
 if (sc != NULL)
     {
+    if (sc->inCache)
+        errAbort("sqlDisconnect called on connection associated with a cache");
     MYSQL *conn = sc->conn;
     struct dlList *resList = sc->resultList;
     struct dlNode *node = sc->node;
@@ -561,6 +565,7 @@ if (sqlOpenConnections)
 	{
 	conn = conNode->val;
 	conNext = conNode->next;
+        conn->inCache = FALSE; // really should be cleaning up caches too
 	sqlDisconnect(&conn);
 	}
     freeDlList(&sqlOpenConnections);
@@ -656,7 +661,10 @@ static struct sqlConnection *sqlConnProfile(struct sqlProfile* sp, char *databas
 /* Connect to database using the profile.  Database maybe NULL to connect to
  * the server. Optionally abort on failure. */
 {
-return sqlConnRemote(sp->host, sp->user, sp->password, database, abort);
+struct sqlConnection *conn = sqlConnRemote(sp->host, sp->user, sp->password, database, abort);
+if (conn != NULL)
+    conn->profile = sp;  // remember profile, mainly for debugging
+return conn;
 }
 
 struct sqlConnection *sqlMayConnect(char *database)
@@ -1590,7 +1598,10 @@ if ((cache = *pCache) != NULL)
     {
     struct sqlConnCacheEntry *scce;
     for (scce = cache->entries; scce != NULL; scce = scce->next)
+        {
+        scce->conn->inCache = FALSE;
 	sqlDisconnect(&scce->conn);
+        }
     slFreeList(&cache->entries);
     freeMem(cache->host);
     freeMem(cache->user);
@@ -1608,6 +1619,7 @@ struct sqlConnCacheEntry *scce;
 AllocVar(scce);
 scce->profile = profile;
 scce->conn = conn;
+conn->inCache = TRUE;
 slAddHead(&cache->entries, scce);
 cache->entryCnt++;
 return scce;
@@ -1731,6 +1743,8 @@ void sqlConnCacheDealloc(struct sqlConnCache *cache, struct sqlConnection **pCon
 struct sqlConnection *conn = *pConn;
 if (conn != NULL)
     {
+    if (!conn->inCache)
+        errAbort("sqlConnCacheDealloc called on connection that is not associated with a cache");
     struct sqlConnCacheEntry *scce;
     for (scce = cache->entries; (scce != NULL) && (scce->conn != conn); scce = scce->next)
         continue;

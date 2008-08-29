@@ -14,7 +14,7 @@
 
 #define MAXALIGN 30  /* max number of species to align */
 #define DEFCOUNT 3   /* require 3 species to match before counting as covered */
-static char const rcsid[] = "$Id: mafCoverage.c,v 1.6.70.2 2008/08/05 07:11:23 markd Exp $";
+static char const rcsid[] = "$Id: mafCoverage.c,v 1.6.70.3 2008/08/29 21:57:59 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -39,7 +39,6 @@ struct chromInfo *getAllChromInfo(char *database)
 /* Return list of info for all chromosomes. */
 {
 struct sqlConnection *conn = hAllocConn(database);
-//struct sqlConnection *conn = sqlConnectRemote(hGetDb());
 struct sqlResult *sr;
 char **row;
 struct chromInfo *ci, *ciList = NULL;

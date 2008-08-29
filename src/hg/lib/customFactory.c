@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.85.4.5 2008/08/09 04:40:38 markd Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.85.4.6 2008/08/29 21:57:26 markd Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -63,33 +63,17 @@ if (!hgIsOfficialChromName(genomeDb, word))
     lineFileAbort(lf, "%s not a chromosome (note: chrom names are case sensitive)", word);
 }
 
-static char *saveHost = NULL;
-static char *saveUser = NULL;
-static char *savePassword = NULL;
+static char *saveConf = NULL;
 
 static void saveCurrentEnv()
 /* while fiddling with environment for pipeline loaders, remember previous env
  */
 {
 char *val = NULL;
-freeMem(saveHost);	/* clear these if previously used	*/
-freeMem(saveUser);
-freeMem(savePassword);
-val = getenv("HGDB_HOST");
-if (val && (strlen(val) > 0))
-    saveHost = cloneString(val);
-else
-    saveHost = NULL;
-val = getenv("HGDB_USER");
-if (val && (strlen(val) > 0))
-    saveUser = cloneString(val);
-else
-    saveUser = NULL;
-val = getenv("HGDB_PASSWORD");
-if (val && (strlen(val) > 0))
-    savePassword = cloneString(val);
-else
-    savePassword = NULL;
+freez(&saveConf);	/* clear these if previously used	*/
+val = getenv("HGDB_CONF");
+if (!isEmpty(val))
+    saveConf = cloneString(val);
 }
 
 static void restorePrevEnv()
@@ -99,36 +83,22 @@ static void restorePrevEnv()
  * them be empty strings.  This will be good enough for cfgOptionEnv()
  * in hdb.c and jksql.c
  */
-if (saveHost)
-    envUpdate("HGDB_HOST", saveHost);
+if (saveConf != NULL)
+    envUpdate("HGDB_HOST", saveConf);
 else
     envUpdate("HGDB_HOST", "");
-if (saveUser)
-    envUpdate("HGDB_USER", saveUser);
-else
-    envUpdate("HGDB_USER", "");
-if (savePassword)
-    envUpdate("HGDB_PASSWORD", savePassword);
-else
-    envUpdate("HGDB_PASSWORD", "");
-freeMem(saveHost);	/* clear these if previously used	*/
-freeMem(saveUser);
-freeMem(savePassword);
+freez(&saveConf);
 }
 
 char *customTrackTempDb()
 /* Get custom database.  If first time set up some
  * environment variables that the loaders will need. */
 {
-/*	set environment for pipeline commands */
-char *host = cfgOptionDefault("customTracks.host", NULL);
-char *user = cfgOptionDefault("customTracks.user", NULL);
-char *pass = cfgOptionDefault("customTracks.password", NULL);
-
+/* set environment for pipeline commands, but don't override if
+ * already set for debugging. */
 saveCurrentEnv();
-envUpdate("HGDB_HOST", host);
-envUpdate("HGDB_USER", user);
-envUpdate("HGDB_PASSWORD", pass);
+if (!isEmpty(getenv("HGDB_CONF")))
+    envUpdate("HGDB_CONF", "./hg.conf");
 return (CUSTOM_TRASH);
 }
 
@@ -147,7 +117,7 @@ trashDirFile(&tn, "ct", "ct", ".err");
 track->dbStderrFile = cloneString(tn.forCgi);
 track->dbDataLoad = TRUE;	
 track->dbTrack = TRUE;
-sqlDisconnect(&ctConn);
+hFreeConn(&ctConn);
 }
 
 static char *ctGenomeOrCurrent(struct customTrack *ct)
@@ -1236,6 +1206,9 @@ if (dbRequested)
 	fputcErr = fputc(c, out);
     carefulClose(&in);
     fflush(out);		/* help see error from loader failure */
+#if 0  // enable this for help debugging
+    fprintf(stderr, "%s\n", pipelineDesc(dataPipe));
+#endif
     if(ferror(out) || pipelineWait(dataPipe))
 	pipelineFailExit(track);	/* prints error and exits */
     unlink(track->dbStderrFile);	/* no errors, not used */
@@ -1248,7 +1221,7 @@ if (dbRequested)
     char buf[64];
     wigDbGetLimits(ctConn, track->dbTableName, 
 	    &upperLimit, &lowerLimit, &span);
-    sqlDisconnect(&ctConn);
+    hFreeConn(&ctConn);
     safef(buf, sizeof(buf), "%d", span);
     ctAddToSettings(track, "spanList", cloneString(buf));
     }
@@ -1918,7 +1891,7 @@ for (track = trackList; track != NULL; track = track->next)
 if (retBrowserLines != NULL)
     *retBrowserLines = browserLines;
 customPpFree(&cpp);
-sqlDisconnect(&ctConn);
+hFreeConn(&ctConn);
 return trackList;
 }
 
