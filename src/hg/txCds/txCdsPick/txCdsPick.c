@@ -198,7 +198,7 @@ while (lineFileRow(lf, row))
         {
 	struct cdsEvidence *cds, *bestCds = tx->cdsList;
 	int bestSize = bestCds->end - bestCds->start;
-	int minSize = bestSize*0.90;
+	int minSize = bestSize*0.50;
 	cdsEvidenceTabOut(bestCds, fTce);
 	pick.start = bestCds->start;
 	pick.end = bestCds->end;
