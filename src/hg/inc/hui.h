@@ -771,7 +771,7 @@ void acemblyDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
 void hCompositeUi(struct cart *cart, struct trackDb *tdb,
-		  char *primarySubtrack, char *fakeSubmit, char *formName);
+          char *primarySubtrack, char *fakeSubmit, char *formName, char *db);
 /* UI for composite tracks: subtrack selection.  If primarySubtrack is
  * non-NULL, don't allow it to be cleared and only offer subtracks
  * that have the same type.  If fakeSubmit is non-NULL, add a hidden
@@ -817,6 +817,9 @@ void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,bool
 
 void scoreCfgUi(struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
+
+void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
+/* UI for maf/wiggle track */
         
 void tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
 /* Updates the tdb_>priority from cart then sorts the list anew */
