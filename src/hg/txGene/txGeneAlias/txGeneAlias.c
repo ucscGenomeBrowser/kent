@@ -9,7 +9,7 @@
 #include "kgXref.h"
 
 
-static char const rcsid[] = "$Id: txGeneAlias.c,v 1.3 2007/03/17 18:54:29 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAlias.c,v 1.4 2008/08/29 01:37:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,7 +17,7 @@ void usage()
 errAbort(
   "txGeneAlias - Make kgAlias and kgProtAlias tables.\n"
   "usage:\n"
-  "   txGeneAlias genomeDb uniProtDb genes.xref genes.ev alias.tab protAlias.tab\n"
+  "   txGeneAlias genomeDb uniProtDb genes.xref genes.ev oldToNew.tab alias.tab protAlias.tab\n"
   "where:\n"
   "   genomeDb is a genome database, like hg19 or something\n"
   "   uniProtDb is a uniProt database, like sp0702020\n"
@@ -48,10 +48,29 @@ if (alias[0] != 0)
     fprintf(f, "%s\t%s\t%s\n", id, protId, alias);
 }
 
+struct hash *loadNewToOldHash(char *oldToNewFile)
+/* Read through 4 column file <position> <old> <new> <type> and make hash of old accessions 
+ * keyed by new accession, only containing elements where new and old are different. */
+{
+struct lineFile *lf = lineFileOpen(oldToNewFile, TRUE);
+char *row[4];
+struct hash *hash = hashNew(16);
+while (lineFileRowTab(lf, row))
+    {
+    char *oldAcc = row[1], *newAcc = row[2];
+    if (newAcc[0] != 0 && !sameString(oldAcc, newAcc))
+	hashAdd(hash, newAcc, cloneString(oldAcc));
+    }
+return hash;
+}
+ 
 void txGeneAlias(char *genomeDb, char *uniProtDb, char *xrefFile, 
-	char *evFile, char *aliasFile, char *protAliasFile)
+	char *evFile, char *oldToNew, char *aliasFile, char *protAliasFile)
 /* txGeneAlias - Make kgAlias and kgProtAlias tables.. */
 {
+/* Read and hash oldToNew */
+struct hash *newToOldHash = loadNewToOldHash(oldToNew);
+
 /* Load evidence into hash */
 struct hash *evHash = newHash(18);
 struct txRnaAccs *ev, *evList = txRnaAccsLoadAll(evFile);
@@ -85,6 +104,9 @@ while (lineFileRowTab(lf, words))
     outAlias(fAlias, id, x->geneSymbol);
     outAlias(fAlias, id, x->refseq);
     outAlias(fAlias, id, x->protAcc);
+    char *old = hashFindVal(newToOldHash, id);
+    if (old != NULL)
+        outAlias(fAlias, id, old);
 
     /* If we've got a uniProt ID, use that to get more info from uniProt. */
     char *acc = x->spID;
@@ -96,6 +118,8 @@ while (lineFileRowTab(lf, words))
 	outProt(fProt, id, acc, x->spDisplayID);
 	outProt(fProt, id, acc, x->geneSymbol);
 	outProt(fProt, id, acc, x->protAcc);
+	if (old != NULL)
+	    outProt(fProt, id, acc, old);
 
 	/* Throw in old swissProt accessions. */
 	safef(query, sizeof(query), "select val from otherAcc where acc = '%s'", acc);
@@ -146,8 +170,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 7)
+if (argc != 8)
     usage();
-txGeneAlias(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
+txGeneAlias(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7]);
 return 0;
 }
