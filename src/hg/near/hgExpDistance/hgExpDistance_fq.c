@@ -24,7 +24,7 @@ pthread_mutex_t mutexDotOut;
 int numThreads;
 int dotEvery = 0;
 
-static char const rcsid[] = "$Id: hgExpDistance_fq.c,v 1.2 2008/08/13 16:22:09 lslater Exp $";
+static char const rcsid[] = "$Id: hgExpDistance_fq.c,v 1.3 2008/08/29 19:55:56 lslater Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -396,7 +396,6 @@ slFreeList( &geneList );
 
 pthread_mutex_destroy( &mutexDotOut );
 pthread_attr_destroy( &attr );
-pthread_exit(NULL);
 
 /* Create and load table. */
 conn = sqlConnect(database);
