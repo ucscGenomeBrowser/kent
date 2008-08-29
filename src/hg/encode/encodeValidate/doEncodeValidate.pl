@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.53 2008/08/29 17:14:18 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.54 2008/08/29 22:17:24 larrym Exp $
 
 use warnings;
 use strict;
@@ -554,9 +554,7 @@ for my $key (keys %ddfSets) {
 }
 
 my $compositeTrack = Encode::compositeTrackName($daf);
-my $sth = $db->execute("select count(*) from trackDb where tableName = ?", $compositeTrack);
-my @row = $sth->fetchrow_array();
-if(!(@row && $row[0])) {
+if(!$db->quickQuery("select count(*) from trackDb where tableName = ?", $compositeTrack)) {
     die "Missing composite track '$compositeTrack'; please contact your data wrangler\n";
 }
 
@@ -566,13 +564,12 @@ if(!(@row && $row[0])) {
 %terms = Encode::getControlledVocab($configPath);
 open(LOADER_RA, ">$outPath/$Encode::loadFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::loadFile\' file; error: $!\n";
 open(TRACK_RA, ">$outPath/$Encode::trackFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::trackFile\' file; error: $!\n";
-my $priority = 0;
+
+my $priority = $db->quickQuery("select max(priority) from trackDb where settings like '%subTrack $compositeTrack%'") || 0;
 $ddfLineNumber = 1;
 foreach my $ddfLine (@ddfLines) {
     $ddfLineNumber++;
     my $errorPrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
-    # XXXX force priorities to be based on order of views in the DAF rather than their order in DDF
-    $priority++;
     my $view = $ddfLine->{view};
     my $type = $daf->{TRACKS}{$view}{type};
 
@@ -640,9 +637,7 @@ foreach my $ddfLine (@ddfLines) {
     $tableName =~ s/[_-]//g;
 
     if(!$opt_allowReloads) {
-        my $sth = $db->execute("select count(*) from trackDb where tableName = ?", $tableName);
-        my @row = $sth->fetchrow_array();
-        if(@row && $row[0]) {
+        if($db->quickQuery("select count(*) from trackDb where tableName = ?", $tableName)) {
             die "view '$view' has already been loaded as track '$tableName'\nPlease contact your wrangler if you need to reload this data\n";
         }
     }
@@ -667,7 +662,7 @@ foreach my $ddfLine (@ddfLines) {
         print TRACK_RA "\tsubGroups\t$subGroups\n";
         print TRACK_RA "\ttype\t$type\n";
         print TRACK_RA sprintf("\tdateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
-        print TRACK_RA "\tpriority\t$priority\n";
+        print TRACK_RA "\tpriority\t" . ($priority + $daf->{TRACKS}{$view}{order}) . "\n";
         # noInherit is necessary b/c composite track will often have a different dummy type setting.
         print TRACK_RA "\tnoInherit\ton\n";
         my %visibility = (Align => 'hide', RawWignal => 'hide', Signal => 'full', Sites => 'dense');
