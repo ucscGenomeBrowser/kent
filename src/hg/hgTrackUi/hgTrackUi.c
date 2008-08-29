@@ -20,7 +20,6 @@
 #include "obscure.h"
 #include "chainCart.h"
 #include "chainDb.h"
-#include "phyloTree.h"
 #include "gvUi.h"
 #include "oregannoUi.h"
 #include "chromGraph.h"
@@ -37,9 +36,8 @@
 
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
-#define MAX_SP_SIZE 2000
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.448 2008/08/08 19:30:18 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.449 2008/08/29 20:56:11 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1746,370 +1744,6 @@ puts("<P><B>Enzymes (separate with commas):</B><BR>");
 cgiMakeTextVar(cutterVar, enz, 100);
 }
 
-struct wigMafSpecies 
-    {
-    struct wigMafSpecies *next;
-    char *name;
-    int group;
-    };
-
-void wigMafUi(struct trackDb *tdb)
-/* UI for maf/wiggle track
- * NOTE: calls wigCfgUi */
-{
-char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
-char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
-char *speciesTree = trackDbSetting(tdb, SPECIES_TREE_VAR);
-char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
-char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
-char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
-char *framesTable = trackDbSetting(tdb, "frames");
-char *firstCase = trackDbSetting(tdb, ITEM_FIRST_CHAR_CASE);
-bool lowerFirstChar = TRUE;
-if (firstCase != NULL)
-    {
-    if (sameWord(firstCase, "noChange")) lowerFirstChar = FALSE;
-    }
-char *species[MAX_SP_SIZE];
-char *groups[20];
-char sGroup[24];
-char *treeImage = NULL;
-struct wigMafSpecies *wmSpecies, *wmSpeciesList = NULL;
-struct slName *speciesList = NULL;
-int group, prevGroup;
-int speciesCt = 0, groupCt = 1;
-int i, j;
-char option[MAX_SP_SIZE];
-struct phyloTree *tree;
-struct consWiggle *consWig, *consWiggles = wigMafWiggles(tdb);
-
-struct sqlConnection *conn;
-char query[256];
-char **row;
-struct sqlResult *sr;
-char *chp;
-char trackName[255];
-boolean lineBreakJustPrinted;
-
-char buttonVar[64];
-int numberPerRow;
-boolean isWigMafProt = FALSE;
-
-if (strstr(tdb->type, "wigMafProt")) isWigMafProt = TRUE;
-
-puts("<TABLE><TR><TD>");
-
-if (consWiggles && consWiggles->next)
-    {
-    /* check for alternate conservation wiggles -- create checkboxes */
-    puts("<P STYLE=\"margin-top:10;\"><B>Conservation:</B>" );
-    boolean first = TRUE;
-    for (consWig = consWiggles; consWig != NULL; consWig = consWig->next)
-        {
-        char *wigVar = wigMafWiggleVar(tdb, consWig);
-        cgiMakeCheckBox(wigVar, cartUsualBoolean(cart, wigVar, first));
-        first = FALSE;
-        subChar(consWig->uiLabel, '_', ' ');
-        printf ("%s&nbsp;", consWig->uiLabel);
-        }
-    }
-
-/* determine species and groups for pairwise -- create checkboxes */
-if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
-    {
-    if (isCustomTrack(tdb->tableName))
-	return;
-    errAbort("Track %s missing required trackDb setting: speciesOrder, speciesGroups, or speciesUseFile", tdb->tableName);
-    }
-
-if (speciesGroup)
-    groupCt = chopLine(speciesGroup, groups);
-
-if (speciesUseFile)
-    {
-    if ((speciesGroup != NULL) || (speciesOrder != NULL))
-	errAbort("Can't specify speciesUseFile and speciesGroup or speciesOrder");
-    speciesOrder = cartGetOrderFromFile(cart, speciesUseFile);
-    }
-
-for (group = 0; group < groupCt; group++)
-    {
-    if (groupCt != 1 || !speciesOrder)
-        {
-        safef(sGroup, sizeof sGroup, "%s%s", 
-                                SPECIES_GROUP_PREFIX, groups[group]);
-        speciesOrder = trackDbRequiredSetting(tdb, sGroup);
-        }
-    speciesCt = chopLine(speciesOrder, species);
-    for (i = 0; i < speciesCt; i++)
-        {
-        AllocVar(wmSpecies);
-        wmSpecies->name = cloneString(species[i]);
-        wmSpecies->group = group;
-        slAddHead(&wmSpeciesList, wmSpecies);
-        slAddTail(&speciesList, slNameNew(cloneString(species[i])));
-        }
-    }
-slReverse(&wmSpeciesList);
-
-puts("\n<P STYLE=><B>Pairwise alignments:</B>&nbsp;");
-
-cgiContinueHiddenVar("g");
-jsInit();
-
-char prefix[512];
-safef(prefix, sizeof prefix, "%s.", tdb->tableName);
-char *defaultOffSpecies = trackDbSetting(tdb, "speciesDefaultOff");
-if (defaultOffSpecies)
-    {
-    safecpy(buttonVar, sizeof buttonVar, "set_defaults_button");
-    /* make button and turn on all species (if button was pressed) */
-    jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_DEFAULTS_BUTTON_LABEL,
-			 prefix, speciesList, NULL, FALSE, TRUE);
-    if (isNotEmpty(cgiOptionalString(buttonVar)))
-        {
-        char *words[MAX_SP_SIZE];
-        int wordCt = chopLine(defaultOffSpecies, words);
-        /* turn off those that are default off */
-        int i;
-        for (i = 0; i < wordCt; i++)
-            {
-            safef(option, sizeof(option), "%s%s", prefix, words[i]);
-            cartSetBoolean(cart, option, FALSE);
-            }
-        }
-    }
-
-puts("&nbsp;");
-safef(buttonVar, sizeof buttonVar, "%s", "set_all_button");
-jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_SET_ALL_BUTTON_LABEL,
-		     prefix, speciesList, NULL, FALSE, TRUE);
-puts("&nbsp;");
-safef(buttonVar, sizeof buttonVar, "%s", "clear_all_button");
-jsMakeSetClearButton(cart, MAIN_FORM, buttonVar, JS_CLEAR_ALL_BUTTON_LABEL,
-		      prefix, speciesList, NULL, FALSE, FALSE);
-
-if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
-    {
-    char buffer[128];
-    char *nodeNames[512];
-    int numNodes = 0;
-    char *path, *orgName;
-    int ii;
-
-    safef(buffer, sizeof(buffer), "%s.vis",tdb->tableName);
-    cartMakeRadioButton(cart, buffer,"useTarg", "useTarg");
-    printf("Show shortest path to target species:  ");
-    path = phyloNodeNames(tree);
-    numNodes = chopLine(path, nodeNames);
-    for(ii=0; ii < numNodes; ii++)
-	{
-	if ((orgName = hOrganism(nodeNames[ii])) != NULL)
-	    nodeNames[ii] = orgName;
-	nodeNames[ii][0] = toupper(nodeNames[ii][0]);
-	}
-
-    cgiMakeDropList(SPECIES_HTML_TARGET, nodeNames, numNodes,
-	cartUsualString(cart, SPECIES_HTML_TARGET, speciesTarget));
-    puts("<br>");
-    cartMakeRadioButton(cart,buffer,"useCheck", "useTarg");
-    printf("Show all species checked : ");
-    }
-
-if (groupCt == 1)
-    puts("\n<TABLE><TR>");
-group = -1;
-lineBreakJustPrinted = FALSE;
-for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL; 
-		    wmSpecies = wmSpecies->next, i++)
-    {
-    char *label;
-    prevGroup = group;
-    group = wmSpecies->group;
-    if (groupCt != 1 && group != prevGroup)
-	{
-	i = 0;
-	j = 0;
-	if (group != 0)
-	    puts("</TR></TABLE>\n");
-        /* replace underscores in group names */
-        subChar(groups[group], '_', ' ');
-	printf("<P>&nbsp;&nbsp;<B><EM>%s</EM></B>", groups[group]);
-
-	puts("\n<TABLE><TR>");
-	}
-    if (hIsGsidServer()) 
-	numberPerRow = 6;
-    else 
-	numberPerRow = 5;
-    
-    /* new logic to decide if line break should be displayed here */
-    if ((j != 0 && (j % numberPerRow) == 0) && (lineBreakJustPrinted == FALSE))
-	{
-	puts("</TR><TR>");
-    	lineBreakJustPrinted = TRUE;
-	}
-    
-    if (hIsGsidServer()) 
-    	{
-	/* for GSID maf, display only entries belong to the specific MSA selected */
-    	safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
-    	label = hOrganism(wmSpecies->name);
-    	if (label == NULL)
-            label = wmSpecies->name;
-	strcpy(trackName, tdb->tableName);	
-
-	/* try AaMaf first */
-	chp = strstr(trackName, "AaMaf");
-	/* if it is not a AaMaf track, try Maf next */
-	if (chp == NULL) chp = strstr(trackName, "Maf");
-
-	/* test if the entry actually is part of the specific maf track data */
-	if (chp != NULL)
-	    {
-	    *chp = '\0';
-	    safef(query, sizeof(query),
-	    "select id from %sMsa where id = 'ss.%s'", trackName, label);
-
-	    conn = hAllocConn();
-	    sr = sqlGetResult(conn, query);	    
-	    row = sqlNextRow(sr);
-
-	    /* offer it only if the entry is found in current maf data set */
-	    if (row != NULL)
-		{
-    		puts("<TD>");
-    		cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
-		printf ("%s", label);
-    		puts("</TD>");
-		fflush(stdout);
-		lineBreakJustPrinted = FALSE;
-		j++;
-		}
-	    sqlFreeResult(&sr);
-	    hFreeConn(&conn);
-	    }
-	}
-    else
-    	{
-    	puts("<TD>");
-    	safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
-    	cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
-    	label = hOrganism(wmSpecies->name);
-    	if (label == NULL)
-		label = wmSpecies->name;
-        if (lowerFirstChar)
-            *label = tolower(*label);
-    	printf ("%s<BR>", label);
-    	puts("</TD>");
-	lineBreakJustPrinted = FALSE;
-	j++;
-	}
-    }
-puts("</TR></TABLE><BR>\n");
-
-if (isWigMafProt) 
-    puts("<B>Multiple alignment amino acid-level:</B><BR>" );
-else 
-    puts("<B>Multiple alignment base-level:</B><BR>" );
-safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_DOT_VAR);
-cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
-
-if (isWigMafProt) 
-    puts("Display amino acids identical to reference as dots<BR>" );
-else
-    puts("Display bases identical to reference as dots<BR>" );
-
-safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
-cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, TRUE));
-
-char *irowStr = trackDbSetting(tdb, "irows");
-boolean doIrows = (irowStr == NULL) || !sameString(irowStr, "off");
-if (isCustomTrack(tdb->tableName) || doIrows)
-    puts("Display chains between alignments<BR>");
-else
-    {
-    if (isWigMafProt) 
-	puts("Display unaligned amino acids with spanning chain as 'o's<BR>");
-    else
-	puts("Display unaligned bases with spanning chain as 'o's<BR>");
-    }
-safef(option, sizeof option, "%s.%s", tdb->tableName, "codons");
-if (framesTable)
-    {
-    char *nodeNames[512];
-    char buffer[128];
-
-    printf("<BR><B>Codon Translation:</B><BR>");
-    printf("Default species to establish reading frame: ");
-    nodeNames[0] = database;
-    for (wmSpecies = wmSpeciesList, i = 1; wmSpecies != NULL; 
-			wmSpecies = wmSpecies->next, i++)
-	{
-	nodeNames[i] = wmSpecies->name;
-	}
-    cgiMakeDropList(SPECIES_CODON_DEFAULT, nodeNames, i,
-	cartUsualString(cart, SPECIES_CODON_DEFAULT, defaultCodonSpecies));
-    puts("<br>");
-    safef(buffer, sizeof(buffer), "%s.codons",tdb->tableName);
-    cartMakeRadioButton(cart, buffer,"codonNone", "codonDefault");
-    printf("No codon translation<BR>");
-    cartMakeRadioButton(cart, buffer,"codonDefault", "codonDefault");
-    printf("Use default species reading frames for translation<BR>");
-    cartMakeRadioButton(cart, buffer,"codonFrameNone", "codonDefault");
-    printf("Use reading frames for species if available, otherwise no translation<BR>");
-    cartMakeRadioButton(cart, buffer,"codonFrameDef", "codonDefault");
-    printf("Use reading frames for species if available, otherwise use default species<BR>");
-    }
-else
-    {
-    /* Codon highlighting does not apply to wigMafProt type */
-    if (!strstr(tdb->type, "wigMafProt"))
-	{
-    	puts("<P><B>Codon highlighting:</B><BR>" );
-
-#ifdef GENE_FRAMING
-
-    	safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_FRAME_VAR);
-    	char *currentCodonMode = cartCgiUsualString(cart, option, MAF_FRAME_GENE);
-
-    	/* Disable codon highlighting */
-   	 cgiMakeRadioButton(option, MAF_FRAME_NONE, 
-		    sameString(MAF_FRAME_NONE, currentCodonMode));
-    	puts("None &nbsp;");
-
-    	/* Use gene pred */
-    	cgiMakeRadioButton(option, MAF_FRAME_GENE, 
-			    sameString(MAF_FRAME_GENE, currentCodonMode));
-    	puts("CDS-annotated frame based on");
-    	safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_GENEPRED_VAR);
-    	genePredDropDown(cart, makeTrackHash(database, chromosome), NULL, option);
-
-#else
-    	snprintf(option, sizeof(option), "%s.%s", tdb->tableName, BASE_COLORS_VAR);
-    	puts ("&nbsp; Alternate colors every");
-    	cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
-    	puts ("bases<BR>");
-    	snprintf(option, sizeof(option), "%s.%s", tdb->tableName, 
-			    BASE_COLORS_OFFSET_VAR);
-    	puts ("&nbsp; Offset alternate colors by");
-    	cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
-    	puts ("bases<BR>");
-#endif
-	}
-    }
-
-treeImage = trackDbSetting(tdb, "treeImage");
-if (treeImage)
-    printf("</TD><TD><IMG ALIGN=TOP SRC=\"../images/%s\"></TD></TR></TABLE>", treeImage);
-else
-    puts("</TD></TR></TABLE>");
-
-if (trackDbSetting(tdb, CONS_WIGGLE) != NULL)
-    {
-    wigCfgUi(cart,tdb,tdb->tableName,"Conservation graph:",FALSE);
-    }
-}
 
 void genericWiggleUi(struct trackDb *tdb, int optionNum )
 /* put up UI for any standard wiggle track (a.k.a. sample track)*/
@@ -2607,15 +2241,13 @@ else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG")
 else if (sameString(track, "hgPcrResult"))
     pcrResultUi(tdb);
 else if (startsWith("bedGraph", tdb->type))
-    wigCfgUi(cart,tdb,tdb->tableName,NULL,FALSE);
-else if (startsWith("maf", tdb->type))
-    wigMafUi(tdb);
+    wigCfgUi(cart,tdb,tdb->tableName,NULL, FALSE);
 else if (startsWith("wig", tdb->type))
         {
         if (startsWith("wigMaf", tdb->type))
-            wigMafUi(tdb);
+            wigMafCfgUi(cart, tdb, tdb->tableName, NULL, FALSE, database);
         else
-            wigCfgUi(cart,tdb,tdb->tableName,NULL,FALSE);
+            wigCfgUi(cart,tdb,tdb->tableName, NULL, FALSE);
         }
 else if (startsWith("chromGraph", tdb->type))
         chromGraphUi(tdb);
@@ -2720,15 +2352,15 @@ else if (tdb->type != NULL)
 		!startsWith("encodeGencodeIntron", track))
 		{
 		if (trackDbSetting(tdb, "scoreFilterMax"))
-            scoreCfgUi(cart,tdb,tdb->tableName,NULL,
-                sqlUnsigned(trackDbSetting(tdb, "scoreFilterMax")),FALSE);
+                    scoreCfgUi(cart,tdb,tdb->tableName,NULL,
+                        sqlUnsigned(trackDbSetting(tdb, "scoreFilterMax")),FALSE);
 		else
-            scoreCfgUi(cart,tdb,tdb->tableName,NULL,1000,FALSE);
+                    scoreCfgUi(cart,tdb,tdb->tableName,NULL,1000,FALSE);
 		}
 	    }
         else if (sameWord(words[0], "bed5FloatScore") || 
                 sameWord(words[0], "bed5FloatScoreWithFdr"))
-            scoreCfgUi(cart,tdb,tdb->tableName,NULL,1000,FALSE);
+                    scoreCfgUi(cart,tdb,tdb->tableName,NULL,1000,FALSE);
 	else if (sameWord(words[0], "psl"))
 	    {
 	    if (wordCount == 3)
@@ -2742,7 +2374,7 @@ else if (tdb->type != NULL)
 if (tdbIsSuperTrack(tdb))
     superTrackUi(tdb);
 else if (tdbIsComposite(tdb))
-    hCompositeUi(cart, tdb, NULL, NULL, MAIN_FORM);
+    hCompositeUi(cart, tdb, NULL, NULL, MAIN_FORM, database);
 }
 
 void trackUi(struct trackDb *tdb)
