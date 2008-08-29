@@ -637,7 +637,7 @@ hgLoadSqlTab $tempDb kgColor ~/kent/src/hg/lib/kgColor.sql ucscGenes.color
 hgLoadSqlTab $tempDb kgTxInfo ~/kent/src/hg/lib/txInfo.sql ucscGenes.info
 
 # Make up alias tables and load them. Takes a minute or so.
-txGeneAlias $db $spDb ucscGenes.xref ucscGenes.ev foo.alias foo.protAlias
+txGeneAlias $db $spDb ucscGenes.xref ucscGenes.ev oldToNew.tab foo.alias foo.protAlias
 sort foo.alias | uniq > ucscGenes.alias
 sort foo.protAlias | uniq > ucscGenes.protAlias
 rm foo.alias foo.protAlias
