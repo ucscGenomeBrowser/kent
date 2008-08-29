@@ -1,7 +1,0 @@
-name global
-knownGene flyBaseGene
-knownGenePep flyBasePep
-knownToRef flyBaseToRefSeq
-nameSql select symbol from flyBase2004Xref where name = '%s'
-descriptionSql select val from flyBaseToDescription where name = '%s'
-proteinSql select alias from flyBaseToUniProt where name = '%s'

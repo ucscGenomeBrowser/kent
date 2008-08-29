@@ -1,6 +1,0 @@
-
-global class complex
-    {
-    double r;  // real part
-    double i;  // imaginary part
-    }
