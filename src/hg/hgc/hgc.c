@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1445.4.9 2008/08/14 15:54:11 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1445.4.10 2008/08/30 00:29:16 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5313,8 +5313,8 @@ if (wordCount > 0)
     }
 printTrackHtml(tdb);
 freez(&dupe);
-sqlDisconnect(&conn);
-sqlDisconnect(&conn1);
+hFreeConn(&conn);
+hFreeConn(&conn1);
 }
 
 void doRikenRna(struct trackDb *tdb, char *item)
@@ -16020,8 +16020,6 @@ freez(&header);
 struct sageExp *loadSageExps(char *tableName, struct bed  *bedist)
 /* load the sage experiment data. */
 {
-char *user = cfgOption("db.user");
-char *password = cfgOption("db.password");
 struct sqlConnection *sc = NULL;
 /* struct sqlConnection *sc = sqlConnectRemote("localhost", user, password, "hgFixed"); */
 char query[256];
@@ -16032,7 +16030,7 @@ char *tmp= cloneString("select * from sageExp order by num");
 if(hTableExists(database, tableName))
     sc = hAllocConn(database);
 else
-    sc = sqlConnectRemote("localhost", user, password, "hgFixed");
+    sc = hAllocConn("hgFixed");
 
 sprintf(query,"%s",tmp);
 sr = sqlGetResult(sc,query);
@@ -16043,10 +16041,7 @@ while((row = sqlNextRow(sr)) != NULL)
     }
 freez(&tmp);
 sqlFreeResult(&sr);
-if(hTableExists(database, tableName))
-    hFreeConn(&sc);
-else
-    sqlDisconnect(&sc);
+hFreeConn(&sc);
 slReverse(&seList);
 return seList;
 }
@@ -16055,8 +16050,6 @@ struct sage *loadSageData(char *table, struct bed* bedList)
 /* load the sage data by constructing a query based on the qNames of the bedList
  */
 {
-char *user = cfgOption("db.user");
-char *password = cfgOption("db.password");
 struct sqlConnection *sc = NULL;
 struct dyString *query = newDyString(2048);
 struct sage *sgList = NULL, *sg=NULL;
@@ -16067,7 +16060,7 @@ struct sqlResult *sr = NULL;
 if(hTableExists(database, table))
     sc = hAllocConn(database);
 else
-    sc = sqlConnectRemote("localhost", user, password, "hgFixed");
+    sc = hAllocConn("hgFixed");
 dyStringPrintf(query, "%s", "select * from sage where ");
 for(bed=bedList;bed!=NULL;bed=bed->next)
     {
@@ -16087,10 +16080,7 @@ while((row = sqlNextRow(sr)) != NULL)
     slAddHead(&sgList,sg);
     }
 sqlFreeResult(&sr);
-if(hTableExists(database, table))
-    hFreeConn(&sc);
-else
-    sqlDisconnect(&sc);
+hFreeConn(&sc);
 slReverse(&sgList);
 freeDyString(&query);
 return sgList;
@@ -16930,7 +16920,7 @@ if (ct->dbTrack)
     char *date = firstWordInLine(sqlTableUpdate(conn, ct->dbTableName));
     if (date != NULL)
 	printf("<B>Data last updated:</B> %s<BR>\n", date);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     }
 printTrackHtml(ct->tdb);
 }
