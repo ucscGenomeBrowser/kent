@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.108.26.2 2008/08/01 06:10:42 markd Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.108.26.3 2008/08/30 00:04:53 markd Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -591,7 +591,7 @@ getGenomeSettings();
 getGenePosition(conn);
 curGenePred = getCurGenePred(conn);
 curGeneName = getGeneName(curGeneId, conn);
-spConn = sqlConnect(UNIPROT_DB_NAME);
+spConn = hAllocConn(UNIPROT_DB_NAME);
 swissProtAcc = getSwissProtAcc(conn, spConn, curGeneId);
 
 /* Check command variables, and do the ones that
@@ -621,6 +621,8 @@ else
     cartWebEnd();
     }
 cartRemovePrefix(cart, hggDoPrefix);
+hFreeConn(&spConn);
+hFreeConn(&conn);
 }
 
 char *excludeVars[] = {"Submit", "submit", NULL};

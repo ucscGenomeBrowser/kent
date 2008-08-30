@@ -6,8 +6,9 @@
 #include "dystring.h"
 #include "spDb.h"
 #include "hgGene.h"
+#include "hdb.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.8 2007/03/16 21:56:35 fanhsu Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.8.72.1 2008/08/30 00:04:53 markd Exp $";
 
 static boolean goExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -41,7 +42,7 @@ static void goPrint(struct section *section,
 	struct sqlConnection *conn, char *geneId)
 /* Print out GO annotations. */
 {
-struct sqlConnection *goConn = sqlConnect("go");
+struct sqlConnection *goConn = hAllocConn("go");
 char *fbAcc = getFlyBaseId(conn, geneId);
 boolean useFbGo = (isFly() && fbAcc != NULL && sqlTableExists(conn, "fbGo"));
 char *acc = useFbGo ? fbAcc : swissProtAcc;
@@ -93,7 +94,7 @@ for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
         hPrintf("<BR>");
     sqlFreeResult(&sr);
     }
-sqlDisconnect(&goConn);
+hFreeConn(&goConn);
 }
 
 struct section *goSection(struct sqlConnection *conn,

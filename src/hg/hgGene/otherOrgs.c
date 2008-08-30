@@ -10,7 +10,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.21.40.2 2008/08/02 04:06:21 markd Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.21.40.3 2008/08/30 00:04:54 markd Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -143,14 +143,15 @@ if (id != NULL)
 					        otherOrg->geneTable);
 	if (hti != NULL)
 	    {
+            struct sqlConnection *otherConn = hAllocConn(otherOrg->db);
 	    char *pos = NULL;
 	    char query[512];
 	    safef(query, sizeof(query),
-		  "select concat(%s, ':', %s+1, '-', %s) from %s.%s "
+		  "select concat(%s, ':', %s+1, '-', %s) from %s "
 		  "where %s = '%s'",
 		  hti->chromField, hti->startField, hti->endField,
-		  otherOrg->db, otherOrg->geneTable, hti->nameField, id);
-	    pos = sqlQuickString(conn, query);
+		  otherOrg->geneTable, hti->nameField, id);
+	    pos = sqlQuickString(otherConn, query);
 	    if (pos != NULL)
 		{
 		char posPlus[2048];
@@ -160,6 +161,7 @@ if (id != NULL)
 		      id);
 		return cloneString(posPlus);
 		}
+            hFreeConn(&otherConn);
 	    }
 	}
     }
@@ -174,11 +176,11 @@ char *otherId = otherOrgId(otherOrg, conn, geneId);
 char *protId = NULL;
 if (otherOrg->db != NULL && otherId != NULL && otherOrg->idToProtIdSql != NULL)
     {
-    struct sqlConnection *conn = sqlConnect(otherOrg->db);
+    struct sqlConnection *conn = hAllocConn(otherOrg->db);
     char query[512];
     safef(query, sizeof(query), otherOrg->idToProtIdSql, otherId);
     protId = sqlQuickString(conn, query);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     }
 if (protId == NULL)
     {
@@ -197,7 +199,7 @@ if (localId != NULL)
     {
     if (otherOrg->otherIdSql)
 	{
-	struct sqlConnection *conn = sqlConnect(otherOrg->db);
+	struct sqlConnection *conn = hAllocConn(otherOrg->db);
 	char query[512];
 	safef(query, sizeof(query), otherOrg->otherIdSql, localId);
 	otherId = sqlQuickString(conn, query);
@@ -206,7 +208,7 @@ if (localId != NULL)
 	    safef(query, sizeof(query), otherOrg->otherIdSql2, localId);
 	    otherId = sqlQuickString(conn, query);
 	    }
-	sqlDisconnect(&conn);
+	hFreeConn(&conn);
 	}
     else
         otherId = cloneString(localId);
