@@ -1,22 +1,17 @@
 #!/bin/sh
 # Start Tcl from a cluster bin directory \
 exec /cluster/bin/tcl/`uname -m`/bin/tclsh8.4 $0 ${1+"$@"}
-package require Tclx
-
-#
+##
 # Program to generate reports from CVS log.
-#
-
-#
-# Notes:
-#   since we quit generating the full diff, we could go back to
-#   using rdiff, however some other file annotation might be done,
-#   so this is left using a working directory
-
-
-
-
+##
+package require Tclx
 package require Itcl
+
+##
+# FIXME:
+#  - indicate deleted files in index.
+#  - be able to just specify the branch tag and not need branch point tag
+##
 
 #
 # Class that contains the information about a file obtained from a cvs log
@@ -47,6 +42,7 @@ package require Itcl
     # Head and branch
     private variable fHead
     private variable fBranch
+    private variable fBranchMagic {}
 
     # Keyword substitution
     private variable fKeywordSubst
@@ -92,7 +88,6 @@ package require Itcl
         return [expr {[cequal $line $FILE_REC_SEP] || [cequal $line $REVISION_REC_SEP]}]
     }
 
-    # typofix by galt alredy
     # Parse the cvs log header. `RCS file:' has already been read.
     private method parseCvsLogHeader {chan} {
 
@@ -156,7 +151,6 @@ package require Itcl
             parseError "invalid `revision' line, got `$line'"
         }
         set line [readCvsLog $chan]
-	#galt fixed typo dataStr should be dateStr
         if {![regexp {^date: ([^;]+);  author: ([^;]+);  state: ([^;]+);} $line {} dateStr author state]} {
             parseError "invalid `date:' line, got `$line'"
         }
@@ -187,7 +181,6 @@ package require Itcl
         
         # Got it all
         lappend fRevisions $revision
-	#galt fixed typo dataStr should be dateStr
         set fRevisionTable($revision) [list $revision $dateStr $author $state $comment]
 
         return [cequal $line $REVISION_REC_SEP]
@@ -262,7 +255,6 @@ package require Itcl
     }
 
 
-    #added by galt
     # Compare revisions       
     public method compareRevs {r1 r2} {
 	set r1s [split $r1 .]
@@ -271,16 +263,15 @@ package require Itcl
 	set r2l [llength $r2s] 
         set i 0
 	while {1} {
-	  if {($i >= $r1l) && ($i >= $r2l)} { return 0 }
-	  if {$i >= $r1l} { return -1 }
-	  if {$i >= $r2l} { return  1 }
-	  set n1 [lindex $r1s $i]
-	  set n2 [lindex $r2s $i]
-	  if {$n1 > $n2} { return  1 }	
-	  if {$n1 < $n2} { return -1 }	
-	  incr i 1
+            if {($i >= $r1l) && ($i >= $r2l)} { return 0 }
+            if {$i >= $r1l} { return -1 }
+            if {$i >= $r2l} { return  1 }
+            set n1 [lindex $r1s $i]
+            set n2 [lindex $r2s $i]
+            if {$n1 > $n2} { return  1 }	
+            if {$n1 < $n2} { return -1 }	
+            incr i 1
 	}
-	return 0
     }
 
 
@@ -299,10 +290,20 @@ package require Itcl
         return $fHead
     }
 
-    # Get the branch
+    # Get the branch, is in the form 1.37.20, not magic branch 1.37.0.20
     public method getBranch {} {
         return $fBranch
     }
+
+    # Get the branch in magic number format (1.37.0.20)
+    public method getBranchMagic {} {
+        if {$fBranchMagic == {}} {
+            set p [split $fBranch .]
+            set fBranchMagic [join [linsert $p end-1 0] .]
+        }
+        return $fBranchMagic
+    }
+
 
     # Test if a revSpec is a number or a tag
     private method isRevNumber {revSpec} {
@@ -310,9 +311,9 @@ package require Itcl
     }
 
     # Lookup a tag.  If it doesn't exit, generate an error if check is 1
-    # of return {} if check is 0. Magic tag HEAD is supported.
+    # of return {} if check is 0. The tag HEAD is supported.
     private method lookupTag {tag {check 1}} {
-        if {[cequal $tag HEAD]} {
+        if {$tag == "HEAD"} {
             return [getHead]
         } elseif {[info exists fTagTable($tag)]} {
             return $fTagTable($tag)
@@ -323,23 +324,40 @@ package require Itcl
         }
     }
 
+    # Test if a tag or a revision is a magic branch
+    public method isBranchMagic {revSpec} {
+        if {![isRevNumber $revSpec]} {
+            set revSpec [lookupTag $revSpec]
+        }
+        return [expr [lindex [split $revSpec .] end-1] == 0]
+    }
+
     # Translate a magic branch number to an actual revision number
     # If not a magic branch, return unchanged.
-    public method translateMagicBranch {rev} {
-        set revs [split $rev .]
-        if {[lindex $revs end-1] == 0} {
+    public method translateBranchMagic {rev} {
+        if {[isBranchMagic $rev]} {
+            set revs [split $rev .]
             return [join [concat [lrange $revs 0 end-2] [lindex $revs end]] .]
         } else {
             return $rev
         }
     }
     
-    # Deterimine if a revision or tag is a branch (x.x.0.x)
+    # Deterimine if a revision or tag is a branch (x.x.x)
     public method isBranch {revSpec} {
         if {![isRevNumber $revSpec]} {
             set revSpec [lookupTag $revSpec]
         }
-        return [expr [lindex [split $revSpec .] end-1] == 0]
+        return [expr {[llength [split $revSpec .]] & 1}]
+    }
+
+    # Deterimine if a revision or tag is a branch (x.x.x) or branch magic (x.x.0.x)
+    public method isBranchOrMagic {revSpec} {
+        if {![isRevNumber $revSpec]} {
+            set revSpec [lookupTag $revSpec]
+        }
+        set parts [split $revSpec .]
+        return [expr {([llength $parts] & 1) || ([lindex $parts end-1] == 0)}]
     }
 
     # Get the list of tags
@@ -363,24 +381,34 @@ package require Itcl
     # check is 0, or an error if check is 1.
     # Translates magic branch numbers.
     public method getTagRevision {tag {check 0}} {
-        return [translateMagicBranch [lookupTag $tag $check]]
+        if {!$check && ($tag == "")} {
+            return $tag
+        } 
+        set rev [lookupTag $tag $check]
+        if {$rev == {}} {
+            return {}
+        } else {
+            return [translateBranchMagic $rev]
+        }
     }
 
     # Given a revision spec (tag or revision), translate it to
     # a revision. Invalid tags generate an error if check is 1,
     # otherwise returns empty. Branch tags are translated from
     # magic number to revision.  Branch numbers are passed through.
-    public method toRevision {revSpec} {
+    # If not found, return {} if check is 0, or an error if check is 1.
+    public method toRevision {revSpec {check 1}} {
         if {[isRevNumber $revSpec]} {
             return $revSpec
         } else {
-            return [getTagRevision $revSpec]
+            return [getTagRevision $revSpec $check]
         }
     }
 
     # Given a branch or revision number (or tag), return its parent.
     # A trunk revision returns {}
     public method getRevisionParent {revSpec} {
+        # FIXME: doesn't handle magic branchs
         set revs [split [toRevision $revSpec] .]
         if {[llength $revs] & 1} {
             # Branch number
@@ -393,42 +421,46 @@ package require Itcl
 
     # Given a revision number (or tag), return its branch number.
     # Branch numbers are returned unchanged.  Head returns {}.
+    # Magic branch numbers are convered to branch
     public method getRevisionBranch {revSpec} {
-        set revs [split [toRevision $revSpec] .]
+        set rev [toRevision $revSpec]
+        set revs [split $rev .]
         if {[llength $revs] == 2} {
             return {}  ;# Head
         } elseif {[llength $revs] & 1} {
-            return [join $revs .]
+            return $rev
+        } elseif {[lindex $revs end-1] == 0} {
+            return [translateBranchMagic $rev]
         } else {
             # Revision number
             return [join [lrange $revs 0 end-1] .]
         }
     }
 
-    # Given a branch tag or revision, get the first and last revision
-    # numbers for the branch.  If no commits have been done on the
+    # Given a branch tag or magic branch revision, get the first and last
+    # revision numbers for the branch.  If no commits have been done on the
     # branch, return {}, otherwise return {firstRev lastRev}
-    public method getBranchRevRange {branchTag} {
-        #FIXME: This could be more general, returning the revision range
-        #given any revSpec.
-        if {![isBranch $branchTag]} {
-            error "Not a branch tag: $branchTag"
+    public method getBranchRevRange {branchSpec} {
+        set branchRev [toRevision $branchSpec]
+        if {[isBranchMagic $branchRev]} {
+            set branchRev [translateBranchMagic $branchRev]
+        } elseif {![isBranch $branchRev]} {
+            error "Not a branch tag, branch revision or magic branch revision: $branchSpec"
         }
-        set branch [getTagRevision $branchTag]
         
         # Search the revision list for the newest and oldest revisions
         # on the branch
         set newestRev {}
         set oldestRev {}
         foreach rev $fRevisions {
-            if {[getRevisionBranch $rev] == $branch} {
+            if {[getRevisionBranch $rev] == $branchRev} {
                 if {[lempty $newestRev]} {
                     set newestRev $rev
                 }
                 set oldestRev $rev
             }
         }
-        if {[lempty $newestRev]} {
+        if {$newestRev == {}} {
             return {}
         } else {
             return [list $oldestRev $newestRev]
@@ -443,7 +475,7 @@ package require Itcl
         if {$last == 1} {
             set prevRev [getRevisionParent $rev]
             if {[lempty $prevRev]} {
-            # will generate diff for original commit
+                # will generate diff for original commit
                 set prevRev 1.0
             }
         } else {
@@ -457,7 +489,7 @@ package require Itcl
     #   - Revision numbers are returned as-is
     #   - Branch revisions are returned as the head.
     public method translateRevision {revSpec} {
-        return [translateMagicBranch [toRevision $revSpec]]
+        return [translateBranchMagic [toRevision $revSpec]]
     }
 
     # Get the list of revision numbers on this file
@@ -476,7 +508,6 @@ package require Itcl
     }
 
 
-    #added by galt
     # Find most-recent dead for handling resurrections
     #  or return "" if none. Scans backwards from to-tag rev passed in.
     public method mostRecentDead {rev} {
@@ -488,7 +519,67 @@ package require Itcl
 	    }
 	    set rev [getPrevRev $rev]
 	}
-	return ""
+	return {}
+    }
+
+    # find max rev on the given branch
+    private method getMaxRevOnBranch {branch minRev} {
+        set maxRev $minRev
+        foreach rev $fRevisions {
+            if {([getRevisionBranch $rev] == $branch) && ([compareRevs $rev $maxRev] > 0)} {
+                set maxRev $rev
+            }
+        }
+        return $maxRev
+    }
+
+
+    # get list of revisions in the specified range (from < rev <= to)
+    # handles toSpec being a branch magic tag.  fromSpec can be empty
+    # if toSpec is branch magic tag
+    public method getRevsForRange {fromSpec toSpec} {
+        
+        # convert to range of revisions, without errors if uknown tag
+        set fromRev [toRevision $fromSpec 0]
+        set toRev [toRevision $toSpec 0]
+
+        if {($fromRev == {}) && ($toRev == {})} {
+            return {}  ;# nothing in this range
+        }
+
+        if {$fromRev == {}} {
+            # no from tag/revision, use branch
+            if {[isBranchOrMagic $toRev]} {
+                set fromRev [getRevisionParent $toRev] ;# get branch point
+            } else {
+                set fromRev 1.0  ;# just added
+            }
+        }
+        if {$toRev == {}} {
+            # deleted before second tag
+            set toRev [getMaxRevOnBranch [getRevisionBranch $fromRev] $fromRev]
+        }
+        
+        # convert to start and end revisions on the same branch
+        if {[isBranchOrMagic $toRev]} {
+            lassign [getBranchRevRange $toRev] startRev endRev
+            if {$startRev == {}} {
+                return {} ;# no commits in range
+            }
+            set toRev $endRev
+        }
+        
+        # find revisions on the same branch as toRev and in range
+        set toBranch [getRevisionBranch $toRev]
+        set revs {}
+        foreach rev $fRevisions {
+            if {([getRevisionBranch $rev] == $toBranch)
+                && ([compareRevs $fromRev $rev] < 0)
+                && ([compareRevs $rev $toRev] <= 0)} {
+                lappend revs $rev
+            }
+        }
+        return $revs
     }
     
     # Convert to a printable string for debugging
@@ -627,10 +718,13 @@ package require Itcl
     }
 
     # do an log, return a list of CVSFileInfo objects
-    public method getLogInfo {} {
+    public method getLogInfo {{fileSubset {}}} {
         set cwd [pwd]
         
         set cmd [list cvs -q log]
+        if {$fileSubset != {}} {
+            set cmd [concat $cmd $fileSubset]
+        }
         try_eval {
             workDirEval {
                 set chan [cvsOpen $cmd]
@@ -659,7 +753,7 @@ package require Itcl
     # emptry.
     public method uniDiff {contextSize rev1 rev2 file} {
         # -N required to make -r 1.0 work
-        set cmd [list cvs -q diff -bB -U $contextSize -kk -N]
+        set cmd [list cvs -q diff -bB -U$contextSize -kk -N]
         lappend cmd [getRevFlag $rev1] $rev1
         if {![lempty $rev2]} {
             lappend cmd [getRevFlag $rev2] $rev2
@@ -692,298 +786,6 @@ package require Itcl
     }
 }
 
-
-# returns {htmlLinks chgCnt}
-proc mkUserDiffs {outDir fileInfo revInfo} {
-    set title "[$fileInfo getWorkingFile] [lindex $revInfo 0]"
-    set desc [htmlEncode [join [lrange $revInfo 0 3]]]
-    set rev2 [lindex $revInfo 0]
-    set rev1 [$fileInfo getPrevRev $rev2]
-    return [mkDiffs $outDir $fileInfo $rev1 $rev2 $title $desc]
-}
-
-# write user file info
-proc userFileReport {fh outDir user fileInfo revisions} {
-    set totalChgCnt 0
-    puts $fh "<LI> [$fileInfo getWorkingFile]"
-    puts $fh "<UL>"
-    foreach rev $revisions {
-        set revInfo [$fileInfo getRevision $rev]
-        lassign [mkUserDiffs $outDir $fileInfo $revInfo] diffLinks chgCnt
-        puts $fh "<LI> $rev $diffLinks<br>"
-        puts $fh [htmlEncode [lindex $revInfo 4]]
-        incr totalChgCnt $chgCnt
-    }
-    puts $fh "</UL>"
-    return $totalChgCnt
-}
-
-# write a report for a user in file and revision order
-proc userReportByFile {outDir user userInfo} {
-    set userDir $outDir/$user
-    file mkdir $userDir
-    set switchAnchor "switch to: <a href=\"index-by-commit.html\">grouped by commit view</a>, <a href=\"../../index.html\">user index</a><br>"
-
-    set fh [open $userDir/index.html w]
-    set title "$user: changes by file"
-    puts $fh "<html><head><title>$title</title></head><body>"
-    puts $fh "<h1>$title</h1>"
-    puts $fh $switchAnchor
-
-    #added by galt
-    #puts $fh "<h3>changes from [fmtDate $::gStartDate] - [fmtDate $::gEndDate]</h3>"
-    puts $fh "<h3>changes from $::gFromTag - $::gToTag</h3>"
-
-    puts $fh "<ul>"
-    set totalChgCnt 0
-    foreach fileRec $userInfo {
-        lassign $fileRec fileInfo revisions
-        set chgCnt [userFileReport $fh $userDir $user $fileInfo $revisions]
-        incr totalChgCnt $chgCnt
-    }
-    puts $fh "</ul>"
-    puts $fh $switchAnchor
-    puts $fh "</body></html>"
-    close $fh
-    return $totalChgCnt
-}
-
-# generate list of files by commit message
-# {commit {{fileInfo revision} ..}
-proc sortByCommit {userInfo} {
-    # build tmp table
-    foreach fileRec $userInfo {
-        lassign $fileRec fileInfo revisions
-        foreach rev $revisions {
-            set revInfo [$fileInfo getRevision $rev]
-            set commit [string trim [lindex $revInfo 4]]
-
-            # save file for sort
-            lappend byCommit($commit) [list [$fileInfo getWorkingFile] $fileInfo $rev]
-            # save lowest date/time for commit sort
-            set time [lindex $revInfo 1]
-            if {![info exists commitTimes($commit)]
-                || ([string compare $time $commitTimes($commit)] > 0)} {
-                set commitTimes($commit) $time
-            }
-        }
-    }
-
-    # Sort commits by time
-    set commitTimeList {}
-    foreach commit [array names commitTimes] {
-        lappend commitTimeList [list $commitTimes($commit) $commit]
-    }
-    set commitTimeList [lsort -index 0 $commitTimeList]
-
-    # now create commit list, sort each commit by file name
-    set commits {}
-    foreach commitTime $commitTimeList {
-        set commit [lindex $commitTime 1]
-        set commitInfo {}
-        foreach fileRec [lsort -index 0 $byCommit($commit)] {
-            lappend commitInfo [lrange $fileRec 1 2]
-        }
-        lappend commits [list $commit $commitInfo]
-    }
-    return $commits
-}
-
-# write commit info
-proc userCommitReport {fh outDir user commit commitInfo} {
-
-    #added by galt
-    #puts $fh "<LI> $commit"
-    puts $fh "<LI> [htmlEncode $commit]"
-    
-    puts $fh "<UL>"
-
-    foreach fileRec $commitInfo {
-        lassign $fileRec fileInfo rev
-        set revInfo [$fileInfo getRevision $rev]
-
-	#added by galt
-        #puts $fh "<LI> [$fileInfo getWorkingFile] $rev"
-        #puts $fh [mkUserDiffs $outDir $fileInfo $revInfo]
-        lassign [mkUserDiffs $outDir $fileInfo $revInfo] diffLinks chgCnt
-        puts $fh "<LI> [$fileInfo getWorkingFile] $rev - $diffLinks"
-	
-    }
-    puts $fh "</UL>"
-}
-
-# write a report for a user grouped by commit
-proc userReportByCommit {outDir user userCommits} {
-    set userDir $outDir/$user
-    file mkdir $userDir
-    set switchAnchor "switch to <a href=\"index.html\">grouped by file view</a>, <a href=\"../../index.html\">user index</a><br>"
-
-    set fh [open $userDir/index-by-commit.html w]
-    set title "$user: changes by commit"
-    puts $fh "<html><head><title>$title</title></head><body>"
-    puts $fh "<h1>$title</h1>"
-    puts $fh $switchAnchor
-
-    #added by galt
-    #puts $fh "<h3>changes from [fmtDate $::gStartDate] - [fmtDate $::gEndDate]</h3>"
-    puts $fh "<h3>changes from $::gFromTag - $::gToTag</h3>"
-
-    puts $fh "<ul>"
-    foreach commitRec $userCommits {
-        userCommitReport $fh $userDir $user [lindex $commitRec 0] \
-            [lindex $commitRec 1]
-    }
-    puts $fh "</ul>"
-    puts $fh $switchAnchor
-    puts $fh "</body></html>"
-    close $fh
-}
-
-proc genUserReports {outDir userTableVar numChangedFiles} {
-    upvar $userTableVar userTable
-    progress "sorting commit information"
-    foreach u [array names userTable] {
-        set userCommits($u) [sortByCommit $userTable($u)]
-    }
-    progress "generating user reports"
-
-    exec rm -rf $outDir
-    file mkdir $outDir
-    set index $outDir/index.html
-    set fh [open $index.tmp w]
-    set title "CVS changes by user"
-
-    #added by galt
-    #set title2 "[fmtDate $::gStartDate] to [fmtDate $::gEndDate]"
-    set title2 "$::gFromTag to $::gToTag ($::gFromTagDate to $::gToTagDate) $::gBranchVersion"
-    
-    puts $fh "<html><head><title>$title</title></head><body>"
-    puts $fh "<h1>$title</h1>"
-    puts $fh "<h2>$title2</h2>"
-    puts $fh "<ul>"
-    set totalChgCnt 0
-    foreach u [lsort [array names userTable]] {
-        set chgCnt [userReportByFile $outDir $u $userTable($u)]
-        userReportByCommit $outDir $u $userCommits($u)
-        incr totalChgCnt $chgCnt
-        set numFiles [llength $userTable($u)]
-        puts $fh "<LI> <A HREF=\"$u/index.html\">$u</A> - changed lines: $chgCnt, files: $numFiles"
-    }
-    puts $fh "</ul>"
-    puts $fh "<ul>"
-    puts $fh "<li> lines changed: $totalChgCnt"
-    puts $fh "<li> files changed: $numChangedFiles"
-    puts $fh "</ul>"
-    puts $fh "</body></html>"
-    close $fh
-    file rename -force $index.tmp $index
-    return $totalChgCnt
-}
-
-
-proc fileReport {fh outDir fileInfo fileRevs} {
-
-    #added by galt
-    #set rev1 [$fileInfo getRevisionParent [$fileInfo getTag $::gFromTag] ]
-    #set rev2 [$fileInfo getRevisionParent [$fileInfo getTag $::gToTag]   ]
-
-    #added by galt (new way using gWhichReport)
-    set rev1 [$fileInfo getTag $::gFromTag]
-    set rev2 [$fileInfo getTag $::gToTag]
-    if {$::gWhichReport=="branch"} {
-        set rev2 [$fileInfo getRevisionParent $rev2 ]
-    } else {
-        set rev1 [$fileInfo getRevisionParent $rev1 ]
-    }
-
-    
-    set title "[$fileInfo getWorkingFile]"
-    set desc {<ul>}
-    foreach rev $fileRevs {
-        set revInfo [$fileInfo getRevision $rev]
-
-	#added by galt	
-    	#lappend desc "<li> [join [lrange $revInfo 0 2]]<br>[htmlEncode [lindex $revInfo 4]]"
-	set revP [$fileInfo getRevisionParent $rev]
-	if {$revP == ""} { set revP $rev }
-	if {[$fileInfo compareRevs $revP $rev1] > 0} {
-	    lappend desc "<li> [join [lrange $revInfo 0 2]]<br>[htmlEncode [lindex $revInfo 4]]"
-	}
-    }
-    lappend desc {</ul>}
-    set desc [join $desc \n]
-
-    #added by galt
-    #lassign [mkDiffs $outDir $fileInfo [fmtDate $::gStartDate] {} $title $desc] diffLinks
-    #set rev1 [fmtDate $::gStartDate]
-    #set rev2 {}
-    if {$rev1==""} {
-     set rev1 "1.0"
-    }
-    lassign [mkDiffs $outDir $fileInfo $rev1 $rev2 $title $desc] diffLinks
-    
-    puts $fh "<LI> <code>[$fileInfo getWorkingFile]</code> - $diffLinks"
-}
-
-proc genFileReports {outDir fileTableVar lineChgCount} {
-    upvar $fileTableVar fileTable
-
-    progress "generating file reports"
-    exec rm -rf $outDir
-    file mkdir $outDir
-    set index $outDir/index.html
-    set fh [open $index.tmp w]
-    set title "CVS changes by file"
-
-    #added by galt
-    #set title2 "[fmtDate $::gStartDate] to [fmtDate $::gEndDate]"
-    set title2 "$::gFromTag to $::gToTag ($::gFromTagDate to $::gToTagDate) $::gBranchVersion"
-    
-    puts $fh "<html><head><title>$title</title></head><body>"
-    puts $fh "<h1>$title</h1>"
-    puts $fh "<h2>$title2</h2>"
-    puts $fh "<ul>"
-    foreach f [lsort [array names fileTable]] {
-        fileReport $fh $outDir [lindex $fileTable($f) 0] [lindex $fileTable($f) 1]
-    }
-    puts $fh "</ul>"
-    puts $fh "<ul>"
-    puts $fh "<li> lines changed: $lineChgCount"
-    puts $fh "<li> files changed: [array size fileTable]"
-    puts $fh "</ul>"
-    puts $fh "</body></html>"
-    close $fh
-    file rename -force $index.tmp $index
-}
-
-
-set gUsage {cvs-reports [options] workdir outDir
-   
-options:
-   -start date - Starting date, in the form 2003/02/30 or 2003-02-30
-   -verbose - Generate progress messages
-}
-
-#
-# Usage error.
-#
-proc usage {{msg {}}} {
-    if {![lempty $msg]} {
-        puts stderr "Error: $msg"
-    }
-    puts stderr $::gUsage
-    exit 1
-}
-
-proc progress {msg} {
-    if {$::gVerbose} {
-        catch {
-            puts "$msg"
-            flush stdout
-        }
-    }
-}
-
 # convert date/time string to sec
 proc cnvDateTime {dateStr} {
     # Tcl clock wants dates in form 2003-01-30
@@ -1002,75 +804,6 @@ proc htmlEncode {text} {
     regsub -all {<} $text {\&lt;} text
     regsub -all {>} $text {\&gt;} text
     return $text
-}
-
-# check rev date and if it's a HEAD revision
-proc isRevSelected {fileInfo rev} {
-    if {[$fileInfo isBranch $rev]} {
-        return 0
-    }
-
-    #--- old way by date.  not used ---
-    #set revRec [$fileInfo getRevision $rev]
-    #return [expr [cnvDateTime [lindex $revRec 1]] >= $::gStartDate]
-
-    # trying to ignore the specific revs of from/to and look at
-    # the parent trunk revs instead, to use those for comparison
-    set ftr [$fileInfo getTag $::gFromTag] 
-    set ttr [$fileInfo getTag $::gToTag]   
-  
-    # since we use non-branch-tag tag "branch" now, we don't need this:
-    #if {$::gWhichReport=="branch"} { 
-	#set ttr [$fileInfo getRevisionParent $ttr ]
-    #} else {
-	#set ftr [$fileInfo getRevisionParent $ftr ] 
-    #}
-    
-    ##used to be ftr,ttr were only x.x.x.x branch revisions
-    ##but now they can be just trunk/tip x.x revisions also
-    ## this compensates for those
-    #if {$ftr==""} { set ftr [$fileInfo getTag $::gFromTag] }
-    #if {$ttr==""} { set ttr [$fileInfo getTag $::gToTag] }
-    ## however, the review tag is getting set on old files,
-    ##  which does not happen by default with branch tags.
-    ##  I have added -a to the review rtag command to suppress
-    ##   the tagging of removed files in ./Attic.
-
-    # Too new = no from- or to- tags (we don't want to see these)
-    # New     = no from-tag but to-tag ok  
-        # may be resurrected file, check rev against most-recent-dead scan back from ttr.
-    # Current = both from- and -to tags ok
-    # Recently removed = only from-tag, no to=tag
-    # Removed long ago = no from- nor to- tags (we don't want to see these)
-    
-    if {$ttr==""} { 
-	# is this a recently deleted rev? if not recent, skip
-	if {$ftr==""} {
-	    return 0
-	}
-	if {[$fileInfo compareRevs $rev $ftr] <= 0} {
-	    return 0
-	}
-    } else {
-    	if {[$fileInfo compareRevs $rev $ttr] >  0} {
-    	    return 0
-	}
-    	if {$ftr==""} {
-	    set ftr [$fileInfo mostRecentDead $ttr]
-	}
-    	if {$ftr!=""} {
-    	    if {$ftr=="$ttr"} {
-    		return 0
-	    }
-	    if {[$fileInfo compareRevs $rev $ftr] <= 0} {
-    		return 0
-    	    }
-    	}
-    }
-   
-    #debug
-    #puts "[$fileInfo getWorkingFile] $rev"
-    return 1
 }
 
 set gDiffStyle {
@@ -1156,6 +889,9 @@ proc cntDiffChgs {diff} {
 # context or full.  Also returns the diff text.
 proc mkFileDiff {outDir fileInfo rev1 rev2 title desc type} {
     set srcFile [$fileInfo getWorkingFile]
+    if {$rev1 == $rev2} {
+        error "mkFileDiff $srcFile must have different recs, got $rev1 == $rev2"
+    }
     if {$type == "full"} {
         set relBase full/$srcFile.$rev1-$rev2
         set contentSize 1000000
@@ -1171,11 +907,9 @@ proc mkFileDiff {outDir fileInfo rev1 rev2 title desc type} {
     set outHtml $outDir/$outHtmlRel
 
     if {[file exists $outTxt] || [file exists $outHtml]} {
-	#added by galt
-        #return [list $outTxtRel $outHtmlRel]
+        # cached
 	if {$type == "context"} {
-	    set diff [read_file $outTxt]
-    	    return [list $outTxtRel $outHtmlRel $diff]
+    	    return [list $outTxtRel $outHtmlRel [read_file $outTxt]]
 	} else {
 	    return [list $outTxtRel $outHtmlRel]
 	}
@@ -1206,20 +940,247 @@ proc mkDiffs {outDir fileInfo rev1 rev2 title desc} {
     return [list $links $chgCnt]
 }
 
+# returns {htmlLinks chgCnt}
+proc mkCommitDiffs {outDir fileInfo revInfo} {
+    set title "[$fileInfo getWorkingFile] [lindex $revInfo 0]"
+    set desc1 [htmlEncode [join [lrange $revInfo 0 2]]]
+    set desc2 [htmlEncode [lindex $revInfo 4]]
+    set desc "$desc1<br>$desc2"
+    set rev2 [lindex $revInfo 0]
+    set rev1 [$fileInfo getPrevRev $rev2]
+    return [mkDiffs $outDir $fileInfo $rev1 $rev2 $title $desc]
+}
+
+# write index page of commits for a file
+proc fileReport {fh outDir fileInfo revisions} {
+    set totalChgCnt 0
+    puts $fh "<LI> [$fileInfo getWorkingFile]"
+    puts $fh "<UL>"
+    foreach rev $revisions {
+        set revInfo [$fileInfo getRevision $rev]
+        lassign [mkCommitDiffs $outDir $fileInfo $revInfo] diffLinks chgCnt
+        puts $fh "<LI> $rev $diffLinks<br>"
+        puts $fh [htmlEncode [lindex $revInfo 4]]
+        incr totalChgCnt $chgCnt
+    }
+    puts $fh "</UL>"
+    return $totalChgCnt
+}
+
+# returns {htmlLinks chgCnt}
+proc mkRangeDiffs {outDir fileInfo revInfo1 revInfo2} {
+    set rev1 [lindex $revInfo1 0]
+    set rev2 [lindex $revInfo2 0]
+    set title "[$fileInfo getWorkingFile] $rev1 - $rev2"
+    return [mkDiffs $outDir $fileInfo $rev1 $rev2 $title ""]
+}
+
+# write file info for change on a range of revisions
+proc fileRangeReport {fh outDir fileInfo revisions} {
+    set rev1 [$fileInfo getPrevRev [lindex $revisions end]]
+    set rev2 [lindex $revisions 0]
+    set revInfo1 [$fileInfo getRevision $rev1]
+    set revInfo2 [$fileInfo getRevision $rev2]
+    lassign [mkRangeDiffs $outDir $fileInfo $revInfo1 $revInfo2] diffLinks chgCnt
+    puts $fh "<LI> [$fileInfo getWorkingFile] $rev1 - $rev2 $diffLinks"
+    return $chgCnt
+}
+
+# write a report for a user in file and revision order
+proc userReportByFile {outDir title2 user userInfo rangeDiffs} {
+    set userDir $outDir/$user
+    file mkdir $userDir
+    if {$rangeDiffs} {
+        set switchAnchor ""
+        set fh [open $userDir/index.html w]
+    } else {
+        set switchAnchor "switch to: <a href=\"index.html\">grouped by commit view</a>, <a href=\"../../index.html\">user index</a><br>"
+        set fh [open $userDir/index-by-file.html w]
+    }
+
+    set title "$user: changes by file"
+    puts $fh "<html><head><title>$title</title></head><body>"
+    puts $fh "<h1>$title</h1>"
+    puts $fh $switchAnchor
+
+    puts $fh "<h3>$title2</h3>"
+    puts $fh "<ul>"
+    set totalChgCnt 0
+    foreach fileRec $userInfo {
+        lassign $fileRec fileInfo revisions
+        if {$rangeDiffs} {
+            set chgCnt [fileRangeReport $fh $userDir $fileInfo $revisions]
+        } else {
+            set chgCnt [fileReport $fh $userDir $fileInfo $revisions]
+        }
+        incr totalChgCnt $chgCnt
+    }
+    puts $fh "</ul>"
+    puts $fh $switchAnchor
+    puts $fh "</body></html>"
+    close $fh
+    return $totalChgCnt
+}
+
+# generate list of files by commit message
+# {commit {{fileInfo revision} ..} }
+proc sortByCommit {userInfo} {
+    # build tmp table
+    foreach fileRec $userInfo {
+        lassign $fileRec fileInfo revisions
+        foreach rev $revisions {
+            set revInfo [$fileInfo getRevision $rev]
+            set commit [string trim [lindex $revInfo 4]]
+
+            # save file for sort
+            lappend byCommit($commit) [list [$fileInfo getWorkingFile] $fileInfo $rev]
+            # save lowest date/time for commit sort
+            set time [lindex $revInfo 1]
+            if {![info exists commitTimes($commit)]
+                || ([string compare $time $commitTimes($commit)] > 0)} {
+                set commitTimes($commit) $time
+            }
+        }
+    }
+
+    # Sort commits by time
+    set commitTimeList {}
+    foreach commit [array names commitTimes] {
+        lappend commitTimeList [list $commitTimes($commit) $commit]
+    }
+    set commitTimeList [lsort -index 0 $commitTimeList]
+
+    # now create commit list, sort each commit by file name
+    set commits {}
+    foreach commitTime $commitTimeList {
+        set commit [lindex $commitTime 1]
+        set commitInfo {}
+        foreach fileRec [lsort -index 0 $byCommit($commit)] {
+            lappend commitInfo [lrange $fileRec 1 2]
+        }
+        lappend commits [list $commit $commitInfo]
+    }
+    return $commits
+}
+
+# write commit info
+proc userCommitReport {fh outDir commit commitInfo} {
+    puts $fh "<LI> [htmlEncode $commit]"
+    puts $fh "<UL>"
+
+    foreach fileRec $commitInfo {
+        lassign $fileRec fileInfo rev
+        set revInfo [$fileInfo getRevision $rev]
+
+        lassign [mkCommitDiffs $outDir $fileInfo $revInfo] diffLinks chgCnt
+        puts $fh "<LI> [$fileInfo getWorkingFile] $rev - $diffLinks"
+	
+    }
+    puts $fh "</UL>"
+}
+
+# write a report for a user grouped by commit
+proc userReportByCommit {outDir title2 user userCommits} {
+    set userDir $outDir/$user
+    file mkdir $userDir
+    set switchAnchor "switch to <a href=\"index-by-file.html\">grouped by file view</a>, <a href=\"../../index.html\">user index</a><br>"
+
+    set fh [open $userDir/index.html w]
+    set title "$user: changes by commit"
+    puts $fh "<html><head><title>$title</title></head><body>"
+    puts $fh "<h1>$title</h1>"
+    puts $fh $switchAnchor
+
+    puts $fh "<h3>$title2</h3>"
+    puts $fh "<ul>"
+    foreach commitRec $userCommits {
+        userCommitReport $fh $userDir [lindex $commitRec 0] [lindex $commitRec 1]
+    }
+    puts $fh "</ul>"
+    puts $fh $switchAnchor
+    puts $fh "</body></html>"
+    close $fh
+}
+
+proc genUserReports {outDir title2 userTableVar numChangedFiles rangeDiffs} {
+    upvar $userTableVar userTable
+    progress "sorting commit information"
+    foreach u [array names userTable] {
+        set userCommits($u) [sortByCommit $userTable($u)]
+    }
+    progress "generating user reports"
+
+    exec rm -rf $outDir
+    file mkdir $outDir
+    set index $outDir/index.html
+    set fh [open $index.tmp w]
+    set title "CVS changes by user"
+
+    puts $fh "<html><head><title>$title</title></head><body>"
+    puts $fh "<h1>$title</h1>"
+    puts $fh "<h2>$title2</h2>"
+    puts $fh "<ul>"
+    set totalChgCnt 0
+    foreach u [lsort [array names userTable]] {
+        set chgCnt [userReportByFile $outDir $title2 $u $userTable($u) $rangeDiffs]
+        if {!$rangeDiffs} {
+            userReportByCommit $outDir $title2 $u $userCommits($u)
+        }
+        incr totalChgCnt $chgCnt
+        set numFiles [llength $userTable($u)]
+        puts $fh "<LI> <A HREF=\"$u/index.html\">$u</A> - changed lines: $chgCnt, files: $numFiles"
+    }
+    puts $fh "</ul>"
+    puts $fh "<ul>"
+    puts $fh "<li> lines changed: $totalChgCnt"
+    puts $fh "<li> files changed: $numChangedFiles"
+    puts $fh "</ul>"
+    puts $fh "</body></html>"
+    close $fh
+    file rename -force $index.tmp $index
+    return $totalChgCnt
+}
+
+proc genFileReports {outDir title2 fileTableVar lineChgCount} {
+    upvar $fileTableVar fileTable
+
+    progress "generating file reports"
+    exec rm -rf $outDir
+    file mkdir $outDir
+    set index $outDir/index.html
+    set fh [open $index.tmp w]
+    set title "CVS changes by file"
+
+    puts $fh "<html><head><title>$title</title></head><body>"
+    puts $fh "<h1>$title</h1>"
+    puts $fh "<h2>$title2</h2>"
+    puts $fh "<ul>"
+    foreach f [lsort [array names fileTable]] {
+        fileReport $fh $outDir [lindex $fileTable($f) 0] [lindex $fileTable($f) 1]
+    }
+    puts $fh "</ul>"
+    puts $fh "<ul>"
+    puts $fh "<li> lines changed: $lineChgCount"
+    puts $fh "<li> files changed: [array size fileTable]"
+    puts $fh "</ul>"
+    puts $fh "</body></html>"
+    close $fh
+    file rename -force $index.tmp $index
+}
+
+
 # select and sort by user add to use table
 # user table are entries of {{fileObj {rev ...} ...}
 # file table entries are {fileObj {rev ...}}
-proc selectFileRevs {fileInfo userTableVar fileTableVar} {
+proc selectFileRevs {fileInfo userTableVar fileTableVar fromTag toTag} {
     upvar $userTableVar userTable $fileTableVar fileTable
     
     # sort revisions out by users
-    set selectRevs {}
-    foreach rev [$fileInfo getRevisions] {
-        if {[isRevSelected $fileInfo $rev]} {
-            set user [lindex [$fileInfo getRevision $rev] 2]
-            lappend byUser($user) $rev
-            lappend selectRevs $rev
-        }
+    set selectRevs [$fileInfo getRevsForRange $fromTag $toTag]
+    
+    # partition revisions my user
+    foreach rev $selectRevs {
+        lappend byUser([lindex [$fileInfo getRevision $rev] 2]) $rev
     }
 
     # add to tables
@@ -1231,17 +1192,13 @@ proc selectFileRevs {fileInfo userTableVar fileTableVar} {
     }
 }
 
-proc makeIndexPage {outDir} {
+proc makeIndexPage {outDir title2 module} {
     file mkdir $outDir
     set index $outDir/index.html
     set fh [open $index.tmp w]
-    set title "CVS changes: $::gModule"
+    set title "CVS changes: $module"
 
-    #added by galt
-    #set title2 "[fmtDate $::gStartDate] to [fmtDate $::gEndDate]"
-    set title2 "$::gFromTag to $::gToTag ($::gFromTagDate to $::gToTagDate) $::gBranchVersion"
-    
-    puts $fh "<html><head><title></title></head><body>"
+    puts $fh "<html><head><title>$title</title></head><body>"
     puts $fh "<h1>$title</h1>"
     puts $fh "<h2>$title2</h2>"
     puts $fh {
@@ -1249,8 +1206,20 @@ proc makeIndexPage {outDir} {
 <li><a href="user/index.html">Changes by user</a>
 <li><a href="file/index.html">Changes by file</a>
 </ul>
-<h2>Overview</h2>
-<h3>Content diffs</h3>
+</body>
+</html>
+}
+    close $fh
+    file rename -force $index.tmp $index
+}
+
+proc makeHelpPage {outDir} {
+    file mkdir $outDir
+    set help $outDir/help.html
+    set fh [open $help.tmp w]
+    puts $fh {<html><head><title>CVS Reports</title></head><body>
+<h1>CVS Reports</h1>
+<h2>Content diffs</h3>
 Two types of diffs are produced:
 <ul>
 <li> Unified contexts diffs - shows the changes and surrounding
@@ -1268,143 +1237,161 @@ The diffs are in two formats:
 
 <p>
 The <code>changed</code> line counts are derived by examining the diffs.
-blocks of deletes followed by inserts are considered replacements,
+Blocks of deletes followed by inserts are considered replacements,
 so the change count is the larger of the delete count and add count.
-
-<h3>Rebuilding the reports</h3>
- To rebuild this report, run:
-
-<!-- #added by galt -->
-<!-- #<blockquote><CODE>cvs-reports-build <em>startDate</em></CODE></blockquote> -->
-<blockquote><CODE>cvs-reports-delta <em>FromTag ToTag FromTagDate ToTagDate mode branchVersion</em></CODE></blockquote>
-
 </body>
 </html>
 }
     close $fh
-    file rename -force $index.tmp $index
+    file rename -force $help.tmp $help
 }
 
-proc genReports {outDir infoList} {
+proc getFileRevs {infoList userTableVar fileTableVar fromTag toTag} {
+    upvar $userTableVar userTable $fileTableVar fileTable
     progress "sorting revision information"
     foreach f $infoList {
-        selectFileRevs $f userTable fileTable
+        selectFileRevs $f userTable fileTable $fromTag $toTag
     }
+}
 
+proc genReports {outDir title2 module infoList fromTag toTag rangeDiffs} {
+    getFileRevs $infoList userTable fileTable $fromTag $toTag
     exec rm -rf $outDir/user.new
-    set lineChgCount [genUserReports $outDir/user.new userTable [array size fileTable]]
+    set lineChgCount [genUserReports $outDir/user.new $title2 userTable [array size fileTable] $rangeDiffs]
     exec rm -rf $outDir/user
     file rename $outDir/user.new $outDir/user
 
     exec rm -rf $outDir/file.new
-    genFileReports $outDir/file.new fileTable $lineChgCount
+    genFileReports $outDir/file.new $title2 fileTable $lineChgCount
     exec rm -rf $outDir/file
     file rename $outDir/file.new $outDir/file
 
-    makeIndexPage $outDir
+    makeIndexPage $outDir $title2 $module
 }
 
 #
 # Entry
 #
+set gUsage {cvs-reports [options] workdir outDir
+   
+options:
+   -start date - Starting date, in the form 2003/02/30 or 2003-02-30
+   -verbose - Generate progress messages
+   -from fromTag
+   -to toTag
+   -fromDate date - only used in title
+   -toDate date - only used in title
+   -branchVersion version  - only used in title
+   -rangeDiffs - do just per-file diffs for target range, rather than per-commit
+   -debug
+   -no-update - don't do a cvs update on working directory
+   -file path - only operate on path, relative to the working directory.
+    Mainly for debugging, maybe repeated.
 
-# added by galt
+fromTag can be a tag made at the branch point and toTag the branch tag
+}
+
+#
+# Usage error.
+#
+proc usage {{msg {}}} {
+    if {![lempty $msg]} {
+        puts stderr "Error: $msg"
+    }
+    puts stderr $::gUsage
+    exit 1
+}
+
+proc progress {msg} {
+    if {$::gVerbose} {
+        catch {
+            puts "$msg"
+            flush stdout
+        }
+    }
+}
+
 # these will be calculated from value(s) passed in
-set gToTag   "branch"
-set gFromTag "review"
-set gWhichReport "none"
-set gBranchVersion "none"
+set toTag {}
+set toTagDate {}
+set fromTag {}
+set fromTagDate {}
+set branchVersion {}
+set rangeDiffs 0
+set fileSubset {}
 
-set gStartDate 0
-set gCgiProgress 0
 set gVerbose 0
-set gRebuildCgi {}
 set debug 0
-
-# added by galt
-# testing - lets see what happens when we turn debug on!
-#set debug 1  - spits out detail to std out, but mostly post my interest area
+set doUpdate 1
 
 while {[string match -* [lindex $argv 0]]} {
     set opt [lvarpop argv]
     switch -- $opt {
-        -from {  #added by galt
+        -from {
             if {[lempty $argv]} {
                 usage "-from requires an argument"
             }
-            set gFromTag [lvarpop argv]
+            set fromTag [lvarpop argv]
         }
-        -to {  #added by galt
+        -to {
             if {[lempty $argv]} {
                 usage "-to requires an argument"
             }
-            set gToTag [lvarpop argv]
+            set toTag [lvarpop argv]
 	}
-        -fromDate {  #added by galt
+        -fromDate {
             if {[lempty $argv]} {
                 usage "-fromDate requires an argument"
             }
-            set gFromTagDate [lvarpop argv]
+            set fromTagDate [lvarpop argv]
         }
-        -toDate {  #added by galt
+        -toDate {
             if {[lempty $argv]} {
                 usage "-toDate requires an argument"
             }
-            set gToTagDate [lvarpop argv]
+            set toTagDate [lvarpop argv]
 	}
-        -whichReport {  #added by galt
+        -whichReport {
+            puts stderr "WARNING: -whichReport is no longer used"
             if {[lempty $argv]} {
                 usage "-whichReport requires an argument"
             }
-            set gWhichReport [lvarpop argv]
+            lvarpop argv
 	}
-        -branchVersion {  #added by galt
+        -branchVersion {
             if {[lempty $argv]} {
                 usage "-branchVersion requires an argument"
             }
-            set gBranchVersion [lvarpop argv]
+            set branchVersion [lvarpop argv]
 	}
-        -start {
-            if {[lempty $argv]} {
-                usage "-start requires an argument"
-            }
-            set startDateStr [lvarpop argv]
-            set gStartDate [cnvDateTime $startDateStr]
-        }
-        -cgi-progress {
-            set gCgiProgress 1
-            set gVerbose 1
-        }
         -verbose {
             set gVerbose 1
         }
-        -rebuild-cgi {
-            if {[lempty $argv]} {
-		# typofix by galt -cgs
-                usage "-rebuild-cgi requires an argument"
-            }
-            set gRebuildCgi [lvarpop argv]
+        -rangeDiffs {
+            set rangeDiffs 1
         }
         -debug {
             set debug 1
         }
+        -no-update {
+            set doUpdate 0
+        }
+        -file {
+            if {[lempty $argv]} {
+                usage "-file requires an argument"
+            }
+            lappend fileSubset [lvarpop argv]
+	}
+
         default {
             usage "Invalid option \"$opt\""
         }
     }
 }
-
-
-if { ($gWhichReport != "branch") && ($gWhichReport != "review") } {
-    usage "wrong report type $gWhichReport, should be branch or review"
-}
-
-
 if {[llength $argv] != 2} {
     usage "wrong \# args"
 }
 lassign $argv workDir outDir
-set gEndDate [clock seconds]
 if {![file isdir $workDir]} {
     usage "workdir does not exists: $workDir"
 }
@@ -1413,29 +1400,37 @@ if {![file isdir $workDir]} {
 umask 0002
 
 # get module from workDir for use in messages
-set gModule [string trim [read_file $workDir/CVS/Repository]]
+set module [string trim [read_file $workDir/CVS/Repository]]
 
-set gCvsInvoke [CVSInvoke \#auto {} $gModule $workDir]
+set gCvsInvoke [CVSInvoke \#auto {} $module $workDir]
 $gCvsInvoke setDebug $debug
 
-# added by galt
-progress "starting from-tag $gFromTag"
-progress "  ending   to-tag $gToTag"
-progress "starting from-tag-date $gFromTagDate"
-progress "  ending   to-tag-date $gToTagDate"
-progress " which report: $gWhichReport"
-progress " branch version: $gBranchVersion"
+progress "starting from-tag $fromTag"
+progress "  ending   to-tag $toTag"
+if {$fromTagDate != {}} {
+    progress "starting from-tag-date $fromTagDate"
+}
+if {$toTagDate != {}} {
+    progress "  ending   to-tag-date $toTagDate"
+}
+if {$branchVersion != {}} {
+    progress " branch version: $branchVersion"
+}
 
-# update the working directory (if rdiff supported -U, we wouldn't need
-# a working dir
+if {$doUpdate} {
+    # update the working directory (if rdiff supported -U to specify context
+    # size, we wouldn't need a working dir)
+    progress "updating cvs working directory for $module"
+    $gCvsInvoke update
+}
 
-progress "updating cvs working directory for $gModule"
-$gCvsInvoke update
-
-progress "collecting cvs change logs for $gModule"
-set infoList [$gCvsInvoke getLogInfo]
-
-genReports $outDir $infoList
+progress "collecting cvs change logs for $module"
+set infoList [$gCvsInvoke getLogInfo $fileSubset]
+set title2 "$fromTag to $toTag ($fromTagDate to $toTagDate) $branchVersion"
+genReports $outDir $title2 $module $infoList $fromTag $toTag $rangeDiffs
 
 progress "cvs report generation complete"
 
+# Local Variables: **
+# mode: tcl **
+# End: **
