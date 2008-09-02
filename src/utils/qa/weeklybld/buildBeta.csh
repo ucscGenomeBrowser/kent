@@ -31,8 +31,10 @@ endif
 echo "Make alpha."
 cd hg
 make alpha >& make.alpha.log
+# These flags and programs will trip the error detection
 sed -i -e "s/-DJK_WARN//g" make.alpha.log
 sed -i -e "s/-Werror//g" make.alpha.log
+sed -i -e "s/gbWarn\.//g" make.alpha.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
 set res = `/bin/egrep -i "error|warn" make.alpha.log`
