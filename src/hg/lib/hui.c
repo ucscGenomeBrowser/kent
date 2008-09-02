@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.112 2008/08/29 20:55:04 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.113 2008/09/02 17:46:17 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -1674,11 +1674,11 @@ boolean dimensionsExist(struct trackDb *parentTdb)
 {
     return (trackDbSetting(parentTdb, "dimensions") != NULL);
 }
-static boolean dimensionsSubtrackOf(struct trackDb *childTdb)
-/* Does this child belong to a parent  with dimensions? */
-{
-    return (tdbIsCompositeChild(childTdb) && dimensionsExist(childTdb->parent));
-}
+//static boolean dimensionsSubtrackOf(struct trackDb *childTdb)
+///* Does this child belong to a parent  with dimensions? */
+//{
+//    return (tdbIsCompositeChild(childTdb) && dimensionsExist(childTdb->parent));
+//}
 
 static dimensions_t *dimensionSettingsGet(struct trackDb *parentTdb)
 /* Parses any dimemnions setting in parent of subtracks */
@@ -1732,33 +1732,60 @@ typedef struct _members {
     char **values;
 } members_t;
 
-static members_t *subgroupMembersGet(struct trackDb *parentTdb, char *settingName)
+int subgroupCount(struct trackDb *parentTdb)
+/* How many subGroup setting does this parent have? */
+{
+int ix;
+int count = 0;
+for(ix=1;ix<=SUBGROUP_MAX;ix++)
+    {
+    char subGrp[16];
+    safef(subGrp, ArraySize(subGrp), "subGroup%d",ix);
+    if(trackDbSetting(parentTdb, subGrp) != NULL)
+        count++;
+    }
+return count;
+}
+
+char * subgroupSettingByTagOrName(struct trackDb *parentTdb, char *groupNameOrTag)
+/* look for a subGroup by name (ie subGroup1) or tag (ie view) and return an unallocated char* */
+{
+int ix;
+char *setting = NULL;
+if(sameStringN(groupNameOrTag,"subGroup",8))
+    {
+    setting = trackDbSetting(parentTdb, groupNameOrTag);
+    if(setting != NULL)
+        return setting;
+    }
+for(ix=1;ix<=SUBGROUP_MAX;ix++) // How many do we support?
+    {
+    char subGrp[16];
+    safef(subGrp, ArraySize(subGrp), "subGroup%d",ix);
+    setting = trackDbSetting(parentTdb, subGrp);
+    if(setting != NULL)  // Doesn't require consecutive subgroups
+        {
+        if(startsWithWord(groupNameOrTag,setting))
+            return setting;
+        }
+    }
+return NULL;
+}
+
+boolean subgroupingExists(struct trackDb *parentTdb, char *groupNameOrTag)
+/* Does this parent track contain a particular subgrouping? */
+{
+    return (subgroupSettingByTagOrName(parentTdb,groupNameOrTag) != NULL);
+}
+
+static members_t *subgroupMembersGet(struct trackDb *parentTdb, char *groupNameOrTag)
 /* Parse a subGroup setting line into tag,title, names(optional) and values(optional), returning the count of members or 0 */
 {
 int ix,cnt;
-char *target = NULL;
-
-char subGrp[16];
-if(sameStringN(settingName,"subGroup",8))
-    target = cloneString(trackDbSetting(parentTdb, settingName));
-if(target == NULL)
-    {    
-    for(ix=1;ix<=SUBGROUP_MAX;ix++) // How many do we support?
-        {
-        safef(subGrp, ArraySize(subGrp), "subGroup%d",ix);
-        char *setting = trackDbSetting(parentTdb, subGrp);
-        if(setting != NULL)
-            {
-            if(startsWithWord(settingName,setting))
-                {
-                target = cloneString(setting);
-                break;
-                }
-            }
-        }
-    }
-if(target == NULL)
+char *setting = subgroupSettingByTagOrName(parentTdb, groupNameOrTag);
+if(setting == NULL)
     return NULL;
+char *target = cloneString(setting);
 
 char *words[64];
 cnt = chopLine(target, words);
@@ -1901,11 +1928,11 @@ if(value && *value)
 
 typedef struct _sortOrder {
     int count;
-    char*sortOrder;
-    char*htmlId;
-    char**column;
-    char**title;
-    boolean* forward;
+    char*sortOrder;      // from cart (eg: CEL=+ FAC=- view=-)
+    char*htmlId;         // {tableName}.sortOrder
+    char**column;        // Always order in trackDb.ra (eg: FAC,CEL,view)
+    char**title;         // Always order in trackDb.ra (eg: Factor,Cell Line,View)
+    boolean* forward;    // Always order in trackDb.ra but value of cart! (eg: -,+,-)
     int*  order;  // 1 based 
 } sortOrder_t;
 
@@ -2189,7 +2216,7 @@ if(useDragAndDrop)
     printf(" class='tableWithDragAndDrop'");
 puts("><THEAD>");
 
-if (!primarySubtrack && isMatrix)
+if (!primarySubtrack)
     {
     char javascript[JBUFSIZE];
     boolean displayAll = sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
@@ -2228,8 +2255,11 @@ if (!primarySubtrack && isMatrix)
         int sIx=0;
         for(sIx=0;sIx<sortOrder->count;sIx++)
             {
-            printf ("<TH id='%s.%s.sortTh' abbr='%c' onMouseOver=\"hintOverSortableColumnHeader(this)\" nowrap><A HREF='#nowhere' onclick=\"tableSortAtButtonPress(this,'%s');return false;\">%s</A><sup>%s%d</sup></TH>",
-                parentTdb->tableName,sortOrder->column[sIx],(sortOrder->forward[sIx]?'-':'+'),sortOrder->column[sIx],sortOrder->title[sIx],(sortOrder->forward[sIx]?"&darr;":"&uarr;"),sortOrder->order[sIx]);
+            printf ("<TH id='%s.%s.sortTh' abbr='%c' onMouseOver=\"hintOverSortableColumnHeader(this)\" nowrap><A HREF='#nowhere' onclick=\"tableSortAtButtonPress(this,'%s');return false;\">%s</A><sup>%s",
+                parentTdb->tableName,sortOrder->column[sIx],(sortOrder->forward[sIx]?'-':'+'),sortOrder->column[sIx],sortOrder->title[sIx],(sortOrder->forward[sIx]?"&darr;":"&uarr;"));
+            if (sortOrder->count > 1)
+                printf ("%d",sortOrder->order[sIx]);
+            puts ("</sup></TH>");
             }
         puts("<TD>&nbsp;</TD>");
         }
@@ -2312,9 +2342,9 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
 
             printf ("&nbsp;</TD>");
             
-            if(isMatrix && sortOrder != NULL) // TODO this needs to be changed to sortOrder->columns which are subGroups
+            if(sortOrder != NULL)
                 {
-                for(di=dimX;di<dimMax;di++)
+                for(di=dimX;di<dimMax;di++)  // TODO this needs to be changed to sortOrder->columns which are subGroups
                     {
                     if(dimensions[di])
                         {
@@ -2591,6 +2621,7 @@ if (scoreCtString != NULL)
         printf("&nbsp; (range: 1 to 100000, total items: %d)",
                 getTableSize(parentTdb->tableName));
     }
+cfgEndBox(boxed);
 }
 
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db)
@@ -3237,7 +3268,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
 }
 
 static boolean hCompositeUiNoMatrix(struct cart *cart, struct trackDb *parentTdb,
-          char *primarySubtrack, char *formName)
+          char *primarySubtrack, char *formName, char *db)
 /* UI for composite tracks: subtrack selection.  This is the default UI 
 without matrix controls. */
 {
@@ -3257,7 +3288,13 @@ bool hasSubgroups = (trackDbSetting(parentTdb, "subGroup1") != NULL);
 if(dimensionsExist(parentTdb))
     return FALSE;
 
-//hCompositeDisplayViewDropDowns(cart,parentTdb);  // TODO Experimental so far
+if(subgroupingExists(parentTdb,"view"))
+    {
+    hCompositeDisplayViewDropDowns(cart,parentTdb,db);
+    if(subgroupCount(parentTdb) <= 1)
+        return TRUE;
+    }
+
 
 puts ("<TABLE>");
 if (hasSubgroups)
@@ -3393,7 +3430,6 @@ void hCompositeUi(struct cart *cart, struct trackDb *tdb,
  * that have the same type.  If fakeSubmit is non-NULL, add a hidden
  * var with that name so it looks like it was pressed. */
 {
-char javascript[JBUFSIZE];
 bool hasSubgroups = (trackDbSetting(tdb, "subGroup1") != NULL);
 boolean displayAll = 
     sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
@@ -3420,33 +3456,10 @@ if(sameOk("subTracks",trackDbSetting(tdb, "dragAndDrop")))
 jsIncludeFile("hui.js",NULL);
 
 if (!hasSubgroups || !isMatrix || primarySubtrack)
-    hCompositeUiNoMatrix(cart,tdb,primarySubtrack,formName);
+    hCompositeUiNoMatrix(cart,tdb,primarySubtrack,formName,db);
 else 
     hCompositeUiByMatrix(cart,tdb,formName,db);
 
-if(primarySubtrack == NULL && isMatrix == FALSE)
-    {
-    puts("<TABLE><TR><TD><B>Show checkboxes for:</B></TD><TD>");
-    if (formName)
-        {
-        safef(javascript, sizeof(javascript), "onclick=\"showSubTrackCheckBoxes(true);\"");
-        
-        cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,
-                                    javascript);
-        puts("Only selected subtracks</TD><TD>");
-        safef(javascript, sizeof(javascript), "onclick=\"showSubTrackCheckBoxes(false);\"");
-        cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,
-                    javascript);
-        }
-    else
-        {
-        cgiMakeRadioButton("displaySubtracks", "selected", !displayAll);
-        puts("Only selected subtracks</TD><TD>");
-        cgiMakeRadioButton("displaySubtracks", "all", displayAll);
-        }
-    puts("All subtracks</TD>");
-    puts("</TR></TABLE>");
-}
 cartSaveSession(cart);
 cgiContinueHiddenVar("g");
 if (displayAll)
@@ -3525,9 +3538,7 @@ char *compositeViewControlNameFromTdb(struct trackDb *tdb)
 char *stView;
 char *name;
 char *parentName = trackDbSetting(tdb, "subTrack");
-if(parentName 
-&& dimensionsSubtrackOf(tdb) // TODO: Remove when no longer restricted to dimensions
-&& subgroupFind(tdb,"view",&stView))  
+if(parentName && subgroupFind(tdb,"view",&stView))
     {
     int len = strlen(parentName) + strlen(stView) + 3;
     name = needMem(len);
