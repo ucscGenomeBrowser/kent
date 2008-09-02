@@ -791,6 +791,15 @@ boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
 boolean dimensionsExist(struct trackDb *parentTdb);
 /* Does this parent track contain dimensions? */
 
+int subgroupCount(struct trackDb *parentTdb);
+/* How many subGroup setting does this parent have? */
+        
+char * subgroupSettingByTagOrName(struct trackDb *parentTdb, char *groupNameOrTag);
+/* look for a subGroup by name (ie subGroup1) or tag (ie view) and return an unallocated char* */
+
+boolean subgroupingExists(struct trackDb *parentTdb, char *groupNameOrTag);
+/* Does this parent track contain a particular subgrouping? */
+
 boolean subgroupFind(struct trackDb *childTrack, char *name,char **value);
 /* looks for a single tag in a childTrack's subGroups setting */
 
@@ -818,6 +827,9 @@ void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,bool
 void scoreCfgUi(struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
 
+void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
+/* UI for maf/wiggle track */
+        
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
 /* UI for maf/wiggle track */
         
