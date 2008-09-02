@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.449 2008/08/29 20:56:11 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.450 2008/09/02 17:47:45 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2459,17 +2459,6 @@ else
 	    tableName = "all_mrna";
         printf(SCHEMA_LINK, database, tdb->grp, tableName, tableName);
         }
-    else if (tdbIsComposite(tdb))
-	{
-	/* handle multi-word subTrack settings: */
-    if(!dimensionsExist(tdb))
-        {
-        char *words[2];
-        if ((chopLine(cloneString(tdb->subtracks->tableName), words) > 0) &&
-            hTableOrSplitExists(words[0]))
-            printf(SCHEMA_LINK,database, tdb->grp, tdb->tableName, tdb->subtracks->tableName);
-            }
-	}
 
     /* Print data version trackDB setting, if any */
     char *version = trackDbSetting(tdb, "dataVersion");
