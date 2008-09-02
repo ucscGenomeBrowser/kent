@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.113 2008/09/02 17:46:17 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.114 2008/09/02 19:06:27 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -1845,8 +1845,9 @@ if(members && *members)
 
 typedef struct _membership {
     int count;
-    char **subgroups;
-    char **membership;
+    char **subgroups;    // Ary of Tags in parentTdb->subGroupN and in childTdb->subGroups (ie view)
+    char **membership;   // Ary of Tags of subGroups that child belongs to (ie PK)
+    char **titles;       // Ary of Titles of subGroups a child belongs to (ie Peak) 
 } membership_t;
 
 static membership_t *subgroupMembershipGet(struct trackDb *childTdb)
@@ -1866,12 +1867,24 @@ assert(cnt <= ArraySize(words));
 membership_t *membership = needMem(sizeof(membership_t));
 membership->subgroups    = needMem((cnt+1)*sizeof(char*));
 membership->membership   = needMem(cnt*sizeof(char*));
+membership->titles       = needMem(cnt*sizeof(char*));
 for (ix = 0,membership->count=0; ix < cnt; ix++)
     {
     if (parseAssignment(words[ix], &name, &value))
         {
         membership->subgroups[membership->count]  = name;
-        membership->membership[membership->count] = strSwapChar(value,'_',' ');
+        membership->membership[membership->count] = value;//strSwapChar(value,'_',' ');
+        members_t* members = subgroupMembersGet(childTdb->parent, name);
+        membership->titles[membership->count] = NULL; // default
+        if(members != NULL)
+            {
+            int ix2 = stringArrayIx(value,members->names,members->count);
+            if(ix2 != -1)
+                {
+                membership->titles[membership->count] = strSwapChar(cloneString(members->values[ix2]),'_',' ');
+                subgroupMembersFree(&members);
+                }
+            }
         membership->count++;
         }
     }
@@ -1883,6 +1896,9 @@ static void subgroupMembershipFree(membership_t **membership)
 {
 if(membership && *membership)
     {
+    int ix;
+    for(ix=0;ix<(*membership)->count;ix++) { freeMem((*membership)->titles[ix]); }
+    freeMem((*membership)->titles);
     freeMem((*membership)->subgroups[(*membership)->count]); // NOTE cloneString:words[0]==membership->subgroups[membership->count] and is freed now
     freeMem((*membership)->subgroups);
     freeMem((*membership)->membership);
@@ -1930,7 +1946,7 @@ typedef struct _sortOrder {
     int count;
     char*sortOrder;      // from cart (eg: CEL=+ FAC=- view=-)
     char*htmlId;         // {tableName}.sortOrder
-    char**column;        // Always order in trackDb.ra (eg: FAC,CEL,view)
+    char**column;        // Always order in trackDb.ra (eg: FAC,CEL,view) TAG
     char**title;         // Always order in trackDb.ra (eg: Factor,Cell Line,View)
     boolean* forward;    // Always order in trackDb.ra but value of cart! (eg: -,+,-)
     int*  order;  // 1 based 
@@ -2009,7 +2025,8 @@ int ix;
 #define CHECKBOX_ID_SZ 128
 char *id = needMem(CHECKBOX_ID_SZ);
 // What is wanted: id="cb_ES_K4_SIG_cb"
-safecpy(id,CHECKBOX_ID_SZ,"cb_");
+safef(id, CHECKBOX_ID_SZ, "cb_%s_", tdb->tableName);
+//safecpy(id,CHECKBOX_ID_SZ,"cb_");
 if(tagX != NULL)
     {
     ix = stringArrayIx(tagX, membership->subgroups, membership->count);
@@ -2027,8 +2044,8 @@ if(ix >= 0)
     safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
 safecat(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "cb");
 // If all else fails:
-if(strlen(id) <= 5)
-    safef(id, CHECKBOX_ID_SZ, "cb_%s", tdb->tableName);
+//if(strlen(id) <= 5)
+//    safef(id, CHECKBOX_ID_SZ, "cb_%s", tdb->tableName);
 return id;    
 }
 static void checkBoxIdFree(char**id)
@@ -2340,21 +2357,18 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 printf("<INPUT TYPE=HIDDEN NAME='%s' id='%s' VALUE=\"%.0f\">", htmlIdentifier, htmlIdentifier, priority); // keeing track of priority
                 }
 
-            printf ("&nbsp;</TD>");
+            puts("&nbsp;</TD>");
             
             if(sortOrder != NULL)
                 {
-                for(di=dimX;di<dimMax;di++)  // TODO this needs to be changed to sortOrder->columns which are subGroups
+                int sIx=0;
+                for(sIx=0;sIx<sortOrder->count;sIx++)
                     {
-                    if(dimensions[di])
+                    ix = stringArrayIx(sortOrder->column[sIx], membership->subgroups, membership->count);
+                    if(ix >= 0)
                         {
-                        ix = stringArrayIx(dimensions[di]->tag, membership->subgroups, membership->count);
-                        if(ix >= 0)
-                            {
-                            ix = stringArrayIx(membership->membership[ix], dimensions[di]->names, dimensions[di]->count);
-                            printf ("<TH id='%s' abbr='%s' STYLE='font-weight:normal' align='left'>%s</TH>",
-                                    dimensions[di]->tag,dimensions[di]->names[ix],dimensions[di]->values[ix]);
-                            }
+                        printf ("<TD id='%s' abbr='%s' align='left'>%s</TH>",
+                                sortOrder->column[sIx],membership->membership[ix],membership->titles[ix]);
                         }
                     }
                 }
@@ -3240,13 +3254,13 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 if(dimensionX && dimensionY)
                     {
                     safef(objName, sizeof(objName), "mat_%s_%s_cb", dimensionX->names[ixX],dimensionY->names[ixY]);
-                    safef(javascript, sizeof(javascript), "onclick=\"matSetCheckBoxesThatContain('id',this.checked,true,'cb_%s_%s_');\"", 
+                    safef(javascript, sizeof(javascript), "onclick=\"matSetCheckBoxesThatContain('id',this.checked,true,'cb_','_%s_%s_');\"", 
                           dimensionX->names[ixX],dimensionY->names[ixY]);
                     }
                 else
                     {
                     safef(objName, sizeof(objName), "mat_%s_cb", (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
-                    safef(javascript, sizeof(javascript), "onclick=\"matSetCheckBoxesThatContain('id',this.checked,true,'cb_%s_');\"", 
+                    safef(javascript, sizeof(javascript), "onclick=\"matSetCheckBoxesThatContain('id',this.checked,true,'cb_','_%s_');\"", 
                           (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
                     }
                 alreadySet = cartUsualBoolean(cart, objName, alreadySet);
