@@ -1,9 +1,0 @@
-name global
-examples Some examples of search terms are 'lmo2' '' 'mek' and 'G Protein'.
-geneTable ensGene
-canonicalTable ensCanonical
-isoformTable ensIsoforms
-pepTable ensPep
-allTranscriptQuery select name,chrom,txStart,txEnd,proteinID from ensGene
-allGeneQuery select transcript,chrom,chromStart,chromEnd,protein from ensCanonical
-oneGeneQuery select name,chrom,txStart,txEnd,proteinId from ensGene where name = '%s'

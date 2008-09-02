@@ -1,3 +1,0 @@
-track	name='User Track'	description='User Supplied Track'	priority='0.001'	altColor='127,127,127'	fieldCount='3'	firstItemPos='chr1:1-100'	genome='hg18'	inputType='bed'	itemCount='2'	origTrackLine='track name=\'User Track\' description=\'User Supplied Track\''	tdbType='bed 3 .'
-chr1	1	100
-chr2	2	200
