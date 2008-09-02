@@ -39,7 +39,7 @@ origAssembly hg17
 track encodeGisRnaPet
 compositeTrack on
 shortLabel GIS PET RNA
-longLabel Genome Institute of Singapore PET of PolyA+ RNA
+longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA
 dataVersion ENCODE June 2005 Freeze
 group encodeGenes
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -51,13 +51,13 @@ type bed 12
     track encodeGisRnaPetMCF7
     subTrack encodeGisRnaPet
     shortLabel GIS RNA MCF7
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (log phase MCF7)
+    longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (log phase MCF7)
     priority 1
 
     track encodeGisRnaPetHCT116
     subTrack encodeGisRnaPet
     shortLabel GIS RNA HCT116
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (5FU-stim HCT116)
+    longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (5FU-stim HCT116)
     color 58,119,40
     priority 2
 
@@ -1145,7 +1145,7 @@ dataVersion ENCODE June 2005 Freeze
 
 track encodeGisChipPet
 shortLabel GIS p53 5FU HCT116
-longLabel Genome Institute of Singapore ChIP-PET: p53 Ab on 5FU treated HCT116 cells
+longLabel GIS ChIP-PET: p53 Ab on 5FU treated HCT116 cells
 group encodeChip
 color 158,35,135
 priority 47.0
@@ -1159,7 +1159,7 @@ dataVersion ENCODE June 2005 Freeze
 track encodeGisChipPetStat1
 compositeTrack on
 shortLabel GIS STAT1 HeLa
-longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on (+/-)gIF HeLa cells
+longLabel GIS ChIP-PET: STAT1 Ab on (+/-)gIF HeLa cells
 group encodeChip
 color 125,140,35
 altColor 67,79,35
@@ -1173,12 +1173,12 @@ dataVersion ENCODE Oct 2005 Freeze
     track encodeGisChipPetStat1Gif
     subTrack encodeGisChipPetStat1
     shortLabel GIS STAT1 +gIF
-    longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on gIF treated HeLa cells
+    longLabel GIS ChIP-PET: STAT1 Ab on gIF treated HeLa cells
 
     track encodeGisChipPetStat1NoGif
     subTrack encodeGisChipPetStat1
     shortLabel GIS STAT1 -gIF
-    longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on untreated HeLa cells
+    longLabel GIS ChIP-PET: STAT1 Ab on untreated HeLa cells
 
 track encodeSangerChipH3H4
 compositeTrack on

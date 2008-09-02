@@ -40,7 +40,7 @@ origAssembly hg17
 track encodeGisRnaPet
 compositeTrack on
 shortLabel GIS PET RNA
-longLabel Genome Institute of Singapore PET of PolyA+ RNA
+longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA
 group encodeGenes
 # NOTE: genome-wide, except randoms and chrY
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrM
@@ -54,19 +54,19 @@ priority 49.2
     track encodeGisRnaPetMCF7
     subTrack encodeGisRnaPet
     shortLabel GIS RNA MCF7
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (log phase MCF7)
+    longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (log phase MCF7)
     priority 1
 
     track encodeGisRnaPetMCF7Estr
     subTrack encodeGisRnaPet
     shortLabel GIS RNA MCF7 Est
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (estrogen-stim MCF7)
+    longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (estrogen-stim MCF7)
     priority 2
 
     track encodeGisRnaPetHCT116
     subTrack encodeGisRnaPet
     shortLabel GIS RNA HCT116
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (5FU-stim HCT116)
+    longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (5FU-stim HCT116)
     priority 3
     color 58,119,40
 
@@ -350,7 +350,7 @@ subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4 hela=HeLa
 track encodeGisChipPetAll
 compositeTrack on
 shortLabel GIS ChIP-PET
-longLabel Genome Institute of Singapore ChIP-PET
+longLabel GIS ChIP-PET
 group encodeChip
 priority 47.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
@@ -361,7 +361,7 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006
     track encodeGisChipPet
     subTrack encodeGisChipPetAll
     shortLabel p53 HCT116 +5FU
-    longLabel Genome Institute of Singapore ChIP-PET: p53 Ab on 5FU treated HCT116 cells
+    longLabel GIS ChIP-PET: p53 Ab on 5FU treated HCT116 cells
     color 158,35,135
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
@@ -370,7 +370,7 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006
     track encodeGisChipPetStat1Gif
     subTrack encodeGisChipPetAll
     shortLabel STAT1 HeLa +gIF
-    longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on gIF treated HeLa cells
+    longLabel GIS ChIP-PET: STAT1 Ab on gIF treated HeLa cells
     color 67,79,35
     dataVersion ENCODE Oct 2005 Freeze
     priority 2
@@ -378,7 +378,7 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006
     track encodeGisChipPetStat1NoGif
     subTrack encodeGisChipPetAll
     shortLabel STAT1 HeLa -gIF
-    longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on untreated HeLa cells
+    longLabel GIS ChIP-PET: STAT1 Ab on untreated HeLa cells
     color 125,140,35
     dataVersion ENCODE Oct 2005 Freeze
     priority 3
@@ -386,7 +386,7 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006
     track encodeGisChipPetMycP493
     subTrack encodeGisChipPetAll
     shortLabel cMyc P493
-    longLabel Genome Institute of Singapore ChIP-PET: c-Myc Ab on P493 B cells
+    longLabel GIS ChIP-PET: c-Myc Ab on P493 B cells
     color 158,35,135
     dataVersion Oct 2006
     priority 4

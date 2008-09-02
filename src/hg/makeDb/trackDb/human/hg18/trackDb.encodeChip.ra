@@ -35,7 +35,7 @@ dataVersion ENCODE Oct 2005 Freeze
 #track encodeGisChipPetAll
 #compositeTrack on
 #shortLabel GIS ChIP-PET
-#longLabel Genome Institute of Singapore ChIP-PET
+#longLabel GIS ChIP-PET
 #group encodeChip
 #priority 47.0
 #chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
@@ -46,7 +46,7 @@ dataVersion ENCODE Oct 2005 Freeze
 #    track encodeGisChipPet
 #    subTrack encodeGisChipPetAll
 #    shortLabel p53 HCT116 +5FU
-#    longLabel Genome Institute of Singapore ChIP-PET: p53 Ab on 5FU treated HCT116 cells
+#    longLabel GIS ChIP-PET: p53 Ab on 5FU treated HCT116 cells
 #    color 158,35,135
 #    origAssembly hg16
 #    dataVersion ENCODE June 2005 Freeze
@@ -55,7 +55,7 @@ dataVersion ENCODE Oct 2005 Freeze
 #    track encodeGisChipPetStat1Gif
 #    subTrack encodeGisChipPetAll
 #    shortLabel STAT1 HeLa +gIF
-#    longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on gIF treated HeLa cells
+#    longLabel GIS ChIP-PET: STAT1 Ab on gIF treated HeLa cells
 #    color 67,79,35
 #    dataVersion ENCODE Oct 2005 Freeze
 #    origAssembly hg17
@@ -65,7 +65,7 @@ dataVersion ENCODE Oct 2005 Freeze
 #    subTrack encodeGisChipPetAll
 #    shortLabel STAT1 HeLa -gIF
 #    origAssembly hg17
-#    longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on untreated HeLa cells
+#    longLabel GIS ChIP-PET: STAT1 Ab on untreated HeLa cells
 #    color 125,140,35
 #    dataVersion ENCODE Oct 2005 Freeze
 #    priority 3
@@ -73,7 +73,7 @@ dataVersion ENCODE Oct 2005 Freeze
 #    track encodeGisChipPetMycP493
 #    subTrack encodeGisChipPetAll
 #    shortLabel cMyc P493
-#    longLabel Genome Institute of Singapore ChIP-PET: c-Myc Ab on P493 B cells
+#    longLabel GIS ChIP-PET: c-Myc Ab on P493 B cells
 #    color 158,35,135
 #    dataVersion Oct 2006
 #    origAssembly hg17
@@ -82,7 +82,7 @@ dataVersion ENCODE Oct 2005 Freeze
 #    track encodeGisChipPetHes3H3K4me3
 #    subTrack encodeGisChipPetAll
 #    shortLabel H3K4me3 hES3
-#    longLabel Genome Institute of Singapore ChIP-PET: H3K4me3 Ab on ES hes-3 cells
+#    longLabel GIS ChIP-PET: H3K4me3 Ab on ES hes-3 cells
 #    color 150,50,50
 #    dataVersion Aug 2007
 #    origAssembly hg18
@@ -91,7 +91,7 @@ dataVersion ENCODE Oct 2005 Freeze
 #    track encodeGisChipPetHes3H3K27me3
 #    subTrack encodeGisChipPetAll
 #    shortLabel H3K27me3 hES3
-#    longLabel Genome Institute of Singapore ChIP-PET: H3K27me3 Ab on ES hes-3 cells
+#    longLabel GIS ChIP-PET: H3K27me3 Ab on ES hes-3 cells
 #    color 50,100,50
 #    dataVersion Aug 2007
 #    origAssembly hg18

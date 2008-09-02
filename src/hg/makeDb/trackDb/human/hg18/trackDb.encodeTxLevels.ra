@@ -127,7 +127,7 @@ origAssembly hg17
 #compositeTrack on
 #shortLabel GIS PET RNA
 #dataVersion ENCODE Oct 2005 Freeze
-#longLabel Genome Institute of Singapore PET of PolyA+ RNA
+#longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA
 #group encodeTxLevels
 ## NOTE: genome-wide, except randoms and chrY
 #chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrM
@@ -140,26 +140,26 @@ origAssembly hg17
 #    track encodeGisRnaPetMCF7
 #    subTrack encodeGisRnaPet
 #    shortLabel GIS RNA MCF7
-#    longLabel Genome Institute of Singapore PET of PolyA+ RNA (log phase MCF7)
+#    longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (log phase MCF7)
 #    priority 1
 #
 #    track encodeGisRnaPetMCF7Estr
 #    subTrack encodeGisRnaPet
 #    shortLabel GIS RNA MCF7 Est
-#    longLabel Genome Institute of Singapore PET of PolyA+ RNA (estrogen-stim MCF7)
+#    longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (estrogen-stim MCF7)
 #    priority 2
 #
 #    track encodeGisRnaPetHCT116
 #    subTrack encodeGisRnaPet
 #    shortLabel GIS RNA HCT116
-#    longLabel Genome Institute of Singapore PET of PolyA+ RNA (5FU-stim HCT116)
+#    longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (5FU-stim HCT116)
 #    priority 3
 #    color 58,119,40
 #    
 #    track encodeGisRnaPetHes3
 #    subTrack encodeGisRnaPet
 #    shortLabel GIS RNA hES3
-#    longLabel Genome Institute of Singapore PET of PolyA+ RNA (embryonic stem cell hES3)
+#    longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA (embryonic stem cell hES3)
 #    priority 4
 #    color 50,100,50
 
