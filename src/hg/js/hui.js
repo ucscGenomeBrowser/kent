@@ -9,24 +9,29 @@ function matSelectViewForSubTracks(obj,view)
 // Handle any necessary changes to subtrack checkboxes when the view changes
 // views are "select" drop downs on a subtrack configuration page
     if( obj.selectedIndex == 0) { // hide
-        matSetCheckBoxesThatContain('id',false,true,view); 
-    } else { 
-        // essentially reclick all 'checked' matrix checkboxes (run onclick script)
+        setCheckBoxesThatContain('id',false,true,view); // No need for matrix version
+        //matSetCheckBoxesThatContain('id',false,true,view);  // Use matrix version to turn off buttons for other views that are "hide"
+    } else {
+        var matrixFound = false; 
         if (document.getElementsByTagName) {
+            // if matrix used then: essentially reclick all 'checked' matrix checkboxes (run onclick script)
             var list = document.getElementsByTagName('input');
             for (var ix=0;ix<list.length;ix++) {
                 var ele = list[ix];
                 if(ele.type.match("checkbox") == null)
                     continue;
                 if(ele.name.indexOf("mat_") == 0) {
+                    var matrixFound = true;
                     var offset = ele.name.lastIndexOf("_cb");
                     if(offset > 0 && offset == (ele.name.length - 3)) {
                         if(ele.checked) {
-                            clickIt(ele,true,true); // force a double click();
-                            //matSetCheckBoxesThatContain('id',true,false,"cb_"+ele.name.substring(4,ele.name.length - 3)+view+'_cb');
+                            clickIt(ele,true,true); // force a double click() which will invoke cb specific js;
                         }
                     }
                 }
+            }
+            if(matrixFound == false) {
+                setCheckBoxesThatContain('id',true,true,view); // No need for matrix version
             }
         }
         else if (document.all) {
@@ -69,7 +74,7 @@ function matSetCheckBoxesThatContain(nameOrId, state, force, sub1)
             }
             if(failed)
                 continue;
-            if(debugLevel>2)
+            if(debugLevel>3)
                 alert("matSetCheckBoxesThatContain found '"+sub1+"' in '"+identifier+"'.");
 
             if(!state) {
@@ -209,6 +214,7 @@ function tableSort(table,fnCompare)
 function trCompareColumnAbbr(tr1,tr2,sortColumns)
 {
 // Compares a set of columns based upon the contents of their abbr
+    //alert("trCompareColumnAbbr("+tr1.id+","+tr2.id+"): "+sortColumns.tags[0]+"="+(sortColumns.reverse[0]?"-":"+"));
     for(var ix=0;ix < sortColumns.cellIxs.length;ix++) {
         if(tr1.cells[sortColumns.cellIxs[ix]].abbr < tr2.cells[sortColumns.cellIxs[ix]].abbr)
             return (sortColumns.reverse[ix] ? -1: 1);
@@ -224,6 +230,7 @@ function tableSortByColumns(table,sortColumns)
 // Will sort the table based on the abbr values on a et of <TH> colIds 
     if (document.getElementsByTagName)
     {
+        //alert("tableSortByColumns(): "+sortColumns.tags[0]+"="+(sortColumns.reverse[0]?"-":"+"));
         tableSort(table,trCompareColumnAbbr,sortColumns);//cellIxs,columns.colRev);
                         var columns = new sortColumnsGetFromTable(table);
         if(sortColumns.tags.length>1)
@@ -370,8 +377,11 @@ function tableSortAtButtonPress(anchor,tagId)
     } else { // need to reverse directions
         theOrder.reverse[oIx] = (theOrder.reverse[oIx] == false);
         var ord = sup.innerHTML.substring(1);
-        sup.innerHTML = (theOrder.reverse[oIx] == false ? "&darr;":"&uarr;") + ord;
+        sup.innerHTML = (theOrder.reverse[oIx] == false ? "&darr;":"&uarr;");
+        if(theOrder.tags.length>1)
+            sup.innerHTML += ord;
     }
+    //alert("tableSortAtButtonPress(): count:"+theOrder.tags.length+" tag:"+theOrder.tags[0]+"="+(theOrder.reverse[0]?"-":"+"));
     var newSortOrder = sortOrderFromColumns(theOrder);
     inp[iIx].value = newSortOrder;
     var thead=tr.parentNode;
