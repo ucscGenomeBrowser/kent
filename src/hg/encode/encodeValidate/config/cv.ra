@@ -73,6 +73,17 @@ karyotype relatively normal
 termId BTO:0000773
 tier 3
 
+# SK-N-MC and PSFK-1 have been submitted but not approved; NHGRI said we can accept submissions for
+# type 3 cells once they have been submitted.
+
+term SK-N-MC
+type Cell Line
+tier 3
+
+term PSFK-1
+type Cell Line
+tier 3
+
 # Gene types
 term Known
 type Gene Type
