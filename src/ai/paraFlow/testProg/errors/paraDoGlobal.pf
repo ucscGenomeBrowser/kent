@@ -1,8 +1,0 @@
-
-int count;
-array of int a = (1,2,3);
-para (int x in a) do
-    {
-    count += 1;
-    }
-print(count);
