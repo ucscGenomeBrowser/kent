@@ -18,7 +18,7 @@
 #include "liftOverChain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.28 2007/11/26 22:43:43 hartera Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.29 2008/09/03 19:18:48 markd Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -26,8 +26,9 @@ static char const rcsid[] = "$Id: hgConvert.c,v 1.28 2007/11/26 22:43:43 hartera
 #define HGLFT_DO_CONVERT "hglft_doConvert"	/* Do the actual conversion */
 
 /* Global Variables */
-struct cart *cart;	        /* CGI and other variables */
-struct hash *oldVars = NULL;
+static struct cart *cart;	        /* CGI and other variables */
+static struct hash *oldVars = NULL;
+static char *database = NULL;
 
 /* Javascript to support New Assembly pulldown when New Genome changes. */
 /* Copies selected values to a hidden form */
@@ -52,7 +53,7 @@ void askForDestination(struct liftOverChain *liftOver, char *fromPos,
 {
 struct dbDb *dbList;
 
-cartWebStart(cart, "Convert %s to New Assembly", fromPos);
+cartWebStart(cart, database, "Convert %s to New Assembly", fromPos);
 
 /* create HMTL form */
 puts("<FORM ACTION=\"../cgi-bin/hgConvert\" NAME=\"mainForm\">\n");
@@ -262,9 +263,9 @@ int start, end;
 int origSize;
 struct chain *chainList, *chain;
 
-cartWebStart(cart, "%s %s %s to %s %s", fromDb->organism, fromDb->description,
+cartWebStart(cart, database, "%s %s %s to %s %s", fromDb->organism, fromDb->description,
 	fromPos, toDb->organism, toDb->description);
-if (!hgParseChromRange(fromPos, &chrom, &start, &end))
+if (!hgParseChromRange(database, fromPos, &chrom, &start, &end))
     errAbort("position %s is not in chrom:start-end format", fromPos);
 origSize = end - start;
 
@@ -317,17 +318,15 @@ void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
 char *organism;
-char *db;    
 struct liftOverChain *liftOverList = NULL, *choice;
 char *fromPos = cartString(theCart, "position");
 struct dbDb *dbList, *fromDb, *toDb;
 
 cart = theCart;
-getDbAndGenome(cart, &db, &organism, oldVars);
-hSetDb(db);
+getDbAndGenome(cart, &database, &organism, oldVars);
 
 liftOverList = liftOverChainListFiltered();
-choice = defaultChoices(liftOverList, organism, db);
+choice = defaultChoices(liftOverList, organism, database);
 if (choice == NULL)
    errAbort("Sorry, no conversions available from this assembly.");
 

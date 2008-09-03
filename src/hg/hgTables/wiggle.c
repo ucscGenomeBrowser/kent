@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.64 2008/05/20 22:22:00 larrym Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.65 2008/09/03 19:18:59 markd Exp $";
 
 extern char *maxOutMenu[];
 
@@ -252,7 +252,7 @@ if (invTable2 || sameString("none", op))
     {
     unsigned chromStart = 0;		/*	start == end == 0	*/
     unsigned chromEnd = 0;		/*	means do full chrom	*/
-    unsigned chromSize = hChromSize(region->chrom);
+    unsigned chromSize = hChromSize(database, region->chrom);
     struct lm *lm2 = lmInit(64*1024);
     struct bed *inverseBedList = NULL;		/*	new list	*/
 
@@ -370,10 +370,10 @@ static struct dataVector *mergedWigDataVector(char *table,
 /* Perform the specified subtrack merge wiggle-operation on table and 
  * all other selected subtracks and intersect if necessary. */
 {
-struct trackDb *tdb1 = hTrackDbForTrack(table);
+struct trackDb *tdb1 = hTrackDbForTrack(database, table);
 struct trackTable *tt1 = trackTableNew(tdb1, table, conn);
 struct dataVector *dataVector1 = dataVectorFetchOneRegion(tt1, region, conn);
-struct trackDb *cTdb = hCompositeTrackDbForSubtrack(tdb1);
+struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb1);
 struct trackDb *sTdb = NULL;
 int numSubtracks = 1;
 char *op = cartString(cart, hgtaSubtrackMergeWigOp);
@@ -479,8 +479,8 @@ if (curTrack != NULL)
 /* OK, table is not curTrack nor any of its subtracks -- look it up (and its 
  * parent if there is one): */
 {
-struct trackDb *tdb = hTrackDbForTrack(table);
-struct trackDb *cTdb = hCompositeTrackDbForSubtrack(tdb);
+struct trackDb *tdb = hTrackDbForTrack(database, table);
+struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
 if (cTdb != NULL)
     return cTdb;
 return tdb;
@@ -539,12 +539,12 @@ if (isCustom)
 	    wds->setSpanConstraint(wds,spanConstraint);
 	else
 	    {
-	    struct sqlConnection *trashConn = sqlCtConn(TRUE);
+	    struct sqlConnection *trashConn = hAllocConn(CUSTOM_TRASH);
 	    struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	    unsigned span = minSpan(trashConn, splitTableOrFileName,
 		region->chrom, region->start, region->end, cart, tdb);
 	    wds->setSpanConstraint(wds, span);
-	    sqlDisconnect(&trashConn);
+	    hFreeConn(&trashConn);
 	    }
 	valuesMatched = getWigglePossibleIntersection(wds, region,
 	    CUSTOM_TRASH, table2, &intersectBedList,
@@ -558,7 +558,7 @@ else
     {
     boolean hasBin = FALSE;
 
-    if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
+    if (hFindSplitTable(database, region->chrom, table, splitTableOrFileName, &hasBin))
 	{
 	/* XXX TBD, watch for a span limit coming in as an SQL filter */
 	if (intersectBedList)
@@ -603,7 +603,7 @@ switch (wigOutType)
 	break;
     default:
     case wigOutData:
-	linesOut = wds->asciiOut(wds, "stdout", TRUE, FALSE);
+	linesOut = wds->asciiOut(wds, database, "stdout", TRUE, FALSE);
 	break;		/* TRUE == sort output, FALSE == not raw data out */
     };
 
@@ -718,15 +718,17 @@ else
         {
         struct customTrack *ct = lookupCt(table);
         tdb = ct->tdb;
-        conn = sqlCtConn(TRUE);
+        conn = hAllocConn(CUSTOM_TRASH);
         }
     else
         {
-        tdb = hTrackDbForTrack(table);
+        tdb = hTrackDbForTrack(database, table);
         }
     struct trackTable *tt1 = trackTableNew(tdb, table, conn);
     dv = dataVectorFetchOneRegion(tt1, region, conn);
     intersectDataVector(table, dv, region, conn);
+    if (isCustomTrack(table))
+        hFreeConn(&conn);
     }
 return dv;
 }
@@ -809,7 +811,7 @@ if (curTrack && sameString(curTrack->tableName, table))
     return startsWith("bedGraph", curTrack->type);
 else
     {
-    struct trackDb *tdb = hTrackDbForTrack(table);
+    struct trackDb *tdb = hTrackDbForTrack(database, table);
     return (tdb && startsWith("bedGraph", tdb->type));
     }
 return FALSE;
@@ -861,7 +863,7 @@ if (isCustom)
     if (ct->dbTrack)
 	{
 	unsigned span = 0;
-	struct sqlConnection *trashConn = sqlCtConn(TRUE);
+	struct sqlConnection *trashConn = hAllocConn(CUSTOM_TRASH);
 	struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	valuesMatched = getWigglePossibleIntersection(wds, region,
 	    CUSTOM_TRASH, table2, &intersectBedList,
@@ -869,7 +871,7 @@ if (isCustom)
 	span = minSpan(trashConn, splitTableOrFileName, region->chrom,
 	    region->start, region->end, cart, tdb);
 	wds->setSpanConstraint(wds, span);
-	sqlDisconnect(&trashConn);
+	hFreeConn(&trashConn);
 	}
     else
 	valuesMatched = getWigglePossibleIntersection(wds, region, NULL, table2,
@@ -882,7 +884,7 @@ else
     if (conn == NULL)
 	errAbort( "getWiggleAsBed: NULL conn given for database table");
 
-    if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
+    if (hFindSplitTable(database, region->chrom, table, splitTableOrFileName, &hasBin))
 	{
 	struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	unsigned span = 0;
@@ -1044,7 +1046,7 @@ for (region = regionList; region != NULL; region = region->next)
 	{
 	if (ct->dbTrack)
 	    {
-	    struct sqlConnection *trashConn = sqlCtConn(TRUE);
+	    struct sqlConnection *trashConn = hAllocConn(CUSTOM_TRASH);
 	    struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	    span = minSpan(trashConn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, tdb);
@@ -1052,7 +1054,7 @@ for (region = regionList; region != NULL; region = region->next)
 	    valuesMatched = getWigglePossibleIntersection(wds, region,
 		CUSTOM_TRASH, table2, &intersectBedList,
 		    splitTableOrFileName, operations);
-	    sqlDisconnect(&trashConn);
+	    hFreeConn(&trashConn);
 	    }
 	else
 	    {
@@ -1069,7 +1071,7 @@ for (region = regionList; region != NULL; region = region->next)
 	}
     else
 	{
-	if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
+	if (hFindSplitTable(database, region->chrom, table, splitTableOrFileName, &hasBin))
 	    {
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, track);
@@ -1109,10 +1111,10 @@ for (region = regionList; region != NULL; region = region->next)
 	    upperLimit = wds->stats->lowerLimit + wds->stats->dataRange;
 
 	if (statsHeaderDone)
-	    wds->statsOut(wds, "stdout", TRUE, TRUE, FALSE, TRUE);
+	    wds->statsOut(wds, database, "stdout", TRUE, TRUE, FALSE, TRUE);
 	else
 	    {
-	    wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, TRUE);
+	    wds->statsOut(wds, database, "stdout", TRUE, TRUE, TRUE, TRUE);
 	    statsHeaderDone = TRUE;
 	    }
 	wds->freeStats(wds);
@@ -1142,7 +1144,7 @@ if (1 == regionCount)
      */
 
     if ( ! ((valuesMatched == 0) && table2) )
-	wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
+	wds->statsOut(wds, database, "stdout", TRUE, TRUE, TRUE, FALSE);
     regionSize = basesInRegion(regionList,0);
     gapTotal = gapsInRegion(conn, regionList,0);
     }

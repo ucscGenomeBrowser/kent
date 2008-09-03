@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.450 2008/09/02 17:47:45 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.451 2008/09/03 19:19:00 markd Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -268,7 +268,7 @@ char autoSubmit[2048];
 char *orthoTable = snp125OrthoTable(tdb, NULL);
 int version = snpVersion(tdb->tableName);
 
-if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
+if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
     {
     snp125ExtendedNames = cartUsualBoolean(cart, "snp125ExtendedNames", FALSE);
     printf("<BR><B>Include Chimp state and observed human alleles in name: </B>&nbsp;");
@@ -506,7 +506,7 @@ if (tdbIsComposite(tdb))
     slSort(&(tdb->subtracks), trackDbCmp);
     for (subTdb = tdb->subtracks;  subTdb != NULL;  subTdb = subTdb->next)
 	{
-	if (hTableExists(subTdb->tableName))
+	if (hTableExists(database, subTdb->tableName))
 	    {
 	    safef(var, sizeof(var), "%s_inv", subTdb->tableName);
 	    cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldInvDefault)); 
@@ -701,7 +701,7 @@ if (startsWith("hgwdev-giardine", cgiServerName()))
 
 void retroposonsUi(struct trackDb *tdb) 
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 char **row;
 struct sqlResult *sr;
@@ -1265,7 +1265,7 @@ baseColorDrawOptDropDown(cart, tdb);
 void knownGeneIdConfig(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 char *omimAvail = NULL;
 safef(query, sizeof(query), "select kgXref.kgID from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 1");
@@ -1315,7 +1315,7 @@ void geneIdConfig(struct trackDb *tdb)
 {
 char varName[64];
 char *geneLabel;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int omimAvail = 0;
 char query[128];
 if (sameString(tdb->tableName, "refGene"))
@@ -1343,7 +1343,7 @@ radioButton(varName, geneLabel, "none");
 void geneIdConfig2(struct trackDb *tdb)
 /* Put up gene ID track controls, with checkboxes */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int omimAvail = 0;
 char query[128];
 if (sameString(tdb->tableName, "refGene"))
@@ -1560,7 +1560,7 @@ struct sample *sample;
 struct sqlResult *sr;
 
 char option[64];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
 char newRow = 0;
 
@@ -1622,7 +1622,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 void chainColorUi(struct trackDb *tdb)
 /* UI for the chain tracks */
 {
-if (chainDbNormScoreAvailable(chromosome, tdb->tableName, NULL))
+if (chainDbNormScoreAvailable(database, chromosome, tdb->tableName, NULL))
     {
     char options[1][256];	/*	our option strings here	*/
     char *colorOpt;
@@ -1633,7 +1633,7 @@ if (chainDbNormScoreAvailable(chromosome, tdb->tableName, NULL))
 
     freeMem (colorOpt);
     filterByChrom(tdb);
-    scoreCfgUi(cart,tdb,tdb->tableName,NULL,2000000000,FALSE);
+    scoreCfgUi(database, cart,tdb,tdb->tableName,NULL,2000000000,FALSE);
     }
 else
     crossSpeciesUi(tdb);
@@ -1648,7 +1648,7 @@ char varName[chromGraphVarNameMaxSize];
 struct sqlConnection *conn = NULL;
 char *track = tdb->tableName;
 if (!isCustomTrack(track))
-    conn = hAllocConn();
+    conn = hAllocConn(database);
 double minVal,maxVal;
 struct chromGraphSettings *cgs = chromGraphSettingsGet(track,
 	conn, tdb, cart);
@@ -1743,7 +1743,6 @@ char *enz = cartUsualString(cart, cutterVar, cutterDefault);
 puts("<P><B>Enzymes (separate with commas):</B><BR>");
 cgiMakeTextVar(cutterVar, enz, 100);
 }
-
 
 void genericWiggleUi(struct trackDb *tdb, int optionNum )
 /* put up UI for any standard wiggle track (a.k.a. sample track)*/
@@ -2109,7 +2108,7 @@ printf("<P><B>Select subtracks to display:</B></P>\n");
 void pcrResultUi(struct trackDb *tdb)
 {
 struct targetDb *target;
-if (! pcrResultParseCart(cart, NULL, NULL, &target))
+if (! pcrResultParseCart(database, cart, NULL, NULL, &target))
     return;
 if (target != NULL)
     {
@@ -2135,7 +2134,7 @@ struct trackDb *tdb;
 printf("<P><TABLE CELLPADDING=2>");
 for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     {
-    if (!hTableOrSplitExists(tdb->tableName) && trackDbSetting(tdb, "compositeTrack") == NULL) // NOTE: tdb if composite, is not yet populated with it's own subtracks!
+    if (!hTableOrSplitExists(database, tdb->tableName) && trackDbSetting(tdb, "compositeTrack") == NULL) // NOTE: tdb if composite, is not yet populated with it's own subtracks!
         continue;
     printf("<TR>");
     printf("<TD NOWRAP><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>", 
@@ -2352,15 +2351,15 @@ else if (tdb->type != NULL)
 		!startsWith("encodeGencodeIntron", track))
 		{
 		if (trackDbSetting(tdb, "scoreFilterMax"))
-                    scoreCfgUi(cart,tdb,tdb->tableName,NULL,
+                    scoreCfgUi(database, cart,tdb,tdb->tableName,NULL,
                         sqlUnsigned(trackDbSetting(tdb, "scoreFilterMax")),FALSE);
 		else
-                    scoreCfgUi(cart,tdb,tdb->tableName,NULL,1000,FALSE);
+                    scoreCfgUi(database, cart,tdb,tdb->tableName,NULL,1000,FALSE);
 		}
 	    }
         else if (sameWord(words[0], "bed5FloatScore") || 
                 sameWord(words[0], "bed5FloatScoreWithFdr"))
-                    scoreCfgUi(cart,tdb,tdb->tableName,NULL,1000,FALSE);
+            scoreCfgUi(database, cart,tdb,tdb->tableName,NULL,1000,FALSE);
 	else if (sameWord(words[0], "psl"))
 	    {
 	    if (wordCount == 3)
@@ -2374,7 +2373,7 @@ else if (tdb->type != NULL)
 if (tdbIsSuperTrack(tdb))
     superTrackUi(tdb);
 else if (tdbIsComposite(tdb))
-    hCompositeUi(cart, tdb, NULL, NULL, MAIN_FORM, database);
+    hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
 }
 
 void trackUi(struct trackDb *tdb)
@@ -2389,7 +2388,7 @@ printf("<H1>%s%s</H1>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 if (tdbIsSuperTrackChild(tdb))
     {
     assert((tdb->parentName));
-    struct trackDb *superTdb = hTrackDbForTrack(tdb->parentName);
+    struct trackDb *superTdb = hTrackDbForTrack(database, tdb->parentName);
     if (superTdb)
         {
         char *encodedMapName = cgiEncode(superTdb->tableName);
@@ -2411,7 +2410,7 @@ else
 if (tdbIsSuper(tdb))
     {
     /* This is a supertrack -- load its members and show hide/show dropdown */
-    hTrackDbLoadSuper(tdb);
+    hTrackDbLoadSuper(database, tdb);
     superTrackDropDown(cart, tdb, 1);
     }
 else
@@ -2451,7 +2450,7 @@ else
     {
     printf("<P>");
 #define SCHEMA_LINK "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=_BLANK> View table schema</A></P>\n"
-    if (hTableOrSplitExists(tdb->tableName))
+    if (hTableOrSplitExists(database, tdb->tableName))
 	{
         /* Make link to TB schema */
 	char *tableName = tdb->tableName;
@@ -2468,11 +2467,11 @@ else
    /* Print lift information from trackDb, if any */
    trackDbPrintOrigAssembly(tdb, database);
 
-    if (hTableOrSplitExists(tdb->tableName))
+   if (hTableOrSplitExists(database, tdb->tableName))
         {
         /* Print update time of the table (or one of the components if split) */
-        char *tableName = hTableForTrack(hGetDb(), tdb->tableName);
-	struct sqlConnection *conn = hAllocConn();
+        char *tableName = hTableForTrack(database, tdb->tableName);
+	struct sqlConnection *conn = hAllocConn(database);
 	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
 	if (date != NULL && !startsWith("wigMaf", tdb->type))
 	    printf("<B>Data last updated:</B> %s<BR>\n", date);
@@ -2539,8 +2538,7 @@ char *ignored;
 cart = theCart;
 track = cartString(cart, "g");
 getDbAndGenome(cart, &database, &ignored, NULL);
-hSetDb(database);
-chromosome = cartUsualString(cart, "c", hDefaultChrom());
+chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
 if (sameWord(track, WIKI_TRACK_TABLE))
     tdb = trackDbForWikiTrack();
 else if (sameWord(track, RULER_TRACK_NAME))
@@ -2552,7 +2550,7 @@ else if (sameWord(track, CUTTERS_TRACK_NAME))
     tdb = trackDbForPseudoTrack(CUTTERS_TRACK_NAME, CUTTERS_TRACK_LABEL, CUTTERS_TRACK_LONGLABEL, tvHide, TRUE);
 else if (isCustomTrack(track))
     {
-    ctList = customTracksParseCart(cart, NULL, NULL);
+    ctList = customTracksParseCart(database, cart, NULL, NULL);
     for (ct = ctList; ct != NULL; ct = ct->next)
         {
         if (sameString(track, ct->tdb->tableName))
@@ -2565,7 +2563,7 @@ else if (isCustomTrack(track))
 else if (sameString(track, "hgPcrResult"))
     tdb = pcrResultFakeTdb();
 else
-    tdb = hTrackDbForTrack(track);
+    tdb = hTrackDbForTrack(database, track);
 if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);
@@ -2573,7 +2571,7 @@ char *super = trackDbGetSupertrackName(tdb);
 if (super)
     {
     /* configured as a supertrack member in trackDb */
-    tdb->parent = hTrackDbForTrack(super);    // TODO: Parent will not point to children
+    tdb->parent = hTrackDbForTrack(database, super);    // TODO: Parent will not point to children
     if (tdb->parent)
         {
         /* the supertrack is also configured, so use supertrack defaults */
@@ -2582,7 +2580,7 @@ if (super)
         }
     }
 char *title = (tdbIsSuper(tdb) ? "Super-track Settings" : "Track Settings");
-cartWebStart(cart, "%s %s", tdb->shortLabel, title);
+cartWebStart(cart, database, "%s %s", tdb->shortLabel, title);
 trackUi(tdb);
 printf("<BR>\n");
 webEnd();

@@ -52,8 +52,8 @@ o1 = mustOpen("temp_spXref2.dat", "w");
 o2 = mustOpen("spXref3.tab", "w");
 o3 = mustOpen("temp_spOrganism.dat", "w");
 
-conn  = hAllocConn();
-conn2 = hAllocConn();
+conn  = hAllocConn(hDefaultDb());
+conn2 = hAllocConn(hDefaultDb());
 conn3 = sqlConnect(proteinDatabaseName);
 
 bioentryId = 0;
@@ -89,7 +89,7 @@ while (row2 != NULL)
 	    }
 	}
     safef(cond_str, sizeof(cond_str), "acc='%s'", accession);
-    displayId = sqlGetField(conn, proteinDatabaseName, "displayId", "val", cond_str);
+    displayId = sqlGetField(proteinDatabaseName, "displayId", "val", cond_str);
 
     // !!! the divsion field probably should be eliminated later
     // use the simple 1 taxon returned value function for the time being, 
@@ -103,10 +103,10 @@ while (row2 != NULL)
 	}
 
     safef(cond_str, sizeof(cond_str), "acc='%s'", accession);
-    desc = sqlGetField(conn, proteinDatabaseName, "description", "val", cond_str);
+    desc = sqlGetField(proteinDatabaseName, "description", "val", cond_str);
     safef(cond_str, sizeof(cond_str), "uniProt='%s'", accession);
-    hugoSymbol = sqlGetField(conn, proteinsDB, "hgnc", "symbol", cond_str);
-    hugoDesc = sqlGetField(conn, proteinsDB, "hgnc", "name", cond_str);
+    hugoSymbol = sqlGetField(proteinsDB, "hgnc", "symbol", cond_str);
+    hugoDesc = sqlGetField(proteinsDB, "hgnc", "name", cond_str);
     if (hugoSymbol==NULL) hugoSymbol = empty_str;
     if (hugoDesc==NULL)   hugoDesc   = empty_str;
 

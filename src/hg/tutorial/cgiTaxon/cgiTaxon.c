@@ -11,7 +11,7 @@
 #include "hui.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: cgiTaxon.c,v 1.1 2007/09/05 22:35:49 kent Exp $";
+static char const rcsid[] = "$Id: cgiTaxon.c,v 1.2 2008/09/03 19:21:23 markd Exp $";
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
@@ -41,7 +41,7 @@ void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
 cart = theCart;
-cartWebStart(cart, "Go between taxon ID, scientific name and common name.");
+cartWebStart(cart, database, "Go between taxon ID, scientific name and common name.");
 printf("<FORM action=\"%s\">\n", "../cgi-bin/cgiTaxon");
 cartSaveSession(cart);
 char *type = cartUsualString(cart, typeVar, types[0]);

@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.83 2008/08/16 21:03:26 baertsch Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.84 2008/09/03 19:19:01 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -234,7 +234,7 @@ if (!reverse)  /*positive strand*/
 	    break;
 
         //get dna for this exon
-        codonDna = hDnaFromSeq( chrom, exonStarts[i], exonEnds[i], dnaUpper );
+        codonDna = hDnaFromSeq(database, chrom, exonStarts[i], exonEnds[i], dnaUpper );
 
 	theStart = exonStarts[i];
 	theEnd = exonEnds[i];
@@ -275,7 +275,7 @@ else   /*negative strand*/
 	    break;
 
         //get dna for this exon
-        codonDna = hDnaFromSeq( chrom, exonStarts[i], exonEnds[i], dnaUpper );
+        codonDna = hDnaFromSeq(database, chrom, exonStarts[i], exonEnds[i], dnaUpper );
 
 	theStart = exonStarts[i];
 	theEnd = exonEnds[i];
@@ -343,7 +343,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	int mrnaS = convertCoordUsingPsl(s, psl);
 	if(mrnaS >= 0)
 	    {
-	    struct dnaSeq *genoSeq = hDnaFromSeq(chromName, s, e, dnaUpper);
+	    struct dnaSeq *genoSeq = hDnaFromSeq(database, chromName, s, e, dnaUpper);
 	    int i;
 	    for (i=0; i < (e - s); i++)
 		{
@@ -543,13 +543,13 @@ static void getGenbankCds(char *acc, struct genbankCds* cds)
 static boolean first = TRUE, haveGbCdnaInfo = FALSE;
 if (first)
     {
-    haveGbCdnaInfo = hTableExists("gbCdnaInfo");
+    haveGbCdnaInfo = hTableExists(database, "gbCdnaInfo");
     first = FALSE;
     }
 if (haveGbCdnaInfo)
     {
     char query[256], buf[256], *cdsStr;
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     sprintf(query, "select cds.name from gbCdnaInfo,cds where (acc = '%s') and (gbCdnaInfo.cds = cds.id)", acc);
     cdsStr = sqlQuickQuery(conn, query, buf, sizeof(buf));
     if (cdsStr != NULL)
@@ -565,7 +565,7 @@ char *p = skipToSpaces(baseColorSetting);
 char *cdsSpecTbl = skipLeadingSpaces(p);
 if (*cdsSpecTbl == '\0')
     errAbort("%s table requires a table name as an argument", BASE_COLOR_USE_CDS);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConnDbTbl(cdsSpecTbl, &cdsSpecTbl, database);
 // allow multiple, but only use the first, since transMapGene table might have
 // multiple entries for same gene from different source dbs.
 struct cdsSpec *cdsSpec
@@ -783,7 +783,7 @@ static struct dnaSeq *maybeGetPcrResultSeq(struct linkedFeatures *lf)
 struct dnaSeq *seq = NULL;
 char *pslFileName, *primerFileName;
 struct targetDb *target;
-if (! pcrResultParseCart(cart, &pslFileName, &primerFileName, &target))
+if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target))
     return NULL;
 char *fPrimer, *rPrimer;
 pcrResultGetPrimers(primerFileName, &fPrimer, &rPrimer);
@@ -802,8 +802,8 @@ if (target != NULL)
     /* Use seq+extFile if specified; otherwise just retrieve from seqFile. */
     if (isNotEmpty(target->seqTable) && isNotEmpty(target->extFileTable))
 	{
-	struct sqlConnection *conn = hAllocConn();
-	seq = hDnaSeqGet(conn, tpsl->tName, target->seqTable,
+	struct sqlConnection *conn = hAllocConn(database);
+	seq = hDnaSeqGet(database, tpsl->tName, target->seqTable,
 			 target->extFileTable);
 	hFreeConn(&conn);
 	}
@@ -832,7 +832,7 @@ if (target != NULL)
     }
 else
     {
-    seq = hChromSeq(chromName, lf->start, lf->end);
+    seq = hChromSeq(database, chromName, lf->start, lf->end);
     if (lf->orientation < 0)
 	reverseComplement(seq->dna, seq->size);
     CopyArray(fPrimer, seq->dna, fPrimerSize);
@@ -856,7 +856,7 @@ int nwords = chopByWhite(buf->string, words, ArraySize(words));
 if ((nwords != ArraySize(words)) || !sameString(words[0], "extFile"))
     errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE,
              seqSource);
-return hDnaSeqGet(NULL, name, words[1], words[2]);
+return hDnaSeqGet(database, name, words[1], words[2]);
 }
 
 static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf,
@@ -869,7 +869,7 @@ struct dnaSeq *mrnaSeq = NULL;
 char *name = getItemDataName(tg, lf->name);
 char *seqSource = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE);
 if (sameString(tableName,"refGene"))
-    mrnaSeq = hGenBankGetMrna(name, "refMrna");
+    mrnaSeq = hGenBankGetMrna(database, name, "refMrna");
 else if (sameString(seqSource, "ss"))
     mrnaSeq = maybeGetUserSeq(name);
 #ifndef GBROWSE
@@ -881,7 +881,7 @@ else if (startsWith("extFile", seqSource))
 else if (endsWith("ExtFile", seqSource))
     mrnaSeq = maybeGetExtFileSeq(seqSource, name);
 else
-    mrnaSeq = hGenBankGetMrna(name, NULL);
+    mrnaSeq = hGenBankGetMrna(database, name, NULL);
 
 if (mrnaSeq != NULL)
     touppers(mrnaSeq->dna);
@@ -1077,7 +1077,7 @@ static struct simpleFeature *splitByCodon( char *chrom,
           than getting it for each linked feature*/
 	if (thisStart < cdsStart) thisStart = cdsStart;
 	if (thisEnd > cdsEnd) thisEnd = cdsEnd;
-        codonDna = hDnaFromSeq( chrom, thisStart, thisEnd, dnaUpper );
+        codonDna = hDnaFromSeq(database, chrom, thisStart, thisEnd, dnaUpper );
         base = thisStart;
 
         //break each block by codon and set color code to denote codon
@@ -1354,7 +1354,7 @@ if(mrnaS >= 0)
     else if (drawOpt == baseColorDrawDiffBases)
 	{
 	char *diffStr = NULL;
-	struct dnaSeq *genoSeq = hDnaFromSeq(chromName, s, e, dnaUpper);
+	struct dnaSeq *genoSeq = hDnaFromSeq(database, chromName, s, e, dnaUpper);
 	diffStr = needMem(sizeof(char) * (e - s + 1));
 	maskDiffString(diffStr, dyMrnaSeq->string, (char *)genoSeq->dna,
 		       ' ');

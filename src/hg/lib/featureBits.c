@@ -13,7 +13,7 @@
 #include "featureBits.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.29 2007/10/24 21:01:41 daryl Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.30 2008/09/03 19:19:22 markd Exp $";
 
 /* By default, clip features to the search range.  It's important to clip 
  * when featureBits output will be used to populate Bits etc.  But allow 
@@ -130,10 +130,10 @@ return fetchQualifiers("utr5", qualifier, extra, retSize);
 
 
 
-boolean fbUnderstandTrackDb(char *db, char *track)
+boolean fbUnderstandTrack(char *db, char *track)
 /* Return TRUE if can turn track into a set of ranges or bits. */
 {
-struct hTableInfo *hti = hFindTableInfoDb(db, NULL, track);
+struct hTableInfo *hti = hFindTableInfo(db, NULL, track);
 
 if (hti == NULL)
     return FALSE;
@@ -141,13 +141,7 @@ else
     return hti->isPos;
 }
 
-boolean fbUnderstandTrack(char *track)
-/* Return TRUE if can turn track into a set of ranges or bits. */
-{
-return(fbUnderstandTrackDb(hGetDb(), track));
-}
-
-static void fbAddFeature(struct featureBits **pList, char *name,
+static void fbAddFeature(char *db, struct featureBits **pList, char *name,
 	char *chrom, int start, int size, char strand, 
 	int winStart, int winEnd)
 /* Add new feature to head of list.  Name can be NULL. */
@@ -155,7 +149,7 @@ static void fbAddFeature(struct featureBits **pList, char *name,
 struct featureBits *fb;
 int s, e;
 char nameBuf[512];
-int chromSize = hChromSize(chrom);
+int chromSize = hChromSize(db, chrom);
 
 if (name == NULL)
     safef(nameBuf, sizeof(nameBuf), "%s:%d-%d", chrom, start+1, start+size);
@@ -186,7 +180,7 @@ if (s < e)
     }
 }
 
-static void setRangePlusExtra(struct featureBits **pList, 
+static void setRangePlusExtra(char *db, struct featureBits **pList, 
 	char *name, char *chrom, int s, int e, char strand, 
 	int extraStart, int extraEnd, 
 	int winStart, int winEnd)
@@ -196,7 +190,7 @@ int w;
 s -= extraStart;
 e += extraEnd;
 w = e - s;
-fbAddFeature(pList, name, chrom, s, w, strand, winStart,winEnd);
+fbAddFeature(db, pList, name, chrom, s, w, strand, winStart,winEnd);
 }
 
 
@@ -309,20 +303,14 @@ void fbOptionsHti(struct hTableInfo *hti)
 fbOptionsHtiCart(hti, NULL);
 }
 
-void fbOptionsDb(char *db, char *track)
+void fbOptions(char *db, char *track)
 /* Print out an HTML table with radio buttons for featureBits options. */
 {
-struct hTableInfo *hti = hFindTableInfoDb(db, NULL, track);
+struct hTableInfo *hti = hFindTableInfo(db, NULL, track);
 if (hti == NULL)
     errAbort("Could not find table info for table %s in database %s",
 	     track, db);
 fbOptionsHti(hti);
-}
-
-void fbOptions(char *track)
-/* Print out an HTML table with radio buttons for featureBits options. */
-{
-fbOptionsDb(hGetDb(), track);
 }
 
 char *fbOptionsToQualifier()
@@ -354,7 +342,7 @@ else
 return(cloneString(qual));
 }
 
-struct featureBits *fbFromBed(char *trackQualifier, struct hTableInfo *hti,
+struct featureBits *fbFromBed(char *db, char *trackQualifier, struct hTableInfo *hti,
 	struct bed *bedList, int chromStart, int chromEnd,
 	boolean clipToWindow, boolean filterOutNoUTR)
 /* Translate a list of bed items into featureBits. */
@@ -449,7 +437,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	    safef(nameBuf, sizeof(nameBuf), "%s_up_%d_%s_%d_%c", 
 		    bed->name, promoSize, bed->chrom, s+1,
 		    frForStrand(bed->strand[0]));
-	    fbAddFeature(&fbList, nameBuf, bed->chrom, s, e - s,
+	    fbAddFeature(db, &fbList, nameBuf, bed->chrom, s, e - s,
 			 bed->strand[0], chromStart, chromEnd);
 	    }
 	}
@@ -472,7 +460,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	    safef(nameBuf, sizeof(nameBuf), "%s_end_%d_%s_%d_%c", 
 		    bed->name, endSize, bed->chrom, s+1,
 		    frForStrand(bed->strand[0]));
-	    fbAddFeature(&fbList, nameBuf, bed->chrom, s, e - s,
+	    fbAddFeature(db, &fbList, nameBuf, bed->chrom, s, e - s,
 			 bed->strand[0], chromStart, chromEnd);
 	    }
 	}
@@ -488,7 +476,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	    safef(nameBuf, sizeof(nameBuf), "%s_intron_%d_%d_%s_%d_%c", 
 		    bed->name, i-1, extraSize, bed->chrom, s+1,
 		    frForStrand(bed->strand[0]));
-	    setRangePlusExtra(&fbList, nameBuf, bed->chrom, s, e,
+	    setRangePlusExtra(db, &fbList, nameBuf, bed->chrom, s, e,
 			      bed->strand[0], extraSize, extraSize,
 			      chromStart, chromEnd);
 	    }
@@ -549,7 +537,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		    safef(nameBuf, sizeof(nameBuf), "%s_%s_%d_%d_%s_%d_%c", 
 			    bed->name, fName, i, extraSize, bed->chrom, s+1,
 			    frForStrand(bed->strand[0]));
-		    setRangePlusExtra(&fbList, nameBuf, bed->chrom, s, e,
+		    setRangePlusExtra(db, &fbList, nameBuf, bed->chrom, s, e,
 				      bed->strand[0], extraSize, extraSize,
 				      chromStart, chromEnd);
 		    }
@@ -602,7 +590,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		safef(nameBuf, sizeof(nameBuf), "%s_%s_%d_%s_%d_%c", 
 			bed->name, fName, extraSize, bed->chrom, s+1,
 			frForStrand(bed->strand[0]));
-		setRangePlusExtra(&fbList, nameBuf, bed->chrom, s, e,
+		setRangePlusExtra(db, &fbList, nameBuf, bed->chrom, s, e,
 				  bed->strand[0], extraSize, extraSize,
 				  chromStart, chromEnd);
 		}
@@ -615,8 +603,7 @@ slReverse(&fbList);
 return fbList;
 }
 
-
-struct featureBits *fbGetRangeQueryDb(char *db, char *trackQualifier,
+struct featureBits *fbGetRangeQuery(char *db, char *trackQualifier,
 	char *chrom, int chromStart, int chromEnd, char *sqlConstraints,
 	boolean clipToWindow, boolean filterOutNoUTR)
 /* Get features in range that match sqlConstraints. */
@@ -628,36 +615,24 @@ char *tQ, *track, *qualifier, *extra;
 
 tQ = cloneString(trackQualifier);
 parseTrackQualifier(tQ, &track, &qualifier, &extra);
-hti = hFindTableInfoDb(db, NULL, track);
+hti = hFindTableInfo(db, NULL, track);
 if (hti == NULL)
     errAbort("Could not find table info for table %s in database %s",
 	     track, db);
-bedList = hGetBedRangeDb(db, track, chrom, chromStart, chromEnd,
+bedList = hGetBedRange(db, track, chrom, chromStart, chromEnd,
 			 sqlConstraints);
-fbList = fbFromBed(trackQualifier, hti, bedList, chromStart, chromEnd,
+fbList = fbFromBed(db, trackQualifier, hti, bedList, chromStart, chromEnd,
 		   clipToWindow, filterOutNoUTR);
 bedFreeList(&bedList);
 return(fbList);
 }
 
-
-struct featureBits *fbGetRangeQuery(char *trackQualifier,
-	char *chrom, int chromStart, int chromEnd, char *sqlConstraints,
-	boolean clipToWindow, boolean filterOutNoUTR)
-/* Get features in range that match sqlConstraints. */
-{
-return(fbGetRangeQueryDb(hGetDb(), trackQualifier,
-			 chrom, chromStart, chromEnd, sqlConstraints,
-			 clipToWindow, filterOutNoUTR));
-}
-
-
-struct featureBits *fbGetRange(char *trackQualifier, char *chrom,
+struct featureBits *fbGetRange(char *db, char *trackQualifier, char *chrom,
 	int chromStart, int chromEnd)
 /* Get features in range that match sqlConstraints. */
 {
-return(fbGetRangeQueryDb(hGetDb(), trackQualifier,
-			 chrom, chromStart, chromEnd, NULL, TRUE, TRUE));
+return(fbGetRangeQuery(db, trackQualifier,
+                       chrom, chromStart, chromEnd, NULL, TRUE, TRUE));
 }
 
 
@@ -679,16 +654,16 @@ for (fb = fbList; fb != NULL; fb = fb->next)
     }
 }
 
-void fbOrTableBits(Bits *bits, char *trackQualifier, char *chrom, 
+void fbOrTableBits(char *db, Bits *bits, char *trackQualifier, char *chrom, 
 	int chromSize, struct sqlConnection *conn)
 /* Ors in features in track on chromosome into bits.  */
 {
-struct featureBits *fbList = fbGetRange(trackQualifier, chrom, 0, chromSize);
+struct featureBits *fbList = fbGetRange(db, trackQualifier, chrom, 0, chromSize);
 fbOrBits(bits, chromSize, fbList, 0);
 featureBitsFreeList(&fbList);
 }
 
-void fbOrTableBitsQueryMinSize(Bits *bits, char *trackQualifier, char *chrom, 
+void fbOrTableBitsQueryMinSize(char *db, Bits *bits, char *trackQualifier, char *chrom, 
 	int chromSize, struct sqlConnection *conn, char *sqlConstraints,
 	boolean clipToWindow, boolean filterOutNoUTR, int minSize)
 /* Ors in features matching sqlConstraints in track on chromosome into bits. 
@@ -696,7 +671,7 @@ void fbOrTableBitsQueryMinSize(Bits *bits, char *trackQualifier, char *chrom,
    things less than a given threshold are alignment gaps rather than introns. */
 {
 struct featureBits *goodList = NULL, *badList = NULL, *fb = NULL, *fbNext = NULL;
-struct featureBits *fbList = fbGetRangeQuery(trackQualifier, chrom, 0,
+struct featureBits *fbList = fbGetRangeQuery(db, trackQualifier, chrom, 0,
 					     chromSize, sqlConstraints,
 					     clipToWindow, filterOutNoUTR);
 if(minSize > 0) 
@@ -723,12 +698,12 @@ featureBitsFreeList(&goodList);
 featureBitsFreeList(&badList);
 }
 
-void fbOrTableBitsQuery(Bits *bits, char *trackQualifier, char *chrom, 
+void fbOrTableBitsQuery(char *db, Bits *bits, char *trackQualifier, char *chrom, 
 	int chromSize, struct sqlConnection *conn, char *sqlConstraints,
 	boolean clipToWindow, boolean filterOutNoUTR)
 /* Ors in features matching sqlConstraints in track on chromosome into bits. */
 {
-fbOrTableBitsQueryMinSize(bits, trackQualifier, chrom, chromSize, conn,
+fbOrTableBitsQueryMinSize(db, bits, trackQualifier, chrom, chromSize, conn,
 			  sqlConstraints, clipToWindow, filterOutNoUTR, 0);
 }
 
@@ -759,7 +734,7 @@ for (fb=fbList;  fb != NULL;  fb=fb->next)
 return(bedList);
 }
 
-void bitsToBed(Bits *bits, char *chrom, int chromSize, FILE *bed, FILE *fa, 
+void bitsToBed(char *db, Bits *bits, char *chrom, int chromSize, FILE *bed, FILE *fa, 
 	int minSize)
 /* Write out runs of bits of at least minSize as items in a bed file. */
 {
@@ -785,7 +760,7 @@ for (i=0; i<chromSize; ++i)
 	    if (fa)
 	        {
 		char name[256];
-		struct dnaSeq *seq = hDnaFromSeq(chrom, start, i, dnaLower);
+		struct dnaSeq *seq = hDnaFromSeq(db,chrom, start, i, dnaLower);
 		sprintf(name, "%s:%d-%d", chrom, start, i);
 		faWriteNext(fa, name, seq->dna, seq->size);
 		freeDnaSeq(&seq);
@@ -801,7 +776,7 @@ if (lastBit && i-start >= minSize)
     if (fa)
 	{
 	char name[256];
-	struct dnaSeq *seq = hDnaFromSeq(chrom, start, i, dnaLower);
+	struct dnaSeq *seq = hDnaFromSeq(db, chrom, start, i, dnaLower);
 	sprintf(name, "%s:%d-%d", chrom, start, i);
 	faWriteNext(fa, name, seq->dna, seq->size);
 	freeDnaSeq(&seq);

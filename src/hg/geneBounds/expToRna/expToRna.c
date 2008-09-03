@@ -9,7 +9,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: expToRna.c,v 1.3 2003/05/06 07:22:18 kate Exp $";
+static char const rcsid[] = "$Id: expToRna.c,v 1.4 2008/09/03 19:18:36 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,12 +29,12 @@ int uniqCount = 0;
 int missCount = 0;
 int hitCount = 0;
 
-void doOneChrom(char *chrom, char *rnaTable, char *expTable, FILE *f)
+void doOneChrom(char *database, char *chrom, char *rnaTable, char *expTable, FILE *f)
 /* Process one chromosome. */
 {
-int chromSize = hChromSize(chrom);
+int chromSize = hChromSize(database, chrom);
 struct binKeeper *bk = binKeeperNew(0, chromSize);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct bed *exp, *rna;
@@ -98,16 +98,15 @@ struct slName *chromList = NULL, *chromEl;
 char *chrom = optionVal("chrom", NULL);
 FILE *f = mustOpen(outName, "w");
 
-hSetDb(database);
 if (chrom != NULL)
     chromList = newSlName(chrom);
 else
-    chromList = hAllChromNames();
+    chromList = hAllChromNames(database);
 for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
     {
     chrom = chromEl->name;
     uglyf("%s\n", chrom);
-    doOneChrom(chrom, rnaTable, expTable, f);
+    doOneChrom(database, chrom, rnaTable, expTable, f);
     }
 printf("%d dupe, %d uniq, %d miss, %d total, %d hits\n", 
 	dupeCount, uniqCount, missCount,

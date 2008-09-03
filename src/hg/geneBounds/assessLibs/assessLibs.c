@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: assessLibs.c,v 1.6 2006/04/05 14:19:55 angie Exp $";
+static char const rcsid[] = "$Id: assessLibs.c,v 1.7 2008/09/03 19:18:33 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -43,11 +43,11 @@ struct libEstHash
     };
 
 
-struct genePred *loadGenePredsOnChrom(char *chrom, char *refTrack)
+struct genePred *loadGenePredsOnChrom(char *database, char *chrom, char *refTrack)
 /* Load all of the gene predictionsA for a given chromosome
  * for a given track. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -66,11 +66,11 @@ slReverse(&gpList);
 return gpList;
 }
 
-struct psl *loadEstsOnChrom(char *chrom)
+struct psl *loadEstsOnChrom(char *database, char *chrom)
 /* Load all of the ESTs on a given chromosome. */
 {
 int rowOffset;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = hChromQuery(conn, "est", chrom, NULL, &rowOffset);
 char **row;
 struct psl *pslList = NULL, *psl;
@@ -109,7 +109,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     }
 }
 
-void assessLibsOnChroms(struct slName *chromList, char *refTrack, struct libEstHash *libList)
+void assessLibsOnChroms(char *database, struct slName *chromList, char *refTrack, struct libEstHash *libList)
 /* Load up each chromosome and evaluate EST alignment stats on it. */
 {
 struct slName *chrom;
@@ -121,10 +121,10 @@ Bits *bits = NULL;
 
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    seq = hLoadChrom(chrom->name);
+    seq = hLoadChrom(database, chrom->name);
     bits = bitAlloc(seq->size);
-    gpList = loadGenePredsOnChrom(chrom->name, refTrack);
-    estList = loadEstsOnChrom(chrom->name);
+    gpList = loadGenePredsOnChrom(database, chrom->name, refTrack);
+    estList = loadEstsOnChrom(database, chrom->name);
     uglyf("%s: %d bases, %d %s, %d ests\n", chrom->name, seq->size, slCount(gpList), refTrack, slCount(estList));
     for (lib = libList; lib != NULL; lib = lib->next)
         {
@@ -139,13 +139,13 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     }
 }
 
-void readLibAndEstInfo(struct libEstHash **retList, struct hash **retHash)
+void readLibAndEstInfo(char *database, struct libEstHash **retList, struct hash **retHash)
 /* Make a list of libraries including all of the ESTs in that library.
  * Return list, and hash of list. */
 {
 struct libEstHash *libList = NULL, *lib, *newList = NULL, *next;
 struct hash *libHash = newHash(0);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -217,19 +217,16 @@ struct slName *chromList = NULL;
 struct libEstHash *libList = NULL;
 struct hash *libHash;
 
-/* Set system to database. */
-hSetDb(database);
-
 /* See if user wants to do a particular chromosome, otherwise get
  * list of all chromosome. */
 chrom = cgiOptionalString("chrom");
 if (chrom == NULL)
-    chromList = hAllChromNames();
+    chromList = hAllChromNames(database);
 else
     chromList = newSlName(chrom);
 
-readLibAndEstInfo(&libList, &libHash);
-assessLibsOnChroms(chromList, refTrack, libList);
+readLibAndEstInfo(database, &libList, &libHash);
+assessLibsOnChroms(database, chromList, refTrack, libList);
 }
 
 int main(int argc, char *argv[])

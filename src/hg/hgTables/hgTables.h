@@ -37,7 +37,6 @@ struct region
 extern struct cart *cart;	/* This holds cgi and other variables between clicks. */
 extern struct hash *oldVars;	/* The cart before new cgi stuff added. */
 extern char *genome;		/* Name of genome - mouse, human, etc. */
-extern char *dbDatabase;	/* Genome database, from db variable. */
 extern char *database;		/* Current database, often but not always dbDatabase. */
 extern char *freezeName;	/* Date of assembly. */
 extern struct trackDb *fullTrackList;	/* List of all tracks in database. */

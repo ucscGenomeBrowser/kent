@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.39 2007/07/23 21:35:40 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.40 2008/09/03 19:18:34 markd Exp $";
 
 /* Notes:
  *  strand is passed as '*' when -ignoreStrand is specified.
@@ -292,7 +292,7 @@ else
         if (tr->isDb)
         anyDb = TRUE;
     if (anyDb)
-        chroms = slNameCloneList(hAllChromNames());
+        chroms = slNameCloneList(hAllChromNames(sqlGetDatabase(conn)));
     else
         chroms = getFileTracksChroms(tracks);
     }
@@ -907,7 +907,7 @@ void clusterGenesOnStrand(struct sqlConnection *conn, struct track* tracks,
 struct genePred *gpList = NULL;
 struct cluster *clusterList = NULL;
 struct track *tr;
-int chromSize = (conn != NULL) ? hChromSize(chrom) : 1000000000;
+int chromSize = (conn != NULL) ? hChromSize(sqlGetDatabase(conn), chrom) : 1000000000;
 struct clusterMaker *cm = clusterMakerStart(chromSize);
 
 for (tr = tracks; tr != NULL; tr = tr->next)
@@ -954,8 +954,7 @@ FILE *flatBedFh = NULL;
 
 if (!sameString(database, "no"))
     {
-    hSetDb(database);
-    conn = hAllocConn();
+    conn = hAllocConn(database);
     }
 
 tracks  = buildTracks(conn, specCount, specs);

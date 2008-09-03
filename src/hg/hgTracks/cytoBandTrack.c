@@ -13,14 +13,14 @@
 static Color cytoBandItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Figure out color of band. */
 {
-return hCytoBandColor(item, hvg, hCytoBandIsDmel(),
+return hCytoBandColor(item, hvg, hCytoBandDbIsDmel(database),
 	tg->ixColor, tg->ixAltColor, shadesOfGray, maxShade);
 }
 
 static char *cytoBandItemName(struct track *tg, void *item)
 /* Return name of cytoBand track item. */
 {
-return hCytoBandName(item, hCytoBandIsDmel());
+return hCytoBandName(item, hCytoBandDbIsDmel(database));
 }
 
 int cytoBandStart(struct track *tg, void *item)
@@ -67,7 +67,7 @@ w = x2-x1;
 if (w < 1)
     w = 1;
 
-hCytoBandDrawAt(band, hvg, x1, y, w, heightPer, hCytoBandIsDmel(), font, 
+hCytoBandDrawAt(band, hvg, x1, y, w, heightPer, hCytoBandDbIsDmel(database), font, 
 	mgFontPixelHeight(font), tg->ixColor, tg->ixAltColor,
 	shadesOfGray, maxShade);
 
@@ -92,7 +92,7 @@ static void loadCytoBandsIdeo(struct track *tg)
 char query[256];
 safef(query, sizeof(query), 
       "select * from cytoBandIdeo where chrom like '%s'", chromName);
-if(hTableExists("cytoBandIdeo"))
+if(hTableExists(database, "cytoBandIdeo"))
     bedLoadItemByQuery(tg, "cytoBandIdeo", query, (ItemLoader)cytoBandLoad);
 if(slCount(tg->items) == 0)
     {
@@ -120,7 +120,7 @@ int lineHeight = 0;
 int heightPer = 0;
 int x1, x2;
 int yBorder = 0;
-int chromSize = hChromSize(chromName);
+int chromSize = hChromSize(database, chromName);
 struct cytoBand *cbList = NULL, *cb = NULL;
 scale = (double) (width - (2 * xBorder)) / chromSize;
 

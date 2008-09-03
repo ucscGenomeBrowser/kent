@@ -2,6 +2,7 @@
  * tracks in the browser CGIs */
 #ifndef transMapStuff_h
 #define transMapStuff_h
+struct trackDb;
 
 /* 
  * transMap table names setting names in trackDb. To get tables shared between
@@ -14,5 +15,4 @@
 char *transMapIdToAcc(char *id);
 /* remove all unique suffixes (starting with last `-') from any TransMap 
  * id.  WARNING: static return */
-
 #endif

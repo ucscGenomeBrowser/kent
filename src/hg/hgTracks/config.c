@@ -309,7 +309,7 @@ struct group *groupList = NULL;
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 
 /* Get track list and group them. */
-ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
+ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
 trackList = getTrackList(&groupList, vis);
 
 /* The ideogram for some reason is considered a track.
@@ -330,7 +330,7 @@ dyStringPrintf(title, "Configure Image");
 
 
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=POST>\n", hgTracksName());
-webStartWrapperDetailedNoArgs(cart, "", title->string, FALSE, FALSE, FALSE, FALSE);
+webStartWrapperDetailedNoArgs(cart, database, "", title->string, FALSE, FALSE, FALSE, FALSE);
 cartSaveSession(cart);
 
 hPrintf("<INPUT TYPE=HIDDEN NAME=\"hgTracksConfigPage\" VALUE=\"\">");

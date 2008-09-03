@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "targetDb.h"
 
-static char const rcsid[] = "$Id: targetDb.c,v 1.1 2008/04/18 23:31:33 angie Exp $";
+static char const rcsid[] = "$Id: targetDb.c,v 1.2 2008/09/03 19:19:27 markd Exp $";
 
 void targetDbStaticLoad(char **row, struct targetDb *ret)
 /* Load a row from targetDb table into ret.  The contents of ret will
@@ -233,7 +233,7 @@ struct targetDb *targetDbLookup(char *db, char *name)
 {
 struct targetDb *targetList = NULL;
 struct sqlConnection *conn = hConnectCentral();
-struct sqlConnection *conn2 = hAllocOrConnect(db);
+struct sqlConnection *conn2 = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 char query[2048];
@@ -254,7 +254,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (newTarg)
 	slAddHead(&targetList, newTarg);
     }
-hFreeOrDisconnect(&conn2);
+hFreeConn(&conn2);
 hDisconnectCentral(&conn);
 return targetList;
 }

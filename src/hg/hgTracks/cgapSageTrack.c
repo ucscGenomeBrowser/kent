@@ -249,7 +249,7 @@ void cgapSageLoadItems(struct track *tg)
 /* each library at a given tag (bed). */
 {
 struct linkedFeatures *itemList = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct hash *libHash = libTissueHash(conn);
 struct hash *libTotHash = getTotTagsHashFromTable(conn);
 struct sqlResult *sr = NULL;

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "output/mainTest.h"
 
-static char const rcsid[] = "$Id:$";
 
 struct pt *ptCommaIn(char **pS, struct pt *ret)
 /* Create a pt out of a comma separated string. 

@@ -15,7 +15,7 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: doTracks.c,v 1.18 2008/06/27 16:30:12 kuhn Exp $";
+static char const rcsid[] = "$Id: doTracks.c,v 1.19 2008/09/03 19:20:58 markd Exp $";
 
 int prevGBOffsetSav;
 char trackOffset[20];
@@ -99,9 +99,9 @@ for (j=0; j<20; j++)
        
     /* get cutoff threshold value pairs */
     safef(cond_str, sizeof(cond_str), "AA='%c'", aaAlphabet[j]);
-    answer = sqlGetField(NULL, database, "pbAnomLimit", "pctLow", cond_str);
+    answer = sqlGetField(database, "pbAnomLimit", "pctLow", cond_str);
     pctLow[j] = (double)(atof(answer));
-    answer = sqlGetField(NULL, database, "pbAnomLimit", "pctHi", cond_str);
+    answer = sqlGetField(database, "pbAnomLimit", "pctHi", cond_str);
     pctHi[j] = (double)(atof(answer));
     }
 
@@ -879,12 +879,12 @@ char *chp, *chp2;
 int  sfCnt;
 int  int_start, int_end;
 
-if (!hTableExistsDb(protDbName, "sfAssign")) return(0);
-if (!hTableExistsDb(protDbName, "ensemblXref3")) return(0);
+if (!hTableExists(protDbName, "sfAssign")) return(0);
+if (!hTableExists(protDbName, "ensemblXref3")) return(0);
 
-conn  = hAllocConn();
-conn2 = hAllocConn();
-conn3 = hAllocConn();
+conn  = hAllocConn(database);
+conn2 = hAllocConn(database);
+conn3 = hAllocConn(database);
 
 safef(query2, sizeof(query), 
     "select distinct sfID, seqID from %s.ensemblXref3 x, %s.sfAssign a where (swissAcc='%s' or tremblAcc='%s') and seqID=x.protein and protein != '' and evalue <= 0.02",
@@ -913,7 +913,7 @@ while (row2 != NULL)
 	    }
 	
 	safef(cond_str, sizeof(cond_str), "id=%s;", sfID);
-    	sfDesc = sqlGetField(conn3, protDbName, "sfDes", "description", cond_str);
+    	sfDesc = sqlGetField(protDbName, "sfDes", "description", cond_str);
 
 
     	/* !!! refine logic here later to be defensive against illegal syntax */
@@ -954,10 +954,10 @@ skip:
     row2 = sqlNextRow(sr2);
     }
 	
+sqlFreeResult(&sr2);
 hFreeConn(&conn);
 hFreeConn(&conn2);
 hFreeConn(&conn3);
-sqlFreeResult(&sr2);
 return(sfCnt);
 }
     
@@ -985,32 +985,32 @@ int  ii = 0;
 int  int_start, int_end;
 
    
-if (!hTableExistsDb(database, "sfAssign")) return(0);
+if (!hTableExists(database, "sfAssign")) return(0);
  
-conn  = hAllocConn();
-conn2 = hAllocConn();
+conn  = hAllocConn(database);
+conn2 = hAllocConn(database);
 
-if (hTableExistsDb(database, "ensemblXref3")) 
+if (hTableExists(database, "ensemblXref3")) 
     {	
     /* use ensemblXref3 for Ensembl data release after ensembl34d */
     safef(cond_str, sizeof(cond_str), "tremblAcc='%s'", proteinID);
-    ensPep = sqlGetField(conn, database, "ensemblXref3", "protein", cond_str);
+    ensPep = sqlGetField(database, "ensemblXref3", "protein", cond_str);
     if (ensPep == NULL)
 	{
    	safef(cond_str, sizeof(cond_str), "swissAcc='%s'", proteinID);
-   	ensPep = sqlGetField(conn, database, "ensemblXref3", "protein", cond_str);
+   	ensPep = sqlGetField(database, "ensemblXref3", "protein", cond_str);
 	if (ensPep == NULL) return(0);
 	}
     }
 else
     {
-    if (! (hTableExistsDb(database, "ensemblXref") || hTableExistsDb(database, "ensTranscript") ) )
+    if (! (hTableExists(database, "ensemblXref") || hTableExists(database, "ensTranscript") ) )
        return(0);
     
     /* two steps query needed because the recent Ensembl gene_xref 11/2003 table does not have 
        valid translation_name */
     safef(cond_str, sizeof(cond_str), "external_name='%s'", protDisplayID);
-    transcriptName = sqlGetField(conn, database, "ensGeneXref", "transcript_name", cond_str);
+    transcriptName = sqlGetField(database, "ensGeneXref", "transcript_name", cond_str);
     if (transcriptName == NULL)
         {
         return(0); 
@@ -1018,7 +1018,7 @@ else
     else
         {
         safef(cond_str, sizeof(cond_str), "transcript_name='%s';", transcriptName);
-        ensPep = sqlGetField(conn, database, "ensTranscript", "translation_name", cond_str);
+        ensPep = sqlGetField(database, "ensTranscript", "translation_name", cond_str);
         if (ensPep == NULL) 
 	    {
 	    hFreeConn(&conn);
@@ -1045,7 +1045,7 @@ while (row != NULL)
     /* sfDesc   = row[6]; */
     /* !!! the recent Suprefamily sfAssign table does not have valid sf description */
     safef(cond_str, sizeof(cond_str), "id=%s;", sfID);
-    sfDesc = sqlGetField(conn2, database, "sfDes", "description", cond_str);
+    sfDesc = sqlGetField(database, "sfDes", "description", cond_str);
 
     /* !!! refine logic here later to be defensive against illegal syntax */
     chp = region;
@@ -1082,9 +1082,9 @@ while (row != NULL)
     row = sqlNextRow(sr);
     }
 
+sqlFreeResult(&sr);
 hFreeConn(&conn);
 hFreeConn(&conn2);
-sqlFreeResult(&sr);
   
 return(ii);
 }
@@ -1250,7 +1250,7 @@ exonStartPos       = blockStartPositive[exonNumber-1];
 exonEndPos         = blockEndPositive[exonNumber-1];
 exonGenomeStartPos = blockGenomeStartPositive[exonNumber-1];
 exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
-dna = hChromSeq(chrom, exonGenomeStartPos, exonGenomeEndPos+1);
+dna = hChromSeq(database, chrom, exonGenomeStartPos, exonGenomeEndPos+1);
 dnaLen = strlen(dna->dna);
 
 k=0;
@@ -1271,7 +1271,7 @@ for (j = 0; j < mrnaLen; j++)
             exonEndPos         = blockEndPositive[exonNumber-1];
             exonGenomeStartPos = blockGenomeStartPositive[exonNumber-1];
             exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
-	    dna = hChromSeq(chrom, exonGenomeStartPos, exonGenomeEndPos+1);
+	    dna = hChromSeq(database, chrom, exonGenomeStartPos, exonGenomeEndPos+1);
     	    dnaLen = strlen(dna->dna);
             k=0;
 	    }
@@ -1442,11 +1442,11 @@ if (mrnaID != NULL)
     	{
 	doExonTrack = FALSE;
 	safef(cond_str, sizeof(cond_str), "spId='%s'", proteinID);
-        kgId = sqlGetField(NULL, database, "kgXref", "kgId", cond_str);
+        kgId = sqlGetField(database, "kgXref", "kgId", cond_str);
 	if (kgId != NULL)
 	    {
 	    safef(cond_str, sizeof(cond_str), "name='%s'", kgId);
-            kgPep = sqlGetField(NULL, database, "knownGenePep", "seq", cond_str);
+            kgPep = sqlGetField(database, "knownGenePep", "seq", cond_str);
       	    //printf("<pre><br>%s", kgPep);fflush(stdout);
 	    if (kgPep != NULL)
 	    	{
@@ -1456,7 +1456,7 @@ if (mrnaID != NULL)
 		    safef(uniProtDbName, sizeof(uniProtDbName),"sp%s", protDbDate);
 		
 		    safef(cond_str, sizeof(cond_str), "acc='%s'", proteinID);
-            	    protPep = sqlGetField(NULL, uniProtDbName, "protein", "val", cond_str);
+            	    protPep = sqlGetField(uniProtDbName, "protein", "val", cond_str);
             	    //printf("<br>%s\n", protPep);fflush(stdout);
             	    if (protPep != NULL)
 		    	{
@@ -1464,7 +1464,7 @@ if (mrnaID != NULL)
 			    {
 			    //printf("<br>MATCH!\n");fflush(stdout);
 		    	    safef(cond_str, sizeof(cond_str), "qName='%s'", kgId);
-            	    	    answer = sqlGetField(NULL, database, kgProtMapTableName, 
+            	    	    answer = sqlGetField(database, kgProtMapTableName, 
 			    			 "qName", cond_str);
             	    	    if (answer != NULL)
 			    	{

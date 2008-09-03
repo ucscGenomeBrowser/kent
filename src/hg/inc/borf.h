@@ -76,7 +76,7 @@ void borfOutput(struct borf *el, FILE *f, char sep, char lastSep);
 struct borf *borfFromBestorfOutput(char *fileName);
 /* Convert bestorf output to borf structure. */
 
-struct borf *borfFromGenomeBed(struct bed *bed);
+struct borf *borfFromGenomeBed(char *db, struct bed *bed);
 /* borfBig - Run Victor Solovyev's bestOrf on a genome bed's coordinates. */
 
 void borfSetExeAndParam(char *exePath, char *paramPath);

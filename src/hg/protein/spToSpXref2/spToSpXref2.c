@@ -46,8 +46,8 @@ proteinDataDate = argv[1];
 
 o1 = mustOpen("temp_spXref2.dat", "w");
 
-conn  = hAllocConn();
-conn2 = hAllocConn();
+conn  = hAllocConn(hDefaultDb());
+conn2 = hAllocConn(hDefaultDb());
 
 icnt =0;
 

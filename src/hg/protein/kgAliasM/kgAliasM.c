@@ -38,8 +38,8 @@ if (argc != 3) usage();
 database  = cloneString(argv[1]);
 proteinDB = cloneString(argv[2]);
 
-conn = hAllocConn();
-conn2= hAllocConn();
+conn = hAllocConn(database);
+conn2= hAllocConn(database);
 o1 = fopen("j.dat", "w");
 o2 = fopen("jj.dat", "w");
 
@@ -67,7 +67,7 @@ while (!bothDone)
 	if ( (symbol  != NULL) && (strlen(symbol) != 0) )
 	    {
             sprintf(cond_str, "geneSymbol = '%s'", symbol);
-            answer = sqlGetField(conn, database, "kgXref", "kgID", cond_str);
+            answer = sqlGetField(database, "kgXref", "kgID", cond_str);
 	    if (answer != NULL)
 		{
 		kgID = strdup(answer);

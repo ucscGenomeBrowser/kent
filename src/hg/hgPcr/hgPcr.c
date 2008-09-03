@@ -25,7 +25,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.25 2008/05/05 23:31:07 angie Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.26 2008/09/03 19:18:57 markd Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -118,7 +118,7 @@ struct targetPcrServer *getTargetServerList(char *db, char *name)
 {
 struct targetPcrServer *serverList = NULL, *server;
 struct sqlConnection *conn = hConnectCentral();
-struct sqlConnection *conn2 = hAllocOrConnect(db);
+struct sqlConnection *conn2 = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 char query[2048];
@@ -149,7 +149,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
-hFreeOrDisconnect(&conn2);
+hFreeConn(&conn2);
 slReverse(&serverList);
 return serverList;
 }
@@ -617,7 +617,7 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 dnaUtilOpen();
-cartWebStart(cart, "UCSC In-Silico PCR");
+cartWebStart(cart, NULL, "UCSC In-Silico PCR");
 dispatch();
 cartWebEnd();
 }

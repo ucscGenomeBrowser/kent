@@ -10,7 +10,7 @@
 #include "agpFrag.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: bedCoverage.c,v 1.7 2007/03/04 17:09:52 kent Exp $";
+static char const rcsid[] = "$Id: bedCoverage.c,v 1.8 2008/09/03 19:20:33 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,10 +25,10 @@ errAbort(
   );
 }
 
-struct chromInfo *getAllChromInfo()
+struct chromInfo *getAllChromInfo(char *database)
 /* Return list of info for all chromosomes. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct chromInfo *ci, *ciList = NULL;
@@ -142,12 +142,12 @@ printf("%s\t%1.2f\t%1.2f\t%1.2f\t%1.2f\n",
 	hundredOrMore * 100.0 / cs->unrestrictedSize);
 }
 
-void getChromSizes(struct hash **retHash, 
+void getChromSizes(char *database, struct hash **retHash, 
 	struct chromSizes **retList)
 /* Return hash of chromSizes. */
 {
-struct sqlConnection *conn = hAllocConn();
-struct chromInfo *ci, *ciList = getAllChromInfo();
+struct sqlConnection *conn = hAllocConn(database);
+struct chromInfo *ci, *ciList = getAllChromInfo(database);
 struct sqlResult *sr;
 char **row;
 struct chromSizes *cs, *csList = NULL;
@@ -228,11 +228,11 @@ for (r = restrictList; r != NULL; r = r->next)
     }
 }
 
-void restrictGaps(UBYTE *cov, int size, char *chrom)
+void restrictGaps(char *database, UBYTE *cov, int size, char *chrom)
 /* Mark gaps as off-limits. */
 {
 int rowOffset;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
 char **row;
 int s,e;
@@ -261,7 +261,7 @@ return count;
 }
 
 
-void scanBed(char *fileName, struct hash *chromHash, boolean restrict)
+void scanBed(char *database, char *fileName, struct hash *chromHash, boolean restrict)
 /* Scan through bed file (which must be sorted by
  * chromosome) and fill in coverage histograms on 
  * each chromosome. */
@@ -287,7 +287,7 @@ while (lineFileRow(lf, row))
 	AllocArray(cov, cs->totalSize);
 	if (restrict)
 	    restrictCov(cov, cs->totalSize, cs->restrictList);
-	restrictGaps(cov, cs->totalSize, chrom);
+	restrictGaps(database, cov, cs->totalSize, chrom);
 	cs->unrestrictedSize = calcUnrestrictedSize(cov, cs->totalSize);
 	lastCs = cs;
 	}
@@ -327,12 +327,11 @@ void bedCoverage(char *database, char *bedFile, char *restrictFile)
 struct chromSizes *cs, *csList = NULL;
 struct hash *chromHash = NULL;
 struct chromSizes *genome;
-hSetDb(database);
 
-getChromSizes(&chromHash, &csList);
+getChromSizes(database, &chromHash, &csList);
 if (restrictFile != NULL)
     addRestrictions(chromHash, restrictFile);
-scanBed(bedFile, chromHash, restrictFile != NULL);
+scanBed(database, bedFile, chromHash, restrictFile != NULL);
 genome = genoSize(csList);
 showStats(genome);
 

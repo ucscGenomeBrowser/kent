@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.14 2008/06/24 18:49:17 hiram Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.15 2008/09/03 19:18:24 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -101,7 +101,6 @@ slFreeList(&list);
 void dbTrash(char *db)
 /* dbTrash - drop tables from a database older than specified N hours. */
 {
-struct sqlConnection *conn = NULL;
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -115,11 +114,7 @@ unsigned long long totalSize = 0;
 struct slName *tableNames = NULL;	/*	subject to age limits	*/
 struct hash *expiredHash = newHash(10);
 struct hash *notExpiredHash = newHash(10);
-
-if (differentWord(db,CUSTOM_TRASH))
-    conn = sqlConnect(db);
-else
-    conn = sqlCtConn(TRUE);
+struct sqlConnection *conn = sqlConnect(db);
 
 if (extFileCheck)
     checkExtFile(conn);

@@ -87,7 +87,7 @@ void bedLoadRnaLpFoldItemByQuery(struct track *tg, char *table,
 /* RNALPFOLD specific tg->item loader, as we need to load items beyond
    the current window to load the chromEnd positions for RNALPFOLD values. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int rowOffset = 0;
 //int chromEndOffset = min(winEnd-winStart, 250000); /* extended chromEnd range */
 struct sqlResult *sr = NULL;

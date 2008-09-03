@@ -8,7 +8,7 @@
 #include "bits.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: trackOverlap.c,v 1.1 2003/06/17 01:40:19 sugnet Exp $";
+static char const rcsid[] = "$Id: trackOverlap.c,v 1.2 2008/09/03 19:20:40 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,7 +27,7 @@ errAbort(
   );
 }
 
-void explainSome(Bits *homo, Bits *once, Bits *bits, char *chrom, int chromSize, 
+void explainSome(char *database, Bits *homo, Bits *once, Bits *bits, char *chrom, int chromSize, 
 	struct sqlConnection *conn, char *trackSpec, char *homologyTrack)
 /* Explain some of homology. */
 {
@@ -37,7 +37,7 @@ homoSize = bitCountRange(homo, 0, chromSize);
 bitClear(bits, chromSize);
 if (trackSpec != NULL)
     {
-    fbOrTableBits(bits, trackSpec, chrom, chromSize, conn);
+    fbOrTableBits(database, bits, trackSpec, chrom, chromSize, conn);
     trackSize = bitCountRange(bits, 0, chromSize);
     bitAnd(bits, homo, chromSize);
     andSize = bitCountRange(bits, 0, chromSize);
@@ -75,16 +75,15 @@ Bits *bits = NULL;
 Bits *once = NULL;
 
 lf = lineFileOpen(specFile, TRUE);
-hSetDb(database);
-conn = hAllocConn();
-chromSize = hChromSize(chrom);
+conn = hAllocConn(database);
+chromSize = hChromSize(database, chrom);
 
 homo = bitAlloc(chromSize);
 bits = bitAlloc(chromSize);
 once = bitAlloc(chromSize);
 
 /* Get homology bitmap and set once mask to be the same. */
-fbOrTableBits(homo, homologyTrack, chrom, chromSize, conn);
+fbOrTableBits(database, homo, homologyTrack, chrom, chromSize, conn);
 bitOr(once, homo, chromSize);
 
 /* printHeader */
@@ -97,10 +96,10 @@ printf("%-21s %8s %8s %5s %6s  %6s %5s  %5s \n",
 printf("-----------------------------------------------------------------------------\n");
 
 /* Whittle awway at homology... */
-explainSome(homo, once, bits, chrom, chromSize, conn, NULL, homologyTrack);
+explainSome(database, homo, once, bits, chrom, chromSize, conn, NULL, homologyTrack);
 while(lineFileNextReal(lf, &line))
     {
-    explainSome(homo, once, bits, chrom, chromSize, conn, line, NULL);
+    explainSome(database, homo, once, bits, chrom, chromSize, conn, line, NULL);
     }
 lineFileClose(&lf);
 hFreeConn(&conn);

@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.32 2007/04/07 00:06:19 angie Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.33 2008/09/03 19:20:42 markd Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -80,7 +80,7 @@ if (pos == NULL)
 else
     {
     char numBuf[32];
-    hgParseChromRange(pos, &chrom, &start, &end);
+    hgParseChromRange(database, pos, &chrom, &start, &end);
     sprintLongWithCommas(numBuf, (start+end+1)/2);
     hPrintf("<A HREF=\"%s?db=%s&position=%s&%s&%s=full\">",
 	    hgTracksName(), database, pos, cartSidUrlString(cart), genomeSetting("geneTable"));
@@ -273,7 +273,7 @@ if (gp->chrom == NULL)
     {
     char *pos = knownPosCellVal(NULL, gp, conn);
     char *chrom;
-    hgParseChromRange(pos, &chrom, &gp->start, &gp->end);
+    hgParseChromRange(database, pos, &chrom, &gp->start, &gp->end);
     gp->chrom = cloneString(chrom);
     }
 }

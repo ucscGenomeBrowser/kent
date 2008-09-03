@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafFrag.c,v 1.4 2005/03/08 21:55:22 jsp Exp $";
+static char const rcsid[] = "$Id: mafFrag.c,v 1.5 2008/09/03 19:21:15 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -42,10 +42,9 @@ if (!isdigit(startString[0]) || !isdigit(endString[0]))
     errAbort("%s %s not numbers", startString, endString);
 start = atoi(startString);
 end = atoi(endString);
-hSetDb(database);
 if (end <= start)
     errAbort("end before start!");
-chromSize = hChromSize(chrom);
+chromSize = hChromSize(database, chrom);
 if (end > chromSize)
    errAbort("End past chromSize (%d > %d)", end, chromSize);
 maf = hgMafFrag(database, track, 

@@ -66,7 +66,7 @@ struct consWiggle {
     char *uiLabel;              /* Label to print on trackUi */
 };
 
-struct consWiggle *wigMafWiggles(struct trackDb *tdb);
+struct consWiggle *wigMafWiggles(char *db, struct trackDb *tdb);
 /* get conservation wiggle table names and labels from trackDb setting,
    ignoring those where table doesn't exist */
 

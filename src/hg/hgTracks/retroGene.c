@@ -2,7 +2,7 @@
 #include "retroGene.h"
 #include "transMapStuff.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.16 2008/08/18 07:46:02 baertsch Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.17 2008/09/03 19:19:04 markd Exp $";
 
 /* bit set of labels to use */
 enum {useOrgCommon = 0x01,
@@ -50,7 +50,7 @@ void lfRetroGene(struct track *tg)
 {
 struct linkedFeatures *lfList = NULL, *lf;
 struct retroMrnaInfo *pg = NULL, *list = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -99,21 +99,21 @@ return hvGfxFindColorIx(hvg, CHROM_20_R, CHROM_20_G, CHROM_20_B);
 
 char *getRetroParentSymbol(struct retroMrnaInfo *r, char *parentName)
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char cond_str[512];
 char *geneSymbol = NULL;
 if (r != NULL)
     {
-    if (hTableExists("kgXref") )
+    if (hTableExists(database, "kgXref") )
         {
         safef(cond_str, sizeof(cond_str), "kgID='%s'", parentName);
-        geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
+        geneSymbol = sqlGetField(database, "kgXref", "geneSymbol", cond_str);
         }
 
-    if (hTableExists("refLink") )
+    if (hTableExists(database, "refLink") )
         {
         safef(cond_str, sizeof(cond_str), "mrnaAcc = '%s'", r->refSeq);
-        geneSymbol = sqlGetField(conn, database, "refLink", "name", cond_str);
+        geneSymbol = sqlGetField(database, "refLink", "name", cond_str);
         }
     }
 hFreeConn(&conn);
@@ -234,7 +234,7 @@ lf->extra = dyStringCannibalize(&label);
 static void lookupRetroAliLabels(struct track *tg)
 /* This converts the retro ids to labels. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *retroInfoTbl = trackDbRequiredSetting(tg->tdb, retroInfoTblSetting);
 
 struct linkedFeatures *lf;

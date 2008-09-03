@@ -28,7 +28,7 @@
 #include "hui.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgCoordConv.c,v 1.26 2005/01/21 04:11:59 kent Exp $";
+static char const rcsid[] = "$Id: hgCoordConv.c,v 1.27 2008/09/03 19:18:48 markd Exp $";
 
 /* these variables are used for testing mode */
 boolean hgTest = FALSE;          /* are we in testing mode ? */
@@ -385,7 +385,7 @@ printf("<i><font size=-1>Comments, Questions, Bug Reports: <a href=\"mailto:sugn
 void doGoodReportZoo(FILE *dummy, struct coordConvRep *ccr) 
 /** output the result of a successful conversion */
 {
-cartWebStart(cart, "Coordinate Conversion for %s %s:%d-%d", 
+cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d", 
 	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 printWebWarnings();
 printf("<p><b>Success:</b> %s\n", ccr->msg);
@@ -419,7 +419,7 @@ cartWebEnd();
 void doGoodReport(FILE *dummy, struct coordConvRep *ccr) 
 /** output the result of a successful conversion */
 {
-cartWebStart(cart, "Coordinate Conversion for %s %s:%d-%d", 
+cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d", 
 	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 printWebWarnings();
 printf("<p><b>Success:</b> %s\n", ccr->msg);
@@ -444,7 +444,7 @@ cartWebEnd();
 /* Same as below.. pretty much */
 void doBadReportZoo(FILE *dummy, struct coordConvRep *ccr) 
 /** output the result of a flawed conversion */{
-cartWebStart(cart, "Coordinate Conversion for %s %s:%d-%d", 
+cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d", 
 	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 printWebWarnings();
 printf("<p><b>Conversion Not Successful:</B> %s\n", ccr->msg);
@@ -459,7 +459,7 @@ cartWebEnd();
 
 void doBadReport(FILE *dummy, struct coordConvRep *ccr) 
 /** output the result of a flawed conversion */{
-cartWebStart(cart, "Coordinate Conversion for %s %s:%d-%d", 
+cartWebStart(cart, database, "Coordinate Conversion for %s %s:%d-%d", 
 	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 printWebWarnings();
 printf("<p><b>Conversion Not Successful:</B> %s\n", ccr->msg);
@@ -731,7 +731,7 @@ int genomeCount = 0;
 char *dbChoice = NULL;
 int i = 0;
 cart = lCart;
-cartWebStart(cart, "Converting Coordinates Between Species");
+cartWebStart(cart, databases, "Converting Coordinates Between Species");
 puts( 
      "<p>This page attempts to convert coordinates from one Zoo species' CFTR region\n"
      "to another. The mechanism for doing this is to use the blastz alignments which have been\n"
@@ -787,7 +787,7 @@ int genomeCount = 0;
 char *dbChoice = NULL;
 int i = 0;
 cart = lCart;
-cartWebStart(cart, "Converting Coordinates Between Drafts");
+cartWebStart(cart, databases, "Converting Coordinates Between Drafts");
 puts( 
      "<p>This page attempts to convert coordinates from one draft of the human genome\n"
      "to another. The mechanism for doing this is to cut out and align pieces from the\n"

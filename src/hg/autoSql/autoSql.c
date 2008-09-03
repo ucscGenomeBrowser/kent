@@ -15,12 +15,13 @@
 #include "linefile.h"
 #include "obscure.h"
 #include "dystring.h"
-#include "cheapcgi.h"
 #include "asParse.h"
+#include "options.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.34 2008/05/28 04:55:31 galt Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.35 2008/09/03 19:18:17 markd Exp $";
 
 boolean withNull = FALSE;
+boolean addRcsId = TRUE;
 
 void usage()
 /* Explain usage and exit. */
@@ -31,13 +32,24 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
 	 "usage:\n"
 	 "    autoSql specFile outRoot {optional: -dbLink -withNull} \n"
 	 "This will create outRoot.sql outRoot.c and outRoot.h based\n"
-	 "on the contents of specFile. The -dbLink flag optionally\n"
-	 "generates code to execute queries and updates of the table.\n"
-	 "The -withNull flag optionally generates code and .sql to \n"
-	 "enable applications to accept and load data into objects \n"
-	 "with potential 'missing data' (NULL in SQL) situations.\n");
+	 "on the contents of specFile. \n"
+         "\n"
+         "options:\n"
+         "  -dbLink - optionally generates code to execute queries and\n"
+         "            updates of the table.\n"
+	 "  -withNull - optionally generates code and .sql to enable\n"
+         "              applications to accept and load data into objects\n"
+	 "              with potential 'missing data' (NULL in SQL)\n"
+         "              situations.\n"
+         "  -noRcsIds - don't add rcsid definitions to generate code.\n");
 }
 
+static struct optionSpec optionSpecs[] = {
+    {"dbLink", OPTION_BOOLEAN},
+    {"withNull", OPTION_BOOLEAN},
+    {"noRcsIds", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 void sqlSymDef(struct asColumn *col, FILE *f)
 /* print symbolic column definition for sql */
@@ -1602,9 +1614,10 @@ FILE *hFile;
 FILE *sqlFile;
 char defineName[256];
 boolean doDbLoadAndSave = FALSE;
-cgiSpoof(&argc, argv);
-doDbLoadAndSave = cgiBoolean("dbLink");
-withNull = cgiBoolean("withNull");
+optionInit(&argc, argv, optionSpecs);
+doDbLoadAndSave = optionExists("dbLink");
+withNull = optionExists("withNull");
+addRcsId = !optionExists("noRcsIds");
 if (argc != 3)
     usage();
 
@@ -1656,8 +1669,11 @@ fprintf(cFile, "#include \"dystring.h\"\n");
 fprintf(cFile, "#include \"jksql.h\"\n");
 fprintf(cFile, "#include \"%s\"\n", dotH);
 fprintf(cFile, "\n");
-/* split string so cvs doesn't substitute in this file */
-fprintf(cFile, "static char const rcsid[] = \"$" "Id:" "$\";\n");
+if (addRcsId)
+    {
+    /* split string so cvs doesn't substitute in this file */
+    fprintf(cFile, "static char const rcsid[] = \"$" "Id:" "$\";\n");
+    }
 fprintf(cFile, "\n");
 
 /* Process each object in specification file and output to .c, 

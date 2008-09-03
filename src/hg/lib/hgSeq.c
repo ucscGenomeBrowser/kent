@@ -10,39 +10,31 @@
 #include "fa.h"
 #include "genePred.h"
 #include "bed.h"
+#include "hgSeq.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.33 2008/08/05 14:36:41 braney Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.34 2008/09/03 19:19:24 markd Exp $";
 
-/* I don't like using this global, but don't want to do a zillion 
- * hChromSizes in addFeature and don't want to add it as a param of 
- * every call to addFeature. */
-static int chromSize = 0;
-
+int hgSeqChromSize(char *db, char *chromName)
 /* get chrom size if there's a database out there,
  * otherwise just return 0 */
-int hgSeqChromSize(char *chromName)
 {
 int thisSize = 0;
 
-/* since we might not have a database, let's be
- * careful about calling hdb routines */
-char *thisDb = hGetDb();
-
 /* first check to see if we can connect to the database */
-struct sqlConnection *conn = sqlMayConnect(thisDb);
+struct sqlConnection *conn = sqlMayConnect(db);
 
 if (conn != NULL)
     {
     sqlDisconnect(&conn);
 
     /* we know there is a db out there */
-    thisSize = hChromSize(chromName);
+    thisSize = hChromSize(db, chromName);
     }
 
 return thisSize;
 }
 
-void hgSeqFeatureRegionOptions(struct cart *cart, boolean canDoUTR,
+static void hgSeqFeatureRegionOptions(struct cart *cart, boolean canDoUTR,
 			       boolean canDoIntrons)
 /* Print out HTML FORM entries for feature region options. */
 {
@@ -155,8 +147,8 @@ puts("Note: if a feature is close to the beginning or end of a chromosome \n"
 }
 
 
-void hgSeqDisplayOptions(struct cart *cart, boolean canDoUTR,
-			 boolean canDoIntrons, boolean offerRevComp)
+static void hgSeqDisplayOptions(struct cart *cart, boolean canDoUTR,
+                                boolean canDoIntrons, boolean offerRevComp)
 /* Print out HTML FORM entries for sequence display options. */
 {
 char *casing, *repMasking;
@@ -238,7 +230,7 @@ hgSeqOptionsHtiCart(hti, NULL);
 #endif /* NEVER */
 
 
-static void hgSeqOptionsDb(struct cart *cart, char *db, char *table)
+void hgSeqOptions(struct cart *cart, char *db, char *table)
 /* Print out HTML FORM entries for gene region and sequence display options. */
 {
 struct hTableInfo *hti;
@@ -251,8 +243,8 @@ if ((table == NULL) || (table[0] == 0))
     }
 else
     {
-    hParseTableName(table, rootName, chrom);
-    hti = hFindTableInfoDb(db, chrom, rootName);
+    hParseTableName(db, table, rootName, chrom);
+    hti = hFindTableInfo(db, chrom, rootName);
     if (hti == NULL)
 	webAbort("Error", "Could not find table info for table %s (%s)",
 		 rootName, table);
@@ -260,15 +252,7 @@ else
 hgSeqOptionsHtiCart(hti, cart);
 }
 
-
-void hgSeqOptions(struct cart *cart, char *table)
-/* Print out HTML FORM entries for gene region and sequence display options. */
-{
-hgSeqOptionsDb(cart, hGetDb(), table);
-}
-
-
-static void maskRepeats(char *chrom, int chromStart, int chromEnd,
+static void maskRepeats(char *db, char *chrom, int chromStart, int chromEnd,
 			DNA *dna, boolean soft)
 /* Lower case bits corresponding to repeats. */
 {
@@ -277,11 +261,10 @@ struct bed *bedItem, *bedList;
 struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
-char *db = hGetDb();
 struct hTableInfo *hti = NULL;
 
-conn = hAllocConn();
-hti = hFindTableInfoDb(db, chrom, "rmsk");
+conn = hAllocConn(db);
+hti = hFindTableInfo(db, chrom, "rmsk");
 
 if (hti == NULL)
     {
@@ -297,7 +280,7 @@ if (hti == NULL)
 	repeatTable = cloneString("windowmaskerSdust");
 	}
     /* if there isn't a rmsk track, look for the repeats bed file */
-    bedList = hGetBedRangeDb(hGetDb(), repeatTable, chrom, chromStart, chromEnd, NULL);
+    bedList = hGetBedRange(db, repeatTable, chrom, chromStart, chromEnd, NULL);
     for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 	{
 	if (bedItem->chromEnd > chromEnd) bedItem->chromEnd = chromEnd;
@@ -328,18 +311,23 @@ hFreeConn(&conn);
 }
 
 
-void hgSeqConcatRegionsDb(char *db, char *chrom, char strand, char *name,
+static void hgSeqConcatRegionsDb(char *db, char *chrom, char strand, char *name,
 			  int rCount, unsigned *rStarts, unsigned *rSizes,
 			  boolean *exonFlags, boolean *cdsFlags)
 /* Concatenate and print out dna for a series of regions. */
 {
+// Note: this code use to generate different sequence ids if the global
+// database in hdb was different than the db parameter.  This functionality
+// has been removed since the global database was removed and it didn't
+// appear to be used.
+
 struct dnaSeq *rSeq = NULL;
 struct dnaSeq *cSeq = NULL;
 char recName[256];
 int seqStart, seqEnd;
 int offset, cSize;
 int i;
-int chromSize = hgSeqChromSize(chrom);
+int chromSize = hgSeqChromSize(db, chrom);
 boolean isRc     = (strand == '-') || cgiBoolean("hgSeq.revComp");
 boolean maskRep  = cgiBoolean("hgSeq.maskRepeats");
 int padding5     = cgiOptionalInt("hgSeq.padding5", 0);
@@ -382,16 +370,14 @@ if ((chromSize > 0) && (seqEnd > chromSize))
     }
 if (seqEnd <= seqStart)
     {
-    printf("# Null range for %s%s%s_%s (range=%s:%d-%d 5'pad=%d 3'pad=%d)\n",
+    printf("# Null range for %s_%s (range=%s:%d-%d 5'pad=%d 3'pad=%d)\n",
 	   db, 
-	   (sameString(db, hGetDb()) ? "" : "_"),
-	   (sameString(db, hGetDb()) ? "" : hGetDb()),
 	   name,
 	   chrom, seqStart+1, seqEnd,
 	   padding5, padding3);
     return;
     }
-rSeq = hDnaFromSeq(chrom, seqStart, seqEnd, dnaLower);
+rSeq = hDnaFromSeq(db, chrom, seqStart, seqEnd, dnaLower);
 
 /* Handle casing and compute size of concatenated sequence */
 if (sameString(casing, "upper"))
@@ -415,9 +401,9 @@ cSeq->size = cSize;
 if (maskRep)
     {
     if (sameString(repMasking, "lower"))
-	maskRepeats(chrom, seqStart, seqEnd, rSeq->dna, TRUE);
+	maskRepeats(db, chrom, seqStart, seqEnd, rSeq->dna, TRUE);
     else
-	maskRepeats(chrom, seqStart, seqEnd, rSeq->dna, FALSE);
+	maskRepeats(db, chrom, seqStart, seqEnd, rSeq->dna, FALSE);
     }
 offset = 0;
 for (i=0;  i < rCount;  i++)
@@ -445,22 +431,20 @@ if (isRc)
     reverseComplement(cSeq->dna, cSeq->size);
 
 safef(recName, sizeof(recName),
-      "%s%s%s_%s range=%s:%d-%d 5'pad=%d 3'pad=%d "
+      "%s_%s range=%s:%d-%d 5'pad=%d 3'pad=%d "
       "strand=%c repeatMasking=%s",
-	db, 
-	(sameString(db, hGetDb()) ? "" : "_"),
-	(sameString(db, hGetDb()) ? "" : hGetDb()),
-	name,
-	chrom, seqStart+1, seqEnd,
-	padding5, padding3,
-	(isRc ? '-' : '+'),
-	(maskRep ? repMasking : "none"));
+      db, 
+      name,
+      chrom, seqStart+1, seqEnd,
+      padding5, padding3,
+      (isRc ? '-' : '+'),
+      (maskRep ? repMasking : "none"));
 faWriteNext(stdout, recName, cSeq->dna, cSeq->size);
 freeDnaSeq(&cSeq);
 }
 
 
-void hgSeqRegionsAdjDb(char *db, char *chrom, char strand, char *name,
+static void hgSeqRegionsAdjDb(char *db, char *chrom, char strand, char *name,
 		       boolean concatRegions, boolean concatAdjacent,
 		       int rCount, unsigned *rStarts, unsigned *rSizes,
 		       boolean *exonFlags, boolean *cdsFlags)
@@ -469,7 +453,7 @@ void hgSeqRegionsAdjDb(char *db, char *chrom, char strand, char *name,
 {
 if (concatRegions || (rCount == 1))
     {
-    hgSeqConcatRegionsDb(hGetDb(), chrom, strand, name,
+    hgSeqConcatRegionsDb(db, chrom, strand, name,
 			 rCount, rStarts, rSizes, exonFlags, cdsFlags);
     }
 else
@@ -499,14 +483,14 @@ else
 	    }
 	len = (isRc ? (j - jEnd) : (jEnd - j));
 	lo  = (isRc ? (jEnd + 1) : j);
-	hgSeqConcatRegionsDb(hGetDb(), chrom, strand, rName,
+	hgSeqConcatRegionsDb(db, chrom, strand, rName,
 			     len, &rStarts[lo], &rSizes[lo], &exonFlags[lo],
 			     &cdsFlags[lo]);
 	}
     }
 }
 
-void hgSeqRegionsDb(char *db, char *chrom, char strand, char *name,
+static void hgSeqRegionsDb(char *db, char *chrom, char strand, char *name,
 		    boolean concatRegions,
 		    int rCount, unsigned *rStarts, unsigned *rSizes,
 		    boolean *exonFlags, boolean *cdsFlags)
@@ -516,22 +500,12 @@ hgSeqRegionsAdjDb(db, chrom, strand, name, concatRegions, FALSE,
 		  rCount, rStarts, rSizes, exonFlags, cdsFlags);
 }
 
-void hgSeqRegions(char *chrom, char strand, char *name,
-		  boolean concatRegions,
-		  int rCount, unsigned *rStarts, unsigned *rSizes,
-		  boolean *exonFlags, boolean *cdsFlags)
-/* Concatenate and print out dna for a series of regions. */
-{
-hgSeqRegionsDb(hGetDb(), chrom, strand, name, concatRegions,
-	       rCount, rStarts, rSizes, exonFlags, cdsFlags);
-}
+static int maxStartsOffset = 0;
 
-
-int maxStartsOffset = 0;
-
-void addFeature(int *count, unsigned *starts, unsigned *sizes,
+static void addFeature(int *count, unsigned *starts, unsigned *sizes,
 		boolean *exonFlags, boolean *cdsFlags,
-		int start, int size, boolean eFlag, boolean cFlag)
+                int start, int size, boolean eFlag, boolean cFlag,
+                int chromSize)
 {
 if (size > 0)
     {
@@ -554,9 +528,7 @@ if (size > 0)
     }
 }
 
-
-
-void hgSeqRange(char *chrom, int chromStart, int chromEnd, char strand,
+void hgSeqRange(char *db, char *chrom, int chromStart, int chromEnd, char strand,
 		char *name)
 /* Print out dna sequence for the given range. */
 {
@@ -565,19 +537,17 @@ unsigned starts[1];
 unsigned sizes[1];
 boolean exonFlags[1];
 boolean cdsFlags[1];
-
-chromSize = hgSeqChromSize(chrom);
-
+int chromSize = hgSeqChromSize(db, chrom);
 maxStartsOffset = 0;
 addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-	   chromStart, chromEnd - chromStart, FALSE, FALSE);
+	   chromStart, chromEnd - chromStart, FALSE, FALSE, chromSize);
 
-hgSeqRegions(chrom, strand, name, FALSE, count, starts, sizes, exonFlags,
-	     cdsFlags);
+hgSeqRegionsDb(db, chrom, strand, name, FALSE, count, starts, sizes, exonFlags,
+               cdsFlags);
 }
 
 
-int hgSeqBedDb(char *db, struct hTableInfo *hti, struct bed *bedList)
+int hgSeqBed(char *db, struct hTableInfo *hti, struct bed *bedList)
 /* Print out dna sequence from the given database of all items in bedList.  
  * hti describes the bed-compatibility level of bedList items.  
  * Returns number of FASTA records printed out. */
@@ -625,7 +595,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
     if (bedItem->blockCount == 0) /* An intersection may have made hti unreliable. */
         canDoIntrons = FALSE;
     rowCount++;
-    chromSize = hgSeqChromSize(bedItem->chrom);
+    int chromSize = hgSeqChromSize(db, bedItem->chrom);
     // bed: translate relative starts to absolute starts
     for (i=0;  i < bedItem->blockCount;  i++)
 	{
@@ -648,13 +618,13 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 	{
 	addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 		   (bedItem->chromStart - promoterSize), promoterSize,
-		   FALSE, FALSE);
+		   FALSE, FALSE, chromSize);
 	}
     else if (isRc && downstream && (downstreamSize > 0))
 	{
 	addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 		   (bedItem->chromStart - downstreamSize), downstreamSize,
-		   FALSE, FALSE);
+		   FALSE, FALSE, chromSize);
 	}
     if (canDoIntrons && canDoUTR)
 	{
@@ -667,7 +637,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 		    {
 		    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 			       bedItem->chromStarts[i], bedItem->blockSizes[i],
-			       TRUE, FALSE);
+			       TRUE, FALSE, chromSize);
 		    }
 		if (((!isRc && utrIntron5) || (isRc && utrIntron3)) &&
 		    (i < bedItem->blockCount - 1))
@@ -678,7 +648,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 			       (bedItem->chromStarts[i+1] -
 				bedItem->chromStarts[i] -
 				bedItem->blockSizes[i]),
-			       FALSE, FALSE);
+			       FALSE, FALSE, chromSize);
 		    }
 		}
 	    else if (bedItem->chromStarts[i] < bedItem->thickEnd)
@@ -693,14 +663,14 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 				   bedItem->chromStarts[i],
 				   (bedItem->thickStart -
 				    bedItem->chromStarts[i]),
-				   TRUE, FALSE);
+				   TRUE, FALSE, chromSize);
 			}
 		    if (cdsExon)
 			{
 			addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 				   bedItem->thickStart,
 				   (bedItem->thickEnd - bedItem->thickStart),
-				   TRUE, TRUE);
+				   TRUE, TRUE, chromSize);
 			}
 		    if ((!isRc && utrExon3)	  || (isRc && utrExon5))
 			{
@@ -709,7 +679,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 				   (bedItem->chromStarts[i] +
 				    bedItem->blockSizes[i] -
 				    bedItem->thickEnd),
-				   TRUE, FALSE);
+				   TRUE, FALSE, chromSize);
 			}
 		    }
 		else if (bedItem->chromStarts[i] < bedItem->thickStart)
@@ -720,7 +690,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 				   bedItem->chromStarts[i],
 				   (bedItem->thickStart -
 				    bedItem->chromStarts[i]),
-				   TRUE, FALSE);
+				   TRUE, FALSE, chromSize);
 			}
 		    if (cdsExon)
 			{
@@ -729,7 +699,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 				   (bedItem->chromStarts[i] +
 				    bedItem->blockSizes[i] -
 				    bedItem->thickStart),
-				   TRUE, TRUE);
+				   TRUE, TRUE, chromSize);
 			}
 		    }
 		else if ((bedItem->chromStarts[i] + bedItem->blockSizes[i]) >
@@ -741,7 +711,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 				   bedItem->chromStarts[i],
 				   (bedItem->thickEnd -
 				    bedItem->chromStarts[i]),
-				   TRUE, TRUE);
+				   TRUE, TRUE, chromSize);
 			}
 		    if ((!isRc && utrExon3)	  || (isRc && utrExon5))
 			{
@@ -750,14 +720,14 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 				   (bedItem->chromStarts[i] +
 				    bedItem->blockSizes[i] -
 				    bedItem->thickEnd),
-				   TRUE, FALSE);
+				   TRUE, FALSE, chromSize);
 			}
 		    }
 		else if (cdsExon)
 		    {
 		    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 			       bedItem->chromStarts[i], bedItem->blockSizes[i],
-			       TRUE, TRUE);
+			       TRUE, TRUE, chromSize);
 		    }
 		isCDS = ! ((bedItem->chromStarts[i] + bedItem->blockSizes[i]) >
 			   bedItem->thickEnd);
@@ -771,7 +741,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 			       (bedItem->chromStarts[i+1] -
 				bedItem->chromStarts[i] -
 				bedItem->blockSizes[i]),
-			       FALSE, isCDS);
+			       FALSE, isCDS, chromSize);
 		    }
 		}
 	    else
@@ -780,7 +750,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 		    {
 		    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 			       bedItem->chromStarts[i], bedItem->blockSizes[i],
-			       TRUE, FALSE);
+			       TRUE, FALSE, chromSize);
 		    }
 		if (((!isRc && utrIntron3) || (isRc && utrIntron5)) &&
 		    (i < bedItem->blockCount - 1))
@@ -791,7 +761,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 			       (bedItem->chromStarts[i+1] -
 				bedItem->chromStarts[i] -
 				bedItem->blockSizes[i]),
-			       FALSE, FALSE);
+			       FALSE, FALSE, chromSize);
 		    }
 		}
 	    }
@@ -804,7 +774,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 		{
 		addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 			   bedItem->chromStarts[i], bedItem->blockSizes[i],
-			   TRUE, FALSE);
+			   TRUE, FALSE, chromSize);
 		}
 	    if (cdsIntron && (i < bedItem->blockCount - 1))
 		{
@@ -813,7 +783,7 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 			   (bedItem->chromStarts[i+1] -
 			    bedItem->chromStarts[i] -
 			    bedItem->blockSizes[i]),
-			   FALSE, FALSE);
+			   FALSE, FALSE, chromSize);
 		}
 	    }
 	}
@@ -824,21 +794,21 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 	    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 		       bedItem->chromStart,
 		       (bedItem->thickStart - bedItem->chromStart),
-		       TRUE, FALSE);
+		       TRUE, FALSE, chromSize);
 	    }
 	if (cdsExon)
 	    {
 	    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 		       bedItem->thickStart,
 		       (bedItem->thickEnd - bedItem->thickStart),
-		       TRUE, TRUE);
+		       TRUE, TRUE, chromSize);
 	    }
 	if ((!isRc && utrExon3)   || (isRc && utrExon5))
 	    {
 	    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 		       bedItem->thickEnd,
 		       (bedItem->chromEnd - bedItem->thickEnd),
-		       TRUE, FALSE);
+		       TRUE, FALSE, chromSize);
 	    }
 	}
     else
@@ -846,17 +816,17 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 	addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 		   bedItem->chromStart,
 		   (bedItem->chromEnd - bedItem->chromStart),
-		   TRUE, FALSE);
+		   TRUE, FALSE, chromSize);
 	}
     if (!isRc && downstream && (downstreamSize > 0))
 	{
 	addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-		   bedItem->chromEnd, downstreamSize, FALSE, FALSE);
+		   bedItem->chromEnd, downstreamSize, FALSE, FALSE, chromSize);
 	}
     else if (isRc && promoter && (promoterSize > 0))
 	{
 	addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-		   bedItem->chromEnd, promoterSize, FALSE, FALSE);
+		   bedItem->chromEnd, promoterSize, FALSE, FALSE, chromSize);
 	}
     snprintf(itemName, sizeof(itemName), "%s_%s", hti->rootName, bedItem->name);
     hgSeqRegionsAdjDb(db, bedItem->chrom, bedItem->strand[0], itemName,
@@ -872,17 +842,8 @@ return totalCount;
 }
 
 
-int hgSeqBed(struct hTableInfo *hti, struct bed *bedList)
-/* Print out dna sequence from the current database of all items in bedList.  
- * hti describes the bed-compatibility level of bedList items.  
- * Returns number of FASTA records printed out. */
-{
-return hgSeqBedDb(hGetDb(), hti, bedList);
-}
-
-
-int hgSeqItemsInRangeDb(char *db, char *table, char *chrom, int chromStart,
-			int chromEnd, char *sqlConstraints)
+int hgSeqItemsInRange(char *db, char *table, char *chrom, int chromStart,
+                      int chromEnd, char *sqlConstraints)
 /* Print out dna sequence of all items (that match sqlConstraints, if nonNULL) 
    in the given range in table.  Return number of items. */
 {
@@ -892,27 +853,15 @@ char rootName[256];
 char parsedChrom[32];
 int itemCount;
 
-hParseTableName(table, rootName, parsedChrom);
-hti = hFindTableInfoDb(db, chrom, rootName);
+hParseTableName(db, table, rootName, parsedChrom);
+hti = hFindTableInfo(db, chrom, rootName);
 if (hti == NULL)
     webAbort("Error", "Could not find table info for table %s (%s)",
 	     rootName, table);
-bedList = hGetBedRangeDb(db, table, chrom, chromStart, chromEnd,
-			 sqlConstraints);
+bedList = hGetBedRange(db, table, chrom, chromStart, chromEnd,
+		       sqlConstraints);
 
-itemCount = hgSeqBedDb(db, hti, bedList);
+itemCount = hgSeqBed(db, hti, bedList);
 bedFreeList(&bedList);
 return itemCount;
 }
-
-
-int hgSeqItemsInRange(char *table, char *chrom, int chromStart, int chromEnd,
-		       char *sqlConstraints)
-/* Print out dna sequence of all items (that match sqlConstraints, if nonNULL) 
-   in the given range in table.  Return number of items. */
-{
-return hgSeqItemsInRangeDb(hGetDb(), table, chrom, chromStart, chromEnd,
-			   sqlConstraints);
-}
-
-

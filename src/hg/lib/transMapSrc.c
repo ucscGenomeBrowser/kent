@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "transMapSrc.h"
 
-static char const rcsid[] = "$Id: transMapSrc.c,v 1.1 2008/05/19 18:16:10 markd Exp $";
+static char const rcsid[] = "$Id: transMapSrc.c,v 1.2 2008/09/03 19:19:27 markd Exp $";
 
 void transMapSrcStaticLoad(char **row, struct transMapSrc *ret)
 /* Load a row from transMapSrc table into ret.  The contents of ret will
@@ -157,12 +157,12 @@ fputc(lastSep,f);
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 
-struct transMapSrc *transMapSrcQuery(struct sqlConnection *conn,
+struct transMapSrc *transMapSrcQuery(struct sqlConnection *srcConn,
                                      char *table, char *srcDb, char *srcId)
 /* load a single transMapSrc object for an srcDb and srcId from a table,
  * or error if not found */
 {
-return sqlQueryObjs(conn, (sqlLoadFunc)transMapSrcLoad,
+return sqlQueryObjs(srcConn, (sqlLoadFunc)transMapSrcLoad,
                     sqlQueryMust|sqlQuerySingle,
                     "SELECT * FROM %s WHERE (db=\"%s\") and (id = \"%s\")",
                     table, srcDb, srcId);

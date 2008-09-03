@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.85 2008/07/09 18:40:39 braney Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.86 2008/09/03 19:19:21 markd Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -55,80 +55,50 @@ if (line != NULL && startsWithWord("track", line))
 return line;
 }
 
-void customFactoryCheckChromNameDb(char *db, char *word, struct lineFile *lf)
+void customFactoryCheckChromNameDb(char *genomeDb, char *word, struct lineFile *lf)
 /* Make sure it's a chromosome or a contig.  Well, at the moment,
  * just make sure it's a chromosome. */
 {
-if (!hgIsOfficialChromNameDb(db, word))
+if (!hgIsOfficialChromName(genomeDb, word))
     lineFileAbort(lf, "%s not a chromosome (note: chrom names are case sensitive)", word);
 }
 
-static char *saveHost = NULL;
-static char *saveUser = NULL;
-static char *savePassword = NULL;
+static char *saveConf = NULL;
 
 static void saveCurrentEnv()
 /* while fiddling with environment for pipeline loaders, remember previous env
  */
 {
 char *val = NULL;
-freeMem(saveHost);	/* clear these if previously used	*/
-freeMem(saveUser);
-freeMem(savePassword);
-val = getenv("HGDB_HOST");
-if (val && (strlen(val) > 0))
-    saveHost = cloneString(val);
-else
-    saveHost = NULL;
-val = getenv("HGDB_USER");
-if (val && (strlen(val) > 0))
-    saveUser = cloneString(val);
-else
-    saveUser = NULL;
-val = getenv("HGDB_PASSWORD");
-if (val && (strlen(val) > 0))
-    savePassword = cloneString(val);
-else
-    savePassword = NULL;
+freez(&saveConf);	/* clear these if previously used	*/
+val = getenv("HGDB_CONF");
+if (!isEmpty(val))
+    saveConf = cloneString(val);
 }
 
 static void restorePrevEnv()
 /* while fiddling with environment for pipeline loaders, restore environment */
 {
 /* can not eliminate the variables from the environment, but can make
- * them be empty strings.  This will be good enough for getCfgValue()
+ * them be empty strings.  This will be good enough for cfgOptionEnv()
  * in hdb.c and jksql.c
  */
-if (saveHost)
-    envUpdate("HGDB_HOST", saveHost);
+if (saveConf != NULL)
+    envUpdate("HGDB_HOST", saveConf);
 else
     envUpdate("HGDB_HOST", "");
-if (saveUser)
-    envUpdate("HGDB_USER", saveUser);
-else
-    envUpdate("HGDB_USER", "");
-if (savePassword)
-    envUpdate("HGDB_PASSWORD", savePassword);
-else
-    envUpdate("HGDB_PASSWORD", "");
-freeMem(saveHost);	/* clear these if previously used	*/
-freeMem(saveUser);
-freeMem(savePassword);
+freez(&saveConf);
 }
 
 char *customTrackTempDb()
 /* Get custom database.  If first time set up some
  * environment variables that the loaders will need. */
 {
-/*	set environment for pipeline commands */
-char *host = cfgOptionDefault("customTracks.host", NULL);
-char *user = cfgOptionDefault("customTracks.user", NULL);
-char *pass = cfgOptionDefault("customTracks.password", NULL);
-
+/* set environment for pipeline commands, but don't override if
+ * already set for debugging. */
 saveCurrentEnv();
-envUpdate("HGDB_HOST", host);
-envUpdate("HGDB_USER", user);
-envUpdate("HGDB_PASSWORD", pass);
+if (!isEmpty(getenv("HGDB_CONF")))
+    envUpdate("HGDB_CONF", "./hg.conf");
 return (CUSTOM_TRASH);
 }
 
@@ -138,7 +108,7 @@ void customFactorySetupDbTrack(struct customTrack *track)
 struct tempName tn;
 char prefix[16];
 static int dbTrackCount = 0;
-struct sqlConnection *ctConn = sqlCtConn(TRUE);
+struct sqlConnection *ctConn = hAllocConn(CUSTOM_TRASH);
 ++dbTrackCount;
 safef(prefix, sizeof(prefix), "t%d", dbTrackCount);
 track->dbTableName = sqlTempTableName(ctConn, prefix);
@@ -147,15 +117,15 @@ trashDirFile(&tn, "ct", "ct", ".err");
 track->dbStderrFile = cloneString(tn.forCgi);
 track->dbDataLoad = TRUE;	
 track->dbTrack = TRUE;
-sqlDisconnect(&ctConn);
+hFreeConn(&ctConn);
 }
 
-char *ctGenomeOrCurrent(struct customTrack *ct)
+static char *ctGenomeOrCurrent(struct customTrack *ct)
 /* return database setting */
 {
 char *ctDb = ctGenome(ct);
 if (ctDb == NULL)
-    ctDb = hGetDb();
+    ctDb = ct->genomeDb;
 return ctDb;
 }
 
@@ -184,7 +154,7 @@ static boolean rowIsBed(char **row, int wordCount, char *db)
 /* Return TRUE if row is consistent with BED format. */
 {
 return wordCount >= 3 && wordCount <= bedKnownFields 
-	&& hgIsOfficialChromNameDb(db, row[0])
+	&& hgIsOfficialChromName(db, row[0])
 	&& isdigit(row[1][0]) && isdigit(row[2][0]);
 }
 
@@ -585,7 +555,7 @@ static struct customFactory coloredExonFactory =
 
 /*** GFF/GTF Factory - converts to BED ***/
 
-static boolean rowIsGff(char **row, int wordCount)
+static boolean rowIsGff(char *db, char **row, int wordCount)
 /* Return TRUE if format of this row is consistent with being a .gff */
 {
 boolean isGff = FALSE;
@@ -598,7 +568,7 @@ if (wordCount >= 8 && wordCount <= 9)
         {
 	if (strand[1] == 0)
 	    {
-	    if (hgIsOfficialChromName(row[0]))
+	    if (hgIsOfficialChromName(db, row[0]))
 	        {
 		if (isdigit(row[3][0]) && isdigit(row[4][0]))
 		    isGff = TRUE;
@@ -622,7 +592,7 @@ if (line == NULL)
 char *dupe = cloneString(line);
 char *row[10];
 int wordCount = chopTabs(dupe, row);
-boolean isGff = rowIsGff(row, wordCount);
+boolean isGff = rowIsGff(track->genomeDb, row, wordCount);
 if (isGff)
     track->gffHelper = gffFileNew("custom input");
 freeMem(dupe);
@@ -993,7 +963,7 @@ static void mafLoaderBuildTab(struct customTrack *track, char *mafFile)
 {
 customFactorySetupDbTrack(track);
 
-char *db = customTrackTempDb();
+char *ctDb = customTrackTempDb();
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/hgLoadMaf", "-verbose=0", "-custom",  NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL};
@@ -1011,13 +981,13 @@ dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-loadFile=%s", mafFile);
 cmd1[4] = dyStringCannibalize(&tmpDy);  tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "-refDb=%s", hGetDb());
+dyStringPrintf(tmpDy, "-refDb=%s", track->genomeDb);
 cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0); 
 dyStringPrintf(tmpDy, "-maxNameLen=%d", track->maxChromName);
 cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0); 
 dyStringPrintf(tmpDy, "-defPos=%s", tn.forCgi);
 cmd1[7] = dyStringCannibalize(&tmpDy);
-cmd1[8] = db;
+cmd1[8] = ctDb;
 cmd1[9] = track->dbTableName;
 
 struct pipeline *dataPipe =  pipelineOpen(cmds, 
@@ -1158,7 +1128,7 @@ dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "-chromInfoDb=%s", hGetDb());
+dyStringPrintf(tmpDy, "-chromInfoDb=%s", track->genomeDb);
 cmd2[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 /* a system could be using /trash/ absolute reference, and nothing to do with
  *	local references, so don't confuse it with ./ a double // will work
@@ -1236,6 +1206,9 @@ if (dbRequested)
 	fputcErr = fputc(c, out);
     carefulClose(&in);
     fflush(out);		/* help see error from loader failure */
+#if 0  // enable this for help debugging
+    fprintf(stderr, "%s\n", pipelineDesc(dataPipe));
+#endif
     if(ferror(out) || pipelineWait(dataPipe))
 	pipelineFailExit(track);	/* prints error and exits */
     unlink(track->dbStderrFile);	/* no errors, not used */
@@ -1244,11 +1217,11 @@ if (dbRequested)
     track->wigFile = NULL;
 
     /* Figure out lower and upper limits with db query */
-    struct sqlConnection *ctConn = sqlCtConn(TRUE);
+    struct sqlConnection *ctConn = hAllocConn(CUSTOM_TRASH);
     char buf[64];
     wigDbGetLimits(ctConn, track->dbTableName, 
 	    &upperLimit, &lowerLimit, &span);
-    sqlDisconnect(&ctConn);
+    hFreeConn(&ctConn);
     safef(buf, sizeof(buf), "%d", span);
     ctAddToSettings(track, "spanList", cloneString(buf));
     }
@@ -1372,7 +1345,7 @@ if (factoryList == NULL)
     }
 }
 
-struct customFactory *customFactoryFind(struct customPp *cpp,
+struct customFactory *customFactoryFind(char *genomeDb, struct customPp *cpp,
 	char *type, struct customTrack *track)
 /* Figure out factory that can handle this track.  The track is
  * loaded from the track line if any, and type is the type element
@@ -1407,6 +1380,7 @@ if ((wordCount != 3) || (!isdigit(row[0][0]) || !isdigit(row[1][0]) || !isdigit(
 }
 
 static void customTrackUpdateFromSettings(struct customTrack *track, 
+                                          char *genomeDb,
 					  char *line, int lineIx)
 /* replace settings in track with those from new track line */
 {
@@ -1454,6 +1428,7 @@ if (NULL == tdb->type)
 /* might be a user-submitted CT that we're reading for the first time */
 if (NULL == tdb->type)
     tdb->type = hashFindVal(hash, "type");
+track->genomeDb = cloneString(genomeDb);
 track->dbTrackType = hashFindVal(hash, "dbTrackType");
 track->dbTableName = hashFindVal(hash, "dbTableName");
 if (track->dbTableName)
@@ -1532,7 +1507,7 @@ if ((val = hashFindVal(hash, "maxChromName")) != NULL)
 else
     {
     char *ctDb = ctGenomeOrCurrent(track);
-    track->maxChromName = hGetMinIndexLengthDb(ctDb);
+    track->maxChromName = hGetMinIndexLength(ctDb);
     }
 if ((line != NULL) && !strstr(line, "tdbType"))
     {
@@ -1605,8 +1580,8 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 return NULL;
 }
 
-void customTrackUpdateFromConfig(struct customTrack *ct, char *config,
-                                struct slName **retBrowserLines)
+void customTrackUpdateFromConfig(struct customTrack *ct, char *genomeDb,
+                                 char *config, struct slName **retBrowserLines)
 /* update custom track from config containing track line and browser lines 
  * Return browser lines */
 {
@@ -1617,7 +1592,7 @@ char *line;
 struct slName *browserLines = NULL;
 while (lineFileNextReal(lf, &line))
     if (startsWithWord("track", line))
-        customTrackUpdateFromSettings(ct, line, 1);
+        customTrackUpdateFromSettings(ct, genomeDb, line, 1);
     else if (startsWithWord("browser", line))
         slNameAddTail(&browserLines, line);
     else
@@ -1654,7 +1629,7 @@ for (bl = ctBrowserLines(ct); bl != NULL; bl = bl->next)
 return (dyStringCannibalize(&ds));
 }
 
-static struct customTrack *trackLineToTrack(char *line, int lineIx)
+static struct customTrack *trackLineToTrack(char *genomeDb, char *line, int lineIx)
 /* Convert a track specification line to a custom track structure. */
 {
 /* Make up basic track with associated tdb.  Fill in settings
@@ -1663,7 +1638,7 @@ struct customTrack *track;
 AllocVar(track);
 struct trackDb *tdb = customTrackTdbDefault();	
 track->tdb = tdb;
-customTrackUpdateFromSettings(track, line, lineIx);
+customTrackUpdateFromSettings(track, genomeDb, line, lineIx);
 return track;
 }
 
@@ -1731,12 +1706,12 @@ if (setting)
 return trackDbSetting(ct->tdb, "genome");
 }
 
-static struct customTrack *customFactoryParseOptionalDb(char *text,
+static struct customTrack *customFactoryParseOptionalDb(char *genomeDb, char *text,
 	boolean isFile, struct slName **retBrowserLines,
 	boolean mustBeCurrentDb)
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  If mustBeCurrentDb, die if custom track 
- * is for some database other than hGetDb(). */
+ * is for some database other than genomeDb. */
 {
 struct customTrack *trackList = NULL, *track = NULL;
 char *line = NULL;
@@ -1746,7 +1721,7 @@ struct sqlConnection *ctConn = NULL;
 char *loadedFromUrl = NULL;
 boolean dbTrack = ctDbUseAll();
 if (dbTrack)
-    ctConn = sqlCtConn(TRUE);
+    ctConn = hAllocConn(CUSTOM_TRASH);
 
 struct lineFile *lf = customLineFile(text, isFile);
 
@@ -1765,7 +1740,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
     //char *type = NULL;
     if (startsWithWord("track", line))
         {
-	track = trackLineToTrack(line, cpp->fileStack->lineIx);
+	track = trackLineToTrack(genomeDb, line, cpp->fileStack->lineIx);
         }
     else if (trackList == NULL)
     /* In this case we handle simple files with a single track
@@ -1775,7 +1750,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
         safef(defaultLine, sizeof defaultLine, 
                         "track name='%s' description='%s'",
                         CT_DEFAULT_TRACK_NAME, CT_DEFAULT_TRACK_DESCR);
-        track = trackLineToTrack(defaultLine, 1);
+        track = trackLineToTrack(genomeDb, defaultLine, 1);
         customPpReuse(cpp, line);
 	}
     else
@@ -1791,10 +1766,10 @@ while ((line = customPpNextReal(cpp)) != NULL)
     if (mustBeCurrentDb)
 	{
 	if (ctDb == NULL)
-	    ctDb = hGetDb();
-	else if (differentString(ctDb, hGetDb()))
+	    ctDb = genomeDb;
+	else if (differentString(ctDb, genomeDb))
 	    errAbort("can't load %s data into %s custom tracks",
-		     ctDb, hGetDb());
+		     ctDb, genomeDb);
 	}
     struct customTrack *oneList = NULL, *oneTrack;
 
@@ -1829,7 +1804,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
         {
 	/* Load track from appropriate factory */
         char *type = track->tdb->type;
-	struct customFactory *fac = customFactoryFind(cpp, type, track);
+	struct customFactory *fac = customFactoryFind(genomeDb, cpp, type, track);
 	if (fac == NULL)
 	    {
 	    struct lineFile *lf = cpp->fileStack;
@@ -1916,24 +1891,24 @@ for (track = trackList; track != NULL; track = track->next)
 if (retBrowserLines != NULL)
     *retBrowserLines = browserLines;
 customPpFree(&cpp);
-sqlDisconnect(&ctConn);
+hFreeConn(&ctConn);
 return trackList;
 }
 
-struct customTrack *customFactoryParse(char *text, boolean isFile,
+struct customTrack *customFactoryParse(char *genomeDb, char *text, boolean isFile,
 	struct slName **retBrowserLines)
 /* Parse text into a custom set of tracks.  Text parameter is a
- * file name if 'isFile' is set.  Die if the track is not for hGetDb(). */
+ * file name if 'isFile' is set.  Die if the track is not for genomeDb. */
 {
-return customFactoryParseOptionalDb(text, isFile, retBrowserLines, TRUE);
+return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, TRUE);
 }
 
-struct customTrack *customFactoryParseAnyDb(char *text, boolean isFile,
+struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean isFile,
 					    struct slName **retBrowserLines)
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  Track does not have to be for hGetDb(). */
 {
-return customFactoryParseOptionalDb(text, isFile, retBrowserLines, FALSE);
+return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, FALSE);
 }
 
 static void readAndIgnore(char *fileName)
@@ -1972,7 +1947,7 @@ hashElFreeList(&fileSettings);
 return isLive;
 }
 
-void customFactoryTestExistence(char *fileName, boolean *retGotLive,
+void customFactoryTestExistence(char *genomeDb, char *fileName, boolean *retGotLive,
 				boolean *retGotExpired)
 /* Test existence of custom track fileName.  If it exists, parse it just 
  * enough to tell whether it refers to database tables and if so, whether 
@@ -1998,7 +1973,7 @@ struct customPp *cpp = customPpNew(lf);
 lf = NULL;
 
 if (dbTrack)
-    ctConn = sqlCtConn(TRUE);
+    ctConn = hAllocConn(CUSTOM_TRASH);
 
 /* Loop through this once for each track. */
 while ((line = customPpNextReal(cpp)) != NULL)
@@ -2012,7 +1987,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 
     if (startsWithWord("track", line))
         {
-	track = trackLineToTrack(line, cpp->fileStack->lineIx);
+	track = trackLineToTrack(genomeDb, line, cpp->fileStack->lineIx);
         }
     else if (trackList == NULL)
 	/* In this case we handle simple files with a single track
@@ -2022,7 +1997,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
         safef(defaultLine, sizeof defaultLine, 
 	      "track name='%s' description='%s'",
 	      CT_DEFAULT_TRACK_NAME, CT_DEFAULT_TRACK_DESCR);
-        track = trackLineToTrack(defaultLine, 1);
+        track = trackLineToTrack(genomeDb, defaultLine, 1);
         customPpReuse(cpp, line);
 	}
     else

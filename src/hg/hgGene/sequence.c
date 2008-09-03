@@ -15,7 +15,7 @@
 #include "hCommon.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.24 2008/08/27 17:49:26 kent Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.25 2008/09/03 19:18:50 markd Exp $";
 
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
@@ -134,7 +134,7 @@ dyStringPrintf(query, " or txEnd != %d)", curGeneEnd);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct sqlConnection *conn2 = hAllocConn();
+    struct sqlConnection *conn2 = hAllocConn(database);
     chrom = row[0];
     start = atoi(row[1]);
     end = atoi(row[2]);
@@ -194,7 +194,7 @@ char *table = genomeSetting("knownGene");
 struct sqlResult *sr;
 char **row;
 char query[256];
-boolean hasBin = hIsBinned(table);
+boolean hasBin = hIsBinned(sqlGetDatabase(conn), table);
 
 hPrintf("<TT><PRE>");
 safef(query, sizeof(query), 
@@ -206,7 +206,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     struct genePred *gene = genePredLoad(row+hasBin);
     struct bed *bed = bedFromGenePred(gene);
-    struct dnaSeq *seq = hSeqForBed(bed);
+    struct dnaSeq *seq = hSeqForBed(sqlGetDatabase(conn), bed);
     hPrintf(">%s (%s predicted mRNA)\n", geneId, geneName);
     writeSeqWithBreaks(stdout, seq->dna, seq->size, 50);
     dnaSeqFree(&seq);

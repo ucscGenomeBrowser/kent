@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.24 2008/07/08 16:05:26 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.25 2008/09/03 19:19:45 markd Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
@@ -71,9 +71,6 @@ errAbort(
 static struct hash *loadAllChromInfo(char *database)
 /* Load up all chromosome infos. */
 {
-char* host = cfgVal("db.host");		/* can not trust environment for */
-char* user = cfgVal("db.user");		/* these items since we may be in */
-char* password = cfgVal("db.password");	/* a customTrack db loader pipeline */
 struct chromInfo *el;
 struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
@@ -83,7 +80,7 @@ char **row;
 /*	be wary of customTrack db loader pipeline which has special
  *	environment variables for HGDB_HOST and so forth
  */
-conn = sqlConnectRemote(host, user, password, database);
+conn = hAllocConn(database);
 ret = newHash(0);
 
 sr = sqlGetResult(conn, "select * from chromInfo");
@@ -94,7 +91,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(ret, el->chrom, (void *)(& el->size));
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 return ret;
 }
 
@@ -290,8 +287,7 @@ char *tab = (char *)NULL;
 
 if (! noLoad)
     {
-    hSetDb(database);
-    conn = hAllocConn();
+    conn = hAllocConn(database);
     verbose(1, "Connected to database %s for track %s\n", database, track);
     }
 
@@ -308,7 +304,7 @@ if ((!oldTable) && (!noLoad))
     if (maxChromNameLength)
 	indexLen = maxChromNameLength;
     else
-	indexLen = hGetMinIndexLength();
+	indexLen = hGetMinIndexLength(database);
     verbose(2, "INDEX chrom length: %d\n", indexLen);
 
     /* Create definition statement. */
@@ -368,7 +364,7 @@ if (! noLoad)
     if (! noHistory)
 	hgHistoryComment(conn, comment);
     verbose(2, "#\t%s\n", comment);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     /*	if temp dir specified, unlink file to make it disappear */
     if ((char *)NULL != tmpDir)
 	unlink(tab);

@@ -101,8 +101,6 @@ proteinDataDate = argv[1];
 kgTempDb = argv[2];
 db = argv[3];
 
-/* Genome db needed for hRnaSeqAndIdx(): */
-hSetDb(db);
 
 sprintf(spDB, "sp%s", proteinDataDate);
 sprintf(proteinsDB, "proteins%s", proteinDataDate);
@@ -111,8 +109,8 @@ sprintf(gbTempDB, "%s", kgTempDb);
 IN  = fopen("protRef.lis", "r"); 
 OUT = fopen("rawJobList", "w");
     
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn2= hAllocConn(db);
+conn3= hAllocConn(db);
    
 proteinCount = 0; 
 snprintf(dirName, (size_t) sizeof(dirName), "./out" );
@@ -130,11 +128,11 @@ while (fgets(line, 1000, IN) != NULL)
     printf(">%s\n", proteinID);
 
     sprintf(cond_str, "acc='%s'", proteinID);
-    aaSeq = sqlGetField(conn3, spDB, "protein","val", cond_str);
+    aaSeq = sqlGetField(spDB, "protein","val", cond_str);
 
     if (aaSeq == NULL)
     	{
-	aaSeq = sqlGetField(conn3, spDB, "varProtein","val", cond_str);
+	aaSeq = sqlGetField(spDB, "varProtein","val", cond_str);
 	}
 			    
     if (aaSeq == NULL)

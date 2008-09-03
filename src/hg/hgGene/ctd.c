@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: ctd.c,v 1.7 2008/03/08 00:18:34 fanhsu Exp $";
+static char const rcsid[] = "$Id: ctd.c,v 1.8 2008/09/03 19:18:49 markd Exp $";
 
 static boolean ctdExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -23,7 +23,7 @@ if (sqlTableExists(conn, "kgXref") == FALSE) return FALSE;
 if (sqlTableExists(conn, "hgFixed.ctdSorted") == TRUE)
     {
     safef(condStr, sizeof(condStr), "x.geneSymbol=c.GeneSymbol and kgId='%s' limit 1", geneId);
-    geneSymbol = sqlGetField(conn, database, "kgXref x, hgFixed.ctdSorted c", 
+    geneSymbol = sqlGetField(database, "kgXref x, hgFixed.ctdSorted c", 
     			     "ChemicalId", condStr);
     if (geneSymbol != NULL) return(TRUE);
     }

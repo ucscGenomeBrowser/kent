@@ -2028,15 +2028,6 @@ int main(int argc, char *argv[])
 struct lineFile *pf, *cf, *lf, *vf=NULL, *df=NULL;
 FILE *of, *in=NULL, *mm=NULL, *cs=NULL, *un=NULL;
 char *faFile, *db, filename[PATH_LEN], *vfName = NULL, *dfName = NULL;
-char *user, *password;
-
-/* try read-only first */
-user = cfgOption("ro.user");
-if (user == NULL) 
-    user = cfgOption("db.user");
-password = cfgOption("ro.password");
-if (password == NULL)
-    password = cfgOption("db.password");
 
 optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
@@ -2102,9 +2093,6 @@ if (codonSubReport)
     cs = mustOpen(filename, "w");
     }
 
-hSetDb(db);
- if (getenv("HGDB_HOST") == NULL)
-     hSetDbConnect("hgwdev.cse.ucsc.edu", db, user, password);
 verbose(2, "Reading CDS file\n");
 readCds(cf);
 verbose(2, "Reading FA file\n");

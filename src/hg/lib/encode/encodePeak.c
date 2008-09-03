@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encodePeak.c,v 1.4 2008/08/26 11:22:35 aamp Exp $";
+static char const rcsid[] = "$Id: encodePeak.c,v 1.5 2008/09/03 19:19:28 markd Exp $";
 
 struct encodePeak *encodePeakLoad(char **row)
 /* Load a encodePeak from row fetched with select * from encodePeak
@@ -187,10 +187,10 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-int encodePeakNumFields(char *trackName)
+int encodePeakNumFields(char *db, char *trackName)
 /* Just quickly count th number of fields. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct slName *fieldNames = sqlFieldNames(conn, trackName);
 int numFields = slCount(fieldNames);
 hFreeConn(&conn);
@@ -200,10 +200,10 @@ slFreeList(&fieldNames);
 return numFields;
 }
 
-enum encodePeakType encodePeakInferType(struct trackDb *tdb)
+enum encodePeakType encodePeakInferType(char *db, struct trackDb *tdb)
 /* Given the trackDb figure out the peak type. Returns zero on error. */ 
 {
-int numFields = encodePeakNumFields(tdb->tableName);
+int numFields = encodePeakNumFields(db, tdb->tableName);
 if (!tdb->type)
     errAbort("unknown type in table %s", tdb->tableName);
 if (sameString(tdb->type, "encodePeak"))

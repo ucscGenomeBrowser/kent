@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.13 2008/08/27 23:06:37 kate Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.14 2008/09/03 19:19:01 markd Exp $";
 
 struct bedGraphItem
 /* A bedGraph track item. */
@@ -77,13 +77,13 @@ if (tg->customPt)
     {
     struct customTrack *ct = (struct customTrack *) tg->customPt;
     tableName = ct->dbTableName;
-    conn = sqlCtConn(TRUE);
+    conn = hAllocConn(CUSTOM_TRASH);
     }
 else 
 #endif /* GBROWSE */
     {
     tableName = tg->mapName;
-    conn = hAllocConn();
+    conn = hAllocConn(database);
     }
 
 sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd, NULL,
@@ -130,7 +130,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
 sqlFreeResult(&sr);
-hFreeOrDisconnect(&conn);
+hFreeConn(&conn);
 
 slReverse(&bgList);
 tg->items = bgList;

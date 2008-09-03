@@ -77,7 +77,7 @@ for (axt = *axtList; axt != NULL; axt = axt->next)
     if (sameString(axt->qName , "gap"))
         qSize = axt->qEnd;
     else
-        qSize = hdbChromSize(queryDb, axt->qName);
+        qSize = hChromSize(queryDb, axt->qName);
 
     reverseComplement(axt->qSym, axt->symCount);
     reverseComplement(axt->tSym, axt->symCount);
@@ -157,7 +157,7 @@ char *getAxtFileName(char *chrom, char *toDb, char *alignment, char *fromDb)
 {
 char query[256];
 struct sqlResult *sr;
-struct sqlConnection *conn = hAllocConnDb(fromDb);
+struct sqlConnection *conn = hAllocConn(fromDb);
 char **row;
 struct axtInfo *ai = NULL;
 

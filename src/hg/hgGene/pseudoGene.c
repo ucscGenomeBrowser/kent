@@ -10,7 +10,7 @@
 #include "bed.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pseudoGene.c,v 1.4 2006/07/26 15:32:05 fanhsu Exp $";
+static char const rcsid[] = "$Id: pseudoGene.c,v 1.5 2008/09/03 19:18:50 markd Exp $";
 
 static boolean pseudoGeneExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -19,7 +19,7 @@ static boolean pseudoGeneExists(struct section *section,
 boolean result;
 
 result = FALSE;
-if (hTableExists("pseudoGeneLink"))
+if (hTableExists(sqlGetDatabase(conn), "pseudoGeneLink"))
     {
     struct sqlResult *sr;
     char **row;
@@ -65,11 +65,11 @@ while ((row = sqlNextRow(sr)) != NULL)
    
     desc = emptyStr;
     safef(condStr, sizeof(condStr), "acc='%s'", name);
-    descID= sqlGetField(NULL, database, "gbCdnaInfo", "description", condStr);
+    descID= sqlGetField(database, "gbCdnaInfo", "description", condStr);
     if (descID != NULL)
     	{
     	safef(condStr, sizeof(condStr), "id=%s", descID);
-    	desc = sqlGetField(NULL, database, "description", "name", condStr);
+    	desc = sqlGetField(database, "description", "name", condStr);
 	if (desc == NULL) desc = emptyStr;
 	}
    	

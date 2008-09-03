@@ -30,7 +30,7 @@ struct hash *getClinicalData(char *tableName)
 {
 struct hash *ret = NULL;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct simpleClinical *clinicalItem = NULL;
@@ -1192,28 +1192,13 @@ for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
 void loadMultScoresBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
-struct sqlConnection *conn;
+struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
 int itemCount =0;
 struct bed *bedList = NULL, *bed;
 enum trackVisibility vis = tg->visibility;
-char *logicalDb;
-boolean isRegularDb; 
-
-logicalDb = trackDbSetting(tg->tdb, "logicalDb");
-
-if (logicalDb == NULL)
-    {
-    isRegularDb = TRUE;
-    conn = hAllocConn();
-    }
-else
-    {
-    isRegularDb = FALSE;
-    conn = hConnectLogicalDb(logicalDb);
-    }
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1222,14 +1207,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     itemCount++;
     }
 sqlFreeResult(&sr);
-if (isRegularDb)
-    {
-    hFreeConn(&conn);
-    }
-else
-    {
-    sqlDisconnect(&conn);
-    }
+hFreeConn(&conn);
 slReverse(&bedList);
 
 #ifdef NEVER

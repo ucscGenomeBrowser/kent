@@ -10,7 +10,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.22 2008/08/20 04:15:48 markd Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.23 2008/09/03 19:18:50 markd Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -140,27 +140,29 @@ if (id != NULL)
 	return id;
     else
 	{
-	struct hTableInfo *hti = hFindTableInfoDb(otherOrg->db, NULL,
-						  otherOrg->geneTable);
+	struct hTableInfo *hti = hFindTableInfo(otherOrg->db, NULL,
+					        otherOrg->geneTable);
 	if (hti != NULL)
 	    {
+            struct sqlConnection *otherConn = hAllocConn(otherOrg->db);
 	    char *pos = NULL;
 	    char query[512];
 	    safef(query, sizeof(query),
-		  "select concat(%s, ':', %s+1, '-', %s) from %s.%s "
+		  "select concat(%s, ':', %s+1, '-', %s) from %s "
 		  "where %s = '%s'",
 		  hti->chromField, hti->startField, hti->endField,
-		  otherOrg->db, otherOrg->geneTable, hti->nameField, id);
-	    pos = sqlQuickString(conn, query);
+		  otherOrg->geneTable, hti->nameField, id);
+	    pos = sqlQuickString(otherConn, query);
 	    if (pos != NULL)
 		{
 		char posPlus[2048];
 		safef(posPlus, sizeof(posPlus), "%s&%s=%s&hgFind.matches=%s",
 		      pos,
-		      otherOrg->geneTable, hTrackOpenVis(otherOrg->geneTable),
+		      otherOrg->geneTable, hTrackOpenVis(sqlGetDatabase(conn), otherOrg->geneTable),
 		      id);
 		return cloneString(posPlus);
 		}
+            hFreeConn(&otherConn);
 	    }
 	}
     }
@@ -176,11 +178,11 @@ char *protId = NULL;
 if (otherOrg->db != NULL && otherId != NULL && otherOrg->idToProtIdSql != NULL
     && sqlDatabaseExists(otherOrg->db))
     {
-    struct sqlConnection *conn = sqlConnect(otherOrg->db);
+    struct sqlConnection *conn = hAllocConn(otherOrg->db);
     char query[512];
     safef(query, sizeof(query), otherOrg->idToProtIdSql, otherId);
     protId = sqlQuickString(conn, query);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     }
 if (protId == NULL)
     {
@@ -199,7 +201,7 @@ if (localId != NULL)
     {
     if (otherOrg->otherIdSql && sqlDatabaseExists(otherOrg->db))
 	{
-	struct sqlConnection *conn = sqlConnect(otherOrg->db);
+	struct sqlConnection *conn = hAllocConn(otherOrg->db);
 	char query[512];
 	safef(query, sizeof(query), otherOrg->otherIdSql, localId);
 	otherId = sqlQuickString(conn, query);
@@ -208,7 +210,7 @@ if (localId != NULL)
 	    safef(query, sizeof(query), otherOrg->otherIdSql2, localId);
 	    otherId = sqlQuickString(conn, query);
 	    }
-	sqlDisconnect(&conn);
+	hFreeConn(&conn);
 	}
     else
         otherId = cloneString(localId);

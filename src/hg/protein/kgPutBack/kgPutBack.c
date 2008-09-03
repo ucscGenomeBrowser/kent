@@ -48,9 +48,9 @@ putBackTable= argv[4];
 outfileName = argv[5];
 
 outf = mustOpen(outfileName, "w");
-conn = hAllocConn();
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn = hAllocConn(genomeDb);
+conn2= hAllocConn(genomeDb);
+conn3= hAllocConn(genomeDb);
 
 icnt = 1;
 /* go through each put back RefSeq */

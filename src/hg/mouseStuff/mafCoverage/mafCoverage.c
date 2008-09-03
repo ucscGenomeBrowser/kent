@@ -14,7 +14,7 @@
 
 #define MAXALIGN 30  /* max number of species to align */
 #define DEFCOUNT 3   /* require 3 species to match before counting as covered */
-static char const rcsid[] = "$Id: mafCoverage.c,v 1.6 2007/03/04 17:19:07 kent Exp $";
+static char const rcsid[] = "$Id: mafCoverage.c,v 1.7 2008/09/03 19:20:36 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -35,11 +35,10 @@ struct optionSpec options[] = {
    {"restrict", OPTION_STRING},
    {NULL,0}
 };
-struct chromInfo *getAllChromInfo()
+struct chromInfo *getAllChromInfo(char *database)
 /* Return list of info for all chromosomes. */
 {
-struct sqlConnection *conn = hAllocConn();
-//struct sqlConnection *conn = sqlConnectRemote(hGetDb());
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct chromInfo *ci, *ciList = NULL;
@@ -175,14 +174,13 @@ if (totalCov > 0 || cs->totalAlign > 0 || tenOrMore > 0 || hundredOrMore > 0)
     }
 }
 
-void getChromSizes(struct hash **retHash, 
+void getChromSizes(char *database, struct hash **retHash, 
 	struct chromSizes **retList)
 /* Return hash of chromSizes.  Also calculates size without
  * gaps. */
 {
-struct sqlConnection *conn = hAllocConn();
-//struct sqlConnection *conn = sqlConnectReadOnly(hGetDb());
-struct chromInfo *ci, *ciList = getAllChromInfo();
+struct sqlConnection *conn = hAllocConn(database);
+struct chromInfo *ci, *ciList = getAllChromInfo(database);
 struct sqlResult *sr;
 char **row;
 struct chromSizes *cs, *csList = NULL;
@@ -277,12 +275,11 @@ for (r = restrictList; r != NULL; r = r->next)
     }
 }
 
-void restrictGaps(UBYTE *cov, int size, char *chrom)
+void restrictGaps(char *database, UBYTE *cov, int size, char *chrom)
 /* Mark gaps as off-limits. */
 {
 int rowOffset;
-struct sqlConnection *conn = hAllocConn();
-//struct sqlConnection *conn = sqlConnectReadOnly(hGetDb());
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
 char **row;
 int s,e;
@@ -312,7 +309,7 @@ return count;
 }
 
 
-void scanMaf(char *fileName, struct hash *chromHash, boolean restrict, int spCount)
+void scanMaf(char *database, char *fileName, struct hash *chromHash, boolean restrict, int spCount)
 /* Scan through maf file (which must be sorted by
  * chromosome) and fill in coverage histograms on 
  * each chromosome. */
@@ -358,9 +355,9 @@ while ((ali = mafNext(mf)) != NULL)
 	    restrictCov(align, cs->totalSize, cs->restrictList);
 	    restrictCov(id, cs->totalSize, cs->restrictList);
             }
-	restrictGaps(cov, cs->totalSize, chrom);
-	restrictGaps(align, cs->totalSize, chrom);
-	restrictGaps(id, cs->totalSize, chrom);
+	restrictGaps(database, cov, cs->totalSize, chrom);
+	restrictGaps(database, align, cs->totalSize, chrom);
+	restrictGaps(database, id, cs->totalSize, chrom);
 	cs->unrestrictedSize = calcUnrestrictedSize(cov, cs->totalSize);
 	lastCs = cs;
 	}
@@ -500,12 +497,11 @@ void mafCoverage(char *database, char *mafFile, char *restrictFile, int spCount)
 struct chromSizes *cs, *csList = NULL;
 struct hash *chromHash = NULL;
 struct chromSizes *genome;
-hSetDb(database);
 
-getChromSizes(&chromHash, &csList);
+getChromSizes(database, &chromHash, &csList);
 if (restrictFile != NULL)
     addRestrictions(chromHash, restrictFile);
-scanMaf(mafFile, chromHash, restrictFile != NULL, spCount);
+scanMaf(database, mafFile, chromHash, restrictFile != NULL, spCount);
 genome = genoSize(csList);
 showStats(genome);
 

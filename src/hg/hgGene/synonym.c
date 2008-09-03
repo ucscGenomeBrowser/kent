@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: synonym.c,v 1.5 2008/07/11 22:00:58 hiram Exp $";
+static char const rcsid[] = "$Id: synonym.c,v 1.6 2008/09/03 19:18:50 markd Exp $";
 
 static void printOurMrnaUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
@@ -227,7 +227,7 @@ if (refSeqAcc[0] != 0)
 else if (mrnaAcc[0] != 0)
     {
     safef(condStr, sizeof(condStr), "acc = '%s'", mrnaAcc);
-    if (sqlGetField(conn, database, "gbCdnaInfo", "acc", condStr) != NULL)
+    if (sqlGetField(database, "gbCdnaInfo", "acc", condStr) != NULL)
         {
     	hPrintf("<B>Representative RNA: </B> <A HREF=\"");
     	printOurMrnaUrl(stdout, mrnaAcc);
@@ -242,13 +242,14 @@ else if (mrnaAcc[0] != 0)
 if (protAcc != NULL)
     {
     kgProteinID = cloneString("");
-    if (hTableExists("knownGene") && (!sameWord(cartOptionalString(cart, hggChrom),"none")))
+    if (hTableExists(sqlGetDatabase(conn), "knownGene")
+        && (!sameWord(cartOptionalString(cart, hggChrom),"none")))
     	{
     	safef(condStr, sizeof(condStr), "name = '%s' and chrom = '%s' and txStart=%s and txEnd=%s", 
 	        id, cartOptionalString(cart, hggChrom), 
     	        cartOptionalString(cart, hggStart), 
 		cartOptionalString(cart, hggEnd));
-    	kgProteinID = sqlGetField(conn, database, "knownGene", "proteinID", condStr);
+    	kgProteinID = sqlGetField(database, "knownGene", "proteinID", condStr);
     	}
 
     hPrintf("<B>Protein: ");

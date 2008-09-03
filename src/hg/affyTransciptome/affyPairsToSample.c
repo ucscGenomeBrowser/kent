@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: affyPairsToSample.c,v 1.3 2003/05/06 07:22:13 kate Exp $";
+static char const rcsid[] = "$Id: affyPairsToSample.c,v 1.4 2008/09/03 19:18:11 markd Exp $";
 
 void usage()
 /* Give the user a hint about how to use this program. */
@@ -83,7 +83,6 @@ void loadAoHash(struct hash *aoHash, struct affyOffset *aoList)
 /* put the aoList into the hash */
 {
 struct affyOffset *ao = NULL;
-char buff[128];
 for(ao = aoList; ao != NULL; ao = ao->next)
     {
     hashAddUnique(aoHash, ao->piece, ao);
@@ -205,7 +204,6 @@ void affyPairsToSample(struct hash *liftHash, int grouping, char *pairsIn)
 struct affyPairs *apList = NULL, *ap = NULL;
 struct sample *sampList = NULL, *samp = NULL;
 struct sample *groupedList = NULL;
-char *fileRoot = NULL;
 char buff[10+strlen(pairsIn)];
 FILE *out = NULL;
 fprintf(stderr, ".");

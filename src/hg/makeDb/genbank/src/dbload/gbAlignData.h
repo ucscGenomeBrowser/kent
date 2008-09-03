@@ -35,20 +35,20 @@ void gbAlignDataSetStatus(struct gbStatusTbl* statusTbl);
 void gbAlignDataDbLoad(struct sqlConnection *conn);
 /* load the alignments into the database */
 
-void gbAlignDataDeleteFromTables(struct sqlConnection *conn,
+void gbAlignDataDeleteFromTables(char *db, struct sqlConnection *conn,
                                  unsigned srcDb, unsigned type,
                                  struct sqlDeleter* deleter,
                                  struct dbLoadOptions* options);
 /* delete alignment data from tables */
 
-void gbAlignDataDeleteOutdated(struct sqlConnection *conn,
+void gbAlignDataDeleteOutdated(char *db, struct sqlConnection *conn,
                                struct gbSelect* select, 
                                struct gbStatusTbl* statusTbl,
                                struct dbLoadOptions* options,
                                char *tmpDir);
 /* delete outdated alignment data */
 
-void gbAlignRemove(struct sqlConnection *conn, struct dbLoadOptions* options,
+void gbAlignRemove(char *db, struct sqlConnection *conn, struct dbLoadOptions* options,
                    struct gbSelect* select, struct sqlDeleter* deleter);
 /* Delete all alignments for the selected categories.  Used when reloading
  * alignments.*/

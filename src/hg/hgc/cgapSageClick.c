@@ -198,7 +198,7 @@ webPrintLinkTableEnd();
 void doCgapSage(struct trackDb *tdb, char *itemName)
 /* CGAP SAGE details. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct cgapSage *tag = cgapSageTagLoad(conn, tdb);
 struct hash *libHash = getLibHash(conn);
 char *libId = cgiUsualString("lib", NULL);

@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "rmskOut.h"
 
-static char const rcsid[] = "$Id: hgLoadOut.c,v 1.18 2007/05/16 20:51:37 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadOut.c,v 1.19 2008/09/03 19:19:44 markd Exp $";
 
 char *createRmskOut = "CREATE TABLE %s (\n"
 "   bin smallint unsigned not null,     # bin index field for range queries\n"
@@ -231,7 +231,7 @@ while (lineFileNext(lf, &line, &lineSize))
     }
 }
 
-void loadOneTable(struct sqlConnection *conn, char *tempName, char *tableName)
+void loadOneTable(char *database, struct sqlConnection *conn, char *tempName, char *tableName)
 /* Load .tab file tempName into tableName and remove tempName. */
 {
 struct dyString *query = newDyString(1024);
@@ -254,7 +254,7 @@ if (!noSplit)
     }
 else
     {
-    int indexLen = hGetMinIndexLength();
+    int indexLen = hGetMinIndexLength(database);
     dyStringPrintf(query, "   INDEX(genoName(%d),bin))\n", indexLen);
     }
 
@@ -268,7 +268,7 @@ sqlUpdate(conn, query->string);
 remove(tempName);
 }
 
-void processOneOut(struct sqlConnection *conn, char *rmskFile, char *suffix)
+void processOneOut(char *database, struct sqlConnection *conn, char *rmskFile, char *suffix)
 /* Read one RepeatMasker .out file and load it into database. */
 {
 verbose(1, "Processing %s\n", rmskFile);
@@ -287,7 +287,7 @@ if (tabFileName == NULL)
     chopSuffix(base);
     safef(tableName, sizeof(tableName), "%s_%s", base, suffix);
     closeFiles();
-    loadOneTable(conn, defaultTempName, tableName);
+    loadOneTable(database, conn, defaultTempName, tableName);
     }
 }
 
@@ -301,10 +301,10 @@ char tableName[256];
 char *chrom = hel->name;
 safef(tempName, sizeof(tempName), "%s_%s", chrom, defaultTempName);
 safef(tableName, sizeof(tableName), "%s_%s", chrom, suffix);
-loadOneTable(theConn, tempName, tableName);
+loadOneTable(sqlGetDatabase(theConn), theConn, tempName, tableName);
 }
 
-void loadSplitTables(struct sqlConnection *conn)
+void loadSplitTables(char *database, struct sqlConnection *conn)
 /* For each chrom in chromHash, load its tempfile into table chrom_suffix. */
 {
 theConn = conn;
@@ -320,8 +320,7 @@ int i;
 
 if (tabFileName == NULL)
     {
-    hSetDb(database);
-    conn = hAllocConn();
+    conn = hAllocConn(database);
     verbose(2,"#\thgLoadOut: connected to database: %s\n", database);
     }
 for (i=0; i<rmskCount; ++i)
@@ -329,15 +328,15 @@ for (i=0; i<rmskCount; ++i)
     if (split || noSplit)
 	readOneOut(rmskFileNames[i]);
     else
-	processOneOut(conn, rmskFileNames[i], suffix);
+	processOneOut(database, conn, rmskFileNames[i], suffix);
     }
 closeFiles();
 if (tabFileName == NULL)
     {
     if (split)
-	loadSplitTables(conn);
+	loadSplitTables(database, conn);
     else if (noSplit)
-	loadOneTable(conn, defaultTempName, suffix);
+	loadOneTable(database, conn, defaultTempName, suffix);
     }
 sqlDisconnect(&conn);
 if (badRepCnt > 0)

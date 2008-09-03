@@ -770,8 +770,8 @@ char *acemblyEnumToString(enum acemblyOptEnum x);
 void acemblyDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
-void hCompositeUi(struct cart *cart, struct trackDb *tdb,
-          char *primarySubtrack, char *fakeSubmit, char *formName, char *db);
+void hCompositeUi(char *db, struct cart *cart, struct trackDb *tdb,
+		  char *primarySubtrack, char *fakeSubmit, char *formName);
 /* UI for composite tracks: subtrack selection.  If primarySubtrack is
  * non-NULL, don't allow it to be cleared and only offer subtracks
  * that have the same type.  If fakeSubmit is non-NULL, add a hidden
@@ -824,7 +824,7 @@ void compositeViewControlNameFree(char **name);
 void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed);
 /* UI for the wiggle track */
 
-void scoreCfgUi(struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
+void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
 
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);

@@ -184,7 +184,7 @@ if (!startsWith("retroAugust",mi->geneSet))
 /* construct URL to browser */
 safef(srcGeneUrl, sizeof(srcGeneUrl),
       "../cgi-bin/hgTracks?db=%s&position=%s:%d-%d",
-       hGetDb(), mi->pg->gChrom, mi->pg->gStart, mi->pg->gEnd);
+       database, mi->pg->gChrom, mi->pg->gStart, mi->pg->gEnd);
 
 printf("<TABLE class=\"transMap\">\n");
 printf("<CAPTION>Source gene</CAPTION>\n");
@@ -225,9 +225,9 @@ struct psl *psl = NULL, *pslList = NULL;
 boolean hasBin;
 char splitTable[64];
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
-hFindSplitTable(seqName, table, splitTable, &hasBin);
+hFindSplitTable(database, seqName, table, splitTable, &hasBin);
 safef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s' and tEnd > %d and tStart < %d", splitTable, qName, tName, tStart, tEnd);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -390,12 +390,12 @@ struct psl *pslList = NULL;
 char query[512];
 if (startsWith("August",mi->geneSet))
     {
-    if (hTableExists("augustusXAli"))
+    if (hTableExists(database, "augustusXAli"))
         {
         *table = cloneString( "augustusXAli");
         pslList = loadPslRangeT(*table, mi->seqId, pg->gChrom, pg->gStart, pg->gEnd);
         }
-    else if (hTableExists("augustusX"))
+    else if (hTableExists(database, "augustusX"))
         {
         struct sqlResult *sr;
         char **row;
@@ -416,7 +416,7 @@ if (startsWith("August",mi->geneSet))
         }
 
     }
-else if (hTableExists("all_mrna"))
+else if (hTableExists(database, "all_mrna"))
     {
     char parent[255];
     char *dotPtr ;
@@ -612,7 +612,7 @@ chopSuffix(name);
 safef(query, sizeof(query), 
         "select concat(exonFrames,'(',cdsStart,')') from rbRetroParent where name like '%s%%' and chrom = '%s'" , 
         name, pg->chrom);
-if (hTableExists("rbRetroParent"))
+if (hTableExists(database, "rbRetroParent"))
     {
     if ( sqlQuickString(conn, query) != NULL)
         printf("<TR><TH>Frames of mapped parent %s (start)<TD>%s</TR>\n",  
@@ -665,7 +665,7 @@ pslFreeList(&psl);
 void retroClickHandler(struct trackDb *tdb, char *mappedId)
 /* Handle click on a transMap tracks */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct mappingInfo *mi = mappingInfoNew(conn, tdb->tableName, mappedId);
 struct psl *pslList = NULL;
 char *table;
@@ -722,7 +722,7 @@ safef(query, sizeof(query),
       "select cds.name "
       "from %s.gbCdnaInfo, %s.cds "
       "where gbCdnaInfo.acc=\"%s\" and gbCdnaInfo.cds=cds.id",
-      hGetDb(), hGetDb(), mi->gbAcc);
+      database, database, mi->gbAcc);
 
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -745,7 +745,7 @@ if (mi->suffix == NULL)
     safef(rootTable, sizeof(rootTable), "%s%sAli", mi->tblPre, mi->geneSet);
 else
     safef(rootTable, sizeof(rootTable), "%s%sAli%s", mi->tblPre, mi->geneSet,mi->suffix);
-hFindSplitTable(seqName, rootTable, table, &hasBin);
+hFindSplitTable(database, seqName, rootTable, table, &hasBin);
 
 safef(query, sizeof(query), "select * from %s where qName = '%s' and tStart = %d",
       table, mi->pg->name, start);
@@ -762,7 +762,7 @@ void retroShowCdnaAli(char *mappedId)
 char *track = cartString(cart, "aliTrack");
 char *table = cartString(cart, "table");
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlConnection *defDbConn = NULL;
 struct mappingInfo *mi = mappingInfoNew(conn, table, mappedId);
 struct genbankCds cds = getCds(conn, mi);
@@ -782,13 +782,13 @@ if (startsWith("August",mi->geneSet))
     safef(acc, sizeof(acc), "aug-%s.T1",mi->seqId);
 else
     safef(acc, sizeof(acc), "%s.%d",mi->seqId, mi->gbCurVer);
-rnaSeq = hDnaSeqGet(conn, acc, "retroSeq", "retroExtFile");
+rnaSeq = hDnaSeqGet(database, acc, "retroSeq", "retroExtFile");
 if (rnaSeq == NULL)
     {
-    rnaSeq = hDnaSeqGet(conn, acc, "seq", "extFile");
+    rnaSeq = hDnaSeqGet(database, acc, "seq", "extFile");
     if (rnaSeq == NULL)
         errAbort("can't get mRNA sequence from %s prefix %s for %s from retroSeq", 
-            hGetDbName(), mi->geneSet, acc);
+            database, mi->geneSet, acc);
     }
 sqlDisconnect(&defDbConn);
 

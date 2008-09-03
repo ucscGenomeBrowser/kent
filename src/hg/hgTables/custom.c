@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.36 2008/05/27 23:48:28 hiram Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.37 2008/09/03 19:18:58 markd Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -24,7 +24,7 @@ struct customTrack *getCustomTracks()
 //fprintf(stdout,"database %s in cart %s", database, cartString(cart, "db"));
 cartSetString(cart, "db", database);
 if (theCtList == NULL)
-    theCtList = customTracksParseCart(cart, &browserLines, NULL);
+    theCtList = customTracksParseCart(database, cart, &browserLines, NULL);
 return(theCtList);
 }
 
@@ -68,6 +68,7 @@ tdb->url = ctUrl;
 
 AllocVar(ct);
 ct->tdb = tdb;
+ct->genomeDb = cloneString(database);
 ct->fieldCount = fields;
 ct->needsLift = FALSE;
 ct->fromPsl = FALSE;
@@ -552,7 +553,7 @@ if (ct->dbTrack)
     char query[512];
     int rowOffset;
     char **row;
-    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     struct sqlResult *sr = NULL;
 
     safef(query, sizeof(query), "select * from %s", ct->dbTableName);
@@ -570,7 +571,7 @@ if (ct->dbTrack)
 	    }
 	}
     sqlFreeResult(&sr);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     }
 else
     {
@@ -729,7 +730,7 @@ void doRemoveCustomTrack(struct sqlConnection *conn)
 getCustomTracks();
 if (theCtList)
     removeNamedCustom(&theCtList, curTable);
-customTracksSaveCart(cart, theCtList);
+customTracksSaveCart(database, cart, theCtList);
 initGroupsTracksTables(conn);
 doMainPage(conn);
 }

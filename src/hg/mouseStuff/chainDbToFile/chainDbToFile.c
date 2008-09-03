@@ -9,7 +9,7 @@
 #include "chain.h"
 #include "chainDb.h"
 
-static char const rcsid[] = "$Id: chainDbToFile.c,v 1.2 2005/01/10 00:37:17 kent Exp $";
+static char const rcsid[] = "$Id: chainDbToFile.c,v 1.3 2008/09/03 19:20:34 markd Exp $";
 
 static struct optionSpec options[] = {
 /*   {"option", OPTION_STRING}, */
@@ -31,7 +31,7 @@ errAbort(
 }
 
 
-struct hash *hashLinks(char *chainTblName)
+struct hash *hashLinks(char *database, char *chainTblName)
 /* Read in all chain links, translate to block lists, and hash by 
  * tName.chainId.
  * chainDb.c has chainAddBlocks -- but that's one SQL query per chain,
@@ -42,7 +42,7 @@ struct hash *hashLinks(char *chainTblName)
 {
 struct hash *h = newHash(20);
 struct hashEl *hel = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[256];
@@ -81,12 +81,12 @@ int sortBoxInTStart(const void *pa, const void *pb)
 return((*(struct cBlock **)pa)->tStart - (*(struct cBlock **)pb)->tStart);
 }
 
-void chainDbToFile(char *chainTable, char *outName)
+void chainDbToFile(char *database, char *chainTable, char *outName)
 /* chainDbToFile - translate a chain's db representation back to file. */
 {
-struct slName *chainTables = hSplitTableNames(chainTable);
+struct slName *chainTables = hSplitTableNames(database, chainTable);
 struct slName *chainTbl = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[256];
@@ -94,8 +94,8 @@ FILE *f = mustOpen(outName, "w");
 
 for (chainTbl = chainTables;  chainTbl != NULL;  chainTbl = chainTbl->next)
     {
-    boolean hasBin = hOffsetPastBin(NULL, chainTbl->name);
-    struct hash *h = hashLinks(chainTbl->name);
+    boolean hasBin = hOffsetPastBin(database, NULL, chainTbl->name);
+    struct hash *h = hashLinks(database, chainTbl->name);
     safef(query, sizeof(query), "select * from %s", chainTbl->name);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -134,8 +134,7 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 
-hSetDb(argv[1]);
-chainDbToFile(argv[2], argv[3]);
+chainDbToFile(argv[1], argv[2], argv[3]);
 
 return 0;
 }

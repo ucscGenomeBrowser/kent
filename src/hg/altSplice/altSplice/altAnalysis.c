@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.17 2007/01/08 19:23:34 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.18 2008/09/03 19:18:13 markd Exp $";
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
 static int minConfidence = 0;
@@ -1210,7 +1210,7 @@ fprintf(out, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
 	"downStreamCons");
 }
 
-float aveSScoreForRegion(char *chrom, int chromStart, int chromEnd)
+float aveSScoreForRegion(char *db, char *chrom, int chromStart, int chromEnd)
 {
 float currentSum = 0;
 int count = 0;
@@ -1218,13 +1218,13 @@ float ave = 0;
 int sPos = 0;
 struct sample *sList=NULL, *s = NULL;
 char *tableName = optionVal("sampleTable", "hg15Mm3L");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr=NULL;
 char **row;
 char buff[256];
 int rowOffset=0;
 safef(buff,sizeof(buff),"%s_%s",chrom, tableName);
-if(hTableExists(buff))
+if(hTableExists(db, buff))
     {
     sr = hRangeQuery(conn, tableName, chrom, chromStart, chromEnd, NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -1257,26 +1257,26 @@ else
 return ave;
 }
 
-void fillInSscores(struct altSpliceSite *as, int edge)
+void fillInSscores(char *db, struct altSpliceSite *as, int edge)
 {
 int offSet = flankingSize;
-as->altCons[edge] = aveSScoreForRegion(as->chrom, as->altBpStarts[edge], as->altBpEnds[edge]);
+as->altCons[edge] = aveSScoreForRegion(db, as->chrom, as->altBpStarts[edge], as->altBpEnds[edge]);
 if(as->spliceTypes[edge] == alt3Prime)
     {
-    as->upStreamCons[edge] = aveSScoreForRegion(as->chrom, as->altBpStarts[edge] - offSet, as->altBpStarts[edge]);
+    as->upStreamCons[edge] = aveSScoreForRegion(db, as->chrom, as->altBpStarts[edge] - offSet, as->altBpStarts[edge]);
     /* We have a problem here which is that we don't know the downstream end. */
     as->downStreamCons[edge] = -1;
     }
 else if(as->spliceTypes[edge] == alt5Prime)
     {
-    as->upStreamCons[edge] = aveSScoreForRegion(as->chrom, as->altStarts[edge-1] - offSet, as->altStarts[edge-1]);
-    as->downStreamCons[edge] = aveSScoreForRegion(as->chrom, as->altBpEnds[edge], as->altBpEnds[edge] + 100);
+    as->upStreamCons[edge] = aveSScoreForRegion(db, as->chrom, as->altStarts[edge-1] - offSet, as->altStarts[edge-1]);
+    as->downStreamCons[edge] = aveSScoreForRegion(db, as->chrom, as->altBpEnds[edge], as->altBpEnds[edge] + 100);
     }
 else if(as->spliceTypes[edge] == altCassette || as->spliceTypes[edge] == altIdentity)
     {
     /* This works for cassette exons, and all exons in general. */
-    as->upStreamCons[edge] = aveSScoreForRegion(as->chrom, as->altBpStarts[edge] - offSet, as->altBpStarts[edge]);
-    as->downStreamCons[edge] = aveSScoreForRegion(as->chrom, as->altBpEnds[edge], as->altBpEnds[edge] +offSet);
+    as->upStreamCons[edge] = aveSScoreForRegion(db, as->chrom, as->altBpStarts[edge] - offSet, as->altBpStarts[edge]);
+    as->downStreamCons[edge] = aveSScoreForRegion(db, as->chrom, as->altBpEnds[edge], as->altBpEnds[edge] +offSet);
     }
 else 
     {
@@ -1392,7 +1392,7 @@ if(alt3bpRegion)
 	    as->agName, as->altTypes[1], as->strand);
 }
 
-void lookForAltSplicing(struct altGraphX *ag, struct altSpliceSite **aSpliceList, 
+void lookForAltSplicing(char *db, struct altGraphX *ag, struct altSpliceSite **aSpliceList, 
 			int *altSpliceSites, int *altSpliceLoci, int *totalSpliceSites)
 /* Walk throught the altGraphX graph and look for evidence of altSplicing. */
 {
@@ -1465,7 +1465,7 @@ for(i=0; i<vCount; i++)
 	if(aSplice->spliceTypes[1] == alt3Prime && (aSplice->altBpEnds[1] - aSplice->altBpStarts[1] == 3))
 	    reportThreeBpBed(aSplice);
 	if(doSScores)
-	    fillInSscores(aSplice, 1);
+	    fillInSscores(db, aSplice, 1);
 	if(RData != NULL)
 	    {
 	    outputForR(aSplice, 1, RData);
@@ -1485,7 +1485,7 @@ for(i=0; i<vCount; i++)
 for(notAlt = notAltList; notAlt != NULL; notAlt = notAlt->next)
     {
     if(doSScores)
-	fillInSscores(notAlt, 1);
+	fillInSscores(db, notAlt, 1);
     if(RData != NULL)
 	{
 	fixOtherStrand(notAlt);
@@ -1593,7 +1593,6 @@ FILE *summaryOut = NULL;
 int altSpliceSites = 0, altSpliceLoci = 0, totalSpliceSites = 0;
 warn("Loading splicing graphs.");
 agList = altGraphXLoadAll(agxFileName);
-hSetDb(db);
 htmlFramesOut = mustOpen(htmlFramesOutName, "w");
 htmlOut = mustOpen(htmlOutName, "w");
 summaryOut = mustOpen(summaryOutName, "w");
@@ -1619,7 +1618,7 @@ fprintf(htmlOut, "<html>\n<body bgcolor=\"#FFF9D2\"><b>Alt-Splice List</b>\n"
 	"<table border=1><tr><th>Name (count)</th><th>Type</th><th>Size</th></tr>\n");
 for(ag=agList; ag != NULL; ag=ag->next)
     {
-    lookForAltSplicing(ag, &aSpliceList, &altSpliceSites, &altSpliceLoci, &totalSpliceSites);
+    lookForAltSplicing(db, ag, &aSpliceList, &altSpliceSites, &altSpliceLoci, &totalSpliceSites);
     for(aSplice=aSpliceList; aSplice != NULL; aSplice= aSplice->next)
 	{
  	altSpliceSiteOutput(aSplice, summaryOut, '\t', '\n');

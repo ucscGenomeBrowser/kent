@@ -125,7 +125,7 @@ comp->src = cloneString(buffer);
 comp->start = start;
 comp->strand = '+';
 comp->size = end - start;
-struct dnaSeq *seq = hChromSeqMixed(chrom, start , end);
+struct dnaSeq *seq = hChromSeqMixed(database, chrom, start , end);
 comp->text = cloneString(seq->dna);
 freeDnaSeq(&seq);
 //printf("getRefAli %s %s %d %d %s\n", database, chrom, start, end, comp->text);
@@ -169,7 +169,7 @@ return list;
 static struct mafAli *getAliForRange(char *database, char *mafTable, 
     char *chrom, int start, int end)
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct mafAli *aliAll = mafLoadInRegion(conn, mafTable,
 	chrom, start, end);
 struct mafAli *ali;

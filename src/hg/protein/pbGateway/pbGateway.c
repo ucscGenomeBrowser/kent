@@ -70,9 +70,9 @@ if (! hDbIsActive(db))
     organism = hGenome(db);
     }
 if (hIsMgcServer())
-    cartWebStart(theCart, "MGC Proteome Browser Gateway \n");
+    cartWebStart(theCart, NULL, "MGC Proteome Browser Gateway \n");
 else
-    cartWebStart(theCart, "UCSC Proteome Browser Gateway \n");
+    cartWebStart(theCart, NULL, "UCSC Proteome Browser Gateway \n");
 
 /* start with a clean slate */
 cartResetInDb(hUserCookie());  

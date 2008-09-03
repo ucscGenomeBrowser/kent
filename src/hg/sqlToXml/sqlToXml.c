@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.14 2006/09/08 15:04:24 angie Exp $";
+static char const rcsid[] = "$Id: sqlToXml.c,v 1.15 2008/09/03 19:21:21 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -357,12 +357,12 @@ while ((c = *in++) != 0)
 *out = 0;
 }
 
-void rSqlToXml(struct sqlConnCache *cc, char *table, char *entryField,
+void rSqlToXml(struct sqlConnCache *cc, char *database, char *table, char *entryField,
 	char *query, struct hash *tableHash, struct specTree *tree,
 	FILE *f, int depth)
 /* Recursively output XML */
 {
-struct sqlConnection *conn = sqlAllocConnection(cc);
+struct sqlConnection *conn = sqlConnCacheAlloc(cc, database);
 struct sqlResult *sr;
 char **row;
 struct typedField *col, *colList = hashMustFindVal(tableHash, table);
@@ -438,7 +438,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		    dyStringPrintf(sql, "%s", row[branch->fieldIx]);
 		if (maxList != 0)
 		    dyStringPrintf(sql, " limit %d", maxList);
-		rSqlToXml(cc, branch->targetTable, branch->targetField, 
+		rSqlToXml(cc, database, branch->targetTable, branch->targetField, 
 			sql->string, tableHash, branch, f, newDepth);
 		dyStringFree(&sql);
 		}
@@ -452,7 +452,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 sqlFreeResult(&sr);
-sqlFreeConnection(cc, &conn);
+sqlConnCacheDealloc(cc, &conn);
 }
 
 
@@ -460,8 +460,8 @@ void sqlToXml(char *database, char *dumpSpec, char *outputXml)
 /* sqlToXml - Given a database, .as file, .joiner file, and a sql select 
  * statement, dump out results as XML. */
 {
-struct sqlConnCache *cc = sqlNewConnCache(database);
-struct sqlConnection *conn = sqlAllocConnection(cc);
+struct sqlConnCache *cc = sqlConnCacheNew();
+struct sqlConnection *conn = sqlConnCacheAlloc(cc, database);
 struct hash *tableHash = tablesAndFields(conn);
 struct specTree *tree = specTreeLoad(dumpSpec, tableHash);
 FILE *f = mustOpen(outputXml, "w");
@@ -486,14 +486,14 @@ if (maxList > 0)
 
 if (!sqlTableExists(conn, table))
     errAbort("No table %s in %s", table, database);
-sqlFreeConnection(cc, &conn);
+sqlConnCacheDealloc(cc, &conn);
 
 verbose(1, "%d tables in %s\n",
 	tableHash->elCount,  database);
 
 escaper = dyStringNew(0);
 fprintf(f, "<%s>\n", topTag);
-rSqlToXml(cc, table, "", sql->string, tableHash, tree, f, 1);
+rSqlToXml(cc, database, table, "", sql->string, tableHash, tree, f, 1);
 fprintf(f, "</%s>\n", topTag);
 carefulClose(&f);
 }

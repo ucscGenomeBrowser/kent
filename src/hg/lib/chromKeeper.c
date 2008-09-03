@@ -14,15 +14,14 @@ void chromKeeperInit(char *db)
 {
 struct slName *names = NULL, *name = NULL;
 int count=0;
-hSetDb(db);
-names = hAllChromNames();
+names = hAllChromNames(db);
 chromCount = slCount(names);
 assert(chromNames == NULL && chromRanges == NULL);
 AllocArray(chromNames, chromCount);
 AllocArray(chromRanges, chromCount);
 for(name=names; name != NULL; name = name->next)
     {
-    int size = hChromSize(name->name);
+    int size = hChromSize(db, name->name);
     chromRanges[count] = binKeeperNew(0,size);
     chromNames[count] = cloneString(name->name);
     count++;

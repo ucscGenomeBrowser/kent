@@ -7,7 +7,7 @@
 #include "hgFind.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgGetAnn.c,v 1.5 2004/08/06 03:07:33 markd Exp $";
+static char const rcsid[] = "$Id: hgGetAnn.c,v 1.6 2008/09/03 19:18:55 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -177,7 +177,7 @@ else
 return tableDesc;
 }
 
-struct hgPositions* findAllChroms()
+struct hgPositions* findAllChroms(char *db)
 /* generate a hgPositions record for the full range of all chromsomes */
 {
 struct hgPositions *positions;
@@ -187,20 +187,20 @@ struct slName *chrom;
 /* setup s hgPositions object */
 AllocVar(positions);
 positions->query = cloneString("-");
-positions->database = hGetDb();
+positions->database = db;
 
 AllocVar(posTab);
 posTab->name = "chromInfo";
 posTab->description = "all rows";
 positions->tableList = posTab;
 
-for (chrom = hAllChromNames(); chrom != NULL; chrom = chrom->next)
+for (chrom = hAllChromNames(db); chrom != NULL; chrom = chrom->next)
     {
     struct hgPos *pos;
     AllocVar(pos);
     pos->chrom = chrom->name;
     pos->chromStart = 0;
-    pos->chromEnd = hChromSize(pos->chrom);
+    pos->chromEnd = hChromSize(db, pos->chrom);
     slAddHead(&posTab->posList, pos);
     positions->posCount++;
     }
@@ -208,16 +208,16 @@ slReverse(&posTab->posList);
 return positions;
 }
 
-struct hgPositions *findPositions(char *spec)
+struct hgPositions *findPositions(char *db, char *spec)
 /* query database with hgFind algorithm */
 {
 struct hgPositions *positions;
 verbose(2, "begin position query: %s\n", spec);
 
 if (sameString(spec, "-"))
-    positions = findAllChroms();
+    positions = findAllChroms(db);
 else
-    positions = hgPositionsFind(spec, NULL, "hgGetAnn", NULL, FALSE);
+    positions = hgPositionsFind(db, spec, NULL, "hgGetAnn", NULL, FALSE);
 
 verbose(2, "end position query: %d matches\n", countFindMatches(positions));
 if (verboseLevel() >= 2)
@@ -238,11 +238,11 @@ if (requireName && (strlen(tableInfo->nameField) == 0))
     errAbort("Error: table %s doesn't have a name field", getTableDesc(tableInfo));
 }
 
-void writeHeaders(FILE *outFh, struct hTableInfo *tableInfo)
+void writeHeaders(char *db, FILE *outFh, struct hTableInfo *tableInfo)
 /* write column headers */
 {
-char *tableName = getTableName(hDefaultChrom(), tableInfo);
-struct sqlConnection *conn = hAllocConn();
+char *tableName = getTableName(hDefaultChrom(db), tableInfo);
+struct sqlConnection *conn = hAllocConn(db);
 struct slName *fields, *fld;
 
 if (colHeaders)
@@ -262,13 +262,13 @@ fputc('\n', outFh);
 hFreeConn(&conn);
 }
 
-FILE* outputOpen(char *tabFile, struct hTableInfo *tableInfo)
+FILE* outputOpen(char *db, char *tabFile, struct hTableInfo *tableInfo)
 /* open output file and write optional header */
 {
 FILE* outFh = mustOpen(tabFile, "w");
 
 if (colHeaders || tsvHeaders)
-    writeHeaders(outFh, tableInfo);
+    writeHeaders(db, outFh, tableInfo);
 
 return outFh;
 }
@@ -338,16 +338,16 @@ while ((row = sqlNextRow(sr)) != NULL)
 return rowCnt;
 }
 
-int outputByChromRange(FILE *outFh, struct hTableInfo *tableInfo, struct hgPos *pos)
+int outputByChromRange(char *db, FILE *outFh, struct hTableInfo *tableInfo, struct hgPos *pos)
 /* output a hgPos by overlaping chrom range */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 int rowOff = 0;
 int rowCnt = 0;
 
 /* start query */
-if ((pos->chromStart == 0) && (pos->chromEnd >= hChromSize(pos->chrom)))
+if ((pos->chromStart == 0) && (pos->chromEnd >= hChromSize(db, pos->chrom)))
     {
     /* optimize full chromosome query */
     sr = hChromQuery(conn, tableInfo->rootName, pos->chrom, NULL, &rowOff);
@@ -367,22 +367,22 @@ hFreeConn(&conn);
 return rowCnt;
 }
 
-int outputChromRangeHits(FILE *outFh, struct hTableInfo *tableInfo, struct hgPosTable *posTab)
+int outputChromRangeHits(char *db, FILE *outFh, struct hTableInfo *tableInfo, struct hgPosTable *posTab)
 /* output for a chromosome ranges query, where hgPosTable is for chromInfo */
 {
 struct hgPos *pos;
 int rowCnt = 0;
 checkTableFields(tableInfo, FALSE);
 for (pos = posTab->posList; pos != NULL; pos = pos->next)
-    rowCnt += outputByChromRange(outFh, tableInfo, pos);
+    rowCnt += outputByChromRange(db, outFh, tableInfo, pos);
 return rowCnt;
 }
 
-int outputByName(FILE *outFh, struct hTableInfo *tableInfo, char *realTable, struct hgPos *pos)
+int outputByName(char *db, FILE *outFh, struct hTableInfo *tableInfo, char *realTable, struct hgPos *pos)
 /* Output results where there is a name and no chrom range hgPos. Actual table
  * name must be supplied, as hgPos does not have a chrom. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char query[512];
 int rowCnt = 0;
@@ -398,10 +398,10 @@ hFreeConn(&conn);
 return rowCnt;
 }
 
-int outputByPosition(FILE *outFh, struct hTableInfo *tableInfo, struct hgPos *pos)
+int outputByPosition(char *db, FILE *outFh, struct hTableInfo *tableInfo, struct hgPos *pos)
 /* Output results where there is a name and chrom location hgPos. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char query[512];
 int rowCnt = 0;
@@ -420,7 +420,7 @@ hFreeConn(&conn);
 return rowCnt;
 }
 
-int outputTablePosHits(FILE *outFh, struct hTableInfo *tableInfo, struct hgPos *pos)
+int outputTablePosHits(char *db, FILE *outFh, struct hTableInfo *tableInfo, struct hgPos *pos)
 /* Output results for when query matches requested table. */
 {
 int rowCnt = 0;
@@ -429,44 +429,44 @@ int rowCnt = 0;
 if (pos->chrom != NULL)
     {
     /* have exact location */
-    rowCnt = outputByPosition(outFh, tableInfo, pos);
+    rowCnt = outputByPosition(db, outFh, tableInfo, pos);
     }
 else if (!tableInfo->isSplit)
     {
     /* table not split */
-    rowCnt += outputByName(outFh, tableInfo, tableInfo->rootName, pos);
+    rowCnt += outputByName(db, outFh, tableInfo, tableInfo->rootName, pos);
     }
 else if (pos->chrom != NULL) 
    {
     /* split table, but we have chrom */
-    rowCnt += outputByName(outFh, tableInfo, getTableName(pos->chrom, tableInfo), pos);
+    rowCnt += outputByName(db, outFh, tableInfo, getTableName(pos->chrom, tableInfo), pos);
     }
 else 
     {
     /* got to try each chrom */
     struct slName *chrom;
-    for (chrom = hAllChromNames(); chrom != NULL; chrom = chrom->next)
+    for (chrom = hAllChromNames(db); chrom != NULL; chrom = chrom->next)
         {
         char *table = getTableName(chrom->name, tableInfo);
-        if (hTableExists(table))
-            rowCnt += outputByName(outFh, tableInfo, table, pos);
+        if (hTableExists(db, table))
+            rowCnt += outputByName(db, outFh, tableInfo, table, pos);
         }
     }
 return rowCnt;
 }
 
-int outputTableHits(FILE *outFh, struct hTableInfo *tableInfo, struct hgPosTable *posTab)
+int outputTableHits(char *db, FILE *outFh, struct hTableInfo *tableInfo, struct hgPosTable *posTab)
 /* output results where table is requested table hgPos */
 {
 struct hgPos *pos;
 int rowCnt = 0;
 checkTableFields(tableInfo, TRUE);
 for (pos = posTab->posList; pos != NULL; pos = pos->next)
-    rowCnt += outputTablePosHits(outFh, tableInfo, pos);
+    rowCnt += outputTablePosHits(db, outFh, tableInfo, pos);
 return rowCnt;
 }
 
-int outputPositions(FILE *outFh, struct hTableInfo *tableInfo, struct hgPositions *positions)
+int outputPositions(char *db, FILE *outFh, struct hTableInfo *tableInfo, struct hgPositions *positions)
 /* output results for a single hgPositions record  */
 {
 struct hgPosTable *posTab;
@@ -474,21 +474,21 @@ int rowCnt = 0;
 for (posTab = positions->tableList; posTab != NULL; posTab = posTab->next)
     {
     if (sameString(posTab->name, "chromInfo"))
-        rowCnt += outputChromRangeHits(outFh, tableInfo, posTab);
+        rowCnt += outputChromRangeHits(db, outFh, tableInfo, posTab);
     else if (sameString(posTab->name, tableInfo->rootName))
-        rowCnt += outputTableHits(outFh, tableInfo, posTab);
+        rowCnt += outputTableHits(db, outFh, tableInfo, posTab);
     }
 return rowCnt;
 }
 
-void outputResults(FILE *outFh, struct hTableInfo *tableInfo, struct hgPositions *positions)
+void outputResults(char *db, FILE *outFh, struct hTableInfo *tableInfo, struct hgPositions *positions)
 /* output hits from hgFind in table */
 {
 struct hgPositions *pos;
 int numRows = 0;
 
 for (pos = positions; pos != NULL; pos = pos->next)
-    numRows += outputPositions(outFh, tableInfo, pos);
+    numRows += outputPositions(db, outFh, tableInfo, pos);
 
 if ((!noMatchOk) && (numRows == 0))
     errAbort("Error: no table rows matching query");
@@ -500,18 +500,17 @@ void hgGetAnn(char *db, char *table, char *spec, char *tabFile)
 {
 struct hgPositions *positions;
 struct hTableInfo *tableInfo;
-hSetDb(db);
 
 /* get table info upfront so don't have to wait long find for error */
-tableInfo = hFindTableInfo(NULL, table);
+tableInfo = hFindTableInfo(db, NULL, table);
 if (tableInfo == NULL)
     errAbort("Error: no table: %s or *_%s", table, table);
 
-positions = findPositions(spec);
+positions = findPositions(db, spec);
 if (positions != NULL)
     {
-    FILE* outFh = outputOpen(tabFile, tableInfo);
-    outputResults(outFh, tableInfo, positions);
+    FILE* outFh = outputOpen(db, tabFile, tableInfo);
+    outputResults(db, outFh, tableInfo, positions);
     carefulClose(&outFh);
     }
 }

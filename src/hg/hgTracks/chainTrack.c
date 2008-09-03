@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.29 2008/02/20 00:42:25 markd Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.30 2008/09/03 19:19:01 markd Exp $";
 
 
 struct cartOptions
@@ -99,7 +99,7 @@ if (tg->items == NULL)		/*Exit Early if nothing to do */
 
 lm = lmInit(1024*4);
 hash = newHash(0);
-conn = hAllocConn();
+conn = hAllocConn(database);
 
 /* Make up a hash of all linked features keyed by
  * id, which is held in the extras field.  To
@@ -136,7 +136,7 @@ if (hash->size)
     boolean isSplit = TRUE;
     /* Make up range query. */
     sprintf(fullName, "%s_%s", chromName, tg->mapName);
-    if (!hTableExistsDb(hGetDb(), fullName))
+    if (!hTableExists(database, fullName))
 	{
 	strcpy(fullName, tg->mapName);
 	isSplit = FALSE;
@@ -252,7 +252,7 @@ char *track = tg->mapName;
 struct chain chain;
 int rowOffset;
 char **row;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 struct linkedFeatures *list = NULL, *lf;
 int qs;
@@ -381,7 +381,7 @@ char scoreOption[256];
 
 AllocVar(chainCart);
 
-normScoreAvailable = chainDbNormScoreAvailable(chromName, tg->mapName, NULL);
+normScoreAvailable = chainDbNormScoreAvailable(database, chromName, tg->mapName, NULL);
 
 /*	what does the cart say about coloring option	*/
 chainCart->chainColor = chainFetchColorOption(tdb, (char **) NULL);

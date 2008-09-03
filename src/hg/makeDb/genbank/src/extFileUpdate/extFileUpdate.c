@@ -17,7 +17,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: extFileUpdate.c,v 1.11 2008/07/17 17:47:24 markd Exp $";
+static char const rcsid[] = "$Id: extFileUpdate.c,v 1.12 2008/09/03 19:19:34 markd Exp $";
 
 /*
  * Algorithm:
@@ -158,11 +158,11 @@ if (fileExists(gbdbPath))
     }
 }
 
-static struct raInfoTbl *loadPartRaInfo(struct extFileTbl* extFileTbl,
+static struct raInfoTbl *loadPartRaInfo(char *db, struct extFileTbl* extFileTbl,
                                         struct gbSelect *select)
 /* load the ra files for all updates in a partition */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct raInfoTbl *rit = raInfoTblNew();
 struct gbSelect upSel = *select;
 
@@ -216,11 +216,11 @@ slReverse(&outdatedSeqs);
 return outdatedSeqs;
 }
 
-static int checkGbStatusVer(char *acc)
+static int checkGbStatusVer(char *db, char *acc)
 /* check if acc is in gbStatus and get the version. return 0 if not in
  * status */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 int ver;
 char query[256];
 safef(query, sizeof(query), "select version from gbStatus where acc=\"%s\"",
@@ -230,10 +230,10 @@ hFreeConn(&conn);
 return ver;
 }
 
-static boolean isPepInRefLink(char *pepAcc)
+static boolean isPepInRefLink(char *db, char *pepAcc)
 /* check if protein acc is in refLink */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 char buf[128], query[256], *acc;
 safef(query, sizeof(query), "select mrnaAcc from refLink where protAcc=\"%s\"",
       pepAcc);
@@ -250,7 +250,7 @@ fprintf(stderr, "Warning: %s %s.%d not expected in gbSeqTbl, dropping\n",
 seqTblDelete(seqTbl, acc);
 }
 
-static struct raInfo *getRaInfo(struct raInfoTbl *rit, char *acc, unsigned version, char *type)
+static struct raInfo *getRaInfo(char *db, struct raInfoTbl *rit, char *acc, unsigned version, char *type)
 /* get RA info entry, or NULL if it can't be resolved */
 {
 struct raInfo *ri = NULL;
@@ -265,7 +265,7 @@ if (ri != NULL)
 /* there is a bug where if a sequence version is updated twice on the same
  * day, then gbExtFile can end up with the old version.  Check for this
  * and update gbSeq version if it occured */
-statVer = checkGbStatusVer(acc);
+statVer = checkGbStatusVer(db, acc);
 if ((statVer != 0) && (statVer != version))
     {
     fprintf(stderr, "Warning: %s %s.%d in gbSeqTbl, %s.%d in gbStatus, updating to new version\n",
@@ -286,7 +286,7 @@ else
 return NULL;
 }
 
-static void updateSeqEntry(struct raInfoTbl *rit, struct seqTbl *seqTbl,
+static void updateSeqEntry(char *db, struct raInfoTbl *rit, struct seqTbl *seqTbl,
                            struct outdatedSeq *os)
 /* add update for a given seq entry, skip with warning if not found in
  * table. */
@@ -295,7 +295,7 @@ struct raInfo *ri = NULL;
 if (startsWith("YP_", os->acc))
     dropUnexpectedSeqEntry(seqTbl, os->seqId, os->acc, os->version, os->type);
 else
-    ri = getRaInfo(rit, os->acc, os->version, os->type);
+    ri = getRaInfo(db, rit, os->acc, os->version, os->type);
 if (ri != NULL)
     {
     /* update from ra entry */
@@ -306,7 +306,7 @@ if (ri != NULL)
 else 
     {
     /* not in ra table */
-    if ((gbGuessSrcDb(os->acc) == GB_REFSEQ) && isPepInRefLink(os->acc))
+    if ((gbGuessSrcDb(os->acc) == GB_REFSEQ) && isPepInRefLink(db, os->acc))
         {
         fprintf(stderr, "Warning: %s %s.%d in gbSeqTbl and refLink, not in ra file, unchanged\n",
                 os->type, os->acc, os->version);
@@ -319,7 +319,7 @@ else
     }
 }
 
-static void extFileUpdatePart(struct sqlConnection *conn, 
+static void extFileUpdatePart(char *db, struct sqlConnection *conn, 
                               struct gbSelect *select,
                               struct extFileTbl* extFileTbl)
 /* update gbSeq/gbExtFile entries for one partition of the database */
@@ -332,10 +332,10 @@ outdatedSeqs = getOutdatedSeqs(conn, select, extFiles);
 if (outdatedSeqs != NULL)
     {
     struct seqTbl *seqTbl = seqTblNew(conn, "/data/tmp", (gbVerbose >= 4));
-    struct raInfoTbl *rit = loadPartRaInfo(extFileTbl, select);
+    struct raInfoTbl *rit = loadPartRaInfo(db, extFileTbl, select);
     struct outdatedSeq *os;
     for (os = outdatedSeqs; os != NULL; os = os->next)
-        updateSeqEntry(rit, seqTbl, os);
+        updateSeqEntry(db, rit, seqTbl, os);
     outdatedSeqFreeList(&outdatedSeqs);
     raInfoTblFree(&rit);
     if (gOptions.flags & DBLOAD_DRY_RUN)
@@ -361,15 +361,14 @@ checkForStop();
 
 gbVerbEnter(1, "extFileUpdate %s", db);
 gOptions = dbLoadOptionsParse(db);
-hgSetDb(db);
-conn = hAllocConn();
+conn = hAllocConn(db);
 gbLockDb(conn, NULL);
 index = gbIndexNew(db, NULL);
 selectList = dbLoadPartitionsGet(&gOptions, index);
 extFileTbl = extFileTblLoad(conn);
 
 for (select = selectList; select != NULL; select = select->next)
-    extFileUpdatePart(conn, select, extFileTbl);
+    extFileUpdatePart(db, conn, select, extFileTbl);
 
 slFreeList(&selectList);
 cleanExtFileTable(conn);

@@ -226,7 +226,7 @@ char* genePredGetCreateSql(char* table, unsigned optFields, unsigned options,
  * optional fields that preceed the highest optFields column.  chromIndexLen
  * is now ignored.. */
 
-struct genePred *getOverlappingGene(struct genePred **list,  char *table, char *chrom, int cStart, int cEnd, char *name, int *retOverlap);
+struct genePred *getOverlappingGene(char *db, struct genePred **list,  char *table, char *chrom, int cStart, int cEnd, char *name, int *retOverlap);
 /* read all genes from a table find the gene with the biggest overlap. 
  * Cache the list of genes to so we only read it once.
  * If there are multiple hits and the name that matches exactly, 

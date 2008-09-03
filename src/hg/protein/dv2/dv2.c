@@ -69,8 +69,8 @@ row = sqlNextRow(sr);
 
 if (row == NULL)
     {
-    hFreeConn(&conn);
     sqlFreeResult(&sr);
+    hFreeConn(&conn);
     return;
     }
 
@@ -216,8 +216,8 @@ else
     row = sqlNextRow(sr);
     }
 
-hFreeConn(&conn);
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 }
 
 int main(int argc, char *argv[])

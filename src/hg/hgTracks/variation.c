@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.139 2008/07/10 17:33:08 tdreszer Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.140 2008/09/03 19:19:04 markd Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -315,7 +315,7 @@ void setSnp125ExtendedNameExtra(struct track *tg)
    for the SNP list with data from a table of orthologous state
    information */
 {
-struct sqlConnection *conn          = hAllocConn();
+struct sqlConnection *conn          = hAllocConn(database);
 int                   rowOffset     = 0;
 char                **row           = NULL;      
 struct slList        *snpItemList   = tg->items; /* list of SNPs */
@@ -440,7 +440,7 @@ void loadSnp125Extended(struct track *tg)
 /* load snps from snp125 table, ortho alleles from snpXXXortho table,
  * and return in extended struct */
 {
-struct sqlConnection   *conn      = hAllocConn();
+struct sqlConnection   *conn      = hAllocConn(database);
 int                     rowOffset = 0;
 char                  **row       = NULL;
 struct slList          *itemList  = tg->items;
@@ -1059,7 +1059,7 @@ tg->freeItems     = freeSnp125;
 tg->loadItems     = loadSnp125Extended;
 tg->itemNameColor = snp125ExtendedColor;
 tg->itemColor     = snp125ExtendedColor;
-if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
+if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
     tg->itemName  = snp125ExtendedName;
 }
 
@@ -1183,7 +1183,7 @@ void bedLoadLdItemByQuery(struct track *tg, char *table,
 /* LD specific tg->item loader, as we need to load items beyond
    the current window to load the chromEnd positions for LD values. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int rowOffset = 0;
 int chromEndOffset = min(winEnd-winStart, 250000); /* extended chromEnd range */
 struct sqlResult *sr = NULL;

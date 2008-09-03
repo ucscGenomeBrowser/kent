@@ -72,7 +72,7 @@ if (! hDbIsActive(db))
 
 if (hIsGsidServer())
     {
-    cartWebStart(theCart, "GSID Protein View Gateway \n");
+    cartWebStart(theCart, NULL, "GSID Protein View Gateway \n");
     }
 else
     {

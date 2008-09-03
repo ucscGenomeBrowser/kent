@@ -7,7 +7,7 @@
 #include "genePredReader.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: genePredToFakePsl.c,v 1.2 2006/04/08 16:32:45 angie Exp $";
+static char const rcsid[] = "$Id: genePredToFakePsl.c,v 1.3 2008/09/03 19:18:39 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -44,7 +44,6 @@ int chromSize = -1;
 FILE *out = mustOpen(pslOut, "w");
 FILE *cds = mustOpen(cdsOut, "w");
 
-hSetDb(db);
 conn = hAllocConn(db);
 
 if (fileExists(fileTbl))
@@ -62,7 +61,7 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
     int e = 0, qSize=0, qCdsStart=0, qCdsEnd=0;
     
     iRec++;
-    chromSize = hChromSize(gp->chrom);
+    chromSize = hChromSize(db, gp->chrom);
     for (e = 0; e < gp->exonCount; ++e)
 	qSize+=(gp->exonEnds[e] - gp->exonStarts[e]);
     psl = pslNew(gp->name, qSize, 0, qSize,

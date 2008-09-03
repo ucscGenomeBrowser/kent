@@ -121,7 +121,7 @@ the corresponding region of the chain alignment.
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.20 2005/06/29 16:51:14 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.21 2008/09/03 19:20:52 markd Exp $";
 static boolean doHappyDots;            /* output activity dots? */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -289,7 +289,7 @@ if (doHappyDots && (--dot <= 0))
     }
 }
 
-struct chain *chainDbLoad(struct sqlConnection *conn, char *track,
+struct chain *chainDbLoad(char *db, struct sqlConnection *conn, char *track,
 			  char *chrom, int id)
 /** Load chain. */
 {
@@ -300,7 +300,7 @@ char **row;
 int rowOffset;
 struct chain *chain = NULL;
 
-if (!hFindSplitTable(chrom, track, table, &rowOffset))
+if (!hFindSplitTable(db, chrom, track, table, &rowOffset))
     errAbort("No %s track in database", track);
 snprintf(query, sizeof(query), 
 	 "select * from %s where id = %d", table, id);
@@ -1270,8 +1270,6 @@ if(inputOk == FALSE)
     errAbort("Fatal errors. Try using with -help to see usage");
 
 /* Set up the database and load nets. */
-hSetDb(db);
-hSetDb2(orthoDb);
 workingChrom = chrom;
 if(netFile != NULL)
     {
@@ -1279,7 +1277,7 @@ if(netFile != NULL)
     netTree = rbTreeFromNetFile(netFile);
     }
 if(needConnection)
-    conn = hAllocConn();
+    conn = hAllocConn(db);
 
 /* Do some converting. */
 if(sameWord("altGraphX", itemType))

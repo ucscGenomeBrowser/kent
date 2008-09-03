@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.32 2005/06/08 20:59:52 jill Exp $";
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.33 2008/09/03 19:19:44 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -90,10 +90,10 @@ if (sqlTableExists(conn, table))
     }
 }
 
-void setupTable(struct sqlConnection *conn, char* table)
+void setupTable(char *database, struct sqlConnection *conn, char* table)
 /* create a psl table as needed */
 {
-int minLength = hGetMinIndexLength();
+int minLength = hGetMinIndexLength(database);
 char *sqlCmd = pslGetCreateSql(table, pslCreateOpts,
                                (pslCreateOpts & PSL_TNAMEIX) ?  minLength : 0);
 if (append)
@@ -142,7 +142,7 @@ carefulClose(&tabFh);
 lineFileClose(&lf);
 }
 
-void loadPslTable(struct sqlConnection *conn, char *pslFile)
+void loadPslTable(char *database, struct sqlConnection *conn, char *pslFile)
 /* load one psl table */
 {
 char table[128], comment[256];
@@ -168,7 +168,7 @@ else
 	splitPath(pslFile, NULL, table, NULL);
     }
 
-setupTable(conn, table);
+setupTable(database, conn, table);
 
 /* if a bin column is being added or if the input file is
  * compressed, we must copy to an intermediate tab file */
@@ -201,10 +201,9 @@ void hgLoadPsl(char *database, int pslCount, char *pslFiles[])
 struct sqlConnection *conn = NULL;
 int i;
 
-hSetDb(database);
 conn = sqlConnect(database);
 for (i = 0; i < pslCount; i++)
-    loadPslTable(conn, pslFiles[i]);
+    loadPslTable(database, conn, pslFiles[i]);
 
 sqlDisconnect(&conn);
 }

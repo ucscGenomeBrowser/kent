@@ -22,8 +22,6 @@ errAbort(
 char line[2000];
 int main(int argc, char *argv[])
 {
-struct sqlConnection *conn;
-    
 FILE *inf;
 FILE *o1, *o2;
 
@@ -47,8 +45,6 @@ proteinFileName  = cloneString(argv[2]);
 outputFileName   = cloneString(argv[3]);
 outputFileName2  = cloneString(argv[4]);
 
-conn = hAllocConn();
-	
 o1 = mustOpen(outputFileName, "w");
 o2 = mustOpen("jj.dat", "w");
     
@@ -119,7 +115,7 @@ while (!done)
 
 		// get display ID from AC		
 		sprintf(cond_str, "accession = '%s'", swissAC);
-    		answer = sqlGetField(conn, proteinDB, "spXref3", "displayID", cond_str);
+    		answer = sqlGetField(proteinDB, "spXref3", "displayID", cond_str);
 		if (answer != NULL)
 		    {
 		    swissDisplayID = answer;
@@ -128,7 +124,7 @@ while (!done)
 		    {
 		    // ACs missing from spXref3 might be found from spSecondardy table
 		    sprintf(cond_str, "accession2 = '%s'", swissAC);
-    		    answer = sqlGetField(conn, proteinDB, "spSecondaryID", "displayID", cond_str);
+    		    answer = sqlGetField(proteinDB, "spSecondaryID", "displayID", cond_str);
 		    if (answer != NULL)
 		    	{
 		    	swissDisplayID = answer;
@@ -153,7 +149,6 @@ while (!done)
     }
 carefulClose(&o1);
 carefulClose(&o2);
-hFreeConn(&conn);
 
 sprintf(cond_str, "cat jj.dat | sort | uniq >%s",outputFileName2);
 system(cond_str);

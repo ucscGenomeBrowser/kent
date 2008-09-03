@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hgFindSpec.h"
 
-static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.11 2006/07/18 14:49:23 angie Exp $";
+static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.12 2008/09/03 19:18:21 markd Exp $";
 
 char *database = NULL;
 /* Need to get a cart in order to use hgFind. */
@@ -71,17 +71,17 @@ boolean gotError = FALSE;
 char *chrom = NULL;
 int chromStart = 0, chromEnd = 0;
 
-hgFindSpecGetAllSpecs(&shortList, &longList);
+hgFindSpecGetAllSpecs(database, &shortList, &longList);
 puts("\n");
 startMs = clock1000();
 for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
     {
     boolean matches = TRUE;
-    boolean tablesExist = hTableOrSplitExists(hfs->searchTable);
+    boolean tablesExist = hTableOrSplitExists(database, hfs->searchTable);
     if (isNotEmpty(termToSearch) && isNotEmpty(hfs->termRegex))
 	matches = matchRegex(termToSearch, hfs->termRegex);
     if (isNotEmpty(hfs->xrefTable))
-	tablesExist |= hTableExists(hfs->xrefTable);
+	tablesExist |= hTableExists(database, hfs->xrefTable);
     if (matches && tablesExist)
 	{
 	verbose(1, "SHORT-CIRCUIT %s\n", hfs->searchName);
@@ -105,11 +105,11 @@ startMs = clock1000();
 for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
     {
     boolean matches = TRUE;
-    boolean tablesExist = hTableOrSplitExists(hfs->searchTable);
+    boolean tablesExist = hTableOrSplitExists(database, hfs->searchTable);
     if (isNotEmpty(termToSearch) && isNotEmpty(hfs->termRegex))
 	matches = matchRegex(termToSearch, hfs->termRegex);
     if (isNotEmpty(hfs->xrefTable))
-	tablesExist |= hTableExists(hfs->xrefTable);
+	tablesExist |= hTableExists(database, hfs->xrefTable);
     if (matches && tablesExist)
 	{
 	verbose(1, "ADDITIVE %s\n", hfs->searchName);
@@ -133,7 +133,7 @@ printf("\nTook %dms to determine multiple/additive searches.\n"
 if (isNotEmpty(termToSearch))
     {
     startMs = clock1000();
-    hgp = findGenomePos(termToSearch, &chrom, &chromStart, &chromEnd, cart);
+    hgp = findGenomePos(database, termToSearch, &chrom, &chromStart, &chromEnd, cart);
     endMs = clock1000();
     if (hgp != NULL && hgp->singlePos != NULL)
 	{
@@ -183,7 +183,7 @@ static boolean checkRegexOnTableField(char *exp, char *altExp, char *table,
 				      char *field, char *searchName)
 /* Return TRUE and complain if any values of table.field do not match exp. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int errCount = 0;
@@ -227,7 +227,7 @@ struct hgFindSpec *shortList = NULL, *longList = NULL, *wholeList = NULL;
 struct hgFindSpec *hfs = NULL;
 boolean gotError = FALSE;
 
-hgFindSpecGetAllSpecs(&shortList, &longList);
+hgFindSpecGetAllSpecs(database, &shortList, &longList);
 wholeList = slCat(shortList, longList);
 
 puts("\n");
@@ -248,7 +248,7 @@ for (hfs = wholeList;  hfs != NULL;  hfs = hfs->next)
 	    }
 	if (isNotEmpty(query))
 	    {
-	    struct slName *tableList = hSplitTableNames(table);
+	    struct slName *tableList = hSplitTableNames(database, table);
 	    struct slName *tPtr = NULL;
 	    char *termPrefix = hgFindSpecSetting(hfs, "termPrefix");
 	    char *field = getFieldFromQuery(query, hfs->searchName);
@@ -276,23 +276,23 @@ boolean doCheckIndexes()
 {
 struct hgFindSpec *shortList = NULL, *longList = NULL, *wholeList = NULL;
 struct hgFindSpec *hfs = NULL;
-struct slName *allChroms = hAllChromNames();
+struct slName *allChroms = hAllChromNames(database);
 boolean gotError = FALSE;
 
-hgFindSpecGetAllSpecs(&shortList, &longList);
+hgFindSpecGetAllSpecs(database, &shortList, &longList);
 wholeList = slCat(shortList, longList);
 
 puts("\n");
 for (hfs = wholeList;  hfs != NULL;  hfs = hfs->next)
     {
-    if (isNotEmpty(hfs->query) && hTableOrSplitExists(hfs->searchTable))
+    if (isNotEmpty(hfs->query) && hTableOrSplitExists(database, hfs->searchTable))
 	{
 	char *field = getFieldFromQuery(hfs->query, hfs->searchName);
-	struct slName *tableList = hSplitTableNames(hfs->searchTable);
+	struct slName *tableList = hSplitTableNames(database, hfs->searchTable);
 	struct slName *tPtr = NULL;
 	for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
 	    {
-	    if (! hFieldHasIndex(tPtr->name, field))
+	    if (! hFieldHasIndex(database, tPtr->name, field))
 		{
 		gotError = TRUE;
 		printf("Error: No SQL index defined for %s.%s.%s (search %s)\n",
@@ -303,10 +303,10 @@ for (hfs = wholeList;  hfs != NULL;  hfs = hfs->next)
 			tPtr->name, field, hfs->searchName);
 	    }
 	}
-    if (isNotEmpty(hfs->xrefQuery) && hTableOrSplitExists(hfs->xrefTable))
+    if (isNotEmpty(hfs->xrefQuery) && hTableOrSplitExists(database, hfs->xrefTable))
 	{
 	char *field = getFieldFromQuery(hfs->xrefQuery, hfs->searchName);
-	if (! hFieldHasIndex(hfs->xrefTable, field))
+	if (! hFieldHasIndex(database, hfs->xrefTable, field))
 	    {
 	    gotError = TRUE;
 	    printf("Error: No SQL index defined for %s.%s.%s (search %s)\n",
@@ -353,7 +353,6 @@ int checkHgFindSpec(char *db, char *termToSearch, boolean showSearches,
 {
 boolean gotError = FALSE;
 
-hSetDb(db);
 database = db;
 
 if (isNotEmpty(termToSearch))

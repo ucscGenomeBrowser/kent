@@ -203,7 +203,8 @@ void tblBldGenePredFromPsl(struct sqlConnection *conn, char *tmpDir, char *pslTb
  * invalid CDS if warnFh is not NULL */
 {
 /* create the tmp table */
-char *sql = genePredGetCreateSql(genePredTbl, genePredAllFlds, genePredWithBin, hGetMinIndexLength());
+char *sql = genePredGetCreateSql(genePredTbl, genePredAllFlds, genePredWithBin,
+                                 hGetMinIndexLength(sqlGetDatabase(conn)));
 sqlRemakeTable(conn, genePredTbl, sql);
 freez(&sql);
 
@@ -235,11 +236,11 @@ carefulClose(&tabFh);
 sqlLoadTabFile(conn, tabFile, genePredTbl, SQL_TAB_FILE_ON_SERVER);
 }
 
-struct slName *getChromNames()
+struct slName *getChromNames(char *db)
 /* get a list of chrom names; do not modify results, as it is cached */
 {
 static struct slName* chroms = NULL;
 if (chroms == NULL)
-    chroms = hAllChromNames();
+    chroms = hAllChromNames(db);
 return chroms;
 }

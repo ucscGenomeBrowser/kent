@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDb.c,v 1.18 2008/02/08 21:08:01 kent Exp $";
+static char const rcsid[] = "$Id: spDb.c,v 1.19 2008/09/03 19:19:27 markd Exp $";
 
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 /* Return TRUE if this is a primary accession in database. */
@@ -606,7 +606,7 @@ if (conn==NULL)
     }
     
 safef(condStr, sizeof(condStr), "oldDisplayId='%s'", oldSpDisplayId);
-newSpDisplayId = sqlGetField(conn, PROTEOME_DB_NAME, "spOldNew", "newDisplayId", condStr);
+newSpDisplayId = sqlGetField(PROTEOME_DB_NAME, "spOldNew", "newDisplayId", condStr);
     
 return(newSpDisplayId);
 }		   
@@ -625,7 +625,7 @@ if (conn==NULL)
     }
 
 safef(condStr, sizeof(condStr), "newDisplayId='%s'", newSpDisplayId);
-oldSpDisplayId = sqlGetField(conn, PROTEOME_DB_NAME, "spOldNew", "oldDisplayId", condStr);
+oldSpDisplayId = sqlGetField(PROTEOME_DB_NAME, "spOldNew", "oldDisplayId", condStr);
     
 return(oldSpDisplayId);
 }	

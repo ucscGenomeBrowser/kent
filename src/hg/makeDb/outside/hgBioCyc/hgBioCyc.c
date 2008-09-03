@@ -40,7 +40,7 @@ if (argc != 3) usage();
 infileName      = argv[1];
 genomeDBname    = argv[2];
 
-conn= hAllocConn();
+conn= hAllocConn(genomeDBname);
 o1 = fopen("j.dat", "w");
 
 inf  = mustOpen(infileName, "r");
@@ -59,15 +59,15 @@ again:
     if (chp == NULL) continue;
 
     sprintf(cond_str, "alias='%s'", refseqID);
-    kgID=sqlGetField(conn, genomeDBname, "kgAlias", "kgID", cond_str);
+    kgID=sqlGetField(genomeDBname, "kgAlias", "kgID", cond_str);
 
     // check with refLink if not found in kgAlias
     if (kgID == NULL)
 	{
     	sprintf(cond_str, "mrnaAcc='%s'", refseqID);
-    	geneSymbol=sqlGetField(conn, genomeDBname, "refLink", "name", cond_str);
+    	geneSymbol=sqlGetField(genomeDBname, "refLink", "name", cond_str);
     	sprintf(cond_str, "alias='%s'", geneSymbol);
-    	kgID=sqlGetField(conn, genomeDBname, "kgAlias", "kgID", cond_str);
+    	kgID=sqlGetField(genomeDBname, "kgAlias", "kgID", cond_str);
 	}
 
     strcpy(mapID, chp);

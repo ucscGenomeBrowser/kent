@@ -18,7 +18,7 @@
 #include "hdb.h"
 #include "orfeomeImageIds.h"
 
-static char const rcsid[] = "$Id: orfeomeDbLoad.c,v 1.3 2007/04/12 22:24:45 markd Exp $";
+static char const rcsid[] = "$Id: orfeomeDbLoad.c,v 1.4 2008/09/03 19:19:36 markd Exp $";
 
 /* Notes:
  *  - Identifies ORFeome clones by both image id and genbank keywords, as it
@@ -218,8 +218,7 @@ static void orfeomeDbLoad(char *db)
 /* Load the database with the ORFeome tables. */
 {
 gbVerbEnter(1, "Loading ORFeome tables");
-hSetDb(db);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 
 tblBldDropTables(conn, orfeomeTables, TBLBLD_TMP_TABLE);
 createOrfeomeMrnaTbl(conn);
@@ -234,8 +233,7 @@ gbVerbLeave(1, "Loading ORFeome tables");
 static void orfeomeDropTables(char *db)
 /* drop all ORFeome-related tables. */
 {
-hSetDb(db);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 gbVerbEnter(1, "droping ORFeome tables");
 tblBldDropTables(conn, orfeomeTables, TBLBLD_REAL_TABLE|TBLBLD_TMP_TABLE|TBLBLD_OLD_TABLE);
 hFreeConn(&conn);

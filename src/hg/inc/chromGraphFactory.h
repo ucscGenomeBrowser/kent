@@ -6,7 +6,7 @@
 
 #include "customFactory.h"
 
-struct customTrack *chromGraphParser(struct customPp *cpp,
+struct customTrack *chromGraphParser(char *genomeDb, struct customPp *cpp,
 	char *formatType, char *markerType, char *columnLabels,
 	char *name, char *description, struct hash *settings,
 	boolean report);

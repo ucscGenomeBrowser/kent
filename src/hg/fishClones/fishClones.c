@@ -760,7 +760,7 @@ void findAccPosition(struct sqlConnection *conn, struct position *pos, struct fi
 void findStsPosition(struct sqlConnection *conn, struct position *pos, struct fishClone *fc)
 /* Determine the position of an sts marker */
 {
-  struct sqlConnection *conn1 = hAllocConn();
+  struct sqlConnection *conn1 = hAllocConn(sqlGetDatabase(conn));
   char query[256];
   struct sqlResult *sr, *sr1;
   char **row, **row1;
@@ -1130,10 +1130,10 @@ void findGoodPlace(struct fishClone *fc)
   
 }
 
-void findClonePos()
+void findClonePos(char *db)
 /* Determine the best positions for each of the FISH clones */
 {
-  struct sqlConnection *conn = hAllocConn();
+  struct sqlConnection *conn = hAllocConn(db);
   struct fishClone *fc;
   struct position *pos;
 
@@ -1262,16 +1262,7 @@ int main(int argc, char *argv[])
   struct lineFile *ff, *cf, *bef, *bpf, *sf, *cpf;
   FILE *of, *af;
   char filename[PATH_LEN], *db, *stsName=NULL, *pslName=NULL;
-  char *user, *password;
 
-  /* try read-only first */
-  user = cfgOption("ro.user");
-  if (user == NULL) 
-    user = cfgOption("db.user");
-  password = cfgOption("ro.password");
-  if (password == NULL)
-    password = cfgOption("db.password");
-  
   optionInit(&argc, argv, optionSpecs);
   if (argc < 4)
     {
@@ -1286,9 +1277,6 @@ int main(int argc, char *argv[])
       return 1;
     }
   db = argv[1];
-  hSetDb(db);
-  if (getenv("HGDB_HOST") == NULL)
-   hSetDbConnect("localhost", db, user, password);
 
   ff = lineFileOpen(argv[2], FALSE);
   cf = lineFileOpen(argv[3], FALSE);
@@ -1341,7 +1329,7 @@ int main(int argc, char *argv[])
       lineFileClose(&cpf);
     }
   verbose(1, "Determining good positions\n");
-  findClonePos();
+  findClonePos(db);
   verbose(1, "Writing output file\n");
   writeOut(of, af);
   fclose(of);

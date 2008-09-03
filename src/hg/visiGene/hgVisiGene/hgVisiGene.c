@@ -646,7 +646,7 @@ void doInitialPage()
 {
 char *listSpec = NULL;
 
-webStartWrapperDetailedNoArgs(cart, "", "VisiGene Image Browser",
+webStartWrapperDetailedNoArgs(cart, NULL, "", "VisiGene Image Browser",
         FALSE, FALSE, FALSE, TRUE);
 
 printf("<FORM ACTION=\"%s\" METHOD=GET>\n",

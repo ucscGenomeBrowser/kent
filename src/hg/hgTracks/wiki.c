@@ -17,7 +17,7 @@ void loadWiki(struct track *tg)
  * window... */
 {
 struct bed *bed, *list = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;

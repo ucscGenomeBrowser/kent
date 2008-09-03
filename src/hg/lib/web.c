@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.150 2008/07/02 23:29:11 braney Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.151 2008/09/03 19:19:27 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -82,17 +82,18 @@ webPushErrHandlers();
 }
 
 static void webStartWrapperDetailedInternal(struct cart *theCart,
-	char *headerText, char *textOutBuf,
+	char *db, char *headerText, char *textOutBuf,
 	boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader,
 	boolean withHtmlHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
 char uiState[256];
 char *scriptName = cgiScriptName();
-char *db = NULL;
 boolean isEncode = FALSE;
 boolean isGsid   = hIsGsidServer();
-boolean dbIsActive = hDbIsActive(hGetDb());
+if (db == NULL)
+    db = hDefaultDb();
+boolean dbIsActive = hDbIsActive(db);
 
 if (scriptName == NULL)
     scriptName = cloneString("");
@@ -284,7 +285,7 @@ else
 	(endsWith(scriptName, "hgc") || endsWith(scriptName, "hgTrackUi") ||
 	 endsWith(scriptName, "hgGene")))
 	{
-	struct trackDb *tdb = hTrackDbForTrack(table);
+	struct trackDb *tdb = hTrackDbForTrack(db, table);
 	if (tdb != NULL)
 	    printf("       <A HREF=\"../cgi-bin/hgTables%s&hgta_doMainPage=1&"
 		   "hgta_group=%s&hgta_track=%s&hgta_table=%s\" "
@@ -405,8 +406,8 @@ webPushErrHandlers();
 webHeadAlreadyOutputed = TRUE;
 }	/*	static void webStartWrapperDetailedInternal()	*/
 
-void webStartWrapperDetailedArgs(struct cart *theCart, char *headerText,
-	char *format, va_list args, boolean withHttpHeader,
+void webStartWrapperDetailedArgs(struct cart *theCart, char *db,
+	char *headerText, char *format, va_list args, boolean withHttpHeader,
 	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
@@ -417,62 +418,62 @@ va_copy(argscp,args);
 vasafef(textOutBuf, sizeof(textOutBuf), format, argscp);
 va_end(argscp);
 
-webStartWrapperDetailedInternal(theCart, headerText, textOutBuf,
+webStartWrapperDetailedInternal(theCart, db, headerText, textOutBuf,
 	withHttpHeader, withLogo, skipSectionHeader, withHtmlHeader);
 }
 
-void webStartWrapperDetailedNoArgs(struct cart *theCart, char *headerText,
-	char *format, boolean withHttpHeader,
+void webStartWrapperDetailedNoArgs(struct cart *theCart, char *db,
+	char *headerText, char *format, boolean withHttpHeader,
 	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
 char textOutBuf[512];
 
 safef(textOutBuf, sizeof(textOutBuf), format);
-webStartWrapperDetailedInternal(theCart, headerText, textOutBuf,
+webStartWrapperDetailedInternal(theCart, db, headerText, textOutBuf,
 	withHttpHeader, withLogo, skipSectionHeader, withHtmlHeader);
 }
 
-void webStartWrapperGatewayHeader(struct cart *theCart, char *headerText,
-    char *format, va_list args, boolean withHttpHeader,
+void webStartWrapperGatewayHeader(struct cart *theCart, char *db,
+	char *headerText, char *format, va_list args, boolean withHttpHeader,
 	boolean withLogo, boolean skipSectionHeader)
 {
-webStartWrapperDetailedArgs(theCart, headerText, format, args, withHttpHeader,
+webStartWrapperDetailedArgs(theCart, db, headerText, format, args, withHttpHeader,
 	withLogo, skipSectionHeader, TRUE);
 }
 
-void webStartWrapperGateway(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
+void webStartWrapperGateway(struct cart *theCart, char *db, char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
-webStartWrapperGatewayHeader(theCart, "", format, args, withHttpHeader,
+webStartWrapperGatewayHeader(theCart, db, "", format, args, withHttpHeader,
 			     withLogo, skipSectionHeader);
 }
 
-void webStartWrapper(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo)
+void webStartWrapper(struct cart *theCart, char *db, char *format, va_list args, boolean withHttpHeader, boolean withLogo)
     /* allows backward compatibility with old webStartWrapper that doesn't contain the "skipHeader" arg */
 	/* output a CGI and HTML header with the given title in printf format */
 {
-webStartWrapperGatewayHeader(theCart, "", format, args, withHttpHeader,
+webStartWrapperGatewayHeader(theCart, db, "", format, args, withHttpHeader,
 			     withLogo, FALSE);
 }	
 
-void webStart(struct cart *theCart, char *format, ...)
+void webStart(struct cart *theCart, char *db, char *format, ...)
 /* Print out pretty wrapper around things when not
  * from cart. */
 {
 va_list args;
 va_start(args, format);
-webStartWrapper(theCart, format, args, TRUE, TRUE);
+webStartWrapper(theCart, db, format, args, TRUE, TRUE);
 va_end(args);
 }
 
-void webStartHeader(struct cart *theCart, char *headerText, char *format, ...)
+void webStartHeader(struct cart *theCart, char *db, char *headerText, char *format, ...)
 /* Print out pretty wrapper around things when not from cart. 
  * Include headerText in the html header. */
 {
 va_list args;
 va_start(args, format);
-webStartWrapperGatewayHeader(theCart, headerText, format, args, TRUE, TRUE,
+webStartWrapperGatewayHeader(theCart, db, headerText, format, args, TRUE, TRUE,
 			     FALSE);
 va_end(args);
 }
@@ -546,7 +547,7 @@ void webVaWarn(char *format, va_list args)
  * the fancy form. */
 {
 if (! webHeadAlreadyOutputed)
-    webStart(errCart, "Error");
+    webStart(errCart, NULL, "Error");
 htmlVaWarn(format, args);
 printf("\n<!-- HGERROR -->\n");
 printf("\n\n");
@@ -562,7 +563,7 @@ va_start(args, format);
 
 /* output the header */
 if(!webHeadAlreadyOutputed)
-	webStart(errCart, title);
+    webStart(errCart, NULL, title);
 
 /* in text mode, have a different error */
 if(webInTextMode)
@@ -576,25 +577,6 @@ webEnd();
 
 va_end(args);
 exit(0);
-}
-
-static boolean haveDatabase(char *db)
-/* check if the database server has the specified database */
-{
-/* list of databases that actually exists (not really worth hashing) */
-static struct hash* validDatabases = NULL;
-if (validDatabases == NULL)
-    {
-    struct sqlConnection *sc = hAllocConn();
-    struct slName* allDatabases = sqlGetAllDatabase(sc);
-    struct slName* dbName = allDatabases;
-    validDatabases = hashNew(8);
-    for (; dbName != NULL; dbName = dbName->next)
-        hashAdd(validDatabases, dbName->name, NULL);
-    hFreeConn(&sc);
-    slFreeList(&allDatabases);
-    }
-return (hashLookup(validDatabases, db) != NULL);
 }
 
 void printCladeListHtml(char *genome, char *onChangeText)
@@ -645,7 +627,7 @@ char *cgiName;
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
     if (!hashFindVal(hash, cur->genome) &&
-	(!doCheck || haveDatabase(cur->name)))
+	(!doCheck || sqlDatabaseExists(cur->name)))
         {
         hashAdd(hash, cur->genome, cur);
         orgList[numGenomes] = cur->genome;
@@ -765,7 +747,7 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 
     if (allowInactive ||
         ((cur->active || sameWord(cur->name, db)) 
-                && haveDatabase(cur->name)))
+                && sqlDatabaseExists(cur->name)))
         {
         assemblyList[numAssemblies] = cur->description;
         values[numAssemblies] = cur->name;
@@ -840,7 +822,7 @@ void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript)
 /* Find all the organisms/assemblies that are referenced in axtInfo, 
  * and print the dropdown list. */
 {
-struct dbDb *dbList = hGetAxtInfoDbs();
+struct dbDb *dbList = hGetAxtInfoDbs(dbCgi);
 char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
@@ -872,55 +854,7 @@ cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly,
 		    javascript);
 }
 
-#ifndef GBROWSE
-void printAlignmentListHtml(char *db, char *alCgiName, char *selected)
-{
-/* Find all the alignments (from axtInfo) that pertain to the selected
- * genome.  Prints to stdout the HTML to render a dropdown list
- * containing a list of the possible alignments to choose from.
- */
-char *alignmentList[128];
-char *values[128];
-int numAlignments = 0;
-struct axtInfo *alignList = NULL;
-struct axtInfo *cur = NULL;
-char *organism = hOrganism(db);
-
-alignList = hGetAxtAlignments(db);
-
-for (cur = alignList; ((cur != NULL) && (numAlignments < 128)); cur = cur->next)
-    {
-    /* If we are looking at a zoo database then show the zoo database list */
-    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
-        strstrNoCase(cur->species, "zoo"))
-        {
-        alignmentList[numAlignments] = cur->alignment;
-        values[numAlignments] = cur->alignment;
-        numAlignments++;
-        }
-    else if (
-             !strstrNoCase(cur->species, "zoo") &&
-             (strstrNoCase(cur->species, db)))
-        {
-        alignmentList[numAlignments] = cur->alignment;
-        values[numAlignments] = cur->alignment;
-        numAlignments++;
-        }
-
-
-    /* Save a pointer to the current alignment */
-    if (selected == NULL)
-        if (strstrNoCase(db, cur->species))
-           {
-           selected = cur->alignment;
-           }
-    }
-cgiMakeDropListFull(alCgiName, alignmentList, values, numAlignments, selected, NULL);
-}
-#endif /* GBROWSE */
-
-char *getDbForGenome(char *genome, struct cart *cart)
-{
+static char *getDbForGenome(char *genome, struct cart *cart)
 /*
   Function to find the default database for the given Genome.
 It looks in the cart first and then, if that database's Genome matches the 
@@ -931,9 +865,11 @@ param Genome - The Genome for which to find a database
 param cart - The cart to use to first search for a suitable database name
 return - The database matching this Genome type
 */
-char *retDb = cartUsualString(cart, dbCgiName, hGetDb());
+{
 
-if (!hDbExists(retDb))
+char *retDb = cartUsualString(cart, dbCgiName, NULL);
+
+if ((retDb == NULL) || !hDbExists(retDb))
     {
     retDb = hDefaultDb();
     }

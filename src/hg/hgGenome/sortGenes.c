@@ -26,7 +26,7 @@ struct colTrack
 void sortGenes(struct sqlConnection *conn)
 /* Put up sort gene page. */
 {
-cartWebStart(cart, "Finding Candidate Genes for Gene Sorter");
+cartWebStart(cart, database, "Finding Candidate Genes for Gene Sorter");
 if (!hgNearOk(database))
     errAbort("Sorry, gene sorter not available for this database.");
 
@@ -50,7 +50,7 @@ for (bed = bedList; bed != NULL; )
     {
     /* Make binKeeper and stuff in all regions in this chromosome into it. */
     char *chrom = bed->chrom;
-    int chromSize = hChromSize(chrom);
+    int chromSize = hChromSize(database, chrom);
     struct binKeeper *bk = binKeeperNew(0, chromSize);
     while (bed != NULL && sameString(chrom, bed->chrom))
 	{

@@ -137,8 +137,8 @@ for (i=0; i<20; i++)
     fh[i] = mustOpen(temp_str, "w");
     }
 
-conn  = hAllocConn();
-conn2 = hAllocConn();
+conn  = hAllocConn(hDefaultDb());
+conn2 = hAllocConn(hDefaultDb());
 
 safef(query2, sizeof(query2), "select proteinID from %s.knownGene;", database);
 sr2 = sqlMustGetResult(conn2, query2);
@@ -155,12 +155,12 @@ while (row2 != NULL)
     {
     protDisplayId = row2[0];   
     safef(cond_str, sizeof(cond_str),  "val='%s'", protDisplayId);
-    accession = sqlGetField(conn, proteinDatabaseName, "displayId", "acc", cond_str);
+    accession = sqlGetField(proteinDatabaseName, "displayId", "acc", cond_str);
 
     if (accession == NULL)
 	{
         safef(cond_str, sizeof(cond_str),  "acc='%s'", protDisplayId);
-    	accession = sqlGetField(conn, proteinDatabaseName, "displayId", "acc", cond_str);
+    	accession = sqlGetField(proteinDatabaseName, "displayId", "acc", cond_str);
 	if (accession == NULL)
 	    {
 	    verbose(2, "'%s' not found.\n", protDisplayId);
@@ -169,7 +169,7 @@ while (row2 != NULL)
 	}
     
     safef(cond_str, sizeof(cond_str),  "accession='%s'", accession);
-    answer = sqlGetField(conn, "proteins040115", "spXref2", "biodatabaseID", cond_str);
+    answer = sqlGetField("proteins040115", "spXref2", "biodatabaseID", cond_str);
     if (answer == NULL)
 	{
 	/* this protein might be a variant splice protein, and then it won't be in spXref2 */
@@ -182,7 +182,7 @@ while (row2 != NULL)
 	}
     
     safef(cond_str, sizeof(cond_str),  "acc='%s'", accession);
-    aaSeq = sqlGetField(conn, proteinDatabaseName, "protein", "val", cond_str);
+    aaSeq = sqlGetField(proteinDatabaseName, "protein", "val", cond_str);
     if (aaSeq == NULL)
 	{
 	printf("Can't find peptide sequence for %s, exiting ...\n", protDisplayId);

@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.59 2008/08/25 21:00:07 aamp Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.60 2008/09/03 19:19:42 markd Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -36,10 +36,9 @@ char *tmpDir = (char *)NULL;	/* location to create a temporary file */
 boolean nameIx = TRUE;	        /* FALSE == do not create the name index */
 boolean ignoreEmpty = FALSE;	/* TRUE == empty input files are not an error */
 boolean allowNegativeScores = FALSE;	/* TRUE == score column set to int */
-boolean customTrackLoader = FALSE; /*TRUE == turn on all custom track options*/
-boolean localDb = FALSE;        /* Connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"*/ 
-/* turns on: noNameIx, ignoreEmpty, allowNegativeScores
-	-verbose=0 */
+boolean customTrackLoader = FALSE; /*TRUE == turn on all custom track options
+                                    * turns on: noNameIx, ignoreEmpty, allowNegativeScores
+                                    * -verbose=0 */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -66,7 +65,6 @@ static struct optionSpec optionSpecs[] = {
     {"ignoreEmpty", OPTION_BOOLEAN},
     {"allowNegativeScores", OPTION_BOOLEAN},
     {"customTrackLoader", OPTION_BOOLEAN},
-    {"local", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -105,7 +103,6 @@ errAbort(
   "   -customTrackLoader  - turns on: -noNameIx, -noHistory, -ignoreEmpty,\n"
   "                         -allowNegativeScores -verbose=0\n"
   "   -verbose=N - verbose level for extra information to STDERR\n"
-  "   -local - connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"
   );
 }
 
@@ -333,9 +330,6 @@ int loadOptions = (optionExists("onServer") ? SQL_TAB_FILE_ON_SERVER : 0);
 if ( ! noLoad )
     conn = sqlConnect(database);
 
-if (localDb)
-    conn = hConnectLocalDb(database);
-
 if ((char *)NULL != tmpDir)
     tab = cloneString(rTempName(tmpDir,"loadBed",".tab"));
 else
@@ -376,13 +370,12 @@ else if (!oldTable)
     {
     int minLength;
 
-    hSetDb(database);
     if (noLoad)
 	minLength=6;
     else if (maxChromNameLength)
 	minLength = maxChromNameLength;
     else
-	minLength = hGetMinIndexLength();
+	minLength = hGetMinIndexLength(database);
     verbose(2, "INDEX chrom length: %d\n", minLength);
 
     /* Create definition statement. */
@@ -550,9 +543,8 @@ nameIx = ! optionExists("noNameIx");
 ignoreEmpty = optionExists("ignoreEmpty");
 allowNegativeScores = optionExists("allowNegativeScores");
 customTrackLoader = optionExists("customTrackLoader");
-localDb = optionExists("local");
 /* turns on: noNameIx, ignoreEmpty, allowNegativeScores
-	-verbose=0 */
+ * -verbose=0 */
 if (customTrackLoader)
     {
     ignoreEmpty = TRUE;

@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgStanfordMicroarray.c,v 1.5 2006/05/23 17:24:51 angie Exp $";
+static char const rcsid[] = "$Id: hgStanfordMicroarray.c,v 1.6 2008/09/03 19:19:46 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -368,8 +368,7 @@ makeExpTable("hgFixed", expTable, expList);
 makeGeneTable(database, table,  geneList, expCount);
 
 /* Update history. */
-hSetDb(database);
-conn = hgStartUpdate();
+conn = hgStartUpdate(database);
 hgEndUpdate(&conn, "Loading %s from %s dir. %d experiments %d genes",
 	table, dir, slCount(expList), slCount(geneList));
 }

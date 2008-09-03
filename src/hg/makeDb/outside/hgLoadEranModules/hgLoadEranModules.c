@@ -13,7 +13,7 @@
 #include "dnaMotif.h"
 #include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.3 2007/03/02 00:48:49 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.4 2008/09/03 19:19:50 markd Exp $";
 
 
 void usage()
@@ -105,7 +105,7 @@ return dif;
 }
 
 
-struct hash *loadGenePositions(struct sqlConnection *conn, char *fileName)
+struct hash *loadGenePositions(char *database, struct sqlConnection *conn, char *fileName)
 /* Read in 7 column file and convert to hash of gene
  * positions. */
 {
@@ -122,7 +122,7 @@ while (lineFileRow(lf, row))
     AllocVar(pos);
     hashAddSaveName(hash, row[0], pos, &pos->name);
     slAddHead(&posList, pos);
-    pos->chrom = hgOfficialChromName(row[1]);
+    pos->chrom = hgOfficialChromName(database, row[1]);
     if (pos->chrom == NULL)
         errAbort("Unrecognized chromosome %s line %d of %s",
 		row[1], lf->lineIx, lf->fileName);
@@ -616,7 +616,7 @@ void hgLoadEranModules(char *database,
 /* hgLoadEranModules - Load regulatory modules from Eran Segal. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct hash *positionsHash = loadGenePositions(conn, genePositions);
+struct hash *positionsHash = loadGenePositions(database, conn, genePositions);
 struct hash *moduleAndMotifHash = loadModuleToMotif(conn, moduleToMotif, "esRegModuleToMotif");
 struct hash *geneToModuleHash = loadGeneToModule(conn, geneToModule, "esRegGeneToModule");
 struct hash *motifHash = loadMotifWeights(conn, motifWeights, "esRegMotif");
@@ -684,7 +684,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 7)
     usage();
-hSetDb(argv[1]);
 hgLoadEranModules(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }

@@ -8,7 +8,7 @@
 #include "genePredReader.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: genePredCheck.c,v 1.7 2008/06/09 23:20:41 pauline Exp $";
+static char const rcsid[] = "$Id: genePredCheck.c,v 1.8 2008/09/03 19:18:38 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -68,9 +68,6 @@ struct genePredReader *gpr;
 struct genePred *gp;
 int iRec = 0;
 
-
-if (gDb != NULL)
-    hSetDb(gDb);  /* needed for hGetChromInfo */
 
 if (fileExists(fileTbl))
     {

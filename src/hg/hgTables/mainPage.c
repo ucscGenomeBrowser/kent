@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.124 2008/07/10 17:36:39 tdreszer Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.125 2008/09/03 19:18:59 markd Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -592,8 +592,8 @@ hPrintf("<TABLE BORDER=0>\n");
 
     if (curTrack == NULL)
 	{
-	struct trackDb *tdb = hTrackDbForTrack(curTable);
-	struct trackDb *cTdb = hCompositeTrackDbForSubtrack(tdb);
+	struct trackDb *tdb = hTrackDbForTrack(database, curTable);
+	struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
 	if (cTdb)
 	    curTrack = cTdb;
 	else

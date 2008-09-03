@@ -38,7 +38,7 @@
 #include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.36 2008/02/23 15:49:55 braney Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.37 2008/09/03 19:18:14 markd Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 boolean usingChromKeeper = FALSE;      /* Are we using a chromosome keeper for agxs? database otherwise. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -47,6 +47,7 @@ static char *chainTable = NULL;        /* Table that contains chains, i.e. chain
 static struct hash *mRnaHash = NULL;   /* Hash for mRNA accesions if we are weigthing them more. */
 static int mRnaWeight = 1;                    /* Weight of mRNAs if we are treating them preferentially. */
 static struct binKeeper *chainKeeper = NULL; /* Bin keeper for easy coordinate access of chains. */
+char *db = NULL, *orthoDb = NULL;     /* databases to operator on */
 
 struct orthoSpliceEdge 
 /* Structure to hold information about one edge in 
@@ -548,7 +549,7 @@ char **row;
 int rowOffset;
 struct chain *chain = NULL;
 
-if (!hFindSplitTable(chrom, track, table, &rowOffset))
+if (!hFindSplitTable(db, chrom, track, table, &rowOffset))
     errAbort("No %s track in database", track);
 snprintf(query, sizeof(query), 
 	 "select * from %s where id = %d", table, id);
@@ -572,7 +573,7 @@ if(id == 0)
     return NULL;
 if(chainTable != NULL)
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(db);
     chain = chainDbLoad(conn, chainTable, workingChrom, id);
     hFreeConn(&conn);
     return chain;
@@ -1374,12 +1375,12 @@ if(!usingChromKeeper)
     {
     char query[256];
     struct sqlConnection *orthoConn = NULL; 
-    orthoConn = hAllocConn2();
+    orthoConn = hAllocConn(orthoDb);
     safef(query, sizeof(query), 
 	  "select * from %s where tName='%s' and tStart<%d and tEnd>%d and strand like '%c'",
 	  altTable, chrom, chromEnd, chromStart, strand);
     agxList = altGraphXLoadByQuery(orthoConn, query);
-    hFreeConn2(&orthoConn);
+    hFreeConn(&orthoConn);
     *toFree = agxList;
     return agxList;
     }
@@ -1871,7 +1872,7 @@ carefulClose(&rFile);
 warn("\nDone.");
 }
     
-void hashMrnas()
+void hashMrnas(char *db)
 /** Hash all of the accessions in the mrna and refSeqAli
     tables for this chromosome. */
 {
@@ -1882,7 +1883,7 @@ char query[256];
 char *chrom = optionVal("chrom", NULL);
 
 /* Allocate some memory. */
-conn = hAllocConn();
+conn = hAllocConn(db);
 mRnaHash = newHash(13);
 mRnaWeight = optionInt("weightMrna", 1);
 
@@ -1911,7 +1912,6 @@ hFreeConn(&conn);
 
 int main(int argc, char *argv[])
 {
-char *db = NULL, *orthoDb = NULL;
 char *mapping = NULL;
 if(argc == 1)
     usage();
@@ -1926,10 +1926,8 @@ if(mapping != NULL)
     mappingFile = mustOpen(mapping, "w");
 if(db == NULL || orthoDb == NULL)
     errAbort("orthoSplice - Must set db and orhtoDb. Try -help for usage.");
-hSetDb(db);
-hSetDb2(orthoDb);
 if(optionExists("weightMrna"))
-    hashMrnas();
+    hashMrnas(db);
 orthoSplice(db, orthoDb);
 hashFree(&mRnaHash);
 if(mappingFile != NULL)

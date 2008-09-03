@@ -32,8 +32,8 @@ char *proteinID;
 if (argc != 2) usage();
 database  = cloneString(argv[1]);
 
-conn = hAllocConn();
-conn2= hAllocConn();
+conn = hAllocConn(database);
+conn2= hAllocConn(database);
 o2 = fopen("jj.dat", "w");
 
 sprintf(query2,"select name, proteinID from %s.knownGene;", database);

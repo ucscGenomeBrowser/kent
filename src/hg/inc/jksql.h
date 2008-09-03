@@ -31,6 +31,8 @@
 #include "hash.h"
 #endif
 
+extern char *defaultProfileName;  // name of default profile
+
 struct sqlConnection *sqlConnect(char *database);
 /* Connect to database on default host as default user. */
 
@@ -38,31 +40,36 @@ struct sqlConnection *sqlMayConnect(char *database);
 /* Connect to database on default host as default user. 
  * Return NULL (don't abort) on failure. */
 
-struct sqlConnection *sqlConnectProfile(char *profile, char *database);
-/* Connect to database using the specified profile.  The profile is the prefix
- * to the host, user, and password variables in .hg.conf.  The environment
- * variables HGDB_${profile}_HOST, HGDB_${profile}_USER,
- * HGDB_${profile}_PASSWORD can override.  */ 
+struct sqlConnection *sqlConnectProfile(char *profileName, char *database);
+/* Connect to profile or database using the specified profile.  Can specify
+ * profileName, database, or both. The profile is the prefix to the host,
+ * user, and password variables in .hg.conf.  For the default profile of "db",
+ * the environment variables HGDB_HOST, HGDB_USER, and HGDB_PASSWORD can
+ * override.
+ */ 
 
-struct sqlConnection *sqlConnectReadOnly(char *database);
-/* Connect to database using ro profile in .hg.conf */ 
+struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database);
+/* Connect to profile or database using the specified profile. Can specify
+ * profileName, database, or both. The profile is the prefix to the host,
+ * user, and password variables in .hg.conf.  For the default profile of "db",
+ * the environment variables HGDB_HOST, HGDB_USER, and HGDB_PASSWORD can
+ * override.  Return NULL if connection fails.
+ */ 
 
-struct sqlConnection *sqlConnectRemote(char *host, 
-	char *user, char *password, char *database);
-/* Connect to database somewhere as somebody. */
+struct sqlConnection *sqlConnectRemote(char *host, char *user, char *password,
+                                       char *database);
+/* Connect to database somewhere as somebody. Database maybe NULL to
+ * just connect to the server. Abort on error. */
 
-struct sqlConnection *sqlConnRemote(char *host, 
-				    char *user, char *password, char *database, boolean abort);
-/* Connect to database somewhere as somebody.  
- * If abort is set display error message and abort on error. */
+struct sqlConnection *sqlMayConnectRemote(char *host, char *user, char *password,
+                                          char *database);
+/* Connect to database somewhere as somebody. Database maybe NULL to
+ * just connect to the server.  Return NULL can't connect */
 
-struct sqlConnection *sqlCtConn(boolean abort);
-/* Connect to customTrash database, optionally abort on failure */
-
-struct hash *sqlHashOfDatabases();
+struct hash *sqlHashOfDatabases(void);
 /* Get hash table with names of all databases that are online. */
 
-struct slName *sqlListOfDatabases();
+struct slName *sqlListOfDatabases(void);
 /* Get list of all databases that are online. */
 
 void sqlDisconnect(struct sqlConnection **pSc);
@@ -80,30 +87,39 @@ struct slName *sqlListTables(struct sqlConnection *conn);
 struct slName *sqlListFields(struct sqlConnection *conn, char *table);
 /* Return list of fields in table. */
 
-struct hash *sqlAllFields();
+struct hash *sqlAllFields(void);
 /* Get hash of all fields in database.table.field format.  */
 
-struct sqlConnCache *sqlNewConnCache(char *database);
+struct sqlConnCache *sqlConnCacheNew();
 /* Return a new connection cache. (Useful if going to be
  * doing lots of different queries in different routines
  * to same database - reduces connection overhead.) */
 
-struct sqlConnCache *sqlNewRemoteConnCache(char *database, 
-	char *host, char *user, char *password);
+struct sqlConnCache *sqlConnCacheNewRemote(char *host, char *user,
+                                           char *password);
 /* Set up a cache on a remote database. */
 
-void sqlFreeConnCache(struct sqlConnCache **pCache);
+struct sqlConnCache *sqlConnCacheNewProfile(char *profileName);
+/* Return a new connection cache associated with the particular profile. */
+
+void sqlConnCacheFree(struct sqlConnCache **pCache);
 /* Dispose of a connection cache. */
 
-struct sqlConnection *sqlMayAllocConnection(struct sqlConnCache *cache,
-					    boolean mustConnect);
-/* Allocate a cached connection. errAbort if too many open connections.  
- * errAbort if mustConnect and connection fails. */
+struct sqlConnection *sqlConnCacheMayAlloc(struct sqlConnCache *cache,
+                                           char *database);
+/* Allocate a cached connection. errAbort if too many open connections,
+ * return NULL if can't connect to server. */
 
-struct sqlConnection *sqlAllocConnection(struct sqlConnCache *cache);
+struct sqlConnection *sqlConnCacheAlloc(struct sqlConnCache *cache,
+                                        char *database);
 /* Allocate a cached connection. */
 
-void sqlFreeConnection(struct sqlConnCache *cache,struct sqlConnection **pConn);
+struct sqlConnection *sqlConnCacheProfileAlloc(struct sqlConnCache *cache,
+                                               char *profileName,
+                                               char *database);
+/* Allocate a cached connection given a profile and/or database. */
+
+void sqlConnCacheDealloc(struct sqlConnCache *cache,struct sqlConnection **pConn);
 /* Free up a cached connection. */
 
 void sqlUpdate(struct sqlConnection *conn, char *query);
@@ -304,11 +320,8 @@ void sqlAbort(struct sqlConnection  *sc, char *format, ...);
 /* Printf formatted error message that adds on sql 
  * error message and abort. */
 
-void sqlCleanupAll();
+void sqlCleanupAll(void);
 /* Cleanup all open connections and resources. */
-
-char *connGetDatabase(struct sqlConnCache *conn);
-/* return database for a connection cache */
 
 boolean sqlWildcardIn(char *s);
 /* Return TRUE if there is a sql wildcard char in string. */
@@ -342,7 +355,7 @@ void sqlMonitorSetIndent(unsigned indent);
  * trace, which can be helpful in making voluminous trace info almost
  * readable. */
 
-void sqlMonitorDisable();
+void sqlMonitorDisable(void);
 /* Disable tracing or profiling of SQL queries. */
 
 int sqlDateToUnixTime(char *sqlDate);
@@ -449,10 +462,5 @@ char *sqlTempTableName(struct sqlConnection *conn, char *prefix);
  * table name encorperates the host, pid, and time, which helps insure
  * uniqueness between different processes at least.  FreeMem the result
  * when you are done. */
-
-char* getCfgValue(char* envName, char* cfgName);
-/* get a configuration value, from either the environment or the cfg file,
- * with the env take precedence.
- */
 
 #endif /* JKSQL_H */

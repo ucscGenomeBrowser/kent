@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.109 2008/08/29 19:19:09 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.110 2008/09/03 19:18:50 markd Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -551,7 +551,7 @@ struct sqlResult *sr;
 char **row;
 struct genePred *gp = NULL;
 
-hFindSplitTable(curGeneChrom, track, table, &hasBin);
+hFindSplitTable(sqlGetDatabase(conn), curGeneChrom, track, table, &hasBin);
 safef(query, sizeof(query), 
 	"select * from %s where name = '%s' "
 	"and chrom = '%s' and txStart=%d and txEnd=%d"
@@ -571,29 +571,29 @@ void doKgMethod(struct sqlConnection *conn)
 {
 struct trackDb *tdb, *tdb2;
 
-cartWebStart(cart, "Methods, Credits, and Use Restrictions");
+cartWebStart(cart, database, "Methods, Credits, and Use Restrictions");
 
 /* default is knownGene */
-tdb = hTrackDbForTrack("knownGene");
+tdb = hTrackDbForTrack(database, "knownGene");
 
 /* deal with special genomes that do not have knownGene */
 if (sameWord(genome, "D. melanogaster"))
     {
-    tdb = hTrackDbForTrack("bdgpGene");
+    tdb = hTrackDbForTrack(database, "bdgpGene");
     }
 if (sameWord(genome, "C. elegans"))
     {
-    tdb = hTrackDbForTrack("sangerGene");
+    tdb = hTrackDbForTrack(database, "sangerGene");
     }
 if (sameWord(genome, "S. cerevisiae"))
     {
-    tdb = hTrackDbForTrack("sgdGene");
+    tdb = hTrackDbForTrack(database, "sgdGene");
     }
 if (sameWord(genome, "Danio rerio"))
     {
-    tdb = hTrackDbForTrack("ensGene");
+    tdb = hTrackDbForTrack(database, "ensGene");
     }
-tdb2 = hTrackDbForTrack(genomeSetting("knownGene"));
+tdb2 = hTrackDbForTrack(database, genomeSetting("knownGene"));
 hPrintf("%s", tdb2->html);
 
 cartWebEnd();
@@ -606,18 +606,17 @@ void cartMain(struct cart *theCart)
 struct sqlConnection *conn = NULL;
 cart = theCart;
 getDbAndGenome(cart, &database, &genome, oldVars);
-hSetDb(database);
 
 /* if kgProtMap2 table exists, this means we are doing KG III */
-if (hTableExists("kgProtMap2")) kgVersion = KG_III;
+if (hTableExists(database, "kgProtMap2")) kgVersion = KG_III;
 
-conn = hAllocConn();
+conn = hAllocConn(database);
 getGenomeSettings();
 curGeneId = findGeneId(conn, cartString(cart, hggGene));
 getGenePosition(conn);
 curGenePred = getCurGenePred(conn);
 curGeneName = getGeneName(curGeneId, conn);
-spConn = sqlConnect(UNIPROT_DB_NAME);
+spConn = hAllocConn(UNIPROT_DB_NAME);
 swissProtAcc = getSwissProtAcc(conn, spConn, curGeneId);
 
 /* Check command variables, and do the ones that
@@ -641,12 +640,14 @@ else if (cartVarExists(cart, hggDoOtherProteinAli))
 else
     {
     /* Default case - start fancy web page. */
-    cartWebStart(cart, "%s Gene %s (%s) Description and Page Index", 
+    cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index", 
     	genome, curGeneName, curGeneId);
     webMain(conn);
     cartWebEnd();
     }
 cartRemovePrefix(cart, hggDoPrefix);
+hFreeConn(&spConn);
+hFreeConn(&conn);
 }
 
 char *excludeVars[] = {"Submit", "submit", NULL};

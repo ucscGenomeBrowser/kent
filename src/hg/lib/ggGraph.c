@@ -15,7 +15,7 @@
 #include "hdb.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.25 2007/02/13 04:46:07 kent Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.26 2008/09/03 19:19:22 markd Exp $";
 
 static int maxEvidence = 500;
 
@@ -1296,10 +1296,11 @@ return total;
 }
 
 		
-struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, 
+struct geneGraph *ggGraphConsensusCluster(char *genomeDb, struct ggMrnaCluster *mc, struct ggMrnaInput *ci, 
 					  struct hash *tissLibHash, boolean fillInEvidence)
-/* Make up a gene transcript graph out of the ggMrnaCluster. Only
- extending truncated exons to consensus splice sites. */
+/* Make up a gene transcript graph out of the ggMrnaCluster. Only extending
+ * truncated exons to consensus splice sites.  If fillInEvidence is FALSE,
+ * genomeDb can be NULL.*/
 {
 struct sqlConnection *conn = NULL;
 struct geneGraph *gg = makeInitialGraph(mc, ci);
@@ -1337,7 +1338,7 @@ fixLargeMrnaInserts(gg);
 if(fillInEvidence)
     {
     if(tissLibHash == NULL)
-	conn = hAllocConn();
+	conn = hAllocConn(genomeDb);
     ggFillInTissuesAndLibraries(gg, tissLibHash, conn);
     }
 else
@@ -1351,10 +1352,10 @@ return gg;
 }
 
 
-struct geneGraph *ggGraphCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci)
+struct geneGraph *ggGraphCluster(char *genomeDb, struct ggMrnaCluster *mc, struct ggMrnaInput *ci)
 /* Make up a gene transcript graph out of the ggMrnaCluster. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(genomeDb);
 struct geneGraph *gg = makeInitialGraph(mc, ci);
 arcsForOverlaps(gg);
 softlyTrim(gg);

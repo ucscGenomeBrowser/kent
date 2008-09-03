@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: utrFa.c,v 1.1 2003/10/15 03:13:39 kent Exp $";
+static char const rcsid[] = "$Id: utrFa.c,v 1.2 2008/09/03 19:21:18 markd Exp $";
 
 int minSize = 16;
 
@@ -90,7 +90,7 @@ return seq;
 }
 
 
-void oneChrom(char *chrom, struct sqlConnection *conn, 
+void oneChrom(char *database, char *chrom, struct sqlConnection *conn, 
 	char *track, char *which, struct hash *hash)
 /* Process one chromosome into hash. */
 {
@@ -100,7 +100,7 @@ struct genePred *gp;
 int rowOffset;
 struct dnaSeq *oldSeq, *seq;
 struct hashEl *oldHel;
-struct dnaSeq *chromSeq = hChromSeq(chrom, 0, hChromSize(chrom));
+struct dnaSeq *chromSeq = hChromSeq(database, chrom, 0, hChromSize(database, chrom));
 
 sr = hChromQuery(conn, track, chrom, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -140,17 +140,16 @@ struct sqlConnection *conn;
 struct hash *hash = newHash(19);	/* DnaSeq valued hash */
 FILE *f = NULL;
 struct hashEl *helList, *hel;
-hSetDb(database);
 
-conn = hAllocConn();
+conn = hAllocConn(database);
 if (optionExists("chrom"))
     chromList = slNameNew(optionVal("chrom", NULL));
 else
-    chromList = hAllChromNames();
+    chromList = hAllChromNames(database);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     warn("%s", chrom->name);
-    oneChrom(chrom->name, conn, geneTrack, which, hash);
+    oneChrom(database, chrom->name, conn, geneTrack, which, hash);
     }
 hFreeConn(&conn);
 f = mustOpen(output, "w");

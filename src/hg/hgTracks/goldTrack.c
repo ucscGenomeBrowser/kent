@@ -20,7 +20,7 @@ return a->chromStart - b->chromStart;
 static void goldLoad(struct track *tg)
 /* Load up golden path from database table to track items. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 struct agpFrag *fragList = NULL, *frag;

@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1457 2008/08/27 03:40:03 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1458 2008/09/03 19:19:07 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -544,7 +544,7 @@ boolean clipToChrom(int *pStart, int *pEnd)
 static int chromSize = -1;
 
 if (chromSize < 0)
-    chromSize = hChromSize(seqName);
+    chromSize = hChromSize(database, seqName);
 if (*pStart < 0) *pStart = 0;
 if (*pEnd > chromSize) *pEnd = chromSize;
 return *pStart < *pEnd;
@@ -583,7 +583,7 @@ clipToChrom(&s, &e);
 printf("<P>Here is the sequence around this feature: bases %d to %d of %s. "
        "The bases that contain the feature itself are in upper case.</P>\n", 
        s, e, seqName);
-seq = hDnaFromSeq(seqName, s, e, dnaLower);
+seq = hDnaFromSeq(database, seqName, s, e, dnaLower);
 toUpperN(seq->dna + (start-s), end - start);
 printf("<PRE><TT>");
 cfm = cfmNew(10, 50, TRUE, FALSE, stdout, s);
@@ -605,7 +605,7 @@ boolean gotE = FALSE;
 
 if (start < 0)
     return;
-gotS = hChromBand(chrom, start, sband);
+gotS = hChromBand(database, chrom, start, sband);
 /* if the start lookup fails, don't bother with the end lookup */
 if (!gotS)
     return;
@@ -618,7 +618,7 @@ if (end == 0)
         printf("<B>Band:</B> %s<BR>\n", sband);
     return;
 }
-gotE = hChromBand(chrom, end-1, eband);
+gotE = hChromBand(database, chrom, end-1, eband);
 /* if eband equals sband, just use sband */
 if (gotE && sameString(sband,eband))
    gotE = FALSE;
@@ -671,7 +671,7 @@ void printPosOnScaffold(char *chrom, int start, int end, char *strand)
     char *scaffoldName;
     int scaffoldStart, scaffoldEnd;
 
-    if (!hScaffoldPos(chrom, start, end, &scaffoldName, &scaffoldStart, &scaffoldEnd))
+    if (!hScaffoldPos(database, chrom, start, end, &scaffoldName, &scaffoldStart, &scaffoldEnd))
         {
         printPosOnChrom(chrom, start,end,strand, FALSE, NULL);
         return;
@@ -738,9 +738,9 @@ void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
 {
 if (item != NULL && item[0] != 0)
-    cartWebStart(cart, "%s (%s)", tdb->longLabel, item);
+    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
 else
-    cartWebStart(cart, "%s", tdb->longLabel);
+    cartWebStart(cart, database, "%s", tdb->longLabel);
 }
 
 static struct dyString *subMulti(char *orig, int subCount, 
@@ -771,7 +771,7 @@ if (sql != NULL)
     {
     char buf[256];
     safef(buf, sizeof(buf), sql, itemName);
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     id = sqlQuickString(conn, buf);
     hFreeConn(&conn);
     }
@@ -891,7 +891,7 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
         table, item, seqName, start);
 
@@ -954,13 +954,13 @@ if (filterTable)
     {
     /* Track display only shows top-scoring N elements -- restrict
      * the list to these.  Get them from the filter table */
-    hasBin = hOffsetPastBin(hDefaultChrom(), filterTable);
+    hasBin = hOffsetPastBin(database, hDefaultChrom(database), filterTable);
     safef(query, sizeof(query), "select * from %s order by score desc limit %d",
             filterTable, filterCt);
     }
 else
     {
-    hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+    hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
     safef(query, sizeof(query),
           "select * from %s where chrom = '%s' and chromEnd > %d and "
           "chromStart < %d order by score desc",
@@ -1017,7 +1017,7 @@ if (bedSize >= 5 && showTopScorers != NULL)
     /* list top-scoring elements in window */
     int maxScorers = sqlUnsigned(showTopScorers);
     doFilterTopScorers = cartCgiUsualBoolean(cart, query, doFilterTopScorers);
-    if (doFilterTopScorers && hTableExists(filterTopScoreTable))
+    if (doFilterTopScorers && hTableExists(database, filterTopScoreTable))
         {
         /* limit to those in the top N, from table */
         safef(query, sizeof query, "%s.%s", table, "filterTopScorersCt");
@@ -1047,14 +1047,14 @@ char **row;
 //boolean firstTime = TRUE;
 //char *escapedName = sqlEscapeString(item);
 int start = cartInt(cart, "o");
-//struct sqlConnection *conn = hAllocConn();
+//struct sqlConnection *conn = hAllocConn(database);
 char *user = cfgOption("db.user");
 char *password = cfgOption("db.password");
 struct sqlConnection *sc;
 struct atom ret;
 
 genericHeader(tdb, item);
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 #if 0
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", table, escapedName, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -1205,7 +1205,7 @@ char **row;
 boolean firstTime = TRUE;
 char *escapedName = sqlEscapeString(item);
 
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 if (bedSize <= 3)
     sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
 else
@@ -1347,7 +1347,7 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 if (bedSize <= 3)
     sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
 else
@@ -1365,7 +1365,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 }
 
-void axtOneGeneOut(struct axt *axtList, int lineSize, 
+void axtOneGeneOut(char *otherDb, struct axt *axtList, int lineSize, 
 		   FILE *f, struct genePred *gp, char *nibFile)
 /* Output axt and orf in pretty format. */
 {
@@ -1466,7 +1466,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
     int qEnd = axt->qEnd;
     int qSize = 0;
     if (!sameString(axt->qName, "gap"))
-        qSize = hChromSize2(axt->qName);
+        qSize = hChromSize(otherDb, axt->qName);
     if (qStrand == '-')
         {
         qStart = qSize - axt->qEnd;
@@ -1925,8 +1925,8 @@ while ((axt = axtRead(lf)) != NULL)
             {
             reverseComplement(axt->qSym, axt->symCount);
             reverseComplement(axt->tSym, axt->symCount);
-            tmp = hChromSize2(axt->qName) - axt->qStart;
-            axt->qStart = hChromSize2(axt->qName) - axt->qEnd;
+            tmp = hChromSize(fromDb, axt->qName) - axt->qStart;
+            axt->qStart = hChromSize(fromDb, axt->qName) - axt->qEnd;
             axt->qEnd = tmp;
             if (prevEnd < (axt->tStart)-1)
                 {
@@ -2006,8 +2006,8 @@ while ((axt = axtRead(lf)) != NULL)
             {
             reverseComplement(axt->qSym, axt->symCount);
             reverseComplement(axt->tSym, axt->symCount);
-            tmp = hChromSize2(axt->qName) - axt->qStart;
-            axt->qStart = hChromSize2(axt->qName) - axt->qEnd;
+            tmp = hChromSize(fromDb, axt->qName) - axt->qStart;
+            axt->qStart = hChromSize(fromDb, axt->qName) - axt->qEnd;
             axt->qEnd = tmp;
             if (prevEnd < (axt->tStart)-1)
                 {
@@ -2071,7 +2071,7 @@ void showGenePos(char *name, struct trackDb *tdb)
 {
 char *track = tdb->tableName;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct genePred *gpList = NULL, *gp = NULL;
 boolean hasBin; 
 char table[64];
@@ -2079,7 +2079,7 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 char *classTable = trackDbSetting(tdb, GENEPRED_CLASS_TBL);
 
-hFindSplitTable(seqName, track, table, &hasBin);
+hFindSplitTable(database, seqName, track, table, &hasBin);
 safef(query, sizeof(query), "name = \"%s\"", name);
 gpList = genePredReaderLoadQuery(conn, table, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
@@ -2108,7 +2108,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     /* if a gene class table exists, get gene class and print */
     if (classTable != NULL)
         {
-        if (hTableExists(classTable)) 
+        if (hTableExists(database, classTable)) 
            {
            safef(query, sizeof(query),
                 "select class from %s where name = \"%s\"", classTable, name);
@@ -2156,7 +2156,7 @@ boolean hasBin;
 int posCount = 0;
 char table[64] ;
 
-hFindSplitTable(seqName, track, table, &hasBin);
+hFindSplitTable(database, seqName, track, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s'", table, name);
 sr = sqlGetResult(connMm, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -2184,7 +2184,7 @@ showGenePos(geneName, tdb);
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 
-if ((pepTable != NULL) && hGenBankHaveSeq(pepName, pepTable))
+if ((pepTable != NULL) && hGenBankHaveSeq(database, pepName, pepTable))
     {
     puts("<LI>\n");
     hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
@@ -2268,7 +2268,7 @@ char *geneTable = tdb->tableName;
 showGenePosMouse(geneName, tdb, connMm);
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
-if (pepTable != NULL && hTableExists(pepTable))
+if (pepTable != NULL && hTableExists(database, pepTable))
     {
     hgcAnchorSomewhereDb(pepClick, pepName, pepTable, seqName, mousedb);
     printf("<LI>Translated Protein</A> \n"); 
@@ -2352,7 +2352,7 @@ struct psl* pslList = getAlignments(conn, tdb->tableName, item);
 /* check if there is an alignment available for this sequence.  This checks
  * both genbank sequences and other sequences in the seq table.  If so,
  * set it up so they can click through to the alignment. */
-if (hGenBankHaveSeq(item, NULL))
+if (hGenBankHaveSeq(database, item, NULL))
     {
     printf("<H3>%s/Genomic Alignments</H3>", item);
     printAlignments(pslList, start, "htcCdnaAli", tdb->tableName, item);
@@ -2391,7 +2391,7 @@ return trackTable;
 void printTBSchemaLink(struct trackDb *tdb)
 /* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
 {
-if (hTableOrSplitExists(tdb->tableName))
+if (hTableOrSplitExists(database, tdb->tableName))
     {
     char *trackTable = getParentTrackName(tdb);
     printf("<P><A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
@@ -2409,7 +2409,7 @@ void printTrackUiLink(struct trackDb *tdb)
 char *trackTable = getParentTrackName(tdb);
 struct trackDb *parentTdb = tdb;
 if (!sameString(trackTable, tdb->tableName))
-    parentTdb = hTrackDbForTrack(trackTable);
+    parentTdb = hTrackDbForTrack(database, trackTable);
 printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s&%s\">"
        "Go to %s track controls</A></P>\n",
        trackTable, cartSidUrlString(cart), parentTdb->shortLabel);
@@ -2454,9 +2454,9 @@ if (!isCustomTrack(tdb->tableName))
     printTrackUiLink(tdb);
     printDataVersion(tdb);
     printOrigAssembly(tdb);
-    if ((tableName = hTableForTrack(hGetDb(), tdb->tableName)) != NULL)
+    if ((tableName = hTableForTrack(database, tdb->tableName)) != NULL)
 	{
-	struct sqlConnection *conn = hAllocConn();
+	struct sqlConnection *conn = hAllocConn(database);
 	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
 	if (date != NULL)
 	    printf("<B>Data last updated:</B> %s<BR>\n", date);
@@ -2500,7 +2500,7 @@ char **row;
 int rowOffset;
 struct chain *chain;
 
-if (!hFindSplitTableDb(db, seqName, track, table, &rowOffset))
+if (!hFindSplitTable(db, seqName, track, table, &rowOffset))
     errAbort("No %s track in database %s for %s", track, db, seqName);
 snprintf(query, sizeof(query), 
 	 "select * from %s where id = %d", table, id);
@@ -2581,8 +2581,6 @@ if (otherOrg == NULL)
     /* use first word of chain label (count on org name as first word) */
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
-if (otherDb != NULL)
-    hSetDb2(otherDb);
 
 chain = chainLoadIdRange(database, track, seqName, winStart, winEnd, atoi(item));
 chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
@@ -2595,7 +2593,7 @@ else if (hDbIsActive(otherDb))
     struct axtScoreScheme *scoreScheme = axtScoreSchemeDefault();
     int qStart = subChain->qStart;
     int qEnd   = subChain->qEnd  ;
-    struct dnaSeq *tSeq = hDnaFromSeq(subChain->tName, subChain->tStart, subChain->tEnd, dnaLower);
+    struct dnaSeq *tSeq = hDnaFromSeq(database, subChain->tName, subChain->tStart, subChain->tEnd, dnaLower);
     struct dnaSeq *qSeq = NULL;
     char *matrix = trackDbSetting(tdb, "matrix");
     if (matrix != NULL)
@@ -2619,7 +2617,7 @@ else if (hDbIsActive(otherDb))
 
     if (subChain->qStrand == '-')
         reverseIntRange(&qStart, &qEnd, subChain->qSize);
-    qSeq = hChromSeq2(subChain->qName, qStart, qEnd);
+    qSeq = hChromSeq(otherDb, subChain->qName, qStart, qEnd);
     if (subChain->qStrand == '-')
         reverseComplement(qSeq->dna, qSeq->size);
     subChain->score = chainCalcScoreSubChain(subChain, scoreScheme, gapCalc,
@@ -2660,7 +2658,7 @@ else if (hDbIsActive(otherDb))
 	   subSetScore);
 printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 
-if (chainDbNormScoreAvailable(chain->tName, track, &foundTable))
+if (chainDbNormScoreAvailable(database, chain->tName, track, &foundTable))
     {
     char query[256];
     struct sqlResult *sr;
@@ -2715,7 +2713,7 @@ char *trackTypeInfo(char *track)
 /* Return type info on track. You can freeMem result when done. */
 {
 struct slName *trackDbs = hTrackDbList(), *oneTrackDb;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char buf[512];
 char query[256];
 for (oneTrackDb = trackDbs; oneTrackDb != NULL; oneTrackDb = oneTrackDb->next)
@@ -2803,7 +2801,7 @@ if (otherOrg == NULL)
     /* use first word in short track label */
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
-hFindSplitTable(seqName, tdb->tableName, table, &rowOffset);
+hFindSplitTable(database, seqName, tdb->tableName, table, &rowOffset);
 snprintf(query, sizeof(query), 
 	 "select * from %s where tName = '%s' and tStart <= %d and tEnd > %d "
 	 "and level = %s",
@@ -2915,7 +2913,7 @@ boolean printedMinus = FALSE;
 char *dupe, *words[16];
 int wordCount;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char table[64];
 boolean hasBin;
 char query[512];
@@ -2934,7 +2932,7 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -2947,7 +2945,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr); 
 slReverse(&tfbsConsSitesList);
 
-hFindSplitTable(seqName, "tfbsConsFactors", table, &hasBin);
+hFindSplitTable(database, seqName, "tfbsConsFactors", table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' ", table, item);
 sr = sqlGetResult(conn, query);
 
@@ -3001,7 +2999,7 @@ if (tfbsConsFactorList)
 	    safef(protMapTable, sizeof(protMapTable), "%s.kgProtMap", factorDb);
 
 	    /* Only display link if entry exists in protein browser */
-	    if (hTableExists(protMapTable))
+	    if (hTableExists(database, protMapTable))
 		{
 		sprintf(query, "select * from %s where qName = '%s'", protMapTable, tfbsConsFactor->id );
 		sr = sqlGetResult(conn, query); 
@@ -3029,7 +3027,7 @@ boolean printedMinus = FALSE;
 char *dupe, *words[16];
 int wordCount;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char table[64];
 boolean hasBin;
 char query[512];
@@ -3045,7 +3043,7 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -3058,7 +3056,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr); 
 slReverse(&tfbsConsList);
 
-if (hTableExists("tfbsConsMap"))
+if (hTableExists(database, "tfbsConsMap"))
     {
     sprintf(query, "select * from tfbsConsMap where id = '%s'", tfbsConsList->name);
     sr = sqlGetResult(conn, query);
@@ -3118,7 +3116,7 @@ if (printFactors)
 	    safef(protMapTable, sizeof(protMapTable), "%s.kgProtMap", factorDb);
 
 	    /* Only display link if entry exists in protein browser */
-	    if (hTableExists(protMapTable))
+	    if (hTableExists(database, protMapTable))
 		{
 		sprintf(query, "select * from %s where qName = '%s';", protMapTable, tfbs->id );
 		sr = sqlGetResult(conn, query); 
@@ -3142,7 +3140,7 @@ void firstEF(struct trackDb *tdb, char *item)
 char *dupe, *words[16];
 int wordCount;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char table[64];
 boolean hasBin;
 struct bed *bed;
@@ -3158,7 +3156,7 @@ wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, FALSE);
 /* printCustomUrl(tdb, itemForUrl, item == itemForUrl); */
 
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -3184,7 +3182,7 @@ void doBed5FloatScore(struct trackDb *tdb, char *item)
 /* Handle click in BED 5+ track: BED 5 with 0-1000 score (for useScore 
  * shading in hgTracks) plus real score for display in details page. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char table[64];
 boolean hasBin;
@@ -3195,7 +3193,7 @@ boolean firstTime = TRUE;
 int start = cartInt(cart, "o");
 int bedSize = 5;
 
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       table, seqName);
 hAddBinToQuery(winStart, winEnd, query);
@@ -3226,7 +3224,7 @@ hFreeConn(&conn);
 void doBed6FloatScore(struct trackDb *tdb, char *item)
 /* Handle click in BED 4+ track that's like BED 6 but with floating pt score */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char table[64];
 boolean hasBin;
@@ -3238,7 +3236,7 @@ int start = cartInt(cart, "o");
 
 genericHeader(tdb, item);
 
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       table, seqName);
 hAddBinToQuery(winStart, winEnd, query);
@@ -3263,7 +3261,7 @@ hFreeConn(&conn);
 void doColoredExon(struct trackDb *tdb, char *item)
 /* Print information for coloredExon type tracks. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char query[256];
 char **row;
@@ -3299,7 +3297,7 @@ void genericClickHandlerPlus(
 char *dupe, *type, *words[16], *headerItem;
 int wordCount;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
 
 if (itemForUrl == NULL)
@@ -3436,7 +3434,7 @@ void savePosInTextBox(char *chrom, int start, int end)
 char position[128];
 char *newPos;
 snprintf(position, 128, "%s:%d-%d", chrom, start, end);
-newPos = addCommasToPos(position);
+newPos = addCommasToPos(database, position);
 cgiMakeTextVar("getDnaPos", newPos, strlen(newPos) + 2);
 cgiContinueHiddenVar("db");
 }
@@ -3490,10 +3488,10 @@ char parsedChrom[32];
 boolean dbIsActive = hDbIsActive(database); 
 if (dbIsActive)
     {
-    hParseTableName(tbl, rootName, parsedChrom);
-    hti = hFindTableInfo(seqName, rootName);
+    hParseTableName(database, tbl, rootName, parsedChrom);
+    hti = hFindTableInfo(database, seqName, rootName);
     }
-cartWebStart(cart, "Get DNA in Window");
+cartWebStart(cart, database, "Get DNA in Window");
 printf("<H2>Get DNA for </H2>\n");
 printf("<FORM ACTION=\"%s\">\n\n", hgcName());
 cartSaveSession(cart);
@@ -3554,7 +3552,7 @@ struct customTrack *getCtList()
 /* initialize theCtList if necessary and return it */
 {
 if (theCtList == NULL)
-    theCtList = customTracksParseCart(cart, NULL, NULL);
+    theCtList = customTracksParseCart(database, cart, NULL, NULL);
 return(theCtList);
 }
 
@@ -3672,7 +3670,7 @@ else
 void doGetDnaExtended1()
 /* Do extended case/color get DNA options. */
 {
-struct trackDb *tdbList = hTrackDb(seqName), *tdb;
+struct trackDb *tdbList = hTrackDb(database, seqName), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
 struct trackDb *utdbList = tdbForUserPsl();
 boolean isRc     = cartUsualBoolean(cart, "hgc.dna.rc", FALSE);
@@ -3689,10 +3687,10 @@ char *pos = NULL;
 ctdbList = slCat(ctdbList, tdbList);
 tdbList = slCat(utdbList, ctdbList);
 
-cartWebStart(cart, "Extended DNA Case/Color");
+cartWebStart(cart, database, "Extended DNA Case/Color");
 
 if (NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))))
-    hgParseChromRange(pos, &seqName, &winStart, &winEnd);
+    hgParseChromRange(database, pos, &seqName, &winStart, &winEnd);
 if (winEnd - winStart > 1000000)
     {
     printf("Please zoom in to 1 million bases or less to color the DNA");
@@ -3745,7 +3743,7 @@ cgiMakeHiddenVar("g", "htcGetDna3");
 
 if (NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))))
     {
-    hgParseChromRange(pos, &seqName, &winStart, &winEnd);
+    hgParseChromRange(database, pos, &seqName, &winStart, &winEnd);
     }
 puts("Position ");
 savePosInTextBox(seqName, winStart+1 - (revComp ? padding3 : padding5), winEnd + (revComp ? padding5 : padding3));
@@ -3768,7 +3766,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     char *track = tdb->tableName;
     if (sameString(USER_PSL_TRACK_NAME, track) ||
 	(lookupCt(track) != NULL) ||
-	(fbUnderstandTrack(track) && !dnaIgnoreTrack(track)))
+	(fbUnderstandTrack(database, track) && !dnaIgnoreTrack(track)))
 	{
 	char *visString = cartOptionalString(cart, track);
 
@@ -3929,7 +3927,7 @@ int qStart;
 struct psl *psl;
 int start, end;
 struct sqlResult *sr;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct dnaSeq *tSeq;
 char query[256], **row;
 char fullTable[64];
@@ -3940,7 +3938,7 @@ char *ptr;
 int totalSize = 0;
 
 start = cartInt(cart, "o");
-hFindSplitTable(seqName, table, fullTable, &hasBin);
+hFindSplitTable(database, seqName, table, fullTable, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
 	fullTable, readName, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -3957,7 +3955,7 @@ if ((ptr = strchr(readName, '.')) != NULL)
     *ptr++ = 0;
 
 printf(">%s-%s\n", readName,database);
-tSeq = hDnaFromSeq(psl->tName, start, end, dnaLower);
+tSeq = hDnaFromSeq(database, psl->tName, start, end, dnaLower);
 
 if (psl->strand[1] == '-')
     {
@@ -4019,13 +4017,13 @@ if (tbl[0] == 0)
     {
     itemCount = 1;
     if ( NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))) &&
-         hgParseChromRangeDb(pos, &chrom, &start, &end, dbIsActive))
+         hgParseChromRange((dbIsActive ? database : NULL), pos, &chrom, &start, &end))
         {
-        hgSeqRange(chrom, start, end, '?', "dna");
+        hgSeqRange(database, chrom, start, end, '?', "dna");
         }
     else
         {        
-        hgSeqRange(seqName, cartInt(cart, "l"), cartInt(cart, "r"),
+        hgSeqRange(database, seqName, cartInt(cart, "l"), cartInt(cart, "r"),
                    '?', "dna");
         }
     }
@@ -4037,7 +4035,7 @@ else
 
     /* use the values from the dnaPos dialog box */
     if (!( NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))) &&
-         hgParseChromRange(pos, &chrom, &start, &end)))
+         hgParseChromRange(database, pos, &chrom, &start, &end)))
 	 {
 	 /* if can't get DnaPos from dialog box, use "o" and "t" */
 	 start = cartInt(cart, "o");
@@ -4046,12 +4044,12 @@ else
 
     /* Table might be a custom track; if it's not in the database, 
      * just get DNA as if no table were given. */
-    hParseTableName(tbl, rootName, parsedChrom);
-    hti = hFindTableInfo(seqName, rootName);
+    hParseTableName(database, tbl, rootName, parsedChrom);
+    hti = hFindTableInfo(database, seqName, rootName);
     if (hti == NULL)
 	{
 	itemCount = 1;
-	hgSeqRange(seqName, start, end, '?', tbl);
+	hgSeqRange(database, seqName, start, end, '?', tbl);
 	}
     else
 	{
@@ -4065,7 +4063,7 @@ else
 	    where = buf;
 	    freeMem(quotedItem);
 	    }
-	itemCount = hgSeqItemsInRange(tbl, seqName, start, end, where);
+	itemCount = hgSeqItemsInRange(database, tbl, seqName, start, end, where);
 	}
     }
 if (itemCount == 0)
@@ -4286,7 +4284,7 @@ boolean defaultUpper = sameString(cartString(cart, "case"), "upper");
 int winSize;
 int lineWidth = cartInt(cart, "lineWidth");
 struct rgbColor *colors;
-struct trackDb *tdbList = hTrackDb(seqName), *tdb;
+struct trackDb *tdbList = hTrackDb(database, seqName), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
 struct trackDb *utdbList = tdbForUserPsl();
 char *pos = NULL;
@@ -4295,7 +4293,7 @@ Bits *iBits;    /* Italic bits. */
 Bits *bBits;    /* Bold bits. */
 
 if (NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))))
-    hgParseChromRange(pos, &seqName, &winStart, &winEnd);
+    hgParseChromRange(database, pos, &seqName, &winStart, &winEnd);
 
 winSize = winEnd - winStart;
 uBits = bitAlloc(winSize);	/* Underline bits. */
@@ -4305,11 +4303,11 @@ bBits = bitAlloc(winSize);	/* Bold bits. */
 ctdbList = slCat(ctdbList, tdbList);
 tdbList = slCat(utdbList, ctdbList);
 
-cartWebStart(cart, "Extended DNA Output");
+cartWebStart(cart, database, "Extended DNA Output");
 printf("<PRE><TT>");
 printf(">%s:%d-%d %s\n", seqName, winStart+1, winEnd,
        (isRc ? "(reverse complement)" : ""));
-seq = hDnaFromSeq(seqName, winStart, winEnd, dnaLower);
+seq = hDnaFromSeq(database, seqName, winStart, winEnd, dnaLower);
 if (isRc)
     reverseComplement(seq->dna, seq->size);
 if (defaultUpper)
@@ -4323,7 +4321,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     struct customTrack *ct = lookupCt(track);
     if (sameString(USER_PSL_TRACK_NAME, track) ||
 	(ct != NULL) ||
-	(fbUnderstandTrack(track) && !dnaIgnoreTrack(track)))
+	(fbUnderstandTrack(database, track) && !dnaIgnoreTrack(track)))
         {
 	char buf[256];
 	int r,g,b;
@@ -4356,7 +4354,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	    bedList = bedFromUserPsl();
 	    bedList2 = bedFilterListInRange(bedList, bf, seqName, winStart,
 					    winEnd);
-	    fbList = fbFromBed(track, hti, bedList2, winStart, winEnd,
+	    fbList = fbFromBed(database, track, hti, bedList2, winStart, winEnd,
 			       TRUE, FALSE);
 	    bedFreeList(&bedList);
 	    bedFreeList(&bedList2);
@@ -4374,7 +4372,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 char query[512];
                 int rowOffset;
                 char **row;
-                struct sqlConnection *conn = sqlCtConn(TRUE);
+                struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
                 struct sqlResult *sr = NULL;
 
                 safef(query, sizeof(query), "select * from %s", ct->dbTableName);
@@ -4390,7 +4388,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                         }
                     }
                 sqlFreeResult(&sr);
-                sqlDisconnect(&conn);
+                hFreeConn(&conn);
                 }
             else
                 {
@@ -4398,14 +4396,14 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 }
 	    bedList2 = bedFilterListInRange(ctBedList, bf, seqName, winStart,
 					    winEnd);
-	    fbList = fbFromBed(track, hti, bedList2, winStart, winEnd,
+	    fbList = fbFromBed(database, track, hti, bedList2, winStart, winEnd,
 			       TRUE, FALSE);
 	    bedFreeList(&bedList2);
             if (!ct->bedList)
                 bedFreeList(&ctBedList);
 	    }
 	else
-	    fbList = fbGetRange(track, seqName, winStart, winEnd);
+	    fbList = fbGetRange(database, track, seqName, winStart, winEnd);
 
 	/* Flip underline/italic/bold bits. */
 	getDnaHandleBits(track, "u", uBits, winStart, winEnd, isRc, fbList);
@@ -4698,7 +4696,7 @@ return imageId;
 void htcDisplayMrna(char *acc)
 /* Display mRNA available from genback or seq table.. */
 {
-struct dnaSeq *seq = hGenBankGetMrna(acc, NULL);
+struct dnaSeq *seq = hGenBankGetMrna(database, acc, NULL);
 if (seq == NULL)
     errAbort("mRNA sequence %s not found", acc);
 
@@ -4726,7 +4724,7 @@ static struct gbWarn *checkGbWarn(struct sqlConnection *conn, char *acc)
 /* check if there is a gbWarn entry for this accession, return NULL if none */
 {
 struct gbWarn *gbWarn = NULL;
-if (hTableExists("gbWarn"))
+if (hTableExists(database, "gbWarn"))
     gbWarn = sqlQueryObjs(conn, (sqlLoadFunc)gbWarnLoad, sqlQuerySingle,
                           "SELECT * FROM gbWarn WHERE acc = \"%s\"", acc);
 return gbWarn;
@@ -4760,8 +4758,8 @@ static void printRnaSpecs(struct trackDb *tdb, char *acc, struct psl *psl)
 /* Print auxiliarry info on RNA. */
 {
 struct dyString *dy = newDyString(1024);
-struct sqlConnection *conn = hgAllocConn();
-struct sqlConnection *conn2= hgAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn2= hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char rgdEstId[512];
@@ -4772,7 +4770,7 @@ char *type,*direction,*source,*orgFullName,*library,*clone,*sex,*tissue,
 int seqSize,fileSize;
 long fileOffset;
 char *ext_file;	
-boolean hasVersion = hHasField("gbCdnaInfo", "version");
+boolean hasVersion = hHasField(database, "gbCdnaInfo", "version");
 boolean haveGbSeq = sqlTableExists(conn, "gbSeq");
 char *seqTbl = haveGbSeq ? "gbSeq" : "seq";
 char *version = NULL;
@@ -4899,7 +4897,7 @@ if (row != NULL)
     /* print RGD EST Report link if it is Rat genome and it has a link to RGD */
     if (sameWord(organism, "Rat"))
 	{
-	if (hTableExists("rgdEstLink"))
+	if (hTableExists(database, "rgdEstLink"))
 	    {
 	    snprintf(query, sizeof(query),
             	"select id from %s.rgdEstLink where name = '%s';",  database, acc);
@@ -4913,14 +4911,14 @@ if (row != NULL)
 	    }
 	}
     printStanSource(acc, type);
-    if (isEst && hTableExists("estOrientInfo") && (psl != NULL))
+    if (isEst && hTableExists(database, "estOrientInfo") && (psl != NULL))
         {
         int estOrient = getEstTranscriptionDir(conn2, psl);
         if (estOrient != 0)
             printf("<B>EST transcribed from %c strand </B>(supported by %d splice sites).<BR>\n",
                    (estOrient > 0 ? '+' : '-' ), abs(estOrient));
         }
-    if (hGenBankHaveSeq(acc, NULL))
+    if (hGenBankHaveSeq(database, acc, NULL))
         {
         printf("<B>%s sequence:</B> ", type); 
         hgcAnchorSomewhere("htcDisplayMrna", acc, tdb->tableName, seqName);
@@ -4942,8 +4940,8 @@ if (end != 0 && differentString(chrom,"0") && isNotEmpty(chrom))
 gbWarnFree(&gbWarn);
 sqlFreeResult(&sr);
 freeDyString(&dy);
-hgFreeConn(&conn);
-hgFreeConn(&conn2);
+hFreeConn(&conn);
+hFreeConn(&conn2);
 }
 
 void printAlignmentsSimple(struct psl *pslList, int startFirst, char *hgcCommand,
@@ -5025,7 +5023,7 @@ struct psl *psl, *pslList = NULL;
 boolean hasBin;
 char splitTable[64];
 char query[256];
-if (!hFindSplitTable(seqName, table, splitTable, &hasBin))
+if (!hFindSplitTable(database, seqName, table, splitTable, &hasBin))
     errAbort("can't find table %s or %s_%s", table, seqName, table);
 safef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
 sr = sqlGetResult(conn, query);
@@ -5048,9 +5046,9 @@ struct psl *psl = NULL, *pslList = NULL;
 boolean hasBin;
 char splitTable[64];
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
-hFindSplitTable(seqName, table, splitTable, &hasBin);
+hFindSplitTable(database, seqName, table, splitTable, &hasBin);
 safef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s' and tEnd > %d and tStart < %d", splitTable, qName, tName, tStart, tEnd);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -5068,7 +5066,7 @@ void doHgRna(struct trackDb *tdb, char *acc)
 /* Click on an individual RNA. */
 {
 char *track = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *type;
 char *table;
 int start = cartInt(cart, "o");
@@ -5136,7 +5134,7 @@ else
     }
 
 /* Print non-sequence info. */
-cartWebStart(cart, acc);
+cartWebStart(cart, database, acc);
 
 printRnaSpecs(tdb, acc, pslList);
 
@@ -5173,7 +5171,7 @@ char *fsize = "+1"; /* specifies font size */
 /* check if there is an alignment available for this sequence.  This checks
  * both genbank sequences and other sequences in the seq table.  If so,
  * set it up so they can click through to the alignment. */
-if (hGenBankHaveSeq(item, NULL))
+if (hGenBankHaveSeq(database, item, NULL))
     {
     printf("<H3>%s/Genomic Alignments</H3>", item);
     printAlignments(pslList, start, "htcCdnaAli", tdb->tableName, item);
@@ -5205,8 +5203,8 @@ int start = cartInt(cart, "o");
 char query[256];
 char **row;
 struct sqlResult *sr = NULL;
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
 
 if (itemForUrl == NULL)
     itemForUrl = item;
@@ -5218,7 +5216,7 @@ printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 /* If this is the affyZebrafish track, check for human ortholog information */
 if (sameString("affyZebrafish", tdb->tableName))
     {
-    if (orthoTable != NULL && hTableExists(orthoTable))
+    if (orthoTable != NULL && hTableExists(database, orthoTable))
         { 
         safef(query, sizeof(query), "select geneSymbol, description from %s where name = '%s' ", orthoTable, item);
         sr = sqlMustGetResult(conn, query);
@@ -5260,8 +5258,8 @@ char **row = NULL;
 struct rhMapZfishInfo *rhInfo = NULL;
 int wordCount;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn1 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn1 = hAllocConn(database);
 boolean rhMapInfoExists = sqlTableExists(conn, "rhMapZfishInfo");
 
 dupe = cloneString(tdb->type);
@@ -5269,7 +5267,7 @@ wordCount = chopLine(dupe, words);
 
 genericHeader(tdb, itemName);
 /* Print non-sequence info */
-cartWebStart(cart, title);
+cartWebStart(cart, database, title);
 
 /* Print out RH map information if available */
 
@@ -5320,8 +5318,8 @@ if (wordCount > 0)
     }
 printTrackHtml(tdb);
 freez(&dupe);
-sqlDisconnect(&conn);
-sqlDisconnect(&conn1);
+hFreeConn(&conn);
+hFreeConn(&conn1);
 }
 
 void doRikenRna(struct trackDb *tdb, char *item)
@@ -5359,8 +5357,8 @@ int start = cartInt(cart, "o");
 char query[256];
 char **row;
 struct sqlResult *sr = NULL;
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
 
 if (itemForUrl == NULL)
     {
@@ -5435,8 +5433,8 @@ if (tpsl->strand[0] == '-')
 struct psl *itemPsl = NULL, *otherPsls = NULL, *gpsl;
 int itemStart = cartInt(cart, "o");
 int itemEnd = cartInt(cart, "t");
-int rowOffset = hOffsetPastBin(seqName, target->pslTable);
-struct sqlConnection *conn = hAllocConn();
+int rowOffset = hOffsetPastBin(database, seqName, target->pslTable);
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[2048];
@@ -5518,8 +5516,8 @@ if (target != NULL)
     /* Use seq+extFile if specified; otherwise just retrieve from seqFile. */
     if (isNotEmpty(target->seqTable) && isNotEmpty(target->extFileTable))
 	{
-	struct sqlConnection *conn = hAllocConn();
-	seq = hDnaSeqGet(conn, psl->tName, target->seqTable,
+	struct sqlConnection *conn = hAllocConn(database);
+	seq = hDnaSeqGet(database, psl->tName, target->seqTable,
 			 target->extFileTable);
 	hFreeConn(&conn);
 	char *dna = cloneStringZ(seq->dna + psl->tStart, productSize);
@@ -5535,7 +5533,7 @@ if (target != NULL)
 	}
     }
 else
-    seq = hChromSeq(psl->tName, psl->tStart, psl->tEnd);
+    seq = hChromSeq(database, psl->tName, psl->tStart, psl->tEnd);
 char *dna = seq->dna;
 tolowers(dna);
 if (psl->strand[0] == '-')
@@ -5569,8 +5567,8 @@ void doPcrResult(char *track, char *item)
 struct trackDb *tdb = pcrResultFakeTdb();
 char *pslFileName, *primerFileName;
 struct targetDb *target;
-cartWebStart(cart, "PCR Results");
-if (! pcrResultParseCart(cart, &pslFileName, &primerFileName, &target))
+cartWebStart(cart, database, "PCR Results");
+if (! pcrResultParseCart(database, cart, &pslFileName, &primerFileName, &target))
     errAbort("PCR Result track has disappeared!");
 
 char *fPrimer, *rPrimer;
@@ -5619,7 +5617,7 @@ char *pslName, *faName, *qName;
 char *encItem = cgiEncode(item);
 enum gfType qt, tt;
 
-cartWebStart(cart, "BLAT Search Alignments");
+cartWebStart(cart, database, "BLAT Search Alignments");
 printf("<H2>BLAT Search Alignments</H2>\n");
 printf("<H3>Click on a line to see detailed letter-by-letter display</H3>");
 parseSs(item, &pslName, &faName, &qName);
@@ -5646,9 +5644,9 @@ void doHgGold(struct trackDb *tdb, char *fragName)
 /* Click on a fragment of golden path. */
 {
 char *track = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
-struct sqlConnection *conn3 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
+struct sqlConnection *conn3 = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -5670,8 +5668,8 @@ char *secondAcc, *secondAccVer;
 char *tmpString;
 int first;
 
-cartWebStart(cart, fragName);
-hFindSplitTable(seqName, track, splitTable, &hasBin);
+cartWebStart(cart, database, fragName);
+hFindSplitTable(database, seqName, track, splitTable, &hasBin);
 sprintf(query, "select * from %s where frag = '%s' and chromStart = %d", 
 	splitTable, fragName, start);
 sr = sqlMustGetResult(conn, query);
@@ -5682,7 +5680,7 @@ printf("<B>Clone Fragment ID:</B> %s<BR>\n", frag.frag);
 printf("<B>Clone Fragment Type:</B> %s<BR>\n", frag.type);
 printf("<B>Clone Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
 
-if (hTableExists("contigAcc"))
+if (hTableExists(database, "contigAcc"))
     {
     sprintf(query2, "select * from contigAcc where contig = '%s'", frag.frag);
     if ((sr2 = sqlGetResult(conn2, query2)))
@@ -5701,7 +5699,7 @@ if (hTableExists("contigAcc"))
 
 printPos(frag.chrom, frag.chromStart, frag.chromEnd, frag.strand, FALSE, NULL);
 
-if (hTableExists("certificate"))
+if (hTableExists(database, "certificate"))
     {
     first = 1;
     again:
@@ -5794,7 +5792,7 @@ void doHgGap(struct trackDb *tdb, char *gapType)
 /* Print a teeny bit of info about a gap. */
 {
 char *track = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -5803,8 +5801,8 @@ int start = cartInt(cart, "o");
 boolean hasBin;
 char splitTable[64];
 
-cartWebStart(cart, "Gap in Sequence");
-hFindSplitTable(seqName, track, splitTable, &hasBin);
+cartWebStart(cart, database, "Gap in Sequence");
+hFindSplitTable(database, seqName, track, splitTable, &hasBin);
 if (sameString(track, splitTable))
     safef(query, sizeof(query), "select * from %s where chrom = '%s' and "
 	  "chromStart = %d", 
@@ -5835,7 +5833,7 @@ void selectOneRow(struct sqlConnection *conn, char *table, char *query,
 char fullTable[64];
 boolean hasBin;
 char **row;
-if (!hFindSplitTable(seqName, table, fullTable, &hasBin))
+if (!hFindSplitTable(database, seqName, table, fullTable, &hasBin))
     errAbort("Table %s doesn't exist in database", table);
 *retSr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(*retSr)) == NULL)
@@ -5848,8 +5846,8 @@ void doHgContig(struct trackDb *tdb, char *ctgName)
 /* Click on a contig. */
 {
 char *track = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
 char query[256], query2[256];
 struct sqlResult *sr, *sr2;
 char **row;
@@ -5874,7 +5872,7 @@ else
 
 sqlFreeResult(&sr);
 
-if (hTableExists("contigAcc"))
+if (hTableExists(database, "contigAcc"))
     {
     sprintf(query2, "select * from contigAcc where contig = '%s'", ctgName);
     if ((sr2 = sqlGetResult(conn2, query2)))
@@ -5891,7 +5889,7 @@ if (hTableExists("contigAcc"))
         }
     }
 
-if (hTableExists("clonePos"))
+if (hTableExists(database, "clonePos"))
     {
     sprintf(query, 
 	    "select count(*) from clonePos where chrom = '%s' and chromEnd >= %d and chromStart <= %d",
@@ -5926,14 +5924,14 @@ void doHgCover(struct trackDb *tdb, char *cloneName)
 /* Respond to click on clone. */
 {
 char *track = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
 struct clonePos *clone;
 int fragCount;
 
-cartWebStart(cart, cloneName);
+cartWebStart(cart, database, cloneName);
 sprintf(query, "select * from %s where name = '%s'", track, cloneName);
 selectOneRow(conn, track, query, &sr, &row);
 clone = clonePosLoad(row);
@@ -5972,7 +5970,7 @@ void doBactigPos(struct trackDb *tdb, char *bactigName)
 /* Click on a bactig. */
 {
 struct bactigPos *bactig;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char *track = tdb->tableName;
@@ -5991,7 +5989,7 @@ printf("<B>Name:</B> %s<BR>\n", bactigName);
 snprintf(goldTable, sizeof(goldTable), "%s_gold", seqName);
 
 puts("<B>First contig:</B>");
-if (hTableExists(goldTable))
+if (hTableExists(database, goldTable))
     {
     snprintf(query, sizeof(query),
 	     "select chromStart from %s where frag = \"%s\"",
@@ -6003,7 +6001,7 @@ if (hTableExists(goldTable))
 printf("%s</A><BR>\n", bactig->startContig);
 
 puts("<B>Last contig:</B>");
-if (hTableExists(goldTable))
+if (hTableExists(database, goldTable))
     {
     snprintf(query, sizeof(query),
 	     "select chromStart from %s where frag = \"%s\"",
@@ -6035,7 +6033,7 @@ struct dnaSeq *tSeq;
 if ((psl->strand[1] == '+') && (qType == gftProt))
     tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1] * 3;
 
-tSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
+tSeq = hDnaFromSeq(database, seqName, tStart, tEnd, dnaLower);
 
 freez(&tSeq->name);
 tSeq->name = cloneString(psl->tName);
@@ -6073,7 +6071,7 @@ if (retTStart)
 tEnd  = psl->tEnd + 100;
 if (tEnd > psl->tSize) tEnd = psl->tSize;
 
-dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
+dnaSeq = hDnaFromSeq(database, seqName, tStart, tEnd, dnaLower);
 freez(&dnaSeq->name);
 dnaSeq->name = cloneString(psl->tName);
 if (retSeq)
@@ -6173,7 +6171,7 @@ if (qName == NULL)
 htmStart(index, qName);
 fprintf(index, "<H3>Alignment of %s</H3>", qName);
 fprintf(index, "<A HREF=\"../%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
-fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(hGetDb()), psl->tName);
+fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(database), psl->tName);
 for (i=1; i<=blockCount; ++i)
     {
     fprintf(index, "<A HREF=\"../%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
@@ -6222,7 +6220,7 @@ fprintf(index, "<H3>Alignment of %s</H3>", qName);
 fprintf(index, "<A HREF=\"../%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
 if (partPsl != wholePsl)
     fprintf(index, "<A HREF=\"../%s#cDNAStart\" TARGET=\"body\">%s in browser window</A><BR>\n", bodyTn.forCgi, qName);
-fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(hGetDb()), partPsl->tName);
+fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(database), partPsl->tName);
 for (i=1; i<=blockCount; ++i)
     {
     fprintf(index, "<A HREF=\"../%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
@@ -6277,7 +6275,7 @@ printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", accChopped, typ
 start = cartInt(cart, "o");
 
 /* Get cds start and stop, if available */
-conn = hAllocConn();
+conn = hAllocConn(database);
 if (sqlTableExists(conn, "gbCdnaInfo"))
     {
     sprintf(query, "select cds from gbCdnaInfo where acc = '%s'", accChopped);
@@ -6294,7 +6292,7 @@ if (sqlTableExists(conn, "gbCdnaInfo"))
     }
 
 /* Look up alignments in database */
-hFindSplitTable(seqName, type, table, &hasBin);
+hFindSplitTable(database, seqName, type, table, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tStart=%d",
 	table, acc, start);
 sr = sqlGetResult(conn, query);
@@ -6306,22 +6304,22 @@ sqlFreeResult(&sr);
 /* get bz rna snapshot for blastz alignments */
 if (sameString("mrnaBlastz", type) || sameString("pseudoMrna", type))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     unsigned retId = 0;
     char *gbdate = NULL;
     sprintf(accTmp,"bz-%s",acc);
     if (hRnaSeqAndIdx(accTmp, &rnaSeq, &retId, gbdate, conn) == -1)
-        rnaSeq = hRnaSeq(acc);
+        rnaSeq = hRnaSeq(database, acc);
     hFreeConn(&conn);
     }
 else if (sameString("HInvGeneMrna", type))
     {
     /* get RNA accession for the gene id in the alignment */
     sprintf(query, "select mrnaAcc from HInv where geneId='%s'", acc);
-    rnaSeq = hRnaSeq(sqlQuickString(conn, query));
+    rnaSeq = hRnaSeq(database, sqlQuickString(conn, query));
     }
 else
-    rnaSeq = hRnaSeq(acc);
+    rnaSeq = hRnaSeq(database, acc);
 
 if (startsWith("xeno", type))
     showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
@@ -6359,7 +6357,7 @@ printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n",
        accChopped, track);
 
 /* Get cds start and stop, if available */
-conn = hAllocConn();
+conn = hAllocConn(database);
 if (sqlTableExists(conn, "gbCdnaInfo"))
     {
     safef(query, sizeof(query), "select cds from gbCdnaInfo where acc = '%s'",
@@ -6428,7 +6426,7 @@ if (startsWith("user", track))
 else
     {
     /* Look up alignments in database */
-    hFindSplitTable(seqName, track, table, &hasBin);
+    hFindSplitTable(database, seqName, track, table, &hasBin);
     safef(query, sizeof(query),
 	  "select * from %s where qName = '%s' and tStart=%d",
 	  table, acc, start);
@@ -6440,22 +6438,20 @@ else
 
     if (startsWith("ucscRetroAli", track) || startsWith("retroMrnaAli", track) || sameString("pseudoMrna", track))
 	{
-	struct sqlConnection *conn = hAllocConn();
         char *suffix = strstr(acc, ".");
         if (suffix != NULL)
             *suffix = '\0';
-        rnaSeq = hDnaSeqGet(conn, acc, "retroSeq", "retroExtFile");
-	hFreeConn(&conn);
+        rnaSeq = hDnaSeqGet(database, acc, "retroSeq", "retroExtFile");
 	}
     else if (sameString("HInvGeneMrna", track))
 	{
 	/* get RNA accession for the gene id in the alignment */
 	safef(query, sizeof(query), "select mrnaAcc from HInv where geneId='%s'",
 	      acc);
-	rnaSeq = hRnaSeq(sqlQuickString(conn, query));
+	rnaSeq = hRnaSeq(database, sqlQuickString(conn, query));
 	}
     else
-	rnaSeq = hRnaSeq(acc);
+	rnaSeq = hRnaSeq(database, acc);
     }
 /* Get partial psl for part of alignment in browser window: */
 if (wholePsl->tStart >= winStart && wholePsl->tEnd <= winEnd)
@@ -6513,7 +6509,7 @@ pslFree(&fatPsl);
 
 if (sameWord(otherDb, "seq"))
     {
-    qSeq = hExtSeqPart(psl->qName, psl->qStart, psl->qEnd);
+    qSeq = hExtSeqPart(database, psl->qName, psl->qStart, psl->qEnd);
     sprintf(name, "%s", psl->qName);
     }
 else
@@ -6570,7 +6566,7 @@ pslFree(&fatPsl);
 
 if (sameWord(otherDb, "seq"))
     {
-    qSeq = hExtSeq(psl->qName);
+    qSeq = hExtSeq(database, psl->qName);
     sprintf(name, "%s", psl->qName);
     }
 else
@@ -6632,7 +6628,7 @@ struct psl *psl;
 int start;
 enum gfType qt = gftProt;
 struct sqlResult *sr;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct dnaSeq *seq = NULL;
 char query[256], **row;
 char fullTable[64];
@@ -6649,7 +6645,7 @@ printf("<HEAD>\n<TITLE>Protein Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
 addp = cartUsualInt(cart, "addp",0);
 pred = cartUsualString(cart, "pred",NULL);
 start = cartInt(cart, "o");
-hFindSplitTable(seqName, table, fullTable, &hasBin);
+hFindSplitTable(database, seqName, table, fullTable, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
 	fullTable, readName, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -6661,7 +6657,7 @@ if ((addp == 1) || (pred != NULL))
     {
     char *ptr;
 
-    if (!hTableExists(pred))
+    if (!hTableExists(database, pred))
 	addp = 1;
     sprintf(buffer, "%s",readName);
     
@@ -6676,7 +6672,7 @@ if ((addp == 1) || (pred != NULL))
 	*ptr = 0;
 	}
     if (addp == 1)
-	seq = hPepSeq(buffer);
+	seq = hPepSeq(database, buffer);
     else
 	{
 	safef(query, sizeof(query),
@@ -6690,7 +6686,7 @@ if ((addp == 1) || (pred != NULL))
 	}
     }
 else
-    seq = hPepSeq(readName);
+    seq = hPepSeq(database, readName);
 hFreeConn(&conn);
 showSomeAlignment(psl, seq, qt, 0, seq->size, NULL, 0, 0);
 }
@@ -6701,7 +6697,7 @@ void htcBlatXeno(char *readName, char *table)
 struct psl *psl;
 int start;
 struct sqlResult *sr;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct dnaSeq *seq;
 char query[256], **row;
 char fullTable[64];
@@ -6713,7 +6709,7 @@ puts("<HTML>");
 printf("<HEAD>\n<TITLE>Sequence %s</TITLE>\n</HEAD>\n\n", readName);
 
 start = cartInt(cart, "o");
-hFindSplitTable(seqName, table, fullTable, &hasBin);
+hFindSplitTable(database, seqName, table, fullTable, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
 	fullTable, readName, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -6722,7 +6718,7 @@ if ((row = sqlNextRow(sr)) == NULL)
 psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-seq = hExtSeq(readName);
+seq = hExtSeq(database, readName);
 showSomeAlignment(psl, seq, gftDnaX, 0, seq->size, NULL, 0, 0);
 }
 
@@ -6742,7 +6738,7 @@ for (i=0; i<count; ++i)
 void fetchAndShowWaba(char *table, char *name)
 /* Fetch and display waba alignment. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -6776,7 +6772,7 @@ hFreeConn(&conn);
 void doHgTet(struct trackDb *tdb, char *name)
 /* Do thing with tet track. */
 {
-cartWebStart(cart, "Fish Alignment");
+cartWebStart(cart, database, "Fish Alignment");
 printf("Alignment between fish sequence %s (above) and human chromosome %s (below)\n",
        name, skipChr(seqName));
 fetchAndShowWaba("waba_tet", name);
@@ -6786,7 +6782,7 @@ fetchAndShowWaba("waba_tet", name);
 void doHgCbr(struct trackDb *tdb, char *name)
 /* Do thing with cbr track. */
 {
-cartWebStart(cart, "Worm Alignment");
+cartWebStart(cart, database, "Worm Alignment");
 printf("Alignment between C briggsae sequence %s (above) and C elegans chromosome %s (below)\n",
        name, skipChr(seqName));
 fetchAndShowWaba("wabaCbr", name);
@@ -6797,10 +6793,10 @@ void doHgRepeat(struct trackDb *tdb, char *repeat)
 {
 char *track = tdb->tableName;
 int offset = cartInt(cart, "o");
-cartWebStart(cart, "Repeat");
+cartWebStart(cart, database, "Repeat");
 if (offset >= 0)
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
  
     struct sqlResult *sr;
     char **row;
@@ -6810,7 +6806,7 @@ if (offset >= 0)
     boolean hasBin;
     int start = cartInt(cart, "o");
 
-    hFindSplitTable(seqName, track, table, &hasBin);
+    hFindSplitTable(database, seqName, track, table, &hasBin);
     sprintf(query, "select * from %s where  repName = '%s' and genoName = '%s' and genoStart = %d",
 	    table, repeat, seqName, start);
     sr = sqlGetResult(conn, query);
@@ -6857,12 +6853,12 @@ void doHgIsochore(struct trackDb *tdb, char *item)
 /* do click on isochore track. */
 {
 char *track = tdb->tableName;
-cartWebStart(cart, "Isochore Info");
+cartWebStart(cart, database, "Isochore Info");
 printf("<H2>Isochore Information</H2>\n");
 if (cgiVarExists("o"))
     {
     struct isochores *iso;
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
     char query[256];
@@ -6891,17 +6887,17 @@ void doSimpleRepeat(struct trackDb *tdb, char *item)
 /* Print info on simple repeat. */
 {
 char *track = tdb->tableName;
-cartWebStart(cart, "Simple Repeat Info");
+cartWebStart(cart, database, "Simple Repeat Info");
 printf("<H2>Simple Tandem Repeat Information</H2>\n");
 if (cgiVarExists("o"))
     {
     struct simpleRepeat *rep;
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
     char query[256];
     int start = cartInt(cart, "o");
-    int rowOffset = hOffsetPastBin(seqName, track);
+    int rowOffset = hOffsetPastBin(database, seqName, track);
     sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	    track, item, seqName, start);
     sr = sqlGetResult(conn, query);
@@ -6933,18 +6929,18 @@ printTrackHtml(tdb);
 void hgSoftPromoter(char *track, char *item)
 /* Print info on Softberry promoter. */
 {
-cartWebStart(cart, "Softberry TSSW Promoter");
+cartWebStart(cart, database, "Softberry TSSW Promoter");
 printf("<H2>Softberry TSSW Promoter Prediction %s</H2>", item);
 
 if (cgiVarExists("o"))
     {
     struct softPromoter *pro;
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
     char query[256];
     int start = cartInt(cart, "o");
-    int rowOffset = hOffsetPastBin(seqName, track);
+    int rowOffset = hOffsetPastBin(database, seqName, track);
     sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	    track, item, seqName, start);
     sr = sqlGetResult(conn, query);
@@ -6993,19 +6989,19 @@ void doCpgIsland(struct trackDb *tdb, char *item)
 /* Print info on CpG Island. */
 {
 char *table = tdb->tableName;
-boolean isExt = hHasField(table, "obsExp");
-cartWebStart(cart, "CpG Island Info");
+boolean isExt = hHasField(database, table, "obsExp");
+cartWebStart(cart, database, "CpG Island Info");
 printf("<H2>CpG Island Info</H2>\n");
 if (cgiVarExists("o"))
     {
     struct cpgIsland *island;
     struct cpgIslandExt *islandExt = NULL;
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
     char query[256];
     int start = cartInt(cart, "o");
-    int rowOffset = hOffsetPastBin(seqName, table);
+    int rowOffset = hOffsetPastBin(database, seqName, table);
     sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, item, seqName, start);
     sr = sqlGetResult(conn, query);
@@ -7048,14 +7044,14 @@ void htcIlluminaProbesAlign(char *item)
 struct psl *psl;
 struct dnaSeq *seq;
 struct sqlResult *sr;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256], **row;
 int start;
 char *pslTable = cgiUsualString("pslTable", "illuminaProbesAlign");
 char *seqTable = cgiUsualString("seqTable", "illuminaProbesSeq");
 char *probeName = item;
 char *probeString;
-int rowOffset = hOffsetPastBin(seqName, pslTable);
+int rowOffset = hOffsetPastBin(database, seqName, pslTable);
 /* Print start of HTML. */
 writeFramesetType();
 puts("<HTML>");
@@ -7083,10 +7079,10 @@ void doIlluminaProbes(struct trackDb *tdb, char *item)
 /* The details page of the Illumina Probes track. */
 {
 char *track = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
-int rowOffset = hOffsetPastBin(seqName, track);
+int rowOffset = hOffsetPastBin(database, seqName, track);
 char query[256];
 int start = cartInt(cart, "o");
 genericHeader(tdb, item);
@@ -7122,10 +7118,10 @@ void doSwitchDbTss(struct trackDb *tdb, char *item)
 /* Print SwitchDB TSS details. */
 {
 char *track = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
-int rowOffset = hOffsetPastBin(seqName, track);
+int rowOffset = hOffsetPastBin(database, seqName, track);
 char query[256];
 genericHeader(tdb, item);
 safef(query, sizeof(query), "select * from %s where name = '%s'", track, item);
@@ -7175,7 +7171,7 @@ void showProteinPrediction(char *pepName, char *table)
 /* Fetch and display protein prediction. */
 {
 /* checks both gbSeq and table */
-aaSeq *seq = hGenBankGetPep(pepName, table);
+aaSeq *seq = hGenBankGetPep(database, pepName, table);
 if (seq == NULL)
     {
     warn("Predicted peptide %s is not avaliable", pepName);
@@ -7214,7 +7210,7 @@ return TRUE;
 char *hugoToGenieName(char *hugoName, char *table)
 /* Covert from hugo to genie name. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 static char buf[256], *name;
 
@@ -7241,7 +7237,7 @@ void htcTranslatedProtein(char *pepName)
 {
 char *table = cartString(cart, "o");
 /* checks both gbSeq and table */
-aaSeq *seq = hGenBankGetPep(pepName, table);
+aaSeq *seq = hGenBankGetPep(database, pepName, table);
 hgcStart("Protein Translation");
 if (seq == NULL)
     {
@@ -7257,7 +7253,7 @@ else
 void htcTranslatedPredMRna(struct trackDb *tdb, char *geneName)
 /* Translate virtual mRNA defined by genePred to protein and display it. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct genePred *gp = NULL;
 char where[256];
 char protName[256];
@@ -7283,9 +7279,9 @@ genePredFree(&gp);
 void htcTranslatedMRna(struct trackDb *tdb, char *acc)
 /* Translate mRNA to protein and display it. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct genbankCds cds = getCds(conn, acc);
-struct dnaSeq *mrna = hGenBankGetMrna(acc, NULL);
+struct dnaSeq *mrna = hGenBankGetMrna(database, acc, NULL);
 if (mrna == NULL)
     errAbort("mRNA sequence %s not found", acc);
 if (cds.end > mrna->size)
@@ -7339,7 +7335,7 @@ struct dnaSeq *getCdnaSeq(struct genePred *gp)
 /* Load in cDNA sequence associated with gene prediction. */
 {
 int txStart = gp->txStart;
-struct dnaSeq *genoSeq = hDnaFromSeq(gp->chrom, txStart, gp->txEnd,  dnaLower);
+struct dnaSeq *genoSeq = hDnaFromSeq(database, gp->chrom, txStart, gp->txEnd,  dnaLower);
 struct dnaSeq *cdnaSeq;
 int cdnaSize = genePredCdnaSize(gp);
 int cdnaOffset = 0, exonStart, exonSize, exonIx;
@@ -7362,7 +7358,7 @@ return cdnaSeq;
 struct dnaSeq *getCdsSeq(struct genePred *gp)
 /* Load in genomic CDS sequence associated with gene prediction. */
 {
-struct dnaSeq *genoSeq = hDnaFromSeq(gp->chrom, gp->cdsStart, gp->cdsEnd,  dnaLower);
+struct dnaSeq *genoSeq = hDnaFromSeq(database, gp->chrom, gp->cdsStart, gp->cdsEnd,  dnaLower);
 struct dnaSeq *cdsSeq;
 int cdsSize = genePredCodingBases(gp);
 int cdsOffset = 0, exonStart, exonEnd, exonSize, exonIx;
@@ -7419,13 +7415,13 @@ void htcGeneMrna(char *geneName)
 {
 char *table = cartString(cart, "o");
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct genePred *gp;
 struct dnaSeq *seq;
 int cdsStart, cdsEnd;
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 
 hgcStart("Predicted mRNA from Genome");
 safef(query, sizeof(query), "select * from %s where name = \"%s\"", table, geneName);
@@ -7455,7 +7451,7 @@ void htcRefMrna(char *geneName)
 /* Display mRNA associated with a refSeq gene. */
 {
 /* check both gbSeq and refMrna */
-struct dnaSeq *seq = hGenBankGetMrna(geneName, "refMrna");
+struct dnaSeq *seq = hGenBankGetMrna(database, geneName, "refMrna");
 if (seq == NULL)
     errAbort("RefSeq mRNA sequence %s not found", geneName);
 
@@ -7479,7 +7475,7 @@ void htcGeneInGenome(char *geneName)
 {
 char *tbl = cgiString("o");
 
-cartWebStart(cart, "Genomic Sequence Near Gene");
+cartWebStart(cart, database, "Genomic Sequence Near Gene");
 printf("<H2>Get Genomic Sequence Near Gene</H2>");
 
 puts("<P>"
@@ -7505,7 +7501,7 @@ printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
 
-hgSeqOptions(cart, tbl);
+hgSeqOptions(cart, database, tbl);
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
 }
@@ -7514,7 +7510,7 @@ void htcGeneAlignment(char *geneName)
 /* Put up page that lets user display genomic sequence
  * associated with gene. */
 {
-cartWebStart(cart, "Aligned Annotated Genomic Sequence ");
+cartWebStart(cart, database, "Aligned Annotated Genomic Sequence ");
 printf("<H2>Align a gene prediction to another species or the same species and view codons and translated proteins.</H2>");
 printf("<FORM ACTION=\"%s\">\n\n", hgcName());
 cartSaveSession(cart);
@@ -7531,7 +7527,7 @@ cgiContinueHiddenVar("r");
 printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
-hgSeqOptions(cart, cgiString("o"));
+hgSeqOptions(cart, database, cgiString("o"));
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
 }
@@ -7573,7 +7569,7 @@ int itemCount;
 char *quotedItem = makeQuotedString(geneName, '\'');
 safef(constraints, sizeof(constraints), "name = %s", quotedItem);
 puts("<PRE>");
-itemCount = hgSeqItemsInRange(table, seqName, winStart, winEnd, constraints);
+itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
 if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
 puts("</PRE>");
@@ -7583,7 +7579,7 @@ freeMem(quotedItem);
 void htcTrackHtml(struct trackDb *tdb)
 /* Handle click to display track html */
 {
-cartWebStart(cart, "%s", tdb->shortLabel);
+cartWebStart(cart, database, "%s", tdb->shortLabel);
 printTrackHtml(tdb);
 webEnd();
 }
@@ -7591,11 +7587,11 @@ webEnd();
 void doViralProt(struct trackDb *tdb, char *geneName)
 /* Handle click on known viral protein track. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int start = cartInt(cart, "o");
 struct psl *pslList = NULL;
 
-cartWebStart(cart, "Viral Gene");
+cartWebStart(cart, database, "Viral Gene");
 printf("<H2>Viral Gene %s</H2>\n", geneName);
 printCustomUrl(tdb, geneName, TRUE);
 
@@ -7614,7 +7610,7 @@ int start = cartInt(cart, "o");
 int total = 0, i = 0;
 char *track = tdb->tableName;
 struct psl *pslList = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
 genericHeader(tdb, item);
 printCustomUrl(tdb, item, TRUE);
@@ -7641,7 +7637,7 @@ printf("%d block(s) covering %d bases<BR>\n"
        pslList->match,
        pslList->misMatch,
        pslList->nCount,
-       pslList->tBaseInsert, hOrganism(hGetDb()),
+       pslList->tBaseInsert, hOrganism(database),
        pslList->qBaseInsert, item,
        pslScore(pslList));
 
@@ -7656,7 +7652,7 @@ void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode,
 char *shortItemName;
 char *genomeStr = "";
 char *genomeStrEnsembl = "";
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char cond_str[256], cond_str2[256], cond_str3[256];
 char *proteinID = NULL;
 char *ensPep;
@@ -7705,40 +7701,40 @@ printf("<A HREF=\"%s/transview?transcript=%s\" "
                "target=_blank>", ensUrl, shortItemName);
 printf("%s</A><br>", itemName);
 
-if (hTableExists("superfamily"))
+if (hTableExists(database, "superfamily"))
     {
     safef(cond_str, sizeof(cond_str), "transcript_name='%s'", shortItemName);    
 
     /* This is necessary, Ensembl kept changing their gene_xref table definition and content.*/
     proteinID = NULL;
 
-    if (hTableExists("ensemblXref3"))
+    if (hTableExists(database, "ensemblXref3"))
     	{
     	/* use ensemblXref3 for Ensembl data release after ensembl34d */
     	safef(cond_str3, sizeof(cond_str3), "transcript='%s'", shortItemName);
-    	ensPep = sqlGetField(conn, database, "ensemblXref3", "protein", cond_str3);
+    	ensPep = sqlGetField(database, "ensemblXref3", "protein", cond_str3);
 	if (ensPep != NULL) proteinID = ensPep;
 	}
 
-    if (hTableExists("ensTranscript") && (proteinID == NULL))
+    if (hTableExists(database, "ensTranscript") && (proteinID == NULL))
 	{
-	proteinID = sqlGetField(conn, database, "ensTranscript", "translation_name", cond_str);
+	proteinID = sqlGetField(database, "ensTranscript", "translation_name", cond_str);
   	}
     else
 	{
-    	if (hTableExists("ensGeneXref"))
+    	if (hTableExists(database, "ensGeneXref"))
             {
-	    proteinID = sqlGetField(conn, database, "ensGeneXref","translation_name", cond_str);
+	    proteinID = sqlGetField(database, "ensGeneXref","translation_name", cond_str);
             }
-        else if (hTableExists("ensemblXref2"))
+        else if (hTableExists(database, "ensemblXref2"))
 	    {
-	    proteinID = sqlGetField(conn, database, "ensemblXref2","translation_name", cond_str);
+	    proteinID = sqlGetField(database, "ensemblXref2","translation_name", cond_str);
   	    }
 	else
 	    {
-	    if (hTableExists("ensemblXref"))
+	    if (hTableExists(database, "ensemblXref"))
 	    	{
-	    	proteinID=sqlGetField(conn,database,"ensemblXref","translation_name",cond_str);
+	    	proteinID=sqlGetField(database, "ensemblXref","translation_name",cond_str);
   	    	}
 	    }
 	}
@@ -7802,12 +7798,12 @@ if (hTableExists("superfamily"))
         }
 #endif
     }
-if (hTableExists("ensGtp") && (proteinID == NULL))
+if (hTableExists(database, "ensGtp") && (proteinID == NULL))
     {
     /* shortItemName removes version number but sometimes the ensGtp */
     /* table has a transcript with version number so exact match not used */
     safef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);  
-    proteinID=sqlGetField(conn, database, "ensGtp","protein",cond_str2);
+    proteinID=sqlGetField(database, "ensGtp","protein",cond_str2);
     if (proteinID != NULL)
 	{ 
         printf("<B>Ensembl Protein: </B>");
@@ -7825,14 +7821,14 @@ void doEnsemblGene(struct trackDb *tdb, char *item, char *itemForUrl)
 char *dupe, *type, *words[16];
 int wordCount;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char condStr[256];
 char ensVersionString[256];
 char ensDateReference[256];
 char headerTitle[512];
 
 /* see if hgFixed.trackVersion exists */
-boolean trackVersionExists = hTableExistsDb("hgFixed", "trackVersion");
+boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
 
 if (trackVersionExists)
     {
@@ -7885,7 +7881,7 @@ sprintf(condStr, "name='%s'", item);
    the external ID */
 if (sameWord(tdb->tableName, "ensGeneNonCoding"))
     {
-    struct sqlConnection *conn2 = hAllocConn();
+    struct sqlConnection *conn2 = hAllocConn(database);
     char query[256];
     struct sqlResult *sr = NULL;
     char **row;
@@ -7907,7 +7903,7 @@ else
     printf("<BR>\n");
     }
 
-if (hTableExists("ensInfo"))
+if (hTableExists(database, "ensInfo"))
     {
     struct sqlResult *sr;
     char query[256], **row;
@@ -7934,7 +7930,7 @@ if (hTableExists("ensInfo"))
 
 /* skip the rest if this gene is not in ensGene */
 sprintf(condStr, "name='%s'", item);
-if (sqlGetField(conn, database, tdb->tableName, "name", condStr) != NULL)
+if (sqlGetField(database, tdb->tableName, "name", condStr) != NULL)
     {
     if (wordCount > 0)
     	{
@@ -7963,7 +7959,7 @@ if (url != NULL && url[0] != 0)
     {
     char supfamURL[1024];
     char *genomeStr;
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     char query[256];
     struct sqlResult *sr;
     char **row;
@@ -7981,8 +7977,8 @@ if (url != NULL && url[0] != 0)
         printf("<li>%s", row[0]);
         row = sqlNextRow(sr);
         }
-    hFreeConn(&conn);
     sqlFreeResult(&sr);
+    hFreeConn(&conn);
     
     printf("</UL>"); 
 
@@ -8021,7 +8017,7 @@ if (url != NULL && url[0] != 0)
 void doSuperfamily(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up Superfamily track info. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -8034,10 +8030,10 @@ if (itemForUrl == NULL)
 genericHeader(tdb, item);
 
 printSuperfamilyCustomUrl(tdb, itemForUrl, item == itemForUrl);
-if (hTableExists("ensGeneXref"))
+if (hTableExists(database, "ensGeneXref"))
     {
     sprintf(query, "translation_name='%s'", item);
-    transcript = sqlGetField(conn, database, "ensGeneXref", "transcript_name", query);
+    transcript = sqlGetField(database, "ensGeneXref", "transcript_name", query);
     
     sprintf(query, 
     	    "select chrom, chromStart, chromEnd from superfamily where name='%s';", transcript);
@@ -8053,10 +8049,10 @@ if (hTableExists("ensGeneXref"))
         }
     sqlFreeResult(&sr);
     }
-if (hTableExists("ensemblXref3"))
+if (hTableExists(database, "ensemblXref3"))
     {
     sprintf(query, "protein='%s'", item);
-    transcript = sqlGetField(conn, database, "ensemblXref3", "transcript", query);
+    transcript = sqlGetField(database, "ensemblXref3", "transcript", query);
     
     sprintf(query, 
     	    "select chrom, chromStart, chromEnd from superfamily where name='%s';", transcript);
@@ -8078,7 +8074,7 @@ printTrackHtml(tdb);
 void doOmimAv(struct trackDb *tdb, char *avName)
 /* Process click on an OMIM AV. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -8096,7 +8092,7 @@ char *line;
 int lineSize;
 
 safef(query, sizeof(query), "%s (%s)", tdb->longLabel, avName);
-cartWebStart(cart, query);
+cartWebStart(cart, database, query);
 
 safef(query, sizeof(query), "select * from omimAv where name = '%s'", avName);
 sr = sqlGetResult(conn, query);
@@ -8171,7 +8167,7 @@ hFreeConn(&conn);
 void doRgdQtl(struct trackDb *tdb, char *item)
 /* Put up RGD QTL info. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -8253,7 +8249,7 @@ void printGadDetails(struct trackDb *tdb, char *itemName, boolean encode)
 int refPrinted = 0;
 boolean showCompleteGadList;
 
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -8442,7 +8438,7 @@ char *chrom, *chromStart, *chromEnd;
 
 if (url != NULL && url[0] != 0)
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     char query[256];
     struct sqlResult *sr;
     char **row;
@@ -8481,7 +8477,7 @@ void doVax003Vax004(struct trackDb *tdb, char *item)
 /* Put up VAX 004 info. */
 {
 char *id;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *aliTbl = tdb->tableName;
 int start = cartInt(cart, "o");
 char cond_str[255], *subjId;
@@ -8494,7 +8490,7 @@ printf("</H3>\n");
 
 /* display subject ID */
 sprintf(cond_str, "dnaSeqId='%s'", id);
-subjId = sqlGetField(conn, database,"gsIdXref", "subjId", cond_str);
+subjId = sqlGetField(database,"gsIdXref", "subjId", cond_str);
 printf("<H3>Subject ID: ");
 printf("<A HREF=\"../cgi-bin/gsidSubj?hgs_subj=%s\">", subjId);
 printf("%s</A>\n", subjId);
@@ -8513,7 +8509,7 @@ void doUniGene3(struct trackDb *tdb, char *item)
 {
 char *url = tdb->url;
 char *id;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *aliTbl = tdb->tableName;
 int start = cartInt(cart, "o");
 
@@ -8577,7 +8573,7 @@ void doRgdGene(struct trackDb *tdb, char *rnaName)
 /* Process click on a RGD gene. */
 {
 char *track = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -8590,7 +8586,7 @@ int start = cartInt(cart, "o");
 if (strchr(rnaName, '\''))
     sqlRnaName = replaceChars(rnaName, "'", "''");
 
-cartWebStart(cart, tdb->longLabel);
+cartWebStart(cart, database, tdb->longLabel);
 
 safef(query, sizeof(query), "select * from refLink where mrnaAcc = '%s'", sqlRnaName);
 sr = sqlGetResult(conn, query);
@@ -8617,7 +8613,7 @@ printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
 printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
 
 /* If refSeqStatus is available, report it: */
-if (hTableExists("refSeqStatus"))
+if (hTableExists(database, "refSeqStatus"))
     {
     safef(query, sizeof(query), "select status from refSeqStatus where mrnaAcc = '%s'",
 	    sqlRnaName);
@@ -8765,7 +8761,7 @@ int gbCdnaGetVersion(struct sqlConnection *conn, char *acc)
 /* return mrna/est version, or 0 if not available */
 {
 int ver = 0;
-if (hHasField("gbCdnaInfo", "version"))
+if (hHasField(database, "gbCdnaInfo", "version"))
     {
     char query[128];
     safef(query, sizeof(query),
@@ -8803,7 +8799,7 @@ else
     printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
 
 /* If refSeqStatus is available, report it: */
-if (hTableExists("refSeqStatus"))
+if (hTableExists(database, "refSeqStatus"))
     {
     safef(query, sizeof(query), "select status from refSeqStatus where mrnaAcc = '%s'",
           sqlRnaName);
@@ -8856,7 +8852,7 @@ if (rl->locusLinkId != 0)
     	rl->locusLinkId);
     printf("%d</A><BR>\n", rl->locusLinkId);
 
-    if ( (strstr(hgGetDb(), "mm") != NULL) && hTableExists("MGIid"))
+    if ( (strstr(database, "mm") != NULL) && hTableExists(database, "MGIid"))
     	{
         char *mgiID;
 	safef(query, sizeof(query), "select MGIid from MGIid where LLid = '%d';",
@@ -8915,7 +8911,7 @@ if (!startsWith("Worm", organism))
         }
     printGeneCards(rl->name);
     }
-if (hTableExists("jaxOrtholog"))
+if (hTableExists(database, "jaxOrtholog"))
     {
     struct jaxOrtholog jo;
     char * sqlRlName = rl->name;
@@ -8936,7 +8932,7 @@ if (hTableExists("jaxOrtholog"))
 	}
     sqlFreeResult(&sr);
     }
-if (startsWith("hg", hGetDb()))
+if (startsWith("hg", database))
     {
     printf("\n");
     printf("<B>AceView:</B> ");
@@ -8950,7 +8946,7 @@ printStanSource(rl->mrnaAcc, "mrna");
 void doRefGene(struct trackDb *tdb, char *rnaName)
 /* Process click on a known RefSeq gene. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -8977,12 +8973,12 @@ sqlFreeResult(&sr);
 if (isXeno)
     {
     if (isNewChimp(database))
-        cartWebStart(cart, "Other RefSeq Gene");
+        cartWebStart(cart, database, "Other RefSeq Gene");
     else
-        cartWebStart(cart, "Non-%s RefSeq Gene", organism);
+        cartWebStart(cart, database, "Non-%s RefSeq Gene", organism);
     }
 else
-    cartWebStart(cart, "RefSeq Gene");
+    cartWebStart(cart, database, "RefSeq Gene");
 printf("<table border=0>\n<tr>\n");
 prRefGeneInfo(conn, rnaName, sqlRnaName, rl, isXeno);
 addGeneExtra(rl->name);  /* adds columns if extra info is available */
@@ -9028,7 +9024,7 @@ return sqlNeedQuickString(conn, query);
 void doHInvGenes(struct trackDb *tdb, char *item)
 /* Process click on H-Invitational genes track. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -9086,7 +9082,7 @@ void showSAM_T02(char *itemName)
 char query2[256];
 struct sqlResult *sr2;
 char **row2;
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn(database);
 char cond_str[256];
 char *predFN;
 char *homologID;
@@ -9118,10 +9114,10 @@ printf("\" TARGET=_blank>%s</A><BR>\n", itemName);
 printf("<B>3D Structure Prediction (PDB file):</B> ");
 gotPDBFile = 0;    
 safef(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", itemName);
-if (sqlGetField(conn2, database, "protHomolog", "proteinID", cond_str) != NULL)
+if (sqlGetField(database, "protHomolog", "proteinID", cond_str) != NULL)
     {
     safef(cond_str, sizeof(cond_str), "proteinID='%s'", itemName);
-    predFN = sqlGetField(conn2, database, "protPredFile", "predFileName", cond_str);
+    predFN = sqlGetField(database, "protPredFile", "predFileName", cond_str);
     if (predFN != NULL)
 	{
 	printf("<A HREF=\"../SARS/%s/", itemName);
@@ -9139,7 +9135,7 @@ printf("<B>3D Structure of Close Homologs:</B> ");
 homologCount = 0;
 strcpy(goodSCOPdomain, "dummy");
 
-conn2= hAllocConn();
+conn2= hAllocConn(database);
 safef(query2, sizeof(query2), 
 	"select homologID,eValue,SCOPdomain,chain from sc1.protHomolog where proteinID='%s' and evalue <= 0.01;",
 	itemName);
@@ -9197,7 +9193,7 @@ htmlHorizontalLine();
 void showHomologies(char *geneName, char *table)
 /* Show homology info. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -9235,7 +9231,7 @@ hFreeConn(&conn);
 void showPseudoHomologies(char *geneName, char *table)
 /* Show homology info. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -9297,11 +9293,11 @@ char chainTable[64];
 char chainTable_chrom[64];
 struct sqlResult *sr;
 char **row;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int first = 0;
 
 safef(chainTable,sizeof(chainTable), "selfChain");
-if (!hTableExists(chainTable) )
+if (!hTableExists(database, chainTable) )
     safef(chainTable,sizeof(chainTable), "chainSelf");
 printf("<B>Description:</B> Retrogenes are processed mRNAs that are inserted back into the genome. Most are pseudogenes, and some are functional genes or anti-sense transcripts that may impede mRNA translation.<p>\n");
 printf("<B>Percent of retro that breaks net relative to Mouse : </B>%d&nbsp;%%<br>\n",pg->overlapMouse);
@@ -9352,7 +9348,7 @@ if (!sameString(pg->kgName,"noKg"))
     linkToOtherBrowserExtra(database, pg->gChrom, pg->kStart, pg->kEnd, "knownGene=pack");
     printf("%s:%d-%d \n", pg->gChrom, pg->kStart, pg->kEnd);
     printf("</A></LI>");
-    if (hTableExists("knownGene"))
+    if (hTableExists(database, "knownGene"))
         {
         char *description;
         safef(query, sizeof(query), 
@@ -9389,9 +9385,9 @@ printf("</ul>");
 /* display pfam domains */
 
 printf("<p>");
-pdb = hPdbFromGdb(hGetDb());
+pdb = hPdbFromGdb(database);
 safef(pfamDesc, 128, "%s.pfamDesc", pdb);
-if (hTableExists("knownToPfam") && hTableExists(pfamDesc))
+if (hTableExists(database, "knownToPfam") && hTableExists(database, pfamDesc))
     {
     safef(query, sizeof(query), 
             "select description from knownToPfam kp, %s p where pfamAC = value and kp.name = '%s'", 
@@ -9407,7 +9403,7 @@ if (hTableExists("knownToPfam") && hTableExists(pfamDesc))
     sqlFreeResult(&sr);
     }
 
-if (hTableExists("all_mrna"))
+if (hTableExists(database, "all_mrna"))
     {
     char parent[255];
     struct psl *pslList = NULL;
@@ -9444,7 +9440,7 @@ if (hTableExists("all_mrna"))
         htmlHorizontalLine();
         safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",\
                 pg->chrom);
-        if (hTableExists(chainTable_chrom) )
+        if (hTableExists(database, chainTable_chrom) )
             {
                 /* lookup chain */
             dyStringPrintf(dy,
@@ -9459,8 +9455,8 @@ if (hTableExists("all_mrna"))
                 {
                 dyStringPrintf(dy,
                     "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d and qStrand = '-'",
-                    pg->chromStart, pg->chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
-                    hChromSize(pg->gChrom)-(pg->gStart));
+                               pg->chromStart, pg->chromEnd, pg->gChrom, hChromSize(database, pg->gChrom)-(pg->gEnd), 
+                    hChromSize(database, pg->gChrom)-(pg->gStart));
                 }
             dyStringAppend(dy, " order by qStart");
             sr = sqlGetResult(conn, dy->string);
@@ -9512,7 +9508,7 @@ void doPseudoPsl(struct trackDb *tdb, char *acc)
 /* Click on an pseudogene based on mrna alignment. */
 {
 char *track = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 char where[256];
@@ -9537,7 +9533,7 @@ if (startsWith("pseudoUcsc",alignTable))
     alignTable = cloneString("pseudoMrna");
     track = cloneString("pseudoGeneLink3");
     }
-if (hTableExists(alignTable) )
+if (hTableExists(database, alignTable) )
     {
     pslList = loadPslRangeT(alignTable, acc, chrom, winStart, winEnd);
     }
@@ -9548,7 +9544,7 @@ slSort(&pslList, pslCmpScoreDesc);
 /* print header */
 genericHeader(tdb, acc);
 /* Print non-sequence info. */
-cartWebStart(cart, acc);
+cartWebStart(cart, database, acc);
 
 
 safef(where, sizeof(where), "name = '%s'", acc);
@@ -9591,7 +9587,7 @@ printTrackHtml(tdb);
 void doEncodePseudoPred(struct trackDb *tdb, char *geneName)
 {
 char query[256], *headerItem, *name2 = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int start = cartInt(cart, "o");
@@ -9668,11 +9664,11 @@ sqlDisconnect(&connMm);
 void showSangerExtra(char *geneName, char *extraTable)
 /* Show info from sanger22extra table if it exists. */
 {
-if (hTableExists(extraTable))
+if (hTableExists(database, extraTable))
     {
     struct sanger22extra se;
     char query[256];
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
 
@@ -9712,9 +9708,9 @@ struct sqlResult *sr;
 char **row;
 
 genericHeader(tdb, name);
-if (hTableExists("vegaInfoZfish"))
+if (hTableExists(database, "vegaInfoZfish"))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
 
     safef(query, sizeof(query),
 	  "select * from vegaInfoZfish where transcriptId = '%s'", name);
@@ -9745,7 +9741,7 @@ if (vif != NULL)
     /* get information for the cloneId from */
     
     printf("<B>Clone Id:</B> \n");
-    struct sqlConnection *conn2 = hAllocConn();
+    struct sqlConnection *conn2 = hAllocConn(database);
     safef(query, sizeof(query),
 	 "select cloneId from vegaToCloneId where transcriptId = '%s'", name);
     sr = sqlGetResult(conn2, query);
@@ -9769,10 +9765,10 @@ void doVegaGene(struct trackDb *tdb, char *geneName)
 struct vegaInfo *vi = NULL;
 
 genericHeader(tdb, geneName);
-if (hTableExists("vegaInfo"))
+if (hTableExists(database, "vegaInfo"))
     {
     char query[256];
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
 
@@ -9821,9 +9817,9 @@ safef(infoTable, sizeof(infoTable), "%sInfo", geneTable);
 
 genericHeader(tdb, geneName);
 
-if (hTableExists(infoTable))
+if (hTableExists(database, infoTable))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
     safef(query, sizeof(query),
@@ -9833,7 +9829,7 @@ if (hTableExists(infoTable))
     if ((row = sqlNextRow(sr)) != NULL)
 	{
 	bgi = bdgpGeneInfoLoad(row);
-	if (hTableExists("flyBaseSwissProt"))
+	if (hTableExists(database, "flyBaseSwissProt"))
 	    {
 	    safef(query, sizeof(query),
 		  "select * from flyBaseSwissProt where flyBaseId = \"%s\"",
@@ -9908,7 +9904,7 @@ printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 
 safef(pepTable, sizeof(pepTable), "%sPep", geneTable);
-if (hGenBankHaveSeq(geneName, pepTable))
+if (hGenBankHaveSeq(database, geneName, pepTable))
     {
     puts("<LI>\n");
     hgcAnchorSomewhere("htcTranslatedProtein", geneName, pepTable,
@@ -9951,7 +9947,7 @@ struct bed *getBedAndPrintPos(struct trackDb *tdb, char *name, int maxN)
 /* Dig up the bed for this item just to print the position. */
 {
 struct bed *bed = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[256];
@@ -9963,7 +9959,7 @@ if (n < 3)
     n = 3;
 if (n > maxN)
     n = maxN;
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and chromStart = %d "
       "and name = '%s'",
@@ -9995,7 +9991,7 @@ void showFlyBase2004Xref(char *xrefTable, char *geneName)
  * (D. mel. v4.0 / D. pseud. 1.0).  Assumes xrefTable exists 
  * and matches flyBase2004Xref.sql! */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct flyBase2004Xref *xref = NULL;
@@ -10008,7 +10004,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     xref = flyBase2004XrefLoad(row);
-    if (hTableExists("flyBaseSwissProt") && isNotEmpty(xref->fbgn))
+    if (hTableExists(database, "flyBaseSwissProt") && isNotEmpty(xref->fbgn))
 	{
 	safef(query, sizeof(query),
 	      "select * from flyBaseSwissProt where flyBaseId = \"%s\"",
@@ -10059,7 +10055,7 @@ genericHeader(tdb, geneName);
 
 /* Note: if we need to expand to a different xref table definition, do 
  * some checking here.  For now, assume it's flyBase2004Xref-compatible: */
-if (hTableExists(xrefTable))
+if (hTableExists(database, xrefTable))
     showFlyBase2004Xref(xrefTable, geneName);
 
 printCustomUrl(tdb, geneName, FALSE);
@@ -10071,7 +10067,7 @@ if (startsWith("genePred", tdb->type))
     printf("<H3>Links to sequence:</H3>\n");
     printf("<UL>\n");
 
-    if (pepTable != NULL && hGenBankHaveSeq(geneName, pepTable))
+    if (pepTable != NULL && hGenBankHaveSeq(database, geneName, pepTable))
 	{
 	puts("<LI>\n");
 	hgcAnchorSomewhere("htcTranslatedProtein", geneName, pepTable,
@@ -10116,9 +10112,9 @@ safef(infoTable, sizeof(infoTable), "%sInfo", geneTable);
 
 genericHeader(tdb, geneName);
 
-if (hTableExists(infoTable))
+if (hTableExists(database, infoTable))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
     safef(query, sizeof(query),
@@ -10173,16 +10169,16 @@ if (bgi != NULL)
 	    printf("&nbsp;&nbsp;&nbsp;%s<BR>\n", words[i]);
 	    }
 	}
-    if (hTableExists("bgiGeneSnp") && hTableExists("bgiSnp"))
+    if (hTableExists(database, "bgiGeneSnp") && hTableExists(database, "bgiSnp"))
 	{
-	struct sqlConnection *conn = hAllocConn();
-	struct sqlConnection *conn2 = hAllocConn();
+	struct sqlConnection *conn = hAllocConn(database);
+	struct sqlConnection *conn2 = hAllocConn(database);
 	struct sqlResult *sr;
 	struct sqlResult *sr2;
 	struct bgiSnp snp;
 	struct bgiGeneSnp gs;
 	char **row;
-	int rowOffset = hOffsetPastBin(seqName, "bgiSnp");
+	int rowOffset = hOffsetPastBin(database, seqName, "bgiSnp");
 	boolean init = FALSE;
 	safef(query, sizeof(query),
 	      "select * from bgiGeneSnp where geneName = '%s'", geneName);
@@ -10225,7 +10221,7 @@ printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 
 safef(pepTable, sizeof(pepTable), "%sPep", geneTable);
-if (hGenBankHaveSeq(geneName, pepTable))
+if (hGenBankHaveSeq(database, geneName, pepTable))
     {
     puts("<LI>\n");
     hgcAnchorSomewhere("htcTranslatedProtein", geneName, pepTable,
@@ -10254,11 +10250,11 @@ void doBGISnp(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct bgiSnp snp;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 
 genericHeader(tdb, itemName);
 
@@ -10276,11 +10272,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>SNP in Broiler?:</B> %s<BR>\n", snp.inBroiler);
     printf("<B>SNP in Layer?:</B> %s<BR>\n", snp.inLayer);
     printf("<B>SNP in Silkie?:</B> %s<BR>\n", snp.inSilkie);
-    if (hTableExists("bgiGeneSnp") && hTableExists("bgiGene"))
+    if (hTableExists(database, "bgiGeneSnp") && hTableExists(database, "bgiGene"))
 	{
 	struct genePred *bg;
-	struct sqlConnection *conn2 = hAllocConn();
-	struct sqlConnection *conn3 = hAllocConn();
+	struct sqlConnection *conn2 = hAllocConn(database);
+	struct sqlConnection *conn3 = hAllocConn(database);
 	struct sqlResult *sr2, *sr3;
 	struct bgiGeneSnp gs;
 	safef(query, sizeof(query),
@@ -10350,18 +10346,18 @@ void doGenomicDups(struct trackDb *tdb, char *dupName)
 char *track = tdb->tableName;
 struct genomicDups dup;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char oChrom[64];
 int oStart;
 
-cartWebStart(cart, "Genomic Duplications");
+cartWebStart(cart, database, "Genomic Duplications");
 printf("<H2>Genomic Duplication Region</H2>\n");
 if (cgiVarExists("o"))
     {
     int start = cartInt(cart, "o");
-    int rowOffset = hOffsetPastBin(seqName, track);
+    int rowOffset = hOffsetPastBin(database, seqName, track);
     parseChromPointPos(dupName, oChrom, &oStart);
 
     sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d "
@@ -10373,11 +10369,11 @@ if (cgiVarExists("o"))
 	genomicDupsStaticLoad(row+rowOffset, &dup);
 	printf("<B>Region Position:</B> <A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
 	       hgTracksPathAndSettings(),
-	       hGetDb(), dup.chrom, dup.chromStart, dup.chromEnd);
+	       database, dup.chrom, dup.chromStart, dup.chromEnd);
 	printf("%s:%d-%d</A><BR>\n", dup.chrom, dup.chromStart, dup.chromEnd);
 	printf("<B>Other Position:</B> <A HREF=\"%s&db=%s&position=%s%%3A%d-%d\" TARGET=_blank>",
 	       hgTracksName(),
-	       hGetDb(), dup.otherChrom, dup.otherStart, dup.otherEnd);
+	       database, dup.otherChrom, dup.otherStart, dup.otherEnd);
 	printf("%s:%d-%d</A><BR>\n", dup.otherChrom, dup.otherStart, dup.otherEnd);
 	printf("<B>Relative orientation:</B> %s<BR>\n", dup.strand);
 	printf("<B>Percent identity:</B> %3.1f%%<BR>\n", 0.1*dup.score);
@@ -10400,7 +10396,7 @@ void htcExtSeq(char *item)
 {
 struct dnaSeq *seq;
 hgcStart(item);
-seq = hExtSeq(item);
+seq = hExtSeq(database, item);
 printf("<PRE><TT>");
 faWriteNext(stdout, item, seq->dna, seq->size);
 printf("</TT></PRE>");
@@ -10412,7 +10408,7 @@ void doBlatMouse(struct trackDb *tdb, char *itemName)
 {
 char *track = tdb->tableName;
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -10424,7 +10420,7 @@ char table[64];
 /* Print heading info including link to NCBI. */
 if (tiNum != NULL) 
     ++tiNum;
-cartWebStart(cart, itemName);
+cartWebStart(cart, database, itemName);
 printf("<H1>Information on Mouse %s %s</H1>", 
        (tiNum == NULL ? "Contig" : "Read"), itemName);
 
@@ -10472,7 +10468,7 @@ if (tiNum != NULL && sqlTableExists(conn, "mouseTraceInfo"))
 
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
-hFindSplitTable(seqName, track, table, &hasBin);
+hFindSplitTable(database, seqName, track, table, &hasBin);
 sprintf(query, "select * from %s where qName = '%s'", table, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -10517,14 +10513,14 @@ struct psl *loadPslAt(char *track, char *qName, int qStart, int qEnd, char *tNam
 /* Load a specific psl */
 {
 struct dyString *dy = newDyString(1024);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char table[64];
 boolean hasBin;
 struct sqlResult *sr;
 char **row;
 struct psl *psl;
 
-hFindSplitTable(tName, track, table, &hasBin);
+hFindSplitTable(database, tName, track, table, &hasBin);
 dyStringPrintf(dy, "select * from %s ", table);
 dyStringPrintf(dy, "where qStart = %d ", qStart);
 dyStringPrintf(dy, "and qEnd = %d ", qEnd);
@@ -10568,7 +10564,7 @@ char otherString[256];
 char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
-cartWebStart(cart, tdb->longLabel);
+cartWebStart(cart, database, tdb->longLabel);
 printf("<B>%s position:</B> <a target=\"_blank\" href=\"%s?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
        otherOrg, hgTracksName(), otherDb, psl->qName, psl->qStart+1, psl->qEnd,
        psl->qName, psl->qStart+1, psl->qEnd);
@@ -10607,7 +10603,7 @@ char otherString[256];
 char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
-cartWebStart(cart, tdb->longLabel);
+cartWebStart(cart, database, tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
 printf("<B>%s position:</B> <a target=\"_blank\" href=\"%s?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
        otherOrg, hgTracksName(), otherDb, psl->qName, psl->qStart+1, psl->qEnd,
@@ -10652,7 +10648,7 @@ char otherString[256];
 char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
-cartWebStart(cart, tdb->longLabel);
+cartWebStart(cart, database, tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
        psl->qName, psl->qStart+1, psl->qEnd);
@@ -10686,7 +10682,7 @@ char anotherString[256];
 char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
-cartWebStart(cart, tdb->longLabel);
+cartWebStart(cart, database, tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
        psl->qName, psl->qStart+1, psl->qEnd);
@@ -10766,11 +10762,11 @@ struct chain *getChainFromRange(char *chainTable, char *chrom, int chromStart, i
 char chainTable_chrom[256];
 struct dyString *dy = newDyString(128);
 struct chain *chainList = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 safef(chainTable_chrom, 256, "%s_%s",chrom, chainTable);
 
 
-if (hTableExists(chainTable_chrom) )
+if (hTableExists(database, chainTable_chrom) )
     {
     /* lookup chain if not stored */
     char **row;
@@ -10804,7 +10800,7 @@ if (hTableExists(chainTable_chrom) )
         chain = NULL;
         if (chainId != 0)
             {
-            chain = chainLoadIdRange(hGetDb(), chainTable, chrom, chromStart, chromEnd, chainId);
+            chain = chainLoadIdRange(database, chainTable, chrom, chromStart, chromEnd, chainId);
             if (chain != NULL)
                 slAddHead(&chainList, chain);
             }
@@ -10841,17 +10837,16 @@ char qNibDir[512];
 char tNibDir[512];
 char path[512];
 boolean hasBin; 
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlConnection *conn2;
 struct hash *qChromHash = hashNew(0);
 struct cnFill *fill;
 struct chain *chain;
 struct dnaSeq *tChrom = NULL;
 
-cartWebStart(cart, "Alignment of %s in %s to pseudogene in %s",
+cartWebStart(cart, database, "Alignment of %s in %s to pseudogene in %s",
 	     name, hOrganism(db2), hOrganism(database));
-hSetDb2(db2); 
-conn2 = hAllocConn2();
+conn2 = hAllocConn(db2);
 
 /* get nibFile for pseudoGene */
 sprintf(query, "select fileName from chromInfo where chrom = '%s'",  chrom);
@@ -10864,7 +10859,7 @@ if (sqlQuickQuery(conn2, query, qNibFile, sizeof(qNibFile)) == NULL)
     errAbort("Sequence chr1 isn't in chromInfo");
 
 /* get gp */
-if (!hFindSplitTableDb(db2, qChrom, track, table, &hasBin))
+if (!hFindSplitTable(db2, qChrom, track, table, &hasBin))
     errAbort("htcPseudoGene: table %s not found.\n",track);
 else if (sameString(track, "mrna"))
     {
@@ -10916,7 +10911,7 @@ sprintf(path, "%s/%s.nib", tNibDir, chrom);
 if (sameString(database,db2))
     {
     strcpy(track, "selfChain");
-    if (!hTableExists("chr1_selfChain"))
+    if (!hTableExists(database, "chr1_selfChain"))
         strcpy(track, "chainSelf");
     }
 else
@@ -10940,7 +10935,7 @@ if (chainId > 0 )
 
     tChrom = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, 
             fill->tStart, fill->tSize);
-    axtList = netFillToAxt(fill, tChrom, hChromSize(chrom), qChromHash, qNibDir, chain, TRUE);
+    axtList = netFillToAxt(fill, tChrom, hChromSize(database, chrom), qChromHash, qNibDir, chain, TRUE);
     /* make sure list is in correct order */
     if (axtList != NULL)
         if (axtList->next != NULL)
@@ -10963,13 +10958,13 @@ if (chainId > 0 )
 
     /* output fancy formatted alignment */
     puts("<PRE><TT>");
-    axtOneGeneOut(axtList, LINESIZE, stdout , gp, qNibFile);
+    axtOneGeneOut(database, axtList, LINESIZE, stdout , gp, qNibFile);
     puts("</TT></PRE>");
     }
 
 axtInfoFreeList(&aiList);
 webEnd();
-hFreeConn2(&conn2);
+hFreeConn(&conn2);
 }
 
 void htcLongXenoPsl2(char *htcCommand, char *item)
@@ -10991,10 +10986,9 @@ if ((ptr = strchr(qChrom, '.')) != NULL)
     qChrom = ptr+1;
 
 /* Make sure that otherOrg's chrom size matches psl's qSize */
-hSetDb2(otherDb);
-if (hChromSize2(qChrom) != psl->qSize)
+if (hChromSize(database, qChrom) != psl->qSize)
     errAbort("Alignment's query size for %s is %d, but the size of %s in database %s is %d.  Incorrect database in trackDb.type?",
-	     qChrom, psl->qSize, qChrom, otherDb, hChromSize2(qChrom));
+	     qChrom, psl->qSize, qChrom, otherDb, hChromSize(otherDb, qChrom));
 
 psl = pslTrimToTargetRange(psl, winStart, winEnd);
 
@@ -11012,7 +11006,7 @@ void doAlignCompGeno(struct trackDb *tdb, char *itemName, char *otherGenome)
 {
 char *track = tdb->tableName;
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -11037,7 +11031,7 @@ if (wordCount == 3)
             }
     }
 freeMem(typeLine);
-cartWebStart(cart, itemName);
+cartWebStart(cart, database, itemName);
 printPosOnChrom(chrom,start,end,NULL,FALSE,NULL);
 printf("<H1>Information on %s Sequence %s</H1>", otherGenome, itemName);
 
@@ -11048,7 +11042,7 @@ printf("%s DNA</A><BR>\n", otherGenome);
 
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
-hFindSplitTable(seqName, track, table, &hasBin);
+hFindSplitTable(database, seqName, track, table, &hasBin);
 
 /* if this is a non-split table then query with tName */
 if (startsWith(track, table))
@@ -11072,7 +11066,7 @@ void doTSS(struct trackDb *tdb, char *itemName)
 {
 char *track = tdb->tableName;
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int start = cartInt(cart, "o");
@@ -11080,7 +11074,7 @@ struct psl *pslList = NULL, *psl = NULL;
 boolean hasBin = TRUE;
 char *table = "refFullAli"; /* Table with the pertinent PSL data */
 
-cartWebStart(cart, itemName);
+cartWebStart(cart, database, itemName);
 printf("<H1>Information on DBTSS Sequence %s</H1>", itemName);
 printf("Get ");
 printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
@@ -11108,16 +11102,16 @@ void doEst3(char *itemName)
 {
 struct est3 el;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
 
-cartWebStart(cart, "EST 3' Ends");
+cartWebStart(cart, database, "EST 3' Ends");
 printf("<H2>EST 3' Ends</H2>\n");
 
-rowOffset = hOffsetPastBin(seqName, "est3");
+rowOffset = hOffsetPastBin(database, seqName, "est3");
 sprintf(query, "select * from est3 where chrom = '%s' and chromStart = %d",
 	seqName, start);
 sr = sqlGetResult(conn, query);
@@ -11144,7 +11138,7 @@ void doEncodeRna(struct trackDb *tdb, char *itemName)
 char *track = tdb->tableName;
 struct encodeRna rna;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -11152,7 +11146,7 @@ int rowOffset;
 struct slName *nameList, *sl;
 
 genericHeader(tdb, itemName);
-rowOffset = hOffsetPastBin(seqName, track);
+rowOffset = hOffsetPastBin(database, seqName, track);
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
       track, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
@@ -11189,14 +11183,14 @@ void doRnaGene(struct trackDb *tdb, char *itemName)
 char *track = tdb->tableName;
 struct rnaGene rna;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
 
 genericHeader(tdb, itemName);
-rowOffset = hOffsetPastBin(seqName, track);
+rowOffset = hOffsetPastBin(database, seqName, track);
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
 	track, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
@@ -11223,11 +11217,11 @@ void doStsMarker(struct trackDb *tdb, char *marker)
 char *table = tdb->tableName;
 char query[256];
 char title[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 boolean stsInfo2Exists = sqlTableExists(conn, "stsInfo2");
 boolean stsInfoExists = sqlTableExists(conn, "stsInfo");
 boolean stsMapExists = sqlTableExists(conn, "stsMap");
-struct sqlConnection *conn1 = hAllocConn();
+struct sqlConnection *conn1 = hAllocConn(database);
 struct sqlResult *sr = NULL, *sr1 = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -11248,7 +11242,7 @@ if (strchr(marker, '\''))
 
 /* Print out non-sequence info */
 sprintf(title, "STS Marker %s", marker);
-cartWebStart(cart, title);
+cartWebStart(cart, database, title);
 
 /* Find the instance of the object in the bed table */ 
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
@@ -11257,7 +11251,7 @@ sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
 	table, sqlMarker, seqName, start, end);  
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-hasBin = hOffsetPastBin(seqName, table);
+hasBin = hOffsetPastBin(database, seqName, table);
 if (row != NULL)
     {
     if (stsMapExists)
@@ -11434,7 +11428,7 @@ if (row != NULL)
 	sprintf(query, "SELECT * FROM all_sts_seq WHERE qName = '%d'", 
 		infoRow->identNo);  
 	sr1 = sqlGetResult(conn1, query);
-	hasBin = hOffsetPastBin(seqName, "all_sts_seq");
+	hasBin = hOffsetPastBin(database, seqName, "all_sts_seq");
 	i = 0;
 	pslStart = 0;
 	while ((row = sqlNextRow(sr1)) != NULL)
@@ -11459,7 +11453,7 @@ if (row != NULL)
 	sprintf(stsid,"dbSTS_%d",infoRow->dbSTSid);
 	sprintf(query, "SELECT * FROM all_sts_primer WHERE qName = '%s'", 
 		stsid);  
-	hasBin = hOffsetPastBin(seqName, "all_sts_primer");
+	hasBin = hOffsetPastBin(database, seqName, "all_sts_primer");
 	sr1 = sqlGetResult(conn1, query);
 	i = 0;
 	pslStart = 0;
@@ -11521,7 +11515,7 @@ if (row != NULL)
                            "AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
 		    table, marker, seqName, start, end); 
 	    sr = sqlGetResult(conn,query);
-	    hasBin = hOffsetPastBin(seqName, table);
+	    hasBin = hOffsetPastBin(database, seqName, table);
 	    while ((row = sqlNextRow(sr)) != NULL)
 		{
 		if (stsMapExists)
@@ -11554,8 +11548,8 @@ void doStsMapMouse(struct trackDb *tdb, char *marker)
 char *table = tdb->tableName;
 char title[256];
 char query[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn1 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn1 = hAllocConn(database);
 struct sqlResult *sr = NULL, *sr1 = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -11570,7 +11564,7 @@ int pslStart;
 
 /* Print out non-sequence info */
 sprintf(title, "STS Marker %s", marker);
-cartWebStart(cart, title);
+cartWebStart(cart, database, title);
 
 /* Find the instance of the object in the bed table */ 
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
@@ -11681,8 +11675,8 @@ char *table = tdb->tableName;
 char title[256];
 char query[256];
 char query1[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn1 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn1 = hAllocConn(database);
 struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -11702,7 +11696,7 @@ int pslStart;
 
 sprintf(title, "STS Marker %s\n", marker);
 /* sprintf(title, "STS Marker <A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?string\%%3AmousemarkerID=%s\" TARGET=_BLANK>%s</A>\n", marker, marker); */
-cartWebStart(cart, title);
+cartWebStart(cart, database, title);
 
 /* Find the instance of the object in the bed table */ 
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
@@ -11860,8 +11854,8 @@ char *table = tdb->tableName;
 char title[256];
 char query[256];
 char query1[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn1 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn1 = hAllocConn(database);
 struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -11879,7 +11873,7 @@ boolean hasBin = FALSE;
 
 /* Print out non-sequence info */
 sprintf(title, "STS Marker %s", marker);
-cartWebStart(cart, title);
+cartWebStart(cart, database, title);
 
 /* Find the instance of the object in the bed table */ 
 safef(query, sizeof(query), "name = '%s'", marker);
@@ -12030,7 +12024,7 @@ void doFishClones(struct trackDb *tdb, char *clone)
 /* Handle click on the FISH clones track */
 {
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -12039,7 +12033,7 @@ struct fishClones *fc;
 int i;
 
 /* Print out non-sequence info */
-cartWebStart(cart, clone);
+cartWebStart(cart, database, clone);
 
 
 /* Find the instance of the object in the bed table */ 
@@ -12133,7 +12127,7 @@ void doRecombRate(struct trackDb *tdb)
 /* Handle click on the Recombination Rate track */
 {
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -12141,7 +12135,7 @@ int end = cartInt(cart, "t");
 struct recombRate *rr;
 
 /* Print out non-sequence info */
-cartWebStart(cart, "Recombination Rates");
+cartWebStart(cart, database, "Recombination Rates");
 
 /* Find the instance of the object in the bed table */ 
 sprintf(query, "SELECT * FROM recombRate WHERE "
@@ -12181,7 +12175,7 @@ void doRecombRateRat(struct trackDb *tdb)
 /* Handle click on the rat Recombination Rate track */
 {
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -12189,7 +12183,7 @@ int end = cartInt(cart, "t");
 struct recombRateRat *rr;
 
 /* Print out non-sequence info */
-cartWebStart(cart, "Recombination Rates");
+cartWebStart(cart, database, "Recombination Rates");
 
 
 /* Find the instance of the object in the bed table */ 
@@ -12223,7 +12217,7 @@ void doRecombRateMouse(struct trackDb *tdb)
 /* Handle click on the mouse Recombination Rate track */
 {
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -12231,7 +12225,7 @@ int end = cartInt(cart, "t");
 struct recombRateMouse *rr;
 
 /* Print out non-sequence info */
-cartWebStart(cart, "Recombination Rates");
+cartWebStart(cart, database, "Recombination Rates");
 
 /* Find the instance of the object in the bed table */ 
 sprintf(query, "SELECT * FROM recombRateMouse WHERE "
@@ -12264,7 +12258,7 @@ void doGenMapDb(struct trackDb *tdb, char *clone)
 /* Handle click on the GenMapDb clones track */
 {
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -12273,7 +12267,7 @@ struct genMapDb *upc;
 int size;
 
 /* Print out non-sequence info */
-cartWebStart(cart, "GenMapDB BAC Clones");
+cartWebStart(cart, database, "GenMapDB BAC Clones");
 
 /* Find the instance of the object in the bed table */ 
 sprintf(query, "SELECT * FROM genMapDb WHERE name = '%s' "
@@ -12347,18 +12341,18 @@ void doMouseOrthoDetail(struct trackDb *tdb, char *itemName)
 char *track = tdb->tableName;
 struct mouseSyn el;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
 
-cartWebStart(cart, "Mouse Synteny");
+cartWebStart(cart, database, "Mouse Synteny");
 printf("<H2>Mouse Synteny</H2>\n");
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
 	track, seqName, start);
-rowOffset = hOffsetPastBin(seqName, track);
+rowOffset = hOffsetPastBin(database, seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -12381,18 +12375,18 @@ void doMouseSyn(struct trackDb *tdb, char *itemName)
 char *track = tdb->tableName;
 struct mouseSyn el;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
 
-cartWebStart(cart, "Mouse Synteny");
+cartWebStart(cart, database, "Mouse Synteny");
 printf("<H2>Mouse Synteny</H2>\n");
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
 	track, seqName, start);
-rowOffset = hOffsetPastBin(seqName, track);
+rowOffset = hOffsetPastBin(database, seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -12415,18 +12409,18 @@ void doMouseSynWhd(struct trackDb *tdb, char *itemName)
 char *track = tdb->tableName;
 struct mouseSynWhd el;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
 
-cartWebStart(cart, "Mouse Synteny (Whitehead)");
+cartWebStart(cart, database, "Mouse Synteny (Whitehead)");
 printf("<H2>Mouse Synteny (Whitehead)</H2>\n");
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
 	track, seqName, start);
-rowOffset = hOffsetPastBin(seqName, track);
+rowOffset = hOffsetPastBin(database, seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -12454,7 +12448,7 @@ void doEnsPhusionBlast(struct trackDb *tdb, char *itemName)
 char *track = tdb->tableName;
 struct ensPhusionBlast el;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char *org = hOrganism(database);
@@ -12463,12 +12457,12 @@ char *elname, *ptr, *xenoDb, *xenoOrg, *xenoChrom;
 char query[256];
 int rowOffset;
 
-cartWebStart(cart, "%s", tdb->longLabel);
+cartWebStart(cart, database, "%s", tdb->longLabel);
 printf("<H2>%s</H2>\n", tdb->longLabel);
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
 	track, seqName, start);
-rowOffset = hOffsetPastBin(seqName, track);
+rowOffset = hOffsetPastBin(database, seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -12566,7 +12560,7 @@ char *doDbSnpRs(char *name)
 {
 struct sqlConnection *hgFixed = sqlConnect("hgFixed");
 char  *rsId = validateOrGetRsId(name, hgFixed);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char   query[512];
@@ -12638,10 +12632,10 @@ void doSnpEntrezGeneLink(struct trackDb *tdb, char *name)
 /* print link to EntrezGene for this SNP */
 {
 char *table = tdb->tableName;
-if (hTableExists("knownGene") && hTableExists("refLink") &&
-    hTableExists("mrnaRefseq") && hTableExists(table))
+if (hTableExists(database, "knownGene") && hTableExists(database, "refLink") &&
+    hTableExists(database, "mrnaRefseq") && hTableExists(database, table))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
     char query[512];
@@ -12661,7 +12655,7 @@ if (hTableExists("knownGene") && hTableExists("refLink") &&
 	  "  and  kg.txStart < snp.chromStart "
 	  "  and  kg.txEnd   > snp.chromEnd   "
 	  "  and  snp.name   = '%s'", table, name);
-    rowOffset = hOffsetPastBin(seqName, table);
+    rowOffset = hOffsetPastBin(database, seqName, table);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -12681,14 +12675,14 @@ char *group = tdb->tableName;
 struct snp snp;
 struct snpMap snpMap;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
 char *printId;
 
-cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
+cartWebStart(cart, database, "Simple Nucleotide Polymorphism (SNP)");
 printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 sprintf(query, 
 	"select * "
@@ -12697,7 +12691,7 @@ sprintf(query,
 	"  and  chromStart = %d "
 	"  and  name = '%s'",
         group, seqName, start, itemName);
-rowOffset = hOffsetPastBin(seqName, group);
+rowOffset = hOffsetPastBin(database, seqName, group);
 sr = sqlGetResult(conn, query);
 if (sameString(group,"snpMap"))
     while ((row = sqlNextRow(sr)) != NULL)
@@ -12739,7 +12733,7 @@ char    *tokens;
 struct   lineFile      *lf;
 struct   tokenizer     *tkz;
 struct   snpExceptions  se;
-struct   sqlConnection *conn = hAllocConn();
+struct   sqlConnection *conn = hAllocConn(database);
 struct   sqlResult     *sr;
 char   **row;
 char     query[256];
@@ -12814,7 +12808,7 @@ printf("<BR>\n");
 void printLsSnpLinks(struct snp snp)
 /* print links to ModBase and LS-SNP at UCSF */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr1, *sr2;
 char **row;
 char   query[256];
@@ -12822,14 +12816,14 @@ char   baseUrl[] = "http://salilab.org/LS-SNP-cgi/";
 char   options[] = "&RequestType=QueryById&idtype=rsID&PropertySelect=";
 char  *snpScript = NULL;
 
-if (sameString("hg17", hGetDb()))
+if (sameString("hg17", database))
     snpScript = cloneString("LS_SNP_query.pl");
-else if (sameString("hg16", hGetDb()))
+else if (sameString("hg16", database))
     snpScript = cloneString("SNP_query.pl");
 else
     return;
 
-if (hTableExists("lsSnpStructure"))
+if (hTableExists(database, "lsSnpStructure"))
     {
     safef(query, sizeof(query), "select distinct uniProtId, rsId from lsSnpStructure "
 	  "where rsId='%s' order by uniProtId", snp.name);
@@ -12841,7 +12835,7 @@ if (hTableExists("lsSnpStructure"))
 	}
     sqlFreeResult(&sr1);
     }
-if (hTableExists("lsSnpFunction"))
+if (hTableExists(database, "lsSnpFunction"))
     {
     safef(query, sizeof(query), "select distinct uniProtId, rsId from lsSnpFunction "
 	  "where rsId='%s' order by uniProtId", snp.name);
@@ -12863,13 +12857,13 @@ char *snpSeqSetting = trackDbSetting(tdb, "snpSeq");
 char snpSeqTable[128];
 char query[256];
 char **row;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 long offset = 0;
 
 if (isNotEmpty(snpSeqSetting))
     {
-    if (hTableExists(snpSeqSetting))
+    if (hTableExists(database, snpSeqSetting))
 	safecpy(snpSeqTable, sizeof(snpSeqTable), snpSeqSetting);
     else
 	return -1;
@@ -12877,10 +12871,10 @@ if (isNotEmpty(snpSeqSetting))
 else
     {
     safef(snpSeqTable, sizeof(snpSeqTable), "%sSeq", tdb->tableName);
-    if (!hTableExists(snpSeqTable))
+    if (!hTableExists(database, snpSeqTable))
 	{
 	safecpy(snpSeqTable, sizeof(snpSeqTable), "snpSeq");
-	if (!hTableExists(snpSeqTable))
+	if (!hTableExists(database, snpSeqTable))
 	    return -1;
 	}
     }
@@ -13155,7 +13149,7 @@ if (start < 0)
 	genoLen5 += start;
     start = 0;
     }
-int chromSize = hChromSize(snp->chrom);
+int chromSize = hChromSize(database, snp->chrom);
 if (end > chromSize)
     {
     if (isRc)
@@ -13166,7 +13160,7 @@ if (end > chromSize)
     }
 
 /* do the lookup */
-seqNib = hChromSeqMixed(snp->chrom, start, end);
+seqNib = hChromSeqMixed(database, snp->chrom, start, end);
 if (seqNib == NULL)
     errAbort("Couldn't get genomic sequence around %s (%s:%d-%d)",
 	     snp->name, snp->chrom, start+1, end);
@@ -13240,17 +13234,17 @@ void doSnp(struct trackDb *tdb, char *itemName)
 char   *group = tdb->tableName;
 struct snp snp;
 int    start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char   query[256];
-int    rowOffset=hOffsetPastBin(seqName, group);
+int    rowOffset=hOffsetPastBin(database, seqName, group);
 int    firstOne=1;
 char  *exception=0;
 char  *chrom="";
 int    chromStart=0;
 
-cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
+cartWebStart(cart, database, "Simple Nucleotide Polymorphism (SNP)");
 printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 safef(query, sizeof(query), "select * from %s where chrom='%s' and "
       "chromStart=%d and name='%s'", group, seqName, start, itemName);
@@ -13276,7 +13270,7 @@ if (startsWith("rs",itemName))
     doSnpEntrezGeneLink(tdb, itemName);
     }
 printLsSnpLinks(snp);
-if (hTableExists("snpExceptions") && differentString(exception,"0"))
+if (hTableExists(database, "snpExceptions") && differentString(exception,"0"))
     writeSnpException(exception, itemName, rowOffset, chrom, chromStart, tdb);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
@@ -13390,11 +13384,11 @@ void doCnpLocke(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct cnpLocke thisItem;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
@@ -13420,11 +13414,11 @@ void doCnpIafrate(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct cnpIafrate cnpIafrate;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
@@ -13451,11 +13445,11 @@ void doCnpIafrate2(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct cnpIafrate2 thisItem;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
@@ -13491,11 +13485,11 @@ void doDelHinds2(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct delHinds2 thisItem;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
@@ -13518,11 +13512,11 @@ void doDelConrad2(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct delConrad2 thisItem;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
@@ -13547,11 +13541,11 @@ void doCnpSebat(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct cnpSebat cnpSebat;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
@@ -13575,11 +13569,11 @@ void doCnpSebat2(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct cnpSebat2 cnpSebat2;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
@@ -13693,11 +13687,11 @@ void doCnpSharp(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct cnpSharp cnpSharp;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256]; 
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 char variantSignal;
 char *itemCopy = cloneString(itemName);
@@ -13736,11 +13730,11 @@ void doCnpSharp2(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct cnpSharp2 cnpSharp2;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
@@ -13768,11 +13762,11 @@ void doDgv(struct trackDb *tdb, char *id)
 /* Details for Database of Genomic Variants (updated superset of cnp*). */
 {
 struct dgv dgv;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[512];
-int rowOffset = hOffsetPastBin(seqName, tdb->tableName);
+int rowOffset = hOffsetPastBin(database, seqName, tdb->tableName);
 genericHeader(tdb, id);
 printCustomUrl(tdb, id, FALSE);
 
@@ -13830,13 +13824,13 @@ void doAffy120K(struct trackDb *tdb, char *itemName)
 char *group = tdb->tableName;
 struct snp snp;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
 
-cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
+cartWebStart(cart, database, "Single Nucleotide Polymorphism (SNP)");
 printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 sprintf(query, "select * "
 	       "from   affy120K "
@@ -13844,7 +13838,7 @@ sprintf(query, "select * "
 	       "  and  chromStart = %d "
 	       "  and  name = '%s'",
                seqName, start, itemName);
-rowOffset = hOffsetPastBin(seqName, group);
+rowOffset = hOffsetPastBin(database, seqName, group);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -13916,13 +13910,13 @@ void doAffy10K(struct trackDb *tdb, char *itemName)
 char *group = tdb->tableName;
 struct snp snp;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
 
-cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
+cartWebStart(cart, database, "Single Nucleotide Polymorphism (SNP)");
 printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 sprintf(query, "select * "
 	       "from   affy10K "
@@ -13930,7 +13924,7 @@ sprintf(query, "select * "
 	       "  and  chromStart = %d "
 	       "  and  name = '%s'",
                seqName, start, itemName);
-rowOffset = hOffsetPastBin(seqName, group);
+rowOffset = hOffsetPastBin(database, seqName, group);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -13947,9 +13941,9 @@ void printSnpOrthoSummary(struct trackDb *tdb, char *rsId, char *observed)
 /* helper function for printSnp125Info */
 {
 char *orthoTable = snp125OrthoTable(tdb, NULL);
-if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
+if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
     char query[512];
@@ -14036,9 +14030,9 @@ void printSnpOrthoRows(struct trackDb *tdb, struct snp125 *snp)
 {
 int speciesCount = 0;
 char *orthoTable = snp125OrthoTable(tdb, &speciesCount);
-if (isNotEmpty(orthoTable) && hTableExists(orthoTable))
+if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
     char query[1024];
@@ -14149,9 +14143,9 @@ char exceptionsTable[128];
 char excDescTable[128];
 safef(exceptionsTable, sizeof(exceptionsTable), "%sExceptions", table);
 safef(excDescTable, sizeof(excDescTable), "%sExceptionDesc", table);
-if (hTableExists(exceptionsTable) && hTableExists(excDescTable))
+if (hTableExists(database, exceptionsTable) && hTableExists(database, excDescTable))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
     char   query[1024];
@@ -14203,9 +14197,9 @@ return snp;
 
 void checkForHapmap(struct trackDb *tdb, char *itemName)
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[512];
-if (!hTableExists("hapmapAllelesSummary"))
+if (!hTableExists(database, "hapmapAllelesSummary"))
     return;
 safef(query, sizeof(query),
       "select count(*) from hapmapAllelesSummary where name = '%s'", itemName);
@@ -14223,11 +14217,11 @@ char   *table = tdb->tableName;
 struct snp125 snp;
 struct snp *snpAlign = NULL;
 int    start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char   query[512];
-int    rowOffset=hOffsetPastBin(seqName, table);
+int    rowOffset=hOffsetPastBin(database, seqName, table);
 int    snpCount=0;
 
 genericHeader(tdb, NULL);
@@ -14303,13 +14297,13 @@ genericClickHandler(tdb, item, buf);
 void doJaxQTL(struct trackDb *tdb, char *item)
 /* Put up info on Quantitative Trait Locus from Jackson Lab. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char query[512];
 char **row;
 int start = cartInt(cart, "o");
 boolean isBed4 = startsWith("bed 4", tdb->type);
-boolean hasBin = hIsBinned(tdb->tableName);
+boolean hasBin = hIsBinned(database, tdb->tableName);
 
 genericHeader(tdb, item);
 safef(query, sizeof(query),
@@ -14328,7 +14322,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 	itemForUrl = name = bed->name;
 	if (isNotEmpty(oDb) && isNotEmpty(oTable))
 	    {
-	    struct sqlConnection *conn2 = hAllocConn();
+	    struct sqlConnection *conn2 = hAllocConn(database);
 	    char buf[1024];
 	    safef(query, sizeof(query),
 		  "select description from %s.%s where name = '%s'",
@@ -14393,12 +14387,12 @@ struct bed *bed;
 char query[512];
 struct sqlResult *sr;
 char **row;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int bedSize;
 
 genericHeader(tdb, item);
 bedSize = 8;
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s'", table, item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -14428,12 +14422,12 @@ struct bed *bed;
 char query[512];
 struct sqlResult *sr;
 char **row;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int bedSize;
 
 genericHeader(tdb, item);
 bedSize = 8;
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s'", table, item);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -14472,7 +14466,7 @@ printTrackHtml(tdb);
 void doJaxQTL3(struct trackDb *tdb, char *item)
 /* Put up info on Quantitative Trait Locus from Jackson Lab. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char query[256];
 char **row;
@@ -14529,8 +14523,8 @@ void doJaxAllele(struct trackDb *tdb, char *item)
 {
 char *track = tdb->tableName;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
 boolean hasBin; 
 char aliasTable[256], phenoTable[256];
 struct sqlResult *sr = NULL;
@@ -14556,7 +14550,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>MGI Representative Transcript:</B> ");
     htmTextOut(stdout, bed->name);
     puts("<BR>");
-    if (hTableExists(aliasTable))
+    if (hTableExists(database, aliasTable))
 	{
 	struct sqlResult *sr2 = NULL;
 	char **row2 = NULL;
@@ -14576,7 +14570,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	sqlFreeResult(&sr2);
 	}
-    if (hTableExists(phenoTable))
+    if (hTableExists(database, phenoTable))
 	{
 	struct sqlResult *sr2 = NULL;
 	char **row2 = NULL;
@@ -14620,7 +14614,7 @@ hFreeConn(&conn);
 void doJaxPhenotype(struct trackDb *tdb, char *item)
 /* Show gene prediction position and other info. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 boolean hasBin; 
@@ -14652,9 +14646,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("<B>MGI Representative Transcript:</B> ");
 	htmTextOut(stdout, bed->name);
 	puts("<BR>");
-	if (hTableExists(aliasTable))
+	if (hTableExists(database, aliasTable))
 	    {
-	    struct sqlConnection *conn2 = hAllocConn();
+	    struct sqlConnection *conn2 = hAllocConn(database);
 	    char query2[512];
 	    char buf[512];
 	    char *mgiId;
@@ -14690,15 +14684,15 @@ for (pheno = phenoList;  pheno != NULL;  pheno = pheno->next)
 	printf("%s", pheno->name);
     }
 puts("<BR>");
-if (hTableExists(phenoTable) && selectedPheno)
+if (hTableExists(database, phenoTable) && selectedPheno)
     {
     struct trackDb *alleleTdb = hMaybeTrackInfo(conn, "jaxAllele");
-    struct sqlConnection *conn2 = hAllocConn();
+    struct sqlConnection *conn2 = hAllocConn(database);
     char query2[512];
     char buf[512];
     char alleleTable[256];
     safef(alleleTable, sizeof(alleleTable), "jaxAlleleInfo");
-    boolean gotAllele = hTableExists(alleleTable);
+    boolean gotAllele = hTableExists(database, alleleTable);
     safef(query, sizeof(query),
 	  "select allele from %s where transcript = '%s' "
 	  "and phenotypes like '%%%s%%'",
@@ -14747,8 +14741,8 @@ void doJaxAliasGenePred(struct trackDb *tdb, char *item)
 {
 char *track = tdb->tableName;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
 struct genePred *gpList = NULL, *gp = NULL;
 boolean hasBin; 
 char table[128];
@@ -14757,8 +14751,8 @@ boolean gotAlias = FALSE;
 
 genericHeader(tdb, item);
 safef(aliasTable, sizeof(aliasTable), "%sAlias", track);
-gotAlias = hTableExists(aliasTable);
-hFindSplitTable(seqName, track, table, &hasBin);
+gotAlias = hTableExists(database, aliasTable);
+hFindSplitTable(database, seqName, track, table, &hasBin);
 safef(query, sizeof(query), "name = \"%s\"", item);
 gpList = genePredReaderLoadQuery(conn, table, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
@@ -14821,7 +14815,7 @@ return id;
 void doEncodeErge(struct trackDb *tdb, char *item)
 /* Print ENCODE data from dbERGE II */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[1024];
 struct encodeErge *ee=NULL;
 int start = cartInt(cart, "o");
@@ -14829,7 +14823,7 @@ char *newLabel = tdb->longLabel + 7; /* removes 'ENCODE ' from label */
 char *encodeName = getEncodeName(item);
 char *encodeId = getEncodeId(item);
 
-cartWebStart(cart, "ENCODE Region Data: %s", newLabel);
+cartWebStart(cart, database, "ENCODE Region Data: %s", newLabel);
 printf("<H2>ENCODE Region <U>%s</U> Data for %s.</H2>\n", newLabel, encodeName);
 genericHeader(tdb, encodeName);
 
@@ -14862,7 +14856,7 @@ hFreeConn(&conn);
 void doEncodeErgeHssCellLines(struct trackDb *tdb, char *item)
 /* Print ENCODE data from dbERGE II */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[1024];
 struct encodeErgeHssCellLines *ee=NULL;
 int start = cartInt(cart, "o");
@@ -14872,7 +14866,7 @@ char *encodeName = getEncodeName(item);
 char *encodeId = getEncodeId(item);
 int i;
 
-cartWebStart(cart, "ENCODE Region Data: %s", tdb->longLabel+7);
+cartWebStart(cart, database, "ENCODE Region Data: %s", tdb->longLabel+7);
 printf("<H2>ENCODE Region <U>%s</U> Data for %s</H2>\n", tdb->longLabel+7, encodeName);
 genericHeader(tdb, item);
 
@@ -14916,11 +14910,11 @@ void doEncodeIndels(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct encodeIndels encodeIndel;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 boolean firstTime = TRUE;
 
@@ -14959,7 +14953,7 @@ hFreeConn(&conn);
 void doGbProtAnn(struct trackDb *tdb, char *item)
 /* Show extra info for GenBank Protein Annotations track. */
 {
-struct sqlConnection *conn  = hAllocConn();
+struct sqlConnection *conn  = hAllocConn(database);
 struct sqlResult *sr;
 char query[256];
 char **row;
@@ -14999,7 +14993,7 @@ void doLinkedFeaturesSeries(char *track, char *clone, struct trackDb *tdb)
 {
 char query[256];
 char title[256];
-struct sqlConnection *conn = hAllocConn(), *conn1 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database), *conn1 = hAllocConn(database);
 struct sqlResult *sr = NULL, *sr2 = NULL, *srb = NULL;
 char **row, **row1, **row2, **rowb; 
 char *lfLabel = NULL;
@@ -15012,7 +15006,7 @@ int length = end - start;
 int i; 
 struct lfs *lfs;
 struct psl *pslList = NULL, *psl;
-boolean hasBin = hOffsetPastBin(seqName, track);
+boolean hasBin = hOffsetPastBin(database, seqName, track);
 
 /* Determine type */
 if (sameString("bacEndPairs", track)) 
@@ -15071,7 +15065,7 @@ if (sameString("earlyRepBad", track))
     }
 
 /* Print out non-sequence info */
-cartWebStart(cart, title);
+cartWebStart(cart, database, title);
 
 /* Find the instance of the object in the bed table */ 
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
@@ -15172,7 +15166,7 @@ if (row != NULL)
     for (i = 0; i < lfs->lfCount; i++) 
 	{
 	sqlFreeResult(&sr);
-        hFindSplitTable(seqName, lfs->pslTable, pslTable, &hasBin);
+        hFindSplitTable(database, seqName, lfs->pslTable, pslTable, &hasBin);
 	sprintf(query, "SELECT * FROM %s WHERE qName = '%s'", 
 	               pslTable, lfs->lfNames[i]);  
 	sr = sqlMustGetResult(conn, query);
@@ -15243,8 +15237,8 @@ sqlFreeResult(&sr2);
 sqlFreeResult(&srb);
 webNewSection("Notes:");
 printTrackHtml(tdb);
-hgFreeConn(&conn);
-hgFreeConn(&conn1);
+hFreeConn(&conn);
+hFreeConn(&conn1);
 } 
 
 void fillCghTable(int type, char *tissue, boolean bold)
@@ -15253,7 +15247,7 @@ void fillCghTable(int type, char *tissue, boolean bold)
 char query[256];
 char currName[64];
 int rowOffset;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 struct cgh *cghRow;
@@ -15291,12 +15285,12 @@ void doCeleraDupPositive(struct trackDb *tdb, char *dupName)
 char *track = tdb->tableName;
 struct celeraDupPositive dup;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int celeraVersion = 0;
 int i = 0;
-cartWebStart(cart, tdb->longLabel);
+cartWebStart(cart, database, tdb->longLabel);
 
 if (sameString(database, "hg15"))
     celeraVersion = 3;
@@ -15306,7 +15300,7 @@ else
 if (cgiVarExists("o"))
     {
     int start = cgiInt("o");
-    int rowOffset = hOffsetPastBin(seqName, track);
+    int rowOffset = hOffsetPastBin(database, seqName, track);
 
     safef(query, sizeof(query),
 	  "select * from %s where chrom = '%s' and chromStart = %d and name= '%s'",
@@ -15387,14 +15381,14 @@ else
 void doGenomicSuperDups(struct trackDb *tdb, char *dupName)
 /* Handle click on genomic dup track. */
 {
-cartWebStart(cart, tdb->longLabel);
+cartWebStart(cart, database, tdb->longLabel);
 
 if (cgiVarExists("o"))
     {
     char *track = tdb->tableName;
     struct genomicSuperDups dup;
     struct dyString *query = newDyString(512);
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
     char oChrom[64];
@@ -15410,7 +15404,7 @@ if (cgiVarExists("o"))
 	alignUrl = "http://humanparalogy.gs.washington.edu";
     else if (sameString("hg15", database) || sameString("hg16", database))
 	alignUrl = "http://humanparalogy.gs.washington.edu/jab/der_oo33";
-    rowOffset = hOffsetPastBin(seqName, track);
+    rowOffset = hOffsetPastBin(database, seqName, track);
     parseSuperDupsChromPointPos(dupName, oChrom, &oStart, &dupId);
     dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 		   track, seqName);
@@ -15482,12 +15476,12 @@ void doCgh(char *track, char *tissue, struct trackDb *tdb)
 /* Create detail page for comparative genomic hybridization track */ 
 {
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 
 /* Print out non-sequence info */
-cartWebStart(cart, tissue);
+cartWebStart(cart, database, tissue);
 
 /* Print general range info */
 printf("<H2>UCSF Comparative Genomic Hybridizations - %s</H2>\n", tissue);
@@ -15524,7 +15518,7 @@ fillCghTable(1, NULL, TRUE);
 printf("<TR><TD>&nbsp;</TD></TR>\n");
 
 printf("</TR>\n</TABLE>\n");
-hgFreeConn(&conn);
+hFreeConn(&conn);
 }
 
 void doMcnBreakpoints(char *track, char *name, struct trackDb *tdb)
@@ -15532,7 +15526,7 @@ void doMcnBreakpoints(char *track, char *name, struct trackDb *tdb)
 {
 char query[256];
 char title[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
@@ -15541,7 +15535,7 @@ struct mcnBreakpoints *mcnRecord;
 
 /* Print out non-sequence info */
 sprintf(title, "MCN Breakpoints - %s",name);
-cartWebStart(cart, title);
+cartWebStart(cart, database, title);
 
 /* Print general range info */
 /*printf("<H2>MCN Breakpoints - %s</H2>\n", name);
@@ -15570,12 +15564,12 @@ while ((row = sqlNextRow(sr)))
     printf("</TR>\n</TABLE>\n");
     }  
 sqlFreeResult(&sr);
-hgFreeConn(&conn);
+hFreeConn(&conn);
 } 
 
 void doProbeDetails(struct trackDb *tdb, char *item)
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct dnaProbe *dp = NULL;
 char buff[256];
 
@@ -15609,7 +15603,7 @@ hFreeConn(&conn);
 
 void doChicken13kDetails(struct trackDb *tdb, char *item)
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct chicken13kInfo *chick = NULL;
 char buff[256];
 int start = cartInt(cart, "o");
@@ -15643,7 +15637,7 @@ void perlegenDetails(struct trackDb *tdb, char *item)
 char *dupe, *words[16];
 int wordCount;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char table[64];
 boolean hasBin;
 struct bed *bed;
@@ -15659,7 +15653,7 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, FALSE);
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
     	table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -15717,7 +15711,7 @@ void haplotypeDetails(struct trackDb *tdb, char *item)
 char *dupe, *words[16];
 int wordCount;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char table[64];
 boolean hasBin;
 struct bed *bed;
@@ -15732,7 +15726,7 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, TRUE);
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
     	table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -15762,7 +15756,7 @@ void mitoDetails(struct trackDb *tdb, char *item)
 char *dupe, *words[16];
 int wordCount;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char table[64];
 boolean hasBin;
 struct bed *bed;
@@ -15778,7 +15772,7 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, TRUE);
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
     	table, item, seqName, start);
 sr = sqlGetResult(conn, query);
@@ -15834,7 +15828,7 @@ void ancientRDetails(struct trackDb *tdb, char *item)
 {
 char *dupe, *words[16];
 int wordCount;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char table[64];
 boolean hasBin;
 struct bed *bed = NULL;
@@ -15851,7 +15845,7 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, TRUE);
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s'",
         table, item, seqName );
 sr = sqlGetResult(conn, query);
@@ -15914,7 +15908,7 @@ void doGcDetails(struct trackDb *tdb, char *itemName) {
 /* Show details for gc percent */
 char *group = tdb->tableName;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -15922,9 +15916,9 @@ struct gcPercent *gc;
 boolean hasBin; 
 char table[64];
 
-cartWebStart(cart, "Percentage GC in 20,000 Base Windows (GC)");
+cartWebStart(cart, database, "Percentage GC in 20,000 Base Windows (GC)");
 
-hFindSplitTable(seqName, group, table, &hasBin);
+hFindSplitTable(database, seqName, group, table, &hasBin);
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
 	table, seqName, start, itemName);
 
@@ -16020,8 +16014,6 @@ freez(&header);
 struct sageExp *loadSageExps(char *tableName, struct bed  *bedist)
 /* load the sage experiment data. */
 {
-char *user = cfgOption("db.user");
-char *password = cfgOption("db.password");
 struct sqlConnection *sc = NULL;
 /* struct sqlConnection *sc = sqlConnectRemote("localhost", user, password, "hgFixed"); */
 char query[256];
@@ -16029,10 +16021,10 @@ struct sageExp *seList = NULL, *se=NULL;
 char **row;
 struct sqlResult *sr = NULL;
 char *tmp= cloneString("select * from sageExp order by num");
-if(hTableExists(tableName))
-    sc = hAllocConn();
+if(hTableExists(database, tableName))
+    sc = hAllocConn(database);
 else
-    sc = sqlConnectRemote("localhost", user, password, "hgFixed");
+    sc = hAllocConn("hgFixed");
 
 sprintf(query,"%s",tmp);
 sr = sqlGetResult(sc,query);
@@ -16043,10 +16035,7 @@ while((row = sqlNextRow(sr)) != NULL)
     }
 freez(&tmp);
 sqlFreeResult(&sr);
-if(hTableExists(tableName))
-    hFreeConn(&sc);
-else
-    sqlDisconnect(&sc);
+hFreeConn(&sc);
 slReverse(&seList);
 return seList;
 }
@@ -16055,8 +16044,6 @@ struct sage *loadSageData(char *table, struct bed* bedList)
 /* load the sage data by constructing a query based on the qNames of the bedList
  */
 {
-char *user = cfgOption("db.user");
-char *password = cfgOption("db.password");
 struct sqlConnection *sc = NULL;
 struct dyString *query = newDyString(2048);
 struct sage *sgList = NULL, *sg=NULL;
@@ -16064,10 +16051,10 @@ struct bed *bed=NULL;
 char **row;
 int count=0;
 struct sqlResult *sr = NULL;
-if(hTableExists(table))
-    sc = hAllocConn();
+if(hTableExists(database, table))
+    sc = hAllocConn(database);
 else
-    sc = sqlConnectRemote("localhost", user, password, "hgFixed");
+    sc = hAllocConn("hgFixed");
 dyStringPrintf(query, "%s", "select * from sage where ");
 for(bed=bedList;bed!=NULL;bed=bed->next)
     {
@@ -16087,10 +16074,7 @@ while((row = sqlNextRow(sr)) != NULL)
     slAddHead(&sgList,sg);
     }
 sqlFreeResult(&sr);
-if(hTableExists(table))
-    hFreeConn(&sc);
-else
-    sqlDisconnect(&sc);
+hFreeConn(&sc);
 slReverse(&sgList);
 freeDyString(&query);
 return sgList;
@@ -16218,12 +16202,12 @@ printf("</table>\n");
 
 struct bed *bedWScoreLoadByChrom(char *table, char *chrom, int start, int end)
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 struct bed *bedWS, *bedWSList = NULL;
 char **row;
 char query[256];
-struct hTableInfo *hti = hFindTableInfo(seqName, table);
+struct hTableInfo *hti = hFindTableInfo(database, seqName, table);
 if(hti == NULL)
     errAbort("Can't find table: (%s) %s", seqName, table);
 else if(hti && sameString(hti->startField, "tStart"))
@@ -16439,7 +16423,7 @@ char query[256];
 struct altGraphX *ag = NULL;
 struct altGraphX *orthoAg = NULL;
 char buff[128];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *image = NULL;
 
 /* Load the altGraphX record and start page. */
@@ -16483,12 +16467,12 @@ else
     {
     struct sqlConnection *orthoConn = NULL;
     struct altGraphX *origAg = NULL;
-    hSetDb2("mm3");
+    char *db2="mm3";
     safef(query, sizeof(query), "select * from altGraphX where name='%s'", ag->name);
     origAg = altGraphXLoadByQuery(conn, query);
     puts("<br><center>Human</center>\n");
     altGraphXMakeImage(tdb,origAg);
-    orthoConn = hAllocConn2();
+    orthoConn = hAllocConn(db2);
     safef(query, sizeof(query), "select orhtoAgName from orthoAgReport where agName='%s'", ag->name);
     sqlQuickQuery(conn, query, buff, sizeof(buff));
     safef(query, sizeof(query), "select * from altGraphX where name='%s'", buff);
@@ -16522,7 +16506,7 @@ hFreeConn(&conn);
 struct lineFile *openExtLineFile(unsigned int extFileId)
 /* Open line file corresponding to id in extFile table. */
 {
-char *path = hExtFileName("extFile", extFileId);
+char *path = hExtFileName(database, "extFile", extFileId);
 struct lineFile *lf = lineFileOpen(path, TRUE);
 freeMem(path);
 return lf;
@@ -16623,13 +16607,13 @@ char thisItem[256];
 char *cgiItem;
 char otherString[256] = "";
 struct sqlResult *pslSr;
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn(database);
 int thisStart, thisEnd;
 int left = cartIntExp( cart, "l" );
 int right = cartIntExp( cart, "r" );
 char *winOn = cartUsualString( cart, "win", "F" );
 
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s'",
 	table, item, seqName);
 sr = sqlGetResult(conn, query);
@@ -16641,7 +16625,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	htmlHorizontalLine();
     smp = sampleLoad(row+hasBin);
     sprintf( tempTableName, "%s_%s", smp->chrom, pslTableName );
-    hFindSplitTable(seqName, pslTableName, table, &hasBin);
+    hFindSplitTable(database, seqName, pslTableName, table, &hasBin);
     sprintf(query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d" 
 	    , table, smp->chrom, smp->chromStart+smp->samplePosition[0]
 	    , smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
@@ -16720,7 +16704,7 @@ char pslTableName[128] = "blastzBestMouse";
 int offset;
 int motifid;
 
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s'",
 	table, item);
 sr = sqlGetResult(conn, query);
@@ -16736,7 +16720,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     sprintf(filename,"../zoo_blanchem/new_raw2_offset%d.fa.main.html?motifID=%d",offset,motifid);
 
     sprintf( tempTableName, "%s_%s", smp->chrom, pslTableName );
-    hFindSplitTable(seqName, pslTableName, table, &hasBin);
+    hFindSplitTable(database, seqName, pslTableName, table, &hasBin);
     sprintf(query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d" ,
 	    table, smp->chrom, smp->chromStart+smp->samplePosition[0],
 	    smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
@@ -16758,7 +16742,7 @@ char *type, *words[16], *dupe = cloneString(tdb->type);
 int num;
 int wordCount;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
@@ -16783,7 +16767,7 @@ char *type, *words[16], *dupe = cloneString(tdb->type);
 int num;
 int wordCount;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
 wordCount = chopLine(dupe, words);
 if (wordCount > 0)
@@ -16816,7 +16800,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 if (ct == NULL)
     errAbort("Couldn't find '%s' in '%s'", trackId, fileName);
 type = ct->tdb->type;
-cartWebStart(cart, "Custom Track: %s", ct->tdb->shortLabel);
+cartWebStart(cart, database, "Custom Track: %s", ct->tdb->shortLabel);
 itemName = skipLeadingSpaces(fileItem);
 printf("<H2>%s</H2>\n", ct->tdb->longLabel);
 if (sameWord(type, "array"))
@@ -16825,9 +16809,9 @@ else if (ct->wiggle)
     {
     if (ct->dbTrack)
 	{
-	struct sqlConnection *conn = sqlCtConn(TRUE);
+	struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 	genericWiggleClick(conn, ct->tdb, fileItem, start);
-	sqlDisconnect(&conn);
+	hFreeConn(&conn);
 	}
     else
 	genericWiggleClick(NULL, ct->tdb, fileItem, start);
@@ -16845,14 +16829,14 @@ else if (ct->dbTrack && startsWith("bedGraph", ct->dbTrackType))
     }
 else if (ct->dbTrack && sameString(ct->dbTrackType, "maf"))
     {
-    struct sqlConnection *conn = sqlCtConn(TRUE);
-    struct sqlConnection *conn2 = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    struct sqlConnection *conn2 = hAllocConn(CUSTOM_TRASH);
     char *saveName = ct->tdb->tableName;
     ct->tdb->tableName = ct->dbTableName;
     customMafClick(conn, conn2, ct->tdb);
     ct->tdb->tableName = saveName;
-    sqlDisconnect(&conn2);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn2);
+    hFreeConn(&conn);
     }
 else
     {
@@ -16861,7 +16845,7 @@ else
 	char where[512];
 	int rowOffset;
 	char **row;
-	struct sqlConnection *conn = sqlCtConn(TRUE);
+	struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 	struct sqlResult *sr = NULL;
 	int rcCount = 0;
 	int start = cartInt(cart, "o");
@@ -16884,7 +16868,7 @@ else
 	    ++rcCount;
 	    }
 	sqlFreeResult(&sr);
-	sqlDisconnect(&conn);
+	hFreeConn(&conn);
 	}
     if (ct->fieldCount < 4)
 	{
@@ -16899,11 +16883,11 @@ else
 		TRUE, NULL);
 	if (ct->dbTrack)
 	    {
-	    struct sqlConnection *conn = sqlCtConn(TRUE);
+	    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 	    char *date = firstWordInLine(sqlTableUpdate(conn, ct->dbTableName));
 	    if (date != NULL)
 		printf("<B>Data last updated:</B> %s<BR>\n", date);
-	    sqlDisconnect(&conn);
+	    hFreeConn(&conn);
 	    }
 	printTrackHtml(ct->tdb);
 	return;
@@ -16926,11 +16910,11 @@ else
     }
 if (ct->dbTrack)
     {
-    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     char *date = firstWordInLine(sqlTableUpdate(conn, ct->dbTableName));
     if (date != NULL)
 	printf("<B>Data last updated:</B> %s<BR>\n", date);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     }
 printTrackHtml(ct->tdb);
 }
@@ -16943,7 +16927,7 @@ int start = cartInt(cart, "o");
 boolean same;
 struct psl *psl = 0;
 struct sqlResult *sr = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256], **row;
 struct psl* pslList = getAlignments(conn, tdb->tableName, itemName);
 char *useName = itemName;
@@ -16975,7 +16959,7 @@ if (blastRef != NULL)
     if ((table = strchr(thisDb, '.')) != NULL)
 	{
 	*table++ = 0;
-	if (hTableExistsDb(thisDb, table))
+	if (hTableExists(thisDb, table))
 	    {
 	    if (!isCe && (ptr = strchr(acc, '.')))
 		*ptr = 0;
@@ -17002,13 +16986,13 @@ else if ((pos = strchr(acc, '.')) != NULL)
 	}
     }
 if (isDm == TRUE)
-    cartWebStart(cart, "FlyBase Protein %s", useName);
+    cartWebStart(cart, database, "FlyBase Protein %s", useName);
 else if (isSacCer == TRUE)
-    cartWebStart(cart, "Yeast Protein %s", useName);
+    cartWebStart(cart, database, "Yeast Protein %s", useName);
 else if (isCe == TRUE)
-    cartWebStart(cart, "C. elegans Protein %s", useName);
+    cartWebStart(cart, database, "C. elegans Protein %s", useName);
 else
-    cartWebStart(cart, "Human Protein %s", useName);
+    cartWebStart(cart, database, "Human Protein %s", useName);
 if (pos != NULL)
     {
     if (isDm == TRUE)
@@ -17140,7 +17124,7 @@ static void doSgdOther(struct trackDb *tdb, char *item)
 /* Display information about other Sacchromyces Genome Database
  * other (not-coding gene) info. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct dyString *dy = dyStringNew(1024);
 if (sqlTableExists(conn, "sgdOtherDescription"))
     {
@@ -17168,7 +17152,7 @@ static void doSgdClone(struct trackDb *tdb, char *item)
 /* Display information about other Sacchromyces Genome Database
  * other (not-coding gene) info. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct dyString *dy = dyStringNew(1024);
 
 if (sqlTableExists(conn, "sgdClone"))
@@ -17196,7 +17180,7 @@ static void doSimpleDiff(struct trackDb *tdb, char *otherOrg)
 /* Print out simpleDiff info. */
 {
 struct simpleNucDiff snd;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char fullTable[64];
 char query[256], **row;
 struct sqlResult *sr;
@@ -17204,7 +17188,7 @@ int rowOffset;
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, NULL);
-if (!hFindSplitTable(seqName, tdb->tableName, fullTable, &rowOffset))
+if (!hFindSplitTable(database, seqName, tdb->tableName, fullTable, &rowOffset))
     errAbort("No %s track in database %s", tdb->tableName, database);
 safef(query, sizeof(query),
     "select * from %s where chrom = '%s' and chromStart=%d", 
@@ -17227,7 +17211,7 @@ static void doVntr(struct trackDb *tdb, char *item)
 /* Perfect microsatellite repeats from VNTR program (Gerome Breen). */
 {
 struct vntr vntr;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 char extra[256];
@@ -17269,7 +17253,7 @@ printTrackHtml(tdb);
 static void doZdobnovSynt(struct trackDb *tdb, char *item)
 /* Gene homology-based synteny blocks from Zdobnov, Bork et al. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 char query[256];
@@ -17279,7 +17263,7 @@ boolean hasBin = FALSE;
 
 genericHeader(tdb, item);
 genericBedClick(conn, tdb, item, start, 4);
-hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
 safef(query, sizeof(query), "select * from %s where name = '%s'",
       fullTable, item);
 sr = sqlGetResult(conn, query);
@@ -17313,7 +17297,7 @@ printTrackHtml(tdb);
 static void doDeweySynt(struct trackDb *tdb, char *item)
 /* Gene homology-based synteny blocks from Dewey, Pachter. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -17323,7 +17307,7 @@ struct bed *bed = NULL;
 char query[512];
 
 genericHeader(tdb, item);
-hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and chromStart = %d",
       fullTable, seqName, start);
@@ -17360,7 +17344,7 @@ void doScaffoldEcores(struct trackDb *tdb, char *item)
 char *dupe, *words[16];
 int wordCount;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int num;
 struct bed *bed = NULL;
 char query[512];
@@ -17387,7 +17371,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 genericHeader(tdb, item);
 /* convert chromosome co-ordinates to scaffold position and */
 /* make into item for URL */
-if (hScaffoldPos(bed->chrom, bed->chromStart, bed->chromEnd, &scaffoldName,            &scaffoldStart, &scaffoldEnd) )
+if (hScaffoldPos(database, bed->chrom, bed->chromStart, bed->chromEnd, &scaffoldName,            &scaffoldStart, &scaffoldEnd) )
    {
    scaffoldStart += 1; 
    dyStringPrintf(itemUrl, "%s:%d-%d", scaffoldName, scaffoldStart,                           scaffoldEnd);
@@ -17421,11 +17405,11 @@ return(stripped);
 static void doGencodeIntron(struct trackDb *tdb, char *item)
 /* Intron validation from ENCODE Gencode/Havana gene predictions */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int start = cartInt(cart, "o");
 struct gencodeIntron *intron, *intronList = NULL;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, tdb->tableName);
+int rowOffset = hOffsetPastBin(database, seqName, tdb->tableName);
 
 genericHeader(tdb, item);
 safef(query, sizeof query, 
@@ -17478,7 +17462,7 @@ printf("<B>Normalized and log2 transformed Luciferase/Renilla Ratio:</B> %g<BR>\
 void doEncodeStanfordPromoters(struct trackDb *tdb, char *item)
 /* Print ENCODE Stanford Promoters data. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int start = cartInt(cart, "o");
@@ -17486,9 +17470,9 @@ char fullTable[64];
 boolean hasBin = FALSE;
 char query[1024];
 
-cartWebStart(cart, tdb->longLabel);
+cartWebStart(cart, database, tdb->longLabel);
 genericHeader(tdb, item);
-hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
 safef(query, sizeof(query),
      "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
       fullTable, seqName, start, item);
@@ -17508,7 +17492,7 @@ printTrackHtml(tdb);
 void doEncodeStanfordRtPcr(struct trackDb *tdb, char *item)
 /* Print ENCODE Stanford RTPCR data. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int start = cartInt(cart, "o");
@@ -17516,9 +17500,9 @@ char fullTable[64];
 boolean hasBin = FALSE;
 char query[1024];
 
-cartWebStart(cart, tdb->longLabel);
+cartWebStart(cart, database, tdb->longLabel);
 genericHeader(tdb, item);
-hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
 safef(query, sizeof(query),
      "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
       fullTable, seqName, start, item);
@@ -17539,11 +17523,11 @@ void doEncodeHapMapAlleleFreq(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct encodeHapMapAlleleFreq alleleFreq;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
@@ -17667,15 +17651,15 @@ void doHapmapSnpsSummary(struct trackDb *tdb, char *itemName, boolean showOrtho)
 {
 char *table = tdb->tableName;
 struct hapmapAllelesSummary *summaryItem;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 float het = 0.0;
  
-if (!hTableExists("hapmapAllelesSummary")) return;
+if (!hTableExists(database, "hapmapAllelesSummary")) return;
 safef(query, sizeof(query), "select * from hapmapAllelesSummary where chrom = '%s' and "
       "chromStart=%d and name = '%s'", seqName, start, itemName);
 sr = sqlGetResult(conn, query);
@@ -17743,11 +17727,11 @@ void doHapmapSnps(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct hapmapSnps *thisItem;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 int majorCount = 0;
 int minorCount = 0;
@@ -17839,11 +17823,11 @@ void doHapmapOrthos(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct hapmapAllelesOrtho *ortho;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 char *otherDb = NULL;
 char *otherDbName = NULL;
@@ -17916,7 +17900,7 @@ struct sqlResult *sr;
 char **row = NULL;
 
 safef(tableName, sizeof(tableName), "snp%d%sorthoAllele", snpVersion, database);
-if (!hTableExistsDb(orthoDb, tableName)) 
+if (!hTableExists(orthoDb, tableName)) 
     {
     sqlDisconnect(&conn);
     return;
@@ -17943,15 +17927,15 @@ static char *fbgnFromCg(char *cgId)
 {
 static char result[32];  /* Ample -- FBgn ID's are 11 chars long. */
 char query[512];
-if (hTableExists("flyBase2004Xref"))
+if (hTableExists(database, "flyBase2004Xref"))
     safef(query, sizeof(query),
 	  "select fbgn from flyBase2004Xref where name = '%s';", cgId);
-else if (hTableExists("bdgpGeneInfo"))
+else if (hTableExists(database, "bdgpGeneInfo"))
     safef(query, sizeof(query),
 	  "select flyBaseId from bdgpGeneInfo where bdgpName = '%s';", cgId);
 else
     return NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *resultOrNULL =  sqlQuickQuery(conn, query, result, sizeof(result));
 hFreeConn(&conn);
 return resultOrNULL;
@@ -17960,7 +17944,7 @@ return resultOrNULL;
 static void doPscreen(struct trackDb *tdb, char *item)
 /* P-Screen (BDGP Gene Disruption Project) P el. insertion locations/genes. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -17969,7 +17953,7 @@ boolean hasBin = FALSE;
 char query[512];
 
 genericHeader(tdb, item);
-hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
 safef(query, sizeof(query),
      "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
       fullTable, seqName, start, item);
@@ -18028,7 +18012,7 @@ static void doOligoMatch(char *item)
 char *oligo = cartUsualString(cart, 
 	oligoMatchVar, cloneString(oligoMatchDefault));
 touppers(oligo);
-cartWebStart(cart, "Perfect Matches to Short Sequence");
+cartWebStart(cart, database, "Perfect Matches to Short Sequence");
 printf("<B>Sequence:</B> %s<BR>\n", oligo);
 printf("<B>Chromosome:</B> %s<BR>\n", seqName);
 printf("<B>Start:</B> %s<BR>\n", item+1);
@@ -18043,10 +18027,10 @@ struct sqlConnection *conn;
 struct cutter *cutters = NULL;
 struct slName *ret = NULL;
 
-conn = hAllocOrConnect("hgFixed");
+conn = hAllocConn("hgFixed");
 cutters = cutterLoadByQuery(conn, "select * from cutters");
 ret = findIsoligamers(myEnzyme, cutters);
-hFreeOrDisconnect(&conn);
+hFreeConn(&conn);
 cutterFreeList(&cutters);
 return ret;
 }
@@ -18078,7 +18062,7 @@ if (!c || !l || !r)
     errAbort("Bad Range");
 s = atoi(l);
 e = atoi(r);
-winDna = hDnaFromSeq(c, s, e, dnaUpper);
+winDna = hDnaFromSeq(database, c, s, e, dnaUpper);
 if (sameString(getBed, "all"))
     safef(query, sizeof(query), "select * from cutters");
 else
@@ -18096,7 +18080,7 @@ puts("</TT></PRE>\n");
 cartFooter();
 bedFreeList(&bedList);
 cutterFreeList(&cut);
-hFreeOrDisconnect(&conn);
+hFreeConn(&conn);
 exit(0);
 }
 
@@ -18110,12 +18094,12 @@ char *doGetBed = cgiOptionalString("doGetBed");
 char *c = cgiOptionalString("c");
 char *l = cgiOptionalString("l");
 char *r = cgiOptionalString("r");    
-conn = hAllocOrConnect("hgFixed");
+conn = hAllocConn("hgFixed");
 if (doGetBed)
     doCuttersEnzymeList(conn, doGetBed, c, l, r);
 safef(query, sizeof(query), "select * from cutters where name=\'%s\'", item);
 cut = cutterLoadByQuery(conn, query);  
-cartWebStart(cart, "Restriction Enzymes from REBASE");
+cartWebStart(cart, database, "Restriction Enzymes from REBASE");
 if (cut)
     {
     char *o = cgiOptionalString("o");
@@ -18178,18 +18162,18 @@ if (cut)
     }
 webIncludeHelpFile(CUTTERS_TRACK_NAME, TRUE);
 cutterFree(&cut);
-hFreeOrDisconnect(&conn);
+hFreeConn(&conn);
 }
 
 static void doAnoEstTcl(struct trackDb *tdb, char *item)
 /* Print info about AnoEst uniquely-clustered item. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int start = cartInt(cart, "o");
 genericHeader(tdb, item);
 printCustomUrl(tdb, item, TRUE);
 genericBedClick(conn, tdb, item, start, 12);
-if (hTableExists("anoEstExpressed"))
+if (hTableExists(database, "anoEstExpressed"))
     {
     char query[512];
     
@@ -18230,7 +18214,7 @@ void doMammalPsg(struct trackDb *tdb, char *itemName)
 {
 struct mammalPsg *mammalPsg = NULL;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char *bayesianFiguresUrl = "../images/mammalPsg";
@@ -18286,7 +18270,7 @@ void doDless(struct trackDb *tdb, char *itemName)
 {
 struct dless *dless = NULL;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 boolean approx;
@@ -18366,7 +18350,7 @@ void showSomeAlignment2(struct psl *psl, bioSeq *qSeq, enum gfType qType, int qS
 int blockCount = 0, i = 0, j= 0, *exnStarts = NULL, *exnEnds = NULL;
 struct tempName indexTn, bodyTn;
 FILE *index, *body;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 struct genePred *gene = NULL;
 char **row, query[256];
@@ -18394,7 +18378,7 @@ for(i = 0; i < 4; i++)
 	if((row = sqlNextRow(sr)) != NULL)
 	    {
 	    int hasBin = 0;
-	    if(hOffsetPastBin(psl->qName, tables[i]))
+	    if(hOffsetPastBin(database, psl->qName, tables[i]))
 		hasBin=1;
 	    gene = genePredLoad(row+hasBin);
 	    break;
@@ -18428,7 +18412,7 @@ htmStart(body, psl->qName);
 if ((psl->strand[1] == '+') && (qType == gftProt))
     tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1] * 3;
 
-tSeq = hDnaFromSeq(seqName, psl->tStart, psl->tEnd, dnaLower);
+tSeq = hDnaFromSeq(database, seqName, psl->tStart, psl->tEnd, dnaLower);
 
 freez(&tSeq->name);
 tSeq->name = cloneString(psl->tName);
@@ -18462,7 +18446,7 @@ if (entryName == NULL)
 htmStart(index, entryName);
 fprintf(index, "<H3>Alignment of %s</H3>", entryName);
 fprintf(index, "<A HREF=\"../%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, entryName);
-fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(hGetDb()), psl->tName);
+fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(database), psl->tName);
 for (i=1; i<=blockCount; ++i)
     {
     fprintf(index, "<A HREF=\"../%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
@@ -18497,10 +18481,10 @@ char query[256], fullTable[64];
 char **row;
 boolean hasBin;
 struct sqlResult *sr = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
 
-hFindSplitTable(chrom, pslTable, fullTable, &hasBin);
+hFindSplitTable(database, chrom, pslTable, fullTable, &hasBin);
 
 sprintf(query, "SELECT * FROM %s WHERE "
         "tName = '%s' AND tStart = %d "
@@ -18527,7 +18511,7 @@ showSomeAlignment2(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, item, "", p
 void doPutaFrag(struct trackDb *tdb, char *item)
 /* display the potential pseudo and coding track */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row, table[256], query[256], *parts[6];
 struct putaInfo *info = NULL;
@@ -18541,7 +18525,7 @@ int partCount;
 
 sprintf(table, "putaInfo");
 sprintf(pslTable,"potentPsl");
-cartWebStart(cart, "Putative Coding or Pseudo Fragments");
+cartWebStart(cart, database, "Putative Coding or Pseudo Fragments");
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
         "AND chrom = '%s' AND chromStart = %d "
         "AND chromEnd = %d",
@@ -18635,9 +18619,9 @@ struct sqlConnection *conn;
 
 genericHeader(tdb, itemName);
 
-conn = hAllocConn();
+conn = hAllocConn(database);
 sprintf(condStr, "interProId='%s'", itemName);
-desc = sqlGetField(conn, "proteome", "interProXref", "description", condStr);
+desc = sqlGetField("proteome", "interProXref", "description", condStr);
 
 printf("<B>Item:</B> %s <BR>\n", itemName);
 printf("<B>Description:</B> %s <BR>\n", desc);
@@ -18658,12 +18642,12 @@ struct dvBed dvBed;
 struct dv *dv;
 struct dvXref2 *dvXref2;
 struct omimTitle *omimTitle;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr, *sr2, *sr3, *sr4;
 char **row;
 char query[256], query2[256], query3[256], query4[256];
 
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
@@ -18712,7 +18696,7 @@ while ((row = sqlNextRow(sr3)) != NULL)
         printOmimUrl(stdout, dvXref2->extAcc);
         printf(" Target=_blank> %s</A> \n", dvXref2->extAcc);
 	/* nested query here */
-        if (hTableExists("omimTitle"))
+        if (hTableExists(database, "omimTitle"))
 	    {
             safef(query4, sizeof(query4), "select * from omimTitle where omimId = '%s' ", dvXref2->extAcc);
             sr4 = sqlGetResult(conn, query4);
@@ -18777,7 +18761,7 @@ void doOreganno (struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct oreganno *r = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -18890,7 +18874,7 @@ hFreeConn(&conn);
 void doSnpArray (struct trackDb *tdb, char *itemName, char *dataSource)
 {
 char *table = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -18918,7 +18902,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 
     if (end == start + 1)
         {
-        hNibForChrom(seqName, nibName);
+        hNibForChrom(database, seqName, nibName);
         seq = hFetchSeq(nibName, seqName, start, end);
 	touppers(seq->dna);
         if (sameString(row[1], "-"))
@@ -18987,7 +18971,7 @@ void printLinksRaLink (char *acc, char *raKey, char *displayVal)
 {
 struct hash *linkInstructions = NULL;
 struct hash *thisLink = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -19067,8 +19051,8 @@ int printProtVarLink (char *id, int i)
 struct protVarLink *link = NULL;
 struct hash *linkInstructions = NULL;
 struct hash *thisLink = NULL;
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -19164,8 +19148,8 @@ int printGvLink (char *id, int i)
 struct gvLink *link = NULL;
 struct hash *linkInstructions = NULL;
 struct hash *thisLink = NULL;
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -19269,7 +19253,7 @@ char *table = tdb->tableName;
 struct omiciaLink *link = NULL;
 struct omiciaAttr *attr = NULL;
 void *omim = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -19328,7 +19312,7 @@ char *table = tdb->tableName;
 struct protVarPos *mut = NULL;
 struct protVar *details = NULL;
 struct protVarAttr attr;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -19412,7 +19396,7 @@ struct gvPos *mut = NULL;
 struct gv *details = NULL;
 struct gvAttr attr;
 struct gvAttrLong attrLong;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -19518,9 +19502,9 @@ printf("</DL>\n");
 printTBSchemaLink(tdb);
 printDataVersion(tdb);
 printOrigAssembly(tdb);
-if ((tableName = hTableForTrack(hGetDb(), tdb->tableName)) != NULL)
+if ((tableName = hTableForTrack(database, tdb->tableName)) != NULL)
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
     if (date != NULL)
         printf("<B>Data last updated:</B> %s<BR>\n", date);
@@ -19547,7 +19531,7 @@ void doPgSnp(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 char *escName = sqlEscapeString(itemName);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -19581,7 +19565,7 @@ if ((row = sqlNextRow(sr)) != NULL)
         printf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", all[i], freq[i], score[i]);
         }
     printf("</table>");
-    printSeqCodDisplay(el);
+    printSeqCodDisplay(database, el);
     }
 sqlFreeResult(&sr);
 printTrackHtml(tdb);
@@ -19594,7 +19578,7 @@ void doAllenBrain(struct trackDb *tdb, char *itemName)
 char *table = tdb->tableName;
 struct psl *pslList;
 int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char *url, query[512];
 
 genericHeader(tdb, itemName);
@@ -19617,7 +19601,7 @@ void doExaptedRepeats(struct trackDb *tdb, char *itemName)
 /* Respond to click on the exaptedRepeats track. */
 {
 char *track = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -19625,7 +19609,7 @@ char *chr, *name;
 unsigned int chromStart, chromEnd;
 boolean blastzAln;
 
-cartWebStart(cart, itemName);
+cartWebStart(cart, database, itemName);
 sprintf(query, "select * from %s where name = '%s'", track, itemName);
 selectOneRow(conn, track, query, &sr, &row);
 chr = cloneString(row[0]);
@@ -19663,11 +19647,11 @@ printf("<B>Source:</B> %s<BR>\n", source);
 printCustomUrl(tdb, name, TRUE);
 if (startsWith("psl", tdb->type))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr = NULL;
     struct dyString *query = dyStringNew(512);
     char **row = NULL;
-    int rowOffset = hOffsetPastBin(seqName, tdb->tableName);
+    int rowOffset = hOffsetPastBin(database, seqName, tdb->tableName);
     int start = cartInt(cart, "o");
     int end = cartInt(cart, "t");
     dyStringPrintf(query, "select * from %s where tName = '%s' and ",
@@ -19681,7 +19665,7 @@ if (startsWith("psl", tdb->type))
 	struct psl *psl = pslLoad(row+rowOffset);
 	printPos(psl->tName, psl->tStart, psl->tEnd, psl->strand, TRUE,
 		 psl->qName);
-	if (hGenBankHaveSeq(itemName, NULL))
+	if (hGenBankHaveSeq(database, itemName, NULL))
 	    {
 	    printf("<H3>%s/Genomic Alignments</H3>", name);
 	    printAlignments(psl, start, "htcCdnaAli", tdb->tableName,
@@ -19712,7 +19696,7 @@ printf("<B>Name:</B> %s<BR>\n", item);
 char *table = tdb->tableName;
 char *cliniTable=NULL, *key=NULL;
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr, *startSr;
 char **row;
 
@@ -19918,7 +19902,7 @@ void doConsIndels(struct trackDb *tdb, char *item)
 /* Display details about items in the Indel-based Conservation track. */
 {
 struct dyString *dy = dyStringNew(1024);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct itemConf *cf;
 char confTable[128];
 
@@ -19955,9 +19939,9 @@ void printKiddEichlerNcbiLinks(struct trackDb *tdb, char *item)
 /* If we have a table that maps kiddEichler IDs to NCBI IDs, print links. */
 {
 char *ncbiAccXref = trackDbSetting(tdb, "ncbiAccXref");
-if (isNotEmpty(ncbiAccXref) && hTableExists(ncbiAccXref))
+if (isNotEmpty(ncbiAccXref) && hTableExists(database, ncbiAccXref))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr;
     char **row;
     char *cloneName = cloneString(item);
@@ -20011,7 +19995,7 @@ if (isNotEmpty(ncbiAccXref) && hTableExists(ncbiAccXref))
 void doKiddEichlerDisc(struct trackDb *tdb, char *item)
 /* Discordant clone end mappings from Kidd..Eichler 2008. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[512];
 struct sqlResult *sr;
 char **row;
@@ -20025,7 +20009,7 @@ genericHeader(tdb, item);
 if (! startsWith(KIDD_EICHLER_DISC_PREFIX, tdb->tableName))
     errAbort("track tableName must begin with "KIDD_EICHLER_DISC_PREFIX
 	     " but instead it is %s", tdb->tableName);
-hasBin = hOffsetPastBin(seqName, tdb->tableName);
+hasBin = hOffsetPastBin(database, seqName, tdb->tableName);
 /* We don't need to add bin to this because name is indexed: */
 safef(query, sizeof(query), "select * from %s where name = '%s' "
 	       "and chrom = '%s' and chromStart = %d",
@@ -20086,16 +20070,13 @@ getDbAndGenome(cart, &database, &genome, NULL);
 organism = hOrganism(database);
 scientificName = hScientificName(database);
 
-hDefaultConnect(); 	/* set up default connection settings */
-hSetDb(database);
-
 protDbName = hPdbFromGdb(database);
 protDbConn = sqlConnect(protDbName);
 
 boolean dbIsActive = hDbIsActive(database); 
 
 if (dbIsActive)
-    seqName = hgOfficialChromName(cartString(cart, "c"));
+    seqName = hgOfficialChromName(database, cartString(cart, "c"));
 else 
     seqName = cartString(cart, "c");
 
@@ -20111,7 +20092,7 @@ if (seqName == NULL)
 		 "hgc: bad input variables c=%s l=%d r=%d",
 		 cartString(cart, "c"), winStart, winEnd);
     else
-	seqName = hDefaultChrom();
+	seqName = hDefaultChrom(database);
     }
 
 struct customTrack *ct = NULL;
@@ -20390,11 +20371,11 @@ else if (sameWord(track, "sanger20"))
     {
     doSangerGene(tdb, item, "sanger20pep", "sanger20mrna", "sanger20extra");
     }
-else if ((sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene")) && hTableExists("vegaInfo"))
+else if ((sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene")) && hTableExists(database, "vegaInfo"))
     {
     doVegaGene(tdb, item);
     }
-else if ((sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene")) && hTableExists("vegaInfoZfish"))
+else if ((sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene")) && hTableExists(database, "vegaInfoZfish"))
     {
     doVegaGeneZfish(tdb, item);
     }
@@ -21118,7 +21099,7 @@ else if (tdb != NULL)
     }
 else
     {
-    cartWebStart(cart, track);
+    cartWebStart(cart, database, track);
     printf("Sorry, clicking there doesn't do anything yet (%s).", track);
     }
 cartHtmlEnd();

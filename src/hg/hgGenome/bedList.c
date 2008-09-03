@@ -22,7 +22,7 @@
 
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.2 2007/09/24 23:24:43 galt Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.3 2008/09/03 19:18:54 markd Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -39,7 +39,7 @@ if (curTrack && sameString(curTrack->tableName, table))
     return startsWith("bedGraph", curTrack->type);
 else
     {
-    struct trackDb *tdb = hTrackDbForTrack(table);
+    struct trackDb *tdb = hTrackDbForTrack(database, table);
     return (tdb && startsWith("bedGraph", tdb->type));
     }
 return FALSE;
@@ -92,7 +92,7 @@ void bedSqlFieldsExceptForChrom(char *chrom,
  * of fields (this *including* the chromosome). */
 {
 struct dyString *fields = dyStringNew(128);
-struct hTableInfo *hti = hFindTableInfoDb(database, chrom, curTable);
+struct hTableInfo *hti = hFindTableInfo(database, chrom, curTable);
 if (hti == NULL)
     errAbort("Could not find table info for table %s", curTable);
 

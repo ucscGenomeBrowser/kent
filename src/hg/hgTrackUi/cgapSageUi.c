@@ -56,7 +56,7 @@ else
 void cgapSageUi(struct trackDb *tdb)
 /* CGAP SAGE UI options. Highlight certain libs/tissues and filter by score. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct slName *tissueList = getListFromCgapSageLibs(conn, "tissue", FALSE, TRUE);
 char *tissueHl = cartUsualString(cart, "cgapSage.tissueHl", "All");
 puts("<BR><B>Tissue:</B>");

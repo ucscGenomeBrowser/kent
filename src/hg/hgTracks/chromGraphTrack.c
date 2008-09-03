@@ -132,7 +132,7 @@ if (binFileName)
     }
 else
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     char query[512];
     struct sqlResult *sr;
     char **row;
@@ -303,7 +303,7 @@ void chromGraphMethods(struct track *tg)
 {
 chromGraphMethodsCommon(tg);
 tg->drawItems = cgDrawItems;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 tg->customPt = chromGraphSettingsGet(tg->mapName, conn,
 	tg->tdb, cart);
 hFreeConn(&conn);

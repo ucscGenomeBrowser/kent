@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: hgFindSpec.c,v 1.7 2008/03/01 00:23:25 jzhu Exp $";
+static char const rcsid[] = "$Id: hgFindSpec.c,v 1.8 2008/09/03 19:19:40 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,7 +25,6 @@ errAbort(
   "\n"
   "Options:\n"
   "   -strict		Add spec to hgFindSpec only if its table(s) exist.\n"
-  "   -local - connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"
   "   -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
   "   for the ra files.\n" 
   );
@@ -34,11 +33,9 @@ errAbort(
 static struct optionSpec optionSpecs[] = {
     {"raName", OPTION_STRING},
     {"strict", OPTION_BOOLEAN},
-	{"local", OPTION_BOOLEAN},
 };
 
 static char *raName = "trackDb.ra";
-boolean localDb=FALSE;              /* Connect to local host, instead of default host, using localDb.XXX variables defined in .hg.conf.\n"*/ 
 
 void addVersion(boolean strict, char *database, char *dirName, char *raName, 
     struct hash *uniqHash,
@@ -49,20 +46,20 @@ void addVersion(boolean strict, char *database, char *dirName, char *raName,
 struct hgFindSpec *hfsList = NULL, *hfs = NULL;
 struct hgFindSpec *hfsNext = NULL;
 
-hfsList = hgFindSpecFromRa(raName);
+hfsList = hgFindSpecFromRa(database, raName);
 if (strict) 
     {
     for (hfs = hfsList; hfs != NULL; hfs = hfsNext)
         {
 	hfsNext = hfs->next;
-        if (! hTableOrSplitExists(hfs->searchTable))
+        if (! hTableOrSplitExists(database, hfs->searchTable))
             {
 	    if (verboseLevel() > 1)
 		printf("%s missing\n", hfs->searchTable);
             slRemoveEl(&hfsList, hfs);
             }
 	else if (hfs->xrefTable[0] != 0 &&
-	    ! hTableOrSplitExists(hfs->xrefTable))
+                 ! hTableOrSplitExists(database, hfs->xrefTable))
 	    {
 	    if (verboseLevel() > 1)
 		printf("%s (xref) missing\n", hfs->xrefTable);
@@ -198,7 +195,6 @@ snprintf(tab, sizeof(tab), "%s.tab", hgFindSpecName);
 sprintf(rootDir, "%s", hgRoot);
 sprintf(orgDir, "%s/%s", hgRoot, org);
 sprintf(asmDir, "%s/%s/%s", hgRoot, org, database);
-hSetDb(database);
 layerOn(strict, database, asmDir, uniqHash, htmlHash, FALSE, &hfsList);
 layerOn(strict, database, orgDir, uniqHash, htmlHash, FALSE, &hfsList);
 layerOn(strict, database, rootDir, uniqHash, htmlHash, TRUE, &hfsList);
@@ -218,11 +214,7 @@ if (verboseLevel() > 0)
     {
     char *create, *end;
     char query[256];
-    struct sqlConnection *conn = NULL;
-    if (!localDb)
-	conn = sqlConnect(database);
-    else
-	conn = hConnectLocalDb(database);
+    struct sqlConnection *conn = sqlConnect(database);
 
     /* Load in table definition. */
     readInGulp(sqlFile, &create, NULL);
@@ -282,7 +274,6 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     usage();
 raName = optionVal("raName", raName);
-localDb = optionExists("local");
 adjustTrackDbName(argv[3]);
 hgFindSpec(argv[1], argv[2], argv[3], argv[4], argv[5],
            optionExists("strict"));

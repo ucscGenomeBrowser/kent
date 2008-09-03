@@ -102,7 +102,7 @@ static void createGeneTbl(struct gbGeneTbl *ggt, struct sqlConnection* conn)
 char *sql = genePredGetCreateSql(ggt->tbl,
                                  (ggt->hasExtCols ? genePredAllFlds : 0),
                                  (ggt->hasBin ? genePredWithBin : 0),
-                                 hGetMinIndexLength());
+                                 hGetMinIndexLength(sqlGetDatabase(conn)));
 sqlRemakeTable(conn, ggt->tbl, sql);
 freeMem(sql);
 }
@@ -111,7 +111,7 @@ static void createFlatTbl(struct gbGeneTbl *ggt, struct sqlConnection* conn)
 /* create a genePred flat table */
 {
 /* edit generated SQL to add geneName column and index */
-char *tmpDef = genePredGetCreateSql(ggt->flatTbl, 0, 0, hGetMinIndexLength());
+char *tmpDef = genePredGetCreateSql(ggt->flatTbl, 0, 0, hGetMinIndexLength(sqlGetDatabase(conn)));
 char *part2 = strchr(tmpDef, '(');
 *(part2++) = '\0';
 char *p = strrchr(part2, ')');

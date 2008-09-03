@@ -45,8 +45,8 @@ if (argc != 3)  usage();
 kgTempDbName    = argv[1];
 roDbName 	= argv[2];
 
-conn = hAllocConn();
-conn3= hAllocConn();
+conn = hAllocConn(roDbName);
+conn3= hAllocConn(roDbName);
 
 o1 = fopen("j.dat",  "w");
 o2 = fopen("jj.dat", "w");
@@ -60,16 +60,16 @@ while (row != NULL)
     kgId = row[0];
 	
     safef(cond_str, sizeof(cond_str), "kgId='%s'", kgId);
-    mRNA = sqlGetField(conn3, roDbName, "kgXref", "mRNA", cond_str);
+    mRNA = sqlGetField(roDbName, "kgXref", "mRNA", cond_str);
     
     safef(cond_str, sizeof(cond_str), "mrna='%s'", mRNA);
-    locusID = sqlGetField(conn3, "entrez", "entrezMrna", "geneId", cond_str);
+    locusID = sqlGetField("entrez", "entrezMrna", "geneId", cond_str);
     
     /* look for RefSeq if not found in mRNAs */
     if (locusID == NULL)
     	{
     	safef(cond_str, sizeof(cond_str), "refseq='%s'", mRNA);
-    	locusID = sqlGetField(conn3, "entrez", "entrezRefseq", "geneId", cond_str);
+    	locusID = sqlGetField("entrez", "entrezRefseq", "geneId", cond_str);
 	}
 
     if (locusID != NULL)
@@ -92,7 +92,7 @@ while (row != NULL)
         if (differentString(table, "knownGene"))
             {
             safef(cond_str, sizeof(cond_str), "name='%s'", kgId);
-            locusID = sqlGetField(conn3, roDbName, table, "name2", cond_str);
+            locusID = sqlGetField(roDbName, table, "name2", cond_str);
             safef(query3, sizeof(query3), "select * from %s.keggList where locusID = '%s'", kgTempDbName, kgId);
             sr3 = sqlGetResult(conn3, query3);
             while ((row3 = sqlNextRow(sr3)) != NULL)

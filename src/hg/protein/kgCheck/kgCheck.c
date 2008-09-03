@@ -59,9 +59,9 @@ chkTable    = argv[4];
 outfileName = argv[5];
 
 outf = mustOpen(outfileName, "w");
-conn = hAllocConn();
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn = hAllocConn(genomeDb);
+conn2= hAllocConn(genomeDb);
+conn3= hAllocConn(genomeDb);
 
 /* go through each protein */
 safef(query2, sizeof(query2), "select * from %s.%s", kgTempDb, candTable);
@@ -128,7 +128,7 @@ while (row2 != NULL)
 	    
         /* give RefSeq entries 0.5 advantage in its ranking */  
 	safef(condStr, sizeof(condStr), "name='%s'", acc);
-	answer = sqlGetField(conn, genomeDb, "refGene", "name", condStr);
+	answer = sqlGetField(genomeDb, "refGene", "name", condStr);
  	if (answer != NULL) 
 	    {
 	    ranking = ranking - 0.5;
@@ -147,7 +147,7 @@ while (row2 != NULL)
 	    safef(condStr, sizeof(condStr), "name='%s'", acc2);
 	    
 	    /* If it is an MGC gene, give it a 0.3 advantable */
-	    answer = sqlGetField(conn, genomeDb, "mgcGenes", "name", condStr);
+	    answer = sqlGetField(genomeDb, "mgcGenes", "name", condStr);
  	    if (answer != NULL) 
 	    	{
 	    	ranking = ranking - 0.3;

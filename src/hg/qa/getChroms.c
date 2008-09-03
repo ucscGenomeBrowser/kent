@@ -4,7 +4,7 @@
 #include "chromInfo.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: getChroms.c,v 1.1 2006/06/13 18:17:29 heather Exp $";
+static char const rcsid[] = "$Id: getChroms.c,v 1.2 2008/09/03 19:21:13 markd Exp $";
 
 static char *db = NULL;
 
@@ -21,7 +21,7 @@ errAbort(
 void getChroms()
 {
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 struct chromInfo *el;
@@ -43,8 +43,7 @@ if (argc != 2)
     usage();
 
 db = argv[1];
-hSetDb(db);
-if (!hTableExists("chromInfo"))
+if (!hTableExists(db, "chromInfo"))
     errAbort("no chromInfo table in %s\n", db);
 getChroms();
 

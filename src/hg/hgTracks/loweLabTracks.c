@@ -85,7 +85,7 @@ void loadBed6(struct track *tg)
  * window... */
 {
 struct bed *bed, *list = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -105,7 +105,7 @@ tg->items = list;
 Color gbGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw gene in. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char query[512];
 struct bed *bed = item;
@@ -113,7 +113,7 @@ struct COG *COG=NULL;
 char *temparray[160];
 char **row;
 
-if(hTableExists("COG"))
+if(hTableExists(database, "COG"))
     {
     sprintf(query, "select * from COG where name = '%s'", bed->name);
     sr = sqlGetResult(conn, query);
@@ -148,7 +148,7 @@ tg->itemColor = gbGeneColor;
 Color gpGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw gene (genePred) in. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char query[512];
 struct linkedFeatures *lf = item;
@@ -159,7 +159,7 @@ if (lf == NULL)
     return shadesOfGray[9];
 if (lf->name == NULL)
     return shadesOfGray[9];
-if(hTableExists("COG"))
+if(hTableExists(database, "COG"))
     {
     sprintf(query, "select * from COG where name = '%s'", lf->name);
     sr = sqlGetResult(conn, query);
@@ -316,7 +316,7 @@ struct linkedFeatures *lf;
 struct slName *codes = NULL, *track=NULL, *scores=NULL;
 struct codeBlast *bedList;
 struct codeBlast *cb, *list=NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 
 char **temparray3;
@@ -566,7 +566,7 @@ void loadOperon(struct track *tg)
 {
 struct linkedFeatures *lfList = NULL, *lf;
 struct bed *bed, *list = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -642,7 +642,7 @@ void loadRNAHybridization(struct track *tg)
  * window... */
 {
 struct rnaHybridization *rnaHyb, *list = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;

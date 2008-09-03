@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgMaf.c,v 1.11 2008/07/09 18:40:39 braney Exp $";
+static char const rcsid[] = "$Id: hgMaf.c,v 1.12 2008/09/03 19:19:24 markd Exp $";
 
 int mafCmp(const void *va, const void *vb)
 /* Compare to sort based on start of first component. */
@@ -73,10 +73,10 @@ return mafList;
 struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end)
 {
-struct sqlConnection *conn2 = hgAllocConn();
+struct sqlConnection *conn2 = hAllocConn(sqlGetDatabase(conn));
 struct mafAli *ret = mafLoadInRegion2(conn, conn2, table, chrom, 
     start, end,NULL);
-hgFreeConn(&conn2);
+hFreeConn(&conn2);
 return ret;
 }
 
@@ -100,7 +100,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     scoredRefStaticLoad(row + rowOffset, &ref);
     if (ref.extFile != extFileId)
 	{
-	char *path = hExtFileName("extFile", ref.extFile);
+	char *path = hExtFileName(sqlGetDatabase(conn),"extFile", ref.extFile);
 	lf = lineFileOpen(path, TRUE);
 	extFileId = ref.extFile;
 	}
@@ -204,9 +204,9 @@ struct mafAli *hgMafFrag(
  * the sources just indicate the species.  You can mafFree this
  * as normal. */
 {
-int chromSize = hChromSize(chrom);
-struct sqlConnection *conn = hAllocConn();
-struct dnaSeq *native = hChromSeq(chrom, start, end);
+int chromSize = hChromSize(database, chrom);
+struct sqlConnection *conn = hAllocConn(database);
+struct dnaSeq *native = hChromSeq(database, chrom, start, end);
 struct mafAli *maf, *mafList = mafLoadInRegion(conn, track, chrom, start, end);
 char masterSrc[128];
 struct hash *orgHash = newHash(10);
@@ -388,7 +388,7 @@ hFreeConn(&conn);
 return maf;
 }
 
-struct consWiggle *wigMafWiggles(struct trackDb *tdb)
+struct consWiggle *wigMafWiggles(char *db, struct trackDb *tdb)
 /* get conservation wiggle table names and labels from trackDb setting,
    ignoring those where table doesn't exist */
 {
@@ -404,7 +404,7 @@ fieldCt = chopLine(cloneString(setting), fields);
 for (i = 0; i < fieldCt; i += 3)
     {
     wigTable = fields[i];
-    if (hTableExists(wigTable));
+    if (hTableExists(db, wigTable));
         {
         AllocVar(wig);
         wig->table = cloneString(wigTable);

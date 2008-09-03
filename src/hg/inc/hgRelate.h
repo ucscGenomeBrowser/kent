@@ -21,19 +21,6 @@
 
 typedef unsigned int HGID;	/* A database ID. */
 
-void hgSetDb(char *dbName);
-/* Set the database name. */
-
-char *hgGetDb();
-/* Return the current database name. */
-
-struct sqlConnection *hgAllocConn();
-/* Get free connection if possible. If not allocate a new one. */
-
-void hgFreeConn(struct sqlConnection **pConn);
-/* Put back connection for reuse. */
-
-
 HGID hgIdQuery(struct sqlConnection *conn, char *query);
 /* Return first field of first table as HGID. 0 return ok. */
 

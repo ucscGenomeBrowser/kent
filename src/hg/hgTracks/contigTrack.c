@@ -12,7 +12,7 @@ static void contigLoad(struct track *tg)
 /* Load up contigs from database table to track items. */
 {
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 struct ctgPos *ctgList = NULL, *ctg;

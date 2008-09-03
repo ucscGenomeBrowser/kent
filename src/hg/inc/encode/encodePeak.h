@@ -72,10 +72,10 @@ enum encodePeakType
     encodePeak9 = 6
 };
 
-int encodePeakNumFields(char *trackName);
+int encodePeakNumFields(char *db, char *trackName);
 /* Just quickly count the number of fields. */
 
-enum encodePeakType encodePeakInferType(struct trackDb *tdb);
+enum encodePeakType encodePeakInferType(char *db, struct trackDb *tdb);
 /* Given the trackDb figure out the peak type. */ 
 
 #endif /* ENCODEPEAK_H */

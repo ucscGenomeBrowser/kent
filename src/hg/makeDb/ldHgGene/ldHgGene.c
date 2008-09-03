@@ -12,7 +12,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.38 2008/02/06 07:02:57 markd Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.39 2008/09/03 19:19:47 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -66,12 +66,11 @@ void loadIntoDatabase(char *database, char *table, char *tabName,
 /* Load tabbed file into database table. Drop and create table. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-hSetDb(database);
 
 if (!appendTbl)
     {
     char *createSql = genePredGetCreateSql(table,  gOptFields, gCreateOpts,
-                                           hGetMinIndexLength());
+                                           hGetMinIndexLength(database));
     sqlRemakeTable(conn, table, createSql);
     freeMem(createSql);
     }

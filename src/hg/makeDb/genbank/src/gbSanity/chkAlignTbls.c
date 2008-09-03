@@ -14,7 +14,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.12 2008/02/15 00:34:49 markd Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.13 2008/09/03 19:19:35 markd Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -25,10 +25,10 @@ static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.12 2008/02/15 00:34:49 mark
 static struct slName* gChroms = NULL;
 static struct hash* gChromSizes = NULL; /* table of chromsome sizes */
 
-static void buildChromSizes()
+static void buildChromSizes(char *db)
 /* build table of chromosome sizes and list of chromosomes */
 {
-struct sqlConnection *conn =  hAllocConn();
+struct sqlConnection *conn =  hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 gChromSizes = hashNew(8);
@@ -44,12 +44,12 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static unsigned getChromSize(char* chrom)
+static unsigned getChromSize(char *db, char* chrom)
 /* get chromosome size, or 0 if invalid */
 {
 struct hashEl* hel;
 if (gChromSizes == NULL)
-    buildChromSizes();
+    buildChromSizes(db);
 
 hel = hashLookup(gChromSizes, chrom);
 if (hel == NULL)
@@ -64,7 +64,7 @@ static void chkPsl(struct psl* psl, unsigned iRow, char* database,
 /* Validate a PSL of a mrna/est to genome alignment against the metadata.
  * Also count the number of alignments of a mrna. */
 {
-unsigned chromSize = getChromSize(psl->tName);
+unsigned chromSize = getChromSize(database, psl->tName);
 struct metaData* md = metaDataTblsFind(metaDataTbls, psl->qName);
 char pslDesc[128];
 if (gbVerbose >= 3)
@@ -135,7 +135,7 @@ else
 
 gbVerbEnter(3, "chkPslTable %s", table);
 
-tableInfo = hFindTableInfoDb(select->release->genome->database, chrom, table);
+tableInfo = hFindTableInfo(select->release->genome->database, chrom, table);
 if (tableInfo == NULL)
     {
     /* If all table, require it */
@@ -178,7 +178,7 @@ static void chkGenePred(struct genePred* gene, char *geneName, unsigned iRow,
  * Also count the number of alignments, and check the geneName, if available */
 {
 char desc[512];
-unsigned chromSize = getChromSize(gene->chrom);
+unsigned chromSize = getChromSize(database, gene->chrom);
 struct metaData* md = metaDataTblsFind(metaDataTbls, gene->name);
 
 if (gbVerbose >= 3)
@@ -421,13 +421,13 @@ if ((select->orgCats & GB_XENO)
     }
 }
 
-int chkAlignTables(struct gbSelect* select, struct sqlConnection* conn,
+int chkAlignTables(char *db, struct gbSelect* select, struct sqlConnection* conn,
                    struct metaDataTbls* metaDataTbls, struct dbLoadOptions *options)
 /* Verify all of the alignment-related. */
 {
 int cnt = 0;
 if (gChromSizes == NULL)
-    buildChromSizes();
+    buildChromSizes(db);
 gbVerbEnter(1, "validating alignment tables: %s", gbSelectDesc(select));
 if (select->release->srcDb & GB_GENBANK)
     {

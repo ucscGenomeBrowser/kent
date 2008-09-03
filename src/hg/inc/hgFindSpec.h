@@ -85,7 +85,7 @@ boolean matchRegexSubstr(char *name, char *exp, regmatch_t substrArr[],
 int hgFindSpecCmp(const void *va, const void *vb);
 /* Compare to sort based on searchPriority. */
 
-struct hgFindSpec *hgFindSpecFromRa(char *raFile);
+struct hgFindSpec *hgFindSpecFromRa(char *db, char *raFile);
 /* Load track info from ra file into list. */
 
 char *hgFindSpecSetting(struct hgFindSpec *hfs, char *name);
@@ -98,11 +98,12 @@ char *hgFindSpecSettingOrDefault(struct hgFindSpec *hfs, char *name,
 				 char *defaultVal);
 /* Return setting string, or defaultVal if none exists */
 
-struct hgFindSpec *hgFindSpecGetSpecs(boolean shortCircuit);
+struct hgFindSpec *hgFindSpecGetSpecs(char *db, boolean shortCircuit);
 /* Load all short-circuit (or not) search specs from the current db, sorted by 
  * searchPriority. */
 
-void hgFindSpecGetAllSpecs(struct hgFindSpec **retShortCircuitList,
+void hgFindSpecGetAllSpecs(char *db,
+                           struct hgFindSpec **retShortCircuitList,
 			   struct hgFindSpec **retAdditiveList);
 /* Load all search specs from the current db, separated according to 
  * shortCircuit and sorted by searchPriority. */

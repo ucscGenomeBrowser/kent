@@ -14,14 +14,14 @@
 #include "gbMetaData.h"
 #include "gbAlignData.h"
 
-static void deleteFromTables(struct sqlConnection *conn,
+static void deleteFromTables(char *db, struct sqlConnection *conn,
                              struct sqlDeleter* deleter, unsigned srcDb,
                              struct dbLoadOptions* options)
 /* deleted acc in a sqlDeleter from all tables. */
 {
 /* order is important here */
-gbAlignDataDeleteFromTables(conn, srcDb, GB_MRNA, deleter, options);
-gbAlignDataDeleteFromTables(conn, srcDb, GB_EST, deleter, options);
+gbAlignDataDeleteFromTables(db, conn, srcDb, GB_MRNA, deleter, options);
+gbAlignDataDeleteFromTables(db, conn, srcDb, GB_EST, deleter, options);
 
 gbMetaDataDeleteFromIdTables(conn, options, deleter);
 gbMetaDataDeleteFromTables(conn, options, srcDb, deleter);
@@ -77,12 +77,12 @@ while ((hel = hashNext(&cookie)) != NULL)
 return deleter;
 }
 
-static void deleteIgnoredRelease(struct gbRelease* release, boolean force, 
+static void deleteIgnoredRelease(char *db, struct gbRelease* release, boolean force, 
                                  struct dbLoadOptions* options, char* workDir)
 /* deleted any sequences in the ignore table from the database that are
  * in the gbStatus table for a release. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlDeleter* deleter =  NULL;
 
 if (sqlTableExists(conn, GB_STATUS_TBL))
@@ -91,13 +91,13 @@ if (sqlTableExists(conn, GB_STATUS_TBL))
 /* drop what we found in the gbStatus table */
 if (deleter != NULL)
     {
-    deleteFromTables(conn, deleter, release->srcDb, options);
+    deleteFromTables(db, conn, deleter, release->srcDb, options);
     sqlDeleterFree(&deleter);
     }
 hFreeConn(&conn);
 }
 
-void gbIgnoredDelete(struct gbSelect* selectList, boolean force,
+void gbIgnoredDelete(char *db, struct gbSelect* selectList, boolean force,
                      struct dbLoadOptions* options, char* workDir)
 /* Deleted any sequences in the ignore table from the database that are in the
  * gbStatus table for all selected releases. force will delete even if not in
@@ -112,7 +112,7 @@ for (; select != NULL; select = select->next)
     {
     if (select->release != release)
         {
-        deleteIgnoredRelease(select->release, force, options, workDir);
+        deleteIgnoredRelease(db, select->release, force, options, workDir);
         release = select->release;
         }
     }
@@ -143,11 +143,11 @@ gbVerbMsg(1, "delete %d entries for reloading", cnt);
 return deleter;
 }
 
-void gbReloadDelete(char *reloadList, struct dbLoadOptions* options,
+void gbReloadDelete(char *db, char *reloadList, struct dbLoadOptions* options,
                     char* workDir)
 /* delete sequences that have been explictly requested for reloading */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 char tmpDir[PATH_LEN];
 struct sqlDeleter* deleter;
 safef(tmpDir, sizeof(tmpDir), "%s/reload", workDir);
@@ -156,7 +156,7 @@ safef(tmpDir, sizeof(tmpDir), "%s/reload", workDir);
 deleter = buildReloadDeleter(reloadList, GB_GENBANK, tmpDir);
 if (deleter != NULL)
     {
-    deleteFromTables(conn, deleter, GB_GENBANK, options);
+    deleteFromTables(db, conn, deleter, GB_GENBANK, options);
     sqlDeleterFree(&deleter);
     }
 
@@ -164,7 +164,7 @@ if (deleter != NULL)
 deleter = buildReloadDeleter(reloadList, GB_REFSEQ, tmpDir);
 if (deleter != NULL)
     {
-    deleteFromTables(conn, deleter, GB_REFSEQ, options);
+    deleteFromTables(db, conn, deleter, GB_REFSEQ, options);
     sqlDeleterFree(&deleter);
     }
 hFreeConn(&conn);

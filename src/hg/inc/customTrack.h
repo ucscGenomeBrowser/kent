@@ -35,6 +35,7 @@ struct customTrack
     {
     struct customTrack *next;	/* Next in list. */
     struct trackDb *tdb;	/* TrackDb description of track. */
+    char *genomeDb;             /* Genome database the track is associated */
     struct bed *bedList;	/* List of beds. */
     int fieldCount;		/* Number of fields in bed. */
     int maxChromName;		/* max chromName length	*/
@@ -69,14 +70,14 @@ struct customTrack
 #define CT_SELECTED_TABLE_VAR   "hgct_table"
 #define CT_UPDATED_TABLE_VAR    "hgct_updatedTable"
 
-struct customTrack *customTracksParseCart(struct cart *cart,
+struct customTrack *customTracksParseCart(char *genomeDb, struct cart *cart,
 					  struct slName **retBrowserLines,
 					  char **retCtFileName);
 /* Parse custom tracks from cart */
 
 /* Another method of creating customTracks is customFactoryParse. */
 
-struct customTrack *customTracksParseCartDetailed(struct cart *cart,
+struct customTrack *customTracksParseCartDetailed(char *genomeDb, struct cart *cart,
 					  struct slName **retBrowserLines,
 					  char **retCtFileName,
                                           struct customTrack **retReplacedCts,
@@ -93,10 +94,10 @@ struct customTrack *customTracksParseCartDetailed(struct cart *cart,
  * error, clear the custom track from the cart,  and return NULL.  It 
  * will also leak memory. */
 
-void customTracksSaveCart(struct cart *cart, struct customTrack *ctList);
+void customTracksSaveCart(char *genomeDb, struct cart *cart, struct customTrack *ctList);
 /* Save custom tracks to trash file for database in cart */
 
-void customTracksSaveFile(struct customTrack *trackList, char *fileName);
+void customTracksSaveFile(char *genomeDb, struct customTrack *trackList, char *fileName);
 /* Save out custom tracks. This is just used by internally  */
 
 char *customTrackFileVar(char *database);
@@ -113,6 +114,8 @@ char *customTrackTableFromLabel(char *label);
 
 #define CUSTOM_TRASH	"customTrash"
 /*	custom tracks database name	*/
+#define CUSTOM_TRACKS_PROFILE	"customTracks"
+/*	custom tracks database profile	*/
 #define CT_META_INFO	"metaInfo"
 /*	table name in customTrash for last accessed memory and other data */
 #define CT_EXTFILE	"extFile"
@@ -129,11 +132,6 @@ boolean verifyWibExists(struct sqlConnection *conn, char *table);
 
 boolean ctDbTableExists(struct sqlConnection *conn, char *table);
 /* verify if custom trash db table exists, touch access stats */
-
-boolean ctDbAvailable(char *tableName);
-/*	determine if custom tracks database is available
- *	and if tableName non-NULL, verify table exists
- */
 
 boolean ctDbUseAll();
 /* check if hg.conf says to try DB loaders for all incoming data tracks */
@@ -164,7 +162,7 @@ struct customTrack *customTrackAddToList(struct customTrack *ctList,
 /* add new tracks to the custom track list, removing older versions,
  * and saving the replaced tracks in a list for the caller */
 
-void customTrackHandleLift(struct customTrack *ctList);
+void customTrackHandleLift(char *db, struct customTrack *ctList);
 /* lift any tracks with contig coords */
 
 boolean customTracksExist(struct cart *cart, char **retCtFileName);

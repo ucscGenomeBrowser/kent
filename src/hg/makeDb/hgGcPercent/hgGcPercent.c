@@ -11,7 +11,7 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.29 2008/01/16 20:39:45 angie Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.30 2008/09/03 19:19:41 markd Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -316,8 +316,6 @@ FILE *tabFile = mustOpen(tabFileName, "w");
 char twoBitFile[512];
 struct bed *bedRegionList = NULL;
 
-hSetDb(database);
-
 verbose(1, "#\tCalculating gcPercent with window size %d\n", winSize);
 verbose(2, "#\tWriting to tab file %s\n", tabFileName);
 
@@ -379,7 +377,7 @@ verbose(1, "#\tFile %s created\n", tabFileName);
 if (!noLoad)
     {
     struct sqlConnection *conn = sqlConnect(database);
-    int indexLen = hGetMinIndexLength();
+    int indexLen = hGetMinIndexLength(database);
     char query[1024];
     safef(query, sizeof(query), createTable, indexLen);
     verbose(1, "#\tLoading gcPercent table\n");

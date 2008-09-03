@@ -7,7 +7,7 @@
 #include "imageClone.h"
 #include "stanMad.h"
 
-static char const rcsid[] = "$Id: findStanAlignments.c,v 1.5 2004/06/08 00:32:59 kate Exp $";
+static char const rcsid[] = "$Id: findStanAlignments.c,v 1.6 2008/09/03 19:20:40 markd Exp $";
 
 void usage() 
 {
@@ -124,7 +124,7 @@ return ret;
 
 void outputAlignmentForStan(struct sqlConnection *conn, struct stanMad *sm, struct hash *iHash, FILE *out)
 {
-struct psl *pslList, *psl= NULL, *bestPsl = NULL;
+struct psl *pslList, *bestPsl = NULL;
 char buff[1024];
 int i;
 struct imageClone *ic = NULL;
@@ -175,9 +175,8 @@ struct stanMad *smList = NULL, *sm = NULL;
 FILE *out = mustOpen(pslOut, "w");
 int count =0;
 struct sqlConnection *conn = NULL;
-hSetDb(db);
 warn("Getting sql Connection...");
-conn = hAllocConn();
+conn = hAllocConn(db);
 warn("Reading in image clones...");
 readInImageHash(iHash, image);
 warn("Loading Stanford Alignments..");

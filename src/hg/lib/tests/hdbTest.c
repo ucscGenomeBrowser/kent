@@ -5,8 +5,8 @@
 
 int main(int argc, char *argv[])
 {
-    hSetDb("hg15");
-    printf("hg15 organism ID = %d\n", hOrganismID("hg15"));
-    printf("hg15 scientific name = %s\n", hScientificName("hg15"));
-    return 0;
+char *db="hg15";
+printf("%s organism ID = %d\n", db, hOrganismID(db));
+printf("%s scientific name = %s\n", db, hScientificName(db));
+return 0;
 }

@@ -13,11 +13,11 @@ errAbort("mgcFastaForBed - Take a bed file and return a fasta file\n"
 	 "   mgcFastaForBed db bedName fastaOutName\n");
 }
 
-struct dnaSeq *seqFromBed(struct bed *bed)
+struct dnaSeq *seqFromBed(char *db, struct bed *bed)
 /* Allocate a dnaSeq and uppercase the parts that are covered by the bed. 
  Free with dnaSeqFree().*/
 {
-struct dnaSeq *seq = hChromSeq(bed->chrom, bed->chromStart, bed->chromEnd);
+struct dnaSeq *seq = hChromSeq(db, bed->chrom, bed->chromStart, bed->chromEnd);
 int i=0,j=0;
 for(i=0;i<bed->blockCount; i++)
     {
@@ -31,7 +31,7 @@ if(sameWord(bed->strand, "-"))
 return seq;
 }
 
-void mgcFastaForBeds(struct bed *bedList, FILE *out)
+void mgcFastaForBeds(char *db, struct bed *bedList, FILE *out)
 /* Convert beds to sequence and output. */
 {
 struct bed *bed = NULL;
@@ -39,7 +39,7 @@ char nameBuff[1024];
 warn("Converting beds");
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
-    struct dnaSeq *seq = seqFromBed(bed);
+    struct dnaSeq *seq = seqFromBed(db, bed);
     safef(nameBuff, sizeof(nameBuff), "%s-%s:%d-%d-%s", bed->name, bed->chrom, 
 	  bed->chromStart, bed->chromEnd, bed->strand);
     faWriteNext(out, nameBuff, seq->dna, seq->size);
@@ -49,17 +49,16 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 
 int main(int argc, char *argv[])
 {
-char *db = NULL;
 struct bed *bedList = NULL;
 FILE *out = NULL;
 if(argc != 4)
     usage();
-hSetDb(argv[1]);
+char *db = argv[1];
 warn("Loading Beds.");
 bedList = bedLoadAll(argv[2]);
 out = mustOpen(argv[3], "w");
 dnaUtilOpen();
-mgcFastaForBeds(bedList, out);
+mgcFastaForBeds(db, bedList, out);
 warn("Done");
 return 0;
 }

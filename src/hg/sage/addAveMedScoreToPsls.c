@@ -9,7 +9,7 @@ errAbort("addAveMedScoreToPsls - Combines unigene pslFile and sage file into bed
          "usage:\n\taddAveMedScoresToPsls <pslFile> <sageFile> <bedOutputFile>\n");
 }
 
-static char const rcsid[] = "$Id: addAveMedScoreToPsls.c,v 1.2 2003/05/06 07:22:35 kate Exp $";
+static char const rcsid[] = "$Id: addAveMedScoreToPsls.c,v 1.3 2008/09/03 19:21:18 markd Exp $";
 
 void createSageHash(struct hash *sgHash, struct sage *sgList)
 {
@@ -26,33 +26,7 @@ struct bed *copyPsl(struct psl *p)
 {
 struct bed *r = NULL;
 r = bedFromPsl(p);
-/* int i; */
-/* AllocVar(r); */
-/* r->match = p->match; */
-/* r->misMatch = p->misMatch; */
-/* r->repMatch = p->repMatch; */
-/* r->nCount = p->nCount; */
-/* r->qNumInsert = p->qNumInsert; */
-/* r->qBaseInsert = p->qBaseInsert; */
-/* r->tNumInsert = p->tNumInsert; */
-/* r->tBaseInsert = p->tBaseInsert; */
-/* for(i=0;i<3;i++) */
-/*     { */
-/*     r->strand[i] = p->strand[i]; */
-/*     } */
-/* r->qName = p->qName; */
-/* r->qSize = p->qSize; */
-/* r->qStart = p->qStart; */
-/* r->qEnd = p->qEnd; */
-/* r->tName = p->tName; */
-/* r->tSize = p->tSize; */
-/* r->tStart = p->tStart; */
-/* r->tEnd = p->tEnd; */
-/* r->blockCount = p->blockCount; */
-/* r->blockSizes = p->blockSizes; */
-/* r->qStarts = p->qStarts; */
-/* r->tStarts = p->tStarts; */
-/* return r; */
+return r;
 }
 
 float getAveMedScore(char *name, struct hash *sgHash)
@@ -91,7 +65,6 @@ void addScoresToPsls(struct psl *pslList, struct bed **pslWSList, struct hash *s
 {
 struct psl *psl;
 struct bed *pslWS;
-char buff[128];
 float score = 0;
 int intScore =0;
 for(psl = pslList; psl != NULL; psl = psl->next)
@@ -111,8 +84,8 @@ for(psl = pslList; psl != NULL; psl = psl->next)
 
 void addAveMedScoreToPsls(char *pslFile, char *sageFile, char *pslOutFile)
 {
-struct psl *psl=NULL, *pslList=NULL;
-struct sage *sg=NULL, *sgList=NULL;
+struct psl *pslList=NULL;
+struct sage *sgList=NULL;
 struct hash *sgHash = newHash(4);
 struct bed *pslWSList = NULL, *pslWS=NULL;
 FILE *out = mustOpen(pslOutFile, "w");

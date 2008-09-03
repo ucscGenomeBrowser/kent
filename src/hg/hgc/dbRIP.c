@@ -11,7 +11,7 @@
 #include "dbRIP.h"
 #include "polyGenotype.h"
 
-static char const rcsid[] = "$Id: dbRIP.c,v 1.7 2006/08/09 21:19:19 hiram Exp $";
+static char const rcsid[] = "$Id: dbRIP.c,v 1.8 2008/09/03 19:19:07 markd Exp $";
 
 
 static int sortEthnicGroup(const void *e1, const void *e2)
@@ -24,7 +24,7 @@ return(strcmp(p1->ethnicGroup, p2->ethnicGroup));
 
 static void polyTable(char *name)
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -152,7 +152,7 @@ else
 void dbRIP(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up dbRIP track info */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char table[64];
 boolean hasBin;
@@ -165,7 +165,7 @@ int itemCount = 0;
 
 genericHeader(tdb, item);
 
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
 dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       table, seqName);
 hAddBinToQuery(winStart, winEnd, query);

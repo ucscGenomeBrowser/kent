@@ -14,7 +14,7 @@
 #include "axt.h"
 
 
-static char const rcsid[] = "$Id: cgiAlign.c,v 1.1 2007/09/05 22:59:47 kent Exp $";
+static char const rcsid[] = "$Id: cgiAlign.c,v 1.2 2008/09/03 19:21:23 markd Exp $";
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
@@ -29,7 +29,7 @@ void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
 cart = theCart;
-cartWebStart(cart, "Align two sequences using protein scoring.");
+cartWebStart(cart, database, "Align two sequences using protein scoring.");
 printf("<FORM ACTION=\"../cgi-bin/cgiAlign\">");
 cartSaveSession(cart);
 cgiMakeSubmitButton();

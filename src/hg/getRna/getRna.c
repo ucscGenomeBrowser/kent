@@ -7,7 +7,7 @@
 #include "linefile.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: getRna.c,v 1.6 2006/05/25 05:18:10 markd Exp $";
+static char const rcsid[] = "$Id: getRna.c,v 1.7 2008/09/03 19:18:41 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -164,8 +164,6 @@ struct lineFile *accLf = lineFileOpen(accFile, TRUE);
 FILE *outFa = mustOpen(outFaFile, "w"); 
 char *line;
 int lineSize;
-
-hSetDb(database);
 
 while (lineFileNext(accLf, &line, &lineSize))
     {

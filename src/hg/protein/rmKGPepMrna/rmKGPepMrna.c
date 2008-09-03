@@ -46,12 +46,11 @@ o2 = fopen("jj.dat", "w");
     
 dbName = argv[1];
 ro_dbName = argv[3];
-hSetDb(ro_dbName);
 sprintf(protDbName,   "proteins%s", argv[2]);
 sprintf(spDbName, "sp%s",   argv[2]);
 
-conn= hAllocConn();
-conn2= hAllocConn();
+conn= hAllocConn(ro_dbName);
+conn2= hAllocConn(ro_dbName);
 sprintf(query2,"select name from %s.knownGene;", dbName);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
@@ -60,7 +59,7 @@ while (row2 != NULL)
     kgID    = row2[0];
     
     sprintf(cond_str, "name = '%s';", kgID);
-    seq = sqlGetField(conn, dbName, "knownGenePep", "seq", cond_str);
+    seq = sqlGetField(dbName, "knownGenePep", "seq", cond_str);
     if (seq != NULL)
 	{
         fprintf(o1, "%s\t%s\n", kgID, seq);fflush(o1);
@@ -68,11 +67,11 @@ while (row2 != NULL)
     else
 	{
         sprintf(cond_str, "name = '%s';", kgID);
-        proteinID=sqlGetField(conn, dbName, "knownGene", "proteinID", cond_str);
+        proteinID=sqlGetField(dbName, "knownGene", "proteinID", cond_str);
 	if (proteinID != NULL)
 	    {
             sprintf(cond_str, "val = '%s';", proteinID);
-            acc = sqlGetField(conn, spDbName, "displayId", "acc", cond_str);
+            acc = sqlGetField(spDbName, "displayId", "acc", cond_str);
 	    if (acc == NULL)
 		{
 fprintf(stderr, "NO acc.displayId.%s: %s from name.knownGene.%s: %s\n", spDbName, proteinID, dbName, kgID);
@@ -81,7 +80,7 @@ fprintf(stderr, "NO acc.displayId.%s: %s from name.knownGene.%s: %s\n", spDbName
 	    else
 		{
 		sprintf(cond_str, "acc = '%s';", acc);
-		seq = sqlGetField(conn, spDbName, "protein", "val", cond_str);
+		seq = sqlGetField(spDbName, "protein", "val", cond_str);
 		if (seq == NULL)
 		    {
 		    fprintf(stderr, "NO protein seq for %s\n", kgID);
@@ -100,14 +99,14 @@ fprintf(stderr, "kgID: %s not in knownGenePep or knownGene\n", kgID);
 
     sprintf(cond_str, "name = '%s';", kgID);
         
-    seq = sqlGetField(conn, dbName, "knownGeneMrna", "seq", cond_str);
+    seq = sqlGetField(dbName, "knownGeneMrna", "seq", cond_str);
     if (seq != NULL)
     	{
         fprintf(o2, "%s\t%s\n", kgID, seq);fflush(o1);
         }
     else
         {
-	kgSeq = hGenBankGetMrna(kgID, NULL);
+	kgSeq = hGenBankGetMrna(dbName, kgID, NULL);
 	   
 	if (kgSeq != NULL)
 	    {
@@ -121,9 +120,9 @@ fprintf(stderr, "kgID: %s not in knownGenePep or knownGene\n", kgID);
     row2 = sqlNextRow(sr2);
     }
 
+sqlFreeResult(&sr2);
 hFreeConn(&conn);
 hFreeConn(&conn2);
-sqlFreeResult(&sr2);
 
 fclose(o1);
 fclose(o2);

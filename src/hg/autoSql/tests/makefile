@@ -1,7 +1,7 @@
 include ../../../inc/common.mk
 
 HG_WARN = ${HG_WARN_ERR}
-AUTOSQL = ${BINDIR}/autoSql
+AUTOSQL = ${BINDIR}/autoSql -noRcsIds
 DIFF = diff -u
 XINC = -I.
 

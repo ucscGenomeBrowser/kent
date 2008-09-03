@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.49 2008/07/02 23:09:23 braney Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.50 2008/09/03 19:18:59 markd Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -480,11 +480,11 @@ hPrintf("For formatting information see: ");
 hPrintf("<A HREF=\"../goldenPath/help/customTrack.html#MAF\">MAF</A> ");
 hPrintf("format.");
 
-struct sqlConnection *conn = sqlCtConn(TRUE);
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 webNewSection("Sample Rows");
 printSampleRows(10, conn, ct->dbTableName);
 printTrackHtml(ct->tdb);
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 }
 
 
@@ -507,11 +507,11 @@ hPrintf("format.");
 
 if (ct->dbTrack)
     {
-    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     webNewSection("Sample Rows");
     printSampleRows(10, conn, ct->dbTableName);
     printTrackHtml(ct->tdb);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     }
 else
     {
@@ -573,7 +573,7 @@ struct trackDb *tdb = NULL;
 char parseBuf[256];
 dbOverrideFromTable(parseBuf, &db, &table);
 htmlOpen("Schema for %s", table);
-tdb = hTrackDbForTrack(table);
+tdb = hTrackDbForTrack(database, table);
 showSchema(db, tdb, table);
 htmlClose();
 }
@@ -587,7 +587,7 @@ if (sameString(curTrack->tableName, curTable))
     return TRUE;
 else if (startsWith("wigMaf", curTrack->type))
     {
-    struct consWiggle *wig, *wiggles = wigMafWiggles(curTrack);
+    struct consWiggle *wig, *wiggles = wigMafWiggles(database, curTrack);
     for (wig = wiggles; wig != NULL; wig = wig->next)
         if (sameString(curTable, wig->table))
             return TRUE;

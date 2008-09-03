@@ -12,23 +12,24 @@ void webSetStyle(char *style);
 void webStartText();
 /* output the head for a text page */
 
-void webStart(struct cart *theCart, char* format,...);
+void webStart(struct cart *theCart, char *db, char* format,...);
 /* output a CGI and HTML header with the given title in printf format */
 
-void webStartHeader(struct cart *theCart, char *header, char* format,...);
+void webStartHeader(struct cart *theCart, char *db, char *header, char* format,...);
 /* output a CGI and HTML header with the given title in printf format */
 
-void webStartWrapper(struct cart *theCart, char *format, va_list args, boolean withHttpHeader,
+void webStartWrapper(struct cart *theCart, char *db, char *format, va_list args, boolean withHttpHeader,
 	boolean withLogo);
 /* output a CGI and HTML header with the given title in printf format */
 
-void webStartWrapperDetailedArgs(struct cart *theCart, char *headerText,
-	char *format, va_list args, boolean withHttpHeader,
+void webStartWrapperDetailedArgs(struct cart *theCart, char *db,
+	char *headerText, char *format, va_list args, boolean withHttpHeader,
 	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader);
 /* output a CGI and HTML header with the given title in printf format with
  * quite a few options.  See also next: */
-void webStartWrapperDetailedNoArgs(struct cart *theCart, char *headerText,
-	char *format, boolean withHttpHeader,
+
+void webStartWrapperDetailedNoArgs(struct cart *theCart, char *db,
+	char *headerText, char *format, boolean withHttpHeader,
 	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader);
 /* output a CGI and HTML header with the given title in printf format with
  * quite a few options.  Same as above without va_list args */
@@ -161,12 +162,6 @@ param db - The default assembly (the database name) to choose as selected.
 void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript);
 /* Find all the organisms/assemblies that are referenced in axtInfo, 
  * and print the dropdown list. */
-
-void printAlignmentListHtml(char *db, char *alCgiName, char *selected);
-/* Find all the alignments (from axtInfo) that pertain to the selected
- * genome.  Prints to stdout the HTML to render a dropdown list
- * containing a list of the possible alignments to choose from.
- */
 
 void printBlatAssemblyListHtml(char *curDb);
 /*

@@ -33,9 +33,9 @@ int iCnt = 1;
 
 cart = theCart;
 if (hIsMgcServer())
-    cartWebStart(theCart, "MGC Known Genes List \n");
+    cartWebStart(theCart, database, "MGC Known Genes List \n");
 else
-    cartWebStart(theCart, "UCSC Known Genes List \n");
+    cartWebStart(theCart, database, "UCSC Known Genes List \n");
 
 getDbAndGenome(cart, &database, &genome, oldVars);
 if (!hTableExistsDb(database, "knownGene"))
@@ -51,8 +51,8 @@ hDisconnectCentral(&connCentral);
 
 printf("<H2>%s Genome (%s Assembly)</H2>\n", genome, genomeDesc);
 
-conn = hAllocConn();
-conn2= hAllocConn();
+conn = hAllocConn(database);
+conn2= hAllocConn(database);
 
 sprintf(query2,"select kgID from %s.kgXref order by geneSymbol;",
 	database);

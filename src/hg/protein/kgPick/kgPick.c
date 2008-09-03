@@ -65,7 +65,7 @@ while (row != NULL)
     
     /* get protein display ID */
     sprintf(condStr, "acc='%s'", protAcc);
-    displayId = sqlGetField(conn2, spDb, "displayId", "val", condStr);
+    displayId = sqlGetField(spDb, "displayId", "val", condStr);
     if (displayId == NULL) displayId = protAcc;
     
     fprintf(outf, "%s\t%s\t%s\n", displayId, alignID, cdsId);
@@ -111,10 +111,10 @@ dupOutfileName = argv[5];
 outf    = mustOpen(outfileName, "w");
 dupOutf = mustOpen(dupOutfileName, "w");
 
-conn2= hAllocConn();
-conn3= hAllocConn();
-conn4= hAllocConn();
-conn5= hAllocConn();
+conn2= hAllocConn(roDb);
+conn3= hAllocConn(roDb);
+conn4= hAllocConn(roDb);
+conn5= hAllocConn(roDb);
 
 strcpy(printedCds, "");
 strcpy(printedMrna, "");
@@ -167,7 +167,7 @@ while (row2 != NULL)
 	    	{
 		/* double check again to see if the RefSeq is still valid */
     		sprintf(condStr, "name='%s'", mrnaID);
-    		refseqId = sqlGetField(conn5, roDb, "refGene", "name", condStr);
+    		refseqId = sqlGetField(roDb, "refGene", "name", condStr);
 		if (refseqId != NULL)
 		    {
 		    if (printCnt < 1)

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "output/symTest.h"
 
-static char const rcsid[] = "$Id:$";
 
 /* definitions for sex column */
 static char *values_sex[] = {"male", "female", NULL};

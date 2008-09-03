@@ -8,7 +8,7 @@
 #include "trackTable.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: trackTable.c,v 1.6 2006/03/09 18:26:58 angie Exp $";
+static char const rcsid[] = "$Id: trackTable.c,v 1.7 2008/09/03 19:19:27 markd Exp $";
 
 void trackTableStaticLoad(char **row, struct trackTable *ret)
 /* Load a row from trackTable table into ret.  The contents of ret will
@@ -382,8 +382,8 @@ static struct trackTable builtIns[] =
     },
 };
 
-struct trackTable *hGetTracks()
-/* Get track table for current database. */
+struct trackTable *hGetTracks(char *db)
+/* Get track table for specified database. */
 {
 struct trackTable *ttList = NULL, *tt;
 int i;
@@ -396,7 +396,7 @@ for (i=0; i<ArraySize(builtIns); ++i)
        safef(table, sizeof(table), "chr22_%s", tt->tableName);
     else
        safef(table, sizeof(table), "%s", tt->tableName);
-    if (hTableExists(table))
+    if (hTableExists(db, table))
         {
 	slAddHead(&ttList, tt);
 	}

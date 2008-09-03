@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: pgSnp.c,v 1.5 2008/08/20 15:35:40 giardine Exp $";
+static char const rcsid[] = "$Id: pgSnp.c,v 1.6 2008/09/03 19:19:26 markd Exp $";
 
 void pgSnpStaticLoad(char **row, struct pgSnp *ret)
 /* Load a row from pgSnp table into ret.  The contents of ret will
@@ -224,7 +224,7 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct pgCodon *fetchCodons (struct bed *gene, unsigned chrStart, unsigned chrEnd)
+struct pgCodon *fetchCodons(char *db, struct bed *gene, unsigned chrStart, unsigned chrEnd)
 /* find codons containing region, return sequence and positions */
 /* gene should have coding sequence only, bedThickOnly */
 {
@@ -287,7 +287,7 @@ for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
             int end = codStart - 1;
             cStart = gene->chromStart + gene->chromStarts[i-1] + gene->blockSizes[i-1] - (end - st);
             cEnd = gene->chromStart + gene->chromStarts[i-1] + gene->blockSizes[i-1];
-            struct dnaSeq *s = hDnaFromSeq(gene->chrom, cStart, cEnd, dnaUpper);
+            struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
             dyStringPrintf(seq, "%s", s->dna);
             //freeDnaSeq(&s);
             }
@@ -298,7 +298,7 @@ for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
             cEnd = gene->chromStart + gene->chromStarts[i-1] + gene->blockSizes[i-1];
             cStart = gene->chromStart + gene->chromStarts[i-1] + gene->blockSizes[i-1] - (end - st);
 //error here?
-            struct dnaSeq *s = hDnaFromSeq(gene->chrom, cStart, cEnd, dnaUpper);
+            struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
             dyStringPrintf(seq, "%s", s->dna);
 //printf("TESTING got seq=%s<br>\n", s->dna);
             //freeDnaSeq(&s);
@@ -322,7 +322,7 @@ for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
             cStart = gene->chromStart + gene->chromStarts[i] + gene->blockSizes[i] - (end - codStart + 1);
             }
 //printf("TESTING fetching sequence for %s:%d-%d\n", gene->chrom, cStart, cEnd);
-        struct dnaSeq *s = hDnaFromSeq(gene->chrom, cStart, cEnd, dnaUpper);
+        struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
         dyStringPrintf(seq, "%s", s->dna);
 //printf("TESTING got seq=%s<br>\n", s->dna);
         //freeDnaSeq(&s);
@@ -333,7 +333,7 @@ for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
             int end = rv->cdEnd;
             cStart = gene->chromStart + gene->chromStarts[i+1] - 1;
             cEnd = gene->chromStart + gene->chromStarts[i+1] + (end - st + 1);
-            struct dnaSeq *s = hDnaFromSeq(gene->chrom, cStart, cEnd, dnaUpper);
+            struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
             dyStringPrintf(seq, "%s", s->dna);
             //freeDnaSeq(&s);
             }
@@ -344,7 +344,7 @@ for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
             cStart = gene->chromStart + gene->chromStarts[i+1];
             cEnd = gene->chromStart + gene->chromStarts[i+1] + (end - st);
 //printf("TESTING fetching sequence for %s:%d-%d\n", gene->chrom, cStart, cEnd);
-            struct dnaSeq *s = hDnaFromSeq(gene->chrom, cStart, cEnd, dnaUpper);
+            struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
             dyStringPrintf(seq, "%s", s->dna);
             //freeDnaSeq(&s);
 //printf("TESTING got seq=%s<br>\n", s->dna);
@@ -385,14 +385,14 @@ return result;
 
 void aaProperties (char *aa1, char *aa2);
 
-void printSeqCodDisplay (struct pgSnp *item)
+void printSeqCodDisplay(char *db, struct pgSnp *item)
 /* print the display of sequence changes for a coding variant */
 {
 struct bed *list = NULL, *el, *th = NULL;
 struct sqlResult *sr;
 char **row;
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 safef(query, sizeof(query), "select chrom, txStart, txEnd, name, 0, strand, cdsStart, cdsEnd, 0, exonCount, exonEnds, exonStarts  from knownGene where chrom = '%s' and cdsStart <= %d and cdsEnd >= %d",
    item->chrom, item->chromStart, item->chromEnd);
 
@@ -418,7 +418,7 @@ int found = 0;
 th = bedThickOnlyList(list);
 for (el = th; el != NULL; el = el->next)
     {
-    struct pgCodon *cod = fetchCodons(el, item->chromStart, item->chromEnd);
+    struct pgCodon *cod = fetchCodons(db, el, item->chromStart, item->chromEnd);
     if (cod == NULL) 
         continue; /* not in exon */
     found++;

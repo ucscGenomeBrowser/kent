@@ -12,7 +12,7 @@
 #include "sqlNum.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mafSplitPos.c,v 1.4 2006/08/14 15:39:44 angie Exp $";
+static char const rcsid[] = "$Id: mafSplitPos.c,v 1.5 2008/09/03 19:21:16 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -145,7 +145,7 @@ if (chrom == NULL)
 else
     {
     chromHash = hashNew(6);
-    hashAddInt(chromHash, chrom, hChromSize(chrom));
+    hashAddInt(chromHash, chrom, hChromSize(database, chrom));
     }
 conn = sqlConnect(database);
 f = mustOpen(outFile, "w");

@@ -347,7 +347,7 @@ webPrintLinkCell(val);
 static void prInitialSection(struct cloneInfo *ci, char *collection)
 /* start page and print initial section */
 {
-cartWebStart(cart, "%s Clone %s.%d", collection, ci->acc, ci->version);
+cartWebStart(cart, database, "%s Clone %s.%d", collection, ci->acc, ci->version);
 printf("<B>%s</B>\n", ci->geneName);
 printf("<BR>%s\n", ci->desc);
 if (ci->refSeqAccv != NULL)
@@ -751,7 +751,7 @@ webPrintLinkTableEnd();
 void doMgcGenes(struct trackDb *tdb, char *acc)
 /* Process click on a mgcGenes track. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int start = cartInt(cart, "o");
 struct mgcDb mgcDb = getMgcDb();
 struct cloneInfo *ci = mgcCloneInfoLoad(conn, acc, start);
@@ -819,7 +819,7 @@ printf("</tr></table>\n");
 void doOrfeomeGenes(struct trackDb *tdb, char *acc)
 /* Process click on a orfeomeGenes track. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 int start = cartInt(cart, "o");
 struct cloneInfo *ci = orfeomeCloneInfoLoad(conn, acc, start);
 

@@ -10,7 +10,7 @@
 #include "bed.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: samplesForCoordinates.c,v 1.7 2003/05/06 07:22:13 kate Exp $";
+static char const rcsid[] = "$Id: samplesForCoordinates.c,v 1.8 2008/09/03 19:18:12 markd Exp $";
 
 struct genomeBit
 /* Piece of the genome */
@@ -73,11 +73,7 @@ return exp;
 struct sqlConnection *getHgdbtestConn(char *db) 
 /* Read .hg.conf and return connection. */
 {
-char *host = cfgOption( "hgdbtest.host");
-char *user = cfgOption( "hgdbtest.user");
-char *password = cfgOption( "hgdbtest.password");
-hSetDbConnect(host,db,user,password);
-return sqlConnectRemote(host, user,password, db);
+return sqlConnectProfile("hgdbtest", db);
 }
 
 int sampleCmpName(const void *va, const void *vb)

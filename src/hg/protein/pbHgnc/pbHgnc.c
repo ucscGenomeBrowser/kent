@@ -39,8 +39,8 @@ if (argc != 2) usage();
 proteinDataDate = argv[1];
    
 o2 = fopen("j.dat", "w");
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn2= hAllocConn(hDefaultDb());
+conn3= hAllocConn(hDefaultDb());
 
 sprintf(query2,
 	"select hgncId, symbol, name, refSeqMapped, refSeqIds, uniProt, entrezMapped, locusType from proteins%s.hgnc where status not like '%cWithdrawn%c'", 

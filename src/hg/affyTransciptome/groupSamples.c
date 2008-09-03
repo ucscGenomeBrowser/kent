@@ -3,7 +3,7 @@
 #include "linefile.h"
 #include "sample.h"
 
-static char const rcsid[] = "$Id: groupSamples.c,v 1.7 2003/05/06 07:22:13 kate Exp $";
+static char const rcsid[] = "$Id: groupSamples.c,v 1.8 2008/09/03 19:18:12 markd Exp $";
 
 void usage()
 {
@@ -54,7 +54,7 @@ return sampleLoad(row);
 void groupByPosition(int grouping , struct lineFile *lf, FILE *out)
 /* Group together samples into a larger bundle. */
 {
-struct sample *groupedList = NULL, *samp = NULL, *currSamp = NULL;
+struct sample *samp = NULL, *currSamp = NULL;
 int count = 0;
 while ((samp = sampleNext(lf)) != NULL)
     {

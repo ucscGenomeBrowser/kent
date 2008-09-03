@@ -129,10 +129,10 @@ struct ggMrnaInput *ggGetMrnaForBac(char *bacAcc);
 struct ggMrnaCluster *ggClusterMrna(struct ggMrnaInput *ci);
 /* Make a list of clusters from ci. */
 
-struct geneGraph *ggGraphCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci);
+struct geneGraph *ggGraphCluster(char *genomeDb, struct ggMrnaCluster *mc, struct ggMrnaInput *ci);
 /* Make up a gene transcript graph out of the ggMrnaCluster. */
 
-struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, 
+struct geneGraph *ggGraphConsensusCluster(char *genomeDb, struct ggMrnaCluster *mc, struct ggMrnaInput *ci, 
 					  struct hash *tissLibHash, boolean fillInEvidence);
 /* Make up a gene transcript graph out of the ggMrnaCluster. Only
  extending truncated exons to consensus splice sites. */

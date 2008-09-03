@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: promoSeqFromCluster.c,v 1.4 2003/05/06 07:22:18 kate Exp $";
+static char const rcsid[] = "$Id: promoSeqFromCluster.c,v 1.5 2008/09/03 19:18:37 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -26,10 +26,7 @@ errAbort(
   );
 }
 
-boolean hFindSplitTable(char *chrom, char *rootName, 
-	char retTableBuf[64], boolean *hasBin);
-
-void fetchPromoter(char *rangeId, int size, FILE *f, FILE *liftFile)
+void fetchPromoter(char *database, char *rangeId, int size, FILE *f, FILE *liftFile)
 /* Get promoter region and write it to file. */
 {
 struct sqlResult *sr;
@@ -37,8 +34,8 @@ char **row;
 struct bed *bed;
 char query[256];
 char *table = "rnaCluster";
-int hasBin = hIsBinned(table);
-struct sqlConnection *conn = hAllocConn();
+int hasBin = hIsBinned(database, table);
+struct sqlConnection *conn = hAllocConn(database);
 struct dnaSeq *seq;
 int start, end, chromSize;
 boolean isRc;
@@ -48,7 +45,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row + hasBin, 12);
-    chromSize = hChromSize(bed->chrom);
+    chromSize = hChromSize(database, bed->chrom);
     isRc = (bed->strand[0] == '-');
     if (isRc)
         {
@@ -64,7 +61,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (start < 0) 
 	    start = 0;
 	}
-    seq = hChromSeq(bed->chrom, start, end);
+    seq = hChromSeq(database, bed->chrom, start, end);
     if (bed->strand[0] == '-')
         reverseComplement(seq->dna, seq->size);
     faWriteNext(f, bed->name, seq->dna, seq->size);
@@ -88,7 +85,6 @@ char *row[3];
 char *id, *group, *lastGroup = NULL;
 
 makeDir(outDir);
-hSetDb(database);
 
 lineFileRow(lf, row); /* Skip first row which just has labels. */
 
@@ -105,7 +101,7 @@ while (lineFileRow(lf, row))
 	snprintf(fileName, sizeof(fileName), "%s/%s.fa", outDir, group);
 	f = mustOpen(fileName, "w");
 	}
-    fetchPromoter(id, size, f, liftFile);
+    fetchPromoter(database, id, size, f, liftFile);
     printf(".");
     fflush(stdout);
     }

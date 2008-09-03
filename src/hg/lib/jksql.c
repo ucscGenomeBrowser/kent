@@ -4,6 +4,12 @@
  * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
  *****************************************************************************/
 /* jksql.c - Stuff to manage interface with SQL database. */
+
+/*
+ * Configuration:
+ */
+
+
 #include "common.h"
 #include "portable.h"
 #include "errabort.h"
@@ -13,11 +19,8 @@
 #include "jksql.h"
 #include "sqlNum.h"
 #include "hgConfig.h"
-#ifndef GBROWSE
-#include "customTrack.h"
-#endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: jksql.c,v 1.114 2008/08/25 21:54:40 aamp Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.115 2008/09/03 19:19:26 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -27,15 +30,28 @@ static long long sqlTotalTime = 0;          /* total real milliseconds */
 static long sqlTotalQueries = 0;            /* total number of queries */
 static boolean monitorHandlerSet = FALSE;   /* is exit handler installed? */
 static unsigned traceIndent = 0;            /* how much to indent */
-static char * indentStr = "                                                       ";
+static char *indentStr = "                                                       ";
+
+struct sqlProfile
+/* a configuration profile for connecting to a server */
+{
+    struct sqlProfile *next;
+    char *name;         // name of profile
+    char *host;         // host name for database server
+    char *user;         // database server user name
+    char *password;     // database server password
+    struct slName *dbs; // database associated with profile, can be NULL.
+    };
 
 struct sqlConnection
 /* This is an item on a list of sql open connections. */
     {
     MYSQL *conn;		    /* Connection. */
+    struct sqlProfile *profile;     /* profile, or NULL if not opened via a profile */
     struct dlNode *node;	    /* Pointer to list node. */
     struct dlList *resultList;	    /* Any open results. */
     boolean hasHardLock;	    /* TRUE if table has a non-advisory lock. */
+    boolean inCache;                /* debugging flag to indicate its in a cache */
     };
 
 struct sqlResult
@@ -48,18 +64,198 @@ struct sqlResult
 
 static struct dlList *sqlOpenConnections;
 
-char* getCfgValue(char* envName, char* cfgName)
-/* get a configuration value, from either the environment or the cfg file,
- * with the env take precedence.
- */
+char *defaultProfileName = "db";                  // name of default profile
+static struct hash *profiles = NULL;              // profiles parsed from hg.conf, by name
+static struct sqlProfile *defaultProfile = NULL;  // default profile, also in profiles list
+static struct hash* dbToProfile = NULL;           // db to sqlProfile
+
+static char *envOverride(char *envName, char *defaultVal)
+/* look up envName in environment, if it exists and is non-empty, return its
+ * value, otherwise return defaultVal */
 {
 char *val = getenv(envName);
-if (val == NULL || (0 == strlen(val)))
-    val = cfgOption(cfgName);
-return val;
+if (isEmpty(val))
+    return defaultVal;
+else
+    return val;
 }
 
-static void monitorInit()
+static struct sqlProfile *sqlProfileNew(char *profileName, char *host, char *user,
+                                        char *password)
+/* create a new profile object */
+{
+struct sqlProfile *sp;
+AllocVar(sp);
+sp->name = cloneString(profileName);
+sp->host = cloneString(host);
+sp->user = cloneString(user);
+sp->password = cloneString(password);
+return sp;
+}
+
+static void sqlProfileAssocDb(struct sqlProfile *sp, char *db)
+/* associate a db with a profile */
+{
+struct sqlProfile *sp2 = hashFindVal(dbToProfile, db);
+if (sp2 != NULL)
+    errAbort("databases %s already associated with profile %s, trying to associated it with %s",
+             db, sp2->name, sp->name);
+hashAdd(dbToProfile, db, sp);
+slSafeAddHead(&sp->dbs, slNameNew(db));
+}
+
+static void sqlProfileCreate(char *profileName, char *host, char *user,
+                             char *password)
+/* create a profile and add to global data structures */
+{
+struct sqlProfile *sp = sqlProfileNew(profileName, host, user, password);
+hashAdd(profiles, sp->name, sp);
+if (sameString(sp->name, defaultProfileName))
+    defaultProfile = sp;  // save default
+}
+
+static void sqlProfileAddProfIf(char *profileName)
+/* check if a config prefix is a profile, and if so, add a
+ * sqlProfile object for it */
+{
+char *host = cfgOption2(profileName, "host");
+char *user = cfgOption2(profileName, "user");
+char *password = cfgOption2(profileName, "password");
+
+if ((host != NULL) && (user != NULL) && (password != NULL))
+    {
+    /* for the default profile, allow environment variable override */
+    if (sameString(profileName, defaultProfileName))
+        {
+        host = envOverride("HGDB_HOST", host);
+        user = envOverride("HGDB_USER", user);
+        password = envOverride("HGDB_PASSWORD", password);
+        }
+    sqlProfileCreate(profileName, host, user, password);
+    }
+}
+
+static void sqlProfileAddProfs(struct slName *cnames)
+/* load the profiles from list of config names */
+{
+struct slName *cname;
+for (cname = cnames; cname != NULL; cname = cname->next)
+    {
+    char *dot1 = strchr(cname->name, '.'); // first dot in name
+    if ((dot1 != NULL) && sameString(dot1, ".host"))
+        {
+        *dot1 = '\0';
+        sqlProfileAddProfIf(cname->name);
+        *dot1 = '.';
+        }
+    }
+}
+
+static void sqlProfileAddDb(char *db, char *profileName)
+/* add a mapping of db to profile */
+{
+struct sqlProfile *sp = hashFindVal(profiles, profileName);
+if (sp == NULL)
+    errAbort("can't find profile %s for database %s in hg.conf", profileName, db);
+sqlProfileAssocDb(sp, db);
+}
+
+static void sqlProfileAddDbs(struct slName *cnames)
+/* add mappings of db to profile from ${db}.${profile} entries */
+{
+struct slName *cname;
+for (cname = cnames; cname != NULL; cname = cname->next)
+    {
+    char *dot1 = strchr(cname->name, '.'); // first dot in name
+    if ((dot1 != NULL) && sameString(dot1, ".profile"))
+        {
+        char *profileName = cfgVal(cname->name);
+        *dot1 = '\0';
+        sqlProfileAddDb(cname->name,  profileName);
+        *dot1 = '.';
+        }
+    }
+}
+
+static void sqlProfileLoad(void)
+/* load the profiles from config */
+{
+profiles = hashNew(8);
+dbToProfile = hashNew(12);
+struct slName *cnames = cfgNames();
+sqlProfileAddProfs(cnames);
+sqlProfileAddDbs(cnames);
+slFreeList(&cnames);
+}
+
+static struct sqlProfile* sqlProfileFindByName(char *profileName, char *database)
+/* find a profile by name, checking that database matches if found */
+{
+struct sqlProfile* sp = hashFindVal(profiles, profileName);
+if (sp == NULL)
+    return NULL;
+#if UNUSED // FIXME: this breaks hgHeatMap, enable when logicalDb removed
+if ((database != NULL) && (sp->dbs != NULL) && !slNameInList(sp->dbs, database))
+    errAbort("attempt to obtain SQL profile %s for database %s, "
+             "which is not associate with this database-specific profile",
+             profileName, database);
+#endif
+return sp;
+}
+
+static struct sqlProfile* sqlProfileFindByDatabase(char *database)
+/* find a profile using database as profile name, return the default if not
+ * found */
+{
+struct sqlProfile *sp = hashFindVal(dbToProfile, database);
+if (sp == NULL)
+    sp = defaultProfile;
+return sp;
+}
+
+static struct sqlProfile* sqlProfileGet(char *profileName, char *database)
+/* lookup a profile using the profile resolution algorithm:
+ *  - If a profile is specified:
+ *     - search hg.conf for the profile, if found:
+ *       - if database is specified, then either
+ *           - the profile should not specify a database
+ *           - the database must match the database in the profile
+ *  - If a profile is not specified:
+ *     - search hg.conf for a profile with the same name as the database
+ *     - if there is no profile named the same as the database, use
+ *       the default profile of "db"
+ * return NULL if not found.
+ */
+{
+assert((profileName != NULL) || (database != NULL));
+if (profiles == NULL)
+    sqlProfileLoad();
+
+if (profileName != NULL)
+    return sqlProfileFindByName(profileName, database);
+else
+    return sqlProfileFindByDatabase(database);
+}
+
+static struct sqlProfile* sqlProfileMustGet(char *profileName, char *database)
+/* lookup a profile using the profile resolution algorithm or die trying */
+{
+struct sqlProfile* sp = sqlProfileGet(profileName, database);
+if (sp == NULL)
+    {
+    if (profileName == NULL)
+        errAbort("can't find database %s in hg.conf, should have a default named \"db\"",
+                 database);
+    else if (database == NULL)
+        errAbort("can't find profile %s in hg.conf", profileName);
+    else
+        errAbort("can't find profile %s for database %s in hg.conf", profileName, database);
+    }
+return sp;
+}
+
+
+static void monitorInit(void)
 /* initialize monitoring on the first call */
 {
 unsigned flags = 0;
@@ -79,7 +275,7 @@ if (flags != 0)
 monitorInited = TRUE;
 }
 
-static void monitorEnter()
+static void monitorEnter(void)
 /* called at the beginning of a routine that is monitored, initialize if
  * necessary and start timing if enabled */
 {
@@ -92,7 +288,7 @@ if (monitorFlags)
     }
 }
 
-static long monitorLeave()
+static long monitorLeave(void)
 /* called at the end of a routine that is monitored, updates time count.
  * returns time since enter. */
 {
@@ -129,7 +325,7 @@ va_end(args);
 fputc('\n', stderr);
 }
 
-static void monitorPrintTime()
+static void monitorPrintTime(void)
 /* print total time */
 {
 /* only print if not explictly disabled */
@@ -185,7 +381,7 @@ void sqlMonitorSetIndent(unsigned indent)
 traceIndent = indent;
 }
 
-void sqlMonitorDisable()
+void sqlMonitorDisable(void)
 /* Disable tracing or profiling of SQL queries. */
 {
 if (monitorFlags & JKSQL_PROF)
@@ -224,6 +420,8 @@ struct sqlConnection *sc = *pSc;
 long deltaTime;
 if (sc != NULL)
     {
+    if (sc->inCache)
+        errAbort("sqlDisconnect called on connection associated with a cache");
     MYSQL *conn = sc->conn;
     struct dlList *resList = sc->resultList;
     struct dlNode *node = sc->node;
@@ -274,7 +472,8 @@ char **row;
 struct slName *databases = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    slSafeAddHead(&databases, slNameNew(row[0]));
+    if (!startsWith("mysql", row[0]))  /* Avoid internal databases. */
+        slSafeAddHead(&databases, slNameNew(row[0]));
     }
 sqlFreeResult(&sr);
 return databases;
@@ -340,7 +539,7 @@ slFreeList(&tableList);
 sqlDisconnect(&conn);
 }
 
-struct hash *sqlAllFields()
+struct hash *sqlAllFields(void)
 /* Get hash of all fields in database.table.field format.  */
 {
 struct hash *fullHash = hashNew(18);
@@ -355,7 +554,7 @@ return fullHash;
 }
 
 
-void sqlCleanupAll()
+void sqlCleanupAll(void)
 /* Cleanup all open connections and resources. */
 {
 if (sqlOpenConnections)
@@ -366,13 +565,14 @@ if (sqlOpenConnections)
 	{
 	conn = conNode->val;
 	conNext = conNode->next;
+        conn->inCache = FALSE; // really should be cleaning up caches too
 	sqlDisconnect(&conn);
 	}
     freeDlList(&sqlOpenConnections);
     }
 }
 
-static void sqlInitTracking()
+static void sqlInitTracking(void)
 /* Initialize tracking and freeing of resources. */
 {
 if (sqlOpenConnections == NULL)
@@ -382,10 +582,11 @@ if (sqlOpenConnections == NULL)
     }
 }
 
-struct sqlConnection *sqlConnRemote(char *host, 
-	char *user, char *password, char *database, boolean abort)
-/* Connect to database somewhere as somebody.  
- * If abort is set display error message and abort on error. */
+static struct sqlConnection *sqlConnRemote(char *host, char *user, char *password,
+                                           char *database, boolean abort)
+/* Connect to database somewhere as somebody. Database maybe NULL to just
+ * connect to the server.  If abort is set display error message and abort on
+ * error. This is the core function that connects to a MySQL server. */
 {
 struct sqlConnection *sc;
 MYSQL *conn;
@@ -423,13 +624,14 @@ if (mysql_real_connect(
 	    database, host, user, getpid(), mysql_error(conn), getpid());
     return NULL;
     }
-#ifdef GBROWSE
-    /* Apparently, when this code runs inside of a perl extension (perl
-     * also happens to be using mysql), conn->db gets garbage.
-     * So just coerce it to what we will expect it to be later. */
-    if (!conn->db || !sameString(database, conn->db))
-	conn->db = cloneString(database);
-#endif /* GBROWSE */
+
+/* Make sure the db is correct in the connect, think usually happens if there
+ * is a mismatch between MySQL library and code.  If this happens, please
+ * figure out what is going on.  Contact markd if you need help. */
+if (((conn->db != NULL) && !sameString(database, conn->db))
+   || ((conn->db == NULL) && (database != NULL)))
+   errAbort("apparent mismatch between mysql.h used to compile jksql.c and libmysqlclient");
+
 if (monitorFlags & JKSQL_TRACE)
     monitorPrint(sc, "SQL_CONNECT", "%s %s", host, user);
 
@@ -439,89 +641,67 @@ if (monitorFlags & JKSQL_TRACE)
 return sc;
 }
 
-struct sqlConnection *sqlConnectRemote(char *host, 
-	char *user, char *password, char *database)
-/* Connect to database somewhere as somebody. */
+struct sqlConnection *sqlConnectRemote(char *host, char *user, char *password,
+                                       char *database)
+/* Connect to database somewhere as somebody. Database maybe NULL to
+ * just connect to the server. Abort on error. */
 {
 return sqlConnRemote(host, user, password, database, TRUE);
 }
 
-#ifndef GBROWSE
-struct sqlConnection *sqlCtConn(boolean abort)
-/* Connect to customTrash database, optionally abort on failure */
+struct sqlConnection *sqlMayConnectRemote(char *host, char *user, char *password,
+                                          char *database)
+/* Connect to database somewhere as somebody. Database maybe NULL to
+ * just connect to the server.  Return NULL can't connect */
 {
-char *host = cfgOptionDefault("customTracks.host", NULL);
-char *user = cfgOptionDefault("customTracks.user", NULL);
-char *password = cfgOptionDefault("customTracks.password", NULL);
-
-if (host && user && password)
-    return sqlConnRemote(host, user, password, CUSTOM_TRASH, abort);
-else
-    {
-    if (abort)
-	errAbort("can not find customTracks DB conn info in hg.conf");
-    else
-	return NULL;
-    }
-return NULL;
+return sqlConnRemote(host, user, password, database, FALSE);
 }
-#endif /* GBROWSE */
 
-struct sqlConnection *sqlConn(char *database, boolean abort)
-/* Connect to database on default host as default user. 
- * Optionally abort on failure. */
+static struct sqlConnection *sqlConnProfile(struct sqlProfile* sp, char *database, boolean abort)
+/* Connect to database using the profile.  Database maybe NULL to connect to
+ * the server. Optionally abort on failure. */
 {
-char* host = getCfgValue("HGDB_HOST", "db.host");
-char* user = getCfgValue("HGDB_USER", "db.user");
-char* password = getCfgValue("HGDB_PASSWORD", "db.password");
-
-if(host == 0 || user == 0 || password == 0)
-    sqlConnectReadOnly(database);
-return sqlConnRemote(host, user, password, database, abort);
+struct sqlConnection *conn = sqlConnRemote(sp->host, sp->user, sp->password, database, abort);
+if (conn != NULL)
+    conn->profile = sp;  // remember profile, mainly for debugging
+return conn;
 }
 
 struct sqlConnection *sqlMayConnect(char *database)
 /* Connect to database on default host as default user. 
  * Return NULL (don't abort) on failure. */
 {
-return sqlConn(database, FALSE);
+return sqlConnProfile(sqlProfileMustGet(NULL, database), database, FALSE);
 }
 
 struct sqlConnection *sqlConnect(char *database)
 /* Connect to database on default host as default user. */
 {
-return sqlConn(database, TRUE);
+return sqlConnProfile(sqlProfileMustGet(NULL, database), database, TRUE);
 }
 
-static char *getProfileCfgValue(char *profile, char *envVarSuffix, char *varSuffix)
-/* get the configuration var for the specified profile */
+struct sqlConnection *sqlConnectProfile(char *profileName, char *database)
+/* Connect to profile or database using the specified profile.  Can specify
+ * profileName, database, or both. The profile is the prefix to the host,
+ * user, and password variables in .hg.conf.  For the default profile of "db",
+ * the environment variables HGDB_HOST, HGDB_USER, and HGDB_PASSWORD can
+ * override.
+ */ 
 {
-char envVar[256], var[256];
-safef(envVar, sizeof(envVar), "HGDB_%s_%s", profile, envVarSuffix);
-safef(var, sizeof(var), "%s.%s", profile, varSuffix);
-char *val = getCfgValue(envVar, var);
-if (val == NULL)
-    errAbort("can't get configuration variable %s or environment variable %s",
-             var, envVar);
-return val;
+struct sqlProfile* sp = sqlProfileGet(profileName, database);
+return sqlConnectRemote(sp->host, sp->user, sp->password, database);
 }
 
-struct sqlConnection *sqlConnectProfile(char *profile, char *database)
-/* Connect to database using the specified profile.  The profile is the prefix
- * to the host, user, and password variables in .hg.conf.  The environment
- * variables HGDB_${profile}_HOST, HGDB_${profile}_USER,
- * HGDB_${profile}_PASSWORD can override.  */ 
+struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database)
+/* Connect to profile or database using the specified profile. Can specify
+ * profileName, database, or both. The profile is the prefix to the host,
+ * user, and password variables in .hg.conf.  For the default profile of "db",
+ * the environment variables HGDB_HOST, HGDB_USER, and HGDB_PASSWORD can
+ * override.  Return NULL if connection fails.
+ */ 
 {
-return sqlConnectRemote(getProfileCfgValue(profile, "HOST", "host"),
-                        getProfileCfgValue(profile, "USER", "user"),
-                        getProfileCfgValue(profile, "PASSWORD", "password"),
-                        database);
-}
-
-struct sqlConnection *sqlConnectReadOnly(char *database)
-/* Connect to database using ro profile in .hg.conf */ 
-{
-return sqlConnectProfile("ro", database);
+struct sqlProfile* sp = sqlProfileGet(profileName, database);
+return sqlMayConnectRemote(sp->host, sp->user, sp->password, database);
 }
 
 void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args)
@@ -630,7 +810,7 @@ res = sqlGetResult(sc, query);
 while ((row=sqlNextRow(res)))
     {
     if (sameWord(*row, "1"))
-        printf("Advisory lock created\n");
+        break;
     else if (sameWord(*row, "0"))
         errAbort("Attempt to GET_LOCK timed out.\nAnother client may have locked this name, %s\n.", name);
     else if (*row == NULL)
@@ -1367,59 +1547,77 @@ monitorLeave();
 return id;
 }
 
-/* Stuff to manage and cache up to 16 open connections on 
- * a database.  Typically you only need 3.
- * MySQL takes about 2 milliseconds on a local
- * host to open a connection.  On a remote host it can be more
- * and this caching is probably actually necessary. */
+/* Stuff to manage and caches of open connections on a database.  Typically
+ * you only need 3.  MySQL takes about 2 milliseconds on a local host to open
+ * a connection.  On a remote host it can be more and this caching is probably
+ * actually necessary. However, much code has been written assuming caching,
+ * so it is probably now necessary.
+ */
 
-enum {maxConn = 16};
+enum {sqlConnCacheMax = 16};
 
 struct sqlConnCache
-    {
-    char *database;				/* SQL database. */
+{
+    /* the following are NULL unless explicitly specified */
     char *host;					/* Host machine of database. */
     char *user;					/* Database user name */
     char *password;				/* Password. */
-    int connAlloced;                            /* # open connections. */
-    struct sqlConnection *connArray[maxConn];   /* Open connections. */
-    boolean connUsed[maxConn];                  /* Tracks used conns. */
-    };
+    struct sqlProfile *profile;                 /* restrict to this profile */
+    /* contents of cache */
+    int entryCnt;                               /* # open connections. */
+    struct sqlConnCacheEntry *entries;          /* entries in the cache */
+};
 
-struct sqlConnCache *sqlNewRemoteConnCache(char *database, 
-	char *host, char *user, char *password)
+struct sqlConnCacheEntry
+/* an entry in the cache */
+{
+    struct sqlConnCacheEntry *next;
+    struct sqlProfile *profile;      /* profile for connection, can be NULL if host is explicit */
+    struct sqlConnection *conn;      /* connection */
+    boolean inUse;                   /* is this in use? */
+};
+
+struct sqlConnCache *sqlConnCacheNewRemote(char *host, char *user,
+                                           char *password)
 /* Set up a cache on a remote database. */
 {
 struct sqlConnCache *cache;
 AllocVar(cache);
-cache->database = cloneString(database);
 cache->host = cloneString(host);
 cache->user = cloneString(user);
 cache->password = cloneString(password);
 return cache;
 }
 
-struct sqlConnCache *sqlNewConnCache(char *database)
+struct sqlConnCache *sqlConnCacheNew()
 /* Return a new connection cache. */
 {
-char* host = getCfgValue("HGDB_HOST", "db.host");
-char* user = getCfgValue("HGDB_USER", "db.user");
-char* password = getCfgValue("HGDB_PASSWORD", "db.password");
-if (password == NULL || user == NULL || host == NULL)
-    errAbort("Could not read hostname, user, or password to the database from configuration file.");
-return sqlNewRemoteConnCache(database, host, user, password);
+struct sqlConnCache *cache;
+AllocVar(cache);
+return cache;
 }
 
-void sqlFreeConnCache(struct sqlConnCache **pCache)
+struct sqlConnCache *sqlConnCacheNewProfile(char *profileName)
+/* Return a new connection cache associated with the particular profile. */
+{
+struct sqlConnCache *cache = sqlConnCacheNew();
+cache->profile = sqlProfileMustGet(profileName, NULL);
+return cache;
+}
+
+void sqlConnCacheFree(struct sqlConnCache **pCache)
 /* Dispose of a connection cache. */
 {
 struct sqlConnCache *cache;
 if ((cache = *pCache) != NULL)
     {
-    int i;
-    for (i=0; i<cache->connAlloced; ++i)
-	sqlDisconnect(&cache->connArray[i]);
-    freeMem(cache->database);
+    struct sqlConnCacheEntry *scce;
+    for (scce = cache->entries; scce != NULL; scce = scce->next)
+        {
+        scce->conn->inCache = FALSE;
+	sqlDisconnect(&scce->conn);
+        }
+    slFreeList(&cache->entries);
     freeMem(cache->host);
     freeMem(cache->user);
     freeMem(cache->password);
@@ -1427,68 +1625,151 @@ if ((cache = *pCache) != NULL)
     }
 }
 
-struct sqlConnection *sqlMayAllocConnection(struct sqlConnCache *cache,
-					    boolean mustConnect)
-/* Allocate a cached connection. errAbort if too many open connections.  
- * errAbort if mustConnect and connection fails. */
+static struct sqlConnCacheEntry *sqlConnCacheAdd(struct sqlConnCache *cache,
+                                                 struct sqlProfile *profile,
+                                                 struct sqlConnection *conn)
+/* create and add a new cache entry */
 {
-int i;
-int connAlloced = cache->connAlloced;
-boolean *connUsed = cache->connUsed;
-for (i=0; i<connAlloced; ++i)
-    {
-    if (!connUsed[i])
-	{
-	connUsed[i] = TRUE;
-	return cache->connArray[i];
-	}
-    }
-if (connAlloced >= maxConn)
-   errAbort("Too many open sqlConnections to %s for cache", cache->database);
-cache->connArray[connAlloced] = sqlConnRemote(cache->host, cache->user,
-					      cache->password, cache->database,
-					      mustConnect);
-if (cache->connArray[connAlloced] != NULL)
-    {
-    connUsed[connAlloced] = TRUE;
-    ++cache->connAlloced;
-    }
-return cache->connArray[connAlloced];
+struct sqlConnCacheEntry *scce;
+AllocVar(scce);
+scce->profile = profile;
+scce->conn = conn;
+conn->inCache = TRUE;
+slAddHead(&cache->entries, scce);
+cache->entryCnt++;
+return scce;
 }
 
-struct sqlConnection *sqlAllocConnection(struct sqlConnCache *cache)
-/* Allocate a cached connection. */
+static boolean sqlConnCacheEntryDbMatch(struct sqlConnCacheEntry *scce,
+                                        char *database)
+/* does a database match the one in the connection cache */
 {
-return sqlMayAllocConnection(cache, TRUE);
+return ((database == NULL) && (scce->conn->conn->db == NULL))
+    || sameString(database, scce->conn->conn->db);
 }
 
-void sqlFreeConnection(struct sqlConnCache *cache, struct sqlConnection **pConn)
-/* Free up a cached connection. */
+static void sqlConnCacheEntrySetDb(struct sqlConnCacheEntry *scce,
+                                   char *database)
+/* set the connect cache and connect to the specified database */
+{
+if (mysql_select_db(scce->conn->conn, database) != 0)
+    errAbort("Couldn't set connection database to %s\n%s", 
+             database, mysql_error(scce->conn->conn));
+}
+
+static struct sqlConnCacheEntry *sqlConnCacheFindFree(struct sqlConnCache *cache,
+                                                      struct sqlProfile *profile,
+                                                      char *database,
+                                                      boolean matchDatabase)
+/* find a free entry associated with profile and database. Return NULL if no
+ * entries are available.  Will attempt to match database if requested, this
+ * includes connections to no database (database==NULL). */
+{
+struct sqlConnCacheEntry *scce;
+for (scce = cache->entries; scce != NULL; scce = scce->next)
+    {
+    if (!scce->inUse && (profile == scce->profile)
+        && ((!matchDatabase) || sqlConnCacheEntryDbMatch(scce, database)))
+        return scce;
+    }
+return NULL;
+}
+
+static struct sqlConnCacheEntry *sqlConnCacheAddNew(struct sqlConnCache *cache,
+                                                    struct sqlProfile *profile,
+                                                    char *database,
+                                                    boolean abort)
+/* create and add a new connect to the cache */
 {
 struct sqlConnection *conn;
-int connAlloced = cache->connAlloced;
-struct sqlConnection **connArray = cache->connArray;
-boolean gotIt = FALSE;
+if (cache->entryCnt >= sqlConnCacheMax)
+    errAbort("Too many open sqlConnections for cache");
+if (cache->host != NULL)
+    conn = sqlConnRemote(cache->host, cache->user,
+                         cache->password, database, abort);
+else
+    conn = sqlConnProfile(profile, database, abort);
+return sqlConnCacheAdd(cache, profile, conn);
+}
 
-if ((conn = *pConn) != NULL)
+static struct sqlConnection *sqlConnCacheDoAlloc(struct sqlConnCache *cache,
+                                                 char *profileName,
+                                                 char *database,
+                                                 boolean abort)
+/* Allocate a cached connection. errAbort if too many open connections.  
+ * errAbort if abort and connection fails. */
+{
+// obtain profile
+struct sqlProfile *profile = NULL;
+if ((cache->host != NULL) && (profileName != NULL))
+    errAbort("can't specify profileName (%s) when sqlConnCache is create with a specific host (%s)",
+             profileName, cache->host);
+if ((profileName != NULL) && (cache->profile != NULL)
+    && !sameString(profileName, cache->profile->name))
+    errAbort("profile name %s doesn't match profile associated with sqlConnCache %s",
+             profileName, cache->profile->name);
+if (cache->profile != NULL)
+    profile = cache->profile;
+else
+    profile = sqlProfileMustGet(profileName, database);
+
+// try getting an entry, first trying to find one for this database, then
+// look for any database, then add a new one
+struct sqlConnCacheEntry *scce
+    = sqlConnCacheFindFree(cache, profile, database, TRUE);
+if (scce == NULL)
     {
-    int ix;
-    for (ix = 0; ix < connAlloced; ++ix)
-	{
-	if (connArray[ix] == conn)
-	    {
-	    cache->connUsed[ix] = FALSE;
-	    gotIt = TRUE;
-	    break;
-	    }
-	}
-    if (! gotIt)
-	errAbort("sqlFreeConnection called on cache (%s) that doesn't contain "
-		 "the given connection", cache->database);
+    scce = sqlConnCacheFindFree(cache, profile, database, FALSE);
+    if (scce != NULL)
+        sqlConnCacheEntrySetDb(scce, database);
+    else
+        scce = sqlConnCacheAddNew(cache, profile, database, abort);
+    }
+scce->inUse = TRUE;
+return scce->conn;
+}
+
+struct sqlConnection *sqlConnCacheMayAlloc(struct sqlConnCache *cache,
+                                           char *database)
+/* Allocate a cached connection. errAbort if too many open connections,
+ * return NULL if can't connect to server. */
+{
+return sqlConnCacheDoAlloc(cache, NULL, database, FALSE);
+}
+
+struct sqlConnection *sqlConnCacheAlloc(struct sqlConnCache *cache,
+                                        char *database)
+/* Allocate a cached connection. */
+{
+return sqlConnCacheDoAlloc(cache, NULL, database, TRUE);
+}
+
+struct sqlConnection *sqlConnCacheProfileAlloc(struct sqlConnCache *cache,
+                                               char *profileName,
+                                               char *database)
+/* Allocate a cached connection given a profile and/or database. */
+{
+return sqlConnCacheDoAlloc(cache, profileName, database, TRUE);
+}
+
+void sqlConnCacheDealloc(struct sqlConnCache *cache, struct sqlConnection **pConn)
+/* Free up a cached connection. */
+{
+struct sqlConnection *conn = *pConn;
+if (conn != NULL)
+    {
+    if (!conn->inCache)
+        errAbort("sqlConnCacheDealloc called on connection that is not associated with a cache");
+    struct sqlConnCacheEntry *scce;
+    for (scce = cache->entries; (scce != NULL) && (scce->conn != conn); scce = scce->next)
+        continue;
+    if (scce ==  NULL)
+        errAbort("sqlConnCacheDealloc called on cache that doesn't contain "
+                 "the given connection");
+    scce->inUse = FALSE;
     *pConn = NULL;
     }
 }
-
 
 char *sqlEscapeString2(char *to, const char* from)
 /* Prepares a string for inclusion in a sql statement.  Output string
@@ -1549,38 +1830,45 @@ char *to = needMem(size * sizeof(char));
 return sqlEscapeTabFileString2(to, from);
 }
 
+static void addProfileDatabases(char *profileName, struct hash *databases)
+/* find databases on a profile and add to hash */
+{
+struct sqlConnection *sc = sqlConnectProfile(profileName, NULL);
+struct slName *db, *dbs = sqlGetAllDatabase(sc);
+for (db = dbs; db != NULL; db = db->next)
+    hashAdd(databases, db->name, NULL);
+sqlDisconnect(&sc);
+slFreeList(&dbs);
+}
 
-struct hash *sqlHashOfDatabases()
+struct hash *sqlHashOfDatabases(void)
 /* Get hash table with names of all databases that are online. */
 {
-struct sqlResult *sr;
-char **row;
-struct sqlConnection *conn = sqlConnect("mysql");
-struct hash *hash = newHash(8);
-
-sr = sqlGetResult(conn, "show databases");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (!startsWith("mysql", row[0]))  /* Avoid internal databases. */
-	hashAdd(hash, row[0], NULL);
-    }
-sqlDisconnect(&conn);
-return hash;
+/* visit all profiles and get all databases */
+if (profiles == NULL)
+    sqlProfileLoad();
+struct hash *databases = newHash(8);
+struct hashCookie cookie = hashFirst(profiles);
+struct hashEl *hel;
+for (hel = hashNext(&cookie);  hel != NULL; hel = hel->next)
+    addProfileDatabases(((struct sqlProfile*)hel->val)->name, databases);
+return databases;
 }
 
-struct slName *sqlListOfDatabases()
+struct slName *sqlListOfDatabases(void)
 /* Get list of all databases that are online. */
 {
-struct sqlConnection *conn = sqlConnect("mysql");
-struct slName *list = sqlGetAllDatabase(conn);
-sqlDisconnect(&conn);
-return list;
-}
-
-char *connGetDatabase(struct sqlConnCache *conn)
-/* return database for a connection cache */
-{
-return conn->database;
+/* build hash and convert to names list to avoid duplicates due to visiting
+ * multiple profiles to the same server */
+struct hash *dbHash = sqlHashOfDatabases();
+struct hashCookie cookie = hashFirst(dbHash);
+struct hashEl *hel;
+struct slName *dbs = NULL;
+for (hel = hashNext(&cookie); hel != NULL; hel = hel->next)
+    slSafeAddHead(&dbs, slNameNew(hel->name));
+hashFree(&dbHash);
+slSort(&dbs, slNameCmp);
+return dbs;
 }
 
 boolean sqlWildcardIn(char *s)

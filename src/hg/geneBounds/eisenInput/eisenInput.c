@@ -11,7 +11,7 @@
 #include "refLink.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: eisenInput.c,v 1.4 2006/04/07 14:30:29 angie Exp $";
+static char const rcsid[] = "$Id: eisenInput.c,v 1.5 2008/09/03 19:18:35 markd Exp $";
 
 /* Some variables we should probably let people set from the
  * command line. */
@@ -42,10 +42,10 @@ return erList;
 }
 
 
-struct bed *loadBed(char *chrom, char *track, int bedN, struct binKeeper *bk)
+struct bed *loadBed(char *database, char *chrom, char *track, int bedN, struct binKeeper *bk)
 /* Load in info from a bed track to bk. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -64,10 +64,10 @@ slReverse(&list);
 return list;
 }
 
-struct genePred *loadGenePred(char *chrom, char *track, struct binKeeper *bk)
+struct genePred *loadGenePred(char *database, char *chrom, char *track, struct binKeeper *bk)
 /* Load in a gene prediction track to bk. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -86,11 +86,11 @@ slReverse(&list);
 return list;
 }
 
-struct refLink *loadRefLink(struct hash *hash)
+struct refLink *loadRefLink(char *database, struct hash *hash)
 /* Load refLink into hash keyed by mrna accession and
  * return list too. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct refLink *list = NULL, *el;
@@ -215,7 +215,7 @@ fprintf(f, "\n");
 freez(&scores);
 }
 
-void oneChromInput(char *chrom, int chromSize, 	
+void oneChromInput(char *database, char *chrom, int chromSize, 	
 	char *rangeTrack, char *expTrack, 
 	struct hash *refLinkHash, struct hash *erHash, FILE *f)
 /* Read in info for one chromosome. */
@@ -231,9 +231,9 @@ struct hash *riHash = hashNew(0); /* rangeInfo values. */
 struct binElement *rangeBeList = NULL, *rangeBe, *beList = NULL, *be;
 
 /* Load up data from database. */
-rangeList = loadBed(chrom, rangeTrack, 12, rangeBk);
-expList = loadBed(chrom, expTrack, 15, expBk);
-knownList = loadGenePred(chrom, "refGene", knownBk);
+rangeList = loadBed(database, chrom, rangeTrack, 12, rangeBk);
+expList = loadBed(database, chrom, expTrack, 15, expBk);
+knownList = loadGenePred(database, chrom, "refGene", knownBk);
 
 /* Build range info basics. */
 rangeBeList = binKeeperFindAll(rangeBk);
@@ -306,11 +306,8 @@ struct hash *erHash = hashNew(0);
 struct expRecord *erList = NULL, *er;
 
 
-/* Set main database. */
-hSetDb(database);
-
 /* Load info good for all chromosomes. */
-refLinkList = loadRefLink(refLinkHash);
+refLinkList = loadRefLink(database, refLinkHash);
 erList = loadExpRecord(expRecordTable, "hgFixed");
 for (er = erList; er != NULL; er = er->next)
     {
@@ -320,12 +317,12 @@ for (er = erList; er != NULL; er = er->next)
     }
 
 /* Do it chromosome by chromosome. */
-chromList = hAllChromNames();
+chromList = hAllChromNames(database);
 for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
     {
     chrom = chromEl->name;
     uglyf("%s\n", chrom);
-    oneChromInput(chrom, hChromSize(chrom), "rnaCluster", expTrack, 
+    oneChromInput(database, chrom, hChromSize(database, chrom), "rnaCluster", expTrack, 
     	refLinkHash, erHash, f);
     }
 

@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bedCons.c,v 1.4 2006/04/07 14:21:24 angie Exp $";
+static char const rcsid[] = "$Id: bedCons.c,v 1.5 2008/09/03 19:18:33 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -53,12 +53,12 @@ struct otherSeq
    FILE *f;	/* Handle on associated file. */
    };
 
-struct hash *makeOtherHash(char *table)
+struct hash *makeOtherHash(char *database, char *table)
 /* Make otherSeq valued hash of other sequences */
 {
 char query[256];
 struct hash *hash = newHash(7);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct otherSeq *os;
@@ -137,16 +137,16 @@ if (qSeq != NULL && tSeq != NULL)
 freeDnaSeq(&qSeq);
 }
 
-void oneChrom(char *chrom, char *refAliTrack, char *bedTrack, 
+void oneChrom(char *database, char *chrom, char *refAliTrack, char *bedTrack, 
 	struct hash *otherHash, struct stats *stats)
 /* Process one chromosome. */
 {
 struct bed *bedList = NULL, *bed;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
-int chromSize = hChromSize(chrom);
+int chromSize = hChromSize(database, chrom);
 struct binKeeper *bk = binKeeperNew(0, chromSize);
 struct psl *pslList = NULL;
 struct dnaSeq *chromSeq = NULL;
@@ -188,7 +188,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 uglyf("Loaded psls\n");
 
-chromSeq = hLoadChrom(chrom);
+chromSeq = hLoadChrom(database, chrom);
 /* Fetch entire chromosome into memory. */
 uglyf("Loaded human seq\n");
 
@@ -218,23 +218,23 @@ hFreeConn(&conn);
 }
 
 
-void bedCons(char *refAliTrack, char *bedTrack)
+void bedCons(char *database, char *refAliTrack, char *bedTrack)
 /* bedCons - Look at conservation of a BED track vs. a refence 
  * (nonredundant) alignment track. */
 {
 struct slName *chromList, *chrom;
 struct stats *stats = NULL;
-struct hash *otherHash = makeOtherHash("mouseChrom");
+struct hash *otherHash = makeOtherHash(database, "mouseChrom");
 
 if (optionExists("chrom"))
     chromList = newSlName(optionVal("chrom", NULL));
 else
-    chromList = hAllChromNames();
+    chromList = hAllChromNames(database);
 AllocVar(stats);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     uglyf("%s\n", chrom->name);
-    oneChrom(chrom->name, refAliTrack, bedTrack, otherHash, stats);
+    oneChrom(database, chrom->name, refAliTrack, bedTrack, otherHash, stats);
     }
 
 printStats(stats);
@@ -246,7 +246,6 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc != 4)
     usage();
-hSetDb(argv[1]);
-bedCons(argv[2], argv[3]);
+bedCons(argv[1], argv[2], argv[3]);
 return 0;
 }

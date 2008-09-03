@@ -13,7 +13,7 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadNetDist.c,v 1.3 2007/04/05 19:06:53 galt Exp $";
+static char const rcsid[] = "$Id: hgLoadNetDist.c,v 1.4 2008/09/03 19:20:44 markd Exp $";
 
 char *sqlRemap=NULL;
 
@@ -76,8 +76,7 @@ char **row;
 if (sqlRemap == NULL) return;
 verbose(2,"beginning processing sqlRemap query [%s] \n",sqlRemap);
 aliasHash = newHash(8);
-hSetDb(db);
-conn = hAllocConn();
+conn = hAllocConn(db);
 sr = sqlGetResult(conn, sqlRemap);
 while ((row = sqlNextRow(sr)) != NULL)
     {

@@ -14,7 +14,7 @@
 #include "netAlign.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: chainNetDbLoad.c,v 1.9 2005/04/13 06:25:51 markd Exp $";
+static char const rcsid[] = "$Id: chainNetDbLoad.c,v 1.10 2008/09/03 19:19:20 markd Exp $";
 
 struct cnFill *cnFillFromNetAlign(struct netAlign *na, struct hash *nameHash)
 /* Convert netAlign to cnFill. Name hash is a place to store
@@ -174,7 +174,7 @@ sr = hRangeQuery(conn, track, chrom, start, end, extraWhere, &rowOffset);
 net = chainNetLoadResult(sr, rowOffset);
 sqlFreeResult(&sr);
 if (net != NULL)
-    net->size = hdbChromSize(database, chrom);
+    net->size = hChromSize(database, chrom);
 sqlDisconnect(&conn);
 return net;
 }
@@ -192,7 +192,7 @@ conn = sqlConnect(database);
 sr = hChromQuery(conn, track, chrom, extraWhere, &rowOffset);
 net = chainNetLoadResult(sr, rowOffset);
 sqlFreeResult(&sr);
-net->size = hdbChromSize(database, chrom);
+net->size = hChromSize(database, chrom);
 sqlDisconnect(&conn);
 return net;
 }
@@ -231,7 +231,7 @@ char query[256];
 struct dyString *dy = newDyString(128);
 
 /* Load chain header. */
-if (!hFindSplitTableDb(database, chrom, track, table, &hasBin))
+if (!hFindSplitTable(database, chrom, track, table, &hasBin))
    errAbort("%s table is not in %s", track, database);
 conn = sqlConnect(database);
 snprintf(query, sizeof(query),

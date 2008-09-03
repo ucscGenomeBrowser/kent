@@ -29,7 +29,7 @@ struct customFactory
      * This routine is allowed to fill in some of track structure if
      * it returns TRUE. */
 
-    struct customTrack * (*loader)(struct customFactory *fac, 
+     struct customTrack * (*loader)(struct customFactory *fac, 
     	struct hash *chromHash,  /* Hash to store chrom names, filled in here */
     	struct customPp *cpp, 	 /* Source of input */
 	struct customTrack *track, /* Skeleton of track, filled in here */
@@ -64,7 +64,7 @@ void customFactorySetupDbTrack(struct customTrack *track);
 
 /*** Interface to custom factory system. ***/
 
-struct customFactory *customFactoryFind(struct customPp *cpp,
+struct customFactory *customFactoryFind(char *genomeDb, struct customPp *cpp,
 	char *type, struct customTrack *track);
 /* Figure out factory that can handle this track.  The track is
  * loaded from the track line if any, and type is the type element
@@ -73,18 +73,18 @@ struct customFactory *customFactoryFind(struct customPp *cpp,
 void customFactoryAdd(struct customFactory *fac);
 /* Add factory to global custom track factory list. */
 
-struct customTrack *customFactoryParse(char *text, boolean isFile,
+struct customTrack *customFactoryParse(char *genomeDb, char *text, boolean isFile,
 	struct slName **retBrowserLines);
 /* Parse text into a custom set of tracks.  Text parameter is a
- * file name if 'isFile' is set.  Die if the track is not for hGetDb(). */
+ * file name if 'isFile' is set.  Die if the track is not for genomeDb. */
 
-struct customTrack *customFactoryParseAnyDb(char *text, boolean isFile,
+struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean isFile,
 					    struct slName **retBrowserLines);
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  Track does not have to be for hGetDb(). */
 
-void customFactoryTestExistence(char *fileName, boolean *retGotLive,
-				boolean *retGotExpired);
+void customFactoryTestExistence(char *genomeDb, char *fileName,
+                                boolean *retGotLive, boolean *retGotExpired);
 /* Test existence of custom track fileName.  If it exists, parse it just 
  * enough to tell whether it refers to database tables and if so, whether 
  * they are alive or have expired.  If they are live, touch them to keep 
@@ -129,8 +129,8 @@ char *ctGenome(struct customTrack *ct);
 char *ctOrigTrackLine(struct customTrack *ct);
 /* return initial setting by user for track line */
 
-void customTrackUpdateFromConfig(struct customTrack *ct, char *config,
-                                struct slName **retBrowserLines);
+void customTrackUpdateFromConfig(struct customTrack *ct, char *genomeDb,
+                                 char *config, struct slName **retBrowserLines);
 /* update custom track from config containing track line and browser lines 
  * Return browser lines */
 

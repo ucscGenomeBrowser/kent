@@ -41,10 +41,10 @@ int liftOverBedPlus(char *fileName, struct hash *chainHash, double minMatch,
  * Return the number of records successfully converted */
 
 int liftOverPositions(char *fileName, struct hash *chainHash, 
-                        double minMatch,  double minBlocks, 
-                        int minSizeT, int minSizeQ,
-                        int minChainT, int minChainQ,
-                        bool fudgeThick, FILE *f, FILE *unmapped, 
+                      double minMatch,  double minBlocks, 
+                      int minSizeT, int minSizeQ,
+                      int minChainT, int minChainQ,
+                      bool fudgeThick, FILE *f, FILE *unmapped, 
 		      bool multiple, char *chainTable, int *errCt);
 /* Create bed file from positions (chrom:start-end) and lift.
  * Return the number of records successfully converted */

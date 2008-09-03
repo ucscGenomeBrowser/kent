@@ -16,7 +16,7 @@ struct ccdsInfo *getCcdsUrlForSrcDb(struct sqlConnection *conn, char *acc)
 /* Get a ccdsInfo object for a RefSeq, ensembl, or vega gene, if it
  * exists, otherwise return NULL */
 {
-if (hTableExists("ccdsInfo"))
+if (hTableExists(database, "ccdsInfo"))
     return ccdsInfoSelectByMrna(conn, acc);
 else
     return NULL;
@@ -299,7 +299,7 @@ geneSimilaritiesFreeList(&geneSims);
 void doCcdsGene(struct trackDb *tdb, char *ccdsId)
 /* Process click on a CCDS gene. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct ccdsInfo *rsCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoNcbi);
 struct ccdsInfo *vegaCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoVega);
 struct ccdsInfo *ensCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoEnsembl);
@@ -314,7 +314,7 @@ ccdsInfoMRnaSort(&rsCcds);
 ccdsInfoMRnaSort(&vegaCcds);
 ccdsInfoMRnaSort(&ensCcds);
 
-cartWebStart(cart, "CCDS Gene");
+cartWebStart(cart, database, "CCDS Gene");
 
 printf("<H2>Consensus CDS Gene %s</H2>\n", ccdsId);
 
@@ -328,7 +328,7 @@ if (geneSym != NULL)
 freez(&geneSym);
 
 /* description */
-desc = hGenBankGetDesc(rsCcds->mrnaAcc, TRUE);
+desc = hGenBankGetDesc(database, rsCcds->mrnaAcc, TRUE);
 if (desc != NULL)
     printf("<TR><TH>Description<TD>%s</TR>\n", desc);
 freez(&desc);
@@ -361,7 +361,7 @@ printf("<CAPTION>Associated Sequences</CAPTION>\n");
 printf("<THEAD>\n");
 printf("<TR><TH>&nbsp;<TH>mRNA<TH>Protein</TR>\n");
 printf("</THEAD><TBODY>\n");
-if (hTableExists("ccdsKgMap"))
+if (hTableExists(database, "ccdsKgMap"))
     ccdsKnownGenesRows(conn, ccdsId);
 ccdsNcbiRows(ccdsId, rsCcds);
 if (vegaCcds != NULL)

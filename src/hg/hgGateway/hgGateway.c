@@ -13,8 +13,9 @@
 #include "hCommon.h"
 #include "hui.h"
 #include "customTrack.h"
+#include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.108 2008/07/09 17:18:23 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.109 2008/09/03 19:18:49 markd Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -29,7 +30,7 @@ void hgGateway()
 char *defaultPosition = hDefaultPos(db);
 char *position = cloneString(cartUsualString(cart, "position", defaultPosition));
 boolean gotClade = hGotClade();
-char *survey = getCfgValue("HGDB_SURVEY", "survey");
+char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
 
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
@@ -113,7 +114,7 @@ puts("<select NAME=\"db\" onchange=\"document.orgForm.db.value = document.mainFo
 puts("</td>\n");
 
 puts("<td align=center>\n");
-cgiMakeTextVar("position", addCommasToPos(position), 30);
+cgiMakeTextVar("position", addCommasToPos(db, position), 30);
 printf("</td>\n");
 
 cartSetString(cart, "position", position);
@@ -222,9 +223,9 @@ if (! hDbIsActive(db))
     }
 scientificName = hScientificName(db);
 if (hIsGsidServer())
-    cartWebStart(theCart, "GSID %s Sequence View (UCSC Genome Browser) Gateway \n", organism);
+    cartWebStart(theCart, db, "GSID %s Sequence View (UCSC Genome Browser) Gateway \n", organism);
 else if (hIsMgcServer())
-    cartWebStart(theCart, "MGC/ORFeome %s Genome Browser Gateway \n", organism);
+    cartWebStart(theCart, db, "MGC/ORFeome %s Genome Browser Gateway \n", organism);
 else
     {
     char buffer[128];
@@ -240,7 +241,7 @@ else
 	else
 	    safef(buffer, sizeof(buffer), "(<I>%s</I>) ", scientificName);
 	}
-    cartWebStart(theCart, "%s %s%s Gateway\n", organism, buffer, browserName);
+    cartWebStart(theCart, db, "%s %s%s Gateway\n", organism, buffer, browserName);
     htmlDoEscape();
     }
 hgGateway();

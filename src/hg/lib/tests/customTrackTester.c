@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customTrackTester.c,v 1.3 2007/03/05 23:57:56 kate Exp $";
+static char const rcsid[] = "$Id: customTrackTester.c,v 1.4 2008/09/03 19:19:28 markd Exp $";
 
 void usage()
 /* explain usage and exit */
@@ -37,37 +37,37 @@ struct customTrack *ctList = NULL, *oldCts = NULL;
 
 readInGulp(inFile, &text, NULL);
 /* read new CT's from input */
-ctList = customFactoryParse(text, FALSE, NULL);
+ctList = customFactoryParse(db, text, FALSE, NULL);
 verbose(3, "parsed %d tracks from %s\n", slCount(ctList), inFile);
 if (trashFile)
     {
     /* read old CT's from trash file */
-    oldCts = customFactoryParse(trashFile, TRUE, NULL);
+    oldCts = customFactoryParse(db, trashFile, TRUE, NULL);
     /* merge old and new */
     ctList = customTrackAddToList(ctList, oldCts, NULL, TRUE);
     }
 /* save to new trash file */
 static struct tempName tn;
 makeTempName(&tn, "ctTest", ".bed");
-customTracksSaveFile(ctList, tn.forCgi);
+customTracksSaveFile(db, ctList, tn.forCgi);
 
 /* reload from new trash file */
 ctList = NULL;
-ctList = customFactoryParse(tn.forCgi, TRUE, NULL);
-customTracksSaveFile(ctList, "stdout");
+ctList = customFactoryParse(db, tn.forCgi, TRUE, NULL);
+customTracksSaveFile(db, ctList, "stdout");
 
 /* cleanup */
 unlink(tn.forCgi);
 }
 
-static void checkCustomTracks(char *outFile, char *expectedFile)
+static void checkCustomTracks(char *db, char *outFile, char *expectedFile)
 /* compare track lines of output file with expected.  Return error
  * settings are not a proper subset */
 {
 struct hash *expHash = hashNew(0);
 struct customTrack *ct = NULL, *expCt = NULL;
-struct customTrack *newCts = customFactoryParse(outFile, TRUE, NULL);
-struct customTrack *expCts = customFactoryParse(expectedFile, TRUE, NULL);
+struct customTrack *newCts = customFactoryParse(db, outFile, TRUE, NULL);
+struct customTrack *expCts = customFactoryParse(db, expectedFile, TRUE, NULL);
 verbose(3, "found %d tracks in output file %s, %d tracks in expected file %s\n",
                 slCount(newCts), outFile, slCount(expCts), expectedFile);
 for (ct = expCts; ct != NULL; ct = ct->next)
@@ -106,7 +106,6 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 char *db = optionVal("db", hDefaultDb());
-hSetDb(db);
 if (argc < 2)
     usage();
 char *task = argv[1];
@@ -126,7 +125,7 @@ else if (sameString(task, "check"))
         usage();
     char *outFile = argv[2];
     char *expFile = argv[3];
-    checkCustomTracks(outFile, expFile);
+    checkCustomTracks(db, outFile, expFile);
     }
 else
     usage();

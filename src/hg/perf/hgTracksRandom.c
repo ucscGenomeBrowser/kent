@@ -13,7 +13,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.12 2006/04/12 20:19:23 heather Exp $";
+static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.13 2008/09/03 19:20:53 markd Exp $";
 
 static char *database = NULL;
 static struct hash *chromHash = NULL;
@@ -143,7 +143,6 @@ srand( (unsigned) time(NULL) );
 
 database = needMem(16);
 strcpy(database, "hg17");
-hSetDb(database);
 
 chromHash = loadAllChromInfo();
 chromSize = getChromSize(chrom);

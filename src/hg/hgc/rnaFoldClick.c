@@ -15,7 +15,7 @@
 #include "rnaSecStr.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.6 2007/10/01 15:04:45 jsp Exp $";
+static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.7 2008/09/03 19:19:08 markd Exp $";
 
 /* Taken from hgc.c (should probably be in hgc.h)*/
 #define RED 0xFF0000
@@ -282,7 +282,6 @@ fprintf(f, " max");
 struct mafAli *mafFromRnaSecStrItem(char *mafTrack, struct rnaSecStr *item)
 {
 struct mafAli *maf;
-hSetDb(database);
 maf = hgMafFrag(database, mafTrack, item->chrom, item->chromStart, item->chromEnd, item->strand[0], NULL, NULL);
 return maf;
 }
@@ -322,7 +321,7 @@ void doRnaSecStr(struct trackDb *tdb, char *itemName)
 /* Handle click on rnaSecStr type elements. */
 {
 char *table = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 struct rnaSecStr *item;
 char extraWhere[256];

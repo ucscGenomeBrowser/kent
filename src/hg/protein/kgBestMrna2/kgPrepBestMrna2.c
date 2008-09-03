@@ -99,7 +99,6 @@ kgTempDb = argv[2];
 
 // make sure db connection goes to correct genome
 // hRnaSeqAndIdx() needs this.
-hSetDb(kgTempDb);
 
 sprintf(spDB, "sp%s", proteinDataDate);
 sprintf(proteinsDB, "proteins%s", proteinDataDate);
@@ -108,8 +107,8 @@ sprintf(gbTempDB, "%s", kgTempDb);
 IN  = fopen("protein.lis", "r"); 
 OUT = fopen("rawJobList", "w");
     
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn2= hAllocConn(kgTempDb);
+conn3= hAllocConn(kgTempDb);
    
 proteinCount = 0; 
 snprintf(dirName, (size_t) sizeof(dirName), "./out" );
@@ -127,11 +126,11 @@ while (fgets(line, 1000, IN) != NULL)
     printf(">>%s\n", proteinID);
 
     sprintf(cond_str, "acc='%s'", proteinID);
-    aaSeq = sqlGetField(conn3, spDB, "protein","val", cond_str);
+    aaSeq = sqlGetField(spDB, "protein","val", cond_str);
     
     if (aaSeq == NULL)
 	{
-    	aaSeq = sqlGetField(conn3, spDB, "varProtein","val", cond_str);
+    	aaSeq = sqlGetField(spDB, "varProtein","val", cond_str);
         }
 	
     if (aaSeq == NULL)
@@ -183,7 +182,7 @@ while (fgets(line, 1000, IN) != NULL)
 
 	printf("%s\t%s\n", proteinID, mrnaID);fflush(stdout);
 	sprintf(cond_str, "name='%s'", mrnaID);
-    	mrnaSeq = sqlGetField(conn3,gbTempDB,"mrnaSeq","seq", cond_str);
+    	mrnaSeq = sqlGetField(gbTempDB,"mrnaSeq","seq", cond_str);
 	fprintf(mrnaOut, ">%s\n%s\n", mrnaID, mrnaSeq);
 	row2 = sqlNextRow(sr2);
 	imrna++;

@@ -39,7 +39,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.16 2007/08/13 23:29:49 markd Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.17 2008/09/03 19:19:35 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -144,7 +144,7 @@ if (attr->load && attr->loadDesc)
 return descOrgCats;
 }
 
-static boolean checkSanity(struct gbSelect* select,
+static boolean checkSanity(char *db, struct gbSelect* select,
                            struct sqlConnection* conn)
 /* check sanity on a select partation */
 {
@@ -158,7 +158,7 @@ chkGbRelease(select, metaDataTbls);
 chkMetaDataXRef(metaDataTbls);
 
 /* check the alignment tables */
-int cnt = chkAlignTables(select, conn, metaDataTbls, &gOptions);
+int cnt = chkAlignTables(db, select, conn, metaDataTbls, &gOptions);
 metaDataTblsFree(&metaDataTbls);
 return (cnt > 0) ? TRUE : FALSE;
 }
@@ -167,7 +167,7 @@ static boolean checkRelease(struct gbRelease* release, char* database,
                             unsigned type, unsigned orgCats, char* accPrefix)
 /* Check a release/type */
 {
-struct sqlConnection* conn = hAllocConn();
+struct sqlConnection* conn = hAllocConn(database);
 struct gbSelect select;
 
 ZeroVar(&select);
@@ -176,7 +176,7 @@ select.type = type;
 
 select.orgCats = orgCats;
 select.accPrefix = accPrefix;
-boolean checked = checkSanity(&select, conn);
+boolean checked = checkSanity(database, &select, conn);
 hFreeConn(&conn);
 return checked;
 }
@@ -249,7 +249,6 @@ static void gbSanity(char* database)
 struct gbIndex* index = gbIndexNew(database, NULL);
 struct sqlConnection *conn;
 struct gbRelease* release;
-hgSetDb(database);
 gbErrorSetDb(database);
 int checkedSetCnt = 0;
 if (gOptions.relRestrict == NULL)
@@ -286,7 +285,7 @@ verbose(1, "%d alignment sets checked\n", checkedSetCnt);
 gbIndexFree(&index);
 
 /* check of uniqueStr ids */
-conn = hAllocConn();
+conn = hAllocConn(database);
 checkGbCdnaInfoStrKeys(conn);
 hFreeConn(&conn);
 }

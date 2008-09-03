@@ -15,7 +15,7 @@ of tag counts for each experiment.
 #include "sage.h"
 #include "sageCounts.h"
 
-static char const rcsid[] = "$Id: createSageSummary.c,v 1.2 2003/05/06 07:22:35 kate Exp $";
+static char const rcsid[] = "$Id: createSageSummary.c,v 1.3 2008/09/03 19:21:18 markd Exp $";
 
 struct sage *createNewSage(int numExp) 
 {
@@ -34,7 +34,6 @@ struct sage *loadSageTags(char *fileName, int numExps)
 {
     struct sage *sgList=NULL, *sg=NULL;
     char *words[3];
-    int wordCount=0;
     struct lineFile *lf = lineFileOpen(fileName, TRUE);
     while(lineFileNextRow(lf, words,3)) 
 	{
@@ -55,7 +54,6 @@ struct sage *loadSageTags(char *fileName, int numExps)
 		}
 	    else 
 		{
-		    sg->numTags;
 		    sg->tags = needMoreMem(sg->tags, (sg->numTags*sizeof(char*)), ((sg->numTags+1)*sizeof(char*)));
 		    sg->tags[sg->numTags] = needMem(sizeof(char) * 11);
 		    strcpy(sg->tags[sg->numTags],words[2]);
@@ -109,7 +107,7 @@ return v1->val - v2->val;
 */
 float scMedian(struct sageCounts *scList, int index)
 {
-struct sageCounts *tmpList = NULL, *sc = NULL;
+struct sageCounts *sc = NULL;
 struct sortable *s=NULL, *sList = NULL, *next = NULL, *s2 = NULL;
 boolean odd = slCount(scList) %2;
 int half = slCount(scList)/2;
@@ -179,7 +177,7 @@ return (float) sqrt(sum/(count-1));
 void printListVals(struct sageCounts *scList, int index)
 {
 struct sageCounts *sc = NULL;
-struct sortable *s=NULL, *sList = NULL, *next = NULL, *s2 = NULL;
+struct sortable *s=NULL, *sList = NULL, *next = NULL;
 for(sc = scList; sc != NULL; sc = sc->next)
     {
     AllocVar(s);
@@ -225,11 +223,12 @@ for(sg=sgList; sg != NULL; sg=sg->next)
 	    }
 	for(i=0; i<sg->numExps; i++) 
 	    {
-	    float ave = -1;
 	    sg->exps[i] =i;
 	    if(slCount(scList) > 3) 
 		{ 
+#ifdef BOGUS
 		int q = 2+2;
+#endif
 		}
 	    sg->meds[i] = scMedian(scList,i);
 	    sg->aves[i] = scAverage(scList, i);

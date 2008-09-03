@@ -317,11 +317,15 @@ void cartHtmlEnd();
 /* Write out HTML footer and get rid or error handler. Needed with cartEmptyShell,
  * but not cartHtmlShell. */
 
-void cartWebStart(struct cart *theCart, char *format, ...);
+void cartWebStart(struct cart *theCart, char *db, char *format, ...)
 /* Print out pretty wrapper around things when working
  * from cart. Balance this with cartWebEnd. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 3, 4)))
+#endif
+;
 
-void cartVaWebStart(struct cart *cart, char *format, va_list args);
+void cartVaWebStart(struct cart *cart, char *db, char *format, va_list args);
 /* Print out pretty wrapper around things when working
  * from cart. */
 
@@ -427,11 +431,11 @@ void cartLoadSettings(struct lineFile *lf, struct cart *cart,
  * If non-NULL, actionVar is a cartRemove wildcard string specifying the
  * CGI action variable that sent us here. */
 
-char *cartGetOrderFromFile(struct cart *cart, char *speciesUseFile);
+char *cartGetOrderFromFile(char *genomeDb, struct cart *cart, char *speciesUseFile);
 /* Look in a cart variable that holds the filename that has a list of 
  * species to show in a maf file */
 
-char *cartGetOrderFromFileAndMsaTable(struct cart *cart, char *speciesUseFile, char *msaTable);
+char *cartGetOrderFromFileAndMsaTable(char *genomeDb, struct cart *cart, char *speciesUseFile, char *msaTable);
 /* Look in a cart variable that holds the filename that has a list of 
  * species to show in a maf file */
 #endif /* CART_H */

@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.135 2008/08/29 22:25:20 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.136 2008/09/03 19:19:05 markd Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -216,16 +216,16 @@ if (speciesUseFile)
 	msaTable = trackDbSetting(track->tdb, "msaTable");
     	if (msaTable != NULL)
 	    {
-	    speciesOrder = cartGetOrderFromFileAndMsaTable(cart, speciesUseFile, msaTable);
+	    speciesOrder = cartGetOrderFromFileAndMsaTable(database, cart, speciesUseFile, msaTable);
     	    }
 	else
 	    {
-    	    speciesOrder = cartGetOrderFromFile(cart, speciesUseFile);
+    	    speciesOrder = cartGetOrderFromFile(database, cart, speciesUseFile);
 	    }
 	}
     else
 	{
-    	speciesOrder = cartGetOrderFromFile(cart, speciesUseFile);
+    	speciesOrder = cartGetOrderFromFile(database, cart, speciesUseFile);
     	}
     speciesOff = NULL;
     }
@@ -369,17 +369,17 @@ if (mp->ct)
     {
     char *fileName = getCustomMafFile(track);
 
-    conn = sqlCtConn(TRUE);
-    conn2 = sqlCtConn(TRUE);
+    conn = hAllocConn(CUSTOM_TRASH);
+    conn2 = hAllocConn(CUSTOM_TRASH);
     mp->list = wigMafLoadInRegion(conn, conn2, mp->ct->dbTableName,
 				chromName, winStart - 2 , winEnd + 2, fileName);
-    sqlDisconnect(&conn);
-    sqlDisconnect(&conn2);
+    hFreeConn(&conn);
+    hFreeConn(&conn2);
     }
 else
     {
-    conn = hAllocConn();
-    conn2 = hAllocConn();
+    conn = hAllocConn(database);
+    conn2 = hAllocConn(database);
     mp->list = wigMafLoadInRegion(conn, conn2, track->mapName, 
 				chromName, winStart - 2 , winEnd + 2, NULL);
     hFreeConn(&conn);
@@ -560,17 +560,17 @@ if (winBaseCount < MAF_SUMMARY_VIEW)
     if (mp->ct)
 	{
 	char *fileName = getCustomMafFile(track);
-	conn = sqlCtConn(TRUE);
-	conn2 = sqlCtConn(TRUE);
+	conn = hAllocConn(CUSTOM_TRASH);
+	conn2 = hAllocConn(CUSTOM_TRASH);
 	mp->list = wigMafLoadInRegion(conn, conn2, mp->ct->dbTableName,
 					chromName, winStart, winEnd, fileName);
-	sqlDisconnect(&conn);
-	sqlDisconnect(&conn2);
+	hFreeConn(&conn);
+	hFreeConn(&conn2);
 	}
     else
 	{
-	conn = hAllocConn();
-	conn2 = hAllocConn();
+	conn = hAllocConn(database);
+	conn2 = hAllocConn(database);
 	mp->list = wigMafLoadInRegion(conn, conn2, track->mapName, 
 					chromName, winStart, winEnd, NULL);
 	hFreeConn(&conn);
@@ -1009,7 +1009,7 @@ static void drawScoreOverview(char *tableName,
 	Color color, Color altColor,
 	enum trackVisibility vis)
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
 drawScoreOverviewC(conn, tableName, height, seqStart, seqEnd, 
 	hvg, xOff, yOff, width, font, color, altColor, vis);
@@ -1024,12 +1024,12 @@ static void drawScoreOverviewCT(char *tableName,
 	Color color, Color altColor,
 	enum trackVisibility vis)
 {
-struct sqlConnection *conn = sqlCtConn(TRUE);
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 
 drawScoreOverviewC(conn, tableName, height, seqStart, seqEnd, 
 	hvg, xOff, yOff, width, font, color, altColor, vis);
 
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 }
 
 
@@ -1074,7 +1074,7 @@ else
 
 /* Create SQL where clause that will load up just the
  * summaries for the species that we are including. */ 
-conn = hAllocConn();
+conn = hAllocConn(database);
 dyStringAppend(where, "src in (");
 for (mi = miList; mi != NULL; mi = mi->next)
     {
@@ -1096,7 +1096,7 @@ sr = hOrderedRangeQuery(conn, summary, chromName, seqStart, seqEnd,
  * The hash is keyed by species. */
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (hHasField(summary, "leftStatus"))
+    if (hHasField(database, summary, "leftStatus"))
         ms = mafSummaryLoad(row + rowOffset);
     else
         /* previous table schema didn't have status fields */
@@ -1209,9 +1209,9 @@ for (mi = miList; mi != NULL; mi = mi->next)
         /* get wiggle table, of pairwise 
            for example, percent identity */
         tableName = getWigTablename(mi->name, suffix);
-        if (!hTableExists(tableName))
+        if (!hTableExists(database, tableName))
             tableName = getWigTablename(mi->db, suffix);
-        if (hTableExists(tableName))
+        if (hTableExists(database, tableName))
             {
             /* reuse the wigTrack for pairwise tables */
             wigTrack->mapName = tableName;
@@ -1230,9 +1230,9 @@ for (mi = miList; mi != NULL; mi = mi->next)
                from mafs */
             hvGfxSetClip(hvg, xOff, yOff, width, mi->height);
             tableName = getMafTablename(mi->name, suffix);
-            if (!hTableExists(tableName))
+            if (!hTableExists(database, tableName))
                 tableName = getMafTablename(mi->db, suffix);
-            if (hTableExists(tableName))
+            if (hTableExists(database, tableName))
                 drawScoreOverview(tableName, mi->height, seqStart, seqEnd, hvg, 
                                 xOff, yOff, width, font, track->ixAltColor, 
                                 track->ixAltColor, tvFull);
@@ -1248,9 +1248,9 @@ for (mi = miList; mi != NULL; mi = mi->next)
 	/* display pairwise alignments in this region in dense format */
 	hvGfxSetClip(hvg, xOff, yOff, width, mi->height);
 	tableName = getMafTablename(mi->name, suffix);
-	if (!hTableExists(tableName))
+	if (!hTableExists(database, tableName))
 	    tableName = getMafTablename(mi->db, suffix);
-	if (hTableExists(tableName))
+	if (hTableExists(database, tableName))
 	    drawScoreOverview(tableName, mi->height, seqStart, seqEnd, hvg, 
 			    xOff, yOff, width, font, color, color, tvDense);
         hvGfxUnclip(hvg);
@@ -1761,22 +1761,22 @@ char *tableName = NULL;
 
 if (mp->ct != NULL)
     {
-    conn2 = sqlCtConn(TRUE);
-    conn3 = sqlCtConn(TRUE);
+    conn2 = hAllocConn(CUSTOM_TRASH);
+    conn3 = hAllocConn(CUSTOM_TRASH);
     tableName = mp->ct->dbTableName;
     mafFile = getCustomMafFile(track);
     }
 else
     {
-    conn2 = hAllocConn();
-    conn3 = hAllocConn();
+    conn2 = hAllocConn(database);
+    conn3 = hAllocConn(database);
     tableName = track->mapName;
     }
 
 if (hIsGsidServer())
     {
     /* decide the value of mafOrigOffset to be used to display xxAaMaf tracks. */
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     safef(query, sizeof(query), "select chromStart from %s", track->mapName);
     mafOrig = atoi(sqlNeedQuickString(conn, query));
     mafOrigOffset = (mafOrig % 3) - 1;
@@ -1833,7 +1833,7 @@ if (framesTable)
 boolean newTableType = FALSE;
 
 if (framesTable != NULL)
-    newTableType = hHasField(framesTable, "isExonStart");
+    newTableType = hHasField(database, framesTable, "isExonStart");
 
 /* initialize "no alignment" string to o's */
 for (i = 0; i < sizeof noAlignment - 1; i++)
@@ -1868,7 +1868,7 @@ selfLine = lines[1];
 AllocArray(insertCounts, alignLineLength);
 
 /* Load up self-line with DNA */
-seq = hChromSeqMixed(chromName, seqStart , seqEnd);
+seq = hChromSeqMixed(database, chromName, seqStart , seqEnd);
 memcpy(selfLine, seq->dna, winBaseCount + 4);
 //toUpperN(selfLine, winBaseCount);
 freeDnaSeq(&seq);
@@ -2177,7 +2177,7 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
 	{
 	int rowOffset;
 	char **row;
-	struct sqlConnection *conn = hAllocConn();
+	struct sqlConnection *conn = hAllocConn(database);
 	struct sqlResult *sr;
 	char extra[512];
 	boolean found = FALSE;
@@ -2315,16 +2315,8 @@ for (i=0; i<lineCount-1; ++i)
     freeMem(lines[i]);
 freez(&lines);
 */
-if (mp->ct != NULL)
-    {
-    sqlDisconnect(&conn2);
-    sqlDisconnect(&conn3);
-    }
-else
-    {
-    hFreeConn(&conn2);
-    hFreeConn(&conn3);
-    }
+hFreeConn(&conn2);
+hFreeConn(&conn3);
 hashFree(&miHash);
 return y;
 }
@@ -2451,7 +2443,7 @@ track->mapsSelf = TRUE;
 //track->canPack = TRUE;
 
 /* deal with conservation wiggle(s) */
-consWigList = wigMafWiggles(tdb);
+consWigList = wigMafWiggles(database, tdb);
 if (consWigList == NULL)
     return;
 

@@ -13,7 +13,7 @@
 #include "snp.h"
 #include "snpExceptions.h"
 
-static char const rcsid[] = "$Id: snpException.c,v 1.4 2005/01/20 00:56:37 daryl Exp $";
+static char const rcsid[] = "$Id: snpException.c,v 1.5 2008/09/03 19:21:20 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,10 +25,10 @@ errAbort("snpException - Get exceptions to a snp invariant rule.\n"
 	 "\tand using exceptionId=0 will process all invariant rules. \n");
 }
 
-struct slName *getChromList()
+struct slName *getChromList(char *db)
 /* Get list of all chromosomes. */
 {
-struct sqlConnection *conn  = hAllocConn();
+struct sqlConnection *conn  = hAllocConn(db);
 struct sqlResult     *sr    = NULL;
 char                **row   = NULL;
 struct slName        *list  = NULL;
@@ -47,10 +47,10 @@ hFreeConn(&conn);
 return list;
 }
 
-struct slName *getGroupList(char *group)
+struct slName *getGroupList(char *db, char *group)
 /* Get list of all rsIds from where clause. */
 {
-struct sqlConnection *conn  = hAllocConn();
+struct sqlConnection *conn  = hAllocConn(db);
 struct sqlResult     *sr    = NULL;
 char                **row   = NULL;
 struct slName        *list  = NULL;
@@ -70,10 +70,10 @@ hFreeConn(&conn);
 return list;
 }
 
-struct snpExceptions *getExceptionList(int inputExceptionId)
+struct snpExceptions *getExceptionList(char *db, int inputExceptionId)
 /* Get list of all exceptions to be tested. */
 {
-struct sqlConnection *conn       = hAllocConn();
+struct sqlConnection *conn       = hAllocConn(db);
 struct sqlResult     *sr         = NULL;
 char                **row        = NULL;
 struct snpExceptions *list       = NULL;
@@ -95,11 +95,11 @@ hFreeConn(&conn);
 return list;
 }
 
-void getInvariants(struct snpExceptions *exceptionList, 
+void getInvariants(char *db, struct snpExceptions *exceptionList, 
 		   struct slName *chromList, char *fileBase)
 /* write list of invariants to output file */
 {
-struct sqlConnection *conn     = hAllocConn();
+struct sqlConnection *conn     = hAllocConn(db);
 struct sqlResult     *sr       = NULL;
 struct snpExceptions *el       = NULL;
 struct slName        *chrom    = NULL;
@@ -147,7 +147,7 @@ for (el=exceptionList; el!=NULL; el=el->next)
 	safef(thisFile, sizeof(thisFile), "%s.%s.bed", fileBase, idString);
 	outFile = mustOpen(thisFile, "w");
 	fprintf(outFile, "# exceptionId:\t%d\n# query:\t%s;\n", el->exceptionId, el->query);
-	nameList = getGroupList(el->query);
+	nameList = getGroupList(db, el->query);
 	for (name=nameList; name!=NULL; name=name->next)
 	    {
 	    safef(query, sizeof(query),
@@ -192,9 +192,9 @@ if (argc != 4)
     usage();
     return 1;
     }
-hSetDb(argv[1]);
-exceptionList=getExceptionList(atoi(argv[2]));
-chromList=getChromList();
-getInvariants(exceptionList, chromList, argv[3]);
+char *db= argv[1];;
+exceptionList=getExceptionList(db, atoi(argv[2]));
+chromList=getChromList(db);
+getInvariants(db, exceptionList, chromList, argv[3]);
 return 0;
 }

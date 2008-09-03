@@ -46,8 +46,8 @@ genomeRelease   = argv[2];
    
 o2 = fopen("jj.dat", "w");
 o3 = fopen("j.dat", "w");
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn2= hAllocConn(hDefaultDb());
+conn3= hAllocConn(hDefaultDb());
 	
 sprintf(query2,"select * from %sTemp.refGene;", genomeRelease);
 sr2 = sqlMustGetResult(conn2, query2);

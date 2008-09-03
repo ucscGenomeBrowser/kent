@@ -17,7 +17,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.40 2008/07/29 20:28:58 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.41 2008/09/03 19:18:57 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -50,7 +50,7 @@ void welcomeUser(char *wikiUserName)
 {
 char *wikiHost = wikiLinkHost();
 
-cartWebStart(cart, "Welcome %s", wikiUserName);
+cartWebStart(cart, NULL, "Welcome %s", wikiUserName);
 jsInit();
 printf("If you are not %s (on the wiki at "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>%s</A>) "
@@ -66,7 +66,7 @@ void offerLogin()
 {
 char *wikiHost = wikiLinkHost();
 
-cartWebStart(cart, "Sign in to UCSC Genome Bioinformatics");
+cartWebStart(cart, NULL, "Sign in to UCSC Genome Bioinformatics");
 jsInit();
 printf("Signing in enables you to save current settings into a "
        "named session, and then restore settings from the session later.\n"
@@ -327,7 +327,7 @@ if (isNotEmpty(userName))
 	   "</TD></TR>\n"
 	   "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>name:</TD><TD>\n");
     cgiMakeOnKeypressTextVar(hgsNewSessionName,
-			     cartUsualString(cart, "db", hGetDb()),
+			     cartUsualString(cart, "db", NULL),
 			     20, jsPressOnEnter(hgsDoNewSession));
     printf("&nbsp;&nbsp;&nbsp;");
     cgiMakeCheckBox(hgsNewSessionShare,
@@ -374,7 +374,7 @@ if (webStarted)
     webNewSection("Session Management");
 else
     {
-    cartWebStart(cart, "Session Management");
+    cartWebStart(cart, NULL, "Session Management");
     jsInit();
     }
 
@@ -465,7 +465,7 @@ else
     {
     if (isNotEmpty(message))
 	{
-	cartWebStart(cart, "Updated Session");
+	cartWebStart(cart, NULL, "Updated Session");
 	jsInit();
 	puts(message);
 	showSessionControls(NULL, FALSE, TRUE);
@@ -622,7 +622,7 @@ if (helList != NULL)
 	    }
 	else
 	    {
-	    customFactoryTestExistence(hel->val,
+	    customFactoryTestExistence(NULL, hel->val,
 				       &thisGotLiveCT, &thisGotExpiredCT);
 	    }
 	if (thisGotLiveCT)

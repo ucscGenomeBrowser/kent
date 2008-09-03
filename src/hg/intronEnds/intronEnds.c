@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: intronEnds.c,v 1.4 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: intronEnds.c,v 1.5 2008/09/03 19:19:18 markd Exp $";
 
 char *chromName;
 
@@ -46,8 +46,7 @@ struct dnaSeq *seq;
 int rowOffset;
 char strand;
 
-hSetDb(database);
-rowOffset = hOffsetPastBin(NULL, table);
+rowOffset = hOffsetPastBin(database, NULL, table);
 conn = hAllocConn(database);
 dyStringPrintf(query, "select * from %s", table);
 if (chromName != NULL)
@@ -63,7 +62,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     gp = genePredLoad(row+rowOffset);
     strand = gp->strand[0];
     txStart = gp->txStart;
-    seq = hDnaFromSeq(gp->chrom, txStart, gp->txEnd, dnaLower);
+    seq = hDnaFromSeq(database, gp->chrom, txStart, gp->txEnd, dnaLower);
     for (exonIx=1; exonIx < gp->exonCount; ++exonIx)
         {
 	++total;

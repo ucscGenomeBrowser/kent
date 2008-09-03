@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: hgSelect.c,v 1.1 2006/07/29 05:51:58 markd Exp $";
+static char const rcsid[] = "$Id: hgSelect.c,v 1.2 2008/09/03 19:18:57 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -124,11 +124,11 @@ sqlFreeResult(&sr);
 dyStringFree(&query);
 }
 
-static void selectFromSplitTable(char *table, struct hTableInfo *tblInfo,
+static void selectFromSplitTable(char *db, char *table, struct hTableInfo *tblInfo,
                                  struct sqlConnection *conn, FILE *outFh)
 /* select from a split table */
 {
-struct slName *chroms = hAllChromNames();
+struct slName *chroms = hAllChromNames(db);
 struct slName *chrom;
 char chromTable[256];
 for (chrom = chroms; chrom != NULL ; chrom = chrom->next)
@@ -143,17 +143,16 @@ void hgSelect(char *db, char *table, char *outFile)
 /* select from genome tables, handling split tables and bin column */
 {
 struct hTableInfo *tblInfo;
-hSetDb(db);
 
 /* get table info upfront so don't have to wait long find for error */
-tblInfo = hFindTableInfo(NULL, table);
+tblInfo = hFindTableInfo(db, NULL, table);
 if (tblInfo == NULL)
     errAbort("Error: no table: %s or *_%s", table, table);
 
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 FILE* outFh = mustOpen(outFile, "w");
 if (tblInfo->isSplit)
-    selectFromSplitTable(table, tblInfo, conn, outFh);
+    selectFromSplitTable(db, table, tblInfo, conn, outFh);
 else
     selectFromTable(table, tblInfo, conn, outFh);
 

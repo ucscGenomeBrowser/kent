@@ -339,11 +339,11 @@ struct wiggleDataStream
 			/*	setting data compare limits 	*/
     int (*bedOut)(struct wiggleDataStream *wds, char *fileName, boolean sort);
 			/*	output the bed list results 	*/
-    void (*statsOut)(struct wiggleDataStream *wds,char *fileName,
+    void (*statsOut)(struct wiggleDataStream *wds, char *db, char *fileName,
 	boolean sort, boolean htmlOut, boolean withHeader,
 	    boolean leaveTableOpen);
 			/*	output the stats list results 	*/
-    int (*asciiOut)(struct wiggleDataStream *wds,char *fileName, boolean sort,
+    int (*asciiOut)(struct wiggleDataStream *wds,char *db, char *fileName, boolean sort,
 	boolean rawDataOut);
 			/*	output the ascii list results 	*/
     void (*sortResults)(struct wiggleDataStream *wds);

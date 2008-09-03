@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wiggleClick.c,v 1.27 2007/06/12 21:28:47 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleClick.c,v 1.28 2008/09/03 19:19:09 markd Exp $";
 
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start)
@@ -56,7 +56,7 @@ if (startsWith("ct_", tdb->tableName))
     }
 else
     {
-    hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+    hFindSplitTable(database, seqName, tdb->tableName, table, &hasBin);
     /*span = spanInUse(conn, table, chrom, winStart, winEnd, cart);*/
     span = minSpan(conn, table, chrom, winStart, winEnd, cart, tdb);
     }
@@ -97,7 +97,7 @@ statsPreamble(wds, chrom, winStart, winEnd, span, valuesMatched, NULL);
 /*	output statistics table
  *		(+sort, +html output, +with header, +close table)
  */
-wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
+wds->statsOut(wds, database, "stdout", TRUE, TRUE, TRUE, FALSE);
 
 
 if ((winEnd - winStart) < 1000001)

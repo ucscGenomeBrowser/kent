@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.127 2008/08/19 22:22:18 braney Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.128 2008/09/03 19:18:49 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -514,7 +514,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
             {
             char *chrom = cloneString(pos);
             chopSuffixAt(chrom, ':');
-            if (hgOfficialChromName(chrom))
+            if (hgOfficialChromName(database, chrom))
                 printf("<TD><A HREF='%s?%s&position=%s&hgTracksConfigPage=notSet' TITLE=%s>%s:</A></TD>", 
                     hgTracksName(), cartSidUrlString(cart),pos, pos, chrom);
             else
@@ -770,8 +770,8 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	        err = "Expecting 3 words in browser position line";
                 break;
                 }
-	    if (!hgParseChromRange(words[2], &chrom, &start, &end) ||
-                start < 0 || end > hChromSize(chrom)) 
+	    if (!hgParseChromRange(database, words[2], &chrom, &start, &end) ||
+                start < 0 || end > hChromSize(database, chrom)) 
                 {
 	        err ="Invalid browser position (use chrN:123-456 format)";
                 break;
@@ -788,7 +788,7 @@ void doAddCustom(char *err)
 /* display form for adding custom tracks.
  * Include error message, if any */
 {
-cartWebStart(cart, "Add Custom Tracks");
+cartWebStart(cart, database, "Add Custom Tracks");
 addCustomForm(NULL, err);
 helpCustom();
 cartWebEnd(cart);
@@ -799,7 +799,7 @@ void doUpdateCustom(struct customTrack *ct, char *err)
  * Include error message, if any */
 {
 char *longLabel = htmlEncode(ct->tdb->longLabel);
-cartWebStart(cart, "Update Custom Track: %s [%s]", 
+cartWebStart(cart, database, "Update Custom Track: %s [%s]", 
         longLabel, database);
 freeMem(longLabel);
 cartSetString(cart, hgCtDocText, ct->tdb->html);
@@ -812,7 +812,7 @@ void doManageCustom(char *warn)
 /* display form for deleting & updating custom tracks.
  * Include warning message, if any */
 {
-cartWebStart(cart, "Manage Custom Tracks");
+cartWebStart(cart, database, "Manage Custom Tracks");
 manageCustomForm(warn);
 webNewSection("Managing Custom Tracks");
 webIncludeHelpFile("customTrackManage", FALSE);
@@ -880,7 +880,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	{
 	struct customTrack *nextCt = NULL, *urlCt = NULL;
 	struct customTrack *urlCts = 
-	    customFactoryParse(ctDataUrl(ct), FALSE, NULL);
+	    customFactoryParse(database, ctDataUrl(ct), FALSE, NULL);
 	for (urlCt = urlCts; urlCt != NULL; urlCt = nextCt)
 	    {
 	    nextCt = urlCt->next;
@@ -892,7 +892,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 ctList = customTrackAddToList(ctList, refreshCts, &replacedCts, FALSE);
 if (warn)
     *warn = replacedTracksMsg(replacedCts);
-customTrackHandleLift(ctList);
+customTrackHandleLift(database, ctList);
 }
 
 void addWarning(struct dyString *ds, char *msg)
@@ -999,7 +999,6 @@ if (sameString(initialDb, "0"))
         cartSetString(cart, "db", database);
         }
     }
-hSetDb(database);
 
 if (cartVarExists(cart, hgCtDoAdd))
     doAddCustom(NULL);
@@ -1011,7 +1010,7 @@ else if (cartVarExists(cart, hgCtTable))
     selectedTable = cloneString(cartString(cart, hgCtTable));
     if (isNotEmpty(selectedTable))
         {
-        ctList = customTracksParseCart(cart, NULL, NULL);
+        ctList = customTracksParseCart(database, cart, NULL, NULL);
         ct = ctFromList(ctList, selectedTable);
         }
     if (ct)
@@ -1067,7 +1066,7 @@ else
             cartRemove(cart, hgCtDataFileName);
             }
         }
-    ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
+    ctList = customTracksParseCartDetailed(database, cart, &browserLines, &ctFileName,
 					    &replacedCts, NULL, &err);
 
     /* exclude special setting used by table browser to indicate
@@ -1096,7 +1095,7 @@ else
                 struct errCatch *catch = errCatchNew();
                 if (errCatchStart(catch))
                     {
-                    customTrackUpdateFromConfig(ct, trackConfig, &browserLines);
+                    customTrackUpdateFromConfig(ct, database, trackConfig, &browserLines);
                     ctUpdated = TRUE;
                     }
                 errCatchEnd(catch);
@@ -1136,7 +1135,7 @@ else
         ctUpdated = TRUE;
 	}
     if (ctUpdated || ctConfigUpdate(ctFileName))
-        customTracksSaveCart(cart, ctList);
+        customTracksSaveCart(database, cart, ctList);
     warn = dyStringCannibalize(&dsWarn);
     if (!initialDb || ctList || cartVarExists(cart, hgCtDoDelete))
         doManageCustom(warn);

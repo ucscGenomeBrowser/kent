@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.94 2008/07/09 22:56:36 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.95 2008/09/03 19:19:19 markd Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -237,15 +237,11 @@ dyStringFree(&dy);
 #ifndef GBROWSE
 static void cartCopyCustomTracks(struct cart *cart, struct hash *oldVars)
 /* If cart contains any live custom tracks, save off a new copy of them, 
- * to prevent clashes by multiple loaders of the same session. 
- * Call hSetDb to avoid the possibility of it getting set incorrectly 
- * as a side-effect during customFactory parsing. */
+ * to prevent clashes by multiple loaders of the same session.  */
 {
 struct hashEl *el, *elList = hashElListHash(cart->hash);
 char *db=NULL, *ignored;
 getDbAndGenome(cart, &db, &ignored, oldVars);
-if (db)
-    hSetDb(db);
 
 for (el = elList; el != NULL; el = el->next)
     {
@@ -255,7 +251,7 @@ for (el = elList; el != NULL; el = el->next)
 	struct customTrack *ctList = NULL;
 	char *ctFileName = (char *)(el->val);
 	if (fileExists(ctFileName))
-	    ctList = customFactoryParseAnyDb(ctFileName, TRUE, &browserLines);
+	    ctList = customFactoryParseAnyDb(db, ctFileName, TRUE, &browserLines);
 	/* Save off only if the custom tracks are live -- if none are live,
 	 * leave cart variables in place so hgSession can detect and inform 
 	 * the user. */
@@ -274,7 +270,7 @@ for (el = elList; el != NULL; el = el->next)
 	    trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
 	    ctFileName = tn.forCgi;
 	    cartSetString(cart, ctFileVar, ctFileName);
-	    customTracksSaveFile(ctList, ctFileName);
+	    customTracksSaveFile(db, ctList, ctFileName);
 	    }
 	}
     }
@@ -565,7 +561,7 @@ if (exclude != NULL)
 	cartExclude(cart, ex);
     }
 
-sqlDisconnect(&conn);
+cartDefaultDisconnector(&conn);
 return cart;
 }
 
@@ -1214,22 +1210,22 @@ pushWarnHandler(htmlVaWarn);
 htmStart(stdout, title);
 }
 
-void cartVaWebStart(struct cart *cart, char *format, va_list args)
+void cartVaWebStart(struct cart *cart, char *db, char *format, va_list args)
 /* Print out pretty wrapper around things when working
  * from cart. */
 {
 pushWarnHandler(htmlVaWarn);
-webStartWrapper(cart, format, args, FALSE, FALSE);
+webStartWrapper(cart, db, format, args, FALSE, FALSE);
 inWeb = TRUE;
 }
 
-void cartWebStart(struct cart *cart, char *format, ...)
+void cartWebStart(struct cart *cart, char *db, char *format, ...)
 /* Print out pretty wrapper around things when working
  * from cart. */
 {
 va_list args;
 va_start(args, format);
-cartVaWebStart(cart, format, args);
+cartVaWebStart(cart, db, format, args);
 va_end(args);
 }
 
@@ -1336,7 +1332,7 @@ cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org, oldVars);
 clade = hClade(org);
 pos = cartOptionalString(cart, positionCgiName);
-pos = addCommasToPos(stripCommas(pos));
+pos = addCommasToPos(db, stripCommas(pos));
 *extra = 0;
 if (pos == NULL && org != NULL) 
     safef(titlePlus,sizeof(titlePlus), "%s%s - %s",org, extra, title );
@@ -1378,7 +1374,7 @@ void cartSetDbDisconnector(DbDisconnect disconnector)
 cartDefaultDisconnector = disconnector;
 }
 
-void saveDefaultGsidLists(struct cart *cart)
+static void saveDefaultGsidLists(char *genomeDb, struct cart *cart)
 /* save the default lists of GSID subject and sequence IDs to 2 internal files under trash/ct
    for applications to use */
 {
@@ -1393,8 +1389,8 @@ char query[255], query2[255];
 char *chp;
 struct sqlConnection *conn, *conn2;
 
-conn= hAllocConn();
-conn2= hAllocConn();
+conn= hAllocConn(genomeDb);
+conn2= hAllocConn(genomeDb);
     
 trashDirFile(&tn, "ct", "gsidSubj", ".list");
 outName = tn.forCgi;
@@ -1442,7 +1438,7 @@ cartSetString(cart, gsidSubjList, outName);
 cartSetString(cart, gsidSeqList, outName2);
 }
 
-char *cartGetOrderFromFile(struct cart *cart, char *speciesUseFile)
+char *cartGetOrderFromFile(char *genomeDb, struct cart *cart, char *speciesUseFile)
 /* Look in a cart variable that holds the filename that has a list of 
  * species to show in a maf file */
 {
@@ -1453,7 +1449,7 @@ if ((val = cartUsualString(cart, speciesUseFile, NULL)) == NULL)
     {
     if (hIsGsidServer())
 	{
-	saveDefaultGsidLists(cart);
+	saveDefaultGsidLists(genomeDb, cart);
 	/* now it should be set */
 	val = cartUsualString(cart, speciesUseFile, NULL);
 	if (val == NULL)
@@ -1476,7 +1472,7 @@ while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 return dyStringCannibalize(&orderDY);
 }
 
-char *cartGetOrderFromFileAndMsaTable(struct cart *cart, char *speciesUseFile, char *msaTable)
+char *cartGetOrderFromFileAndMsaTable(char *genomeDb, struct cart *cart, char *speciesUseFile, char *msaTable)
 /* This function is used for GSID server only.
    Look in a cart variable that holds the filename that has a list of 
  * species to show in a maf file and also restrict the results by the IDs existing in an MSA table*/
@@ -1492,7 +1488,7 @@ if ((val = cartUsualString(cart, speciesUseFile, NULL)) == NULL)
     {
     if (hIsGsidServer())
 	{
-	saveDefaultGsidLists(cart);
+	saveDefaultGsidLists(genomeDb, cart);
 
 	/* now it should be set */
 	val = cartUsualString(cart, speciesUseFile, NULL);
@@ -1512,7 +1508,7 @@ if (lf == NULL)
 
 if (hIsGsidServer())
     {
-    conn= hAllocConn();
+    conn= hAllocConn(genomeDb);
     while( ( lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
     	{
 	safef(query, sizeof(query), 

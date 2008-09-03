@@ -466,7 +466,7 @@ void loadSampleIntoLinkedFeature(struct track *tg)
 /* Convert sample info in window to linked feature. */
 {
 int maxWiggleTrackHeight = 2500;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -565,7 +565,7 @@ void loadHumMusL(struct track *tg)
  * on the mouse browser. It decides which of 4 tables to
  * load based on how large of a window the user is looking at*/
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -770,7 +770,7 @@ void loadSampleZoo(struct track *tg)
 /* Convert sample info in window to linked feature. */
 {
 int maxWiggleTrackHeight = 2500;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -850,7 +850,7 @@ tg->loadItems = loadSampleZoo;
 void loadAffyTranscriptome(struct track *tg)
 /* Convert sample info in window to linked feature. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
@@ -880,7 +880,7 @@ else
     safef(tableName, sizeof(tableName), "%s", tg->mapName);
 
 /*see if we have a summary table*/
-if(hTableExists(tableName))
+if(hTableExists(database, tableName))
     safef(query, sizeof(query), "select name from %s where name = '%s' limit 1",  tableName, tg->shortLabel);
 else
     {

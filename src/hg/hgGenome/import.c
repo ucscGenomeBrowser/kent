@@ -50,7 +50,7 @@ else
 struct slName *getChroms()
 /* Get a chrom list. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct slName *chromList = NULL;
@@ -77,7 +77,7 @@ if (isPositional)
     {
     /* Check for missing split tables before querying: */
     char *db = sqlGetDatabase(conn);
-    struct hTableInfo *hti = hFindTableInfoDb(db, chrom, table);
+    struct hTableInfo *hti = hFindTableInfo(db, chrom, table);
     if (hti == NULL)
         return NULL;
     else if (hti->isSplit)
@@ -123,7 +123,7 @@ else
         track = table + strlen("chrN_");
     else
         track = table;
-    hti = hFindTableInfoDb(db, NULL, track);
+    hti = hFindTableInfo(db, NULL, track);
     }
 return(hti);
 }
@@ -160,7 +160,7 @@ for (track = trackList; track != NULL; track = track->next)
     }
 
 /* Scan through group table, putting in ones where we have data. */
-groupsAll = hLoadGrps();
+groupsAll = hLoadGrps(sqlGetDatabase(conn));
 for (group = slPopHead(&groupsAll); group != NULL; group = slPopHead(&groupsAll))
     {
     if (hashLookup(groupsInTrackList, group->name))
@@ -289,7 +289,7 @@ return track;
 struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
 {
-struct trackDb *list = hTrackDb(NULL), *tdb, *next;
+struct trackDb *list = hTrackDb(database, NULL), *tdb, *next;
 struct customTrack *ctList, *ct;
 
 
@@ -340,7 +340,7 @@ if (trackDupe != NULL && trackDupe[0] != 0)
                 }
             }
         /* include conservation wiggle tables */
-        struct consWiggle *wig, *wiggles = wigMafWiggles(track);
+        struct consWiggle *wig, *wiggles = wigMafWiggles(database, track);
         slReverse(&wiggles);
         for (wig = wiggles; wig != NULL; wig = wig->next)
             {
@@ -460,8 +460,8 @@ curTable = findSelectedTable(conn, curTrack, hggTable);
 
 if (curTrack == NULL)
     {
-    struct trackDb *tdb = hTrackDbForTrack(curTable);
-    struct trackDb *cTdb = hCompositeTrackDbForSubtrack(tdb);
+    struct trackDb *tdb = hTrackDbForTrack(database, curTable);
+    struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
     if (cTdb)
         curTrack = cTdb;
     else
@@ -849,7 +849,7 @@ for (name = nameList; name != NULL; name = next)
 	    continue;  /* filter out anything starting with database, e.g. db.name (like Locus Variants) */
     if (!isCt)  /* all custom tracks are positional */
 	{
-    	struct hTableInfo *hti = hFindTableInfoDb(database, NULL, name->name);
+    	struct hTableInfo *hti = hFindTableInfo(database, NULL, name->name);
 	if (!hti)
 	    continue;  /* filter out tables that don't exist anymore */
 	if (!htiIsPositional(hti))
@@ -900,7 +900,7 @@ boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
 struct hTableInfo *hti = NULL;
 
 
-cartWebStart(cart, "Import Table to Genome Graphs");
+cartWebStart(cart, database, "Import Table to Genome Graphs");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" NAME=\"mainForm\" METHOD=\"POST\">");
 cartSaveSession(cart);
 
@@ -948,8 +948,8 @@ hPrintf("</TD></TR>\n");
 
 if (curTrack == NULL)
     {
-    struct trackDb *tdb = hTrackDbForTrack(curTable);
-    struct trackDb *cTdb = hCompositeTrackDbForSubtrack(tdb);
+    struct trackDb *tdb = hTrackDbForTrack(database, curTable);
+    struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
     if (cTdb)
 	curTrack = cTdb;
     else
@@ -1109,9 +1109,9 @@ if (val[0] != 0)
 void updateCustomTracksImport(struct customTrack *upList) 
 /* Update custom tracks file with current upload data */
 {
-struct customTrack *oldList = customTracksParseCart(cart, NULL, NULL);
+struct customTrack *oldList = customTracksParseCart(database, cart, NULL, NULL);
 struct customTrack *outList = customTrackAddToList(oldList, upList, NULL, FALSE);
-customTracksSaveCart(cart, outList);
+customTracksSaveCart(database, cart, outList);
 hPrintf("These data are now available in the drop-down menus on the ");
 hPrintf("main page for graphing.<BR>");
 }
@@ -1127,7 +1127,7 @@ addIfNonempty(settings, hggMaxVal, "maxVal");
 addIfNonempty(settings, hggMaxGapToFill, "maxGapToFill");
 addIfNonempty(settings, hggLabelVals, "linesAt");
 
-struct customTrack *trackList = chromGraphParser(cpp,
+struct customTrack *trackList = chromGraphParser(database, cpp,
 	cartUsualString(cart, hggFormatType, cgfFormatTab),
 	cartUsualString(cart, hggMarkerType, cgfMarkerGenomic),
 	cartUsualString(cart, hggColumnLabels, cgfColLabelGuess), 
@@ -1159,7 +1159,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     if (!bedList)
 	continue;
     
-    chromSize = hChromSize(chrom);
+    chromSize = hChromSize(database, chrom);
     tree = rangeTreeNew();
     for(bed=bedList;bed;bed=bed->next)
 	{
@@ -1221,7 +1221,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     if (!bedList)
 	continue;
     
-    chromSize = hChromSize(chrom);
+    chromSize = hChromSize(database, chrom);
 
     //debug
     //hPrintf("chrom %s size=%d numFeatures=%d<br>\n", chrom, chromSize, slCount(bedList)); fflush(stdout);
@@ -1286,7 +1286,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     if (!bedList)
 	continue;
     
-    chromSize = hChromSize(chrom);
+    chromSize = hChromSize(database, chrom);
 
     //debug
     //hPrintf("chrom %s size=%d numFeatures=%d<br>\n", chrom, chromSize, slCount(bedList)); fflush(stdout);
@@ -1353,7 +1353,7 @@ for (chr = chromList; chr != NULL; chr = chr->next)
     if (!wds->stats)
 	continue;
     
-    chromSize = hChromSize(chrom);
+    chromSize = hChromSize(database, chrom);
 
     numWindows = ((chromSize+windowSize-1)/windowSize);
 
@@ -1422,7 +1422,7 @@ boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
         isChromGraphCt = FALSE;
 struct hTableInfo *hti = NULL;
 
-cartWebStart(cart, "Table Import in Progress ");
+cartWebStart(cart, database, "Table Import in Progress ");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\">");
 cartSaveSession(cart);
 
@@ -1449,8 +1449,8 @@ if (isCustomTrack(curTable))
 
 if (curTrack == NULL)
     {
-    struct trackDb *tdb = hTrackDbForTrack(curTable);
-    struct trackDb *cTdb = hCompositeTrackDbForSubtrack(tdb);
+    struct trackDb *tdb = hTrackDbForTrack(database, curTable);
+    struct trackDb *cTdb = hCompositeTrackDbForSubtrack(database, tdb);
     if (cTdb)
 	curTrack = cTdb;
     else

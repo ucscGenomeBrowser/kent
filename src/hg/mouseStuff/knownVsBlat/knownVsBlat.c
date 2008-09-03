@@ -13,7 +13,7 @@
 #include "bed.h"
 #include "blatStats.h"
 
-static char const rcsid[] = "$Id: knownVsBlat.c,v 1.14 2006/06/20 16:44:17 angie Exp $";
+static char const rcsid[] = "$Id: knownVsBlat.c,v 1.15 2008/09/03 19:20:36 markd Exp $";
 
 /* Variables that can be set from command line. */
 int dotEvery = 0;	/* How often to print I'm alive dots. */
@@ -226,7 +226,7 @@ stat->features += 1;
 return painted;
 }
 
-void pslMakeMilli(struct dnaSeq *geno, struct psl *pslList, int *milliMatches, 
+void pslMakeMilli(char *database, struct dnaSeq *geno, struct psl *pslList, int *milliMatches, 
 	char *chrom, int genoStart, int genoEnd, 
 	struct hash *traceHash, struct dnaSeq **pTraceList)
 /* Fill in milliMatches array with scores from pslList. */
@@ -248,7 +248,7 @@ for (psl = pslList; psl != NULL && psl->tStart < genoEnd; psl = psl->next)
 	    struct dnaSeq *trace;
 	    if ((trace = hashFindVal(traceHash, traceName)) == NULL)
 		{
-		trace = hExtSeq(traceName);
+		trace = hExtSeq(database, traceName);
 		slAddHead(pTraceList, trace);
 		hashAdd(traceHash, traceName, trace);
 		}
@@ -462,11 +462,11 @@ for (el = *pList; el != NULL; el = next)
 }
 
 
-struct geneIsoforms *getChromGenes(char *chrom, struct hash *nmToGeneHash)
+struct geneIsoforms *getChromGenes(char *database, char *chrom, struct hash *nmToGeneHash)
 /* Get list of genes in this chromosome with isoforms bundled together. */
 {
 char query[256];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct hash *geneHash = newHash(0);
@@ -522,7 +522,7 @@ for (gp = gi->gpList; gp != NULL; gp = gp->next)
 return maxGp;
 }
 
-struct psl *getChromPsl(char *chrom, char *splitTable)
+struct psl *getChromPsl(char *database, char *chrom, char *splitTable)
 /* Get all alignments for chromosome sorted by chromosome
  * start position. */
 {
@@ -531,10 +531,10 @@ char query[256], **row;
 struct sqlResult *sr;
 struct psl *pslList = NULL, *psl;
 boolean hasBin;
-boolean isSplit = hFindSplitTable(chrom, splitTable, table, &hasBin);
-if (hTableExists(table))
+boolean isSplit = hFindSplitTable(database, chrom, splitTable, table, &hasBin);
+if (hTableExists(database, table))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     if (isSplit)
 	sprintf(query, "select * from %s", table);
     else
@@ -554,7 +554,7 @@ else
 return pslList;
 }
 
-struct bed *getChromBed(char *chrom, char *splitTable)
+struct bed *getChromBed(char *database, char *chrom, char *splitTable)
 /* Get all alignments for chromosome sorted by chromosome
  * start position. */
 {
@@ -563,12 +563,12 @@ char query[256], **row;
 struct sqlResult *sr;
 struct bed *bedList = NULL, *bed;
 boolean hasBin;
-boolean isSplit = hFindSplitTable(chrom, splitTable, table, &hasBin);
+boolean isSplit = hFindSplitTable(database, chrom, splitTable, table, &hasBin);
 
 uglyf("hFindSplitTable(%s, %s, %s, %d)\n", chrom, splitTable, table, hasBin);
-if (hTableExists(table))
+if (hTableExists(database, table))
     {
-    struct sqlConnection *conn = hAllocConn();
+    struct sqlConnection *conn = hAllocConn(database);
     if (isSplit)
 	sprintf(query, "select chrom,chromStart,chromEnd from %s", table);
     else
@@ -596,7 +596,7 @@ return bedList;
 
 
 
-struct blatStats *chromStats(char *chrom, struct hash *nmToGeneHash, char *table)
+struct blatStats *chromStats(char *database, char *chrom, struct hash *nmToGeneHash, char *table)
 /* Produce stats for one chromosome. Just consider longest isoform
  * of each gene. */
 {
@@ -618,15 +618,15 @@ boolean isPsl = sameWord(format, "psl");
 struct hash *traceHash = newHash(0);
 struct dnaSeq *traceList = NULL;
 
-hNibForChrom(chrom, nibName);
+hNibForChrom(database, chrom, nibName);
 nibOpenVerify(nibName, &nibFile, &chromSize);
 if (isPsl)
-    itemList = pslList = getChromPsl(chrom, table);
+    itemList = pslList = getChromPsl(database, chrom, table);
 else
-    itemList = bedList = getChromBed(chrom, table);
+    itemList = bedList = getChromBed(database, chrom, table);
 
 AllocVar(stats);
-giList = getChromGenes(chrom, nmToGeneHash);
+giList = getChromGenes(database, chrom, nmToGeneHash);
 for (gi = giList; gi != NULL; gi = gi->next)
     {
     int *milliMatches = NULL;
@@ -651,7 +651,7 @@ for (gi = giList; gi != NULL; gi = gi->next)
 
     AllocArray(milliMatches, sizeRegion);
     if (isPsl)
-	pslMakeMilli(geno, itemList, milliMatches, chrom, startRegion, endRegion, traceHash, &traceList);
+	pslMakeMilli(database, geno, itemList, milliMatches, chrom, startRegion, endRegion, traceHash, &traceList);
     else
         bedMakeMilli(itemList, milliMatches, chrom, startRegion, endRegion);
     gStats = calcGeneStats(chrom, startRegion, endRegion, milliMatches, gp);
@@ -672,10 +672,10 @@ freeDnaSeqList(&traceList);
 return stats;
 }
 
-struct hash *makeNmToGeneHash()
+struct hash *makeNmToGeneHash(char *database)
 /* Make a hash that maps refSeq genes to their common names. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct hash *hash = newHash(0);
 struct sqlResult *sr;
 struct refLink rl;
@@ -700,16 +700,15 @@ struct blatStats *statsList = NULL, *stats, *sumStats;
 struct hash *nmToGeneHash;
 FILE *f = mustOpen(output, "w");
 
-hSetDb(database);
-nmToGeneHash = makeNmToGeneHash();
+nmToGeneHash = makeNmToGeneHash(database);
 if (sameWord(clChrom, "all"))
-    allChroms = hAllChromNames();
+    allChroms = hAllChromNames(database);
 else
     allChroms = newSlName(clChrom);
 slReverse(&allChroms);
 for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
     {
-    stats = chromStats(chrom->name, nmToGeneHash, table);
+    stats = chromStats(database, chrom->name, nmToGeneHash, table);
     reportStats(f, stats, chrom->name, reportPercentId);
     fprintf(f, "\n");
     slAddHead(&statsList, stats);

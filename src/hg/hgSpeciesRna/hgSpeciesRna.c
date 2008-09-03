@@ -56,8 +56,7 @@ if (filter != NULL)
     }
 if (optionExists("est"))
     type = "EST";
-hSetDb(database);
-conn = hAllocConn();
+conn = hAllocConn(database);
 safef(query, sizeof(query),
 	"select id from organism where name = '%s %s'", genus, species);
 taxon = sqlQuickNum(conn, query);
@@ -72,7 +71,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct dnaSeq *seq = NULL;
     if ( filter == NULL || hashLookup(filterHash, row[0]) != NULL)
         {
-        seq = hGenBankGetMrna(row[0], NULL);
+        seq = hGenBankGetMrna(database, row[0], NULL);
         faWriteNext(f, seq->name, seq->dna, seq->size);
         dnaSeqFree(&seq);
         }

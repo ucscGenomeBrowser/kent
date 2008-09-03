@@ -9,12 +9,12 @@
 #include "trackDb.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: txCdsInfo.c,v 1.7 2007/03/30 19:32:04 kent Exp $";
+static char const rcsid[] = "$Id: txCdsInfo.c,v 1.8 2008/09/03 19:19:08 markd Exp $";
 
 void showTxInfo(char *geneName, struct trackDb *tdb, char *txInfoTable)
 /* Print out stuff from txInfo table. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 if (sqlTableExists(conn, txInfoTable))
     {
     char query[512];
@@ -196,7 +196,7 @@ printf("%s",
 void showCdsEvidence(char *geneName, struct trackDb *tdb, char *evTable)
 /* Print out stuff from cdsEvidence table. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 double bestScore = 0;
 if (sqlTableExists(conn, evTable))
     {

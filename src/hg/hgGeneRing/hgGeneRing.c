@@ -17,7 +17,7 @@
 #include "bdgpGeneInfo.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgGeneRing.c,v 1.6 2007/07/13 22:56:40 angie Exp $";
+static char const rcsid[] = "$Id: hgGeneRing.c,v 1.7 2008/09/03 19:18:53 markd Exp $";
 
 char *errMsg = NULL;
 
@@ -946,7 +946,7 @@ if (sameWord(action,"geneFrame"))
     }
 else
     {
-    cartWebStart(theCart, "%s Gene Network Browser \n", organism);
+    cartWebStart(theCart, database, "%s Gene Network Browser \n", organism);
     geneList = cloneString(cartUsualString(cart, "ring_geneList", ""));
     errMsg = cartUsualString(cart, "ring_errMsg", "");  /* any error from last time */
 

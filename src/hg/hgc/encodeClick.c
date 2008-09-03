@@ -11,9 +11,9 @@
 void doEncodePeak(struct trackDb *tdb)
 /*  details for encodePeak type tracks. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
-enum encodePeakType peakType = encodePeakInferType(tdb);
+enum encodePeakType peakType = encodePeakInferType(database, tdb);
 char **row;
 char *chrom = cgiString("c");
 int start = cgiInt("o");

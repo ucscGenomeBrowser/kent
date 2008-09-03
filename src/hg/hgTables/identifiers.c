@@ -15,7 +15,7 @@
 #include "wikiTrack.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.23 2008/05/30 18:38:45 hiram Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.24 2008/09/03 19:18:58 markd Exp $";
 
 
 static boolean forCurTable()
@@ -66,7 +66,7 @@ static struct slName *getExamples(struct sqlConnection *conn,
 /* Return a list of several example values of table.field. */
 {
 char fullTable[HDB_MAX_TABLE_STRING];
-if (! hFindSplitTableDb(database, NULL, table, fullTable, NULL))
+if (! hFindSplitTable(database, NULL, table, fullTable, NULL))
     safef(fullTable, sizeof(fullTable), table);
 return sqlRandomSampleConn(conn, fullTable, field, count);
 }
@@ -275,7 +275,7 @@ else if (sameWord(curTable, WIKI_TRACK_TABLE))
 else if (strchr(curTable, '.'))
     tableList = slNameNew(curTable);
 else
-    tableList = hSplitTableNames(curTable);
+    tableList = hSplitTableNames(database, curTable);
 idField = getIdField(actualDb, curTrack, curTable, hti);
 if (idField != NULL)
     addPrimaryIdsToHash(alternateConn, matchHash, idField, tableList, lm);

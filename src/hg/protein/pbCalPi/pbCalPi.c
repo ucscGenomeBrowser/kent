@@ -94,7 +94,6 @@ int main(int argc, char *argv[])
 char *infName, *spDb, *outfName;
 float pI;
 char *acc;
-struct sqlConnection *conn;
 char *seq;
 char cond_str[255];
 struct lineFile *inf;
@@ -112,14 +111,13 @@ outfName  = argv[3];
 
 inf = lineFileOpen(infName, TRUE); /* input file */
 outf1 = mustOpen(outfName, "w");
-conn  = hAllocConn();
 
 while (lineFileRow(inf, row))
     {
     acc = row[0];
 
     safef(cond_str, sizeof(cond_str), "acc='%s'", acc);
-    seq  = sqlGetField(conn, spDb, "protein", "val", cond_str);
+    seq  = sqlGetField(spDb, "protein", "val", cond_str);
 
     if (seq != NULL)
 	{

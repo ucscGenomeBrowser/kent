@@ -48,10 +48,9 @@ superfamDb = argv[2];
 o3 = mustOpen("j.dat", "w");
 o4 = mustOpen("jj.dat", "w");
 
-hSetDb(genomeDb);
-conn = hAllocConn();
-connEnsGene= hAllocConn();
-connSf= hAllocConn();
+conn = hAllocConn(genomeDb);
+connEnsGene= hAllocConn(genomeDb);
+connSf= hAllocConn(genomeDb);
 
 safef(query2,sizeof(query2),"select * from %s.ensGene;", genomeDb);
 
@@ -77,15 +76,15 @@ while (row2 != NULL)
     chp = strstr(name, ".");
     if (chp != NULL) *chp = '\0';
 
-    if (hTableExistsDb(genomeDb, "ensGeneXref"))
+    if (hTableExists(genomeDb, "ensGeneXref"))
         {
         safef(cond_str, sizeof(cond_str), "transcript_name='%s'", name);
-        translation_name = sqlGetField(conn, genomeDb, "ensGeneXref", "translation_name", cond_str);
+        translation_name = sqlGetField(genomeDb, "ensGeneXref", "translation_name", cond_str);
         }
-    if (hTableExistsDb(genomeDb,"ensemblXref3") && translation_name == NULL)
+    if (hTableExists(genomeDb,"ensemblXref3") && translation_name == NULL)
         {
         safef(cond_str, sizeof(cond_str), "transcript='%s'", name);
-        translation_name = sqlGetField(conn, genomeDb, "ensemblXref3", "protein", cond_str);
+        translation_name = sqlGetField(genomeDb, "ensemblXref3", "protein", cond_str);
         }
     if (translation_name == NULL) 
 	{
@@ -119,7 +118,7 @@ while (row2 != NULL)
  	    sfDesc	= row[6];	/* 0302 and other supfam releases has an error here */
 		
 	    sprintf(cond_str, "id=%s", sfID);
-	    sfDesc  = sqlGetField(connSf, superfamDb, "des", "description", cond_str);
+	    sfDesc  = sqlGetField(superfamDb, "des", "description", cond_str);
 
 	    E = atof(eValue);
 	    if (E > 0.02) continue;

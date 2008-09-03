@@ -30,7 +30,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.24 2008/02/20 00:42:24 markd Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.25 2008/09/03 19:18:54 markd Exp $";
 
 
 static char *allColors[] = {
@@ -497,7 +497,7 @@ void handlePostscript(struct sqlConnection *conn)
 struct tempName psTn;
 char *pdfFile = NULL;
 trashDirFile(&psTn, "hgg", "hgg", ".eps");
-cartWebStart(cart, "%s Genome Graphs", genome);
+cartWebStart(cart, database, "%s Genome Graphs", genome);
 printf("<H1>PostScript/PDF Output</H1>\n");
 printf("PostScript images can be printed at high resolution "
        "and edited by many drawing programs such as Adobe "
@@ -533,7 +533,7 @@ int i, j;
 int realCount = 0;
 char *scriptName = "../cgi-bin/hgGenome";
 
-cartWebStart(cart, "%s Genome Graphs", genome);
+cartWebStart(cart, database, "%s Genome Graphs", genome);
 
 /* Start form and save session var. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=GET>\n", scriptName);

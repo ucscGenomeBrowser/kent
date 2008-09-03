@@ -106,7 +106,7 @@ void allEncodePeakLoadItems(struct track *tg)
 /* Just call the flexible linkedFeatures loader with a few custom fns. */
 {
 enum encodePeakType peakType = tg->customInt;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
@@ -181,7 +181,7 @@ void narrowPeakLoadItems(struct track *tg)
 /* reverts to allEncodePeakLoadItems after checking the size. */
 {
 enum encodePeakType pt = narrowPeak;
-int numFields = encodePeakNumFields(tg->mapName);
+int numFields = encodePeakNumFields(database, tg->mapName);
 if (numFields == 9)
     pt = narrowPeak;
 else
@@ -194,7 +194,7 @@ void broadPeakLoadItems(struct track *tg)
 /* reverts to allEncodePeakLoadItems after checking the size. */
 {
 enum encodePeakType pt = broadPeak;
-int numFields = encodePeakNumFields(tg->mapName);
+int numFields = encodePeakNumFields(database, tg->mapName);
 if (numFields == 8)
     pt = broadPeak;
 else
@@ -207,7 +207,7 @@ void gappedPeakLoadItems(struct track *tg)
 /* reverts to allEncodePeakLoadItems after checking the size. */
 {
 enum encodePeakType pt = gappedPeak;
-int numFields = encodePeakNumFields(tg->mapName);
+int numFields = encodePeakNumFields(database, tg->mapName);
 if (numFields == 14)
     pt = gappedPeak;
 else
@@ -221,7 +221,7 @@ void encodePeakLoadItems(struct track *tg)
 /* appropriate loader */
 {
 enum encodePeakType pt = 0;
-int numFields = encodePeakNumFields(tg->mapName);
+int numFields = encodePeakNumFields(database, tg->mapName);
 if (numFields == 5)
     pt = encodePeak5;
 else if (numFields == 6)

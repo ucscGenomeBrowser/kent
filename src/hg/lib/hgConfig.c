@@ -1,12 +1,14 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.18 2008/06/03 23:17:56 markd Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.19 2008/09/03 19:19:24 markd Exp $";
 
 #include "common.h"
+#include "hgConfig.h"
 #include "hash.h"
 #include "cheapcgi.h"
 #include "portable.h"
 #include "linefile.h"
+#include "customTrack.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -46,10 +48,12 @@ return FALSE;
 
 static void checkConfigPerms(char *filename)
 /* get that we are either a CGI or that the config file is only readable by 
- * the user, or doesn't exist */
+ * the user, or doesn't exist.  Specifying HGDB_CONF also disables perms
+ * check to make debugging and having CGIs run loaders easier */
 {
 struct stat statBuf;
-if ((!isBrowserCgi()) && (stat(filename, &statBuf) == 0))
+if ((!isBrowserCgi()) && isEmpty(getenv("HGDB_CONF"))
+    && (stat(filename, &statBuf) == 0))
     {
     if ((statBuf.st_mode & (S_IRWXG|S_IRWXO)) != 0)
         errAbort("config file %s allows group or other access, must only allow user access",
@@ -60,20 +64,22 @@ if ((!isBrowserCgi()) && (stat(filename, &statBuf) == 0))
 static void getConfigFile(char filename[PATH_LEN])
 /* get path to .hg.conf file to use */
 {
-if (!isBrowserCgi())
+if (!isEmpty(getenv("HGDB_CONF")))
     {
-    /* Check for explictly specified file in env, otherwise use one in home */
-    if (getenv("HGDB_CONF") != NULL)
-        strcpy(filename, getenv("HGDB_CONF"));
-    else
-        safef(filename, PATH_LEN, "%s/%s",
-	      getenv("HOME"), USER_CONFIG_FILE);
-    checkConfigPerms(filename);
+    // use environment variable
+    strcpy(filename, getenv("HGDB_CONF"));
     }
-else	/* on the web, read from global config file */
+else if (isBrowserCgi())
     {
+    /* on the web, read from global config file */
     safef(filename, PATH_LEN, "%s/%s",
 	  GLOBAL_CONFIG_PATH, GLOBAL_CONFIG_FILE);
+    }
+else
+    {
+    /*use one in home */
+    safef(filename, PATH_LEN, "%s/%s",
+          getenv("HOME"), USER_CONFIG_FILE);
     }
 }
 
@@ -154,6 +160,36 @@ while(lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 }
 
+static void addConfigIfUndef(char *prefix, char *suffix, char *value)
+/* if the specified config item doesn't exist, add it */
+{
+char name[256];
+safef(name, sizeof(name), "%s.%s", prefix, suffix);
+if (cfgOption(name) == NULL)
+    hashAdd(cfgOptionsHash, name, cloneString(value));
+}
+
+static boolean haveProfile(char *profileName)
+/* see if we appear to have the profile.  Can't do this in
+ * actual profile code, since it wants the config object that is being
+ * hacked */
+{
+return (cfgOption2(profileName, "host") != NULL) && (cfgOption2(profileName, "user") != NULL)
+    && (cfgOption2(profileName, "password") != NULL);
+
+}
+
+
+static void hackConfigProfiles()
+/* Add in some pre-defined profile mappings if needed.  This was added to make
+ * older conf files compatible with the db profile paradigm */
+{
+/* add mapping of customTrash database to profile if we have customTracks 
+ * profile defined */
+if (haveProfile(CUSTOM_TRACKS_PROFILE))
+    addConfigIfUndef(CUSTOM_TRASH, "profile", CUSTOM_TRACKS_PROFILE);
+}
+
 static void initConfig()
 /* create and initilize the config hash */
 {
@@ -161,6 +197,7 @@ char filename[PATH_LEN];
 cfgOptionsHash = newHash(6);
 getConfigFile(filename);
 parseConfigFile(filename, 0);
+hackConfigProfiles();
 }
 
 char* cfgOption(char* name)
@@ -173,13 +210,45 @@ if(cfgOptionsHash == NULL)
 return hashFindVal(cfgOptionsHash, name);
 }
 
-char* cfgOptionDefault(char* name, char* def)
+char *cfgOptionDefault(char* name, char* def)
 /* Return the option with the given name or the given default 
  * if it doesn't exist. */
 {
 char *val = cfgOption(name);
 if (val == NULL)
     val = def;
+return val;
+}
+
+char *cfgOption2(char *prefix, char *suffix)
+/* Return the option with the given two-part name, formed from prefix.suffix.
+ * Return NULL if it doesn't exist. */
+{
+/* initilize the config hash if it is not */
+if(cfgOptionsHash == NULL)
+    initConfig();
+char name[256];
+safef(name, sizeof(name), "%s.%s", prefix, suffix);
+return hashFindVal(cfgOptionsHash, name);
+}
+
+char* cfgOptionDefault2(char *prefix, char *suffix, char* def)
+/* Return the option with the given two-part name, formed from prefix.suffix,
+ * or the given default if it doesn't exist. */
+{
+char *val = cfgOption2(prefix, suffix);
+if (val == NULL)
+    val = def;
+return val;
+}
+
+char *cfgOptionEnv(char *envName, char* name)
+/* get a configuration optional value, from either the environment or the cfg
+ * file, with the env take precedence.  Return NULL if not found */
+{
+char *val = getenv(envName);
+if (val == NULL || (strlen(val) == 0))
+    val = cfgOption(name);
 return val;
 }
 
@@ -191,6 +260,19 @@ char *val = cfgOption(name);
 if (val == NULL)
     errAbort("%s doesn't exist in hg.conf file", name);
 return val;
+}
+
+struct slName *cfgNames()
+/* get list of names in config file. slFreeList when finished */
+{
+if(cfgOptionsHash == NULL)
+    initConfig();
+struct slName *names = NULL;
+struct hashCookie cookie = hashFirst(cfgOptionsHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    slSafeAddHead(&names, slNameNew(hel->name));
+return names;
 }
 
 unsigned long cfgModTime()

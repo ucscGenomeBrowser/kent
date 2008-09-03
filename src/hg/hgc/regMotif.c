@@ -75,7 +75,7 @@ for (i=0; i<size; ++i)
 static struct dnaMotif *loadDnaMotif(char *motifName, char *motifTable)
 /* Load dnaMotif from table. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 struct dnaMotif *motif;
 sprintf(query, "name = '%s'", motifName);
@@ -122,14 +122,14 @@ int start = cartInt(cart, "o");
 struct dnaSeq *seq = NULL;
 struct dnaMotif *motif = loadDnaMotif(item, motifTable);
 char *table = tdb->tableName;
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 char query[256];
 struct sqlResult *sr;
 char **row;
 struct bed *hit = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 
-cartWebStart(cart, "Regulatory Motif Info");
+cartWebStart(cart, database, "Regulatory Motif Info");
 genericBedClick(conn, tdb, item, start, 6);
 
 sprintf(query, 
@@ -143,7 +143,7 @@ sqlFreeResult(&sr);
 
 if (hit != NULL)
     {
-    seq = hDnaFromSeq(hit->chrom, hit->chromStart, hit->chromEnd, dnaLower);
+    seq = hDnaFromSeq(database, hit->chrom, hit->chromStart, hit->chromEnd, dnaLower);
     if (hit->strand[0] == '-')
 	reverseComplement(seq->dna, seq->size);
     }
@@ -155,7 +155,7 @@ void doFlyreg(struct trackDb *tdb, char *item)
 /* flyreg.org: Drosophila DNase I Footprint db. */
 {
 struct dyString *query = newDyString(256);
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
@@ -167,7 +167,7 @@ struct dnaMotif *motif = NULL;
 boolean isVersion2 = sameString(tdb->tableName, "flyreg2");
 
 genericHeader(tdb, item);
-hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+hFindSplitTable(database, seqName, tdb->tableName, fullTable, &hasBin);
 dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       fullTable, seqName);
 hAddBinToQuery(start, end, query);
@@ -188,7 +188,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     printEntrezPubMedUidUrl(stdout, fr.pmid);
     printf("\" TARGET=_BLANK>%d</A><BR>\n", fr.pmid);
     bedPrintPos((struct bed *)(&fr), 3, tdb);
-    if (hTableExists(motifTable))
+    if (hTableExists(database, motifTable))
 	{
 	motif = loadDnaMotif(item, motifTable);
 	if (motif != NULL)
@@ -213,7 +213,7 @@ static void wrapHgGeneLink(struct sqlConnection *conn, char *name,
 char query[256];
 struct sqlResult *sr;
 char **row;
-int rowOffset = hOffsetPastBin(seqName, "sgdGene");
+int rowOffset = hOffsetPastBin(database, seqName, "sgdGene");
 safef(query, sizeof(query), 
     "select * from %s where name = '%s'", geneTable, name);
 sr = sqlGetResult(conn, query);
@@ -267,14 +267,14 @@ struct dnaMotif *motif = loadDnaMotif(item, motifTable);
 int start = cartInt(cart, "o");
 struct dnaSeq *seq = NULL;
 char *table = tdb->tableName;
-int rowOffset = hOffsetPastBin(seqName, table);
+int rowOffset = hOffsetPastBin(database, seqName, table);
 char query[256];
 struct sqlResult *sr;
 char **row;
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct transRegCode *trc = NULL;
 
-cartWebStart(cart, "Regulatory Code Info");
+cartWebStart(cart, database, "Regulatory Code Info");
 sprintf(query, 
 	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	table, item, seqName, start);
@@ -287,7 +287,7 @@ sqlFreeResult(&sr);
 if (trc != NULL)
     {
     char strand[2];
-    seq = hDnaFromSeq(trc->chrom, trc->chromStart, trc->chromEnd, dnaLower);
+    seq = hDnaFromSeq(database, trc->chrom, trc->chromStart, trc->chromEnd, dnaLower);
     if (seq->size != motif->columnCount)
 	{
         printf("WARNING: seq->size = %d, motif->colCount=%d<BR>\n", 
@@ -321,7 +321,7 @@ static double motifScoreHere(char *chrom, int start, int end,
 /* Return score of motif at given position. */
 {
 double score;
-struct dnaSeq *seq = hDnaFromSeq(chrom, start, end, dnaLower);
+struct dnaSeq *seq = hDnaFromSeq(database, chrom, start, end, dnaLower);
 struct dnaMotif *motif = loadDnaMotif(motifName, motifTable);
 char strand = dnaMotifBestStrand(motif, seq->dna);
 if (strand == '-')
@@ -539,11 +539,11 @@ void doTransRegCodeProbe(struct trackDb *tdb, char *item,
 char query[256];
 struct sqlResult *sr;
 char **row;
-int rowOffset = hOffsetPastBin(seqName, tdb->tableName);
-struct sqlConnection *conn = hAllocConn();
+int rowOffset = hOffsetPastBin(database, seqName, tdb->tableName);
+struct sqlConnection *conn = hAllocConn(database);
 struct transRegCodeProbe *probe = NULL;
 
-cartWebStart(cart, "CHIP/CHIP Probe Info");
+cartWebStart(cart, database, "CHIP/CHIP Probe Info");
 safef(query, sizeof(query), "select * from %s where name = '%s'",
 	tdb->tableName, item);
 sr = sqlGetResult(conn, query);
