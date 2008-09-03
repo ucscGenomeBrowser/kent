@@ -7,7 +7,7 @@
 #include "chromInfo.h"
 #include "options.h"
 #include "genomeRangeTree.h"
-#include "commonBaseMask.h"
+#include "baseMaskCommon.h"
 
 /* FIXME:
  * - would be nice to be able to specify ranges in the same manner

@@ -5,16 +5,16 @@ L = -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-O = commonBaseMask.o cachedMask.o trackToBaseMask.o bedToBaseMask.o baseMaskToBed.o baseMask.o
+O = cachedMask.o trackToBaseMask.o bedToBaseMask.o baseMaskToBed.o baseMask.o
 B = cachedMask trackToBaseMask bedToBaseMask baseMaskToBed baseMask
 
 all: $B
 
-cachedMask: cachedMaskUsage.msg commonBaseMask.o cachedMask.o ${MYLIBS} 
-	${CC} ${COPT} ${CFLAGS} ${XINC} -o cachedMask commonBaseMask.o cachedMask.o ${MYLIBS} ${MYSQLLIBS} $L
+cachedMask: cachedMaskUsage.msg cachedMask.o ${MYLIBS} 
+	${CC} ${COPT} ${CFLAGS} ${XINC} -o cachedMask cachedMask.o ${MYLIBS} ${MYSQLLIBS} $L
 
-trackToBaseMask: trackToBaseMaskUsage.msg commonBaseMask.o trackToBaseMask.o ${MYLIBS} 
-	${CC} ${COPT} ${CFLAGS} -o trackToBaseMask commonBaseMask.o trackToBaseMask.o ${MYLIBS} ${MYSQLLIBS} $L
+trackToBaseMask: trackToBaseMaskUsage.msg trackToBaseMask.o ${MYLIBS} 
+	${CC} ${COPT} ${CFLAGS} -o trackToBaseMask trackToBaseMask.o ${MYLIBS} ${MYSQLLIBS} $L
 
 bedToBaseMask: bedToBaseMaskUsage.msg bedToBaseMask.o ${MYLIBS} 
 	${CC} ${COPT} ${CFLAGS} -o bedToBaseMask bedToBaseMask.o ${MYLIBS} ${MYSQLLIBS} $L

@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "chromInfo.h"
 #include "genomeRangeTree.h"
-#include "commonBaseMask.h"
+#include "baseMaskCommon.h"
 
 //#define MJP verbose(1,"%s[%3d]: ", __func__, __LINE__);
 
@@ -77,7 +77,8 @@ return realTable;
 void splitDbTable(char *chromDb, char *track, char **pDb, char **pTable)
 /* split the track into db name and table name. 
  * If no db specified then this will be chromDb.
- * Cannabalizes track. */
+ * Cannabalizes track. 
+ * *pDb points a table in *track. *pTable points at database in *track or *chromDb. */
 {
 char *words[2];
 int n = chopByChar(track, '.', words, 2);

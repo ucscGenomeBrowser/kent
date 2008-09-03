@@ -8,7 +8,7 @@
 #include "options.h"
 #include "jksql.h"
 #include "genomeRangeTree.h"
-#include "commonBaseMask.h"
+#include "baseMaskCommon.h"
 
 //#define MJP verbose(1,"%s[%3d]: ", __func__, __LINE__);
 
