@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.372 2008/09/03 19:19:24 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.373 2008/09/03 20:33:49 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -466,14 +466,13 @@ struct sqlConnection *hAllocConnDbTbl(char *spec, char **tableRet, char *default
  * defaultDb is not NULL, 'table' can also be used.  Also returns pointer to
  * table in spec string. */
 {
-char buf[512], *sep, *db;
-sep = strchr(spec, '.');
+char buf[512], *db = NULL;;
+char *sep = strchr(spec, '.');
 if (sep == NULL)
     {
     if (defaultDb == NULL)
         errAbort("no defaultDb, expected db.table, got %s", spec);
-    else
-        db = defaultDb;
+    db = defaultDb;
     *tableRet = spec;
     }
 else
