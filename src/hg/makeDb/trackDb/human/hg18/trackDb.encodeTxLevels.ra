@@ -125,7 +125,7 @@ origAssembly hg17
 # GIS RNA is in a different track group in hg17
 #track encodeGisRnaPet
 #compositeTrack on
-#shortLabel GIS PET RNA
+#shortLabel GIS-PET RNA
 #dataVersion ENCODE Oct 2005 Freeze
 #longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA
 #group encodeTxLevels
