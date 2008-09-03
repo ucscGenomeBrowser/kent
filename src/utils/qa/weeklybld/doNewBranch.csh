@@ -121,7 +121,7 @@ echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on b
  exit 1
 endif
 echo "build on beta done for v$BRANCHNN"
-echo "v$BRANCHNN built successfully on beta (day 9)." | mail -s "'v$BRANCHNN Build complete on beta (day 9).'" $USER donnak kate galt kent browser-qa
+echo "v$BRANCHNN built successfully on beta (day 9)." | mail -s "'v$BRANCHNN Build complete on beta (day 9).'" $USER galt kent browser-qa
 
 echo
 #echo debug: disabled build utils on beta
