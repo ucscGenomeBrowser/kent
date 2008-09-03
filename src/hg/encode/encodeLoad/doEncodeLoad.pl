@@ -332,8 +332,8 @@ print PUSHQ <<_EOF_;
 -- New entry in Main Push Queue, to alert QA to existence of new tables:
 LOCK TABLES pushQ WRITE;
 SELECT \@rank := max(rank)+1 FROM pushQ WHERE priority = 'A';
-SELECT \@pid := right(concat("00000",convert(max(qid)+1,CHAR)),6) FROM pushQ;
-INSERT INTO pushQ VALUES (\@pid,'','A',\@rank,now(),'Y','$shortLabel','$daf->{assembly}','$tables','','$files',0,'hgwdev','N','','N','N','','$wranglerName','','$daf->{grant}/$daf->{lab}','','','N',now(),'',0,'','','$releaseLog','');
+SELECT \@qid := right(concat("00000",convert(max(qid)+1,CHAR)),6) FROM pushQ;
+INSERT INTO pushQ VALUES (\@qid,'','A',\@rank,now(),'Y','$shortLabel','$daf->{assembly}','$tables','','$files',0,'hgwdev','N','','N','N','','$wranglerName','','$daf->{grant}/$daf->{lab}','','','N',now(),'',0,'','','$releaseLog','');
 UNLOCK TABLES;
 _EOF_
 close(PUSHQ);
