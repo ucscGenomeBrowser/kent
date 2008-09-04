@@ -520,16 +520,6 @@ foreach mouse ( $mice )
   echo "     /gbdb/$mouse/igtc/genetrap.$update.fasta"
 end
 
-echo " - ask for push of these tables: igtc, seq, extFile"
-echo "     in mm7, mm8, mm9"
-echo "   from hgwbeta -> RR"
-
-echo " - ask for drop of old files from hgnfs1"
-echo "   (do this AFTER previous table push is complete):"
-foreach mouse ( $mice )
-  echo "     /gbdb/$mouse/igtc/genetrap.$lastMonth.fasta"
-end
-
 echo
 echo " - check that these new ones are ok on beta:"
 foreach mouse ( $mice )
@@ -563,6 +553,16 @@ foreach i ( $counter)
 end
 echo
 echo
+
+echo " - ask for push of these tables: igtc, seq, extFile"
+echo "     in mm7, mm8, mm9"
+echo "   from hgwbeta -> RR"
+
+echo " - ask for drop of old files from hgnfs1"
+echo "   (do this AFTER previous table push is complete):"
+foreach mouse ( $mice )
+  echo "     /gbdb/$mouse/igtc/genetrap.$lastMonth.fasta"
+end
 
 echo " - Add reviewer name and qId (taken from queue Id at the top of current pushQ entry)"
 echo " to notes section of pushQ entry" 
