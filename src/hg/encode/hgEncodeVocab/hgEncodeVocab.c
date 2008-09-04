@@ -7,22 +7,29 @@
 #include "hCommon.h"
 #include "htmshell.h"
 #include "ra.h"
+#include "hui.h"
 
 /* hgEncodeVocab - A CGI script to display the different types of encode controlled vocabulary.
  * usage:
  *   hgEncodeVocab [ra=cv.ra] type=[Antibody|"Cell Line"|localization|rnaExtract|"Gene Type"] [tier=(1|2|3)]
  * options:\n"
- *    ra=cv.ra       : Path to cv.ra file (default CV_FILE)
+ *    ra=cv.ra       : Path to cv.ra file (default cv_file())
  *    type=TypeName  : Type to display
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.5 2008/08/26 19:15:54 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.6 2008/09/04 18:51:26 larrym Exp $";
 
-/* Default location, can specify as cgi var: ra=cv.ra */
+static char *cv_file()
+{
+/* return default location of cv.ra (can specify as cgi var: ra=cv.ra) */
 
-#define CV_FILE "/cluster/data/encode/pipeline/encpipeline_prod/config/cv.ra"
-
+static char filePath[PATH_LEN];
+safef(filePath, sizeof(filePath), "%s/encode/cv.ra", hCgiRoot());
+if(!fileExists(filePath))
+    errAbort("Error: can't locate cv.ra; %s doesn't exist\n", filePath);
+return filePath;
+}
 
 int termCmp(const void *va, const void *vb)
 /* Compare controlled vocab based on term value */
@@ -159,7 +166,7 @@ else
 
 void doMiddle()
 {
-struct hash *cvHash = raReadAll(cgiUsualString("ra", CV_FILE), "term");
+struct hash *cvHash = raReadAll(cgiUsualString("ra", cv_file()), "term");
 struct hashCookie hc = hashFirst(cvHash);
 struct hashEl *hEl;
 struct slList *termList = NULL;
