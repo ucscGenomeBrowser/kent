@@ -431,3 +431,22 @@ taeGut1.downloadDir = taeGut1
 
     # cleanup
     rm -rf fasta
+
+#####################################################
+# build 2bit with contigs from random chroms and chrUn (DONE braney 2008-08-30)
+
+    cd /cluster/data/taeGut1
+    fgrep 'random 
+Un' taeGut1.agp | awk '{if ($5 == "W") print $1, $2-1, $3, $6}' \
+    | while read chr start stop contig; \
+    do \
+	echo ">$contig"; twoBitToFa taeGut1.2bit:$chr:$start-$stop stdout \
+	| tail -n +2; \
+    done > unRandom.fa
+
+    fgrep -v 'random 
+Un' chrom.sizes | awk '{print $1}' | \
+    twoBitToFa taeGut1.2bit -seqList=stdin noUn.fa
+    cat noUn.fa unRandom.fa | faToTwoBit stdin taeGut1.blastz.2bit
+
+    twoBitInfo taeGut1.blastz.2bit taeGut1.blastz.sizes
