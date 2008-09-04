@@ -450,3 +450,31 @@ Un' chrom.sizes | awk '{print $1}' | \
     cat noUn.fa unRandom.fa | faToTwoBit stdin taeGut1.blastz.2bit
 
     twoBitInfo taeGut1.blastz.2bit taeGut1.blastz.sizes
+
+#########################################################################
+## BLASTZ galGal3 swap (working braney
+    ##	the original blastz to galGal3 measured
+    ssh hgwdev
+    mkdir /cluster/data/taeGut1/bed/blastz.galGal3.swap
+    cd /cluster/data/taeGut1/bed/blastz.galGal3.swap
+    nice -n +19 featureBits galGal3 chainTaeGut1Link \
+	> fb.galGal3.chainTaeGut1Link.txt 2>&1
+
+# 714757948 bases of 1042591351 (68.556%) in intersection
+
+    ssh swarm
+    cd /cluster/data/taeGut1/bed/blastz.galGal3.swap
+    screen
+    doBlastzChainNet.pl \
+	/cluster/data/galGal3/bed/blastz.taeGut1.2008-09-04/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -bigClusterHub=swarm -smallCluster=swarm \
+	-workhorse=kolossus -swap > swap.log 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/taeGut1/bed/blastz.galGal3.swap
+    nice -n +19 featureBits taeGut1 chainGalGal3Link \
+	> fb.taeGut1l.chainGalGal3Link.txt 2>&1  
+# 802731012 bases of 1222864691 (65.643%) in intersection
+
