@@ -4,6 +4,10 @@ L = -lm ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
+hgExpDistance_fq: hgExpDistance_fq.o ${MYLIBS}
+	${CC} ${COPT} -o ${BINDIR}/hgExpDistance $@.o ${MYLIBS} $L -lpthread
+	${STRIP} ${BINDIR}/hgExpDistance${EXE}
+
 hgExpDistance: hgExpDistance.o ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/hgExpDistance $@.o ${MYLIBS} $L
 	${STRIP} ${BINDIR}/hgExpDistance${EXE}
@@ -11,10 +15,6 @@ hgExpDistance: hgExpDistance.o ${MYLIBS}
 hgExpDistance_fm: hgExpDistance_fm.o ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/hgExpDistance_fm $@.o ${MYLIBS} $L -lpthread
 	${STRIP} ${BINDIR}/hgExpDistance_fm${EXE}
-
-hgExpDistance_fq: hgExpDistance_fq.o ${MYLIBS}
-	${CC} ${COPT} -o ${BINDIR}/hgExpDistance_fq $@.o ${MYLIBS} $L -lpthread
-	${STRIP} ${BINDIR}/hgExpDistance_fq${EXE}
 
 hgExpDistance_tm: hgExpDistance_tm.o ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/hgExpDistance_tm $@.o ${MYLIBS} $L
