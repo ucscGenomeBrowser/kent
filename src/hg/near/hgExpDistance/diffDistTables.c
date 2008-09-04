@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: diffDistTables.c,v 1.1 2008/08/29 19:59:30 lslater Exp $";
+static char const rcsid[] = "$Id: diffDistTables.c,v 1.2 2008/09/04 19:31:23 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -39,29 +39,6 @@ struct microDataDist
     float distance;	/* Distance between name1 and name2 experiments */
     };
 
-int cmpName2(const void *va, const void *vb)
-/* Compare to sort based on name2 field */
-{
-const struct microDataDist *a = *((struct microDataDist **)va);
-const struct microDataDist *b = *((struct microDataDist **)vb);
-return strcmp(a->name2,b->name2);
-}
-
-int cmpDistName2(const void *va, const void *vb)
-/* Compare to sort based on name2 then on distance fields */
-{
-const struct microDataDist *a = *((struct microDataDist **)va);
-const struct microDataDist *b = *((struct microDataDist **)vb);
-float distDif = a->distance - b->distance;
-int name2Dif = strcmp(a->name2,b->name2);
-if (distDif < 0 && name2Dif <= 0)
-    return -1;
-else if (distDif > 0)
-    return 1;
-else
-    return 0;
-}
-
 int cmpName1DistName2(const void *va, const void *vb)
 /* Compare to sort based on name2, then distance, then name1 fields */
 {
@@ -70,12 +47,23 @@ const struct microDataDist *b = *((struct microDataDist **)vb);
 float distDif = a->distance - b->distance;
 int name1Dif = strcmp(a->name1,b->name1);
 int name2Dif = strcmp(a->name2,b->name2);
-if (name2Dif <= 0 && distDif <= 0 && name1Dif < 0)
+
+if (name1Dif < 0)
     return -1;
-else if (name1Dif > 0)
+if (name1Dif > 0)
     return 1;
-else
-    return 0;
+
+if (distDif < 0)
+    return -1;
+if (distDif > 0)
+    return 1;
+
+if (name2Dif < 0)
+    return -1;
+if (name2Dif > 0)
+    return 1;
+
+return 0;
 }
 
 struct microDataDist *loadDists(struct sqlConnection *conn, char *table)
@@ -149,16 +137,12 @@ AllocArray(dist1Array, dist1Count);
 for (dPtr = dist1List,distIx=0; dPtr != NULL; dPtr = dPtr->next, ++distIx)
     dist1Array[distIx] = dPtr;
 
-qsort( dist1Array, dist1Count, sizeof(dist1Array[0]), cmpName2 );
-qsort( dist1Array, dist1Count, sizeof(dist1Array[0]), cmpDistName2 );
 qsort( dist1Array, dist1Count, sizeof(dist1Array[0]), cmpName1DistName2 );
 
 AllocArray(dist2Array, dist2Count);
 for (dPtr = dist2List,distIx=0; dPtr != NULL; dPtr = dPtr->next, ++distIx)
     dist2Array[distIx] = dPtr;
 
-qsort( dist2Array, dist2Count, sizeof(dist2Array[0]), cmpName2 );
-qsort( dist2Array, dist2Count, sizeof(dist2Array[0]), cmpDistName2 );
 qsort( dist2Array, dist2Count, sizeof(dist2Array[0]), cmpName1DistName2 );
 
 /* Print out differences in sorted lists */
