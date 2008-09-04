@@ -2382,6 +2382,63 @@ type netAlign galGal3 chainGalGal3
 otherDb galGal3
 release beta
 
+
+# release alpha: $o_db in shortLabel
+track chainTaeGut1
+shortLabel $o_db Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 181
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain taeGut1
+otherDb taeGut1
+release alpha
+
+# release beta: $o_Organism in shortLabel
+track chainTaeGut1
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 181
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain taeGut1
+otherDb taeGut1
+release beta
+
+# release alpha: $o_db in shortLabel
+track netTaeGut1
+shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 181.1
+visibility hide
+spectrum on
+type netAlign taeGut1 chainTaeGut1
+otherDb taeGut1
+release alpha
+
+# release beta: $o_Organism in shortLabel
+track netTaeGut1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 181.1
+visibility hide
+spectrum on
+type netAlign taeGut1 chainTaeGut1
+otherDb taeGut1
+release beta
+
 track chainOrnAna1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
