@@ -56,10 +56,10 @@ static char *chromTable(char *db, char *table, char *chromDb)
  * You can freeMem this when done. */
 {
 char *realTable;
-struct sqlConnection *sc = hAllocOrConnect(chromDb);
-char *chrom = hDefaultChromDb(chromDb);
+struct sqlConnection *sc = hAllocConn(chromDb);
+char *chrom = hDefaultChrom(chromDb);
 sqlDisconnect(&sc);
-sc = hAllocOrConnect(db);
+sc = hAllocConn(db);
 if (sqlTableExists(sc, table))
     {
     realTable = cloneString(table);
@@ -120,7 +120,7 @@ static time_t chromTableUpdateTime(char *db, char *table, char *chromDb)
 char *realTable = chromTable(db, table, chromDb);
 time_t time = 0;
 /* connect to database and get last update time for table if it exists */
-struct sqlConnection *sc = hAllocOrConnect(db);
+struct sqlConnection *sc = hAllocConn(db);
 if (sqlTableExists(sc, realTable))
     time = sqlTableUpdateTime(sc, realTable);
 else
@@ -209,7 +209,7 @@ struct bed *b, *bList;
 struct genomeRangeTree *tree = genomeRangeTreeNew();
 //struct slName *chrom, *chromList = hAllChromNamesDb(db);
 struct chromInfo *ci, *ciList = createChromInfoList("all", chromDb);
-struct sqlConnection *conn = hAllocOrConnect(db);
+struct sqlConnection *conn = hAllocConn(db);
 struct rbTree *rt;
 double totalSize = 0, treeSize = 0, nodes = 0;
 /* loop over all chromosomes adding to range tree */
@@ -217,7 +217,7 @@ for (ci = ciList ; ci ; ci = ci->next)
     {
     totalSize += ci->size;
     rt = NULL;
-    if ( (bList = hGetBedRangeDb(db, track, ci->chrom, 0, 0, NULL)) )
+    if ( (bList = hGetBedRange(db, track, ci->chrom, 0, 0, NULL)) )
 	{
 	rt = genomeRangeTreeFindOrAddRangeTree(tree, ci->chrom);
         for ( b = bList ; b ; b = b->next )
