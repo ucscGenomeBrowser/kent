@@ -2538,4 +2538,71 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
-############################################################################
+
+
+#####################################################
+# build 2bit with contigs from random chroms and chrUn (DONE braney 2008-08-30)
+    cd /cluster/data/galGal3
+    fgrep -h 'random 
+Un' */*.agp | awk '{if ($5 == "W") print $1, $2-1, $3, $6}' \
+    | while read chr start stop contig; \
+    do \
+	echo ">$contig"; twoBitToFa galGal3.2bit:$chr:$start-$stop stdout \
+	| tail -n +2; \
+    done > unRandom.fa
+
+    fgrep -v 'random 
+Un' chrom.sizes | awk '{print $1}' | \
+    twoBitToFa galGal3.2bit -seqList=stdin noUn.fa
+    cat noUn.fa unRandom.fa | faToTwoBit stdin galGal3.blastz.2bit
+
+    twoBitInfo galGal3.blastz.2bit galGal3.blastz.sizes
+
+#########################################################################
+# BLASTZ/CHAIN/NET TAEGUT1 (DONE braney 2008-09-04)
+    ssh swarm
+    screen
+    mkdir /cluster/data/galGal3/bed/blastz.taeGut1.2008-09-04
+    cd /cluster/data/galGal3/bed/blastz.taeGut1.2008-09-04
+    cat << _EOF_ > DEF
+# chicken vs. zebra finch
+BLASTZ_T=2
+BLASTZ_M=50
+
+# TARGET: Chicken galGal3
+# SEQ1_DIR=/scratch/data/galGal3/galGal3.2bit
+# SEQ1_LEN=/scratch/data/galGal3/chrom.sizes
+SEQ1_DIR=/hive/data/genomes/galGal3/galGal3.2bit
+SEQ1_LEN=/hive/data/genomes/galGal3/chrom.sizes
+# SEQ1_CTGDIR=/hive/data/genomes/galGal3/galGal3.blastz.2bit
+# SEQ1_CTGLEN=/hive/data/genomes/galGal3/galGal3.blastz.sizes
+# SEQ1_LIFT=/hive/data/genomes/galGal3/jkStuff/liftAll.lft
+# one chrom at a time
+SEQ1_CHUNK=500000000
+SEQ1_LAP=0
+
+# QUERY: Zebra finch taeGut1 -
+# SEQ2_DIR=/scratch/data/taeGut1/taeGut1.2bit
+# SEQ2_LEN=/scratch/data/taeGut1/chrom.sizes
+SEQ2_DIR=/hive/data/genomes/taeGut1/taeGut1.2bit
+SEQ2_LEN=/hive/data/genomes/taeGut1/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/taeGut1/taeGut1.blastz.2bit
+SEQ2_CTGLEN=/hive/data/genomes/taeGut1/taeGut1.blastz.sizes
+SEQ2_LIFT=/hive/data/genomes/taeGut1/jkStuff/liftAll.lft
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/galGal3/bed/blastz.taeGut1.2008-09-04
+_EOF_
+    # << emacs
+     doBlastzChainNet.pl -syntenicNet \
+     -bigClusterHub=swarm -chainMinScore=2000 -chainLinearGap=medium \
+     -smallClusterHub=swarm DEF -workhorse=swarm \
+     -qRepeats=windowmaskerSdust > do.log 2>&1
+
+    cd /cluster/data/galGal3/bed
+    rm -f blastz.taeGut1
+    ln -s blastz.taeGut1.2008-09-04 /cluster/data/galGal3/bed/blastz.taeGut1
+
+############
