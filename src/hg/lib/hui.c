@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.112 2008/08/29 20:55:04 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.112.4.1 2008/09/04 23:20:13 mikep Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -1995,9 +1995,12 @@ if(tagY != NULL)
     if(ix >= 0)
         safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
     }
-ix = stringArrayIx("view", membership->subgroups, membership->count);   // view is a known tagname
-if(ix >= 0)
-    safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
+if(membership != NULL)
+    {
+    ix = stringArrayIx("view", membership->subgroups, membership->count);   // view is a known tagname
+    if(ix >= 0)
+        safef(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "%s_", membership->membership[ix]);
+    }
 safecat(id+strlen(id), CHECKBOX_ID_SZ-strlen(id), "cb");
 // If all else fails:
 if(strlen(id) <= 5)
