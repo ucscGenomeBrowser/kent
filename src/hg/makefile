@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.146 2008/09/03 19:18:11 markd Exp $
+# 	$Id: makefile,v 1.147 2008/09/04 18:21:57 larrym Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -216,6 +216,7 @@ compile: ${BROWSER_BINS:%=%.compile} ${BROWSER_LOADERS:%=%.compile}
 #   cgi: Destination for the binaries is /usr/local/apache/cgi-bin-${USER}
 
 cgi: ${BROWSER_BINS:%=%.bins} ${BROWSER_LOADERS:%=%.cgi}
+	( cd encode/encodeValidate && $(MAKE) cgi)
 %.bins: hgLib
 	( cd $* && echo $* && $(MAKE) )
 %.cgi: hgLib
