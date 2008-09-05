@@ -85,24 +85,6 @@ while ( $i <= $#files )
     set r = $revs[$i]
     set p = $prevs[$i]
 
-# I MIGHT NOT NEED THIS
-#    if ( "$r" == "$p" ) then
-#	# if moving to where it already is, 
-#	# we have to remove it first to establish a new branch,
-#	# otherwise it does nothing and you are left with the old branch
-#	# including any failed patches, which is not good,
-#	# so we must remove it, so that when it gets added back,
-#	# it will get a new branch revision number.
-#	set cmd = "cvs rtag -dB v${BRANCHNN}_branch kent/src/$f"
-#	echo $cmd
-#	$cmd
-#	if ( $status ) then 
-#	    echo "error moving cvs branch tag for $f"
-#	    set err=1
-#	    break
-#	endif
-#    endif
-
     # move the tag in cvs for this week's branch.
     set cmd = "cvs rtag -r${r} -F -B -b v${BRANCHNN}_branch kent/src/$f"
     echo $cmd
