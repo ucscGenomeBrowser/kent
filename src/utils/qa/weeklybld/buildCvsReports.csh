@@ -68,7 +68,7 @@ if ( "$2" != "real" ) then
 endif 
 
 # it will shove itself off into the background anyway!
-cd /projects/compbio/bin
+cd $WEEKLYBLD
 
 if ( "$mode" == "review") then
     ./cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN}
