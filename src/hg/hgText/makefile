@@ -1,15 +1,33 @@
-include ../../inc/common.mk
 
-L = -lm ${MYSQLLIBS}
-MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+all::
+	@echo "ERROR: obsolete utility hg/hgText/"
 
-A = hgText
+my::
+	@echo "ERROR: obsolete utility hg/hgText/"
 
-O = $A.o hgWigText.o
+alpha::
+	@echo "ERROR: obsolete utility hg/hgText/"
 
-include ../../inc/cgi_build_rules.mk
+beta::
+	@echo "ERROR: obsolete utility hg/hgText/"
 
-compile: $O 
-	${CC} $O ${MYLIBS} ${L} 
-	mv ${AOUT} $A${EXE}
+strip::
+	@echo "ERROR: obsolete utility hg/hgText/"
+
+install::
+	@echo "ERROR: obsolete utility hg/hgText/"
+
+debug::
+	@echo "ERROR: obsolete utility hg/hgText/"
+
+lib::
+	@echo "ERROR: obsolete utility hg/hgText/"
+
+clean::
+	@echo "ERROR: obsolete utility hg/hgText/"
+
+tags::
+	@echo "ERROR: obsolete utility hg/hgText/"
+
+compile:
+	@echo "ERROR: obsolete utility hg/hgText/"
