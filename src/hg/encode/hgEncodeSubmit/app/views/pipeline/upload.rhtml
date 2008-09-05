@@ -28,10 +28,19 @@ Resume if the previous upload  was interrupted.
     <br/>
 
   <% else %>
+    <% 
+    ftpServer = "#{ActiveRecord::Base.configurations[RAILS_ENV]['ftpServer']}"
+    ftpPort = "#{ActiveRecord::Base.configurations[RAILS_ENV]['ftpPort']}"
+    ftpText = "ftp #{ftpServer}"
+    if ftpPort != "21" 
+      ftpText += " #{ftpPort}"
+    end
+    %>
 
     <p><label for="project_upload_ftp">
     or Upload your archive to your <%= link_to 'FTP', '/help.html#ftpHelp' -%> space</label>
-    <A HREF=<%= @ftpUrl -%>> <%= @ftpUrl -%></A><br/>
+    using your same login and password.<br/>
+    &nbsp;&nbsp;&nbsp;<A HREF=<%= @ftpUrl -%>> <%= ftpText -%></A><br/>  
     Then <%= link_to 'refresh', {:action => 'upload', :id => @project.id} -%>.
 
   <% end %>
