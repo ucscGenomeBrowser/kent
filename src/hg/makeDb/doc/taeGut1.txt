@@ -452,7 +452,7 @@ Un' chrom.sizes | awk '{print $1}' | \
     twoBitInfo taeGut1.blastz.2bit taeGut1.blastz.sizes
 
 #########################################################################
-## BLASTZ galGal3 swap (working braney
+## BLASTZ galGal3 swap (DONE braney 2008-09-04)
     ##	the original blastz to galGal3 measured
     ssh hgwdev
     mkdir /cluster/data/taeGut1/bed/blastz.galGal3.swap
@@ -478,3 +478,31 @@ Un' chrom.sizes | awk '{print $1}' | \
 	> fb.taeGut1l.chainGalGal3Link.txt 2>&1  
 # 802731012 bases of 1222864691 (65.643%) in intersection
 
+
+#########################################################################
+## BLASTZ hg18 swap (DONE braney 2008-09-04)
+    ##	the original blastz to hg18 measured
+    ssh hgwdev
+    mkdir /cluster/data/taeGut1/bed/blastz.hg18.swap
+    cd /cluster/data/taeGut1/bed/blastz.hg18.swap
+    nice -n +19 featureBits hg18 chainTaeGut1Link \
+	> fb.hg18.chainTaeGut1Link.txt 2>&1
+
+# 76276656 bases of 2881515245 (2.647%) in intersection
+
+    ssh swarm
+    cd /cluster/data/taeGut1/bed/blastz.hg18.swap
+    screen
+    doBlastzChainNet.pl \
+	/cluster/data/hg18/bed/blastz.taeGut1.2008-09-04/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -bigClusterHub=swarm -smallCluster=swarm \
+	-workhorse=kolossus -swap > swap.log 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/taeGut1/bed/blastz.hg18.swap
+    nice -n +19 featureBits taeGut1 chainHg18Link \
+	> fb.taeGut1l.chainHg18Link.txt 2>&1  
+
+# 70048616 bases of 1222864691 (5.728%) in intersection
