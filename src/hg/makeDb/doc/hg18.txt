@@ -23314,3 +23314,53 @@ TMPDIR=/scratch/tmp
     #	real    17m9.675s
     cat fb.oryLat2.chainHg18Link.txt
     #	46961822 bases of 700386597 (6.705%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET TAEGUT1 (DONE braney 2008-09-04)
+    ssh swarm
+    screen
+    mkdir /cluster/data/hg18/bed/blastz.taeGut1.2008-09-04
+    cd /cluster/data/hg18/bed/blastz.taeGut1.2008-09-04
+    cat << _EOF_ > DEF
+# human vs. zebra finch
+BLASTZ_M=50
+
+# TARGET: Human hg18
+ SEQ1_DIR=/scratch/data/hg18/hg18.2bit
+ SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+# one chrom at a time
+SEQ1_CHUNK=500000000
+SEQ1_LAP=0
+
+# QUERY: Zebra finch taeGut1 -
+ SEQ2_DIR=/scratch/data/taeGut1/taeGut1.2bit
+ SEQ2_LEN=/scratch/data/taeGut1/chrom.sizes
+# SEQ2_DIR=/hive/data/genomes/taeGut1/taeGut1.2bit
+# SEQ2_LEN=/hive/data/genomes/taeGut1/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/taeGut1/taeGut1.blastz.2bit
+SEQ2_CTGLEN=/hive/data/genomes/taeGut1/taeGut1.blastz.sizes
+SEQ2_LIFT=/hive/data/genomes/taeGut1/jkStuff/liftAll.lft
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg18/bed/blastz.taeGut1.2008-09-04
+_EOF_
+    # << emacs
+     doBlastzChainNet.pl -syntenicNet \
+     -bigClusterHub=swarm -chainMinScore=2000 -chainLinearGap=loose \
+     -smallClusterHub=swarm DEF -workhorse=kolossus \
+     -qRepeats=windowmaskerSdust > do.log 2>&1
+
+# Completed: 5680 of 5680 jobs
+# CPU time in finished jobs:    2552155s   42535.91m   708.93h   29.54d  0.081 y
+# IO & Wait Time:                224054s    3734.24m    62.24h    2.59d  0.007 y
+# Average job time:                 489s       8.15m     0.14h    0.01d
+# Longest finished job:            6357s     105.95m     1.77h    0.07d
+# Submission to last job:          6690s     111.50m     1.86h    0.08d
+
+    cd /cluster/data/hg18/bed
+    rm -f blastz.taeGut1
+    ln -s blastz.taeGut1.2008-09-04 /cluster/data/hg18/bed/blastz.taeGut1
+
+############
