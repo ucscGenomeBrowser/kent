@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.30 2008/09/03 19:19:04 markd Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.31 2008/09/05 20:22:35 giardine Exp $";
 
 #define CHROM_COLORS 26
 
@@ -1387,10 +1387,10 @@ if (attr == NULL)
     }
 for (cnt = 0; cnt < oregannoTypeSize; cnt++)
     {
-    if (cartVarExists(cart, oregannoTypeString[cnt]) &&        
-        cartString(cart, oregannoTypeString[cnt]) != NULL &&        
+    if (!cartVarExists(cart, oregannoTypeString[cnt]) ||        
+        (cartString(cart, oregannoTypeString[cnt]) != NULL &&        
         differentString(cartString(cart, oregannoTypeString[cnt]), "0") && 
-        sameString(oregannoTypeDbValue[cnt], attr->attrVal))
+        sameString(oregannoTypeDbValue[cnt], attr->attrVal)))
         {
         oregannoAttrFree(&attr);
         return TRUE; /* include this type */
