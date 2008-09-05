@@ -22,10 +22,14 @@ Setting up a development environment:
 -------------------------------
 To update server:
 
-1. mongrel_rails stop
+1. mongrel_rails stop  (or use ./stop batch file)
 
-2. cd /kent/src/hg/encode; cvsup
+2. cd /kent/src/hg/encode; cvsup   (only if you know that all checked in changes are good)
 
-3. rake db:migrate
+3. rake db:migrate  (skip this unless there were database structure changes)
 
-4. mongrel_rails start -p <yourPort> -d
+4. mongrel_rails start -p <yourPort> -d  (or use ./go batch file)
+
+--------------------------------
+
+
