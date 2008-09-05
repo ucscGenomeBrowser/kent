@@ -61,7 +61,7 @@ if (row != NULL)
 	pValIx = 13;
 	}
     printf("<B>Signal value:</B> %f<BR>\n", sqlFloat(rowPastOffset[sigIx]));
-    printf("<B>P-value:</B> %f<BR>\n", sqlFloat(rowPastOffset[pValIx]));
+    printf("<B>P-value (-log10):</B> %f<BR>\n", sqlFloat(rowPastOffset[pValIx]));
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);

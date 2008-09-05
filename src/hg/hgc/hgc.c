@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1458 2008/09/03 19:19:07 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1459 2008/09/05 06:14:43 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3309,10 +3309,14 @@ headerItem = cloneString(item);
 if (wordCount > 0)
     {
     type = words[0];
-    if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "netAlign") )
+    if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "netAlign") 
+	|| sameString(type, "encodePeak"))
         /* suppress printing item name in page header, as it is
            not informative for these track types */
         headerItem = NULL;
+    else if ((sameString(type, "narrowPeak") || sameString(type, "broadPeak") || sameString(type, "gappedPeak")) 
+	     && headerItem && sameString(headerItem, "."))
+	headerItem = NULL;
     }
 genericHeader(tdb, headerItem);
 printCustomUrl(tdb, itemForUrl, item == itemForUrl);
