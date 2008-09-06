@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.115 2008/09/03 19:19:26 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.116 2008/09/06 04:06:52 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1833,12 +1833,15 @@ return sqlEscapeTabFileString2(to, from);
 static void addProfileDatabases(char *profileName, struct hash *databases)
 /* find databases on a profile and add to hash */
 {
-struct sqlConnection *sc = sqlConnectProfile(profileName, NULL);
-struct slName *db, *dbs = sqlGetAllDatabase(sc);
-for (db = dbs; db != NULL; db = db->next)
-    hashAdd(databases, db->name, NULL);
-sqlDisconnect(&sc);
-slFreeList(&dbs);
+struct sqlConnection *sc = sqlMayConnectProfile(profileName, NULL);
+if (sc != NULL)
+    {
+    struct slName *db, *dbs = sqlGetAllDatabase(sc);
+    for (db = dbs; db != NULL; db = db->next)
+        hashAdd(databases, db->name, NULL);
+    sqlDisconnect(&sc);
+    slFreeList(&dbs);
+    }
 }
 
 struct hash *sqlHashOfDatabases(void)
@@ -1850,7 +1853,7 @@ if (profiles == NULL)
 struct hash *databases = newHash(8);
 struct hashCookie cookie = hashFirst(profiles);
 struct hashEl *hel;
-for (hel = hashNext(&cookie);  hel != NULL; hel = hel->next)
+while ((hel = hashNext(&cookie)) != NULL)
     addProfileDatabases(((struct sqlProfile*)hel->val)->name, databases);
 return databases;
 }
@@ -1864,7 +1867,7 @@ struct hash *dbHash = sqlHashOfDatabases();
 struct hashCookie cookie = hashFirst(dbHash);
 struct hashEl *hel;
 struct slName *dbs = NULL;
-for (hel = hashNext(&cookie); hel != NULL; hel = hel->next)
+while ((hel = hashNext(&cookie)) != NULL)
     slSafeAddHead(&dbs, slNameNew(hel->name));
 hashFree(&dbHash);
 slSort(&dbs, slNameCmp);
