@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1459 2008/09/05 06:14:43 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1460 2008/09/06 19:28:00 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2540,6 +2540,14 @@ void linkToOtherBrowserTitle(char *otherDb, char *chrom, int start, int end, cha
 {
 printf("<A TARGET=\"_blank\" TITLE=\"%s\" HREF=\"%s?db=%s&ct=&position=%s%%3A%d-%d\">",
        title, hgTracksName(), otherDb, chrom, start+1, end);
+}
+
+void linkToPal(char *track,  char *chrom, int start, int end, char *geneName)
+/* Make anchor tag to open pal window */
+{
+printf("<A TITLE=\"%s\" HREF=\"%s?g=%s&i=%s&c=%s&l=%d&r=%d\">",
+       geneName, hgPalName(), track, geneName, chrom, start, end);
+    printf("%s</A>  ",geneName);
 }
 
 void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg)
@@ -6661,8 +6669,6 @@ if ((addp == 1) || (pred != NULL))
     {
     char *ptr;
 
-    if (!hTableExists(database, pred))
-	addp = 1;
     sprintf(buffer, "%s",readName);
     
     if (!(sameString(pred, "ce3.blastWBPep01")
@@ -8734,6 +8740,12 @@ for (i = 0; imgExt[i] != NULL; i++)
 return NULL;
 }
 
+void addPalLink(char *track, char *chrom, int start, int end, char *geneName)
+{
+printf("<B>CDS FASTA alignment from multiple alignment: </B>\n");
+linkToPal( track, chrom, start, end, geneName);
+}
+
 void addGeneExtra(char *geneName)
 /* create html table columns with geneExtra data, see hgdocs/geneExtra/README
  * for details */
@@ -8959,6 +8971,9 @@ char *summary = NULL;
 boolean isXeno = sameString(tdb->tableName, "xenoRefGene");
 struct refLink *rl;
 int start = cartInt(cart, "o");
+int left = cartInt(cart, "l");
+int right = cartInt(cart, "r");
+char *chrom = cartString(cart, "c");
 
 /* Make sure to escape single quotes for DB parseability */
 if (strchr(rnaName, '\''))
@@ -8986,6 +9001,14 @@ else
 printf("<table border=0>\n<tr>\n");
 prRefGeneInfo(conn, rnaName, sqlRnaName, rl, isXeno);
 addGeneExtra(rl->name);  /* adds columns if extra info is available */
+
+#ifdef HGPAL
+addPalLink(tdb->tableName,  chrom, left, right, rnaName);
+#else
+chrom = 0;
+left = right = 0;
+#endif
+
 printf("</tr>\n</table>\n");
 
 /* optional summary text */
