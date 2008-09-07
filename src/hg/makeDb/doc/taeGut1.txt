@@ -433,15 +433,21 @@ taeGut1.downloadDir = taeGut1
     rm -rf fasta
 
 #####################################################
-# build 2bit with contigs from random chroms and chrUn (DONE braney 2008-08-30)
-
+# build 2bit with contigs from random chroms and chrUn (reDONE braney 2008-09-06)
     cd /cluster/data/taeGut1
     fgrep 'random 
-Un' taeGut1.agp | awk '{if ($5 == "W") print $1, $2-1, $3, $6}' \
-    | while read chr start stop contig; \
-    do \
-	echo ">$contig"; twoBitToFa taeGut1.2bit:$chr:$start-$stop stdout \
-	| tail -n +2; \
+Un' taeGut1.agp | awk '{if ($5 == "W") print $1, $2-1, $3, $6, $9}' \
+    | while read chr start stop contig strand; 
+    do 
+	echo ">$contig"; 
+	if test $strand == '+'
+	then
+	    twoBitToFa taeGut1.2bit:$chr:$start-$stop stdout \
+		| tail -n +2; 
+	else
+	    twoBitToFa taeGut1.2bit:$chr:$start-$stop stdout | \
+		faRc -keepCase stdin stdout | tail -n +2; 
+	fi
     done > unRandom.fa
 
     fgrep -v 'random 
@@ -452,22 +458,15 @@ Un' chrom.sizes | awk '{print $1}' | \
     twoBitInfo taeGut1.blastz.2bit taeGut1.blastz.sizes
 
 #########################################################################
-## BLASTZ galGal3 swap (DONE braney 2008-09-04)
+## BLASTZ galGal3 swap (reDONE braney 2008-09-06)
     ##	the original blastz to galGal3 measured
-    ssh hgwdev
-    mkdir /cluster/data/taeGut1/bed/blastz.galGal3.swap
-    cd /cluster/data/taeGut1/bed/blastz.galGal3.swap
-    nice -n +19 featureBits galGal3 chainTaeGut1Link \
-	> fb.galGal3.chainTaeGut1Link.txt 2>&1
-
-# 714757948 bases of 1042591351 (68.556%) in intersection
-
     ssh swarm
+    mkdir /cluster/data/taeGut1/bed/blastz.galGal3.swap
     cd /cluster/data/taeGut1/bed/blastz.galGal3.swap
     screen
     doBlastzChainNet.pl \
-	/cluster/data/galGal3/bed/blastz.taeGut1.2008-09-04/DEF \
-	-chainMinScore=2000 -chainLinearGap=medium \
+	/cluster/data/galGal3/bed/blastz.taeGut1.2008-09-06/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-verbose=2 -bigClusterHub=swarm -smallCluster=swarm \
 	-workhorse=kolossus -swap > swap.log 2>&1 &
@@ -480,29 +479,180 @@ Un' chrom.sizes | awk '{print $1}' | \
 
 
 #########################################################################
-## BLASTZ hg18 swap (DONE braney 2008-09-04)
-    ##	the original blastz to hg18 measured
-    ssh hgwdev
-    mkdir /cluster/data/taeGut1/bed/blastz.hg18.swap
-    cd /cluster/data/taeGut1/bed/blastz.hg18.swap
-    nice -n +19 featureBits hg18 chainTaeGut1Link \
-	> fb.hg18.chainTaeGut1Link.txt 2>&1
-
-# 76276656 bases of 2881515245 (2.647%) in intersection
-
+## BLASTZ hg18 swap (reDONE braney 2008-09-06)
     ssh swarm
+    mkdir /cluster/data/taeGut1/bed/blastz.hg18.swap
     cd /cluster/data/taeGut1/bed/blastz.hg18.swap
     screen
     doBlastzChainNet.pl \
-	/cluster/data/hg18/bed/blastz.taeGut1.2008-09-04/DEF \
-	-chainMinScore=2000 -chainLinearGap=medium \
+	/cluster/data/hg18/bed/blastz.taeGut1.2008-09-06/DEF \
+	-chainMinScore=3000 -chainLinearGap=medium \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-verbose=2 -bigClusterHub=swarm -smallCluster=swarm \
 	-workhorse=kolossus -swap > swap.log 2>&1 &
 
-    ssh hgwdev
-    cd /cluster/data/taeGut1/bed/blastz.hg18.swap
-    nice -n +19 featureBits taeGut1 chainHg18Link \
-	> fb.taeGut1l.chainHg18Link.txt 2>&1  
 
-# 70048616 bases of 1222864691 (5.728%) in intersection
+###########################################################################
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2008-09-07)
+    # bash  if not using bash shell already
+    ssh kolossus
+    mkdir /cluster/data/taeGut1/blastDb
+    cd /cluster/data/taeGut1
+    awk '{if ($2 > 1000000) print $1}' taeGut1.blastz.sizes > 1meg.lst
+    twoBitToFa -seqList=1meg.lst  taeGut1.blastz.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+    rm temp.fa 1meg.lst
+
+    awk '{if ($2 <= 1000000) print $1}' taeGut1.blastz.sizes > less1meg.lst
+    twoBitToFa -seqList=less1meg.lst  taeGut1.blastz.2bit temp.fa
+    faSplit about temp.fa 1000000 blastDb/y 
+
+    cd blastDb
+    for i in *.fa
+    do
+	/hive/data/outside/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+    ls *.nsq | wc -l
+# 1243
+
+    mkdir -p /cluster/data/taeGut1/bed/tblastn.hg18KG
+    cd /cluster/data/taeGut1/bed/tblastn.hg18KG
+    echo  ../../blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+
+# 1243 query.lst
+
+   # we want around 150000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(150000/`wc query.lst | awk '{print $1}'`\)
+
+# 36727/(150000/1243) = 304.344407
+
+   mkdir -p kgfa
+   split -l 304 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   mkdir -p blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/taeGut1/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/hive/data/outside/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /hive/data/outside/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/taeGut1/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
+        if pslCheck -prot $3.tmp
+        then                  
+            mv $3.tmp $3     
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0               
+    fi                      
+fi                         
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    exit 
+    
+    ssh swarm
+    cd /cluster/data/taeGut1/bed/tblastn.hg18KG
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+
+
+# Completed: 150403 of 150403 jobs
+# CPU time in finished jobs:    7194206s  119903.43m  1998.39h   83.27d  0.228 y
+# IO & Wait Time:                576761s    9612.69m   160.21h    6.68d  0.018 y
+# Average job time:                  52s       0.86m     0.01h    0.00d
+# Longest finished job:             120s       2.00m     0.03h    0.00d
+# Submission to last job:         12759s     212.65m     3.54h    0.15d
+
+    ssh swarm
+    cd /cluster/data/taeGut1/bed/tblastn.hg18KG
+    mkdir chainRun
+    cd chainRun
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS ../blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    para create chainSpec
+    para try, check, push, check etc.
+
+# Completed: 121 of 121 jobs
+# CPU time in finished jobs:      14143s     235.72m     3.93h    0.16d  0.000 y
+# IO & Wait Time:                 54085s     901.42m    15.02h    0.63d  0.002 y
+# Average job time:                 564s       9.40m     0.16h    0.01d
+# Longest finished job:             995s      16.58m     0.28h    0.01d
+# Submission to last job:          1047s      17.45m     0.29h    0.01d
+
+    cd /cluster/data/taeGut1/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort u.*.psl m60* | uniq > ../unliftBlastHg18KG.psl
+    cd ..
+    pslCheck unliftBlastHg18KG.psl
+    liftUp -nohead temp.psl ../../jkStuff/liftAll.lft carry unliftBlastHg18KG.psl 
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n temp.psl  > blastHg18KG.psl
+    rm temp.psl
+    pslCheck blastHg18KG.psl
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/taeGut1/bed/tblastn.hg18KG
+    hgLoadPsl taeGut1 blastHg18KG.psl
+
+    # check coverage
+    featureBits taeGut1 blastHg18KG 
+# 19587281 bases of 1222864691 (1.602%) in intersection
+
+    featureBits taeGut1 all_mrna blastHg18KG  -enrichment
+# all_mrna 0.117%, blastHg18KG 1.602%, both 0.049%, cover 41.81%, enrich 26.10x
+
+    rm -rf blastOut
+#end tblastn
