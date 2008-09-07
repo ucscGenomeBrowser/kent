@@ -1,4 +1,5 @@
-track mgcGenes
+track mgcFullMrna
+#track mgcGenes
 shortLabel XGC Genes
 longLabel Xenopus Gene Collection Full ORF mRNAs
 group genes

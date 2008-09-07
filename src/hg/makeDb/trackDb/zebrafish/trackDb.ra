@@ -1,4 +1,5 @@
-track mgcGenes
+track mgcFullMrna
+#track mgcGenes
 shortLabel ZGC Genes
 longLabel Zebrafish Gene Collection Full ORF mRNAs
 group genes
