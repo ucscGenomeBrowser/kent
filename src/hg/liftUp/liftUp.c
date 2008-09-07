@@ -19,7 +19,7 @@
 #include "xa.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.46 2007/08/27 21:25:40 angie Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.47 2008/09/07 18:12:46 braney Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -378,6 +378,8 @@ for (i=0; i<sourceCount; ++i)
 	    psl = pslNext(lf);
 	if (psl == NULL)
 	    break;
+	boolean isProt = pslIsProtein(psl);
+
 	doDots(&dotMod);
 	if (querySide)
 	    seqName = psl->qName;
@@ -479,25 +481,49 @@ for (i=0; i<sourceCount; ++i)
 		    }
 		else
 		    {
-		    if (psl->strand[strandChar] == '-')
-			 errAbort("Can't handle all these minus strands!");
+		    if (isProt)
+			{
+			/* if it's protein, we can't reverse the query */
+			if (psl->strand[strandChar] == '-')
+			    {
+			    for (j=0; j<blockCount; ++j)
+				starts[j] += offset;
+			    }
+			else
+			    {
+			    for (j=0; j<blockCount; ++j)
+				{
+				int tr = seqSize - starts[j];
+				tr += offset;
+				starts[j] = spec->newSize - tr;
+				}
+			    }
+			psl->strand[strandChar] = 
+			    flipStrand(psl->strand[strandChar]);
+			}
 		    else
 			{
-			for (j=0; j<blockCount; ++j)
+			if (psl->strand[strandChar] == '-')
+			     errAbort("Can't handle all these minus strands! line %d",lf->lineIx);
+			else
 			    {
-			    psl->tStarts[j] = psl->tSize - 
-			    	(psl->tStarts[j] + blockSizes[j]) + offset;
-			    psl->qStarts[j] = psl->qSize - 
-			    	(psl->qStarts[j] + blockSizes[j]);	/* no offset. */
+			    for (j=0; j<blockCount; ++j)
+				{
+				psl->tStarts[j] = psl->tSize - 
+				    (psl->tStarts[j] + blockSizes[j]) + offset;
+				psl->qStarts[j] = psl->qSize - 
+				    (psl->qStarts[j] + blockSizes[j]);	/* no offset. */
+				}
+			    psl->strand[1-strandChar] = 
+				flipStrand(psl->strand[1-strandChar]);
+			    reverseUnsigned(blockSizes, blockCount);
+			    reverseUnsigned(psl->qStarts, blockCount);
+			    reverseUnsigned(psl->tStarts, blockCount);
 			    }
-			psl->strand[1-strandChar] = 
-			    flipStrand(psl->strand[1-strandChar]);
-			reverseUnsigned(blockSizes, blockCount);
-			reverseUnsigned(psl->qStarts, blockCount);
-			reverseUnsigned(psl->tStarts, blockCount);
 			}
 		    }
 		}
+
 	    if (isPtoG)
 		for (j=0; j<blockCount; ++j)
 		    blockSizes[j] *= 3;
