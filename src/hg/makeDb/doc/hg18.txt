@@ -23319,8 +23319,8 @@ TMPDIR=/scratch/tmp
 # BLASTZ/CHAIN/NET TAEGUT1 (DONE braney 2008-09-04)
     ssh swarm
     screen
-    mkdir /cluster/data/hg18/bed/blastz.taeGut1.2008-09-04
-    cd /cluster/data/hg18/bed/blastz.taeGut1.2008-09-04
+    mkdir /cluster/data/hg18/bed/blastz.taeGut1.2008-09-06
+    cd /cluster/data/hg18/bed/blastz.taeGut1.2008-09-06
     cat << _EOF_ > DEF
 # human vs. zebra finch
 BLASTZ_M=50
@@ -23329,12 +23329,12 @@ BLASTZ_M=50
  SEQ1_DIR=/scratch/data/hg18/hg18.2bit
  SEQ1_LEN=/scratch/data/hg18/chrom.sizes
 # one chrom at a time
-SEQ1_CHUNK=500000000
+SEQ1_CHUNK=200000000
 SEQ1_LAP=0
 
-# QUERY: Zebra finch taeGut1 -
- SEQ2_DIR=/scratch/data/taeGut1/taeGut1.2bit
- SEQ2_LEN=/scratch/data/taeGut1/chrom.sizes
+# QUERY: Zebra finch taeGut1
+SEQ2_DIR=/scratch/data/taeGut1/taeGut1.2bit
+SEQ2_LEN=/scratch/data/taeGut1/chrom.sizes
 # SEQ2_DIR=/hive/data/genomes/taeGut1/taeGut1.2bit
 # SEQ2_LEN=/hive/data/genomes/taeGut1/chrom.sizes
 SEQ2_CTGDIR=/hive/data/genomes/taeGut1/taeGut1.blastz.2bit
@@ -23344,12 +23344,12 @@ SEQ2_CHUNK=20000000
 SEQ2_LAP=0
 SEQ2_LIMIT=100
 
-BASE=/hive/data/genomes/hg18/bed/blastz.taeGut1.2008-09-04
+BASE=/hive/data/genomes/hg18/bed/blastz.taeGut1.2008-09-06
 _EOF_
     # << emacs
      doBlastzChainNet.pl -syntenicNet \
-     -bigClusterHub=swarm -chainMinScore=2000 -chainLinearGap=loose \
-     -smallClusterHub=swarm DEF -workhorse=kolossus \
+     -bigClusterHub=swarm -chainMinScore=3000 -chainLinearGap=loose \
+     -smallClusterHub=swarm DEF -workhorse=swarm \
      -qRepeats=windowmaskerSdust > do.log 2>&1
 
 # Completed: 5680 of 5680 jobs
@@ -23361,6 +23361,6 @@ _EOF_
 
     cd /cluster/data/hg18/bed
     rm -f blastz.taeGut1
-    ln -s blastz.taeGut1.2008-09-04 /cluster/data/hg18/bed/blastz.taeGut1
+    ln -s blastz.taeGut1.2008-09-06 /cluster/data/hg18/bed/blastz.taeGut1
 
 ############

@@ -2562,8 +2562,8 @@ Un' chrom.sizes | awk '{print $1}' | \
 # BLASTZ/CHAIN/NET TAEGUT1 (DONE braney 2008-09-04)
     ssh swarm
     screen
-    mkdir /cluster/data/galGal3/bed/blastz.taeGut1.2008-09-04
-    cd /cluster/data/galGal3/bed/blastz.taeGut1.2008-09-04
+    mkdir /cluster/data/galGal3/bed/blastz.taeGut1.2008-09-06
+    cd /cluster/data/galGal3/bed/blastz.taeGut1.2008-09-06
     cat << _EOF_ > DEF
 # chicken vs. zebra finch
 BLASTZ_T=2
@@ -2578,10 +2578,10 @@ SEQ1_LEN=/hive/data/genomes/galGal3/chrom.sizes
 # SEQ1_CTGLEN=/hive/data/genomes/galGal3/galGal3.blastz.sizes
 # SEQ1_LIFT=/hive/data/genomes/galGal3/jkStuff/liftAll.lft
 # one chrom at a time
-SEQ1_CHUNK=500000000
+SEQ1_CHUNK=200000000
 SEQ1_LAP=0
 
-# QUERY: Zebra finch taeGut1 -
+# QUERY: Zebra finch taeGut1
 # SEQ2_DIR=/scratch/data/taeGut1/taeGut1.2bit
 # SEQ2_LEN=/scratch/data/taeGut1/chrom.sizes
 SEQ2_DIR=/hive/data/genomes/taeGut1/taeGut1.2bit
@@ -2593,16 +2593,16 @@ SEQ2_CHUNK=20000000
 SEQ2_LAP=0
 SEQ2_LIMIT=100
 
-BASE=/hive/data/genomes/galGal3/bed/blastz.taeGut1.2008-09-04
+BASE=/hive/data/genomes/galGal3/bed/blastz.taeGut1.2008-09-06
 _EOF_
     # << emacs
      doBlastzChainNet.pl -syntenicNet \
-     -bigClusterHub=swarm -chainMinScore=2000 -chainLinearGap=medium \
+     -bigClusterHub=swarm -chainMinScore=3000 -chainLinearGap=medium \
      -smallClusterHub=swarm DEF -workhorse=swarm \
-     -qRepeats=windowmaskerSdust > do.log 2>&1
+     -qRepeats=windowmaskerSdust > do.log 2>&1 &
 
     cd /cluster/data/galGal3/bed
     rm -f blastz.taeGut1
-    ln -s blastz.taeGut1.2008-09-04 /cluster/data/galGal3/bed/blastz.taeGut1
+    ln -s blastz.taeGut1.2008-09-06 /cluster/data/galGal3/bed/blastz.taeGut1
 
 ############
