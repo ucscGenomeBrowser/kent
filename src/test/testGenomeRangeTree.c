@@ -1,6 +1,5 @@
 #include "common.h"
 #include "options.h"
-#include "genomeRangeTree.h"
 #include "genomeRangeTreeFile.h"
 
 /* Test program for genomeRangeTree library functions (author: mikep) */

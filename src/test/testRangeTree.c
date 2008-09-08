@@ -1,6 +1,5 @@
 #include "common.h"
 #include "options.h"
-#include "rangeTree.h"
 #include "rangeTreeFile.h"
 
 /* Test program for rangeTree library functions (author: mikep) */

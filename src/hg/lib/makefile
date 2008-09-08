@@ -39,7 +39,8 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     flyBaseSwissProt.o flyreg.o flyreg2.o gbExtFile.o gbWarn.o gbMiscDiff.o gbProtAnn.o gcPercent.o \
     genbank.o gencodeGeneClass.o gencodeIntron.o genMapDb.o \
     geneBands.o geneCheck.o geneCheckDetails.o geneCheckWidget.o \
-    geneGraph.o genePred.o genePredReader.o geneSimilarities.o genoLay.o genomicDups.o \
+    geneGraph.o genePred.o genePredReader.o geneSimilarities.o genoLay.o \
+    genomeRangeTreeFile.o genomicDups.o \
     genomicSuperDups.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     ggTypes.o glDbRep.o goa.o goaPart.o googleAnalytics.o \
     growthCondition.o grp.o \
@@ -63,7 +64,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     pbStamp.o pcrResult.o pepPred.o plasEndPairs.o \
     polyGenotype.o protFeat.o pscreen.o \
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
-    rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
+    rangeTreeFile.o rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
     rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o \
     rgdQtl.o riken.o rhMapZfishInfo.o rikenBest.o rikenCluster.o rmskOut.o \

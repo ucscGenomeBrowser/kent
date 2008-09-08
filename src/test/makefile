@@ -5,16 +5,16 @@ include ../inc/common.mk
 	chmod a+x ${AOUT}
 	mv ${AOUT} ../cgi-bin/test.cgi
 
-testRangeTree: ../lib/$(MACHTYPE)/jkweb.a testRangeTree.c
-	${CC} ${COPT} ${CFLAGS} -I../inc testRangeTree.c ../lib/$(MACHTYPE)/jkweb.a -lm -o testRangeTree
+testRangeTree: ../lib/$(MACHTYPE)/jkweb.a ../lib/$(MACHTYPE)/jkhgap.a testRangeTree.c
+	${CC} ${COPT} ${CFLAGS} -I../inc -I../hg/inc testRangeTree.c ../lib/$(MACHTYPE)/jkweb.a -lm -o testRangeTree
 	chmod a+x testRangeTree
 	./testRangeTree -verbose=0
 	hexdump -f out/testRangeTree.fmt out/testRangeTree.out > out/testRangeTree.hexdump2
 	diff out/testRangeTree.hexdump out/testRangeTree.hexdump2
 	rm out/testRangeTree.out out/testRangeTree.hexdump2 testRangeTree
 
-testGenomeRangeTree: ../lib/$(MACHTYPE)/jkweb.a testGenomeRangeTree.c
-	${CC} ${COPT} ${CFLAGS} -I../inc testGenomeRangeTree.c ../lib/$(MACHTYPE)/jkweb.a -lm -o testGenomeRangeTree
+testGenomeRangeTree: ../lib/$(MACHTYPE)/jkweb.a ../lib/$(MACHTYPE)/jkhgap.a testGenomeRangeTree.c
+	${CC} ${COPT} ${CFLAGS} -I../inc -I../hg/inc testGenomeRangeTree.c ../lib/$(MACHTYPE)/jkweb.a -lm -o testGenomeRangeTree
 	chmod a+x testGenomeRangeTree
 	./testGenomeRangeTree -verbose=0
 	hexdump -n 58 -f out/testGenomeRangeTree.fmt out/testGenomeRangeTree.out > out/testGenomeRangeTree.hexdump2
