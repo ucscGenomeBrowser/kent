@@ -191,7 +191,7 @@ pbCalResStdGlobal 080707
 
 # Load distribution tables:
 
-hgLoadSqlTab proteins080707 pbAbnomLimit ~/kent/src/hg/lib/pbAnomLimit.sql ./pbAnomLimit.tab
+hgLoadSqlTab proteins080707 pbAnomLimit ~/kent/src/hg/lib/pbAnomLimit.sql ./pbAnomLimit.tab
 hgLoadSqlTab proteins080707 pbResAvgStd  ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd.tab
 
 # Get taxonomy names table from NCBI.
