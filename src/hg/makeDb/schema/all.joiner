@@ -32,7 +32,7 @@ set rheMac rheMac1,rheMac2
 set strPur strPur1,strPur2
 set felCat felCat3
 set gasAcu gasAcu1
-set oryLat oryLat1 oryLat2
+set oryLat oryLat1,oryLat2
 set equCab equCab1,equCab2
 set anoCar anoCar1
 set ornAna ornAna1
