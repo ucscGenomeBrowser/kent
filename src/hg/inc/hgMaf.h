@@ -2,6 +2,7 @@
  *           Also, items for maf track display */
 
 #include "trackDb.h"
+#include "cart.h"
 
 /* Track settings and variables */
 #define SPECIES_TREE_VAR        "speciesTree"
@@ -72,3 +73,15 @@ struct consWiggle *wigMafWiggles(char *db, struct trackDb *tdb);
 
 char *wigMafWiggleVar(struct trackDb *tdb, struct consWiggle *wig);
 /* Return name of cart variable for this cons wiggle */
+
+struct wigMafSpecies 
+    {
+    struct wigMafSpecies *next;
+    char *name;
+    int group;
+    boolean on;
+    };
+
+struct wigMafSpecies * wigMafSpeciesTable(struct cart *cart, 
+    struct trackDb *tdb, char *db) ;
+char **wigMafGetSpecies(struct cart *cart, struct trackDb *tdb, char *db, struct wigMafSpecies **list, int *groupCt);
