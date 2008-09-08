@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gsidMsaToTab.c,v 1.1 2007/07/11 19:10:11 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidMsaToTab.c,v 1.2 2008/09/08 17:20:03 markd Exp $";
 
 char *seq, *id;
 char newSeq[100000];
@@ -47,7 +47,7 @@ if (argc != 3) usage();
 database   = argv[1];
 seqDataSet = argv[2];
 
-conn2= hAllocConn();
+conn2= hAllocConn(database);
 
 safef(outFileNameDna, sizeof(outFileNameDna), "%sDnaSeq.tab", seqDataSet);
 safef(outFileNameAa,  sizeof(outFileNameAa),  "%sAaSeq.tmp",  seqDataSet);

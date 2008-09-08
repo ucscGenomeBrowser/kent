@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gsidMsa.c,v 1.3 2008/04/16 18:50:39 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidMsa.c,v 1.4 2008/09/08 17:20:03 markd Exp $";
 
 #define MAXSEQ 5000
 #define MAXSEQLEN 15000
@@ -60,7 +60,7 @@ int j,jj,k;
 int seqCnt = 0;
 int max, kmax, kmax2;
 
-conn2= hAllocConn();
+conn2= hAllocConn(database);
 
 outf = mustOpen(outWigFn, "w");
 	

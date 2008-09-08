@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gsidGetConsensus.c,v 1.1 2007/06/25 18:10:21 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidGetConsensus.c,v 1.2 2008/09/08 17:20:03 markd Exp $";
 
 #define MAXSEQ 5000
 #define MAXSEQLEN 5000
@@ -155,7 +155,7 @@ else
     	}
     }
 
-conn2= hAllocConn();
+conn2= hAllocConn(database);
 
 outf = mustOpen(faOutputFile, "w");
 	
@@ -171,7 +171,7 @@ while (row2 != NULL)
     if (seqLen == 0) seqLen = strlen(row2[1]);
     if (strlen(row2[1]) != seqLen)
 	{
-	fprintf(stderr, "%s has seqLen=%d, skipping ...\n", row2[0], strlen(row2[1]));
+	fprintf(stderr, "%s has seqLen=%d, skipping ...\n", row2[0], (int)strlen(row2[1]));
 	goto skip;
 	}
     strcpy(seqId[ii], row2[0]);
@@ -269,8 +269,6 @@ int main(int argc, char *argv[])
 int ia;
 char *database, *table;
 char *faOutputFilename;
-int startPos;
-char *faOutputFile;
 char *seqType;
 
 optionInit(&argc, argv, optionSpecs);

@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gsidAaMsa.c,v 1.2 2007/04/20 22:03:26 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidAaMsa.c,v 1.3 2008/09/08 17:20:03 markd Exp $";
 
 #define MAXSEQ 5000
 #define MAXSEQLEN 5000
@@ -93,11 +93,11 @@ errAbort(
 void gsidAaMsa(char *database, char *table, char *baseAcc, int startPos, 
 char *outWigFn, char *outConsFn)
 {
-struct sqlConnection *conn2, *conn3, *conn4;
+struct sqlConnection *conn2;
  
-char query2[256], query3[256];
-struct sqlResult *sr2, *sr3;
-char **row2, **row3;
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
 FILE *outf, *outf2;
 
 char base;
@@ -113,7 +113,7 @@ for (i=0; i < MAXBASE; i++)
     refBase2[i] = *aaCode2[i];
     }
 
-conn2= hAllocConn();
+conn2= hAllocConn(database);
 
 outf = mustOpen(outWigFn, "w");
 	

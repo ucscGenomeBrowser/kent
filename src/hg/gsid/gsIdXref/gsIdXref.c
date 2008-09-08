@@ -24,7 +24,7 @@ char query2[256], query3[256];
 struct sqlResult *sr2, *sr3;
 char **row2, **row3;
 
-char *subjId, *rawId, *dnaSeqId, *aaSeqId;
+char *subjId, *rawId, *aaSeqId;
 char *genomeRelease;
 char *outFileName;
 char *chp;
@@ -38,8 +38,8 @@ genomeRelease   = argv[1];
 outFileName     = argv[2];
    
 outf = fopen(outFileName, "w");
-conn2= hAllocConn();
-conn3= hAllocConn();
+conn2= hAllocConn(genomeRelease);
+conn3= hAllocConn(genomeRelease);
 	
 sprintf(query2,"select subjId, labCode from %s.labCodeSubjId", genomeRelease);
 sr2 = sqlMustGetResult(conn2, query2);
