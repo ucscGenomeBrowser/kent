@@ -18,7 +18,7 @@
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.6 2008/09/04 18:51:26 larrym Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.7 2008/09/08 17:51:21 tdreszer Exp $";
 
 static char *cv_file()
 {
@@ -43,25 +43,25 @@ return (strcmp(termA, termB));
 
 void doTypeHeader(char *type)
 {
-if (!strcmp(type,"Antibody"))
+if (sameString(type,"Antibody"))
     {
     puts("  <TH>Term</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH>");
     }
-else if (!strcmp(type,"localization"))
+else if (sameString(type,"localization"))
     {
     puts("  <TH>Term</TH><TH>Description</TH><TH>GO ID</TH>");
     }
-else if (!strcmp(type,"rnaExtract"))
+else if (sameString(type,"rnaExtract"))
     {
     puts("  <TH>Term</TH><TH>Description</TH>");
     }
-else if (!strcmp(type,"Gene Type"))
+else if (sameString(type,"Gene Type"))
     {
     puts("  <TH>Term</TH><TH>Description</TH>");
     }
-else if (!strcmp(type,"Cell Line"))
+else if (sameString(type,"Cell Line"))
     {
-    puts("  <TH>Term</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Order URL</TH><TH>Term ID</TH>");
+    puts("  <TH>Term</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Order URL</TH><TH>Term ID</TH>");
     }
 else 
     errAbort("Error: Unrecognised type (%s)\n", type);
@@ -71,12 +71,22 @@ void doTypeRow(struct hash *ra, char *type, int *total)
 {
 char *s, *u;
 
-if (!strcmp(type,"Antibody"))
+// Skip all rows that do not match term
+char *term = cgiOptionalString("term");
+if(term)
+    {
+    (void)stripChar(term,'\"');
+    if(differentWord(term,hashMustFindVal(ra,"term")))
+        return;
+    }
+else
+    term = hashMustFindVal(ra,"term");
+    
+if (sameString(type,"Antibody"))
     {
     ++(*total);
     puts("<TR>");
-    s = hashMustFindVal(ra, "term");
-    printf("  <TD>%s</TD>\n", s);
+    printf("  <TD>%s</TD>\n", term);
     s = hashFindVal(ra, "targetDescription");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
     s = hashFindVal(ra, "antibodyDescription");
@@ -93,12 +103,11 @@ if (!strcmp(type,"Antibody"))
     puts("</TD>");
     puts("</TR>");
     }
-else if (strcmp(type,"localization")==0)
+else if (sameString(type,"localization"))
     {
     ++(*total);
     puts("<TR>");
-    s = hashMustFindVal(ra, "term");
-    printf("  <TD>%s</TD>\n", s);
+    printf("  <TD>%s</TD>\n", term);
     s = hashMustFindVal(ra, "description");
     printf("  <TD>%s</TD>\n", s);
     s = hashFindVal(ra, "termId");
@@ -112,35 +121,58 @@ else if (strcmp(type,"localization")==0)
     puts("</TD>");
     puts("</TR>");
     }
-else if (strcmp(type,"rnaExtract")==0)
+else if (sameString(type,"rnaExtract"))
     {
     ++(*total);
     puts("<TR>");
-    s = hashMustFindVal(ra, "term");
-    printf("  <TD>%s</TD>\n", s);
+    printf("  <TD>%s</TD>\n", term);
     s = hashMustFindVal(ra, "description");
     printf("  <TD>%s</TD>\n", s);
     puts("</TR>");
     }
-else if (strcmp(type,"Gene Type")==0)
+else if (sameString(type,"Gene Type"))
     {
     ++(*total);
     puts("<TR>");
-    s = hashMustFindVal(ra, "term");
-    printf("  <TD>%s</TD>\n", s);
+    printf("  <TD>%s</TD>\n", term);
     s = hashMustFindVal(ra, "description");
     printf("  <TD>%s</TD>\n", s);
     puts("</TR>");
     }
-else if (strcmp(type,"Cell Line")==0)
+else if (sameString(type,"Cell Line"))
     {
-    if (cgiOptionalInt("tier",0) && hashFindVal(ra,"tier") && atoi(hashFindVal(ra,"tier"))==cgiOptionalInt("tier",0))
-    	{
-    	++(*total);
+    if (cgiOptionalInt("tier",0))
+        {
+        if (hashFindVal(ra,"tier") == NULL)
+            return;
+        if (atoi(hashFindVal(ra,"tier"))!=cgiOptionalInt("tier",0))
+            return;
+        }
+    if (cgiOptionalString("tiers"))
+        {
+        if (hashFindVal(ra,"tier") == NULL)
+            return;
+        boolean found=FALSE;
+        char *tiers=cloneString(cgiOptionalString("tiers"));
+        char *tier;
+        (void)strSwapChar(tiers,',',' ');
+        while((tier=nextWord(&tiers)))
+            {
+            if (atoi(hashFindVal(ra,"tier"))==atoi(tier))
+                {
+                found=TRUE;
+                break;
+                }
+            }
+        if(!found)
+            return;
+        }
+  	++(*total);
 	puts("<TR>");
-	s = hashMustFindVal(ra, "term");
-    	printf("  <TD>%s</TD>\n", s);
-       	s = hashFindVal(ra, "description");
+    printf("  <TD>%s</TD>\n", term);
+    s = hashFindVal(ra, "tier");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+    s = hashFindVal(ra, "description");
 	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
 	s = hashFindVal(ra, "lineage");
 	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
@@ -157,12 +189,24 @@ else if (strcmp(type,"Cell Line")==0)
 	s = hashFindVal(ra, "termId");
 	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
     	puts("</TR>");
-	}
     }
 else 
     errAbort("Error: Unrecognised type (%s)\n", type);
 }
 
+static char *normalizeType(char *type)
+{
+(void)stripChar(type,'\"');
+if ((sameWord(type,"Cell Line"))
+||  (sameWord(type,"cellLine" ))
+||  (sameWord(type,"Cell Type"))
+||  (sameWord(type,"cellType" )))
+    return cloneString("Cell Line");
+else if (sameWord(type,"Factor"))
+    return cloneString("Antibody");
+    
+return type;  
+}
 
 void doMiddle()
 {
@@ -176,7 +220,26 @@ int total = 0;
 
 puts("<TABLE BORDER=1 BGCOLOR=#FFFEE8 CELLSPACING=0 CELLPADDING=2>");
 puts("<TR style=\"background:#D9E4F8\">");
-type = cgiString("type");
+type = cgiOptionalString("type");
+if(type==NULL)    // If not type, but term, then search for first term and use it's type
+    {
+    char*term=cgiString("term");
+        errAbort("Error: Required 'type' or 'term' argument not found\n");
+    (void)stripChar(type,'\"');
+    while ((hEl = hashNext(&hc)) != NULL)
+        {
+        ra = (struct hash *)hEl->val;
+        if (differentString(hashMustFindVal(ra, "term"), term))
+            continue;
+        type = hashMustFindVal(ra, "type");
+        break;
+        }
+    hc = hashFirst(cvHash);
+    }
+if(type==NULL)    // Still not type? abort
+    errAbort("Error: Required 'type' or 'term' argument not found\n");
+type = normalizeType(type);
+//printf("The type is \"%s\"<BR>\n",type);
 doTypeHeader(type);
 puts("</TR>");
 
