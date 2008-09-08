@@ -3,7 +3,7 @@
 #include "localmem.h"
 #include "rbTree.h"
 #include "hash.h"
-#include "rangeTree.h"
+#include "rangeTreeFile.h"
 #include "genomeRangeTreeFile.h"
 #include <limits.h>
 

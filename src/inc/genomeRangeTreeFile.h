@@ -7,17 +7,9 @@
 #ifndef GENOMERANGETREEFILE_H
 #define GENOMERANGETREEFILE_H
 
-//#ifndef HASH_H
-//#include "hash.h"
+//#ifndef RANGETREE_H
+//#include "rangeTree.h"
 //#endif
-
-//#ifndef DYSTRING_H
-//#include "dystring.h"
-//#endif
-
-#ifndef RANGETREE_H
-#include "rangeTree.h"
-#endif
 
 #ifndef GENOMERANGETREE_H
 #include "genomeRangeTree.h"
