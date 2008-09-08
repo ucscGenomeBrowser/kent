@@ -83,5 +83,5 @@ struct wigMafSpecies
     };
 
 struct wigMafSpecies * wigMafSpeciesTable(struct cart *cart, 
-    struct trackDb *tdb, char *db) ;
+    struct trackDb *tdb, char *name, char *db) ;
 char **wigMafGetSpecies(struct cart *cart, struct trackDb *tdb, char *db, struct wigMafSpecies **list, int *groupCt);
