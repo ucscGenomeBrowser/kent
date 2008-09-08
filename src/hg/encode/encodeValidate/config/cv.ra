@@ -7,7 +7,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&P
 type Cell Line
 karyotype relatively normal
 lineage mesoderm
-termId BTO:0000773
+termId BTO:0002026 (non-specific)
 tier 1
 
 term K562
@@ -55,13 +55,14 @@ karyotype normal
 termId BTO:0000375
 tier 2
 
-term NT2/D1
+###### type 3 cells once they have been submitted.
+term A549
 type Cell Line
-description malignant pluripotent embryonal carcinoma (Ntera2)
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1973&Template=cellBiology
-lineage ectoderm
+description epithelial cell line derived from a lung carcinoma tissue 
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-185&Template=cellBiology
+lineage endoderm
 karyotype cancer
-termId BTO:0000946
+termId BTO:0000018
 tier 3
 
 term GM18507
@@ -70,17 +71,54 @@ description lymphoblastoid
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18507
 lineage mesoderm
 karyotype relatively normal
-termId BTO:0000773
+termId BTO:0002062 (non-specific)
 tier 3
 
-# SK-N-MC and PSFK-1 have been submitted but not approved; NHGRI said we can accept submissions for
-# type 3 cells once they have been submitted.
+term Jurkat
+type Cell Line
+description T lymphoblastoid cell line derived from an acute T cell leukemia 
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
+lineage mesoderm 
+karyotype cancer
+termId BTO:0001948
+tier 3
+
+############ Submitted but not yet approved
+###term LNCaP
+###type Cell Line
+###description prostate adenocarcinoma
+###orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1740&Template=cellBiology
+###lineage mesoderm
+###karyotype cancer
+###termId BTO:0002021 (non-specific)
+###tier 3
+############ Submitted but not yet approved
+
+term NT2/D1
+type Cell Line
+description malignant pluripotent embryonal carcinoma (Ntera2)
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1973&Template=cellBiology
+lineage embryonic
+karyotype cancer
+termId BTO:0000946
+tier 3
+
+term PFSK-1
+type Cell Line
+description neuroectodermal cell line derived from a human cerebral brain tumor 
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2060&Template=cellBiology
+lineage ectoderm
+karyotype cancer
+termId BTO:0000690 (non-specific)
+tier 3
+
 term SK-N-MC
 type Cell Line
-tier 3
-
-term PSFK-1
-type Cell Line
+description neuroepithelioma cell line derived from a metastatic supra-orbital human brain tumor 
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-10&Template=cellBiology
+lineage ectoderm
+karyotype cancer
+termId BTO:0002372 (non-specific)
 tier 3
 
 # Gene types
