@@ -423,7 +423,7 @@ subtrack setting.
 
 To include a subtrack of a different type, specify
 the complete settings for the subtrack type, and use the "noInherit on"
-trackDb setting.
+trackDb setting.  NOTE: This is required for "Multi-View" (see below).
 
 For readability, please indent the subtrack entries in trackDb.ra by 4 spaces.
 
@@ -453,7 +453,7 @@ Composite Track ADDITIONAL OPTIONS
 MATRIX or DIMENSIONS
 --------------------
 Composite Tracks can be organized into a matrix of X and Y Dimensions of 
-subtracks.  This method of organization also may include a "Views" dimension.
+subtracks.  This method of organization also may include a "view" subGroup.
 The organization is achieved with a dimensions setting which refers to 
 subgroups already defined. Example:
     subGroup2 cellType Cell_Type ES=ES MEF=MEF NP=NP EShyb=ES-hybrid
@@ -464,8 +464,8 @@ check boxes with 'Cell Types' along the X axis and 'Factors' along the Y.  All
 individual subtracks will be displayed below, but the matix of check boxes will 
 allow easy selection by subgrouping. 
 
-VIEWS
------
+VIEWS or MULTI-VIEW
+-------------------
 A composite track may have subtracks with similar data subtracks which have 
 different types or views. For instance, ChIP-seq tracks may cover raw aligns,
 a signal track and called peaks.  The aligns may be 'bed 3', peaks 'bed 5 +' 
@@ -475,8 +475,36 @@ is achieved with the specialized subgroup "views". Example:
     subGroup1 view Views HMM=Sites-HMM WIN=Sites-Windowing SIG=Signal_Densities ALN=Alignments
 where each view (HMM,WIN,SIG,ALN) will be controlled by a separate drop down 
 (hide,dense,...) and auxilary controls.  All subtracks for a given view must 
-be of the same track type.  Currently this feature is only enabled for a composite 
-using dimensions.
+be of the same track type.  Each subtrack of a multi-view should have the 
+"noInherit on" setting, and all the proper settings for the subtrack type.
+
+SORT
+----
+The order of subtracks within a composite track are originally defined by the 
+"priority" setting.  But the subtrack order can be made sortable with the
+"sortOrder" setting.  It defines the original sort order, but results in the
+UI allowing the resorting of the subtracks which will effect both the hgTrackUi 
+display and the hgTracks display of the track data.  The sortOrder relies
+upon subGroups:
+    subGroup1 view Views HMM=Sites-HMM WIN=Sites-Windowing SIG=Signal_Densities ALN=Alignments
+    subGroup2 cellType Cell_Type ES=ES MEF=MEF NP=NP EShyb=ES-hybrid
+    subGroup3 factor Factor K04=H3K4me3 K09=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3
+    sortOrder cellType=+ factor=+ view=-
+These settings result in an original order by cellType,factor,view, but view is
+in reverse order.  NOTE: the value sorted will be the subGroup Ids, NOT the values.
+In the example, subGroup3 refers to factors with values displayed in the UI like 
+"H4K20me3" and "H4K20me3".  An alphabetic sort of these values would place H4K20me3 
+before H4K20me3.  However the actual sort will be of the Ids K09 and K20, which will 
+result in a more desirable order.  NOTE: At some time, sortOrder may be extended to
+allow sorting by shortLabel and longLabel, but currently only subgroups are sortable.
+NOTE: This setting is incompatible with dividers and hierarchy and supercedes those 
+settings.
+
+DRAG AND DROP
+-------------
+Subtracks of a composite track may be reordered by dragAndDrop as well.  To enable 
+this functionality add the "dragAndDrop subTracks" setting to the composite (parent) 
+track.
 
 DIVIDERS
 --------
@@ -489,6 +517,7 @@ groups of subtracks. Example:
 This will place a simple dividing line anytime the cellType or factor changes 
 when listing the subtracks on the subtrack configuration page.  In addition, 
 alternate groups will be displayed with slightly different background color.
+NOTE: This setting is incompatible with and overridden by sortOrder.
 
 HIERARCHY
 ---------
@@ -497,9 +526,30 @@ the composite track configuration page.  It is especially useful in easily
 distinguishing views which are likely to be different within a single group 
 of subtracks.  Example:
     hierarchy view HMM=0 WIN=0 SIG=1 ALN=2
-While a particular cell type and factor combination may be set of with dividers, 
+While a particular cell type and factor combination may be set off with dividers, 
 between the dividers the HMM and WIN type subtracks have no indentation, while 
 the signal track is indented by one and the alignment subtrack by two.
+NOTE: This setting is incompatible with and overridden by sortOrder.
+
+CONTROLLED VOCABULARY
+---------------------
+A special feature of the whole genome ENCODE consortium effort is that there 
+are standardized cellTypes, antibodies and other known entities that are 
+defined in a "controlled vocabulary".  The definitions of the vocabulary will
+be reachable from the hgTrackUi page but this special case must be defined in 
+the trackDb.ra file.  To do this, use the controlledVocabulary setting.  Its
+contents will first refer to the cv.ra file to be referenced, then the 
+subGroups that are controlled vocabulary:
+    controlledVocabulary encode/cv.ra cellType factor
+The term that is sought in the controlled vocabulary is the label of the individual 
+subgroup.  That is
+    subGroup2 cellTreat Cell_Treatment SK=SK-N-MC SK_E=SK-N-MC;Estrogen
+    controlledVocabulary encode/cv.ra cellTreat
+will look for the term "SK-N-MC" in the controlled vocabulary.  
+NOTE: The special character ';' allows the lookup of multiple terms.  In the
+example above, both terms "SK-N-MC" and "Estrogen" may be found in the 
+controlled vocabulary.  
+
 
 EXAMPLE of Composite Track with ADITIONAL OPTIONS
 -------------------------------------------------
@@ -510,10 +560,13 @@ longLabel Broad Institute Chromatin State Mapping using ChIP-Seq
 group regulation
 subGroup1 view Views HMM=Sites-HMM WIN=Sites-Windowing SIG=Signal_Densities ALN=Alignments
 subGroup2 cellType Cell_Type ES=ES MEF=MEF NP=NP EShyb=ES-hybrid
-subGroup3 factor Factor K4=H3K4me3 K9=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3 PAN=pan-H3 WCE=WCE RPOL=RPol-II
+subGroup3 factor Factor K04=H3K4me3 K09=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3
 dimensions dimensionX=cellType dimensionY=factor 
-dividers cellType factor 
-hierarchy view HMM=0 WIN=0 SIG=1 ALN=2
+sortOrder cellType=+ factor=+ view=-
+dragAndDrop subTracks
+#dividers cellType factor
+#hierarchy view HMM=0 WIN=0 SIG=1 ALN=2
+controlledVocabulary encode/cv.ra cellType factor
 priority 130
 type bed 3
 
@@ -521,63 +574,56 @@ type bed 3
     shortLabel H3K4me3-ES HMM
     longLabel Broad Stem Cell Chromatin IP Sites by HMM (H3K4me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cellType=ES view=HMM
+    subGroups factor=K04 cellType=ES view=HMM
     type bed 3
     color 25,25,150
     noInherit off
-    priority 1.00
+    priority 1
 
     track broadStemChipWinSitesH3K4me3Es
     shortLabel H3K4me3-ES Win
     longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K4me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cellType=ES view=WIN
+    subGroups factor=K04 cellType=ES view=WIN
     type bed 5 +
     useScore 1
     color 25,25,150
     noInherit off
-    priority 2.00
+    priority 2
 
     track broadStemChipSignalH3K4Es
     shortLabel H3K4me3-ES Sig
     longLabel Broad Stem Cell Chromatin IP Signal (H3K4me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cellType=ES view=SIG
+    subGroups factor=K04 cellType=ES view=SIG
     type wig
     yLineOnOff On
     yLineMark 1.0
     maxHeightPixels 100:32:8
     color 25,150,25
     noInherit on
-    priority 3.01
+    priority 3
 
     track broadStemChipAlignmentsH3K4Me3Es
     shortLabel H3K4me3-ES Align
     longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Embryonic Stem (ES) cells)
     subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cellType=ES view=ALN
+    subGroups factor=K04 cellType=ES view=ALN
     type bed 9 +
     useScore 1
     noInherit off
-    priority 4.02
-
-    track broadStemChipWinSitesH3K4me3Mef
-    shortLabel H3K4me3-MEF Win
-    longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K4me3 ab, Embryonic Fibroblasts (MEF))
-    subTrack broadChromatinChIPSeq
-    subGroups factor=K4 cellType=MEF view=WIN
-    type bed 5 +
-    useScore 1
-    color 25,25,150
-    noInherit off
-    priority 12.10
+    priority 4
      . . .
      
 This example set up a composite track configuration page with an X and Y 
-dimension matrix of check boxes for Cell Types by Factors.  Additionally, 
-there are up to four views for each cellType/factor combination.  Each 
-cellType/factor set will be set off by dividers and all subtracks belonging 
-to the ALN view will be indented by two for easy visual identification.
+dimension matrix of check boxes for Cell Types by Factors, and a multi-view.  
+The subtracks will be sortable on either of the 2 dimensions and the view type.
+Additionally, the subtracks can be dragged and dropped into a preferred order
+by the user.  Notice that dividers and hierarchy are commented out, since they
+are incompatible and ignored when sort is enabled.  Finally notice this example
+defines a controlled vocabulary for both cellTypes and factors with definitions
+found in the encode/cv.ra directory (off the pache/cgi-bin/). (Don't be confused
+though, this example mm8 composite track doesn't really have controlled vocabulary.)
 
 ---------------------
 
