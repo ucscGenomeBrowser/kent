@@ -1369,3 +1369,10 @@ knownToVisiGene mm8
 # requested push of table hgwdev.visiGene.submissionSource.
 
 
+################### (galt 2008-09-08 done)
+# move visiGene data to hive
+ssh hgwdev
+mv /hive/archive/SanVol1/visiGene /hive/data/inside/visiGene
+ln -s /hive/data/inside/visiGene /gbdb/visiGene
+# note /usr/local/apache/htdocs/visiGene is still a symlink to /gbdb/visiGene
+
