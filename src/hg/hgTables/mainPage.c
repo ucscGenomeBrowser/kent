@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.125 2008/09/03 19:18:59 markd Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.126 2008/09/08 18:20:38 markd Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -548,7 +548,7 @@ hPrintf("<TABLE BORDER=0>\n");
 /* Print group and track line. */
     {
     hPrintf("<TR><TD>");
-    selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn, TRUE);
+    selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn, allowAllTables());
     nbSpaces(3);
     curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
     nbSpaces(3);

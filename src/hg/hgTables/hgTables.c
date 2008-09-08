@@ -27,8 +27,9 @@
 #include "hgMaf.h"
 #include "gvUi.h"
 #include "wikiTrack.h"
+#include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.165 2008/09/03 19:18:58 markd Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.166 2008/09/08 18:20:38 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -56,6 +57,12 @@ char *curTable;		/* Currently selected table. */
 struct joiner *allJoiner;	/* Info on how to join tables. */
 
 static struct pipeline *compressPipeline = (struct pipeline *)NULL;
+
+boolean allowAllTables(void)
+/* determine if all tables should is allowed by configuration */
+{
+return !cfgOptionBooleanDefault("hgta.disableAllTables", FALSE);
+}
 
 /* --------------- HTML Helpers ----------------- */
 
@@ -1641,7 +1648,7 @@ void initGroupsTracksTables(struct sqlConnection *conn)
 {
 fullTrackList = getFullTrackList();
 curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
-fullGroupList = makeGroupList(conn, fullTrackList, TRUE);
+fullGroupList = makeGroupList(conn, fullTrackList, allowAllTables());
 curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
 if (sameString(curGroup->name, "allTables"))
     curTrack = NULL;

@@ -7,6 +7,11 @@ char* cfgOption(char* name);
 char* cfgOptionDefault(char* name, char* def);
 /* return the option with the given name or the given default if it doesn't exist */
 
+boolean cfgOptionBooleanDefault(char* name, boolean def);
+/* return the boolean value for option with the given name or the given
+ * default if it doesn't exist. Booleans of yes/no/on/off/true/false are
+ * recognized */
+
 char *cfgOptionEnv(char *envName, char* name);
 /* get a configuration optional value, from either the environment or the cfg
  * file, with the env take precedence.  Return NULL if not found */

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.19 2008/09/03 19:19:24 markd Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.20 2008/09/08 18:20:37 markd Exp $";
 
 #include "common.h"
 #include "hgConfig.h"
@@ -218,6 +218,26 @@ char *val = cfgOption(name);
 if (val == NULL)
     val = def;
 return val;
+}
+
+boolean cfgOptionBooleanDefault(char* name, boolean def)
+/* return the boolean value for option with the given name or the given
+ * default if it doesn't exist. Booleans of yes/no/on/off/true/false are
+ * recognized */
+{
+char *val = cfgOptionDefault(name, NULL);
+if (val == NULL)
+    return def;
+if (sameString(val, "yes") || sameString(val, "on") || sameString(val, "true"))
+    return TRUE;
+else if (sameString(val, "no") || sameString(val, "off")|| sameString(val, "false"))
+    return FALSE;
+else
+    {
+    errAbort("hg.conf value for %s: \"%s\", expected one of yes, no, on, off, true, false",
+             name, val);
+    return FALSE;
+    }
 }
 
 char *cfgOption2(char *prefix, char *suffix)

@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.67 2008/09/03 19:18:58 markd Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.68 2008/09/08 18:20:37 markd Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -267,7 +267,7 @@ static struct trackDb *showTrackFieldLimited(struct grp *selGroup,
 struct trackDb *track, *selTrack = NULL;
 if (trackScript == NULL)
     trackScript = "";
-if (sameString(selGroup->name, "allTables"))
+if (sameString(selGroup->name, "allTables") && allowAllTables())
     {
     char *selDb = findSelDb();
     struct slName *dbList = getDbListForGenome(), *db;

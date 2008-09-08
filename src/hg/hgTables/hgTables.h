@@ -516,6 +516,10 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define outGalaxy "galaxyQuery"
 #define outMaf "maf"
 
+/* --------- configuration options ------------ */
+boolean allowAllTables(void);
+/* determine if all tables should is allowed by configuration */
+
 /* --------- Identifier list handling stuff. ------------ */
 
 char *identifierFileName();
