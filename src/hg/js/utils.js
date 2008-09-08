@@ -15,74 +15,32 @@ function clickIt(obj,state,force)
 function setCheckBoxesWithPrefix(obj, prefix, state)
 {
 // Set all checkboxes with given prefix to state boolean
-   if (document.getElementsByTagName)
-   {
-        // Tested in FireFox 1.5 & 2, IE 6 & 7, and Safari
-        var list = document.getElementsByTagName('input');
-        var first = true;
-        for (var i=0;i<list.length;i++, first=false) {
-            var ele = list[i];
-            if(ele.type.match("checkbox") == null)
-                 continue;
-            // if(first) alert(ele.checked);
-            // arbitrary numbers are used to make id's unique (e.g. "map-1"), so look for prefix
-            if(ele.id.indexOf(prefix) == 0) {
-                if(ele.checked != state)
-                    ele.click();  // Forces onclick() javascript to run 
-            }
-            first = false;
-        }
-   } else if (document.all) {
-        if(debug)
-            alert("setCheckBoxesWithPrefix is unimplemented for this browser");
-   } else {
-        // NS 4.x - I gave up trying to get this to work.
-        if(debug)
-           alert("setCheckBoxesWithPrefix is unimplemented for this browser");
-   }
+    var list = inputArrayThatMatches("checkbox","id",prefix,"");
+    for (var i=0;i<list.length;i++) {
+        var ele = list[i];
+            if(ele.checked != state)
+                ele.click();  // Forces onclick() javascript to run
+    }
 }
 
 function setCheckBoxesThatContain(nameOrId, state, force, sub1)
 {
 // Set all checkboxes which contain 1 or more given substrings in NAME or ID to state boolean
 // This can force the 'onclick() js of the checkbox, even if it is already in the state 
-    var retval = false;
-    if (document.getElementsByTagName)
-    {
-        if(debug)
-            alert("setCheckBoxesContains is about to set the checkBoxes to "+state);
-        var list = document.getElementsByTagName('input');
-        for (var ix=0;ix<list.length;ix++) {
-            var ele = list[ix];
-            var identifier = ele.name;
-            if(ele.type.match("checkbox") == null)
-                 continue;
-            if(nameOrId.search(/id/i) != -1)
-                identifier = ele.id;
-            var failed = false;
-            for(var aIx=3;aIx<arguments.length;aIx++) {
-                if(identifier.indexOf(arguments[aIx]) == -1) { 
-                    failed = true;
-                    break;
-                }
-            }
-            if(failed)
-                continue;
-            if(debug)
-                alert("setCheckBoxesContains found '"+sub1+"' in '"+identifier+"'.");
-
-            clickIt(ele,state,force);
-        }
-        retval = true;
-    } else if (document.all) {
-        if(debug)
-            alert("setCheckBoxesContains is unimplemented for this browser");
-    } else {
-        // NS 4.x - I gave up trying to get this to work.
-        if(debug)
-           alert("setCheckBoxesContains is unimplemented for this browser");
+    if(debug)
+        alert("setCheckBoxesContains is about to set the checkBoxes to "+state);
+    var list;
+    if(arguments.length == 4)
+        list = inputArrayThatMatches("checkbox",nameOrId,"","",sub1);
+    else if(arguments.length == 5)
+        list = inputArrayThatMatches("checkbox",nameOrId,"","",sub1,arguments[4]);
+    else if(arguments.length == 6)
+        list = inputArrayThatMatches("checkbox",nameOrId,"","",sub1,arguments[4],arguments[5]);
+    //var list = document.getElementsByTagName('input');
+    for (var ix=0;ix<list.length;ix++) {
+        clickIt(list[ix],state,force);
     }
-    return retval;
+    return true;
 }
 
 function getViewsSelected(nameMatches,on)
@@ -112,6 +70,46 @@ function getViewsSelected(nameMatches,on)
    return( views );
 }
 
+function inputArrayThatMatches(inpType,nameOrId,prefix,suffix)
+{
+    // returns an array of input controls that match the criteria
+    var found = new Array();
+    var fIx = 0;
+    if (document.getElementsByTagName)
+    {
+        var list = document.getElementsByTagName('input');
+        for (var ix=0;ix<list.length;ix++) {
+            var ele = list[ix];
+            if(ele.type != inpType)
+                continue;
+            var identifier = ele.name;
+            if(nameOrId.search(/id/i) != -1)
+                identifier = ele.id;
+            var failed = false;
+            if(prefix.length > 0)
+                failed = (identifier.indexOf(prefix) != 0)
+            if(!failed && suffix.length > 0)
+                failed = (identifier.lastIndexOf(suffix) != (identifier.length - suffix.length))
+            if(!failed) {
+                for(var aIx=4;aIx<arguments.length;aIx++) {
+                    if(identifier.indexOf(arguments[aIx]) == -1) {
+                        failed = true;
+                        break;
+                    }
+                }
+            }
+            if(!failed) {
+                found[fIx] = ele;
+                fIx++;
+            }
+        }
+    } else {
+        // NS 4.x - I gave up trying to get this to work.
+        if(debugLevel>2)
+           alert("arrayOfInputsThatMatch is unimplemented for this browser");
+    }
+    return found;
+}
 function showSubTrackCheckBoxes(onlySelected)
 {
 // If a Subtrack configuration page has show "only selected subtracks" option,

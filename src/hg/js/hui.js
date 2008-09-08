@@ -12,35 +12,16 @@ function matSelectViewForSubTracks(obj,view)
         setCheckBoxesThatContain('id',false,true,view); // No need for matrix version
         //matSetCheckBoxesThatContain('id',false,true,view);  // Use matrix version to turn off buttons for other views that are "hide"
     } else {
-        var matrixFound = false; 
-        if (document.getElementsByTagName) {
-            // if matrix used then: essentially reclick all 'checked' matrix checkboxes (run onclick script)
-            var list = document.getElementsByTagName('input');
-            for (var ix=0;ix<list.length;ix++) {
-                var ele = list[ix];
-                if(ele.type.match("checkbox") == null)
-                    continue;
-                if(ele.name.indexOf("mat_") == 0) {
-                    var matrixFound = true;
-                    var offset = ele.name.lastIndexOf("_cb");
-                    if(offset > 0 && offset == (ele.name.length - 3)) {
-                        if(ele.checked) {
-                            clickIt(ele,true,true); // force a double click() which will invoke cb specific js;
-                        }
-                    }
-                }
-            }
-            if(matrixFound == false) {
-                setCheckBoxesThatContain('id',true,true,view); // No need for matrix version
+        // if matrix used then: essentially reclick all 'checked' matrix checkboxes (run onclick script)
+        var list = inputArrayThatMatches("checkbox","name","mat_","_cb");
+        for (var ix=0;ix<list.length;ix++) {
+            var ele = list[ix];
+            if(list[ix].checked) {
+                clickIt(list[ix],true,true); // force a double click() which will invoke cb specific js;
             }
         }
-        else if (document.all) {
-                if(debugLevel>2)
-                    alert("selectViewForSubTracks is unimplemented for this browser)");
-        } else {
-                // NS 4.x - I gave up trying to get this to work.
-                if(debugLevel>2)
-                alert("selectViewForSubTracks is unimplemented for this browser");
+        if(list.length == 0) {
+            setCheckBoxesThatContain('id',true,true,view); // No need for matrix version
         }
     }
 }
@@ -50,58 +31,41 @@ function matSetCheckBoxesThatContain(nameOrId, state, force, sub1)
 // Set all checkboxes which contain 1 or more given substrings in NAME or ID to state boolean
 // Unlike the std setCheckBoxesThatContain() this also recognizes whether views 
 // additionally control which subtracks will be checked
-    var retval = false;
-    if (document.getElementsByTagName)
-    {
-        if(debugLevel>2)
-            alert("matSetCheckBoxesThatContain is about to set the checkBoxes to "+state);
+    if(debugLevel>2)
+        alert("matSetCheckBoxesThatContain is about to set the checkBoxes to "+state);
 
-        var views = getViewsSelected("_dd_",true); // get views that are on
-        var list = document.getElementsByTagName('input');
-        for (var ix=0;ix<list.length;ix++) {
-            var ele = list[ix];
-            if(ele.type.match("checkbox") == null)
-                continue;
-            var identifier = ele.name;
-            if(nameOrId.search(/id/i) != -1)
-                identifier = ele.id;
-            var failed = false;
-            for(var aIx=3;aIx<arguments.length;aIx++) {
-                if(identifier.indexOf(arguments[aIx]) == -1) {
-                    failed = true;
-                    break;
-                }
-            }
-            if(failed)
-                continue;
-            if(debugLevel>3)
-                alert("matSetCheckBoxesThatContain found '"+sub1+"' in '"+identifier+"'.");
+    var views = getViewsSelected("_dd_",true); // get views that are on
 
-            if(!state) {
-                clickIt(ele,state,force);
+    var list;
+    if(arguments.length == 4)
+        list = inputArrayThatMatches("checkbox",nameOrId,"","",sub1);
+    else if(arguments.length == 5)
+        list = inputArrayThatMatches("checkbox",nameOrId,"","",sub1,arguments[4]);
+    else if(arguments.length == 6)
+        list = inputArrayThatMatches("checkbox",nameOrId,"","",sub1,arguments[4],arguments[5]);
+    for (var ix=0;ix<list.length;ix++) {
+        var identifier = list[ix].name;
+        if(nameOrId.search(/id/i) != -1)
+            identifier = list[ix].id;
+        if(debugLevel>3)
+            alert("matSetCheckBoxesThatContain found '"+sub1+"' in '"+identifier+"'.");
+
+        if(!state) {
+            clickIt(list[ix],state,force);
+        } else {
+            if(views.length == 0) {
+                clickIt(list[ix],state,force);
             } else {
-                if(views.length == 0) {
-                    clickIt(ele,state,force);
-                } else {
-                    for(var vIx=0;vIx<views.length;vIx++) {
-                        if(identifier.indexOf("_"+views[vIx]+"_") >= 0) {
-                            clickIt(ele,state,force);
-                            break;
-                        }
+                for(var vIx=0;vIx<views.length;vIx++) {
+                    if(identifier.indexOf("_"+views[vIx]+"_") >= 0) {
+                        clickIt(list[ix],state,force);
+                        break;
                     }
                 }
             }
         }
-        retval = true;
-    } else if (document.all) {
-        if(debugLevel>2)
-            alert("matSetCheckBoxesThatContain is unimplemented for this browser");
-    } else {
-        // NS 4.x - I gave up trying to get this to work.
-        if(debugLevel>2)
-           alert("matSetCheckBoxesThatContain is unimplemented for this browser");
     }
-    return retval;
+    return true;
 }
 
 function showConfigControls(name)
@@ -488,22 +452,41 @@ function tableReOrderColumns(table,cellIxFrom,cellIxTo)
     }    
 }
 
+function matChkBoxesNormalized()
+{
+// check/unchecks matrix checkboxes based upon subtrack checkboxes
+    var list = inputArrayThatMatches("checkbox","name","mat_","_cb");
+    for (var ix=0;ix<list.length;ix++) {
+        var cntChecked=0;
+        var tags=list[ix].name.substring(3,list[ix].name.length - 3);
+        var sublist = inputArrayThatMatches("checkbox","id","cb_","",tags);
+        for (var sIx=0;sIx<sublist.length;sIx++) {
+            if(sublist[sIx].checked)
+                cntChecked++;
+        }
+        if(cntChecked == sublist.length)
+            list[ix].checked=true;
+        else if(cntChecked == 0)
+            list[ix].checked=false;
+    }
+}
+function showOrHideSelectedSubtracks()
+{
+// Show or Hide subtracks based upon radio toggle
+    var onlySelected = inputArrayThatMatches("radio","name","displaySubtracks","");
+    //var onlySelected = document.getElementsByName("displaySubtracks");
+    if(onlySelected.length > 0)
+        showSubTrackCheckBoxes(onlySelected[0].checked);
+}
+
 ///// Following functions called on page load
 function matInitializeMatrix()
 {
 // Called at Onload to coordinate all subtracks with the matrix of check boxes
     if (document.getElementsByTagName) {
-        var list = document.getElementsByTagName('input');
-        for (var ix=0;ix<list.length;ix++) {
-            var ele = list[ix];
-            if(ele.type.match("checkbox") != null
-            && ele.name.indexOf("mat_") == 0) {
-                var offset = ele.name.lastIndexOf("_cb");
-                if(offset > 0 && offset == (ele.name.length - 3)) {
-                    clickIt(ele,ele.checked,true); // force a double click();
-                }
-            } 
-        }
+        matChkBoxesNormalized();
+        showOrHideSelectedSubtracks();
+        
         var list = document.getElementsByTagName('table');
         for(var ix=0;ix<list.length;ix++) {
             var offset = list[ix].id.lastIndexOf(".sortable");
