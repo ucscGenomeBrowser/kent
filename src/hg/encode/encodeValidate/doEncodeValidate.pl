@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.54 2008/08/29 22:17:24 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.55 2008/09/08 21:08:49 larrym Exp $
 
 use warnings;
 use strict;
@@ -633,8 +633,10 @@ foreach my $ddfLine (@ddfLines) {
             $additional = "\tcell\t$hash{cell}\n" . $additional;
         }
     }
-    # mysql doesn't allow hyphens in table names and our naming convention doesn't allow underbars.
-    $tableName =~ s/[_-]//g;
+    
+    # mysql doesn't allow hyphens in table names and our naming convention doesn't allow underbars; to be
+    # safe, we strip non-alphanumerics.
+    $tableName =~ s/[^A-Za-z0-9]//g;
 
     if(!$opt_allowReloads) {
         if($db->quickQuery("select count(*) from trackDb where tableName = ?", $tableName)) {
