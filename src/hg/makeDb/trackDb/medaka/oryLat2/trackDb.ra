@@ -71,3 +71,37 @@ shortCircuit 1
 termRegex scaffold[0-9]+|ultracontig[0-9]+_scaffold[0-9]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
+
+track multiz5way
+shortLabel Conservation
+longLabel 5 Species Multiz Alignment & Conservation 
+group compGeno
+priority 104.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons5way
+spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+frames multiz5wayFrames
+irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multiz5waySummary
+speciesCodonDefault oryLat1
+speciesGroups vertebrate
+sGroup_vertebrate gasAcu1 tetNig1 fr2 danRer5
+treeImage phylo/oryLat1_5way.gif
+
+track phastConsElements5way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements
+group compGeno
+priority 105
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
