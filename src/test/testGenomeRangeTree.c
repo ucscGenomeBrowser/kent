@@ -1,6 +1,7 @@
 #include "common.h"
 #include "options.h"
 #include "genomeRangeTree.h"
+#include "genomeRangeTreeFile.h"
 
 /* Test program for genomeRangeTree library functions (author: mikep) */
 
@@ -328,7 +329,7 @@ else
 
 r1 = genomeRangeTreeAllOverlapping(t1, "chr2",1,2);
 if ( !r1 || r1->next || r1->start!=1 || r1->end!=10 || r1->val) 
-    errAbort("Error: genomeRangeTreeAllOverlapping(t1,chr1,12,13) all overlapping wrong [got (%p,%d,%d,%p), wanted ((nill),1,10,(nil))\n",r1->start,r1->end,r1->val);
+    errAbort("Error: genomeRangeTreeAllOverlapping(t1,chr1,12,13) all overlapping wrong [got (%p,%d,%d,%p), wanted ((nill),1,10,(nil))\n",r1, r1->start,r1->end,r1->val);
 else
     verbose(1,"OK: genomeRangeTreeAllOverlapping(t1,chr2,1,2) overlapping (1,10)\n");
 
@@ -549,7 +550,7 @@ verbose(1,"OK: genomeRangeTreeWrite(t2, out/testGenomeRangeTree.out2) \n");
 /* genomeRangeTreeFileReadHeader */
 tf1 = genomeRangeTreeFileReadHeader("out/testGenomeRangeTree.out");
 if (!tf1)
-    errAbort("Error: genomeRangeTreeFileReadHeader() failed\n", slCount(r1));
+    errAbort("Error: genomeRangeTreeFileReadHeader() failed\n");
 else
     verbose(1,"OK: genomeRangeTreeFileReadHeader() #1\n");
 if (slCount(tf1->chromList) != 2 || !tf1->file || (tf1->sig != 0xf7fb8104 &&  tf1->sig != 0x0481fbf7) 
@@ -659,7 +660,7 @@ else
 
 tf2 = genomeRangeTreeFileReadHeader("out/testGenomeRangeTreeUnion2.out");
 if (!tf2 || tf2->numChroms != 4 || !tf2->chromList)
-    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion2.out) failed (tf2=%p)\n");
+    errAbort("Error: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion2.out) failed (tf2=%p)\n", tf2);
 else
     verbose(1,"OK: genomeRangeTreeFileReadHeader(out/testGenomeRangeTreeUnion2.out) tf2=%p\n", tf2);
 if (slCount(tf2->chromList) != 4 )

@@ -94,9 +94,9 @@ rangeTreeWriteNodes(rt1,f);
 carefulClose(&f);
 
 if ((n=fileSize("out/testRangeTree.out")) != 2*2*sizeof(bits32))
-    errAbort("Error: rangeWriteOne(r,f) wrote wrong size file (got=%d, expected=%d)\n", n, 2*2*sizeof(bits32));
+    errAbort("Error: rangeWriteOne(r,f) wrote wrong size file (got=%d, expected=%d)\n", n, 2*2*(int)sizeof(bits32));
 else
-    verbose(1,"OK: rangeWriteOne(r,f) wrote %d bytes\n", 2*2*sizeof(bits32));
+    verbose(1,"OK: rangeWriteOne(r,f) wrote %d bytes\n", 2*2*(int)sizeof(bits32));
 
 f = mustOpen("out/testRangeTree.out","r");
 rt2 = rangeTreeNew();
@@ -122,9 +122,9 @@ else
 n = rangeTreeSizeInFile(rt1);
 n2 = rangeTreeSizeInFile(rt1);
 if (n != 2*2*sizeof(bits32) || n != n2)
-    errAbort("Error: rangeTreeSizeInFile() failed. got (n=%d,size(rt2)=%d); expected (n=%d,size(rt2)=%d)\n", n, n2, 2*2*sizeof(bits32), 2*2*sizeof(bits32));
+    errAbort("Error: rangeTreeSizeInFile() failed. got (n=%d,size(rt2)=%d); expected (n=%d,size(rt2)=%d)\n", n, n2, 2*2*(int)sizeof(bits32), 2*2*(int)sizeof(bits32));
 else
-    verbose(1,"OK: rangeTreeSizeInFile()=%d \n", 2*2*sizeof(bits32));
+    verbose(1,"OK: rangeTreeSizeInFile()=%d \n", 2*2*(int)sizeof(bits32));
 }
 
 
