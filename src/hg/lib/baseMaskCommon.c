@@ -3,6 +3,7 @@
 #include "hdb.h"
 #include "chromInfo.h"
 #include "genomeRangeTree.h"
+#include "genomeRangeTreeFile.h"
 #include "baseMaskCommon.h"
 
 //#define MJP verbose(1,"%s[%3d]: ", __func__, __LINE__);
