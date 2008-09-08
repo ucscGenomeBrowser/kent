@@ -35,5 +35,6 @@ DIRS = \
         gsidMsaToTab \
         gsidPbGateway \
         pbGsid \
+	pwdtest \
 	gsidMember 
 
