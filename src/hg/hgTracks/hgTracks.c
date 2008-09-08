@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1505 2008/09/03 19:19:03 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1506 2008/09/08 18:08:37 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1444,6 +1444,24 @@ safef(scaleText, scaleTextSize, "%d %s", scaleBasesTextNum, baseWord);
 return scaleBases;
 }
 
+enum trackVisibility limitedVisFromComposite(struct track *subtrack)
+/* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
+{
+enum trackVisibility vis = subtrack->limitedVis == tvHide ?
+                           subtrack->visibility : 
+                           tvMin(subtrack->visibility,subtrack->limitedVis);
+char *stView;
+// If the composite track has "view" based drop downs, set visibility based upon those
+if(subgroupFind(subtrack->tdb,"view",&stView))
+    {
+    char ddName[128];
+    safef(ddName,128,"%s_dd_%s",subtrack->tdb->parent->tableName,stView); // If not found takes "usual"
+    vis = hTvFromString(cartUsualString(cart, ddName,hStringFromTv(subtrack->visibility)));
+    subgroupFree(&stView);
+    }
+return vis;
+}
+
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
 {
@@ -1554,15 +1572,13 @@ for (track = trackList; track != NULL; track = track->next)
                     subtrack->limitedVisSet = TRUE;
                     }
                 // If the composite track has "view" based drop downs, set visibility based upon those
-                char *stView;
-                if(subgroupFind(subtrack->tdb,"view",&stView))
+                enum trackVisibility vis = limitedVisFromComposite(subtrack);
+                if(subtrack->visibility != vis)
                     {
-                    char ddName[128];
-                    safef(ddName,128,"%s_dd_%s",track->mapName,stView); // If not found takes "usual"
-                    subtrack->visibility = hTvFromString(cartUsualString(cart, ddName,hStringFromTv(subtrack->visibility)));
+                    subtrack->visibility = vis;
                     subtrack->limitedVis = tvMin(track->visibility,subtrack->visibility);
-                    subgroupFree(&stView);
-                    }
+                    subtrack->limitedVisSet = (subtrack->limitedVis != tvHide && subtrack->visibility != subtrack->limitedVis);
+                    } 
                 }
             }
 	if (maxSafeHeight < (pixHeight+trackPlusLabelHeight(track,fontHeight)))
