@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.166 2008/09/08 18:20:38 markd Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.167 2008/09/08 22:28:38 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1479,6 +1479,8 @@ else if (sameString(output, outBed))
     doOutBed(table, conn);
 else if (sameString(output, outCustomTrack))
     doOutCustomTrack(table, conn);
+else if (sameString(output, outPal))
+    doOutPal( conn);
 else if (sameString(output, outGff))
     {
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
@@ -1596,6 +1598,8 @@ else if ((varList = cartFindPrefix(cart, hgtaDoClearAllFieldPrefix)) != NULL)
     doClearAllField(varList->name + strlen(hgtaDoClearAllFieldPrefix));
 else if ((varList = cartFindPrefix(cart, hgtaDoSetAllFieldPrefix)) != NULL)
     doSetAllField(varList->name + strlen(hgtaDoSetAllFieldPrefix));
+else if (cartVarExists(cart, hgtaDoPalOut))
+    doGenePredPal(conn);
 else if (cartVarExists(cart, hgtaDoGenePredSequence))
     doGenePredSequence(conn);  
 else if (cartVarExists(cart, hgtaDoGenomicDna))

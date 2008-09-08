@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.126 2008/09/08 18:20:38 markd Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.127 2008/09/08 22:28:38 braney Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -430,6 +430,9 @@ struct outputType otSelected = { NULL,
 struct outputType otSequence = { NULL, 
     outSequence,
     "sequence", };
+struct outputType otPal = { NULL, 
+    outPal,
+    "CDS FASTA Alignment from multiple alignment", };
 struct outputType otGff = { NULL, 
     outGff,
     "GTF - gene transfer format", };
@@ -493,6 +496,9 @@ else if (isPositional)
     slAddTail(&otList, &otSelected);
     slAddTail(&otList, &otSequence);
     slAddTail(&otList, &otGff);
+#ifdef HGPAL
+    slAddTail(&otList, &otPal);
+#endif
     slAddTail(&otList, &otBed);
     slAddTail(&otList, &otCustomTrack);
     slAddTail(&otList, &otHyperlinks);
