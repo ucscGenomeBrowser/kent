@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.34 2008/03/15 19:52:50 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.35 2008/09/08 16:05:04 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1192,8 +1192,8 @@ void doMiddle(struct cart *theCart)
 struct sqlConnection *conn;
 cart = theCart;
 
-hSetDb("membership");
-conn = hAllocConn();
+//hSetDb("membership");
+conn = hAllocConn("membership");
 
 
 if (cartVarExists(cart, "debug"))
