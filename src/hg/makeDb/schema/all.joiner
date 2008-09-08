@@ -32,7 +32,7 @@ set rheMac rheMac1,rheMac2
 set strPur strPur1,strPur2
 set felCat felCat3
 set gasAcu gasAcu1
-set oryLat oryLat1
+set oryLat oryLat1 oryLat2
 set equCab equCab1,equCab2
 set anoCar anoCar1
 set ornAna ornAna1
@@ -78,7 +78,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 
 # Define transMap databases
 # transMapDb not public: dasNov1,echTel1,loxAfr1,oryCun1,otoGar1
-set transMapDb anoCar1,bosTau4,calJac1,canFam2,cavPor3,danRer5,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,mm9,monDom4,ornAna1,oryLat1,panTro2,petMar1,ponAbe2,rheMac2,rn4,tetNig1,xenTro2
+set transMapDb anoCar1,bosTau4,calJac1,canFam2,cavPor3,danRer5,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,mm9,monDom4,ornAna1,oryLat1,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,tetNig1,xenTro2
 
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
