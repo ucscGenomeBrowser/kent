@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1460 2008/09/06 19:28:00 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1461 2008/09/08 22:01:15 kate Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3790,7 +3790,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 visString = cartOptionalString(cart, supertrack);
 
 	char buf[128];
-	if (visString != NULL && sameString(visString, "hide"))
+	if (visString == NULL || (visString != NULL && sameString(visString, "hide")))
 	    {
 	    char varName[256];
 	    sprintf(varName, "%s_case", track);
