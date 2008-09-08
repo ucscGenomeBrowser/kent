@@ -14,7 +14,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat2.txt,v 1.4 2008/08/28 21:18:59 hiram Exp $"
+#	"$Id: oryLat2.txt,v 1.5 2008/09/08 16:39:32 hiram Exp $"
 #
 ###########################################################################
 
@@ -158,7 +158,7 @@ nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^MT/chrM/"
 	-buildDir=/cluster/data/oryLat2/bed/repeatMasker \
 	-bigClusterHub=pk -smallClusterHub=memk > do.log 2>&1
     #	RM version from the log:
-    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.4 2008/08/28 21:18:59 hiram Exp $
+    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.5 2008/09/08 16:39:32 hiram Exp $
     #	CC   RELEASE 20080801
     #   about 40 minutes run time
 
@@ -696,3 +696,821 @@ TMPDIR=/scratch/tmp
 	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > download.log 2>&1 &
 
 #########################################################################
+## 5-Way Multiz (DONE - 2008-09-03 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/oryLat2/bed/multiz5way
+    cd /cluster/data/oryLat2/bed/multiz5way
+
+    sed -e "s/oryLat1/oryLat2/; s/danRer4/danRer5/" \
+	/cluster/data/oryLat1/bed/multiz5way/5way.nh > 5way.nh
+    #	this file looks like:
+
+    cat << '_EOF_' > 5way.nh
+  (((tetraodon_tetNig1:0.199381,fugu_fr2:0.239894):0.2,
+    (stickleback_gasAcu1:0.2,medaka_oryLat2:0.2):0.2):0.292961,
+        zebrafish_danRer5:0.782561);
+'_EOF_'
+    # << happy emacs
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/oryLat2_5way.gif
+
+    /cluster/bin/phast/all_dists 5way.nh > 5way.distances.txt
+    #	Use this output to create the table below
+    grep -y oryLat2 5way.distances.txt | sort -k3,3n
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                        chainOryLat1Link   chain    linearGap
+#    distance                      on oryLat2    on other   minScore
+#  1  0.4000 - stickleback gasAcu1 (% 30.210) (% 42.495)       3000     medium
+#  2  0.7994 - tetraodon tetNig1   (% 23.297) (% 40.613)       3000     medium
+#  3  0.8399 - fugu fr2            (% 25.835) (% 39.058)       3000     medium
+#  4  1.4755 - zebrafish danRer5   (% 19.713) (% 11.055)       3000     medium
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	5way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    cd /cluster/data/oryLat2/bed/multiz5way
+    #	bash shell syntax here ...
+    export H=/cluster/data/oryLat2/bed
+    mkdir mafLinks
+    for G in gasAcu1 tetNig1 fr2 danRer5
+    do
+	mkdir mafLinks/$G
+	if [ ! -d ${H}/blastz.${G}/mafNet ]; then
+	echo "missing directory blastz.${G}/mafNet"
+	else
+	ln -s ${H}/blastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+	fi
+    done
+
+    #	need to split these things up by chrom and scaffold names for
+    #	efficient kluster run.  Using the new hive architecture.
+    ssh hgwdev
+    cd /hive/data/genomes/oryLat2/bed/multiz5way
+    mkdir mafSplit
+    for G in gasAcu1 tetNig1 fr2 danRer5
+do
+    echo -n "working ${G} ..."
+    rm -fr mafSplit/${G}
+    mkdir mafSplit/${G}
+    cd mafSplit/${G}
+    mafSplit /dev/null scaf ../../mafLinks/${G}/oryLat2.${G}.net.maf.gz \
+	-verbose=2 -byTarget -useHashedName=16 -outDirDepth=2
+    cd /hive/data/genomes/oryLat2/bed/multiz5way
+    echo " done"
+done
+    #	create a run-time list of files to operate on, not all file names
+    #	exist for all assemblies
+    cd mafSplit
+    for D in *
+do
+    cd "${D}"
+    find . -type f
+    cd ..
+done | sort -u | sed -e "s#./##" > ../5-way.split.list
+    wc -l ../5-way.split.list
+    #	792 ../5-way.split.list
+    
+    # the autoMultiz cluster run
+    ssh swarm
+    cd /cluster/data/oryLat2/bed/multiz5way/
+
+    mkdir splitRun
+    cd splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = oryLat2
+set subdir = $1
+set c = $2
+set result = $3
+set resultDir = $result:h
+set run = `pwd`
+set tmp = $run/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/oryLat2/bed/multiz5way/mafSplit
+rm -fr $tmp
+mkdir -p $tmp
+mkdir -p $resultDir
+cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp
+pwd
+ls -l
+cat species.list
+foreach s (`sed -e "s/ $db//" species.list`)
+    set in = $pairs/$s/$subdir/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        zcat $in.gz > $out
+    else if (-e $in) then
+        cp -p $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+rm -f $result
+cp -p $tmp/$c.maf $result
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $run/tmp/$db
+rmdir --ignore-fail-on-non-empty $run/tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(dir1) $(root1) {check out line+ /hive/data/genomes/oryLat2/bed/multiz5way/splitRun/maf/$(dir1)/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    gensub2 ../../5-way.split.list single template jobList
+    para create jobList
+# Completed: 792 of 792 jobs
+# CPU time in finished jobs:       5423s      90.38m     1.51h    0.06d  0.000 y
+# IO & Wait Time:                138287s    2304.79m    38.41h    1.60d  0.004 y
+# Average job time:                 181s       3.02m     0.05h    0.00d
+# Longest finished job:             404s       6.73m     0.11h    0.00d
+# Submission to last job:           436s       7.27m     0.12h    0.01d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    # put the split maf results back together into a single maf file
+    #	eliminate duplicate comments
+    ssh hgwdev
+    cd /hive/data/genomes/oryLat2/bed/multiz5way/splitRun
+    grep "^##maf version" maf/0/0/scaf11300.maf \
+	| sort -u > oryLat2.5way.maf
+    for F in `find ./maf -depth -type f`
+do
+    grep -h "^#" "${F}" | egrep -v "maf version=1|eof maf" \
+	| sed -e "s#/_MZ_[^ ]* # #g; s#__[0-9]##g"
+done | sort -u >> oryLat2.5way.maf
+    for F in `find ./maf -depth -type f`
+do
+    grep -v -h "^#" "${F}"
+done >> oryLat2.5way.maf
+    grep "^##eof maf" maf/0/0/scaf11300.maf \
+	| sort -u >> oryLat2.5way.maf
+
+    # load tables for a look
+    ssh hgwdev
+    mkdir -p /gbdb/oryLat2/multiz5way/maf
+    ln -s /hive/data/genomes/oryLat2/bed/multiz5way/splitRun/oryLat2.5way.maf \
+                /gbdb/oryLat2/multiz5way/maf/multiz5way.maf
+    # this generates an immense multiz5way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/oryLat2/multiz5way/maf oryLat2 multiz5way
+    #	real    1m10.380s
+    #	Loaded 1366931 mafs in 1 files from /gbdb/oryLat2/multiz5way/maf
+    # load summary table
+    time nice -n +19 cat /gbdb/oryLat2/multiz5way/maf/*.maf \
+	| hgLoadMafSummary oryLat2 -minSize=30000 -mergeGap=1500 \
+	 -maxSize=200000  multiz5waySummary stdin
+    #	real    2m39.822
+    #	Created 353577 summary blocks from 2852890 components and 1197504 mafs
+    #	from stdin
+
+    # Gap Annotation
+    # prepare bed files with gap info
+    mkdir /cluster/data/oryLat2/bed/multiz5way/anno
+    cd /cluster/data/oryLat2/bed/multiz5way/anno
+    mkdir maf run
+
+    #	these actually already all exist from previous multiple alignments
+    for DB in `cat ../species.list`
+do
+    CDIR="/cluster/data/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+	echo "creating ${DB}.N.bed"
+	echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+	ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    rm -f nBeds sizes
+    for DB in `sed -e "s/ oryLat2//" ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    ssh memk
+    #	need to split up the single maf file into individual
+    #	per-scaffold maf files to run annotation on
+    mkdir /cluster/data/oryLat2/bed/multiz5way/anno/splitMaf
+    cd /cluster/data/oryLat2/bed/multiz5way/anno/splitMaf
+    #	create bed files to list approximately 112 scaffolds in
+    #	a single list, approximately 64 lists
+    cat << '_EOF_' > mkBedLists.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $bedCount = 0;
+my $i = 0;
+
+my $bedFile = sprintf("file_%d.bed", $bedCount);
+
+open (BF,">$bedFile") or die "can not write to $bedFile $!";
+
+open (FH,"</cluster/data/oryLat2/chrom.sizes") or
+        die "can not read /cluster/data/oryLat2/chrom.sizes $!";
+while (my $line = <FH>) {
+    chomp $line;
+    if ( (($i + 1) % 111) == 0 )  {
+        printf "%s\n", $line;
+        close (BF);
+        ++$bedCount;
+        $bedFile = sprintf("file_%d.bed", $bedCount);
+        open (BF,">$bedFile") or die "can not write to $bedFile $!";
+    }
+    ++$i;
+    my ($chr, $size) = split('\s+',$line);
+    printf BF "%s\t0\t%d\t%s\n", $chr, $size, $chr;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkBedLists.pl
+    ./mkBedLists.pl
+
+    #	now, run a mafsInRegion on each one of those lists
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set runDir = `pwd`
+set resultDir = $1
+set bedFile = $resultDir.bed
+mkdir -p $resultDir
+mkdir -p /scratch/tmp/oryLat2/$resultDir
+pushd /scratch/tmp/oryLat2/$resultDir
+mafsInRegion $runDir/$bedFile -outDir . \
+	/cluster/data/oryLat2/bed/multiz5way/splitRun/oryLat2.5way.maf
+popd
+rsync -q -a /scratch/tmp/oryLat2/$resultDir/ ./$resultDir/
+rm -fr /scratch/tmp/oryLat2/$resultDir
+rmdir --ignore-fail-on-non-empty /scratch/tmp/oryLat2
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls file*.bed > runList
+    gensub2 runList single template jobList
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 65 of 65 jobs
+# CPU time in finished jobs:       2615s      43.58m     0.73h    0.03d  0.000 y
+# IO & Wait Time:                 11436s     190.60m     3.18h    0.13d  0.000 y
+# Average job time:                 216s       3.60m     0.06h    0.00d
+# Longest finished job:             493s       8.22m     0.14h    0.01d
+# Submission to last job:          3875s      64.58m     1.08h    0.04d
+
+    cd /cluster/data/oryLat2/bed/multiz5way/anno/run
+
+    cat << '_EOF_' > doAnno.csh
+#!/bin/csh -ef
+set outDir = ../maf/$2
+set result = $3
+set input = $1
+mkdir -p $outDir
+cat $input | \
+nice mafAddIRows -nBeds=nBeds stdin /hive/data/genomes/oryLat2/oryLat2.2bit $result
+'_EOF_'
+    # << happy emacs
+    chmod +x doAnno.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./doAnno.csh $(path1) $(lastDir1) {check out line+ ../maf/$(lastDir1)/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../splitMaf -type f -name "*.maf" > maf.list
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 5542 of 5542 jobs
+# CPU time in finished jobs:        725s      12.09m     0.20h    0.01d  0.000 y
+# IO & Wait Time:                 37945s     632.41m    10.54h    0.44d  0.001 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest finished job:              53s       0.88m     0.01h    0.00d
+# Submission to last job:           243s       4.05m     0.07h    0.00d
+
+    ssh hgwdev
+    cd /cluster/data/oryLat2/bed/multiz5way/anno
+    grep "^##maf version" maf/file_0/chr1.maf \
+	| sort -u > oryLat2.5way.maf
+    find ./maf -type f -depth -name "*.maf" | while read F
+do
+    grep -v -h "^#" "${F}"
+done >> oryLat2.5way.maf
+    echo "##eof maf" >> oryLat2.5way.maf
+
+    ssh hgwdev
+    cd /cluster/data/oryLat2/bed/multiz5way/anno
+    mkdir -p /gbdb/oryLat2/multiz5way/anno
+    ln -s `pwd`/oryLat2.5way.maf \
+                /gbdb/oryLat2/multiz5way/anno/multiz5way.maf
+    #	by loading this into the table multiz5way, it will replace the
+    #	previously loaded table with the unannotated mafs
+    #	huge temp files are made, do them on local disk
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/oryLat2/multiz5way/anno \
+                oryLat2 multiz5way
+    #	Loaded 1620199 mafs in 1 files from /gbdb/oryLat2/multiz5way/anno
+    #	real    3m19.209s
+
+    #	normally filter this for chrom size > 1,000,000 and only load
+    #	those chroms.  But this is a scaffold assembly, load everything:
+    time nice -n +19 hgLoadMafSummary oryLat2 -minSize=30000 -mergeGap=1500 \
+	-maxSize=200000  multiz5waySummary \
+	    /gbdb/oryLat2/multiz5way/anno/multiz5way.maf
+    #	Created 353577 summary blocks from 2852890 components and 1428024 mafs
+    #	from /gbdb/oryLat2/multiz5way/anno/multiz5way.maf
+    #	real    3m49.692s
+
+    #	by loading this into the table multiz5waySummary, it will replace
+    #	the previously loaded table with the unannotated mafs
+    #	remove the multiz5way*.tab files in this /scratch/tmp directory
+    rm multiz5way*.tab
+    #	And, you can remove the previously loaded non-annotated maf file link:
+    rm /gbdb/oryLat2/multiz5way/maf/multiz5way.maf
+    rmdir /gbdb/oryLat2/multiz5way/maf
+
+###########################################################################
+## Annotate 5-way multiple alignment with gene annotations
+##		(DONE - 2008-09-03 - Hiram)
+    # Gene frames, using the "best" gene set on each organism:
+    #	use ensGene for oryLat2, gasAcu1, fr2, danRer5
+    #	with Mrnas for tetNig1
+
+    ssh hgwdev
+    mkdir /cluster/data/oryLat2/bed/multiz5way/frames
+    cd /cluster/data/oryLat2/bed/multiz5way/frames
+    mkdir genes
+    # ensGene
+    for DB in oryLat2 gasAcu1 fr2 danRer5
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    # use the xenoMrna data for tetNig1
+    for DB in tetNig1
+do
+tmpExt=`mktemp temp.XXXXXX`
+tmpMrnaCds=${DB}.mrna-cds.${tmpExt}
+tmpMrna=${DB}.mrna.${tmpExt}
+tmpCds=${DB}.cds.${tmpExt}
+hgsql -N -e 'select xenoMrna.qName,cds.name,xenoMrna.* \
+	   from xenoMrna,gbCdnaInfo,cds \
+	   where (xenoMrna.qName = gbCdnaInfo.acc) and \
+	     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+$DB > ${tmpMrnaCds}
+cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} stdout | \
+genePredSingleCover stdin stdout | gzip -2c > /scratch/tmp/$DB.tmp.gz
+rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+mv /scratch/tmp/$DB.tmp.gz genes/$DB.gp.gz
+rm -f $tmpExt
+echo "${DB} done"
+done
+
+    ls -og genes
+# -rw-rw-r--  1 1866277 Sep  3 14:02 oryLat2.gp.gz
+# -rw-rw-r--  1 1984758 Sep  3 14:02 gasAcu1.gp.gz
+# -rw-rw-r--  1 1909042 Sep  3 14:02 fr2.gp.gz
+# -rw-rw-r--  1 1845404 Sep  3 14:02 danRer5.gp.gz
+# -rw-rw-r--  1 1693359 Sep  3 14:13 tetNig1.gp.gz
+
+    cd /cluster/data/oryLat2/bed/multiz5way/frames
+    #	anything to annotate is in a pair, e.g.: oryLat2 genes/oryLat2.gp.gz
+    time (cat ../anno/oryLat2.5way.maf | nice -n +19 genePredToMafFrames oryLat2 stdin stdout oryLat2 genes/oryLat2.gp.gz gasAcu1 genes/gasAcu1.gp.gz fr2 genes/fr2.gp.gz danRer5 genes/danRer5.gp.gz tetNig1 genes/tetNig1.gp.gz | gzip > multiz5way.mafFrames.gz) > frames.log 2>&1
+    # see what it looks like in terms of number of annotations per DB:
+    zcat multiz5way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
+#	201595 oryLat2
+#	213947 tetNig1
+#	280670 danRer5
+#	298913 gasAcu1
+#	318664 fr2
+
+    #	load the resulting file
+    cd /cluster/data/oryLat2/bed/multiz5way/frames
+    time nice -n +19 hgLoadMafFrames oryLat2 multiz5wayFrames \
+	multiz5way.mafFrames.gz
+    #	real    0m53.888s
+
+    #	enable the trackDb entries:
+# frames multiz5wayFrames
+# irows on
+
+#############################################################################
+# phastCons 5-way (DONE - 2008-09-03,08 - Hiram)
+
+    # split 5way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh memk
+    mkdir /cluster/data/oryLat2/bed/multiz5way/msa.split
+    cd /cluster/data/oryLat2/bed/multiz5way/msa.split
+    mkdir -p /cluster/data/oryLat2/bed/multiz5way/cons/ss
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set MAFS = /cluster/data/oryLat2/bed/multiz5way/anno/maf
+set WINDOWS = /cluster/data/oryLat2/bed/multiz5way/cons/ss
+pushd $WINDOWS
+set resultDir = $1
+set c = $2
+rm -fr $resultDir/$c
+mkdir -p $resultDir
+twoBitToFa -seq=$c /cluster/data/oryLat2/oryLat2.2bit /scratch/tmp/oryLat2.$c.fa
+/cluster/bin/phast/$MACHTYPE/msa_split $MAFS/$resultDir/$c.maf -i MAF \
+    -M /scratch/tmp/oryLat2.$c.fa \
+    -o SS -r $resultDir/$c -w 10000000,0 -I 1000 -B 5000
+rm -f /scratch/tmp/oryLat2.$c.fa
+popd
+mkdir -p $resultDir
+date > $resultDir/$c.out
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(dir1) $(root1) {check out line+ $(dir1)/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	create list of maf files:
+    (cd ../anno/maf; find . -type f) | sed -e "s#^./##" > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+# Completed: 5542 of 5542 jobs
+# CPU time in finished jobs:        707s      11.79m     0.20h    0.01d  0.000 y
+# IO & Wait Time:                 16217s     270.28m     4.50h    0.19d  0.001 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:             100s       1.67m     0.03h    0.00d
+# Submission to last job:          7795s     129.92m     2.17h    0.09d
+
+    #  create starting-tree with the largest ss file:
+    cd /cluster/data/oryLat2/bed/multiz5way/cons
+    time nice -n +19 /cluster/bin/phast/$MACHTYPE/phyloFit -i SS \
+	ss/file_0/chr4.10000001-19997581.ss \
+--tree "(((tetNig1,fr2),(gasAcu1,oryLat2)),danRer5)" \
+    --out-root starting-tree
+    #	Fitting tree model to s1.1-39973033.ss using REV ...
+    #	Writing model to starting-tree.mod ...
+    #	real    0m8.798s
+
+    # add up the C and G:
+    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    #	0.417
+    #	This 0.417 is used in the --gc argument below
+
+    # Create a random list of 50 1 mb regions  (do not use the _randoms)
+    cd /cluster/data/oryLat2/bed/multiz5way/cons
+    find ./ss -type f | grep "/chr" | xargs ls -1l \
+	| awk '$5 > 4000000 {print $9;}' \
+	| sed -e "s#./ss/##" | randomLines stdin 50 randomSs.list
+
+    # Set up parasol directory to calculate trees on these 50 regions
+    ssh memk
+    mkdir /cluster/data/oryLat2/bed/multiz5way/cons/treeRun1
+    cd /cluster/data/oryLat2/bed/multiz5way/cons/treeRun1
+    mkdir tree log
+
+    #	Tuning this loop should come back to here to recalculate 
+    # Create little script that calls phastCons with right arguments
+    #	--target-coverage of 0.20 is about right for mouse, will be
+    #	tuned exactly below
+    cat > makeTree.csh << '_EOF_'
+#!/bin/csh -fe
+set C=$1:h
+mkdir -p log/${C} tree/${C}
+    /cluster/bin/phast/$MACHTYPE/phastCons ../ss/$1 \
+      /cluster/data/oryLat2/bed/multiz5way/cons/starting-tree.mod \
+      --gc 0.417 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-length 10 --target-coverage 0.20 \
+      --quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+    #	<< happy emacs
+    chmod a+x makeTree.csh
+
+    # Create gensub file
+    cat > template << '_EOF_'
+#LOOP
+./makeTree.csh $(path1)
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    # Make cluster job and run it
+    gensub2 ../randomSs.list single template jobList
+    para create jobList
+    para try/push/check/etc
+# Completed: 50 of 50 jobs
+# CPU time in finished jobs:       7629s     127.15m     2.12h    0.09d  0.000 y
+# IO & Wait Time:                   367s       6.11m     0.10h    0.00d  0.000 y
+# Average job time:                 160s       2.67m     0.04h    0.00d
+# Longest finished job:             282s       4.70m     0.08h    0.00d
+# Submission to last job:           518s       8.63m     0.14h    0.01d
+
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    ls -1 tree/file_0/*.cons.mod > cons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.list' \
+	--output-average ave.cons.mod > cons_summary.txt
+    ls -1 tree/file_0/*.noncons.mod > noncons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.list' \
+	--output-average ave.noncons.mod > noncons_summary.txt
+    cp -p ave.*.mod ..
+    cd ..
+    cp -p ave.*.mod /cluster/data/oryLat1/bed/multiz5way/cons
+
+    #	measuring entropy, aiming for a PIT = 10
+    #	consEntopy <target coverage> <expected lengths>
+    #		 ave.cons.mod ave.noncons.mod --NH 9.78
+    #	--expected-length 10 --target-coverage 0.20 \
+    time /cluster/bin/phast/$MACHTYPE/consEntropy --NH 9.7834 \
+	0.20 10 ave.{cons,noncons}.mod
+# ( Solving for new omega: 10.000000 10.103157 10.102202 )
+# Transition parameters: gamma=0.200000, omega=10.000000, mu=0.100000, nu=0.025000
+# Relative entropy: H=0.861827 bits/site
+# Expected min. length: L_min=11.328911 sites
+# Expected max. length: L_max=7.054937 sites
+# Phylogenetic information threshold: PIT=L_min*H=9.763558 bits
+# Recommended expected length: omega=10.102202 sites (for L_min*H=9.783400)
+
+    #	--expected-length 14 --target-coverage 0.20 \
+# ( Solving for new omega: 14.000000 10.288426 9.355350 9.262718 9.261710 )
+# Transition parameters: gamma=0.200000, omega=14.000000, mu=0.071429, nu=0.017857
+# Relative entropy: H=0.783596 bits/site
+# Expected min. length: L_min=13.493848 sites
+# Expected max. length: L_max=9.090919 sites
+# Phylogenetic information threshold: PIT=L_min*H=10.573722 bits
+# Recommended expected length: omega=9.261710 sites (for L_min*H=9.783400)
+
+    #	--expected-length 12 --target-coverage 0.20 \
+    #	this one comes closest to PIT=10
+# ( Solving for new omega: 12.000000 9.993483 9.668856 9.658335 9.658324 )
+# Transition parameters: gamma=0.200000, omega=12.000000, mu=0.083333, nu=0.020833
+# Relative entropy: H=0.816888 bits/site
+# Expected min. length: L_min=12.489452 sites
+# Expected max. length: L_max=8.136430 sites
+# Phylogenetic information threshold: PIT=L_min*H=10.202482 bits
+# Recommended expected length: omega=9.658324 sites (for L_min*H=9.783400)
+
+    #	--expected-length 13 --target-coverage 0.20 \
+# ( Solving for new omega: 13.000000 10.112898 9.494883 9.455298 9.455126 )
+# Transition parameters: gamma=0.200000, omega=13.000000, mu=0.076923, nu=0.019231
+# Relative entropy: H=0.799098 bits/site
+# Expected min. length: L_min=13.008620 sites
+# Expected max. length: L_max=8.627917 sites
+# Phylogenetic information threshold: PIT=L_min*H=10.395159 bits
+# Recommended expected length: omega=9.455126 sites (for L_min*H=9.783400)
+
+
+    featureBits oryLat2 *.bed
+    #	61468061 bases of 700386597 (8.776%) in intersection
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, run it on
+    #	a kluster without too many CPUs
+    ssh memk
+    mkdir -p /cluster/data/oryLat2/bed/multiz5way/cons/run.cons
+    cd /cluster/data/oryLat2/bed/multiz5way/cons/run.cons
+
+    #	there are going to be several different phastCons runs using
+    #	this same script.  They trigger off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is one of:
+    #	all gliers placentals
+    #	Well, that's what it was when used in the Mm9 30-way,
+    #	in this instance, there is only the directory "all"
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.2007-05-04/bin
+set subDir = $1
+set f = $2
+set c = $2:r
+set len = $3
+set cov = $4
+set grp = $cwd:t
+set tmp = /scratch/tmp/$f
+set cons = /cluster/data/oryLat2/bed/multiz5way/cons
+mkdir -p $tmp
+set san = /cluster/data/oryLat2/bed/multiz5way/cons
+cp -p $cons/$grp/ave.cons.mod $cons/$grp/ave.noncons.mod $tmp
+cp -p $san/ss/$subDir/${f}.ss $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phastCons ${f}.ss ave.cons.mod,ave.noncons.mod \
+    --expected-length $len --target-coverage $cov \
+    --quiet --seqname ${c} --idpref ${c} --viterbi ${f}.bed --score > ${f}.pp
+popd > /dev/null
+mkdir -p $san/$grp/pp/$subDir $san/$grp/bed/$subDir
+sleep 4
+touch $san/$grp/pp/$subDir $san/$grp/bed/$subDir
+rm -f $san/$grp/pp/$subDir/$f.pp
+rm -f $san/$grp/bed/$subDir/$f.bed
+mv $tmp/$f.pp $san/$grp/pp/$subDir
+mv $tmp/$f.bed $san/$grp/bed/$subDir
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    # Create parasol batch and run it
+    cd /cluster/data/oryLat2/bed/multiz5way/cons
+    find ./ss -type f -name "*.ss" | sed -e "s#^./##; s/.ss$//" > ss.list
+
+    # run for all species
+    mkdir -p all run.cons/all
+    cd all
+    ln -s ../ave.*cons.mod .
+    cd run.cons/all
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create template file for "all" run
+    cat << '_EOF_' > template
+#LOOP
+../doPhast.csh $(lastDir1) $(file1) 12 .2 {check out line+ /cluster/data/oryLat2/bed/multiz5way/cons/all/pp/$(lastDir1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 ../../ss.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 4265 of 4265 jobs
+# CPU time in finished jobs:       2722s      45.36m     0.76h    0.03d  0.000 y
+# IO & Wait Time:                 28535s     475.59m     7.93h    0.33d  0.001 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest finished job:              42s       0.70m     0.01h    0.00d
+# Submission to last job:          1181s      19.68m     0.33h    0.01d
+
+    # create Most Conserved track
+    cd /cluster/data/oryLat2/bed/multiz5way/cons/all
+    find ./bed -type f -name "*.bed" | xargs cat \
+	| sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/oryLat2/bed/multiz5way/cons/all
+    time nice -n +19 hgLoadBed oryLat2 phastConsElements5way mostConserved.bed
+    #	Loaded 1047037 elements of size 5
+    #	real    0m33.582s
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    #	We don't have any gene tracks to compare CDS coverage
+    #	--rho .31 --expected-length 45 --target-coverage .3
+    featureBits oryLat2 phastConsElements5way
+    #	61468061 bases of 700386597 (8.776%) in intersection
+
+    #	creating the phastCons data files
+    mkdir -p phastCons5wayScores
+    #	take a look at the file names to see where the chrom files
+    #	are:
+for D in `ls -1d pp/file* | sort -t_ -k2n`
+do
+    F=${D/pp\/}
+    out=phastCons5wayScores/${F}.data.gz
+    ls -S ${D}/*.pp
+done | sed -e "s#/# s #g; s#\.# d #g; s#-# m #" \
+    | sort -k5,5 -k7,7n | sed -e "s# s #/#g; s# d #.#g; s# m #-#" > fileList.txt
+
+    #	the chrom files are all in file_0, with chrM in file_12
+    #	therefore:
+    for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 M
+do
+    find ./pp/file_0 ./pp/file_12 -type f | grep "/chr${C}\." \
+	| sed -e "s#^./##" | sed -e "s#/# s #g; s#\.# d #g; s#-# m #" \
+	| sort -k5,5 -k7,7n | sed -e "s# s #/#g; s# d #.#g; s# m #-#" \
+	| while read F
+    do
+	cat "${F}"
+    done | gzip >> phastCons5wayScores/chr${C}.data.txt.gz
+    echo chr${C}.data.txt
+done
+
+    #	these files mistakenly got gzipped during the first run of
+    #	this script, so now they are *.pp.gz and they are zcat
+    #	And, for the rest, place them in their file_N groups
+for D in `ls -1d pp/file* | sort -t_ -k2n`
+do
+    F=${D/pp\/}
+    out=phastCons5wayScores/${F}.data.gz
+    ls -S ${D}/*.pp.gz | grep -v "/chr" \
+	| sed -e "s#/# s #g; s#\.# d #g; s#-# m #" \
+	| sort -k5,5 -k7,7n | sed -e "s# s #/#g; s# d #.#g; s# m #-#" \
+	| xargs zcat > phastCons5wayScores/${F}.data.txt
+    gzip phastCons5wayScores/${F}.data.txt
+    ls -og phastCons5wayScores/${F}.data.txt.gz
+done
+
+    #	verify nothing got lost
+    find ./pp -type f | xargs zcat | wc -l
+    #	300140068
+    zcat phastCons5wayScores/*.txt.gz | wc -l
+    #	300140068
+
+    #	can now convert to wiggle data
+    ls -rt phastCons5wayScores/*.txt.gz | while read F
+do
+    zcat "${F}"
+done | wigEncode stdin phastCons5way.wig phastCons5way.wib
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /hive/data/genomes/oryLat2/bed/multiz5way/cons/all
+    ln -s `pwd`/phastCons5way.wib /gbdb/oryLat2/multiz5way/phastCons5way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/oryLat2/multiz5way oryLat2 \
+	phastCons5way phastCons5way.wig
+    #	real    0m13.164s
+    # remove garbage
+    rm wiggle.tab
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/oryLat2/bed/multiz5way/cons/all
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=oryLat2 phastCons5way > histogram.data 2>&1
+    #	real    5m0.608s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Medaka oryLat2 Histogram phastCons5way track"
+set xlabel " phastCons5way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    #	These trackDb entries turn on the wiggle phastCons data track:
+    #	type wigMaf 0.0 1.0
+    #	maxHeightPixels 100:40:11
+    #	wiggle phastCons5way
+    #	spanList 1
+    #	autoScaleDefault Off
+    #	windowingFunction mean
+    #	pairwiseHeight 12
+    #	yLineOnOff Off
+
+#############################################################################
