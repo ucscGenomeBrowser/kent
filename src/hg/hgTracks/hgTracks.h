@@ -1034,5 +1034,8 @@ char *getItemDataName(struct track *tg, char *itemName);
 void registerTrackHandler(char *name, TrackHandler handler);
 /* Register a track handling function. */
 
+enum trackVisibility limitedVisFromComposite(struct track *subtrack);
+/* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
+        
 #endif /* HGTRACKS_H */
 
