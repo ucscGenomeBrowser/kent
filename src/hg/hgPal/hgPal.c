@@ -14,7 +14,7 @@
 #include "mafGene.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgPal.c,v 1.3 2008/09/08 22:26:45 braney Exp $";
+static char const rcsid[] = "$Id: hgPal.c,v 1.4 2008/09/08 23:35:41 braney Exp $";
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
@@ -226,7 +226,7 @@ if(includeList)
     slReverse(&includeList);
 #endif
 struct slName *includeList = newSlName(database);
-struct wigMafSpecies *wmSpeciesList = wigMafSpeciesTable(cart, tdb, database);
+struct wigMafSpecies *wmSpeciesList = wigMafSpeciesTable(cart, tdb, tdb->tableName, database);
 struct wigMafSpecies *wmSpecies = wmSpeciesList;
 
 for(; wmSpecies; wmSpecies = wmSpecies->next)
