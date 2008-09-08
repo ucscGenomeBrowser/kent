@@ -19,12 +19,16 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.116 2008/09/04 00:16:04 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.117 2008/09/08 17:59:12 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
 #define CLEAR_BUTTON_LABEL      "clear" 
 #define JBUFSIZE 2048
+
+#define PM_BUTTON "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG height=18 width=18 onclick=\"return (setCheckBoxesThatContain('%s',%s,true,'%s','%s') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
+#define  PLUS_BUTTON(nameOrId,anc,str1,str2) printf(PM_BUTTON, (anc),(anc),(nameOrId),"true",(str1),(str2),(anc),"add_sm.gif","+")
+#define MINUS_BUTTON(nameOrId,anc,str1,str2) printf(PM_BUTTON, (anc),(anc),(nameOrId),"false",(str1),(str2),(anc),"remove_sm.gif","-")
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -2289,7 +2293,7 @@ if (!primarySubtrack)
         puts("<TH align=\"center\" nowrap>&nbsp;Restricted Until&nbsp;</TH></TR>");
     }
 
-if(sortOrder != NULL || useDragAndDrop)  
+if(sortOrder != NULL || useDragAndDrop)
     {
     tdbSortPrioritiesFromCart(cart, &(parentTdb->subtracks)); // preserves user's prev sort/drags
     puts("</THEAD><TBODY id='sortable_tbody'>");
@@ -2487,7 +2491,7 @@ void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,bool
 char *typeLine = NULL;  /*  to parse the trackDb type line  */
 char *words[8];     /*  to parse the trackDb type line  */
 int wordCount = 0;  /*  to parse the trackDb type line  */
-char options[14][256];  /*  our option strings here */
+char option[256];
 double minY;        /*  from trackDb or cart    */
 double maxY;        /*  from trackDb or cart    */
 double tDbMinY;     /*  data range limits from trackDb type line */
@@ -2506,28 +2510,19 @@ boolean bedGraph = FALSE;   /*  working on bedGraph type ? */
 
 cfgBeginBoxAndTitle(boxed, title);
 
+wigFetchMinMaxPixelsWithCart(cart,tdb,name,&minHeightPixels, &maxHeightPixels, &defaultHeight);
 typeLine = cloneString(tdb->type);
 wordCount = chopLine(typeLine,words);
 
 if (sameString(words[0],"bedGraph"))
     bedGraph = TRUE;
 
-snprintf( &options[0][0], 256, "%s.%s", name, HEIGHTPER );
-snprintf( &options[4][0], 256, "%s.%s", name, MIN_Y );
-snprintf( &options[5][0], 256, "%s.%s", name, MAX_Y );
-snprintf( &options[7][0], 256, "%s.%s", name, HORIZGRID );
-snprintf( &options[8][0], 256, "%s.%s", name, LINEBAR );
-snprintf( &options[9][0], 256, "%s.%s", name, AUTOSCALE );
-snprintf( &options[10][0], 256, "%s.%s", name, WINDOWINGFUNCTION );
-snprintf( &options[11][0], 256, "%s.%s", name, SMOOTHINGWINDOW );
-snprintf( &options[12][0], 256, "%s.%s", name, YLINEMARK );
-snprintf( &options[13][0], 256, "%s.%s", name, YLINEONOFF );
-
-wigFetchMinMaxPixelsWithCart(cart,tdb,name,&minHeightPixels, &maxHeightPixels, &defaultHeight);
 if (bedGraph)
     wigFetchMinMaxLimitsWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY);
 else
     wigFetchMinMaxYWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
+freeMem(typeLine);
+
 (void) wigFetchHorizontalGridWithCart(cart,tdb,name, &horizontalGrid);
 (void) wigFetchAutoScaleWithCart(cart,tdb,name, &autoScale);
 (void) wigFetchGraphTypeWithCart(cart,tdb,name, &lineBar);
@@ -2542,43 +2537,53 @@ if (bedGraph)
     printf("<b>Type of graph:&nbsp;</b>");
 else
     printf("<b>Type of graph:&nbsp;</b>");
-wiggleGraphDropDown(&options[8][0], lineBar);
+snprintf( option, sizeof(option), "%s.%s", name, LINEBAR );
+wiggleGraphDropDown(option, lineBar);
 puts("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>");
 
 puts("<b>y&nbsp;=&nbsp;0.0 line:&nbsp;</b>");
-wiggleGridDropDown(&options[7][0], horizontalGrid);
+snprintf(option, sizeof(option), "%s.%s", name, HORIZGRID );
+wiggleGridDropDown(option, horizontalGrid);
 puts(" </TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>");
 
 printf("<b>Track height:&nbsp;</b>");
-cgiMakeIntVar(&options[0][0], defaultHeight, 5);
+snprintf(option, sizeof(option), "%s.%s", name, HEIGHTPER );
+cgiMakeIntVar(option, defaultHeight, 5);
 printf("&nbsp;pixels&nbsp;&nbsp;(range: %d to %d)",
     minHeightPixels, maxHeightPixels);
 puts("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>");
 
 printf("<b>Vertical viewing range</b>:&nbsp;&nbsp;\n<b>min:&nbsp;</b>");
-cgiMakeDoubleVar(&options[4][0], minY, 6);
+snprintf(option, sizeof(option), "%s.%s", name, MIN_Y );
+cgiMakeDoubleVar(option, minY, 6);
 printf("&nbsp;&nbsp;&nbsp;<b>max:&nbsp;</b>");
-cgiMakeDoubleVar(&options[5][0], maxY, 6);
+snprintf(option, sizeof(option), "%s.%s", name, MAX_Y );
+cgiMakeDoubleVar(option, maxY, 6);
 printf("&nbsp;(range: %g to %g)",
     tDbMinY, tDbMaxY);
 puts("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>");
 
 printf("<b>Data view scaling:&nbsp;</b>");
-wiggleScaleDropDown(&options[9][0], autoScale);
+snprintf(option, sizeof(option), "%s.%s", name, AUTOSCALE );
+wiggleScaleDropDown(option, autoScale);
 puts("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>");
 
 printf("<b>Windowing function:&nbsp;</b>");
-wiggleWindowingDropDown(&options[10][0], windowingFunction);
+snprintf(option, sizeof(option), "%s.%s", name, WINDOWINGFUNCTION );
+wiggleWindowingDropDown(option, windowingFunction);
 puts("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>");
 
 printf("<b>Smoothing window:&nbsp;</b>");
-wiggleSmoothingDropDown(&options[11][0], smoothingWindow);
+snprintf(option, sizeof(option), "%s.%s", name, SMOOTHINGWINDOW );
+wiggleSmoothingDropDown(option, smoothingWindow);
 puts("&nbsp;pixels</TD></TR><TR><TD ALIGN=LEFT COLSPAN=1>");
 
 puts("<b>Draw indicator line at y&nbsp;=&nbsp;</b>&nbsp;");
-cgiMakeDoubleVar(&options[12][0], yLineMark, 6);
+snprintf(option, sizeof(option), "%s.%s", name, YLINEMARK );
+cgiMakeDoubleVar(option, yLineMark, 6);
 printf("&nbsp;&nbsp;");
-wiggleYLineMarkDropDown(&options[13][0], yLineMarkOnOff);
+snprintf(option, sizeof(option), "%s.%s", name, YLINEONOFF );
+wiggleYLineMarkDropDown(option, yLineMarkOnOff);
 if(boxed)
     printf("</TD><TD align=\"RIGHT\">");
 else    
@@ -2587,7 +2592,6 @@ printf("<A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",WIGGLE_HELP_P
 if(boxed)
     puts("</TD></TR></TABLE>");
 
-freeMem(typeLine);
 cfgEndBox(boxed);
 }
 
@@ -2690,7 +2694,6 @@ char *chp;
 char trackName[255];
 boolean lineBreakJustPrinted;
 
-char buttonVar[64];
 int numberPerRow;
 boolean isWigMafProt = FALSE;
 
@@ -2753,41 +2756,50 @@ slReverse(&wmSpeciesList);
 
 puts("\n<P STYLE=><B>Pairwise alignments:</B>&nbsp;");
 
-cgiContinueHiddenVar("g");
-jsInit();
-
-char prefix[512];
-safef(prefix, sizeof prefix, "%s.", tdb->tableName);
-char *defaultOffSpecies = trackDbSetting(tdb, "speciesDefaultOff");
-if (defaultOffSpecies)
+if(differentString(name,tdb->tableName))
     {
-    safecpy(buttonVar, sizeof buttonVar, "set_defaults_button");
-    /* make button and turn on all species (if button was pressed) */
-    jsMakeSetClearButton(cart, "mainForm", buttonVar, JS_DEFAULTS_BUTTON_LABEL,
-			 prefix, speciesList, NULL, FALSE, TRUE);
-    if (isNotEmpty(cgiOptionalString(buttonVar)))
+    PLUS_BUTTON( "id", "plus_pw","cb_maf_","_maf_");
+    MINUS_BUTTON("id","minus_pw","cb_maf_","_maf_");
+    }
+else
+    {
+    char buttonVar[64];
+    cgiContinueHiddenVar("g");
+    jsInit();
+
+    char prefix[512];
+    safef(prefix, sizeof prefix, "%s.", name);
+    char *defaultOffSpecies = trackDbSetting(tdb, "speciesDefaultOff");
+    if (defaultOffSpecies)
         {
-        char *words[MAX_SP_SIZE];
-        int wordCt = chopLine(defaultOffSpecies, words);
-        /* turn off those that are default off */
-        int i;
-        for (i = 0; i < wordCt; i++)
+        safecpy(buttonVar, sizeof buttonVar, "set_defaults_button");
+        /* make button and turn on all species (if button was pressed) */
+        jsMakeSetClearButton(cart, "mainForm", buttonVar, JS_DEFAULTS_BUTTON_LABEL,
+                prefix, speciesList, NULL, FALSE, TRUE);
+        if (isNotEmpty(cgiOptionalString(buttonVar)))
             {
-            safef(option, sizeof(option), "%s%s", prefix, words[i]);
-            cartSetBoolean(cart, option, FALSE);
+            char *words[MAX_SP_SIZE];
+            int wordCt = chopLine(defaultOffSpecies, words);
+            /* turn off those that are default off */
+            int i;
+            for (i = 0; i < wordCt; i++)
+                {
+                safef(option, sizeof(option), "%s%s", prefix, words[i]);
+                cartSetBoolean(cart, option, FALSE);
+                }
             }
         }
+
+    puts("&nbsp;");
+    safef(buttonVar, sizeof buttonVar, "%s", "set_all_button");
+    jsMakeSetClearButton(cart, "mainForm", buttonVar, JS_SET_ALL_BUTTON_LABEL,
+                prefix, speciesList, NULL, FALSE, TRUE);
+    puts("&nbsp;");
+    safef(buttonVar, sizeof buttonVar, "%s", "clear_all_button");
+    jsMakeSetClearButton(cart, "mainForm", buttonVar, JS_CLEAR_ALL_BUTTON_LABEL,
+                prefix, speciesList, NULL, FALSE, FALSE);
     }
-
-puts("&nbsp;");
-safef(buttonVar, sizeof buttonVar, "%s", "set_all_button");
-jsMakeSetClearButton(cart, "mainForm", buttonVar, JS_SET_ALL_BUTTON_LABEL,
-		     prefix, speciesList, NULL, FALSE, TRUE);
-puts("&nbsp;");
-safef(buttonVar, sizeof buttonVar, "%s", "clear_all_button");
-jsMakeSetClearButton(cart, "mainForm", buttonVar, JS_CLEAR_ALL_BUTTON_LABEL,
-		      prefix, speciesList, NULL, FALSE, FALSE);
-
+    
 if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
     {
     char buffer[128];
@@ -2796,7 +2808,7 @@ if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
     char *path, *orgName;
     int ii;
 
-    safef(buffer, sizeof(buffer), "%s.vis",tdb->tableName);
+    safef(buffer, sizeof(buffer), "%s.vis",name);
     cartMakeRadioButton(cart, buffer,"useTarg", "useTarg");
     printf("Show shortest path to target species:  ");
     path = phyloNodeNames(tree);
@@ -2834,6 +2846,14 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
         /* replace underscores in group names */
         subChar(groups[group], '_', ' ');
 	printf("<P>&nbsp;&nbsp;<B><EM>%s</EM></B>", groups[group]);
+    if(differentString(name,tdb->tableName))
+        {
+        printf("&nbsp;&nbsp;");
+        safef(option, sizeof(option), "plus_%s", groups[group]);
+        PLUS_BUTTON( "id",option,"cb_maf_",groups[group]);
+        safef(option, sizeof(option),"minus_%s", groups[group]);
+        MINUS_BUTTON("id",option,"cb_maf_",groups[group]);
+        }
 
 	puts("\n<TABLE><TR>");
 	}
@@ -2852,11 +2872,11 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     if (hIsGsidServer()) 
     	{
 	/* for GSID maf, display only entries belong to the specific MSA selected */
-    	safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
+    	safef(option, sizeof(option), "%s.%s", name, wmSpecies->name);
     	label = hOrganism(wmSpecies->name);
     	if (label == NULL)
             label = wmSpecies->name;
-	strcpy(trackName, tdb->tableName);	
+	strcpy(trackName, tdb->tableName);
 
 	/* try AaMaf first */
 	chp = strstr(trackName, "AaMaf");
@@ -2892,8 +2912,15 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     else
     	{
     	puts("<TD>");
-    	safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
-    	cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
+    	safef(option, sizeof(option), "%s.%s", name, wmSpecies->name);
+        if(sameString(name,tdb->tableName))
+            cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
+        else   // This is part of a dropdown
+            {
+            char id[MAX_SP_SIZE];
+            safef(id, sizeof(id), "cb_maf_%s_%s", groups[group], wmSpecies->name);
+            cgiMakeCheckBoxWithId(option, cartUsualBoolean(cart, option, TRUE),id);
+            }
     	label = hOrganism(wmSpecies->name);
     	if (label == NULL)
 		label = wmSpecies->name;
@@ -2911,7 +2938,7 @@ if (isWigMafProt)
     puts("<B>Multiple alignment amino acid-level:</B><BR>" );
 else 
     puts("<B>Multiple alignment base-level:</B><BR>" );
-safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_DOT_VAR);
+safef(option, sizeof option, "%s.%s", name, MAF_DOT_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
 
 if (isWigMafProt) 
@@ -2919,7 +2946,7 @@ if (isWigMafProt)
 else
     puts("Display bases identical to reference as dots<BR>" );
 
-safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
+safef(option, sizeof option, "%s.%s", name, MAF_CHAIN_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, TRUE));
 
 char *irowStr = trackDbSetting(tdb, "irows");
@@ -2933,7 +2960,7 @@ else
     else
 	puts("Display unaligned bases with spanning chain as 'o's<BR>");
     }
-safef(option, sizeof option, "%s.%s", tdb->tableName, "codons");
+safef(option, sizeof option, "%s.%s", name, "codons");
 if (framesTable)
     {
     char *nodeNames[512];
@@ -2950,7 +2977,7 @@ if (framesTable)
     cgiMakeDropList(SPECIES_CODON_DEFAULT, nodeNames, i,
 	cartUsualString(cart, SPECIES_CODON_DEFAULT, defaultCodonSpecies));
     puts("<br>");
-    safef(buffer, sizeof(buffer), "%s.codons",tdb->tableName);
+    safef(buffer, sizeof(buffer), "%s.codons",name);
     cartMakeRadioButton(cart, buffer,"codonNone", "codonDefault");
     printf("No codon translation<BR>");
     cartMakeRadioButton(cart, buffer,"codonDefault", "codonDefault");
@@ -2969,7 +2996,7 @@ else
 
 #ifdef GENE_FRAMING
 
-    	safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_FRAME_VAR);
+    	safef(option, sizeof(option), "%s.%s", name, MAF_FRAME_VAR);
     	char *currentCodonMode = cartCgiUsualString(cart, option, MAF_FRAME_GENE);
 
     	/* Disable codon highlighting */
@@ -2981,15 +3008,15 @@ else
     	cgiMakeRadioButton(option, MAF_FRAME_GENE, 
 			    sameString(MAF_FRAME_GENE, currentCodonMode));
     	puts("CDS-annotated frame based on");
-    	safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_GENEPRED_VAR);
+    	safef(option, sizeof(option), "%s.%s", name, MAF_GENEPRED_VAR);
     	genePredDropDown(cart, makeTrackHash(db, chromosome), NULL, option);
 
 #else
-    	snprintf(option, sizeof(option), "%s.%s", tdb->tableName, BASE_COLORS_VAR);
+    	snprintf(option, sizeof(option), "%s.%s", name, BASE_COLORS_VAR);
     	puts ("&nbsp; Alternate colors every");
     	cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
     	puts ("bases<BR>");
-    	snprintf(option, sizeof(option), "%s.%s", tdb->tableName, 
+    	snprintf(option, sizeof(option), "%s.%s", name, 
 			    BASE_COLORS_OFFSET_VAR);
     	puts ("&nbsp; Offset alternate colors by");
     	cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
@@ -3006,7 +3033,7 @@ else
 
 if (trackDbSetting(tdb, CONS_WIGGLE) != NULL)
     {
-    wigCfgUi(cart,tdb,tdb->tableName,"Conservation graph:",FALSE);
+    wigCfgUi(cart,tdb,name,"Conservation graph:",FALSE);
     }
 cfgEndBox(boxed);
 }
@@ -3024,7 +3051,6 @@ char javascript[JBUFSIZE];
 members_t *membersOfView = subgroupMembersGet(parentTdb,"view");
 if(membersOfView == NULL)
     return FALSE;
-    
     
 // Should create an array of matchedSubtracks to build appropriate controls
 #define CFG_NOT      0x00
@@ -3120,6 +3146,36 @@ freeMem(matchedSubtracks);
 return TRUE;
 }
 
+static char *labelWithControlledVocabLink(struct trackDb *parentTdb, char *vocabType, char *label)
+/* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
+   then label will be wrapped with the link to display it. 
+   NOTE: returned string is on the stack so use it or loose it. */
+{
+char *vocab = trackDbSetting(parentTdb, "controlledVocabulary");
+if(vocab == NULL)
+    return cloneString(label); // No wrapping!
+
+char *words[15];
+int count,ix;
+if((count = chopByWhite(cloneString(vocab), words,15)) <= 1)
+    return cloneString(label);
+for(ix=1;ix<count;ix++)
+    {
+    if(sameString(vocabType,words[ix]))
+       break;
+    }
+if(ix==count)
+    return cloneString(label);
+
+#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&type=\"%s\"&term=\"%s\"' TARGET=_BLANK>%s</A>\n"
+//#define VOCAB_LINK "<A HREF='hgEncodeVocab?type=\"%s\"&term=\"%s\"' TARGET=_BLANK>%s</A>\n"
+int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(vocabType)+2*strlen(label);
+char *link=needMem(sz);
+safef(link,sz,VOCAB_LINK,words[0],vocabType,label,label);
+freeMem(words[0]);
+return link;
+}
+
 static boolean hCompositeUiByMatrix(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
 /* UI for composite tracks: matrix of checkboxes. */
 {
@@ -3171,14 +3227,11 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     printf("<TABLE border=\"0\" bgcolor=\"%s\" borderColor=\"%s\">\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
     
     printf("<TR ALIGN=CENTER BGCOLOR=\"%s\">\n",COLOR_BG_ALTDEFAULT);
-#define PM_BUTTON  "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG height=18 width=18 onclick=\"return (setCheckBoxesThatContain('name',%s,true,'%s','%s') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
-#define  PLUS_BUTTON(anc,str1,str2) printf(PM_BUTTON, (anc),(anc),"true",(str1),(str2),(anc),"add_sm.gif","+")
-#define MINUS_BUTTON(anc,str1,str2) printf(PM_BUTTON, (anc),(anc),"false",(str1),(str2),(anc),"remove_sm.gif","-")
     if(dimensionX && dimensionY)
         {
         printf("<TH ALIGN=LEFT WIDTH=\"100\">All&nbsp;&nbsp;");
-        PLUS_BUTTON(  "plus_all","mat_","_cb");
-        MINUS_BUTTON("minus_all","mat_","_cb");
+        PLUS_BUTTON( "name", "plus_all","mat_","_cb");
+        MINUS_BUTTON("name","minus_all","mat_","_cb");
         puts("</TH>");
         }
     else if(dimensionX) 
@@ -3192,13 +3245,13 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         if(dimensionY)
             printf("<TH WIDTH=\"100\"><EM><B>%s</EM></B></TH>", dimensionX->title);
         for (ixX = 0; ixX < dimensionX->count; ixX++)
-            printf("<TH WIDTH=\"100\">%s</TH>",dimensionX->values[ixX]);
+            printf("<TH WIDTH=\"100\">%s</TH>",labelWithControlledVocabLink(parentTdb,dimensionX->tag,dimensionX->values[ixX]));
         }
     else
         {
         printf("<TH ALIGN=CENTER WIDTH=\"100\">");
-        PLUS_BUTTON(  "plus_all","mat_","_cb");
-        MINUS_BUTTON("minus_all","mat_","_cb");
+        PLUS_BUTTON( "name", "plus_all","mat_","_cb");
+        MINUS_BUTTON("name","minus_all","mat_","_cb");
         puts("</TH>");
         }
     puts("</TR>\n");
@@ -3212,9 +3265,9 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             puts("<TD>");
             safef(option, sizeof(option), "mat_%s_", dimensionX->names[ixX]);
             safef(objName, sizeof(objName), "plus_%s_all", dimensionX->names[ixX]);
-            PLUS_BUTTON(  objName,option,"_cb");
+            PLUS_BUTTON( "name",objName,option,"_cb");
             safef(objName, sizeof(objName), "minus_%s_all", dimensionX->names[ixX]);
-            MINUS_BUTTON(objName,option,"_cb");
+            MINUS_BUTTON("name",objName,option,"_cb");
             puts("</TD>");    
             }
         puts("</TR>\n");
@@ -3223,17 +3276,17 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     // Now the Y by X matrix
     for (ixY = 0; ixY < sizeOfY; ixY++)
         {
-        assert(!dimensionY || ixY < dimensionY->count);    
+        assert(!dimensionY || ixY < dimensionY->count); 
         printf("<TR ALIGN=CENTER BGCOLOR=\"#FFF9D2\">");
         if(dimensionY == NULL) // 'All' buttons go here if no Y dimension
             {
             printf("<TH ALIGN=CENTER WIDTH=\"100\">");
-            PLUS_BUTTON(  "plus_all","mat_","_cb");
-            MINUS_BUTTON("minus_all","mat_","_cb");
+            PLUS_BUTTON( "name", "plus_all","mat_","_cb");
+            MINUS_BUTTON("name","minus_all","mat_","_cb");
             puts("</TH>");
             }
         else if(ixY < dimensionY->count)
-            printf("<TH ALIGN=RIGHT>%s</TH>\n",dimensionY->values[ixY]);
+            printf("<TH ALIGN=RIGHT>%s</TH>\n",labelWithControlledVocabLink(parentTdb,dimensionY->tag,dimensionY->values[ixY]));
         else
             break;
         
@@ -3242,9 +3295,9 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             puts("<TD>");    
             safef(option, sizeof(option), "_%s_cb", dimensionY->names[ixY]);    
             safef(objName, sizeof(objName), "plus_all_%s", dimensionY->names[ixY]);
-            PLUS_BUTTON(  objName,"mat_",option);
+            PLUS_BUTTON( "name",objName,"mat_",option);
             safef(objName, sizeof(objName), "minus_all_%s", dimensionY->names[ixY]);
-            MINUS_BUTTON(objName,"mat_",option);
+            MINUS_BUTTON("name",objName,"mat_",option);
             puts("</TD>");
             }
         for (ixX = 0; ixX < sizeOfX; ixX++)
@@ -3284,8 +3337,8 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     return TRUE;
 }
 
-static boolean hCompositeUiNoMatrix(struct cart *cart, struct trackDb *parentTdb,
-          char *primarySubtrack, char *formName, char *db)
+static boolean hCompositeUiNoMatrix(char *db, struct cart *cart, struct trackDb *parentTdb,
+          char *primarySubtrack, char *formName)
 /* UI for composite tracks: subtrack selection.  This is the default UI 
 without matrix controls. */
 {
@@ -3311,7 +3364,6 @@ if(subgroupingExists(parentTdb,"view"))
     if(subgroupCount(parentTdb) <= 1)
         return TRUE;
     }
-
 
 puts ("<TABLE>");
 if (hasSubgroups)
@@ -3452,7 +3504,6 @@ boolean displayAll =
     sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
 boolean isMatrix = dimensionsExist(tdb);
 
-
 puts("<P>");
 if (slCount(tdb->subtracks) < MANY_SUBTRACKS && !hasSubgroups)
     {
@@ -3461,7 +3512,7 @@ if (slCount(tdb->subtracks) < MANY_SUBTRACKS && !hasSubgroups)
     }
 if (fakeSubmit)
     cgiMakeHiddenVar(fakeSubmit, "submit");
-    
+        
 jsIncludeFile("utils.js",NULL);
 
 if(sameOk("subTracks",trackDbSetting(tdb, "dragAndDrop")))
@@ -3473,7 +3524,7 @@ if(sameOk("subTracks",trackDbSetting(tdb, "dragAndDrop")))
 jsIncludeFile("hui.js",NULL);
 
 if (!hasSubgroups || !isMatrix || primarySubtrack)
-    hCompositeUiNoMatrix(cart,tdb,primarySubtrack,formName,db);
+    hCompositeUiNoMatrix(db, cart,tdb,primarySubtrack,formName);
 else 
     hCompositeUiByMatrix(db, cart,tdb,formName);
 
