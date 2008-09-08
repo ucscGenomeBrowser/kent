@@ -18,7 +18,7 @@
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.7 2008/09/08 17:51:21 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.8 2008/09/08 19:51:36 tdreszer Exp $";
 
 static char *cv_file()
 {
@@ -223,15 +223,16 @@ puts("<TR style=\"background:#D9E4F8\">");
 type = cgiOptionalString("type");
 if(type==NULL)    // If not type, but term, then search for first term and use it's type
     {
-    char*term=cgiString("term");
-        errAbort("Error: Required 'type' or 'term' argument not found\n");
-    (void)stripChar(type,'\"');
+    char *term = cgiOptionalString("term");
+    if(term==NULL)
+        errAbort("Error: Required 'term' or 'type' argument not found\n");
+    (void)stripChar(term,'\"');
     while ((hEl = hashNext(&hc)) != NULL)
         {
         ra = (struct hash *)hEl->val;
-        if (differentString(hashMustFindVal(ra, "term"), term))
+        if (differentStringNullOk(hashFindVal(ra, "term"), term))
             continue;
-        type = hashMustFindVal(ra, "type");
+        type = hashFindVal(ra, "type");
         break;
         }
     hc = hashFirst(cvHash);
