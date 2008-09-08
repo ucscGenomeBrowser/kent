@@ -14,7 +14,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat2.txt,v 1.5 2008/09/08 16:39:32 hiram Exp $"
+#	"$Id: oryLat2.txt,v 1.6 2008/09/08 21:11:20 hiram Exp $"
 #
 ###########################################################################
 
@@ -158,7 +158,7 @@ nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^MT/chrM/"
 	-buildDir=/cluster/data/oryLat2/bed/repeatMasker \
 	-bigClusterHub=pk -smallClusterHub=memk > do.log 2>&1
     #	RM version from the log:
-    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.5 2008/09/08 16:39:32 hiram Exp $
+    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.6 2008/09/08 21:11:20 hiram Exp $
     #	CC   RELEASE 20080801
     #   about 40 minutes run time
 
@@ -1512,5 +1512,117 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	windowingFunction mean
     #	pairwiseHeight 12
     #	yLineOnOff Off
+
+#############################################################################
+# CREATE MICROSAT TRACK (DONE - 2008-09-08 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/oryLat2/bed/microsat
+     cd /cluster/data/oryLat2/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    hgLoadBed oryLat2 microsat microsat.bed
+
+#############################################################################
+# Create Quality Track (DONE - 2008-09-08 - Hiram)
+    #	The quality scores obtained for oryLat1 are now correct since
+    #	we haven't smashed the scaffolds and ultracontigs into chrUn
+    #	So, using the file picked up for oryLat1:
+    ssh hgwdev
+    mkdir /cluster/data/oryLat2/bed/qual
+    cd /cluster/data/oryLat2/bed/qual
+    ln -s /cluster/data/oryLat1/bed/qual/medakaver1.0.UCSC.fasta.qual .
+
+    # some of the numbers in this are incorrect, too large.  Truncate them
+    #	to 90 as per advice from Budrul in email, and convert chrom numbers
+    #	to UCSC chrom names
+    time nice -n +19 sed -e "s/ dna:.*//; s/^>\([0-9][0-9]*\)/>chr\1/;" \
+	medakaver1.0.UCSC.fasta.qual \
+	| sed -e \
+"s/ 1[0-9][0-9]/ 90/g; s/ 2[0-9][0-9]/ 90/g; s/^1[0-9][0-9]/90/; s/^2[0-9][0-9]/90/;" \
+	| qaToQac stdin oryLat2.qual.qac
+    #	real    3m0.928s
+
+    time nice -n +19 qacToWig -fixed oryLat2.qual.qac stdout \
+	| wigEncode stdin oryLat2.qual.wig oryLat2.qual.wib
+    #	Converted stdin, upper limit 99.00, lower limit 0.00
+    #	real    real    5m31.095s
+
+    ssh hgwdev
+    cd /cluster/data/oryLat2/bed/qual
+    ln -s /cluster/data/oryLat2/bed/qual/oryLat2.qual.wib /gbdb/oryLat2/wib
+    time nice -n +19 hgLoadWiggle -tmpDir=/scratch/tmp \
+	-pathPrefix=/gbdb/oryLat2/wib oryLat2 quality oryLat2.qual.wig
+    #	real    0m20.513s
+
+#############################################################################
+# create downloads (DONE - 2008-09-08 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/oryLat2
+    ln -s bed/repeatMasker/oryLat2.fa.out .
+    time nice -n +19 makeDownloads.pl oryLat2 > makeDownloads.log 2>&1
+    #	real    7m39.978s
+    #	Edit the resulting README files
+
+    #	add upstream sequences for ensGenes version 50
+    cd /cluster/data/oryLat2/goldenPath/bigZips
+foreach size (1000 2000 5000)
+  echo $size
+  featureBits oryLat2 ensGene:upstream:$size -fa=stdout \
+  | gzip -c > ensGene.upstream$size.fa.gz
+end
+    #	add those to the md5 sum file and the README file
+    md5sum ensGene.up* >> md5sum.txt
+
+#########################################################################
+# MULTIZ5WAY DOWNLOADABLES (DONE - 2008-09-08 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/oryLat2/bed/multiz5way/mafDownloads
+    cd /cluster/data/oryLat2/bed/multiz5way
+
+    # upstream mafs 
+    #	There isn't any refGene table, using ensGene instead
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    nice -n +19 featureBits -verbose=2 oryLat2 \
+        ensGene:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' \
+        | $HOME/kent/src/hg/ratStuff/mafFrags/mafFrags oryLat2 multiz5way \
+                stdin stdout -orgs=species.list \
+        | gzip -c > mafDownloads/ensGene.upstream${S}.maf.gz
+    echo "done ensGene.upstream${S}.maf.gz"
+done
+
+    cd /cluster/data/oryLat2/bed/multiz5way/mafDownloads
+    cp -p ../anno/oryLat2.5way.maf .
+    gzip oryLat2.5way.maf
+
+    nice -n +19 md5sum *.maf.gz > md5sum.txt
+    # Make a README.txt
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/oryLat2/multiz5way
+    cd /usr/local/apache/htdocs/goldenPath/oryLat2/multiz5way
+    ln -s /cluster/data/oryLat2/bed/multiz5way/mafDownloads/{*.gz,*.txt} .
+
+#############################################################################
+# making the pushQ entry (DONE - 2008-09-08 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/oryLat2/jkStuff
+    makePushQSql.pl oryLat2 > oryLat2.pushQ.sql
+oryLat2 does not have seq
+Could not tell (from trackDb, all.joiner and hardcoded lists of supporting
+and genbank tables) which tracks to assign these tables to:
+  ensGtp
+  ensPep
+  multiz5way
+  multiz5wayFrames
+  multiz5waySummary
+  phastCons5way
+  phastConsElements5way
+    scp -p oryLat2.pushQ.sql hiram@hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < oryLat2.pushQ.sql
+    #	manually add the entry for the 5way business
 
 #############################################################################
