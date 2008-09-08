@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.31 2008/09/05 20:22:35 giardine Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.32 2008/09/08 18:02:23 hiram Exp $";
 
 #define CHROM_COLORS 26
 
@@ -3118,6 +3118,7 @@ assert(starts != NULL && sizes != NULL && blockCount > 0);
 AllocVar(lf);
 lf->grayIx = grayIx;
 strncpy(lf->name, bed->name, sizeof(lf->name));
+lf->name[sizeof(lf->name)-1] = 0;
 lf->orientation = orientFromChar(bed->strand[0]);
 for (i=0; i<blockCount; ++i)
     {
