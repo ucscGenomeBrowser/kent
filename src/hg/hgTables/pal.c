@@ -348,7 +348,7 @@ printf("Output lines with just dashes<BR>");
 
 printf("<BR>");
 struct trackDb *maftdb = hTrackDbForTrack(database, mafTable);
-wigMafSpeciesTable(cart, maftdb, database);
+wigMafSpeciesTable(cart, maftdb, mafTable, database);
 
 //getSpecies(mafTable, TRUE);
 cgiMakeButton(hgtaDoPalOut, "submit");
