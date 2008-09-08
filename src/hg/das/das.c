@@ -19,7 +19,7 @@
 #include "trackTable.h"
 
 
-static char const rcsid[] = "$Id: das.c,v 1.42 2008/09/03 19:18:23 markd Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.43 2008/09/08 07:45:14 markd Exp $";
 
 /* Including the count in the types response can be very slow for large
  * regions and is optional.  Inclusion of count if controlled by this compile-
@@ -342,7 +342,7 @@ static struct hash *hashOfTracks()
 /* Get list of tracks and put into hash keyed by tableName*/
 {
 struct hash *trackHash = newHash(7);
-struct trackTable *ttList = hGetTracks(), *tt;
+struct trackTable *ttList = hGetTracks(database), *tt;
 for (tt = ttList; tt != NULL; tt = tt->next)
     hashAdd(trackHash, tt->tableName, tt);
 return trackHash;

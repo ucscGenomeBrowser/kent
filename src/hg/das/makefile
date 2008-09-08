@@ -13,6 +13,6 @@ O = $A.o
 include ../../inc/cgi_build_rules.mk
 
 compile: $O 
-	${CC} $O ${MYLIBS} ${L} 
+	${CC} ${COPT} ${CFLAGS} ${HG_WARN} $O ${MYLIBS} ${L} 
 	mv ${AOUT} $A${EXE}
 	chmod a+rx $A
