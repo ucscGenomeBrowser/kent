@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.117 2008/09/08 17:59:12 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.118 2008/09/08 23:34:54 braney Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -2645,87 +2645,34 @@ if (scoreCtString != NULL)
 cfgEndBox(boxed);
 }
 
-void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db)
-/* UI for maf/wiggle track
- * NOTE: calls wigCfgUi */
+
+char **wigMafGetSpecies(struct cart *cart, struct trackDb *tdb, char *db, struct wigMafSpecies **list, int *groupCt)
 {
-struct wigMafSpecies 
-    {
-    struct wigMafSpecies *next;
-    char *name;
-    int group;
-    };
-
-#define MAX_SP_SIZE 2000
-
-cfgBeginBoxAndTitle(boxed, title);
-
-char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
-char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
-char *speciesTree = trackDbSetting(tdb, SPECIES_TREE_VAR);
-char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
+int speciesCt = 0;
 char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
 char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
-char *framesTable = trackDbSetting(tdb, "frames");
-char *firstCase = trackDbSetting(tdb, ITEM_FIRST_CHAR_CASE);
-bool lowerFirstChar = TRUE;
-if (firstCase != NULL)
-    {
-    if (sameWord(firstCase, "noChange")) lowerFirstChar = FALSE;
-    }
-char *species[MAX_SP_SIZE];
-char *groups[20];
+char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
 char sGroup[24];
-char *treeImage = NULL;
+//Ochar *groups[20];
 struct wigMafSpecies *wmSpecies, *wmSpeciesList = NULL;
-struct slName *speciesList = NULL;
-int group, prevGroup;
-int speciesCt = 0, groupCt = 1;
-int i, j;
+int group;
+int i;
+#define MAX_SP_SIZE 2000
+#define MAX_GROUPS 20
+char *species[MAX_SP_SIZE];
 char option[MAX_SP_SIZE];
-struct phyloTree *tree;
-struct consWiggle *consWig, *consWiggles = wigMafWiggles(db, tdb);
-
-struct sqlConnection *conn;
-char query[256];
-char **row;
-struct sqlResult *sr;
-char *chp;
-char trackName[255];
-boolean lineBreakJustPrinted;
-
-int numberPerRow;
-boolean isWigMafProt = FALSE;
-
-if (strstr(tdb->type, "wigMafProt")) isWigMafProt = TRUE;
-
-puts("<TABLE><TR><TD>");
-
-if (consWiggles && consWiggles->next)
-    {
-    /* check for alternate conservation wiggles -- create checkboxes */
-    puts("<P STYLE=\"margin-top:10;\"><B>Conservation:</B>" );
-    boolean first = TRUE;
-    for (consWig = consWiggles; consWig != NULL; consWig = consWig->next)
-        {
-        char *wigVar = wigMafWiggleVar(tdb, consWig);
-        cgiMakeCheckBox(wigVar, cartUsualBoolean(cart, wigVar, first));
-        first = FALSE;
-        subChar(consWig->uiLabel, '_', ' ');
-        printf ("%s&nbsp;", consWig->uiLabel);
-        }
-    }
 
 /* determine species and groups for pairwise -- create checkboxes */
 if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
     {
     if (isCustomTrack(tdb->tableName))
-	return;
+	return NULL;
     errAbort("Track %s missing required trackDb setting: speciesOrder, speciesGroups, or speciesUseFile", tdb->tableName);
     }
 
+char **groups = needMem(MAX_GROUPS * sizeof (char *));
 if (speciesGroup)
-    groupCt = chopLine(speciesGroup, groups);
+    *groupCt = chopByWhite(speciesGroup, groups, MAX_GROUPS);
 
 if (speciesUseFile)
     {
@@ -2734,9 +2681,9 @@ if (speciesUseFile)
     speciesOrder = cartGetOrderFromFile(db, cart, speciesUseFile);
     }
 
-for (group = 0; group < groupCt; group++)
+for (group = 0; group < *groupCt; group++)
     {
-    if (groupCt != 1 || !speciesOrder)
+    if (*groupCt != 1 || !speciesOrder)
         {
         safef(sGroup, sizeof sGroup, "%s%s", 
                                 SPECIES_GROUP_PREFIX, groups[group]);
@@ -2747,12 +2694,54 @@ for (group = 0; group < groupCt; group++)
         {
         AllocVar(wmSpecies);
         wmSpecies->name = cloneString(species[i]);
+    	safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
+	wmSpecies->on = cartUsualBoolean(cart, option, TRUE);
+	//printf("checking %s and is %d\n",option,wmSpecies->on);
         wmSpecies->group = group;
         slAddHead(&wmSpeciesList, wmSpecies);
-        slAddTail(&speciesList, slNameNew(cloneString(species[i])));
         }
     }
 slReverse(&wmSpeciesList);
+*list = wmSpeciesList;
+
+return groups;
+}
+
+struct wigMafSpecies * wigMafSpeciesTable(struct cart *cart, 
+    struct trackDb *tdb, char *name, char *db) 
+{
+int groupCt;
+#define MAX_SP_SIZE 2000
+char option[MAX_SP_SIZE];
+int group, prevGroup;
+int i,j;
+
+bool lowerFirstChar = TRUE;
+char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
+char *speciesTree = trackDbSetting(tdb, SPECIES_TREE_VAR);
+
+struct wigMafSpecies *wmSpeciesList;
+char **groups = wigMafGetSpecies(cart, tdb, db, &wmSpeciesList, &groupCt); 
+struct wigMafSpecies *wmSpecies = wmSpeciesList;
+struct slName *speciesList = NULL;
+
+for(; wmSpecies; wmSpecies = wmSpecies->next)
+    {
+    struct slName *newName = slNameNew(wmSpecies->name); 
+    slAddHead(&speciesList, newName);
+    //printf("%s<BR>\n",speciesList->name);
+    }
+slReverse(&speciesList);
+
+int numberPerRow;
+struct phyloTree *tree;
+boolean lineBreakJustPrinted;
+char trackName[255];
+char query[256];
+char **row;
+struct sqlConnection *conn;
+struct sqlResult *sr;
+
 
 puts("\n<P STYLE=><B>Pairwise alignments:</B>&nbsp;");
 
@@ -2871,6 +2860,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     
     if (hIsGsidServer()) 
     	{
+	char *chp;
 	/* for GSID maf, display only entries belong to the specific MSA selected */
     	safef(option, sizeof(option), "%s.%s", name, wmSpecies->name);
     	label = hOrganism(wmSpecies->name);
@@ -2913,13 +2903,14 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     	{
     	puts("<TD>");
     	safef(option, sizeof(option), "%s.%s", name, wmSpecies->name);
+	wmSpecies->on = cartUsualBoolean(cart, option, TRUE);
         if(sameString(name,tdb->tableName))
-            cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
+            cgiMakeCheckBox(option, wmSpecies->on);
         else   // This is part of a dropdown
             {
             char id[MAX_SP_SIZE];
             safef(id, sizeof(id), "cb_maf_%s_%s", groups[group], wmSpecies->name);
-            cgiMakeCheckBoxWithId(option, cartUsualBoolean(cart, option, TRUE),id);
+            cgiMakeCheckBoxWithId(option, wmSpecies->on,id);
             }
     	label = hOrganism(wmSpecies->name);
     	if (label == NULL)
@@ -2933,6 +2924,53 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
 	}
     }
 puts("</TR></TABLE><BR>\n");
+return wmSpeciesList;
+}
+
+void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db)
+/* UI for maf/wiggle track
+ * NOTE: calls wigCfgUi */
+{
+bool lowerFirstChar = TRUE;
+int i;
+char option[MAX_SP_SIZE];
+
+cfgBeginBoxAndTitle(boxed, title);
+
+char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
+char *framesTable = trackDbSetting(tdb, "frames");
+char *firstCase = trackDbSetting(tdb, ITEM_FIRST_CHAR_CASE);
+if (firstCase != NULL)
+    {
+    if (sameWord(firstCase, "noChange")) lowerFirstChar = FALSE;
+    }
+char *treeImage = NULL;
+struct consWiggle *consWig, *consWiggles = wigMafWiggles(db, tdb);
+
+
+boolean isWigMafProt = FALSE;
+
+if (strstr(tdb->type, "wigMafProt")) isWigMafProt = TRUE;
+
+puts("<TABLE><TR><TD>");
+
+if (consWiggles && consWiggles->next)
+    {
+    /* check for alternate conservation wiggles -- create checkboxes */
+    puts("<P STYLE=\"margin-top:10;\"><B>Conservation:</B>" );
+    boolean first = TRUE;
+    for (consWig = consWiggles; consWig != NULL; consWig = consWig->next)
+        {
+        char *wigVar = wigMafWiggleVar(tdb, consWig);
+        cgiMakeCheckBox(wigVar, cartUsualBoolean(cart, wigVar, first));
+        first = FALSE;
+        subChar(consWig->uiLabel, '_', ' ');
+        printf ("%s&nbsp;", consWig->uiLabel);
+        }
+    }
+
+struct wigMafSpecies *wmSpeciesList = wigMafSpeciesTable(cart, tdb, name, db);
+struct wigMafSpecies *wmSpecies;
 
 if (isWigMafProt) 
     puts("<B>Multiple alignment amino acid-level:</B><BR>" );
