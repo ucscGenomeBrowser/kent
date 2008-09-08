@@ -404,6 +404,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaRegionTypeEncode "encode"
 #define hgtaRegionTypeGenome "genome"
 #define hgtaRegionTypeRange "range"
+#define hgtaDoPalOut "hgta_palOut"
 
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
@@ -438,6 +439,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaMetaVersion "hgta_metaVersion"
 #define hgtaMetaDatabases "hgta_metaDatabases"
 #define hgtaMetaTables "hgta_metaTables"
+#define hgtaMafTable "hgta_mafTable"
 
    /* These intersection page vars come in pairs so we can cancel. */
 #define hgtaIntersectGroup "hgta_intersectGroup"
@@ -515,6 +517,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define outChromGraphData "chromGraphData"
 #define outGalaxy "galaxyQuery"
 #define outMaf "maf"
+#define outPal "pal"
 
 /* --------- configuration options ------------ */
 boolean allowAllTables(void);
@@ -750,6 +753,9 @@ void doOutSelectedFields(char *table, struct sqlConnection *conn);
 void doOutSequence(struct sqlConnection *conn);
 /* Output sequence page. */
 
+void doOutPal( struct sqlConnection *conn);
+/* Output protein alignment page */
+
 void doOutBed(char *table, struct sqlConnection *conn);
 /* Put up form to select BED output format. */
 
@@ -809,6 +815,9 @@ void doCorrelateSubmit(struct sqlConnection *conn);
 
 void doGenePredSequence(struct sqlConnection *conn);
 /* Output genePred sequence. */
+
+void doGenePredPal(struct sqlConnection *conn);
+/* Output genePred protein alignment. */
 
 void doGenomicDna(struct sqlConnection *conn);
 /* Get genomic sequence (UI has already told us how). */
