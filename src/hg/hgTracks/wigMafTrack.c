@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.136 2008/09/03 19:19:05 markd Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.137 2008/09/08 18:22:04 tdreszer Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -187,7 +187,8 @@ if (firstCase != NULL)
     if (sameWord(firstCase, "noChange")) lowerFirstChar = FALSE;
     }
 
-safef(buffer, sizeof(buffer), "%s.vis",track->mapName);
+char *cfgPrefix = compositeViewControlNameFromTdb(track->tdb);
+safef(buffer, sizeof(buffer), "%s.vis",/*cfgPrefix*/track->mapName);
 if (!cartVarExists(cart, buffer) && (speciesTarget != NULL))
     useTarg = TRUE;
 else
@@ -280,14 +281,15 @@ for (group = 0; group < groupCt; group++)
 	}
 
 
-    safef(option, sizeof(option), "%s.speciesOrder", track->mapName);
+    safef(option, sizeof(option), "%s.speciesOrder", /*cfgPrefix*/track->mapName);
     speciesCt = chopLine(cloneString(speciesOrder), species);
+
     for (i = 0; i < speciesCt; i++)
         {
 	if (!useTarg)
 	    {
 	    /* skip this species if UI checkbox was unchecked */
-	    safef(option, sizeof(option), "%s.%s", track->mapName, species[i]);
+	    safef(option, sizeof(option), "%s.%s", cfgPrefix, species[i]);
 	    if (!cartVarExists(cart, option))
 		if (hashLookup(speciesOffHash, species[i]))
 		    cartSetBoolean(cart, option, FALSE);
@@ -305,8 +307,9 @@ for (mi = miList; mi != NULL; mi = mi->next)
     mi->height = height;
     dyStringPrintf(order, "%s ",mi->db);
     }
-safef(option, sizeof(option), "%s.speciesOrder", track->mapName);
+safef(option, sizeof(option), "%s.speciesOrder", /*cfgPrefix*/track->mapName);
 cartSetString(cart, option, order->string);
+compositeViewControlNameFree(&cfgPrefix);
 slReverse(&miList);
 
 return miList;
@@ -410,7 +413,7 @@ loadMafsToTrack(track);
 struct track *wigTrack = track->subtracks;
 if (wigTrack)
     {
-    enum trackVisibility wigVis = (wigTrack->visibility == tvDense ? tvDense : tvFull);
+    enum trackVisibility wigVis = (wigTrack->limitedVis == tvDense ? tvDense : tvFull);
     while (wigTrack !=  NULL)
         {
         scoreHeight = wigTotalHeight(wigTrack, wigVis);
@@ -595,7 +598,7 @@ if (displayPairwise(track))
     /* make up items for other organisms by scanning through
      * all mafs and looking at database prefix to source. */
     {
-    speciesItems = newSpeciesItems(track, track->visibility == tvFull ?
+    speciesItems = newSpeciesItems(track, track->limitedVis == tvFull ?
                                                 pairwiseWigHeight(track) :
                                                 tl.fontHeight);
     miList = slCat(speciesItems, miList);
@@ -619,12 +622,12 @@ mp->list = (char *)-1;   /* no maf's loaded or attempted to load */
  * track we force dense mode since we don't have
  * a summary table (yet). */
 if ((winBaseCount >= MAF_SUMMARY_VIEW) && isCustomTrack(track->mapName))
-    track->visibility = tvDense; 
+    track->limitedVis = tvDense;
 
 /* Load up mafs and store in track so drawer doesn't have
  * to do it again. */
 /* Make up tracks for display. */
-if (track->visibility == tvFull || track->visibility == tvPack)
+if (track->limitedVis == tvFull || track->limitedVis == tvPack)
     {
     if (isBaseLevel)
 	{
@@ -636,7 +639,7 @@ if (track->visibility == tvFull || track->visibility == tvPack)
 	miList = loadPairwiseItems(track);
 	}
     }
-else if (track->visibility == tvSquish)
+else if (track->limitedVis == tvSquish)
     {
     if (!wigTrack)
         {
@@ -728,6 +731,10 @@ static void wigMafLoad(struct track *track)
 struct wigMafItem *miList = NULL;
 struct track *wigTrack = track->subtracks;
 
+// Make sure visibility takes into account any composite track with multi-views
+track->limitedVis = tvMin(track->visibility,limitedVisFromComposite(track));
+track->limitedVisSet = (track->limitedVis != tvHide && track->visibility != track->limitedVis);
+
 miList = loadWigMafItems(track, zoomedToBaseLevel);
 track->items = miList;
 
@@ -737,6 +744,7 @@ while (wigTrack != NULL)
     /* update track visibility from parent track,
      * since hgTracks will update parent vis before loadItems */
     wigTrack->visibility = track->visibility;
+    wigTrack->limitedVis = track->limitedVis;
     wigTrack->loadItems(wigTrack);
     wigTrack = wigTrack->next;
     }
@@ -1061,7 +1069,10 @@ if (miList == NULL)
 if ((summary = summarySetting(track)) == NULL)
     return FALSE;
 
-safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
+char *cfgPrefix = compositeViewControlNameFromTdb(track->tdb);
+
+safef(option, sizeof(option), "%s.%s", cfgPrefix, MAF_CHAIN_VAR);
+compositeViewControlNameFree(&cfgPrefix);
 if (cartVarExists(cart, option))
     useIrowChains = cartCgiUsualBoolean(cart, option, TRUE);
 else
@@ -1279,7 +1290,10 @@ struct mafPriv *mp = getMafPriv(track);
 if (miList == NULL || mp->list == NULL)
     return FALSE;
 
-safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
+char *cfgPrefix = compositeViewControlNameFromTdb(track->tdb);
+
+safef(option, sizeof(option), "%s.%s", cfgPrefix, MAF_CHAIN_VAR);
+compositeViewControlNameFree(&cfgPrefix);
 if (cartVarExists(cart, option))
     useIrowChains = cartCgiUsualBoolean(cart, option, TRUE);
 else
@@ -1801,7 +1815,9 @@ seqEnd +=2;
 if (seqEnd > seqBaseCount)
     seqEnd = seqBaseCount;
 
-safef(option, sizeof(option), "%s.%s", track->mapName, MAF_DOT_VAR);
+char *cfgPrefix = compositeViewControlNameFromTdb(track->tdb);
+
+safef(option, sizeof(option), "%s.%s", cfgPrefix, MAF_DOT_VAR);
 if (cartVarExists(cart, option))
     {
     dots = cartCgiUsualBoolean(cart, option, FALSE);
@@ -1816,7 +1832,7 @@ else
 	}
     }
 
-safef(buf, sizeof(buf), "%s.frames",track->mapName);
+safef(buf, sizeof(buf), "%s.frames",/*cfgPrefix*/track->mapName);
 if (cartVarExists(cart, buf))
     framesTable = cartUsualString(cart, buf, NULL);
 else
@@ -1824,7 +1840,7 @@ else
 
 if (framesTable)
     {
-    safef(buf, sizeof(buf), "%s.codons",track->mapName);
+    safef(buf, sizeof(buf), "%s.codons",cfgPrefix);
     codonTransMode = cartUsualString(cart, buf, "codonDefault");
     if (sameString("codonNone", codonTransMode))
 	framesTable = NULL;
@@ -1840,7 +1856,7 @@ for (i = 0; i < sizeof noAlignment - 1; i++)
     noAlignment[i] = UNALIGNED_SEQ;
 
 
-safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
+safef(option, sizeof(option), "%s.%s", cfgPrefix, MAF_CHAIN_VAR);
 if (cartVarExists(cart, option))
     useIrowChains = cartCgiUsualBoolean(cart, option, TRUE);
 else
@@ -2142,9 +2158,9 @@ y += mi->height;
 /* draw alternating colors behind base-level alignments */
     {
     int alternateColorBaseCount, alternateColorBaseOffset;
-    safef(buf, sizeof(buf), "%s.%s", track->mapName, BASE_COLORS_VAR);
+    safef(buf, sizeof(buf), "%s.%s", cfgPrefix, BASE_COLORS_VAR);
     alternateColorBaseCount = cartCgiUsualInt(cart, buf, 0);
-    safef(buf, sizeof(buf), "%s.%s", track->mapName, BASE_COLORS_OFFSET_VAR);
+    safef(buf, sizeof(buf), "%s.%s", cfgPrefix, BASE_COLORS_OFFSET_VAR);
     alternateColorBaseOffset = cartCgiUsualInt(cart, buf, 0);
     if (alternateColorBaseCount != 0)
         {
@@ -2155,6 +2171,7 @@ y += mi->height;
                 alternateColorBaseCount, shadesOfSea[0], MG_WHITE);
         }
     }
+compositeViewControlNameFree(&cfgPrefix);
 
 /* draw base-level alignments */
 for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
