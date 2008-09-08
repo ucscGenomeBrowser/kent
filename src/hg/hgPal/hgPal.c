@@ -14,7 +14,7 @@
 #include "mafGene.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgPal.c,v 1.2 2008/08/26 22:56:45 braney Exp $";
+static char const rcsid[] = "$Id: hgPal.c,v 1.3 2008/09/08 22:26:45 braney Exp $";
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
@@ -38,7 +38,7 @@ char *speciesNames[STATIC_ARRAY_SIZE];
 /* load one or more genePreds from the database */
 struct genePred *getPreds(char *geneName, char *geneTable, char *db)
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct genePred *list = NULL;
 char query[1024];
 struct sqlResult *sr = NULL;
@@ -46,7 +46,7 @@ char **row;
 char splitTable[HDB_MAX_TABLE_STRING];
 boolean hasBin;
 
-boolean found =  hFindSplitTableDb(db, NULL, geneTable,
+boolean found =  hFindSplitTable(db, NULL, geneTable,
 	splitTable, &hasBin);
 
 if (!found)
@@ -88,12 +88,12 @@ return list;
 
 void showMafTracks(struct cart *cart, char *mafTable, char *geneTable, char *gene)
 {
-char option[MAX_SP_SIZE];
+//char option[MAX_SP_SIZE];
 char query[512];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
-sprintf(query, "select tableName from trackDb where type like 'wigMaf%%'");
+safef(query, sizeof query, "select tableName from trackDb where type like 'wigMaf%%'");
 char *checked = NULL;
 struct slName *speciesList = NULL;
 int ii;
@@ -128,10 +128,11 @@ for(ii=0; ii < count; ii++)
 if ((mafTable == NULL) || (checked == NULL))
     checked = mafTable = mafTrackExist[0];
 
-cgiMakeDropList("mafTrack", mafTrackExist, count2,  checked);
+cgiMakeDropList("mafTable", mafTrackExist, count2,  checked);
 printf("<BR>");
 
-struct trackDb *tdb = hTrackDbForTrack(mafTable);
+struct trackDb *tdb = hTrackDbForTrack(database, mafTable);
+#ifdef NOTNOW
 char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
 char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
 char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
@@ -140,6 +141,7 @@ int speciesCt = 0, groupCt = 1;
 int group;
 char sGroup[24];
 char *species[MAX_SP_SIZE];
+#endif
 boolean inExons = cartUsualBoolean(cart, "mafGeneExons", TRUE); 
 boolean noTrans = cartUsualBoolean(cart, "mafGeneNoTrans", FALSE); 
 boolean outBlank = cartUsualBoolean(cart, "mafGeneOutBlank", FALSE); 
@@ -153,6 +155,7 @@ cgiMakeCheckBox("mafGeneOutBlank", outBlank);
 printf("Output lines with just dashes<BR>");
 
 
+#ifdef NOTNOW
 /* determine species and groups for pairwise -- create checkboxes */
 if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
     {
@@ -221,6 +224,21 @@ puts("</TR></TABLE><BR>");
 
 if(includeList)
     slReverse(&includeList);
+#endif
+struct slName *includeList = newSlName(database);
+struct wigMafSpecies *wmSpeciesList = wigMafSpeciesTable(cart, tdb, database);
+struct wigMafSpecies *wmSpecies = wmSpeciesList;
+
+for(; wmSpecies; wmSpecies = wmSpecies->next)
+    {
+    if (wmSpecies->on)
+	{
+	struct slName *newName = slNameNew(wmSpecies->name);
+	slAddHead(&includeList, newName);
+	}
+    }
+slReverse(&includeList);
+
 
 //for(sl = includeList; sl; sl = sl->next)
     //printf("include %s\n<BR>", sl->name);
@@ -242,7 +260,7 @@ for(; pred; pred = pred->next)
 
 for(ii=0; ii < count; ii++)
     freez(&mafTrackNames[count]);
-hgFreeConn(&conn);
+hFreeConn(&conn);
 }
 
 void doMiddle(struct cart *cart)
@@ -251,7 +269,7 @@ void doMiddle(struct cart *cart)
 
 char *track = cartString(cart, "g");
 char *item = cartOptionalString(cart, "i");
-char *mafTrack = cartOptionalString(cart, "mafTrack");
+char *mafTable = cartOptionalString(cart, "mafTable");
 //struct trackDb *tdb = NULL;
  //       tdb = hashFindVal(trackHash, track);
 
@@ -262,13 +280,13 @@ getDbAndGenome(cart, &database, &genome, NULL);
 organism = hOrganism(database);
 scientificName = hScientificName(database);
 
-hDefaultConnect(); 	/* set up default connection settings */
-hSetDb(database);
+//hDefaultConnect(); 	/* set up default connection settings */
+//hSetDb(database);
 
 boolean dbIsActive = hDbIsActive(database); 
 
 if (dbIsActive)
-    seqName = hgOfficialChromName(cartString(cart, "c"));
+    seqName = hgOfficialChromName(database, cartString(cart, "c"));
 else 
     seqName = cartString(cart, "c");
 
@@ -282,19 +300,19 @@ if (seqName == NULL)
 		 "hgc: bad input variables c=%s l=%d r=%d",
 		 cartString(cart, "c"), winStart, winEnd);
     else
-	seqName = hDefaultChrom();
+	seqName = hDefaultChrom(database);
     }
 
 
 
-cartWebStart(cart, "Protein Alignments for %s",item);
+cartWebStart(cart, database, "Protein Alignments for %s %s",track,item);
 //printf("track is %s item %s\n", track,item);
 #define MAIN_FORM "mainForm"
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgPalName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 
-showMafTracks(cart, mafTrack, track, item);
+showMafTracks(cart, mafTable, track, item);
 cartHtmlEnd();
 }
 
