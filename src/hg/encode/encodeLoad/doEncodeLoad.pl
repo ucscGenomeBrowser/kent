@@ -132,6 +132,7 @@ sub loadBedFromSchema
     } else {
         print "$fileList loaded into $tableName\n";
     }
+    # XXXX special case narrowPeak/broadPeak/gappedPeak to convert "." => "" in name column?
     push(@{$pushQ->{TABLES}}, $tableName);
 }
 
@@ -309,10 +310,8 @@ if($email && $email =~ /([^@]+)/) {
 }
 
 my $tables = join("\\n", @{$pushQ->{TABLES}});
-my $files = "";
-if(defined($pushQ->{FILES}) && @{$pushQ->{FILES}}) {
-    $files = join("\\n", @{$pushQ->{FILES}});
-}
+push(@{$pushQ->{FILES}}, "/usr/local/apache/cgi-bin/encode/cv.ra");
+my $files = join("\\n", @{$pushQ->{FILES}});
 
 my ($shortLabel, $longLabel);
 my $sth = $db->execute("select shortLabel, longLabel from trackDb where tableName = ?", $compositeTrack);
