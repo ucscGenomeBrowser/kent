@@ -83,17 +83,6 @@ karyotype cancer
 termId BTO:0001948
 tier 3
 
-############ Submitted but not yet approved
-###term LNCaP
-###type Cell Line
-###description prostate adenocarcinoma
-###orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1740&Template=cellBiology
-###lineage mesoderm
-###karyotype cancer
-###termId BTO:0002021 (non-specific)
-###tier 3
-############ Submitted but not yet approved
-
 term NT2/D1
 type Cell Line
 description malignant pluripotent embryonal carcinoma (Ntera2)
