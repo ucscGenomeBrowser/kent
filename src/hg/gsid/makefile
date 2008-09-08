@@ -28,5 +28,13 @@ clean:
 DIRS = \
 	gsidSubj \
 	gsidTable \
-	gsidMember 
+	gsidMember \ 
+	gsIdXref \
+	gsidAaMsa \
+	gsidGetConsensus \
+	gsidMsa \
+	gsidMsaToTab \
+	gsidPbGateway \
+	pbGsid \
+	pwdtest
 
