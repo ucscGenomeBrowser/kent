@@ -46,7 +46,8 @@ if (row != NULL)
     /* Strand, score */
     if ((peakType == narrowPeak) || (peakType == broadPeak) || (peakType == gappedPeak))
 	{
-	printf("<B>Strand:</B> %c<BR>\n", rowPastOffset[5][0]);
+	if (rowPastOffset[5][0] != '.')
+	    printf("<B>Strand:</B> %c<BR>\n", rowPastOffset[5][0]);
 	printf("<B>Score:</B> %d<BR>\n", sqlUnsigned(rowPastOffset[4]));       
 	}
     /* signalVal, pVal */
