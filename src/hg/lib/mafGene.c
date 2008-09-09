@@ -744,6 +744,12 @@ unsigned *lastStart = &exonStart[pred->exonCount];
 unsigned *exonEnd = pred->exonEnds;
 int *frames = pred->exonFrames;
 
+if (frames == NULL)
+    {
+    genePredAddExonFrames(pred);
+    frames = pred->exonFrames;
+    }
+
 assert(frames != NULL);
 
 int start = 0;
