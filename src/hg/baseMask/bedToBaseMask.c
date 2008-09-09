@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "bed.h"
-#include "genomeRangeTree.h"
+#include "genomeRangeTreeFile.h"
 #include "options.h"
 
 /* FIXME:

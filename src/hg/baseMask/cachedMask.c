@@ -7,10 +7,8 @@
 #include "hdb.h"
 #include "options.h"
 #include "jksql.h"
-#include "genomeRangeTree.h"
+#include "genomeRangeTreeFile.h"
 #include "baseMaskCommon.h"
-
-//#define MJP verbose(1,"%s[%3d]: ", __func__, __LINE__);
 
 /* FIXME:
  * - would be nice to be able to specify ranges in the same manner
@@ -73,7 +71,7 @@ obama = (argc > 4 ? argv[4] : NULL);
 
 if (!strlen(cacheDir))
     errAbort("specify cache directory\n");
-if (argc == 3)
+if (track2 == NULL)
     {
     /* cache the track if it is not there already */
     splitDbTable(chromDb, track1, &db1, &table1);
