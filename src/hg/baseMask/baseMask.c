@@ -1,7 +1,8 @@
 /* baseMask - process baseMasks - 'and' or 'or' two baseMasks together */
 
 #include "common.h"
-#include "genomeRangeTree.h"
+#include "rangeTreeFile.h"
+#include "genomeRangeTreeFile.h"
 #include "options.h"
 
 /* FIXME:
@@ -28,29 +29,6 @@ static char *usageMsg =
 #include "baseMaskUsage.msg" 
     ;
 errAbort("%s\n%s", msg, usageMsg);
-}
-
-//int sqlTableUpdateTime(struct sqlConnection *conn, char *table)
-
-void genomeRangeTreeStats(char *fileName, int *numChroms, int *nodes, int *size)
-{
-struct genomeRangeTreeFile *tf = genomeRangeTreeFileReadHeader(fileName);
-struct hashEl *c;
-int n;
-*size = 0;
-*nodes = 0;
-*numChroms = tf->numChroms;
-for (c = tf->chromList ; c ; c = c->next)
-    {
-    struct rangeStartSize *r;
-    n = hashIntVal(tf->nodes, c->name);
-    *nodes += n;
-    AllocArray(r, n);
-    rangeReadArray(tf->file, r, n, tf->isSwapped);
-    *size += rangeArraySize(r, n);
-    freez(&r);
-    }
-genomeRangeTreeFileFree(&tf);
 }
 
 /* entry */
@@ -86,7 +64,7 @@ if (argc == 1)
     {
     if (!quiet)
 	{
-	genomeRangeTreeStats(baseMask1, &numChroms, &nodes, &size);
+	genomeRangeTreeFileStats(baseMask1, &numChroms, &nodes, &size);
 	fprintf(stderr, "%d bases in %d ranges in %d chroms in baseMask\n", size, nodes, numChroms);
 	}
     }
