@@ -8,6 +8,7 @@
 #include "obscure.h"
 #include "genePred.h"
 #include "mafGene.h"
+#include "genePredReader.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -56,39 +57,29 @@ boolean newTableType;
 /* load one or more genePreds from the database */
 struct genePred *getPreds(char *geneName, char *geneTable, char *db)
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(db);
 struct genePred *list = NULL;
-char query[1024];
-struct sqlResult *sr = NULL;
-char **row;
 char splitTable[HDB_MAX_TABLE_STRING];
+struct genePred *gene;
 boolean hasBin;
+struct genePredReader *reader;
 
-boolean found =  hFindSplitTableDb(db, NULL, geneTable,
+boolean found =  hFindSplitTable(db, NULL, geneTable,
 	splitTable, &hasBin);
 
 if (!found)
     errAbort("can't find table %s\n", geneTable);
 
+char extra[2048];
 if (onlyChrom != NULL)
-    safef(query, sizeof query, 
-	    "select * from %s where name='%s' and chrom='%s' \n",
-	    splitTable,  geneName, onlyChrom);
+    safef(extra, sizeof extra, "name='%s' and chrom='%s'", geneName, onlyChrom);
 else
-    safef(query, sizeof query, 
-	    "select * from %s where name='%s' \n",
-	    splitTable,  geneName);
+    safef(extra, sizeof extra, "name='%s'", geneName);
 
-sr = sqlGetResult(conn, query);
+reader = genePredReaderQuery( conn, splitTable, extra);
 
-while ((row = sqlNextRow(sr)) != NULL)
+while ((gene  = genePredReaderNext(reader)) != NULL)
     {
-    struct genePred *gene = genePredExtLoad(hasBin ? &row[1] : row,
-	GENEPREDX_NUM_COLS );
-
-    if (gene->exonFrames == NULL)
-	genePredAddExonFrames(gene);
-
     verbose(2, "got gene %s\n",gene->name);
     slAddHead(&list, gene);
     }
@@ -98,7 +89,7 @@ if (list == NULL)
 
 slReverse(&list);
 
-sqlFreeResult(&sr);
+genePredReaderFree(&reader);
 hFreeConn(&conn);
 
 return list;
@@ -147,10 +138,15 @@ void outGene(FILE *f, char *geneName, char *dbName, char *mafTable,
     char *geneTable, struct slName *speciesNameList)
 {
 struct genePred *pred = getPreds(geneName, geneTable, dbName);
+unsigned options = 0;
+
+if (inExons)
+    options |= MAFGENE_EXONS;
+if (noTrans)
+    options |= MAFGENE_NOTRANS;
 
 for(; pred; pred = pred->next)
-    mafGeneOutPred(f, pred, dbName, mafTable, speciesNameList,
-	inExons, noTrans);
+    mafGeneOutPred(f, pred, dbName, mafTable, speciesNameList, options);
 }
 
 /* read a list of single words from a file */
@@ -177,7 +173,7 @@ return list;
 /* query the list of gene names from the frames table */
 static struct slName *queryNames(char *dbName, char *geneTable)
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn(dbName);
 struct slName *list = NULL;
 char query[1024];
 struct sqlResult *sr = NULL;
@@ -189,7 +185,7 @@ if (onlyChrom != NULL)
 	geneTable, onlyChrom);
 else
     safef(query, sizeof query, 
-	"select distinct(name) from %s and cdsStart != cdsEnd\n", geneTable);
+	"select distinct(name) from %s where cdsStart != cdsEnd\n", geneTable);
 
 sr = sqlGetResult(conn, query);
 
@@ -215,8 +211,6 @@ void mafGene(char *dbName, char *mafTable, char *geneTable,
 struct slName *geneNames = NULL;
 struct slName *speciesNames = readList(speciesList);
 FILE *f = mustOpen(outName, "w");
-
-hSetDb(dbName);
 
 if (geneList != NULL)
     geneNames = readList(geneList);
