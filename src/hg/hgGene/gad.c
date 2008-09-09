@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: gad.c,v 1.8 2008/09/03 19:18:49 markd Exp $";
+static char const rcsid[] = "$Id: gad.c,v 1.9 2008/09/09 23:11:56 markd Exp $";
 
 static boolean gadExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -142,11 +142,7 @@ if (url != NULL && url[0] != 0)
 	      "<A HREF=\"%s?showAllRef=Y&%s&#35;gad\">click here to view the complete list</A> ", 
 	      "hgGene", currentCgiUrl->string);
     	}
-	
-    hFreeConn(&conn);
     }
-
-return;
 }
 
 struct section *gadSection(struct sqlConnection *conn, 

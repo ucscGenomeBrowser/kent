@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.110 2008/09/03 19:18:50 markd Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.111 2008/09/09 23:11:56 markd Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -430,6 +430,7 @@ void printSections(struct section *sectionList, struct sqlConnection *conn,
 struct section *section;
 for (section = sectionList; section != NULL; section = section->next)
     {
+    fprintf(stderr, "section: %s %s\n", section->name, sqlGetDatabase(conn));
     char *closeVarName = sectionCloseVar(section->name);
     boolean isOpen = !(cartUsualInt(cart, closeVarName, 0));
     char *otherState = (isOpen ? "1" : "0");

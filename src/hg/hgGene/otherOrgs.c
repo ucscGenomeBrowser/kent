@@ -10,7 +10,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.23 2008/09/03 19:18:50 markd Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.24 2008/09/09 23:11:56 markd Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -126,6 +126,39 @@ else
     return NULL;
 }
 
+static char *otherOrgPositionFromDb(struct otherOrg *otherOrg, char *id)
+/* Get position of id from other organism database, if possible. */
+{
+struct hTableInfo *hti = hFindTableInfo(otherOrg->db, NULL,
+                                        otherOrg->geneTable);
+if (hti == NULL)
+    return NULL;  // table  not found
+
+struct sqlConnection *conn = hAllocConn(otherOrg->db);
+char query[512];
+safef(query, sizeof(query),
+      "select concat(%s, ':', %s+1, '-', %s) from %s "
+      "where %s = '%s'",
+      hti->chromField, hti->startField, hti->endField,
+      otherOrg->geneTable, hti->nameField, id);
+char *pos = sqlQuickString(conn, query);
+if (pos != NULL)
+    {
+    char posPlus[2048];
+    safef(posPlus, sizeof(posPlus), "%s&%s=%s&hgFind.matches=%s",
+          pos,
+          otherOrg->geneTable, hTrackOpenVis(sqlGetDatabase(conn), otherOrg->geneTable),
+          id);
+    hFreeConn(&conn);
+    return cloneString(posPlus);
+    }
+else
+    {
+    hFreeConn(&conn);
+    return NULL;
+    }
+}
+
 static char *otherOrgPosition(struct otherOrg *otherOrg,
 			      struct sqlConnection *conn, char *geneId)
 /* Return position of gene ID in other organism or NULL if it doesn't exist;
@@ -139,32 +172,7 @@ if (id != NULL)
         || !sqlDatabaseExists(otherOrg->db))
 	return id;
     else
-	{
-	struct hTableInfo *hti = hFindTableInfo(otherOrg->db, NULL,
-					        otherOrg->geneTable);
-	if (hti != NULL)
-	    {
-            struct sqlConnection *otherConn = hAllocConn(otherOrg->db);
-	    char *pos = NULL;
-	    char query[512];
-	    safef(query, sizeof(query),
-		  "select concat(%s, ':', %s+1, '-', %s) from %s "
-		  "where %s = '%s'",
-		  hti->chromField, hti->startField, hti->endField,
-		  otherOrg->geneTable, hti->nameField, id);
-	    pos = sqlQuickString(otherConn, query);
-	    if (pos != NULL)
-		{
-		char posPlus[2048];
-		safef(posPlus, sizeof(posPlus), "%s&%s=%s&hgFind.matches=%s",
-		      pos,
-		      otherOrg->geneTable, hTrackOpenVis(sqlGetDatabase(conn), otherOrg->geneTable),
-		      id);
-		return cloneString(posPlus);
-		}
-            hFreeConn(&otherConn);
-	    }
-	}
+        return otherOrgPositionFromDb(otherOrg, id);
     }
 return NULL;
 }
