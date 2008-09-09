@@ -15,6 +15,7 @@
 #include "hgTables.h"
 #include "hgMaf.h"
 #include "mafGene.h"
+#include "genePredReader.h"
 
 #define MAX_SP_SIZE 2000
 
@@ -22,6 +23,46 @@
 static char *mafTrackNames[STATIC_ARRAY_SIZE];
 static char *mafTrackExist[STATIC_ARRAY_SIZE];
 //static char *speciesNames[STATIC_ARRAY_SIZE];
+
+struct genePredReader *regionGenePredQuery(struct sqlConnection *conn, 
+	char *table,  struct region *region, char *extraWhere)
+/* Construct and execute query for table on region. Returns NULL if 
+ * table doesn't exist (e.g. missing split table for region->chrom). */
+{
+struct genePredReader *reader;
+
+/* Check for missing split tables before querying: */
+char *db = sqlGetDatabase(conn);
+struct hTableInfo *hti = hFindTableInfo(db, region->chrom, table);
+if (hti == NULL)
+    return NULL;
+else if (hti->isSplit)
+    {
+    char fullTableName[256];
+    safef(fullTableName, sizeof(fullTableName),
+	  "%s_%s", region->chrom, table);
+    if (!sqlTableExists(conn, fullTableName))
+	return NULL;
+    }
+
+if (region->fullChrom) /* Full chromosome. */
+    {
+    char extra[2048];
+
+    if (extraWhere)
+	safef(extra, sizeof extra, "chrom=%s AND %s",region->chrom,extraWhere);
+    else
+	safef(extra, sizeof extra, "chrom=%s",region->chrom);
+    reader = genePredReaderQuery( conn, table, extra);
+    }
+else
+    {
+    reader = genePredReaderRangeQuery( conn,  table, region->chrom, 
+	region->start, region->end,  extraWhere);
+    }
+
+return reader;
+}
 
 #ifdef NTONOW
 static struct slName *getSpecies(char *mafTable, boolean doPrint)
@@ -123,9 +164,11 @@ return includeList;
 }
 #endif
 
+
 void doGenePredPal(struct sqlConnection *conn)
 /* Output genePred protein alignment. */
 {
+struct genePredReader *reader = NULL;
 char *mafTable = cartString(cart, "mafTable");
 if (anySubtrackMerge(database, curTable))
     errAbort("Can't do protein alignment output when subtrack merge is on. "
@@ -195,23 +238,16 @@ struct genePred *list = NULL;
 /* Loop through each region. */
 for (region = regionList; region != NULL; region = region->next)
     {
-    struct sqlResult *sr;
-    char **row;
-    //int colIx, lastCol = fieldCount-1;
+    struct genePred *pred;
     char *filter = filterClause(database, curTable, region->chrom);
 
-    sr = regionQuery(conn, curTable, "*", 
-    	region, isPositional, filter);
-    if (sr == NULL)
+    reader = regionGenePredQuery(conn, curTable, region, filter);
+    if (reader == NULL)
 	continue;
 
-    while ((row = sqlNextRow(sr)) != NULL)
+    //while ((row = sqlNextRow(sr)) != NULL)
+    while ((pred  = genePredReaderNext(reader)) != NULL)
 	{
-	struct genePred *pred;
-	if (hti->hasBin)
-	    pred = genePredExtLoad(&row[1], GENEPREDX_NUM_COLS);
-	else
-	    pred = genePredExtLoad(row, GENEPREDX_NUM_COLS);
 	if (idHash == NULL || hashLookup(idHash, pred->name))
 	    {
 	    slAddHead(&list, pred);
@@ -219,12 +255,15 @@ for (region = regionList; region != NULL; region = region->next)
 	    ++outCount;
 	    }
 	}
-    sqlFreeResult(&sr);
     freez(&filter);
     }
 
+genePredReaderFree(&reader);
+
 if (list != NULL)
     {
+    slReverse(&list);
+
     struct genePred *pred;
     unsigned options = 0;
 
@@ -251,9 +290,7 @@ if (list != NULL)
 	}
     slReverse(&includeList);
     for(pred = list; pred ; pred = pred->next)
-	{
 	mafGeneOutPred(stdout, pred, database, mafTable, includeList, options);
-	}
     }
 
 /* Do some error diagnostics for user. */

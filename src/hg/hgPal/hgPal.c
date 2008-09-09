@@ -13,8 +13,9 @@
 #include "hgMaf.h"
 #include "mafGene.h"
 #include "hCommon.h"
+#include "genePredReader.h"
 
-static char const rcsid[] = "$Id: hgPal.c,v 1.4 2008/09/08 23:35:41 braney Exp $";
+static char const rcsid[] = "$Id: hgPal.c,v 1.5 2008/09/09 21:22:03 braney Exp $";
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
@@ -40,11 +41,13 @@ struct genePred *getPreds(char *geneName, char *geneTable, char *db)
 {
 struct sqlConnection *conn = hAllocConn(db);
 struct genePred *list = NULL;
-char query[1024];
-struct sqlResult *sr = NULL;
-char **row;
+struct genePred *gene;
+//char query[1024];
+//struct sqlResult *sr = NULL;
+//char **row;
 char splitTable[HDB_MAX_TABLE_STRING];
 boolean hasBin;
+struct genePredReader *reader;
 
 boolean found =  hFindSplitTable(db, NULL, geneTable,
 	splitTable, &hasBin);
@@ -52,24 +55,21 @@ boolean found =  hFindSplitTable(db, NULL, geneTable,
 if (!found)
     errAbort("can't find table %s\n", geneTable);
 
+char extra[2048];
 if (onlyChrom != NULL)
-    safef(query, sizeof query, 
-	    "select * from %s where name='%s' and chrom='%s' \n",
-	    splitTable,  geneName, onlyChrom);
+    safef(extra, sizeof extra, "name='%s' and chrom='%s'", geneName, onlyChrom);
 else
-    safef(query, sizeof query, 
-	    "select * from %s where name='%s' \n",
-	    splitTable,  geneName);
+    safef(extra, sizeof extra, "name='%s'", geneName);
 
-sr = sqlGetResult(conn, query);
+reader = genePredReaderQuery( conn, splitTable, extra);
 
-while ((row = sqlNextRow(sr)) != NULL)
+//sr = sqlGetResult(conn, query);
+
+//while ((row = sqlNextRow(sr)) != NULL)
+while ((gene  = genePredReaderNext(reader)) != NULL)
     {
-    struct genePred *gene = genePredExtLoad(hasBin ? &row[1] : row,
-	GENEPREDX_NUM_COLS );
-
-    if (gene->exonFrames == NULL)
-	genePredAddExonFrames(gene);
+    //if (gene->exonFrames == NULL)
+	//genePredAddExonFrames(gene);
 
     verbose(2, "got gene %s\n",gene->name);
     slAddHead(&list, gene);
@@ -80,7 +80,8 @@ if (list == NULL)
 
 slReverse(&list);
 
-sqlFreeResult(&sr);
+genePredReaderFree(&reader);
+//sqlFreeResult(&sr);
 hFreeConn(&conn);
 
 return list;
@@ -297,7 +298,7 @@ if (seqName == NULL)
     {
     if (winStart != 0 || winEnd != 0)
 	webAbort("CGI variable error",
-		 "hgc: bad input variables c=%s l=%d r=%d",
+		 "hgPal: bad input variables c=%s l=%d r=%d",
 		 cartString(cart, "c"), winStart, winEnd);
     else
 	seqName = hDefaultChrom(database);
