@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1461 2008/09/08 22:01:15 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1462 2008/09/09 17:49:32 kate Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3780,17 +3780,16 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	(lookupCt(track) != NULL) ||
 	(fbUnderstandTrack(database, track) && !dnaIgnoreTrack(track)))
 	{
-	char *visString = cartOptionalString(cart, track);
-
-        /* determine if track is really visible -- if it's in a supertrack
-         * the supertrack visibility affects the track visibility */
-        char *supertrack = NULL;
-        if (visString && differentString(visString, "hide") && 
-            (supertrack = trackDbGetSupertrackName(tdb)) != NULL)
-                visString = cartOptionalString(cart, supertrack);
-
+        char *visString = cartUsualString(cart, track, hStringFromTv(tdb->visibility));
+         if (differentString(visString, "hide") && tdb->parent)
+            {
+            char *parentVisString = cartUsualString(cart, tdb->parentName, 
+                                        hStringFromTv(tdb->parent->visibility));
+            if (sameString("hide", parentVisString))
+                visString = "hide";
+            }
 	char buf[128];
-	if (visString == NULL || (visString != NULL && sameString(visString, "hide")))
+	if (sameString(visString, "hide"))
 	    {
 	    char varName[256];
 	    sprintf(varName, "%s_case", track);
