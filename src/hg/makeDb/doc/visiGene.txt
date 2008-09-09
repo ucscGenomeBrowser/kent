@@ -1368,6 +1368,78 @@ knownToVisiGene mm8
 # removed same thing from vgLoadNibb.c source code.
 # requested push of table hgwdev.visiGene.submissionSource.
 
+################### (galt 2008-08-18 done)
+# make downloads for visiGene
+
+ssh hgwdev
+co browser   # if you haven't already done it
+
+change browser module, downloads.html to add links to visiGene download
+
+cvs commit browser/downloads.html
+
+# updating the visiGene downloads
+
+cd /usr/local/apache/htdocs/goldenPath
+mkdir visiGene
+cd visiGene
+mkdir database
+cd database
+
+
+vi README
+---------
+This directory contains the downloadable tables in the UCSC visiGene
+database. This database is shared by the program VisiGene
+ http://genome.ucsc.edu/cgi-bin/hgVisiGene
+and tracks that incorporate visiGene data, such as the Known Genes tracks.
+
+To see descriptions of the tables in visiGene, visit the Table Browser:
+  http://genome.ucsc.edu/cgi-bin/hgTables
+select "All Tables" as the group, select visiGene as the database,
+and select a table.  Then click the "describe table schema" button.
+---------
+
+hgsqldump visiGene -T .
+
+rm vgPrbAli.*
+rm vgPrbAliAll.*
+
+sed -i -e 's/hgwdev[.]cse/genome/' fileLocation.txt
+
+gzip *.txt
+
+Do a push-request:
+------------
+please rsync (with appropriate flags)
+
+hgwdev:/usr/local/apache/htdocs/goldenPath/visiGene/
+
+to
+
+hgdownload:/usr/local/apache2/htdocs/goldenPath/visiGene/
+
+Reason:
+ Now users will have an easier time of downloading visiGene database.
+
+------------
+
+also, first time only, do 
+
+update browser sandbox with links on downloads.html,
+then do a push-request:
+
+Please push downloads.html from dev to hgdownload:
+
+hgwdev:/usr/local/apache/htdocs/downloads.html
+
+to
+
+hgdownload:/usr/local/apache2/htdocs/downloads.html
+
+Reason:
+ added the page links for visiGene database download.
+
 
 ################### (galt 2008-09-08 done)
 # move visiGene data to hive
