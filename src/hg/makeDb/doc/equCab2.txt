@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.18 2008/08/19 22:48:54 larrym Exp $"
+#	"$Id: equCab2.txt,v 1.19 2008/09/09 21:07:00 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.18 2008/08/19 22:48:54 larrym Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.19 2008/09/09 21:07:00 larrym Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -1774,14 +1774,16 @@ Added following files to pushQ entry:
 ##########################################################################
 
 ##########################################################################
-# Fix duplicate scaffold_34 (WORKING - 2008-08-19 - larrym)
+# Fix duplicate scaffold_34 (DONE - 2008-09-09 - larrym)
+
+Start 2008-08-19:
 
 insert into dbDb (name, description, nibPath, organism, defaultPos, active, genome, scientificName) values ('equCab2Copy', 'Sep. 2007 (test)', '/gbdb/equCab2Copy', 'Horse', 'chr11:52,970,942-52,973,091', 1, 'Horse', 'Equus caballus');
 
 chr27:
 
-    scaffold_24 - chr27:1-39960074
-    scaffold_34 - chr27:39961075-65921033
+    scaffold_24 - chr27:1-39960074 - 39,960,074
+    scaffold_34 - chr27:39961075-65921033 (25959959 bases long)
 
 The region to delete starts at the gap precediing scaffold_34:
 
@@ -1885,10 +1887,10 @@ chrX
 chrUn
 chrM
 
-mv equCab2.2bit equCab2.2bit.bak
-mv equCab2.rmsk.2bit equCab2.rmsk.2bit.bak
-mv equCab2.unmasked.2bit equCab2.unmasked.2bit.bak
-mv equCab2.UnScaffolds.2bit equCab2.UnScaffolds.2bit.bak
+mv equCab2.2bit equCab2.2bit.old
+mv equCab2.rmsk.2bit equCab2.rmsk.2bit.old
+mv equCab2.unmasked.2bit equCab2.unmasked.2bit.old
+mv equCab2.UnScaffolds.2bit equCab2.UnScaffolds.2bit.old
 
 twoBitToFa -seqList=seqList.txt equCab2.2bit.bak equCab2.fa
 faSize equCab2.fa
@@ -1901,10 +1903,10 @@ agrees!
 # twoBitToFa is putting in "chr27:0-39960074, so we have to fix that up with the perl -ne
 # all commands run on kkstore05:
 
-twoBitToFa -seqList=seqList.txt equCab2.2bit.bak stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.2bit
-twoBitToFa -seqList=seqList.txt equCab2.rmsk.2bit.bak stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.rmsk.2bit
-twoBitToFa -seqList=seqList.txt equCab2.unmasked.2bit.bak stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.unmasked.2bit
-twoBitToFa -seqList=seqList.txt equCab2.UnScaffolds.2bit.bak stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.UnScaffolds.2bit
+twoBitToFa -seqList=seqList.txt equCab2.2bit.old stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.2bit
+twoBitToFa -seqList=seqList.txt equCab2.rmsk.2bit.old stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.rmsk.2bit
+twoBitToFa -seqList=seqList.txt equCab2.unmasked.2bit.old stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.unmasked.2bit
+twoBitToFa -seqList=seqList.txt equCab2.UnScaffolds.2bit.old stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.UnScaffolds.2bit
 
 2nd run of test:
 overlaps:       gc5Base chrom   chromStart      1
@@ -1916,9 +1918,9 @@ overlaps:       nscanGene       chrom   txStart 1
 
 Sent email to cluster-admin to reload blat from 2bit file.
 
-# XXXX Don't know what to do with these
 select * from gc5Base where chrom = 'chr27' and chromStart < 39960074 && chromEnd > 39960074;
 select * from quality where chrom = 'chr27' and chromStart < 39960074 && chromEnd > 39960074;
+# Fixed gc5Base and quality below
 
 delete from xenoMrna where tName = 'chr27' and tStart < 39960074 && tEnd > 39960074;
 2 rows
@@ -1927,3 +1929,115 @@ delete from blastHg18KG where tName = 'chr27' and tStart < 39960074 && tEnd > 39
 1 overlapping row in nscanGene:
 delete from nscanGene where chrom = 'chr27' and txStart < 39960074 and txEnd > 39960074;
 1 row
+
+cd /cluster/data/equCab2/broad
+cp -p ucsc.agp ucsc.agp.old
+cp -p Contig.bed Contig.bed.old
+cp -p ucsc.agp ucsc.agp.old
+cp -p mapped.agp.chromosome.agp mapped.agp.chromosome.agp.old
+
+# manually remove relevant section (line 51417-52415)
+
+        # on kkstore05
+	qaToQac assembly.quals.gz stdout | qacAgpLift ucsc.agp stdin equCab2.qual.qac
+        Read 55316 qacs from stdin
+        Got 33 chroms in ucsc.agp
+        ...
+        chr27 size=39960074
+        ...
+        cd /cluster/data/equCab2/bed/qual
+	qacToWig -fixed /cluster/data/equCab2/broad/equCab2.qual.qac stdout | wigEncode stdin qual.wig qual.wib
+	# run on hgwdev:
+	hgLoadWiggle -pathPrefix=/gbdb/equCab2/wib equCab2 quality qual.wig &
+
+        cd /cluster/data/equCab2/bed/gc5Base
+    	hgGcPercent -wigOut -doGaps -win=5 -file=stdout -verbose=0 equCab2 /cluster/data/equCab2/equCab2.2bit | wigEncode stdin gc5Base.wig gc5Base.wib
+        hgLoadWiggle -pathPrefix=/gbdb/equCab2/wib equCab2 gc5Base gc5Base.wig &
+
+hg18.chainEquCab2 etc.
+
+	grep contig_ mapped.agp.chromosome.agp | awk '{print $3-$2+1}' | ave stdin
+        count 55316
+        total 2428773513
+
+grep contig_ mapped.agp.chromosome.agp | awk '{print $3-$2+1}' | sort -r -n | ~/bin/n50.pl 2428773513
+count: 6246; len: 112381
+
+cp -p Contig.bed Contig.bed.old
+# manually remove extra contig in chr27
+
+        grep scaffold_ Contig.bed | awk '{print $3-$2}' | ave stdin
+        count 73
+        average 30724621.506849
+        total 2242897370
+
+        grep scaffold_ Contig.bed | awk '{print $3-$2}' | ~/bin/n50.pl 2242897370
+        count: 33; len: 53663962
+
+    checkTableCoords equCab2 -daysOld=1000
+    equCab2.chr27_chainCanFam2Link has 1604165 records with end > chromSize.
+    equCab2.chr27_chainGalGal3Link has 374961 records with end > chromSize.
+    equCab2.chr27_chainHg18Link has 1351976 records with end > chromSize.
+    equCab2.chr27_chainMm9Link has 1671652 records with end > chromSize.
+    equCab2.chr27_chainOrnAna1Link has 696995 records with end > chromSize.
+    equCab2.xenoMrna has 3 records with end > chromSize.
+
+delete from chr27_chainCanFam2Link where tName = 'chr27' and tStart >= 39960074;
+1604165 rows
+delete from chr27_chainGalGal3Link where tName = 'chr27' and tStart >= 39960074;
+374961 rows
+delete from chr27_chainHg18Link where tName = 'chr27' and tStart >= 39960074;
+1351976 rows
+delete from chr27_chainMm9Link where tName = 'chr27' and tStart >= 39960074;
+1671652 rows
+delete from chr27_chainOrnAna1Link where tName = 'chr27' and tStart >= ;
+696995 rows
+
+I don't know how the xenoMrna records got missed:
+delete from xenoMrna where tName = 'chr27' and tEnd > 39960074;
+3 rows
+
+hg18, mm9, canFam2, ornAna1, galGal3
+chr27_chainCanFam2Link hg18, mm9, canFam2, ornAna1, galGal3
+
+##########################################################################
+#  re-make downloads (DONE - 2008-09-09 - larrym)
+
+Edit to remove end of chr27:
+
+chrom.sizes, rmsk_and_gaps.bed
+equCab2.agp, 27/chr27.agp, 27/chr27.fa.out
+bed/simpleRepeat/simpleRepeat.bed, bed/simpleRepeat/bed.tab
+bed/simpleRepeat/trfMask.bed, trfMaskChrom/chr27.bed
+bed/repeatMasker/bed.tab, bed/repeatMasker/equCab2.fa.out
+bed/chromInfo/chromInfo.tab
+broad/ctgPos2.tab, broad/scaffolds.bed
+
+    #	verify all tracks have html pages for their trackDb entries
+    cd /cluster/data/equCab2
+    cp -rp goldenPath goldenPath.old
+    /cluster/bin/scripts/makeDownloads.pl equCab2
+    # restore the older README files
+    cd /cluster/data/equCab2
+    for dir in bigZips database liftOver chromosomes
+    do
+        cp -p goldenPath.old/$dir/README.txt goldenPath/$dir/README.txt
+    done
+    #	re-build the upstream files:
+   for size in 1000 2000 5000
+do
+  echo $size
+  featureBits equCab2 ensGene:upstream:$size -fa=stdout \
+  | gzip -c > ensGene.upstream$size.fa.gz
+done
+
+#########################################################################
+# Re-run creation of OOC file for genbank runs (DONE - 2008-08-27 - larrym)
+
+    1024 * (2.5 / 3.1) == 825.805824
+    # Use -repMatch=825 (based on size -- for human we use 1024, and
+    # horse size is 84% of human judging by twoBitInfo -noNs)
+
+    cd /cluster/data/equCab2
+    blat equCab2.2bit /dev/null /dev/null -tileSize=11 \
+	-makeOoc=equCab2.11.ooc -repMatch=825 &
