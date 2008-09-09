@@ -434,10 +434,10 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
 		    <FONT color="#0000FF"><PRE><TT> track name=sample</TT></PRE></FONT>
 		    The currently defined custom maf track variables are:
                     <UL>
-                    <LI><B>name</B> - Required. Name the track </LI>
-                    <LI><B>description</B> - Optional. 
+                    <LI><B>name=sample</B> - Required. Name the track </LI>
+                    <LI><B>description="Sample Track"</B> - Optional. 
 		    Give a long name for the track</LI>
-                    <LI><B>frames=table</B> - Optional. 
+                    <LI><B>frames=multiz28wayFrames</B> - Optional. 
 		    Tell the browser which table to 
 		    grab the gene frames from.  This is usually associated with
 		    a N-way alignment where the name ends in string 
@@ -446,8 +446,8 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
 		    Use dots instead of bases when bases are identical</LI>
                     <LI><B>visibility=dense|pack|full</B> - Optional. 
 		    Set the default visibility mode for this track.</LI>
-                    <LI><B>speciesOrder="list"</B> - Optional. 
-		    List the order in which
+                    <LI><B>speciesOrder="hg18 panTro2"</B> - Optional. 
+		    White-space separated list specifying the order in which
 		    the sequences in the maf should be displayed.
 		    </LI>
 		    </UL>
