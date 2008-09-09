@@ -1125,3 +1125,27 @@ done
     rm -f /cluster/bluearc/equCab2/equCab2.2bit
 
 ##########################################################################
+
+#########################################################################
+# REDO EQUCAB1->EQUCAB2 LIFTOVER (DONE - 2008-09-09 - larrym)
+
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -workhorse=hgwdev -bigClusterHub=pk -debug equCab1 equCab2
+
+    # Real run:
+    cd /cluster/data/equCab1/bed/blat.equCab2.2008-07-08
+    doSameSpeciesLiftOver.pl -ooc /-workhorse=hgwdev -bigClusterHub=pk equCab1 equCab2 >& do.log &
+    tail -f do.log
+    rm -f /cluster/bluearc/equCab2/equCab2.2bit
+
+    # redo to make sure we used the right .ooc file:
+    doSameSpeciesLiftOver.pl -ooc /hive/data/genomes/equCab2/equCab2.11.ooc -workhorse=hgwdev -bigClusterHub=pk -debug equCab1 equCab2
+    HgStepManager: executing from step 'align' through step 'cleanup'.
+    HgStepManager: executing step 'align' Thu Sep  4 12:59:45 2008.
+    align: can't find equCab2/equCab2.2bit in /cluster/bluearc/, /san/sanvol1/scratch/, /scratch/hg/ -- please distribute.
+
+    # fix scratch data for equCab2
+    cd /san/sanvol1/scratch/equCab2
+    ln -s /hive/data/genomes/equCab2/equCab2.2bit .
+    cd /cluster/data/equCab1
+    doSameSpeciesLiftOver.pl -ooc /hive/data/genomes/equCab2/equCab2.11.ooc -workhorse=hgwdev -bigClusterHub=pk equCab1 equCab2
