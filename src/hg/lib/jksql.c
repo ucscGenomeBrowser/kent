@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.117 2008/09/09 04:13:04 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.118 2008/09/09 15:00:46 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -154,7 +154,6 @@ for (cname = cnames; cname != NULL; cname = cname->next)
 static void sqlProfileAddDb(char *db, char *profileName)
 /* add a mapping of db to profile */
 {
-fprintf(stderr, "sqlProfileAddDb: %s %s\n", db, profileName);
 struct sqlProfile *sp = hashFindVal(profiles, profileName);
 if (sp == NULL)
     errAbort("can't find profile %s for database %s in hg.conf", profileName, db);
