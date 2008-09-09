@@ -330,11 +330,11 @@ while (c1 && c2) /* at least one chrom in each tree */
 	int n0=0;
 	unsigned s0=0;
 	if (orDirectToFile)
-	    s0 = rangeTreeFileUnionToFile(r1, r2, nodes1, nodes2, tf->file, &n0);
+	    s0 = rangeArrayUnionToFile(r1, r2, nodes1, nodes2, tf->file, &n0);
 	else
 	    {
 	    struct rangeStartSize *r=NULL;
-	    s0 = rangeTreeFileUnion(r1, r2, nodes1, nodes2, &r, saveMem, NULL, NULL, NULL, &n0);
+	    s0 = rangeArrayUnion(r1, r2, nodes1, nodes2, &r, saveMem, NULL, NULL, NULL, &n0);
 	    if (tf->file && n0 > 0)
 		{
 		rangeWriteArray(r, n0, tf->file);
@@ -484,7 +484,7 @@ while (c1 && c2) /* at least one chrom in each tree */
 	unsigned s0;
 	int n0=0;
 	struct rangeStartSize *r = NULL;
-	s0 = rangeTreeFileIntersection(r1, r2, nodes1, nodes2, &r, saveMem, NULL, NULL, NULL, &n0);
+	s0 = rangeArrayIntersection(r1, r2, nodes1, nodes2, &r, saveMem, NULL, NULL, NULL, &n0);
 	/* if non-null intersection then remember chrom, array of ranges and number of nodes */
 	if (n0>0)
 	    {

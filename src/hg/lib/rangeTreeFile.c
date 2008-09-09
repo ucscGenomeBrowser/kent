@@ -264,7 +264,7 @@ rbTreeTraverse(tree, rangeValSize);
 return rangeTreeSizeInFile(tree) + tempValSize;
 }
 
-unsigned rangeTreeFileIntersection(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, boolean saveMem, struct bed **pBed, char *chrom, struct lm *lm, int *n)
+unsigned rangeArrayIntersection(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, boolean saveMem, struct bed **pBed, char *chrom, struct lm *lm, int *n)
 /* Create intersection of array of 'n1' ranges (start,size) in r1 with 
  * 'n2' ranges (start,size) in r2.
  * If pRange is not null, the ranges are saved into an allocated array 'r' 
@@ -411,7 +411,7 @@ if (pRange)
 return totSize;
 }
 
-unsigned rangeTreeFileUnion(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, boolean saveMem, struct bed **pBed, char *chrom, struct lm *lm, int *n)
+unsigned rangeArrayUnion(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, boolean saveMem, struct bed **pBed, char *chrom, struct lm *lm, int *n)
 /* Create union of array of 'n1' ranges (start,size) in r1 with 
  * 'n2' ranges (start,size) in r2.
  * If pRange is not null, the ranges are saved into an allocated array 'r' 
@@ -625,7 +625,7 @@ return totSize;
 }
 
 
-unsigned rangeTreeFileUnionToFile(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, FILE *of, int *n)
+unsigned rangeArrayUnionToFile(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, FILE *of, int *n)
 /* Create union of array of 'n1' ranges (start,size) in r1 with 
  * 'n2' ranges in r2, writing them to output file 'of' and returning 
  * the number of merged ranges written in 'n'. 
