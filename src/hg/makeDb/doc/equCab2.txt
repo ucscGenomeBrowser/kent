@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.19 2008/09/09 21:07:00 larrym Exp $"
+#	"$Id: equCab2.txt,v 1.20 2008/09/09 22:01:05 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.19 2008/09/09 21:07:00 larrym Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.20 2008/09/09 22:01:05 larrym Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -1803,7 +1803,7 @@ Tracks to ignore while testing:
 
 a lot of tables are split, so I will have to write some C to do this:
 
-run delete program (test/test.c):
+run delete program (/cluster/data/equCab2/fixEquCab2.c):
 
 #table:chromName:number rows deleted
 blastHg18KG:tName:1138
@@ -1841,7 +1841,6 @@ transMapAlnSplicedEst:tName:177200
 transMapAlnUcscGenes:tName:1713
 xenoMrna:tName:21370
 
-
 Things that apparently didn't get covered by the script:
 
     multiz6wayFrames, multiz6waySummary, phastCons6way
@@ -1866,7 +1865,6 @@ delete from refFlat where chrom = 'chr27' and txStart >= 39960074;
 delete from mrnaOrientInfo where chrom = 'chr27' and chromStart >= 39960074;
 34 rows
 
-
 sanity check:
 
     dbSnoop equCab2Copy stdout | grep ^2008 | egrep -v 'chr[0-9MX]+_' | grep -v trackDb | grep -v hgFindSpec | grep -v chrUn | sort
@@ -1876,8 +1874,8 @@ Truncate chromInfo:
     update chromInfo set size = 39960074 where chrom = 'chr27';
 
 # re-build 2bit files:
+# create /cluster/data/equCab2/seqList.txt to use as parameter to twoBitToFa:
 
-seqList.txt:
 chr1
 ...
 chr27:0-39960074
@@ -1908,15 +1906,13 @@ twoBitToFa -seqList=seqList.txt equCab2.rmsk.2bit.old stdout | perl -ne 's/^>chr
 twoBitToFa -seqList=seqList.txt equCab2.unmasked.2bit.old stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.unmasked.2bit
 twoBitToFa -seqList=seqList.txt equCab2.UnScaffolds.2bit.old stdout | perl -ne 's/^>chr27:0-39960074/>chr27/;print;' | faToTwoBit stdin equCab2.UnScaffolds.2bit
 
-2nd run of test:
+2nd run of fixEquCab2:
 overlaps:       gc5Base chrom   chromStart      1
 overlaps:       quality chrom   chromStart      1
 overlaps:       nscanGene       chrom   txStart 1
 overlaps:       xenoMrna        tName   tStart  2
 overlaps:       blastHg18KG     tName   tStart  1
 overlaps:       nscanGene       chrom   txStart 1
-
-Sent email to cluster-admin to reload blat from 2bit file.
 
 select * from gc5Base where chrom = 'chr27' and chromStart < 39960074 && chromEnd > 39960074;
 select * from quality where chrom = 'chr27' and chromStart < 39960074 && chromEnd > 39960074;
@@ -1930,13 +1926,29 @@ delete from blastHg18KG where tName = 'chr27' and tStart < 39960074 && tEnd > 39
 delete from nscanGene where chrom = 'chr27' and txStart < 39960074 and txEnd > 39960074;
 1 row
 
-cd /cluster/data/equCab2/broad
-cp -p ucsc.agp ucsc.agp.old
-cp -p Contig.bed Contig.bed.old
-cp -p ucsc.agp ucsc.agp.old
-cp -p mapped.agp.chromosome.agp mapped.agp.chromosome.agp.old
+Sent email to cluster-admin to reload blat from 2bit file.
 
-# manually remove relevant section (line 51417-52415)
+After reload, a portion of previously duplicated DNA:
+
+	TATTGCAGGCAGGATGACCACTATTGCAACGCTCTCCGGCCTCGAAATGG
+
+now shows up with only one hit.
+
+
+	# download fixed agp from broad
+	cd /cluster/data/equCab2/broad
+	mkdir 2008-04-15-updates
+	cd 2008-04-15-updates
+	wget ftp://ftp.broad.mit.edu/pub/assemblies/mammals/horse/Equus2/mapped.agp.chromosome.agp
+	
+	cp -p ucsc.agp ucsc.agp.old
+	cp -p Contig.bed Contig.bed.old
+	cp -p ucsc.agp ucsc.agp.old
+	cp -p mapped.agp.chromosome.agp mapped.agp.chromosome.agp.old
+	# manually remove relevant section (line 51417-52415)
+
+	diff mapped.agp.chromosome.agp 2008-04-15-updates/mapped.agp.chromosome.agp
+	# no differences (which is good, means they changed what I expected them to change)
 
         # on kkstore05
 	qaToQac assembly.quals.gz stdout | qacAgpLift ucsc.agp stdin equCab2.qual.qac
@@ -1999,6 +2011,10 @@ delete from xenoMrna where tName = 'chr27' and tEnd > 39960074;
 
 hg18, mm9, canFam2, ornAna1, galGal3
 chr27_chainCanFam2Link hg18, mm9, canFam2, ornAna1, galGal3
+
+In a meeting we (kuhn, hiram et al.) decided to do the nets and chains later,
+and focus on releasing core stuff now; i.e. I will re-run all net/chain
+stuff from scratch later.
 
 ##########################################################################
 #  re-make downloads (DONE - 2008-09-09 - larrym)
