@@ -233,7 +233,7 @@ for (gs = ci->refSeqs->genes; gs != NULL; gs = gs->next)
     gs->gene->name = accv;
     }
 
-if (ci->refSeqs->genes != NULL)
+if ((ci->refSeqs != NULL) && (ci->refSeqs->genes != NULL))
     {
     // use first one (highest similarity)
     ci->refSeqAccv = cloneString(ci->refSeqs->genes->gene->name);
@@ -762,7 +762,7 @@ printMgcHomeUrl(&mgcDb);
 printf("\" TARGET=_blank>%s</A>\n", mgcDb.title);
 
 prMgcInfoLinks(conn, acc, &mgcDb, ci);
-if (ci->refSeqs->genes != NULL)
+if ((ci->refSeqs != NULL) && (ci->refSeqs->genes != NULL))
     prRefSeqSims(ci);
 prSeqLinks(conn, tdb->tableName, acc);
  // FIXME: tmp until change to psl complete
@@ -829,7 +829,7 @@ printf("<BR><B>Clone Source</B>: <A href=\"http://www.orfeomecollaboration.org/\
        " TARGET=_blank>ORFeome collaboration</A>\n");
 
 prOrfeomeInfoLinks(conn, acc, ci);
-if (ci->refSeqs->genes != NULL)
+if ((ci->refSeqs != NULL) && (ci->refSeqs->genes != NULL))
     prRefSeqSims(ci);
 prSeqLinks(conn, tdb->tableName, acc);
  // FIXME: tmp until change to psl complete
