@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.116 2008/09/06 04:06:52 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.117 2008/09/09 04:13:04 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -154,6 +154,7 @@ for (cname = cnames; cname != NULL; cname = cname->next)
 static void sqlProfileAddDb(char *db, char *profileName)
 /* add a mapping of db to profile */
 {
+fprintf(stderr, "sqlProfileAddDb: %s %s\n", db, profileName);
 struct sqlProfile *sp = hashFindVal(profiles, profileName);
 if (sp == NULL)
     errAbort("can't find profile %s for database %s in hg.conf", profileName, db);
@@ -1847,14 +1848,17 @@ if (sc != NULL)
 struct hash *sqlHashOfDatabases(void)
 /* Get hash table with names of all databases that are online. */
 {
-/* visit all profiles and get all databases */
 if (profiles == NULL)
     sqlProfileLoad();
 struct hash *databases = newHash(8);
-struct hashCookie cookie = hashFirst(profiles);
+// add databases found using default profile
+addProfileDatabases(defaultProfileName, databases);
+
+// add other databases explicitly associated with other profiles
+struct hashCookie cookie = hashFirst(dbToProfile);
 struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
-    addProfileDatabases(((struct sqlProfile*)hel->val)->name, databases);
+    hashAdd(databases, ((struct sqlProfile*)hel->val)->name, NULL);
 return databases;
 }
 
