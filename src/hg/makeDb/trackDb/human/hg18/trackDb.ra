@@ -447,7 +447,7 @@ type bed 6 .
 
 track knownGeneOld3
 shortLabel Old UCSC Genes
-longLabel Previous Version of  UCSC Genes
+longLabel Previous Version of UCSC Genes
 group genes
 priority 34.1
 visibility hide
