@@ -2,7 +2,7 @@
 
 #include <limits.h>
 #include "common.h"
-#include "genomeRangeTree.h"
+#include "genomeRangeTreeFile.h"
 #include "options.h"
 
 static struct optionSpec optionSpecs[] = {
@@ -62,7 +62,7 @@ else
 }
 
 
-void baseMaskToBed(char *inBama, char *bedFile, boolean merge)
+void baseMaskToBedSlow(char *inBama, char *bedFile, boolean merge)
 /* read first 3 columns of bed and write as baseMask */
 {
 struct rbTree *rt;
@@ -89,7 +89,6 @@ hashElFreeList(&chromList);
 genomeRangeTreeFree(&tree);
 }
 
-
 void usage(char *msg)
 /* usage message and abort */
 {
@@ -114,6 +113,6 @@ gId = optionExists("id");
 char *inBama = argv[0];
 char *outBed = argv[1];
 
-baseMaskToBed(inBama, outBed, merge);
+genomeRangeTreeFileWriteToBed(inBama, outBed, gId, merge);
 return 0;
 }
