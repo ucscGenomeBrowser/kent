@@ -55,6 +55,43 @@ void rangeWriteArray(struct rangeStartSize *r, int n, FILE *f)
 mustWrite(f, r, n*sizeof(*r));
 }
 
+void rangeWriteArrayToBed(char *chrom, struct rangeStartSize *r, int n, boolean withId, boolean mergeAdjacent, FILE *f)
+/* Write 'n' elements of range array (start,size) to file 'f' in bed format.
+ * If withId then adds an id in the name field in the format 'chrom.N' .
+ * If mergeAdjacent then any ranges which are adjacent, and would otherwise appear 
+ * on multiple bed lines, are merged into a single bed line. */
+{
+int i, id = 0;
+int start, end;
+if (n==0)
+    return;
+start = r[0].start;
+end = r[0].start+r[0].size;
+for (i=1 ; i<n ; ++i)
+    {
+    if (end > r[i].start)
+	errAbort("overlapping bed records in chrom %s (start,end=%d) (start=%d,end=%d)\n", chrom, end, r[i].start, r[i].start+r[i].size);
+    if (mergeAdjacent && end == r[i].start) /* keep the previous start and dont write bed */
+	{
+	end = r[i].start+r[i].size;
+	}
+    else /* print the previous range and update */
+	{
+	if (withId)
+	    fprintf(f, "%s\t%d\t%d\t%s.%d\n", chrom, start, end, chrom, ++id);
+	else
+	    fprintf(f, "%s\t%d\t%d\n", chrom, start, end);
+	start = r[i].start;
+	end = r[i].start+r[i].size;
+	}
+    }
+/* print the last item */
+if (withId) 
+    fprintf(f, "%s\t%d\t%d\t%s.%d\n", chrom, start, end, chrom, ++id);
+else
+    fprintf(f, "%s\t%d\t%d\n", chrom, start, end);
+}
+
 unsigned rangeArraySize(struct rangeStartSize *r, int n)
 /* calculate the total size of the array */
 {
@@ -227,23 +264,39 @@ rbTreeTraverse(tree, rangeValSize);
 return rangeTreeSizeInFile(tree) + tempValSize;
 }
 
-unsigned rangeTreeFileIntersection(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, int *n, boolean saveMem)
+unsigned rangeTreeFileIntersection(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, boolean saveMem, struct bed **pBed, char *chrom, struct lm *lm, int *n)
 /* Create intersection of array of 'n1' ranges (start,size) in r1 with 
- * 'n2' ranges (start,size) in r2, saving them in array r and returning 
- * the number of merged ranges in n.
- * Note that the ranges are as stored on disk (start,size), 
+ * 'n2' ranges (start,size) in r2.
+ * If pRange is not null, the ranges are saved into an allocated array 'r' 
+ * and then returned in *pRange. 
+ * Note that the ranges in *pRange are as stored on disk (start,size), 
  * not as in the rangeTree (start,end).
- * Free array with freez(&r)
- * Returns total size of ranges in r. If no ranges, returns NULL in r. */
+ * If saveMem is true, tries to shrink size of array r before returning it.
+ * Free array with freez(&r).
+ * If pBed is not null, the ranges are saved as a list of bed records
+ * and returned in *pBed. The bed->chrom field is set to chrom. Memory 
+ * for bed records is allocated from lm. Free using lmCleanup.
+ * The number of merged ranges is stored in n.
+ * If no ranges, returns NULL in *pRange and *pBed.
+ * Returns total size of ranges in intersection or zero if none. */
 {
 int r1end, r2end, i = 0;
-unsigned size = 0;
+unsigned totSize = 0;
 struct rangeStartSize *r = NULL;
 int rSize = max(n1,n2); /* max size needed is larger of two */
-AllocArray(r, rSize);
+struct bed *bList = NULL;
+if (pBed && !lm)
+    errAbort("specify localmem when requesting bed output");
+if (pBed && !chrom)
+    errAbort("specify chrom when requesting bed output");
+if (pRange)
+    {
+    AllocArray(r, rSize);
+    }
 /* loop around merging while we have ranges in both lists */
 while ( n1 > 0 && n2 > 0)
     {
+    verbose(2,"loop n1=%d n2=%d\n", n1, n2);
     r1end = r1->start+r1->size;
     r2end = r2->start+r2->size;
     /* check which should be merged or output */
@@ -268,27 +321,69 @@ while ( n1 > 0 && n2 > 0)
 	{ 
 	if (r1end > r2end) /* 1 is rightmost, get highest start, fix size, and read next r2 */
 	    {
-	    r[i].start = max(r1->start,r2->start);
-	    r[i].size = r2end - r[i].start;
-	    size += r[i].size;
+	    int start = max(r1->start,r2->start);
+	    int l = r2end-start;
+	    if(pBed)
+		{
+		struct bed *b;
+		lmAllocVar(lm, b);
+		b->chrom = chrom;
+		b->chromStart = start;
+		b->chromEnd = r2end;
+		slAddHead(&bList, b);
+		}
+	    if (r)
+		{
+		r[i].start = start;
+		r[i].size = l;
+		}
+	    totSize += l;
 	    ++i;
 	    --n2;
 	    ++r2;
 	    }
 	else if (r2end > r1end) /* 2 is rightmost, set lowest start, fix size, and read next r1 */
 	    {
-	    r[i].start = max(r1->start,r2->start);
-	    r[i].size = r1end - r[i].start;
-	    size += r[i].size;
+	    int start = max(r1->start,r2->start);
+	    int l = r1end-start;
+            if(pBed)
+                {
+		struct bed *b;
+                lmAllocVar(lm, b);
+                b->chrom = chrom;
+                b->chromStart = start;
+                b->chromEnd = r1end;
+                slAddHead(&bList, b);
+                }
+	    if (r)
+		{
+		r[i].start = start;
+		r[i].size = l;
+		}
+	    totSize += l;
 	    ++i;
 	    --n1;
 	    ++r1;
 	    }
 	else /* 1 and 2 both end on same base, write out smallest one, and read both */
 	    {
-	    r[i].start = max(r1->start,r2->start);
-            r[i].size = r1end - r[i].start;
-            size += r[i].size;
+            int start = max(r1->start,r2->start);
+            int l = r1end-start;
+            if(pBed)
+                {
+		struct bed *b;
+                lmAllocVar(lm, b);
+                b->chrom = chrom;
+                b->chromStart = start;
+                b->chromEnd = r1end;
+                slAddHead(&bList, b);
+                }
+	    if (r)
+		{
+		r[i].start = start;
+		r[i].size = l;
+		}
+            totSize += l;
             ++i;
 	    --n1;
 	    ++r1;
@@ -298,33 +393,53 @@ while ( n1 > 0 && n2 > 0)
 	}
     }
 *n = i;
-if (*n == 0) /* if no results, free this memory */
+if (r && *n == 0) /* if no results, free this memory */
     freez(&r);
-else if (saveMem && *n < rSize/2) /* we seriously overestimated mem reqts so free it up */
+else if (r && saveMem && *n < rSize/2) /* we seriously overestimated mem reqts so free it up */
     {
     struct rangeStartSize *r0 = CloneArray(r, *n);
     freez(&r);
     r = r0;
     }
-*pRange = r;
-return size;
+if (pBed)
+    {
+    slReverse(&bList);
+    *pBed = bList;
+    }
+if (pRange)
+    *pRange = r;
+return totSize;
 }
 
-unsigned rangeTreeFileUnion(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, int *n, boolean saveMem)
+unsigned rangeTreeFileUnion(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, boolean saveMem, struct bed **pBed, char *chrom, struct lm *lm, int *n)
 /* Create union of array of 'n1' ranges (start,size) in r1 with 
- * 'n2' ranges in r2, saving them in array r and returning 
- * the number of merged ragnes in n. 
- * Note that the ranges are as stored on disk (start,size)
+ * 'n2' ranges (start,size) in r2.
+ * If pRange is not null, the ranges are saved into an allocated array 'r' 
+ * and then returned in *pRange. 
+ * Note that the ranges in *pRange are as stored on disk (start,size), 
  * not as in the rangeTree (start,end).
- * Free array with freez(&r)
- * Returns total size of ranges in r. */
+ * If saveMem is true, tries to shrink size of array r before returning it.
+ * Free array with freez(&r).
+ * If pBed is not null, the ranges are saved as a list of bed records
+ * and returned in *pBed. The bed->chrom field is set to chrom. Memory 
+ * for bed records is allocated from lm. Free using lmCleanup.
+ * The number of merged ranges is stored in n.
+ * If no ranges, returns NULL in *pRange and *pBed.
+ * Returns total size of ranges in intersection or zero if none. */
 {
-int r1end, r2end;
-unsigned size = 0;
+int r1end, r2end, i = 0; 
+unsigned totSize = 0;
 struct rangeStartSize *r = NULL;
-int i = 0;
 int rSize = n1 + n2; /* worst case these dont overlap at all */
-AllocArray(r, rSize);
+struct bed *bList = NULL;
+if (pBed && !lm)
+    errAbort("specify localmem when requesting bed output");
+if (pBed && !chrom)
+    errAbort("specify chrom when requesting bed output");
+if (pRange)     
+    {           
+    AllocArray(r, rSize);
+    }       
 /* loop around merging while we have ranges in both lists */
 while ( n1 > 0 && n2 > 0)
     {
@@ -333,18 +448,42 @@ while ( n1 > 0 && n2 > 0)
     /* check which should be merged or output */
     if ( r1end <= r2->start ) /* r1 is upstream, write it and get next one */
 	{
-	r[i].start = r1->start;
-	r[i].size = r1->size;
-	size += r[i].size;
+        if(pBed)
+            {
+            struct bed *b;
+            lmAllocVar(lm, b);
+            b->chrom = chrom;
+            b->chromStart = r1->start;
+            b->chromEnd = r1->start+r1->size;
+            slAddHead(&bList, b);
+            }
+	if (r)
+	    {
+	    r[i].start = r1->start;
+	    r[i].size = r1->size;
+	    }
+	totSize += r1->size;
 	++i;
 	--n1;
 	++r1;
 	}
     else if (r2end <= r1->start) /* r2 is upstream, write it and get next one */
 	{
-	r[i].start = r2->start;
-	r[i].size = r2->size;
-	size += r[i].size;
+        if(pBed)
+            {
+            struct bed *b;
+            lmAllocVar(lm, b);
+            b->chrom = chrom;
+            b->chromStart = r2->start;
+            b->chromEnd = r2->start+r2->size;
+            slAddHead(&bList, b);
+            }
+	if (r)
+	    {
+	    r[i].start = r2->start;
+	    r[i].size = r2->size;
+	    }
+	totSize += r2->size;
 	++i;
 	--n2;
 	++r2;
@@ -381,15 +520,39 @@ while ( n1 > 0 && n2 > 0)
 	    {
 	    if (r1->start <= r2->start)
 		{
-		r[i].start = r1->start;
-		r[i].size = r1->size;
-		size += r[i].size;
+		if(pBed)
+		    {
+		    struct bed *b;
+		    lmAllocVar(lm, b);
+		    b->chrom = chrom;
+		    b->chromStart = r1->start;
+		    b->chromEnd = r1->start+r1->size;
+		    slAddHead(&bList, b);
+		    }
+		if (r)
+		    {
+		    r[i].start = r1->start;
+		    r[i].size = r1->size;
+		    }
+		totSize += r1->size;
 		}
 	    else
 		{
-		r[i].start = r2->start;
-		r[i].size = r2->size;
-		size += r[i].size;
+                if(pBed)
+                    {
+                    struct bed *b;
+                    lmAllocVar(lm, b);
+                    b->chrom = chrom;
+                    b->chromStart = r2->start;
+                    b->chromEnd = r2->start+r2->size;
+                    slAddHead(&bList, b);
+                    }
+		if (r)
+		    {
+		    r[i].start = r2->start;
+		    r[i].size = r2->size;
+		    }
+		totSize += r2->size;
 		}
 	    ++i;
 	    --n1;
@@ -402,18 +565,42 @@ while ( n1 > 0 && n2 > 0)
 /* write out any remaining nodes that are either in n1 or n2 */
 while (n1)
     {
-    r[i].start = r1->start;
-    r[i].size = r1->size;
-    size += r[i].size;
+    if(pBed)
+        {
+        struct bed *b;
+        lmAllocVar(lm, b);
+        b->chrom = chrom;
+        b->chromStart = r1->start;
+        b->chromEnd = r1->start+r1->size;
+        slAddHead(&bList, b);
+        }
+    if (r)
+	{
+	r[i].start = r1->start;
+	r[i].size = r1->size;
+	}
+    totSize += r1->size;
     ++i;
     --n1;
     ++r1;
     }
 while (n2)
     {
-    r[i].start = r2->start;
-    r[i].size = r2->size;
-    size += r[i].size;
+    if(pBed)
+        {
+        struct bed *b;
+        lmAllocVar(lm, b);
+        b->chrom = chrom;
+        b->chromStart = r2->start;
+        b->chromEnd = r2->start+r2->size;
+        slAddHead(&bList, b);
+        }
+    if (r)
+	{
+	r[i].start = r2->start;
+	r[i].size = r2->size;
+	}
+    totSize += r2->size;
     ++i;
     --n2;
     ++r2;
@@ -427,8 +614,14 @@ else if (saveMem && i < rSize/2) /* we seriously overestimated mem reqts so free
     r = r0;
     }
 *n = i;
-*pRange = r;
-return size;
+if (pBed)
+    {
+    slReverse(&bList);
+    *pBed = bList;
+    }
+if (pRange)
+    *pRange = r;
+return totSize;
 }
 
 

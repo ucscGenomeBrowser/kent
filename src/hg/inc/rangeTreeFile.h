@@ -6,6 +6,10 @@
 #ifndef RANGETREEFILE_H
 #define RANGETREEFILE_H
 
+#ifndef BED_H
+#include "bed.h"
+#endif
+
 #ifndef RANGETREE_H
 #include "rangeTree.h"
 #endif
@@ -31,6 +35,12 @@ void rangeReadArray(FILE *f, struct rangeStartSize *r, int n, boolean isSwapped)
 
 void rangeWriteArray(struct rangeStartSize *r, int n, FILE *f);
 /* Write 'n' elements of range array (start,size) to file 'f'. */
+
+void rangeWriteArrayToBed(char *chrom, struct rangeStartSize *r, int n, boolean withId, boolean mergeAdjacent, FILE *f);
+/* Write 'n' elements of range array (start,size) to file 'f' in bed format.
+ * If withId then adds an id in the name field in the format 'chrom.N' .
+ * If mergeAdjacent then any ranges which are adjacent, and would otherwise appear 
+ * on multiple bed lines, are merged into a single bed line. */
 
 unsigned rangeArraySize(struct rangeStartSize *r, int n);
 /* calculate the total size of the array */
@@ -94,23 +104,37 @@ int rangeTreeSizeInFileWithVal(struct rbTree *tree, int (*rangeValSizeInFile)(vo
  * rangeValSizeInFile should refer to a function which calculates the size of the val 
  * in a binary file. Not called if null. */
 
-unsigned rangeTreeFileIntersection(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, int *n, boolean saveMem);
+unsigned rangeTreeFileIntersection(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, boolean saveMem, struct bed **pBed, char *chrom, struct lm *lm, int *n);
 /* Create intersection of array of 'n1' ranges (start,size) in r1 with 
- * 'n2' ranges in r2, saving them in array r and returning 
- * the number of merged ranges in n.
- * Note that the ranges are as stored on disk (start,size), 
+ * 'n2' ranges (start,size) in r2.
+ * If pRange is not null, the ranges are saved into an allocated array 'r' 
+ * and then returned in *pRange. 
+ * Note that the ranges in *pRange are as stored on disk (start,size), 
  * not as in the rangeTree (start,end).
- * Free array with freez(&r)
- * Returns total size of ranges in r. */
+ * If saveMem is true, tries to shrink size of array r before returning it.
+ * Free array with freez(&r).
+ * If pBed is not null, the ranges are saved as a list of bed records
+ * and returned in *pBed. The bed->chrom field is set to chrom. Memory 
+ * for bed records is allocated from lm. Free using lmCleanup.
+ * The number of merged ranges is stored in n.
+ * If no ranges, returns NULL in *pRange and *pBed.
+ * Returns total size of ranges in intersection or zero if none. */
 
-unsigned rangeTreeFileUnion(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, int *n, boolean saveMem);
+unsigned rangeTreeFileUnion(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, struct rangeStartSize **pRange, boolean saveMem, struct bed **pBed, char *chrom, struct lm *lm, int *n);
 /* Create union of array of 'n1' ranges (start,size) in r1 with 
- * 'n2' ranges in r2, saving them in array r and returning 
- * the number of merged ragnes in n. 
- * Note that the ranges are as stored on disk (start,size)
+ * 'n2' ranges (start,size) in r2.
+ * If pRange is not null, the ranges are saved into an allocated array 'r' 
+ * and then returned in *pRange. 
+ * Note that the ranges in *pRange are as stored on disk (start,size), 
  * not as in the rangeTree (start,end).
- * Free array with freez(&r)
- * Returns total size of ranges in r. */
+ * If saveMem is true, tries to shrink size of array r before returning it.
+ * Free array with freez(&r).
+ * If pBed is not null, the ranges are saved as a list of bed records
+ * and returned in *pBed. The bed->chrom field is set to chrom. Memory 
+ * for bed records is allocated from lm. Free using lmCleanup.
+ * The number of merged ranges is stored in n.
+ * If no ranges, returns NULL in *pRange and *pBed.
+ * Returns total size of ranges in intersection or zero if none. */
 
 unsigned rangeTreeFileUnionToFile(struct rangeStartSize *r1, struct rangeStartSize *r2, int n1, int n2, FILE *of, int *n);
 /* Create union of array of 'n1' ranges (start,size) in r1 with 

@@ -334,7 +334,7 @@ while (c1 && c2) /* at least one chrom in each tree */
 	else
 	    {
 	    struct rangeStartSize *r=NULL;
-	    s0 = rangeTreeFileUnion(r1, r2, nodes1, nodes2, &r, &n0, saveMem);
+	    s0 = rangeTreeFileUnion(r1, r2, nodes1, nodes2, &r, saveMem, NULL, NULL, NULL, &n0);
 	    if (tf->file && n0 > 0)
 		{
 		rangeWriteArray(r, n0, tf->file);
@@ -484,8 +484,7 @@ while (c1 && c2) /* at least one chrom in each tree */
 	unsigned s0;
 	int n0=0;
 	struct rangeStartSize *r = NULL;
-	s0 = rangeTreeFileIntersection(r1, r2, nodes1, nodes2, &r, &n0, saveMem);
-	//MJP : bed stuff: s0 = rangeTreeFileIntersection(r1, r2, nodes1, nodes2, &r, saveMem, NULL, NULL, NULL, &n0);
+	s0 = rangeTreeFileIntersection(r1, r2, nodes1, nodes2, &r, saveMem, NULL, NULL, NULL, &n0);
 	/* if non-null intersection then remember chrom, array of ranges and number of nodes */
 	if (n0>0)
 	    {
@@ -584,5 +583,27 @@ if (fseek(tf->file, hashIntVal(tf->offset, chrom), SEEK_SET) != 0)
     errnoAbort("could not seek to pos %d in chrom %s in file %s\n", 
 	hashIntVal(tf->offset, chrom), chrom, tf->name);
 return hashIntVal(tf->nodes, chrom);
+}
+
+void genomeRangeTreeFileWriteToBed(char *inBama, char *bedFile, boolean withId, boolean mergeAdjacent)
+/* Write a genomeRangeTreeFile directly to a bed file.
+ * If withId then unique identifier is added to the name field.
+ * If mergeAdjacent then adjacent ranges, which would otherwise appear on individual lines,
+ * are merged into a single bed line. */
+{
+struct genomeRangeTreeFile *tf = genomeRangeTreeFileReadHeader(inBama);
+FILE *f = mustOpen(bedFile,"w");
+struct hashEl *chrom;
+for (chrom = tf->chromList ; chrom ; chrom = chrom->next)
+    {
+    struct rangeStartSize *r;
+    int n = hashIntVal(tf->nodes, chrom->name);
+    AllocArray(r, n);
+    rangeReadArray(tf->file, r, n, tf->isSwapped);
+    rangeWriteArrayToBed(chrom->name, r, n, withId, mergeAdjacent, f);
+    freez(&r);
+    }
+carefulClose(&f);
+genomeRangeTreeFileFree(&tf);
 }
 

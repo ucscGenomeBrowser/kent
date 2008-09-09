@@ -134,6 +134,11 @@ int genomeRangeTreeFileChromSeek(struct genomeRangeTreeFile *tf, char *chrom);
  * and returns 0 for number of nodes.
  */
 
+void genomeRangeTreeFileWriteToBed(char *inBama, char *bedFile, boolean withId, boolean mergeAdjacent);
+/* Write a genomeRangeTreeFile directly to a bed file.
+ * If withId then unique identifier is added to the name field.
+ * If mergeAdjacent then adjacent ranges, which would otherwise appear on individual lines, * are merged into a
+ * single bed line. */
 
 #endif /* GENOMERANGETREEFILE_H */
 
