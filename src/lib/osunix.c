@@ -11,9 +11,9 @@
 #include <termios.h>
 #include "portable.h"
 #include "portimpl.h"
-#include "wait.h"
+#include <sys/wait.h>
 
-static char const rcsid[] = "$Id: osunix.c,v 1.33 2008/09/03 19:21:41 markd Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.34 2008/09/09 04:17:39 markd Exp $";
 
 
 off_t fileSize(char *pathname)
