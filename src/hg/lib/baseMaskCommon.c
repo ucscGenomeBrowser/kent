@@ -12,7 +12,7 @@ static struct chromInfo *createChromInfoList(char *name, char *database)
 /* Load up all chromosome information. 
  * Similar to featureBits.c - maybe could be moved to library ? */
 {
-struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int loaded=0;
@@ -48,7 +48,7 @@ if (sameWord(name, "all"))
     verbose(2, "#\tloaded size info for %d chroms, total size: %u\n",
         loaded, totalSize);
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 return ret;
 }
 
@@ -59,7 +59,7 @@ static char *chromTable(char *db, char *table, char *chromDb)
 char *realTable;
 struct sqlConnection *sc = hAllocConn(chromDb);
 char *chrom = hDefaultChrom(chromDb);
-sqlDisconnect(&sc);
+hFreeConn(&sc);
 sc = hAllocConn(db);
 if (sqlTableExists(sc, table))
     {
@@ -71,7 +71,7 @@ else
     safef(buf, sizeof(buf), "%s_%s", chrom, table);
     realTable = cloneString(buf);
     }
-sqlDisconnect(&sc);
+hFreeConn(&sc);
 return realTable;
 }
 
@@ -129,7 +129,7 @@ else
 if (time <= 0)
     errAbort("invalid table update time (%d)\n", (int)time);
 freeMem(realTable);
-sqlDisconnect(&sc);
+hFreeConn(&sc);
 return time;
 }
 
@@ -238,7 +238,7 @@ if (obama)
     genomeRangeTreeWrite(tree, obama); /* write the tree out */
 genomeRangeTreeFree(&tree);
 slFreeList(&ciList);
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 }
 
 char *baseMaskCacheTrack(char *cacheDir, char *chromDb, char *db, char *table, boolean quiet, boolean logUpdateTimes)
