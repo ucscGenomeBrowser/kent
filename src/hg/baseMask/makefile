@@ -10,19 +10,19 @@ B = cachedMask trackToBaseMask bedToBaseMask baseMaskToBed baseMask
 
 all: $B
 
-cachedMask: cachedMaskUsage.msg cachedMask.o ${MYLIBS} 
+cachedMask: ${MYLIBS} cachedMaskUsage.msg cachedMask.o 
 	${CC} ${COPT} ${CFLAGS} ${XINC} -o cachedMask cachedMask.o ${MYLIBS} ${MYSQLLIBS} $L
 
-trackToBaseMask: trackToBaseMaskUsage.msg trackToBaseMask.o ${MYLIBS} 
+trackToBaseMask: ${MYLIBS} trackToBaseMaskUsage.msg trackToBaseMask.o
 	${CC} ${COPT} ${CFLAGS} -o trackToBaseMask trackToBaseMask.o ${MYLIBS} ${MYSQLLIBS} $L
 
-bedToBaseMask: bedToBaseMaskUsage.msg bedToBaseMask.o ${MYLIBS} 
+bedToBaseMask: ${MYLIBS} bedToBaseMaskUsage.msg bedToBaseMask.o
 	${CC} ${COPT} ${CFLAGS} -o bedToBaseMask bedToBaseMask.o ${MYLIBS} ${MYSQLLIBS} $L
 
-baseMaskToBed: baseMaskToBedUsage.msg baseMaskToBed.o ${MYLIBS} 
+baseMaskToBed: ${MYLIBS} baseMaskToBedUsage.msg baseMaskToBed.o
 	${CC} ${COPT} ${CFLAGS} -o baseMaskToBed baseMaskToBed.o ${MYLIBS} ${MYSQLLIBS} $L
 
-baseMask: baseMaskUsage.msg baseMask.o ${MYLIBS} 
+baseMask: ${MYLIBS} baseMaskUsage.msg baseMask.o
 	${CC} ${COPT} ${CFLAGS} -o baseMask baseMask.o ${MYLIBS} ${MYSQLLIBS} $L
 
 
