@@ -14,7 +14,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat2.txt,v 1.6 2008/09/08 21:11:20 hiram Exp $"
+#	"$Id: oryLat2.txt,v 1.7 2008/09/09 18:34:06 hiram Exp $"
 #
 ###########################################################################
 
@@ -158,7 +158,7 @@ nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^MT/chrM/"
 	-buildDir=/cluster/data/oryLat2/bed/repeatMasker \
 	-bigClusterHub=pk -smallClusterHub=memk > do.log 2>&1
     #	RM version from the log:
-    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.6 2008/09/08 21:11:20 hiram Exp $
+    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.7 2008/09/09 18:34:06 hiram Exp $
     #	CC   RELEASE 20080801
     #   about 40 minutes run time
 
@@ -1624,5 +1624,50 @@ and genbank tables) which tracks to assign these tables to:
     cd /tmp
     hgsql qapushq < oryLat2.pushQ.sql
     #	manually add the entry for the 5way business
+
+#############################################################################
+#  Create 5-way downloads (DONE - 2008-09-09 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/oryLat2/goldenPath/multiz5way
+    mkdir /cluster/data/oryLat2/goldenPath/phastCons5way
+    cd /cluster/data/oryLat2/goldenPath/phastCons5way
+    ln -s ../../bed/multiz5way/cons/all/phastCons5wayScores/*.txt.gz .
+    ln -s ../../bed/multiz5way/cons/ave.cons.mod 5way.conserved.mod
+    ln -s ../../bed/multiz5way/cons/ave.noncons.mod 5way.non-conserved.mod
+    md5sum *.gz *.mod > md5sum.txt
+
+    #	copy a README and fix it up for here:
+    cp /usr/local/apache/htdocs/goldenPath/oryLat1/phastCons5Scores/README.txt .
+
+    mkdir /cluster/data/oryLat2/goldenPath/multiz5way
+    cd /cluster/data/oryLat2/goldenPath/multiz5way
+    ln -s ../../bed/multiz5way/mafDownloads/* .
+    ln -s ../../bed/multiz5way/5way.nh ./oryLat2.5way.nh
+
+    #	check the names in these upstream files to ensure sanity:
+    zcat upstream1000.maf.gz | grep "^s " | awk '{print $2}' \
+	| sort | uniq -c | sort -rn | less
+    #	should be a list of the other 4 species with a high count,
+    #	then Ensembl gene names, e.g.:
+    #	4558 tetNig1
+    #	4558 gasAcu1
+    #	4558 fr2
+    #	4558 danRer5
+    #	1 ENSORLT00000025880
+    #	1 ENSORLT00000025875
+    #	1 ENSORLT00000025852
+    #	... etc ...
+
+    ssh hgwdev
+    cd /cluster/data/oryLat2/goldenPath/phastCons5way
+    mkdir /usr/local/apache/htdocs/goldenPath/oryLat2/phastCons5way
+    ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/oryLat2/phastCons5way
+
+    cd /cluster/data/oryLat2/goldenPath/multiz5way
+    mkdir /usr/local/apache/htdocs/goldenPath/oryLat2/multiz5way
+
+    ln -s `pwd`/* /usr/local/apache/htdocs/goldenPath/oryLat2/multiz5way
+    #	if your ln -s `pwd`/* made extra links to files you don't want there,
+    #	check the goldenPath locations and remove those extra links
 
 #############################################################################
