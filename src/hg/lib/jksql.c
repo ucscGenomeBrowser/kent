@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.118 2008/09/09 15:00:46 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.119 2008/09/09 23:13:18 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -51,7 +51,9 @@ struct sqlConnection
     struct dlNode *node;	    /* Pointer to list node. */
     struct dlList *resultList;	    /* Any open results. */
     boolean hasHardLock;	    /* TRUE if table has a non-advisory lock. */
-    boolean inCache;                /* debugging flag to indicate its in a cache */
+    boolean inCache;                /* debugging flag to indicate it's in a cache */
+    boolean isFree;                /* is this connection free for reuse; alway FALSE
+                                    * unless managed by a cache */
     };
 
 struct sqlResult
@@ -422,6 +424,7 @@ if (sc != NULL)
     {
     if (sc->inCache)
         errAbort("sqlDisconnect called on connection associated with a cache");
+    assert(!sc->isFree);
     MYSQL *conn = sc->conn;
     struct dlList *resList = sc->resultList;
     struct dlNode *node = sc->node;
@@ -461,6 +464,7 @@ if (sc != NULL)
 char* sqlGetDatabase(struct sqlConnection *sc)
 /* Get the database associated with an connection. */
 {
+assert(!sc->isFree);
 return sc->conn->db;
 }
 
@@ -742,6 +746,7 @@ static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,
 /* Returns NULL if result was empty.  Otherwise returns a structure
  * that you can do sqlRow() on. */
 {
+assert(!sc->isFree);
 MYSQL *conn = sc->conn;
 struct sqlResult *res = NULL;
 long deltaTime;
@@ -1083,6 +1088,7 @@ void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
 /* Load a tab-seperated file into a database table, checking for errors. 
  * Options are the SQL_TAB_* bit set. */
 {
+assert(!conn->isFree);
 char tabPath[PATH_LEN];
 char query[PATH_LEN+256];
 int numScan, numRecs, numSkipped, numWarnings;
@@ -1540,6 +1546,7 @@ return list;
 unsigned int sqlLastAutoId(struct sqlConnection *conn)
 /* Return last automatically incremented id inserted into database. */
 {
+assert(!conn->isFree);
 unsigned id;
 monitorEnter();
 id = mysql_insert_id(conn->conn);
@@ -1615,6 +1622,7 @@ if ((cache = *pCache) != NULL)
     for (scce = cache->entries; scce != NULL; scce = scce->next)
         {
         scce->conn->inCache = FALSE;
+        scce->conn->isFree = FALSE;
 	sqlDisconnect(&scce->conn);
         }
     slFreeList(&cache->entries);
@@ -1635,6 +1643,7 @@ AllocVar(scce);
 scce->profile = profile;
 scce->conn = conn;
 conn->inCache = TRUE;
+conn->isFree = TRUE;
 slAddHead(&cache->entries, scce);
 cache->entryCnt++;
 return scce;
@@ -1670,7 +1679,9 @@ for (scce = cache->entries; scce != NULL; scce = scce->next)
     {
     if (!scce->inUse && (profile == scce->profile)
         && ((!matchDatabase) || sqlConnCacheEntryDbMatch(scce, database)))
+        {
         return scce;
+        }
     }
 return NULL;
 }
@@ -1689,7 +1700,13 @@ if (cache->host != NULL)
                          cache->password, database, abort);
 else
     conn = sqlConnProfile(profile, database, abort);
-return sqlConnCacheAdd(cache, profile, conn);
+if (conn != NULL)
+    return sqlConnCacheAdd(cache, profile, conn);
+else 
+    {
+    assert(!abort);
+    return NULL;
+    }
 }
 
 static struct sqlConnection *sqlConnCacheDoAlloc(struct sqlConnCache *cache,
@@ -1725,8 +1742,15 @@ if (scce == NULL)
     else
         scce = sqlConnCacheAddNew(cache, profile, database, abort);
     }
-scce->inUse = TRUE;
-return scce->conn;
+if (scce != NULL)
+    {
+    assert(scce->conn->isFree);
+    scce->inUse = TRUE;
+    scce->conn->isFree = FALSE;
+    return scce->conn;
+    }
+else
+    return NULL;
 }
 
 struct sqlConnection *sqlConnCacheMayAlloc(struct sqlConnCache *cache,
@@ -1760,6 +1784,8 @@ if (conn != NULL)
     {
     if (!conn->inCache)
         errAbort("sqlConnCacheDealloc called on connection that is not associated with a cache");
+    assert(!conn->isFree);
+    conn->isFree = TRUE;
     struct sqlConnCacheEntry *scce;
     for (scce = cache->entries; (scce != NULL) && (scce->conn != conn); scce = scce->next)
         continue;
