@@ -258,15 +258,21 @@ char *hExtFileName(char *db, char *extFileTable, unsigned extFileId);
  * are done with it. */
 
 struct dnaSeq *hDnaSeqGet(char *db, char *acc, char *seqTbl, char *extFileTbl);
-/* Get a cDNA or DNA sequence from the specified seq and extFile
- * tables. Return NULL if not found. */
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables.  The
+ * seqTbl/extFileTbl arguments may include the database, in which case they
+ * override what is in db (which could even be NULL). Return NULL if not
+ * found. */
 
 struct dnaSeq *hDnaSeqMustGet(char *db, char *acc, char *seqTbl, char *extFileTbl);
-/* Get a cDNA or DNA sequence from the specified seq and extFile tables.
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables.  The
+ * seqTbl/extFileTbl arguments may include the database, in which case they
+ * override what is in db (which could even be NULL).
  * Abort if not found. */
 
 aaSeq *hPepSeqGet(char *db, char *acc, char *seqTbl, char *extFileTbl);
-/* Get a peptide sequence from the specified seq and extFile tables. Return
+/* Get a peptide sequence from the specified seq and extFile tables.   The
+ * seqTbl/extFileTbl arguments may include the database, in which case they
+ * override what is in db (which could even be NULL). Return
  * NULL if not found. */
 
 aaSeq *hPepSeqMustGet(char *db, char *acc, char *seqTbl, char *extFileTbl);

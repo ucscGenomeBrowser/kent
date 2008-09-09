@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.373 2008/09/03 20:33:49 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.374 2008/09/09 21:02:55 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1136,12 +1136,38 @@ if (read(fd, buf, size) < size)
 return buf;
 }
 
+static char *dbTblParse(char *defaultDb, char *tbl, char **tblRet,
+                        char *buf, int bufSize)
+/* Check if tbl contains db, if so, then split it and the database and table,
+ * returning the database. If a db isn't encoded, return defaultDb and tbl unchanged, or abort if
+ * defaultDb is NULL.  buf must be big enough to hold the database. */
+{
+char *dot = strchr(tbl, '.');
+if (dot == NULL)
+    {
+    if (defaultDb == NULL)
+        errAbort("no default database and no database specified with table %s", tbl);
+    *tblRet = tbl;
+    return defaultDb;
+    }
+else
+    {
+    safencpy(buf, bufSize, tbl, (dot-tbl));
+    *tblRet = dot+1;
+    return buf;
+    }
+}
+
 static bioSeq *seqGet(char *db, char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
-/* Return sequence from the specified seq and extFile tables. NULL if not
+/* Return sequence from the specified seq and extFile tables.   The
+ * seqTbl/extFileTbl arguments may include the database, in which case they
+ * override what is in db (which could even be NULL). NULL if not
  * found. */
 {
- struct sqlConnection *conn = hAllocConn(db);
 /* look up sequence */
+char dbBuf[64];
+char *seqDb = dbTblParse(db, seqTbl, &seqTbl, dbBuf, sizeof(dbBuf));
+struct sqlConnection *conn = hAllocConn(seqDb);
 char query[256];
 safef(query, sizeof(query),
       "select extFile,file_offset,file_size from %s where acc = '%s'",
@@ -1154,12 +1180,15 @@ if (row == NULL)
     hFreeConn(&conn);
     return NULL;
     }
-/* look up extFile */ 
 HGID extId = sqlUnsigned(row[0]);
 off_t offset = sqlLongLong(row[1]);
 size_t size = sqlUnsigned(row[2]);
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 
+/* look up extFile */ 
+char *extDb = dbTblParse(db, extFileTbl, &extFileTbl, dbBuf, sizeof(dbBuf));
+conn = hAllocConn(extDb);
 struct largeSeqFile *lsf = largeFileHandle(conn, extId, extFileTbl);
 char *buf = readOpenFileSection(lsf->fd, offset, size, lsf->path, acc);
 hFreeConn(&conn);
@@ -1167,8 +1196,10 @@ return faSeqFromMemText(buf, isDna);
 }
 
 static bioSeq *seqMustGet(char *db, char *acc, boolean isDna, char *seqTbl, char *extFileTbl)
-/* Return sequence from the specified seq and extFile tables.
- * Return Abort if not found. */
+/* Return sequence from the specified seq and extFile tables.  The
+ * seqTbl/extFileTbl arguments may include the database, in which case they
+ * override what is in db (which could even be NULL).  Return Abort if not
+ * found. */
 {
 bioSeq *seq = seqGet(db, acc, isDna, seqTbl, extFileTbl);
 if (seq == NULL)
@@ -1177,28 +1208,36 @@ return seq;
 }
 
 struct dnaSeq *hDnaSeqGet(char *db, char *acc, char *seqTbl, char *extFileTbl)
-/* Get a cDNA or DNA sequence from the specified seq and extFile
- * tables. Return NULL if not found. */
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables.  The
+ * seqTbl/extFileTbl arguments may include the database, in which case they
+ * override what is in db (which could even be NULL). Return NULL if not
+ * found. */
 {
 return seqGet(db, acc, TRUE, seqTbl, extFileTbl);
 }
 
 struct dnaSeq *hDnaSeqMustGet(char *db, char *acc, char *seqTbl, char *extFileTbl)
-/* Get a cDNA or DNA sequence from the specified seq and extFile tables.
+/* Get a cDNA or DNA sequence from the specified seq and extFile tables.  The
+ * seqTbl/extFileTbl arguments may include the database, in which case they
+ * override what is in db (which could even be NULL).
  * Abort if not found. */
 {
 return seqMustGet(db, acc, TRUE, seqTbl, extFileTbl);
 }
 
 aaSeq *hPepSeqGet(char *db, char *acc, char *seqTbl, char *extFileTbl)
-/* Get a peptide sequence from the specified seq and extFile tables. Return
+/* Get a peptide sequence from the specified seq and extFile tables.   The
+ * seqTbl/extFileTbl arguments may include the database, in which case they
+ * override what is in db (which could even be NULL). Return
  * NULL if not found. */
 {
 return seqGet(db, acc, FALSE, seqTbl, extFileTbl);
 }
 
 aaSeq *hPepSeqMustGet(char *db, char *acc, char *seqTbl, char *extFileTbl)
-/* Get a peptide sequence from the specified seq and extFile tables. Abort if
+/* Get a peptide sequence from the specified seq and extFile tables.  The
+ * seqTbl/extFileTbl arguments may include the database, in which case they
+ * override what is in db (which could even be NULL). Abort if
  * not found. */
 {
 return seqMustGet(db, acc, FALSE, seqTbl, extFileTbl);
