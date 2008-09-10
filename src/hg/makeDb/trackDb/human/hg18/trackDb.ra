@@ -1541,7 +1541,7 @@ compositeTrack on
 shortLabel UU ChIP Signal
 longLabel Uppsala University ChIP-chip Signal
 group regulation
-priority 0
+priority 300
 visibility hide
 type wig -1.9 4.23
 spanList 1
@@ -1578,7 +1578,7 @@ compositeTrack on
 shortLabel UU ChIP Sites
 longLabel Uppsala University ChIP-chip Sites
 group regulation
-priority 0
+priority 300
 type bed 3
 
     track uppsalaChipH3acSites
@@ -1616,7 +1616,7 @@ compositeTrack on
 shortLabel Affy Tx lRNA Reg
 longLabel Affymetrix Transcriptome Phase 3 Long RNA Fragments
 group expression
-priority 0
+priority 300
 origAssembly hg17
 type bed 3 .
 
@@ -1688,7 +1688,7 @@ longLabel Affymetrix Transcriptome Phase 3 Long RNA Signal
 group expression
 defaultViewLimits 0:150
 autoScaleDefault Off
-priority 0
+priority 300
 origAssembly hg17
 maxHeightPixels 100:30:10
 canPack off
@@ -1760,7 +1760,7 @@ compositeTrack on
 shortLabel Affy Tx sRNA Reg
 longLabel Affymetrix Transcriptome Phase 3 Short RNA Fragments
 group expression
-priority 98.3
+priority 300
 origAssembly hg17
 type bed 3 .
 
@@ -1796,7 +1796,7 @@ longLabel Affymetrix Transcriptome Phase 3 Short RNA Signal
 group expression
 defaultViewLimits 0:150
 autoScaleDefault Off
-priority 98.4
+priority 300
 origAssembly hg17
 maxHeightPixels 100:30:10
 canPack off
@@ -2865,7 +2865,7 @@ superTrack laminB1Super dense
 shortLabel  NKI LADs (Tig3)
 longLabel NKI LADs (Lamina Associated Domains, Tig3 cells)
 group regulation
-priority 0
+priority 300
 visibility hide
 color 0,0,127
 type bed 3
@@ -2875,7 +2875,7 @@ superTrack laminB1Super dense
 shortLabel LaminB1 (Tig3)
 longLabel NKI LaminB1 DamID Map (log2-ratio scores, Tig3 cells)
 group regulation
-priority 0
+priority 300
 visibility hide
 color 0,0,127
 maxHeightPixels 100:40:11
@@ -2913,7 +2913,7 @@ priority 300
     shortLabel Nucl Occ: A375
     longLabel UW Predicted Nucleosome Occupancy - A375
     group regulation
-    priority 0
+    priority 300
     visibility hide
     type wig -10 10
 
@@ -2922,7 +2922,7 @@ priority 300
     shortLabel Nucl Occ: Dennis
     longLabel UW Predicted Nucleosome Occupancy - Dennis
     group regulation
-    priority 0
+    priority 300
     visibility hide
     type wig -10 10
 
@@ -2931,7 +2931,7 @@ priority 300
     shortLabel Nucl Occ: MEC
     longLabel UW Predicted Nucleosome Occupancy - MEC
     group regulation
-    priority 0
+    priority 300
     visibility hide
     type wig -10 10
 

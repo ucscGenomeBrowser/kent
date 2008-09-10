@@ -2,23 +2,15 @@
 
 # GIS RNA and Chip-PET
 
-        track wgEncodeGisSuper
-        superTrack on
-        shortLabel GIS PET
-        longLabel Gene Identification Signature Paired-End Tags 
-        group regulation
-        priority 95.1
-
 track wgEncodeGisRnaPet
-superTrack wgEncodeGisSuper dense
 compositeTrack on
 shortLabel GIS PET RNA
 dataVersion ENCODE Oct 2005 Freeze
 longLabel Gene Identification Signature Paired-End Tags of PolyA+ RNA
-group regulation
+group expression
 # NOTE: genome-wide, except randoms and chrY
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrM
-priority 95.1
+priority 0
 itemRgb on
 type bed 12
 origAssembly hg17
@@ -54,12 +46,11 @@ origAssembly hg17
     color 50,100,50
 
 track wgEncodeGisChipPetAll
-superTrack wgEncodeGisSuper dense
 compositeTrack on
 shortLabel GIS ChIP-PET
 longLabel GIS ChIP-PET
 group regulation
-priority 95.2
+priority 0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 useScore 1
 type bed 12
@@ -126,7 +117,7 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006, Aug 2007
         group regulation
         shortLabel LI/UCSD TAF1
         longLabel Ludwig Institute/UC San Diego TAF1 Binding in Fibroblasts
-        priority 96.1
+        priority 300
 
 track wgEncodeUcsdNgTaf1Signal
 superTrack wgEncodeUcsdNgTaf1Super dense
@@ -141,7 +132,7 @@ windowingFunction mean
 autoScale off
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
-priority 96.1
+priority 300
 
 track wgEncodeUcsdNgTaf1Sites
 superTrack wgEncodeUcsdNgTaf1Super dense
@@ -152,7 +143,7 @@ group regulation
 type bed 3
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
-priority 96.2
+priority 300
 
     track wgEncodeUcsdNgTaf1KnownSites
     subTrack wgEncodeUcsdNgTaf1Sites
@@ -183,7 +174,7 @@ windowingFunction mean
 autoScale off
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
-priority 96.3
+priority 300
 
     track wgEncodeUcsdNgTaf1ValidH3ac
     subTrack wgEncodeUcsdNgTaf1Valid
@@ -217,7 +208,7 @@ compositeTrack on
 shortLabel Duke DNase
 longLabel ENCODE - Duke DNaseI Hypersensitivity
 group regulation
-priority 510
+priority 0
 type bed 3
 useScore 1
 origAssembly hg18
@@ -273,7 +264,7 @@ dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType factor
-priority	511
+priority	0
 type bed 3
 wgEncode 1
 
