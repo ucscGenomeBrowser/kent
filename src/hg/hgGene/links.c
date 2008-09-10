@@ -10,7 +10,7 @@
 #include "hgGene.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.35 2008/09/03 19:18:50 markd Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.36 2008/09/10 18:29:45 braney Exp $";
 
 struct link
 /* A link to another web site. */
@@ -163,13 +163,14 @@ if (sameString(link->name, "tbSchema"))
     }
 geneId = cloneAndCut(geneId, link->preCutAt);
 safef(query, sizeof(query), link->idSql, geneId);
+
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL && row[0][0] != 0) /* If not null or empty */
     {
     struct dyString *dy = newDyString(0);
     char *name = cloneAndCut(row[0], link->postCutAt);
-    dyStringPrintf(dy, link->url, name, row[1], row[2]);
+    dyStringPrintf(dy, link->url, name, row[1], row[2], row[3]);
     addLinkExtras(link, dy);
     url = dyStringCannibalize(&dy);
     freez(&name);
