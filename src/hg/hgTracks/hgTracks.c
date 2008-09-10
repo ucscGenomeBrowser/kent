@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1506 2008/09/08 18:08:37 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1507 2008/09/10 04:40:49 kate Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -133,7 +133,8 @@ if (dif == 0)
 if (dif < 0)
    return -1;
 else if (dif == 0.0)
-   return -1 * strcasecmp(a->shortLabel, b->shortLabel);
+    /* secondary sort on label */
+    return -1 * strcasecmp(b->shortLabel, a->shortLabel);
 else
    return 1;
 }
@@ -143,23 +144,7 @@ int trackRefCmpPriority(const void *va, const void *vb)
 {
 const struct trackRef *a = *((struct trackRef **)va);
 const struct trackRef *b = *((struct trackRef **)vb);
-float dif = a->track->group->priority - b->track->group->priority;
-
-if (dif == 0)
-    dif = a->track->priority - b->track->priority;
-if (dif < 0)
-    return -1;
-if (dif == 0.0)
-    {
-    /* assure super tracks appear ahead of their members if same pri */
-    if (a->track->tdb && tdbIsSuper(a->track->tdb))
-        return 0;
-    if (b->track->tdb && tdbIsSuper(b->track->tdb))
-        return 1;
-   return 0;
-   }
-else
-   return 1;
+return tgCmpPriority(&a->track, &b->track);
 }
 
 int gCmpPriority(const void *va, const void *vb)
