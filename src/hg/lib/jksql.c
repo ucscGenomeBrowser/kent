@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.119 2008/09/09 23:13:18 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.120 2008/09/10 01:44:54 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -570,6 +570,7 @@ if (sqlOpenConnections)
 	conn = conNode->val;
 	conNext = conNode->next;
         conn->inCache = FALSE; // really should be cleaning up caches too
+        conn->isFree = FALSE;
 	sqlDisconnect(&conn);
 	}
     freeDlList(&sqlOpenConnections);
