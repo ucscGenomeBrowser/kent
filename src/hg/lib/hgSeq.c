@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "hgSeq.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.34 2008/09/03 19:19:24 markd Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.35 2008/09/10 23:10:24 angie Exp $";
 
 int hgSeqChromSize(char *db, char *chromName)
 /* get chrom size if there's a database out there,
@@ -789,6 +789,8 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 	}
     else if (canDoUTR)
 	{
+	if (bedItem->thickStart == 0 && bedItem->thickEnd == 0)
+	    bedItem->thickStart = bedItem->thickEnd = bedItem->chromStart;
 	if ((!isRc && utrExon5)   || (isRc && utrExon3))
 	    {
 	    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
