@@ -75,7 +75,7 @@ set CVS_REPORTS_DIR $CVS_REPORTS_BASE/$whichReport
 set CVS_WORK_DIR $CVS_REPORTS_BASE/kent
 
 # this is the program name
-set CVS_REPORTS $CVS_REPORTS_DIR/cvs-reports-d
+set CVS_REPORTS ./cvs-reports-d
 
 set lockFile [mkLock]
 try_eval {
@@ -87,4 +87,6 @@ try_eval {
 }
 file delete $lockFile
 
-
+# Local Variables: **
+# mode: tcl **
+# End: **
