@@ -687,6 +687,18 @@ identifier affyHumanExonSampleId
     $hg.affyHumanExon.expIds comma full 
     $hg.affyHumanExon.expScores comma indexOf full
 
+identifier sestanBrainAtlas
+"Another Affy All Exon array ... slightly different set of probes though"
+    $hg.sestanBrainAtlas.name
+    hgFixed.affyHumanExon.name minCheck=0.99
+    $hg.affyHumanExon.name minCheck=0.99
+
+identifier sestanBrainAtlasId
+"Sample IDs for the Sestan brain atlas array."
+    hgFixed.sestanBrainAtlasExps.id
+    $hg.sestanBrainAtlas.expIds comma full 
+    $hg.sestanBrainAtlas.expScores comma indexOf full
+
 identifier gnfHumanAtlas2
 "Novartis GNF Human gene probe ID"
     hgFixed.gnfHumanAtlas2All.name
