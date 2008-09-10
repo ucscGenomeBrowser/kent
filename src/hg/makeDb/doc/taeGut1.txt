@@ -479,14 +479,14 @@ Un' chrom.sizes | awk '{print $1}' | \
 
 
 #########################################################################
-## BLASTZ hg18 swap (reDONE braney 2008-09-06)
+## BLASTZ hg18 swap (reDONE braney 2008-09-10)
     ssh swarm
     mkdir /cluster/data/taeGut1/bed/blastz.hg18.swap
     cd /cluster/data/taeGut1/bed/blastz.hg18.swap
     screen
     doBlastzChainNet.pl \
-	/cluster/data/hg18/bed/blastz.taeGut1.2008-09-06/DEF \
-	-chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/hg18/bed/blastz.taeGut1.2008-09-09/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-verbose=2 -bigClusterHub=swarm -smallCluster=swarm \
 	-workhorse=kolossus -swap > swap.log 2>&1 &
