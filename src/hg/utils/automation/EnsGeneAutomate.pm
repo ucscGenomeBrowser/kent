@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.12 2008/08/08 20:58:55 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.13 2008/09/10 17:19:27 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
@@ -475,7 +475,7 @@ my %ensGeneFtpFileNames_50 = (
 'ochPri2' => 'ochotona_princeps/Ochotona_princeps.pika.50.gtf.gz',
 'ornAna1' => 'ornithorhynchus_anatinus/Ornithorhynchus_anatinus.OANA5.50.gtf.gz',
 'oryCun1' => 'oryctolagus_cuniculus/Oryctolagus_cuniculus.RABBIT.50.gtf.gz',
-'oryLat1' => 'oryzias_latipes/Oryzias_latipes.MEDAKA1.50.gtf.gz',
+'oryLat2' => 'oryzias_latipes/Oryzias_latipes.MEDAKA1.50.gtf.gz',
 'otoGar1' => 'otolemur_garnettii/Otolemur_garnettii.BUSHBABY1.50.gtf.gz',
 'panTro2' => 'pan_troglodytes/Pan_troglodytes.CHIMP2.1.50.gtf.gz',
 'ponAbe2' => 'pongo_pygmaeus/Pongo_pygmaeus.PPYG2.50.gtf.gz',
@@ -518,7 +518,7 @@ my %ensGeneFtpPeptideFileNames_50 = (
 'ochPri2' => 'ochotona_princeps/pep/Ochotona_princeps.pika.50.pep.all.fa.gz',
 'ornAna1' => 'ornithorhynchus_anatinus/pep/Ornithorhynchus_anatinus.OANA5.50.pep.all.fa.gz',
 'oryCun1' => 'oryctolagus_cuniculus/pep/Oryctolagus_cuniculus.RABBIT.50.pep.all.fa.gz',
-'oryLat1' => 'oryzias_latipes/pep/Oryzias_latipes.MEDAKA1.50.pep.all.fa.gz',
+'oryLat2' => 'oryzias_latipes/pep/Oryzias_latipes.MEDAKA1.50.pep.all.fa.gz',
 'otoGar1' => 'otolemur_garnettii/pep/Otolemur_garnettii.BUSHBABY1.50.pep.all.fa.gz',
 'panTro2' => 'pan_troglodytes/pep/Pan_troglodytes.CHIMP2.1.50.pep.all.fa.gz',
 'ponAbe2' => 'pongo_pygmaeus/pep/Pongo_pygmaeus.PPYG2.50.pep.all.fa.gz',
@@ -562,7 +562,7 @@ my %ensGeneFtpMySqlFileNames_50 = (
 'ochPri2' => 'ochotona_princeps_core_50_1a',
 'ornAna1' => 'ornithorhynchus_anatinus_core_50_1g',
 'oryCun1' => 'oryctolagus_cuniculus_core_50_1g',
-'oryLat1' => 'oryzias_latipes_core_50_1f',
+'oryLat2' => 'oryzias_latipes_core_50_1f',
 'otoGar1' => 'otolemur_garnettii_core_50_1d',
 'panTro2' => 'pan_troglodytes_core_50_21i',
 'ponAbe2' => 'pongo_pygmaeus_core_50_1a',
