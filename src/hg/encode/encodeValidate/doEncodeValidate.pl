@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.56 2008/09/10 19:01:36 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.57 2008/09/10 19:50:46 mikep Exp $
 
 use warnings;
 use strict;
@@ -81,6 +81,8 @@ our %validators = (
     cell => \&validateCellLine,
     gene => \&validateGeneType,
     antibody => \&validateAntibody,
+    rnaExtract => \&validateRnaExtract,
+    localization => \&validateLocalization,
     );
 
 # standard validators (required or optional for all projects)
@@ -128,6 +130,16 @@ sub validateLabVersion {
 sub validateCellLine {
     my ($val) = @_;
     defined($terms{'Cell Line'}{$val}) || die "ERROR: Cell line \'$val\' is not known \n";
+}
+
+sub validateRnaExtract {
+    my ($val) = @_;
+    defined($terms{'rnaExtract'}{$val}) || die "ERROR: rnaExtract \'$val\' is not known \n";
+}
+
+sub validateLocalization {
+    my ($val) = @_;
+    defined($terms{'localization'}{$val}) || die "ERROR: localization \'$val\' is not known \n";
 }
 
 sub validateGeneType {
