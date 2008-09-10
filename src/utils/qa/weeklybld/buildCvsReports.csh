@@ -70,18 +70,24 @@ endif
 # it will shove itself off into the background anyway!
 cd $WEEKLYBLD
 
+# You can't check the status code of a command after an if statement, it must be directly after the command
 if ( "$mode" == "review") then
     ./cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN}
+    if ( $status ) then
+        echo "[mode=$mode] cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN} failed on $HOST "
+        exit 1
+    endif
 else    
     ./cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN}
+    if ( $status ) then
+        echo "[mode=$mode] cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN} failed on $HOST "
+        exit 1
+    endif
 endif    
-if ( $status ) then
- echo "cvs-reports-delta failed on $HOST"
- exit 1
-endif
-echo "cvs-reports-delta done on $HOST"
-cd $WEEKLYBLD
 
+echo "cvs-reports-delta done on $HOST"
+
+cd $WEEKLYBLD
 
 # fix main report page /cvs-reports/index.html to have dates
 cd /usr/local/apache/htdocs/cvs-reports/
