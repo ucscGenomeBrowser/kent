@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.86 2008/09/03 19:19:21 markd Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.87 2008/09/10 22:59:14 larrym Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -259,6 +259,9 @@ while( (i < 3) && lineFileNext(lf, &line, NULL))
     {
     dyStringPrintf(errDy, "%s<BR>\n", line);
     ++i;
+    // break out of loop after wibSizeLimit msg to avoid printing stuff from other commands in the pipe.
+    if(strstr(line, "wibSizeLimit"))
+        break;
     }
 lineFileClose(&lf);
 if (i < 1)
@@ -1188,6 +1191,8 @@ void wigLoaderEncoding(struct customTrack *track, char *wigAscii,
 double lowerLimit = 0.0;
 double upperLimit = 100.0;
 int span = 1;
+
+fprintf(stderr, "wigAscii: %s; dbRequested: %d\n", wigAscii, dbRequested);
 
 /* Load database if requested */
 if (dbRequested)
