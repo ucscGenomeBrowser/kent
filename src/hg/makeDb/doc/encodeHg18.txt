@@ -1130,6 +1130,11 @@ cat > getGenes.csh << 'EOF'
     nice hgLoadMafFrames hg18 encodeTbaFramesDec07 mafFrames.gz >& loadFrames.log &
 
     # Post downloads
+    ssh kkstore03
+    cd /cluster/data/encode/TBA/DEC-07/2008-01-10/
+    mkdir downloads
+    cd anno/maf
+    tar cvfz ../../downloads/encodeTba.maf.tgz  *.maf
 
     # Obtain sequence freeze
     ssh kkstore03
@@ -1169,6 +1174,9 @@ cat > getGenes.csh << 'EOF'
     ln -s /cluster/data/encode/MSA/DEC-07/downloads/{README.txt,DEC-2007.tar.gz} .
     ln -s /cluster/data/encode/MSA/DEC-07/downloads/{tree_4d.tba.nh,species37.nh} .
     cp ~/browser/images/phylo/encode_37way.gif .
+    mkdir -p alignments/TBA/
+    cd alignments/TBA
+    ln -s /cluster/data/encode/TBA/DEC-07/2008-01-10/downloads/encodeTba.maf.tgz encodeTbaDec07.maf.tgz
 
     # Conservation
     mkdir -p ChaiCons/2008-03-24/lab BinCons/2008-03-24/lab
