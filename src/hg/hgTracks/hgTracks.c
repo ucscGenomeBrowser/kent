@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1507 2008/09/10 04:40:49 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1508 2008/09/10 16:17:49 hiram Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2867,7 +2867,7 @@ if (sameString(database, "anoGam1"))
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", "NCBI");
     }
-if (sameString(database, "oryLat1"))
+if (startsWith("oryLat", database))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"http://medaka.utgenome.org/browser_ens_jump.php?revision=version1.0&chr=chromosome%s&start=%d&end=%d\" TARGET=_blank class=\"topbar\">%s</A></TD>",
         skipChr(chromName), winStart+1, winEnd, "UTGB");
