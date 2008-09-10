@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: synonym.c,v 1.7 2008/09/10 17:55:09 hiram Exp $";
+static char const rcsid[] = "$Id: synonym.c,v 1.8 2008/09/10 18:02:08 hiram Exp $";
 
 static void printOurMrnaUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
@@ -244,7 +244,7 @@ if (protAcc != NULL)
     kgProteinID = cloneString("");
     if (hTableExists(sqlGetDatabase(conn), "knownGene")
         && (isNotEmpty(cartOptionalString(cart, hggChrom)) &&
-	      differentStringNullOk(cartOptionalString(cart, hggChrom),"none")))
+	      differentWord(cartOptionalString(cart, hggChrom),"none")))
     	{
     	safef(condStr, sizeof(condStr), "name = '%s' and chrom = '%s' and txStart=%s and txEnd=%s", 
 	        id, cartOptionalString(cart, hggChrom), 
