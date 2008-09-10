@@ -202,8 +202,8 @@ mustWrite(f, buf, strlen(buf));
 carefulClose(&f);
 }
 
-void trackToBaseMask(char *db, char *track, char *chromDb, char *obama, boolean quiet)
-/* Create a baseMask file obama representing the 'track' in database 'db'.
+void trackToBaseMask(char *db, char *track, char *chromDb, char *oBama, boolean quiet)
+/* Create a baseMask file oBama representing the 'track' in database 'db'.
  * If quiet = false, outputs number of based on overlap of chromosome ranges. */
 {
 struct bed *b, *bList;
@@ -234,8 +234,8 @@ for (ci = ciList ; ci ; ci = ci->next)
 if (!quiet)
     fprintf(stderr,"%1.0f bases in %1.0f ranges in %d chromosomes of %1.0f (%4.3f%%) bases in genome\n",
 	treeSize, nodes, tree->hash->elCount, totalSize, 100.0*treeSize/totalSize);
-if (obama)
-    genomeRangeTreeWrite(tree, obama); /* write the tree out */
+if (oBama)
+    genomeRangeTreeWrite(tree, oBama); /* write the tree out */
 genomeRangeTreeFree(&tree);
 slFreeList(&ciList);
 hFreeConn(&conn);

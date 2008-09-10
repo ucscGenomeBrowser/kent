@@ -9,8 +9,8 @@ void splitDbTable(char *chromDb, char *track, char **pDb, char **pTable);
  * Cannabalizes track. 
  * *pDb points a table in *track. *pTable points at database in *track or *chromDb. */
 
-void trackToBaseMask(char *db, char *track, char *chromDb, char *obama, boolean quiet);
-/* Create a baseMask file obama representing the 'track' in database 'db'.
+void trackToBaseMask(char *db, char *track, char *chromDb, char *oBama, boolean quiet);
+/* Create a baseMask file oBama representing the 'track' in database 'db'.
  * If quiet = false, outputs number of based on overlap of chromosome ranges. */
 
 char *baseMaskCacheTrack(char *cacheDir, char *chromDb, char *db, char *table, boolean quiet, boolean logUpdateTimes);
