@@ -118,9 +118,9 @@ priority 2.7
 visibility off
 type association knownToHInv
 queryFull select name,value from knownToHInv
-queryOne select value,name from knownToHInv where name = '%s'
-invQueryOne select name from knownToHInv where value = '%s'
-itemUrl http://www.jbirc.aist.go.jp/hinv/soup/pub_Detail.pl?acc_id=%s
+queryOne select value,value from knownToHInv where name = '%s'
+invQueryOne select value from knownToHInv where value = '%s'
+itemUrl http://h-invitational.jp/hinv/spsoup/transcript_view?hit_id=%s
 
 name humanNormal
 shortLabel Normal Tissue
