@@ -15,7 +15,7 @@ PIPELINE_PATH=/cluster/data/encode/pipeline
 CONFIG_DIR = ${PIPELINE_PATH}/${PIPELINE_DIR}/config
 
 all:
-	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts PIPELINE_DIR=encpipeline_${USER} scripts config
+	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts PIPELINE_DIR=encpipeline_${USER} scripts config cgi
 
 alpha:
 	@${MAKE} --no-print-directory SCRIPTS=${SCRIPTS} PIPELINE_DIR=encpipeline_beta scripts config
