@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.14 2008/08/29 22:00:27 larrym Exp $
+# $Id: Encode.pm,v 1.15 2008/09/10 18:37:07 larrym Exp $
 
 package Encode;
 
@@ -216,8 +216,6 @@ sub getDaf
 
     # Read info from Project Information File.  Verify required fields
     # are present and that the project is marked active.
-    my %daf = ();
-    $daf{TRACKS} = {};
     my $wd = cwd();
     chdir($submitDir);
     my @glob = glob "*.DAF";
@@ -226,9 +224,19 @@ sub getDaf
     if(!(-e $dafFile)) {
         die "Can't find the DAF file\n";
     }
+    $dafFile = $submitDir . "/" . $dafFile;
     &HgAutomate::verbose(2, "Using newest DAF file \'$dafFile\'\n");
-    my $lines = readFile("$dafFile");
     chdir($wd);
+    return parseDaf($dafFile, $grants, $fields);
+}
+
+sub parseDaf
+{
+# Identical to getDaf, but first argument is the DAF filename.
+    my ($dafFile, $grants, $fields) = @_;
+    my %daf = ();
+    $daf{TRACKS} = {};
+    my $lines = readFile("$dafFile");
     my $order = 1;
 
     while (@{$lines}) {
