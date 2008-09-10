@@ -23363,4 +23363,45 @@ _EOF_
     rm -f blastz.taeGut1
     ln -s blastz.taeGut1.2008-09-06 /cluster/data/hg18/bed/blastz.taeGut1
 
+################################################################
+# HUMAN FETAL BRAIN EXON ARRAYS (YALE) (Andy)
+
+ssh hgwdev
+bash
+
+mkdir /hive/data/genomes/hg18/bed/yaleMicroarrays
+cd /hive/data/genomes/hg18/bed/yaleMicroarrays
+cp /var/ftp/encode/Sestan_fetal_brain_exon_arrays.rar .
+rar e Sestan_fetal_brain_exon_arrays.rar
+tail +2 18_19_21_23_full_SLR_converted.txt | grep -v "\-\-\-" > sestanBrainAtlas.bed
+hgLoadBed hg18 sestanBrainAtlas{,.bed}
+# just a little array name organization
+head -n1 18_19_21_23_full_SLR_converted.txt | \
+   sed 's/.*expNames=\"//;s/\"\ name=.*//;s/\.CEL//g' | \
+   tr ',' '\n' | sed '/^$/d' | grep -n '' | tr ':' '\t' | \
+   awk 'BEGIN{OFS="\t";}{$1=$1 - 1; print;}' \
+      > arrays.txt
+awk 'BEGIN{OFS="\t";}{print $1, $2, $2, "n/a", "n/a", "n/a", "103", "n/a,n/a,"$2",";}' \
+   arrays.txt > sestanBrainAtlasExps.tab
+ln -s ~/kent/src/hg/lib/expRecord.sql sestanBrainAtlasExps.sql
+hgLoadSqlTab hgFixed sestanBrainAtlasExps{,.sql,.tab}
+
+# Removed some of the arrays... the manual way
+# something's weird
+tr '\r' '\n' < sestanBrainAtlas.bed | sed '/^$/d; s/$/,/' > ses.bed
+cut -f1-14 ses.bed | \
+   awk 'BEGIN{FS="\t";OFS="\t"}{$2 = $2 - 1; $13 = $13 - 8; print;}' | \
+   sed 's/95,96,97,98,99,100,101,102//' > ses14.bed
+cut -f15 ses.bed | cut -d',' -f1-74,77-92,99- > ses15.bed
+paste ses14.bed ses15.bed > newSestan.bed
+hgLoadBed hg18 sestanBrainAtlas newSestan.bed
+ln -s ~/kent/src/hg/makeDb/hgCgiData/Human/microarrayGroups.ra 
+grep -A5 sestanBrainAtlasAll microarrayGroups.ra | grep "^names" | sed 's/names //' | tr ',' '\n' | sed '/^$/d' > namesCol.txt
+grep -A5 sestanBrainAtlasAll microarrayGroups.ra | grep "^expIds" | sed 's/expIds //' | tr ',' '\n' | sed '/^$/d' >expCol.txt
+paste expCol.txt namesCol.txt > arrays.txt
+awk 'BEGIN{OFS="\t";}{print $1, $2, $2, "n/a", "n/a", "n/a", "103", "n/a,n/a,"$2",";}' \
+   arrays.txt > sestanBrainAtlasExps.tab
+hgLoadSqlTab hgFixed sestanBrainAtlasExps{,.sql,.tab}
+ssh kolossus
+
 ############
