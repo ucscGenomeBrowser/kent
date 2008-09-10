@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.24 2007/03/31 16:48:10 markd Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.25 2008/09/10 22:57:05 larrym Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -361,7 +361,7 @@ while (lineFileNext(lf, &line, NULL))
 
     ++lineCount;
     if ((wibSizeLimit > 0) && (wibSize >= wibSizeLimit))
-	    continue;	/*	skip rest of input data	*/
+        errAbort("wibSizeLimit of %lld has been exceeded; you must use bedGraph's for files with more data points", wibSizeLimit);
 
     line = skipLeadingSpaces(line);
     /*	ignore blank or comment lines	*/
