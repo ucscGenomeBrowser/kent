@@ -61,8 +61,7 @@ echo "tagReview.csh done on $HOST"
 echo "tag review moved to HEAD."
 
 #echo debug: disabled buildCvsReports
-ssh hgwdev $WEEKLYBLD/buildCvsReports.csh review real
-
+ssh -n hgwdev "$WEEKLYBLD/buildCvsReports.csh review real"
 if ( $status ) then
  echo "buildCvsReports.csh  failed on hgwdev"
  exit 1
