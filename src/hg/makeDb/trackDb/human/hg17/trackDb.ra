@@ -184,7 +184,7 @@ track targetScanS
 shortLabel T-ScanS miRNA
 longLabel TargetScanS miRNA Regulatory Sites
 group regulation
-priority 101
+priority 0
 visibility hide
 color 0,96,0
 type bed 9 .
@@ -194,7 +194,7 @@ compositeTrack on
 shortLabel PicTar miRNA
 longLabel MicroRNA Target Sites in 3' UTRs Predicted by PicTar
 group regulation
-priority 102
+priority 0
 visibility hide
 type bed 9
 
@@ -216,7 +216,7 @@ track firstEF
 shortLabel FirstEF 
 longLabel FirstEF: First-Exon and Promoter Prediction
 group regulation
-priority 90.1
+priority 0
 visibility hide
 spectrum on
 type bed 6 .
@@ -228,7 +228,7 @@ track regPotential5X
 shortLabel 5x Reg Potential
 longLabel 5-Way Regulatory Potential - Human, Chimp, Dog, Mouse, Rat
 group regulation
-priority 91
+priority 200
 visibility hide
 autoScaleDefault Off
 maxHeightPixels 128:36:16
@@ -244,7 +244,7 @@ track regPotential3X
 shortLabel 3x Reg Potential
 longLabel 3-Way Regulatory Potential - Human, Mouse (May 2004/mm5), Rat (June 2003/rn3)
 group regulation
-priority 91.05
+priority 0
 visibility hide
 autoScaleDefault Off
 maxHeightPixels 128:36:16
@@ -260,7 +260,7 @@ track regPotential2X
 shortLabel 2x Reg Potential
 longLabel 2-Way Regulatory Potential - Human (hg17), Mouse (May 2004/mm5)
 group regulation
-priority 91.1
+priority 0
 visibility hide
 autoScaleDefault Off
 maxHeightPixels 128:36:16
@@ -275,7 +275,7 @@ spanList 1
 track tfbsConsSites
 shortLabel TFBS Conserved
 longLabel HMR Conserved Transcription Factor Binding Sites
-priority 94
+priority 0
 group regulation
 visibility hide
 type bed 6 +
@@ -290,16 +290,16 @@ url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$
         superTrack on
         shortLabel Affy Txn
         longLabel Affy Transcriptome Phase 3
-        group regulation
-        priority 98.1
+        group expression
+        priority 0
 
 track affyTxnPhase3FragsL
 superTrack affyTxnPhase3Super dense
 compositeTrack on
 shortLabel Affy Tx lRNA Reg
 longLabel Affymetrix Transcriptome Phase 3 Long RNA Fragments
-group regulation
-priority 98.11
+group expression
+priority 0
 type bed 3 .
 
     track affyTxnPhase3FragsHDF
@@ -367,11 +367,10 @@ superTrack affyTxnPhase3Super dense
 compositeTrack on
 shortLabel Affy Tx lRNA Sig
 longLabel Affymetrix Transcriptome Phase 3 Long RNA Signal
-group regulation
 defaultViewLimits 0:150
 autoScaleDefault Off
-group regulation
-priority 98.2
+group expression
+priority 0
 maxHeightPixels 100:30:10
 canPack off
 type wig 0 1000
@@ -441,8 +440,8 @@ superTrack affyTxnPhase3Super dense
 compositeTrack on
 shortLabel Affy Tx sRNA Reg
 longLabel Affymetrix Transcriptome Phase 3 Short RNA Fragments
-group regulation
-priority 98.3
+group expression
+priority 0
 type bed 3 .
 
     track affyTxnPhase3FragsHeLaTopStrand
@@ -474,11 +473,10 @@ compositeTrack on
 superTrack affyTxnPhase3Super dense
 shortLabel Affy Tx sRNA Sig
 longLabel Affymetrix Transcriptome Phase 3 Short RNA Signal
-group regulation
+group expression
 defaultViewLimits 0:150
 autoScaleDefault Off
-group regulation
-priority 98.4
+priority 0
 maxHeightPixels 100:30:10
 canPack off
 type wig 0 1000
@@ -511,7 +509,7 @@ track sangamoDnaseHs
 shortLabel SGMO/EIO CD34 HS
 longLabel Sangamo - Eur. Inst. Oncology DNase Hypersensitive Sites
 group regulation
-priority 99.0
+priority 0
 visibility hide
 color 100,30,150
 type bed 5 .
@@ -521,14 +519,14 @@ type bed 5 .
             longLabel Duke DNaseI Hypersensitivity in CD4+ T-cells
             superTrack on 
             group regulation
-            priority 100.1
+            priority 0
 
 track dukeDnaseCd4Signal
 superTrack dukeDnaseSuper full
 shortLabel Duke DNase Sig
 longLabel Duke DNaseI Hypersensitivity Signal in CD4+ T-cells
 group regulation
-priority 100.1
+priority 0
 type wig -.66 25.74
 viewLimits -.66:3
 maxHeightPixels 64:24:16
@@ -541,7 +539,7 @@ superTrack dukeDnaseSuper dense
 shortLabel Duke DNase Sites
 longLabel Duke DNaseI Hypersensitive Sites in CD4+ T-cells
 group regulation
-priority 100.2
+priority 0
 type bed 5 +
 useScore 1
 
@@ -550,7 +548,7 @@ compositeTrack on
 shortLabel Stanf NRSF ChIP-seq
 longLabel Stanford Neuron-Restrictive Silencer Factor ChIP-seq
 group regulation
-priority 500
+priority 0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY,chrM
 visibility hide
 type bed 6 .

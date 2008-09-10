@@ -123,7 +123,7 @@ type bed 12 .
 track tfbsCons
 shortLabel TFBS Conserved
 longLabel HMR Conserved Transcription Factor Binding Sites
-priority 94
+priority 0
 group regulation
 visibility hide
 type bed 6 +
@@ -1312,8 +1312,8 @@ type bed 3 .
 track transcriptomeJurkat
 shortLabel Jurkat
 longLabel Expression in the Jurkat Cell Line
-group regulation
-priority 91
+group expression
+priority 0
 visibility hide
 chromosomes chr7,chr11,
 autoScaleDefault Off
@@ -1325,8 +1325,8 @@ type wig -600 2000
 track transcriptomePC3
 shortLabel PC3
 longLabel Expression in the PC3 Cell Line
-group regulation
-priority 92
+group expression
+priority 0
 visibility hide
 chromosomes chr7,chr11,
 autoScaleDefault Off
@@ -1351,7 +1351,7 @@ track regPotential3X
 shortLabel 3x Reg Potential
 longLabel 3-Way Regulatory Potential - Human, Mouse (Feb. 2003/mm3), Rat (June 2003/rn3)
 group regulation
-priority 91
+priority 200
 visibility hide
 autoScaleDefault Off
 maxHeightPixels 128:36:16
@@ -1367,7 +1367,7 @@ track regPotential2X
 shortLabel 2x Reg Potential
 longLabel 2-Way Regulatory Potential - Human (hg16), Mouse (Oct. 2003/mm4)
 group regulation
-priority 91.1
+priority 200
 visibility hide
 autoScaleDefault Off
 maxHeightPixels 128:36:16

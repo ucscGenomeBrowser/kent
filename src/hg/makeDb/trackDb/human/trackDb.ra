@@ -390,8 +390,8 @@ type bed 12 .
 track gladHumES
 shortLabel Gstone Arrays
 longLabel Gladstone Microarray Data
-group regulation
-priority 79
+group expression
+priority 0
 visibility hide
 type expRatio
 expScale 4.0
@@ -401,8 +401,8 @@ expTable gladHumESExps
 track gnfAtlas2
 shortLabel GNF Atlas 2
 longLabel GNF Expression Atlas 2
-group regulation
-priority 80
+group expression
+priority 0
 visibility hide
 type expRatio
 expScale 4.0
@@ -414,8 +414,8 @@ groupings gnfHumanAtlas2Groups
 track affyUcla
 shortLabel UCLA GeneChip
 longLabel UCLA Affymetrix U133 GeneChip Data
-group regulation
-priority 81
+group expression
+priority 0
 visibility hide
 type bed 15 +
 expTable affyUclaExps
@@ -424,8 +424,8 @@ canPack off
 track affyUclaNorm
 shortLabel UCLA Tissues
 longLabel UCLA Affymetrix U133 GeneChip Normal Tissues
-group regulation
-priority 81.1
+group expression
+priority 0
 expScale 3.0
 expStep 0.5
 expTable affyUclaNormExps
@@ -436,8 +436,8 @@ type bed 15 +
 track nci60
 shortLabel NCI60
 longLabel Microarray Experiments for NCI 60 Cell Lines
-group regulation
-priority 84
+group expression
+priority 0
 visibility hide
 type expRatio
 expScale 3.0
@@ -450,8 +450,8 @@ expTable nci60Exps
 track affy
 shortLabel GNF
 longLabel GNF Gene Expression Atlas Using Affymetrix GeneChips
-group regulation
-priority 85
+group expression
+priority 0
 visibility hide
 type bed 15 +
 expTable affyExps
@@ -459,8 +459,8 @@ expTable affyExps
 track affyRatio
 shortLabel GNF Ratio
 longLabel GNF Gene Expression Atlas Ratios Using Affymetrix GeneChips
-group regulation
-priority 86
+group expression
+priority 0
 visibility hide
 type expRatio
 expScale 3.0
@@ -473,8 +473,8 @@ expTable affyExps
 track humanNormal
 shortLabel Human Normal
 longLabel Expression from Normal Human Tissue
-group regulation
-priority 87
+group expression
+priority 0
 visibility hide
 type expRatio
 expScale 3.0
@@ -486,15 +486,15 @@ track cghNci60
 shortLabel CGH NCI60
 longLabel Comparative Genomic Hybridization Experiments for NCI 60 Cell Lines
 group regulation
-priority 87
+priority 0
 visibility hide
 type bed 15 +
 
 track yaleBertoneTars
 shortLabel Bertone Yale TAR
 longLabel Yale Transcriptionally Active Regions (TARs) (Bertone data)
-group regulation
-priority 87
+group expression
+priority 0
 visibility hide
 color 50,100,50
 url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
@@ -504,8 +504,8 @@ type psl .
 track affyTranscriptome 
 shortLabel Transcriptome
 longLabel Affymetrix Experimentally Derived Transcriptome
-group regulation
-priority 88
+group expression
+priority 0
 visibility hide
 color 100,50,0
 altColor 0,0,255
@@ -515,32 +515,32 @@ type sample
 track affyU133
 shortLabel Affy U133
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U133
-group regulation
-priority 89
+group expression
+priority 0
 visibility hide
 type psl .
 
 track affyGnf1h
 shortLabel Affy GNF1H
 longLabel Alignments of Affymetrix Consensus/Exemplars from GNF1H
-group regulation
-priority 89.1
+group expression
+priority 0
 visibility hide
 type psl .
 
 track affyU95
 shortLabel Affy U95
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U95
-group regulation
-priority 89.2
+group expression
+priority 0
 visibility hide
 type psl .
 
 track illuminaProbes
 shortLabel Illumina WG-6
 longLabel Alignments of Illumina WG-6 3.0 Probe set
-group regulation
-priority 89.3
+group expression
+priority 0
 visibility hide
 type bed 12 .
 pslTable illuminaProbesAlign
@@ -550,7 +550,7 @@ track switchDbTss
 shortLabel SwitchGear TSS
 longLabel SwitchGear Genomics Transcription Start Sites
 group regulation
-priority 91.1
+priority 0
 visibility hide
 origAssembly hg17
 type bed 6 +
@@ -559,7 +559,7 @@ track promoterStanford
 shortLabel Stanford Promoters
 longLabel Stanford Promoters
 group regulation
-priority 92
+priority 0
 visibility hide
 type bed 6 .
 
@@ -567,7 +567,7 @@ track promoterStanfordGene
 shortLabel Stanford Gene Model
 longLabel Stanford ENCODE Gene Models
 group regulation
-priority 93
+priority 0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 12 .
@@ -578,7 +578,7 @@ longLabel Human/Mouse Regulatory Potential Score
 group regulation
 color 100,50,0
 altColor 50,150,128
-priority 92
+priority 0
 visibility hide
 type sample 0 8
 
@@ -586,7 +586,7 @@ track vistaEnhancers
 shortLabel Vista Enhancers
 longLabel Vista HMR-Conserved Non-coding Human Enhancers from LBNL
 group regulation
-priority 93
+priority 0
 visibility hide
 color 50,70,120
 type bed 5 +
@@ -1142,8 +1142,8 @@ otherDb hg16
 track affyTranscription
 shortLabel Transcription
 longLabel Affy. SK-N-AS Transcript Abundance
-group regulation
-priority 99
+group expression
+priority 0
 visibility hide
 autoScaleDefault Off
 color 175,150,128
@@ -1163,8 +1163,8 @@ compositeTrack on smart
 visibility hide
 defaultViewLimits 0:150
 autoScaleDefault Off
-group regulation
-priority 98.9
+group expression
+priority 0
 maxHeightPixels 100:30:10
 canPack off
 centerLabelsDense on
@@ -1178,8 +1178,8 @@ release beta
     visibility hide
     defaultViewLimits 0:150
     autoScaleDefault Off
-    group regulation
-    priority 98.9
+    group expression
+    priority 0
     maxHeightPixels 100:30:10
     canPack off
     centerLabelsDense on
@@ -1189,9 +1189,9 @@ release beta
 track A375CytosolicPolyAPlusTxn
 shortLabel A375 Txn
 longLabel A375 Cytosolic polyA+, Affy Transcriptome
-group regulation
+group expression
 centerLabelsDense on
-priority 99.01
+priority 0
 autoScaleDefault Off
 color 175,150,128
 altColor 255,128,0
@@ -1206,9 +1206,9 @@ wigColorBy A375CytosolicPolyAPlusTnFg
 track A375CytosolicPolyAPlusTnFg
 shortLabel A375 TnFg
 longLabel A375 Cytosolic polyA+, Affy Transfrags
-group regulation
+group expression
 centerLabelsDense on
-priority 99.02
+priority 0
 visibility pack
 color 35,35,175
 altColor 160,160,188
@@ -1220,9 +1220,9 @@ noInherit on
 track FHs738LuCytosolicPolyAPlusTxn
 shortLabel FHs738Lu Txn
 longLabel FHs738Lu Cytosolic polyA+, Affy Transcriptome
-group regulation
+group expression
 centerLabelsDense on
-priority 99.03
+priority 0
 autoScaleDefault Off
 color 175,150,128
 altColor 255,128,0
@@ -1237,9 +1237,9 @@ wigColorBy FHs738LuCytosolicPolyAPlusTnFg
 track FHs738LuCytosolicPolyAPlusTnFg
 shortLabel FHs738Lu TnFg
 longLabel FHs738Lu Cytosolic polyA+, Affy Transfrags
-group regulation
+group expression
 centerLabelsDense on
-priority 99.04
+priority 0
 visibility pack
 color 35,35,175
 altColor 160,160,188
@@ -1251,9 +1251,9 @@ noInherit on
 track HepG2CytosolicPolyAPlusTxn
 shortLabel HepG2+ Cyto Txn
 longLabel HepG2 Cytosolic polyA+, Affy Transcriptome
-group regulation
+group expression
 centerLabelsDense on
-priority 99.05
+priority 0
 autoScaleDefault Off
 color 175,150,128
 altColor 255,128,0
@@ -1268,9 +1268,9 @@ wigColorBy HepG2CytosolicPolyAPlusTnFg
 track HepG2CytosolicPolyAPlusTnFg
 shortLabel HepG2+ Cyto TnFg
 longLabel HepG2 Cytosolic polyA+, Affy Transfrags
-group regulation
+group expression
 centerLabelsDense on
-priority 99.06
+priority 0
 visibility pack
 color 35,35,175
 altColor 160,160,188
@@ -1282,9 +1282,9 @@ noInherit on
 track HepG2NuclearPolyAPlusTxn
 shortLabel HepG2+ Nuc Txn
 longLabel HepG2 Nuclear polyA+, Affy Transcriptome
-group regulation
+group expression
 centerLabelsDense on
-priority 99.061
+priority 0
 autoScaleDefault Off
 color 175,150,128
 altColor 255,128,0
@@ -1299,9 +1299,9 @@ wigColorBy HepG2NuclearPolyAPlusTnFg
 track HepG2NuclearPolyAPlusTnFg
 shortLabel HepG2+ Nuc TnFg
 longLabel HepG2 Nuclear polyA+, Affy Transfrags
-group regulation
+group expression
 centerLabelsDense on
-priority 99.062
+priority 0
 visibility pack
 color 35,35,175
 altColor 160,160,188
@@ -1313,9 +1313,9 @@ noInherit on
 track HepG2CytosolicPolyAMinusTxn
 shortLabel HepG2- Cyto Txn
 longLabel HepG2 Cytosolic polyA-, Affy Transcriptome
-group regulation
+group expression
 centerLabelsDense on
-priority 99.063
+priority 0
 autoScaleDefault Off
 color 175,150,128
 altColor 255,128,0
@@ -1330,9 +1330,9 @@ wigColorBy HepG2CytosolicPolyAMinusTnFg
 track HepG2CytosolicPolyAMinusTnFg
 shortLabel HepG2- Cyto TnFg
 longLabel HepG2 Cytosolic polyA-, Affy Transfrags
-group regulation
+group expression
 centerLabelsDense on
-priority 99.064
+priority 0
 visibility pack
 color 35,35,175
 altColor 160,160,188
@@ -1344,9 +1344,9 @@ noInherit on
 track HepG2NuclearPolyAMinusTxn
 shortLabel HepG2- Nuc Txn
 longLabel HepG2 Nuclear polyA-, Affy Transcriptome
-group regulation
+group expression
 centerLabelsDense on
-priority 99.065
+priority 0
 autoScaleDefault Off
 color 175,150,128
 altColor 255,128,0
@@ -1361,9 +1361,9 @@ wigColorBy HepG2NuclearPolyAMinusTnFg
 track HepG2NuclearPolyAMinusTnFg
 shortLabel HepG2- Nuc TnFg
 longLabel HepG2 Nuclear polyA-, Affy Transfrags
-group regulation
+group expression
 centerLabelsDense on
-priority 99.067
+priority 0
 visibility pack
 color 35,35,175
 altColor 160,160,188
@@ -1375,9 +1375,9 @@ noInherit on
 track JurkatCytosolicPolyAPlusTxn
 shortLabel Jurkat Txn
 longLabel Jurkat Cytosolic polyA+, Affy Transcriptome
-group regulation
+group expression
 centerLabelsDense on
-priority 99.07
+priority 0
 autoScaleDefault Off
 color 175,150,128
 altColor 255,128,0
@@ -1392,9 +1392,9 @@ wigColorBy JurkatCytosolicPolyAPlusTnFg
 track JurkatCytosolicPolyAPlusTnFg
 shortLabel Jurkat TnFg
 longLabel Jurkat Cytosolic polyA+, Affy Transfrags
-group regulation
+group expression
 centerLabelsDense on
-priority 99.08
+priority 0
 visibility pack
 color 35,35,175
 altColor 160,160,188
@@ -1406,9 +1406,9 @@ noInherit on
 track NCCITCytosolicPolyAPlusTxn
 shortLabel NCCIT Txn
 longLabel NCCIT Cytosolic polyA+, Affy Transcriptome
-group regulation
+group expression
 centerLabelsDense on
-priority 99.09
+priority 0
 autoScaleDefault Off
 color 175,150,128
 altColor 255,128,0
@@ -1423,9 +1423,9 @@ wigColorBy NCCITCytosolicPolyAPlusTnFg
 track NCCITCytosolicPolyAPlusTnFg
 shortLabel NCCIT TnFg
 longLabel NCCIT Cytosolic polyA+, Affy Transfrags
-group regulation
+group expression
 centerLabelsDense on
-priority 99.10
+priority 0
 visibility pack
 color 35,35,175
 altColor 160,160,188
@@ -1437,9 +1437,9 @@ noInherit on
 track PC3CytosolicPolyAPlusTxn
 shortLabel PC3 Txn
 longLabel PC3 Cytosolic polyA+, Affy Transcriptome
-group regulation
+group expression
 centerLabelsDense on
-priority 99.11
+priority 0
 autoScaleDefault Off
 color 175,150,128
 altColor 255,128,0
@@ -1454,9 +1454,9 @@ wigColorBy PC3CytosolicPolyAPlusTnFg
 track PC3CytosolicPolyAPlusTnFg
 shortLabel PC3 TnFg
 longLabel PC3 Cytosolic polyA+, Affy Transfrags
-group regulation
+group expression
 centerLabelsDense on
-priority 99.12
+priority 0
 visibility pack
 color 35,35,175
 altColor 160,160,188
@@ -1468,9 +1468,9 @@ noInherit on
 track SKNASCytosolicPolyAPlusTxn
 shortLabel SK-N-AS Txn
 longLabel SK-N-AS Cytosolic polyA+, Affy Transcriptome
-group regulation
+group expression
 centerLabelsDense on
-priority 99.13
+priority 0
 autoScaleDefault Off
 color 175,150,128
 altColor 255,128,0
@@ -1485,9 +1485,9 @@ wigColorBy SKNASCytosolicPolyAPlusTnFg
 track SKNASCytosolicPolyAPlusTnFg
 shortLabel SK-N-AS TnFg
 longLabel SK-N-AS Cytosolic polyA+, Affy Transfrags
-group regulation
+group expression
 centerLabelsDense on
-priority 99.14
+priority 0
 visibility pack
 color 35,35,175
 altColor 160,160,188
@@ -1500,9 +1500,9 @@ noInherit on
 track U87CytosolicPolyAPlusTxn
 shortLabel U87 Txn
 longLabel U87 Cytosolic polyA+, Affy Transcriptome
-group regulation
+group expression
 centerLabelsDense on
-priority 99.15
+priority 0
 autoScaleDefault Off
 color 175,150,128
 altColor 255,128,0
@@ -1518,9 +1518,9 @@ wigColorBy U87CytosolicPolyAPlusTnFg
 track U87CytosolicPolyAPlusTnFg
 shortLabel U87 TnFg
 longLabel U87 Cytosolic polyA+, Affy Transfrags
-group regulation
+group expression
 centerLabelsDense on
-priority 99.16
+priority 0
 visibility pack
 color 35,35,175
 altColor 160,160,188
@@ -1532,8 +1532,8 @@ noInherit on
 track affyU133Plus2
 shortLabel Affy U133Plus2
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U133 Plus 2.0
-group regulation
-priority 89.15
+group expression
+priority 0
 visibility hide
 type psl .
 
@@ -1541,17 +1541,19 @@ track nhgriDnaseHs
 shortLabel NHGRI DNaseI-HS
 longLabel NHGRI DNaseI-Hypersensitive Sites
 group regulation
-priority 100
+priority 0
 visibility hide
 type bed 5 .
 useScore 1
 origAssembly hg16
 
+# explicitly give this a priority >100, so it doesn't precede
+# the others in this group, which are assigned pri=100, and alpha sorted by short label
 track regPotential7X
 shortLabel 7X Reg Potential
 longLabel ESPERR Regulatory Potential (7 Species)
 group regulation
-priority 101
+priority 200
 visibility hide
 autoScaleDefault Off
 maxHeightPixels 128:36:16
@@ -1808,8 +1810,8 @@ url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
 track affyHumanExon
 shortLabel Affy All Exon
 longLabel Affymetrix All Exon Chips
-group regulation
-priority 79.1
+group expression
+priority 0
 visibility hide
 type expRatio
 expScale 4.0
@@ -1821,8 +1823,8 @@ groupings affyHumanExonGroups
 track affyHuEx1
 shortLabel Affy HuEx 1.0
 longLabel Affymetrix Human Exon 1.0 Probe Sets
-group regulation
-priority 79.11
+group expression
+priority 0
 visibility hide
 url http://www.affymetrix.com/analysis/netaffx/exon/probe_set.affx?pk=1:$$
 urlLabel Netaffx Link:
@@ -1832,8 +1834,8 @@ type bed 6 .
 track sestanBrainAtlas
 shortLabel Sestan Brain
 longLabel Sestan Lab Human Brain Atlas Microarrays
-group regulation
-priority 79.20
+group expression
+priority 0
 visibility hide
 type expRatio
 expScale 3.0
@@ -1845,8 +1847,8 @@ track agilentCgh
 shortLabel Agilent CGH
 longLabel Agilent CGH Microarray probesets
 compositeTrack on
-group regulation
-priority 79.5
+group expression
+priority 0
 visibility hide
 type bed 6 .
 
@@ -2211,7 +2213,7 @@ compositeTrack on
 shortLabel Stanf ChIP
 longLabel Stanford ChIP-chip (GMO6990, HeLa, HepG2, Jurkat, K562 cells; GABP, SRF, TAF, NRST/REST ChIP)
 group regulation
-priority 501
+priority 0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -2306,6 +2308,33 @@ visibility hide
 color 12,12,120
 type bed 4 .
 url http://rgd.mcw.edu/objectSearch/qtlReport.jsp?rgd_id=
+
+track nibbImageProbes
+shortLabel NIBB Frog Images
+longLabel Xenopus Laevis In Situ mRNA Probes from NIBB
+group expression
+priority 0
+visibility hide
+color 50,0,100
+type psl xeno
+
+track allenBrainAli
+shortLabel Allen Brain
+longLabel Allen Brain Atlas Probes
+group expression
+priority 0
+visibility hide
+color 50,0,100
+type psl .
+
+track eponine
+shortLabel Eponine TSS
+longLabel Eponine Predicted Transcription Start Sites
+group expression
+priority 0
+visibility hide
+color 0,100,100
+type bed 4 +
 
 # in priority.ra 
 #
