@@ -11875,3 +11875,10 @@ awk 'BEGIN{OFS="\t"}{print $4,$3-$2}' affyHuEx1.fixed.bed | sort -k2,2nr | head
    # genbank release 157.0 now contains misc_diff fields for MGC clones
    # reloading mRNAs results in gbMiscDiff table being created.
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna hg16
+
+################################################
+# SPLIT EXPRESSION & REGULATION GROUPS
+# (2008-09-09 kate)
+
+echo "insert into grp (name, label, priority) values ('expression', 'Expression', 4.5)" | hgsql hg16
+echo "update grp set label='Regulation' where name='regulation'" | hgsql hg16

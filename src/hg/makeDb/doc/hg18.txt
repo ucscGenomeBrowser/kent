@@ -23414,3 +23414,10 @@ hgLoadSqlTab hgFixed sestanBrainAtlasExps{,.sql,.tab}
 ssh kolossus
 
 ############
+
+################################################
+# SPLIT EXPRESSION & REGULATION GROUPS
+# (2008-09-09 kate)
+
+echo "insert into grp (name, label, priority, defaultIsClosed) values ('expression', 'Expression', 4.5, 1)" | hgsql hg18
+echo "update grp set label='Regulation' where name='regulation'" | hgsql hg18

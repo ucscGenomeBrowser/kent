@@ -24596,4 +24596,9 @@ see doc/builds.txt for specific details.
     end
 
 
-############################################################################
+################################################
+# SPLIT EXPRESSION & REGULATION GROUPS
+# (2008-09-09 kate)
+
+echo "insert into grp (name, label, priority, defaultIsClosed) values ('expression', 'Expression', 4.5, 1)" | hgsql hg17
+echo "update grp set label='Regulation' where name='regulation'" | hgsql hg17
