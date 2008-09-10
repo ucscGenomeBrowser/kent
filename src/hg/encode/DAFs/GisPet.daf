@@ -1,0 +1,41 @@
+# Data Agreement File for PET Ditag project $Revision: 1.1 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# Lab and general info
+grant             Gingeras
+lab               Gis
+dataType          Pet
+variables         cell, localization, rnaExtract
+assembly          hg18
+dafVersion        0.2.2
+
+# Track/view definition
+view             Tags
+longLabelPrefix  GIS PET Tags
+type             gappedPeak
+hasReplicates    no
+required         yes
+
+view             Signal
+longLabelPrefix  GIS PET Signal
+type             wig
+hasReplicates    no
+required         yes
+
+view             RawSignal
+longLabelPrefix  GIS PET Raw Signal
+type             wig
+hasReplicates    yes
+required         yes
+
+view             Alignments
+longLabelPrefix  GIS PET Alignments
+type             pairedTagAlign
+hasReplicates    yes
+required         yes
+
+view             Fastq
+type             download
+required         yes

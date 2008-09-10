@@ -1,0 +1,8 @@
+files	view	cell	localization	rnaExtract	accession	softwareVersion	replicate
+pairedEnds.bed	Tags	K562	nucleus	short	GEO123	peakCaller_1.0	
+signal.wig	Signal	K562	nucleus	short	wiggleCreate_1.0_orWhatever	
+rep1.wig	RawSignal	K562	nucleus	short	wiggleCreate_1.0_orWhatever	1
+rep2.wig	RawSignal	K562	nucleus	short	wiggleCreate_1.0_orWhatever	2
+backgrd.wig	RawSignal	K562	nucleus	short	wiggleCreate_1.0_orWhatever	
+tagmaps.bed	Alignments	K562	nucleus	short	GEO123	ELAN_1.0_orWhatever	
+test5.fastq	download	nucleus	short	GEO123		
