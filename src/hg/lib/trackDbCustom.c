@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.42 2008/07/19 00:08:47 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.43 2008/09/10 04:42:21 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -336,7 +336,10 @@ while ((raRecord = raNextRecord(lf)) != NULL)
         {
         struct trackDb *td = hashFindVal(tdHash, trackName);
         if (td != NULL)
+            {
             td->priority = atof(priority);
+            trackDbPolish(td);
+            }
         }
     hashFree(&raRecord);
     }
