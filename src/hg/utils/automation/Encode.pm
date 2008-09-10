@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.15 2008/09/10 18:37:07 larrym Exp $
+# $Id: Encode.pm,v 1.16 2008/09/10 18:53:38 larrym Exp $
 
 package Encode;
 
@@ -224,7 +224,7 @@ sub getDaf
     if(!(-e $dafFile)) {
         die "Can't find the DAF file\n";
     }
-    $dafFile = $submitDir . "/" . $dafFile;
+    $dafFile = cwd() . "/" . $dafFile;
     &HgAutomate::verbose(2, "Using newest DAF file \'$dafFile\'\n");
     chdir($wd);
     return parseDaf($dafFile, $grants, $fields);
