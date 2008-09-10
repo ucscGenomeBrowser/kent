@@ -14,8 +14,8 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-find /projects/compbiousr/cvsroot/kent -name '#cvs*' > cvs.locks.found
-find /projects/compbiousr/cvslock/kent -name '#cvs*' >> cvs.locks.found
+find /projects/compbiousr/cvsroot/kent -name '#cvs*' -printf "%p %TY-%Tm-%TdT%TT%TZ\n" |egrep -v "^(find)" > cvs.locks.found
+find /projects/compbiousr/cvslock/kent -name '#cvs*' -printf "%p %TY-%Tm-%TdT%TT%TZ\n" |egrep -v "^(find)" >> cvs.locks.found
 
 echo "cvs.locks.found:"
 cat cvs.locks.found
