@@ -168,6 +168,17 @@ static void rangeValSize(void *val)
 tempValSize += tempFuncRangeValSize(val);
 }
 
+void rangeArrayToTree(struct rbTree *rt, struct rangeStartSize r[], int numNodes)
+/* Reads numNodes ranges from the range array 'r' and adds them to rangeTree rt. 
+ * Does not read range val. */
+{   
+int i;
+for (i = 0 ; i<numNodes ; ++i)
+    {
+    rangeTreeAdd(rt, r[i].start, r[i].start+r[i].size);
+    }
+}
+
 void rangeTreeReadNodes(FILE *f, struct rbTree *rt, int numNodes, boolean isSwapped)
 /* Reads numNodes ranges from the file and adds them to rangeTree rt.
  * Does not read range val.  */

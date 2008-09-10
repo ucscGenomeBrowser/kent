@@ -60,6 +60,10 @@ void rangeWriteOneWithVal(struct range *r, FILE *f, void (*valWriteOne)(void *va
  * Writes start and size.
  * valWriteOne should point to a function which writes the value (not called if null). */
 
+void rangeArrayToTree(struct rbTree *rt, struct rangeStartSize r[], int numNodes);
+/* Reads numNodes ranges from the range array 'r' and adds them to rangeTree rt. 
+ * Does not read range val. */
+
 void rangeTreeReadNodes(FILE *f, struct rbTree *rt, int numNodes, boolean isSwapped);
 /* Reads numNodes ranges from the file and adds them to rangeTree rt.
  * Does not read range val.  */
