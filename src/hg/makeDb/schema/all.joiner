@@ -3194,6 +3194,7 @@ tablesIgnored $hg
     encodeYaleChipPval%
     encodeYaleChipSignal%
     encodeYaleChipSites%
+    encodeTba%
 
 tablesIgnored $mm
     chr%_gold
