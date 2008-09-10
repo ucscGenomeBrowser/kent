@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.55 2008/09/08 21:08:49 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.56 2008/09/10 19:01:36 larrym Exp $
 
 use warnings;
 use strict;
@@ -52,8 +52,8 @@ options:
     -allowReloads       Allow reloads of existing tables
     -configDir dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
-    -validateDaf	exit after validating DAF file
-    -verbose num        Set verbose level to num (default 1).            -
+    -validateDaf	exit after validating DAF file (project-submission-dir is the DAF file name).
+    -verbose num        Set verbose level to num (default 1).
     -outDir dir         Path of output directory, for validation files
                         (default: submission-dir/out)
 END
@@ -387,6 +387,9 @@ if (defined $opt_configDir) {
 } else {
     $configPath = "$submitDir/../config"
 }
+if(!(-d $configPath)) {
+    die "configPath '$configPath' is invalid; Can't find the config directory\n";
+}
 &HgAutomate::verbose(4, "Config directory path: \'$configPath\'\n");
 
 if (defined $opt_outDir) {
@@ -400,22 +403,32 @@ if (defined $opt_outDir) {
 }
 &HgAutomate::verbose(4, "Output directory path: '$outPath'; submitPath: '$submitPath'\n");
 
-# Change dir to submission directory 
-chdir $submitPath ||
-    die ("SYS ERR; Can't change to submission directory \'$submitPath\': $OS_ERROR\n");
-&HgAutomate::verbose(3, "Creating output in directory \'$outPath\'\n");
-mkdir $outPath || 
-    die ("SYS ERR: Can't create out directory \'$outPath\': $OS_ERROR\n");
+if(!$opt_validateDaf) {
+    # Change dir to submission directory 
+    if(!chdir($submitPath)) {
+        die ("SYS ERR; Can't change to submission directory \'$submitPath\': $OS_ERROR\n");
+    }
+    &HgAutomate::verbose(3, "Creating output in directory \'$outPath\'\n");
+    if(!(-d $outPath)) {
+        mkdir $outPath || die ("SYS ERR: Can't create out directory \'$outPath\': $OS_ERROR\n");
+    }
+}
 
 # labs is now in fact the list of grants (labs are w/n grants, and are not currently validated).
 my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $grants, $fields);
 
 if($opt_validateDaf) {
+    if(-f $submitDir) {
+        Encode::parseDaf($submitDir, $grants, $fields);
+    } else {
+        Encode::getDaf($submitDir, $grants, $fields);
+    }
     print STDERR "DAF is valid\n";
     exit(0);
 }
+
+my $daf = Encode::getDaf($submitDir, $grants, $fields);
 
 my $db = HgDb->new(DB => $daf->{assembly});
 
