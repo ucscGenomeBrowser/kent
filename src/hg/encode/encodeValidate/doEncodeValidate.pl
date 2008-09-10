@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.57 2008/09/10 19:50:46 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.58 2008/09/10 19:52:27 larrym Exp $
 
 use warnings;
 use strict;
@@ -99,12 +99,12 @@ sub validateFileName {
             die "ERROR: File '$file' does not exist (possibly bad glob)\n";
         }
     }
-    &HgAutomate::verbose(3, "     Track: $track    Files: " . join (' ', @newFiles) . "\n");
+    HgAutomate::verbose(3, "     Track: $track    Files: " . join (' ', @newFiles) . "\n");
     for my $file (@newFiles) {
         -e $file || die "ERROR: File \'$file\' does not exist\n";
         -s $file || die "ERROR: File \'$file\' is empty\n";
         -r $file || die "ERROR: File \'$file\' is not readable \n";
-        &checkDataFormat($daf->{TRACKS}{$track}{type}, $file);
+        checkDataFormat($daf->{TRACKS}{$track}{type}, $file);
     }
     $files = \@newFiles;
 }
@@ -191,7 +191,7 @@ sub validateWig
         print STDERR  "ERROR: File \'$file\' failed wiggle validation\n";
         die "ERROR: " . $safe->stderr();
     } else {
-        &HgAutomate::verbose(2, "File \'$file\' passed wiggle validation\n");
+        HgAutomate::verbose(2, "File \'$file\' passed wiggle validation\n");
     }
 }
 
@@ -250,7 +250,7 @@ sub validateGene {
         my @err = <ERR>;
         die "@err\n";
     } else {
-        &HgAutomate::verbose(2, "File \'$file\' passed GFF validation\n");
+        HgAutomate::verbose(2, "File \'$file\' passed GFF validation\n");
     }
 }
 
@@ -326,7 +326,7 @@ sub validateDdfField {
     # validate value for type of field
     my ($type, $val, $track, $daf) = @_;
     $type =~ s/ /_/g;
-    &HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
+    HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
     if($validators{$type}) {
         $validators{$type}->($val, $track, $daf);
     }
@@ -335,7 +335,7 @@ sub validateDdfField {
 sub checkDataFormat {
     # validate file type
     my ($format, $file) = @_;
-    &HgAutomate::verbose(3, "Checking data format for $file: $format\n");
+    HgAutomate::verbose(3, "Checking data format for $file: $format\n");
     my $type = $format;
     if ($format =~ m/(bed) (\d+)/) {
         $format = $1;
@@ -382,13 +382,13 @@ my $submitDir = $ARGV[1];
 $opt_verbose = 1 if (!defined $opt_verbose);
 
 # Determine submission, configuration, and output directory paths
-&HgAutomate::verbose(2, "Validating submission in directory \'$submitDir\'\n");
+HgAutomate::verbose(2, "Validating submission in directory \'$submitDir\'\n");
 if ($submitDir =~ /^\/.*/) {
     $submitPath = $submitDir;
 } else {
     $submitPath = "$wd/$submitDir";
 }
-&HgAutomate::verbose(4, "Submission directory path: \'$submitPath\'\n");
+HgAutomate::verbose(4, "Submission directory path: \'$submitPath\'\n");
 
 if (defined $opt_configDir) {
     if ($opt_configDir =~ /^\//) {
@@ -402,7 +402,7 @@ if (defined $opt_configDir) {
 if(!(-d $configPath)) {
     die "configPath '$configPath' is invalid; Can't find the config directory\n";
 }
-&HgAutomate::verbose(4, "Config directory path: \'$configPath\'\n");
+HgAutomate::verbose(4, "Config directory path: \'$configPath\'\n");
 
 if (defined $opt_outDir) {
     if ($opt_outDir =~ /^\//) {
@@ -413,14 +413,14 @@ if (defined $opt_outDir) {
 } else {
     $outPath = "$submitPath/out"
 }
-&HgAutomate::verbose(4, "Output directory path: '$outPath'; submitPath: '$submitPath'\n");
+HgAutomate::verbose(4, "Output directory path: '$outPath'; submitPath: '$submitPath'\n");
 
 if(!$opt_validateDaf) {
     # Change dir to submission directory 
     if(!chdir($submitPath)) {
         die ("SYS ERR; Can't change to submission directory \'$submitPath\': $OS_ERROR\n");
     }
-    &HgAutomate::verbose(3, "Creating output in directory \'$outPath\'\n");
+    HgAutomate::verbose(3, "Creating output in directory \'$outPath\'\n");
     if(!(-d $outPath)) {
         mkdir $outPath || die ("SYS ERR: Can't create out directory \'$outPath\': $OS_ERROR\n");
     }
@@ -465,7 +465,7 @@ if($hasReplicates) {
 my @glob = glob "*.DDF";
 push(@glob, glob "*.ddf");
 my $ddfFile = Encode::newestFile(@glob);
-&HgAutomate::verbose(2, "Using newest DDF file \'$ddfFile\'\n");
+HgAutomate::verbose(2, "Using newest DDF file \'$ddfFile\'\n");
 my $lines = Encode::readFile($ddfFile);
 
 my $ddfLineNumber = 0;
