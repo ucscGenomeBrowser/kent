@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.23 2008/07/28 04:15:09 kate Exp $
+# $Id: doBlastzChainNet.pl,v 1.24 2008/09/10 16:01:38 braney Exp $
 
 # to-do items:
 # - lots of testing
@@ -1308,6 +1308,7 @@ sub installDownloads {
 				      $runDir, $whatItDoes, $DEF);
   $bossScript->add(<<_EOF_
 mkdir -p $HgAutomate::goldenPath/$tDb
+rm -rf $HgAutomate::goldenPath/$tDb/vs$QDb
 mkdir $HgAutomate::goldenPath/$tDb/vs$QDb
 cd $HgAutomate::goldenPath/$tDb/vs$QDb
 ln -s $runDir/$tDb.$qDb.all.chain.gz .
