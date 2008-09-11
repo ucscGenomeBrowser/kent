@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.58 2008/09/10 19:52:27 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.59 2008/09/11 22:11:11 larrym Exp $
 
 use warnings;
 use strict;
@@ -358,10 +358,11 @@ sub ddfKey
 ############################################################################
 # Main
 
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time());
+my $now = time();
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($now);
 my @ddfHeader;		# list of field names on the first line of DDF file
 my %ddfHeader = ();	# convenience hash version of @ddfHeader (maps name to field index)
-my @ddfLines = ();	# each line in DDF (except for fields header)
+my @ddfLines = ();	# each line in DDF (except for fields header); value is a hash; e.g. {files => 'foo.bed', cell => 'HeLa-S3', ...}
 my %ddfSets = ();	# info about DDF entries broken down by ddfKey
 my $wd = cwd();
 
@@ -589,6 +590,12 @@ if(!$db->quickQuery("select count(*) from trackDb where tableName = ?", $composi
 %terms = Encode::getControlledVocab($configPath);
 open(LOADER_RA, ">$outPath/$Encode::loadFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::loadFile\' file; error: $!\n";
 open(TRACK_RA, ">$outPath/$Encode::trackFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::trackFile\' file; error: $!\n";
+open(README, ">$outPath/README.txt") || die "SYS ERROR: Can't write '$outPath/READEME.txt' file; error: $!\n";
+
+my @variables;
+if (defined($daf->{variables})) {
+    @variables = @{$daf->{variableArray}};
+}
 
 my $priority = $db->quickQuery("select max(priority) from trackDb where settings like '%subTrack $compositeTrack%'") || 0;
 $ddfLineNumber = 1;
@@ -626,8 +633,7 @@ foreach my $ddfLine (@ddfLines) {
     my $subGroups = "view=$view";
     my $additional = "\n";
     my $pushQDescription = "";
-    if (defined($daf->{variables})) {
-        my @variables = @{$daf->{variableArray}};
+    if (@variables) {
         my %hash = map { $_ => $ddfLine->{$_} } @variables;
         for my $var (@variables) {
             $tableName = $tableName . $ddfLine->{$var};
@@ -681,7 +687,19 @@ foreach my $ddfLine (@ddfLines) {
     print LOADER_RA "pushQDescription $pushQDescription\n";
     print LOADER_RA "\n";
 
-    if(!$downloadOnly) {
+    if($downloadOnly) {
+        print README "file: $tableName.$type\n";
+        for my $var (@variables) {
+            print README "$var: " . $ddfLine->{$var} . "\n";
+        }
+        if(defined($replicate)) {
+            print README "replicate: $replicate\n";
+        }
+        
+        my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate($now);
+        print README sprintf("data restricted until: %d-%02d-%d\n", 1900 + $rYear, $rMon + 1, $rMDay);
+        print README "\n";
+    } else {
         print TRACK_RA "\ttrack\t$tableName\n";
         print TRACK_RA "\tsubTrack\t$compositeTrack\n";
         print TRACK_RA "\tshortLabel\t$shortLabel\n";
@@ -710,5 +728,6 @@ END
 }
 close(LOADER_RA);
 close(TRACK_RA);
+close(README);
 
 exit 0;
