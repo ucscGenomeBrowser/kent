@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.43 2008/09/10 04:42:21 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.44 2008/09/11 23:15:02 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -363,6 +363,15 @@ if (tdb == NULL)
 if (tdb->settingsHash == NULL)
     tdb->settingsHash = raFromString(tdb->settings);
 return hashFindVal(tdb->settingsHash, name);
+}
+
+boolean trackDbSettingOn(struct trackDb *tdb, char *name)
+/* Return true if a tdb setting is "on" "true" or "enabled". */
+{
+char *setting = trackDbSetting(tdb,name);
+return  (setting && (   sameWord(setting,"on") 
+                     || sameWord(setting,"true") 
+                     || sameWord(setting,"enabled")));
 }
 
 char *trackDbRequiredSetting(struct trackDb *tdb, char *name)

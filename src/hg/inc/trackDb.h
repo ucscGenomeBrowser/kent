@@ -195,6 +195,9 @@ struct hash *trackDbHashSettings(struct trackDb *tdb);
 char *trackDbSetting(struct trackDb *tdb, char *name);
 /* Return setting string or NULL if none exists. */
 
+boolean trackDbSettingOn(struct trackDb *tdb, char *name);
+/* Return true if a tdb setting is "on" "true" or "enabled". */
+
 char *trackDbRequiredSetting(struct trackDb *tdb, char *name);
 /* Return setting string or squawk and die. */
 
