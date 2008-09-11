@@ -16,6 +16,7 @@
 #include "hgMaf.h"
 #include "mafGene.h"
 #include "genePredReader.h"
+#include "jsHelper.h"
 
 boolean isGenePredTable(struct trackDb *track, char *table)
 /* Return TRUE if table is genePred. */
@@ -41,6 +42,20 @@ return FALSE;
 static char *mafTrackNames[STATIC_ARRAY_SIZE];
 static char *mafTrackExist[STATIC_ARRAY_SIZE];
 //static char *speciesNames[STATIC_ARRAY_SIZE];
+
+#define hgtaCGIGeneMafTable "hgta_mafGeneMafTable" 
+#define hgtaJSGeneMafTable  "mafGeneMafTable" 
+#define hgtaCGIGeneExons "hgta_mafGeneExons" 
+#define hgtaJSGeneExons  "mafGeneExons" 
+#define hgtaCGIGeneNoTrans "hgta_mafGeneNoTrans" 
+#define hgtaJSGeneNoTrans  "mafGeneNoTrans" 
+#define hgtaCGIGeneOutBlank "hgta_mafGeneOutBlank" 
+#define hgtaJSGeneOutBlank  "mafGeneOutBlank" 
+
+static char *curVars[] = {
+	hgtaCGIGeneMafTable, hgtaCGIGeneExons,
+	hgtaCGIGeneNoTrans, hgtaCGIGeneOutBlank
+	};
 
 struct genePredReader *regionGenePredQuery(struct sqlConnection *conn, 
 	char *table,  struct region *region, char *extraWhere)
@@ -68,9 +83,9 @@ if (region->fullChrom) /* Full chromosome. */
     char extra[2048];
 
     if (extraWhere)
-	safef(extra, sizeof extra, "chrom=%s AND %s",region->chrom,extraWhere);
+	safef(extra, sizeof extra, "chrom='%s' AND %s",region->chrom,extraWhere);
     else
-	safef(extra, sizeof extra, "chrom=%s",region->chrom);
+	safef(extra, sizeof extra, "chrom='%s'",region->chrom);
     reader = genePredReaderQuery( conn, table, extra);
     }
 else
@@ -82,123 +97,23 @@ else
 return reader;
 }
 
-#ifdef NTONOW
-static struct slName *getSpecies(char *mafTable, boolean doPrint)
-{
-char option[MAX_SP_SIZE];
-struct slName *speciesList = NULL;
-int ii;
-//errAbort("Looking for %s in %s\n", mafTable, database);
-struct trackDb *tdb = hTrackDbForTrack(database, mafTable);
-//errAbort("tdb %p\n",tdb);
-char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
-char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
-char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
-char *groups[20];
-int speciesCt = 0, groupCt = 1;
-int group;
-char sGroup[24];
-char *species[MAX_SP_SIZE];
-/* determine species and groups for pairwise -- create checkboxes */
-if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
-    {
-//    if (isCustomTrack(tdb->tableName))
-//	return;
-    errAbort("Track %s missing required trackDb setting: speciesOrder, speciesGroups, or speciesUseFile", tdb->tableName);
-    }
-
-slAddHead(&speciesList, slNameNew(database));
-
-if (speciesGroup)
-    groupCt = chopLine(speciesGroup, groups);
-
-if (speciesUseFile)
-    {
-    if ((speciesGroup != NULL) || (speciesOrder != NULL))
-	errAbort("Can't specify speciesUseFile and speciesGroup or speciesOrder");
-    speciesOrder = cartGetOrderFromFile(database, cart, speciesUseFile);
-    }
-
-for (group = 0; group < groupCt; group++)
-    {
-    if (groupCt != 1 || !speciesOrder)
-        {
-        safef(sGroup, sizeof sGroup, "%s%s", 
-                                SPECIES_GROUP_PREFIX, groups[group]);
-        speciesOrder = trackDbRequiredSetting(tdb, sGroup);
-        }
-    speciesCt = chopLine(speciesOrder, species);
-    for (ii = 0; ii < speciesCt; ii++)
-        {
-//	printf("looking at %s\n", species[ii]);
-        slAddTail(&speciesList, slNameNew(species[ii]));
-        }
-    }
-struct slName *sl;
-
-if (doPrint)
-    {
-    printf("<B>Species to include:</B><BR>\n");
-    puts("\n<TABLE><TR>");
-    }
-
-ii=0;
-struct slName *includeList = NULL;
-struct slName *next;
-
-for(sl = speciesList; sl; sl = next)
-    {
-    next = sl->next;
-    sl->next = NULL;
-    safef(option, sizeof(option), "%s.%s", tdb->tableName, sl->name);
-    int on = cartUsualBoolean(cart, option, TRUE);
-    
-    if (on)
-	slAddHead(&includeList, sl);
-
-    if (doPrint)
-	{
-	puts("<TD>");
-	cgiMakeCheckBox(option, on);
-	char *label = hOrganism(sl->name);
-	if (label == NULL)
-		label = sl->name;
-	printf ("%s<BR>", label);
-	puts("</TD>");
-	if (++ii ==  5)
-	    {
-	    puts("</TR><TR>");
-	    ii=0;
-	    }
-	}
-    }
-if (doPrint)
-    puts("</TR></TABLE><BR>");
-
-if(includeList)
-    slReverse(&includeList);
-
-return includeList;
-}
-#endif
-
-
 void doGenePredPal(struct sqlConnection *conn)
 /* Output genePred protein alignment. */
 {
 struct genePredReader *reader = NULL;
-char *mafTable = cartString(cart, "mafTable");
 if (anySubtrackMerge(database, curTable))
     errAbort("Can't do protein alignment output when subtrack merge is on. "
     "Please go back and select another output type (BED or custom track is good), or clear the subtrack merge.");
 if (anyIntersection())
     errAbort("Can't do protein alignment output when intersection is on. "
     "Please go back and select another output type (BED or custom track is good), or clear the intersection.");
+
 textOpen();
 
-boolean inExons = cartUsualBoolean(cart, "mafGeneExons", TRUE); 
-boolean noTrans = cartUsualBoolean(cart, "mafGeneNoTrans", FALSE); 
-boolean outBlank = cartUsualBoolean(cart, "mafGeneOutBlank", FALSE); 
+char *mafTable = cartString(cart, hgtaCGIGeneMafTable); 
+boolean inExons = cartUsualBoolean(cart, hgtaCGIGeneExons , TRUE); 
+boolean noTrans = cartUsualBoolean(cart, hgtaCGIGeneNoTrans, FALSE); 
+boolean outBlank = cartUsualBoolean(cart, hgtaCGIGeneOutBlank, FALSE); 
 struct region *regionList = getRegions();
 struct region *region;
 struct hTableInfo *hti = NULL;
@@ -317,32 +232,38 @@ if (outCount == 0)
 hashFree(&idHash);
 }
 
-#ifdef NOTNOW
-static char *onChangeMafTable()
-/* Return javascript executed when they change clade. */
+
+
+static char *onChangeEnd(struct dyString **pDy)
+/* Finish up javascript onChange command. */
 {
-//struct dyString *dy = onChangeStart();
-struct dyString *dy = jsOnChangeStart();
-jsDropDownCarryOver(dy, "mafTable");
-//jsDropDownCarryOver(dy, "mafTable");
-dyStringAppend(dy, " document.hiddenForm.org.value=0;");
-dyStringAppend(dy, " document.hiddenForm.db.value=0;");
-dyStringAppend(dy, " document.hiddenForm.position.value='';");
-return jsOnChangeEnd(&dy);
+dyStringAppend(*pDy, "document.hiddenForm.submit();\"");
+return dyStringCannibalize(pDy);
 }
-#endif
 
-
-static void palOptions(struct trackDb *track, char *type, 
-	struct sqlConnection *conn)
-/* Put up sequence type options for gene prediction tracks. */
+static struct dyString *onChangeStart()
+/* Start up a javascript onChange command */
 {
-htmlOpen("Select multiple alignment and options for %s", track->shortLabel);
+struct dyString *dy = dyStringNew(1024);
+dyStringAppend(dy, "onChange=\"");
+jsDropDownCarryOver(dy, hgtaCGIGeneMafTable);
+jsTrackedVarCarryOver(dy, hgtaCGIGeneExons, hgtaJSGeneExons); 
+jsTrackedVarCarryOver(dy, hgtaCGIGeneNoTrans, hgtaJSGeneNoTrans); 
+jsTrackedVarCarryOver(dy, hgtaCGIGeneOutBlank, hgtaJSGeneOutBlank); 
+return dy;
+}
 
-char *mafTable = cartOptionalString(cart, "mafTable");
-//char option[MAX_SP_SIZE];
+static char *onChangeGenome()
+/* Get group-changing javascript. */
+{
+struct dyString *dy = onChangeStart();
+return onChangeEnd(&dy);
+}
+
+static char * outMafTableDrop(struct cart *cart, struct sqlConnection *conn)
+{
+char *mafTable = cartOptionalString(cart, hgtaCGIGeneMafTable);
 char query[512];
-//struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 safef(query, sizeof query, "select tableName from trackDb where type like 'wigMaf%%'");
@@ -376,28 +297,36 @@ for(ii=0; ii < count; ii++)
 if ((mafTable == NULL) || (checked == NULL))
     checked = mafTable = mafTrackExist[0];
 
-hPrintf("<FORM ACTION=\"%s\" METHOD=GET>\n", getScriptName());
-//cgiMakeDropListFull("mafTable", mafTrackExist, NULL,  count2,  checked, onChangeMafTable);
 printf("MAF table: \n");
-cgiMakeDropList("mafTable", mafTrackExist, count2,  checked);
-//cartSetString(cart, "mafTable", mafTable);
-cgiMakeButton(hgtaDoTopSubmit, "submit");
-hPrintf("</FORM>\n");
+//cgiMakeDropList(hgtaCGIGeneMafTable, mafTrackExist, count2,  checked);
+cgiMakeDropListFull(hgtaCGIGeneMafTable, mafTrackExist, mafTrackExist, count2,  checked, onChangeGenome());
 
-#define MAIN_FORM "mainForm"
-hPrintf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
-       getScriptName(), "POST");
-//hPrintf("<FORM ACTION=\"%s\" METHOD=POST>\n", getScriptName());
+return mafTable;
+}
+
+static void palOptions(struct trackDb *track, char *type, 
+	struct sqlConnection *conn)
+/* Put up sequence type options for gene prediction tracks. */
+{
+htmlOpen("Select multiple alignment and options for %s", track->shortLabel);
+
+hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=GET>\n", getScriptName());
+cartSaveSession(cart);
+
+char *mafTable = outMafTableDrop(cart, conn);
+
+/*
 boolean inExons = cartUsualBoolean(cart, "mafGeneExons", TRUE); 
 boolean noTrans = cartUsualBoolean(cart, "mafGeneNoTrans", FALSE); 
 boolean outBlank = cartUsualBoolean(cart, "mafGeneOutBlank", FALSE); 
+*/
 
 printf("<BR><B>Formatting options:</B><BR>\n");
-cgiMakeCheckBox("mafGeneExons", inExons);
+jsMakeTrackingCheckBox(cart, hgtaCGIGeneExons, hgtaJSGeneExons, FALSE);
 printf("Separate into exons<BR>");
-cgiMakeCheckBox("mafGeneNoTrans", noTrans);
-printf("Don't translate into amino acids<BR>");
-cgiMakeCheckBox("mafGeneOutBlank", outBlank);
+jsMakeTrackingCheckBox(cart, hgtaCGIGeneNoTrans, hgtaJSGeneNoTrans, FALSE);
+printf("Show nucelotides<BR>");
+jsMakeTrackingCheckBox(cart, hgtaCGIGeneOutBlank, hgtaJSGeneOutBlank, FALSE);
 printf("Output lines with just dashes<BR>");
 
 
@@ -410,6 +339,14 @@ cgiMakeButton(hgtaDoPalOut, "submit");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>\n");
+/* Hidden form - for benefit of javascript. */
+    {
+    static char *saveVars[32];
+    int varCount = ArraySize(curVars);
+    memcpy(saveVars, curVars, varCount * sizeof(saveVars[0]));
+    saveVars[varCount] = hgtaDoPal;
+    jsCreateHiddenForm(cart, getScriptName(), saveVars, varCount+1);
+    }
 cartSaveSession(cart);
 htmlClose();
 }
