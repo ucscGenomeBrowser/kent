@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.128 2008/09/11 01:38:44 braney Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.129 2008/09/11 21:40:50 braney Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -431,7 +431,7 @@ struct outputType otSequence = { NULL,
     outSequence,
     "sequence", };
 struct outputType otPal = { NULL, 
-    outPal,
+    outPalOptions,
     "CDS FASTA Alignment from multiple alignment", };
 struct outputType otGff = { NULL, 
     outGff,
