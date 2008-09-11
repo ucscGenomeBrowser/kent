@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.16 2008/09/10 18:53:38 larrym Exp $
+# $Id: Encode.pm,v 1.17 2008/09/11 22:09:48 larrym Exp $
 
 package Encode;
 
@@ -27,6 +27,8 @@ our $dafVersion = "0.2.2";
 our $fieldConfigFile = "fields.ra";
 our $vocabConfigFile = "cv.ra";
 our $labsConfigFile = "labs.ra";
+
+our $restrictedMonths = 9;
 
 our $sqlCreate = "/cluster/bin/sqlCreate";
 # Add type names to this list for types that can be loaded via .sql files (e.g. bed5FloatScore.sql)
@@ -329,6 +331,22 @@ sub downloadDir
 {
     my ($daf) = @_;
     return "/usr/local/apache/htdocs/goldenPath/$daf->{assembly}/" . compositeTrackName($daf);
+}
+
+sub restrictionDate
+{
+# calculate the "restrict until ..." date.
+# now argument s/d be time().
+# returns the standard time list; i.e.: ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)
+    my ($now) = @_;
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($now);
+    my $restrictedYear = $year;
+    my $restrictedMon = $mon + $restrictedMonths;
+    if($restrictedMon >= 12) {
+        $restrictedYear++;
+        $restrictedMon = ($mon + $restrictedMonths) % 12;
+    }
+    return ($sec,$min,$hour,$mday,$restrictedMon,$restrictedYear,$wday,$yday,$isdst);
 }
 
 1;
