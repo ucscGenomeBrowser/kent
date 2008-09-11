@@ -10,5 +10,8 @@ dbSnoop: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/dbSnoop $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/dbSnoop${EXE}
 
+compile: $O ${MYLIBS}
+	${CC} ${COPT} -o dbSnoop $O ${MYLIBS} $L
+    
 clean:
-	rm -f $O
+	rm -f $O dbSnoop

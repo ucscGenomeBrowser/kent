@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "tableStatus.h"
 
-static char const rcsid[] = "$Id: dbSnoop.c,v 1.11 2006/10/04 18:59:04 hiram Exp $";
+static char const rcsid[] = "$Id: dbSnoop.c,v 1.12 2008/09/11 17:34:23 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -77,7 +77,16 @@ int tableInfoCmpUpdateTime(const void *va, const void *vb)
 {
 const struct tableInfo *a = *((struct tableInfo **)va);
 const struct tableInfo *b = *((struct tableInfo **)vb);
-return strcmp(b->status->updateTime, a->status->updateTime);
+char *aT = a->status->updateTime;
+char *bT = b->status->updateTime;
+if (aT == bT)
+    return FALSE;
+else if (aT == NULL)	/* Update_time is NULL for InnoDB tables */
+    return -1;
+else if (bT == NULL)
+    return 1;
+else
+    return strcmp(bT,aT);
 }
 
 
