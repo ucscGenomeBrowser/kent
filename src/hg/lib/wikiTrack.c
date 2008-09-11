@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.23 2008/09/03 19:19:28 markd Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.24 2008/09/11 23:22:44 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -713,6 +713,8 @@ safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=edit",
 char *fullText = htmlSlurpWithCookies(wikiPageUrl,cookie);
 struct htmlPage *page = htmlPageParseOk(wikiPageUrl, fullText);
 /* fullText pointer is placed in page->fullText */
+/* the submit on the edit is going to need these cookies */
+page->cookies = cookie;
 
 return (page);
 }
