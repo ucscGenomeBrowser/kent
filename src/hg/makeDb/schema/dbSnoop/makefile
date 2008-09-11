@@ -12,6 +12,6 @@ dbSnoop: $O ${MYLIBS}
 
 compile: $O ${MYLIBS}
 	${CC} ${COPT} -o dbSnoop $O ${MYLIBS} $L
-    
+
 clean:
 	rm -f $O dbSnoop
