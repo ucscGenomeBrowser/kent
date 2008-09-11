@@ -69,7 +69,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.128 2008/07/11 21:54:15 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.129 2008/09/11 23:19:30 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -2775,17 +2775,38 @@ for (node = list->head; !dlEnd(node); node = node->next)
 return count;
 }
 
+int getBusyCpus(struct dlList *list)
+/* Return total CPU resources in list. */
+{
+int count = 0;
+struct dlNode *node = NULL;
+for (node = list->head; !dlEnd(node); node = node->next)
+    {
+    struct machine *machine = node->val;
+    /* all the cpus now in-use */
+    struct dlNode *jobNode = NULL;
+    for (jobNode = machine->jobs->head; !dlEnd(jobNode); jobNode = jobNode->next)
+	{
+	struct job *job = jobNode->val;
+	struct batch * batch =job->batch;
+	count += batch->cpu;
+	}
+    }
+return count;
+}
+
 void status(struct paraMessage *pm)
 /* Write summary status.  Format is one line per message
  * followed by a blank message. */
 {
 char buf[256];
-safef(buf, sizeof(buf), "CPUs total: %d", 
-    getCpus(freeMachines)+getCpus(readyMachines)+getCpus(blockedMachines)+getCpus(busyMachines));
+int totalCpus = getCpus(freeMachines)+getCpus(readyMachines)+getCpus(blockedMachines)+getCpus(busyMachines);
+int busyCpus = getBusyCpus(readyMachines)+getBusyCpus(blockedMachines)+getBusyCpus(busyMachines);
+safef(buf, sizeof(buf), "CPUs total: %d", totalCpus);
 pmSendString(pm, rudpOut, buf);
-safef(buf, sizeof(buf), "CPUs free: %d", getCpus(freeMachines));
+safef(buf, sizeof(buf), "CPUs free: %d", totalCpus - busyCpus);
 pmSendString(pm, rudpOut, buf);
-safef(buf, sizeof(buf), "CPUs busy: %d", getCpus(readyMachines)+getCpus(blockedMachines)+getCpus(busyMachines));
+safef(buf, sizeof(buf), "CPUs busy: %d", busyCpus);
 pmSendString(pm, rudpOut, buf);
 safef(buf, sizeof(buf), "Nodes total: %d", 
     dlCount(freeMachines)+dlCount(busyMachines)+dlCount(readyMachines)+
