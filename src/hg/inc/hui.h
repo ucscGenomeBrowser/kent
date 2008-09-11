@@ -836,4 +836,7 @@ void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title,
 void tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
 /* Updates the tdb_>priority from cart then sorts the list anew */
 
+enum trackVisibility visCompositeViewDefault(struct trackDb *parentTdb,char *view);
+/* returns the default track visibility of particular view within a composite track */
+
 #endif /* HUI_H */

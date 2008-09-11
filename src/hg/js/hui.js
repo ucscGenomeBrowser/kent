@@ -68,9 +68,87 @@ function matSetCheckBoxesThatContain(nameOrId, state, force, sub1)
     return true;
 }
 
+function matSubtrackCbClick(subCb)
+{
+// When a matrix subrtrack checkbox is clicked, it may result in
+// Clicking/unclicking the corresponding matrix CB.  Also the 
+// subtrack may be hidden as a result.    
+    matChkBoxNormalizeMatching(subCb);
+    hideOrShowSubtrack(subCb);
+}
+
+function compositeCfgUpdateSubtrackCfgs(inp)
+{
+// Updates all subtrack configuration values when the composite cfg is changed
+    var count=0;
+    var suffix = inp.name.substring(inp.name.indexOf("."));
+    var list = inputArrayThatMatches(inp.type,"name","",suffix);
+    for (var ix=0;ix<list.length;ix++) {
+        list[ix].value = inp.value;
+        count++;
+    }
+    if(list.length==0) {
+        var list = document.getElementsByTagName('select');
+        for (var ix=0;ix<list.length;ix++) {
+            if(list[ix].name.lastIndexOf(suffix) == list[ix].name.length - suffix.length ) {
+                list[ix].value = inp.value;
+                count++;
+            }
+        }
+    }
+    //alert("compositeCfgUpdateSubtrackCfgs("+suffix+") updated "+count+" inputs.")
+}
+
+function compositeCfgRegisterOnchangeAction(prefix)
+{
+    var count=0;
+    var list = inputArrayThatMatches("","name",prefix,"");
+    for (var ix=0;ix<list.length;ix++) {
+        list[ix].onchange = function(){compositeCfgUpdateSubtrackCfgs(this);};
+        count++;
+    }
+    var list = document.getElementsByTagName('select');
+    for (var ix=0;ix<list.length;ix++) {
+        if(list[ix].name.indexOf(prefix) == 0) {
+            list[ix].onchange = function(){compositeCfgUpdateSubtrackCfgs(this);};
+            count++;
+        }
+    }
+    //alert("compositeCfgRegisterOnchangeAction("+prefix+") updated "+count+" inputs and selects.")
+}
+
+
+function subtrackCfgHideAll(table)
+{
+// hide all the subtrack configuration stuff
+    var div = table.getElementsByTagName("div");
+    for (var ix=0;ix<div.length;ix++) {
+        if (div[ix].id.lastIndexOf(".cfg") == div[ix].id.length - 4) 
+        div[ix].style.display = 'none';
+    }
+}
+
+function subtrackCfgShow(anchor)
+{
+// Will show subtrack specific configuration controls
+// Config controls not matching name will be hidden
+    var td=anchor.parentNode;
+    var tr=td.parentNode;
+    var tbody=tr.parentNode;
+    var div = tr.getElementsByTagName("div");
+    if (div!=undefined && div[0].id.lastIndexOf(".cfg") == div[0].id.length - 4) {
+        if (div[0].style.display == 'none') {
+            subtrackCfgHideAll(tbody);
+            div[0].style.display = '';
+        } else
+            div[0].style.display = 'none';
+    }
+    return true;
+}
+
 function showConfigControls(name)
 {
-// Will show wig configuration controls
+// Will show configuration controls
 // Config controls not matching name will be hidden
     var retval = false;
     if (document.getElementsByTagName)
@@ -87,6 +165,11 @@ function showConfigControls(name)
             }
         }
         retval = true;
+        var list = document.getElementsByTagName('table');
+        for (var ix=0;ix<list.length;ix++) {
+            if(list[ix].id.indexOf("subtracks.") == 0)
+                subtrackCfgHideAll(list[ix]);
+        }
     }
     else if (document.all) {
         if(debugLevel>2)
@@ -109,21 +192,21 @@ function trAlternateColors(table,cellIx)
     var lastContent = "start";
     var cIxs = new Array();
 
-    for(var aIx=1;aIx<arguments.length;aIx++) {
+    for(var aIx=1;aIx<arguments.length;aIx++) {   // multiple columns
         cIxs[aIx-1] = arguments[aIx]; 
     }
     if (document.getElementsByTagName)
     {
         for (var trIx=0;trIx<table.rows.length;trIx++) {
             var curContent = "";
-            //if(table.rows[trIx].cells[cellIx]) {
-            //    curContent = table.rows[trIx].cells[cellIx].innerText?
-            //                 table.rows[trIx].cells[cellIx].innerText:
-            //                 table.rows[trIx].cells[cellIx].innerHTML;
-            //}
+            if(table.rows[trIx].style.display == 'none')
+                continue;
             for(var ix=0;ix<cIxs.length;ix++) {
-                if(table.rows[trIx].cells[cIxs[ix]]) 
-                    curContent += table.rows[trIx].cells[cIxs[ix]].innerHTML;
+                if(table.rows[trIx].cells[cIxs[ix]]) {
+                    curContent = (table.rows[trIx].cells[cIxs[ix]].abbr != "" ?
+                                  table.rows[trIx].cells[cIxs[ix]].abbr       :
+                                  table.rows[trIx].cells[cIxs[ix]].innerHTML  );
+                }
             }
             if( lastContent != curContent ) {
                 lastContent  = curContent;
@@ -145,6 +228,7 @@ function tableSort(table,fnCompare)
 {
 // Sorts table based upon rules passed in by function reference
     //alert("tableSort("+table.id+") is beginning.");
+    subtrackCfgHideAll(table);
     var trs=0,moves=0;
     var colOrder = new Array();
     var cIx=0;
@@ -452,31 +536,83 @@ function tableReOrderColumns(table,cellIxFrom,cellIxTo)
     }    
 }
 
+function matChkBoxNormalize(matCb)
+{
+// check/unchecks a single matrix checkbox based upon subtrack checkboxes
+    var cntChecked=0;
+    var tags=matCb.name.substring(3,matCb.name.length - 3);
+    var sublist = inputArrayThatMatches("checkbox","id","cb_","",tags);
+    for (var ix=0;ix<sublist.length;ix++) {
+        if(sublist[ix].checked)
+            cntChecked++;
+    }
+    if(cntChecked == sublist.length)
+        matCb.checked=true;
+    else if(cntChecked == 0)
+        matCb.checked=false;
+}
+
+function matChkBoxNormalizeMatching(subCb)
+{
+// check/unchecks a matrix checkbox based upon subtrack checkboxes
+// the matrix cb is the one that matches the subtrack cb provided
+    // cb_tableName_dimX_dimY_view_cb need: _dimX_dimY_
+    var tags = subCb.id.split('_');
+    if(tags.length < 4)
+        return;
+    tags[0] = "_" + tags[2] + "_";
+    if(tags.length > 4)
+        tags[0] += tags[3] + "_"; // Assume 2 dimensions first (remember tags[3] could be unwanted view
+    //alert("matChkBoxNormalizeOne() id:"+subCb.id+" tags:"+tags[0]);
+    var list = inputArrayThatMatches("checkbox","name","mat_","_cb",tags[0]);
+    if(list.length==0) {
+        tags[0] = "_" + tags[2] + "_";
+        list = inputArrayThatMatches("checkbox","name","mat_","_cb",tags[0]);
+    }
+    // There should be only one!
+    for (var ix=0;ix<list.length;ix++) {
+        matChkBoxNormalize(list[ix]);
+    }
+}
+
 function matChkBoxesNormalized()
 {
 // check/unchecks matrix checkboxes based upon subtrack checkboxes
     var list = inputArrayThatMatches("checkbox","name","mat_","_cb");
     for (var ix=0;ix<list.length;ix++) {
-        var cntChecked=0;
-        var tags=list[ix].name.substring(3,list[ix].name.length - 3);
-        var sublist = inputArrayThatMatches("checkbox","id","cb_","",tags);
-        for (var sIx=0;sIx<sublist.length;sIx++) {
-            if(sublist[sIx].checked)
-                cntChecked++;
-        }
-        if(cntChecked == sublist.length)
-            list[ix].checked=true;
-        else if(cntChecked == 0)
-            list[ix].checked=false;
+        matChkBoxNormalize(list[ix]);
     }
 }
-function showOrHideSelectedSubtracks()
+
+function showOrHideSelectedSubtracks(inp)
 {
 // Show or Hide subtracks based upon radio toggle
-    var onlySelected = inputArrayThatMatches("radio","name","displaySubtracks","");
-    //var onlySelected = document.getElementsByName("displaySubtracks");
-    if(onlySelected.length > 0)
-        showSubTrackCheckBoxes(onlySelected[0].checked);
+    var showHide;
+    if(arguments.length > 0)
+        showHide=inp;
+    else {
+        var onlySelected = inputArrayThatMatches("radio","name","displaySubtracks","");
+        if(onlySelected.length > 0)
+            showHide = onlySelected[0].checked;
+        else
+            return;
+    }
+    showSubTrackCheckBoxes(showHide);
+    var list = document.getElementsByTagName('table');
+    for(var ix=0;ix<list.length;ix++) {
+        if(list[ix].id.lastIndexOf(".sortable") == list[ix].id.length - 9) {
+            var columns = new sortColumnsGetFromTable(list[ix]);
+            var tbody = list[ix].getElementsByTagName('tbody');
+            if(columns.tags.length>1) {
+                if(columns.tags.length==2)
+                    trAlternateColors(tbody[0],columns.cellIxs[0]);
+                else if(columns.tags.length==3)
+                    trAlternateColors(tbody[0],columns.cellIxs[0],columns.cellIxs[1]);
+                else
+                    trAlternateColors(tbody[0],columns.cellIxs[0],columns.cellIxs[1],columns.cellIxs[2]);
+            }
+        }
+    }
 }
 
 ///// Following functions called on page load
@@ -486,19 +622,6 @@ function matInitializeMatrix()
     if (document.getElementsByTagName) {
         matChkBoxesNormalized();
         showOrHideSelectedSubtracks();
-        
-        var list = document.getElementsByTagName('table');
-        for(var ix=0;ix<list.length;ix++) {
-            var offset = list[ix].id.lastIndexOf(".sortable");
-            if(offset > 0 && offset == list[ix].id.length - 9) {
-                var table = list[ix];
-                tbody = table.getElementsByTagName('tbody');
-                //tableSort(tbody[0],trComparePriority);
-                var columns = new sortColumnsGetFromTable(table);
-                if(columns.tags.length>1)
-                    trAlternateColors(tbody[0],columns.cellIxs[columns.tags.length-2]);
-            }
-        }
     }
     else if(debugLevel>2) {
         alert("matInitializeMatrix is unimplemented for this browser)");
@@ -509,13 +632,18 @@ function matInitializeMatrix()
 $(document).ready(function() 
 {
     //matInitializeMatrix();
+
     // Allows rows to have their positions updated after a drag event
     $(".tableWithDragAndDrop").tableDnD({
-        //onDragClass: function(row) { row.bgColor="#EEEEEE"; },
+        onDragClass: "trDrag",
         onDrop: function(table, row) {
                 if(tableSetPositions) {
                     tableSetPositions(table);
                 }
             }
         });
+    $(".trDraggable").hover(
+        function(){if($(this).hasClass('trDrag') == false) $(this).addClass('pale');},
+        function(){$(this).removeClass('pale');}
+    );
 });

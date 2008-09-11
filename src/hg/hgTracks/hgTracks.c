@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1508 2008/09/10 16:17:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1509 2008/09/11 23:40:46 tdreszer Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1433,16 +1433,26 @@ enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
 {
 enum trackVisibility vis = subtrack->limitedVis == tvHide ?
-                           subtrack->visibility : 
+                           subtrack->visibility :
                            tvMin(subtrack->visibility,subtrack->limitedVis);
-char *stView;
-// If the composite track has "view" based drop downs, set visibility based upon those
-if(subgroupFind(subtrack->tdb,"view",&stView))
+
+if(tdbIsCompositeChild(subtrack->tdb))
     {
-    char ddName[128];
-    safef(ddName,128,"%s_dd_%s",subtrack->tdb->parent->tableName,stView); // If not found takes "usual"
-    vis = hTvFromString(cartUsualString(cart, ddName,hStringFromTv(subtrack->visibility)));
-    subgroupFree(&stView);
+    char *stView;
+    // If the composite track has "view" based drop downs, set visibility based upon those
+    if(subgroupFind(subtrack->tdb,"view",&stView))
+        {
+        int len = strlen(subtrack->tdb->parent->tableName) + strlen(stView) + 10;
+        char *ddName = needMem(len);
+        safef(ddName,len,"%s_dd_%s",subtrack->tdb->parent->tableName,stView); // If not found takes "usual"
+        char * fromParent = cartOptionalString(cart, ddName);
+        if(fromParent)
+            vis = hTvFromString(fromParent);
+        else
+            vis = visCompositeViewDefault(subtrack->tdb->parent,stView);
+        freeMem(ddName);
+        subgroupFree(&stView);
+        }
     }
 return vis;
 }
