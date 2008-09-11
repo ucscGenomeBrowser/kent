@@ -80,7 +80,7 @@ function inputArrayThatMatches(inpType,nameOrId,prefix,suffix)
         var list = document.getElementsByTagName('input');
         for (var ix=0;ix<list.length;ix++) {
             var ele = list[ix];
-            if(ele.type != inpType)
+            if(inpType.length > 0 && ele.type != inpType)
                 continue;
             var identifier = ele.name;
             if(nameOrId.search(/id/i) != -1)
@@ -127,7 +127,7 @@ function showSubTrackCheckBoxes(onlySelected)
                 } else {
                     var associated_cb = tblRow.id.substring(3,tblRow.id.length);
                     chkBox = document.getElementById(associated_cb);
-                    if(chkBox.checked)
+                    if(chkBox!=undefined && chkBox.checked)
                         tblRow.style.display = ''; 
                     else
                         tblRow.style.display = 'none';
