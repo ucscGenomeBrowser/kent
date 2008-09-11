@@ -17,6 +17,24 @@
 #include "mafGene.h"
 #include "genePredReader.h"
 
+boolean isGenePredTable(struct trackDb *track, char *table)
+/* Return TRUE if table is genePred. */
+{
+char setting[128], *p = setting;
+
+if (track == NULL)
+    return FALSE;
+if (isEmpty(track->type))
+    return FALSE;
+safecpy(setting, sizeof setting, track->type);
+char *type = nextWord(&p);
+
+if (sameString(type, "genePred"))
+    if (sameString(track->tableName, table))
+        return TRUE;
+return FALSE;
+}
+
 #define MAX_SP_SIZE 2000
 
 #define STATIC_ARRAY_SIZE   1024

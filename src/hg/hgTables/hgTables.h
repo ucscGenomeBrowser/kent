@@ -405,6 +405,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaRegionTypeGenome "genome"
 #define hgtaRegionTypeRange "range"
 #define hgtaDoPalOut "hgta_palOut"
+#define hgtaDoPal "hgta_doPal"
 
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
@@ -566,6 +567,15 @@ void doOutChromGraphDataCt(struct trackDb *track, char *table);
 
 void doSummaryStatsChromGraph(struct sqlConnection *conn);
 /* Put up page showing summary stats for chromGraph track. */
+
+/* ----------- hgPal stuff in pal.c ------------------------------*/
+
+boolean isGenePredTable(struct trackDb *track, char *table);
+/* Return TRUE if table is maf. */
+
+void doOutPal( struct sqlConnection *conn);
+/* Output protein alignment page */
+
 
 /* ----------- Maf stuff in maf.c ------------------------------*/
 
@@ -753,8 +763,6 @@ void doOutSelectedFields(char *table, struct sqlConnection *conn);
 void doOutSequence(struct sqlConnection *conn);
 /* Output sequence page. */
 
-void doOutPal( struct sqlConnection *conn);
-/* Output protein alignment page */
 
 void doOutBed(char *table, struct sqlConnection *conn);
 /* Put up form to select BED output format. */

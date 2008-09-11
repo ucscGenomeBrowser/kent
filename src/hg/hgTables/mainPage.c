@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.127 2008/09/08 22:28:38 braney Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.128 2008/09/11 01:38:44 braney Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -460,7 +460,8 @@ struct outputType otChromGraphData = { NULL,
 
 
 static void showOutputTypeRow(boolean isWig, boolean isBedGr,
-    boolean isPositional, boolean isMaf, boolean isChromGraphCt)
+    boolean isPositional, boolean isMaf, boolean isChromGraphCt,
+    boolean isGenePred)
 /* Print output line. */
 {
 struct outputType *otList = NULL;
@@ -497,7 +498,8 @@ else if (isPositional)
     slAddTail(&otList, &otSequence);
     slAddTail(&otList, &otGff);
 #ifdef HGPAL
-    slAddTail(&otList, &otPal);
+    if (isGenePred)
+	slAddTail(&otList, &otPal);
 #endif
     slAddTail(&otList, &otBed);
     slAddTail(&otList, &otCustomTrack);
@@ -524,7 +526,7 @@ void showMainControlTable(struct sqlConnection *conn)
 {
 struct grp *selGroup;
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
-	isChromGraphCt = FALSE;
+	isChromGraphCt = FALSE, isGenePred = FALSE;
 boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 
@@ -587,6 +589,7 @@ hPrintf("<TABLE BORDER=0>\n");
     isWig = isWiggle(database, curTable);
     isMaf = isMafTable(database, curTrack, curTable);
     isBedGr = isBedGraph(curTable);
+    isGenePred = isGenePredTable(curTrack, curTable);
     nbSpaces(1);
     if (isCustomTrack(curTable))
 	{
@@ -771,7 +774,8 @@ if (curTrack && curTrack->type)		/*	dbg	*/
     }
 
 /* Print output type line. */
-showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt);
+showOutputTypeRow(isWig, isBedGr, isPositional, isMaf, isChromGraphCt,
+    isGenePred);
 
 /* Print output destination line. */
     {

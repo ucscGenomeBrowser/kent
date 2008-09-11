@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.167 2008/09/08 22:28:38 braney Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.168 2008/09/11 01:38:44 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1544,6 +1544,8 @@ else if (cartVarExists(cart, hgtaDoSummaryStats))
     doSummaryStats(conn);
 else if (cartVarExists(cart, hgtaDoIntersectPage))
     doIntersectPage(conn);
+else if (cartVarExists(cart, hgtaDoPal))
+    doOutPal( conn);
 else if (cartVarExists(cart, hgtaDoClearIntersect))
     doClearIntersect(conn);
 else if (cartVarExists(cart, hgtaDoIntersectMore))
