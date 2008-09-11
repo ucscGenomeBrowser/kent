@@ -518,7 +518,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define outChromGraphData "chromGraphData"
 #define outGalaxy "galaxyQuery"
 #define outMaf "maf"
-#define outPal "pal"
+#define outPalOptions "pal"
 
 /* --------- configuration options ------------ */
 boolean allowAllTables(void);
@@ -573,7 +573,7 @@ void doSummaryStatsChromGraph(struct sqlConnection *conn);
 boolean isGenePredTable(struct trackDb *track, char *table);
 /* Return TRUE if table is maf. */
 
-void doOutPal( struct sqlConnection *conn);
+void doOutPalOptions( struct sqlConnection *conn);
 /* Output protein alignment page */
 
 

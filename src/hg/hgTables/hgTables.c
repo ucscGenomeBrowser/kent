@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.168 2008/09/11 01:38:44 braney Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.169 2008/09/11 21:40:37 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1479,8 +1479,8 @@ else if (sameString(output, outBed))
     doOutBed(table, conn);
 else if (sameString(output, outCustomTrack))
     doOutCustomTrack(table, conn);
-else if (sameString(output, outPal))
-    doOutPal( conn);
+else if (sameString(output, outPalOptions))
+    doOutPalOptions( conn);
 else if (sameString(output, outGff))
     {
     if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
@@ -1544,8 +1544,10 @@ else if (cartVarExists(cart, hgtaDoSummaryStats))
     doSummaryStats(conn);
 else if (cartVarExists(cart, hgtaDoIntersectPage))
     doIntersectPage(conn);
+else if (cartVarExists(cart, hgtaDoPalOut))
+    doGenePredPal(conn);
 else if (cartVarExists(cart, hgtaDoPal))
-    doOutPal( conn);
+    doOutPalOptions( conn);
 else if (cartVarExists(cart, hgtaDoClearIntersect))
     doClearIntersect(conn);
 else if (cartVarExists(cart, hgtaDoIntersectMore))
@@ -1600,8 +1602,6 @@ else if ((varList = cartFindPrefix(cart, hgtaDoClearAllFieldPrefix)) != NULL)
     doClearAllField(varList->name + strlen(hgtaDoClearAllFieldPrefix));
 else if ((varList = cartFindPrefix(cart, hgtaDoSetAllFieldPrefix)) != NULL)
     doSetAllField(varList->name + strlen(hgtaDoSetAllFieldPrefix));
-else if (cartVarExists(cart, hgtaDoPalOut))
-    doGenePredPal(conn);
 else if (cartVarExists(cart, hgtaDoGenePredSequence))
     doGenePredSequence(conn);  
 else if (cartVarExists(cart, hgtaDoGenomicDna))
