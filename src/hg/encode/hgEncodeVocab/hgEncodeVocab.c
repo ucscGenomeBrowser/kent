@@ -18,7 +18,7 @@
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.8 2008/09/08 19:51:36 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.9 2008/09/11 00:13:36 kate Exp $";
 
 static char *cv_file()
 {
@@ -61,7 +61,7 @@ else if (sameString(type,"Gene Type"))
     }
 else if (sameString(type,"Cell Line"))
     {
-    puts("  <TH>Term</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Order URL</TH><TH>Term ID</TH>");
+    puts("  <TH>Term</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Vendor ID</TH><TH>Term ID</TH>");
     }
 else 
     errAbort("Error: Unrecognised type (%s)\n", type);
@@ -91,6 +91,7 @@ if (sameString(type,"Antibody"))
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
     s = hashFindVal(ra, "antibodyDescription");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
+
     s = hashFindVal(ra, "vendorName");
     char *t = hashFindVal(ra, "vendorId");
     char *u = hashFindVal(ra, "orderUrl");
@@ -101,6 +102,7 @@ if (sameString(type,"Antibody"))
     if (u)
         printf("</A>");
     puts("</TD>");
+
     puts("</TR>");
     }
 else if (sameString(type,"localization"))
@@ -119,6 +121,7 @@ else if (sameString(type,"localization"))
     if (u)
         printf("</A>");
     puts("</TD>");
+
     puts("</TR>");
     }
 else if (sameString(type,"rnaExtract"))
@@ -167,28 +170,39 @@ else if (sameString(type,"Cell Line"))
         if(!found)
             return;
         }
-  	++(*total);
-	puts("<TR>");
+    ++(*total);
+    puts("<TR>");
     printf("  <TD>%s</TD>\n", term);
     s = hashFindVal(ra, "tier");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
     s = hashFindVal(ra, "description");
-	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
-	s = hashFindVal(ra, "lineage");
-	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
-       	s = hashFindVal(ra, "karyotype");
-       	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
-	u = hashFindVal(ra, "orderUrl");
-	printf("  <TD>");
-	if (u)
-	    printf("<A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=%s>", u);
-      	printf("%s", u ? u : "&nbsp;");
-	if (u)
-	    printf("</A>");
-       	printf("</TD>\n");
-	s = hashFindVal(ra, "termId");
-	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
-    	puts("</TR>");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+    s = hashFindVal(ra, "lineage");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+    s = hashFindVal(ra, "karyotype");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+
+    s = hashFindVal(ra, "vendorName");
+    char *t = hashFindVal(ra, "vendorId");
+    char *u = hashFindVal(ra, "orderUrl");
+    printf("  <TD>");
+    if (u)
+        printf("<A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=%s>", u);
+    printf("%s %s", s ? s : "&nbsp;", t ? t : "&nbsp;");
+    if (u)
+        printf("</A>");
+    puts("</TD>");
+
+    s = hashFindVal(ra, "termId");
+    u = hashFindVal(ra, "termUrl");
+    printf("  <TD>");
+    if (u)
+        printf("<A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=%s>", u);
+    printf("%s", s ? s : "&nbsp;");
+    if (u)
+        printf("</A>");
+    puts("</TD>");
+    puts("</TR>");
     }
 else 
     errAbort("Error: Unrecognised type (%s)\n", type);
