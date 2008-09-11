@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.118 2008/09/08 23:34:54 braney Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.119 2008/09/11 21:39:30 braney Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -2648,6 +2648,7 @@ cfgEndBox(boxed);
 
 char **wigMafGetSpecies(struct cart *cart, struct trackDb *tdb, char *db, struct wigMafSpecies **list, int *groupCt)
 {
+*groupCt = 1;
 int speciesCt = 0;
 char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
 char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
@@ -2696,7 +2697,6 @@ for (group = 0; group < *groupCt; group++)
         wmSpecies->name = cloneString(species[i]);
     	safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
 	wmSpecies->on = cartUsualBoolean(cart, option, TRUE);
-	//printf("checking %s and is %d\n",option,wmSpecies->on);
         wmSpecies->group = group;
         slAddHead(&wmSpeciesList, wmSpecies);
         }
@@ -2743,7 +2743,7 @@ struct sqlConnection *conn;
 struct sqlResult *sr;
 
 
-puts("\n<P STYLE=><B>Pairwise alignments:</B>&nbsp;");
+puts("\n<P STYLE=><B>Species selection:</B>&nbsp;");
 
 if(differentString(name,tdb->tableName))
     {
@@ -2904,6 +2904,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     	puts("<TD>");
     	safef(option, sizeof(option), "%s.%s", name, wmSpecies->name);
 	wmSpecies->on = cartUsualBoolean(cart, option, TRUE);
+
         if(sameString(name,tdb->tableName))
             cgiMakeCheckBox(option, wmSpecies->on);
         else   // This is part of a dropdown
