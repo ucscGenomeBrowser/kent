@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.20 2008/09/09 22:01:05 larrym Exp $"
+#	"$Id: equCab2.txt,v 1.21 2008/09/11 19:47:58 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.20 2008/09/09 22:01:05 larrym Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.21 2008/09/11 19:47:58 larrym Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -1780,10 +1780,22 @@ Start 2008-08-19:
 
 insert into dbDb (name, description, nibPath, organism, defaultPos, active, genome, scientificName) values ('equCab2Copy', 'Sep. 2007 (test)', '/gbdb/equCab2Copy', 'Horse', 'chr11:52,970,942-52,973,091', 1, 'Horse', 'Equus caballus');
 
+chr6 (correct location):
+
+    scaffold_34 - chr6:58759118-84719076
+
 chr27:
 
     scaffold_24 - chr27:1-39960074 - 39,960,074
     scaffold_34 - chr27:39961075-65921033 (25959959 bases long)
+
+Example of errors:
+
+    human protein FLJ13236 - aligns to chr6:67090333-67092571 and chr27:48292290-48294528
+    mRNA AJ514427 - aligns to chr6:67600011-67601519 and chr27:48801968-48803476
+    est CX605339 - aligns to chr6:67238940-67239361 and chr27:48440897-48441318
+    intronEst CD469838 - aligns to chr6:71553983-71575277 and chr27:52755940-52777234
+    xenoMrna BC033236 - aligns to chr6:67088771-67092632 and chr27:48290728-48294589
 
 The region to delete starts at the gap precediing scaffold_34:
 
@@ -2057,3 +2069,36 @@ done
     cd /cluster/data/equCab2
     blat equCab2.2bit /dev/null /dev/null -tileSize=11 \
 	-makeOoc=equCab2.11.ooc -repMatch=825 &
+
+#########################################################################
+# REDO-GENBANK AUTO UPDATE (DONE - 2008-09-11 - larrym)
+
+    ssh genbank
+    screen	#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time /bin/nice -n 19 bin/gbAlignStep -initial equCab2 &
+    #   logFile: var/build/logs/2008.09.10-13:33:41.equCab2.initalign.log
+
+    # kill'ed b/c /scratch/data hadn't been rsync'ed
+
+    # email to cluster-admin:
+    # please rsync  /hive/data/staging/data/equCab2 to /scratch/data/equCab2 on all cluster nodes
+
+    # gbAlignStep hadn't got the parasol step, so markd said I could just re-run it:
+    rm -rf /cluster/genbank/genbank/build/work/initial.equCab2
+    time /bin/nice -n 19 bin/gbAlignStep -initial equCab2 &
+    # logFile: var/build/logs/2008.09.10-15:27:53.equCab2.initalign.log
+    # 8970.392u 3173.177s 8:20:43.48 40.4%    0+0k 0+0io 1233pf+0w
+    
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time /bin/nice -n 19 ./bin/gbDbLoadStep -drop -initialLoad equCab2 &
+    # logFile: var/dbload/hgwdev/logs/2008.09.11-11:50:22.dbload.log
+    # 632.112u 222.505s 18:36.80 76.5%
+
+    # test some genbank stuff - look at chr6:67,086,866-71,661,987
+    mRNA AJ514427 - aligns just to chr6:67600011-67601519
+    est CX605339 - aligns just to chr6:67238940-67239361
+    intronEst CD469838 - aligns just to chr6:71553983-71575277
+    xenoMrna BC033236 - aligns just to chr6:67088771-67092632
