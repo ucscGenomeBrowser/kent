@@ -100,6 +100,9 @@ return reader;
 void doGenePredPal(struct sqlConnection *conn)
 /* Output genePred protein alignment. */
 {
+cartRemove(cart, hgtaDoPal);
+cartRemove(cart, hgtaDoPalOut);
+cartSaveSession(cart);
 struct genePredReader *reader = NULL;
 if (anySubtrackMerge(database, curTable))
     errAbort("Can't do protein alignment output when subtrack merge is on. "
@@ -297,7 +300,7 @@ for(ii=0; ii < count; ii++)
 if ((mafTable == NULL) || (checked == NULL))
     checked = mafTable = mafTrackExist[0];
 
-printf("MAF table: \n");
+printf("<B>MAF table: </B>\n");
 //cgiMakeDropList(hgtaCGIGeneMafTable, mafTrackExist, count2,  checked);
 cgiMakeDropListFull(hgtaCGIGeneMafTable, mafTrackExist, mafTrackExist, count2,  checked, onChangeGenome());
 
@@ -321,7 +324,7 @@ boolean noTrans = cartUsualBoolean(cart, "mafGeneNoTrans", FALSE);
 boolean outBlank = cartUsualBoolean(cart, "mafGeneOutBlank", FALSE); 
 */
 
-printf("<BR><B>Formatting options:</B><BR>\n");
+printf("<BR><BR><B>Formatting options:</B><BR>\n");
 jsMakeTrackingCheckBox(cart, hgtaCGIGeneExons, hgtaJSGeneExons, FALSE);
 printf("Separate into exons<BR>");
 jsMakeTrackingCheckBox(cart, hgtaCGIGeneNoTrans, hgtaJSGeneNoTrans, FALSE);
@@ -338,20 +341,24 @@ wigMafSpeciesTable(cart, maftdb, mafTable, database);
 cgiMakeButton(hgtaDoPalOut, "submit");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "cancel");
+hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", hgtaDoPal);
 hPrintf("</FORM>\n");
 /* Hidden form - for benefit of javascript. */
     {
     static char *saveVars[32];
     int varCount = ArraySize(curVars);
+    assert(varCount + 1 < (sizeof saveVars / sizeof(char *)));
     memcpy(saveVars, curVars, varCount * sizeof(saveVars[0]));
     saveVars[varCount] = hgtaDoPal;
     jsCreateHiddenForm(cart, getScriptName(), saveVars, varCount+1);
     }
+
 cartSaveSession(cart);
+cartSetString(cart, hgtaDoPal, "on");
 htmlClose();
 }
 
-void doOutPal(struct sqlConnection *conn)
+void doOutPalOptions(struct sqlConnection *conn)
 /* Output fasta page. */
 {
 palOptions(curTrack, curTrack->type, conn);
