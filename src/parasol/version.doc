@@ -284,3 +284,8 @@
         Added retry with sleep for pmSendString and sickBatch based on feedback
         from MarkD with 2 genbank para make failures, and Brian with flakey SAN.
 
+12.10   Made cpus busy/free counts more according to expectations. Previously it had
+        counted all cpus on a machine as busy if even one job was running on it.
+
+        Fixed minor param-checking bug in "parasol check dead"
+
