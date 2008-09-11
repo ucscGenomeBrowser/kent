@@ -10,15 +10,28 @@ DOWNLOAD_DIR = /usr/local/apache/htdocs/encode/tests
 
 # Put the working dataType's into DIRS
 DIRS = chipseq
+FILES = load.ra trackDb.ra README.txt
 
 all: test
 
 test:
 	for dir in $(DIRS); do \
 		${PROG} -allowReloads -configDir=../config x input/$$dir && \
-		diff input/$$dir/out/load.ra expected/$$dir/load.ra && \
-		diff --ignore-matching-lines=dateSubmitted input/$$dir/out/trackDb.ra expected/$$dir/trackDb.ra; \
+		for file in $(FILES); do \
+			diff --ignore-matching-lines=dateSubmitted input/$$dir/out/$$file expected/$$dir/$$file; \
+		done \
         done
+
+# update-expected let's you update the contents of the expected dir's (you still have
+# to checkin to cvs (if you want to)).
+update-expected:
+	for dir in $(DIRS); do \
+		${PROG} -allowReloads -configDir=../config x input/$$dir && \
+		mkdir -p expected/$$dir && \
+		for file in $(FILES); do \
+			cp -p input/$$dir/out/$$file expected/$$dir; \
+		done \
+	done
 
 output:
 	${MKDIR} input/chipseq/out
