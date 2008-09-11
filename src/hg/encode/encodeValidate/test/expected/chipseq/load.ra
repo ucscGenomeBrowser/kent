@@ -1,0 +1,40 @@
+tablename wgEncodeHudsonAlphaChipSeqAlignmentsRep1SKNMCFOXP2
+view Alignments
+type tagAlign
+assembly hg18
+files FoxP2_SL167.align_25.hg18.1.txt.BED FoxP2_SL167.align_25.hg18.2.txt.BED
+downloadOnly 1
+pushQDescription FOXP2 in SK-N-MC
+
+tablename wgEncodeHudsonAlphaChipSeqSignalSKNMCFOXP2
+view Signal
+type wig
+assembly hg18
+files FoxP2_SL167.align_25.wig
+downloadOnly 0
+pushQDescription FOXP2 in SK-N-MC
+
+tablename wgEncodeHudsonAlphaChipSeqPeaksSKNMCFOXP2
+view Peaks
+type narrowPeak
+assembly hg18
+files SL_167_peak_caller.ChIP.peaks
+downloadOnly 0
+pushQDescription FOXP2 in SK-N-MC
+
+tablename wgEncodeHudsonAlphaChipSeqRawDataRep1SKNMCFOXP2
+view RawData
+type fastq
+assembly hg18
+files FoxP2_SL167.fastq
+downloadOnly 1
+pushQDescription FOXP2 in SK-N-MC
+
+tablename wgEncodeHudsonAlphaChipSeqRawSignalRep1SKNMCFOXP2
+view RawSignal
+type wig
+assembly hg18
+files autoCreated1.bed
+downloadOnly 0
+pushQDescription FOXP2 in SK-N-MC
+
