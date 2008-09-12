@@ -2330,7 +2330,7 @@ type psl .
 track eponine
 shortLabel Eponine TSS
 longLabel Eponine Predicted Transcription Start Sites
-group expression
+group regulation 
 priority 0
 visibility hide
 color 0,100,100
