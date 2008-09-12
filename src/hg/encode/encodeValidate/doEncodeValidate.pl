@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.59 2008/09/11 22:11:11 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.60 2008/09/12 03:22:48 larrym Exp $
 
 use warnings;
 use strict;
@@ -63,7 +63,7 @@ exit 1;
 ############################################################################
 # Validators for DDF columns -- extend when adding new metadata fields
 #
-# validators die if they encounter errors.
+# validators should return list of errors encountered (empty list means no errors were found).
 #
 # validator callbacks are called thus:
 #
@@ -75,7 +75,7 @@ exit 1;
 
 # dispatch table
 our %validators = (
-    files => \&validateFileName,
+    files => \&validateFiles,
     view => \&validateDatasetName,
     labVersion => \&validateLabVersion,
     cell => \&validateCellLine,
@@ -83,75 +83,100 @@ our %validators = (
     antibody => \&validateAntibody,
     rnaExtract => \&validateRnaExtract,
     localization => \&validateLocalization,
+    replicate => \&validateReplicate,
     );
 
 # standard validators (required or optional for all projects)
-sub validateFileName {
+
+sub validateFiles {
     # Validate array of filenames, ordered by part
     # Check files exist and are of correct data format
     my ($files, $track, $daf) = @_;
     my @newFiles;
+    my @errors;
+    my $regex = "\`\|\\\|\|\"\|\'";
+    if($files =~ /($regex)/) {
+        # die if file list has any suspicious characters in it (b/c this will be used in shell commands).
+        # XXXX I don't think this works
+        push(@errors, "'$files' has invalid characters; files cannot contain following characters: \"'`|");
+    }
     for my $file (@{$files}) {
         my @list = glob $file;
         if(@list) {
             push(@newFiles, @list);
         } else {
-            die "ERROR: File '$file' does not exist (possibly bad glob)\n";
+            push(@errors, "File '$file' does not exist (possibly bad glob?)");
         }
     }
     HgAutomate::verbose(3, "     Track: $track    Files: " . join (' ', @newFiles) . "\n");
     for my $file (@newFiles) {
-        -e $file || die "ERROR: File \'$file\' does not exist\n";
-        -s $file || die "ERROR: File \'$file\' is empty\n";
-        -r $file || die "ERROR: File \'$file\' is not readable \n";
-        checkDataFormat($daf->{TRACKS}{$track}{type}, $file);
+        if(!-e $file) {
+            push(@errors, "File \'$file\' does not exist");
+        } elsif(!(-s $file)) {
+            push(@errors, "File \'$file\' is empty");
+        } elsif(!(-r $file)) {
+            push(@errors, "File \'$file\' is not readable");
+        } else {
+            push(@errors, checkDataFormat($daf->{TRACKS}{$track}{type}, $file));
+        }
     }
     $files = \@newFiles;
+    return @errors;
 }
 
 sub validateDatasetName {
     my ($val) = @_;
+    return ();
 }
 
 sub validateDataType {
     my ($val) = @_;
+    return ();
 }
 
 sub validateRawDataAcc {
 # No validation
+    return ();
 }
 
 sub validateLabVersion {
 # No validation
+    return ();
 }
 
 # project-specific validators
 
 sub validateCellLine {
     my ($val) = @_;
-    defined($terms{'Cell Line'}{$val}) || die "ERROR: Cell line \'$val\' is not known \n";
+    return defined($terms{'Cell Line'}{$val}) ? () : ("Cell line \'$val\' is not known");
 }
 
 sub validateRnaExtract {
     my ($val) = @_;
-    defined($terms{'rnaExtract'}{$val}) || die "ERROR: rnaExtract \'$val\' is not known \n";
+    return defined($terms{'rnaExtract'}{$val}) ? () : ("rnaExtract \'$val\' is not known");
 }
 
 sub validateLocalization {
     my ($val) = @_;
-    defined($terms{'localization'}{$val}) || die "ERROR: localization \'$val\' is not known \n";
+    return defined($terms{'localization'}{$val}) ? () : ("localization \'$val\' is not known");
 }
 
 sub validateGeneType {
     my ($val) = @_;
-    defined($terms{'Gene Type'}{$val}) || die "ERROR: Gene type \'$val\' is not known \n";
+    return defined($terms{'Gene Type'}{$val}) ? () : ("Gene type \'$val\' is not known");
 }
 
 sub validateAntibody {
     my ($val) = @_;
-    if(!($val eq 'input' || $val eq 'control' || defined($terms{'Antibody'}{$val}))) {
-        die "ERROR: Antibody \'$val\' is not known \n";
+    if(lc($val) eq 'input' || lc($val) eq 'control' || defined($terms{'Antibody'}{$val})) {
+        return ();
+    } else {
+        return ("Antibody \'$val\' is not known");
     }
+}
+
+sub validateReplicate {
+    return ();
 }
 
 ############################################################################
@@ -188,11 +213,11 @@ sub validateWig
     my @cmds = ("head -10 $filePath", "wigEncode stdin /dev/null /dev/null");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null");
     if(my $err = $safe->exec()) {
-        print STDERR  "ERROR: File \'$file\' failed wiggle validation\n";
-        die "ERROR: " . $safe->stderr();
+        return "File \'$file\' failed wiggle validation: " . $safe->stderr();
     } else {
         HgAutomate::verbose(2, "File \'$file\' passed wiggle validation\n");
     }
+    return ();
 }
 
 sub validateBed {
@@ -236,6 +261,7 @@ sub validateBed {
     }
     close(FILE);
     HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
+    return ();
 }
 
 sub validateGene {
@@ -245,13 +271,14 @@ sub validateGene {
     my $err = system (
         "cd $outPath; egrep -v '^track|browser' $filePath | ldHgGene -out=genePred.tab -genePredExt hg18 testTable stdin >$outFile 2>&1");
     if ($err) {
-        print STDERR  "ERROR: File \'$file\' failed GFF validation\n";
+        print STDERR  "File \'$file\' failed GFF validation\n";
         open(ERR, "$outPath/$outFile") || die "ERROR: Can't open GFF validation file \'$outPath/$outFile\': $!\n";
         my @err = <ERR>;
         die "@err\n";
     } else {
         HgAutomate::verbose(2, "File \'$file\' passed GFF validation\n");
     }
+    return ();
 }
 
 sub validateTagAlign
@@ -263,11 +290,13 @@ sub validateTagAlign
     while(<FILE>) {
         $line++;
         if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[ATCG\.]+\s+\d+\s+[+-]$/)) {
-            die "Line number $line in file '$file' is invalid\nline: $_\n";
+            chomp;
+            return "Invalid $type file; line $line in file '$file' is invalid:\nline: $_";
         }
     }
     close(FILE);
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    return ();
 }
 
 sub validateNarrowPeak
@@ -279,11 +308,13 @@ sub validateNarrowPeak
     while(<FILE>) {
         $line++;
         if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+$floatRegEx\s+$floatRegEx\s+\d+$/)) {
-            die "Line number $line in file '$file' is invalid\nline: $_\n";
+            chomp;
+            return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_");
         }
     }
     close(FILE);
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    return ();
 }
 
 sub validateFastQ
@@ -303,20 +334,23 @@ sub validateFastQ
                   plusLine => {REGEX => "\\\+([A-Za-z0-9_.:-]*)", NEXT => 'qualLine'},
                   qualLine => {REGEX => $qualRegEx, NEXT => 'firstLine'}};
     while(<FILE>) {
+        chomp;
         $line++;
+        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid";
         my $regex = $states->{$state}{REGEX};
         if(/^${regex}$/) {
 	        $seqName = $1 if($state eq 'firstLine');
                 if($state eq 'plusLine' && defined($1) && $1 && $1 ne $seqName) {
-                    die "Line number $line in file '$file' is invalid;\nseqence name '$1' does not match previous seqence name '$seqName'\nline: $_\n";
+                    return("$errorPrefix: seqence name '$1' does not match previous seqence name '$seqName'\nline: $_");
                 }
 	        $state = $states->{$state}{NEXT};
         } else {
-	         die "Line number $line in file '$file' is invalid (expecting $state)\nline: $_\n";
+	         return("$errorPrefix (expecting $state):\nline: $_");
         }
     }
     close(FILE);
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    return ();
 }
 
 ############################################################################
@@ -328,7 +362,9 @@ sub validateDdfField {
     $type =~ s/ /_/g;
     HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
     if($validators{$type}) {
-        $validators{$type}->($val, $track, $daf);
+        return $validators{$type}->($val, $track, $daf);
+    } else {
+        die "Validator for type '$type' is missing";
     }
 }
 
@@ -340,8 +376,8 @@ sub checkDataFormat {
     if ($format =~ m/(bed) (\d+)/) {
         $format = $1;
     }
-    $formatCheckers{$format} || die "ERROR: Data format \'$format\' is unknown\n";
-    $formatCheckers{$format}->($submitPath, $file, $type);
+    $formatCheckers{$format} || return "Data format \'$format\' is unknown\n";
+    return $formatCheckers{$format}->($submitPath, $file, $type);
 }
 
 sub ddfKey
@@ -398,7 +434,7 @@ if (defined $opt_configDir) {
         $configPath = "$wd/$opt_configDir";
     }
 } else {
-    $configPath = "$submitDir/../config"
+    $configPath = "$submitPath/../config"
 }
 if(!(-d $configPath)) {
     die "configPath '$configPath' is invalid; Can't find the config directory\n";
@@ -490,7 +526,12 @@ while(@{$lines}) {
     last;
 }
 
-Encode::validateFieldList(\@ddfHeader, $fields, 'ddf', "ERROR in DDF '$ddfFile':");
+my @errors = Encode::validateFieldList(\@ddfHeader, $fields, 'ddf');
+if(@errors) {
+    die "ERROR in DDF '$ddfFile':\n" . join("\n", @errors) . "\n";
+}
+
+%terms = Encode::getControlledVocab($configPath);
 
 # Process lines in DDF file. Create a list with one entry per line;
 # the entry is field/value hash (fields per @ddfHeader).
@@ -498,7 +539,8 @@ Encode::validateFieldList(\@ddfHeader, $fields, 'ddf', "ERROR in DDF '$ddfFile':
 while (@{$lines}) {
     my $line = shift(@{$lines});
     $ddfLineNumber++;
-    my $errorPrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
+    my $errorPrefix = "DDF lineNumber $ddfLineNumber:";
+    HgAutomate::verbose(2, "Parsing ddf line $ddfLineNumber\n");
 
     $line =~ s/^\s+//;
     $line =~ s/\s+$//;
@@ -506,7 +548,8 @@ while (@{$lines}) {
     next if $line =~ /^$/;
 
     if($line !~ /\t/) {
-        die "$errorPrefix line has no tabs; the DDF is required to be tab delimited\n";
+        push(@errors, "$errorPrefix line has no tabs; the DDF is required to be tab delimited");
+        next;
     }
     my $i = 0;
     my %line;
@@ -514,36 +557,45 @@ while (@{$lines}) {
         $line{$ddfHeader[$i]} = $val;
         $i++;
     }
-    Encode::validateValueList(\%line, $fields, 'ddf', $errorPrefix);
 
-    # die if file list has any suspicious characters in it (b/c this will be used in shell commands).
-    my $files = $line{files};
-    my $regex = "\`\|\\\|\|\"\|\'";
-    if($files =~ /($regex)/) {
-        die("$errorPrefix files list '$files' has invalid characters; files cannot contain following characters: \"'`|\n");
+    if(my @tmp = Encode::validateValueList(\%line, $fields, 'ddf', $errorPrefix)) {
+        push(@errors, $errorPrefix . "\n" . join("\n", @tmp));
+        next;
     }
+
     my $view = $line{view};
-    if(!$daf->{TRACKS}{$view}) {
-        die "$errorPrefix undefined view '$view' in DDF\n";
-    }
-    if($fields->{replicate}{required}) {
-        my $replicate = $line{replicate};
-        if($daf->{TRACKS}{$view}{hasReplicates} && (!defined($replicate) || !length($replicate))) {
-            die "$errorPrefix missing replicate number for view '$view'";
+    if($daf->{TRACKS}{$view}) {
+        my $files = $line{files};
+        if($fields->{replicate}{required}) {
+            my $replicate = $line{replicate};
+            if($daf->{TRACKS}{$view}{hasReplicates} && (!defined($replicate) || !length($replicate))) {
+                push(@errors, "$errorPrefix missing replicate number for view '$view'");
+            }
         }
-    }
-    my @filenames;
-    for(split(',', $files)) {
-        # Use glob explicitly so our error messages have the list of files actually used.
-        if(my @glob = glob) {
-            push(@filenames, @glob);
+        my @filenames;
+        for(split(',', $files)) {
+            # Use glob explicitly so our error messages have the list of files actually used.
+            if(my @glob = glob) {
+                push(@filenames, @glob);
+            } else {
+                push(@filenames, $_);
+            }
+        }
+        $line{files} = \@filenames;
+        my @metadataErrors;
+        for my $field (keys %line) {
+            push(@metadataErrors, validateDdfField($field, $line{$field}, $view, $daf));
+        }
+        if(@metadataErrors) {
+            push(@errors, @metadataErrors);
         } else {
-            push(@filenames, $_);
+            # avoid spurious errors by not putting invalid lines into %ddfSets
+            $ddfSets{ddfKey(\%line, \%ddfHeader, $daf)}{VIEWS}{$view} = \%line;
         }
+        push(@ddfLines, \%line);
+    } else {
+        push(@errors, "$errorPrefix undefined view '$view'");
     }
-    $line{files} = \@filenames;
-    push(@ddfLines, \%line);
-    $ddfSets{ddfKey(\%line, \%ddfHeader, $daf)}{VIEWS}{$view} = \%line;
 }
 
 my $tmpCount = 1;
@@ -553,41 +605,51 @@ for my $key (keys %ddfSets) {
     for my $view (keys %{$daf->{TRACKS}}) {
         if($daf->{TRACKS}{$view}{required}) {
             if(!defined($ddfSets{$key}{VIEWS}{$view})) {
-                die "ERROR: view '$view' missing for DDF entry '$key'\n";
+                push(@errors, "view '$view' missing for $key");
             }
         }
     }
 
-    # create missing optional views (e.g. ChIP-Seq RawSignal)
-    if(defined($ddfSets{$key}{VIEWS}{Alignments}) && !defined($ddfSets{$key}{VIEWS}{RawSignal})) {
-        my $newView = 'RawSignal';
-        my $alignmentLine = $ddfSets{$key}{VIEWS}{Alignments};
-        my %line = %{$alignmentLine};
-        $line{view} = $newView;
-        $ddfSets{$key}{VIEWS}{$newView} = \%line;
-        my $files = join(" ", @{$alignmentLine->{files}});
-        my $tmpFile = "autoCreated$tmpCount.bed";
-        $tmpCount++;
-        my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $daf->{assembly} stdin");
-        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
-        if(my $err = $safe->exec()) {
-            print STDERR  "ERROR: failed creation of wiggle for $key\n";
-            die "ERROR: " . $safe->stderr();
+    # create missing optional views (e.g. ChIP-Seq RawSignal); but don't bother if we have already
+    # encountered errors.
+    if(!@errors) {
+        if(defined($ddfSets{$key}{VIEWS}{Alignments}) && !defined($ddfSets{$key}{VIEWS}{RawSignal})) {
+            my $newView = 'RawSignal';
+            my $alignmentLine = $ddfSets{$key}{VIEWS}{Alignments};
+            my %line = %{$alignmentLine};
+            $line{view} = $newView;
+            $ddfSets{$key}{VIEWS}{$newView} = \%line;
+            my $files = join(" ", @{$alignmentLine->{files}});
+            my $tmpFile = "autoCreated$tmpCount.bed";
+            $tmpCount++;
+            my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $daf->{assembly} stdin");
+            my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
+            if(my $err = $safe->exec()) {
+                print STDERR  "ERROR: failed creation of wiggle for $key" . $safe->stderr() . "\n";
+                # don't show end-user pipe error(s)
+                push(@errors, "failed creation of wiggle for '$key'");
+            }
+            $line{files} = [$tmpFile];
+            push(@ddfLines, \%line);
         }
-        $line{files} = [$tmpFile];
-        push(@ddfLines, \%line);
     }
 }
 
 my $compositeTrack = Encode::compositeTrackName($daf);
 if(!$db->quickQuery("select count(*) from trackDb where tableName = ?", $compositeTrack)) {
-    die "Missing composite track '$compositeTrack'; please contact your data wrangler\n";
+    push(@errors, "Missing composite track '$compositeTrack'; please contact your data wrangler");
 }
+
+if(@errors) {
+    my $prefix = @errors > 1 ? "Error(s)" : "Error";
+    die "$prefix:\n\n" . join("\n\n", @errors) . "\n";    
+}
+
+# After this point, we don't use @errors and just die immediately.
 
 # Validate files and metadata fields in all ddfLines using controlled
 # vocabulary.  Create load.ra file for loader and trackDb.ra file for wrangler.
 
-%terms = Encode::getControlledVocab($configPath);
 open(LOADER_RA, ">$outPath/$Encode::loadFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::loadFile\' file; error: $!\n";
 open(TRACK_RA, ">$outPath/$Encode::trackFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::trackFile\' file; error: $!\n";
 open(README, ">$outPath/README.txt") || die "SYS ERROR: Can't write '$outPath/READEME.txt' file; error: $!\n";
@@ -601,20 +663,17 @@ my $priority = $db->quickQuery("select max(priority) from trackDb where settings
 $ddfLineNumber = 1;
 foreach my $ddfLine (@ddfLines) {
     $ddfLineNumber++;
-    my $errorPrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
+    my $diePrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
     my $view = $ddfLine->{view};
     my $type = $daf->{TRACKS}{$view}{type};
 
     HgAutomate::verbose(2, "  View: $view\n");
-    for my $field (keys %{$ddfLine}) {
-        validateDdfField($field, $ddfLine->{$field}, $view, $daf);
-    }
     my $replicate;
     if($hasReplicates && $daf->{TRACKS}{$view}{hasReplicates}) {
         $replicate = $ddfLine->{replicate};
         if(defined($replicate) && $replicate > 0) {
         } else {
-            die "$errorPrefix invalid or missing replicate value\n";
+            die "$diePrefix invalid or missing replicate value\n";
         }
     }
     # Construct table name from track name and variables
