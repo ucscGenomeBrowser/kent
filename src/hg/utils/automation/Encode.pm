@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.18 2008/09/12 02:48:21 larrym Exp $
+# $Id: Encode.pm,v 1.19 2008/09/12 21:37:16 larrym Exp $
 
 package Encode;
 
@@ -77,19 +77,19 @@ sub validateFieldList {
     my ($fields, $schema, $file) = @_;
     my %hash = map {$_ => 1} @{$fields};
     my @errors;
-    if($file ne 'ddf' && $file ne 'dafHeader') {
+    if($file ne 'ddf' && $file ne 'dafHeader' && $file ne 'dafList') {
         push(@errors, "file argument '$file' is invalid");
     } else {
         # look for missing required fields
         for my $field (keys %{$schema}) {
-            if($schema->{$field}{file} eq $file && $schema->{$field}{required} && !defined($hash{$field})) {
+            if(defined($schema->{$field}{file}) && $schema->{$field}{file} eq $file && $schema->{$field}{required} && !exists($hash{$field})) {
                 push(@errors, "field '$field' not defined");
             }
         }
 
         # now look for fields in list that aren't in schema
         for my $field (@{$fields}) {
-            if(!defined($schema->{$field}{file}) || $schema->{$field}{file} ne $file) {
+            if(!defined($schema->{$field}) || !defined($schema->{$field}{file}) || $schema->{$field}{file} ne $file) {
                 push(@errors, "invalid field '$field'");
             }
         }
@@ -107,7 +107,7 @@ sub validateValueList {
         if(defined($schema->{$field}{file}) && $schema->{$field}{file} eq $file) {
             my $type = $schema->{$field}{type} || 'string';
             if($type eq 'bool') {
-                if(lc($val) ne 'yes' && lc($val) ne 'no') {
+                if(lc($val) ne 'yes' && lc($val) ne 'no' && $val != 1 && $val != 0) {
                     push(@errors, "invalid boolean; field '$field', value '$val'; value must be 'yes' or 'no'");
                 } else {
                     $values->{$field} = lc($val) eq 'yes' ? 1 : 0;
@@ -127,6 +127,7 @@ sub readFile
 # Return lines from given file, with EOL chomp'ed off.
 # Handles either Unix or Mac EOL characters.
 # Reads whole file into memory, so should NOT be used for huge files.
+# XXXX Should be modified to handle DOS files too (I've gotten those from Rami).
     my ($file) = @_;
     my $oldEOL = $/;
     open(FILE, $file) or die "ERROR: Can't open file \'$file\'\n";
@@ -202,7 +203,7 @@ sub getFields
 sub validateAssembly {
     my ($val) = @_;
     if($val ne 'hg18') {
-        return "ERROR: Assembly '$val' is invalid (must be 'hg18')";
+        return "Assembly '$val' is invalid (must be 'hg18')";
     } else {
         return ();
     }
@@ -227,7 +228,7 @@ sub getDaf
         die "Can't find the DAF file\n";
     }
     $dafFile = cwd() . "/" . $dafFile;
-    &HgAutomate::verbose(2, "Using newest DAF file \'$dafFile\'\n");
+    HgAutomate::verbose(2, "Using newest DAF file \'$dafFile\'\n");
     chdir($wd);
     return parseDaf($dafFile, $grants, $fields);
 }
@@ -260,7 +261,7 @@ sub parseDaf
             # remember track of order, so we can prioritize tracks correctly
             $track{order} = $order++;
             $daf{TRACKS}->{$track} = \%track;
-            &HgAutomate::verbose(5, "  Found view: \'$track\'\n");
+            HgAutomate::verbose(5, "  Found view: \'$track\'\n");
             while ($line = shift @{$lines}) {
                 $line =~ s/^ +//;
                 $line =~ s/ +$//;
@@ -272,12 +273,12 @@ sub parseDaf
                 }
                 my ($key, $val) = splitKeyVal($line);
                 $track{$key} = $val;
-                &HgAutomate::verbose(5, "    Property: $key = $val\n");
+                HgAutomate::verbose(5, "    line: '$line'; Property: $key = $val\n");
             }
             $track{required} = lc($track{required}) eq 'yes' ? 1 : 0;
             $track{hasReplicates} = lc($track{hasReplicates}) eq 'yes' ? 1 : 0;
         } else {
-            &HgAutomate::verbose(3, "DAF field: $key = $val\n");
+            HgAutomate::verbose(3, "DAF field: $key = $val\n");
             $daf{$key} = $val;
         }
     }
@@ -297,12 +298,14 @@ sub parseDaf
     }
     push(@errors, validateAssembly($daf{assembly}));
 
-    foreach my $track (keys %{$daf{TRACKS}}) {
-        &HgAutomate::verbose(4, "  Track: $track\n");
-        my %track = %{$daf{TRACKS}->{$track}};
+    foreach my $view (keys %{$daf{TRACKS}}) {
+        HgAutomate::verbose(4, "  View: $view\n");
+        my %track = %{$daf{TRACKS}->{$view}};
         foreach my $key (keys %track) {
-            &HgAutomate::verbose(4, "    Setting: $key   Value: $track{$key}\n");
+            HgAutomate::verbose(4, "    Setting: $key   Value: $track{$key}\n");
         }
+        my @keys = keys %track;
+        push(@errors, validateFieldList(\@keys, $fields, 'dafList'));
     }
 
     if (defined($daf{variables})) {
