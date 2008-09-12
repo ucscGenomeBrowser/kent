@@ -428,29 +428,33 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
                     <P>
 		    <B>Custom Tracks</B>
 		    <P>
-		    Custom MAF tracks must have as their first line a "track" 
-		    line with at least a name=<value> pair. The second line
-		    must be the header line described below.
+                    The first line of a custom MAF track must be a "track" line
+		    that contains a name=value pair specifying the track name.
+		    Here is an example of a minimal track line:
+		    
 		    <FONT color="#0000FF"><PRE><TT> track name=sample</TT></PRE></FONT>
-		    The currently defined custom maf track variables are:
+                    The following variables can be specified in the track line
+		    of a custom MAF:
                     <UL>
                     <LI><B>name=sample</B> - Required. Name the track </LI>
                     <LI><B>description="Sample Track"</B> - Optional. 
-		    Give a long name for the track</LI>
+		    Gives a long name for the track</LI>
                     <LI><B>frames=multiz28wayFrames</B> - Optional. 
-		    Tell the browser which table to 
+		    Tells the browser which table to 
 		    grab the gene frames from.  This is usually associated with
 		    a N-way alignment where the name ends in string 
 		    "Frames" </LI>
                     <LI><B>mafDot=on</B> - Optional. 
 		    Use dots instead of bases when bases are identical</LI>
                     <LI><B>visibility=dense|pack|full</B> - Optional. 
-		    Set the default visibility mode for this track.</LI>
+		    Sets the default visibility mode for this track.</LI>
                     <LI><B>speciesOrder="hg18 panTro2"</B> - Optional. 
 		    White-space separated list specifying the order in which
 		    the sequences in the maf should be displayed.
 		    </LI>
 		    </UL>
+		    The second line of a custom MAF track must be a header
+	            line as described below.
 		    <P>
 		    <B>Header Line</B>
 		    <P>
@@ -713,7 +717,7 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
 		    Repeats are shown as lowercase, and each block may
                     have a subset of the input sequences.  All
 		    sequence columns and rows must contain at least one nucleotide
-                    (no full columns or rows of insertions).
+                    (no columns or rows that contain only insertions).
 
 		    <FONT color="#0000FF">
 <PRE><TT> 
