@@ -478,6 +478,27 @@ where each view (HMM,WIN,SIG,ALN) will be controlled by a separate drop down
 be of the same track type.  Each subtrack of a multi-view should have the 
 "noInherit on" setting, and all the proper settings for the subtrack type.
 
+    MULTI-VIEW VISIBILITY DEFAULTS
+    ------------------------------
+    Since using multi-view represents two levels of drop-downs controlling whether a 
+    subtrack will be displayed, and since the "visibility' setting on the composite
+    (parent) track controls the default setting (eg 'packed'), it is necessary to 
+    have an additional setting for the multi-view defaults:
+        visibilityViewDefaults HMM=packed WIN=packed SIG=full ALN=hide
+
+    MULTI-VIEW INDIVIDUAL SUBTRACK CONFIGURATION
+    --------------------------------------------
+    While in many cases all subtracks for a given view type should share the same
+    configuration settings (eg "Track height:"), in some cases it is desirable to 
+    allow configuration of individual subtracks.  To achieve this, add the following
+    setting to the subtrack (not to the composite track):
+        configurable on
+    It should be understood how individually configured settings work.  Whenever 
+    settings are configured by the user at the view level, that value will be set
+    for all subtracks.  If a subtrack is then individually configured, the setting
+    will apply only to that subtrack.  If the setting is then changed at the view 
+    level again, the individual setting is lost.
+
 SORT
 ----
 The order of subtracks within a composite track are originally defined by the 
@@ -550,7 +571,6 @@ NOTE: The special character ';' allows the lookup of multiple terms.  In the
 example above, both terms "SK-N-MC" and "Estrogen" may be found in the 
 controlled vocabulary.  
 
-
 EXAMPLE of Composite Track with ADITIONAL OPTIONS
 -------------------------------------------------
 track broadChromatinChIPSeq
@@ -566,6 +586,8 @@ sortOrder cellType=+ factor=+ view=-
 dragAndDrop subTracks
 #dividers cellType factor
 #hierarchy view HMM=0 WIN=0 SIG=1 ALN=2
+visibility hide
+visibilityViewDefaults HMM=packed WIN=packed SIG=full ALN=hide
 controlledVocabulary encode/cv.ra cellType factor
 priority 130
 type bed 3
@@ -578,6 +600,7 @@ type bed 3
     type bed 3
     color 25,25,150
     noInherit off
+    configurable on
     priority 1
 
     track broadStemChipWinSitesH3K4me3Es
@@ -589,6 +612,7 @@ type bed 3
     useScore 1
     color 25,25,150
     noInherit off
+    configurable on
     priority 2
 
     track broadStemChipSignalH3K4Es
@@ -602,6 +626,7 @@ type bed 3
     maxHeightPixels 100:32:8
     color 25,150,25
     noInherit on
+    configurable on
     priority 3
 
     track broadStemChipAlignmentsH3K4Me3Es
@@ -620,10 +645,16 @@ dimension matrix of check boxes for Cell Types by Factors, and a multi-view.
 The subtracks will be sortable on either of the 2 dimensions and the view type.
 Additionally, the subtracks can be dragged and dropped into a preferred order
 by the user.  Notice that dividers and hierarchy are commented out, since they
-are incompatible and ignored when sort is enabled.  Finally notice this example
-defines a controlled vocabulary for both cellTypes and factors with definitions
-found in the encode/cv.ra directory (off the pache/cgi-bin/). (Don't be confused
-though, this example mm8 composite track doesn't really have controlled vocabulary.)
+are incompatible and ignored when sort is enabled.  Also notice that the 
+entire composite track defaults to 'hide' when the user first visits the 
+browser.  However, if the user then sets this to 'full' then 2 of 4 types
+of subtracks will be displayed as packed, the signal will be displayed as
+full and the alignments subtracks will still be hidden.  Additionally all
+of the subtracks are individually configurable except alignments.  Finally,
+notice this example defines a controlled vocabulary for both cellTypes and 
+factors with definitions found in the encode/cv.ra directory (off the 
+pache/cgi-bin/). (Don't be confused though, this example mm8 composite track 
+doesn't really have controlled vocabulary.)
 
 ---------------------
 
