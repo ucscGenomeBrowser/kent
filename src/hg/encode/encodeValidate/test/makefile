@@ -14,6 +14,11 @@ FILES = load.ra trackDb.ra README.txt
 
 all: test
 
+bad:
+	echo 'testing an un-readable file' > input/badDdf/unreadable.txt
+	chmod 222 input/badDdf/unreadable.txt
+	${PROG} -configDir=../config x input/badDdf
+
 test:
 	for dir in $(DIRS); do \
 		${PROG} -allowReloads -configDir=../config x input/$$dir && \
@@ -38,6 +43,7 @@ output:
 
 clean: 
 	rm -rf output
+	rm -rf input/badDdf/unreadable.txt
 
 install:
 	for dir in $(DIRS); do \
