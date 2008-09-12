@@ -217,6 +217,7 @@ subGroup2 cellType Cell_Line G878=GM12878
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
+visibilityViewDefaults PK=packed SIG=full
 controlledVocabulary encode/cv.ra cellType
 dataVersion ENCODE Submitted June 2008
 wgEncode 1
@@ -232,7 +233,7 @@ wgEncode 1
     noInherit off
     priority 1
     color 25,25,150
-    visibility dense
+    #configurable on
     dateSubmitted   2008-06-07 10:27:26
 
     track wgEncodeDukeDnaseSignalGM12878
@@ -248,7 +249,7 @@ wgEncode 1
     noInherit on
     priority 2
     color 25,150,25
-    visibility full
+    #configurable on
     dateSubmitted   2008-06-07 10:27:26
 
 track wgEncodeHudsonAlphaChipSeq
@@ -263,6 +264,7 @@ subGroup3 factor Factor FOXP2=FOXP2 Control=Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
+visibilityViewDefaults Sites=packed Peaks=packed Signal=full RawSignal=hide
 controlledVocabulary encode/cv.ra cellType factor
 priority	0
 type bed 3
@@ -278,6 +280,7 @@ wgEncode 1
 	priority	1
 	noInherit	on
 	cell	SK-N-MC
+    #configurable on
 	antibody	control
 
 	track	wgEncodeHudsonAlphaChipSeqRawSignalPFSK1Control
@@ -289,5 +292,6 @@ wgEncode 1
 	dateSubmitted	2008-09-11 20:49:12
 	priority	2
 	noInherit	on
+    #configurable on
 	cell	PFSK-1
 	antibody	control
