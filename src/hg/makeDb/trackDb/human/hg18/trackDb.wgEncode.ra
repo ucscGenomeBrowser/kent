@@ -280,7 +280,7 @@ wgEncode 1
 	priority	1
 	noInherit	on
 	cell	SK-N-MC
-    #configurable on
+    configurable on
 	antibody	control
 
 	track	wgEncodeHudsonAlphaChipSeqRawSignalPFSK1Control
@@ -292,6 +292,6 @@ wgEncode 1
 	dateSubmitted	2008-09-11 20:49:12
 	priority	2
 	noInherit	on
-    #configurable on
+    configurable on
 	cell	PFSK-1
 	antibody	control
