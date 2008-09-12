@@ -271,7 +271,7 @@ wgEncode 1
 	track	wgEncodeHudsonAlphaChipSeqRawSignalSKNMCControl
 	subTrack	wgEncodeHudsonAlphaChipSeq
 	shortLabel	Control SK-N-MC
-	longLabel	ENCODE (Control in SK-N-MC cells)
+	longLabel	HudsonAlpha ChIP-Seq Raw Signal (Control in SK-N-MC cells)
 	subGroups	view=RawSignal factor=Control cellType=SK-N-MC
 	type	wig
 	dateSubmitted	2008-09-11 20:49:12
@@ -283,7 +283,7 @@ wgEncode 1
 	track	wgEncodeHudsonAlphaChipSeqRawSignalPFSK1Control
 	subTrack	wgEncodeHudsonAlphaChipSeq
 	shortLabel	Control PFSK-1
-	longLabel	ENCODE (Control in PFSK-1 cells)
+	longLabel	HudsonAlpha ChIP-Seq Raw Signal (Control in PFSK-1 cells)
 	subGroups	view=RawSignal factor=Control cellType=PFSK-1
 	type	wig
 	dateSubmitted	2008-09-11 20:49:12
