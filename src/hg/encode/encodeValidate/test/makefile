@@ -17,7 +17,8 @@ all: test
 bad:
 	echo 'testing an un-readable file' > input/badDdf/unreadable.txt
 	chmod 222 input/badDdf/unreadable.txt
-	${PROG} -configDir=../config x input/badDdf
+	-${PROG} -configDir=../config x input/badDdf
+	-${PROG} -configDir ../config x input/badDaf
 
 test:
 	for dir in $(DIRS); do \
