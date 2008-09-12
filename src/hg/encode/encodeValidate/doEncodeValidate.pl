@@ -8,7 +8,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.60 2008/09/12 03:22:48 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.61 2008/09/12 20:10:31 larrym Exp $
 
 use warnings;
 use strict;
@@ -60,6 +60,15 @@ END
 exit 1;
 }
 
+sub pushError
+{
+    my ($errors, @new) = @_;
+    if(@new) {
+        push(@{$errors}, @new);
+        HgAutomate::verbose(2, "pushing errors:\n\t" . join("\n\t", @new) . "\n");
+    }
+}
+
 ############################################################################
 # Validators for DDF columns -- extend when adding new metadata fields
 #
@@ -95,29 +104,27 @@ sub validateFiles {
     my @newFiles;
     my @errors;
     my $regex = "\`\|\\\|\|\"\|\'";
-    if($files =~ /($regex)/) {
-        # die if file list has any suspicious characters in it (b/c this will be used in shell commands).
-        # XXXX I don't think this works
-        push(@errors, "'$files' has invalid characters; files cannot contain following characters: \"'`|");
-    }
     for my $file (@{$files}) {
         my @list = glob $file;
         if(@list) {
             push(@newFiles, @list);
         } else {
-            push(@errors, "File '$file' does not exist (possibly bad glob?)");
+            pushError(\@errors, "File '$file' does not exist (possibly bad glob?)");
         }
     }
     HgAutomate::verbose(3, "     Track: $track    Files: " . join (' ', @newFiles) . "\n");
     for my $file (@newFiles) {
-        if(!-e $file) {
-            push(@errors, "File \'$file\' does not exist");
+        if($file =~ /($regex)/) {
+            # Do not allows filenames with suspicious characters (b/c filename will be used in shell commands).
+            pushError(\@errors, "File '$file' has invalid characters; files cannot contain following characters: \"'`|");
+        } elsif(!-e $file) {
+            pushError(\@errors, "File \'$file\' does not exist");
         } elsif(!(-s $file)) {
-            push(@errors, "File \'$file\' is empty");
+            pushError(\@errors, "File \'$file\' is empty");
         } elsif(!(-r $file)) {
-            push(@errors, "File \'$file\' is not readable");
+            pushError(\@errors, "File \'$file\' is un-readable");
         } else {
-            push(@errors, checkDataFormat($daf->{TRACKS}{$track}{type}, $file));
+            pushError(\@errors, checkDataFormat($daf->{TRACKS}{$track}{type}, $file));
         }
     }
     $files = \@newFiles;
@@ -209,11 +216,13 @@ sub validateWig
     my ($path, $file, $type) = @_;
     my $filePath = "$path/$file";
 
-    # XXXX why not do the whole thing, rather than just 10 lines?
-    my @cmds = ("head -10 $filePath", "wigEncode stdin /dev/null /dev/null");
+    # XXXX why not do the whole thing, rather than just 1000 lines?
+    my @cmds = ("head -1000 $filePath", "wigEncode stdin /dev/null /dev/null");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null");
     if(my $err = $safe->exec()) {
-        return "File \'$file\' failed wiggle validation: " . $safe->stderr();
+        my $err = $safe->stderr();
+        chomp($err);
+        return "File \'$file\' failed wiggle validation: " . $err;
     } else {
         HgAutomate::verbose(2, "File \'$file\' passed wiggle validation\n");
     }
@@ -491,9 +500,14 @@ if (defined($daf->{variables})) {
 
 # make replicate column required when appropriate.
 my $hasReplicates = 0;
+my $maxOrder = 0;
 for my $view (keys %{$daf->{TRACKS}}) {
     $hasReplicates += $daf->{TRACKS}{$view}{hasReplicates};
+    if($daf->{TRACKS}{$view}{order} > $maxOrder) {
+        $maxOrder = $daf->{TRACKS}{$view}{order}
+    }
 }
+
 if($hasReplicates) {
     $fields->{replicate}{required} = 1;
 }
@@ -548,7 +562,7 @@ while (@{$lines}) {
     next if $line =~ /^$/;
 
     if($line !~ /\t/) {
-        push(@errors, "$errorPrefix line has no tabs; the DDF is required to be tab delimited");
+        pushError(\@errors, "$errorPrefix line has no tabs; the DDF is required to be tab delimited");
         next;
     }
     my $i = 0;
@@ -559,7 +573,7 @@ while (@{$lines}) {
     }
 
     if(my @tmp = Encode::validateValueList(\%line, $fields, 'ddf', $errorPrefix)) {
-        push(@errors, $errorPrefix . "\n" . join("\n", @tmp));
+        pushError(\@errors, $errorPrefix . "\n" . join("\n", @tmp));
         next;
     }
 
@@ -569,7 +583,7 @@ while (@{$lines}) {
         if($fields->{replicate}{required}) {
             my $replicate = $line{replicate};
             if($daf->{TRACKS}{$view}{hasReplicates} && (!defined($replicate) || !length($replicate))) {
-                push(@errors, "$errorPrefix missing replicate number for view '$view'");
+                pushError(\@errors, "$errorPrefix missing replicate number for view '$view'");
             }
         }
         my @filenames;
@@ -587,37 +601,42 @@ while (@{$lines}) {
             push(@metadataErrors, validateDdfField($field, $line{$field}, $view, $daf));
         }
         if(@metadataErrors) {
-            push(@errors, @metadataErrors);
+            pushError(\@errors, @metadataErrors);
         } else {
             # avoid spurious errors by not putting invalid lines into %ddfSets
             $ddfSets{ddfKey(\%line, \%ddfHeader, $daf)}{VIEWS}{$view} = \%line;
         }
         push(@ddfLines, \%line);
     } else {
-        push(@errors, "$errorPrefix undefined view '$view'");
+        pushError(\@errors, "$errorPrefix undefined view '$view'");
     }
 }
 
 my $tmpCount = 1;
 
-# die if there are missing required views
-for my $key (keys %ddfSets) {
-    for my $view (keys %{$daf->{TRACKS}}) {
-        if($daf->{TRACKS}{$view}{required}) {
-            if(!defined($ddfSets{$key}{VIEWS}{$view})) {
-                push(@errors, "view '$view' missing for $key");
+if(!@errors) {
+    # Look for missing required views and create missing, optional views, but
+    # but don't bother if we have already encountered errors.
+    for my $key (keys %ddfSets) {
+        for my $view (keys %{$daf->{TRACKS}}) {
+            if($daf->{TRACKS}{$view}{required}) {
+                if(!defined($ddfSets{$key}{VIEWS}{$view})) {
+                    pushError(\@errors, "view '$view' missing for $key");
+                }
             }
         }
-    }
-
-    # create missing optional views (e.g. ChIP-Seq RawSignal); but don't bother if we have already
-    # encountered errors.
-    if(!@errors) {
+        
+        # create missing optional views (e.g. ChIP-Seq RawSignal)
         if(defined($ddfSets{$key}{VIEWS}{Alignments}) && !defined($ddfSets{$key}{VIEWS}{RawSignal})) {
             my $newView = 'RawSignal';
             my $alignmentLine = $ddfSets{$key}{VIEWS}{Alignments};
             my %line = %{$alignmentLine};
             $line{view} = $newView;
+            $line{type} = 'wig';
+            # hack for case where they have removed RawSignal view in the DAF
+            if(!defined($daf->{TRACKS}{$newView}{order})) {
+                $daf->{TRACKS}{$newView}{order} = ++$maxOrder;
+            }
             $ddfSets{$key}{VIEWS}{$newView} = \%line;
             my $files = join(" ", @{$alignmentLine->{files}});
             my $tmpFile = "autoCreated$tmpCount.bed";
@@ -627,7 +646,7 @@ for my $key (keys %ddfSets) {
             if(my $err = $safe->exec()) {
                 print STDERR  "ERROR: failed creation of wiggle for $key" . $safe->stderr() . "\n";
                 # don't show end-user pipe error(s)
-                push(@errors, "failed creation of wiggle for '$key'");
+                pushError(\@errors, "failed creation of wiggle for '$key'");
             }
             $line{files} = [$tmpFile];
             push(@ddfLines, \%line);
@@ -637,7 +656,7 @@ for my $key (keys %ddfSets) {
 
 my $compositeTrack = Encode::compositeTrackName($daf);
 if(!$db->quickQuery("select count(*) from trackDb where tableName = ?", $compositeTrack)) {
-    push(@errors, "Missing composite track '$compositeTrack'; please contact your data wrangler");
+    pushError(\@errors, "Missing composite track '$compositeTrack'; please contact your data wrangler");
 }
 
 if(@errors) {
@@ -695,7 +714,11 @@ foreach my $ddfLine (@ddfLines) {
     if (@variables) {
         my %hash = map { $_ => $ddfLine->{$_} } @variables;
         for my $var (@variables) {
-            $tableName = $tableName . $ddfLine->{$var};
+            my $val = $hash{$var};
+            if(lc($val) eq 'control' || lc($val) eq 'input') {
+                $val = ucfirst(lc($val));
+            }
+            $tableName = $tableName . $val;
         }
         my $shortSuffix;
         my $longSuffix;
