@@ -258,8 +258,8 @@ longLabel ENCODE HudsonAlpha ChIP-Seq
 group regulation
 # subGroup1 view Views Sites=Sites Counts=Counts
 subGroup1 view Views Sites=Sites Peaks=Peaks Signal=Signal ZeroFilledSignal=ZeroFilledSignal ZeroFilledBedGraphSignal=ZeroFilledBedGraphSignal RawSignal=RawSignal
-subGroup2 cellType Cell_Line SK-N-MC=SK-N-MC
-subGroup3 factor Factor FOXP2=FOXP2
+subGroup2 cellType Cell_Line SK-N-MC=SK-N-MC PFSK-1=PFSK-1
+subGroup3 factor Factor FOXP2=FOXP2 Control=Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
@@ -268,80 +268,26 @@ priority	0
 type bed 3
 wgEncode 1
 
-	track	wgEncodeHudsonAlphaChipSeqPeaksSKNMCFOXP2
+	track	wgEncodeHudsonAlphaChipSeqRawSignalSKNMCControl
 	subTrack	wgEncodeHudsonAlphaChipSeq
-	shortLabel	FOXP2/SK-N-MC Pks
-	longLabel	HudsonAlpha ChIP/Seq Peaks (FOXP2 in SK-N-MC cells)
-    subGroups	view=Peaks factor=FOXP2 cellType=SK-N-MC
-	type	narrowPeak
-	dateSubmitted	2008-08-13 11:23:43
+	shortLabel	Control SK-N-MC
+	longLabel	ENCODE (Control in SK-N-MC cells)
+	subGroups	view=RawSignal factor=Control cellType=SK-N-MC
+	type	wig
+	dateSubmitted	2008-09-11 20:49:12
 	priority	1
 	noInherit	on
 	cell	SK-N-MC
-	antibody	FOXP2
-        canPack	on
+	antibody	control
 
-	track	wgEncodeHudsonAlphaChipSeqSignalSKNMCFOXP2
+	track	wgEncodeHudsonAlphaChipSeqRawSignalPFSK1Control
 	subTrack	wgEncodeHudsonAlphaChipSeq
-	shortLabel	FOXP2/SK-N-MC Sig
-	longLabel	HudsonAlpha ChIP/Seq Signal with NULLs(FOXP2 in SK-N-MC cells)
-    subGroups	view=Signal factor=FOXP2 cellType=SK-N-MC
+	shortLabel	Control PFSK-1
+	longLabel	ENCODE (Control in PFSK-1 cells)
+	subGroups	view=RawSignal factor=Control cellType=PFSK-1
 	type	wig
-	dateSubmitted	2008-08-8 14:5:19
+	dateSubmitted	2008-09-11 20:49:12
 	priority	2
 	noInherit	on
-	visibility	full
-	spanList	1
-	windowingFunction	mean
-	maxHeightPixels	100:16:16
-	cell	SK-N-MC
-	antibody	FOXP2
-        viewLimits	1:62
-
-	track	wgEncodeHudsonAlphaChipSeqSignalZeroFilledSKNMCFOXP2
-	subTrack	wgEncodeHudsonAlphaChipSeq
-	shortLabel	FOXP2/SK-N-MC Zero Sig
-	longLabel	HudsonAlpha ChIP/Seq ZeroFilled Signal (FOXP2 in SK-N-MC cells)
-    subGroups	view=ZeroFilledSignal factor=FOXP2 cellType=SK-N-MC
-	type	wig
-	dateSubmitted	2008-08-8 14:5:19
-	priority	3
-	noInherit	on
-	visibility	full
-	spanList	1
-	windowingFunction	mean
-	maxHeightPixels	100:16:16
-	cell	SK-N-MC
-	antibody	FOXP2
-        viewLimits	1:62
-
-	track	wgEncodeHudsonAlphaChipSeqSignalBedGraphSKNMCFOXP2
-	subTrack	wgEncodeHudsonAlphaChipSeq
-	shortLabel	FOXP2/SK-N-MC Zero Bed Sig
-	longLabel	HudsonAlpha ChIP/Seq ZeroFilled BedGraph Signal (FOXP2 in SK-N-MC cells)
-	subGroups	view=ZeroFilledBedGraphSignal factor=FOXP2 cellType=SK-N-MC
-	type	bedGraph 4
-	dateSubmitted	2008-08-8 14:5:19
-	priority	4
-	noInherit	on
-	visibility	full
-	cell	SK-N-MC
-	antibody	FOXP2
-        viewLimits	1:62
-
-	track	wgEncodeHudsonAlphaChipSeqRawSignalRep1SKNMCFOXP2
-	subTrack	wgEncodeHudsonAlphaChipSeq
-	shortLabel	FOXP2/SK-N-MC Raw
-	longLabel	HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (FOXP2 in SK-N-MC cells)
-	subGroups	view=RawSignal factor=FOXP2 cellType=SK-N-MC
-#subGroups   view=RawSignal
-	type	wig
-	dateSubmitted	2008-08-8 14:5:19
-	priority	5
-	noInherit	on
-	spanList	1
-	windowingFunction	mean
-	maxHeightPixels	100:16:16
-	cell	SK-N-MC
-	antibody	FOXP2
-        viewLimits	1:62
+	cell	PFSK-1
+	antibody	control
