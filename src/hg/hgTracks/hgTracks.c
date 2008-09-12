@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1509 2008/09/11 23:40:46 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1510 2008/09/12 01:25:45 kate Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -134,7 +134,7 @@ if (dif < 0)
    return -1;
 else if (dif == 0.0)
     /* secondary sort on label */
-    return -1 * strcasecmp(b->shortLabel, a->shortLabel);
+    return strcasecmp(a->shortLabel, b->shortLabel);
 else
    return 1;
 }
