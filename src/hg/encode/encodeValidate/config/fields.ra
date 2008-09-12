@@ -60,3 +60,33 @@ field variables
 file dafHeader
 type string
 required no
+
+field longLabelPrefix
+file dafList
+type string
+required no
+
+field shortLabelPrefix
+file dafList
+type string
+required no
+
+field type
+file dafList
+type string
+required yes
+
+field hasReplicates
+file dafList
+type string
+required yes
+
+field required
+file dafList
+type bool
+required yes
+
+field order
+file dafList
+type in
+required no
