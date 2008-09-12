@@ -18,7 +18,7 @@
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.9 2008/09/11 00:13:36 kate Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.10 2008/09/12 18:47:12 tdreszer Exp $";
 
 static char *cv_file()
 {
@@ -62,6 +62,11 @@ else if (sameString(type,"Gene Type"))
 else if (sameString(type,"Cell Line"))
     {
     puts("  <TH>Term</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Vendor ID</TH><TH>Term ID</TH>");
+    }
+else if (sameWord(type,"control"))
+    {
+    puts("  <TH>Term</TH><TH>Description</TH></TR><TR>");
+    puts("  <TH>Control</TH><TH>This data represents a control being compared with the other tracks in the set.</TH>");
     }
 else 
     errAbort("Error: Unrecognised type (%s)\n", type);
@@ -209,6 +214,7 @@ else
 }
 
 static char *normalizeType(char *type)
+/* Strips any quotation marks and converts common synonyms */
 {
 (void)stripChar(type,'\"');
 if ((sameWord(type,"Cell Line"))
@@ -220,6 +226,42 @@ else if (sameWord(type,"Factor"))
     return cloneString("Antibody");
     
 return type;  
+}
+
+static char *findType(struct hash *cvHash)
+/* returns the type that was requested or else the type associated with the term requested */
+{
+struct hashCookie hc = hashFirst(cvHash);
+struct hashEl *hEl;
+struct hash *ra;
+char *type = cgiOptionalString("type");
+
+if(type==NULL)    // If not type, but term, then search for first term and use it's type
+    {
+    char *term = cgiOptionalString("term");
+    if(term==NULL)
+        errAbort("Error: Required 'term' or 'type' argument not found\n");
+    (void)stripChar(term,'\"');
+    if(sameWord(term,"control"))
+        {
+        type = term;
+        }
+    else
+        {
+        while ((hEl = hashNext(&hc)) != NULL)
+            {
+            ra = (struct hash *)hEl->val;
+            if (differentStringNullOk(hashFindVal(ra, "term"), term))
+                continue;
+            type = hashFindVal(ra, "type");
+            break;
+            }
+        //hc = hashFirst(cvHash);
+        }
+    }
+if(type==NULL)    // Still not type? abort
+    errAbort("Error: Required 'type' or 'term' argument not found\n");
+return normalizeType(type);
 }
 
 void doMiddle()
@@ -234,45 +276,29 @@ int total = 0;
 
 puts("<TABLE BORDER=1 BGCOLOR=#FFFEE8 CELLSPACING=0 CELLPADDING=2>");
 puts("<TR style=\"background:#D9E4F8\">");
-type = cgiOptionalString("type");
-if(type==NULL)    // If not type, but term, then search for first term and use it's type
-    {
-    char *term = cgiOptionalString("term");
-    if(term==NULL)
-        errAbort("Error: Required 'term' or 'type' argument not found\n");
-    (void)stripChar(term,'\"');
-    while ((hEl = hashNext(&hc)) != NULL)
-        {
-        ra = (struct hash *)hEl->val;
-        if (differentStringNullOk(hashFindVal(ra, "term"), term))
-            continue;
-        type = hashFindVal(ra, "type");
-        break;
-        }
-    hc = hashFirst(cvHash);
-    }
-if(type==NULL)    // Still not type? abort
-    errAbort("Error: Required 'type' or 'term' argument not found\n");
-type = normalizeType(type);
-//printf("The type is \"%s\"<BR>\n",type);
+type = findType(cvHash);
 doTypeHeader(type);
 puts("</TR>");
 
-while ((hEl = hashNext(&hc)) != NULL)
+if(differentWord(type,"control"))
     {
-    ra = (struct hash *)hEl->val;
-    if (differentString(hashMustFindVal(ra, "type"), type))
-        continue;
-    slAddTail(&termList, ra);
-    }
-slSort(&termList, termCmp);
-while((ra = slPopHead(&termList)) != NULL)
-    {
-    // TODO: Add check for unknown tags in cv.ra
-    doTypeRow(ra, type, &total);
+    while ((hEl = hashNext(&hc)) != NULL)
+        {
+        ra = (struct hash *)hEl->val;
+        if (differentString(hashMustFindVal(ra, "type"), type))
+            continue;
+        slAddTail(&termList, ra);
+        }
+    slSort(&termList, termCmp);
+    while((ra = slPopHead(&termList)) != NULL)
+        {
+        // TODO: Add check for unknown tags in cv.ra
+        doTypeRow(ra, type, &total);
+        }
     }
 puts("</TABLE><BR>");
-printf("Total = %d\n", total);
+if(total > 1)
+    printf("Total = %d\n", total);
 }
 
 int main(int argc, char *argv[])
