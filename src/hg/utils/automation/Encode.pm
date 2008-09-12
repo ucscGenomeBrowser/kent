@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.17 2008/09/11 22:09:48 larrym Exp $
+# $Id: Encode.pm,v 1.18 2008/09/12 02:48:21 larrym Exp $
 
 package Encode;
 
@@ -73,34 +73,34 @@ sub splitKeyVal
 sub validateFieldList {
 # validate the entries in a RA record or DDF header using fields.ra
 # $file s/d be 'ddf' or 'dafHeader'
-# die's if any errors are found.
-    my ($fields, $schema, $file, $errStrPrefix) = @_;
+# Returns list of any errors that are found.
+    my ($fields, $schema, $file) = @_;
     my %hash = map {$_ => 1} @{$fields};
     my @errors;
-    die "file '$file' is invalid\n" if($file ne 'ddf' && $file ne 'dafHeader');
+    if($file ne 'ddf' && $file ne 'dafHeader') {
+        push(@errors, "file argument '$file' is invalid");
+    } else {
+        # look for missing required fields
+        for my $field (keys %{$schema}) {
+            if($schema->{$field}{file} eq $file && $schema->{$field}{required} && !defined($hash{$field})) {
+                push(@errors, "field '$field' not defined");
+            }
+        }
 
-    # look for missing required fields
-    for my $field (keys %{$schema}) {
-        if($schema->{$field}{file} eq $file && $schema->{$field}{required} && !defined($hash{$field})) {
-            push(@errors, "field '$field' not defined");
+        # now look for fields in list that aren't in schema
+        for my $field (@{$fields}) {
+            if(!defined($schema->{$field}{file}) || $schema->{$field}{file} ne $file) {
+                push(@errors, "invalid field '$field'");
+            }
         }
     }
-
-    # now look for fields in list that aren't in schema
-    for my $field (@{$fields}) {
-        if(!defined($schema->{$field}{file}) || $schema->{$field}{file} ne $file) {
-            push(@errors, "invalid field '$field'");
-        }
-    }
-    if(@errors) {
-        die $errStrPrefix . " " . join("; ", @errors) . " \n";
-    }
+    return @errors;
 }
 
 sub validateValueList {
 # validate hash of values using fields.ra; $file s/d be 'ddf' or 'dafHeader'
-# die's if any errors are found.
-    my ($values, $schema, $file, $errStrPrefix) = @_;
+# Returns list of any errors that are found.
+    my ($values, $schema, $file) = @_;
     my @errors;
     for my $field (keys %{$values}) {
         my $val = $values->{$field};
@@ -119,9 +119,7 @@ sub validateValueList {
             }
         }
     }
-    if(@errors) {
-        die $errStrPrefix . " " . join("; ", @errors) . " \n";
-    }
+    return @errors;
 }
 
 sub readFile
@@ -204,7 +202,9 @@ sub getFields
 sub validateAssembly {
     my ($val) = @_;
     if($val ne 'hg18') {
-        die "ERROR: Assembly '$val' is invalid (must be 'hg18')\n";
+        return "ERROR: Assembly '$val' is invalid (must be 'hg18')";
+    } else {
+        return ();
     }
 }
 
@@ -284,18 +284,18 @@ sub parseDaf
 
     # Validate fields
     my @tmp = grep(!/^TRACKS$/, keys %daf);
-    validateFieldList(\@tmp, $fields, 'dafHeader', "ERROR in DAF '$dafFile':");
+    my @errors = validateFieldList(\@tmp, $fields, 'dafHeader');
 
     if($daf{dafVersion} ne $dafVersion) {
-        die "ERROR: dafVersion '$daf{dafVersion}' does not match current version: $dafVersion\n";
+        push(@errors, "dafVersion '$daf{dafVersion}' does not match current version: $dafVersion");
     }
     if(!keys(%{$daf{TRACKS}})) {
-        die "ERROR: no views defined for project \'$daf{project}\' in DAF '$dafFile'\n";
+        push(@errors, "no views defined for project \'$daf{project}\' in DAF '$dafFile'");
     }
     if(!defined($grants->{$daf{grant}})) {
-        die "ERROR: invalid lab '$daf{grant}' in DAF '$dafFile'\n";
+        push(@errors, "invalid lab '$daf{grant}' in DAF '$dafFile'");
     }
-    validateAssembly($daf{assembly});
+    push(@errors, validateAssembly($daf{assembly}));
 
     foreach my $track (keys %{$daf{TRACKS}}) {
         &HgAutomate::verbose(4, "  Track: $track\n");
@@ -317,6 +317,9 @@ sub parseDaf
         }
         $daf{variableHash} = \%variables;
         $daf{variableArray} = \@variables;
+    }
+    if(@errors) {
+        die "ERROR(s) in DAF '$dafFile':\n\n" . join("\n\n", @errors) . "\n";
     }
     return \%daf;
 }
