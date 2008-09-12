@@ -257,7 +257,7 @@ shortLabel HudsonAlpha ChIP
 longLabel ENCODE HudsonAlpha ChIP-Seq
 group regulation
 # subGroup1 view Views Sites=Sites Counts=Counts
-subGroup1 view Views Sites=Sites Peaks=Peaks Signal=Signal ZeroFilledSignal=ZeroFilledSignal ZeroFilledBedGraphSignal=ZeroFilledBedGraphSignal RawSignal=RawSignal
+subGroup1 view Views Sites=Sites Peaks=Peaks Signal=Signal RawSignal=RawSignal
 subGroup2 cellType Cell_Line SK-N-MC=SK-N-MC PFSK-1=PFSK-1
 subGroup3 factor Factor FOXP2=FOXP2 Control=Control
 dimensions dimensionX=cellType dimensionY=factor
