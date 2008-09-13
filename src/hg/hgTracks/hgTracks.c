@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1510 2008/09/12 01:25:45 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1511 2008/09/13 20:43:35 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -65,7 +65,6 @@ int gfxBorder = hgDefaultGfxBorder;	/* Width of graphics border. */
 int guidelineSpacing = 12;	/* Pixels between guidelines. */
 
 boolean withIdeogram = TRUE;            /* Display chromosome ideogram? */
-boolean ideogramAvail = FALSE;           /* Is the ideogram data available for this genome? */
 
 int rulerMode = tvHide;         /* on, off, full */
 
@@ -463,19 +462,23 @@ for(cb = cbList; cb != NULL; cb = cb->next)
     }
 }
 
-void makeChromIdeoImage(struct track **pTrackList, char *psOutput)
-/* Make an ideogram image of the chromsome and our position in
-   it. */
+void makeChromIdeoImage(struct track **pTrackList, char *psOutput,
+                        struct tempName *ideoTn)
+/* Make an ideogram image of the chromsome and our position in it.  If the
+ * ideoTn parameter is not NULL, it is filled in if the ideogram is created. */
 {
 struct track *ideoTrack = NULL;
 MgFont *font = tl.font;
 char *mapName = "ideoMap";
 struct hvGfx *hvg;
-struct tempName gifTn;
 boolean doIdeo = TRUE;
+boolean ideogramAvail = FALSE;
 int ideoWidth = round(.8 *tl.picWidth);
 int ideoHeight = 0;
 int textWidth = 0;
+struct tempName gifTn;
+if (ideoTn == NULL)
+    ideoTn = &gifTn;   // not returning value
 
 ideoTrack = chromIdeoTrack(*pTrackList);
 
@@ -500,10 +503,6 @@ else
     /* If hidden don't draw. */
     if(ideoTrack->limitedVis == tvHide || !withIdeogram)
 	doIdeo = FALSE;
-
-    /* If doing postscript, skip ideogram. */
-    if(psOutput)
-	doIdeo = FALSE;
     }
 if(doIdeo)
     {
@@ -512,12 +511,21 @@ if(doIdeo)
     char title[32];
     startBand[0] = endBand[0] = '\0';
     fillInStartEndBands(ideoTrack, startBand, endBand, sizeof(startBand)); 
-    /* Draw the ideogram. */
-    trashDirFile(&gifTn, "hgtIdeo", "hgtIdeo", ".gif");
     /* Start up client side map. */
-    hPrintf("<MAP Name=%s>\n", mapName);
+    if (!psOutput)
+        hPrintf("<MAP Name=%s>\n", mapName);
+    /* Draw the ideogram. */
     ideoHeight = gfxBorder + ideoTrack->height;
-    hvg = hvGfxOpenGif(ideoWidth, ideoHeight, gifTn.forCgi);
+    if (psOutput)
+        {
+        trashDirFile(ideoTn, "hgtIdeo", "hgtIdeo", ".ps");
+        hvg = hvGfxOpenPostScript(ideoWidth, ideoHeight, ideoTn->forCgi);
+        }
+    else
+        {
+        trashDirFile(ideoTn, "hgtIdeo", "hgtIdeo", ".gif");
+        hvg = hvGfxOpenGif(ideoWidth, ideoHeight, ideoTn->forCgi);
+        }
     hvg->rc = revCmplDisp;
     initColors(hvg);
     ideoTrack->ixColor = hvGfxFindRgb(hvg, &ideoTrack->color);
@@ -535,14 +543,15 @@ if(doIdeo)
     /* Save out picture and tell html file about it. */
     hvGfxClose(&hvg);
     /* Finish map. */
-    hPrintf("</MAP>\n");
+    if (!psOutput)
+        hPrintf("</MAP>\n");
     }
 hPrintf("<TABLE BORDER=0 CELLPADDING=0>");
-if(doIdeo)
+if (doIdeo && !psOutput)
     {
     hPrintf("<TR><TD HEIGHT=5></TD></TR>");
     hPrintf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s >",
-	    gifTn.forHtml, ideoWidth, ideoHeight, mapName);
+	    ideoTn->forHtml, ideoWidth, ideoHeight, mapName);
     hPrintf("</TD></TR>");
     hPrintf("<TR><TD HEIGHT=5></TD></TR></TABLE>");
     }
@@ -3311,9 +3320,10 @@ if (measureTiming)
     }
 }
 
-void doTrackForm(char *psOutput)
-/* Make the tracks display form with the zoom/scroll
- * buttons and the active image. */
+void doTrackForm(char *psOutput, struct tempName *ideoTn)
+/* Make the tracks display form with the zoom/scroll buttons and the active
+ * image.  If the ideoTn parameter is not NULL, it is filled in if the
+ * ideogram is created.  */
 {
 struct group *group;
 struct track *track;
@@ -3535,7 +3545,7 @@ if (!hideControls)
     }
 
 /* Make chromsome ideogram gif and map. */
-makeChromIdeoImage(&trackList, psOutput);
+makeChromIdeoImage(&trackList, psOutput, ideoTn);
 
 /* Make clickable image and map. */
 makeActiveImage(trackList, psOutput);
@@ -3925,26 +3935,43 @@ return (ret == 0) ? 1 : ret;
 void handlePostscript()
 /* Deal with Postscript output. */
 {
-struct tempName psTn;
-char *pdfFile = NULL;
+struct tempName psTn, ideoPsTn;
+char *pdfFile = NULL, *ideoPdfFile;
+ZeroVar(&ideoPsTn);
 trashDirFile(&psTn, "hgt", "hgt", ".eps");
 printf("<H1>PostScript/PDF Output</H1>\n");
 printf("PostScript images can be printed at high resolution "
        "and edited by many drawing programs such as Adobe "
-       "Illustrator.<BR>");
-doTrackForm(psTn.forCgi);
-printf("<A HREF=\"%s\">Click here</A> "
+       "Illustrator.");
+doTrackForm(psTn.forCgi, &ideoPsTn);
+
+// postscript
+printf("<UL>\n");
+printf("<LI><A HREF=\"%s\">Click here</A> "
        "to download the current browser graphic in PostScript.  ", psTn.forCgi);
+if (strlen(ideoPsTn.forCgi))
+    printf("<LI><A HREF=\"%s\">Click here</A> "
+           "to download the current browser ideogram in PostScript.  ", ideoPsTn.forCgi);
+printf("</UL>\n");
+
 pdfFile = convertEpsToPdf(psTn.forCgi);
+if (strlen(ideoPsTn.forCgi))
+    ideoPdfFile = convertEpsToPdf(ideoPsTn.forCgi);
 if(pdfFile != NULL) 
     {
-    printf("<BR><BR>PDF can be viewed with Adobe Acrobat Reader.<BR>\n");
-    printf("<A TARGET=_blank HREF=\"%s\">Click here</A> "
+    printf("<BR>PDF can be viewed with Adobe Acrobat Reader.\n");
+    printf("<UL>\n");
+    printf("<LI><A TARGET=_blank HREF=\"%s\">Click here</A> "
 	   "to download the current browser graphic in PDF.", pdfFile);
+    if (ideoPdfFile != NULL)
+        printf("<LI><A TARGET=_blank HREF=\"%s\">Click here</A> "
+               "to download the current browser ideogram in PDF.", ideoPdfFile);
+    printf("</UL>\n");
+    freez(&pdfFile);
+    freez(&pdfFile);
     }
 else
     printf("<BR><BR>PDF format not available");
-freez(&pdfFile);
 }
 
 boolean isGenome(char *pos)
@@ -4131,7 +4158,7 @@ cartSetString(cart, "position", newPos);
 if (cgiVarExists("hgt.psOutput"))
     handlePostscript();
 else
-    doTrackForm(NULL);
+    doTrackForm(NULL, NULL);
 }
 
 void chromInfoTotalRow(long long total)
