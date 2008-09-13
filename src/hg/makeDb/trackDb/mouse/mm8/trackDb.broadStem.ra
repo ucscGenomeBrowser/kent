@@ -13,8 +13,8 @@ subGroup3 FAC Epitope K04m1=H3K4me1 K04m2=H3K4me2 K04m3=H3K4me3 K09m3=H3K9me3 K2
 dimensions dimensionX=CEL dimensionY=FAC
 sortOrder CEL=+ FAC=+ view=-
 dragAndDrop subTracks
-dividers CEL FAC 
-hierarchy view HMM=0 WIN=0 DEN=1 ALN=2
+visibility full
+visibilityViewDefaults HMM=squish WIN=squish DEN=full
 priority 130
 type bed 3
 
@@ -27,7 +27,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 0,110,0
-    visibility dense
+    configurable on
     priority 2
     
     track broadStemChipSignalH3K4me1Es
@@ -42,7 +42,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,110,0
-    visibility full
+    configurable on
     priority 3
 
 #    track broadStemChipAlignmentsH3K4me1Es
@@ -54,7 +54,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,110,0
-#    visibility hide
 #    priority 4
 
     track broadStemChipWinSitesH3K4me1Np
@@ -66,7 +65,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 0,110,0
-    visibility dense
+    configurable on
     priority 12
     
     track broadStemChipSignalH3K4me1Np
@@ -81,7 +80,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,110,0
-    visibility full
+    configurable on
     priority 13
 
 #    track broadStemChipAlignmentsH3K4me1Np
@@ -93,7 +92,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,110,0
-#    visibility hide
 #    priority 14
 
     track broadStemChipWinSitesH3K4me2Es
@@ -105,7 +103,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 0,130,0
-    visibility dense
+    configurable on
     priority 22
     
     track broadStemChipSignalH3K4me2Es
@@ -120,7 +118,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,130,0
-    visibility full
+    configurable on
     priority 23
 
 #    track broadStemChipAlignmentsH3K4me2Es
@@ -132,7 +130,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,130,0
-#    visibility hide
 #    priority 24
 
     track broadStemChipWinSitesH3K4me2Np
@@ -144,7 +141,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 0,130,0
-    visibility dense
+    configurable on
     priority 32
     
     track broadStemChipSignalH3K4me2Np
@@ -159,7 +156,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,130,0
-    visibility full
+    configurable on
     priority 33
 
 #    track broadStemChipAlignmentsH3K4me2Np
@@ -171,7 +168,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,130,0
-#    visibility hide
 #    priority 34
 
     track broadStemChipWinSitesH3K4me2Brain
@@ -183,7 +179,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 0,130,0
-    visibility dense
+    configurable on
     priority 42
     
     track broadStemChipSignalH3K4me2Brain
@@ -198,7 +194,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,130,0
-    visibility full
+    configurable on
     priority 43
 
 #    track broadStemChipAlignmentsH3K4me2Brain
@@ -210,7 +206,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,130,0
-#    visibility hide
 #    priority 44
     
     track broadStemChipHmmSitesH3K4me3Es
@@ -221,7 +216,6 @@ type bed 3
     type bed 3
     noInherit off
     color 0,150,0
-    visibility dense
     priority 51
 
     track broadStemChipWinSitesH3K4me3Es
@@ -233,7 +227,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 0,150,0
-    visibility dense
+    configurable on
     priority 52
 
     track broadStemChipSignalH3K4Es
@@ -248,7 +242,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,150,0
-    visibility full
+    configurable on
     priority 53
 
 #    track broadStemChipAlignmentsH3K4Me3Es
@@ -260,7 +254,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,150,0
-#    visibility hide
 #    priority 54
 
     track broadStemChipWinSitesH3K4me3Mef
@@ -272,7 +265,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 0,150,0
-    visibility dense
+    configurable on
     priority 62
 
     track broadStemChipSignalH3K4Mef
@@ -287,7 +280,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,150,0
-    visibility full
+    configurable on
     priority 63
 
 #    track broadStemChipAlignmentsH3K4Me3Mef
@@ -299,11 +292,10 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,150,0
-#    visibility hide
 #    priority 64
 
     track broadStemChipWinSitesH3K4me3Np
-    shortLabel H3K4me3  NP Win
+    shortLabel H3K4me3 NP Win
     longLabel Broad Stem Cell Chromatin IP Sites by Window (H3K4me3 ab, Neural Progenitor (NP) cells)
     subTrack broadChromatinChIPSeq
     subGroups FAC=K04m3 CEL=NP view=WIN
@@ -311,7 +303,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 0,150,0
-    visibility dense
+    configurable on
     priority 72
 
     track broadStemChipSignalH3K4Np
@@ -326,7 +318,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,150,0
-    visibility full
+    configurable on
     priority 73
 
 #    track broadStemChipAlignmentsH3K4Me3Np
@@ -338,7 +330,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,150,0
-#    visibility hide
 #    priority 74
     
     track broadStemChipSignalH3K4EsHyb
@@ -353,7 +344,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,150,0
-    visibility full
+    configurable on
     priority 83
     
 #    track broadStemChipAlignmentsH3K4Me3EsHyb
@@ -365,7 +356,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,150,0
-#    visibility hide
 #    priority 84
 
     track broadStemChipWinSitesH3K4me3Brain
@@ -377,7 +367,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 0,150,0
-    visibility dense
+    configurable on
     priority 92
     
     track broadStemChipSignalH3K4me3Brain
@@ -392,7 +382,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,150,0
-    visibility full
+    configurable on
     priority 93
 
 #    track broadStemChipAlignmentsH3K4me3Brain
@@ -404,7 +394,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,150,0
-#    visibility hide
 #    priority 94
 
     track broadStemChipHmmSitesH3K9me3Es
@@ -415,7 +404,6 @@ type bed 3
     type bed 3
     noInherit off
     color 100,0,0
-    visibility dense
     priority 101
 
     track broadStemChipWinSitesH3K9me3Es
@@ -427,7 +415,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 100,0,0
-    visibility dense
+    configurable on
     priority 102
 
     track broadStemChipSignalH3K9Es
@@ -442,7 +430,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 100,0,0
-    visibility full
+    configurable on
     priority 103
     
 #    track broadStemChipAlignmentsH3K9Me3Es
@@ -454,7 +442,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 100,0,0
-#    visibility hide
 #    priority 104
 
     track broadStemChipWinSitesH3K9me3Mef
@@ -466,7 +453,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 100,0,0
-    visibility dense
+    configurable on
     priority 112
 
     track broadStemChipSignalH3K9Mef
@@ -481,7 +468,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 100,0,0
-    visibility full
+    configurable on
     priority 113
     
 #    track broadStemChipAlignmentsH3K9Me3Mef
@@ -493,7 +480,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 100,0,0
-#    visibility hide
 #    priority 114
 
     track broadStemChipWinSitesH3K9me3Np
@@ -505,7 +491,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 100,0,0
-    visibility dense
+    configurable on
     priority 122
 
     track broadStemChipSignalH3K9Np
@@ -520,7 +506,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 100,0,0
-    visibility full
+    configurable on
     priority 123
 
 #    track broadStemChipAlignmentsH3K9Me3Np
@@ -532,7 +518,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 100,0,0
-#    visibility hide
 #    priority 124
 
     track broadStemChipSignalH3K9EsHyb
@@ -547,7 +532,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 100,0,0
-    visibility full
+    configurable on
     priority 133
 
 #    track broadStemChipAlignmentsH3K9Me3EsHyb
@@ -559,7 +544,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 100,0,0
-#    visibility hide
 #    priority 134
 
     track broadStemChipHmmSitesH3K20me3Es
@@ -570,7 +554,6 @@ type bed 3
     type bed 3
     noInherit off
     color 150,0,0
-    visibility dense
     priority 141
 
     track broadStemChipSignalH4K20Es
@@ -585,7 +568,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 150,0,0
-    visibility full
+    configurable on
     priority 143
 
 #    track broadStemChipAlignmentsH4K20Me3Es
@@ -597,7 +580,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 150,0,0
-#    visibility hide
 #    priority 144
 
     track broadStemChipHmmSitesH3K27me3Es
@@ -608,7 +590,6 @@ type bed 3
     type bed 3
     noInherit off
     color 255,0,0
-    visibility dense
     priority 151
 
     track broadStemChipWinSitesH3K27me3Es
@@ -620,7 +601,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 255,0,0
-    visibility dense
+    configurable on
     priority 152
 
     track broadStemChipSignalH3K27Es
@@ -635,7 +616,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 255,0,0
-    visibility full
+    configurable on
     priority 153
 
 #    track broadStemChipAlignmentsH3K27Me3Es
@@ -647,7 +628,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 255,0,0
-#    visibility hide
 #    priority 154
 
     track broadStemChipWinSitesH3K27me3Mef
@@ -659,7 +639,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 255,0,0
-    visibility dense
+    configurable on
     priority 162
 
     track broadStemChipSignalH3K27Mef
@@ -674,7 +654,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 255,0,0
-    visibility full
+    configurable on
     priority 163
 
 #    track broadStemChipAlignmentsH3K27Me3Mef
@@ -686,7 +666,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 255,0,0
-#    visibility hide
 #    priority 164
 
     track broadStemChipWinSitesH3K27me3Np
@@ -698,7 +677,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 255,0,0
-    visibility dense
+    configurable on
     priority 172
 
     track broadStemChipSignalH3K27Np
@@ -713,7 +692,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 255,0,0
-    visibility full
+    configurable on
     priority 173
 
 #    track broadStemChipAlignmentsH3K27Me3Np
@@ -725,7 +704,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 255,0,0
-#    visibility hide
 #    priority 174
 
     track broadStemChipWinSitesH3K27me3Brain
@@ -737,7 +715,7 @@ type bed 3
     #spectrum on
     noInherit on
     color 255,0,0
-    visibility dense
+    configurable on
     priority 182
     
     track broadStemChipSignalH3K27me3Brain
@@ -752,7 +730,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 255,0,0
-    visibility full
+    configurable on
     priority 183
 
 #    track broadStemChipAlignmentsH3K27me3Brain
@@ -764,7 +742,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 255,0,0
-#    visibility hide
 #    priority 184
     
     track broadStemChipHmmSitesH3K36me3Es
@@ -775,7 +752,6 @@ type bed 3
     type bed 3
     noInherit off
     color 0,0,150
-    visibility dense
     priority 191
     
     track broadStemChipSignalH3K36Es
@@ -790,7 +766,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,0,150
-    visibility full
+    configurable on
     priority 193
 
 #    track broadStemChipAlignmentsH3K36Me3Es
@@ -802,7 +778,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,0,150
-#    visibility hide
 #    priority 194
 
     track broadStemChipSignalH3K36Mef
@@ -817,7 +792,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,0,150
-    visibility full
+    configurable on
     priority 203
 
 #    track broadStemChipAlignmentsH3K36Me3Mef
@@ -829,7 +804,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,0,150
-#    visibility hide
 #    priority 204
 
     track broadStemChipSignalH3K36Np
@@ -844,7 +818,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,0,150
-    visibility full
+    configurable on
     priority 213
 
 #    track broadStemChipAlignmentsH3K36Me3Np
@@ -856,7 +830,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,0,150
-#    visibility hide
 #    priority 214
 
     track broadStemChipSignalH3K36EsHyb
@@ -871,7 +844,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,0,150
-    visibility full
+    configurable on
     priority 223
 
 #    track broadStemChipAlignmentsH3K36Me3EsHyb
@@ -883,7 +856,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,0,150
-#    visibility hide
 #    priority 224
 
     track broadStemChipSignalH3Es
@@ -898,7 +870,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color  0,0,0
-    visibility full
+    configurable on
     priority 233
 
 #    track broadStemChipAlignmentsH3panEs
@@ -910,7 +882,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color  0,0,0
-#    visibility hide
 #    priority 234
 
 #    track broadStemChipAlignmentsWceEs
@@ -922,7 +893,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,0,0
-#    visibility hide
 #    priority 244
 
 #    track broadStemChipAlignmentsWceMef
@@ -934,7 +904,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,0,0
-#    visibility hide
 #    priority 254
 
 #    track broadStemChipAlignmentsWceNp
@@ -946,7 +915,6 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,0,0
-#    visibility hide
 #    priority 264
 
     track broadStemChipSignalRpolEs
@@ -961,7 +929,7 @@ type bed 3
     maxHeightPixels 100:32:8
     noInherit on
     color 0,100,0
-    visibility full
+    configurable on
     priority 273
     
 #    track broadStemChipAlignmentsRPolEs
@@ -973,6 +941,5 @@ type bed 3
 #    #spectrum on
 #    noInherit on
 #    color 0,100,0
-#    visibility hide
 #    priority 274
 
