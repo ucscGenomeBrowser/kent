@@ -8,7 +8,7 @@
 #include "genePred.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: genePredToGtf.c,v 1.15 2008/08/18 20:51:54 markd Exp $";
+static char const rcsid[] = "$Id: genePredToGtf.c,v 1.16 2008/09/13 00:47:08 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -129,7 +129,10 @@ int dir = (dist >= 0) ? 1 : -1;
 while ((0 <= iExon) && (iExon < gp->exonCount) && (left > 0))
     {
     if (inExon(gp, iExon, pos+dir))
+        {
         pos += dir;
+        left--;
+        }
     else if (dir >= 0)
         {
         // move to next exon
@@ -142,9 +145,11 @@ while ((0 <= iExon) && (iExon < gp->exonCount) && (left > 0))
         // move to previous
         iExon--;
         if (iExon >= 0)
-            pos = (gp->exonStarts[iExon]+gp->exonEnds[iExon])-1;
+            {
+            pos = gp->exonEnds[iExon]-1;
+            left--;
+            }
         }
-    left--;
     }
 if (left > 0)
     errAbort("can't move %d by %d and be an exon of %s %s:%d-%d",
@@ -237,7 +242,7 @@ if (honorCdsStat && (gp->optFields & genePredCdsStatFld)
 
 // find last CDS exon
 int iExon, cdsStart = 0, cdsEnd = 0;
-for (iExon = gp->exonCount; iExon >= 0; iExon--)
+for (iExon = gp->exonCount-1; iExon >= 0; iExon--)
     {
     if (genePredCdsExon(gp, iExon, &cdsStart, &cdsEnd))
         break;
@@ -373,10 +378,10 @@ if (gp->strand[0] == '+')
     }
 else
     {
-    if (codonComplete(&firstCodon))
+    if (codonComplete(&lastCodon))
         writeCodon(f, source, name, geneName, chrom, strand, "start_codon",
                    &lastCodon);
-    if (codonComplete(&lastCodon))
+    if (codonComplete(&firstCodon))
         writeCodon(f, source, name, geneName, chrom, strand, "stop_codon",
                    &firstCodon);
     }
