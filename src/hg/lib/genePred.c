@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.100 2008/09/03 19:19:22 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.101 2008/09/13 00:46:54 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1296,6 +1296,7 @@ boolean genePredCdsExon(struct genePred *gp, int iExon, int *startPtr, int *endP
 /* Get the CDS range in an exon.  If there is no CDS, return FALSE and then
  * set start == end */
 {
+assert((iExon >= 0) && (iExon < gp->exonCount));
 int start = gp->exonStarts[iExon];
 int end = gp->exonEnds[iExon];
 
