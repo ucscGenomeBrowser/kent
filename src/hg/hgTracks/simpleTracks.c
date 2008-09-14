@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.32 2008/09/08 18:02:23 hiram Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.33 2008/09/14 23:22:37 baertsch Exp $";
 
 #define CHROM_COLORS 26
 
@@ -931,9 +931,37 @@ void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd,
 int x1 = round((double)(chromStart-winStart)*scale) + xOff;
 int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
 int w = x2-x1;
+int maxColor = color;
+int maxCount = 0;
+int col;
+assert(x1<MAXPIXELS);
+colorBin[x1][color]++ ;
+if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= winEnd))
+    {
+    /* loop through binned colors and pick color with highest count for this pixel*/
+    /* if there are multiple colors with the same count, then blend them (only working for red and yellow) */
+    for (col = 0 ; col < 256 ; col++)
+        {
+        int binCount = colorBin[x1][col];
+        if (binCount >= maxCount && binCount > 0)
+            {
+            /* blend colors with equal counts (only red and yellow currently)*/
+            if (binCount == maxCount && col != maxColor)
+                {
+                if ((col      == getCdsColor(CDS_SYN_PROT) && maxColor == getCdsColor(CDS_STOP)) || 
+                    (maxColor == getCdsColor(CDS_SYN_PROT) && col      == getCdsColor(CDS_STOP))  )
+                    {
+                    maxColor = CDS_SYN_BLEND;
+                    }
+                }
+            maxCount = binCount;
+            maxColor = col;
+            }
+        }
+    }
 if (w < 1)
     w = 1;
-hvGfxBox(hvg, x1, y, w, height, color);
+hvGfxBox(hvg, x1, y, w, height, maxColor);
 }
 
 
@@ -942,7 +970,7 @@ void drawScaledBoxSample(struct hvGfx *hvg,
 	int xOff, int y, int height, Color color, int score)
 /* Draw a box scaled from chromosome to window coordinates. */
 {
-int i;
+//int i;
 int x1, x2, w;
 x1 = round((double)(chromStart-winStart)*scale) + xOff;
 x2 = round((double)(chromEnd-winStart)*scale) + xOff;
@@ -953,6 +981,7 @@ w = x2-x1;
 if (w < 1)
     w = 1;
 hvGfxBox(hvg, x1, y, w, height, color);
+#ifdef staleCode
 if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= winEnd))
     {
     for (i = x1 ; i < x1+w; i++)
@@ -962,6 +991,7 @@ if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= wi
         colorBin[i][color] = (z > score)? z : score;
         }
     }
+#endif
 }
 
 
