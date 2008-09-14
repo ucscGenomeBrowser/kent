@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.33 2008/09/14 23:22:37 baertsch Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.34 2008/09/14 23:44:23 baertsch Exp $";
 
 #define CHROM_COLORS 26
 
@@ -934,6 +934,8 @@ int w = x2-x1;
 int maxColor = color;
 int maxCount = 0;
 int col;
+int blendCount = 0;
+Color blendColor = color;
 assert(x1<MAXPIXELS);
 colorBin[x1][color]++ ;
 if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= winEnd))
@@ -951,13 +953,16 @@ if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= wi
                 if ((col      == getCdsColor(CDS_SYN_PROT) && maxColor == getCdsColor(CDS_STOP)) || 
                     (maxColor == getCdsColor(CDS_SYN_PROT) && col      == getCdsColor(CDS_STOP))  )
                     {
-                    maxColor = CDS_SYN_BLEND;
+                    blendColor = getCdsColor(CDS_SYN_BLEND);
+                    blendCount = maxCount;
                     }
                 }
             maxCount = binCount;
             maxColor = col;
             }
         }
+    if (blendCount >= maxCount)
+        maxColor = blendColor;
     }
 if (w < 1)
     w = 1;
