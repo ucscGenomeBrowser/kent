@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1511 2008/09/13 20:43:35 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1512 2008/09/14 16:49:56 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3936,7 +3936,7 @@ void handlePostscript()
 /* Deal with Postscript output. */
 {
 struct tempName psTn, ideoPsTn;
-char *pdfFile = NULL, *ideoPdfFile;
+char *pdfFile = NULL, *ideoPdfFile = NULL;
 ZeroVar(&ideoPsTn);
 trashDirFile(&psTn, "hgt", "hgt", ".eps");
 printf("<H1>PostScript/PDF Output</H1>\n");
