@@ -307,7 +307,7 @@ return exonList;
 }
 
 
-void processRefSeq(char *faFile, char *raFile, char *pslFile, char *loc2refFile, 
+void processRefSeq(char *database, char *faFile, char *raFile, char *pslFile, char *loc2refFile, 
 	char *pepFile, char *mim2locFile)
 /* hgRefSeqMrna - Load refSeq mRNA alignments and other info into 
  * refSeqGene table. */
@@ -322,7 +322,7 @@ int noLocCount = 0;
 int rsiCount = 0;
 int noProtCount = 0;
 struct psl *psl;
-struct sqlConnection *conn = hgStartUpdate();
+struct sqlConnection *conn = hgStartUpdate(database);
 struct hash *productHash = loadNameTable(conn, "productName", 16);
 struct hash *geneHash = loadNameTable(conn, "geneName", 16);
 char *kgName = "refGene";
@@ -564,7 +564,7 @@ if (strstr(database, "Temp") == NULL)
     {
     errAbort("hgKgMrna is meant to load mrna data into a Temporary database only, exiting ...\n");
     }
-processRefSeq(faFile, raFile, pslFile, loc2refFile, pepFile, mim2locFile);
+processRefSeq(database, faFile, raFile, pslFile, loc2refFile, pepFile, mim2locFile);
 }
 
 int main(int argc, char *argv[])

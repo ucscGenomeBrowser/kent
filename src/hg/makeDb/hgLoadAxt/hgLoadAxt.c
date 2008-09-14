@@ -26,18 +26,16 @@ errAbort(
 void hgLoadAxt(char *database, char *table)
 /* hgLoadAxt - Load a axt file index into the database. */
 {
-int i;
 char extFileDir[512];
 struct fileInfo *fileList = NULL, *fileEl;
 struct sqlConnection *conn;
 long count = 0;
 FILE *f = hgCreateTabFile(".", table);
 
-hSetDb(database);
 safef(extFileDir, sizeof(extFileDir), "/gbdb/%s/%s", database, table);
 fileList = listDirX(extFileDir, "*.axt", TRUE);
-conn = hgStartUpdate();
-scoredRefTableCreate(conn, table, hGetMinIndexLength());
+conn = hgStartUpdate(database);
+scoredRefTableCreate(conn, table, hGetMinIndexLength(database));
 if (fileList == NULL)
     errAbort("%s doesn't exist or doesn't have any axt files", extFileDir);
 for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
@@ -48,7 +46,6 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     struct scoredRef mr;
     off_t offset = 0;
     HGID extId = hgAddToExtFile(fileName, conn);
-    int dbNameLen = strlen(database);
 
     verbose(1, "Indexing and tabulating %s\n", fileName);
     while ((axt = axtReadWithPos(lf, &offset)) != NULL)
@@ -60,7 +57,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 	mr.chromStart = axt->tStart;
 	mr.chromEnd = axt->tEnd;
 	if (axt->tStrand == '-')
-	    reverseIntRange(&mr.chromStart, &mr.chromEnd, hChromSize(mr.chrom));
+	    reverseIntRange(&mr.chromStart, &mr.chromEnd, hChromSize(database, mr.chrom));
 	mr.extFile = extId;
 	mr.offset = offset;
 	mr.score = (double)axt->score/(axt->tEnd - axt->tStart);

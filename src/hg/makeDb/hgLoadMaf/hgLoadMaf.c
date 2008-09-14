@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.25 2008/09/03 19:19:43 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.26 2008/09/14 08:08:28 markd Exp $";
 
 /* Command line options */
 
@@ -155,7 +155,7 @@ else
     if (isCustom)
 	conn = sqlConnect(database);
     else
-	conn = hgStartUpdate();
+	conn = hgStartUpdate(database);
 
     scoredRefTableCreate(conn, table, indexLen);
     }
