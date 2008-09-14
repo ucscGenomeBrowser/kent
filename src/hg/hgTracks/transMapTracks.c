@@ -82,7 +82,6 @@ if ((labelSet & useGene) && (geneConn != NULL))
     {
     gene = transMapGeneQuery(geneConn, transMapGeneTbl,
                              info->srcDb, transMapIdToAcc(info->srcId));
-    hFreeConn(&geneConn);
     }
 
 struct dyString *label = dyStringNew(64);
