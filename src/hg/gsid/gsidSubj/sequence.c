@@ -11,7 +11,7 @@
 #include "net.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.8 2008/08/11 23:24:12 fanhsu Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.9 2008/09/15 20:39:49 fanhsu Exp $";
 
 static boolean sequenceExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -97,7 +97,6 @@ while (row != NULL)
     row = sqlNextRow(sr);
     }
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 return;
 }
 

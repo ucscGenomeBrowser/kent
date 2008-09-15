@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: demog.c,v 1.5 2007/11/16 22:21:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: demog.c,v 1.6 2008/09/15 20:41:03 fanhsu Exp $";
 
 static boolean demogExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -92,7 +92,6 @@ if (row != NULL)
     }
 
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 
 return;
 }

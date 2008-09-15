@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: clinical.c,v 1.10 2008/07/08 16:47:30 fanhsu Exp $";
+static char const rcsid[] = "$Id: clinical.c,v 1.11 2008/09/15 20:41:48 fanhsu Exp $";
 
 static boolean clinicalExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -116,7 +116,6 @@ while (row != NULL)
     row = sqlNextRow(sr);
     }
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 printf("</TR></TABLE>");
 printf("<br>* Estimated Study Day of Infection (ESDI), ");
 printf("click <a href=\"http://www.gsid.org/downloads/methods_and_conventions.pdf\" target=_blank> here </a>");
