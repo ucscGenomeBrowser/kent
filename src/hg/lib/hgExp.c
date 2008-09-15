@@ -9,7 +9,7 @@
 #include "hgExp.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.11 2005/06/06 20:20:10 galt Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.12 2008/09/15 16:13:42 fanhsu Exp $";
 
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
@@ -99,6 +99,8 @@ void hgExpLabelPrint(char *colName, char *subName, int skipName,
 int i;
 int groupSize;
 char gifName[128];
+
+struct tempName tempFn;
 char **experiments = hgExpGetNames("hgFixed", 
 	expTable, representativeCount, representatives, skipName);
 int height = gifLabelMaxWidth(experiments, representativeCount);
@@ -107,12 +109,14 @@ for (i=0; i<representativeCount; i += groupSize+1)
     {
     printf("<TD VALIGN=\"BOTTOM\">");
     groupSize = countNonNull(experiments+i, representativeCount-i);
-    safef(gifName, sizeof(gifName), "../trash/nea_%s_%s%d.gif", 
+    
+    safef(gifName, sizeof(gifName), "../trash/nea_%s_%s%d", 
     	colName, subName, ++gifStart);
-    gifLabelVerticalText(gifName, experiments+i, groupSize, height);
+    makeTempName(&tempFn, gifName, ".gif");
+    gifLabelVerticalText(tempFn.forCgi, experiments+i, groupSize, height);
     if (url != NULL)
        printf("<A HREF=\"%s\">", url); 
-    printf("<IMG BORDER=0 SRC=\"%s\">", gifName);
+    printf("<IMG BORDER=0 SRC=\"%s\">", tempFn.forCgi);
     if (url != NULL)
 	printf("</A>");
     printf("</TD>");
