@@ -11,7 +11,7 @@ CONFIG_FILES = \
 
 CV = cv.ra
 
-PIPELINE_PATH=/cluster/data/encode/pipeline
+PIPELINE_PATH=/hive/groups/encode/dcc/pipeline
 CONFIG_DIR = ${PIPELINE_PATH}/${PIPELINE_DIR}/config
 
 all:
