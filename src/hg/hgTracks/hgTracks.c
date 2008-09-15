@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1512 2008/09/14 16:49:56 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1513 2008/09/15 22:51:48 galt Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3351,7 +3351,7 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracksName());
-cartSaveSession(cart);
+if (!psOutput) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''";
 
 /* See if want to include sequence search results. */
@@ -3506,7 +3506,7 @@ if (!hideControls)
         hPrintf(trackGroupsHidden2->string);
         freeDyString(&trackGroupsHidden1);
         freeDyString(&trackGroupsHidden2);
-	cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+	if (!psOutput) cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 	clearButtonJavascript = "document.TrackForm.position.value=''";
 	hPrintf("<CENTER>");
 	}
@@ -3967,7 +3967,6 @@ if(pdfFile != NULL)
         printf("<LI><A TARGET=_blank HREF=\"%s\">Click here</A> "
                "to download the current browser ideogram in PDF.", ideoPdfFile);
     printf("</UL>\n");
-    freez(&pdfFile);
     freez(&pdfFile);
     }
 else
