@@ -1,0 +1,409 @@
+##########################################################################
+# CREATE HIVA244 DATABASE (STARTED 9/5/08 DONE 9/14/08, Fan) 
+
+# for emacs: -*- mode: sh; -*-
+
+    ssh hiv1
+
+    mkdir /hive/groups/gsid/medical/hiv/hiva244
+    cd /hive/groups/gsid/medical/hiv/hiva244
+
+# Receive data file, reference.fasta, from Keith Crandall dated 8/29/08,
+# keep the A244 part and name it hivA244.fa.
+
+    # translate to nib
+    mkdir nib
+    cp ¡Vp hivA244.fa chr1.fa
+    faToNib chr1.fa nib/chr1.nib
+
+CREATING DATABASE 
+
+    # Create the hiva244 database.
+
+    hgsql hivA2442 -e 'create database hiva244'
+
+# CREATING GRP TABLE FOR TRACK GROUPING 
+    
+    echo "create table grp (PRIMARY KEY(NAME)) select * from hivA2442.grp" \
+      | hgsql hiva244
+
+# STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  
+
+    mkdir -p /gbdb/hiva244/nib
+    cp -p nib/chr1.nib /gbdb/hiva244/nib
+
+    # Load /gbdb/hiva244/nib paths into database and save size info.
+    hgsql hiva244  < ~/src/hg/lib/chromInfo.sql
+
+    hgNibSeq -preMadeNib hiva244 /gbdb/hiva244/nib /gbdb/hiva244/nib/chr1.fa
+
+    echo "select chrom,size from chromInfo" | hgsql -N hiva244 > chrom.sizes
+
+# MAKE HGCENTRALHIV1 ENTRY AND TRACKDB TABLE FOR HIVA244 
+    echo 'insert into defaultDb values("HIV A244 (GP120)", "hiva244");' \
+      | hgsql -h localhost hgcentralhiv1
+
+    echo 'insert into dbDb values("hiva244", "Sept. 2008", \
+          "/gbdb/hiva244/nib", "HIV A244 (GP120)", "chr1", 1, 2050, \
+    "HIV A244 (GP120)","Human immunodeficiency     virus 1", \
+    "/gbdb/hiva244/html/description.html", 0, 0, " sequence as of Oct., 2008");' \
+      | hgsql hgcentralhiv1 -h localhost
+
+    echo 'insert into genomeClade values("HIV A244 (GP120)", "other", 200);'\
+      | hgsql hgcentralhiv1 -h localhost
+
+    # Edit that makefile to add hiva244 in all the right places
+
+    cd ~src/hg/makeDb/trackDb
+    vi makefile
+
+    mkdir ¡Vp hiv/hiva244
+    cp ¡Vp hiv/hivmn2/trackDb hiv/hiva244
+
+    make update
+    make alpha update DBS=hiva244
+
+    cvs update
+    cvs commit makefile
+
+# MAKE hgcentralhiv1 blatServers ENTRY FOR hiva244
+
+# Ask admin to start BLAT server processes
+
+   echo 'insert into blatServers values("hiva244", "hiv1", "17796", "1", "0"); \
+        insert into blatServers values("hiva244", "hiv1", "17797", "0", "0");' \
+      | hgsql hgcentralhiv1 -h localhost
+
+# CREATE TRACKDB TABLE
+
+    cd src/hg/makeDb/trackDb/hiv
+    mkdir hiva244
+    cvs add hiva244
+    cd hiva244
+    cp ../hivmn2/trackDb.ra . ¡Vp
+    cvs add trackDb.ra
+    cvs commit trackDb.ra
+    cd ~/src/hg/makeDb/trackDb
+    make update DBS=hiva244
+    make alpha update DBS=hiva244
+
+# copy over tables from hivVax003Vax004
+
+    cd /hive/groups/gsid/medical/hiv/hiva244
+    echo 'cp -p /data/mysql/hivVax003Vax004/$1.* /data/mysql/hiva244' >copy1Table
+    chmod +x copy1Table
+
+    copy1Table dnaSeq
+    copy1Table aaSeq
+    copy1Table gsidSubjInfo
+    copy1Table gsidClinicRec
+    copy1Table gsIdXref
+    copy1Table vax003AEMsa
+    copy1Table vax003BMsa
+    copy1Table vax003BMsa
+    copy1Table vax004Msa
+
+# CREATE VAX004 TRACK 
+
+    cd /hive/groups/gsid/medical/hiv/hiva244
+    mkdir vax004
+    cd vax004
+
+# get vax004 sequences
+    hgsql hiva244 -N -e 'select * from dnaSeq where id like "%U%"' >vax004.tab
+
+# create .fa file
+    tabToFa vax004
+
+    mkdir -p /gbdb/hiva244/vax004
+    cp -p vax004.fa /gbdb/hiva244/vax004/vax004.fa
+
+    hgLoadSeq -replace hiva244 /gbdb/hiva244/vax004/vax004.fa
+
+# BLAT
+    gfClient -minScore=200 -minIdentity=80 -nohead hiv1.cse.ucsc.edu 17797  /gbdb/hiva244/nib \
+    -out=psl -t=dna -q=dna vax004.fa vax004.psl
+
+# count the result
+    wc *.psl
+    cut -f 10 vax004.psl |wc
+    cut -f 10 vax004.psl |sort -u |wc
+
+# load the psl result into vax004 table
+    hgLoadPsl hiva244 vax004.psl
+
+# hgLoadPsl has some file permission problem.  Finish this by manually load the psl.tab file.
+    hgsql hivA244 -e 'load data local infile "psl.tab" into table vax004'
+
+# CREATE VAX003 TRACK 
+
+    cd /hive/groups/gsid/medical/hiv/hiva244
+    mkdir vax003
+    cd vax003
+
+# get vax003 sequences
+    hgsql hiva244 -N -e 'select * from dnaSeq where id like "%T%"' >vax003.tab
+
+# create .fa file
+    tabToFa vax003
+
+    mkdir -p /gbdb/hiva244/vax003
+    cp -p vax003.fa /gbdb/hiva244/vax003/vax003.fa
+
+    hgLoadSeq -replace hiva244 /gbdb/hiva244/vax003/vax003.fa
+
+# BLAT
+    gfClient -minScore=200 -minIdentity=80 -nohead hiv1.cse.ucsc.edu 17797  /gbdb/hiva244/nib \
+    -out=psl -t=dna -q=dna vax003.fa vax003.psl
+
+# count the result
+    wc *.psl
+    cut -f 10 vax003.psl |wc
+    cut -f 10 vax003.psl |sort -u |wc
+
+# load the psl result into vax003 table
+    hgLoadPsl hiva244 vax003.psl
+
+# hgLoadPsl has some file permission problem.  Finish this by manually load the psl.tab file.
+    hgsql hiva244 -e 'load data local infile "psl.tab" into table vax003'
+
+#CREATE HIVGENE TRACK
+
+    cd /hive/groups/gsid/medical/hiv/hiva244
+
+    mkdir hivGene
+    cd hivGene
+
+# CREATE hivGene TRACK 
+
+# during initial hiv1 build, landMark.txt was created by:   
+# copy the sequence data from HIV Sequence Database web page:
+# http://www.hiv.lanl.gov/content/sequence/HIV/REVIEWS/HXB2.html
+# create raw sequence file, landMark.txt
+
+# copy over this file
+
+    cp ¡Vp /hive/groups/gsid/medical/hiv/hiv1/hivGene/landMark.txt .
+
+# Process landMark.txt into hivGene.fa
+
+    faToTab -type=protein landMark.txt landMark.tab
+    cut -f 1 landMark.tab |toLower stdin j1
+    cut -f 2 landMark.tab >j2
+    paste j1 j2 >hivGene.tab
+    rm j1 j2
+
+# create hivGene.fa
+    tabToFa hivGene
+
+# BLAT against base genome
+    gfClient localhost 17796 /gbdb/hiva244/nib -out=psl -t=dnax -q=prot  hivGene.fa hivGene.psl
+
+# load into temp table, testPsl
+    hgLoadPsl hiva244 table=testPsl hivGene.psl
+# finish load manually to overcome permission problem
+     hgsql hiva244 ¡Ve 'load data local infile "psl.tab" into table testPsl'
+     
+# create initial bed file
+    hgsql hiva244 -N -e \
+    'select "chr1", tStart, tEnd, qName from testPsl where (tEnd-tStart)/3/qSize>0.70'\
+     >hivGene.bed0
+
+# remove tat and rev, upper case ENV, POL, and GAG
+    cat hivGene.bed0 |grep -v tat |grep -v rev|sed -e 's/env/ENV/' |sed -e 's/pol/POL/'|\
+    sed -e 's/gag/GAG/' >hivGene.bed1
+
+# The alignment for A244 base genome is just too poor for any of those V* regions
+# This track really does not provide much significant info.
+# manually add ENV entry
+     
+     cp hivGene.bed1 hivGene.bed
+     
+    vi hivGene.bed
+
+# load it into hivGene table
+
+    hgLoadBed hiva244 hivGene hivGene.bed
+    hgsql hiva244 -e 'drop table testPsl'
+
+# CREATE INTERPRO TRACK
+
+   cd /hive/groups/gsid/medical/hiv/hiva244
+   mkdir interPro
+   cd interPro
+
+# get all HIV-1 domain sequences
+# use what we built for hiv1 before
+
+   cp /hive/groups/gsid/medical/hiv/hiv1/interPro/interProHiv1.fa interProhiva244.fa
+
+# BLAT against base genome
+    gfClient localhost 17796 /gbdb/hiva244/nib -out=psl -t=dnax -q=prot  interProhiva244.fa interProhiva244.psl
+
+# load it into a temp table
+    hgLoadPsl hiva244 table=testPsl interProhiva244.psl
+# finish above manually.
+    hgsql hiva244 ¡Ve ¡¥load data local infile "psl.tab" into table  testPsl¡¦
+
+# create bed file from this temp table
+    hgsql hiva244 -N -e \
+    'select "chr1", tStart, tEnd, qName from testPsl where (tEnd-tStart)/3/qSize>0.42' \
+    > interProhiva244.bed
+
+# load the bed file into the track table
+    hgLoadBed hiva244 interPro interProhiva244.bed
+
+# drop the temp table.
+    hgsql hiva244 -e 'drop table testPsl'
+
+# CREATE CONSERVATION TRACKS
+
+    mkdir -p /hive/groups/gsid/medical/hiv/hiva244/conservation
+    cd /hive/groups/gsid/medical/hiv/hiva244/conservation
+
+# create the .wig file and .fa file of the consensus sequence.
+
+    gsidMsa hiva244 vax003BMsa A244-gp120 1 vax003BCons.wig vax003BConsensus.fa
+    gsidMsa hiva244 vax003AEMsa A244-gp120 1 vax003AECons.wig vax003AEConsensus.fa
+
+# encode and load the wig file
+    wigEncode vax003BCons.wig stdout vax003BCons.wib \
+    | hgLoadWiggle hiva244 vax003BCons stdin
+
+    wigEncode vax003AECons.wig stdout vax003AECons.wib \
+    | hgLoadWiggle hiva244 vax003AECons stdin
+
+# copy .wib file to /gbdb
+    mkdir -p /gbdb/hiva244/wib
+    cp vax003BCons.wib /gbdb/hiva244/wib
+
+    cp vax003AECons.wib /gbdb/hiva244/wib
+
+# do the same for protein conservation track
+
+    mkdir aa
+    cd aa
+
+# create .wig file
+
+    gsidAaMsa2 hiva244 vax003BMsa A244-gp120 1 vax003BAaCons.wig vax003AaBConsensus.fa
+    gsidAaMsa2 hiva244 vax003AEMsa A244-gp120 1 vax003AEAaCons.wig vax003AaAEConsensus.fa
+
+# encode and load the .wib file   
+    wigEncode vax003BAaCons.wig stdout vax003BAaCons.wib \
+    | hgLoadWiggle hiva244 vax003BAaCons stdin
+
+    cp vax003BAaCons.wib /gbdb/hiva244/wib
+
+    wigEncode vax003AEAaCons.wig stdout vax003AEAaCons.wib \
+    | hgLoadWiggle hiva244 vax003AEAaCons stdin
+
+    cp vax003AEAaCons.wib /gbdb/hiva244/wib
+
+# CREATE MAF TRACKS FOR vax003AE STRAIN
+
+    cd /hive/groups/gsid/medical/hiv/hiva244
+    mkdir -p msa/AE
+    cd msa/AE
+
+# create a script file, doall
+
+    hgsql hiva244 -N -e \
+    'select id from vax003AEMsa where id like "%T%"'\
+    |sed -e 's/ss/do1 ss/g' >doall
+
+# create one line script file, do1, with the following line in it:
+
+    hgsql hiva244 -N -e  "select id, seq from vax003AEMsa where id='${1}'"
+    chmod +x do*
+
+# run the script to get the .tab file with all MSA sequences of VAX003AE
+    doall >a244.tab
+# convert .tab into .fa file
+    tabToFa a244
+
+# grab the base alignment sequence
+    echo ">hiva244" >a244.aln
+    hgsql hiva244 -N -e 'select seq from vax003AEMsa where id="A244-gp120"'  >> a244.aln
+
+# prepare an interium file, jjAll.mfa
+    cat a244.aln a244.fa >jjAll.mfa
+    echo = >>jjAll.mfa
+
+# Run xmfaToMafA244AE to create a precursor file for the final .maf
+
+    xmfaToMafA244AE jjAll.mfa j.out  org1=hiva244
+    cat j.out|sed -e 's/\./_/g'|sed -e 's/_chr/\.chr/g' >chr1.tmp
+
+#    rm jjAll.mfa j.out
+
+    cat chr1.tmp |sed -e 's/ss_T/T/g' >chr1.maf
+
+# copy .maf to /gbdb.
+
+    mkdir -p  /gbdb/hiva244/vax003AEMaf
+    cp chr1.maf /gbdb/hiva244/vax003AEMaf -p
+    echo before load
+    hgLoadMaf hiva244 vax003AEMaf
+
+# create another copy for protein MAF.
+
+    mkdir -p  /gbdb/hiva244/vax003AEAaMaf 
+    cp -p chr1.maf /gbdb/hiva244/vax003AEAaMaf
+    hgLoadMaf hiva244 vax003AEAaMaf
+
+
+# CREATE MAF TRACKS FOR vax003B STRAIN
+
+    cd /hive/groups/gsid/medical/hiv/hiva244
+    mkdir -p msa/B
+    cd msa/B
+
+# create a script file, doall
+
+    hgsql hiva244 -N -e \
+    'select id from vax003BMsa where id like "%T%"'\
+    |sed -e 's/ss/do1 ss/g' >doall
+
+# create one line script file, do1, with the following line in it:
+
+    hgsql hiva244 -N -e  "select id, seq from vax003BMsa where id='${1}'"
+
+    chmod +x do*
+
+# run the script to get the .tab file with all MSA sequences of VAX003B
+    doall >a244.tab
+# convert .tab into .fa file
+    tabToFa a244
+
+# grab the base alignment sequence
+    echo ">hiva244" >a244.aln
+    hgsql hiva244 -N -e 'select seq from vax003BMsa where id="A244-gp120"'  >> a244.aln
+
+# prepare an interium file, jjAll.mfa
+    cat a244.aln a244.fa >jjAll.mfa
+    echo = >>jjAll.mfa
+
+# Run xmfaToMafA244B to create a precursor file for the final .maf
+
+    xmfaToMafA244B jjAll.mfa j.out  org1=hiva244
+    cat j.out|sed -e 's/\./_/g'|sed -e 's/_chr/\.chr/g' >chr1.tmp
+
+#    rm jjAll.mfa j.out
+
+    cat chr1.tmp |sed -e 's/ss_T/T/g' >chr1.maf
+
+# copy .maf to /gbdb.
+
+    mkdir -p  /gbdb/hiva244/vax003BMaf
+    cp chr1.maf /gbdb/hiva244/vax003BMaf -p
+    echo before load
+    hgLoadMaf hiva244 vax003BMaf
+
+# create another copy for protein MAF.
+
+    mkdir -p  /gbdb/hiva244/vax003BAaMaf 
+    cp -p chr1.maf /gbdb/hiva244/vax003BAaMaf
+    hgLoadMaf hiva244 vax003BAaMaf
+
+##########################################################################
