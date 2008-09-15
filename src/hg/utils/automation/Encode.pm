@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.19 2008/09/12 21:37:16 larrym Exp $
+# $Id: Encode.pm,v 1.20 2008/09/15 19:13:42 larrym Exp $
 
 package Encode;
 
@@ -124,25 +124,22 @@ sub validateValueList {
 
 sub readFile
 {
-# Return lines from given file, with EOL chomp'ed off.
-# Handles either Unix or Mac EOL characters.
+# Return lines from given file, with EOLs chomp'ed off.
+# Handles Macintosh, MS-DOS or Unix EOL characters.
 # Reads whole file into memory, so should NOT be used for huge files.
-# XXXX Should be modified to handle DOS files too (I've gotten those from Rami).
     my ($file) = @_;
     my $oldEOL = $/;
+    undef $/;
     open(FILE, $file) or die "ERROR: Can't open file \'$file\'\n";
-    my @lines = <FILE>;
-    if(@lines == 1 && $lines[0] =~ /\r/) {
-        # rewind and re-read as a Mac file - obviously, this isn't the most efficient way to do this.
-        seek(FILE, 0, 0);
-        $/ = "\r";
-        @lines = <FILE>;
-    }
-    for (@lines) {
-        chomp;
-    }
+    my $content = <FILE>;
     close(FILE);
     $/ = $oldEOL;
+
+    # MS-DOS => Unix
+    $content =~ s/\r\n/\n/g;
+    # Mac => Unix
+    $content =~ s/\r/\n/g;
+    my @lines = split(/\n/, $content);
     return \@lines;
 }
 
