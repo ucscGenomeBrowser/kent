@@ -15,7 +15,7 @@
 #include "hCommon.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: hgPal.c,v 1.6 2008/09/10 18:41:25 braney Exp $";
+static char const rcsid[] = "$Id: hgPal.c,v 1.7 2008/09/15 22:05:28 braney Exp $";
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
@@ -141,7 +141,7 @@ printf("<B>Formatting options:</B><BR>\n");
 cgiMakeCheckBox("mafGeneExons", inExons);
 printf("Separate into exons<BR>");
 cgiMakeCheckBox("mafGeneNoTrans", noTrans);
-printf("Don't translate into amino acids<BR>");
+printf("Show nucleotides<BR>");
 cgiMakeCheckBox("mafGeneOutBlank", outBlank);
 printf("Output lines with just dashes<BR>");
 
