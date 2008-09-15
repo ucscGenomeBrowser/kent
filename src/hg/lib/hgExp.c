@@ -7,10 +7,9 @@
 #include "cart.h"
 #include "cheapcgi.h"
 #include "hgExp.h"
-#include "trashDir.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.13 2008/09/15 17:15:50 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.14 2008/09/15 18:36:36 fanhsu Exp $";
 
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
@@ -100,8 +99,6 @@ void hgExpLabelPrint(char *colName, char *subName, int skipName,
 int i;
 int groupSize;
 char gifName[128];
-
-struct tempName tempFn;
 char **experiments = hgExpGetNames("hgFixed", 
 	expTable, representativeCount, representatives, skipName);
 int height = gifLabelMaxWidth(experiments, representativeCount);
@@ -110,15 +107,12 @@ for (i=0; i<representativeCount; i += groupSize+1)
     {
     printf("<TD VALIGN=\"BOTTOM\">");
     groupSize = countNonNull(experiments+i, representativeCount-i);
-    
-    safef(gifName, sizeof(gifName), "nea_%s_%s%d", 
+    safef(gifName, sizeof(gifName), "../trash/nea_%s_%s%d.gif", 
     	colName, subName, ++gifStart);
-    trashDirFile(&tempFn,  "../trash/nea", gifName, ".gif");
-
-    gifLabelVerticalText(tempFn.forCgi, experiments+i, groupSize, height);
+    gifLabelVerticalText(gifName, experiments+i, groupSize, height);
     if (url != NULL)
        printf("<A HREF=\"%s\">", url); 
-    printf("<IMG BORDER=0 SRC=\"%s\">", tempFn.forCgi);
+    printf("<IMG BORDER=0 SRC=\"%s\">", gifName);
     if (url != NULL)
 	printf("</A>");
     printf("</TD>");
@@ -129,6 +123,7 @@ for (i=0; i<representativeCount; ++i)
    freeMem(experiments[i]);
 freeMem(experiments);
 }
+
 
 boolean hgExpLoadVals(struct sqlConnection *lookupConn,
 	struct sqlConnection *dataConn,
