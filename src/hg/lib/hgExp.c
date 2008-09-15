@@ -7,9 +7,10 @@
 #include "cart.h"
 #include "cheapcgi.h"
 #include "hgExp.h"
+#include "trashDir.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.12 2008/09/15 16:13:42 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.13 2008/09/15 17:15:50 fanhsu Exp $";
 
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
@@ -110,9 +111,10 @@ for (i=0; i<representativeCount; i += groupSize+1)
     printf("<TD VALIGN=\"BOTTOM\">");
     groupSize = countNonNull(experiments+i, representativeCount-i);
     
-    safef(gifName, sizeof(gifName), "../trash/nea_%s_%s%d", 
+    safef(gifName, sizeof(gifName), "nea_%s_%s%d", 
     	colName, subName, ++gifStart);
-    makeTempName(&tempFn, gifName, ".gif");
+    trashDirFile(&tempFn,  "../trash/nea", gifName, ".gif");
+
     gifLabelVerticalText(tempFn.forCgi, experiments+i, groupSize, height);
     if (url != NULL)
        printf("<A HREF=\"%s\">", url); 
@@ -127,7 +129,6 @@ for (i=0; i<representativeCount; ++i)
    freeMem(experiments[i]);
 freeMem(experiments);
 }
-
 
 boolean hgExpLoadVals(struct sqlConnection *lookupConn,
 	struct sqlConnection *dataConn,
