@@ -2,9 +2,10 @@
 
 #include "common.h"
 #include "memgfx.h"
+#include "portable.h"
 #include "gifLabel.h"
 
-static char const rcsid[] = "$Id: gifLabel.c,v 1.7 2005/06/06 20:20:10 galt Exp $";
+static char const rcsid[] = "$Id: gifLabel.c,v 1.8 2008/09/15 23:55:50 galt Exp $";
 
 int gifLabelMaxWidth(char **labels, int labelCount)
 /* Return maximum pixel width of labels.  It's ok to have
@@ -81,16 +82,22 @@ return result;
 void gifLabelVerticalText(char *fileName, char **labels, int labelCount, 
 	int height)
 /* Make a gif file with given labels.  This will check to see if fileName
- * exists already, and if so do nothing. */
+ * exists already and has not changed, and if so do nothing. */
 {
 struct memGfx *straight = altColorLabels(labels, labelCount, height);
 struct memGfx *rotated = mgRotate90(straight);
-char tempName[512];
-safef(tempName, sizeof(tempName), "%s_trash", fileName);
-mgSaveGif(rotated, tempName);  /* note we cannot delete this later because of permissions */
+struct tempName tn;
+makeTempName(&tn, "gifLabelVertTemp", ".gif");
+mgSaveGif(rotated, tn.forCgi); 
 /* the savings here is in the user's own browser cache - not updated if no change */
-if (!sameFileContents(tempName,fileName))  
-    mgSaveGif(rotated, fileName);
+if (sameFileContents(tn.forCgi,fileName))  
+    {
+    remove(tn.forCgi);
+    }
+else
+    {
+    rename(tn.forCgi, fileName);
+    }
 mgFree(&straight);
 mgFree(&rotated);
 }
