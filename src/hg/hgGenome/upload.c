@@ -28,9 +28,13 @@ static char *markerNames[] = {
     cgfMarkerAffy500,
     cgfMarkerAffy6,
     cgfMarkerAffy6SV,
+
     cgfMarkerHumanHap300,
     cgfMarkerHumanHap550,
     cgfMarkerHumanHap650,
+
+    cgfMarkerAgilentCgh244A,
+
     };
 
 static char *formatNames[] = {
@@ -94,8 +98,8 @@ hPrintf("file name: <INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", hggUploadFile,
 	oldFileName);
 hPrintf("<BR>\n");
 hPrintf("&nbsp;or<BR>\n");
-hPrintf("URL: ");
-cartMakeTextVar(cart, hggUploadUrl, "", 32);
+hPrintf("Paste URLs or data:<br>");
+cgiMakeTextArea(hggUploadUrl, "", 7, 73);
 hPrintf("<BR>\n");
 hPrintf("<BR>\n");
 cgiMakeButton(hggSubmitUpload, "submit");
@@ -169,9 +173,9 @@ hPrintf(
 " If left blank the axis will be labeled at the 1/3 and 2/3 point. </LI>"
 "<LI><B>draw connecting lines:</B> Lines connecting data points separated by "
 " no more than this number of bases are drawn.  </LI>"
-"<LI><B>file name or URL:</B> Specifies the source of the uploaded data --"
-" either a file on your local computer or a URL at which the data file can be"
-" found. If entries are made in both fields, the file name will take"
+"<LI><B>file name, or Paste URLs or data:</B> Specify the uploaded data --"
+" enter either a file on your local computer; or a URL at which the data file can be"
+" found; or simply paste-in the data. If entries are made in both fields, the file name will take"
 " precedence. </LI>");
 cartWebEnd();
 }
