@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1513 2008/09/15 22:51:48 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1514 2008/09/15 23:42:00 galt Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3968,6 +3968,7 @@ if(pdfFile != NULL)
                "to download the current browser ideogram in PDF.", ideoPdfFile);
     printf("</UL>\n");
     freez(&pdfFile);
+    freez(&ideoPdfFile);
     }
 else
     printf("<BR><BR>PDF format not available");
