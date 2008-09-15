@@ -18,9 +18,12 @@
 #define affy500Table "snpArrayAffy500"
 #define affy6Table "snpArrayAffy6"
 #define affy6SVTable "snpArrayAffy6SV"
+
 #define illumina300Table "snpArrayIllumina300"
 #define illumina550Table "snpArrayIllumina550"
 #define illumina650Table "snpArrayIllumina650"
+
+#define agilentCgh244ATable "agilentCgh244a"
 
 typedef int (*Chopper)(char *line, char **cols, int maxCol);
 /* A function that breaks a row into columns. */
@@ -309,6 +312,16 @@ if (sqlTableExists(conn, table))
     slAddHead(&list, mtr);
     }
 
+/* Agilent CGH 244A */
+table = agilentCgh244ATable;
+if (sqlTableExists(conn, table))
+    {
+    AllocVar(mtr);
+    mtr->type = cgfMarkerAgilentCgh244A;
+    mtr->table = table;
+    mtr->query = "select count(*) from %s where name='%s'";
+    slAddHead(&list, mtr);
+    }
 
 /* SNP table */
 table = findSnpTable(conn);
@@ -776,28 +789,20 @@ else if (sameString(markerType, cgfMarkerAffy100))
 else if (sameString(markerType, cgfMarkerAffy500)
       || sameString(markerType, cgfMarkerAffy6)
       || sameString(markerType, cgfMarkerAffy6SV)
+      || sameString(markerType, cgfMarkerHumanHap300)
+      || sameString(markerType, cgfMarkerHumanHap550)
+      || sameString(markerType, cgfMarkerHumanHap650)
+      || sameString(markerType, cgfMarkerAgilentCgh244A)
         )
     {
     char *table = "";
     if (sameString(markerType, cgfMarkerAffy500)) table = affy500Table;
     if (sameString(markerType, cgfMarkerAffy6))   table = affy6Table;
     if (sameString(markerType, cgfMarkerAffy6SV)) table = affy6SVTable;
-    if (!sqlTableExists(conn, table))
-        errAbort("Sorry, no data for %s on this assembly.",
-		markerType);
-    ok = mayProcessDb(conn, cpp, colCount, formatType,
-    	firstLineLabels, fileList, table,
-    	"select chrom,chromStart,name from %s", NULL, NULL, report);
-    }
-else if (sameString(markerType, cgfMarkerHumanHap300)
-      || sameString(markerType, cgfMarkerHumanHap550)
-      || sameString(markerType, cgfMarkerHumanHap650)
-        )
-    {
-    char *table = "";
     if (sameString(markerType, cgfMarkerHumanHap300)) table = illumina300Table;
     if (sameString(markerType, cgfMarkerHumanHap550)) table = illumina550Table;
     if (sameString(markerType, cgfMarkerHumanHap650)) table = illumina650Table;
+    if (sameString(markerType, cgfMarkerAgilentCgh244A)) table = agilentCgh244ATable;
     if (!sqlTableExists(conn, table))
         errAbort("Sorry, no data for %s on this assembly.",
 		markerType);
