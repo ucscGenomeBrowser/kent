@@ -4,6 +4,8 @@
 term GM12878
 description lymphoblastoid
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&PgId=166
+vendorName Coriell
+vendorId GM12878
 type Cell Line
 karyotype relatively normal
 lineage mesoderm
@@ -13,6 +15,8 @@ tier 1
 term K562
 description leukemia
 orderUrl http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL-243
+vendorName ATCC
+vendorId CCL-243
 type Cell Line
 karyotype cancer
 lineage mesoderm
@@ -23,6 +27,8 @@ term HepG2
 description liver carcinoma
 type Cell Line
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
+vendorName ATCC
+vendorId HB-8065
 lineage endoderm
 karyotype cancer
 termId BTO:0000559
@@ -32,6 +38,8 @@ term HeLaS3
 description cervical carcinoma
 type Cell Line
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
+vendorName ATCC
+vendorId CCL-2.2
 lineage ectoderm
 karyotype cancer
 termId BTO:0000568
@@ -41,6 +49,8 @@ term HUVEC
 description umbilical vein endothelial
 type Cell Line
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA1B392C76A4F18C7C001A4B525E10&layout=6_1_65_52_7&uiarea=2)/.do
+vendorName Lonza
+vendorId CC-2517
 lineage mesoderm
 karyotype normal
 termId BTO:0001949
@@ -50,6 +60,8 @@ term Keratinocyte
 type Cell Line
 description keratinocyte
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(isQuery=yes&xcm=lonza_b2b&query=CC2501&layout=6_1_65_52_7&uiarea=2&carea=DCEA1F8CCA53E1F18C7C001A4B525E10)/.do
+vendorName Lonza
+vendorId CC-2501
 lineage ectoderm
 karyotype normal
 termId BTO:0000375
@@ -60,6 +72,8 @@ term A549
 type Cell Line
 description epithelial cell line derived from a lung carcinoma tissue 
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-185&Template=cellBiology
+vendorName ATCC
+vendorId CCL-185
 lineage endoderm
 karyotype cancer
 termId BTO:0000018
@@ -69,6 +83,8 @@ term GM18507
 type Cell Line
 description lymphoblastoid 
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18507
+vendorName Coriell
+vendorId GM18507
 lineage mesoderm
 karyotype relatively normal
 termId BTO:0002062 (non-specific)
@@ -78,15 +94,30 @@ term Jurkat
 type Cell Line
 description T lymphoblastoid cell line derived from an acute T cell leukemia 
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
+vendorName ATCC
+vendorId TIB-152
 lineage mesoderm 
 karyotype cancer
 termId BTO:0001948
+tier 3
+
+term LNCaP
+type Cell Line
+description prostate adenocarcinoma 
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1740&Template=cellBiology
+vendorName ATCC
+vendorId CRL-1740
+lineage endoderm
+karyotype cancer
+termId BTO:0002021
 tier 3
 
 term NT2/D1
 type Cell Line
 description malignant pluripotent embryonal carcinoma (Ntera2)
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1973&Template=cellBiology
+vendorName ATCC
+vendorId CRL-1973
 lineage embryonic
 karyotype cancer
 termId BTO:0000946
@@ -96,6 +127,8 @@ term PFSK-1
 type Cell Line
 description neuroectodermal cell line derived from a human cerebral brain tumor 
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2060&Template=cellBiology
+vendorName ATCC
+vendorId CRL-2060
 lineage ectoderm
 karyotype cancer
 termId BTO:0000690 (non-specific)
@@ -105,6 +138,8 @@ term SK-N-MC
 type Cell Line
 description neuroepithelioma cell line derived from a metastatic supra-orbital human brain tumor 
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-10&Template=cellBiology
+vendorName ATCC
+vendorId HTB-10
 lineage ectoderm
 karyotype cancer
 termId BTO:0002372 (non-specific)
