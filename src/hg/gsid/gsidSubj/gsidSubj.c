@@ -18,7 +18,7 @@
 #include "gsid.h"
 #include "gsidSubj.h"
 
-static char const rcsid[] = "$Id: gsidSubj.c,v 1.14 2008/09/08 16:00:55 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidSubj.c,v 1.15 2008/09/15 20:46:13 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -287,7 +287,6 @@ getDbAndGenome(cart, &database, &genome, oldCart);
 /* !!! force database to hiv1 until move to server hiv1 is complete 
    and the default database of hgcentral on it point to hiv1. */
 
-//hSetDb(database);
 conn = hAllocConn(database);
 
 curSubjId = cgiOptionalString("hgs_subj");
@@ -295,6 +294,8 @@ if (curSubjId == NULL) curSubjId = strdup("");
 
 cartHtmlStart("HIV Vaccine Subject View");
 webMain(conn);
+
+hFreeConn(&conn);
 
 cartHtmlEnd();
 }
