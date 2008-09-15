@@ -1891,7 +1891,7 @@ identifier cgapMapId
 identifier cgapAlias
 "NCI Cancer Genome Annotation Project Alias"
     $gbd.cgapAlias.alias dupeOk
-    $gbd,!mm5,!hg15,!hg16.knownGene.name minCheck=0.20
+    $gbd,!mm5,!hg15,!hg16,!hg18.knownGene.name minCheck=0.20
 
 identifier cgapMapIdHg15
 "NCI Cancer Genome Annotation Project Map ID for hg15"
