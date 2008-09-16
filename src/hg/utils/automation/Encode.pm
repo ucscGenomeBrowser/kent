@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.20 2008/09/15 19:13:42 larrym Exp $
+# $Id: Encode.pm,v 1.21 2008/09/16 20:07:46 larrym Exp $
 
 package Encode;
 
@@ -27,6 +27,7 @@ our $dafVersion = "0.2.2";
 our $fieldConfigFile = "fields.ra";
 our $vocabConfigFile = "cv.ra";
 our $labsConfigFile = "labs.ra";
+our $autoCreatedPrefix = "autoCreated";
 
 our $restrictedMonths = 9;
 
