@@ -2065,7 +2065,8 @@ identifier kiddEichlerId external=EichlerLab
     $hg.kiddEichlerDiscAbc12.name chopAfter=,
     $hg.kiddEichlerDiscAbc13.name chopAfter=,
     $hg.kiddEichlerDiscAbc14.name chopAfter=,
-    $hg.kiddEichlerDiscG248.name chopAfter=, chopBefore=_ minCheck=0.01
+    hg17.kiddEichlerDiscG248.name chopAfter=, chopBefore=_ minCheck=0.01
+    $hg,!hg17.kiddEichlerDiscG248.name chopAfter=, chopBefore=_ minCheck=0.005
 
 # BGI SNP Identifiers
 
