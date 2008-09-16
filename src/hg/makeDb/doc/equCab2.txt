@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.21 2008/09/11 19:47:58 larrym Exp $"
+#	"$Id: equCab2.txt,v 1.22 2008/09/16 19:41:05 larrym Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.21 2008/09/11 19:47:58 larrym Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.22 2008/09/16 19:41:05 larrym Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -2028,6 +2028,12 @@ In a meeting we (kuhn, hiram et al.) decided to do the nets and chains later,
 and focus on releasing core stuff now; i.e. I will re-run all net/chain
 stuff from scratch later.
 
+# misc fixes:
+
+# fixup genoLeft column in rmsk table:
+
+update chr27_rmsk set genoLeft = genoLeft + 25959959;
+
 ##########################################################################
 #  re-make downloads (DONE - 2008-09-09 - larrym)
 
@@ -2102,3 +2108,84 @@ done
     est CX605339 - aligns just to chr6:67238940-67239361
     intronEst CD469838 - aligns just to chr6:71553983-71575277
     xenoMrna BC033236 - aligns just to chr6:67088771-67092632
+
+#########################################################################
+# QA by larrym
+
+RefSeq Gene COL2A1 - why is it 1 base shorter now? - chr6:65629018-65660099 vs. chr6:65629017-65660099
+
+http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgc?hgsid=1559182&o=65629017&t=65660099&g=refGene&i=NM_001081764&c=chr6&l=62511743&r=76237109&db=equCab2
+http://hgwbeta.cse.ucsc.edu/cgi-bin/hgc?hgsid=1501039&o=65629016&t=65660099&g=refGene&i=NM_001081764&c=chr6&l=62511743&r=76237109&db=equCab2
+
+Alignment is on reverse strand; older version is one base longer; why?
+
+Similar with RefSeq Gene IL23 (which is not on reverse strand).
+
+select * from refGene where name = 'NM_001082522';
+
+echo "select * from refGene where name = 'NM_001082522';" | hgsql equCab2
+vs.
+echo "select * from refGene where name = 'NM_001082522';" | hgsql equCab2Old
+
+True on other chromosomes; e.g.: RefSeq Gene TPH2 - chr28:559352-671879
+
+Update_time: 2008-09-11 12:08:02
+
+markd says don't worry about it - probably a blat change.
+
+##########################################################################
+#  re-verify all.joiner entries (DONE - 2008-09-15 - larrym)
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=equCab2 -tableCoverage all.joiner
+    joinerCheck -database=equCab2 -keys all.joiner
+
+Error: 352 of 19964 elements of equCab2.nscanPep.name are not in key nscanGene.name line 589 of all.joiner
+Example miss: CHR27.199.1
+
+ equCab2.transMapInfoRefSeq.mappedId - hits 50099 of 51032
+Error: 933 of 51032 elements of equCab2.transMapInfoRefSeq.mappedId are not in key transMapAlnRefSeq.qName line 2408 of all.joiner
+Example miss: NM_000020.2-1.2
+
+ equCab2.transMapInfoUcscGenes.mappedId - hits 94700 of 96413
+Error: 1713 of 96413 elements of equCab2.transMapInfoUcscGenes.mappedId are not in key transMapAlnUcscGenes.qName line 2413 of all.joiner
+Example miss: UC001RME.1-1.2
+
+ equCab2.transMapInfoMRna.mappedId - hits 474538 of 483510
+Error: 8972 of 483510 elements of equCab2.transMapInfoMRna.mappedId are not in key transMapAlnMRna.qName line 2418 of all.joinerw
+Example miss: A10156.1-1.2
+
+ equCab2.transMapInfoSplicedEst.mappedId - hits 6221957 of 6399157
+Error: 177200 of 6399157 elements of 
+Example miss: AA000021.1-1.2
+
+select count(*) from nscanPep where name >= 'CHR27.199.1' and name <= 'CHR28';
+352
+
+delete from nscanPep where name >= 'CHR27.199.1' and name <= 'CHR28';
+Query OK, 352 rows affected (0.01 sec)
+
+~/src/delOrphans.pl transMapInfoRefSeq mappedId transMapAlnRefSeq qName
+deleted: 933
+~/src/delOrphans.pl transMapInfoUcscGenes mappedId transMapAlnUcscGenes qName
+deleted: 1713
+~/src/delOrphans.pl transMapInfoMRna mappedId transMapAlnMRna qName
+deleted: 8972
+~/src/delOrphans.pl transMapInfoSplicedEst mappedId transMapAlnSplicedEst qName
+deleted: 177200
+
+re-run:
+
+    joinerCheck -database=equCab2 -keys all.joiner
+
+no errors
+
+    joinerCheck -database=equCab2 -times all.joiner
+
+############################################################################
+## RE-COMPUTE DEFAULT POSITION (DONE - 2008-09-16 - larrym)
+
+    # determine new default position using liftOver (via convert menu)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr11:52,970,942-53,028,811" where name="equCab2";' hgcentraltest
