@@ -263,23 +263,19 @@ for my $key (keys %ra) {
     my $files = $h->{files};
     my @files = split(/\s+/, $files);
     my %extendedTypes = map { $_ => 1 } @Encode::extendedTypes;
+    my $hgdownload = 0;
 
     if ($h->{downloadOnly}) {
-        # soft link file(s) into download dir
-        my $target = "$downloadDir/$tablename.$type";
-        unlink($target);
-        if(@files == 1) {
-            !system("/bin/ln -s $submitPath/$files[0] $target") || die "link failed: $?\n";
-        } else {
-            # have to make a concatenated copy of multiple files
-            my $cmd = "cat " . join(" ", @files) . " > $tablename.$type";
-            !system($cmd) || die "system '$cmd' failed: $?\n";
-            !system("/bin/ln -s $submitPath/$tablename.$type $target") || die "link failed: $?\n";
-        }
-        push(@{$pushQ->{FILES}}, $target);
+        $hgdownload = 1;
     } elsif($type eq "genePred") {
         loadGene($assembly, $tablename, $files, $pushQ);
     } elsif ($type eq "wig") {
+        # Copy signal data to hgdownload (unless we created it).
+        if(@files == 1) {
+            $hgdownload = $files[0] !~ /^$Encode::autoautoCreatedPrefix/;
+        } else {
+            $hgdownload = 1;
+        }
         loadWig($assembly, $tablename, $files, $pushQ);
     } elsif ($extendedTypes{$type}) {
         loadBedFromSchema($assembly, $tablename, $files, $type, $pushQ);
@@ -287,6 +283,22 @@ for my $key (keys %ra) {
         loadBed($assembly, $tablename, $files, $pushQ);
     } else {
         die "ERROR: unknown type: $type in $Encode::loadFile\n";
+    }
+    if($hgdownload) {
+        # soft link file(s) into download dir
+        my $target = "$downloadDir/$tablename.$type";
+        unlink($target);
+        if(@files == 1) {
+            HgAutomate::verbose(2, "soft-linking $files[0] => $target\n");
+            !system("/bin/ln -s $submitPath/$files[0] $target") || die "link failed: $?\n";
+        } else {
+            # have to make a concatenated copy of multiple files
+            HgAutomate::verbose(2, "soft-linking concatenated file $tablename.$type => $target\n");
+            my $cmd = "cat " . join(" ", @files) . " > $tablename.$type";
+            !system($cmd) || die "system '$cmd' failed: $?\n";
+            !system("/bin/ln -s $submitPath/$tablename.$type $target") || die "link failed: $?\n";
+        }
+        push(@{$pushQ->{FILES}}, $target);
     }
     print STDERR "\n" if($debug);
 }
