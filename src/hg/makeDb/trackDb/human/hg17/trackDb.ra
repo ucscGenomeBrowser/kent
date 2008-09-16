@@ -1659,6 +1659,23 @@ canPack off
 chromosomes chr20
 type bed 4 +
 
+track kiddEichlerDisc
+compositeTrack on
+shortLabel HGSV Discordant
+longLabel HGSV Discordant Clone End Alignments
+group varRep
+priority 144.85
+visibility hide
+itemRgb on
+type bed 12
+urlLabel Clone Summary (Eichler Lab Browser): 
+url http://mrhgsv.gs.washington.edu/cgi-bin/hgc?i=$$&c=$S&l=$[&r=$]&db=$D&position=$S:$[-$]
+# the chromEnd coords on their site are 1 greater than last block end...
+# this is a hint to hgc to add 1 to t when forming a link to their site.
+endFudge 1
+ncbiAccXref kiddEichlerToNcbi
+pairedEndUrlFormat http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?&cmd=retrieve&val=CENTER_NAME%%3D'ABC'%%20and%%20LIBRARY_ID%%3D'%s'%%20and%%20TRACE_NAME%%3D'%s'&retrieve=Submit
+
 track blastzSelf
 shortLabel Self Blastz
 longLabel $Organism Blastz Self Alignments
