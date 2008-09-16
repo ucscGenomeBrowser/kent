@@ -13,12 +13,13 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.44 2008/09/11 23:15:02 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.45 2008/09/16 23:18:56 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
 int trackDbCmp(const void *va, const void *vb)
-/* Compare to sort based on priority. */
+/* Compare to sort based on priority; use shortLabel as secondary sort key.
+ * Note: parallel code to hgTracks.c:tgCmpPriority */
 {
 const struct trackDb *a = *((struct trackDb **)va);
 const struct trackDb *b = *((struct trackDb **)vb);
@@ -26,7 +27,7 @@ float dif = a->priority - b->priority;
 if (dif < 0)
    return -1;
 else if (dif == 0.0)
-   return 0;
+   return strcasecmp(a->shortLabel, b->shortLabel);
 else
    return 1;
 }
