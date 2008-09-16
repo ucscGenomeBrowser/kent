@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.120 2008/09/11 23:39:04 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.121 2008/09/16 00:39:31 braney Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
@@ -2767,6 +2767,7 @@ if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
     }
 
 char **groups = needMem(MAX_GROUPS * sizeof (char *));
+*groupCt = 1;
 if (speciesGroup)
     *groupCt = chopByWhite(speciesGroup, groups, MAX_GROUPS);
 
@@ -2839,7 +2840,7 @@ struct sqlConnection *conn;
 struct sqlResult *sr;
 
 
-puts("\n<P STYLE=><B>Pairwise alignments:</B>&nbsp;");
+puts("\n<P STYLE=><B>Species selection:</B>&nbsp;");
 
 if(differentString(name,tdb->tableName))
     {
