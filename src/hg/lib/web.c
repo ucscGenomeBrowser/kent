@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.151 2008/09/03 19:19:27 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.152 2008/09/16 17:31:00 braney Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -263,7 +263,7 @@ else
     if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
 	endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgTrackUi") ||
 	endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
-	endsWith(scriptName, "hgc"))
+	endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
 	{
 	printf("       <A HREF=\"../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet\" class=\"topbar\">\n",
 	       uiState);
