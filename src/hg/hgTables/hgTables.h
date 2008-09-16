@@ -518,7 +518,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define outChromGraphData "chromGraphData"
 #define outGalaxy "galaxyQuery"
 #define outMaf "maf"
-#define outPalOptions "pal"
+#define outPalOptions "fasta"
 
 /* --------- configuration options ------------ */
 boolean allowAllTables(void);
