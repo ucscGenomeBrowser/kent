@@ -443,7 +443,6 @@ release beta
 
 # keep adjacent to MGC
 track orfeomeMrna
-#track orfeomeGenes
 shortLabel ORFeome Clones
 longLabel ORFeome Collaboration Gene Clones
 group genes
@@ -460,22 +459,6 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
-release alpha
-
-track orfeomeGenes
-shortLabel ORFeome Clones
-longLabel ORFeome Collaboration Gene Clones
-group genes
-priority 36.1
-visibility hide
-color 34,139,34
-type genePred . orfeomeMrna
-exonArrows on
-cdsDrawOptions enabled
-cdsDrawDefault genomic\ codons
-baseColorUseCds given
-baseColorDefault genomicCodons
-release beta
 
 track transMap
 superTrack on
