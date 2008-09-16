@@ -50,13 +50,13 @@ if (navigator.appName=="Netscape") {
     <!-- <table width="100%"><tr>-->
     <table cellpadding=0 cellspacing=0 width="100%"><tr>
     <td align="left">
-    <%= link_to_unless_current 'New Project', 
+    <%= link_to_unless_current 'New Submission', 
                 :controller => 'pipeline', :action => 'new' %> 
     <%= ' | ' -%>
-    <%= link_to_unless_current 'All Projects', 
+    <%= link_to_unless_current 'All Submissions', 
                 :controller => 'pipeline', :action => 'list' %> 
     <%= ' | ' -%>
-    <%= link_to_unless_current 'My Projects', 
+    <%= link_to_unless_current 'My Submissions', 
                 :controller => 'pipeline', :action => 'show_user' %> 
     </td>
     <td align="right">

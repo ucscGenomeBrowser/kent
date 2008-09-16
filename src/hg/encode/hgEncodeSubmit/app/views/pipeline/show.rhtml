@@ -53,15 +53,17 @@
     <%= ' | ' -%> </td>
   <% end %>
 
-  <td><%= link_to 'Submit Data', {:action => 'upload', :id => @project.id} -%>
-  <%= ' | ' -%> </td>
-  <td><%= link_to 'Delete Project', {:action => 'delete', :id => @project.id},
-    :confirm => "Are you sure you want to delete this project?" -%>
-  <%= ' | ' -%> </td>
-  <td><%= link_to 'Rename Project', {:action => 'edit', :id => @project.id} -%></td>
-  <% if current_user.login == "admin" and @project_status != "new" %>
-    <td><%= ' | ' -%>
-    <%= link_to 'Expand', {:action => 'reexpand_all', :id => @project.id} -%></td>
+  <% if @project.status == "new" or current_user.login == "admin" %>
+    <td><%= link_to 'Submit Data', {:action => 'upload', :id => @project.id} -%>
+    <%= ' | ' -%> </td>
+    <td><%= link_to 'Delete Project', {:action => 'delete', :id => @project.id},
+      :confirm => "Are you sure you want to delete this project?" -%>
+    <%= ' | ' -%> </td>
+    <td><%= link_to 'Rename Project', {:action => 'edit', :id => @project.id} -%></td>
+    <% if current_user.login == "admin" and @project_status != "new" %>
+      <td><%= ' | ' -%>
+      <%= link_to 'Expand', {:action => 'reexpand_all', :id => @project.id} -%></td>
+    <% end %>
   <% end %>
 <% end %>
 
@@ -101,10 +103,12 @@
     <td><%= a.archives_active -%></td>
   <% end %>
 
-  <% if c == "1" %>
-    <td><%= link_to 'Delete', {:action => 'delete_archive', :id => a.id} -%></td>
-  <% else %>
-    <td><%= link_to 'Un-Delete', {:action => 'delete_archive', :id => a.id} -%></td>
+  <% if @project.status == "new" or current_user.login == "admin" %>
+    <% if c == "1" %>
+      <td><%= link_to 'Delete', {:action => 'delete_archive', :id => a.id} -%></td>
+    <% else %>
+      <td><%= link_to 'Un-Delete', {:action => 'delete_archive', :id => a.id} -%></td>
+    <% end %>
   <% end %>
   </tr>
 

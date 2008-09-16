@@ -1,12 +1,14 @@
 <p>
-<b>Create new project:</b>
+<b>Create new submission:</b>
 <p>
 <%= error_messages_for 'project' -%>
 
 <% form_tag(:action => 'create') do %>
 
   <p><label for="project_name">Name</label><br/>
-  <%= text_field 'project', 'name'  %></p>
+  <%= text_field 'project', 'name'  %>
+  <br><i>Please supply a readable name that includes the data type and lab (e.g.:  Duke Dnase-Seq Sep08)</i>
+  </p>
  
 <%
 =begin %>
