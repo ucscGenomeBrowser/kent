@@ -157,7 +157,10 @@ for(ii=0; ii < count; ii++)
     }
 
 if ((mafTable == NULL) || (checked == NULL))
+    {
     checked = mafTable = mafTrackExist[0];
+    cartSetString(cart, hgtaCGIGeneMafTable, mafTable);
+    }
 
 printf("<B>MAF table: </B>\n");
 cgiMakeDropListFull(hgtaCGIGeneMafTable, mafTrackExist, mafTrackExist, count2,  checked, onChangeGenome());
