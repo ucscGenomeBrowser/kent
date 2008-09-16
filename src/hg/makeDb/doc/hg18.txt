@@ -23421,3 +23421,155 @@ ssh kolossus
 
 echo "insert into grp (name, label, priority, defaultIsClosed) values ('expression', 'Expression', 4.5, 1)" | hgsql hg18
 echo "update grp set label='Regulation' where name='regulation'" | hgsql hg18
+
+
+############################################################################
+# KIDD/EICHLER DISCORDANT CLONE ENDS (DONE 9/16/08 angie)
+    ssh hgwdev
+    mkdir /cluster/data/hg18/bed/kiddEichlerDiscordant
+    cd /cluster/data/hg18/bed/kiddEichlerDiscordant
+    foreach i (ABC7 ABC8 ABC9 ABC10 ABC11 ABC12 ABC13 ABC14 G248)
+      wget --user=uuuu  --password=ppppppp \
+        http://eichlerlab.gs.washington.edu/kiddj/hg18_fosmidmap/$i.bestdiscordant.sorted.gz
+    end
+    # Load the tracks (translate bacEndPairs-inspired format to bed12):
+    foreach f (*.gz)
+      set track = `echo $f:r:r:r \
+        | perl -wpe 's/^([AG])(\w+)$/kiddEichlerDisc$1\L$2/ || die;'`
+      if ($status != 0) break
+      echo $track
+      zcat $f \
+      | perl -wpe 'if (/^chrom\s+chromStart/) {s/^.*\n$//; next;} \
+        my ($c, $s, $e, $n, $sc, $st, $bSt, $bSz, undef, $t) = split; \
+        @bSts = split(",", $bSt);  @bSzs = split(",", $bSz); \
+        if ($t =~ /^transchrm_/) { \
+          @bSts = (0);  @bSzs = ($e - $s); \
+        } elsif ($t =~ /^OEA_/) { \
+          die "\nERROR: bSts[0] $bSts[0] != s $s\n" if ($bSts[0] != $s); \
+          $bSzs[0]--; \
+          $bE = $bSts[0] + $bSzs[0]; \
+          die "bE $bE != e $e\n" if ($bE != $e); \
+          $bSts[0] -= $s; \
+        } elsif ($#bSts == 1) { \
+          if ($bSts[0] > $bSts[1]) { \
+            # warn "Swapping $n ($bSts[0] > $bSts[1])\n"; \
+            $tmp = $bSts[0];  $bSts[0] = $bSts[1];  $bSts[1] = $tmp; \
+            $tmp = $bSzs[0];  $bSzs[0] = $bSzs[1];  $bSzs[1] = $tmp; \
+          } \
+          if ($bSts[0] != $s) { \
+            die "\nERROR: n=$n,$t: bSts[0]=$bSts[0] but s=$s\n\t"; \
+          } \
+          $bSzs[0]--;  $bSzs[1]--; \
+          $bE0 = $bSts[0] + $bSzs[0]; \
+          $bE1 = $bSts[1] + $bSzs[1]; \
+          $bE = $bE0 > $bE1 ? $bE0 : $bE1; \
+          if ($bE != $e) { \
+            warn "n=$n,$t: bE0=$bE0, bE1=$bE1, bE=$bE, e=$e\n"; \
+            if ($bE1 > $e) { \
+              warn "n=$n,$t: tweaking bSzs[1] (clip to chromEnd)\n"; \
+              $bSzs[1] = $e - $bSts[1]; \
+            } \
+          } \
+          $bSts[0] -= $s;  $bSts[1] -= $s; \
+        } else { die "t is $t but \$#bSts is $#bSts"; } \
+        $bSt = join(",", @bSts) . ",";  $bSz = join(",", @bSzs) . ","; \
+        $rgb = ($t =~ /^deletion/) ? "224,0,0" : \
+               ($t =~ /^insertion/) ? "0,0,224" : \
+               ($t =~ /^inversion/) ? "0,224,0" : \
+               ($t =~ /^OEA/) ? "240,160,64" : "0,0,0"; \
+        $_ = join("\t", $c, $s, $e, "$n,$t", int($sc+0.5), $st, $s, $e, $rgb, \
+                        scalar(@bSzs), $bSz, $bSt) . "\n";' \
+      | hgLoadBed -tab hg18 $track stdin
+      checkTableCoords hg18 $track
+    end
+    # Tons of overlapping block and blockEnd[n-1]!=end warnings from
+    # checkTableCoords -- but these are discordant mappings, so we
+    # expect those.  Make sure there aren't any other types of errors:
+    foreach f (*.gz)
+      set track = `echo $f:r:r:r \
+        | perl -wpe 's/^([AG])(\w+)$/kiddEichlerDisc$1\L$2/ || die;'`
+      checkTableCoords hg18 $track |& egrep -v 'overlapping|!= end'
+    end
+    # No output, good.
+
+    # Get clone ID -> NCBI acc mapping (same as for hg17; redownloaded to
+    # make sure).
+    mkdir /cluster/data/hg18/bed/kiddEichlerDiscordant/cloneIds
+    cd /cluster/data/hg18/bed/kiddEichlerDiscordant/cloneIds
+    # Saved off emailed file from Jeff Kidd to clones_used_3nov.txt.accessions;
+    # get trace archive trace names for end reads:
+    foreach n (7 9 10 11 12 13 14)
+      wget http://hgsv.washington.edu/general/download/clone_mapping/ABC$n/ABC$n.conversion.gz
+    end
+    # ABC8 has _a and _b files:
+    wget http://hgsv.washington.edu/general/download/clone_mapping/ABC8/ABC8_a.conversion.gz
+    wget http://hgsv.washington.edu/general/download/clone_mapping/ABC8/ABC8_b.conversion.gz
+    # That file is not available for G248.
+    gunzip *.gz
+    # Combine the relevant data from the .conversion files; keep only those
+    # IDs that are used in the tracks.
+    zcat ../[AG]*.gz \
+    | cut -f 4 \
+    | egrep -v '^(#chrom|track|name)' \
+    | sed -e 's/,.*//' \
+    | sort -u > discIds.txt
+    grep -h -v ^163722_163722- *.conversion \
+    | perl -wpe 's/^OurClone.*\n// || s/^\d+_(HUMAN|\d+_).*\n$// || \
+      s/^(\d+_)?(ABC|G)(\d+)(_\d\d?)?(_\d\d?)?_0*(\d+?_[A-Z]\d\d?)\.(F|FORWARD|R|REVERSE)\.\d+\t(\w+)$/$2$3_$6\t$7\t$8/ || \
+      warn "Parse line $.:\n$_";' \
+    | sort > allEnds.tab
+    grep -wFf discIds.txt allEnds.tab > discEnds.txt
+    wc -l discIds.txt allEnds.tab discEnds.txt 
+#   352330 discIds.txt
+# 17490847 allEnds.tab
+#   781513 discEnds.txt
+    # discEnds.txt has 2 lines (forward & reverse) for most of its ids...
+    # ideally we would see 2*(352330) lines in discEnds.txt.
+    # Get a list of which discordant clone IDs don't have ends in *.conv*:
+    cut -f 1 allEnds.tab | uniq > all.tmp
+    comm -23 discIds.txt all.tmp > discNotInConv.txt
+    wc -l discNotInConv.txt
+#41853 discNotInConv.txt
+    cat > combine.pl <<'_EOF_'
+#!/usr/bin/perl -w
+use strict;
+my ($cloneFile, $endsFile) = @ARGV;
+open(CLONES, $cloneFile) || die "Can't open $cloneFile: $!\n";
+my %idInfo;
+while(<CLONES>) {
+  (s/^(\d+_)?(ABC|G)(\d+)(_\d\d?)?(_\d\d?)?_0*(\d+?_[A-Z]\d\d?)\t(\w+)$/$2$3_$6\t$7/ && m/^(\w+)\t(\w+)/) || \
+  m/^(G248\w+)\t(\w+)$/ || die "Parse line $.:$_";
+  my ($id, $acc) = ($1, $2);
+  $idInfo{$id}->[0] = $acc;
+}
+close(CLONES);
+open(ENDS, $endsFile) || die "Can't open $endsFile: $!\n";
+while (<ENDS>) {
+  chomp; my ($id, $dir, $traceName) = split("\t");
+  if ($dir =~ /^F/) {
+    $idInfo{$id}->[1] = $traceName;
+  } elsif ($dir =~ /^R/) {
+    $idInfo{$id}->[2] = $traceName;
+  } else { die "What is this \$dir: $dir ?\n"; }
+}
+close(ENDS);
+foreach my $id (sort keys %idInfo) {
+  my $infoRef = $idInfo{$id};
+  $infoRef->[0] = '' if (! defined $infoRef->[0]);
+  $infoRef->[1] = 0 if (! defined $infoRef->[1]);
+  $infoRef->[2] = 0 if (! defined $infoRef->[2]);
+  print join("\t", $id, @{$infoRef}) . "\n";
+}
+'_EOF_'
+    # << emacs
+    chmod a+x combine.pl
+    combine.pl clones_used_3nov.txt.accessions discEnds.txt \
+    | sort > kiddEichlerToNcbi.txt
+    # Load table:
+    hgLoadSqlTab hg18 kiddEichlerToNcbi \
+      $HOME/kent/src/hg/lib/kiddEichlerToNcbi.sql kiddEichlerToNcbi.txt
+    # Add to makeDb/schema/all.joiner, then check:
+    runJoiner.csh hg18 kiddEichlerToNcbi $HOME/kent/src/hg/makeDb/schema
+
+
+############################################################################
