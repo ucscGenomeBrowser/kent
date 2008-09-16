@@ -25,6 +25,12 @@ return FALSE;
 void doGenePredPal(struct sqlConnection *conn)
 /* Output genePred protein alignment. */
 {
+if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
+    {
+    sendParamsToGalaxy(hgtaDoPalOut, "submit");
+    return;
+    }
+
 /* get rid of pesky cookies that would bring us back here */
 cartRemove(cart, hgtaDoPal);
 cartRemove(cart, hgtaDoPalOut);
