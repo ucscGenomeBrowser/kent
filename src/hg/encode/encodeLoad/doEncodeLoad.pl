@@ -272,7 +272,7 @@ for my $key (keys %ra) {
     } elsif ($type eq "wig") {
         # Copy signal data to hgdownload (unless we created it).
         if(@files == 1) {
-            $hgdownload = $files[0] !~ /^$Encode::autoautoCreatedPrefix/;
+            $hgdownload = $files[0] !~ /^$Encode::autoCreatedPrefix/;
         } else {
             $hgdownload = 1;
         }

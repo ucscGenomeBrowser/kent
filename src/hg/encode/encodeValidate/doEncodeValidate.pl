@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.62 2008/09/16 20:06:28 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.63 2008/09/16 20:08:57 larrym Exp $
 
 use warnings;
 use strict;
@@ -648,7 +648,7 @@ if(!@errors) {
             }
             $ddfSets{$key}{VIEWS}{$newView} = \%line;
             my $files = join(" ", @{$alignmentLine->{files}});
-            my $tmpFile = $Encode::autoCreated . "$tmpCount.bed";
+            my $tmpFile = $Encode::autoCreatedPrefix . "$tmpCount.bed";
             $tmpCount++;
             my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $daf->{assembly} stdin");
             my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
