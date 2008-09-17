@@ -4,7 +4,7 @@ class UserNotifier < ActionMailer::Base
     setup_email(user)
     @recipients  = ActiveRecord::Base.configurations[RAILS_ENV]['emailOnLoad']
     db = ActiveRecord::Base.configurations[RAILS_ENV]['database']
-    @subject    += "Project #{db} #{project.id} #{project.name} loaded"
+    @subject    += "Submission #{db} #{project.id} #{project.name} loaded"
     @body[:project] = project
     @body[:database] = db
   end
