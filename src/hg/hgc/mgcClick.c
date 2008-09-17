@@ -11,6 +11,8 @@
 #include "genePred.h"
 #include "geneSimilarities.h"
 
+static char const rcsid[] = "$Id: mgcClick.c,v 1.28 2008/09/17 17:40:40 mikep Exp $";
+
 static char *findRefSeqSummary(struct sqlConnection *conn,
                                struct geneSimilarities *refSeqs,
                                char **sumAccv)
