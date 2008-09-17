@@ -4,6 +4,8 @@
 #include "hgTables.h"
 #include "pal.h"
 
+static char const rcsid[] = "$Id: pal.c,v 1.10 2008/09/17 17:54:03 braney Exp $";
+
 boolean isGenePredTable(struct trackDb *track, char *table)
 /* Return TRUE if table is genePred. */
 {

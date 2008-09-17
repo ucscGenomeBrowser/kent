@@ -9,6 +9,8 @@
 #include "genePred.h"
 #include "mafGene.h"
 
+static char const rcsid[] = "$Id: mafGene.c,v 1.6 2008/09/17 17:53:22 braney Exp $";
+
 struct exonInfo
 {
     struct exonInfo *next;

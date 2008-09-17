@@ -10,6 +10,8 @@
 #include "jsHelper.h"
 #include "hPrint.h"
 
+static char const rcsid[] = "$Id: pal.c,v 1.3 2008/09/17 17:52:40 braney Exp $";
+
 /* this is for a list of MAF tables in the current
  * genome. 
  */
