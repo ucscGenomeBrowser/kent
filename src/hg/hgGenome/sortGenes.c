@@ -16,6 +16,8 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
+static char const rcsid[] = "$Id: sortGenes.c,v 1.9 2008/09/17 18:36:35 galt Exp $";
+
 struct colTrack
 /* Genome browser track/gene sorter column correspondence. */
     {

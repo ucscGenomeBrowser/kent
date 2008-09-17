@@ -26,6 +26,7 @@
 
 #include "wiggle.h"
 
+static char const rcsid[] = "$Id: import.c,v 1.13 2008/09/17 18:36:35 galt Exp $";
 
 /* from hgTables.c */
 

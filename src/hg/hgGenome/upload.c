@@ -18,6 +18,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
+static char const rcsid[] = "$Id: upload.c,v 1.34 2008/09/17 18:36:35 galt Exp $";
 
 static char *markerNames[] = {
     cgfMarkerGuess,

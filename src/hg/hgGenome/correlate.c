@@ -9,6 +9,8 @@
 #include "hPrint.h"
 #include "hgGenome.h"
 
+static char const rcsid[] = "$Id: correlate.c,v 1.9 2008/09/17 18:36:35 galt Exp $";
+
 static void correlateChrom(struct chromGraphBin *a, struct chromGraphBin *b,
 	struct correlate *c)
 /* Add a sample point to correlation for each data point in each graph.

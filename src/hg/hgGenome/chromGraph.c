@@ -9,6 +9,8 @@
 
 #include "hgGenome.h"
 
+static char const rcsid[] = "$Id: chromGraph.c,v 1.2 2008/09/17 18:36:35 galt Exp $";
+
 boolean isChromGraph(struct trackDb *track)
 /* Return TRUE if it's a chromGraph track */
 {

@@ -11,6 +11,8 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
+static char const rcsid[] = "$Id: browseRegions.c,v 1.14 2008/09/17 18:36:35 galt Exp $";
+
 static void quotedBrowserUrl(FILE *f, struct bed3 *bed, struct genoGraph *gg)
 /* Print URL that will open browser at bed position with genoGraph track on */
 {

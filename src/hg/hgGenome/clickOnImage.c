@@ -11,6 +11,8 @@
 #include "hdb.h"
 #include "hgGenome.h"
 
+static char const rcsid[] = "$Id: clickOnImage.c,v 1.5 2008/09/17 18:36:35 galt Exp $";
+
 struct genoLayChrom *genoLayChromAt(struct genoLay *gl, int x, int y)
 /* Return chromosome if any at x,y */
 {
