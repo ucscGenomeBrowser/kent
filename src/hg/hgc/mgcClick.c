@@ -405,16 +405,21 @@ webPrintLinkCellEnd();
 webPrintLinkTableNewRow();
 
 webPrintLinkCellStart();
-hgcAnchorSomewhere("htcGeneMrna", acc, table, seqName);
+hgcAnchorSomewhere("htcDisplayMrna", acc, table, seqName);
 printf("Reference genome mRNA</A>");
 webPrintLinkCellEnd();
 
+// FIXME: this is current broken with psl track.
+#if BROKEN
 webPrintLinkCellStart();
 hgcAnchorSomewhere("htcTranslatedPredMRna", acc, table, seqName);
 printf("Reference genome protein</A>");
 webPrintLinkCellEnd();
 
 webFinishPartialLinkTable(1, 2, 3);
+#else
+webFinishPartialLinkTable(1, 1, 3);
+#endif
 
 webPrintLinkTableEnd();
 }
