@@ -9,6 +9,8 @@
 #include "dnaMotifSql.h"
 #include "dystring.h"
 
+static char const rcsid[] = "$Id: dnaMotifSql.c,v 1.5 2008/09/17 18:10:13 kent Exp $";
+
 struct dnaMotif *dnaMotifLoad(char **row)
 /* Load a dnaMotif from row fetched with select * from dnaMotif
  * from database.  Dispose of this with dnaMotifFree(). */

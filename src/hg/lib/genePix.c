@@ -6,6 +6,8 @@
 #include "jksql.h"
 #include "genePix.h"
 
+static char const rcsid[] = "$Id: genePix.c,v 1.4 2008/09/17 18:10:13 kent Exp $";
+
 static char *cloneOrNull(char *s)
 /* Return copy of string, or NULL if it is empty */
 {

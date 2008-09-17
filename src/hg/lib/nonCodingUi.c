@@ -2,6 +2,8 @@
 #include "nonCodingUi.h"
 #include "common.h"
 
+static char const rcsid[] = "$Id: nonCodingUi.c,v 1.2 2008/09/17 18:10:14 kent Exp $";
+
 /************ Biotype related controls *********/
 /* Types: miRNA, rRNA, snRNA, pseudogene, snoRNA, misc_RNA */
 

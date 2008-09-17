@@ -6,6 +6,8 @@
 #include "hash.h"
 #include "txCommon.h"
 
+static char const rcsid[] = "$Id: txCommon.c,v 1.5 2008/09/17 18:10:14 kent Exp $";
+
 char *txAccFromTempName(char *tempName)
 /* Given name in this.that.acc.version format, return
  * just acc.version. */

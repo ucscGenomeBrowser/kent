@@ -8,6 +8,8 @@
 #include "cytoBand.h"
 #include "hCytoBand.h"
 
+static char const rcsid[] = "$Id: hCytoBand.c,v 1.6 2008/09/17 18:10:13 kent Exp $";
+
 static char *abbreviatedBandName(struct cytoBand *band, 
 	MgFont *font, int width, boolean isDmel)
 /* Return a string abbreviated enough to fit into space. */

@@ -5,6 +5,8 @@
 #include "hash.h"
 #include "liftUp.h"
 
+static char const rcsid[] = "$Id: liftUp.c,v 1.4 2008/09/17 18:10:14 kent Exp $";
+
 struct liftSpec *readLifts(char *fileName)
 /* Read in lift file. */
 {

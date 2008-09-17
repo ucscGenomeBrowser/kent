@@ -8,6 +8,8 @@
 #include "hgConfig.h"
 #include "botDelay.h"
 
+static char const rcsid[] = "$Id: botDelay.c,v 1.12 2008/09/17 18:10:13 kent Exp $";
+
 int botDelayTime(char *host, int port, char *ip)
 /* Figure out suggested delay time for ip address in
  * milliseconds. */

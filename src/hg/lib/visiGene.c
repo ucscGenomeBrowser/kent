@@ -6,6 +6,8 @@
 #include "jksql.h"
 #include "visiGene.h"
 
+static char const rcsid[] = "$Id: visiGene.c,v 1.18 2008/09/17 18:10:14 kent Exp $";
+
 static char *cloneOrNull(char *s)
 /* Return copy of string, or NULL if it is empty */
 {

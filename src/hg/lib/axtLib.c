@@ -14,6 +14,8 @@
 #include "chainToAxt.h"
 #include "hdb.h"
 
+static char const rcsid[] = "$Id: axtLib.c,v 1.13 2008/09/17 18:10:12 kent Exp $";
+
 
 struct axt *netFillToAxt(struct cnFill *fill, struct dnaSeq *tChrom , int tSize,
 	struct hash *qChromHash, char *nibDir,

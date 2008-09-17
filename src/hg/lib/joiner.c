@@ -19,6 +19,8 @@
 #include "jksql.h"
 #include "joiner.h"
 
+static char const rcsid[] = "$Id: joiner.c,v 1.27 2008/09/17 18:10:13 kent Exp $";
+
 static void joinerFieldFree(struct joinerField **pJf)
 /* Free up memory associated with joinerField. */
 {

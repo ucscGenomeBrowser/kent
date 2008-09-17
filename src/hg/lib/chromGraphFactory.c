@@ -15,6 +15,8 @@
 #include "chromGraphFactory.h"
 #include "trashDir.h"
 
+static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.13 2008/09/17 18:10:13 kent Exp $";
+
 #define affy500Table "snpArrayAffy500"
 #define affy6Table "snpArrayAffy6"
 #define affy6SVTable "snpArrayAffy6SV"
