@@ -331,8 +331,6 @@ static struct cloneInfo *orfeomeCloneInfoLoad(struct sqlConnection *conn, char *
 {
 struct cloneInfo *ci = cloneInfoLoad(conn, acc, start, "orfeomeGenes");
 ci->isMgc = FALSE;
-if (ci->imageId == 0)
-    errAbort("no IMAGE:nnnn entry in mrnaClone table for ORRFeome clone %s", acc);
 return ci;
 }
 
