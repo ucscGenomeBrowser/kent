@@ -21,6 +21,8 @@
 #include "printCaption.h"
 #include "trashDir.h"
 
+static char const rcsid[] = "$Id: hgVisiGene.c,v 1.101 2008/09/17 20:10:43 galt Exp $";
+
 /* Globals */
 struct cart *cart;		/* Current CGI values */
 struct hash *oldCart;		/* Previous CGI values */
