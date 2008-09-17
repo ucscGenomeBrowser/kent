@@ -20,7 +20,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.40 2008/09/08 16:02:38 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.41 2008/09/17 16:13:22 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "submit_filter", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -714,6 +714,24 @@ lineFileClose(&lf);
 return hash;
 }
 
+int countQuotedWordsInFile(char *fileName)
+/* Count Quoted Words in a file */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *word;
+int cnt;
+cnt = 0;
+while (lineFileNext(lf, &line, NULL))
+    {
+    while ((word = nextQuotedWord(&line)) != NULL)
+        {
+	cnt++;
+        }
+    }
+lineFileClose(&lf);
+return cnt;
+}
+
 struct hash *keyFileHash(struct column *col)
 /* Make up a hash from key file for this column. 
  * Return NULL if no key file. */
@@ -855,7 +873,7 @@ if (!columnSetting(col, "noKeys", NULL))
         {
         if (fileExists(fileName))
             {
-            int count = countWordsInFile(fileName);
+            int count = countQuotedWordsInFile(fileName);
             advFilterKeyClearButton(col);
             hPrintf("<BR>\n");
             if (count == 1)
