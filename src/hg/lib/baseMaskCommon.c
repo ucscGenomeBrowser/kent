@@ -6,6 +6,8 @@
 #include "genomeRangeTreeFile.h"
 #include "baseMaskCommon.h"
 
+static char const rcsid[] = "$Id: baseMaskCommon.c,v 1.6 2008/09/17 19:43:49 mikep Exp $";
+
 //#define MJP verbose(1,"%s[%3d]: ", __func__, __LINE__);
 
 static struct chromInfo *createChromInfoList(char *name, char *database)

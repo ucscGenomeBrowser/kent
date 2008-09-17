@@ -13,6 +13,7 @@
 #include "rangeTree.h"
 #include "rangeTreeFile.h"
 
+static char const rcsid[] = "$Id: rangeTreeFile.c,v 1.5 2008/09/17 19:45:00 mikep Exp $";
 
 struct range rangeReadOne(FILE *f, boolean isSwapped)
 /* Returns a single range from the file */
