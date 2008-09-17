@@ -13,6 +13,8 @@
 #include "rbTree.h"
 #include "rangeTree.h"
 
+static char const rcsid[] = "$Id: rangeTree.c,v 1.20 2008/09/17 17:51:32 mikep Exp $";
+
 int rangeCmp(void *va, void *vb)
 /* Return -1 if a before b,  0 if a and b overlap,
  * and 1 if a after b. */

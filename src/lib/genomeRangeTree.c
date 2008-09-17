@@ -17,6 +17,8 @@
 #include "dystring.h"
 #include <limits.h>
 
+static char const rcsid[] = "$Id: genomeRangeTree.c,v 1.11 2008/09/17 17:51:32 mikep Exp $";
+
 struct genomeRangeTree *genomeRangeTreeNewSize(int hashPowerOfTwoSize)
 /* Create a new, empty, genomeRangeTree. 
  * Free with genomeRangeTreeFree. */
