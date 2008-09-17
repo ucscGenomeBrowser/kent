@@ -3,6 +3,8 @@
 #include "dystring.h"
 #include "quotedP.h"
 
+static char const rcsid[] = "$Id: quotedP.c,v 1.4 2008/09/17 17:58:56 galt Exp $";
+
 char *quotedPrintableEncode(char *input)
 /* Use Quoted-Printable standard to encode a string. */
 {

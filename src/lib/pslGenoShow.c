@@ -12,6 +12,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
+static char const rcsid[] = "$Id: pslGenoShow.c,v 1.4 2008/09/17 18:00:47 galt Exp $";
 
 static void pslShowAlignmentStranded2(struct psl *psl, boolean isProt,
 	char *qName, bioSeq *qSeq, int qStart, int qEnd,
