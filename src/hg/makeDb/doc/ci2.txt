@@ -265,23 +265,25 @@ ci2.perChromTables = no
 # 31491546 bases of 141233565 (22.297%) in intersection
 # in ci1 28699953 bases of 113192845 (25.355%) in intersection
 
-# MAKE DOWNLOADABLE SEQUENCE FILES 
+# MAKE DOWNLOADABLE SEQUENCE FILES  (re-DONE braney 2008-09-17)
     ssh kkstore02
     cd /cluster/data/ci2
     #- Build the .zip files
+    csh
     cat << '_EOF_' > jkStuff/zipAll.csh
 rm -rf zip
 mkdir zip
 zip -j zip/Scaffold.out.zip all.out
-zip -j zip/ScaffoldFa.zip scaffolds/*.fa
-zip -j zip/ScaffoldFaMasked.zip maskedScaffolds/*.fa
-cd bed/simpleRepeat
+cd maskedScaffolds
+zip -j ../zip/ScaffoldFa.zip *.fa
+cd ../hardMaskedScaffolds
+zip -j ../zip/ScaffoldFaMasked.zip *.fa
+cd ../bed/simpleRepeat
 zip -j ../../zip/ScaffoldTrf.zip simpleRepeat.bed
-cd ../..
 '_EOF_'
     # << this line makes emacs coloring happy
-### NOTES: NEED NEW GENBANK PROCESS FOR THIS
-    csh ./jkStuff/zipAll.csh |& tee zipAll.log
+    chmod +x ./jkStuff/zipAll.csh
+    ./jkStuff/zipAll.csh  |& tee zipAll.log
     cd zip
     #- Look at zipAll.log to make sure all file lists look reasonable.  
     #- Check zip file integrity:
@@ -290,6 +292,7 @@ cd ../..
       tail -1 $f.test
     end
     wc -l *.zip.test
+    rm *.zip.test
 
     #- Copy the .zip files to hgwdev:/usr/local/apache/...
     ssh hgwdev
