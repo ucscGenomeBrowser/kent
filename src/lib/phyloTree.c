@@ -3,6 +3,8 @@
 #include "dystring.h"
 #include "phyloTree.h"
 
+static char const rcsid[] = "$Id: phyloTree.c,v 1.9 2008/09/17 17:56:38 kent Exp $";
+
 struct phyloTree *phyloReadTree(struct lineFile *lf)
 /* reads a phyloTree from lineFile (first line only) */
 {

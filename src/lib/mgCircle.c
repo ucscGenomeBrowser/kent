@@ -4,6 +4,8 @@
 #include "common.h"
 #include "memgfx.h"
 
+static char const rcsid[] = "$Id: mgCircle.c,v 1.4 2008/09/17 17:56:37 kent Exp $";
+
 void mgCircle(struct memGfx *mg, int xCen, int yCen, int rad, 
 	Color color, boolean filled)
 /* Draw a circle using a stepping algorithm.  Doesn't correct

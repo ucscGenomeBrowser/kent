@@ -2,6 +2,8 @@
 #include "common.h"
 #include "gfxPoly.h"
 
+static char const rcsid[] = "$Id: gfxPoly.c,v 1.3 2008/09/17 17:56:37 kent Exp $";
+
 struct gfxPoly *gfxPolyNew()
 /* Create new (empty) polygon */
 {

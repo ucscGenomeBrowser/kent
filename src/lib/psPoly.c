@@ -2,6 +2,8 @@
 #include "common.h"
 #include "psPoly.h"
 
+static char const rcsid[] = "$Id: psPoly.c,v 1.2 2008/09/17 17:56:38 kent Exp $";
+
 struct psPoly *psPolyNew()
 /* Create new (empty) polygon */
 {

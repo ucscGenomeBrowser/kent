@@ -12,6 +12,8 @@
 #include "memgfx.h"
 #include "gfxPoly.h"
 
+static char const rcsid[] = "$Id: mgPolygon.c,v 1.8 2008/09/17 17:56:37 kent Exp $";
+
 void mgDrawPolyOutline(struct memGfx *mg, struct gfxPoly *poly, Color color)
 /* Draw a singe pixel line around polygon. */
 {

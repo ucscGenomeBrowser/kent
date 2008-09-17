@@ -56,6 +56,8 @@
 #include "common.h"
 #include "oligoTm.h"
 
+static char const rcsid[] = "$Id: oligoTm.c,v 1.2 2008/09/17 17:56:38 kent Exp $";
+
 /* 
  * Tables of nearest-neighbor thermodynamics for DNA bases.  See Breslauer,
  * Frank, Bloecker, and Markey, Proc. Natl. Acad. Sci. USA, vol 83, page 3748,

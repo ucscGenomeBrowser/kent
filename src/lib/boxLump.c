@@ -11,6 +11,8 @@
 #include "boxClump.h"
 #include "boxLump.h"
 
+static char const rcsid[] = "$Id: boxLump.c,v 1.2 2008/09/17 17:56:37 kent Exp $";
+
 int boxInCmpQuery(const void *va, const void *vb)
 /* Compare to sort based on query start. */
 {

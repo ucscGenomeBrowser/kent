@@ -9,6 +9,7 @@
 #include "obscure.h"
 #include "dtdParse.h"
 
+static char const rcsid[] = "$Id: dtdParse.c,v 1.5 2008/09/17 17:56:37 kent Exp $";
 
 static void syntaxError(struct lineFile *lf)
 /* Report syntax error and exit. */
