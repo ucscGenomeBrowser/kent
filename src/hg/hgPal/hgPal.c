@@ -7,7 +7,7 @@
 #include "hui.h"
 #include "pal.h"
 
-static char const rcsid[] = "$Id: hgPal.c,v 1.8 2008/09/16 00:43:51 braney Exp $";
+static char const rcsid[] = "$Id: hgPal.c,v 1.9 2008/09/18 21:57:35 braney Exp $";
 
 char *excludeVars[] = {"Submit", "submit", NULL,};
 
@@ -31,6 +31,8 @@ cartWebStart(cart, database, "Protein Alignments for %s %s",track,item);
 /* output the option selection dialog */
 palOptions(cart, conn, addOurButtons, NULL);
 
+printf("For information about output data format see "
+  "<A HREF=\"../goldenPath/help/hgTablesHelp.html#FASTA\">Table Browser User's Guide</A><BR>");
 struct hash *hash = newHash(1);
 
 /* we're only showing the one name */
