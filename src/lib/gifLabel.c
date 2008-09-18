@@ -5,7 +5,7 @@
 #include "portable.h"
 #include "gifLabel.h"
 
-static char const rcsid[] = "$Id: gifLabel.c,v 1.8 2008/09/15 23:55:50 galt Exp $";
+static char const rcsid[] = "$Id: gifLabel.c,v 1.9 2008/09/18 00:38:20 galt Exp $";
 
 int gifLabelMaxWidth(char **labels, int labelCount)
 /* Return maximum pixel width of labels.  It's ok to have
@@ -55,29 +55,19 @@ return mg;
 }
 
 
-boolean sameFileContents(char *n1, char *n2)
+boolean sameGifContents(struct memGfx *n1, struct memGfx *n2)
 /* compare two files and return true if their contents are identical using binary compare */
 {
-int r1 = 0, r2 = 0;
-char buf1[4096];
-char buf2[4096];
-FILE *f1 = NULL, *f2 = NULL;
-boolean result = TRUE;
-f1 = fopen(n1,"r"); if (f1 == NULL) { return FALSE; }
-f2 = fopen(n2,"r"); if (f2 == NULL) { fclose(f1); return FALSE; }
-while (TRUE)
-    {
-    r1 = fread(buf1, 1, sizeof(buf1), f1);
-    r2 = fread(buf2, 1, sizeof(buf2), f2);
-    if (r1 != r2) { result = FALSE; break; } /* diff file size */
-    if (r1 == 0) { break; }  /* eof */
-    if (memcmp(buf1,buf2,r1)!=0) { result = FALSE; break; } /* file contents differ */
-    }
-fclose(f2);
-fclose(f1);
-return result;
+if (n1 == NULL) {  return FALSE; }
+if (n2 == NULL) { return FALSE; }
+if (n1->width != n2->width) { return FALSE; }
+if (n1->height != n2->height) { return FALSE; }
+if (n1->colorsUsed != n2->colorsUsed) { return FALSE; }
+if (memcmp(n1->colorMap, n2->colorMap, 256 * 3)!=0) { return FALSE; } /* gif colormaps differ */
+long bytes = (long)n1->width * n1->height;
+if (memcmp(n1->pixels, n2->pixels, bytes)!=0) { return FALSE; } /* gif contents differ */
+return TRUE;
 }
-
 
 void gifLabelVerticalText(char *fileName, char **labels, int labelCount, 
 	int height)
@@ -86,20 +76,21 @@ void gifLabelVerticalText(char *fileName, char **labels, int labelCount,
 {
 struct memGfx *straight = altColorLabels(labels, labelCount, height);
 struct memGfx *rotated = mgRotate90(straight);
-struct tempName tn;
-makeTempName(&tn, "gifLabelVertTemp", ".gif");
-mgSaveGif(rotated, tn.forCgi); 
+struct memGfx *existing = NULL;
+if (fileExists(fileName))
+    existing = mgLoadGif(fileName);
 /* the savings here is in the user's own browser cache - not updated if no change */
-if (sameFileContents(tn.forCgi,fileName))  
+if (!sameGifContents(rotated, existing))  
     {
-    remove(tn.forCgi);
-    }
-else
-    {
+    struct tempName tn;
+    makeTempName(&tn, "gifLabelVertTemp", ".gif");
+    mgSaveGif(rotated, tn.forCgi); 
     rename(tn.forCgi, fileName);
     }
 mgFree(&straight);
 mgFree(&rotated);
+if (existing)
+    mgFree(&existing);
 }
 
 
