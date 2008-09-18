@@ -109,7 +109,10 @@ GSID_DBS = \
 
 ARCHIVED_DBS = \
 	rheMac1 \
-	danRer1 
+	danRer1 \
+	mm5 \
+	mm6 \
+	danRer2
 
 update: #clean
 	./loadTracks trackDb_${USER} hgFindSpec_${USER} ${DBS}
@@ -126,7 +129,7 @@ alphaLocal: clean
 	./loadTracks -local -release=alpha trackDb hgFindSpec ${DBS}
 
 strict: clean
-	${CVS} -q up -d -P .
+	# ${CVS} -q up -d -P .
 	./loadTracks -strict -release=beta trackDb hgFindSpec ${DBS}
 
 # this will fail if we are not in a beta checkout:
