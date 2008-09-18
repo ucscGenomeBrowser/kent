@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.45 2007/06/13 18:18:36 kuhn Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.46 2008/09/18 20:02:45 hiram Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -269,6 +269,37 @@ size_t ptToSizet(void *pt)
 {
 char *a = NULL, *b = pt;
 return b - a;
+}
+
+boolean parseQuotedStringNoEscapes( char *in, char *out, char **retNext)
+/* Read quoted string from in (which should begin with first quote).
+ * Write unquoted string to out, which may be the same as in.
+ * Return pointer to character past end of string in *retNext. 
+ * Return FALSE if can't find end.
+ * Unlike parseQuotedString() do not treat backslash as an escape
+ *	character, merely pass it on through.
+ */
+{
+char c, *s = in;
+int quoteChar = *s++;
+
+for (;;)
+   {
+   c = *s++;
+   if (c == 0)
+       {
+       warn("Unmatched %c", quoteChar);
+       return FALSE;
+       }
+   else if (c == quoteChar)
+       break;
+   else
+       *out++ = c;
+   }
+*out = 0;
+if (retNext != NULL)
+    *retNext = s;
+return TRUE;
 }
 
 boolean parseQuotedString( char *in, char *out, char **retNext)
