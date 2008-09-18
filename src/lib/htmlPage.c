@@ -23,7 +23,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.35 2007/06/13 18:20:38 kuhn Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.36 2008/09/18 21:46:22 hiram Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -590,7 +590,7 @@ for (;;)
 		    val = e = skipLeadingSpaces(e);
 		    if (e[0] == '"' || e[0] == '\'')
 			{
-			if (!parseQuotedString(val, val, &e))
+			if (!parseQuotedStringNoEscapes(val, val, &e))
 			    break;
 			}
 		    else
