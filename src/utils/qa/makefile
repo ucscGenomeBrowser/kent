@@ -63,6 +63,7 @@ install:
 	cp -p --remove-destination getGbdbBeta.csh         ${SCRIPTS}
 	cp -p --remove-destination getJoinerKeyErrors.pl   ${SCRIPTS}
 	cp -p --remove-destination getLastMonth.csh        ${SCRIPTS}
+	cp -p --remove-destination getLiftOver.csh         ${SCRIPTS}
 	cp -p --remove-destination getMatrixLines.csh      ${SCRIPTS}
 	cp -p --remove-destination getMonthLastYear.csh    ${SCRIPTS}
 	cp -p --remove-destination getOrderKey.csh         ${SCRIPTS}
