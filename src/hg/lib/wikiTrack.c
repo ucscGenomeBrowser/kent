@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.24 2008/09/11 23:22:44 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.25 2008/09/18 21:47:05 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -599,7 +599,7 @@ char *fetchWikiRawText(char *descriptionKey)
 /* fetch page from wiki in raw form as it is in the edit form */
 {
 char wikiPageUrl[512];
-safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php/%s?action=raw",
+safef(wikiPageUrl, sizeof(wikiPageUrl), "%s/index.php?title=%s&action=raw",
 	cfgOptionDefault(CFG_WIKI_URL, NULL), descriptionKey);
 struct lineFile *lf = netLineFileMayOpen(wikiPageUrl);
 
