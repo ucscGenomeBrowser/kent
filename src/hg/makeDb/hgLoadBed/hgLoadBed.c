@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.60 2008/09/03 19:19:42 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.61 2008/09/18 00:52:03 larrym Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -36,6 +36,7 @@ char *tmpDir = (char *)NULL;	/* location to create a temporary file */
 boolean nameIx = TRUE;	        /* FALSE == do not create the name index */
 boolean ignoreEmpty = FALSE;	/* TRUE == empty input files are not an error */
 boolean allowNegativeScores = FALSE;	/* TRUE == score column set to int */
+char *fillInScoreColumn = NULL;      /* column to use to fill-in score column */
 boolean customTrackLoader = FALSE; /*TRUE == turn on all custom track options
                                     * turns on: noNameIx, ignoreEmpty, allowNegativeScores
                                     * -verbose=0 */
@@ -65,6 +66,7 @@ static struct optionSpec optionSpecs[] = {
     {"ignoreEmpty", OPTION_BOOLEAN},
     {"allowNegativeScores", OPTION_BOOLEAN},
     {"customTrackLoader", OPTION_BOOLEAN},
+    {"fillInScore", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -102,6 +104,7 @@ errAbort(
   "   -allowNegativeScores  - sql definition of score column is int, not unsigned\n"
   "   -customTrackLoader  - turns on: -noNameIx, -noHistory, -ignoreEmpty,\n"
   "                         -allowNegativeScores -verbose=0\n"
+  "   -fillInScore=colName - if every score value is zero, then use column 'colName' to fill in the score column (assigning scores 100-1000)\n"
   "   -verbose=N - verbose level for extra information to STDERR\n"
   );
 }
@@ -454,6 +457,44 @@ if ( ! noLoad )
 		slCount(bedList), track);
 	hgHistoryComment(conn, comment);
 	}
+    if(fillInScoreColumn != NULL)
+        {
+        char query[500];
+        char buf[500];
+        struct sqlResult *sr;
+        safef(query, sizeof(query), "select sum(score) from %s", track);
+        if(sqlQuickQuery(conn, query, buf, sizeof(buf)))
+            {
+            unsigned sum = sqlUnsigned(buf);
+            if (!sum)
+                {
+                safef(query, sizeof(query), "select min(%s), max(%s) from %s", fillInScoreColumn, fillInScoreColumn, track);
+                if ((sr = sqlGetResult(conn, query)) != NULL)
+                    {
+                    char **row = sqlNextRow(sr);
+                    if(row != NULL)
+                        {
+                        float min = sqlFloat(row[0]);
+                        float max = sqlFloat(row[1]);
+                        sqlFreeResult(&sr);
+
+                        // Calculate a, b s/t f(x) = ax + b maps min-max => 100-1000
+                        float a = 900 / (max - min);
+                        float b = 1000 - (900 * max) / (max - min);
+
+                        safef(query, sizeof(query), "update %s set score = round((%f * %s) + %f)",  track, a, fillInScoreColumn, b);
+                        int changed = sqlUpdateRows(conn, query, NULL);
+                        verbose(2, "update query: %s; changed: %d\n", query, changed);
+                        }
+                    else
+                        {
+                        sqlFreeResult(&sr);
+                        }
+                    }
+                }
+            }
+
+        }
     sqlDisconnect(&conn);
     /*	if temp dir specified, unlink file to make it disappear */
     if ((char *)NULL != tmpDir)
@@ -553,6 +594,7 @@ if (customTrackLoader)
     allowNegativeScores = TRUE;
     verboseSetLevel(0);
     }
+fillInScoreColumn = optionVal("fillInScore", NULL);
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
