@@ -63,6 +63,15 @@ size_t ptToSizet(void *pt);
 /* Convert pointer to size_t.  Use when really want to store a
  * pointer in a size_t. */
 
+boolean parseQuotedStringNoEscapes( char *in, char *out, char **retNext);
+/* Read quoted string from in (which should begin with first quote).
+ * Write unquoted string to out, which may be the same as in.
+ * Return pointer to character past end of string in *retNext. 
+ * Return FALSE if can't find end.
+ * Unlike parseQuotedString() do not treat backslash as an escape
+ *	character, merely pass it on through.
+ */
+
 boolean parseQuotedString( char *in, char *out, char **retNext);
 /* Read quoted string from in (which should begin with first quote).
  * Write unquoted string to out, which may be the same as in.
