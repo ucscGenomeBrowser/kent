@@ -198,6 +198,11 @@ hashTest1: ${BIN_DIR}/testHash mkdirs
 	${BIN_DIR}/testHash input/$@.txt > output/$@.out
 	diff expected/$@.out output/$@.out
 
+${BIN_DIR}/testQuotedString: mkdirs testQuotedString.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/testQuotedString testQuotedString.o ${MYLIBS}
+
+testQuotedString:	${BIN_DIR}/testQuotedString mkdirs
+	${BIN_DIR}/testQuotedString -verbose=2 quote this\\ following
 
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out
