@@ -29,7 +29,7 @@
 
 include ../../../inc/common.mk
 
-DBS = 	hg13 hg15 hg16 hg17 hg18\
+DBS = 	hg16 hg17 hg18\
 	venter1 \
 	panTro1 panTro2 \
 	ponAbe1 ponAbe2 \
@@ -38,11 +38,11 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	otoGar1 tupBel1\
 	canFam1 canFam2 \
 	felCat3 \
-	mm2 mm3 mm4 mm5 mm6 mm7 mm8 mm9 \
-	rn2 rn3 rn4 \
+	mm6 mm7 mm8 mm9 \
+	rn3 rn4 \
 	speTri1 cavPor3 \
 	oryCun1 \
-	bosTau1 bosTau2 bosTau3 bosTau4 \
+	bosTau2 bosTau3 bosTau4 \
 	equCab1 \
 	equCab2 \
 	turTru1 vicVic1 pteVam1 tarSyr1 \
@@ -63,7 +63,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	petMar1 \
 	braFlo1 \
 	cioSav1 \
-	danRer2 danRer3 danRer4 danRer5 \
+	danRer3 danRer4 danRer5 \
 	gasAcu1 \
 	dm1 dm2 dm3 \
 	dp2 dp3 \
@@ -83,7 +83,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	ci1 ci2 cioSav2 \
 	strPur1 strPur2 \
     nemVec1 \
-	ce1 ce2 ce3 ce4 ce6 \
+	ce2 ce3 ce4 ce6 \
 	cb1 cb2 cb3 \
 	caeRem1 caeRem2 caeRem3 \
 	caeJap1 \
