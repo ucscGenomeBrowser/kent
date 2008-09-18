@@ -6,7 +6,7 @@
 #include "genomeRangeTreeFile.h"
 #include "baseMaskCommon.h"
 
-static char const rcsid[] = "$Id: baseMaskCommon.c,v 1.6 2008/09/17 19:43:49 mikep Exp $";
+static char const rcsid[] = "$Id: baseMaskCommon.c,v 1.7 2008/09/18 03:51:57 mikep Exp $";
 
 //#define MJP verbose(1,"%s[%3d]: ", __func__, __LINE__);
 
@@ -190,14 +190,14 @@ static void writeCacheLog(char *file, char *db, char *table, time_t newCacheTime
 {
 char buf[1024], timeBuf[1024];
 safef(buf, sizeof(buf), "%s.%s: ", db, table);
-formatTime(timeBuf, sizeof(timeBuf), "new_cache=[", newCacheTime, "] ");
+formatTime(timeBuf, sizeof(timeBuf), "newCache=[", newCacheTime, "] ");
 safecat(buf, sizeof(buf), timeBuf);
 formatTime(timeBuf, sizeof(timeBuf), "tableUpdateTime=[", tableTime, "] ");
 safecat(buf, sizeof(buf), timeBuf);
 if (oldCacheTime<=0)
-    safef(timeBuf, sizeof(timeBuf), "old_cache=[]\n");
+    safef(timeBuf, sizeof(timeBuf), "oldCache=[]\n");
 else
-    formatTime(timeBuf, sizeof(timeBuf), "old_cache=[", oldCacheTime, "]\n");
+    formatTime(timeBuf, sizeof(timeBuf), "oldCache=[", oldCacheTime, "]\n");
 safecat(buf, sizeof(buf), timeBuf);
 FILE *f = mustOpen(file, "a");
 mustWrite(f, buf, strlen(buf));
