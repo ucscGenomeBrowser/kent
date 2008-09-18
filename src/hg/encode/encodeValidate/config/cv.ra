@@ -357,4 +357,12 @@ term proteinRnaExtracts
 type rnaExtract
 description RNA associated with RNA binding proteins 
 
+# promoters
+term SV40
+type promoter
+description Simian Virus 40 (SV40) Early Core Promoter 
+
+term G-gamma
+type promoter
+description promoter for the G-gamma globulin genes
 
