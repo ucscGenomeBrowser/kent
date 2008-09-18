@@ -2,11 +2,11 @@
 # in various databases.
 
 # Define databases used for various organisms
-set hg hg15,hg16,hg17,hg18
-set mm mm3,mm4,mm5,mm6,mm7,mm8,mm9
-set rn rn2,rn3,rn4
+set hg hg16,hg17,hg18
+set mm mm7,mm8,mm9
+set rn rn3,rn4
 set fr fr1,fr2
-set ce ce1,ce2,ce4,ce6
+set ce ce2,ce4,ce6
 set cb cb1,cb3
 set dm dm1,dm2,dm3
 set dp dp2,dp3
@@ -14,7 +14,7 @@ set sacCer sacCer1
 set panTro panTro1,panTro2
 set galGal galGal2,galGal3
 set ci ci1,ci2
-set danRer danRer1,danRer2,danRer3,danRer4,danRer5
+set danRer danRer3,danRer4,danRer5
 set canFam canFam1,canFam2
 set droYak droYak1,droYak2
 set droMoj droMoj1,droMoj2
@@ -27,8 +27,8 @@ set cioSav cioSav1
 set tetNig tetNig1
 set xenTro xenTro1,xenTro2
 set monDom monDom1,monDom4
-set bosTau bosTau1,bosTau2,bosTau3,bosTau4
-set rheMac rheMac1,rheMac2
+set bosTau bosTau2,bosTau3,bosTau4
+set rheMac rheMac2
 set strPur strPur1,strPur2
 set felCat felCat3
 set gasAcu gasAcu1
