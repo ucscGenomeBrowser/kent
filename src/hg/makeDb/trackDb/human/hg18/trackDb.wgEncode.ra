@@ -252,6 +252,23 @@ wgEncode 1
     #configurable on
     dateSubmitted   2008-06-07 10:27:26
 
+track wgEncodeDukeDnase
+compositeTrack on
+shortLabel Elnitski NRE
+longLabel ENCODE Elnitski Negative Regulatory Elements
+group regulation
+subGroup1 view Views SI=Silencers EB=Enhancer_Blockers
+subGroup2 cellType Cell_Line K562=K562
+subGroup3 promoter Promoter SV40=SV40 Ggam=G-gamma
+dimensions dimensionX=cellType dimensionY=promoter
+sortOrder view=+ cellType=+ promoter=+
+dragAndDrop subTracks
+visibilityViewDefaults SI=packed EB=packed
+controlledVocabulary encode/cv.ra cellType promoter
+priority 0
+type bed 3
+wgEncode 1
+
 track wgEncodeHudsonAlphaChipSeq
 compositeTrack on
 shortLabel HudsonAlpha ChIP
