@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.15 2008/06/25 16:08:23 hiram Exp $
+# $Id: HgAutomate.pm,v 1.16 2008/09/19 04:36:22 angie Exp $
 package HgAutomate;
 
 use warnings;
@@ -49,11 +49,14 @@ use File::Basename;
 use vars qw( %cluster %clusterFilesystem $defaultDbHost );
 
 %cluster = 
-    ( 'pk' =>
+    ( 'swarm' => ,
+        { 'enabled' => 1, 'gigaHz' => 2.33, 'ram' => 8,
+	  'hostCount' => 1024, },
+      'pk' =>
         { 'enabled' => 1, 'gigaHz' => 2.0, 'ram' => 4,
 	  'hostCount' => 394, },
       'kk' =>
-        { 'enabled' => 1, 'gigaHz' => 0.8, 'ram' => 1,
+        { 'enabled' => 0, 'gigaHz' => 0.8, 'ram' => 1,
 	  'hostCount' => 600, },
       'memk' =>
         { 'enabled' => 1, 'gigaHz' => 1.0, 'ram' => 32,
@@ -70,18 +73,10 @@ my @allClusters = (keys %cluster);
         { root => '/scratch/hg', clusterLocality => 1.0,
 	  distrHost => [], distrCommand => '',
 	  inputFor => \@allClusters, outputFor => [], },
-      'iscratch' =>
-        { root => '/iscratch/i', clusterLocality => 0.5,
-	  distrHost => ['kkr1u00'], distrCommand => 'iSync',
-	  inputFor => ['kk', 'kk9'], outputFor => [], },
       'san' =>
         { root => '/san/sanvol1/scratch', clusterLocality => 0.5,
 	  distrHost => ['pk', 'kkstore*'], distrCommand => '',
 	  inputFor => ['pk', 'memk'], outputFor => ['pk', 'kk', 'memk'], },
-      'bluearc' =>
-        { root => '/cluster/bluearc', clusterLocality => 0.1,
-	  distrHost => ['kkstore*'], distrCommand => '',
-	  inputFor => \@allClusters, outputFor => \@allClusters, },
     );
 
 $defaultDbHost = 'hgwdev';
@@ -358,7 +353,7 @@ sub chooseFilesystemsForCluster {
   confess "Unrecognized cluster $cluster" if (! $clusterInfo);
   confess "Second arg must be either \"in\" or \"out\""
     if ($inOrOut ne 'in' && $inOrOut ne 'out');
-  my @filesystems = ();
+  my @filesystems = ('/hive/data/genomes');
   foreach my $fs (keys %clusterFilesystem) {
     my $fsInfo = $clusterFilesystem{$fs};
     my @okClusters = ($inOrOut eq 'in') ?
