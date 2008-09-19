@@ -1,12 +1,18 @@
 name human
 db hg17
 
+name mouse
+db mm7
+
 name zebrafish
 db danRer3
 otherUrl http://apr2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
 
 name drosophila
 db dm2
+
+name cElegans
+db ce2
 
 name yeast
 db sacCer1
