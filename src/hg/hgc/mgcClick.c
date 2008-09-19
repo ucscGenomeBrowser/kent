@@ -331,8 +331,6 @@ static struct cloneInfo *orfeomeCloneInfoLoad(struct sqlConnection *conn, char *
 {
 struct cloneInfo *ci = cloneInfoLoad(conn, acc, start, "orfeomeGenes");
 ci->isMgc = FALSE;
-if (ci->imageId == 0)
-    errAbort("no IMAGE:nnnn entry in mrnaClone table for ORRFeome clone %s", acc);
 return ci;
 }
 
@@ -405,16 +403,21 @@ webPrintLinkCellEnd();
 webPrintLinkTableNewRow();
 
 webPrintLinkCellStart();
-hgcAnchorSomewhere("htcGeneMrna", acc, table, seqName);
+hgcAnchorSomewhere("htcDisplayMrna", acc, table, seqName);
 printf("Reference genome mRNA</A>");
 webPrintLinkCellEnd();
 
+// FIXME: this is current broken with psl track.
+#if BROKEN
 webPrintLinkCellStart();
 hgcAnchorSomewhere("htcTranslatedPredMRna", acc, table, seqName);
 printf("Reference genome protein</A>");
 webPrintLinkCellEnd();
 
 webFinishPartialLinkTable(1, 2, 3);
+#else
+webFinishPartialLinkTable(1, 1, 3);
+#endif
 
 webPrintLinkTableEnd();
 }

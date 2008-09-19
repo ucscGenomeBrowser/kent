@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.87 2008/09/10 22:59:14 larrym Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.88 2008/09/19 20:10:56 markd Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -2056,7 +2056,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
     slAddHead(&trackList, track);
     }
 customPpFree(&cpp);
-sqlDisconnect(&ctConn);
+hFreeConn(&ctConn);
 }
 
 char *ctInitialPosition(struct customTrack *ct)
