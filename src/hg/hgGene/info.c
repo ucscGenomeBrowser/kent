@@ -9,7 +9,7 @@
 #include "txInfo.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: info.c,v 1.3 2008/09/03 19:18:50 markd Exp $";
+static char const rcsid[] = "$Id: info.c,v 1.4 2008/09/19 20:21:31 kuhn Exp $";
 
 void doTxInfoDescription(struct sqlConnection *conn)
 /* Put up info on fields in txInfo table. */
@@ -49,7 +49,7 @@ printf("%s",
 "before it can produce a detectable amount of protein. Therefore when this condition\n"
 "is true we remove the predicted coding region  from the transcript.</LI>\n"
 "<LI><B>CDS single in 3' UTR</B> - This is a strong indicator that the coding region\n"
-"(CDS) is a coincedental open reading frame  rather than a true indication \n"
+"(CDS) is a coincidental open reading frame  rather than a true indication \n"
 "that the transcript codes for protein.  This indicates that the coding sequence \n"
 "resides in a single exon, and that this exon is located entirely in the 3' UTR \n"
 "of another transcript that codes for a different protein not overlapping the \n"
