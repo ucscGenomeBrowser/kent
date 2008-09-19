@@ -1,9 +1,6 @@
 name human
 db hg16
 
-name mouse
-db mm6
-
 name zebrafish
 db danRer3
 otherUrl http://apr2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
