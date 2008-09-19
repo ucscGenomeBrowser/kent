@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl instead.
 
-# $Id: doSameSpeciesLiftOver.pl,v 1.4 2007/08/13 20:45:19 angie Exp $
+# $Id: doSameSpeciesLiftOver.pl,v 1.5 2008/09/19 04:38:08 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -55,7 +55,7 @@ options:
                           $HgAutomate::clusterData/\$fromDb/$HgAutomate::trackBuild/blat.\$toDb.\$date
                           (necessary when continuing at a later date).
     -ooc /path/11.ooc     Use this instead of the default
-                          /cluster/bluearc/fromDb/11.ooc
+                          /hive/data/genomes/fromDb/11.ooc
                           Can be "none".
 _EOF_
   ;
@@ -152,7 +152,7 @@ sub doAlign {
   my $runDir = "$buildDir/run.blat";
   &HgAutomate::mustMkdir($runDir);
 
-  my $ooc = "/cluster/bluearc/$tDb/11.ooc";
+  my $ooc = "/hive/data/genomes/$tDb/11.ooc";
   if ($opt_ooc) {
     if ($opt_ooc eq 'none') {
       $ooc = "";
