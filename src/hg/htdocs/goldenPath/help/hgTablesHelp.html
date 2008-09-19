@@ -61,6 +61,7 @@
         	  <LI><A CLASS="toc" HREF="#AllFields">Displaying all fields in a table</A>
         	  <LI><A CLASS="toc" HREF="#SelectedFields">Displaying selected fields from one or more tables</A>
         	  <LI><A CLASS="toc" HREF="#Sequence">Displaying sequence (FASTA) data</A>
+        	  <LI><A CLASS="toc" HREF="#FASTA">Displaying CDS FASTA alignments</A>
         	  <LI><A CLASS="toc" HREF="#GTF_BED">Saving query results in GTF or BED format</A>
         	  <LI><A CLASS="toc" HREF="#SaveFile">Saving data to a file</A>
         	  <LI><A CLASS="toc" HREF="#CustomTrack">Saving data as a custom track</A>
@@ -967,6 +968,80 @@
 	      Gene Predictions</em> group, you will be offered the option to
 	      view the protein sequence associated with the track rather than
 	      the genomic sequence.
+	      <P>
+
+<!------ CDS FASTA alignments -------------------->
+<A NAME="FASTA"></A>
+	      <HR>
+	      <FONT SIZE="3" COLOR="#0000FF"><B>Displaying CDS FASTA alignments</B> (genePred tables only)</FONT>
+	      <P>
+	      CDS FASTA alignments have different formats based on what 
+	      options are selected in the MAF table selection dialog.
+	      <P>
+	      <UL>
+	      <LI><B>Show nucleotides</B> -
+	      Normally the nucleotides in the alignment are translated
+	      into amino acids according to the strand and exon frames
+	      defined in the selected genePred table.
+	      If this button is checked then the nucleotides
+	      in the alignment will not be translated into amino
+	      acids.  
+	      <LI><B>Output lines with just dashes</B> - 
+	      Normally alignment rows with only dashes
+	      aren't printed.  If this button is checked then
+	      these rows are printed.
+	      <LI><B>Separate into exons</B>-
+	      Normally the coding exons of each gene are concatenated into
+	      one sequence in the output FASTA alignment. In this
+	      case each output row header has the format listed
+	      below under "Whole gene format".
+	      If this button is pressed then then each exon
+	      will output with a separate header in the format
+	      listed below under "Exon format".
+	      </UL>
+	      Whole gene format:
+	      <pre>
+	      geneName_assemblyName peptideLength location
+	      </pre>
+	      Exon format:
+	      <pre>
+	      geneName_assemblyName_exonNum_totalExons exonLength inFrame outFrame location
+	      </pre>
+	      Following are the descriptions for each field name:
+	      <UL>
+	      <LI><B>geneName</B>- the name field from the genePred table.
+	      <LI><B>assemblyName</B>- the UCSC assembly id for the species.
+	      <LI><B>peptideLength</B>- the length of the entire coding region.
+	      If the "Show nucleotides" button is checked, this will be in 
+	      nucleotides, otherwise it will be the number of amino acids in 
+	      the peptide.
+	      <LI><B>location</B>- this is the chromosome position within the 
+	      assembly that is aligned in the multiple alignment.  The format
+	      of this string is chrom:start-end followed by the strand
+	      where the alignment occurs.  If more than one region is
+	      aligned than all the regions are listed with a semi-colon (;)
+	      between each position.  This address is in genome browser
+	      coordinates (i.e. the start address is one-based).
+	      <LI><B>exonNum</B>- the ordinal of the exon.  Exons are
+	      counted starting at one and begin at the transcription start site
+	      and progressing along the strand of transcription.
+	      <LI><B>totalExons</B>- the number of coding exons in the gene.
+	      <LI><B>exonLength</B>- the length of the current exon.
+	      If the "Show nucleotides" button is checked, this will be the 
+	      number of nucleotides in the exon, otherwise it will be 
+	      the number of amino acids in 
+	      the exon (with the amino acid translated from split codons 
+	      placed in the exon where two of the three nucleotides lie).
+	      <LI><B>inFrame</B>- the frame number of the first nucleotide
+	      in the exon. Frame numbers can be 0, 1, or 2 depending on
+	      what position that nucleotide takes in the codon which
+	      contains it.
+	      <LI><B>outFrame</B>- the frame number of the next nucleotide
+	      after the last nucleotide in this exon.
+	      Frame numbers can be 0, 1, or 2 depending on
+	      what position that nucleotide takes in the codon which
+	      contains it.
+	      </UL>
 	      <P>
 
 <!------GTF/BED Format---------------------->
