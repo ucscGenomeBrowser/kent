@@ -258,16 +258,27 @@ shortLabel Elnitski NRE
 longLabel ENCODE Elnitski Negative Regulatory Elements
 group regulation
 subGroup1 view Views SI=Silencers EB=Enhancer_Blockers
-subGroup2 cellType Cell_Line K562=K562
+subGroup2 cellType Cell_Line K562=K562 Hela=HeLa-S3
 subGroup3 promoter Promoter SV40=SV40 Ggam=G-gamma
 dimensions dimensionX=cellType dimensionY=promoter
 sortOrder view=+ cellType=+ promoter=+
 dragAndDrop subTracks
-visibilityViewDefaults SI=packed EB=packed
+visibilityViewDefaults SI=pack EB=pack
 controlledVocabulary encode/cv.ra cellType promoter
 priority 0
 type bed 3
 wgEncode 1
+
+        track   wgEncodeNHGRINRESilencersK562SV40
+        subTrack        wgEncodeNHGRINRE
+        shortLabel      K562
+        longLabel       ENCODE Elnitski Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
+        subGroups       view=SI cellType=K562 promoter=SV40 
+        type    bed 6
+        dateSubmitted   2008-09-18 17:19:9
+        priority        1
+        noInherit       on
+        cell    K562
 
 track wgEncodeHudsonAlphaChipSeq
 compositeTrack on
