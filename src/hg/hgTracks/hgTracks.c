@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1514 2008/09/15 23:42:00 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1515 2008/09/19 16:14:16 markd Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3951,7 +3951,7 @@ printf("<LI><A HREF=\"%s\">Click here</A> "
        "to download the current browser graphic in PostScript.  ", psTn.forCgi);
 if (strlen(ideoPsTn.forCgi))
     printf("<LI><A HREF=\"%s\">Click here</A> "
-           "to download the current browser ideogram in PostScript.  ", ideoPsTn.forCgi);
+           "to download the current chromosome ideogram in PostScript.  ", ideoPsTn.forCgi);
 printf("</UL>\n");
 
 pdfFile = convertEpsToPdf(psTn.forCgi);
@@ -3965,7 +3965,7 @@ if(pdfFile != NULL)
 	   "to download the current browser graphic in PDF.", pdfFile);
     if (ideoPdfFile != NULL)
         printf("<LI><A TARGET=_blank HREF=\"%s\">Click here</A> "
-               "to download the current browser ideogram in PDF.", ideoPdfFile);
+               "to download the current chromosome ideogram in PDF.", ideoPdfFile);
     printf("</UL>\n");
     freez(&pdfFile);
     freez(&ideoPdfFile);
