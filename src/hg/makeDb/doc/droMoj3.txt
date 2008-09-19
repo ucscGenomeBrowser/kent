@@ -176,3 +176,24 @@ BASE=/cluster/data/droMoj3/bed/blastz.droGri2.2006-10-02
     ln -s blastz.droGri2.2006-10-02 /cluster/data/droMoj3/bed/blastz.droGri2
 
 
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE 9/18/08 angie)
+    # Use -repMatch=100 like droMoj2.
+    ssh kolossus
+    blat /hive/data/genomes/droMoj3/droMoj3.2bit /dev/null /dev/null \
+      -tileSize=11 -makeOoc=/hive/data/genomes/droMoj3/11.ooc -repMatch=100
+#Wrote 17148 overused 11-mers to /hive/data/genomes/droMoj3/11.ooc
+
+
+#########################################################################
+# LIFTOVER TO DROMOJ2 (DONE 9/18/08)
+    doSameSpeciesLiftOver.pl -bigClusterHub=swarm -workhorse=kolossus \
+      droMoj3 droMoj2 -debug
+# *** Steps were performed in /cluster/data/droMoj3/bed/blat.droMoj2.2008-09-18
+    cd /cluster/data/droMoj3/bed/blat.droMoj2.2008-09-18
+    doSameSpeciesLiftOver.pl -bigClusterHub=swarm -workhorse=kolossus \
+      -ooc=/hive/data/genomes/droMoj3/11.ooc droMoj3 droMoj2 >& do.log &
+    tail -f do.log
+
+
+#########################################################################
