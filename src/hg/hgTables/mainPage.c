@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.130 2008/09/18 21:35:45 braney Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.131 2008/09/20 20:10:20 braney Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -497,10 +497,8 @@ else if (isPositional)
     slAddTail(&otList, &otSelected);
     slAddTail(&otList, &otSequence);
     slAddTail(&otList, &otGff);
-#ifdef HGPAL
     if (isGenePred)
 	slAddTail(&otList, &otPal);
-#endif
     slAddTail(&otList, &otBed);
     slAddTail(&otList, &otCustomTrack);
     slAddTail(&otList, &otHyperlinks);
