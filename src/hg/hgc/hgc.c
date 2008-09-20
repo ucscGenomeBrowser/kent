@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1462 2008/09/09 17:49:32 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1463 2008/09/20 20:06:47 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -9001,12 +9001,7 @@ printf("<table border=0>\n<tr>\n");
 prRefGeneInfo(conn, rnaName, sqlRnaName, rl, isXeno);
 addGeneExtra(rl->name);  /* adds columns if extra info is available */
 
-#ifdef HGPAL
 addPalLink(tdb->tableName,  chrom, left, right, rnaName);
-#else
-chrom = 0;
-left = right = 0;
-#endif
 
 printf("</tr>\n</table>\n");
 
