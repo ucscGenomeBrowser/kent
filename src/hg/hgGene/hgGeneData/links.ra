@@ -28,6 +28,15 @@ hgsid on
 dbInUrl on
 priority 1
 
+name palTrack
+shortLabel Protein FASTA
+tables knownGene
+idSql select chrom,txStart+1,txEnd,name from knownGene where name = '%s'
+url ../cgi-bin/hgPal?g=knownGene&c=%s&l=%s&r=%s&i=%s
+hgsid on
+dbInUrl on
+priority 1
+
 name tbSchema
 shortLabel Table Schema
 tables knownGene
@@ -144,3 +153,4 @@ idSql select kgID from kgXref where kgID = '%s'
 url ../cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=none&hgg_do_wikiTrack=1
 dbInUrl on
 priority 10
+
