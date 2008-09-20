@@ -467,6 +467,14 @@ void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd,
 /* Draw a box scaled from chromosome to window coordinates. 
  * Get scale first with scaleForPixels. */
 
+void drawScaledBoxBlend(struct hvGfx *hvg, int chromStart, int chromEnd, 
+	double scale, int xOff, int y, int height, Color color);
+/* Draw a box scaled from chromosome to window coordinates. 
+ * Get scale first with scaleForPixels. 
+ * use colorBin to collect multiple colors for the same pixel, choose
+ * majority color, break ties by blending the colors. 
+ * Yellow and red are blended as brown, other colors not implemented.*/
+
 Color whiteIndex();
 /* Return index of white. */
 

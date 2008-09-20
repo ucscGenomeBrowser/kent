@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.34 2008/09/14 23:44:23 baertsch Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.35 2008/09/20 09:35:15 baertsch Exp $";
 
 #define CHROM_COLORS 26
 
@@ -182,7 +182,7 @@ boolean withGuidelines = TRUE;		/* Display guidelines? */
 boolean withNextExonArrows = FALSE;	/* Display next exon navigation buttons near center labels? */
 boolean revCmplDisp = FALSE;          /* reverse-complement display */
 
-boolean measureTiming = FALSE;	/* Flip this on to display timing
+boolean measureTiming = TRUE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
 struct track *trackList = NULL;    /* List of all tracks. */
 struct cart *cart;	/* The cart where we keep persistent variables. */
@@ -931,6 +931,22 @@ void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd,
 int x1 = round((double)(chromStart-winStart)*scale) + xOff;
 int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
 int w = x2-x1;
+if (w < 1)
+    w = 1;
+hvGfxBox(hvg, x1, y, w, height, color);
+}
+
+void drawScaledBoxBlend(struct hvGfx *hvg, int chromStart, int chromEnd, 
+	double scale, int xOff, int y, int height, Color color)
+/* Draw a box scaled from chromosome to window coordinates. 
+ * Get scale first with scaleForPixels. 
+ * use colorBin to collect multiple colors for the same pixel, choose
+ * majority color, break ties by blending the colors. 
+ * Yellow and red are blended as brown, other colors not implemented.*/
+{
+int x1 = round((double)(chromStart-winStart)*scale) + xOff;
+int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
+int w = x2-x1;
 int maxColor = color;
 int maxCount = 0;
 int col;
@@ -969,7 +985,6 @@ if (w < 1)
 hvGfxBox(hvg, x1, y, w, height, maxColor);
 }
 
-
 void drawScaledBoxSample(struct hvGfx *hvg, 
 	int chromStart, int chromEnd, double scale, 
 	int xOff, int y, int height, Color color, int score)
@@ -986,17 +1001,6 @@ w = x2-x1;
 if (w < 1)
     w = 1;
 hvGfxBox(hvg, x1, y, w, height, color);
-#ifdef staleCode
-if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= winEnd))
-    {
-    for (i = x1 ; i < x1+w; i++)
-        {
-        assert(i<MAXPIXELS);
-        z = colorBin[i][color] ;  /*pick color of highest scoring alignment  for this pixel */
-        colorBin[i][color] = (z > score)? z : score;
-        }
-    }
-#endif
 }
 
 

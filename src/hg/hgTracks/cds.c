@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.85 2008/09/14 23:22:37 baertsch Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.86 2008/09/20 09:35:15 baertsch Exp $";
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -1431,13 +1431,14 @@ for (sf = lf->codons; sf != NULL; sf = sf->next)
 	    if (mrnaCodon == '\0')
 		mrnaCodon = '*';
 	    colorAndCodonFromGrayIx(hvg, genomicCodon, sf->grayIx, dummyColor);
-            if (mrnaCodon != genomicCodon[0] && protEquivalent(genomicCodon[0], mrnaCodon))
-                    color = cdsColor[CDS_SYN_PROT];
-            //if (sf->grayIx < 0 || mrnaCodon != genomicCodon[0]) 
-             //   printf("color %d codon %c %c s-e %d-%d ",color, genomicCodon[0], mrnaCodon, s, e);
-	    if (queryInsertion ||
-		(genomicCodon[0] != 'X' && mrnaCodon != genomicCodon[0]))
+	    if (queryInsertion)
 		drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
+            if ((genomicCodon[0] != 'X' && mrnaCodon != genomicCodon[0])) 
+                {
+                if (mrnaCodon != genomicCodon[0] && protEquivalent(genomicCodon[0], mrnaCodon))
+                    color = cdsColor[CDS_SYN_PROT];
+                    drawScaledBoxBlend(hvg, s, e, scale, xOff, y, heightPer, color);
+                }
 	    }
 	else
 	    {

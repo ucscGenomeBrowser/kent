@@ -77,9 +77,9 @@
 #define CDS_SYN_PROT_G  215 
 #define CDS_SYN_PROT_B  0
 
-#define CDS_SYN_BLEND    12  /* orange, protein seq part syn and part non-syn */
-#define CDS_SYN_BLEND_R  220 
-#define CDS_SYN_BLEND_G  128 
+#define CDS_SYN_BLEND    12  /* brown, protein seq part syn and part non-syn */
+#define CDS_SYN_BLEND_R  100 
+#define CDS_SYN_BLEND_G  50 
 #define CDS_SYN_BLEND_B  0
 
 #define CDS_NUM_COLORS 13
