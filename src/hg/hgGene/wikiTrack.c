@@ -15,7 +15,7 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.21 2008/09/03 19:18:50 markd Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.22 2008/09/20 00:01:33 hiram Exp $";
 
 static char *hgGeneUrl()
 {
@@ -290,7 +290,7 @@ safef(transcriptTag, ArraySize(transcriptTag), "%s", curGeneId);
 
 if (canonical)
     dyStringPrintf(extraHeader,
-	"Canonical gene details [http://%s/cgi-bin/hgGene?org=%s&hgg_gene=%s "
+	"Canonical gene details [http://%s/cgi-bin/hgGene?hgg_chrom=none&org=%s&hgg_gene=%s "
 	    "%s %s]<BR>\n",
 	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), genome,
 	    canonical, name, canonical);
@@ -303,7 +303,7 @@ if ((slCount(allIsoforms) > 1) || (!canonical))
 	if (isNotEmpty(canonical) && sameWord(canonical,el->name))
 	    continue;
 	dyStringPrintf(extraHeader,
-	    "[http://%s/cgi-bin/hgGene?org=%s&hgg_gene=%s %s]",
+	    "[http://%s/cgi-bin/hgGene?hgg_chrom=none&org=%s&hgg_gene=%s %s]",
 		cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER),
 		    genome, el->name, el->name);
 	if (el->next)
