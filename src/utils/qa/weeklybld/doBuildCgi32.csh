@@ -37,7 +37,7 @@ echo
 echo  "NOW STARTING 32-BIT CGI BUILD ON $BOX32"
 echo
 
-ssh $BOX32 $WEEKLYBLD/buildCgi32.csh
+ssh -n $BOX32 $WEEKLYBLD/buildCgi32.csh
 if ( $status ) then
     echo "build 32-bit CGIs on $HOST failed"
     exit 1
