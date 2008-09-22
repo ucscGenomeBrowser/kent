@@ -39,10 +39,19 @@ getLiftOver.csh $db hgwbeta | tee -a $db.liftOverList
 echo
 
 echo "------------"
+# get hgGene connections (blastTab)
+echo "knownGenes using ${db}:"
+find ~/kent/src/hg/hgGene -name otherOrgs.ra | xargs grep $db \
+  | awk -F":" '{print $1}' > $db.kgList
+sed "s/\// /g" $db.kgList  | awk '{print $(NF-1)}' | sort 
+echo
+
+echo "------------"
 echo "unique set of assemblies with tracks:"
 cat $db.fullList | grep -v found | awk '{print $1}' | grep . | sort -u
 echo
 
+echo "------------"
 echo "liftOver set:"
 cat $db.liftOverList | grep -v hgwbeta | awk '{print $1}' | grep . | sort -u
 
