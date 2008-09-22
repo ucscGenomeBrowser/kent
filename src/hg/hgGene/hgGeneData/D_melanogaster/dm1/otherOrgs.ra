@@ -2,14 +2,14 @@ name human
 db hg16
 
 name mouse
-db mm7 
+db mm6 
 
 name zebrafish
 db danRer3
 otherUrl http://apr2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
 
 name cElegans
-db ce2
+db ce1
 
 name yeast
 db sacCer1
