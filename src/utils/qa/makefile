@@ -43,7 +43,7 @@ install:
 	cp -p --remove-destination dbUpdateTimes.csh       ${SCRIPTS}
 	cp -p --remove-destination dropUserTables.csh      ${SCRIPTS}
 	cp -p --remove-destination dumpEmpty.csh           ${SCRIPTS}
-	cp -p --remove-destination findArchPartners.csh    ${SCRIPTS}
+	cp -p --remove-destination findDbPartners.csh      ${SCRIPTS}
 	cp -p --remove-destination findBigFiles.csh        ${SCRIPTS}
 	cp -p --remove-destination findBlatServer.csh      ${SCRIPTS}
 	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
