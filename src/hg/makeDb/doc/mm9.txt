@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.74 2008/08/28 21:18:58 hiram Exp $"
+#	"$Id: mm9.txt,v 1.75 2008/09/22 23:24:52 mikep Exp $"
 #
 
 #######################################################################
@@ -8501,3 +8501,98 @@ TMPDIR=/scratch/tmp
     #	real    15m26.642s
     cat fb.oryLat2.chainMm9Link.txt
     #	45837267 bases of 700386597 (6.545%) in intersection
+
+#######################################
+# Wold RNA-seq data (Done Jul 30 mikep)
+#
+
+df .
+#Filesystem           1K-blocks      Used Available Use% Mounted on
+#kkstore06-10:/export/cluster/store4
+#                     2402304448 2183573728  96700640  96% /cluster/store4
+ssh kkstore06
+cd /cluster/store4/mm9/bed/woldRnaSeq/
+
+# naming convention: woldRnaSeq (Signal) Tissue Replicate
+
+# rename input wigs to convention
+mv mm9Brain.wig   woldRnaSeqSignalBrain1.wigbed
+mv mm9Brain2.wig  woldRnaSeqSignalBrain2.wigbed
+mv mm9Liver.wig   woldRnaSeqSignalLiver1.wigbed
+mv mm9Liver2.wig  woldRnaSeqSignalLiver2.wigbed
+mv mm9Muscle.wig  woldRnaSeqSignalMuscle1.wigbed
+mv mm9Muscle2.wig woldRnaSeqSignalMuscle2.wigbed
+
+# wigEncode it all
+for T in Brain Liver Muscle
+do 
+  for R in 1 2
+  do
+  wigEncode woldRnaSeqSignal${T}${R}.wigbed woldRnaSeqSignal${T}${R}.wig woldRnaSeqSignal${T}${R}.wib
+  done
+done
+
+#Converted woldRnaSeqSignalBrain1.wigbed, upper limit 12989.00, lower limit 1.00
+#Converted woldRnaSeqSignalBrain2.wigbed, upper limit 1482.24, lower limit 0.04
+#Converted woldRnaSeqSignalLiver1.wigbed, upper limit 44652.00, lower limit 1.00
+#Converted woldRnaSeqSignalLiver2.wigbed, upper limit 2567.53, lower limit 0.06
+#Converted woldRnaSeqSignalMuscle1.wigbed, upper limit 60949.00, lower limit 1.00
+#Converted woldRnaSeqSignalMuscle2.wigbed, upper limit 2726.96, lower limit 0.06
+
+# Load on hgwdev
+ssh hgwdev
+
+for T in Brain Liver Muscle
+do 
+  for R in 1 2
+  do
+  ln -s /cluster/data/mm9/bed/woldRnaSeq/woldRnaSeqSignal${T}${R}.wib /gbdb/mm9/wib/
+  hgLoadWiggle mm9 woldRnaSeqSignal${T}${R} woldRnaSeqSignal${T}${R}.wig 
+  done
+done
+rm wiggle.tab
+
+# do the beds
+for F in data/*beds*tgz
+do
+  echo "untaring $F"
+  tar zxvf $F
+done
+
+# How many records in the beds?
+ wc -l *bed
+#   8868804 mm9Brain1.multi.bed
+#    856281 mm9Brain1.splices.bed
+#  14488584 mm9Brain1.uniqs.bed
+#  16180919 mm9Brain2.multi.bed
+#     54100 mm9Brain2.spike.bed
+#   1570776 mm9Brain2.splices.bed
+#  26519333 mm9Brain2.uniqs.bed
+#  12794917 mm9Liver1.multi.bed
+#   1030969 mm9Liver1.splices.bed
+#  13133048 mm9Liver1.uniqs.bed
+#  17783124 mm9Liver2.multi.bed
+#    414618 mm9Liver2.spike.bed
+#   1372984 mm9Liver2.splices.bed
+#  17673014 mm9Liver2.uniqs.bed
+#  12048985 mm9Muscle1.multi.bed
+#   1150895 mm9Muscle1.splices.bed
+#  13936012 mm9Muscle1.uniqs.bed
+#  16033642 mm9Muscle2.multi.bed
+#    589787 mm9Muscle2.spike.bed
+#   1347749 mm9Muscle2.splices.bed
+#  16632816 mm9Muscle2.uniqs.bed
+# 194481357 total
+
+# Just do the splices ones
+for T in Brain Liver Muscle
+do
+  for R in 1 2
+  do
+  egrep -v "^track" mm9${T}${R}.splices.bed | gawk -v OFS="\t" '{print $1,$2,$3,$4,$5,$6,$2,$3,0,$10,$11,$12}' > woldRnaSeqSplices${T}${R}.bed
+  hgLoadBed mm9 woldRnaSeqSplices${T}${R} woldRnaSeqSplices${T}${R}.bed
+  done
+done
+rm bed.tab
+
+#######################################
