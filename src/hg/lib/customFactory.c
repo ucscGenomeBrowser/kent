@@ -24,7 +24,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.88 2008/09/19 20:10:56 markd Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.89 2008/09/22 05:18:59 larrym Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1191,8 +1191,6 @@ void wigLoaderEncoding(struct customTrack *track, char *wigAscii,
 double lowerLimit = 0.0;
 double upperLimit = 100.0;
 int span = 1;
-
-fprintf(stderr, "wigAscii: %s; dbRequested: %d\n", wigAscii, dbRequested);
 
 /* Load database if requested */
 if (dbRequested)
