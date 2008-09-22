@@ -4,6 +4,8 @@
 #include "cart.h"
 #include "cheapcgi.h"
 
+static char const rcsid[] = "$Id: gvUi.c,v 1.17 2008/09/22 18:53:00 giardine Exp $";
+
 /***************Filters**************/
 
 /* some stuff for mutation type choices */
