@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.64 2008/09/18 23:42:14 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.65 2008/09/22 23:31:11 larrym Exp $
 
 use warnings;
 use strict;
@@ -40,6 +40,8 @@ use vars qw/
     $opt_configDir
     $opt_outDir
     $opt_validateDaf
+    $opt_validateFile
+    $opt_fileType
     $opt_verbose
     /;
 
@@ -59,11 +61,13 @@ Current dafVersion is: $Encode::dafVersion
 
 options:
     -allowReloads       Allow reloads of existing tables
-    -configDir dir      Path of configuration directory, containing
+    -configDir=dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
     -validateDaf	exit after validating DAF file (project-submission-dir is the DAF file name).
-    -verbose num        Set verbose level to num (default 1).
-    -outDir dir         Path of output directory, for validation files
+    -validateFile	exit after validating file (project-submission-dir is the file name; requires -fileType option as well)
+    -fileType=type	used only with validateFile option; e.g. narrowPeak
+    -verbose=num        Set verbose level to num (default 1).
+    -outDir=dir         Path of output directory, for validation files
                         (default: submission-dir/out)
 END
 exit 1;
@@ -229,7 +233,7 @@ my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|))";
 sub validateWig
 {
     my ($path, $file, $type) = @_;
-    my $filePath = "$path/$file";
+    my $filePath = defined($path) ? "$path/$file" : $file;
 
     # XXXX why not do the whole thing, rather than just 1000 lines?
     my @cmds = ("head -1000 $filePath", "wigEncode stdin /dev/null /dev/null");
@@ -247,7 +251,7 @@ sub validateWig
 sub validateBed {
 # Validate each line of a bed 5 or greater file.
     my ($path, $file, $type) = @_;
-    my $filePath = "$path/$file";
+    my $filePath = defined($path) ? "$path/$file" : $file;
     my $line = 0;
     open(FILE, $filePath) or die "Couldn't open file: $filePath; error: $!\n";
     while(<FILE>) {
@@ -291,7 +295,7 @@ sub validateBed {
 sub validateGene {
     my ($path, $file, $type) = @_;
     my $outFile = "validateGene.out";
-    my $filePath = "$path/$file";
+    my $filePath = defined($path) ? "$path/$file" : $file;
     my $err = system (
         "cd $outPath; egrep -v '^track|browser' $filePath | ldHgGene -out=genePred.tab -genePredExt hg18 testTable stdin >$outFile 2>&1");
     if ($err) {
@@ -308,7 +312,7 @@ sub validateGene {
 sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
-    my $filePath = "$path/$file";
+    my $filePath = defined($path) ? "$path/$file" : $file;
     my $line = 0;
     open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
     while(<FILE>) {
@@ -326,7 +330,7 @@ sub validateTagAlign
 sub validateNarrowPeak
 {
     my ($path, $file, $type) = @_;
-    my $filePath = "$path/$file";
+    my $filePath = defined($path) ? "$path/$file" : $file;
     my $line = 0;
     open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
     while(<FILE>) {
@@ -345,7 +349,7 @@ sub validateFastQ
 {
     # Syntax per http://maq.sourceforge.net/fastq.shtml
     my ($path, $file, $type) = @_;
-    my $filePath = "$path/$file";
+    my $filePath = defined($path) ? "$path/$file" : $file;
     my $line = 0;
     open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
     my $state = 'firstLine';
@@ -430,17 +434,26 @@ my $ok = GetOptions("allowReloads",
                     "configDir=s",
                     "outDir=s",
                     "validateDaf",
+                    "validateFile",
+                    "fileType=s",
                     "verbose=i",
                     );
 usage() if (!$ok);
+$opt_verbose = 1 if (!defined $opt_verbose);
+
 usage() if (scalar(@ARGV) < 2);
 
 # Get command-line args
 my $submitType = $ARGV[0];	# currently not used
 my $submitDir = $ARGV[1];
 
-# Get general options
-$opt_verbose = 1 if (!defined $opt_verbose);
+if($opt_validateFile && $opt_fileType) {
+    if(my @errors = checkDataFormat($opt_fileType, $submitDir)) {
+        die "Invalid file: " . join(", ", @errors) . "\n";
+    } else {
+        exit(0);
+    }
+}
 
 # Determine submission, configuration, and output directory paths
 HgAutomate::verbose(2, "Validating submission in directory \'$submitDir\'\n");
