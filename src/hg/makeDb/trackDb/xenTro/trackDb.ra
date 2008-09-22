@@ -16,17 +16,6 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
-release alpha
-
-track mgcGenes
-shortLabel XGC Genes
-longLabel Xenopus Gene Collection Full ORF mRNAs
-group genes
-priority 36
-visibility pack
-color 34,139,34
-type genePred
-release beta
 
 track jgiFilteredModels
 shortLabel JGI Genes
