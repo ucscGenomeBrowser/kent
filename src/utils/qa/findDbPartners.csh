@@ -55,5 +55,6 @@ echo "------------"
 echo "liftOver set:"
 cat $db.liftOverList | grep -v hgwbeta | awk '{print $1}' | grep . | sort -u
 
+rm -f $db.*List
 exit 0
 
