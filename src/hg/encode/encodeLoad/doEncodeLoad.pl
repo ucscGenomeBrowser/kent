@@ -124,7 +124,11 @@ sub loadBedFromSchema
         die "SQL schema '$Encode::sqlCreate/${sqlTable}.sql' does not exist\n";
     }
 
-    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=out -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable");
+    my $fillInArg = "";
+    if($sqlTable =~ /peak/) {
+        $fillInArg = "-fillInScore=signalValue ";
+    }
+    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=out -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
 
     if(my $err = $safe->exec()) {
@@ -239,8 +243,8 @@ print STDERR "\n" if($debug);
 
 my $compositeTrack = Encode::compositeTrackName($daf);
 my $downloadDir = Encode::downloadDir($daf);
-if(! -d $downloadDir) {
-    die "download dir for 'compositeTrack' is not properly configured; please contact your wrangler at: $email\n";
+if(!(-d $downloadDir)) {
+    mkdir $downloadDir || die ("Can't create download directory (error: '$!'); please contact your wrangler at: $email\n");
 }
 
 for my $key (keys %ra) {
@@ -266,6 +270,7 @@ for my $key (keys %ra) {
     my $hgdownload = 0;
 
     if ($h->{downloadOnly}) {
+        # XXXX convert solexa/illumina => sanger fastq when appropriate
         $hgdownload = 1;
     } elsif($type eq "genePred") {
         loadGene($assembly, $tablename, $files, $pushQ);
