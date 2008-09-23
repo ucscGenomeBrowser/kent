@@ -972,45 +972,46 @@
 
 <!------ CDS FASTA alignments -------------------->
 <A NAME="FASTA"></A>
-	      <HR>
-	      <FONT SIZE="3" COLOR="#0000FF"><B>Displaying CDS FASTA alignments</B> (genePred tables only)</FONT>
-	      <P>
-              To display FASTA multiple alignments for the CDS regions of genes,
-              select the <em>CDS FASTA alignment from multiple alignment</em> 
-              option in the <TT><B>output format</B></TT> list. In order to see
-              this output type option, you must have a genePred table selected.
-              </P>
-              <P> 
-              The Table Browser will present you with a configuration page.
-              On this page, you can select options for your ouput.
-              First, select your MAF table.  This is the table from which 
-              the multiple alignments will be extracted for the CDS regions
-              of your gene track. 
-              </P>
-	      <P>
-              Then select any of the following choices:
-	      <UL>
-	      <LI><B>Separate into exons</B> -
-	      The default behavior is for the coding exons of each gene to be
-              concatenated into
-	      one sequence in the output FASTA alignment. In this
-	      case each output row header has the format listed
-	      below under &quot;Whole gene format&quot;.
-	      If this button is pressed then then each exon
-	      will output with a separate header in the format
-	      listed below under &quot;Exon format&quot;.<br>
-              Whole gene format:
-	      <tt>geneName_assemblyName peptideLength location</tt><br>
-	      Exon format:
-	      <tt>geneName_assemblyName_exonNum_totalExons exonLength inFrame 
-              outFrame location</tt><br>
+	  <HR>
+	  <FONT SIZE="3" COLOR="#0000FF"><B>Displaying CDS FASTA alignments</B> (genePred tables only)</FONT>
+	  <P>
+          To display FASTA multiple alignments for the CDS regions of genes,
+          select the <em>CDS FASTA alignment from multiple alignment</em> 
+          option in the <TT><B>output format</B></TT> list. In order to see
+          this output format option, you must have a genePred table 
+          selected.
+          </P>
+          <P> 
+          The Table Browser will present you with a configuration page.
+          On this page, you can select options for your ouput.
+          First, select your MAF table.  This is the table from which 
+          the multiple alignments will be extracted for the CDS regions
+          of your gene track. 
+          </P>
+	  <P>
+          Then select any of the following choices:
+	    <UL>
+	    <LI><B>Separate into exons</B> -
+	    The default behavior is for the coding exons of each gene to be
+            concatenated into
+	    one sequence in the output FASTA multiple alignment. In this
+	    case each output row header has the format listed
+	    below under &quot;Whole gene format&quot;.
+	    If this option is chosen then then each exon will be
+	    listed with a separate header in the format
+	    listed below under &quot;Exon format&quot;.<br>
+            Whole gene format:
+            <tt>geneName_assemblyName peptideLength location</tt><br>
+	    Exon format:
+	    <tt>geneName_assemblyName_exonNum_totalExons exonLength inFrame 
+            outFrame location</tt><br>
 
-	      Following are the descriptions for each field name:
+	    Following are the descriptions for each field name:
 	      <UL>
 	      <LI><B>geneName</B>- the name field from the genePred table.
 	      <LI><B>assemblyName</B>- the UCSC assembly id for the species.
 	      <LI><B>peptideLength</B>- the length of the entire coding region.
-	      If the &quot;Show nucleotides&quot; button is checked, this will 
+	      If the &quot;Show nucleotides&quot; option is chosen, this will 
               be in nucleotides, otherwise it will be the number of amino 
               acids in the peptide.
 	      <LI><B>location</B>- this is the chromosome position within the 
@@ -1026,7 +1027,7 @@
 	      and progressing along the strand of transcription.
 	      <LI><B>totalExons</B>- the number of coding exons in the gene.
 	      <LI><B>exonLength</B>- the length of the current exon.
-	      If the &quot;Show nucleotides&quot; button is checked, this will 
+	      If the &quot;Show nucleotides&quot; option is chosen, this will 
               be the 
 	      number of nucleotides in the exon, otherwise it will be 
 	      the number of amino acids in 
@@ -1042,20 +1043,23 @@
 	      what position that nucleotide takes in the codon which
 	      contains it.
 	      </UL>
-              <LI><B>Show nucleotides</B> -
-	      The default behavior is for the nucleotides in the alignment
-              to be translated
-	      into amino acids according to the strand and exon frames
-	      defined in the selected genePred table.
-	      If this button is checked, then the nucleotides
-	      in the alignment will not be translated into amino
-	      acids.  
-	      <LI><B>Output lines with just dashes</B> - 
-	      The default behavior is for the alignment rows that contain
-              only dashes to not be printed.  If this button is checked, then
-	      these dashes-only rows are printed.
-	      </UL>
-
+            <LI><B>Show nucleotides</B> -
+	    The default behavior is for the nucleotides in the alignment
+            to be translated
+	    into amino acids according to the strand and exon frames
+	    defined in the selected genePred table.
+            If this option is chosen, then the nucleotides
+	    in the alignment will not be translated into amino
+	    acids.        
+            <LI><B>Output lines with just dashes</B> - 
+	    The default behavior is for the alignment rows that contain
+            only dashes to not be printed.  If this option is chosen, then
+	    these dashes-only rows are printed.
+	    </UL>
+         Finally, from the list of species, select those that you would
+         like included in the FASTA multiple alignment output.  Press
+         the &quot;Submit&quot; button to view the output. 
+         <P>
 
 <!------GTF/BED Format---------------------->
 <A NAME="GTF_BED"></A>
