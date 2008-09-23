@@ -1,0 +1,54 @@
+# Data Agreement File for RNA-seq project $Revision: 1.1 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# Lab and general info
+grant             Gingeras
+lab               Cshl
+dataType          RnaSeq
+variables         cell, localization, rnaExtract
+assembly          hg18
+dafVersion        0.2.2
+
+# Track/view definition
+view             Transfrags
+longLabelPrefix  CSHL RNA-Seq Transfrags
+type             broadPeak
+hasReplicates    no
+required         yes
+
+view             PlusSignal
+longLabelPrefix  CSHL RNA-Seq Plus Strand Signal
+type             wig
+hasReplicates    no
+required         yes
+
+view             MinusSignal
+longLabelPrefix  CSHL RNA-Seq Minus Strand Signal
+type             wig
+hasReplicates    no
+required         yes
+
+view             PlusRawSignal
+longLabelPrefix  CSHL RNA-Seq Plus Strand Raw Signal
+type             wig
+hasReplicates    yes
+required         no
+
+view             MinusRawSignal
+longLabelPrefix  CSHL RNA-Seq Minus Strand Raw Signal
+type             wig
+hasReplicates    yes
+required         no
+
+view             Alignments
+longLabelPrefix  CSHL RNA-Seq Tags
+type             tagAlign
+hasReplicates    yes
+required         yes
+
+view             Fastq
+type             download
+hasReplicates    yes
+required         yes
