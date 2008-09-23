@@ -61,11 +61,11 @@ echo
 
 echo "------------"
 echo "liftOver set:"
-cat $db.liftOverList | grep -v "hgwbeta|found" | awk '{print $1}' | grep . | sort -u
+cat $db.liftOverList | egrep -v "chains" | awk '{print $1}' | grep . | sort -u
 
 echo
 echo "------------"
-echo "unique set of assemblies with tracks:"
+echo "unique set of assemblies with connecting tracks:"
 cat $db.fullList | egrep -v "blast|found" | awk '{print $1}' | grep . | sort -u
 echo
 
