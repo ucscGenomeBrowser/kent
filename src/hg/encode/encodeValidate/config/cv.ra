@@ -90,6 +90,17 @@ karyotype relatively normal
 termId BTO:0002062 (non-specific)
 tier 3
 
+term HCT-116
+type Cell Line
+description colorectal carcinoma  
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-247&Template=cellBiology
+vendorName ATCC
+vendorId CCL247
+lineage endoderm
+karyotype cancer
+termId BTO:0002254
+tier 3
+
 term Jurkat
 type Cell Line
 description T lymphoblastoid cell line derived from an acute T cell leukemia 
