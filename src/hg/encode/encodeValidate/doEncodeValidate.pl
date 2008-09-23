@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.65 2008/09/22 23:31:11 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.66 2008/09/23 19:47:53 larrym Exp $
 
 use warnings;
 use strict;
@@ -410,10 +410,16 @@ sub checkDataFormat {
 
 sub ddfKey
 {
-# return key for given DDF line (e.g. "antibody=$antibody;cell=$cell" for ChIP-Seq data)
+# return key for given DDF line (e.g. "antibody=$antibody;cell=$cell" for ChIP-Seq data).
+# The key includes replicate (if applicable). We may want to make that an option.
     my ($fields, $ddfHeader, $daf) = @_;
     if (defined($daf->{variables})) {
-        return join(";", map("$_=" . $fields->{$_}, sort @{$daf->{variableArray}}));
+        my $delim = ";";
+        my $key = join($delim, map("$_=" . $fields->{$_}, sort @{$daf->{variableArray}}));
+        if(defined($fields->{replicate})) {
+            $key .= $delim . $fields->{replicate};
+        }
+        return $key;
     } else {
         die "ERROR: no key defined for this DAF\n";
     }
@@ -669,6 +675,7 @@ if(!@errors) {
             my $files = join(" ", @{$alignmentLine->{files}});
             my $tmpFile = $Encode::autoCreatedPrefix . "$tmpCount.bed";
             $tmpCount++;
+            HgAutomate::verbose(2, "Auto-creating view '$newView' for key '$key'\n");
             my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $daf->{assembly} stdin");
             my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
             if(my $err = $safe->exec()) {
@@ -705,6 +712,9 @@ my @variables;
 if (defined($daf->{variables})) {
     @variables = @{$daf->{variableArray}};
 }
+
+# XXXX Calculation of priorities still needs work; we currently don't account for multiple experiments in the same DDF.
+# It may in fact be too much work to do automatic calculation of priorities (i.e. the wrangler may have to do it manually).
 
 my $priority = $db->quickQuery("select max(priority) from trackDb where settings like '%subTrack $compositeTrack%'") || 0;
 $ddfLineNumber = 1;
