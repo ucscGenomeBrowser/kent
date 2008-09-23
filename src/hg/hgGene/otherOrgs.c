@@ -10,7 +10,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.27 2008/09/19 16:10:41 markd Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.28 2008/09/23 17:33:07 hiram Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -150,7 +150,7 @@ if (pos != NULL)
           otherOrg->geneTable, hTrackOpenVis(sqlGetDatabase(conn), otherOrg->geneTable),
           id);
     hFreeConn(&conn);
-    freez(pos);
+    freez(&pos);
     return cloneString(posPlus);
     }
 else
