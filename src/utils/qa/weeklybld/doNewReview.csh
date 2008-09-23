@@ -47,26 +47,26 @@ if ( "$1" != "real" ) then
 endif 
 
 echo
-echo "Now beginning to build new branch $BRANCHNN"
+echo "Now beginning to build new branch $BRANCHNN [`date`]"
 
 echo
 
 #echo debug: disabled tagging
 ./tagReview.csh real
 if ( $status ) then
- echo "tagReview.csh failed on $HOST"
+ echo "tagReview.csh failed on $HOST [`date`]"
  exit 1
 endif
-echo "tagReview.csh done on $HOST"
+echo "tagReview.csh done on $HOST [`date`]"
 echo "tag review moved to HEAD."
 
 #echo debug: disabled buildCvsReports
 ssh -n hgwdev "$WEEKLYBLD/buildCvsReports.csh review real"
 if ( $status ) then
- echo "buildCvsReports.csh  failed on hgwdev"
+ echo "buildCvsReports.csh  failed on hgwdev [`date`]"
  exit 1
 endif
-echo "buildCvsReports.csh done on hgwdev, sending email..."
+echo "buildCvsReports.csh done on hgwdev, sending email... [`date`]"
 echo "Ready for pairings (day 2, CVS reports completed for v$BRANCHNN preview)." | mail -s "Ready for pairings (day 2, CVS reports completed for v$BRANCHNN preview)." $USER donnak kate kuhn
 
 
