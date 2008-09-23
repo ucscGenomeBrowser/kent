@@ -807,12 +807,7 @@ proc htmlEncode {text} {
 }
 
 set gDiffStyle {
-<STYLE type="text/css">
-    .del  {background-color: red; font-weight: bold; padding-right: 100%;}
-    .add  {background-color: lime; font-weight: bold; padding-right: 100%;}
-    .repl {background-color: blue; font-weight: bold; padding-right: 100%;}
-    .begin {background-color: yellow; font-weight: bold; padding-right: 100%;}
-</STYLE>
+<LINK REL="STYLESHEET" HREF="/style/cvs_reports.css">
 }
 
 # HTML format a diff; desc should be HTML-ized.
