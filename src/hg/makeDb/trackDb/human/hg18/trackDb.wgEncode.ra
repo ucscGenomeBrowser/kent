@@ -292,7 +292,7 @@ subGroup3 factor Factor FOXP2=FOXP2 Control=Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults Sites=packed Peaks=packed Signal=full RawSignal=hide
+visibilityViewDefaults Peaks=full Signal=full RawSignal=full
 controlledVocabulary encode/cv.ra cellType factor
 priority	0
 type bed 3
@@ -308,8 +308,8 @@ wgEncode 1
 	priority	1
 	noInherit	on
 	cell	SK-N-MC
-    configurable on
 	antibody	control
+        configurable on
 
 	track	wgEncodeHudsonAlphaChipSeqRawSignalPFSK1Control
 	subTrack	wgEncodeHudsonAlphaChipSeq
@@ -320,6 +320,117 @@ wgEncode 1
 	dateSubmitted	2008-09-11 20:49:12
 	priority	2
 	noInherit	on
-    configurable on
 	cell	PFSK-1
 	antibody	control
+
+	track	wgEncodeHudsonAlphaChipSeqPeaksRep1PFSK1FOXP2
+	subTrack	wgEncodeHudsonAlphaChipSeq
+	shortLabel	FOXP2 PFSK-1
+	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 1 (FOXP2 in PFSK-1 cells)
+	subGroups	view=Peaks factor=FOXP2 cellType=PFSK-1
+	type	narrowPeak
+	dateSubmitted	2008-09-23 11:25:47
+	priority	3
+	noInherit	on
+	cell	PFSK-1
+	antibody	FOXP2
+
+	track	wgEncodeHudsonAlphaChipSeqPeaksRep2PFSK1FOXP2
+	subTrack	wgEncodeHudsonAlphaChipSeq
+	shortLabel	FOXP2 PFSK-1
+	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 2 (FOXP2 in PFSK-1 cells)
+	subGroups	view=Peaks factor=FOXP2 cellType=PFSK-1
+	type	narrowPeak
+	dateSubmitted	2008-09-23 11:25:47
+	priority	4
+	noInherit	on
+	cell	PFSK-1
+	antibody	FOXP2
+
+
+	track	wgEncodeHudsonAlphaChipSeqRawSignalRep1PFSK1FOXP2
+	subTrack	wgEncodeHudsonAlphaChipSeq
+	shortLabel	FOXP2 PFSK-1
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (FOXP2 in PFSK-1 cells)
+	subGroups	view=RawSignal factor=FOXP2 cellType=PFSK-1
+	type	wig
+	dateSubmitted	2008-09-23 11:25:47
+	priority	5
+	noInherit	on
+	spanList	1
+	windowingFunction	mean
+	maxHeightPixels	100:16:16
+	cell	PFSK-1
+	antibody	FOXP2
+
+	track	wgEncodeHudsonAlphaChipSeqRawSignalRep2PFSK1FOXP2
+	subTrack	wgEncodeHudsonAlphaChipSeq
+	shortLabel	FOXP2 PFSK-1
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (FOXP2 in PFSK-1 cells)
+	subGroups	view=RawSignal factor=FOXP2 cellType=PFSK-1
+	type	wig
+	dateSubmitted	2008-09-23 11:25:47
+	priority	6
+	noInherit	on
+	spanList	1
+	windowingFunction	mean
+	maxHeightPixels	100:16:16
+	cell	PFSK-1
+	antibody	FOXP2
+
+
+	track	wgEncodeHudsonAlphaChipSeqPeaksRep1SKNMCFOXP2
+	subTrack	wgEncodeHudsonAlphaChipSeq
+	shortLabel	FOXP2 SK-N-MC
+	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 1 (FOXP2 in SK-N-MC cells)
+	subGroups	view=Peaks factor=FOXP2 cellType=SK-N-MC
+	type	narrowPeak
+	dateSubmitted	2008-09-23 11:25:47
+	priority	7
+	noInherit	on
+	cell	SK-N-MC
+	antibody	FOXP2
+
+	track	wgEncodeHudsonAlphaChipSeqPeaksRep2SKNMCFOXP2
+	subTrack	wgEncodeHudsonAlphaChipSeq
+	shortLabel	FOXP2 SK-N-MC
+	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 2 (FOXP2 in SK-N-MC cells)
+	subGroups	view=Peaks factor=FOXP2 cellType=SK-N-MC
+	type	narrowPeak
+	dateSubmitted	2008-09-23 11:25:47
+	priority	8
+	noInherit	on
+	cell	SK-N-MC
+	antibody	FOXP2
+
+	track	wgEncodeHudsonAlphaChipSeqRawSignalRep1SKNMCFOXP2
+	subTrack	wgEncodeHudsonAlphaChipSeq
+	shortLabel	FOXP2 SK-N-MC
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (FOXP2 in SK-N-MC cells)
+	subGroups	view=RawSignal factor=FOXP2 cellType=SK-N-MC
+	type	wig
+	dateSubmitted	2008-09-23 11:25:47
+	priority	9
+	noInherit	on
+	spanList	1
+	windowingFunction	mean
+	maxHeightPixels	100:16:16
+	cell	SK-N-MC
+	antibody	FOXP2
+
+	track	wgEncodeHudsonAlphaChipSeqRawSignalRep2SKNMCFOXP2
+	subTrack	wgEncodeHudsonAlphaChipSeq
+	shortLabel	FOXP2 SK-N-MC
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (FOXP2 in SK-N-MC cells)
+	subGroups	view=RawSignal factor=FOXP2 cellType=SK-N-MC
+	type	wig
+	dateSubmitted	2008-09-23 11:25:47
+	priority	10
+	noInherit	on
+	spanList	1
+	windowingFunction	mean
+	maxHeightPixels	100:16:16
+	cell	SK-N-MC
+	antibody	FOXP2
+
+
