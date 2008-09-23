@@ -4,7 +4,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.17 2008/09/18 21:36:15 braney Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.18 2008/09/23 20:26:32 ann Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -96,9 +96,9 @@ hPrintf("%s",
 "        used as the basis for custom tracks).</LI>\n"
 "        \n"
 "        <LI><em><B>CDS FASTA alignment from multiple alignment</B></em> "
-"        - FASTA alignments of the CDS region of a gene prediction using"
-"        any of the multiple alignments loaded on the current"
-"        database. Output sequence can be in amino acid or nucleotide space."
+"        - FASTA alignments of the CDS regions of a gene prediction track"
+"        using any of the multiple alignment tracks for the current database."
+"        Output sequence can be in either amino acid- or nucleotide-space."
 "        Available only for genePred tracks."
 "        <LI><em><B>custom track</B></em> -  customized Genome Browser annotation  \n"
 "        track based on the results of the query.</LI>\n"
