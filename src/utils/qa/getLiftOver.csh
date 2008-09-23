@@ -48,9 +48,9 @@ if ($machine == 'hgwdev') then
 endif
 
 echo "\nliftOver chains TO $db on $machine --\n" 
-hgsql $host -Ne "select fromDb from liftOverChain where toDb = '$db' \
- order by fromDb" $central
+hgsql $host -Ne "SELECT fromDb FROM liftOverChain WHERE toDb = '$db' \
+ ORDER BY fromDb" $central
 
 echo "\nliftOver chains FROM $db on $machine --\n" 
-hgsql $host -Ne "select toDb from liftOverChain where fromDb = '$db' \
- order by toDb" $central
+hgsql $host -Ne "SELECT toDb FROM liftOverChain WHERE fromDb = '$db' \
+ ORDER BY toDb" $central
