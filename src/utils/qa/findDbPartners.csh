@@ -9,6 +9,7 @@
 
 set db=""
 set fullDbList=""
+set net=""
 
 if ( "$HOST" != "hgwdev" ) then
  echo "\n error: you must run this script on dev!\n"
@@ -27,12 +28,24 @@ else
 endif
 
 # uppercase the db, make net name and find any assemblies with nets to db
-set net=`echo $db| perl -wpe 's/(.*)/net\u$1/'`
+set Db=`echo $db | perl -wpe '$_ = ucfirst($_)'`
+set net="net$Db"
 getAssemblies.csh $net  | grep -v hgwbeta | tee $db.fullList
 
 # get multiz tracks in other assemblies
-echo "conservation:\n"
+echo "conservation:"
 getConservation.csh $db | tee -a $db.fullList
+
+# get {Human,Fly,Worm} Proteins tracks in other assemblies
+getAssemblies.csh blast%${Db}% | egrep -v "found|split" | tee -a $db.fullList 
+
+# find if {Human,Fly,Worm} Proteins track exists
+echo "find if {Human,Fly,Worm} Proteins track exists.  ref to:"
+hgsql -h hgwbeta -e "SHOW TABLES LIKE 'blast%'" $db | egrep "FB|KG|SG" \
+  | egrep -v "Ref|Pep" \
+  | sed "s/blast//" | perl -pwe '$_ = lcfirst($_)' | perl -wpe "s/FB|KG|SG//" \
+  | tee -a $db.fullList
+echo
 
 # get liftOvers:
 getLiftOver.csh $db hgwbeta | tee -a $db.liftOverList
@@ -40,20 +53,21 @@ echo
 
 echo "------------"
 # get hgGene connections (blastTab)
-echo "knownGenes using ${db}:"
+echo "knownGenes using $db (blastTab):"
 find ~/kent/src/hg/hgGene -name otherOrgs.ra | xargs grep $db \
   | awk -F":" '{print $1}' > $db.kgList
 sed "s/\// /g" $db.kgList  | awk '{print $(NF-1)}' | sort 
 echo
 
 echo "------------"
-echo "unique set of assemblies with tracks:"
-cat $db.fullList | grep -v found | awk '{print $1}' | grep . | sort -u
-echo
-
-echo "------------"
 echo "liftOver set:"
-cat $db.liftOverList | grep -v hgwbeta | awk '{print $1}' | grep . | sort -u
+cat $db.liftOverList | grep -v "hgwbeta|found" | awk '{print $1}' | grep . | sort -u
+
+echo
+echo "------------"
+echo "unique set of assemblies with tracks:"
+cat $db.fullList | egrep -v "blast|found" | awk '{print $1}' | grep . | sort -u
+echo
 
 rm -f $db.*List
 exit 0
