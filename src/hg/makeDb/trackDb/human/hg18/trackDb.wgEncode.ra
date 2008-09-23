@@ -280,6 +280,42 @@ wgEncode 1
         noInherit       on
         cell    K562
 
+track wgEncodeDukeChIPseq
+compositeTrack on
+shortLabel Duke ChIP-seq
+longLabel ENCODE - Duke ChIP-seq === PLACE HOLDER ===
+group regulation
+priority 0
+type bed 3
+
+track wgEncodeDukeFAIREseq
+compositeTrack on
+shortLabel Duke FAIRE-seq
+longLabel ENCODE - Duke FAIRE-seq === PLACE HOLDER ===
+group regulation
+priority 0
+type bed 3
+
+track wgEncodeYaleChIPseq
+compositeTrack on
+shortLabel Yale ChIP-seq
+longLabel ENCODE - Yale ChIP-seq Transcription Factor Binding Sites
+group regulation
+priority 0
+type bed 3
+useScore 1
+origAssembly hg18
+subGroup1 view Views PK=Peaks SIG=Signal RAWSIG=Raw_Signal
+subGroup2 cellType Cell_Line G878=GM12878
+subGroup2 antibody Factor AB=BB
+dimensions dimensionX=cellType dimensionY=antibody
+sortOrder antibody=+ cellType=+ view=-
+dragAndDrop subTracks
+visibilityViewDefaults PK=packed SIG=full RAWSIG=hide
+controlledVocabulary encode/cv.ra cellType
+dataVersion ENCODE Submitted June 2008
+wgEncode 1
+
 track wgEncodeHudsonAlphaChipSeq
 compositeTrack on
 shortLabel HudsonAlpha ChIP
