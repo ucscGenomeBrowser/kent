@@ -11,7 +11,7 @@
 #include "txCommon.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: txGeneProtAndRna.c,v 1.3 2007/03/17 22:40:25 kent Exp $";
+static char const rcsid[] = "$Id: txGeneProtAndRna.c,v 1.4 2008/09/23 04:34:54 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -65,7 +65,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     {
     info = hashMustFindVal(infoHash, bed->name);
     char *acc = hashMustFindVal(txToAccHash, bed->name);
-    bioSeq *txSeq, *protSeq;
+    bioSeq *txSeq, *protSeq = NULL;
     if (info->isRefSeq)
         {
 	char *refAcc = txAccFromTempName(bed->name);
@@ -75,7 +75,8 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	/* Find sequence. */
 	txSeq = hashMustFindVal(refSeqHash, refAcc);
 	char *protAcc = hashMustFindVal(refToPepHash, refAcc);
-	protSeq  = hashMustFindVal(refPepHash, protAcc);
+	if (bed->thickStart != bed->thickEnd)
+	    protSeq  = hashMustFindVal(refPepHash, protAcc);
 	}
     else
         {
