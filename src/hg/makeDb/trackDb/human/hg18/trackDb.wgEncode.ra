@@ -254,8 +254,8 @@ wgEncode 1
 
 track wgEncodeNhgriNre
 compositeTrack on
-shortLabel Elnitski NRE
-longLabel ENCODE Elnitski Negative Regulatory Elements
+shortLabel NHGRI NRE
+longLabel ENCODE NHGRI (Elnitski) Negative Regulatory Elements
 group regulation
 subGroup1 view Views SI=Silencers EB=Enhancer_Blockers
 subGroup2 cellType Cell_Line K562=K562 Hela=HeLa-S3
@@ -271,8 +271,8 @@ wgEncode 1
 
         track   wgEncodeNhgriNreSilencersK562SV40
         subTrack        wgEncodeNhgriNre
-        shortLabel      K562
-        longLabel       ENCODE Elnitski Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
+        shortLabel      NHGRI NRE K562
+        longLabel       ENCODE NHGRI Negative Regulatory Elements - Silencers in K562 cells
         subGroups       view=SI cellType=K562 promoter=SV40 
         type    bed 6
         dateSubmitted   2008-09-18 17:19:9
