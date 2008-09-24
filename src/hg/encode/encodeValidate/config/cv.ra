@@ -34,7 +34,7 @@ karyotype cancer
 termId BTO:0000559
 tier 2
 
-term HeLaS3
+term HeLa-S3
 description cervical carcinoma
 type Cell Line
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
@@ -44,6 +44,17 @@ lineage ectoderm
 karyotype cancer
 termId BTO:0000568
 tier 2
+
+term HeLa-S3_IFNg
+description cervical carcinoma (Interferon gamma treatment)
+type Cell Line
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
+vendorName ATCC
+vendorId CCL-2.2
+lineage ectoderm
+karyotype cancer
+termId BTO:0000568
+tier 3
 
 term HUVEC
 description umbilical vein endothelial
@@ -319,15 +330,6 @@ type Antibody
 orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229326 
 vendorName BD Biosciences 
 vendorId 612044 
-
-term c-Myc  
-type Antibody
-antibodyDescription rabbit polyclonal to amino acids 1-262 of c-Myc human origin 
-targetDescription transcription factor, c-Myc-encoded proteins function in cell proliferation, differentiation and neoplastic disease 
-type Antibody
-vendorName Santa Cruz Biotech
-vendorId sc-764
-orderUrl http://www.scbt.com/product.php?datasheet=764
 
 # localization
 term nucleus
