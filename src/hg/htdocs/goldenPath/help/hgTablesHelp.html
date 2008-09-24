@@ -979,14 +979,28 @@
           select the <em>CDS FASTA alignment from multiple alignment</em> 
           option in the <TT><B>output format</B></TT> list. In order to see
           this output format option, you must have a genePred table 
-          selected.
+          selected. If you limit your search to a certain position of the
+          genome (rather than searching the entire genome), the tool
+          will return FASTA alignments for any and all genes that overlap
+          the position for which you are searching.
           </P>
           <P> 
           The Table Browser will present you with a configuration page.
           On this page, you can select options for your ouput.
+          </P>
+          <P>
           First, select your MAF table.  This is the table from which 
           the multiple alignments will be extracted for the CDS regions
-          of your gene track. 
+          of your gene track. If you do not know the name of the MAF table
+          that corresponds to the Conservation track, you can find it in the
+          Genome Browser by following these instructions.  Hold your mouse 
+          over the 'mini-button' to the left of the Conservation track display,
+          or over the hyperlinked track name in the track controls (below the 
+          display).  The URL to which this item is linked will appear at the 
+          bottom of your browser.  At the end of the URL, you will see 
+          <TT>&g=AAAA</TT>.  The <TT>AAAA</TT> is the name of the table 
+          that holds the data.  That is the table you should choose from the 
+          <B>MAF table</B> list. 
           </P>
 	  <P>
           Then select any of the following choices:
