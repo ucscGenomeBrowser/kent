@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.66 2008/09/23 19:47:53 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.67 2008/09/24 00:25:14 larrym Exp $
 
 use warnings;
 use strict;
@@ -27,6 +27,7 @@ use Getopt::Long;
 use English;
 use Carp qw(cluck);
 use Cwd;
+use IO::File;
 
 use lib "/cluster/bin/scripts";
 use Encode;
@@ -228,6 +229,22 @@ our %formatCheckers = (
     fastq => \&validateFastQ,
     );
 
+sub isZipped
+{
+    my ($filePath) = @_;
+    return $filePath =~ m/\.gz$/;
+}
+
+sub openUtil
+{
+# Handles opening gzipped as well as plain files
+    my ($path, $file) = @_;
+    my $fh = new IO::File;
+    my $filePath = defined($path) ? "$path/$file" : $file;
+    open($fh, isZipped($filePath) ? "/bin/gunzip -c $filePath |" : $filePath) or die "Couldn't open file '$file'; error: $!\n";
+    return $fh;
+}
+
 my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|))";
 
 sub validateWig
@@ -235,9 +252,16 @@ sub validateWig
     my ($path, $file, $type) = @_;
     my $filePath = defined($path) ? "$path/$file" : $file;
 
-    # XXXX why not do the whole thing, rather than just 1000 lines?
-    my @cmds = ("head -1000 $filePath", "wigEncode stdin /dev/null /dev/null");
-    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null");
+    my @cmds;
+    if(isZipped($filePath)) {
+        # wigEncode knows how to handle zipped files.
+        push(@cmds, "wigEncode $filePath /dev/null /dev/null");
+    } else {
+        # XXXX why not do the whole thing, rather than just 1000 lines?
+        push(@cmds, "head -1000 $filePath");
+        push(@cmds, "wigEncode stdin /dev/null /dev/null");
+    }
+    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose - 1);
     if(my $err = $safe->exec()) {
         my $err = $safe->stderr();
         chomp($err);
@@ -251,10 +275,9 @@ sub validateWig
 sub validateBed {
 # Validate each line of a bed 5 or greater file.
     my ($path, $file, $type) = @_;
-    my $filePath = defined($path) ? "$path/$file" : $file;
     my $line = 0;
-    open(FILE, $filePath) or die "Couldn't open file: $filePath; error: $!\n";
-    while(<FILE>) {
+    my $fh = openUtil($path, $file);
+    while(<$fh>) {
         chomp;
         my @fields = split /\s+/;
         $line++;
@@ -287,7 +310,7 @@ sub validateBed {
             ;
         }
     }
-    close(FILE);
+    $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
     return ();
 }
@@ -296,6 +319,10 @@ sub validateGene {
     my ($path, $file, $type) = @_;
     my $outFile = "validateGene.out";
     my $filePath = defined($path) ? "$path/$file" : $file;
+    if(isZipped($filePath)) {
+        # XXXX should be modified to handle zipped files.
+        die "We don't currently supporte gzipped gene files\n";
+    }
     my $err = system (
         "cd $outPath; egrep -v '^track|browser' $filePath | ldHgGene -out=genePred.tab -genePredExt hg18 testTable stdin >$outFile 2>&1");
     if ($err) {
@@ -312,17 +339,16 @@ sub validateGene {
 sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
-    my $filePath = defined($path) ? "$path/$file" : $file;
     my $line = 0;
-    open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
-    while(<FILE>) {
+    my $fh = openUtil($path, $file);
+    while(<$fh>) {
         $line++;
         if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[ATCG\.]+\s+\d+\s+[+-]$/)) {
             chomp;
             return "Invalid $type file; line $line in file '$file' is invalid:\nline: $_";
         }
     }
-    close(FILE);
+    $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
     return ();
 }
@@ -330,17 +356,16 @@ sub validateTagAlign
 sub validateNarrowPeak
 {
     my ($path, $file, $type) = @_;
-    my $filePath = defined($path) ? "$path/$file" : $file;
+    my $fh = openUtil($path, $file);
     my $line = 0;
-    open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
-    while(<FILE>) {
+    while(<$fh>) {
         $line++;
         if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+$floatRegEx\s+$floatRegEx\s+\d+$/)) {
             chomp;
             return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_");
         }
     }
-    close(FILE);
+    $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
     return ();
 }
@@ -349,9 +374,8 @@ sub validateFastQ
 {
     # Syntax per http://maq.sourceforge.net/fastq.shtml
     my ($path, $file, $type) = @_;
-    my $filePath = defined($path) ? "$path/$file" : $file;
+    my $fh = openUtil($path, $file);
     my $line = 0;
-    open(FILE, $filePath) or die "Couldn't open file '$filePath'; error: $!\n";
     my $state = 'firstLine';
     my $seqName;
     my $seqNameRegEx = "[A-Za-z0-9_.:-]+";
@@ -361,7 +385,7 @@ sub validateFastQ
                   seqLine => {REGEX => $seqRegEx, NEXT => 'plusLine'},
                   plusLine => {REGEX => "\\\+([A-Za-z0-9_.:-]*)", NEXT => 'qualLine'},
                   qualLine => {REGEX => $qualRegEx, NEXT => 'firstLine'}};
-    while(<FILE>) {
+    while(<$fh>) {
         chomp;
         $line++;
         my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid";
@@ -375,8 +399,8 @@ sub validateFastQ
         } else {
 	         return("$errorPrefix (expecting $state):\nline: $_");
         }
-    }
-    close(FILE);
+     }
+    $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
     return ();
 }
@@ -411,12 +435,12 @@ sub checkDataFormat {
 sub ddfKey
 {
 # return key for given DDF line (e.g. "antibody=$antibody;cell=$cell" for ChIP-Seq data).
-# The key includes replicate (if applicable). We may want to make that an option.
-    my ($fields, $ddfHeader, $daf) = @_;
+# The key includes replicate (if applicable) if $includeReplicate is true.
+    my ($fields, $ddfHeader, $daf, $includeReplicate) = @_;
     if (defined($daf->{variables})) {
         my $delim = ";";
         my $key = join($delim, map("$_=" . $fields->{$_}, sort @{$daf->{variableArray}}));
-        if(defined($fields->{replicate})) {
+        if($includeReplicate && defined($fields->{replicate})) {
             $key .= $delim . $fields->{replicate};
         }
         return $key;
@@ -434,6 +458,7 @@ my @ddfHeader;		# list of field names on the first line of DDF file
 my %ddfHeader = ();	# convenience hash version of @ddfHeader (maps name to field index)
 my @ddfLines = ();	# each line in DDF (except for fields header); value is a hash; e.g. {files => 'foo.bed', cell => 'HeLa-S3', ...}
 my %ddfSets = ();	# info about DDF entries broken down by ddfKey
+my %ddfReplicateSets = ();	# info about DDF entries broken down by ddfKey (including replicate)
 my $wd = cwd();
 
 my $ok = GetOptions("allowReloads",
@@ -638,7 +663,8 @@ while (@{$lines}) {
             pushError(\@errors, @metadataErrors);
         } else {
             # avoid spurious errors by not putting invalid lines into %ddfSets
-            $ddfSets{ddfKey(\%line, \%ddfHeader, $daf)}{VIEWS}{$view} = \%line;
+            $ddfSets{ddfKey(\%line, \%ddfHeader, $daf, 0)}{VIEWS}{$view} = \%line;
+            $ddfReplicateSets{ddfKey(\%line, \%ddfHeader, $daf, 1)}{VIEWS}{$view} = \%line;
         }
         push(@ddfLines, \%line);
     } else {
@@ -651,6 +677,7 @@ my $tmpCount = 1;
 if(!@errors) {
     # Look for missing required views and create missing, optional views, but
     # but don't bother if we have already encountered errors.
+
     for my $key (keys %ddfSets) {
         for my $view (keys %{$daf->{TRACKS}}) {
             if($daf->{TRACKS}{$view}{required}) {
@@ -659,11 +686,13 @@ if(!@errors) {
                 }
             }
         }
+    }
         
-        # create missing optional views (e.g. ChIP-Seq RawSignal)
-        if(defined($ddfSets{$key}{VIEWS}{Alignments}) && !defined($ddfSets{$key}{VIEWS}{RawSignal})) {
+    for my $key (keys %ddfReplicateSets) {
+        # create missing optional views (e.g. ChIP-Seq RawSignal); note this loop assumes these are on a per replicate basis.
+        if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}) && !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})) {
             my $newView = 'RawSignal';
-            my $alignmentLine = $ddfSets{$key}{VIEWS}{Alignments};
+            my $alignmentLine = $ddfReplicateSets{$key}{VIEWS}{Alignments};
             my %line = %{$alignmentLine};
             $line{view} = $newView;
             $line{type} = 'wig';
@@ -671,7 +700,7 @@ if(!@errors) {
             if(!defined($daf->{TRACKS}{$newView}{order})) {
                 $daf->{TRACKS}{$newView}{order} = ++$maxOrder;
             }
-            $ddfSets{$key}{VIEWS}{$newView} = \%line;
+            $ddfReplicateSets{$key}{VIEWS}{$newView} = \%line;
             my $files = join(" ", @{$alignmentLine->{files}});
             my $tmpFile = $Encode::autoCreatedPrefix . "$tmpCount.bed";
             $tmpCount++;
