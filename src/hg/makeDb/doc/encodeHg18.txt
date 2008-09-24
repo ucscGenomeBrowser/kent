@@ -1098,7 +1098,7 @@ cat > getGenes.csh << 'EOF'
       rm -f $tmpExt
     end
     # using encodeGencodeGeneKnownMar07 for hg18
-    # using knownGene for rn4 mm9 hg18
+    # using knownGene for rn4 mm9 
     # using refGene for panTro2
     # using ensGene for monDom4, rheMac2
     # genePreds; (must keep only the first 10 columns for knownGene)
