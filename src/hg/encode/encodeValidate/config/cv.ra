@@ -320,6 +320,15 @@ orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229326
 vendorName BD Biosciences 
 vendorId 612044 
 
+term c-Myc  
+type Antibody
+antibodyDescription rabbit polyclonal to amino acids 1-262 of c-Myc human origin 
+targetDescription transcription factor, c-Myc-encoded proteins function in cell proliferation, differentiation and neoplastic disease 
+type Antibody
+vendorName Santa Cruz Biotech
+vendorId sc-764
+orderUrl http://www.scbt.com/product.php?datasheet=764
+
 # localization
 term nucleus
 type localization
