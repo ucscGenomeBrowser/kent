@@ -6,6 +6,7 @@ shortLabel 36-Way TBA
 longLabel TBA 36-Vertebrate Alignments in the ENCODE Regions
 group encodeCompAndVar
 subGroup1 view Views align=Alignments cons=Conservation
+visibilityViewDefaults align=full cons=pack
 sortOrder view=+
 dragAndDrop subTracks
 type bed 4
