@@ -1102,7 +1102,9 @@ cat > getGenes.csh << 'EOF'
     # using refGene for panTro2
     # using ensGene for monDom4, rheMac2
     # genePreds; (must keep only the first 10 columns for knownGene)
-    set geneDbs = "hg18 mm9 rn4 panTro2 monDom4 rheMac2 ponAbe2"
+    #set geneDbs = "hg18 mm9 rn4 panTro2 monDom4 rheMac2 ponAbe2"
+    #  NOTE: next time include ponAbe2, using ensGene
+    set geneDbs = "hg18 mm9 rn4 panTro2 monDom4 rheMac2"
     foreach queryDb ($geneDbs)
       if ($queryDb == "monDom4" || $queryDb == "rheMac2") then
         set geneTbl = ensGene
