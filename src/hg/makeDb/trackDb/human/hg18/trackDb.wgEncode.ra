@@ -252,7 +252,7 @@ wgEncode 1
     #configurable on
     dateSubmitted   2008-06-07 10:27:26
 
-track wgEncodeNHGRINRE
+track wgEncodeNhgriNre
 compositeTrack on
 shortLabel Elnitski NRE
 longLabel ENCODE Elnitski Negative Regulatory Elements
@@ -269,8 +269,8 @@ priority 0
 type bed 3
 wgEncode 1
 
-        track   wgEncodeNHGRINRESilencersK562SV40
-        subTrack        wgEncodeNHGRINRE
+        track   wgEncodeNhgriNreSilencersK562SV40
+        subTrack        wgEncodeNhgriNre
         shortLabel      K562
         longLabel       ENCODE Elnitski Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
         subGroups       view=SI cellType=K562 promoter=SV40 
