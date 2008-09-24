@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.21 2008/09/16 20:07:46 larrym Exp $
+# $Id: Encode.pm,v 1.22 2008/09/24 22:03:04 larrym Exp $
 
 package Encode;
 
@@ -328,13 +328,31 @@ sub parseDaf
 sub compositeTrackName
 {
     my ($daf) = @_;
-    return "wgEncode$daf->{lab}$daf->{dataType}";
+    return "wgEncode" . ucfirst(lc($daf->{lab})) . $daf->{dataType};
 }
 
 sub downloadDir
 {
     my ($daf) = @_;
     return "/usr/local/apache/htdocs/goldenPath/$daf->{assembly}/" . compositeTrackName($daf);
+}
+
+sub daysInMonth
+{
+    # $mon and $year are in format returned by localtime
+    my ($mon, $year) = @_;
+    $year += 1900;
+    if($mon == 1) {
+        if ((!($year % 4) && ($year % 100)) || !($year % 400)) {
+            return 29;
+        } else {
+            return 28;
+        }
+    } elsif ($mon == 3 || $mon == 5 || $mon == 8 || $mon == 10) {
+        return 30;
+    } else {
+        return 31;
+    }
 }
 
 sub restrictionDate
@@ -349,6 +367,10 @@ sub restrictionDate
     if($restrictedMon >= 12) {
         $restrictedYear++;
         $restrictedMon = ($mon + $restrictedMonths) % 12;
+    }
+    if($mday > daysInMonth($restrictedMon,$restrictedYear)) {
+        # wrap to first when to avoid, for example, 2008-05-31 => 2009-02-31
+        $mday = 1;
     }
     return ($sec,$min,$hour,$mday,$restrictedMon,$restrictedYear,$wday,$yday,$isdst);
 }
