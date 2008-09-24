@@ -26,8 +26,11 @@ priority 138
 track netOryLat2
 priority 138.1
 
+track chainOryLat1
+priority 139
+
 track netOryLat1
-priority 138.1
+priority 139.1
 
 # zebrafish
 track chainDanRer4
