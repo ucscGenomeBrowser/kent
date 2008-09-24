@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.67 2008/09/24 00:25:14 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.68 2008/09/24 22:32:33 larrym Exp $
 
 use warnings;
 use strict;
@@ -677,6 +677,7 @@ my $tmpCount = 1;
 if(!@errors) {
     # Look for missing required views and create missing, optional views, but
     # but don't bother if we have already encountered errors.
+    # Could also look for replicate inconsistency here (e.g. Alignments for replicate 3 but not fastq for replicate 3).
 
     for my $key (keys %ddfSets) {
         for my $view (keys %{$daf->{TRACKS}}) {
@@ -690,6 +691,7 @@ if(!@errors) {
         
     for my $key (keys %ddfReplicateSets) {
         # create missing optional views (e.g. ChIP-Seq RawSignal); note this loop assumes these are on a per replicate basis.
+
         if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}) && !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})) {
             my $newView = 'RawSignal';
             my $alignmentLine = $ddfReplicateSets{$key}{VIEWS}{Alignments};
@@ -782,13 +784,12 @@ foreach my $ddfLine (@ddfLines) {
         my %hash = map { $_ => $ddfLine->{$_} } @variables;
         for my $var (@variables) {
             my $val = $hash{$var};
-            if(lc($val) eq 'control' || lc($val) eq 'input') {
-                $val = ucfirst(lc($val));
-            }
+            $val = ucfirst(lc($val));
             $tableName = $tableName . $val;
         }
-        my $shortSuffix;
+        my $shortSuffix = "";
         my $longSuffix;
+        my %shortViewMap = (Peaks => 'Pk', Signal => 'Sig', RawSignal => 'Raw');
         if($hash{antibody} && $hash{cell}) {
             $pushQDescription = "$hash{antibody} in $hash{cell}";
             $shortSuffix = "$hash{antibody} $hash{cell}";
@@ -797,6 +798,13 @@ foreach my $ddfLine (@ddfLines) {
             $pushQDescription = "$hash{cell}";
             $shortSuffix = "$hash{cell}";
             $longSuffix = "in $hash{cell} cells";
+        }
+        if(defined($shortViewMap{$view})) {
+            $shortSuffix .= " " . $shortViewMap{$view};
+        }
+        if(defined($replicate)) {
+            $shortSuffix .= " $replicate";
+            $pushQDescription .= " Replicate $replicate";
         }
         if($shortSuffix) {
             $shortLabel = $shortLabel ? "$shortLabel ($shortSuffix)" : $shortSuffix;
