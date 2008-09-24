@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.75 2008/09/22 23:24:52 mikep Exp $"
+#	"$Id: mm9.txt,v 1.76 2008/09/24 17:43:44 angie Exp $"
 #
 
 #######################################################################
@@ -8228,10 +8228,10 @@ see doc/builds.txt for specific details.
 
 
 ############################################################################
-# JAX/MGI TRACKS (DONE 7/14/08 angie)
-    ssh kkstore06
-    mkdir -p /cluster/data/mm9/bed/jax/2008_07
-    cd /cluster/data/mm9/bed/jax/2008_07
+# JAX/MGI TRACKS (DONE 9/23/08 angie -- chrMT->M tweaked 9/24)
+    ssh kolossus
+    mkdir -p /cluster/data/mm9/bed/jax/2008_09
+    cd /cluster/data/mm9/bed/jax/2008_09
     wget ftp://ftp.informatics.jax.org/pub/gbrowse/\*
     wget ftp://ftp.informatics.jax.org/pub/reports/MGI_PhenotypicAllele.rpt
     # Jax Rep Transcript track
@@ -8240,7 +8240,8 @@ see doc/builds.txt for specific details.
     # -- aliases ~ MGI:\d+
     # Use simple perl script to uniquify transcript names and make alias.tab.
     # Inspired by the mm6 version, but format has changed.
-    /cluster/data/mm8/bed/jax//2007_07/parseRepTranscript.pl \
+  # NOTE FOR NEXT TIME: change chrMT -> chrM here.
+    /cluster/data/mm8/bed/jax/2007_07/parseRepTranscript.pl \
       SEQ_RepTransGenomic_rpt.gff \
     | sed -e 's/^/chr/' \
       > jaxRepTranscript.gff
@@ -8337,7 +8338,7 @@ see doc/builds.txt for specific details.
 
     # Load tables
     ssh hgwdev
-    cd /cluster/data/mm9/bed/jax/2008_07
+    cd /cluster/data/mm9/bed/jax/2008_09
     # jaxRepTranscript
     ldHgGene mm9 jaxRepTranscript jaxRepTranscript.gff
     hgsql mm9 < fixJaxRepTranscript.sql
@@ -8345,17 +8346,19 @@ see doc/builds.txt for specific details.
       ~/kent/src/hg/lib/genericAlias.sql > jaxRepTranscriptAlias.sql 
     hgLoadSqlTab mm9 jaxRepTranscriptAlias \
       jaxRepTranscriptAlias.sql jaxRepTranscriptAlias.tab
+    # 9/24/08: tweak chrMT->chrM -- shouldn't be necessary next time.
+    hgsql mm9 -e \
+      'update jaxRepTranscript set chrom = "chrM" where chrom = "chrMT";'
+    checkTableCoords mm9 jaxRepTranscript
     # jaxAllele
-    sed -e 's/bed12Source/jaxAllele/g' \
-      $HOME/kent/src/hg/lib/bed12Source.sql > jaxAllele.sql
-    hgLoadBed -sqlTable=jaxAllele.sql mm9 jaxAllele jaxAllele.bed
+    hgLoadBed -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed12Source.sql \
+      mm9 jaxAllele jaxAllele.bed
     hgsql mm9 < fixJaxAllele.sql
     hgLoadSqlTab mm9 jaxAlleleInfo \
       ~/kent/src/hg/lib/jaxAlleleInfo.sql jaxAlleleInfo.tab
     # jaxPhenotype
-    sed -e 's/bed12Source/jaxPhenotype/g' \
-      $HOME/kent/src/hg/lib/bed12Source.sql > jaxPhenotype.sql
-    hgLoadBed -tab -sqlTable=jaxPhenotype.sql mm9 jaxPhenotype jaxPhenotype.bed
+    hgLoadBed -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed12Source.sql \
+      -tab mm9 jaxPhenotype jaxPhenotype.bed
     hgsql mm9 < fixJaxPhenotype.sql
     sed -e 's/genericAlias/jaxPhenotypeAlias/' \
       ~/kent/src/hg/lib/genericAlias.sql > jaxPhenotypeAlias.sql
