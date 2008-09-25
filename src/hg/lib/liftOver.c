@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.39 2008/09/03 19:19:26 markd Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.40 2008/09/25 18:21:40 angie Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -126,7 +126,9 @@ return ok;
 static char *remapRange(struct hash *chainHash, double minRatio, 
                         int minSizeT, int minSizeQ, 
                         int minChainSizeT, int minChainSizeQ, 
-                        char *chrom, int s, int e, char strand, double minMatch,
+                        char *chrom, int s, int e, char strand,
+			int thickStart, int thickEnd, bool useThick,
+			double minMatch,
                         char *regionName, char *db, char *chainTableName,
                         struct bed **bedRet, struct bed **unmappedBedRet)
 /* Remap a range through chain hash.  If all is well return NULL
@@ -148,7 +150,6 @@ double minMatchSize = minMatch * (end - start);
 int intersectSize;
 int tStart;
 bool multiple = (regionName != NULL);
-
 
 verbose(2, "%s:%d-%d", chrom, s, e);
 verbose(2, multiple ? "\t%s\n": "\n", regionName);
@@ -226,6 +227,9 @@ for (chain = chainsHit; chain != NULL; chain = chain->next)
         errAbort("Chain mapping error: %s:%d-%d\n", chain->qName, start, end);
     if (chain->qStrand == '-')
 	strand = otherStrand(strand);
+    if (useThick)
+	if (!mapThroughChain(chain, minRatio, &thickStart, &thickEnd, &subChain))
+	    thickStart = thickEnd = start;
     verbose(3, "mapped %s:%d-%d\n", chain->qName, start, end);
     verbose(4, "Mapped! Target:\t%s\t%d\t%d\t%c\tQuery:\t%s\t%d\t%d\t%c\n",
 	    chain->tName, subChain->tStart, subChain->tEnd, strand, 
@@ -244,6 +248,11 @@ for (chain = chainsHit; chain != NULL; chain = chain->next)
         bed->name = cloneString(regionName);
     bed->strand[0] = strand;
     bed->strand[1] = 0;
+    if (useThick)
+	{
+	bed->thickStart = thickStart;
+	bed->thickEnd = thickEnd;
+	}
     slAddHead(&bedList, bed);
 
     if (tStart < subChain->tStart)
@@ -280,8 +289,8 @@ char *liftOverRemapRange(struct hash *chainHash, double minRatio,
 struct bed *bed;
 char *error;
 
-error = remapRange(chainHash, minRatio, 0, 0, 0, 0, chrom, s, e, strand, minMatch,
-		   NULL, NULL, NULL, &bed, NULL);
+error = remapRange(chainHash, minRatio, 0, 0, 0, 0, chrom, s, e, strand, 0, 0,
+		   FALSE, minMatch, NULL, NULL, NULL, &bed, NULL);
 if (error != NULL)
     return error;
 if (retChrom)
@@ -380,6 +389,8 @@ while ((wordCount =
     chrom = words[0];
     s = lineFileNeedFullNum(lf, words, 1);
     e = lineFileNeedFullNum(lf, words, 2);
+    bool useThick = FALSE;
+    int thickStart = 0, thickEnd = 0;
     if (s > e)
 	errAbort("Start after end line %d of %s", lf->lineIx, lf->fileName);
     if (multiple)
@@ -390,8 +401,15 @@ while ((wordCount =
         }
     if (wordCount >= 6 && (bedPlus == 0 || bedPlus >= 6))
 	strand = words[5][0];
+    if (wordCount >= 8 && (bedPlus == 0 || bedPlus >= 8))
+	{
+	useThick = TRUE;
+	thickStart = lineFileNeedFullNum(lf, words, 6);
+	thickEnd = lineFileNeedFullNum(lf, words, 7);
+	}
     error = remapRange(chainHash, minMatch, minSizeT, minSizeQ, minChainT, 
-		       minChainQ, chrom, s, e, strand, minMatch, 
+		       minChainQ, chrom, s, e, strand,
+		       thickStart, thickEnd, useThick, minMatch, 
 		       region, db, chainTableName, &bedList, &unmappedBedList);
     if (error == NULL)
         {
@@ -419,6 +437,12 @@ while ((wordCount =
                     if (i == 5 && (bedPlus == 0 || bedPlus >= 6))
                         /* get strand from remap */
                         fprintf(f, "\t%c", bed->strand[0]);
+		    else if (i == 6 && useThick)
+                        /* get thickStart from remap */
+                        fprintf(f, "\t%d", bed->thickStart);
+		    else if (i == 7 && useThick)
+                        /* get thickEnd from remap */
+                        fprintf(f, "\t%d", bed->thickEnd);
                     else
                         /* everything else just passed through */
                         fprintf(f, "\t%s", words[i]);
