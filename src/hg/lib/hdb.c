@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.374 2008/09/09 21:02:55 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.375 2008/09/25 22:18:21 braney Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -207,6 +207,43 @@ void hSetTrackDbName(char *trackDbName)
 /* Override the hg.conf db.trackDb setting. */
 {
 hdbTrackDb = cloneString(trackDbName);
+}
+
+struct slName *hTrackTablesOfType(struct sqlConnection *conn, char *type)
+/* get list of tables in trackDb list with type */
+{
+struct slName *tdbList = hTrackDbList();
+struct hash *nameHash = newHash(4);
+
+for(; tdbList; tdbList = tdbList->next)
+    {
+    char query[2048];
+
+    safef(query, sizeof query, 
+	"select tableName from %s where type like '%s'", tdbList->name, type);
+
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+	hashStore(nameHash, row[0]);
+    sqlFreeResult(&sr);
+    }
+
+struct slName *list = NULL;
+struct hashCookie cook = hashFirst(nameHash);
+struct hashEl *hel;
+
+while ((hel = hashNext(&cook)) != NULL)
+    {
+    if (sqlTableExists(conn, hel->name))
+	{
+	struct slName *name = newSlName(hel->name);
+	slAddHead(&list, name);
+	}
+    }
+
+freeHash(&nameHash);
+return list;
 }
 
 boolean hArchiveDbExists(char *database)
