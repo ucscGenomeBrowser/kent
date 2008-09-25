@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.72 2008/09/25 20:42:56 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.73 2008/09/25 21:38:53 mikep Exp $
 
 use warnings;
 use strict;
@@ -239,7 +239,8 @@ our %formatCheckers = (
     tagAlign => \&validateTagAlign,
     narrowPeak => \&validateNarrowPeak,
     fastq => \&validateFastQ,
-    download => \&validateDownload,
+    csfasta => \&validateCsfasta,
+    csqual  => \&validateCsqual,
     );
 
 sub isZipped
@@ -457,14 +458,82 @@ sub validateFastQ
     return ();
 }
 
-sub validateDownload
+sub validateCsfasta
 {
-    # just check the file exists and is not size 0 (empty)
+    # Syntax per http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm
+    # Sample:-
+
+    # # Wed Jul 30 15:30:48 2008 /share/apps/corona/bin/filter_fasta.pl --output=/data/results/S0033/S0033_20080723_2/I22_EA/results.01/primary.20080730194737531 --name=S0033_20080723_2_I22_EA_ --tag=F3 --minlength=30 --mask=111111111111111111111111111111 --prefix=T /data/results/S0033/S0033_20080723_2/I22_EA/jobs/postPrimerSetPrimary.1416/rawseq 
+    # # Cwd: /home/pipeline
+    # # Title: S0033_20080723_2_I22_EA_
+    # >461_19_90_F3
+    # T203033330010111011221200302001
+    # >461_19_209_F3
+    # T022213002230311203200200322000
     my ($path, $file, $type) = @_;
-    return("Invalid $type file: [$path/$file] does not exist\n") unless -e "$path/$file";
-    return("Invalid $type file: [$path/$file] is empty\n") unless -s "$path/$file";
-    return();
+    my $fh = openUtil($path, $file);
+    my $line = 0;
+    my $state = 'header';
+    my $seqName;
+    my $states = {header => {REGEX => "^>\\d+_\\d+_\\d+_\.\\d+", NEXT => 'seq'},
+                  seq => {REGEX => "^T\\d+", NEXT => 'header'},
+                  };
+    while(<$fh>) {
+        chomp;
+        $line++;
+        next if m/^#/;
+        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid";
+        my $regex = $states->{$state}{REGEX};
+        if(/^${regex}$/) {
+	        $seqName = $1 if($state eq 'header');
+	        $state = $states->{$state}{NEXT};
+        } else {
+	         return("$errorPrefix (expecting $state):\nline: $_");
+        }
+     }
+    $fh->close();
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    return ();
 }
+
+sub validateCsqual
+{
+    # Syntax per http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm
+    # Sample:-
+
+    # # Cwd: /home/pipeline
+    # # Title: S0033_20080723_2_I22_EA_
+    # >461_19_90_F3
+    # 20 10 8 13 8 10 20 7 7 24 15 22 21 14 14 8 11 15 5 20 6 5 8 22 6 24 3 16 7 11 
+    # >461_19_209_F3
+    # 16 8 5 12 20 24 19 8 13 17 11 23 8 24 8 7 17 4 20 8 29 7 3 16 3 4 8 20 17 9 
+
+    my ($path, $file, $type) = @_;
+    my $fh = openUtil($path, $file);
+    my $line = 0;
+    my $state = 'header';
+    my $seqName;
+    my $states = {header => {REGEX => "^>\\d+_\\d+_\\d+_\.\\d+", NEXT => 'qual'},
+                  qual => {REGEX => "^(\\d+ )+", NEXT => 'header'},
+                  };
+    while(<$fh>) {
+        chomp;
+        $line++;
+        next if m/^#/;
+        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid";
+        my $regex = $states->{$state}{REGEX};
+        if(/^${regex}$/) {
+	        $seqName = $1 if($state eq 'header');
+	        $state = $states->{$state}{NEXT};
+        } else {
+	         return("$errorPrefix (expecting $state) [regex=$regex]:\nline: [$_]");
+        }
+     }
+    $fh->close();
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    return ();
+}
+
 
 ############################################################################
 # Misc subroutines
