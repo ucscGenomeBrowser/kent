@@ -32,6 +32,7 @@ use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose/;
 
 my $loadRa = "out/$Encode::loadFile";
 my $unloadRa = "out/$Encode::unloadFile";
+my $trackDb = "out/trackDb.ra";
 my $submitDir = "";
 my $submitPath;			# full path of data submission directory
 my $submitType = "";		# currently ignored
@@ -96,6 +97,19 @@ sub loadWig
         die("ERROR: failed wiggle ln\n");
     } else {
         print "$fileList loaded into $tableName\n";
+
+        # retrieve lower and upper limits from $stderrFile and fix-up trackDb.ra file to add this to wig type line
+        my $lines = Encode::readFile($stderrFile);
+        for my $line (@{$lines}) {
+            if($line =~ /Converted stdin, upper limit (.+), lower limit (.+)/) {
+                my $max = $1;
+                my $min = $2;
+                my $placeHolder = Encode::wigMinMaxPlaceHolder($tableName);
+                my $cmd = "/usr/local/bin/perl -i -ne 's/$placeHolder/$min $max/; print;' $trackDb";
+                HgAutomate::verbose(2, "updating $trackDb to set min/max for $tableName to $min,$max\ncmd: $cmd\n");
+                !system($cmd) || die "trackDb.ra update failed: $?\n";
+            }
+        }
     }
     push(@{$pushQ->{TABLES}}, $tableName);
     push(@{$pushQ->{FILES}}, "$submitPath/$tableName.wib");
@@ -105,7 +119,7 @@ sub loadBed
 {
     my ($assembly, $tableName, $fileList, $pushQ) = @_;
     #TEST by replacing "cat" with  "head -1000 -q"
-    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=out");
+    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
     if(my $err = $safe->exec()) {
         die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
@@ -128,7 +142,7 @@ sub loadBedFromSchema
     if($sqlTable =~ /peak/) {
         $fillInArg = "-fillInScore=signalValue ";
     }
-    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=out -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
+    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
 
     if(my $err = $safe->exec()) {
@@ -215,7 +229,7 @@ if(!(-e $unloader)) {
 if(!(-e $unloader)) {
     die "Can't find unloader ($unloader)\n";
 }
-if(system("$unloader $submitType $submitDir")) {
+if(system("$unloader $submitType $submitPath")) {
     die "unload script failed\n";
 }
 
