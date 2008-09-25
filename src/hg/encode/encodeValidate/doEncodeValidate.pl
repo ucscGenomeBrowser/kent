@@ -17,12 +17,13 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.69 2008/09/25 00:16:13 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.70 2008/09/25 00:39:57 mikep Exp $
 
 use warnings;
 use strict;
 
 use File::stat;
+use File::Basename;
 use Getopt::Long;
 use English;
 use Carp qw(cluck);
@@ -228,11 +229,13 @@ sub validateReplicate {
 our %formatCheckers = (
     wig => \&validateWig,
     bed => \&validateBed,
+    bedGraph => \&validateBedGraph,
     bed5FloatScore => \&validateBed,
     genePred => \&validateGene,
     tagAlign => \&validateTagAlign,
     narrowPeak => \&validateNarrowPeak,
     fastq => \&validateFastQ,
+    download => \&validateDownload,
     );
 
 sub isZipped
@@ -310,7 +313,7 @@ sub validateBed {
             die "$prefix field 5 value ($fields[4]) is invalid; score must be 0-1000\n";
         } elsif ($type eq 'bed5FloatScore' && $fieldCount < 6) {
             die "$prefix field 6 invalid; bed5FloatScore requires 6 fields";
-        } elsif ($type eq 'bed5FloatScore' && $fields[5] !~ /^$floatRegEx^/) {
+        } elsif ($type eq 'bed5FloatScore' && $fields[5] !~ /^$floatRegEx$/) {
             die "$prefix field 6 value '$fields[5]' is invalid; must be a float\n";
         } else {
             ;
@@ -320,6 +323,44 @@ sub validateBed {
     HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
     return ();
 }
+
+sub validateBedGraph {
+# Validate each line of a bedGraph file.
+    my ($path, $file, $type) = @_;
+    my $line = 0;
+    my $fh = openUtil($path, $file);
+    while(<$fh>) {
+        chomp;
+        my @fields = split /\s+/;
+        $line++;
+        my $fieldCount = @fields;
+        next if(!$fieldCount);
+        my $prefix = "Failed bedGraph validation, file '$file'; line $line:";
+        if(/^(track|browser)/) {
+            ;
+        } elsif($fieldCount != 4) {
+            die "$prefix found " . scalar(@fields) . " fields; need 4\n";
+        } elsif ($fields[0] !~ /^chr(\d+|M|X|Y)$/) {
+            # I have seen non-standard chrom names (e.g. "chr2_hap2" from Wold) and we want
+            # to make sure we don't import those.
+            die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
+        } elsif ($fields[1] !~ /^\d+$/) {
+            die "$prefix field 2 value ($fields[1]) is invalid; value must be a positive number\n";
+        } elsif ($fields[2] !~ /^\d+$/) {
+            die "$prefix field 3 value ($fields[2]) is invalid; value must be a positive number\n";
+        } elsif ($fields[2] < $fields[1]) {
+            die "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])\n";
+        } elsif ($fields[3] !~ /^$floatRegEx$/) {
+            die "$prefix field 4 value '$fields[3]' is invalid; must be a float [$floatRegEx]\n";
+        } else {
+            ;
+        }
+    }
+    $fh->close();
+    HgAutomate::verbose(2, "File \'$file\' passed bedGraph validation\n");
+    return ();
+}
+
 
 sub validateGene {
     my ($path, $file, $type) = @_;
@@ -349,7 +390,8 @@ sub validateTagAlign
     my $fh = openUtil($path, $file);
     while(<$fh>) {
         $line++;
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[ATCG\.]+\s+\d+\s+[+-]$/)) {
+	# MJP: for now, allow colorspace sequences as well as DNA + dot
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[0-3ATCG\.]+\s+\d+\s+[+-]$/)) {
             chomp;
             return "Invalid $type file; line $line in file '$file' is invalid:\nline: $_";
         }
@@ -409,6 +451,15 @@ sub validateFastQ
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
     return ();
+}
+
+sub validateDownload
+{
+    # just check the file exists and is not size 0 (empty)
+    my ($path, $file, $type) = @_;
+    return("Invalid $type file: [$path/$file] does not exist\n") unless -e "$path/$file";
+    return("Invalid $type file: [$path/$file] is empty\n") unless -s "$path/$file";
+    return();
 }
 
 ############################################################################
@@ -612,6 +663,7 @@ if(@errors) {
 
 %terms = Encode::getControlledVocab($configPath);
 
+
 # Process lines in DDF file. Create a list with one entry per line;
 # the entry is field/value hash (fields per @ddfHeader).
 
@@ -709,6 +761,23 @@ if(!@errors) {
                 $daf->{TRACKS}{$newView}{order} = ++$maxOrder;
             }
             $ddfReplicateSets{$key}{VIEWS}{$newView} = \%line;
+	    my @unzippedFiles = ();
+	    for my $file (@{$alignmentLine->{files}}) {
+		# Unzip any zipped files - only works if they are with .gz suffix
+		my ($fbase,$dir,$suf) = fileparse($file, ".gz");
+		if ($suf eq ".gz") {
+		    my $err = system("zcat $file > $fbase");
+		    if ($err) {
+			die ("File \'$file\' failed zcat unzipping to \'$fbase\'\n");
+		    }
+		    HgAutomate::verbose(2, "File \'$file\' zcat unzipped to \'$fbase\'\n");
+		    push @unzippedFiles, $fbase;
+		} else {
+		    push @unzippedFiles, $file;
+		}
+	    }
+	    $alignmentLine->{files} = \@unzippedFiles;
+	    # Now we can safely sort these files as none are zipped
             my $files = join(" ", @{$alignmentLine->{files}});
             my $tmpFile = $Encode::autoCreatedPrefix . "$tmpCount.bed";
             $tmpCount++;
@@ -759,7 +828,7 @@ foreach my $ddfLine (@ddfLines) {
     $ddfLineNumber++;
     my $diePrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
     my $view = $ddfLine->{view};
-    my $type = $daf->{TRACKS}{$view}{type};
+    my $type = $daf->{TRACKS}{$view}{type} || die "Missing DAF entry for view '$view'\n";
 
     HgAutomate::verbose(2, "  View: $view\n");
     my $replicate;
