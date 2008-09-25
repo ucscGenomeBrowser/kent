@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.71 2008/09/25 20:26:02 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.72 2008/09/25 20:42:56 larrym Exp $
 
 use warnings;
 use strict;
@@ -29,6 +29,7 @@ use English;
 use Carp qw(cluck);
 use Cwd;
 use IO::File;
+use File::Basename;
 
 use lib "/cluster/bin/scripts";
 use Encode;
@@ -40,10 +41,11 @@ use SafePipe;
 use vars qw/
     $opt_allowReloads
     $opt_configDir
+    $opt_fileType
     $opt_outDir
+    $opt_skipAutoCreation
     $opt_validateDaf
     $opt_validateFile
-    $opt_fileType
     $opt_verbose
     /;
 
@@ -65,9 +67,11 @@ options:
     -allowReloads       Allow reloads of existing tables
     -configDir=dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
+    -fileType=type	used only with validateFile option; e.g. narrowPeak
+    -skipAutoCreation   Tells script skip creating the auto-created files (e.g. RawSignal); this can save you a lot of time
+                        when you are debugging and re-running the script on large projects
     -validateDaf	exit after validating DAF file (project-submission-dir is the DAF file name).
     -validateFile	exit after validating file (project-submission-dir is the file name; requires -fileType option as well)
-    -fileType=type	used only with validateFile option; e.g. narrowPeak
     -verbose=num        Set verbose level to num (default 1).
     -outDir=dir         Path of output directory, for validation files
                         (default: submission-dir/out)
@@ -520,10 +524,11 @@ my $wd = cwd();
 
 my $ok = GetOptions("allowReloads",
                     "configDir=s",
+                    "fileType=s",
                     "outDir=s",
+                    "skipAutoCreation",
                     "validateDaf",
                     "validateFile",
-                    "fileType=s",
                     "verbose=i",
                     );
 usage() if (!$ok);
@@ -663,6 +668,15 @@ if(@errors) {
 
 %terms = Encode::getControlledVocab($configPath);
 
+my @variables;
+if (defined($daf->{variables})) {
+    @variables = @{$daf->{variableArray}};
+} else {
+    # XXXX this may not in fact be an error (i.e. will we have DAF's w/o variables?) 
+    die "Missing variables list\n";
+}
+
+my %metadataHash;
 
 # Process lines in DDF file. Create a list with one entry per line;
 # the entry is field/value hash (fields per @ddfHeader).
@@ -723,6 +737,8 @@ while (@{$lines}) {
             # avoid spurious errors by not putting invalid lines into %ddfSets
             $ddfSets{ddfKey(\%line, \%ddfHeader, $daf, 0)}{VIEWS}{$view} = \%line;
             $ddfReplicateSets{ddfKey(\%line, \%ddfHeader, $daf, 1)}{VIEWS}{$view} = \%line;
+            my $str = join(", ", map($line{$_}, sort(@variables)));
+            $metadataHash{$str} = 1;
         }
         push(@ddfLines, \%line);
     } else {
@@ -781,13 +797,17 @@ if(!@errors) {
             my $files = join(" ", @{$alignmentLine->{files}});
             my $tmpFile = $Encode::autoCreatedPrefix . "$tmpCount.bed";
             $tmpCount++;
-            HgAutomate::verbose(2, "Auto-creating view '$newView' for key '$key'\n");
-            my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $daf->{assembly} stdin");
-            my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
-            if(my $err = $safe->exec()) {
-                print STDERR  "ERROR: failed creation of wiggle for $key" . $safe->stderr() . "\n";
-                # don't show end-user pipe error(s)
-                pushError(\@errors, "failed creation of wiggle for '$key'");
+            if($opt_skipAutoCreation) {
+                HgAutomate::verbose(2, "Skipping auto-creating view '$newView' for key '$key'\n");
+            } else {
+                HgAutomate::verbose(2, "Auto-creating view '$newView' for key '$key'\n");
+                  my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $daf->{assembly} stdin");
+                  my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
+                  if(my $err = $safe->exec()) {
+                      print STDERR  "ERROR: failed creation of wiggle for $key" . $safe->stderr() . "\n";
+                      # don't show end-user pipe error(s)
+                      pushError(\@errors, "failed creation of wiggle for '$key'");
+                  }
             }
             $line{files} = [$tmpFile];
             push(@ddfLines, \%line);
@@ -813,11 +833,6 @@ if(@errors) {
 open(LOADER_RA, ">$outPath/$Encode::loadFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::loadFile\' file; error: $!\n";
 open(TRACK_RA, ">$outPath/$Encode::trackFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::trackFile\' file; error: $!\n";
 open(README, ">$outPath/README.txt") || die "SYS ERROR: Can't write '$outPath/READEME.txt' file; error: $!\n";
-
-my @variables;
-if (defined($daf->{variables})) {
-    @variables = @{$daf->{variableArray}};
-}
 
 # XXXX Calculation of priorities still needs work; we currently don't account for multiple experiments in the same DDF.
 # It may in fact be too much work to do automatic calculation of priorities (i.e. the wrangler may have to do it manually).
@@ -937,7 +952,12 @@ foreach my $ddfLine (@ddfLines) {
         print TRACK_RA "\tshortLabel\t$shortLabel\n";
         print TRACK_RA "\tlongLabel\t$longLabel\n";
         print TRACK_RA "\tsubGroups\t$subGroups\n";
-        print TRACK_RA "\ttype\t$type\n";
+        if($type eq 'wig') {
+            my $placeHolder = Encode::wigMinMaxPlaceHolder($tableName);
+            print TRACK_RA "\ttype\t$type $placeHolder\n";
+        } else {
+            print TRACK_RA "\ttype\t$type\n";
+        }
         print TRACK_RA sprintf("\tdateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
         print TRACK_RA "\tpriority\t" . ($priority + $daf->{TRACKS}{$view}{order}) . "\n";
         # noInherit is necessary b/c composite track will often have a different dummy type setting.
@@ -963,3 +983,19 @@ close(TRACK_RA);
 close(README);
 
 exit 0;
+
+# XXXX Turn this code on when metadata and count field has been added to encpipeline_prod
+
+if($submitDir =~ /(\d+)$/) {
+    my $id = $1;
+    if(dirname($submitDir) =~ /_(.*)/) {
+        my $instance = $1;
+        # XXXX rubyDb logic s/d probably be moved to Encode.pm
+        my $rubyDb = HgDb->new(DB => "encpipeline_$instance");
+        my @tmp = keys %metadataHash;
+        my $count = scalar(@tmp);
+        my $metadata = join("; ", @tmp);
+        HgAutomate::verbose(2, "Updating id '$id'; metdata: '$metadata'; count: 'count'\n");
+        $rubyDb->execute("update projects set count = ?, metadata = ? where id = ?", $count, $metadata, $id);
+    }
+}
