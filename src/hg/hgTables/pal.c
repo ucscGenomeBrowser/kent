@@ -4,7 +4,7 @@
 #include "hgTables.h"
 #include "pal.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.10 2008/09/17 17:54:03 braney Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.11 2008/09/25 16:40:25 braney Exp $";
 
 boolean isGenePredTable(struct trackDb *track, char *table)
 /* Return TRUE if table is genePred. */
@@ -63,7 +63,9 @@ hashFree(&hash);
 void addOurButtons()
 /* callback from options dialog to add navigation buttons */
 {
-cgiMakeButton(hgtaDoPalOut, "submit");
+printf("For information about output data format see "
+  "<A HREF=\"../goldenPath/help/hgTablesHelp.html#FASTA\">Table Browser User's Guide</A><BR>");
+cgiMakeButton(hgtaDoPalOut, "get output");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", hgtaDoPal);
