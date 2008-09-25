@@ -1,0 +1,75 @@
+<a name="HudsonAlpha.2FCaltech_ChIP-Seq_Docs"></a><h1> HudsonAlpha/Caltech ChIP-Seq Docs </h1>
+<a name="Description"></a><h2> Description </h2>
+<p>These tracks display binding sites of the specified transcription
+factors in the given cell types as identified by ChIP-Seq (<a href='#1'>1</a>).
+The ChIP-Seq method uses formaldehyde to cross-link DNA associated
+proteins to genomic DNA within living cells. The cross-linked cells are
+lysed and sonicated, releasing small soluble chromatin fragments. The
+chromatin fragments bound by a specific or general transcription
+factors are immunoprecipitated by using an antibody directed against a
+specific transcription factor of interest. After reversing the chemical
+cross-links, the recovered DNA fragments are ligated to specific
+double-stranded DNA adapters, size-selected and sequenced. Short reads
+of 25-35 bp are mapped to the human reference genome, generating peaks
+or enriched regions of high read density relative to a total input
+chromatin control reads.
+</p>
+<a name="Methods"></a><h2> Methods </h2>
+<p><b> Chromatin immunoprecipitation (ChIP) </b>
+</p><p>Cross-linked chromatin was immunoprecipitated with antibody according to the protocol posted at <a href="http://myers.hudsonalpha.org/content/protocols.html"  title="http://myers.hudsonalpha.org/content/protocols.html" rel="nofollow">http://myers.hudsonalpha.org/content/protocols.html</a>. We tested biological replicates from each cell line.  
+</p><p><b> DNA library construction and sequencing </b>
+</p><p>We generated libraries from DNA fragments recovered from
+immunoprecipitation and total input chromatin according to the protocol
+posted at <a href="http://myers.hudsonalpha.org/content/protocols.html"  title="http://myers.hudsonalpha.org/content/protocols.html" rel="nofollow">http://myers.hudsonalpha.org/content/protocols.html</a>.  We sequenced these libraries with an Illumina Genome Analyzer (GA1) according to the manufacturer's recommendations.
+</p><p><br>
+<b> Validation of ChIP-Seq </b>
+</p><p>Quantitative polymerase chain reaction (qPCR) assays can be used
+to validate the transcription factor binding sites found using
+ChIP-seq. The computational algorithm <a href="http://mendel.stanford.edu/sidowlab/downloads/quest"  title="http://mendel.stanford.edu/sidowlab/downloads/quest" rel="nofollow">QuEST</a>
+(<a href='#2'>2</a>) identifies regions of enriched read density. QuEST reports a single
+genomic coordinate (peak) for each enriched region. These peaks are
+ranked according to the ChIP-seq enrichment ratio and qPCR assays are
+used to validate the set of overlapping peaks between replicates for
+each cell line. We designed qPCR primer pairs to interrogate the list
+of ordered peaks in common between replicates. Amplicons were 60-100 bp
+in length and were completely contained within 250 bp of either side of
+the peak coordinate. For each primer pair, we performed qPCR assays on
+biological replicate ChIP samples on both cell lines and recovered
+total input chromatin DNA. We calculated enrichment as a ratio of
+amount of target DNA over the average of a pair of negative control
+primers. We considered an assay as positive when it had a two-fold or
+greater enrichment of the average qPCR replicates (<a href='#2'>2</a>).
+</p><p><br>
+<b> Processing and analysis software used </b>
+</p><p>Sequence data produced by the Illumina data pipeline software
+were quality filtered and then mapped to hg18 using its integrated
+Eland software. To identify likely binding sites, Peak Calling was
+applied on the aligned sequence data sets using QuEST (<a href='#2'>2</a>):
+quantitative enrichment of sequence tags (QuEST) is based on the kernel
+density estimation approach, which uses ChIP-Seq data to determine
+positions where protein complexes contact DNA. QuEST uses data in the
+form of genome coordinates ('tags') obtained from mapping several
+million sequencing reads to a reference genome. Tags from forward and
+reverse reads cluster on opposite sides of the transcription factor
+binding site. QuEST first constructs two separate profiles, one for
+forward and one for reverse tags. QuEST identifies candidates for
+combined density profile (CDP) peaks as positions in the reference
+genome corresponding to local maxima of the CDP with sufficient
+enrichment compared to the control data.
+</p>
+<a name="Credits"></a><h2> Credits </h2>
+<a name="References"></a><h2> References </h2>
+<p><a name='1'>1</a>. 
+Johnson DS, Mortazavi A, Myers RM, Wold B.
+<a href='http://www.sciencemag.org/cgi/content/full/316/5830/1497'>Genome-wide mapping of in vivo protein-DNA interactions</a>.
+Science. 2007 Jun 8;316(5830):1497-502. 
+See also: 
+Fields S.
+<a href='http://www.sciencemag.org/cgi/content/full/316/5830/1441'>Molecular biology. Site-seeing by sequencing</a>.
+Science. 2007 Jun 8;316(5830):1441-2. 
+</p>
+<p><a name='2'>2</a>. 
+Valouev A, Johnson DS, Sundquist A, Medina C, Anton E, Batzoglou S, Myers RM, Sidow A.
+<a href='http://www.nature.com/nmeth/journal/v5/n9/abs/nmeth.1246.html'>Genome-wide analysis of transcription factor binding sites based on ChIP-Seq data</a>.
+Nat Methods. 2008 Aug 17. 
+</p>
