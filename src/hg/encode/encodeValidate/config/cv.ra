@@ -332,6 +332,12 @@ vendorName BD Biosciences
 vendorId 612044 
 
 # localization
+term cell
+type localization
+description whole cell
+termId GO:0005634
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
+
 term nucleus
 type localization
 description Large membrane bound part of cell containing chromosomes and the bulk of the cell's DNA
