@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.70 2008/09/25 00:39:57 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.71 2008/09/25 20:26:02 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -391,7 +391,7 @@ sub validateTagAlign
     while(<$fh>) {
         $line++;
 	# MJP: for now, allow colorspace sequences as well as DNA + dot
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[0-3ATCG\.]+\s+\d+\s+[+-]$/)) {
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[0-3ATCGN\.]+\s+\d+\s+[+-]$/)) {
             chomp;
             return "Invalid $type file; line $line in file '$file' is invalid:\nline: $_";
         }
