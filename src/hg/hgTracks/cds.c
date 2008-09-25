@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.86 2008/09/20 09:35:15 baertsch Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.87 2008/09/25 23:11:00 angie Exp $";
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -1437,7 +1437,7 @@ for (sf = lf->codons; sf != NULL; sf = sf->next)
                 {
                 if (mrnaCodon != genomicCodon[0] && protEquivalent(genomicCodon[0], mrnaCodon))
                     color = cdsColor[CDS_SYN_PROT];
-                    drawScaledBoxBlend(hvg, s, e, scale, xOff, y, heightPer, color);
+		drawScaledBoxBlend(hvg, s, e, scale, xOff, y, heightPer, color);
                 }
 	    }
 	else
