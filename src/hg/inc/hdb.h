@@ -88,6 +88,9 @@ struct slName *hTrackDbList(void);
 void hSetTrackDbName(char *trackDbName);
 /* Override the hg.conf db.trackDb setting. */
 
+struct slName *hTrackTablesOfType(struct sqlConnection *conn, char *type);
+/* get list of tables in trackDb list with type */
+
 char *hPdbFromGdb(char *genomeDb);
 /* return the name of the proteome database given the genome database name */
 
