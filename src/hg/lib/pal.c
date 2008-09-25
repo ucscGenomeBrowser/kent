@@ -11,14 +11,7 @@
 #include "hPrint.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.4 2008/09/25 18:12:13 braney Exp $";
-
-/* this is for a list of MAF tables in the current
- * genome. 
- */
-#define STATIC_ARRAY_SIZE   1024
-static char *mafTrackNames[STATIC_ARRAY_SIZE];
-static char *mafTrackExist[STATIC_ARRAY_SIZE];
+static char const rcsid[] = "$Id: pal.c,v 1.5 2008/09/25 22:20:11 braney Exp $";
 
 #define hgtaCGIGeneMafTable "hgta_mafGeneMafTable" 
 #define hgtaJSGeneMafTable  "mafGeneMafTable" 
@@ -147,49 +140,30 @@ return NULL;
 
 static char * outMafTableDrop(struct cart *cart, struct sqlConnection *conn)
 {
-char query[512];
-struct sqlResult *sr;
-char **row;
+struct slName *list = hTrackTablesOfType(conn, "wigMaf%%");
+int count = slCount(list);
 
-safef(query, sizeof query, "select tableName from trackDb where type like 'wigMaf%%'");
-sr = sqlGetResult(conn, query);
-int count = 0;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    mafTrackNames[count] = cloneString(row[0]);
-    if (count == STATIC_ARRAY_SIZE)
-	break;
-    count++;
-    }
-sqlFreeResult(&sr);
+if (count == 0)
+    errAbort("There are no multiple alignments available for this genome.");
 
-/* discover tables that exist and see if one is our current table */
+char **tables = needMem(sizeof(char *) * count);
+char **tb = tables;
 char *mafTable = cartOptionalString(cart, hgtaCGIGeneMafTable);
-int count2 = 0;
-int ii;
-char *checked = NULL;
-for(ii=0; ii < count; ii++)
-    {
-    if (sqlTableExists(conn, mafTrackNames[ii]))
-	{
-	mafTrackExist[count2] = mafTrackNames[ii];
-	if ((mafTable != NULL) && sameString(mafTable, mafTrackExist[count2]))
-	    checked = mafTrackExist[count2];
-	count2++;
-	}
-    }
 
-if ((mafTable == NULL) || (checked == NULL))
+if (mafTable == NULL)
     {
     if ((mafTable = getConservationTrackName(conn)) == NULL)
-	mafTable = mafTrackExist[0];
+	mafTable = list->name;
 
-    checked = mafTable;
     cartSetString(cart, hgtaCGIGeneMafTable, mafTable);
     }
 
+for(; list; list = list->next)
+    *tb++ = list->name;
+
 printf("<B>MAF table: </B>\n");
-cgiMakeDropListFull(hgtaCGIGeneMafTable, mafTrackExist, mafTrackExist, count2,  checked, onChangeGenome());
+cgiMakeDropListFull(hgtaCGIGeneMafTable, tables, tables, 
+    count , mafTable, onChangeGenome());
 
 return mafTable;
 }
