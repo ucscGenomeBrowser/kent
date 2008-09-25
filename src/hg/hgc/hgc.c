@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1463 2008/09/20 20:06:47 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1464 2008/09/25 22:22:19 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8739,10 +8739,16 @@ for (i = 0; imgExt[i] != NULL; i++)
 return NULL;
 }
 
-void addPalLink(char *track, char *chrom, int start, int end, char *geneName)
+void addPalLink(struct sqlConnection *conn, char *track, 
+    char *chrom, int start, int end, char *geneName)
 {
-printf("<B>CDS FASTA alignment from multiple alignment: </B>\n");
-linkToPal( track, chrom, start, end, geneName);
+struct slName *list = hTrackTablesOfType(conn, "wigMaf%%");
+
+if (list != NULL)
+    {
+    printf("<B>CDS FASTA alignment from multiple alignment: </B>\n");
+    linkToPal( track, chrom, start, end, geneName);
+    }
 }
 
 void addGeneExtra(char *geneName)
@@ -9001,7 +9007,7 @@ printf("<table border=0>\n<tr>\n");
 prRefGeneInfo(conn, rnaName, sqlRnaName, rl, isXeno);
 addGeneExtra(rl->name);  /* adds columns if extra info is available */
 
-addPalLink(tdb->tableName,  chrom, left, right, rnaName);
+addPalLink(conn, tdb->tableName,  chrom, left, right, rnaName);
 
 printf("</tr>\n</table>\n");
 
