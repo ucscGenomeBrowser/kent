@@ -1,6 +1,8 @@
+include ../../../inc/common.mk
+
 # make VERBOSE=-verbose=2 will echo out positions as they convert
 
-test:   bin bedPlus3 simpleTest minus enm001 chuckTest chuckBigTest enr223
+test:   bin bedPlus3 bed8 simpleTest minus enm001 chuckTest chuckBigTest enr223
 
 PROG=liftOver
 
@@ -11,6 +13,14 @@ bed12:	mkdirs
                 output/bed12.good.bed output/bed12.bad.bed
 	cat output/bed12.{good,bad}.bed | \
                 diff - expected/bed12.bed
+
+bed8:	mkdirs
+	${BINDIR}/${PROG} \
+            input/bed8.bed \
+            /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain.gz \
+                output/bed8.good.bed output/bed8.bad.bed
+	cat output/bed8.{good,bad}.bed | \
+                diff - expected/bed8.bed
 
 bin:    mkdirs
 	${BINDIR}/${PROG} -hasBin -bedPlus=6\
