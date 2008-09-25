@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.102 2008/05/05 22:29:58 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.103 2008/09/25 20:47:42 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3258,7 +3258,7 @@ cuser     = cfgOption("rrcentral.user"    );
 cpassword = cfgOption("rrcentral.password");
 centraldb = cfgOption("rrcentral.db");
 
-webStart(NULL, "Track and Table Releases");
+webStart(NULL, NULL, "Track and Table Releases");
 
 
 
@@ -3326,7 +3326,8 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 
 printf("</ul>\n");
 printf("<p>\n");
-printf(" For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/gbdDescriptions.html>Description of the annotation database</a> and the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>\n");
+printf(" For more information about the tracks and tables listed on this page, refer to the "
+"<a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>\n");
 
 strftime (now, sizeof(now), "%02d %b %Y", loctime); /* default to today's date */
 printf("<em>Last updated %s. <a HREF=\"mailto:genome@soe.ucsc.edu\">Inquiries and feedback welcome</a>.</em>\n",now);
