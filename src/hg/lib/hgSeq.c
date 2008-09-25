@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "hgSeq.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.35 2008/09/10 23:10:24 angie Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.36 2008/09/25 22:07:34 angie Exp $";
 
 int hgSeqChromSize(char *db, char *chromName)
 /* get chrom size if there's a database out there,
@@ -507,25 +507,22 @@ static void addFeature(int *count, unsigned *starts, unsigned *sizes,
                 int start, int size, boolean eFlag, boolean cFlag,
                 int chromSize)
 {
-if (size > 0)
+if (start < 0)
     {
-    if (start < 0)
-	{
-	size += start;
-	start = 0;
-	}
+    size += start;
+    start = 0;
+    }
 
 /* if we know the chromSize, don't try to get more than's there */
-    if ((chromSize > 0) && (start + size > chromSize))
-	size = chromSize - start;
-    if (*count > maxStartsOffset)
-	errAbort("addFeature: overflow (%d > %d)", *count, maxStartsOffset);
-    starts[*count]    = start;
-    sizes[*count]     = size;
-    exonFlags[*count] = eFlag;
-    cdsFlags[*count]  = cFlag;
-    (*count)++;
-    }
+if ((chromSize > 0) && (start + size > chromSize))
+    size = chromSize - start;
+if (*count > maxStartsOffset)
+    errAbort("addFeature: overflow (%d > %d)", *count, maxStartsOffset);
+starts[*count]    = start;
+sizes[*count]     = size;
+exonFlags[*count] = eFlag;
+cdsFlags[*count]  = cFlag;
+(*count)++;
 }
 
 void hgSeqRange(char *db, char *chrom, int chromStart, int chromEnd, char strand,
