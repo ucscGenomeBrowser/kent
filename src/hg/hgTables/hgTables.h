@@ -570,8 +570,9 @@ void doSummaryStatsChromGraph(struct sqlConnection *conn);
 
 /* ----------- hgPal stuff in pal.c ------------------------------*/
 
-boolean isGenePredTable(struct trackDb *track, char *table);
-/* Return TRUE if table is maf. */
+boolean isPalCompatible(struct sqlConnection *conn, 
+    struct trackDb *track, char *table);
+/* Return TRUE if table is genePred and there is a maf. */
 
 void doOutPalOptions( struct sqlConnection *conn);
 /* Output protein alignment page */
