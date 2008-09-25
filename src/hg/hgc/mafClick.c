@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.55 2008/09/03 19:19:08 markd Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.56 2008/09/25 03:44:23 kate Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -185,20 +185,20 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		else
 		    fprintf(f, "  ");
 
-		if (hDbExists(dbOnly))
-		    {
-		    dyStringPrintf(dy, "Get %s DNA %s:%d-%d %c %*dbps",hOrganism(dbOnly),chrom, s+1, e, mc->strand,sizeChars, mc->size);
-		    printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A> ",  dy->string,hgcName(),
-		       s, cgiEncode(chrom),
-		       chrom, s, e, dbOnly, revComp);
-		    }
-		else
-		    fprintf(f, "  ");
-		}
-	    else
-		{
-		fprintf(f, "    ");
-		}
+                if (hDbExists(dbOnly))
+                    {
+                    dyStringPrintf(dy, "Get %s DNA %s:%d-%d %c %*dbps",hOrganism(dbOnly),chrom, s+1, e, mc->strand,sizeChars, mc->size);
+                    printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A> ",  dy->string,hgcName(),
+                       s, cgiEncode(chrom),
+                       chrom, s, e, dbOnly, revComp);
+                    }
+                else
+                    fprintf(f, "  ");
+                }
+            else
+                {
+                fprintf(f, "    ");
+                }
 
 	    dyStringClear(dy);
 	    dyStringPrintf(dy, "%s:%d-%d %c %*dbps",chrom, s+1, e, mc->strand,sizeChars, mc->size);
@@ -235,13 +235,19 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 			}
 		    else
 			fprintf(f,"  ");
-		    dyStringPrintf(dy, "Get %s DNA %s:%d-%d %c %d bps Unaligned",hOrganism(dbOnly),chrom, s+1, e, mc->strand, e-s);
 
-		    printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A>  ", dy->string,  hgcName(),
-		       s, cgiEncode(chrom),
-		       chrom, s, e, dbOnly,revComp);
-		    }
-		else
+                    if (hDbExists(dbOnly))
+                        {
+                        dyStringPrintf(dy, "Get %s DNA %s:%d-%d %c %d bps Unaligned",hOrganism(dbOnly),chrom, s+1, e, mc->strand, e-s);
+
+                        printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A>  ", dy->string,  hgcName(),
+                           s, cgiEncode(chrom),
+                           chrom, s, e, dbOnly,revComp);
+                        }
+                    else
+                        fprintf(f, "  ");
+                    }
+                else
 		    fprintf(f, "     ");
 		initSummaryLine(summaryLine, size, ' ');
 		dyStringClear(dy);
@@ -319,10 +325,14 @@ if (haveInserts)
 	    else
 		fprintf(f, "  ");
 
-	    printf("<A TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A> ",  hgcName(),
-	       s, cgiEncode(chrom),
-	       chrom,  s, e, dbOnly,revComp);
-	    fprintf(f, "%*s %dbp\n", srcChars, org,mc->rightLen);
+            if (hDbExists(dbOnly))
+                {
+                printf("<A TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A> ",  hgcName(), 
+                    s, cgiEncode(chrom), chrom,  s, e, dbOnly,revComp);
+                }
+	    else
+		fprintf(f, "  ");
+            fprintf(f, "%*s %dbp\n", srcChars, org,mc->rightLen);
 	    }
 	}
     fprintf(f, "\n");
