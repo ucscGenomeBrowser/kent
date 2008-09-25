@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.22 2008/09/24 22:03:04 larrym Exp $
+# $Id: Encode.pm,v 1.23 2008/09/25 20:43:55 larrym Exp $
 
 package Encode;
 
@@ -373,6 +373,13 @@ sub restrictionDate
         $mday = 1;
     }
     return ($sec,$min,$hour,$mday,$restrictedMon,$restrictedYear,$wday,$yday,$isdst);
+}
+
+sub wigMinMaxPlaceHolder
+{
+# This is a placeholder used to let the loader fixup the min/max ranges for wig's
+    my ($tableName) = @_;
+    return uc("${tableName}_MinMaxRange");
 }
 
 1;
