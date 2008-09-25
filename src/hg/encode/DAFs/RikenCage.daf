@@ -1,4 +1,4 @@
-# Data Agreement File for CAGE project $Revision: 1.1 $
+# Data Agreement File for CAGE project $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -12,58 +12,34 @@ assembly          hg18
 dafVersion        0.2.2
 
 # Track/view definition
-view             PlusTSS
+view             PlusClusters
 longLabelPrefix  RIKEN CAGE Plus Strand Predicted Start Sites
 type             bedGraph
 required         yes
 hasReplicates    no
 
-view             MinusTSS
+view             MinusClusters
 longLabelPrefix  RIKEN CAGE Minus Strand Predicted Start Sites
 type             bedGraph
 required         yes
 hasReplicates    no
 
-view             PlusSignal
-longLabelPrefix  RIKEN CAGE Plus Strand Signal
-type             wig
-required         yes
-hasReplicates    no
-
-view             MinusSignal
-longLabelPrefix  RIKEN CAGE Minus Strand Signal
-type             wig
-required         yes
-hasReplicates    no
-
-view             PlusRawSignal
-longLabelPrefix  RIKEN CAGE Plus Strand Raw Signal
+view		 RawSignal
+longLabelPrefix  RIKEN CAGE Raw Signal (both strands)
 type             wig
 required         no
-hasReplicates    yes
-
-view             MinusRawSignal
-longLabelPrefix  RIKEN CAGE Minus Strand Raw Signal
-type             wig
-required         no
-hasReplicates    yes
+hasReplicates    no
 
 view             Alignments
 longLabelPrefix  RIKEN CAGE Tags
 type             tagAlign
 required         yes
-hasReplicates    yes
+hasReplicates    no
 
-====== IF YOU CAN SUPPLY FASTQ, WE USE THIS: ===
-view             Fastq
-type             download
-required         yes
-
-====== OTHERWISE WE DO SOMETHING LIKE THIS: ===
 view             ColorSpaceFasta
-type             download
+type             csfasta
 required         yes
 
 view             FastaQuality
-type             download
+type             csqual
 required         yes
