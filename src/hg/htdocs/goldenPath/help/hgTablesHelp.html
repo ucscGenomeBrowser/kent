@@ -977,7 +977,9 @@
           <P>
           The CDS FASTA alignments are created from a Multiple Alignment File
           (<A HREF="../../FAQ/FAQformat#format5">MAF</A>) in
-          combination with a genePred table.  The UCSC MAF format stores 
+          combination with a 
+          <A HREF="../../FAQ/FAQformat#format9">genePred</A> table.  
+          The UCSC MAF format stores 
           multiple alignments at the DNA level between entire genomes. You can
           use the Table Browser to return CDS FASTA alignments in
           nucleotide-space, or you can request that it be translated into
@@ -1026,7 +1028,7 @@
 	    one sequence in the output FASTA multiple alignment. In this
 	    case each output row header has the format listed
 	    below under &quot;Whole gene format&quot;.
-	    If this option is chosen then then each exon will be
+	    If this option is chosen then each exon will be
 	    listed with a separate header in the format
 	    listed below under &quot;Exon format&quot;.<br>
             <LI><B>Show nucleotides</B> -
@@ -1093,7 +1095,37 @@
 	      </UL>
          <P>
          <B>Explanation of CDS FASTA sequence format</B><BR>
- 
+         As noted above, the CDS FASTA output files can be in either DNA-space 
+         or protein-space.
+         </P>
+         <P>
+         In some instances, there is a dash (&quot;&ndash;&quot;) in the 
+         sequence portion of the CDS FASTA file. Dashes are used in several 
+         circumstances.  A dash could mean that the sequence is missing for 
+         the aligning genome.  A dash can also mean that the aligning 
+         genome has a deletion, or that the base genome has an insertion.
+         </P>
+         <P>
+         &mdash; Nucleotide CDS FASTA sequence:<BR>
+
+         &mdash; Amino Acid CDS FASTA sequence:<BR>
+         <UL>
+          <LI>Codons that have a dash in any of the three nucleotides are 
+          represented by a dash in the amino acid.  
+          <LI>Codons with an N in any position are represented with an X.  
+          <LI>Stop codons are represented with a Z.  
+          <LI>All other amino acids follow the IUPAC amino acid codes.
+         </UL>
+
+          In exon format, when the codon triplet is split between two 
+          exons, the exon with the two nucleotides will have the amino acid
+          like so:
+<PRE><TT>
+            |exon1|  |exon2|
+nucleotide: AAACCCT  TTGGGAAA
+protein:     K  P    F  G  K 
+</TT></PRE>
+
          </P>
 
 
