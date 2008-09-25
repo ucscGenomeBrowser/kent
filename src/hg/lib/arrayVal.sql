@@ -1,7 +1,9 @@
 CREATE TABLE arrayVal (
-  sampleId varchar(255),
-  probeId varchar(255),
-  val double
+  sampleId int not null,
+  sampleName varchar(127) not null,
+  probeId int not null,
+  probeName varchar(127) not null,
+  val double not null
 ) TYPE=MyISAM;
 
 
