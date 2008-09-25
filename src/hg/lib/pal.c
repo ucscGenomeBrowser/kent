@@ -9,8 +9,9 @@
 #include "hgMaf.h"
 #include "jsHelper.h"
 #include "hPrint.h"
+#include "hdb.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.3 2008/09/17 17:52:40 braney Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.4 2008/09/25 18:12:13 braney Exp $";
 
 /* this is for a list of MAF tables in the current
  * genome. 
@@ -124,6 +125,26 @@ struct dyString *dy = onChangeStart();
 return onChangeEnd(&dy);
 }
 
+static char * getConservationTrackName( struct sqlConnection *conn)
+{
+char tableName[512];
+struct slName *list = hTrackDbList();
+
+for(; list; list = list->next)
+    {
+    char query[512];
+    safef(query, sizeof query, 
+	"select tableName from %s where shortLabel='Conservation'", list->name);
+
+    char *ret = sqlQuickQuery(conn, query, tableName, 512);
+
+    if (ret != NULL)
+	return cloneString(ret);
+    }
+
+return NULL;
+}
+
 static char * outMafTableDrop(struct cart *cart, struct sqlConnection *conn)
 {
 char query[512];
@@ -160,7 +181,10 @@ for(ii=0; ii < count; ii++)
 
 if ((mafTable == NULL) || (checked == NULL))
     {
-    checked = mafTable = mafTrackExist[0];
+    if ((mafTable = getConservationTrackName(conn)) == NULL)
+	mafTable = mafTrackExist[0];
+
+    checked = mafTable;
     cartSetString(cart, hgtaCGIGeneMafTable, mafTable);
     }
 
