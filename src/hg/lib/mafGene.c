@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "mafGene.h"
 
-static char const rcsid[] = "$Id: mafGene.c,v 1.7 2008/09/25 19:49:54 braney Exp $";
+static char const rcsid[] = "$Id: mafGene.c,v 1.8 2008/09/25 22:19:10 braney Exp $";
 
 struct exonInfo
 {
@@ -576,15 +576,21 @@ for(; comp; comp = comp->next)
 	    comp->srcSize - (comp->start + comp->size), 
 	    comp->srcSize - comp->start);
 
-    char *mptr = ali->components->text;
-    char *cptr = comp->text;
-    char *sptr = &si->nucSequence[start];
+
+    char *tptr = ali->components->text;
+    int size = 0;
+    for(jj = 0 ; jj < ali->textSize; jj++)
+	if (*tptr++ != '-')
+	    size++;
 
     /* check to make sure maf is sane (no overlaps) */
-    if (start + ali->textSize >= si->size)
+    if (start + size >= si->size + 1)
 	errAbort("bad maf, nucSequence buffer overflow %d %d %d\n", 
-	    start,ali->textSize, si->size);
+	    start,size, si->size);
 
+    char *cptr = comp->text;
+    char *sptr = &si->nucSequence[start];
+    char *mptr = ali->components->text;
     if (cptr != NULL)
 	{
 	for(jj = 0 ; jj < ali->textSize; jj++)
