@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "mafGene.h"
 
-static char const rcsid[] = "$Id: mafGene.c,v 1.6 2008/09/17 17:53:22 braney Exp $";
+static char const rcsid[] = "$Id: mafGene.c,v 1.7 2008/09/25 19:49:54 braney Exp $";
 
 struct exonInfo
 {
@@ -48,7 +48,6 @@ struct speciesInfo
 #define MAX_EXON_SIZE 100 * 1024
 static char exonBuffer[MAX_EXON_SIZE];
 
-//static char geneNameBuffer[5000];
 static char bigBuffer[100 * 1024];
 
 #define MAX_COMPS  	5000 
@@ -130,7 +129,6 @@ comp->size = end - start;
 struct dnaSeq *seq = hChromSeqMixed(database, chrom, start , end);
 comp->text = cloneString(seq->dna);
 freeDnaSeq(&seq);
-//printf("getRefAli %s %s %d %d %s\n", database, chrom, start, end, comp->text);
 
 return ali;
 }
@@ -320,10 +318,6 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 		outSeq->size,
 		gi->frame, lastFrame,
 		siTemp->curPosString->name);
-		//dbName, gi->frame->chrom,
-		//gi->chromStart+1, gi->chromEnd, startFrame->strand[0]);
-
-	    //maybePrintGeneName(gi->name, f);
 
 	    fprintf(f, "\n%s\n",  outSeq->dna);
 	    }
@@ -381,7 +375,6 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 
 	start = gi->exonStart;
 	ptr = &siTemp->nucSequence[gi->exonStart];
-	//fprintf(f, ">%s_%s_%d_%d %d %d %d %s.%s:%d-%d %c",
 	fprintf(f, ">%s_%s_%d_%d %d %d %d %s",
 	    gi->name, 
 	    siTemp->name, exonNum, exonCount, 
@@ -390,10 +383,6 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	    siTemp->curPosString->name);
 
 	siTemp->curPosString = siTemp->curPosString->next;
-	 //   dbName, gi->frame->chrom,
-	  //  gi->chromStart+1, gi->chromEnd, startFrame->strand[0]);
-
-	//maybePrintGeneName(gi->name, f);
 
 	fprintf(f, "\n");
 	for (; start < end; start++)
@@ -458,11 +447,9 @@ if (inExons)
     }
 
 struct exonInfo *lastGi;
-//int start = giList->chromStart + 1;
 
 for(lastGi = giList; lastGi->next ; lastGi = lastGi->next)
     ;
-//int end = lastGi->chromEnd;
 
 if (noTrans)
     {
@@ -470,13 +457,8 @@ if (noTrans)
 	{
 	if (doBlank || !allDashes(si->nucSequence))
 	    {
-	    //fprintf(f, ">%s_%s %d %s.%s:%d-%d %c",
 	    fprintf(f, ">%s_%s %d %s",
 		giList->name, si->name, si->size, allPos(si));
-		//dbName,
-		//giList->frame->chrom, start, end, giList->frame->strand[0]);
-
-	    //maybePrintGeneName(giList->name, f);
 	    fprintf(f, "\n%s\n", si->nucSequence);
 	    }
 	}
@@ -489,14 +471,8 @@ else
 	translateProtein(si);
 	if (doBlank || !allDashes(si->aaSequence))
 	    {
-	    //fprintf(f, ">%s_%s %d %s.%s:%d-%d %c",
 	    fprintf(f, ">%s_%s %d %s",
 		giList->name, si->name, si->aaSize, allPos(si));
-
-		//dbName,
-		//giList->frame->chrom, start, end, giList->frame->strand[0]);
-
-	    //maybePrintGeneName(giList->name, f);
 
 	    fprintf(f, "\n%s\n", si->aaSequence);
 	    }
@@ -560,18 +536,13 @@ if ((si->chrom == NULL) ||
     si->end = end;
     }
 
-//printf("update pos %s %s %d %d\n",si->name, chrom, start,end);
 if (strand == '+')
     {
-    //printf("changing end %d ", si->end);
     si->end = end;
-    //printf("%d\n", si->end);
     }
 else
     {
-    //printf("changing start %d ", si->start);
     si->start = start;
-    //printf("%d\n", si->start);
     }
 }
 
@@ -609,6 +580,11 @@ for(; comp; comp = comp->next)
     char *cptr = comp->text;
     char *sptr = &si->nucSequence[start];
 
+    /* check to make sure maf is sane (no overlaps) */
+    if (start + ali->textSize >= si->size)
+	errAbort("bad maf, nucSequence buffer overflow %d %d %d\n", 
+	    start,ali->textSize, si->size);
+
     if (cptr != NULL)
 	{
 	for(jj = 0 ; jj < ali->textSize; jj++)
@@ -642,7 +618,6 @@ static void copyMafs(struct hash *siHash, struct exonInfo **giList,
 {
 int start = 0;
 struct exonInfo *gi = *giList;
-//int exonCount = 0;
 
 for(; gi; gi = gi->next)
     {
@@ -698,7 +673,6 @@ if (frameNeg)
 	verbose(3, "old start %d ",gi->exonStart);
 	gi->exonStart = size - (gi->exonStart + gi->exonSize);
 	verbose(3, "new start %d size %d \n",gi->exonStart, gi->exonSize);
-	//if (gi == *giList)
 	if (gi->next == NULL)
 	    assert(gi->exonStart == 0);
 	}
@@ -731,8 +705,6 @@ for(; list ; list = giNext)
     {
     giNext = list->next;
 
-//    mafFramesFreeList(&list->frame);
-//    genePredFree(&list->genePred);
     mafAliFreeList(&list->ali);
     }
 }
@@ -799,9 +771,7 @@ for(; exonStart < lastStart; exonStart++, exonEnd++, frames++)
     if (thisEnd == pred->cdsEnd)
 	break;
     }
-//printf("giList->strand %c\n", giList->strand);
-//if (giList->strand == '+')
-    slReverse(&giList);
+slReverse(&giList);
 
 return giList;
 }
