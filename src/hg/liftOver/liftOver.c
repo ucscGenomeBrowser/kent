@@ -10,7 +10,7 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.26 2006/08/23 23:53:11 markd Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.27 2008/09/25 18:12:36 angie Exp $";
 
 int bedPlus = 0;
 bool fudgeThick = FALSE;
@@ -72,10 +72,11 @@ errAbort(
   "   -hasBin - File has bin value (used only with -bedPlus)\n"
   "   -tab - Separate by tabs rather than space (used only with -bedPlus)\n"
   "   -pslT - File is in psl format, map target side only\n"
-  "   -minBlocks=0.N Minimum ratio of alignment blocks/exons that must map\n"
+  "   -minBlocks=0.N Minimum ratio of alignment blocks or exons that must map\n"
   "                  (default %3.2f)\n"
-  "   -fudgeThick    If thickStart/thickEnd is not mapped, use the closest \n"
-  "                  mapped base.  Recommended if using -minBlocks.\n"
+  "   -fudgeThick    (bed 12 or 12+ only) If thickStart/thickEnd is not mapped,\n"
+  "                  use the closest mapped base.  Recommended if using \n"
+  "                  -minBlocks.\n"
   "   -multiple               Allow multiple output regions\n"
   "   -minChainT, -minChainQ  Minimum chain size in target/query, when mapping\n" 
   "                           to multiple output regions (default 0, 0)\n"
