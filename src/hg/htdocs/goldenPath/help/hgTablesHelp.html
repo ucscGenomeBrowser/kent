@@ -974,13 +974,6 @@
 <A NAME="FASTA"></A>
 	  <HR>
 	  <FONT SIZE="3" COLOR="#0000FF"><B>Displaying CDS FASTA alignments</B> (genePred tables only)</FONT>
-	  <P>
-          To display FASTA multiple alignments for the CDS regions of genes,
-          select the <em>CDS FASTA alignment from multiple alignment</em> 
-          option in the <TT><B>output format</B></TT> list. In order to see
-          this output format option, you must have a genePred table 
-          selected.
-          </P>
           <P>
           The CDS FASTA alignments are created from a Multiple Alignment File
           (<A HREF="../../FAQ/FAQformat#format5">MAF</A>) in
@@ -992,6 +985,7 @@
           MAF files are all created by aligning genomes at the DNA level.
           </P>
           <P>
+	  <B>Genome-wide CDS FASTA alignments</B><BR>
           If you limit your search to a certain position range within the
           genome (rather than searching the entire genome), the tool
           will return FASTA alignments for all genes that overlap
@@ -1001,11 +995,17 @@
           requesting output from the entire genome.  A genome-wide
           query will take a substantial amount of compute time, and it is
           likely that your Internet browser will time out and disconnect.
-          If you would like to download genome-wide CDS FASTA output, you
-          can do so from the 
+          If you would like to download genome-wide CDS FASTA output 
+          for any of several model organisms, you can do so from the 
           <A HREF="http://hgdownload.cse.ucsc.edu">download server</A>.
           </P>
-          <P> 
+	  <P>
+          <B>Creating CDS FASTA alignments using the Table Browser</B><BR>
+          To display FASTA multiple alignments for the CDS regions of genes,
+          select the <em>CDS FASTA alignment from multiple alignment</em> 
+          option in the <TT><B>output format</B></TT> list. In order to see
+          this output format option, you must have a genePred table 
+          selected. 
           The Table Browser will present you with a configuration page.
           On this page, you can select options for your ouput.
           </P>
@@ -1046,11 +1046,11 @@
          like included in the FASTA multiple alignment output.  Press
          the &quot;Submit&quot; button to view the output. 
          <P>
-            Explanation of CDS FASTA format: <BR>
+            <B>Explanation of CDS FASTA header format</B><BR>
  
-            Whole gene format:
+            &mdash; Whole gene format:
             <tt>geneName_assemblyName peptideLength location</tt><br>
-	    Exon format:
+	    &mdash; Exon format:
 	    <tt>geneName_assemblyName_exonNum_totalExons exonLength inFrame 
             outFrame location</tt><br><br>
 
@@ -1091,6 +1091,10 @@
 	      what position that nucleotide takes in the codon which
 	      contains it.
 	      </UL>
+         <P>
+         <B>Explanation of CDS FASTA sequence format</B><BR>
+ 
+         </P>
 
 
 <!------GTF/BED Format---------------------->
