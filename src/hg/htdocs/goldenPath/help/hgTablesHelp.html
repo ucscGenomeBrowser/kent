@@ -1059,7 +1059,9 @@
 	    Following are the descriptions for each field name:
 	      <UL>
 	      <LI><B>geneName</B>- the name field from the genePred table.
-	      <LI><B>assemblyName</B>- the UCSC assembly id for the species.
+	      <LI><B>assemblyName</B>- the UCSC assembly 
+              <A HREF="../../FAQ/FAQreleases#release1">name</A>
+              for the species.
 	      <LI><B>peptideLength</B>- the length of the entire coding region.
 	      If the &quot;Show nucleotides&quot; option is chosen, this will 
               be in nucleotides, otherwise it will be the number of amino 
@@ -1095,6 +1097,8 @@
 	      </UL>
          <P>
          <B>Explanation of CDS FASTA sequence format</B><BR>
+
+<B><FONT color='red'>this section under construction...</FONT></B><BR><BR>
          As noted above, the CDS FASTA output files can be in either DNA-space 
          or protein-space.
          </P>
@@ -1107,7 +1111,29 @@
          </P>
          <P>
          &mdash; Nucleotide CDS FASTA sequence:<BR>
+         Consider the example below that shows the FASTA sequence for four
+         species aligned with the first exon of the human gene
+         PLEKHO1 (a.k.a. uc001ett.1).  
 
+Note that the rat (rn4) is missing the first three nucleotides.  This could be due to a lineage-specific insertion between the aligned blocks in the human genome or a lineage-specific deletion between the aligned blocks in the aligning species. 
+
+Zebrafish (danRer4) has only dashes.  This could be due to excessive evolutionary distance between the zebrafish and human, or independent indels in the region between the aligned blocks in both species.
+
+Sometimes, viewing the Conservation track in this area will help clarify the exact meaning of the dashes.
+
+
+<PRE>
+>uc001ett.1_hg18_1_6 30 0 0 chr1:148389072-148389101+
+ATGATGAAGAAGAACAATTCCGCCAAGCGG
+>uc001ett.1_panTro2_1_6 30 0 0 chr1:129156502-129156531+
+ATGATGAAGAAGAACAATTCCGCCAAGCGG
+>uc001ett.1_rn4_1_6 30 0 0 chr2:190795892-190795918-
+---ATGAAGAAGAGCGGCTCCGGCAAGCGG
+>uc001ett.1_danRer4_1_6 30 0 0
+------------------------------
+>uc001ett.1_oryLat1_1_6 30 0 0 chr11:3404940-3404969-
+AGGATGAAGAAAAGCAACCAGAGCAGGCGG
+</PRE>
          &mdash; Amino Acid CDS FASTA sequence:<BR>
          <UL>
           <LI>Codons that have a dash in any of the three nucleotides are 
@@ -1115,11 +1141,11 @@
           <LI>Codons with an N in any position are represented with an X.  
           <LI>Stop codons are represented with a Z.  
           <LI>All other amino acids follow the IUPAC amino acid codes.
-         </UL>
-
-          In exon format, when the codon triplet is split between two 
+          <LI>In exon format, when the codon triplet is split between two 
           exons, the exon with the two nucleotides will have the amino acid
           like so:
+         </UL>
+
 <PRE><TT>
             |exon1|  |exon2|
 nucleotide: AAACCCT  TTGGGAAA
