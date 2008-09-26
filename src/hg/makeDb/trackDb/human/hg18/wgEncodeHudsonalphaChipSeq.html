@@ -43,7 +43,8 @@ greater enrichment of the average qPCR replicates (<a href='#2'>2</a>).
 <b> Processing and analysis software used </b>
 </p><p>Sequence data produced by the Illumina data pipeline software
 were quality filtered and then mapped to hg18 using its integrated
-Eland software. To identify likely binding sites, Peak Calling was
+Eland software, with multiply mapped reads discarded. 
+To identify likely binding sites, Peak Calling was
 applied on the aligned sequence data sets using QuEST (<a href='#2'>2</a>):
 quantitative enrichment of sequence tags (QuEST) is based on the kernel
 density estimation approach, which uses ChIP-Seq data to determine
