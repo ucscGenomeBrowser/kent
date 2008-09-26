@@ -25,6 +25,15 @@ idSql select fbtr from flyBase2004Xref where name = '%s'
 url http://flybase.net/.bin/fbidq.html?%s
 priority 10
 
+name palTrack
+shortLabel Protein FASTA
+tables flyBaseGene
+idSql select chrom,txStart+1,txEnd,name from flyBaseGene where name = '%s'
+url ../cgi-bin/hgPal?g=flyBaseGene&c=%s&l=%s&r=%s&i=%s
+hgsid on
+dbInUrl on
+priority 1
+
 name uniProt
 tables flyBaseToUniProt
 idSql select alias from flyBaseToUniProt where name = '%s'
