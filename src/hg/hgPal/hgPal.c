@@ -7,7 +7,7 @@
 #include "hui.h"
 #include "pal.h"
 
-static char const rcsid[] = "$Id: hgPal.c,v 1.9 2008/09/18 21:57:35 braney Exp $";
+static char const rcsid[] = "$Id: hgPal.c,v 1.10 2008/09/26 18:48:34 braney Exp $";
 
 char *excludeVars[] = {"Submit", "submit", NULL,};
 
@@ -40,7 +40,8 @@ hashStore(hash, item);
 printf("<pre>");
 
 /* output the alignments */
-palOutPredsInHash(conn, cart, hash, track);
+if (palOutPredsInHash(conn, cart, hash, track) == 0)
+    printf("<B>No coding region in gene '%s'</B><BR>",item);
 
 cartHtmlEnd();
 }
