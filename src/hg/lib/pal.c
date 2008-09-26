@@ -11,7 +11,7 @@
 #include "hPrint.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.5 2008/09/25 22:20:11 braney Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.6 2008/09/26 02:45:55 braney Exp $";
 
 #define hgtaCGIGeneMafTable "hgta_mafGeneMafTable" 
 #define hgtaJSGeneMafTable  "mafGeneMafTable" 
@@ -44,7 +44,6 @@ while ((pred  = genePredReaderNext(reader)) != NULL)
     }
 genePredReaderFree(&reader);
 
-
 if (list != NULL)
     {
     slReverse(&list);
@@ -52,7 +51,7 @@ if (list != NULL)
     struct genePred *pred;
     unsigned options = 0;
     char *mafTable = cartString(cart, hgtaCGIGeneMafTable); 
-    boolean inExons = cartUsualBoolean(cart, hgtaCGIGeneExons , TRUE); 
+    boolean inExons = cartUsualBoolean(cart, hgtaCGIGeneExons , FALSE); 
     boolean noTrans = cartUsualBoolean(cart, hgtaCGIGeneNoTrans, FALSE); 
     boolean outBlank = cartUsualBoolean(cart, hgtaCGIGeneOutBlank, FALSE); 
 
@@ -120,22 +119,40 @@ return onChangeEnd(&dy);
 
 static char * getConservationTrackName( struct sqlConnection *conn)
 {
-char tableName[512];
-struct slName *list = hTrackDbList();
+struct slName *dbList = hTrackDbList();
+struct slName *dbl = dbList;
+char *ret = NULL;
 
-for(; list; list = list->next)
+for(; dbl; dbl = dbl->next)
     {
     char query[512];
     safef(query, sizeof query, 
-	"select tableName from %s where shortLabel='Conservation'", list->name);
+	"select tableName from %s where shortLabel='Conservation'", dbl->name);
 
-    char *ret = sqlQuickQuery(conn, query, tableName, 512);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    struct slName *tableList = NULL;
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	struct slName *name = newSlName(row[0]);
+	slAddHead(&tableList, name);
+	}
+    sqlFreeResult(&sr);
+
+    struct slName *l = tableList;
+
+    for(; l; l = l->next)
+	if (sqlTableExists(conn, l->name))
+	    ret = cloneString(l->name);
+
+    slFreeList(&tableList);
 
     if (ret != NULL)
-	return cloneString(ret);
+	break;
     }
+slFreeList(&dbList);
 
-return NULL;
+return ret;
 }
 
 static char * outMafTableDrop(struct cart *cart, struct sqlConnection *conn)
@@ -149,6 +166,18 @@ if (count == 0)
 char **tables = needMem(sizeof(char *) * count);
 char **tb = tables;
 char *mafTable = cartOptionalString(cart, hgtaCGIGeneMafTable);
+
+if (mafTable != NULL)
+    {
+    struct slName *l = list;
+    for(; l; l=l->next)
+	if (sameString(l->name, mafTable))
+	    break;
+
+    /* didn't find mafTable in list, reset it */
+    if (l == NULL)
+	mafTable = NULL;
+    }
 
 if (mafTable == NULL)
     {
