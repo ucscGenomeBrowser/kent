@@ -296,6 +296,196 @@ group regulation
 priority 0
 type bed 3
 
+track wgEncodeRikenCage
+compositeTrack on
+shortLabel RIKEN CAGE
+longLabel ENCODE - RIKEN CAGE
+group regulation
+subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters RawSignal=RawSignal
+subGroup2 cellType Cell_Line K562=K562
+dimensions dimensionX=cellType
+sortOrder cellType=+ view=+
+dragAndDrop subTracks
+visibilityViewDefaults PlusClusters=full MinusClusters=full RawSignal=hide
+controlledVocabulary encode/cv.ra cellType
+priority 0
+type bed 3
+
+	track	wgEncodeRikenCageColorSpaceFastaK562CellShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562
+	longLabel	ENCODE (in K562 cells)
+	subGroups	view=ColorSpaceFasta cellType=K562
+	type	download
+	dateSubmitted	2008-09-24 17:42:45
+	priority	5
+	noInherit	on
+	cell	K562
+
+	track	wgEncodeRikenCageFastaQualityK562CellShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562
+	longLabel	ENCODE (in K562 cells)
+	subGroups	view=FastaQuality cellType=K562
+	type	download
+	dateSubmitted	2008-09-24 17:42:45
+	priority	6
+	noInherit	on
+	cell	K562
+
+	track	wgEncodeRikenCageColorSpaceFastaK562CytosolShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562
+	longLabel	ENCODE (in K562 cells)
+	subGroups	view=ColorSpaceFasta cellType=K562
+	type	download
+	dateSubmitted	2008-09-24 17:42:45
+	priority	5
+	noInherit	on
+	cell	K562
+
+	track	wgEncodeRikenCageFastaQualityK562CytosolShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562
+	longLabel	ENCODE (in K562 cells)
+	subGroups	view=FastaQuality cellType=K562
+	type	download
+	dateSubmitted	2008-09-24 17:42:45
+	priority	6
+	noInherit	on
+	cell	K562
+
+	track	wgEncodeRikenCageColorSpaceFastaK562NucleusShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562
+	longLabel	ENCODE (in K562 cells)
+	subGroups	view=ColorSpaceFasta cellType=K562
+	type	download
+	dateSubmitted	2008-09-24 17:42:45
+	priority	5
+	noInherit	on
+	cell	K562
+
+	track	wgEncodeRikenCageFastaQualityK562NucleusShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562
+	longLabel	ENCODE (in K562 cells)
+	subGroups	view=FastaQuality cellType=K562
+	type	download
+	dateSubmitted	2008-09-24 17:42:45
+	priority	6
+	noInherit	on
+	cell	K562
+
+	track	wgEncodeRikenCagePlusClustersK562CellShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562
+	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in K562 cells)
+	subGroups	view=PlusClusters cellType=K562
+	type	bedGraph
+	dateSubmitted	2008-09-24 17:42:45
+	priority	1
+	noInherit	on
+	cell	K562
+
+	track	wgEncodeRikenCageMinusClustersK562CellShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562
+	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in K562 cells)
+	subGroups	view=MinusClusters cellType=K562
+	type	bedGraph
+	dateSubmitted	2008-09-24 17:42:45
+	priority	2
+	noInherit	on
+	cell	K562
+
+	track	wgEncodeRikenCagePlusClustersK562CytosolShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562
+	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in K562 cells)
+	subGroups	view=PlusClusters cellType=K562
+	type	bedGraph
+	dateSubmitted	2008-09-24 17:42:45
+	priority	1
+	noInherit	on
+	cell	K562
+
+	track	wgEncodeRikenCageMinusClustersK562CytosolShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562
+	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in K562 cells)
+	subGroups	view=MinusClusters cellType=K562
+	type	bedGraph
+	dateSubmitted	2008-09-24 17:42:45
+	priority	2
+	noInherit	on
+	cell	K562
+
+	track	wgEncodeRikenCagePlusClustersK562NucleusShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562
+	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in K562 cells)
+	subGroups	view=PlusClusters cellType=K562
+	type	bedGraph
+	dateSubmitted	2008-09-24 17:42:45
+	priority	1
+	noInherit	on
+	cell	K562
+
+	track	wgEncodeRikenCageMinusClustersK562NucleusShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562
+	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in K562 cells)
+	subGroups	view=MinusClusters cellType=K562
+	type	bedGraph
+	dateSubmitted	2008-09-24 17:42:45
+	priority	2
+	noInherit	on
+	cell	K562
+
+	track	wgEncodeRikenCageRawSignalK562CellShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562 Raw
+	longLabel	ENCODE RIKEN CAGE Raw Signal combining strands (auto-generated) (in K562 cells)
+	subGroups	view=RawSignal cellType=K562
+	type	wig
+	dateSubmitted	2008-09-24 17:42:45
+	priority	3
+	noInherit	on
+	spanList	1
+	windowingFunction	mean
+	maxHeightPixels	100:16:16
+	cell	K562
+
+	track	wgEncodeRikenCageRawSignalK562NucleusShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562 Raw
+	longLabel	ENCODE RIKEN CAGE Raw Signal combining strands (auto-generated) (in K562 cells)
+	subGroups	view=RawSignal cellType=K562
+	type	wig
+	dateSubmitted	2008-09-24 17:42:45
+	priority	3
+	noInherit	on
+	spanList	1
+	windowingFunction	mean
+	maxHeightPixels	100:16:16
+	cell	K562
+
+	track	wgEncodeRikenCageRawSignalK562CytosolShort
+	subTrack	wgEncodeRikenCage
+	shortLabel	K562 Raw
+	longLabel	ENCODE RIKEN CAGE Raw Signal combining strands (auto-generated) (in K562 cells)
+	subGroups	view=RawSignal cellType=K562
+	type	wig
+	dateSubmitted	2008-09-24 17:42:45
+	priority	3
+	noInherit	on
+	spanList	1
+	windowingFunction	mean
+	maxHeightPixels	100:16:16
+	cell	K562
+
+
 track wgEncodeYaleChIPseq
 compositeTrack on
 shortLabel Yale ChIP-seq
