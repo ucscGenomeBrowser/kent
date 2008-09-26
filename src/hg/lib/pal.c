@@ -11,7 +11,7 @@
 #include "hPrint.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.6 2008/09/26 02:45:55 braney Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.7 2008/09/26 18:48:09 braney Exp $";
 
 #define hgtaCGIGeneMafTable "hgta_mafGeneMafTable" 
 #define hgtaJSGeneMafTable  "mafGeneMafTable" 
@@ -85,7 +85,13 @@ if (list != NULL)
 
     /* send out the alignments */
     for(pred = list; pred ; pred = pred->next)
-	mafGeneOutPred(stdout, pred, database, mafTable, includeList, options);
+	{
+	if (pred->cdsStart != pred->cdsEnd)
+	    mafGeneOutPred(stdout, pred, database, mafTable, 
+		includeList, options);
+	else
+	    outCount--;
+	}
     }
 
 return outCount;
