@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.6 2006/03/08 20:02:48 hiram Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.7 2008/09/26 23:54:33 tdreszer Exp $";
 
 /* Command line switches. */
 //static char *strand = (char *)NULL;	/* strand to process, default +	*/
@@ -181,15 +181,25 @@ for (i=0; i<fileCount; ++i)
 	    verbose(2,"#\tchrom %s starting, size %d\n", prevChrom,
 		thisChromSize);
 	    }
-	if (bed->chromEnd > thisChromSize)
-	    {
-	    warn("ERROR: %s\t%d\t%d", bed->chrom, bed->chromStart,
-		bed->chromEnd);
-	    errAbort("chromEnd > chromSize ?  %d > %d", bed->chromEnd,
-		chromSize);
-	    }
-	for (i = bed->chromStart; i < bed->chromEnd; ++i)
-	    counts[i]++;	    
+    if (bed->chromEnd > thisChromSize)
+        {
+        if (differentWord(bed->chrom,"chrM")) // circular chrom
+            {
+            warn("ERROR: %s\t%d\t%d", bed->chrom, bed->chromStart,
+            bed->chromEnd);
+            errAbort("chromEnd > chromSize ?  %d > %d", bed->chromEnd,
+                thisChromSize);
+            }
+        for (i = bed->chromStart; i < thisChromSize; ++i)
+            counts[i]++;
+        for (i = 0; i < (bed->chromEnd - thisChromSize); ++i)
+            counts[i]++;
+        }
+    else
+        {
+        for (i = bed->chromStart; i < bed->chromEnd; ++i)
+            counts[i]++;
+        }
 	outputToDo = TRUE;
 	}
     verbose(2,"#\tchrom %s done, size %d\n", prevChrom, thisChromSize);
