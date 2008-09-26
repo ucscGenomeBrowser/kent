@@ -1097,8 +1097,6 @@
 	      </UL>
          <P>
          <B>Explanation of CDS FASTA sequence format</B><BR>
-
-<B><FONT color='red'>this section under construction...</FONT></B><BR><BR>
          As noted above, the CDS FASTA output files can be in either DNA-space 
          or protein-space.
          </P>
@@ -1110,30 +1108,45 @@
          genome has a deletion, or that the base genome has an insertion.
          </P>
          <P>
+         Because the CDS FASTA alignments are based on one reference
+         genome (e.g. human), amino-acids or bases that aren't
+         in human aren't displayed.  Consequently the peptide in
+         the aligning genomes aren't necessarily the peptide that
+         the other organisms gene would generate.  Anything inserted
+         in the other species or deleted in human will
+         not be present in the alignment.  We represent this
+         with an orange bar in the Genome Browser display, but
+         the CDS FASTA alignments silently ignore this issue. 
+         </P>
+         <P>
          &mdash; Nucleotide CDS FASTA sequence:<BR>
          Consider the example below that shows the FASTA sequence for four
          species aligned with the first exon of the human gene
-         PLEKHO1 (a.k.a. uc001ett.1).  
-
-Note that the rat (rn4) is missing the first three nucleotides.  This could be due to a lineage-specific insertion between the aligned blocks in the human genome or a lineage-specific deletion between the aligned blocks in the aligning species. 
-
-Zebrafish (danRer4) has only dashes.  This could be due to excessive evolutionary distance between the zebrafish and human, or independent indels in the region between the aligned blocks in both species.
-
-Sometimes, viewing the Conservation track in this area will help clarify the exact meaning of the dashes.
-
-
+         PLEKHO1 (UCSC Gene: uc001ett.1). Note that the rat (rn4) row 
+         is missing 
+         the first three nucleotides.  This could be due to a 
+         lineage-specific insertion between the rat and  
+         human genomes, or a lineage-specific deletion between the
+         human and rat genomes. Note also that the Zebrafish 
+         (danRer4) row contains only dashes.  This could be due to 
+         excessive evolutionary distance between the zebrafish and human, 
+         or independent indels in the region in
+         both species. Sometimes it is helpful to view the  
+         Conservation track in the Genome Browser in this area to
+         clarify the exact meaning of the dashes.
 <PRE>
->uc001ett.1_hg18_1_6 30 0 0 chr1:148389072-148389101+
+&gt;uc001ett.1_hg18_1_6 30 0 0 chr1:148389072-148389101+
 ATGATGAAGAAGAACAATTCCGCCAAGCGG
->uc001ett.1_panTro2_1_6 30 0 0 chr1:129156502-129156531+
+&gt;uc001ett.1_panTro2_1_6 30 0 0 chr1:129156502-129156531+
 ATGATGAAGAAGAACAATTCCGCCAAGCGG
->uc001ett.1_rn4_1_6 30 0 0 chr2:190795892-190795918-
+&gt;uc001ett.1_rn4_1_6 30 0 0 chr2:190795892-190795918-
 ---ATGAAGAAGAGCGGCTCCGGCAAGCGG
->uc001ett.1_danRer4_1_6 30 0 0
+&gt;uc001ett.1_danRer4_1_6 30 0 0
 ------------------------------
->uc001ett.1_oryLat1_1_6 30 0 0 chr11:3404940-3404969-
+&gt;uc001ett.1_oryLat1_1_6 30 0 0 chr11:3404940-3404969-
 AGGATGAAGAAAAGCAACCAGAGCAGGCGG
 </PRE>
+
          &mdash; Amino Acid CDS FASTA sequence:<BR>
          <UL>
           <LI>Codons that have a dash in any of the three nucleotides are 
