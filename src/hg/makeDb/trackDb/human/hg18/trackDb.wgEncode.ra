@@ -336,7 +336,7 @@ wgEncode 1
 
 	track	wgEncodeHudsonalphaChipSeqRawSignalPfsk1Control
 	subTrack	wgEncodeHudsonalphaChipSeq
-	shortLabel	Control PFSK-1
+	shortLabel	Control PFSK1
 	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal (Control in PFSK-1 cells)
 	subGroups	view=RawSignal factor=Control cellType=PFSK-1
 	type	wig 1.00 4125.00
@@ -348,7 +348,7 @@ wgEncode 1
 
 	track	wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Foxp2
 	subTrack	wgEncodeHudsonalphaChipSeq
-	shortLabel	FOXP2 PFSK-1 Pk 1
+	shortLabel	FOXP2 PFSK1 Pk 1
 	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 1 (FOXP2 in PFSK-1 cells)
 	subGroups	view=Peaks factor=FOXP2 cellType=PFSK-1
 	type	narrowPeak
@@ -357,10 +357,11 @@ wgEncode 1
 	noInherit	on
 	cell	PFSK-1
 	antibody	FOXP2
+        color 107,112,43
 
 	track	wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Foxp2
 	subTrack	wgEncodeHudsonalphaChipSeq
-	shortLabel	FOXP2 PFSK-1 Raw 1
+	shortLabel	FOXP2 PFSK1 Raw 1
 	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (FOXP2 in PFSK-1 cells)
 	subGroups	view=RawSignal factor=FOXP2 cellType=PFSK-1
 	type	wig 1.00 894.00
@@ -372,10 +373,11 @@ wgEncode 1
 	maxHeightPixels	100:16:16
 	cell	PFSK-1
 	antibody	FOXP2
+        color 107,112,43
 
 	track	wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Foxp2
 	subTrack	wgEncodeHudsonalphaChipSeq
-	shortLabel	FOXP2 PFSK-1 Pk 2
+	shortLabel	FOXP2 PFSK1 Pk 2
 	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 2 (FOXP2 in PFSK-1 cells)
 	subGroups	view=Peaks factor=FOXP2 cellType=PFSK-1
 	type	narrowPeak
@@ -384,10 +386,11 @@ wgEncode 1
 	noInherit	on
 	cell	PFSK-1
 	antibody	FOXP2
+        color 107,112,43
 
 	track	wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Foxp2
 	subTrack	wgEncodeHudsonalphaChipSeq
-	shortLabel	FOXP2 PFSK-1 Raw 2
+	shortLabel	FOXP2 PFSK1 Raw 2
 	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (FOXP2 in PFSK-1 cells)
 	subGroups	view=RawSignal factor=FOXP2 cellType=PFSK-1
 	type	wig 1.00 524.00
@@ -399,10 +402,11 @@ wgEncode 1
 	maxHeightPixels	100:16:16
 	cell	PFSK-1
 	antibody	FOXP2
+        color 107,112,43
 
 	track	wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 	subTrack	wgEncodeHudsonalphaChipSeq
-	shortLabel	Control SK-N-MC
+	shortLabel	Control SKNMC
 	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal (Control in SK-N-MC cells)
 	subGroups	view=RawSignal factor=Control cellType=SK-N-MC
 	type	wig 1.00 835.00
@@ -414,7 +418,7 @@ wgEncode 1
 
 	track	wgEncodeHudsonalphaChipSeqPeaksRep1SknmcFoxp2
 	subTrack	wgEncodeHudsonalphaChipSeq
-	shortLabel	FOXP2 SK-N-MC Pk 1
+	shortLabel	FOXP2 SKNMC Pk 1
 	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 1 (FOXP2 in SK-N-MC cells)
 	subGroups	view=Peaks factor=FOXP2 cellType=SK-N-MC
 	type	narrowPeak
@@ -423,10 +427,11 @@ wgEncode 1
 	noInherit	on
 	cell	SK-N-MC
 	antibody	FOXP2
+        color 107,112,43
 
 	track	wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
 	subTrack	wgEncodeHudsonalphaChipSeq
-	shortLabel	FOXP2 SK-N-MC Raw 1
+	shortLabel	FOXP2 SKNMC Raw 1
 	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (FOXP2 in SK-N-MC cells)
 	subGroups	view=RawSignal factor=FOXP2 cellType=SK-N-MC
 	type	wig 1.00 1030.00
@@ -438,10 +443,11 @@ wgEncode 1
 	maxHeightPixels	100:16:16
 	cell	SK-N-MC
 	antibody	FOXP2
+        color 107,112,43
 
 	track	wgEncodeHudsonalphaChipSeqPeaksRep2SknmcFoxp2
 	subTrack	wgEncodeHudsonalphaChipSeq
-	shortLabel	FOXP2 SK-N-MC Pk 2
+	shortLabel	FOXP2 SKNMC Pk 2
 	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 2 (FOXP2 in SK-N-MC cells)
 	subGroups	view=Peaks factor=FOXP2 cellType=SK-N-MC
 	type	narrowPeak
@@ -450,10 +456,11 @@ wgEncode 1
 	noInherit	on
 	cell	SK-N-MC
 	antibody	FOXP2
+        color 107,112,43
 
 	track	wgEncodeHudsonalphaChipSeqRawSignalRep2SknmcFoxp2
 	subTrack	wgEncodeHudsonalphaChipSeq
-	shortLabel	FOXP2 SK-N-MC Raw 2
+	shortLabel	FOXP2 SKNMC Raw 2
 	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (FOXP2 in SK-N-MC cells)
 	subGroups	view=RawSignal factor=FOXP2 cellType=SK-N-MC
 	type	wig 1.00 813.00
@@ -465,3 +472,5 @@ wgEncode 1
 	maxHeightPixels	100:16:16
 	cell	SK-N-MC
 	antibody	FOXP2
+        color 107,112,43
+
