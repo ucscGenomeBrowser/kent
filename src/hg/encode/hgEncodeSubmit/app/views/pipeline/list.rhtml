@@ -11,6 +11,7 @@
  <% end %>
  <td align="left"><b>Status</b></td><td>&nbsp;</td>
  <% if !defined? @user %>
+   <td align="left"><b>Submitter</b></td><td>&nbsp;</td>
    <td align="left"><b>Investigator</b></td><td>&nbsp;</td>
  <% end %>
  <td align="left"><b>Updated PST</b></td></tr>
@@ -54,6 +55,7 @@
   </td><td>&nbsp;</td>
 
   <% if !defined? @user %>
+    <td><%= c.user.login -%></td><td>&nbsp;</td>    
     <td><%= c.user.pi -%></td><td>&nbsp;</td>
   <% end %>
   <td><%= c.updated_at.strftime("%b %d %H:%M") -%></td>
