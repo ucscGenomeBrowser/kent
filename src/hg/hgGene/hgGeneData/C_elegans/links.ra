@@ -16,6 +16,15 @@ idSql select name from sangerGene where name = '%s'
 url http://www.wormbase.org/db/gene/gene?name=%s
 priority 10
 
+name palTrack
+shortLabel Protein FASTA
+tables sangerGene
+idSql select chrom,txStart+1,txEnd,name from sangerGene where name = '%s'
+url ../cgi-bin/hgPal?g=sangerGene&c=%s&l=%s&r=%s&i=%s
+hgsid on
+dbInUrl on
+priority 1
+
 name uniProt
 tables sangerLinks
 idSql select protName from sangerLinks where orfName = '%s'
