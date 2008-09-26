@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.73 2008/09/25 21:38:53 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.74 2008/09/26 00:56:17 larrym Exp $
 
 use warnings;
 use strict;
@@ -43,6 +43,7 @@ use vars qw/
     $opt_configDir
     $opt_fileType
     $opt_outDir
+    $opt_quick
     $opt_skipAutoCreation
     $opt_validateDaf
     $opt_validateFile
@@ -54,6 +55,7 @@ our $submitPath;        # full path of data submission directory
 our $configPath;        # full path of configuration directory
 our $outPath;           # full path of output directory
 our %terms;             # controlled vocabulary
+our $quickCount=100;
 
 sub usage {
     print STDERR <<END;
@@ -68,6 +70,7 @@ options:
     -configDir=dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
     -fileType=type	used only with validateFile option; e.g. narrowPeak
+    -quick		Validate only first $quickCount lines of files
     -skipAutoCreation   Tells script skip creating the auto-created files (e.g. RawSignal); this can save you a lot of time
                         when you are debugging and re-running the script on large projects
     -validateDaf	exit after validating DAF file (project-submission-dir is the DAF file name).
@@ -323,6 +326,7 @@ sub validateBed {
         } else {
             ;
         }
+        last if($opt_quick && $line >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
@@ -360,6 +364,7 @@ sub validateBedGraph {
         } else {
             ;
         }
+        last if($opt_quick && $line >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed bedGraph validation\n");
@@ -375,6 +380,7 @@ sub validateGene {
         # XXXX should be modified to handle zipped files.
         die "We don't currently supporte gzipped gene files\n";
     }
+    # XXXX Add support for $opt_quick
     my $err = system (
         "cd $outPath; egrep -v '^track|browser' $filePath | ldHgGene -out=genePred.tab -genePredExt hg18 testTable stdin >$outFile 2>&1");
     if ($err) {
@@ -400,6 +406,7 @@ sub validateTagAlign
             chomp;
             return "Invalid $type file; line $line in file '$file' is invalid:\nline: $_";
         }
+        last if($opt_quick && $line >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
@@ -417,6 +424,7 @@ sub validateNarrowPeak
             chomp;
             return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_");
         }
+        last if($opt_quick && $line >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
@@ -452,6 +460,7 @@ sub validateFastQ
         } else {
 	         return("$errorPrefix (expecting $state):\nline: $_");
         }
+        last if($opt_quick && $line >= $quickCount);
      }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
@@ -490,6 +499,7 @@ sub validateCsfasta
         } else {
 	         return("$errorPrefix (expecting $state):\nline: $_");
         }
+        last if($opt_quick && $line >= $quickCount);
      }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
@@ -528,6 +538,7 @@ sub validateCsqual
         } else {
 	         return("$errorPrefix (expecting $state) [regex=$regex]:\nline: [$_]");
         }
+        last if($opt_quick && $line >= $quickCount);
      }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
@@ -595,6 +606,7 @@ my $ok = GetOptions("allowReloads",
                     "configDir=s",
                     "fileType=s",
                     "outDir=s",
+                    "quick",
                     "skipAutoCreation",
                     "validateDaf",
                     "validateFile",
@@ -1051,10 +1063,6 @@ close(LOADER_RA);
 close(TRACK_RA);
 close(README);
 
-exit 0;
-
-# XXXX Turn this code on when metadata and count field has been added to encpipeline_prod
-
 if($submitDir =~ /(\d+)$/) {
     my $id = $1;
     if(dirname($submitDir) =~ /_(.*)/) {
@@ -1068,3 +1076,5 @@ if($submitDir =~ /(\d+)$/) {
         $rubyDb->execute("update projects set count = ?, metadata = ? where id = ?", $count, $metadata, $id);
     }
 }
+
+exit 0;
