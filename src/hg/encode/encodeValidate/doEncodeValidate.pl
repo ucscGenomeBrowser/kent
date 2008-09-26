@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.74 2008/09/26 00:56:17 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.75 2008/09/26 20:51:35 larrym Exp $
 
 use warnings;
 use strict;
@@ -420,7 +420,7 @@ sub validateNarrowPeak
     my $line = 0;
     while(<$fh>) {
         $line++;
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+$floatRegEx\s+$floatRegEx\s+\d+$/)) {
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+$floatRegEx\s+$floatRegEx\s+[+-]?\d+$/)) {
             chomp;
             return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_");
         }
