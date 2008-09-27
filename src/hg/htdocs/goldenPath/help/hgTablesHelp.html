@@ -981,17 +981,14 @@
           <A HREF="../../FAQ/FAQformat#format9">genePred</A> table.  
           The UCSC MAF format stores 
           multiple alignments at the DNA level between entire genomes. You can
-          use the Table Browser to return CDS FASTA alignments in
+          use the Table Browser to return FASTA alignments of coding regions in
           nucleotide-space or translated into
           amino acid-space.  However, it is worth noting that the initial
           MAF files are all created by aligning genomes at the DNA level.
           </P>
           <P>
 	  <B>Genome-wide CDS FASTA alignments</B><BR>
-          If you limit your search to a certain position range within the
-          genome (rather than searching the entire genome), the tool
-          will return FASTA alignments for all genes that overlap
-          the position for which you are searching. Note that when using
+          Note that when using
           the Table Browser to fetch CDS FASTA output, it is best to 
           restrict your query to a reasonable-sized position range rather than 
           requesting output from the entire genome.  A genome-wide
@@ -1008,6 +1005,10 @@
           option in the <TT><B>output format</B></TT> list. In order to see
           this output format option, you must have a genePred table 
           selected. 
+          If you limit your search to a certain position range within the
+          genome (rather than searching the entire genome), the tool
+          will return FASTA alignments for all genes that overlap
+          the position for which you are searching. 
           The Table Browser will present you with a configuration page.
           On this page, you can select options for your ouput.
           </P>
@@ -1046,7 +1047,7 @@
 	    </UL>
          Finally, from the list of species, select those that you would
          like included in the FASTA multiple alignment output.  Press
-         the &quot;Submit&quot; button to view the output. 
+         the &quot;get output&quot; button to view the output. 
          <P>
             <B>Explanation of CDS FASTA header format</B><BR>
  
@@ -1083,7 +1084,7 @@
               be the 
 	      number of nucleotides in the exon, otherwise it will be 
 	      the number of amino acids in 
-	      the exon (with the amino acid translated from split codons 
+	      the exon (with amino acids translated from split codons 
 	      placed in the exon where two of the three nucleotides lie).
 	      <LI><B>inFrame</B>- the frame number of the first nucleotide
 	      in the exon. Frame numbers can be 0, 1, or 2 depending on
@@ -1103,18 +1104,18 @@
          <P>
          In some instances, there is a dash (&quot;&ndash;&quot;) in the 
          sequence portion of the CDS FASTA file. Dashes are used in several 
-         circumstances.  A dash could mean that the sequence is missing for 
-         the aligning genome.  A dash can also mean that the aligning 
-         genome has a deletion, or that the base genome has an insertion.
+         circumstances.  They indicate missing sequence for the aligning 
+         genome, as well as deletions in the aligning genome or insertions
+         in the base genome.
          </P>
          <P>
          Because the CDS FASTA alignments are based on one reference
-         genome (e.g. human), amino-acids or bases that aren't
-         in human aren't displayed.  Consequently the peptide in
-         the aligning genomes aren't necessarily the peptide that
-         the other organisms gene would generate.  Anything inserted
-         in the other species or deleted in human will
-         not be present in the alignment.  We represent this
+         genome, any amino acids or nucleotides that are not
+         in the reference genome are not displayed.  Consequently the peptides
+         shown for aligning genomes are not necessarily the peptide that
+         the other organisms' gene would generate.  Any sequence inserted
+         in an aligning genome or deleted in the base genome will not be 
+         present in the alignment.  We represent this condition
          with an orange bar in the Genome Browser display, but
          the CDS FASTA alignments silently ignore this issue. 
          </P>
@@ -1130,7 +1131,7 @@
          human and rat genomes. Note also that the Zebrafish 
          (danRer4) row contains only dashes.  This could be due to 
          excessive evolutionary distance between the zebrafish and human, 
-         or independent indels in the region in
+         missing data in the zebrafish, or independent indels in the region in
          both species. Sometimes it is helpful to view the  
          Conservation track in the Genome Browser in this area to
          clarify the exact meaning of the dashes.
@@ -1155,8 +1156,8 @@ AGGATGAAGAAAAGCAACCAGAGCAGGCGG
           <LI>Stop codons are represented with a Z.  
           <LI>All other amino acids follow the IUPAC amino acid codes.
           <LI>In exon format, when the codon triplet is split between two 
-          exons, the exon with the two nucleotides will have the amino acid
-          like so:
+          exons, the amino acid will be displayed as part of the exon
+          containing two of the three nucleotides like so:
          </UL>
 
 <PRE><TT>
