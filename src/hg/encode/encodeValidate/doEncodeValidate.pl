@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.75 2008/09/26 20:51:35 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.76 2008/09/29 21:31:55 mikep Exp $
 
 use warnings;
 use strict;
@@ -48,6 +48,7 @@ use vars qw/
     $opt_validateDaf
     $opt_validateFile
     $opt_verbose
+    $opt_timing
     /;
 
 # Global variables
@@ -56,6 +57,7 @@ our $configPath;        # full path of configuration directory
 our $outPath;           # full path of output directory
 our %terms;             # controlled vocabulary
 our $quickCount=100;
+our $time0 = time;
 
 sub usage {
     print STDERR <<END;
@@ -89,6 +91,15 @@ sub pushError
         push(@{$errors}, @new);
         HgAutomate::verbose(2, "pushing errors:\n\t" . join("\n\t", @new) . "\n");
     }
+}
+
+sub doTime
+# print out time difference in seconds since last call to this function, or the program started.
+{
+    my $msg = shift || "";
+    my $time1 = time;
+    warn("# $msg : ".($time1-$time0)." secs");
+    $time0 = time;
 }
 
 ############################################################################
@@ -128,6 +139,7 @@ sub validateFiles {
     my @newFiles;
     my @errors;
     my $regex = "\`\|\\\|\|\"\|\'";
+    doTime("beginning validateFiles") if $opt_timing;
     for my $file (@{$files}) {
         my @list = glob $file;
         if(@list) {
@@ -138,6 +150,12 @@ sub validateFiles {
     }
     HgAutomate::verbose(3, "     Track: $track    Files: " . join (' ', @newFiles) . "\n");
     for my $file (@newFiles) {
+        my ($fbase,$dir,$suf) = fileparse($file, ".gz");
+	# Check if the file has been replaced with an unzipped version 
+        # This check is also done where we auto create the RawSignal view from the Alignments 
+        if ($suf eq ".gz" and ! -e $file and -s "$dir/$fbase") {
+            $file = "$dir/$fbase";
+        }
         if($file =~ /($regex)/) {
             # Do not allows filenames with suspicious characters (b/c filename will be used in shell commands).
             pushError(\@errors, "File '$file' has invalid characters; files cannot contain following characters: \"'`|");
@@ -152,6 +170,7 @@ sub validateFiles {
         }
     }
     $files = \@newFiles;
+    doTime("done validateFiles") if $opt_timing;
     return @errors;
 }
 
@@ -268,6 +287,7 @@ sub validateWig
 {
     my ($path, $file, $type) = @_;
     my $filePath = defined($path) ? "$path/$file" : $file;
+    doTime("beginning validateWig") if $opt_timing;
 
     my @cmds;
     if(isZipped($filePath)) {
@@ -286,6 +306,7 @@ sub validateWig
     } else {
         HgAutomate::verbose(2, "File \'$file\' passed wiggle validation\n");
     }
+    doTime("done validateWig") if $opt_timing;
     return ();
 }
 
@@ -293,6 +314,7 @@ sub validateBed {
 # Validate each line of a bed 5 or greater file.
     my ($path, $file, $type) = @_;
     my $line = 0;
+    doTime("beginning validateBed") if $opt_timing;
     my $fh = openUtil($path, $file);
     while(<$fh>) {
         chomp;
@@ -330,6 +352,7 @@ sub validateBed {
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
+    doTime("done validateBed") if $opt_timing;
     return ();
 }
 
@@ -337,6 +360,7 @@ sub validateBedGraph {
 # Validate each line of a bedGraph file.
     my ($path, $file, $type) = @_;
     my $line = 0;
+    doTime("beginning validateBedGraph") if $opt_timing;
     my $fh = openUtil($path, $file);
     while(<$fh>) {
         chomp;
@@ -368,6 +392,7 @@ sub validateBedGraph {
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed bedGraph validation\n");
+    doTime("done validateBedGraph") if $opt_timing;
     return ();
 }
 
@@ -375,6 +400,7 @@ sub validateBedGraph {
 sub validateGene {
     my ($path, $file, $type) = @_;
     my $outFile = "validateGene.out";
+    doTime("beginning validateGene") if $opt_timing;
     my $filePath = defined($path) ? "$path/$file" : $file;
     if(isZipped($filePath)) {
         # XXXX should be modified to handle zipped files.
@@ -391,6 +417,7 @@ sub validateGene {
     } else {
         HgAutomate::verbose(2, "File \'$file\' passed GFF validation\n");
     }
+    doTime("done validateGene") if $opt_timing;
     return ();
 }
 
@@ -398,18 +425,20 @@ sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
     my $line = 0;
+    doTime("beginning validateTagAlign") if $opt_timing;
     my $fh = openUtil($path, $file);
     while(<$fh>) {
         $line++;
 	# MJP: for now, allow colorspace sequences as well as DNA + dot
         if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[0-3ATCGN\.]+\s+\d+\s+[+-]$/)) {
             chomp;
-            return "Invalid $type file; line $line in file '$file' is invalid:\nline: $_";
+            return "Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validateTagAlign]";
         }
         last if($opt_quick && $line >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateTagAlign") if $opt_timing;
     return ();
 }
 
@@ -418,16 +447,18 @@ sub validateNarrowPeak
     my ($path, $file, $type) = @_;
     my $fh = openUtil($path, $file);
     my $line = 0;
+    doTime("beginning validateNarrowPeak") if $opt_timing;
     while(<$fh>) {
         $line++;
         if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+$floatRegEx\s+$floatRegEx\s+[+-]?\d+$/)) {
             chomp;
-            return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_");
+            return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validateNarrowPeak]");
         }
         last if($opt_quick && $line >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateNarrorPeak") if $opt_timing;
     return ();
 }
 
@@ -435,6 +466,7 @@ sub validateFastQ
 {
     # Syntax per http://maq.sourceforge.net/fastq.shtml
     my ($path, $file, $type) = @_;
+    doTime("beginning validateFastQ") if $opt_timing;
     my $fh = openUtil($path, $file);
     my $line = 0;
     my $state = 'firstLine';
@@ -449,7 +481,7 @@ sub validateFastQ
     while(<$fh>) {
         chomp;
         $line++;
-        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid";
+        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid [validateFastQ]";
         my $regex = $states->{$state}{REGEX};
         if(/^${regex}$/) {
 	        $seqName = $1 if($state eq 'firstLine');
@@ -464,6 +496,7 @@ sub validateFastQ
      }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateFastQ") if $opt_timing;
     return ();
 }
 
@@ -480,6 +513,7 @@ sub validateCsfasta
     # >461_19_209_F3
     # T022213002230311203200200322000
     my ($path, $file, $type) = @_;
+    doTime("beginning validateCsfasta") if $opt_timing;
     my $fh = openUtil($path, $file);
     my $line = 0;
     my $state = 'header';
@@ -491,7 +525,7 @@ sub validateCsfasta
         chomp;
         $line++;
         next if m/^#/;
-        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid";
+        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid [validateCsfasta]";
         my $regex = $states->{$state}{REGEX};
         if(/^${regex}$/) {
 	        $seqName = $1 if($state eq 'header');
@@ -503,6 +537,7 @@ sub validateCsfasta
      }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateCsfasta") if $opt_timing;
     return ();
 }
 
@@ -519,6 +554,7 @@ sub validateCsqual
     # 16 8 5 12 20 24 19 8 13 17 11 23 8 24 8 7 17 4 20 8 29 7 3 16 3 4 8 20 17 9 
 
     my ($path, $file, $type) = @_;
+    doTime("beginning validateCsqual") if $opt_timing;
     my $fh = openUtil($path, $file);
     my $line = 0;
     my $state = 'header';
@@ -530,7 +566,7 @@ sub validateCsqual
         chomp;
         $line++;
         next if m/^#/;
-        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid";
+        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid [validateCsqual]";
         my $regex = $states->{$state}{REGEX};
         if(/^${regex}$/) {
 	        $seqName = $1 if($state eq 'header');
@@ -542,6 +578,7 @@ sub validateCsqual
      }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateCsqual") if $opt_timing;
     return ();
 }
 
@@ -607,6 +644,7 @@ my $ok = GetOptions("allowReloads",
                     "fileType=s",
                     "outDir=s",
                     "quick",
+                    "timing",
                     "skipAutoCreation",
                     "validateDaf",
                     "validateFile",
@@ -844,6 +882,7 @@ if(!@errors) {
         }
     }
         
+    doTime("beginning ddfReplicateSets loop") if $opt_timing;
     for my $key (keys %ddfReplicateSets) {
         # create missing optional views (e.g. ChIP-Seq RawSignal); note this loop assumes these are on a per replicate basis.
 
@@ -859,20 +898,29 @@ if(!@errors) {
             }
             $ddfReplicateSets{$key}{VIEWS}{$newView} = \%line;
 	    my @unzippedFiles = ();
+            doTime("beginning unzipping replicates files") if $opt_timing;
 	    for my $file (@{$alignmentLine->{files}}) {
 		# Unzip any zipped files - only works if they are with .gz suffix
 		my ($fbase,$dir,$suf) = fileparse($file, ".gz");
 		if ($suf eq ".gz") {
-		    my $err = system("zcat $file > $fbase");
-		    if ($err) {
-			die ("File \'$file\' failed zcat unzipping to \'$fbase\'\n");
-		    }
-		    HgAutomate::verbose(2, "File \'$file\' zcat unzipped to \'$fbase\'\n");
+                    # If the zipped file exists and has not already been unzipped then unzip it
+                    # This check is also done above at the stage where we are testign the files in the ddf exist
+                    if (-s $file and ! -s "$dir/$fbase") { 
+			my $err = system("gunzip $file");
+			if ($err) {
+			    die ("File \'$file\' failed gunzip $file\n");
+			}
+		        HgAutomate::verbose(2, "File \'$file\' gunzipped to \'$fbase\'\n");
+                    }
+                    if ( ! -s "$dir/$fbase") { 
+	               die ("Unzipped file \'$fbase\' does not exist (or is empty) for DDF file \'$file\'\n");
+                    }
 		    push @unzippedFiles, $fbase;
 		} else {
 		    push @unzippedFiles, $file;
 		}
 	    }
+            doTime("done unzipping replicates files") if $opt_timing;
 	    $alignmentLine->{files} = \@unzippedFiles;
 	    # Now we can safely sort these files as none are zipped
             my $files = join(" ", @{$alignmentLine->{files}});
@@ -882,6 +930,7 @@ if(!@errors) {
                 HgAutomate::verbose(2, "Skipping auto-creating view '$newView' for key '$key'\n");
             } else {
                 HgAutomate::verbose(2, "Auto-creating view '$newView' for key '$key'\n");
+                  doTime("beginning Auto-create of view $newView") if $opt_timing;
                   my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $daf->{assembly} stdin");
                   my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
                   if(my $err = $safe->exec()) {
@@ -889,11 +938,13 @@ if(!@errors) {
                       # don't show end-user pipe error(s)
                       pushError(\@errors, "failed creation of wiggle for '$key'");
                   }
+                  doTime("done Auto-create of view $newView") if $opt_timing;
             }
             $line{files} = [$tmpFile];
             push(@ddfLines, \%line);
         }
     }
+    doTime("done ddfReplicateSets loop") if $opt_timing;
 }
 
 my $compositeTrack = Encode::compositeTrackName($daf);
@@ -910,6 +961,7 @@ if(@errors) {
 
 # Validate files and metadata fields in all ddfLines using controlled
 # vocabulary.  Create load.ra file for loader and trackDb.ra file for wrangler.
+doTime("beginning out files") if $opt_timing;
 
 open(LOADER_RA, ">$outPath/$Encode::loadFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::loadFile\' file; error: $!\n";
 open(TRACK_RA, ">$outPath/$Encode::trackFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::trackFile\' file; error: $!\n";
@@ -1004,7 +1056,7 @@ foreach my $ddfLine (@ddfLines) {
     }
 
     # XXXX Move the decision about which views have tracks into the DAF?
-    my $downloadOnly = $view eq 'RawData' || $view eq 'Alignments' ? 1 : 0;
+    my $downloadOnly = $view eq 'RawData' || $view eq 'RawData2' || $view eq 'Alignments' ? 1 : 0;
 
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "view $view\n";
@@ -1062,6 +1114,7 @@ END
 close(LOADER_RA);
 close(TRACK_RA);
 close(README);
+doTime("done out files") if $opt_timing;
 
 if($submitDir =~ /(\d+)$/) {
     my $id = $1;
