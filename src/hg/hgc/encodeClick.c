@@ -29,6 +29,7 @@ if (row != NULL)
     {
     char **rowPastOffset = row + rowOffset;
     int sigIx = 3, pValIx = 4;
+    float signal, pValue;
     /* Position */
     printf("<B>Position:</B> "
        "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
@@ -61,8 +62,12 @@ if (row != NULL)
 	sigIx = 12;
 	pValIx = 13;
 	}
-    printf("<B>Signal value:</B> %f<BR>\n", sqlFloat(rowPastOffset[sigIx]));
-    printf("<B>P-value (-log10):</B> %f<BR>\n", sqlFloat(rowPastOffset[pValIx]));
+    signal = sqlFloat(rowPastOffset[sigIx]);
+    if (signal >= 0)
+	printf("<B>Signal value:</B> %f<BR>\n", signal);
+    pValue = sqlFloat(rowPastOffset[pValIx]);
+    if (pValue >= 0)
+	printf("<B>P-value (-log10):</B> %f<BR>\n", pValue);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
