@@ -15,28 +15,39 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.15 2008/09/03 19:18:59 markd Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.16 2008/09/29 22:33:42 tdreszer Exp $";
 
 boolean isMafTable(char *database, struct trackDb *track, char *table)
 /* Return TRUE if table is maf. */
 {
-char setting[128], *p = setting;
-
 if (track == NULL)
     return FALSE;
 if (isEmpty(track->type))
     return FALSE;
-safecpy(setting, sizeof setting, track->type);
-char *type = nextWord(&p);
 
-if (sameString(type, "maf") || sameString(type, "wigMaf"))
-    if (sameString(track->tableName, table))
+if (sameString(track->tableName, table))
+    {
+    if (startsWithWord("maf",track->type) || startsWithWord("wigMaf",track->type))
         return TRUE;
+    }
+else
+    {
+    struct trackDb *childTdb;
+    for (childTdb = track->subtracks;childTdb;childTdb=childTdb->next)
+        {
+        if(sameString(childTdb->tableName, table))
+            {
+            if (startsWithWord("maf",childTdb->type) || startsWithWord("wigMaf",childTdb->type))
+                return TRUE;
+            break;
+            }
+        }
+    }
 return FALSE;
 }
 
 void doOutMaf(struct trackDb *track, char *table, struct sqlConnection *conn)
-/* Output regions as MAF.  maf tables look bed-like enough for 
+/* Output regions as MAF.  maf tables look bed-like enough for
  * cookedBedsOnRegions to handle intersections. */
 {
 struct region *region = NULL, *regionList = getRegions();
@@ -72,8 +83,8 @@ for (region = regionList; region != NULL; region = region->next)
 	struct mafAli *mafList = NULL, *maf = NULL;
 	char dbChrom[64];
 	safef(dbChrom, sizeof(dbChrom), "%s.%s", database, bed->chrom);
-	/* For MAF, we clip to viewing window (region) instead of showing 
-	 * entire items that happen to overlap the window/region, which is 
+	/* For MAF, we clip to viewing window (region) instead of showing
+	 * entire items that happen to overlap the window/region, which is
 	 * what we get from cookedBedList. */
 	if (bed->chromStart < region->start)
 	    bed->chromStart = region->start;
@@ -82,14 +93,14 @@ for (region = regionList; region != NULL; region = region->next)
 	if (bed->chromStart >= bed->chromEnd)
 	    continue;
 	if (ct == NULL)
-	    mafList = mafLoadInRegion(conn, table, bed->chrom, 
+	    mafList = mafLoadInRegion(conn, table, bed->chrom,
 				      bed->chromStart, bed->chromEnd);
 	else
-	    mafList = mafLoadInRegion2(ctConn, ctConn2, ct->dbTableName, 
+	    mafList = mafLoadInRegion2(ctConn, ctConn2, ct->dbTableName,
 		    bed->chrom, bed->chromStart, bed->chromEnd, mafFile);
 	for (maf = mafList; maf != NULL; maf = maf->next)
 	    {
-	    struct mafAli *subset = mafSubset(maf, dbChrom, 
+	    struct mafAli *subset = mafSubset(maf, dbChrom,
 					      bed->chromStart, bed->chromEnd);
 	    if (subset != NULL)
 		{
