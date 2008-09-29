@@ -30,7 +30,7 @@ errAbort(
   "   -exons             output exons\n"
   "   -noTrans           don't translate output into amino acids\n"
   "   -delay=N           delay N seconds between genes (default 0)\n" 
-  "   -transUC           use kgXref table to translate uc* names\n"
+  "   -noDash            don't output lines with all dashes\n"
   );
 }
 
@@ -40,7 +40,7 @@ static struct optionSpec options[] = {
    {"chrom", OPTION_STRING},
    {"exons", OPTION_BOOLEAN},
    {"noTrans", OPTION_BOOLEAN},
-   {"transUC", OPTION_BOOLEAN},
+   {"noDash", OPTION_BOOLEAN},
    {"delay", OPTION_INT},
    {NULL, 0},
 };
@@ -50,9 +50,9 @@ char *geneList = NULL;
 char *onlyChrom = NULL;
 boolean inExons = FALSE;
 boolean noTrans = TRUE;
-boolean transUC = FALSE;
 int delay = 0;
 boolean newTableType;
+boolean noDash = FALSE;
 
 /* load one or more genePreds from the database */
 struct genePred *getPreds(char *geneName, char *geneTable, char *db)
@@ -95,42 +95,6 @@ hFreeConn(&conn);
 return list;
 }
 
-#ifdef NOTNOW
-char *getGeneName(char *ucName)
-{
-struct sqlConnection *conn = hAllocConn();
-char query[1024];
-struct sqlResult *sr = NULL;
-char **row;
-
-safef(query, sizeof query, 
-    "select geneSymbol from kgXref where kgID='%s'\n", ucName);
-sr = sqlGetResult(conn, query);
-
-if ((row = sqlNextRow(sr)) == NULL)
-    {
-    hFreeConn(&conn);
-    return NULL;
-    }
-
-safef(geneNameBuffer, sizeof geneNameBuffer, "%s", row[0]);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-spaceToUnderbar(geneNameBuffer);
-
-return geneNameBuffer;
-}
-
-void maybePrintGeneName(char *name, FILE *f)
-{
-if (transUC)
-    {
-    char *geneName = getGeneName(name);
-    fprintf(f, " %s", geneName);
-    }
-}
-#endif
-
 /* output the sequence for one gene for every species to 
  * the file stream 
  */
@@ -144,6 +108,8 @@ if (inExons)
     options |= MAFGENE_EXONS;
 if (noTrans)
     options |= MAFGENE_NOTRANS;
+if (!noDash)
+    options |= MAFGENE_OUTBLANK;
 
 for(; pred; pred = pred->next)
     mafGeneOutPred(f, pred, dbName, mafTable, speciesNameList, options);
@@ -248,8 +214,8 @@ geneName = optionVal("geneName", geneName);
 geneList = optionVal("geneList", geneList);
 onlyChrom = optionVal("chrom", onlyChrom);
 inExons = optionExists("exons");
+noDash = optionExists("noDash");
 noTrans = optionExists("noTrans");
-transUC = optionExists("transUC");
 delay = optionInt("delay", delay);
 
 if ((geneName != NULL) && (geneList != NULL))
