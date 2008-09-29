@@ -36,7 +36,7 @@ origAssembly hg17
     color 58,119,40
     dataVersion ENCODE Oct 2005 Freeze
     priority 3
-    
+
     track wgEncodeGisRnaPetHes3
     subTrack wgEncodeGisRnaPet
     shortLabel GIS RNA hES3
@@ -91,7 +91,7 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006, Aug 2007
     dataVersion Oct 2006
     origAssembly hg17
     priority 4
-    
+
     track wgEncodeGisChipPetHes3H3K4me3
     subTrack wgEncodeGisChipPetAll
     shortLabel H3K4me3 hES3
@@ -100,7 +100,7 @@ dataVersion ENCODE June 2005 Freeze, ENCODE Oct 2005 Freeze, Oct 2006, Aug 2007
     dataVersion Aug 2007
     origAssembly hg18
     priority 5
-    
+
     track wgEncodeGisChipPetHes3H3K27me3
     subTrack wgEncodeGisChipPetAll
     shortLabel H3K27me3 hES3
@@ -273,7 +273,7 @@ wgEncode 1
         subTrack        wgEncodeNhgriNre
         shortLabel      NHGRI NRE K562
         longLabel       ENCODE NHGRI Negative Regulatory Elements - Silencers in K562 cells
-        subGroups       view=SI cellType=K562 promoter=SV40 
+        subGroups       view=SI cellType=K562 promoter=SV40
         type    bed 6
         dateSubmitted   2008-09-18 17:19:9
         priority        1
@@ -422,23 +422,85 @@ type bed 3
 
 track wgEncodeYaleChIPseq
 compositeTrack on
-shortLabel Yale ChIP-seq
+shortLabel Yale TFBS
 longLabel ENCODE - Yale ChIP-seq Transcription Factor Binding Sites
 group regulation
 priority 0
 type bed 3
 useScore 1
 origAssembly hg18
-subGroup1 view Views PK=Peaks SIG=Signal RAWSIG=Raw_Signal
-subGroup2 cellType Cell_Line G878=GM12878
-subGroup2 antibody Factor AB=BB
-dimensions dimensionX=cellType dimensionY=antibody
-sortOrder antibody=+ cellType=+ view=-
+subGroup1 view Views PK=Peaks Signal=Signal RawSignal=Raw_Signal
+subGroup2 cellType Cell_Line HeLa-S3=HeLa-S3 HeLa-S3_IFNg=HeLa-S3_IFNg
+subGroup3 factor Factor Input=Input
+dimensions dimensionX=cellType dimensionY=factor
+sortOrder factor=+ cellType=+ view=-
 dragAndDrop subTracks
-visibilityViewDefaults PK=packed SIG=full RAWSIG=hide
-controlledVocabulary encode/cv.ra cellType
+visibilityViewDefaults PK=packed Signal=full RawSignal=hide
+controlledVocabulary encode/cv.ra cellType factor
 dataVersion ENCODE Submitted June 2008
 wgEncode 1
+
+        track   wgEncodeYaleChIPseqSignalHelas3Input
+        subTrack        wgEncodeYaleChIPseq
+        shortLabel      HeLa Input Sig
+        longLabel       ENCODE Yale ChIP-Seq Signal (Input in HeLa-S3 cells)
+        subGroups       view=Signal factor=Input cellType=HeLa-S3
+        type            wig 0.00 8316.00
+        dateSubmitted   2008-09-29 14:52:0
+        priority        1
+        noInherit       on
+        visibility      full
+        spanList        1
+        windowingFunction       mean
+        maxHeightPixels 100:16:16
+        cell    HeLa-S3
+        antibody        Input
+
+        track   wgEncodeYaleChIPseqRawSignalHelas3Input
+        subTrack        wgEncodeYaleChIPseq
+        shortLabel      HeLa Input Raw
+        longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in HeLa-S3 cells)
+        subGroups       view=RawSignal factor=Input cellType=HeLa-S3
+        type            wig 1.00 4247.00
+        dateSubmitted   2008-09-29 14:52:0
+        priority        2
+        noInherit       on
+        spanList        1
+        windowingFunction       mean
+        maxHeightPixels 100:16:16
+        cell    HeLa-S3
+        antibody        Input
+
+        track   wgEncodeYaleChIPseqSignalHelas3ifngInput
+        subTrack        wgEncodeYaleChIPseq
+        shortLabel      HeLa IF Input Sig
+        longLabel       ENCODE Yale ChIP-Seq Signal (Input in HeLa-S3_IFNg cells)
+        subGroups       view=Signal factor=Input cellType=HeLa-S3_IFNg
+        type            wig 0.00 11690.00
+        dateSubmitted   2008-09-29 14:12:28
+        priority        1
+        noInherit       on
+        visibility      full
+        spanList        1
+        windowingFunction       mean
+        maxHeightPixels 100:16:16
+        cell    HeLa-S3_IFNg
+        antibody        Input
+
+        track   wgEncodeYaleChIPseqRawSignalHelas3ifngInput
+        subTrack        wgEncodeYaleChIPseq
+        shortLabel      HeLa IF Input Raw
+        longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in HeLa-S3_IFNg cells)
+        subGroups       view=RawSignal factor=Input cellType=HeLa-S3_IFNg
+        type            wig 1.00 4733.00
+        dateSubmitted   2008-09-29 14:12:28
+        priority        2
+        noInherit       on
+        spanList        1
+        windowingFunction       mean
+        maxHeightPixels 100:16:16
+        cell    HeLa-S3_IFNg
+        antibody        Input
 
 track wgEncodeHudsonalphaChipSeq
 compositeTrack on
