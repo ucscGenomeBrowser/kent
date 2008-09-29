@@ -317,8 +317,8 @@ type bed 3
 	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in K562 cells)
 	subGroups	view=PlusClusters cellType=K562
 	type	bedGraph
-	dateSubmitted	2008-09-24 17:42:45
-	priority	1
+	dateSubmitted	2008-09-29 12:2:45
+	priority	4
 	noInherit	on
 	cell	K562
 
@@ -328,8 +328,8 @@ type bed 3
 	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in K562 cells)
 	subGroups	view=MinusClusters cellType=K562
 	type	bedGraph
-	dateSubmitted	2008-09-24 17:42:45
-	priority	2
+	dateSubmitted	2008-09-29 12:2:45
+	priority	5
 	noInherit	on
 	cell	K562
 
@@ -339,8 +339,8 @@ type bed 3
 	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in K562 cells)
 	subGroups	view=PlusClusters cellType=K562
 	type	bedGraph
-	dateSubmitted	2008-09-24 17:42:45
-	priority	1
+	dateSubmitted	2008-09-29 12:2:45
+	priority	4
 	noInherit	on
 	cell	K562
 
@@ -350,8 +350,8 @@ type bed 3
 	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in K562 cells)
 	subGroups	view=MinusClusters cellType=K562
 	type	bedGraph
-	dateSubmitted	2008-09-24 17:42:45
-	priority	2
+	dateSubmitted	2008-09-29 12:2:45
+	priority	5
 	noInherit	on
 	cell	K562
 
@@ -361,8 +361,8 @@ type bed 3
 	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in K562 cells)
 	subGroups	view=PlusClusters cellType=K562
 	type	bedGraph
-	dateSubmitted	2008-09-24 17:42:45
-	priority	1
+	dateSubmitted	2008-09-29 12:2:45
+	priority	4
 	noInherit	on
 	cell	K562
 
@@ -372,19 +372,19 @@ type bed 3
 	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in K562 cells)
 	subGroups	view=MinusClusters cellType=K562
 	type	bedGraph
-	dateSubmitted	2008-09-24 17:42:45
-	priority	2
+	dateSubmitted	2008-09-29 12:2:45
+	priority	5
 	noInherit	on
 	cell	K562
 
 	track	wgEncodeRikenCageRawSignalK562CellShort
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562 Raw
-	longLabel	ENCODE RIKEN CAGE Raw Signal combining strands (auto-generated) (in K562 cells)
+	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in K562 cells)
 	subGroups	view=RawSignal cellType=K562
-	type	wig
-	dateSubmitted	2008-09-24 17:42:45
-	priority	3
+	type	wig WGENCODERIKENCAGERAWSIGNALK562CELLSHORT_MINMAXRANGE
+	dateSubmitted	2008-09-29 12:2:45
+	priority	6
 	noInherit	on
 	spanList	1
 	windowingFunction	mean
@@ -394,11 +394,11 @@ type bed 3
 	track	wgEncodeRikenCageRawSignalK562NucleusShort
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562 Raw
-	longLabel	ENCODE RIKEN CAGE Raw Signal combining strands (auto-generated) (in K562 cells)
+	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in K562 cells)
 	subGroups	view=RawSignal cellType=K562
-	type	wig
-	dateSubmitted	2008-09-24 17:42:45
-	priority	3
+	type	wig WGENCODERIKENCAGERAWSIGNALK562NUCLEUSSHORT_MINMAXRANGE
+	dateSubmitted	2008-09-29 12:2:45
+	priority	6
 	noInherit	on
 	spanList	1
 	windowingFunction	mean
@@ -408,11 +408,11 @@ type bed 3
 	track	wgEncodeRikenCageRawSignalK562CytosolShort
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562 Raw
-	longLabel	ENCODE RIKEN CAGE Raw Signal combining strands (auto-generated) (in K562 cells)
+	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in K562 cells)
 	subGroups	view=RawSignal cellType=K562
-	type	wig
-	dateSubmitted	2008-09-24 17:42:45
-	priority	3
+	type	wig WGENCODERIKENCAGERAWSIGNALK562CYTOSOLSHORT_MINMAXRANGE
+	dateSubmitted	2008-09-29 12:2:45
+	priority	6
 	noInherit	on
 	spanList	1
 	windowingFunction	mean
