@@ -18,7 +18,7 @@
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.10 2008/09/12 18:47:12 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.11 2008/09/29 16:19:25 tdreszer Exp $";
 
 static char *cv_file()
 {
@@ -51,14 +51,6 @@ else if (sameString(type,"localization"))
     {
     puts("  <TH>Term</TH><TH>Description</TH><TH>GO ID</TH>");
     }
-else if (sameString(type,"rnaExtract"))
-    {
-    puts("  <TH>Term</TH><TH>Description</TH>");
-    }
-else if (sameString(type,"Gene Type"))
-    {
-    puts("  <TH>Term</TH><TH>Description</TH>");
-    }
 else if (sameString(type,"Cell Line"))
     {
     puts("  <TH>Term</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Vendor ID</TH><TH>Term ID</TH>");
@@ -68,7 +60,13 @@ else if (sameWord(type,"control"))
     puts("  <TH>Term</TH><TH>Description</TH></TR><TR>");
     puts("  <TH>Control</TH><TH>This data represents a control being compared with the other tracks in the set.</TH>");
     }
-else 
+else if (sameString(type,"Gene Type")
+     ||  sameString(type,"promoter")
+     ||  sameString(type,"rnaExtract"))
+    {
+    puts("  <TH>Term</TH><TH>Description</TH>");
+    }
+else
     errAbort("Error: Unrecognised type (%s)\n", type);
 }
 
@@ -86,7 +84,7 @@ if(term)
     }
 else
     term = hashMustFindVal(ra,"term");
-    
+
 if (sameString(type,"Antibody"))
     {
     ++(*total);
@@ -129,16 +127,9 @@ else if (sameString(type,"localization"))
 
     puts("</TR>");
     }
-else if (sameString(type,"rnaExtract"))
-    {
-    ++(*total);
-    puts("<TR>");
-    printf("  <TD>%s</TD>\n", term);
-    s = hashMustFindVal(ra, "description");
-    printf("  <TD>%s</TD>\n", s);
-    puts("</TR>");
-    }
-else if (sameString(type,"Gene Type"))
+else if (sameString(type,"Gene Type")
+     ||  sameString(type,"promoter")
+     ||  sameString(type,"rnaExtract"))
     {
     ++(*total);
     puts("<TR>");
@@ -209,7 +200,7 @@ else if (sameString(type,"Cell Line"))
     puts("</TD>");
     puts("</TR>");
     }
-else 
+else
     errAbort("Error: Unrecognised type (%s)\n", type);
 }
 
@@ -224,8 +215,8 @@ if ((sameWord(type,"Cell Line"))
     return cloneString("Cell Line");
 else if (sameWord(type,"Factor"))
     return cloneString("Antibody");
-    
-return type;  
+
+return type;
 }
 
 static char *findType(struct hash *cvHash)
