@@ -19,13 +19,13 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.137 2008/09/08 18:22:04 tdreszer Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.138 2008/09/29 23:09:02 tdreszer Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
 
 struct wigMafItem
-/* A maf track item -- 
+/* A maf track item --
  * a line of bases (base level) or pairwise density gradient (zoomed out). */
     {
     struct wigMafItem *next;
@@ -75,11 +75,11 @@ Color wigMafItemLabelColor(struct track *tg, void *item, struct hvGfx *hvg)
 struct wigMafItem *mi = (struct wigMafItem *)item;
 if (sameString(mi->name, GAP_ITEM_LABEL))
     return getOrangeColor();
-return (((struct wigMafItem *)item)->group % 2 ? 
+return (((struct wigMafItem *)item)->group % 2 ?
                         tg->ixAltColor : tg->ixColor);
 }
 
-static struct mafAli *wigMafLoadInRegion(struct sqlConnection *conn, 
+static struct mafAli *wigMafLoadInRegion(struct sqlConnection *conn,
     struct sqlConnection *conn2, char *table, char *chrom, int start, int end, char *file)
 /* Load mafs from region */
 {
@@ -136,7 +136,7 @@ for (maf = mp->list; maf != NULL; maf = maf->next)
 	    AllocVar(mi);
 	    mi->db = cloneString(buf);
 	    otherOrganism = hOrganism(mi->db);
-	    mi->name = 
+	    mi->name =
 		(otherOrganism == NULL ? cloneString(buf) : otherOrganism);
 
 	    mi->height = tl.fontHeight;
@@ -239,13 +239,13 @@ if (speciesOff)
         hashAdd(speciesOffHash, defaultOff[i], NULL);
     }
 
-/* Make up items for other organisms by scanning through group & species 
+/* Make up items for other organisms by scanning through group & species
    track settings */
 for (group = 0; group < groupCt; group++)
     {
     if (groupCt != 1 || !speciesOrder)
         {
-        safef(sGroup, sizeof sGroup, "%s%s", 
+        safef(sGroup, sizeof sGroup, "%s%s",
                                 SPECIES_GROUP_PREFIX, groups[group]);
         speciesOrder = trackDbRequiredSetting(track->tdb, sGroup);
         }
@@ -383,7 +383,7 @@ else
     {
     conn = hAllocConn(database);
     conn2 = hAllocConn(database);
-    mp->list = wigMafLoadInRegion(conn, conn2, track->mapName, 
+    mp->list = wigMafLoadInRegion(conn, conn2, track->mapName,
 				chromName, winStart - 2 , winEnd + 2, NULL);
     hFreeConn(&conn);
     hFreeConn(&conn2);
@@ -460,7 +460,7 @@ return suffix;
 
 static int pairwiseWigHeight(struct track *track)
 /* Return the height of a pairwise wiggle for this track, or 0 if n/a
- * NOTE: set one pixel smaller than we actually want, to 
+ * NOTE: set one pixel smaller than we actually want, to
  * leave a border at the bottom of the wiggle.
  */
 {
@@ -521,7 +521,7 @@ return cloneString(table);
 static boolean displayPairwise(struct track *track)
 /* determine if tables are present for pairwise display */
 {
-return winBaseCount < MAF_SUMMARY_VIEW || isCustomTrack(track->mapName) || 
+return winBaseCount < MAF_SUMMARY_VIEW || isCustomTrack(track->mapName) ||
 	pairwiseSuffix(track) || summarySetting(track);
 }
 
@@ -574,7 +574,7 @@ if (winBaseCount < MAF_SUMMARY_VIEW)
 	{
 	conn = hAllocConn(database);
 	conn2 = hAllocConn(database);
-	mp->list = wigMafLoadInRegion(conn, conn2, track->mapName, 
+	mp->list = wigMafLoadInRegion(conn, conn2, track->mapName,
 					chromName, winStart, winEnd, NULL);
 	hFreeConn(&conn);
 	hFreeConn(&conn2);
@@ -634,7 +634,7 @@ if (track->limitedVis == tvFull || track->limitedVis == tvPack)
 	miList = loadBaseByBaseItems(track);
 	}
     /* zoomed out */
-    else 
+    else
 	{
 	miList = loadPairwiseItems(track);
 	}
@@ -658,7 +658,7 @@ else if (track->limitedVis == tvSquish)
         wigTrack = wigTrack->next;
         }
     }
-else 
+else
     {
     /* dense mode, zoomed out - show density plot, with track label */
     if (!wigTrack)
@@ -672,7 +672,7 @@ else
 	miList->height = tl.fontHeight;
 #else
 	    miList =  loadPairwiseItems(track);
-	
+
 	/* remove components that aren't selected */
 	struct wigMafItem *mil = miList;
 	struct hash *nameHash = newHash(5);
@@ -738,7 +738,7 @@ track->limitedVisSet = (track->limitedVis != tvHide && track->visibility != trac
 miList = loadWigMafItems(track, zoomedToBaseLevel);
 track->items = miList;
 
-while (wigTrack != NULL) 
+while (wigTrack != NULL)
     // load wiggle subtrack items
     {
     /* update track visibility from parent track,
@@ -759,6 +759,8 @@ for (mi = track->items; mi != NULL; mi = mi->next)
     total += mi->height;
 
 track->height = total;
+if (track->limitedVis == tvDense)
+    track->height=tl.fontHeight+1; // Evidence that track-height comes in as 9 but should be 10!
 return track->height;
 }
 
@@ -787,10 +789,10 @@ struct wigMafItem *mi = item;
 return mi->name;
 }
 
-static void processInserts(char *text, struct mafAli *maf, 
+static void processInserts(char *text, struct mafAli *maf,
                                 struct hash *itemHash,
 	                        int insertCounts[], int baseCount)
-/* Make up insert line from sequence of reference species.  
+/* Make up insert line from sequence of reference species.
    It has a gap count at each displayed base position, and is generated by
    counting up '-' chars in the sequence, where  */
 {
@@ -905,9 +907,9 @@ return xOff + x1 + w - 1;
 }
 
 static void drawScoreSummary(struct mafSummary *summaryList, int height,
-                             int seqStart, int seqEnd, 
+                             int seqStart, int seqEnd,
                             struct hvGfx *hvg, int xOff, int yOff,
-                            int width, MgFont *font, 
+                            int width, MgFont *font,
                             Color color, Color altColor,
                             enum trackVisibility vis, boolean chainBreaks)
 /* Draw density plot or graph for summary maf scores */
@@ -924,7 +926,7 @@ int lastX;
 ms = summaryList;
 if (chainBreaks && ms->chromStart > chromStart)
     {
-    if ((ms->leftStatus[0] == MAF_CONTIG_STATUS || 
+    if ((ms->leftStatus[0] == MAF_CONTIG_STATUS ||
      ms->leftStatus[0] == MAF_INSERT_STATUS))
 	{
 	isDouble = (ms->leftStatus[0] == MAF_INSERT_STATUS);
@@ -952,12 +954,12 @@ for (ms = summaryList; ms != NULL; ms = ms->next)
     /* draw chain after alignment */
     if (chainBreaks && ms->chromEnd < seqEnd && ms->next != NULL)
 	{
-	if ((ms->rightStatus[0] == MAF_CONTIG_STATUS || 
+	if ((ms->rightStatus[0] == MAF_CONTIG_STATUS ||
          ms->rightStatus[0] == MAF_INSERT_STATUS))
 	    {
 	    isDouble = (ms->rightStatus[0] == MAF_INSERT_STATUS);
 	    x1 = round((double)((int)ms->chromEnd+1 - seqStart) * scale) + xOff;
-	    x2 = round((double)((int)ms->next->chromStart-1 - seqStart) * scale) 
+	    x2 = round((double)((int)ms->next->chromStart-1 - seqStart) * scale)
 		    + xOff;
 	    w = x2 - x1;
 	    if (w == 1 && x1 == lastX)
@@ -983,20 +985,20 @@ for (ms = summaryList; ms != NULL; ms = ms->next)
 
 static void drawScoreOverviewC(struct sqlConnection *conn,
 			    char *tableName, int height,
-                             int seqStart, int seqEnd, 
+                             int seqStart, int seqEnd,
                             struct hvGfx *hvg, int xOff, int yOff,
-                            int width, MgFont *font, 
+                            int width, MgFont *font,
                             Color color, Color altColor,
                             enum trackVisibility vis)
 /* Draw density plot or graph for overall maf scores rather than computing
  * by sections, for speed.  Don't actually load the mafs -- just
  * the scored refs from the table.
- * TODO: reuse code in mafTrack.c 
+ * TODO: reuse code in mafTrack.c
  */
 {
 char **row;
 int rowOffset;
-struct sqlResult *sr = hRangeQuery(conn, tableName, chromName, 
+struct sqlResult *sr = hRangeQuery(conn, tableName, chromName,
 			    seqStart, seqEnd, NULL, &rowOffset);
 
 double scale = scaleForPixels(width);
@@ -1010,38 +1012,38 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-static void drawScoreOverview(char *tableName, 
-	int height, int seqStart, int seqEnd, 
+static void drawScoreOverview(char *tableName,
+	int height, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff,
-	int width, MgFont *font, 
+	int width, MgFont *font,
 	Color color, Color altColor,
 	enum trackVisibility vis)
 {
 struct sqlConnection *conn = hAllocConn(database);
 
-drawScoreOverviewC(conn, tableName, height, seqStart, seqEnd, 
+drawScoreOverviewC(conn, tableName, height, seqStart, seqEnd,
 	hvg, xOff, yOff, width, font, color, altColor, vis);
 
 hFreeConn(&conn);
 }
 
-static void drawScoreOverviewCT(char *tableName, 
-	int height, int seqStart, int seqEnd, 
+static void drawScoreOverviewCT(char *tableName,
+	int height, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff,
-	int width, MgFont *font, 
+	int width, MgFont *font,
 	Color color, Color altColor,
 	enum trackVisibility vis)
 {
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 
-drawScoreOverviewC(conn, tableName, height, seqStart, seqEnd, 
+drawScoreOverviewC(conn, tableName, height, seqStart, seqEnd,
 	hvg, xOff, yOff, width, font, color, altColor, vis);
 
 hFreeConn(&conn);
 }
 
 
-static boolean drawPairsFromSummary(struct track *track, 
+static boolean drawPairsFromSummary(struct track *track,
         int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, MgFont *font,
         Color color, enum trackVisibility vis)
@@ -1084,7 +1086,7 @@ else
     }
 
 /* Create SQL where clause that will load up just the
- * summaries for the species that we are including. */ 
+ * summaries for the species that we are including. */
 conn = hAllocConn(database);
 dyStringAppend(where, "src in (");
 for (mi = miList; mi != NULL; mi = mi->next)
@@ -1145,18 +1147,18 @@ for (mi = miList; mi != NULL; mi = mi->next)
 	if (vis == tvFull)
 	    {
 	    hvGfxSetClip(hvg, xOff, yOff, width, 16);
-	    drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, hvg, 
+	    drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, hvg,
 				    xOff, yOff, width, font, track->ixAltColor,
 				    track->ixAltColor, tvFull, useIrowChains);
 	    hvGfxUnclip(hvg);
 	    }
-	else 
+	else
 	    {
 	    /* pack */
 	    /* get maf table, containing pairwise alignments for this organism */
 	    /* display pairwise alignments in this region in dense format */
 	    hvGfxSetClip(hvg, xOff, yOff, width, mi->height);
-	    drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, hvg, 
+	    drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, hvg,
 				xOff, yOff, width, font, color, color, tvDense,
 				useIrowChains);
 	    hvGfxUnclip(hvg);
@@ -1167,8 +1169,8 @@ for (mi = miList; mi != NULL; mi = mi->next)
 return TRUE;
 }
 
-static boolean drawPairsFromPairwiseMafScores(struct track *track, 
-        int seqStart, int seqEnd, struct hvGfx *hvg, int xOff, int yOff, 
+static boolean drawPairsFromPairwiseMafScores(struct track *track,
+        int seqStart, int seqEnd, struct hvGfx *hvg, int xOff, int yOff,
         int width, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw pairwise display for this multiple alignment */
 {
@@ -1210,14 +1212,14 @@ for (mi = miList; mi != NULL; mi = mi->next)
     if (isCustomTrack(track->mapName))
 	{
 	struct mafPriv *mp = getMafPriv(track);
-	drawScoreOverviewCT(mp->ct->dbTableName, mi->height, 
-		seqStart, seqEnd, 
+	drawScoreOverviewCT(mp->ct->dbTableName, mi->height,
+		seqStart, seqEnd,
 		hvg, xOff, yOff, width, font, color, color, vis);
 	hvGfxUnclip(hvg);
 	}
     else if (vis == tvFull)
         {
-        /* get wiggle table, of pairwise 
+        /* get wiggle table, of pairwise
            for example, percent identity */
         tableName = getWigTablename(mi->name, suffix);
         if (!hTableExists(database, tableName))
@@ -1237,22 +1239,22 @@ for (mi = miList; mi != NULL; mi = mi->next)
             }
         else
             {
-            /* no wiggle table for this -- compute a graph on-the-fly 
+            /* no wiggle table for this -- compute a graph on-the-fly
                from mafs */
             hvGfxSetClip(hvg, xOff, yOff, width, mi->height);
             tableName = getMafTablename(mi->name, suffix);
             if (!hTableExists(database, tableName))
                 tableName = getMafTablename(mi->db, suffix);
             if (hTableExists(database, tableName))
-                drawScoreOverview(tableName, mi->height, seqStart, seqEnd, hvg, 
-                                xOff, yOff, width, font, track->ixAltColor, 
+                drawScoreOverview(tableName, mi->height, seqStart, seqEnd, hvg,
+                                xOff, yOff, width, font, track->ixAltColor,
                                 track->ixAltColor, tvFull);
             hvGfxUnclip(hvg);
             }
         /* need to add extra space between wiggles (for now) */
         mi->height = pairwiseHeight;
         }
-    else 
+    else
         {
 	/* pack */
 	/* get maf table, containing pairwise alignments for this organism */
@@ -1262,7 +1264,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
 	if (!hTableExists(database, tableName))
 	    tableName = getMafTablename(mi->db, suffix);
 	if (hTableExists(database, tableName))
-	    drawScoreOverview(tableName, mi->height, seqStart, seqEnd, hvg, 
+	    drawScoreOverview(tableName, mi->height, seqStart, seqEnd, hvg,
 			    xOff, yOff, width, font, color, color, tvDense);
         hvGfxUnclip(hvg);
         }
@@ -1271,7 +1273,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
 return TRUE;
 }
 
-static boolean drawPairsFromMultipleMaf(struct track *track, 
+static boolean drawPairsFromMultipleMaf(struct track *track,
         int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, MgFont *font,
         Color color, enum trackVisibility vis)
@@ -1358,7 +1360,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
     /* compute a graph or density on-the-fly from mafs */
     hvGfxSetClip(hvg, xOff, yOff, width, mi->height);
     drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, hvg, xOff, yOff,
-                         width, font, pairColor, pairColor, vis, FALSE, 
+                         width, font, pairColor, pairColor, vis, FALSE,
                          useIrowChains);
     hvGfxUnclip(hvg);
 
@@ -1397,8 +1399,8 @@ static boolean wigMafDrawPairwise(struct track *track, int seqStart, int seqEnd,
     return FALSE;
 }
 
-static void alternateBlocksBehindChars(struct hvGfx *hvg, int x, int y, 
-	int width, int height, int charWidth, int charCount, 
+static void alternateBlocksBehindChars(struct hvGfx *hvg, int x, int y,
+	int width, int height, int charWidth, int charCount,
 	int stripeCharWidth, Color a, Color b)
 /* Draw blocks that alternate between color a and b. */
 {
@@ -1460,8 +1462,8 @@ else
 }
 
 #define ISGAP(x)  (((x) == '=') || (((x) == '-')))
-#define ISN(x)  ((x) == 'N') 
-#define ISSPACE(x)  ((x) == ' ') 
+#define ISN(x)  ((x) == 'N')
+#define ISSPACE(x)  ((x) == ' ')
 #define ISGAPSPACEORN(x)  (ISSPACE(x) || ISGAP(x) || ISN(x))
 
 static AA lookupAndCheckCodon(char *codon)
@@ -1474,8 +1476,8 @@ if ((retValue = lookupCodon(codon)) == 0)
 return retValue;
 }
 
-static void translateCodons(struct sqlConnection *conn, 
-    struct sqlConnection *conn2, char *tableName, char *compName, 
+static void translateCodons(struct sqlConnection *conn,
+    struct sqlConnection *conn2, char *tableName, char *compName,
     DNA *dna, int start, int length, int frame, char strand,
     int prevEnd, int nextStart, bool alreadyComplemented,
     int x, int y, int width, int height, struct hvGfx *hvg, char *mafFile)
@@ -1569,14 +1571,14 @@ else if (frame && (prevEnd != -1))
 	case 2:
 	    if (strand == '-')
 		{
-		ali = mafLoadInRegion2(conn, conn2, tableName, chromName, 
+		ali = mafLoadInRegion2(conn, conn2, tableName, chromName,
 			    prevEnd, prevEnd + 2, mafFile);
 		if (ali != NULL)
 		    sub = mafSubset(ali, masterChrom, prevEnd, prevEnd + 2  );
 		}
 	    else
 		{
-		ali = mafLoadInRegion2(conn, conn2, tableName, chromName, 
+		ali = mafLoadInRegion2(conn, conn2, tableName, chromName,
 			    prevEnd - 1, prevEnd + 1, mafFile);
 		if (ali != NULL)
 		    sub = mafSubset(ali, masterChrom, prevEnd - 1, prevEnd + 1);
@@ -1646,18 +1648,18 @@ if (length && (nextStart != -1))
 
     memset(codon, 0, sizeof(codon));
     sub = NULL;
-	
+
     if (strand == '-')
 	{
-	ali = mafLoadInRegion2(conn, conn2, tableName, chromName, 
+	ali = mafLoadInRegion2(conn, conn2, tableName, chromName,
 		    nextStart - 2 + length, nextStart + 1, mafFile );
 	if (ali != NULL)
-	    sub = mafSubset(ali, masterChrom, 
+	    sub = mafSubset(ali, masterChrom,
 		nextStart - 2 + length, nextStart + 1);
 	}
     else
 	{
-	ali = mafLoadInRegion2(conn, conn2, tableName, chromName, 
+	ali = mafLoadInRegion2(conn, conn2, tableName, chromName,
 				nextStart , nextStart + 2, mafFile );
 	if (ali != NULL)
 	    sub = mafSubset(ali, masterChrom, nextStart , nextStart + 2);
@@ -1733,7 +1735,7 @@ if (strand == '-')
 }
 
 static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis,
 	struct wigMafItem *miList)
 /* Draw base-by-base view, return new Y offset. */
@@ -1967,7 +1969,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	    if (startInserts)
 		{
 		struct mafComp *mc1;
-		if (((mc1 = mafMayFindCompSpecies(maf, mi->db, '.')) != NULL) && 
+		if (((mc1 = mafMayFindCompSpecies(maf, mi->db, '.')) != NULL) &&
 		    ((mc1->text) && (countNonDash(mc1->text, startInserts) > 0)))
 			{
 			mi->inserts[mi->insertsSize] =  (subStart - seqStart)+ 1;
@@ -2082,13 +2084,13 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		    	mi->seqEndsSize++;
 		    }
 		}
-            if (mc->text && ((mc->leftStatus == MAF_MISSING_STATUS))) 
+            if (mc->text && ((mc->leftStatus == MAF_MISSING_STATUS)))
 		{
                 char *p = seq;
 		while(*p == '-')
 		    *p++ = 'N';
 		}
-            if (mc->text && ((mc->leftStatus == MAF_INSERT_STATUS))) 
+            if (mc->text && ((mc->leftStatus == MAF_INSERT_STATUS)))
 		{
                 char *p = seq;
 		while(*p == '-')
@@ -2110,7 +2112,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		    m--;
 		    }
 		}
-	    
+
             mi->insertsSize = processSeq(seq, mcMaster->text, size, lines[mi->ix], lineOffset, subSize,
 	    	mi->inserts, mi->insertsSize);
             if (needToFree)
@@ -2142,13 +2144,13 @@ for(offset=startSub2*2; (offset < alignLineLength) && (offset < winBaseCount + s
 	    {
 	    dyStringPrintf(label, "%d",insertCounts[offset]);
 	    }
-	    
+
 	if (label->stringSize > haveRoomFor)
 	    {
 	    dyStringClear(label);
 	    dyStringPrintf(label, "%c",(insertCounts[offset] % 3) == 0 ? '*' : '+');
 	    }
-	hvGfxTextCentered(hvg, x1+x - (width/winBaseCount)/2, y, x2-x1, mi->height, 
+	hvGfxTextCentered(hvg, x1+x - (width/winBaseCount)/2, y, x2-x1, mi->height,
 		getOrangeColor(), font, label->string);
 	dyStringFree(&label);
 	}
@@ -2166,8 +2168,8 @@ y += mi->height;
         {
         int baseWidth = spreadStringCharWidth(width, winBaseCount);
         int colorX = x + alternateColorBaseOffset * baseWidth;
-        alternateBlocksBehindChars(hvg, colorX, y-1, width, 
-                mi->height*(lineCount-1), tl.mWidth, winBaseCount, 
+        alternateBlocksBehindChars(hvg, colorX, y-1, width,
+                mi->height*(lineCount-1), tl.mWidth, winBaseCount,
                 alternateColorBaseCount, shadesOfSea[0], MG_WHITE);
         }
     }
@@ -2201,19 +2203,19 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
 
 	if (sameString("codonDefault", codonTransMode))
 	    {
-	    safef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies); 
+	    safef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
 
 	    found = TRUE;
 	    }
 	else if (sameString("codonFrameDef", codonTransMode))
 	    {
-	    safef(extra, sizeof(extra), "src='%s'",mi->db); 
+	    safef(extra, sizeof(extra), "src='%s'",mi->db);
 
 	    found = FALSE;
 	    }
 	else if (sameString("codonFrameNone", codonTransMode))
 	    {
-	    safef(extra, sizeof(extra), "src='%s'",mi->db); 
+	    safef(extra, sizeof(extra), "src='%s'",mi->db);
 
 	    found = TRUE;
 	    }
@@ -2225,7 +2227,7 @@ tryagain:
 	    {
 	    struct mafFrames mf;
 	    int start, end, w;
-	    int frame; 
+	    int frame;
 
 	    found = TRUE;
 	    if (newTableType)
@@ -2249,20 +2251,20 @@ tryagain:
 		    frame = (frame + seqStart-mf.chromStart  ) % 3;
 		}
 
-	    end = mf.chromEnd > seqEnd ? seqEnd - seqStart  : mf.chromEnd - seqStart; 
+	    end = mf.chromEnd > seqEnd ? seqEnd - seqStart  : mf.chromEnd - seqStart;
 	    w= end - start;
 
-	    translateCodons(conn2, conn3, tableName, mi->db, line, start , 
+	    translateCodons(conn2, conn3, tableName, mi->db, line, start ,
 		w, frame, mf.strand[0],mf.prevFramePos,mf.nextFramePos,
 		complementBases, x, y, width, mi->height,  hvg, mafFile);
-	    
+
 	    }
 	sqlFreeResult(&sr);
 
 	if (!found)
 	    {
 	    /* try the default species */
-	    safef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies); 
+	    safef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies);
 
 	    found = TRUE; /* don't try again */
 	    goto tryagain;
@@ -2339,7 +2341,7 @@ return y;
 }
 
 static int wigMafDrawScoreGraph(struct track *track, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
 {
 /* Draw routine for score graph, returns new Y offset */
@@ -2355,6 +2357,8 @@ if (wigTrack == NULL)
     if (vis == tvFull || vis == tvPack)
         /* suppress graph if other items displayed (bases or pairs) */
         return yOff;
+    else if (vis == tvDense) {
+        height = track->height; // Evidence that track-height comes in as 9 but should be 10!
     /* draw some kind of graph from multiple alignment */
     struct mafPriv *mp = getMafPriv(track);
     if (mp->list != (char *)-1 && mp->list != NULL)
@@ -2367,14 +2371,14 @@ if (wigTrack == NULL)
     else if (mp->ct != NULL)
         {
         /* use or scored refs from maf table*/
-        drawScoreOverviewCT(mp->ct->dbTableName, height, seqStart, seqEnd, 
+        drawScoreOverviewCT(mp->ct->dbTableName, height, seqStart, seqEnd,
 		hvg, xOff, yOff, width, font, color, color, scoreVis);
         yOff++;
         }
     else
         {
         /* use or scored refs from maf table*/
-        drawScoreOverview(track->mapName, height, seqStart, seqEnd, hvg, 
+        drawScoreOverview(track->mapName, height, seqStart, seqEnd, hvg,
                             xOff, yOff, width, font, color, color, scoreVis);
         yOff++;
         }
@@ -2405,7 +2409,7 @@ return yOff;
 
 
 static void wigMafDraw(struct track *track, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw routine for wigmaf type tracks */
 {
@@ -2428,11 +2432,11 @@ if (vis == tvFull || vis == tvPack)
 				    color, vis, wiList);
 				    //MG_RED, vis, wiList);
 	}
-    else 
-	wigMafDrawPairwise(track, seqStart, seqEnd, hvg, xOff, y, 
+    else
+	wigMafDrawPairwise(track, seqStart, seqEnd, hvg, xOff, y,
 				width, font, color, vis);
     }
-mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, track->height, track->mapName, 
+mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, track->height, track->mapName,
             track->mapName, NULL);
 }
 
@@ -2464,7 +2468,7 @@ consWigList = wigMafWiggles(database, tdb);
 if (consWigList == NULL)
     return;
 
-/* determine which conservation wiggles to use -- from cart, 
+/* determine which conservation wiggles to use -- from cart,
  or if none there, use first entry in trackDb setting */
 boolean first = TRUE;
 for (consWig = consWigList; consWig != NULL; consWig = consWig->next)
