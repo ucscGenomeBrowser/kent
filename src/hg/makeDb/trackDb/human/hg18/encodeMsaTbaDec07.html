@@ -105,18 +105,100 @@ In full display mode, this track shows pairwise alignments
 of each species aligned to the human genome.  
 In dense mode, the alignments are depicted using a gray-scale
 density gradient.  The checkboxes in the track configuration section allow
-the exclusion of species from the pairwise display.
+the exclusion of species from the pairwise display. To view detailed 
+information about the alignments at a specific position, zoom the display in 
+to 30,000 or fewer bases, then click on the alignment.
+</P>
+
+<H3>Gap Annotation</H3>
 <P>
-When zoomed-in to the base-display level, the track shows the base
-composition of each alignment. The numbers and symbols on the 
-&quot;Gaps&quot; line indicate the lengths of gaps in the human sequence at those
-alignment positions relative to the longest non-human sequence. If there is
-sufficient space in the display, the size of the gap is shown; if not, and if
-the gap size is a multiple of 3, a &quot;*&quot; is displayed, 
-otherwise &quot;+&quot; is shown.
-To view detailed information about the
-alignments at a specific position, zoom in the display to 30,000 or fewer 
-bases, then click on the alignment.  </P>
+The <EM>Display chains between alignments</EM> configuration option
+enables display of gaps between alignment blocks in the pairwise alignments in
+a manner similar to the Chain track display.  The following
+conventions are used:
+<UL>
+<LI><B>Single line:</B> no bases in the aligned species. Possibly due to a
+lineage-specific insertion between the aligned blocks in the $organism genome
+or a lineage-specific deletion between the aligned blocks in the aligning
+species.
+<LI><B>Double line:</B> aligning species has one or more unalignable bases in
+the gap region. Possibly due to excessive evolutionary distance between
+species or independent indels in the region between the aligned blocks in both
+species.
+<LI><B>Pale yellow coloring:</B> aligning species has Ns in the gap region.
+Reflects uncertainty in the relationship between the DNA of both species, due
+to lack of sequence in relevant portions of the aligning species.
+</UL></P>
+
+<H3>Genomic Breaks</H3>
+<P>
+Discontinuities in the genomic context (chromosome, scaffold or region) of the
+aligned DNA in the aligning species are shown as follows:
+<UL>
+<LI>
+<B>Vertical blue bar:</B> represents a discontinuity that persists indefinitely
+on either side, <em>e.g.</em> a large region of DNA on either side of the bar
+comes from a different chromosome in the aligned species due to a large scale
+rearrangement.
+<LI>
+<B>Green square brackets:</B> enclose shorter alignments consisting of DNA from
+one genomic context in the aligned species nested inside a larger chain of
+alignments from a different genomic context. The alignment within the
+brackets may represent a short misalignment, a lineage-specific insertion of a
+transposon in the $organism genome that aligns to a paralogous copy somewhere
+else in the aligned species, or other similar occurrence.
+</UL></P>
+
+<H3>Base Level</H3>
+<P>
+When zoomed-in to the base-level display, the track shows the base
+composition of each alignment, with bases in annotated repetitive
+elements displayed in lower case. The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the $organism sequence at those
+alignment positions relative to the longest non-$organism sequence.
+If there is sufficient space in the display, the size of the gap is shown.
+If the space is insufficient and the gap size is a multiple of 3, a
+&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</P>
+<P>
+Codon translation is available in base-level display mode if the
+displayed region is identified as a coding segment. To display this annotation,
+select the species for translation from the pull-down menu in the Codon
+Translation configuration section at the top of the page. Then, select one of
+the following modes:
+<UL>
+<LI>
+<B>No codon translation:</B> the gene annotation is not used; the bases are
+displayed without translation.
+<LI>
+<B>Use default species reading frames for translation:</B> the annotations from the genome
+displayed
+in the <EM>Default species for translation</EM>; pull-down menu are used to
+translate all the aligned species present in the alignment.
+<LI>
+<B>Use reading frames for species if available, otherwise no translation:</B> codon
+translation is performed only for those species where the region is
+annotated as protein coding.
+<LI><B>Use reading frames for species if available, otherwise use default species:</B>
+codon translation is done on those species that are annotated as being protein
+coding over the aligned region using species-specific annotation; the remaining
+species are translated using the default species annotation.
+</UL></P>
+<P>
+Codon translation uses the following gene tracks as the basis for
+translation, depending on the species chosen (<B>Table 2</B>).
+Species listed in the row labeled &quot;None&quot; do not have
+species-specific reading frames for gene translation.
+
+<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<TR ALIGN=left><TD><B>Gene Track</B></TD><TD><B>Species</B></TD></TR>
+<TR ALIGN=left><TD>Gencode Genes</TD><TD>human</TD></TR>
+<TR ALIGN=left><TD>UCSC Genes</TD><TD>mouse</TD></TR>
+<TR ALIGN=left><TD>Known Genes</TD><TD>rat</TD></TR>
+<TR ALIGN=left><TD>RefSeq Genes</TD><TD>chimp</TD></TR>
+<TR ALIGN=left><TD>Ensembl Genes</TD><TD>rhesus, opossum</TD></TR>
+<TR ALIGN=left><TD>None</TD><TD>the remaining 30 species</TD></TR>
+</TABLE>
+</BLOCKQUOTE></P>
 
 <H2>Methods</H2>
 
