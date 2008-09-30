@@ -96,3 +96,123 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
+track nucleosomeStringency
+shortLabel NSome Stringency
+longLabel Nucleosome Positioning Stringency from SOLiD core alignments
+group map
+priority 125.0
+visibility hide
+type wig 0 1
+maxHeightPixels 100:48:11
+windowingFunction mean
+defaultViewLimits 0:1
+autoScale On
+color 128,0,128
+spanList 1
+
+track nucleosomeAdjustedCoverage
+shortLabel Adj NSome Covrg
+longLabel Adjusted nucleosome coverage (25bp)
+group map
+priority 124.0
+visibility hide
+type wig -11.93 8.76
+maxHeightPixels 100:48:11
+windowingFunction mean
+defaultViewLimits -5:5
+autoScale On
+color 255,0,128
+spanList 1
+
+track nucleosomeDensity
+shortLabel NSome Coverage
+longLabel Coverage of nucleosome predictions from SOLiD core alignments
+group map
+priority 123.0
+visibility hide
+type wig 1 19137
+spanList 1
+maxHeightPixels 100:40:11
+windowingFunction mean
+defaultViewLimits 1:100
+autoScaleDefault Off
+compositeTrack on
+
+	track monoNucleosomesSense
+	subTrack nucleosomeDensity
+	shortLabel NSome Core +Covg
+	longLabel Coverage of mononucleosomal fragments, sense strand reads
+	color 0,72,255
+	priority 1
+
+	track monoNucleosomesAntiSense
+	subTrack nucleosomeDensity
+	shortLabel NSome Core -Covg
+	longLabel Coverage of mononucleosomal fragments, antisense strand reads
+	color 0,170,37
+	priority 2
+
+track nucleosomeControlCoverage
+shortLabel MNase Coverage
+longLabel Micrococcal nuclease control coverage
+group map
+priority 122.0
+visibility hide
+type wig 1 5544
+spanList 1
+maxHeightPixels 100:40:11
+windowingFunction mean
+defaultViewLimits 1:100
+autoScaleDefault Off
+compositeTrack on
+
+	track nucleosomeControlSenseCoverage
+	subTrack nucleosomeControlCoverage
+	shortLabel Cntl MNase +Covg
+	longLabel Micrococcal nuclease control coverage, sense strand reads
+	color 255,132,0
+	priority 1
+
+	track nucleosomeControlAntisenseCoverage
+	subTrack nucleosomeControlCoverage
+	shortLabel Cntl MNase -Covg
+	longLabel Micrococcal nuclease control coverage, antisense strand reads
+	color 200,80,0
+	priority 2
+
+track nucleosome
+shortLabel Nucleosome
+longLabel Nucleosome predictions from SOLiD core alignments
+group map
+priority 120.0
+visibility hide
+type bed 12
+itemRgb on
+compositeTrack on
+
+	track nucleosomeControl
+	subTrack nucleosome
+	shortLabel Control
+	longLabel mononucleosome control
+	priority 1
+
+	track nucleosomeFragmentsSense
+	subTrack nucleosome
+	shortLabel fragments +
+	longLabel mononucleosomal fragments, sense strand reads
+	priority 2
+
+	track nucleosomeFragmentsAntisense
+	subTrack nucleosome
+	shortLabel fragments -
+	longLabel mononucleosomal fragments, antisense strand reads
+	priority 3
+
+track 25mersRepeats
+shortLabel 25mers
+longLabel 25mers repeat annotation
+group varRep
+priority 160
+visibility hide
+type bed 9
+itemRgb on
