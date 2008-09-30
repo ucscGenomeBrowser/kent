@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "mafGene.h"
 
-static char const rcsid[] = "$Id: mafGene.c,v 1.8 2008/09/25 22:19:10 braney Exp $";
+static char const rcsid[] = "$Id: mafGene.c,v 1.9 2008/09/30 20:37:12 braney Exp $";
 
 struct exonInfo
 {
@@ -253,24 +253,17 @@ int exonCount = 0;
 struct exonInfo *gi = giList;
 
 for(; gi; gi = gi->next)
-    exonCount++;
+    {
+    if (gi->exonSize > 1)
+	exonCount++;
+    }
 
 for(gi = giList; gi; gi = gi->next, exonNum++)
     {
     struct speciesInfo *siTemp = si;
-#ifdef NOTNOW
-    if (gi->strand == '-')
-	slReverse(&gi->frame);
-
-    struct mafFrames *startFrame = gi->frame;
-    assert(startFrame->isExonStart == TRUE);
-    struct mafFrames *lastFrame = startFrame;
-    assert(gi->exonSize < MAX_EXON_SIZE);
-
-    while(lastFrame->next)
-	lastFrame = lastFrame->next;
-    assert(lastFrame->isExonEnd == TRUE);
-#endif
+    
+    if (gi->exonSize == 1)
+	continue;
 
     for(; siTemp ; siTemp = siTemp->next)
 	{
