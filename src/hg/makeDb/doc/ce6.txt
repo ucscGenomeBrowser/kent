@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.11 2008/07/15 18:37:45 hiram Exp $
+#  $Id: ce6.txt,v 1.12 2008/09/30 14:41:07 braney Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -2425,3 +2425,93 @@ do
 done
 
 #############################################################################
+# hgPal downloads
+    ssh hgwdev
+    screen
+    bash
+    rm -rf /cluster/data/ce6/bed/multiz6way/pal
+    mkdir /cluster/data/ce6/bed/multiz6way/pal
+    cd /cluster/data/ce6/bed/multiz6way/pal
+    mz=multiz6way
+    gp=refGene
+    db=ce6
+    echo $db > order.lst
+    echo "select settings from trackDb where tableName='$mz'" | \
+	hgsql $db | sed 's/\\n/\n/g'| grep speciesOrder | tr ' ' '\n' | \
+	tail -n +2 >> order.lst
+
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > refGene.jobs
+
+    time sh -x refGene.jobs > refGene.job.log 2>&1 & 
+    tail -f refGene.job.log
+
+    ssh kolossus
+    cd /cluster/data/ce6/bed/multiz6way/pal
+    zcat exonAA/*.gz | gzip -c > refGene.6way.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > refGene.6way.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > refGene.6way.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > refGene.6way.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz6way
+    gp=refGene
+    db=ce6
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz
+    ln -s `pwd`/$gp.6way.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.6way.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    # back to hgwdev
+    cd /cluster/data/ce6/bed/multiz6way/pal
+    mz=multiz6way
+    gp=sangerGene
+    db=ce6
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 & 
+    tail -f $gp.$mz.job.log
+
+# real    30m29.805s
+# user    3m2.680s
+# sys     2m26.858s
+
+    ssh kolossus
+    cd /cluster/data/ce6/bed/multiz6way/pal
+    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    pd=/usr/local/apache/htdocs/goldenPath/ce6/multiz6way
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+#########################################################################
