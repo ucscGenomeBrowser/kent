@@ -1565,7 +1565,7 @@ identifier wormBaseIsoformCluster
 identifier wormBaseId external=WormBase dependency
 "WormBase (C. elegans) ORF ID"
     $ce.sangerGene.name
-    $gbd.ceBlastTab.target minCheck=0.90
+    $gbd,!rn3.ceBlastTab.target minCheck=0.90
     $ce.kimExpDistance.query minCheck=0.68
     $ce.kimExpDistance.target minCheck=0.66
     $ce.orfToGene.name
