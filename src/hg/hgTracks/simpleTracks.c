@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.36 2008/09/22 17:56:17 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.37 2008/09/30 23:41:34 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 
@@ -134,6 +134,10 @@ Color shadesOfGreen[EXPR_DATA_SHADES];
 Color shadesOfRed[EXPR_DATA_SHADES];
 Color shadesOfBlue[EXPR_DATA_SHADES];
 Color shadesOfYellow[EXPR_DATA_SHADES];
+Color shadesOfGreenOnWhite[EXPR_DATA_SHADES];
+Color shadesOfRedOnWhite[EXPR_DATA_SHADES];
+Color shadesOfBlueOnWhite[EXPR_DATA_SHADES];
+Color shadesOfYellowOnWhite[EXPR_DATA_SHADES];
 Color orangeColor = 0;
 Color brickColor = 0;
 Color blueColor = 0;
@@ -1939,6 +1943,21 @@ hvGfxMakeColorGradient(hvg, &black, &blue, EXPR_DATA_SHADES, shadesOfBlue);
 hvGfxMakeColorGradient(hvg, &black, &red, EXPR_DATA_SHADES, shadesOfRed);
 hvGfxMakeColorGradient(hvg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 hvGfxMakeColorGradient(hvg, &black, &yellow, EXPR_DATA_SHADES, shadesOfYellow);
+exprBedColorsMade = TRUE;
+}
+
+void makeRedBlueShadesOnWhiteBackground(struct hvGfx *hvg) 
+/* Allocate the shades of Red, Green, Blue and Yellow for expression tracks */
+{
+static struct rgbColor red    = {255, 0, 0};
+static struct rgbColor green  = {0, 255, 0};
+static struct rgbColor blue   = {0, 0, 255};
+static struct rgbColor yellow = {255, 255, 0};
+static struct rgbColor white  = {255, 255, 255};
+hvGfxMakeColorGradient(hvg, &white, &blue,   EXPR_DATA_SHADES, shadesOfBlueOnWhite);
+hvGfxMakeColorGradient(hvg, &white, &red,    EXPR_DATA_SHADES, shadesOfRedOnWhite);
+hvGfxMakeColorGradient(hvg, &white, &green,  EXPR_DATA_SHADES, shadesOfGreenOnWhite);
+hvGfxMakeColorGradient(hvg, &white, &yellow, EXPR_DATA_SHADES, shadesOfYellowOnWhite);
 exprBedColorsMade = TRUE;
 }
 
