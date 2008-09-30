@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.138 2008/09/29 23:09:02 tdreszer Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.139 2008/09/30 00:01:01 tdreszer Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -2357,7 +2357,7 @@ if (wigTrack == NULL)
     if (vis == tvFull || vis == tvPack)
         /* suppress graph if other items displayed (bases or pairs) */
         return yOff;
-    else if (vis == tvDense) {
+    else if (vis == tvDense)
         height = track->height; // Evidence that track-height comes in as 9 but should be 10!
     /* draw some kind of graph from multiple alignment */
     struct mafPriv *mp = getMafPriv(track);
