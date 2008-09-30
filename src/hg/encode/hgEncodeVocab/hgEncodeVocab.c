@@ -18,7 +18,7 @@
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.11 2008/09/29 16:19:25 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.12 2008/09/30 17:53:47 tdreszer Exp $";
 
 static char *cv_file()
 {
@@ -55,10 +55,10 @@ else if (sameString(type,"Cell Line"))
     {
     puts("  <TH>Term</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Vendor ID</TH><TH>Term ID</TH>");
     }
-else if (sameWord(type,"control"))
+else if (sameWord(type,"control") || sameWord(type,"input"))
     {
     puts("  <TH>Term</TH><TH>Description</TH></TR><TR>");
-    puts("  <TH>Control</TH><TH>This data represents a control being compared with the other tracks in the set.</TH>");
+    printf("  <Td>%s</Td><Td>This data represents a control being compared with the other tracks in the set.</Td>\n",type);
     }
 else if (sameString(type,"Gene Type")
      ||  sameString(type,"promoter")
@@ -233,7 +233,7 @@ if(type==NULL)    // If not type, but term, then search for first term and use i
     if(term==NULL)
         errAbort("Error: Required 'term' or 'type' argument not found\n");
     (void)stripChar(term,'\"');
-    if(sameWord(term,"control"))
+    if(sameWord(term,"control") || sameWord(term,"input"))
         {
         type = term;
         }
@@ -271,7 +271,7 @@ type = findType(cvHash);
 doTypeHeader(type);
 puts("</TR>");
 
-if(differentWord(type,"control"))
+if(differentWord(type,"control") && differentWord(type,"input"))
     {
     while ((hEl = hashNext(&hc)) != NULL)
         {
