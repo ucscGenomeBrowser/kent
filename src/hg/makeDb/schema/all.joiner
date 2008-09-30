@@ -1827,8 +1827,8 @@ identifier ensemblTranscriptIdCe external=Ensembl dependency
 identifier ensemblTranscriptIdFelCat external=Ensembl dependency
 "Ensembl Transcript ID for felCat"
     $felCat.ensGene.name dupeOk
-    $felCat.ensGtp.transcript
-    $felCat.ensPep.name
+    $felCat.ensGtp.transcript minCheck=0.99
+    $felCat.ensPep.name minCheck=0.99
 
 identifier ensemblTranscriptId3 external=Ensembl dependency
 "Ensembl Transcript ID"
