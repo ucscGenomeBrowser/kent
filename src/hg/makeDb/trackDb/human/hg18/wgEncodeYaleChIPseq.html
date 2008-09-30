@@ -1,13 +1,19 @@
 <h2> Description </h2>
 
-<p>These tracks show probable binding sites of the specified transcription factors 
-in the given cell types as determined by chromatin immunoprecipitation followed by 
-high throughput sequencing (CHIP-seq). The tracks are grouped by TF targeted antibody 
-and by cell type.  Within a grouping their will be one or more of the following: aligned 
-reads, signal of read density and called peaks which represent the sites with the greatest 
+<p>These tracks show probable binding sites of the specified transcription factors
+in the given cell types as determined by chromatin immunoprecipitation followed by
+high throughput sequencing (CHIP-seq). The tracks are grouped by TF targeted antibody
+and by cell type.  Included for each cell type is the input signal, which represents the
+control condition where no antibody targeting was performed.
+Within a grouping their will be one or more of the following:
+<ul>
+<li><B><i>Raw Signal</i></B> of aligned read density
+<li><B><i>Signal</i></B> of replicate combined and input (control) subtracted read density
+<li>Called <B><i>Peaks</i></B> which represent the sites with the greatest
 evidence of TF binding obtained from these experiments.
+</ul>
 </p>
-
+<!--
 <h3> Cell Types </h3>
 <table border="1">
 <tr><th>Cell line</th><th>Description</th><th>Source</th><th>Term ID</th></tr>
@@ -47,78 +53,78 @@ evidence of TF binding obtained from these experiments.
     <td> G2406 and K2106</td>
     </tr>
 </table>
-
+-->
 <h2> Methods </h2>
-<p>Similar to those previously published with the exceptions that the cells were unstimulated and sodium orthovanadate was omitted from the buffers: 
+<p>Similar to those previously published with the exceptions that the cells were unstimulated and sodium orthovanadate was omitted from the buffers:
 <a href="http://www.genome.org/cgi/content/abstract/17/6/898" title="http://www.genome.org/cgi/content/abstract/17/6/898" rel="nofollow">Euskirchen et al., Nature 2007.</a>
 </p>
 
 <h3> Extraction protocol </h3>
-<p>HeLa S3 cells were grown either: (PolII and Input) at the National Cell Culture Center (Minneapolis, MN ) 
-in Joklik?s modified MEM supplemented 5% Newborn Calf Serum to a density of 5 x10^5 cells/ml.; or (Stat1 and 
-Input) in Minimum Essential Medium modified for Suspension (SMEM, Invitrogen), supplemented with glutamine, 
-10% FBS, and antibiotics (penicillin-streptomycin) at 37C in 5% CO2, to a density of 5 x10^5 cells/ml and 
-then stimulated at these same growth conditions for 30 min with 5 ng/ml human recombinant IFN-? (R&amp;D Systems #285-IF). 
-</p><p>All cells were then were fixed with 1% formaldehyde at room temperature for 10 min. Fixation was 
-terminated with 125 mM glycine, and cells were washed twice in cold 1x PBS, and then swelled on ice in 
-hypotonic lysis buffer (20 mM Hepes, pH 7.9, 10 mM KCl, 1 mM EDTA, pH 8, 10% glycerol, 1 mM DTT, 0.5 mM 
-PMSF, 0.1 mM sodium orthovanadate and Roche complete protease inhibitors). Cell lysates were homogenized 
-with 30 strokes in a Dounce homogenizer (Kontes, pestle B). Nuclear pellets were collected and lysed in 
-1x RIPA buffer (10 mM Tris-Cl, pH 8.0, 140 mM NaCl, 1% Triton X-100, 0.1% SDS, 1% deoxycholic acid, 0.5 
-mM PMSF, 1 mM DTT, 0.1 mM sodium orthovanadate and protease inhibitors). Chromatin was sheared with a 
-Branson 250 Sonifier (output setting 2, 100% duty cycle, seven 30-second pulses) to an average of 700 
-bp as verified on a 1.5% agarose gel. 
-</p><p>Clarified lysates for ChIP samples were agitated overnight at 4C with antibody. Following this 
-incubation Protein A agarose beads (Upstate-Millipore #16-156) were added and allowed to bind for 60 
-min at 4C. Immunoprecipitates were washed three times in 1x RIPA, once in 1x PBS, and then eluted in 
-1xTE/1%SDS.  Clarified lysates for Input DNA samples were stored overnight at 4C in parallel with ChIP 
-experiments. 
-</p><p>For ChIP and Input samples, crosslinks were reversed overnight at 65C. ChIP DNA was purified 
-by incubation with RNase A for 1 h at 37C, with 200 ug/ml Proteinase K for 2 h at 45C, phenol:chloroform:isoamyl 
-alcohol extraction, and precipitation with 0.1 volumes of 3M sodium acetate, 2 volumes of 100% ethanol 
+<p>HeLa S3 cells were grown either: (PolII and Input) at the National Cell Culture Center (Minneapolis, MN )
+in Joklik?s modified MEM supplemented 5% Newborn Calf Serum to a density of 5 x10^5 cells/ml.; or (Stat1 and
+Input) in Minimum Essential Medium modified for Suspension (SMEM, Invitrogen), supplemented with glutamine,
+10% FBS, and antibiotics (penicillin-streptomycin) at 37C in 5% CO2, to a density of 5 x10^5 cells/ml and
+then stimulated at these same growth conditions for 30 min with 5 ng/ml human recombinant IFN-? (R&amp;D Systems #285-IF).
+</p><p>All cells were then were fixed with 1% formaldehyde at room temperature for 10 min. Fixation was
+terminated with 125 mM glycine, and cells were washed twice in cold 1x PBS, and then swelled on ice in
+hypotonic lysis buffer (20 mM Hepes, pH 7.9, 10 mM KCl, 1 mM EDTA, pH 8, 10% glycerol, 1 mM DTT, 0.5 mM
+PMSF, 0.1 mM sodium orthovanadate and Roche complete protease inhibitors). Cell lysates were homogenized
+with 30 strokes in a Dounce homogenizer (Kontes, pestle B). Nuclear pellets were collected and lysed in
+1x RIPA buffer (10 mM Tris-Cl, pH 8.0, 140 mM NaCl, 1% Triton X-100, 0.1% SDS, 1% deoxycholic acid, 0.5
+mM PMSF, 1 mM DTT, 0.1 mM sodium orthovanadate and protease inhibitors). Chromatin was sheared with a
+Branson 250 Sonifier (output setting 2, 100% duty cycle, seven 30-second pulses) to an average of 700
+bp as verified on a 1.5% agarose gel.
+</p><p>Clarified lysates for ChIP samples were agitated overnight at 4C with antibody. Following this
+incubation Protein A agarose beads (Upstate-Millipore #16-156) were added and allowed to bind for 60
+min at 4C. Immunoprecipitates were washed three times in 1x RIPA, once in 1x PBS, and then eluted in
+1xTE/1%SDS.  Clarified lysates for Input DNA samples were stored overnight at 4C in parallel with ChIP
+experiments.
+</p><p>For ChIP and Input samples, crosslinks were reversed overnight at 65C. ChIP DNA was purified
+by incubation with RNase A for 1 h at 37C, with 200 ug/ml Proteinase K for 2 h at 45C, phenol:chloroform:isoamyl
+alcohol extraction, and precipitation with 0.1 volumes of 3M sodium acetate, 2 volumes of 100% ethanol
 and 1.5 ul of pellet paint (Novagen).
-</p><p>ChIP-DNA sequencing libraries were prepared according to Illumina's instructions accompanying 
+</p><p>ChIP-DNA sequencing libraries were prepared according to Illumina's instructions accompanying
 the DNA Sample Kit (Part# 0801-0303).
 </p>
 
 <h3> Scoring of ChIP-Seq Data </h3>
-<p>Only sequence reads (length ~30 bps) that align uniquely (using Eland) with at most two mismatches 
-against the hg18 build of the human genome are used. From the mapped tags a signal map of ChIP DNA 
-fragments (average fragment length ~ 200 bps) is constructed where the signal height is the number of 
-overlapping fragments at each nucleotide position in the genome. For each 1Mb segment of each chromosome 
-a peak height threshold is determined by requiring a false discovery rate &lt;= 0.05 when comparing the 
-number of peaks above threshold as compared the number obtained from multiple simulations of a random 
-null background with the same number of mapped reads (also accounting for the fraction of mapable bases 
-for sequence tags in that 1Mb segment). The number of mapped tags in a putative binding region is compared 
-against the normalized (normalized by correlating tag counts in genomic 10 Kb windows) number of mapped 
-tags in the same region from an Input DNA control. Using a binomial test only regions that have a 
+<p>Only sequence reads (length ~30 bps) that align uniquely (using Eland) with at most two mismatches
+against the hg18 build of the human genome are used. From the mapped tags a signal map of ChIP DNA
+fragments (average fragment length ~ 200 bps) is constructed where the signal height is the number of
+overlapping fragments at each nucleotide position in the genome. For each 1Mb segment of each chromosome
+a peak height threshold is determined by requiring a false discovery rate &lt;= 0.05 when comparing the
+number of peaks above threshold as compared the number obtained from multiple simulations of a random
+null background with the same number of mapped reads (also accounting for the fraction of mapable bases
+for sequence tags in that 1Mb segment). The number of mapped tags in a putative binding region is compared
+against the normalized (normalized by correlating tag counts in genomic 10 Kb windows) number of mapped
+tags in the same region from an Input DNA control. Using a binomial test only regions that have a
 p-value &lt;= 0.05 are considered to be significantly enriched compared to the Input DNA control.
 </p>
 
 <h2> Credits </h2>
-<p>This data was generated and analyzed by the labs of 
-     <a href="http://www.yale.edu/snyder/" title="http://www.yale.edu/snyder/" rel="nofollow">Michael Snyder</a>, 
+<p>This data was generated and analyzed by the labs of
+     <a href="http://www.yale.edu/snyder/" title="http://www.yale.edu/snyder/" rel="nofollow">Michael Snyder</a>,
      <a href="http://bioinfo.mbb.yale.edu/" title="http://bioinfo.mbb.yale.edu/" rel="nofollow">Mark Gerstein</a>
- and <a href="http://info.med.yale.edu/bcmm/SMW/SMWhome2.html" title="http://info.med.yale.edu/bcmm/SMW/SMWhome2.html" rel="nofollow">Sherman Weissman</a> 
+ and <a href="http://info.med.yale.edu/bcmm/SMW/SMWhome2.html" title="http://info.med.yale.edu/bcmm/SMW/SMWhome2.html" rel="nofollow">Sherman Weissman</a>
  at Yale University.
 
 </p>
 <h2> References </h2>
 <p>
 
-Euskirchen G., Rozowsky J., Wei C., Zhang Z., Hartman S., Weissman S., Gerstein M., Ruan Y. and Snyder M. 
+Euskirchen G., Rozowsky J., Wei C., Zhang Z., Hartman S., Weissman S., Gerstein M., Ruan Y. and Snyder M.
  <a href="http://www.genome.org/cgi/content/abstract/17/6/898" title="http://www.genome.org/cgi/content/abstract/17/6/898" rel="nofollow">
  Mapping of transcription factor binding regions in mammalian cells by ChIP: comparison of array- and sequencing-based technologies.</a>
  <i>Genome Res.</i><B>17</B>:898-909. 2007.
 </p><p>
 
-Cawley S., Bekiranov S., Ng H.H., Kapranov P., Sekinger E.A., Kampa D., Piccolboni A., Sementchenko V., Cheng, J. et al. 
+Cawley S., Bekiranov S., Ng H.H., Kapranov P., Sekinger E.A., Kampa D., Piccolboni A., Sementchenko V., Cheng, J. et al.
  <a href="http://www.sciencedirect.com/science?_ob=ArticleURL&amp;_udi=B6WSN-4BSKPFC-5&amp;_coverDate=02%2F20%2F2004&amp;_alid=285307404&amp;_rdoc=1&amp;_fmt=&amp;_orig=search&amp;_qd=1&amp;_cdi=7051&amp;_sort=d&amp;view=c&amp;_acct=C000050221&amp;_version=1&amp;_urlVersion=0&amp;_userid=10&amp;md5=265f0611e9997e646df745df9e3bff4c" title="http://www.sciencedirect.com/science?_ob=ArticleURL&amp;_udi=B6WSN-4BSKPFC-5&amp;_coverDate=02%2F20%2F2004&amp;_alid=285307404&amp;_rdoc=1&amp;_fmt=&amp;_orig=search&amp;_qd=1&amp;_cdi=7051&amp;_sort=d&amp;view=c&amp;_acct=C000050221&amp;_version=1&amp;_urlVersion=0&amp;_userid=10&amp;md5=265f0611e9997e646df745df9e3bff4c" rel="nofollow">
  Unbiased mapping of transcription factor binding sites along human chromosomes 21 and 22 points to widespread regulation of noncoding RNAs.</a>
  <i>Cell</i><b>116</b>(4):499-509. 2004.
 </p><p>
 
-Euskirchen G., Royce T.E., Bertone P., Martone R., Rinn J.L., Nelson F.K., Sayward F., Luscombe N.M., Miller P. et al. 
+Euskirchen G., Royce T.E., Bertone P., Martone R., Rinn J.L., Nelson F.K., Sayward F., Luscombe N.M., Miller P. et al.
  <a href="http://mcb.asm.org/cgi/content/full/24/9/3804?view=long&amp;pmid=15082775" title="http://mcb.asm.org/cgi/content/full/24/9/3804?view=long&amp;pmid=15082775" rel="nofollow">
  CREB binds to multiple loci on human chromosome 22.</a>
  <i>Mol Cell Biol.</i> <b>24</b>(9):3804-14. 2004.
@@ -136,8 +142,8 @@ Martone, R., Euskirchen, G., Bertone, P., Hartman, S., Royce, T.E., Luscombe, N.
  <i>Proc Natl Acad Sci</i> U S A. <b>100</B>(21):12247-52. 2003.
 </p><p>
 
-Quackenbush, J.. 
+Quackenbush, J..
  <a href="http://www.nature.com/ng/journal/v32/n4s/abs/ng1032.html" title="http://www.nature.com/ng/journal/v32/n4s/abs/ng1032.html" rel="nofollow">
- Microarray data normalization and transformation.</a> 
+ Microarray data normalization and transformation.</a>
  <i>Nat Genet.</i> <b>32</b>(Suppl):496-501. 2002.
 </p>
