@@ -1184,7 +1184,7 @@ identifier refSeqId typeOf=mrnaAccession
     hg18,mm6,mm7,mm8,mm9.knownToRefSeq.value minCheck=0.96
     hg16,hg17,mm5.knownToRefSeq.value minCheck=0.95
     $kgDb.refSeqKg.refseq minCheck=0.60
-    $ccdsDb,!hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.40
+    $ccdsDb,!hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.35
     $gbd,!mm5,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
     mm5.mrnaRefseq.refseq minCheck=0.22
     rn2,rn3.mrnaRefseq.refseq minCheck=0.03
