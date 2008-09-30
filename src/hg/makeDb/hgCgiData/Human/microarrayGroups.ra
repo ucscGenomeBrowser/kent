@@ -738,3 +738,30 @@ groupSizes 7,5,9,4,7,8,9,6,2,9,1,
 names BREAST,CNS,COLON,DUPLICATE,LEUKEMIA,MELANOMA,NSCLC,OVARIAN,PROSTATE,RENAL,UNKNOWN,
 
 
+
+name affyExonTissuesGroups
+type groupings
+all affyExonTissuesAll
+combine affyExonTissuesGroupByTissueMean,affyExonTissuesGroupByTissueMedian,
+combine.default affyExonTissuesGroupByTissueMedian
+
+name affyExonTissuesAll
+type all
+description All Arrays
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
+groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+names breast_A,breast_B,breast_C,cerebellum_A,cerebellum_B,cerebellum_C,heart_A,heart_B,heart_C,kidney_A,kidney_B,kidney_C,liver_A,liver_B,liver_C,muscle_A,muscle_B,muscle_C,pancreas_A,pancreas_B,pancreas_C,prostate_A,prostate_B,prostate_C,spleen_A,spleen_B,spleen_C,testes_A,testes_B,testes_C,thyroid_A,thyroid_B,thyroid_C,
+
+name affyExonTissuesGroupByTissueMean
+type combine mean
+description Arrays Grouped By Tissue Mean
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
+groupSizes 3,3,3,3,3,3,3,3,3,3,3,
+names breast,cerebellum,heart,kidney,liver,muscle,pancreas,prostate,spleen,testes,thyroid,
+
+name affyExonTissuesGroupByTissueMedian
+type combine median
+description Arrays Grouped By Tissue Median
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
+groupSizes 3,3,3,3,3,3,3,3,3,3,3,
+names breast,cerebellum,heart,kidney,liver,muscle,pancreas,prostate,spleen,testes,thyroid,

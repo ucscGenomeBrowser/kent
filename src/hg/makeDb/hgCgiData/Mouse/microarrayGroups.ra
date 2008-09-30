@@ -113,3 +113,30 @@ description Tissue Type Medians
 expIds 0,1,10,2,3,4,5,6,7,8,9,34,35,36,37,38,49,50,54,55,56,57,58,59,60,51,52,53,22,23,24,25,26,15,16,17,18,19,20,21,31,32,33,46,11,12,13,14,39,40,41,27,28,29,30,42,43,44,45,47,48,
 groupSizes 11,5,9,3,5,7,4,4,3,10,
 names brain,digestion,embryo,germ,gland,immune,muscle,nerve,organ,other,
+
+name affyExonTissuesGroups
+type groupings
+all affyExonTissuesAll
+combine affyExonTissuesGroupByTissueMean,affyExonTissuesGroupByTissueMedian,
+combine.default affyExonTissuesGroupByTissueMedian
+
+name affyExonTissuesAll
+type all
+description All Arrays
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
+groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+names  brain_A,brain_B,brain_C,embryo_A,embryo_B,embryo_C,heart_A,heart_B,heart_C,kidney_A,kidney_B,kidney_C,liver_A,liver_B,liver_C,lung_A,lung_B,lung_C,muscle_A,muscle_B,muscle_C,ovary_A,ovary_B,ovary_C,spleen_A,spleen_B,spleen_C,testicle_A,testicle_B,testicle_C,thymus_A,thymus_B,thymus_C,
+
+name affyExonTissuesGroupByTissueMean
+type combine mean
+description Arrays Grouped By Tissue Mean
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
+groupSizes 3,3,3,3,3,3,3,3,3,3,3,
+names brain,embryo,heart,kidney,liver,lung,muscle,ovary,spleen,testicle,thymus,
+
+name affyExonTissuesGroupByTissueMedian
+type combine median
+description Arrays Grouped By Tissue Median
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
+groupSizes 3,3,3,3,3,3,3,3,3,3,3,
+names brain,embryo,heart,kidney,liver,lung,muscle,ovary,spleen,testicle,thymus,

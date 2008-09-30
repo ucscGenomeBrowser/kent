@@ -2683,3 +2683,14 @@ xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
 termRegex AC[0-9]{6}
 searchPriority 52
 
+track affyExonTissues
+shortLabel Affy Exon Tissues
+longLabel Affymetrix Exon Array 1.0: Normal Tissues
+group expression
+priority 79.1
+visibility hide
+type expRatio
+expScale 3.0
+expStep 0.5
+expTable affyExonTissuesExps
+groupings affyExonTissuesGroups

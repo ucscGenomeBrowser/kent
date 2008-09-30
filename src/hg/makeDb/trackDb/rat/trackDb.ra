@@ -524,3 +524,15 @@ noScoreFilter .
     priority 2
     url https://www.affymetrix.com/LinkServlet?probeset=$$
     urlLabel Netaffx Link:
+
+track affyExonTissues
+shortLabel Affy Exon Tissues
+longLabel Affymetrix Exon Array 1.0: Normal Tissues
+group regulation
+priority 79.1
+visibility hide
+type expRatio
+expScale 3.0
+expStep 0.5
+expTable affyExonTissuesExps
+groupings affyExonTissuesGroups
