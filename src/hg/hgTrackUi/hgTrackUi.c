@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.451 2008/09/03 19:19:00 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.452 2008/09/30 23:38:36 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1003,16 +1003,21 @@ void expRatioColorOption(struct trackDb *tdb)
 {
 char radioName[256];
 char *colorSetting = NULL;
-boolean rgChecked = FALSE;
+boolean rgChecked  = FALSE;
+boolean rgwChecked = FALSE;
 safef(radioName, sizeof(radioName), "%s.color", tdb->tableName);
 colorSetting = cartUsualString(cart, radioName, "redGreen");
 if (sameString(colorSetting, "redGreen"))
     rgChecked = TRUE;
+if (sameString(colorSetting, "redBlueOnWhite"))
+    rgwChecked = TRUE;
 puts("<BR><B>Color: </B> ");
 cgiMakeRadioButton(radioName, "redGreen", rgChecked);
 puts("red/green");
-cgiMakeRadioButton(radioName, "yellowBlue", !rgChecked);
-puts("yellow/blue<BR>\n");
+cgiMakeRadioButton(radioName, "yellowBlue", !(rgChecked || rgwChecked));
+puts("yellow/blue\n");
+cgiMakeRadioButton(radioName, "redBlueOnWhite", rgwChecked);
+puts("red/blue on white background<BR>");
 }
 
 void expRatioUi(struct trackDb *tdb)
