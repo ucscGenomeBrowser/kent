@@ -2611,3 +2611,75 @@ semiShortCircuit 1
 termRegex [a-z0-9]+
 searchPriority 50
 
+searchTable kiddEichlerDiscAbc7
+searchMethod exact
+query select chrom,chromStart,chromEnd,name from %s where name like "%s,%%"
+xrefTable kiddEichlerToNcbi
+xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
+termRegex AC[0-9]{6}
+searchPriority 52
+
+searchTable kiddEichlerDiscAbc8
+searchMethod exact
+query select chrom,chromStart,chromEnd,name from %s where name like "%s,%%"
+xrefTable kiddEichlerToNcbi
+xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
+termRegex AC[0-9]{6}
+searchPriority 52
+
+searchTable kiddEichlerDiscAbc9
+searchMethod exact
+query select chrom,chromStart,chromEnd,name from %s where name like "%s,%%"
+xrefTable kiddEichlerToNcbi
+xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
+termRegex AC[0-9]{6}
+searchPriority 52
+
+searchTable kiddEichlerDiscAbc10
+searchMethod exact
+query select chrom,chromStart,chromEnd,name from %s where name like "%s,%%"
+xrefTable kiddEichlerToNcbi
+xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
+termRegex AC[0-9]{6}
+searchPriority 52
+
+searchTable kiddEichlerDiscAbc11
+searchMethod exact
+query select chrom,chromStart,chromEnd,name from %s where name like "%s,%%"
+xrefTable kiddEichlerToNcbi
+xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
+termRegex AC[0-9]{6}
+searchPriority 52
+
+searchTable kiddEichlerDiscAbc12
+searchMethod exact
+query select chrom,chromStart,chromEnd,name from %s where name like "%s,%%"
+xrefTable kiddEichlerToNcbi
+xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
+termRegex AC[0-9]{6}
+searchPriority 52
+
+searchTable kiddEichlerDiscAbc13
+searchMethod exact
+query select chrom,chromStart,chromEnd,name from %s where name like "%s,%%"
+xrefTable kiddEichlerToNcbi
+xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
+termRegex AC[0-9]{6}
+searchPriority 52
+
+searchTable kiddEichlerDiscAbc14
+searchMethod exact
+query select chrom,chromStart,chromEnd,name from %s where name like "%s,%%"
+xrefTable kiddEichlerToNcbi
+xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
+termRegex AC[0-9]{6}
+searchPriority 52
+
+searchTable kiddEichlerDiscG248
+searchMethod exact
+query select chrom,chromStart,chromEnd,name from %s where name like "%s,%%"
+xrefTable kiddEichlerToNcbi
+xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
+termRegex AC[0-9]{6}
+searchPriority 52
+
