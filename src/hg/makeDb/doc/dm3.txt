@@ -2497,13 +2497,14 @@ _EOF_
     rm -rf /cluster/data/dm3/bed/multiz15way/pal
     mkdir /cluster/data/dm3/bed/multiz15way/pal
     cd /cluster/data/dm3/bed/multiz15way/pal
-    mz=multiz15way
-    gp=refGene
-    db=dm3
     echo $db > order.lst
     echo "select settings from trackDb where tableName='$mz'" | \
 	hgsql $db | sed 's/\\n/\n/g'| grep speciesOrder | tr ' ' '\n' | \
 	tail -n +2 >> order.lst
+
+    mz=multiz15way
+    gp=refGene
+    db=dm3
 
     mkdir exonAA exonNuc ppredAA ppredNuc
     for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
@@ -2520,27 +2521,25 @@ _EOF_
     done > refGene.jobs
 
     time sh -x refGene.jobs > refGene.job.log 2>&1 & 
+    sleep 1
     tail -f refGene.job.log
 
-    ssh kolossus
-    cd /cluster/data/dm3/bed/multiz15way/pal
-    zcat exonAA/*.gz | gzip -c > refGene.15way.exonAA.fa.gz
-    zcat exonNuc/*.gz | gzip -c > refGene.15way.exonNuc.fa.gz
-    zcat ppredAA/*.gz | gzip -c > refGene.15way.ppredAA.fa.gz
-    zcat ppredNuc/*.gz | gzip -c > refGene.15way.ppredNuc.fa.gz
+# real    35m20.802s
+# user    5m26.007s
+# sys     1m25.462s
+
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
 
     rm -rf exonAA exonNuc ppredAA ppredNuc
 
     # we're only distributing exons at the moment
-    mz=multiz15way
-    gp=refGene
-    db=dm3
     pd=/usr/local/apache/htdocs/goldenPath/$db/$mz
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
-    # back to hgwdev
-    cd /cluster/data/dm3/bed/multiz15way/pal
     mz=multiz15way
     gp=flyBaseGene
     db=dm3
@@ -2562,9 +2561,9 @@ _EOF_
     sleep 1
     tail -f $gp.$mz.job.log
 
-# real    43m50.542s
-# user    5m26.946s
-# sys     1m26.197s
+# real    35m13.992s
+# user    5m18.930s
+# sys     1m27.205s
 
     zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
     zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
