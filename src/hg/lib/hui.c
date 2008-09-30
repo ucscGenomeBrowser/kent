@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.122 2008/09/29 22:55:02 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.123 2008/09/30 00:03:53 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add"
@@ -3288,7 +3288,8 @@ if(ix==count)
 #define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' TARGET=_BLANK>%s</A>\n"
 int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(vocabType)+2*strlen(label);
 char *link=needMem(sz);
-safef(link,sz,VOCAB_LINK,words[0],label,label);
+char *term = strSwapChar(cloneString(label),' ','_');
+safef(link,sz,VOCAB_LINK,words[0],term,label);
 freeMem(words[0]);
 return link;
 }
