@@ -30,37 +30,37 @@ if ( "$1" != "real" ) then
 	exit 0
 endif 
 
-echo "Tagging new branch $BRANCHNN"
+echo "Tagging new branch $BRANCHNN [${0}: `date`]"
 
 # rtag the new branch
 set temp = "v$BRANCHNN""_branch"
 cvs -d hgwdev:$CVSROOT rtag -FBb "$temp" kent >& /dev/null
 if ( $status ) then
- echo "cvs rtag failed for branch-tag $temp with new version# $BRANCHNN on $HOST"
+ echo "cvs rtag failed for branch-tag $temp with new version# $BRANCHNN on $HOST [${0}: `date`]"
  exit 1
 endif
-echo "new branch and tag v$BRANCHNN created."
+echo "new branch and tag v$BRANCHNN created. [${0}: `date`]"
 
 # rtag non-branch-tag "branch" which marks original branch point for cvs reports
 cvs -d hgwdev:$CVSROOT rtag -Fa branch kent >& /dev/null
 if ( $status ) then
- echo "cvs rtag failed for non-branch-tag 'branch' with new version# $BRANCHNN on $HOST"
+ echo "cvs rtag failed for non-branch-tag 'branch' with new version# $BRANCHNN on $HOST [${0}: `date`]"
  exit 1
 endif
-echo "new branch and tag v$BRANCHNN created."
+echo "new branch and tag v$BRANCHNN created. [${0}: `date`]"
 
 echo
-echo "moving tag beta..."
+echo "moving tag beta... [${0}: `date`]"
 # new way (faster, but does it work? attic files ok?):
 cvs -d hgwdev:$CVSROOT rtag -Fa -rv${BRANCHNN}_branch beta kent >& /dev/null
 # old way (works but slower)
 #cvs -d hgwdev:$CVSROOT rtag -da beta kent >& /dev/null
 #cvs -d hgwdev:$CVSROOT rtag -rv${BRANCHNN}_branch beta kent >& /dev/null
 if ( $status ) then
- echo "cvs rtag failed for beta tag with new version# $BRANCHNN on $HOST"
+ echo "cvs rtag failed for beta tag with new version# $BRANCHNN on $HOST [${0}: `date`]"
  exit 1
 endif
-echo "beta regular tag moved to the new branch v$BRANCHNN."
+echo "beta regular tag moved to the new branch v$BRANCHNN. [${0}: `date`]"
 
 exit 0
 

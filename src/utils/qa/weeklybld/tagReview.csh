@@ -13,7 +13,7 @@ if ( "$1" != "real" ) then
 	exit 0
 endif 
 
-echo "Moving review tag to current tip versions [`date`]"
+echo "Moving review tag to current tip versions [${0}: `date`]"
 
 # rtag the review tag
 echo
@@ -25,9 +25,9 @@ cvs -d hgwdev:$CVSROOT rtag -Fa review kent >& /dev/null
 #cvs -d hgwdev:$CVSROOT rtag -da review kent >& /dev/null
 #cvs -d hgwdev:$CVSROOT rtag review kent >& /dev/null
 if ( $status ) then
- echo "cvs rtag failed for review tag move [`date`]"
+ echo "cvs rtag failed for review tag move [${0}: `date`]"
  exit 1
 endif
-echo "review tag moved to tip. [`date`]"
+echo "review tag moved to tip. [${0}: `date`]"
 
 
