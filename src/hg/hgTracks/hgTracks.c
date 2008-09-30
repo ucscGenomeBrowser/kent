@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1515 2008/09/19 16:14:16 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1516 2008/09/30 06:57:44 aamp Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1732,6 +1732,8 @@ if (withLeftLabels)
 		 subtrack = subtrack->next)
                 if (isSubtrackVisible(subtrack))
                     y = doLeftLabels(subtrack, hvg, font, y);
+	    if (track->limitedVis == tvDense)
+		track->labelNextItemButtonable = FALSE;
             }
         else
             y = doLeftLabels(track, hvg, font, y);
