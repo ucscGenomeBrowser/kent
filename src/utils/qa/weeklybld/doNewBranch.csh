@@ -47,7 +47,7 @@ if ( "$1" != "real" ) then
 endif 
 
 echo
-echo "Now beginning to build new branch $BRANCHNN"
+echo "Now beginning to build new branch $BRANCHNN [${0}: `date`]"
 
 echo
 
@@ -63,100 +63,83 @@ endif
 ./updateCgiVersion.csh real
 
 if ( $status ) then
- echo "cvs-cgi-version-update failed on $HOST"
+ echo "cvs-cgi-version-update failed on $HOST [${0}: `date`]"
  exit 1
 endif
-echo "cvs-cgi-version-update done on $HOST"
+echo "cvs-cgi-version-update done on $HOST [${0}: `date`]"
 
 
 echo
 #echo debug: disabled tagging
 ./tagNewBranch.csh real
 if ( $status ) then
- echo "tagNewBranch.csh failed on $HOST"
+ echo "tagNewBranch.csh failed on $HOST [${0}: `date`]"
  exit 1
 endif
-echo "tagNewBranch.csh done on $HOST"
+echo "tagNewBranch.csh done on $HOST [${0}: `date`]"
 echo "new branch v$BRANCHNN created."
 
 echo
 echo
-echo  "NOW STARTING CVS-Reports ON HGWDEV IN PARALLEL"
+echo  "NOW STARTING CVS-Reports ON HGWDEV IN PARALLEL [${0}: `date`]"
 echo
 #echo debug: disabled buildCvsReports
-ssh hgwdev $WEEKLYBLD/buildCvsReports.csh branch real >& doNewCvs.log &
+ssh -n hgwdev $WEEKLYBLD/buildCvsReports.csh branch real >& doNewCvs.log &
 # note - we are now running it in the background on hgwdev
 
 #---------------------
 
 echo
-echo  "NOW STARTING 32-BIT BUILD ON $BOX32 IN PARALLEL"
+echo  "NOW STARTING 32-BIT BUILD ON $BOX32 IN PARALLEL [${0}: `date`]"
 echo
 #echo debug: disabled parallel build 32bit utils on dev
-ssh $BOX32 "$WEEKLYBLD/doNewBranch32.csh opensesame" >& doNew32.log &
+ssh -n $BOX32 "$WEEKLYBLD/doNewBranch32.csh opensesame" >& doNew32.log &
 
-echo
+echo "Unpack the new branch on BUILDDIR for beta [${0}: `date`]"
 #unpack the new branch on BUILDDIR for beta
 #echo debug: disabled coBranch.csh
 ./coBranch.csh
 if ( $status ) then
+ echo "Unpack the new branch on BUILDDIR for beta FAILED [${0}: `date`]"
  exit 1
 endif
 
+echo "Build utils on beta [${0}: `date`]"
 echo
 #echo debug: disabled build utils on beta
 ./buildUtils.csh
 if ( $status ) then
+    echo "Build utils on beta FAILED [${0}: `date`]"
     exit 1
 endif
 
 echo
+echo "Build branch sandbox on beta [${0}: `date`]"
 # build branch sandbox on beta
 #echo debug: disabled build branch sandbox on beta
 ./buildBeta.csh
 if ( $status ) then
- echo "build on beta failed for v$BRANCHNN"
+ echo "build on beta failed for v$BRANCHNN [${0}: `date`]"
 # echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER galt browser-qa
-echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER
+echo "v$BRANCHNN build on beta failed [${0}: `date`]." | mail -s "'v$BRANCHNN Build failed on beta'" $USER
  exit 1
 endif
-echo "build on beta done for v$BRANCHNN"
+echo "build on beta done for v$BRANCHNN [${0}: `date`]"
 echo "v$BRANCHNN built successfully on beta (day 9)." | mail -s "'v$BRANCHNN Build complete on beta (day 9).'" $USER galt kent browser-qa
 
 echo
-#echo debug: disabled build utils on beta
-./buildUtils.csh
-if ( $status ) then
-    exit 1
-endif
-
-echo
-
-# XXXX put in a wait here?
+echo "Waiting for the background beta:cvs-reports and ${BOX32}:doNewBranch32.csh to finish [${0}: `date`]"
+wait
 
 if ( -e CvsReports.ok ) then
-    echo "CVS Reports finished ok."
+    echo "CVS Reports finished ok. [${0}: `date`]"
 else
-    echo "CVS Reports had some error, no ok file found."
+    echo "CVS Reports had some error, no ok file found. [${0}: `date`]"
 endif
 if (-e 32bitUtils.ok) then
-    echo "32-bit utils build finished ok."
+    echo "32-bit utils build finished ok. [${0}: `date`]"
 else
-    echo "32-bit utils build had some error, no ok file found."
+    echo "32-bit utils build had some error, no ok file found. [${0}: `date`]"
 endif
-
-
-# do not do this here this way - we might as well wait until
-#  later in the week to run this after most branch-tag moves will have been applied.
-# Besides it does not work to run this script
-#  from beta because when ssh wants the password
-#  it fails to get input from stdin redirected across machines,
-#  so that means actually logging into $BOX32 and then running it.
-#  But it will take care of the rest.
-#ssh $BOX32 $WEEKLYBLD/buildCgi32.csh
-#if ( $status ) then
-#    echo "build 32-bit CGIs on $BOX32 failed"
-#    exit 1
-#endif
 
 exit 0
