@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.14 2008/09/30 21:43:46 hiram Exp $
+#  $Id: ce6.txt,v 1.15 2008/09/30 22:21:24 braney Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -2666,27 +2666,26 @@ rm -f chr.list
     done > refGene.jobs
 
     time sh -x refGene.jobs > refGene.job.log 2>&1 & 
+    sleep 1
     tail -f refGene.job.log
 
-    ssh kolossus
-    cd /cluster/data/ce6/bed/multiz6way/pal
-    zcat exonAA/*.gz | gzip -c > refGene.6way.exonAA.fa.gz
-    zcat exonNuc/*.gz | gzip -c > refGene.6way.exonNuc.fa.gz
-    zcat ppredAA/*.gz | gzip -c > refGene.6way.ppredAA.fa.gz
-    zcat ppredNuc/*.gz | gzip -c > refGene.6way.ppredNuc.fa.gz
+# real    14m44.986s
+# user    2m26.113s
+# sys     1m41.837s
+
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
 
     rm -rf exonAA exonNuc ppredAA ppredNuc
 
     # we're only distributing exons at the moment
-    mz=multiz6way
-    gp=refGene
-    db=ce6
     pd=/usr/local/apache/htdocs/goldenPath/$db/$mz
-    ln -s `pwd`/$gp.6way.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
-    ln -s `pwd`/$gp.6way.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    rm -rf $pd/$gp.exonAA.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
-    # back to hgwdev
-    cd /cluster/data/ce6/bed/multiz6way/pal
     mz=multiz6way
     gp=sangerGene
     db=ce6
@@ -2705,14 +2704,13 @@ rm -f chr.list
     done > $gp.$mz.jobs
 
     time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 & 
+    sleep 1
     tail -f $gp.$mz.job.log
 
-# real    30m29.805s
-# user    3m2.680s
-# sys     2m26.858s
+# real    16m2.266s
+# user    2m43.764s
+# sys     2m7.173s
 
-    ssh kolossus
-    cd /cluster/data/ce6/bed/multiz6way/pal
     zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
     zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
     zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
