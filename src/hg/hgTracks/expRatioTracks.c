@@ -883,9 +883,22 @@ int colorIndex = 0;
 float maxDeviation = 1.0;
 char colorVarName[256];
 boolean redGreen = TRUE;
+boolean redBlueOnWhite = FALSE;
 safef(colorVarName, sizeof(colorVarName), "%s.color", tg->tdb->tableName);
+
+/* decide color scheme flags */
 if (!sameString(cartUsualString(cart, colorVarName, "redGreen"), "redGreen"))
-    redGreen = FALSE;
+    {
+    if (sameString(cartUsualString(cart, colorVarName, "redGreen"), "redBlueOnWhite"))
+    	{
+	redBlueOnWhite = TRUE;
+    	redGreen = FALSE;
+	}
+    else
+    	{
+    	redGreen = FALSE;
+	}
+    }
 
 /* if val is error value show make it gray */
 if(val <= -10000)
@@ -899,8 +912,11 @@ if(val <= -10000)
 /*     absVal = absVal/1000; */
  
 if(!exprBedColorsMade)
+    {
     makeRedGreenShades(hvg);
-
+    makeRedBlueShadesOnWhiteBackground(hvg);
+    }
+    
 /* cap the value to be less than or equal to maxDeviation */
 if (tg->limitedVis == tvFull || tg->limitedVis == tvPack || tg->limitedVis == tvSquish)
     maxDeviation = fullMax;
@@ -918,9 +934,41 @@ if(absVal > maxDeviation)
  */
 colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
 if(val > 0) 
-    return (redGreen ? shadesOfRed[colorIndex] : shadesOfYellow[colorIndex]); 
+    {
+    if (redGreen)
+    	{
+	return (shadesOfRed[colorIndex]);
+	}
+    else
+    	{
+        if (redBlueOnWhite)
+    	    {
+	    return (shadesOfRedOnWhite[colorIndex]);
+	    }
+	else
+	    {
+	    return (shadesOfYellow[colorIndex]); 
+	    }
+	}
+    }    
 else 
-    return (redGreen ? shadesOfGreen[colorIndex] : shadesOfBlue[colorIndex]);
+    {
+    if (redGreen)
+    	{
+	return (shadesOfGreen[colorIndex]);
+	}
+    else
+    	{
+        if (redBlueOnWhite)
+    	    {
+	    return (shadesOfBlueOnWhite[colorIndex]);
+	    }
+	else
+	    {
+	    return (shadesOfBlue[colorIndex]); 
+	    }
+	}
+    }    
 }
 
 void makeLoweShades(struct hvGfx *hvg) 
