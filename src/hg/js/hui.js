@@ -12,6 +12,11 @@ function matSelectViewForSubTracks(obj,view)
         setCheckBoxesThatContain('id',false,true,view); // No need for matrix version
         //matSetCheckBoxesThatContain('id',false,true,view);  // Use matrix version to turn off buttons for other views that are "hide"
     } else {
+        // Make main display dropdown show full if currently hide
+        var trackName = obj.name.substring(0,obj.name.indexOf("_dd_"))
+        var displayDD = document.getElementsByName(trackName);
+        if(displayDD.length >= 1 && displayDD[0].selectedIndex == 0)
+            displayDD[0].selectedIndex = displayDD[0].options.length - 1;
         // if matrix used then: essentially reclick all 'checked' matrix checkboxes (run onclick script)
         var list = inputArrayThatMatches("checkbox","name","mat_","_cb");
         for (var ix=0;ix<list.length;ix++) {
@@ -29,7 +34,7 @@ function matSelectViewForSubTracks(obj,view)
 function matSetCheckBoxesThatContain(nameOrId, state, force, sub1)
 {
 // Set all checkboxes which contain 1 or more given substrings in NAME or ID to state boolean
-// Unlike the std setCheckBoxesThatContain() this also recognizes whether views 
+// Unlike the std setCheckBoxesThatContain() this also recognizes whether views
 // additionally control which subtracks will be checked
     if(debugLevel>2)
         alert("matSetCheckBoxesThatContain is about to set the checkBoxes to "+state);
@@ -71,8 +76,8 @@ function matSetCheckBoxesThatContain(nameOrId, state, force, sub1)
 function matSubtrackCbClick(subCb)
 {
 // When a matrix subrtrack checkbox is clicked, it may result in
-// Clicking/unclicking the corresponding matrix CB.  Also the 
-// subtrack may be hidden as a result.    
+// Clicking/unclicking the corresponding matrix CB.  Also the
+// subtrack may be hidden as a result.
     matChkBoxNormalizeMatching(subCb);
     hideOrShowSubtrack(subCb);
 }
@@ -123,7 +128,7 @@ function subtrackCfgHideAll(table)
 // hide all the subtrack configuration stuff
     var div = table.getElementsByTagName("div");
     for (var ix=0;ix<div.length;ix++) {
-        if (div[ix].id.lastIndexOf(".cfg") == div[ix].id.length - 4) 
+        if (div[ix].id.lastIndexOf(".cfg") == div[ix].id.length - 4)
         div[ix].style.display = 'none';
     }
 }
@@ -193,7 +198,7 @@ function trAlternateColors(table,cellIx)
     var cIxs = new Array();
 
     for(var aIx=1;aIx<arguments.length;aIx++) {   // multiple columns
-        cIxs[aIx-1] = arguments[aIx]; 
+        cIxs[aIx-1] = arguments[aIx];
     }
     if (document.getElementsByTagName)
     {
@@ -246,7 +251,7 @@ function tableSort(table,fnCompare)
             }
         }
     }
-    if(fnCompare != trComparePriority) 
+    if(fnCompare != trComparePriority)
         tableSetPositions(table);
     //alert("tableSort("+table.id+") examined "+trs+" rows and made "+moves+" moves.");
 }
@@ -275,7 +280,7 @@ function trCompareColumnAbbr(tr1,tr2,sortColumns)
 
 function tableSortByColumns(table,sortColumns)
 {
-// Will sort the table based on the abbr values on a et of <TH> colIds 
+// Will sort the table based on the abbr values on a et of <TH> colIds
     if (document.getElementsByTagName)
     {
         //alert("tableSortByColumns(): "+sortColumns.tags[0]+"="+(sortColumns.reverse[0]?"-":"+"));
@@ -308,7 +313,7 @@ function sortOrderFromTr(tr)
         if(offset > 0 && offset == inp[ix].id.length - 10)
             return inp[ix].value;
     }
-    return ""; 
+    return "";
 }
 function sortColumnsGetFromSortOrder(sortOrder)
 {// Creates sortColumns struct (without cellIxs[]) from a trackDB.sortOrder setting string
@@ -326,7 +331,7 @@ function sortColumnsGetFromSortOrder(sortOrder)
     }
 }
 function sortColumnsGetFromTr(tr)
-{// Creates a sortColumns struct from the entries in the '*.sortTr' heading row of a sortable table 
+{// Creates a sortColumns struct from the entries in the '*.sortTr' heading row of a sortable table
     this.inheritFrom = sortColumnsGetFromSortOrder;
     var inp = tr.getElementsByTagName('input');
     var ix;
@@ -339,7 +344,7 @@ function sortColumnsGetFromTr(tr)
     }
     if(ix == inp.length)
         return;
-    
+
     // Add an additional array
     this.cellIxs = new Array();
     var cols = tr.getElementsByTagName('th');
@@ -382,11 +387,11 @@ function hintOverSortableColumnHeader(th)
         var sortColumns = new sortColumnsGetFromTr(tr);
     }
 }
-    
+
 function tableSortAtButtonPress(anchor,tagId)
 {// Upodates the sortColumns struct and sorts the table when a column header has been pressed
  // If the current primary sort column is pressed, its direction is toggled then the table is sorted
- // If a secondary sort column is pressed, it is moved to the primary spot and sorted in fwd direction 
+ // If a secondary sort column is pressed, it is moved to the primary spot and sorted in fwd direction
     var th=anchor.parentNode;
     var sup=th.getElementsByTagName("sup")[0];
     var tr=th.parentNode;
@@ -396,7 +401,7 @@ function tableSortAtButtonPress(anchor,tagId)
         var offset = inp[iIx].id.lastIndexOf(".sortOrder");
         if(offset > 0 && offset == inp[iIx].id.length - 10)
             break;
-    } 
+    }
     var theOrder = new sortColumnsGetFromTr(tr);
     var oIx;
     for(oIx=0;oIx<theOrder.tags.length;oIx++) {
@@ -437,7 +442,7 @@ function tableSortAtButtonPress(anchor,tagId)
     tbody = table.getElementsByTagName("tbody")[0];
     tableSortByColumns(tbody,theOrder);
     return;
-    
+
 }
 
 ///// Following functions are for Sorting by priority
@@ -467,7 +472,7 @@ function trFindPosition(tr)
     var inp = tr.getElementsByTagName('input');
     for(var ix=0;ix<inp.length;ix++) {
         var offset = inp[ix].name.indexOf(".priority");
-        if(offset > 0 && offset == (inp[ix].name.length - 9)) { 
+        if(offset > 0 && offset == (inp[ix].name.length - 9)) {
             return inp[ix].value;
         }
     }
@@ -483,15 +488,15 @@ function hintForDraggableRow(tr)
 
 function trComparePriority(tr1,tr2)
 {
-// Compare routine for sorting by *.priority 
+// Compare routine for sorting by *.priority
     var priority1 = 999999;
     var priority2 = 999999;
     var inp1 = tr1.getElementsByTagName('input');
     var inp2 = tr2.getElementsByTagName('input');
     for(var ix=0;ix<inp1.length;ix++) { // should be same length
-        if(inp1[ix].name.indexOf(".priority") == (inp1[ix].name.length - 9)) 
+        if(inp1[ix].name.indexOf(".priority") == (inp1[ix].name.length - 9))
             priority1 = inp1[ix].value;
-        if(inp2[ix].name.indexOf(".priority") == (inp2[ix].name.length - 9))  
+        if(inp2[ix].name.indexOf(".priority") == (inp2[ix].name.length - 9))
             priority2 = inp2[ix].value;
         if(priority1 < 999999 && priority2 < 999999)
             break;
@@ -506,7 +511,7 @@ function trReOrderCells(tr,cellIxFrom,cellIxTo)
     //alert("tableSort("+table.id+") is beginning.");
     if(cellIxFrom == cellIxTo)
         return;
-    
+
     var tdFrom = tr.cells[cellIxFrom];
     var tdTo   = tr.cells[cellIxTo];
     if((cellIxTo - cellIxFrom) == 1) {
@@ -514,7 +519,7 @@ function trReOrderCells(tr,cellIxFrom,cellIxTo)
         tdTo   = tr.cells[cellIxFrom];
     } else if((cellIxTo - cellIxFrom) > 1)
         tdTo   = tr.cells[cellIxTo + 1];
-    
+
     tr.insertBefore(tr.removeChild(tdFrom), tdTo);
 }
 
@@ -533,7 +538,7 @@ function tableReOrderColumns(table,cellIxFrom,cellIxTo)
         for(var ix=0;ix<tbody[0].rows.length;ix++) {
             trReOrderCells(tbody[0].rows[ix],cellIxFrom,cellIxTo);
         }
-    }    
+    }
 }
 
 function matChkBoxNormalize(matCb)
@@ -629,7 +634,7 @@ function matInitializeMatrix()
 }
 
 // The following js depends upon the jQuery library
-$(document).ready(function() 
+$(document).ready(function()
 {
     //matInitializeMatrix();
 
