@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.13 2008/09/30 14:41:55 braney Exp $
+#  $Id: ce6.txt,v 1.14 2008/09/30 21:43:46 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -2425,6 +2425,217 @@ do
 done
 
 #############################################################################
+# Lift nucleosome data from ce4 to ce6 (DONE - 2008-09-28,30 - Hiram)
+    mkdir /hive/data/genomes/ce6/bed/monoNucleosomes
+    cd /hive/data/genomes/ce6/bed/monoNucleosomes
+    ln -s ../../../ce4/bed/monoNucleosomes/chrI-M.for.paired.bed.gz \
+	ce4.nucleosomeControl.fwd.bed.gz
+    ln -s ../../../ce4/bed/monoNucleosomes/chrI-M.rev.paired.bed.gz \
+	ce4.nucleosomeControl.rev.bed.gz
+    ln -s \
+/usr/local/apache/htdocs/goldenPath/ce4/liftOver/ce4ToCe6.over.chain.gz \
+	ce4ToCe6.over.chain.gz
+    #	The name filed isn't being parsed correctly because of the blanks
+    #	take out the blanks so liftOver can read them, put them back
+    #	in after lift
+    zcat ce4.nucleosomeControl.fwd.bed.gz | sed -e "s/n = /n=/" \
+	| liftOver stdin ce4ToCe6.over.chain.gz stdout \
+		ce6.nucleosomeControl.fwd.unMapped \
+	| sed -e "s/n=/n = /" | gzip > ce6.nucleosomeControl.fwd.bed.gz
+    #	only 5 items do not map correctly
+    zcat ce4.nucleosomeControl.rev.bed.gz | sed -e "s/n = /n=/" \
+	| liftOver stdin ce4ToCe6.over.chain.gz stdout \
+		ce6.nucleosomeControl.rev.unMapped \
+	| sed -e "s/n=/n = /" | gzip > ce6.nucleosomeControl.rev.bed.gz
+    #	71 items do not map correctly
+    LOAD="hgLoadBed -tab -noNameIx ce6"
+    zcat ce6.nucleosomeControl.fwd.bed.gz ce6.nucleosomeControl.rev.bed.gz \
+        | ${LOAD} nucleosomeControl stdin
+    #	Loaded 28951421 elements of size 12
+
+    #	Collapsed nucleosome track files by chromosome:
+    ln -s ../../../ce4/bed/monoNucleosomes/chrI-M.for.clean.bed.gz \
+	./ce4.nucleosomeFragmentsSense.bed.gz
+    ln -s ../../../ce4/bed/monoNucleosomes/chrI-M.rev.clean.bed.gz \
+	./ce4.nucleosomeFragmentsAntisense.bed.gz
+    zcat ce4.nucleosomeFragmentsSense.bed.gz | sed -e "s/n = /n=/" \
+	| liftOver stdin ce4ToCe6.over.chain.gz stdout \
+		ce6.nucleosomeControlFragmentsSense.unMapped \
+	| sed -e "s/n=/n = /" | gzip > ce6.nucleosomeFragmentsSense.bed.gz
+    #	four items do not map
+    zcat ce4.nucleosomeFragmentsAntisense.bed.gz | sed -e "s/n = /n=/" \
+	| liftOver stdin ce4ToCe6.over.chain.gz stdout \
+		ce6.nucleosomeControlFragmentsAntisense.unMapped \
+	| sed -e "s/n=/n = /" | gzip > ce6.nucleosomeFragmentsAntisense.bed.gz
+    #	34 items do not map
+    zcat ce6.nucleosomeFragmentsSense.bed.gz \
+        | ${LOAD} nucleosomeFragmentsSense stdin
+    #	Loaded 11279598 elements of size 12
+    zcat ce6.nucleosomeFragmentsAntisense.bed.gz \
+        | ${LOAD} nucleosomeFragmentsAntisense stdin
+    #	Loaded 11269358 elements of size 12
+    #	these three tracks grouped into the composite: "nucleosome"
+    #	labels:
+    #   composite container: Nucleosome predictions from SOLidD core alignments
+    #	Control - : mononucleosome control
+    #	fragments + : mononucleosomal fragments, sense strand reads
+    #	fragments - : mononucleosomal fragments, antisense strand reads
+
+    #	Positioning stringency wig track
+    ln -s \
+../../../ce4/bed/monoNucleosomes/chrI-M_positioning_stringency.wig.gz \
+	./ce4.nucleosomeStringency.wigVariable.txt.gz
+    zcat ce4.nucleosomeStringency.wigVariable.txt.gz \
+	| varStepToBedGraph.pl stdin | liftOver stdin ce4ToCe6.over.chain.gz \
+	    stdout ce6.nucleosomeStringency.unMapped \
+	| gzip > ce6.nucleosomeStringency.bedGraph.gz
+    #	11 items do not lift
+    cat << '_EOF_' > bedGraphToVarStep.sh
+#!/bin/sh
+
+SPAN=1
+SRC0=ce4.nucleosomeStringency.wigVariable.txt.gz
+SRC=ce6.nucleosomeStringency.bedGraph.gz
+R=ce6.nucleosomeStringency.wigVariable.txt
+rm -f ${R}
+zcat ${SRC0} | egrep "^browser|^track" > ${R}
+zcat ${SRC} | grep "^chr" | cut -f1 | sort -u > chr.list
+cat chr.list | while read C
+do
+    echo "variableStep chrom=${C} span=${SPAN}" >> ${R}
+    zcat "${SRC}" \
+        | awk '{if (match($1,"^'"${C}"'$")) { print } }' | sort -k2n | awk '
+{
+    printf "%d\t%g\n", $2+1, $4
+}
+' >> ${R}
+done
+rm -f chr.list
+'_EOF_'
+    # << happy emacs
+    time ./bedGraphToVarStep.sh
+    #	real    35m15.201s
+    gzip ce6.nucleosomeStringency.wigVariable.txt
+    zcat ce6.nucleosomeStringency.wigVariable.txt.gz \
+	| wigEncode stdin nucleosomeStringency.wig nucleosomeStringency.wib
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    ln -s `pwd`/nucleosomeStringency.wib /gbdb/ce6/wib
+    #	Positioning stringency wig track
+    hgLoadWiggle ce6 nucleosomeStringency nucleosomeStringency.wig
+    #	NSome Stringency
+    #	Nucleosome Positioning Stringency from SOLiD core alignments
+
+    #	 Adjusted nucleosome coverage wig track:
+    ln -s \
+	../../../ce4/bed/monoNucleosomes/adjusted_coverage_chrI-M.wig.gz \
+	./ce4.nucleosomeAdjustedCoverage.wigVariable.txt.gz
+    zcat ce4.nucleosomeAdjustedCoverage.wigVariable.txt.gz \
+	| varStepToBedGraph.pl stdin | liftOver stdin ce4ToCe6.over.chain.gz \
+	    stdout ce6.nucleosomeAdjustedCoverage.unMapped \
+	| gzip > ce6.nucleosomeAdjustedCoverage.bedGraph.gz
+    time ./bedGraphToVarStep.sh \
+	ce4.nucleosomeAdjustedCoverage.wigVariable.txt.gz \
+	ce6.nucleosomeAdjustedCoverage.bedGraph.gz \
+	ce6.nucleosomeAdjustedCoverage.wigVariable.txt
+    #	real    27m40.408s
+    time gzip ce6.nucleosomeAdjustedCoverage.wigVariable.txt
+    #	real    3m27.146s
+
+    time wigEncode ce6.nucleosomeAdjustedCoverage.wigVariable.txt.gz \
+	nucleosomeAdjustedCoverage.wig nucleosomeAdjustedCoverage.wib
+    #	real    1m25.770s
+    #	Converted ce6.nucleosomeAdjustedCoverage.wigVariable.txt.gz
+    #	upper limit 8.76, lower limit -11.93
+    ln -s `pwd`/nucleosomeAdjustedCoverage.wib /gbdb/ce6/wib
+    hgLoadWiggle ce6 nucleosomeAdjustedCoverage nucleosomeAdjustedCoverage.wig
+    #	Adj NSome Covrg
+    #	Adjusted nucleosome coverage (25bp)
+
+    #	MNase Coverage
+    #	Micrococcal nuclease control coverage
+    #	Cntl MNase +Covg
+    #	Micrococcal nuclease control coverage, sense strand reads
+    #	Cntl MNase -Covg
+    #	Micrococcal nuclease control coverage, antisense strand reads
+    zcat ce6.nucleosomeControl.fwd.bed.gz | sort -k1,1 -k2,2n \
+     | bedItemOverlapCount ce6 stdin \
+     | wigEncode stdin nucleosomeControlSenseCoverage.wig \
+        nucleosomeControlSenseCoverage.wib
+    #	Converted stdin, upper limit 142.00, lower limit 1.00
+    ln -s `pwd`/nucleosomeControlSenseCoverage.wib /gbdb/ce6/wib
+
+    zcat ce6.nucleosomeControl.rev.bed.gz | sort -k1,1 -k2,2n \
+     | bedItemOverlapCount ce6 stdin \
+     | wigEncode stdin nucleosomeControlAntisenseCoverage.wig \
+        nucleosomeControlAntisenseCoverage.wib
+    #	Converted stdin, upper limit 145.00, lower limit 1.00
+    ln -s `pwd`/nucleosomeControlAntisenseCoverage.wib /gbdb/ce6/wib
+
+    hgLoadWiggle ce6 nucleosomeControlSenseCoverage \
+        nucleosomeControlSenseCoverage.wig
+    hgLoadWiggle ce6 nucleosomeControlAntisenseCoverage \
+        nucleosomeControlAntisenseCoverage.wig
+
+    mkdir ce4.monoNucleosomes
+    cd ce4.monoNucleosomes
+    ln -s ../../../../ce4/bed/monoNucleosomes/stanford/clean/* .
+
+    zcat ce4.monoNucleosomes/chr*.forward.bed.gz \
+	| liftOver stdin ce4ToCe6.over.chain.gz \
+	    stdout ce6.monoNucleosomesSense.unMapped \
+	| gzip > ce6.monoNucleosomesSense.bed.gz
+    zcat ce4.monoNucleosomes/chr*.reverse.bed.gz \
+	| liftOver stdin ce4ToCe6.over.chain.gz \
+	    stdout ce6.monoNucleosomesAntiSense.unMapped \
+	| gzip > ce6.monoNucleosomesAntiSense.bed.gz
+    bedItemOverlapCount ce6 ce6.monoNucleosomesSense.bed.gz \
+         | wigEncode stdin monoNucleosomesSense.wig monoNucleosomesSense.wib
+    #	Converted stdin, upper limit 16195.00, lower limit 1.00
+    bedItemOverlapCount ce6 ce6.monoNucleosomesAntiSense.bed.gz \
+         | wigEncode stdin monoNucleosomesAntiSense.wig \
+		monoNucleosomesAntiSense.wib
+    #	Converted stdin, upper limit 19137.00, lower limit 1.00
+    ln -s `pwd`/monoNucleosomesSense.wib /gbdb/ce6/wib
+    ln -s `pwd`/monoNucleosomesAntiSense.wib /gbdb/ce6/wib
+    #	for downloads:
+    bedItemOverlapCount ce6 ce6.monoNucleosomesSense.bed.gz \
+	| gzip --rsyncable > monoNucleosomesSense.wigVariable.gz
+    bedItemOverlapCount ce6 ce6.monoNucleosomesAntiSense.bed.gz \
+	| gzip --rsyncable > monoNucleosomesAntiSense.wigVariable.gz
+
+    
+    #	NSome Coverage
+    #	Coverage of nucleosome predictions from SOLiD core alignments
+
+    #	Control
+    #	mononucleosome control
+    hgLoadWiggle ce6 monoNucleosomesSense monoNucleosomesSense.wig
+    #	NSome Core +Covg
+    #	Coverage of mononucleosomal fragments, sense strand reads
+    hgLoadWiggle ce6 monoNucleosomesAntiSense monoNucleosomesAntiSense.wig
+    #	NSome Core -Covg
+    #	Coverage of mononucleosomal fragments, antisense strand reads
+
+#########################################################################
+#  lift 25mers repeat track from ce4 (DONE - 2008-09-30 - Hiram)
+    mkdir /cluster/data/ce6/bed/25mersRepeats
+    cd /cluster/data/ce6/bed/25mersRepeats
+    ln -s /cluster/data/ce4/bed/25mersRepeats/withScore.bed \
+	./ce4.25mersRepeats.bed
+    ln -s \
+/usr/local/apache/htdocs/goldenPath/ce4/liftOver/ce4ToCe6.over.chain.gz \
+	ce4ToCe6.over.chain.gz
+    liftOver ce4.25mersRepeats.bed ce4ToCe6.over.chain.gz \
+	ce6.25mersRepeats.bed ce6.unMapped
+    #	no elements failed the eliftOver
+
+    hgLoadBed ce6 25mersRepeats ce6.25mersRepeats.bed
+    #	Loaded 757742 elements of size 9
+    #	clean up
+    rm bed.tab
+    gzip ce6.25mersRepeats.bed
+
+#########################################################################
 # hgPal downloads (DONE braney 2008-09-30)
     ssh hgwdev
     screen
