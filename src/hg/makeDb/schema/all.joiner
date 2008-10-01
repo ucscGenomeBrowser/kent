@@ -1657,7 +1657,7 @@ identifier bdgpTranscriptId external=BDGP dependency
     dm1.fbTranscript.transcriptId minCheck=0.95
     dm1.hgBlastTab.query
     dm1.blastFBPep00.name
-    dm1.pscreen.geneIds comma
+    dm1.pscreen.geneIds comma minCheck=0.90
 
 identifier bdgpNonCodingId external=BDGP
 "Berkeley Drosophila Genome Project Noncoding Gene ID"
