@@ -14,12 +14,12 @@
     <!-- Header Images and links -->
     <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
       <TR><TH COLSPAN=2 ALIGN="left">&nbsp;&nbsp;
-          <A HREF="http://www.genome.gov/10005107" TARGET=_blank><IMG SRC="../images/encodelogo.gif" height=50 ALT="ENCODE Project at NHGRI"></A>
-          &nbsp;&nbsp;
-          <A HREF="/encode/"><IMG SRC="../images/encode.jpg" ALT="ENCODE Project at UCSC"></A>
+          <A HREF="http://www.genome.gov/10005107" TARGET=_blank><IMG SRC="/images/encodelogo.gif" height=50 ALT="ENCODE Project at NHGRI"></A>&nbsp;&nbsp;
+      <!-- TODO: Replace with image -->
+        <A HREF="/encode/"><FONT SIZE=5 COLOR="gold">ENCODE Pilot Project</FONT>&nbsp;<FONT SIZE=5 COLOR="blue">at UCSC</A>
       </TH></TR>
 
-      <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../inc/encode.topbar.html"--></TD></TR>
+      <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../inc/encode.topbar_pilot.html"--></TD></TR>
 
       <TR HEIGHT="100%" VALIGN="top">
         <TD ROWSPAN="3" VALIGN="top" HEIGHT="100%"> 
@@ -40,27 +40,19 @@
 	        	<A CLASS="leftbar" HREF="encode.hg17.html">
 		   	Regions (hg17)</A><HR>
                 	<A CLASS="leftbar" HREF="trackStatus.html">
-                    	Data Status</a> <HR>
+                    	Released Data</a> <HR>
 	        	<A CLASS="leftbar" HREF="http://hgdownload.cse.ucsc.edu/goldenPath/encode/index.html">
 		   	Downloads</A><HR>
-	        	<A CLASS="leftbar" HREF="submission.html">
-		   	Submission</A><HR>
-	        	<A CLASS="leftbar" HREF="../cgi-bin/hgLiftOver">
-		   	Tools</A><HR>
-                	<A CLASS="leftbar" HREF="releaseLog.html">
-                    	Release Log</a> <HR>
 			<A class="leftbar" HREF="contributors_pilot.html">
 		   	Contributors</a>
 			<HR>
-	        	<A CLASS="leftbar" HREF="terms.html">
+	        	<A CLASS="leftbar" HREF="terms_pilot.html">
 		   	Terms of Use</a><HR>
 <!--
 			<BR>&nbsp<HR>
                 	<A CLASS="leftbar" HREF="../cgi-bin/hgGateway">
 		   	Genome Browser</A><HR>
 -->
-                	<A CLASS="leftbar" HREF="../contacts.html">
-		   	Contact Us</A><HR>
  	        	<BR>
 	      		<IMG SRC="../images/DOT.gif" ALT="" HEIGHT=970 WIDTH=1>
    	    	      </TD></TR>
@@ -94,7 +86,7 @@
 		          (<A HREF="http://www.ucsc.edu/public/" 
 		    	  TARGET=_blank>UCSC</A>) manages the official 
 			  repository of sequence-related data submitted during 
-			  the pilot phase of the 
+			  the pilot phase (2003-2007) of the 
 		 	  <A HREF="http://www.genome.gov/10005107" 
 		    	  TARGET=_blank>ENCODE</A> project at 
 		  	  <A HREF="http://www.genome.gov/" 
@@ -122,7 +114,7 @@
 		          <P>
                           ENCODE data submissions released by UCSC during the
 			  pilot phase are listed on the 
-                          <A HREF="releaseLog.html">release log 
+                          <A HREF="trackStatus.html">released data 
 		          page</A>. Primary data for ENCODE is available from 
 			  the 
                           <A HREF="http://www.ncbi.nlm.nih.gov/projects/geo/info/ENCODE.html"
@@ -143,8 +135,8 @@
 			  Biomolecular Science and Engineering 
 			  (<A HREF="http://www.cbse.ucsc.edu/" 
 		          TARGET=_blank>CBSE</A>) at UCSC. Click the 
-			  <A HREF="contributors.html">Contributors</A> link for
-			  a complete list of ENCODE data providers and the
+			  <A HREF="contributors_pilot.html">Contributors</A> link for
+			  a complete list of ENCODE pilot phase data providers and the
 			  UCSC staff who develop and maintain this website.</P>
 <!--
 			  The individuals who 
@@ -164,8 +156,9 @@
 -->
 		          <P>
  		          The ENCODE project has now expanded to cover the full 
-			  human genome. UCSC is the official data 
-			  coordination center for this endeavor. The new data 
+			  human genome. UCSC is the official 
+                          <A HREF="index.html">Data Coordination Center</A>
+                          for this endeavor. The new data 
 			  are accessible on the most recent human assemblies in 
 			  the <A HREF="../cgi-bin/hgGateway?org=human">Genome 
 			  Browser</A>, along with the sequence and 
@@ -294,11 +287,10 @@
 		      <A HREF="http://genome.ucsc.edu/#Conditions">Conditions of Use</A> 
 		      for the UCSC Genome Browser apply.
 		      <LI>
-		      The ENCODE-specific conditions of use are
-		      still being developed and will be displayed here
-		      in the future.  Until then, <A
-		      HREF="../contacts.html">please contact
-		      us</A> for the conditions on the use of this data.
+                      The 
+		      <A HREF="terms_pilot.html">
+                      ENCODE Consortium Data Release Policy (2003-2007)</A>
+                      applies to all pilot phase ENCODE data.
 		    </UL>
 	          </TD><TD WIDTH=15></TD></TR>
 		</TABLE>
