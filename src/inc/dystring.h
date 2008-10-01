@@ -75,5 +75,9 @@ char *dyStringCannibalize(struct dyString **pDy);
 void dyStringResize(struct dyString *ds, int newSize);
 /* resize a string, if the string expands, blanks are appended */
 
+void dyStringQuoteString(struct dyString *dy, char quotChar, char *text);
+/* Append quotChar-quoted text (with any internal occurrences of quotChar
+ * \-escaped) onto end of dy. */
+
 #endif /* DYSTRING_H */
 

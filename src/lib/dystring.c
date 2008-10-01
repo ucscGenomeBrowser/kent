@@ -6,7 +6,7 @@
 #include "common.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dystring.c,v 1.22 2006/02/02 16:24:24 kent Exp $";
+static char const rcsid[] = "$Id: dystring.c,v 1.23 2008/10/01 17:21:01 angie Exp $";
 
 struct dyString *newDyString(int initialBufSize)
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */
@@ -215,3 +215,20 @@ if (newSize > oldSize)
 ds->string[newSize] = '\0';
 ds->stringSize = newSize;
 }
+
+void dyStringQuoteString(struct dyString *dy, char quotChar, char *text)
+/* Append quotChar-quoted text (with any internal occurrences of quotChar
+ * \-escaped) onto end of dy. */
+{
+char c;
+
+dyStringAppendC(dy, quotChar);
+while ((c = *text++) != 0)
+    {
+    if (c == quotChar)
+        dyStringAppendC(dy, '\\');
+    dyStringAppendC(dy, c);
+    }
+dyStringAppendC(dy, quotChar);
+}
+
