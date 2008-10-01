@@ -304,18 +304,35 @@ for my $key (keys %ra) {
         die "ERROR: unknown type: $type in $Encode::loadFile\n";
     }
     if($hgdownload) {
-        # soft link file(s) into download dir
-        my $target = "$downloadDir/$tablename.$type";
+        # soft link file(s) into download dir - gzip files as appropriate
+        my $target = "$downloadDir/$tablename.$type.gz";
         unlink($target);
+
         if(@files == 1) {
-            HgAutomate::verbose(2, "soft-linking $files[0] => $target\n");
-            !system("/bin/ln -s $submitPath/$files[0] $target") || die "link failed: $?\n";
+            my $srcFile = "$submitPath/$files[0]";
+            if(Encode::isZipped($srcFile)) {
+                HgAutomate::verbose(2, "soft-linking $srcFile => $target\n");
+                !system("/bin/ln -s $srcFile $target") || die "link failed: $?\n";
+            } else {
+                HgAutomate::verbose(2, "copying/zipping $srcFile => $target\n");
+                !system("/bin/gzip -c $srcFile > $target") || die "gzip: $?\n";
+            }
         } else {
-            # have to make a concatenated copy of multiple files
-            HgAutomate::verbose(2, "soft-linking concatenated file $tablename.$type => $target\n");
-            my $cmd = "cat " . join(" ", @files) . " > $tablename.$type";
-            !system($cmd) || die "system '$cmd' failed: $?\n";
-            !system("/bin/ln -s $submitPath/$tablename.$type $target") || die "link failed: $?\n";
+            # make a concatenated copy of multiple files
+            my $unZippedTarget = "$downloadDir/$tablename.$type";
+            unlink($unZippedTarget);
+            for my $file (@files) {
+                $file = "$submitPath/$file";
+                my $cmd;
+                if(Encode::isZipped($file)) {
+                    $cmd = "/bin/zcat $file >> $unZippedTarget";
+                } else {
+                    $cmd = "/bin/cat $file >> $unZippedTarget";
+                }
+                HgAutomate::verbose(2, "copying $file to $target\n");
+                !system($cmd) || die "system '$cmd' failed: $?\n";
+            }
+            !system("/bin/gzip $unZippedTarget") || die "gzip failed: $?\n";
         }
         push(@{$pushQ->{FILES}}, $target);
     }
@@ -372,6 +389,7 @@ close(PUSHQ);
 
 if(-e $readmeFile) {
     open(README, ">>$readmeFile") || die "SYS ERROR: Can't write '$readmeFile' file; error: $!\n";
+    print README "\n";
 } else {
     open(README, ">$readmeFile") || die "SYS ERROR: Can't write '$readmeFile' file; error: $!\n";
     print README <<END;
