@@ -265,6 +265,7 @@ sortOrder view=+ cellType=+ promoter=+
 dragAndDrop subTracks
 visibilityViewDefaults SI=pack EB=pack
 controlledVocabulary encode/cv.ra cellType promoter
+dataVersion ENCODE Submitted September 2008
 priority 0
 type bed 3
 wgEncode 1
@@ -437,7 +438,7 @@ sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=pack Signal=full RawSignal=hide
 controlledVocabulary encode/cv.ra cellType factor
-dataVersion ENCODE Submitted June 2008
+dataVersion ENCODE Submitted September 2008
 wgEncode 1
 
         track   wgEncodeYaleChIPseqSignalHelas3Input
