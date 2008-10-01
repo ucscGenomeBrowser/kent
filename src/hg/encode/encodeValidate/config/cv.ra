@@ -2,47 +2,51 @@
 # Will be auto-generated from private Wiki
 # Cell types
 term GM12878
+type Cell Line
 description lymphoblastoid
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&PgId=166
 vendorName Coriell
 vendorId GM12878
-type Cell Line
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&PgId=166
 karyotype relatively normal
 lineage mesoderm
 termId BTO:0002026 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 tier 1
 
 term K562
+type Cell Line
 description leukemia
-orderUrl http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL-243
 vendorName ATCC
 vendorId CCL-243
-type Cell Line
+orderUrl http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL-243
 karyotype cancer
 lineage mesoderm
 termId BTO:0000664
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
 tier 1
 
 term HepG2
-description liver carcinoma
 type Cell Line
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
+description liver carcinoma
 vendorName ATCC
 vendorId HB-8065
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&Template=cellBiology
 lineage endoderm
 karyotype cancer
 termId BTO:0000559
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
 tier 2
 
 term HeLa-S3
-description cervical carcinoma
 type Cell Line
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
+description cervical carcinoma
 vendorName ATCC
 vendorId CCL-2.2
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
 lineage ectoderm
 karyotype cancer
 termId BTO:0000568
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
 tier 2
 
 term HeLa-S3_IFNg
@@ -57,53 +61,56 @@ termId BTO:0000568
 tier 3
 
 term HUVEC
-description umbilical vein endothelial
 type Cell Line
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA1B392C76A4F18C7C001A4B525E10&layout=6_1_65_52_7&uiarea=2)/.do
+description umbilical vein endothelial
 vendorName Lonza
 vendorId CC-2517
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA1B392C76A4F18C7C001A4B525E10&layout=6_1_65_52_7&uiarea=2)/.do
 lineage mesoderm
 karyotype normal
 termId BTO:0001949
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001949
 tier 2
 
 term Keratinocyte
 type Cell Line
 description keratinocyte
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(isQuery=yes&xcm=lonza_b2b&query=CC2501&layout=6_1_65_52_7&uiarea=2&carea=DCEA1F8CCA53E1F18C7C001A4B525E10)/.do
 vendorName Lonza
 vendorId CC-2501
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(isQuery=yes&xcm=lonza_b2b&query=CC2501&layout=6_1_65_52_7&uiarea=2&carea=DCEA1F8CCA53E1F18C7C001A4B525E10)/.do
 lineage ectoderm
 karyotype normal
 termId BTO:0000375
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
 tier 2
 
 ###### type 3 cells once they have been submitted.
 term A549
 type Cell Line
 description epithelial cell line derived from a lung carcinoma tissue 
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-185&Template=cellBiology
 vendorName ATCC
-vendorId CCL-185
+vendorId CCl-185
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-185&Template=cellBiology
 lineage endoderm
 karyotype cancer
 termId BTO:0000018
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 tier 3
 
 term GM18507
 type Cell Line
 description lymphoblastoid 
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18507
 vendorName Coriell
 vendorId GM18507
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18507
 lineage mesoderm
 karyotype relatively normal
 termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 tier 3
 
 term HCT-116
 type Cell Line
-description colorectal carcinoma  
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-247&Template=cellBiology
 vendorName ATCC
 vendorId CCL247
@@ -115,20 +122,21 @@ tier 3
 term Jurkat
 type Cell Line
 description T lymphoblastoid cell line derived from an acute T cell leukemia 
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
 vendorName ATCC
 vendorId TIB-152
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
 lineage mesoderm 
 karyotype cancer
 termId BTO:0001948
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
 tier 3
 
 term LNCaP
 type Cell Line
 description prostate adenocarcinoma 
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1740&Template=cellBiology
 vendorName ATCC
 vendorId CRL-1740
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1740&Template=cellBiology
 lineage endoderm
 karyotype cancer
 termId BTO:0002021
@@ -137,34 +145,37 @@ tier 3
 term NT2/D1
 type Cell Line
 description malignant pluripotent embryonal carcinoma (Ntera2)
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1973&Template=cellBiology
 vendorName ATCC
 vendorId CRL-1973
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1973&Template=cellBiology
 lineage embryonic
 karyotype cancer
 termId BTO:0000946
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000946
 tier 3
 
 term PFSK-1
 type Cell Line
 description neuroectodermal cell line derived from a human cerebral brain tumor 
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2060&Template=cellBiology
 vendorName ATCC
 vendorId CRL-2060
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2060&Template=cellBiology
 lineage ectoderm
 karyotype cancer
 termId BTO:0000690 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000690
 tier 3
 
 term SK-N-MC
 type Cell Line
 description neuroepithelioma cell line derived from a metastatic supra-orbital human brain tumor 
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-10&Template=cellBiology
 vendorName ATCC
 vendorId HTB-10
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-10&Template=cellBiology
 lineage ectoderm
 karyotype cancer
 termId BTO:0002372 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 tier 3
 
 # Gene types
@@ -317,7 +328,6 @@ term CtBP1
 type Antibody
 antibodyDescription mouse monoclonal 
 targetDescription C-terminal binding protein 1 
-type Antibody
 orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229303  
 vendorName BD Biosciences 
 vendorId 612042 
@@ -326,16 +336,14 @@ term CtBP2
 type Antibody
 antibodyDescription mouse monoclonal 
 targetDescription C-terminal binding protein 2 
-type Antibody
 orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229326 
 vendorName BD Biosciences 
 vendorId 612044 
 
-term c-Myc  
+term c-Myc
 type Antibody
-antibodyDescription rabbit polyclonal to amino acids 1-262 of c-Myc human origin 
-targetDescription transcription factor, c-Myc-encoded proteins function in cell proliferation, differentiation and neoplastic disease 
-type Antibody
+antibodyDescription rabbit polyclonal to amino acids 1-262 of c-Myc human origin
+targetDescription transcription factor; c-Myc-encoded proteins function in cell proliferation,differentiation and neoplastic disease
 vendorName Santa Cruz Biotech
 vendorId sc-764
 orderUrl http://www.scbt.com/product.php?datasheet=764
