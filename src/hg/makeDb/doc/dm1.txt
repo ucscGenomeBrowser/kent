@@ -549,6 +549,9 @@
     hgsql dm1 -e 'insert into pscreen values(672, "chrX", 11430596, 11430597, "EY12008", 0, "+", 0, 1, "CG1830,");'
     hgsql dm1 -e 'insert into pscreen values(720, "chr2R", 17764291, 17764292, "EY12526", 0, "-", 0, 1, "CG30092,");'
 
+#QA NOTE: [ASZ, 10-1-2008] mytouch dm1 pscreen 200501071700.00
+#(becuase it was not updated after a bdgpGene update (pscreen is outdated)
+
 
 # FLYBASE IN SITU IMAGES / EXPRESSION (REDONE 6/17/04 angie)
     # FlyBase has downloadable in situ images for BACs:
