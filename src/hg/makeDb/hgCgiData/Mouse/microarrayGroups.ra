@@ -114,6 +114,28 @@ expIds 0,1,10,2,3,4,5,6,7,8,9,34,35,36,37,38,49,50,54,55,56,57,58,59,60,51,52,53
 groupSizes 11,5,9,3,5,7,4,4,3,10,
 names brain,digestion,embryo,germ,gland,immune,muscle,nerve,organ,other,
 
+# GNF MOE430 version 2
+
+name gnfMOE430v2Groups
+type groupings 
+all gnfMOE430v2All
+combine gnfMOE430v2TissueMedians,
+combine.default gnfMOE430v2TissueMedians
+
+name gnfMOE430v2All
+type all
+description All Tissues
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,
+groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+names 3T3-L1,B-cells marginal zone,Baf3,C2C12,C3H 10T1 2,NK cells,RAW 264 7,T-cells CD4+,T-cells CD8+,T-cells foxP3+,adipose brown,adipose white,adrenal gland,amygdala,bladder,bone,bone marrow,cerebellum,cerebral cortex,cerebral cortex prefrontal,ciliary bodies,common myeloid progenitor,cornea,dendritic cells lymphoid CD8a+,dendritic cells myeloid CD8a-,dendritic plasmacytoid B220+,dorsal root ganglia,dorsal striatum,embryonic stem line Bruce4 p13,embryonic stem line V26 2 p16,epidermis,eyecup,follicular B-cells,granulo mono progenitor,granulocytes mac1+gr1+,heart,hippocampus,hypothalamus,intestine large,intestine small,iris,kidney,lacrimal gland,lens,liver,lung,lymph nodes,mIMCD-3,macrophage bone marrow 0hr,macrophage bone marrow 24h LPS,macrophage bone marrow 2hr LPS,macrophage bone marrow 6hr LPS,macrophage peri LPS thio 0hrs,macrophage peri LPS thio 1hrs,macrophage peri LPS thio 7hrs,mammary gland  lact,mammary gland non-lactating,mast cells,mast cells IgE,mast cells IgE+antigen 1hr,mast cells IgE+antigen 6hr,mega erythrocyte progenitor,microglia,min6,neuro2a,nih 3T3,nucleus accumbens,olfactory bulb,osteoblast day14,osteoblast day21,osteoblast day5,osteoclasts,ovary,pancreas,pituitary,placenta,prostate,retina,retinal pigment epithelium,salivary gland,skeletal muscle,spinal cord,spleen,stem cells  HSC,stomach,testis,thymocyte DP CD4+CD8+,thymocyte SP CD4+,thymocyte SP CD8+,umbilical cord,uterus,
+
+name gnfMOE430v2TissueMedians
+type combine median
+description Tissue Type Medians
+expIds 110,160,128,130,132,134,8,24,26,28,44,62,64,124,126,66,68,138,152,162,22,46,48,142,178,30,34,52,70,76,148,150,0,2,4,120,136,170,6,74,98,100,140,144,12,10,122,146,164,166,168,18,32,54,82,84,86,88,90,92,94,96,102,104,106,108,158,172,174,176,20,60,154,180,36,38,40,42,112,118,156,72,78,80,114,116,14,16,50,56,58,
+groupSizes 2,4,9,5,5,7,4,2,6,26,4,7,5,3,2,
+names blood,bone,brain,digestion,embryo,eye,fat,germ,gland,immune,muscle,nerve,organ,other,skin,
+
 name affyExonTissuesGroups
 type groupings
 all affyExonTissuesAll
