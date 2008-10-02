@@ -11,7 +11,7 @@
 #include "hPrint.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.7 2008/09/26 18:48:09 braney Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.8 2008/10/02 23:54:02 braney Exp $";
 
 #define hgtaCGIGeneMafTable "hgta_mafGeneMafTable" 
 #define hgtaJSGeneMafTable  "mafGeneMafTable" 
@@ -27,71 +27,90 @@ static char *curVars[] = {
 	hgtaCGIGeneNoTrans, hgtaCGIGeneOutBlank
 	};
 
-int palOutPredsInHash(struct sqlConnection *conn, struct cart *cart,
-    struct hash *hash, char *table )
-/* output the alignments who's names match strings in hash */
+int palOutPredList(struct sqlConnection *conn, struct cart *cart,
+    struct genePred *list)
+/* output a list of genePreds in pal format */
 {
-struct genePredReader *reader = genePredReaderQuery( conn, table, NULL);
-int outCount = 0;
-struct genePred *list = NULL, *pred;
-while ((pred  = genePredReaderNext(reader)) != NULL)
+if (list == NULL)
+    return 0;
+
+char *mafTable = cartString(cart, hgtaCGIGeneMafTable); 
+char *database = sqlGetDatabase(conn);
+struct trackDb *maftdb = hTrackDbForTrack(database, mafTable);
+struct wigMafSpecies *wmSpecies;
+int groupCnt;
+
+/* this queries the state of the getSpecies dialog */
+wigMafGetSpecies(cart, maftdb, database, &wmSpecies, &groupCnt);
+
+/* since the species selection dialog doesn't list
+ * the reference species, we just automatically include
+ * it */
+struct slName *includeList = slNameNew(database);
+
+/* now make a list of all species that are on */
+for(; wmSpecies; wmSpecies = wmSpecies->next)
     {
-    if (hashLookup(hash, pred->name))
+    if (wmSpecies->on)
 	{
-	slAddHead(&list, pred);
-	++outCount;
+	struct slName *newName = slNameNew(wmSpecies->name);
+	slAddHead(&includeList, newName);
 	}
     }
-genePredReaderFree(&reader);
+slReverse(&includeList);
 
+boolean inExons = cartUsualBoolean(cart, hgtaCGIGeneExons , FALSE); 
+boolean noTrans = cartUsualBoolean(cart, hgtaCGIGeneNoTrans, FALSE); 
+boolean outBlank = cartUsualBoolean(cart, hgtaCGIGeneOutBlank, FALSE); 
+unsigned options = 0;
+if (inExons)  options |= MAFGENE_EXONS;
+if (noTrans)  options |= MAFGENE_NOTRANS;
+if (outBlank) options |= MAFGENE_OUTBLANK;
+
+/* send out the alignments */
+int outCount = 0;
+for( ; list ; list = list->next)
+    {
+    if (list->cdsStart != list->cdsEnd)
+	{
+	outCount++;
+	mafGeneOutPred(stdout, list, database, mafTable, 
+	    includeList, options);
+	}
+    }
+
+slNameFreeList(&includeList);
+return outCount;
+}
+
+int palOutPredsInBeds(struct sqlConnection *conn, struct cart *cart,
+    struct bed *beds, char *table )
+/* output the alignments who's names and coords match a bed*/
+{
+struct genePred *list = NULL;
+
+for(; beds; beds = beds->next)
+    {
+    char where[10 * 1024];
+
+    safef(where, sizeof where, 
+	"name = '%s' and chrom='%s' and txEnd > %d and txStart <= %d",
+	beds->name, beds->chrom, beds->chromStart, beds->chromEnd);
+
+    struct genePredReader *reader = genePredReaderQuery( conn, table, where);
+    struct genePred *pred;
+    while ((pred = genePredReaderNext(reader)) != NULL)
+	slAddHead(&list, pred);
+
+    genePredReaderFree(&reader);
+    }
+
+int outCount = 0;
 if (list != NULL)
     {
     slReverse(&list);
-
-    struct genePred *pred;
-    unsigned options = 0;
-    char *mafTable = cartString(cart, hgtaCGIGeneMafTable); 
-    boolean inExons = cartUsualBoolean(cart, hgtaCGIGeneExons , FALSE); 
-    boolean noTrans = cartUsualBoolean(cart, hgtaCGIGeneNoTrans, FALSE); 
-    boolean outBlank = cartUsualBoolean(cart, hgtaCGIGeneOutBlank, FALSE); 
-
-    if (inExons)  options |= MAFGENE_EXONS;
-    if (noTrans)  options |= MAFGENE_NOTRANS;
-    if (outBlank) options |= MAFGENE_OUTBLANK;
-
-    char *database = sqlGetDatabase(conn);
-    struct trackDb *maftdb = hTrackDbForTrack(database, mafTable);
-    struct wigMafSpecies *wmSpecies;
-    int groupCnt;
-
-    /* this queries the state of the getSpecies dialog */
-    wigMafGetSpecies(cart, maftdb, database, &wmSpecies, &groupCnt);
-
-    /* since the species selection dialog doesn't list
-     * the reference species, we just automatically include
-     * it */
-    struct slName *includeList = slNameNew(database);
-
-    /* now make a list of all species that are on */
-    for(; wmSpecies; wmSpecies = wmSpecies->next)
-	{
-	if (wmSpecies->on)
-	    {
-	    struct slName *newName = slNameNew(wmSpecies->name);
-	    slAddHead(&includeList, newName);
-	    }
-	}
-    slReverse(&includeList);
-
-    /* send out the alignments */
-    for(pred = list; pred ; pred = pred->next)
-	{
-	if (pred->cdsStart != pred->cdsEnd)
-	    mafGeneOutPred(stdout, pred, database, mafTable, 
-		includeList, options);
-	else
-	    outCount--;
-	}
+    outCount = palOutPredList( conn, cart, list);
+    genePredFreeList(&list);
     }
 
 return outCount;
