@@ -4,7 +4,7 @@
 #include "hgTables.h"
 #include "pal.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.13 2008/10/02 21:01:58 braney Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.14 2008/10/02 23:59:05 braney Exp $";
 
 boolean isPalCompatible(struct sqlConnection *conn,
     struct trackDb *track, char *table)
@@ -51,26 +51,24 @@ cartRemove(cart, hgtaDoPal);
 cartRemove(cart, hgtaDoPalOut);
 cartSaveSession(cart);
 
+if (anyIntersection() && intersectionIsBpWise())
+    errAbort("Can't do CDS FASTA output when bit-wise intersection is on. "
+    "Please go back and select another output type, or clear the intersection.");
+
 struct lm *lm = lmInit(64*1024);
 int fieldCount;
-struct bed *bed, *bedList = cookedBedsOnRegions(conn, curTable, getRegions(),
+struct bed *bedList = cookedBedsOnRegions(conn, curTable, getRegions(),
 	lm, &fieldCount);
-
-/* Make hash of all id's passing filters. */
-struct hash *hash = newHash(18);
-for (bed = bedList; bed != NULL; bed = bed->next)
-    hashAdd(hash, bed->name, NULL);
 
 //lmCleanup(&lm);
 
 textOpen();
 
-int outCount = palOutPredsInHash(conn, cart, hash, curTable);
+int outCount = palOutPredsInBeds(conn, cart, bedList, curTable);
 
 /* Do some error diagnostics for user. */
 if (outCount == 0)
     explainWhyNoResults(NULL);
-hashFree(&hash);
 }
 
 void addOurButtons()
