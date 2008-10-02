@@ -22,6 +22,8 @@ if ( $#argv != 1 ) then
   echo
   echo "    usage:  database"
   echo
+  echo "    runs on hgwbeta"
+  echo
   exit
 else
   set db=$argv[1]
