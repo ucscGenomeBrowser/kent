@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: hgFindSpec.c,v 1.8 2008/09/03 19:19:40 markd Exp $";
+static char const rcsid[] = "$Id: hgFindSpec.c,v 1.9 2008/10/02 16:09:24 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -77,21 +77,6 @@ for (hfs = hfsList; hfs != NULL; hfs = hfsNext)
 	slAddHead(pSpecList, hfs);
 	}
     }
-}
-
-void dyStringQuoteString(struct dyString *dy, char quotChar, char *text)
-/* Stringize text onto end of dy. */
-{
-char c;
-
-dyStringAppendC(dy, quotChar);
-while ((c = *text++) != 0)
-    {
-    if (c == quotChar)
-        dyStringAppendC(dy, '\\');
-    dyStringAppendC(dy, c);
-    }
-dyStringAppendC(dy, quotChar);
 }
 
 void updateBigTextField(struct sqlConnection *conn, char *table,
