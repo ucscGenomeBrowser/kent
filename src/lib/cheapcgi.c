@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.104 2008/06/01 14:58:25 tdreszer Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.105 2008/10/02 23:00:05 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1170,24 +1170,33 @@ void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked)
     cgiMakeDropListClass(name, menu, menuSize, checked, "normalText");
 }
 
-void cgiMakeMultList(char *name, char *menu[], int menuSize, char *checked, int length)
+char *cgiMultListShadowPrefix()
+/* Prefix for shadow variable set with multi-select inputs. */
+{
+return "multishad.";
+}
+
+void cgiMakeMultList(char *name, char *menu[], int menuSize, struct slName *checked, int length)
 /* Make a list of names with window height equalt to length,
  * which can have multiple selections. Same as drop-down list 
  * except "multiple" is added to select tag. */
 {
 int i;
 char *selString;
-if (checked == NULL) checked = menu[0];
+if (checked == NULL) checked = slNameNew(menu[0]);
 printf("<SELECT MULTIPLE SIZE=%d ALIGN=CENTER NAME=\"%s\">\n", length, name);
 for (i=0; i<menuSize; ++i)
     {
-    if (sameWord(menu[i], checked))
+    if (slNameInList(checked, menu[i]))
         selString = " SELECTED";
     else
         selString = "";
     printf("<OPTION%s>%s</OPTION>\n", selString, menu[i]);
     }
 printf("</SELECT>\n");
+char buf[512];
+safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
+cgiMakeHiddenVar(buf, "1");
 }
 
 void cgiMakeDropListFull(char *name, char *menu[], char *values[], 

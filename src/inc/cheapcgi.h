@@ -78,6 +78,9 @@ void cgiMakeHiddenBoolean(char *name, boolean on);
  * can distinguish between variable not present and
  * variable set to false. */
 
+char *cgiMultListShadowPrefix();
+/* Prefix for shadow variable set with multi-select inputs. */
+
 int cgiIntExp(char *varName);
 /* Evaluate an integer expression in varName and
  * return value. */
@@ -229,7 +232,7 @@ void cgiMakeDropListWithVals(char *name, char *menu[], char *values[],
 void cgiMakeDropListFull(char *name, char *menu[], char *values[], int menuSize, char *checked, char *extraAttribs);
 /* Make a drop-down list with names and values. */
 
-void cgiMakeMultList(char *name, char *menu[], int menuSize, char *checked, int length);
+void cgiMakeMultList(char *name, char *menu[], int menuSize, struct slName *checked, int length);
 /* Make a list of names which can have multiple selections.
  * Same as drop-down list except "multiple" is added to select tag */
 
