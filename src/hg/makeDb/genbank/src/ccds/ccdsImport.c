@@ -13,7 +13,7 @@
 extern char *createTablesSql;
 extern char *createKeysSql;
 
-static char const rcsid[] = "$Id: ccdsImport.c,v 1.9 2008/04/06 00:40:06 markd Exp $";
+static char const rcsid[] = "$Id: ccdsImport.c,v 1.10 2008/10/02 20:34:24 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -51,7 +51,7 @@ if (conn == NULL)
     char sql[256];
     verbose(1, "creating databases %s\n", db);
     safef(sql, sizeof(sql), "create database %s", db);
-    conn = sqlConnect(NULL);
+    conn = sqlConnectProfile(defaultProfileName, NULL);
     sqlUpdate(conn, sql);
     sqlDisconnect(&conn);
     conn = sqlConnect(db);

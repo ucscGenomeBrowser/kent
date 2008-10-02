@@ -93,7 +93,8 @@ CREATE TABLE InterpretationSubtypes (
 	interpretation_subtype_uid int PRIMARY KEY  NOT NULL ,
 	interpretation_type_uid int NOT NULL ,
 	interpretation_subtype varchar (128) NOT NULL ,
-        for_public tinyint(1) NOT NULL
+        for_public tinyint(1) NOT NULL ,
+        can_edit_comment tinyint(1) NOT NULL 
 ) 
 ;
 
