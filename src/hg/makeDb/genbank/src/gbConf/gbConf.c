@@ -7,7 +7,7 @@
 #include "portable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: gbConf.c,v 1.5 2008/06/23 22:36:22 markd Exp $";
+static char const rcsid[] = "$Id: gbConf.c,v 1.6 2008/10/02 20:34:04 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -18,12 +18,13 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 static int errCnt = 0; // count of errors encountered
+static char *clusterMaster = "/hive/data/staging/"; // MUST END IN SLASH
 
 static void usage(char *msg)
 /* Explain usage and exit. */
 {
 errAbort("%s\n\n"
-         "gbConf [options] genebank.conf\n"
+         "gbConf [options] genbank.conf\n"
          "\n"
          "Print contents of genbank.conf with variables expanded for debugging purposes.\n"
          "The results will not contain comments and will be alphabetically sorted\n"
@@ -36,9 +37,9 @@ errAbort("%s\n\n"
          "   -clusterFileCheck - check for existence of files that must be\n"
          "    on the cluster.\n"
          "   -checkClusterMaster - check cluster master directory for cluster files:\n"
-         "       /cluster/bluearc/scratch/\n"
+         "       %s\n"
          "   -verbose=n  n >=2: print files that are present when doing checks\n",
-         msg);
+         msg, clusterMaster);
 }
 
 static char *parsePrefix(char *varName)
@@ -323,7 +324,7 @@ char *replacePre = NULL, *replaceVal = NULL;
 if (checkClusterMaster)
     {
     replacePre = "/scratch/";
-    replaceVal = "/cluster/bluearc/scratch/";
+    replaceVal = clusterMaster;
     }
 
 struct slName *db;
