@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1464 2008/09/25 22:22:19 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1465 2008/10/02 21:25:03 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5554,7 +5554,7 @@ printf("<TT><PRE>");
 printf("><A HREF=\"%s?%s&db=%s&position=%s",
        hgTracksName(), cartSidUrlString(cart), database, psl->tName);
 if (target == NULL)
-    printf(":%d-%d", psl->tStart, psl->tEnd);
+    printf(":%d-%d", psl->tStart+1, psl->tEnd);
 printf("\">%s:%d%c%d</A> %dbp %s %s\n",
        psl->tName, psl->tStart, psl->strand[0], psl->tEnd,
        productSize, fPrimer, rPrimer);
