@@ -2,10 +2,10 @@
 
 # hgShowEncodeSubmissions - generate web page listing projects with status and metadata
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeStatus/hgShowEncodeSubmissions,v 1.1 2008/09/30 00:08:56 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeStatus/hgShowEncodeSubmissions,v 1.2 2008/10/02 14:50:03 kate Exp $
 
 echo "Content-Type:text/html"
 echo ""
 echo "<HTML><BODY>"
-/cluster/bin/x86_64/hgsql -H encpipeline_prod -e 'select name, status, metadata from projects where status<>"new" order by status' | sed -e 's/TABLE/TABLE BGCOLOR="#FFFEE8" STYLE=\"border-collapse: collapse\" CELLPADDING=3/' -e 's/<TH/<TH STYLE=\"background:#D9E4F8\"/g' 
+/cluster/bin/x86_64/hgsql -H encpipeline_prod -e 'select name, status, metadata from projects where status<>"new" order by status,name' | sed -e 's/TABLE/TABLE BGCOLOR="#FFFEE8" STYLE=\"border-collapse: collapse\" CELLPADDING=3/' -e 's/<TH/<TH STYLE=\"background:#D9E4F8\"/g' 
 echo "</BODY></HTML>"
