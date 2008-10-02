@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.76 2008/09/24 17:43:44 angie Exp $"
+#	"$Id: mm9.txt,v 1.77 2008/10/02 23:39:41 hiram Exp $"
 #
 
 #######################################################################
@@ -8597,5 +8597,114 @@ do
   done
 done
 rm bed.tab
+
+#########################################################################
+### Affy MOE430 version 2 (DONE - 2008-09-25,10-02 - Hiram)
+    # Align probes from MOE430v2 chip.
+    #	Data was picked up manually from the Affymetrix WEB site
+    #	while logged in to the Affymetrix system, from the page:
+# http://www.affymetrix.com/support/technical/byproduct.affx?product=moe430-20
+    # found links to the following files:
+-rw-r--r--  1  51429336 Dec  1  2003 Mouse430_2.probe_fasta
+-rw-r--r--  1    163849 Dec  2  2003 Mouse430_2_control
+-rw-r--r--  1  89662619 Dec  2  2003 Mouse430_2.consensus
+-rw-r--r--  1  30999528 Dec  2  2003 Mouse430_2.target
+-rw-r--r--  1  24828845 Jun 12  2006 Mouse430_2.link.psl
+-rw-r--r--  1 119301329 Aug 18  2006 Mouse430_2_ortholog.csv
+-rw-rw-rw-  1  95467111 Jul  7 22:05 Mouse430_2.na26.annot.csv
+-rw-r--r--  1      3188 Jul  8 13:23 3prime-IVT.AFFX_README.NetAffx-CSV-Files.txt
+    #	placed into: /hive/data/genomes/mm9/bed/affyMOE430v2/affyData
+
+    #	The GNF folks pointed to data available at:
+    #	http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE10246
+
+    ssh memk
+#     cat ../affyData/Mouse430_2.probe_fasta \
+# 	| sed -e "s/probe:Mouse430_2:/MOE320v2_/; s/:.*//" > MOE430v2_probes.fa
+#     cat ../affyData/Mouse430_2.target \
+# 	| sed -e "s/target:Mouse430_2:/MOE320v2_/; s/;.*//" > MOE430v2_target.fa
+    mkdir /hive/data/genomes/mm9/bed/affyMOE430v2/run
+    cd /hive/data/genomes/mm9/bed/affyMOE430v2/run
+    mkdir psl
+
+    cut -f1 ../../../chrom.sizes > genome.list
+    cat ../affyData/Mouse430_2.consensus \
+	| sed -e "s/consensus:Mouse430_2://; s/;.*//" > affyMOE430v2.fa
+
+    ls -1 /hive/data/genomes/mm9/bed/affyMOE430v2/run/affyMOE430v2.fa \
+	> probe.list
+
+    cat << '_EOF_' > template
+#LOOP
+blat -fine -ooc=/scratch/data/mm9/11.ooc /scratch/data/mm9/nib/$(path1).nib $(path2) {check out line+ psl/$(root1).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 genome.list probe.list template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+    para time
+# Completed: 35 of 35 jobs
+# CPU time in finished jobs:      22222s     370.36m     6.17h    0.26d  0.001 y
+# IO & Wait Time:                   104s       1.74m     0.03h    0.00d  0.000 y
+# Average job time:                 638s      10.63m     0.18h    0.01d
+# Longest finished job:            1580s      26.33m     0.44h    0.02d
+# Submission to last job:          1589s      26.48m     0.44h    0.02d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create gnf1h.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl \
+	../affyMOE430v2.psl /dev/null
+
+    # Load probes and alignments from MOE430v2 into database.
+    ssh hgwdev
+    cd /hive/data/genomes/mm9/bed/affyMOE430v2
+    mkdir /projects/compbio/data/microarray/affyMOE430v2
+    cp -p run/affyMOE430v2.fa /projects/compbio/data/microarray/affyMOE430v2
+
+    ln -s /projects/compbio/data/microarray/affyMOE430v2/affyMOE430v2.fa \
+	/gbdb/hgFixed/affyProbes
+
+    hgLoadPsl mm9 affyMOE430v2.psl
+    hgLoadSeq mm9 /gbdb/hgFixed/affyProbes/affyMOE430v2.fa
+    #	45037 sequences
+
+    #	Create a similar formatted file to the one used in MOE430
+    zcat geoData/GSE10246_series_matrix.txt.gz \
+	| egrep "^\"1|source_name|Sample_title" \
+	| sed -e "s/\!Sample_title/#Probe Set/; s#\!Sample_source_name_ch1##;" \
+	| sed -e "s/\"//g" > gnfMOE430v2.AD.txt
+
+    #	create tables gnfMOE430v2AllExps and gnfMOE430v2All tables in hgFixed
+    hgGnfMicroarray gnfMOE430v2AllExps gnfMOE430v2All \
+	gnfMOE430v2.AD.txt -chip=MOE430v2
+    #	182 experiments
+    # Convert these to ratios using the median of medians of non-cancerous
+    # cell types as the denominator as so:
+    cd ~/src/hg/makeDb/hgRatioMicroarray
+    # create table gnfMOE430v2AllRatio in hgFixed from hgFixed.gnfMOE430v2All
+    #	and classification file ../hgMedianMicroarray/gnfMOE430v2.ra
+    hgRatioMicroarray gnfMOE430v2All gnfMOE430v2AllRatio \
+	-clump=../hgMedianMicroarray/gnfMOE430v2.ra
+    cd ../hgMedianMicroarray
+    # create tables gnfMOE430v2MedianRatio gnfMOE430v2MedianExps in hgFixed
+    hgMedianMicroarray hgFixed gnfMOE430v2AllRatio gnfMOE430v2AllExps \
+	gnfMOE430v2.ra gnfMOE430v2MedianRatio gnfMOE430v2MedianExps -minExps=1
+
+    # Also make a median version of the absolute measurements
+    #	create gnfMOE430v2Median
+    hgMedianMicroarray hgFixed gnfMOE430v2All gnfMOE430v2AllExps \
+	gnfMOE430v2.ra gnfMOE430v2Median gnfMOE430v2MedianExps -minExps=1
+
+    cd /hive/data/genomes/mm9/bed/affyMOE430v2
+    # Load up microarray track
+    hgMapMicroarray gnfMOE430v2.bed hgFixed.gnfMOE430v2MedianRatio \
+    	affyMOE430v2.psl
+    #	Loaded 45037 rows of expression data from hgFixed.gnfMOE430v2MedianRatio
+    #	Mapped 44106,  multiply-mapped 2087, missed 0, unmapped 931
+
+    hgLoadBed mm9 gnfMOE430v2 gnfMOE430v2.bed
+    #	Loaded 46193 elements of size 15
 
 #######################################
