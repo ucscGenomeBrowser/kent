@@ -53,10 +53,6 @@ void cartCheckout(struct cart **pCart);
 void cartEncodeState(struct cart *cart, struct dyString *dy);
 /* Add a CGI-encoded var=val&... string of all cart variables to dy. */
 
-void cartParseOverHash(struct cart *cart, char *contents);
-/* Parse cgi-style contents into cart's hash table.  This will
- * replace existing members of hash that have same name. */
-
 char *cartSessionVarName();
 /* Return name of CGI session ID variable. */
 
@@ -132,6 +128,14 @@ INLINE char *cartUsualStringDb(struct cart *cart, char *db, char *var, char *usu
 
 char *cartCgiUsualString(struct cart *cart, char *var, char *usual);
 /* Look for var in CGI, then in cart, if not found then return usual. */
+
+struct slName *cartOptionalSlNameList(struct cart *cart, char *var);
+/* Return slName list (possibly with multiple values for the same var) or
+ * NULL if not found. */
+
+void cartAddString(struct cart *cart, char *var, char *val);
+/* Add string valued cart variable (if called multiple times on same var,
+ * will create a list -- retrieve with cartOptionalSlNameList. */
 
 void cartSetString(struct cart *cart, char *var, char *val);
 /* Set string valued cart variable. */

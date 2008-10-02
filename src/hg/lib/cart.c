@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.95 2008/09/03 19:19:19 markd Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.96 2008/10/02 23:15:47 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -109,9 +109,11 @@ if (!sqlTableOk(conn, "sessionDb"))
 return TRUE;
 }
 
-void cartParseOverHash(struct cart *cart, char *contents)
-/* Parse cgi-style contents into a hash table.  This will
- * replace existing members of hash that have same name. */
+static void cartParseOverHash(struct cart *cart, char *contents)
+/* Parse cgi-style contents into a hash table.  This will *not*
+ * replace existing members of hash that have same name, so we can 
+ * support multi-select form inputs (same var name can have multiple
+ * values which will be in separate hashEl's). */
 {
 struct hash *hash = cart->hash;
 char *namePt, *dataPt, *nextNamePt;
@@ -128,7 +130,7 @@ while (namePt != NULL && namePt[0] != 0)
     if (nextNamePt != NULL)
          *nextNamePt++ = 0;
     cgiDecode(dataPt,dataPt,strlen(dataPt));
-    hashUpdateDynamicVal(hash, namePt, cloneString(dataPt));
+    hashAdd(hash, namePt, cloneString(dataPt));
     namePt = nextNamePt;
     }
 }
@@ -277,46 +279,80 @@ for (el = elList; el != NULL; el = el->next)
 }
 #endif /* GBROWSE */
 
+static void storeInOldVars(struct cart *cart, struct hash *oldVars, char *var)
+/* Store all cart hash elements for var into oldVars (if it exists). */
+{
+if (oldVars == NULL)
+    return;
+struct hashEl *hel = hashLookup(cart->hash, var);
+while (hel != NULL)
+    {
+    hashAdd(oldVars, var, cloneString(hel->val));
+    hel = hashLookupNext(hel);
+    }
+}
+
 static void loadCgiOverHash(struct cart *cart, struct hash *oldVars)
 /* Store CGI variables in cart. */
 {
 struct cgiVar *cv, *cvList = cgiVarList();
 char *booShadow = cgiBooleanShadowPrefix();
 int booSize = strlen(booShadow);
+char *multShadow = cgiMultListShadowPrefix();
+int multSize = strlen(multShadow);
 struct hash *booHash = newHash(8);
+struct hash *cgiHash = hashNew(11);
 
-/* First handle boolean variables and store in hash. */
+/* First handle boolean variables and store in cgiHash.  We store in a
+ * separate hash in order to distinguish between a list-variable's old
+ * values in the cart hash and new values from cgi. */
 for (cv = cvList; cv != NULL; cv = cv->next)
     {
     if (startsWith(booShadow, cv->name))
         {
 	char *booVar = cv->name + booSize;
 	char *val = (cgiVarExists(booVar) ? "1" : "0");
-	if (oldVars != NULL)
-	    {
-	    char *s = hashFindVal(cart->hash, booVar);
-	    if (s != NULL)
-	        hashAdd(oldVars, booVar, cloneString(s));
-	    }
-	cartSetString(cart, booVar, val);
+	storeInOldVars(cart, oldVars, booVar);
+	cartRemove(cart, booVar);
+	hashAdd(cgiHash, booVar, val);
 	hashAdd(booHash, booVar, NULL);
+	}
+    else if (startsWith(multShadow, cv->name))
+	{
+	/* This shadow variable enables us to detect when all inputs in
+	 * the multi-select box have been deselected. */
+	char *multVar = cv->name + multSize;
+	if (! cgiVarExists(multVar))
+	    {
+	    storeInOldVars(cart, oldVars, multVar);
+	    cartRemove(cart, multVar);
+	    hashAdd(cgiHash, multVar, NULL);
+	    }
 	}
     }
 
 /* Handle non-boolean vars. */
 for (cv = cgiVarList(); cv != NULL; cv = cv->next)
     {
-    if (!startsWith(booShadow, cv->name) && !hashLookup(booHash, cv->name))
+    if (! (startsWith(booShadow, cv->name) || hashLookup(booHash, cv->name) ||
+	   startsWith(multShadow, cv->name)) )
+
 	{
-	if (oldVars != NULL)
-	    {
-	    char *s = hashFindVal(cart->hash, cv->name);
-	    if (s != NULL)
-	        hashAdd(oldVars, cv->name, cloneString(s));
-	    }
-	cartSetString(cart, cv->name, cv->val);
+	storeInOldVars(cart, oldVars, cv->name);
+	cartRemove(cart, cv->name);
+	hashAdd(cgiHash, cv->name, cv->val);
 	}
     }
+
+/* Add new settings to cart (old values of these variables have been
+ * removed above). */
+struct hashEl *hel = hashElListHash(cgiHash);
+while (hel != NULL)
+    {
+    cartAddString(cart, hel->name, hel->val);
+    hel = hel->next;
+    }
+hashFree(&cgiHash);
 hashFree(&booHash);
 }
 
@@ -423,7 +459,7 @@ while (lineFileNext(lf, &line, &size))
 	if (val != NULL)
 	    {
 	    struct dyString *dy = dyStringSub(val, "\\n", "\n");
-	    cartSetString(cart, var, dy->string);
+	    cartAddString(cart, var, dy->string);
 	    dyStringFree(&dy);
 	    }
 	else if (var != NULL)
@@ -682,10 +718,12 @@ void cartRemove(struct cart *cart, char *var)
 /* Remove variable from cart. */
 {
 struct hashEl *hel = hashLookup(cart->hash, var);
-if (hel != NULL)
+while (hel != NULL)
     {
+    struct hashEl *nextHel = hashLookupNext(hel);
     freez(&hel->val);
     hashRemove(cart->hash, var);
+    hel = nextHel;
     }
 }
 
@@ -794,6 +832,30 @@ if (cart != NULL)
 return(usual);
 }
 
+struct slName *cartOptionalSlNameList(struct cart *cart, char *var)
+/* Return slName list (possibly with multiple values for the same var) or
+ * NULL if not found. */
+{
+struct slName *slnList = NULL;
+struct hashEl *hel = hashLookup(cart->hash, var);
+while (hel != NULL)
+    {
+    if (hel->val != NULL)
+	{
+	struct slName *sln = slNameNew(hel->val);
+	slAddHead(&slnList, sln);
+	}
+    hel = hashLookupNext(hel);
+    }
+return slnList;
+}
+
+void cartAddString(struct cart *cart, char *var, char *val)
+/* Add string valued cart variable (if called multiple times on same var,
+ * will create a list -- retrieve with cartOptionalSlNameList. */
+{
+hashAdd(cart->hash, var, cloneString(val));
+}
 
 void cartSetString(struct cart *cart, char *var, char *val)
 /* Set string valued cart variable. */
