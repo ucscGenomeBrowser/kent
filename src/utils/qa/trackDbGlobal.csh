@@ -58,6 +58,10 @@ endif
 
 set dbs=`getAssemblies.csh chromInfo hgwbeta \
   | egrep -v "getting|found" | egrep "."`
+if ( $status ) then
+  echo $dbs
+  exit 1
+endif
  
 # set file paths and URLs
 set today=`date +%Y-%m-%d`
