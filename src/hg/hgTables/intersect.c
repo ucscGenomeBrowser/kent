@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.43 2008/09/03 19:18:59 markd Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.44 2008/10/02 21:10:43 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -344,7 +344,14 @@ if (bedItem->chromStart < 0 || bedItem->chromEnd > chromSize)
 	     chromSize, (bedItem->name ? bedItem->name : ""),
 	     bedItem->chrom, bedItem->chromStart, bedItem->chromEnd);
 
-if (hasBlocks)
+if (bedItem->chromStart == bedItem->chromEnd)
+    {
+    /* Zero-size item: count overlap with adjacent bases. */
+    for (i = bedItem->chromStart-1;  i < bedItem->chromEnd+1;  i++)
+	if (i >= 0 && i < chromSize && bitReadOne(bits, i))
+	    count++;
+    }
+else if (hasBlocks)
     {
     for (i=0;  i < bedItem->blockCount;  i++)
 	{
@@ -426,7 +433,7 @@ for (bed = bedListIn;  bed != NULL;  bed = nextBed)
     else
 	length = (bed->chromEnd - bed->chromStart);
     if (length == 0)
-	length = 1;
+	length = 2;
     pctBasesOverlap = ((numBasesOverlap * 100.0) / length);
     if ((sameString("any", op) && (numBasesOverlap > 0)) ||
 	(sameString("none", op) && (numBasesOverlap == 0)) ||
@@ -441,6 +448,30 @@ for (bed = bedListIn;  bed != NULL;  bed = nextBed)
 slReverse(&intersectedBedList);
 return intersectedBedList;
 } 
+
+void expandZeroSize(struct bed *bedList, boolean hasBlocks, int chromSize)
+/* Expand any bed items with size=0 to size=2 so insertion points are not
+ * invisible when intersecting with items (as opposed to base-pair-wise). */
+{
+struct bed *bed;
+for (bed = bedList;  bed != NULL;  bed = bed->next)
+    if (bed->chromStart == bed->chromEnd)
+	{
+	if (bed->chromStart > 0)
+	    bed->chromStart--;
+	if (bed->chromEnd < chromSize)
+	    bed->chromEnd++;
+	if (hasBlocks)
+	    {
+	    if (bed->blockCount != 1)
+		errAbort("expandZeroItem: how did a zero-length bed (%s:%d-%d) with blocks "
+			 "get a blockCount of %d not 1?",
+			 bed->chrom, bed->chromStart, bed->chromEnd, bed->blockCount);
+	    bed->chromStarts[0] = 0;
+	    bed->blockSizes[0] = bed->chromEnd - bed->chromStart;
+	    }
+	}
+}
 
 static struct bed *intersectOnRegion(
 	struct sqlConnection *conn,	/* Open connection to database. */
@@ -487,6 +518,8 @@ if ((!sameString("any", op)) &&
 
 
 /* Load intersecting track into a bitmap. */
+if (!isBpWise)
+    expandZeroSize(bedList2, hti2->hasBlocks, chromSize);
 bedOrBits(bits2, chromSize, bedList2, hti2->hasBlocks, 0);
 
 /* Produce intersectedBedList. */
