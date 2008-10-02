@@ -7,7 +7,7 @@
 #include "hui.h"
 #include "pal.h"
 
-static char const rcsid[] = "$Id: hgPal.c,v 1.10 2008/09/26 18:48:34 braney Exp $";
+static char const rcsid[] = "$Id: hgPal.c,v 1.11 2008/10/02 23:59:40 braney Exp $";
 
 char *excludeVars[] = {"Submit", "submit", NULL,};
 
@@ -20,7 +20,10 @@ void doMiddle(struct cart *cart)
 /* Set up globals and make web page */
 {
 char *track = cartString(cart, "g");
+char *chrom = cartOptionalString(cart, "c");
 char *item = cartOptionalString(cart, "i");
+int start = cartInt(cart, "l");
+int end = cartInt(cart, "r");
 char *database;
 char *genome;
 
@@ -33,14 +36,17 @@ palOptions(cart, conn, addOurButtons, NULL);
 
 printf("For information about output data format see "
   "<A HREF=\"../goldenPath/help/hgTablesHelp.html#FASTA\">Table Browser User's Guide</A><BR>");
-struct hash *hash = newHash(1);
 
-/* we're only showing the one name */
-hashStore(hash, item);
+struct bed *bed;
+AllocVar(bed);
+bed->name = item;
+bed->chromStart = start;
+bed->chromEnd = end;
+bed->chrom = chrom;
+
 printf("<pre>");
-
 /* output the alignments */
-if (palOutPredsInHash(conn, cart, hash, track) == 0)
+if (palOutPredsInBeds(conn, cart, bed, track) == 0)
     printf("<B>No coding region in gene '%s'</B><BR>",item);
 
 cartHtmlEnd();
