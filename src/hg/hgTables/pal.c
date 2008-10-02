@@ -4,7 +4,7 @@
 #include "hgTables.h"
 #include "pal.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.12 2008/09/25 22:23:55 braney Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.13 2008/10/02 21:01:58 braney Exp $";
 
 boolean isPalCompatible(struct sqlConnection *conn,
     struct trackDb *track, char *table)
@@ -19,9 +19,11 @@ if (isEmpty(track->type))
 safecpy(setting, sizeof setting, track->type);
 char *type = nextWord(&p);
 
-if (sameString(type, "genePred"))
-    if (!sameString(track->tableName, table))
-	return FALSE;
+if (!sameString(type, "genePred"))
+    return FALSE;
+
+if (!sameString(track->tableName, table))
+    return FALSE;
 
 /* we also check for a maf table */
 struct slName *list = hTrackTablesOfType(conn, "wigMaf%%");

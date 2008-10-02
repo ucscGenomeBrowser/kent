@@ -832,7 +832,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&bedList, bed);
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 slReverse(&bedList);
 return bedList;
 }
