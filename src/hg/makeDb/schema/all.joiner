@@ -1530,6 +1530,11 @@ identifier igtcName
     $mm.seq.acc
     $mm.igtc.qName
 
+identifier kompName
+"KOMP (knockoutmouse.org) gene name"
+    $mm.komp.name
+    $mm.kompExtra.name
+
 
 # "Biological" Gene Names
 
