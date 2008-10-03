@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "hgSeq.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.36 2008/09/25 22:07:34 angie Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.37 2008/10/03 01:14:36 braney Exp $";
 
 int hgSeqChromSize(char *db, char *chromName)
 /* get chrom size if there's a database out there,
@@ -252,65 +252,6 @@ else
 hgSeqOptionsHtiCart(hti, cart);
 }
 
-static void maskRepeats(char *db, char *chrom, int chromStart, int chromEnd,
-			DNA *dna, boolean soft)
-/* Lower case bits corresponding to repeats. */
-{
-int rowOffset;
-struct bed *bedItem, *bedList;
-struct sqlConnection *conn;
-struct sqlResult *sr;
-char **row;
-struct hTableInfo *hti = NULL;
-
-conn = hAllocConn(db);
-hti = hFindTableInfo(db, chrom, "rmsk");
-
-if (hti == NULL)
-    {
-    char *repeatTable = cloneString("repeatTableNotFound");
-    if (sqlTableExists(conn,"repeats"))
-	{
-	freeMem(repeatTable);
-	repeatTable = cloneString("repeats");
-	}
-    else if (sqlTableExists(conn,"windowmaskerSdust"))
-	{
-	freeMem(repeatTable);
-	repeatTable = cloneString("windowmaskerSdust");
-	}
-    /* if there isn't a rmsk track, look for the repeats bed file */
-    bedList = hGetBedRange(db, repeatTable, chrom, chromStart, chromEnd, NULL);
-    for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
-	{
-	if (bedItem->chromEnd > chromEnd) bedItem->chromEnd = chromEnd;
-	if (bedItem->chromStart < chromStart) bedItem->chromStart = chromStart;
-	if (soft)
-	    toLowerN(dna+bedItem->chromStart-chromStart, bedItem->chromEnd - bedItem->chromStart);
-	else
-	    memset(dna+bedItem->chromStart-chromStart, 'n', bedItem->chromEnd - bedItem->chromStart);
-	}
-    }
-else
-    {
-    sr = hRangeQuery(conn, "rmsk", chrom, chromStart, chromEnd, NULL, &rowOffset);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	struct rmskOut ro;
-	rmskOutStaticLoad(row+rowOffset, &ro);
-	if (ro.genoEnd > chromEnd) ro.genoEnd = chromEnd;
-	if (ro.genoStart < chromStart) ro.genoStart = chromStart;
-	if (soft)
-	    toLowerN(dna+ro.genoStart-chromStart, ro.genoEnd - ro.genoStart);
-	else
-	    memset(dna+ro.genoStart-chromStart, 'n', ro.genoEnd - ro.genoStart);
-	}
-    sqlFreeResult(&sr);
-    }
-hFreeConn(&conn);
-}
-
-
 static void hgSeqConcatRegionsDb(char *db, char *chrom, char strand, char *name,
 			  int rCount, unsigned *rStarts, unsigned *rSizes,
 			  boolean *exonFlags, boolean *cdsFlags)
@@ -377,11 +318,9 @@ if (seqEnd <= seqStart)
 	   padding5, padding3);
     return;
     }
-rSeq = hDnaFromSeq(db, chrom, seqStart, seqEnd, dnaLower);
+rSeq = hDnaFromSeq(db, chrom, seqStart, seqEnd, dnaMixed);
 
 /* Handle casing and compute size of concatenated sequence */
-if (sameString(casing, "upper"))
-    touppers(rSeq->dna);
 cSize = 0;
 for (i=0;  i < rCount;  i++)
     {
@@ -400,11 +339,17 @@ cSeq->size = cSize;
 
 if (maskRep)
     {
-    if (sameString(repMasking, "lower"))
-	maskRepeats(db, chrom, seqStart, seqEnd, rSeq->dna, TRUE);
-    else
-	maskRepeats(db, chrom, seqStart, seqEnd, rSeq->dna, FALSE);
+    if (!sameString(repMasking, "lower"))
+	lowerToN(rSeq->dna, strlen(rSeq->dna));
     }
+else
+    {
+    if (sameString(casing, "upper"))
+	touppers(rSeq->dna);
+    else
+	tolowers(rSeq->dna);
+    }
+
 offset = 0;
 for (i=0;  i < rCount;  i++)
     {
