@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.454 2008/10/03 22:34:55 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.455 2008/10/03 23:02:11 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1330,29 +1330,44 @@ radioButton(varName, geneLabel, "both");
 radioButton(varName, geneLabel, "none");
 }
 
-void refGeneUI(struct trackDb *tdb)
-/* Put up gene ID track controls, with checkboxes */
+static void hideNoncodingOpt(struct trackDb *tdb)
+/* Put up hide-noncoding options. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+/* Put up option to hide noncoding elements. */
+printf("<B>Hide noncoding genes:</B> ");
+char varName[64];
+safef(varName, sizeof(varName), "%s.%s", tdb->tableName, HIDE_NONCODING_SUFFIX);
+cartMakeCheckBox(cart, varName, HIDE_NONCODING_DEFAULT);
+}
+
+void refGeneUI(struct trackDb *tdb)
+/* Put up refGene or xenoRefGene gene ID track controls, with checkboxes */
+{
+/* Figure out if OMIM database is available. */
 int omimAvail = 0;
-char query[128];
 if (sameString(tdb->tableName, "refGene"))
     {
+    struct sqlConnection *conn = hAllocConn(database);
+    char query[128];
     safef(query, sizeof(query), "select refLink.omimId from refLink, refGene where refLink.mrnaAcc = refGene.name and refLink.omimId != 0 limit 1");
     omimAvail = sqlQuickNum(conn, query);
+    hFreeConn(&conn);
     }
-hFreeConn(&conn);
 
+/* Put up label line  - boxes for gene, accession or maybe OMIM. */
 printf("<B>Label:</B> ");
 labelMakeCheckBox(tdb, "gene", "gene", FALSE);
 labelMakeCheckBox(tdb, "acc", "accession", FALSE);
-
 if (omimAvail != 0)
     {
     char sym[32];
     safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
     labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
     }
+printf("<BR>\n");
+
+/* Put up noncoding option and codon coloring stuff. */
+hideNoncodingOpt(tdb);
 baseColorDrawOptDropDown(cart, tdb);
 }
 

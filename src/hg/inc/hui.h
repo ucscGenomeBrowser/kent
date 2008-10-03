@@ -493,7 +493,6 @@ char *wiggleGridEnumToString(enum wiggleGridOptEnum x);
 void wiggleGridDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
-
 /*** Control of base/codon coloring code: ***/
 
 /* Drawing modes: values <= baseColorDrawOff don't render at base or codon
@@ -547,6 +546,9 @@ enum baseColorDrawOpt baseColorDrawOptEnabled(struct cart *cart,
 					      struct trackDb *tdb);
 /* Query cart & trackDb to determine what drawing mode (if any) is enabled. */
 
+/*** Other Gene Prediction type options: ***/
+#define HIDE_NONCODING_SUFFIX "hideNoncoding"
+#define HIDE_NONCODING_DEFAULT FALSE
 
 /*** Control of fancy indel display code: ***/
 

@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.37 2008/09/30 23:41:34 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.38 2008/10/03 23:02:10 kent Exp $";
 
 #define CHROM_COLORS 26
 
@@ -3662,6 +3662,9 @@ int grayIx = maxShade;
 struct genePredReader *gpr = NULL;
 struct genePred *gp = NULL;
 boolean nmdTrackFilter = sameString(trackDbSettingOrDefault(tg->tdb, "nmdFilter", "off"), "on");
+char varName[64];
+safef(varName, sizeof(varName), "%s.%s", table, HIDE_NONCODING_SUFFIX);
+boolean hideNoncoding = cartUsualBoolean(cart, varName, HIDE_NONCODING_DEFAULT);
 boolean doNmd = FALSE;
 char buff[256];
 enum baseColorDrawOpt drawOpt = baseColorDrawOff;
@@ -3678,7 +3681,8 @@ if (table != NULL)
 if (tg->itemAttrTbl != NULL)
     itemAttrTblLoad(tg->itemAttrTbl, conn, chrom, start, end);
 
-gpr = genePredReaderRangeQuery(conn, table, chrom, start, end, NULL);
+char *noncodingClause = (hideNoncoding ? "cdsStart != cdsEnd" : NULL);
+gpr = genePredReaderRangeQuery(conn, table, chrom, start, end, noncodingClause);
 while ((gp = genePredReaderNext(gpr)) != NULL)
     {
     if(doNmd && genePredNmdTarget(gp))
