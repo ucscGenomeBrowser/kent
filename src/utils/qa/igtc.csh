@@ -16,7 +16,8 @@ set day=""
 set counter=( 1 2 3 )
 set init=( 0 0 0 )
 set mice=( mm9 mm8 mm7 )
-set extFileId=($init)
+set extFileId=( $init )
+set extFileIdOld=( $init )
 
 set urlbeta="http://hgwbeta.cse.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
 set urldev="http://hgwdev.cse.ucsc.edu/cgi-bin/hgTracks?igtc=pack"
@@ -427,7 +428,6 @@ echo
 # (get from beta, as dev might not have it anymore)
 
 echo "remove old rows:"
-set extFileIdOld=( $init )
 foreach i ( $counter )
   set extFileIdOld[$i]=`hgsql -h hgwbeta -Ne 'SELECT id FROM extFile \
     WHERE name LIKE "genetrap.'$lastMonth%'"' $mice[$i]`
