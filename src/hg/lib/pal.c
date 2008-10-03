@@ -11,7 +11,7 @@
 #include "hPrint.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.8 2008/10/02 23:54:02 braney Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.9 2008/10/03 00:06:07 braney Exp $";
 
 #define hgtaCGIGeneMafTable "hgta_mafGeneMafTable" 
 #define hgtaJSGeneMafTable  "mafGeneMafTable" 
@@ -85,7 +85,7 @@ return outCount;
 
 int palOutPredsInBeds(struct sqlConnection *conn, struct cart *cart,
     struct bed *beds, char *table )
-/* output the alignments who's names and coords match a bed*/
+/* output the alignments whose names and coords match a bed*/
 {
 struct genePred *list = NULL;
 

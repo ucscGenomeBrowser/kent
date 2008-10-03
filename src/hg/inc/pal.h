@@ -6,7 +6,7 @@ void palOptions(struct cart *cart,
 
 int palOutPredsInBeds(struct sqlConnection *conn, struct cart *cart,
     struct bed *beds, char *table);
-/* output the alignments who's names and coords match a bed*/
+/* output the alignments whose names and coords match a bed*/
 
 int palOutPredList(struct sqlConnection *conn, struct cart *cart,
     struct genePred *list);
