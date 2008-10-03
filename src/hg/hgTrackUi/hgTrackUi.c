@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.453 2008/10/03 22:33:07 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.454 2008/10/03 22:34:55 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1330,7 +1330,7 @@ radioButton(varName, geneLabel, "both");
 radioButton(varName, geneLabel, "none");
 }
 
-void geneIdConfig2(struct trackDb *tdb)
+void refGeneUI(struct trackDb *tdb)
 /* Put up gene ID track controls, with checkboxes */
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -1353,12 +1353,6 @@ if (omimAvail != 0)
     safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
     labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
     }
-}
-
-void refGeneUI(struct trackDb *tdb)
-/* Put up refGene-specific controls */
-{
-geneIdConfig2(tdb);
 baseColorDrawOptDropDown(cart, tdb);
 }
 
