@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1465 2008/10/02 21:25:03 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1466 2008/10/03 17:37:26 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -782,7 +782,7 @@ void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabe
 /* Print custom URL specified in trackDb settings. */
 {
 char *url;
-char urlLabelSetting[10];
+char urlLabelSetting[32];
 
 /* check the url setting prefix and get the correct url setting from trackDb */
 if (sameWord(urlSetting, "url"))
@@ -19713,6 +19713,71 @@ else
 printTrackHtml(tdb);
 }
 
+void doKomp(struct trackDb *tdb, char *item)
+/* KnockOut Mouse Project */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char query[512];
+struct sqlResult *sr;
+char **row;
+genericHeader(tdb, item);
+char *extraTable = trackDbSettingOrDefault(tdb, "xrefTable", "kompExtra");
+boolean gotExtra = sqlTableExists(conn, extraTable);
+if (gotExtra)
+    {
+    safef(query, sizeof(query), "select alias from %s where name = '%s'",
+	  extraTable, item);
+    sr = sqlGetResult(conn, query);
+    char lastMgiId[16];
+    lastMgiId[0] = '\0';
+    puts("<TABLE BORDERWIDTH=0 CELLPADDING=0>");
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	char *words[3];
+	int wordCount = chopCommas(row[0], words);
+	if (wordCount >= 3)
+	    {
+	    char *mgiId = words[0], *center = words[1], *status = words[2];
+	    if (!sameString(mgiId, lastMgiId))
+		{
+		printf("<TR><TD colspan=2>");
+		printCustomUrl(tdb, mgiId, FALSE);
+		printf("</TD></TR>\n<TR><TD colspan=2>");
+		printOtherCustomUrl(tdb, mgiId, "mgiUrl", FALSE);
+		printf("</TD></TR>\n");
+		safecpy(lastMgiId, sizeof(lastMgiId), mgiId);
+		}
+	    printf("<TR><TD><B>Center: </B>%s</TD>\n", center);
+	    printf("<TD><B>Status: </B>%s</TD></TR>\n", status);
+	    }
+	}
+    puts("<TR><TD colspan=2>");
+    sqlFreeResult(&sr);
+    }
+safef(query, sizeof(query), "select chrom,chromStart,chromEnd from %s "
+      "where name = '%s'", tdb->tableName, item);
+sr = sqlGetResult(conn, query);
+char lastChr[32];
+int lastStart = -1;
+int lastEnd = -1;
+lastChr[0] = '\0';
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *chr = row[0];
+    int start = atoi(row[1]), end = atoi(row[2]);
+    if (!sameString(chr, lastChr) || start != lastStart || end != lastEnd)
+	printPos(chr, start, end, NULL, TRUE, item);
+    safecpy(lastChr, sizeof(lastChr), chr);
+    lastStart = start;
+    lastEnd = end;
+    }
+sqlFreeResult(&sr);
+if (gotExtra)
+    puts("</TD></TR></TABLE>");
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void doUCSFDemo(struct trackDb *tdb, char *item)
 {
 genericHeader(tdb, item);
@@ -21092,6 +21157,10 @@ else if (sameString("mammalPsg", track))
 else if (sameString("igtc", track))
     {
     doIgtc(tdb, item);
+    }
+else if (startsWith("komp", track))
+    {
+    doKomp(tdb, item);
     }
 else if (startsWith("dbRIP", track))
     {
