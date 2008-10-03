@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.452 2008/09/30 23:38:36 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.453 2008/10/03 22:33:07 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1315,33 +1315,18 @@ knownGeneIdConfig(tdb);
 knownGeneShowWhatUi(tdb);
 baseColorDrawOptDropDown(cart, tdb);
 }
+
 void geneIdConfig(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
 char varName[64];
 char *geneLabel;
-struct sqlConnection *conn = hAllocConn(database);
-int omimAvail = 0;
-char query[128];
-if (sameString(tdb->tableName, "refGene"))
-    {
-    safef(query, sizeof(query), "select refLink.omimId from refLink, refGene where refLink.mrnaAcc = refGene.name and refLink.omimId != 0 limit 1");
-    omimAvail = sqlQuickNum(conn, query);
-    }
-hFreeConn(&conn);
-
 safef(varName, sizeof(varName), "%s.label", tdb->tableName);
 geneLabel = cartUsualString(cart, varName, "gene");
 printf("<B>Label:</B> ");
 radioButton(varName, geneLabel, "gene");
 radioButton(varName, geneLabel, "accession");
-if (omimAvail != 0) 
-    {
-    radioButton(varName, geneLabel, "OMIM ID");
-    radioButton(varName, geneLabel, "all");
-    }
-else 
-    radioButton(varName, geneLabel, "both");
+radioButton(varName, geneLabel, "both");
 radioButton(varName, geneLabel, "none");
 }
 
