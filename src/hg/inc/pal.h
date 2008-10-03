@@ -4,6 +4,10 @@ void palOptions(struct cart *cart,
 	char *extraVar);
 /* output the options dialog (select MAF file, output options */
 
-int palOutPredsInHash(struct sqlConnection *conn, struct cart *cart,
-    struct hash *hash, char *table );
-/* output the alignments who's names match strings in hash */
+int palOutPredsInBeds(struct sqlConnection *conn, struct cart *cart,
+    struct bed *beds, char *table);
+/* output the alignments who's names and coords match a bed*/
+
+int palOutPredList(struct sqlConnection *conn, struct cart *cart,
+    struct genePred *list);
+/* output a list of genePreds in pal format */
