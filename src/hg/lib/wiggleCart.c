@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.15 2008/06/25 16:13:14 tdreszer Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.16 2008/10/03 17:11:53 tdreszer Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -74,6 +74,73 @@ wigDebugPrint("wigFetch");
 
 #endif
 
+static void wigMaxLimitsCompositeOverride(struct trackDb *tdb,char *name,double *min, double *max,double *tDbMin, double *tDbMax)
+/* If aquiring min/max for composite level wig cfg, look for trackDb.ra "settingsByView" */
+{
+if(tdbIsCompositeChild(tdb)
+&& startsWith(tdb->parent->tableName,name)
+&& name[strlen(tdb->parent->tableName)] == '.'            // Cfg at composite view level
+&& trackDbSetting(tdb->parent,"settingsByView") != NULL)  // settings specific to composite view level
+    {
+    char *words[8];
+    char *view=NULL;
+    char *limitsByView=NULL;
+    int cnt,ix;
+    if(subgroupFind(tdb,"view",&view)) // Find out view of tdb
+        {
+        // retrieve settingsByView from parent "limitsByView Signal:defaultViewLimits=5:500,viewLimits=0:20910 ..."
+        cnt = chopLine(cloneString(trackDbSetting(tdb->parent,"settingsByView")), words);
+        for(ix=0;ix<cnt;ix++)
+            {
+            if(startsWith(view,words[ix]) && words[ix][strlen(view)] == ':')
+                {
+                limitsByView = cloneString(words[ix]+(strlen(view)+1));
+                break;
+                }
+            }
+        freeMem(words[0]);
+        subgroupFree(&view);
+        }
+    if(limitsByView != NULL) // found a match
+        {
+        // parse limitsByView "defaultViewLimits=5:500,viewLimits=0:20910"
+        cnt = chopByChar(limitsByView,',',words,ArraySize(words));
+        for(ix=0;ix<cnt;ix++)
+            {
+            if(startsWith(VIEWLIMITS,words[ix]) && words[ix][strlen(VIEWLIMITS)] == '=')
+                {
+                // parse viewLimits "0:20910"
+                words[ix] = strSwapChar(words[ix]+(strlen(VIEWLIMITS)+1),':',0);
+                if(tDbMin != NULL && words[ix][0] != 0)
+                    {
+                    *tDbMin = atoi(words[ix]);
+                    words[ix] += strlen(words[ix])+1;
+                    }
+                if(tDbMax != NULL && words[ix][0] != 0)
+                    *tDbMax = atoi(words[ix]);
+                if(tDbMin != NULL && tDbMax != NULL)
+                    correctOrder(*tDbMin,*tDbMax);
+                }
+            if(startsWith(DEFAULTVIEWLIMITS,words[ix]) && words[ix][strlen(DEFAULTVIEWLIMITS)] == '=')
+                {
+                words[ix] = strSwapChar(words[ix]+(strlen(DEFAULTVIEWLIMITS)+1),':',0);
+                // parse defaultViewLimits "5:500"
+                if(words[ix][0] != 0)
+                    {
+                    assert(min != NULL && max != NULL);
+                    *min = atoi(words[ix]);
+                    words[ix] += strlen(words[ix])+1;
+                    if(words[ix][0] != 0)
+                        *max = atoi(words[ix]);
+                    correctOrder(*min,*max);
+                    }
+                }
+            }
+        freeMem(limitsByView);
+        }
+    }
+}
+
 /*****************************************************************************
  *	Min, Max Y viewing limits
  *	Absolute limits are defined on the trackDb type line
@@ -83,24 +150,22 @@ wigDebugPrint("wigFetch");
  *		or viewLimits from custom tracks
  *		(both identifiers work from either custom or trackDb)
  *****************************************************************************/
-void wigFetchMinMaxYWithCart(struct cart *theCart, struct trackDb *tdb, char *name, 
+void wigFetchMinMaxYWithCart(struct cart *theCart, struct trackDb *tdb, char *name,
     double *min, double *max, double *tDbMin, double *tDbMax, int wordCount, char **words)
 {
 char o4[MAX_OPT_STRLEN]; /* Option 4 - minimum Y axis value: .minY	*/
 char o5[MAX_OPT_STRLEN]; /* Option 5 - maximum Y axis value: .minY	*/
 char *minY_str = NULL;  /*	string from cart	*/
 char *maxY_str = NULL;  /*	string from cart	*/
-double minYc;   /*	value from cart */
-double maxYc;   /*	value from cart */
 double minY;    /*	from trackDb.ra words, the absolute minimum */
 double maxY;    /*	from trackDb.ra words, the absolute maximum */
-char * tdbDefault = cloneString(
-    trackDbSettingOrDefault(tdb, DEFAULTVIEWLIMITS, "NONE") );
+char * tdbDefault = cloneString(trackDbSettingOrDefault(tdb, DEFAULTVIEWLIMITS, "NONE"));
 double defaultViewMinY = 0.0;	/* optional default viewing window	*/
 double defaultViewMaxY = 0.0;	/* can be different than absolute min,max */
 char * viewLimits = (char *)NULL;
-boolean optionalViewLimitsExist = FALSE;	/* to decide if using these */
-
+char * settingsMin = (char *)NULL;
+char * settingsMax = (char *)NULL;
+boolean isBedGraph = (wordCount == 0 || sameString(words[0],"bedGraph"));
 
 /*	Allow the word "viewLimits" to be recognized too */
 if (sameWord("NONE",tdbDefault))
@@ -118,6 +183,13 @@ if ((tdb->settings != (char *)NULL) &&
 	viewLimits = cloneString((char *)hel->val);
     else if ((hel = hashLookup(tdb->settingsHash, DEFAULTVIEWLIMITS)) != NULL)
 	viewLimits = cloneString((char *)hel->val);
+    if(isBedGraph)
+        {
+        if ((hel = hashLookup(tdb->settingsHash, MIN_LIMIT)) != NULL)
+        settingsMin = cloneString((char *)hel->val);
+        if ((hel = hashLookup(tdb->settingsHash, MAX_LIMIT)) != NULL)
+        settingsMax = cloneString((char *)hel->val);
+        }
     }
 
 /*	If no viewLimits from trackDb, if in settings, use them.  */
@@ -134,25 +206,60 @@ if (sameWord("NONE",tdbDefault) && (viewLimits != (char *)NULL))
  *	type wig min max
  *	where min and max are floating point numbers (integers OK)
  */
-*min = minY = DEFAULT_MIN_Yv;
-*max = maxY = DEFAULT_MAX_Yv;
-
-/*	Let's see what trackDb has to say about these things,
- *	these words come from the trackDb.ra type wig line:
- *	type wig <min> <max>
- */
-switch (wordCount)
+if(isBedGraph)
     {
-	case 3:
-	    maxY = atof(words[2]);
-	    minY = atof(words[1]);
-	    break;
-	case 2:
-	    minY = atof(words[1]);
-	    break;
-	default:
-	    break;
-    } 
+    *min = minY = DEFAULT_MIN_BED_GRAPH;
+    *max = maxY = DEFAULT_MAX_BED_GRAPH;
+    }
+else
+    {
+    *min = minY = DEFAULT_MIN_Yv;
+    *max = maxY = DEFAULT_MAX_Yv;
+    }
+
+if(isBedGraph)
+    {
+    char * tdbMin = cloneString(trackDbSettingOrDefault(tdb, MIN_LIMIT, "NONE"));
+    char * tdbMax = cloneString(trackDbSettingOrDefault(tdb, MAX_LIMIT, "NONE"));
+    if (sameWord("NONE",tdbMin))
+        {
+        if (settingsMin != (char *)NULL)
+            minY = sqlDouble(settingsMin);
+        }
+    else
+        minY = sqlDouble(tdbMin);
+
+    if (sameWord("NONE",tdbMax))
+        {
+        if (settingsMax != (char *)NULL)
+            maxY = sqlDouble(settingsMax);
+        }
+    else
+        maxY = sqlDouble(tdbMax);
+    freeMem(tdbMax);
+    freeMem(tdbMin);
+    freeMem(settingsMax);
+    freeMem(settingsMin);
+    }
+else
+    {
+    /*	Let's see what trackDb has to say about these things,
+    *	these words come from the trackDb.ra type wig line:
+    *	type wig <min> <max>
+    */
+    switch (wordCount)
+        {
+        case 3:
+            maxY = atof(words[2]);
+            minY = atof(words[1]);
+            break;
+        case 2:
+            minY = atof(words[1]);
+            break;
+        default:
+            break;
+        }
+    }
 correctOrder(minY,maxY);
 
 /*	Check to see if custom track viewLimits will override the
@@ -171,23 +278,23 @@ if (viewLimits)
     double viewMin;
     double viewMax;
     if (wordCount == 2)
-	{
-	viewMin = atof(words[0]);
-	viewMax = atof(words[1]);
-	/*	make sure they are in order	*/
-	correctOrder(viewMin,viewMax);
+        {
+        viewMin = atof(words[0]);
+        viewMax = atof(words[1]);
+        /*	make sure they are in order	*/
+        correctOrder(viewMin,viewMax);
 
-	/*	and they had better be different	*/
-	if (! ((viewMax - viewMin) > 0.0))
-	    {
-	    viewMax = viewMin = 0.0;	/* failed the test */
-	    }
-	else
-	    {
-	    minY = min(minY, viewMin);
-	    maxY = max(maxY, viewMax);
-	    }
-	}
+        /*	and they had better be different	*/
+        if (! ((viewMax - viewMin) > 0.0))
+            {
+            viewMax = viewMin = 0.0;	/* failed the test */
+            }
+        else
+            {
+            minY = min(minY, viewMin);
+            maxY = max(maxY, viewMax);
+            }
+        }
     }
 
 /*	return if OK to do that	*/
@@ -195,6 +302,8 @@ if (tDbMin)
     *tDbMin = minY;
 if (tDbMax)
     *tDbMax = maxY;
+*min = minY;
+*max = maxY;
 
 /*	See if a default viewing window is specified in the trackDb.ra file
  *	Yes, it is true, this parsing is paranoid and verifies that the
@@ -208,21 +317,27 @@ if (differentWord("NONE",tdbDefault))
     char *sep = ":";
     int wordCount = chopString(tdbDefault,sep,words,ArraySize(words));
     if (wordCount == 2)
-	{
-	defaultViewMinY = atof(words[0]);
-	defaultViewMaxY = atof(words[1]);
-	/*	make sure they are in order	*/
-	correctOrder(defaultViewMinY,defaultViewMaxY);
+        {
+        defaultViewMinY = atof(words[0]);
+        defaultViewMaxY = atof(words[1]);
+        /*	make sure they are in order	*/
+        correctOrder(defaultViewMinY,defaultViewMaxY);
 
-	/*	and they had better be different	*/
-	if (! ((defaultViewMaxY - defaultViewMinY) > 0.0))
-	    {
-	    defaultViewMaxY = defaultViewMinY = 0.0;	/* failed the test */
-	    }
-	else
-	    optionalViewLimitsExist = TRUE;
-	}
+        /*	and they had better be different	*/
+        if (! ((defaultViewMaxY - defaultViewMinY) > 0.0))
+            {
+            defaultViewMaxY = defaultViewMinY = 0.0;	/* failed the test */
+            }
+        else
+            {
+            *min = defaultViewMinY;
+            *max = defaultViewMaxY;
+            }
+        }
     }
+
+// One more step: If we are loading settings for a composite view, then look for overrides
+wigMaxLimitsCompositeOverride(tdb,name,min,max,tDbMin,tDbMax);
 
 /*	And finally, let's see if values are available in the cart */
 snprintf( o4, sizeof(o4), "%s.%s", name, MIN_Y);
@@ -232,31 +347,10 @@ maxY_str = cartOptionalString(theCart, o5);
 
 if (minY_str && maxY_str)	/*	if specified in the cart */
     {
-    minYc = atof(minY_str);	/*	try to use them	*/
-    maxYc = atof(maxY_str);
+    *min = max( minY, atof(minY_str));
+    *max = min( maxY, atof(maxY_str));
+    correctOrder(*min,*max);
     }
-else
-    {
-    if (optionalViewLimitsExist)	/* if specified in trackDb	*/
-	{
-	minYc = defaultViewMinY;	/*	try to use these	*/
-	maxYc = defaultViewMaxY;
-	}
-    else
-	{
-	minYc = minY;		/* no cart, no other settings, use the	*/
-	maxYc = maxY;		/* values from the trackDb type line	*/
-	}
-    }
-
-
-/*	Finally, clip the possible user requested settings to those
- *	limits within the range of the trackDb type line
- */
-*min = max( minY, minYc);
-*max = min( maxY, maxYc);
-/*      And ensure their order is correct     */
-correctOrder(*min,*max);
 
 freeMem(tdbDefault);
 freeMem(viewLimits);
@@ -409,7 +503,7 @@ return(cloneString(ret));
 }
 
 /*	horizontalGrid - off by default **********************************/
-enum wiggleGridOptEnum wigFetchHorizontalGridWithCart(struct cart *theCart, 
+enum wiggleGridOptEnum wigFetchHorizontalGridWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name,char **optString)
 {
 char *Default = wiggleGridEnumToString(wiggleHorizontalGridOff);
@@ -434,7 +528,7 @@ return(ret);
 }	/*	enum wiggleGridOptEnum wigFetchHorizontalGridWithCart()	*/
 
 /******	autoScale - on by default ***************************************/
-enum wiggleScaleOptEnum wigFetchAutoScaleWithCart(struct cart *theCart, 
+enum wiggleScaleOptEnum wigFetchAutoScaleWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
 {
 char *Default = wiggleScaleEnumToString(wiggleScaleAuto);
@@ -469,7 +563,7 @@ return(ret);
 }	/*	enum wiggleScaleOptEnum wigFetchAutoScaleWithCart()	*/
 
 /******	graphType - line(points) or bar graph *****************************/
-enum wiggleGraphOptEnum wigFetchGraphTypeWithCart(struct cart *theCart, 
+enum wiggleGraphOptEnum wigFetchGraphTypeWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
 {
 char *Default = wiggleGraphEnumToString(wiggleGraphBar);
@@ -494,7 +588,7 @@ return(ret);
 }	/*	enum wiggleGraphOptEnum wigFetchGraphTypeWithCart()	*/
 
 /******	windowingFunction - Maximum by default **************************/
-enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart(struct cart *theCart, 
+enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
 {
 char *Default = wiggleWindowingEnumToString(wiggleWindowingMax);
@@ -511,7 +605,7 @@ windowingFunction = cloneString(cartOptionalString(theCart, option));
  */
 if (!windowingFunction)
     {
-    char * tdbDefault = 
+    char * tdbDefault =
 	trackDbSettingOrDefault(tdb, WINDOWINGFUNCTION, Default);
 
     freeMem(windowingFunction);
@@ -546,7 +640,7 @@ return(ret);
 }	/*	enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart() */
 
 /******	smoothingWindow - OFF by default **************************/
-enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart(struct cart *theCart, 
+enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
 {
 char * Default = wiggleSmoothingEnumToString(wiggleSmoothingOff);
@@ -559,7 +653,7 @@ smoothingWindow = cloneString(cartOptionalString(theCart, option));
 
 if (!smoothingWindow) /* if nothing from the Cart, check trackDb/settings */
     {
-    char * tdbDefault = 
+    char * tdbDefault =
 	trackDbSettingOrDefault(tdb, SMOOTHINGWINDOW, Default);
 
 
@@ -594,7 +688,7 @@ return(ret);
 }	/*	enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart()	*/
 
 /*	yLineMark - off by default **********************************/
-enum wiggleYLineMarkEnum wigFetchYLineMarkWithCart(struct cart *theCart, 
+enum wiggleYLineMarkEnum wigFetchYLineMarkWithCart(struct cart *theCart,
     struct trackDb *tdb, char *name, char **optString)
 {
 char *Default = wiggleYLineMarkEnumToString(wiggleYLineMarkOff);
@@ -679,194 +773,8 @@ freeMem(tdbDefault);
  *		or viewLimits from custom tracks
  *		(both identifiers work from either custom or trackDb)
  *****************************************************************************/
-void wigFetchMinMaxLimitsWithCart(struct cart *theCart, struct trackDb *tdb, char *name, 
+void wigFetchMinMaxLimitsWithCart(struct cart *theCart, struct trackDb *tdb, char *name,
     double *min, double *max,double *tDbMin, double *tDbMax)
 {
-char o4[MAX_OPT_STRLEN]; /* Option 4 - minimum Y axis value: .minY	*/
-char o5[MAX_OPT_STRLEN]; /* Option 5 - maximum Y axis value: .minY	*/
-char *minY_str = NULL;  /*	string from cart	*/
-char *maxY_str = NULL;  /*	string from cart	*/
-double minYc;   /*	value from cart */
-double maxYc;   /*	value from cart */
-double minY;    /*	from trackDb.ra minLimit, the absolute minimum */
-double maxY;    /*	from trackDb.ra maxLimit, the absolute maximum */
-char * tdbMin = cloneString(
-    trackDbSettingOrDefault(tdb, MIN_LIMIT, "NONE") );
-char * tdbMax = cloneString(
-    trackDbSettingOrDefault(tdb, MAX_LIMIT, "NONE") );
-char * tdbDefault = cloneString(
-    trackDbSettingOrDefault(tdb, DEFAULTVIEWLIMITS, "NONE") );
-double defaultViewMinY = 0.0;	/* optional default viewing window	*/
-double defaultViewMaxY = 0.0;	/* can be different than absolute min,max */
-char * viewLimits = (char *)NULL;
-char * settingsMin = (char *)NULL;
-char * settingsMax = (char *)NULL;
-boolean optionalViewLimitsExist = FALSE;	/* to decide if using these */
-
-/*	Allow the word "viewLimits" to be recognized too */
-if (sameWord("NONE",tdbDefault))
-    {
-    freeMem(tdbDefault);
-    tdbDefault = cloneString(trackDbSettingOrDefault(tdb, VIEWLIMITS, "NONE"));
-    }
-
-/*	And check for either viewLimits in custom track settings */
-if ((tdb->settings != (char *)NULL) &&
-    (tdb->settingsHash != (struct hash *)NULL))
-    {
-    struct hashEl *hel;
-    if ((hel = hashLookup(tdb->settingsHash, VIEWLIMITS)) != NULL)
-	viewLimits = cloneString((char *)hel->val);
-    else if ((hel = hashLookup(tdb->settingsHash, DEFAULTVIEWLIMITS)) != NULL)
-	viewLimits = cloneString((char *)hel->val);
-    if ((hel = hashLookup(tdb->settingsHash, MIN_LIMIT)) != NULL)
-	settingsMin = cloneString((char *)hel->val);
-    if ((hel = hashLookup(tdb->settingsHash, MAX_LIMIT)) != NULL)
-	settingsMax = cloneString((char *)hel->val);
-    }
-
-/*	If no viewLimits from trackDb, if in settings, use them.  */
-if (sameWord("NONE",tdbDefault) && (viewLimits != (char *)NULL))
-    {
-    freeMem(tdbDefault);
-    tdbDefault = cloneString(viewLimits);
-    }
-
-/*	Assume last resort defaults, these should never be used
- *	The only case they would be used is if trackDb settings are not
- *	there or can not be parsed properly
- */
-*min = minY = DEFAULT_MIN_BED_GRAPH;
-*max = maxY = DEFAULT_MAX_BED_GRAPH;
-
-/*	Let's see if trackDb, or settings from custom track,
- *	specifies a min,max
- */
-if (sameWord("NONE",tdbMin))
-    {
-    if (settingsMin != (char *)NULL)
-	minY = sqlDouble(settingsMin);
-    }
-else
-    minY = sqlDouble(tdbMin);
-
-if (sameWord("NONE",tdbMax))
-    {
-    if (settingsMax != (char *)NULL)
-	maxY = sqlDouble(settingsMax);
-    }
-else
-    maxY = sqlDouble(tdbMax);
-
-correctOrder(minY,maxY);
-
-/*	Check to see if custom track viewLimits will override the
- *	track type wig limits.  When viewLimits are greater than the
- *	type wig limits, use the viewLimits.  This is necessary because
- *	the custom track type wig limits are exactly at the limits of
- *	the data input and thus it is better if viewLimits are set
- *	outside the limits of the data so it will look better in the
- *	graph.
- */
-if (viewLimits)
-    {
-    char *words[2];
-    char *sep = ":";
-    int wordCount = chopString(viewLimits,sep,words,ArraySize(words));
-    double viewMin;
-    double viewMax;
-    if (wordCount == 2)
-	{
-	viewMin = atof(words[0]);
-	viewMax = atof(words[1]);
-	/*	make sure they are in order	*/
-	correctOrder(viewMin,viewMax);
-
-	/*	and they had better be different	*/
-	if (! ((viewMax - viewMin) > 0.0))
-	    {
-	    viewMax = viewMin = 0.0;	/* failed the test */
-	    }
-	else
-	    {
-	    minY = min(minY, viewMin);
-	    maxY = max(maxY, viewMax);
-	    }
-	}
-    }
-
-/*	return if OK to do that	*/
-if (tDbMin)
-    *tDbMin = minY;
-if (tDbMax)
-    *tDbMax = maxY;
-
-/*	See if a default viewing window is specified in the trackDb.ra file
- *	Yes, it is true, this parsing is paranoid and verifies that the
- *	input values are valid in order to be used.  If they are no
- *	good, they are as good as not there and the result is a pair of
- *	zeros and they are not used.
- */
-if (differentWord("NONE",tdbDefault))
-    {
-    char *words[2];
-    char *sep = ":";
-    int wordCount = chopString(tdbDefault,sep,words,ArraySize(words));
-    if (wordCount == 2)
-	{
-	defaultViewMinY = atof(words[0]);
-	defaultViewMaxY = atof(words[1]);
-	/*	make sure they are in order	*/
-	correctOrder(defaultViewMinY,defaultViewMaxY);
-
-	/*	and they had better be different	*/
-	if (! ((defaultViewMaxY - defaultViewMinY) > 0.0))
-	    {
-	    defaultViewMaxY = defaultViewMinY = 0.0;	/* failed the test */
-	    }
-	else
-	    optionalViewLimitsExist = TRUE;
-	}
-    }
-
-/*	And finally, let's see if values are available in the cart */
-snprintf( o4, sizeof(o4), "%s.%s", name, MIN_Y);
-snprintf( o5, sizeof(o5), "%s.%s", name, MAX_Y);
-minY_str = cartOptionalString(theCart, o4);
-maxY_str = cartOptionalString(theCart, o5);
-
-if (minY_str && maxY_str)	/*	if specified in the cart */
-    {
-    minYc = atof(minY_str);	/*	try to use them	*/
-    maxYc = atof(maxY_str);
-    }
-else
-    {
-    if (optionalViewLimitsExist)	/* if specified in trackDb	*/
-	{
-	minYc = defaultViewMinY;	/*	try to use these	*/
-	maxYc = defaultViewMaxY;
-	}
-    else
-	{
-	minYc = minY;		/* no cart, no other settings, use the	*/
-	maxYc = maxY;		/* values from the trackDb type line	*/
-	}
-    }
-
-/*	Finally, clip the possible user requested settings to those
- *	limits within the range of the trackDb type line
- */
-*min = max( minY, minYc);
-*max = min( maxY, maxYc);
-/*      And ensure their order is correct     */
-correctOrder(*min,*max);
-
-/*	possibly cloned strings, free when non null	*/
-freeMem(tdbDefault);
-freeMem(tdbMax);
-freeMem(tdbMin);
-freeMem(viewLimits);
-freeMem(settingsMax);
-freeMem(settingsMin);
+wigFetchMinMaxYWithCart(theCart,tdb,name,min,max,tDbMin,tDbMax,0,NULL);
 }	/*	void wigFetchMinMaxYWithCart()	*/
