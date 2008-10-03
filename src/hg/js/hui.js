@@ -106,6 +106,8 @@ function compositeCfgUpdateSubtrackCfgs(inp)
 
 function compositeCfgRegisterOnchangeAction(prefix)
 {
+// After composite level cfg settings written to HTML it is necessary to go back and
+// make sure that each time they change, any matching subtrack level cfg setting are changed.
     var count=0;
     var list = inputArrayThatMatches("","name",prefix,"");
     for (var ix=0;ix<list.length;ix++) {
