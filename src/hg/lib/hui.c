@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.123 2008/09/30 00:03:53 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.124 2008/10/03 17:19:27 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add"
@@ -2431,11 +2431,11 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
 
             char *id = checkBoxIdMakeForTrack(subtrack,(dimensions[dimX]?dimensions[dimX]->tag:NULL),
                                                        (dimensions[dimY]?dimensions[dimY]->tag:NULL),membership); // view is known tag
-            printf("<TR valign='center' BGCOLOR=\"%s\"",colors[colorIx]);
+            printf("<TR valign='top' BGCOLOR=\"%s\"",colors[colorIx]);
             if(useDragAndDrop)
                 printf(" class='trDraggable' title='Drag to Reorder' onmouseover=\"hintForDraggableRow(this)\"");
 
-            printf(" id=\"tr_%s\" valign=\"CENTER\" nowrap>\n<TD>",id);
+            printf(" id=\"tr_%s\" nowrap>\n<TD>",id);
             cgiMakeCheckBoxIdAndJS(htmlIdentifier,alreadySet,id,"onclick=\"matSubtrackCbClick(this);\" onmouseover=\"this.style.cursor='default';\"");
             if(sortOrder != NULL || useDragAndDrop)
                 {
@@ -2476,12 +2476,10 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             printf ("<TD nowrap='true'>&nbsp;%s", subtrack->longLabel);
             if(cType != cfgNone)
                 {
-                char prefix[256];
                 ix = stringArrayIx("view", membership->subgroups, membership->count);
-                safef(prefix,sizeof(prefix),"%s.%s",subtrack->tableName,membership->membership[ix]);
-                safef(htmlIdentifier, sizeof(htmlIdentifier), "Configure subtrack %s", subtrack->shortLabel);
+                safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.%s",subtrack->tableName,membership->membership[ix]);
                 printf("<DIV id=\"div.%s.cfg\" style=\"display:none\">\n",subtrack->tableName);
-                cfgByCfgType(cType,db,cart,subtrack,prefix,htmlIdentifier,TRUE);
+                cfgByCfgType(cType,db,cart,subtrack,htmlIdentifier,"Subtrack",TRUE);
                 puts("</DIV>\n");
                 }
 #define SCHEMA_LINK "<TD>&nbsp;<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=_BLANK title='View table schema'>schema</A>&nbsp;\n"
@@ -2592,7 +2590,6 @@ char *yLineMarkOnOff;   /*  user defined Y marker line to draw */
 double yLineMark;       /*  from trackDb or cart    */
 int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int minHeightPixels = MIN_HEIGHT_PER;
-boolean bedGraph = FALSE;   /*  working on bedGraph type ? */
 
 cfgBeginBoxAndTitle(boxed, title);
 
@@ -2600,13 +2597,7 @@ wigFetchMinMaxPixelsWithCart(cart,tdb,name,&minHeightPixels, &maxHeightPixels, &
 typeLine = cloneString(tdb->type);
 wordCount = chopLine(typeLine,words);
 
-if (sameString(words[0],"bedGraph"))
-    bedGraph = TRUE;
-
-if (bedGraph)
-    wigFetchMinMaxLimitsWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY);
-else
-    wigFetchMinMaxYWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
+wigFetchMinMaxYWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 freeMem(typeLine);
 
 (void) wigFetchHorizontalGridWithCart(cart,tdb,name, &horizontalGrid);
@@ -2618,11 +2609,7 @@ freeMem(typeLine);
 wigFetchYLineMarkValueWithCart(cart,tdb,name, &yLineMark);
 
 puts("<TABLE BORDER=0><TR><TD ALIGN=LEFT>");
-
-if (bedGraph)
-    printf("<b>Type of graph:&nbsp;</b>");
-else
-    printf("<b>Type of graph:&nbsp;</b>");
+printf("<b>Type of graph:&nbsp;</b>");
 snprintf( option, sizeof(option), "%s.%s", name, LINEBAR );
 wiggleGraphDropDown(option, lineBar);
 puts("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>");
@@ -3163,26 +3150,46 @@ if (trackDbSetting(tdb, CONS_WIGGLE) != NULL)
 cfgEndBox(boxed);
 }
 
-enum trackVisibility visCompositeViewDefault(struct trackDb *parentTdb,char *view)
-/* returns the default track visibility of particular view within a composite track */
+static boolean compositeViewCfgExpandedByDefault(struct trackDb *parentTdb,char *view,char **visibility)
+/* returns true if the view cfg is expanded by default.  Optioanally allocates string of view setting (eg 'dense') */
 {
 int cnt,ix;
+boolean expanded = FALSE;
+if ( visibility != NULL )
+    *visibility = cloneString(hStringFromTv(parentTdb->visibility));
 char *setting = trackDbSetting(parentTdb, "visibilityViewDefaults");
 if(setting == NULL)
-    return parentTdb->visibility;
+    return FALSE;
+
 char *target = cloneString(setting);
-enum trackVisibility vis = tvHide;
 char *words[64];
 cnt = chopLine(target, words);
 for(ix=0;ix<cnt;ix++)
     {
     if(startsWith(view,words[ix]) && words[ix][strlen(view)] == '=')
         {
-        vis = hTvFromString(words[ix] + strlen(view) + 1);
+        if (words[ix][strlen(words[ix]) - 1] == '+')
+            {
+            expanded = TRUE;
+            if ( visibility != NULL )
+                words[ix][strlen(words[ix]) - 1] = 0;
+            }
+        if ( visibility != NULL )
+            *visibility = cloneString(words[ix] + strlen(view) + 1);
         break;
         }
     }
 freeMem(target);
+return expanded;
+}
+
+enum trackVisibility visCompositeViewDefault(struct trackDb *parentTdb,char *view)
+/* returns the default track visibility of particular view within a composite track */
+{
+char *visibility = NULL;
+(void)compositeViewCfgExpandedByDefault(parentTdb,view,&visibility);
+enum trackVisibility vis = hTvFromString(visibility);
+freeMem(visibility);
 return vis;
 }
 
@@ -3215,6 +3222,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
             continue;
         matchedSubtracks[ix] = subtrack;
         configurable[ix] = (char)cfgTypeFromTdb(subtrack);
+        // Need to find maximum wig range
         if(configurable[ix] != cfgNone)
             makeCfgRows = TRUE;
         break;
@@ -3250,11 +3258,14 @@ if(makeCfgRows)
         {
         if(matchedSubtracks[ix] != NULL)
             {
-            printf("<TR id=\"tr_cfg_%s\" style=\"display:none\"><TD>&nbsp;&nbsp;&nbsp;&nbsp;</TD><TD>",membersOfView->names[ix]);
+            printf("<TR id=\"tr_cfg_%s\"",membersOfView->names[ix]);
+            if(!compositeViewCfgExpandedByDefault(parentTdb,membersOfView->names[ix],NULL))
+                printf(" style=\"display:none\"");
+            printf("><TD>&nbsp;&nbsp;&nbsp;&nbsp;</TD><TD>");
             safef(objName, sizeof(objName), "%s.%s", parentTdb->tableName,membersOfView->names[ix]);
             cfgByCfgType(configurable[ix],db,cart,matchedSubtracks[ix],objName,membersOfView->values[ix],TRUE);
             if(configurable[ix] != cfgNone)
-                printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\");</script>",objName);
+                printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>",objName);
             }
         }
     }
@@ -3732,7 +3743,7 @@ char *compositeViewControlNameFromTdb(struct trackDb *tdb)
 char *stView;
 char *name;
 char *rootName = NULL;
-if(subgroupFind(tdb,"view",&stView))
+if(tdbIsCompositeChild(tdb) && subgroupFind(tdb,"view",&stView))
     {
     if(trackDbSettingOn(tdb, "configurable"))
         rootName = tdb->tableName;
