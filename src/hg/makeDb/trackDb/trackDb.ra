@@ -3930,7 +3930,7 @@ searchPriority 50
 
 searchTable genscan
 searchType genePred
-termRegex [[:alnum:]_]+\.[0-9]+
+termRegex [[:alnum:]_?]+\.?[0-9]+
 searchPriority 50
 
 searchTable twinscan
