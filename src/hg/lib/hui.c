@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.125 2008/10/03 19:19:13 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.126 2008/10/04 01:22:18 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add"
@@ -1925,13 +1925,8 @@ if(found[strlen(name)] != '=')
     return FALSE;
 if(value != (void*)NULL)
     {
-    char *safe1stWord = cloneString(found+strlen(name)+1);
-    if(safe1stWord != NULL && *safe1stWord != 0)
-        {
-        *value = cloneString(firstWordInLine(safe1stWord));
-        freeMem(safe1stWord);
-        }
-    else
+    *value = firstWordInLine(cloneString(skipLeadingSpaces(found+strlen(name)+1)));
+    if(*value == NULL)
         return FALSE;
     }
 return TRUE;
@@ -3749,10 +3744,10 @@ else
 char *compositeViewControlNameFromTdb(struct trackDb *tdb)
 /* Returns a string with the composite view control name if one exists */
 {
-char *stView;
-char *name;
+char *stView   = NULL;
+char *name     = NULL;
 char *rootName = NULL;
-if(subgroupFind(tdb,"view",&stView) && trackDbSetting(tdb, "subTrack") != NULL)
+if(tdbIsCompositeChild(tdb) == TRUE && subgroupFind(tdb,"view",&stView) && trackDbSetting(tdb, "subTrack") != NULL)
     {
     if(trackDbSettingOn(tdb, "configurable"))
         rootName = tdb->tableName;
