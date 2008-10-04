@@ -10,7 +10,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at: ~/kent/src/hg/encode/encodeUnload/doEncodeUnload.pl
 #
-# $Id: doEncodeUnload.pl,v 1.2 2008/08/26 00:17:59 larrym Exp $
+# $Id: doEncodeUnload.pl,v 1.3 2008/10/04 00:02:35 mikep Exp $
 
 use warnings;
 use strict;
@@ -24,6 +24,7 @@ use HgDb;
 use HgAutomate;
 
 use vars qw/$opt_verbose/;
+my $PROG = basename $0;
 
 sub usage
 {
@@ -115,14 +116,13 @@ for my $key (keys %ra) {
 
     my %extendedTypes = map { $_ => 1 } @Encode::extendedTypes;
     my $type = $h->{type};
-    if($type eq "genePred" || $type =~ /^bed/ || $extendedTypes{$type}) {
+    if (exists($h->{downloadOnly}) and $h->{downloadOnly}) { # dont unload stuff which is never loaded
+    } elsif($type eq "genePred" || $type =~ /^bed/ || $extendedTypes{$type}) {
         genericUnload($assembly, $db, $tablename);
     } elsif ($type eq "wig") {
         unloadWig($assembly, $db, $tablename);
-    } elsif ($type eq "fastq") {
-        ;
     } else {
-        die "ERROR: unknown type: $h->{type} in load.ra\n";
+        die "ERROR: unknown type: $h->{type} in load.ra ($PROG)\n";
     }
 }
 
