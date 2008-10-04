@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.77 2008/10/01 23:16:38 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.78 2008/10/04 09:59:00 mikep Exp $
 
 use warnings;
 use strict;
@@ -598,6 +598,9 @@ sub checkDataFormat {
     HgAutomate::verbose(3, "Checking data format for $file: $format\n");
     my $type = $format;
     if ($format =~ m/(bed) (\d+)/) {
+        $format = $1;
+    }
+    if ($format =~ m/(bedGraph) (\d+)/) {
         $format = $1;
     }
     $formatCheckers{$format} || return "Data format \'$format\' is unknown\n";
