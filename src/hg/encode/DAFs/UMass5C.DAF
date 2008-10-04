@@ -1,0 +1,39 @@
+# Data Agreement File for UMass 5C project
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+ # Lab and general info
+ grant             Dekker
+ lab               Dekker
+ dataType          5C
+ variables         cell
+ assembly          hg18
+ dafVersion        0.2.2
+
+ # Track/view definition
+ view             Peaks
+ longLabelPrefix  UMass 5C Interactions
+ type             gappedPeak
+ hasReplicates    no
+ required         yes
+
+ view             Signal
+ longLabelPrefix  UMass 5C Interaction Level
+ type             wig
+ hasReplicates    no
+ required         yes
+
+ view             Alignments
+ longLabelPrefix  UMass 5C Alignments
+ type             pairedTagAlign
+ hasReplicates    no
+ required         yes
+
+ view             RawData
+ type             fastq
+ hasReplicates    no
+ required         yes
+
+ view             RawData1
+ type             download
