@@ -39,6 +39,7 @@ my $submitType = "";		# currently ignored
 my $tempDir = "/data/tmp";
 my $encInstance = "";
 
+my $PROG = basename $0;
 my $debug = 0;
 
 sub usage
@@ -94,7 +95,7 @@ sub loadWig
         dieFile($stderrFile);
     } elsif (system("rm -f /gbdb/$assembly/wib/$tableName.wib") ||
              system("ln -s $submitPath/$tableName.wib /gbdb/$assembly/wib")) {
-        die("ERROR: failed wiggle ln\n");
+        die("ERROR: failed wiggle load ln\n");
     } else {
         print "$fileList loaded into $tableName\n";
 
@@ -123,6 +124,20 @@ sub loadBed
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
     if(my $err = $safe->exec()) {
         die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
+    } else {
+        print "$fileList loaded into $tableName\n";
+    }
+    push(@{$pushQ->{TABLES}}, $tableName);
+}
+
+sub loadBedGraph
+{
+    my ($assembly, $tableName, $fileList, $pushQ) = @_;
+    #TEST by replacing "cat" with  "head -1000 -q"
+    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName -bedGraph=4 stdin -tmpDir=$tempDir");
+    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
+    if(my $err = $safe->exec()) {
+        die("ERROR: File(s) '$fileList' failed bedGraph load:\n" . $safe->stderr() . "\n");
     } else {
         print "$fileList loaded into $tableName\n";
     }
@@ -234,7 +249,7 @@ if(system("$unloader $submitType $submitPath")) {
 }
 
 if(!(-e $loadRa)) {
-    die "ERROR: load.ra not found\n";
+    die "ERROR: load.ra not found ($PROG)\n";
 }
 
 #TODO change to : FileUtils.cp $loadRa, $unloadRa
@@ -279,11 +294,12 @@ for my $key (keys %ra) {
     my $assembly = $h->{assembly};
     my $type = $h->{type};
     my $files = $h->{files};
+    my $downloadOnly = (defined($h->{downloadOnly}) and $h->{downloadOnly});
     my @files = split(/\s+/, $files);
     my %extendedTypes = map { $_ => 1 } @Encode::extendedTypes;
     my $hgdownload = 0;
 
-    if ($h->{downloadOnly}) {
+    if ($downloadOnly) {
         # XXXX convert solexa/illumina => sanger fastq when appropriate
         $hgdownload = 1;
     } elsif($type eq "genePred") {
@@ -300,8 +316,10 @@ for my $key (keys %ra) {
         loadBedFromSchema($assembly, $tablename, $files, $type, $pushQ);
     } elsif ($type =~ /^bed (3|4|5|6)$/) {
         loadBed($assembly, $tablename, $files, $pushQ);
+    } elsif ($type =~ /^bedGraph (4)$/) {
+        loadBedGraph($assembly, $tablename, $files, $pushQ);
     } else {
-        die "ERROR: unknown type: $type in $Encode::loadFile\n";
+        die "ERROR: unknown type: $type in $Encode::loadFile ($PROG)\n";
     }
     if($hgdownload) {
         # soft link file(s) into download dir - gzip files as appropriate
