@@ -154,11 +154,12 @@ sub loadBedFromSchema
     }
 
     my $fillInArg = "";
-    if($sqlTable =~ /peak/) {
+    if($sqlTable =~ /peak/i) {
+        # fill in zero score columns for narrowPeaks etc.
         $fillInArg = "-fillInScore=signalValue ";
     }
     my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
-    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
+    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
 
     if(my $err = $safe->exec()) {
         die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
