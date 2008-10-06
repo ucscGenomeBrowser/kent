@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "mafGene.h"
 
-static char const rcsid[] = "$Id: mafGene.c,v 1.9 2008/09/30 20:37:12 braney Exp $";
+static char const rcsid[] = "$Id: mafGene.c,v 1.10 2008/10/06 21:19:27 braney Exp $";
 
 struct exonInfo
 {
@@ -244,7 +244,7 @@ return siList;
 
 
 static void outSpeciesExons(FILE *f, char *dbName, struct speciesInfo *si, 
-    struct exonInfo *giList, boolean doBlank)
+    struct exonInfo *giList, boolean doBlank, boolean doTable, int numCols)
 {
 int exonNum = 1;
 struct dnaSeq thisSeq;
@@ -303,16 +303,27 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	thisSeq.dna = exonBuffer;
 	thisSeq.size = ptr - exonBuffer;
 	outSeq =  doTranslate(&thisSeq, 0,  0, FALSE);
+	char buffer[10 * 1024];
+
+	safef(buffer, sizeof buffer,  "%s_%s_%d_%d %d %d %d %s",
+	    gi->name, 
+	    siTemp->name, exonNum, exonCount, 
+	    outSeq->size,
+	    gi->frame, lastFrame,
+	    siTemp->curPosString->name);
+
 	if (doBlank || !allDashes(outSeq->dna))
 	    {
-	    fprintf(f, ">%s_%s_%d_%d %d %d %d %s",
-		gi->name, 
-		siTemp->name, exonNum, exonCount, 
-		outSeq->size,
-		gi->frame, lastFrame,
-		siTemp->curPosString->name);
+	    if (doTable)
+		{
+		if (strlen(buffer) > numCols)
+		    buffer[numCols] = 0;
+		fprintf(f, "%-*s ", numCols, buffer);
+		}
+	    else
+		fprintf(f, ">%s\n", buffer);
 
-	    fprintf(f, "\n%s\n",  outSeq->dna);
+	    fprintf(f, "%s\n", outSeq->dna);
 	    }
 	siTemp->curPosString = siTemp->curPosString->next;
 	}
@@ -321,8 +332,9 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 fprintf(f, "\n");
 }
 
-static void outSpeciesExonsNoTrans(FILE *f, char *dbName, struct speciesInfo *si, 
-    struct exonInfo *giList, boolean doBlank)
+static void outSpeciesExonsNoTrans(FILE *f, char *dbName, 
+    struct speciesInfo *si, struct exonInfo *giList, boolean doBlank,
+    boolean doTable, int numCols)
 {
 int exonNum = 1;
 int exonCount = 0;
@@ -335,19 +347,6 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
     {
     struct speciesInfo *siTemp = si;
 
-#ifdef NOTNOW
-    if (gi->strand == '-')
-	slReverse(&gi->frame);
-
-    struct mafFrames *startFrame = gi->frame;
-    assert(startFrame->isExonStart == TRUE);
-    struct mafFrames *lastFrame = startFrame;
-    assert(gi->exonSize < MAX_EXON_SIZE);
-
-    while(lastFrame->next)
-	lastFrame = lastFrame->next;
-    assert(lastFrame->isExonEnd == TRUE);
-#endif
     int lastFrameNum = (gi->frame + gi->exonSize) % 3;
 
     for(; siTemp ; siTemp = siTemp->next)
@@ -368,16 +367,26 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 
 	start = gi->exonStart;
 	ptr = &siTemp->nucSequence[gi->exonStart];
-	fprintf(f, ">%s_%s_%d_%d %d %d %d %s",
+	char buffer[10 * 1024];
+
+	safef(buffer, sizeof buffer, "%s_%s_%d_%d %d %d %d %s",
 	    gi->name, 
 	    siTemp->name, exonNum, exonCount, 
 	    gi->exonSize,
 	    gi->frame, lastFrameNum,
 	    siTemp->curPosString->name);
 
+	if (doTable)
+	    {
+	    if (strlen(buffer) > numCols)
+		buffer[numCols] = 0;
+	    fprintf(f, "%-*s ", numCols, buffer);
+	    }
+	else
+	    fprintf(f, ">%s\n", buffer);
+
 	siTemp->curPosString = siTemp->curPosString->next;
 
-	fprintf(f, "\n");
 	for (; start < end; start++)
 	    fprintf(f, "%c", *ptr++);
 	fprintf(f, "\n");
@@ -424,18 +433,20 @@ return bigBuffer;
 
 /* output a particular species sequence to the file stream */
 static void writeOutSpecies(FILE *f, char *dbName, struct speciesInfo *si, 
-    struct exonInfo *giList, unsigned options)
+    struct exonInfo *giList, unsigned options, int numCols)
 {
 boolean inExons = options & MAFGENE_EXONS;
 boolean noTrans = options & MAFGENE_NOTRANS;
 boolean doBlank = options & MAFGENE_OUTBLANK;
+boolean doTable = options & MAFGENE_OUTTABLE;
 
 if (inExons)
     {
     if (noTrans)
-	outSpeciesExonsNoTrans(f, dbName, si, giList, doBlank);
+	outSpeciesExonsNoTrans(f, dbName, si, giList, doBlank, 
+	    doTable, numCols);
     else
-	outSpeciesExons(f, dbName, si, giList, doBlank);
+	outSpeciesExons(f, dbName, si, giList, doBlank, doTable, numCols);
     return;
     }
 
@@ -450,9 +461,21 @@ if (noTrans)
 	{
 	if (doBlank || !allDashes(si->nucSequence))
 	    {
-	    fprintf(f, ">%s_%s %d %s",
+	    char buffer[10 * 1024];
+
+	    safef(buffer, sizeof buffer, "%s_%s %d %s\n",
 		giList->name, si->name, si->size, allPos(si));
-	    fprintf(f, "\n%s\n", si->nucSequence);
+
+	    if (doTable)
+		{
+		if (strlen(buffer) > numCols)
+		    buffer[numCols] = 0;
+		fprintf(f, "%-*s ", numCols, buffer);
+		}
+	    else
+		fprintf(f, ">%s\n", buffer);
+
+	    fprintf(f, "%s\n", si->nucSequence);
 	    }
 	}
     fprintf(f, "\n\n");
@@ -462,12 +485,24 @@ else
     for(; si ; si = si->next)
 	{
 	translateProtein(si);
+
+	char buffer[10 * 1024];
+
+	safef(buffer, sizeof buffer, "%s_%s %d %s",
+	    giList->name, si->name, si->aaSize, allPos(si));
+
 	if (doBlank || !allDashes(si->aaSequence))
 	    {
-	    fprintf(f, ">%s_%s %d %s",
-		giList->name, si->name, si->aaSize, allPos(si));
+	    if (doTable)
+		{
+		if (strlen(buffer) > numCols)
+		    buffer[numCols] = 0;
+		fprintf(f, "%-*s ", numCols, buffer);
+		}
+	    else
+		fprintf(f, ">%s\n", buffer);
 
-	    fprintf(f, "\n%s\n", si->aaSequence);
+	    fprintf(f, "%s\n", si->aaSequence);
 	    }
 	}
     fprintf(f, "\n\n");
@@ -776,7 +811,8 @@ return giList;
 }
 
 void mafGeneOutPred(FILE *f, struct genePred *pred, char *dbName, 
-    char *mafTable,  struct slName *speciesNameList, unsigned options) 
+    char *mafTable,  struct slName *speciesNameList, unsigned options,
+    int numCols) 
 {
 boolean inExons = options & MAFGENE_EXONS;
 
@@ -798,7 +834,7 @@ struct speciesInfo *si = speciesList;
 for(; si ; si = si->next)
     si->curPosString = si->posStrings;
 
-writeOutSpecies(f, dbName, speciesList, giList, options);
+writeOutSpecies(f, dbName, speciesList, giList, options, numCols);
 
 freeSpeciesInfo(speciesList);
 freeGIList(giList);
