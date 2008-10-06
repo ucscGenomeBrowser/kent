@@ -1302,6 +1302,4 @@ visibility hide
 type expRatio
 expScale 4.0
 expStep 0.5
-expTable gnfMOE430v2MedianExps
-# (expTable is kind of obsolete)
 groupings gnfMOE430v2Groups
