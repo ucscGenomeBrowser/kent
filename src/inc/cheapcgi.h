@@ -236,6 +236,11 @@ void cgiMakeMultList(char *name, char *menu[], int menuSize, struct slName *chec
 /* Make a list of names which can have multiple selections.
  * Same as drop-down list except "multiple" is added to select tag */
 
+void cgiMakeCheckboxGroup(char *name, char *menu[], int menuSize, struct slName *checked,
+			  int tableColumns);
+/* Make a table of checkboxes that have the same variable name but different
+ * values (same behavior as a multi-select input). */
+
 void cgiMakeHiddenVar(char *varName, char *string);
 /* Store string in hidden input for next time around. */
 
