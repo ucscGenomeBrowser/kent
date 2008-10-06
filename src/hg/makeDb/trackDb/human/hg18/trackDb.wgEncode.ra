@@ -312,113 +312,113 @@ controlledVocabulary encode/cv.ra cellType
 priority 0
 type bed 3
 
-	track	wgEncodeRikenCagePlusClustersK562CellShort
+	track	wgEncodeRikenCagePlusClustersLncapCellLongnonpolya
+	subTrack	wgEncodeRikenCage
+	shortLabel	LNCaP
+	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in LNCaP cells)
+	subGroups	view=PlusClusters cellType=LNCaP
+	type	bedGraph 4
+	dateSubmitted	2008-10-4 0:59:52
+	priority	7
+	noInherit	on
+	cell	LNCaP
+
+	track	wgEncodeRikenCageMinusClustersLncapCellLongnonpolya
+	subTrack	wgEncodeRikenCage
+	shortLabel	LNCaP
+	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in LNCaP cells)
+	subGroups	view=MinusClusters cellType=LNCaP
+	type	bedGraph 4
+	dateSubmitted	2008-10-4 0:59:52
+	priority	8
+	noInherit	on
+	cell	LNCaP
+
+	track	wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562
 	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in K562 cells)
 	subGroups	view=PlusClusters cellType=K562
-	type	bedGraph
-	dateSubmitted	2008-09-29 12:2:45
-	priority	4
+	type	bedGraph 4
+	dateSubmitted	2008-10-4 0:59:52
+	priority	7
 	noInherit	on
 	cell	K562
 
-	track	wgEncodeRikenCageMinusClustersK562CellShort
+	track	wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562
 	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in K562 cells)
 	subGroups	view=MinusClusters cellType=K562
-	type	bedGraph
-	dateSubmitted	2008-09-29 12:2:45
-	priority	5
+	type	bedGraph 4
+	dateSubmitted	2008-10-4 0:59:52
+	priority	8
 	noInherit	on
 	cell	K562
 
-	track	wgEncodeRikenCagePlusClustersK562CytosolShort
+	track	wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562
 	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in K562 cells)
 	subGroups	view=PlusClusters cellType=K562
-	type	bedGraph
-	dateSubmitted	2008-09-29 12:2:45
-	priority	4
+	type	bedGraph 4
+	dateSubmitted	2008-10-4 0:59:52
+	priority	7
 	noInherit	on
 	cell	K562
 
-	track	wgEncodeRikenCageMinusClustersK562CytosolShort
+	track	wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562
 	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in K562 cells)
 	subGroups	view=MinusClusters cellType=K562
-	type	bedGraph
-	dateSubmitted	2008-09-29 12:2:45
-	priority	5
+	type	bedGraph 4
+	dateSubmitted	2008-10-4 0:59:52
+	priority	8
 	noInherit	on
 	cell	K562
 
-	track	wgEncodeRikenCagePlusClustersK562NucleusShort
-	subTrack	wgEncodeRikenCage
-	shortLabel	K562
-	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in K562 cells)
-	subGroups	view=PlusClusters cellType=K562
-	type	bedGraph
-	dateSubmitted	2008-09-29 12:2:45
-	priority	4
-	noInherit	on
-	cell	K562
-
-	track	wgEncodeRikenCageMinusClustersK562NucleusShort
-	subTrack	wgEncodeRikenCage
-	shortLabel	K562
-	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in K562 cells)
-	subGroups	view=MinusClusters cellType=K562
-	type	bedGraph
-	dateSubmitted	2008-09-29 12:2:45
-	priority	5
-	noInherit	on
-	cell	K562
-
-	track	wgEncodeRikenCageRawSignalK562CellShort
+	track	wgEncodeRikenCageRawSignalK562CytosolLongnonpolya
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562 Raw
 	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in K562 cells)
 	subGroups	view=RawSignal cellType=K562
-	type	wig WGENCODERIKENCAGERAWSIGNALK562CELLSHORT_MINMAXRANGE
-	dateSubmitted	2008-09-29 12:2:45
-	priority	6
+	type	wig 1.00 1657.00
+	dateSubmitted	2008-10-4 0:59:52
+	priority	9
 	noInherit	on
 	spanList	1
 	windowingFunction	mean
 	maxHeightPixels	100:16:16
 	cell	K562
 
-	track	wgEncodeRikenCageRawSignalK562NucleusShort
+	track	wgEncodeRikenCageRawSignalK562NucleusLongnonpolya
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562 Raw
 	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in K562 cells)
 	subGroups	view=RawSignal cellType=K562
-	type	wig WGENCODERIKENCAGERAWSIGNALK562NUCLEUSSHORT_MINMAXRANGE
-	dateSubmitted	2008-09-29 12:2:45
-	priority	6
+	type	wig 1.00 45083.00
+	dateSubmitted	2008-10-4 0:59:52
+	priority	9
 	noInherit	on
 	spanList	1
 	windowingFunction	mean
 	maxHeightPixels	100:16:16
 	cell	K562
 
-	track	wgEncodeRikenCageRawSignalK562CytosolShort
+	track	wgEncodeRikenCageRawSignalLncapCellLongnonpolya
 	subTrack	wgEncodeRikenCage
-	shortLabel	K562 Raw
-	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in K562 cells)
-	subGroups	view=RawSignal cellType=K562
-	type	wig WGENCODERIKENCAGERAWSIGNALK562CYTOSOLSHORT_MINMAXRANGE
-	dateSubmitted	2008-09-29 12:2:45
-	priority	6
+	shortLabel	LNCaP Raw
+	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in LNCaP cells)
+	subGroups	view=RawSignal cellType=LNCaP
+	type	wig 1.00 1988.00
+	dateSubmitted	2008-10-4 0:59:52
+	priority	9
 	noInherit	on
 	spanList	1
 	windowingFunction	mean
 	maxHeightPixels	100:16:16
-	cell	K562
+	cell	LNCaP
 
 
 track wgEncodeYaleChIPseq
