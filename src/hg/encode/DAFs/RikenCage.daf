@@ -1,4 +1,4 @@
-# Data Agreement File for CAGE project $Revision: 1.2 $
+# Data Agreement File for CAGE project $Revision: 1.3 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -14,13 +14,13 @@ dafVersion        0.2.2
 # Track/view definition
 view             PlusClusters
 longLabelPrefix  RIKEN CAGE Plus Strand Predicted Start Sites
-type             bedGraph
+type             bedGraph 4
 required         yes
 hasReplicates    no
 
 view             MinusClusters
 longLabelPrefix  RIKEN CAGE Minus Strand Predicted Start Sites
-type             bedGraph
+type             bedGraph 4
 required         yes
 hasReplicates    no
 
@@ -36,10 +36,12 @@ type             tagAlign
 required         yes
 hasReplicates    no
 
-view             ColorSpaceFasta
+view             RawData
 type             csfasta
 required         yes
+hasReplicates    no
 
-view             FastaQuality
+view             RawData2
 type             csqual
 required         yes
+hasReplicates    no
