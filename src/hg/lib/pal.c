@@ -11,7 +11,7 @@
 #include "hPrint.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.9 2008/10/03 00:06:07 braney Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.10 2008/10/06 21:21:12 braney Exp $";
 
 #define hgtaCGIGeneMafTable "hgta_mafGeneMafTable" 
 #define hgtaJSGeneMafTable  "mafGeneMafTable" 
@@ -21,10 +21,15 @@ static char const rcsid[] = "$Id: pal.c,v 1.9 2008/10/03 00:06:07 braney Exp $";
 #define hgtaJSGeneNoTrans  "mafGeneNoTrans" 
 #define hgtaCGIGeneOutBlank "hgta_mafGeneOutBlank" 
 #define hgtaJSGeneOutBlank  "mafGeneOutBlank" 
+#define hgtaCGIOutTable "hgta_mafOutTable" 
+#define hgtaJSOutTable  "mafOutTable" 
+#define hgtaCGINumColumns "hgta_mafNumColumns"
+#define hgtaJSNumColumns  "mafNumColumns"
 
 static char *curVars[] = {
 	hgtaCGIGeneMafTable, hgtaCGIGeneExons,
-	hgtaCGIGeneNoTrans, hgtaCGIGeneOutBlank
+	hgtaCGIGeneNoTrans, hgtaCGIGeneOutBlank,
+	hgtaCGIOutTable, hgtaCGINumColumns
 	};
 
 int palOutPredList(struct sqlConnection *conn, struct cart *cart,
@@ -62,10 +67,14 @@ slReverse(&includeList);
 boolean inExons = cartUsualBoolean(cart, hgtaCGIGeneExons , FALSE); 
 boolean noTrans = cartUsualBoolean(cart, hgtaCGIGeneNoTrans, FALSE); 
 boolean outBlank = cartUsualBoolean(cart, hgtaCGIGeneOutBlank, FALSE); 
+boolean outTable = cartUsualBoolean(cart, hgtaCGIOutTable, FALSE); 
+int numCols = cartUsualInt(cart, hgtaCGINumColumns, 20);
 unsigned options = 0;
+
 if (inExons)  options |= MAFGENE_EXONS;
 if (noTrans)  options |= MAFGENE_NOTRANS;
 if (outBlank) options |= MAFGENE_OUTBLANK;
+if (outTable) options |= MAFGENE_OUTTABLE;
 
 /* send out the alignments */
 int outCount = 0;
@@ -75,7 +84,7 @@ for( ; list ; list = list->next)
 	{
 	outCount++;
 	mafGeneOutPred(stdout, list, database, mafTable, 
-	    includeList, options);
+	    includeList, options, numCols);
 	}
     }
 
@@ -132,6 +141,8 @@ jsDropDownCarryOver(dy, hgtaCGIGeneMafTable);
 jsTrackedVarCarryOver(dy, hgtaCGIGeneExons, hgtaJSGeneExons); 
 jsTrackedVarCarryOver(dy, hgtaCGIGeneNoTrans, hgtaJSGeneNoTrans); 
 jsTrackedVarCarryOver(dy, hgtaCGIGeneOutBlank, hgtaJSGeneOutBlank); 
+jsTrackedVarCarryOver(dy, hgtaCGIOutTable, hgtaJSOutTable); 
+jsTextCarryOver(dy, hgtaCGINumColumns);
 return dy;
 }
 
@@ -233,6 +244,7 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=GET>\n", cgiScriptName());
 cartSaveSession(cart);
 
 char *mafTable = outMafTableDrop(cart, conn);
+char *numColumns = cartUsualString(cart, hgtaCGINumColumns, "");
 
 printf("<BR><BR><B>Formatting options:</B><BR>\n");
 jsMakeTrackingCheckBox(cart, hgtaCGIGeneExons, hgtaJSGeneExons, FALSE);
@@ -241,6 +253,11 @@ jsMakeTrackingCheckBox(cart, hgtaCGIGeneNoTrans, hgtaJSGeneNoTrans, FALSE);
 printf("Show nucelotides<BR>");
 jsMakeTrackingCheckBox(cart, hgtaCGIGeneOutBlank, hgtaJSGeneOutBlank, FALSE);
 printf("Output lines with just dashes<BR>");
+jsMakeTrackingCheckBox(cart, hgtaCGIOutTable, hgtaJSOutTable, FALSE);
+printf("Format output as table. Truncate header at ");
+cgiMakeTextVar(hgtaCGINumColumns, numColumns, 2);
+printf("columns<BR>");
+
 
 printf("<BR>");
 struct trackDb *maftdb = hTrackDbForTrack(database, mafTable);
