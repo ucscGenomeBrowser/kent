@@ -25,6 +25,9 @@ char *hgTablesName();
 char *hgCustomName();
 /* Relative URL to custom tracks manager. */
 
+char *hgSessionName();
+/* Relative URL to session manager. */
+
 char *hgPalName();
 /* Relative URL to click processing program. */
 

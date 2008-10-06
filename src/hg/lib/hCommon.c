@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.34 2008/08/26 22:25:12 braney Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.35 2008/10/06 17:18:27 angie Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to genome browser. */
@@ -14,6 +14,7 @@ static char *_hgTrackUiName = "../cgi-bin/hgTrackUi"; /* Path to extended ui pro
 static char *_hgTextName = "../cgi-bin/hgText"; /* Path back to the text browser. */
 static char *_hgTablesName = "../cgi-bin/hgTables"; /* Path back to the table browser. */
 static char *_hgCustomName = "../cgi-bin/hgCustom"; /* Path back to the custom tracks manager. */
+static char *_hgSessionName = "../cgi-bin/hgSession";	/* Path to session manager. */
 static char *_hgPalName = "../cgi-bin/hgPal"; /* Path back to the protein aligner */
 
 char *hgPalName()
@@ -56,6 +57,12 @@ char *hgCustomName()
 /* Relative URL to custom tracks manager. */
 {
 return _hgCustomName;
+}
+
+char *hgSessionName()
+/* Relative URL to session manager. */
+{
+return _hgSessionName;
 }
 
 static void finishCloneName(char *fragName, char *e, char cloneName[128])
