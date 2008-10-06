@@ -2261,7 +2261,6 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
 type chain xenTro2
 otherDb xenTro2
-release beta
 
 track netXenTro2
 shortLabel $o_Organism Net
@@ -2272,7 +2271,6 @@ visibility hide
 spectrum on
 type netAlign xenTro2 chainXenTro2
 otherDb xenTro2
-release beta
 
 track chainGalGal2
 shortLabel $o_Organism Chain
