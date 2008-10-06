@@ -94,6 +94,90 @@ expScale 2.0
 expStep 0.2
 groupings ucsfNeveCGHGroups
 
+track fengAgilentExp
+shortLabel Gene Expression (Maser. et.al 2007)
+longLabel Multi-tissue Human Agilent 1A Exon Array from DFCI (Maher et. al 2006)
+group x
+priority 45.1
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings fengAgilentExpGroups
+
+track feng44Bcgh
+shortLabel Agilent 44B CGH (Maser. et.al 2007)
+longLabel Multi-tissue Agilent 44B CGH Array from DFCI (Maher et. al 2006)
+group x
+priority 45.2
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings feng44BcghGroups
+
+track feng244Acgh
+shortLabel Agilent 244A CGH (Maser et. al 2007)
+longLabel Multi-tissue Agilent 244A CGH Array from DFCI (Maher et. al 2006)
+group x
+priority 45.3
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings feng244AcghGroups
+
+track lin2008Exp
+shortLabel Melanoma Gene Expression (Lin. et.al 2008)
+longLabel Melanoma Gene Expression (Lin et. al 2008)
+group x
+priority 46.1
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings lin2008ExpGroups
+
+track lin2008cnv50K
+shortLabel Melanoma 50K CNV (Lin. et.al 2008)
+longLabel Melanoma 50K CNV (Lin et. al 2008)
+group x
+priority 46.2
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings lin2008cnv50KGroups
+
+track lin2008cnv250K
+shortLabel Melanoma 250K CNV (Lin. et.al 2008)
+longLabel Melanoma 250K CNV (Lin et. al 2008)
+group x
+priority 46.3
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings lin2008cnv250KGroups
+
+track weir2007
+shortLabel Lung CNV (Weir. et.al 2007)
+longLabel Lung CNV (Weir et. al 2007)
+group x
+priority 47.1
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings weir2007Groups
+
 #TCGA
 
 track mskccCGH
