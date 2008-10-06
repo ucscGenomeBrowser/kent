@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.61 2008/09/18 00:52:03 larrym Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.62 2008/10/06 17:32:56 angie Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -303,7 +303,9 @@ static void adjustSqlTableColumns(struct sqlConnection *conn, char *tableName, i
 /* Otherwise the data is unloadable. */
 {
 struct slName *fieldNames = sqlFieldNames(conn, tableName);
-int numFields = slCount(fieldNames) - 1; /* (subtract bin) */
+int numFields = slCount(fieldNames);
+if (! noBin)
+    numFields--;  // subtract bin column if sql includes it
 if (numFields != bedSize)
     {
     struct slName *oneName;
