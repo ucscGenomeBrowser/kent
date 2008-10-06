@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.58 2008/07/03 00:49:25 braney Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.59 2008/10/06 23:33:47 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -656,15 +656,18 @@ char *name = NULL;
 char **valMenu = NULL;
 int valMenuSize = 0;
 
-hPrintf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", field);
+hPrintf("<TR VALIGN=BOTTOM><TD valign=top> %s </TD><TD valign=top>\n", field);
 name = filterFieldVarName(db, table, field, filterDdVar);
 cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
 		cartUsualString(cart, name, ddOpMenu[0]));
 hPrintf(" %s </TD><TD>\n", isSqlSetType(type) ? "include" : "match");
 name = filterPatternVarName(db, table, field);
 makeEnumValMenu(type, &valMenu, &valMenuSize);
-cgiMakeDropList(name, valMenu, valMenuSize,
-		cartUsualString(cart, name, valMenu[0]));
+if (valMenuSize-1 > 2)
+    cgiMakeCheckboxGroup(name, valMenu, valMenuSize, cartOptionalSlNameList(cart, name), 5);
+else
+    cgiMakeDropList(name, valMenu, valMenuSize,
+		    cartUsualString(cart, name, valMenu[0]));
 if (logOp == NULL)
     logOp = "";
 hPrintf("</TD><TD> %s </TD></TR>\n", logOp);
@@ -1268,6 +1271,34 @@ sqlFreeResult(&sr);
 return type;
 }
 
+static void normalizePatList(struct slName **pPatList)
+/* patList might be a plain old list of terms, in which case we keep the 
+ * terms only if they are not no-ops.  patList might also be one element
+ * that is a space-separated list of terms, in which case we make a new
+ * list item for each non-no-op term.  (Trim spaces while we're at it.) */
+{
+struct slName *pat, *nextPat, *patListOut = NULL;
+if (pPatList == NULL) return;
+for (pat = *pPatList;  pat != NULL;  pat = nextPat)
+    {
+    nextPat = pat->next;
+    strcpy(pat->name, trimSpaces(pat->name));
+    if (hasWhiteSpace(pat->name))
+	{
+	char *line = pat->name, *word;
+	while ((word = nextQuotedWord(&line)) != NULL)
+	    if (wildReal(word))
+		{
+		struct slName *newPat = slNameNew(word);
+		slAddHead(&patListOut, newPat);
+		}
+	slNameFree(&pat);
+	}
+    else if (wildReal(pat->name))
+	slAddHead(&patListOut, pat);
+    }
+*pPatList = patListOut;
+}
 
 char *filterClause(char *db, char *table, char *chrom)
 /* Get filter clause (something to put after 'where')
@@ -1347,29 +1378,31 @@ for (var = varList; var != NULL; var = var->next)
     if (sameString(type, filterDdVar))
         {
 	char *patVar = filterPatternVarName(db, table, field);
-	char *pat = trimSpaces(cartOptionalString(cart, patVar));
-	if (wildReal(pat))
+	struct slName *patList = cartOptionalSlNameList(cart, patVar);
+	normalizePatList(&patList);
+	if (slCount(patList) > 0)
 	    {
-	    char *sqlPat = sqlLikeFromWild(pat);
 	    char *ddVal = cartString(cart, var->name);
-	    char *line = sqlPat, *word;
 	    boolean neg = sameString(ddVal, ddOpMenu[1]);
-	    boolean composite = hasWhiteSpace(line);
+	    char *fieldType = getSqlType(conn, explicitDbTable, field);
 	    boolean needOr = FALSE;
 	    if (needAnd) dyStringAppend(dy, " and ");
-	    if (composite) dyStringAppendC(dy, '(');
 	    needAnd = TRUE;
-	    while ((word = nextQuotedWord(&line)) != NULL)
+	    boolean composite = (slCount(patList) > 1);
+	    if (composite) dyStringAppendC(dy, '(');
+	    struct slName *pat;
+	    for (pat = patList;  pat != NULL;  pat = pat->next)
 		{
+		char *sqlPat = sqlLikeFromWild(pat->name);
 		if (needOr)
 		    dyStringAppend(dy, " OR ");
 		needOr = TRUE;
-		if (isSqlSetType(getSqlType(conn, explicitDbTable, field)))
+		if (isSqlSetType(fieldType))
 		    {
 		    if (neg)
 			dyStringAppend(dy, "not ");
 		    dyStringPrintf(dy, "FIND_IN_SET('%s', %s.%s)>0 ",
-				   word, explicitDbTable, field);
+				   sqlPat, explicitDbTable , field);
 		    }
 		else
 		    {
@@ -1388,12 +1421,12 @@ for (var = varList; var != NULL; var = var->next)
 			    dyStringAppend(dy, "= ");
 			}
 		    dyStringAppendC(dy, '\'');
-		    dyStringAppendEscapeQuotes(dy, word, '\'', '\\');
+		    dyStringAppendEscapeQuotes(dy, sqlPat, '\'', '\\');
 		    dyStringAppendC(dy, '\'');
 		    }
+		freez(&sqlPat);
 		}
 	    if (composite) dyStringAppendC(dy, ')');
-	    freez(&sqlPat);
 	    }
 	}
     else if (sameString(type, filterCmpVar))
