@@ -11,9 +11,9 @@
 /* hgSession form inputs */
 #define hgsNewSessionName hgSessionPrefix "newSessionName"
 #define hgsNewSessionShare hgSessionPrefix "newSessionShare"
+#define hgsNewSessionDescription hgSessionPrefix "newSessionDescription"
 #define hgsDoNewSession hgSessionPrefix "doNewSession"
 
-#define hgsUnsharePrefix hgSessionPrefix "unshare_"
 #define hgsSharePrefix hgSessionPrefix "share_"
 #define hgsLoadPrefix hgSessionPrefix "load_"
 #define hgsDeletePrefix hgSessionPrefix "delete_"
@@ -29,6 +29,10 @@
 #define hgsDoLoadUrl hgSessionPrefix "doLoadUrl"
 
 #define hgsDoMainPage hgSessionPrefix "doMainPage"
+
+#define hgsDoSessionDetail hgSessionPrefix "doSessionDetail"
+#define hgsOldSessionName hgSessionPrefix "oldSessionName"
+#define hgsDoSessionChange hgSessionPrefix "doSessionChange"
 
 #define hgsDo hgSessionPrefix "do"
 
