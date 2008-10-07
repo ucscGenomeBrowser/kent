@@ -288,14 +288,6 @@ expTable mouseRinnSexMedianExps
 # (expTable is kind of obselete)
 groupings rinnSexGroups
 
-track affyMOE430v2
-shortLabel Affy MOE430v2
-longLabel Alignments of Affymetrix Consensus Sequences from Mouse MOE430 version 2
-group regulation
-priority 88
-visibility hide
-type psl .
-
 track affyGnfU74A
 shortLabel GNF U74A
 longLabel GNF Expression Atlas on Mouse Affymetrix U74A Chip
@@ -1293,11 +1285,20 @@ expStep 0.5
 expTable affyExonTissuesExps
 groupings affyExonTissuesGroups
 
+track affyMOE430v2
+shortLabel Affy MOE430v2
+longLabel Alignments of Affymetrix Consensus Sequences from Mouse MOE430 version 2
+group regulation
+priority 88
+visibility hide
+url https://www.affymetrix.com/LinkServlet?probeset=$$
+type psl .
+
 track gnfMOE430v2
 shortLabel GNF MOE430 v2
 longLabel GNF Expression Affy MOE430 version 2
 group regulation
-priority 81.0
+priority 88.1
 visibility hide
 type expRatio
 expScale 4.0
