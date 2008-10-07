@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.60 2008/10/07 22:17:57 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.61 2008/10/07 22:39:58 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1390,7 +1390,7 @@ for (var = varList; var != NULL; var = var->next)
 	    needAnd = TRUE;
 	    if (neg) dyStringAppend(dy, "not ");
 	    boolean composite = (slCount(patList) > 1);
-	    if (composite) dyStringAppendC(dy, '(');
+	    if (composite || neg) dyStringAppendC(dy, '(');
 	    struct slName *pat;
 	    for (pat = patList;  pat != NULL;  pat = pat->next)
 		{
@@ -1416,7 +1416,7 @@ for (var = varList; var != NULL; var = var->next)
 		    }
 		freez(&sqlPat);
 		}
-	    if (composite) dyStringAppendC(dy, ')');
+	    if (composite || neg) dyStringAppendC(dy, ')');
 	    }
 	}
     else if (sameString(type, filterCmpVar))
