@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.81 2008/10/07 22:30:52 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.82 2008/10/07 23:59:57 mikep Exp $
 
 use warnings;
 use strict;
@@ -397,10 +397,10 @@ sub validateBedGraph {
 sub validateGtf {
 # validate GTF by converting to genePred and validating that
     my ($path, $file, $type) = @_;
-    my $outFile = "/tmp/doEncodeValidate.gtf.bed";
     my $errFile = "/tmp/doEncodeValidate.gtf.err";
     doTime("beginning validateGtf") if $opt_timing;
     my $filePath = defined($path) ? "$path/$file" : $file;
+    my $outFile = "$filePath.bed";
     if(Encode::isZipped($filePath)) {
         # XXXX should be modified to handle zipped files.
         die "We don't currently support gzipped gtf files\n";
@@ -1136,6 +1136,8 @@ foreach my $ddfLine (@ddfLines) {
         if($type eq 'wig') {
             my $placeHolder = Encode::wigMinMaxPlaceHolder($tableName);
             print TRACK_RA "\ttype\t$type $placeHolder\n";
+        } elsif($type eq 'gtf') { # GTF is converted to and loaded as genePred
+            print TRACK_RA "\ttype\tgenePred\n";
         } else {
             print TRACK_RA "\ttype\t$type\n";
         }
