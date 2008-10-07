@@ -178,6 +178,17 @@ termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 tier 3
 
+term prostate
+type Cell Line
+description prostate tissue purchased for Gingeras project
+vendorName Unknown
+orderUrl http://www.atcc.org/
+lineage Unknown
+karyotype Unknown
+termId BTO:0001129
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
+tier 3
+
 # Gene types
 term Known
 type Gene Type
