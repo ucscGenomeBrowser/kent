@@ -5,13 +5,14 @@
 
 #Named user sessions.
 CREATE TABLE namedSessionDb (
-    userName varchar(32) not null,	# User name (from genomewiki).
+    userName varchar(64) not null,	# User name (from genomewiki).
     sessionName varchar(255) not null,	# Name that user assigns to this session
     contents longblob not null,	# CGI string of var=val&... settings.
-    shared tinyint(4) not null, # 1 if this session may be shared with other users.
+    shared tinyint not null,	# 1 if this session may be shared with other users.
     firstUse datetime not null,	# Session creation date.
     lastUse datetime not null,	# Session most-recent-usage date.
     useCount int not null,	# Number of times this session has been used.
+    settings longblob not null,	# .ra-formatted metadata
               #Indices
     PRIMARY KEY(userName,sessionName)
 );

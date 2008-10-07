@@ -8,4 +8,5 @@ table namedSessionDb
     datetime firstUse;	"Session creation date."
     datetime lastUse;	"Session most-recent-usage date."
     int useCount;	"Number of times this session has been used."
+    lstring settings;	".ra-formatted metadata"
     )
