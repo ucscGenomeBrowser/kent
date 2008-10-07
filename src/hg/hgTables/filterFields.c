@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.59 2008/10/06 23:33:47 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.60 2008/10/07 22:17:57 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1388,6 +1388,7 @@ for (var = varList; var != NULL; var = var->next)
 	    boolean needOr = FALSE;
 	    if (needAnd) dyStringAppend(dy, " and ");
 	    needAnd = TRUE;
+	    if (neg) dyStringAppend(dy, "not ");
 	    boolean composite = (slCount(patList) > 1);
 	    if (composite) dyStringAppendC(dy, '(');
 	    struct slName *pat;
@@ -1399,8 +1400,6 @@ for (var = varList; var != NULL; var = var->next)
 		needOr = TRUE;
 		if (isSqlSetType(fieldType))
 		    {
-		    if (neg)
-			dyStringAppend(dy, "not ");
 		    dyStringPrintf(dy, "FIND_IN_SET('%s', %s.%s)>0 ",
 				   sqlPat, explicitDbTable , field);
 		    }
@@ -1408,18 +1407,9 @@ for (var = varList; var != NULL; var = var->next)
 		    {
 		    dyStringPrintf(dy, "%s.%s ", explicitDbTable, field);
 		    if (sqlWildcardIn(sqlPat))
-			{
-			if (neg)
-			    dyStringAppend(dy, "not ");
 			dyStringAppend(dy, "like ");
-			}
 		    else
-			{
-			if (neg)
-			    dyStringAppend(dy, "!= ");
-			else
-			    dyStringAppend(dy, "= ");
-			}
+			dyStringAppend(dy, "= ");
 		    dyStringAppendC(dy, '\'');
 		    dyStringAppendEscapeQuotes(dy, sqlPat, '\'', '\\');
 		    dyStringAppendC(dy, '\'');
