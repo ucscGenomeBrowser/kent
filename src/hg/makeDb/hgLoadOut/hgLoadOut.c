@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "rmskOut.h"
 
-static char const rcsid[] = "$Id: hgLoadOut.c,v 1.19 2008/09/03 19:19:44 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadOut.c,v 1.20 2008/10/07 18:44:26 braney Exp $";
 
 char *createRmskOut = "CREATE TABLE %s (\n"
 "   bin smallint unsigned not null,     # bin index field for range queries\n"
@@ -338,7 +338,7 @@ if (tabFileName == NULL)
     else if (noSplit)
 	loadOneTable(database, conn, defaultTempName, suffix);
     }
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 if (badRepCnt > 0)
     {
     warn("note: %d records dropped due to repStart > repEnd\n", badRepCnt);
