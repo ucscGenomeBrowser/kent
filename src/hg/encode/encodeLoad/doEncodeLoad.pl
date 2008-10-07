@@ -28,7 +28,7 @@ use RAFile;
 use SafePipe;
 use HgDb;
 
-use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose/;
+use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose $opt_debug/;
 
 my $loadRa = "out/$Encode::loadFile";
 my $unloadRa = "out/$Encode::unloadFile";
@@ -40,7 +40,6 @@ my $tempDir = "/data/tmp";
 my $encInstance = "";
 
 my $PROG = basename $0;
-my $debug = 0;
 
 sub usage
 {
@@ -72,6 +71,7 @@ sub loadGene
 {
     my ($assembly, $tableName, $fileList, $pushQ) = @_;
 
+    HgAutomate::verbose(2, "loadGene ($assembly, $tableName, $fileList, $pushQ)\n");
     if(system("cat $fileList | egrep -v '^track|browser' | ldHgGene -genePredExt $assembly $tableName stdin > out/loadGene.out 2>&1")) {
         print STDERR "ERROR: File(s) '$fileList' failed gene load.\n";
         dieFile("out/loadGene.out");
@@ -86,10 +86,13 @@ sub loadWig
 {
     my ($assembly, $tableName, $fileList, $pushQ) = @_;
 
-    my @cmds = ("cat $fileList", "wigEncode stdin stdout $tableName.wib", "hgLoadWiggle -pathPrefix=/gbdb/$assembly/wib -tmpDir=$tempDir $assembly $tableName stdin");
+    HgAutomate::verbose(2, "loadWig ($assembly, $tableName, $fileList, $pushQ)\n");
+    my $catCmd = $opt_debug ? "head -1000 $fileList" : "cat $fileList"; # load 1000 records if $opt_debug
+    my @cmds = ($catCmd, "wigEncode stdin stdout $tableName.wib", "hgLoadWiggle -pathPrefix=/gbdb/$assembly/wib -tmpDir=$tempDir $assembly $tableName stdin");
+    HgAutomate::verbose(2, "loadWig cmds [".join(" ; ",@cmds)."]\n");
     my $stderrFile = "out/$tableName.err";
     unlink($stderrFile);
-    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", STDERR => $stderrFile, DEBUG => $debug);
+    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", STDERR => $stderrFile, DEBUG => $opt_debug);
     if(my $err = $safe->exec()) {
         print STDERR "ERROR: File(s) $fileList failed wiggle load:\n\n";
         dieFile($stderrFile);
@@ -119,9 +122,11 @@ sub loadWig
 sub loadBed
 {
     my ($assembly, $tableName, $fileList, $pushQ) = @_;
-    #TEST by replacing "cat" with  "head -1000 -q"
-    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir");
-    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
+    HgAutomate::verbose(2, "loadBed ($assembly, $tableName, $fileList, $pushQ)\n");
+    my $catCmd = $opt_debug ? "head -1000 $fileList" : "cat $fileList"; # load 1000 records if $opt_debug
+    my @cmds = ($catCmd, "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir");
+    HgAutomate::verbose(2, "loadBed cmds [".join(" ; ",@cmds)."]\n");
+    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_debug);
     if(my $err = $safe->exec()) {
         die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
     } else {
@@ -133,9 +138,11 @@ sub loadBed
 sub loadBedGraph
 {
     my ($assembly, $tableName, $fileList, $pushQ) = @_;
-    #TEST by replacing "cat" with  "head -1000 -q"
-    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName -bedGraph=4 stdin -tmpDir=$tempDir");
-    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $debug);
+    HgAutomate::verbose(2, "loadBedGraph ($assembly, $tableName, $fileList, $pushQ)\n");
+    my $catCmd = Encode::isZipped($fileList) ? "/bin/zcat $fileList" : "/bin/cat $fileList";
+    my @cmds = ($catCmd, "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName -bedGraph=4 stdin -tmpDir=$tempDir");
+    HgAutomate::verbose(2, "loadBedGraph cmds [".join(" ; ",@cmds)."]\n");
+    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_debug);
     if(my $err = $safe->exec()) {
         die("ERROR: File(s) '$fileList' failed bedGraph load:\n" . $safe->stderr() . "\n");
     } else {
@@ -148,6 +155,7 @@ sub loadBedFromSchema
 {
 # Load bed using a .sql file
     my ($assembly, $tableName, $fileList, $sqlTable, $pushQ) = @_;
+    HgAutomate::verbose(2, "loadBedFromSchema ($assembly, $tableName, $fileList, $sqlTable, $pushQ)\n");
 
     if(!(-e "$Encode::sqlCreate/${sqlTable}.sql")) {
         die "SQL schema '$Encode::sqlCreate/${sqlTable}.sql' does not exist\n";
@@ -158,7 +166,10 @@ sub loadBedFromSchema
         # fill in zero score columns for narrowPeaks etc.
         $fillInArg = "-fillInScore=signalValue ";
     }
-    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
+
+    my $catCmd = $opt_debug ? "head -1000 $fileList" : "cat $fileList"; # load 1000 records if $opt_debug
+    my @cmds = ($catCmd, "egrep -v '^track|browser'", "hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
+    HgAutomate::verbose(2, "loadBedFromSchema cmds [".join(" ; ",@cmds)."]\n");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
 
     if(my $err = $safe->exec()) {
@@ -176,9 +187,10 @@ sub loadBedFromSchema
 
 my $wd = cwd();
 
-GetOptions("configDir=s", "noEmail", "outDir=s", "verbose=i") || usage();
+GetOptions("configDir=s", "noEmail", "outDir=s", "verbose=i", "debug") || usage();
 $opt_verbose = 1 if (!defined $opt_verbose);
 $opt_noEmail = 0 if (!defined $opt_noEmail);
+$opt_debug = 0 if (!defined $opt_debug);
 if($opt_outDir) {
     $loadRa = "$opt_outDir/$Encode::loadFile";
     $unloadRa = "$opt_outDir/$Encode::unloadFile";
@@ -259,7 +271,7 @@ if(system("cp $loadRa $unloadRa")) {
     die "Cannot: cp $loadRa $unloadRa\n";
 }
 
-print STDERR "Loading project in directory $submitDir\n" if($debug);
+HgAutomate::verbose(1, "Loading project in directory $submitDir\n");
 
 # Load files listed in load.ra
 
@@ -267,9 +279,7 @@ my %ra = RAFile::readRaFile($loadRa, 'tablename');
 my $pushQ = {};
 $pushQ->{TABLES} = [];
 
-print STDERR "$loadRa has: " . scalar(keys %ra) . " records\n" if($debug);
-
-print STDERR "\n" if($debug);
+HgAutomate::verbose(2, "loadRa ($loadRa) has: " . scalar(keys %ra) . " records\n");
 
 my $compositeTrack = Encode::compositeTrackName($daf);
 my $downloadDir = Encode::downloadDir($daf);
@@ -288,8 +298,8 @@ for my $key (keys %ra) {
             $str .= "$field: " . $h->{$field} . "\n";
         }
     }
+    HgAutomate::verbose(3, "key=[$key] tablename=[$tablename] str=[$str]\n");
     $str .= "\n";
-    HgAutomate::verbose(3, $str);
 
     # temporary work-around (XXXX, galt why is this "temporary?").
     my $assembly = $h->{assembly};
@@ -300,8 +310,10 @@ for my $key (keys %ra) {
     my %extendedTypes = map { $_ => 1 } @Encode::extendedTypes;
     my $hgdownload = 0;
 
+    HgAutomate::verbose(2, "TYPE=[$type] extendedTypes=[".(defined($extendedTypes{$type}) ? $extendedTypes{$type} : "")."] key=[$key] tablename=[$tablename] downloadOnly=[$downloadOnly]\n");
     if ($downloadOnly) {
         # XXXX convert solexa/illumina => sanger fastq when appropriate
+        HgAutomate::verbose(3, "Download only; dont load [$key].\n");
         $hgdownload = 1;
     } elsif($type eq "genePred") {
         loadGene($assembly, $tablename, $files, $pushQ);
@@ -322,13 +334,16 @@ for my $key (keys %ra) {
     } else {
         die "ERROR: unknown type: $type in $Encode::loadFile ($PROG)\n";
     }
+    HgAutomate::verbose(2, "Done loading. Now making links and copies. hgdownload=[$hgdownload]\n");
     if($hgdownload) {
         # soft link file(s) into download dir - gzip files as appropriate
         my $target = "$downloadDir/$tablename.$type.gz";
         unlink($target);
+        HgAutomate::verbose(2, "unlink($target)\n");
 
         if(@files == 1) {
             my $srcFile = "$submitPath/$files[0]";
+            HgAutomate::verbose(2, "One file: srcFile=[$srcFile]\n");
             if(Encode::isZipped($srcFile)) {
                 HgAutomate::verbose(2, "soft-linking $srcFile => $target\n");
                 !system("/bin/ln -s $srcFile $target") || die "link failed: $?\n";
@@ -340,6 +355,7 @@ for my $key (keys %ra) {
             # make a concatenated copy of multiple files
             my $unZippedTarget = "$downloadDir/$tablename.$type";
             unlink($unZippedTarget);
+            HgAutomate::verbose(2, "Zero or multiple files: files=[@files] unlink($unZippedTarget)\n");
             for my $file (@files) {
                 $file = "$submitPath/$file";
                 my $cmd;
@@ -355,7 +371,6 @@ for my $key (keys %ra) {
         }
         push(@{$pushQ->{FILES}}, $target);
     }
-    print STDERR "\n" if($debug);
 }
 
 # Send "data is ready" email to email contact assigned to $daf{lab}
