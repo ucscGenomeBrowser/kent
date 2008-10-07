@@ -2,68 +2,29 @@
 
 # Tarsier syrichta
 #########################################################################
-# DOWNLOAD SEQUENCE (DONE braney 2008-07-11)
-    ssh kkstore05
-    mkdir /cluster/store12/tarSyr1
+# DOWNLOAD SEQUENCE (DONE braney 2008-10-07)
+    ssh kolossus
+    mkdir /hive/data/genomes/tarSyr1
     ln -s /cluster/store12/tarSyr1 /cluster/data
     mkdir /cluster/data/tarSyr1/broad
     cd /cluster/data/tarSyr1/broad
 
     wget --timestamping \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/tarsier/assembly.agp \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/tarsier/assembly.bases.gz \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/tarsier/assembly.quals.gz 
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/tarsier/Tarsyr1.0/assembly.agp \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/tarsier/Tarsyr1.0/assembly.bases.gz \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/tarsier/Tarsyr1.0/assembly.quals.gz 
+    md5sum ass* > assembly.md5sum
 
-
-qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin tarSyr1.qual.qac
-
-    wget --timestamping \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/tarsier/BasicStats.out
-
-
-# --------------------------------------------------------------------------------
-# Fri Jul 04 11:25:33 2008 run (pid=13467) using Thu Jun 26 06:49:09 EDT 2008
-# make
-# BasicStats PRE=/seq/assembly_analysis/ DATA=projects/LowCoverage/Tarsius
-# \
-# RUN=run/work SUBDIR=assembly.8_FinalizeAssembly QUAL_STATS=True
-# \
-# OUTFILE=BasicStats.out
-# # --------------------------------------------------------------------------------
-# 
-# Supercontigs having < 3 reads or < 1kb sequence are
-# ignored.
-# 239 gaps <= -1000; 0 gaps <= -10000; 0 gaps <= -100000
-# fraction of gaps < -10kb or more than 4 deviations below
-# zero: 0.519%
-# 48 gaps > 10kb, 0 gaps > 50kb, 0 gaps > 200kb, 0 gaps >
-# 1Mb
-# 72.86% of reads were used in the assembly (75.84% of
-# bases, 77.3% of Q20 bases)
-# 0% of reads were used multiply in the assembly
-# 1044723 contigs, having N50 length 3157
-# total contig length: 2627536014, spanning 3032285294
-# bases (with 13.3% in gaps)
-# 500238 supercontigs, having N50 length 11476 (not
-# including gaps)
-# 99.9% of assembly in supers of size < 200000 (3029245249
-# bases)
-# Assembly base coverage: 2.92X.  Assembly Q20 coverage:
-# 2.66X.
-# 99.98% of bases have q >= 1
-# 96.97% of bases have q >= 20
-# 94.13% of bases have q >= 30
-# 90.74% of bases have q >= 40
-# 87.35% of bases have q >= 50
-# 
+    qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin tarSyr1.qual.qac
 
    cut -f 1 assembly.agp | uniq -c | wc -l 
-   # Number of scaffolds: 659020
+   # Number of scaffolds: 656709
 
 
 #########################################################################
-# Create .ra file and run makeGenomeDb.pl
-    ssh kkstore05
+# Create .ra file and run makeGenomeDb.pl  (working... braney
+    ssh hgwdev
+    screen
     cd /cluster/data/tarSyr1
 cat << _EOF_ >tarSyr1.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -72,7 +33,7 @@ clade mammal
 genomeCladePriority 35
 scientificName  Tarsier syrichta
 commonName Tarsier
-assemblyDate Jul. 2008
+assemblyDate Aug. 2008
 assemblyLabel Broad Institute tarSyr1 
 orderKey 236.5
 #mitoAcc AJ222767
@@ -84,7 +45,7 @@ dbDbSpeciesDir tarsier
 _EOF_
 
 # use 'screen' make sure on kkstore05
-    makeGenomeDb.pl -verbose=2 tarSyr1.config.ra > makeGenomeDb.out 2>&1 &
+    makeGenomeDb.pl -workhorse kolossus -verbose=2 tarSyr1.config.ra > makeGenomeDb.out 2>&1 &
 
 # 'ctl-a ctl -d' returns to previous shell
 cut -f 2 chrom.sizes | ave stdin
@@ -100,7 +61,7 @@ cut -f 2 chrom.sizes | ave stdin
 
 
 #########################################################################
-# REPEATMASKER (DONE braney 2008-07-11)
+# REPEATMASKER (not done)
     ssh kkstore05
     screen # use a screen to manage this job
     mkdir /cluster/data/tarSyr1/bed/repeatMasker
@@ -121,7 +82,7 @@ cut -f 2 chrom.sizes | ave stdin
 
 
 #########################################################################
-# SIMPLE REPEATS TRF (DONE braney 2008-07-11)
+# SIMPLE REPEATS TRF (not done)
     ssh kkstore05
     screen # use a screen to manage this job
     mkdir /cluster/data/tarSyr1/bed/simpleRepeat
