@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1466 2008/10/03 17:37:26 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1467 2008/10/07 20:39:34 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -20293,7 +20293,14 @@ else if (startsWith("retroMrna",track ) || startsWith("retroAugust",track )|| st
     }
 else if (sameString(track, "hgcRetroCdnaAli"))
     retroShowCdnaAli(item);
-else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") || sameWord(track, "affyRAE230") || sameWord(track, "affyZebrafish") || sameWord(track, "affyGnf1h") || sameWord(track, "affyGnf1m") )
+else if (sameWord(track, "affyU95")
+	|| sameWord(track, "affyU133")
+	|| sameWord(track, "affyU74")
+	|| sameWord(track, "affyRAE230")
+	|| sameWord(track, "affyZebrafish")
+	|| sameWord(track, "affyGnf1h")
+	|| sameWord(track, "affyMOE430v2")
+	|| sameWord(track, "affyGnf1m") )
     {
     doAffy(tdb, item, NULL);
     }
