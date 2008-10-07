@@ -2,10 +2,11 @@
 
 # armadillo ( Dasypus novemcinctus )
 #########################################################################
-# DOWNLOAD SEQUENCE (DONE braney 2008-08-02)
-    ssh kkstore05
-    mkdir /cluster/store12/dasNov2
-    ln -s /cluster/store12/dasNov2 /cluster/data
+# DOWNLOAD SEQUENCE (working braney 
+    ssh kolossus
+    mkdir /hive/data/genomes/dasNov2
+    rm /cluster/data/dasNov2
+    ln -s /hive/data/genomes/dasNov2 /cluster/data
     mkdir /cluster/data/dasNov2/broad
     cd /cluster/data/dasNov2/broad
 
@@ -13,9 +14,10 @@
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/armadillo/dasNov2/assembly.agp \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/armadillo/dasNov2/assembly.bases.gz \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/armadillo/dasNov2/assembly.quals.gz 
+    md5sum ass* > assembly.md5sum
 
 
-qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin dasNov2.qual.qac
+    qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin dasNov2.qual.qac
 
     wget --timestamping \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/armadillo/dasNov2/BasicStats.out
@@ -23,12 +25,12 @@ ftp://ftp.broad.mit.edu/pub/assemblies/mammals/armadillo/dasNov2/BasicStats.out
 # no BasicStats.out
 
    cut -f 1 assembly.agp | uniq -c | wc -l 
-   # Number of scaffolds: 292144
+# Number of scaffolds: 292141
 
 
 #########################################################################
-# Create .ra file and run makeGenomeDb.pl
-    ssh kkstore05
+# Create .ra file and run makeGenomeDb.pl (DONE braney 2008-09-22)
+    ssh kolossus
     cd /cluster/data/dasNov2
 cat << _EOF_ >dasNov2.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -48,8 +50,7 @@ qualFiles /cluster/data/dasNov2/broad/dasNov2.qual.qac
 dbDbSpeciesDir armadillo
 _EOF_
 
-# use 'screen' make sure on kkstore05
-    makeGenomeDb.pl -verbose=2 dasNov2.config.ra > makeGenomeDb.out 2>&1 &
+    makeGenomeDb.pl -workhorse=kolossus -verbose=2 dasNov2.config.ra > makeGenomeDb.out 2>&1 &
 
     # when done
     cut -f 2 chrom.sizes | ave stdin
@@ -57,33 +58,32 @@ _EOF_
 # Q1 2152.000000
 # median 4946.000000
 # Q3 10566.000000
-# average 16477.772475
+# average 16477.740413
 # min 600.000000
 # max 985764.000000
-# count 292144
-# total 4813882362.000000
-# standard deviation 32801.467338
+# count 292141
+# total 4813823562.000000
+# standard deviation 32801.578215
 
 #########################################################################
-# REPEATMASKER (DONE braney 2008-08-02)
-    ssh kkstore05
+# REPEATMASKER (DONE braney  2008-10-07)
+    ssh kolossus
     screen # use a screen to manage this job
     mkdir /cluster/data/dasNov2/bed/repeatMasker
     cd /cluster/data/dasNov2/bed/repeatMasker
     doRepeatMasker.pl -buildDir=/cluster/data/dasNov2/bed/repeatMasker \
         dasNov2 > do.log 2>&1 &
-# cluster down.  Had to run cluster jobs "by hand"
 
 # Completed: 10555 of 10555 jobs
-# CPU time in finished jobs:   22228696s  370478.27m  6174.64h  257.28d  0.705 y
-# IO & Wait Time:                124433s    2073.88m    34.56h    1.44d  0.004 y
-# Average job time:                2118s      35.30m     0.59h    0.02d
-# Longest finished job:            8377s     139.62m     2.33h    0.10d
-# Submission to last job:        208144s    3469.07m    57.82h    2.41d
+# CPU time in finished jobs:   22325655s  372094.25m  6201.57h  258.40d  0.708 y
+# IO & Wait Time:                 86043s    1434.05m    23.90h    1.00d  0.003 y
+# Average job time:                2123s      35.39m     0.59h    0.02d
+# Longest finished job:            7949s     132.48m     2.21h    0.09d
+# Submission to last job:         69062s    1151.03m    19.18h    0.80d
+
 
     doRepeatMasker.pl -buildDir=/cluster/data/dasNov2/bed/repeatMasker \
         -continue cat dasNov2 > do2.log 2>&1 &
-
 
     # Note: can run simpleRepeats simultaneously
     #### When done with RM:
@@ -91,16 +91,12 @@ _EOF_
     cd /cluster/data/dasNov2/bed/repeatMasker
 
     time nice -n +19 featureBits dasNov2 rmsk > fb.dasNov2.rmsk.txt 2>&1 &
-# 886641222 bases of 2371518823 (37.387%) in intersection
-
-    # RepeatMasker and lib version from do.log:
-    #    Jun 13 2008 (open-3-2-5) version of RepeatMasker
-    # CC   RELEASE 20080611;  
+# 888874669 bases of 2371493872 (37.482%) in intersection
 
 
 #########################################################################
-# SIMPLE REPEATS TRF (DONE braney 2008-08-02)
-    ssh kkstore05
+# SIMPLE REPEATS TRF (DONE braney 2008-10-07)
+    ssh kolossus
     screen # use a screen to manage this job
     mkdir /cluster/data/dasNov2/bed/simpleRepeat
     cd /cluster/data/dasNov2/bed/simpleRepeat
@@ -111,17 +107,16 @@ _EOF_
     #### When done
     ssh pk
     para time
-    # Completed: 51 of 51 jobs
-    # CPU time in finished jobs:      24985s     416.41m     6.94h    0.29d
-    # 0.001 y
-    # IO & Wait Time:                   101s       1.69m     0.03h    0.00d
-    # 0.000 y
-    # Average job time:                 492s       8.20m     0.14h    0.01d
-    # Longest finished job:            3887s      64.78m     1.08h    0.04d
-    # Submission to last job:          3911s      65.18m     1.09h    0.05d
+
+# Completed: 97 of 97 jobs
+# CPU time in finished jobs:      61803s    1030.05m    17.17h    0.72d  0.002 y
+# IO & Wait Time:                  3111s      51.85m     0.86h    0.04d  0.000 y
+# Average job time:                 669s      11.15m     0.19h    0.01d
+# Longest finished job:            7949s     132.48m     2.21h    0.09d
+# Submission to last job:          7957s     132.62m     2.21h    0.09d
 
     featureBits dasNov2 simpleRepeat
-    # 36542185 bases of 2298455021 (1.590%) in intersection
+# 26484090 bases of 2371493872 (1.117%) in intersection
 
     #	after RM run is done, add this mask:
     cd /cluster/data/dasNov2
@@ -129,30 +124,26 @@ _EOF_
 
     twoBitToFa dasNov2.2bit stdout | faSize stdin
 
-# 4813882362 bases (2442363539 N's 2371518823 real 1490899957 upper 880618866
-# lower) in 292144 sequences in 1 files
-# Total size: mean 16477.8 sd 32801.5 min 600 (scaffold_292143) max 985764
+# 4813823562 bases (2442329690 N's 2371493872 real 1488699780 upper 882794092
+# lower) in 292141 sequences in 1 files
+# Total size: mean 16477.7 sd 32801.6 min 600 (scaffold_292140) max 985764
 # (scaffold_0) median 4946
-# N count: mean 8360.1 sd 19087.3
-# U count: mean 5103.3 sd 10748.2
-# L count: mean 3014.3 sd 5609.3
-# %18.29 masked total, %37.13 masked real
+# N count: mean 8360.1 sd 19087.4
+# U count: mean 5095.8 sd 10731.3
+# L count: mean 3021.8 sd 5626.4
+# %18.34 masked total, %37.23 masked real
 
     twoBitToFa dasNov2.rmsk.2bit stdout | faSize stdin
-# 4813882362 bases (2442363539 N's 2371518823 real 1491422101 upper 880096722
-# lower) in 292144 sequences in 1 files
-# Total size: mean 16477.8 sd 32801.5 min 600 (scaffold_292143) max 985764
+# 4813823562 bases (2442329690 N's 2371493872 real 1489221550 upper 882272322
+# lower) in 292141 sequences in 1 files
+# Total size: mean 16477.7 sd 32801.6 min 600 (scaffold_292140) max 985764
 # (scaffold_0) median 4946
-# N count: mean 8360.1 sd 19087.3
-# U count: mean 5105.1 sd 10751.4
-# L count: mean 3012.5 sd 5606.3
-# %18.28 masked total, %37.11 masked real
+# N count: mean 8360.1 sd 19087.4
+# U count: mean 5097.6 sd 10734.5
+# L count: mean 3020.0 sd 5623.4
+# %18.33 masked total, %37.20 masked real
 
     # Link to it from /gbdb
+    ssh hgwdev
+    rm -f  /gbdb/dasNov2/dasNov2.2bit
     ln -s /cluster/data/dasNov2/dasNov2.2bit /gbdb/dasNov2/dasNov2.2bit
-
-    # mkdir /san/sanvol1/scratch/dasNov2
-    cp /cluster/data/dasNov2/dasNov2.2bit /san/sanvol1/scratch/dasNov2
-    cp /cluster/data/dasNov2/chrom.sizes /san/sanvol1/scratch/dasNov2
-
-
