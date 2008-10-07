@@ -22,6 +22,8 @@ mkdir $BUILDDIR/cgi-bin-32
 
 cd $BUILDDIR/v${BRANCHNN}_branch/kent/src
 
+echo "making libs on $HOST [${0}: `date`]"
+
 make libs >& make.log
 sed -i -e "s/-DJK_WARN//g" make.log
 sed -i -e "s/-Werror//g" make.log
@@ -30,12 +32,12 @@ sed -i -e "s/-Werror//g" make.log
 set res = `/bin/egrep -i "error|warn" make.log |grep -v "gbExtFile.o gbWarn.o gbMiscDiff.o"`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
- echo "libs errs found:"
+ echo "libs errs found on $HOST :  [${0}: `date`]"
  echo "$res"
  exit 1
 endif
 #
-echo "Make alpha."
+echo "Make alpha on $HOST. [${0}: `date`]"
 cd hg
 make CGI_BIN=$BUILDDIR/cgi-bin-32 DOCUMENTROOT=$BUILDDIR alpha >& make.alpha.log
 sed -i -e "s/-DJK_WARN//g" make.alpha.log
@@ -45,13 +47,13 @@ sed -i -e "s/-Werror//g" make.alpha.log
 set res = `/bin/egrep -i "error|warn" make.alpha.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
- echo "alpha errs found:"
+ echo "alpha errs found on $HOST : [${0}: `date`]"
  echo "$res"
  #echo "ignore the one error from vgGetText for now."
  exit 1
 endif
 #
-
+echo "removing data directories on $HOST [${0}: `date`]"
 cd $BUILDDIR/cgi-bin-32
 rm all.joiner
 rm -fr hgNearData
@@ -65,7 +67,7 @@ rm -fr hgSubjData
 scp -r -p * qateam@hgdownload:/mirrordata/apache/cgi-bin-i386/
 
 echo
-echo "32-bit cgis built on $HOST and scp'd to hgdownload"
+echo "32-bit cgis built on $HOST and scp'd to hgdownload [${0}: `date`]"
 #
 exit 0
 

@@ -34,7 +34,7 @@ if ( "$LASTREVIEWDAY" == "" ) then
 endif
 
 echo
-echo  "NOW STARTING 32-BIT CGI BUILD ON $BOX32"
+echo  "NOW STARTING 32-BIT CGI BUILD ON $BOX32 [${0}: `date`]"
 echo
 
 ssh -n $BOX32 $WEEKLYBLD/buildCgi32.csh
@@ -42,5 +42,7 @@ if ( $status ) then
     echo "build 32-bit CGIs on $HOST failed"
     exit 1
 endif
+
+echo "Build 32-bit CGIs complete  [${0}: `date`]"
 
 exit 0
