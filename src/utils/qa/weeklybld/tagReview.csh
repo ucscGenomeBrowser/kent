@@ -13,11 +13,9 @@ if ( "$1" != "real" ) then
 	exit 0
 endif 
 
-echo "Moving review tag to current tip versions [${0}: `date`]"
+echo "Moving review tag to current tip versions on $HOST [${0}: `date`]"
 
 # rtag the review tag
-echo
-echo "moving tag review..."
 # new way should be faster:
 cvs -d hgwdev:$CVSROOT rtag -Fa review kent >& /dev/null
 # note: if this breaks the cvs-reports just return it to the old way.
@@ -28,6 +26,6 @@ if ( $status ) then
  echo "cvs rtag failed for review tag move [${0}: `date`]"
  exit 1
 endif
-echo "review tag moved to tip. [${0}: `date`]"
+echo "review tag moved to tip on $HOST. [${0}: `date`]"
 
 

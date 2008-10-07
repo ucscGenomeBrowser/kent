@@ -36,7 +36,7 @@ if ( -e CvsReports.ok ) then
 endif    
 
 echo
-echo "now building CVS reports. [${0}: `date`]"
+echo "now building CVS reports on $HOST. [${0}: `date`]"
 
 @ LASTNN=$BRANCHNN - 1
 set fromTag=v${LASTNN}_branch
