@@ -113,7 +113,7 @@ if (noTrans)
 if (!noDash)
     options |= MAFGENE_OUTBLANK;
 
-mafGeneOutPred(f, pred, dbName, mafTable, speciesNameList, options);
+mafGeneOutPred(f, pred, dbName, mafTable, speciesNameList, options, 0);
 }
 
 /* read a list of single words from a file */
