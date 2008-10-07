@@ -17,6 +17,7 @@ DIRS = \
 	mafFilter \
 	mafFrag \
 	mafFrags \
+	mafGene \
 	mafMeFirst \
 	mafSpeciesList \
 	mafSpeciesSubset \
