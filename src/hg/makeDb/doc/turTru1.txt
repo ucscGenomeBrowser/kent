@@ -2,7 +2,7 @@
 
 # Tursiops truncatus  Bottle-nosed dolphin
 #########################################################################
-# DOWNLOAD SEQUENCE (DONE braney 2008-07-11)
+# DOWNLOAD SEQUENCE (DONE braney 2008-10-07)
     ssh kkstore05
     mkdir /cluster/store12/turTru1
     ln -s /cluster/store12/turTru1 /cluster/data
@@ -10,52 +10,20 @@
     cd /cluster/data/turTru1/broad
 
     wget --timestamping \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/bottlenosedDolphin/assembly.agp \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/bottlenosedDolphin/assembly.bases.gz \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/bottlenosedDolphin/assembly.quals.gz 
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/bottlenosedDolphin/Turtru1.0/assembly.agp \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/bottlenosedDolphin/Turtru1.0/assembly.bases.gz \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/bottlenosedDolphin/Turtru1.0/assembly.quals.gz 
+    md5sum ass* > assembly.md5sum
 
-
-qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin turTru1.qual.qac
-
-    wget --timestamping \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/bottlenosedDolphin/BasicStats.out
-
-
-# --------------------------------------------------------------------------------
-# Fri Sep 14 06:24:58 2007 run (pid=10185), using Fri Sep  7 11:08:37 EDT 2007
-# make
-# BasicStats PRE=/wga/dev/WGAdata DATA=projects/Tursiops RUN=run/work
-\
-#           SUBDIR=assisted_2.13 QUAL_STATS=True OUTFILE=BasicStats.out
-#	   --------------------------------------------------------------------------------
-#
-#	   Supercontigs having < 3 reads or < 1kb sequence are ignored.
-#	   1367 gaps <= -1000; 0 gaps <= -10000; 0 gaps <= -100000
-#	   fraction of gaps < -10kb or more than 4 deviations below zero:
-#	   0.00268%
-#	   0 gaps > 10kb, 0 gaps > 50kb, 0 gaps > 200kb, 0 gaps > 1Mb
-#	   92.32% of reads were used in the assembly (93.54% of bases, 92.89%
-#	   of Q20 bases)
-#	   0% of reads were used multiply in the assembly
-#	   430731 contigs, having N50 length 9845
-#	   total contig length: 2275033792, spanning 2487223073 bases (with
-#	   8.53% in gaps)
-#	   95332 supercontigs, having N50 length 159345 (not including gaps)
-#	   57.5% of assembly in supers of size < 200000 (1430068338 bases)
-#	   Assembly base coverage: 3.24X.  Assembly Q20 coverage:  2.98X.
-#	   99.99% of bases have q >= 1
-#	   98.33% of bases have q >= 20
-#	   96.3% of bases have q >= 30
-#	   94.21% of bases have q >= 40
-#	   91.6% of bases have q >= 50
+    qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin turTru1.qual.qac
 
    cut -f 1 assembly.agp | uniq -c | wc -l 
-   # Number of scaffolds: 116471
+   # Number of scaffolds: 116467
 
 
 #########################################################################
-# Create .ra file and run makeGenomeDb.pl
-    ssh kkstore05
+# Create .ra file and run makeGenomeDb.pl(DONE braney 2008-10-07)
+    ssh kolossus
     cd /cluster/data/turTru1
 cat << _EOF_ >turTru1.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -76,23 +44,22 @@ dbDbSpeciesDir dolphin
 _EOF_
 
 # use 'screen' make sure on kkstore05
-    makeGenomeDb.pl -verbose=2 turTru1.config.ra > makeGenomeDb.out 2>&1 &
+    makeGenomeDb.pl -workhorse kolossus -verbose=2 turTru1.config.ra > makeGenomeDb.out 2>&1 &
 
-# 'ctl-a ctl -d' returns to previous shell
-cut -f 2 chrom.sizes | ave stdin
-# Q1 7169.500000
-# median 13298.000000
-# Q3 55788.500000
-# average 866164.007952
-# min 3002.000000
-# max 88675666.000000
-# count 3144
-# total 2723219641.000000
-# standard deviation 5316243.688364
+    cut -f 2 chrom.sizes | ave stdin
+# Q1 1243.000000
+# median 1593.000000
+# Q3 6511.000000
+# average 21628.860415
+# min 336.000000
+# max 1406907.000000
+# count 116467
+# total 2519048486.000000
+# standard deviation 63795.083568
 
 
 #########################################################################
-# REPEATMASKER (DONE braney 2008-07-11)
+# REPEATMASKER (not done)
     ssh kkstore05
     screen # use a screen to manage this job
     mkdir /cluster/data/turTru1/bed/repeatMasker
@@ -124,7 +91,7 @@ cut -f 2 chrom.sizes | ave stdin
 
 
 #########################################################################
-# SIMPLE REPEATS TRF (DONE braney 2008-07-11)
+# SIMPLE REPEATS TRF (not done)
     ssh kkstore05
     screen # use a screen to manage this job
     mkdir /cluster/data/turTru1/bed/simpleRepeat
