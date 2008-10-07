@@ -831,3 +831,32 @@ wgEncode 1
 	antibody	FOXP2
         color 107,112,43
 
+track wgEncodeSangerGencode 
+compositeTrack on       
+shortLabel Gencode Genes
+longLabel ENCODE Sanger Gencode Genes 
+group genes
+priority 34
+visibility pack
+color 12,12,120
+type genePred 
+hgGene on
+hgsid on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+baseColorUseCds given
+baseColorDefault genomicCodons
+wgEncode 1
+subGroup1 view Views Gencode=Gencode
+
+	track	wgEncodeSangerGencodeGencode
+	subTrack	wgEncodeSangerGencode
+	shortLabel	Sanger Gencode
+	longLabel	ENCODE Sanger Gencode Gene predictions
+	subGroups	view=Gencode
+	type	gtf
+	dateSubmitted	2008-10-7 15:12:42
+	priority	1
+	noInherit	on
+
+
+
