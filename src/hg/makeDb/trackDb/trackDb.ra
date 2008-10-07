@@ -2358,7 +2358,7 @@ track chainTaeGut1
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 181
+priority 179
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -2374,7 +2374,7 @@ track chainTaeGut1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 181
+priority 179
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -2390,7 +2390,7 @@ track netTaeGut1
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 181.1
+priority 179.1
 visibility hide
 spectrum on
 type netAlign taeGut1 chainTaeGut1
@@ -2402,7 +2402,7 @@ track netTaeGut1
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 181.1
+priority 179.1
 visibility hide
 spectrum on
 type netAlign taeGut1 chainTaeGut1
