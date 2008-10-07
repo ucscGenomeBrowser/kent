@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.80 2008/10/07 14:44:43 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.81 2008/10/07 22:30:52 mikep Exp $
 
 use warnings;
 use strict;
@@ -261,6 +261,7 @@ our %formatCheckers = (
     bedGraph => \&validateBedGraph,
     bed5FloatScore => \&validateBed,
     genePred => \&validateGene,
+    gtf => \&validateGtf,
     tagAlign => \&validateTagAlign,
     narrowPeak => \&validateNarrowPeak,
     fastq => \&validateFastQ,
@@ -391,6 +392,30 @@ sub validateBedGraph {
     HgAutomate::verbose(2, "File \'$file\' passed bedGraph validation\n");
     doTime("done validateBedGraph") if $opt_timing;
     return ();
+}
+
+sub validateGtf {
+# validate GTF by converting to genePred and validating that
+    my ($path, $file, $type) = @_;
+    my $outFile = "/tmp/doEncodeValidate.gtf.bed";
+    my $errFile = "/tmp/doEncodeValidate.gtf.err";
+    doTime("beginning validateGtf") if $opt_timing;
+    my $filePath = defined($path) ? "$path/$file" : $file;
+    if(Encode::isZipped($filePath)) {
+        # XXXX should be modified to handle zipped files.
+        die "We don't currently support gzipped gtf files\n";
+    }
+    # XXXX Add support for $opt_quick
+    my $err = system ( "gtfToGenePred $filePath $outFile >$errFile 2>&1");
+    if ($err) {
+        print STDERR  "File \'$file\' failed GTF validation\n";
+        open(ERR, "$errFile") || die "ERROR: Can't open gtfToGenePred error file \'$errFile\': $!\n";
+        my @err = <ERR>;
+        die "@err\n";
+    }
+    HgAutomate::verbose(2, "File \'$file\' passed gtfToGenePred conversion \n");
+    doTime("done validateGtf") if $opt_timing;
+    return validateGene(undef,$outFile,$type);
 }
 
 
@@ -608,6 +633,7 @@ sub checkDataFormat {
     }
     $formatCheckers{$format} || return "Data format \'$format\' is unknown\n";
     return $formatCheckers{$format}->($submitPath, $file, $type);
+    HgAutomate::verbose(3, "Done checking data format for $file: $format\n");
 }
 
 sub ddfKey
@@ -615,6 +641,7 @@ sub ddfKey
 # return key for given DDF line (e.g. "antibody=$antibody;cell=$cell" for ChIP-Seq data).
 # The key includes replicate (if applicable) if $includeReplicate is true.
     my ($fields, $ddfHeader, $daf, $includeReplicate) = @_;
+
     if (defined($daf->{variables})) {
         my $delim = ";";
         my $key = join($delim, map("$_=" . $fields->{$_}, sort @{$daf->{variableArray}}));
@@ -623,7 +650,7 @@ sub ddfKey
         }
         return $key;
     } else {
-        die "ERROR: no key defined for this DAF\n";
+	return undef; # Some dafs have no variables, eg, Sanger Gencode
     }
 }
 
@@ -792,8 +819,8 @@ my @variables;
 if (defined($daf->{variables})) {
     @variables = @{$daf->{variableArray}};
 } else {
-    # XXXX this may not in fact be an error (i.e. will we have DAF's w/o variables?) 
-    die "Missing variables list\n";
+    # Hubbard Sanger Gencode project has no variables
+    @variables = ();
 }
 
 my %metadataHash;
@@ -829,6 +856,7 @@ while (@{$lines}) {
     }
 
     my $view = $line{view};
+    HgAutomate::verbose(2,"Parsing $view\n");
     if($daf->{TRACKS}{$view}) {
         my $files = $line{files};
         if($fields->{replicate}{required}) {
@@ -855,15 +883,19 @@ while (@{$lines}) {
             pushError(\@errors, @metadataErrors);
         } else {
             # avoid spurious errors by not putting invalid lines into %ddfSets
-            $ddfSets{ddfKey(\%line, \%ddfHeader, $daf, 0)}{VIEWS}{$view} = \%line;
-            $ddfReplicateSets{ddfKey(\%line, \%ddfHeader, $daf, 1)}{VIEWS}{$view} = \%line;
-            my $str = join(", ", map($line{$_}, sort(@variables)));
-            $metadataHash{$str} = 1;
+	    # ddfKey returnes undef if there are no variables defined
+	    if (defined(ddfKey(\%line, \%ddfHeader, $daf, 1))) {
+		$ddfSets{ddfKey(\%line, \%ddfHeader, $daf, 0)}{VIEWS}{$view} = \%line;
+		$ddfReplicateSets{ddfKey(\%line, \%ddfHeader, $daf, 1)}{VIEWS}{$view} = \%line;
+		my $str = join(", ", map($line{$_}, sort(@variables)));
+		$metadataHash{$str} = 1;
+	    }
         }
         push(@ddfLines, \%line);
     } else {
         pushError(\@errors, "$errorPrefix undefined view '$view'");
     }
+    HgAutomate::verbose(2, "End of parsing ddf line $ddfLineNumber\n");
 }
 
 my $tmpCount = 1;
