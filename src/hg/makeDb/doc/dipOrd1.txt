@@ -2,7 +2,7 @@
 
 # Dipodomys ordii  Kangaroo rat
 #########################################################################
-# DOWNLOAD SEQUENCE (DONE braney 2008-07-11)
+# DOWNLOAD SEQUENCE (DONE braney 2008-10-07)
     ssh kkstore05
     mkdir /cluster/store12/dipOrd1
     ln -s /cluster/store12/dipOrd1 /cluster/data
@@ -10,60 +10,19 @@
     cd /cluster/data/dipOrd1/broad
 
     wget --timestamping \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/kangarooRat/assembly.agp \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/kangarooRat/assembly.bases.gz \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/kangarooRat/assembly.quals.gz 
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/kangarooRat/Dipord1.0/assembly.agp \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/kangarooRat/Dipord1.0/assembly.bases.gz \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/kangarooRat/Dipord1.0/assembly.quals.gz 
+    md5sum ass* > assembly.md5sum
 
-
-qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin dipOrd1.qual.qac
-
-    wget --timestamping \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/kangarooRat/BasicStats.out
-
-# -------------------------------------------------------------------------------
-# Sun Mar 30 18:04:44 2008 run (pid=3803) using Tue Mar 25 18:04:47 EDT 2008
-# make
-##  BasicStats PRE=/wga/dev/WGAdata DATA=projects/LowCoverage/KangarooRat
-# \
-# RUN=run/work SUBDIR=assisted_2.5 QUAL_STATS=True
-# \
-# OUTFILE=BasicStats.out
-# --------------------------------------------------------------------------------
-# 
-# Supercontigs having < 3 reads or < 1kb sequence are
-# ignored.
-# 22009 gaps <= -1000; 1077 gaps <= -10000; 42 gaps <=
-# -100000
-# fraction of gaps < -10kb or more than 4 deviations below
-# zero: 1.71%
-# 47 gaps > 10kb, 0 gaps > 50kb, 0 gaps > 200kb, 0 gaps >
-# 1Mb
-# 85.19% of reads were used in the assembly (86.86% of
-# bases, 87.1% of Q20 bases)
-# 0% of reads were used multiply in the assembly
-# 531745 contigs, having N50 length 4439
-# total contig length: 1796318881, spanning 2102137918
-# bases (with 14.5% in gaps)
-# 166994 supercontigs, having N50 length 33004 (not
-# including gaps)
-# 93.3% of assembly in supers of size < 200000 (1960264569
-# bases)
-# Assembly base coverage: 2.74X.  Assembly Q20 coverage:
-# 2.53X.
-# 99.99% of bases have q >= 1
-# 97.49% of bases have q >= 20
-# 94.5% of bases have q >= 30
-# 91.37% of bases have q >= 40
-# 87.51% of bases have q >= 50
-
+    qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin dipOrd1.qual.qac
 
    cut -f 1 assembly.agp | uniq -c | wc -l 
    # Number of scaffolds: 210053
 
-
 #########################################################################
-# Create .ra file and run makeGenomeDb.pl
-    ssh kkstore05
+# Create .ra file and run makeGenomeDb.pl (DONE braney 2008-10-07)
+    ssh kolossus
     cd /cluster/data/dipOrd1
 cat << _EOF_ >dipOrd1.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -84,22 +43,21 @@ dbDbSpeciesDir kangarooRat
 _EOF_
 
 # use 'screen' make sure on kkstore05
-    makeGenomeDb.pl -verbose=2 dipOrd1.config.ra > makeGenomeDb.out 2>&1 &
+    makeGenomeDb.pl -workhorse kolossus dipOrd1.config.ra > makeGenomeDb.out 2>&1 &
 
-# 'ctl-a ctl -d' returns to previous shell
-cut -f 2 chrom.sizes | ave stdin
+    cut -f 2 chrom.sizes | ave stdin
 # Q1 1417.000000
 # median 2509.000000
 # Q3 8139.000000
-# average 10276.009783
-# min 600.000000
+# average 10275.987955
+# min 554.000000
 # max 11421927.000000
 # count 210053
-# total 2158506683.000000
-# standard deviation 40860.458748
+# total 2158502098.000000
+# standard deviation 40860.463605
 
 #########################################################################
-# REPEATMASKER (DONE braney 2008-07-21)
+# REPEATMASKER (not done)
     ssh kkstore05
     screen # use a screen to manage this job
     mkdir /cluster/data/dipOrd1/bed/repeatMasker
@@ -122,7 +80,7 @@ cut -f 2 chrom.sizes | ave stdin
 
 
 #########################################################################
-# SIMPLE REPEATS TRF (DONE braney 2008-07-21)
+# SIMPLE REPEATS TRF (not done)
     ssh kkstore05
     screen # use a screen to manage this job
     mkdir /cluster/data/dipOrd1/bed/simpleRepeat
