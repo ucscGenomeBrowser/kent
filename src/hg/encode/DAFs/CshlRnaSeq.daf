@@ -1,4 +1,4 @@
-# Data Agreement File for RNA-seq project $Revision: 1.1 $
+# Data Agreement File for RNA-seq project $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -18,18 +18,6 @@ type             broadPeak
 hasReplicates    no
 required         yes
 
-view             PlusSignal
-longLabelPrefix  CSHL RNA-Seq Plus Strand Signal
-type             wig
-hasReplicates    no
-required         yes
-
-view             MinusSignal
-longLabelPrefix  CSHL RNA-Seq Minus Strand Signal
-type             wig
-hasReplicates    no
-required         yes
-
 view             PlusRawSignal
 longLabelPrefix  CSHL RNA-Seq Plus Strand Raw Signal
 type             wig
@@ -39,16 +27,16 @@ required         no
 view             MinusRawSignal
 longLabelPrefix  CSHL RNA-Seq Minus Strand Raw Signal
 type             wig
-hasReplicates    yes
+hasReplicates    no
 required         no
 
 view             Alignments
 longLabelPrefix  CSHL RNA-Seq Tags
 type             tagAlign
-hasReplicates    yes
+hasReplicates    no
 required         yes
 
-view             Fastq
-type             download
-hasReplicates    yes
+view             RawData
+type             fastq
+hasReplicates    no
 required         yes
