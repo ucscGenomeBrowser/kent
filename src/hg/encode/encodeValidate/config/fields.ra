@@ -66,6 +66,11 @@ file dafHeader
 type string
 required no
 
+field medianReadLength
+file dafHeader
+type in
+required no
+
 field longLabelPrefix
 file dafList
 type string
