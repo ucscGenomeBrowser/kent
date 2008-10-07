@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.78 2008/10/04 09:59:00 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.79 2008/10/07 00:50:12 larrym Exp $
 
 use warnings;
 use strict;
@@ -884,61 +884,66 @@ if(!@errors) {
         # create missing optional views (e.g. ChIP-Seq RawSignal); note this loop assumes these are on a per replicate basis.
 
         if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}) && !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})) {
-            my $newView = 'RawSignal';
-            my $alignmentLine = $ddfReplicateSets{$key}{VIEWS}{Alignments};
-            my %line = %{$alignmentLine};
-            $line{view} = $newView;
-            $line{type} = 'wig';
-            # hack for case where they have removed RawSignal view in the DAF
-            if(!defined($daf->{TRACKS}{$newView}{order})) {
-                $daf->{TRACKS}{$newView}{order} = ++$maxOrder;
-            }
-            $ddfReplicateSets{$key}{VIEWS}{$newView} = \%line;
-	    my @unzippedFiles = ();
-            doTime("beginning unzipping replicates files") if $opt_timing;
-	    for my $file (@{$alignmentLine->{files}}) {
-		# Unzip any zipped files - only works if they are with .gz suffix
-		my ($fbase,$dir,$suf) = fileparse($file, ".gz");
-		if ($suf eq ".gz") {
-                    # If the zipped file exists and has not already been unzipped then unzip it
-                    # This check is also done above at the stage where we are testign the files in the ddf exist
-                    if (-s $file and ! -s "$dir/$fbase") { 
-			my $err = system("gunzip $file");
-			if ($err) {
-			    die ("File \'$file\' failed gunzip $file\n");
-			}
-		        HgAutomate::verbose(2, "File \'$file\' gunzipped to \'$fbase\'\n");
+            if($daf->{medianReadLength}) {
+                my $newView = 'RawSignal';
+                my $alignmentLine = $ddfReplicateSets{$key}{VIEWS}{Alignments};
+                my %line = %{$alignmentLine};
+                $line{view} = $newView;
+                $line{type} = 'wig';
+                # hack for case where they have removed RawSignal view in the DAF
+                if(!defined($daf->{TRACKS}{$newView}{order})) {
+                    $daf->{TRACKS}{$newView}{order} = ++$maxOrder;
+                }
+                $ddfReplicateSets{$key}{VIEWS}{$newView} = \%line;
+                # XXXX Now that bedExtendRanges precedes sort, do we still need to unzip all these files?
+                my @unzippedFiles = ();
+                doTime("beginning unzipping replicates files") if $opt_timing;
+                for my $file (@{$alignmentLine->{files}}) {
+                    # Unzip any zipped files - only works if they are with .gz suffix
+                    my ($fbase,$dir,$suf) = fileparse($file, ".gz");
+                    if ($suf eq ".gz") {
+                        # If the zipped file exists and has not already been unzipped then unzip it
+                        # This check is also done above at the stage where we are testign the files in the ddf exist
+                        if (-s $file and ! -s "$dir/$fbase") { 
+                            my $err = system("gunzip $file");
+                            if ($err) {
+                                die ("File \'$file\' failed gunzip $file\n");
+                            }
+                            HgAutomate::verbose(2, "File \'$file\' gunzipped to \'$fbase\'\n");
+                        }
+                        if ( ! -s "$dir/$fbase") { 
+                            die ("Unzipped file \'$fbase\' does not exist (or is empty) for DDF file \'$file\'\n");
+                        }
+                        push @unzippedFiles, $fbase;
+                    } else {
+                        push @unzippedFiles, $file;
                     }
-                    if ( ! -s "$dir/$fbase") { 
-	               die ("Unzipped file \'$fbase\' does not exist (or is empty) for DDF file \'$file\'\n");
+                }
+                doTime("done unzipping replicates files") if $opt_timing;
+                $alignmentLine->{files} = \@unzippedFiles;
+                # Now we can safely sort these files as none are zipped
+                my $files = join(" ", @{$alignmentLine->{files}});
+                my $tmpFile = $Encode::autoCreatedPrefix . "$tmpCount.bed";
+                $tmpCount++;
+                if($opt_skipAutoCreation) {
+                    HgAutomate::verbose(2, "Skipping auto-creating view '$newView' for key '$key'\n");
+                  } else {
+                      HgAutomate::verbose(2, "Auto-creating view '$newView' for key '$key'\n");
+                        doTime("beginning Auto-create of view $newView") if $opt_timing;
+                        my @cmds = ("/cluster/bin/x86_64/bedExtendRanges $daf->{assembly} $daf->{medianReadLength} $files", "sort -k1,1 -k2,2n -", "bedItemOverlapCount $daf->{assembly} stdin");
+                        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
+                        if(my $err = $safe->exec()) {
+                            print STDERR  "ERROR: failed creation of wiggle for $key" . $safe->stderr() . "\n";
+                            # don't show end-user pipe error(s)
+                            pushError(\@errors, "failed creation of wiggle for '$key'");
+                        }
+                        doTime("done Auto-create of view $newView") if $opt_timing;
                     }
-		    push @unzippedFiles, $fbase;
-		} else {
-		    push @unzippedFiles, $file;
-		}
-	    }
-            doTime("done unzipping replicates files") if $opt_timing;
-	    $alignmentLine->{files} = \@unzippedFiles;
-	    # Now we can safely sort these files as none are zipped
-            my $files = join(" ", @{$alignmentLine->{files}});
-            my $tmpFile = $Encode::autoCreatedPrefix . "$tmpCount.bed";
-            $tmpCount++;
-            if($opt_skipAutoCreation) {
-                HgAutomate::verbose(2, "Skipping auto-creating view '$newView' for key '$key'\n");
+                $line{files} = [$tmpFile];
+                push(@ddfLines, \%line);
             } else {
-                HgAutomate::verbose(2, "Auto-creating view '$newView' for key '$key'\n");
-                  doTime("beginning Auto-create of view $newView") if $opt_timing;
-                  my @cmds = ("sort -k1,1 -k2,2n $files", "bedItemOverlapCount $daf->{assembly} stdin");
-                  my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
-                  if(my $err = $safe->exec()) {
-                      print STDERR  "ERROR: failed creation of wiggle for $key" . $safe->stderr() . "\n";
-                      # don't show end-user pipe error(s)
-                      pushError(\@errors, "failed creation of wiggle for '$key'");
-                  }
-                  doTime("done Auto-create of view $newView") if $opt_timing;
+                pushError(\@errors, "Missing medianReadLength field; this field is required when RawSignal view is not provided");
             }
-            $line{files} = [$tmpFile];
-            push(@ddfLines, \%line);
         }
     }
     doTime("done ddfReplicateSets loop") if $opt_timing;
