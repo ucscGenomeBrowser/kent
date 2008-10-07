@@ -303,8 +303,10 @@ shortLabel RIKEN CAGE
 longLabel ENCODE - RIKEN CAGE
 group regulation
 subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters RawSignal=RawSignal
-subGroup2 cellType Cell_Line K562=K562
-dimensions dimensionX=cellType
+subGroup2 cellType Cell_Line K562=K562 prostate=prostate
+subGroup3 localization Localization cytosol=cytosol nucleus=nucleus cell=cell 
+subGroup4 rnaExtract RNA_Extract longNonPolyA=longNonPolyA 
+#dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults PlusClusters=full MinusClusters=full RawSignal=hide
@@ -312,113 +314,131 @@ controlledVocabulary encode/cv.ra cellType
 priority 0
 type bed 3
 
-	track	wgEncodeRikenCagePlusClustersLncapCellLongnonpolya
+	track	wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
 	subTrack	wgEncodeRikenCage
-	shortLabel	LNCaP
-	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in LNCaP cells)
-	subGroups	view=PlusClusters cellType=LNCaP
+	shortLabel	prostate
+	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in prostate cells)
+	subGroups	view=PlusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA
 	type	bedGraph 4
-	dateSubmitted	2008-10-4 0:59:52
-	priority	7
+	dateSubmitted	2008-10-7 2:17:2
+	priority	10
 	noInherit	on
-	cell	LNCaP
+	rnaExtract	longNonPolyA
+	localization	cell
+	cell	prostate
 
-	track	wgEncodeRikenCageMinusClustersLncapCellLongnonpolya
+	track	wgEncodeRikenCageMinusClustersProstateCellLongnonpolya
 	subTrack	wgEncodeRikenCage
-	shortLabel	LNCaP
-	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in LNCaP cells)
-	subGroups	view=MinusClusters cellType=LNCaP
+	shortLabel	prostate
+	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in prostate cells)
+	subGroups	view=MinusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA
 	type	bedGraph 4
-	dateSubmitted	2008-10-4 0:59:52
-	priority	8
+	dateSubmitted	2008-10-7 2:17:2
+	priority	11
 	noInherit	on
-	cell	LNCaP
+	rnaExtract	longNonPolyA
+	localization	cell
+	cell	prostate
 
 	track	wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562
 	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in K562 cells)
-	subGroups	view=PlusClusters cellType=K562
+	subGroups	view=PlusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA
 	type	bedGraph 4
-	dateSubmitted	2008-10-4 0:59:52
-	priority	7
+	dateSubmitted	2008-10-7 2:17:2
+	priority	10
 	noInherit	on
+	rnaExtract	longNonPolyA
+	localization	cytosol
 	cell	K562
 
 	track	wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562
 	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in K562 cells)
-	subGroups	view=MinusClusters cellType=K562
+	subGroups	view=MinusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA
 	type	bedGraph 4
-	dateSubmitted	2008-10-4 0:59:52
-	priority	8
+	dateSubmitted	2008-10-7 2:17:2
+	priority	11
 	noInherit	on
+	rnaExtract	longNonPolyA
+	localization	cytosol
 	cell	K562
 
 	track	wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562
 	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in K562 cells)
-	subGroups	view=PlusClusters cellType=K562
+	subGroups	view=PlusClusters cellType=K562 localization=nucleus rnaExtract=longNonPolyA
 	type	bedGraph 4
-	dateSubmitted	2008-10-4 0:59:52
-	priority	7
+	dateSubmitted	2008-10-7 2:17:2
+	priority	10
 	noInherit	on
+	rnaExtract	longNonPolyA
+	localization	nucleus
 	cell	K562
 
 	track	wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562
 	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in K562 cells)
-	subGroups	view=MinusClusters cellType=K562
+	subGroups	view=MinusClusters cellType=K562 localization=nucleus rnaExtract=longNonPolyA
 	type	bedGraph 4
-	dateSubmitted	2008-10-4 0:59:52
-	priority	8
+	dateSubmitted	2008-10-7 2:17:2
+	priority	11
 	noInherit	on
+	rnaExtract	longNonPolyA
+	localization	nucleus
 	cell	K562
 
 	track	wgEncodeRikenCageRawSignalK562CytosolLongnonpolya
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562 Raw
 	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in K562 cells)
-	subGroups	view=RawSignal cellType=K562
-	type	wig 1.00 1657.00
-	dateSubmitted	2008-10-4 0:59:52
-	priority	9
+	subGroups	view=RawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
+	type	wig 1.00 63824.00
+	dateSubmitted	2008-10-7 2:17:2
+	priority	12
 	noInherit	on
 	spanList	1
 	windowingFunction	mean
 	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	cytosol
 	cell	K562
+
+	track	wgEncodeRikenCageRawSignalProstateCellLongnonpolya
+	subTrack	wgEncodeRikenCage
+	shortLabel	prostate Raw
+	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in prostate cells)
+	subGroups	view=RawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
+	type	wig 1.00 65524.00
+	dateSubmitted	2008-10-7 2:17:2
+	priority	12
+	noInherit	on
+	spanList	1
+	windowingFunction	mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	cell
+	cell	prostate
 
 	track	wgEncodeRikenCageRawSignalK562NucleusLongnonpolya
 	subTrack	wgEncodeRikenCage
 	shortLabel	K562 Raw
 	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in K562 cells)
-	subGroups	view=RawSignal cellType=K562
+	subGroups	view=RawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
 	type	wig 1.00 45083.00
-	dateSubmitted	2008-10-4 0:59:52
-	priority	9
+	dateSubmitted	2008-10-7 2:17:2
+	priority	12
 	noInherit	on
 	spanList	1
 	windowingFunction	mean
 	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	nucleus
 	cell	K562
-
-	track	wgEncodeRikenCageRawSignalLncapCellLongnonpolya
-	subTrack	wgEncodeRikenCage
-	shortLabel	LNCaP Raw
-	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in LNCaP cells)
-	subGroups	view=RawSignal cellType=LNCaP
-	type	wig 1.00 1988.00
-	dateSubmitted	2008-10-4 0:59:52
-	priority	9
-	noInherit	on
-	spanList	1
-	windowingFunction	mean
-	maxHeightPixels	100:16:16
-	cell	LNCaP
 
 
 track wgEncodeYaleChIPseq
