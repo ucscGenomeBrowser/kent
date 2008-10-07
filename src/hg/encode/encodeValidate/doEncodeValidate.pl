@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.79 2008/10/07 00:50:12 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.80 2008/10/07 14:44:43 mikep Exp $
 
 use warnings;
 use strict;
@@ -44,6 +44,7 @@ use vars qw/
     $opt_fileType
     $opt_outDir
     $opt_quick
+    $opt_skipValidateFiles
     $opt_skipAutoCreation
     $opt_validateDaf
     $opt_validateFile
@@ -73,6 +74,7 @@ options:
                         metadata .ra files (default: submission-dir/../config)
     -fileType=type	used only with validateFile option; e.g. narrowPeak
     -quick		Validate only first $quickCount lines of files
+    -skipValidateFiles  Tells script skip the file validation step; to save a lot of time during testing
     -skipAutoCreation   Tells script skip creating the auto-created files (e.g. RawSignal); this can save you a lot of time
                         when you are debugging and re-running the script on large projects
     -validateDaf	exit after validating DAF file (project-submission-dir is the DAF file name).
@@ -149,6 +151,7 @@ sub validateFiles {
         }
     }
     HgAutomate::verbose(3, "     Track: $track    Files: " . join (' ', @newFiles) . "\n");
+    return () if $opt_skipValidateFiles;
     for my $file (@newFiles) {
         my ($fbase,$dir,$suf) = fileparse($file, ".gz");
 	# Check if the file has been replaced with an unzipped version 
@@ -642,6 +645,7 @@ my $ok = GetOptions("allowReloads",
                     "outDir=s",
                     "quick",
                     "timing",
+                    "skipValidateFiles",
                     "skipAutoCreation",
                     "validateDaf",
                     "validateFile",
@@ -1044,6 +1048,14 @@ foreach my $ddfLine (@ddfLines) {
         if($hash{cell}) {
             $subGroups .= " cellType=$hash{cell}";
             $additional = "\tcell\t$hash{cell}\n" . $additional;
+        }
+        if($hash{localization}) {
+            $subGroups .= " localization=$hash{localization}";
+            $additional = "\tlocalization\t$hash{localization}\n" . $additional;
+        }
+        if($hash{rnaExtract}) {
+            $subGroups .= " rnaExtract=$hash{rnaExtract}";
+            $additional = "\trnaExtract\t$hash{rnaExtract}\n" . $additional;
         }
     }
     
