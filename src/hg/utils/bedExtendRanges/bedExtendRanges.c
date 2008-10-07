@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: bedExtendRanges.c,v 1.1 2008/10/06 23:49:26 larrym Exp $";
+static char const rcsid[] = "$Id: bedExtendRanges.c,v 1.2 2008/10/07 00:04:41 larrym Exp $";
 
 static boolean strictTab = FALSE;	/* Separate on tabs. */
 static struct hash *chromHash = NULL;
@@ -26,21 +26,20 @@ void usage()
 {
 errAbort(
   "bedExtendRanges - extend length of entries in bed 6+ data to be at least the given length,\n"
-  "taking strand directionality into account.\n"
-  "\n"
+  "taking strand directionality into account.\n\n"
   "usage:\n"
-  "   bedExtendRanges database length files(s)\n"
-  "example:\n"
-  "   bedExtendRanges hg18 250 stdin\n"
+  "   bedExtendRanges database length files(s)\n\n"
+  "options:\n"
+  "   -tab\t\tSeparate by tabs rather than space\n"
+  "   -verbose=N - verbose level for extra information to STDERR\n\n"
+  "example:\n\n"
+  "   bedExtendRanges hg18 250 stdin\n\n"
   "will transform:\n"
   "    chr1 500 525 . 100 +\n" 
   "    chr1 1000 1025 . 100 -\n" 
   "to:\n"
   "    chr1 500 750 . 100 +\n"
   "    chr1 775 1025 . 100 -\n"
-  "options:\n"
-  "   -tab\t\tSeparate by tabs rather than space\n"
-  "   -verbose=N - verbose level for extra information to STDERR\n"
   );
 }
 
