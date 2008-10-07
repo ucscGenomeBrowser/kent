@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "mafGene.h"
 
-static char const rcsid[] = "$Id: mafGene.c,v 1.10 2008/10/06 21:19:27 braney Exp $";
+static char const rcsid[] = "$Id: mafGene.c,v 1.11 2008/10/07 19:19:25 braney Exp $";
 
 struct exonInfo
 {
@@ -316,9 +316,14 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	    {
 	    if (doTable)
 		{
-		if (strlen(buffer) > numCols)
-		    buffer[numCols] = 0;
-		fprintf(f, "%-*s ", numCols, buffer);
+		if (numCols == -1)
+		    fprintf(f, "%s ", buffer);
+		else
+		    {
+		    if (strlen(buffer) > numCols)
+			buffer[numCols] = 0;
+		    fprintf(f, "%-*s ", numCols, buffer);
+		    }
 		}
 	    else
 		fprintf(f, ">%s\n", buffer);
@@ -378,9 +383,14 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 
 	if (doTable)
 	    {
-	    if (strlen(buffer) > numCols)
-		buffer[numCols] = 0;
-	    fprintf(f, "%-*s ", numCols, buffer);
+	    if (numCols == -1)
+		fprintf(f, "%s ", buffer);
+	    else
+		{
+		if (strlen(buffer) > numCols)
+		    buffer[numCols] = 0;
+		fprintf(f, "%-*s ", numCols, buffer);
+		}
 	    }
 	else
 	    fprintf(f, ">%s\n", buffer);
@@ -468,9 +478,14 @@ if (noTrans)
 
 	    if (doTable)
 		{
-		if (strlen(buffer) > numCols)
-		    buffer[numCols] = 0;
-		fprintf(f, "%-*s ", numCols, buffer);
+		if (numCols == -1)
+		    fprintf(f, "%s ", buffer);
+		else
+		    {
+		    if (strlen(buffer) > numCols)
+			buffer[numCols] = 0;
+		    fprintf(f, "%-*s ", numCols, buffer);
+		    }
 		}
 	    else
 		fprintf(f, ">%s\n", buffer);
@@ -495,9 +510,14 @@ else
 	    {
 	    if (doTable)
 		{
-		if (strlen(buffer) > numCols)
-		    buffer[numCols] = 0;
-		fprintf(f, "%-*s ", numCols, buffer);
+		if (numCols == -1)
+		    fprintf(f, "%s ", buffer);
+		else
+		    {
+		    if (strlen(buffer) > numCols)
+			buffer[numCols] = 0;
+		    fprintf(f, "%-*s ", numCols, buffer);
+		    }
 		}
 	    else
 		fprintf(f, ">%s\n", buffer);
@@ -818,6 +838,9 @@ boolean inExons = options & MAFGENE_EXONS;
 
 if (pred->cdsStart == pred->cdsEnd)
     return;
+
+if (numCols < -1)
+    errAbort("Number of columns must be zero or greater.");
 
 struct exonInfo *giList = buildGIList(dbName, pred, mafTable);
 
