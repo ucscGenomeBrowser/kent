@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.58 2008/06/16 15:09:55 giardine Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.59 2008/10/07 19:58:03 hiram Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -635,7 +635,7 @@ fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->expCount; ++i)
     {
-    fprintf(f, "%f", el->expScores[i]);
+    fprintf(f, "%g", el->expScores[i]);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
