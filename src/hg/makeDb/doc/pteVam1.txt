@@ -11,58 +11,19 @@
     cd /cluster/data/pteVam1/broad
 
     wget --timestamping \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/assembly.agp \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/assembly.bases.gz \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/assembly.quals.gz 
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/Ptevap1.0/assembly.agp \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/Ptevap1.0/assembly.bases.gz \
+ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/Ptevap1.0/assembly.quals.gz 
+    md5sum ass* > assembly.md5sum
 
+    qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin pteVam1.qual.qac
 
-qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin pteVam1.qual.qac
-
-    wget --timestamping \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/megabat/BasicStats.out
-
-
-
-# --------------------------------------------------------------------------------
-# Sun Jun 08 21:15:46 2008 run (pid=20620) using Wed May 28 18:47:34 EDT 2008
-# make
-# BasicStats PRE=/seq/assembly_analysis/ DATA=projects/LowCoverage/Vampyrus
-#           RUN=run/work SUBDIR=assembly.8_FinalizeAssembly QUAL_STATS=True
-#	              OUTFILE=BasicStats.out
-#--------------------------------------------------------------------------------
-#
-#Supercontigs having < 3 reads or < 1kb sequence are
-#ignored.
-#1669 gaps <= -1000; 0 gaps <= -10000; 0 gaps <= -100000
-#fraction of gaps < -10kb or more than 4 deviations below
-#zero: 0.417%
-#0 gaps > 10kb, 0 gaps > 50kb, 0 gaps > 200kb, 0 gaps >
-#1Mb
-#92.4% of reads were used in the assembly (92.98% of
-#bases, 92.55% of Q20 bases)
-#0% of reads were used multiply in the assembly
-#355409 contigs, having N50 length 8747
-#total contig length: 1802061378, spanning 1947863545
-#bases (with 7.49% in gaps)
-#63545 supercontigs, having N50 length 121471 (not
-#including gaps)
-#68.7% of assembly in supers of size < 200000 (1337400469
-#bases)
-#Assembly base coverage: 3.13X.  Assembly Q20 coverage:
-#2.86X.
-#100% of bases have q >= 1
-#98.07% of bases have q >= 20
-#95.57% of bases have q >= 30
-#93.01% of bases have q >= 40
-#89.77% of bases have q >= 50
-
-   cut -f 1 assembly.agp | uniq -c | wc -l 
-   # Number of scaffolds: 96946
-
+    cut -f 1 assembly.agp | uniq -c | wc -l 
+# Number of scaffolds: 96944
 
 #########################################################################
 # Create .ra file and run makeGenomeDb.pl
-    ssh kkstore05
+    ssh kolossus
     cd /cluster/data/pteVam1
 cat << _EOF_ >pteVam1.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -83,23 +44,22 @@ dbDbSpeciesDir megabat
 _EOF_
 
 # use 'screen' make sure on kkstore05
-    makeGenomeDb.pl -verbose=2 pteVam1.config.ra > makeGenomeDb.out 2>&1 &
+    makeGenomeDb.pl -workhorse kolossus pteVam1.config.ra > makeGenomeDb.out 2>&1 &
 
-# 'ctl-a ctl -d' returns to previous shell
-cut -f 2 chrom.sizes | ave stdin
+    cut -f 2 chrom.sizes | ave stdin
 # Q1 1162.000000
 # median 1777.000000
-# Q3 9073.500000
-# average 20589.606956
+# Q3 9074.500000
+# average 20589.994327
 # min 601.000000
 # max 1019178.000000
-# count 96946
-# total 1996080036.000000
-# standard deviation 54685.357562
+# count 96944
+# total 1996076410.000000
+# standard deviation 54685.855293
 
 
 #########################################################################
-# REPEATMASKER (DONE - 2008-07-28 braney)
+# REPEATMASKER (not done)
     ssh kkstore05
     screen # use a screen to manage this job
     mkdir /cluster/data/pteVam1/bed/repeatMasker
@@ -128,7 +88,7 @@ cut -f 2 chrom.sizes | ave stdin
     # CC   RELEASE 20080611; 
 
 #########################################################################
-# SIMPLE REPEATS TRF (DONE - 2008-07-28 braney)
+# SIMPLE REPEATS TRF (not done)
     ssh kkstore05
     screen # use a screen to manage this job
     mkdir /cluster/data/pteVam1/bed/simpleRepeat
