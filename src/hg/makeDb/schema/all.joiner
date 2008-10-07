@@ -676,6 +676,9 @@ identifier agilentCghRn4Id
     rn4.agilentCgh244a.name minCheck=0.99
     rn4.agilentCgh105a.name minCheck=0.30
 
+identifier affyExonTissues
+"Affymetrix all exon array normal tissues"
+    
 identifier affyHumanExon
 "Affymetrix all human exon array probe id"
     hgFixed.affyHumanExon.name
@@ -698,6 +701,18 @@ identifier sestanBrainAtlasId
     hgFixed.sestanBrainAtlasExps.id
     $hg.sestanBrainAtlas.expIds comma full 
     $hg.sestanBrainAtlas.expScores comma indexOf full
+
+identifier affyMouseExonSampleId
+"Sample IDs for Affymetrix all mouse exon array."
+    hgFixed.affyMouseExonTissuesAllExps.id
+    $mm.affyExonTissues.expIds comma full 
+    $mm.affyExonTissues.expScores comma indexOf full
+
+identifier affyRatExonSampleId
+"Sample IDs for Affymetrix all rat exon array."
+    hgFixed.affyRatExonTissuesAllExps.id
+    $rn.affyExonTissues.expIds comma full 
+    $rn.affyExonTissues.expScores comma indexOf full
 
 identifier gnfHumanAtlas2
 "Novartis GNF Human gene probe ID"
