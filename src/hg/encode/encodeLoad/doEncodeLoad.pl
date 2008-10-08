@@ -315,6 +315,9 @@ for my $key (keys %ra) {
         # XXXX convert solexa/illumina => sanger fastq when appropriate
         HgAutomate::verbose(3, "Download only; dont load [$key].\n");
         $hgdownload = 1;
+    } elsif($type eq "gtf") {
+	# The validator converted the gtf file into a genePred file *.bed
+        loadGene($assembly, $tablename, "$files.bed", $pushQ);
     } elsif($type eq "genePred") {
         loadGene($assembly, $tablename, $files, $pushQ);
     } elsif ($type eq "wig") {
