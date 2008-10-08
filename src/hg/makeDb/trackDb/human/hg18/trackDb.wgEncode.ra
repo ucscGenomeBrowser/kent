@@ -853,7 +853,7 @@ subGroup1 view Views Gencode=Gencode
 	shortLabel	Sanger Gencode
 	longLabel	ENCODE Sanger Gencode Gene predictions
 	subGroups	view=Gencode
-	type	gtf
+	type	genePred
 	dateSubmitted	2008-10-7 15:12:42
 	priority	1
 	noInherit	on
