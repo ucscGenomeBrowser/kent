@@ -13,9 +13,9 @@
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/mouseLemur/MicMur1.0/assembly.agp \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/mouseLemur/MicMur1.0/assembly.bases.gz \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/mouseLemur/MicMur1.0/assembly.quals.gz 
+    md5sum ass* > assembly.md5sum
 
-
-qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin micMur1.qual.qac
+    qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin micMur1.qual.qac
 
    cut -f 1 assembly.agp | uniq -c | wc -l 
    # Number of scaffolds: 185042

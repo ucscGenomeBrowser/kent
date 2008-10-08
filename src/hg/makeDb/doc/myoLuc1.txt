@@ -13,9 +13,10 @@
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/microbat/myoLuc1/assembly.agp \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/microbat/myoLuc1/assembly.bases.gz \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/microbat/myoLuc1/assembly.quals.gz 
+    md5sum ass* > assembly.md5sum
 
 
-qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin myoLuc1.qual.qac
+    qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin myoLuc1.qual.qac
 
     wget --timestamping \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/microbat/myoLuc1/BasicStats.out

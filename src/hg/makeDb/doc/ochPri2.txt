@@ -13,9 +13,9 @@
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/pika/OchPri2.0/assembly.agp \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/pika/OchPri2.0/assembly.bases.gz \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/pika/OchPri2.0/assembly.quals.gz 
+    md5sum ass* > assembly.md5sum
 
-
-qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin ochPri2.qual.qac
+    qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin ochPri2.qual.qac
 
     # wget --timestamping \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/pika/OchPri2.0/BasicStats.out
