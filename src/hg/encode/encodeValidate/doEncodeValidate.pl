@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.84 2008/10/08 05:16:13 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.85 2008/10/08 18:37:46 larrym Exp $
 
 use warnings;
 use strict;
@@ -920,7 +920,9 @@ if(!@errors) {
         # create missing optional views (e.g. ChIP-Seq RawSignal); note this loop assumes these are on a per replicate basis.
 
         if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}) && !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})) {
-            if($daf->{medianFragmentLength}) {
+            if($daf->{dataType} eq 'ChipSeq' && !defined($daf->{medianFragmentLength})) {
+                pushError(\@errors, "Missing medianFragmentLength field; this field is required for dataType '$daf->{dataType}' when RawSignal view is not provided");
+            } else {
                 my $newView = 'RawSignal';
                 my $alignmentLine = $ddfReplicateSets{$key}{VIEWS}{Alignments};
                 my %line = %{$alignmentLine};
@@ -931,7 +933,6 @@ if(!@errors) {
                     $daf->{TRACKS}{$newView}{order} = ++$maxOrder;
                 }
                 $ddfReplicateSets{$key}{VIEWS}{$newView} = \%line;
-                # XXXX Now that bedExtendRanges precedes sort, do we still need to unzip all these files?
                 my @unzippedFiles = ();
                 doTime("beginning unzipping replicates files") if $opt_timing;
                 for my $file (@{$alignmentLine->{files}}) {
@@ -967,7 +968,15 @@ if(!@errors) {
                       HgAutomate::verbose(2, "Auto-creating view '$newView' for key '$key'\n");
                         doTime("beginning Auto-create of view $newView") if $opt_timing;
                         # XXXX gzip before saving to disk?
-                        my @cmds = ("/cluster/bin/x86_64/bedExtendRanges $daf->{assembly} $daf->{medianFragmentLength} $files", "sort -k1,1 -k2,2n -", "bedItemOverlapCount $daf->{assembly} stdin");
+                        my @cmds;
+                        my $sortFiles;
+                        if(defined($daf->{medianFragmentLength})) {
+                            push(@cmds, "/cluster/bin/x86_64/bedExtendRanges $daf->{assembly} $daf->{medianFragmentLength} $files");
+                            $sortFiles = " -";
+                        } else {
+                            $sortFiles = $files;
+                        }
+                        push(@cmds, "sort -k1,1 -k2,2n $sortFiles", "bedItemOverlapCount $daf->{assembly} stdin");
                         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
                         if(my $err = $safe->exec()) {
                             print STDERR  "ERROR: failed creation of wiggle for $key" . $safe->stderr() . "\n";
@@ -978,8 +987,6 @@ if(!@errors) {
                     }
                 $line{files} = [$tmpFile];
                 push(@ddfLines, \%line);
-            } else {
-                pushError(\@errors, "Missing medianFragmentLength field; this field is required when RawSignal view is not provided");
             }
         }
     }
@@ -1125,7 +1132,7 @@ foreach my $ddfLine (@ddfLines) {
         }
         
         my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate($now);
-        print README sprintf("data restricted until: %d-%02d-%d\n", 1900 + $rYear, $rMon + 1, $rMDay);
+        print README sprintf("data restricted until: %d-%02d-%02d\n", 1900 + $rYear, $rMon + 1, $rMDay);
         print README "\n";
     }
     if(!$downloadOnly) {
