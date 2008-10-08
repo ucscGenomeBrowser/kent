@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.82 2008/10/07 23:59:57 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.83 2008/10/08 01:09:40 larrym Exp $
 
 use warnings;
 use strict;
@@ -920,7 +920,7 @@ if(!@errors) {
         # create missing optional views (e.g. ChIP-Seq RawSignal); note this loop assumes these are on a per replicate basis.
 
         if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}) && !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})) {
-            if($daf->{medianReadLength}) {
+            if($daf->{medianFragmentLength}) {
                 my $newView = 'RawSignal';
                 my $alignmentLine = $ddfReplicateSets{$key}{VIEWS}{Alignments};
                 my %line = %{$alignmentLine};
@@ -966,7 +966,8 @@ if(!@errors) {
                   } else {
                       HgAutomate::verbose(2, "Auto-creating view '$newView' for key '$key'\n");
                         doTime("beginning Auto-create of view $newView") if $opt_timing;
-                        my @cmds = ("/cluster/bin/x86_64/bedExtendRanges $daf->{assembly} $daf->{medianReadLength} $files", "sort -k1,1 -k2,2n -", "bedItemOverlapCount $daf->{assembly} stdin");
+                        # XXXX gzip before saving to disk?
+                        my @cmds = ("/cluster/bin/x86_64/bedExtendRanges $daf->{assembly} $daf->{medianFragmentLength} $files", "sort -k1,1 -k2,2n -", "bedItemOverlapCount $daf->{assembly} stdin");
                         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
                         if(my $err = $safe->exec()) {
                             print STDERR  "ERROR: failed creation of wiggle for $key" . $safe->stderr() . "\n";
@@ -978,7 +979,7 @@ if(!@errors) {
                 $line{files} = [$tmpFile];
                 push(@ddfLines, \%line);
             } else {
-                pushError(\@errors, "Missing medianReadLength field; this field is required when RawSignal view is not provided");
+                pushError(\@errors, "Missing medianFragmentLength field; this field is required when RawSignal view is not provided");
             }
         }
     }
