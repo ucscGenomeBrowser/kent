@@ -1,12 +1,17 @@
-file: wgEncodeHudsonAlphaChipSeqAlignmentsRep1SKNMCFOXP2.tagAlign
+file: wgEncodeHudsonalphaChipSeqAlignmentsRep1SknmcFoxp2.tagAlign.gz
 cell: SK-N-MC
 antibody: FOXP2
 replicate: 1
-data restricted until: 2009-06-11
+data restricted until: 2009-07-08
 
-file: wgEncodeHudsonAlphaChipSeqRawDataRep1SKNMCFOXP2.fastq
+file: wgEncodeHudsonalphaChipSeqSignalSknmcFoxp2.wig.gz
+cell: SK-N-MC
+antibody: FOXP2
+data restricted until: 2009-07-08
+
+file: wgEncodeHudsonalphaChipSeqRawDataRep1SknmcFoxp2.fastq.gz
 cell: SK-N-MC
 antibody: FOXP2
 replicate: 1
-data restricted until: 2009-06-11
+data restricted until: 2009-07-08
 
