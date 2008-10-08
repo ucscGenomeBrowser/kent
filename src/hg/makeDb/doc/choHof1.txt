@@ -2,7 +2,7 @@
 
 # sloth ( Choloepus hoffmanni )
 #########################################################################
-# DOWNLOAD SEQUENCE (DONE braney 2008-08-04)
+# DOWNLOAD SEQUENCE (DONE braney 2008-10-07)
     ssh kkstore05
     mkdir /cluster/store12/choHof1
     ln -s /cluster/store12/choHof1 /cluster/data
@@ -13,47 +13,16 @@
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/sloth/ChoHof1.0/assembly.agp \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/sloth/ChoHof1.0/assembly.bases.gz \
 ftp://ftp.broad.mit.edu/pub/assemblies/mammals/sloth/ChoHof1.0/assembly.quals.gz 
+    md5sum ass* > assembly.md5sum
 
-
-qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin choHof1.qual.qac
-
-    wget --timestamping \
-ftp://ftp.broad.mit.edu/pub/assemblies/mammals/sloth/ChoHof1.0/BasicStats.out
-# --------------------------------------------------------------------------------
-# Thu Jul 10 15:36:10 2008 run (pid=7149) using Sat Jul  5 12:52:57 EDT 2008
-# make
-# BasicStats PRE=/seq/assembly_analysis/ DATA=projects/LowCoverage/Sloth
-# \
-#           RUN=run/work SUBDIR=assembly.8_FinalizeAssembly QUAL_STATS=True
-\
-#           OUTFILE=BasicStats.out
-#--------------------------------------------------------------------------------
-#
-#Supercontigs having < 3 reads or < 1kb sequence are ignored.
-#95 gaps <= -1000; 0 gaps <= -10000; 0 gaps <= -100000
-#fraction of gaps < -10kb or more than 4 deviations below zero: 0.503%
-#0 gaps > 10kb, 0 gaps > 50kb, 0 gaps > 200kb, 0 gaps > 1Mb
-#74.58% of reads were used in the assembly (76.64% of bases, 77.64% of Q20
-#bases)
-#0% of reads were used multiply in the assembly
-#850842 contigs, having N50 length 2461
-#total contig length: 1950483635, spanning 2343984972 bases (with 16.8% in
-#gaps)
-#370984 supercontigs, having N50 length 8604 (not including gaps)
-#100% of assembly in supers of size < 200000 (2343984972 bases)
-#Assembly base coverage: 2.26X.  Assembly Q20 coverage:  2.05X.
-#99.99% of bases have q >= 1
-#96.49% of bases have q >= 20
-#92.79% of bases have q >= 30
-#88.59% of bases have q >= 40
-#84.54% of bases have q >= 50
+    qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin choHof1.qual.qac
 
    cut -f 1 assembly.agp | uniq -c | wc -l 
-   # Number of scaffolds: 481260
+   # Number of scaffolds: 481259
 
 #########################################################################
-# Create .ra file and run makeGenomeDb.pl
-    ssh kkstore05
+# Create .ra file and run makeGenomeDb.pl (DONE braney 2008-10-07)
+    ssh kolossus
     cd /cluster/data/choHof1
 cat << _EOF_ >choHof1.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -73,24 +42,21 @@ qualFiles /cluster/data/choHof1/broad/choHof1.qual.qac
 dbDbSpeciesDir sloth
 _EOF_
 
-# use 'screen' make sure on kkstore05
-    makeGenomeDb.pl -verbose=2 choHof1.config.ra > makeGenomeDb.out 2>&1 &
+    makeGenomeDb.pl -workhorse kolossus choHof1.config.ra > makeGenomeDb.out 2>&1 &
 
-# 'ctl-a ctl -d' returns to previous shell
-cut -f 2 chrom.sizes | ave stdin
-# Q1 7169.500000
-# median 13298.000000
-# Q3 55788.500000
-# average 866164.007952
-# min 3002.000000
-# max 88675666.000000
-# count 3144
-# total 2723219641.000000
-# standard deviation 5316243.688364
-
+    cut -f 2 chrom.sizes | ave stdin
+# Q1 1235.000000
+# median 2269.000000
+# Q3 6207.000000
+# average 5109.364438
+# min 250.000000
+# max 197267.000000
+# count 481259
+# total 2458927620.000000
+# standard deviation 6671.452585
 
 #########################################################################
-# REPEATMASKER (DONE braney 2008-08-04)
+# REPEATMASKER (not done)
     ssh kkstore05
     screen # use a screen to manage this job
     mkdir /cluster/data/choHof1/bed/repeatMasker
@@ -109,7 +75,7 @@ cut -f 2 chrom.sizes | ave stdin
 
 
 #########################################################################
-# SIMPLE REPEATS TRF (DONE braney 2008-08-04)
+# SIMPLE REPEATS TRF (not done)
     ssh kkstore05
     screen # use a screen to manage this job
     mkdir /cluster/data/choHof1/bed/simpleRepeat
@@ -149,10 +115,5 @@ cut -f 2 chrom.sizes | ave stdin
 # %29.78 masked total, %35.54 masked real
 
     # Link to it from /gbdb
+    rm -f /gbdb/choHof1/choHof1.2bit
     ln -s /cluster/data/choHof1/choHof1.2bit /gbdb/choHof1/choHof1.2bit
-
-    # mkdir /san/sanvol1/scratch/choHof1
-    cp /cluster/data/choHof1/choHof1.2bit /san/sanvol1/scratch/choHof1
-    cp /cluster/data/choHof1/chrom.sizes /san/sanvol1/scratch/choHof1
-
-
