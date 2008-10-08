@@ -6,17 +6,20 @@ lab	HudsonAlpha
 dataType	ChipSeq
 variables	cell, antibody
 assembly	hg18
+medianFragmentLength	225
+fragmentLengthRange	150-300
 dafVersion      0.2.2
+
 
 # Track/view definition
 view             Peaks
-longLabelPrefix  HudsonAlpha ChIP/Seq Peaks
+longLabelPrefix  HudsonAlpha ChIP-Seq Peaks
 type             narrowPeak
 hasReplicates    no
 required         yes
 
 view             Signal
-longLabelPrefix  HudsonAlpha ChIP/Seq Signal
+longLabelPrefix  HudsonAlpha ChIP-Seq Signal
 type             wig
 hasReplicates    no
 required         yes
