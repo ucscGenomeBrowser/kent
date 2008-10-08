@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.83 2008/10/08 01:09:40 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.84 2008/10/08 05:16:13 mikep Exp $
 
 use warnings;
 use strict;
@@ -400,7 +400,7 @@ sub validateGtf {
     my $errFile = "/tmp/doEncodeValidate.gtf.err";
     doTime("beginning validateGtf") if $opt_timing;
     my $filePath = defined($path) ? "$path/$file" : $file;
-    my $outFile = "$filePath.bed";
+    my $outFile = "/tmp/doEncodeValidate.gtf.bed"; # Should use temp file but we only have one GTF project
     if(Encode::isZipped($filePath)) {
         # XXXX should be modified to handle zipped files.
         die "We don't currently support gzipped gtf files\n";
