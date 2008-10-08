@@ -71,6 +71,11 @@ file dafHeader
 type in
 required no
 
+field fragmentLengthRange
+file dafHeader
+type in
+required no
+
 field longLabelPrefix
 file dafList
 type string
