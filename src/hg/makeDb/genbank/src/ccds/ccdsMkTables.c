@@ -15,7 +15,7 @@
 #include <sys/types.h>
 #include <regex.h>
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.21 2008/09/03 19:19:33 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.22 2008/10/08 16:56:11 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -298,11 +298,11 @@ while ((hel = hashNext(&cookie)) != NULL)
 
 static void findPartialMatches(struct sqlConnection *conn, struct genomeInfo *genome,
                                struct hash* ignoreTbl)
-/* find CCDS interpretation_subtype of "Partial match".  Does in a separate
+/* find CCDS interpretation_subtype of "Partial match".  Done in a separate
  * pass due to the lack of sub-selects in mysql 4. */
 {
 verbose(2, "begin findPartialMatches\n");
-static char select[4096];
+char select[4096];
 safef(select, sizeof(select),
       "SELECT "
       "CcdsUids.ccds_uid, GroupVersions.ccds_version "
@@ -329,6 +329,37 @@ sqlFreeResult(&sr);
 verbose(2, "end findPartialMatches: %d partial matches found\n", cnt);
 }
 
+static void findReplaced(struct sqlConnection *conn, struct genomeInfo *genome,
+                         struct hash* ignoreTbl)
+/* find CCDSs that have been replaced.  Done in a separate pass due to the
+ * lack of sub-selects in mysql 4. */
+{
+verbose(2, "begin findReplaced\n");
+static char select[4096];
+safef(select, sizeof(select),
+      "SELECT "
+      "CcdsUids.ccds_uid, GroupVersions.ccds_version "
+      "FROM %s, Interpretations, InterpretationSubtypes "
+      "WHERE %s "
+      "AND (Interpretations.ccds_uid = CcdsUids.ccds_uid) "
+      "AND (Interpretations.interpretation_subtype_uid = InterpretationSubtypes.interpretation_subtype_uid) "
+      "AND (InterpretationSubtypes.interpretation_subtype in (\"Strand changed\", \"Location changed\", \"Merged\")) "
+      "AND (Interpretations.val_description in (\"New CCDS\", \"Merged into\"))",
+      mkCommonFrom(), mkCommonWhere(genome, conn));
+
+struct sqlResult *sr = sqlGetResult(conn, select);
+char **row;
+int cnt = 0;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hashEl *hel = hashStore(ignoreTbl, ccdsMkId(sqlUnsigned(row[0]), sqlUnsigned(row[1])));
+    hel->val = "partial_match";
+    cnt++;
+    }
+sqlFreeResult(&sr);
+verbose(2, "end findReplaced: %d replaced CCDS found\n", cnt);
+}
+
 static struct hash* buildIgnoreTbl(struct sqlConnection *conn, struct genomeInfo *genome)
 /* Build table of CCDS ids to ignore.  This currently contains:
  *   - ones that have the interpretation_subtype of "Partial match".
@@ -336,6 +367,7 @@ static struct hash* buildIgnoreTbl(struct sqlConnection *conn, struct genomeInfo
 {
 struct hash* ignoreTbl = hashNew(20);
 findPartialMatches(conn, genome, ignoreTbl);
+findReplaced(conn, genome, ignoreTbl);
 if (verboseLevel() >= 3)
     dumpIgnoreTbl(ignoreTbl);
 return ignoreTbl;
