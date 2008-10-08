@@ -69,11 +69,11 @@ sub dieFile
 
 sub loadGene
 {
-    my ($assembly, $tableName, $fileList, $pushQ) = @_;
+    my ($assembly, $tableName, $fileList, $pushQ, $ldHgGeneFlags) = @_;
 
-    HgAutomate::verbose(2, "loadGene ($assembly, $tableName, $fileList, $pushQ)\n");
-    if(system("cat $fileList | egrep -v '^track|browser' | ldHgGene -genePredExt $assembly $tableName stdin > out/loadGene.out 2>&1")) {
-        print STDERR "ERROR: File(s) '$fileList' failed gene load.\n";
+    HgAutomate::verbose(2, "loadGene ($assembly, $tableName, $fileList, $pushQ, $ldHgGeneFlags)\n");
+    if(system("cat $fileList | egrep -v '^track|browser' | ldHgGene $ldHgGeneFlags $assembly $tableName stdin > out/loadGene.out 2>&1")) {
+        print STDERR "ERROR: File(s) '$fileList' ($ldHgGeneFlags) failed gene load.\n";
         dieFile("out/loadGene.out");
     } else {
         print "$fileList loaded into $tableName\n";
@@ -316,10 +316,9 @@ for my $key (keys %ra) {
         HgAutomate::verbose(3, "Download only; dont load [$key].\n");
         $hgdownload = 1;
     } elsif($type eq "gtf") {
-	# The validator converted the gtf file into a genePred file *.bed
-        loadGene($assembly, $tablename, "$files.bed", $pushQ);
-    } elsif($type eq "genePred") {
-        loadGene($assembly, $tablename, $files, $pushQ);
+        loadGene($assembly, $tablename, $files, $pushQ, "-gtf");
+    } elsif($type eq "genePred" ) {
+        loadGene($assembly, $tablename, $files, $pushQ, "-genePredExt");
     } elsif ($type eq "wig") {
         # Copy signal data to hgdownload (unless we created it).
         if(@files == 1) {
