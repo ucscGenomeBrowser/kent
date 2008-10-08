@@ -12,19 +12,28 @@ DOWNLOAD_DIR = /usr/local/apache/htdocs/encode/tests
 DIRS = chipseq
 FILES = load.ra trackDb.ra README.txt
 
+TMP_FILE_1 = 1.tmp
+TMP_FILE_2 = 2.tmp
+
 all: test
 
+# "make bad" is useful for testing error reporting by doEncodeValidate.pl
+
 bad:
-	echo 'testing an un-readable file' > input/badDdf/unreadable.txt
-	chmod 222 input/badDdf/unreadable.txt
+	@echo 'testing an un-readable file' > input/badDdf/unreadable.txt
+	@chmod 222 input/badDdf/unreadable.txt
 	-${PROG} -configDir=../config x input/badDdf
 	-${PROG} -configDir ../config x input/badDaf
+	@rm input/badDdf/unreadable.txt
 
 test:
 	for dir in $(DIRS); do \
 		${PROG} -allowReloads -configDir=../config x input/$$dir && \
 		for file in $(FILES); do \
-			diff --ignore-matching-lines=dateSubmitted input/$$dir/out/$$file expected/$$dir/$$file; \
+			egrep -v '(priority|dateSubmitted|data restricted)' input/$$dir/out/$$file > ${TMP_FILE_1} && \
+			egrep -v '(priority|dateSubmitted|data restricted)' expected/$$dir/$$file > ${TMP_FILE_2} && \
+			diff ${TMP_FILE_2} ${TMP_FILE_1} && \
+			rm ${TMP_FILE_1} ${TMP_FILE_2}; \
 		done \
         done
 
