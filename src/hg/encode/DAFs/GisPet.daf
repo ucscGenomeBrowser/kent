@@ -1,4 +1,4 @@
-# Data Agreement File for PET Ditag project $Revision: 1.1 $
+# Data Agreement File for PET Ditag project $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -18,24 +18,25 @@ type             gappedPeak
 hasReplicates    no
 required         yes
 
-view             Signal
-longLabelPrefix  GIS PET Signal
+view             PlusRawSignal
+longLabelPrefix  GIS PET Raw Signal (plus strand)
 type             wig
 hasReplicates    no
-required         yes
+required         no
 
-view             RawSignal
-longLabelPrefix  GIS PET Raw Signal
+view             MinusRawSignal
+longLabelPrefix  GIS PET Raw Signal (minus strand)
 type             wig
-hasReplicates    yes
-required         yes
+hasReplicates    no
+required         no
 
 view             Alignments
 longLabelPrefix  GIS PET Alignments
 type             pairedTagAlign
-hasReplicates    yes
+hasReplicates    no
 required         yes
 
-view             Fastq
-type             download
+view             RawData
+type             fastq
+hasReplicates    no
 required         yes
