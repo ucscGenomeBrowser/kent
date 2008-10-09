@@ -59,10 +59,11 @@ Alignment step, runs:
  - gbAlignIServerCopy - Copy fasta files to iservers with rsync 
  - gbAlignRun - rsh to kk adn run para make until jobs complete
    checking results.
- - gbAlignFinish - Process PSL files and install in data directory";
+ - gbAlignFinish - Process PSL files and install in data directory
+";
 
 #
-# $Id: gbAlignStep,v 1.19 2007/12/26 16:22:35 markd Exp $
+# $Id: gbAlignStep,v 1.20 2008/10/09 01:10:48 markd Exp $
 #
 use strict;
 use warnings;
@@ -70,24 +71,6 @@ use File::Basename;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use gbCommon;
-
-# open all of the /cluster/store directory to avoid automounter problems on
-# genbank server (FIXME: tmp hack)
-use POSIX;
-sub holdOpenDir($) {
-    my($path) = @_;
-    my $fd = POSIX::open($path);
-    if (!defined($fd)) {
-        die("can't open cluster directory $path");
-    }
-}
-sub openStoreDirsHack() {
-    holdOpenDir("/cluster/data");
-    holdOpenDir("/cluster/bin");
-    for (my $i = 1; $i <= 12; $i++) {
-        holdOpenDir("/cluster/store".scalar($i));
-    }
-}
 
 # Entry
 my $workDir;
@@ -232,7 +215,6 @@ if (!defined($main::ENV{TMPDIR})) {
     makeDir($main::ENV{TMPDIR});
 }
 checkOnBuildServer();
-openStoreDirsHack();
 
 # begin
 if ($initialBuild) {
