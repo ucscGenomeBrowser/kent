@@ -12,9 +12,10 @@
 #include "affyAllExonProbe.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.20 2008/09/03 19:19:07 markd Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.21 2008/10/09 18:32:05 hiram Exp $";
 
-static struct rgbColor getColorForExprBed(float val, float max, boolean redGreen)
+static struct rgbColor getColorForExprBed(float val, float max,
+	boolean redGreen, boolean redBlueOnWhite)
 /* Return the correct color for a given score */
 {
 float absVal = fabs(val);
@@ -35,7 +36,7 @@ if (max == 0)
 colorIndex = (int)(absVal * 255/max);
 
 
-if(redGreen) 
+if (redGreen) 
     {
    if(val > 0) 
 	{
@@ -49,6 +50,21 @@ if(redGreen)
 	color.g = colorIndex;
 	color.b = 0;
 	}
+    }
+else if (redBlueOnWhite)
+    {
+    if(val > 0) 
+	{
+	color.r = 255; 
+	color.g = 255 - colorIndex;
+	color.b = 255 - colorIndex;
+	}
+    else 
+	{
+	color.r = 255 - colorIndex;
+	color.g = 255 - colorIndex;
+	color.b = 255;
+	}	
     }
 else
     {
@@ -105,7 +121,7 @@ msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNa
 }
 
 static void printExprssnColorKey(float minVal, float maxVal, float stepSize, int base,
-			struct rgbColor(*getColor)(float val, float maxVal, boolean redGreen), boolean redGreen)
+	struct rgbColor(*getColor)(float val, float maxVal, boolean redGreen, boolean redBlueOnWhite), boolean redGreen, boolean redBlueOnWhite)
 /* print out a little table which provides a color->score key */
 {
 float currentVal = -1 * maxVal;
@@ -125,7 +141,7 @@ for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += step
 printf("</tr><tr>\n");
 for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += stepSize)
     {
-    struct rgbColor rgb = getColor(currentVal, maxVal, redGreen);
+    struct rgbColor rgb = getColor(currentVal, maxVal, redGreen, redBlueOnWhite);
     printf("<td bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", rgb.r, rgb.g, rgb.b);
     }
 printf("</tr></table>\n");
@@ -133,7 +149,8 @@ printf("</td></tr></table>\n");
 }
 
 static void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash, 
-			     int expIndex, char *expName, float maxScore, boolean redGreen)
+     int expIndex, char *expName, float maxScore,
+    boolean redGreen, boolean redBlueOnWhite)
 /* print the name of the experiment and color the 
    background of individual cells using the score to 
    create false two color display */
@@ -154,18 +171,20 @@ else
 for(bed = bedList;bed != NULL; bed = bed->next)
     {
     /* use the background colors to creat patterns */
-    struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore, redGreen);
+    struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore, redGreen, redBlueOnWhite);
     printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
     }
 printf("</tr>\n");
 }
 
-static void msBedPrintTable(struct bed *bedList, struct hash *erHash, char *itemName, 
-		     char *expName, float minScore, float maxScore, float stepSize, int base,
-		     void(*printHeader)(struct bed *bedList, struct hash *erHash, char *item),
-		     void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex, char *expName, float maxScore, boolean redGreen),
-		     void(*printKey)(float minVal, float maxVal, float size, int base, struct rgbColor(*getColor)(float val, float max, boolean redGreen), boolean redGreen),
-		     struct rgbColor(*getColor)(float val, float max, boolean redGreen), boolean redGreen)
+static void msBedPrintTable(struct bed *bedList, struct hash *erHash,
+    char *itemName, char *expName, float minScore, float maxScore,
+    float stepSize, int base,
+    void(*printHeader)(struct bed *bedList, struct hash *erHash, char *item),
+    void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex, char *expName, float maxScore, boolean redGreen, boolean redBlueOnWhite),
+    void(*printKey)(float minVal, float maxVal, float size, int base, struct rgbColor(*getColor)(float val, float max, boolean redGreen, boolean redBlueOnWhite), boolean redGreen, boolean redBlueOnWhite),
+    struct rgbColor(*getColor)(float val, float max, boolean redGreen, boolean redBlueOnWhite),
+	boolean redGreen, boolean redBlueOnWhite)
 /* prints out a table from the data present in the bedList */
 {
 int i,featureCount=0;
@@ -174,7 +193,7 @@ if(bedList == NULL)
 featureCount = slCount(bedList);
 /* time to write out some html, first the table and header */
 if(printKey != NULL)
-    printKey(minScore, maxScore, stepSize, base, getColor, redGreen);
+    printKey(minScore, maxScore, stepSize, base, getColor, redGreen, redBlueOnWhite);
 printf("<p>\n");
 printf("<basefont size=-1>\n");
 printf("<table  bgcolor=\"#000000\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\"><tr><td>");
@@ -182,7 +201,7 @@ printf("<table  bgcolor=\"#fffee8\" border=\"0\" cellspacing=\"0\" cellpadding=\
 printHeader(bedList, erHash, itemName);
 for(i=0; i<bedList->expCount; i++)
     {
-    printRow(bedList, erHash, i, expName, maxScore, redGreen);
+    printRow(bedList, erHash, i, expName, maxScore, redGreen, redBlueOnWhite);
     }
 printf("</table>");
 printf("</td></tr></table>");
@@ -394,11 +413,24 @@ struct bed *bedList;
 char *itemName = cgiUsualString("i2","none");
 char *expName = (item == NULL) ? itemName : item;
 boolean redGreen = TRUE;
+boolean redBlueOnWhite = FALSE;
 char colorVarName[256];
 
 safef(colorVarName, sizeof(colorVarName), "%s.color", tdb->tableName);
+/* decide color scheme flags */
 if (!sameString(cartUsualString(cart, colorVarName, "redGreen"), "redGreen"))
-    redGreen = FALSE;
+    {
+    if (sameString(cartUsualString(cart, colorVarName, "redGreen"), "redBlueOnWhite"))
+    	{
+	redBlueOnWhite = TRUE;
+    	redGreen = FALSE;
+	}
+    else
+    	{
+    	redGreen = FALSE;
+	}
+    }
+
 if (!ct)
     {
     genericHeader(tdb, itemName);
@@ -435,8 +467,9 @@ else
 	hashAdd(erHash, id, er);
 	}
     puts("<h2></h2><p>\n");
-    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 2,
-		     msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed, redGreen);
+    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore,
+	stepSize, 2, msBedDefaultPrintHeader, msBedExpressionPrintRow,
+	printExprssnColorKey, getColorForExprBed, redGreen, redBlueOnWhite);
     hashTraverseEls(erHash, erHashElFree);
     hashFree(&erHash);
     microarrayGroupsFree(&groupings);
