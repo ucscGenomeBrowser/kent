@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.41 2008/10/09 01:49:44 braney Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.42 2008/10/09 17:28:46 hiram Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -393,8 +393,8 @@ while ((wordCount =
     int thickStart = 0, thickEnd = 0;
     if (s > e)
 	errAbort(
-	"Start address is after end address on line %d of bed file %s", 
-	    lf->lineIx, lf->fileName);
+	"ERROR: start coordinate is after end coordinate (chromStart > chromEnd) on line %d of bed file %s\nERROR: %s %d %d", 
+	    lf->lineIx, lf->fileName, chrom, s, e);
     if (multiple)
         {
         if (wordCount < 4 || wordCount > 6)
