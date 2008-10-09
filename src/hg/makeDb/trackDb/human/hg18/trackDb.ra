@@ -2911,3 +2911,79 @@ priority 300
     visibility hide
     type wig -10 10
 
+track zhaoLabNucleosome
+compositeTrack on
+shortLabel Zhao lab Nucleosome
+longLabel Zhao lab Nucleosome measurements
+group x
+priority 300
+visibility hide
+exonArrows off
+type bed 12
+itemRgb on
+chromosomes chr1
+
+    track zhaoLabActivatedNucleosomeFwd
+    subTrack zhaoLabNucleosome
+    shortLabel ActiveNucleosome
+    longLabel Activated nucleosome forward strand
+    priority 1
+
+    track zhaoLabActivatedNucleosomeRev
+    subTrack zhaoLabNucleosome
+    shortLabel ActiveNucleosome
+    longLabel Activated nucleosome reverse strand
+    priority 2
+
+    track zhaoLabRestingNucleosomeFwd
+    subTrack zhaoLabNucleosome
+    shortLabel RestingNucleosome
+    longLabel Resting nucleosome forward strand
+    priority 3
+
+    track zhaoLabRestingNucleosomeRev
+    subTrack zhaoLabNucleosome
+    shortLabel RestingNucleosome
+    longLabel Resting nucleosome reverse strand
+    priority 4
+
+    track zhaoLabRestingH3Fwd
+    subTrack zhaoLabNucleosome
+    shortLabel RestingHistoneH3
+    longLabel Resting histone H3 forward strand
+    priority 5
+
+    track zhaoLabRestingH3Rev
+    subTrack zhaoLabNucleosome
+    shortLabel RestingNucleosome
+    longLabel Resting histone H3 reverse strand
+    priority 6
+
+track zhaoLabPolII
+compositeTrack on
+shortLabel Zhao lab PolII
+longLabel Zhao lab Pol II measurements
+group x
+priority 300
+visibility hide
+exonArrows off
+type bed 9
+itemRgb on
+
+    track zhaoLabActiveUnphosPolII
+    subTrack zhaoLabPolII
+    shortLabel Active Unphosphor PolII
+    longLabel Activated Unphosphorylated Pol II
+    priority 1
+
+    track zhaoLabRestingUnphosPolII
+    subTrack zhaoLabPolII
+    shortLabel Resting Unphosphor PolII
+    longLabel Resting Unphosphorylated Pol II
+    priority 2
+
+    track zhaoLabActiveSer5PhosPolII
+    subTrack zhaoLabPolII
+    shortLabel Active Ser5 PolII
+    longLabel Activated Ser5 Phosphorylated Pol II
+    priority 3
