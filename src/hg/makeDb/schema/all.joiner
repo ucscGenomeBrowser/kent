@@ -737,6 +737,16 @@ identifier gnfMouseAtlas2
     $mm.gnfAtlas2.name
     $mm.affyGnf1m.qName
 
+identifier gnfMOE430v2
+"Novartis GNF Mouse gene probe ID"
+    hgFixed.gnfMOE430v2All.name
+    hgFixed.gnfMOE430v2AllRatio.name unique
+    hgFixed.gnfMOE430v2Median.name full unique
+    hgFixed.gnfMOE430v2MedianRatio.name unique
+    $mm.knownToGnfMOE430v2.value
+    $mm.gnfMOE430v2.name
+    $mm.affyMOE430v2.qName
+
 identifier gnfRatAtlas2
 "Novartis GNF Rat gene probe ID"
     hgFixed.gnfRatAtlas2All.name
