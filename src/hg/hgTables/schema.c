@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.51 2008/09/18 22:09:18 angie Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.52 2008/10/09 00:04:32 aamp Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -531,6 +531,36 @@ else
     }
 }
 
+static void showSchemaCtArray(char *table, struct customTrack *ct)
+/* Show schema on bed format custom track. */
+{
+struct bed *bed;
+int count = 0;
+/* Find named custom track. */
+hPrintf("<B>Custom Track ID:</B> %s ", table);
+hPrintf("<B>Field Count:</B> %d<BR>", ct->fieldCount);
+hPrintf("For formatting information see: ");
+hPrintf("<A HREF=\"../goldenPath/help/customTrack.html#microarray\">Microarray</A> ");
+hPrintf("format.");
+
+if (ct->dbTrack)
+    {
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    webNewSection("Sample Rows");
+    printSampleRows(10, conn, ct->dbTableName);
+    printTrackHtml(ct->tdb);
+    hFreeConn(&conn);
+    }
+else
+    {
+    webNewSection("Sample Rows");
+    hPrintf("<TT><PRE>");
+    for(bed = ct->bedList;bed != NULL && count < 10;bed = bed->next,++count)
+	bedTabOutN(bed, ct->fieldCount, stdout);
+    hPrintf("</PRE></TT>\n");
+    }
+}
+
 static void showSchemaCt(char *table)
 /* Show schema on custom track. */
 {
@@ -544,6 +574,8 @@ else if (startsWithWord("bed", type) || startsWithWord("bedGraph", type))
     showSchemaCtBed(table, ct);
 else if (startsWithWord("maf", type))
     showSchemaCtMaf(table, ct);
+else if (startsWithWord("array", type))
+    showSchemaCtArray(table, ct);
 else
     errAbort("Unrecognized customTrack type %s", type);
 }
