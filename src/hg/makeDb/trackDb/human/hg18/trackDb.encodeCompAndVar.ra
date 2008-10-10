@@ -6,7 +6,7 @@ shortLabel 36-Way TBA
 longLabel TBA 36-Vertebrate Alignments in the ENCODE Regions
 group encodeCompAndVar
 subGroup1 view Views align=Alignments cons=Conservation
-visibilityViewDefaults align=full cons=pack
+visibilityViewDefaults align=full+ cons=pack
 sortOrder view=+
 dragAndDrop subTracks
 type bed 4
@@ -30,7 +30,7 @@ priority 1
     speciesGroups primate placental mammal vertebrate
     sGroup_primate panTro2 ponAbe2 gibbon colobus_monkey vervet baboon rheMac2 dusky_titi owl_monkey marmoset squirrel_monkey mouse_lemur galago
     sGroup_placental tree_shrew rn4 mm9 guinea_pig st_squirrel rabbit bosTau3 horse cat canFam2 flying_fox sbbat rfbat hedgehog shrew armadillo elephant tenrec rock_hyrax
-    sGroup_mammal monDom4 platypus 
+    sGroup_mammal monDom4 platypus
     sGroup_vertebrate galGal3
     treeImage phylo/encode_37way.gif
     chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -44,7 +44,7 @@ priority 1
     type bed 4
     subGroups view=cons
     color 0, 10, 100
-    priority 1
+    priority 2
 
     track encodeTbaChaiConsDec07
     subTrack encodeMsaTbaDec07
@@ -54,7 +54,7 @@ priority 1
     noInherit on
     type bed 3
     color 100, 10, 0
-    priority 2
+    priority 3
 
 track encodeTbaAlignSep07
 shortLabel Sep07 TBA Align
@@ -70,19 +70,19 @@ frames encodeTbaFramesDec07
 speciesGroups primate placental mammal vertebrate
 sGroup_primate panTro2 baboon gibbon colobus_monkey vervet rheMac2 dusky_titi owl_monkey marmoset squirrel_monkey mouse_lemur galago
 sGroup_placental tree_shrew rn4 mouse guinea_pig st_squirrel rabbit bosTau2 horse cat canFam2 flying_fox sbbat rfbat hedgehog armadillo elephant tenrec rock_hyrax
-sGroup_mammal monDom4 platypus 
-sGroup_vertebrate galGal3 xenTro2 
+sGroup_mammal monDom4 platypus
+sGroup_vertebrate galGal3 xenTro2
 #treeImage phylo/species28.gif
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion Sep 2007
 
 track encodeIndels
-shortLabel NHGRI DIPs 
+shortLabel NHGRI DIPs
 longLabel NHGRI Deletion/Insertion Polymorphisms in ENCODE regions
 group encodeCompAndVar
 priority 80
 itemRgb on
-type bed 9 + 
+type bed 9 +
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE June 2005 Freeze
 origAssembly hg17
