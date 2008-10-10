@@ -51,9 +51,8 @@ else
   endif
 endif
 
-cp /cluster/bin/scripts/linkCheckExclude .
+cp /cluster/bin/scripts/linkCheckExclude excludeList
 foreach filePath (`cat $pathfile`)
   echo "filePath: $filePath"
-  checkStaticLinks.csh $filePath $yymmdd linkCheckExclude
+  checkStaticLinks.csh $filePath $yymmdd excludeList
 end
-rm -f linkCheckExclude
