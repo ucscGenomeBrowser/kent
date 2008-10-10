@@ -167,6 +167,44 @@ summarized in the following table:
     9: 45 <= Q < 98
     F: Q == 99
 
+'e' Lines
+
+The 'e' lines are optional and indicate that there isn't aligning 
+DNA for a species but that the current block is bridged by a chain 
+that connects blocks before and after this block.
+
+  src -- The name of one of the source sequences for the alignment. 
+  start -- The start of the non-aligning region in the source sequence. 
+      This is a zero-based number. If the strand field is '-' then this is 
+      the start relative to the reverse-complemented source sequence. 
+  size -- The size in base pairs of the non-aligning region in the 
+      source sequence. 
+  strand -- Either '+' or '-'. If '-', then the alignment is to the 
+      reverse-complemented source. 
+  srcSize -- The size of the entire source sequence, not just the parts 
+      involved in the alignment. alignment and any insertions (dashes) 
+      as well. 
+  status -- A character that specifies the relationship between the 
+      non-aligning sequence in this block and the sequence that appears 
+      in the previous and subsequent blocks. 
+
+The status character can be one of the following values: 
+
+  C -- the sequence before and after is contiguous implying that this 
+      region was either deleted in the source or inserted in the 
+      reference sequence. The browser draws a single line or a '-' 
+      in base mode in these blocks. 
+  I -- there are non-aligning bases in the source species between 
+      chained alignment blocks before and after this block. The 
+      browser shows a double line or '=' in base mode. 
+  M -- there are non-aligning bases in the source and more than 95% 
+      of them are Ns in the source. The browser shows a pale yellow bar. 
+  n -- there are non-aligning bases in the source and the next aligning 
+      block starts in a new chromosome or scaffold that is bridged by 
+      a chain between still other blocks. The browser shows either a 
+      single line or a double line based on how many bases are in the 
+      gap between the bridging alignments. 
+
 'r' Lines
 
 The r lines are optional.  They specify how this region of the
