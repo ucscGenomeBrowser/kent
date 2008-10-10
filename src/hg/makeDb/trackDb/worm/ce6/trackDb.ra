@@ -189,6 +189,7 @@ visibility hide
 type bed 12
 itemRgb on
 compositeTrack on
+origAssembly ce4
 
 	track nucleosomeControl
 	subTrack nucleosome
