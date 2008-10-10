@@ -7,7 +7,7 @@
 #include "portable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: gbConf.c,v 1.6 2008/10/02 20:34:04 markd Exp $";
+static char const rcsid[] = "$Id: gbConf.c,v 1.7 2008/10/10 06:06:58 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -304,16 +304,24 @@ else
     }
 }
 
+static void checkServerDbFiles(char *db, struct gbConf *conf)
+/* check for server files for a database */
+{
+    checkForDbFile(conf, db, "serverGenome", TRUE, TRUE, NULL, NULL);
+    checkForDbFile(conf, db, "lift", TRUE, FALSE, NULL, NULL);
+    checkForDbFile(conf, db, "hapRegions", FALSE, TRUE, NULL, NULL);
+    // upstreamMafOrgs is required if upstreamMaf is specified
+    
+    if (gbConfGetDb(conf, db, "upstreamMaf") != NULL)
+        checkForDbFile(conf, db, "upstreamMafOrgs", TRUE, TRUE, NULL, NULL);
+}
+
 static void checkServerFiles(struct slName *dbs, struct gbConf *conf)
 /* check for server files */
 {
 struct slName *db;
 for (db = dbs; db != NULL; db = db->next)
-    {
-    checkForDbFile(conf, db->name, "serverGenome", TRUE, TRUE, NULL, NULL);
-    checkForDbFile(conf, db->name, "lift", TRUE, FALSE, NULL, NULL);
-    checkForDbFile(conf, db->name, "hapRegions", FALSE, TRUE, NULL, NULL);
-    }
+    checkServerDbFiles(db->name, conf);
 }
 
 static void checkClusterFiles(struct slName *dbs, struct gbConf *conf,

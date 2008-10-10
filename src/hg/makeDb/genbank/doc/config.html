@@ -129,12 +129,19 @@
      <li> <code><em>$db</em>.mgcTables.default</code> - indicates which
           MGC tables to create when there is no host-specific setting.
 
-     <li> <code><em>$db</em>.orfeomeTables.<em>$host</em></code> - indicates if
-          ORFeome tables should be create when loading database on <CODE><em>$host</em></code>.
-          Values are <CODE>yes</CODE>, or <CODE>no</CODE>.
-          <CODE><em>$host</em></code> is the value returned by <CODE>uname -n</CODE>.
-     <li> <code><em>$db</em>.orfeomeTables.default</code> - indicates if
-          ORFeome tables should be created when there is no host-specific setting.
+     <li> <code><em>$db</em>.upstreamTable</code> - If specified, use this
+       table to create upstream FASTA files. It is an error if the table
+       doesn't exist.  If not specified, don't create upstream
+       FASTAs.
+
+     <li> <code><em>$db</em>.upstreamMaf</code> - If specified, create
+       update MAFs using this MAF table and the genes
+       in <code><em>$db</em>.upstreamTable</code>.
+       In or not specified, don't create upstream MAFs.
+
+     <li> <code><em>$db</em>.upstreamMafOrgs</code> - File containing
+       order list of organisms to include in the upstream MAF.
+       Required if <code><em>$db</em>.upstreamMaf</code> is specified.
 
      <li> <code><em>$db</em>.ccds.ncbiBuild</code> - includes NCBI build number
        (e.g. 36.3) for CCDS table building.  Specifying this enabled auto-update
@@ -167,4 +174,3 @@
     </UL>
   </BODY>
 </HTML>
-

@@ -29,7 +29,8 @@ BEGIN {
                            getDbConfNo splitSpaceList
                            getHgConf setupHgConf callMysql runMysqlDump runMysql
                            haveMysqlDb haveMysqlTbl listMysqlTbls
-                           getDownloadTimeFile getDownloadDir getRelDownloadDir
+                           getDownloadTimeFile getRelDownloadDir
+                           getSeqDownloadDir getMafDownloadDir
                            checkOnBuildServer);
     
     # make stdout/stderr always line buffered
@@ -979,10 +980,16 @@ sub getRelDownloadDir($) {
     return $relDir;
 }
 
-# the absolute path to the download directory on hgdownload.
-sub getDownloadDir($$) {
+# the absolute path to the sequence download directory on hgdownload.
+sub getSeqDownloadDir($$) {
     my($downloadRootDir, $db) = @_;
     return $downloadRootDir . "/" . getRelDownloadDir($db) . "/bigZips";
+}
+
+# the absolute path to the MAF upstream download directory on hgdownload.
+sub getMafDownloadDir($$$) {
+    my($downloadRootDir, $db, $tbl) = @_;
+    return $downloadRootDir . "/" . getRelDownloadDir($db) . "/${tbl}/maf";
 }
 
 # get download time file for a db
