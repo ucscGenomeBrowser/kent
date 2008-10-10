@@ -9,7 +9,9 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.36 2007/12/17 15:42:18 braney Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.37 2008/10/10 06:02:24 markd Exp $";
+
+char *mafRegDefTxUpstream = "txupstream";  // transcription start size upstream region
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -77,6 +79,19 @@ for (;;)
     if (**pLine != '#')
         return TRUE;
     }
+}
+
+static void mafRegDefParse(struct mafFile *mf, struct mafAli *ali, char *line)
+/* parse a 'r' line of an 'a' paragraph. */
+{
+if (ali->regDef != NULL)
+    errAbort("multiple 'r' lines in an alignment paragraph: %d of %s", mf->lf->lineIx, mf->lf->fileName);
+char *row[3];
+int wordCount = chopByWhite(line, row, ArraySize(row));
+if (wordCount != 3)
+    lineFileExpectWords(mf->lf, 3+1, wordCount+1); // +1 for 'r'
+ali->regDef = mafRegDefNew(row[0], lineFileNeedFullNum(mf->lf, row, 1),
+                           row[2]);
 }
 
 struct mafAli *mafNextWithPos(struct mafFile *mf, off_t *retOffset)
@@ -214,6 +229,8 @@ for (;;)
 			comp = ali->components;
 			comp->quality = cloneString(row[2]);
 		}
+	    if (sameString(word, "r"))
+                mafRegDefParse(mf, ali, line);
 	    }
 	slReverse(&ali->components);
 	return ali;
@@ -270,6 +287,10 @@ int srcChars = 0, startChars = 0, sizeChars = 0, srcSizeChars = 0;
 
 /* Write out alignment header */
 fprintf(f, "a score=%f\n", ali->score);
+
+/* include region definition */
+if (ali->regDef != NULL)
+    fprintf(f, "r %s %d %s\n", ali->regDef->type, ali->regDef->size, ali->regDef->id);
 
 /* Figure out length of each field. */
 for (comp = ali->components; comp != NULL; comp = comp->next)
@@ -382,6 +403,7 @@ struct mafAli *obj = *pObj;
 if (obj == NULL)
     return;
 mafCompFreeList(&obj->components);
+mafRegDefFree(&obj->regDef);
 freez(pObj);
 }
 
@@ -744,5 +766,31 @@ for (comp = maf->components; comp != NULL; comp = comp->next)
 		comp->quality[writeIx] = 0;
 	}
 maf->textSize = writeIx;
+}
+
+struct mafRegDef *mafRegDefNew(char *type, int size, char *id)
+/* construct a new mafRegDef object */
+{
+struct mafRegDef *mrd;
+AllocVar(mrd);
+if (sameString(type, mafRegDefTxUpstream))
+    mrd->type = mafRegDefTxUpstream;
+else
+    errAbort("invalid mafRefDef type: %s", type);
+mrd->size = size;
+mrd->id = cloneString(id);
+return mrd;
+}
+
+void mafRegDefFree(struct mafRegDef **mrdPtr)
+/* Free a mafRegDef object */
+{
+struct mafRegDef *mrd = *mrdPtr;
+if (mrd != NULL)
+    {
+    freeMem(mrd->id);
+    freeMem(mrd);
+    *mrdPtr = NULL;
+    }
 }
 

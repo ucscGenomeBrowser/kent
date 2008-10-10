@@ -33,6 +33,7 @@ struct mafAli
     double score;        /* Score.  Meaning depends on mafFile.scoring.  0.0 if no scoring. */
     struct mafComp *components;	/* List of components of alignment */
     int textSize;         /* Size of text in each component. */
+    struct mafRegDef *regDef; /* source of region definitions (r line) */
     };
 
 void mafAliFree(struct mafAli **pObj);
@@ -76,6 +77,21 @@ void mafCompFree(struct mafComp **pObj);
 void mafCompFreeList(struct mafComp **pList);
 /* Free up a list of maf components. */
 
+struct mafRegDef
+/* MAF region definition (r line) */
+{
+    char *type;   // type of definition, one of constants below (not malloced)
+    int size;     // region size
+    char *id;     // identifiers
+};
+extern char *mafRegDefTxUpstream;  // transcription start size upstream region
+
+struct mafRegDef *mafRegDefNew(char *type, int size, char *id);
+/* construct a new mafRegDef object */
+
+void mafRegDefFree(struct mafRegDef **mrdPtr);
+/* Free a mafRegDef object */
+
 int mafPlusStart(struct mafComp *comp);
 /* Return start relative to plus strand of src. */
 
@@ -97,7 +113,7 @@ struct mafAli *mafNext(struct mafFile *mafFile);
 
 struct mafAli *mafNextWithPos(struct mafFile *mf, off_t *retOffset);
 /* Return next alignment in FILE or NULL if at end.  If retOffset is
- * nonNULL, return start offset of record in file. */
+ * non-NULL, return start offset of record in file. */
 
 struct mafFile *mafReadAll(char *fileName);
 /* Read in full maf file */

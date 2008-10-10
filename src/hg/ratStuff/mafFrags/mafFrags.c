@@ -11,7 +11,7 @@
 #include "hgMaf.h"
 
 
-static char const rcsid[] = "$Id: mafFrags.c,v 1.7 2008/09/03 19:21:15 markd Exp $";
+static char const rcsid[] = "$Id: mafFrags.c,v 1.8 2008/10/10 06:02:24 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,6 +25,8 @@ errAbort(
   "   -bed12 - If set, in.bed is a bed 12 file, including exons\n"
   "   -thickOnly - Only extract subset between thickStart/thickEnd\n"
   "   -meFirst - Put native sequence first in maf\n"
+  "   -txStarts - Add MAF txstart region definitions ('r' lines) using BED name\n"
+  "    and output actual reference genome coordinates in MAF.\n"
   );
 }
 
@@ -33,12 +35,14 @@ static struct optionSpec options[] = {
    {"bed12", OPTION_BOOLEAN},
    {"thickOnly", OPTION_BOOLEAN},
    {"meFirst", OPTION_BOOLEAN},
+   {"txStarts", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 boolean bed12 = FALSE;
 boolean thickOnly = FALSE;
 boolean meFirst = FALSE;
+boolean txStarts = FALSE;
 
 struct mafAli *mafFromBed12(char *database, char *track, struct bed *bed, 
 	struct slName *orgList)
@@ -153,6 +157,34 @@ slRemoveEl(&maf->components, comp);
 slAddHead(&maf->components, comp);
 }
 
+static void processBed6(char *database, char *track, FILE *f, struct bed *bed,
+                        struct slName *orgList)
+/* generate MAF alignment for a bed6 */
+{
+struct mafAli *maf; 
+if (txStarts)
+    {
+    maf = hgMafFrag(database, track, 
+                    bed->chrom, bed->chromStart, bed->chromEnd, bed->strand[0],
+                    NULL, orgList);
+    maf->regDef = mafRegDefNew(mafRegDefTxUpstream,
+                               bed->chromEnd-bed->chromStart,
+                               bed->name);
+    if (meFirst)
+        moveMeToFirst(maf, database);
+    }
+else
+    {
+    maf = hgMafFrag(database, track, 
+                    bed->chrom, bed->chromStart, bed->chromEnd, bed->strand[0],
+                    bed->name, orgList);
+    if (meFirst)
+        moveMeToFirst(maf, bed->name);
+    }
+mafWrite(f, maf);
+mafAliFree(&maf);
+} 
+
 void mafFrags(char *database, char *track, char *bedFile, char *mafFile)
 /* mafFrags - Collect MAFs from regions specified in a 6 column bed file. */
 {
@@ -199,13 +231,7 @@ else
     while (lineFileRow(lf, row))
 	{
 	struct bed *bed = bedLoadN(row, ArraySize(row));
-	struct mafAli *maf = hgMafFrag(database, track, 
-	    bed->chrom, bed->chromStart, bed->chromEnd, bed->strand[0],
-	    bed->name, orgList);
-	if (meFirst)
-	    moveMeToFirst(maf, bed->name);
-	mafWrite(f, maf);
-	mafAliFree(&maf);
+        processBed6(database, track, f, bed, orgList);
 	bedFree(&bed);
 	}
     }
@@ -222,6 +248,7 @@ if (argc != 5)
 bed12 = optionExists("bed12");
 thickOnly = optionExists("thickOnly");
 meFirst = optionExists("meFirst");
+txStarts = optionExists("txStarts");
 mafFrags(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

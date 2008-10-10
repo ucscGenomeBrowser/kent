@@ -166,3 +166,17 @@ summarized in the following table:
     8: 40 <= Q < 45
     9: 45 <= Q < 98
     F: Q == 99
+
+'r' Lines
+
+The r lines are optional.  They are used to specify the source
+of definition of the MAF region.  These are often genes.  A
+paragraph can only have one r line.  The first word defines the
+source type, with the remanded of the words specific to the
+source type.  The following source types are defined:
+
+   txupstream - Gene transcription start upstream regions:
+           r txupstream size geneId
+       size - is the number of bases in the region
+       geneId - gene identifier for the gene
+
