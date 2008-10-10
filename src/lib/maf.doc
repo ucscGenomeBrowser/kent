@@ -169,11 +169,11 @@ summarized in the following table:
 
 'r' Lines
 
-The r lines are optional.  They are used to specify the source
-of definition of the MAF region.  These are often genes.  A
-paragraph can only have one r line.  The first word defines the
-source type, with the remanded of the words specific to the
-source type.  The following source types are defined:
+The r lines are optional.  They specify how this region of the
+MAF was defined.  A paragraph can only have one r line.  The
+first word defines the source type, with the remanded of the
+words specific to the source type.  The following source types
+are defined:
 
    txupstream - Gene transcription start upstream regions:
            r txupstream size geneId
