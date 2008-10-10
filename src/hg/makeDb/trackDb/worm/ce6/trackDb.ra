@@ -109,6 +109,7 @@ defaultViewLimits 0:1
 autoScale On
 color 128,0,128
 spanList 1
+origAssembly ce4
 
 track nucleosomeAdjustedCoverage
 shortLabel Adj NSome Covrg
@@ -123,6 +124,7 @@ defaultViewLimits -5:5
 autoScale On
 color 255,0,128
 spanList 1
+origAssembly ce4
 
 track nucleosomeDensity
 shortLabel NSome Coverage
@@ -137,6 +139,7 @@ windowingFunction mean
 defaultViewLimits 1:100
 autoScaleDefault Off
 compositeTrack on
+origAssembly ce4
 
 	track monoNucleosomesSense
 	subTrack nucleosomeDensity
@@ -165,6 +168,7 @@ windowingFunction mean
 defaultViewLimits 1:100
 autoScaleDefault Off
 compositeTrack on
+origAssembly ce4
 
 	track nucleosomeControlSenseCoverage
 	subTrack nucleosomeControlCoverage
@@ -217,3 +221,4 @@ priority 160
 visibility hide
 type bed 9
 itemRgb on
+origAssembly ce4
