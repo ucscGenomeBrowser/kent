@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.139 2008/09/30 00:01:01 tdreszer Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.140 2008/10/11 19:54:42 markd Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -339,12 +339,16 @@ if (mp == NULL)
 return mp;
 }
 
+char *getTrackMafFile(struct track *track)
+/* look up MAF file name in track setting, return NULL if not found */
+{
+return hashFindVal(track->tdb->settingsHash, "mafFile");
+}
+
 char *getCustomMafFile(struct track *track)
 {
-struct hash *settings = track->tdb->settingsHash;
-char *fileName = NULL;
-
-if ((fileName = hashFindVal(settings, "mafFile")) == NULL)
+char *fileName = getTrackMafFile(track);
+if (fileName == NULL)
     errAbort("cannot find custom maf setting");
 return fileName;
 }
@@ -381,10 +385,11 @@ if (mp->ct)
     }
 else
     {
+    char *fileName = getTrackMafFile(track);  // optional
     conn = hAllocConn(database);
     conn2 = hAllocConn(database);
     mp->list = wigMafLoadInRegion(conn, conn2, track->mapName,
-				chromName, winStart - 2 , winEnd + 2, NULL);
+				chromName, winStart - 2 , winEnd + 2, fileName);
     hFreeConn(&conn);
     hFreeConn(&conn2);
     }
@@ -572,10 +577,11 @@ if (winBaseCount < MAF_SUMMARY_VIEW)
 	}
     else
 	{
+        char *fileName = getTrackMafFile(track);  // optional
 	conn = hAllocConn(database);
 	conn2 = hAllocConn(database);
 	mp->list = wigMafLoadInRegion(conn, conn2, track->mapName,
-					chromName, winStart, winEnd, NULL);
+					chromName, winStart, winEnd, fileName);
 	hFreeConn(&conn);
 	hFreeConn(&conn2);
 	}
@@ -1787,6 +1793,7 @@ else
     conn2 = hAllocConn(database);
     conn3 = hAllocConn(database);
     tableName = track->mapName;
+    mafFile = getTrackMafFile(track);  // optional
     }
 
 if (hIsGsidServer())

@@ -172,6 +172,10 @@ The format of the type fields:
             configured in from the track config page.
       itemFirstCharCase - this controls if species names in the multiple alignment
             should be capitalized in the pairwise display.
+      mafFile - optional path to MAF file.  If specified, this is used to
+            find a single MAF file for the track instead of looking up the
+            file in the extFile tables.  Use hgLoadMaf -custom when
+            when using this setting.
 
 14. type wig [lower] [upper]
    Continuous value graphing track.

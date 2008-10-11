@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.56 2008/09/25 03:44:23 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.57 2008/10/11 19:54:42 markd Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -768,8 +768,10 @@ else
 static void mafOrAxtClick(struct sqlConnection *conn, struct trackDb *tdb, char *axtOtherDb)
 {
 struct sqlConnection *conn2 = hAllocConn(database);
+// MAF file location is optionally in trackDb
+char *mafFile = hashFindVal(tdb->settingsHash, "mafFile");
 
-mafOrAxtClick2(conn, conn2, tdb, axtOtherDb, NULL);
+mafOrAxtClick2(conn, conn2, tdb, axtOtherDb, mafFile);
 
 hFreeConn(&conn2);
 }
