@@ -30,13 +30,13 @@ HGID hgRealIdQuery(struct sqlConnection *conn, char *query);
 void hgHistoryComment(struct sqlConnection *conn, char *comment, ...);
 /* Add comment to history table.  Does not lock the process. */
 
-struct sqlConnection *hgStartUpdate();
+struct sqlConnection *hgStartUpdate(char *db);
 /* Open and connection and get next global id from the history table */
 
 void hgEndUpdate(struct sqlConnection **pConn, char *comment, ...);
 /* Finish up connection with a printf format comment. */
 
-HGID hgNextId();
+HGID hgNextId(void);
 /* Get next unique id.  (Should only be called after hgStartUpdate). */
 
 FILE *hgCreateTabFile(char *tmpDir, char *tableName);

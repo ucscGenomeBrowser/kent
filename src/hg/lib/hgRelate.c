@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.24 2008/09/03 19:19:24 markd Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.25 2008/10/11 20:17:35 markd Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -90,7 +90,7 @@ return maxId;
 static HGID startUpdateId;	/* First ID in this update. */
 static HGID endUpdateId;	/* One past last ID in this update. */
 
-HGID hgNextId()
+HGID hgNextId(void)
 /* Get next free global ID. */
 {
 return endUpdateId++;

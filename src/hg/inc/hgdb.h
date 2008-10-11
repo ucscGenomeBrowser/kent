@@ -7,20 +7,20 @@
 #ifndef HGDB_H
 #define HGDB_H
 
-char *hgdbRootDir();
+char *hgdbRootDir(void);
 /* Return root directory of human genome database. */
 
 struct dnaSeq *hgdbRnaSeq(char *accession);
 /* Return mRNA or EST sequence from an accession number. */
 
-struct fof *hgdbRnaFof();
+struct fof *hgdbRnaFof(void);
 /* Return index for RNA sequences. */
 
 struct dnaSeq *hgdbShortSeq(char *accession);
 /* Return mRNA, EST, BACend or STS sequence based on
  * accession number. */
 
-struct fof *hgdbShortFof();
+struct fof *hgdbShortFof(void);
 /* Return index for short sequences. */
 
 struct dnaSeq *hgdbFinishedSeq(char *accession);
@@ -36,7 +36,7 @@ struct dnaSeq *hgdbGetSeq(char *accession);
 char *hgdbKeyText(char *accession);
 /* Get key-value lines about accession number. */
 
-struct fof *hgdbKeyFof();
+struct fof *hgdbKeyFof(void);
 /* Return index for key-values indexed by accession. */
 
 boolean hgdbSmallKey(char *accession, char *key, char *valBuf, int valBufSize);
