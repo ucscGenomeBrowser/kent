@@ -29,7 +29,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.30 2008/09/03 19:19:33 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.31 2008/10/12 07:33:02 markd Exp $";
 
 /* objects handling table loads */
 static struct gbAlignTblSet *alignTblSet = NULL;
@@ -329,12 +329,12 @@ static void deleteRefSeqAligns(struct sqlConnection *conn,
                                struct sqlDeleter* deleter)
 /* delete outdated refseq alignments from the database. */
 {
-sqlDeleterDel(deleter, conn, "refSeqAli", "qName");
-sqlDeleterDel(deleter, conn, "refGene", "name");
-sqlDeleterDel(deleter, conn, "refFlat", "name");
-sqlDeleterDel(deleter, conn, "xenoRefSeqAli", "qName");
-sqlDeleterDel(deleter, conn, "xenoRefGene", "name");
-sqlDeleterDel(deleter, conn, "xenoRefFlat", "name");
+sqlDeleterDel(deleter, conn, REFSEQ_ALI_TBL, "qName");
+sqlDeleterDel(deleter, conn, REF_GENE_TBL, "name");
+sqlDeleterDel(deleter, conn, REF_FLAT_TBL, "name");
+sqlDeleterDel(deleter, conn, XENO_REFSEQ_ALI_TBL, "qName");
+sqlDeleterDel(deleter, conn, XENO_REF_GENE_TBL, "name");
+sqlDeleterDel(deleter, conn, XENO_REF_FLAT_TBL, "name");
 sqlDeleterDel(deleter, conn, "mrnaOrientInfo", "name");
 }
 
@@ -390,12 +390,12 @@ static void removeRefSeq(struct sqlConnection *conn, struct gbSelect* select,
 {
 if (select->orgCats & GB_NATIVE)
     {
-    sqlDropTable(conn, "refSeqAli");
-    sqlDeleterDel(deleter, conn, "mrnaOrientInfo", "name");
+    sqlDropTable(conn, REFSEQ_ALI_TBL);
+    sqlDeleterDel(deleter, conn, MRNA_ORIENTINFO_TBL, "name");
     }
 if (select->orgCats & GB_XENO)
     {
-    sqlDropTable(conn, "xenoRefSeqAli");
+    sqlDropTable(conn, XENO_REFSEQ_ALI_TBL);
     }
 }
 
@@ -407,21 +407,21 @@ if (select->orgCats & GB_NATIVE)
     {
     struct slName* chrom;
     char table[64];
-    sqlDropTable(conn, "all_mrna");
-    sqlDeleterDel(deleter, conn, "mrnaOrientInfo", "name");
+    sqlDropTable(conn, ALL_MRNA_TBL);
+    sqlDeleterDel(deleter, conn, MRNA_ORIENTINFO_TBL, "name");
     for (chrom = getChromNames(db); chrom != NULL; chrom = chrom->next)
         {
         safef(table, sizeof(table), "%s_mrna", chrom->name);
         sqlDropTable(conn, table);
         }
     if (haveMgc)
-        sqlDropTable(conn, "mgcFullMrna");
+        sqlDropTable(conn, MGC_FULL_MRNA_TBL);
     if (haveOrfeome)
-        sqlDropTable(conn, "orfeomeMrna");
+        sqlDropTable(conn, ORFEOME_MRNA_TBL);
     }
 if (select->orgCats & GB_XENO)
     {
-    sqlDropTable(conn, "xenoMrna");
+    sqlDropTable(conn, XENO_MRNA_TBL);
     }
     
 }

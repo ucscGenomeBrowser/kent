@@ -32,7 +32,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.39 2008/09/03 19:19:34 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.40 2008/10/12 07:33:02 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -629,7 +629,7 @@ struct slName *tables, *tbl;
 struct sqlConnection *conn;
 
 gbVerbEnter(1, "dropAll");
-conn = hAllocConn(gDatabase);
+conn = hAllocConn(database);
 gbLockDb(conn, NULL);
 
 tables = getTableList(conn);
