@@ -36,6 +36,7 @@ test:
 			rm ${TMP_FILE_1} ${TMP_FILE_2}; \
 		done \
         done
+	echo "All tests passed"
 
 # update-expected let's you update the contents of the expected dir's (you still have
 # to checkin to cvs (if you want to)).
