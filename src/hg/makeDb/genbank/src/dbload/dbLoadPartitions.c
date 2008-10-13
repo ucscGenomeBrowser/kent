@@ -50,8 +50,7 @@ boolean dbLoadNonCoding(char *db, struct gbSelect* select)
 static char *host = NULL;
 if (host == NULL)
     host = getHost();
-// FIXME tmp hack for hgwdev hg18 only
+// FIXME tmp hack for hgwdev only
 return (select->release->srcDb == GB_REFSEQ)
-    && sameString(host, "hgwdev")
-    && sameString(db, "hg18");
+    && sameString(host, "hgwdev");
 }
