@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wiggleClick.c,v 1.28 2008/09/03 19:19:09 markd Exp $";
+static char const rcsid[] = "$Id: wiggleClick.c,v 1.29 2008/10/13 17:58:53 hiram Exp $";
 
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start)
@@ -69,10 +69,12 @@ wds->setSpanConstraint(wds, span);
 wds->setChromConstraint(wds, chrom);
 wds->setPositionConstraint(wds, winStart, winEnd);
 
-/*	If our window is less than 1000000 points, we can do
+/*	If our window is less than some number of points, we can do
  *	the histogram too.
  */
-if ((winEnd - winStart) < 1000001)
+#define MAX_WINDOW_ALLOW_STATS	100000001
+#define MAX_WINDOW_ALLOW_STRING	"100,000,000"
+if ((winEnd - winStart) < MAX_WINDOW_ALLOW_STATS)
 	operations |= wigFetchAscii;
 
 /*	We want to also fetch the actual data values so we can run a
@@ -99,8 +101,7 @@ statsPreamble(wds, chrom, winStart, winEnd, span, valuesMatched, NULL);
  */
 wds->statsOut(wds, database, "stdout", TRUE, TRUE, TRUE, FALSE);
 
-
-if ((winEnd - winStart) < 1000001)
+if ((winEnd - winStart) < MAX_WINDOW_ALLOW_STATS)
     {
     char *words[16];
     int wordCount = 0;
@@ -117,6 +118,15 @@ if ((winEnd - winStart) < 1000001)
 
     /*	convert the ascii data listings to one giant float array 	*/
     valuesArray = wds->asciiToDataArray(wds, valuesMatched, &valueCount);
+
+    /* let's see if we really want to use the range from the track type
+     *	line, or the actual range in this data.  If there is a good
+     *	actual range in the data, use that instead
+     */
+    if (hRange > 0.0) {
+	if (wds->stats->dataRange != 0)
+	    hRange = 0.0;
+    }
 
     /*	If we have a valid range, use a specified 20 bin histogram
      *	NOTE: pass 21 as binCount to get a 20 bin histogram
@@ -140,8 +150,8 @@ if ((winEnd - winStart) < 1000001)
     }
 else
     {
-    printf("<P>(viewing windows of fewer than 1,000,000 bases will also"
-	" display a histogram)</P>\n");
+    printf("<P>(viewing windows of fewer than %s bases will also"
+	" display a histogram)</P>\n", MAX_WINDOW_ALLOW_STRING);
     }
 
 wiggleDataStreamFree(&wds);
