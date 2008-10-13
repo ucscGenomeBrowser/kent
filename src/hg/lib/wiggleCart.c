@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.16 2008/10/03 17:11:53 tdreszer Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.17 2008/10/13 22:59:28 tdreszer Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -88,17 +88,18 @@ if(tdbIsCompositeChild(tdb)
     int cnt,ix;
     if(subgroupFind(tdb,"view",&view)) // Find out view of tdb
         {
-        // retrieve settingsByView from parent "limitsByView Signal:defaultViewLimits=5:500,viewLimits=0:20910 ..."
-        cnt = chopLine(cloneString(trackDbSetting(tdb->parent,"settingsByView")), words);
+        char *settings = cloneString(trackDbSetting(tdb->parent,"settingsByView"));
+        // retrieve settingsByView from parent "settingsByView Signal:defaultViewLimits=5:500,viewLimits=0:20910 ..."
+        cnt = chopLine(settings, words);
         for(ix=0;ix<cnt;ix++)
             {
-            if(startsWith(view,words[ix]) && words[ix][strlen(view)] == ':')
+            if(startsWithWordByDelimiter(view,':',words[ix]))
                 {
                 limitsByView = cloneString(words[ix]+(strlen(view)+1));
                 break;
                 }
             }
-        freeMem(words[0]);
+        freeMem(settings);
         subgroupFree(&view);
         }
     if(limitsByView != NULL) // found a match
@@ -107,31 +108,27 @@ if(tdbIsCompositeChild(tdb)
         cnt = chopByChar(limitsByView,',',words,ArraySize(words));
         for(ix=0;ix<cnt;ix++)
             {
-            if(startsWith(VIEWLIMITS,words[ix]) && words[ix][strlen(VIEWLIMITS)] == '=')
+            if(startsWithWordByDelimiter(VIEWLIMITS,'=',words[ix]))
                 {
                 // parse viewLimits "0:20910"
-                words[ix] = strSwapChar(words[ix]+(strlen(VIEWLIMITS)+1),':',0);
+                words[ix] = strSwapChar(words[ix]+strlen(VIEWLIMITS)+1,':',' ');
                 if(tDbMin != NULL && words[ix][0] != 0)
-                    {
-                    *tDbMin = atoi(words[ix]);
-                    words[ix] += strlen(words[ix])+1;
-                    }
+                    *tDbMin = sqlUnsigned(nextWord(&words[ix]));
                 if(tDbMax != NULL && words[ix][0] != 0)
-                    *tDbMax = atoi(words[ix]);
+                    *tDbMax = sqlUnsigned(words[ix]);
                 if(tDbMin != NULL && tDbMax != NULL)
                     correctOrder(*tDbMin,*tDbMax);
                 }
-            if(startsWith(DEFAULTVIEWLIMITS,words[ix]) && words[ix][strlen(DEFAULTVIEWLIMITS)] == '=')
+            else if(startsWithWordByDelimiter(DEFAULTVIEWLIMITS,'=',words[ix]))
                 {
-                words[ix] = strSwapChar(words[ix]+(strlen(DEFAULTVIEWLIMITS)+1),':',0);
+                words[ix] = strSwapChar(words[ix]+strlen(DEFAULTVIEWLIMITS)+1,':',' ');
                 // parse defaultViewLimits "5:500"
                 if(words[ix][0] != 0)
                     {
                     assert(min != NULL && max != NULL);
-                    *min = atoi(words[ix]);
-                    words[ix] += strlen(words[ix])+1;
+                    *min = sqlUnsigned(nextWord(&words[ix]));
                     if(words[ix][0] != 0)
-                        *max = atoi(words[ix]);
+                        *max = sqlUnsigned(words[ix]);
                     correctOrder(*min,*max);
                     }
                 }
