@@ -548,6 +548,8 @@ function matChkBoxNormalize(matCb)
 // check/unchecks a single matrix checkbox based upon subtrack checkboxes
     var cntChecked=0;
     var tags=matCb.name.substring(3,matCb.name.length - 3);
+    if(tags.substring(tags.length - 5,tags.length) == "_dimZ")
+        tags = tags.substring(0,tags.length - 6);
     var sublist = inputArrayThatMatches("checkbox","id","cb_","",tags);
     for (var ix=0;ix<sublist.length;ix++) {
         if(sublist[ix].checked)
@@ -579,6 +581,17 @@ function matChkBoxNormalizeMatching(subCb)
     // There should be only one!
     for (var ix=0;ix<list.length;ix++) {
         matChkBoxNormalize(list[ix]);
+    }
+    // What about the Z dimension?
+    if(tags.length > 5) {
+        tags[0] = "_" + tags[4] + "_"; // Z dimension should be 3rd tag and has a separate 1D matrix of chkbxs
+        var list = inputArrayThatMatches("checkbox","name","mat_","_cb",tags[0]);
+        if(list.length>0) {
+            // There should be only one!
+            for (var ix=0;ix<list.length;ix++) {
+                matChkBoxNormalize(list[ix]);
+            }
+        }
     }
 }
 
