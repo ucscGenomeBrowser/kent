@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.68 2008/09/08 18:20:37 markd Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.69 2008/10/13 16:08:26 larrym Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -176,6 +176,9 @@ if (startsWith("bedGraph", tdb->type) ||
     startsWith("wig ",tdb->type) ||
     startsWith("genePred",tdb->type) ||
     startsWith("psl",tdb->type) ||
+    startsWith("narrowPeak",tdb->type) ||
+    startsWith("broadPeak",tdb->type) ||
+    startsWith("gappedPeak",tdb->type) ||
     startsWith("bed ",tdb->type))
         return TRUE;
 if (startsWith("wigMaf ",tdb->type))
@@ -385,6 +388,19 @@ else if (sameString("cpgIsland", tdb->tableName))
     table->isBedGraph = TRUE;
     table->bedGraphColumnName = cloneString("perCpg");
     table->bedGraphColumnNum = 8;
+    }
+else if (startsWith("narrowPeak", tdb->type) ||
+         startsWith("broadPeak",tdb->type))
+    {
+    table->isBedGraph = TRUE;
+    table->bedGraphColumnName = cloneString("signalValue");
+    table->bedGraphColumnNum = 8;
+    }
+else if (startsWith("gappedPeak",tdb->type))
+    {
+    table->isBedGraph = TRUE;
+    table->bedGraphColumnName = cloneString("signalValue");
+    table->bedGraphColumnNum = 14;
     }
 else if (startsWith("bed ", tdb->type))
     {
