@@ -51,8 +51,16 @@ else
   endif
 endif
 
-cp /cluster/bin/scripts/linkCheckExclude excludeList
+cp /cluster/bin/scripts/linkCheckExclude excludeList >& /dev/null
+if ( $status ) then
+  echo "\nexclude file does not exist\n" 
+  exit 1
+endif
 foreach filePath (`cat $pathfile`)
   echo "filePath: $filePath"
   checkStaticLinks.csh $filePath $yymmdd excludeList
+  if ( $status ) then
+    echo "\nexclude file does not exist\n" 
+    exit 1
+  endif
 end

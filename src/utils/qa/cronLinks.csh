@@ -28,14 +28,17 @@ endif
 set dirPath="/usr/local/apache/htdocs"
 set machine="genome-test.cse.ucsc.edu"
 set directory="qa/test-results/staticLinks"
-cd $dirPath/$directory
 set dateString=`date +%Y-%m-%d`
 
-if ( ! -d $dateString ) then
-  mkdir $dateString
+if ( ! -d $dirPath/$directory/$dateString ) then
+  mkdir $dirPath/$directory/$dateString
 endif
-cd $dateString
-nice checkAllStaticLinks.csh all $dateString >& links.$dateString &
+
+nice checkAllStaticLinks.csh all $dateString >& $dirPath/$directory/$dateString/links.$dateString
+if ( $status ) then
+  echo "\nerror.  possibly exclude file does not exist.  quitting.\n"
+  exit 1
+endif
 
 echo "link-checking complete"
 date
