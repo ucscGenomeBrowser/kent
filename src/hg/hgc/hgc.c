@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1467 2008/10/07 20:39:34 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1468 2008/10/13 06:21:18 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8792,6 +8792,18 @@ if (hHasField(database, "gbCdnaInfo", "version"))
 return ver;
 }
 
+char *gbCdnaGetDescription(struct sqlConnection *conn, char *acc)
+/* return mrna description, or NULL if not available. freeMem result */
+{
+char query[128];
+safef(query, sizeof(query),
+      "select description.name from gbCdnaInfo,description where (acc = '%s') and (gbCdnaInfo.description = description.id)", acc);
+char *desc = sqlQuickString(conn, query);
+if ((desc == NULL) || sameString(desc, "n/a") || (strlen(desc) == 0))
+    freez(&desc);
+return desc;
+}
+
 void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
                    char *sqlRnaName, struct refLink *rl, boolean isXeno)
 /* print basic details information and links for a RefGene */
@@ -8824,14 +8836,19 @@ if (hTableExists(database, "refSeqStatus"))
     {
     safef(query, sizeof(query), "select status from refSeqStatus where mrnaAcc = '%s'",
           sqlRnaName);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-        {
-	printf("&nbsp;&nbsp; Status: <B>%s</B>", row[0]);
-	}
-    sqlFreeResult(&sr);
+    char *stat = sqlQuickString(conn, query);
+    if (stat != NULL)
+	printf("&nbsp;&nbsp; <B>Status: </B>%s", stat);
     }
 puts("<BR>");
+char *desc = gbCdnaGetDescription(conn, rl->mrnaAcc);
+if (desc != NULL)
+    {
+    printf("<B>Description:</B> ");
+    htmlTextOut(desc);
+    printf("<BR>\n");
+    }
+
 if (isXeno || isNewChimp(database))
     {
     char *org;
