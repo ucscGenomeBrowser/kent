@@ -1,7 +1,7 @@
-/* Common.h - functions that are commonly used.  Includes 
+/* Common.h - functions that are commonly used.  Includes
  * routines for managing singly linked lists, some basic
  * string manipulation stuff, and other stuff of the
- * short but useful nature. 
+ * short but useful nature.
  *
  * This file is copyright 2002-2005 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
@@ -226,7 +226,7 @@ void freeMem(void *pt);
 /* Free memory will check for null before freeing. */
 
 void freez(void *ppt);
-/* Pass address of pointer.  Will free pointer and set it 
+/* Pass address of pointer.  Will free pointer and set it
  * to NULL. Typical use:
  *     s = needMem(1024);
  *          ...
@@ -297,7 +297,7 @@ void verboseSetLevel(int verbosity);
 /* Set verbosity level in log.  0 for no logging,
  * higher number for increasing verbosity. */
 
-void zeroBytes(void *vpt, int count);     
+void zeroBytes(void *vpt, int count);
 /* fill a specified area of memory with zeroes */
 
 #define ZeroVar(v) zeroBytes(v, sizeof(*v))
@@ -327,7 +327,7 @@ struct slList
     struct slList *next;
     };
 
-int slCount(void *list); 
+int slCount(void *list);
 /* Return # of elements in list.  */
 
 void *slElementFromIx(void *list, int ix);
@@ -337,12 +337,12 @@ void *slElementFromIx(void *list, int ix);
 int slIxFromElement(void *list, void *el);
 /* Return index of el in list.  Returns -1 if not on list. */
 
-void slSafeAddHead(void *listPt, void *node); 
+void slSafeAddHead(void *listPt, void *node);
 /* Add new node to start of list.
  * Usage:
  *    slSafeAddHead(&list, node);
  * where list and nodes are both pointers to structure
- * that begin with a next pointer. 
+ * that begin with a next pointer.
  */
 
 /* Add new node to start of list, this macro is faster
@@ -358,7 +358,7 @@ void slAddTail(void *listPt, void *node);
  * where list and nodes are both pointers to structure
  * that begin with a next pointer. This is sometimes
  * convenient but relatively slow.  For longer lists
- * it's better to slAddHead, and slReverse when done. 
+ * it's better to slAddHead, and slReverse when done.
  */
 
 void *slPopHead(void *listPt);
@@ -373,7 +373,7 @@ void *slCat(void *a, void *b);
  *   struct slName *a = getNames("a");
  *   struct slName *b = getNames("b");
  *   struct slName *ab = slCat(a,b)
- * After this it is no longer safe to use a or b. 
+ * After this it is no longer safe to use a or b.
  */
 
 void *slLastEl(void *list);
@@ -388,23 +388,23 @@ void slReverse(void *listPt);
 typedef int CmpFunction(const void *elem1, const void *elem2);
 
 void slSort(void *pList, CmpFunction *compare);
-/* Sort a singly linked list with Qsort and a temporary array. 
+/* Sort a singly linked list with Qsort and a temporary array.
  * The arguments to the compare function in real, non-void, life
  * are pointers to pointers. */
 
 void slUniqify(void *pList, CmpFunction *compare, void (*free)());
-/* Return sorted list with duplicates removed. 
+/* Return sorted list with duplicates removed.
  * Compare should be same type of function as slSort's compare (taking
  * pointers to pointers to elements.  Free should take a simple
  * pointer to dispose of duplicate element, and can be NULL. */
 
 boolean slRemoveEl(void *vpList, void *vToRemove);
 /* Remove element from doubly linked list.  Usage:
- *    slRemove(&list, el);  
+ *    slRemove(&list, el);
  * Returns TRUE if element in list.  */
 
 void slFreeList(void *listPt);
-/* Free all elements in list and set list pointer to null. 
+/* Free all elements in list and set list pointer to null.
  * Usage:
  *    slFreeList(&list);
  */
@@ -502,12 +502,12 @@ void *slNameFind(void *list, char *string);
  * with next/name fields) that matches string. */
 
 int slNameFindIx(struct slName *list, char *string);
-/* Return index of first element of slName list (or any other 
+/* Return index of first element of slName list (or any other
  * list starting with next/name fields) that matches string.
  * ... Return -1 if not found. */
 
 char *slNameStore(struct slName **pList, char *string);
-/* Put string into list if it's not there already.  
+/* Put string into list if it's not there already.
  * Return the version of string stored in list. */
 
 struct slName *slNameAddHead(struct slName **pList, char *name);
@@ -529,8 +529,8 @@ struct slName *slNameListFromString(char *s, char delimiter);
 /* Parse out comma-separated list. */
 
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize);
-/* Return list of slNames from an array of strings of length arraySize. 
- * If a string in the array is NULL, the array will be treated as 
+/* Return list of slNames from an array of strings of length arraySize.
+ * If a string in the array is NULL, the array will be treated as
  * NULL-terminated. */
 
 char *slNameListToString(struct slName *list, char delimiter);
@@ -595,12 +595,12 @@ void *slPairFindVal(struct slPair *list, char *name);
 /* Return value associated with name in list, or NULL if not found. */
 
 struct slPair *slPairFromString(char *s);
-/* Return slPair list parsed from list in string s 
+/* Return slPair list parsed from list in string s
  * name1=val1 name2=val2 ...
  * Returns NULL if parse error */
 
 void gentleFree(void *pt);
-/* check pointer for NULL before freeing. 
+/* check pointer for NULL before freeing.
  * (Actually plain old freeMem does that these days.) */
 
 /*******  Some stuff for processing strings. *******/
@@ -653,6 +653,10 @@ boolean startsWithWord(char *firstWord, char *line);
 /* Return TRUE if first white-space-delimited word in line
  * is same as firstWord.  Comparison is case sensitive. */
 
+boolean startsWithWordByDelimiter(char *firstWord,char delimit, char *line);
+/* Return TRUE if first word in line is same as firstWord as delimited by delimit.
+   Comparison is case sensitive. Delimit of ' ' uses isspace() */
+
 #define stringIn(needle, haystack) strstr(haystack, needle)
 /* Returns position of needle in haystack or NULL if it's not there. */
 /*        char *stringIn(char *needle, char *haystack);      */
@@ -662,7 +666,7 @@ char *rStringIn(char *needle, char *haystack);
 
 char *stringBetween(char *start, char *end, char *haystack);
 /* Return string between start and end strings, or NULL if
- * none found.  The first such instance is returned. 
+ * none found.  The first such instance is returned.
  * String must be freed by caller. */
 
 boolean endsWith(char *string, char *end);
@@ -704,13 +708,12 @@ char *replaceChars(char *string, char *oldStr, char *newStr);
  Return value needs to be freeMem'd.
 */
 
-void subChar(char *s, char oldChar, char newChar);
-/* Substitute newChar for oldChar throughout string s. */
-
 char * memSwapChar(char *s, int len, char oldChar, char newChar);
-/* Substitute newChar for oldChar throughout memory of given length. 
+/* Substitute newChar for oldChar throughout memory of given length.
    old or new may be null */
-#define strSwapChar(s,old,new) memSwapChar((s),strlen(s),(old),(new))
+#define strSwapChar(s,old,new)   memSwapChar((s),strlen(s),(old),(new))
+#define subChar(s,old,new) (void)memSwapChar((s),strlen(s),(old),(new))
+/* Substitute newChar for oldChar throughout string s. */
 
 void stripChar(char *s, char c);
 /* Remove all occurences of c from s. */
@@ -734,7 +737,7 @@ int chopString(char *in, char *sep, char *outArray[], int outSize);
 /* int chopString(in, sep, outArray, outSize); */
 /* This chops up the input string (cannabilizing it)
  * into an array of zero terminated strings in
- * outArray.  It returns the number of strings. 
+ * outArray.  It returns the number of strings.
  * If you pass in NULL for outArray, it will just
  * return the number of strings that it *would*
  * chop. */
@@ -799,6 +802,27 @@ char *nextWord(char **pLine);
 char *nextTabWord(char **pLine);
 /* Return next tab-separated word. */
 
+char *cloneFirstWordByDelimiter(char *line,char delimit);
+/* Returns a cloned first word, not harming the memory passed in
+   Delimiter of ' ' will delimit by isspace() */
+#define cloneFirstWordInLine(line) cloneFirstWordByDelimiter((line),' ')
+#define cloneFirstWordByTab(line)  cloneFirstWordByDelimiter((line),'\t')
+/* Returns a cloned first word, not harming the memory passed in */
+
+char *cloneNextWordByDelimiter(char **line,char delimit);
+/* Returns a cloned first word, advancing the line pointer
+   but not harming memory passed in. Delimit ' ' uses isspace() */
+#define cloneNextWord(line)      cloneNextWordByDelimiter((line),' ')
+#define cloneNextWordByTab(line) cloneNextWordByDelimiter((line),'\t')
+
+char *nextStringInList(char **pStrings);
+/* returns pointer to the first string and advances pointer to next in
+   list of strings dilimited by 1 null and terminated by 2 nulls. */
+
+int cntStringsInList(char *pStrings);
+/* returns count of strings in a
+   list of strings dilimited by 1 null and terminated by 2 nulls. */
+
 int stringArrayIx(char *string, char *array[], int arraySize);
 /* Return index of string in array or -1 if not there. */
 
@@ -837,7 +861,7 @@ void chopSuffix(char *s);
 /* Remove suffix (last . in string and beyond) if any. */
 
 void chopSuffixAt(char *s, char c);
-/* Remove end of string from last occurrence of char c. 
+/* Remove end of string from last occurrence of char c.
  * chopSuffixAt(s, '.') is equivalent to regular chopSuffix. */
 
 char *chopPrefix(char *s);
@@ -882,7 +906,7 @@ char *mustReadString(FILE *f);
 
 boolean fastReadString(FILE *f, char buf[256]);
 /* Read a string into buffer, which must be long enough
- * to hold it.  String is in 'writeString' format. 
+ * to hold it.  String is in 'writeString' format.
  * Returns FALSE at EOF. */
 
 void writeBits64(FILE *f, bits64 x);
@@ -895,7 +919,7 @@ void carefulClose(FILE **pFile);
 /* Close file if open and null out handle to it. */
 
 boolean carefulCloseWarn(FILE **pFile);
-/* Close file if open and null out handle to it. 
+/* Close file if open and null out handle to it.
  * Return FALSE and print a warning message if there
  * is a problem.*/
 
@@ -944,11 +968,11 @@ bits32 readBits32(FILE *f, boolean isSwapped);
 
 void removeReturns(char* dest, char* src);
 /* Removes the '\r' character from a string.
- * the source and destination strings can be the same, 
+ * the source and destination strings can be the same,
  * if there are no threads */
-		
+
 int intExp(char *text);
-/* Convert text to integer expression and evaluate. 
+/* Convert text to integer expression and evaluate.
  * Throws if it finds a non-number. */
 
 double doubleExp(char *text);
@@ -1013,13 +1037,13 @@ char *trueFalseString(boolean b);
 /* Return "true" or "false" */
 
 void uglyTime(char *label, ...);
-/* Print label and how long it's been since last call.  Call with 
+/* Print label and how long it's been since last call.  Call with
  * a NULL label to initialize. */
 
 /*	In case the development environment does not supply INFINITY	*/
 #if !defined(INFINITY)
 #define INFINITY (1.0/0.0)
-#endif 
+#endif
 
 void makeDirs(char* path);
 /* make a directory, including parent directories */
