@@ -4,7 +4,7 @@
 #
 # Load databases on the current server.
 #
-# $Id: gbDbLoadStep,v 1.46 2008/08/13 02:37:50 genbank Exp $
+# $Id: gbDbLoadStep,v 1.47 2008/10/13 17:32:24 markd Exp $
 #
 use strict;
 use warnings;
@@ -94,11 +94,8 @@ sub renameVarReloadFile($) {
 # get the MGC table conf value, or undef if no MGC table load.
 sub getMgcConf($) {
     my($db) = @_;
-    my $host = callProg("uname -n", 1);
-    chomp($host);
-    
     # try to find a 
-    my $conf = findConf("$db.mgcTables.$host");
+    my $conf = findConf("$db.mgcTables.$gbCommon::hostName");
     if (!defined($conf)) {
         $conf = findConf("$db.mgcTables.default");
     }
@@ -148,11 +145,8 @@ sub loadMgc($$) {
 # get a boolean indicating if the ORFeome tables should be created.
 sub getOrfeomeConf($) {
     my($db) = @_;
-    my $host = callProg("uname -n", 1);
-    chomp($host);
-    
     # try to find a 
-    my $conf = getDbConfUndef($db, "orfeomeTables.$host");
+    my $conf = getDbConfUndef($db, "orfeomeTables.$gbCommon::hostName");
     if (!defined($conf)) {
         $conf = getDbConfUndef($db, "orfeomeTables.default");
     }
@@ -211,8 +205,10 @@ sub dropTables($) {
 # load ccds and related tables for a db
 sub ccdsLoad($$) {
     my($db, $ccdsNcbiBuild) = @_;
-    # use profile ccds:ccds
-    runProg("ccdsMkTables -loadDb ccds:ccds $db $ccdsNcbiBuild ccdsInfo ccdsGene");
+    # use profile ccds:ccds except for hgwdev.  This allows any user
+    # to load hgwdev without requiring update of .hg.conf files
+    my $ccdsDb = ($gbCommon::hostName eq "hgwdev") ? "ccds" : "ccds:ccds";
+    runProg("ccdsMkTables -loadDb $ccdsDb $db $ccdsNcbiBuild ccdsInfo ccdsGene");
     runProg("mkCcdsGeneMap -db=$db -loadDb ccdsGene knownGene ccdsKgMap");
 }
 
