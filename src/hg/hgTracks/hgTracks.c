@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1516 2008/09/30 06:57:44 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1517 2008/10/13 22:40:25 aamp Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2511,6 +2511,7 @@ if (sameString(type, "maf"))
     mp->ct = ct;
 
     tg->customPt = mp;
+    tg->labelNextItemButtonable = FALSE;
     }
 else if (sameString(type, "wig"))
     {
@@ -2520,6 +2521,7 @@ else if (sameString(type, "wig"))
     else
 	tg->loadItems = ctWigLoadItems;
     tg->customPt = ct;
+    tg->labelNextItemButtonable = FALSE;
     }
 else if (sameString(type, "bedGraph"))
     {
@@ -2528,6 +2530,7 @@ else if (sameString(type, "bedGraph"))
     tg->customPt = ct;
     ct->wigFile = ctFileName;
     tg->mapItemName = ctMapItemName;
+    tg->labelNextItemButtonable = FALSE;
     }
 else if (sameString(type, "bed"))
     {
@@ -2561,6 +2564,7 @@ else if (sameString(type, "bed"))
 	}
     tg->mapItemName = ctMapItemName;
     tg->canPack = TRUE;
+    tg->labelNextItemButtonable = TRUE;
     tg->customPt = ct;
     }
 else if (sameString(type, "chromGraph"))
@@ -2568,25 +2572,27 @@ else if (sameString(type, "chromGraph"))
     tdb->type = NULL;	/* Swap out type for the moment. */
     tg = trackFromTrackDb(tdb);
     chromGraphMethodsCt(tg);
+    tg->labelNextItemButtonable = FALSE;
     tdb->type = typeOrig;
     }
 else if (sameString(type, "array"))
     {
     tg = trackFromTrackDb(tdb);
     expRatioMethodsFromCt(tg);
+    tg->labelNextItemButtonable = TRUE;
     tg->customPt = ct;
     }
 else if (sameString(type, "coloredExon"))
     {
     tg = trackFromTrackDb(tdb);
     coloredExonMethodsFromCt(tg);
+    tg->labelNextItemButtonable = TRUE;
     tg->customPt = ct;
     }
 else
     {
     errAbort("Unrecognized custom graph type %s", type);
     }
-tg->labelNextItemButtonable = FALSE;
 tg->hasUi = TRUE;
 freez(&typeDupe);
 return tg;

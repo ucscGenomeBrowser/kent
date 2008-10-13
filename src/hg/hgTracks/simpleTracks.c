@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.38 2008/10/03 23:02:10 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.39 2008/10/13 22:40:25 aamp Exp $";
 
 #define CHROM_COLORS 26
 
@@ -1648,7 +1648,15 @@ for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
         items = loadOregannoAsBed(tg, chromName, start, end);
     else
 #endif /* GBROWSE */
-	items = hGetBedRange(database, tg->mapName, chromName, start, end, NULL);
+	{
+	if (sameString(tg->mapName, "ct_UserTrack"))
+	    {
+	    struct customTrack *ct = tg->customPt;
+	    items = hGetBedRange(CUSTOM_TRASH, ct->dbTableName, chromName, start, end, NULL);
+	    }
+	else 
+	    items = hGetBedRange(database, tg->mapName, chromName, start, end, NULL);
+	}
     /* If we got something, or weren't able to search as big as we wanted to */
     /* (in case we're at the end of the chrom).  */
     if ((items != NULL) || (size < sizeWanted))
