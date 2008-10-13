@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.120 2008/10/13 22:55:27 tdreszer Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.121 2008/10/13 23:07:22 tdreszer Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1608,7 +1608,8 @@ int cntStringsInList(char *pStrings)
    list of strings dilimited by 1 null and terminated by 2 nulls. */
 {
 int cnt=0;
-while(nextString(pStrings) != NULL)
+char *p = pStrings;
+while(nextStringInList(&p) != NULL)
     cnt++;
 return cnt;
 }
