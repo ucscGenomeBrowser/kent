@@ -3295,3 +3295,6 @@ tablesIgnored canFam2
 
 tablesIgnored equCab2
     ctgPos2
+
+tablesIgnored oryLat2
+    microsat
