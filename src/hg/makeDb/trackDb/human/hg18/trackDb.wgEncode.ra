@@ -304,13 +304,13 @@ longLabel ENCODE - RIKEN CAGE
 group regulation
 subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters RawSignal=RawSignal
 subGroup2 cellType Cell_Line K562=K562 prostate=prostate
-subGroup3 localization Localization cytosol=cytosol nucleus=nucleus cell=cell 
-subGroup4 rnaExtract RNA_Extract longNonPolyA=longNonPolyA 
-#dimensions dimensionX=cellType
-sortOrder cellType=+ view=+
+subGroup3 localization Localization cytosol=cytosol nucleus=nucleus cell=cell
+subGroup4 rnaExtract RNA_Extract longNonPolyA=longNonPolyA
+dimensions dimensionY=rnaExtract dimensionX=cellType dimensionZ=localization
+sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults PlusClusters=full MinusClusters=full RawSignal=hide
-controlledVocabulary encode/cv.ra cellType
+controlledVocabulary encode/cv.ra cellType localization rnaExtract
 priority 0
 type bed 3
 
@@ -450,14 +450,15 @@ priority 0
 type bed 3
 useScore 1
 origAssembly hg18
-subGroup1 view Views Peaks=Peaks Signal=Signal RawSignal=Raw_Signal
+subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2 cellType Cell_Line HeLa-S3=HeLa-S3 HeLa-S3_IFNg=HeLa-S3_IFNg
 subGroup3 factor Antibody CTRL=Input Pol2=Pol2 STAT1=STAT1
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults Peaks=pack Signal=full RawSignal=hide
+visibilityViewDefaults Peaks=pack Signal=full zRAW=hide
 controlledVocabulary encode/cv.ra cellType factor
+settingsByView Signal:defaultViewLimits=5:500,viewLimits=0:20910
 dataVersion ENCODE Submitted September 2008
 wgEncode 1
 
@@ -467,6 +468,7 @@ wgEncode 1
         longLabel       ENCODE Yale ChIP-Seq Signal (Input in HeLa-S3 cells)
         subGroups       view=Signal factor=CTRL cellType=HeLa-S3
         type            wig 0.00 8316.00
+        defaultViewLimits 2:2000
         dateSubmitted   2008-09-29 14:52:0
         priority        1
         noInherit       on
@@ -483,7 +485,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Inp Raw
         longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in HeLa-S3 cells)
-        subGroups       view=RawSignal factor=CTRL cellType=HeLa-S3
+        subGroups       view=zRAW factor=CTRL cellType=HeLa-S3
         type            wig 1.00 4247.00
         dateSubmitted   2008-09-29 14:52:0
         priority        2
@@ -531,7 +533,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Pol2 Raw 1
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in HeLa-S3 cells)
-        subGroups       view=RawSignal factor=Pol2 cellType=HeLa-S3
+        subGroups       view=zRAW factor=Pol2 cellType=HeLa-S3
         type            wig 1.00 2079.00
         dateSubmitted   2008-10-1 9:27:32
         priority        5
@@ -547,7 +549,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Pol2 Raw 2
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (Pol2 in HeLa-S3 cells)
-        subGroups       view=RawSignal factor=Pol2 cellType=HeLa-S3
+        subGroups       view=zRAW factor=Pol2 cellType=HeLa-S3
         type            wig 1.00 3795.00
         dateSubmitted   2008-10-1 9:27:32
         priority        5
@@ -563,7 +565,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Pol2 Raw 3
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 3 (Pol2 in HeLa-S3 cells)
-        subGroups       view=RawSignal factor=Pol2 cellType=HeLa-S3
+        subGroups       view=zRAW factor=Pol2 cellType=HeLa-S3
         type            wig 1.00 3649.00
         dateSubmitted   2008-10-1 9:27:32
         priority        6
@@ -597,7 +599,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa IF Inp Raw
         longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in HeLa-S3_IFNg cells)
-        subGroups       view=RawSignal factor=CTRL cellType=HeLa-S3_IFNg
+        subGroups       view=zRAW factor=CTRL cellType=HeLa-S3_IFNg
         type            wig 1.00 4733.00
         dateSubmitted   2008-09-29 14:12:28
         priority        8
@@ -645,7 +647,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa IF STAT1 Raw 1
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (STAT1 in HeLa-S3_IFNg cells)
-        subGroups       view=RawSignal factor=STAT1 cellType=HeLa-S3_IFNg
+        subGroups       view=zRAW factor=STAT1 cellType=HeLa-S3_IFNg
         type            wig 1.00 14648.00
         dateSubmitted   2008-10-1 10:6:2
         priority        11
@@ -661,7 +663,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa IF STAT1 Raw 2
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (STAT1 in HeLa-S3_IFNg cells)
-        subGroups       view=RawSignal factor=STAT1 cellType=HeLa-S3_IFNg
+        subGroups       view=zRAW factor=STAT1 cellType=HeLa-S3_IFNg
         type            wig 1.00 6262.00
         dateSubmitted   2008-10-1 10:6:2
         priority        12
@@ -831,15 +833,15 @@ wgEncode 1
 	antibody	FOXP2
         color 107,112,43
 
-track wgEncodeSangerGencode 
-compositeTrack on       
+track wgEncodeSangerGencode
+compositeTrack on
 shortLabel Gencode Genes
-longLabel ENCODE Sanger Gencode Genes 
+longLabel ENCODE Sanger Gencode Genes
 group genes
 priority 34
 visibility pack
 color 12,12,120
-type genePred 
+type genePred
 hgGene on
 hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
