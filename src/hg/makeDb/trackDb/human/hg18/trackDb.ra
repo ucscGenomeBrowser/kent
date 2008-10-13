@@ -2959,6 +2959,121 @@ chromosomes chr1
     longLabel Resting histone H3 reverse strand
     priority 6
 
+track zhaoLabNucleosomeGraph
+compositeTrack on
+shortLabel Nucleosome graph
+longLabel Density graph, Zhao lab Nucleosome measurements
+group x
+priority 300
+visibility hide
+chromosomes chr1
+type wig 0 10520
+defaultViewLimits 0:10520
+spanList 1
+minLimit 0
+maxLimit 10520
+autoScaleDefault Off
+maxHeightPixels 128:64:11
+
+    track zhaoLabActivatedNucleosomeFwdWig
+    subTrack zhaoLabNucleosomeGraph
+    shortLabel ActiveNucleosome
+    longLabel Density graph, activated nucleosome forward strand
+    priority 1
+
+    track zhaoLabActivatedNucleosomeRevWig
+    subTrack zhaoLabNucleosomeGraph
+    shortLabel ActiveNucleosome
+    longLabel Density graph, activated nucleosome reverse strand
+    priority 2
+
+    track zhaoLabRestingNucleosomeFwdWig
+    subTrack zhaoLabNucleosomeGraph
+    shortLabel RestingNucleosome
+    longLabel Density graph, resting nucleosome forward strand
+    priority 3
+
+    track zhaoLabRestingNucleosomeRevWig
+    subTrack zhaoLabNucleosomeGraph
+    shortLabel RestingNucleosome
+    longLabel Density graph, resting nucleosome reverse strand
+    priority 4
+
+    track zhaoLabRestingH3FwdWig
+    subTrack zhaoLabNucleosomeGraph
+    shortLabel RestingHistoneH3
+    longLabel Density graph, resting histone H3 forward strand
+    priority 5
+
+    track zhaoLabRestingH3RevWig
+    subTrack zhaoLabNucleosomeGraph
+    shortLabel RestingNucleosome
+    longLabel Density graph, resting histone H3 reverse strand
+    priority 6
+
+track zhaoLabPolII
+compositeTrack on
+shortLabel Zhao lab PolII
+longLabel Zhao lab Pol II measurements
+group x
+priority 300
+visibility hide
+exonArrows off
+type bed 9
+itemRgb on
+chromosomes chr1
+
+    track zhaoLabActiveUnphosPolII
+    subTrack zhaoLabPolII
+    shortLabel Active Unphosphor PolII
+    longLabel Activated Unphosphorylated Pol II
+    priority 1
+
+    track zhaoLabRestingUnphosPolII
+    subTrack zhaoLabPolII
+    shortLabel Resting Unphosphor PolII
+    longLabel Resting Unphosphorylated Pol II
+    priority 2
+
+    track zhaoLabActiveSer5PhosPolII
+    subTrack zhaoLabPolII
+    shortLabel Active Ser5 PolII
+    longLabel Activated Ser5 Phosphorylated Pol II
+    priority 3
+
+track zhaoLabPolIIgraph
+compositeTrack on
+shortLabel PolII graph
+longLabel Zhao lab Pol II measurements density graph
+group x
+priority 300.1
+visibility hide
+type bedGraph 4
+defaultViewLimits 0:10520
+minLimit 0
+maxLimit 10520
+autoScaleDefault Off
+maxHeightPixels 128:64:11
+chromosomes chr1
+
+    track zhaoLabActiveUnphosPolIIBedGraph
+    subTrack zhaoLabPolIIgraph
+    shortLabel density Active Unphosphor PolII
+    longLabel Density graph, activated Unphosphorylated Pol II
+    priority 1
+
+    track zhaoLabRestingUnphosPolIIBedGraph
+    subTrack zhaoLabPolIIgraph
+    shortLabel density Resting Unphosphor PolII
+    longLabel Density graph, resting Unphosphorylated Pol II
+    priority 2
+
+    track zhaoLabActiveSer5PhosPolIIBedGraph
+    subTrack zhaoLabPolIIgraph
+    shortLabel density Active Ser5 PolII
+    longLabel Density graph, activated Ser5 Phosphorylated Pol II
+    priority 3
+
 track zhaoLabPolII
 compositeTrack on
 shortLabel Zhao lab PolII
@@ -2986,4 +3101,38 @@ itemRgb on
     subTrack zhaoLabPolII
     shortLabel Active Ser5 PolII
     longLabel Activated Ser5 Phosphorylated Pol II
+    priority 3
+
+track zhaoLabPolIIgraph
+compositeTrack on
+shortLabel PolII graph
+longLabel Zhao lab Pol II measurements density graph
+group x
+priority 300.1
+visibility hide
+exonArrows off
+type bedGraph 4
+defaultViewLimits 0:10520
+minLimit 0
+maxLimit 10520
+autoScaleDefault Off
+maxHeightPixels 128:64:11
+
+
+    track zhaoLabActiveUnphosPolIIBedGraph
+    subTrack zhaoLabPolIIgraph
+    shortLabel density Active Unphosphor PolII
+    longLabel Density graph, activated Unphosphorylated Pol II
+    priority 1
+
+    track zhaoLabRestingUnphosPolIIBedGraph
+    subTrack zhaoLabPolIIgraph
+    shortLabel density Resting Unphosphor PolII
+    longLabel Density graph, resting Unphosphorylated Pol II
+    priority 2
+
+    track zhaoLabActiveSer5PhosPolIIBedGraph
+    subTrack zhaoLabPolIIgraph
+    shortLabel density Active Ser5 PolII
+    longLabel Density graph, activated Ser5 Phosphorylated Pol II
     priority 3
