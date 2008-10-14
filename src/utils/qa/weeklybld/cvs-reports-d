@@ -666,7 +666,7 @@ package require Itcl
         if {$fDebug} {
             puts stderr [join [concat | $argv]]
         }
-        return [open [concat | $argv]]
+        return [open [concat | $argv 2>@stderr]]
     }
 
     # throw an error including a cvs commit
