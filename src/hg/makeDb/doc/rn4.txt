@@ -4827,3 +4827,9 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+
+
+#############################################################################
+# RAT TISSUE EXON ARRAYS (Melissa Cline, cline@biology.ucsc.edu, 10/14/08)  
+# (to build the affyExonTissues track, see the steps outlined in hg18.txt)
+#############################################################################
