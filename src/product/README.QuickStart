@@ -8,22 +8,23 @@ for the purpose of demonstrating the CGI binaries are functioning.
 The only tables you need to load for this are:
 
 1. all tables in the hgcentral database
-2. five tables in the human genome
+2. six tables in the human genome
 
 Create an empty hgcentral database:
 $ hgsql -e "create database hgcentral;" mysql
 
 Load all tables into the hgcentral database.
 Copy all the mysql data files from
-        ftp://hgdownload.cse.ucsc.edu/mysql/hgcentral/*.*
+    rsync -avzP rsync://hgdownload.cse.ucsc.edu/mysql/hgcentral/ .
 directly into the MySQL data area for your hgcentral database.
 (something usually like /var/lib/mysql/hgcentral/)
 (or load this database with mysql/hgsql commands and the hgcentral.sql
 	text file dump of these tables from:
-        http://hgdownload.cse.ucsc.edu/admin/hgcentral.sql
+    rsync -avzP rsync://hgdownload.cse.ucsc.edu/genome/admin/hgcentral.sql .
+    (or: http://hgdownload.cse.ucsc.edu/admin/hgcentral.sql)
 )
 
-And then five tables for the latest human database.
+And then six tables for the latest human database.
 The gateway page always needs a minimum human database in order
 to function even if the browser is being built for the primary
 purpose of displaying other genomes.  This default can currently
@@ -34,24 +35,29 @@ Start with an empty database, for example hg18:
 $ hgsql -e "create database hg18;" mysql
 
 Again, copy the MySQL files directly from the download
-server, for example hg18: ftp://hgdownload.cse.ucsc.edu/mysql/hg18/
+server, for example hg18:
+    rsync -avzP rsync://hgdownload.cse.ucsc.edu/mysql/hg18/ .
+    (beware, this is an immense amount of data)
 into your MySQL data area.  Or load these tables from the text SQL
-dumps in: http://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/
+dumps from:
+    rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ .
+    (beware, this is an immense amount of data)
 
 The minimal set of tables required are:
 grp
 trackDb
 hgFindSpec
 chromInfo
+gold
+gap
 
-And one table for any other track, for example gap.
 The gap table is an example of the split table concept for performance
 purposes.  It consists of the tables: chr*_gap which is a total
 of 49 tables just for the gap track.  (3 * 49 = 147 MySQL data files)
 
 (each MySQL data table is three files: .MYD .MYI and .frm files)
 
-With this set of five tables the gateway page will
+With this set of six tables the gateway page will
 begin to function and the browser page and table browser
 will function.  Other browser functions are not ready yet without
 additional tables and databases.  This is a bare minimum just to
@@ -65,4 +71,4 @@ Some assemblies have all the DNA sequence in a single .2bit file,
 for example: /gbdb/mm8/mm8.2bit
 
 ====================================================================
-This file last updated: $Date: 2007/01/10 18:12:46 $
+This file last updated: $Date: 2008/10/14 16:38:47 $
