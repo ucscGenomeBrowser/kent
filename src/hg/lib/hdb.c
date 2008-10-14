@@ -38,7 +38,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.375 2008/09/25 22:18:21 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.376 2008/10/14 16:15:33 braney Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -816,8 +816,13 @@ if (hDbIsActive(db))
     }
 else
     {
+    char *nibPath = hDbDbNibPath(db);
+
+    if (nibPath == NULL)
+	errAbort("nibPath is NULL for database '%s'", db);
+
     safef(retNibName, HDB_MAX_PATH_STRING, "%s/%s.2bit", 
-	hDbDbNibPath(db), db);
+	nibPath, db);
     if (!fileExists(retNibName))
 	{
 	/* if 2bit file isn't there, try up one directory */
