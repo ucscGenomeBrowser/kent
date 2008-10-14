@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1517 2008/10/13 22:40:25 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1518 2008/10/14 23:43:14 aamp Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2593,6 +2593,8 @@ else
     {
     errAbort("Unrecognized custom graph type %s", type);
     }
+if (!ct->dbTrack)
+    tg->labelNextItemButtonable = FALSE;
 tg->hasUi = TRUE;
 freez(&typeDupe);
 return tg;
