@@ -302,9 +302,9 @@ compositeTrack on
 shortLabel RIKEN CAGE
 longLabel ENCODE - RIKEN CAGE
 group regulation
-subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters RawSignal=RawSignal
-subGroup2 cellType Cell_Line K562=K562 prostate=prostate
-subGroup3 localization Localization cytosol=cytosol nucleus=nucleus cell=cell
+subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters RawSignal=Raw_Signal
+subGroup2 cellType Cell_Line K562=K562 prostate=Prostate
+subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=longNonPolyA
 dimensions dimensionY=rnaExtract dimensionX=cellType dimensionZ=localization
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
@@ -451,7 +451,7 @@ type bed 3
 useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
-subGroup2 cellType Cell_Line HeLa-S3=HeLa-S3 HeLa-S3_IFNg=HeLa-S3_IFNg
+subGroup2 cellType Cell_Line HeLa-S3=HeLa-S3 HeLa-S3_IFNg=HeLa-S3_IFNg K562=K562
 subGroup3 factor Antibody CTRL=Input Pol2=Pol2 STAT1=STAT1
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
@@ -674,6 +674,84 @@ wgEncode 1
         cell            HeLa-S3_IFNg
         antibody        STAT1
         color           112,103,174
+
+        track   wgEncodeYaleChIPseqPeaksK562Pol2
+        subTrack        wgEncodeYaleChIPseq
+        shortLabel      K562 Pol2 Pk
+        longLabel       ENCODE Yale ChIP-Seq Peaks (Pol2 in K562 cells)
+        subGroups       view=Peaks factor=Pol2 cellType=K562
+        type    narrowPeak
+        dateSubmitted   2008-10-14 13:29:42
+        priority        13
+        noInherit       on
+        cell    K562
+        antibody        Pol2
+        configurable    on
+
+        track   wgEncodeYaleChIPseqSignalK562Pol2
+        subTrack        wgEncodeYaleChIPseq
+        shortLabel      K562 Pol2 Sig
+        longLabel       ENCODE Yale ChIP-Seq Signal (Pol2 in K562 cells)
+        subGroups       view=Signal factor=Pol2 cellType=K562
+        type    wig 0.00 18226.00
+        dateSubmitted   2008-10-14 13:29:42
+        priority        14
+        noInherit       on
+        visibility      full
+        spanList        1
+        windowingFunction       mean
+        maxHeightPixels 100:16:16
+        cell    K562
+        antibody        Pol2
+        configurable    on
+
+        track   wgEncodeYaleChIPseqRawSignalRep1K562Pol2
+        subTrack        wgEncodeYaleChIPseq
+        shortLabel      K562 Pol2 Raw 1
+        longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in K562 cells)
+        subGroups       view=zRAW factor=Pol2 cellType=K562
+        type    wig 1.00 6180.00
+        dateSubmitted   2008-10-14 13:29:42
+        priority        15
+        noInherit       on
+        spanList        1
+        windowingFunction       mean
+        maxHeightPixels 100:16:16
+        cell    K562
+        antibody        Pol2
+
+        track   wgEncodeYaleChIPseqSignalK562Input
+        subTrack        wgEncodeYaleChIPseq
+        shortLabel      K562 Inp Sig
+        longLabel       ENCODE Yale ChIP-Seq Signal (Input in K562 cells)
+        subGroups       view=Signal factor=CTRL cellType=K562
+        type    wig 0.00 4661.00
+        dateSubmitted   2008-10-14 11:39:9
+        priority        16
+        noInherit       on
+        visibility      full
+        spanList        1
+        windowingFunction       mean
+        maxHeightPixels 100:16:16
+        cell    K562
+        antibody        Input
+        configurable    on
+
+        track   wgEncodeYaleChIPseqRawSignalK562Input
+        subTrack        wgEncodeYaleChIPseq
+        shortLabel      K562 Inp Raw
+        longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in K562 cells)
+        subGroups       view=zRAW factor=CTRL cellType=K562
+        type    wig 1.00 1315.00
+        dateSubmitted   2008-10-14 11:39:9
+        priority        17
+        noInherit       on
+        spanList        1
+        windowingFunction       mean
+        maxHeightPixels 100:16:16
+        cell    K562
+        antibody        Input
+        configurable    on
 
 track wgEncodeHudsonalphaChipSeq
 compositeTrack on
