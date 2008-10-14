@@ -13,6 +13,7 @@ if ( "$HOST" != "$BOX32" ) then
  exit 1
 endif
 
+set ScriptStart=`date`
 
 echo "BRANCHNN=$BRANCHNN"
 echo "TODAY=$TODAY       (last build day)"
@@ -71,6 +72,6 @@ if ( $status ) then
     exit 1
 endif
 
-echo "success 32-bit build utils v${BRANCHNN}" > 32bitUtils.ok
+echo "success 32-bit build utils v${BRANCHNN} [${0}: START=${ScriptStart} END=`date`]" > 32bitUtils.ok
 exit 0
 
