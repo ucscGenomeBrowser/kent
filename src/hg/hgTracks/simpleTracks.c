@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.39 2008/10/13 22:40:25 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.40 2008/10/14 19:20:37 aamp Exp $";
 
 #define CHROM_COLORS 26
 
@@ -1760,8 +1760,7 @@ enum {blackShadeIx=9,whiteShadeIx=0};
 
 void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader)(char **row), 
 				   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
-				   void (*freeWhatever)(struct slList **pItem), char *scoreColumn, 
-				   char *moreWhere, boolean (*itemFilter)(struct slList *item))
+				   char *scoreColumn, char *moreWhere, boolean (*itemFilter)(struct slList *item))
 /* Make a linkedFeatures loader by providing three functions: (1) a regular */
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the the thing loaded in (1). */
@@ -1802,8 +1801,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	{
 	struct linkedFeatures *lf = lfFromWhatever(item);
 	slAddHead(&lfList, lf);
-	if (freeWhatever)
-	    freeWhatever(&item);
 	}
     }
 sqlFreeResult(&sr);

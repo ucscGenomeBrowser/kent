@@ -1783,13 +1783,6 @@ struct slList *illuminaProbesAlmostLoad(char **row)
 return (struct slList *)bedLoad12(row);
 }
 
-void illuminaProbesFree(struct slList **pItem)
-/* Frees my bed. (used by loadLinkedFeaturesWithLoaders). */
-{
-struct bed **pBed = (struct bed **)pItem;
-bedFree(pBed);
-}
-
 struct linkedFeatures *lfFromIlluminaProbesBed(struct slList *item)
 /* converts illumina probes bed to linkedFeatures, and also puts */
 /* that info in itemRgb in the extra field so we can use it later. */
@@ -1805,7 +1798,7 @@ void illuminaProbesLoadItems(struct track *tg)
 /* Just call the flexible linkedFeatures loader with a few custom fns. */
 {
 loadLinkedFeaturesWithLoaders(tg, illuminaProbesAlmostLoad, lfFromIlluminaProbesBed,
-			      illuminaProbesFree, NULL, NULL, NULL);
+			      "score", NULL, NULL);
 }
 
 Color illuminaProbesColor(struct track *tg, void *item, struct hvGfx *hvg)

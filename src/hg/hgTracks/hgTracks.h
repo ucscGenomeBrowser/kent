@@ -575,8 +575,7 @@ void bedLoadItem(struct track *tg, char *table, ItemLoader loader);
 
 void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader)(char **row), 
 				   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
-				   void (*freeWhatever)(struct slList **pItem), char *scoreColumn, 
-				   char *moreWhere, boolean (*itemFilter)(struct slList *item));
+				   char *scoreColumn, char *moreWhere, boolean (*itemFilter)(struct slList *item));
 /* Make a linkedFeatures loader by providing three functions: (1) a regular */
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the thing loaded in (1). */
