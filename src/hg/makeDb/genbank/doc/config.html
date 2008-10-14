@@ -129,19 +129,16 @@
      <li> <code><em>$db</em>.mgcTables.default</code> - indicates which
           MGC tables to create when there is no host-specific setting.
 
-     <li> <code><em>$db</em>.upstreamTable</code> - If specified, use this
+     <li> <code><em>$db</em>.upstreamGeneTbl</code> - If specified, use this
        table to create upstream FASTA files. It is an error if the table
        doesn't exist.  If not specified, don't create upstream
        FASTAs.
 
-     <li> <code><em>$db</em>.upstreamMaf</code> - If specified, create
-       update MAFs using this MAF table and the genes
-       in <code><em>$db</em>.upstreamTable</code>.
-       If not specified, don't create upstream MAFs.
-
-     <li> <code><em>$db</em>.upstreamMafOrgs</code> - File containing
-       order list of organisms to include in the upstream MAF.
-       Required if <code><em>$db</em>.upstreamMaf</code> is specified.
+     <li> <code><em>$db</em>.upstreamMaf</code> - If specified, create update
+       MAFs using this MAF table and organism list, and the genes
+       in <code><em>$db</em>.upstreamGeneTbl</code>.  First value should be
+       table name, second should be fully qualified path to file with order
+       list of organisms to include in the upstream MAF.
 
      <li> <code><em>$db</em>.ccds.ncbiBuild</code> - includes NCBI build number
        (e.g. 36.3) for CCDS table building.  Specifying this enabled auto-update
