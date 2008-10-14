@@ -1,12 +1,12 @@
 #!/bin/tcsh
 if ( "$HOST" != "hgwdev" ) then
- echo "Error: this script must be run from hgwdev."
+ echo "Error: this script must be run from hgwdev. [${0}: `date`]"
  exit 1
 endif
 
 set mode=$1
 if ( "$mode" != "branch" && "$mode" != "review") then
-  echo "must specify the mode (without quotes) on commandline: either 'review' (day1) or 'branch' (day8) "
+  echo "must specify the mode (without quotes) on commandline: either 'review' (day1) or 'branch' (day8) [${0}: `date`]"
   exit 1
 endif
 
@@ -62,7 +62,7 @@ echo "LASTREVIEWDAY=$LASTREVIEWDAY"
 
 if ( "$2" != "real" ) then
 	echo
-	echo "Not real.   To make real changes, put real as cmdline parm."
+	echo "Not real.   To make real changes, put real as cmdline parm. [${0}: `date`]"
 	echo
 	exit 0
 endif 
@@ -74,13 +74,13 @@ cd $WEEKLYBLD
 if ( "$mode" == "review") then
     ./cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN}
     if ( $status ) then
-        echo "[mode=$mode] cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN} failed on $HOST "
+        echo "[mode=$mode] cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN} failed on $HOST [${0}: `date`]"
         exit 1
     endif
 else    
     ./cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN}
     if ( $status ) then
-        echo "[mode=$mode] cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN} failed on $HOST "
+        echo "[mode=$mode] cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN} failed on $HOST [${0}: `date`]"
         exit 1
     endif
 endif    

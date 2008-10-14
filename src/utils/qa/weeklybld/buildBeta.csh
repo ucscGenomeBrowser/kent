@@ -2,7 +2,7 @@
 cd $WEEKLYBLD
 
 if ( "$HOST" != "hgwbeta" ) then
- echo "error: you must run this script on hgwbeta!"
+ echo "error: you must run this script on hgwbeta! [${0}: `date`]"
  exit 1
 endif
 
@@ -13,7 +13,7 @@ cd $BUILDDIR/$dir
 cd kent
 pwd
 #
-echo "Make libs."
+echo "Make libs. [${0}: `date`]"
 cd src
 make libs >& make.log
 sed -i -e "s/-DJK_WARN//g" make.log
@@ -28,7 +28,7 @@ if ( "$wc" != "0" ) then
  exit 1
 endif
 #
-echo "Make alpha."
+echo "Make alpha. [${0}: `date`]"
 cd hg
 make alpha >& make.alpha.log
 # These flags and programs will trip the error detection
@@ -45,7 +45,7 @@ if ( "$wc" != "0" ) then
 endif
 #
 # RUN vgGetText
-echo "making vgGetText"
+echo "making vgGetText [${0}: `date`]"
 cd $BUILDDIR/$dir/kent/src/hg/visiGene/vgGetText
 make alpha >& make.alpha.log
 sed -i -e "s/-DJK_WARN//g" make.alpha.log
@@ -86,7 +86,7 @@ endif
 #endif
 #
 echo
-echo "Build libs, alpha, strict-track  done."
+echo "Build libs, alpha, strict-track  done. [${0}: `date`]"
 #
 exit 0
 

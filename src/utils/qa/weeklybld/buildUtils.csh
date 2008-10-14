@@ -7,7 +7,7 @@ cd $WEEKLYBLD
 set MAKEPARAMS=""
 if ( "$MACHTYPE" == "i386" ) then
     if ( "$HOST" != "$BOX32" ) then
-	echo "error: you must run this script on $BOX32!"
+	echo "error: you must run this script on $BOX32! [${0}: `date`]"
 	exit 1
     endif
     # hack to force use of gcc34 on titan rather than the newer gcc (4.1) which makes binaries
@@ -16,7 +16,7 @@ if ( "$MACHTYPE" == "i386" ) then
 endif
 if ( "$MACHTYPE" == "x86_64" ) then
     if ( "$HOST" != "hgwbeta" ) then
-	echo "error: you must run this script on hgwbeta!"
+	echo "error: you must run this script on hgwbeta! [${0}: `date`]"
 	exit 1
     endif
 endif
@@ -25,7 +25,7 @@ set branch=v${BRANCHNN}_branch
 
 if ( "$1" == "tip" ) then
     set base=$BUILDDIR/tip
-    echo "updating tip sandbox"
+    echo "updating tip sandbox [${0}: `date`]"
     cd $base/kent
     cvs up -dP  >& /dev/null
     echo "done updating tip sandbox"
@@ -35,20 +35,20 @@ else
 endif
 
 if ( -d ~/bin/${MACHTYPE}.orig ) then
- echo "restoring from last failed symlink."
+ echo "restoring from last failed symlink. [${0}: `date`]"
  ./unsymtrick.csh
 endif
 if ( ! -d ~/bin/${MACHTYPE}.cluster ) then
- echo "something messed up in symlink"
+ echo "something messed up in symlink [${0}: `date`]"
  exit 1
 endif
 
 # Symlink Trick safe now
-echo "Symlink Trick."
+echo "Symlink Trick. [${0}: `date`]"
 ./symtrick.csh
 
 echo
-echo "Building src utils."
+echo "Building src utils. [${0}: `date`]"
 cd $base/kent/src
 echo "Before make utils"
 make $MAKEPARAMS utils >& make.utils.log
@@ -70,10 +70,10 @@ endif
 
 # Undo Symlink trick
 $WEEKLYBLD/unsymtrick.csh
-echo "Restore: undoing Symlink Trick."
+echo "Restore: undoing Symlink Trick. [${0}: `date`]"
 
 echo
-echo "Build of Utils on $HOST complete."
+echo "Build of Utils on $HOST complete. [${0}: `date`]"
 echo
 
 exit 0

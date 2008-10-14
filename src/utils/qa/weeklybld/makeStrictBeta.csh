@@ -2,7 +2,7 @@
 cd $WEEKLYBLD
 
 if ( "$HOST" != "hgwbeta" ) then
-echo "error: you must run this script on hgwbeta!"
+echo "error: you must run this script on hgwbeta! [${0}: `date`]"
 exit 1
 endif
 
@@ -13,7 +13,7 @@ cd $dir
 cd kent
 pwd
 # the makefile now does zoo automatically now when you call it
-echo "trackDb Make strict."
+echo "trackDb Make strict. [${0}: `date`]"
 cd $BUILDDIR/$dir/kent/src/hg/makeDb/trackDb
 make strict >& make.strict.log
 set res = `/bin/egrep -i "error|warn" make.strict.log`
@@ -33,5 +33,5 @@ if ( "$wc" != "0" ) then
 endif
 rm warning.txt
 
-echo "trackDb Make strict done on Beta"
+echo "trackDb Make strict done on Beta [${0}: `date`]"
 exit 0

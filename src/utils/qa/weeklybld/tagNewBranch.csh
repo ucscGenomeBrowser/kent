@@ -25,7 +25,7 @@ endif
 
 if ( "$1" != "real" ) then
 	echo
-	echo "Not real.   To make real changes, put real as cmdline parm."
+	echo "Not real.   To make real changes, put real as cmdline parm. [${0}: `date`]"
 	echo
 	exit 0
 endif 

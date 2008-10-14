@@ -130,6 +130,7 @@ echo "v$BRANCHNN built successfully on beta (day 9)." | mail -s "'v$BRANCHNN Bui
 echo
 echo "Waiting for the background beta:cvs-reports and ${BOX32}:doNewBranch32.csh to finish [${0}: `date`]"
 wait
+echo "Wait complete, checking results. [${0}: `date`]"
 
 if ( -e CvsReports.ok ) then
     echo "CVS Reports finished ok. [${0}: `date`]"
