@@ -52,3 +52,71 @@
 
     # fb.tupBel1.chainHg18Link.txt:
     #   
+
+#########################################################################
+## Repeat Masker (WORKING - 2008-10-14 - Hiram)
+    screen	# to manage this several day job
+    mkdir /hive/data/genomes/tupBel1/bed/repeatMasker
+    cd /hive/data/genomes/tupBel1/bed/repeatMasker
+    time doRepeatMasker.pl -workhorse=hgwdev -bigClusterHub=swarm \
+	-buildDir=`pwd` tupBel1 > do.log 2>&1 &
+    #	real    660m58.642s
+    #	failed in doMask.csh due to no tupBel1.unmasked.2bit file ?
+    #	which was there at the beginning, now it is gone ?
+    #	the broken doRepeatMasker.pl script removed it due to hive confusion
+    #	went back to the jkStuff/makeUnmasked script and re-ran part of that.
+    #	then ran the doMask.csh script to finish that, and continuing:
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-continue=install -workhorse=hgwdev -bigClusterHub=swarm \
+        -buildDir=`pwd` tupBel1 > install.log 2>&1 &
+    #	real    23m37.870s
+    twoBitToFa tupBel1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+# 3660774957 bases (1523549481 N's 2137225476 real 1701215604 upper 436009872
+# lower) in 150851 sequences in 1 files
+# %11.91 masked total, %20.40 masked real
+
+###########################################################################
+# SIMPLE REPEATS TRF (DONE - 2008-10-15 - Hiram)
+    screen # use a screen to manage this job
+    mkdir /cluster/data/tupBel1/bed/simpleRepeat
+    cd /cluster/data/tupBel1/bed/simpleRepeat
+    # 
+    time  $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/cluster/data/tupBel1/bed/simpleRepeat \
+	tupBel1 > do.log 2>&1 &
+    #	real    81m6.278s
+    cat fb.simpleRepeat
+    #	77116433 bases of 2137225476 (3.608%) in intersection
+
+    #	after RM run is done, add this mask:
+    cd /cluster/data/tupBel1
+    rm tupBel1.2bit
+    twoBitMask tupBel1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed tupBel1.2bit
+    #	can safely ignore warning about >=13 fields in bed file
+
+    twoBitToFa tupBel1.2bit stdout | faSize stdin > tupBel.2bit.faSize.txt
+# 3660774957 bases (1523549481 N's 2137225476 real 1700569122 upper 436656354
+# lower) in 150851 sequences in 1 files
+#	%11.93 masked total, %20.43 masked real
+
+    #	link to gbdb
+    ln -s `pwd`/tupBel1.2bit /gbdb/tupBel1
+
+###########################################################################
+# prepare for kluster runs (DONE _ 2008-10-15 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	turTru1: 2137225476
+    # thus: 1024 * 2137225476/2881421696 = 759
+    #	rounding down to 700
+    cd /cluster/data/tupBel1
+    time blat tupBel1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=tupBel1.11.ooc -repMatch=700
+    #	real    2m18.283s
+    #	Wrote 34503 overused 11-mers to tupBel1.11.ooc
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/tupBel1
+    cp -p tupBel1.2bit chrom.sizes tupBel1.11.ooc \
+	/hive/data/staging/data/tupBel1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
