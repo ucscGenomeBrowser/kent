@@ -45,7 +45,7 @@ endif
 echo "greetings. \n\n  you have content in the B-queue that someone should look at." > Bfile
 echo "  this is a periodic reminder from a QA cronjob.\n" >> Bfile
 hgsql -h hgwbeta -t -e "SELECT dbs, track, reviewer, sponsor, \
-  qadate FROM pushQ WHERE priority = 'B'" qapushq >> Bfile
+  qadate FROM pushQ WHERE priority = 'B' ORDER BY qadate" qapushq >> Bfile
 
 # get lst of all developers and QA involved in B-queue tracks
 set contacts=`hgsql -N -h hgwbeta -e "SELECT sponsor, reviewer, sponsor FROM pushQ \
