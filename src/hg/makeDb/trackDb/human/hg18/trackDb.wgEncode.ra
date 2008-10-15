@@ -313,6 +313,7 @@ visibilityViewDefaults PlusClusters=full MinusClusters=full RawSignal=hide
 controlledVocabulary encode/cv.ra cellType localization rnaExtract
 priority 0
 type bed 3
+wgEncode 1
 
 	track	wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
 	subTrack	wgEncodeRikenCage
