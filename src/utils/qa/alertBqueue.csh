@@ -10,6 +10,7 @@
 #
 ################################
 
+set go=""
 # make lists of substitutions for email addresses
 set counter=( 1 2 3 4 5 6 7 8 9 10 11 12 13 )
 set alias=( andy belinda  brian  brooke bob  fan    jim  jing larry  mark  rachel  ting     zach    )
@@ -22,9 +23,11 @@ if ( $#argv != 1  ) then
   echo
   echo "    usage:  go"
   echo
+  echo "  uses hard-coded aliases to get email from nicknames."
+  echo
   exit
 else
-  set db=$argv[1]
+  set go=$argv[1]
 endif
 
 if ( "$HOST" != "hgwdev" ) then
@@ -32,7 +35,7 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-if ( $db != "go" ) then
+if ( $go != "go" ) then
   echo 
   echo ' only the argument "go" is allowed.'
   echo 
@@ -70,9 +73,8 @@ foreach i ( $counter )
   endif 
 end
 
-foreach contact ( $contacts )
-  cat Bfile | mail -s "B-queue alert" $contact
-end
+# set contacts="ann kuhn pauline rhead kayla"
 
+cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "B-queue alert" $USER
 rm Bfile
 
