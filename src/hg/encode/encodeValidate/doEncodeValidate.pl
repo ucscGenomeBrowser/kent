@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.88 2008/10/16 21:05:59 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.89 2008/10/16 21:33:55 mikep Exp $
 
 use warnings;
 use strict;
@@ -401,10 +401,10 @@ sub validateBedGraph {
 sub validateGtf {
 # validate GTF by converting to genePred and validating that
     my ($path, $file, $type) = @_;
-    my $errFile = "/tmp/doEncodeValidate.gtf.err";
+    my $errFile = "$path/doEncodeValidate.gtf.err";
     doTime("beginning validateGtf") if $opt_timing;
     my $filePath = defined($path) ? "$path/$file" : $file;
-    my $outFile = "/tmp/doEncodeValidate.gtf.bed"; # Should use temp file but we only have one GTF project
+    my $outFile = "$path/doEncodeValidate.gtf.bed"; 
     if(Encode::isZipped($filePath)) {
         # XXXX should be modified to handle zipped files.
         die "We don't currently support gzipped gtf files\n";
@@ -417,6 +417,8 @@ sub validateGtf {
         my @err = <ERR>;
         die "@err\n";
     }
+    unlink $outFile;
+    unlink $errFile;
     HgAutomate::verbose(2, "File \'$file\' passed gtfToGenePred conversion \n");
     doTime("done validateGtf") if $opt_timing;
     return validateGene(undef,$outFile,$type);
@@ -1090,15 +1092,25 @@ foreach my $ddfLine (@ddfLines) {
         my $shortSuffix = "";
         my $longSuffix;
         my %shortViewMap = (Peaks => 'Pk', Signal => 'Sig', RawSignal => 'Raw', PlusRawSignal => 'PlusRaw', MinusRawSignal => 'MinusRaw');
-        if($hash{antibody} && $hash{cell}) {
-            $pushQDescription = "$hash{antibody} in $hash{cell}";
-            $shortSuffix = "$hash{antibody} $hash{cell}";
-            $longSuffix = "$hash{antibody} in $hash{cell} cells";
+        if($hash{'antibody'} && $hash{'cell'}) {
+            $pushQDescription = "$hash{'antibody'} in $hash{'cell'}";
+            $shortSuffix = "$hash{'antibody'} $hash{'cell'}";
+            $longSuffix = "$hash{'antibody'} in $hash{'cell'} cells";
+        } elsif($hash{'rnaExtract'} && $hash{'localization'} && $hash{'cell'}) {
+            $pushQDescription = "$hash{'rnaExtract'} in $hash{'cell'} $hash{'localization'}";
+            $shortSuffix = "$hash{'rnaExtract'} $hash{'cell'} $hash{'localization'}";
+            $longSuffix = "from $hash{'rnaExtract'} in $hash{'cell'} cell $hash{'localization'}";
+        } elsif($hash{'freezeDate'}) {
+            $pushQDescription = $hash{'freezeDate'};
+            $shortSuffix = $hash{'freezeDate'};
+            $longSuffix = $hash{'freezeDate'};
         } elsif ($hash{"cell"}) {
-            $pushQDescription = "$hash{cell}";
-            $shortSuffix = "$hash{cell}";
-            $longSuffix = "in $hash{cell} cells";
-        }
+            $pushQDescription = "$hash{'cell'}";
+            $shortSuffix = "$hash{'cell'}";
+            $longSuffix = "in $hash{'cell'} cells";
+        } else {
+	    warn "Warning: variables undefined for pushQDescription,shortSuffix,longSuffix\n";
+	}
         if(defined($shortViewMap{$view})) {
             $shortSuffix .= " " . $shortViewMap{$view};
         }
@@ -1141,7 +1153,9 @@ foreach my $ddfLine (@ddfLines) {
     }
 
     # XXXX Move the decision about which views have tracks into the DAF?
-    my $downloadOnly = $view eq 'RawData' || $view eq 'RawData2' || $view eq 'Alignments' ? 1 : 0;
+    # Gingeras group need to see their alignments
+    # Riken group have RawData and RawData2 because they have colorspace fasta and quality files
+    my $downloadOnly = $view eq 'RawData' || $view eq 'RawData2' || ($view eq 'Alignments' and $daf->{grant} ne "Gingeras") ? 1 : 0;
 
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "view $view\n";
