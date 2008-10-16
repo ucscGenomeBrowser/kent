@@ -47,6 +47,9 @@ echo "Push request:"
 echo "Please push from dev-->hgdownload "
 echo "  /usr/local/apache/htdocs/admin/hgcentral.sql"
 echo
+echo "Please also push the raw hgcentral mysql tables"
+echo "from the RR to hgdownload."
+echo
 echo "reason: (describe here)"
 echo
 
