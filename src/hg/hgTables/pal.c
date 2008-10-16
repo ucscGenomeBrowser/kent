@@ -4,7 +4,7 @@
 #include "hgTables.h"
 #include "pal.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.14 2008/10/02 23:59:05 braney Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.15 2008/10/16 15:58:12 ann Exp $";
 
 boolean isPalCompatible(struct sqlConnection *conn,
     struct trackDb *track, char *table)
@@ -74,8 +74,8 @@ if (outCount == 0)
 void addOurButtons()
 /* callback from options dialog to add navigation buttons */
 {
-printf("For information about output data format see "
-  "<A HREF=\"../goldenPath/help/hgTablesHelp.html#FASTA\">Table Browser User's Guide</A><BR>");
+printf("For information about output data format see the"
+  "<A HREF=\"../goldenPath/help/hgTablesHelp.html#FASTA\">User's Guide</A><BR>");
 cgiMakeButton(hgtaDoPalOut, "get output");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "cancel");
