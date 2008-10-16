@@ -6,8 +6,6 @@
 #include "rbTree.h"
 #include "intValTree.h"
 
-static char const rcsid[] = "$Id: intValTree.c,v 1.2 2008/09/17 17:56:37 kent Exp $";
-
 int intValCmp(void *va, void *vb)
 /* Return -1 if a before b,  0 if a and b overlap,
  * and 1 if a after b. */
@@ -85,3 +83,22 @@ if (iv == NULL)
 return iv->val;
 }
 
+void rbTreeTraverse(struct rbTree *tree, void (*doItem)(void *item));
+
+void doAllKeys(void *item, void *context)
+/* Callback function for tree traversal. */
+{
+int **pPt = context;
+struct intVal *iv = item;
+**pPt = iv->key;
+*pPt += 1;
+}
+
+int *intValTreeKeys(struct rbTree *tree)
+/* Returns array of keys (size is tree->n).  You freeMem this when done. */
+{
+int *results, *pt;
+pt = AllocArray(results, tree->n);
+rbTreeTraverseWithContext(tree, doAllKeys, &pt);
+return results;
+}

@@ -43,5 +43,8 @@ void *intValTreeFind(struct rbTree *tree, int key);
 void *intValTreeMustFind(struct rbTree *tree, int key);
 /* Return value associated with given key. Aborts if none exists. */
 
+int *intValTreeKeys(struct rbTree *tree);
+/* Returns array of keys (size is tree->n).  You freeMem this when done. */
+
 #endif /* INTVALTREE_H */
 

@@ -80,6 +80,11 @@ struct slRef *rbTreeItemsInRange(struct rbTree *tree, void *minItem, void *maxIt
 void rbTreeTraverse(struct rbTree *tree, void (*doItem)(void *item));
 /* Apply doItem function to all items in tree */
 
+void rbTreeTraverseWithContext(struct rbTree *tree, 
+	void (*doItem)(void *item, void *context), void *context);
+/* Traverse tree calling doItem on every item with context pointer passed through to doItem.
+ * This often avoids having to declare global or static variables for the doItem callback to use. */
+
 struct slRef *rbTreeItems(struct rbTree *tree);
 /* Return sorted list of items.  slFreeList this when done.*/
 
