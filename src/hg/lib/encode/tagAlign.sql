@@ -12,5 +12,5 @@ CREATE TABLE tagAlign (
     score int not null,	# Indicates mismatches, quality, or other measurement (0-1000)
     strand char(1) not null,	# Orientation of this read (+ or -)
               #Indices
-    PRIMARY KEY(chrom)
+    INDEX chromStart (chrom(8), chromStart)
 );
