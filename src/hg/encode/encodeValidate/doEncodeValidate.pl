@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.86 2008/10/16 16:25:48 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.87 2008/10/16 20:08:44 larrym Exp $
 
 use warnings;
 use strict;
@@ -1205,7 +1205,8 @@ if($submitDir =~ /(\d+)$/) {
         my $count = scalar(@tmp);
         my $metadata = join("; ", @tmp);
         HgAutomate::verbose(2, "Updating id '$id'; metdata: '$metadata'; count: 'count'\n");
-        $rubyDb->execute("update projects set count = ?, metadata = ? where id = ?", $count, $metadata, $id);
+        $rubyDb->execute("update projects set count = ?, metadata = ?, lab = ?, data_type = ?, track = ? where id = ?", 
+                         $count, $metadata, $daf->{lab}, $daf->{dataType}, $compositeTrack, $id);
     }
 }
 
