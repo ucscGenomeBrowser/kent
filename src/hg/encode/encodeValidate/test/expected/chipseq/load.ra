@@ -34,7 +34,7 @@ tablename wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
 view RawSignal
 type wig
 assembly hg18
-files autoCreated1.bed
+files autoCreatedRawSignal1.bed
 downloadOnly 0
 pushQDescription FOXP2 in SK-N-MC Replicate 1
 

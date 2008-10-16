@@ -239,6 +239,14 @@ echo "the dateReference column in the hgFixed.trackVersion table"
 echo "should say 'current' for your database (or all):"
 hgsql -Ne "SELECT db, dateReference FROM trackVersion WHERE version = $ver AND name = 'ensGene'" hgFixed
 
+# check that the corresponding upstream MAF files have been updated
+echo "\n\n----------------------"
+echo "In conjunction with an Ensembl Gene update, some upstream MAF files need"
+echo "to be rebuilt. Specifically those for: ornAna1, fr2, gasAcu1, oryLat1"
+echo "Check for them here (look for new dates) there should be 3 for each db:"
+echo "hgwdev:/data/apache/htdocs/goldenPath/<db>/multiz*way/maf/ensGene.upstream?000.maf.gz"
+echo
+
 # clean up
 rm -f xxDbList$$ xxNotActive$$ xxNotOnBeta$$
 

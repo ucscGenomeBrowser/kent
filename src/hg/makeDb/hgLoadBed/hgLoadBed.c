@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.62 2008/10/06 17:32:56 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.63 2008/10/15 08:37:10 aamp Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -25,7 +25,6 @@ boolean itemRgb = TRUE;		/* parse field nine as r,g,b when commas seen */
 boolean notItemRgb = FALSE;	/* do NOT parse field nine as r,g,b */
 boolean noStrict = FALSE;	/* skip the coord sanity checks */
 int bedGraph = 0;		/* bedGraph column option, non-zero means yes */
-int bedPlus = 0;                /* force bedSize instead of guessing */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 boolean renameSqlTable = FALSE;	/* Rename table created with -sqlTable to */
                                 /*     to match track */
@@ -56,7 +55,6 @@ static struct optionSpec optionSpecs[] = {
     {"noLoad", OPTION_BOOLEAN},
     {"noHistory", OPTION_BOOLEAN},
     {"bedGraph", OPTION_INT},
-    {"bedPlus", OPTION_INT},
     {"notItemRgb", OPTION_BOOLEAN},
     {"noStrict", OPTION_BOOLEAN},
     {"nostrict", OPTION_BOOLEAN},
@@ -85,7 +83,7 @@ errAbort(
   "             the mysql server can access.\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
   "   -renameSqlTable Rename table created with -sqlTable to match track\n"
-  "   -trimSqlTable \n"
+  "   -trimSqlTable  if sqlTable has n rows, and input has m rows, only load m rows, meaning the last n-m rows in the sqlTable are optional\n"
   "   -tab  Separate by tabs rather than space\n"
   "   -hasBin   Input bed file starts with a bin field.\n"
   "   -noLoad  - Do not load database and do not clean up tab files\n"
@@ -225,7 +223,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
         {
 	/*	new definition for old "reserved" field, now itemRgb */
 	/*	and when itemRgb, it is a comma separated string r,g,b */
-	if (itemRgb && (i == 8) && ((bedPlus >= 8) || (bedPlus == 0)))
+	if (itemRgb && (i == 8))
 	    {
 	    char *comma;
 	    /*  Allow comma separated list of rgb values here   */
@@ -574,9 +572,6 @@ hasBin = optionExists("hasBin");
 noLoad = optionExists("noLoad");
 noHistory = optionExists("noHistory");
 bedGraph = optionInt("bedGraph",0);
-bedPlus = optionInt("bedPlus", 0);
-if ((bedPlus > 0) && ((bedPlus < 3) || (bedPlus > 15)))
-    usage();
 notItemRgb = optionExists("notItemRgb");
 if (notItemRgb) itemRgb = FALSE;
 maxChromNameLength = optionInt("maxChromNameLength",0);

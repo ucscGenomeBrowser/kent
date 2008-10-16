@@ -17,6 +17,8 @@ if ("$HOST" != "$BOX32") then
  exit 1
 endif
 
+set ScriptStart=`date`
+
 rm -fr $BUILDDIR/cgi-bin-32
 mkdir $BUILDDIR/cgi-bin-32
 
@@ -67,7 +69,7 @@ rm -fr hgSubjData
 scp -r -p * qateam@hgdownload:/mirrordata/apache/cgi-bin-i386/
 
 echo
-echo "32-bit cgis built on $HOST and scp'd to hgdownload [${0}: `date`]"
+echo "32-bit cgis built on $HOST and scp'd to hgdownload [${0}: START=${ScriptStart} END=`date`]"
 #
 exit 0
 

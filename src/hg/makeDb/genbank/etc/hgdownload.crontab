@@ -7,5 +7,5 @@ MAILTO=genbank@cse.ucsc.edu
 PATH=/usr/local/bin:/usr/bin:/bin
 
 # copy new download files from genbank server
-# poll hourly 16:30 - 21:30
-30 16-21 * * * rsync -e '/usr/bin/rsh' --whole-file -rl --include='*.fa.gz' --exclude='*.tmp' genbank-10:/cluster/data/genbank/ftp/ /mirrordata/apache/htdocs/goldenPath
+# poll hourly
+30 * * * * rsync -e '/usr/bin/rsh' --whole-file -rl --include='*.fa.gz' --include='*.maf.gz' --exclude='*.tmp*' genbank-10:/cluster/data/genbank/ftp/ /mirrordata/apache/htdocs/goldenPath

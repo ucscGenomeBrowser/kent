@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.79 2008/10/08 18:14:04 braney Exp $"
+#	"$Id: mm9.txt,v 1.81 2008/10/14 20:58:59 cline Exp $"
 #
 
 #######################################################################
@@ -8670,6 +8670,9 @@ blat -fine -ooc=/scratch/data/mm9/11.ooc /scratch/data/mm9/nib/$(path1).nib $(pa
     hgLoadPsl mm9 affyMOE430v2.psl
     hgLoadSeq mm9 /gbdb/hgFixed/affyProbes/affyMOE430v2.fa
     #	45037 sequences
+    pslToBed affyMOE430v2.psl affyMOE430v2Probes.bed
+    hgLoadBed -tmpDir=/scratch/tmp mm9 affyMOE430v2Probes affyMOE430v2Probes.bed
+    Loaded 46193 elements of size 12
 
     #	Create a similar formatted file to the one used in MOE430
     zcat geoData/GSE10246_series_matrix.txt.gz \
@@ -8678,16 +8681,63 @@ blat -fine -ooc=/scratch/data/mm9/11.ooc /scratch/data/mm9/nib/$(path1).nib $(pa
 	| sed -e "s/\"//g" > gnfMOE430v2.AD.txt
 
     #	create tables gnfMOE430v2AllExps and gnfMOE430v2All tables in hgFixed
+    grep "^1" gnfMOE430v2.AD.txt \
+    	| hgGenericMicroarray hgFixed gnfMOE430v2All stdin
+    #	from that table, create median ratio table
+    hgRatioMicroarray -minAbsVal=0 gnfMOE430v2All gnfMOE430v2AllRatio
+    # add those ratio's to the probe locations to make a bed 15 microarray type
+    bedMergeExpData hgFixed.gnfMOE430v2AllRatio mm9.affyMOE430v2Probes \
+	gnfMOE430v2AllRatio.bed
+    hgLoadBed mm9 gnfMOE430v2 gnfMOE430v2AllRatio.bed
+    hgMapToGene mm9 gnfMOE430v2 knownGene knownToGnfMOE430v2 '-type=bed 12'
+    hgExpDistance mm9 hgFixed.gnfMOE430v2AllRatio \
+	hgFixed.gnfMOE430v2AllExps gnfMOE430v2Distance \
+	-lookup=knownToGnfMOE430v2
+    #	Have 45037 elements in hgFixed.gnfMOE430v2AllRatio
+    #	Got 39872 unique elements in hgFixed.gnfMOE430v2AllRatio
+    #	Loaded gnfMOE430v2Distance
+    #	real    30m58.034s
+    #	user    60m26.362s
+    #	sys     3m16.217s
+
+
+    #	do not need this table for the genome browser display
+    hgsql -e "drop table gnfMOE430v2Probes;" mm9
+
+    #	The hgGenericMicroarray business above did not properly create
+    #	the AllExps table, to do this properly:
+
     hgGnfMicroarray gnfMOE430v2AllExps gnfMOE430v2All \
 	gnfMOE430v2.AD.txt -chip=MOE430v2
+    # create table gnfMOE430v2AllRatio in hgFixed from hgFixed.gnfMOE430v2All
+    #	and classification file ../hgMedianMicroarray/gnfMOE430v2.ra
+    hgRatioMicroarray gnfMOE430v2All gnfMOE430v2AllRatio \
+	-clump=$HOME/kent/src/hg/makeDb/hgMedianMicroarray/gnfMOE430v2.ra
+    # Take the median value over multiple replicants creating
+    # hgFixed.gnfMOE430v2MedianRatio and gnfMOE430v2MedianExps
+    cd ../hgMedianMicroarray
+    hgMedianMicroarray hgFixed gnfMOE430v2AllRatio gnfMOE430v2AllExps \
+	$HOME/kent/src/hg/makeDb/hgMedianMicroarray/gnfMOE430v2.ra \
+	gnfMOE430v2MedianRatio gnfMOE430v2MedianExps -minExps=1
+    # Also make a median version of the absolute measurements
+    hgMedianMicroarray hgFixed gnfMOE430v2All gnfMOE430v2AllExps \
+	$HOME/kent/src/hg/makeDb/hgMedianMicroarray/gnfMOE430v2.ra \
+	gnfMOE430v2Median gnfMOE430v2MedianExps -minExps=1
+
+    hgExpDistance mm9 hgFixed.gnfMOE430v2MedianRatio \
+	hgFixed.gnfMOE430v2MedianExps gnfMOE430v2Distance \
+	-lookup=knownToGnfMOE430v2
+    #	Have 45037 elements in hgFixed.gnfMOE430v2MedianRatio
+    #	Got 39872 unique elements in hgFixed.gnfMOE430v2MedianRatio
+    #	real    16m5.102s
+    #	user    41m54.581s
+    #	sys     1m28.595s
+
+
     #	182 experiments
     # Convert these to ratios using the median of medians of non-cancerous
     # cell types as the denominator as so:
     cd ~/src/hg/makeDb/hgRatioMicroarray
-    # create table gnfMOE430v2AllRatio in hgFixed from hgFixed.gnfMOE430v2All
-    #	and classification file ../hgMedianMicroarray/gnfMOE430v2.ra
-    hgRatioMicroarray gnfMOE430v2All gnfMOE430v2AllRatio \
-	-clump=../hgMedianMicroarray/gnfMOE430v2.ra
     cd ../hgMedianMicroarray
     # create tables gnfMOE430v2MedianRatio gnfMOE430v2MedianExps in hgFixed
     hgMedianMicroarray hgFixed gnfMOE430v2AllRatio gnfMOE430v2AllExps \
@@ -8708,7 +8758,18 @@ blat -fine -ooc=/scratch/data/mm9/11.ooc /scratch/data/mm9/nib/$(path1).nib $(pa
     hgLoadBed mm9 gnfMOE430v2 gnfMOE430v2.bed
     #	Loaded 46193 elements of size 15
 
-#######################################
+    hgExpDistance mm9 hgFixed.gnfMouseAtlas2MedianRatio \
+	hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
+# Convert these to ratios using the median of medians of non-cancerous
+# cell types as the denominator as so:
+cd ~/src/hg/makeDb/hgRatioMicroarray
+hgRatioMicroarray gnfMouseAtlas2All gnfMouseAtlas2AllRatio -clump=../hgMedianMicroarray/gnfMouseAtlas2.ra
+# Take the median value over multiple replicants and put in this table:
+cd ../hgMedianMicroarray
+hgMedianMicroarray hgFixed gnfMouseAtlas2AllRatio gnfMouseAtlas2AllExps gnfMouseAtlas2.ra gnfMouseAtlas2MedianRatio gnfMouseAtlas2MedianExps -minExps=1
+# Also make a median version of the absolute measurements
+hgMedianMicroarray hgFixed gnfMouseAtlas2All gnfMouseAtlas2AllExps gnfMouseAtlas2.ra gnfMouseAtlas2Median gnfMouseAtlas2MedianExps -minExps=1
+
 ############################################################################
 # hgPal downloads
     ssh hgwdev
@@ -8868,3 +8929,9 @@ EOF
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
 #########################################################################
+
+
+#############################################################################
+# MOUSE TISSUE EXON ARRAYS (Melissa Cline, cline@biology.ucsc.edu, 10/14/08)  
+# (to build the affyExonTissues track, see the steps outlined in hg18.txt)
+#############################################################################

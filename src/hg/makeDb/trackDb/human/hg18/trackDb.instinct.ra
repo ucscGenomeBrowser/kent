@@ -94,7 +94,7 @@ expScale 2.0
 expStep 0.2
 groupings ucsfNeveCGHGroups
 
-track fengAgilentExp
+track maserAgilentExp
 shortLabel Gene Expression (Maser. et.al 2007)
 longLabel Multi-tissue Human Agilent 1A Exon Array from DFCI (Maher et. al 2006)
 group x
@@ -104,9 +104,9 @@ type expRatio
 logicalDb localDb
 expScale 2.0
 expStep 0.1
-groupings fengAgilentExpGroups
+groupings maserAgilentExpGroups
 
-track feng44Bcgh
+track maser44Bcgh
 shortLabel Agilent 44B CGH (Maser. et.al 2007)
 longLabel Multi-tissue Agilent 44B CGH Array from DFCI (Maher et. al 2006)
 group x
@@ -116,9 +116,9 @@ type expRatio
 logicalDb localDb
 expScale 2.0
 expStep 0.1
-groupings feng44BcghGroups
+groupings maser44BcghGroups
 
-track feng244Acgh
+track maser244Acgh
 shortLabel Agilent 244A CGH (Maser et. al 2007)
 longLabel Multi-tissue Agilent 244A CGH Array from DFCI (Maher et. al 2006)
 group x
@@ -128,7 +128,7 @@ type expRatio
 logicalDb localDb
 expScale 2.0
 expStep 0.1
-groupings feng244AcghGroups
+groupings maser244AcghGroups
 
 track lin2008Exp
 shortLabel Melanoma Gene Expression (Lin. et.al 2008)
@@ -281,3 +281,14 @@ expScale 2.0
 expStep 0.2
 groupings naderi2007ExpGroups
 
+track kaiser2007
+shortLabel Colon Cancer Gene Expression (Kaiser et al. 2007)
+longLabel Colon Cancer Gene Expression (Kaiser et al. 2007)
+group x
+priority 47
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings kaiser2007Groups

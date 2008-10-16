@@ -676,9 +676,6 @@ identifier agilentCghRn4Id
     rn4.agilentCgh244a.name minCheck=0.99
     rn4.agilentCgh105a.name minCheck=0.30
 
-identifier affyExonTissues
-"Affymetrix all exon array normal tissues"
-    
 identifier affyHumanExon
 "Affymetrix all human exon array probe id"
     hgFixed.affyHumanExon.name
@@ -693,8 +690,7 @@ identifier affyHumanExonSampleId
 identifier sestanBrainAtlas
 "Another Affy All Exon array ... slightly different set of probes though"
     $hg.sestanBrainAtlas.name
-    hgFixed.affyHumanExon.name minCheck=0.99
-    $hg.affyHumanExon.name minCheck=0.99
+    $hg.affyHumanExon.name minCheck=0.62
 
 identifier sestanBrainAtlasId
 "Sample IDs for the Sestan brain atlas array."

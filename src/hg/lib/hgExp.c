@@ -9,7 +9,9 @@
 #include "hgExp.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.14 2008/09/15 18:36:36 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.15 2008/10/16 18:08:30 hiram Exp $";
+
+static int expSubcellWidth = 21;
 
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
@@ -105,7 +107,7 @@ int height = gifLabelMaxWidth(experiments, representativeCount);
 
 for (i=0; i<representativeCount; i += groupSize+1)
     {
-    printf("<TD VALIGN=\"BOTTOM\">");
+    printf("<TD VALIGN='BOTTOM' WIDTH=%d>", expSubcellWidth);
     groupSize = countNonNull(experiments+i, representativeCount-i);
     safef(gifName, sizeof(gifName), "../trash/nea_%s_%s%d.gif", 
     	colName, subName, ++gifStart);
@@ -217,8 +219,6 @@ else
     }
 }
 
-static int expSubcellWidth = 21;
-
 static void startExpCell()
 /* Print out start of expression cell, which contains a table. */
 {
@@ -263,9 +263,9 @@ for (i=0; i<repCount; ++i)
 	    printf("<TD WIDTH=%d>&nbsp;</TD>", expSubcellWidth);
 	else
 	    {
-	    printf("<TD WIDTH=%d BGCOLOR=\"#", expSubcellWidth);
+	    printf("<TD WIDTH=%d BGCOLOR='#", expSubcellWidth);
 	    colorVal(val, scale, colorBlindColors, useGrays, logGrays);
-	    printf("\">&nbsp;</TD>");
+	    printf("'>&nbsp;</TD>");
 	    }
 	}
     }

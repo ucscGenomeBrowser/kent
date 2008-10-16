@@ -12,6 +12,8 @@ endif
 
 # ASSUMPTION: that the requisite branch-tag or review-tag script has already been run.
 
+set ScriptStart=`date`
+
 cd $WEEKLYBLD
 
 if ( "$TODAY" == "" ) then
@@ -74,13 +76,13 @@ cd $WEEKLYBLD
 if ( "$mode" == "review") then
     ./cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN}
     if ( $status ) then
-        echo "[mode=$mode] cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN} failed on $HOST [${0}: `date`]"
+        echo "Error: [mode=$mode] cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN} failed on $HOST [${0}: `date`]"
         exit 1
     endif
 else    
     ./cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN}
     if ( $status ) then
-        echo "[mode=$mode] cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN} failed on $HOST [${0}: `date`]"
+        echo "Error: [mode=$mode] cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN} failed on $HOST [${0}: `date`]"
         exit 1
     endif
 endif    
@@ -104,7 +106,7 @@ endif
 echo "</ul></body></html>" >> index.html
 cd $WEEKLYBLD
 
-echo "success CVS Reports v${BRANCHNN} $mode" > CvsReports.ok
+echo "success CVS Reports v${BRANCHNN} $mode [${0}: START=${ScriptStart} END=`date`]" > CvsReports.ok
 
 exit 0
 

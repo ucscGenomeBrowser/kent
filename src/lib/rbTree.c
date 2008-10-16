@@ -9,7 +9,7 @@
 #include "localmem.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: rbTree.c,v 1.11 2007/11/26 02:09:52 kent Exp $";
+static char const rcsid[] = "$Id: rbTree.c,v 1.12 2008/10/16 02:39:51 kent Exp $";
 
 
 static struct rbTreeNode *restructure(struct rbTree *t, int tos, 
@@ -643,6 +643,7 @@ if (n != NULL)
     }
 }
 
+
 void rbTreeTraverseRange(struct rbTree *tree, void *minItem, void *maxItem,
 	void (*doItem)(void *item))
 /* Apply doItem function to all items in tree such that
@@ -659,8 +660,37 @@ void rbTreeTraverse(struct rbTree *tree, void (*doItem)(void *item))
 /* Apply doItem function to all items in tree */
 {
 doIt = doItem;
-compareIt = tree->compare;
 rTreeTraverse(tree->root);
+}
+
+struct rTreeContext
+/* Context for traversing a tree when you want to be fully thread safe and reentrant. */
+    {
+    void *context;	/* Some context carried from user and passed to doIt. */
+    void (*doItem)(void *item, void *context);
+    };
+
+static void rTreeTraverseWithContext(struct rbTreeNode *n, struct rTreeContext *context)
+/* Traverse tree with a little context so don't need little static variables that
+ * prevent reentrancy of callback functions. */
+{
+if (n != NULL)
+    {
+    rTreeTraverseWithContext(n->left, context);
+    context->doItem(n->item, context->context);
+    rTreeTraverseWithContext(n->right, context);
+    }
+}
+
+void rbTreeTraverseWithContext(struct rbTree *tree, 
+	void (*doItem)(void *item, void *context), void *context)
+/* Traverse tree calling doItem on every item with context pointer passed through to doItem.
+ * This often avoids having to declare global or static variables for the doItem callback to use. */
+{
+struct rTreeContext ctx;
+ctx.context = context;
+ctx.doItem = doItem;
+rTreeTraverseWithContext(tree->root, &ctx);
 }
 
 struct slRef *itList;  /* List of items that rbTreeItemsInRange returns. */
@@ -681,13 +711,21 @@ slReverse(&itList);
 return itList;
 }
 
+static void addRefWithContext(void *item, void *context)
+/* Add item it itList. */
+{
+struct slRef **pList = context;
+refAdd(pList, item);
+}
+
+
 struct slRef *rbTreeItems(struct rbTree *tree)
 /* Return sorted list of items.  slFreeList this when done.*/
 {
-itList = NULL;
-rbTreeTraverse(tree, addRef);
-slReverse(&itList);
-return itList;
+struct slRef *list = NULL;
+rbTreeTraverseWithContext(tree, addRefWithContext, &list);
+slReverse(&list);
+return list;
 }
 
 int rbTreeCmpString(void *a, void *b)

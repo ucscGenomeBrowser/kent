@@ -9,12 +9,6 @@ struct slList *switchDbTssLoadConduit(char **row)
 return (struct slList *)switchDbTssLoad(row);
 }
 
-void switchDbTssFreeConduit(struct slList **pItem)
-{
-struct switchDbTss **pTss = (struct switchDbTss **)pItem;
-switchDbTssFree(pTss);
-}
-
 boolean switchDbTssFilterPseudo(struct slList *slItem)
 /* "Include pseudogenes" checkbox filter. */
 {
@@ -60,7 +54,7 @@ safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
 if (!cartVarExists(cart, optionScoreStr))
     cartSetInt(cart, optionScoreStr, SWITCHDBTSS_FILTER); 
 loadLinkedFeaturesWithLoaders(tg, switchDbTssLoadConduit, lfFromSwitchDbTss, 
-			      switchDbTssFreeConduit, "confScore", NULL, switchDbTssFilterPseudo);
+			      "confScore", NULL, switchDbTssFilterPseudo);
 }
 
 Color switchDbTssItemColor(struct track *tg, void *item, struct hvGfx *hvg)

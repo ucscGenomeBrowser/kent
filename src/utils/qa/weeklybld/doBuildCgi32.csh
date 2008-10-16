@@ -6,6 +6,8 @@ if ( "$HOST" != "hgwbeta" ) then
  exit 1
 endif
 
+set ScriptStart=`date`
+
 echo "BRANCHNN=$BRANCHNN"
 echo "TODAY=$TODAY       (last build day)"
 echo "LASTWEEK=$LASTWEEK   (previous build day)"
@@ -43,6 +45,6 @@ if ( $status ) then
     exit 1
 endif
 
-echo "Build 32-bit CGIs complete  [${0}: `date`]"
+echo "Build 32-bit CGIs complete  [${0}: START=${ScriptStart} END=`date`]"
 
 exit 0

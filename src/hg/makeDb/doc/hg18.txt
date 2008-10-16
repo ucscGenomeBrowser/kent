@@ -23413,7 +23413,273 @@ awk 'BEGIN{OFS="\t";}{print $1, $2, $2, "n/a", "n/a", "n/a", "103", "n/a,n/a,"$2
 hgLoadSqlTab hgFixed sestanBrainAtlasExps{,.sql,.tab}
 ssh kolossus
 
+################################################################
+# HUMAN TISSUE EXON ARRAYS (Melissa Cline, cline@biology.ucsc.edu, 10/14/08)
+
+#
+# AffyExonTissue Step 1: download exon array coordinate data from Affy
+# and extract coordinates Download HuEx-1_0-st-v2 Annotations, Full,
+# Hg18/Build 36 gff.  The file is available at
+# http://www.affymetrix.com/support/technical/byproduct.affx?product=huexon-st
+# and the download requires logging in to NetAffx (free, registration
+# required) Uncompress the GFF files.  Parse out key fields with the
+# script below, generating hg18.affy.exon.coords.tab
+#
+
+#---------
+#!/usr/bin/env perl                                                 
+
+=pod                                                                
+                                                                    
+=head1 NAME 
+
+parseGffArrayData.pl
+                                                                    
+=head1 SYNOPSYS                                                     
+                                                                    
+cat *gff |parseGffArrayData.pl > array.coords.tab
+
+=head1 DESCRIPTION                                                  
+                                                                    
+Parses probeset coordinates out of the Affy design data
+                                                                    
+=cut         
+
+{
+    use strict;
+    use Getopt::Long;
+    use GFF;
+    use GFF::GeneFeature;
+    use FileHandle;
+
+    print "chr\tstart\tend\tID\tscore\tstrand\n";
+    while (my $line = <>) {
+	chomp;
+	my @tokens = split /\s/, $line;
+	if ($tokens[2] eq "probeset") {
+	    my $gffFeature = new GFF::GeneFeature;
+	    my $gffData = $gffFeature->new_from_line($line);
+	    my $probesetId = $gffData->group_value('probeset_id');
+	    my $probesetLevel = $gffData->group_value('level');
+	    my $bounded = $gffData->group_value('bounded');
+	    my $cds = $gffData->group_value('cds');
+	    my $score;
+	    if ($probesetLevel eq "core") {
+		$score = 900;
+	    } elsif ($probesetLevel eq "extended") {
+		$score = 500;
+	    } else {
+		$score = 200;
+	    }
+	    if ($bounded) { $score -= 200; }
+	    if ($cds) { $score += 100; }
+	    if ($score < 100) { $score = 100; }
+	    print($gffData->seqname(), "\t", $gffData->start(), "\t",
+		  $gffData->end(), "\t", $probesetId, "\t$score\t",
+		  $gffData->strand(), "\n");
+	}
+    }
+}
+#-------
+
+
+#
+# AffyExonTissue Step 2: download tissue data from Affy, generate bed15 file
+#
+# Download Human Exon 1.0 ST APT results from 
+# http://www.affymetrix.com/support/technical/sample_data/exon_array_data.affx
+# (requires free registration and login, as above)
+# Uncompress, and get rid of the undesired tissue mixture columns.
+cut -f 1-34 \
+  < apt-probeset-summarize-results-exon/quant-norm.pm-gcbg.plier.summary.txt \
+  > quant-norm.pm-gcbg.plier.nomix.summary.txt
+
+#
+# Generate a bed15 file using the command below, and script below that.
+# For the purposes of generating a track, ignore the first line.
+#
+arrayToBed15.py \
+  --coordinates hg18.affy.exon.coords.tab \
+  --plier quant-norm.pm-gcbg.plier.nomix.summary.txt \
+  --name "humanExon" \
+  --groups "breast,breast,breast,cerebellum,cerebellum,cerebellum,heart,heart,heart,kidney,kidney,kidney,liver,liver,liver,muscle,muscle,muscle,pancreas,pancreas,pancreas,prostate,prostate,prostate,spleen,spleen,spleen,testes,testes,testes,thyroid,thyroid,thyroid" \
+|tail -n +2 > human.exon.headless.bed15
+
+#---
+#!/usr/bin/python
+
+from optparse import OptionParser
+import math
+import re
+        
+#
+# get the genomic probeset coordinates
+#
+def parseProbesetCoordinates(coordinatesFilename):
+    """Build a dictionary of coordinates from a tab-delmited file"""
+    coordinateData = {}
+    coordinatesFileHandle = open(coordinatesFilename)
+    coordinatesFileHandle.readline()  # skip the header line
+    for line in coordinatesFileHandle:
+        line = line.rstrip();
+        tokens = line.split('\t')
+        id = tokens[3]
+        coordinateData[id] = tokens;
+    return(coordinateData)
+
+def median(numbers):
+    """Sort the input list and return the middle element."""
+    nn = len(numbers)
+    copy = numbers[:] # So that "numbers" keeps its original order
+    copy.sort()
+    if nn & 1:         # There is an odd number of elements
+        return copy[nn // 2]
+    else:
+        return (copy[nn // 2] + copy[nn // 2 - 1]) / 2
+
+
+def medianOfMedians(experimentNames, experimentValues):
+       """Given replicated values, find the median of the replicate medians."""
+       # Create a dictionary to sort the values by experiment set
+       replicates = {}
+       #
+       # Group the epxeriments into replicate sets by experiment names.
+       # This assumes that experiments in the same replicate set have the
+       # same name.
+       #
+       for ii in range(0,len(experimentNames)-1):
+           if not replicates.has_key(experimentNames[ii]):
+               replicates[experimentNames[ii]] = [experimentValues[ii]]
+           else :
+               replicates[experimentNames[ii]].append(experimentValues[ii])
+       # Make a list containing the median value of each replicate set.
+       medians = list()
+       for replicateSet in replicates.keys() :
+           values = replicates[replicateSet]
+           thisMedian = median(values)
+           medians.append(thisMedian)
+       # Now get the median value of the median list
+       medianValue = median(medians)
+       return(medianValue)
+           
+
+    
+def printHeaderData(experimentList, trackName):
+    """Print a header line for a bed15 file"""
+    expNames = ",".join(experimentList)
+    print "track type=\"array\" expScale=3 expStep=0.5 ",
+    print " name=\"" + str(trackName) + "\"", \
+          " description=\"Microarray custom track\"",
+    print " expNames=" "\"" + expNames + "\""
+    
+
+def printPlierResults(resultsLine, experimentGroups, probesetCoordinates):
+    """median-center a line of expression results, print in bed15 format"""
+    background = 10
+    plierResultsLine = line.split('\t')
+    probesetId = plierResultsLine[0]
+    del plierResultsLine[0]
+    if probesetCoordinates.has_key(probesetId):
+        coordinates = probesetCoordinates[probesetId]
+        #
+        # Given coordinate data (chr start end ID score strand)
+        #   and given experimental data (ID exp1 exp2 exp3 ... expN)
+        # Print as follows:
+        # 1. Basic bedfile stuff: chromosome, start, end, name, score, 
+        #    strand, thickStart (=start), thickEnd (=end), 0, blocks (=1),
+        #    blocklengths (=end-start+1,), blockstarts (=0,)
+        #
+        start = int(coordinates[1]) - 1
+        end = int(coordinates[2])
+        length = end - start
+        print str(coordinates[0]) + "\t" + str(start) + "\t" \
+              + str(end) + "\t" + str(probesetId) + "\t", \
+              coordinates[4], "\t", coordinates[5], "\t", start, "\t", \
+              end, "\t0\t1\t", \
+              str(length) + ",\t", "0,\t",
+        #
+        # Continue with microarray-specific stuff:
+        # - experiment count
+        # - comma-separated list of experiment IDs (0 .. experimentCount)
+        # - comma-separated list of experiment scores (log(result)-log(median))
+        #
+        experimentCount = len(plierResultsLine) 
+        experimentValues = list()
+        for value in plierResultsLine:
+            experimentValues.append(float(value))
+        medianValue = medianOfMedians(experimentGroups, experimentValues)
+        logMedian = math.log(medianValue+background)
+        valuesStrings = list()
+        for thisValue in experimentValues:
+            thisScore = math.log(thisValue+background) - logMedian
+            valuesStrings.append(str(thisScore))
+        experimentScoreString = ",".join(valuesStrings)
+        ids = list()
+        for ii in range(0, experimentCount):
+            ids.append(str(ii))
+        experimentIdString = ",".join(ids)
+        print experimentCount, "\t", experimentIdString, "\t", \
+              experimentScoreString
+    return
+    
+parser = OptionParser()
+parser.add_option("--coordinates", dest="coordinatesFile")
+parser.add_option("--plier", dest="plierResultsFile")
+parser.add_option("--name", dest="trackName")
+parser.add_option("--groups", dest="experimentGroups")
+(parameters, args) = parser.parse_args()
+
+experimentGroups = parameters.experimentGroups.split(",")
+probesetCoordinates = parseProbesetCoordinates(parameters.coordinatesFile)
+
+plierResults = open(parameters.plierResultsFile)
+for line in plierResults:
+    line = line.rstrip()
+    if (re.search("^#", line)) :
+        continue
+    elif (re.search("^probeset_id", line)) :
+        printHeaderData(experimentGroups, parameters.trackName)
+    else :
+        printPlierResults(line, experimentGroups, probesetCoordinates)
+#---
+
+
+
+#
+# AffyExonTissue Step 3: set up a browser track from the bed15 file 
+#   created offline: trackDb.affyExonTissues.ra, 
+#                    affyExonTissues.html,
+#                    microarrayGroups.affyExonTissues.ra
+#
+cat $KENT/src/hg/makeDb/trackDb/human/trackDb.ra trackDb.affyExonTissues.ra \
+    > trackDb.new.ra
+cp trackDb.new.ra  $KENT/src/hg/makeDb/trackDb/human/trackDb.ra             
+cp affyExonTissues.html $KENT/src/hg/makeDb/trackDb/human
+cat $KENT/src/hg/makeDb/hgCgiData/Human/microarrayGroups.ra \
+    microarrayGroups.affyExonTissues.ra  > microarrayGroups.new.ra
+hgLoadBed hg18 affyExonTissues human.exon.headless.bed15
+cd $KENT/src/hg/makeDb/trackDb
+make update DBS="hg17 hg18"
+cd $KENT/src
+make -j8 cgi >& ~/make.j8.cgi.errout
+
+
+#
+# AffyExonTissue Step 4: load the appropriate fields into hgFixed
+#
+grep -A5 affyExonTissuesAll microarrayGroups.ra | grep "^names" \
+   | sed 's/names //' | tr ',' '\n' | sed '/^$/d' | sed 's/^\s\+//' > n.txt
+grep -A5 affyExonTissuesAll microarrayGroups.ra | grep "^expIds" \
+   | sed 's/expIds //' | tr ',' '\n' | sed '/^$/d' | sed 's/^\s\+//' > e.txt
+paste e.txt n.txt > a.txt
+awk 'BEGIN{OFS="\t";}
+    {print $1, $2, $2, "n/a", "n/a", "n/a", "33", "n/a,n/a,"$2",";}' a.txt \
+  > exps.tab
+ln -s ../../../lib/expRecord.sql 
+hgLoadSqlTab hgFixed affyMouseExonTissuesAllExps expRecord.sql exps.tab
+rm a.txt n.txt e.txt exps.tab
 ############
+
 
 ################################################
 # SPLIT EXPRESSION & REGULATION GROUPS

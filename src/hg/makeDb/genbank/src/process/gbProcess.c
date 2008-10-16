@@ -42,7 +42,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.22 2008/04/26 07:09:22 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.23 2008/10/14 17:35:16 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -374,6 +374,17 @@ while (xref != NULL)
 slFreeList(&head);
 }
 
+static void parseGene()
+/* Parse the /gene entries, using either the CDS one, or if not available,
+ * the one from the GENE field */
+{
+struct keyVal* geneKv = NULL;
+if (!isEmpty(gbCdsGeneField->val->string))
+    updateKvt(&geneKv, "gen", gbCdsGeneField->val->string);
+else if (!isEmpty(gbGeneGeneField->val->string))
+    updateKvt(&geneKv, "gen", gbGeneGeneField->val->string);
+}
+
 static void parseSourceOrganism()
 /* parse source /organism fields, output as srcOrg if different from org */
 {
@@ -622,11 +633,6 @@ else if (wordCount == 5 && sameString(words[2], "bp") && isdigit(words[1][0]))
     }
 else
     {
-    int i;
-    uglyf("Arghh!\n ");
-    for (i=0; i<wordCount; ++i)
-        uglyf("'%s' ", words[i]);
-    uglyf("\n");
     errAbort("Short LOCUS line in %s accession %s",
              lf->fileName, accession);
     }
@@ -642,6 +648,7 @@ if (((wordCount >= 5) && sameString(words[4], "EST")) ||
 
 /* Handle other fields */
 parseDbXrefs();
+parseGene();
 parseSourceOrganism();
 parseMiscDiffs();
 parseWarnings();

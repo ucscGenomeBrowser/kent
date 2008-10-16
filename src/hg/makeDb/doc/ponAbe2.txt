@@ -4,7 +4,7 @@
 # This file describes browser build for the Orangutan
 # genome, July 31 2007
 #
-#	"$Id: ponAbe2.txt,v 1.19 2008/07/01 16:53:03 markd Exp $"
+#	"$Id: ponAbe2.txt,v 1.20 2008/10/14 18:25:38 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
@@ -2024,3 +2024,42 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# Create quality download files (DONE - 2008-10-14 - Hiram)
+    cd /hive/data/genomes/ponAbe2/bed/qual
+    qacToQa /hive/data/genomes/ponAbe2/wustl/ponAbe2.qual.qac ponAbe2.qa.fa
+    cat << '_EOF_' > splitByName.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my $chrom = "";
+while (my $line = <>) {
+    if ($line =~ m/^>/) {
+	close FH if (length($chrom) > 0);
+	chomp $line;
+	$chrom = $line;
+	$chrom =~ s/>//;
+	$chrom =~ s/\s+//g;
+	open (FH, "| gzip -c > qa/$chrom.qa.fa.gz") or
+		die "can not write to qa/$chrom.qa.fa.gz";
+	print FH ">$chrom\n";
+    } else {
+	print FH "$line";
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./splitByName.pl
+    mkdir qa
+    ./splitByName.pl < ponAbe2.qa.fa
+    cd qa
+    tar cvzf ../ponAbe2.quality.fa.gz ./*.fa.gz
+    #	check byte counts with these files to make sure they are OK
+    for F in *.fa.gz; do zcat $F; done | wc
+    #	172337823 3446754951 10512603041
+    cd ..
+    wc ponAbe2.qa.fa
+    #	172337823  3446754951 10512603041 ponAbe2.qa.fa
+    # identical counts, OK.

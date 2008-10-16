@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.85 2008/10/08 18:37:46 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.88 2008/10/16 21:05:59 larrym Exp $
 
 use warnings;
 use strict;
@@ -44,8 +44,9 @@ use vars qw/
     $opt_fileType
     $opt_outDir
     $opt_quick
-    $opt_skipValidateFiles
     $opt_skipAutoCreation
+    $opt_skipOutput
+    $opt_skipValidateFiles
     $opt_validateDaf
     $opt_validateFile
     $opt_verbose
@@ -68,15 +69,18 @@ submission-type is currently ignored.
 
 Current dafVersion is: $Encode::dafVersion
 
+Creates the following output files: $Encode::loadFile, $Encode::trackFile and README.txt
+
 options:
     -allowReloads       Allow reloads of existing tables
     -configDir=dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
     -fileType=type	used only with validateFile option; e.g. narrowPeak
     -quick		Validate only first $quickCount lines of files
+    -skipAutoCreation   Tells script skip creating the auto-created files (e.g. RawSignal, PlusRawSignal, MinusRawSignal)
+                        this can save you a lot of time when you are debugging and re-running the script on large projects
+    -skipOutput         Don't write the various output files
     -skipValidateFiles  Tells script skip the file validation step; to save a lot of time during testing
-    -skipAutoCreation   Tells script skip creating the auto-created files (e.g. RawSignal); this can save you a lot of time
-                        when you are debugging and re-running the script on large projects
     -validateDaf	exit after validating DAF file (project-submission-dir is the DAF file name).
     -validateFile	exit after validating file (project-submission-dir is the file name; requires -fileType option as well)
     -verbose=num        Set verbose level to num (default 1).
@@ -672,8 +676,9 @@ my $ok = GetOptions("allowReloads",
                     "outDir=s",
                     "quick",
                     "timing",
-                    "skipValidateFiles",
                     "skipAutoCreation",
+                    "skipOutput",
+                    "skipValidateFiles",
                     "validateDaf",
                     "validateFile",
                     "verbose=i",
@@ -917,24 +922,40 @@ if(!@errors) {
         
     doTime("beginning ddfReplicateSets loop") if $opt_timing;
     for my $key (keys %ddfReplicateSets) {
-        # create missing optional views (e.g. ChIP-Seq RawSignal); note this loop assumes these are on a per replicate basis.
+        # create missing optional views (e.g. ChIP-Seq RawSignal or transcriptome project PlusRawSignal and MinusRawSignal)
+	# note this loop assumes these are on a per replicate basis.
+	# Also note that any project (like transcriptome) that doesnt have replicates should also use
+	# this for their auto-create signals. 
 
-        if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}) && !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})) {
+        if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}) 
+		&& !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal}) 
+		&& !defined($ddfReplicateSets{$key}{VIEWS}{PlusRawSignal})
+		&& !defined($ddfReplicateSets{$key}{VIEWS}{MinusRawSignal})) {
             if($daf->{dataType} eq 'ChipSeq' && !defined($daf->{medianFragmentLength})) {
                 pushError(\@errors, "Missing medianFragmentLength field; this field is required for dataType '$daf->{dataType}' when RawSignal view is not provided");
             } else {
-                my $newView = 'RawSignal';
+                # hack for case where they have removed RawSignal view in the DAF
+		# - if no (Plus|Minus|)RawSignal is defined, assume RawSignal is required
+                if(!defined($daf->{TRACKS}{RawSignal}{order}) 
+			&& !defined($daf->{TRACKS}{PlusRawSignal}{order}) 
+			&& !defined($daf->{TRACKS}{MinusRawSignal}{order}) ) {
+                    $daf->{TRACKS}{RawSignal}{order} = ++$maxOrder;
+                }
+		# Make a list of the PlusRawSignal/MinusRawSignal or RawSignals we are going to have to make
+		my @newViews = ();
+		push @newViews, "RawSignal" if $daf->{TRACKS}{RawSignal}{order};
+		push @newViews, "PlusRawSignal" if $daf->{TRACKS}{PlusRawSignal}{order};
+		push @newViews, "MinusRawSignal" if $daf->{TRACKS}{MinusRawSignal}{order};
+		
+		foreach my $newView (@newViews) #loop around making them
+		{
                 my $alignmentLine = $ddfReplicateSets{$key}{VIEWS}{Alignments};
                 my %line = %{$alignmentLine};
                 $line{view} = $newView;
                 $line{type} = 'wig';
-                # hack for case where they have removed RawSignal view in the DAF
-                if(!defined($daf->{TRACKS}{$newView}{order})) {
-                    $daf->{TRACKS}{$newView}{order} = ++$maxOrder;
-                }
                 $ddfReplicateSets{$key}{VIEWS}{$newView} = \%line;
                 my @unzippedFiles = ();
-                doTime("beginning unzipping replicates files") if $opt_timing;
+                doTime("beginning unzipping replicates files for view [$newView]") if $opt_timing;
                 for my $file (@{$alignmentLine->{files}}) {
                     # Unzip any zipped files - only works if they are with .gz suffix
                     my ($fbase,$dir,$suf) = fileparse($file, ".gz");
@@ -960,13 +981,13 @@ if(!@errors) {
                 $alignmentLine->{files} = \@unzippedFiles;
                 # Now we can safely sort these files as none are zipped
                 my $files = join(" ", @{$alignmentLine->{files}});
-                my $tmpFile = $Encode::autoCreatedPrefix . "$tmpCount.bed";
+                my $tmpFile = $Encode::autoCreatedPrefix . $newView. "$tmpCount.bed"; # add the type of view to the name
                 $tmpCount++;
                 if($opt_skipAutoCreation) {
                     HgAutomate::verbose(2, "Skipping auto-creating view '$newView' for key '$key'\n");
                   } else {
-                      HgAutomate::verbose(2, "Auto-creating view '$newView' for key '$key'\n");
-                        doTime("beginning Auto-create of view $newView") if $opt_timing;
+                      HgAutomate::verbose(2, "Auto-creating view '$newView' for key '$key' in file '$tmpFile'\n");
+                        doTime("beginning Auto-create of view $newView in file $tmpFile") if $opt_timing;
                         # XXXX gzip before saving to disk?
                         my @cmds;
                         my $sortFiles;
@@ -976,7 +997,10 @@ if(!@errors) {
                         } else {
                             $sortFiles = $files;
                         }
-                        push(@cmds, "sort -k1,1 -k2,2n $sortFiles", "bedItemOverlapCount $daf->{assembly} stdin");
+                        push @cmds, "sort -k1,1 -k2,2n $sortFiles";
+			push @cmds, "gawk '\$6 == \"+\" {print}'" if $newView eq "PlusRawSignal";
+			push @cmds, "gawk '\$6 == \"-\" {print}'" if $newView eq "MinusRawSignal";
+                        push @cmds, "bedItemOverlapCount $daf->{assembly} stdin";
                         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
                         if(my $err = $safe->exec()) {
                             print STDERR  "ERROR: failed creation of wiggle for $key" . $safe->stderr() . "\n";
@@ -987,9 +1011,10 @@ if(!@errors) {
                     }
                 $line{files} = [$tmpFile];
                 push(@ddfLines, \%line);
+	    }  # End foreach newView loop
             }
         }
-    }
+    } # End replicate sets loop
     doTime("done ddfReplicateSets loop") if $opt_timing;
 }
 
@@ -1009,9 +1034,15 @@ if(@errors) {
 # vocabulary.  Create load.ra file for loader and trackDb.ra file for wrangler.
 doTime("beginning out files") if $opt_timing;
 
-open(LOADER_RA, ">$outPath/$Encode::loadFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::loadFile\' file; error: $!\n";
-open(TRACK_RA, ">$outPath/$Encode::trackFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::trackFile\' file; error: $!\n";
-open(README, ">$outPath/README.txt") || die "SYS ERROR: Can't write '$outPath/READEME.txt' file; error: $!\n";
+if($opt_skipOutput) {
+    open(LOADER_RA, ">>/dev/null");
+    open(TRACK_RA, ">>/dev/null");
+    open(README, ">>/dev/null");
+} else {
+    open(LOADER_RA, ">$outPath/$Encode::loadFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::loadFile\' file; error: $!\n";
+    open(TRACK_RA, ">$outPath/$Encode::trackFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::trackFile\' file; error: $!\n";
+    open(README, ">$outPath/README.txt") || die "SYS ERROR: Can't write '$outPath/READEME.txt' file; error: $!\n";
+}
 
 # XXXX Calculation of priorities still needs work; we currently don't account for multiple experiments in the same DDF.
 # It may in fact be too much work to do automatic calculation of priorities (i.e. the wrangler may have to do it manually).
@@ -1058,7 +1089,7 @@ foreach my $ddfLine (@ddfLines) {
         }
         my $shortSuffix = "";
         my $longSuffix;
-        my %shortViewMap = (Peaks => 'Pk', Signal => 'Sig', RawSignal => 'Raw');
+        my %shortViewMap = (Peaks => 'Pk', Signal => 'Sig', RawSignal => 'Raw', PlusRawSignal => 'PlusRaw', MinusRawSignal => 'MinusRaw');
         if($hash{antibody} && $hash{cell}) {
             $pushQDescription = "$hash{antibody} in $hash{cell}";
             $shortSuffix = "$hash{antibody} $hash{cell}";
@@ -1184,7 +1215,8 @@ if($submitDir =~ /(\d+)$/) {
         my $count = scalar(@tmp);
         my $metadata = join("; ", @tmp);
         HgAutomate::verbose(2, "Updating id '$id'; metdata: '$metadata'; count: 'count'\n");
-        $rubyDb->execute("update projects set count = ?, metadata = ? where id = ?", $count, $metadata, $id);
+        $rubyDb->execute("update projects set count = ?, metadata = ?, lab = ?, data_type = ?, track = ? where id = ?", 
+                         $count, $metadata, $daf->{lab}, $daf->{dataType}, $compositeTrack, $id);
     }
 }
 

@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.20 2008/04/26 07:09:22 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.21 2008/10/14 17:35:16 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -33,7 +33,9 @@ struct gbField *gbMapField;
 struct gbField *gbSourceOrganism;
 struct gbField *gbPrtField;
 struct gbField *gbGeneDbxField;
+struct gbField *gbGeneGeneField;
 struct gbField *gbCdsDbxField;
+struct gbField *gbCdsGeneField;
 struct gbField *gbProteinIdField;
 struct gbField *gbTranslationField;
 struct gbField *gbCloneLibField;
@@ -272,6 +274,9 @@ slAddTail(&c1->children, c2);
 /* FEATURES gene */
 c1 = newField("gene", NULL, GBF_NONE, 5, 128);
 slAddTail(&c0->children, c1);
+c2 = newField("/gene", NULL, GBF_NONE, 21, 128);
+slAddTail(&c1->children, c2);
+gbGeneGeneField = c2;
 c2 = newField("/db_xref", NULL, GBF_MULTI_VAL, 21, 128); 
 slAddTail(&c1->children, c2);
 gbGeneDbxField = c2;
@@ -279,10 +284,10 @@ gbGeneDbxField = c2;
 /* FEATURES CDS */
 c1 = newField("CDS", "cds", GBF_MULTI_LINE, 5, 128);
 slAddTail(&c0->children, c1);
-c2 = newField("/gene", "gen", GBF_TRACK_VALS, 21, 128);
+c2 = newField("/gene", NULL, GBF_NONE, 21, 128);
 slAddTail(&c1->children, c2);
+gbCdsGeneField = c2;
 c2 = newField("/locus_tag", "lot", GBF_TRACK_VALS, 21, 128);
-
 slAddTail(&c1->children, c2);
 
 c2 = newField("/product", "pro", GBF_NONE, 21, 128);
