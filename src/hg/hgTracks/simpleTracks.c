@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.39 2008/10/13 22:40:25 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.39.2.1 2008/10/16 02:23:35 mikep Exp $";
 
 #define CHROM_COLORS 26
 
@@ -1649,7 +1649,7 @@ for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
     else
 #endif /* GBROWSE */
 	{
-	if (sameString(tg->mapName, "ct_UserTrack"))
+	if (isCustomTrack(tg->mapName))
 	    {
 	    struct customTrack *ct = tg->customPt;
 	    items = hGetBedRange(CUSTOM_TRASH, ct->dbTableName, chromName, start, end, NULL);
