@@ -1295,8 +1295,8 @@ url https://www.affymetrix.com/LinkServlet?probeset=$$
 type psl .
 
 track gnfMOE430v2
-shortLabel GNF MOE430 v2
-longLabel GNF Expression Affy MOE430 version 2
+shortLabel GNF Atlas 3
+longLabel GNF Expression Atlas 3
 group regulation
 priority 88.1
 visibility hide
