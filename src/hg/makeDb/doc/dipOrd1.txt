@@ -57,70 +57,69 @@ _EOF_
 # standard deviation 40860.463605
 
 #########################################################################
-# REPEATMASKER (not done)
-    ssh kkstore05
-    screen # use a screen to manage this job
-    mkdir /cluster/data/dipOrd1/bed/repeatMasker
-    cd /cluster/data/dipOrd1/bed/repeatMasker
-    doRepeatMasker.pl -buildDir=/cluster/data/dipOrd1/bed/repeatMasker \
-        dipOrd1 > do.log 2>&1 &
-
-    # Note: can run simpleRepeats simultaneously
-    #### When done with RM:
-    ssh pk
-    para time
-
-#   new parasol, cluster a mess
-
-    doRepeatMasker.pl -continue cat -buildDir=/cluster/data/dipOrd1/bed/repeatMasker \
-        dipOrd1 > do3.log 2>&1 &
-
-    time nice -n +19 featureBits dipOrd1 rmsk > fb.dipOrd1.rmsk.txt 2>&1 &
-    # 440029204 bases of 1844966916 (23.850%) in intersection
-
+## Repeat Masker (DONE - 2008-10-14 - Hiram)
+    screen	# to manage this job
+    mkdir /hive/data/genomes/dipOrd1/bed/repeatMasker
+    cd /hive/data/genomes/dipOrd1/bed/repeatMasker
+    time doRepeatMasker.pl -workhorse=hgwdev -bigClusterHub=swarm \
+	-buildDir=`pwd` dipOrd1 > do.log 2>&1 &
+    #	real    663m46.841s
+    #	failed in doMask.csh due to no dipOrd1.unmasked.2bit file ?
+    #	which was there at the beginning, now it is gone ?
+    #	the broken doRepeatMasker.pl script removed it due to hive confusion
+    #	went back to the jkStuff/makeUnmasked script and re-ran part of that.
+    #	then ran the doMask.csh script to finish that, and continuing:
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-continue=install -workhorse=hgwdev -bigClusterHub=swarm \
+        -buildDir=`pwd` dipOrd1 > install.log 2>&1 &
+    #	real    15m17.199s
+    twoBitToFa dipOrd1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+# 2158502098 bases (313540677 N's 1844961421 real 1404133178 upper 440828243
+# lower) in 210053 sequences in 1 files
+# %20.42 masked total, %23.89 masked real
 
 #########################################################################
-# SIMPLE REPEATS TRF (not done)
-    ssh kkstore05
+# SIMPLE REPEATS TRF (DONE - 2008-10-17 - Hiram)
     screen # use a screen to manage this job
     mkdir /cluster/data/dipOrd1/bed/simpleRepeat
     cd /cluster/data/dipOrd1/bed/simpleRepeat
     # 
-    doSimpleRepeat.pl -buildDir=/cluster/data/dipOrd1/bed/simpleRepeat \
+    time  $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/cluster/data/dipOrd1/bed/simpleRepeat \
 	dipOrd1 > do.log 2>&1 &
+    #	real    2630m12.078s
 
     featureBits dipOrd1 simpleRepeat
-    # 203389506 bases of 1844966916 (11.024%) in intersection
+    #	211605979 bases of 1844961421 (11.469%) in intersection
 
     #	after RM run is done, add this mask:
     cd /cluster/data/dipOrd1
     twoBitMask dipOrd1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed dipOrd1.2bit
 
-    twoBitToFa dipOrd1.2bit stdout | faSize stdin
-# 2158506683 bases (313539767 N's 1844966916 real 1328458474 upper 516508442
+    twoBitToFa dipOrd1.2bit stdout | faSize stdin > dipOrd1.2bit.faSize.txt
+# 2158502098 bases (313540677 N's 1844961421 real 1323236442 upper 521724979
 # lower) in 210053 sequences in 1 files
-# Total size: mean 10276.0 sd 40860.6 min 600 (scaffold_210052) max 11421927
-# (scaffold_0) median 2509
-# N count: mean 1492.7 sd 3518.5
-# U count: mean 6324.4 sd 30354.6
-# L count: mean 2458.9 sd 8794.9
-# %23.93 masked total, %28.00 masked real
+# %24.17 masked total, %28.28 masked real
 
-    twoBitToFa dipOrd1.rmsk.2bit stdout | faSize stdin
-# 2158506683 bases (313539767 N's 1844966916 real 1405171780 upper 439795136
-# lower) in 210053 sequences in 1 files
-# Total size: mean 10276.0 sd 40860.6 min 600 (scaffold_210052) max 11421927
-# (scaffold_0) median 2509
-# N count: mean 1492.7 sd 3518.5
-# U count: mean 6689.6 sd 30353.9
-# L count: mean 2093.7 sd 8597.1
-# %20.37 masked total, %23.84 masked real
+    #	link to gbdb
+    ln -s `pwd`/dipOrd1.2bit /gbdb/dipOrd1
 
-    # Link to it from /gbdb
-    ln -s /cluster/data/dipOrd1/dipOrd1.2bit /gbdb/dipOrd1/dipOrd1.2bit
+###########################################################################
+# prepare for kluster runs (DONE _ 2008-10-17 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	dipOrd1: 1844961421
+    # thus: 1024 * 1844961421/2881421696 = 655
+    #	rounding up to 700 to be a bit conservative
+    cd /hive/data/genomes/dipOrd1
+    time blat dipOrd1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=dipOrd1.11.ooc -repMatch=700
+    #	Wrote 33062 overused 11-mers to dipOrd1.11.ooc
+    #	real    1m34.993s
 
-    # mkdir /san/sanvol1/scratch/dipOrd1
-    cp /cluster/data/dipOrd1/dipOrd1.2bit /san/sanvol1/scratch/dipOrd1
-    cp /cluster/data/dipOrd1/chrom.sizes /san/sanvol1/scratch/dipOrd1
-
-
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/dipOrd1
+    cp -p dipOrd1.2bit chrom.sizes dipOrd1.11.ooc \
+	/hive/data/staging/data/dipOrd1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
