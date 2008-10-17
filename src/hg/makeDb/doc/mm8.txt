@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.71 2008/10/14 20:58:59 cline Exp $"
+#	"$Id: mm8.txt,v 1.72 2008/10/17 01:06:35 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -9577,3 +9577,9 @@ see doc/builds.txt for specific details.
 # MOUSE TISSUE EXON ARRAYS (Melissa Cline, cline@biology.ucsc.edu, 10/14/08)  
 # (to build the affyExonTissues track, see the steps outlined in hg18.txt)
 #############################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+mm8.upstreamGeneTbl = refGene
+mm8.upstreamMaf = multiz17way /hive/data/genomes/mm8/bed/multiz17way/species.lst

@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.18 2008/08/28 21:18:57 hiram Exp $"
+#       "$Id: petMar1.txt,v 1.19 2008/10/17 01:06:35 markd Exp $"
 #
 
 ##########################################################################
@@ -1716,3 +1716,9 @@ see doc/builds.txt for specific details.
     #	39181422 bases of 831696438 (4.711%) in intersection
 
 ############################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+petMar1.upstreamGeneTbl = xenoRefGene
+petMar1.upstreamMaf = multiz6way /hive/data/genomes/petMar1/bed/multiz6way/species.list

@@ -3131,3 +3131,8 @@ see doc/builds.txt for specific details.
 	-verbose=2 -smallClusterHub=pk -bigClusterHub=pk > download.log 2>&1 &
 
 #########################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+danRer5.upstreamGeneTbl = refGene

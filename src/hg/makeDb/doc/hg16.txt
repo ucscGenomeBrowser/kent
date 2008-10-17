@@ -11882,3 +11882,12 @@ awk 'BEGIN{OFS="\t"}{print $4,$3-$2}' affyHuEx1.fixed.bed | sort -k2,2nr | head
 
 echo "insert into grp (name, label, priority) values ('expression', 'Expression', 4.5)" | hgsql hg16
 echo "update grp set label='Regulation' where name='regulation'" | hgsql hg16
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+
+echo hg16 panTro1 mm3 rn3 galGal2> /hive/data/genomes/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/species.lst
+update genbank.conf:
+hg16.upstreamGeneTbl = refGene
+hg16.upstreamMaf = mzPt1Mm3Rn3Gg2_pHMM /hive/data/genomes/hg16/bed/multiz.hg16mm3rn3panTro1galGal2/species.lst
+

@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 # Washington University School of Medicine GSC and Sanger Institute WS190
 
-#  $Id: ce6.txt,v 1.15 2008/09/30 22:21:24 braney Exp $
+#  $Id: ce6.txt,v 1.16 2008/10/17 01:06:31 markd Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-05-30 - Hiram)
@@ -2724,3 +2724,9 @@ rm -f chr.list
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
 #########################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+ce6.upstreamGeneTbl = refGene
+ce6.upstreamMaf = multiz6way /hive/data/genomes/ce6/bed/multiz6way/species.lst

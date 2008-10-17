@@ -2606,3 +2606,9 @@ _EOF_
     ln -s blastz.taeGut1.2008-09-06 /cluster/data/galGal3/bed/blastz.taeGut1
 
 ############
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+galGal3.upstreamGeneTbl = refGene
+galGal3.upstreamMaf = multiz7way /hive/data/genomes/galGal3/bed/multiz7way/species.lst

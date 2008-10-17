@@ -23999,3 +23999,9 @@ EOF
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
 #########################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+hg18.upstreamGeneTbl = refGene
+hg18.upstreamMaf = multiz28way /hive/data/genomes/hg18/bed/multiz28way/species.lst

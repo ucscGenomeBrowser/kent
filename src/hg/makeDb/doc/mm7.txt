@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: mm7.txt,v 1.11 2008/01/14 23:06:15 rhead Exp $"
+#	"$Id: mm7.txt,v 1.12 2008/10/17 01:06:34 markd Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12480,3 +12480,8 @@ synBlastp.csh mm7 rn3
 # (DONE galt 2007-02-15)
 # Create table that maps between known genes and visiGene database 
     knownToVisiGene mm7
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+mm7.upstreamGeneTbl = refGene

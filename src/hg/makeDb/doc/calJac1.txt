@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.16 2008/07/01 16:52:59 markd Exp $"
+#	"$Id: calJac1.txt,v 1.17 2008/10/17 01:06:30 markd Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -1620,3 +1620,9 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+calJac1.upstreamGeneTbl = xenoRefGene
+calJac1.upstreamMaf = multiz9way /hive/data/genomes/calJac1/bed/multiz9way/species.list

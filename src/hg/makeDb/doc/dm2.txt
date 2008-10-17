@@ -5826,3 +5826,9 @@ chainOne $(path1)
 
 
 #########################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+dm2.upstreamGeneTbl = refGene
+dm2.upstreamMaf = multiz15way /hive/data/genomes/dm2/bed/multiz15way/species.lst

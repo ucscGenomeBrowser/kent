@@ -10277,3 +10277,9 @@ KEY `chainId` ( `chainId` )
 
 
 ###########################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+danRer4.upstreamGeneTbl = refGene
+danRer4.upstreamMaf = multiz7way /hive/data/genomes/danRer4/bed/multiz7way/species.lst

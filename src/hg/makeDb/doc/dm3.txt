@@ -2578,3 +2578,9 @@ _EOF_
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
 #########################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+dm3.upstreamGeneTbl = refGene
+dm3.upstreamMaf = multiz15way /hive/data/genomes/dm3/bed/multiz15way/species.lst

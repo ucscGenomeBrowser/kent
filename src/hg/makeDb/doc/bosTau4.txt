@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Bos Taurus -- Baylor Release 4.0 (Oct 4 2007)
-#	"$Id: bosTau4.txt,v 1.15 2008/08/11 21:00:37 hiram Exp $"
+#	"$Id: bosTau4.txt,v 1.16 2008/10/17 01:06:30 markd Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2008-03-07 - Hiram)
     ssh kkstore06
@@ -1790,3 +1790,9 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+bosTau4.upstreamGeneTbl = mgcGenes
+bosTau4.upstreamMaf = multiz5way /hive/data/genomes/bosTau4/bed/multiz5way/species.list

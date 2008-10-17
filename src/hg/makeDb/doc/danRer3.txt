@@ -8696,3 +8696,10 @@ line+ /san/sanvol1/scratch/danRer3/rhMap/psl/$(root1)_$(root2).psl}\n#ENDLOOP'
     # 37G     newBacends
     nice rm -r newBacends
 #########################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+echo danRer3 fr1 tetNig1 mm7 hg18  > /hive/data/genomes/danRer3/bed/multiz5way/species.list
+update genbank.conf
+danRer3.upstreamGeneTbl = refGene
+danRer3.upstreamMaf = multiz5way /hive/data/genomes/danRer3/bed/multiz5way/species.list

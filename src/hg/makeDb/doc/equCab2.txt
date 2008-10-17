@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.22 2008/09/16 19:41:05 larrym Exp $"
+#	"$Id: equCab2.txt,v 1.23 2008/10/17 01:06:32 markd Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.22 2008/09/16 19:41:05 larrym Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.23 2008/10/17 01:06:32 markd Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -2189,3 +2189,9 @@ no errors
 
     ssh hgwdev
     hgsql -e 'update dbDb set defaultPos="chr11:52,970,942-53,028,811" where name="equCab2";' hgcentraltest
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+equCab2.upstreamGeneTbl = refGene
+equCab2.upstreamMaf = multiz6way /hive/data/genomes/equCab2/bed/multiz6way/species.list

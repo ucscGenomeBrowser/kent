@@ -1587,3 +1587,9 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+xenTro2.upstreamGeneTbl = mgcGenes
+xenTro2.upstreamMaf = multiz7way /hive/data/genomes/xenTro2/bed/multiz7way/species.lst

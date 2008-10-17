@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.14 2008/08/05 17:20:06 kuhn Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.15 2008/10/17 01:06:30 markd Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -4011,3 +4011,9 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+cavPor3.upstreamGeneTbl = xenoRefGene
+cavPor3.upstreamMaf = multiz8way /hive/data/genomes/cavPor3/bed/multiz8way/species.list

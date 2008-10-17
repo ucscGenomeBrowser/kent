@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.17 2008/05/28 23:05:15 hiram Exp $"
+#       "$Id: braFlo1.txt,v 1.18 2008/10/17 01:06:30 markd Exp $"
 #
 
 ##########################################################################
@@ -1519,3 +1519,9 @@ printf "%s\t%d\t%d\t%d\tN\t%d\tfragment\tyes\n", $1, $2, $3, ix, $3-$2
     nice ./bin/gbDbLoadStep3 -drop -initialLoad braFlo1&
 
 #############################################################################
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+braFlo1.upstreamGeneTbl = xenoRefGene
+braFlo1.upstreamMaf = multiz5way /hive/data/genomes/braFlo1/bed/multiz5way/species.list

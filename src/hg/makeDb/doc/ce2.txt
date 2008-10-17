@@ -2818,3 +2818,8 @@ done
     ls -og ce2ToCe4*
     #	lrwxrwxrwx  1 53 Jun  5 16:35 ce2ToCe4.over.chain.gz ->
     #		/cluster/data/ce2/bed/liftOver/ce2ToCe4.over.chain.gz
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+ce2.upstreamGeneTbl = refGene

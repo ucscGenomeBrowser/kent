@@ -5282,3 +5282,8 @@ BASE=/cluster/data/rn3/bed/blastz.canFam2.2005-08-12
    # genbank release 157.0 now contains misc_diff fields for MGC clones
    # reloading mRNAs results in gbMiscDiff table being created.
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna rn3
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+rn3.upstreamGeneTbl = refGene

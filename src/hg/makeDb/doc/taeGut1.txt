@@ -656,3 +656,8 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+taeGut1.upstreamGeneTbl = refGene

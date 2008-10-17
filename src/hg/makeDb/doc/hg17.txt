@@ -24602,3 +24602,9 @@ see doc/builds.txt for specific details.
 
 echo "insert into grp (name, label, priority, defaultIsClosed) values ('expression', 'Expression', 4.5, 1)" | hgsql hg17
 echo "update grp set label='Regulation' where name='regulation'" | hgsql hg17
+
+################################################
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+update genbank.conf:
+hg17.upstreamGeneTbl = refGene
+hg17.upstreamMaf = multiz17way /hive/data/genomes/hg17/bed/multiz17way/species.lst
