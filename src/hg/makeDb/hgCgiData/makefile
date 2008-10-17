@@ -18,6 +18,11 @@ beta::
 
 compile::
 	
+install::
+	rm -fr ${DESTDIR}${CGI_BIN}/hgCgiData
+	rsync -ar --exclude=CVS/ --exclude=.svn/ --exclude=makefile --delete ../hgCgiData ${DESTDIR}${CGI_BIN}/
+	chmod -R g+w ${DESTDIR}${CGI_BIN}/hgCgiData
+	chmod -R a+rX ${DESTDIR}${CGI_BIN}/hgCgiData
 
 clean::
 	
