@@ -3862,6 +3862,12 @@ searchType bed
 termRegex ([[:alnum:]_ ]+|((RP|CT|GS|CH|TAM|MSMG)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
 searchPriority 8
 
+searchTable bacEndPairsBad
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|CT|GS|CH|TAM|MSMG)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8
+
 searchTable fosEndPairs
 searchMethod exact
 searchType bed
