@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.127 2008/10/13 23:09:27 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.128 2008/10/17 23:14:32 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add"
@@ -2593,9 +2593,7 @@ static void cfgBeginBoxAndTitle(boolean boxed, char *title)
 {
 if (boxed)
     {
-    printf("<TABLE CELLSPACING=\"3\" CELLPADDING=\"0\" border=\"4\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>\n",
-            COLOR_DARKBLUE, COLOR_DARKBLUE);
-    printf("<TABLE border=\"0\" bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>", COLOR_BG_ALTDEFAULT, COLOR_BG_ALTDEFAULT);
+    printf("<TABLE class='blueBox' bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>", COLOR_BG_ALTDEFAULT, COLOR_BG_ALTDEFAULT);
     if (title)
         printf("<CENTER><B>%s Configuration</B></CENTER>\n", title);
     }
@@ -2609,7 +2607,7 @@ static void cfgEndBox(boolean boxed)
 /* Handle end of box and title for individual track type settings */
 {
 if (boxed)
-    puts("</td></tr></table></td></tr></table>");
+    puts("</td></tr></table>");
 }
 
 void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed)
@@ -3407,9 +3405,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
 
     // Regardless of whether there is a dimension X or Y, there will be 'all' buttons
     puts("<B>Select subtracks:</B><BR>");
-    printf("<TABLE CELLSPACING='3' CELLPADDING='0' border='4' bgcolor='%s' borderColor='%s'><TR ALIGN=CENTER bgcolor=\"%s\"><TD>\n",
-           COLOR_DARKGREEN,COLOR_DARKGREEN,COLOR_BG_ALTDEFAULT);
-    printf("<TABLE border='0' bgcolor='%s' borderColor='%s'>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
+    printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'}>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
 
     printf("<TR ALIGN=CENTER BGCOLOR='%s'>\n",COLOR_BG_ALTDEFAULT);
     if(dimensionX && dimensionY)
@@ -3428,7 +3424,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     if(dimensionX)
         {
         if(dimensionY)
-            printf("<TH WIDTH=\"100\"><EM><B>%s</EM></B></TH>", dimensionX->title);
+            printf("<TH align='right' WIDTH=\"100\"><EM><B>%s</EM></B>:</TH>", dimensionX->title);
         for (ixX = 0; ixX < dimensionX->count; ixX++)
             printf("<TH WIDTH=\"100\">%s</TH>",labelWithControlledVocabLink(parentTdb,dimensionX->tag,dimensionX->values[ixX]));
         }
@@ -3471,7 +3467,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             puts("</TH>");
             }
         else if(ixY < dimensionY->count)
-            printf("<TH ALIGN=RIGHT>%s</TH>\n",labelWithControlledVocabLink(parentTdb,dimensionY->tag,dimensionY->values[ixY]));
+            printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithControlledVocabLink(parentTdb,dimensionY->tag,dimensionY->values[ixY]));
         else
             break;
 
@@ -3514,27 +3510,24 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             }
         puts("</TR>\n");
         }
-    puts("</TABLE>");
     if(dimensionZ)
         {
-        //printf("</TD></TR><TR ALIGN=CENTER BGCOLOR='%s' valign='bottom'><TD>",COLOR_BG_ALTDEFAULT);  // Green Line between?
-        printf("<TABLE border='0' bgcolor='%s' borderColor='%s' cellpadding='3'>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
         printf("<TR align='right' valign='bottom' BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
-        printf("<TH>%s\n",dimensionZ->title);
-        PLUS_BUTTON( "name","plus_all_dimZ", "mat_","_dimZ_cb");
-        MINUS_BUTTON("name","minus_all_dimZ","mat_","_dimZ_cb");
-        puts("</TD>");
+        printf("<TH><EM><B>%s</EM></B>:",dimensionZ->title);
+        //PLUS_BUTTON( "name","plus_all_dimZ", "mat_","_dimZ_cb");
+        //MINUS_BUTTON("name","minus_all_dimZ","mat_","_dimZ_cb");
+        puts("</TH><TH nowrap align='left' colspan=50>");
         for(ixZ=0;ixZ<sizeOfZ;ixZ++)
             if(cellsZ[ixZ]>0)
                 {
-                printf("<TH>%s",labelWithControlledVocabLink(parentTdb,dimensionZ->tag,dimensionZ->values[ixZ]));
+                printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                 safef(objName, sizeof(objName), "mat_%s_dimZ_cb",dimensionZ->names[ixZ]);
                 safef(javascript, sizeof(javascript), "onclick=\"matSetCheckBoxesThatContain('id',this.checked,true,'cb_','_%s_','_cb');\"",
                       dimensionZ->names[ixZ]);
                 alreadySet = cartUsualBoolean(cart, objName, alreadySet);
                 cgiMakeCheckBoxJS(objName,alreadySet,javascript);
+                printf("%s",labelWithControlledVocabLink(parentTdb,dimensionZ->tag,dimensionZ->values[ixZ]));
                 }
-        puts("</TD></TR></TABLE>");
         }
     puts("</TD></TR></TABLE>");
     subgroupMembersFree(&dimensionX);
@@ -3698,6 +3691,18 @@ for (i = 0; i < MAX_SUBGROUP; i++)
     }
     return TRUE;
 }
+static void commonCssStyles()
+/* Defines a few common styles to use through CSS */
+{
+    printf("<style type='text/css'>");
+    //printf(".tDnD_whileDrag {background-color:%s;}",COLOR_BG_GHOST);
+    printf(".trDrag {background-color:%s;} .pale {background-color:%s;}",COLOR_BG_GHOST,COLOR_BG_PALE);
+    //printf(".greenBox {border-color: %s #FF0000; border-width: 5px; border-style: outset;}",COLOR_DARKGREEN);
+    //printf(".greenBox {border: 5px inset %s;}",COLOR_DARKGREEN);
+    printf(".greenBox {border: 5px outset %s;}",COLOR_DARKGREEN);
+    printf(".blueBox {border: 4px ridge %s;}",COLOR_DARKBLUE);
+    puts("</style>");
+}
 
 void hCompositeUi(char *db, struct cart *cart, struct trackDb *tdb,
 		  char *primarySubtrack, char *fakeSubmit, char *formName)
@@ -3716,9 +3721,8 @@ if(sameOk("subTracks",trackDbSetting(tdb, "dragAndDrop")))
     {
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("jquery.tablednd.js", NULL);
-    //printf("<style type='text/css'>.tDnD_whileDrag {background-color:%s;}</style>",COLOR_BG_GHOST);
-    printf("<style type='text/css'>.trDrag {background-color:%s;} .pale {background-color:%s;}</style>",COLOR_BG_GHOST,COLOR_BG_PALE);
     }
+    commonCssStyles();
 jsIncludeFile("hui.js",NULL);
 
 puts("<P>");
