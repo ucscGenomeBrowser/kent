@@ -12,12 +12,12 @@
 #
 # We die immediately (with a human readable message) when internal errors are encountered (e.g. file I/O errors or misconfiguration).
 #
-# In order to facilitate debugging of often very large file uploads, we try to accumulate multiple user errors (e.g. DAF, DAS or 
+# In order to facilitate debugging of often very large file uploads, we try to accumulate multiple user errors (e.g. DAF, DAS or
 # file syntax errors) before die'ing with a message with a list of errors.
 
-# DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
+# DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.89 2008/10/16 21:33:55 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.90 2008/10/17 23:19:06 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -158,8 +158,8 @@ sub validateFiles {
     return () if $opt_skipValidateFiles;
     for my $file (@newFiles) {
         my ($fbase,$dir,$suf) = fileparse($file, ".gz");
-	# Check if the file has been replaced with an unzipped version 
-        # This check is also done where we auto create the RawSignal view from the Alignments 
+	# Check if the file has been replaced with an unzipped version
+        # This check is also done where we auto create the RawSignal view from the Alignments
         if ($suf eq ".gz" and ! -e $file and -s "$dir/$fbase") {
             $file = "$dir/$fbase";
         }
@@ -247,7 +247,7 @@ sub validateReplicate {
 }
 
 ############################################################################
-# Format checkers - check file format for given types; extend when adding new 
+# Format checkers - check file format for given types; extend when adding new
 # data formats
 #
 # Some of the checkers use regular expressions to validate syntax of the files.
@@ -283,7 +283,9 @@ sub openUtil
     return $fh;
 }
 
-my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|))";
+my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
+# my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|[eE]{1}?[+-]{1}?\\d+))";  # Tim's attempt
+# my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|))";                      # Original
 
 sub validateWig
 {
@@ -404,7 +406,7 @@ sub validateGtf {
     my $errFile = "$path/doEncodeValidate.gtf.err";
     doTime("beginning validateGtf") if $opt_timing;
     my $filePath = defined($path) ? "$path/$file" : $file;
-    my $outFile = "$path/doEncodeValidate.gtf.bed"; 
+    my $outFile = "$path/doEncodeValidate.gtf.bed";
     if(Encode::isZipped($filePath)) {
         # XXXX should be modified to handle zipped files.
         die "We don't currently support gzipped gtf files\n";
@@ -533,7 +535,7 @@ sub validateCsfasta
     # Syntax per http://marketing.appliedbiosystems.com/mk/submit/SOLID_KNOWLEDGE_RD?_JS=T&rd=dm
     # Sample:-
 
-    # # Wed Jul 30 15:30:48 2008 /share/apps/corona/bin/filter_fasta.pl --output=/data/results/S0033/S0033_20080723_2/I22_EA/results.01/primary.20080730194737531 --name=S0033_20080723_2_I22_EA_ --tag=F3 --minlength=30 --mask=111111111111111111111111111111 --prefix=T /data/results/S0033/S0033_20080723_2/I22_EA/jobs/postPrimerSetPrimary.1416/rawseq 
+    # # Wed Jul 30 15:30:48 2008 /share/apps/corona/bin/filter_fasta.pl --output=/data/results/S0033/S0033_20080723_2/I22_EA/results.01/primary.20080730194737531 --name=S0033_20080723_2_I22_EA_ --tag=F3 --minlength=30 --mask=111111111111111111111111111111 --prefix=T /data/results/S0033/S0033_20080723_2/I22_EA/jobs/postPrimerSetPrimary.1416/rawseq
     # # Cwd: /home/pipeline
     # # Title: S0033_20080723_2_I22_EA_
     # >461_19_90_F3
@@ -577,9 +579,9 @@ sub validateCsqual
     # # Cwd: /home/pipeline
     # # Title: S0033_20080723_2_I22_EA_
     # >461_19_90_F3
-    # 20 10 8 13 8 10 20 7 7 24 15 22 21 14 14 8 11 15 5 20 6 5 8 22 6 24 3 16 7 11 
+    # 20 10 8 13 8 10 20 7 7 24 15 22 21 14 14 8 11 15 5 20 6 5 8 22 6 24 3 16 7 11
     # >461_19_209_F3
-    # 16 8 5 12 20 24 19 8 13 17 11 23 8 24 8 7 17 4 20 8 29 7 3 16 3 4 8 20 17 9 
+    # 16 8 5 12 20 24 19 8 13 17 11 23 8 24 8 7 17 4 20 8 29 7 3 16 3 4 8 20 17 9
 
     my ($path, $file, $type) = @_;
     doTime("beginning validateCsqual") if $opt_timing;
@@ -737,7 +739,7 @@ if (defined $opt_outDir) {
 HgAutomate::verbose(4, "Output directory path: '$outPath'; submitPath: '$submitPath'\n");
 
 if(!$opt_validateDaf) {
-    # Change dir to submission directory 
+    # Change dir to submission directory
     if(!chdir($submitPath)) {
         die ("SYS ERR; Can't change to submission directory \'$submitPath\': $OS_ERROR\n");
     }
@@ -921,16 +923,16 @@ if(!@errors) {
             }
         }
     }
-        
+
     doTime("beginning ddfReplicateSets loop") if $opt_timing;
     for my $key (keys %ddfReplicateSets) {
         # create missing optional views (e.g. ChIP-Seq RawSignal or transcriptome project PlusRawSignal and MinusRawSignal)
 	# note this loop assumes these are on a per replicate basis.
 	# Also note that any project (like transcriptome) that doesnt have replicates should also use
-	# this for their auto-create signals. 
+	# this for their auto-create signals.
 
-        if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}) 
-		&& !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal}) 
+        if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
+		&& !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})
 		&& !defined($ddfReplicateSets{$key}{VIEWS}{PlusRawSignal})
 		&& !defined($ddfReplicateSets{$key}{VIEWS}{MinusRawSignal})) {
             if($daf->{dataType} eq 'ChipSeq' && !defined($daf->{medianFragmentLength})) {
@@ -938,8 +940,8 @@ if(!@errors) {
             } else {
                 # hack for case where they have removed RawSignal view in the DAF
 		# - if no (Plus|Minus|)RawSignal is defined, assume RawSignal is required
-                if(!defined($daf->{TRACKS}{RawSignal}{order}) 
-			&& !defined($daf->{TRACKS}{PlusRawSignal}{order}) 
+                if(!defined($daf->{TRACKS}{RawSignal}{order})
+			&& !defined($daf->{TRACKS}{PlusRawSignal}{order})
 			&& !defined($daf->{TRACKS}{MinusRawSignal}{order}) ) {
                     $daf->{TRACKS}{RawSignal}{order} = ++$maxOrder;
                 }
@@ -948,7 +950,7 @@ if(!@errors) {
 		push @newViews, "RawSignal" if $daf->{TRACKS}{RawSignal}{order};
 		push @newViews, "PlusRawSignal" if $daf->{TRACKS}{PlusRawSignal}{order};
 		push @newViews, "MinusRawSignal" if $daf->{TRACKS}{MinusRawSignal}{order};
-		
+
 		foreach my $newView (@newViews) #loop around making them
 		{
                 my $alignmentLine = $ddfReplicateSets{$key}{VIEWS}{Alignments};
@@ -964,14 +966,14 @@ if(!@errors) {
                     if ($suf eq ".gz") {
                         # If the zipped file exists and has not already been unzipped then unzip it
                         # This check is also done above at the stage where we are testign the files in the ddf exist
-                        if (-s $file and ! -s "$dir/$fbase") { 
+                        if (-s $file and ! -s "$dir/$fbase") {
                             my $err = system("gunzip $file");
                             if ($err) {
                                 die ("File \'$file\' failed gunzip $file\n");
                             }
                             HgAutomate::verbose(2, "File \'$file\' gunzipped to \'$fbase\'\n");
                         }
-                        if ( ! -s "$dir/$fbase") { 
+                        if ( ! -s "$dir/$fbase") {
                             die ("Unzipped file \'$fbase\' does not exist (or is empty) for DDF file \'$file\'\n");
                         }
                         push @unzippedFiles, $fbase;
@@ -1027,7 +1029,7 @@ if(!$db->quickQuery("select count(*) from trackDb where tableName = ?", $composi
 
 if(@errors) {
     my $prefix = @errors > 1 ? "Error(s)" : "Error";
-    die "$prefix:\n\n" . join("\n\n", @errors) . "\n";    
+    die "$prefix:\n\n" . join("\n\n", @errors) . "\n";
 }
 
 # After this point, we don't use @errors and just die immediately.
@@ -1141,7 +1143,7 @@ foreach my $ddfLine (@ddfLines) {
             $additional = "\trnaExtract\t$hash{rnaExtract}\n" . $additional;
         }
     }
-    
+
     # mysql doesn't allow hyphens in table names and our naming convention doesn't allow underbars; to be
     # safe, we strip non-alphanumerics.
     $tableName =~ s/[^A-Za-z0-9]//g;
@@ -1175,7 +1177,7 @@ foreach my $ddfLine (@ddfLines) {
         if(defined($replicate)) {
             print README "replicate: $replicate\n";
         }
-        
+
         my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate($now);
         print README sprintf("data restricted until: %d-%02d-%02d\n", 1900 + $rYear, $rMon + 1, $rMDay);
         print README "\n";
@@ -1229,7 +1231,7 @@ if($submitDir =~ /(\d+)$/) {
         my $count = scalar(@tmp);
         my $metadata = join("; ", @tmp);
         HgAutomate::verbose(2, "Updating id '$id'; metdata: '$metadata'; count: 'count'\n");
-        $rubyDb->execute("update projects set count = ?, metadata = ?, lab = ?, data_type = ?, track = ? where id = ?", 
+        $rubyDb->execute("update projects set count = ?, metadata = ?, lab = ?, data_type = ?, track = ? where id = ?",
                          $count, $metadata, $daf->{lab}, $daf->{dataType}, $compositeTrack, $id);
     }
 }
