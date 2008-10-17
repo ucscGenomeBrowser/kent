@@ -1,1 +1,2 @@
+pipeline_runner.rb >& /dev/null &
 mongrel_rails start -p yourPortNumberHere -d
