@@ -91,10 +91,10 @@ irows on
 autoScaleDefault Off
 windowingFunction mean
 summary multiz5waySummary
-speciesCodonDefault oryLat1
+speciesCodonDefault oryLat2
 speciesGroups vertebrate
 sGroup_vertebrate gasAcu1 tetNig1 fr2 danRer5
-treeImage phylo/oryLat1_5way.gif
+treeImage phylo/oryLat2_5way.gif
 
 track phastConsElements5way
 shortLabel Most Conserved
