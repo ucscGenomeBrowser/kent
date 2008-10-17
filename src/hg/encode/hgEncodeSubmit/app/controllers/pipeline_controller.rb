@@ -15,40 +15,19 @@ class PipelineController < ApplicationController
   
   def list
     @autoRefresh = true
-  end  
+    @projects = Project.find(:all, :order => 'name')
+  end
   
   def show_user
 
     @autoRefresh = true
     @user = User.find(current_user.id)
     @projects = @user.projects
-    @theSort = params[:sort]
-    if @theSort.nil? 
-       render :action => 'list'
-    else
-       render :action => 'list', :sort => @theSort
-    end    
-  end
 
-  def sort_all  
-    @theSort = params[:sort]
-    case @theSort
-       when "Status"
-          @projects = Project.find(:all, :order => 'status')
-       when "Time"
-          @projects = Project.find(:all, :order => 'updated_at')
-       when "Investigator"
-          @projects = Project.find(:all, :include => :user, :order => 'pi')
-       else 
-          @projects = Project.find(:all, :order => 'name')
-    end
     render :action => 'list'
+    
   end
-
-  def sort_user
-
-  end
-
+  
   def show
     @autoRefresh = true
     @project = Project.find(params[:id])
