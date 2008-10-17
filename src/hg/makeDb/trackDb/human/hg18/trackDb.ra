@@ -3160,7 +3160,7 @@ shortLabel Barski ChIPseq
 longLabel Barski et al. 2007 Chromatin Methylation ChIP-Seq
 group regulation
 subGroup1 view View SIG=Signal
-subGroup2 AB Antibody H3K04=H3K4 H3K09=H3K9 H3K27=H3K27 H3K36=H3K36 H3K79=H3K79 H3R2=H3R2 H4K20=H4K20 H4R3=H4R3 H2BK5=H2BK5 H2AZ=H2AZ PolII=PolII CTCF=CTCF
+subGroup2 AB Target H3K04=H3K4 H3K09=H3K9 H3K27=H3K27 H3K36=H3K36 H3K79=H3K79 H3R2=H3R2 H4K20=H4K20 H4R3=H4R3 H2BK5=H2BK5 H2AZ=H2AZ PolII=PolII CTCF=CTCF
 subGroup3 METH Methylation m1=me1 m2=me2 m3=me3 NA=N/A
 dimensions dimensionX=METH dimensionY=AB
 sortOrder AB=+ METH=+ view=+
