@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.10 2008/05/02 21:23:08 angie Exp $
+# $Id: doRepeatMasker.pl,v 1.11 2008/10/17 18:29:12 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -132,8 +132,12 @@ sub doCluster {
   }
   my @okIn = grep !/scratch/,
     &HgAutomate::chooseFilesystemsForCluster($paraHub, "in");
-  my @okOut = grep !/$okIn[0]/,
-    &HgAutomate::chooseFilesystemsForCluster($paraHub, "out");
+  my @okOut = &HgAutomate::chooseFilesystemsForCluster($paraHub, "out");
+  if (scalar(@okOut) > 1) {
+    @okOut = grep !/$okIn[0]/, @okOut;
+  }
+  my $inHive = 0;
+  $inHive = 1 if ($okIn[0] =~ m#/hive/data/genomes#);
   my $clusterSeqDir = "$okIn[0]/$db";
   my $clusterSeq = "$clusterSeqDir/$db.unmasked.2bit";
   my $partDir .= "$okOut[0]/$db/RMPart";
@@ -229,9 +233,16 @@ chmod a+x RMRun.csh
 ls -l $RepeatMaskerPath
 grep 'version of RepeatMasker\$' $RepeatMasker
 grep RELEASE $RepeatMaskerPath/Libraries/RepeatMaskerLib.embl
-
+_EOF_
+  );
+  if (! $inHive) {
+    $bossScript->add(<<_EOF_
 mkdir -p $clusterSeqDir
 rsync -av $unmaskedSeq $clusterSeq
+_EOF_
+    );
+  }
+  $bossScript->add(<<_EOF_
 rm -rf $partDir
 $Bin/simplePartition.pl $clusterSeq 500000 $partDir
 rm -f $buildDir/RMPart
@@ -240,12 +251,16 @@ ln -s $partDir $buildDir/RMPart
 $HgAutomate::gensub2 $partDir/partitions.lst single gsub jobList
 $HgAutomate::paraRun
 
-rm -f $clusterSeq
 _EOF_
   );
+  if (! $inHive) {
+    $bossScript->add(<<_EOF_
+rm -f $clusterSeq
+_EOF_
+    );
+  }
   $bossScript->execute();
 } # doCluster
-
 
 #########################################################################
 # * step: cat [fileServer]

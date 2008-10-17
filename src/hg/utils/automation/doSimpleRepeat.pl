@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doSimpleRepeat.pl instead.
 
-# $Id: doSimpleRepeat.pl,v 1.3 2008/01/15 18:04:46 hiram Exp $
+# $Id: doSimpleRepeat.pl,v 1.4 2008/10/17 18:29:12 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -132,8 +132,13 @@ sub doCluster {
   if (scalar(@okOut) > 1) {
     @okOut = grep !/$okIn[0]/, @okOut;
   }
+  my $inHive = 0;
+  $inHive = 1 if ($okIn[0] =~ m#/hive/data/genomes#);
   my $clusterSeqDir = "$okIn[0]/$db";
   my $clusterSeq = "$clusterSeqDir/$db.doSimp.2bit";
+  if ($inHive) {
+    $clusterSeq = "$clusterSeqDir/$db.unmasked.2bit";
+  }
   my $partDir .= "$okOut[0]/$db/TrfPart";
 
   # Cluster job script:
@@ -203,11 +208,17 @@ and runs it on the cluster with the most available bandwidth.";
   my $bossScript = new HgRemoteScript("$runDir/doTrf.csh", $paraHub,
 				      $runDir, $whatItDoes);
 
+  if (! $inHive) {
+    $bossScript->add(<<_EOF_
+mkdir -p $clusterSeqDir
+rsync -av $unmaskedSeq $clusterSeq
+_EOF_
+    );
+  }
+
   $bossScript->add(<<_EOF_
 chmod a+x TrfRun.csh
 
-mkdir -p $clusterSeqDir
-rsync -av $unmaskedSeq $clusterSeq
 rm -rf $partDir
 $Bin/simplePartition.pl $clusterSeq $chunkSize $partDir
 rm -f $buildDir/TrfPart
@@ -215,10 +226,15 @@ ln -s $partDir $buildDir/TrfPart
 
 $HgAutomate::gensub2 $partDir/partitions.lst single gsub jobList
 $HgAutomate::paraRun
-
-rm -f $clusterSeq
 _EOF_
   );
+
+  if (! $inHive) {
+    $bossScript->add(<<_EOF_
+rm -f $clusterSeq
+_EOF_
+    );
+  }
   $bossScript->execute();
 } # doCluster
 
