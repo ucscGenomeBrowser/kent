@@ -105,7 +105,7 @@
 #include "splix.h"
 #include "intValTree.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.1 2008/10/18 09:29:17 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.2 2008/10/18 23:48:15 kent Exp $";
 
 char *out = "psl";
 int minScore = 22;
@@ -517,7 +517,7 @@ switch (hit->missingQuad)
     }
 if (diffCount <= maxMismatch)
     outputMatch(diffCount, c, tOffset, 0, tagSize, 0, 0, 0);
-else if (hit->subCount < maxMismatch) 
+else if (maxGap > 0 && hit->subCount < maxMismatch) 
     {
     /* Need to explore possibilities of indels if we are on the end quadrants */
     int gapSize = 1; /* May need more work here for indels bigger than a single base. */
