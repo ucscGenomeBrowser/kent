@@ -8,7 +8,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: splatTestSet.c,v 1.1 2008/10/18 09:29:18 kent Exp $";
+static char const rcsid[] = "$Id: splatTestSet.c,v 1.2 2008/10/18 23:48:44 kent Exp $";
 
 /* Command line variables. */
 int chromCount = 1;
@@ -20,6 +20,8 @@ int stepSize = 1;
 int readSize = 25;
 int readCount;
 boolean existingGenome = FALSE;
+boolean separateMutations = FALSE;
+boolean spaceForDel = FALSE;
 
 /* Other global */
 int readsGenerated;
@@ -40,6 +42,8 @@ errAbort(
   "   -insPerRead=N - number of insertions per read (default %d)\n"
   "   -delPerRead=N - number of deletions per read (default %d)\n"
   "   -subPerRead=N - number of substitutions per read (default %d)\n"
+  "   -separateMutations - if set, then don't allow two mutations on same base\n"
+  "   -spaceForDel - if set put in a space where deletion is\n"
   "   -stepSize=N - number of bases to step between reads (default %d)\n"
   "   -readSize=N - size of read (default %d)\n"
   "   -readCount=N - number of reads (default = 1x coverage of genome)\n"
@@ -54,6 +58,8 @@ static struct optionSpec options[] = {
    {"insPerRead", OPTION_INT},
    {"delPerRead", OPTION_INT},
    {"subPerRead", OPTION_INT},
+   {"separateMutations", OPTION_BOOLEAN},
+   {"spaceForDel", OPTION_BOOLEAN},
    {"stepSize", OPTION_INT},
    {"readSize", OPTION_INT},
    {"readCount", OPTION_INT},
@@ -83,9 +89,40 @@ for (chromIx = 1; chromIx <= chromCount; ++chromIx)
 carefulClose(&f);
 }
 
-void fakeRead(DNA *dna, int insertPos, int deletePos, int *subPos, int subCount, FILE *f)
+boolean allDifferent(int *array, int size)
+/* Return TRUE if all elements of array of given size are different. */
+{
+int i,j;
+for (i=0; i<size; ++i)
+   for (j=i+1; j<size; ++j)
+       if (array[i] == array[j])
+           return FALSE;
+return TRUE;
+}
+
+void fakeRead(char *name, DNA *dna, int insertPos, int deletePos, int *subPos, int subCount, FILE *f)
 /* Generate fake read from dna, possibly mutating it at given positions. */
 {
+if (separateMutations)
+    {
+    int mutCount = 0;
+    int mutArray[16];
+    CopyArray(subPos, mutArray, subCount);
+    mutCount += subCount;
+    if (insPerRead > 0)
+        {
+	mutArray[mutCount] = insertPos;
+	mutCount += 1;
+	}
+    if (delPerRead > 0)
+        {
+	mutArray[mutCount] = deletePos;
+	mutCount += 1;
+	}
+    if (!allDifferent(mutArray, mutCount))
+        return;
+    }
+fprintf(f, ">%s\n", name);
 int inputSize = readSize;
 if (insPerRead > 0)
     inputSize -= insPerRead;
@@ -96,7 +133,8 @@ for (i=0; i<inputSize; ++i)
     {
     if (delPerRead > 0 && i == deletePos)
 	{
-	fputc(' ', f);
+	if (spaceForDel)
+	    fputc(' ', f);
         continue;
 	}
     if (insPerRead > 0 && i == insertPos)
@@ -114,6 +152,8 @@ for (i=0; i<inputSize; ++i)
         base = toupper(ntCompTable[(int)base]);
     fputc(base, f);
     }
+if (insPerRead > 0 && insertPos == inputSize)
+    fputc(toupper(valToNt[rand()&3]), f);
 fputc('\n', f);
 ++readsGenerated;
 }
@@ -130,8 +170,9 @@ for (i=0; i<subPerRead; ++i)
     subPos[i] = 0;
 for (i=0; i<lastReadStart; i += stepSize)
     {
-    fprintf(f, ">%s_%d\n", chrom->name, i);
-    fakeRead(dna + i, insertPos, deletePos, subPos, subPerRead, f);
+    char name[64];
+    safef(name, sizeof(name), "%s_%d_%d", chrom->name, i, readsGenerated);
+    fakeRead(name, dna + i, insertPos, deletePos, subPos, subPerRead, f);
     if (readsGenerated >= readCount)
         break;
 
@@ -143,7 +184,7 @@ for (i=0; i<lastReadStart; i += stepSize)
         deletePos = 0;
     int j;
     for (j=0; j<subPerRead; ++j)
-        {
+	{
 	if (++subPos[j] >= readSize)
 	    subPos[j] = 0;
 	else
@@ -188,6 +229,8 @@ delPerRead = optionInt("delPerRead", delPerRead);
 if (delPerRead > 1)
    errAbort("Sorry, currently can only do up to one deletion per read.");
 subPerRead = optionInt("subPerRead", subPerRead);
+separateMutations = optionExists("separateMutations");
+spaceForDel = optionExists("spaceForDel");
 stepSize = optionInt("stepSize", stepSize);
 readSize = optionInt("readSize", readSize);
 readCount = chromCount * (chromSize-readSize+1) / stepSize;
