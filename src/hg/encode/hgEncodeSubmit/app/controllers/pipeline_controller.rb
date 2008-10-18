@@ -1,12 +1,15 @@
 class PipelineController < ApplicationController
 
   include PipelineBackground
+  include SortHelper
 
   # TODO: move some stuff into the private area so it can't be called by URL-hackers
 
   #CONSTANTS
 
   AUTOUPLOADLABEL = "Submit"
+
+  helper :sort
 
   before_filter :login_required
   before_filter :check_user_is_owner, :except => 
@@ -16,20 +19,33 @@ class PipelineController < ApplicationController
   layout 'main'
   
   def list
+    sort_init 'name'
+    sort_update
     @autoRefresh = true
-    @projects = Project.find(:all, :order => 'name')
+    @sort_key = params[:sort_key]
+    if @sort_key == "pi" || @sort_key == "login"
+      @projects = Project.find(:all, :include => :user, :order => sort_clause)
+    elsif @sort_key.nil? == false
+      @projects = Project.find(:all, :order => sort_clause)
+    else
+      @projects = Project.find(:all)
+    end
   end
   
   def show_user
-
+    sort_init 'name'
+    sort_update
     @autoRefresh = true
+    @sort_key = params[:sort_key]
     @user = User.find(current_user.id)
-    @projects = @user.projects
-
-    render :action => 'list'
-    
+    if @sort_key.nil? == false
+      @projects = Project.find(:all, :conditions => ["user_id = ?", current_user.id], :order => sort_clause)
+    else 
+      @projects = @user.projects
+    end
+    render :action => 'list'    
   end
-  
+
   def show
     @autoRefresh = true
     @project = Project.find(params[:id])

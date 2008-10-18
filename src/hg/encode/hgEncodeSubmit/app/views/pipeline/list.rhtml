@@ -4,17 +4,17 @@
 
 <p>
  <table id="projects" cellpadding=1 cellspacing=3>
- <tr><td align="left"><b>Name</b></td><td>&nbsp;</td>
+ <tr><td align="left"><b><%= sort_link('name', 'Name') -%></b></td><td>&nbsp;</td>
 
  <% if current_user.login == "admin" %>
-   <td align="left"><b>Type</b></td><td>&nbsp;</td>
+   <td align="left"><b><%= sort_link('Type') -%></b></td><td>&nbsp;</td>
  <% end %>
- <td align="left"><b>Status</b></td><td>&nbsp;</td>
+ <td align="left"><b><%= sort_link('Status') -%></b></td><td>&nbsp;</td>
  <% if !defined? @user %>
-   <td align="left"><b>Investigator</b></td><td>&nbsp;</td>
-   <td align="left"><b>Submitter</b></td><td>&nbsp;</td>
+   <td align="left"><b><%= sort_link('pi', 'Investigator') -%></b></td><td>&nbsp;</td>
+   <td align="left"><b><%= sort_link('login', 'Submitter') -%></b></td><td>&nbsp;</td>
  <% end %>
- <td align="left"><b>Updated PST</b></td></tr>
+ <td align="left"><b><%= sort_link('updated_at', 'Updated PST') -%></b></td></tr>
 
  <% @projects.each do |c| %>
   <tr>

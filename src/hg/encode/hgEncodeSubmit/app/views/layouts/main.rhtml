@@ -53,11 +53,21 @@ if (navigator.appName=="Netscape") {
     <%= link_to_unless_current 'New Submission', 
                 :controller => 'pipeline', :action => 'new' %> 
     <%= ' | ' -%>
-    <%= link_to_unless_current 'All Submissions', 
-                :controller => 'pipeline', :action => 'list' %> 
+    <%= 
+        if params[:controller] == 'pipeline' && params[:action] == 'list'
+	    "All Submissions"
+        else 
+            link_to 'All Submissions', :controller => 'pipeline', :action => 'list' 
+        end
+    -%> 
     <%= ' | ' -%>
-    <%= link_to_unless_current 'My Submissions', 
-                :controller => 'pipeline', :action => 'show_user' %> 
+    <%= 
+        if params[:controller] == 'pipeline' && params[:action] == 'show_user'
+	    "My Submissions"
+        else 
+            link_to 'My Submissions', :controller => 'pipeline', :action => 'show_user' 
+        end
+    -%> 
     </td>
     <td align="right">
     <%= link_to ' Log Out', :controller => 'account', :action => 'logout' %> 
