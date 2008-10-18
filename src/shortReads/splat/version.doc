@@ -1,0 +1,12 @@
+ 8 (and before) - Getting basic index working to find probable hits.
+ 9 - Adding DNA sequence to index file.
+10 - Starting to work on extending hits into alignments.  No indels seems to work.
+11 - Making up a test case generator and some misc.
+12 - Got middle two quadrant query insert case working.
+13 - Got first quadrant query insert case working.
+14 - Got last quadrant query insert case working.
+15 - Middle two quadrants of query delete seem to work.
+16 - Got last quadrant query insert case working.
+17 - Got first quadrant query insert case working.
+18 - Made it just output either an insertion or a deletion in the end quadrants, not both.
+     Fixed off by one bug fix in last quadrant insert that caused an extra mismatch to be counted.
