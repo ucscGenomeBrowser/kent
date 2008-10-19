@@ -108,7 +108,7 @@
 #include "psl.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.4 2008/10/19 05:20:22 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.5 2008/10/19 06:05:09 kent Exp $";
 
 char *version = "20";
 
@@ -124,8 +124,6 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "NOTE: splat is in early stages of development. No real output yet, just some diagnostic\n"
-  "messages to stdout.\n"
   "splat - SPeedy Local Alignment Tool. v%s. Designed to align small reads to large\n"
   "DNA databases such as genomes quickly.  Reads need to be at least 25 bases.\n"
   "usage:\n"
@@ -147,6 +145,9 @@ errAbort(
   "   -maxGap=N. Maximum gap size. Default is %d. Set to 0 for no gaps\n"
   "   -maxMismatch=N. Maximum number of mismatches. Default %d. (A gap counts as a mismatch.)\n"
   "   -mmap - Use memory mapping. Faster just a few reads, but much slower for many reads\n"
+  "current limits:\n"
+  "   Right now _only_ really aligns first 25 bases of a read.\n"
+  "   Maps _all_ occurences of read in genome, which will fill hard disk on repeats\n"
   , version, maxGap, maxMismatch
   );
 }
@@ -818,8 +819,8 @@ return -1;
 }
 
 
-void splatOutputMaf(struct splatTag *tag, struct dnaSeq *qSeq, struct splix *splix, 
-	int chromIx, FILE *f)
+void splatOutputMaf(struct splatTag *tag, int mapCount,
+	struct dnaSeq *qSeq, struct splix *splix, int chromIx, FILE *f)
 /* Output tag to maf file. */
 {
 /* Handle reverse-complementing if need be. */
@@ -919,8 +920,8 @@ if (strand == '-')
 }
 
 
-void splatOutputPsl(struct splatTag *tag, struct dnaSeq *qSeq, struct splix *splix, 
-	int chromIx, FILE *f)
+void splatOutputPsl(struct splatTag *tag, int mapCount,
+	struct dnaSeq *qSeq, struct splix *splix, int chromIx, FILE *f)
 /* Output tag to psl file. */
 {
 /* Handle reverse-complementing if need be. */
@@ -1005,8 +1006,8 @@ else
 fputc(a, f);
 }
 
-void splatOutputTagAlign(struct splatTag *tag, struct dnaSeq *qSeq, struct splix *splix, 
-	int chromIx, FILE *f)
+void splatOutputTagAlign(struct splatTag *tag, int mapCount, 
+	struct dnaSeq *qSeq, struct splix *splix, int chromIx, FILE *f)
 /* Output tag to TagAlign file. */
 {
 char strand = tag->strand;
@@ -1046,27 +1047,29 @@ if (size2)
     }
 fputc('\t', f);
 
-fprintf(f, "1000\t");
+fprintf(f, "%d\t", 1000/mapCount);
 fprintf(f, "%c\n", strand);
 
 if (strand == '-')
     reverseComplement(qSeq->dna, qSeq->size);
 }
 
-void splatTagOutput(struct splatTag *tag, struct dnaSeq *qSeq, struct splix *splix, FILE *f)
+void splatTagOutput(struct splatTag *tag, int mapCount, struct dnaSeq *qSeq, struct splix *splix, 
+	FILE *f)
 /* Output tag match */
 {
 int chromIx = tOffsetToChromIx(splix, tag->t1);
 if (sameString(outType, "maf"))
-    splatOutputMaf(tag, qSeq, splix, chromIx, f);
+    splatOutputMaf(tag, mapCount, qSeq, splix, chromIx, f);
 else if (sameString(outType, "psl"))
-    splatOutputPsl(tag, qSeq, splix, chromIx, f);
+    splatOutputPsl(tag, mapCount, qSeq, splix, chromIx, f);
 else if (sameString(outType, "tagAlign"))
-    splatOutputTagAlign(tag, qSeq, splix, chromIx, f);
+    splatOutputTagAlign(tag, mapCount, qSeq, splix, chromIx, f);
 }
 
-void splatOne(struct dnaSeq *qSeq, struct splix *splix, int maxGap, FILE *f)
-/* Align one query sequence against index, filter, and write out results */
+int splatOne(struct dnaSeq *qSeq, struct splix *splix, int maxGap, FILE *f)
+/* Align one query sequence against index, filter, and write out results.
+ * Returns the number of mappings. */
 {
 struct splatTag *tagList = NULL, *tag;
 int size = qSeq->size;
@@ -1075,7 +1078,7 @@ if (size < desiredSize)
     {
     warn("%s is %d bases, minimum splat query size %d, skipping", 
     	qSeq->name, tagSize, qSeq->size);
-    return;
+    return 0;
     }
 verbose(2, "%s\n", qSeq->name);
 splatOneStrand(qSeq, '+', 0, splix, maxGap, &tagList);
@@ -1084,9 +1087,11 @@ int tagPosition = qSeq->size - desiredSize;
 splatOneStrand(qSeq, '-', tagPosition, splix, maxGap, &tagList);
 reverseComplement(qSeq->dna, qSeq->size);
 slReverse(&tagList);
+int mapCount = slCount(tagList);
 for (tag = tagList; tag != NULL; tag = tag->next)
-    splatTagOutput(tag, qSeq, splix, f);
+    splatTagOutput(tag, mapCount, qSeq, splix, f);
 splatTagFreeList(&tagList);
+return mapCount;
 }
 
 void splatHeaderOutput(char *target, char *query, char *outType, FILE *f)
@@ -1115,16 +1120,27 @@ struct dnaLoad *qLoad = dnaLoadOpen(query);
 FILE *f = mustOpen(output, "w");
 splatHeaderOutput(target, query, outType, f);
 struct dnaSeq *qSeq;
+int uniqMap = 0, totalMap = 0, totalReads = 0;
 while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     {
     verbose(2, "Processing %s\n", qSeq->name);
     toUpperN(qSeq->dna, qSeq->size);
-    splatOne(qSeq, splix, maxGap, f);
+    int mapCount = splatOne(qSeq, splix, maxGap, f);
+    if (mapCount > 0)
+        {
+	++totalMap;
+	if (mapCount == 1)
+	    ++uniqMap;
+	}
     dnaSeqFree(&qSeq);
+    ++totalReads;
     }
 splixFree(&splix);
 dnaLoadClose(&qLoad);
 carefulClose(&f);
+verbose(1, "mapped %d of %d (%5.2f%%), %d (%5.2f%%) uniquely from %s\n",
+	totalMap, totalReads, 100.0*totalMap/totalReads,
+	uniqMap, 100.0*uniqMap/totalReads, query);
 }
 
 int main(int argc, char *argv[])
