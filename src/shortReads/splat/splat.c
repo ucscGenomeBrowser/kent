@@ -108,7 +108,7 @@
 #include "psl.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.5 2008/10/19 06:05:09 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.6 2008/10/19 20:57:26 kent Exp $";
 
 char *version = "20";
 
@@ -173,14 +173,18 @@ struct splatHit
     };
 
 int splatHitCmp(void *va, void *vb)
-/* Return -1 if a before b,  0 if a and b overlap,
- * and 1 if a after b. */
+/* Sort hits that need to be extended independently. */
 {
 struct splatHit *a = va;
 struct splatHit *b = vb;
 int diff = a->tOffset - b->tOffset;
 if (diff == 0)
     diff = a->gapSize - b->gapSize;
+if (diff == 0)
+    {
+    if (a->gapSize != 0)  /* Inserts need to be tried in all quadrants. */
+	diff = a->missingQuad - b->missingQuad;
+    }
 return diff;
 }
 
@@ -470,6 +474,34 @@ for (gapPos = 0; gapPos < mysterySize; ++gapPos)
 *retBestGapPos = bestGapPos;
 }
 
+void slideDeletion1(DNA *q, DNA *t, int gapSize, int solidSize, int mysterySize,
+	int *retBestGapPos, int *retLeastDiffs)
+/* Slide deletion through all possible positions and return best position and number
+ * of differences there. */
+{
+int diffs = countDiff(q, t+gapSize, solidSize);
+int bestGapPos = -1;
+int leastDiffs = diffs;
+int gapPos;
+for (gapPos = 0; gapPos < mysterySize; ++gapPos)
+    {
+    DNA qq = q[gapPos];
+    DNA tt = t[gapPos];
+    if (qq != tt)
+       diffs += 1;
+    if (qq != t[gapPos+gapSize])
+       diffs -= 1;
+    if (diffs < leastDiffs)
+	{
+	leastDiffs = diffs;
+	bestGapPos = gapPos;
+	}
+    }
+*retLeastDiffs = leastDiffs;
+*retBestGapPos = bestGapPos;
+}
+
+
 void slideDeletion2(DNA *q, DNA *t, int gapSize, int solidSize, int mysterySize,
 	int *retBestGapPos, int *retLeastDiffs)
 /* Slide deletion through all possible positions and return best position and number
@@ -624,7 +656,6 @@ switch (hit->missingQuad)
         internalErr();
         break;
     }
-
 int bestGapPos, leastDiffs;
 slideInsert2(c->qSeq->dna + c->tagPosition + mysteryOffset, 
 	     c->splix->allDna + tOffset + mysteryOffset, 
@@ -757,11 +788,11 @@ if (maxGap > 0)
     searchExact(splix, firstHalf, lastHex, 3, 0, hitTree, 0, 1, 2);
     if (maxMismatch > 1)
 	{
-	searchExact12Vary6(splix, secondHalf, twoAfterFirstHex, 0, secondHalfPos, hitTree, -1, 1);
+	searchExact12Vary6(splix, secondHalf, twoAfterFirstHex, 0, secondHalfPos-maxGap, hitTree, -1, 1);
 	searchExact12Vary6(splix, secondHalf, firstHex, 0, secondHalfPos+maxGap, hitTree, 1, 1);
 	searchExact12Vary6(splix, firstHalf, twoBeforeLastHex, 3, 0, hitTree, -1, 2);
 	searchExact12Vary6(splix, firstHalf, lastHex, 3, 0, hitTree, 1, 2);
-	searchVary12Exact6(splix, secondHalf, twoAfterFirstHex, 0, secondHalfPos, hitTree, -1, 1);
+	searchVary12Exact6(splix, secondHalf, twoAfterFirstHex, 0, secondHalfPos-maxGap, hitTree, -1, 1);
 	searchVary12Exact6(splix, secondHalf, firstHex, 0, secondHalfPos+maxGap, hitTree, 1, 1);
 	searchVary12Exact6(splix, firstHalf, twoBeforeLastHex, 3, 0, hitTree, -1, 2);
 	searchVary12Exact6(splix, firstHalf, lastHex, 3, 0, hitTree, 1, 2);
@@ -793,6 +824,7 @@ void splatOneStrand(struct dnaSeq *qSeq, char strand,
 /* Align one query strand against index, filter, and write out results */
 {
 struct rbTree *hitTree = splatHitsOneStrand(qSeq, strand, tagPosition, splix, maxGap);
+verbose(2, " %d hits on %c strand\n", hitTree->n, strand);
 if (hitTree->n > 0)
     {
     extendHitsToTags(hitTree, qSeq, strand, tagPosition, splix, !worseToo, pTagList);
@@ -843,7 +875,6 @@ if (size2 == 0)
     q2 = q1 + size1;
     t2 = t1 + size1;
     }
-// uglyf("tag %s %c,  q1=%d, t1=%d, size1=%d, q2=%d, t2=%d, size2=%d\n", qSeq->name, strand, q1, t1, size1, q2, t2, size2);
 
 /* Output first block */
 DNA *qDna = qSeq->dna + q1;
@@ -1017,7 +1048,7 @@ if (strand == '-')
 /* Write chrom chromStart chromEnd */
 fprintf(f, "%s\t", splix->chromNames[chromIx]);
 int chromOffset = splix->chromOffsets[chromIx];
-fprintf(f, "%d\t%d\t", tag->t1 - chromOffset, tag->t2 - chromOffset);
+fprintf(f, "%d\t%d\t", tag->t1 - chromOffset, tag->t2 + tag->size2 - chromOffset);
 
 /* Write sequence including gaps (- for deletions, ^ for inserts) */
 int i;
@@ -1080,7 +1111,6 @@ if (size < desiredSize)
     	qSeq->name, tagSize, qSeq->size);
     return 0;
     }
-verbose(2, "%s\n", qSeq->name);
 splatOneStrand(qSeq, '+', 0, splix, maxGap, &tagList);
 reverseComplement(qSeq->dna, qSeq->size);
 int tagPosition = qSeq->size - desiredSize;
@@ -1126,6 +1156,7 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     verbose(2, "Processing %s\n", qSeq->name);
     toUpperN(qSeq->dna, qSeq->size);
     int mapCount = splatOne(qSeq, splix, maxGap, f);
+    verbose(2, " %d mappings\n", mapCount);
     if (mapCount > 0)
         {
 	++totalMap;
