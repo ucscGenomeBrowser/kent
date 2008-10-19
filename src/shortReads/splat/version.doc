@@ -10,3 +10,5 @@
 17 - Got first quadrant query insert case working.
 18 - Made it just output either an insertion or a deletion in the end quadrants, not both.
      Fixed off by one bug fix in last quadrant insert that caused an extra mismatch to be counted.
+19 - Refactoring to have an intermediate list of matches in memory.
+20 - Making it have tagAlign, maf, and psl output.  (Old style output is gone).
