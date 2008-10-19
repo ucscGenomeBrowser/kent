@@ -105,7 +105,7 @@
 #include "splix.h"
 #include "intValTree.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.2 2008/10/18 23:48:15 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.3 2008/10/19 02:53:18 kent Exp $";
 
 char *out = "psl";
 int minScore = 22;
@@ -153,6 +153,40 @@ static struct optionSpec options[] = {
    {"mmap", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+struct splatHit
+/* Information on an index hit.  This only has about a 1% chance of being real after
+ * extension, but hey, it's a start. */
+    {
+    int tOffset;	/* Offset to DNA in target */
+    int gapSize;	/* >0 for insert in query/del in target, <0 for reverse. 0 for no gap. */
+    int subCount;	/* Count of substitutions we know about already. */
+    int missingQuad;	/* Which data quadrant is lacking (not found in index). */
+    };
+
+int splatHitCmp(void *va, void *vb)
+/* Return -1 if a before b,  0 if a and b overlap,
+ * and 1 if a after b. */
+{
+struct splatHit *a = va;
+struct splatHit *b = vb;
+int diff = a->tOffset - b->tOffset;
+if (diff == 0)
+    diff = a->gapSize - b->gapSize;
+return diff;
+}
+
+struct splatTag
+/* Roughtly 25-base match that passes maxGap and maxMismatch criteria. */
+    {
+    struct splatTag *next;	 /* Next in list. */
+    int score;  /* Match - mismatch - 2*inserts for now. */
+    int q1,t1;  /* Position of first block in query and target. */
+    int size1;	/* Size of first block. */
+    int q2,t2;  /* Position of second block if any. */
+    int size2;  /* Size of second block.  May be zero. */
+    char strand; /* Query strand. */
+    };
 
 void dnaToBinary(DNA *dna, int maxGap, int *pFirstHalf, int *pSecondHalf,
 	bits16 *pAfter1, bits16 *pAfter2, bits16 *pBefore1, bits16 *pBefore2,
@@ -218,27 +252,6 @@ for (i=0; i<hexCount; ++i)
 return -1;
 }
 
-struct hitInfo
-/* Information on an index hit. */
-    {
-    int tOffset;	/* Offset to DNA in target */
-    int gapSize;	/* >0 for insert in query/del in target, <0 for reverse. 0 for no gap. */
-    int subCount;	/* Count of substitutions we know about already. */
-    int missingQuad;	/* Which data quadrant is lacking (not found in index). */
-    };
-
-int hitInfoCmp(void *va, void *vb)
-/* Return -1 if a before b,  0 if a and b overlap,
- * and 1 if a after b. */
-{
-struct hitInfo *a = va;
-struct hitInfo *b = vb;
-int diff = a->tOffset - b->tOffset;
-if (diff == 0)
-    diff = a->gapSize - b->gapSize;
-return diff;
-}
-
 void exactIndexHits(bits16 hex, bits16 *sortedHexes, int slotSize, 
 	bits32 *offsets, struct rbTree *hitTree, int startOffset,
 	int subCount, int gapSize, int missingQuad)
@@ -249,10 +262,10 @@ int ix = searchHexes(hex, sortedHexes, slotSize);
 if (ix >= 0)
     {
     int dnaOffset = offsets[ix] + startOffset;
-    struct hitInfo h;
+    struct splatHit h;
     h.tOffset = dnaOffset;
     h.gapSize = gapSize;
-    struct hitInfo *hit = rbTreeFind(hitTree, &h);
+    struct splatHit *hit = rbTreeFind(hitTree, &h);
     if (hit == NULL)
 	{
 	lmAllocVar(hitTree->lm, hit);
@@ -341,7 +354,7 @@ struct alignContext
 /* Context for an alignment. Necessary data for rbTree-traversing call-back function. */
     {
     struct splix *splix;	/* Index. */
-    FILE *f;			/* Output. */
+    struct splatTag **pTagList;	/* Pointer to tag list that gets filled in. */
     struct dnaSeq *qSeq;	/* DNA sequence. */
     char strand;		/* query strand. */
     int tagPosition;		/* Position of tag. */
@@ -358,48 +371,24 @@ for (i=0; i<size; ++i)
 return count;
 }
 
-void outputMatch(int subCount, struct alignContext *c, 
+void addMatch(int subCount, struct alignContext *c, 
 	int t1, int q1, int size1,
 	int t2, int q2, int size2)
 /* Output a match, which may be in two blocks. */
 {
-FILE *f = c->f;
-struct dnaSeq *qSeq = c->qSeq;
-DNA *qDna = qSeq->dna + c->tagPosition + q1;
-struct splix *splix = c->splix;
-DNA *tDna = splix->allDna + t1;
-fprintf(f, "%-12s ", qSeq->name);
-int i;
-for (i=0; i<size1; ++i)
-    fputc(qDna[i], f);
-int qGapSize = q2 - (q1+size1);
-int tGapSize = t2 - (t1+size1);
-if (size2)
-    {
-    for (i=0; i<qGapSize; ++i)
-        fputc(qDna[size1+i], f);
-    for (i=0; i<tGapSize; ++i)
-        fputc('-', f);
-    qDna = qSeq->dna + c->tagPosition + q2;
-    for (i=0; i<size2; ++i)
-	fputc(qDna[i], f);
-    }
-fprintf(f, "\t%d\t%c\n", q1, c->strand);
-fprintf(f, "%-12s ", "splix");
-for (i=0; i<size1; ++i)
-    fputc(tDna[i], f);
-if (size2)
-    {
-    for (i=0; i<qGapSize; ++i)
-        fputc('-', f);
-    for (i=0; i<tGapSize; ++i)
-        fputc(tDna[size1+i], f);
-    tDna = splix->allDna + t2;
-    for (i=0; i<size2; ++i)
-	fputc(tDna[i], f);
-    }
-fprintf(f, "\t%d\t%c\n", t1, '+');
-fprintf(f, "\n");
+int score = size1 + size2 - subCount;	// TODO: insert penalty???
+					// TODO: check against high score on list
+struct splatTag *tag;
+AllocVar(tag);
+tag->score  = score;
+tag->q1 = q1 + c->tagPosition;
+tag->t1 = t1;
+tag->size1 = size1;
+tag->q2 = q2 + c->tagPosition;
+tag->t2 = t2;
+tag->size2 = size2;
+tag->strand = c->strand;
+slAddHead(c->pTagList, tag);
 }
 
 void slideInsert1(DNA *q, DNA *t, int gapSize, int solidSize, int mysterySize,
@@ -485,7 +474,7 @@ for (gapPos = 0; gapPos < mysterySize; ++gapPos)
 *retBestGapPos = bestGapPos;
 }
 
-void extendMaybeOutputNoIndexIndels(struct hitInfo *hit, struct alignContext *c)
+void extendMaybeOutputNoIndexIndels(struct splatHit *hit, struct alignContext *c)
 /* Handle case where the 12-mer and the 6-mer in the index both hit without any
  * indication of an indel.  In the case where the missing quadrant is the first or
  * last though there could still be an indel in one of these quadrands. */
@@ -516,7 +505,7 @@ switch (hit->missingQuad)
        break;
     }
 if (diffCount <= maxMismatch)
-    outputMatch(diffCount, c, tOffset, 0, tagSize, 0, 0, 0);
+    addMatch(diffCount, c, tOffset, 0, tagSize, 0, 0, 0);
 else if (maxGap > 0 && hit->subCount < maxMismatch) 
     {
     /* Need to explore possibilities of indels if we are on the end quadrants */
@@ -541,7 +530,7 @@ else if (maxGap > 0 && hit->subCount < maxMismatch)
 	    if (leastDiffsInsert <= maxMismatch)
 		{
 		int b1Size = bestGapPosInsert + 1;
-		outputMatch(leastDiffsInsert, c, tOffset+gapSize, 0, b1Size, 
+		addMatch(leastDiffsInsert, c, tOffset+gapSize, 0, b1Size, 
 		    tOffset+gapSize+b1Size, b1Size+gapSize, tagSize - b1Size - gapSize);
 		}
 	    }
@@ -550,7 +539,7 @@ else if (maxGap > 0 && hit->subCount < maxMismatch)
 	    if (leastDiffsDelete <= maxMismatch)
 		{
 		int b1Size = bestGapPosDelete + 1;
-		outputMatch(leastDiffsDelete, c, tOffset-gapSize, 0, b1Size, 
+		addMatch(leastDiffsDelete, c, tOffset-gapSize, 0, b1Size, 
 		    tOffset+b1Size, b1Size, tagSize - b1Size);
 		}
 	    }
@@ -576,7 +565,7 @@ else if (maxGap > 0 && hit->subCount < maxMismatch)
 	    if (leastDiffsInsert <= maxMismatch)
 		{
 		int b1Size = bestGapPosInsert + 1 + startOffset;
-		outputMatch(leastDiffsInsert, c, tOffset, 0, b1Size, 
+		addMatch(leastDiffsInsert, c, tOffset, 0, b1Size, 
 		    tOffset+b1Size, b1Size+gapSize, tagSize - b1Size - gapSize);
 		}
 	    }
@@ -585,7 +574,7 @@ else if (maxGap > 0 && hit->subCount < maxMismatch)
 	    if (leastDiffsDelete <= maxMismatch)
 		{
 		int b1Size = bestGapPosDelete + 1 + startOffset;
-		outputMatch(leastDiffsDelete, c, tOffset, 0, b1Size, 
+		addMatch(leastDiffsDelete, c, tOffset, 0, b1Size, 
 		    tOffset+b1Size+gapSize, b1Size, tagSize - b1Size);
 		}
 	    }
@@ -593,7 +582,7 @@ else if (maxGap > 0 && hit->subCount < maxMismatch)
     }
 }
 
-void extendMaybeOutputInsert(struct hitInfo *hit, struct alignContext *c)
+void extendMaybeOutputInsert(struct splatHit *hit, struct alignContext *c)
 /* Handle case where there is a base inserted in the query relative to the target. */
 {
 int tOffset = hit->tOffset;
@@ -622,13 +611,13 @@ leastDiffs += hit->subCount + 1;
 if (leastDiffs <= maxMismatch)
     {
     int b1Size = bestGapPos + mysteryOffset + 1;
-    outputMatch(leastDiffs, c, tOffset, 0, b1Size, 
+    addMatch(leastDiffs, c, tOffset, 0, b1Size, 
     	tOffset+b1Size, b1Size+gapSize, tagSize - b1Size - gapSize);
     }
 }
 
 
-void extendMaybeOutputDeletion(struct hitInfo *hit, struct alignContext *c)
+void extendMaybeOutputDeletion(struct splatHit *hit, struct alignContext *c)
 /* Handle case where there is a base deleted in the query relative to the target. */
 {
 int tOffset = hit->tOffset;
@@ -669,7 +658,7 @@ if (diffCount < maxMismatch)
     if (leastDiffs <= maxMismatch)
 	{
 	int b1Size = bestGapPos + bigMysteryOffset + 1;
-	outputMatch(leastDiffs, c, tOffset, 0, b1Size, 
+	addMatch(leastDiffs, c, tOffset, 0, b1Size, 
 	    tOffset+b1Size+gapSize, b1Size, tagSize - b1Size);
 	}
     }
@@ -679,7 +668,7 @@ void extendMaybeOutput(void *item, void *context)
 /* Callback function for tree traverser that extends alignments and if good, outputs them. */
 {
 /* Rescue some typed variables out of container-driven voidness. */
-struct hitInfo *hit = item;
+struct splatHit *hit = item;
 struct alignContext *c = context;
 
 if (hit->gapSize == 0)
@@ -696,11 +685,20 @@ else
     }
 }
 
-void splatOneStrand(struct dnaSeq *qSeq, char strand,
-	int tagPosition, struct splix *splix, int maxGap, FILE *f)
-/* Align one query strand against index, filter, and write out results */
+struct rbTree *splatHitsOneStrand(struct dnaSeq *qSeq, char strand,
+	int tagPosition, struct splix *splix, int maxGap)
+/* Look through index for hits to query tag on one strand. 
+ * Input:
+ *   qSeq - entire query sequence, reverse complimented if on - strand
+ *   strand - either + or -
+ *   tagPosition - start position within query to pass against index.
+ *                 splixMinQuerySize + maxGap long.
+ *   splix - the index to search
+ *   maxGap - the maximum insertion or deletion size
+ * Output: a binary tree filled with splatHits.  The tree owns the hits themselves,
+ *   so you can dispose of it simply with rbTreeFree(). */
 {
-struct rbTree *hitTree = rbTreeNew(hitInfoCmp);
+struct rbTree *hitTree = rbTreeNew(splatHitCmp);
 
 /* Convert DNA to binary format */
 int firstHalf, secondHalf;
@@ -730,7 +728,6 @@ if (maxMismatch > 1)
 /* Look at single base indels with few mismatches */
 if (maxGap > 0)
     {
-    // searchExact(splix, secondHalf, twoAfterFirstHex, 0, secondHalfPos, hitTree, 0, -1, 1);
     searchExact(splix, secondHalf, twoAfterFirstHex, 0, secondHalfPos-maxGap, hitTree, 0, -1, 1);
     searchExact(splix, secondHalf, firstHex, 0, secondHalfPos+maxGap, hitTree, 0, 1, 1);
     searchExact(splix, firstHalf, twoBeforeLastHex, 3, 0, hitTree, 0, -1, 2);
@@ -747,24 +744,93 @@ if (maxGap > 0)
 	searchVary12Exact6(splix, firstHalf, lastHex, 3, 0, hitTree, 1, 2);
 	}
     }
+return hitTree;
+}
+
+void extendHitsToTags(struct rbTree *hitTree, struct dnaSeq *qSeq, char strand, 
+	int tagPosition, struct splix *splix, boolean bestOnly, struct splatTag **pTagList)
+/* Examine each of the hits in the hitTree, and add ones that are high scoring enough
+ * after extension to the tagList. If bestOnly is set it may free existing tags on list if
+ * it finds a higher scoring tag. */
+{
+struct alignContext ac;
+ZeroVar(&ac);
+ac.splix = splix;
+ac.pTagList = pTagList;
+ac.qSeq = qSeq;
+ac.strand = strand;
+ac.tagPosition = tagPosition;
+rbTreeTraverseWithContext(hitTree, extendMaybeOutput, &ac);
+}
+
+	
+
+void splatOneStrand(struct dnaSeq *qSeq, char strand,
+	int tagPosition, struct splix *splix, int maxGap, struct splatTag **pTagList)
+/* Align one query strand against index, filter, and write out results */
+{
+struct rbTree *hitTree = splatHitsOneStrand(qSeq, strand, tagPosition, splix, maxGap);
 if (hitTree->n > 0)
     {
-    struct alignContext ac;
-    ZeroVar(&ac);
-    ac.splix = splix;
-    ac.f = f;
-    ac.qSeq = qSeq;
-    ac.strand = strand;
-    ac.tagPosition = tagPosition;
-    rbTreeTraverseWithContext(hitTree, extendMaybeOutput, &ac);
+    extendHitsToTags(hitTree, qSeq, strand, tagPosition, splix, !worseToo, pTagList);
+    rbTreeFree(&hitTree);
     }
-
 rbTreeFree(&hitTree);
+}
+
+void splatTagOutput(struct splatTag *tag, struct dnaSeq *qSeq, struct splix *splix, FILE *f)
+/* Output tag match */
+{
+char strand = tag->strand;
+if (strand == '-')
+    reverseComplement(qSeq->dna, qSeq->size);
+fprintf(f, "%s\t", qSeq->name);
+int size1 = tag->size1;
+int size2 = tag->size2;
+int q1 = tag->q1, q2 = tag->q2;
+int t1 = tag->t1, t2 = tag->t2;
+DNA *qDna = qSeq->dna + q1;
+DNA *tDna = splix->allDna + t1;
+// uglyf("tag %s %c,  q1=%d, t1=%d, size1=%d, q2=%d, t2=%d, size2=%d\n", qSeq->name, strand, q1, t1, size1, q2, t2, size2);
+int i;
+for (i=0; i<size1; ++i)
+    fputc(qDna[i], f);
+int qGapSize = q2 - (q1+size1);
+int tGapSize = t2 - (t1+size1);
+if (size2)
+    {
+    for (i=0; i<qGapSize; ++i)
+        fputc(qDna[size1+i], f);
+    for (i=0; i<tGapSize; ++i)
+        fputc('-', f);
+    qDna = qSeq->dna + q2;
+    for (i=0; i<size2; ++i)
+	fputc(qDna[i], f);
+    }
+fprintf(f, "\t%d\t%c\n", q1, tag->strand);
+fprintf(f, "%s\t", "splix");
+for (i=0; i<size1; ++i)
+    fputc(tDna[i], f);
+if (size2)
+    {
+    for (i=0; i<qGapSize; ++i)
+        fputc('-', f);
+    for (i=0; i<tGapSize; ++i)
+        fputc(tDna[size1+i], f);
+    tDna = splix->allDna + t2;
+    for (i=0; i<size2; ++i)
+	fputc(tDna[i], f);
+    }
+fprintf(f, "\t%d\t%c\n", t1, '+');
+fprintf(f, "\n");
+if (strand == '-')
+    reverseComplement(qSeq->dna, qSeq->size);
 }
 
 void splatOne(struct dnaSeq *qSeq, struct splix *splix, int maxGap, FILE *f)
 /* Align one query sequence against index, filter, and write out results */
 {
+struct splatTag *tagList = NULL, *tag;
 int size = qSeq->size;
 int desiredSize = tagSize;
 if (size < desiredSize)
@@ -774,10 +840,14 @@ if (size < desiredSize)
     return;
     }
 verbose(2, "%s\n", qSeq->name);
-splatOneStrand(qSeq, '+', 0, splix, maxGap, f);
+splatOneStrand(qSeq, '+', 0, splix, maxGap, &tagList);
 reverseComplement(qSeq->dna, qSeq->size);
 int tagPosition = qSeq->size - desiredSize;
-splatOneStrand(qSeq, '-', tagPosition, splix, maxGap, f);
+splatOneStrand(qSeq, '-', tagPosition, splix, maxGap, &tagList);
+reverseComplement(qSeq->dna, qSeq->size);
+slReverse(&tagList);
+for (tag = tagList; tag != NULL; tag = tag->next)
+    splatTagOutput(tag, qSeq, splix, f);
 }
 
 void splat(char *target, char *query, char *output)
@@ -805,6 +875,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+minScore = optionInt("minScore", minScore);
+worseToo = optionExists("worseToo");
 maxGap = optionInt("maxGap", maxGap);
 maxMismatch = optionInt("maxMismatch", maxMismatch);
 tagSize = maxGap + splixMinQuerySize;
