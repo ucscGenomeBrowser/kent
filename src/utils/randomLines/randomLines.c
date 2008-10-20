@@ -3,9 +3,9 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "dlist.h"
+#include "obscure.h"
 
-static char const rcsid[] = "$Id: randomLines.c,v 1.4 2004/03/15 00:02:26 sugnet Exp $";
+static char const rcsid[] = "$Id: randomLines.c,v 1.5 2008/10/20 03:17:38 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,67 +22,40 @@ errAbort(
 
 boolean decomment = FALSE;
 
-struct dlList *readLines(char *fileName)
-/* Read all lines into a dlList. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line;
-struct dlList *list = newDlList();
-while (lineFileNext(lf, &line, NULL))
-    {
-    if (decomment)
-        {
-	char *s = skipLeadingSpaces(line);
-	if (s[0] == 0 || s[0] == '#')
-	    continue;
-	}
-    line = cloneString(line);
-    dlAddValTail(list, line);
-    }
-return list;
-}
-
-struct dlNode *dlNodeForIx(struct dlList *list, int ix)
-/* Return node at given position on list. */
-{
-int i;
-struct dlNode *node = list->head;
-for (i=0; i<ix; ++i)
-    {
-    if (dlEnd(node))
-        errAbort("Not %d items on list", ix);
-    node = node->next;
-    }
-return node;
-}
-
 void randomLines(char *inName, int count, char *outName)
 /* randomLines - Pick out random lines from file. */
 {
+/* Read all lines of input and put into an array. */
+struct slName *slPt, *slList= readAllLines(inName);
+int lineCount = slCount(slList);
+char **lineArray;
+AllocArray(lineArray, lineCount);
+int i;
+for (i=0, slPt=slList; i<lineCount; ++i, slPt = slPt->next)
+    lineArray[i] = slPt->name;
+
+/* Avoid an infinite, or very long loop by not letting them ask for all
+ * the lines except in the small case. */
+int maxCount = lineCount/2;
+if (maxCount < 1000)
+    maxCount = lineCount;
+if (count > maxCount)
+    errAbort("%s has %d lines.  Random lines will only output %d or less lines\n"
+             "on a file this size. You asked for %d. Sorry.",
+    	inName, lineCount, maxCount, count);
+
 FILE *f = mustOpen(outName, "w");
-struct dlList *list = readLines(inName);
-struct dlNode *node;
-char *seed = optionVal("seed", NULL);
-char *s;
-int lineCount = dlCount(list);
-int ix, randomIx;
-if(seed == NULL)
-    srand(time(NULL));
-else
-    srand(atoi(seed));
-if (lineCount < count)
+int outCount = 0;
+while (outCount < count)
     {
-    warn("Only %d lines in %s", lineCount, inName);
-    count = lineCount;
-    }
-for (ix = count; ix>0; --ix)
-    {
-    randomIx = rand()%lineCount;
-    node = dlNodeForIx(list, randomIx);
-    dlRemove(node);
-    s = node->val;
-    fprintf(f, "%s\n", s);
-    lineCount -= 1;
+    int randomIx = rand()%lineCount;
+    char *line = lineArray[randomIx];
+    if (line)
+	{
+        fprintf(f, "%s\n", line);
+	++outCount;
+	lineArray[randomIx] = NULL;
+	}
     }
 }
 
