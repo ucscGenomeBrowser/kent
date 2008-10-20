@@ -2916,11 +2916,9 @@ compositeTrack on
 shortLabel Zhao Nucleosome
 longLabel Zhao lab Nucleosome measurements
 group x
-#sub
 priority 400
 visibility hide
 type bed 3
-useScore 1
 subGroup1 view Views PK=Sites SIG=Density
 subGroup2 FAC Factor H3=Histone-H3 NUC=Nucleosome POL2S=Pol-II_Serine-5 POL2U=Pol-II_Unphosphorylate
 subGroup3 ACT Activation ACTV=Active REST=Resting
@@ -2941,6 +2939,7 @@ chromosomes chr1
     type bed 12
     itemRgb on
     priority 1
+    noInherit	on
 
     track zhaoLabActivatedNucleosomeRev
     subTrack zhaoLabNucleosome
@@ -2951,6 +2950,7 @@ chromosomes chr1
     type bed 12
     itemRgb on
     priority 2
+    noInherit	on
 
     track zhaoLabRestingNucleosomeFwd
     subTrack zhaoLabNucleosome
@@ -2961,6 +2961,7 @@ chromosomes chr1
     type bed 12
     itemRgb on
     priority 3
+    noInherit	on
 
     track zhaoLabRestingNucleosomeRev
     subTrack zhaoLabNucleosome
@@ -2971,6 +2972,7 @@ chromosomes chr1
     type bed 12
     itemRgb on
     priority 4
+    noInherit	on
 
     track zhaoLabRestingH3Fwd
     subTrack zhaoLabNucleosome
@@ -2981,6 +2983,7 @@ chromosomes chr1
     type bed 12
     itemRgb on
     priority 5
+    noInherit	on
 
     track zhaoLabRestingH3Rev
     subTrack zhaoLabNucleosome
@@ -2991,6 +2994,7 @@ chromosomes chr1
     type bed 12
     itemRgb on
     priority 6
+    noInherit	on
 
     track zhaoLabActivatedNucleosomeFwdWig
     subTrack zhaoLabNucleosome
@@ -3006,6 +3010,7 @@ chromosomes chr1
     maxHeightPixels 128:40:11
     configurable on
     priority 11
+    noInherit	on
 
     track zhaoLabActivatedNucleosomeRevWig
     subTrack zhaoLabNucleosome
@@ -3021,6 +3026,7 @@ chromosomes chr1
     maxHeightPixels 128:40:11
     configurable on
     priority 12
+    noInherit	on
 
     track zhaoLabRestingNucleosomeFwdWig
     subTrack zhaoLabNucleosome
@@ -3036,6 +3042,7 @@ chromosomes chr1
     maxHeightPixels 128:40:11
     configurable on
     priority 13
+    noInherit	on
 
     track zhaoLabRestingNucleosomeRevWig
     subTrack zhaoLabNucleosome
@@ -3051,6 +3058,7 @@ chromosomes chr1
     maxHeightPixels 128:40:11
     configurable on
     priority 14
+    noInherit	on
 
     track zhaoLabRestingH3FwdWig
     subTrack zhaoLabNucleosome
@@ -3066,12 +3074,13 @@ chromosomes chr1
     maxHeightPixels 128:40:11
     configurable on
     priority 15
+    noInherit	on
 
     track zhaoLabRestingH3RevWig
     subTrack zhaoLabNucleosome
     shortLabel RestingNucleosome
     longLabel Density graph, resting histone H3 reverse strand
-    subGroups FAC=NUC STRAND=RWD ACT=REST view=SIG
+    subGroups FAC=H3 STRAND=RWD ACT=REST view=SIG
     type wig 0 10520
     defaultViewLimits 0:10520
     spanList 1
@@ -3081,6 +3090,7 @@ chromosomes chr1
     maxHeightPixels 128:40:11
     configurable on
     priority 16
+    noInherit	on
 
     track zhaoLabActiveUnphosPolII
     subTrack zhaoLabNucleosome
@@ -3091,6 +3101,7 @@ chromosomes chr1
     type bed 9
     itemRgb on
     priority 21
+    noInherit	on
 
     track zhaoLabRestingUnphosPolII
     subTrack zhaoLabNucleosome
@@ -3101,6 +3112,7 @@ chromosomes chr1
     type bed 9
     itemRgb on
     priority 22
+    noInherit	on
 
     track zhaoLabActiveSer5PhosPolII
     subTrack zhaoLabNucleosome
@@ -3111,6 +3123,7 @@ chromosomes chr1
     type bed 9
     itemRgb on
     priority 23
+    noInherit	on
 
     track zhaoLabActiveUnphosPolIIBedGraph
     subTrack zhaoLabNucleosome
@@ -3125,6 +3138,7 @@ chromosomes chr1
     maxHeightPixels 128:40:11
     configurable on
     priority 31
+    noInherit	on
 
     track zhaoLabRestingUnphosPolIIBedGraph
     subTrack zhaoLabNucleosome
@@ -3139,6 +3153,7 @@ chromosomes chr1
     maxHeightPixels 128:40:11
     configurable on
     priority 32
+    noInherit	on
 
     track zhaoLabActiveSer5PhosPolIIBedGraph
     subTrack zhaoLabNucleosome
@@ -3153,6 +3168,7 @@ chromosomes chr1
     maxHeightPixels 128:40:11
     configurable on
     priority 33
+    noInherit	on
 
 track barskiChIPseq
 compositeTrack on
