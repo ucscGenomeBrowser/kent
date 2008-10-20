@@ -105,16 +105,19 @@
 #include "dnaLoad.h"
 #include "splix.h"
 #include "intValTree.h"
+#include "fa.h"
 #include "psl.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.6 2008/10/19 20:57:26 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.7 2008/10/20 05:49:53 kent Exp $";
 
-char *version = "20";
+char *version = "23";
 
-char *outType = "tagAlign";
+char *outType = "splat";
 int minScore = 22;
 boolean worseToo = FALSE;
+int maxRepeat = 10;
+char *repeatOutput = NULL;
 int maxGap = 1;
 int maxMismatch = 2;
 boolean memoryMap = FALSE;
@@ -124,43 +127,45 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "splat - SPeedy Local Alignment Tool. v%s. Designed to align small reads to large\n"
-  "DNA databases such as genomes quickly.  Reads need to be at least 25 bases.\n"
-  "usage:\n"
-  "   splat target query output\n"
-  "where:\n"
-  "   target is a large indexed dna database in splix format.  Use splixMake to create this\n"
-  "          file from fasta, 2bit or nib format\n"
-  "   query is a fasta or fastq file full of sequences of at least 25 bases each\n"
-  "   output is the output alignment file, by default in .psl format\n"
-  "note: can use 'stdin' or 'stdout' as a file name for better piping\n"
-  "overall options:\n"
-  "   -out=format. Output format.  Options include tagAlign (default), psl, maf, [soap, eland soon....]\n"
-#ifdef SOON
-  "   -minScore=N. Minimum alignment score for output. Default 22. Score is by default\n"
-  "                match - mismatch - 2*gapOpen - gapExtend\n"
-  "   -worseToo - if set return alignments other than the best alignments\n"
-  "options effecting just first 25 bases\n"
-#endif /* SOON */
-  "   -maxGap=N. Maximum gap size. Default is %d. Set to 0 for no gaps\n"
-  "   -maxMismatch=N. Maximum number of mismatches. Default %d. (A gap counts as a mismatch.)\n"
-  "   -mmap - Use memory mapping. Faster just a few reads, but much slower for many reads\n"
-  "current limits:\n"
-  "   Right now _only_ really aligns first 25 bases of a read.\n"
-  "   Maps _all_ occurences of read in genome, which will fill hard disk on repeats\n"
-  , version, maxGap, maxMismatch
-  );
+"splat - SPeedy Local Alignment Tool. v%s. Designed to align small reads to large\n"
+"DNA databases such as genomes quickly.  Reads need to be at least 25 bases.\n"
+"usage:\n"
+"   splat target query output\n"
+"where:\n"
+"   target is a large indexed dna database in splix format.  Use splixMake to create this\n"
+"          file from fasta, 2bit or nib format\n"
+"   query is a fasta or fastq file full of sequences of at least 25 bases each\n"
+"   output is the output alignment file, by default in .psl format\n"
+"note: can use 'stdin' or 'stdout' as a file name for better piping\n"
+"overall options:\n"
+"   -out=format. Output format.  Options include splat (default), psl, maf, [soap, eland soon....]\n"
+"   -worseToo - if set return alignments other than the best alignments\n"
+"   -maxRepeat=N  - maximum number of alignments to output on one query sequence. Default %d\n"
+"   -repeatOutput=fileName.fa - Put reads that map more than maxRepeat times in here\n"
+"options effecting just first 25 bases\n"
+"   -maxGap=N. Maximum gap size. Default is %d. Set to 0 for no gaps\n"
+"   -maxMismatch=N. Maximum number of mismatches. Default %d. (A gap counts as a mismatch.)\n"
+"   -mmap - Use memory mapping. Faster just a few reads, but much slower for many reads\n"
+"current limits:\n"
+"   Right now _only_ really aligns first 25 bases of a read.\n"
+"   Maps _all_ occurences of read in genome, which will fill hard disk on repeats\n"
+, version, maxRepeat, maxGap, maxMismatch
+);
 }
 
 static struct optionSpec options[] = {
    {"out", OPTION_STRING},
    {"minScore", OPTION_FLOAT},
    {"worseToo", OPTION_BOOLEAN},
+   {"maxRepeat", OPTION_INT},
+   {"repeatOutput", OPTION_STRING},
    {"maxGap", OPTION_INT},
    {"maxMismatch", OPTION_INT},
    {"mmap", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+FILE *repeatOutputFile = NULL;
 
 struct splatHit
 /* Information on an index hit.  This only has about a 1% chance of being real after
@@ -174,6 +179,7 @@ struct splatHit
 
 int splatHitCmp(void *va, void *vb)
 /* Sort hits that need to be extended independently. */
+/* Note: sorting function for rbTree, not for slSort! */
 {
 struct splatHit *a = va;
 struct splatHit *b = vb;
@@ -181,10 +187,7 @@ int diff = a->tOffset - b->tOffset;
 if (diff == 0)
     diff = a->gapSize - b->gapSize;
 if (diff == 0)
-    {
-    if (a->gapSize != 0)  /* Inserts need to be tried in all quadrants. */
-	diff = a->missingQuad - b->missingQuad;
-    }
+    diff = a->missingQuad - b->missingQuad;
 return diff;
 }
 
@@ -202,6 +205,35 @@ struct splatTag
 
 #define splatTagFree(pt) freez(pt)
 #define splatTagFreeList(pList) slFreeList(pList)
+
+int splatTagCmpPosAndScore(const void *va, const void *vb)
+/* Sort tags based on position fields, then score. */
+/* Note: sorting function for slSort, not for rbTree! */
+{
+const struct splatTag *a = *((struct splatTag **)va);
+const struct splatTag *b = *((struct splatTag **)vb);
+int diff = a->strand - b->strand;
+if (diff == 0)
+    diff = a->t1 - b->t1;
+if (diff == 0)
+    {
+    int aEnd = a->t2 + a->size2;
+    int bEnd = b->t2 + b->size2;
+    diff = aEnd - bEnd;
+    }
+if (diff == 0)
+    diff = a->q1 - b->q1;
+if (diff == 0)
+    {
+    int aEnd = a->q2 + a->size2;
+    int bEnd = b->q2 + b->size2;
+    diff = aEnd - bEnd;
+    }
+if (diff == 0)
+    diff = b->score - a->score;
+return diff;
+}
+
 
 void dnaToBinary(DNA *dna, int maxGap, int *pFirstHalf, int *pSecondHalf,
 	bits16 *pAfter1, bits16 *pAfter2, bits16 *pBefore1, bits16 *pBefore2,
@@ -392,7 +424,9 @@ void addMatch(int diffCount, struct alignContext *c,
 /* Output a match, which may be in two blocks. */
 {
 /* Convert to a positive score rather than a negative one. */
-int score = size1 + size2 - diffCount;
+int score = 2*(size1 + size2 - diffCount);
+if (size2 != 0)
+    score -= 3;
 
 /* Normalize q2,t2 to make 'gap' zero size in single block case */
 if (size2 == 0)
@@ -473,34 +507,6 @@ for (gapPos = 0; gapPos < mysterySize; ++gapPos)
 *retLeastDiffs = leastDiffs;
 *retBestGapPos = bestGapPos;
 }
-
-void slideDeletion1(DNA *q, DNA *t, int gapSize, int solidSize, int mysterySize,
-	int *retBestGapPos, int *retLeastDiffs)
-/* Slide deletion through all possible positions and return best position and number
- * of differences there. */
-{
-int diffs = countDiff(q, t+gapSize, solidSize);
-int bestGapPos = -1;
-int leastDiffs = diffs;
-int gapPos;
-for (gapPos = 0; gapPos < mysterySize; ++gapPos)
-    {
-    DNA qq = q[gapPos];
-    DNA tt = t[gapPos];
-    if (qq != tt)
-       diffs += 1;
-    if (qq != t[gapPos+gapSize])
-       diffs -= 1;
-    if (diffs < leastDiffs)
-	{
-	leastDiffs = diffs;
-	bestGapPos = gapPos;
-	}
-    }
-*retLeastDiffs = leastDiffs;
-*retBestGapPos = bestGapPos;
-}
-
 
 void slideDeletion2(DNA *q, DNA *t, int gapSize, int solidSize, int mysterySize,
 	int *retBestGapPos, int *retLeastDiffs)
@@ -1037,9 +1043,9 @@ else
 fputc(a, f);
 }
 
-void splatOutputTagAlign(struct splatTag *tag, int mapCount, 
+void splatOutputSplat(struct splatTag *tag, int mapCount, 
 	struct dnaSeq *qSeq, struct splix *splix, int chromIx, FILE *f)
-/* Output tag to TagAlign file. */
+/* Output tag to splat format output file. (Tag-align plus query name)*/
 {
 char strand = tag->strand;
 if (strand == '-')
@@ -1079,7 +1085,8 @@ if (size2)
 fputc('\t', f);
 
 fprintf(f, "%d\t", 1000/mapCount);
-fprintf(f, "%c\n", strand);
+fprintf(f, "%c\t", strand);
+fprintf(f, "%s\n", qSeq->name);
 
 if (strand == '-')
     reverseComplement(qSeq->dna, qSeq->size);
@@ -1094,34 +1101,103 @@ if (sameString(outType, "maf"))
     splatOutputMaf(tag, mapCount, qSeq, splix, chromIx, f);
 else if (sameString(outType, "psl"))
     splatOutputPsl(tag, mapCount, qSeq, splix, chromIx, f);
-else if (sameString(outType, "tagAlign"))
-    splatOutputTagAlign(tag, mapCount, qSeq, splix, chromIx, f);
+else if (sameString(outType, "splat"))
+    splatOutputSplat(tag, mapCount, qSeq, splix, chromIx, f);
 }
 
-int splatOne(struct dnaSeq *qSeq, struct splix *splix, int maxGap, FILE *f)
+struct splatTag *removeDupeTags(struct splatTag *tagList)
+/* Assuming tagList is sorted, return list with duplicate tags removed. */
+{
+struct splatTag *tag, *prev, *next, *newList = NULL;
+
+slSort(&tagList, splatTagCmpPosAndScore);
+for (tag = tagList; tag != NULL; tag = next)
+    {
+    next = tag->next;
+    if (next != NULL && splatTagCmpPosAndScore(&tag, &next) == 0)
+	splatTagFree(&tag);
+    else
+	slAddHead(&newList, tag);
+    }
+slReverse(&newList);
+return newList;
+}
+
+struct splatTag *splatTagFilterOnScore(struct splatTag *tagList, int minScore)
+/* Remove (and free) tags below minScore from list. */
+{
+struct splatTag *tag, *next, *newList = NULL;
+for (tag = tagList; tag != NULL; tag = next)
+    {
+    next = tag->next;
+    if (tag->score >= minScore)
+        slAddHead(&newList, tag);
+    else
+        splatTagFree(&tag);
+    }
+slReverse(&newList);
+return newList;
+}
+
+void splatOne(struct dnaSeq *qSeq, struct splix *splix, int maxGap, FILE *f,
+	int *retMapCount, boolean *retIsRepeat)
 /* Align one query sequence against index, filter, and write out results.
  * Returns the number of mappings. */
 {
 struct splatTag *tagList = NULL, *tag;
 int size = qSeq->size;
 int desiredSize = tagSize;
+int outputCount = 0;
+boolean isRepeat = FALSE;
 if (size < desiredSize)
     {
     warn("%s is %d bases, minimum splat query size %d, skipping", 
     	qSeq->name, tagSize, qSeq->size);
-    return 0;
+    return;
     }
 splatOneStrand(qSeq, '+', 0, splix, maxGap, &tagList);
 reverseComplement(qSeq->dna, qSeq->size);
 int tagPosition = qSeq->size - desiredSize;
 splatOneStrand(qSeq, '-', tagPosition, splix, maxGap, &tagList);
 reverseComplement(qSeq->dna, qSeq->size);
-slReverse(&tagList);
-int mapCount = slCount(tagList);
-for (tag = tagList; tag != NULL; tag = tag->next)
-    splatTagOutput(tag, mapCount, qSeq, splix, f);
-splatTagFreeList(&tagList);
-return mapCount;
+if (tagList != NULL)
+    {
+    /* Find best score. */
+    int bestScore = 0;
+    for (tag = tagList; tag != NULL; tag = tag->next)
+        {
+	if (tag->score > bestScore)
+	    bestScore = tag->score;
+	}
+
+    /* Unless doing worseToo remove tags that are not best scoring */
+    if (!worseToo)
+	tagList = splatTagFilterOnScore(tagList, bestScore);
+    
+
+    /* Some duplicate tags may have come through.  This also will filter the tags 
+     * by chromosome position. */
+    tagList = removeDupeTags(tagList);
+
+
+    /* Count up mappings, and output either to repeat file or to mapping file. */
+    outputCount = slCount(tagList);
+    isRepeat = (outputCount > maxRepeat);
+    if (isRepeat)
+        {
+	if (repeatOutputFile != NULL)
+	    faWriteNext(repeatOutputFile, qSeq->name, qSeq->dna, qSeq->size);
+	outputCount = 0;
+	}
+    else
+        {
+	for (tag = tagList; tag != NULL; tag=tag->next)
+	    splatTagOutput(tag, outputCount, qSeq, splix, f);
+	}
+    splatTagFreeList(&tagList);
+    }
+*retMapCount = outputCount;
+*retIsRepeat = isRepeat;
 }
 
 void splatHeaderOutput(char *target, char *query, char *outType, FILE *f)
@@ -1136,7 +1212,7 @@ if (sameString(outType, "maf"))
 else if (sameString(outType, "psl"))
     {
     }
-else if (sameString(outType, "tagAlign"))
+else if (sameString(outType, "splat"))
     ;
 else
     errAbort("Unrecognized output type %s", outType);
@@ -1148,30 +1224,52 @@ void splat(char *target, char *query, char *output)
 struct splix *splix = splixRead(target, memoryMap);
 struct dnaLoad *qLoad = dnaLoadOpen(query);
 FILE *f = mustOpen(output, "w");
+if (repeatOutput != NULL)
+    repeatOutputFile = mustOpen(repeatOutput, "w");
 splatHeaderOutput(target, query, outType, f);
 struct dnaSeq *qSeq;
-int uniqMap = 0, totalMap = 0, totalReads = 0;
+int uniqCount = 0, totalMap = 0, totalRepeat = 0, totalReads = 0;
 while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     {
     verbose(2, "Processing %s\n", qSeq->name);
     toUpperN(qSeq->dna, qSeq->size);
-    int mapCount = splatOne(qSeq, splix, maxGap, f);
+    int mapCount;
+    boolean isRepeat;
+    splatOne(qSeq, splix, maxGap, f, &mapCount, &isRepeat);
     verbose(2, " %d mappings\n", mapCount);
     if (mapCount > 0)
         {
 	++totalMap;
 	if (mapCount == 1)
-	    ++uniqMap;
+	    ++uniqCount;
 	}
+    if (isRepeat)
+        ++totalRepeat;
     dnaSeqFree(&qSeq);
     ++totalReads;
     }
+
+/* Report statistics (to stderr) */
+verbose(1, "Overall results for mapping %d reads in %s to %s\n", 
+	totalReads, query, target);
+int missCount = totalReads - totalMap - totalRepeat;
+verbose(1, "%d (%4.1f%%) did not map\n", missCount, 100.0 * missCount/totalReads);
+verbose(1, "%d (%4.1f%%) mapped more than %d places\n", 
+	totalRepeat, 100.0 * totalRepeat / totalReads, maxRepeat);
+if (maxRepeat >= 2)
+    {
+    int multiCount = totalReads - uniqCount - totalRepeat;
+    verbose(1,  "%d (%4.1f%%) mapped between 2 and %d places\n",
+	multiCount, 100.0 * multiCount / totalReads, maxRepeat);
+    }
+verbose(1, "%d (%4.1f%%) mapped uniquely\n",
+    uniqCount, 100.0 * uniqCount / totalReads);
+
+/* Clean up. */
 splixFree(&splix);
 dnaLoadClose(&qLoad);
 carefulClose(&f);
-verbose(1, "mapped %d of %d (%5.2f%%), %d (%5.2f%%) uniquely from %s\n",
-	totalMap, totalReads, 100.0*totalMap/totalReads,
-	uniqMap, 100.0*uniqMap/totalReads, query);
+carefulClose(&repeatOutputFile);
 }
 
 int main(int argc, char *argv[])
@@ -1183,6 +1281,8 @@ if (argc != 4)
 outType = optionVal("out", outType);
 minScore = optionInt("minScore", minScore);
 worseToo = optionExists("worseToo");
+maxRepeat = optionInt("maxRepeat", maxRepeat);
+repeatOutput = optionVal("repeatOutput", NULL);
 maxGap = optionInt("maxGap", maxGap);
 maxMismatch = optionInt("maxMismatch", maxMismatch);
 tagSize = maxGap + splixMinQuerySize;

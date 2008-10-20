@@ -14,3 +14,7 @@
 20 - Making it have tagAlign, maf, and psl output.  (Old style output is gone).
 21 - Fixing a couple of bugs that reduced coverage in insert+sub and especially delete+sub
      cases.  Still a small bug (affecting ~2% of cases) in the delete+sub case.
+22 - Fixed delete+sub bug. The fix is causing more repeat reporting of matches, which was
+     already happening.  Next stop is to fix that.
+23 - Fixed duplicate reporting of matches.  Also made it only report best matchings by default
+     and only up to a fixed number (default 10) of matches per read.
