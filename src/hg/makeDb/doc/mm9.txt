@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.82 2008/10/17 01:06:35 markd Exp $"
+#	"$Id: mm9.txt,v 1.83 2008/10/20 21:32:48 angie Exp $"
 #
 
 #######################################################################
@@ -8598,6 +8598,57 @@ do
   done
 done
 rm bed.tab
+
+
+#########################################################################
+# KOMP (KNOCKOUT MOUSE PROJECT) (DONE 10/20/08 angie)
+    ssh hgwdev
+    mkdir /hive/data/genomes/mm9/bed/komp
+    cd /hive/data/genomes/mm9/bed/komp
+    # Save files emailed from Carol Bult 10/18 as 
+    # CSD_GFF_10182008.txt and Regeneron_GFF_10172008.txt.
+    # Make bed9 (would be bed4, but using itemRgb):
+    perl -wpe 'chomp; @w = split("\t"); \
+      if ($w[3] eq "") { warn "$_\n";  s/^.*//; \
+                         next; } # Some lines have no coords. \
+      $color = ($w[9] eq "Yellow") ? "255,215,0" : \
+               ($w[9] eq "Green")  ? "0,240,0" : \
+               ($w[9] eq "Blue")   ? "0,0,200" : "0,0,0"; \
+      $_ = join("\t", $w[0], $w[3], $w[4], $w[10], \
+                0, ".", $w[3], $w[3], $color) . "\n";' \
+      CSD_GFF_10182008.txt Regeneron_GFF_10172008.txt > komp.bed
+#chr10   .       CSD                     .       .       .       MGI:3645882;In Progress Yellow  EG633971
+#chr11   .       CSD                     .       .       .       MGI:3650936;Withdrawn/Problematic       Black   OTTMUSG00000002671
+#chr2    .       CSD                     .       .       .       MGI:3702423;Withdrawn/Problematic       Black   OTTMUSG00000016613
+#chr2    .       CSD                     .       .       .       MGI:3706568;Withdrawn/Problematic       Black   OTTMUSG00000016226
+#chr2    .       CSD                     .       .       .       MGI:1913626;In Progress Yellow  3100002L24Rik
+#chr2    .       CSD                     .       .       .       MGI:3649840;Withdrawn/Problematic       Black   OTTMUSG00000016576
+#chr4    .       CSD                     .       .       .       MGI:3645499;Withdrawn/Problematic       Black   EG433762
+#chr8    .       CSD                     .       .       .       MGI:3642269;Withdrawn/Problematic       Black   OTTMUSG00000018948
+#chr8    .       CSD                     .       .       .       MGI:3647176;Withdrawn/Problematic       Black   EG654453
+#chr11   .       Regeneron                       .       .       .       MGI:1890761;Not Started/On Hold Blue    Sox16
+#chr5    .       Regeneron                       .       .       .       MGI:3648938;Reagent(s) Available        Green   Pvrig
+#chr8    .       Regeneron                       .       .       .       MGI:2387432;Not Started/On Hold Blue    Trim61
+    # Make an alias-style table with associated info (MGI ID and status):
+    perl -wpe 'chomp; @w = split("\t"); \
+      if ($w[3] eq "") { s/^.*//; next; } # Some lines have no coords. \
+      $w[8] =~ m/^(MGI:\d+);\s*(\w.*)/ || die; \
+      ($mgi, $status) = ($1, $2); \
+      $_ = "$w[10]\t$mgi,$w[2],$status\n";' \
+      CSD_GFF_10182008.txt Regeneron_GFF_10172008.txt \
+    | sort > kompExtra.tab
+    # Load 'em up:
+    hgLoadBed mm9 komp komp.bed
+#Loaded 9049 elements of size 9
+    sed -e 's/genericAlias/kompExtra/' $HOME/kent/src/hg/lib/genericAlias.sql \
+      > kompExtra.sql
+    hgLoadSqlTab mm9 kompExtra kompExtra.sql kompExtra.tab
+    checkTableCoords -verbose=2 mm9 komp
+    # No output, good.
+    runJoiner.csh mm9 komp
+#Checking keys on database mm9
+# mm9.kompExtra.name - hits 9049 of 9049 ok
+
 
 #########################################################################
 ### Affy MOE430 version 2 (DONE - 2008-09-25,10-02 - Hiram)
