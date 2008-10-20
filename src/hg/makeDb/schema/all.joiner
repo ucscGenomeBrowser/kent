@@ -1553,7 +1553,7 @@ identifier igtcName
 
 identifier kompName
 "KOMP (knockoutmouse.org) gene name"
-    $mm.komp.name
+    $mm.komp.name dupeOk
     $mm.kompExtra.name
 
 
