@@ -109,7 +109,7 @@
 #include "psl.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.7 2008/10/20 05:49:53 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.8 2008/10/20 08:13:52 kent Exp $";
 
 char *version = "23";
 
@@ -1108,7 +1108,7 @@ else if (sameString(outType, "splat"))
 struct splatTag *removeDupeTags(struct splatTag *tagList)
 /* Assuming tagList is sorted, return list with duplicate tags removed. */
 {
-struct splatTag *tag, *prev, *next, *newList = NULL;
+struct splatTag *tag, *next, *newList = NULL;
 
 slSort(&tagList, splatTagCmpPosAndScore);
 for (tag = tagList; tag != NULL; tag = next)
@@ -1253,16 +1253,16 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
 verbose(1, "Overall results for mapping %d reads in %s to %s\n", 
 	totalReads, query, target);
 int missCount = totalReads - totalMap - totalRepeat;
-verbose(1, "%d (%4.1f%%) did not map\n", missCount, 100.0 * missCount/totalReads);
-verbose(1, "%d (%4.1f%%) mapped more than %d places\n", 
+verbose(1, "%d (%5.2f%%) did not map\n", missCount, 100.0 * missCount/totalReads);
+verbose(1, "%d (%5.2f%%) mapped more than %d places\n", 
 	totalRepeat, 100.0 * totalRepeat / totalReads, maxRepeat);
 if (maxRepeat >= 2)
     {
     int multiCount = totalReads - uniqCount - totalRepeat;
-    verbose(1,  "%d (%4.1f%%) mapped between 2 and %d places\n",
+    verbose(1,  "%d (%5.2f%%) mapped between 2 and %d places\n",
 	multiCount, 100.0 * multiCount / totalReads, maxRepeat);
     }
-verbose(1, "%d (%4.1f%%) mapped uniquely\n",
+verbose(1, "%d (%5.2f%%) mapped uniquely\n",
     uniqCount, 100.0 * uniqCount / totalReads);
 
 /* Clean up. */
