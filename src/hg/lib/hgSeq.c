@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "hgSeq.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.37 2008/10/03 01:14:36 braney Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.38 2008/10/20 17:27:29 angie Exp $";
 
 int hgSeqChromSize(char *db, char *chromName)
 /* get chrom size if there's a database out there,
@@ -318,7 +318,18 @@ if (seqEnd <= seqStart)
 	   padding5, padding3);
     return;
     }
-rSeq = hDnaFromSeq(db, chrom, seqStart, seqEnd, dnaMixed);
+if (maskRep)
+    {
+    rSeq = hDnaFromSeq(db, chrom, seqStart, seqEnd, dnaMixed);
+    if (sameString(repMasking, "N"))
+	lowerToN(rSeq->dna, strlen(rSeq->dna));
+    if (!sameString(casing, "upper"))
+	tolowers(rSeq->dna);
+    }
+else if (sameString(casing, "upper"))
+    rSeq = hDnaFromSeq(db, chrom, seqStart, seqEnd, dnaUpper);
+else
+    rSeq = hDnaFromSeq(db, chrom, seqStart, seqEnd, dnaLower);
 
 /* Handle casing and compute size of concatenated sequence */
 cSize = 0;
@@ -336,19 +347,6 @@ cSize += (padding5 + padding3);
 AllocVar(cSeq);
 cSeq->dna = needLargeMem(cSize+1);
 cSeq->size = cSize;
-
-if (maskRep)
-    {
-    if (!sameString(repMasking, "lower"))
-	lowerToN(rSeq->dna, strlen(rSeq->dna));
-    }
-else
-    {
-    if (sameString(casing, "upper"))
-	touppers(rSeq->dna);
-    else
-	tolowers(rSeq->dna);
-    }
 
 offset = 0;
 for (i=0;  i < rCount;  i++)
