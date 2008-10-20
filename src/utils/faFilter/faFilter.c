@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: faFilter.c,v 1.5 2008/05/14 07:19:22 markd Exp $";
+static char const rcsid[] = "$Id: faFilter.c,v 1.6 2008/10/20 02:45:35 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -26,6 +26,7 @@ errAbort("faFilter - Filter fa records, selecting ones that match the specified 
          "    -v - invert match, select non-matching records.\n"
          "    -minSize=N - Only pass sequences at least this big.\n"
          "    -maxSize=N - Only pass sequences this size or smaller.\n"
+	 "    -maxN=N Only pass sequences with fewer than this number of N's\n"
          "    -uniq - Removes duplicate sequence ids, keeping the first.\n"
          "\n"
          "All specified conditions must pass to pass a sequence.  If no conditions are\n"
@@ -39,6 +40,7 @@ static struct optionSpec options[] = {
     {"v", OPTION_BOOLEAN},
     {"minSize", OPTION_INT},
     {"maxSize", OPTION_INT},
+    {"maxN", OPTION_INT},
     {"uniq", OPTION_BOOLEAN},
     {NULL, 0},
 };
@@ -49,6 +51,7 @@ char *namePat = NULL;
 boolean vOption = FALSE;
 int minSize = -1;
 int maxSize = -1;
+int maxN = -1;
 struct hash *uniqHash = NULL;
 
 char *parseSeqName(char *seqHeader)
@@ -92,6 +95,19 @@ for (pat = patternsList; pat != NULL; pat = pat->next)
 return FALSE;
 }
 
+int countN(DNA *seq, int seqSize)
+/* Count N's in sequence. */
+{
+int nCount = 0;
+while (--seqSize >= 0)
+    {
+    DNA base = *seq++;
+    if (base == 'n' || base == 'N')
+       ++nCount;
+    }
+return nCount;
+}
+
 boolean recMatches(DNA *seq, int seqSize, char *seqHeader, struct slName *patternsList)
 /* check if a fasta record matches the sequence constraints */
 {
@@ -108,6 +124,8 @@ if (uniqHash != NULL)
         return FALSE;  // already seen
     hashAdd(uniqHash, name, NULL);
     }
+if (maxN >= 0 && countN(seq, seqSize) > maxN)
+    return FALSE;
 return TRUE;
 }
 
@@ -143,8 +161,9 @@ if (argc != 3)
 optNamePatList = optionVal("namePatList", NULL);
 namePat = optionVal("name", NULL);
 vOption = optionExists("v");
-minSize = optionInt("minSize", -1);
-maxSize = optionInt("maxSize", -1);
+minSize = optionInt("minSize", minSize);
+maxSize = optionInt("maxSize", maxSize);
+maxN = optionInt("maxN", maxN);
 if (optionExists("uniq"))
     uniqHash = hashNew(24);
 faFilter(argv[1],argv[2]);
