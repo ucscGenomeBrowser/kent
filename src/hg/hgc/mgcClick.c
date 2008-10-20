@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "geneSimilarities.h"
 
-static char const rcsid[] = "$Id: mgcClick.c,v 1.28 2008/09/17 17:40:40 mikep Exp $";
+static char const rcsid[] = "$Id: mgcClick.c,v 1.29 2008/10/20 21:14:43 markd Exp $";
 
 static char *findRefSeqSummary(struct sqlConnection *conn,
                                struct geneSimilarities *refSeqs,
@@ -142,7 +142,8 @@ struct cloneInfo
     boolean isMgc;    // is this MGC or ORFeome
     char *acc;
     int start;
-    char *table;
+    char *pslTbl;     // psl-format table
+    char *gpTbl;      // genePred format table
     char *desc;       // genbank info
     char *organism;
     char *tissue;
@@ -225,7 +226,7 @@ static void getRefSeqInfo(struct sqlConnection *conn, struct cloneInfo *ci)
 /* fill in refSeq info */
 {
 ci->refSeqs = geneSimilaritiesBuildAt(conn, TRUE, ci->acc, seqName, ci->start,
-                                      ci->table, "refGene");
+                                      ci->gpTbl, "refGene");
 // replace accession in gene names with accession.version
 struct geneSim *gs;
 for (gs = ci->refSeqs->genes; gs != NULL; gs = gs->next)
@@ -272,14 +273,15 @@ for (i = 0; i < nwords; i++)
 }
 
 static struct cloneInfo *cloneInfoLoad(struct sqlConnection *conn, char *acc,
-                                       int start, char *cloneTbl)
+                                       int start, char *pslTbl, char *gpTbl)
 /* Load clone information tables. */
 {
 struct cloneInfo *ci;
 AllocVar(ci);
 ci->acc = cloneString(acc);
 ci->start = start;
-ci->table = cloneString(cloneTbl);
+ci->pslTbl = cloneString(pslTbl);
+ci->gpTbl = cloneString(gpTbl);
 cdnaInfoLoad(ci, conn);
 parseCloneField(ci);
 if (sqlTableExists(conn, "refGene"))
@@ -294,7 +296,8 @@ struct cloneInfo *ci = *ciPtr;
 if (ci != NULL)
     {
     freeMem(ci->acc);
-    freeMem(ci->table);
+    freeMem(ci->pslTbl);
+    freeMem(ci->gpTbl);
     freeMem(ci->desc);
     freeMem(ci->organism);
     freeMem(ci->tissue);
@@ -318,7 +321,7 @@ static struct cloneInfo *mgcCloneInfoLoad(struct sqlConnection *conn, char *acc,
                                           int start)
 /* Load MGC clone information */
 {
-struct cloneInfo *ci = cloneInfoLoad(conn, acc, start, "mgcGenes");
+struct cloneInfo *ci = cloneInfoLoad(conn, acc, start, "mgcFullMrna", "mgcGenes");
 ci->isMgc = TRUE;
 if (ci->mgcId == 0)
     errAbort("no MGC:nnnn entry in mrnaClone table for MGC clone %s", acc);
@@ -331,7 +334,7 @@ static struct cloneInfo *orfeomeCloneInfoLoad(struct sqlConnection *conn, char *
                                               int start)
 /* Load ORFeome clone information */
 {
-struct cloneInfo *ci = cloneInfoLoad(conn, acc, start, "orfeomeGenes");
+struct cloneInfo *ci = cloneInfoLoad(conn, acc, start, "orfeomeMrna", "orfeomeGenes");
 ci->isMgc = FALSE;
 return ci;
 }
@@ -381,41 +384,40 @@ prCellLabelVal("Modification date", ci->moddate);
 webPrintLinkTableEnd();
 }
 
-static void prSeqLinks(struct sqlConnection *conn, char *table, char *acc)
+static void prSeqLinks(struct sqlConnection *conn, struct cloneInfo *ci)
 /* print table of sequence links */
 {
 webNewSection("Sequences");
 webPrintLinkTableStart();
 
 webPrintLinkCellStart();
-hgcAnchorSomewhere("htcDisplayMrna", acc, table, seqName);
+hgcAnchorSomewhere("htcDisplayMrna", ci->acc, ci->pslTbl, seqName);
 printf("mRNA</a>"); 
 webPrintLinkCellEnd();
 
 webPrintLinkCellStart();
-hgcAnchorSomewhere("htcTranslatedMRna", acc, table, seqName);
+hgcAnchorSomewhere("htcTranslatedMRna", ci->acc, ci->pslTbl, seqName);
 printf("Protein</A><br>");
 webPrintLinkCellEnd();
 
 webPrintLinkCellStart();
-hgcAnchorSomewhere("htcGeneInGenome", acc, table, seqName);
+hgcAnchorSomewhere("htcGeneInGenome", ci->acc, ci->gpTbl, seqName);
 printf("Genomic</A>");
 webPrintLinkCellEnd();
 
 webPrintLinkTableNewRow();
 
 webPrintLinkCellStart();
-hgcAnchorSomewhere("htcDisplayMrna", acc, table, seqName);
+hgcAnchorSomewhere("htcDisplayMrna", ci->acc, ci->gpTbl, seqName);
 printf("Reference genome mRNA</A>");
 webPrintLinkCellEnd();
 
-// FIXME: this is current broken with psl track.
 #if BROKEN
+// FIXME: doesn't work when genePred table is not the track; not that important
 webPrintLinkCellStart();
-hgcAnchorSomewhere("htcTranslatedPredMRna", acc, table, seqName);
+hgcAnchorSomewhereTbl("htcTranslatedPredMRna", ci->acc, ci->pslTbl, seqName, ci->gpTbl);
 printf("Reference genome protein</A>");
 webPrintLinkCellEnd();
-
 webFinishPartialLinkTable(1, 2, 3);
 #else
 webFinishPartialLinkTable(1, 1, 3);
@@ -462,10 +464,10 @@ printf("%.1f%%", 100.0*aligned/((float)psl->qSize));
 webPrintLinkCellEnd();
 }
 
-static void prAligns(struct sqlConnection *conn, char *pslTbl, char *acc, int start)
+static void prAligns(struct sqlConnection *conn, struct cloneInfo *ci)
 /* print table of alignments */
 {
-struct psl* pslList = getAlignments(conn, pslTbl, acc);
+struct psl* pslList = getAlignments(conn, ci->pslTbl, ci->acc);
 assert(pslList != NULL);
 slSort(&pslList, pslCmpMatch);
 
@@ -489,10 +491,10 @@ int pass;
 for (pass = 1; pass <= 2; pass++)
     {
     for (psl = pslList; psl != NULL; psl = psl->next)
-        if ((pass == 1) == (psl->tStart == start))
+        if ((pass == 1) == (psl->tStart == ci->start))
             {
             webPrintLinkTableNewRow();
-            prAlign(conn, pslTbl, psl);
+            prAlign(conn, ci->pslTbl, psl);
             }
     }
 webPrintLinkTableEnd();
@@ -628,7 +630,7 @@ static void prCcdsLinks(struct sqlConnection *conn, struct cloneInfo *ci)
 {
 struct geneSimilarities *ccdsGenes
     = geneSimilaritiesBuildAt(conn, TRUE, ci->acc, seqName, ci->start,
-                              ci->table, "ccdsGene");
+                              ci->gpTbl, "ccdsGene");
 if (ccdsGenes->genes != NULL)
     {
     /* just use cloest one */
@@ -648,7 +650,7 @@ static void prUcscGenesLinks(struct sqlConnection *conn, struct cloneInfo *ci)
 {
 struct geneSimilarities *ucscGenes
     = geneSimilaritiesBuildAt(conn, TRUE, ci->acc, seqName, ci->start,
-                              ci->table, "knownGene");
+                              ci->gpTbl, "knownGene");
 if (ucscGenes->genes != NULL)
     {
     /* just use cloest one */
@@ -769,12 +771,8 @@ printf("\" TARGET=_blank>%s</A>\n", mgcDb.title);
 prMgcInfoLinks(conn, acc, &mgcDb, ci);
 if ((ci->refSeqs != NULL) && (ci->refSeqs->genes != NULL))
     prRefSeqSims(ci);
-prSeqLinks(conn, tdb->tableName, acc);
- // FIXME: tmp until change to psl complete
-if (startsWith("psl", tdb->type))
-    prAligns(conn, tdb->tableName, acc, start);
-else
-    prAligns(conn, "mgcFullMrna", acc, start);
+prSeqLinks(conn, ci);
+prAligns(conn, ci);
 prMiscDiffs(conn, acc);
 prMethodsLink(conn, tdb->tableName);
 
@@ -836,12 +834,8 @@ printf("<BR><B>Clone Source</B>: <A href=\"http://www.orfeomecollaboration.org/\
 prOrfeomeInfoLinks(conn, acc, ci);
 if ((ci->refSeqs != NULL) && (ci->refSeqs->genes != NULL))
     prRefSeqSims(ci);
-prSeqLinks(conn, tdb->tableName, acc);
- // FIXME: tmp until change to psl complete
-if (startsWith("psl", tdb->type))
-    prAligns(conn, tdb->tableName, acc, start);
-else
-    prAligns(conn, "orfeomeMrna", acc, start);
+prSeqLinks(conn, ci);
+prAligns(conn, ci);
 prMiscDiffs(conn, acc);
 prMethodsLink(conn, tdb->tableName);
 cloneInfoFree(&ci);
