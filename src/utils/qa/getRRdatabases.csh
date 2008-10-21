@@ -18,17 +18,22 @@ set betapath=""
 set betaflag=0
 set betacommand="" 
 set badmach=0
+set active=""
 
-if ($#argv != 1) then
+if ( $#argv < 1 || $#argv > 2 ) then
   echo
   echo "  gets the names of all databases on an RR machine"
   echo "  not real-time. uses morning TABLE STATUS dump."
   echo
-  echo "    usage: machine"
+  echo "    usage: machine [active]"
+  echo "     use 'active' param to restrict list to only active DBs"
   echo
   exit
 else
   set mach1=$argv[1]
+  if ( $#argv == 2 ) then
+    set active=$argv[2]
+  endif
 endif
 
 set machpath1=$rootpath/$mach1
@@ -94,7 +99,11 @@ else
   set fullpath1=$betapath/$mach1/$dirname1
 endif
 
-# get names of databases from files database.tbls in mark's directories
-$betacommand ls -1 $fullpath1 | grep "tbls" | sed -e "s/\.tbls//" | sort
-echo "last dump: $dirname1"
-
+if ( active != $active ) then
+  # get names of databases from files database.tbls in mark's directories
+  $betacommand ls -1 $fullpath1 | grep "tbls" | sed -e "s/\.tbls//" | sort
+  echo "last dump: $dirname1"
+else
+  hgsql -h genome-centdb -Ne "SELECT name FROM dbDb WHERE active = 1 \
+   ORDER BY name" hgcentral
+endif
