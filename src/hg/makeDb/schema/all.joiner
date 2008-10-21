@@ -3227,6 +3227,15 @@ tablesIgnored $hg
     encodeYaleChipSignal%
     encodeYaleChipSites%
     encodeTba%
+    kiddEichlerValidAbc7
+    kiddEichlerValidAbc8
+    kiddEichlerValidAbc9
+    kiddEichlerValidAbc10
+    kiddEichlerValidAbc11
+    kiddEichlerValidAbc12
+    kiddEichlerValidAbc13
+    kiddEichlerValidAbc14
+    kiddEichlerValidG248
 
 tablesIgnored $mm
     chr%_gold
