@@ -422,3 +422,7 @@ term G-gamma
 type promoter
 description promoter for the G-gamma globulin genes
 
+# freezeDates for Sanger Gencode project
+term 2008-10-01
+type freezeDate
+description 2008-10-01 freeze
