@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.11 2008/10/17 18:29:12 hiram Exp $
+# $Id: doRepeatMasker.pl,v 1.12 2008/10/21 22:49:57 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -338,6 +338,7 @@ sub doMask {
 
   $bossScript->add(<<_EOF_
 twoBitMask $unmaskedSeq $db.fa.out $db.rmsk.2bit
+twoBitToFa $db.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
 _EOF_
   );
   $bossScript->execute();
