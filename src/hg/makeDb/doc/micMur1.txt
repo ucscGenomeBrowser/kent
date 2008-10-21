@@ -149,3 +149,8 @@ cut -f 2 chrom.sizes | ave stdin
     cp /cluster/data/micMur1/chrom.sizes /san/sanvol1/scratch/micMur1
 
 
+############################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute micMur1 (NCBI project 19967, ABDC00000000)" where name="micMur1";' hgcentraltest
+###########################################################################

@@ -132,4 +132,9 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
+
 ############################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad version 1 (NCBI project 16955, AAQR00000000)" where name="otoGar1";' hgcentraltest
+###########################################################################
