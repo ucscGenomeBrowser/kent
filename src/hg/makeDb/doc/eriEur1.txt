@@ -92,3 +92,65 @@ dbDbSpeciesDir hedgehog
     mkdir -p $d/eriEur1/bigZips
     ln -s $bd/bigZips/{*.gz,md5sum.txt,README.txt} $d/eriEur1/bigZips
    
+##############################################################################
+## Repeat Masker (DONE - 2008-10-20 - Hiram)
+    screen	# to manage this several day job
+    mkdir /hive/data/genomes/eriEur1/bed/repeatMasker
+    cd /hive/data/genomes/eriEur1/bed/repeatMasker
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-workhorse=hgwdev -bigClusterHub=swarm \
+	-buildDir=`pwd` eriEur1 > do.log 2>&1 &
+XXX - running 2008-10-21 09:41
+    #	real    258m6.902s
+
+    twoBitToFa eriEur1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+# 2936119008 bases (1103254311 N's 1832864697 real 1411267433 upper 421597264
+# lower) in 262057 sequences in 1 files
+# 14.36 masked total, %23.00 masked rea
+
+#########################################################################
+# SIMPLE REPEATS TRF (WORKING - 2008-10-21 - Hiram)
+    screen # use a screen to manage this job
+    mkdir /hive/data/genomes/eriEur1/bed/simpleRepeat
+    cd /hive/data/genomes/eriEur1/bed/simpleRepeat
+    # 
+    time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/cluster/data/eriEur1/bed/simpleRepeat eriEur1 > do.log 2>&1 &
+    #	real    74m17.044s
+    #	failed during load due to no eriEur1 database present, add that
+    #	(see below) and run the doLoad.csh manually:
+    /hive/data/genomes/eriEur1/bed/simpleRepeat
+    time ./doLoad.csh
+    #	real    2m34.038s
+    cat fb.simpleRepeat
+    #	47016125 bases of 2133134836 (2.204%) in intersection
+
+XXX - waiting for RM run to complete
+    #	after RM run is done, add this mask:
+    cd /hive/data/genomes/eriEur1
+    rm eriEur1.2bit
+    twoBitMask eriEur1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed eriEur1.2bit
+    #	can safely ignore warning about >=13 fields in bed file
+
+    twoBitToFa eriEur1.2bit stdout | faSize stdin > eriEur1.2bit.faSize.txt
+# 2519048486 bases (220604396 N's 2298444090 real 1290364660 upper 1008079430
+# lower) in 116467 sequences in 1 files
+# %40.02 masked total, %43.86 masked rea
+    #	link to gbdb
+    ln -s `pwd`/eriEur1.2bit /gbdb/eriEur1
+
+#########################################################################
+# creating DB to make it easier to work with this (DONE - 2008-10-20 - Hiram)
+    cd /hive/data/genomes/eriEur1/downloads
+    qaToQac assembly.quals.gz stdout \
+    | qacAgpLift assembly.agp stdin eriEur1.quals.qac
+    cd /hive/data/genomes/eriEur1
+    # edit eriEur1.config.ra to set:
+    #	qualFiles /cluster/data/eriEur1/downloads/eriEur1.quals.qac
+    makeGenomeDb.pl -workhorse=hgwdev -continue=agp -stop=agp \
+	eriEur1.config.ra > makeAgp.log 2>&1
+    time makeGenomeDb.pl -workhorse=hgwdev -continue=db -stop=db \
+	eriEur1.config.ra > makeDb.log 2>&1
+    #	real    32m3.304s
+    makeGenomeDb.pl -workhorse=hgwdev -continue=dbDb -stop=dbDb \
+	eriEur1.config.ra > makeDbDb.log 2>&1
