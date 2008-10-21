@@ -109,7 +109,7 @@
 #include "psl.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.8 2008/10/20 08:13:52 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.9 2008/10/21 00:28:35 kent Exp $";
 
 char *version = "23";
 
@@ -308,24 +308,30 @@ void exactIndexHits(bits16 hex, bits16 *sortedHexes, int slotSize,
 int ix = searchHexes(hex, sortedHexes, slotSize);
 if (ix >= 0)
     {
-    int dnaOffset = offsets[ix] + startOffset;
-    struct splatHit h;
-    h.tOffset = dnaOffset;
-    h.gapSize = gapSize;
-    struct splatHit *hit = rbTreeFind(hitTree, &h);
-    if (hit == NULL)
+    for (;;)
 	{
-	lmAllocVar(hitTree->lm, hit);
-	hit->tOffset = dnaOffset;
-	hit->gapSize = gapSize;
-	hit->missingQuad = missingQuad;
-	hit->subCount = subCount;
-        rbTreeAdd(hitTree, hit);
-	}
-    else if (subCount < hit->subCount)	/* Got a better hit, update tree leaf! */
-        {
-	hit->missingQuad = missingQuad;
-	hit->subCount = subCount;
+	int dnaOffset = offsets[ix] + startOffset;
+	struct splatHit h;
+	h.tOffset = dnaOffset;
+	h.gapSize = gapSize;
+	struct splatHit *hit = rbTreeFind(hitTree, &h);
+	if (hit == NULL)
+	    {
+	    lmAllocVar(hitTree->lm, hit);
+	    hit->tOffset = dnaOffset;
+	    hit->gapSize = gapSize;
+	    hit->missingQuad = missingQuad;
+	    hit->subCount = subCount;
+	    rbTreeAdd(hitTree, hit);
+	    }
+	else if (subCount < hit->subCount)	/* Got a better hit, update tree leaf! */
+	    {
+	    hit->missingQuad = missingQuad;
+	    hit->subCount = subCount;
+	    }
+	ix += 1;
+	if (sortedHexes[ix] != hex)
+	    break;
 	}
     }
 }
@@ -731,6 +737,8 @@ void extendMaybeOutput(void *item, void *context)
 struct splatHit *hit = item;
 struct alignContext *c = context;
 
+verbose(3, "   tOffset=%d gapSize=%d subCount=%d missingQuad=%d\n", 
+	hit->tOffset, hit->gapSize, hit->subCount, hit->missingQuad);
 if (hit->gapSize == 0)
     {
     extendMaybeOutputNoIndexIndels(hit, c);
