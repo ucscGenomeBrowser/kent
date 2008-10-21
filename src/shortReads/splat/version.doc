@@ -19,4 +19,5 @@
 23 - Fixed duplicate reporting of matches.  Also made it only report best matchings by default
      and only up to a fixed number (default 10) of matches per read.
 24 - Fixed bug where when there was more than a single 18-base hit to the index, only the first
-     hit was being extended.
+     hit was being extended.  Fixed another very subtle bug that was discriminating a little
+     too much against insertions vs. substitutions.  Changed minScore option to maxDivergence.
