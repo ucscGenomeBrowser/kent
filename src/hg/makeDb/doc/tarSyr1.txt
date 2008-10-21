@@ -138,4 +138,76 @@ cut -f 2 chrom.sizes | ave stdin
     cp /cluster/data/tarSyr1/tarSyr1.2bit /san/sanvol1/scratch/tarSyr1
     cp /cluster/data/tarSyr1/chrom.sizes /san/sanvol1/scratch/tarSyr1
 
+#########################################################################
+## Repeat Masker (DONE - 2008-10-15 - Hiram)
+    screen # use a screen to manage this job
+    mkdir /hive/data/genomes/tarSyr1/bed/repeatMasker
+    cd /hive/data/genomes/tarSyr1/bed/repeatMasker
+    doRepeatMasker.pl -workhorse=hgwdev -bigClusterHub=swarm \
+	-species=tarsier -buildDir=`pwd` tarSyr1 > do.log 2>&1 &
+    #	real    810m18.865s
+    #	failed in doMask.csh due to no tarSyr1.unmasked.2bit file ?
+    #	which was there at the beginning, now it is gone ?
+    #	the broken doRepeatMasker.pl script removed it due to hive confusion
+    #	went back to the jkStuff/makeUnmasked script and re-ran part of that.
+    #	then ran the doMask.csh script to finish that, and continuing:
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-continue=install -workhorse=hgwdev -bigClusterHub=swarm \
+        -species=tarsier -buildDir=`pwd` tarSyr1 > install.log 2>&1 &
+    #	real    26m23.595s
+    twoBitToFa tarSyr1.rmsk.2bit stdout | faSize stdin
+# 3179905132 bases (411368789 N's 2768536343 real 1613280363 upper 1155255980
+# lower) in 656709 sequences in 1 files
+# %36.33 masked total, %41.73 masked real
 
+###########################################################################
+# SIMPLE REPEATS TRF (DONE - 2008-10-16 - Hiram)
+    screen # use a screen to manage this job
+    mkdir /hive/data/genomes/tarSyr1/bed/simpleRepeat
+    cd /hive/data/genomes/tarSyr1/bed/simpleRepeat
+    # 
+    time  $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/hive/data/genomes/tarSyr1/bed/simpleRepeat \
+	tarSyr1 > do.log 2>&1 &
+    #	real    382m17.104s
+    cat fb.simpleRepeat
+    #	50848145 bases of 2768536343 (1.837%) in intersection
+
+    #	after RM run is done, add this mask:
+    cd /hive/data/genomes/tarSyr1
+    rm tarSyr1.2bit
+    twoBitMask tarSyr1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed tarSyr1.2bit
+    #	can safely ignore warning about >=13 fields in bed file
+
+    twoBitToFa tarSyr1.2bit stdout | faSize stdin > tarSyr1.2bit.faSize.txt
+# 3179905132 bases (411368789 N's 2768536343 real 1612652870 upper 1155883473
+# lower) in 656709 sequences in 1 files
+# %36.35 masked total, %41.75 masked real
+
+    #	link to gbdb
+    ln -s `pwd`/tarSyr1.2bit /gbdb/tarSyr1
+
+###########################################################################
+# prepare for kluster runs (DONE _ 2008-10-16 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	tarSyr1: 2768536343
+    # thus: 1024 * 2768536343/2881421696 = 983
+    #	rounding up to 1000 for a bit more conservative masking
+    cd /hive/data/genomes/tarSyr1
+    time blat tarSyr1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=tarSyr1.11.ooc -repMatch=1000
+    #	Wrote 31947 overused 11-mers to tarSyr1.11.ooc
+    #	real    2m30.155s
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/tarSyr1
+    cp -p tarSyr1.2bit chrom.sizes tarSyr1.11.ooc \
+	/hive/data/staging/data/tarSyr1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
+
+###########################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute tarSyr1 (NCBI project 20335, ABRT000000000)" where name="tarSyr1";' hgcentraltest
+###########################################################################
