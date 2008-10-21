@@ -93,23 +93,22 @@ dbDbSpeciesDir hedgehog
     ln -s $bd/bigZips/{*.gz,md5sum.txt,README.txt} $d/eriEur1/bigZips
    
 ##############################################################################
-## Repeat Masker (DONE - 2008-10-20 - Hiram)
+## Repeat Masker (DONE - 2008-10-21 - Hiram)
     screen	# to manage this several day job
     mkdir /hive/data/genomes/eriEur1/bed/repeatMasker
     cd /hive/data/genomes/eriEur1/bed/repeatMasker
     time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
 	-workhorse=hgwdev -bigClusterHub=swarm \
 	-buildDir=`pwd` eriEur1 > do.log 2>&1 &
-XXX - running 2008-10-21 09:41
-    #	real    258m6.902s
+    #	real    307m30.737s
 
     twoBitToFa eriEur1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
-# 2936119008 bases (1103254311 N's 1832864697 real 1411267433 upper 421597264
-# lower) in 262057 sequences in 1 files
-# 14.36 masked total, %23.00 masked rea
+# 3367787358 bases (1234652522 N's 2133134836 real 1749034540 upper 384100296
+# lower) in 379802 sequences in 1 files
+# %11.41 masked total, %18.01 masked real
 
 #########################################################################
-# SIMPLE REPEATS TRF (WORKING - 2008-10-21 - Hiram)
+# SIMPLE REPEATS TRF (DONE - 2008-10-21 - Hiram)
     screen # use a screen to manage this job
     mkdir /hive/data/genomes/eriEur1/bed/simpleRepeat
     cd /hive/data/genomes/eriEur1/bed/simpleRepeat
@@ -125,19 +124,22 @@ XXX - running 2008-10-21 09:41
     cat fb.simpleRepeat
     #	47016125 bases of 2133134836 (2.204%) in intersection
 
-XXX - waiting for RM run to complete
     #	after RM run is done, add this mask:
     cd /hive/data/genomes/eriEur1
-    rm eriEur1.2bit
-    twoBitMask eriEur1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed eriEur1.2bit
+    #	do NOT disturb the existing WindowMasked sequence
+    twoBitMask eriEur1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed \
+	eriEur1.rmTrf.2bit
     #	can safely ignore warning about >=13 fields in bed file
 
-    twoBitToFa eriEur1.2bit stdout | faSize stdin > eriEur1.2bit.faSize.txt
-# 2519048486 bases (220604396 N's 2298444090 real 1290364660 upper 1008079430
-# lower) in 116467 sequences in 1 files
-# %40.02 masked total, %43.86 masked rea
+    twoBitToFa eriEur1.rmTrf.2bit stdout | faSize stdin \
+	> eriEur1.rmTrf.faSize.txt
+# 3367787358 bases (1234652522 N's 2133134836 real 1747981326 upper 385153510
+# lower) in 379802 sequences in 1 files
+# %11.44 masked total, %18.06 masked rea
+
     #	link to gbdb
-    ln -s `pwd`/eriEur1.2bit /gbdb/eriEur1
+    #	do NOT replace the existing WindowMasked sequence
+    # ln -s `pwd`/eriEur1.2bit /gbdb/eriEur1
 
 #########################################################################
 # creating DB to make it easier to work with this (DONE - 2008-10-20 - Hiram)
@@ -154,3 +156,23 @@ XXX - waiting for RM run to complete
     #	real    32m3.304s
     makeGenomeDb.pl -workhorse=hgwdev -continue=dbDb -stop=dbDb \
 	eriEur1.config.ra > makeDbDb.log 2>&1
+
+#########################################################################
+# prepare for kluster runs (DONE _ 2008-10-21 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	eriEur1: 2133134836
+    # thus: 1024 * 2133134836/2881421696 = 758
+    #	rounding up to 800 for a bit more conservative masking
+    cd /hive/data/genomes/eriEur1
+    time blat eriEur1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=eriEur1.11.ooc -repMatch=800
+    #	Wrote 43503 overused 11-mers to eriEur1.11.ooc
+    #	real    2m23.915s
+
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/eriEur1
+    cp -p eriEur1.2bit chrom.sizes eriEur1.11.ooc \
+	/hive/data/staging/data/eriEur1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
