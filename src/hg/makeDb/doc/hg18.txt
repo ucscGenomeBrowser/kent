@@ -22548,56 +22548,41 @@ _EOF_
 
 ######
 #############################################################################
-# BLASTZ/CHAIN/NET tarSyr1 (not done)
-    ssh kkstore02
+# BLASTZ/CHAIN/NET tarSyr1 (WORKING - 2008-10-21 - Hiram)
     screen #	use screen to control this multi-day job
-    mkdir /cluster/data/hg18/bed/blastz.tarSyr1.2008-07-19
-    cd /cluster/data/hg18/bed/blastz.tarSyr1.2008-07-19
-    cat << _EOF_ > DEF
+    mkdir /hive/data/genomes/hg18/bed/blastzTarSyr1.2008-10-21
+    cd /hive/data/genomes/hg18/bed/blastzTarSyr1.2008-10-21
+    cat << '_EOF_' > DEF
 # Human vs. Tarsier
 
 BLASTZ_M=50
+BLASTZ=lastz
 
 # TARGET: Human Hg18
 SEQ1_DIR=/scratch/data/hg18/nib
-SEQ1_LEN=/cluster/data/hg18/chrom.sizes
-SEQ1_CHUNK=10000000
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=200000000
 SEQ1_LAP=10000
 
 # QUERY: Tarsier
-SEQ2_DIR=/san/sanvol1/scratch/tarSyr1/tarSyr1.2bit
-SEQ2_LEN=/san/sanvol1/scratch/tarSyr1/chrom.sizes
+SEQ2_DIR=/scratch/data/tarSyr1/tarSyr1.2bit
+SEQ2_LEN=/scratch/data/tarSyr1/chrom.sizes
 SEQ2_CHUNK=20000000
-SEQ2_LIMIT=100
+SEQ2_LIMIT=50
 SEQ2_LAP=0
 
-BASE=/cluster/data/hg18/bed/blastz.tarSyr1.2008-07-19
+BASE=/hive/data/genomes/hg18/bed/blastzTarSyr1.2008-10-21
 TMPDIR=/scratch/tmp
-_EOF_
-
+'_EOF_'
     # << happy emacs
 
-    time doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk  \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/tarSyr1/blastz.hg18 > do.log 2>&1 &
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-bigClusterHub=pk  \
+      -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - 2008-10-21 15:50
 
-    # para got changed, had to recover and restart
-
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/tarSyr1/blastz.hg18 > do2.log 2>&1 &
-
-    # memk died on chr19 in chainRun (ran on kolossus)
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=chainMerge \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/tarSyr1/blastz.hg18 > do3.log 2>&1 &
-
-    ln -s blastz.tarSyr1.2008-07-13 /cluster/data/hg18/bed/blastz.tarSyr1
-
-    featureBits hg18 chainVicPac1Link
+    featureBits hg18 chainTarSyr1Link
     # 1139695079 bases of 2881515245 (39.552%) in intersection
 
     cd /cluster/data/hg18/bed/blastz.tarSyr1.2008-07-19
