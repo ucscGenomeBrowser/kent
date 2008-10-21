@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.83 2008/10/20 21:32:48 angie Exp $"
+#	"$Id: mm9.txt,v 1.84 2008/10/21 16:51:00 angie Exp $"
 #
 
 #######################################################################
@@ -8601,7 +8601,7 @@ rm bed.tab
 
 
 #########################################################################
-# KOMP (KNOCKOUT MOUSE PROJECT) (DONE 10/20/08 angie)
+# KOMP (KNOCKOUT MOUSE PROJECT) (DONE 10/21/08 angie)
     ssh hgwdev
     mkdir /hive/data/genomes/mm9/bed/komp
     cd /hive/data/genomes/mm9/bed/komp
@@ -8614,6 +8614,7 @@ rm bed.tab
       $color = ($w[9] eq "Yellow") ? "255,215,0" : \
                ($w[9] eq "Green")  ? "0,240,0" : \
                ($w[9] eq "Blue")   ? "0,0,200" : "0,0,0"; \
+      $w[3]--; \
       $_ = join("\t", $w[0], $w[3], $w[4], $w[10], \
                 0, ".", $w[3], $w[3], $color) . "\n";' \
       CSD_GFF_10182008.txt Regeneron_GFF_10172008.txt > komp.bed
