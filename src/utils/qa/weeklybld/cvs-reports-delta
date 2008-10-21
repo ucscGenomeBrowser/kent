@@ -28,10 +28,10 @@ proc cnvDateTime {dateStr} {
     return [clock scan $dateStr]
 }
 
-proc buildReports {fromTag toTag fromTagDate toTagDate whichReport branchVersion} {
+proc buildReports {fromTag toTag fromTagDate toTagDate branchVersion} {
     set pid [fork]
     if {$pid == 0} {
-        execl $::CVS_REPORTS [list -verbose -from $fromTag -to $toTag -fromDate $fromTagDate -toDate $toTagDate -whichReport $whichReport -branchVersion $branchVersion $::CVS_WORK_DIR $::CVS_REPORTS_DIR]
+        execl $::CVS_REPORTS [list -verbose -from $fromTag -to $toTag -fromDate $fromTagDate -toDate $toTagDate -branchVersion $branchVersion $::CVS_WORK_DIR $::CVS_REPORTS_DIR]
     } else {
         set status [wait $pid]
         if {[lrange $status 1 2] != "EXIT 0"} {
@@ -79,7 +79,7 @@ set CVS_REPORTS ./cvs-reports-d
 
 set lockFile [mkLock]
 try_eval {
-    buildReports $fromTag $toTag $fromTagDate $toTagDate $whichReport $branchVersion
+    buildReports $fromTag $toTag $fromTagDate $toTagDate $branchVersion
 } {
     file delete $lockFile
     puts "Error: $errorResult"
