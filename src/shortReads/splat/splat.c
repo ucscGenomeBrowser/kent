@@ -109,12 +109,13 @@
 #include "psl.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.9 2008/10/21 00:28:35 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.10 2008/10/21 02:10:17 kent Exp $";
 
-char *version = "23";
+
+char *version = "24";
 
 char *outType = "splat";
-int minScore = 22;
+int maxDivergence = 5;
 boolean worseToo = FALSE;
 int maxRepeat = 10;
 char *repeatOutput = NULL;
@@ -145,17 +146,19 @@ errAbort(
 "options effecting just first 25 bases\n"
 "   -maxGap=N. Maximum gap size. Default is %d. Set to 0 for no gaps\n"
 "   -maxMismatch=N. Maximum number of mismatches. Default %d. (A gap counts as a mismatch.)\n"
+"   -maxDivergence=N Maximum divergence level between read and genome to map.  Default %d\n"
+"                    Divergence combines gaps and mismatches.  Mismatch=2, gap=3\n"
 "   -mmap - Use memory mapping. Faster just a few reads, but much slower for many reads\n"
 "current limits:\n"
 "   Right now _only_ really aligns first 25 bases of a read.\n"
 "   Maps _all_ occurences of read in genome, which will fill hard disk on repeats\n"
-, version, maxRepeat, maxGap, maxMismatch
+, version, maxRepeat, maxGap, maxMismatch, maxDivergence
 );
 }
 
 static struct optionSpec options[] = {
    {"out", OPTION_STRING},
-   {"minScore", OPTION_FLOAT},
+   {"maxDivergence", OPTION_FLOAT},
    {"worseToo", OPTION_BOOLEAN},
    {"maxRepeat", OPTION_INT},
    {"repeatOutput", OPTION_STRING},
@@ -195,7 +198,7 @@ struct splatTag
 /* Roughtly 25-base match that passes maxGap and maxMismatch criteria. */
     {
     struct splatTag *next;	 /* Next in list. */
-    int score;  /* Match - mismatch - 2*inserts for now. */
+    int divergence;  /* mismatch + 2*inserts for now. */
     bits32 q1,t1;  /* Position of first block in query and target. */
     bits32 size1;	/* Size of first block. */
     bits32 q2,t2;  /* Position of second block if any. */
@@ -206,8 +209,8 @@ struct splatTag
 #define splatTagFree(pt) freez(pt)
 #define splatTagFreeList(pList) slFreeList(pList)
 
-int splatTagCmpPosAndScore(const void *va, const void *vb)
-/* Sort tags based on position fields, then score. */
+int splatTagCmpPosAndDivergence(const void *va, const void *vb)
+/* Sort tags based on position fields, then divergence. */
 /* Note: sorting function for slSort, not for rbTree! */
 {
 const struct splatTag *a = *((struct splatTag **)va);
@@ -230,7 +233,7 @@ if (diff == 0)
     diff = aEnd - bEnd;
     }
 if (diff == 0)
-    diff = b->score - a->score;
+    diff = a->divergence - b->divergence;
 return diff;
 }
 
@@ -429,11 +432,6 @@ void addMatch(int diffCount, struct alignContext *c,
 	int t2, int q2, int size2)
 /* Output a match, which may be in two blocks. */
 {
-/* Convert to a positive score rather than a negative one. */
-int score = 2*(size1 + size2 - diffCount);
-if (size2 != 0)
-    score -= 3;
-
 /* Normalize q2,t2 to make 'gap' zero size in single block case */
 if (size2 == 0)
     {
@@ -441,10 +439,19 @@ if (size2 == 0)
     t2 = t1 + size1;
     }
 
+/* Calculate divergence - 2*bases_different + 2*(gap_count) + base_in_gaps. */
+int qGap = q1 + size1 - q2;
+int tGap = t1 + size1 - t2;
+int gap = max(qGap, tGap);
+int divergence = 2*diffCount + gap;
+if (gap)
+    divergence += 2;
+
+
 /* Alloc and fill in tag. */
 struct splatTag *tag;
 AllocVar(tag);
-tag->score  = score;
+tag->divergence  = divergence;
 tag->q1 = q1 + c->tagPosition;
 tag->t1 = t1;
 tag->size1 = size1;
@@ -547,7 +554,8 @@ void extendMaybeOutputNoIndexIndels(struct splatHit *hit, struct alignContext *c
  * last though there could still be an indel in one of these quadrands. */
 {
 int tOffset = hit->tOffset;
-int diffCount = hit->subCount;
+int origDiffCount = hit->subCount;
+int diffCount = origDiffCount;
 int quad = hit->missingQuad;
 DNA *qDna = c->qSeq->dna + c->tagPosition;
 DNA *tDna = c->splix->allDna + tOffset;
@@ -573,7 +581,7 @@ switch (hit->missingQuad)
     }
 if (diffCount <= maxMismatch)
     addMatch(diffCount, c, tOffset, 0, tagSize, 0, 0, 0);
-else if (maxGap > 0 && hit->subCount < maxMismatch) 
+else if (maxGap > 0 && origDiffCount < maxMismatch) 
     {
     /* Need to explore possibilities of indels if we are on the end quadrants */
     int gapSize = 1; /* May need more work here for indels bigger than a single base. */
@@ -584,29 +592,27 @@ else if (maxGap > 0 && hit->subCount < maxMismatch)
 	/* Figure out insertion best score and position. */
 	slideInsert1(qDna+gapSize, tDna+gapSize, gapSize, 6, 7, 
 		&bestGapPosInsert, &leastDiffsInsert);
-	leastDiffsInsert += hit->subCount+1;
 
 	/* Figure out deletion best score and position. */
 	slideDeletion2(qDna, tDna-gapSize, gapSize, 7, 8, &bestGapPosDelete, &leastDiffsDelete);
-	leastDiffsDelete += hit->subCount+1;
 
 	/* Output better scoring of insert or delete - delete on tie since it has one
 	 * more matching base. */
 	if (leastDiffsInsert < leastDiffsDelete)
 	    {
-	    if (leastDiffsInsert <= maxMismatch)
+	    if (leastDiffsInsert < maxMismatch)
 		{
 		int b1Size = bestGapPosInsert + 1;
-		addMatch(leastDiffsInsert, c, tOffset+gapSize, 0, b1Size, 
+		addMatch(leastDiffsInsert+origDiffCount, c, tOffset+gapSize, 0, b1Size, 
 		    tOffset+gapSize+b1Size, b1Size+gapSize, tagSize - b1Size - gapSize);
 		}
 	    }
 	else
 	    {
-	    if (leastDiffsDelete <= maxMismatch)
+	    if (leastDiffsDelete < maxMismatch)
 		{
 		int b1Size = bestGapPosDelete + 1;
-		addMatch(leastDiffsDelete, c, tOffset-gapSize, 0, b1Size, 
+		addMatch(leastDiffsDelete+origDiffCount, c, tOffset-gapSize, 0, b1Size, 
 		    tOffset+b1Size, b1Size, tagSize - b1Size);
 		}
 	    }
@@ -617,31 +623,29 @@ else if (maxGap > 0 && hit->subCount < maxMismatch)
 	int startOffset = 18;
 	slideInsert2(qDna+startOffset, tDna+startOffset, gapSize, 
 		6, 7, &bestGapPosInsert, &leastDiffsInsert);
-	leastDiffsInsert += hit->subCount+1;
 
 
 	/* Figure out deletion best score and position. */
 	slideDeletion2(qDna+startOffset, tDna+startOffset, gapSize, 
 		7, 8, &bestGapPosDelete, &leastDiffsDelete);
-	leastDiffsDelete += hit->subCount+1;
 
 	/* Output better scoring of insert or delete - delete on tie since it has one
 	 * more matching base. */
 	if (leastDiffsInsert < leastDiffsDelete)
 	    {
-	    if (leastDiffsInsert <= maxMismatch)
+	    if (leastDiffsInsert < maxMismatch)
 		{
 		int b1Size = bestGapPosInsert + 1 + startOffset;
-		addMatch(leastDiffsInsert, c, tOffset, 0, b1Size, 
+		addMatch(leastDiffsInsert+origDiffCount, c, tOffset, 0, b1Size, 
 		    tOffset+b1Size, b1Size+gapSize, tagSize - b1Size - gapSize);
 		}
 	    }
 	else
 	    {
-	    if (leastDiffsDelete <= maxMismatch)
+	    if (leastDiffsDelete < maxMismatch)
 		{
 		int b1Size = bestGapPosDelete + 1 + startOffset;
-		addMatch(leastDiffsDelete, c, tOffset, 0, b1Size, 
+		addMatch(leastDiffsDelete+origDiffCount, c, tOffset, 0, b1Size, 
 		    tOffset+b1Size+gapSize, b1Size, tagSize - b1Size);
 		}
 	    }
@@ -950,7 +954,7 @@ tComp->text = dyStringCannibalize(&tSym);
 /* Build up a maf alignment structure . */
 struct mafAli *maf;
 AllocVar(maf);
-maf->score = tag->score;
+maf->score = 2*qComp->size - tag->divergence;
 maf->textSize = symSize;
 maf->components = tComp;
 tComp->next = qComp;
@@ -1114,15 +1118,15 @@ else if (sameString(outType, "splat"))
 }
 
 struct splatTag *removeDupeTags(struct splatTag *tagList)
-/* Assuming tagList is sorted, return list with duplicate tags removed. */
+/* Return list with duplicate tags removed.  As a side effect sort list. */
 {
 struct splatTag *tag, *next, *newList = NULL;
 
-slSort(&tagList, splatTagCmpPosAndScore);
+slSort(&tagList, splatTagCmpPosAndDivergence);
 for (tag = tagList; tag != NULL; tag = next)
     {
     next = tag->next;
-    if (next != NULL && splatTagCmpPosAndScore(&tag, &next) == 0)
+    if (next != NULL && splatTagCmpPosAndDivergence(&tag, &next) == 0)
 	splatTagFree(&tag);
     else
 	slAddHead(&newList, tag);
@@ -1131,14 +1135,14 @@ slReverse(&newList);
 return newList;
 }
 
-struct splatTag *splatTagFilterOnScore(struct splatTag *tagList, int minScore)
-/* Remove (and free) tags below minScore from list. */
+struct splatTag *splatTagFilterOnDivergence(struct splatTag *tagList, int maxDivergence)
+/* Remove (and free) tags with more than maxDivergence from list. */
 {
 struct splatTag *tag, *next, *newList = NULL;
 for (tag = tagList; tag != NULL; tag = next)
     {
     next = tag->next;
-    if (tag->score >= minScore)
+    if (tag->divergence <= maxDivergence)
         slAddHead(&newList, tag);
     else
         splatTagFree(&tag);
@@ -1170,17 +1174,17 @@ splatOneStrand(qSeq, '-', tagPosition, splix, maxGap, &tagList);
 reverseComplement(qSeq->dna, qSeq->size);
 if (tagList != NULL)
     {
-    /* Find best score. */
-    int bestScore = 0;
-    for (tag = tagList; tag != NULL; tag = tag->next)
+    /* Find least divergence. */
+    int leastDivergence = tagList->divergence;
+    for (tag = tagList->next; tag != NULL; tag = tag->next)
         {
-	if (tag->score > bestScore)
-	    bestScore = tag->score;
+	if (tag->divergence < leastDivergence)
+	    leastDivergence = tag->divergence;
 	}
 
     /* Unless doing worseToo remove tags that are not best scoring */
     if (!worseToo)
-	tagList = splatTagFilterOnScore(tagList, bestScore);
+	tagList = splatTagFilterOnDivergence(tagList, leastDivergence);
     
 
     /* Some duplicate tags may have come through.  This also will filter the tags 
@@ -1287,7 +1291,7 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 outType = optionVal("out", outType);
-minScore = optionInt("minScore", minScore);
+maxDivergence = optionInt("maxDivergence", maxDivergence);
 worseToo = optionExists("worseToo");
 maxRepeat = optionInt("maxRepeat", maxRepeat);
 repeatOutput = optionVal("repeatOutput", NULL);
