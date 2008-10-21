@@ -83,8 +83,6 @@ if (iv == NULL)
 return iv->val;
 }
 
-void rbTreeTraverse(struct rbTree *tree, void (*doItem)(void *item));
-
 void doAllKeys(void *item, void *context)
 /* Callback function for tree traversal. */
 {
