@@ -13,17 +13,16 @@
 set go=""
 # make lists of substitutions for email addresses
 set counter=( 1 2 3 4 5 6 7 8 9 10 11 12 13 )
-set alias=( andy belinda  brian  brooke bob  fan    jim  jing larry  mark  rachel  ting     zach    )
-set email=( aamp giardine braney rhead  kuhn fanhsu kent jzhu larrym markd hartera tingwang jsanborn)
+set alias=( andy belinda  brian  brooke bob  fan    jim  jing larry  mark  rachel  ting     zach     )
+set email=( aamp giardine braney rhead  kuhn fanhsu kent jzhu larrym markd hartera tingwang jsanborn )
 
 
 if ( $#argv != 1  ) then
   echo
-  echo "  checks pushQ for B entries and send email to developer and QA."
+  echo "  checks pushQ for B entries and sends email to developer and QA."
+  echo "  uses hard-coded aliases to get email address from nicknames."
   echo
   echo "    usage:  go"
-  echo
-  echo "  uses hard-coded aliases to get email from nicknames."
   echo
   exit
 else
@@ -39,6 +38,7 @@ if ( $go != "go" ) then
   echo 
   echo ' only the argument "go" is allowed.'
   echo 
+  exit 1
 endif 
 
 # echo "testing \n \n sending only to ann and bob right now \n \n "  > Bfile
