@@ -57,94 +57,67 @@ _EOF_
 # total 2519048486.000000
 # standard deviation 63795.083568
 
+#########################################################################
+## Repeat Masker (DONE - 2008-10-16 - Hiram)
+    screen	# to manage this several day job
+    mkdir /hive/data/genomes/turTru1/bed/repeatMasker
+    cd /hive/data/genomes/turTru1/bed/repeatMasker
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-workhorse=hgwdev -bigClusterHub=swarm \
+	-buildDir=`pwd` turTru1 > do.log 2>&1 &
+    #	real    797m7.301s
+    twoBitToFa turTru1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+# 2519048486 bases (220604396 N's 2298444090 real 1290940163 upper 1007503927
+# lower) in 116467 sequences in 1 files
+# %40.00 masked total, %43.83 masked rea
 
 #########################################################################
-# REPEATMASKER (not done)
-    ssh kkstore05
+# SIMPLE REPEATS TRF (DONE - 2008-10-15 - Hiram)
     screen # use a screen to manage this job
-    mkdir /cluster/data/turTru1/bed/repeatMasker
-    cd /cluster/data/turTru1/bed/repeatMasker
-    doRepeatMasker.pl -buildDir=/cluster/data/turTru1/bed/repeatMasker \
-        turTru1 > do.log 2>&1 &
-
-    # Note: can run simpleRepeats simultaneously
-    #### When done with RM:
-    ssh pk
-    para time
-
-#    Completed: 6258 of 6258 jobs
-#    CPU time in finished jobs:   20645642s  344094.03m  5734.90h  238.95d
-#    0.655 y
-#    IO & Wait Time:                120642s    2010.71m    33.51h    1.40d
-#    0.004 y
-#    Average job time:                3318s      55.31m     0.92h    0.04d
-#    Longest finished job:            9661s     161.02m     2.68h    0.11d
-#    Submission to last job:         66905s    1115.08m    18.58h    0.77d
-
-
-    time nice -n +19 featureBits turTru1 rmsk > fb.turTru1.rmsk.txt 2>&1 &
-    # 1006823376 bases of 2298455021 (43.804%) in intersection
-
-    # RepeatMasker and lib version from do.log:
-    #    Jun 13 2008 (open-3-2-5) version of RepeatMasker
-    # CC   RELEASE 20080611;  
-
-
-#########################################################################
-# SIMPLE REPEATS TRF (not done)
-    ssh kkstore05
-    screen # use a screen to manage this job
-    mkdir /cluster/data/turTru1/bed/simpleRepeat
-    cd /cluster/data/turTru1/bed/simpleRepeat
+    mkdir /hive/data/genomes/turTru1/bed/simpleRepeat
+    cd /hive/data/genomes/turTru1/bed/simpleRepeat
     # 
-    doSimpleRepeat.pl -buildDir=/cluster/data/turTru1/bed/simpleRepeat \
-	turTru1 > do.log 2>&1 &
-
-    #### When done
-    ssh pk
-    para time
-    # Completed: 51 of 51 jobs
-    # CPU time in finished jobs:      24985s     416.41m     6.94h    0.29d
-    # 0.001 y
-    # IO & Wait Time:                   101s       1.69m     0.03h    0.00d
-    # 0.000 y
-    # Average job time:                 492s       8.20m     0.14h    0.01d
-    # Longest finished job:            3887s      64.78m     1.08h    0.04d
-    # Submission to last job:          3911s      65.18m     1.09h    0.05d
-
-    featureBits turTru1 simpleRepeat
-    # 36542185 bases of 2298455021 (1.590%) in intersection
+    time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/cluster/data/turTru1/bed/simpleRepeat turTru1 > do.log 2>&1 &
+    #	real    74m17.044s
+    cat fb.simpleRepeat
+    #	36542185 bases of 2298444090 (1.590%) in intersection
 
     #	after RM run is done, add this mask:
-    cd /cluster/data/turTru1
+    cd /hive/data/genomes/turTru1
+    rm turTru1.2bit
     twoBitMask turTru1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed turTru1.2bit
+    #	can safely ignore warning about >=13 fields in bed file
 
-    twoBitToFa turTru1.2bit stdout | faSize stdin
+    twoBitToFa turTru1.2bit stdout | faSize stdin > turTru1.2bit.faSize.txt
+# 2519048486 bases (220604396 N's 2298444090 real 1290364660 upper 1008079430
+# lower) in 116467 sequences in 1 files
+# %40.02 masked total, %43.86 masked rea
+    #	link to gbdb
+    ln -s `pwd`/turTru1.2bit /gbdb/turTru1
 
-    # 2519061163 bases (220606142 N's 2298455021 real 1293632105 upper
-    # 1004822916 lower) in 116471 sequences in 1 files
-    # Total size: mean 21628.2 sd 63794.4 min 336 (scaffold_16) max 1406907
-    # (scaffold_109916) median 1593
-    # N count: mean 1894.1 sd 4764.6
-    # U count: mean 11106.9 sd 36345.8
-    # L count: mean 8627.2 sd 23828.2
-    # %39.89 masked total, %43.72 masked real
+###########################################################################
+# prepare for kluster runs (DONE _ 2008-10-16 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	turTru1: 2298444090
+    # thus: 1024 * 2298444090/2881421696 = 816
+    #	rounding up to 850 for a more conservative masking
+    cd /hive/data/genomes/turTru1
+    time blat turTru1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=turTru1.11.ooc -repMatch=850
+    #	Wrote 31521 overused 11-mers to turTru1.11.ooc
+    #	real    2m9.494s
 
-    twoBitToFa turTru1.rmsk.2bit stdout | faSize stdin
-    # 2519061163 bases (220606142 N's 2298455021 real 1294208094 upper
-    # 1004246927 lower) in 116471 sequences in 1 files
-    # Total size: mean 21628.2 sd 63794.4 min 336 (scaffold_16) max 1406907
-    # (scaffold_109916) median 1593
-    # N count: mean 1894.1 sd 4764.6
-    # U count: mean 11111.8 sd 36361.5
-    # L count: mean 8622.3 sd 23813.1
-    # %39.87 masked total, %43.69 masked real
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/turTru1
+    cp -p turTru1.2bit chrom.sizes turTru1.11.ooc \
+	/hive/data/staging/data/turTru1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
 
-    # Link to it from /gbdb
-    ln -s /cluster/data/turTru1/turTru1.2bit /gbdb/turTru1/turTru1.2bit
-
-    # mkdir /san/sanvol1/scratch/turTru1
-    cp /cluster/data/turTru1/turTru1.2bit /san/sanvol1/scratch/turTru1
-    cp /cluster/data/turTru1/chrom.sizes /san/sanvol1/scratch/turTru1
-
-
+###########################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute turTru1 (NCBI project 20367, ABRN01000000)" where name="turTru1";' hgcentraltest
+###########################################################################
