@@ -123,3 +123,9 @@ _EOF_
 	/hive/data/staging/data/dipOrd1
     #	request to cluster admin to push this to the kluster nodes
     #	/scratch/data/
+
+###########################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute dipOrd1 (NCBI project 20385, ABRO01000000)" where name="dipOrd1";' hgcentraltest
+###########################################################################
