@@ -109,7 +109,7 @@
 #include "psl.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.10 2008/10/21 02:10:17 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.11 2008/10/21 02:54:46 kent Exp $";
 
 
 char *version = "24";
@@ -432,9 +432,12 @@ void addMatch(int diffCount, struct alignContext *c,
 	int t2, int q2, int size2)
 /* Output a match, which may be in two blocks. */
 {
+q1 += c->tagPosition;
+q2 += c->tagPosition;
 /* Normalize q2,t2 to make 'gap' zero size in single block case */
-if (size2 == 0)
+if (size2 <= 0)
     {
+    size2 = 0;
     q2 = q1 + size1;
     t2 = t1 + size1;
     }
@@ -452,16 +455,15 @@ if (gap)
 struct splatTag *tag;
 AllocVar(tag);
 tag->divergence  = divergence;
-tag->q1 = q1 + c->tagPosition;
+tag->q1 = q1;
 tag->t1 = t1;
 tag->size1 = size1;
-tag->q2 = q2 + c->tagPosition;
+tag->q2 = q2;
 tag->t2 = t2;
 tag->size2 = size2;
 tag->strand = c->strand;
 
-/* Add to list.  (TODO, check score, trim lower scores from list, omit
- * doing anything for lower scores.) */
+/* Add to list. */
 slAddHead(c->pTagList, tag);
 }
 
@@ -1078,7 +1080,7 @@ DNA *qDna = qSeq->dna + q1;
 DNA *tDna = splix->allDna + t1;
 for (i=0; i<tag->size1; ++i)
      dnaOutUpperMatch(qDna[i], tDna[i], f);
-if (size2)
+if (size2 > 0)
     {
     int qGapSize = q2 - (q1+size1);
     int tGapSize = t2 - (t1+size1);
@@ -1233,8 +1235,8 @@ else
 void splat(char *target, char *query, char *output)
 /* splat - Speedy Local Alignment Tool. */
 {
-struct splix *splix = splixRead(target, memoryMap);
 struct dnaLoad *qLoad = dnaLoadOpen(query);
+struct splix *splix = splixRead(target, memoryMap);
 FILE *f = mustOpen(output, "w");
 if (repeatOutput != NULL)
     repeatOutputFile = mustOpen(repeatOutput, "w");
