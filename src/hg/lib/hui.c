@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.128 2008/10/17 23:14:32 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.129 2008/10/21 16:20:18 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add"
@@ -2517,6 +2517,9 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 puts ("</TD>");
                 }
             printf ("<TD nowrap='true'>&nbsp;%s", subtrack->longLabel);
+            if(trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
+                printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
+
             if(cType != cfgNone)
                 {
                 ix = stringArrayIx("view", membership->subgroups, membership->count);
@@ -3512,11 +3515,10 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         }
     if(dimensionZ)
         {
-        printf("<TR align='right' valign='bottom' BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
-        printf("<TH><EM><B>%s</EM></B>:",dimensionZ->title);
+        printf("<TR align='center' valign='bottom' BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
+        printf("<TH class='greenRoof' colspan=50><EM><B>%s</EM></B>:",dimensionZ->title);
         //PLUS_BUTTON( "name","plus_all_dimZ", "mat_","_dimZ_cb");
         //MINUS_BUTTON("name","minus_all_dimZ","mat_","_dimZ_cb");
-        puts("</TH><TH nowrap align='left' colspan=50>");
         for(ixZ=0;ixZ<sizeOfZ;ixZ++)
             if(cellsZ[ixZ]>0)
                 {
@@ -3697,10 +3699,9 @@ static void commonCssStyles()
     printf("<style type='text/css'>");
     //printf(".tDnD_whileDrag {background-color:%s;}",COLOR_BG_GHOST);
     printf(".trDrag {background-color:%s;} .pale {background-color:%s;}",COLOR_BG_GHOST,COLOR_BG_PALE);
-    //printf(".greenBox {border-color: %s #FF0000; border-width: 5px; border-style: outset;}",COLOR_DARKGREEN);
-    //printf(".greenBox {border: 5px inset %s;}",COLOR_DARKGREEN);
+    printf(".greenRoof {border-top: 3px groove %s;}",COLOR_DARKGREEN);
     printf(".greenBox {border: 5px outset %s;}",COLOR_DARKGREEN);
-    printf(".blueBox {border: 4px ridge %s;}",COLOR_DARKBLUE);
+    printf(".blueBox {border: 4px inset %s;}",COLOR_DARKBLUE);
     puts("</style>");
 }
 
