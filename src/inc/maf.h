@@ -53,6 +53,7 @@ void mafAliFreeList(struct mafAli **pList);
 #define	MAF_MAYBE_NEW_STATUS		'S'
 #define	MAF_MAYBE_NEW_NESTED_STATUS	's'
 #define	MAF_MISSING_STATUS		'M'
+#define	MAF_TANDEM_STATUS		'T'
 
 struct mafComp
 /* A component of a multiple alignment. */
