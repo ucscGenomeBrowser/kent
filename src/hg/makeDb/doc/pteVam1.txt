@@ -57,86 +57,69 @@ _EOF_
 # total 1996076410.000000
 # standard deviation 54685.855293
 
+#########################################################################
+## Repeat Masker (DONE - 2008-10-16 - Hiram)
+    screen	# to manage this several day job
+    mkdir /hive/data/genomes/pteVam1/bed/repeatMasker
+    cd /hive/data/genomes/pteVam1/bed/repeatMasker
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-workhorse=hgwdev -bigClusterHub=swarm \
+	-buildDir=`pwd` pteVam1 > do.log 2>&1 &
+    #	real    806m48.065s
+    twoBitToFa pteVam1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+    #	1996076410 bases (156639750 N's 1839436660 real 1256029530 upper
+    #	583407130 lower) in 96944 sequences in 1 files
+    #	%29.23 masked total, %31.72 masked real
 
 #########################################################################
-# REPEATMASKER (not done)
-    ssh kkstore05
-    screen # use a screen to manage this job
-    mkdir /cluster/data/pteVam1/bed/repeatMasker
-    cd /cluster/data/pteVam1/bed/repeatMasker
-    doRepeatMasker.pl -buildDir=/cluster/data/pteVam1/bed/repeatMasker \
-        pteVam1 > do.log 2>&1 &
-
-    # Note: can run simpleRepeats simultaneously
-    #### When done with RM:
-    ssh pk
-    para time
-    # Completed: 4794 of 4794 jobs
-    # CPU time in finished jobs:   17003294s  283388.23m  4723.14h  196.80d
-    # 0.539 y
-    # IO & Wait Time:                126432s    2107.21m    35.12h    1.46d
-    # 0.004 y
-    # Average job time:                3573s      59.55m     0.99h    0.04d
-    # Longest finished job:           11478s     191.30m     3.19h    0.13d
-    # Submission to last job:        132391s    2206.52m    36.78h    1.53d
-
-    time nice -n +19 featureBits pteVam1 rmsk > fb.pteVam1.rmsk.txt 2>&1 &
-    # 581029514 bases of 1839440286 (31.587%) in intersection
-
-    # RepeatMasker and lib version from do.log:
-    #    Jun 13 2008 (open-3-2-5) version of RepeatMasker
-    # CC   RELEASE 20080611; 
-
-#########################################################################
-# SIMPLE REPEATS TRF (not done)
-    ssh kkstore05
+# SIMPLE REPEATS TRF (WORKING - 2008-10-15 - Hiram)
     screen # use a screen to manage this job
     mkdir /cluster/data/pteVam1/bed/simpleRepeat
     cd /cluster/data/pteVam1/bed/simpleRepeat
     # 
-    doSimpleRepeat.pl -buildDir=/cluster/data/pteVam1/bed/simpleRepeat \
-	pteVam1 > do.log 2>&1 &
+    time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/cluster/data/pteVam1/bed/simpleRepeat pteVam1 > do.log 2>&1 &
+    #	real    98m59.097
+    cat fb.simpleRepeat
+    #	33179383 bases of 1839436660 (1.804%) in intersection
 
-    #### When done
-    ssh pk
-    para time
-    # Completed: 40 of 40 jobs
-    # CPU time in finished jobs:      19524s     325.40m     5.42h    0.23d
-    # 0.001 y
-    # IO & Wait Time:                   119s       1.98m     0.03h    0.00d
-    # 0.000 y
-    # Average job time:                 491s       8.18m     0.14h    0.01d
-    # Longest finished job:            4715s      78.58m     1.31h    0.05d
-    # Submission to last job:          5306s      88.43m     1.47h    0.06d
-
-    featureBits pteVam1 simpleRepeat
-    # 33179383 bases of 1839440286 (1.804%) in intersection
-
+XXX - waiting for RM to complete 2008-10-15 13:32
     #	after RM run is done, add this mask:
-    cd /cluster/data/pteVam1
+    cd /hive/data/genomes/pteVam1
+    rm pteVam1.2bit
     twoBitMask pteVam1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed pteVam1.2bit
+    #	can safely ignore warning about >=13 fields in bed file
 
-    twoBitToFa pteVam1.2bit stdout | faSize stdin
-# 1996080036 bases (156639750 N's 1839440286 real 1258682971 upper 580757315
-# lower) in 96946 sequences in 1 files
-# Total size: mean 20589.6 sd 54685.6 min 601 (scaffold_96945) max 1019178
-# (scaffold_0) median 1777
-# N count: mean 1615.7 sd 3733.4
-# U count: mean 12983.3 sd 35952.8
-# L count: mean 5990.5 sd 15976.6
-# %29.09 masked total, %31.57 masked real
+    twoBitToFa pteVam1.2bit stdout | faSize stdin > pteVam1.2bit.faSize.txt
+# 1996076410 bases (156639750 N's 1839436660 real 1255425444 upper 584011216
+# lower) in 96944 sequences in 1 files
+# %29.26 masked total, %31.75 masked rea
 
-    twoBitToFa pteVam1.rmsk.2bit stdout | faSize stdin
-# 1996080036 bases (156639750 N's 1839440286 real 1259287571 upper 580152715
-# lower) in 96946 sequences in 1 files
-# Total size: mean 20589.6 sd 54685.6 min 601 (scaffold_96945) max 1019178
-# (scaffold_0) median 1777
-# N count: mean 1615.7 sd 3733.4
-# U count: mean 12989.6 sd 35967.3
-# L count: mean 5984.3 sd 15963.0
-# %29.06 masked total, %31.54 masked real
+    #	link to gbdb
+    ln -s `pwd`/pteVam1.2bit /gbdb/pteVam1
 
-    ln -s /cluster/data/pteVam1/pteVam1.2bit /gbdb/pteVam1/pteVam1.2bit
+###########################################################################
+# prepare for kluster runs (DONE _ 2008-10-16 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	pteVam1: 1839436660
+    # thus: 1024 * 1839436660/2881421696 = 653
+    #	rounding up to 700 for a bit more conservative masking
+    cd /hive/data/genomes/pteVam1
+    time blat pteVam1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=pteVam1.11.ooc -repMatch=700
+    #	Wrote 19840 overused 11-mers to pteVam1.11.ooc
+    #	real    1m44.676s
 
-    cp /cluster/data/pteVam1/pteVam1.2bit /san/sanvol1/scratch/pteVam1
-    cp /cluster/data/pteVam1/chrom.sizes /san/sanvol1/scratch/pteVam1
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/pteVam1
+    cp -p pteVam1.2bit chrom.sizes pteVam1.11.ooc \
+	/hive/data/staging/data/pteVam1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
+
+###########################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute pteVam1 (NCBI project 20325, ABRP01000000)" where name="pteVam1";' hgcentraltest
+###########################################################################
