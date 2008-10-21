@@ -56,85 +56,84 @@ _EOF_
 # standard deviation 16728.518926
 
 #########################################################################
-# REPEATMASKER (not done)
-    ssh kkstore05
-    screen # use a screen to manage this job
-    mkdir /cluster/data/proCap1/bed/repeatMasker
-    cd /cluster/data/proCap1/bed/repeatMasker
-    doRepeatMasker.pl -buildDir=/cluster/data/proCap1/bed/repeatMasker \
-        proCap1 > do.log 2>&1 &
-
-    # Note: can run simpleRepeats simultaneously
-    #### When done with RM:
-    ssh pk
-    para time
-
-#    Completed: 6258 of 6258 jobs
-#    CPU time in finished jobs:   20645642s  344094.03m  5734.90h  238.95d
-#    0.655 y
-#    IO & Wait Time:                120642s    2010.71m    33.51h    1.40d
-#    0.004 y
-#    Average job time:                3318s      55.31m     0.92h    0.04d
-#    Longest finished job:            9661s     161.02m     2.68h    0.11d
-#    Submission to last job:         66905s    1115.08m    18.58h    0.77d
-
-
-    time nice -n +19 featureBits proCap1 rmsk > fb.proCap1.rmsk.txt 2>&1 &
-    # 1006823376 bases of 2298455021 (43.804%) in intersection
-
-    # RepeatMasker and lib version from do.log:
-    #    Jun 13 2008 (open-3-2-5) version of RepeatMasker
-    # CC   RELEASE 20080611;  
-
+## Repeat Masker (DONE - 2008-10-16 - Hiram)
+    screen	# to manage this several day job
+    mkdir /hive/data/genomes/proCap1/bed/repeatMasker
+    cd /hive/data/genomes/proCap1/bed/repeatMasker
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-workhorse=hgwdev -bigClusterHub=swarm \
+	-buildDir=`pwd` proCap1 > do.log 2>&1 &
+    #	real    867m49.502s
+    twoBitToFa proCap1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+# 2985258999 bases (577411318 N's 2407847681 real 1731549681 upper 676298000
+# lower) in 295006 sequences in 1 files
+# %22.65 masked total, %28.09 masked rea
 
 #########################################################################
-# SIMPLE REPEATS TRF (not done)
-    ssh kkstore05
+# SIMPLE REPEATS TRF (DONE - 2008-10-16 - Hiram)
     screen # use a screen to manage this job
     mkdir /cluster/data/proCap1/bed/simpleRepeat
     cd /cluster/data/proCap1/bed/simpleRepeat
     # 
-    doSimpleRepeat.pl -buildDir=/cluster/data/proCap1/bed/simpleRepeat \
-	proCap1 > do.log 2>&1 &
+    time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/cluster/data/proCap1/bed/simpleRepeat proCap1 > do.log 2>&1 &
+    #	real    67m53.007s
+    #	batch failed on pk, finish it manually
+    #	this was an unusual error, when TrfRun.csh was splitting up the .lft
+    #	file, it ended up with a single file in the last split, and that
+    #	single file had no results for it, so the lift of that non-existent
+    #	fail failed.  Temporarily changed, in TrfRun.csh:
+    #	split -l 500 $inLft SplitLft.
+    #	to be:
+    #	split -l 400 $inLft SplitLft.
+    #	and ran TrfRun.csh manually:
+    time ./TrfRun.csh /san/sanvol1/scratch/proCap1/TrfPart/039/039.lst.bed
+    #	now, continuing:
+    time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-continue=filter \
+	-buildDir=/cluster/data/proCap1/bed/simpleRepeat proCap1 \
+	> filter.log 2>&1 &
 
-    #### When done
-    ssh pk
-    para time
-    # Completed: 51 of 51 jobs
-    # CPU time in finished jobs:      24985s     416.41m     6.94h    0.29d
-    # 0.001 y
-    # IO & Wait Time:                   101s       1.69m     0.03h    0.00d
-    # 0.000 y
-    # Average job time:                 492s       8.20m     0.14h    0.01d
-    # Longest finished job:            3887s      64.78m     1.08h    0.04d
-    # Submission to last job:          3911s      65.18m     1.09h    0.05d
-
-    featureBits proCap1 simpleRepeat
-    # 24277312 bases of 2407857472 (1.008%) in intersection
+    cat fb.simpleRepeat
+    #	24599087 bases of 2407847681 (1.022%) in intersection
 
     #	after RM run is done, add this mask:
-    cd /cluster/data/proCap1
+    cd /hive/data/genomes/proCap1
+    rm proCap1.2bit
     twoBitMask proCap1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed proCap1.2bit
+    #	can safely ignore warning about >=13 fields in bed file
 
-    twoBitToFa proCap1.2bit stdout | faSize stdin
-# 2985267768 bases (577410296 N's 2407857472 real 1732706800 upper 675150672
-# lower) in 295008 sequences in 1 files
-# Total size: mean 10119.3 sd 16728.5 min 1000 (scaffold_295007) max 390036
-# (scaffold_1) median 4249
-# N count: mean 1957.3 sd 3298.2
-# U count: mean 5873.4 sd 10786.7
-# L count: mean 2288.6 sd 3537.1
-# %22.62 masked total, %28.04 masked real
+    twoBitToFa proCap1.2bit stdout | faSize stdin > proCap1.2bit.faSize.txt
+# 2985258999 bases (577411318 N's 2407847681 real 1731119427 upper 676728254
+# lower) in 295006 sequences in 1 files
+# %22.67 masked total, %28.11 masked rea
 
-    twoBitToFa proCap1.rmsk.2bit stdout | faSize stdin
-# 2985267768 bases (577410296 N's 2407857472 real 1733130127 upper 674727345
-# lower) in 295008 sequences in 1 files
-# Total size: mean 10119.3 sd 16728.5 min 1000 (scaffold_295007) max 390036
-# (scaffold_1) median 4249
-# N count: mean 1957.3 sd 3298.2
-# U count: mean 5874.9 sd 10789.4
-# L count: mean 2287.1 sd 3534.9
-# %22.60 masked total, %28.02 masked real
+    #	link to gbdb
+    ln -s `pwd`/proCap1.2bit /gbdb/proCap1
 
-    # Link to it from /gbdb
-    ln -s /cluster/data/proCap1/proCap1.2bit /gbdb/proCap1/proCap1.2bit
+###########################################################################
+# prepare for kluster runs (DONE 2008-10-16 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	proCap1: 2407847681
+    # thus: 1024 * 2407847681/2881421696 = 855
+    #	rounding up to 900 to be conservative
+    cd /hive/data/genomes/proCap1
+    time blat proCap1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=proCap1.11.ooc -repMatch=900
+    #	Wrote 30662 overused 11-mers to proCap1.11.ooc
+    #	real    2m12.136s
+
+
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/proCap1
+    cp -p proCap1.2bit chrom.sizes proCap1.11.ooc \
+	/hive/data/staging/data/proCap1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
+
+###########################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute proCap1 (NCBI project 13972, ABRQ01000000)" where name="proCap1";' hgcentraltest
+###########################################################################
