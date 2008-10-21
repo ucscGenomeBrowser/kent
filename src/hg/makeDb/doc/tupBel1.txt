@@ -108,15 +108,21 @@
     #	hg18: 2881421696
     #	turTru1: 2137225476
     # thus: 1024 * 2137225476/2881421696 = 759
-    #	rounding down to 700
-    cd /cluster/data/tupBel1
+    #	rounding up to 800 to be conservative
+    cd /hive/data/genomes/tupBel1
     time blat tupBel1.2bit \
-	/dev/null /dev/null -tileSize=11 -makeOoc=tupBel1.11.ooc -repMatch=700
+	/dev/null /dev/null -tileSize=11 -makeOoc=tupBel1.11.ooc -repMatch=800
     #	real    2m18.283s
-    #	Wrote 34503 overused 11-mers to tupBel1.11.ooc
+    #	Wrote 27284 overused 11-mers to tupBel1.11.ooc
     #	and staging data for push to kluster nodes
     mkdir /hive/data/staging/data/tupBel1
     cp -p tupBel1.2bit chrom.sizes tupBel1.11.ooc \
 	/hive/data/staging/data/tupBel1
     #	request to cluster admin to push this to the kluster nodes
     #	/scratch/data/
+
+############################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute tupBel1 (NCBI project 13971, AAPY01000000)" where name="tupBel1";' hgcentraltest
+###########################################################################
