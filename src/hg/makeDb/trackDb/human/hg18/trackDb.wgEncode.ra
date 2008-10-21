@@ -1001,8 +1001,15 @@ wgEncode 1
 track wgEncodeSangerGencode
 compositeTrack on
 shortLabel Gencode Genes
-longLabel ENCODE Sanger Gencode Genes
+longLabel ENCODE - Sanger Gencode Genes
 group genes
+subGroup1 view Views GencodeManual=Gencode_Manual GencodeAuto=Gencode_Automatic
+subGroup2 freezeDate Freeze_Date 2008-10-01=2008-10-01
+dimensions dimensionX=freezeDate
+sortOrder freezeDate=+
+dragAndDrop subTracks
+visibilityViewDefaults GencodeManual=pack GencodeAuto=pack 
+controlledVocabulary encode/cv.ra freezeDate
 priority 34
 visibility pack
 color 12,12,120
@@ -1013,17 +1020,24 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 baseColorUseCds given
 baseColorDefault genomicCodons
 wgEncode 1
-subGroup1 view Views Gencode=Gencode
 
-	track	wgEncodeSangerGencodeGencode
+	track	wgEncodeSangerGencodeGencodeManual20081001
 	subTrack	wgEncodeSangerGencode
-	shortLabel	Sanger Gencode
-	longLabel	ENCODE Sanger Gencode Gene predictions
-	subGroups	view=Gencode
+	shortLabel	Sanger Gencode Manual (2008-10-01)
+	longLabel	ENCODE Sanger Gencode Manual Gene predictions (level 1+2) (2008-10-01)
+	subGroups	view=GencodeManual
 	type	genePred
-	dateSubmitted	2008-10-7 15:12:42
-	priority	1
+	dateSubmitted	2008-10-21 12:24:57
+	priority	2
 	noInherit	on
 
-
+	track	wgEncodeSangerGencodeGencodeAuto20081001
+	subTrack	wgEncodeSangerGencode
+	shortLabel	Sanger Gencode Auto (2008-10-01)
+	longLabel	ENCODE Sanger Gencode Automated Gene predictions (level 3) (2008-10-01)
+	subGroups	view=GencodeAuto
+	type	genePred
+	dateSubmitted	2008-10-21 12:24:57
+	priority	3
+	noInherit	on
 
