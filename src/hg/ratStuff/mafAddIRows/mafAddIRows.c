@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.17 2008/06/26 17:39:40 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.18 2008/10/21 15:55:05 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;
@@ -222,10 +222,16 @@ for(; strandHead ; strandHead = strandHead->next)
 	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_MISSING_STATUS;
 	    prevLink->mc->rightLen = link->mc->leftLen = nCount;
 	    }
-	else if  ((tDiff > 100000) || ((qDiff < 0) || (qDiff > 100000)))
+	else if  ((tDiff > 100000) ||  
+		  (qDiff > 100000) || (qDiff < -100000))
 	    {
 	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_NEW_STATUS;
 	    prevLink->mc->rightLen = link->mc->leftLen = 0;
+	    }
+	else if  (qDiff < 0)
+	    {
+	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_TANDEM_STATUS;
+	    prevLink->mc->rightLen = link->mc->leftLen = -qDiff;
 	    }
 	else if (qDiff == 0)
 	    {
