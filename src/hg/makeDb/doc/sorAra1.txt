@@ -76,6 +76,12 @@ dbDbSpeciesDir shrew
     mkdir -p /san/sanvol1/scratch/sorAra1
     cp -p sorAra1.2bit chrom.sizes /san/sanvol1/scratch/sorAra1
 
+    #	load this table after creating a db (DONE - 2008-10-21 - Hiram)
+    cd /hive/data/genomes/sorAra1/bed/WindowMasker.2007-03-05
+    time hgLoadBed sorAra1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 11038904 elements of size 3
+    #	real    3m20.424s
+
 ################################################
 # DOWNLOADS (2007-06-05 kate)
 
