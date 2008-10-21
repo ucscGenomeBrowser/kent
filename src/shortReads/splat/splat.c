@@ -109,10 +109,10 @@
 #include "psl.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.12 2008/10/21 06:05:58 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.13 2008/10/21 21:20:57 kent Exp $";
 
 
-char *version = "24";
+char *version = "25";
 
 char *outType = "splat";
 int maxDivergence = 5;
@@ -192,6 +192,28 @@ if (diff == 0)
 if (diff == 0)
     diff = a->missingQuad - b->missingQuad;
 return diff;
+}
+
+void dumpSixmer(int hexamer)
+/* Write out hexamer */
+{
+fputc(valToNt[(hexamer>>10)&3], stdout);
+fputc(valToNt[(hexamer>>8)&3], stdout);
+fputc(valToNt[(hexamer>>6)&3], stdout);
+fputc(valToNt[(hexamer>>4)&3], stdout);
+fputc(valToNt[(hexamer>>2)&3], stdout);
+fputc(valToNt[hexamer&3], stdout);
+}
+
+void dumpTwelvemer(int twelvemer)
+{
+fputc(valToNt[(twelvemer>>22)&3], stdout);
+fputc(valToNt[(twelvemer>>20)&3], stdout);
+fputc(valToNt[(twelvemer>>18)&3], stdout);
+fputc(valToNt[(twelvemer>>16)&3], stdout);
+fputc(valToNt[(twelvemer>>14)&3], stdout);
+fputc(valToNt[(twelvemer>>12)&3], stdout);
+dumpSixmer(twelvemer);
 }
 
 struct splatTag
