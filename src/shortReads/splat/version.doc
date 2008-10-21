@@ -21,3 +21,6 @@
 24 - Fixed bug where when there was more than a single 18-base hit to the index, only the first
      hit was being extended.  Fixed another very subtle bug that was discriminating a little
      too much against insertions vs. substitutions.  Changed minScore option to maxDivergence.
+25 - Fixing a bug where it would sometimes output a spurious ^.  Making it open read file 
+     (which is quick) before loading index (which is slow) to catch typoes in command line faster.
+26 - Made 25th base in read significant even when maxGap=0.

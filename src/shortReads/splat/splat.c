@@ -109,7 +109,7 @@
 #include "psl.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.11 2008/10/21 02:54:46 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.12 2008/10/21 06:05:58 kent Exp $";
 
 
 char *version = "24";
@@ -559,7 +559,8 @@ int tOffset = hit->tOffset;
 int origDiffCount = hit->subCount;
 int diffCount = origDiffCount;
 int quad = hit->missingQuad;
-DNA *qDna = c->qSeq->dna + c->tagPosition;
+struct dnaSeq *qSeq = c->qSeq;
+DNA *qDna = qSeq->dna + c->tagPosition;
 DNA *tDna = c->splix->allDna + tOffset;
 switch (hit->missingQuad)
     {
@@ -581,6 +582,9 @@ switch (hit->missingQuad)
        diffCount += countDiff(qDna+18, tDna+18, 6+maxGap);
        break;
     }
+if (qSeq->size > 24 && maxGap == 0)	/* Make 25th base significant in all cases. */
+    if (qDna[24] != tDna[24])
+       ++diffCount;
 if (diffCount <= maxMismatch)
     addMatch(diffCount, c, tOffset, 0, tagSize, 0, 0, 0);
 else if (maxGap > 0 && origDiffCount < maxMismatch) 
@@ -1272,7 +1276,7 @@ verbose(1, "%d (%5.2f%%) mapped more than %d places\n",
 	totalRepeat, 100.0 * totalRepeat / totalReads, maxRepeat);
 if (maxRepeat >= 2)
     {
-    int multiCount = totalReads - uniqCount - totalRepeat;
+    int multiCount = totalMap - uniqCount;
     verbose(1,  "%d (%5.2f%%) mapped between 2 and %d places\n",
 	multiCount, 100.0 * multiCount / totalReads, maxRepeat);
     }
