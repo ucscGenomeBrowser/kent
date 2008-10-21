@@ -56,64 +56,62 @@ _EOF_
 # standard deviation 6671.452585
 
 #########################################################################
-# REPEATMASKER (not done)
-    ssh kkstore05
-    screen # use a screen to manage this job
-    mkdir /cluster/data/choHof1/bed/repeatMasker
-    cd /cluster/data/choHof1/bed/repeatMasker
-    doRepeatMasker.pl -buildDir=/cluster/data/choHof1/bed/repeatMasker \
-        choHof1 > do.log 2>&1 &
-
-    # Note: can run simpleRepeats simultaneously
-    #### When done with RM:
-    time nice -n +19 featureBits choHof1 rmsk > fb.choHof1.rmsk.txt 2>&1 &
-# 734740693 bases of 2060445842 (35.659%) in intersection
-
-    # RepeatMasker and lib version from do.log:
-    #    Jun 13 2008 (open-3-2-5) version of RepeatMasker
-    # CC   RELEASE 20080611;  
-
+## Repeat Masker (DONE - 2008-10-16 - Hiram)
+    screen	# to manage this several day job
+    mkdir /hive/data/genomes/choHof1/bed/repeatMasker
+    cd /hive/data/genomes/choHof1/bed/repeatMasker
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-workhorse=hgwdev -bigClusterHub=swarm \
+	-buildDir=`pwd` choHof1 > do.log 2>&1 &
+    #	real    907m8.655s
+    twoBitToFa choHof1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+# 2458927620 bases (398507935 N's 2060419685 real 1325807439 upper 734612246
+# lower) in 481259 sequences in 1 files
+# %29.88 masked total, %35.65 masked rea
 
 #########################################################################
-# SIMPLE REPEATS TRF (not done)
-    ssh kkstore05
+# SIMPLE REPEATS TRF (DONE - 2008-10-15 - Hiram)
     screen # use a screen to manage this job
-    mkdir /cluster/data/choHof1/bed/simpleRepeat
-    cd /cluster/data/choHof1/bed/simpleRepeat
+    mkdir /hive/data/genomes/choHof1/bed/simpleRepeat
+    cd /hive/data/genomes/choHof1/bed/simpleRepeat
     # 
-    doSimpleRepeat.pl -buildDir=/cluster/data/choHof1/bed/simpleRepeat \
-	choHof1 > do.log 2>&1 &
-
-    #### When done
-    featureBits choHof1 simpleRepeat
-    # 32246798 bases of 2060445842 (1.565%) in intersection
+    time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/hive/data/genomes/choHof1/bed/simpleRepeat choHof1 \
+	> do.log 2>&1 &
+    #	real    276m12.206s
+    cat fb.simpleRepeat
+    #	32246798 bases of 2060419685 (1.565%) in intersection
 
     #	after RM run is done, add this mask:
-    cd /cluster/data/choHof1
+    cd /hive/data/genomes/choHof1
+    rm choHof1.2bit
     twoBitMask choHof1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed choHof1.2bit
+    #	can safely ignore warning about >=13 fields in bed file
 
-    twoBitToFa choHof1.2bit stdout | faSize stdin
+    twoBitToFa choHof1.2bit stdout | faSize stdin > choHof1.2bit.faSize.txt
+# 2458927620 bases (398507935 N's 2060419685 real 1325416974 upper 735002711
+# lower) in 481259 sequences in 1 files
+# %29.89 masked total, %35.67 masked real
 
-# 2458941592 bases (398495750 N's 2060445842 real 1327799854 upper 732645988
-# lower) in 481260 sequences in 1 files
-# Total size: mean 5109.4 sd 6671.4 min 600 (scaffold_481259) max 197267
-# (scaffold_0) median 2269
-# N count: mean 828.0 sd 1404.5
-# U count: mean 2759.0 sd 4098.4
-# L count: mean 1522.3 sd 1925.2
-# %29.80 masked total, %35.56 masked real
+    #	link to gbdb
+    ln -s `pwd`/choHof1.2bit /gbdb/choHof1
 
-    twoBitToFa choHof1.rmsk.2bit stdout | faSize stdin
+###########################################################################
+# prepare for kluster runs (DONE _ 2008-10-16 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	choHof1: 2060419685
+    # thus: 1024 * 2060419685/2881421696 = 732
+    #	rounding up to 800 for a bit more conservative masking
+    cd /hive/data/genomes/choHof1
+    time blat choHof1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=choHof1.11.ooc -repMatch=800
+    #	Wrote 34983 overused 11-mers to choHof1.11.ooc
+    #	real    2m5.136s
 
-# 2458941592 bases (398495750 N's 2060445842 real 1328190473 upper 732255369
-# lower) in 481260 sequences in 1 files
-# Total size: mean 5109.4 sd 6671.4 min 600 (scaffold_481259) max 197267
-# (scaffold_0) median 2269
-# N count: mean 828.0 sd 1404.5
-# U count: mean 2759.8 sd 4099.5
-# L count: mean 1521.5 sd 1924.3
-# %29.78 masked total, %35.54 masked real
-
-    # Link to it from /gbdb
-    rm -f /gbdb/choHof1/choHof1.2bit
-    ln -s /cluster/data/choHof1/choHof1.2bit /gbdb/choHof1/choHof1.2bit
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/choHof1
+    cp -p choHof1.2bit chrom.sizes choHof1.11.ooc \
+	/hive/data/staging/data/choHof1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
