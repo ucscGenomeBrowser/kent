@@ -22546,7 +22546,132 @@ _EOF_
 
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 vicPac1 > rbest.log 2>&1 &
 
-######
+#############################################################################
+# BLASTZ/CHAIN/NET dipOrd1 (WORKING - 2008-10-21 - Hiram)
+    screen #	use screen to control this multi-day job
+    mkdir /hive/data/genomes/hg18/bed/blastzDipOrd1.2008-10-21
+    cd /hive/data/genomes/hg18/bed/blastzDipOrd1.2008-10-21
+    cat << '_EOF_' > DEF
+# Human vs. Kangaroo rat
+
+BLASTZ_M=50
+BLASTZ=lastz
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
+
+# QUERY: Kangaroo rat
+SEQ2_DIR=/scratch/data/dipOrd1/dipOrd1.2bit
+SEQ2_LEN=/scratch/data/dipOrd1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg18/bed/blastzDipOrd1.2008-10-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-bigClusterHub=swarm  \
+      -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - 2008-10-21 16:13
+
+    featureBits hg18 chainDipOrd1Link
+    # 1139695079 bases of 2881515245 (39.552%) in intersection
+
+    cd /cluster/data/hg18/bed/blastzDipOrd1.2008-10-21
+
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 dipOrd1 > rbest.log 2>&1 &
+
+#############################################################################
+# BLASTZ/CHAIN/NET pteVam1 (WORKING - 2008-10-21 - Hiram)
+    screen #	use screen to control this multi-day job
+    mkdir /hive/data/genomes/hg18/bed/blastzPteVam1.2008-10-21
+    cd /hive/data/genomes/hg18/bed/blastzPteVam1.2008-10-21
+    cat << '_EOF_' > DEF
+# Human vs. Megabat
+
+BLASTZ_M=50
+BLASTZ=lastz
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
+
+# QUERY: Megabat
+SEQ2_DIR=/scratch/data/pteVam1/pteVam1.2bit
+SEQ2_LEN=/scratch/data/pteVam1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg18/bed/blastzPteVam1.2008-10-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-bigClusterHub=pk  \
+      -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - 2008-10-21 16:21
+
+    featureBits hg18 chainPteVam1Link
+    # 1139695079 bases of 2881515245 (39.552%) in intersection
+
+    cd /cluster/data/hg18/bed/blastzPteVam1.2008-10-21
+
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 pteVam1 > rbest.log 2>&1 &
+
+#############################################################################
+# BLASTZ/CHAIN/NET turTru1 (WORKING - 2008-10-21 - Hiram)
+    screen #	use screen to control this multi-day job
+    mkdir /hive/data/genomes/hg18/bed/blastzTurTru1.2008-10-21
+    cd /hive/data/genomes/hg18/bed/blastzTurTru1.2008-10-21
+    cat << '_EOF_' > DEF
+# Human vs. Dolphin
+
+BLASTZ_M=50
+BLASTZ=lastz
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
+
+# QUERY: Dolphin
+SEQ2_DIR=/scratch/data/turTru1/turTru1.2bit
+SEQ2_LEN=/scratch/data/turTru1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg18/bed/blastzTurTru1.2008-10-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-bigClusterHub=swarm  \
+      -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - 2008-10-21 16:07
+
+    featureBits hg18 chainTurTru1Link
+    # 1139695079 bases of 2881515245 (39.552%) in intersection
+
+    cd /cluster/data/hg18/bed/blastzTurTru1.2008-10-21
+
+    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 turTru1 > rbest.log 2>&1 &
+
 #############################################################################
 # BLASTZ/CHAIN/NET tarSyr1 (WORKING - 2008-10-21 - Hiram)
     screen #	use screen to control this multi-day job
