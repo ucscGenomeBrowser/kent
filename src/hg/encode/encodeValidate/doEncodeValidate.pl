@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.90 2008/10/17 23:19:06 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.91 2008/10/21 17:21:23 mikep Exp $
 
 use warnings;
 use strict;
@@ -1193,6 +1193,8 @@ foreach my $ddfLine (@ddfLines) {
             print TRACK_RA "\ttype\t$type $placeHolder\n";
         } elsif($type eq 'gtf') { # GTF is converted to and loaded as genePred
             print TRACK_RA "\ttype\tgenePred\n";
+        } elsif($type eq 'tagAlign') { # tagAligns are bed 6 but with column called 'sequence' instead of 'name'
+            print TRACK_RA "\ttype\tbed 6\n";
         } else {
             print TRACK_RA "\ttype\t$type\n";
         }
