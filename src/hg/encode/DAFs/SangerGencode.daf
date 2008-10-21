@@ -1,4 +1,4 @@
-# Data Agreement File for Gencode project $Revision: 1.1 $
+# Data Agreement File for Gencode project $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -7,15 +7,22 @@
 grant             Hubbard
 lab               Sanger
 dataType          Gencode
-variables         
+variables         freezeDate
 assembly          hg18
 dafVersion        0.2.2
 
 # Track/view definition
-view             Gencode
-shortLabelPrefix       Sanger Gencode
-longLabelPrefix  Sanger Gencode Gene predictions
+view             GencodeManual
+shortLabelPrefix       Sanger Gencode Manual
+longLabelPrefix  Sanger Gencode Manual Gene predictions (level 1+2)
 type             gtf
 required         yes
+hasReplicates    no
+
+view             GencodeAuto
+shortLabelPrefix       Sanger Gencode Auto
+longLabelPrefix  Sanger Gencode Automated Gene predictions (level 3)
+type             gtf
+required         no
 hasReplicates    no
 
