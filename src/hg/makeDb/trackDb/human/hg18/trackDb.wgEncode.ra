@@ -302,27 +302,66 @@ compositeTrack on
 shortLabel RIKEN CAGE
 longLabel ENCODE - RIKEN CAGE
 group regulation
-subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters RawSignal=Raw_Signal
+subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal Alignments=Alignments
 subGroup2 cellType Cell_Line K562=K562 prostate=Prostate
 subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=longNonPolyA
 dimensions dimensionY=rnaExtract dimensionX=cellType dimensionZ=localization
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults PlusClusters=full MinusClusters=full RawSignal=hide
+visibilityViewDefaults PlusClusters=full MinusClusters=full PlusRawSignal=hide MinusRawSignal=hide Alignments=hide
 controlledVocabulary encode/cv.ra cellType localization rnaExtract
 priority 0
 type bed 3
 wgEncode 1
 
+	track	wgEncodeRikenCageAlignmentsProstateCellLongnonpolya
+	subTrack	wgEncodeRikenCage
+	shortLabel	longNonPolyA prostate cell
+	longLabel	ENCODE RIKEN CAGE Tags (from longNonPolyA in prostate cell cell)
+	subGroups	view=Alignments cellType=prostate localization=cell rnaExtract=longNonPolyA
+	type	bed 6
+	dateSubmitted	2008-10-20 14:48:58
+	priority	17
+	noInherit	on
+	rnaExtract	longNonPolyA
+	localization	cell
+	cell	prostate
+
+	track	wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya
+	subTrack	wgEncodeRikenCage
+	shortLabel	longNonPolyA K562 cytosol
+	longLabel	ENCODE RIKEN CAGE Tags (from longNonPolyA in K562 cell cytosol)
+	subGroups	view=Alignments cellType=K562 localization=cytosol rnaExtract=longNonPolyA
+	type	bed 6
+	dateSubmitted	2008-10-20 14:48:58
+	priority	17
+	noInherit	on
+	rnaExtract	longNonPolyA
+	localization	cytosol
+	cell	K562
+
+	track	wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya
+	subTrack	wgEncodeRikenCage
+	shortLabel	longNonPolyA K562 nucleus
+	longLabel	ENCODE RIKEN CAGE Tags (from longNonPolyA in K562 cell nucleus)
+	subGroups	view=Alignments cellType=K562 localization=nucleus rnaExtract=longNonPolyA
+	type	bed 6
+	dateSubmitted	2008-10-20 14:48:58
+	priority	17
+	noInherit	on
+	rnaExtract	longNonPolyA
+	localization	nucleus
+	cell	K562
+
 	track	wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
 	subTrack	wgEncodeRikenCage
-	shortLabel	prostate
-	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in prostate cells)
+	shortLabel	longNonPolyA prostate cell
+	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (from longNonPolyA in prostate cell cell)
 	subGroups	view=PlusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA
 	type	bedGraph 4
-	dateSubmitted	2008-10-7 2:17:2
-	priority	10
+	dateSubmitted	2008-10-20 14:48:58
+	priority	13
 	noInherit	on
 	rnaExtract	longNonPolyA
 	localization	cell
@@ -330,12 +369,12 @@ wgEncode 1
 
 	track	wgEncodeRikenCageMinusClustersProstateCellLongnonpolya
 	subTrack	wgEncodeRikenCage
-	shortLabel	prostate
-	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in prostate cells)
+	shortLabel	longNonPolyA prostate cell
+	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (from longNonPolyA in prostate cell cell)
 	subGroups	view=MinusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA
 	type	bedGraph 4
-	dateSubmitted	2008-10-7 2:17:2
-	priority	11
+	dateSubmitted	2008-10-20 14:48:58
+	priority	14
 	noInherit	on
 	rnaExtract	longNonPolyA
 	localization	cell
@@ -343,12 +382,12 @@ wgEncode 1
 
 	track	wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya
 	subTrack	wgEncodeRikenCage
-	shortLabel	K562
-	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in K562 cells)
+	shortLabel	longNonPolyA K562 cytosol
+	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (from longNonPolyA in K562 cell cytosol)
 	subGroups	view=PlusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA
 	type	bedGraph 4
-	dateSubmitted	2008-10-7 2:17:2
-	priority	10
+	dateSubmitted	2008-10-20 14:48:58
+	priority	13
 	noInherit	on
 	rnaExtract	longNonPolyA
 	localization	cytosol
@@ -356,12 +395,12 @@ wgEncode 1
 
 	track	wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya
 	subTrack	wgEncodeRikenCage
-	shortLabel	K562
-	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in K562 cells)
+	shortLabel	longNonPolyA K562 cytosol
+	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (from longNonPolyA in K562 cell cytosol)
 	subGroups	view=MinusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA
 	type	bedGraph 4
-	dateSubmitted	2008-10-7 2:17:2
-	priority	11
+	dateSubmitted	2008-10-20 14:48:58
+	priority	14
 	noInherit	on
 	rnaExtract	longNonPolyA
 	localization	cytosol
@@ -369,12 +408,12 @@ wgEncode 1
 
 	track	wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya
 	subTrack	wgEncodeRikenCage
-	shortLabel	K562
-	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (in K562 cells)
+	shortLabel	longNonPolyA K562 nucleus
+	longLabel	ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (from longNonPolyA in K562 cell nucleus)
 	subGroups	view=PlusClusters cellType=K562 localization=nucleus rnaExtract=longNonPolyA
 	type	bedGraph 4
-	dateSubmitted	2008-10-7 2:17:2
-	priority	10
+	dateSubmitted	2008-10-20 14:48:58
+	priority	13
 	noInherit	on
 	rnaExtract	longNonPolyA
 	localization	nucleus
@@ -382,25 +421,25 @@ wgEncode 1
 
 	track	wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya
 	subTrack	wgEncodeRikenCage
-	shortLabel	K562
-	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (in K562 cells)
+	shortLabel	longNonPolyA K562 nucleus
+	longLabel	ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (from longNonPolyA in K562 cell nucleus)
 	subGroups	view=MinusClusters cellType=K562 localization=nucleus rnaExtract=longNonPolyA
 	type	bedGraph 4
-	dateSubmitted	2008-10-7 2:17:2
-	priority	11
+	dateSubmitted	2008-10-20 14:48:58
+	priority	14
 	noInherit	on
 	rnaExtract	longNonPolyA
 	localization	nucleus
 	cell	K562
 
-	track	wgEncodeRikenCageRawSignalK562CytosolLongnonpolya
+	track	wgEncodeRikenCagePlusRawSignalK562CytosolLongnonpolya
 	subTrack	wgEncodeRikenCage
-	shortLabel	K562 Raw
-	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in K562 cells)
-	subGroups	view=RawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
-	type	wig 1.00 63824.00
-	dateSubmitted	2008-10-7 2:17:2
-	priority	12
+	shortLabel	longNonPolyA K562 cytosol PlusRaw
+	longLabel	ENCODE RIKEN CAGE Plus Raw Signal (from longNonPolyA in K562 cell cytosol)
+	subGroups	view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
+	type	wig 1.00 63823.00
+	dateSubmitted	2008-10-20 14:48:58
+	priority	15
 	noInherit	on
 	spanList	1
 	windowingFunction	mean
@@ -409,14 +448,30 @@ wgEncode 1
 	localization	cytosol
 	cell	K562
 
-	track	wgEncodeRikenCageRawSignalProstateCellLongnonpolya
+	track	wgEncodeRikenCageMinusRawSignalK562CytosolLongnonpolya
 	subTrack	wgEncodeRikenCage
-	shortLabel	prostate Raw
-	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in prostate cells)
-	subGroups	view=RawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
-	type	wig 1.00 65524.00
-	dateSubmitted	2008-10-7 2:17:2
-	priority	12
+	shortLabel	longNonPolyA K562 cytosol MinusRaw
+	longLabel	ENCODE RIKEN CAGE Minus Raw Signal (from longNonPolyA in K562 cell cytosol)
+	subGroups	view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
+	type	wig 1.00 63540.00
+	dateSubmitted	2008-10-20 14:48:58
+	priority	16
+	noInherit	on
+	spanList	1
+	windowingFunction	mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	cytosol
+	cell	K562
+
+	track	wgEncodeRikenCagePlusRawSignalProstateCellLongnonpolya
+	subTrack	wgEncodeRikenCage
+	shortLabel	longNonPolyA prostate cell PlusRaw
+	longLabel	ENCODE RIKEN CAGE Plus Raw Signal (from longNonPolyA in prostate cell cell)
+	subGroups	view=PlusRawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
+	type	wig 1.00 61689.00
+	dateSubmitted	2008-10-20 14:48:58
+	priority	15
 	noInherit	on
 	spanList	1
 	windowingFunction	mean
@@ -425,14 +480,30 @@ wgEncode 1
 	localization	cell
 	cell	prostate
 
-	track	wgEncodeRikenCageRawSignalK562NucleusLongnonpolya
+	track	wgEncodeRikenCageMinusRawSignalProstateCellLongnonpolya
 	subTrack	wgEncodeRikenCage
-	shortLabel	K562 Raw
-	longLabel	ENCODE RIKEN CAGE Raw Signal (both strands) (in K562 cells)
-	subGroups	view=RawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
+	shortLabel	longNonPolyA prostate cell MinusRaw
+	longLabel	ENCODE RIKEN CAGE Minus Raw Signal (from longNonPolyA in prostate cell cell)
+	subGroups	view=MinusRawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
+	type	wig 1.00 65524.00
+	dateSubmitted	2008-10-20 14:48:58
+	priority	16
+	noInherit	on
+	spanList	1
+	windowingFunction	mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	cell
+	cell	prostate
+
+	track	wgEncodeRikenCagePlusRawSignalK562NucleusLongnonpolya
+	subTrack	wgEncodeRikenCage
+	shortLabel	longNonPolyA K562 nucleus PlusRaw
+	longLabel	ENCODE RIKEN CAGE Plus Raw Signal (from longNonPolyA in K562 cell nucleus)
+	subGroups	view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
 	type	wig 1.00 45083.00
-	dateSubmitted	2008-10-7 2:17:2
-	priority	12
+	dateSubmitted	2008-10-20 14:48:58
+	priority	15
 	noInherit	on
 	spanList	1
 	windowingFunction	mean
@@ -441,6 +512,21 @@ wgEncode 1
 	localization	nucleus
 	cell	K562
 
+	track	wgEncodeRikenCageMinusRawSignalK562NucleusLongnonpolya
+	subTrack	wgEncodeRikenCage
+	shortLabel	longNonPolyA K562 nucleus MinusRaw
+	longLabel	ENCODE RIKEN CAGE Minus Raw Signal (from longNonPolyA in K562 cell nucleus)
+	subGroups	view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
+	type	wig 1.00 14562.00
+	dateSubmitted	2008-10-20 14:48:58
+	priority	16
+	noInherit	on
+	spanList	1
+	windowingFunction	mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	nucleus
+	cell	K562
 
 track wgEncodeYaleChIPseq
 compositeTrack on
