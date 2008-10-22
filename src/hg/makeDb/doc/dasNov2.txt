@@ -147,3 +147,29 @@ _EOF_
     ssh hgwdev
     rm -f  /gbdb/dasNov2/dasNov2.2bit
     ln -s /cluster/data/dasNov2/dasNov2.2bit /gbdb/dasNov2/dasNov2.2bit
+
+#########################################################################
+# prepare for kluster runs (DONE - 2008-10-22 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	dasNov2: 2371493872
+    # thus: 1024 * 2371493872/2881421696 = 842
+    #	rounding up to 900 for a bit more conservative masking
+    cd /hive/data/genomes/dasNov2
+    time blat dasNov2.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=dasNov2.11.ooc -repMatch=900
+    #	Wrote 30934 overused 11-mers to dasNov2.11.ooc
+    #	real    2m49.196s
+
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/dasNov2
+    cp -p dasNov2.2bit chrom.sizes dasNov2.11.ooc \
+	/hive/data/staging/data/dasNov2
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
+
+###########################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-22 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute dasNov2 (NCBI project 12594, AAGV020000000)" where name="dasNov2";' hgcentraltest
+###########################################################################
