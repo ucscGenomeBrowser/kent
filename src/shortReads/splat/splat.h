@@ -28,10 +28,9 @@ struct splatAlign
 /* A full alignment - the first 25 bases plus if need be a banded extension. */
     {
     struct splatAlign *next;	/* Next in list. */
-    double score;		/* Score from scoring matrix. */
-    struct cBlock *blockList;	/* List of aligning blocks. */
-    char strand; 		/* Query strand. */
-    int chromIx;		/* Which chromosome it's on. */
+    struct chain *chain;	/* Chain representation. */
+    DNA *qDna;			/* Query sequence DNA.  Not allocated here. */
+    DNA *tDna;			/* Target sequence DNA.  Not allocated here. */
     };
 
 void splatAlignFree(struct splatAlign **pAli);

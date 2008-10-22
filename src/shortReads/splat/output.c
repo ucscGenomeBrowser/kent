@@ -10,14 +10,11 @@
 #include "splat.h"
 
 static void splatOutputMaf(struct splatAlign *ali, 
-	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix, FILE *f)
+	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, FILE *f)
 /* Output alignment to maf file. */
 {
-struct cBlock *bStart = ali->blockList;
-struct cBlock *bEnd = slLastEl(bStart);
-int chromIx = ali->chromIx;
-char strand = ali->strand;
-struct dnaSeq *qSeq = (strand == '-' ? qSeqR : qSeqF);
+struct cBlock *bStart = ali->chain->blockList;
+struct chain *chain = ali->chain;
 
 /* Create symbols - DNA alignment with dashes for inserts - a long process. */
 struct dyString *qSym = dyStringNew(0), *tSym = dyStringNew(0);
@@ -28,8 +25,8 @@ for (b = bStart; b != NULL; b = bNext)
     {
     /* Output letters in block. */
     int bSize = b->tEnd - b->tStart;
-    DNA *qDna = qSeq->dna + b->qStart;
-    DNA *tDna = splix->allDna + b->tStart;
+    DNA *qDna = ali->qDna + b->qStart;
+    DNA *tDna = ali->tDna + b->tStart;
     int i;
     for (i=0; i<bSize; ++i)
 	{
@@ -67,27 +64,27 @@ int symSize = tSym->stringSize;
 /* Build up a maf component for query */
 struct mafComp *qComp;
 AllocVar(qComp);
-qComp->src = cloneString(qSeq->name);
-qComp->srcSize = qSeq->size;
-qComp->strand = strand;
+qComp->src = cloneString(chain->qName);
+qComp->srcSize = chain->qSize;
+qComp->strand = chain->qStrand;
 qComp->start = bStart->qStart;
-qComp->size = bEnd->qEnd - bStart->qStart;
+qComp->size = chain->qEnd - chain->qStart;
 qComp->text = dyStringCannibalize(&qSym);
 
 /* Build up a maf component for target */
 struct mafComp *tComp;
 AllocVar(tComp);
-tComp->src = cloneString(splix->chromNames[chromIx]);
-tComp->srcSize = splix->chromSizes[chromIx];
+tComp->src = cloneString(chain->tName);
+tComp->srcSize = chain->tSize;
 tComp->strand = '+';
-tComp->start = bStart->tStart - splix->chromOffsets[chromIx];
-tComp->size = bEnd->tEnd - bStart->tStart;
+tComp->start = chain->tStart;
+tComp->size = chain->tEnd - chain->tStart;
 tComp->text = dyStringCannibalize(&tSym);
 
 /* Build up a maf alignment structure . */
 struct mafAli *maf;
 AllocVar(maf);
-maf->score = ali->score;
+maf->score = chain->score;
 maf->textSize = symSize;
 maf->components = tComp;
 tComp->next = qComp;
@@ -103,23 +100,20 @@ static void splatOutputMafs(struct splatAlign *aliList,
 {
 struct splatAlign *ali;
 for (ali = aliList; ali != NULL; ali = ali->next)
-    splatOutputMaf(ali, qSeqF, qSeqR, splix, f);
+    splatOutputMaf(ali, qSeqF, qSeqR, f);
 }
 
 
 static void splatOutputPsl(struct splatAlign *ali, 
-	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix, FILE *f)
+	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, FILE *f)
 /* Output alignment to psl file. */
 {
-struct cBlock *bStart = ali->blockList;
-struct cBlock *bEnd = slLastEl(bStart);
-int chromIx = ali->chromIx;
-char strand = ali->strand;
-struct dnaSeq *qSeq = (strand == '-' ? qSeqR : qSeqF);
+struct chain *chain = ali->chain;
+struct cBlock *bStart = ali->chain->blockList;
 
 /* Point to DNA */
-DNA *qDna = qSeq->dna;
-DNA *tDna = splix->allDna;
+DNA *qDna = ali->qDna;
+DNA *tDna = ali->tDna;
 
 /* Loop through blocks and calculate summary fields. */
 unsigned match = 0;	/* Number of bases that match that aren't repeats */
@@ -169,22 +163,22 @@ fprintf(f, "%d\t", tNumInsert);
 fprintf(f, "%d\t", tBaseInsert);
 
 /* Write out basic info on query */
-fprintf(f, "%c\t", strand);
-fprintf(f, "%s\t", qSeq->name);
-fprintf(f, "%d\t", qSeq->size);
+fprintf(f, "%c\t", chain->qStrand);
+fprintf(f, "%s\t", chain->qName);
+fprintf(f, "%d\t", chain->qSize);
 
 /* Handle qStart/qEnd field, which requires some care on - strand. */
-int qStart = bStart->qStart;
-int qEnd = bEnd->qEnd;
-if (strand == '-')
-    reverseIntRange(&qStart, &qEnd, qSeq->size);
+int qStart = chain->qStart;
+int qEnd = chain->qEnd;
+if (chain->qStrand == '-')
+    reverseIntRange(&qStart, &qEnd, chain->qSize);
 fprintf(f, "%d\t%d\t", qStart, qEnd);
 
 /* Target is always on plus strand, so easier. */
-fprintf(f, "%s\t", splix->chromNames[chromIx]);		// tName
-fprintf(f, "%d\t", (int)splix->chromSizes[chromIx]);	// tSize
-fprintf(f, "%d\t", bStart->tStart);			// tStart
-fprintf(f, "%d\t", bEnd->tEnd);				// tEnd
+fprintf(f, "%s\t", chain->tName);	// tName
+fprintf(f, "%d\t", chain->tSize);	// tSize
+fprintf(f, "%d\t", chain->tStart);	// tStart
+fprintf(f, "%d\t", chain->tEnd);	// tEnd
 
 /* Now deal with block fields. */
 fprintf(f, "%d\t", slCount(bStart));
@@ -211,7 +205,7 @@ static void splatOutputPsls(struct splatAlign *aliList,
 {
 struct splatAlign *ali;
 for (ali = aliList; ali != NULL; ali = ali->next)
-    splatOutputPsl(ali, qSeqF, qSeqR, splix, f);
+    splatOutputPsl(ali, qSeqF, qSeqR, f);
 }
 
 static void dnaOutUpperMatch(DNA a, DNA b, FILE *f)
@@ -225,23 +219,19 @@ fputc(a, f);
 }
 
 static void splatOutputSplat(struct splatAlign *ali, int mapCount,
-	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix, FILE *f)
+	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, FILE *f)
 /* Output alignment  to splat format output file. (Tag-align plus query name) */
 {
-struct cBlock *bStart = ali->blockList;
-struct cBlock *bEnd = slLastEl(bStart);
-int chromIx = ali->chromIx;
-char strand = ali->strand;
-struct dnaSeq *qSeq = (strand == '-' ? qSeqR : qSeqF);
+struct chain *chain = ali->chain;
+struct cBlock *bStart = ali->chain->blockList;
 
 /* Write chrom chromStart chromEnd */
-fprintf(f, "%s\t", splix->chromNames[chromIx]);
-int chromOffset = splix->chromOffsets[chromIx];
-fprintf(f, "%d\t%d\t", bStart->tStart - chromOffset, bEnd->tEnd - chromOffset);
+fprintf(f, "%s\t", chain->tName);
+fprintf(f, "%d\t%d\t", chain->tStart, chain->tEnd);
 
 /* Write sequence including gaps (- for deletions, ^ for inserts) */
-DNA *qDna = qSeq->dna;
-DNA *tDna = splix->allDna;
+DNA *qDna = ali->qDna;
+DNA *tDna = ali->tDna;
 struct cBlock *b, *bNext;
 for (b = bStart; b != NULL; b = bNext)
     {
@@ -269,8 +259,8 @@ for (b = bStart; b != NULL; b = bNext)
 fputc('\t', f);
 
 fprintf(f, "%d\t", 1000/mapCount);
-fprintf(f, "%c\t", strand);
-fprintf(f, "%s\n", qSeq->name);
+fprintf(f, "%c\t", chain->qStrand);
+fprintf(f, "%s\n", chain->qName);
 }
 
 static void splatOutputSplats(struct splatAlign *aliList, 
@@ -280,7 +270,7 @@ static void splatOutputSplats(struct splatAlign *aliList,
 int mapCount = slCount(aliList);
 struct splatAlign *ali;
 for (ali = aliList; ali != NULL; ali = ali->next)
-    splatOutputSplat(ali, mapCount, qSeqF, qSeqR, splix, f);
+    splatOutputSplat(ali, mapCount, qSeqF, qSeqR, f);
 }
 
 void splatOutList(struct splatAlign *aliList, char *outType,
