@@ -71,10 +71,15 @@ sub loadGene
 {
     my ($assembly, $tableName, $fileList, $pushQ, $ldHgGeneFlags) = @_;
 
+    my $stdoutFile = "out/loadGene.out";
+    my $stderrFile = "out/loadGene.err";
+
     HgAutomate::verbose(2, "loadGene ($assembly, $tableName, $fileList, $pushQ, $ldHgGeneFlags)\n");
-    if(system("cat $fileList | egrep -v '^track|browser' | ldHgGene $ldHgGeneFlags $assembly $tableName stdin > out/loadGene.out 2>&1")) {
+    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "ldHgGene $ldHgGeneFlags $assembly $tableName stdin ");
+    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $stdoutFile, STDERR => $stderrFile, DEBUG => $opt_debug);
+    if(my $err = $safe->exec()) {
         print STDERR "ERROR: File(s) '$fileList' ($ldHgGeneFlags) failed gene load.\n";
-        dieFile("out/loadGene.out");
+        dieFile($stderrFile);
     } else {
         print "$fileList loaded into $tableName\n";
         # debug restore: File.delete "genePred.tab";
@@ -316,7 +321,7 @@ for my $key (keys %ra) {
         HgAutomate::verbose(3, "Download only; dont load [$key].\n");
         $hgdownload = 1;
     } elsif($type eq "gtf") {
-        loadGene($assembly, $tablename, $files, $pushQ, "-gtf");
+        loadGene($assembly, $tablename, $files, $pushQ, "-gtf -genePredExt");
     } elsif($type eq "genePred" ) {
         loadGene($assembly, $tablename, $files, $pushQ, "-genePredExt");
     } elsif ($type eq "wig") {
