@@ -31,8 +31,14 @@ struct splatAlign
     double score;		/* Score from scoring matrix. */
     struct cBlock *blockList;	/* List of aligning blocks. */
     char strand; 		/* Query strand. */
+    int chromIx;		/* Which chromosome it's on. */
     };
 
+void splatAlignFree(struct splatAlign **pAli);
+/* Free up a splatAlign. */
+
+void splatAlignFreeList(struct splatAlign **pList);
+/* Free up a list of splatAligns. */
 
 extern char *version ;	/* Program version number. */
 
@@ -42,7 +48,7 @@ int countDnaDiffs(DNA *a, DNA *b, int size);
 void splatOutHeader(char *target, char *query, char *outType, FILE *f);
 /* Output file header if any.  Also check and abort if outType is not supported. */
 
-void splatOutTags(struct splatTag *tagList, char *outType,
+void splatOutList(struct splatAlign *aliList, char *outType,
 	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix, FILE *f);
-/* Output tag matches to file. */
+/* Output list of alignments to file in format defined by outType. */
 

@@ -9,30 +9,13 @@
 #include "splix.h"
 #include "splat.h"
 
-static int tOffsetToChromIx(struct splix *splix, bits32 tOffset)
-/* Figure out index of chromosome containing tOffset */
-{
-int i;
-int chromCount = splix->header->chromCount;
-/* TODO - convert to binary search */
-for (i=0; i<chromCount; ++i)
-    {
-    int chromStart = splix->chromOffsets[i];
-    int chromEnd = chromStart + splix->chromSizes[i];
-    if (tOffset >= chromStart && tOffset < chromEnd)
-        return i;
-    }
-errAbort("tOffset %d out of range\n", tOffset);
-return -1;
-}
-
 static void splatOutputMaf(struct splatAlign *ali, 
 	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix, FILE *f)
 /* Output alignment to maf file. */
 {
 struct cBlock *bStart = ali->blockList;
 struct cBlock *bEnd = slLastEl(bStart);
-int chromIx = tOffsetToChromIx(splix, bStart->tStart);
+int chromIx = ali->chromIx;
 char strand = ali->strand;
 struct dnaSeq *qSeq = (strand == '-' ? qSeqR : qSeqF);
 
@@ -130,7 +113,7 @@ static void splatOutputPsl(struct splatAlign *ali,
 {
 struct cBlock *bStart = ali->blockList;
 struct cBlock *bEnd = slLastEl(bStart);
-int chromIx = tOffsetToChromIx(splix, bStart->tStart);
+int chromIx = ali->chromIx;
 char strand = ali->strand;
 struct dnaSeq *qSeq = (strand == '-' ? qSeqR : qSeqF);
 
@@ -247,7 +230,7 @@ static void splatOutputSplat(struct splatAlign *ali, int mapCount,
 {
 struct cBlock *bStart = ali->blockList;
 struct cBlock *bEnd = slLastEl(bStart);
-int chromIx = tOffsetToChromIx(splix, bStart->tStart);
+int chromIx = ali->chromIx;
 char strand = ali->strand;
 struct dnaSeq *qSeq = (strand == '-' ? qSeqR : qSeqF);
 
@@ -300,68 +283,10 @@ for (ali = aliList; ali != NULL; ali = ali->next)
     splatOutputSplat(ali, mapCount, qSeqF, qSeqR, splix, f);
 }
 
-static struct splatAlign *tagToAlign(struct splatTag *tag, 
-	struct dnaSeq *qSeqF,  struct dnaSeq *qSeqR,
-	struct splix *splix)
-/* Convert splatTag to splatAlign on the basic level.  Don't (yet) 
- * fill in score field or do extension. */
-{
-/* Allocate and fill  out cBlock structure on first alignment block. */
-char strand = tag->strand;
-struct dnaSeq *qSeq = (strand == '-' ? qSeqF : qSeqR);
-DNA *q = qSeq->dna;
-DNA *t = splix->allDna;
-struct cBlock *block1;
-AllocVar(block1);
-block1->qStart = tag->q1;
-block1->qEnd = tag->q1 + tag->size1;
-block1->tStart = tag->t1;
-block1->tEnd = tag->t1 + tag->size1;
-
-/* Allocate and fill out splatAlign struct. */
-struct splatAlign *align;
-AllocVar(align);
-align->strand = tag->strand;
-align->blockList = block1;
-align->score = 2*qSeq->size - tag->divergence;	// TODO - calculate with matrix
-
-/* If need be add second block to alignment. */
-if (tag->size2 > 0)
-    {
-    struct cBlock *block2;
-    AllocVar(block2);
-    block2->qStart = tag->q2;
-    block2->qEnd = tag->q2 + tag->size2;
-    block2->tStart = tag->t2;
-    block2->tEnd = tag->t2 + tag->size2;
-    block1->next = block2;
-    }
-return align;
-}
-
-
-struct splatAlign *tagListToAliList(struct splatTag *tagList, 
-	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix)
-/* Convert a list of tags to a list of alignments. */
-{
-struct splatTag *tag;
-struct splatAlign *aliList = NULL;
-for (tag = tagList; tag != NULL; tag = tag->next)
-    {
-    struct splatAlign *ali = tagToAlign(tag, qSeqF, qSeqR, splix);
-    slAddHead(&aliList, ali);
-    }
-slReverse(&aliList);
-return aliList;
-}
-
-void splatOutTags(struct splatTag *tagList, char *outType,
+void splatOutList(struct splatAlign *aliList, char *outType,
 	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix, FILE *f)
-/* Output tag match */
+/* Output list of alignments to file in format defined by outType. */
 {
-/* TODO: Will move the tag to ali conversion elsewhere soon, this is just an intermediate
- * stage in refactoring to use aliList. */
-struct splatAlign *aliList = tagListToAliList(tagList, qSeqF, qSeqR, splix);
 if (sameString(outType, "maf"))
     splatOutputMafs(aliList, qSeqF, qSeqR, splix, f);
 else if (sameString(outType, "psl"))

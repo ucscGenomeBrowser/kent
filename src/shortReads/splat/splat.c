@@ -107,10 +107,11 @@
 #include "fa.h"
 #include "fuzzyFind.h"
 #include "psl.h"
+#include "axt.h"
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.15 2008/10/22 02:38:36 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.16 2008/10/22 04:17:48 kent Exp $";
 
 
 char *version = "26";	/* Program version number. */
@@ -213,7 +214,35 @@ if (diff == 0)
 return diff;
 }
 
-#ifdef SOON
+void splatAlignFree(struct splatAlign **pAli)
+/* Free up a splatAlign. */
+{
+struct splatAlign *ali = *pAli;
+if (ali != NULL)
+    {
+    slFreeList(&ali->blockList);
+    freez(pAli);
+    }
+}
+
+void splatAlignFreeList(struct splatAlign **pList)
+/* Free a list of dynamically allocated splatAlign's */
+{
+struct splatAlign *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    splatAlignFree(&el);
+    }
+*pList = NULL;
+}
+
+
+void splatAlignFreeList(struct splatAlign **pList);
+/* Free up a list of splatAligns. */
+
+
 static int splatAlignCmpScore(const void *va, const void *vb)
 /* Sort alignments based on score. */
 {
@@ -227,7 +256,6 @@ else if (diff > 0)
 else
     return 0;
 }
-#endif /* SOON */
 
 
 #ifdef DEBUG
@@ -914,8 +942,71 @@ slReverse(&newList);
 return newList;
 }
 
-static void splatOne(struct dnaSeq *qSeqF, struct splix *splix, int maxGap, FILE *f,
-	int *retMapCount, boolean *retIsRepeat)
+static struct splatAlign *tagToAlign(struct splatTag *tag, 
+	struct dnaSeq *qSeqF,  struct dnaSeq *qSeqR,
+	struct splix *splix, struct axtScoreScheme *scoreScheme)
+/* Convert splatTag to splatAlign on the basic level.  Don't (yet) 
+ * fill in score field or do extension. */
+{
+/* Allocate and fill  out cBlock structure on first alignment block. */
+char strand = tag->strand;
+struct dnaSeq *qSeq = (strand == '-' ? qSeqR : qSeqF);
+DNA *q = qSeq->dna;
+DNA *t = splix->allDna;
+struct cBlock *block1;
+AllocVar(block1);
+block1->qStart = tag->q1;
+block1->qEnd = tag->q1 + tag->size1;
+block1->tStart = tag->t1;
+block1->tEnd = tag->t1 + tag->size1;
+block1->score = axtScoreUngapped(scoreScheme, q+block1->qStart, t+block1->tStart, tag->size1);
+
+/* Allocate and fill out splatAlign struct. */
+struct splatAlign *align;
+AllocVar(align);
+align->strand = tag->strand;
+align->blockList = block1;
+align->score = block1->score;
+align->chromIx = splixOffsetToChromIx(splix, tag->q1);
+
+/* If need be add second block to alignment. */
+if (tag->size2 > 0)
+    {
+    struct cBlock *block2;
+    AllocVar(block2);
+    block2->qStart = tag->q2;
+    block2->qEnd = tag->q2 + tag->size2;
+    block2->tStart = tag->t2;
+    block2->tEnd = tag->t2 + tag->size2;
+    block2->score = axtScoreUngapped(scoreScheme, q+block2->qStart, t+block2->tStart, tag->size2);
+    int qGap = block2->qStart - block1->qEnd;
+    int tGap = block2->tStart - block1->tEnd;
+    int gap = qGap + tGap;
+    align->score += block2->score - gap*scoreScheme->gapExtend - scoreScheme->gapOpen;
+    block1->next = block2;
+    }
+return align;
+}
+
+
+struct splatAlign *extendTags(struct splatTag *tagList, 
+	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix,
+	struct axtScoreScheme *scoreScheme)
+/* Convert a list of tags to a list of alignments. */
+{
+struct splatTag *tag;
+struct splatAlign *aliList = NULL;
+for (tag = tagList; tag != NULL; tag = tag->next)
+    {
+    struct splatAlign *ali = tagToAlign(tag, qSeqF, qSeqR, splix, scoreScheme);
+    slAddHead(&aliList, ali);
+    }
+slReverse(&aliList);
+return aliList;
+}
+
+static void splatOne(struct dnaSeq *qSeqF, struct splix *splix, int maxGap, 
+	struct axtScoreScheme *scoreScheme, FILE *f, int *retMapCount, boolean *retIsRepeat)
 /* Align one query sequence against index, filter, and write out results.
  * Returns the number of mappings. */
 {
@@ -963,7 +1054,10 @@ if (tagList != NULL)
 	}
     else
         {
-	splatOutTags(tagList, out, qSeqF, qSeqR, splix, f);
+	struct splatAlign *aliList = extendTags(tagList, qSeqF, qSeqR, splix, scoreScheme);
+	slSort(&aliList, splatAlignCmpScore);
+	splatOutList(aliList, out, qSeqF, qSeqR, splix, f);
+	splatAlignFreeList(&aliList);
 	}
     splatTagFreeList(&tagList);
     }
@@ -976,6 +1070,7 @@ dnaSeqFree(&qSeqR);
 void splat(char *target, char *query, char *output)
 /* splat - Speedy Local Alignment Tool. */
 {
+struct axtScoreScheme *scoreScheme = axtScoreSchemeSimpleDna(2, 2, 2, 1);
 struct dnaLoad *qLoad = dnaLoadOpen(query);
 struct splix *splix = splixRead(target, memoryMap);
 FILE *f = mustOpen(output, "w");
@@ -990,7 +1085,7 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     toUpperN(qSeq->dna, qSeq->size);
     int mapCount = 0;
     boolean isRepeat = FALSE;
-    splatOne(qSeq, splix, maxGap, f, &mapCount, &isRepeat);
+    splatOne(qSeq, splix, maxGap, scoreScheme, f, &mapCount, &isRepeat);
     verbose(2, " %d mappings\n", mapCount);
     if (mapCount > 0)
         {
