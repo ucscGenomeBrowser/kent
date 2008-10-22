@@ -8,6 +8,10 @@
 #ifndef BANDEXT_H
 #define BANDEXT_H
 
+#ifndef LOCALMEM_H
+#include "localmem.h"
+#endif
+
 boolean bandExt(boolean global, struct axtScoreScheme *ss, int maxInsert,
 	char *aStart, int aSize, char *bStart, int bSize, int dir,
 	int symAlloc, int *retSymCount, char *retSymA, char *retSymB, 
