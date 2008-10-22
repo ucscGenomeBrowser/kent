@@ -1,5 +1,7 @@
 /* Splat.h - link together exported things from various splat modules. */
 
+extern char *version ;	/* Program version number. */
+
 struct splatHit
 /* Information on an index hit.  This only has about a 1% chance of being real after
  * extension, but hey, it's a start. */
@@ -39,7 +41,10 @@ void splatAlignFree(struct splatAlign **pAli);
 void splatAlignFreeList(struct splatAlign **pList);
 /* Free up a list of splatAligns. */
 
-extern char *version ;	/* Program version number. */
+struct splatAlign *splatExtendTags(struct splatTag *tagList, 
+	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix,
+	struct axtScoreScheme *scoreScheme);
+/* Convert a list of tags to a list of alignments. */
 
 int countDnaDiffs(DNA *a, DNA *b, int size);
 /* Count number of differing bases. */

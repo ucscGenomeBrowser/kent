@@ -13,6 +13,8 @@ static void splatOutputMaf(struct splatAlign *ali,
 	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, FILE *f)
 /* Output alignment to maf file. */
 {
+/* TODO: This is sufficiently refactored now that it can become a thin
+ * wrapper around chainToMaf, mafWrite, mafFree. */
 struct cBlock *bStart = ali->chain->blockList;
 struct chain *chain = ali->chain;
 
@@ -108,6 +110,8 @@ static void splatOutputPsl(struct splatAlign *ali,
 	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, FILE *f)
 /* Output alignment to psl file. */
 {
+/* TODO - this is sufficiently refactored now that it can be a very thin
+ * wrapper around chainToPsl/pslWrite/pslFree. */
 struct chain *chain = ali->chain;
 struct cBlock *bStart = ali->chain->blockList;
 

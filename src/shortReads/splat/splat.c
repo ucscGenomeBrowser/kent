@@ -111,10 +111,10 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.17 2008/10/22 05:06:41 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.18 2008/10/22 06:00:27 kent Exp $";
 
 
-char *version = "26";	/* Program version number. */
+char *version = "27";	/* Program version number. */
 
 static char *out = "splat";
 static int maxDivergence = 5;
@@ -942,86 +942,6 @@ slReverse(&newList);
 return newList;
 }
 
-static struct splatAlign *tagToAlign(struct splatTag *tag, 
-	struct dnaSeq *qSeqF,  struct dnaSeq *qSeqR,
-	struct splix *splix, struct axtScoreScheme *scoreScheme)
-/* Convert splatTag to splatAlign on the basic level.  Don't (yet) 
- * fill in score field or do extension. */
-{
-char strand = tag->strand;
-struct dnaSeq *qSeq = (strand == '-' ? qSeqR : qSeqF);
-int chromIx = splixOffsetToChromIx(splix, tag->t1);
-int chromOffset = splix->chromOffsets[chromIx];
-DNA *q = qSeq->dna;
-DNA *t = splix->allDna + chromOffset;
-
-/* Allocate and fill  out cBlock structure on first alignment block. */
-struct cBlock *block1;
-AllocVar(block1);
-block1->qStart = tag->q1;
-block1->qEnd = tag->q1 + tag->size1;
-block1->tStart = tag->t1 - chromOffset;
-block1->tEnd = tag->t1 + tag->size1;
-block1->score = axtScoreUngapped(scoreScheme, q+block1->qStart, t+block1->tStart, tag->size1);
-
-/* Allocate and fill in chain structure. */
-struct chain *chain;
-AllocVar(chain);
-chain->score = block1->score;
-chain->tName = cloneString(splix->chromNames[chromIx]);
-chain->tSize = splix->chromSizes[chromIx];
-chain->tStart = block1->tStart;
-chain->tEnd = block1->tEnd;
-chain->qName = cloneString(qSeq->name);
-chain->qSize = qSeq->size;
-chain->qStrand = strand;
-chain->qStart = block1->qStart;
-chain->qEnd = block1->qEnd;
-chain->blockList = block1;
-
-/* Allocate and fill out splatAlign struct. */
-struct splatAlign *align;
-AllocVar(align);
-align->chain = chain;
-align->qDna = q;
-align->tDna = t;
-
-/* If need be add second block to alignment. */
-if (tag->size2 > 0)
-    {
-    struct cBlock *block2;
-    AllocVar(block2);
-    block2->qStart = tag->q2;
-    chain->qEnd = block2->qEnd = tag->q2 + tag->size2;
-    block2->tStart = tag->t2 - chromOffset;
-    chain->tEnd = block2->tEnd = tag->t2 + tag->size2;
-    block2->score = axtScoreUngapped(scoreScheme, q+block2->qStart, t+block2->tStart, tag->size2);
-    int qGap = block2->qStart - block1->qEnd;
-    int tGap = block2->tStart - block1->tEnd;
-    int gap = qGap + tGap;
-    chain->score += block2->score - gap*scoreScheme->gapExtend - scoreScheme->gapOpen;
-    block1->next = block2;
-    }
-return align;
-}
-
-
-struct splatAlign *extendTags(struct splatTag *tagList, 
-	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix,
-	struct axtScoreScheme *scoreScheme)
-/* Convert a list of tags to a list of alignments. */
-{
-struct splatTag *tag;
-struct splatAlign *aliList = NULL;
-for (tag = tagList; tag != NULL; tag = tag->next)
-    {
-    struct splatAlign *ali = tagToAlign(tag, qSeqF, qSeqR, splix, scoreScheme);
-    slAddHead(&aliList, ali);
-    }
-slReverse(&aliList);
-return aliList;
-}
-
 static void splatOne(struct dnaSeq *qSeqF, struct splix *splix, int maxGap, 
 	struct axtScoreScheme *scoreScheme, FILE *f, int *retMapCount, boolean *retIsRepeat)
 /* Align one query sequence against index, filter, and write out results.
@@ -1071,7 +991,7 @@ if (tagList != NULL)
 	}
     else
         {
-	struct splatAlign *aliList = extendTags(tagList, qSeqF, qSeqR, splix, scoreScheme);
+	struct splatAlign *aliList = splatExtendTags(tagList, qSeqF, qSeqR, splix, scoreScheme);
 	slSort(&aliList, splatAlignCmpScore);
 	splatOutList(aliList, out, qSeqF, qSeqR, splix, f);
 	splatAlignFreeList(&aliList);

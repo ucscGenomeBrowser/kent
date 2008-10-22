@@ -28,3 +28,4 @@
 26 - Moving output routines to a separate module.
      Refactoring to make it convert splatTag list to splatAlign list before doing output.
      As part of this the output routines take chains instead of splatTags as input.
+27 - Adding in first cut of banded extension.
