@@ -1009,7 +1009,6 @@ dimensions dimensionX=freezeDate
 sortOrder freezeDate=+
 dragAndDrop subTracks
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack 
-controlledVocabulary encode/cv.ra freezeDate
 priority 34
 visibility pack
 color 12,12,120
@@ -1025,7 +1024,7 @@ wgEncode 1
 	subTrack	wgEncodeSangerGencode
 	shortLabel	Sanger Gencode Manual (2008-10-01)
 	longLabel	ENCODE Sanger Gencode Manual Gene predictions (level 1+2) (2008-10-01)
-	subGroups	view=GencodeManual
+	subGroups	view=GencodeManual freezeDate=2008-10-01
 	type	genePred
 	dateSubmitted	2008-10-21 12:24:57
 	priority	2
@@ -1035,7 +1034,7 @@ wgEncode 1
 	subTrack	wgEncodeSangerGencode
 	shortLabel	Sanger Gencode Auto (2008-10-01)
 	longLabel	ENCODE Sanger Gencode Automated Gene predictions (level 3) (2008-10-01)
-	subGroups	view=GencodeAuto
+	subGroups	view=GencodeAuto freezeDate=2008-10-01
 	type	genePred
 	dateSubmitted	2008-10-21 12:24:57
 	priority	3
