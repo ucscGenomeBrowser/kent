@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.92 2008/10/22 02:17:17 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.93 2008/10/22 20:40:29 mikep Exp $
 
 use warnings;
 use strict;
@@ -1102,6 +1102,7 @@ foreach my $ddfLine (@ddfLines) {
             $val = ucfirst(lc($val));
             $tableName = $tableName . $val;
         }
+	
         my $shortSuffix = "";
         my $longSuffix;
         my %shortViewMap = (Peaks => 'Pk', Signal => 'Sig', RawSignal => 'Raw', PlusRawSignal => 'PlusRaw', MinusRawSignal => 'MinusRaw');
@@ -1137,21 +1138,14 @@ foreach my $ddfLine (@ddfLines) {
         if($longSuffix) {
             $longLabel .= " ($longSuffix)";
         }
-        if($hash{antibody}) {
-            $subGroups .= " factor=$hash{antibody}";
-            $additional = "\tantibody\t$hash{antibody}\n" . $additional;
-        }
-        if($hash{cell}) {
-            $subGroups .= " cellType=$hash{cell}";
-            $additional = "\tcell\t$hash{cell}\n" . $additional;
-        }
-        if($hash{localization}) {
-            $subGroups .= " localization=$hash{localization}";
-            $additional = "\tlocalization\t$hash{localization}\n" . $additional;
-        }
-        if($hash{rnaExtract}) {
-            $subGroups .= " rnaExtract=$hash{rnaExtract}";
-            $additional = "\trnaExtract\t$hash{rnaExtract}\n" . $additional;
+	# make the "subGroups" and "additional" fields from all variables
+	for my $var (sort keys %hash) {
+            # The var name is over-ridden for antibody and cell, for historical reasons
+            my $groupVar = $var; 
+	    $groupVar = "factor" if $var eq "antibody";
+	    $groupVar = "cellType" if $var eq "cell";
+            $subGroups .= " $groupVar=$hash{$var}";
+            $additional = "\t$var\t$hash{$var}\n" . $additional;
         }
     }
 
