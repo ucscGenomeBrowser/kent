@@ -79,41 +79,6 @@ if (blockList != NULL)
     }
 }
 
-static struct cBlock *symToBlocks(int symCount, char *qSym, char *tSym, 
-        int qs, int ts)
-/* Convert from insert-symbol type representation to blocks. */
-{
-struct cBlock *blockList = NULL, *block = NULL;
-int i;
-for (i=0; i<symCount; ++i)
-    {
-    if (qSym[i] == '-')
-        {
-        block = NULL;
-        ++ts;
-        }
-    else if (tSym[i] == '-')
-        {
-        block = NULL;
-        ++qs;
-        }
-    else
-        {
-        if (block == NULL)
-            {
-            AllocVar(block);
-            slAddHead(&blockList, block);
-            block->qStart = qs;
-            block->tStart = ts;
-            }
-        block->qEnd = ++qs;
-        block->tEnd = ++ts;
-        }
-    }
-slReverse(&blockList);
-return blockList;
-}
-        
 static struct cBlock *extendInRegion(struct bzp *bzp,
                              struct dnaSeq *query, int qStart, int qEnd,
                              struct dnaSeq *target, int tStart, int tEnd,
@@ -148,7 +113,7 @@ if (qSize > 0 && tSize > 0)
         qExtStart = qEnd - qs - 1;
         tExtStart = tEnd - ts - 1;
         }
-    return symToBlocks(symCount, qSym, tSym, qExtStart, tExtStart);
+    return cBlocksFromAliSym(symCount, qSym, tSym, qExtStart, tExtStart);
     }
 else
     return NULL;

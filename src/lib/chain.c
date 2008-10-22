@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.26 2008/06/24 14:40:04 markd Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.27 2008/10/22 01:16:03 kent Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -80,6 +80,44 @@ for (block = blockList; block != NULL; block = block->next)
     block->qEnd += qOff;
     }
 }
+
+struct cBlock *cBlocksFromAliSym(int symCount, char *qSym, char *tSym, 
+        int qPos, int tPos)
+/* Convert alignment from alignment symbol (bases and dashes) format 
+ * to a list of chain blocks.  The qPos and tPos correspond to the start
+ * in the query and target sequences of the first letter in  qSym and tSym. */
+{
+struct cBlock *blockList = NULL, *block = NULL;
+int i;
+for (i=0; i<symCount; ++i)
+    {
+    if (qSym[i] == '-')
+        {
+        block = NULL;
+        ++tPos;
+        }
+    else if (tSym[i] == '-')
+        {
+        block = NULL;
+        ++qPos;
+        }
+    else
+        {
+        if (block == NULL)
+            {
+            AllocVar(block);
+            slAddHead(&blockList, block);
+            block->qStart = qPos;
+            block->tStart = tPos;
+            }
+        block->qEnd = ++qPos;
+        block->tEnd = ++tPos;
+        }
+    }
+slReverse(&blockList);
+return blockList;
+}
+        
 
 int chainCmpScore(const void *va, const void *vb)
 /* Compare to sort based on total score. */

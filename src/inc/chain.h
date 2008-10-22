@@ -36,6 +36,12 @@ int cBlockCmpDiagQuery(const void *va, const void *vb);
 void cBlocksAddOffset(struct cBlock *blockList, int qOff, int tOff);
 /* Add offsets to block list. */
 
+struct cBlock *cBlocksFromAliSym(int symCount, char *qSym, char *tSym, 
+        int qPos, int tPos);
+/* Convert alignment from alignment symbol (bases and dashes) format 
+ * to a list of chain blocks.  The qPos and tPos correspond to the start
+ * in the query and target sequences of the first letter in  qSym and tSym. */
+
 struct chain
 /* A chain of blocks.  Used for output of chainBlocks. */
     {
