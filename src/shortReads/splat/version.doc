@@ -23,4 +23,5 @@
      too much against insertions vs. substitutions.  Changed minScore option to maxDivergence.
 25 - Fixing a bug where it would sometimes output a spurious ^.  Making it open read file 
      (which is quick) before loading index (which is slow) to catch typoes in command line faster.
-26 - Made 25th base in read significant even when maxGap=0.
+     Made 25th base in read significant even when maxGap=0.  Fixed reporting bug in number of 
+     reads multiply aligned. 

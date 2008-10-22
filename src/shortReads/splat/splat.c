@@ -100,31 +100,32 @@
 #include "hash.h"
 #include "options.h"
 #include "localmem.h"
-#include "dystring.h"
 #include "dnaseq.h"
 #include "dnaLoad.h"
 #include "splix.h"
 #include "intValTree.h"
 #include "fa.h"
+#include "fuzzyFind.h"
 #include "psl.h"
 #include "maf.h"
+#include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.13 2008/10/21 21:20:57 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.14 2008/10/22 01:17:54 kent Exp $";
 
 
-char *version = "25";
+char *version = "25";	/* Program version number. */
 
-char *outType = "splat";
-int maxDivergence = 5;
-boolean worseToo = FALSE;
-int maxRepeat = 10;
-char *repeatOutput = NULL;
-int maxGap = 1;
-int maxMismatch = 2;
-boolean memoryMap = FALSE;
-int tagSize;
+static char *out = "splat";
+static int maxDivergence = 5;
+static boolean worseToo = FALSE;
+static int maxRepeat = 10;
+static char *repeatOutput = NULL;
+static int maxGap = 1;
+static int maxMismatch = 2;
+static boolean memoryMap = FALSE;
+static int tagSize;
 
-void usage()
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -136,7 +137,7 @@ errAbort(
 "   target is a large indexed dna database in splix format.  Use splixMake to create this\n"
 "          file from fasta, 2bit or nib format\n"
 "   query is a fasta or fastq file full of sequences of at least 25 bases each\n"
-"   output is the output alignment file, by default in .psl format\n"
+"   output is the output alignment file, by default in .splat format\n"
 "note: can use 'stdin' or 'stdout' as a file name for better piping\n"
 "overall options:\n"
 "   -out=format. Output format.  Options include splat (default), psl, maf, [soap, eland soon....]\n"
@@ -168,19 +169,9 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-FILE *repeatOutputFile = NULL;
+static FILE *repeatOutputFile = NULL;
 
-struct splatHit
-/* Information on an index hit.  This only has about a 1% chance of being real after
- * extension, but hey, it's a start. */
-    {
-    bits32 tOffset;	/* Offset to DNA in target */
-    int gapSize;	/* >0 for insert in query/del in target, <0 for reverse. 0 for no gap. */
-    int subCount;	/* Count of substitutions we know about already. */
-    int missingQuad;	/* Which data quadrant is lacking (not found in index). */
-    };
-
-int splatHitCmp(void *va, void *vb)
+static int splatHitCmp(void *va, void *vb)
 /* Sort hits that need to be extended independently. */
 /* Note: sorting function for rbTree, not for slSort! */
 {
@@ -194,44 +185,7 @@ if (diff == 0)
 return diff;
 }
 
-void dumpSixmer(int hexamer)
-/* Write out hexamer */
-{
-fputc(valToNt[(hexamer>>10)&3], stdout);
-fputc(valToNt[(hexamer>>8)&3], stdout);
-fputc(valToNt[(hexamer>>6)&3], stdout);
-fputc(valToNt[(hexamer>>4)&3], stdout);
-fputc(valToNt[(hexamer>>2)&3], stdout);
-fputc(valToNt[hexamer&3], stdout);
-}
-
-void dumpTwelvemer(int twelvemer)
-{
-fputc(valToNt[(twelvemer>>22)&3], stdout);
-fputc(valToNt[(twelvemer>>20)&3], stdout);
-fputc(valToNt[(twelvemer>>18)&3], stdout);
-fputc(valToNt[(twelvemer>>16)&3], stdout);
-fputc(valToNt[(twelvemer>>14)&3], stdout);
-fputc(valToNt[(twelvemer>>12)&3], stdout);
-dumpSixmer(twelvemer);
-}
-
-struct splatTag
-/* Roughtly 25-base match that passes maxGap and maxMismatch criteria. */
-    {
-    struct splatTag *next;	 /* Next in list. */
-    int divergence;  /* mismatch + 2*inserts for now. */
-    bits32 q1,t1;  /* Position of first block in query and target. */
-    bits32 size1;	/* Size of first block. */
-    bits32 q2,t2;  /* Position of second block if any. */
-    bits32 size2;  /* Size of second block.  May be zero. */
-    char strand; /* Query strand. */
-    };
-
-#define splatTagFree(pt) freez(pt)
-#define splatTagFreeList(pList) slFreeList(pList)
-
-int splatTagCmpPosAndDivergence(const void *va, const void *vb)
+static int splatTagCmpPosAndDivergence(const void *va, const void *vb)
 /* Sort tags based on position fields, then divergence. */
 /* Note: sorting function for slSort, not for rbTree! */
 {
@@ -259,8 +213,87 @@ if (diff == 0)
 return diff;
 }
 
+#ifdef SOON
+static int splatAlignCmpScore(const void *va, const void *vb)
+/* Sort alignments based on score. */
+{
+const struct splatAlign *a = *((struct splatAlign **)va);
+const struct splatAlign *b = *((struct splatAlign **)vb);
+double diff = a->score - b->score;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
+else
+    return 0;
+}
+#endif /* SOON */
 
-void dnaToBinary(DNA *dna, int maxGap, int *pFirstHalf, int *pSecondHalf,
+#ifdef SOON
+static struct splatAlign *tagToAlign(struct splatTag *tag, struct dnaSeq *query, 
+	struct splix *splix)
+/* Convert splatTag to splatAlign on the basic level.  Don't (yet) 
+ * fill in score field or do extension. */
+{
+/* Allocate and fill  out ffAli structure on first alignment block. */
+DNA *q = query->dna;
+DNA *t = splix->allDna;
+struct ffAli *ff;
+AllocVar(ff);
+ff->nStart = q + tag->q1;
+ff->nEnd = ff->nStart + tag->size1;
+ff->hStart = t + tag->t1;
+ff->hEnd = ff->hStart + tag->size1;
+
+/* Allocate and fill out splatAlign struct. */
+struct splatAlign *align;
+AllocVar(align);
+align->strand = tag->strand;
+align->ffList = ff;
+
+/* If need be add second block to alignment. */
+if (tag->size2 > 0)
+    {
+    struct ffAli *ff2;
+    AllocVar(ff2);
+    ff2->nStart = q + tag->q2;
+    ff2->nEnd = ff2->nStart + tag->size2;
+    ff2->hStart = t + tag->t2;
+    ff2->hEnd = ff2->hStart + tag->size2;
+    ff->right = ff2;
+    ff2->left = ff;
+    }
+return align;
+}
+#endif /* SOON */
+
+
+#ifdef DEBUG
+static void dumpSixmer(int hexamer)
+/* Write out hexamer */
+{
+fputc(valToNt[(hexamer>>10)&3], stdout);
+fputc(valToNt[(hexamer>>8)&3], stdout);
+fputc(valToNt[(hexamer>>6)&3], stdout);
+fputc(valToNt[(hexamer>>4)&3], stdout);
+fputc(valToNt[(hexamer>>2)&3], stdout);
+fputc(valToNt[hexamer&3], stdout);
+}
+
+static void dumpTwelvemer(int twelvemer)
+{
+fputc(valToNt[(twelvemer>>22)&3], stdout);
+fputc(valToNt[(twelvemer>>20)&3], stdout);
+fputc(valToNt[(twelvemer>>18)&3], stdout);
+fputc(valToNt[(twelvemer>>16)&3], stdout);
+fputc(valToNt[(twelvemer>>14)&3], stdout);
+fputc(valToNt[(twelvemer>>12)&3], stdout);
+dumpSixmer(twelvemer);
+}
+#endif /* DEBUG */
+
+
+static void dnaToBinary(DNA *dna, int maxGap, int *pFirstHalf, int *pSecondHalf,
 	bits16 *pAfter1, bits16 *pAfter2, bits16 *pBefore1, bits16 *pBefore2,
 	bits16 *pFirstHex, bits16 *pLastHex,
 	bits16 *pTwoAfterFirstHex, bits16 *pTwoBeforeLastHex)
@@ -313,7 +346,7 @@ else
 *pTwoBeforeLastHex = (secondHalf >> 4) & 0xFFF;
 }
 
-int searchHexes(bits16 query, bits16 *hexes, int hexCount)
+static int searchHexes(bits16 query, bits16 *hexes, int hexCount)
 /* See if query sequence is in hexes, which is sorted. */
 {
 /* TODO: replace this with a binary search. */
@@ -324,7 +357,7 @@ for (i=0; i<hexCount; ++i)
 return -1;
 }
 
-void exactIndexHits(bits16 hex, bits16 *sortedHexes, int slotSize, 
+static void exactIndexHits(bits16 hex, bits16 *sortedHexes, int slotSize, 
 	bits32 *offsets, struct rbTree *hitTree, int startOffset,
 	int subCount, int gapSize, int missingQuad)
 /* Look for hits that involve no index mismatches.  Put resultint offsets (plus startOffset)
@@ -361,7 +394,7 @@ if (ix >= 0)
     }
 }
 
-void searchExact(struct splix *splix, int twelvemer, bits16 sixmer, int whichSixmer,
+static void searchExact(struct splix *splix, int twelvemer, bits16 sixmer, int whichSixmer,
 	int dnaStartOffset, struct rbTree *hitTree,
 	int subCount, int gapSize, int missingQuad)
 /* If there's an exact match put DNA offset of match into hitTree. */
@@ -378,7 +411,7 @@ if (slotSize != 0)
     }
 }
 
-void searchExact12Vary6(struct splix *splix, int twelvemer, bits16 sixmer, int whichSixmer,
+static void searchExact12Vary6(struct splix *splix, int twelvemer, bits16 sixmer, int whichSixmer,
 	int dnaStartOffset, struct rbTree *hitTree, int gapSize, int missingQuad)
 /* Search for exact matches to twelvemer and off-by-ones to sixmer. */
 {
@@ -403,7 +436,7 @@ for (baseIx = 0; baseIx<6; ++baseIx)
     }
 }
 
-void searchVary12Exact6(struct splix *splix, int twelvemer, bits16 sixmer, int whichSixmer,
+static void searchVary12Exact6(struct splix *splix, int twelvemer, bits16 sixmer, int whichSixmer,
 	int dnaStartOffset, struct rbTree *hitTree, int gapSize, int missingQuad)
 /* Search for exact matches to twelvemer and off-by-ones to sixmer. */
 {
@@ -438,7 +471,7 @@ struct alignContext
     int tagPosition;		/* Position of tag. */
     };
 
-int countDiff(DNA *a, DNA *b, int size)
+int countDnaDiffs(DNA *a, DNA *b, int size)
 /* Count number of differing bases. */
 {
 int i;
@@ -449,7 +482,7 @@ for (i=0; i<size; ++i)
 return count;
 }
 
-void addMatch(int diffCount, struct alignContext *c, 
+static void addMatch(int diffCount, struct alignContext *c, 
 	int t1, int q1, int size1,
 	int t2, int q2, int size2)
 /* Output a match, which may be in two blocks. */
@@ -489,13 +522,13 @@ tag->strand = c->strand;
 slAddHead(c->pTagList, tag);
 }
 
-void slideInsert1(DNA *q, DNA *t, int gapSize, int solidSize, int mysterySize,
+static void slideInsert1(DNA *q, DNA *t, int gapSize, int solidSize, int mysterySize,
 	int *retBestGapPos, int *retLeastDiffs)
 /* Slide insert though all possible positions and return best position and number
  * of differences there. */
 {
 int gapPos = -1;
-int diffs = countDiff(q, t, solidSize);
+int diffs = countDnaDiffs(q, t, solidSize);
 int bestGapPos = gapPos;
 int leastDiffs = diffs;
 for (gapPos = 0; gapPos < mysterySize; ++gapPos)
@@ -516,14 +549,14 @@ for (gapPos = 0; gapPos < mysterySize; ++gapPos)
 *retBestGapPos = bestGapPos;
 }
 
-void slideInsert2(DNA *q, DNA *t, int gapSize, int solidSize, int mysterySize,
+static void slideInsert2(DNA *q, DNA *t, int gapSize, int solidSize, int mysterySize,
 	int *retBestGapPos, int *retLeastDiffs)
 /* Slide insert though all possible positions and return best position and number
  * of differences there. Does this a _slightly_ different way than slideInsert1. 
  * Actually different in at least three ways, and to parameterize all three would
  * give it a lot of parameters.... */
 {
-int diffs = countDiff(q+gapSize, t, solidSize);
+int diffs = countDnaDiffs(q+gapSize, t, solidSize);
 int bestGapPos = -1;
 int leastDiffs = diffs;
 int gapPos;
@@ -545,12 +578,12 @@ for (gapPos = 0; gapPos < mysterySize; ++gapPos)
 *retBestGapPos = bestGapPos;
 }
 
-void slideDeletion2(DNA *q, DNA *t, int gapSize, int solidSize, int mysterySize,
+static void slideDeletion2(DNA *q, DNA *t, int gapSize, int solidSize, int mysterySize,
 	int *retBestGapPos, int *retLeastDiffs)
 /* Slide deletion through all possible positions and return best position and number
  * of differences there. */
 {
-int diffs = countDiff(q, t+gapSize, solidSize);
+int diffs = countDnaDiffs(q, t+gapSize, solidSize);
 int bestGapPos = -1;
 int leastDiffs = diffs;
 int gapPos;
@@ -572,7 +605,7 @@ for (gapPos = 0; gapPos < mysterySize; ++gapPos)
 *retBestGapPos = bestGapPos;
 }
 
-void extendMaybeOutputNoIndexIndels(struct splatHit *hit, struct alignContext *c)
+static void extendMaybeOutputNoIndexIndels(struct splatHit *hit, struct alignContext *c)
 /* Handle case where the 12-mer and the 6-mer in the index both hit without any
  * indication of an indel.  In the case where the missing quadrant is the first or
  * last though there could still be an indel in one of these quadrands. */
@@ -590,18 +623,18 @@ switch (hit->missingQuad)
      * The _'s indicate areas that have been explored in the index. 
      * The singleton ? may actually represent 0 up to maxGap bases. */
     case 0: /* Explore ? ?????? ______ ______ ______ */
-       diffCount += countDiff(qDna, tDna, 6+maxGap);
+       diffCount += countDnaDiffs(qDna, tDna, 6+maxGap);
        break;
     case 1: /* Explore ? ______ ?????? ______ ______ */
-       diffCount += countDiff(qDna, tDna, maxGap);
-       diffCount += countDiff(qDna + 6 + maxGap, tDna + 6 + maxGap, 6);
+       diffCount += countDnaDiffs(qDna, tDna, maxGap);
+       diffCount += countDnaDiffs(qDna + 6 + maxGap, tDna + 6 + maxGap, 6);
        break;
     case 2: /* Explore ______ ______ ?????? ______ ? */
-       diffCount += countDiff(qDna+12, tDna+12, 6);
-       diffCount += countDiff(qDna+24, tDna+24, maxGap);
+       diffCount += countDnaDiffs(qDna+12, tDna+12, 6);
+       diffCount += countDnaDiffs(qDna+24, tDna+24, maxGap);
        break;
     case 3: /* Explore ______ ______ ______ ?????? ? */
-       diffCount += countDiff(qDna+18, tDna+18, 6+maxGap);
+       diffCount += countDnaDiffs(qDna+18, tDna+18, 6+maxGap);
        break;
     }
 if (qSeq->size > 24 && maxGap == 0)	/* Make 25th base significant in all cases. */
@@ -681,7 +714,7 @@ else if (maxGap > 0 && origDiffCount < maxMismatch)
     }
 }
 
-void extendMaybeOutputInsert(struct splatHit *hit, struct alignContext *c)
+static void extendMaybeOutputInsert(struct splatHit *hit, struct alignContext *c)
 /* Handle case where there is a base inserted in the query relative to the target. */
 {
 int tOffset = hit->tOffset;
@@ -715,7 +748,7 @@ if (leastDiffs <= maxMismatch)
 }
 
 
-void extendMaybeOutputDeletion(struct splatHit *hit, struct alignContext *c)
+static void extendMaybeOutputDeletion(struct splatHit *hit, struct alignContext *c)
 /* Handle case where there is a base deleted in the query relative to the target. */
 {
 int tOffset = hit->tOffset;
@@ -744,7 +777,7 @@ switch (hit->missingQuad)
     }
 DNA *q = c->qSeq->dna + c->tagPosition;
 DNA *t = c->splix->allDna + tOffset;
-diffCount += countDiff(q + qSmallMysteryOffset, t + tSmallMysteryOffset, smallMysterySize);
+diffCount += countDnaDiffs(q + qSmallMysteryOffset, t + tSmallMysteryOffset, smallMysterySize);
 if (diffCount < maxMismatch)
     {
     int bestGapPos, leastDiffs;
@@ -762,7 +795,7 @@ if (diffCount < maxMismatch)
     }
 }
 
-void extendMaybeOutput(void *item, void *context)
+static void extendMaybeOutput(void *item, void *context)
 /* Callback function for tree traverser that extends alignments and if good, outputs them. */
 {
 /* Rescue some typed variables out of container-driven voidness. */
@@ -785,7 +818,7 @@ else
     }
 }
 
-struct rbTree *splatHitsOneStrand(struct dnaSeq *qSeq, char strand,
+static struct rbTree *splatHitsOneStrand(struct dnaSeq *qSeq, char strand,
 	int tagPosition, struct splix *splix, int maxGap)
 /* Look through index for hits to query tag on one strand. 
  * Input:
@@ -847,8 +880,8 @@ if (maxGap > 0)
 return hitTree;
 }
 
-void extendHitsToTags(struct rbTree *hitTree, struct dnaSeq *qSeq, char strand, 
-	int tagPosition, struct splix *splix, boolean bestOnly, struct splatTag **pTagList)
+static void extendHitsToTags(struct rbTree *hitTree, struct dnaSeq *qSeq, char strand, 
+	int tagPosition, struct splix *splix, struct splatTag **pTagList)
 /* Examine each of the hits in the hitTree, and add ones that are high scoring enough
  * after extension to the tagList. If bestOnly is set it may free existing tags on list if
  * it finds a higher scoring tag. */
@@ -863,289 +896,7 @@ ac.tagPosition = tagPosition;
 rbTreeTraverseWithContext(hitTree, extendMaybeOutput, &ac);
 }
 
-	
-
-void splatOneStrand(struct dnaSeq *qSeq, char strand,
-	int tagPosition, struct splix *splix, int maxGap, struct splatTag **pTagList)
-/* Align one query strand against index, filter, and write out results */
-{
-struct rbTree *hitTree = splatHitsOneStrand(qSeq, strand, tagPosition, splix, maxGap);
-verbose(2, " %d hits on %c strand\n", hitTree->n, strand);
-if (hitTree->n > 0)
-    {
-    extendHitsToTags(hitTree, qSeq, strand, tagPosition, splix, !worseToo, pTagList);
-    rbTreeFree(&hitTree);
-    }
-rbTreeFree(&hitTree);
-}
-
-int tOffsetToChromIx(struct splix *splix, bits32 tOffset)
-/* Figure out index of chromosome containing tOffset */
-{
-int i;
-int chromCount = splix->header->chromCount;
-/* TODO - convert to binary search */
-for (i=0; i<chromCount; ++i)
-    {
-    int chromStart = splix->chromOffsets[i];
-    int chromEnd = chromStart + splix->chromSizes[i];
-    if (tOffset >= chromStart && tOffset < chromEnd)
-        return i;
-    }
-errAbort("tOffset %d out of range\n", tOffset);
-return -1;
-}
-
-
-void splatOutputMaf(struct splatTag *tag, int mapCount,
-	struct dnaSeq *qSeq, struct splix *splix, int chromIx, FILE *f)
-/* Output tag to maf file. */
-{
-/* Handle reverse-complementing if need be. */
-char strand = tag->strand;
-if (strand == '-')
-    reverseComplement(qSeq->dna, qSeq->size);
-
-/* Create symbols - DNA alignment with dashes for inserts - a long process. */
-struct dyString *qSym = dyStringNew(0), *tSym = dyStringNew(0);
-
-/* Fetch a bunch of vars from tag. */
-int q1 = tag->q1, q2 = tag->q2;
-int t1 = tag->t1, t2 = tag->t2;
-int size1 = tag->size1;
-int size2 = tag->size2;
-
-/* Normalize q2,t2 to make life easier in single block case */
-if (size2 == 0)
-    {
-    q2 = q1 + size1;
-    t2 = t1 + size1;
-    }
-
-/* Output first block */
-DNA *qDna = qSeq->dna + q1;
-DNA *tDna = splix->allDna + t1;
-int i;
-for (i=0; i<size1; ++i)
-    {
-    dyStringAppendC(qSym, qDna[i]);
-    dyStringAppendC(tSym, tDna[i]);
-    }
-
-/* If there's second block, output gaps, which is tricky. */
-int qGapSize = q2 - (q1+size1);
-int tGapSize = t2 - (t1+size1);
-if (size2)
-    {
-    for (i=0; i<qGapSize; ++i)
-	{
-        dyStringAppendC(qSym, qDna[size1+i]);
-	dyStringAppendC(tSym, '-');
-	}
-    for (i=0; i<tGapSize; ++i)
-	{
-	dyStringAppendC(qSym, '-');
-	dyStringAppendC(tSym, tDna[size1+i]);
-	}
-
-    /* Output second block. */
-    qDna = qSeq->dna + q2;
-    tDna = splix->allDna + t2;
-    for (i=0; i<size2; ++i)
-	{
-	dyStringAppendC(qSym, qDna[i]);
-	dyStringAppendC(tSym, tDna[i]);
-	}
-    }
-int symSize = tSym->stringSize;
-
-/* Build up a maf component for query */
-struct mafComp *qComp;
-AllocVar(qComp);
-qComp->src = cloneString(qSeq->name);
-qComp->srcSize = qSeq->size;
-qComp->strand = strand;
-qComp->start = q1;
-qComp->size = q2 + size2 - q1;
-qComp->text = dyStringCannibalize(&qSym);
-
-/* Build up a maf component for target */
-struct mafComp *tComp;
-AllocVar(tComp);
-tComp->src = cloneString(splix->chromNames[chromIx]);
-tComp->srcSize = splix->chromSizes[chromIx];
-tComp->strand = '+';
-tComp->start = t1 - splix->chromOffsets[chromIx];
-tComp->size = t2 + size2 - t1;
-tComp->text = dyStringCannibalize(&tSym);
-
-/* Build up a maf alignment structure . */
-struct mafAli *maf;
-AllocVar(maf);
-maf->score = 2*qComp->size - tag->divergence;
-maf->textSize = symSize;
-maf->components = tComp;
-tComp->next = qComp;
-
-/* Save it to file, and free it up. */
-mafWrite(f, maf);
-mafAliFree(&maf);
-
-/* Restore qSeq + strand if need be. */
-if (strand == '-')
-    reverseComplement(qSeq->dna, qSeq->size);
-}
-
-
-void splatOutputPsl(struct splatTag *tag, int mapCount,
-	struct dnaSeq *qSeq, struct splix *splix, int chromIx, FILE *f)
-/* Output tag to psl file. */
-{
-/* Handle reverse-complementing if need be. */
-char strand = tag->strand;
-if (strand == '-')
-    reverseComplement(qSeq->dna, qSeq->size);
-
-/* Fetch a bunch of vars from tag. */
-int q1 = tag->q1, q2 = tag->q2;
-int t1 = tag->t1, t2 = tag->t2;
-int size1 = tag->size1;
-int size2 = tag->size2;
-int totalSize = size1 + size2;
-
-/* Point to DNA */
-DNA *qDna = qSeq->dna;
-DNA *tDna = splix->allDna;
-
-/* Calculate and write the summary non-gappy fields. */
-int misMatches = countDiff(qDna + q1, tDna + t1, size1) + countDiff(qDna + q2, tDna + t2, size2);
-fprintf(f, "%d\t", totalSize - misMatches);	// matches
-fprintf(f, "%d\t", misMatches);			// misMatches
-fprintf(f, "0\t0\t");				// repMatches and nCount
-
-/* Calculate and write gappy fields. */
-int qGapSize = q2 - (q1+size1);
-int tGapSize = t2 - (t1+size1);
-fprintf(f, "%d\t", (qGapSize == 0 ? 0 : 1) );	// qNumInsert
-fprintf(f, "%d\t", qGapSize);			// qBaseInsert
-fprintf(f, "%d\t", (tGapSize == 0 ? 0 : 1) );	// tNumInsert
-fprintf(f, "%d\t", tGapSize);			// tBaseInsert
-
-/* A few more straightforward strands. */
-fprintf(f, "%c\t", strand);			// strand
-fprintf(f, "%s\t", qSeq->name);			// qName
-fprintf(f, "%d\t", qSeq->size);			// qSize
-
-/* Handle qStart/qEnd field, which requires some care on - strand. */
-int qStart = q1;
-int qEnd = q2 + size2;
-if (strand == '-')
-    reverseIntRange(&qStart, &qEnd, qSeq->size);
-fprintf(f, "%d\t%d\t", qStart, qEnd);		// qStart and qEnd
-
-/* Target is always on plus strand, so easier. */
-fprintf(f, "%s\t", splix->chromNames[chromIx]);	// tName
-fprintf(f, "%d\t", (int)splix->chromSizes[chromIx]);	// tSize
-fprintf(f, "%d\t", t1);				// tStart
-fprintf(f, "%d\t", t2 + size2);			// tEnd
-
-/* Now deal with blocky fields depending if there are one or two. */
-if (size2 == 0)
-    {
-    /* One block case. */
-    fprintf(f, "1\t");				// blockCount
-    fprintf(f, "%d,\t", size1);			// blockSizes
-    fprintf(f, "%d,\t", q1);			// qStarts
-    fprintf(f, "%d,\n", t1);			// tStarts
-    }
-else
-    {
-    /* Two block case. */
-    fprintf(f, "2\t");				// blockCount
-    fprintf(f, "%d,%d,\t", size1, size2);	// blockSizes
-    fprintf(f, "%d,%d,\t", q1, q2);		// qStarts
-    fprintf(f, "%d,%d,\n", t1, t2);		// tStart);
-    }
-
-/* Restore qSeq + strand if need be. */
-if (strand == '-')
-    reverseComplement(qSeq->dna, qSeq->size);
-}
-
-
-void dnaOutUpperMatch(DNA a, DNA b, FILE *f)
-/* Write out a in upper case if it matches b, otherwise in lower case. */
-{
-if (a == b)
-    a = toupper(a);
-else
-    a = tolower(a);
-fputc(a, f);
-}
-
-void splatOutputSplat(struct splatTag *tag, int mapCount, 
-	struct dnaSeq *qSeq, struct splix *splix, int chromIx, FILE *f)
-/* Output tag to splat format output file. (Tag-align plus query name)*/
-{
-char strand = tag->strand;
-if (strand == '-')
-    reverseComplement(qSeq->dna, qSeq->size);
-
-/* Write chrom chromStart chromEnd */
-fprintf(f, "%s\t", splix->chromNames[chromIx]);
-int chromOffset = splix->chromOffsets[chromIx];
-fprintf(f, "%d\t%d\t", tag->t1 - chromOffset, tag->t2 + tag->size2 - chromOffset);
-
-/* Write sequence including gaps (- for deletions, ^ for inserts) */
-int i;
-int size1 = tag->size1;
-int size2 = tag->size2;
-int q1 = tag->q1, q2 = tag->q2;
-int t1 = tag->t1, t2 = tag->t2;
-DNA *qDna = qSeq->dna + q1;
-DNA *tDna = splix->allDna + t1;
-for (i=0; i<tag->size1; ++i)
-     dnaOutUpperMatch(qDna[i], tDna[i], f);
-if (size2 > 0)
-    {
-    int qGapSize = q2 - (q1+size1);
-    int tGapSize = t2 - (t1+size1);
-    for (i=0; i<qGapSize; ++i)
-	{
-	fputc('^', f);
-        fputc(tolower(qDna[size1+i]), f);
-	}
-    for (i=0; i<tGapSize; ++i)
-        fputc('-', f);
-    qDna = qSeq->dna + q2;
-    tDna = splix->allDna + t2;
-    for (i=0; i<size2; ++i)
-        dnaOutUpperMatch(qDna[i], tDna[i], f);
-    }
-fputc('\t', f);
-
-fprintf(f, "%d\t", 1000/mapCount);
-fprintf(f, "%c\t", strand);
-fprintf(f, "%s\n", qSeq->name);
-
-if (strand == '-')
-    reverseComplement(qSeq->dna, qSeq->size);
-}
-
-void splatTagOutput(struct splatTag *tag, int mapCount, struct dnaSeq *qSeq, struct splix *splix, 
-	FILE *f)
-/* Output tag match */
-{
-int chromIx = tOffsetToChromIx(splix, tag->t1);
-if (sameString(outType, "maf"))
-    splatOutputMaf(tag, mapCount, qSeq, splix, chromIx, f);
-else if (sameString(outType, "psl"))
-    splatOutputPsl(tag, mapCount, qSeq, splix, chromIx, f);
-else if (sameString(outType, "splat"))
-    splatOutputSplat(tag, mapCount, qSeq, splix, chromIx, f);
-}
-
-struct splatTag *removeDupeTags(struct splatTag *tagList)
+static struct splatTag *removeDupeTags(struct splatTag *tagList)
 /* Return list with duplicate tags removed.  As a side effect sort list. */
 {
 struct splatTag *tag, *next, *newList = NULL;
@@ -1163,7 +914,29 @@ slReverse(&newList);
 return newList;
 }
 
-struct splatTag *splatTagFilterOnDivergence(struct splatTag *tagList, int maxDivergence)
+static void splatOneStrand(struct dnaSeq *qSeq, char strand,
+	int tagPosition, struct splix *splix, int maxGap, struct splatTag **pTagList)
+/* Align one query strand against index, filter, and write out results */
+{
+struct rbTree *hitTree = splatHitsOneStrand(qSeq, strand, tagPosition, splix, maxGap);
+struct splatTag *tagList = NULL;
+verbose(2, " %d hits on %c strand\n", hitTree->n, strand);
+if (hitTree->n > 0)
+    {
+    extendHitsToTags(hitTree, qSeq, strand, tagPosition, splix, &tagList);
+
+    /* Some duplicate tags may have come through.  This also will filter the tags 
+     * by chromosome position. */
+    tagList = removeDupeTags(tagList);
+    *pTagList = slCat(tagList, *pTagList);
+
+
+    rbTreeFree(&hitTree);
+    }
+rbTreeFree(&hitTree);
+}
+
+static struct splatTag *splatTagFilterOnDivergence(struct splatTag *tagList, int maxDivergence)
 /* Remove (and free) tags with more than maxDivergence from list. */
 {
 struct splatTag *tag, *next, *newList = NULL;
@@ -1179,27 +952,29 @@ slReverse(&newList);
 return newList;
 }
 
-void splatOne(struct dnaSeq *qSeq, struct splix *splix, int maxGap, FILE *f,
+static void splatOne(struct dnaSeq *qSeqF, struct splix *splix, int maxGap, FILE *f,
 	int *retMapCount, boolean *retIsRepeat)
 /* Align one query sequence against index, filter, and write out results.
  * Returns the number of mappings. */
 {
+/* Make reverse complement of query too. */
+struct dnaSeq *qSeqR = cloneDnaSeq(qSeqF);
+reverseComplement(qSeqR->dna, qSeqR->size);
+
 struct splatTag *tagList = NULL, *tag;
-int size = qSeq->size;
+int size = qSeqF->size;
 int desiredSize = tagSize;
 int outputCount = 0;
 boolean isRepeat = FALSE;
 if (size < desiredSize)
     {
     warn("%s is %d bases, minimum splat query size %d, skipping", 
-    	qSeq->name, tagSize, qSeq->size);
+    	qSeqF->name, tagSize, qSeqF->size);
     return;
     }
-splatOneStrand(qSeq, '+', 0, splix, maxGap, &tagList);
-reverseComplement(qSeq->dna, qSeq->size);
-int tagPosition = qSeq->size - desiredSize;
-splatOneStrand(qSeq, '-', tagPosition, splix, maxGap, &tagList);
-reverseComplement(qSeq->dna, qSeq->size);
+splatOneStrand(qSeqF, '+', 0, splix, maxGap, &tagList);
+int tagPosition = qSeqR->size - desiredSize;
+splatOneStrand(qSeqR, '-', tagPosition, splix, maxGap, &tagList);
 if (tagList != NULL)
     {
     /* Find least divergence. */
@@ -1215,48 +990,26 @@ if (tagList != NULL)
 	tagList = splatTagFilterOnDivergence(tagList, leastDivergence);
     
 
-    /* Some duplicate tags may have come through.  This also will filter the tags 
-     * by chromosome position. */
-    tagList = removeDupeTags(tagList);
-
-
     /* Count up mappings, and output either to repeat file or to mapping file. */
     outputCount = slCount(tagList);
     isRepeat = (outputCount > maxRepeat);
     if (isRepeat)
         {
 	if (repeatOutputFile != NULL)
-	    faWriteNext(repeatOutputFile, qSeq->name, qSeq->dna, qSeq->size);
+	    faWriteNext(repeatOutputFile, qSeqF->name, qSeqF->dna, qSeqF->size);
 	outputCount = 0;
 	}
     else
         {
-	for (tag = tagList; tag != NULL; tag=tag->next)
-	    splatTagOutput(tag, outputCount, qSeq, splix, f);
+	splatOutTags(tagList, out, qSeqF, qSeqR, splix, f);
 	}
     splatTagFreeList(&tagList);
     }
+dnaSeqFree(&qSeqR);
 *retMapCount = outputCount;
 *retIsRepeat = isRepeat;
 }
 
-void splatHeaderOutput(char *target, char *query, char *outType, FILE *f)
-/* Write out file type specific header if any. */
-{
-if (sameString(outType, "maf"))
-    {
-    fprintf(f, "##maf version=1 program=splat\n");
-    fprintf(f, "# splat.v%s %s %s\n", version, target, query);
-    fprintf(f, "\n");
-    }
-else if (sameString(outType, "psl"))
-    {
-    }
-else if (sameString(outType, "splat"))
-    ;
-else
-    errAbort("Unrecognized output type %s", outType);
-}
 
 void splat(char *target, char *query, char *output)
 /* splat - Speedy Local Alignment Tool. */
@@ -1266,15 +1019,15 @@ struct splix *splix = splixRead(target, memoryMap);
 FILE *f = mustOpen(output, "w");
 if (repeatOutput != NULL)
     repeatOutputFile = mustOpen(repeatOutput, "w");
-splatHeaderOutput(target, query, outType, f);
+splatOutHeader(target, query, out, f);
 struct dnaSeq *qSeq;
 int uniqCount = 0, totalMap = 0, totalRepeat = 0, totalReads = 0;
 while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     {
     verbose(2, "Processing %s\n", qSeq->name);
     toUpperN(qSeq->dna, qSeq->size);
-    int mapCount;
-    boolean isRepeat;
+    int mapCount = 0;
+    boolean isRepeat = FALSE;
     splatOne(qSeq, splix, maxGap, f, &mapCount, &isRepeat);
     verbose(2, " %d mappings\n", mapCount);
     if (mapCount > 0)
@@ -1318,7 +1071,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
-outType = optionVal("out", outType);
+out = optionVal("out", out);
 maxDivergence = optionInt("maxDivergence", maxDivergence);
 worseToo = optionExists("worseToo");
 maxRepeat = optionInt("maxRepeat", maxRepeat);
