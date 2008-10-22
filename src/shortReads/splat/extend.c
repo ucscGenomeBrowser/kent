@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "chain.h"
+#include "chainConnect.h"
 #include "axt.h"
 #include "bandExt.h"
 #include "splix.h"
@@ -89,7 +90,112 @@ chain->score = score;
 return score;
 }
 
+static struct cBlock *bestBlock(struct chain *chain)
+/* Return best scoring block in chain */
+{
+struct cBlock *block, *best = NULL;
+int bestScore = 0;
+for (block = chain->blockList; block != NULL; block = block->next)
+    {
+    if (block->score > bestScore)
+        {
+	bestScore = block->score;
+	best = block;
+	}
+    }
+return best;
+}
 
+static struct cBlock *extendInRegion(
+                             DNA *qDna, int qStart, int qEnd,
+                             DNA *tDna, int tStart, int tEnd,
+                             int dir, char *qSym, char *tSym, int symAlloc,
+			     struct axtScoreScheme *scoreScheme, int maxGap)
+/* Do banded extension in region and return as a list of blocks. */
+{
+int symCount;
+int qSize = qEnd - qStart;
+int tSize = tEnd - tStart;
+int qs, ts, qExtStart, tExtStart;
+if (qSize > 0 && tSize > 0)
+    {
+    if (dir < 0)
+        {
+        qStart = qEnd - qSize;
+        tStart = tEnd - tSize;
+        }
+    bandExt(FALSE, scoreScheme, maxGap, 
+            qDna + qStart,  qSize,
+            tDna + tStart, tSize,
+            dir, symAlloc, &symCount, qSym, tSym, &qs, &ts);
+    if (dir > 0)
+        {
+        qExtStart = qStart;
+        tExtStart = tStart;
+        }
+    else
+        {
+        qExtStart = qEnd - qs - 1;
+        tExtStart = tEnd - ts - 1;
+        }
+    return cBlocksFromAliSym(symCount, qSym, tSym, qExtStart, tExtStart);
+    }
+else
+    return NULL;
+}
+
+
+void extendAroundBestBlock(struct splatAlign *ali, struct axtScoreScheme *scoreScheme)
+/* Return realignment created by extending in both directions from the mid-point of the
+ * best block in the existing alignment. */
+{
+int maxSingleGap = 9;
+int maxTotalGaps = 3*maxSingleGap;
+struct chain *chain = ali->chain;
+struct cBlock *anchor = bestBlock(chain);
+int qMid = (anchor->qStart + anchor->qEnd)/2;
+int tMid = (anchor->tStart + anchor->tEnd)/2;
+int symAlloc = chain->qSize * 2;
+char *qSym, *tSym;
+AllocArray(qSym, symAlloc);
+AllocArray(tSym, symAlloc);
+
+int qBeforeSize = qMid;
+struct cBlock *blocksBefore 
+	= extendInRegion(ali->qDna, 0, qMid,
+	                 ali->tDna, tMid - qBeforeSize - maxTotalGaps, tMid,
+			 -1, qSym, tSym, symAlloc, scoreScheme, maxSingleGap);
+int qAfterSize = chain->qSize - qMid;
+struct cBlock *blocksAfter 
+	= extendInRegion(ali->qDna, qMid, chain->qSize,
+	                 ali->tDna, tMid, tMid + qAfterSize + maxTotalGaps,
+			 1, qSym, tSym, symAlloc, scoreScheme, maxSingleGap);
+struct cBlock *allBlocks = slCat(blocksBefore, blocksAfter);
+slFreeList(&chain->blockList);
+chain->blockList = allBlocks;
+chainMergeAbutting(chain);
+chainCalcBounds(chain);
+chainAddAxtScore(chain, ali->qDna, ali->tDna, scoreScheme);
+freeMem(qSym);
+freeMem(tSym);
+}
+
+struct splatAlign *splatExtendTag(struct splatTag *tag,
+	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix,
+	struct axtScoreScheme *scoreScheme)
+/* Convert a single tag to an alignment. */
+{
+struct splatAlign *ali = tagToAlign(tag, qSeqF, qSeqR, splix, scoreScheme);
+struct chain *chain = ali->chain;
+chainAddAxtScore(chain, ali->qDna, ali->tDna, scoreScheme);
+int qxSize = chain->qSize - chain->qEnd;	/* extra q size. */
+int txSize = chain->tSize - chain->tEnd;	/* extra t size. */
+if (qxSize > 0 && txSize > 0)
+    extendAroundBestBlock(ali, scoreScheme);
+return ali;
+}
+
+#ifdef OLD
 struct splatAlign *splatExtendTag(struct splatTag *tag,
 	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix,
 	struct axtScoreScheme *scoreScheme)
@@ -99,6 +205,7 @@ int maxSingleGap = 9;
 int maxTotalGap = maxSingleGap * 3;
 struct splatAlign *ali = tagToAlign(tag, qSeqF, qSeqR, splix, scoreScheme);
 struct chain *chain = ali->chain;
+chainAddAxtScore(chain, ali->qDna, ali->tDna, scoreScheme);
 int qxSize = chain->qSize - chain->qEnd;	/* extra q size. */
 int txSize = chain->tSize - chain->tEnd;	/* extra t size. */
 if (qxSize > 0 && txSize > 0)
@@ -123,26 +230,17 @@ if (qxSize > 0 && txSize > 0)
 	struct cBlock *newBlocks = cBlocksFromAliSym(symCount, 
 		qSym, tSym, qxStart, txStart);
 	struct cBlock *lastOldBlock = slLastEl(chain->blockList);
-	struct cBlock *lastNewBlock = slLastEl(newBlocks);
-	chain->qEnd = lastNewBlock->qEnd;
-	chain->tEnd = lastNewBlock->tEnd;
-	if (lastOldBlock->qEnd == newBlocks->qStart && lastOldBlock->tEnd == newBlocks->tStart)
-	    {
-	    /* Merge in first new block to last old block, and dispose of first new block. */
-	    lastOldBlock->qEnd = newBlocks->qEnd;
-	    lastOldBlock->tEnd = newBlocks->tEnd;
-	    lastOldBlock->next = newBlocks->next;
-	    freeMem(newBlocks);
-	    }
-	else
-	    lastOldBlock->next = newBlocks;
+	lastOldBlock->next = newBlocks;
+	chainMergeAbutting(chain);
+	chainCalcBounds(chain);
+	chainAddAxtScore(chain, ali->qDna, ali->tDna, scoreScheme);
 	}
     freeMem(qSym);
     freeMem(tSym);
     }
-chainAddAxtScore(ali->chain, ali->qDna, ali->tDna, scoreScheme);
 return ali;
 }
+#endif /* OLD */
 
 struct splatAlign *splatExtendTags(struct splatTag *tagList, 
 	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix,

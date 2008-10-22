@@ -111,10 +111,10 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.18 2008/10/22 06:00:27 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.19 2008/10/22 07:09:41 kent Exp $";
 
 
-char *version = "27";	/* Program version number. */
+char *version = "28";	/* Program version number. */
 
 static char *out = "splat";
 static int maxDivergence = 5;
@@ -1007,7 +1007,7 @@ dnaSeqFree(&qSeqR);
 void splat(char *target, char *query, char *output)
 /* splat - Speedy Local Alignment Tool. */
 {
-struct axtScoreScheme *scoreScheme = axtScoreSchemeSimpleDna(2, 2, 2, 1);
+struct axtScoreScheme *scoreScheme = axtScoreSchemeSimpleDna(2, 2, 2, 2);
 struct dnaLoad *qLoad = dnaLoadOpen(query);
 struct splix *splix = splixRead(target, memoryMap);
 FILE *f = mustOpen(output, "w");

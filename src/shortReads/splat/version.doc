@@ -29,3 +29,7 @@
      Refactoring to make it convert splatTag list to splatAlign list before doing output.
      As part of this the output routines take chains instead of splatTags as input.
 27 - Adding in first cut of banded extension.
+28 - Making banded extension proceed out from the midpoint of the best block found during
+     the tag-mapping phase.  Mostly this is good.  It's definitely good for the 3' end.
+     On the 5' end I've mixed feelings, because sometimes now the alignment does not
+     go all the way to the start of the read.  
