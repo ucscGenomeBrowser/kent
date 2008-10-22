@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.91 2008/10/21 17:21:23 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.92 2008/10/22 02:17:17 mikep Exp $
 
 use warnings;
 use strict;
@@ -133,6 +133,7 @@ our %validators = (
     antibody => \&validateAntibody,
     rnaExtract => \&validateRnaExtract,
     localization => \&validateLocalization,
+    freezeDate => \&validateFreezeDate,
     replicate => \&validateReplicate,
     );
 
@@ -240,6 +241,11 @@ sub validateAntibody {
     } else {
         return ("Antibody \'$val\' is not known");
     }
+}
+
+sub validateFreezeDate {
+    my ($val) = @_;
+    return defined($terms{'freezeDate'}{$val}) ? () : ("freezeDate \'$val\' is not known");
 }
 
 sub validateReplicate {
@@ -411,6 +417,7 @@ sub validateGtf {
         # XXXX should be modified to handle zipped files.
         die "We don't currently support gzipped gtf files\n";
     }
+    HgAutomate::verbose(2, "validateGtf(path=$path,file=$file,type=$type)\n");
     # XXXX Add support for $opt_quick
     my $err = system ( "gtfToGenePred $filePath $outFile >$errFile 2>&1");
     if ($err) {
@@ -419,11 +426,15 @@ sub validateGtf {
         my @err = <ERR>;
         die "@err\n";
     }
-    unlink $outFile;
     unlink $errFile;
     HgAutomate::verbose(2, "File \'$file\' passed gtfToGenePred conversion \n");
     doTime("done validateGtf") if $opt_timing;
-    return validateGene(undef,$outFile,$type);
+    my @res = validateGene(undef,$outFile,$type);
+    if (scalar(@res)==0) { # no errors so remove the temp .bed file
+        HgAutomate::verbose(2, "File \'$file\' passed gtf gene validation \n");
+	unlink $outFile;
+    } 
+    return @res;
 }
 
 
