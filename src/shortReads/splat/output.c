@@ -3,7 +3,7 @@
 #include "common.h"
 #include "dystring.h"
 #include "dnautil.h"
-#include "dnaSeq.h"
+#include "dnaseq.h"
 #include "maf.h"
 #include "chain.h"
 #include "splix.h"
