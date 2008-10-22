@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.213 2008/09/03 19:19:24 markd Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.214 2008/10/22 18:19:15 markd Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2045,7 +2045,7 @@ boolean found = FALSE;
 
 if (gotRefLink)
     {
-    if (startsWith("NM_", spec) || startsWith("XM_", spec))
+    if (startsWith("NM_", spec) || startsWith("NR_", spec) || startsWith("XM_", spec))
 	{
 	dyStringPrintf(ds, "select * from refLink where mrnaAcc = '%s'", spec);
 	addRefLinks(conn, ds, &rlList);
