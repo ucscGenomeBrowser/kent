@@ -6,7 +6,7 @@
 #include "genbank.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: genbank.c,v 1.11 2008/03/11 04:32:35 markd Exp $";
+static char const rcsid[] = "$Id: genbank.c,v 1.12 2008/10/22 19:23:54 markd Exp $";
 
 static char *JOIN_PREFIX = "join(";
 static char *COMPLEMENT_PREFIX = "complement(";
@@ -157,8 +157,23 @@ if (strlen(acc) > GENBANK_ACC_BUFSZ-1)
 boolean genbankIsRefSeqAcc(char *acc)
 /* determine if a accession appears to be from RefSeq */
 {
-/* NM_012345, NP_012345, etc */
+/* NM_012345, NP_012345, NR_012345, etc */
 return (strlen(acc) > 4) && (acc[0] == 'N') && (acc[2] == '_');
+}
+
+boolean genbankIsRefSeqCodingMRnaAcc(char *acc)
+/* determine if a accession appears to be a protein-coding RefSeq
+ * accession. */
+{
+/* NM_012345 */
+return (strlen(acc) > 4) && (acc[0] == 'N') && (acc[0] == 'M') && (acc[2] == '_');
+}
+
+boolean genbankIsRefSeqNonCodingMRnaAcc(char *acc)
+/* determine if a accession appears to be a non-protein-coding RefSeq
+ * accession. */
+{
+return genbankIsRefSeqAcc(acc) && ! genbankIsRefSeqCodingMRnaAcc(acc);
 }
 
 char* genbankDropVer(char *outAcc, char *inAcc)

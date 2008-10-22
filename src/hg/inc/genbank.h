@@ -46,6 +46,14 @@ struct genbankCds genbankCdsToGenome(struct genbankCds* cds, struct psl *psl);
 boolean genbankIsRefSeqAcc(char *acc);
 /* determine if a accession appears to be from RefSeq */
 
+boolean genbankIsRefSeqCodingMRnaAcc(char *acc);
+/* determine if a accession appears to be a protein-coding RefSeq
+ * accession. */
+
+boolean genbankIsRefSeqNonCodingMRnaAcc(char *acc);
+/* determine if a accession appears to be a non-protein-coding RefSeq
+ * accession. */
+
 char* genbankDropVer(char *outAcc, char *inAcc);
 /* strip the version from a genbank id.  Input and output
  * strings maybe the same. acc length is checked against

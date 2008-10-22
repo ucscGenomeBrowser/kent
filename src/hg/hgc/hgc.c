@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1468 2008/10/13 06:21:18 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1469 2008/10/22 19:23:55 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2096,7 +2096,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
         else
            printf("</b> %s<br>\n",gp->name2);
         }
-    if (gp->exonFrames != NULL) 
+    if ((gp->exonFrames != NULL) && (!genbankIsRefSeqNonCodingMRnaAcc(gp->name)))
         {
         printf("<b>CDS Start: </b>");
         printCdsStatus((gp->strand[0] == '+') ? gp->cdsStartStat : gp->cdsEndStat);
@@ -2203,7 +2203,7 @@ if (!foundPep)
 	    {
 	    printf("No protein prediction for Ensembl gene");
 	    }
-	else
+	else if (!genbankIsRefSeqNonCodingMRnaAcc(geneName))
 	    {
 	    hgcAnchorSomewhere("htcTranslatedPredMRna", geneName,
 		"translate", seqName);
@@ -9024,7 +9024,8 @@ printf("<table border=0>\n<tr>\n");
 prRefGeneInfo(conn, rnaName, sqlRnaName, rl, isXeno);
 addGeneExtra(rl->name);  /* adds columns if extra info is available */
 
-addPalLink(conn, tdb->tableName,  chrom, left, right, rnaName);
+if (genbankIsRefSeqCodingMRnaAcc(rnaName))
+    addPalLink(conn, tdb->tableName,  chrom, left, right, rnaName);
 
 printf("</tr>\n</table>\n");
 
