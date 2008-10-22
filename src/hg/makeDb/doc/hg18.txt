@@ -22387,109 +22387,6 @@ Estimated complete:                 0s       0.00m     0.00h    0.00d
     hgLoadSeq -replace hg18 /gbdb/hg18/uniGene/Hs.seq.uniq.simpleHeader.fa
 
 #############################################################################
-# BLASTZ/CHAIN/NET turTru1 (not done)
-    ssh kkstore05
-    screen #	use screen to control this multi-day job
-    mkdir /cluster/data/hg18/bed/blastz.turTru1.2008-07-11
-    cd /cluster/data/hg18/bed/blastz.turTru1.2008-07-11
-    cat << _EOF_ > DEF
-# Human vs. Dolphin
-
-BLASTZ_M=50
-
-# TARGET: Human Hg18
-SEQ1_DIR=/scratch/data/hg18/nib
-SEQ1_LEN=/cluster/data/hg18/chrom.sizes
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-
-# QUERY: Dolphin
-SEQ2_DIR=/san/sanvol1/scratch/turTru1/turTru1.2bit
-SEQ2_LEN=/san/sanvol1/scratch/turTru1/chrom.sizes
-SEQ2_CHUNK=20000000
-SEQ2_LIMIT=100
-SEQ2_LAP=0
-
-BASE=/cluster/data/hg18/bed/blastz.turTru1.2008-07-11
-TMPDIR=/scratch/tmp
-_EOF_
-
-    # << happy emacs
-
-    time doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk  \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/turTru1/blastz.hg18 > do.log 2>&1 &
-
-    # failed so had to run last five jobs manually
-
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/turTru1/blastz.hg18 > do2.log 2>&1 &
-
-    ln -s blastz.turTru1.2008-07-11 /cluster/data/hg18/bed/blastz.turTru1
-
-    featureBits hg18 chainTurTru1Link
-    # 1400537230 bases of 2881515245 (48.604%) in intersection
-
-    cd /cluster/data/hg18/bed/blastz.turTru1.2008-07-11
-
-    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 turTru1 > rbest.log 2>&1 &
-
-#############################################################################
-# BLASTZ/CHAIN/NET pteVam1 (not done)
-    ssh kkstore02
-    screen #	use screen to control this multi-day job
-    mkdir /cluster/data/hg18/bed/blastz.pteVam1.2008-07-13
-    cd /cluster/data/hg18/bed/blastz.pteVam1.2008-07-13
-    cat << _EOF_ > DEF
-# Human vs. Megabat
-
-BLASTZ_M=50
-
-# TARGET: Human Hg18
-SEQ1_DIR=/scratch/data/hg18/nib
-SEQ1_LEN=/cluster/data/hg18/chrom.sizes
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-
-# QUERY: Megabat
-SEQ2_DIR=/san/sanvol1/scratch/pteVam1/pteVam1.2bit
-SEQ2_LEN=/san/sanvol1/scratch/pteVam1/chrom.sizes
-SEQ2_CHUNK=20000000
-SEQ2_LIMIT=100
-SEQ2_LAP=0
-
-BASE=/cluster/data/hg18/bed/blastz.pteVam1.2008-07-13
-TMPDIR=/scratch/tmp
-_EOF_
-
-    # << happy emacs
-
-    time doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk  \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/pteVam1/blastz.hg18 > do.log 2>&1 &
-
-    # failed so had to run last five jobs manually
-
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/pteVam1/blastz.hg18 > do2.log 2>&1 &
-
-    cd ..
-    ln -s blastz.pteVam1.2008-07-13 /cluster/data/hg18/bed/blastz.pteVam1
-
-    featureBits hg18 chainPteVam1Link
-    # 1312925830 bases of 2881515245 (45.564%) in intersection
-
-    cd /cluster/data/hg18/bed/blastz.pteVam1.2008-07-13
-
-    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 pteVam1 > rbest.log 2>&1 &
-
-#############################################################################
 # BLASTZ/CHAIN/NET vicPac1 (not done)
     ssh kkstore02
     screen #	use screen to control this multi-day job
@@ -22547,7 +22444,7 @@ _EOF_
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 vicPac1 > rbest.log 2>&1 &
 
 #############################################################################
-# BLASTZ/CHAIN/NET dipOrd1 (WORKING - 2008-10-21 - Hiram)
+# BLASTZ/CHAIN/NET dipOrd1 (DONE - 2008-10-22 - Hiram)
     screen #	use screen to control this multi-day job
     mkdir /hive/data/genomes/hg18/bed/blastzDipOrd1.2008-10-21
     cd /hive/data/genomes/hg18/bed/blastzDipOrd1.2008-10-21
@@ -22575,18 +22472,27 @@ TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
 
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+    time doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
 	-bigClusterHub=swarm  \
       -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - 2008-10-21 16:13
+    #	real    881m33.829s
+    cat fb.hg18.chainDipOrd1Link.txt 
+    #	786126212 bases of 2881515245 (27.282%) in intersection
+    #	slight difficulty with the makeMd5sum.csh script, fixed in the source
+    #	and completed the copy of the liftOver file, then continuing,
+    #	with -syntenicNet:
 
-    featureBits hg18 chainDipOrd1Link
-    # 1139695079 bases of 2881515245 (39.552%) in intersection
+    time doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -continue=cleanup -bigClusterHub=swarm  \
+      -chainMinScore=3000 -chainLinearGap=medium > synNet.log 2>&1 &
+    #	real    86m15.646s
 
     cd /cluster/data/hg18/bed/blastzDipOrd1.2008-10-21
 
-    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 dipOrd1 > rbest.log 2>&1 &
+    time nice -n +19 doRecipBest.pl hg18 dipOrd1 > rbest.log 2>&1 &
+XXX - running 2008-10-22 11:39
 
 #############################################################################
 # BLASTZ/CHAIN/NET pteVam1 (WORKING - 2008-10-21 - Hiram)
@@ -22617,11 +22523,17 @@ TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
 
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+    time doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
 	-bigClusterHub=pk  \
       -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - 2008-10-21 16:21
+    #	real    595m14.168s
+    #	some crashed jobs, finish the batch on pk manually, then, continuing:
+    time doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=cat -bigClusterHub=pk  \
+      -chainMinScore=3000 -chainLinearGap=medium > cat.log 2>&1 &
+XXX - running - 2008-10-22 15:45
 
     featureBits hg18 chainPteVam1Link
     # 1139695079 bases of 2881515245 (39.552%) in intersection
@@ -22631,7 +22543,7 @@ XXX - running - 2008-10-21 16:21
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 pteVam1 > rbest.log 2>&1 &
 
 #############################################################################
-# BLASTZ/CHAIN/NET turTru1 (WORKING - 2008-10-21 - Hiram)
+# BLASTZ/CHAIN/NET turTru1 (DONE - 2008-10-22 - Hiram)
     screen #	use screen to control this multi-day job
     mkdir /hive/data/genomes/hg18/bed/blastzTurTru1.2008-10-21
     cd /hive/data/genomes/hg18/bed/blastzTurTru1.2008-10-21
@@ -22659,18 +22571,26 @@ TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
 
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+    time doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
 	-bigClusterHub=swarm  \
       -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX - running - 2008-10-21 16:07
-
-    featureBits hg18 chainTurTru1Link
-    # 1139695079 bases of 2881515245 (39.552%) in intersection
+    #	real    702m54.490s
+    cat fb.hg18.chainTurTru1Link.txt
+    #	1398587431 bases of 2881515245 (48.537%) in intersection
+    #	slight difficulty with the makeMd5sum.csh script, fixed in the source
+    #	and completed the copy of the liftOver file, then continuing,
+    #	with -syntenicNet:
 
     cd /cluster/data/hg18/bed/blastzTurTru1.2008-10-21
+    time doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -continue=cleanup -bigClusterHub=swarm  \
+      -chainMinScore=3000 -chainLinearGap=medium > synNet.log 2>&1 &
+    #	real    74m4.276s
 
-    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 turTru1 > rbest.log 2>&1 &
+    time nice -n +19 doRecipBest.pl hg18 turTru1 > rbest.log 2>&1 &
+    #	real    275m19.714s
 
 #############################################################################
 # BLASTZ/CHAIN/NET tarSyr1 (WORKING - 2008-10-21 - Hiram)
@@ -22710,80 +22630,16 @@ XXX - running - 2008-10-21 15:50
     featureBits hg18 chainTarSyr1Link
     # 1139695079 bases of 2881515245 (39.552%) in intersection
 
-    cd /cluster/data/hg18/bed/blastz.tarSyr1.2008-07-19
+    cd /cluster/data/hg18/bed/blastz.tarSyr1.2008-10-21
 
-    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 tarSyr1 > rbest.log 2>&1 &
-
-#############################################################################
-# BLASTZ/CHAIN/NET dipOrd1 (not done)
-    ssh kkstore02
-    screen #	use screen to control this multi-day job
-    mkdir /cluster/data/hg18/bed/blastz.dipOrd1.2008-07-27
-    cd /cluster/data/hg18/bed/blastz.dipOrd1.2008-07-27
-    cat << _EOF_ > DEF
-# Human vs. Kangaroo rat
-
-BLASTZ_M=50
-BLASTZ=lastz
-
-# TARGET: Human Hg18
-SEQ1_DIR=/scratch/data/hg18/nib
-SEQ1_LEN=/cluster/data/hg18/chrom.sizes
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-
-# QUERY: Kangaroo rat
-SEQ2_DIR=/san/sanvol1/scratch/dipOrd1/dipOrd1.2bit
-SEQ2_LEN=/san/sanvol1/scratch/dipOrd1/chrom.sizes
-SEQ2_CHUNK=20000000
-SEQ2_LIMIT=100
-SEQ2_LAP=0
-
-BASE=/cluster/data/hg18/bed/blastz.dipOrd1.2008-07-27
-TMPDIR=/scratch/tmp
-_EOF_
-
-    # << happy emacs
-
-    time doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk  \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/dipOrd1/blastz.hg18 > do.log 2>&1 &
-
-# Completed: 726225 of 726225 jobs
-# CPU time in finished jobs:   15086026s  251433.77m  4190.56h  174.61d  0.478 y
-# IO & Wait Time:               2524564s   42076.06m   701.27h   29.22d  0.080 y
-# Average job time:                  24s       0.40m     0.01h    0.00d
-# Longest finished job:             809s      13.48m     0.22h    0.01d
-# Submission to last job:         59736s     995.60m    16.59h    0.69d
-
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/dipOrd1/blastz.hg18 > do2.log 2>&1 &
-
-    # memk died on chr19 in chainRun (ran on kolossus)
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=chainMerge \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/dipOrd1/blastz.hg18 > do3.log 2>&1 &
-
-    ln -s `pwd`/blastz.dipOrd1.2008-07-27 /cluster/data/hg18/bed/blastz.dipOrd1
-
-    featureBits hg18 chainDipOrd1Link
-    # 787795764 bases of 2881515245 (27.340%) in intersection
-
-    cd /cluster/data/hg18/bed/blastz.dipOrd1.2008-07-27
-
-    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 dipOrd1 > rbest.log 2>&1 &
+    time nice -n +19 doRecipBest.pl hg18 tarSyr1 > rbest.log 2>&1 &
 
 #############################################################################
-# BLASTZ/CHAIN/NET proCap1 (not done)
-    ssh kkstore02
+# BLASTZ/CHAIN/NET proCap1 (WORKING - 2008-10-22 - Hiram)
     screen #	use screen to control this multi-day job
-    mkdir /cluster/data/hg18/bed/blastz.proCap1.2008-07-29
-    cd /cluster/data/hg18/bed/blastz.proCap1.2008-07-29
-    cat << _EOF_ > DEF
+    mkdir /hive/data/genomes/hg18/bed/blastzProCap1.2008-10-22
+    cd /hive/data/genomes/hg18/bed/blastzProCap1.2008-10-22
+    cat << '_EOF_' > DEF
 # Human vs. Rock Hyrax
 
 BLASTZ_M=50
@@ -22791,63 +22647,207 @@ BLASTZ=lastz
 
 # TARGET: Human Hg18
 SEQ1_DIR=/scratch/data/hg18/nib
-SEQ1_LEN=/cluster/data/hg18/chrom.sizes
-SEQ1_CHUNK=10000000
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=200000000
 SEQ1_LAP=10000
 
 # QUERY: Rock Hyrax
-SEQ2_DIR=/san/sanvol1/scratch/proCap1/proCap1.2bit
-SEQ2_LEN=/san/sanvol1/scratch/proCap1/chrom.sizes
+SEQ2_DIR=/scratch/data/proCap1/proCap1.2bit
+SEQ2_LEN=/scratch/data/proCap1/chrom.sizes
 SEQ2_CHUNK=20000000
 SEQ2_LIMIT=100
 SEQ2_LAP=0
 
-BASE=/cluster/data/hg18/bed/blastz.proCap1.2008-07-29
+BASE=/hive/data/genomes/hg18/bed/blastzProCap1.2008-10-22
 TMPDIR=/scratch/tmp
-_EOF_
-
+'_EOF_'
     # << happy emacs
 
-    time doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk  \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/proCap1/blastz.hg18 > do.log 2>&1 &
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-bigClusterHub=swarm  \
+      -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - 2008-10-22 11:58
 
-# Completed: 1018045 of 1018095 jobs
-# Crashed: 50 jobs
-# CPU time in finished jobs:   25713285s  428554.75m  7142.58h  297.61d  0.815 y
-# IO & Wait Time:               5359056s   89317.60m  1488.63h   62.03d  0.170 y
-# Average job time:                  31s       0.51m     0.01h    0.00d
-# Longest finished job:            4904s      81.73m     1.36h    0.06d
-# Submission to last job:        195335s    3255.58m    54.26h    2.26d
+    featureBits hg18 chainProCap1Link
+    # 1139695079 bases of 2881515245 (39.552%) in intersection
+
+    cd /cluster/data/hg18/bed/blastz.proCap1.2008-10-22
+
+    time nice -n +19 doRecipBest.pl hg18 proCap1 > rbest.log 2>&1 &
+
+#############################################################################
+# BLASTZ/CHAIN/NET choHof1 (WORKING - 2008-10-22 - Hiram)
+    screen #	use screen to control this multi-day job
+    mkdir /hive/data/genomes/hg18/bed/blastzChoHof1.2008-10-22
+    cd /hive/data/genomes/hg18/bed/blastzChoHof1.2008-10-22
+    cat << '_EOF_' > DEF
+# Human vs. Sloth
+
+BLASTZ_M=50
+BLASTZ=lastz
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
+
+# QUERY: Sloth
+SEQ2_DIR=/scratch/data/choHof1/choHof1.2bit
+SEQ2_LEN=/scratch/data/choHof1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg18/bed/blastzChoHof1.2008-10-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-bigClusterHub=swarm  \
+      -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - 2008-10-22 12:07
+
+    featureBits hg18 chainChoHof1Link
+    # 1139695079 bases of 2881515245 (39.552%) in intersection
+
+    cd /cluster/data/hg18/bed/blastz.choHof1.2008-10-22
+
+    time nice -n +19 doRecipBest.pl hg18 choHof1 > rbest.log 2>&1 &
+
+#############################################################################
+# BLASTZ/CHAIN/NET dasNov2 (WORKING - 2008-10-22 - Hiram)
+    screen #	use screen to control this multi-day job
+    mkdir /hive/data/genomes/hg18/bed/blastzDasNov2.2008-10-22
+    cd /hive/data/genomes/hg18/bed/blastzDasNov2.2008-10-22
+    cat << '_EOF_' > DEF
+# Human vs. Armadillo
+
+BLASTZ_M=50
+BLASTZ=lastz
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
+
+# QUERY: Armadillo
+SEQ2_DIR=/scratch/data/dasNov2/dasNov2.2bit
+SEQ2_LEN=/scratch/data/dasNov2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg18/bed/blastzDasNov2.2008-10-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-bigClusterHub=swarm  \
+      -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - 2008-10-22 12:13
+
+    featureBits hg18 chainDasNov2Link
+    # 1139695079 bases of 2881515245 (39.552%) in intersection
+
+    cd /cluster/data/hg18/bed/blastz.dasNov2.2008-10-22
+
+    time nice -n +19 doRecipBest.pl hg18 dasNov2 > rbest.log 2>&1 &
+
+#############################################################################
+# BLASTZ/CHAIN/NET loxAfr2 (WORKING - 2008-10-22 - Hiram)
+    screen #	use screen to control this multi-day job
+    mkdir /hive/data/genomes/hg18/bed/blastzLoxAfr2.2008-10-22
+    cd /hive/data/genomes/hg18/bed/blastzLoxAfr2.2008-10-22
+    cat << '_EOF_' > DEF
+# Human vs. Elephant
+
+BLASTZ_M=50
+BLASTZ=lastz
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
+
+# QUERY: Elephant
+SEQ2_DIR=/scratch/data/loxAfr2/loxAfr2.2bit
+SEQ2_LEN=/scratch/data/loxAfr2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg18/bed/blastzLoxAfr2.2008-10-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-bigClusterHub=swarm  \
+      -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - 2008-10-22 12:18
+
+    featureBits hg18 chainLoxAfr2Link
+    # 1139695079 bases of 2881515245 (39.552%) in intersection
+
+    cd /cluster/data/hg18/bed/blastz.loxAfr2.2008-10-22
+
+    time nice -n +19 doRecipBest.pl hg18 loxAfr2 > rbest.log 2>&1 &
 
 
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/proCap1/blastz.hg18 > do2.log 2>&1 &
+#############################################################################
+# BLASTZ/CHAIN/NET vicPac1 (WORKING - 2008-10-22 - Hiram)
 
-# Completed: 49 of 49 jobs
-# CPU time in finished jobs:       1970s      32.84m     0.55h    0.02d  0.000 y
-# IO & Wait Time:                   665s      11.08m     0.18h    0.01d  0.000 y
-# Average job time:                  54s       0.90m     0.01h    0.00d
-# Longest finished job:            1062s      17.70m     0.29h    0.01d
-# Submission to last job:          1143s      19.05m     0.32h    0.01d
+XXX this sequence needs to get on /hive/data/staging
 
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=chainMerge \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/proCap1/blastz.hg18 > do3.log 2>&1 &
+    screen #	use screen to control this multi-day job
+    mkdir /hive/data/genomes/hg18/bed/blastzVicPac1.2008-10-22
+    cd /hive/data/genomes/hg18/bed/blastzVicPac1.2008-10-22
+    cat << '_EOF_' > DEF
+# Human vs. Alpaca
 
-    cd /cluster/data/hg18/bed
-    ln -s `pwd`/blastz.proCap1.2008-07-29 /cluster/data/hg18/bed/blastz.proCap1
+BLASTZ_M=50
+BLASTZ=lastz
 
-    featureBits hg18 chainProCav1Link
-    # 787795764 bases of 2881515245 (27.340%) in intersection
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=200000000
+SEQ1_LAP=10000
 
-    cd /cluster/data/hg18/bed/blastz.proCap1.2008-07-29
+# QUERY: Alpaca
+SEQ2_DIR=/scratch/data/vicPac1/vicPac1.2bit
+SEQ2_LEN=/scratch/data/vicPac1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
 
-    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 proCap1 > rbest.log 2>&1 &
+BASE=/hive/data/genomes/hg18/bed/blastzVicPac1.2008-10-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-bigClusterHub=swarm  \
+      -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+real    0m17.412s
+XXX - running - 2008-10-22 11:58
+
+    featureBits hg18 chainVicPac1Link
+    # 1139695079 bases of 2881515245 (39.552%) in intersection
+
+    cd /cluster/data/hg18/bed/blastz.vicPac1.2008-10-22
+
+    time nice -n +19 doRecipBest.pl hg18 vicPac1 > rbest.log 2>&1 &
 
 #############################################################################
 # BLASTZ/CHAIN/NET ochPri2 (DONE braney 2008-07-30)
@@ -23078,68 +23078,6 @@ _EOF_
     hgLoadBed hg18 snpArrayIllumina1M snpArrayIllumina1M.tab -tab -sqlTable=snpArrayIllumina1M.sql
 
 #############################################################################
-# BLASTZ/CHAIN/NET dasNov2 (not done)
-    ssh kkstore02
-    screen #	use screen to control this multi-day job
-    mkdir /cluster/data/hg18/bed/blastz.dasNov2.2008-08-02
-    cd /cluster/data/hg18/bed/blastz.dasNov2.2008-08-02
-    cat << _EOF_ > DEF
-# Human vs. Armadillo
-
-BLASTZ_M=50
-BLASTZ=/cluster/home/braney/bin/x86_64/lastz
-
-# TARGET: Human Hg18 (whole chroms)
-SEQ1_DIR=/scratch/data/hg18/nib
-SEQ1_LEN=/cluster/data/hg18/chrom.sizes
-SEQ1_CHUNK=200000000
-SEQ1_LAP=0
-
-# QUERY: Armadillo
-SEQ2_DIR=/san/sanvol1/scratch/dasNov2/dasNov2.2bit
-SEQ2_LEN=/san/sanvol1/scratch/dasNov2/chrom.sizes
-SEQ2_CHUNK=20000000
-SEQ2_LIMIT=100
-SEQ2_LAP=0
-
-BASE=/cluster/data/hg18/bed/blastz.dasNov2.2008-08-02
-TMPDIR=/scratch/tmp
-_EOF_
-
-    # << happy emacs
-
-    time doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk  \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/dasNov2/blastz.hg18 > do.log 2>&1 &
-
-# had to run some jobs on memk
-
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/dasNov2/blastz.hg18 > do2.log 2>&1 &
-
-    # netChainSubset barfed with memory error (PATH error)
-
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=load \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/dasNov2/blastz.hg18 > do3.log 2>&1 &
-
-    ssh hgwdev
-    cd /cluster/data/hg18/bed
-    ln -s `pwd`/blastz.dasNov2.2008-08-02 /cluster/data/hg18/bed/blastz.dasNov2
-
-    featureBits hg18 chainDasNov2Link
-# 971316235 bases of 2881515245 (33.709%) in intersection
-
-    ssh kkstore02
-    cd /cluster/data/hg18/bed/blastz.dasNov2.2008-08-02
-
-    nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 dasNov2 > rbest.log 2>&1 &
-
-#############################################################################
 # BLASTZ/CHAIN/NET micMur1 (DONE braney 2008-08-04 )
     ssh kkstore02
     screen #	use screen to control this multi-day job
@@ -23256,67 +23194,6 @@ _EOF_
     cd /cluster/data/hg18/bed/blastz.speTri1.2008-08-04
 
     nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 speTri1 > rbest.log 2>&1 &
-
-#############################################################################
-# BLASTZ/CHAIN/NET choHof1 (not done)
-    ssh kkstore02
-    screen #	use screen to control this multi-day job
-    mkdir /cluster/data/hg18/bed/blastz.choHof1.2008-08-04
-    cd /cluster/data/hg18/bed/blastz.choHof1.2008-08-04
-    cat << _EOF_ > DEF
-# Human vs. Sloth
-
-BLASTZ_M=50
-BLASTZ=/cluster/home/braney/bin/x86_64/lastz
-
-# TARGET: Human Hg18 (whole chroms)
-SEQ1_DIR=/scratch/data/hg18/nib
-SEQ1_LEN=/cluster/data/hg18/chrom.sizes
-SEQ1_CHUNK=200000000
-SEQ1_LAP=0
-
-# QUERY: Sloth
-SEQ2_DIR=/san/sanvol1/scratch/choHof1/choHof1.2bit
-SEQ2_LEN=/san/sanvol1/scratch/choHof1/chrom.sizes
-SEQ2_CHUNK=20000000
-SEQ2_LIMIT=100
-SEQ2_LAP=0
-
-BASE=/cluster/data/hg18/bed/blastz.choHof1.2008-08-04
-TMPDIR=/scratch/tmp
-_EOF_
-
-    # << happy emacs
-
-    time doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk  \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/choHof1/blastz.hg18 > do.log 2>&1 &
-
-# did crashed jobs on memk
-
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/choHof1/blastz.hg18 > do2.log 2>&1 &
-
-# had to run netChains.csh by hand due to PATH problem
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=load \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/choHof1/blastz.hg18 > do3.log 2>&1 &
-
-    ssh hgwdev
-    cd /cluster/data/hg18/bed
-    ln -s `pwd`/blastz.choHof1.2008-08-04 /cluster/data/hg18/bed/blastz.choHof1
-
-    featureBits hg18 chainChoHof1Link
-# 994528760 bases of 2881515245 (34.514%) in intersection
-
-    ssh kkstore02
-    cd /cluster/data/hg18/bed/blastz.choHof1.2008-08-04
-
-    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 choHof1 > rbest.log 2>&1 &
 
 #######################################################
 ## 44-way multiz (braney working....
