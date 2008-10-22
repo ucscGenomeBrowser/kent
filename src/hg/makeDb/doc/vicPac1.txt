@@ -138,3 +138,70 @@ cut -f 2 chrom.sizes | ave stdin
 
     cp /cluster/data/vicPac1/vicPac1.2bit /san/sanvol1/scratch/vicPac1
     cp /cluster/data/vicPac1/chrom.sizes /san/sanvol1/scratch/vicPac1
+
+#########################################################################
+## Repeat Masker (DONE - 2008-10-16 - Hiram)
+    screen	# to manage this several day job
+    mkdir /hive/data/genomes/vicPac1/bed/repeatMasker
+    cd /hive/data/genomes/vicPac1/bed/repeatMasker
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-workhorse=hgwdev -bigClusterHub=swarm \
+	-buildDir=`pwd` vicPac1 > do.log 2>&1 &
+    #	real    292m6.556s
+
+    twoBitToFa vicPac1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+# 2962253608 bases (1039343173 N's 1922910435 real 1306779321 upper 616131114
+# lower) in 298413 sequences in 1 files
+# %20.80 masked total, %32.04 masked real
+
+#########################################################################
+# SIMPLE REPEATS TRF (DONE - 2008-10-17 - Hiram)
+    screen # use a screen to manage this job
+    mkdir /hive/data/genomes/vicPac1/bed/simpleRepeat
+    cd /hive/data/genomes/vicPac1/bed/simpleRepeat
+    # 
+    time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/cluster/data/vicPac1/bed/simpleRepeat vicPac1 > do.log 2>&1 &
+    #	real    74m17.044s
+    cat fb.simpleRepeat
+    #	77925712 bases of 1922910435 (4.052%) in intersection
+
+    #	after RM run is done, add this mask:
+    cd /hive/data/genomes/vicPac1
+    rm vicPac1.2bit
+    twoBitMask vicPac1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed vicPac1.2bit
+    #	can safely ignore warning about >=13 fields in bed file
+
+    twoBitToFa vicPac1.2bit stdout | faSize stdin > vicPac1.2bit.faSize.txt
+# 2962253608 bases (1039343173 N's 1922910435 real 1303047359 upper 619863076
+# lower) in 298413 sequences in 1 files
+# %20.93 masked total, %32.24 masked rea
+
+    #	link to gbdb
+    ln -s `pwd`/vicPac1.2bit /gbdb/vicPac1
+
+###########################################################################
+# prepare for kluster runs (DONE _ 2008-10-22 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	vicPac1: 1922910435
+    # thus: 1024 * 1922910435/2881421696 = 683
+    #	rounding up to 700 for a more conservative masking
+    cd /hive/data/genomes/vicPac1
+    time blat vicPac1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=vicPac1.11.ooc -repMatch=700
+    #	Wrote 25830 overused 11-mers to vicPac1.11.ooc
+    #	real    2m8.728s
+
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/vicPac1
+    cp -p vicPac1.2bit chrom.sizes vicPac1.11.ooc \
+	/hive/data/staging/data/vicPac1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
+
+###########################################################################
+# fix the scientific name (DONE - 2008-10-22 - Hiram)
+    hgsql -e 'update dbDb set
+scientificName="Vicugna pacos" where name="vicPac1";' hgcentraltest
+###########################################################################
