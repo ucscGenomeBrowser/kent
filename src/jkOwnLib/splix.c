@@ -127,3 +127,21 @@ if (splix != NULL)
     freez(pSplix);
     }
 }
+
+int splixOffsetToChromIx(struct splix *splix, bits32 tOffset)
+/* Figure out index of chromosome containing tOffset */
+{
+int i;
+int chromCount = splix->header->chromCount;
+/* TODO - convert to binary search */
+for (i=0; i<chromCount; ++i)
+    {
+    int chromStart = splix->chromOffsets[i];
+    int chromEnd = chromStart + splix->chromSizes[i];
+    if (tOffset >= chromStart && tOffset < chromEnd)
+        return i;
+    }
+errAbort("tOffset %d out of range\n", tOffset);
+return -1;
+}
+

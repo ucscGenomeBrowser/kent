@@ -67,6 +67,9 @@ struct splix *splixRead(char *fileName, boolean memoryMap);
 void splixFree(struct splix **pSplix);
 /* Free up resources associated with index. */
 
+int splixOffsetToChromIx(struct splix *splix, bits32 tOffset);
+/* Figure out index of chromosome containing tOffset */
+
 /** Stuff to define SPLIX files **/
 #define SPLIX_MAGIC 0x5616A283	/* Magic number at start of SPLIX file */
 #define SPLIX_MAJOR_VERSION 0	
