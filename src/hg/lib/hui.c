@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.129 2008/10/21 16:20:18 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.130 2008/10/22 22:42:34 kate Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add"
@@ -3070,7 +3070,7 @@ boolean isWigMafProt = FALSE;
 
 if (strstr(tdb->type, "wigMafProt")) isWigMafProt = TRUE;
 
-puts("<TABLE><TR><TD>");
+puts("<TABLE><TR><TD VALIGN=\"TOP\">");
 
 if (consWiggles && consWiggles->next)
     {
@@ -3183,7 +3183,7 @@ else
 
 treeImage = trackDbSetting(tdb, "treeImage");
 if (treeImage)
-    printf("</TD><TD><IMG ALIGN=TOP SRC=\"../images/%s\"></TD></TR></TABLE>", treeImage);
+    printf("</TD><TD VALIGN=\"TOP\"><IMG SRC=\"../images/%s\"></TD></TR></TABLE>", treeImage);
 else
     puts("</TD></TR></TABLE>");
 
