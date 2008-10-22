@@ -29,7 +29,7 @@ struct splatAlign
     {
     struct splatAlign *next;	/* Next in list. */
     double score;		/* Score from scoring matrix. */
-    struct ffAli *ffList;	/* List of alignment blocks. */
+    struct cBlock *blockList;	/* List of aligning blocks. */
     char strand; 		/* Query strand. */
     };
 

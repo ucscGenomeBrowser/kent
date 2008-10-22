@@ -110,10 +110,10 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.14 2008/10/22 01:17:54 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.15 2008/10/22 02:38:36 kent Exp $";
 
 
-char *version = "25";	/* Program version number. */
+char *version = "26";	/* Program version number. */
 
 static char *out = "splat";
 static int maxDivergence = 5;
@@ -226,44 +226,6 @@ else if (diff > 0)
     return 1;
 else
     return 0;
-}
-#endif /* SOON */
-
-#ifdef SOON
-static struct splatAlign *tagToAlign(struct splatTag *tag, struct dnaSeq *query, 
-	struct splix *splix)
-/* Convert splatTag to splatAlign on the basic level.  Don't (yet) 
- * fill in score field or do extension. */
-{
-/* Allocate and fill  out ffAli structure on first alignment block. */
-DNA *q = query->dna;
-DNA *t = splix->allDna;
-struct ffAli *ff;
-AllocVar(ff);
-ff->nStart = q + tag->q1;
-ff->nEnd = ff->nStart + tag->size1;
-ff->hStart = t + tag->t1;
-ff->hEnd = ff->hStart + tag->size1;
-
-/* Allocate and fill out splatAlign struct. */
-struct splatAlign *align;
-AllocVar(align);
-align->strand = tag->strand;
-align->ffList = ff;
-
-/* If need be add second block to alignment. */
-if (tag->size2 > 0)
-    {
-    struct ffAli *ff2;
-    AllocVar(ff2);
-    ff2->nStart = q + tag->q2;
-    ff2->nEnd = ff2->nStart + tag->size2;
-    ff2->hStart = t + tag->t2;
-    ff2->hEnd = ff2->hStart + tag->size2;
-    ff->right = ff2;
-    ff2->left = ff;
-    }
-return align;
 }
 #endif /* SOON */
 
