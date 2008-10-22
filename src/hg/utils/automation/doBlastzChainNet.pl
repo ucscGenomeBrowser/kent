@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.24 2008/09/10 16:01:38 braney Exp $
+# $Id: doBlastzChainNet.pl,v 1.25 2008/10/22 17:00:25 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -1028,6 +1028,7 @@ _EOF_
   );
   if (! $isSelf) {
     $bossScript->add(<<_EOF_
+rm -f $liftOverDir/$over
 cp -p $altOver $liftOverDir/$over
 cd ..
 md5sum axtNet/*.gz >> axtChain/md5sum.txt
