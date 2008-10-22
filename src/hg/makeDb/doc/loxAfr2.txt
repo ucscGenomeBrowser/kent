@@ -151,3 +151,29 @@ _EOF_
     # Link to it from /gbdb
     rm -f  /gbdb/loxAfr2/loxAfr2.2bit
     ln -s /cluster/data/loxAfr2/loxAfr2.2bit /gbdb/loxAfr2/loxAfr2.2bit
+
+#########################################################################
+# prepare for kluster runs (DONE - 2008-10-22 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	loxAfr2: 2444975542
+    # thus: 1024 * 2444975542/2881421696 = 868
+    #	rounding up to 900 for a bit more conservative masking
+    cd /hive/data/genomes/loxAfr2
+    time blat loxAfr2.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=loxAfr2.11.ooc -repMatch=900
+    #	Wrote 38872 overused 11-mers to loxAfr2.11.ooc
+    #	real    2m46.741s
+
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/loxAfr2
+    cp -p loxAfr2.2bit chrom.sizes loxAfr2.11.ooc \
+	/hive/data/staging/data/loxAfr2
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
+
+###########################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-22 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute loxAfr2 (NCBI project 12569, AAGU02000000)" where name="loxAfr2";' hgcentraltest
+###########################################################################
