@@ -18,7 +18,7 @@
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.12 2008/09/30 17:53:47 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.13 2008/10/23 23:33:10 tdreszer Exp $";
 
 static char *cv_file()
 {
@@ -60,14 +60,8 @@ else if (sameWord(type,"control") || sameWord(type,"input"))
     puts("  <TH>Term</TH><TH>Description</TH></TR><TR>");
     printf("  <Td>%s</Td><Td>This data represents a control being compared with the other tracks in the set.</Td>\n",type);
     }
-else if (sameString(type,"Gene Type")
-     ||  sameString(type,"promoter")
-     ||  sameString(type,"rnaExtract"))
-    {
-    puts("  <TH>Term</TH><TH>Description</TH>");
-    }
 else
-    errAbort("Error: Unrecognised type (%s)\n", type);
+    puts("  <TH>Term</TH><TH>Description</TH>");
 }
 
 void doTypeRow(struct hash *ra, char *type, int *total)
@@ -125,17 +119,6 @@ else if (sameString(type,"localization"))
         printf("</A>");
     puts("</TD>");
 
-    puts("</TR>");
-    }
-else if (sameString(type,"Gene Type")
-     ||  sameString(type,"promoter")
-     ||  sameString(type,"rnaExtract"))
-    {
-    ++(*total);
-    puts("<TR>");
-    printf("  <TD>%s</TD>\n", term);
-    s = hashMustFindVal(ra, "description");
-    printf("  <TD>%s</TD>\n", s);
     puts("</TR>");
     }
 else if (sameString(type,"Cell Line"))
@@ -201,7 +184,22 @@ else if (sameString(type,"Cell Line"))
     puts("</TR>");
     }
 else
-    errAbort("Error: Unrecognised type (%s)\n", type);
+    {
+    s = hashFindVal(ra, "description");
+    if(s != NULL)
+        {
+        ++(*total);
+        puts("<TR>");
+        printf("  <TD>%s</TD>\n", term);
+        printf("  <TD>%s</TD>\n", s);
+        puts("</TR>");
+        }
+    else
+        {
+        printf("<TR>\n  <TD>%s</TD>\n  <TD>Unrecognised term</TD>\n</TR>\n", term);
+        errAbort("Error: Unrecognised type (%s)\n", type);
+        }
+    }
 }
 
 static char *normalizeType(char *type)
@@ -242,7 +240,8 @@ if(type==NULL)    // If not type, but term, then search for first term and use i
         while ((hEl = hashNext(&hc)) != NULL)
             {
             ra = (struct hash *)hEl->val;
-            if (differentStringNullOk(hashFindVal(ra, "term"), term))
+            char *cmpTerm = hashFindVal(ra, "term");
+            if (cmpTerm == NULL || differentWord(cmpTerm, term))
                 continue;
             type = hashFindVal(ra, "type");
             break;
