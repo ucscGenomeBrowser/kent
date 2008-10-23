@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.94 2008/10/23 22:47:04 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.95 2008/10/23 23:11:02 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -274,6 +274,8 @@ our %formatCheckers = (
     gtf => \&validateGtf,
     tagAlign => \&validateTagAlign,
     narrowPeak => \&validateNarrowPeak,
+    broadPeak => \&validateBroadPeak,
+    gappedPeak => \&validateGappedPeak,
     fastq => \&validateFastQ,
     csfasta => \&validateCsfasta,
     csqual  => \&validateCsqual,
@@ -491,7 +493,7 @@ sub validateNarrowPeak
     doTime("beginning validateNarrowPeak") if $opt_timing;
     while(<$fh>) {
         $line++;
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+$floatRegEx\s+$floatRegEx\s+[+-]?\d+$/)) {
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+$floatRegEx\s+$floatRegEx\s+$floatRegEx\s+[+-]?\d+$/)) {
             chomp;
             return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validateNarrowPeak]");
         }
@@ -500,6 +502,46 @@ sub validateNarrowPeak
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
     doTime("done validateNarrorPeak") if $opt_timing;
+    return ();
+}
+
+sub validateBroadPeak
+{
+    my ($path, $file, $type) = @_;
+    my $fh = openUtil($path, $file);
+    my $line = 0;
+    doTime("beginning validateBroadPeak") if $opt_timing;
+    while(<$fh>) {
+        $line++;
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+$floatRegEx\s+$floatRegEx\s+$floatRegEx$/)) {
+            chomp;
+            return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validateBroadPeak]");
+        }
+        last if($opt_quick && $line >= $quickCount);
+    }
+    $fh->close();
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateBroadPeak") if $opt_timing;
+    return ();
+}
+
+sub validateGappedPeak
+{
+    my ($path, $file, $type) = @_;
+    my $fh = openUtil($path, $file);
+    my $line = 0;
+    doTime("beginning validateGappedPeak") if $opt_timing;
+    while(<$fh>) {
+        $line++;
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+\d+\s+\d+\s+\S+\s+\d+\s+\S+\s+\S+\s+$floatRegEx\s+$floatRegEx\s+$floatRegEx$/)) {
+            chomp;
+            return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validateGappedPeak]");
+        }
+        last if($opt_quick && $line >= $quickCount);
+    }
+    $fh->close();
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateGappedPeak") if $opt_timing;
     return ();
 }
 
