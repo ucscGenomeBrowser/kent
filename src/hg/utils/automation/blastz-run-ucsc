@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.6 2008/08/19 16:03:24 braney Exp $
+# $Id: blastz-run-ucsc,v 1.7 2008/10/23 22:29:52 hiram Exp $
 
 use Getopt::Long;
 use strict;
@@ -70,6 +70,7 @@ sub checkOptions {
   }
 }
 
+my $machtype = $ENV{'MACHTYPE'};
 # This hash will contain the params defined in the Scott-style DEF script:
 my %defVars = ();
 # Temporary local directory for intermediate files:
@@ -88,7 +89,7 @@ sub cleanDie {
   # Clean up $TMP (if it has been created) and then die.
   my ($msg) = @_;
   if ($TMP && -d $TMP) {
-    system("rm -rf $TMP");
+    system("/bin/sh", "-c", "/bin/rm -rf $TMP");
   }
   die $msg;
 }
@@ -99,7 +100,7 @@ sub run {
   my $setPath = "export PATH=";
   $setPath .= "$defVars{PATH}:" if (defined $defVars{'PATH'});
   $setPath .= "$defaultPath; ";
-  system($setPath . $cmd) == 0 ||
+  system("/bin/sh", "-c", $setPath . $cmd) == 0 ||
     &cleanDie("Command failed:\n$setPath\n$cmd\n");
 }
 
@@ -108,10 +109,10 @@ sub nfsNoodge {
   # wait a second, try again.  
   # Scott's blastz-run included a similar trick.  
   my ($file) = @_;
-  my $ret = system("ls -d $file > /dev/null");
+  my $ret = system("/bin/sh", "-c", "ls -d $file > /dev/null");
   if ($ret != 0) {
     sleep 1;
-    $ret = system("ls -d $file > /dev/null");
+    $ret = system("/bin/sh", "-c", "ls -d $file > /dev/null");
     sleep 1 if ($ret != 0);
   }
 }
@@ -218,7 +219,9 @@ sub collapseFileSpecs {
   # OK, we're in the clear to concatenate all of these complete sequences 
   # onto one local file.
   my $big = "$TMP/bigCollapse.fa";
-  &run("cat /dev/null > $big");
+  # avoiding exec of shell here instead of going through &run
+  # and making an empty new file $big
+  &run("/bin/cp /dev/null $big");
   foreach my $spec (@fileSpecs) {
     my ($seq, $local) = unpackForBlastz($spec, '.', 'tmp');
     $local =~ s/\[\S+\]$//;
@@ -230,8 +233,8 @@ sub collapseFileSpecs {
       chomp $size;
       &run("nibFrag -masked $nib 0 $size + $local");
     }
-    &run("cat $local >> $big");
-    &run("rm -f $local") if ($local =~ /^$TMP/);
+    &run("/bin/cat $local >> $big");
+    &run("/bin/rm -f $local") if ($local =~ /^$TMP/);
   }
   $collapsed = 1;
   @fileSpecs = ($big);
@@ -273,11 +276,11 @@ sub unpackForBlastz {
     # Don't use twoBitToFa's range extraction capabilities -- that 
     # confuses blastz/normalizeLav.  Just extract the whole thing as 
     # fa and tell blastz what range we're using:
-    &run("twoBitToFa $fname:$seq $local");
+    &run("/cluster/bin/$machtype/twoBitToFa $fname:$seq $local");
     $local .= &blastzRangeSpec($start, $end);
   } elsif ($fname =~ /\.fa(\.gz)?$/) {
     if ($1) {
-      &run("gunzip -c $fname > $local");
+      &run("/bin/gunzip -c $fname > $local");
     } else {
       $local = $fname;
     }
@@ -548,7 +551,7 @@ my $collapsed;
 
 # Local file to hold concatenated results of all {target, query} runs:
 my $localOut = "$TMP/local.lav";
-&run("cat /dev/null > $localOut");
+&run("/bin/cp /dev/null $localOut");
 # Local temporary files that are overwritten by each {target, query} run:
 my $littleRaw = "$TMP/little.raw";
 my $littleOut = "$TMP/little.lav";
@@ -571,28 +574,28 @@ foreach my $tSpec (@tFileSpecs) {
       &liftLav($littleRaw, $littleOut, $tSeq, $qSeq);
       if ($qLocal =~ /^$TMP/) {
 	  $qLocal =~ s/\[.*\]$//;
-	  &run("rm $qLocal");
+	  &run("/bin/rm $qLocal");
       }
     }
     if ($opt_outFormat) {
       &convertOutput($littleOut, $littleConv);
-      &run("cat $littleConv >> $localOut");
+      &run("/bin/cat $littleConv >> $localOut");
     } else {
-      &run("cat $littleOut >> $localOut");
+      &run("/bin/cat $littleOut >> $localOut");
     }
   }
   if ($tLocal =~ /^$TMP/) {
       $tLocal =~ s/\[.*\]$//;
-      &run("rm $tLocal");
+      &run("/bin/rm $tLocal");
   }
 }
 if ($opt_gz) {
-  &run("gzip $localOut");
+  &run("/bin/gzip $localOut");
   $localOut .= ".gz";
 }
 # Move collected results to final location.
-&run("mv $localOut $out");
+&run("/bin/mv $localOut $out");
 
 # Clean up temporary directory:
-&run("rm -rf $TMP");
+&run("/bin/rm -rf $TMP");
 
