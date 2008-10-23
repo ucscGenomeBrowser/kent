@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.93 2008/10/22 20:40:29 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.94 2008/10/23 22:47:04 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -433,7 +433,7 @@ sub validateGtf {
     if (scalar(@res)==0) { # no errors so remove the temp .bed file
         HgAutomate::verbose(2, "File \'$file\' passed gtf gene validation \n");
 	unlink $outFile;
-    } 
+    }
     return @res;
 }
 
@@ -671,6 +671,78 @@ sub ddfKey
     } else {
 	return undef; # Some dafs have no variables, eg, Sanger Gencode
     }
+}
+
+sub printCompositeTdbSettings {
+# prints out trackDb.ra settings for the composite track
+    local *OUT_FILE = shift;
+    my ($daf,%ddfSets) = @_;
+
+    my $compositeTrack = Encode::compositeTrackName($daf);
+
+    print OUT_FILE "track\t\t$compositeTrack\n";
+    print OUT_FILE "compositeTrack\ton\n";
+
+    my $setting    = "subGroup1\tview Views";
+    my $visDefault = "visibilityViewDefaults\t";
+    # Cycle through to get best view to default labels and to get all views and terms
+    for my $view (keys %{$daf->{TRACKS}}) {
+        for my $key (keys %ddfSets) {
+            if(defined($ddfSets{$key}{VIEWS}{$view})) {
+                $setting = $setting . " " . $view . "=" . $view;
+                $visDefault = $visDefault . " " . $view . "=";
+                if($view eq "Peaks") {
+                    $visDefault = $visDefault . "dense";
+                } elsif($view eq "Signal") {
+                    $visDefault = $visDefault . "full";
+                } else {
+                    $visDefault = $visDefault . "hide";
+                }
+            }
+        }
+    }
+    print OUT_FILE "shortLabel\t" . $daf->{lab} . " " . $daf->{dataType} . "\n"; # Default to  lab datatype
+    print OUT_FILE "longLabel\tENCODE " . $daf->{lab} . " " . $daf->{grant} . " " . $daf->{dataType} . "\n";  # Default to lab grant datatype
+    print OUT_FILE "group\t\tregulation\n";   # This is just a guess.  Buyer beware
+    print OUT_FILE $setting . "\n"; # "subGroup1\tview Views Peaks=Peaks Signal=Signal RawSignal=Raw_Signal\n";
+
+    # Need to create N subgroups with M members each
+    if (defined($daf->{variables})) {
+        my $grpNo = 1;
+        my $sortOrder = "sortOrder\t";
+        my $controlledVocab = "controlledVocabulary\tencode/cv.ra";
+        if (defined($daf->{variables})) {
+            my @variables = @{$daf->{variableArray}};
+            for my $variable (@variables) {
+                $grpNo++;
+                my $groupVar = $variable;
+	            $groupVar = "factor" if $variable eq "antibody";
+                $groupVar = "cellType" if $variable eq "cell";
+                $sortOrder = "$sortOrder$groupVar=+ ";
+                $controlledVocab = "$controlledVocab $groupVar";
+                $setting = "subGroup$grpNo\t$groupVar " . ucfirst($groupVar);
+                $setting = "subGroup$grpNo\t$groupVar " . "Cell_Line" if $variable eq "cell";
+                for my $key (keys %ddfSets) {
+                    my @pairs = split(';', $key);
+                    for my $pair (@pairs) {
+                        my ($var, $term) = split('=', $pair);
+                        if($var eq $variable) {
+                            $setting = "$setting $term=$term";
+                        }
+                    }
+                }
+                print OUT_FILE $setting . "\n";     # "subGroup2\cellTyle Cell_Line ???\n;
+            }
+        }
+        $setting = $sortOrder . "view=+";
+        print OUT_FILE $setting . "\n";         # "sortOrder\tcellType=+ factor=+ view=+\n";
+        print OUT_FILE $controlledVocab . "\n"; # "controlledVocabulary\tencode/cv.ra cellType factor\n";
+    }
+    print OUT_FILE "dragAndDrop\tsubTracks\n";
+    print OUT_FILE $visDefault . "\n";          #"visibilityViewDefaults\tPeaks=dense Signal=full RawSignal=hide\n";
+    print OUT_FILE "priority\t0\n";
+    print OUT_FILE "type\t\tbed 3\n";
+    print OUT_FILE "wgEncode\t1\n\n";
 }
 
 ############################################################################
@@ -1034,9 +1106,11 @@ if(!@errors) {
 }
 
 my $compositeTrack = Encode::compositeTrackName($daf);
-if(!$db->quickQuery("select count(*) from trackDb where tableName = ?", $compositeTrack)) {
-    pushError(\@errors, "Missing composite track '$compositeTrack'; please contact your data wrangler");
-}
+### No good reason to make this an error.  Composite entry can be added when subtracks are 1st added to trackDb.
+#if(!$db->quickQuery("select count(*) from trackDb where tableName = ?", $compositeTrack)) {
+#    pushError(\@errors, "Missing composite track '$compositeTrack'; please contact your data wrangler");
+#}
+my $compositeExists = $db->quickQuery("select count(*) from trackDb where tableName = ?", $compositeTrack);
 
 if(@errors) {
     my $prefix = @errors > 1 ? "Error(s)" : "Error";
@@ -1059,11 +1133,17 @@ if($opt_skipOutput) {
     open(README, ">$outPath/README.txt") || die "SYS ERROR: Can't write '$outPath/READEME.txt' file; error: $!\n";
 }
 
+# Create a composite track entry if the trackDb.ra entry was not found
+if(!$opt_skipOutput && !$compositeExists) {
+    printCompositeTdbSettings(*TRACK_RA,$daf,%ddfSets);
+}
+
 # XXXX Calculation of priorities still needs work; we currently don't account for multiple experiments in the same DDF.
 # It may in fact be too much work to do automatic calculation of priorities (i.e. the wrangler may have to do it manually).
 
 my $priority = $db->quickQuery("select max(priority) from trackDb where settings like '%subTrack $compositeTrack%'") || 0;
 $ddfLineNumber = 1;
+
 foreach my $ddfLine (@ddfLines) {
     $ddfLineNumber++;
     my $diePrefix = "ERROR on DDF lineNumber $ddfLineNumber:";
@@ -1102,7 +1182,7 @@ foreach my $ddfLine (@ddfLines) {
             $val = ucfirst(lc($val));
             $tableName = $tableName . $val;
         }
-	
+
         my $shortSuffix = "";
         my $longSuffix;
         my %shortViewMap = (Peaks => 'Pk', Signal => 'Sig', RawSignal => 'Raw', PlusRawSignal => 'PlusRaw', MinusRawSignal => 'MinusRaw');
@@ -1141,11 +1221,15 @@ foreach my $ddfLine (@ddfLines) {
 	# make the "subGroups" and "additional" fields from all variables
 	for my $var (sort keys %hash) {
             # The var name is over-ridden for antibody and cell, for historical reasons
-            my $groupVar = $var; 
+            my $groupVar = $var;
 	    $groupVar = "factor" if $var eq "antibody";
 	    $groupVar = "cellType" if $var eq "cell";
             $subGroups .= " $groupVar=$hash{$var}";
-            $additional = "\t$var\t$hash{$var}\n" . $additional;
+            if(length($var) < 6) {
+                $additional = "\t$var\t\t$hash{$var}\n" . $additional;
+            } else {
+                $additional = "\t$var\t$hash{$var}\n" . $additional;
+            }
         }
     }
 
@@ -1173,6 +1257,8 @@ foreach my $ddfLine (@ddfLines) {
     print LOADER_RA "pushQDescription $pushQDescription\n";
     print LOADER_RA "\n";
 
+    my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate($now);
+
     if($downloadOnly || ($type eq "wig" && !grep(/$Encode::autoCreatedPrefix/, @{$ddfLine->{files}}))) {
         # adds entries to README.txt for download only files AND wig data (excepting wig data generated by us)
         print README "file: $tableName.$type.gz\n";
@@ -1183,38 +1269,39 @@ foreach my $ddfLine (@ddfLines) {
             print README "replicate: $replicate\n";
         }
 
-        my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate($now);
-        print README sprintf("data restricted until: %d-%02d-%02d\n", 1900 + $rYear, $rMon + 1, $rMDay);
+        print README sprintf("data RESTRICTED UNTIL: %d-%02d-%02d\n", 1900 + $rYear, $rMon + 1, $rMDay);
         print README "\n";
     }
     if(!$downloadOnly) {
-        print TRACK_RA "\ttrack\t$tableName\n";
+        print TRACK_RA "\ttrack\t\t$tableName\n";
         print TRACK_RA "\tsubTrack\t$compositeTrack\n";
         print TRACK_RA "\tshortLabel\t$shortLabel\n";
         print TRACK_RA "\tlongLabel\t$longLabel\n";
         print TRACK_RA "\tsubGroups\t$subGroups\n";
         if($type eq 'wig') {
             my $placeHolder = Encode::wigMinMaxPlaceHolder($tableName);
-            print TRACK_RA "\ttype\t$type $placeHolder\n";
+            print TRACK_RA "\ttype\t\t$type $placeHolder\n";
         } elsif($type eq 'gtf') { # GTF is converted to and loaded as genePred
-            print TRACK_RA "\ttype\tgenePred\n";
+            print TRACK_RA "\ttype\t\tgenePred\n";
         } elsif($type eq 'tagAlign') { # tagAligns are bed 6 but with column called 'sequence' instead of 'name'
-            print TRACK_RA "\ttype\tbed 6\n";
+            print TRACK_RA "\ttype\t\tbed 6\n";
         } else {
-            print TRACK_RA "\ttype\t$type\n";
+            print TRACK_RA "\ttype\t\t$type\n";
         }
         print TRACK_RA sprintf("\tdateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
+        print TRACK_RA sprintf("\tdateReleased\t%d-%02d-%d\n",1900 + $rYear, $rMon + 1, $rMDay);
         print TRACK_RA "\tpriority\t" . ($priority + $daf->{TRACKS}{$view}{order}) . "\n";
         # noInherit is necessary b/c composite track will often have a different dummy type setting.
         print TRACK_RA "\tnoInherit\ton\n";
-        my %visibility = (Align => 'hide', RawWignal => 'hide', Signal => 'full', Sites => 'dense');
-        if($visibility{$view}) {
-            print TRACK_RA "\tvisibility\t$visibility{$view}\n";
+        if($view eq 'RawSignal') {
+            print TRACK_RA "\tconfigurable\toff\n";
+        } else {
+            print TRACK_RA "\tconfigurable\ton\n";
         }
         if($type eq 'wig') {
             print TRACK_RA <<END;
 	spanList	1
-	windowingFunction	mean
+	windowingFunction mean
 	maxHeightPixels	100:16:16
 END
 	} elsif($type eq 'bed 5 +') {
