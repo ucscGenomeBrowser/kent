@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.49 2007/03/14 04:54:55 kent Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.50 2008/10/23 19:59:47 kent Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -473,6 +473,21 @@ unsigned temp;
 temp = *pStart;
 *pStart = size - *pEnd;
 *pEnd = size - temp;
+}
+
+int cmpDnaStrings(DNA *a, DNA *b)
+/* Compare using screwy non-alphabetical DNA order TCGA */
+{
+for (;;)
+    {
+    DNA aa = *a++;
+    DNA bb = *b++;
+    if (aa != bb)
+        return ntVal[(int)aa] - ntVal[(int)bb];
+    if (aa == 0)
+	break;
+    }
+return 0;
 }
 
 

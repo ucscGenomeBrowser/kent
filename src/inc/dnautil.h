@@ -95,6 +95,9 @@ enum dnaCase {dnaUpper,dnaLower,dnaMixed,};
 /* Convert T's to U's */
 void toRna(DNA *dna);
 
+int cmpDnaStrings(DNA *a, DNA *b);
+/* Compare using screwy non-alphabetical DNA order TCGA */
+
 typedef char Codon; /* Our codon type. */
 
 /* Return single letter code (upper case) for protein.
