@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.132 2008/09/25 22:23:55 braney Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.133 2008/10/23 23:34:30 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -364,7 +364,7 @@ else
 /* Get currently selected table.  If it isn't in our list
  * then revert to first in list. */
 selTable = cartUsualString(cart, varName, nameList->name);
-if (!slNameInList(nameList, selTable))
+if (!slNameInListUseCase(nameList, selTable))
     selTable = nameList->name;
 
 /* Print out label and drop-down list. */
