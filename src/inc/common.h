@@ -495,7 +495,10 @@ void slNameSort(struct slName **pList);
 /* Sort slName list. */
 
 boolean slNameInList(struct slName *list, char *string);
-/* Return true if string is in name list */
+/* Return true if string is in name list -- case insensitive. */
+
+boolean slNameInListUseCase(struct slName *list, char *string);
+/* Return true if string is in name list -- case sensitive. */
 
 void *slNameFind(void *list, char *string);
 /* Return first element of slName list (or any other list starting

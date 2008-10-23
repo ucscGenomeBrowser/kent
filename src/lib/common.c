@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.121 2008/10/13 23:07:22 tdreszer Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.122 2008/10/23 23:31:39 angie Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -605,11 +605,21 @@ slSort(pList, slNameCmp);
 }
 
 boolean slNameInList(struct slName *list, char *string)
-/* Return true if string is in name list */
+/* Return true if string is in name list -- case insensitive. */
 {
 struct slName *el;
 for (el = list; el != NULL; el = el->next)
     if (sameWord(string, el->name))
+        return TRUE;
+return FALSE;
+}
+
+boolean slNameInListUseCase(struct slName *list, char *string)
+/* Return true if string is in name list -- case sensitive. */
+{
+struct slName *el;
+for (el = list; el != NULL; el = el->next)
+    if (string != NULL && !strcmp(string, el->name))
         return TRUE;
 return FALSE;
 }
