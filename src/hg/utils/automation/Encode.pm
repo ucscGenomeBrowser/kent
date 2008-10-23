@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.25 2008/10/16 16:26:55 mikep Exp $
+# $Id: Encode.pm,v 1.26 2008/10/23 22:43:15 tdreszer Exp $
 
 package Encode;
 
@@ -183,7 +183,7 @@ sub getControlledVocab
 
 sub getFields
 {
-# Gather fields defined for DDF file. File is in 
+# Gather fields defined for DDF file. File is in
 # ra format:  field <name>, required <true|false>
     my ($configPath) = @_;
     my %fields = RAFile::readRaFile("$configPath/$fieldConfigFile", "field");
@@ -369,8 +369,13 @@ sub restrictionDate
         $restrictedMon = ($mon + $restrictedMonths) % 12;
     }
     if($mday > daysInMonth($restrictedMon,$restrictedYear)) {
-        # wrap to first when to avoid, for example, 2008-05-31 => 2009-02-31
-        $mday = 1;
+        # wrap to first when to avoid, for example, 2008-05-31 + 9mo = 2009-02-31 => 2009-03-03
+        $mday = $mday - daysInMonth($restrictedMon,$restrictedYear);
+        $restrictedMon++;
+        if($restrictedMon >= 12) {
+            $restrictedYear++;
+            $restrictedMon = 0;
+        }
     }
     return ($sec,$min,$hour,$mday,$restrictedMon,$restrictedYear,$wday,$yday,$isdst);
 }
