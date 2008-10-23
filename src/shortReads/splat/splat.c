@@ -111,11 +111,12 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.19 2008/10/22 07:09:41 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.20 2008/10/23 19:59:17 kent Exp $";
 
 
 char *version = "28";	/* Program version number. */
 
+static char *over = NULL;
 static char *out = "splat";
 static int maxDivergence = 5;
 static boolean worseToo = FALSE;
@@ -141,7 +142,9 @@ errAbort(
 "   output is the output alignment file, by default in .splat format\n"
 "note: can use 'stdin' or 'stdout' as a file name for better piping\n"
 "overall options:\n"
-"   -out=format. Output format.  Options include splat (default), psl, maf, [soap, eland soon....]\n"
+"   -over=fileName - Name of file with list of 25-mers that map many times in genome.\n"
+"       Highly recommended option for speed.  Typically use file human10.over for human genome.\n"
+"   -out=format - Output format.  Options include splat (default), psl, maf, [soap, eland soon....]\n"
 "   -worseToo - if set return alignments other than the best alignments\n"
 "   -maxRepeat=N  - maximum number of alignments to output on one query sequence. Default %d\n"
 "   -repeatOutput=fileName.fa - Put reads that map more than maxRepeat times in here\n"
@@ -159,6 +162,7 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+   {"over", OPTION_STRING},
    {"out", OPTION_STRING},
    {"maxDivergence", OPTION_FLOAT},
    {"worseToo", OPTION_BOOLEAN},
@@ -171,6 +175,9 @@ static struct optionSpec options[] = {
 };
 
 static FILE *repeatOutputFile = NULL;
+int overArraySize;
+bits64 *overArray;
+
 
 static int splatHitCmp(void *va, void *vb)
 /* Sort hits that need to be extended independently. */
@@ -870,7 +877,7 @@ if (maxGap > 0)
 return hitTree;
 }
 
-static void extendHitsToTags(struct rbTree *hitTree, struct dnaSeq *qSeq, char strand, 
+void extendHitsToTags(struct rbTree *hitTree, struct dnaSeq *qSeq, char strand, 
 	int tagPosition, struct splix *splix, struct splatTag **pTagList)
 /* Examine each of the hits in the hitTree, and add ones that are high scoring enough
  * after extension to the tagList. If bestOnly is set it may free existing tags on list if
@@ -1009,7 +1016,14 @@ void splat(char *target, char *query, char *output)
 {
 struct axtScoreScheme *scoreScheme = axtScoreSchemeSimpleDna(2, 2, 2, 2);
 struct dnaLoad *qLoad = dnaLoadOpen(query);
+uglyTime("Initializing");
+if (over != NULL)
+    {
+    overRead(over, maxRepeat+1, &overArraySize, &overArray);
+    uglyTime("Read %s", over);
+    }
 struct splix *splix = splixRead(target, memoryMap);
+uglyTime("Read %s", target);
 FILE *f = mustOpen(output, "w");
 if (repeatOutput != NULL)
     repeatOutputFile = mustOpen(repeatOutput, "w");
@@ -1035,6 +1049,7 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     dnaSeqFree(&qSeq);
     ++totalReads;
     }
+uglyTime("Alignment");
 
 /* Report statistics (to stderr) */
 verbose(1, "Overall results for mapping %d reads in %s to %s\n", 
@@ -1062,9 +1077,11 @@ carefulClose(&repeatOutputFile);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+uglyTime(NULL);
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+over = optionVal("over", over);
 out = optionVal("out", out);
 maxDivergence = optionInt("maxDivergence", maxDivergence);
 worseToo = optionExists("worseToo");

@@ -56,3 +56,10 @@ void splatOutList(struct splatAlign *aliList, char *outType,
 	struct dnaSeq *qSeqF, struct dnaSeq *qSeqR, struct splix *splix, FILE *f);
 /* Output list of alignments to file in format defined by outType. */
 
+bits64 basesToBits64(char *dna, int size);
+/* Convert dna of given size (up to 32) to binary representation */
+
+void overRead(char *fileName, int minCount, int *retArraySize, bits64 **retArray);
+/* Read in file of format <25-mer> <count> and return an array the 25-mers that have
+ * counts greater or equal to minCount.  The 25-mers will be returned as 64-bit numbers
+ * with the DNA packed 2 bits per base. */
