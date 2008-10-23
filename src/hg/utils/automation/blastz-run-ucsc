@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.7 2008/10/23 22:29:52 hiram Exp $
+# $Id: blastz-run-ucsc,v 1.8 2008/10/23 22:58:42 hiram Exp $
 
 use Getopt::Long;
 use strict;
@@ -70,7 +70,8 @@ sub checkOptions {
   }
 }
 
-my $machtype = $ENV{'MACHTYPE'};
+# my $machtype = $ENV{'MACHTYPE'};
+my $machtype = "x86_64";
 # This hash will contain the params defined in the Scott-style DEF script:
 my %defVars = ();
 # Temporary local directory for intermediate files:
