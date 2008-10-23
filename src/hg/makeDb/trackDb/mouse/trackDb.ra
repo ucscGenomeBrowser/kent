@@ -1245,6 +1245,12 @@ termRegex (NT_|NC_)[0-9]+([0-9\.]+)?
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s%%'
 searchPriority 5
 
+searchTable komp
+searchType bed
+searchMethod exact
+searchPriority 5
+termRegex [a-zA-Z0-9.-]+
+
 track affyMouseExon
 compositeTrack on
 shortLabel Affy Exon
