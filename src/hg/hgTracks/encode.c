@@ -8,6 +8,8 @@
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 
+static char const rcsid[] = "$Id: encode.c,v 1.10 2008/10/24 18:42:23 tdreszer Exp $";
+
 char *encodeErgeName(struct track *tg, void *item)
 /* return the actual data name, in form xx/yyyy cut off xx/ return yyyy */
 {
@@ -20,7 +22,7 @@ if (name != NULL)
     return name;
 return "unknown";
 }
-  
+
 void encodeErgeMethods(struct track *tg)
 /* setup special methods for ENCODE dbERGE II tracks */
 {
@@ -35,7 +37,7 @@ int r = tg->color.r;
 int g = tg->color.g;
 int b = tg->color.b;
 
-if (thisItem->strand[0] == '-') 
+if (thisItem->strand[0] == '-')
     {
     r = g;
     g = b;
@@ -113,7 +115,7 @@ int rowOffset;
 struct linkedFeatures *lfList = NULL;
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
-    {  
+    {
     struct linkedFeatures *lf;
     int peak = -1;
     char **rowPastOffset = row + rowOffset;
@@ -127,7 +129,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	lf->score = (float)sqlUnsigned(rowPastOffset[4]);
 	lf->orientation = orientFromChar(rowPastOffset[5][0]);
 	}
-    else 
+    else
 	lf->score = 1000;
     if (peakType == narrowPeak)
 	peak = sqlSigned(rowPastOffset[8]);
@@ -182,7 +184,7 @@ void narrowPeakLoadItems(struct track *tg)
 {
 enum encodePeakType pt = narrowPeak;
 int numFields = encodePeakNumFields(database, tg->mapName);
-if (numFields == 9)
+if (numFields == 10)
     pt = narrowPeak;
 else
     errAbort("track %s has wrong number of fields for narrowPeak type\n", tg->mapName);
@@ -195,7 +197,7 @@ void broadPeakLoadItems(struct track *tg)
 {
 enum encodePeakType pt = broadPeak;
 int numFields = encodePeakNumFields(database, tg->mapName);
-if (numFields == 8)
+if (numFields == 9)
     pt = broadPeak;
 else
     errAbort("track %s has wrong number of fields for broadPeak type\n", tg->mapName);
@@ -208,7 +210,7 @@ void gappedPeakLoadItems(struct track *tg)
 {
 enum encodePeakType pt = gappedPeak;
 int numFields = encodePeakNumFields(database, tg->mapName);
-if (numFields == 14)
+if (numFields == 15)
     pt = gappedPeak;
 else
     errAbort("track %s has wrong number of fields for gappedPeak type\n", tg->mapName);
@@ -228,14 +230,14 @@ else if (numFields == 6)
     pt = encodePeak6;
 else if (numFields == 9)
     pt = encodePeak9;
-else 
+else
     errAbort("track %s has wrong number of fields (%d) for the encodePeak type\n", tg->mapName, numFields);
 tg->customInt = pt;
 allEncodePeakLoadItems(tg);
 }
 
 static void encodePeakDrawAt(struct track *tg, void *item,
-	struct hvGfx *hvg, int xOff, int y, double scale, 
+	struct hvGfx *hvg, int xOff, int y, double scale,
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the peak from the linkedFeature.  Currently this doesn't draw any */
 /* sorta shading based on the signalValue/pValue. */
@@ -251,14 +253,14 @@ if (lf->components)
     struct simpleFeature *sf;
     drawScaledBox(hvg, lf->start, lf->end, scale, xOff, y+(heightPer/2), 1, rangeColor);
     for (sf = lf->components; sf != NULL; sf = sf->next)
-	drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y+shortOff, 
-		      shortHeight, rangeColor);	
+	drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y+shortOff,
+		      shortHeight, rangeColor);
     }
-else 
-    drawScaledBox(hvg, lf->start, lf->end, scale, xOff, y+shortOff, 
+else
+    drawScaledBox(hvg, lf->start, lf->end, scale, xOff, y+shortOff,
 		  shortHeight, rangeColor);
 if ((lf->tallEnd > 0) && (lf->tallStart < lf->end))
-    drawScaledBox(hvg, lf->tallStart, lf->tallEnd, scale, xOff, y, 
+    drawScaledBox(hvg, lf->tallStart, lf->tallEnd, scale, xOff, y,
 		  heightPer, peakColor);
 }
 
@@ -268,7 +270,7 @@ char *encodePeakItemName(struct track *tg, void *item)
 struct linkedFeatures *lf = item;
 if (lf->name && sameString(lf->name, "."))
     return "";
-else 
+else
     return lf->name;
 }
 
