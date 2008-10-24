@@ -9,37 +9,37 @@ combine.default sestanBrainAtlasGroupByTissueMedian
 name sestanBrainAtlasAll
 type all
 description All Arrays
-expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,
-groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-names Orbito_19L,Orbito_19R,MPFC_18L,MPFC_18R,MPFC_19L,MPFC_19R,MPFC_21L,MPFC_21R,MPFC_23L,MPFC_23R,DLPFC_18L,DLPFC_18R,DLPFC_19L,DLPFC_19R,DLPFC_21L,DLPFC_21R,DLPFC_23L,DLPFC_23R,VLPFC_18L,VLPFC_18R,VLPFC_19L,VLPFC_19R,VLPFC_21L,VLPFC_21R,VLPFC_23L,VLPFC_23R,MS_18L,MS_18R,MS_19L,MS_19R,MS_21L,MS_21R,MS_23L,MS_23R,Par_18L,Par_18R,Par_19L,Par_19R,Par_21L,Par_21R,Par_23L,Par_23R,Temp_18L,Temp_18R,Temp_19L,Temp_19R,Temp_21L,Temp_21R,Temp_23L,Temp_23R,Aud_18L,Aud_18R,Aud_19L,Aud_19R,Aud_21L,Aud_21R,Aud_23L,Aud_23R,Occ_18L,Occ_18R,Occ_19L,Occ_19R,Occ_21L,Occ_21R,Occ_23L,Occ_23R,Hipp_18L,Hipp_18R,Hipp_19L,Hipp_19R,Hipp_21L,Hipp_21R,Hipp_23L,Hipp_23R,Amyg_19L,Amyg_19R,Striat_18L,Striat_18R,Striat_19L,Striat_19R,Striat_21L,Striat_21R,Striat_23L,Striat_23R,Thal_18L,Thal_18R,Thal_19L,Thal_19R,Thal_21L,Thal_21R,Thal_23L,Thal_23R,VTA_19L,VTA_19R,Pons_19L,Pons_19R,Medulla_19L,Medulla_19R,Cbllm_18NA,Cbllm_19L,Cbllm_19R,Cbllm_21NA,Cbllm_23NA,
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,
+groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+names Orbito_19L,Orbito_19R,MPFC_18L,MPFC_18R,MPFC_19L,MPFC_19R,MPFC_21L,MPFC_21R,MPFC_23L,MPFC_23R,DLPFC_18L,DLPFC_18R,DLPFC_19L,DLPFC_19R,DLPFC_21L,DLPFC_21R,DLPFC_23L,DLPFC_23R,VLPFC_18L,VLPFC_18R,VLPFC_19L,VLPFC_19R,VLPFC_21L,VLPFC_21R,VLPFC_23L,VLPFC_23R,MS_18L,MS_18R,MS_19L,MS_19R,MS_21L,MS_21R,MS_23L,MS_23R,Par_18L,Par_18R,Par_19L,Par_19R,Par_21L,Par_21R,Par_23L,Par_23R,Temp_18L,Temp_18R,Temp_19L,Temp_19R,Temp_21L,Temp_21R,Temp_23L,Temp_23R,Aud_18L,Aud_18R,Aud_19L,Aud_19R,Aud_21L,Aud_21R,Aud_23L,Aud_23R,Occ_18L,Occ_18R,Occ_19L,Occ_19R,Occ_21L,Occ_21R,Occ_23L,Occ_23R,Hipp_18L,Hipp_18R,Hipp_19L,Hipp_19R,Hipp_21L,Hipp_21R,Hipp_23L,Hipp_23R,Striat_18L,Striat_18R,Striat_19L,Striat_19R,Striat_21L,Striat_21R,Striat_23L,Striat_23R,Thal_18L,Thal_18R,Thal_19L,Thal_19R,Thal_21L,Thal_21R,Thal_23L,Thal_23R,Cbllm_18NA,Cbllm_19L,Cbllm_19R,Cbllm_21NA,Cbllm_23NA,
 
 name sestanBrainAtlasGroupByTissueMean
 type combine mean
 description Arrays Grouped By Tissue Mean
-expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,
-groupSizes 2,8,8,8,8,8,8,8,8,8,2,8,8,2,2,2,5,
-names oPFC,mPFC,dlPFC,vlPFC,motorsensory,parietal,tempassociation,tempauditory,occip,hippocamp,amygdala,striatum,thalamus,VTA,pons,medulla,cerebellum,
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,
+groupSizes 2,8,8,8,8,8,8,8,8,8,8,8,5,
+names oPFC,mPFC,dlPFC,vlPFC,motorsensory,parietal,tempassociation,tempauditory,occip,hippocamp,striatum,thalamus,cerebellum,
 
 name sestanBrainAtlasGroupByTissueMedian
 type combine median
 description Arrays Grouped By Tissue Median
-expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,
-groupSizes 2,8,8,8,8,8,8,8,8,8,2,8,8,2,2,2,5,
-names oPFC,mPFC,dlPFC,vlPFC,motorsensory,parietal,tempassociation,tempauditory,occip,hippocamp,amygdala,striatum,thalamus,VTA,pons,medulla,cerebellum,
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,
+groupSizes 2,8,8,8,8,8,8,8,8,8,8,8,5,
+names oPFC,mPFC,dlPFC,vlPFC,motorsensory,parietal,tempassociation,tempauditory,occip,hippocamp,striatum,thalamus,cerebellum,
 
 name sestanBrainAtlasGroupByTissueMeanNctx
 type combine mean
 description Arrays Grouped By Tissue Mean and Neocortical Areas Combined
-expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,
-groupSizes 66,8,2,8,8,2,2,2,5,
-names neocortex,hippocamp,amygdala,striatum,thalamus,VTA,pons,medulla,cerebellum,
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,
+groupSizes 66,8,8,8,5,
+names neocortex,hippocamp,striatum,thalamus,cerebellum,
 
 name sestanBrainAtlasGroupByTissueMedianNctx
 type combine median
 description Arrays Grouped By Tissue Median and Neocortical Areas Combined
-expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,
-groupSizes 66,8,2,8,8,2,2,2,5,
-names neocortex,hippocamp,amygdala,striatum,thalamus,VTA,pons,medulla,cerebellum,
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,
+groupSizes 66,8,8,8,5,
+names neocortex,hippocamp,striatum,thalamus,cerebellum,
 
 #### AFFY HUMAN EXON
 
