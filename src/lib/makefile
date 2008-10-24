@@ -30,7 +30,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     scoreWindow.o seg.o seqOut.o seqStats.o servBrcMcw.o servCrunx.o \
     servcis.o servcl.o servmsII.o servpws.o shaRes.o slog.o snof.o \
     snofmake.o snofsig.o spaceSaver.o spacedColumn.o spacedSeed.o \
-    sqlList.o sqlNum.o subText.o synQueue.o \
+    splatAli.o sqlList.o sqlNum.o subText.o synQueue.o \
     tabRow.o textOut.o tokenizer.o trix.o twoBit.o \
     vGfx.o vGif.o verbose.o \
     wildcmp.o wormdna.o \
