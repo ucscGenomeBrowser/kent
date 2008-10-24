@@ -111,10 +111,9 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.20 2008/10/23 19:59:17 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.21 2008/10/24 18:39:59 kent Exp $";
 
-
-char *version = "28";	/* Program version number. */
+char *version = "29";	/* Program version number. */
 
 static char *over = NULL;
 static char *out = "splat";
@@ -178,6 +177,7 @@ static FILE *repeatOutputFile = NULL;
 int overArraySize;
 bits64 *overArray;
 
+long exactIndexQueries, binaryQueries, hits12, hits18, newHits18, hits25, hitsFull;
 
 static int splatHitCmp(void *va, void *vb)
 /* Sort hits that need to be extended independently. */
@@ -343,14 +343,57 @@ else
 *pTwoBeforeLastHex = (secondHalf >> 4) & 0xFFF;
 }
 
-static int searchHexes(bits16 query, bits16 *hexes, int hexCount)
+#ifdef SOON
+static boolean chopOutPieces(bits64 bases25, int maxGap, int *pFirstHalf, int *pSecondHalf,
+	bits16 *pAfter1, bits16 *pAfter2, bits16 *pBefore1, bits16 *pBefore2,
+	bits16 *pFirstHex, bits16 *pLastHex,
+	bits16 *pTwoAfterFirstHex, bits16 *pTwoBeforeLastHex)
+/* Convert from DNA string to binary representation chopped up various ways. */
+{
+}
+#endif /* SOON */
+
+int hexCmp(const void *va, const void *vb)
+/* Compare two bit16. */
+{
+bits16 a = *((bits16*)va), b = *((bits16*)vb);
+return a-b;
+}
+
+int binaryFindHex(bits16 val, bits16 *pos, 
+	int posCount)
+/* Find index of hex that matches val, or -1 if none such. */
+{
+int startIx=0, endIx=posCount-1, midIx;
+bits16 posVal;
+
+for (;;)
+    {
+    if (startIx == endIx)
+        {
+	posVal = pos[startIx];
+	if (posVal == val)
+	    return startIx;
+	else
+	    return -1;
+	}
+    midIx = ((startIx + endIx)>>1);
+    posVal = pos[midIx];
+    if (posVal < val)
+        startIx = midIx+1;
+    else
+        endIx = midIx;
+    }
+}
+
+
+int linearFindHex(bits16 query, bits16 *hexes, int hexCount)
 /* See if query sequence is in hexes, which is sorted. */
 {
-/* TODO: replace this with a binary search. */
 int i;
 for (i=0; i<hexCount; ++i)
     if (hexes[i] == query)
-        return i;
+	return i;
 return -1;
 }
 
@@ -360,7 +403,9 @@ static void exactIndexHits(bits16 hex, bits16 *sortedHexes, int slotSize,
 /* Look for hits that involve no index mismatches.  Put resultint offsets (plus startOffset)
  * into hitTree. */
 {
-int ix = searchHexes(hex, sortedHexes, slotSize);
+exactIndexQueries += 1;
+hits12 += slotSize;
+int ix = binaryFindHex(hex, sortedHexes, slotSize);
 if (ix >= 0)
     {
     for (;;)
@@ -378,6 +423,7 @@ if (ix >= 0)
 	    hit->missingQuad = missingQuad;
 	    hit->subCount = subCount;
 	    rbTreeAdd(hitTree, hit);
+	    ++newHits18;
 	    }
 	else if (subCount < hit->subCount)	/* Got a better hit, update tree leaf! */
 	    {
@@ -385,6 +431,7 @@ if (ix >= 0)
 	    hit->subCount = subCount;
 	    }
 	ix += 1;
+	++hits18;
 	if (sortedHexes[ix] != hex)
 	    break;
 	}
@@ -815,8 +862,8 @@ else
     }
 }
 
-static struct rbTree *splatHitsOneStrand(struct dnaSeq *qSeq, char strand,
-	int tagPosition, struct splix *splix, int maxGap)
+static struct rbTree *splatHitsOneStrand(struct dnaSeq *qSeq, bits64 bases25, 
+	char strand, int tagPosition, struct splix *splix, int maxGap)
 /* Look through index for hits to query tag on one strand. 
  * Input:
  *   qSeq - entire query sequence, reverse complimented if on - strand
@@ -834,6 +881,7 @@ struct rbTree *hitTree = rbTreeNew(splatHitCmp);
 int firstHalf, secondHalf;
 bits16 after1, after2, before1, before2;
 bits16 firstHex, lastHex, twoAfterFirstHex, twoBeforeLastHex;
+
 dnaToBinary(qSeq->dna + tagPosition, maxGap,
 	&firstHalf, &secondHalf, &after1, &after2, &before1, &before2,
 	&firstHex, &lastHex, &twoAfterFirstHex, &twoBeforeLastHex);
@@ -911,11 +959,11 @@ slReverse(&newList);
 return newList;
 }
 
-static void splatOneStrand(struct dnaSeq *qSeq, char strand,
+static void splatOneStrand(struct dnaSeq *qSeq, bits64 bases25, char strand,
 	int tagPosition, struct splix *splix, int maxGap, struct splatTag **pTagList)
 /* Align one query strand against index, filter, and write out results */
 {
-struct rbTree *hitTree = splatHitsOneStrand(qSeq, strand, tagPosition, splix, maxGap);
+struct rbTree *hitTree = splatHitsOneStrand(qSeq, bases25, strand, tagPosition, splix, maxGap);
 struct splatTag *tagList = NULL;
 verbose(2, " %d hits on %c strand\n", hitTree->n, strand);
 if (hitTree->n > 0)
@@ -969,10 +1017,24 @@ if (size < desiredSize)
     	qSeqF->name, tagSize, qSeqF->size);
     return;
     }
-splatOneStrand(qSeqF, '+', 0, splix, maxGap, &tagList);
-int tagPosition = qSeqR->size - desiredSize;
-splatOneStrand(qSeqR, '-', tagPosition, splix, maxGap, &tagList);
-if (tagList != NULL)
+bits64 bases25f = basesToBits64(qSeqF->dna, 25);
+boolean isRepeatingOver = overCheck(bases25f, overArraySize, overArray);
+if (!isRepeatingOver)
+    {
+    splatOneStrand(qSeqF, bases25f, '+', 0, splix, maxGap, &tagList);
+    int tagPosition = qSeqR->size - desiredSize;
+    bits64 bases25r = basesToBits64(qSeqR->dna + tagPosition, 25);
+    isRepeatingOver = overCheck(bases25r, overArraySize, overArray);
+    if (!isRepeatingOver)
+	splatOneStrand(qSeqR, bases25r, '-', tagPosition, splix, maxGap, &tagList);
+    }
+if (isRepeatingOver)
+    {
+    if (repeatOutputFile != NULL)
+	faWriteNext(repeatOutputFile, qSeqF->name, qSeqF->dna, qSeqF->size);
+    isRepeat = TRUE;
+    }
+else if (tagList != NULL)
     {
     /* Find least divergence. */
     int leastDivergence = tagList->divergence;
@@ -989,6 +1051,7 @@ if (tagList != NULL)
 
     /* Count up mappings, and output either to repeat file or to mapping file. */
     outputCount = slCount(tagList);
+    hits25 += outputCount;
     isRepeat = (outputCount > maxRepeat);
     if (isRepeat)
         {
@@ -999,6 +1062,7 @@ if (tagList != NULL)
     else
         {
 	struct splatAlign *aliList = splatExtendTags(tagList, qSeqF, qSeqR, splix, scoreScheme);
+	hitsFull += slCount(aliList);
 	slSort(&aliList, splatAlignCmpScore);
 	splatOutList(aliList, out, qSeqF, qSeqR, splix, f);
 	splatAlignFreeList(&aliList);
@@ -1066,6 +1130,9 @@ if (maxRepeat >= 2)
     }
 verbose(1, "%d (%5.2f%%) mapped uniquely\n",
     uniqCount, 100.0 * uniqCount / totalReads);
+
+verbose(1, "%ld index queries, %ld binaryQueries, %ld hits12, %ld hits18, %ld newHits18, %ld hits25, %ld hitsFull\n", 
+	exactIndexQueries, binaryQueries, hits12, hits18, newHits18, hits25, hitsFull);
 
 /* Clean up. */
 splixFree(&splix);

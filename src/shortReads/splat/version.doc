@@ -33,3 +33,6 @@
      the tag-mapping phase.  Mostly this is good.  It's definitely good for the 3' end.
      On the 5' end I've mixed feelings, because sometimes now the alignment does not
      go all the way to the start of the read.  
+29 - Adding "over" file which contains overused 25-mers, which can speed up search.
+     Making hexamer subindex search binary rather than linear.  Should speed up some
+     aspects on larger target sets.

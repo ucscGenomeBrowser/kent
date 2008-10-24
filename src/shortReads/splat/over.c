@@ -11,19 +11,13 @@ struct el64
     bits64 val;
     };
 
-bits64 basesToBits64(char *dna, int size)
-/* Convert dna of given size (up to 32) to binary representation */
+int overCmp(const void *va, const void *vb)
+/* Compare two bit64s. */
 {
-if (size > 32)
-    errAbort("basesToBits64 called on %d bases, can only go up to 32", size);
-bits64 result = 0;
-int i;
-for (i=0; i<size; ++i)
-    {
-    result <<= 2;
-    result += ntValNoN[(int)dna[i]];
-    }
-return result;
+bits64 a = *((bits64*)va), b = *((bits64*)vb);
+if (a < b) return -1;
+else if (a > b) return 1;
+else return 0;
 }
 
 void overRead(char *fileName, int minCount, int *retArraySize, bits64 **retArray)
@@ -45,6 +39,8 @@ while (lineFileRow(lf, row))
         {
 	lmAllocVar(lm, el);
 	el->val = basesToBits64(row[0], 25);
+	if (list != NULL && el->val < list->val)
+	    errAbort("%s is unsorted on line %d", lf->fileName, lf->lineIx);
 	slAddHead(&list, el);
 	arraySize += 1;
 	}
@@ -62,5 +58,14 @@ for (i=0, el=list; i<arraySize; ++i, el = el->next)
 lmCleanup(&lm);
 *retArraySize = arraySize;
 *retArray = array;
+}
+
+
+boolean overCheck(bits64 query, int arraySize, bits64 *array)
+/* Return TRUE if query is in array.  */
+{
+if (arraySize == 0)
+    return FALSE;
+return bsearch(&query, array, arraySize, sizeof(query), overCmp) != NULL;
 }
 
