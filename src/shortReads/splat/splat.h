@@ -6,6 +6,7 @@ struct splatHit
 /* Information on an index hit.  This only has about a 1% chance of being real after
  * extension, but hey, it's a start. */
     {
+    struct splatHit *next;	/* Next in list. */
     bits32 tOffset;	/* Offset to DNA in target */
     int gapSize;	/* >0 for insert in query/del in target, <0 for reverse. 0 for no gap. */
     int subCount;	/* Count of substitutions we know about already. */

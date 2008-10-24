@@ -111,9 +111,9 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.21 2008/10/24 18:39:59 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.22 2008/10/24 22:31:20 kent Exp $";
 
-char *version = "29";	/* Program version number. */
+char *version = "30";	/* Program version number. */
 
 static char *over = NULL;
 static char *out = "splat";
@@ -177,25 +177,10 @@ static FILE *repeatOutputFile = NULL;
 int overArraySize;
 bits64 *overArray;
 
-long exactIndexQueries, binaryQueries, hits12, hits18, newHits18, hits25, hitsFull;
-
-static int splatHitCmp(void *va, void *vb)
-/* Sort hits that need to be extended independently. */
-/* Note: sorting function for rbTree, not for slSort! */
-{
-struct splatHit *a = va;
-struct splatHit *b = vb;
-int diff = a->tOffset - b->tOffset;
-if (diff == 0)
-    diff = a->gapSize - b->gapSize;
-if (diff == 0)
-    diff = a->missingQuad - b->missingQuad;
-return diff;
-}
+long exactIndexQueries, hits12, hits18, hits25, hitsFull;
 
 static int splatTagCmpPosAndDivergence(const void *va, const void *vb)
 /* Sort tags based on position fields, then divergence. */
-/* Note: sorting function for slSort, not for rbTree! */
 {
 const struct splatTag *a = *((struct splatTag **)va);
 const struct splatTag *b = *((struct splatTag **)vb);
@@ -398,12 +383,11 @@ return -1;
 }
 
 static void exactIndexHits(bits16 hex, bits16 *sortedHexes, int slotSize, 
-	bits32 *offsets, struct rbTree *hitTree, int startOffset,
-	int subCount, int gapSize, int missingQuad)
+	bits32 *offsets, int startOffset, int subCount, int gapSize, 
+	int missingQuad, struct lm *lm, struct splatHit **pHitList)
 /* Look for hits that involve no index mismatches.  Put resultint offsets (plus startOffset)
  * into hitTree. */
 {
-exactIndexQueries += 1;
 hits12 += slotSize;
 int ix = binaryFindHex(hex, sortedHexes, slotSize);
 if (ix >= 0)
@@ -411,25 +395,13 @@ if (ix >= 0)
     for (;;)
 	{
 	int dnaOffset = offsets[ix] + startOffset;
-	struct splatHit h;
-	h.tOffset = dnaOffset;
-	h.gapSize = gapSize;
-	struct splatHit *hit = rbTreeFind(hitTree, &h);
-	if (hit == NULL)
-	    {
-	    lmAllocVar(hitTree->lm, hit);
-	    hit->tOffset = dnaOffset;
-	    hit->gapSize = gapSize;
-	    hit->missingQuad = missingQuad;
-	    hit->subCount = subCount;
-	    rbTreeAdd(hitTree, hit);
-	    ++newHits18;
-	    }
-	else if (subCount < hit->subCount)	/* Got a better hit, update tree leaf! */
-	    {
-	    hit->missingQuad = missingQuad;
-	    hit->subCount = subCount;
-	    }
+	struct splatHit *hit;
+	lmAllocVar(lm, hit);
+	hit->tOffset = dnaOffset;
+	hit->gapSize = gapSize;
+	hit->missingQuad = missingQuad;
+	hit->subCount = subCount;
+	slAddHead(pHitList, hit);
 	ix += 1;
 	++hits18;
 	if (sortedHexes[ix] != hex)
@@ -439,10 +411,11 @@ if (ix >= 0)
 }
 
 static void searchExact(struct splix *splix, int twelvemer, bits16 sixmer, int whichSixmer,
-	int dnaStartOffset, struct rbTree *hitTree,
-	int subCount, int gapSize, int missingQuad)
+	int dnaStartOffset, int subCount, int gapSize, int missingQuad,
+	struct lm *lm, struct splatHit **pHitList)
 /* If there's an exact match put DNA offset of match into hitTree. */
 {
+exactIndexQueries += 1;
 int slotSize = splix->slotSizes[twelvemer];
 if (slotSize != 0)
     {
@@ -450,13 +423,14 @@ if (slotSize != 0)
     char *slot = splix->slots[twelvemer];
     bits16 *hexesSixmer = (bits16*)(slot + whichSixmer*sizeof(bits16)*slotSize);
     bits32 *offsetsSixmer = (bits32*)((8+sizeof(bits32)*whichSixmer)*slotSize + slot);
-    exactIndexHits(sixmer, hexesSixmer, slotSize, offsetsSixmer, hitTree, dnaStartOffset,
-    	subCount, gapSize, missingQuad);
+    exactIndexHits(sixmer, hexesSixmer, slotSize, offsetsSixmer, dnaStartOffset,
+    	subCount, gapSize, missingQuad, lm, pHitList);
     }
 }
 
 static void searchExact12Vary6(struct splix *splix, int twelvemer, bits16 sixmer, int whichSixmer,
-	int dnaStartOffset, struct rbTree *hitTree, int gapSize, int missingQuad)
+	int dnaStartOffset, int gapSize, int missingQuad, struct lm *lm,
+	struct splatHit **pHitList)
 /* Search for exact matches to twelvemer and off-by-ones to sixmer. */
 {
 bits16 oneOff = sixmer;
@@ -466,14 +440,14 @@ int baseIx;
 for (baseIx = 0; baseIx<6; ++baseIx)
     {
     oneOff ^= toggle1;
-    searchExact(splix, twelvemer, oneOff, whichSixmer, dnaStartOffset, hitTree,
-    	1, gapSize, missingQuad);
+    searchExact(splix, twelvemer, oneOff, whichSixmer, dnaStartOffset,
+    	1, gapSize, missingQuad, lm, pHitList);
     oneOff ^= toggle2;
-    searchExact(splix, twelvemer, oneOff, whichSixmer, dnaStartOffset, hitTree,
-    	1, gapSize, missingQuad);
+    searchExact(splix, twelvemer, oneOff, whichSixmer, dnaStartOffset, 
+    	1, gapSize, missingQuad, lm, pHitList);
     oneOff ^= toggle1;
-    searchExact(splix, twelvemer, oneOff, whichSixmer, dnaStartOffset, hitTree,
-    	1, gapSize, missingQuad);
+    searchExact(splix, twelvemer, oneOff, whichSixmer, dnaStartOffset, 
+    	1, gapSize, missingQuad, lm, pHitList);
     oneOff ^= toggle2;	/* Restore base to unmutated form. */
     toggle1 <<= 2;	/* Move on to next base. */
     toggle2 <<= 2;	/* Move on to next base. */
@@ -481,7 +455,8 @@ for (baseIx = 0; baseIx<6; ++baseIx)
 }
 
 static void searchVary12Exact6(struct splix *splix, int twelvemer, bits16 sixmer, int whichSixmer,
-	int dnaStartOffset, struct rbTree *hitTree, int gapSize, int missingQuad)
+	int dnaStartOffset, int gapSize, int missingQuad, 
+	struct lm *lm, struct splatHit **pHitList)
 /* Search for exact matches to twelvemer and off-by-ones to sixmer. */
 {
 bits32 oneOff = twelvemer;
@@ -491,14 +466,14 @@ int baseIx;
 for (baseIx = 0; baseIx<12; ++baseIx)
     {
     oneOff ^= toggle1;
-    searchExact(splix, oneOff, sixmer, whichSixmer, dnaStartOffset, hitTree,
-    	1, gapSize, missingQuad);
+    searchExact(splix, oneOff, sixmer, whichSixmer, dnaStartOffset, 
+    	1, gapSize, missingQuad, lm, pHitList);
     oneOff ^= toggle2;
-    searchExact(splix, oneOff, sixmer, whichSixmer, dnaStartOffset, hitTree,
-    	1, gapSize, missingQuad);
+    searchExact(splix, oneOff, sixmer, whichSixmer, dnaStartOffset, 
+    	1, gapSize, missingQuad, lm, pHitList);
     oneOff ^= toggle1;
-    searchExact(splix, oneOff, sixmer, whichSixmer, dnaStartOffset, hitTree,
-    	1, gapSize, missingQuad);
+    searchExact(splix, oneOff, sixmer, whichSixmer, dnaStartOffset, 
+    	1, gapSize, missingQuad, lm, pHitList);
     oneOff ^= toggle2;	/* Restore base to unmutated form. */
     toggle1 <<= 2;	/* Move on to next base. */
     toggle2 <<= 2;	/* Move on to next base. */
@@ -862,8 +837,9 @@ else
     }
 }
 
-static struct rbTree *splatHitsOneStrand(struct dnaSeq *qSeq, bits64 bases25, 
-	char strand, int tagPosition, struct splix *splix, int maxGap)
+void splatHitsOneStrand(struct dnaSeq *qSeq, bits64 bases25, 
+	char strand, int tagPosition, struct splix *splix, int maxGap,
+	struct lm *lm, struct splatHit **pHitList)
 /* Look through index for hits to query tag on one strand. 
  * Input:
  *   qSeq - entire query sequence, reverse complimented if on - strand
@@ -872,11 +848,8 @@ static struct rbTree *splatHitsOneStrand(struct dnaSeq *qSeq, bits64 bases25,
  *                 splixMinQuerySize + maxGap long.
  *   splix - the index to search
  *   maxGap - the maximum insertion or deletion size
- * Output: a binary tree filled with splatHits.  The tree owns the hits themselves,
- *   so you can dispose of it simply with rbTreeFree(). */
+ * A list of splat hits allocated on lm. */
 {
-struct rbTree *hitTree = rbTreeNew(splatHitCmp);
-
 /* Convert DNA to binary format */
 int firstHalf, secondHalf;
 bits16 after1, after2, before1, before2;
@@ -887,50 +860,50 @@ dnaToBinary(qSeq->dna + tagPosition, maxGap,
 	&firstHex, &lastHex, &twoAfterFirstHex, &twoBeforeLastHex);
 
 int secondHalfPos = -12 - maxGap;
-searchExact(splix, firstHalf, after1, 2, 0, hitTree, 0, 0, 3);
-searchExact(splix, firstHalf, after2, 3, 0, hitTree, 0, 0, 2);
-searchExact(splix, secondHalf, before1, 0, secondHalfPos, hitTree, 0, 0, 1);
-searchExact(splix, secondHalf, before2, 1, secondHalfPos, hitTree, 0, 0, 0);
+searchExact(splix, firstHalf, after1, 2, 0, 0, 0, 3, lm, pHitList);
+searchExact(splix, firstHalf, after2, 3, 0, 0, 0, 2, lm, pHitList);
+searchExact(splix, secondHalf, before1, 0, secondHalfPos, 0, 0, 1, lm, pHitList);
+searchExact(splix, secondHalf, before2, 1, secondHalfPos, 0, 0, 0, lm, pHitList);
 if (maxMismatch > 1)
     {
-    searchVary12Exact6(splix, firstHalf, after1, 2, 0, hitTree, 0, 3);
-    searchVary12Exact6(splix, firstHalf, after2, 3, 0, hitTree, 0, 2);
-    searchVary12Exact6(splix, secondHalf, before1, 0, secondHalfPos, hitTree, 0, 1);
-    searchVary12Exact6(splix, secondHalf, before2, 1, secondHalfPos, hitTree, 0, 0);
-    searchExact12Vary6(splix, firstHalf, after1, 2, 0, hitTree, 0, 3);
-    searchExact12Vary6(splix, firstHalf, after2, 3, 0, hitTree, 0, 2);
-    searchExact12Vary6(splix, secondHalf, before1, 0, secondHalfPos, hitTree, 0, 1);
-    searchExact12Vary6(splix, secondHalf, before2, 1, secondHalfPos, hitTree, 0, 0);
+    searchVary12Exact6(splix, firstHalf, after1, 2, 0, 0, 3, lm, pHitList);
+    searchVary12Exact6(splix, firstHalf, after2, 3, 0, 0, 2, lm, pHitList);
+    searchVary12Exact6(splix, secondHalf, before1, 0, secondHalfPos, 0, 1, lm, pHitList);
+    searchVary12Exact6(splix, secondHalf, before2, 1, secondHalfPos, 0, 0, lm, pHitList);
+    searchExact12Vary6(splix, firstHalf, after1, 2, 0, 0, 3, lm, pHitList);
+    searchExact12Vary6(splix, firstHalf, after2, 3, 0, 0, 2, lm, pHitList);
+    searchExact12Vary6(splix, secondHalf, before1, 0, secondHalfPos, 0, 1, lm, pHitList);
+    searchExact12Vary6(splix, secondHalf, before2, 1, secondHalfPos, 0, 0, lm, pHitList);
     }
 
 /* Look at single base indels with few mismatches */
 if (maxGap > 0)
     {
-    searchExact(splix, secondHalf, twoAfterFirstHex, 0, secondHalfPos-maxGap, hitTree, 0, -1, 1);
-    searchExact(splix, secondHalf, firstHex, 0, secondHalfPos+maxGap, hitTree, 0, 1, 1);
-    searchExact(splix, firstHalf, twoBeforeLastHex, 3, 0, hitTree, 0, -1, 2);
-    searchExact(splix, firstHalf, lastHex, 3, 0, hitTree, 0, 1, 2);
+    searchExact(splix, secondHalf, twoAfterFirstHex, 0, secondHalfPos-maxGap, 0, -1, 1, lm, pHitList);
+    searchExact(splix, secondHalf, firstHex, 0, secondHalfPos+maxGap, 0, 1, 1, lm, pHitList);
+    searchExact(splix, firstHalf, twoBeforeLastHex, 3, 0, 0, -1, 2, lm, pHitList);
+    searchExact(splix, firstHalf, lastHex, 3, 0, 0, 1, 2, lm, pHitList);
     if (maxMismatch > 1)
 	{
-	searchExact12Vary6(splix, secondHalf, twoAfterFirstHex, 0, secondHalfPos-maxGap, hitTree, -1, 1);
-	searchExact12Vary6(splix, secondHalf, firstHex, 0, secondHalfPos+maxGap, hitTree, 1, 1);
-	searchExact12Vary6(splix, firstHalf, twoBeforeLastHex, 3, 0, hitTree, -1, 2);
-	searchExact12Vary6(splix, firstHalf, lastHex, 3, 0, hitTree, 1, 2);
-	searchVary12Exact6(splix, secondHalf, twoAfterFirstHex, 0, secondHalfPos-maxGap, hitTree, -1, 1);
-	searchVary12Exact6(splix, secondHalf, firstHex, 0, secondHalfPos+maxGap, hitTree, 1, 1);
-	searchVary12Exact6(splix, firstHalf, twoBeforeLastHex, 3, 0, hitTree, -1, 2);
-	searchVary12Exact6(splix, firstHalf, lastHex, 3, 0, hitTree, 1, 2);
+	searchExact12Vary6(splix, secondHalf, twoAfterFirstHex, 0, secondHalfPos-maxGap, -1, 1, lm, pHitList);
+	searchExact12Vary6(splix, secondHalf, firstHex, 0, secondHalfPos+maxGap, 1, 1, lm, pHitList);
+	searchExact12Vary6(splix, firstHalf, twoBeforeLastHex, 3, 0, -1, 2, lm, pHitList);
+	searchExact12Vary6(splix, firstHalf, lastHex, 3, 0, 1, 2, lm, pHitList);
+	searchVary12Exact6(splix, secondHalf, twoAfterFirstHex, 0, secondHalfPos-maxGap, -1, 1, lm, pHitList);
+	searchVary12Exact6(splix, secondHalf, firstHex, 0, secondHalfPos+maxGap, 1, 1, lm, pHitList);
+	searchVary12Exact6(splix, firstHalf, twoBeforeLastHex, 3, 0, -1, 2, lm, pHitList);
+	searchVary12Exact6(splix, firstHalf, lastHex, 3, 0, 1, 2, lm, pHitList);
 	}
     }
-return hitTree;
 }
 
-void extendHitsToTags(struct rbTree *hitTree, struct dnaSeq *qSeq, char strand, 
+void extendHitsToTags(struct splatHit *hitList, struct dnaSeq *qSeq, char strand, 
 	int tagPosition, struct splix *splix, struct splatTag **pTagList)
 /* Examine each of the hits in the hitTree, and add ones that are high scoring enough
  * after extension to the tagList. If bestOnly is set it may free existing tags on list if
  * it finds a higher scoring tag. */
 {
+struct splatHit *hit;
 struct alignContext ac;
 ZeroVar(&ac);
 ac.splix = splix;
@@ -938,7 +911,8 @@ ac.pTagList = pTagList;
 ac.qSeq = qSeq;
 ac.strand = strand;
 ac.tagPosition = tagPosition;
-rbTreeTraverseWithContext(hitTree, extendMaybeOutput, &ac);
+for (hit = hitList; hit != NULL; hit = hit->next)
+    extendMaybeOutput(hit, &ac);
 }
 
 static struct splatTag *removeDupeTags(struct splatTag *tagList)
@@ -963,22 +937,22 @@ static void splatOneStrand(struct dnaSeq *qSeq, bits64 bases25, char strand,
 	int tagPosition, struct splix *splix, int maxGap, struct splatTag **pTagList)
 /* Align one query strand against index, filter, and write out results */
 {
-struct rbTree *hitTree = splatHitsOneStrand(qSeq, bases25, strand, tagPosition, splix, maxGap);
+struct splatHit *hitList = NULL;
+struct lm *lm = lmInit(1024);
+splatHitsOneStrand(qSeq, bases25, strand, tagPosition, splix, maxGap, lm, &hitList);
 struct splatTag *tagList = NULL;
-verbose(2, " %d hits on %c strand\n", hitTree->n, strand);
-if (hitTree->n > 0)
+int hitCount = slCount(hitList);
+verbose(2, " %d hits on %c strand\n", hitCount, strand);
+if (hitCount > 0)
     {
-    extendHitsToTags(hitTree, qSeq, strand, tagPosition, splix, &tagList);
+    extendHitsToTags(hitList, qSeq, strand, tagPosition, splix, &tagList);
 
     /* Some duplicate tags may have come through.  This also will filter the tags 
      * by chromosome position. */
     tagList = removeDupeTags(tagList);
     *pTagList = slCat(tagList, *pTagList);
-
-
-    rbTreeFree(&hitTree);
     }
-rbTreeFree(&hitTree);
+lmCleanup(&lm);
 }
 
 static struct splatTag *splatTagFilterOnDivergence(struct splatTag *tagList, int maxDivergence)
@@ -1080,7 +1054,6 @@ void splat(char *target, char *query, char *output)
 {
 struct axtScoreScheme *scoreScheme = axtScoreSchemeSimpleDna(2, 2, 2, 2);
 struct dnaLoad *qLoad = dnaLoadOpen(query);
-uglyTime("Initializing");
 if (over != NULL)
     {
     overRead(over, maxRepeat+1, &overArraySize, &overArray);
@@ -1131,8 +1104,8 @@ if (maxRepeat >= 2)
 verbose(1, "%d (%5.2f%%) mapped uniquely\n",
     uniqCount, 100.0 * uniqCount / totalReads);
 
-verbose(1, "%ld index queries, %ld binaryQueries, %ld hits12, %ld hits18, %ld newHits18, %ld hits25, %ld hitsFull\n", 
-	exactIndexQueries, binaryQueries, hits12, hits18, newHits18, hits25, hitsFull);
+verbose(1, "%ld index queries, %ld hits12, %ld hits18, %ld hits25, %ld hitsFull\n", 
+	exactIndexQueries, hits12, hits18, hits25, hitsFull);
 
 /* Clean up. */
 splixFree(&splix);

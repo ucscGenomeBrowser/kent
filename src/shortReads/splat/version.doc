@@ -36,3 +36,5 @@
 29 - Adding "over" file which contains overused 25-mers, which can speed up search.
      Making hexamer subindex search binary rather than linear.  Should speed up some
      aspects on larger target sets.
+30 - Pretty major speed tweak (running in ~2/3 of time it used to) by replacing rbTree with
+     a simple list for hits.
