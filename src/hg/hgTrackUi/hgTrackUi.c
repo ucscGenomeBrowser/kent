@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.455 2008/10/03 23:02:11 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.456 2008/10/24 22:32:40 markd Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1299,7 +1299,7 @@ printf("<B>Show:</B> ");
 safef(varName, sizeof(varName), "%s.show.noncoding", tdb->tableName);
 boolean option = cartUsualBoolean(cart, varName, TRUE);
 cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "noncoding genes");
+printf(" %s&nbsp;&nbsp;&nbsp;", "non-coding genes");
 safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->tableName);
 option = cartUsualBoolean(cart, varName, TRUE);
 cgiMakeCheckBox(varName, option);
@@ -1333,8 +1333,8 @@ radioButton(varName, geneLabel, "none");
 static void hideNoncodingOpt(struct trackDb *tdb)
 /* Put up hide-noncoding options. */
 {
-/* Put up option to hide noncoding elements. */
-printf("<B>Hide noncoding genes:</B> ");
+/* Put up option to hide non-coding elements. */
+printf("<B>Hide non-coding genes:</B> ");
 char varName[64];
 safef(varName, sizeof(varName), "%s.%s", tdb->tableName, HIDE_NONCODING_SUFFIX);
 cartMakeCheckBox(cart, varName, HIDE_NONCODING_DEFAULT);
