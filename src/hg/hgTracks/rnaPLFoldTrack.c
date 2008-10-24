@@ -220,6 +220,9 @@ if (yt>yMax && trim)
 return; /* mapDiamondUI is working well, but there is a bug with 
 	   AREA=POLY on the Mac browsers, so this will be 
 	   postponed for now by not using this code */
+	/* also, since it only goes to hgTrackUi, it is redundant with mapTrackBackground.
+	 * so keep this disabled until there is something more specific like an hgc 
+	 * handler for diamonds. */
 if (drawMap && xt-xl>5 && xb-xl>5)
     mapDiamondUi(hvg, xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName,
 		 tg->tdb->tableName);
