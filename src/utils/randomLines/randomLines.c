@@ -5,7 +5,9 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: randomLines.c,v 1.5 2008/10/20 03:17:38 kent Exp $";
+static char const rcsid[] = "$Id: randomLines.c,v 1.6 2008/10/24 01:09:24 kent Exp $";
+
+int seed;
 
 void usage()
 /* Explain usage and exit. */
@@ -15,16 +17,24 @@ errAbort(
   "usage:\n"
   "   randomLines inFile count outFile\n"
   "options:\n"
-  "   -seed - Set seed used for randomizing, useful for debugging.\n"
+  "   -seed=N - Set seed used for randomizing, useful for debugging.\n"
   "   -decomment - remove blank lines and those starting with \n"
   );
 }
+
+static struct optionSpec options[] = {
+   {"seed", OPTION_INT},
+   {"decomment", OPTION_BOOLEAN},
+   {NULL, 0},
+};
 
 boolean decomment = FALSE;
 
 void randomLines(char *inName, int count, char *outName)
 /* randomLines - Pick out random lines from file. */
 {
+srand(seed);
+
 /* Read all lines of input and put into an array. */
 struct slName *slPt, *slList= readAllLines(inName);
 int lineCount = slCount(slList);
@@ -62,9 +72,10 @@ while (outCount < count)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
 if (argc != 4 || !isdigit(argv[2][0]))
     usage();
+seed = optionInt("seed", (int)time(NULL));
 decomment = optionExists("decomment");
 randomLines(argv[1], atoi(argv[2]), argv[3]);
 return 0;
