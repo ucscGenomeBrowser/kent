@@ -173,6 +173,9 @@ void dnaBaseHistogram(DNA *dna, int dnaSize, int histogram[4]);
 void dnaMixedCaseFilter(char *in, DNA *out);
 /* Filter out non-DNA characters but leave case intact. */
 
+bits64 basesToBits64(char *dna, int size);
+/* Convert dna of given size (up to 32) to binary representation */
+
 bits32 packDna16(DNA *in);
 /* pack 16 bases into a word */
 

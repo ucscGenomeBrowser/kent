@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.50 2008/10/23 19:59:47 kent Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.51 2008/10/24 18:20:17 kent Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -655,6 +655,21 @@ while (--dnaSize >= 0)
     if ((val = ntVal[(int)*dna++]) >= 0)
         ++histogram[val];
     }
+}
+
+bits64 basesToBits64(char *dna, int size)
+/* Convert dna of given size (up to 32) to binary representation */
+{
+if (size > 32)
+    errAbort("basesToBits64 called on %d bases, can only go up to 32", size);
+bits64 result = 0;
+int i;
+for (i=0; i<size; ++i)
+    {
+    result <<= 2;
+    result += ntValNoN[(int)dna[i]];
+    }
+return result;
 }
 
 bits32 packDna16(DNA *in)
