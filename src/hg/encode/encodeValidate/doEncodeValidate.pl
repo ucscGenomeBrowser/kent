@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.95 2008/10/23 23:11:02 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.96 2008/10/24 18:31:16 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -1332,6 +1332,9 @@ foreach my $ddfLine (@ddfLines) {
         }
         print TRACK_RA sprintf("\tdateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
         print TRACK_RA sprintf("\tdateReleased\t%d-%02d-%d\n",1900 + $rYear, $rMon + 1, $rMDay);
+        if(defined($ddfLine->{accession}) && length($ddfLine->{accession}) > 0) {
+            print TRACK_RA sprintf("\taccession\t%s\n",$ddfLine->{accession});
+        }
         print TRACK_RA "\tpriority\t" . ($priority + $daf->{TRACKS}{$view}{order}) . "\n";
         # noInherit is necessary b/c composite track will often have a different dummy type setting.
         print TRACK_RA "\tnoInherit\ton\n";
