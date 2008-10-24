@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.140 2008/09/03 19:19:04 markd Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.141 2008/10/24 17:53:54 angie Exp $";
 
 struct hash *snp125FuncCartColorHash = NULL;
 struct hash *snp125FuncCartNameHash = NULL;
@@ -1161,11 +1161,12 @@ static struct rgbColor white = {255, 255, 255};
 static struct rgbColor red   = {255,   0,   0};
 static struct rgbColor green = {  0, 255,   0};
 static struct rgbColor blue  = {  0,   0, 255};
-struct dyString *dsLdPos = newDyString(32);
+char var[512];
 char *ldPos = NULL;
 
-dyStringPrintf(dsLdPos, "%s_pos", tg->tdb->tableName);
-ldPos = cartUsualString(cart, dsLdPos->string, ldPosDefault);
+char *track = tg->tdb->parent ? tg->tdb->parent->tableName : tg->tdb->tableName;
+safef(var, sizeof(var), "%s_pos", track);
+ldPos = cartUsualString(cart, var, ldPosDefault);
 ldHighLodLowDprime = hvGfxFindColorIx(hvg, 255, 224, 224); /* pink */
 ldHighDprimeLowLod = hvGfxFindColorIx(hvg, 192, 192, 240); /* blue */
 if (sameString(ldPos,"red")) 
@@ -1245,10 +1246,9 @@ void mapTrackBackground(struct track *tg, struct hvGfx *hvg, int xOff, int yOff)
 xOff = hvGfxAdjXW(hvg, xOff, insideWidth);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", 
 	xOff, yOff, xOff+insideWidth, yOff+tg->height);
-/* move this to hgTracks when finished */
-hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(), 
-	cartSessionVarName(), cartSessionId(cart), chromName, 
-	tg->tdb->tableName, tg->tdb->tableName);
+char *track = tg->tdb->parent ? tg->tdb->parent->tableName : tg->tdb->tableName;
+hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(),
+	cartSessionVarName(), cartSessionId(cart), chromName, track, track);
 mapStatusMessage("%s controls", tg->mapName);
 hPrintf(">\n");
 }
@@ -1305,7 +1305,7 @@ void ldDrawDiamond(struct hvGfx *hvg, struct track *tg, int width,
 		   int xOff, int yOff, int a, int b, int c, int d, 
 		   Color shade, Color outlineColor, double scale, 
 		   boolean drawMap, char *name, enum trackVisibility vis,
-		   boolean trim)
+		   boolean trim, boolean ldInv)
 /* Draw and map a single pairwise LD box */
 {
 int yMax = ldTotalHeight(tg, vis)+yOff;
@@ -1318,11 +1318,7 @@ int yl = round((double)(scale*(c-a)/2)) + yOff;
 int yt = round((double)(scale*(d-a)/2)) + yOff;
 int yr = round((double)(scale*(d-b)/2)) + yOff;
 int yb = round((double)(scale*(c-b)/2)) + yOff;
-boolean ldInv;
-struct dyString *dsLdInv = newDyString(32);
 
-dyStringPrintf(dsLdInv, "%s_inv", tg->mapName);
-ldInv = cartUsualBoolean(cart, dsLdInv->string, ldInvDefault);
 if (!ldInv)
     {
     yl = yMax - yl + yOff;
@@ -1339,19 +1335,23 @@ drawDiamond(hvg, xl, yl, xt, yt, xr, yr, xb, yb, shade, outlineColor);
 return; /* mapDiamondUI is working well, but there is a bug with 
 	   AREA=POLY on the Mac browsers, so this will be 
 	   postponed for now by not using this code */
+	/* also, since it only goes to hgTrackUi, it is redundant with mapTrackBackground.
+	 * so keep this disabled until there is something more specific like an hgc 
+	 * handler for diamonds. */
 if (drawMap && xt-xl>5 && xb-xl>5)
     mapDiamondUi(hvg, xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName,
-		 tg->tdb->tableName);
+		 tg->tdb->parent ? tg->tdb->parent->tableName : tg->tdb->tableName);
 }
 
 Color getOutlineColor(struct track *tg, int itemCount)
 /* get outline color from cart and set outlineColor*/
 {
-struct dyString *dsLdOut = newDyString(32);
 char *outColor = NULL;
+char var[512];
 
-dyStringPrintf(dsLdOut, "%s_out", tg->tdb->tableName);
-outColor = cartUsualString(cart, dsLdOut->string, ldOutDefault);
+char *track = tg->tdb->parent ? tg->tdb->parent->tableName : tg->tdb->tableName;
+safef(var, sizeof(var), "%s_out", track);
+outColor = cartUsualString(cart, var, ldOutDefault);
 if (winEnd-winStart > 100000)
     return 0;
 if (sameString(outColor,"yellow"))
@@ -1510,7 +1510,8 @@ void ldDrawDense(struct hvGfx *hvg, struct track *tg, int xOff, int yOff,
 static struct ldStats lds;
 struct ld2 *dPtr;
 char var[512];
-safef(var, sizeof(var), "%s_gap", tg->tdb->tableName);
+char *track = tg->tdb->parent ? tg->tdb->parent->tableName : tg->tdb->tableName;
+safef(var, sizeof(var), "%s_gap", track);
 boolean useTInt = cartUsualBoolean(cart, var, ldGapDefault);
 for (dPtr = tg->items;  dPtr != NULL;  dPtr = dPtr->next)
     {
@@ -1559,7 +1560,8 @@ if (vis == tvDense)
 else
     yVisOffset = tg->heightPer + height/2;
 
-safef(var, sizeof(var), "%s_val", tg->tdb->tableName);
+char *track = tg->tdb->parent ? tg->tdb->parent->tableName : tg->tdb->tableName;
+safef(var, sizeof(var), "%s_val", track);
 ldVal = cartUsualString(cart, var, ldValDefault);
 if (sameString(ldVal, "lod"))
     ldVal = cloneString("LOD");
@@ -1641,14 +1643,18 @@ struct hash *ldHash    = newHash(20);
 Color        yellow    = hvGfxFindRgb(hvg, &undefinedYellowColor);
 char        *ldVal     = NULL;
 boolean      ldTrm;
-struct dyString *dsLdVal = newDyString(32);
-struct dyString *dsLdTrm = newDyString(32);
+boolean      ldInv;
+char         var[512];
 boolean dynamicDense = FALSE;
 
-dyStringPrintf(dsLdVal, "%s_val", tg->tdb->tableName);
-dyStringPrintf(dsLdTrm, "%s_trm", tg->tdb->tableName);
-ldVal = cartUsualString( cart, dsLdVal->string, ldValDefault);
-ldTrm = cartUsualBoolean(cart, dsLdTrm->string, ldTrmDefault);
+safef(var, sizeof(var), "%s_inv", tg->tdb->tableName);
+ldInv = cartUsualBoolean(cart, var, ldInvDefault);
+char *track = tg->tdb->parent ? tg->tdb->parent->tableName : tg->tdb->tableName;
+safef(var, sizeof(var), "%s_val", track);
+ldVal = cartUsualString( cart, var, ldValDefault);
+safef(var, sizeof(var), "%s_trm", track);
+ldTrm = cartUsualBoolean(cart, var, ldTrmDefault);
+
 if (tg->limitedVisSet)
     vis = tg->limitedVis;
 if (vis != tvDense && vis != tvFull)
@@ -1715,7 +1721,7 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	    continue;
 	shade = colorLookup[(int)ldVal[i]];
 	if (vis == tvFull)
-	    ldDrawDiamond(hvg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
+	    ldDrawDiamond(hvg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm, ldInv);
 	else if (dynamicDense)
 	    {
 	    ldAddToDenseValueHash(ldHash, a, ldVal[i]);
@@ -1734,7 +1740,7 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	    continue;
 	shade = colorLookup[(int)ldVal[i]];
 	if (vis == tvFull)
-	    ldDrawDiamond(hvg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
+	    ldDrawDiamond(hvg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm, ldInv);
 	else if (dynamicDense)
 	    {
 	    ldAddToDenseValueHash(ldHash, a, ldVal[i]);
@@ -1757,7 +1763,7 @@ if (dPtr->next==NULL)
 	    ldVal = dPtr->dprime;
 	shade = colorLookup[(int)ldVal[0]];
 	if (vis == tvFull)
-	    ldDrawDiamond(hvg, tg, width, xOff, yOff, a, b, a, b, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
+	    ldDrawDiamond(hvg, tg, width, xOff, yOff, a, b, a, b, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm, ldInv);
 	else if (dynamicDense)
 	    {
 	    ldAddToDenseValueHash(ldHash, a, ldVal[0]);
