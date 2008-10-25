@@ -11,7 +11,7 @@
 #include "dnaseq.h"
 #include "splix.h"
 
-static char const rcsid[] = "$Id: splixMake.c,v 1.1 2008/10/18 09:29:18 kent Exp $";
+static char const rcsid[] = "$Id: splixMake.c,v 1.2 2008/10/25 17:08:51 kent Exp $";
 
 #define splixMaxStackSize 4096
 
@@ -23,9 +23,9 @@ void usage()
 errAbort(
   "splixMake - Create splat index file from DNA sequences.\n"
   "usage:\n"
-  "   splixMake input output.splix\n"
-  "where input is either a fasta file, a nib file, a 2bit file, or a text file containing\n"
-  "the names of the above file types one per line.\n"
+  "   splixMake input1 input2 ... inputN output.splix\n"
+  "where each input is either a fasta file, a nib file, a 2bit file, or a text file\n"
+  "containing the names of the above file types one per line.\n"
   "options:\n"
   "   -unmask - ignore masking in input [not yet implemented, currently always ignores]\n"
   "   -verbose=N - set level of status messages, default 1.  Set to 0 for quiet, 2 for more.\n"
@@ -318,12 +318,10 @@ freeMem(header);
 carefulClose(&f);
 }
 
-void splixMake(char *input, char *output)
+void splixMake(int inCount, char *inputs[], char *output)
 /* splixMake - Create splat index file from DNA sequences.. */
 {
 struct lm *lm = lmInit(0);
-struct dnaLoad *dl = dnaLoadOpen(input);
-struct dnaSeq *seq;
 struct hash *uniqHash = hashNew(0);
 struct chromInfo *chrom, *chromList = NULL;
 bits64 chromOffset = 0, maxOffset;
@@ -332,16 +330,24 @@ AllocArray(listyIndex, splixSlotCount);
 maxOffset = 1;
 maxOffset <<= 32;
 bits32 totalBasesIndexed = 0;
-while ((seq = dnaLoadNext(dl)) != NULL)
+int inputIx;
+for (inputIx=0; inputIx<inCount; ++inputIx)
     {
-    verbose(1, "processing %s with %d bases\n", seq->name, seq->size);
-    hashAddUnique(uniqHash, seq->name, NULL);
-    chrom = indexSeq(seq, chromOffset, lm, listyIndex);
-    chromOffset += chrom->size + 1;
-    if (chromOffset >= maxOffset)
-        errAbort("Too much sequence to index, can only handle 4 Gig\n");
-    totalBasesIndexed += chrom->basesIndexed;
-    slAddHead(&chromList, chrom);
+    char * input = inputs[inputIx];
+    struct dnaLoad *dl = dnaLoadOpen(input);
+    struct dnaSeq *seq;
+    while ((seq = dnaLoadNext(dl)) != NULL)
+	{
+	verbose(1, "processing %s with %d bases\n", seq->name, seq->size);
+	hashAddUnique(uniqHash, seq->name, NULL);
+	chrom = indexSeq(seq, chromOffset, lm, listyIndex);
+	chromOffset += chrom->size + 1;
+	if (chromOffset >= maxOffset)
+	    errAbort("Too much sequence to index, can only handle 4 Gig\n");
+	totalBasesIndexed += chrom->basesIndexed;
+	slAddHead(&chromList, chrom);
+	}
+    dnaLoadClose(&dl);
     }
 verbose(1, "Indexed %lld bases\n", (long long)totalBasesIndexed);
 slReverse(&chromList);
@@ -355,9 +361,9 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 unmask = optionExists("unmask");
-if (argc != 3)
+if (argc < 3)
     usage();
 dnaUtilOpen();
-splixMake(argv[1], argv[2]);
+splixMake(argc-2, argv+1, argv[argc-1]);
 return 0;
 }
