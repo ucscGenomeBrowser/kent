@@ -9,7 +9,7 @@
 #include "dnaseq.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaMake.c,v 1.1 2008/10/25 20:42:16 kent Exp $";
+static char const rcsid[] = "$Id: sufaMake.c,v 1.2 2008/10/25 20:45:48 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -78,7 +78,7 @@ struct chromInfo *indexChromPass1(struct dnaSeq *seq, bits32 chromOffset, struct
 /* Create a sufaOneBaseListy for each base in seq, and hang it in appropriate slot
  * in listyIndex. */
 {
-int baseIx,i;
+int baseIx;
 DNA *dna = seq->dna;
 int seqSize = seq->size;
 int basesIndexed = 0;
@@ -145,14 +145,6 @@ static int cmpAfter16(const void *va, const void *vb)
 const struct sufaOneBaseListy *a = *((struct sufaOneBaseListy **)va);
 const struct sufaOneBaseListy *b = *((struct sufaOneBaseListy **)vb);
 return strcmp(globalAllDna + a->dnaOffset + 16, globalAllDna + b->dnaOffset + 16);
-}
-
-static int cmpAfter12(const void *va, const void *vb)
-/* Compare to sort, assuming first 12 bases already match. */
-{
-const struct sufaOneBaseListy *a = *((struct sufaOneBaseListy **)va);
-const struct sufaOneBaseListy *b = *((struct sufaOneBaseListy **)vb);
-return strcmp(globalAllDna + a->dnaOffset + 12, globalAllDna + b->dnaOffset + 12);
 }
 
 void finishAndWriteOneSlot(struct sufaOneBaseListy **listyIndex, int slotIx, DNA *allDna,
