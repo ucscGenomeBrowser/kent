@@ -39,3 +39,5 @@
 30 - Pretty major speed tweak (running in ~2/3 of time it used to) by replacing rbTree with
      a simple list for hits.
 31 - Fixed bug in extensions that caused crash on splix files with more than one sequence.
+     Decent speed tweak (running in 80% of former time) from making tags allocated out of
+     same local memory pool as hits, and using same pool for both strands.

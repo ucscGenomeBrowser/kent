@@ -111,7 +111,7 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.23 2008/10/25 03:48:18 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.24 2008/10/25 04:44:06 kent Exp $";
 
 char *version = "31";	/* Program version number. */
 
@@ -481,13 +481,16 @@ for (baseIx = 0; baseIx<12; ++baseIx)
 }
 
 struct alignContext
-/* Context for an alignment. Necessary data for rbTree-traversing call-back function. */
+/* Context for an alignment. Necessary data for rbTree-traversing call-back function. 
+ * Actually we no longer need this, but it does bundle together parameters shared
+ * by a number of routines together. */
     {
     struct splix *splix;	/* Index. */
     struct splatTag **pTagList;	/* Pointer to tag list that gets filled in. */
     struct dnaSeq *qSeq;	/* DNA sequence. */
     char strand;		/* query strand. */
     int tagPosition;		/* Position of tag. */
+    struct lm *lm;		/* Local memory pool where tags are allocated. */
     };
 
 int countDnaDiffs(DNA *a, DNA *b, int size)
@@ -527,7 +530,7 @@ if (gap)
 
 /* Alloc and fill in tag. */
 struct splatTag *tag;
-AllocVar(tag);
+lmAllocVar(c->lm, tag);
 tag->divergence  = divergence;
 tag->q1 = q1;
 tag->t1 = t1;
@@ -814,13 +817,9 @@ if (diffCount < maxMismatch)
     }
 }
 
-static void extendMaybeOutput(void *item, void *context)
+static void extendMaybeOutput(struct splatHit *hit, struct alignContext *c)
 /* Callback function for tree traverser that extends alignments and if good, outputs them. */
 {
-/* Rescue some typed variables out of container-driven voidness. */
-struct splatHit *hit = item;
-struct alignContext *c = context;
-
 verbose(3, "   tOffset=%d gapSize=%d subCount=%d missingQuad=%d\n", 
 	hit->tOffset, hit->gapSize, hit->subCount, hit->missingQuad);
 if (hit->gapSize == 0)
@@ -898,7 +897,7 @@ if (maxGap > 0)
 }
 
 void extendHitsToTags(struct splatHit *hitList, struct dnaSeq *qSeq, char strand, 
-	int tagPosition, struct splix *splix, struct splatTag **pTagList)
+	int tagPosition, struct splix *splix, struct lm *lm, struct splatTag **pTagList)
 /* Examine each of the hits in the hitTree, and add ones that are high scoring enough
  * after extension to the tagList. If bestOnly is set it may free existing tags on list if
  * it finds a higher scoring tag. */
@@ -911,6 +910,7 @@ ac.pTagList = pTagList;
 ac.qSeq = qSeq;
 ac.strand = strand;
 ac.tagPosition = tagPosition;
+ac.lm = lm;
 for (hit = hitList; hit != NULL; hit = hit->next)
     extendMaybeOutput(hit, &ac);
 }
@@ -924,9 +924,7 @@ slSort(&tagList, splatTagCmpPosAndDivergence);
 for (tag = tagList; tag != NULL; tag = next)
     {
     next = tag->next;
-    if (next != NULL && splatTagCmpPosAndDivergence(&tag, &next) == 0)
-	splatTagFree(&tag);
-    else
+    if (next == NULL || splatTagCmpPosAndDivergence(&tag, &next) != 0)
 	slAddHead(&newList, tag);
     }
 slReverse(&newList);
@@ -934,25 +932,24 @@ return newList;
 }
 
 static void splatOneStrand(struct dnaSeq *qSeq, bits64 bases25, char strand,
-	int tagPosition, struct splix *splix, int maxGap, struct splatTag **pTagList)
+	int tagPosition, struct splix *splix, int maxGap, 
+	struct lm *lm, struct splatTag **pTagList)
 /* Align one query strand against index, filter, and write out results */
 {
 struct splatHit *hitList = NULL;
-struct lm *lm = lmInit(1024);
 splatHitsOneStrand(qSeq, bases25, strand, tagPosition, splix, maxGap, lm, &hitList);
 struct splatTag *tagList = NULL;
 int hitCount = slCount(hitList);
 verbose(2, " %d hits on %c strand\n", hitCount, strand);
 if (hitCount > 0)
     {
-    extendHitsToTags(hitList, qSeq, strand, tagPosition, splix, &tagList);
+    extendHitsToTags(hitList, qSeq, strand, tagPosition, splix, lm, &tagList);
 
     /* Some duplicate tags may have come through.  This also will filter the tags 
      * by chromosome position. */
     tagList = removeDupeTags(tagList);
     *pTagList = slCat(tagList, *pTagList);
     }
-lmCleanup(&lm);
 }
 
 static struct splatTag *splatTagFilterOnDivergence(struct splatTag *tagList, int maxDivergence)
@@ -964,8 +961,6 @@ for (tag = tagList; tag != NULL; tag = next)
     next = tag->next;
     if (tag->divergence <= maxDivergence)
         slAddHead(&newList, tag);
-    else
-        splatTagFree(&tag);
     }
 slReverse(&newList);
 return newList;
@@ -976,6 +971,9 @@ static void splatOne(struct dnaSeq *qSeqF, struct splix *splix, int maxGap,
 /* Align one query sequence against index, filter, and write out results.
  * Returns the number of mappings. */
 {
+/* Local memory pool for hits and tags for this sequence. */
+struct lm *lm = lmInit(1024*4);
+
 /* Make reverse complement of query too. */
 struct dnaSeq *qSeqR = cloneDnaSeq(qSeqF);
 reverseComplement(qSeqR->dna, qSeqR->size);
@@ -995,12 +993,12 @@ bits64 bases25f = basesToBits64(qSeqF->dna, 25);
 boolean isRepeatingOver = overCheck(bases25f, overArraySize, overArray);
 if (!isRepeatingOver)
     {
-    splatOneStrand(qSeqF, bases25f, '+', 0, splix, maxGap, &tagList);
+    splatOneStrand(qSeqF, bases25f, '+', 0, splix, maxGap, lm, &tagList);
     int tagPosition = qSeqR->size - desiredSize;
     bits64 bases25r = basesToBits64(qSeqR->dna + tagPosition, 25);
     isRepeatingOver = overCheck(bases25r, overArraySize, overArray);
     if (!isRepeatingOver)
-	splatOneStrand(qSeqR, bases25r, '-', tagPosition, splix, maxGap, &tagList);
+	splatOneStrand(qSeqR, bases25r, '-', tagPosition, splix, maxGap, lm, &tagList);
     }
 if (isRepeatingOver)
     {
@@ -1041,9 +1039,9 @@ else if (tagList != NULL)
 	splatOutList(aliList, out, qSeqF, qSeqR, splix, f);
 	splatAlignFreeList(&aliList);
 	}
-    splatTagFreeList(&tagList);
     }
 dnaSeqFree(&qSeqR);
+lmCleanup(&lm);
 *retMapCount = outputCount;
 *retIsRepeat = isRepeat;
 }
