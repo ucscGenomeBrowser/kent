@@ -40,4 +40,7 @@
      a simple list for hits.
 31 - Fixed bug in extensions that caused crash on splix files with more than one sequence.
      Decent speed tweak (running in 80% of former time) from making tags allocated out of
-     same local memory pool as hits, and using same pool for both strands.
+     same local memory pool as hits, and using same pool for both strands.  Another nice
+     speed tweak from filtering out second best hits before doing the dupe scan, which
+     right now involves a sort.  This also actually fixed a bug where sometimes second
+     best alignments were the ones that were kept in the dupe phase.

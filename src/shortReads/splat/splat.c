@@ -111,7 +111,7 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.24 2008/10/25 04:44:06 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.25 2008/10/25 05:36:32 kent Exp $";
 
 char *version = "31";	/* Program version number. */
 
@@ -179,31 +179,23 @@ bits64 *overArray;
 
 long exactIndexQueries, hits12, hits18, hits25, hitsFull;
 
-static int splatTagCmpPosAndDivergence(const void *va, const void *vb)
+static int splatTagCmp(const void *va, const void *vb)
 /* Sort tags based on position fields, then divergence. */
 {
 const struct splatTag *a = *((struct splatTag **)va);
 const struct splatTag *b = *((struct splatTag **)vb);
-int diff = a->strand - b->strand;
-if (diff == 0)
-    diff = a->t1 - b->t1;
-if (diff == 0)
-    {
-    int aEnd = a->t2 + a->size2;
-    int bEnd = b->t2 + b->size2;
-    diff = aEnd - bEnd;
-    }
-if (diff == 0)
-    diff = a->q1 - b->q1;
-if (diff == 0)
-    {
-    int aEnd = a->q2 + a->size2;
-    int bEnd = b->q2 + b->size2;
-    diff = aEnd - bEnd;
-    }
-if (diff == 0)
-    diff = a->divergence - b->divergence;
-return diff;
+int diff;
+
+if ((diff = a->t1 - b->t1) != 0) return diff;
+int aEnd = a->t2 + a->size2;
+int bEnd = b->t2 + b->size2;
+if ((diff = aEnd - bEnd) != 0) return diff;
+if ((diff = a->strand - b->strand) != 0) return diff;
+if ((diff = a->divergence - b->divergence) != 0) return diff;
+if ((diff = a->q1 - b->q1) != 0) return diff;
+aEnd = a->q2 + a->size2;
+bEnd = b->q2 + b->size2;
+return aEnd - bEnd;
 }
 
 void splatAlignFree(struct splatAlign **pAli)
@@ -920,12 +912,38 @@ static struct splatTag *removeDupeTags(struct splatTag *tagList)
 {
 struct splatTag *tag, *next, *newList = NULL;
 
-slSort(&tagList, splatTagCmpPosAndDivergence);
+slSort(&tagList, splatTagCmp);
 for (tag = tagList; tag != NULL; tag = next)
     {
     next = tag->next;
-    if (next == NULL || splatTagCmpPosAndDivergence(&tag, &next) != 0)
+    if (next == NULL || splatTagCmp(&tag, &next) != 0)
 	slAddHead(&newList, tag);
+    }
+slReverse(&newList);
+return newList;
+}
+
+static int findLeastDivergence(struct splatTag *tagList)
+{
+struct splatTag *tag;
+int leastDivergence = tagList->divergence;
+for (tag = tagList->next; tag != NULL; tag = tag->next)
+    {
+    if (tag->divergence < leastDivergence)
+	leastDivergence = tag->divergence;
+    }
+return leastDivergence;
+}
+
+static struct splatTag *splatTagFilterOnDivergence(struct splatTag *tagList, int maxDivergence)
+/* Remove (and free) tags with more than maxDivergence from list. */
+{
+struct splatTag *tag, *next, *newList = NULL;
+for (tag = tagList; tag != NULL; tag = next)
+    {
+    next = tag->next;
+    if (tag->divergence <= maxDivergence)
+        slAddHead(&newList, tag);
     }
 slReverse(&newList);
 return newList;
@@ -945,25 +963,16 @@ if (hitCount > 0)
     {
     extendHitsToTags(hitList, qSeq, strand, tagPosition, splix, lm, &tagList);
 
+    /* Since this is faster than removing dupes, and will often trim list a lot, do
+     * it now, even though we have to do it again when we have data on both strands. */
+    if (tagList != NULL && !worseToo)
+	tagList = splatTagFilterOnDivergence(tagList, findLeastDivergence(tagList) );
+
     /* Some duplicate tags may have come through.  This also will filter the tags 
      * by chromosome position. */
     tagList = removeDupeTags(tagList);
     *pTagList = slCat(tagList, *pTagList);
     }
-}
-
-static struct splatTag *splatTagFilterOnDivergence(struct splatTag *tagList, int maxDivergence)
-/* Remove (and free) tags with more than maxDivergence from list. */
-{
-struct splatTag *tag, *next, *newList = NULL;
-for (tag = tagList; tag != NULL; tag = next)
-    {
-    next = tag->next;
-    if (tag->divergence <= maxDivergence)
-        slAddHead(&newList, tag);
-    }
-slReverse(&newList);
-return newList;
 }
 
 static void splatOne(struct dnaSeq *qSeqF, struct splix *splix, int maxGap, 
@@ -1009,16 +1018,10 @@ if (isRepeatingOver)
 else if (tagList != NULL)
     {
     /* Find least divergence. */
-    int leastDivergence = tagList->divergence;
-    for (tag = tagList->next; tag != NULL; tag = tag->next)
-        {
-	if (tag->divergence < leastDivergence)
-	    leastDivergence = tag->divergence;
-	}
 
     /* Unless doing worseToo remove tags that are not best scoring */
     if (!worseToo)
-	tagList = splatTagFilterOnDivergence(tagList, leastDivergence);
+	tagList = splatTagFilterOnDivergence(tagList, findLeastDivergence(tagList) );
     
 
     /* Count up mappings, and output either to repeat file or to mapping file. */
@@ -1039,6 +1042,8 @@ else if (tagList != NULL)
 	splatOutList(aliList, out, qSeqF, qSeqR, splix, f);
 	splatAlignFreeList(&aliList);
 	}
+#ifdef SOON
+#endif /* SOON */
     }
 dnaSeqFree(&qSeqR);
 lmCleanup(&lm);
