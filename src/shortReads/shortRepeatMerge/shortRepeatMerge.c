@@ -6,7 +6,7 @@
 #include "sqlNum.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: shortRepeatMerge.c,v 1.1 2008/10/23 20:03:59 kent Exp $";
+static char const rcsid[] = "$Id: shortRepeatMerge.c,v 1.2 2008/10/25 03:49:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -15,8 +15,6 @@ errAbort(
   "shortRepeatMerge - Merge files made with shortRepeatFind.\n"
   "usage:\n"
   "   shortRepeatMerge input(s).srf output.srf\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
@@ -121,7 +119,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 dnaUtilOpen();
-if (argc < 3)
+if (argc < 4)
     usage();
 shortRepeatMerge(argc-2, argv+1, argv[argc-1]);
 return 0;
