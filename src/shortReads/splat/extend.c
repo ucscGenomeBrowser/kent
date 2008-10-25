@@ -26,9 +26,9 @@ DNA *t = splix->allDna + chromOffset;
 struct cBlock *block1;
 AllocVar(block1);
 block1->qStart = tag->q1;
-block1->qEnd = tag->q1 + tag->size1;
+block1->qEnd = block1->qStart + tag->size1;
 block1->tStart = tag->t1 - chromOffset;
-block1->tEnd = tag->t1 + tag->size1;
+block1->tEnd = block1->tStart + tag->size1;
 
 /* Allocate and fill in chain structure. */
 struct chain *chain;
@@ -57,9 +57,9 @@ if (tag->size2 > 0)
     struct cBlock *block2;
     AllocVar(block2);
     block2->qStart = tag->q2;
-    chain->qEnd = block2->qEnd = tag->q2 + tag->size2;
+    chain->qEnd = block2->qEnd = block2->qStart + tag->size2;
     block2->tStart = tag->t2 - chromOffset;
-    chain->tEnd = block2->tEnd = tag->t2 + tag->size2;
+    chain->tEnd = block2->tEnd = block2->tStart + tag->size2;
     block1->next = block2;
     }
 return align;

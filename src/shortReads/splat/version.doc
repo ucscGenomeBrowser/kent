@@ -38,3 +38,4 @@
      aspects on larger target sets.
 30 - Pretty major speed tweak (running in ~2/3 of time it used to) by replacing rbTree with
      a simple list for hits.
+31 - Fixed bug in extensions that caused crash on splix files with more than one sequence.

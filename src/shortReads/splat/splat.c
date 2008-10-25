@@ -111,9 +111,9 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.22 2008/10/24 22:31:20 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.23 2008/10/25 03:48:18 kent Exp $";
 
-char *version = "30";	/* Program version number. */
+char *version = "31";	/* Program version number. */
 
 static char *over = NULL;
 static char *out = "splat";
@@ -141,11 +141,11 @@ errAbort(
 "   output is the output alignment file, by default in .splat format\n"
 "note: can use 'stdin' or 'stdout' as a file name for better piping\n"
 "overall options:\n"
-"   -over=fileName - Name of file with list of 25-mers that map many times in genome.\n"
-"       Highly recommended option for speed.  Typically use file human10.over for human genome.\n"
 "   -out=format - Output format.  Options include splat (default), psl, maf, [soap, eland soon....]\n"
 "   -worseToo - if set return alignments other than the best alignments\n"
 "   -maxRepeat=N  - maximum number of alignments to output on one query sequence. Default %d\n"
+"   -over=fileName - Name of file with list of 25-mers that map many times in genome.\n"
+"       Helps speed in some cases.  Typically use file human10.over for human genome.\n"
 "   -repeatOutput=fileName.fa - Put reads that map more than maxRepeat times in here\n"
 "options effecting just first 25 bases\n"
 "   -maxGap=N. Maximum gap size. Default is %d. Set to 0 for no gaps\n"
@@ -1057,10 +1057,9 @@ struct dnaLoad *qLoad = dnaLoadOpen(query);
 if (over != NULL)
     {
     overRead(over, maxRepeat+1, &overArraySize, &overArray);
-    uglyTime("Read %s", over);
     }
 struct splix *splix = splixRead(target, memoryMap);
-uglyTime("Read %s", target);
+uglyTime("Loaded %s", target);
 FILE *f = mustOpen(output, "w");
 if (repeatOutput != NULL)
     repeatOutputFile = mustOpen(repeatOutput, "w");
