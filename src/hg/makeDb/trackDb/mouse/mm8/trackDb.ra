@@ -620,7 +620,7 @@ subGroup3 FAC Epitope K04m1=H3K4me1 K04m2=H3K4me2 K04m3=H3K4me3 K09m3=H3K9me3 K2
 dimensions dimensionX=CEL dimensionY=FAC
 sortOrder CEL=+ FAC=+ view=-
 dragAndDrop subTracks
-visibility full
+visibility hide
 visibilityViewDefaults HMM=squish WIN=squish DEN=full
 priority 130
 type bed 3
