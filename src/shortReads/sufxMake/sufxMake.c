@@ -8,7 +8,7 @@
 #include "dnaseq.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxMake.c,v 1.4 2008/10/26 23:12:14 kent Exp $";
+static char const rcsid[] = "$Id: sufxMake.c,v 1.5 2008/10/26 23:52:16 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -322,6 +322,7 @@ mustRead(f, suffixArray, arraySize*sizeof(bits32));
 verbose(1, "Read suffix array back in\n");
 
 /* Calculate traverse array */
+memset(traverseArray, 0, arraySize*sizeof(bits32));
 sufxFillInTraverseArray(allDna, suffixArray, arraySize, traverseArray);
 verbose(1, "Filled in traverseArray\n");
 
@@ -384,9 +385,9 @@ AllocArray(twelvemerIndex, sufxSlotCount);
  * use the listArray for the traverseArray.  We write out the traverse array to finish
  * things up. */
 
-bits32 *offsetArray;
-AllocArray(offsetArray, estimatedGenomeSize);
-bits32 *listArray;
+bits32 *offsetArray = needHugeMem(estimatedGenomeSize * sizeof(bits32));
+bits32 *listArray = needHugeZeroedMem(estimatedGenomeSize * sizeof(bits32));;
+
 AllocArray(listArray, estimatedGenomeSize);
 verbose(1, "Allocated buffers: %lld bytes total\n", 9LL*estimatedGenomeSize + sufxSlotCount*4);
 
