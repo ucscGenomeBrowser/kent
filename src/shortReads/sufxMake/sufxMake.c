@@ -5,7 +5,7 @@
 #include "options.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufxMake.c,v 1.1 2008/10/26 09:34:37 kent Exp $";
+static char const rcsid[] = "$Id: sufxMake.c,v 1.2 2008/10/26 09:42:56 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -68,16 +68,7 @@ char *allDna = sufa->allDna;
 bits32 *array = sufa->array;
 bits32 *xArray = sufxCalcSearchExtensions(allDna, array, arraySize);
 uglyTime("Calculated extensions", input);
-
-int i;
-for (i=0; i<arraySize; ++i)
-    {
-    int offset = array[i];
-    fprintf(f, "%d %d ", i, offset);
-    mustWrite(f, allDna+offset, 50);
-    fprintf(f, " %d\n", xArray[i]);
-    }
-carefulClose(&f);
+mustWrite(f, xArray, arraySize * sizeof(bits32));
 uglyTime("wrote %s", output);
 }
 
