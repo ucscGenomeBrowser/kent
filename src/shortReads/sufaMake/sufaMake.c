@@ -9,7 +9,7 @@
 #include "dnaseq.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaMake.c,v 1.2 2008/10/25 20:45:48 kent Exp $";
+static char const rcsid[] = "$Id: sufaMake.c,v 1.3 2008/10/26 00:15:43 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -26,11 +26,17 @@ errAbort(
 }
 
 /* Base values in _alphabetical_ order. Unfortunately the ones in dnautil.h are not.... */
-#define A_VAL 0
-#define C_VAL 1
-#define G_VAL 2
-#define T_VAL 3
+#define SUFA_A 0
+#define SUFA_C 1
+#define SUFA_G 2
+#define SUFA_T 3
 
+/* Hex conversions to assist debugging:
+ * 0=AA 1=AC 2=AG 3=AT 4=CA 5=CC 6=CG 7=CT
+ * 8=GA 9=GC A=GG B=GT C=TA D=TC E=TG F=TT
+ */
+
+/* Table to convert letters to one of the above values. */
 int baseToVal[256];
 
 static struct optionSpec options[] = {
@@ -73,6 +79,13 @@ while (--count >= 0)
     fputc(0, f);
 }
 
+void dumpDnaPairs(DNA *s, int size, FILE *f)
+{
+int i;
+for (i=0; i<size; i+=2)
+    fprintf(f, "%c%c ", s[i], s[i+1]);
+}
+
 struct chromInfo *indexChromPass1(struct dnaSeq *seq, bits32 chromOffset, struct lm *lm,
 	struct sufaOneBaseListy **listyIndex)
 /* Create a sufaOneBaseListy for each base in seq, and hang it in appropriate slot
@@ -99,7 +112,7 @@ for (baseIx=0; baseIx<11; ++baseIx)
     {
     int baseLetter = dna[baseIx];
     if (baseLetter == 'N')
-        maskTil = baseIx + 12;
+        maskTil = baseIx + 24;
     twelve1 <<= 2;
     twelve1 += baseToVal[baseLetter];
     }
@@ -107,7 +120,7 @@ for (baseIx=11; baseIx<23; ++baseIx)
     {
     int baseLetter = dna[baseIx];
     if (baseLetter == 'N')
-        maskTil = baseIx + 12;
+        maskTil = baseIx + 24;
     twelve2 <<= 2;
     twelve2 += baseToVal[baseLetter];
     }
@@ -117,12 +130,11 @@ for (baseIx = 23; baseIx < seqSize; ++baseIx)
     {
     int baseLetter = dna[baseIx];
     if (baseLetter == 'N')
-        maskTil = baseIx + 12;
-    int base = baseToVal[baseLetter];
-    twelve2 = (twelve2 << 2) + base;
-    twelve1 = (twelve1 << 2) + (twelve2>>12);
-    twelve1 &= 0xFFFFF;
-    twelve2 &= 0xFFFFF;
+        maskTil = baseIx + 24;
+    twelve1 = (twelve1 << 2) + (twelve2>>22);
+    twelve2 = (twelve2 << 2) + baseToVal[baseLetter];
+    twelve1 &= 0xFFFFFF;
+    twelve2 &= 0xFFFFFF;
     if (baseIx >= maskTil)
 	{
 	struct sufaOneBaseListy *temp;
@@ -262,9 +274,9 @@ if (estimatedGenomeSize >= maxGenomeSize)
     errAbort("Can only handle genomes up to 4000 meg, sorry.");
 
 /* Fill out baseToVal array - A is already done. */
-baseToVal[(int)'C'] = baseToVal[(int)'c'] = C_VAL;
-baseToVal[(int)'G'] = baseToVal[(int)'g'] = G_VAL;
-baseToVal[(int)'T'] = baseToVal[(int)'t'] = T_VAL;
+baseToVal[(int)'C'] = baseToVal[(int)'c'] = SUFA_C;
+baseToVal[(int)'G'] = baseToVal[(int)'g'] = SUFA_G;
+baseToVal[(int)'T'] = baseToVal[(int)'t'] = SUFA_T;
 
 struct lm *lm = lmInit(0);
 struct hash *uniqHash = hashNew(0);
@@ -285,6 +297,7 @@ for (inputIx=0; inputIx<inCount; ++inputIx)
     while ((seq = dnaLoadNext(dl)) != NULL)
 	{
 	verbose(1, "reading %s with %d bases\n", seq->name, seq->size);
+	toUpperN(seq->dna, seq->size);
 	bits64 currentSize = chromOffset + seq->size + 1;
 	if (currentSize > estimatedGenomeSize)
 	    errAbort("Too much sequence.  You estimated %lld, comes to %lld\n"
@@ -293,7 +306,6 @@ for (inputIx=0; inputIx<inCount; ++inputIx)
 	hashAddUnique(uniqHash, seq->name, NULL);
 	chrom = indexChromPass1(seq, chromOffset, lm, listyIndex);
 	memcpy(allDna + chromOffset, seq->dna, seq->size + 1);
-	toUpperN(allDna + chromOffset, seq->size);
 	chromOffset = currentSize;
 	totalBasesIndexed += chrom->basesIndexed;
 	slAddHead(&chromList, chrom);
