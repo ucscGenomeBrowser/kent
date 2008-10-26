@@ -8,9 +8,10 @@
 #include "dnaLoad.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaFind.c,v 1.3 2008/10/26 08:08:58 kent Exp $";
+static char const rcsid[] = "$Id: sufaFind.c,v 1.4 2008/10/26 09:38:30 kent Exp $";
 
 boolean mmap;
+int maxMismatch = 2;
 
 void usage()
 /* Explain usage and exit. */
@@ -21,11 +22,14 @@ errAbort(
   "   sufaFind target.sufa query.fa output\n"
   "options:\n"
   "   -mmap - Use memory mapping. Faster just a few reads, but much slower for many reads\n"
+  "   -maxMismatch - maximum number of mismatches allowed.  Default %d\n"
+  , maxMismatch
   );
 }
 
 static struct optionSpec options[] = {
    {"mmap", OPTION_BOOLEAN},
+   {"maxMismatch", OPTION_INT},
    {NULL, 0},
 };
 
@@ -177,7 +181,7 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     toUpperN(qSeq->dna, qSeq->size);
     char *prefix = needMem(qSeq->size+1);
     sufaFindOneOff(sufa->allDna, sufa->array, arraySize, 0, arraySize, prefix, 0,
-        qSeq->dna, qSeq->size, 0, 2, &hitList);
+        qSeq->dna, qSeq->size, 0, maxMismatch, &hitList);
     if (hitList == NULL)
         fprintf(f, "%s miss\n", qSeq->name);
     else
@@ -207,6 +211,7 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 mmap = optionExists("mmap");
+maxMismatch = optionInt("maxMismatch", maxMismatch);
 dnaUtilOpen();
 sufaFind(argv[1], argv[2], argv[3]);
 return 0;
