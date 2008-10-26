@@ -4,7 +4,7 @@ L = -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-O = splatMerge.o splatAli.o
+O = splatMerge.o
 
 splatMerge: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/splatMerge $O ${MYLIBS} $L
