@@ -163,7 +163,7 @@ for (i=0; i<arraySize; ++i)
 	    }
 	}
     if (depth >= stackSize)
-        errAbort("Stack overflow");
+        errAbort("Stack overflow, depth >= %d", stackSize);
     stack[depth] = i;
     depth += 1;
     }
