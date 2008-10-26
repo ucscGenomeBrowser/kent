@@ -1,5 +1,5 @@
-/* sufa - splat (speedy local alignment tool)  index.  Index that helps map short reads
- * quickly to the genome. */
+/* sufa - suffix array for genome.  Use sufaMake utility to create one of these, and
+ * the routines here to access it.  See comment by sufaFileHeader for file format. */
 
 #ifndef SUFA_H
 #define SUFA_H
@@ -20,14 +20,14 @@ struct sufaFileHeader
     bits64 size;	/* Total size to memmap, including header. */
     bits32 chromCount;	/* Total count of chromosomes/contigs in file. */
     bits32 chromNamesSize;	/* Size of names of all contigs (including zeroes at end),
-    				   padded to 8 byte boundary as needed). */
+    				   padded to 4 byte boundary as needed). */
     bits64 basesIndexed;/* Total number of bases actually indexed (non-N, unmasked). */
-    bits64 dnaDiskSize;	/* Size of DNA on disk including zero separators */
+    bits64 dnaDiskSize;	/* Size of DNA on disk with zero separators. Padded to 4 byte boundary  */
     bits64 reserved[11];/* All zeroes for now. */
     };
 
 struct sufa 
-/* Short read index in memory */
+/* Suffix array in memory */
     {
     struct sufa *next;
     boolean isMapped;	/* True if memory mapped. */
@@ -44,7 +44,7 @@ struct sufa *sufaRead(char *fileName, boolean memoryMap);
  * which will be faster typically for about 100 reads, and slower for more
  * than that (_much_ slower for thousands of reads and more). */
 
-void sufaFree(struct sufa **pSplix);
+void sufaFree(struct sufa **pSufa);
 /* Free up resources associated with index. */
 
 int sufaOffsetToChromIx(struct sufa *sufa, bits32 tOffset);
