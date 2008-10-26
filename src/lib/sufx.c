@@ -143,7 +143,7 @@ void sufxFillInTraverseArray(char *dna, bits32 *suffixArray, int arraySize, bits
 bits32 *traverse;
 AllocArray(traverse, arraySize);
 int depth = 0;
-int stackSize = 128;
+int stackSize = 4*1024;
 int *stack;
 AllocArray(stack, stackSize);
 int i;
