@@ -8,7 +8,7 @@
 #include "dnaLoad.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaFind.c,v 1.2 2008/10/26 05:50:55 kent Exp $";
+static char const rcsid[] = "$Id: sufaFind.c,v 1.3 2008/10/26 08:08:58 kent Exp $";
 
 boolean mmap;
 
@@ -108,7 +108,7 @@ if (prefixSize == querySize)
     return;
     }
 /* If we have used up all of our substitutions, then look for an exact match to
- * what is left and add it if it exists, then end. */
+ * what is left and add it if it exists. This is another end condition. */
 if (subCount == maxSubs)
     {
     int ix = sufaUpperBound(allDna, array+sliceOffset, sliceSize, 
@@ -136,10 +136,11 @@ for (quadrantIx=0; quadrantIx<4; ++quadrantIx)
     quadrants[quadrantIx] = sufaUpperBound(allDna, array+sliceOffset, sliceSize, 
     	prefix, prefixSize+1, prefixSize) + sliceOffset;
     }
-char queryBase = query[prefixSize]; 
 quadrants[4] = sliceOffset + sliceSize;
 int quadrantEnd = quadrants[0];
+
 /* Further explore within each of the non-empty quadrants */
+char queryBase = query[prefixSize]; 
 for (quadrantIx=0; quadrantIx < 4; ++quadrantIx)
     {
     int quadrantStart = quadrantEnd;
