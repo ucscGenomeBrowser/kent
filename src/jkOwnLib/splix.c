@@ -6,7 +6,7 @@
 #include "splix.h"
 #include <sys/mman.h>
 
-void *pointerOffset(void *pt, bits64 offset)
+static void *pointerOffset(void *pt, bits64 offset)
 /* A little wrapper around pointer arithmetic in terms of bytes. */
 {
 char *s = pt;
