@@ -8,7 +8,7 @@
 #include "dnaseq.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxMake.c,v 1.3 2008/10/26 20:09:03 kent Exp $";
+static char const rcsid[] = "$Id: sufxMake.c,v 1.4 2008/10/26 23:12:14 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,7 +49,6 @@ struct chromInfo
     char *name;		/* Chromosome/contig name. */
     bits32 size;	/* Chromosome size. */
     bits32 offset;	/* Chromosome offset in total DNA */
-    bits32 basesIndexed; /* Bases actually indexed. */
     struct dnaSeq *seq;	/* Chromosome sequence. */
     };
 
@@ -121,7 +120,6 @@ for (baseIx = 12; baseIx < seqSize; ++baseIx)
 	++freePos;
 	}
     }
-chrom->basesIndexed = freePos - chromOffset;
 return chrom;
 }
 
@@ -177,21 +175,6 @@ for (sortIx=0, listIx=firstIx; listIx != 0; ++sortIx, listIx=listArray[listIx])
 /* Do the qsort.  I hope I got the cmp function right! */
 qsort(sortArray, listSize, sizeof(sortArray[0]), cmpAfter16);
 
-#ifdef DEBUG
-    {
-    uglyf("Sorting %d elements\n", listSize);
-    int i;
-    int size = min(listSize, 10);
-    for (i=0; i<size; ++i)
-        {
-	int offset = sortArray[i];
-	char *dna = allDna + offset;
-	mustWrite(uglyOut, dna, 50);
-	uglyf("\n");
-	}
-    }
-#endif /* DEBUG */
-
 /* Write out sorted result. */
 mustWrite(f, sortArray, listSize * sizeof(bits32));
 
@@ -201,10 +184,11 @@ if (bigArray)
 }
 
 
-void finishAndWriteOneSlot(bits32 *offsetArray, bits32 *listArray, bits32 *twelvemerIndex,
+bits64 finishAndWriteOneSlot(bits32 *offsetArray, bits32 *listArray, bits32 *twelvemerIndex,
 	int slotIx, DNA *allDna, FILE *f)
-/* Do additional sorting and write results to file. */
+/* Do additional sorting and write results to file.  Return amount actually written. */
 {
+bits64 basesIndexed = 0;
 bits32 elIx, nextElIx, slotFirstIx = twelvemerIndex[slotIx];
 if (slotFirstIx != 0)
     {
@@ -221,6 +205,7 @@ if (slotFirstIx != 0)
 	    {
 	    listArray[elIx] = buckets[bucketIx];
 	    buckets[bucketIx] = elIx;
+	    ++basesIndexed;
 	    }
 	}
 
@@ -260,31 +245,23 @@ if (slotFirstIx != 0)
 		    sortAndWriteOffsets(firstIx, offsetArray, listArray, allDna, f);
 		    }
 		}
-#ifdef SOON
-	        {
-		slSort(&bucketList, cmpAfter16);
-		for (el = bucketList; el != NULL; el = el->next)
-		    writeOne(f, el->dnaOffset);
-		}
-#endif /* SOON */
 	    }
 	}
     }
+return basesIndexed;
 }
 
 void sufxWriteMerged(struct chromInfo *chromList, DNA *allDna,
-	bits32 *offsetArray, bits32 *listArray, bits32 *twelvemerIndex,
-	bits64 totalBasesIndexed, char *output)
+	bits32 *offsetArray, bits32 *listArray, bits32 *twelvemerIndex, char *output)
 /* Write out a file that contains a single splix that is the merger of
- * all of the individual splixes in list. */
+ * all of the individual splixes in list.   As a side effect will replace
+ * offsetArray with suffix array and listArray with traverse array */
 {
-FILE *f = mustOpen(output, "w");
+FILE *f = mustOpen(output, "w+");
 
 /** Allocate header and fill out easy constant fields. */
 struct sufxFileHeader *header;
 AllocVar(header);
-#define SUFA_MAGIC 0x6727B283	/* Magic number at start of SUFA file */
-header->magic = SUFA_MAGIC;	/* TODO - change to SUFX_MAGIC after refactoring. */
 header->majorVersion = SUFX_MAJOR_VERSION;
 header->minorVersion = SUFX_MINOR_VERSION;
 
@@ -301,17 +278,8 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 /* Fill in  most of rest of header fields */
 header->chromCount = slCount(chromList);
 header->chromNamesSize = roundUpTo4(chromNamesSize);
-header->arraySize = totalBasesIndexed;
 header->dnaDiskSize = roundUpTo4(dnaDiskSize);
 bits32 chromSizesSize = header->chromCount*sizeof(bits32);
-
-/* Fill out size field last .*/
-header->size = sizeof(*header) 			// header
-	+ header->chromNamesSize + 		// chromosome names
-	+ header->chromCount * sizeof(bits32)	// chromosome sizes
-	+ header->dnaDiskSize 			// dna sequence
-	+ sizeof(bits32) * totalBasesIndexed;	// suffix array
-verbose(1, "%s will be %lld bytes\n", output, header->size);
 
 /* Write header. */
 mustWrite(f, header, sizeof(*header));
@@ -330,16 +298,52 @@ zeroPad(f, chromSizesSizePad);
 /* Write out chromosome DNA and zeros before, between, and after. */
 mustWrite(f, allDna, dnaDiskSize);
 zeroPad(f, header->dnaDiskSize - dnaDiskSize);
-verbose(1, "Wrote %lld bases of DNA in including zero padding\n", header->dnaDiskSize);
+verbose(1, "Wrote %lld bases of DNA including zero padding\n", header->dnaDiskSize);
 
 /* Calculate and write suffix array. */
+bits64 arraySize = 0;
+off_t suffixArrayFileOffset = ftello(f);
 int slotCount = sufxSlotCount;
 int slotIx;
 for (slotIx=0; slotIx < slotCount; ++slotIx)
-    finishAndWriteOneSlot(offsetArray, listArray, twelvemerIndex, slotIx, allDna, f);
-verbose(1, "Wrote %lld suffix array positions\n", totalBasesIndexed);
+    arraySize += finishAndWriteOneSlot(offsetArray, listArray, twelvemerIndex, slotIx, allDna, f);
+verbose(1, "Wrote %lld suffix array positions\n", arraySize);
 
+/* Now we're done with the offsetArray and listArray buffers, so use them for the
+ * next phase. */
+bits32 *suffixArray = offsetArray;
+offsetArray = NULL;	/* Help make some errors more obvious */
+bits32 *traverseArray = listArray;
+listArray = NULL;	/* Help make some errors more obvious */
+
+/* Read the suffix array back from the file. */
+fseeko(f, suffixArrayFileOffset, SEEK_SET);
+mustRead(f, suffixArray, arraySize*sizeof(bits32));
+verbose(1, "Read suffix array back in\n");
+
+/* Calculate traverse array */
+sufxFillInTraverseArray(allDna, suffixArray, arraySize, traverseArray);
+verbose(1, "Filled in traverseArray\n");
+
+/* Write out traverse array. */
+mustWrite(f, traverseArray, arraySize*sizeof(bits32));
+verbose(1, "Wrote out traverseArray\n");
+
+/* Update a few fields in header, and go back and write it out again with
+ * the correct magic number to indicate it's complete. */
+header->magic = SUFX_MAGIC;
+header->arraySize = arraySize;
+header->size = sizeof(*header) 			// header
+	+ header->chromNamesSize + 		// chromosome names
+	+ header->chromCount * sizeof(bits32)	// chromosome sizes
+	+ header->dnaDiskSize 			// dna sequence
+	+ sizeof(bits32) * arraySize	 	// suffix array
+	+ sizeof(bits32) * arraySize;  		// traverse array
+
+rewind(f);
+mustWrite(f, header, sizeof(*header));
 carefulClose(&f);
+verbose(1, "Completed %s is %lld bytes\n", output, header->size);
 }
 
 void sufxMake(int inCount, char *inputs[], char *genomeMegs, char *output)
@@ -380,12 +384,12 @@ AllocArray(twelvemerIndex, sufxSlotCount);
  * use the listArray for the traverseArray.  We write out the traverse array to finish
  * things up. */
 
-bits32 *offsetArray, *suffixArray;
-suffixArray = AllocArray(offsetArray, estimatedGenomeSize);
-bits32 *listArray, *traverseArray;
-traverseArray = AllocArray(listArray, estimatedGenomeSize);
+bits32 *offsetArray;
+AllocArray(offsetArray, estimatedGenomeSize);
+bits32 *listArray;
+AllocArray(listArray, estimatedGenomeSize);
+verbose(1, "Allocated buffers: %lld bytes total\n", 9LL*estimatedGenomeSize + sufxSlotCount*4);
 
-bits32 totalBasesIndexed = 0;
 int inputIx;
 for (inputIx=0; inputIx<inCount; ++inputIx)
     {
@@ -405,16 +409,14 @@ for (inputIx=0; inputIx<inCount; ++inputIx)
 	chrom = indexChromPass1(seq, chromOffset, offsetArray, listArray, twelvemerIndex);
 	memcpy(allDna + chromOffset, seq->dna, seq->size + 1);
 	chromOffset = currentSize;
-	totalBasesIndexed += chrom->basesIndexed;
 	slAddHead(&chromList, chrom);
 	dnaSeqFree(&seq);
 	}
     dnaLoadClose(&dl);
     }
-verbose(1, "Indexed %lld bases\n", (long long)totalBasesIndexed);
+verbose(1, "Done big bucket sort\n");
 slReverse(&chromList);
-sufxWriteMerged(chromList, allDna, offsetArray, listArray, twelvemerIndex,
-	totalBasesIndexed, output);
+sufxWriteMerged(chromList, allDna, offsetArray, listArray, twelvemerIndex, output);
 }
 
 int main(int argc, char *argv[])
