@@ -6,7 +6,7 @@
 #include "options.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaRepeatFind.c,v 1.1 2008/10/26 02:02:21 kent Exp $";
+static char const rcsid[] = "$Id: sufaRepeatFind.c,v 1.2 2008/10/26 20:10:18 kent Exp $";
 
 int readSize = 25;
 int minCount = 5;
@@ -52,7 +52,7 @@ struct sufa *sufa = sufaRead(in, FALSE);
 FILE *f = mustOpen(out, "w");
 DNA *dna = sufa->allDna;
 bits32 *array = sufa->array;
-int arraySize = sufa->header->basesIndexed;
+int arraySize = sufa->header->arraySize;
 int i, sameSize;
 for (i=0; i<arraySize; i += sameSize)
     {

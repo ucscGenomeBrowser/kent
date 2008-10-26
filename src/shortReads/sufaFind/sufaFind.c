@@ -8,7 +8,7 @@
 #include "dnaLoad.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaFind.c,v 1.4 2008/10/26 09:38:30 kent Exp $";
+static char const rcsid[] = "$Id: sufaFind.c,v 1.5 2008/10/26 20:10:18 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -170,7 +170,7 @@ void sufaFind(char *sufaFile, char *queryFile, char *outputFile)
 {
 struct sufa *sufa = sufaRead(sufaFile, mmap);
 struct dnaLoad *qLoad = dnaLoadOpen(queryFile);
-int arraySize = sufa->header->basesIndexed;
+int arraySize = sufa->header->arraySize;
 FILE *f = mustOpen(outputFile, "w");
 struct dnaSeq *qSeq;
 int qSeqCount = 0;

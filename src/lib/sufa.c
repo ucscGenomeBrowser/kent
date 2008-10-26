@@ -94,7 +94,7 @@ for (i=0; i<chromCount; ++i)
 
 /* Finally point to the suffix array!. */
 sufa->array = pointerOffset(header, mapOffset);
-mapOffset += header->basesIndexed * sizeof(bits32);
+mapOffset += header->arraySize * sizeof(bits32);
 
 
 assert(mapOffset == header->size);	/* Sanity check */

@@ -9,7 +9,7 @@
 #include "dnaseq.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaMake.c,v 1.3 2008/10/26 00:15:43 kent Exp $";
+static char const rcsid[] = "$Id: sufaMake.c,v 1.4 2008/10/26 20:10:18 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -223,7 +223,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 /* Fill in  most of rest of header fields */
 header->chromCount = slCount(chromList);
 header->chromNamesSize = roundUpTo4(chromNamesSize);
-header->basesIndexed = totalBasesIndexed;
+header->arraySize = totalBasesIndexed;
 header->dnaDiskSize = roundUpTo4(dnaDiskSize);
 bits32 chromSizesSize = header->chromCount*sizeof(bits32);
 

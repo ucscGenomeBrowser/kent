@@ -21,7 +21,7 @@ struct sufaFileHeader
     bits32 chromCount;	/* Total count of chromosomes/contigs in file. */
     bits32 chromNamesSize;	/* Size of names of all contigs (including zeroes at end),
     				   padded to 4 byte boundary as needed). */
-    bits64 basesIndexed;/* Total number of bases actually indexed (non-N, unmasked). */
+    bits64 arraySize;   /* Total number of bases actually indexed (non-N, unmasked). */
     bits64 dnaDiskSize;	/* Size of DNA on disk with zero separators. Padded to 4 byte boundary  */
     bits64 reserved[11];/* All zeroes for now. */
     };
