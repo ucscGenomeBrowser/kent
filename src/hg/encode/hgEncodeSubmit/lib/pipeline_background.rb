@@ -16,6 +16,19 @@ module PipelineBackground
     f.close
   end
 
+  def clear_run_stat(project_id)
+    project = Project.find(project_id)
+    project.run_stat = nil
+    saver project
+  rescue ActiveRecord::RecordNotFound
+  end
+
+  def set_run_stat(project_id)
+    project = Project.find(project_id)
+    project.run_stat = "running"
+    saver project
+  end
+
   def validate_background(project_id)
 
     project = Project.find(project_id)
@@ -577,6 +590,9 @@ private
 
   def new_status(project, status)
     project.status = status
+    if status.ends_with?(" requested")
+      project.run_stat = "waiting"
+    end
     unless saver project
       return false
     end

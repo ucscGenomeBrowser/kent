@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/config/boot'
 
 require RAILS_ROOT + '/config/environment'
 
-require "pp"
+#require "pp"
 
 #pp User.find(:all)
 
@@ -19,7 +19,7 @@ while true
   QueuedJob.transaction do
     job = QueuedJob.find(:first, :lock => true)
     if job
-      pp job
+      #pp job
       project_id = job.project_id
       source = job.source_code
       queued_at = job.queued_at
@@ -35,11 +35,13 @@ while true
   if source.blank?
     sleep 3  
   else
+    set_run_stat(project_id)
     eval source
+    clear_run_stat(project_id)
   end
 
 
 end
 
-puts "wow!"
+#puts "wow!"
 

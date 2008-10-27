@@ -25,7 +25,7 @@ class PipelineController < ApplicationController
     @sort_key = params[:sort_key]
     if @sort_key == "pi" || @sort_key == "login"
       @projects = Project.find(:all, :include => :user, :order => sort_clause)
-    elsif @sort_key.nil? == false
+    elsif @sort_key
       @projects = Project.find(:all, :order => sort_clause)
     else
       @projects = Project.find(:all)
@@ -35,20 +35,27 @@ class PipelineController < ApplicationController
   def show_user
     sort_init 'name'
     sort_update
-    @autoRefresh = true
     @sort_key = params[:sort_key]
     @user = User.find(current_user.id)
-    if @sort_key.nil? == false
+    if @sort_key
       @projects = Project.find(:all, :conditions => ["user_id = ?", current_user.id], :order => sort_clause)
     else 
       @projects = @user.projects
+    end
+    @projects.each do 
+      |p|
+      if p.run_stat
+        @autoRefresh = true
+      end
     end
     render :action => 'list'    
   end
 
   def show
-    @autoRefresh = true
     @project = Project.find(params[:id])
+    if @project.run_stat
+      @autoRefresh = true
+    end
     @errText = ""
     case @project.status
       when "validate failed"
@@ -69,7 +76,17 @@ class PipelineController < ApplicationController
           end
         end
     end 
- 
+    if @project.run_stat and @project.run_stat == "waiting"
+      job = QueuedJob.find(:first, :conditions => ["project_id = ?", @project.id])
+      if job
+        @aheadOfYou = QueuedJob.count_by_sql "select count(*) from queued_jobs where id < #{job.id}"
+      else
+        @aheadOfYou = nil
+      end
+    end
+  rescue
+      redirect_to :action => 'show_user'
+      return
   end
 
 
@@ -169,13 +186,7 @@ class PipelineController < ApplicationController
     projectDir= path_to_project_dir(@project.id)
     msg = ""
     msg += "Project delete requested."
-    @project.status = "delete requested"
-    unless @project.save
-      flash[:error] = "System error - project record save failed."
-      #@project.errors.each_full { |x| msg += x + "<br>" }
-      redirect_to :action => 'show', :id => @project
-      return
-    end
+    new_status @project, "delete requested"
     unless queue_job "delete_background(#{@project.id})"
       flash[:error] = "System error - queued_jobs save failed."
       return
@@ -284,29 +295,44 @@ class PipelineController < ApplicationController
       if @upftp.blank?
         # should be local-file upload, Hmm... where does Mongrel put it during upload?
         pf = path_to_file(@project.id, @filename)
-        unless defined? @upload.local_path
-          FileUtils.copy(@upload.local_path, pf)
+        if @upload.respond_to?(:local_path) and @upload.local_path and File.exists?(@upload.local_path)
+
+          logger.info "#DEBUG local_path=#{@upload.local_path} length=#{@upload.length} original_filename=#{@upload.original_filename}"  #debug
+          FileUtils.copy_file(@upload.local_path, pf)
+
+        elsif file.respond_to?(:read)
+
+          logger.info "#DEBUG length=#{@upload.length} original_filename=#{@upload.original_filename}"  #debug
+          File.open(local_file_path, "wb") { |f| f.write(file.read) }
+
         else
-          File.open(pf, "wb") { |f| f.write(@upload.read) }
-        end
+
+          raise ArgumentError.new("Do not know how to handle #{@upload.inspect}?")
+
+       end 
+       FileUtils.chmod 0664, pf
+
+       # old way
+       #if defined? @upload.local_path
+       #   FileUtils.copy(@upload.local_path, pf)
+       # else
+       #   File.open(pf, "wb") { |f| f.write(@upload.read) }
+       # end
+
       end
     end
     autoResume = @params['auto_resume']['0'] == "1" ? " -c" : ""
 
-    flash[:notice] = msg
-    redirect_to :action => 'show', :id => @project
-
-    @project.status = "upload requested"
-    unless @project.save
-      flash[:error] = "System error - project record save failed."
-      return
-    end
+    new_status @project, "upload requested"
     upload_name = @upload.blank? ? "" : @upload.original_filename
     param_string = "#{@project.id},\"#{@upurl}\", \"#{@upftp}\", \"#{upload_name}\", \"#{autoResume}\""
     unless queue_job "upload_background(#{param_string})"
       flash[:error] = "System error - queued_jobs save failed."
       return
     end
+
+    flash[:notice] = msg
+    redirect_to :action => 'show', :id => @project
 
   end
 

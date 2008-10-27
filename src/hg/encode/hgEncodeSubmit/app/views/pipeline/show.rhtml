@@ -1,30 +1,27 @@
 <p>
 <%
-if current_user.login == "admin" or current_user.login == "galt"
+if current_user.login == "admin" or current_user.login == "galtx"
   advancedView = true
 else
   advancedView = false
 end
+if @project.run_stat.nil? 
+  busy = false
+else
+  busy = true
+end
 %>
-<% if @project.project_archives.blank? %>
+<% if @project.project_archives.blank? and @project.status=="new" %>
    <b>Submit data for this project:</b>
 <% end %>
+
 <table style="margin-top:10px;" cellpadding=1 cellspacing=1>
+
 <tr><td>Submission: </td><td><%= @project.name -%></td><td>&nbsp;&nbsp;&nbsp;</td>
 <td>Created: </td><td><%= @project.created_at.strftime("%b %d %H:%M"); -%></td>
 </tr>
 
-<tr><td>Status: </td><td><%= 
-  if @project.status.starts_with?("schedule uploading ")
-    "schedule uploading"
-  else
-    if @project.status.starts_with?("schedule expanding ")
-      "schedule expanding"
-    else
-      @project.status
-    end
-  end
--%></td>
+<tr><td>Status: </td><td><%= @project.status -%></td>
 <td>&nbsp;</td>
 <td>Updated: </td><td><%= @project.updated_at.strftime("%b %d %H:%M"); -%></td>
 <tr><td>&nbsp;</td>
@@ -36,48 +33,55 @@ end
 <% end %>
 </table>
 
+<% if @aheadOfYou -%>
+<strong>Number of Waiting Jobs Ahead of Yours: </strong> <%= @aheadOfYou -%> <br/>
+<% end %>
+
 <% if @uploadText -%>
 <strong>Progress uploading: </strong> <%= @uploadText -%> <br/>
 <% end %>
-</p>
 
-<!-- <table CELLSPACING=0 CELLPADDING=0> -->
+<table style="margin-top:10px;" cellpadding=1 cellspacing=1>
 
-<% if @project.status == "loading" or
-      @project.status == "uploading" or
-      @project.status == "expanding" or
-      @project.status == "re-expanding all" or
-      @project.status == "validating" %> 
-  <td><%= link_to ' ', {:action => 'nothingyet', :id => @project.id} -%></td>
-<% elsif @project.status.starts_with?("schedule") %>
-  <td><%= link_to ' ', {:action => 'nothingyet', :id => @project.id} -%></td>
-<% else %>
+<% if not busy and (@project.status != "loaded" or advancedView) %> 
+
   <% if @project.status == "uploaded" %> 
     <td><%= link_to 'Validate', {:action => 'begin_validating', :id => @project.id} -%>
     <%= ' | ' -%> </td>
-  <% elsif @project.status == "validated" %> 
+  <% end %>
+
+  <% if @project.status == "validated" %> 
     <td><%= link_to 'Load', {:action => 'begin_loading', :id => @project.id} -%>
     <%= ' | ' -%> </td>
   <% end %>
 
-  <% if @project.status == "new" or advancedView %>
+  <% if @project.status == "new" \
+     or @project.status == "upload failed" \
+     or @project.status == "validate failed" \
+     or advancedView %>
     <td><%= link_to 'Submit Data', {:action => 'upload', :id => @project.id} -%>
     <%= ' | ' -%> </td>
-    <td><%= link_to 'Delete Submission', {:action => 'delete', :id => @project.id},
-      :confirm => "Are you sure you want to delete this project?" -%>
-    <%= ' | ' -%> </td>
-    <td><%= link_to 'Rename Submission', {:action => 'edit', :id => @project.id} -%></td>
-    <% if advancedView and @project_status != "new" %>
-      <td><%= ' | ' -%>
-      <%= link_to 'Expand', {:action => 'reexpand_all', :id => @project.id} -%></td>
-    <% end %>
   <% end %>
+
+    <td><%= link_to 'Delete Submission', {:action => 'delete', :id => @project.id},
+      :confirm => "Are you sure you want to delete this submission?" -%>
+    <%= ' | ' -%> </td>
+
+  <% if @project.status == "new" or advancedView %>
+    <td><%= link_to 'Rename Submission', {:action => 'edit', :id => @project.id} -%></td>
+  <% end %>
+
+  <% if advancedView and @project_status != "new" %>
+    <td><%= ' | ' -%>
+    <%= link_to 'Expand', {:action => 'reexpand_all', :id => @project.id} -%></td>
+  <% end %>
+
 <% end %>
 
 </table>
 
 
-<% if current_user.login == "galt" %>
+<% if current_user.login == "galtx" %>
 <table style="margin-top:10px;" cellpadding=1 cellspacing=1>
 <tr>
     <td><%= link_to 'Validate', {:action => 'validate', :id => @project.id} -%>
@@ -131,7 +135,7 @@ end
     <td><%= a.archives_active -%></td>
   <% end %>
 
-  <% if @project.status == "new" or advancedView %>
+  <% if not busy and advancedView %>
     <% if c == "1" %>
       <td><%= link_to 'Delete', {:action => 'delete_archive', :id => a.id} -%></td>
     <% else %>
