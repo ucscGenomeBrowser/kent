@@ -10,6 +10,7 @@ DOWNLOAD_DIR = /usr/local/apache/htdocs/encode/tests
 
 # Put the working dataType's into DIRS
 DIRS = chipseq
+BAD = badDaf badDdf
 FILES = load.ra trackDb.ra README.txt
 
 TMP_FILE_1 = 1.tmp
@@ -22,8 +23,9 @@ all: test
 bad:
 	@echo 'testing an un-readable file' > input/badDdf/unreadable.txt
 	@chmod 222 input/badDdf/unreadable.txt
-	-${PROG} -configDir=../config x input/badDdf
-	-${PROG} -configDir ../config x input/badDaf
+	for dir in $(BAD); do \
+		${PROG} -configDir=../config x input/$$dir; \
+	done
 	@rm input/badDdf/unreadable.txt
 
 test:
@@ -59,4 +61,7 @@ clean:
 install:
 	for dir in $(DIRS); do \
 		(cd input/$$dir; tar cvfz ${DOWNLOAD_DIR}/$$dir.good.tar.gz --exclude=CVS --exclude=out `cvsFiles`);\
+	done
+	for dir in $(BAD); do \
+		(cd input/$$dir; tar cvfz ${DOWNLOAD_DIR}/$$dir.bad.tar.gz --exclude=CVS --exclude=out `cvsFiles`);\
 	done
