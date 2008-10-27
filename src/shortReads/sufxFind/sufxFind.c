@@ -8,7 +8,7 @@
 #include "dnaLoad.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxFind.c,v 1.2 2008/10/27 05:55:53 kent Exp $";
+static char const rcsid[] = "$Id: sufxFind.c,v 1.3 2008/10/27 06:26:24 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -109,7 +109,6 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     struct slInt *hit, *hitList = NULL;
     verbose(2, "Processing %s\n", qSeq->name);
     toUpperN(qSeq->dna, qSeq->size);
-    char *prefix = needMem(qSeq->size+1);
     sufxFindExact(sufx->allDna, sufx->array, sufx->traverse, arraySize, qSeq->dna, qSeq->size, &hitList);
     for (hit = hitList; hit != NULL; hit = hit->next)
 	{
