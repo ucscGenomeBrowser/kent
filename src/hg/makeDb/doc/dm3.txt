@@ -1343,9 +1343,10 @@ cat  << 'EOF' > spec
     ln -s multiz15way.2006-12-11 /cluster/data/dm3/bed/multiz15way
 
 
-# MULTIZ15WAY DOWNLOADABLES (ANNOTATED) (DONE 12/11/2006 angie -- UPSTREAM REDONE 5/18/08)
+# MULTIZ15WAY DOWNLOADABLES (ANNOTATED) (DONE 12/11/2006 angie -- UPSTREAM REDONE 5/18/08, 10/27/08)
 # 5/18/08: regenerating upstream* to fix bug (truncated refGene names to
 # NM_[0-9]{6} but there are some valid NM_[0-9]{9} IDs now).
+# 10/27/08: regenerating with FlyBase Genes and mafFrags -txStarts.
     # Annotated MAF is now documented, so use anno/maf for downloads.
     ssh hgwdev
     mkdir /cluster/data/dm3/bed/multiz15way.2006-12-11/mafDownloads
@@ -1355,9 +1356,9 @@ cat > mafFrags.csh << 'EOF'
     date
     foreach i (1000 2000 5000)
         echo "making upstream$i.maf"
-        nice featureBits dm3 refGene:upstream:$i -fa=/dev/null -bed=stdout \
+        nice featureBits dm3 flyBaseGene:upstream:$i -fa=/dev/null -bed=stdout \
         | sed -re 's/ [^\t]*\t/\t/;' > up.bed
-        nice mafFrags dm3 multiz15way up.bed upstream$i.maf \
+        nice mafFrags -txStarts dm3 multiz15way up.bed upstream$i.maf \
                 -orgs=../species.lst
         rm up.bed
     end
@@ -1365,7 +1366,7 @@ cat > mafFrags.csh << 'EOF'
 'EOF'
     # << emacs
     time csh mafFrags.csh >&! mafFrags.log & tail -f mafFrags.log
-#84.447u 50.200s 6:36.35 33.9%   0+0k 0+0io 6pf+0w
+#171.365u 94.950s 21:16.74 20.8% 0+0k 0+0io 0pf+0w
 
     ssh kolossus
     cd /cluster/data/dm3/bed/multiz15way.2006-12-11/mafDownloads
@@ -1381,7 +1382,7 @@ cat > downloads.csh << 'EOF'
 'EOF'
     # << emacs
     time csh -efx downloads.csh >&! downloads.log
-#413.557u 5.025s 7:12.93 96.6%   0+0k 0+0io 0pf+0w
+#459.706u 5.793s 8:23.71 92.4%   0+0k 0+0io 0pf+0w
     nice gzip up*.maf
     nice md5sum up*.maf.gz >> md5sum.txt
     # Make a README.txt .
@@ -1846,7 +1847,7 @@ ftp://ftp.flybase.net/releases/FB2006_01/dmel_r5.1/chado-xml/chado_dmel_genes.xm
 # FlyBase 5.1 history: (DONE 4/5/07 angie - REDONE 6/18/07)
 # Redone 6/18/07 after folding in DHGP's chr*Het heterochromatin annotations.
 # FlyBase 5.3 history: (DONE 9/20/07 angie)
-# FlyBase 5.12 history: (DONE 10/21/08 angie)
+# FlyBase 5.12 history: (DONE 10/24/08 angie)
     # In dm2, I combined three sources: specific transcript mappings 
     # from uniProt.description, less specific gene mappings from 
     # uniProt.description, and fbUniProt mappings extracted from 
@@ -1914,9 +1915,12 @@ ftp://ftp.flybase.net/releases/FB2006_01/dmel_r5.1/chado-xml/chado_dmel_genes.xm
     | /cluster/data/dm2/bed/uniProtToFlyBase/combineMappings.pl transcriptIds.txt \
       uniProtMapping.txt - /dev/null \
       > flyBaseToUniProt.txt
-    # Make a 2-column version for loading:
-    cut -f 1,2 flyBaseToUniProt.txt > flyBaseToUniProtLoad.txt
-    # Load into a genericAlias-type table (this ignores the third column).
+    # Make a 2-column version for loading -- and add back in the transcripts for
+    # which we couldn't find a UniProt acc, because they have to have something in
+    # flyBaseToUniProt in order for hgNear's oneGeneQuery to work!:
+    join -t '	' -a 1 -e n/a -o 1.1,2.2 transcriptIds.txt flyBaseToUniProt.txt \
+      > flyBaseToUniProtLoad.txt
+    # Load into a genericAlias-type table:
     ssh hgwdev
     cd /cluster/data/dm3/bed/uniProtToFlyBase
     sed -e 's/genericAlias/flyBaseToUniProt/' \
@@ -2016,9 +2020,8 @@ _EOF_
 # FlyBase 5.1 history: (DONE 4/5/07 angie - REDONE 6/18/07)
 # Redone 6/18/07 after folding in DHGP's chr*Het heterochromatin annotations.
 # FlyBase 5.3 history: (DONE 9/20/07 angie)
-# FlyBase 5.12 history: (DONE 10/21/08 angie)
+# FlyBase 5.12 history: (DONE 10/24/08 angie)
     ssh hgwdev
-    # First we have to add a proteinId column to flyBaseGene.
     hgClusterGenes dm3 flyBaseGene flyBaseIsoforms flyBaseCanonical \
       -protAccQuery='select name,alias from flyBaseToUniProt'
 #Got 13784 clusters, from 21236 genes in 15 chromosomes
@@ -2040,7 +2043,7 @@ _EOF_
 # FlyBase 5.1 history: (DONE 4/5/07 angie - REDONE 6/18/07)
 # Redone 6/18/07 after folding in DHGP's chr*Het heterochromatin annotations.
 # FlyBase 5.3 history: (DONE 9/20/07 angie)
-# FlyBase 5.12 history: (DONE 10/21/08 angie)
+# FlyBase 5.12 history: (DONE 10/24/08 angie)
     # hgNear's knownDetails column type expects a single table that links 
     # transcript ID with uniProt description, so whip one up here:
     # (used by hgGene too though hgGene could join on the fly)
@@ -2088,10 +2091,11 @@ _EOF_
 
 #########################################################################
 # BDGP IN SITU IMAGE LINKS (DONE 4/7/06)
+# grabbed data again 10/24/08, no change.
     # HGGENE
     ssh hgwdev
     cd /cluster/data/dm3/bed/bdgpExprLink
-    wget -O summary.txt.070406 \
+    wget -O summary.txt.081024 \
     'http://www.fruitfly.org/cgi-bin/ex/bquery.pl?qpage=entry&qtype=summarytext'
     # remove header line.
     hgLoadSqlTab dm3 bdgpExprLink ~/kent/src/hg/lib/bdgpExprLink.sql \
@@ -2590,10 +2594,12 @@ _EOF_
 #########################################################################
 
 ################################################
-# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
+# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd -- UNDONE 2008-10-27 markd)
 update genbank.conf:
 dm3.upstreamGeneTbl = refGene
 dm3.upstreamMaf = multiz15way /hive/data/genomes/dm3/bed/multiz15way/species.lst
+# Those lines have been removed because Ann, Angie and Mark decided to
+# use FlyBase Genes as the reference set instead of RefSeq.
 
 
 #########################################################################
