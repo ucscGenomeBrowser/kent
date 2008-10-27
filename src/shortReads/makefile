@@ -10,5 +10,7 @@ all:
 	cd sufaFind && ${MAKE}
 	cd sufaMake && ${MAKE}
 	cd sufaRepeatFind && ${MAKE}
+	cd sufxDump && ${MAKE}
+	cd sufxFind && ${MAKE}
 	cd sufxMake && ${MAKE}
 
