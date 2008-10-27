@@ -47,10 +47,5 @@ boolean dbLoadNonCoding(char *db, struct gbSelect* select)
 /* determine if non-protein coding sequences should be loaded for this
  * partition */
 {
-static char *host = NULL;
-if (host == NULL)
-    host = getHost();
-// FIXME tmp hack for hgwdev/hgwbeta only
-return (select->release->srcDb == GB_REFSEQ)
-    && (sameString(host, "hgwdev") || sameString(host, "hgwbeta"));
+return (select->release->srcDb == GB_REFSEQ);
 }
