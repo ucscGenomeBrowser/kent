@@ -8,7 +8,7 @@
 #include "dnaLoad.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxFind.c,v 1.1 2008/10/27 01:54:47 kent Exp $";
+static char const rcsid[] = "$Id: sufxFind.c,v 1.2 2008/10/27 05:55:53 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -83,11 +83,13 @@ for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
 	 * all of these hits at this point though. */
 	struct slInt *hit = slIntNew(arrayPos);
 	slAddHead(pHitList, hit);
-	break;
+	return;
 	}
 
     /* Otherwise just move forward in array one. */
     arrayPos += 1;
+    if (memcmp(qDna, tDna+suffixArray[arrayPos], qDnaOffset+1) != 0)
+       return;		/* Prefix changed, no match. */
     }
 }
 
@@ -109,7 +111,6 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     toUpperN(qSeq->dna, qSeq->size);
     char *prefix = needMem(qSeq->size+1);
     sufxFindExact(sufx->allDna, sufx->array, sufx->traverse, arraySize, qSeq->dna, qSeq->size, &hitList);
-    uglyf("hitCount = %d\n", slCount(hitList));
     for (hit = hitList; hit != NULL; hit = hit->next)
 	{
 	int hitIx = hit->val;
@@ -122,7 +123,13 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
 	else
 	    {
 	    for (i=0; i<count; ++i)
+		{
 		fprintf(f, "%s hits offset %d\n", qSeq->name, sufx->array[hitIx+i]);
+		fprintf(f, "q %s\n", qSeq->dna);
+		fprintf(f, "t ");
+		mustWrite(f, sufx->allDna + sufx->array[hitIx+i], qSeq->size);
+		fprintf(f, "\n");
+		}
 	    }
 	}
     ++qSeqCount;
