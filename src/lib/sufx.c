@@ -140,8 +140,6 @@ return -1;
 void sufxFillInTraverseArray(char *dna, bits32 *suffixArray, int arraySize, bits32 *traverseArray)
 /* Fill in the bits that will help us traverse the array as if it were a tree. */
 {
-bits32 *traverse;
-AllocArray(traverse, arraySize);
 int depth = 0;
 int stackSize = 4*1024;
 int *stack;
@@ -157,7 +155,7 @@ for (i=0; i<arraySize; ++i)
 	char *prevDna = dna + suffixArray[prevIx];
 	if (curDna[d] != prevDna[d])
 	    {
-	    traverse[prevIx] = i - prevIx;
+	    traverseArray[prevIx] = i - prevIx;
 	    depth = d;
 	    break;
 	    }
