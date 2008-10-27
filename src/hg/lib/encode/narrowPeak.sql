@@ -14,7 +14,7 @@ CREATE TABLE narrowPeak (
     signalValue float not null,	# Measurement of average enrichment for the region
     pValue float not null default -1,	# Within dataset statistical significance of signal value (-log10)
     qValue float not null default -1,	# Cross-dataset statistical significance of signal value (-log10)
-    peak int not null default -1,	# Point-source called for this peak; 0-based offset from chromStart (use -1 if no point-source called)
+    peak int not null default -1,	# Point-source called for this peak. 0-based offset from chromStart (use -1 if no point-source called)
               #Indices
     INDEX chromStart (chrom(8), chromStart)
 );
