@@ -235,5 +235,7 @@ boolean mafColumnEmpty(struct mafAli *maf, int col);
 void mafStripEmptyColumns(struct mafAli *maf);
 /* Remove columns that are all '-' or '.' from  maf. */
 
+boolean isContigOrTandem(char status);
+/* is status MAF_CONTIG_STATUS or MAF_TANDEM_STATUS */
 #endif /* MAF_H */
 
