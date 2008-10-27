@@ -8,7 +8,7 @@
 #include "dnaLoad.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaFind.c,v 1.5 2008/10/26 20:10:18 kent Exp $";
+static char const rcsid[] = "$Id: sufaFind.c,v 1.6 2008/10/27 07:47:55 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -118,10 +118,6 @@ if (subCount == maxSubs)
     int ix = sufaUpperBound(allDna, array+sliceOffset, sliceSize, 
     	query, querySize, prefixSize) + sliceOffset;
     int offset = array[ix];
-       {
-       char *t = allDna + offset;
-       char *q = query;
-       }
     if (memcmp(allDna+offset+prefixSize, query+prefixSize, querySize-prefixSize) == 0)
 	{
 	struct slInt *hit = slIntNew(ix);
