@@ -111,7 +111,7 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.25 2008/10/25 05:36:32 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.26 2008/10/27 07:46:31 kent Exp $";
 
 char *version = "31";	/* Program version number. */
 
@@ -987,7 +987,7 @@ struct lm *lm = lmInit(1024*4);
 struct dnaSeq *qSeqR = cloneDnaSeq(qSeqF);
 reverseComplement(qSeqR->dna, qSeqR->size);
 
-struct splatTag *tagList = NULL, *tag;
+struct splatTag *tagList = NULL;
 int size = qSeqF->size;
 int desiredSize = tagSize;
 int outputCount = 0;
