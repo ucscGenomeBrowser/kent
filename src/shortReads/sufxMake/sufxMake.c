@@ -8,7 +8,7 @@
 #include "dnaseq.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxMake.c,v 1.7 2008/10/27 06:10:16 kent Exp $";
+static char const rcsid[] = "$Id: sufxMake.c,v 1.8 2008/10/27 07:43:15 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -80,10 +80,10 @@ struct chromInfo *indexChromPass1(struct dnaSeq *seq, bits32 chromOffset,
 /* Create a sufxOneBaseListy for each base in seq, and hang it in appropriate slot
  * in listyIndex. */
 {
-int baseIx;
+bits32 baseIx;
 DNA *dna = seq->dna;
-int seqSize = seq->size;
-int maskTil = 0;
+bits32 seqSize = seq->size;
+bits32 maskTil = 0;
 
 struct chromInfo *chrom;
 AllocVar(chrom);
@@ -92,6 +92,7 @@ chrom->size = seq->size;
 chrom->offset = chromOffset;
 chrom->seq = seq;
 
+verbose(2, "   start short initial loop\n");
 /* Preload the twelvemer with the first 11 bases. */
 bits32 twelve = 0;
 for (baseIx=0; baseIx<11; ++baseIx)
@@ -102,9 +103,10 @@ for (baseIx=0; baseIx<11; ++baseIx)
     twelve <<= 2;
     twelve += baseToVal[baseLetter];
     }
-    
+
+verbose(2, "   start main loop\n");
 /* Do the middle part of the sequence where there are no end conditions to consider. */
-int freePos = chromOffset;
+bits32 freePos = chromOffset;
 for (baseIx = 11; baseIx < seqSize; ++baseIx)
     {
     int baseLetter = dna[baseIx];
@@ -120,6 +122,7 @@ for (baseIx = 11; baseIx < seqSize; ++baseIx)
 	++freePos;
 	}
     }
+verbose(2, "   end main loop\n");
 return chrom;
 }
 
@@ -185,7 +188,7 @@ if (bigArray)
 
 
 bits64 finishAndWriteOneSlot(bits32 *offsetArray, bits32 *listArray, bits32 *twelvemerIndex,
-	int slotIx, DNA *allDna, FILE *f)
+	bits32 slotIx, DNA *allDna, FILE *f)
 /* Do additional sorting and write results to file.  Return amount actually written. */
 {
 bits64 basesIndexed = 0;
@@ -194,13 +197,13 @@ if (slotFirstIx != 0)
     {
     /* Do in affect a secondary bucket sort on the 13-16th bases. */
     bits32 buckets[256];
-    int bucketIx;
+    bits32 bucketIx;
     for (bucketIx = 0; bucketIx < ArraySize(buckets); bucketIx += 1)
         buckets[bucketIx] = 0;
     for (elIx = slotFirstIx; elIx != 0; elIx = nextElIx)
         {
 	nextElIx = listArray[elIx];
-	int bucketIx = binary4(allDna + offsetArray[elIx] + 12);
+	int bucketIx = binary4(allDna + offsetArray[elIx] + 12U);
 	if (bucketIx >= 0)
 	    {
 	    listArray[elIx] = buckets[bucketIx];
@@ -215,7 +218,7 @@ if (slotFirstIx != 0)
 	bits32 firstIx = buckets[bucketIx];
 	if (firstIx != 0)
 	    {
-	    int secondIx = listArray[firstIx];
+	    bits32 secondIx = listArray[firstIx];
 	    if (secondIx == 0)
 	        {
 		/* Special case for size one list, there are lots of these! */
@@ -405,8 +408,11 @@ for (inputIx=0; inputIx<inCount; ++inputIx)
 		     "(including one base pad before and after each chromosome.)", 
 		     estimatedGenomeSize, currentSize);
 	hashAddUnique(uniqHash, seq->name, NULL);
+	verbose(2, "  About to do first pass index\n");
 	chrom = indexChromPass1(seq, chromOffset, offsetArray, listArray, twelvemerIndex);
+	verbose(2, "  Done first pass index\n");
 	memcpy(allDna + chromOffset, seq->dna, seq->size + 1);
+	verbose(2, "  Done copy to allDna + %lld, size %d, totalSize %lld\n", chromOffset, seq->size+1, currentSize);
 	chromOffset = currentSize;
 	slAddHead(&chromList, chrom);
 	dnaSeqFree(&seq);
