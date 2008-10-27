@@ -9,7 +9,7 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.37 2008/10/10 06:02:24 markd Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.38 2008/10/27 17:52:19 braney Exp $";
 
 char *mafRegDefTxUpstream = "txupstream";  // transcription start size upstream region
 
@@ -794,3 +794,9 @@ if (mrd != NULL)
     }
 }
 
+boolean isContigOrTandem(char status)
+/* is status MAF_CONTIG_STATUS or MAF_TANDEM_STATUS */
+{
+return ((status == MAF_CONTIG_STATUS) ||
+	(status == MAF_TANDEM_STATUS));
+}
