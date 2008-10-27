@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.18 2008/10/21 15:55:05 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.19 2008/10/27 17:54:53 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;
@@ -298,7 +298,7 @@ for(; subSpecies; subSpecies = subSpecies->next)
 	    {
 	    errAbort("zero right status\n");
 	    }
-	else if ((mc->rightStatus == MAF_CONTIG_STATUS) || (mc->rightStatus == MAF_INSERT_STATUS))
+	else if (isContigOrTandem(mc->rightStatus) || (mc->rightStatus == MAF_INSERT_STATUS))
 	    leftLen = mc->rightLen;
 	else if (mc->rightStatus == MAF_NEW_STATUS)
 	    {
@@ -359,6 +359,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 		    case MAF_NEW_NESTED_STATUS:
 		    case MAF_MAYBE_NEW_NESTED_STATUS:
 		    case MAF_CONTIG_STATUS:
+		    case MAF_TANDEM_STATUS:
 		    case MAF_INSERT_STATUS:
 			AllocVar(mc);
 			mc->rightStatus = mc->leftStatus = blockStatus->mc->rightStatus;
@@ -458,6 +459,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 		    {
 		    case MAF_MISSING_STATUS:
 		    case MAF_CONTIG_STATUS:
+		    case MAF_TANDEM_STATUS:
 		    case MAF_INSERT_STATUS:
 		    case MAF_NEW_NESTED_STATUS:
 		    case MAF_MAYBE_NEW_NESTED_STATUS:
