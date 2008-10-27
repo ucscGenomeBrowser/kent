@@ -8,7 +8,7 @@
 #include "dnaseq.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxMake.c,v 1.6 2008/10/27 00:04:21 kent Exp $";
+static char const rcsid[] = "$Id: sufxMake.c,v 1.7 2008/10/27 06:10:16 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -105,7 +105,7 @@ for (baseIx=0; baseIx<11; ++baseIx)
     
 /* Do the middle part of the sequence where there are no end conditions to consider. */
 int freePos = chromOffset;
-for (baseIx = 12; baseIx < seqSize; ++baseIx)
+for (baseIx = 11; baseIx < seqSize; ++baseIx)
     {
     int baseLetter = dna[baseIx];
     if (baseLetter == 'N')
