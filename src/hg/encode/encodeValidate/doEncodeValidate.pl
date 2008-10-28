@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.96 2008/10/24 18:31:16 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.97 2008/10/28 19:49:15 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -49,6 +49,7 @@ use vars qw/
     $opt_skipValidateFiles
     $opt_validateDaf
     $opt_validateFile
+    $opt_sendEmail
     $opt_verbose
     $opt_timing
     /;
@@ -810,6 +811,7 @@ my $ok = GetOptions("allowReloads",
                     "skipValidateFiles",
                     "validateDaf",
                     "validateFile",
+                    "sendEmail",
                     "verbose=i",
                     );
 usage() if (!$ok);
@@ -891,6 +893,15 @@ if($opt_validateDaf) {
 my $daf = Encode::getDaf($submitDir, $grants, $fields);
 
 my $db = HgDb->new(DB => $daf->{assembly});
+
+if($opt_sendEmail) {
+    if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
+        my $email = $grants->{$daf->{grant}}{wranglerEmail};
+        if($email) {
+            `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $daf->{grant}/$daf->{lab} lab has been submitted for validation." $email`;
+        }
+    }
+}
 
 # Add the variables in the DAF file to the required fields list
 if (defined($daf->{variables})) {
