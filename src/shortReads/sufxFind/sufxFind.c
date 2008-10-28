@@ -10,7 +10,7 @@
 #include "dnaLoad.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxFind.c,v 1.8 2008/10/28 06:39:30 kent Exp $";
+static char const rcsid[] = "$Id: sufxFind.c,v 1.9 2008/10/28 19:09:19 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -62,16 +62,20 @@ void finalSearch(DNA *tDna, bits32 *suffixArray, int searchStart, int searchEnd,
  * of the array seach with each successive item in the window we've checked one
  * more letter already. */
 {
+// uglyf("finalSearch. q=%s, searchStart=%d, searchEnd=%d, alreadyMatched=%d\n", qDna, searchStart, searchEnd, alreadyMatched);
 int searchIx;
 for (searchIx = searchStart; searchIx < searchEnd; ++searchIx)
     {
     int diff = memcmp(qDna+alreadyMatched, tDna+alreadyMatched+suffixArray[searchIx], 
     	qSize-alreadyMatched);
     /* Todo - break without a hit when diff is the wrong sign. */
+//      uglyf("q "); mustWrite(uglyOut, qDna+alreadyMatched, qSize-alreadyMatched); uglyf("\n");
+//      uglyf("t "); mustWrite(uglyOut, tDna+suffixArray[searchIx]+alreadyMatched, qSize-alreadyMatched); uglyf("\n");
     if (diff == 0)
         {
 	struct slInt *hit = slIntNew(searchIx);
 	slAddHead(pHitList, hit);
+// 	uglyf("Hit!\n");
 	break;
 	}
     ++alreadyMatched;
@@ -133,6 +137,11 @@ for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
 	}
     ++arrayPos;
     }
+/* If we got here we matched the whole query sequence, and actually there's multiple
+ * matches to it.  It's actually rare to get to here on query sequences larger than
+ * 20 bases or so. */
+finalSearch(tDna, suffixArray, searchStart, searchEnd, qDna, qSize,
+	qSize - (arrayPos-searchStart-1), pHitList);  // TODO - check -1
 }
 
 
