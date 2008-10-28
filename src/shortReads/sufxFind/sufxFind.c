@@ -10,7 +10,7 @@
 #include "dnaLoad.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxFind.c,v 1.7 2008/10/28 06:14:38 kent Exp $";
+static char const rcsid[] = "$Id: sufxFind.c,v 1.8 2008/10/28 06:39:30 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -58,33 +58,23 @@ void finalSearch(DNA *tDna, bits32 *suffixArray, int searchStart, int searchEnd,
 /* Our search has been narrowed to be between searchStart and searchEnd.
  * We know within the interval a prefix of size alreadyMatched is already
  * the same.  Here we check if anything in this interval to see if there is
- * a full match to anything. If so we add it to hitList. */
+ * a full match to anything. If so we add it to hitList.  Due to the peculiarities
+ * of the array seach with each successive item in the window we've checked one
+ * more letter already. */
 {
-// uglyf("finalSearch %d to %d, alreadyMatched %d\n", searchStart, searchEnd, alreadyMatched);
 int searchIx;
 for (searchIx = searchStart; searchIx < searchEnd; ++searchIx)
     {
-    // uglyf("q %s %s\n", qDna, qDna+alreadyMatched);
-    // uglyf("t %s %s\n", cloneStringZ(tDna+suffixArray[searchIx], qSize), cloneStringZ(tDna+suffixArray[searchIx]+alreadyMatched, qSize-alreadyMatched));
     int diff = memcmp(qDna+alreadyMatched, tDna+alreadyMatched+suffixArray[searchIx], 
     	qSize-alreadyMatched);
     /* Todo - break without a hit when diff is the wrong sign. */
     if (diff == 0)
         {
-	// uglyf("Hit!");
 	struct slInt *hit = slIntNew(searchIx);
 	slAddHead(pHitList, hit);
 	break;
 	}
     ++alreadyMatched;
-#ifdef SOON
-    if (memcmp(qDna, tDna+suffixArray[searchIx], qSize) == 0)
-	{
-	struct slInt *hit = slIntNew(searchIx);
-	slAddHead(pHitList, hit);
-	break;
-	}
-#endif /* SOON */
     }
 }
 
@@ -112,8 +102,6 @@ for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
 	    {
 	    if ((nextPos += nextOffset) >= searchEnd)
 		{
-		// uglyf("match from out of letters at given position (%d).\n", qDnaOffset);
-		// uglyf("  searchStart=%d arrayPos=%d searchEnd=%d\n", searchStart, arrayPos, searchEnd);
 		searchEnd = arrayPos;
 		finalSearch(tDna, suffixArray, searchStart, searchEnd, qDna, qSize, 
 			qDnaOffset-(arrayPos-searchStart), pHitList);
@@ -130,9 +118,15 @@ for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
 	    } 
 	}
     searchEnd = arrayPos + nextOffset;  
+
+    /* We are going to advance to next position in query and in array.
+     * This will only possibly yield a match if the next item in the suffix
+     * array has a prefix that matches the current position up to our current
+     * offset.  Happily this is encoded in the traverse array in a subtle way.
+     * The step to find another letter at this position has to be greater than
+     * one for the prefix to be shared. */
     if (nextOffset <= 1)
 	{
-	// uglyf("match from nowhere to go at %d, arrayPos %d\n", qDnaOffset, arrayPos);
 	finalSearch(tDna, suffixArray, searchStart, searchEnd, qDna, qSize, 
 		qDnaOffset - (arrayPos-searchStart), pHitList);
 	return;  /* No match since prefix of next position doesn't match us. */
