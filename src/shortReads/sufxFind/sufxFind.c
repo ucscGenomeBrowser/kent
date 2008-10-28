@@ -8,7 +8,7 @@
 #include "dnaLoad.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxFind.c,v 1.3 2008/10/27 06:26:24 kent Exp $";
+static char const rcsid[] = "$Id: sufxFind.c,v 1.4 2008/10/28 00:59:13 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -76,7 +76,8 @@ for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
 
     /* Check to see if rest of query string matches current position, if so we're done. */
     int qNext = qDnaOffset+1;
-    if (qNext == qSize || memcmp(qDna+qNext, tDna+tDnaOffset+qNext, qSize-qNext) == 0)
+    int cmp = memcmp(qDna+qNext, tDna+tDnaOffset+qNext, qSize-qNext);
+    if (cmp == 0)
         {
 	/* Got hit!  In fact it may be first of many matching hits that start at arrayPos. 
 	 * We'll take of this later.  Keeps data structures lighter weight not to repeat
@@ -85,6 +86,8 @@ for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
 	slAddHead(pHitList, hit);
 	return;
 	}
+    else if (cmp < 0)
+        return;
 
     /* Otherwise just move forward in array one. */
     arrayPos += 1;
