@@ -8,7 +8,7 @@
 #include "dnaseq.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxMake.c,v 1.8 2008/10/27 07:43:15 kent Exp $";
+static char const rcsid[] = "$Id: sufxMake.c,v 1.9 2008/10/28 03:45:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -254,6 +254,49 @@ if (slotFirstIx != 0)
 return basesIndexed;
 }
 
+void sufxFillInTraverseArray2(char *dna, bits32 *suffixArray, int arraySize, bits32 *traverseArray)
+/* Fill in the bits that will help us traverse the array as if it were a tree. */
+{
+int depth = 0;
+int stackSize = 4*1024;
+int *stack;
+AllocArray(stack, stackSize);
+int i;
+for (i=0; i<arraySize; ++i)
+    {
+    char *curDna = dna + suffixArray[i];
+    int d;
+    for (d = 0; d<depth; ++d)
+        {
+	int prevIx = stack[d];
+	char *prevDna = dna + suffixArray[prevIx];
+	if (curDna[d] != prevDna[d])
+	    {
+	    int stackIx;
+	    for (stackIx=d; stackIx<depth; ++stackIx)
+	        {
+		prevIx = stack[stackIx];
+		traverseArray[prevIx] = i - prevIx;
+		}
+	    depth = d;
+	    break;
+	    }
+	}
+    if (depth >= stackSize)
+        errAbort("Stack overflow, depth >= %d", stackSize);
+    stack[depth] = i;
+    depth += 1;
+    }
+/* Do final clear out of stack */
+int stackIx;
+for (stackIx=0; stackIx < depth; ++stackIx)
+    {
+    int prevIx = stack[stackIx];
+    traverseArray[prevIx] = arraySize - prevIx;
+    }
+}
+
+
 void sufxWriteMerged(struct chromInfo *chromList, DNA *allDna,
 	bits32 *offsetArray, bits32 *listArray, bits32 *twelvemerIndex, char *output)
 /* Write out a file that contains a single splix that is the merger of
@@ -326,7 +369,7 @@ verbose(1, "Read suffix array back in\n");
 
 /* Calculate traverse array */
 memset(traverseArray, 0, arraySize*sizeof(bits32));
-sufxFillInTraverseArray(allDna, suffixArray, arraySize, traverseArray);
+sufxFillInTraverseArray2(allDna, suffixArray, arraySize, traverseArray);
 verbose(1, "Filled in traverseArray\n");
 
 /* Write out traverse array. */

@@ -8,10 +8,11 @@
 #include "dnaLoad.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaFind.c,v 1.6 2008/10/27 07:47:55 kent Exp $";
+static char const rcsid[] = "$Id: sufaFind.c,v 1.7 2008/10/28 03:45:00 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
+int maxRepeat = 10;
 
 void usage()
 /* Explain usage and exit. */
@@ -21,13 +22,15 @@ errAbort(
   "usage:\n"
   "   sufaFind target.sufa query.fa output\n"
   "options:\n"
+  "   -maxRepeat=N  - maximum number of alignments to output on one query sequence. Default %d\n"
   "   -mmap - Use memory mapping. Faster just a few reads, but much slower for many reads\n"
   "   -maxMismatch - maximum number of mismatches allowed.  Default %d\n"
-  , maxMismatch
+  , maxRepeat, maxMismatch
   );
 }
 
 static struct optionSpec options[] = {
+   {"maxRepeat", OPTION_INT},
    {"mmap", OPTION_BOOLEAN},
    {"maxMismatch", OPTION_INT},
    {NULL, 0},
@@ -178,18 +181,25 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     char *prefix = needMem(qSeq->size+1);
     sufaFindOneOff(sufa->allDna, sufa->array, arraySize, 0, arraySize, prefix, 0,
         qSeq->dna, qSeq->size, 0, maxMismatch, &hitList);
-    if (hitList == NULL)
-        fprintf(f, "%s miss\n", qSeq->name);
-    else
+    for (hit = hitList; hit != NULL; hit = hit->next)
 	{
-	for (hit = hitList; hit != NULL; hit = hit->next)
+	int hitIx = hit->val;
+	int count = sufaCountIdenticalPrefix(sufa->allDna, qSeq->size, 
+		sufa->array + hitIx, arraySize - hitIx);
+	int i;
+	if (count > maxRepeat)
 	    {
-	    int hitIx = hit->val;
-	    int count = sufaCountIdenticalPrefix(sufa->allDna, qSeq->size, 
-		    sufa->array + hitIx, arraySize - hitIx);
-	    int i;
+	    }
+	else
+	    {
 	    for (i=0; i<count; ++i)
+		{
 		fprintf(f, "%s hits offset %d\n", qSeq->name, sufa->array[hitIx+i]);
+		fprintf(f, "q %s\n", qSeq->dna);
+		fprintf(f, "t ");
+		mustWrite(f, sufa->allDna + sufa->array[hitIx+i], qSeq->size);
+		fprintf(f, "\n");
+		}
 	    }
 	}
     ++qSeqCount;
@@ -206,8 +216,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
-mmap = optionExists("mmap");
+maxRepeat = optionInt("maxRepeat", maxRepeat);
 maxMismatch = optionInt("maxMismatch", maxMismatch);
+mmap = optionExists("mmap");
 dnaUtilOpen();
 sufaFind(argv[1], argv[2], argv[3]);
 return 0;

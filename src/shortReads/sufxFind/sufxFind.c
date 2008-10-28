@@ -8,7 +8,7 @@
 #include "dnaLoad.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxFind.c,v 1.4 2008/10/28 00:59:13 kent Exp $";
+static char const rcsid[] = "$Id: sufxFind.c,v 1.5 2008/10/28 03:45:00 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -55,30 +55,49 @@ void sufxFindExact(DNA *tDna, bits32 *suffixArray, bits32 *traverseArray, int ar
 	DNA *qDna, int qSize, struct slInt **pHitList)
 /* Search for all exact matches to qDna in suffix array.  Return them in pHitList. */
 {
-int qDnaOffset, tDnaOffset;
 bits32 arrayPos = 0;
+bits32 searchEnd = arraySize;
+
+uglyf("%s - suffixFindExact\n", qDna);
 /* We step through each base of the query */
+int qDnaOffset;
 for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
     {
+    bits32 nextOffset = traverseArray[arrayPos];
+    bits32 tDnaOffset = suffixArray[arrayPos];
     DNA qBase = qDna[qDnaOffset];
-    /* Loop until we find a matching base in the target at this position - up to 4 times. */
-    for (;;)
-        {
-	tDnaOffset = suffixArray[arrayPos];
-	DNA tBase = tDna[tDnaOffset+qDnaOffset];
-	if (tBase == qBase)
-	    break;
-	int nextOffset = traverseArray[arrayPos];
-	if (nextOffset == 0)
-	    return;	/* End of the line, no match. */
-	arrayPos += nextOffset;
-	}
+    DNA tBase = tDna[tDnaOffset+qDnaOffset];
 
+    uglyf("  qDnaOffset=%d q/t=%c/%c arrayPos=%u searchEnd=%u.\n", qDnaOffset, qBase, tBase, arrayPos, searchEnd);
+
+    /* Skip to next matching base. */
+    if (qBase != tBase)
+        {
+	for (;;)
+	    {
+	    uglyf("    skipping %d to next base ", nextOffset);
+	    if ((arrayPos += nextOffset) >= searchEnd)
+		{
+		uglyf("ran off end (arrayPos=%u searchEnd %u)\n", arrayPos, searchEnd);
+		return;   /* No luck! */
+		}
+	    nextOffset = traverseArray[arrayPos];
+	    tDnaOffset = suffixArray[arrayPos];
+	    tBase = tDna[tDnaOffset+qDnaOffset];
+	    uglyf("at %u: %c\n", arrayPos, tBase);
+	    if (qBase == tBase)
+	        {
+		break;
+		}
+	    } 
+	}
+    searchEnd = arrayPos + nextOffset;  
+    
     /* Check to see if rest of query string matches current position, if so we're done. */
-    int qNext = qDnaOffset+1;
+    bits32 qNext = qDnaOffset+1;
     int cmp = memcmp(qDna+qNext, tDna+tDnaOffset+qNext, qSize-qNext);
     if (cmp == 0)
-        {
+	{
 	/* Got hit!  In fact it may be first of many matching hits that start at arrayPos. 
 	 * We'll take of this later.  Keeps data structures lighter weight not to repeat
 	 * all of these hits at this point though. */
@@ -86,13 +105,9 @@ for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
 	slAddHead(pHitList, hit);
 	return;
 	}
-    else if (cmp < 0)
-        return;
-
-    /* Otherwise just move forward in array one. */
-    arrayPos += 1;
-    if (memcmp(qDna, tDna+suffixArray[arrayPos], qDnaOffset+1) != 0)
-       return;		/* Prefix changed, no match. */
+    if (nextOffset <= 1)
+	return;  /* No match */
+    ++arrayPos;
     }
 }
 
@@ -105,7 +120,7 @@ struct dnaLoad *qLoad = dnaLoadOpen(queryFile);
 int arraySize = sufx->header->arraySize;
 FILE *f = mustOpen(outputFile, "w");
 struct dnaSeq *qSeq;
-int qSeqCount = 0;
+int queryCount = 0, hitCount = 0, missCount=0;
 
 while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     {
@@ -113,6 +128,10 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     verbose(2, "Processing %s\n", qSeq->name);
     toUpperN(qSeq->dna, qSeq->size);
     sufxFindExact(sufx->allDna, sufx->array, sufx->traverse, arraySize, qSeq->dna, qSeq->size, &hitList);
+    if (hitList != NULL)
+	++hitCount;
+    else
+	++missCount;
     for (hit = hitList; hit != NULL; hit = hit->next)
 	{
 	int hitIx = hit->val;
@@ -134,9 +153,11 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
 		}
 	    }
 	}
-    ++qSeqCount;
+    ++queryCount;
     dnaSeqFree(&qSeq);
     }
+verbose(1, "%d queries. %d hits (%5.2f%%). %d misses (%5.2f%%).\n", queryCount, 
+    hitCount, 100.0*hitCount/queryCount, missCount, 100.0*missCount/queryCount);
 carefulClose(&f);
 }
 

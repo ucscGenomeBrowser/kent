@@ -111,7 +111,7 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.26 2008/10/27 07:46:31 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.27 2008/10/28 03:45:00 kent Exp $";
 
 char *version = "31";	/* Program version number. */
 
@@ -153,9 +153,6 @@ errAbort(
 "   -maxDivergence=N Maximum divergence level between read and genome to map.  Default %d\n"
 "                    Divergence combines gaps and mismatches.  Mismatch=2, gap=3\n"
 "   -mmap - Use memory mapping. Faster just a few reads, but much slower for many reads\n"
-"current limits:\n"
-"   Right now _only_ really aligns first 25 bases of a read.\n"
-"   Maps _all_ occurences of read in genome, which will fill hard disk on repeats\n"
 , version, maxRepeat, maxGap, maxMismatch, maxDivergence
 );
 }

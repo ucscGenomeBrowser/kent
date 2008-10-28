@@ -53,11 +53,8 @@ void sufxFree(struct sufx **pSufx);
 int sufxOffsetToChromIx(struct sufx *sufx, bits32 tOffset);
 /* Figure out index of chromosome containing tOffset */
 
-void sufxFillInTraverseArray(char *dna, bits32 *suffixArray, int arraySize, bits32 *traverseArray);
-/* Fill in the bits that will help us traverse the array as if it were a tree. */
-
 /** Stuff to define SUFX files **/
-#define SUFX_MAGIC 0x600BA3A2	/* Magic number at start of SUFX file */
+#define SUFX_MAGIC 0x600BA3A1	/* Magic number at start of SUFX file */
 #define SUFX_MAJOR_VERSION 0	
 #define SUFX_MINOR_VERSION 0
 

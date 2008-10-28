@@ -137,33 +137,3 @@ errAbort("tOffset %d out of range\n", tOffset);
 return -1;
 }
 
-void sufxFillInTraverseArray(char *dna, bits32 *suffixArray, int arraySize, bits32 *traverseArray)
-/* Fill in the bits that will help us traverse the array as if it were a tree. */
-{
-int depth = 0;
-int stackSize = 4*1024;
-int *stack;
-AllocArray(stack, stackSize);
-int i;
-for (i=0; i<arraySize; ++i)
-    {
-    char *curDna = dna + suffixArray[i];
-    int d;
-    for (d = 0; d<depth; ++d)
-        {
-	int prevIx = stack[d];
-	char *prevDna = dna + suffixArray[prevIx];
-	if (curDna[d] != prevDna[d])
-	    {
-	    traverseArray[prevIx] = i - prevIx;
-	    depth = d;
-	    break;
-	    }
-	}
-    if (depth >= stackSize)
-        errAbort("Stack overflow, depth >= %d", stackSize);
-    stack[depth] = i;
-    depth += 1;
-    }
-}
-
