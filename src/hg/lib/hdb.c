@@ -5,7 +5,6 @@
 #include "portable.h"
 #include "linefile.h"
 #include "binRange.h"
-#include <mysql.h>
 #include "jksql.h"
 #include "dnautil.h"
 #include "dnaseq.h"
@@ -38,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.376 2008/10/14 16:15:33 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.377 2008/10/28 07:39:05 kent Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
