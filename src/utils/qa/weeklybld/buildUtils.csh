@@ -25,7 +25,7 @@ set branch=v${BRANCHNN}_branch
 
 if ( "$1" == "tip" ) then
     set base=$BUILDDIR/tip
-    echo "updating tip sandbox [${0}: `date`]"
+    echo "updating tip sandbox on $HOST [${0}: `date`]"
     cd $base/kent
     cvs up -dP  >& /dev/null
     echo "done updating tip sandbox"
@@ -35,26 +35,26 @@ else
 endif
 
 if ( -d ~/bin/${MACHTYPE}.orig ) then
- echo "restoring from last failed symlink. [${0}: `date`]"
+ echo "restoring from last failed symlink. on $HOST [${0}: `date`]"
  ./unsymtrick.csh
 endif
 if ( ! -d ~/bin/${MACHTYPE}.cluster ) then
- echo "something messed up in symlink [${0}: `date`]"
+ echo "something messed up in symlink on $HOST [${0}: `date`]"
  exit 1
 endif
 
 # Symlink Trick safe now
-echo "Symlink Trick. [${0}: `date`]"
+echo "Symlink Trick. on $HOST [${0}: `date`]"
 ./symtrick.csh
 
 echo
-echo "Building src utils. [${0}: `date`]"
+echo "Building src utils. on $HOST [${0}: `date`]"
 cd $base/kent/src
-echo "Before make utils"
+echo "Before make utils on $HOST [${0}: `date`]"
 make $MAKEPARAMS utils >& make.utils.log
-echo "After make utils"
+echo "After make utils on $HOST [${0}: `date`]"
 make $MAKEPARAMS blatSuite >>& make.utils.log
-echo "After make blatSuite"
+echo "After make blatSuite on $HOST [${0}: `date`]"
 sed -i -e "s/-DJK_WARN//g" make.utils.log
 sed -i -e "s/-Werror//g" make.utils.log
 sed -i -e "s/gbWarn//g" make.utils.log
@@ -62,7 +62,7 @@ sed -i -e "s/gbWarn//g" make.utils.log
 set res = `/bin/egrep -i "error|warn" make.utils.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
- echo "errs found:"
+ echo "errs found on $HOST:"
  echo "$res"
  $WEEKLYBLD/unsymtrick.csh
  exit 1
@@ -70,7 +70,7 @@ endif
 
 # Undo Symlink trick
 $WEEKLYBLD/unsymtrick.csh
-echo "Restore: undoing Symlink Trick. [${0}: `date`]"
+echo "Restore: undoing Symlink Trick. on $HOST [${0}: `date`]"
 
 echo
 echo "Build of Utils on $HOST complete. [${0}: `date`]"
