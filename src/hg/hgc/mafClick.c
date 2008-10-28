@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.57 2008/10/11 19:54:42 markd Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.58 2008/10/28 13:48:15 braney Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -127,6 +127,8 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 	if (mc->text && (mc->rightStatus == MAF_INSERT_STATUS) && (masterMc->start + masterMc->size < winEnd))
 	    haveInserts = TRUE;
 
+printf("species %s:%d-%d %c %d %c %d\n",mc->src,mc->start,mc->start+mc->size,
+    mc->leftStatus, mc->leftLen,mc->rightStatus, mc->rightLen);
 #ifdef REVERSESTRAND
 	/* complement bases if hgTracks is on reverse strand */
 	if (mc->size && cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
@@ -213,6 +215,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 	else
 	    {
 	    if (((mc->leftStatus == MAF_CONTIG_STATUS) && (mc->rightStatus == MAF_CONTIG_STATUS) )
+	    || ((mc->leftStatus == MAF_TANDEM_STATUS) && (mc->rightStatus == MAF_TANDEM_STATUS) )
 	    || ((mc->leftStatus == MAF_INSERT_STATUS) && (mc->rightStatus == MAF_INSERT_STATUS) )
 	    || ((mc->leftStatus == MAF_MISSING_STATUS) && (mc->rightStatus == MAF_MISSING_STATUS) ))
 		{
@@ -262,6 +265,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		    case MAF_MISSING_STATUS:
 			ch = 'N';
 			break;
+		    case MAF_TANDEM_STATUS:
 		    case MAF_CONTIG_STATUS:
 			ch = '-';
 			break;
@@ -939,6 +943,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 	else
 	    {
 	    if (((mc->leftStatus == MAF_CONTIG_STATUS) && (mc->rightStatus == MAF_CONTIG_STATUS) )
+	    || ((mc->leftStatus == MAF_TANDEM_STATUS) && (mc->rightStatus == MAF_TANDEM_STATUS) )
 	    || ((mc->leftStatus == MAF_INSERT_STATUS) && (mc->rightStatus == MAF_INSERT_STATUS) )
 	    || ((mc->leftStatus == MAF_MISSING_STATUS) && (mc->rightStatus == MAF_MISSING_STATUS) ))
 		{
@@ -967,6 +972,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		    case MAF_MISSING_STATUS:
 			ch = 'N';
 			break;
+		    case MAF_TANDEM_STATUS:
 		    case MAF_CONTIG_STATUS:
 			ch = '-';
 			break;
