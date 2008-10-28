@@ -8,7 +8,7 @@ variables	cell, antibody
 assembly	hg18
 medianFragmentLength	225
 fragmentLengthRange	150-300
-dafVersion      0.2.2
+dafVersion      1.0
 
 
 # Track/view definition
