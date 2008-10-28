@@ -1,4 +1,6 @@
-/* sufxFind - Find sequence by searching suffix array.. */
+/* sufxFind - Find sequence by searching suffix array. */
+/* Copyright Jim Kent 2008 all rights reserved. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,7 +10,7 @@
 #include "dnaLoad.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxFind.c,v 1.6 2008/10/28 03:49:57 kent Exp $";
+static char const rcsid[] = "$Id: sufxFind.c,v 1.7 2008/10/28 06:14:38 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -51,12 +53,47 @@ for (i=1; i<arraySize; ++i)
 return i;
 }
 
+void finalSearch(DNA *tDna, bits32 *suffixArray, int searchStart, int searchEnd, 
+	DNA *qDna, int qSize, int alreadyMatched, struct slInt **pHitList)
+/* Our search has been narrowed to be between searchStart and searchEnd.
+ * We know within the interval a prefix of size alreadyMatched is already
+ * the same.  Here we check if anything in this interval to see if there is
+ * a full match to anything. If so we add it to hitList. */
+{
+// uglyf("finalSearch %d to %d, alreadyMatched %d\n", searchStart, searchEnd, alreadyMatched);
+int searchIx;
+for (searchIx = searchStart; searchIx < searchEnd; ++searchIx)
+    {
+    // uglyf("q %s %s\n", qDna, qDna+alreadyMatched);
+    // uglyf("t %s %s\n", cloneStringZ(tDna+suffixArray[searchIx], qSize), cloneStringZ(tDna+suffixArray[searchIx]+alreadyMatched, qSize-alreadyMatched));
+    int diff = memcmp(qDna+alreadyMatched, tDna+alreadyMatched+suffixArray[searchIx], 
+    	qSize-alreadyMatched);
+    /* Todo - break without a hit when diff is the wrong sign. */
+    if (diff == 0)
+        {
+	// uglyf("Hit!");
+	struct slInt *hit = slIntNew(searchIx);
+	slAddHead(pHitList, hit);
+	break;
+	}
+    ++alreadyMatched;
+#ifdef SOON
+    if (memcmp(qDna, tDna+suffixArray[searchIx], qSize) == 0)
+	{
+	struct slInt *hit = slIntNew(searchIx);
+	slAddHead(pHitList, hit);
+	break;
+	}
+#endif /* SOON */
+    }
+}
+
 void sufxFindExact(DNA *tDna, bits32 *suffixArray, bits32 *traverseArray, int arraySize,
 	DNA *qDna, int qSize, struct slInt **pHitList)
 /* Search for all exact matches to qDna in suffix array.  Return them in pHitList. */
 {
-bits32 arrayPos = 0;
-bits32 searchEnd = arraySize;
+bits32 arrayPos = 0;		/* We always start at the first position in array. */
+bits32 searchStart = 0, searchEnd = arraySize;  /* We progressively narrow search window. */
 
 /* We step through each base of the query */
 int qDnaOffset;
@@ -70,33 +107,36 @@ for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
     /* Skip to next matching base. */
     if (qBase != tBase)
         {
+	int nextPos = arrayPos;
 	for (;;)
 	    {
-	    if ((arrayPos += nextOffset) >= searchEnd)
-		return;   /* No luck! */
-	    nextOffset = traverseArray[arrayPos];
-	    tDnaOffset = suffixArray[arrayPos];
+	    if ((nextPos += nextOffset) >= searchEnd)
+		{
+		// uglyf("match from out of letters at given position (%d).\n", qDnaOffset);
+		// uglyf("  searchStart=%d arrayPos=%d searchEnd=%d\n", searchStart, arrayPos, searchEnd);
+		searchEnd = arrayPos;
+		finalSearch(tDna, suffixArray, searchStart, searchEnd, qDna, qSize, 
+			qDnaOffset-(arrayPos-searchStart), pHitList);
+		return;   /* Ran through all variations of letters at this position. */
+		}
+	    nextOffset = traverseArray[nextPos];
+	    tDnaOffset = suffixArray[nextPos];
 	    tBase = tDna[tDnaOffset+qDnaOffset];
 	    if (qBase == tBase)
+		{
+		searchStart = arrayPos = nextPos;
 		break;
+		}
 	    } 
 	}
     searchEnd = arrayPos + nextOffset;  
-    
-    /* Check to see if rest of query string matches current position, if so we're done. */
-    bits32 qNext = qDnaOffset+1;
-    int cmp = memcmp(qDna+qNext, tDna+tDnaOffset+qNext, qSize-qNext);
-    if (cmp == 0)
-	{
-	/* Got hit!  In fact it may be first of many matching hits that start at arrayPos. 
-	 * We'll take of this later.  Keeps data structures lighter weight not to repeat
-	 * all of these hits at this point though. */
-	struct slInt *hit = slIntNew(arrayPos);
-	slAddHead(pHitList, hit);
-	return;
-	}
     if (nextOffset <= 1)
+	{
+	// uglyf("match from nowhere to go at %d, arrayPos %d\n", qDnaOffset, arrayPos);
+	finalSearch(tDna, suffixArray, searchStart, searchEnd, qDna, qSize, 
+		qDnaOffset - (arrayPos-searchStart), pHitList);
 	return;  /* No match since prefix of next position doesn't match us. */
+	}
     ++arrayPos;
     }
 }
