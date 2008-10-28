@@ -19,7 +19,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.43 2008/10/28 21:48:42 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.44 2008/10/28 22:45:37 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -293,7 +293,7 @@ void showOtherUserOptions()
 {
 printf("<TABLE BORDERWIDTH=0>\n");
 printf("<TR><TD colspan=2>"
-       "Load settings from another user's saved session:</TD></TR>\n"
+       "Use settings from another user's saved session:</TD></TR>\n"
        "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>user: \n");
 cgiMakeOnKeypressTextVar(hgsOtherUserName,
 			 cartUsualString(cart, hgsOtherUserName, ""),
@@ -313,12 +313,12 @@ void showLoadingOptions(char *userName, boolean savedSessionsSupported)
 /* Show options for loading settings from another user's session, a file 
  * or URL. */
 {
-printf("<H3>Load Settings</H3>\n");
+printf("<H3>Restore Settings</H3>\n");
 if (savedSessionsSupported)
     showOtherUserOptions();
 
 printf("<TABLE BORDERWIDTH=0>\n");
-printf("<TR><TD colspan=2>Load settings from a local file:</TD>\n");
+printf("<TR><TD colspan=2>Use settings from a local file:</TD>\n");
 printf("<TD><INPUT TYPE=FILE NAME=\"%s\" "
        "onkeypress=\"return noSubmitOnEnter(event);\">\n",
        hgsLoadLocalFileName);
@@ -327,7 +327,7 @@ cgiMakeButton(hgsDoLoadLocal, "submit");
 printf("</TD></TR>\n");
 printf("<TR><TD colspan=2></TD></TR>\n");
 
-printf("<TR><TD colspan=2>Load settings from a URL (http://..., ftp://...):"
+printf("<TR><TD colspan=2>Use settings from a URL (http://..., ftp://...):"
        "</TD>\n");
 printf("<TD>\n");
 cgiMakeOnKeypressTextVar(hgsLoadUrlName,
