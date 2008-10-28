@@ -10,7 +10,7 @@
 #include "dnaLoad.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxFind.c,v 1.9 2008/10/28 19:09:19 kent Exp $";
+static char const rcsid[] = "$Id: sufxFind.c,v 1.10 2008/10/28 23:24:39 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -82,40 +82,41 @@ for (searchIx = searchStart; searchIx < searchEnd; ++searchIx)
     }
 }
 
-void sufxFindExact(DNA *tDna, bits32 *suffixArray, bits32 *traverseArray, int arraySize,
-	DNA *qDna, int qSize, struct slInt **pHitList)
-/* Search for all exact matches to qDna in suffix array.  Return them in pHitList. */
+void sufxFindWithin(DNA *tDna, bits32 *suffixArray, bits32 *traverseArray, 
+	DNA *qDna, int qSize, int cursor, bits32 searchStart, bits32 searchEnd, 
+	struct slInt **pHitList)
+/* Search the part of the suffix array between searchStart and searchEnd for a match.
+ * The searchStart/searchEnd and cursor position must agree. */
 {
-bits32 arrayPos = 0;		/* We always start at the first position in array. */
-bits32 searchStart = 0, searchEnd = arraySize;  /* We progressively narrow search window. */
-
+bits32 arrayPos = searchStart;
 /* We step through each base of the query */
-int qDnaOffset;
-for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
+// uglyf("qDna=%s\n", qDna);
+for (; cursor<qSize; ++cursor)
     {
     bits32 nextOffset = traverseArray[arrayPos];
-    bits32 tDnaOffset = suffixArray[arrayPos];
-    DNA qBase = qDna[qDnaOffset];
-    DNA tBase = tDna[tDnaOffset+qDnaOffset];
+    DNA qBase = qDna[cursor];
+    DNA tBase = tDna[suffixArray[arrayPos]+cursor];
+    // uglyf("cursor=%d, qBase/tBase=%c/%c, arrayPos=%d\n", cursor, qBase, tBase, arrayPos);
 
     /* Skip to next matching base. */
     if (qBase != tBase)
         {
 	int nextPos = arrayPos;
+	// uglyf("mismatch\n");
 	for (;;)
 	    {
 	    if ((nextPos += nextOffset) >= searchEnd)
 		{
-		searchEnd = arrayPos;
-		finalSearch(tDna, suffixArray, searchStart, searchEnd, qDna, qSize, 
-			qDnaOffset-(arrayPos-searchStart), pHitList);
+		finalSearch(tDna, suffixArray, searchStart, arrayPos, qDna, qSize, 
+			cursor-(arrayPos-searchStart), pHitList);
 		return;   /* Ran through all variations of letters at this position. */
 		}
 	    nextOffset = traverseArray[nextPos];
-	    tDnaOffset = suffixArray[nextPos];
-	    tBase = tDna[tDnaOffset+qDnaOffset];
+	    tBase = tDna[suffixArray[nextPos]+cursor];
+	    // uglyf("  %c at %d\n", tBase, nextPos);
 	    if (qBase == tBase)
 		{
+		// uglyf("   match %c at %d\n", tBase, nextPos);
 		searchStart = arrayPos = nextPos;
 		break;
 		}
@@ -132,7 +133,7 @@ for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
     if (nextOffset <= 1)
 	{
 	finalSearch(tDna, suffixArray, searchStart, searchEnd, qDna, qSize, 
-		qDnaOffset - (arrayPos-searchStart), pHitList);
+		cursor - (arrayPos-searchStart), pHitList);
 	return;  /* No match since prefix of next position doesn't match us. */
 	}
     ++arrayPos;
@@ -142,6 +143,80 @@ for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
  * 20 bases or so. */
 finalSearch(tDna, suffixArray, searchStart, searchEnd, qDna, qSize,
 	qSize - (arrayPos-searchStart-1), pHitList);  // TODO - check -1
+}
+
+void sufxFindExact(DNA *tDna, bits32 *suffixArray, bits32 *traverseArray, int arraySize,
+	DNA *qDna, int qSize, struct slInt **pHitList)
+/* Search for all exact matches to qDna in suffix array.  Return them in pHitList. */
+{
+sufxFindWithin(tDna, suffixArray, traverseArray, qDna, qSize, 0, 0, arraySize, pHitList);
+}
+
+boolean mostlySame(char *a, char *b, int size, int maxMismatch)
+/* Return TRUE if a and b are the same with possibly a few mismatches. */
+{
+int mismatches = 0;
+int i;
+for (i=0; i<size; ++i)
+    {
+    if (a[i] != b[i])
+        if (++mismatches > maxMismatch)
+	    return FALSE;
+    }
+return TRUE;
+}
+
+void sufxFindOneOff(char *tDna, bits32 *suffixArray, bits32 *traverseArray, 
+	bits32 sliceStart, bits32 sliceEnd, int cursor,
+	char *qDna, int qSize, int subCount, int maxSubs, 
+	struct slInt **pHitList)
+{
+#ifdef DEBUG
+    {
+    uglyf("sufxFindOneOff cursor=%d qSize=%d subCount=%d maxSubs=%d sliceStart=%d sliceEnd=%d\n", cursor, qSize, subCount, maxSubs, sliceStart, sliceEnd);
+    char *q = cloneStringZ(qDna, qSize);
+    tolowers(q);
+    q[cursor] = toupper(q[cursor]);
+    uglyf("%s\n", q);
+    }
+#endif /* DEBUG */
+
+/* Start recursion with end conditions.  First is that we've matched the whole thing. */
+if (cursor == qSize)
+    {
+    struct slInt *hit = slIntNew(sliceStart);
+    slAddHead(pHitList, hit);
+    return;
+    }
+/* If we have used up all of our substitutions, then look for an exact match to
+ * what is left and add it if it exists. This is another end condition. */
+if (subCount == maxSubs)
+    {
+    sufxFindWithin(tDna, suffixArray, traverseArray, qDna, qSize, 
+    	cursor, sliceStart, sliceEnd, pHitList);
+    return;
+    }
+
+/* If not at end, then call self for each of the possibilities present so far. */
+bits32 arrayPos, nextArrayPos;
+for (arrayPos = sliceStart; arrayPos < sliceEnd; arrayPos = nextArrayPos)
+    {
+    int subsliceSize = traverseArray[arrayPos];
+    nextArrayPos = arrayPos + subsliceSize;
+    int extraSub = (qDna[cursor] == tDna[suffixArray[arrayPos]+cursor] ? 0 : 1);
+    if (mostlySame(qDna+cursor+1, tDna+suffixArray[arrayPos]+cursor+1,
+	qSize - cursor - 1, maxSubs - subCount - extraSub))
+	{
+	struct slInt *hit = slIntNew(arrayPos);
+	slAddHead(pHitList, hit);
+	}
+    if (subsliceSize > 1)
+        {
+	sufxFindOneOff(tDna, suffixArray, traverseArray, 
+		arrayPos+1, nextArrayPos, cursor+1, qDna, qSize, subCount+extraSub,
+		maxSubs, pHitList);
+	}
+    }
 }
 
 
@@ -160,7 +235,8 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     struct slInt *hit, *hitList = NULL;
     verbose(2, "Processing %s\n", qSeq->name);
     toUpperN(qSeq->dna, qSeq->size);
-    sufxFindExact(sufx->allDna, sufx->array, sufx->traverse, arraySize, qSeq->dna, qSeq->size, &hitList);
+    sufxFindOneOff(sufx->allDna, sufx->array, sufx->traverse, 
+    	0, arraySize, 0, qSeq->dna, qSeq->size, 0, maxMismatch, &hitList);
     if (hitList != NULL)
 	++hitCount;
     else
