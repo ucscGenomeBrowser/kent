@@ -24,9 +24,11 @@ module PipelineBackground
   end
 
   def set_run_stat(project_id)
-    project = Project.find(project_id)
-    project.run_stat = "running"
-    saver project
+    unless project_id == 0
+      project = Project.find(project_id)
+      project.run_stat = "running"
+      saver project
+    end
   end
 
   def validate_background(project_id)
@@ -115,7 +117,7 @@ module PipelineBackground
   end
  
 
-  def upload_background(project_id, upurl, upftp, upload, autoResume)
+  def upload_background(project_id, upurl, upftp, upload, local_path, autoResume)
 
     project = Project.find(project_id)
 
@@ -133,6 +135,9 @@ module PipelineBackground
     end
     unless upload
       upload = ""
+    end
+    unless local_path
+      local_path = ""
     end
 
     unless upurl.blank?
@@ -213,15 +218,19 @@ module PipelineBackground
         FileUtils.copy(ftpPath, pf)
         File.delete(ftpPath)
       else
-        # was already done by client in foreground
-        # should be local-file upload, Hmm... where does Mongrel put it during upload?
-        #unless defined? upload.local_path
-        #  FileUtils.copy(upload.local_path, pf)
-        #else
-        #  File.open(pf, "wb") { |f| f.write(upload.read) }
-        #end
+        unless local_path.blank?
+          unless File.exists?(local_path)
+            cmd = "echo 'local_path file #{local_path} is missing' &> #{projectDir}/upload_error" 
+            system(cmd)
+            new_status project, "upload failed"
+            return
+          end
+          FileUtils.copy(local_path, pf)
+          File.delete(local_path)
+        end
       end
     end
+    FileUtils.chmod 0664, pf
 
     unless new_status project, "expanding"
       return

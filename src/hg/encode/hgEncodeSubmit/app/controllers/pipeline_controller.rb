@@ -237,6 +237,7 @@ class PipelineController < ApplicationController
     unless @upftp
       @upftp = ""
     end
+    bg_local_path = ""
 
     return if @upload.blank? && @upurl.blank? && @upftp.blank?
 
@@ -298,19 +299,20 @@ class PipelineController < ApplicationController
         if @upload.respond_to?(:local_path) and @upload.local_path and File.exists?(@upload.local_path)
 
           logger.info "#DEBUG local_path=#{@upload.local_path} length=#{@upload.length} original_filename=#{@upload.original_filename}"  #debug
-          FileUtils.copy_file(@upload.local_path, pf)
+          bg_local_path = "#{@upload.local_path}_BG"
+          File.link(@upload.local_path, bg_local_path)  # we want the file to be preserved beyond cgi call for bg to use
 
         elsif file.respond_to?(:read)
 
           logger.info "#DEBUG length=#{@upload.length} original_filename=#{@upload.original_filename}"  #debug
-          File.open(local_file_path, "wb") { |f| f.write(file.read) }
+          File.open(pf, "wb") { |f| f.write(@upload.read); f.close }
 
         else
 
           raise ArgumentError.new("Do not know how to handle #{@upload.inspect}?")
 
        end 
-       FileUtils.chmod 0664, pf
+       @upload.close
 
        # old way
        #if defined? @upload.local_path
@@ -325,7 +327,7 @@ class PipelineController < ApplicationController
 
     new_status @project, "upload requested"
     upload_name = @upload.blank? ? "" : @upload.original_filename
-    param_string = "#{@project.id},\"#{@upurl}\", \"#{@upftp}\", \"#{upload_name}\", \"#{autoResume}\""
+    param_string = "#{@project.id},\"#{@upurl}\", \"#{@upftp}\", \"#{upload_name}\", \"#{bg_local_path}\", \"#{autoResume}\""
     unless queue_job "upload_background(#{param_string})"
       flash[:error] = "System error - queued_jobs save failed."
       return
