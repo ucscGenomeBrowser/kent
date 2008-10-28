@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.140 2008/10/11 19:54:42 markd Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.141 2008/10/28 13:46:14 braney Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -932,8 +932,8 @@ int lastX;
 ms = summaryList;
 if (chainBreaks && ms->chromStart > chromStart)
     {
-    if ((ms->leftStatus[0] == MAF_CONTIG_STATUS ||
-     ms->leftStatus[0] == MAF_INSERT_STATUS))
+    if (isContigOrTandem(ms->leftStatus[0]) ||
+	 ms->leftStatus[0] == MAF_INSERT_STATUS)
 	{
 	isDouble = (ms->leftStatus[0] == MAF_INSERT_STATUS);
 	x1 = xOff;
@@ -960,8 +960,8 @@ for (ms = summaryList; ms != NULL; ms = ms->next)
     /* draw chain after alignment */
     if (chainBreaks && ms->chromEnd < seqEnd && ms->next != NULL)
 	{
-	if ((ms->rightStatus[0] == MAF_CONTIG_STATUS ||
-         ms->rightStatus[0] == MAF_INSERT_STATUS))
+	if (isContigOrTandem(ms->rightStatus[0]) ||
+	     ms->rightStatus[0] == MAF_INSERT_STATUS)
 	    {
 	    isDouble = (ms->rightStatus[0] == MAF_INSERT_STATUS);
 	    x1 = round((double)((int)ms->chromEnd+1 - seqStart) * scale) + xOff;
@@ -1990,8 +1990,8 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                  * of flanking alignments, fill with dashes or ='s */
                if (!useIrowChains)
                    continue;
-                if ((mc->leftStatus == MAF_CONTIG_STATUS &&
-                    mc->rightStatus == MAF_CONTIG_STATUS))
+                if (isContigOrTandem(mc->leftStatus) &&
+                    isContigOrTandem(mc->rightStatus))
                     {
                     char fill = '-';
                     seq = needMem(size+1);
