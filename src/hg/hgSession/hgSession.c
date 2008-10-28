@@ -19,7 +19,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.42 2008/10/07 00:22:03 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.43 2008/10/28 21:48:42 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -35,6 +35,8 @@ errAbort(
 struct cart *cart;
 char *excludeVars[] = {"Submit", "submit", NULL};
 
+/* Javascript to confirm that the user truly wants to delete a session. */
+#define confirmDeleteFormat "return confirm('Are you sure you want to delete %s?');"
 
 char *cgiDecodeClone(char *encStr)
 /* Allocate and return a CGI-decoded copy of encStr. */
@@ -236,7 +238,7 @@ safef(query, sizeof(query), "SELECT sessionName, shared, firstUse from %s "
       "WHERE userName = '%s' ORDER BY sessionName;",
       namedSessionTable, encUserName);
 sr = sqlGetResult(conn, query);
-printf("<TH><TD><B>session name</B></TD><TD><B>created on</B></TD><TD align=center><B>load this&nbsp;<BR>session&nbsp;</B></TD>"
+printf("<TH><TD><B>session name</B></TD><TD><B>created on</B></TD><TD align=center><B>use this&nbsp;<BR>session&nbsp;</B></TD>"
        "<TD align=center><B>delete this&nbsp;<BR>session&nbsp;</B></TD><TD align=center><B>share with&nbsp;<BR>others?&nbsp;</B></TD><TD align=center><B>link to<BR>session</B></TD>"
        "<TD align=center><B>send to<BR>mail</B></TD></TH>");
 while ((row = sqlNextRow(sr)) != NULL)
@@ -259,10 +261,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("&nbsp;&nbsp;</TD>"
 	   "<TD>%s&nbsp;&nbsp;</TD><TD align=center>", firstUse);
     safef(buf, sizeof(buf), "%s%s", hgsLoadPrefix, encSessionName);
-    cgiMakeButton(buf, "load");
+    cgiMakeButton(buf, "use");
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsDeletePrefix, encSessionName);
-    cgiMakeButton(buf, "delete");
+    char command[512];
+    safef(command, sizeof(command), confirmDeleteFormat, sessionName);
+    cgiMakeOnClickSubmitButton(command, buf, "delete");
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, encSessionName);
     cgiMakeCheckBoxJS(buf, shared, "onchange=\"document.mainForm.submit();\"");
@@ -520,6 +524,8 @@ cartRemovePrefix(cart, hgsLoadPrefix);
 cartRemovePrefix(cart, hgsLoadLocalFileName);
 cartRemovePrefix(cart, hgsDeletePrefix);
 cartRemovePrefix(cart, hgsDo);
+cartRemove(cart, hgsOldSessionName);
+cartRemove(cart, hgsCancel);
 }
 
 void checkForCustomTracks(struct dyString *dyMessage);
@@ -941,7 +947,7 @@ return dyStringCannibalize(&dyMessage);
 char *doSessionDetail(char *sessionName)
 /* Show details about a particular session. */
 {
-struct dyString *dyMessage = dyStringNew(1024);
+struct dyString *dyMessage = dyStringNew(4096);
 char *encSessionName = cgiEncodeFull(sessionName);
 char *userName = wikiLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
@@ -971,26 +977,34 @@ if ((row = sqlNextRow(sr)) != NULL)
     char *description = getSetting(settings, "description");
     if (description == NULL) description = "";
 
+#define highlightAccChanges "{ var b = document.getElementById('" hgsDoSessionChange "'); " \
+                            "  if (b) { b.style.background = '#ff9999'; } }"
+
     dyStringPrintf(dyMessage, "<B>%s</B><P>\n"
 		   "<FORM ACTION=\"%s\" NAME=\"detailForm\" METHOD=GET>\n"
 		   "<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=%u>"
 		   "<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=\"%s\">"
 		   "Session Name: "
-		   "<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\">\n",
+		   "<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\" "
+		   "onChange=\"%s\" onKeypress=\"%s\">\n",
 		   sessionName, hgSessionName(),
 		   cartSessionVarName(cart), cartSessionId(cart), hgsOldSessionName, sessionName,
-		   hgsNewSessionName, 32, sessionName);
+		   hgsNewSessionName, 32, sessionName, highlightAccChanges, highlightAccChanges);
     dyStringPrintf(dyMessage,
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" VALUE=\"load\">"
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" VALUE=\"delete\">"
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"accept changes\">"
+		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" VALUE=\"use\">"
+		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" VALUE=\"delete\" "
+		   "onClick=\"" confirmDeleteFormat "\">"
+		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT ID=\"%s\" NAME=\"%s\" VALUE=\"accept changes\">"
+		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"cancel\"> "
 		   "<BR>\n",
 		   hgsLoadPrefix, encSessionName, hgsDeletePrefix, encSessionName,
-		   hgsDoSessionChange);
+		   sessionName, hgsDoSessionChange, hgsDoSessionChange, hgsCancel);
     dyStringPrintf(dyMessage,
-		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on>\n"
+		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
+		   "onChange=\"%s\" onClick=\"%s\">\n"
 		   "<INPUT TYPE=HIDDEN NAME=\"%s%s%s\" VALUE=1><BR>\n",
-		   hgsSharePrefix, encSessionName, (shared ? "CHECKED" : ""),
+		   hgsSharePrefix, encSessionName, (shared ? " CHECKED" : ""),
+		   highlightAccChanges, highlightAccChanges,
 		   cgiBooleanShadowPrefix(), hgsSharePrefix, encSessionName);
     dyStringPrintf(dyMessage,
 		   "Created on %s.<BR>\n", firstUse);
@@ -1002,8 +1016,10 @@ if ((row = sqlNextRow(sr)) != NULL)
 	description = replaceChars(description, "\\__ESC__", "\\");
 	dyStringPrintf(dyMessage,
 		       "Description:<BR>\n"
-		       "<TEXTAREA NAME=\"%s\" ROWS=%d COLS=%d>%s</TEXTAREA><BR>\n",
-		       hgsNewSessionDescription, 10, 80, description);
+		       "<TEXTAREA NAME=\"%s\" ROWS=%d COLS=%d "
+		       "onChange=\"%s\" onKeypress=\"%s\">%s</TEXTAREA><BR>\n",
+		       hgsNewSessionDescription, 5, 80,
+		       highlightAccChanges, highlightAccChanges, description);
 	}
     dyStringAppend(dyMessage, "</FORM>\n");
     sqlFreeResult(&sr);
@@ -1012,6 +1028,19 @@ else
     errAbort("doSessionDetail: got no results from query:<BR>\n%s\n", query);
 
 return dyStringCannibalize(&dyMessage);
+}
+
+void renamePrefixedCartVar(char *prefix, char *oldName, char *newName)
+/* If cart has prefix+oldName, replace it with prefix+newName = submit. */
+{
+char varName[256];
+safef(varName, sizeof(varName), "%s%s", prefix, oldName);
+if (cartVarExists(cart, varName))
+    {
+    cartRemove(cart, varName);
+    safef(varName, sizeof(varName), "%s%s", prefix, newName);
+    cartSetString(cart, varName, "submit");
+    }
 }
 
 char *doSessionChange(char *oldSessionName)
@@ -1063,6 +1092,8 @@ if (isNotEmpty(newName) && !sameString(sessionName, newName))
 		   sessionName, newName);
     sessionName = newName;
     encSessionName = encNewName;
+    renamePrefixedCartVar(hgsLoadPrefix, encOldSessionName, encNewName);
+    renamePrefixedCartVar(hgsDeletePrefix, encOldSessionName, encNewName);
     }
 char varName[256];
 safef(varName, sizeof(varName), hgsSharePrefix "%s", encOldSessionName);
@@ -1079,6 +1110,10 @@ if (cgiBooleanDefined(varName))
 		       htmlEncode(sessionName), (newShared ? "shared" : "unshared"));
 
 	}
+    cartRemove(cart, varName);
+    char shadowVarName[512];
+    safef(shadowVarName, sizeof(shadowVarName), "%s%s", cgiBooleanShadowPrefix(), varName);
+    cartRemove(cart, shadowVarName);
     }
 if (gotSettings)
     {
@@ -1137,7 +1172,7 @@ struct hash *oldVars = hashNew(10);
  * take care of headers instead of using a fixed cart*Shell(). */
 cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
-if (cartVarExists(cart, hgsDoMainPage))
+if (cartVarExists(cart, hgsDoMainPage) || cartVarExists(cart, hgsCancel))
     doMainPage(NULL);
 else if (cartVarExists(cart, hgsDoNewSession))
     {
@@ -1171,6 +1206,19 @@ else if (cartVarExists(cart, hgsDoSessionDetail))
 else if (cartVarExists(cart, hgsDoSessionChange))
     {
     char *message = doSessionChange(cartString(cart, hgsOldSessionName));
+    doMainPage(message);
+    }
+else if (cartVarExists(cart, hgsOldSessionName))
+    {
+    char *message1 = doSessionChange(cartString(cart, hgsOldSessionName));
+    char *message2 = doUpdateSessions();
+    char *message = message2;
+    if (!startsWith("No changes to session", message1))
+	{
+	size_t len = (sizeof message1[0]) * (strlen(message1) + strlen(message2) + 1);
+	message = needMem(len);
+	safef(message, len, "%s%s", message1, message2);
+	}
     doMainPage(message);
     }
 else

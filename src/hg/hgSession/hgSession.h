@@ -34,6 +34,8 @@
 #define hgsOldSessionName hgSessionPrefix "oldSessionName"
 #define hgsDoSessionChange hgSessionPrefix "doSessionChange"
 
+#define hgsCancel hgSessionPrefix "cancel"
+
 #define hgsDo hgSessionPrefix "do"
 
 #endif /* HGSESSION_H */
