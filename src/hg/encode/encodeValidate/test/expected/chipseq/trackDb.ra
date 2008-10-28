@@ -1,43 +1,48 @@
-	track	wgEncodeHudsonalphaChipSeqSignalSknmcFoxp2
+	track		wgEncodeHudsonalphaChipSeqSignalSknmcFoxp2
 	subTrack	wgEncodeHudsonalphaChipSeq
 	shortLabel	FOXP2 SK-N-MC Sig
 	longLabel	ENCODE HudsonAlpha ChIP-Seq Signal (FOXP2 in SK-N-MC cells)
 	subGroups	view=Signal factor=FOXP2 cellType=SK-N-MC
-	type	wig WGENCODEHUDSONALPHACHIPSEQSIGNALSKNMCFOXP2_MINMAXRANGE
-	dateSubmitted	2008-10-8 11:27:4
+	type		wig WGENCODEHUDSONALPHACHIPSEQSIGNALSKNMCFOXP2_MINMAXRANGE
+	dateSubmitted	2008-10-28 10:16:33
+	dateReleased	2009-07-28
 	priority	12
 	noInherit	on
-	visibility	full
+	configurable	on
 	spanList	1
-	windowingFunction	mean
+	windowingFunction mean
 	maxHeightPixels	100:16:16
-	cell	SK-N-MC
+	cell		SK-N-MC
 	antibody	FOXP2
 
-	track	wgEncodeHudsonalphaChipSeqPeaksSknmcFoxp2
+	track		wgEncodeHudsonalphaChipSeqPeaksSknmcFoxp2
 	subTrack	wgEncodeHudsonalphaChipSeq
 	shortLabel	FOXP2 SK-N-MC Pk
 	longLabel	ENCODE HudsonAlpha ChIP-Seq Peaks (FOXP2 in SK-N-MC cells)
 	subGroups	view=Peaks factor=FOXP2 cellType=SK-N-MC
-	type	narrowPeak
-	dateSubmitted	2008-10-8 11:27:4
+	type		narrowPeak
+	dateSubmitted	2008-10-28 10:16:33
+	dateReleased	2009-07-28
 	priority	11
 	noInherit	on
-	cell	SK-N-MC
+	configurable	on
+	cell		SK-N-MC
 	antibody	FOXP2
 
-	track	wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
+	track		wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
 	subTrack	wgEncodeHudsonalphaChipSeq
 	shortLabel	FOXP2 SK-N-MC Raw 1
 	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (FOXP2 in SK-N-MC cells)
 	subGroups	view=RawSignal factor=FOXP2 cellType=SK-N-MC
-	type	wig WGENCODEHUDSONALPHACHIPSEQRAWSIGNALREP1SKNMCFOXP2_MINMAXRANGE
-	dateSubmitted	2008-10-8 11:27:4
+	type		wig WGENCODEHUDSONALPHACHIPSEQRAWSIGNALREP1SKNMCFOXP2_MINMAXRANGE
+	dateSubmitted	2008-10-28 10:16:33
+	dateReleased	2009-07-28
 	priority	13
 	noInherit	on
+	configurable	off
 	spanList	1
-	windowingFunction	mean
+	windowingFunction mean
 	maxHeightPixels	100:16:16
-	cell	SK-N-MC
+	cell		SK-N-MC
 	antibody	FOXP2
 
