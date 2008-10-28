@@ -1,6 +1,6 @@
 /* splixMake - Create splat index file from DNA sequences.  For structure of splix file see
  * comment in splix.h on splixFileHeader. */
-/* This file is copyright 2008 Jim Kent.  All rights reserved. */
+/* Copyright 2008 Jim Kent all rights reserved. */
 
 #include "common.h"
 #include "linefile.h"
@@ -11,7 +11,7 @@
 #include "dnaseq.h"
 #include "splix.h"
 
-static char const rcsid[] = "$Id: splixMake.c,v 1.2 2008/10/25 17:08:51 kent Exp $";
+static char const rcsid[] = "$Id: splixMake.c,v 1.3 2008/10/28 23:34:51 kent Exp $";
 
 #define splixMaxStackSize 4096
 

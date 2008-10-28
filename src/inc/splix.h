@@ -1,5 +1,7 @@
 /* splix - splat (speedy local alignment tool)  index.  Index that helps map short reads
  * quickly to the genome. */
+/* This file is copyright 2008 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #ifndef SPLIX_H
 #define SPLIX_H

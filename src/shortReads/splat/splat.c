@@ -1,5 +1,5 @@
 /* splat - Speedy Local Alignment Tool. */
-/* This file is copyright 2008 Jim Kent.  All rights reserved. */
+/* Copyright 2008 Jim Kent all rights reserved. */
 
 /* Currently the program is just partially implemented.  The indexing part seems to work.
  * Need still to extend alignments of index hits (where we expect only about 1 in 200
@@ -111,7 +111,7 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.27 2008/10/28 03:45:00 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.28 2008/10/28 23:34:50 kent Exp $";
 
 char *version = "31";	/* Program version number. */
 

@@ -1,4 +1,7 @@
 /* splatCheck1 - Check that all the test set really is being covered.. */
+ * This file is copyright 2008 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -6,7 +9,7 @@
 #include "sqlNum.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: splatCheck1.c,v 1.1 2008/10/24 22:42:37 kent Exp $";
+static char const rcsid[] = "$Id: splatCheck1.c,v 1.2 2008/10/28 23:34:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

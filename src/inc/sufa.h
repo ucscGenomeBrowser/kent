@@ -1,5 +1,7 @@
 /* sufa - suffix array for genome.  Use sufaMake utility to create one of these, and
  * the routines here to access it.  See comment by sufaFileHeader for file format. */
+/* This file is copyright 2008 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #ifndef SUFA_H
 #define SUFA_H

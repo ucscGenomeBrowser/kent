@@ -8,7 +8,7 @@ HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../in
 
 ifeq (${HG_WARN},)
   ifeq (darwin,$(findstring darwin,${OSTYPE}))
-      HG_WARN = -Wall -Werror -Wno-unused-variable -Wno-long-double
+      HG_WARN = -Wall -Wno-unused-variable -Wno-long-double
       HG_WARN_UNINIT=
   else
     ifeq (solaris,$(findstring solaris,${OSTYPE}))

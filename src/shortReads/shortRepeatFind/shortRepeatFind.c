@@ -1,4 +1,9 @@
-/* shortRepeatFind - Figure out short pieces of DNA that happen a lot in genome.. */
+/* shortRepeatFind - Figure out short pieces of DNA that happen a lot in genome. 
+ * The current implementation scans the splix index.  Scanning a suffix array
+ * index is better though, so I recomment you use sufaRepeatFind instead. */
+/* This file is copyright 2008 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -7,7 +12,7 @@
 #include "dnaLoad.h"
 #include "splix.h"
 
-static char const rcsid[] = "$Id: shortRepeatFind.c,v 1.1 2008/10/23 20:04:20 kent Exp $";
+static char const rcsid[] = "$Id: shortRepeatFind.c,v 1.2 2008/10/28 23:34:50 kent Exp $";
 
 int readSize = 25;
 int minCount = 5;

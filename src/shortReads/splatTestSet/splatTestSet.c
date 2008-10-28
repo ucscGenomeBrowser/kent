@@ -1,4 +1,7 @@
 /* splatTestSet - Create test set for splat. */
+/* This file is copyright 2008 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,7 +11,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: splatTestSet.c,v 1.2 2008/10/18 23:48:44 kent Exp $";
+static char const rcsid[] = "$Id: splatTestSet.c,v 1.3 2008/10/28 23:34:51 kent Exp $";
 
 /* Command line variables. */
 int chromCount = 1;

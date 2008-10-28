@@ -1,4 +1,6 @@
 /* over Handle processing over-occurring 25-mers. */
+/* Copyright 2008 Jim Kent all rights reserved. */
+
 #include "common.h"
 #include "linefile.h"
 #include "localmem.h"

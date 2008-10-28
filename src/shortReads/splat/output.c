@@ -1,4 +1,5 @@
 /* output - output alignments to files in various formats. */
+/* Copyright 2008 Jim Kent all rights reserved. */
 
 #include "common.h"
 #include "dystring.h"

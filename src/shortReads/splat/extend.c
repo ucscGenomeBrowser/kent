@@ -1,5 +1,6 @@
 /* extend - extend tag matches to full sequence matches, making use of
  * banded Smith-Waterman. */
+/* Copyright 2008 Jim Kent all rights reserved. */
 
 #include "common.h"
 #include "chain.h"

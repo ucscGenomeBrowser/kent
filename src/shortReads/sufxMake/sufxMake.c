@@ -1,4 +1,6 @@
 /* sufxMake - Make a suffix array file out of input DNA sequences.. */
+/* Copyright Jim Kent 2008 all rights reserved. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,7 +10,7 @@
 #include "dnaseq.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxMake.c,v 1.9 2008/10/28 03:45:00 kent Exp $";
+static char const rcsid[] = "$Id: sufxMake.c,v 1.10 2008/10/28 23:34:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

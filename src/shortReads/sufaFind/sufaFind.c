@@ -1,4 +1,7 @@
-/* sufaFind - Find sequence by searching suffix array.. */
+/* sufaFind - Find sequence by searching suffix array with a standard binary search.
+ * Theoretically allowes mismatches, and did at one point, but is broken now. */
+/* Copyright 2008 Jim Kent all rights reserved. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,7 +11,7 @@
 #include "dnaLoad.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaFind.c,v 1.7 2008/10/28 03:45:00 kent Exp $";
+static char const rcsid[] = "$Id: sufaFind.c,v 1.8 2008/10/28 23:34:51 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;

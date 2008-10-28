@@ -1,4 +1,6 @@
-/* sufaMake - Make a suffix array file out of input DNA sequences.. */
+/* sufaMake - Make a suffix array file out of input DNA sequences. */
+/* Copyright 2008 Jim Kent all rights reserved. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -9,7 +11,7 @@
 #include "dnaseq.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaMake.c,v 1.4 2008/10/26 20:10:18 kent Exp $";
+static char const rcsid[] = "$Id: sufaMake.c,v 1.5 2008/10/28 23:34:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
