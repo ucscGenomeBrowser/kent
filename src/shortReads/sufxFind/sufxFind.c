@@ -8,7 +8,7 @@
 #include "dnaLoad.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxFind.c,v 1.5 2008/10/28 03:45:00 kent Exp $";
+static char const rcsid[] = "$Id: sufxFind.c,v 1.6 2008/10/28 03:49:57 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -58,7 +58,6 @@ void sufxFindExact(DNA *tDna, bits32 *suffixArray, bits32 *traverseArray, int ar
 bits32 arrayPos = 0;
 bits32 searchEnd = arraySize;
 
-uglyf("%s - suffixFindExact\n", qDna);
 /* We step through each base of the query */
 int qDnaOffset;
 for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
@@ -68,27 +67,18 @@ for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
     DNA qBase = qDna[qDnaOffset];
     DNA tBase = tDna[tDnaOffset+qDnaOffset];
 
-    uglyf("  qDnaOffset=%d q/t=%c/%c arrayPos=%u searchEnd=%u.\n", qDnaOffset, qBase, tBase, arrayPos, searchEnd);
-
     /* Skip to next matching base. */
     if (qBase != tBase)
         {
 	for (;;)
 	    {
-	    uglyf("    skipping %d to next base ", nextOffset);
 	    if ((arrayPos += nextOffset) >= searchEnd)
-		{
-		uglyf("ran off end (arrayPos=%u searchEnd %u)\n", arrayPos, searchEnd);
 		return;   /* No luck! */
-		}
 	    nextOffset = traverseArray[arrayPos];
 	    tDnaOffset = suffixArray[arrayPos];
 	    tBase = tDna[tDnaOffset+qDnaOffset];
-	    uglyf("at %u: %c\n", arrayPos, tBase);
 	    if (qBase == tBase)
-	        {
 		break;
-		}
 	    } 
 	}
     searchEnd = arrayPos + nextOffset;  
@@ -106,7 +96,7 @@ for (qDnaOffset=0; qDnaOffset<qSize; ++qDnaOffset)
 	return;
 	}
     if (nextOffset <= 1)
-	return;  /* No match */
+	return;  /* No match since prefix of next position doesn't match us. */
     ++arrayPos;
     }
 }
