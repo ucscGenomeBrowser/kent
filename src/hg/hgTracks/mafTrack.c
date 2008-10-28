@@ -15,7 +15,7 @@
 #include "mafTrack.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.62 2008/09/03 19:19:03 markd Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.63 2008/10/28 13:44:38 braney Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -634,7 +634,7 @@ for (full = mafList; full != NULL; full = full->next)
 		/* double gap -> display double line ala chain tracks */
 		drawMafChain(hvg, x1, yOff, w, height, TRUE);
 		}
-            else if (( mc->leftStatus == MAF_CONTIG_STATUS)  || ( mc->rightStatus == MAF_CONTIG_STATUS ))
+            else if (isContigOrTandem( mc->leftStatus)  || isContigOrTandem( mc->rightStatus))
 		{
 		/* single gap -> display single line ala chain tracks */
 		drawMafChain(hvg, x1, yOff, w, height, FALSE);
