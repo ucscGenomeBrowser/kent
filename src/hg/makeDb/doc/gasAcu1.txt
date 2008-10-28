@@ -2673,3 +2673,7 @@ see doc/builds.txt for specific details.
     #	189793612 bases of 446627861 (42.495%) in intersection
 
 ############################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute gasAcu1 (1.0) (NCBI project 13579, AANH01000000)" where name="gasAcu1";' hgcentraltest
+###########################################################################

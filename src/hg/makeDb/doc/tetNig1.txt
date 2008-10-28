@@ -3140,3 +3140,7 @@ chainOne $(path1)
     #	139059872 bases of 342403326 (40.613%) in intersection
 
 ##########################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Genoscope and Broad Institute V7 (NCBI project 12350, CAAE01000000)" where name="tetNig1";' hgcentraltest
+###########################################################################
