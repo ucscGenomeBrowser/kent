@@ -16,17 +16,17 @@ struct sufxFileHeader
  *                     and after (to make some end conditions easier).  Padded if need be with
  *                     additional zeroes to 4 base boundary.
  *    suffix array -   32 bits for each indexed base. Alphabetical offsets into DNA
- *    traverse array - Also 33 bits per indexed base. Helper info to traverse array like a tree. */
+ *    traverse array - Also 32 bits per indexed base. Helper info to traverse array like a tree. */
     {
-    bits32 magic;	/* Always SUFX_MAGIC */
+    bits32 magic;	 /* Always SUFX_MAGIC */
     bits16 majorVersion; /* This version changes when backward compatibility breaks. */
     bits16 minorVersion; /* This version changes whenever a feature is added. */
-    bits64 size;	/* Total size to memmap, including header. */
-    bits32 chromCount;	/* Total count of chromosomes/contigs in file. */
+    bits64 size;	 /* Total size to memmap, including header. */
+    bits32 chromCount;	 /* Total count of chromosomes/contigs in file. */
     bits32 chromNamesSize;	/* Size of names of all contigs (including zeroes at end),
     				   padded to 4 byte boundary as needed). */
-    bits64 arraySize;	/* Total number of bases actually indexed (non-N, unmasked). */
-    bits64 dnaDiskSize;	/* Size of DNA on disk with zero separators. Padded to 4 byte boundary  */
+    bits64 arraySize;	 /* Total number of bases actually indexed (non-N, unmasked). */
+    bits64 dnaDiskSize;	 /* Size of DNA on disk with zero separators. Padded to 4 byte boundary  */
     bits64 reserved[11];/* All zeroes for now. */
     };
 
