@@ -1,8 +1,11 @@
-files	view	cell	accession	softwareVersion	replicate
-dnase.bed	Peak	K562	GEO123	peakCaller_1.0_or_whatever	
-dnase.wig	Signal	K562	GEO123	peakCaller_1.0_or_whatever	
-rep1.wig	RawSignal	K562	GEO123	peakCaller_1.0_or_whatever	1
-rep2.wig	RawSignal	K562	GEO123	peakCaller_1.0_or_whatever	2
-bckgrd3.wig	RawSignal	K562	GEO123	peakCaller_1.0_or_whatever	
-tagalign.bed	Alignments	K562	GEO123	ELAN_2.0_or_whatever	
-dnase.fastq	download	K562	GEO123		
+files	view	cell	replicate	accession	labVersion
+hotspot1.bed	Hotspots	K562		GEO123	peakCaller_1.0_or_whatever
+hotspot2.bed	Hotspots	HepG2		GEO123	peakCaller_1.0_or_whatever
+peak1.bed	Peaks	K562		GEO123	peakCaller_1.0_or_whatever
+peak2.bed	Peaks	HepG2		GEO123	peakCaller_1.0_or_whatever
+raw1rep1.wig	RawSignal	K562	1	GEO123	peakCaller_1.0_or_whatever
+raw2rep1.wig	RawSignal	HepG2	1	GEO123	peakCaller_1.0_or_whatever
+tagalign1rep1.bed	Alignments	K562	1	GEO123	ELAN_2.0_or_whatever
+tagalign2rep1.bed	Alignments	HepG2	1	GEO123	ELAN_2.0_or_whatever
+dnase1rep1.fastq	download	K562	1	GEO123	
+dnase2rep1.fastq	download	HepG2	1	GEO123	
