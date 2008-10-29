@@ -1,6 +1,7 @@
 /* sufx - suffix array with traversal extension for genome.  Use sufxMake utility to 
  * create one of these files , and the routines here to access it.  See comment by 
- * sufxFileHeader for file format. */
+ * sufxFileHeader for file format. See src/shortReads/sufxMake/sufx.doc as well for
+ * an explanation of the data structures, particularly the traverse array. */
 /* This file is copyright 2008 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
@@ -41,7 +42,7 @@ struct sufx
     bits32 *chromOffsets;  /* Offset of each chromosome's DNA */
     char *allDna;	/* All DNA from each contig/chromosome with zero separators. */
     bits32 *array;	/* Alphabetized offsets into allDna. */
-    bits32 *traverse;	/* Offsets to position in array where current letter changes. */
+    bits32 *traverse;	/* Offsets to position in array where current prefix changes. */
     };
 
 struct sufx *sufxRead(char *fileName, boolean memoryMap);
