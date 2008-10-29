@@ -6,7 +6,7 @@
 #include "genbank.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: genbank.c,v 1.12 2008/10/22 19:23:54 markd Exp $";
+static char const rcsid[] = "$Id: genbank.c,v 1.13 2008/10/29 23:38:54 markd Exp $";
 
 static char *JOIN_PREFIX = "join(";
 static char *COMPLEMENT_PREFIX = "complement(";
@@ -166,7 +166,7 @@ boolean genbankIsRefSeqCodingMRnaAcc(char *acc)
  * accession. */
 {
 /* NM_012345 */
-return (strlen(acc) > 4) && (acc[0] == 'N') && (acc[0] == 'M') && (acc[2] == '_');
+return (strlen(acc) > 4) && (acc[0] == 'N') && (acc[1] == 'M') && (acc[2] == '_');
 }
 
 boolean genbankIsRefSeqNonCodingMRnaAcc(char *acc)
