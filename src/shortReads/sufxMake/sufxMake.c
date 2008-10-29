@@ -10,7 +10,7 @@
 #include "dnaseq.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxMake.c,v 1.11 2008/10/29 01:54:41 kent Exp $";
+static char const rcsid[] = "$Id: sufxMake.c,v 1.12 2008/10/29 02:01:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -256,14 +256,14 @@ if (slotFirstIx != 0)
 return basesIndexed;
 }
 
-void sufxFillInTraverseArray(char *dna, bits32 *suffixArray, int arraySize, bits32 *traverseArray)
+void sufxFillInTraverseArray(char *dna, bits32 *suffixArray, bits64 arraySize, bits32 *traverseArray)
 /* Fill in the bits that will help us traverse the array as if it were a tree. */
 {
 int depth = 0;
 int stackSize = 4*1024;
 int *stack;
 AllocArray(stack, stackSize);
-int i;
+bits64 i;
 for (i=0; i<arraySize; ++i)
     {
     char *curDna = dna + suffixArray[i];
