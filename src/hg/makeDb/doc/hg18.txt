@@ -22856,7 +22856,7 @@ TMPDIR=/scratch/tmp
     #	real    622m17.655s
 
 #############################################################################
-# BLASTZ/CHAIN/NET vicPac1 (WORKING - 2008-10-28 - Hiram)
+# BLASTZ/CHAIN/NET vicPac1 (DONE - 2008-10-28,29 - Hiram)
     screen #	use screen to control this multi-day job
     mkdir /hive/data/genomes/hg18/bed/blastzVicPac1.2008-10-28
     cd /hive/data/genomes/hg18/bed/blastzVicPac1.2008-10-28
@@ -22895,6 +22895,7 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/hg18/bed/blastzVicPac1.2008-10-28
 
     time nice -n +19 doRecipBest.pl hg18 vicPac1 > rbest.log 2>&1 &
+    #	real    380m17.963s
 
 #############################################################################
 # BLASTZ/CHAIN/NET ochPri2 (DONE braney 2008-07-30)
