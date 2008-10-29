@@ -10,7 +10,7 @@
 #include "dnaLoad.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxFind.c,v 1.10 2008/10/28 23:24:39 kent Exp $";
+static char const rcsid[] = "$Id: sufxFind.c,v 1.11 2008/10/29 01:59:02 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -224,6 +224,7 @@ void sufxFind(char *sufxFile, char *queryFile, char *outputFile)
 /* sufxFind - Find sequence by searching suffix array.. */
 {
 struct sufx *sufx = sufxRead(sufxFile, mmap);
+uglyTime("Loaded %s", sufxFile);
 struct dnaLoad *qLoad = dnaLoadOpen(queryFile);
 int arraySize = sufx->header->arraySize;
 FILE *f = mustOpen(outputFile, "w");
@@ -265,6 +266,7 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     ++queryCount;
     dnaSeqFree(&qSeq);
     }
+uglyTime("Alignment");
 verbose(1, "%d queries. %d hits (%5.2f%%). %d misses (%5.2f%%).\n", queryCount, 
     hitCount, 100.0*hitCount/queryCount, missCount, 100.0*missCount/queryCount);
 carefulClose(&f);
@@ -273,6 +275,7 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+uglyTime(NULL);
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
