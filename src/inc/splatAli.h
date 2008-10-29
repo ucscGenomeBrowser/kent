@@ -10,7 +10,7 @@
 #define SPLATALI_NUM_COLS 7
 
 struct splatAli
-/* A parsed out splt format alignment. */
+/* A parsed out splat format alignment. */
     {
     struct splatAli *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome mapped to */

@@ -1,5 +1,5 @@
 table splatAli
-"A parsed out splt format alignment."
+"A parsed out splat format alignment."
     (
     string chrom;	"Chromosome mapped to"
     int chromStart;	"Start position in chromosome (zero based)"
