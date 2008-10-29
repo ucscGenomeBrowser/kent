@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.58 2008/10/28 13:48:15 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.59 2008/10/29 14:05:22 braney Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -127,8 +127,6 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 	if (mc->text && (mc->rightStatus == MAF_INSERT_STATUS) && (masterMc->start + masterMc->size < winEnd))
 	    haveInserts = TRUE;
 
-printf("species %s:%d-%d %c %d %c %d\n",mc->src,mc->start,mc->start+mc->size,
-    mc->leftStatus, mc->leftLen,mc->rightStatus, mc->rightLen);
 #ifdef REVERSESTRAND
 	/* complement bases if hgTracks is on reverse strand */
 	if (mc->size && cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
