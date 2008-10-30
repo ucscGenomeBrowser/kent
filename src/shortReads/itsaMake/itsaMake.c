@@ -11,7 +11,7 @@
 #include "itsa.h"
 
 
-static char const rcsid[] = "$Id: itsaMake.c,v 1.1 2008/10/30 04:34:09 kent Exp $";
+static char const rcsid[] = "$Id: itsaMake.c,v 1.2 2008/10/30 04:54:22 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -476,7 +476,7 @@ bits32 *index13;
 AllocArray(index13, itsaSlotCount);
 bits32 *offsetArray = needHugeMem(totalDnaSize * sizeof(bits32));
 bits32 *listArray = needHugeZeroedMem(totalDnaSize * sizeof(bits32));;
-uglyTime("Allocated buffers %lld bytes total\n", 
+uglyTime("Allocated buffers %lld bytes total", 
 	9LL*totalDnaSize + itsaSlotCount*sizeof(bits32));
 
 /* Where normally we'd keep some sort of structure with a next element to form a list
