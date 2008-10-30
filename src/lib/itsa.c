@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include <sys/mman.h>
+#include "net.h"
 #include "itsa.h"
 
 static void *pointerOffset(void *pt, bits64 offset)
@@ -26,7 +27,7 @@ int fd = open(fileName, O_RDONLY);
 if (fd < 0)
     errnoAbort("Can't open %s", fileName);
 struct itsaFileHeader h;
-if (read(fd, &h, sizeof(h)) < sizeof(h))
+if (netReadAll(fd, &h, sizeof(h)) < sizeof(h))
     errnoAbort("Couldn't read header of file %s", fileName);
 if (h.magic != ITSA_MAGIC)
     errAbort("%s does not seem to be a itsa file.", fileName);

@@ -6,6 +6,7 @@
 #include "common.h"
 #include <sys/mman.h>
 #include "sufx.h"
+#include "net.h"
 
 static void *pointerOffset(void *pt, bits64 offset)
 /* A little wrapper around pointer arithmetic in terms of bytes. */
@@ -51,7 +52,7 @@ else
 	errnoAbort("Couldn't seek back to start of sufx file %s.  "
 		   "Splix files must be random access files, not pipes and the like"
 		   , fileName);
-    if (read(fd, header, h.size) < h.size)
+    if (netReadAll(fd, header, h.size) < h.size)
         errnoAbort("Couldn't read all of sufx file %s.", fileName);
     }
 
