@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.60 2008/05/14 21:03:24 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.61 2008/10/30 03:13:08 kent Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -171,7 +171,7 @@ if (!plumberInstalled)
     }
 }
 
-int netReadAll(int sd, void *vBuf, size_t size)
+size_t netReadAll(int sd, void *vBuf, size_t size)
 /* Read given number of bytes into buffer.
  * Don't give up on first read! */
 {

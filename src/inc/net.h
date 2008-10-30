@@ -47,7 +47,7 @@ FILE *netFileFromSocket(int socket);
 void netBlockBrokenPipes();
 /* Make it so a broken pipe doesn't kill us. */
 
-int netReadAll(int sd, void *vBuf, size_t size);
+size_t netReadAll(int sd, void *vBuf, size_t size);
 /* Read given number of bytes into buffer.
  * Don't give up on first read! */
 
