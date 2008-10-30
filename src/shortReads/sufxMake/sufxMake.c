@@ -10,7 +10,7 @@
 #include "dnaseq.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxMake.c,v 1.12 2008/10/29 02:01:00 kent Exp $";
+static char const rcsid[] = "$Id: sufxMake.c,v 1.13 2008/10/30 04:29:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -270,7 +270,7 @@ for (i=0; i<arraySize; ++i)
     int d;
     for (d = 0; d<depth; ++d)
         {
-	int prevIx = stack[d];
+	bits32 prevIx = stack[d];
 	char *prevDna = dna + suffixArray[prevIx];
 	if (curDna[d] != prevDna[d])
 	    {
@@ -293,7 +293,7 @@ for (i=0; i<arraySize; ++i)
 int stackIx;
 for (stackIx=0; stackIx < depth; ++stackIx)
     {
-    int prevIx = stack[stackIx];
+    bits32 prevIx = stack[stackIx];
     traverseArray[prevIx] = arraySize - prevIx;
     }
 }

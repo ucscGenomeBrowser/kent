@@ -10,7 +10,7 @@
 #include "dnaLoad.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxFind.c,v 1.11 2008/10/29 01:59:02 kent Exp $";
+static char const rcsid[] = "$Id: sufxFind.c,v 1.12 2008/10/30 04:29:02 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -38,12 +38,12 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-int sufxCountIdenticalPrefix(DNA *dna, int tileSize, bits32 *array, int arraySize)
+int sufxCountIdenticalPrefix(DNA *dna, int tileSize, bits32 *array, bits32 arraySize)
 /* Count up number of places in a row in array, where the referenced DNA is the
  * same up to tileSize bases.  You do this a lot since generally the suffix tree
  * search just gives you the first place in the array that matches. */
 {
-int i;
+bits32 i;
 DNA *first = dna + array[0];
 for (i=1; i<arraySize; ++i)
     {
@@ -53,7 +53,7 @@ for (i=1; i<arraySize; ++i)
 return i;
 }
 
-void finalSearch(DNA *tDna, bits32 *suffixArray, int searchStart, int searchEnd, 
+void finalSearch(DNA *tDna, bits32 *suffixArray, bits32 searchStart, bits32 searchEnd, 
 	DNA *qDna, int qSize, int alreadyMatched, struct slInt **pHitList)
 /* Our search has been narrowed to be between searchStart and searchEnd.
  * We know within the interval a prefix of size alreadyMatched is already
@@ -63,7 +63,7 @@ void finalSearch(DNA *tDna, bits32 *suffixArray, int searchStart, int searchEnd,
  * more letter already. */
 {
 // uglyf("finalSearch. q=%s, searchStart=%d, searchEnd=%d, alreadyMatched=%d\n", qDna, searchStart, searchEnd, alreadyMatched);
-int searchIx;
+bits32 searchIx;
 for (searchIx = searchStart; searchIx < searchEnd; ++searchIx)
     {
     int diff = memcmp(qDna+alreadyMatched, tDna+alreadyMatched+suffixArray[searchIx], 
@@ -101,7 +101,7 @@ for (; cursor<qSize; ++cursor)
     /* Skip to next matching base. */
     if (qBase != tBase)
         {
-	int nextPos = arrayPos;
+	bits32 nextPos = arrayPos;
 	// uglyf("mismatch\n");
 	for (;;)
 	    {
@@ -145,7 +145,7 @@ finalSearch(tDna, suffixArray, searchStart, searchEnd, qDna, qSize,
 	qSize - (arrayPos-searchStart-1), pHitList);  // TODO - check -1
 }
 
-void sufxFindExact(DNA *tDna, bits32 *suffixArray, bits32 *traverseArray, int arraySize,
+void sufxFindExact(DNA *tDna, bits32 *suffixArray, bits32 *traverseArray, bits32 arraySize,
 	DNA *qDna, int qSize, struct slInt **pHitList)
 /* Search for all exact matches to qDna in suffix array.  Return them in pHitList. */
 {
@@ -201,7 +201,7 @@ if (subCount == maxSubs)
 bits32 arrayPos, nextArrayPos;
 for (arrayPos = sliceStart; arrayPos < sliceEnd; arrayPos = nextArrayPos)
     {
-    int subsliceSize = traverseArray[arrayPos];
+    bits32 subsliceSize = traverseArray[arrayPos];
     nextArrayPos = arrayPos + subsliceSize;
     int extraSub = (qDna[cursor] == tDna[suffixArray[arrayPos]+cursor] ? 0 : 1);
     if (mostlySame(qDna+cursor+1, tDna+suffixArray[arrayPos]+cursor+1,
@@ -226,7 +226,7 @@ void sufxFind(char *sufxFile, char *queryFile, char *outputFile)
 struct sufx *sufx = sufxRead(sufxFile, mmap);
 uglyTime("Loaded %s", sufxFile);
 struct dnaLoad *qLoad = dnaLoadOpen(queryFile);
-int arraySize = sufx->header->arraySize;
+bits32 arraySize = sufx->header->arraySize;
 FILE *f = mustOpen(outputFile, "w");
 struct dnaSeq *qSeq;
 int queryCount = 0, hitCount = 0, missCount=0;
@@ -244,10 +244,10 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
 	++missCount;
     for (hit = hitList; hit != NULL; hit = hit->next)
 	{
-	int hitIx = hit->val;
-	int count = sufxCountIdenticalPrefix(sufx->allDna, qSeq->size, 
+	bits32 hitIx = hit->val;
+	bits32 count = sufxCountIdenticalPrefix(sufx->allDna, qSeq->size, 
 		sufx->array + hitIx, arraySize - hitIx);
-	int i;
+	bits32 i;
 	if (count > maxRepeat)
 	    {
 	    }
