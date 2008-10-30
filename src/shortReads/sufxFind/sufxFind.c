@@ -10,7 +10,7 @@
 #include "dnaLoad.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxFind.c,v 1.12 2008/10/30 04:29:02 kent Exp $";
+static char const rcsid[] = "$Id: sufxFind.c,v 1.13 2008/10/30 05:07:10 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -25,7 +25,7 @@ errAbort(
   "   sufxFind target.sufx query.fa output\n"
   "options:\n"
   "   -maxRepeat=N  - maximum number of alignments to output on one query sequence. Default %d\n"
-  "   -maxMismatch - maximum number of mismatches allowed.  Default %d. NOT IMPLEMENTED\n"
+  "   -maxMismatch - maximum number of mismatches allowed.  Default %d.\n"
   "   -mmap - Use memory mapping. Faster just a few reads, but much slower for many reads\n"
   , maxRepeat, maxMismatch
   );
@@ -166,14 +166,15 @@ for (i=0; i<size; ++i)
 return TRUE;
 }
 
-void sufxFindOneOff(char *tDna, bits32 *suffixArray, bits32 *traverseArray, 
+void sufxFuzzyFind(char *tDna, bits32 *suffixArray, bits32 *traverseArray, 
 	bits32 sliceStart, bits32 sliceEnd, int cursor,
 	char *qDna, int qSize, int subCount, int maxSubs, 
 	struct slInt **pHitList)
+/* Search suffix array for matches up to maxSubs different.  Recursive routine. */
 {
 #ifdef DEBUG
     {
-    uglyf("sufxFindOneOff cursor=%d qSize=%d subCount=%d maxSubs=%d sliceStart=%d sliceEnd=%d\n", cursor, qSize, subCount, maxSubs, sliceStart, sliceEnd);
+    uglyf("sufxFuzzyFind cursor=%d qSize=%d subCount=%d maxSubs=%d sliceStart=%d sliceEnd=%d\n", cursor, qSize, subCount, maxSubs, sliceStart, sliceEnd);
     char *q = cloneStringZ(qDna, qSize);
     tolowers(q);
     q[cursor] = toupper(q[cursor]);
@@ -212,7 +213,7 @@ for (arrayPos = sliceStart; arrayPos < sliceEnd; arrayPos = nextArrayPos)
 	}
     if (subsliceSize > 1)
         {
-	sufxFindOneOff(tDna, suffixArray, traverseArray, 
+	sufxFuzzyFind(tDna, suffixArray, traverseArray, 
 		arrayPos+1, nextArrayPos, cursor+1, qDna, qSize, subCount+extraSub,
 		maxSubs, pHitList);
 	}
@@ -236,7 +237,7 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     struct slInt *hit, *hitList = NULL;
     verbose(2, "Processing %s\n", qSeq->name);
     toUpperN(qSeq->dna, qSeq->size);
-    sufxFindOneOff(sufx->allDna, sufx->array, sufx->traverse, 
+    sufxFuzzyFind(sufx->allDna, sufx->array, sufx->traverse, 
     	0, arraySize, 0, qSeq->dna, qSeq->size, 0, maxMismatch, &hitList);
     if (hitList != NULL)
 	++hitCount;
