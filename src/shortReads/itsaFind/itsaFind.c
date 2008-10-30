@@ -6,9 +6,10 @@
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "dnaLoad.h"
+#include "verbose.h"
 #include "itsa.h"
 
-static char const rcsid[] = "$Id: itsaFind.c,v 1.1 2008/10/30 04:34:09 kent Exp $";
+static char const rcsid[] = "$Id: itsaFind.c,v 1.2 2008/10/30 16:11:41 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -36,9 +37,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-/* Table to convert letters to ITSA_A, ITSA_C, ITSA_G, ITSA_T . */
-int baseToVal[256];
-
 void finalSearch(DNA *tDna, bits32 *suffixArray, bits32 searchStart, bits32 searchEnd, 
 	DNA *qDna, int qSize, int alreadyMatched, struct slInt **pHitList)
 /* Our search has been narrowed to be between searchStart and searchEnd.
@@ -48,20 +46,16 @@ void finalSearch(DNA *tDna, bits32 *suffixArray, bits32 searchStart, bits32 sear
  * of the array seach with each successive item in the window we've checked one
  * more letter already. */
 {
-// uglyf("finalSearch. q=%s, searchStart=%d, searchEnd=%d, alreadyMatched=%d\n", qDna, searchStart, searchEnd, alreadyMatched);
 bits32 searchIx;
 for (searchIx = searchStart; searchIx < searchEnd; ++searchIx)
     {
     int diff = memcmp(qDna+alreadyMatched, tDna+alreadyMatched+suffixArray[searchIx], 
     	qSize-alreadyMatched);
     /* Todo - break without a hit when diff is the wrong sign. */
-//      uglyf("q "); mustWrite(uglyOut, qDna+alreadyMatched, qSize-alreadyMatched); uglyf("\n");
-//      uglyf("t "); mustWrite(uglyOut, tDna+suffixArray[searchIx]+alreadyMatched, qSize-alreadyMatched); uglyf("\n");
     if (diff == 0)
         {
 	struct slInt *hit = slIntNew(searchIx);
 	slAddHead(pHitList, hit);
-// 	uglyf("Hit!\n");
 	break;
 	}
     ++alreadyMatched;
@@ -76,19 +70,16 @@ void itsaFindWithin(DNA *tDna, bits32 *suffixArray, bits32 *traverseArray,
 {
 bits32 arrayPos = searchStart;
 /* We step through each base of the query */
-// uglyf("qDna=%s\n", qDna);
 for (; cursor<qSize; ++cursor)
     {
     bits32 nextOffset = traverseArray[arrayPos];
     DNA qBase = qDna[cursor];
     DNA tBase = tDna[suffixArray[arrayPos]+cursor];
-    // uglyf("cursor=%d, qBase/tBase=%c/%c, arrayPos=%d\n", cursor, qBase, tBase, arrayPos);
 
     /* Skip to next matching base. */
     if (qBase != tBase)
         {
 	bits32 nextPos = arrayPos;
-	// uglyf("mismatch\n");
 	for (;;)
 	    {
 	    if ((nextPos += nextOffset) >= searchEnd)
@@ -99,10 +90,8 @@ for (; cursor<qSize; ++cursor)
 		}
 	    nextOffset = traverseArray[nextPos];
 	    tBase = tDna[suffixArray[nextPos]+cursor];
-	    // uglyf("  %c at %d\n", tBase, nextPos);
 	    if (qBase == tBase)
 		{
-		// uglyf("   match %c at %d\n", tBase, nextPos);
 		searchStart = arrayPos = nextPos;
 		break;
 		}
@@ -131,31 +120,28 @@ finalSearch(tDna, suffixArray, searchStart, searchEnd, qDna, qSize,
 	qSize - (arrayPos-searchStart-1), pHitList);  // TODO - check -1
 }
 
-int itsaDnaToBinary(DNA *dna, int size)
-/* Convert dna to binary representation. */
+void itsaFindGivenSlot(int slot, struct itsa *itsa, DNA *qDna, int qSize, int remainingMismatches,
+	struct slInt **pHitList)
+/* Given a slot (a 13-mer converted to binary that is the first 13 bases of qDna possibly with
+ * an induced mutation or two) check out appropriate part of suffix array for hits. */
 {
-int i;
-int val = 0;
-for (i=0; i<size; ++i)
+bits32 searchStart = itsa->index13[slot];
+if (searchStart != 0)
     {
-    val <<= 2;
-    val += baseToVal[(int)dna[i]];
+    searchStart -= 1;	/* Pesky thing to keep 0 meaning no data in slot. */
+    // uglyf("Going to look within.  Cursor slot %d\n", itsa->cursors13[slot]);
+    itsaFindWithin(itsa->allDna, itsa->array, itsa->traverse, qDna, qSize,
+    	itsa->cursors13[slot], searchStart, searchStart + itsa->traverse[searchStart], pHitList);
     }
-return val;
 }
 
 void itsaExactFind(struct itsa *itsa, DNA *qDna, int qSize, struct slInt **pHitList)
 /* Search indexed traversable suffix tree for exact matches. */
 {
 int slot = itsaDnaToBinary(qDna, 13);
-bits32 searchStart = itsa->index13[slot];
-if (searchStart != 0)
-    {
-    searchStart -= 1;	/* Pesky thing to keep 0 meaning no data in slot. */
-    itsaFindWithin(itsa->allDna, itsa->array, itsa->traverse, qDna, qSize,
-    	itsa->cursors13[slot], searchStart, searchStart + itsa->traverse[searchStart], pHitList);
-    }
+itsaFindGivenSlot(slot, itsa, qDna, qSize, 0, pHitList);
 }
+
 
 int itsaCountIdenticalPrefix(DNA *dna, int prefixSize, bits32 *array, bits32 arraySize)
 /* Count up number of places in a row in array, where the referenced DNA is the
@@ -179,15 +165,34 @@ void itsaFuzzyFind(struct itsa *itsa,
 	char *qDna, int qSize, int subCount, int maxSubs, 
 	struct slInt **pHitList)
 {
-/* For now, actually do exact match */
-itsaExactFind(itsa, qDna, qSize, pHitList);
+// uglyf("itsaFuzzyFind %s\n", qDna);
+int slot = itsaDnaToBinary(qDna, 13);
+itsaFindGivenSlot(slot, itsa, qDna, qSize, maxMismatch, pHitList);
+if (maxMismatch > 0)
+    {
+    int toggle1 = 1, toggle2 = 2;
+    int baseIx;
+    int mismatchLeft = maxMismatch-1;
+    for (baseIx = 0; baseIx<13; ++baseIx)
+	{
+	slot ^= toggle1;
+	itsaFindGivenSlot(slot, itsa, qDna, qSize, mismatchLeft, pHitList);
+	slot ^= toggle2;
+	itsaFindGivenSlot(slot, itsa, qDna, qSize, mismatchLeft, pHitList);
+	slot ^= toggle1;
+	itsaFindGivenSlot(slot, itsa, qDna, qSize, mismatchLeft, pHitList);
+	slot ^= toggle2;	/* Restore base to unmutated form. */
+	toggle1 <<= 2;	/* Move on to next base. */
+	toggle2 <<= 2;	/* Move on to next base. */
+	}
+    }
 }
 
 void itsaFind(char *itsaFile, char *queryFile, char *outputFile)
 /* itsaFind - Find sequence by searching indexed traversable suffix array.. */
 {
 struct itsa *itsa = itsaRead(itsaFile, mmap);
-uglyTime("Loaded %s", itsaFile);
+verboseTime(1, "Loaded %s", itsaFile);
 struct dnaLoad *qLoad = dnaLoadOpen(queryFile);
 bits32 arraySize = itsa->header->arraySize;
 FILE *f = mustOpen(outputFile, "w");
@@ -228,7 +233,7 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     ++queryCount;
     dnaSeqFree(&qSeq);
     }
-uglyTime("Alignment");
+verboseTime(1, "Alignment");
 verbose(1, "%d queries. %d hits (%5.2f%%). %d misses (%5.2f%%).\n", queryCount, 
     hitCount, 100.0*hitCount/queryCount, missCount, 100.0*missCount/queryCount);
 carefulClose(&f);
@@ -244,12 +249,7 @@ maxRepeat = optionInt("maxRepeat", maxRepeat);
 maxMismatch = optionInt("maxMismatch", maxMismatch);
 mmap = optionExists("mmap");
 dnaUtilOpen();
-
-/* Fill out baseToVal array - A is already done. */
-baseToVal[(int)'C'] = baseToVal[(int)'c'] = ITSA_C;
-baseToVal[(int)'G'] = baseToVal[(int)'g'] = ITSA_G;
-baseToVal[(int)'T'] = baseToVal[(int)'t'] = ITSA_T;
-
+itsaBaseToValInit();
 itsaFind(argv[1], argv[2], argv[3]);
 return 0;
 }
