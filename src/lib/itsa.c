@@ -16,25 +16,6 @@ char *s = pt;
 return s + offset;
 }
 
-static UBYTE *makeCursors13()
-/* Figure out the cursor positions that correspond to the index slots */
-{
-UBYTE *cursors = needLargeMem(itsaSlotCount);
-int cursorPos = 13 - 1;
-int stepSize = 1;
-int i,j;
-for (i=0; i<13; ++i)
-    {
-    for (j=0; j<itsaSlotCount; j += stepSize)
-        {
-	cursors[j] = cursorPos;
-	}
-    stepSize <<= 2;
-    cursorPos -= 1;
-    }
-return cursors;
-}
-
 struct itsa *itsaRead(char *fileName, boolean memoryMap)
 /* Read in a itsa from a file.  Does this via memory mapping if you like,
  * which will be faster typically for about 100 reads, and slower for more
@@ -156,7 +137,7 @@ int itsaOffsetToChromIx(struct itsa *itsa, bits32 tOffset)
 {
 int i;
 int chromCount = itsa->header->chromCount;
-/* TODO - convert to binary search - will need to sort chromosome list though.... */
+/* TODO - convert to binary search - at least chrom list is sorted in itsas. */
 for (i=0; i<chromCount; ++i)
     {
     int chromStart = itsa->chromOffsets[i];
