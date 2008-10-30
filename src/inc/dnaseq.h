@@ -66,5 +66,8 @@ Bits *maskFromUpperCaseSeq(bioSeq *seq);
 struct hash *dnaSeqHash(struct dnaSeq *seqList);
 /* Return hash of sequences keyed by name. */
 
+int dnaSeqCmpName(const void *va, const void *vb);
+/* Compare to sort based on sequence name. */
+
 #endif /* DNASEQ_H */
 
