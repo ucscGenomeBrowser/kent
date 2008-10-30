@@ -54,7 +54,7 @@ else
 	errnoAbort("Couldn't seek back to start of itsa file %s.  "
 		   "Splix files must be random access files, not pipes and the like"
 		   , fileName);
-    if (read(fd, header, h.size) < h.size)
+    if (netReadAll(fd, header, h.size) < h.size)
         errnoAbort("Couldn't read all of itsa file %s.", fileName);
     }
 
