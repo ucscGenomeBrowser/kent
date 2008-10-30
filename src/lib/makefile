@@ -14,7 +14,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     gfNet.o gff.o gfxPoly.o gifLabel.o gifcomp.o \
     gifdecomp.o gifread.o gifwrite.o \
     hash.o histogram.o hmmPfamParse.o hmmstats.o htmlPage.o htmshell.o \
-    intExp.o intValTree.o internet.o \
+    intExp.o intValTree.o internet.o itsa.o \
     jointalign.o jpegSize.o \
     keys.o kxTok.o \
     linefile.o localmem.o log.o \
