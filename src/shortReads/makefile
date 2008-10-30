@@ -1,6 +1,9 @@
 include ../inc/common.mk
 
 all:
+	cd itsaDump && ${MAKE}
+	cd itsaFind && ${MAKE}
+	cd itsaMake && ${MAKE}
 	cd shortRepeatFind && ${MAKE}
 	cd shortRepeatMerge && ${MAKE}
 	cd splat && ${MAKE}
