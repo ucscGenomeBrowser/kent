@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1469 2008/10/22 19:23:55 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1470 2008/10/30 18:00:12 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5556,7 +5556,7 @@ printf("><A HREF=\"%s?%s&db=%s&position=%s",
 if (target == NULL)
     printf(":%d-%d", psl->tStart+1, psl->tEnd);
 printf("\">%s:%d%c%d</A> %dbp %s %s\n",
-       psl->tName, psl->tStart, psl->strand[0], psl->tEnd,
+       psl->tName, psl->tStart+1, psl->strand[0], psl->tEnd,
        productSize, fPrimer, rPrimer);
 
 /* Flip reverse primer to be in same direction and case as sequence, to 
