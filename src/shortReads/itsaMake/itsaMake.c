@@ -8,10 +8,11 @@
 #include "sqlNum.h"
 #include "dnaLoad.h"
 #include "dnaseq.h"
+#include "verbose.h"
 #include "itsa.h"
 
 
-static char const rcsid[] = "$Id: itsaMake.c,v 1.2 2008/10/30 04:54:22 kent Exp $";
+static char const rcsid[] = "$Id: itsaMake.c,v 1.3 2008/10/30 06:54:15 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,16 +24,10 @@ errAbort(
   "where each input is either a fasta file, a nib file, a 2bit file, or a text file\n"
   "containing the names of the above file types one per line and output.itsa is the\n"
   "output file containing the suffix array in a binary format.\n"
+  "options:\n"
+  "   verbose=N - Control verbosity. Default 1 is normal.  0 is silent."
   );
 }
-
-/* Hex conversions to assist debugging:
- * 0=AA 1=AC 2=AG 3=AT 4=CA 5=CC 6=CG 7=CT
- * 8=GA 9=GC A=GG B=GT C=TA D=TC E=TG F=TT
- */
-
-/* Table to convert letters to one of the above values. */
-int baseToVal[256];
 
 static struct optionSpec options[] = {
    {NULL, 0},
@@ -48,20 +43,20 @@ struct chromInfo
     };
 
 
-bits64 roundUpTo4(bits64 x)
+static bits64 roundUpTo4(bits64 x)
 /* Round x up to next multiple of 4 */
 {
 return (x+3) & (~(3));
 }
 
-void zeroPad(FILE *f, int count)
+static void zeroPad(FILE *f, int count)
 /* Write zeroes to file. */
 {
 while (--count >= 0)
     fputc(0, f);
 }
 
-void indexChromPass1(struct chromInfo *chrom, DNA *allDna,  
+static void indexChromPass1(struct chromInfo *chrom, DNA *allDna,  
 	bits32 *offsetArray, bits32 *listArray, bits32 *index13)
 /* Create a itsaOneBaseListy for each base in seq, and hang it in appropriate slot
  * in listyIndex. */
@@ -81,7 +76,7 @@ for (baseIx=0; baseIx<12; ++baseIx)
     if (baseLetter == 'N')
         maskTil = baseIx + 13;
     thirteen <<= 2;
-    thirteen += baseToVal[baseLetter];
+    thirteen += itsaBaseToVal[baseLetter];
     }
 
 verbose(2, "   start main loop\n");
@@ -92,7 +87,7 @@ for (baseIx = 12; baseIx < seqSize; ++baseIx)
     int baseLetter = dna[baseIx];
     if (baseLetter == 'N')
         maskTil = baseIx + 13;
-    thirteen = (thirteen << 2) + baseToVal[baseLetter];
+    thirteen = (thirteen << 2) + itsaBaseToVal[baseLetter];
     thirteen &= 0x3FFFFFF;
     if (baseIx >= maskTil)
 	{
@@ -126,7 +121,7 @@ for (i=0; i<4; ++i)
     if (baseLetter == 'N')
         return -1;
     packedDna <<= 2;
-    packedDna += baseToVal[baseLetter];
+    packedDna += itsaBaseToVal[baseLetter];
     }
 return packedDna;
 }
@@ -233,7 +228,7 @@ if (slotFirstIx != 0)
 return basesIndexed;
 }
 
-void itsaFillInTraverseArray(char *dna, bits32 *suffixArray, bits32 arraySize, 
+static void itsaFillInTraverseArray(char *dna, bits32 *suffixArray, bits32 arraySize, 
 	bits32 *traverseArray, UBYTE *cursorArray)
 /* Fill in the bits that will help us traverse the array as if it were a tree. */
 {
@@ -267,7 +262,15 @@ for (i=0; i<arraySize; ++i)
     stack[depth] = i;
     cursorArray[i] = depth;  // May overflow. That's ok. We just care about indexed ones which are < 13.
     depth += 1;
+    if ((i&0xFFFFF)==0xFFFFF)
+        {
+	verboseDot();
+	if ((i&0x3FFFFFF)==0)
+	    verbose(1, "traversed %lld%%\n", 100LL*i/arraySize);
+	}
     }
+verbose(1, "finished traversal\n");
+
 /* Do final clear out of stack */
 int stackIx;
 for (stackIx=0; stackIx < depth; ++stackIx)
@@ -277,7 +280,7 @@ for (stackIx=0; stackIx < depth; ++stackIx)
     }
 }
 
-void itsaWriteMerged(struct chromInfo *chromList, DNA *allDna,
+static void itsaWriteMerged(struct chromInfo *chromList, DNA *allDna,
 	bits32 *offsetArray, bits32 *listArray, bits32 *index13, char *output)
 /* Write out a file that contains a single splix that is the merger of
  * all of the individual splixes in list.   As a side effect will replace
@@ -324,7 +327,7 @@ zeroPad(f, chromSizesSizePad);
 /* Write out chromosome DNA and zeros before, between, and after. */
 mustWrite(f, allDna, dnaDiskSize);
 zeroPad(f, header->dnaDiskSize - dnaDiskSize);
-uglyTime("Wrote %lld bases of DNA including zero padding", header->dnaDiskSize);
+verboseTime(1, "Wrote %lld bases of DNA including zero padding", header->dnaDiskSize);
 
 /* Calculate and write suffix array. Convert index13 to index of array as opposed to index
  * of sequence. */
@@ -342,10 +345,15 @@ for (slotIx=0; slotIx < slotCount; ++slotIx)
     else
         index13[slotIx] = 0;
     arraySize += slotSize;
-    if ((slotIx % 5000000 == 0) && slotIx != 0)
-        verbose(1, "Wrote slot %d of %d\n", slotIx, slotCount);
+    if ((slotIx % 200000 == 0) && slotIx != 0)
+	{
+	verboseDot();
+	if (slotIx % 10000000 == 0)
+	    verbose(1, "fine sort bucket %d of %d\n", slotIx, slotCount);
+	}
     }
-uglyTime("Wrote %lld suffix array positions", arraySize);
+verbose(1, "fine sort bucket %d of %d\n", slotCount, slotCount);
+verboseTime(1, "Wrote %lld suffix array positions", arraySize);
 
 /* Now we're done with the offsetArray and listArray buffers, so use them for the
  * next phase. */
@@ -357,21 +365,21 @@ listArray = NULL;	/* Help make some errors more obvious */
 /* Read the suffix array back from the file. */
 fseeko(f, suffixArrayFileOffset, SEEK_SET);
 mustRead(f, suffixArray, arraySize*sizeof(bits32));
-uglyTime("Read suffix array back in");
+verboseTime(1, "Read suffix array back in");
 
 /* Calculate traverse array and cursor arrays */
 memset(traverseArray, 0, arraySize*sizeof(bits32));
 UBYTE *cursorArray = needHugeMem(arraySize);
 itsaFillInTraverseArray(allDna, suffixArray, arraySize, traverseArray, cursorArray);
-uglyTime("Filled in traverseArray");
+verboseTime(1, "Filled in traverseArray");
 
 /* Write out traverse array. */
 mustWrite(f, traverseArray, arraySize*sizeof(bits32));
-uglyTime("Wrote out traverseArray");
+verboseTime(1, "Wrote out traverseArray");
 
 /* Write out 13-mer index. */
 mustWrite(f, index13, itsaSlotCount*sizeof(bits32));
-uglyTime("Wrote out index13");
+verboseTime(1, "Wrote out index13");
 
 /* Write out bits of cursor array corresponding to index. */
 for (slotIx=0; slotIx<itsaSlotCount; ++slotIx)
@@ -382,7 +390,7 @@ for (slotIx=0; slotIx<itsaSlotCount; ++slotIx)
     else
        fputc(cursorArray[indexPos-1], f);
     }
-uglyTime("Wrote out cursors13");
+verboseTime(1, "Wrote out cursors13");
 
 /* Update a few fields in header, and go back and write it out again with
  * the correct magic number to indicate it's complete. */
@@ -403,25 +411,13 @@ carefulClose(&f);
 verbose(1, "Completed %s is %lld bytes\n", output, header->size);
 }
 
-int dnaSeqCmpName(const void *va, const void *vb)
-/* Compare to sort based on sequence name. */
-{
-const struct dnaSeq *a = *((struct dnaSeq **)va);
-const struct dnaSeq *b = *((struct dnaSeq **)vb);
-return strcmp(a->name, b->name);
-}
-
 void itsaMake(int inCount, char *inputs[], char *output)
 /* itsaMake - Make a suffix array file out of input DNA sequences.. */
 {
-uglyTime(NULL);
+verboseTime(1, NULL);
 bits64 maxGenomeSize = 1024LL*1024*1024*4;
 
-/* Fill out baseToVal array - A is already done. */
-baseToVal[(int)'C'] = baseToVal[(int)'c'] = ITSA_C;
-baseToVal[(int)'G'] = baseToVal[(int)'g'] = ITSA_G;
-baseToVal[(int)'T'] = baseToVal[(int)'t'] = ITSA_T;
-
+itsaBaseToValInit();
 
 /* Load all DNA, make sure names are unique, and alphabetize by name. */
 struct dnaSeq *seqList = NULL, *seq;
@@ -445,7 +441,7 @@ for (inputIx=0; inputIx<inCount; ++inputIx)
     dnaLoadClose(&dl);
     }
 slSort(&seqList, dnaSeqCmpName);
-uglyTime("Loaded %lld bases in %d sequences", totalDnaSize, slCount(seqList));
+verboseTime(1, "Loaded %lld bases in %d sequences", totalDnaSize, slCount(seqList));
 
 /* Allocate big buffer for all DNA. */
 DNA *allDna = globalAllDna = needHugeMem(totalDnaSize);
@@ -476,7 +472,7 @@ bits32 *index13;
 AllocArray(index13, itsaSlotCount);
 bits32 *offsetArray = needHugeMem(totalDnaSize * sizeof(bits32));
 bits32 *listArray = needHugeZeroedMem(totalDnaSize * sizeof(bits32));;
-uglyTime("Allocated buffers %lld bytes total", 
+verboseTime(1, "Allocated buffers %lld bytes total", 
 	9LL*totalDnaSize + itsaSlotCount*sizeof(bits32));
 
 /* Where normally we'd keep some sort of structure with a next element to form a list
@@ -501,7 +497,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     indexChromPass1(chrom, allDna, offsetArray, listArray, index13);
     verbose(2, "  Done first pass index\n");
     }
-uglyTime("Done big bucket sort");
+verboseTime(1, "Done big bucket sort");
 slReverse(&chromList);
 itsaWriteMerged(chromList, allDna, offsetArray, listArray, index13, output);
 }
