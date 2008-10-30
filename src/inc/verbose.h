@@ -16,6 +16,10 @@ __attribute__((format(printf, 2, 3)))
 void verboseVa(int verbosity, char *format, va_list args);
 /* Log with at given verbosity vprintf formatted args. */
 
+void verboseTime(int verbosity, char *label, ...);
+/* Print label and how long it's been since last call.  Call with
+ * a NULL label to initialize.  Verbosity level 1 */
+
 void verboseDot();
 /* Write I'm alive dot (at verbosity level 1) */
 

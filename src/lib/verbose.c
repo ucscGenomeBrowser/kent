@@ -2,9 +2,10 @@
  * current verbosity level.  These messages go to stderr. */
 
 #include "common.h"
+#include "portable.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: verbose.c,v 1.5 2005/10/17 15:46:41 markd Exp $";
+static char const rcsid[] = "$Id: verbose.c,v 1.6 2008/10/30 09:27:23 kent Exp $";
 
 static int logVerbosity = 1;	/* The level of log verbosity.  0 is silent. */
 static FILE *logFile;	/* File to log to. */
@@ -35,6 +36,24 @@ va_start(args, format);
 verboseVa(verbosity, format, args);
 va_end(args);
 }
+
+void verboseTime(int verbosity, char *label, ...)
+/* Print label and how long it's been since last call.  Call with
+ * a NULL label to initialize. */
+{
+static long lastTime = 0;
+long time = clock1000();
+va_list args;
+va_start(args, label);
+if (label != NULL)
+    {
+    verboseVa(verbosity, label, args);
+    verbose(verbosity, ": %ld millis\n", time - lastTime);
+    }
+lastTime = time;
+va_end(args);
+}
+
 
 boolean verboseDotsEnabled()
 /* check if outputting of happy dots are enabled.  They will be enabled if the
