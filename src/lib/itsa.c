@@ -10,6 +10,37 @@
 #include "net.h"
 #include "itsa.h"
 
+/* Hex conversions to assist debugging:
+ * 0=AA 1=AC 2=AG 3=AT 4=CA 5=CC 6=CG 7=CT
+ * 8=GA 9=GC A=GG B=GT C=TA D=TC E=TG F=TT
+ */
+
+/* Table to convert letters to one of the above values. */
+int itsaBaseToVal[256];
+
+void itsaBaseToValInit()
+/* Initialize itsaBaseToVal array */
+{
+/* Fill out itsaBaseToVal array - A is already done. */
+itsaBaseToVal[(int)'C'] = itsaBaseToVal[(int)'c'] = ITSA_C;
+itsaBaseToVal[(int)'G'] = itsaBaseToVal[(int)'g'] = ITSA_G;
+itsaBaseToVal[(int)'T'] = itsaBaseToVal[(int)'t'] = ITSA_T;
+}
+
+int itsaDnaToBinary(char *dna, int size)
+/* Convert dna to binary representation. */
+{
+int i;
+int val = 0;
+for (i=0; i<size; ++i)
+    {
+    val <<= 2;
+    val += itsaBaseToVal[(int)dna[i]];
+    }
+return val;
+}
+
+
 static void *pointerOffset(void *pt, bits64 offset)
 /* A little wrapper around pointer arithmetic in terms of bytes. */
 {

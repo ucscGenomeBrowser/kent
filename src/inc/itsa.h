@@ -78,5 +78,13 @@ int itsaOffsetToChromIx(struct itsa *itsa, bits32 tOffset);
 #define ITSA_G 2
 #define ITSA_T 3
 
+/* Table to convert letters to one of the above values. Call itsaBaseToValInit() before using. */
+extern int itsaBaseToVal[256];
+
+void itsaBaseToValInit();
+/* Initialize itsaBaseToVal array */
+
+int itsaDnaToBinary(char *dna, int size);
+/* Convert dna to binary representation. Call itsaBaseToValInit() first. */
 
 #endif /* ITSA_H */
