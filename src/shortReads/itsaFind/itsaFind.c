@@ -9,10 +9,10 @@
 #include "verbose.h"
 #include "itsa.h"
 
-static char const rcsid[] = "$Id: itsaFind.c,v 1.2 2008/10/30 16:11:41 kent Exp $";
+static char const rcsid[] = "$Id: itsaFind.c,v 1.3 2008/10/31 05:44:21 kent Exp $";
 
 boolean mmap;
-int maxMismatch = 2;
+int maxMismatch = 0;
 int maxRepeat = 10;
 
 void usage()
@@ -25,7 +25,7 @@ errAbort(
   "options:\n"
   "   -maxRepeat=N  - maximum number of alignments to output on one query sequence. Default %d\n"
   "   -mmap - Use memory mapping. Faster just a few reads, but much slower for many reads\n"
-  "   -maxMismatch - maximum number of mismatches allowed.  Default %d\n"
+  "   -maxMismatch - maximum number of mismatches allowed.  Default %d. NOT IMPLEMENTED\n"
   , maxRepeat, maxMismatch
   );
 }
@@ -68,6 +68,7 @@ void itsaFindWithin(DNA *tDna, bits32 *suffixArray, bits32 *traverseArray,
 /* Search the part of the suffix array between searchStart and searchEnd for a match.
  * The searchStart/searchEnd and cursor position must agree. */
 {
+uglyf("itsaFindWithin(qDna=%s cursor=%d searchStart=%d searchEnd=%d\n", qDna, cursor, searchStart, searchEnd);
 bits32 arrayPos = searchStart;
 /* We step through each base of the query */
 for (; cursor<qSize; ++cursor)
@@ -129,7 +130,7 @@ bits32 searchStart = itsa->index13[slot];
 if (searchStart != 0)
     {
     searchStart -= 1;	/* Pesky thing to keep 0 meaning no data in slot. */
-    // uglyf("Going to look within.  Cursor slot %d\n", itsa->cursors13[slot]);
+    uglyf("Going to look within.  Cursor slot %d\n", itsa->cursors13[slot]);
     itsaFindWithin(itsa->allDna, itsa->array, itsa->traverse, qDna, qSize,
     	itsa->cursors13[slot], searchStart, searchStart + itsa->traverse[searchStart], pHitList);
     }
@@ -162,30 +163,55 @@ return i;
 
 void itsaFuzzyFind(struct itsa *itsa,
 	bits32 sliceStart, bits32 sliceEnd, int cursor,
-	char *qDna, int qSize, int subCount, int maxSubs, 
+	char *qDna, int qSize, int subsLeft, 
 	struct slInt **pHitList)
 {
 // uglyf("itsaFuzzyFind %s\n", qDna);
 int slot = itsaDnaToBinary(qDna, 13);
+char *qMutant = cloneStringZ(qDna, qSize);
 itsaFindGivenSlot(slot, itsa, qDna, qSize, maxMismatch, pHitList);
-if (maxMismatch > 0)
+if (subsLeft > 0)
     {
-    int toggle1 = 1, toggle2 = 2;
+    subsLeft -= 1;
+    int mutantSlot = slot;
+    static int mutMasks[13] = {0x3FFFFFC, 0x3FFFFF3, 0x3FFFFCF, 0x3FFFF3F, 0x3FFFCFF, 0x3FFF3FF,
+                             0x3FFCFFF, 0x3FF3FFF, 0x3FCFFFF, 0x3F3FFFF, 0x3CFFFFF, 0x33FFFFF,
+			     0x0FFFFFF, };
+    int toggle1 = 1;
     int baseIx;
-    int mismatchLeft = maxMismatch-1;
     for (baseIx = 0; baseIx<13; ++baseIx)
 	{
-	slot ^= toggle1;
-	itsaFindGivenSlot(slot, itsa, qDna, qSize, mismatchLeft, pHitList);
-	slot ^= toggle2;
-	itsaFindGivenSlot(slot, itsa, qDna, qSize, mismatchLeft, pHitList);
-	slot ^= toggle1;
-	itsaFindGivenSlot(slot, itsa, qDna, qSize, mismatchLeft, pHitList);
-	slot ^= toggle2;	/* Restore base to unmutated form. */
+	int baseOffset = 12-baseIx;
+	DNA qOrig = qDna[baseOffset];
+	mutantSlot = slot & mutMasks[baseIx];	/* A */
+	if (qOrig != 'A')
+	    {
+	    qMutant[baseOffset] = 'A';
+	    itsaFindGivenSlot(mutantSlot, itsa, qMutant, qSize, subsLeft, pHitList);
+	    }
+	mutantSlot += toggle1;
+	if (qOrig != 'C')
+	    {
+	    qMutant[baseOffset] = 'C';
+	    itsaFindGivenSlot(mutantSlot, itsa, qMutant, qSize, subsLeft, pHitList);
+	    }
+	mutantSlot += toggle1;
+	if (qOrig != 'G')
+	    {
+	    qMutant[baseOffset] = 'G';
+	    itsaFindGivenSlot(mutantSlot, itsa, qMutant, qSize, subsLeft, pHitList);
+	    }
+	mutantSlot += toggle1;
+	if (qOrig != 'T')
+	    {
+	    qMutant[baseOffset] = 'T';
+	    itsaFindGivenSlot(mutantSlot, itsa, qMutant, qSize, subsLeft, pHitList);
+	    }
+	qMutant[baseOffset] = qOrig;
 	toggle1 <<= 2;	/* Move on to next base. */
-	toggle2 <<= 2;	/* Move on to next base. */
 	}
     }
+freeMem(qMutant);
 }
 
 void itsaFind(char *itsaFile, char *queryFile, char *outputFile)
@@ -204,7 +230,7 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     struct slInt *hit, *hitList = NULL;
     verbose(2, "Processing %s\n", qSeq->name);
     toUpperN(qSeq->dna, qSeq->size);
-    itsaFuzzyFind(itsa, 0, arraySize, 0, qSeq->dna, qSeq->size, 0, maxMismatch, &hitList);
+    itsaFuzzyFind(itsa, 0, arraySize, 0, qSeq->dna, qSeq->size, maxMismatch, &hitList);
     if (hitList != NULL)
 	++hitCount;
     else
@@ -248,6 +274,7 @@ if (argc != 4)
 maxRepeat = optionInt("maxRepeat", maxRepeat);
 maxMismatch = optionInt("maxMismatch", maxMismatch);
 mmap = optionExists("mmap");
+verboseTime(1, NULL);
 dnaUtilOpen();
 itsaBaseToValInit();
 itsaFind(argv[1], argv[2], argv[3]);
