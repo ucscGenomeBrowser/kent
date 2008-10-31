@@ -10167,6 +10167,45 @@ BASE=/cluster/data/hg18/bed/blastz.galGal3.2006-05-22
       >& do.log & tail -f do.log
     ln -s blastz.galGal3.2006-05-22 /cluster/data/hg18/bed/blastz.galGal3
 
+    # running syntenicNet 2008-10-30
+    #	had to update the DEF file to correspond to new hive layout
+    cd /cluster/data/hg18/bed/blastz.galGal3.2006-05-22
+    mv DEF DEF.0
+    cat << '_EOF_' > DEF
+# human vs chicken
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human hg18
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_SMSK=/scratch/data/hg18/linSpecRep/notInMouseRat
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chicken galGal3 - single chunk big enough to run entire chrom
+SEQ2_DIR=/scratch/data/galGal3/nib
+SEQ2_LEN=/scratch/data/galGal3/chrom.sizes
+SEQ2_SMSK=/scratch/data/galGal3/linSpecRep
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg18/bed/blastz.galGal3.2006-05-22
+'_EOF_'
+    # << happy emacs 
+
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
+      -bigClusterHub=swarm -smallClusterHub=memk \
+      -continue=syntenicNet -syntenicNet \
+	-chainMinScore=5000 -chainLinearGap=loose > synNet.log 2>&1
+    #	worked OK in about 3 minutes
 
 #########################################################################
 # REGULATORY POTENTIAL (DONE - 2006-06-09 - Hiram)
@@ -13771,6 +13810,22 @@ TMPDIR=/scratch/tmp
     #	real    3m16.810s
     #	112434396 bases of 1741478929 (6.456%) in intersection
 
+    # reciprocal best net mafs for multiz 2008-10-30 - Hiram
+    time nice -n +19 doRecipBest.pl hg18 anoCar1 > rbest.log 2>&1 &
+    #	this failed immediately:
+# cd /cluster/data/hg18/bed/blastz.anoCar1/axtChain
+# chainStitchId hg18.anoCar1.over.chain.gz stdout
+# chainSwap stdin stdout
+# chainSort stdin anoCar1.hg18.tBest.chain
+# t end mismatch -526389042 vs 10481870 line 1920305 of stdin
+
+# Command failed:
+# ssh -x kkr14u04 nice /cluster/data/hg18/bed/blastz.anoCar1/axtChain/doRecipBest.csh
+    #	but, then, when run locally on hgwdev, it proceeded just fine:
+    time nice -n +19 ./doRecipBest.csh > doRecipBest.log 2>&1 &
+    #	real    175m54.202s
+    doRecipBest.pl -continue=download hg18 anoCar1
+
 ##########################################################################
 # UPDATED hg18.knownToVisiGene (DONE galt 2007-02-15)
 #  after making sure hg18.vgAllProbes was up to date (see makeVisiGene.doc)
@@ -14056,6 +14111,10 @@ TMPDIR=/scratch/tmp
       -blastzOutRoot /cluster/bluearc/hg18.ornAna1 \
       >& do.log & tail -f do.log
 
+    cd /cluster/data/hg18/bed/blastz.ornAna1.2007-04-02
+    time nice -n +19 doRecipBest.pl hg18 ornAna1 > rbest.log 2>&1 &
+    #	real    238m22.247s
+    #	worked OK
 
 ########################################################################
 # 28-WAY VERTEBRATE MULTIZ (2007-03-20 kate)
