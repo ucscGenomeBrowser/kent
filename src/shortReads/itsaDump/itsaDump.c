@@ -6,7 +6,9 @@
 #include "dnautil.h"
 #include "itsa.h"
 
-static char const rcsid[] = "$Id: itsaDump.c,v 1.1 2008/10/30 04:34:09 kent Exp $";
+static char const rcsid[] = "$Id: itsaDump.c,v 1.2 2008/10/31 05:45:05 kent Exp $";
+
+int maxSize = 1000000;
 
 void usage()
 /* Explain usage and exit. */
@@ -17,11 +19,14 @@ errAbort(
   "   itsaDump input.itsa output.txt\n"
   "options:\n"
   "   -index=indexOut.txt\n"
+  "   -maxSize=N - maximum lines to write out, default %d\n"
+  , maxSize
   );
 }
 
 static struct optionSpec options[] = {
    {"index", OPTION_STRING},
+   {"maxSize", OPTION_INT},
    {NULL, 0},
 };
 
@@ -58,7 +63,10 @@ void itsaDump(char *input, char *output)
 struct itsa *itsa = itsaRead(input, FALSE);
 FILE *f = mustOpen(output, "w");
 int i;
-for (i=0; i<itsa->header->arraySize; ++i)
+int maxCount = maxSize;
+if (maxCount > itsa->header->arraySize)
+    maxCount = itsa->header->arraySize;
+for (i=0; i<maxCount; ++i)
     {
     fprintf(f, "%4d %4d ", i, itsa->traverse[i]);
     writeZeroSuppress(f, itsa->allDna+itsa->array[i], 30);
@@ -72,7 +80,7 @@ if (index)
     char dna13[14];
     dna13[13] = 0;
     f = mustOpen(index, "w");
-    for (i=0; i<itsaSlotCount; ++i)
+    for (i=0; i<maxCount; ++i)
        {
        binaryToDna13(i, dna13);
        int cursor = itsa->cursors13[i];
@@ -94,6 +102,7 @@ int main(int argc, char *argv[])
 {
 dnaUtilOpen();
 optionInit(&argc, argv, options);
+maxSize = optionInt("maxSize", maxSize);
 if (argc != 3)
     usage();
 itsaDump(argv[1], argv[2]);
