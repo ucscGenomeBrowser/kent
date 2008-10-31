@@ -19,7 +19,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.44 2008/10/28 22:45:37 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.45 2008/10/31 23:55:42 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -661,7 +661,7 @@ if (helList != NULL)
 	    }
 	else
 	    {
-	    customFactoryTestExistence(NULL, hel->val,
+	    customFactoryTestExistence(db, hel->val,
 				       &thisGotLiveCT, &thisGotExpiredCT);
 	    }
 	if (thisGotLiveCT)
