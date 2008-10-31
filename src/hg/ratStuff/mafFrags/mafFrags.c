@@ -11,7 +11,7 @@
 #include "hgMaf.h"
 
 
-static char const rcsid[] = "$Id: mafFrags.c,v 1.8 2008/10/10 06:02:24 markd Exp $";
+static char const rcsid[] = "$Id: mafFrags.c,v 1.9 2008/10/31 00:38:35 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -148,11 +148,7 @@ return bigMaf;
 void moveMeToFirst(struct mafAli *maf, char *myName)
 /* Find component matching myName, and move it to first. */
 {
-struct mafComp *comp;
-for (comp = maf->components; comp != NULL; comp = comp->next)
-    if (sameString(comp->src, myName))
-        break;
-assert(comp != NULL);
+struct mafComp *comp = mafFindCompPrefix(maf, myName, ".");
 slRemoveEl(&maf->components, comp);
 slAddHead(&maf->components, comp);
 }
