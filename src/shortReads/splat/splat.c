@@ -111,10 +111,11 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.28 2008/10/28 23:34:50 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.29 2008/10/31 05:51:59 kent Exp $";
 
 char *version = "31";	/* Program version number. */
 
+/* Command line driven variables. */
 static char *over = NULL;
 static char *out = "splat";
 static int maxDivergence = 5;
@@ -125,6 +126,8 @@ static int maxGap = 1;
 static int maxMismatch = 2;
 static boolean memoryMap = FALSE;
 static int tagSize;
+
+static boolean exactOnly;	/* Set to true if maxGap and maxMismatch are both 0. */
 
 static void usage()
 /* Explain usage and exit. */
@@ -849,9 +852,12 @@ dnaToBinary(qSeq->dna + tagPosition, maxGap,
 
 int secondHalfPos = -12 - maxGap;
 searchExact(splix, firstHalf, after1, 2, 0, 0, 0, 3, lm, pHitList);
-searchExact(splix, firstHalf, after2, 3, 0, 0, 0, 2, lm, pHitList);
-searchExact(splix, secondHalf, before1, 0, secondHalfPos, 0, 0, 1, lm, pHitList);
-searchExact(splix, secondHalf, before2, 1, secondHalfPos, 0, 0, 0, lm, pHitList);
+if (!exactOnly)
+    {
+    searchExact(splix, firstHalf, after2, 3, 0, 0, 0, 2, lm, pHitList);
+    searchExact(splix, secondHalf, before1, 0, secondHalfPos, 0, 0, 1, lm, pHitList);
+    searchExact(splix, secondHalf, before2, 1, secondHalfPos, 0, 0, 0, lm, pHitList);
+    }
 if (maxMismatch > 1)
     {
     searchVary12Exact6(splix, firstHalf, after1, 2, 0, 0, 3, lm, pHitList);
@@ -1128,6 +1134,8 @@ maxRepeat = optionInt("maxRepeat", maxRepeat);
 repeatOutput = optionVal("repeatOutput", NULL);
 maxGap = optionInt("maxGap", maxGap);
 maxMismatch = optionInt("maxMismatch", maxMismatch);
+exactOnly = (maxGap == 0 && maxMismatch == 0);
+uglyf("Exact only = %d\n", exactOnly);
 tagSize = maxGap + splixMinQuerySize;
 memoryMap = optionExists("mmap");
 if (maxGap > 1)
