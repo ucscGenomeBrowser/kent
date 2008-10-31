@@ -68,6 +68,10 @@ boolean hIsGsidServer();
 /* Is this the GSID-customized server? Change for config variable
  * gsid.server=yes */
 
+boolean hIsCgbServer();
+/* Is this a cancer genome browser server? Change for config variable
+ * cgb.server=yes */
+
 void hTableStart();
 /* Output a table with solid borders. */
 
