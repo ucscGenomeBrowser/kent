@@ -697,6 +697,12 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
       > /san/sanvol1/galGal3/linSpecRep/$f:t:r:r.out.spec
     end
 
+    #	rebuild these as they appear to have become lost
+    mkdir /hive/data/staging/data/galGal3/linSpecRep
+    foreach f (*/chr*.fa.out)
+      awk '$10 !~/^(L3|L3a|L3b|MIR|MIR3|MIRb|MIRm)$/ {print;}' $f \
+	> /hive/data/staging/data/galGal3/linSpecRep/$f:t:r:r.out.spec
+    end
 
 #########################################################################
 # SWAP CHAINS/NET HG18 (DONE 5/23/06 angie)
