@@ -112,6 +112,11 @@ class PipelineController < ApplicationController
 
   def load
     @project = Project.find(params[:id])
+    if @project.run_stat 
+      flash[:error] = "Please wait, a background job is still running."
+      redirect_to :action => 'show', :id => @project.id
+      return
+    end
     if @project.status == "validated"
       new_status @project, "load requested"
       unless queue_job "load_background(#{@project.id})"
@@ -124,6 +129,11 @@ class PipelineController < ApplicationController
 
   def validate
     @project = Project.find(params[:id])
+    if @project.run_stat 
+      flash[:error] = "Please wait, a background job is still running."
+      redirect_to :action => 'show', :id => @project.id
+      return
+    end
     if @project.status == "uploaded"
       new_status @project, "validate requested"
       unless queue_job "validate_background(#{@project.id})"
@@ -183,6 +193,12 @@ class PipelineController < ApplicationController
   end
   
   def delete
+    @project = Project.find(params[:id])
+    if @project.run_stat 
+      flash[:error] = "Please wait, a background job is still running."
+      redirect_to :action => 'show', :id => @project.id
+      return
+    end
     projectDir= path_to_project_dir(@project.id)
     msg = ""
     msg += "Submission delete requested."
@@ -200,6 +216,11 @@ class PipelineController < ApplicationController
 
   def upload
     @project = Project.find(params[:id])
+    if @project.run_stat 
+      flash[:error] = "Please wait, a background job is still running."
+      redirect_to :action => 'show', :id => @project.id
+      return
+    end
     @autoUploadLabel = AUTOUPLOADLABEL
     # handle FTP stuff
     @user = current_user
@@ -352,6 +373,11 @@ class PipelineController < ApplicationController
     end
     msg = ""
     @project = Project.find(params[:id])
+    if @project.run_stat 
+      flash[:error] = "Please wait, a background job is still running."
+      redirect_to :action => 'show', :id => @project.id
+      return
+    end
     n = archive.archive_no-1
     c = @project.archives_active[n..n]
     if c == "1"
@@ -381,6 +407,11 @@ class PipelineController < ApplicationController
 
   def reexpand_all
     @project = Project.find(params[:id])
+    if @project.run_stat 
+      flash[:error] = "Please wait, a background job is still running."
+      redirect_to :action => 'show', :id => @project.id
+      return
+    end
     if @project.status != "new"
       new_status @project, "re-expand all requested"
       unless queue_job "reexpand_all_background(#{@project.id})"
