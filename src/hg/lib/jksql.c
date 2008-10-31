@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.120 2008/09/10 01:44:54 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.121 2008/10/31 16:22:53 fanhsu Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -466,6 +466,13 @@ char* sqlGetDatabase(struct sqlConnection *sc)
 {
 assert(!sc->isFree);
 return sc->conn->db;
+}
+
+char* sqlGetHost(struct sqlConnection *sc)
+/* Get the host associated with an connection. */
+{
+assert(!sc->isFree);
+return sc->conn->host;
 }
 
 struct slName *sqlGetAllDatabase(struct sqlConnection *sc)
