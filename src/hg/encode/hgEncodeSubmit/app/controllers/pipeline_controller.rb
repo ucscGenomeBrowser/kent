@@ -185,7 +185,7 @@ class PipelineController < ApplicationController
   def delete
     projectDir= path_to_project_dir(@project.id)
     msg = ""
-    msg += "Project delete requested."
+    msg += "Submission delete requested."
     new_status @project, "delete requested"
     unless queue_job "delete_background(#{@project.id})"
       flash[:error] = "System error - queued_jobs save failed."
