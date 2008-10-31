@@ -78,7 +78,7 @@ void sqlDisconnect(struct sqlConnection **pSc);
 char* sqlGetDatabase(struct sqlConnection *sc);
 /* Get the database associated with an connection. */
 
-char* sqlGetHost(struct sqlConnection *sc)
+char* sqlGetHost(struct sqlConnection *sc);
 /* Get the host associated with an connection. */
 
 struct slName *sqlGetAllDatabase(struct sqlConnection *sc);
