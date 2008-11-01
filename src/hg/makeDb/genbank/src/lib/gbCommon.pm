@@ -17,7 +17,7 @@ use POSIX ":sys_wait_h";  # they have got to be kidding
 BEGIN {
     use Exporter();
     @gbCommon::ISA = qw(Exporter);
-    @gbCommon::EXPORT = qw(getTimeStamp getDateStamp prMsg setTaskName 
+    @gbCommon::EXPORT = qw(getTimeStamp getDateStamp isoTimeStamp prMsg setTaskName 
                            makeTimeFile loadTimeFile
                            beginTask beginTaskNoLock endTask gbError makeDir
                            makeFileDir removeDir renameFile getFileSize getFileModTime
@@ -26,12 +26,13 @@ BEGIN {
                            parseOptEq inList inListRef getTmpDir readFile makeAbs
                            backgroundStart backgroundWait
                            findConf getConf getConfNo getDbConfUndef getDbConf
-                           getDbConfNo splitSpaceList
+                           getDbConfNo getDbConfNoUndef splitSpaceList
                            getHgConf setupHgConf callMysql runMysqlDump runMysql
                            haveMysqlDb haveMysqlTbl listMysqlTbls
-                           getDownloadTimeFile getRelDownloadDir
+                           getRelDownloadDir
                            getSeqDownloadDir getMafDownloadDir
-                           checkOnBuildServer);
+                           getBlatTargetDbDir checkOnBuildServer
+                           unlinkFiles);
     
     # make stdout/stderr always line buffered
     STDOUT->autoflush(1);
@@ -116,6 +117,12 @@ sub getTimeStamp() {
 sub getDateStamp() {
     return strftime("%Y.%m.%d", localtime(time()));
 }
+
+# Generate an ISO time stamp
+sub isoTimeStamp() {
+    return strftime("%Y-%m-%dT%T%z", localtime(time()));
+}
+
 
 # make a time file containing the time in seconds
 sub makeTimeFile($) {
@@ -837,12 +844,24 @@ sub getDbConf($$) {
     return $value;
 }
 
-# get a configuration value for a database, or the default, or an error
-# if neither are specified.  If the values is empty or "no", undef is returned.
+# get a configuration value for a database, or the default, or an error if
+# neither are specified.  If the values is empty or "no", undef is returned.
 sub getDbConfNo($$) {
     my($db, $name) = @_;
     my $value = getDbConf($db, $name);
     if (($value eq "") || ($value eq "no")) {
+        return undef;
+    } else {
+        return $value;
+    }
+}
+
+# get a configuration value for a database, or the default, or undef if
+# neither are specified.  If the values is empty or "no", undef is returned.
+sub getDbConfNoUndef($$) {
+    my($db, $name) = @_;
+    my $value = getDbConfUndef($db, $name);
+    if (!defined($value) || ($value eq "") || ($value eq "no")) {
         return undef;
     } else {
         return $value;
@@ -992,10 +1011,10 @@ sub getMafDownloadDir($$$) {
     return $downloadRootDir . "/" . getRelDownloadDir($db) . "/${tbl}/maf";
 }
 
-# get download time file for a db
-sub getDownloadTimeFile($$) {
-    my($downloadRootDir, $db) = @_;
-    return dirname(getDownloadDir($downloadRootDir, $db)) . "/download.time";
+# the absolute path to the blat target directory in gbdb
+sub getBlatTargetDbDir($) {
+    my($db) = @_;
+    return "data/blatTargetDb/${db}";
 }
 
 # if build.server is server in conf file, check that this is the correct host
@@ -1005,6 +1024,16 @@ sub checkOnBuildServer() {
         if ($gbCommon::hostName ne $bldServer) {
             gbError("this script must be run on configured build.server ("
                     . $bldServer . "), not on " . $gbCommon::hostName);
+        }
+    }
+}
+
+# unlink a list of files, error if one failes
+sub unlinkFiles(@) {
+    my @files = @_;
+    foreach my $file (@files) {
+        if (unlink($file) != 1) {
+            gbError("unlink failed: $file");
         }
     }
 }

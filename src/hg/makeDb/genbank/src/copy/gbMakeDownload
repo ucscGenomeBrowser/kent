@@ -9,7 +9,7 @@
 # to database.
 #
 #
-# $Id: gbMakeDownload,v 1.11 2008/10/14 22:51:10 markd Exp $
+# $Id: gbMakeDownload,v 1.12 2008/11/01 22:04:50 markd Exp $
 #
 use strict;
 use warnings;
@@ -25,18 +25,19 @@ my $usage =
     . "\n"
     . " Options:\n"
     . "   -getDownloadSeqs=days - create sequence gzipped fasta files and save in\n"
-    . "    \$gbRoot/ftp if ftp/\$db/download.time doesn't exists or time is\n"
+    . "    \$gbRoot/data/ftp if ftp/\$db/download.time doesn't exists or time is\n"
     . "    more than \$days days old. If not specified, they will be recreated only\n"
     . "    if they don't exist. Specify 0 to force recreation.\n"
     . "   -downloadRootDir=dir - save download files in this directory, default is:\n"
-    . "       ./ftp\n"
+    . "       ./data/ftp\n"
     . "   -rsyncGbdb - rsync gbdb to local /gbdb\n"
     . "   -verbose=n\n";
 
 my $verboseArg;
 my $getDownloadSeqsDays = undef;
 my $rsyncGbdb = 0;
-my $downloadRootDir = "ftp";
+my $downloadRootDir = "data/ftp";
+my $maxBlatTargetDbs = 3;  # number of targetDbs to keep
 
 # rsync gbdb links to local system
 sub rsyncGbdbLinks() {
@@ -71,6 +72,51 @@ sub fileOutOfDate($) {
     }
 }
 
+# determine if a file is older, return true if it doesn't exist
+sub fileOlder($$) {
+    my($file, $other) = @_;
+    my $ftime = getFileMTime($file);
+    my $otime = getFileMTime($other);
+    if (!defined($ftime) || !defined($otime)) {
+        return 1;
+    } else {
+        return $ftime < $otime;
+    }
+}
+
+# is a partition enabled
+sub isLoadEnabled($$$$) {
+    my($db, $srcDb, $type, $orgCat) = @_;
+    return getDbConfNo($db, "$srcDb.$type.$orgCat.load");
+}
+
+# is a blat targetDb enabled
+sub isBlatTargetDbEnabled($$) {
+    my($db, $srcDb) = @_;
+    return getDbConfNoUndef($db, "$srcDb.mrna.blatTargetDb");
+}
+
+# generate key used to look up sequence fa basename
+sub mkSeqBaseKey($$$) {
+    my($srcDb, $type, $orgCat) = @_;
+    return $srcDb . ".". $type . ".". $orgCat;
+}
+
+# table of key to basename
+my %baseNameTbl;
+$baseNameTbl{mkSeqBaseKey("genbank", "mrna", "native")} = "mrna";
+$baseNameTbl{mkSeqBaseKey("genbank", "mrna", "xeno")}   = "xenoMrna";
+$baseNameTbl{mkSeqBaseKey("genbank", "est", "native")}  = "est";
+$baseNameTbl{mkSeqBaseKey("refseq", "mrna", "native")}  = "refMrna";
+
+# get path to a sequence download file.
+sub getSeqFaPath($$$$) {
+    my($db, $srcDb, $type, $orgCat) = @_;
+    my $baseName = $baseNameTbl{mkSeqBaseKey($srcDb, $type, $orgCat)};
+    my $downloadDir = getSeqDownloadDir($downloadRootDir, $db);
+    return "$downloadDir/$baseName.fa.gz";
+}
+
 # create an md5sum of a file, with path in file being
 # specified file name, rather than full path.
 sub createMd5($$$) {
@@ -85,12 +131,11 @@ sub createMd5($$$) {
 
 # Build a sequence fa and md5sum files
 sub makeSeqFa($$$$$) {
-    my($db, $srcDb, $type, $orgCat, $outPre) = @_;
-    my $fa = "$outPre.fa.gz";
-    my $md5 = "$fa.md5";
-    prMsg("creating $fa");
-
-    my $tmpFa = "$fa.tmp.gz";
+    my($db, $srcDb, $type, $orgCat, $seqFa) = @_;
+    my $md5 = "$seqFa.md5";
+    prMsg("creating $seqFa");
+    makeFileDir($seqFa);
+    my $tmpFa = "$seqFa.tmp.gz";
     my $tmpMd5 = "$md5.tmp";
     my $cmd = "gbGetSeqs -get=seq -db=$db -$orgCat";
     if (defined($verboseArg)) {
@@ -98,8 +143,8 @@ sub makeSeqFa($$$$$) {
     }
     $cmd .= " $srcDb $type $tmpFa";
     runProg($cmd);
-    createMd5($tmpFa, basename($fa), $tmpMd5);
-    renameFile($tmpFa, $fa);
+    createMd5($tmpFa, basename($seqFa), $tmpMd5);
+    renameFile($tmpFa, $seqFa);
     renameFile($tmpMd5, $md5);
 }
 
@@ -107,36 +152,97 @@ sub makeSeqFa($$$$$) {
 # and the files if out of date or doesn't exist.  If called with
 # $justCheck, just return status indicating if they need to be
 # updated
-sub maybeMakeSeqFa($$$$$$) {
-    my($justCheck, $db, $srcDb, $type, $orgCat, $outBase) = @_;
-    my $downloadDir = getSeqDownloadDir($downloadRootDir, $db);
-    my $outPre = "$downloadDir/$outBase";
-    my $loadTbl = getDbConfNo($db, "$srcDb.$type.$orgCat.load");
-    if ($loadTbl && fileOutOfDate("$outPre.fa.gz")) {
-        if (!$justCheck) {
-            makeDir($downloadDir);
-            makeSeqFa($db, $srcDb, $type, $orgCat, $outPre);
+sub maybeMakeSeqFa($$$$$) {
+    my($justCheck, $db, $srcDb, $type, $orgCat) = @_;
+    if (isLoadEnabled($db, $srcDb, $type, $orgCat)) {
+        my $seqFa =  getSeqFaPath($db, $srcDb, $type, $orgCat);
+        if (fileOutOfDate($seqFa)) {
+            if (!$justCheck) {
+                makeSeqFa($db, $srcDb, $type, $orgCat, $seqFa);
+            }
+            return 1;
         }
-        return 1;
-    } else {
-        return 0;
     }
+    return 0;
+}
+
+# get base name for a BLAT targetDb, geting srcDb
+sub getBlatTargetDbBaseName($) {
+    my($srcDb) = @_;
+    return (($srcDb eq "refseq") ? "refMrna" : "mrna");
+}
+
+
+# get sorted list of blat target dbs
+sub getBlatTargetDbs($$) {
+    my($db, $srcDb) = @_;
+    return sort(glob(getBlatTargetDbDir($db) . "/" . getBlatTargetDbBaseName($srcDb) . ".*T*.2bit"));
+}
+
+# generate name for new blat target db
+sub mkBlatTargetDbName($$) {
+    my($db, $srcDb) = @_;
+    return getBlatTargetDbDir($db) . "/" . getBlatTargetDbBaseName($srcDb) . "." . isoTimeStamp() . ".2bit";
+}
+
+# Build a blat targetDb 2bit file
+sub makeBlatTargetDb($$$) {
+    my($db, $srcDb, $seqFa) = @_;
+    my $seqTwoBit = mkBlatTargetDbName($db, $srcDb);
+    prMsg("creating $seqTwoBit");
+    makeFileDir($seqTwoBit);
+    my $tmpTwoBit = $seqTwoBit . ".tmp";
+    my $cmd = "faToTwoBit -ignoreDups $seqFa $tmpTwoBit";
+    runProg($cmd);
+    renameFile($tmpTwoBit, $seqTwoBit);
+}
+
+# Create one sequence blat targetDb 2bit file if it is out of date for the
+# source fasta.  If $justCheck, just return status indicating if they need to
+# be updated
+sub maybeMakeBlatTargetDb($$$$$) {
+    my($justCheck, $db, $srcDb, $type, $srcFaStale) = @_;
+    if (isLoadEnabled($db, $srcDb, $type, "native") && isBlatTargetDbEnabled($db, $srcDb)) {
+        my @seqTwoBits = getBlatTargetDbs($db, $srcDb);
+        my $seqFa =  getSeqFaPath($db, $srcDb, $type, "native");
+        if ($srcFaStale || ($#seqTwoBits < 0) || fileOlder($seqTwoBits[$#seqTwoBits], $seqFa)) {
+            if (!$justCheck) {
+                makeBlatTargetDb($db, $srcDb, $seqFa);
+                # remove targetDbs over max
+                if ($#seqTwoBits+1 >= $maxBlatTargetDbs) {
+                    unlinkFiles(@seqTwoBits[0..($#seqTwoBits-$maxBlatTargetDbs)+1]);
+                }
+            }
+            return 1;
+        }
+    }
+    return 0;
 }
 
 # make sequence fasta download files, or just check if they need updates
 sub maybeMakeSeqFaFiles($$) {
     my($justCheck, $db) = @_;
     my $needUpdated = 0;
-    if (maybeMakeSeqFa($justCheck, $db, "genbank", "mrna", "native", "mrna")) {
+    my $mrnaFaDirty = 0;
+    if (maybeMakeSeqFa($justCheck, $db, "genbank", "mrna", "native")) {
+        $needUpdated = 1;
+        $mrnaFaDirty = 1;
+    }
+    if (maybeMakeBlatTargetDb($justCheck, $db, "genbank", "mrna", $mrnaFaDirty)) {
         $needUpdated = 1;
     }
-    if (maybeMakeSeqFa($justCheck, $db, "genbank", "mrna", "xeno", "xenoMrna")) {
+    if (maybeMakeSeqFa($justCheck, $db, "genbank", "mrna", "xeno")) {
         $needUpdated = 1;
     }
-    if (maybeMakeSeqFa($justCheck, $db, "genbank", "est", "native", "est")) {
+    if (maybeMakeSeqFa($justCheck, $db, "genbank", "est", "native")) {
         $needUpdated = 1;
     }
-    if (maybeMakeSeqFa($justCheck, $db, "refseq", "mrna", "native", "refMrna")) {
+    $mrnaFaDirty = 0;
+    if (maybeMakeSeqFa($justCheck, $db, "refseq", "mrna", "native")) {
+        $needUpdated = 1;
+        $mrnaFaDirty = 1;
+    }
+    if (maybeMakeBlatTargetDb($justCheck, $db, "refseq", "mrna", $mrnaFaDirty)) {
         $needUpdated = 1;
     }
     return $needUpdated;
@@ -220,7 +326,7 @@ sub makeUpstreamMafSize($$$$$$) {
     makeDir(dirname($maf));
     # WARNING: -fa=/dev/null is need as it changes bed format.
     # sed cleanups nasty names generated by featureBits
-    runPipe("featureBits -bed=stdout -fa=/dev/null -verbose=0 $db ${geneTbl}:upstream:${size} | sed -re 's/_up_[^\\t]+//' | sort -k1,1 -k2,2n | mafFrags -txStarts -orgs=${mafOrgs} ${db} ${mafTbl} stdin stdout | gzip -c > $tmpMaf");
+    runPipe("featureBits -bed=stdout -fa=/dev/null -verbose=0 $db ${geneTbl}:upstream:${size} | sed -re 's/_up_[^\\t]+//' | sort -k1,1 -k2,2n | mafFrags -txStarts -meFirst -orgs=${mafOrgs} ${db} ${mafTbl} stdin stdout | gzip -c > $tmpMaf");
     createMd5($tmpMaf, basename($maf), $tmpMd5);
     renameFile($tmpMaf, $maf);
     renameFile($tmpMd5, $md5);
