@@ -9,13 +9,13 @@ echo "Make zip [${0}: `date`]"
 ./makeZip.csh
 set err = $status
 if ( $err ) then
-    echo "error running makezip.csh: $err" 
+    echo "error running makezip.csh: $err [${0}: `date`]" 
     exit 1
 endif 
 ./buildZip.csh
 set err = $status
 if ( $err ) then
-    echo "error running buildzip.csh: $err" 
+    echo "error running buildzip.csh: $err [${0}: `date`]"  
     exit 1
 endif
 

@@ -7,12 +7,12 @@ endif
 cd $BUILDDIR
 set dir = "v"$BRANCHNN"_branch_zip" 
 if ( -e $dir ) then
- echo "removing old branch_zip dir."
+ echo "removing old branch_zip dir. [${0}: `date`]"
  rm -fr $dir 
 endif
 mkdir -p $dir
 cd $dir
-echo "Checking out branch $BRANCHNN."
+echo "Checking out branch $BRANCHNN. [${0}: `date`]"
 cvs -d hgwdev:$CVSROOT export -r "v"$BRANCHNN"_branch"  kent >& /dev/null
 set err = $status
 if ( $err ) then
@@ -21,14 +21,14 @@ if ( $err ) then
 endif 
 set zip = "../zips/jksrc.v"$BRANCHNN".zip"
 if ( -e $zip ) then
- echo "removing old zip $zip"
+ echo "removing old zip $zip [${0}: `date`]"
  rm $zip
 endif
-echo "zipping up $zip."
+echo "zipping up $zip. [${0}: `date`]"
 zip -rT9v0 $zip kent >& /dev/null
 set err = $status
 if ( $err ) then
- echo "error zipping $zip: $err" 
+ echo "error zipping $zip: $err [${0}: `date`]" 
  exit 1
 endif 
 chmod 664 $zip
@@ -36,9 +36,9 @@ chmod 664 $zip
 cd $BUILDDIR
 set dir = "v"$BRANCHNN"_branch_zip"
 if ( -e $dir ) then
-    echo "cleaning up branch_zip dir."
+    echo "cleaning up branch_zip dir. [${0}: `date`]"
     rm -fr $dir
 endif
-echo Done.
+echo "Done. [${0}: `date`]"
 exit 0
 
