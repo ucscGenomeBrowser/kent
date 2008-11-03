@@ -10,7 +10,8 @@
     cd /hive/data/genomes/gorGor1/sanger
 
     wget --timestamping \
-ftp://ftp.sanger.ac.uk/pub/sequences/gorilla/draft_assembly_v0.1/gorilla_draft_genome_31265.agp.gz
+ftp://ftp.sanger.ac.uk/pub4/gorilla/gorilla_draft_genome_31265.agp.gz
+
     wget --timestamping \
 ftp://ftp.sanger.ac.uk/pub/sequences/gorilla/draft_assembly_v0.1/gorilla_draft_genome_31265.fastq.gz
     wget --timestamping \
@@ -40,53 +41,125 @@ assemblyDate Oct. 2008
 assemblyLabel Sanger Institute genome_31265
 orderKey 10
 mitoAcc NC_011120
-fastaFiles /hive/data/genomes/gorGor1/sanger/gorilla_draft_genome_31265.fragments.gz
-agpFiles /hive/data/genomes/gorGor1/sanger/gorilla_draft_genome_31265.agp.gz
-qualFiles none
+# fastaFiles
+# /hive/data/genomes/gorGor1/sanger/gorilla_draft_genome_31265.fragments.gz
+fastaFiles /hive/data/genomes/gorGor1/sanger/clean.fragments.fa.gz
+# fastaFiles /hive/data/genomes/gorGor1/sanger/genome_31265.fa
+# agpFiles /hive/data/genomes/gorGor1/sanger/gorilla_draft_genome_31265.agp.gz
+agpFiles /hive/data/genomes/gorGor1/sanger/clean.agp
+# qualFiles none
 dbDbSpeciesDir gorilla
 '_EOF_'
     # << happy emacs
 
-    makeGenomeDb.pl -stop=seq -workhorse=hgwdev -verbose=2 gorGor1.config.ra
-    #	this fails because the items in the fragments fasta file and
-    #	the agp file do not match in sizes
+    #	there is some funny business going on with the agp file, it doesn't
+    #	specify gaps that are at the beginning of the scaffold.  Our tools
+    #	will not work with such an AGP file, so fix it up:
+    cd /hive/data/genomes/gorGor1/sanger
+    cat << '_EOF_' > fixAgp.pl
+#!/usr/bin/env perl
 
-# use 'screen' make sure on kkstore05
-    makeGenomeDb.pl -workhorse kolossus -verbose=2 gorGor1.config.ra > makeGenomeDb.out 2>&1 &
+use strict;
+use warnings;
+
+open (FH,"zcat gorilla_draft_genome_31265.agp.gz|") or
+        die "can not zcat gorilla_draft_genome_31265.agp.gz";
+while (my $line = <FH>) {
+    my ($name, $start, $end, $frag, $type, $rest) = split('\s+', $line, 6);
+    if ((1 == $frag) && (1 != $start)) {
+        printf "%s\t1\t%d\t1\tN\t%d\tfragment\tyes\n",
+                $name, $start-1, $start-1;
+    }
+    print "$line";
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x fixAgp.pl
+    ./fixAgp.pl > clean.agp
+
+    #	running these step-wise to work out difficulties at each step
+    makeGenomeDb.pl -stop=seq -workhorse=hgwdev -verbose=2 gorGor1.config.ra
+    makeGenomeDb.pl -continue=agp -stop=agp -workhorse=hgwdev \
+	-verbose=2 gorGor1.config.ra
+    makeGenomeDb.pl -continue=db -stop=db -workhorse=hgwdev \
+	-verbose=2 gorGor1.config.ra
+
+
+    #	the names are too long for our normal chromInfo index:
+LOAD DATA   INFILE '/hive/data/genomes/gorGor1/bed/chromInfo/chromInfo.tab'  INTO TABLE chromInfo
+
+mySQL error 1062: Duplicate entry 'Supercontig_0000' for key 1
+    #	Fixup the chromInfo.sql file:
+    cd /hive/data/genomes/gorGor1/bed/chromInfo
+    cp /cluster/home/hiram/kent/src/hg/lib/chromInfo.sql .
+    #	PRIMARY KEY(chrom(20)) - was 16 before
+    hgLoadSqlTab gorGor1 chromInfo *.sql *.tab
+    #	continuing with the rest of the steps from jkStuff/makeDb.csh,
+    #	starting with:
+    hgGoldGapGl -noGl gorGor1 /cluster/data/gorGor1/gorGor1.agp
+
+    makeGenomeDb.pl -continue=dbDb -stop=dbDb -workhorse=hgwdev \
+	-verbose=2 gorGor1.config.ra
+    makeGenomeDb.pl -continue=trackDb -stop=trackDb -workhorse=hgwdev \
+	-verbose=2 gorGor1.config.ra
+
 
     cut -f 2 chrom.sizes | ave stdin
-# Q1 1243.000000
-# median 1593.000000
-# Q3 6511.000000
-# average 21628.860415
-# min 336.000000
-# max 1406907.000000
-# count 116467
-# total 2519048486.000000
-# standard deviation 63795.083568
+# Q1 855.000000
+# median 1216.000000
+# Q3 2773.000000
+# average 3810.123774
+# min 500.000000
+# max 942632.000000
+# count 609861
+# total 2323645895.000000
+# standard deviation 9559.595923
+
+    #	looking for the N50 value:
+    awk '{sum += $2; print NR, sum, $0}' chrom.sizes | less
+    #	scanning down until the sum is 1/2 of the total
+    #	2323645895 / 2 = 1161822947
+    #	where it looks like:
+# 45571 1161796841 Supercontig_0163790    11279
+# 45572 1161808120 Supercontig_0164808    11279
+# 45573 1161819399 Supercontig_0249037    11279
+# 45574 1161830677 Supercontig_0021829    11278
+# 45575 1161841955 Supercontig_0049999    11278
+    #	thus N50 is size 11,278 bases at #45,574
+
 
 #########################################################################
-## Repeat Masker (DONE - 2008-10-16 - Hiram)
+## Repeat Masker (WORKING - 2008-11-03 - Hiram)
     screen	# to manage this several day job
     mkdir /hive/data/genomes/gorGor1/bed/repeatMasker
     cd /hive/data/genomes/gorGor1/bed/repeatMasker
-    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+    time doRepeatMasker.pl -verbose=2 \
 	-workhorse=hgwdev -bigClusterHub=swarm \
 	-buildDir=`pwd` gorGor1 > do.log 2>&1 &
+XXX - running 2008-11-03 10:00
     #	real    797m7.301s
-    twoBitToFa gorGor1.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+    cat faSize.rmsk.txt
 # 2519048486 bases (220604396 N's 2298444090 real 1290940163 upper 1007503927
 # lower) in 116467 sequences in 1 files
 # %40.00 masked total, %43.83 masked rea
 
+    #	from the do.log file:
+# RepeatMasker version development-$Id: RepeatMasker,v 1.22 2008/08/08
+# 16:44:40 angie Exp $
+#    Aug 7 2008 (open-3-2-6) version of RepeatMasker
+# grep RELEASE /scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
+# CC   RELEASE 20080801;   
+
 #########################################################################
-# SIMPLE REPEATS TRF (WORKING - 2008-10-15 - Hiram)
+# SIMPLE REPEATS TRF (WORKING - 2008-11-03 - Hiram)
     screen # use a screen to manage this job
     mkdir /hive/data/genomes/gorGor1/bed/simpleRepeat
     cd /hive/data/genomes/gorGor1/bed/simpleRepeat
     # 
-    time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
-	-buildDir=/cluster/data/gorGor1/bed/simpleRepeat gorGor1 > do.log 2>&1 &
+    time doSimpleRepeat.pl -verbose=2 \
+	-buildDir=`pwd` gorGor1 > do.log 2>&1 &
+XXX - running 2008-11-03 10:02
     #	real    74m17.044s
     cat fb.simpleRepeat
     #	36542185 bases of 2298444090 (1.590%) in intersection
@@ -123,5 +196,3 @@ dbDbSpeciesDir gorilla
 	/hive/data/staging/data/gorGor1
     #	request to cluster admin to push this to the kluster nodes
     #	/scratch/data/
-
-
