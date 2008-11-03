@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.97 2008/10/28 19:49:15 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.98 2008/11/03 17:28:47 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -816,6 +816,7 @@ my $ok = GetOptions("allowReloads",
                     );
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
+$opt_sendEmail = 0 if (!defined $opt_sendEmail);
 
 usage() if (scalar(@ARGV) < 2);
 
