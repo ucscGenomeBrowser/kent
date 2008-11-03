@@ -1,4 +1,4 @@
-# Data Agreement File for RNA-chip project $Revision: 1.2 $
+# Data Agreement File for RNA-chip project $Revision: 1.3 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -16,6 +16,12 @@ view             Transfrags
 longLabelPrefix  Affy Transfrags
 type             broadPeak
 required         yes
+hasReplicates    no
+
+view             FilteredTransfrags
+longLabelPrefix  Affy Filtered Transfrags
+type             broadPeak
+required         no
 hasReplicates    no
 
 view             RawSignal
