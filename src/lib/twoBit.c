@@ -9,7 +9,7 @@
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.23 2008/08/12 07:04:35 mikep Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.24 2008/11/03 19:07:33 kent Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -391,45 +391,51 @@ else
     }
 }
 
+struct twoBit *twoBitOneFromFile(struct twoBitFile *tbf, char *name)
+/* Get single sequence as two bit. */
+{
+bits32 packByteCount;
+boolean isSwapped = tbf->isSwapped;
+struct twoBit *twoBit;
+AllocVar(twoBit);
+twoBit->name = cloneString(name);
+FILE *f = tbf->f;
+
+/* Find offset in index and seek to it */
+twoBitSeekTo(tbf, name);
+
+/* Read in seqSize. */
+twoBit->size = readBits32(f, isSwapped);
+
+/* Read in blocks of N. */
+readBlockCoords(f, isSwapped, &(twoBit->nBlockCount),
+		&(twoBit->nStarts), &(twoBit->nSizes));
+
+/* Read in masked blocks. */
+readBlockCoords(f, isSwapped, &(twoBit->maskBlockCount),
+		&(twoBit->maskStarts), &(twoBit->maskSizes));
+
+/* Reserved word. */
+twoBit->reserved = readBits32(f, isSwapped);
+
+/* Read in data. */
+packByteCount = packedSize(twoBit->size);
+twoBit->data = needLargeMem(packByteCount);
+mustRead(f, twoBit->data, packByteCount);
+
+return twoBit;
+}
+
 struct twoBit *twoBitFromFile(char *fileName)
 /* Get twoBit list of all sequences in twoBit file. */
 {
 struct twoBitFile *tbf = twoBitOpen(fileName);
 struct twoBitIndex *index;
-struct twoBit *twoBitList = NULL, *twoBit = NULL;
-boolean isSwapped = tbf->isSwapped;
-FILE *f = tbf->f;
+struct twoBit *twoBitList = NULL;
 
 for (index = tbf->indexList; index != NULL; index = index->next)
     {
-    char *name = index->name;
-    bits32 packByteCount;
-
-    AllocVar(twoBit);
-    twoBit->name = cloneString(name);
-
-    /* Find offset in index and seek to it */
-    twoBitSeekTo(tbf, name);
-
-    /* Read in seqSize. */
-    twoBit->size = readBits32(f, isSwapped);
-
-    /* Read in blocks of N. */
-    readBlockCoords(f, isSwapped, &(twoBit->nBlockCount),
-		    &(twoBit->nStarts), &(twoBit->nSizes));
-
-    /* Read in masked blocks. */
-    readBlockCoords(f, isSwapped, &(twoBit->maskBlockCount),
-		    &(twoBit->maskStarts), &(twoBit->maskSizes));
-
-    /* Reserved word. */
-    twoBit->reserved = readBits32(f, isSwapped);
-
-    /* Read in data. */
-    packByteCount = packedSize(twoBit->size);
-    twoBit->data = needLargeMem(packByteCount);
-    mustRead(f, twoBit->data, packByteCount);
-
+    struct twoBit *twoBit = twoBitOneFromFile(tbf, index->name);
     slAddHead(&twoBitList, twoBit);
     }
 
@@ -437,6 +443,36 @@ twoBitClose(&tbf);
 slReverse(&twoBitList);
 return twoBitList;
 }
+
+
+void twoBitFree(struct twoBit **pTwoBit)
+/* Free up a two bit structure. */
+{
+struct twoBit *twoBit = *pTwoBit;
+if (twoBit != NULL)
+    {
+    freeMem(twoBit->nStarts);
+    freeMem(twoBit->nSizes);
+    freeMem(twoBit->maskStarts);
+    freeMem(twoBit->maskSizes);
+    freeMem(twoBit->data);
+    freez(pTwoBit);
+    }
+}
+
+void twoBitFreeList(struct twoBit **pList)
+/* Free a list of dynamically allocated twoBit's */
+{
+struct twoBit *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    twoBitFree(&el);
+    }
+*pList = NULL;
+}
+
 
 struct dnaSeq *twoBitReadSeqFragExt(struct twoBitFile *tbf, char *name,
 	int fragStart, int fragEnd, boolean doMask, int *retFullSize)

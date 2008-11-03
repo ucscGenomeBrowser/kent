@@ -112,6 +112,16 @@ struct twoBit *twoBitFromDnaSeq(struct dnaSeq *seq, boolean doMask);
 struct twoBit *twoBitFromFile(char *fileName);
 /* Get twoBit list of all sequences in twoBit file. */
 
+struct twoBit *twoBitOneFromFile(struct twoBitFile *tbf, char *name);
+/* Get single sequence as two bit. */
+
+void twoBitFree(struct twoBit **pTwoBit);
+/* Free up a two bit structure. */
+
+void twoBitFreeList(struct twoBit **pList);
+/* Free a list of dynamically allocated twoBit's */
+
+
 void twoBitWriteOne(struct twoBit *twoBit, FILE *f);
 /* Write out one twoBit sequence to binary file. 
  * Note this does not include the name, which is
