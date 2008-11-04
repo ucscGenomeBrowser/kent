@@ -110,7 +110,7 @@ class PipelineController < ApplicationController
     @errText = getUploadErrText
   end
 
-  def load
+  def db_load
     @project = Project.find(params[:id])
     if @project.run_stat 
       flash[:error] = "Please wait, a background job is still running."

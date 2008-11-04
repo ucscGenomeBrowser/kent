@@ -51,18 +51,19 @@ end
 <% if (not busy) and authorized and (@project.status != "loaded" or current_user.login == "admin") %> 
 
   <% if @project.status == "uploaded" %> 
-    <td><%= link_to 'Validate', {:action => 'begin_validating', :id => @project.id} -%>
+    <td><%= link_to 'Validate', {:action => 'validate', :id => @project.id} -%>
     <%= ' | ' -%> </td>
   <% end %>
 
   <% if @project.status == "validated" %> 
-    <td><%= link_to 'Load', {:action => 'begin_loading', :id => @project.id} -%>
+    <td><%= link_to 'Load', {:action => 'db_load', :id => @project.id} -%>
     <%= ' | ' -%> </td>
   <% end %>
 
   <% if @project.status == "new" \
      or @project.status == "upload failed" \
      or @project.status == "validate failed" \
+     or @project.status == "load failed" \
      or advancedView %>
     <td><%= link_to 'Submit Data', {:action => 'upload', :id => @project.id} -%>
     <%= ' | ' -%> </td>
@@ -91,7 +92,7 @@ end
 <tr>
     <td><%= link_to 'Validate', {:action => 'validate', :id => @project.id} -%>
     <%= ' | ' -%> </td>
-    <td><%= link_to 'Load', {:action => 'load', :id => @project.id} -%>
+    <td><%= link_to 'Load', {:action => 'db_load', :id => @project.id} -%>
     <%= ' | ' -%> </td>
     <td><%= link_to 'Submit Data', {:action => 'upload', :id => @project.id} -%>
     <%= ' | ' -%> </td>
