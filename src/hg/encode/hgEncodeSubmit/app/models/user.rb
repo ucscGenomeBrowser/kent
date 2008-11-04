@@ -123,6 +123,12 @@ class User < ActiveRecord::Base
     if User.find_by_email(new_email)
       errors.add(new_email, "is already being used")
     end
+    if login == "admin"
+      temp = User.find(self.id)
+      if (not temp) or (temp.login != "admin")
+        errors.add("login", "admin reserved")
+      end
+    end
   end
 
   def update_ftp_password

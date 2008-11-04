@@ -428,7 +428,7 @@ private
   
   def check_user_is_owner
     @project = Project.find(params[:id])
-    unless @project.user_id == @current_user.id
+    unless @project.user_id == @current_user.id or @current_user.login == "admin"
       flash[:error] = "That project does not belong to you."
       redirect_to :action => 'list'
       return false
