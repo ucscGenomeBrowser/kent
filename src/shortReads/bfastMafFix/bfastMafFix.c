@@ -7,7 +7,7 @@
 #include "sqlNum.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: bfastMafFix.c,v 1.1 2008/11/04 20:21:37 kent Exp $";
+static char const rcsid[] = "$Id: bfastMafFix.c,v 1.2 2008/11/04 20:28:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -90,7 +90,6 @@ FILE *f = mustOpen(output, "w");
 mafWriteStart(f, "bfastFixed");
 char *line;
 struct mafAli *maf = NULL;
-struct mafComp *mc = NULL;
 char *contig;
 
 while (lineFileNext(lf, &line, NULL))
