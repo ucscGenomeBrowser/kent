@@ -10,6 +10,11 @@ if @project.run_stat.nil?
 else
   busy = true
 end
+if @project.user_id == @current_user.id or current_user.login == "admin"
+  authorized = true
+else
+  authorized = false
+end
 %>
 <% if @project.project_archives.blank? and @project.status=="new" %>
    <b>Submit data for this project:</b>
@@ -43,7 +48,7 @@ end
 
 <table style="margin-top:10px;" cellpadding=1 cellspacing=1>
 
-<% if not busy and (@project.status != "loaded" or advancedView) %> 
+<% if (not busy) and authorized and (@project.status != "loaded" or current_user.login == "admin") %> 
 
   <% if @project.status == "uploaded" %> 
     <td><%= link_to 'Validate', {:action => 'begin_validating', :id => @project.id} -%>
@@ -135,7 +140,7 @@ end
     <td><%= a.archives_active -%></td>
   <% end %>
 
-  <% if not busy and advancedView %>
+  <% if (not busy) and authorized and advancedView %>
     <% if c == "1" %>
       <td><%= link_to 'Delete', {:action => 'delete_archive', :id => a.id} -%></td>
     <% else %>
