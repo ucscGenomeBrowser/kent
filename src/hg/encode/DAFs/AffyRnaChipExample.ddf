@@ -1,7 +1,5 @@
-files	view	cell	localization	rnaExtract	accession	softwareVersion	replicate
-transfrags.bed	Transfrags	K562	polysomes	longPolyA	GEO123	minrun_5_maxgap_3_and_whatever_extra_parameters	
-filtered.bed	FilteredTransfrags	K562	polysomes	longPolyA	GEO123	minrun_5_maxgap_3_and_whatever_extra_parameters	
-pooledSig.wig	Signal	K562	polysomes	longPolyA	GEO123	wiggleProg_1.0	
-rep1.wig	RawSignal	K562	polysomes	longPolyA	GEO123	wiggleProg_1.0	1
-rep2.wig	RawSignal	K562	polysomes	longPolyA	GEO123	wiggleProg_1.0	2
-backgrd.wig	RawSignal	K562	polysomes	longPolyA	GEO123	wiggleProg_1.0	
+files	view	cell	localization	rnaExtract	accession	labVersion
+transfrags.bed	Transfrags	K562	polysomes	longPolyA	GEO123	minrun_5_maxgap_3_and_whatever_extra_parameters
+filtered.bed	FilteredTransfrags	K562	polysomes	longPolyA	GEO123	minrun_5_maxgap_3_and_whatever_extra_parameters
+filtered.wig	FilteredRawSignal	K562	polysomes	longPolyA	GEO123	wiggleProg_1.0
+data.wig	RawSignal	K562	polysomes	longPolyA	GEO123	wiggleProg_1.0
