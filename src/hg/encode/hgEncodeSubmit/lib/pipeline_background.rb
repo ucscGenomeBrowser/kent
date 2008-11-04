@@ -215,8 +215,9 @@ module PipelineBackground
           new_status project, "upload failed"
           return
         end
-        FileUtils.copy(ftpPath, pf)
-        File.delete(ftpPath)
+        #FileUtils.copy(ftpPath, pf)
+        File.rename(ftpPath, pf)
+        File.delete(ftpPath) if File.exists?(ftpPath)  # just in case rename doesn't cleanup
       else
         unless local_path.blank?
           unless File.exists?(local_path)
@@ -225,8 +226,9 @@ module PipelineBackground
             new_status project, "upload failed"
             return
           end
-          FileUtils.copy(local_path, pf)
-          File.delete(local_path)
+          #FileUtils.copy(local_path, pf)
+          File.rename(local_path, pf)
+          File.delete(local_path) if File.exists?(local_path)  # just in case rename doesn't cleanup
         end
       end
     end
@@ -363,6 +365,7 @@ module PipelineBackground
           toName = my_join(parentDir, f)    
           # move file from temporary upload dir into parent dir
           File.rename(fullName,toName);
+          FileUtils.chmod 0664, toName
 
         end
       end
