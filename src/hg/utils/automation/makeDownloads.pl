@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.16 2008/05/23 23:02:18 hiram Exp $
+# $Id: makeDownloads.pl,v 1.17 2008/11/04 07:19:34 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -678,6 +678,7 @@ refMrna.fa.gz - RefSeq mRNA from the same species as the genome.
 _EOF_
     ;
   }
+  my $dunno = '*** ??? ***';
   if ($geneTable) {
     my $geneDesc;
     if ($geneTable eq 'refGene') {
@@ -687,16 +688,29 @@ _EOF_
     } elsif ($geneTable eq 'xenoRefGene') {
       $geneDesc = 'non-$Organism RefSeq';
     } else {
-      $geneDesc = '*** ??? ***';
+      $geneDesc = $dunno;
     }
     print $fh <<_EOF_
 upstream1000.fa.gz - Sequences 1000 bases upstream of annotated
-    transcription start of $geneDesc genes.  This includes only cases
-    where the transcription start is annotated separately from the
-    coding region start.  Note that upstream files are generated only
-    when an assembly is released. Therefore, the data may be slightly
-    out of synch with the RefSeq data in assemblies that are
-    incrementally updated nightly.
+    transcription starts of $geneDesc genes with annotated 5' UTRs.
+_EOF_
+    ;
+    if ($geneDesc ne $dunno) {
+      print $fh <<_EOF_
+    This file is updated weekly so it might be slightly out of sync with
+    the $geneDesc data which is updated daily for most assemblies.
+_EOF_
+      ;
+    } else {
+      print $fh <<_EOF_
+    Note that upstream files are generated only when an assembly is
+    released. Therefore, the data may be slightly out of synch with
+    the RefSeq data in assemblies that are incrementally updated
+    nightly.
+_EOF_
+      ;
+    }
+    print $fh <<_EOF_
 
 upstream2000.fa.gz - Same as upstream1000, but 2000 bases.
 
