@@ -407,3 +407,7 @@ CREATING DATABASE
     hgLoadMaf hiva244 vax003BAaMaf
 
 ##########################################################################
+# REBUILD THE gsidClinicRecWithSeq TABLE (DONE 11/03/08, Fan)
+
+# See details in hivVax003Vax004.txt.
+###########################################################
