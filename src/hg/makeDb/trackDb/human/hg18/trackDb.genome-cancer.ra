@@ -1,0 +1,222 @@
+track ucsfNeveExp
+shortLabel Breast Cell Line Expression (Neve. et.al)
+longLabel breast cancer cell line gene expression (Neve et.al.Cancer Cell 2006)
+group x
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.2
+groupings ucsfNeveExpGroups
+
+track ucsfNeveCGH
+shortLabel Breast Cell Line CGH (Neve. et.al)
+longLabel breast cancer cell line CGH (Neve et.al.Cancer Cell 2006)
+group x
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.2
+groupings ucsfNeveCGHGroups
+
+track maserAgilentExp
+shortLabel Gene Expression (Maser. et.al 2007)
+longLabel Multi-tissue Human Agilent 1A Exon Array from DFCI (Maher et. al 2006)
+group x
+priority 45.1
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings maserAgilentExpGroups
+
+track maser44Bcgh
+shortLabel Agilent 44B CGH (Maser. et.al 2007)
+longLabel Multi-tissue Agilent 44B CGH Array from DFCI (Maher et. al 2006)
+group x
+priority 45.2
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings maser44BcghGroups
+
+track maser244Acgh
+shortLabel Agilent 244A CGH (Maser et. al 2007)
+longLabel Multi-tissue Agilent 244A CGH Array from DFCI (Maher et. al 2006)
+group x
+priority 45.3
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings maser244AcghGroups
+
+track lin2008Exp
+shortLabel Melanoma Gene Expression (Lin. et.al 2008)
+longLabel Melanoma Gene Expression (Lin et. al 2008)
+group x
+priority 46.1
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings lin2008ExpGroups
+
+track lin2008cnv50K
+shortLabel Melanoma 50K CNV (Lin. et.al 2008)
+longLabel Melanoma 50K CNV (Lin et. al 2008)
+group x
+priority 46.2
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings lin2008cnv50KGroups
+
+track lin2008cnv250K
+shortLabel Melanoma 250K CNV (Lin. et.al 2008)
+longLabel Melanoma 250K CNV (Lin et. al 2008)
+group x
+priority 46.3
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings lin2008cnv250KGroups
+
+track weir2007
+shortLabel Lung CNV (Weir. et.al 2007)
+longLabel Lung CNV (Weir et. al 2007)
+group x
+priority 47.1
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.1
+groupings weir2007Groups
+
+#TCGA
+
+track mskccCGH
+shortLabel TCGA GBM mskccCGH
+longLabel TCGA GBM mskcc CGH array 244A 
+group x
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 0.5
+expStep 0.05
+groupings mskccCGHGroups
+
+track harvardCGH
+shortLabel TCGA GBM harvardCGH
+longLabel TCGA GBM harvard CGH array 244A 
+group x
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings harvardCGHGroups
+
+track uncAgiExp
+shortLabel TCGA GBM uncAgiExp
+longLabel TCGA GBM unc Agilent Expression array 4x44k
+group x
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1  
+groupings uncAgiExpGroups
+
+track broadAffyExp
+shortLabel TCGA GBM broadAffyExp
+longLabel TCGA GBM Broad Affymetrix Expression array U133A
+group x
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 3.0
+expStep 0.2
+groupings broadAffyExpGroups
+
+track CaMPScoreExternal
+shortLabel CaMPScoreExternal 
+longLabel CaMPScoreExternal Science 2007 volelstein
+group x
+visibility hide
+type bed
+
+# Johnson & Johnson 
+
+track wang2005Exp
+shortLabel  Breast Cancer Gene Expression (Wang et. al. Lancet 2005)
+longLabel Lymph-Node-Negative Breast Cancer Gene Exp. (Wang et. al. Lancet 2005)
+group x
+priority 44
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings wang2005ExpGroups
+
+track chin2006Exp
+shortLabel  Breast Cancer Gene Expression (Chin et. al Cancer Cell 2006)
+longLabel Breast Cancer Gene Expression (Chin et. al. Cancer Cell 2006)
+group x
+priority 45
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings chin2006ExpGroups
+
+track chinSFGenomeBio2007
+shortLabel Breast Cancer Tumor CGH (ChinSF et al. 2007)
+longLabel Breast Cancer Tumor CGH (ChinSF et al. Genome Bio 2007)
+group x
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.2
+groupings chinSFGenomeBio2007Groups
+
+track naderi2007Exp
+shortLabel Breast Cancer Gene Expression (Naderi et al. Oncogene 2007)
+longLabel Breast Cancer Gene Expression (Naderi et al. Oncogene 2007)
+group x
+priority 46
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings naderi2007ExpGroups
+
+track kaiser2007
+shortLabel Colon Cancer Gene Expression (Kaiser et al. 2007)
+longLabel Colon Cancer Gene Expression (Kaiser et al. 2007)
+group x
+priority 47
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings kaiser2007Groups
