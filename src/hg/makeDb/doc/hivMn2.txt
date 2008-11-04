@@ -585,3 +585,8 @@ do1 vax004Msa
     cp -p chr1.maf /gbdb/hivmn2/vax003BAaMaf
     hgLoadMaf hivmn2 vax003BAaMaf
 
+##############################################################
+# REBUILD THE gsidClinicRecWithSeq TABLE (DONE 11/03/08, Fan)
+
+# See details in hivVax003Vax004.txt.
+##############################################################
