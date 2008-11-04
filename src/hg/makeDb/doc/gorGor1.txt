@@ -130,21 +130,21 @@ mySQL error 1062: Duplicate entry 'Supercontig_0000' for key 1
 
 
 #########################################################################
-## Repeat Masker (WORKING - 2008-11-03 - Hiram)
+## Repeat Masker (DONE - 2008-11-03,04 - Hiram)
     screen	# to manage this several day job
     mkdir /hive/data/genomes/gorGor1/bed/repeatMasker
     cd /hive/data/genomes/gorGor1/bed/repeatMasker
     time doRepeatMasker.pl -verbose=2 \
 	-workhorse=hgwdev -bigClusterHub=swarm \
 	-buildDir=`pwd` gorGor1 > do.log 2>&1 &
-XXX - running 2008-11-03 10:00
+    #	real    360m45.970s
     #	real    797m7.301s
     cat faSize.rmsk.txt
-# 2519048486 bases (220604396 N's 2298444090 real 1290940163 upper 1007503927
-# lower) in 116467 sequences in 1 files
-# %40.00 masked total, %43.83 masked rea
+# 2323645895 bases (279671235 N's 2043974660 real 1079526671 upper 964447989
+# lower) in 609861 sequences in 1 files
+# %41.51 masked total, %47.18 masked real
 
-    #	from the do.log file:
+    #	from the do.log file, to go into the bigZips/README file:
 # RepeatMasker version development-$Id: RepeatMasker,v 1.22 2008/08/08
 # 16:44:40 angie Exp $
 #    Aug 7 2008 (open-3-2-6) version of RepeatMasker
@@ -152,17 +152,17 @@ XXX - running 2008-11-03 10:00
 # CC   RELEASE 20080801;   
 
 #########################################################################
-# SIMPLE REPEATS TRF (WORKING - 2008-11-03 - Hiram)
+# SIMPLE REPEATS TRF (DONE - 2008-11-03 - Hiram)
     screen # use a screen to manage this job
     mkdir /hive/data/genomes/gorGor1/bed/simpleRepeat
     cd /hive/data/genomes/gorGor1/bed/simpleRepeat
     # 
     time doSimpleRepeat.pl -verbose=2 \
 	-buildDir=`pwd` gorGor1 > do.log 2>&1 &
-XXX - running 2008-11-03 10:02
-    #	real    74m17.044s
+    #	real    1471m34.533s
+    #	there were delays due to hang-ups when trying to talk to kolossus
     cat fb.simpleRepeat
-    #	36542185 bases of 2298444090 (1.590%) in intersection
+    #	187515375 bases of 2075548667 (9.034%) in intersection
 
     #	after RM run is done, add this mask:
     cd /hive/data/genomes/gorGor1
@@ -171,24 +171,25 @@ XXX - running 2008-11-03 10:02
     #	can safely ignore warning about >=13 fields in bed file
 
     twoBitToFa gorGor1.2bit stdout | faSize stdin > gorGor1.2bit.faSize.txt
-# 2519048486 bases (220604396 N's 2298444090 real 1290364660 upper 1008079430
-# lower) in 116467 sequences in 1 files
-# %40.02 masked total, %43.86 masked rea
+# 2323645895 bases (279671235 N's 2043974660 real 1077776023 upper 966198637
+# lower) in 609861 sequences in 1 files
+# %41.58 masked total, %47.27 masked real
+
     #	link to gbdb
     ln -s `pwd`/gorGor1.2bit /gbdb/gorGor1
 
 ###########################################################################
-# prepare for kluster runs (DONE _ 2008-10-16 - Hiram)
+# prepare for kluster runs (DONE _ 2008-11-04 - Hiram)
     # compare to size of real bases to adjust the repMatch
     #	hg18: 2881421696
-    #	gorGor1: 2298444090
-    # thus: 1024 * 2298444090/2881421696 = 816
-    #	rounding up to 850 for a more conservative masking
+    #	gorGor1: 2043974660
+    # thus: 1024 * 2043974660/2881421696 = 726
+    #	rounding up to 800 for a more conservative masking
     cd /hive/data/genomes/gorGor1
     time blat gorGor1.2bit \
-	/dev/null /dev/null -tileSize=11 -makeOoc=gorGor1.11.ooc -repMatch=850
-    #	Wrote 31521 overused 11-mers to gorGor1.11.ooc
-    #	real    2m9.494s
+	/dev/null /dev/null -tileSize=11 -makeOoc=gorGor1.11.ooc -repMatch=800
+    #	Wrote 23284 overused 11-mers to gorGor1.11.ooc
+    #	real    2m3.365s
 
     #	and staging data for push to kluster nodes
     mkdir /hive/data/staging/data/gorGor1
@@ -196,3 +197,9 @@ XXX - running 2008-11-03 10:02
 	/hive/data/staging/data/gorGor1
     #	request to cluster admin to push this to the kluster nodes
     #	/scratch/data/
+
+###########################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-11-03 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Sanger Institute Oct 2008 (NCBI project 31265, CABD01000000)" where name="gorGor1";' hgcentraltest
+###########################################################################
