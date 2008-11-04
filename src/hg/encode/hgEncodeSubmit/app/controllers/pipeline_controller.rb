@@ -13,7 +13,7 @@ class PipelineController < ApplicationController
 
   before_filter :login_required
   before_filter :check_user_is_owner, :except => 
-        [:new, :create, :list, :show_user, :show, :delete_archive, 
+        [:new, :create, :list, :show_user, :show, 
         :valid_status, :load_status, :unload_status, :upload_status ]
   
   layout 'main'
