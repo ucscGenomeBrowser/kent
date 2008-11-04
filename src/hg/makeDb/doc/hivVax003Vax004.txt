@@ -612,4 +612,57 @@
     hgLoadMaf hivVax003Vax004 vax003BAaMaf
 
 ########################################################################################
+# REBUILD THE gsidClinicRecWithSeq TABLE (DONE 11/03/08, Fan)
 
+mkdir -p /hive/groups/gsid/medical/hiv/hivVax003Vax004/clinical/novRebuild
+
+cd /hive/groups/gsid/medical/hiv/hivVax003Vax004/clinical/novRebuild
+
+#copy table gsidClinicRecNew into gsidClinicRecNew2
+
+cp ~/hg/lib/gsidClinicRec.sql gsidClinicRecNew2.sql
+vi gsidClinicRecNew2.sql
+hgsql  hivVax003Vax004Build -e 'drop table gsidClinicRecNew2'
+hgsql  hivVax003Vax004Build < gsidClinicRecNew2.sql
+
+hgsql hivVax003Vax004Build -N -e 'select * from gsidClinicRecNew' >gsidClinicRecNew2.tab
+
+hgsql  hivVax003Vax004Build -e \
+'load data local infile "gsidClinicRecNew2.tab" into table  gsidClinicRecNew2'
+
+hgsql hivVax003Vax004Build -N -e 'select * from gsidClinicRecNew2' >j.tab
+diff j.tab gsidClinicRecNew2.tab
+
+# change 200 to 399 so that they are consistent between two table
+
+hgsql hivVax003Vax004Build -e 'update gsidClinicRecNew2 set hivQuan=399 where hivQuan=200'
+hgsql hivVax003Vax004Build -N -e 'select * from gsidClinicRecNew2' >jj.tab
+diff j.tab jj.tab
+
+# rebuild the gsidClinicRecWithSeq table for VAX003 subjects
+
+hgsql hivVax003Vax004Build -N -e \
+'select c.specimenId, c.subjId, c.labCode, c.daysCollection, r.RNA, r.CD4ABS from gsidClinicRecNew2 c, VAX003_RNACD4080501Raw r where c.specimenId=r.SpecimenNo and c.daysCollection=r.DRNACD4 and c.subjId=r.GSID and r.RNA=c.hivQuan and r.CD4ABS=c.cd4Count and r.SpecimenNo != ""' >j.out
+
+cut -f 1-4 j.out >j.1
+
+# revert back from 399 to 200
+cut -f 5-6 j.out  | sed -e 's/399\t/200\t/' >j.2
+
+paste j.1 j.2 >gsidClinicRecWithSeq.vax003.tab
+
+hgsql hivVax003Vax004 -e 'delete from gsidClinicRecWithSeq where subjId like "GSID3%"'
+hgsql hivVax003Vax004 -e 'load data local infile "gsidClinicRecWithSeq.vax003.tab" into table gsidClinicRecWithSeq'
+
+# update the same table for the other 3 genomes
+
+hgsql hivgne8v2 -e 'delete from gsidClinicRecWithSeq where subjId like "GSID3%"'
+hgsql hivgne8v2 -e 'load data local infile "gsidClinicRecWithSeq.vax003.tab" into table gsidClinicRecWithSeq'
+
+hgsql hivmn2 -e 'delete from gsidClinicRecWithSeq where subjId like "GSID3%"'
+hgsql hivmn2 -e 'load data local infile "gsidClinicRecWithSeq.vax003.tab" into table gsidClinicRecWithSeq'
+
+hgsql hiva244 -e 'delete from gsidClinicRecWithSeq where subjId like "GSID3%"'
+hgsql hiva244 -e 'load data local infile "gsidClinicRecWithSeq.vax003.tab" into table gsidClinicRecWithSeq'
+
+######################################################################################
