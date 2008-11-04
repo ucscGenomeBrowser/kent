@@ -1,24 +1,26 @@
 <!-- Display image in righthand corner -->
-<TABLE ALIGN=RIGHT BORDER=0 WIDTH=185>
+<TABLE ALIGN=RIGHT BORDER=0 WIDTH=315>
   <TR><TD ALIGN=RIGHT>
-    <A HREF="*** link to sequencing center's project page"
+    <A HREF="http://www.sanger.ac.uk/Info/Statistics/"
     TARGET=_blank>
-    <IMG SRC="/images/Gorilla_gorilla_gorilla.jpg" WIDTH=*** HEIGHT=*** ALT="Gorilla"></A>
+    <IMG SRC="/images/Gorilla_gorilla_gorilla.jpg" WIDTH=300 HEIGHT=300 ALT="Gorilla"></A>
   </TD></TR>
   <TR><TD ALIGN=RIGHT> 
     <FONT SIZE=-1><em>Gorilla gorilla gorilla</em><BR> 
     </FONT>
     <FONT SIZE=-2> 
-      Photo courtesy of ***
-      (<A HREF="*** link to source" 
-      TARGET=_blank>***source</A>)
+      Photo courtesy of
+      (<A HREF="http://commons.wikimedia.org/wiki/User:Arpingstone" 
+      TARGET=_blank>Adrian Pingstone</A>)
     </FONT>
   </TD></TR>
 </TABLE>
 
 <P>
 The Oct. 2008 <em>Gorilla gorilla gorilla</em> draft assembly 
-(Sanger Institute genome_31265) was produced by the *** sequencing center.
+(Sanger Institute genome_31265) was produced by the
+<A HREF="http://www.sanger.ac.uk/Info/Statistics/"
+TARGET=_blank>Sanger Institute</A> sequencing center.
 
 <H3>Sample position queries</H3>
 <P>
@@ -93,6 +95,20 @@ Gorilla genome.  See the
 <HR>
 <H3>Assembly details</H3>
 <P>
+This is <A HREF="http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nuccore&id=211774530"
+TARGET=_blank>NCBI Genome Project 31265</A> with accession numbers specified
+by LOCUS accession record CABD01000000
+</P>
+<P>
+This draft assembly is a 2x ABI based Phusion assembly which has been improved
+with 20x Solexa short read sequence.  The short reads were aligned to
+the ABI assembly using Maq and where evidence exists from the
+Solexa reads that the ABI base call is wrong it has been corrected.
+Regions of the ABI assembly that had no Solexa coverage were
+assumed to be non-Gorilla sequence and removed.  Large gaps in the
+Supercontigs are inferred by Phusion from the distance between
+placed fosmid end reads.
+</P>
 <P>
 In this initial assembly, there are 217,735 identified gaps, comprising
 a total of 265,263,406 bases.  There is an additional 16,910,764 bases
@@ -114,7 +130,6 @@ Bulk downloads of the sequence and annotation data are available via
 the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/gorGor1/">FTP
 server</A> or the <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#gorilla">Downloads</A> page. 
 
-  *** Developer -- remove this if no conditions for use:
 These data have
 <A HREF="../goldenPath/credits.html#gorilla_use">specific 
 conditions for use</A>. 
