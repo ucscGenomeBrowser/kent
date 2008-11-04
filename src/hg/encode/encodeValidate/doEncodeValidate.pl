@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.98 2008/11/03 17:28:47 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.99 2008/11/04 05:47:49 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -126,7 +126,8 @@ sub doTime
 our %validators = (
     files => \&validateFiles,
     view => \&validateDatasetName,
-    labVersion => \&validateLabVersion,
+    labVersion => \&validateNoValidation,
+    softwareVersion => \&validateNoValidation,
     accession => \&validateNoValidation,
     cell => \&validateCellLine,
     gene => \&validateGeneType,
@@ -194,11 +195,6 @@ sub validateDataType {
 }
 
 sub validateRawDataAcc {
-# No validation
-    return ();
-}
-
-sub validateLabVersion {
 # No validation
     return ();
 }
