@@ -203,54 +203,293 @@ priority 300
     priority 4
     color 58,119,40
 
-track wgEncodeDukeDnase
-compositeTrack on
-shortLabel Duke DNase
-longLabel ENCODE - Duke DNaseI Hypersensitivity
-group regulation
-priority 0
-type bed 3
-useScore 1
-origAssembly hg18
-subGroup1 view Views PK=Peaks SIG=Signal_Densities
-subGroup2 cellType Cell_Line G878=GM12878
-dimensions dimensionX=cellType
-sortOrder cellType=+ view=+
-dragAndDrop subTracks
-visibilityViewDefaults PK=packed SIG=full
+track		wgEncodeChromatinMap
+compositeTrack	on
+shortLabel	Chromatin Map
+longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
+group		regulation
+subGroup1	view Views Peaks=Peaks Signal=Signal zRAW=RawSignal
+subGroup2	cellType Cell_Line GM12878=GM12878
+subGroup3	EXP Experiment INP=Input ChIP-CTCF=ChIP-seq_CTCF DNase=DNase-seq FAIRE=FAIRE-seq
+sortOrder	cellType=+ EXP=+ view=+
+controlledVocabulary	encode/cv.ra cellType
+dimensions  dimensionX=cellType dimensionY=EXP
+dragAndDrop	subTracks
+visibilityViewDefaults	 Peaks=dense Signal=full zRAW=hide
 controlledVocabulary encode/cv.ra cellType
-dataVersion ENCODE Submitted June 2008
-wgEncode 1
+priority	0
+type		bed 3
+wgEncode	1
 
-    track wgEncodeDukeDnasePeaksGM12878
-    subTrack wgEncodeDukeDnase
-    shortLabel DNase GM12878 Pk
-    longLabel ENCODE - Duke DNaseI Hypersensitivity Peaks (cell line GM12878)
-    subGroups cellType=G878 view=PK
-    cellLine GM12878
-    type bed 5 +
-    useScore 1
-    noInherit off
-    priority 1
-    color 25,25,150
-    #configurable on
-    dateSubmitted   2008-06-07 10:27:26
+	track		   wgEncodeUtaustinChIPseqSignalGm12878Input
+	subTrack       wgEncodeChromatinMap
+	shortLabel	   INP GM12878 Sig
+	longLabel      ENCODE UT-Austin Input Signal (Input in GM12878 cells)
+	subGroups      view=Signal EXP=INP cellType=GM12878
+	type           wig 0.00 29.05
+	dateSubmitted  2008-11-4 12:11:48
+	dateReleased   2009-08-4
+	priority       1
+	noInherit      on
+	configurable   on
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
+	antibody       Input
 
-    track wgEncodeDukeDnaseSignalGM12878
-    subTrack wgEncodeDukeDnase
-    shortLabel DNase GM12878 Sig
-    longLabel ENCODE - Duke DNaseI Hypersensitivity Signal (cell line GM12878)
-    subGroups cellType=G878 view=SIG
-    cellLine GM12878
-    type wig
-    yLineOnOff On
-    yLineMark 1.0
-    maxHeightPixels 100:32:8
-    noInherit on
-    priority 2
-    color 25,150,25
-    #configurable on
-    dateSubmitted   2008-06-07 10:27:26
+	track          wgEncodeUtaustinChIPseqRawSignalGm12878Input
+	subTrack       wgEncodeChromatinMap
+	shortLabel     INP GM12878 Raw
+	longLabel      ENCODE UT-Austin Input Raw Signal (Input in GM12878 cells)
+	subGroups      view=zRAW EXP=INP cellType=GM12878
+	type           wig 0.00 29.05
+	dateSubmitted  2008-11-4 12:11:48
+	dateReleased   2009-08-4
+	priority       2
+	noInherit      on
+	configurable   off
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
+	antibody       Input
+
+	track          wgEncodeUtaChIPseqPeaksGm12878Ctcf
+	subTrack       wgEncodeChromatinMap
+	shortLabel     CTCF GM12878 Pk
+	longLabel      ENCODE UT-Austin ChIP-Seq Peaks (CTCF in GM12878 cells)
+	subGroups      view=Peaks EXP=ChIP-CTCF cellType=GM12878
+	type           narrowPeak
+	dateSubmitted  2008-11-4 11:37:19
+	dateReleased   2009-08-4
+	priority       3
+	noInherit      on
+	configurable   on
+	cell           GM12878
+	antibody       CTCF
+
+	track          wgEncodeUtaChIPseqSignalGm12878Ctcf
+	subTrack       wgEncodeChromatinMap
+	shortLabel     CTCF GM12878 Sig
+	longLabel      ENCODE UT-Austin ChIP-Seq Signal (CTCF in GM12878 cells)
+	subGroups      view=Signal EXP=ChIP-CTCF cellType=GM12878
+	type           wig 0.00 14.01
+	dateSubmitted  2008-11-4 11:37:19
+	dateReleased   2009-08-4
+	priority       4
+	noInherit      on
+	configurable   on
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
+	antibody       CTCF
+
+	track          wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf
+	subTrack       wgEncodeChromatinMap
+	shortLabel     CTCF GM12878 Raw1
+	longLabel      ENCODE UT-Austin ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12878 cells)
+	subGroups      view=zRAW EXP=ChIP-CTCF cellType=GM12878
+	type           wig 0.00 6.71
+	dateSubmitted  2008-11-4 11:37:19
+	dateReleased   2009-08-4
+	priority       5
+	noInherit      on
+	configurable   off
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
+	antibody       CTCF
+
+	track          wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
+	subTrack       wgEncodeChromatinMap
+	shortLabel     CTCF GM12878 Raw2
+	longLabel      ENCODE UT-Austin ChIP-Seq Raw Signal Replicate 2 (CTCF in GM12878 cells)
+	subGroups      view=zRAW EXP=ChIP-CTCF cellType=GM12878
+	type           wig 0.00 7.24
+	dateSubmitted  2008-11-4 11:37:19
+	dateReleased   2009-08-4
+	priority       6
+	noInherit      on
+	configurable   off
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
+	antibody       CTCF
+
+	track          wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
+	subTrack       wgEncodeChromatinMap
+	shortLabel     CTCF GM12878 Raw3
+	longLabel      ENCODE UT-Austin ChIP-Seq Raw Signal Replicate 3 (CTCF in GM12878 cells)
+	subGroups      view=zRAW EXP=ChIP-CTCF cellType=GM12878
+	type           wig 0.00 14.01
+	dateSubmitted  2008-11-4 11:37:19
+	dateReleased   2009-08-4
+	priority       7
+	noInherit      on
+	configurable   off
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
+	antibody       CTCF
+
+	track          wgEncodeDukeDNaseSeqPeaksGm12878
+	subTrack       wgEncodeChromatinMap
+	shortLabel     DNase GM12878 Pk
+	longLabel      ENCODE Duke DNase-Seq Peaks (in GM12878 cells)
+	subGroups      view=Peaks EXP=DNase cellType=GM12878
+	type           narrowPeak
+	dateSubmitted  2008-11-4 8:33:46
+	dateReleased   2009-08-4
+	priority       11
+	noInherit      on
+	configurable   on
+	cell           GM12878
+
+	track          wgEncodeDukeDNaseSeqSignalGm12878
+	subTrack       wgEncodeChromatinMap
+	shortLabel     DNase GM12878 Sig
+	longLabel      ENCODE Duke DNase-Seq Signal (in GM12878 cells)
+	subGroups      view=Signal EXP=DNase cellType=GM12878
+	type           wig 0.00 39.64
+	dateSubmitted  2008-11-4 8:33:46
+	dateReleased   2009-08-4
+	priority       12
+	noInherit      on
+	configurable   on
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
+
+	track          wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
+	subTrack       wgEncodeChromatinMap
+	shortLabel     DNase GM12878 Raw1
+	longLabel      ENCODE Duke DNase-Seq Raw Signal Replicate 1 (in GM12878 cells)
+	subGroups      view=zRAW EXP=DNase cellType=GM12878
+	type           wig 0.00 10.46
+	dateSubmitted  2008-11-4 8:33:46
+	dateReleased   2009-08-4
+	priority       13
+	noInherit      on
+	configurable   off
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
+
+	track          wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
+	subTrack       wgEncodeChromatinMap
+	shortLabel     DNase GM12878 Raw2
+	longLabel      ENCODE Duke DNase-Seq Raw Signal Replicate 2 (in GM12878 cells)
+	subGroups      view=zRAW EXP=DNase cellType=GM12878
+	type           wig 0.00 9.77
+	dateSubmitted  2008-11-4 8:33:46
+	dateReleased   2009-08-4
+	priority       14
+	noInherit      on
+	configurable   off
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
+
+	track          gEncodeDukeDNaseSeqRawSignalRep3Gm12878
+	subTrack       wgEncodeChromatinMap
+	shortLabel     DNase GM12878 Raw3
+	longLabel      ENCODE Duke DNase-Seq Raw Signal Replicate 3 (in GM12878 cells)
+	subGroups      view=zRAW EXP=DNase cellType=GM12878
+	type           wig 0.00 39.64
+	dateSubmitted  2008-11-4 8:33:46
+	dateReleased   2009-08-4
+	priority       15
+	noInherit      on
+	configurable   off
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
+
+	track          wgEncodeUncFAIREseqPeaksGm12878
+	subTrack       wgEncodeChromatinMap
+	shortLabel     FAIRE GM12878 Pk
+	longLabel      ENCODE UNC FAIRE-Seq Peaks (in GM12878 cells)
+	subGroups      view=Peaks EXP=FAIRE cellType=GM12878
+	type           narrowPeak
+	dateSubmitted  2008-11-4 10:18:16
+	dateReleased   2009-08-4
+	priority       16
+	noInherit      on
+	configurable   on
+	cell           GM12878
+
+	track          wgEncodeUncFAIREseqSignalGm12878
+	subTrack       wgEncodeChromatinMap
+	shortLabel     FAIRE GM12878 Sig
+	longLabel      ENCODE UNC FAIRE-Seq Signal (in GM12878 cells)
+	subGroups      view=Signal EXP=FAIRE cellType=GM12878
+	type           wig 0.00 18.37
+	dateSubmitted  2008-11-4 10:18:16
+	dateReleased   2009-08-4
+	priority       17
+	noInherit      on
+	configurable   on
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
+
+	track          wgEncodeUncFAIREseqRawSignalRep1Gm12878
+	subTrack       wgEncodeChromatinMap
+	shortLabel     FAIRE GM12878 Raw1
+	longLabel      ENCODE UNC FAIRE-Seq Raw Signal Replicate 1 (in GM12878 cells)
+	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
+	type           wig 0.00 22.93
+	dateSubmitted  2008-11-4 10:18:16
+	dateReleased   2009-08-4
+	priority       18
+	noInherit      on
+	configurable   off
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
+
+	track          wgEncodeUncFAIREseqRawSignalRep2Gm12878
+	subTrack       wgEncodeChromatinMap
+	shortLabel     FAIRE GM12878 Raw 2
+	longLabel      ENCODE UNC FAIRE-Seq Raw Signal Replicate 2 (in GM12878 cells)
+	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
+	type           wig 0.00 50.40
+	dateSubmitted  2008-11-4 10:18:16
+	dateReleased   2009-08-4
+	priority       19
+	noInherit      on
+	configurable   off
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
+
+	track          wgEncodeUncFAIREseqRawSignalRep3Gm12878
+	subTrack       wgEncodeChromatinMap
+	shortLabel     FAIRE GM12878 Raw 3
+	longLabel      ENCODE UNC FAIRE-Seq Raw Signal Replicate 3 (in GM12878 cells)
+	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
+	type           wig 0.00 112.28
+	dateSubmitted  2008-11-4 10:18:16
+	dateReleased   2009-08-4
+	priority       20
+	noInherit      on
+	configurable   off
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell           GM12878
 
 track wgEncodeNhgriNre
 compositeTrack on
@@ -557,6 +796,7 @@ wgEncode 1
         type            wig 0.00 8316.00
         defaultViewLimits 2:2000
         dateSubmitted   2008-09-29 14:52:0
+        dateReleased    2009-06-29
         priority        1
         noInherit       on
         visibility      full
@@ -576,6 +816,7 @@ wgEncode 1
         subGroups       view=zRAW factor=CTRL cellType=HeLa-S3
         type            wig 1.00 4247.00
         dateSubmitted   2008-09-29 14:52:0
+        dateReleased    2009-06-29
         priority        2
         noInherit       on
         spanList        1
@@ -593,6 +834,7 @@ wgEncode 1
         subGroups       view=Peaks factor=Pol2 cellType=HeLa-S3
         type            narrowPeak
         dateSubmitted   2008-10-1 9:27:32
+        dateReleased    2009-07-01
         priority        3
         noInherit       on
         cell            HeLa-S3
@@ -608,6 +850,7 @@ wgEncode 1
         subGroups       view=Signal factor=Pol2 cellType=HeLa-S3
         type            wig 0.00 14600.00
         dateSubmitted   2008-10-1 9:27:32
+        dateReleased    2009-07-01
         priority        4
         noInherit       on
         visibility      full
@@ -627,6 +870,7 @@ wgEncode 1
         subGroups       view=zRAW factor=Pol2 cellType=HeLa-S3
         type            wig 1.00 2079.00
         dateSubmitted   2008-10-1 9:27:32
+        dateReleased    2009-07-01
         priority        5
         noInherit       on
         spanList        1
@@ -644,6 +888,7 @@ wgEncode 1
         subGroups       view=zRAW factor=Pol2 cellType=HeLa-S3
         type            wig 1.00 3795.00
         dateSubmitted   2008-10-1 9:27:32
+        dateReleased    2009-07-01
         priority        5
         noInherit       on
         spanList        1
@@ -661,6 +906,7 @@ wgEncode 1
         subGroups       view=zRAW factor=Pol2 cellType=HeLa-S3
         type            wig 1.00 3649.00
         dateSubmitted   2008-10-1 9:27:32
+        dateReleased    2009-07-01
         priority        6
         noInherit       on
         spanList        1
@@ -678,6 +924,7 @@ wgEncode 1
         subGroups       view=Signal factor=CTRL cellType=HeLa-S3_IFNg
         type            wig 0.00 11690.00
         dateSubmitted   2008-09-29 14:12:28
+        dateReleased    2009-06-29
         priority        7
         noInherit       on
         visibility      full
@@ -697,6 +944,7 @@ wgEncode 1
         subGroups       view=zRAW factor=CTRL cellType=HeLa-S3_IFNg
         type            wig 1.00 4733.00
         dateSubmitted   2008-09-29 14:12:28
+        dateReleased    2009-06-29
         priority        8
         noInherit       on
         spanList        1
@@ -714,6 +962,7 @@ wgEncode 1
         subGroups       view=Peaks factor=STAT1 cellType=HeLa-S3_IFNg
         type            narrowPeak
         dateSubmitted   2008-10-1 10:6:2
+        dateReleased    2009-07-01
         priority        9
         noInherit       on
         cell            HeLa-S3_IFNg
@@ -729,6 +978,7 @@ wgEncode 1
         subGroups       view=Signal factor=STAT1 cellType=HeLa-S3_IFNg
         type            wig 0.00 20910.00
         dateSubmitted   2008-10-1 10:6:2
+        dateReleased    2009-07-01
         priority        10
         noInherit       on
         visibility      full
@@ -748,6 +998,7 @@ wgEncode 1
         subGroups       view=zRAW factor=STAT1 cellType=HeLa-S3_IFNg
         type            wig 1.00 14648.00
         dateSubmitted   2008-10-1 10:6:2
+        dateReleased    2009-07-01
         priority        11
         noInherit       on
         spanList        1
@@ -765,6 +1016,7 @@ wgEncode 1
         subGroups       view=zRAW factor=STAT1 cellType=HeLa-S3_IFNg
         type            wig 1.00 6262.00
         dateSubmitted   2008-10-1 10:6:2
+        dateReleased    2009-07-01
         priority        12
         noInherit       on
         spanList        1
@@ -782,6 +1034,7 @@ wgEncode 1
         subGroups       view=Signal factor=CTRL cellType=K562
         type            wig 0.00 4661.00
         dateSubmitted   2008-10-14 11:39:9
+        dateReleased    2009-07-14
         priority        13
         noInherit       on
         visibility      full
@@ -799,6 +1052,7 @@ wgEncode 1
         subGroups       view=zRAW factor=CTRL cellType=K562
         type            wig 1.00 1315.00
         dateSubmitted   2008-10-14 11:39:9
+        dateReleased    2009-07-14
         priority        14
         noInherit       on
         spanList        1
@@ -815,6 +1069,7 @@ wgEncode 1
         subGroups       view=Peaks factor=Pol2 cellType=K562
         type            narrowPeak
         dateSubmitted   2008-10-14 13:29:42
+        dateReleased    2009-07-14
         priority        15
         noInherit       on
         cell    K562
@@ -828,6 +1083,7 @@ wgEncode 1
         subGroups       view=Signal factor=Pol2 cellType=K562
         type            wig 0.00 18226.00
         dateSubmitted   2008-10-14 13:29:42
+        dateReleased    2009-07-14
         priority        16
         noInherit       on
         visibility      full
