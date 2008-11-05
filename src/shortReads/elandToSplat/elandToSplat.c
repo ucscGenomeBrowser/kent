@@ -5,7 +5,7 @@
 #include "options.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: elandToSplat.c,v 1.2 2008/11/05 05:50:05 kent Exp $";
+static char const rcsid[] = "$Id: elandToSplat.c,v 1.3 2008/11/05 05:51:02 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -85,12 +85,7 @@ while (lineFileNextReal(lf, &line))
     if (wordCount != 3 && wordCount != 4)
        errAbort("Expecting 3 or 4 columns line %d of %s, got %d", lf->lineIx, lf->fileName, wordCount);
     if (wordCount == 4)
-        {
-	char *readName = words[0];
-	char *seq = words[1];
-	char *mappings = words[2];
 	outputMappings(words[0], words[1], words[3], lf, f);
-	}
     }
 }
 
