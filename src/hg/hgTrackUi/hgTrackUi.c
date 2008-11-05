@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.456 2008/10/24 22:32:40 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.457 2008/11/05 14:10:27 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2267,7 +2267,7 @@ else if (sameString(track, "humMusL") ||
  * For crossSpeciesUi, the
  * default for chrom coloring is "on", unless track setting
  * colorChromDefault is set to "off" */
-else if (endsWith("chainSelf", track))
+else if (startsWith("chain", track) || endsWith("chainSelf", track))
     chainColorUi(tdb);
 else if (sameString(track, "orthoTop4"))
     /* still used ?? */
