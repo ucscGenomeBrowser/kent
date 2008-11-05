@@ -8,10 +8,15 @@
 #include "options.h"
 #include "splatAli.h"
 
-static char const rcsid[] = "$Id: splatMerge.c,v 1.2 2008/10/28 23:34:51 kent Exp $";
+static char const rcsid[] = "$Id: splatMerge.c,v 1.3 2008/11/05 08:01:27 kent Exp $";
 
 boolean big = FALSE;
 boolean dupeOk = FALSE;
+static boolean worseToo = FALSE;
+static int maxRepeat = 10;
+static char *repeatOutput = NULL;
+int minScore = 0;
+
 
 void usage()
 /* Explain usage and exit. */
@@ -25,12 +30,23 @@ errAbort(
   "          In this case the input files must be sorted on the read-name (sort -k 7)\n"
   "   -dupeOk - Allow the same read to align in the same place.  Normally this would\n"
   "             indicate an error in the input, but it's easy to do so it's checked\n"
+  "   -worseToo - if set return alignments other than the best alignments\n"
+  "   -maxRepeat=N - Maximum number of times for a read to be aligned.\n"
+  "   -repeatOutput=file.fa - Output reads that align more than maxRepeat times here\n"
+  "   -minScore=N - Minimum score (score is 2*match - 2*mismatch - 3*gap)\n"
+
   );
 }
+
+static FILE *repeatOutputFile = NULL;
 
 static struct optionSpec options[] = {
    {"big", OPTION_BOOLEAN},
    {"dupeOk", OPTION_BOOLEAN},
+   {"maxRepeat", OPTION_INT},
+   {"repeatOutput", OPTION_STRING},
+   {"worseToo", OPTION_BOOLEAN},
+   {"minScore", OPTION_INT},
    {NULL, 0},
 };
 
@@ -160,13 +176,30 @@ void outputBest(struct splatAli *start, struct splatAli *end, int bestScore, int
 /* Output the splat items between start and end that score at bestScore. */
 {
 struct splatAli *el;
-for (el = start; el != end; el = el->next)
+if (bestScore >= minScore)
     {
-    int score = splatAliScore(el->alignedBases);
-    if (score >= bestScore)
-        {
-	el->score = 1000/bestCount;
-	splatAliTabOut(el, f);
+    if (bestCount <= maxRepeat)
+	{
+	for (el = start; el != end; el = el->next)
+	    {
+	    int score = splatAliScore(el->alignedBases);
+	    if (worseToo || score >= bestScore)
+		{
+		el->score = 1000/bestCount;
+		splatAliTabOut(el, f);
+		}
+	    }
+	}
+    else
+	{
+	if (repeatOutputFile != NULL)
+	    {
+	    char *bases = cloneString(start->alignedBases);
+	    stripChar(bases, '-');
+	    stripChar(bases, '^');
+	    fprintf(repeatOutputFile, ">%s\n%s\n", start->readName, bases);
+	    freeMem(bases);
+	    }
 	}
     }
 }
@@ -210,6 +243,8 @@ carefulClose(&f);
 void splatMerge(int inCount, char *inNames[], char *outName)
 /* splatMerge - Merge together splat files.. */
 {
+if (repeatOutput != NULL)
+    repeatOutputFile = mustOpen(repeatOutput, "w");
 if (big)
     splatMergeBig(inCount, inNames, outName);
 else
@@ -224,6 +259,10 @@ if (argc < 4)
     usage();
 big = optionExists("big");
 dupeOk = optionExists("dupeOk");
+worseToo = optionExists("worseToo");
+maxRepeat = optionInt("maxRepeat", maxRepeat);
+repeatOutput = optionVal("repeatOutput", NULL);
+minScore = optionInt("minScore", minScore);
 splatMerge(argc-2, argv+1, argv[argc-1]);
 return 0;
 }
