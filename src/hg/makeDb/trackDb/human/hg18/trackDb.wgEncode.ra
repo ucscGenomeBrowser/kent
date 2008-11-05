@@ -228,7 +228,7 @@ wgEncode	1
 	subGroups      view=Signal EXP=Ainp cellType=GM12878
 	type           wig 0.00 29.05
 	dateSubmitted  2008-11-4 12:11:48
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       1
 	noInherit      on
 	configurable   on
@@ -245,7 +245,7 @@ wgEncode	1
 	subGroups      view=zRAW EXP=Ainp cellType=GM12878
 	type           wig 0.00 29.05
 	dateSubmitted  2008-11-4 12:11:48
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       2
 	noInherit      on
 	configurable   off
@@ -262,7 +262,7 @@ wgEncode	1
 	subGroups      view=Peaks EXP=ChIP-CTCF cellType=GM12878
 	type           narrowPeak
 	dateSubmitted  2008-11-4 11:37:19
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       3
 	noInherit      on
 	configurable   on
@@ -276,7 +276,7 @@ wgEncode	1
 	subGroups      view=Signal EXP=ChIP-CTCF cellType=GM12878
 	type           wig 0.00 14.01
 	dateSubmitted  2008-11-4 11:37:19
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       4
 	noInherit      on
 	configurable   on
@@ -293,7 +293,7 @@ wgEncode	1
 	subGroups      view=zRAW EXP=ChIP-CTCF cellType=GM12878
 	type           wig 0.00 6.71
 	dateSubmitted  2008-11-4 11:37:19
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       5
 	noInherit      on
 	configurable   off
@@ -310,7 +310,7 @@ wgEncode	1
 	subGroups      view=zRAW EXP=ChIP-CTCF cellType=GM12878
 	type           wig 0.00 7.24
 	dateSubmitted  2008-11-4 11:37:19
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       6
 	noInherit      on
 	configurable   off
@@ -327,7 +327,7 @@ wgEncode	1
 	subGroups      view=zRAW EXP=ChIP-CTCF cellType=GM12878
 	type           wig 0.00 14.01
 	dateSubmitted  2008-11-4 11:37:19
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       7
 	noInherit      on
 	configurable   off
@@ -344,7 +344,7 @@ wgEncode	1
 	subGroups      view=Peaks EXP=DNase cellType=GM12878
 	type           narrowPeak
 	dateSubmitted  2008-11-4 8:33:46
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       11
 	noInherit      on
 	configurable   on
@@ -357,7 +357,7 @@ wgEncode	1
 	subGroups      view=Signal EXP=DNase cellType=GM12878
 	type           wig 0.00 39.64
 	dateSubmitted  2008-11-4 8:33:46
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       12
 	noInherit      on
 	configurable   on
@@ -373,7 +373,7 @@ wgEncode	1
 	subGroups      view=zRAW EXP=DNase cellType=GM12878
 	type           wig 0.00 10.46
 	dateSubmitted  2008-11-4 8:33:46
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       13
 	noInherit      on
 	configurable   off
@@ -389,7 +389,7 @@ wgEncode	1
 	subGroups      view=zRAW EXP=DNase cellType=GM12878
 	type           wig 0.00 9.77
 	dateSubmitted  2008-11-4 8:33:46
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       14
 	noInherit      on
 	configurable   off
@@ -398,14 +398,14 @@ wgEncode	1
 	maxHeightPixels	100:16:16
 	cell           GM12878
 
-	track          gEncodeDukeDNaseSeqRawSignalRep3Gm12878
+	track          wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
 	subTrack       wgEncodeChromatinMap
 	shortLabel     DNase GM12878 Raw3
 	longLabel      ENCODE Chromatin Map Duke DNase-Seq Raw Signal Replicate 3 (in GM12878 cells)
 	subGroups      view=zRAW EXP=DNase cellType=GM12878
 	type           wig 0.00 39.64
 	dateSubmitted  2008-11-4 8:33:46
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       15
 	noInherit      on
 	configurable   off
@@ -421,7 +421,7 @@ wgEncode	1
 	subGroups      view=Peaks EXP=FAIRE cellType=GM12878
 	type           narrowPeak
 	dateSubmitted  2008-11-4 10:18:16
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       16
 	noInherit      on
 	configurable   on
@@ -434,7 +434,7 @@ wgEncode	1
 	subGroups      view=Signal EXP=FAIRE cellType=GM12878
 	type           wig 0.00 18.37
 	dateSubmitted  2008-11-4 10:18:16
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       17
 	noInherit      on
 	configurable   on
@@ -450,7 +450,7 @@ wgEncode	1
 	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
 	type           wig 0.00 22.93
 	dateSubmitted  2008-11-4 10:18:16
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       18
 	noInherit      on
 	configurable   off
@@ -466,7 +466,7 @@ wgEncode	1
 	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
 	type           wig 0.00 50.40
 	dateSubmitted  2008-11-4 10:18:16
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       19
 	noInherit      on
 	configurable   off
@@ -482,7 +482,7 @@ wgEncode	1
 	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
 	type           wig 0.00 112.28
 	dateSubmitted  2008-11-4 10:18:16
-	dateReleased   2009-08-4
+	dateReleased   2009-08-04
 	priority       20
 	noInherit      on
 	configurable   off
