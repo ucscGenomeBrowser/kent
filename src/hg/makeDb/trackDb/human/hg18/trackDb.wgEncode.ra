@@ -210,7 +210,7 @@ longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
 group		regulation
 subGroup1	view Views Peaks=Peaks Signal=Signal zRAW=RawSignal
 subGroup2	cellType Cell_Line GM12878=GM12878
-subGroup3	EXP Experiment INP=Input ChIP-CTCF=ChIP-seq_CTCF DNase=DNase-seq FAIRE=FAIRE-seq
+subGroup3	EXP Experiment Ainp=Input ChIP-CTCF=ChIP-seq_CTCF DNase=DNase-seq FAIRE=FAIRE-seq
 sortOrder	cellType=+ EXP=+ view=+
 controlledVocabulary	encode/cv.ra cellType
 dimensions  dimensionX=cellType dimensionY=EXP
@@ -224,8 +224,8 @@ wgEncode	1
 	track		   wgEncodeUtaustinChIPseqSignalGm12878Input
 	subTrack       wgEncodeChromatinMap
 	shortLabel	   INP GM12878 Sig
-	longLabel      ENCODE UT-Austin Input Signal (Input in GM12878 cells)
-	subGroups      view=Signal EXP=INP cellType=GM12878
+	longLabel      ENCODE Chromatin Map UT-Austin Input Signal (GM12878 cells)
+	subGroups      view=Signal EXP=Ainp cellType=GM12878
 	type           wig 0.00 29.05
 	dateSubmitted  2008-11-4 12:11:48
 	dateReleased   2009-08-4
@@ -241,8 +241,8 @@ wgEncode	1
 	track          wgEncodeUtaustinChIPseqRawSignalGm12878Input
 	subTrack       wgEncodeChromatinMap
 	shortLabel     INP GM12878 Raw
-	longLabel      ENCODE UT-Austin Input Raw Signal (Input in GM12878 cells)
-	subGroups      view=zRAW EXP=INP cellType=GM12878
+	longLabel      ENCODE Chromatin Map UT-Austin Input Raw Signal (GM12878 cells)
+	subGroups      view=zRAW EXP=Ainp cellType=GM12878
 	type           wig 0.00 29.05
 	dateSubmitted  2008-11-4 12:11:48
 	dateReleased   2009-08-4
@@ -258,7 +258,7 @@ wgEncode	1
 	track          wgEncodeUtaChIPseqPeaksGm12878Ctcf
 	subTrack       wgEncodeChromatinMap
 	shortLabel     CTCF GM12878 Pk
-	longLabel      ENCODE UT-Austin ChIP-Seq Peaks (CTCF in GM12878 cells)
+	longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Peaks (CTCF in GM12878 cells)
 	subGroups      view=Peaks EXP=ChIP-CTCF cellType=GM12878
 	type           narrowPeak
 	dateSubmitted  2008-11-4 11:37:19
@@ -272,7 +272,7 @@ wgEncode	1
 	track          wgEncodeUtaChIPseqSignalGm12878Ctcf
 	subTrack       wgEncodeChromatinMap
 	shortLabel     CTCF GM12878 Sig
-	longLabel      ENCODE UT-Austin ChIP-Seq Signal (CTCF in GM12878 cells)
+	longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Signal (CTCF in GM12878 cells)
 	subGroups      view=Signal EXP=ChIP-CTCF cellType=GM12878
 	type           wig 0.00 14.01
 	dateSubmitted  2008-11-4 11:37:19
@@ -289,7 +289,7 @@ wgEncode	1
 	track          wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf
 	subTrack       wgEncodeChromatinMap
 	shortLabel     CTCF GM12878 Raw1
-	longLabel      ENCODE UT-Austin ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12878 cells)
+	longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12878 cells)
 	subGroups      view=zRAW EXP=ChIP-CTCF cellType=GM12878
 	type           wig 0.00 6.71
 	dateSubmitted  2008-11-4 11:37:19
@@ -306,7 +306,7 @@ wgEncode	1
 	track          wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
 	subTrack       wgEncodeChromatinMap
 	shortLabel     CTCF GM12878 Raw2
-	longLabel      ENCODE UT-Austin ChIP-Seq Raw Signal Replicate 2 (CTCF in GM12878 cells)
+	longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Raw Signal Replicate 2 (CTCF in GM12878 cells)
 	subGroups      view=zRAW EXP=ChIP-CTCF cellType=GM12878
 	type           wig 0.00 7.24
 	dateSubmitted  2008-11-4 11:37:19
@@ -323,7 +323,7 @@ wgEncode	1
 	track          wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
 	subTrack       wgEncodeChromatinMap
 	shortLabel     CTCF GM12878 Raw3
-	longLabel      ENCODE UT-Austin ChIP-Seq Raw Signal Replicate 3 (CTCF in GM12878 cells)
+	longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Raw Signal Replicate 3 (CTCF in GM12878 cells)
 	subGroups      view=zRAW EXP=ChIP-CTCF cellType=GM12878
 	type           wig 0.00 14.01
 	dateSubmitted  2008-11-4 11:37:19
@@ -340,7 +340,7 @@ wgEncode	1
 	track          wgEncodeDukeDNaseSeqPeaksGm12878
 	subTrack       wgEncodeChromatinMap
 	shortLabel     DNase GM12878 Pk
-	longLabel      ENCODE Duke DNase-Seq Peaks (in GM12878 cells)
+	longLabel      ENCODE Chromatin Map Duke DNase-Seq Peaks (in GM12878 cells)
 	subGroups      view=Peaks EXP=DNase cellType=GM12878
 	type           narrowPeak
 	dateSubmitted  2008-11-4 8:33:46
@@ -353,7 +353,7 @@ wgEncode	1
 	track          wgEncodeDukeDNaseSeqSignalGm12878
 	subTrack       wgEncodeChromatinMap
 	shortLabel     DNase GM12878 Sig
-	longLabel      ENCODE Duke DNase-Seq Signal (in GM12878 cells)
+	longLabel      ENCODE Chromatin Map Duke DNase-Seq Signal (in GM12878 cells)
 	subGroups      view=Signal EXP=DNase cellType=GM12878
 	type           wig 0.00 39.64
 	dateSubmitted  2008-11-4 8:33:46
@@ -369,7 +369,7 @@ wgEncode	1
 	track          wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
 	subTrack       wgEncodeChromatinMap
 	shortLabel     DNase GM12878 Raw1
-	longLabel      ENCODE Duke DNase-Seq Raw Signal Replicate 1 (in GM12878 cells)
+	longLabel      ENCODE Chromatin Map Duke DNase-Seq Raw Signal Replicate 1 (in GM12878 cells)
 	subGroups      view=zRAW EXP=DNase cellType=GM12878
 	type           wig 0.00 10.46
 	dateSubmitted  2008-11-4 8:33:46
@@ -385,7 +385,7 @@ wgEncode	1
 	track          wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
 	subTrack       wgEncodeChromatinMap
 	shortLabel     DNase GM12878 Raw2
-	longLabel      ENCODE Duke DNase-Seq Raw Signal Replicate 2 (in GM12878 cells)
+	longLabel      ENCODE Chromatin Map Duke DNase-Seq Raw Signal Replicate 2 (in GM12878 cells)
 	subGroups      view=zRAW EXP=DNase cellType=GM12878
 	type           wig 0.00 9.77
 	dateSubmitted  2008-11-4 8:33:46
@@ -401,7 +401,7 @@ wgEncode	1
 	track          gEncodeDukeDNaseSeqRawSignalRep3Gm12878
 	subTrack       wgEncodeChromatinMap
 	shortLabel     DNase GM12878 Raw3
-	longLabel      ENCODE Duke DNase-Seq Raw Signal Replicate 3 (in GM12878 cells)
+	longLabel      ENCODE Chromatin Map Duke DNase-Seq Raw Signal Replicate 3 (in GM12878 cells)
 	subGroups      view=zRAW EXP=DNase cellType=GM12878
 	type           wig 0.00 39.64
 	dateSubmitted  2008-11-4 8:33:46
@@ -417,7 +417,7 @@ wgEncode	1
 	track          wgEncodeUncFAIREseqPeaksGm12878
 	subTrack       wgEncodeChromatinMap
 	shortLabel     FAIRE GM12878 Pk
-	longLabel      ENCODE UNC FAIRE-Seq Peaks (in GM12878 cells)
+	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Peaks (in GM12878 cells)
 	subGroups      view=Peaks EXP=FAIRE cellType=GM12878
 	type           narrowPeak
 	dateSubmitted  2008-11-4 10:18:16
@@ -430,7 +430,7 @@ wgEncode	1
 	track          wgEncodeUncFAIREseqSignalGm12878
 	subTrack       wgEncodeChromatinMap
 	shortLabel     FAIRE GM12878 Sig
-	longLabel      ENCODE UNC FAIRE-Seq Signal (in GM12878 cells)
+	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Signal (in GM12878 cells)
 	subGroups      view=Signal EXP=FAIRE cellType=GM12878
 	type           wig 0.00 18.37
 	dateSubmitted  2008-11-4 10:18:16
@@ -446,7 +446,7 @@ wgEncode	1
 	track          wgEncodeUncFAIREseqRawSignalRep1Gm12878
 	subTrack       wgEncodeChromatinMap
 	shortLabel     FAIRE GM12878 Raw1
-	longLabel      ENCODE UNC FAIRE-Seq Raw Signal Replicate 1 (in GM12878 cells)
+	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 1 (in GM12878 cells)
 	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
 	type           wig 0.00 22.93
 	dateSubmitted  2008-11-4 10:18:16
@@ -462,7 +462,7 @@ wgEncode	1
 	track          wgEncodeUncFAIREseqRawSignalRep2Gm12878
 	subTrack       wgEncodeChromatinMap
 	shortLabel     FAIRE GM12878 Raw 2
-	longLabel      ENCODE UNC FAIRE-Seq Raw Signal Replicate 2 (in GM12878 cells)
+	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 2 (in GM12878 cells)
 	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
 	type           wig 0.00 50.40
 	dateSubmitted  2008-11-4 10:18:16
@@ -478,7 +478,7 @@ wgEncode	1
 	track          wgEncodeUncFAIREseqRawSignalRep3Gm12878
 	subTrack       wgEncodeChromatinMap
 	shortLabel     FAIRE GM12878 Raw 3
-	longLabel      ENCODE UNC FAIRE-Seq Raw Signal Replicate 3 (in GM12878 cells)
+	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 3 (in GM12878 cells)
 	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
 	type           wig 0.00 112.28
 	dateSubmitted  2008-11-4 10:18:16
@@ -519,22 +519,6 @@ wgEncode 1
         priority        1
         noInherit       on
         cell    K562
-
-track wgEncodeDukeChIPseq
-compositeTrack on
-shortLabel Duke ChIP-seq
-longLabel ENCODE - Duke ChIP-seq === PLACE HOLDER ===
-group regulation
-priority 0
-type bed 3
-
-track wgEncodeDukeFAIREseq
-compositeTrack on
-shortLabel Duke FAIRE-seq
-longLabel ENCODE - Duke FAIRE-seq === PLACE HOLDER ===
-group regulation
-priority 0
-type bed 3
 
 track wgEncodeRikenCage
 compositeTrack on
