@@ -1,5 +1,6 @@
-/* i16Make - Make a suffix array file out of input DNA sequences.. */
-/* Copyright Jim Kent 2008 all rights reserved. */
+/* i16Make - Make a 16 bit DNA index.. */
+/* This file is copyright 2008 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "linefile.h"
@@ -11,7 +12,7 @@
 #include "verbose.h"
 #include "i16.h"
 
-static char const rcsid[] = "$Id: i16Make.c,v 1.1 2008/10/31 02:54:35 kent Exp $";
+static char const rcsid[] = "$Id: i16Make.c,v 1.2 2008/11/06 07:03:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

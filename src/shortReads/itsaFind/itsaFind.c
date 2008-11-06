@@ -1,4 +1,6 @@
 /* itsaFind - Find sequence by searching indexed traversable suffix array.. */
+/* Copyright 2008 Jim Kent all rights reserved. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -9,7 +11,7 @@
 #include "verbose.h"
 #include "itsa.h"
 
-static char const rcsid[] = "$Id: itsaFind.c,v 1.3 2008/10/31 05:44:21 kent Exp $";
+static char const rcsid[] = "$Id: itsaFind.c,v 1.4 2008/11/06 07:03:00 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 0;

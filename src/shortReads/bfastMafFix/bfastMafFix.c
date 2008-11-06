@@ -1,4 +1,6 @@
 /* bfastMafFix - Fix bfast's broken MAFs.. */
+/* This file is copyright 2008 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -7,7 +9,7 @@
 #include "sqlNum.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: bfastMafFix.c,v 1.3 2008/11/06 06:57:11 kent Exp $";
+static char const rcsid[] = "$Id: bfastMafFix.c,v 1.4 2008/11/06 07:03:00 kent Exp $";
 
 char *out = "maf";
 

@@ -1,5 +1,8 @@
 /* sufaRepeatFind - Use a sufa index to find short sequence that repeat more than a given number 
  * of times.. */
+/* This file is copyright 2008 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -7,7 +10,7 @@
 #include "options.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaRepeatFind.c,v 1.3 2008/10/28 23:34:51 kent Exp $";
+static char const rcsid[] = "$Id: sufaRepeatFind.c,v 1.4 2008/11/06 07:03:00 kent Exp $";
 
 int readSize = 25;
 int minCount = 5;

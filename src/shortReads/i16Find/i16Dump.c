@@ -1,4 +1,6 @@
 /* i16Dump - Dump out i16 file into a readable format.. */
+/* This file is copyright 2008 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -6,7 +8,7 @@
 #include "dnautil.h"
 #include "i16.h"
 
-static char const rcsid[] = "$Id: i16Dump.c,v 1.1 2008/10/31 02:54:36 kent Exp $";
+static char const rcsid[] = "$Id: i16Dump.c,v 1.2 2008/11/06 07:03:00 kent Exp $";
 
 int maxSize = 50000;
 int maxOverflow = 16;

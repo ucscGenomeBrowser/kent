@@ -1,6 +1,8 @@
 /* shortRepeatMerge - Merge files made with shortRepeatFind.  This is mostly
  * because the splix index for the full genome won't fit into memory, so
  * we have to do it in parts, and then merge it together here. */
+/* This file is copyright 2008 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "linefile.h"
@@ -9,7 +11,7 @@
 #include "sqlNum.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: shortRepeatMerge.c,v 1.3 2008/10/28 23:34:50 kent Exp $";
+static char const rcsid[] = "$Id: shortRepeatMerge.c,v 1.4 2008/11/06 07:03:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

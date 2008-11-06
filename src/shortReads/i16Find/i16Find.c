@@ -1,4 +1,6 @@
 /* i16Find - Find sequence by searching with 16 base index.. */
+/* This file is copyright 2008 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -9,7 +11,7 @@
 #include "verbose.h"
 #include "i16.h"
 
-static char const rcsid[] = "$Id: i16Find.c,v 1.1 2008/10/31 02:54:36 kent Exp $";
+static char const rcsid[] = "$Id: i16Find.c,v 1.2 2008/11/06 07:03:00 kent Exp $";
 
 boolean mmap;
 boolean noOverflow;

@@ -1,11 +1,13 @@
 /* elandToSplat - Convert eland output to splat output.. */
+/* This file is copyright 2008 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: elandToSplat.c,v 1.4 2008/11/05 18:37:56 kent Exp $";
+static char const rcsid[] = "$Id: elandToSplat.c,v 1.5 2008/11/06 07:03:00 kent Exp $";
 
 boolean multi = FALSE;
 char *dna = NULL;
