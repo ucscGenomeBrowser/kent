@@ -37,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.377 2008/10/28 07:39:05 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.378 2008/11/06 17:14:03 fanhsu Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -462,7 +462,7 @@ if (hdbCc == NULL)
 return sqlConnCacheProfileAlloc(hdbCc, profileName, db);
 }
 
-static char *getTrackProfileName(struct trackDb *tdb)
+char *getTrackProfileName(struct trackDb *tdb)
 /* get profile is associated with a track, return it, otherwise NULL */
 {
 // FIXME: logicalDb will not work in the long term, remove when this
@@ -2594,7 +2594,7 @@ hFreeConn(&conn);
 return(gotIndex);
 }
 
-boolean hFindBed12FieldsAndBin(char *db, char *table, 
+boolean hFindBed12FieldsAndBinWithConn(struct sqlConnection *conn, char *db, char *table, 
 	char retChrom[HDB_MAX_FIELD_STRING],
 	char retStart[HDB_MAX_FIELD_STRING],
 	char retEnd[HDB_MAX_FIELD_STRING],
@@ -2612,15 +2612,12 @@ boolean hFindBed12FieldsAndBin(char *db, char *table,
  * will be set to "". */
 {
 char query[256];
-struct sqlConnection *conn = NULL;
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(5);
 boolean gotIt = TRUE, binned = FALSE;
 
-if (! hTableExists(db, table))
-    return FALSE;
-conn = hAllocConn(db);
+if (conn == NULL) return FALSE;
 
 /* Set field names to empty strings */
 retEnd[0] = 0;
@@ -2724,9 +2721,95 @@ else
     gotIt = FALSE;
     }
 freeHash(&hash);
-hFreeConn(&conn);
 *retBinned = binned;
 return gotIt;
+}
+
+boolean hFindFieldsAndBinWithConn(struct sqlConnection *conn, char *db, char *table, 
+	char retChrom[HDB_MAX_FIELD_STRING],
+	char retStart[HDB_MAX_FIELD_STRING], char retEnd[HDB_MAX_FIELD_STRING],
+	boolean *retBinned)
+/* Given a table return the fields for selecting chromosome, start, end,
+ * and whether it's binned . */
+{
+char retName[HDB_MAX_FIELD_STRING];
+char retScore[HDB_MAX_FIELD_STRING];
+char retStrand[HDB_MAX_FIELD_STRING];
+char retCdsStart[HDB_MAX_FIELD_STRING];
+char retCdsEnd[HDB_MAX_FIELD_STRING];
+char retCount[HDB_MAX_FIELD_STRING];
+char retStarts[HDB_MAX_FIELD_STRING];
+char retEndsSizes[HDB_MAX_FIELD_STRING];
+char retSpan[HDB_MAX_FIELD_STRING];
+return hFindBed12FieldsAndBinWithConn(conn, db, table,
+			      retChrom, retStart, retEnd,
+			      retName, retScore, retStrand,
+			      retCdsStart, retCdsEnd,
+			      retCount, retStarts, retEndsSizes,
+			      retSpan, retBinned);
+}
+
+boolean hFindChromStartEndFieldsWithConn(struct sqlConnection *conn, char *db, char *table, 
+	char retChrom[HDB_MAX_FIELD_STRING],
+	char retStart[HDB_MAX_FIELD_STRING], char retEnd[HDB_MAX_FIELD_STRING])
+/* Given a table return the fields for selecting chromosome, start, and end. */
+{
+char retName[HDB_MAX_FIELD_STRING];
+char retScore[HDB_MAX_FIELD_STRING];
+char retStrand[HDB_MAX_FIELD_STRING];
+char retCdsStart[HDB_MAX_FIELD_STRING];
+char retCdsEnd[HDB_MAX_FIELD_STRING];
+char retCount[HDB_MAX_FIELD_STRING];
+char retStarts[HDB_MAX_FIELD_STRING];
+char retEndsSizes[HDB_MAX_FIELD_STRING];
+char retSpan[HDB_MAX_FIELD_STRING];
+boolean isBinned;
+return hFindBed12FieldsAndBinWithConn(conn, db, table,
+			      retChrom, retStart, retEnd,
+			      retName, retScore, retStrand,
+			      retCdsStart, retCdsEnd,
+			      retCount, retStarts, retEndsSizes,
+			      retSpan, &isBinned);
+}
+
+boolean hFindBed12FieldsAndBin(char *db, char *table, 
+	char retChrom[HDB_MAX_FIELD_STRING],
+	char retStart[HDB_MAX_FIELD_STRING],
+	char retEnd[HDB_MAX_FIELD_STRING],
+	char retName[HDB_MAX_FIELD_STRING],
+	char retScore[HDB_MAX_FIELD_STRING],
+	char retStrand[HDB_MAX_FIELD_STRING],
+        char retCdsStart[HDB_MAX_FIELD_STRING],
+	char retCdsEnd[HDB_MAX_FIELD_STRING],
+	char retCount[HDB_MAX_FIELD_STRING],
+	char retStarts[HDB_MAX_FIELD_STRING],
+	char retEndsSizes[HDB_MAX_FIELD_STRING],
+        char retSpan[HDB_MAX_FIELD_STRING], boolean *retBinned)
+/* Given a table return the fields corresponding to all the bed 12 
+ * fields, if they exist.  Fields that don't exist in the given table 
+ * will be set to "". */
+{
+struct sqlConnection *conn = NULL;
+boolean gotIt;
+
+if (! hTableExists(db, table))
+    return FALSE;
+conn = hAllocConn(db);
+gotIt = hFindBed12FieldsAndBinWithConn(conn, db, table,
+        retChrom,
+        retStart,
+        retEnd,
+        retName,
+        retScore,
+        retStrand,
+        retCdsStart,
+        retCdsEnd,
+        retCount,
+        retStarts,
+        retEndsSizes,
+        retSpan, retBinned);
+hFreeConn(&conn);
+return(gotIt);
 }
 
 boolean hFindFieldsAndBin(char *db, char *table, 
@@ -2776,7 +2859,6 @@ return hFindBed12FieldsAndBin(db, table,
 			      retSpan, &isBinned);
 }
 
-
 struct hTableInfo *hFindTableInfo(char *db, char *chrom, char *rootName)
 /* Find table information.  Return NULL if no table.  */
 {
@@ -2814,6 +2896,89 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
     hashAddSaveName(hash, rootName, hti, &hti->rootName);
     hti->isSplit = isSplit;
     hti->isPos = hFindBed12FieldsAndBin(db, fullName,
+	hti->chromField, hti->startField, hti->endField,
+	hti->nameField, hti->scoreField, hti->strandField,
+	hti->cdsStartField, hti->cdsEndField,
+	hti->countField, hti->startsField, hti->endsSizesField,
+	hti->spanField, &hti->hasBin);
+    hti->hasCDS = (hti->cdsStartField[0] != 0);
+    hti->hasBlocks = (hti->startsField[0] != 0);
+    if (hti->isPos)
+	{
+	if (sameString(hti->startsField, "exonStarts"))
+	    hti->type = cloneString("genePred");
+	else if (sameString(hti->startsField, "chromStarts") ||
+		 sameString(hti->startsField, "blockStarts"))
+	    hti->type = cloneString("bed 12");
+	else if (sameString(hti->startsField, "lfStarts"))
+	    hti->type = cloneString("linkedFeatures");
+	else if (sameString(hti->startsField, "tStarts"))
+	    hti->type = cloneString("psl");
+	else if (hti->cdsStartField[0] != 0)
+	    hti->type = cloneString("bed 8");
+	else if (hti->strandField[0] !=0  &&  hti->chromField[0] == 0)
+	    hti->type = cloneString("gl");
+	else if (hti->strandField[0] !=0)
+	    hti->type = cloneString("bed 6");
+	else if (hti->spanField[0] !=0)
+	    hti->type = cloneString("wiggle");
+	else if (hti->nameField[0] !=0)
+	    hti->type = cloneString("bed 4");
+	else if (hti->endField[0] != 0)
+	    hti->type = cloneString("bed 3");
+	else
+	    {
+	    hti->type = cloneString("chromGraph");
+	    safef(hti->endField, sizeof(hti->endField), "%s+1", 
+	    	hti->startField);
+	    }
+	}
+    else
+	hti->type = NULL;
+    }
+return hti;
+}
+
+struct hTableInfo *hFindTableInfoWithConn(char *db, char *chrom, char *rootName, 
+					  struct sqlConnection *conn)
+/* Find table information, with conn as part of input parameters.  Return NULL if no table.  */
+{
+static struct hash *dbHash = NULL;	/* Values are hashes of tables. */
+struct hash *hash;
+struct hTableInfo *hti;
+char fullName[HDB_MAX_TABLE_STRING];
+boolean isSplit = FALSE;
+
+if (conn == NULL) return FALSE;
+
+if (chrom == NULL)
+    chrom = hDefaultChrom(db);
+if (dbHash == NULL)
+    dbHash = newHash(8);
+hash = hashFindVal(dbHash, db);
+if (hash == NULL)
+    {
+    hash = newHash(8);
+    hashAdd(dbHash, db, hash);
+    }
+if ((hti = hashFindVal(hash, rootName)) == NULL)
+    {
+    if (chrom != NULL)
+	{
+	safef(fullName, sizeof(fullName), "%s_%s", chrom, rootName);
+	if (hTableExists(db, fullName))
+	    isSplit = TRUE;
+	}
+    if (!isSplit)
+        {
+	safef(fullName, sizeof(fullName), "%s", rootName);
+	if (!hTableExists(db, fullName))
+	    return NULL;
+	}
+    AllocVar(hti);
+    hashAddSaveName(hash, rootName, hti, &hti->rootName);
+    hti->isSplit = isSplit;
+    hti->isPos = hFindBed12FieldsAndBinWithConn(conn, db, fullName,
 	hti->chromField, hti->startField, hti->endField,
 	hti->nameField, hti->scoreField, hti->strandField,
 	hti->cdsStartField, hti->cdsEndField,
@@ -3048,7 +3213,8 @@ struct sqlResult *hExtendedRangeQuery(
 /* Range query with lots of options. */
 {
 char *db = sqlGetDatabase(conn);
-struct hTableInfo *hti = hFindTableInfo(db, chrom, rootTable);
+/* call hFindTableInfoWithConn() to support tracks may from different hosts */
+struct hTableInfo *hti = hFindTableInfoWithConn(db, chrom, rootTable, conn);
 struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(1024);
 char *table = NULL;
@@ -3107,7 +3273,6 @@ if (retRowOffset != NULL)
     *retRowOffset = rowOffset;
 return sr;
 }
-
 
 struct sqlResult *hRangeQuery(struct sqlConnection *conn,
 	char *rootTable, char *chrom,
