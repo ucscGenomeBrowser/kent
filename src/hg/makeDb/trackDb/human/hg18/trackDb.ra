@@ -425,7 +425,7 @@ track knownGene
 shortLabel UCSC Genes
 longLabel UCSC Genes Based on RefSeq, UniProt, GenBank, CCDS and Comparative Genomics
 group genes
-priority 34
+priority 10
 visibility pack
 color 12,12,120
 type genePred knownGenePep knownGeneMrna
@@ -449,7 +449,7 @@ track knownGeneOld3
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
 group genes
-priority 34.1
+priority 10.1
 visibility hide
 color 82,82,160
 type genePred
