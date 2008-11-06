@@ -5,6 +5,6 @@
 
 arch=`uname -m`
 rtdir="/cluster/data/genbank/runtime/$arch"
-LD_LIBRARY_PATH="$rtdir/lib"
+LD_LIBRARY_PATH="$rtdir/lib:${LD_LIBRARY_PATH}"
 export LD_LIBRARY_PATH
 exec $rtdir/bin/python "$@"
