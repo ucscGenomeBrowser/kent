@@ -217,7 +217,7 @@ module PipelineBackground
         end
         #FileUtils.copy(ftpPath, pf)
         File.rename(ftpPath, pf)
-        File.delete(ftpPath) if File.exists?(ftpPath)  # just in case rename doesn't cleanup
+        File.delete(ftpPath) if File.exists?(ftpPath) and File.exists(pf)  # just in case rename doesn't cleanup
       else
         unless local_path.blank?
           unless File.exists?(local_path)
@@ -228,11 +228,10 @@ module PipelineBackground
           end
           #FileUtils.copy(local_path, pf)
           File.rename(local_path, pf)
-          File.delete(local_path) if File.exists?(local_path)  # just in case rename doesn't cleanup
+          File.delete(local_path) if File.exists?(local_path) and File.exists(pf)  # just in case rename doesn't cleanup
         end
       end
     end
-    FileUtils.chmod 0664, pf
 
     unless new_status project, "expanding"
       return
