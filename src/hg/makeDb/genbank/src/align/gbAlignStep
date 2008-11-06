@@ -63,7 +63,7 @@ Alignment step, runs:
 ";
 
 #
-# $Id: gbAlignStep,v 1.20 2008/10/09 01:10:48 markd Exp $
+# $Id: gbAlignStep,v 1.21 2008/11/06 23:12:51 markd Exp $
 #
 use strict;
 use warnings;
@@ -71,6 +71,22 @@ use File::Basename;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use gbCommon;
+
+# open /cluster/ directories to avoid automounter problems on
+# genbank server results in "Device or resource busy" error
+# (FIXME: tmp hack)
+use POSIX;
+sub holdOpenDir($) {
+    my($path) = @_;
+    my $fd = POSIX::open($path);
+    if (!defined($fd)) {
+        die("can't open cluster directory $path");
+    }
+}
+sub openNfsDirsHack() {
+    holdOpenDir("/cluster/genbank");
+    holdOpenDir("/cluster/bin");
+}
 
 # Entry
 my $workDir;
@@ -215,6 +231,7 @@ if (!defined($main::ENV{TMPDIR})) {
     makeDir($main::ENV{TMPDIR});
 }
 checkOnBuildServer();
+openNfsDirsHack();
 
 # begin
 if ($initialBuild) {
