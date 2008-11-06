@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.1 2008/10/30 16:49:17 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.2 2008/11/06 21:54:55 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -96,9 +96,9 @@ sub htmlTableRow {
     my ($file,$size,$date,$releaseDate,$metaData) = @_;
 
     if($releaseDate && length($releaseDate) > 0) {
-        print OUT_FILE "<TR><TD>&nbsp;&nbsp;$releaseDate\n";
+        print OUT_FILE "<TR><TD align='left'>&nbsp;&nbsp;$releaseDate\n";
     } else {
-        print OUT_FILE "<TR>\n";
+        print OUT_FILE "<TR><TD align='left'>&nbsp;\n";
     }
     print OUT_FILE "<TD><A type='application/zip' target='_blank' HREF=\"$file\">$file</A>\n";
     print OUT_FILE "<TD align='right'>&nbsp;&nbsp;$size<TD>&nbsp;&nbsp;$date&nbsp;&nbsp;\n";
@@ -194,7 +194,7 @@ for my $line (@fileList) {
                 } elsif($pair[0] eq "dateSubmitted" && length($releaseDate) == 0) {
                     my ($YYYY,$MM,$DD) = split('-',$pair[1]);
                     my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
-                    $releaseDate = join('-',(1900 + $rYear,$rMon,$rMDay));
+                    $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
                 } elsif($pair[0] eq "cell" || $pair[0] eq "antibody") {
                     $metaData .= "$pair[0]:$pair[1] ";
                 }
@@ -205,7 +205,7 @@ for my $line (@fileList) {
             $metaData = "ENCODE Type:$dataType";
             my ($YYYY,$MM,$DD) = split('-',$file[3]);
             my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
-            $releaseDate = join('-',(1900 + $rYear,$rMon,$rMDay));
+            $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
         }
     }
     # Now file contains: [file without path] [tableName] [size] [date] [releaseDate] [fullpath/file]
