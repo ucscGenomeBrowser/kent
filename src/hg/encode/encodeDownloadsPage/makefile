@@ -10,8 +10,8 @@ all:
 
 alpha: scripts
 
-install: 
-	@${MAKE} --no-print-directory SCRIPTS=${ENCODE_PIPELINE_BIN} scripts schemas
+install:
+	@${MAKE} --no-print-directory SCRIPTS=${ENCODE_PIPELINE_BIN} scripts
 
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
