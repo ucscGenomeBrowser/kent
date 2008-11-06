@@ -65,5 +65,16 @@ void splatAliOutput(struct splatAli *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+int splatAliCmpReadName(const void *va, const void *vb);
+/* Compare two based on readName. Also separate secondarily on chrom position. */
+
+int splatAliScore(char *ali);
+/* Score splat-encoded alignment. */
+
+void splatAliLookForBest(struct splatAli *start, struct splatAli *end, 
+	int *retBestScore, int *retBestCount);
+/* Scan through list from start up to but not including end (which may be NULL)
+ * and figure out best score and number of elements in list with that score. */
+
 #endif /* SPLATALI_H */
 

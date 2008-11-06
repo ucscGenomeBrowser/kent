@@ -11,7 +11,7 @@
 #include "sqlList.h"
 #include "splatAli.h"
 
-static char const rcsid[] = "$Id: splatAli.c,v 1.2 2008/10/28 23:38:14 kent Exp $";
+static char const rcsid[] = "$Id: splatAli.c,v 1.3 2008/11/06 05:07:06 kent Exp $";
 
 void splatAliStaticLoad(char **row, struct splatAli *ret)
 /* Load a row from splatAli table into ret.  The contents of ret will
@@ -154,4 +154,82 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+int splatAliCmpReadName(const void *va, const void *vb)
+/* Compare two based on readName. Also separate secondarily on chrom position. */
+{
+const struct splatAli *a = *((struct splatAli **)va);
+const struct splatAli *b = *((struct splatAli **)vb);
+int diff = strcmp(a->readName, b->readName);
+if (diff == 0)
+    diff = a->chromStart - b->chromStart;
+if (diff == 0)
+    diff = a->chromEnd - b->chromEnd;
+if (diff == 0)
+    diff = a->strand - b->strand;
+if (diff == 0)
+    diff = strcmp(a->chrom, b->chrom);
+return diff;
+}
+
+int splatAliScore(char *ali)
+/* Score splat-encoded alignment. */
+{
+int score = 0;
+char c;
+while ((c = *ali++))
+    {
+    switch (c)
+        {
+	case 'a':
+	case 'c':
+	case 'g':
+	case 't':
+	    score -= 2;
+	    break;
+	case 'A':
+	case 'C':
+	case 'G':
+	case 'T':
+	    score += 2;
+	    break;
+	case 'n':
+	case 'N':
+	    break;
+	case '^':
+	    score -= 3;
+	    ali += 1;
+	    break;
+	case '-':
+	    score -= 3;
+	    break;
+	}
+    }
+return score;
+}
+
+void splatAliLookForBest(struct splatAli *start, struct splatAli *end, 
+	int *retBestScore, int *retBestCount)
+/* Scan through list from start up to but not including end (which may be NULL)
+ * and figure out best score and number of elements in list with that score. */
+{
+int bestScore = 0, bestCount = 0;
+struct splatAli *el;
+for (el = start; el != end; el = el->next)
+    {
+    int score = splatAliScore(el->alignedBases);
+    if (score >= bestScore)
+        {
+	if (score > bestScore)
+	    {
+	    bestScore = score;
+	    bestCount = 1;
+	    }
+	else
+	    bestCount += 1;
+	}
+    }
+*retBestScore = bestScore;
+*retBestCount = bestCount;
+}
 
