@@ -1,5 +1,5 @@
 /* splatCheck1 - Check that all the test set really is being covered.. */
- * This file is copyright 2008 Jim Kent, but license is hereby
+/* This file is copyright 2008 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
@@ -9,7 +9,7 @@
 #include "sqlNum.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: splatCheck1.c,v 1.2 2008/10/28 23:34:51 kent Exp $";
+static char const rcsid[] = "$Id: splatCheck1.c,v 1.3 2008/11/06 06:58:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -69,11 +69,7 @@ struct hash *goodHash = hashNew(0);	/* Keep track of good reads here. */
 while (lineFileRow(lf, row))
     {
     /* Read in line and parse it, track it. */
-    char *chrom = row[0];
     int chromStart = sqlUnsigned(row[1]);
-    int chromEnd = sqlUnsigned(row[2]);
-    char *seq = row[3];
-    int mapScore = sqlUnsigned(row[4]);
     char *strand = row[5];
     char *name = row[6];
     hashStore(mappedHash, name);
