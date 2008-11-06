@@ -14,7 +14,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat2.txt,v 1.10 2008/10/28 21:37:56 hiram Exp $"
+#	"$Id: oryLat2.txt,v 1.11 2008/11/06 00:31:12 pauline Exp $"
 #
 ###########################################################################
 
@@ -158,7 +158,7 @@ nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^MT/chrM/"
 	-buildDir=/cluster/data/oryLat2/bed/repeatMasker \
 	-bigClusterHub=pk -smallClusterHub=memk > do.log 2>&1
     #	RM version from the log:
-    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.10 2008/10/28 21:37:56 hiram Exp $
+    #	RepeatMasker version development-$Id: oryLat2.txt,v 1.11 2008/11/06 00:31:12 pauline Exp $
     #	CC   RELEASE 20080801
     #   about 40 minutes run time
 
@@ -1677,6 +1677,10 @@ and genbank tables) which tracks to assign these tables to:
     hgsql -e \
 'update dbDb set defaultPos="chr6:11,027,149-11,038,707" where name = "oryLat2";' \
 	-h genome-testdb hgcentraltest
+
+## note from QA changed position because default tracks were sparse in old
+## position:
+'update dbDb set defaultPos='chr18:14,435,198-14,444,829' where name="oryLat2";'
 
 ############################################################################
 
