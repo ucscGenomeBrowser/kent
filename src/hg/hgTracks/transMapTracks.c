@@ -40,7 +40,7 @@ struct hashEl *labels = cartFindPrefix(cart, prefix);
 if (labels == NULL)
     {
     // default to common name+accession and save this in cart so it makes sense in trackUi
-    labelSet = useAcc;
+    labelSet = useOrgCommon|useAcc;
     char setting[64];
     safef(setting, sizeof(setting), "%s.label.acc", tg->tdb->tableName);
     cartSetBoolean(cart, setting, TRUE);
