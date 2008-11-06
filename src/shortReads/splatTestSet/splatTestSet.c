@@ -9,9 +9,11 @@
 #include "sqlNum.h"
 #include "dnautil.h"
 #include "dnaseq.h"
+#include "dnaLoad.h"
 #include "fa.h"
+#include "verbose.h"
 
-static char const rcsid[] = "$Id: splatTestSet.c,v 1.3 2008/10/28 23:34:51 kent Exp $";
+static char const rcsid[] = "$Id: splatTestSet.c,v 1.4 2008/11/06 17:33:18 kent Exp $";
 
 /* Command line variables. */
 int chromCount = 1;
@@ -25,6 +27,7 @@ int readCount;
 boolean existingGenome = FALSE;
 boolean separateMutations = FALSE;
 boolean spaceForDel = FALSE;
+boolean randomPos = FALSE;
 
 /* Other global */
 int readsGenerated;
@@ -35,10 +38,13 @@ void usage()
 errAbort(
   "splatTestSet - Create test set for splat.  This will be a pretty easy to interpret set.\n"
   "usage:\n"
-  "   splatTestSet genome.fa reads.fa\n"
-  "Creates random sequence in genome.fa, and reads that are this sequence.\n"
+  "   splatTestSet genome reads.fa\n"
+  "Creates random sequence in genome, and reads that are this sequence.\n"
   "The reads just step through the genome in order.  The mutations if any will be\n"
   "applied in a very predictable way too, advancing in position one base with each read.\n"
+  "The genome is by default created as a fasta file.  With the existingGenome flag, the\n"
+  "genome can be in fasta, nib, or 2bit format, or a text file containing a list of files\n"
+  "in one of these formats.\n"
   "options:\n"
   "   -chromCount=N - number of chromosomes in genome.fa (default %d)\n"
   "   -chromSize=N - bases per chromosome (default %d)\n"
@@ -50,7 +56,8 @@ errAbort(
   "   -stepSize=N - number of bases to step between reads (default %d)\n"
   "   -readSize=N - size of read (default %d)\n"
   "   -readCount=N - number of reads (default = 1x coverage of genome)\n"
-  "   -existingGenome - If set genome.fa is an existing file, otherwise it's created.\n"
+  "   -existingGenome - If set genome is an existing file, otherwise it's created.\n"
+  "   -randomPos - If true take random positions rather than stepping.\n"
   , chromCount, chromSize, insPerRead, delPerRead, subPerRead, stepSize, readSize
   );
 }
@@ -67,6 +74,7 @@ static struct optionSpec options[] = {
    {"readSize", OPTION_INT},
    {"readCount", OPTION_INT},
    {"existingGenome", OPTION_BOOLEAN},
+   {"randomPos", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -161,7 +169,7 @@ fputc('\n', f);
 ++readsGenerated;
 }
 
-void generateFakeReads(struct dnaSeq *chrom, FILE *f)
+void fakeReadsOnChrom(struct dnaSeq *chrom, FILE *f)
 /* Generate fake reads that cover chrom. */
 {
 DNA *dna = chrom->dna;
@@ -196,25 +204,122 @@ for (i=0; i<lastReadStart; i += stepSize)
     }
 }
 
-void splatTestSet(char *genomeFile, char *readFile)
-/* splatTestSet - Create test set for splat. */
+void makeSteppedReads(struct dnaSeq *genome, FILE *f)
+/* Make reads evenly spaced through genome. */
 {
-if (!existingGenome)
-    generateFakeGenome(genomeFile);
-struct dnaSeq *genome = faReadAllDna(genomeFile);
 struct dnaSeq *chrom;
-FILE *f = mustOpen(readFile, "w");
 for (;;)
     {
     for (chrom = genome; chrom != NULL; chrom = chrom->next)
 	{
-	generateFakeReads(chrom, f);
+	fakeReadsOnChrom(chrom, f);
 	if (readsGenerated >= readCount)
 	    break;
 	}
     if (readsGenerated >= readCount)
-        break;
+	break;
     }
+}
+
+static int findIxOfGreatestLowerBound(int count, long *array, long val)
+/* Find index of greatest element in array that is less 
+ * than or equal to val using a binary search. */
+{
+int startIx=0, endIx=count-1, midIx;
+int arrayVal;
+
+for (;;)
+    {
+    if (startIx == endIx)
+        {
+	arrayVal = array[startIx];
+	if (arrayVal <= val || startIx == 0)
+	    return startIx;
+	else
+	    return startIx-1;
+	}
+    midIx = ((startIx + endIx)>>1);
+    arrayVal = array[midIx];
+    if (arrayVal < val)
+        startIx = midIx+1;
+    else
+        endIx = midIx;
+    }
+}
+
+
+void makeRandomReads(struct dnaSeq *genome, FILE *f)
+/* Make reads randomly spread through genome. */
+{
+/* Assign each chromosome a position. */
+int chromCount = slCount(genome);
+long *offsets = needMem((chromCount+1)*sizeof(long));
+struct dnaSeq **chromArray = needMem(chromCount * sizeof(struct dnaSeq*));
+long offset = 0;
+int i;
+struct dnaSeq *chrom;
+for (i=0, chrom=genome; i<chromCount; ++i, chrom=chrom->next)
+    {
+    chromArray[i] = chrom;
+    offsets[i] = offset;
+    offset += chrom->size;
+    }
+offsets[chromCount] = offset;
+long totalSize = offset;
+
+/* Allocate and zero out some buffers for main loop. */
+DNA *dna = needMem(readSize+1);
+int subPos[subPerRead];
+for (i=0; i<subPerRead; ++i)
+    subPos[i] = 0;
+int insertPos = 0, deletePos = 0;
+
+/* Randomly generate positions, use binary search to find chromosome,
+ * and try to output ones that aren't on edge. */
+while (readsGenerated < readCount)
+    {
+    long startPos = rand()%totalSize;
+    int chromIx = findIxOfGreatestLowerBound(chromCount,offsets, startPos);
+    if (chromIx >= 0 && startPos+readSize < offsets[chromIx+1])
+        {
+	struct dnaSeq *chrom = chromArray[chromIx];
+	long chromPos = startPos - offsets[chromIx];
+	memcpy(dna, chrom->dna + chromPos, readSize);
+	char strandLetter = 'F';
+	if (rand()&1)
+	    {
+	    reverseComplement(dna, readSize);
+	    strandLetter = 'R';
+	    }
+         char name[64];
+	 safef(name, sizeof(name), "%s_%ld_%d%c", 
+	 	chrom->name, chromPos, readsGenerated, strandLetter);
+	 if (insPerRead > 0)
+	     insertPos = rand()%readSize;
+	 if (delPerRead > 0)
+	     deletePos = rand()%readSize;
+	 int j;
+	 for (j=0; j<subPerRead; ++j)
+	    subPos[j] = rand()%readSize;
+	 fakeRead(name, dna, insertPos, deletePos, subPos, subPerRead, f);
+	}
+    }
+}
+
+void splatTestSet(char *genomeFile, char *readFile)
+/* splatTestSet - Create test set for splat. */
+{
+verboseTime(1, NULL);
+if (!existingGenome)
+    generateFakeGenome(genomeFile);
+struct dnaSeq *genome = dnaLoadAll(genomeFile);
+verboseTime(1, "Read %d sequences from %s", slCount(genome), genomeFile);
+FILE *f = mustOpen(readFile, "w");
+if (randomPos)
+    makeRandomReads(genome, f);
+else
+    makeSteppedReads(genome, f);
+verboseTime(1, "Generated %d fake reads", readsGenerated);
 carefulClose(&f);
 }
 
@@ -239,6 +344,7 @@ readSize = optionInt("readSize", readSize);
 readCount = chromCount * (chromSize-readSize+1) / stepSize;
 readCount = optionInt("readCount", readCount);
 existingGenome = optionExists("existingGenome");
+randomPos = optionExists("randomPos");
 if (argc != 3)
     usage();
 splatTestSet(argv[1], argv[2]);
