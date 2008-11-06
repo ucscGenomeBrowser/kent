@@ -42,7 +42,7 @@ ifeq (${BINDIR},)
     BINDIR = ${HOME}/bin/${MACHTYPE}
 endif
 ifeq (${ENCODE_PIPELINE_BIN},)
-    ENCODE_PIPELINE_BIN=/cluster/encodeftp/bin
+    ENCODE_PIPELINE_BIN=/cluster/data/encode/pipeline/bin
 endif
 
 MKDIR=mkdir -p
