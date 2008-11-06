@@ -6,7 +6,7 @@
 #include "splatAli.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: splatToEland.c,v 1.1 2008/11/06 03:54:09 kent Exp $";
+static char const rcsid[] = "$Id: splatToEland.c,v 1.2 2008/11/06 06:45:01 kent Exp $";
 
 boolean multi = FALSE;
 char *reads = NULL;
@@ -155,13 +155,6 @@ else
    }
 }
 
-void elandMultiOutput(struct splatAli *start, struct splatAli *end,
-	int bestScore, int bestCount, int subCounts[3], FILE *f)
-/* Output information on read in multiple mapping format. */
-{
-errAbort("multi option not yet implemented");
-}
-
 int countSubs(char *seq)
 /* Count substitutions in seq.  Indels count as a substitution. */
 {
@@ -174,7 +167,6 @@ while ((c = *seq++) != 0)
     }
 return count;
 }
-
 
 void countSubsInList(struct splatAli *start, struct splatAli *end, int subCounts[0])
 /* Count up number of alignments with zero, one, or two substitutions.  Indels count
@@ -190,6 +182,62 @@ for (el = start; el != end; el = el->next)
     subCounts[subs] += 1;
     }
 }
+
+int cmpSplatRefChromStart(const void *va, const void *vb)
+/* Compare to sort based on query start. */
+{
+struct slRef *aRef = *((struct slRef **)va);
+struct slRef *bRef = *((struct slRef **)vb);
+struct splatAli *a = aRef->val;
+struct splatAli *b = bRef->val;
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->chromStart - b->chromStart;
+return dif;
+}
+
+void elandMultiOutput(struct splatAli *start, struct splatAli *end,
+	int bestScore, int bestCount, int subCounts[3], FILE *f)
+/* Output information on read in multiple mapping format. */
+{
+fprintf(f, ">%s\t", start->readName);
+char *bases = splatAliBasesOnly(start->alignedBases);
+fprintf(f, "%s\t", bases);
+freeMem(bases);
+fprintf(f, "%d:%d:%d\t", subCounts[0], subCounts[1], subCounts[2]);
+
+/* Create a reference list of mappings that are in the best slot for substitutions,
+ * sorted by chromosome location. */
+int targetSub = minSubs(subCounts);
+struct slRef *refList = NULL, *ref;
+struct splatAli *splat;
+for (splat = start; splat != end; splat = splat->next)
+    {
+    if (countSubs(splat->alignedBases) == targetSub)
+       refAdd(&refList, splat);
+    }
+slSort(&refList, cmpSplatRefChromStart);
+
+/* Output comma separated list of mappings. */
+char *chrom = "";
+for (ref = refList; ref != NULL; ref = ref->next)
+    {
+    splat = ref->val;
+    if (!sameString(chrom, splat->chrom))
+	{
+	chrom = splat->chrom;
+        fprintf(f, "%s:", chrom);
+	}
+    fprintf(f, "%d", splat->chromStart+1);
+    fprintf(f, "%c", (splat->strand[0] == '-' ? 'R' : 'F'));
+    fprintf(f, "%d", targetSub);
+    if (ref->next != NULL)
+        fprintf(f, ",");
+    }
+fprintf(f, "\n");
+}
+
 
 void splatToEland(char *inName, char *outName)
 /* splatToEland - Convert from splat to eland format.. */
