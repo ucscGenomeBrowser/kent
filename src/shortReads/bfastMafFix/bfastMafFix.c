@@ -7,7 +7,9 @@
 #include "sqlNum.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: bfastMafFix.c,v 1.2 2008/11/04 20:28:26 kent Exp $";
+static char const rcsid[] = "$Id: bfastMafFix.c,v 1.3 2008/11/06 06:57:11 kent Exp $";
+
+char *out = "maf";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,11 +19,12 @@ errAbort(
   "usage:\n"
   "   bfastMafFix bfast.maf chrom.sizes fixed.maf\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -out=type Type can be maf (default), bed, or splat.\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"out", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -81,6 +84,47 @@ else
     }
 }
 
+void writeAsBed(FILE *f, struct mafAli *maf)
+/* Write alignment as a bed. */
+{
+struct mafComp *chromMc = maf->components;
+struct mafComp *readMc = chromMc->next;
+fprintf(f, "%s\t%d\t%d\t%s\t%d\t%c\n",
+	chromMc->src, chromMc->start, chromMc->start + chromMc->size,
+	readMc->src, round(1000 * maf->score / 50), readMc->strand);
+}
+
+void writeSplatSeq(FILE *f, int textSize, char *chromText, char *readText)
+/* Write out sequence in splat format*/
+{
+int i;
+for (i=0; i<textSize; ++i)
+    {
+    char c = toupper(chromText[i]);
+    char r = toupper(readText[i]);
+    if (c == r || c == '-')
+        fputc(c, f);
+    else if (r == '-')
+        {
+	fputc('^', f);
+	fputc(r, f);
+	}
+    else
+        fputc(tolower(r), f);
+    }
+}
+
+void writeAsSplat(FILE *f, struct mafAli *maf)
+/* Write alignment as a splat. */
+{
+struct mafComp *chromMc = maf->components;
+struct mafComp *readMc = chromMc->next;
+fprintf(f, "%s\t%d\t%d\t", 
+	chromMc->src, chromMc->start, chromMc->start + chromMc->size);
+writeSplatSeq(f, maf->textSize, chromMc->text, readMc->text);
+fprintf(f, "\t%d\t%c\t%s\n", round(1000 * maf->score / 50), readMc->strand, readMc->src);
+}
+
 void bfastMafFix(char *input, char *chromSizes, char *output)
 /* bfastMafFix - Fix bfast's broken MAFs.. */
 {
@@ -100,7 +144,14 @@ while (lineFileNext(lf, &line, NULL))
     switch (c)
         {
 	case 0:
-	   mafWrite(f, maf);
+	   if (sameString(out, "bed"))
+	      writeAsBed(f, maf);
+	   else if (sameString(out, "maf"))
+	      mafWrite(f, maf);
+	   else if (sameString(out, "splat"))
+	      writeAsSplat(f, maf);
+	   else
+	      errAbort("Unknown out type %s\n", out);
 	   mafAliFree(&maf);
 	   break;
 	case 'a':
@@ -121,6 +172,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+out = optionVal("out", out);
 bfastMafFix(argv[1], argv[2], argv[3]);
 return 0;
 }
