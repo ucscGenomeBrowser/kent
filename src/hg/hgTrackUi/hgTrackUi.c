@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.457 2008/11/05 14:10:27 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.458 2008/11/06 18:09:41 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2470,7 +2470,8 @@ else
         {
         /* Print update time of the table (or one of the components if split) */
         char *tableName = hTableForTrack(database, tdb->tableName);
-	struct sqlConnection *conn = hAllocConn(database);
+	struct sqlConnection *conn = hAllocConnProfile(getTrackProfileName(tdb), database);
+
 	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
 	if (date != NULL && !startsWith("wigMaf", tdb->type))
 	    printf("<B>Data last updated:</B> %s<BR>\n", date);
