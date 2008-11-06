@@ -13,7 +13,7 @@
 #include "fa.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: splatTestSet.c,v 1.4 2008/11/06 17:33:18 kent Exp $";
+static char const rcsid[] = "$Id: splatTestSet.c,v 1.5 2008/11/06 19:25:04 kent Exp $";
 
 /* Command line variables. */
 int chromCount = 1;
@@ -111,9 +111,24 @@ for (i=0; i<size; ++i)
 return TRUE;
 }
 
+boolean allAcgt(DNA *dna, int size)
+/* Return TRUE if all dna is one of regular bases. */
+{
+int i;
+for (i=0; i<size; ++i)
+    {
+    int base = dna[i];
+    if (ntVal[base] < 0)
+        return FALSE;
+    }
+return TRUE;
+}
+
 void fakeRead(char *name, DNA *dna, int insertPos, int deletePos, int *subPos, int subCount, FILE *f)
 /* Generate fake read from dna, possibly mutating it at given positions. */
 {
+if (!allAcgt(dna, readSize))
+    return;
 if (separateMutations)
     {
     int mutCount = 0;
@@ -182,7 +197,7 @@ for (i=0; i<subPerRead; ++i)
 for (i=0; i<lastReadStart; i += stepSize)
     {
     char name[64];
-    safef(name, sizeof(name), "%s_%d_%d", chrom->name, i, readsGenerated);
+    safef(name, sizeof(name), "%s_%d_%d", chrom->name, i, readsGenerated+1);
     fakeRead(name, dna + i, insertPos, deletePos, subPos, subPerRead, f);
     if (readsGenerated >= readCount)
         break;
@@ -221,12 +236,12 @@ for (;;)
     }
 }
 
-static int findIxOfGreatestLowerBound(int count, long *array, long val)
+static long findIxOfGreatestLowerBound(long count, long *array, long val)
 /* Find index of greatest element in array that is less 
  * than or equal to val using a binary search. */
 {
-int startIx=0, endIx=count-1, midIx;
-int arrayVal;
+long startIx=0, endIx=count-1, midIx;
+long arrayVal;
 
 for (;;)
     {
@@ -266,6 +281,7 @@ for (i=0, chrom=genome; i<chromCount; ++i, chrom=chrom->next)
     }
 offsets[chromCount] = offset;
 long totalSize = offset;
+verbose(1, "%d sequences, %ld total bases\n", chromCount, totalSize);
 
 /* Allocate and zero out some buffers for main loop. */
 DNA *dna = needMem(readSize+1);
@@ -278,7 +294,7 @@ int insertPos = 0, deletePos = 0;
  * and try to output ones that aren't on edge. */
 while (readsGenerated < readCount)
     {
-    long startPos = rand()%totalSize;
+    long startPos = (2L*rand())%totalSize;	/* The 2* is needed to cover more than 2gig */
     int chromIx = findIxOfGreatestLowerBound(chromCount,offsets, startPos);
     if (chromIx >= 0 && startPos+readSize < offsets[chromIx+1])
         {
@@ -291,9 +307,9 @@ while (readsGenerated < readCount)
 	    reverseComplement(dna, readSize);
 	    strandLetter = 'R';
 	    }
-         char name[64];
-	 safef(name, sizeof(name), "%s_%ld_%d%c", 
-	 	chrom->name, chromPos, readsGenerated, strandLetter);
+         char name[256];
+	 safef(name, sizeof(name), "%s_%ld_%d%c",
+	 	chrom->name, chromPos, readsGenerated+1, strandLetter);
 	 if (insPerRead > 0)
 	     insertPos = rand()%readSize;
 	 if (delPerRead > 0)
@@ -314,6 +330,10 @@ if (!existingGenome)
     generateFakeGenome(genomeFile);
 struct dnaSeq *genome = dnaLoadAll(genomeFile);
 verboseTime(1, "Read %d sequences from %s", slCount(genome), genomeFile);
+struct dnaSeq *chrom;
+for (chrom = genome; chrom != NULL; chrom = chrom->next)
+    toLowerN(chrom->dna, chrom->size);
+verboseTime(1, "Lower cased sequence");
 FILE *f = mustOpen(readFile, "w");
 if (randomPos)
     makeRandomReads(genome, f);
