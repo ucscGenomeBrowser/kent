@@ -11,7 +11,7 @@
 #include "dnaLoad.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaFind.c,v 1.9 2008/11/02 20:18:05 kent Exp $";
+static char const rcsid[] = "$Id: sufaFind.c,v 1.10 2008/11/06 06:59:01 kent Exp $";
 
 // boolean uglyOne;
 
@@ -147,7 +147,7 @@ if (subCount == maxSubs)
     if (ix >= 0)
 	{
 	ix += sliceOffset;
-	int offset = array[ix];
+	// int offset = array[ix];
 	// spaceOut(uglyOut, depth*2);
 	// uglyf("--ix=%d offset=%d  memcmp ", ix, offset);
 	// mustWrite(uglyOut, allDna+offset+prefixSize, querySize-prefixSize);
