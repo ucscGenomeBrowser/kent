@@ -123,6 +123,9 @@ int hChromCount(char *db);
 struct sqlConnection *hAllocConn(char *db);
 /* Get free connection if possible. If not allocate a new one. */
 
+char *getTrackProfileName(struct trackDb *tdb);
+/* get profile is associated with a track, return it, otherwise NULL */
+
 struct sqlConnection *hAllocConnProfile(char *profileName, char *db);
 /* Get free connection, specifying a profile and/or a database. If none
  * is available, allocate a new one. */
@@ -417,6 +420,10 @@ struct trackDb *hCompositeTrackDbForSubtrack(char *db, struct trackDb *sTdb);
 
 void hTrackDbLoadSuper(char *db, struct trackDb *tdb);
 /* Populate child trackDbs of this supertrack */
+
+struct hTableInfo *hFindTableInfoWithConn(char *db, char *chrom, char *rootName,
+                                          struct sqlConnection *conn);
+/* Find table information, with conn as part of input parameters.  Return NULL if no table.  */
 
 struct hTableInfo *hFindTableInfo(char *db, char *chrom, char *rootName);
 /* Find table information in specified db.  Return NULL if no table. */
