@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.130 2008/10/22 22:42:34 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.131 2008/11/06 00:30:19 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add"
@@ -2534,7 +2534,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             if(trackDbSetting(subtrack, "dateReleased"))
                 {
                 displayDate = strSwapChar(cloneString(trackDbSetting(subtrack, "dateReleased")),' ',0);   // Truncate time
-                printf("</TD><TD align=\"CENTER\">&nbsp;%s&nbsp;",dateAddToAndFormat(displayDate,"%F",0,9,0));
+                printf("</TD><TD align=\"CENTER\">&nbsp;%s&nbsp;",displayDate);
                 }
             else if(trackDbSetting(subtrack, "dateSubmitted"))
                 {
@@ -3329,22 +3329,66 @@ if(vocab == NULL)
     return cloneString(label); // No wrapping!
 
 char *words[15];
+char *prefix=NULL;
+char *suffix=NULL;
 int count,ix;
+char buffer[128];
+buffer[0] = 0;
 if((count = chopByWhite(cloneString(vocab), words,15)) <= 1)
     return cloneString(label);
 for(ix=1;ix<count;ix++)
     {
     if(sameString(vocabType,words[ix]))
        break;
+    else if(countChars(words[ix],'=') == 1)
+        {
+            strSwapChar(words[ix],'=',0);
+            if(sameString(vocabType,words[ix]))
+                {
+                char * lookForSet = words[ix] + strlen(words[ix]) + 1;
+                char * lookFor = NULL;
+                boolean found = FALSE;
+                while(!found && (lookFor = cloneNextWordByDelimiter(&lookForSet,',')))
+                    {
+                    if(sameString(label,lookFor))
+                        found = TRUE;
+                    else if(startsWith(lookFor,label) && label[strlen(lookFor)] == ' ')
+                        {
+                        suffix = buffer;
+                        strcpy(suffix,label+strlen(lookFor));
+                        label = lookFor;
+                        found = TRUE;
+                        }
+                    else if(endsWith(label,lookFor) && label[strlen(label) - strlen(lookFor) - 1] == ' ')
+                        {
+                        prefix = buffer;
+                        strcpy(prefix,label);
+                        prefix[strlen(label) - strlen(lookFor)] = 0;
+                        label = lookFor;
+                        found = TRUE;
+                        }
+                    }
+                if(found)
+                    break;
+                }
+        }
     }
 if(ix==count)
+    {
+    freeMem(words[0]);
     return cloneString(label);
+    }
 
-#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' TARGET=_BLANK>%s</A>\n"
-int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(vocabType)+2*strlen(label);
+#define VOCAB_LINK "%s<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' TARGET=_BLANK>%s</A>%s\n"
+int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(vocabType)+2*strlen(label) + strlen(buffer) + 2;
 char *link=needMem(sz);
 char *term = strSwapChar(cloneString(label),' ','_');
-safef(link,sz,VOCAB_LINK,words[0],term,label);
+if(prefix)
+    safef(link,sz,VOCAB_LINK,prefix,words[0],term,label,"");
+else if(suffix)
+    safef(link,sz,VOCAB_LINK,"",words[0],term,label,suffix);
+else
+    safef(link,sz,VOCAB_LINK,"",words[0],term,label,"");
 freeMem(words[0]);
 return link;
 }
