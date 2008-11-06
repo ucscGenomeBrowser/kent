@@ -111,7 +111,7 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.29 2008/10/31 05:51:59 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.30 2008/11/06 06:58:00 kent Exp $";
 
 char *version = "31";	/* Program version number. */
 
@@ -1135,7 +1135,6 @@ repeatOutput = optionVal("repeatOutput", NULL);
 maxGap = optionInt("maxGap", maxGap);
 maxMismatch = optionInt("maxMismatch", maxMismatch);
 exactOnly = (maxGap == 0 && maxMismatch == 0);
-uglyf("Exact only = %d\n", exactOnly);
 tagSize = maxGap + splixMinQuerySize;
 memoryMap = optionExists("mmap");
 if (maxGap > 1)
