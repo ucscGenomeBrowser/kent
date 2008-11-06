@@ -216,7 +216,7 @@ controlledVocabulary	encode/cv.ra cellType
 dimensions  dimensionX=cellType dimensionY=EXP
 dragAndDrop	subTracks
 visibilityViewDefaults	 Peaks=dense Signal=full zRAW=hide
-controlledVocabulary encode/cv.ra cellType
+controlledVocabulary encode/cv.ra cellType EXP=Input,CTCF
 priority	0
 type		bed 3
 wgEncode	1
