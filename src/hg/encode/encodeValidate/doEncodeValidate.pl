@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.99 2008/11/04 05:47:49 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.100 2008/11/06 21:55:51 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -1338,8 +1338,8 @@ foreach my $ddfLine (@ddfLines) {
         } else {
             print TRACK_RA "\ttype\t\t$type\n";
         }
-        print TRACK_RA sprintf("\tdateSubmitted\t%d-%02d-%d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
-        print TRACK_RA sprintf("\tdateReleased\t%d-%02d-%d\n",1900 + $rYear, $rMon + 1, $rMDay);
+        print TRACK_RA sprintf("\tdateSubmitted\t%04d-%02d-%02d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
+        print TRACK_RA sprintf("\tdateReleased\t%04d-%02d-%02d\n",1900 + $rYear, $rMon + 1, $rMDay);
         if(defined($ddfLine->{accession}) && length($ddfLine->{accession}) > 0) {
             print TRACK_RA sprintf("\taccession\t%s\n",$ddfLine->{accession});
         }
