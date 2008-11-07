@@ -207,24 +207,40 @@ wgEncodeUncFAIREseq
 compositeTrack	on
 shortLabel	Chromatin Map
 longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
+group		regulation
+priority	0
+type		bed 3
+wgEncode	1
 # DECOY for pipeline
 
 wgEncodeUt-aChIPseq
 compositeTrack	on
 shortLabel	Chromatin Map
 longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
+group		regulation
+priority	0
+type		bed 3
+wgEncode	1
 # DECOY for pipeline
 
 wgEncodeUt-austinChIPseq
 compositeTrack	on
 shortLabel	Chromatin Map
 longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
+group		regulation
+priority	0
+type		bed 3
+wgEncode	1
 # DECOY for pipeline
 
 wgEncodeDukeDNaseSeq
 compositeTrack	on
 shortLabel	Chromatin Map
 longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
+group		regulation
+priority	0
+type		bed 3
+wgEncode	1
 # DECOY for pipeline
 
 track		wgEncodeChromatinMap
