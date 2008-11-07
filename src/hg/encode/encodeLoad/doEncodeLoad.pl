@@ -414,6 +414,8 @@ if(@row) {
     $shortLabel = $row[0];
     $longLabel = $row[1];
 }
+$shortLabel = "ENCODE shortLabel" if (!defined($shortLabel));
+$longLabel = "ENCODE longLabel Missing" if (!defined($longLabel));
 
 my $releaseLog = "$longLabel: " . join(", ", keys %labels);
 
