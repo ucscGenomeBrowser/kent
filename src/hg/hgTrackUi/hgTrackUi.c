@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.458 2008/11/06 18:09:41 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.459 2008/11/07 17:48:57 ann Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1488,7 +1488,7 @@ char *filterSetting;
 char filterVar[256];
 char *filterVal = "";
 
-printf("<p><b>Filter by chromosome (eg. chr10):</b> ");
+printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
 snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->tableName);
 filterSetting = cartUsualString(cart, filterVar, filterVal);
 cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
