@@ -1043,6 +1043,23 @@ cat > doAnno.csh << 'EOF'
     cat *.maf | hgLoadMafSummary hg18 encodeTbaSummaryDec07 stdin 
     cd ..
 
+    # Reannotate with newer mafAddIRows having distinctive rows for
+    # tandem dups (by request of JK)
+    # 2008-10-23 kate
+    # again (another fix to mafAddIRows) 2008-10-27 kate
+    ssh kolossus
+    cd /cluster/data/encode/TBA
+    cd DEC-07/2008-01-10
+    cd anno/run
+    # edit doAnno.csh to use new version
+    csh doAnno.csh >&! doAnno.log &
+    ssh hgwdev
+    set mdir = /cluster/data/encode/TBA/DEC-07/2008-01-10/anno/maf
+    cd $mdir
+    set gdir = /gbdb/hg18/encode/TBA/DEC-07/2008-01-10/maf
+    hgLoadMaf -pathPrefix=$gdir -WARN hg18 encodeTbaAlignDec07 >&! load.log &
+    # Ignore 'score too small' errors
+    cat *.maf | hgLoadMafSummary hg18 encodeTbaSummaryDec07 stdin 
     #Created 141213 summary blocks from 8144409 components and 389847 mafs from stdin
     #Loading into hg18 table encodeTbaSummaryDec07...
 
@@ -1136,6 +1153,8 @@ cat > getGenes.csh << 'EOF'
     cd /cluster/data/encode/TBA/DEC-07/2008-01-10/
     mkdir downloads
     cd anno/maf
+    # redo to include re-annotated mafs (with 'T' lines for tandem dups)
+    # 2008-11-06 kate
     tar cvfz ../../downloads/encodeTba.maf.tgz  *.maf
 
     # Obtain sequence freeze
@@ -1159,10 +1178,15 @@ cat > getGenes.csh << 'EOF'
     # Received species tree from Gayle 8/08
     cp ../lab/conserved.mod tree_4d.tba.nh
     # edit to remove phastCons-specific header
-    cp ../lab/tree_Dec2007.nh species37.nh
-    # Create tree image with phyloGif -- use 1024 height, preserve underscores
-    # encode_37way.gif
-    cp encode_37way.gif ~/browser/images/phylo/
+    # edit tree to remove species not in this dataset: gorilla, lemur, black_lemur, sheep, 
+    #   muntjak_indian, ajbat, cpbat, eehedgehog, wallaby, dunnart, torgoise, xenopus
+    #   tetraodon, fugu, zebrafish, pig
+    tail +2 seq/metadata.txt | awk '{print $1}' | sort | uniq > species.txt
+    echo `cat species.txt|sed 's/$/,/'` | sed 's/ //g' > speciesList.txt
+    /cluster/bin/phast/tree_doctor --prune-all-but `cat speciesList.txt` ../lab/tree_Dec2007.nh | sed 's/:0.000000//g' > species36.nh
+    # Create tree image with phyloGif -- use 700 height, preserve underscores
+    # encode_36way.gif
+    cp encode_36way.gif ~/browser/images/phylo/
     # checkin to CVS
     cp ../lab/README_DEC-2007.txt README.txt
     # fix typo -- it's the Dec not Sep freeze
@@ -1174,8 +1198,8 @@ cat > getGenes.csh << 'EOF'
     mkdir -p MSA/DEC-2007
     cd MSA/DEC-2007
     ln -s /cluster/data/encode/MSA/DEC-07/downloads/{README.txt,DEC-2007.tar.gz} .
-    ln -s /cluster/data/encode/MSA/DEC-07/downloads/{tree_4d.tba.nh,species37.nh} .
-    cp ~/browser/images/phylo/encode_37way.gif .
+    ln -s /cluster/data/encode/MSA/DEC-07/downloads/{tree_4d.tba.nh,species36.nh} .
+    cp ~/browser/images/phylo/encode_36way.gif .
     mkdir -p alignments/TBA/
     cd alignments/TBA
     ln -s /cluster/data/encode/TBA/DEC-07/2008-01-10/downloads/encodeTba.maf.tgz encodeTbaDec07.maf.tgz
