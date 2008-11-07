@@ -1,11 +1,5 @@
-/* splat - Speedy Local Alignment Tool. */
+/* splat - Speedy Local Alignment Tool.  For short reads - 25 bases and up.  */
 /* Copyright 2008 Jim Kent all rights reserved. */
-
-/* Currently the program is just partially implemented.  The indexing part seems to work.
- * Need still to extend alignments of index hits (where we expect only about 1 in 200
- * extensions to be exact if running on whole genome) and then to write out the alignments. 
- * UCSC reviewers - I'm working on this for Kent Informatics rather than UCSC, so no
- * need for you to review it.  */
 
 /* The algorithm is designed to map 25-mers accommodating up to two base substitutions,
  * or one substitution and a single base insertion or deletion. The idea of the algorithm
@@ -111,7 +105,7 @@
 #include "maf.h"
 #include "splat.h"
 
-static char const rcsid[] = "$Id: splat.c,v 1.30 2008/11/06 06:58:00 kent Exp $";
+static char const rcsid[] = "$Id: splat.c,v 1.31 2008/11/07 07:06:40 kent Exp $";
 
 char *version = "31";	/* Program version number. */
 
@@ -652,8 +646,18 @@ switch (hit->missingQuad)
        break;
     }
 if (qSeq->size > 24 && maxGap == 0)	/* Make 25th base significant in all cases. */
-    if (qDna[24] != tDna[24])
-       ++diffCount;
+    {
+    if (c->strand == '-')
+	{
+	if (qDna[-1] != tDna[-1])
+	   ++diffCount;
+	}
+    else
+	{
+	if (qDna[24] != tDna[24])
+	   ++diffCount;
+	}
+    }
 if (diffCount <= maxMismatch)
     addMatch(diffCount, c, tOffset, 0, tagSize, 0, 0, 0);
 else if (maxGap > 0 && origDiffCount < maxMismatch) 
@@ -1012,6 +1016,7 @@ if (!isRepeatingOver)
     if (!isRepeatingOver)
 	splatOneStrand(qSeqR, bases25r, '-', tagPosition, splix, maxGap, lm, &tagList);
     }
+verbose(2, " %d tags\n", slCount(tagList));
 if (isRepeatingOver)
     {
     if (repeatOutputFile != NULL)
@@ -1065,7 +1070,7 @@ if (over != NULL)
     overRead(over, maxRepeat+1, &overArraySize, &overArray);
     }
 struct splix *splix = splixRead(target, memoryMap);
-uglyTime("Loaded %s", target);
+verboseTime(1, "Loaded %s", target);
 FILE *f = mustOpen(output, "w");
 if (repeatOutput != NULL)
     repeatOutputFile = mustOpen(repeatOutput, "w");
@@ -1091,7 +1096,7 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     dnaSeqFree(&qSeq);
     ++totalReads;
     }
-uglyTime("Alignment");
+verboseTime(1, "Alignment");
 
 /* Report statistics (to stderr) */
 verbose(1, "Overall results for mapping %d reads in %s to %s\n", 
@@ -1122,7 +1127,7 @@ carefulClose(&repeatOutputFile);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-uglyTime(NULL);
+verboseTime(1, NULL);
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
