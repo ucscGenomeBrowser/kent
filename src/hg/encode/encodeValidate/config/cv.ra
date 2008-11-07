@@ -378,9 +378,9 @@ description The fluid between the cells outer membrane and the nucleus
 termId GO:0005829
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005829
 
-term polysomes
+term polysome
 type localization
-description Strands of mRNA with ribosomes attatched
+description Strand of mRNA with ribosomes attatched
 termId GO:0005844
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005844
 
