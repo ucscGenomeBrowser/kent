@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.2 2008/11/06 21:54:55 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.3 2008/11/07 20:44:56 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -201,7 +201,7 @@ for my $line (@fileList) {
             }
         }
     } else {
-        if($dataType eq "fastq" || $dataType eq "tagAlign") {
+        if($dataType eq "fastq" || $dataType eq "tagAlign" || $dataType eq "csfasta" || $dataType eq "csqual") {
             $metaData = "ENCODE Type:$dataType";
             my ($YYYY,$MM,$DD) = split('-',$file[3]);
             my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
