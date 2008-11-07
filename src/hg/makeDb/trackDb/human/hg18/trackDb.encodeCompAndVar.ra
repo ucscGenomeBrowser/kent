@@ -31,7 +31,7 @@ priority 1
     sGroup_placental tree_shrew rn4 mm9 guinea_pig st_squirrel rabbit bosTau3 horse cat canFam2 flying_fox sbbat rfbat hedgehog shrew armadillo elephant tenrec rock_hyrax
     sGroup_mammal monDom4 platypus
     sGroup_vertebrate galGal3
-    speciesDefaultOff panTro2 rheMac2 bosTau3 cat horse canFam2 tenrec elephant armadillo shrew hedgehog guinea_pig rn4 tree_shrew
+    speciesDefaultOff panTro2 ponAbe2 colobus_monkey vervet rheMac2 squirrel_monkey tree_shrew rn4 mm9  bosTau3 horse canFam2 flying_fox rock_hyrax opossum chicken
     treeImage phylo/encode_36way.gif
     chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     dataVersion Dec 2007
@@ -65,7 +65,6 @@ color 0, 10, 100
 altColor 1,128,0
 type wigMaf 0.0 1.0
 pairwiseHeight 10
-summary encodeTbaSummarySep07
 frames encodeTbaFramesDec07
 speciesGroups primate placental mammal vertebrate
 sGroup_primate panTro2 baboon gibbon colobus_monkey vervet rheMac2 dusky_titi owl_monkey marmoset squirrel_monkey mouse_lemur galago
