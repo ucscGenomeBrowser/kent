@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.100 2008/11/06 21:55:51 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.101 2008/11/07 01:11:36 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -728,14 +728,17 @@ sub printCompositeTdbSettings {
     for my $view (keys %{$daf->{TRACKS}}) {
         for my $key (keys %ddfSets) {
             if(defined($ddfSets{$key}{VIEWS}{$view})) {
-                $setting = $setting . " " . $view . "=" . $view;
-                $visDefault = $visDefault . " " . $view . "=";
-                if($view eq "Peaks") {
-                    $visDefault = $visDefault . "dense";
-                } elsif($view eq "Signal") {
-                    $visDefault = $visDefault . "full";
-                } else {
-                    $visDefault = $visDefault . "hide";
+                my $downloadOnly = $view eq 'RawData' || $view eq 'RawData2' || ($view eq 'Alignments' and $daf->{grant} ne "Gingeras") ? 1 : 0;
+                if(!$downloadOnly) {
+                    $setting = $setting . " " . $view . "=" . $view;
+                    $visDefault = $visDefault . " " . $view . "=";
+                    if($view eq "Peaks") {
+                        $visDefault = $visDefault . "dense";
+                    } elsif($view eq "Signal") {
+                        $visDefault = $visDefault . "full";
+                    } else {
+                        $visDefault = $visDefault . "hide";
+                    }
                 }
             }
         }
@@ -749,6 +752,7 @@ sub printCompositeTdbSettings {
     if (defined($daf->{variables})) {
         my $grpNo = 1;
         my $sortOrder = "sortOrder\t";
+        my $dimensions = "dimensions";
         my $controlledVocab = "controlledVocabulary\tencode/cv.ra";
         if (defined($daf->{variables})) {
             my @variables = @{$daf->{variableArray}};
@@ -757,6 +761,9 @@ sub printCompositeTdbSettings {
                 my $groupVar = $variable;
 	            $groupVar = "factor" if $variable eq "antibody";
                 $groupVar = "cellType" if $variable eq "cell";
+                if($grpNo < 5) {
+                    $dimensions .= "\tdimension" . chr(86 + $grpNo) . "=" . $groupVar;
+                }
                 $sortOrder = "$sortOrder$groupVar=+ ";
                 $controlledVocab = "$controlledVocab $groupVar";
                 $setting = "subGroup$grpNo\t$groupVar " . ucfirst($groupVar);
@@ -774,6 +781,7 @@ sub printCompositeTdbSettings {
             }
         }
         $setting = $sortOrder . "view=+";
+        print OUT_FILE $dimensions . "\n";         # "dimensions  dimensionX=cellType dimensionY=factor"
         print OUT_FILE $setting . "\n";         # "sortOrder\tcellType=+ factor=+ view=+\n";
         print OUT_FILE $controlledVocab . "\n"; # "controlledVocabulary\tencode/cv.ra cellType factor\n";
     }
