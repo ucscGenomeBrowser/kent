@@ -11,9 +11,7 @@
 #include "dnaLoad.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaFind.c,v 1.10 2008/11/06 06:59:01 kent Exp $";
-
-// boolean uglyOne;
+static char const rcsid[] = "$Id: sufaFind.c,v 1.11 2008/11/07 23:56:44 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;
@@ -48,14 +46,6 @@ int sufaUpperBound(char *allDna, bits32 *array, int arraySize, char *queryDna, i
 	int prefixSize)
 /* Find something that matches query, otherwise the place it should be inserted in array. */
 {
-#ifdef DEBUG
-if (uglyOne) {
-	     char *q = cloneStringZ(queryDna, querySize);
-	     tolowers(q);
-	     toUpperN(q+prefixSize, querySize-prefixSize);
-	     uglyf("sufaUpperBound queryDna=%s querySize=%d prefixSize=%d arraySize=%d\n", q, querySize, prefixSize, arraySize);
-             }
-#endif /* DEBUG */
 ++upperBoundCount;
 int startIx=0, endIx=arraySize-1, midIx;
 int offset;
@@ -126,11 +116,6 @@ void sufaFindOneOff(int depth, char *allDna, bits32 *array, int arraySize,
 /* Find all array position that match off by one.  
  *    This is a recursive function*/
 {
-// uglyOne = sameString(prefix, "TCCAGA");
-// spaceOut(uglyOut, depth*2);
-// uglyf("sufaFindOneOff prefix/suffix %s/%s subCount=%d sliceOffset=%d sliceSize=%d\n", prefix, query+prefixSize, subCount, sliceOffset, sliceSize);
-// if (uglyOne)
-    // uglyf(">>Got you %s\n", prefix);
 /* Start recursion with end conditions.  First is that we've matched the whole thing. */
 if (prefixSize == querySize)
     {
@@ -147,13 +132,6 @@ if (subCount == maxSubs)
     if (ix >= 0)
 	{
 	ix += sliceOffset;
-	// int offset = array[ix];
-	// spaceOut(uglyOut, depth*2);
-	// uglyf("--ix=%d offset=%d  memcmp ", ix, offset);
-	// mustWrite(uglyOut, allDna+offset+prefixSize, querySize-prefixSize);
-	// uglyf(" ");
-	// mustWrite(uglyOut, query+prefixSize, querySize-prefixSize);
-	// uglyf("\n");
 	struct slInt *hit = slIntNew(ix);
 	slAddHead(pHitList, hit);
 	}
@@ -170,13 +148,11 @@ if (subCount == maxSubs)
 int quadrantIx;
 int quadrants[5];
 char queryBase = query[prefixSize]; 
-// if (uglyOne) uglyf("sloceOffset %d, sliceSize %d\n", sliceOffset, sliceSize);
 for (quadrantIx=0; quadrantIx<4; ++quadrantIx)
     {
     prefix[prefixSize] = bases4[quadrantIx];
     int bounds = sufaUpperBound(allDna, array+sliceOffset, sliceSize, 
     	prefix, prefixSize+1, prefixSize);
-    // if (uglyOne) uglyf("quad %d, bounds=%d\n", quadrantIx, bounds);
     if (bounds >= 0) bounds += sliceOffset;
     quadrants[quadrantIx] = bounds;
     }
@@ -198,9 +174,7 @@ for (quadrantIx=0; quadrantIx < 4; ++quadrantIx)
 		}
 	    }
 	}
-    // if (uglyOne) uglyf("%s %c bounds=%d\n", prefix, bases4[quadrantIx], quadrants[quadrantIx]);
     }
-// if (uglyOne) uglyf("%s $ bounds=%d\n", prefix, quadrants[4]);
 
 /* Further explore within each of the non-empty quadrants */
 int quadrantEnd = quadrants[0];
@@ -231,6 +205,7 @@ struct sufa *sufa = sufaRead(sufaFile, mmap);
 struct dnaLoad *qLoad = dnaLoadOpen(queryFile);
 int arraySize = sufa->header->arraySize;
 FILE *f = mustOpen(outputFile, "w");
+uglyTime("Loaded %s", sufaFile);
 struct dnaSeq *qSeq;
 int queryCount = 0, hitCount = 0, missCount=0;
 while ((qSeq = dnaLoadNext(qLoad)) != NULL)
@@ -270,6 +245,7 @@ while ((qSeq = dnaLoadNext(qLoad)) != NULL)
     ++queryCount;
     dnaSeqFree(&qSeq);
     }
+uglyTime("Aligned");
 carefulClose(&f);
 verbose(1, "%d binary searches, %ld binary branches\n", upperBoundCount,
 	binaryBranches);
@@ -280,6 +256,7 @@ verbose(1, "%d queries. %d hits (%5.2f%%). %d misses (%5.2f%%).\n", queryCount,
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+uglyTime(NULL);
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
