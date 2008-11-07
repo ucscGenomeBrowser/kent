@@ -6,7 +6,7 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: bwtMake.c,v 1.2 2008/11/07 20:37:23 kent Exp $";
+static char const rcsid[] = "$Id: bwtMake.c,v 1.3 2008/11/07 23:54:52 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -47,6 +47,9 @@ for (i=0; i<maxSize; ++i)
     else
 	fputc(c, f);
     }
+if (i == maxSize)
+    fprintf(f, "...");
+fputc('$', f);
 }
 
 void bwtMake(char *in, char *out)

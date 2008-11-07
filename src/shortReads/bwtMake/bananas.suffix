@@ -1,0 +1,28 @@
+0 s $        occ[s,0] = 0
+1 b ananas$  occ[b,1] = 0
+2 n anas$    occ[n,2] = 0
+3 n as$      occ[n,3] = 1
+4 $ bananas$ occ[$,4] = 1
+5 a nanas$   occ[a,5] = 0
+6 a nas$     occ[a,6] = 1
+7 a s$       occ[a,7] = 2
+
+offsets
+   $ - 0
+   a - 1
+   b - 4
+   n - 5
+   s - 7
+
+reconstructing in reverse
+   letter = $,  nextPos = 0  <- start condition, always starts with last letter
+   letter = s,  nextPos = offsets[s] + occ[s,0] = 7+0 = 7
+   letter = a,  nextPos = offsets[a] + occ[a,7] = 1+2 = 3
+   letter = n,  nextPos = offsets[n] + occ[n,3] = 5+1 = 6
+   letter = a,  nextPos = offsets[a] + occ[a,6] = 1+1 = 2
+   letter = n,  nextPos = offsets[n] + occ[n,2] = 5+0 = 5
+   letter = a,  nextPos = offsets[a] + occ[a,5] = 1+0 = 1
+   letter = b,  nextPos = offsets[b] + occ[b,1] = 4+0 = 4
+  
+search for 'ana'
+
