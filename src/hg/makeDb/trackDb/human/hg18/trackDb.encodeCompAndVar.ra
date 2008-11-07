@@ -9,6 +9,7 @@ subGroup1 view Views align=Alignments cons=Conservation
 visibilityViewDefaults align=full+ cons=dense
 dragAndDrop subTracks
 type bed 4
+wgEncode 1
 priority 1
 
     track encodeTbaAlignDec07
@@ -34,7 +35,7 @@ priority 1
     speciesDefaultOff panTro2 ponAbe2 colobus_monkey vervet rheMac2 squirrel_monkey tree_shrew rn4 mm9  bosTau3 horse canFam2 flying_fox rock_hyrax monDom4 galGal3
     treeImage phylo/encode_36way.gif
     chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-    dataVersion Dec 2007
+    dataVersion ENCODE Nov 2008 Freeze
 
     track encodeTbaBinConsDec07
     subTrack encodeMsaTbaDec07
@@ -45,6 +46,7 @@ priority 1
     subGroups view=cons
     color 0, 10, 100
     priority 1
+    dataVersion ENCODE Nov 2008 Freeze
 
     track encodeTbaChaiConsDec07
     subTrack encodeMsaTbaDec07
@@ -55,6 +57,7 @@ priority 1
     type bed 3
     color 100, 10, 0
     priority 2
+    dataVersion ENCODE Nov 2008 Freeze
 
 track encodeTbaAlignSep07
 shortLabel Sep07 TBA Align
