@@ -1,6 +1,6 @@
 <p>
 <%
-if current_user.login == "admin" or current_user.login == "galtx"
+if current_user.role == "admin" 
   advancedView = true
 else
   advancedView = false
@@ -10,7 +10,7 @@ if @project.run_stat.nil?
 else
   busy = true
 end
-if @project.user_id == @current_user.id or current_user.login == "admin"
+if @project.user_id == @current_user.id or current_user.role == "admin"
   authorized = true
 else
   authorized = false
@@ -48,7 +48,7 @@ end
 
 <table style="margin-top:10px;" cellpadding=1 cellspacing=1>
 
-<% if (not busy) and authorized and (@project.status != "loaded" or current_user.login == "admin") %> 
+<% if (not busy) and authorized and (@project.status != "loaded" or current_user.role == "admin") %> 
 
   <% if @project.status == "uploaded" %> 
     <td><%= link_to 'Validate', {:action => 'validate', :id => @project.id} -%>

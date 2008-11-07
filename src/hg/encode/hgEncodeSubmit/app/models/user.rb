@@ -36,6 +36,17 @@ class User < ActiveRecord::Base
     u && u.authenticated?(password) ? u : nil
   end
 
+  def self.authenticateAs(login, password, loginAs)
+    # hide records with a nil activated_at
+    u = find :first, :conditions => ['login = ? and activated_at IS NOT NULL', login]
+    if u && u.authenticated?(password) && u.role == "admin"
+      u = find :first, :conditions => ['login = ? and activated_at IS NOT NULL', loginAs]
+    else
+      u = nil
+    end
+    return u
+  end
+
   # Encrypts some data with the salt.
   def self.encrypt(password, salt)
     Digest::SHA1.hexdigest("--#{salt}--#{password}--")

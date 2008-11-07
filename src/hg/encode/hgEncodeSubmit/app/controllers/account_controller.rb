@@ -11,7 +11,14 @@ class AccountController < ApplicationController
 
   def login
     return unless request.post?
-    self.current_user = User.authenticate(params[:login], params[:password])
+    parsed_login = params[:login].split(" as ")
+    p_login = parsed_login[0]
+    login_as = parsed_login[1]
+    if login_as
+      self.current_user = User.authenticateAs(p_login, params[:password], login_as)
+    else
+      self.current_user = User.authenticate(p_login, params[:password])
+    end
     if logged_in?
       if params[:remember_me] == "1"
         self.current_user.remember_me
