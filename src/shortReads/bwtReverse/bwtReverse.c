@@ -5,7 +5,7 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: bwtReverse.c,v 1.1 2008/11/07 20:38:19 kent Exp $";
+static char const rcsid[] = "$Id: bwtReverse.c,v 1.2 2008/11/07 23:55:21 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -60,8 +60,8 @@ for (;;)
     {
     int c = out[i] = in[endPos];
     verbose(2, "i=%u, c=%c(%d), endPos=%u\n", i, c, c, endPos);
+    verbose(2, "   offsets[%c] = %u, occ[%c@%d] = %u\n", c, offsets[c], c, endPos, occ[endPos]);
     endPos = offsets[c] + occ[endPos];
-    verbose(2, "   offsets[%c] = %u, counts[%c] = %u, endPos = %u\n", c, offsets[c], c, counts[c], endPos);
     counts[c] -= 1;
     if (i == 0)
         break;
