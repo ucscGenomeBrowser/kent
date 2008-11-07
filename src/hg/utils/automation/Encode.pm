@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.28 2008/11/07 21:20:14 tdreszer Exp $
+# $Id: Encode.pm,v 1.29 2008/11/07 22:40:52 tdreszer Exp $
 
 package Encode;
 
@@ -329,7 +329,7 @@ sub parseDaf
 sub compositeTrackName
 {
     my ($daf) = @_;
-    if($daf->{grant} == "Crawford") {
+    if($daf->{grant} eq "Crawford") {
         return "wgEncodeChromatinMap";
     }
     return "wgEncode" . ucfirst(lc($daf->{lab})) . $daf->{dataType};
