@@ -117,16 +117,9 @@ ARCHIVED_DBS = \
 update: #clean
 	./loadTracks trackDb_${USER} hgFindSpec_${USER} ${DBS}
 
-updateLocal: #clean
-	./loadTracks -local trackDb_${USER} hgFindSpec_${USER} ${DBS}
-
 alpha: clean
 	${CVS} -q up -d -P .
 	./loadTracks -release=alpha trackDb hgFindSpec ${DBS}
-
-alphaLocal: clean
-	${CVS} -q up -d -P .
-	./loadTracks -local -release=alpha trackDb hgFindSpec ${DBS}
 
 strict: clean
 	${CVS} -q up -d -P .
