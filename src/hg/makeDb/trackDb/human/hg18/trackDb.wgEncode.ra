@@ -203,6 +203,30 @@ priority 300
     priority 4
     color 58,119,40
 
+wgEncodeUncFAIREseq
+compositeTrack	on
+shortLabel	Chromatin Map
+longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
+# DECOY for pipeline
+
+wgEncodeUt-aChIPseq
+compositeTrack	on
+shortLabel	Chromatin Map
+longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
+# DECOY for pipeline
+
+wgEncodeUt-austinChIPseq
+compositeTrack	on
+shortLabel	Chromatin Map
+longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
+# DECOY for pipeline
+
+wgEncodeDukeDNaseSeq
+compositeTrack	on
+shortLabel	Chromatin Map
+longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
+# DECOY for pipeline
+
 track		wgEncodeChromatinMap
 compositeTrack	on
 shortLabel	Chromatin Map
@@ -234,7 +258,7 @@ wgEncode	1
 	configurable   on
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 	antibody       Input
 
@@ -251,7 +275,7 @@ wgEncode	1
 	configurable   off
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 	antibody       Input
 
@@ -282,7 +306,7 @@ wgEncode	1
 	configurable   on
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 	antibody       CTCF
 
@@ -299,7 +323,7 @@ wgEncode	1
 	configurable   off
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 	antibody       CTCF
 
@@ -316,7 +340,7 @@ wgEncode	1
 	configurable   off
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 	antibody       CTCF
 
@@ -333,7 +357,7 @@ wgEncode	1
 	configurable   off
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 	antibody       CTCF
 
@@ -363,7 +387,7 @@ wgEncode	1
 	configurable   on
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 
 	track          wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
@@ -379,7 +403,7 @@ wgEncode	1
 	configurable   off
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 
 	track          wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
@@ -395,7 +419,7 @@ wgEncode	1
 	configurable   off
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 
 	track          wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
@@ -411,7 +435,7 @@ wgEncode	1
 	configurable   off
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 
 	track          wgEncodeUncFAIREseqPeaksGm12878
@@ -440,7 +464,7 @@ wgEncode	1
 	configurable   on
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 
 	track          wgEncodeUncFAIREseqRawSignalRep1Gm12878
@@ -456,7 +480,7 @@ wgEncode	1
 	configurable   off
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 
 	track          wgEncodeUncFAIREseqRawSignalRep2Gm12878
@@ -472,7 +496,7 @@ wgEncode	1
 	configurable   off
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 
 	track          wgEncodeUncFAIREseqRawSignalRep3Gm12878
@@ -488,7 +512,7 @@ wgEncode	1
 	configurable   off
 	spanList       1
 	windowingFunction mean
-	maxHeightPixels	100:16:16
+	maxHeightPixels	100:32:16
 	cell           GM12878
 
 track wgEncodeNhgriNre
