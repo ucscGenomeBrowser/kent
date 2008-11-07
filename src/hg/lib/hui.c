@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.131 2008/11/06 00:30:19 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.132 2008/11/07 20:47:10 tdreszer Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add"
@@ -2405,7 +2405,7 @@ if (!primarySubtrack)
     if(restrictions)
         {
         printf("<TH align=\"center\" nowrap>&nbsp;");
-#define RESTRICTED_USE_LINK "<A HREF=\"http://genome.cse.ucsc.edu/FAQ/FAQcite\" TARGET=_BLANK>%s</A>\n"
+#define RESTRICTED_USE_LINK "<A HREF='/ENCODE/terms.html' TARGET=_BLANK>%s</A>\n"
         printf(RESTRICTED_USE_LINK,"Restricted Until");
         puts("&nbsp;</TH>");
         }
