@@ -3,7 +3,7 @@
 track encodeMsaTbaDec07
 compositeTrack on
 shortLabel 36-Way TBA
-longLabel TBA 36-Vertebrate Alignments in the ENCODE Regions
+longLabel TBA Alignments and Conservation of 36 Vertebrates in the ENCODE Regions
 group encodeCompAndVar
 subGroup1 view Views align=Alignments cons=Conservation
 visibilityViewDefaults align=full+ cons=dense
@@ -17,7 +17,7 @@ priority 1
     longLabel TBA Alignments of 36 Vertebrates in the ENCODE Regions
     subGroups view=align
     noInherit on
-    priority 1
+    priority 3
     color 0, 10, 100
     altColor 1,128,0
     type wigMaf 0.0 1.0
@@ -31,7 +31,7 @@ priority 1
     sGroup_placental tree_shrew rn4 mm9 guinea_pig st_squirrel rabbit bosTau3 horse cat canFam2 flying_fox sbbat rfbat hedgehog shrew armadillo elephant tenrec rock_hyrax
     sGroup_mammal monDom4 platypus
     sGroup_vertebrate galGal3
-    speciesDefaultOff panTro2 ponAbe2 colobus_monkey vervet rheMac2 squirrel_monkey tree_shrew rn4 mm9  bosTau3 horse canFam2 flying_fox rock_hyrax opossum chicken
+    speciesDefaultOff panTro2 ponAbe2 colobus_monkey vervet rheMac2 squirrel_monkey tree_shrew rn4 mm9  bosTau3 horse canFam2 flying_fox rock_hyrax monDom4 galGal3
     treeImage phylo/encode_36way.gif
     chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
     dataVersion Dec 2007
@@ -44,7 +44,7 @@ priority 1
     type bed 4
     subGroups view=cons
     color 0, 10, 100
-    priority 2
+    priority 1
 
     track encodeTbaChaiConsDec07
     subTrack encodeMsaTbaDec07
@@ -54,7 +54,7 @@ priority 1
     noInherit on
     type bed 3
     color 100, 10, 0
-    priority 3
+    priority 2
 
 track encodeTbaAlignSep07
 shortLabel Sep07 TBA Align
