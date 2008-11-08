@@ -7,7 +7,7 @@
 #include "targetDb.h"
 #include "pcrResult.h"
 
-static char const rcsid[] = "$Id: pcrResult.c,v 1.9 2008/09/03 19:19:26 markd Exp $";
+static char const rcsid[] = "$Id: pcrResult.c,v 1.10 2008/11/08 00:31:38 angie Exp $";
 
 char *pcrResultCartVar(char *db)
 /* Returns the cart variable name for PCR result track info for db. 
@@ -172,13 +172,13 @@ return tdb;
 }
 
 char *pcrResultItemAccName(char *acc, char *name)
-/* If the accession and display name are different, concatenate them
+/* If a display name is given in addition to the acc, concatenate them
  * into a single name that must match a non-genomic target item's name
  * in the targetDb .2bit.  Do not free the result. */
 {
 static char accName[256];
-if (sameString(acc, name))
-    safecpy(accName, sizeof(accName), name);
+if (isEmpty(name))
+    safecpy(accName, sizeof(accName), acc);
 else
     safef(accName, sizeof(accName), "%s__%s", acc, name);
 return accName;
@@ -201,11 +201,11 @@ return nameIn;
 
 char *pcrResultItemName(char *nameIn)
 /* If nameIn contains a concatenated accession and display name, returns
- * just the name.  Do not free the result.*/
+ * just the name.  If accession only, returns NULL.  Do not free the result.*/
 {
 char *ptr = strstr(nameIn, "__");
 if (ptr != NULL)
     return ptr+2;
-return nameIn;
+return NULL;
 }
 

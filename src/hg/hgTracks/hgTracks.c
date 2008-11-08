@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1519 2008/10/24 23:13:11 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1520 2008/11/08 00:31:38 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -647,13 +647,24 @@ slSort(&itemList, linkedFeaturesCmp);
 tg->items = itemList;
 }
 
+char *pcrResultTrackItemName(struct track *tg, void *item)
+/* If lf->extra is non-empty, return it (display name for item).
+ * Otherwise default to item name. */
+{
+struct linkedFeatures *lf = item;
+if (lf->extra != NULL)
+    return lf->extra;
+else
+    return lf->name;
+}
+
 struct track *pcrResultTg()
 /* Make track of hgPcr results (alignments of user's submitted primers). */
 {
 struct trackDb *tdb = pcrResultFakeTdb();
 struct track *tg = trackFromTrackDb(tdb);
 tg->loadItems = pcrResultLoad;
-tg->itemName = lfMapNameFromExtra;
+tg->itemName = pcrResultTrackItemName;
 tg->mapItemName = pcrResultMapItemName;
 tg->exonArrows = TRUE;
 tg->hasUi = TRUE;
