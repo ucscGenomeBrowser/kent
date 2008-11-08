@@ -52,16 +52,17 @@ end
 
   <tr>
     <td>
-    <%= ' | ' -%> </td>
 
   <% if @project.status == "validated" %> 
-    <td><%= link_to 'Load', {:action => 'db_load', :id => @project.id} -%>
-    <%= ' | ' -%> </td>
+    <td><%= ' [ ' -%> 
+    <%= link_to 'Load', {:action => 'db_load', :id => @project.id} -%>
+    <%= ' ] ' -%> </td>
   <% end %>
 
   <% if @project.status == "uploaded" %> 
-    <td><%= link_to 'Validate', {:action => 'validate', :id => @project.id} -%>
-    <%= ' | ' -%> </td>
+    <td><%= ' [ ' -%> 
+    <%= link_to 'Validate', {:action => 'validate', :id => @project.id} -%>
+    <%= ' ] ' -%> </td>
   <% end %>
 
   <% if @project.status == "new" \
@@ -70,30 +71,35 @@ end
      or @project.status == "validate failed" \
      or @project.status == "load failed" \
      or advancedView %>
-    <td><%= link_to 'Submit Data', {:action => 'upload', :id => @project.id} -%>
-    <%= ' | ' -%> </td>
+    <td><%= ' [ ' -%> 
+    <%= link_to 'Submit Data', {:action => 'upload', :id => @project.id} -%>
+    <%= ' ] ' -%> </td>
   <% end %>
 
   <% if @project.status != "displayed" or advancedView %>
-    <td><%= link_to 'Delete Submission', {:action => 'delete', :id => @project.id},
+    <td><%= ' [ ' -%> 
+    <%= link_to 'Delete Submission', {:action => 'delete', :id => @project.id},
       :confirm => "Are you sure you want to delete this submission?" -%>
-    <%= ' | ' -%> </td>
+    <%= ' ] ' -%> </td>
   <% end %>
 
   <% if @project.status == "new" or advancedView %>
-    <td><%= link_to 'Rename Submission', {:action => 'edit', :id => @project.id} -%>
-    <%= ' | ' -%> </td>
+    <td><%= ' [ ' -%> 
+    <%= link_to 'Rename Submission', {:action => 'edit', :id => @project.id} -%>
+    <%= ' ] ' -%> </td>
   <% end %>
 
   <% if advancedView and @project_status != "new" %>
-    <td><%= link_to 'Unload', {:action => 'unload', :id => @project.id},
+    <td><%= ' [ ' -%> 
+    <%= link_to 'Unload', {:action => 'unload', :id => @project.id},
       :confirm => "Are you sure you want to unload this submission?" -%>
-    <%= ' | ' -%> </td>
+    <%= ' ] ' -%> </td>
   <% end %>
 
   <% if advancedView and @project_status != "new" %>
-    <td><%= link_to 'Expand', {:action => 'reexpand_all', :id => @project.id} -%>
-    <%= ' | ' -%> </td>
+    <td><%= ' [ ' -%> 
+    <%= link_to 'Expand', {:action => 'reexpand_all', :id => @project.id} -%>
+    <%= ' ] ' -%> </td>
   <% end %>
 
   </tr>
