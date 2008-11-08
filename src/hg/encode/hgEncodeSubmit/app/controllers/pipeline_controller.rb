@@ -342,7 +342,7 @@ class PipelineController < ApplicationController
           bg_local_path = "#{@upload.local_path}_BG"
           File.link(@upload.local_path, bg_local_path)  # we want the file to be preserved beyond cgi call for bg to use
 
-        elsif file.respond_to?(:read)
+        elsif @upload.respond_to?(:read)
 
           logger.info "#DEBUG length=#{@upload.length} original_filename=#{@upload.original_filename}"  #debug
           File.open(pf, "wb") { |f| f.write(@upload.read); f.close }
