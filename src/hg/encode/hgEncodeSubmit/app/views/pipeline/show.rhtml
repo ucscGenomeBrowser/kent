@@ -79,6 +79,11 @@ end
 
   <% if advancedView and @project_status != "new" %>
     <td><%= ' | ' -%>
+    <%= link_to 'Unload', {:action => 'unload', :id => @project.id} -%></td>
+  <% end %>
+
+  <% if advancedView and @project_status != "new" %>
+    <td><%= ' | ' -%>
     <%= link_to 'Expand', {:action => 'reexpand_all', :id => @project.id} -%></td>
   <% end %>
 

@@ -1,5 +1,7 @@
 module PipelineBackground
 
+# TODO maybe all of these can be private ?
+
 #  protected
   def background_test
     #require 'pp'   # debug
@@ -80,7 +82,7 @@ module PipelineBackground
 
   end 
 
-  def delete_background(project_id)
+  def unload_background(project_id)
     # call an unload cleanup routine 
     #  (e.g. that can remove .wib symlinks from /gbdb/ to the submission dir)
     project = Project.find(project_id)
@@ -102,7 +104,11 @@ module PipelineBackground
       exitCode = run_with_timeout(cmd, timeout)
 
       if exitCode == 0
-        new_status project, "unloaded"
+        if project.project_archives.length == 0
+          new_status project, "new"
+        else
+          new_status project, "uploaded"
+        end
       else
         yell "Project unload failed."
         new_status project, "unload failed"
@@ -110,10 +116,15 @@ module PipelineBackground
       end
 
     end    
+
+  end
+ 
+  def delete_background(project_id)
+    project = Project.find(project_id)
+    unload_background(project.id)
     delete_completion(project.id)
     new_status project, "deleted"
     destroyer project
-
   end
  
 

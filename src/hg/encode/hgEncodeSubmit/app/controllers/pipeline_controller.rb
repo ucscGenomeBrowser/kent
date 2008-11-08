@@ -192,6 +192,25 @@ class PipelineController < ApplicationController
     end
   end
   
+  def unload
+    @project = Project.find(params[:id])
+    if @project.run_stat 
+      flash[:error] = "Please wait, a background job is still running."
+      redirect_to :action => 'show', :id => @project.id
+      return
+    end
+    projectDir= path_to_project_dir(@project.id)
+    msg = ""
+    msg += "Submission unload requested."
+    new_status @project, "unload requested"
+    unless queue_job "unload_background(#{@project.id})"
+      flash[:error] = "System error - queued_jobs save failed."
+      return
+    end
+    flash[:notice] = msg
+    redirect_to :action => 'show_user'
+  end
+
   def delete
     @project = Project.find(params[:id])
     if @project.run_stat 
