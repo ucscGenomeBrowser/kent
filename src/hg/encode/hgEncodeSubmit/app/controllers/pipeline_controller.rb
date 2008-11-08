@@ -13,7 +13,7 @@ class PipelineController < ApplicationController
 
   before_filter :login_required
   before_filter :check_user_is_owner, :except => 
-        [:new, :create, :list, :show_user, :show, 
+        [:new, :create, :list, :show_user, :show, :delete_archive,
         :valid_status, :load_status, :unload_status, :upload_status ]
   
   layout 'main'
@@ -364,6 +364,15 @@ class PipelineController < ApplicationController
       end
     end
     autoResume = @params['auto_resume']['0'] == "1" ? " -c" : ""
+
+    # need to preserve the status for the archive NOW
+    if @project.project_archives.last
+      @project.project_archives.last.status = @project.status
+      @project.project_archives.last.archives_active = @project.archives_active
+      unless saver @project.project_archives.last
+        flash[:error] = "unable to save @project.project_archives.last" 
+      end
+    end
 
     new_status @project, "upload requested"
     upload_name = @upload.blank? ? "" : @upload.original_filename

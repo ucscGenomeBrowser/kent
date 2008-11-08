@@ -183,7 +183,6 @@ module PipelineBackground
 
     #msg += "Uploading/expanding #{plainName}.<br>"
 
-    saveProjectStatus = project.status
     unless new_status project, "uploading"
       return
     end
@@ -195,14 +194,6 @@ module PipelineBackground
       File.delete(pf) if File.exists?(pf)
     end
     
-    if project.project_archives.last
-      project.project_archives.last.status = saveProjectStatus
-      project.project_archives.last.archives_active = project.archives_active
-      unless saver project.project_archives.last
-        return
-      end
-    end
-
     unless upurl.blank?
 
       # trying for more info, remove -nv option:
