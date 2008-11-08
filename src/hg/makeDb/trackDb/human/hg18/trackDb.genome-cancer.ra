@@ -179,7 +179,7 @@ shortLabel  Breast Cancer Gene Expression (Chin et. al Cancer Cell 2006)
 longLabel Breast Cancer Gene Expression (Chin et. al. Cancer Cell 2006)
 group cancerGenomics
 priority 45
-visibility hide
+visibility pack
 logicalDb localDb
 type expRatio
 expScale 2.0
