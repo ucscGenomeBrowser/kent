@@ -29,33 +29,33 @@ color 173,17,162
 type genePred
 
 release alpha
-track phyloP
-shortLabel 28-Way PhyloP
+track phyloPCons28way
+shortLabel Basewise Conserv
 compositeTrack on
-longLabel PhyloP Conservation P-Values (28 Vertebrate Species)
+longLabel Basewise Conservation by PhyloP for 28-Species Vertebrate Multiz Alignment
 spanList 1
 maxHeightPixels 100:40:11
 autoScaleDefault Off
 windowingFunction mean
 group compGeno
-priority 103.1
+priority 103.4
 visibility hide
-color 0, 10, 100
-altColor 0,90,10
+altColor 70,130,70
+color 0,90,20
 type wig 0.0 2.87
 viewLimits .2:1.6
 
-    track phyloP28way
-    subTrack phyloP
-    shortLabel Vertebrate
-    longLabel Vertebrate PhyloP Conservation P-Values
-    priority 2
-
     track phyloP28wayPlacMammal
-    subTrack phyloP
-    shortLabel Plac Mammal
-    longLabel Placental Mammal PhyloP Conservation P-Values
+    subTrack phyloPCons28way
+    shortLabel Mammal Cons
+    longLabel Placental Mammal Basewise Conservation by PhyloP
     priority 1
+
+    track phyloP28way
+    subTrack phyloPCons28way
+    shortLabel Vertebrate Cons
+    longLabel Vertebrate Basewise Conservation by PhyloP
+    priority 2
 
 release alpha
 track phastConsHq
@@ -67,7 +67,7 @@ maxHeightPixels 100:40:11
 autoScaleDefault Off
 windowingFunction mean
 group compGeno
-priority 103.2
+priority 103.5
 visibility hide
 color 0, 10, 100
 altColor 0,90,10
