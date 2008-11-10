@@ -39,7 +39,7 @@ scientificName  Gorilla gorilla gorilla
 commonName Gorilla
 assemblyDate Oct. 2008
 assemblyLabel Sanger Institute genome_31265
-orderKey 10
+orderKey 27
 mitoAcc NC_011120
 # fastaFiles
 # /hive/data/genomes/gorGor1/sanger/gorilla_draft_genome_31265.fragments.gz
@@ -203,3 +203,110 @@ mySQL error 1062: Duplicate entry 'Supercontig_0000' for key 1
     hgsql -e 'update dbDb set
 sourceName="Sanger Institute Oct 2008 (NCBI project 31265, CABD01000000)" where name="gorGor1";' hgcentraltest
 ###########################################################################
+#  BLATSERVERS ENTRY (DONE - 2007-11-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("gorGor1", "blat13", "17790", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("gorGor1", "blat13", "17791", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+############################################################################
+# Create quality track (DONE - 2008-11-10 - Hiram)
+    mkdir /hive/data/genomes/gorGor1/sanger/fastq
+    cd /hive/data/genomes/gorGor1/sanger/fastq
+    #	the delivered fastq file is full of sequences that have nothing to
+    #	do with the Supercontigs, scan it and select out only that business
+    #	that belongs, and fixup the chrM sequence name (although this chrM is
+    #	different than the one from NC_011120)
+    zcat ../gorilla_draft_genome_31265.fastq.gz | awk '
+BEGIN { done = 0 }
+{
+if (match($0,"^@3_42962700_339")) { done = 1; }
+if (match($0,"^@gi.5835149.ref.NC_001645.1")) {
+    print "@chrM gi.5835149.ref.NC_001645.1 Supercontig_" }
+else { if (0 == done) { print } }
+}
+' | gzip -c > trimmed.fastq.gz
+    #	after re-writing fastqToFa to get it to properly parse multi-line
+    #	fastq files:
+    fastqToFa -qual=gorGor1.qual.fa -nameVerify="Supercontig_" -noErrors \
+        -verbose=2 -qualSizes=gorGor1.qual.sizes \
+        trimmed.fastq.gz stdout | gzip -c > gorGor1.withAllNs.fa.gz
+
+    #	And then, a lot of these records are all N's - so, eliminate them:
+    faCount gorGor1.fa.gz > gorGor1.faCount.txt
+    egrep "^Super|^chr" gorGor1.withAllNs.faCount.txt \
+	| awk '{if($2 == $7) { print }}' \
+	> all.Ns.names
+    egrep "^Super|^chr" gorGor1.withAllNs.faCount.txt \
+	| awk '{if($2 != $7) { print }}' \
+	> not.all.Ns.names
+    cut -f 1 not.all.Ns.names \
+	| faSomeRecords gorGor1.withAllNs.fa.gz stdin stdout | gzip -c \
+	> gorGor1.fa.gz
+
+    cat << '_EOF_' > cleanQuals.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %allowList;
+my $allowListSize = 0;
+open (FH, "cut -f 1 not.all.Ns.names|") or
+        die "can not cut -f 1 not.all.Ns.names";
+while (my $line = <FH>) {
+    chomp $line;
+    $allowList{$line} = 1;
+    ++$allowListSize;
+}
+close (FH);
+print STDERR "working with a list of $allowListSize names\n";
+
+my $allowed = 0;
+my $allowedCount = 0;
+open (CL, ">clean.gorGor1.qual.fa") or
+        die "can not write to clean.gorGor1.qual.fa";
+open (FH, "<gorGor1.qual.fa") or die "can not read gorGor1.qual.fa";
+while (my $line = <FH>) {
+    if ($line =~ m/^>Supercontig_|^>chrM /) {
+        my $name = $line;
+        chomp $name;
+        $name =~ s/^>//;
+        $name =~ s/ .*//;
+        if (exists($allowList{$name})) {
+            $allowed = 1;
+            ++$allowedCount;
+        } else {
+            $allowed = 0;
+        }
+    }
+    if ($allowed) {
+        print CL "$line";
+    }
+}
+close (FH);
+print STDERR "passed through $allowedCount sequences\n";
+'_EOF_'
+    # << happy emacs
+    ./cleanQuals.pl
+# working with a list of 609861 names
+# passed through 609861 sequences
+
+    cd /cluster/data/gorGor1/bed/qual
+    ln -s ../../sanger/fastq/clean.gorGor1.qual.fa gorGor1.qual.fa
+    qaToQac gorGor1.qual.fa gorGor1.qual.qac
+    qacToWig -fixed gorGor1.qual.qac stdout | wigEncode stdin qual.{wig,wib}
+    #	Converted stdin, upper limit 93.00, lower limit 0.00
+    #	real    20m44.535s
+    #	loading table:
+    rm -f /gbdb/gorGor1/wib/qual.wib
+    ln -s /cluster/data/gorGor1/bed/qual/qual.wib /gbdb/gorGor1/wib/
+    time hgLoadWiggle -tmpDir=/scratch/tmp \
+	-pathPrefix=/gbdb/gorGor1/wib gorGor1 quality qual.wig
+    #	real    1m8.385s
+
+############################################################################
