@@ -24608,3 +24608,42 @@ echo "update grp set label='Regulation' where name='regulation'" | hgsql hg17
 update genbank.conf:
 hg17.upstreamGeneTbl = refGene
 hg17.upstreamMaf = multiz17way /hive/data/genomes/hg17/bed/multiz17way/species.lst
+
+
+#############################################################################
+# MAKE PCR TARGET FOR UCSC GENES (DONE 11/4/08 angie)
+    ssh hgwdev
+    mkdir /cluster/data/hg17/bed/mrnaPcr
+    cd /cluster/data/hg17/bed/mrnaPcr
+    # First, get consistent FA and PSL for UCSC Genes.
+    genePredToBed /cluster/data/hg17/bed/kgHg17F/try3/kg3Try3.gp > ucscGenes.bed
+    hgsql hg17 -NBe 'select kgId,geneSymbol from kgXref' \
+    | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \
+      > idSub.txt
+    subColumn 4 ucscGenes.bed idSub.txt ucscGenesIdSubbed.bed
+    sequenceForBed -keepName -db=hg17 -bedIn=ucscGenesIdSubbed.bed \
+      -fastaOut=stdout \
+    | faToTwoBit -ignoreDups stdin kgTargetSeq.2bit
+    cut -f 1-10 /cluster/data/hg17/bed/kgHg17F/try3/kg3Try3.gp \
+    | genePredToFakePsl hg17 stdin kgTargetAli.psl /dev/null
+
+    # Load up the UCSC Genes target PSL table and put 2bit in /gbdb::
+    cd /cluster/data/hg17/bed/mrnaPcr
+    hgLoadPsl hg17 kgTargetAli.psl
+    mkdir /gbdb/hg17/targetDb
+    ln -s /cluster/data/hg17/bed/mrnaPcr/kgTargetSeq.2bit /gbdb/hg17/targetDb/
+
+    # Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on
+    # /gbdb/hg17/targetDb/kgTargetSeq.2bit .
+
+    ssh hgwdev
+    # Add records to hgcentraltest blatServers and targetDb:
+    hgsql hgcentraltest -e \
+      'INSERT into blatServers values ("hg17Kg", "blat13", 17797, 0, 1);'
+    hgsql hgcentraltest -e \
+      'INSERT into targetDb values("hg17Kg", "UCSC Genes", \
+         "hg17", "kgTargetAli", "", "", \
+         "/gbdb/hg17/targetDb/kgTargetSeq.2bit", 1, now(), "");'
+
+
+#############################################################################

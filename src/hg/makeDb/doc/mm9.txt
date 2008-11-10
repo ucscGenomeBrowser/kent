@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.85 2008/11/10 17:40:02 kate Exp $"
+#	"$Id: mm9.txt,v 1.86 2008/11/10 20:28:18 angie Exp $"
 #
 
 #######################################################################
@@ -9003,3 +9003,41 @@ EOF
 update genbank.conf:
 mm9.upstreamGeneTbl = refGene
 mm9.upstreamMaf = multiz30way /hive/data/genomes/mm9/bed/multiz30way/species.list
+
+
+#############################################################################
+# MAKE PCR TARGET FOR UCSC GENES (DONE 11/4/08)
+    ssh hgwdev
+    mkdir /cluster/data/mm9/bed/mrnaPcr
+    cd /cluster/data/mm9/bed/mrnaPcr
+    genePredToBed /cluster/data/mm9/bed/ucsc.10/ucscGenes.gp > ucscGenes.bed
+    hgsql mm9 -NBe 'select kgId,geneSymbol from kgXref' \
+    | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \
+      > idSub.txt
+    subColumn 4 ucscGenes.bed idSub.txt ucscGenesIdSubbed.bed
+    sequenceForBed -keepName -db=mm9 -bedIn=ucscGenesIdSubbed.bed \
+      -fastaOut=stdout \
+    | faToTwoBit stdin kgTargetSeq.2bit
+    cut -f 1-10 /cluster/data/mm9/bed/ucsc.10/ucscGenes.gp \
+    | genePredToFakePsl mm9 stdin kgTargetAli.psl /dev/null
+
+    # Load up the UCSC Genes target PSL table and put 2bit in /gbdb::
+    cd /cluster/data/mm9/bed/mrnaPcr
+    hgLoadPsl mm9 kgTargetAli.psl
+    mkdir /gbdb/mm9/targetDb
+    ln -s /cluster/data/mm9/bed/mrnaPcr/kgTargetSeq.2bit /gbdb/mm9/targetDb/
+
+    # Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on
+    # /gbdb/mm9/targetDb/kgTargetSeq.2bit .
+
+    ssh hgwdev
+    # Add records to hgcentraltest blatServers and targetDb:
+    hgsql hgcentraltest -e \
+      'INSERT into blatServers values ("mm9Kg", "blat13", 17805, 0, 1);'
+    hgsql hgcentraltest -e \
+      'INSERT into targetDb values("mm9Kg", "UCSC Genes", \
+         "mm9", "kgTargetAli", "", "", \
+         "/gbdb/mm9/targetDb/kgTargetSeq.2bit", 1, now(), "");'
+
+
+#############################################################################
