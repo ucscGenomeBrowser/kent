@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.29 2008/11/07 22:40:52 tdreszer Exp $
+# $Id: Encode.pm,v 1.30 2008/11/10 02:35:51 tdreszer Exp $
 
 package Encode;
 
@@ -329,9 +329,10 @@ sub parseDaf
 sub compositeTrackName
 {
     my ($daf) = @_;
-    if($daf->{grant} eq "Crawford") {
-        return "wgEncodeChromatinMap";
-    }
+    ### The following is being backed out because it creates additional naming conflicts.  Tim will deal with it when he gets back
+    #if($daf->{grant} eq "Crawford") {
+    #    return "wgEncodeChromatinMap";
+    #}
     return "wgEncode" . ucfirst(lc($daf->{lab})) . $daf->{dataType};
 }
 
