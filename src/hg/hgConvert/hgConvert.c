@@ -18,7 +18,7 @@
 #include "liftOverChain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.31 2008/11/10 19:04:09 angie Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.32 2008/11/10 19:15:09 angie Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -290,7 +290,8 @@ else
            sequence file (of the hgConvert result) exists in the location 
            specified in chromInfo for the toDb. */
  
-        boolean chromSeqExists = chromSeqFileExists(toDb->name, chain->qName);
+        boolean chromSeqExists = (sqlDatabaseExists(toDb->name) &&
+				  chromSeqFileExists(toDb->name, chain->qName));
         /* Check if the toDb has active set to 1 in dbDb if the toDb 
            database exists. 
            If these conditions are met then print position link to 
@@ -326,7 +327,7 @@ else
     if (choice == NULL)
 	errAbort("Sorry, no conversions available from this assembly.");
     struct dbDb *dbList, *fromDb, *toDb;
-    dbList = hDbDbList();
+    dbList = hDbDbListMaybeCheck(FALSE);
     fromDb = matchingDb(dbList, choice->fromDb);
     toDb = matchingDb(dbList, choice->toDb);
     askForDestination(choice, fromPos, fromDb, toDb);
