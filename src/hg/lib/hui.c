@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.132 2008/11/07 20:47:10 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.133 2008/11/10 19:40:31 kate Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add"
@@ -2303,6 +2303,20 @@ switch(cType)
     }
 }
 
+char *encodeRestrictionDateDisplay(struct trackDb *trackDb)
+/* Create a string for ENCODE restriction date of this track */
+{
+if (!trackDb)
+    return NULL;
+char *date = trackDbSetting(trackDb, "dateReleased");
+if (date)
+    return strSwapChar(cloneString(date), ' ', 0);   // Truncate time
+date = trackDbSetting(trackDb, "dateSubmitted");
+if (date)
+    return dateAddToAndFormat(strSwapChar(cloneString(date), ' ', 0), "%F", 0, 9, 0);
+return NULL;
+}
+
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
                  boolean selectedOnly, char *primarySubtrack)
 /* Show checkboxes for subtracks. */
@@ -2405,8 +2419,7 @@ if (!primarySubtrack)
     if(restrictions)
         {
         printf("<TH align=\"center\" nowrap>&nbsp;");
-#define RESTRICTED_USE_LINK "<A HREF='/ENCODE/terms.html' TARGET=_BLANK>%s</A>\n"
-        printf(RESTRICTED_USE_LINK,"Restricted Until");
+        printf("<A HREF=\'%s\' TARGET=BLANK>Restricted Until</A>", ENCODE_DATA_RELEASE_POLICY);
         puts("&nbsp;</TH>");
         }
     }
@@ -2530,17 +2543,11 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 }
 #define SCHEMA_LINK "<TD>&nbsp;<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=_BLANK title='View table schema'>schema</A>&nbsp;\n"
             printf(SCHEMA_LINK, db, parentTdb->grp, parentTdb->tableName, subtrack->tableName);
-            char *displayDate = NULL;
-            if(trackDbSetting(subtrack, "dateReleased"))
-                {
-                displayDate = strSwapChar(cloneString(trackDbSetting(subtrack, "dateReleased")),' ',0);   // Truncate time
-                printf("</TD><TD align=\"CENTER\">&nbsp;%s&nbsp;",displayDate);
-                }
-            else if(trackDbSetting(subtrack, "dateSubmitted"))
-                {
-                displayDate = strSwapChar(cloneString(trackDbSetting(subtrack, "dateSubmitted")),' ',0);   // Truncate time
-                printf("</TD><TD align=\"CENTER\">&nbsp;%s&nbsp;",dateAddToAndFormat(displayDate,"%F",0,9,0));
-                }
+
+            char *dateDisplay = encodeRestrictionDateDisplay(subtrack);
+            if (dateDisplay)
+                printf("</TD><TD align=\"CENTER\">&nbsp;%s&nbsp;", dateDisplay);
+
             puts("</TD></TR>");
             checkBoxIdFree(&id);
             }
@@ -3894,4 +3901,3 @@ void compositeViewControlNameFree(char **name)
 if(name && *name)
     freez(name);
 }
-

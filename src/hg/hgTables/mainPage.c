@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.133 2008/10/23 23:34:30 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.134 2008/11/10 19:40:31 kate Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -370,6 +370,7 @@ if (!slNameInListUseCase(nameList, selTable))
 /* Print out label and drop-down list. */
 hPrintf("<B>table: </B>");
 hPrintf("<SELECT NAME=\"%s\" %s>\n", varName, onChangeTable());
+struct trackDb *selTdb = NULL;
 for (name = nameList; name != NULL; name = name->next)
     {
     struct trackDb *tdb = NULL;
@@ -377,10 +378,12 @@ for (name = nameList; name != NULL; name = name->next)
 	tdb = findCompositeTdb(track, name->name);
     hPrintf("<OPTION VALUE=\"%s\"", name->name);
     if (sameString(selTable, name->name))
+        {
         hPrintf(" SELECTED");
+        selTdb = tdb;
+        }
     if (tdb != NULL)
-	if ((curTrack == NULL) ||
-	    differentWord(tdb->shortLabel, curTrack->shortLabel))
+	if ((curTrack == NULL) || differentWord(tdb->shortLabel, curTrack->shortLabel))
 	    hPrintf(">%s (%s)\n", tdb->shortLabel, name->name);
 	else
 	    hPrintf(">%s\n", name->name);
@@ -388,6 +391,10 @@ for (name = nameList; name != NULL; name = name->next)
 	hPrintf(">%s\n", name->name);
     }
 hPrintf("</SELECT>\n");
+char *restrictDate = encodeRestrictionDateDisplay(selTdb);
+if (restrictDate)
+    hPrintf("<A HREF=\'%s\' TARGET=BLANK>restricted until:</A>&nbsp;%s", 
+                ENCODE_DATA_RELEASE_POLICY, restrictDate);
 return selTable;
 }
 

@@ -24,6 +24,10 @@ char *wrapWhiteFont(char *s);
  *	relative URL reference
  */
 
+#define ENCODE_DATA_RELEASE_POLICY "/ENCODE/terms.html"
+char *encodeRestrictionDateDisplay(struct trackDb *trackDb);
+/* Create a string for ENCODE restriction date of this track */
+
 char *hDocumentRoot();
 /* get the path to the DocumentRoot, or the default */
 
