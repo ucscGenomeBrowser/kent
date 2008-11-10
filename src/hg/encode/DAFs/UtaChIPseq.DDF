@@ -1,0 +1,12 @@
+files	view	cell	antibody	labVersion	replicate
+UCSC_submission/GM12878_UtaChIPseq_CTCF_rep1.fastq	RawData	GM12878	CTCF		1
+UCSC_submission/GM12878_UtaChIPseq_CTCF_rep2.fastq	RawData	GM12878	CTCF		2
+UCSC_submission/GM12878_UtaChIPseq_CTCF_rep3.fastq	RawData	GM12878	CTCF		3
+UCSC_submission/Raw_GM12878_UtaChIPseq_CTCF_rep1.taf	Alignments	GM12878	CTCF		1
+UCSC_submission/Raw_GM12878_UtaChIPseq_CTCF_rep2.taf	Alignments	GM12878	CTCF		2
+UCSC_submission/Raw_GM12878_UtaChIPseq_CTCF_rep3.taf	Alignments	GM12878	CTCF		3
+UCSC_submission/GM12878_UtaChIPseq_CTCF_rep1_*.wig	RawSignal	GM12878	CTCF		1
+UCSC_submission/GM12878_UtaChIPseq_CTCF_rep2_*.wig	RawSignal	GM12878	CTCF		2
+UCSC_submission/GM12878_UtaChIPseq_CTCF_rep3_*.wig	RawSignal	GM12878	CTCF		3
+UCSC_submission/GM12878_UtaChIPseq_CTCF_chr*.wig	Signal	GM12878	CTCF	1.0	1
+UCSC_submission/GM12878_UtaChIPseq_CTCF.pk	Peaks	GM12878	CTCF	1.0	1

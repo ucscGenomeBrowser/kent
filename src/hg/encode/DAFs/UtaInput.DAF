@@ -1,0 +1,36 @@
+# Data Agreement File for UT-Austin (Duke) Input  project
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+ # Lab and general info
+ grant            Crawford
+ lab              UT-Austin
+ dataType         ChIPseq
+ variables        cell, antibody
+ assembly         hg18
+ dafVersion       1.0
+
+ # Track/view definition
+ view             Signal
+ longLabelPrefix  UT-Austin Input Signal
+ type             wig
+ hasReplicates    no
+ required         no
+
+ view             RawSignal
+ longLabelPrefix  UT-Austin Input Raw Signal
+ type             wig
+ hasReplicates    no
+ required         yes
+
+ view             Alignments
+ longLabelPrefix  UT-Austin Input Alignments
+ type             tagAlign
+ hasReplicates    no
+ required         yes
+
+ view             RawData
+ type             fastq
+ hasReplicates    no
+ required         yes
