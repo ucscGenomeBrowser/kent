@@ -4242,7 +4242,7 @@ cat > template << '_EOF_'
 /cluster/bin/scripts/runEpcr64 $(path1) $(path2) {check out line /san/sanvol1/scratch/hg18/sts.10/epcr/out/$(root1).$(root2).epcr}
 #ENDLOOP
 '_EOF_'
-    # happy emacs
+    # << emacs
     gensub2 primers.lst contig.lst template jobList
     para create jobList
 	# 3420 jobs
@@ -21001,7 +21001,7 @@ TMPDIR=/scratch/tmp
     # 1647122438 bases of 2881515245 (57.162%) in intersection
 
 #############################################################################
-# MAKE PCR TARGET FOR UCSC GENES (DONE 4/18/08 angie)
+# MAKE PCR TARGET FOR UCSC GENES (DONE 4/18/08 angie - UPDATED 11/4/08)
     ssh hgwdev
     mkdir /cluster/data/hg18/bed/mrnaPcr
     cd /cluster/data/hg18/bed/mrnaPcr
@@ -21014,7 +21014,7 @@ TMPDIR=/scratch/tmp
     # Jim's suggestion: use sequenceForBed to get genomic-translated
     # sequences, and then genePredToFakePsl.  sequenceToBed must be
     # run on hgwdev.
-    genePredToBed /cluster/data/hg18/bed/ucsc.10/ucscGenes.gp > ucscGenes.bed
+    genePredToBed /cluster/data/hg18/bed/ucsc.11/ucscGenes.gp > ucscGenes.bed
     hgsql hg18 -NBe 'select kgId,geneSymbol from kgXref' \
     | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \
       > idSub.txt
@@ -21022,7 +21022,7 @@ TMPDIR=/scratch/tmp
     sequenceForBed -keepName -db=hg18 -bedIn=ucscGenesIdSubbed.bed \
       -fastaOut=stdout \
     | faToTwoBit stdin kgTargetSeq.2bit
-    cut -f 1-10 /cluster/data/hg18/bed/ucsc.10/ucscGenes.gp \
+    cut -f 1-10 /cluster/data/hg18/bed/ucsc.11/ucscGenes.gp \
     | genePredToFakePsl hg18 stdin kgTargetAli.psl /dev/null
 
     # Load up the UCSC Genes target PSL table and put 2bit in /gbdb::
@@ -21031,19 +21031,17 @@ TMPDIR=/scratch/tmp
     mkdir /gbdb/hg18/targetDb
     ln -s /cluster/data/hg18/bed/mrnaPcr/kgTargetSeq.2bit /gbdb/hg18/targetDb/
 
-    ssh kolossus
-    # Start up gfServer for kgTargetSeq:
-    cd /cluster/data/hg18/bed/mrnaPcr
-    gfServer -stepSize=5 -canStop start localhost 17990 kgTargetSeq.2bit &
+    # Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on
+    # /gbdb/hg18/targetDb/kgTargetSeq.2bit .
 
     ssh hgwdev
     # Add records to hgcentraltest blatServers and targetDb:
     hgsql hgcentraltest -e \
-      'INSERT into blatServers values ("hg18Kg", "kolossus", 17990, 0, 1);'
+      'INSERT into blatServers values ("hg18KgNov08", "blat13", 17799, 0, 1);'
     hgsql hgcentraltest -e \
-      'INSERT into targetDb values("hg18Kg", "UCSC Genes", \
+      'INSERT into targetDb values("hg18KgNov08", "UCSC Genes", \
          "hg18", "kgTargetAli", "", "", \
-         "/gbdb/hg18/targetDb/kgTargetSeq.2bit", 1, now());'
+         "/gbdb/hg18/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
 
 #############################################################################
@@ -21073,11 +21071,11 @@ TMPDIR=/scratch/tmp
     ssh hgwdev
     # Add records to hgcentraltest blatServers and targetDb:
     hgsql hgcentraltest -e \
-      'INSERT into blatServers values ("hg18Mrna", "kolossus", 17991, 0, 1);'
+      'INSERT into blatServers values ("hg18MrnaApr08", "kolossus", 17991, 0, 1);'
     hgsql hgcentraltest -e \
-      'INSERT into targetDb values("hg18Mrna", "Human mRNAs", \
+      'INSERT into targetDb values("hg18MrnaApr08", "Human mRNAs", \
          "hg18", "mrnaTargetAli", "", "", \
-         "/gbdb/hg18/targetDb/mrnaTargetSeq.2bit", 2, now());'
+         "/gbdb/hg18/targetDb/mrnaTargetSeq.2bit", 2, now(), "");'
 
 
 #############################################################################
