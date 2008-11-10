@@ -37,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.379 2008/11/10 19:04:09 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.380 2008/11/10 19:14:15 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2339,7 +2339,7 @@ dyStringFree(&ds);
 return db;
 }
 
-static struct dbDb *hDbDbListMaybeCheck(boolean doCheck)
+struct dbDb *hDbDbListMaybeCheck(boolean doCheck)
 /* Return list of databases in dbDb.  If doCheck, check database existence.
  * The list includes the name, description, and where to
  * find the nib-formatted DNA files. Free this with dbDbFree. */

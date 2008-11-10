@@ -378,6 +378,11 @@ struct dbDb *hDbDbList(void);
  * The list includes the name, description, and where to
  * find the nib-formatted DNA files. Free this with dbDbFree. */
 
+struct dbDb *hDbDbListMaybeCheck(boolean doCheck);
+/* Return list of databases in dbDb.  If doCheck, check database existence.
+ * The list includes the name, description, and where to
+ * find the nib-formatted DNA files. Free this with dbDbFree. */
+
 struct dbDb *hArchiveDbDbList(void);
 /* Return list of databases in archive central dbDb.
  * Free this with dbDbFree. */
