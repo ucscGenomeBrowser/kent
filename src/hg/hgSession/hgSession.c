@@ -19,7 +19,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.45 2008/10/31 23:55:42 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.46 2008/11/10 22:45:41 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,6 +34,7 @@ errAbort(
 /* Global variables. */
 struct cart *cart;
 char *excludeVars[] = {"Submit", "submit", NULL};
+struct slName *existingSessionNames = NULL;
 
 /* Javascript to confirm that the user truly wants to delete a session. */
 #define confirmDeleteFormat "return confirm('Are you sure you want to delete %s?');"
@@ -277,6 +278,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<TD align=center>%s</TD></TR>", link);
     freez(&link);
     foundAny = TRUE;
+    struct slName *sn = slNameNew(sessionName);
+    slAddHead(&existingSessionNames, sn);
     }
 if (!foundAny)
     printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>(none)</TD>"
@@ -364,7 +367,23 @@ if (isNotEmpty(userName))
     printf("allow this session to be loaded by others\n");
     printf("</TD><TD>");
     printf("&nbsp;");
-    cgiMakeButton(hgsDoNewSession, "submit");
+    if (existingSessionNames)
+	{
+	struct dyString *js = dyStringNew(1024);
+	struct slName *sn;
+	dyStringAppend(js, "var si = document.getElementsByName('" hgsNewSessionName "'); ");
+	dyStringAppend(js, "if (si[0] && ( ");
+	for (sn = existingSessionNames;  sn != NULL;  sn = sn->next)
+	    dyStringPrintf(js, "si[0].value == '%s'%s",
+			   sn->name, (sn->next ? " || " : " )) { "));
+	dyStringAppend(js, "return confirm('This will overwrite the contents of the existing "
+		       "session ' + si[0].value + '.  Proceed?'); ");
+	dyStringAppend(js, "}");
+	cgiMakeOnClickSubmitButton(js->string, hgsDoNewSession, "submit");
+	dyStringFree(&js);
+	}
+    else
+	cgiMakeButton(hgsDoNewSession, "submit");
     printf("</TD></TR>\n");
     printf("<TR><TD colspan=4></TD></TR>\n");
     }
