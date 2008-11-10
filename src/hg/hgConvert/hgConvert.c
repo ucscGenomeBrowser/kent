@@ -18,7 +18,7 @@
 #include "liftOverChain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.29 2008/09/03 19:18:48 markd Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.30 2008/11/10 18:01:01 angie Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -28,6 +28,7 @@ static char const rcsid[] = "$Id: hgConvert.c,v 1.29 2008/09/03 19:18:48 markd E
 /* Global Variables */
 static struct cart *cart;	        /* CGI and other variables */
 static struct hash *oldVars = NULL;
+static char *organism = NULL;
 static char *database = NULL;
 
 /* Javascript to support New Assembly pulldown when New Genome changes. */
@@ -113,10 +114,6 @@ char *chainToOrg = hArchiveOrganism(chain->toDb);
 int fromRank = hashIntValDefault(dbRank, chain->fromDb, 0);
 int toRank = hashIntValDefault(dbRank, chain->toDb, 0);
 int maxRank = hashIntVal(dbRank, "maxRank");
-
-if (fromRank == 0 || toRank == 0) /* not an active db in dbDb or archiveDbDb. */
-    return -1;    /*  toOrg and toDb lists would not display properly */
-
 
 if (sameOk(fromOrg,chainFromOrg) &&
     sameOk(fromDb,chain->fromDb) && 
@@ -253,11 +250,11 @@ slSort(&chainList, chainCmpScore);
 return chainList;
 }
 
-void doConvert(struct liftOverChain *liftOver, char *fromPos,
-	struct dbDb *fromDb, struct dbDb *toDb)
+void doConvert(char *fromPos)
 /* Actually do the conversion */
 {
-char *fileName = liftOverChainFile(liftOver->fromDb, liftOver->toDb);
+struct dbDb *fromDb = hDbDb(database), *toDb = hDbDb(cartString(cart, HGLFT_TODB_VAR));
+char *fileName = liftOverChainFile(fromDb->name, toDb->name);
 char *chrom;
 int start, end;
 int origSize;
@@ -293,18 +290,16 @@ else
            sequence file (of the hgConvert result) exists in the location 
            specified in chromInfo for the toDb. */
  
-        boolean chromSeqExists = chromSeqFileExists(liftOver->toDb, 
-                                      chain->qName);
+        boolean chromSeqExists = chromSeqFileExists(toDb->name, chain->qName);
         /* Check if the toDb has active set to 1 in dbDb if the toDb 
            database exists. 
            If these conditions are met then print position link to 
            browser for toDb, otherwise just print position without link. */
-        if (hDbIsActive(liftOver->toDb) && chromSeqExists) 
+        if (hDbIsActive(toDb->name) && chromSeqExists) 
 	    printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\">",
-	       hgTracksName(), liftOver->toDb,
-	       chain->qName, qStart+1, qEnd);
+		   hgTracksName(), toDb->name, chain->qName, qStart+1, qEnd);
 	printf("%s:%d-%d",  chain->qName, qStart+1, qEnd);
-        if (hDbIsActive(liftOver->toDb) && chromSeqExists) 
+        if (hDbIsActive(toDb->name) && chromSeqExists) 
 	    printf("</A>");
 	printf(" (%3.1f%% of bases, %3.1f%% of span)<BR>\n",
 	    100.0 * blockSize/origSize,  
@@ -317,27 +312,26 @@ cartWebEnd();
 void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
-char *organism;
-struct liftOverChain *liftOverList = NULL, *choice;
 char *fromPos = cartString(theCart, "position");
-struct dbDb *dbList, *fromDb, *toDb;
 
 cart = theCart;
 getDbAndGenome(cart, &database, &organism, oldVars);
 
-liftOverList = liftOverChainListFiltered();
-choice = defaultChoices(liftOverList, organism, database);
-if (choice == NULL)
-   errAbort("Sorry, no conversions available from this assembly.");
-
-dbList = hDbDbList();
-fromDb = matchingDb(dbList, choice->fromDb);
-toDb = matchingDb(dbList, choice->toDb);
 if (cartVarExists(cart, HGLFT_DO_CONVERT))
-    doConvert(choice, fromPos, fromDb, toDb);
+    doConvert(fromPos);
 else
+    {
+    struct liftOverChain *liftOverList = liftOverChainListFiltered();
+    struct liftOverChain *choice = defaultChoices(liftOverList, organism, database);
+    if (choice == NULL)
+	errAbort("Sorry, no conversions available from this assembly.");
+    struct dbDb *dbList, *fromDb, *toDb;
+    dbList = hDbDbList();
+    fromDb = matchingDb(dbList, choice->fromDb);
+    toDb = matchingDb(dbList, choice->toDb);
     askForDestination(choice, fromPos, fromDb, toDb);
-liftOverChainFreeList(&liftOverList);
+    liftOverChainFreeList(&liftOverList);
+    }
 }
 
 /* Null terminated list of CGI Variables we don't want to save
