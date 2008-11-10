@@ -18,7 +18,7 @@
 #include "liftOverChain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.30 2008/11/10 18:01:01 angie Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.31 2008/11/10 19:04:09 angie Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -321,7 +321,7 @@ if (cartVarExists(cart, HGLFT_DO_CONVERT))
     doConvert(fromPos);
 else
     {
-    struct liftOverChain *liftOverList = liftOverChainListFiltered();
+    struct liftOverChain *liftOverList = liftOverChainListForDbFiltered(database);
     struct liftOverChain *choice = defaultChoices(liftOverList, organism, database);
     if (choice == NULL)
 	errAbort("Sorry, no conversions available from this assembly.");

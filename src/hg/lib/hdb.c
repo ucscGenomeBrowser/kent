@@ -37,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.378 2008/11/06 17:14:03 fanhsu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.379 2008/11/10 19:04:09 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3850,12 +3850,9 @@ struct slName *hLiftOverToDbs(char *fromDb)
  * fromDb. */
 {
 struct slName *names = NULL;
-struct liftOverChain *chainList = liftOverChainListFiltered(), *chain;
+struct liftOverChain *chainList = liftOverChainListForDbFiltered(fromDb), *chain;
 for (chain = chainList; chain != NULL; chain = chain->next)
-    {
-    if (!fromDb || (fromDb && sameString(fromDb,chain->fromDb)))
-	slNameStore(&names,chain->toDb);
-    }
+    slNameStore(&names, chain->toDb);
 liftOverChainFreeList(&chainList);
 return names;
 }
@@ -3979,7 +3976,7 @@ struct hash *hash = newHash(0);
 struct hash *dbNameHash = newHash(3);
 
 /* Get list of all liftOver chains in central database */
-chainList = liftOverChainListFiltered();
+chainList = liftOverChainListForDbFiltered(fromDb);
 
 /* Create hash of databases having liftOver chains from the fromDb */
 for (chain = chainList; chain != NULL; chain = chain->next)
