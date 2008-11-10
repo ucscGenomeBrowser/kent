@@ -20,6 +20,10 @@ struct liftOverChain *liftOverChainListFiltered();
 struct liftOverChain *liftOverChainForDb(char *fromDb);
 /* Return list of liftOverChains for this database. */
 
+struct liftOverChain *liftOverChainListForDbFiltered(char *fromDb);
+/* Get list of all liftOver chains in the central database for fromDb,
+ * filtered to include only those chains whose liftover files exist. */
+
 char *liftOverChainFile(char *fromDb, char *toDb);
 /* Get filename of liftOver chain */
 

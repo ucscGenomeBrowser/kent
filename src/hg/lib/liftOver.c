@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.42 2008/10/09 17:28:46 hiram Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.43 2008/11/10 19:02:03 angie Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -1609,14 +1609,26 @@ filterOutMissingChains(&list);
 return list;
 }
 
+struct liftOverChain *liftOverChainListForDbFiltered(char *fromDb)
+/* Get list of all liftOver chains in the central database for fromDb,
+ * filtered to include only those chains whose liftover files exist. */
+{
+struct liftOverChain *list = liftOverChainForDb(fromDb);
+filterOutMissingChains(&list); 
+return list;
+}
+
 struct liftOverChain *liftOverChainForDb(char *fromDb)
 /* Return list of liftOverChains for this database. */
 {
 struct sqlConnection *conn = hConnectCentral();
 struct liftOverChain *list = NULL;
-char query[256];
-safef(query, sizeof(query), "select * from liftOverChain where fromDb='%s'",
-	fromDb);
+char query[512];
+if (isNotEmpty(fromDb))
+    safef(query, sizeof(query), "select * from liftOverChain where fromDb='%s'",
+	  fromDb);
+else
+    safecpy(query, sizeof(query), "select * from liftOverChain");
 list = liftOverChainLoadByQuery(conn, query);
 hDisconnectCentral(&conn);
 return list;
