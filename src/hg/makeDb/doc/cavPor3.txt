@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.15 2008/10/17 01:06:30 markd Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.16 2008/11/10 17:40:02 kate Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -981,7 +981,6 @@ _EOF_
 
     cat fb.cavPor3.chainHg18Link.txt
     # 1281925834 bases of 2663369733 (48.132%) in intersection
-
 
 #########################################################################
 # BLASTZ/CHAIN/NET mm9-cavPor3 (START - 2008-04-10 - DONE 2008-04-14 - Tim)
@@ -3659,6 +3658,84 @@ TMPDIR=/scratch/tmp
     # got here
     ln -s blastzSpeTri0.2008-05-16 /cluster/data/cavPor3/bed/blastzSpeTri0
 
+    # failures... have to rescue manually
+    # make axt's.  Note -- too many scaffolds to do in a single pass
+    # (exhausts mem) so we split
+    ssh kksstore05
+    cd /cluster/data/cavPor3/bed/blastz.speTri0/axtChain
+    netSplit noClass.net noClass
+    ~kate/bin/x86_64/netSplit noClass.net noClass -lump=100
+    # can't just split to chains (exhausts open files)
+    chainSplit chain cavPor3.speTri0.all.chain.gz -lump=100
+    cd noClass
+    mkdir ../../axtNetChunks
+cat > netToAxt.csh << 'EOF'
+    foreach i (*.net)
+        set p = $i:r
+        echo $i
+	netToAxt $p.net ../chain/$p.chain /cluster/data/cavPor3/cavPor3.2bit /cluster/data/speTri0/speTri0.2bit ../../axtNetChunks/$i:r.axt
+    end
+'EOF'
+    csh netToAxt.csh >&! netToAxt.log &
+
+    # create unfiltered mafNet to get better squirrel coverage (2008-11-3 kate)
+    cd ../../axtNetChunks
+    cat *.axt | axtSort stdin stdout > ../axtChain/cavPor3.speTri0.net.axt
+    mkdir ../mafNet
+    axtToMaf -tPrefix=cavPor3. -qPrefix=speTri0. ../axtChain/cavPor3.speTri0.net.axt \
+        /cluster/data/cavPor3/chrom.sizes /cluster/data/speTri0/chrom.sizes \
+            ../mafNet/cavPor3.speTri0.net.maf
+    gzip stdin > ../mafNet/cavPor3.speTri0.net.maf.gz
+
+    # low cov genome, so use reciprocal best for multiple alignment
+    # need to generate liftover chains, which failed in automation
+cat > over.csh << 'EOF'
+    foreach i (*.net)
+        set p = $i:r
+        echo $i
+	netChainSubset -verbose=0 $p.net ../chain/$p.chain stdout | \
+            chainStitchId stdin $i.over.chain
+    end
+    cat *.over.chain | gzip -c > cavPor3.speTri0.over.chain.gz
+'EOF'
+    csh over.csh >&! over.log &
+
+    ssh hgwdev
+    cd /cluster/data/cavPor3/bed/blastz.speTri0
+    mkdir /usr/local/apache/htdocs/goldenPath/cavPor3/vsSpeTri0
+    /cluster/bin/scripts/doRecipBest.pl cavPor3 speTri0 >&! rbest.log &
+
+    # TODO: 
+    # load chains in database and check coverage
+    # NOTE: exhausts mem on hgwdev -- need to try this on kolossus ?
+    cd axtChain
+    cat > loadChains.csh << 'EOF'
+hgLoadChain -tIndex cavPor3 chainSpeTri0 cavPor3.speTri0.all.chain.gz
+featureBits cavPor3 chainSpeTri0Link > fb.cavPor3.chainSpeTri0Link.txt
+cat fb.cavPor3.chainSpeTri0Link.txt
+'EOF'
+    csh loadChains.csh >&! loadChains.log &
+############################################################################
+# SWAP SpeTri0  Blastz (2008-11-01 kate)
+
+mkdir -p /cluster/data/speTri0/bed
+cd /cluster/data/speTri0/bed
+mkdir blastz.cavPor3.swap
+cd blastz.cavPor3.swap
+
+cd /cluster/data/cavPor3/bed/blastz.speTri0/axtChain/chain
+mkdir ../chain.swap
+cat > swap.csh << 'EOF'
+foreach c (*.chain)
+    echo $c
+    chainSwap $c ../chain.swap/$c
+end
+'EOF'
+csh swap.csh >&! swap.log &
+
+doBlastzChainNet.pl -swap -chainMinScore=3000 -chainLinearGap=medium \
+    /cluster/data/cavPor3/bed/blastz.speTri0/DEF >& swap.log  &
+
 ############################################################################
 # TRANSMAP vertebrate.2008-05-20 build  (2008-05-24 markd)
 
@@ -3693,7 +3770,6 @@ see doc/builds.txt for specific details.
 
 # ### Found this in Kate's unchecked in cavPor3.txt.  I need it to continue the blastz to get the maf for multiz !!
 # ### #############################################################################
-# ### <<<<<<< cavPor3.txt
 # ### # BLASTZ/CHAIN/NET 2X Ground squirrel: speTri0 (In progress 2008-05-16 kate)
 # ### 
 # ###     ssh kkstore05
@@ -3729,7 +3805,6 @@ see doc/builds.txt for specific details.
 # ### 
 # ###     # got here
 # ###     ln -s blastzSpeTri0.2008-05-16 /cluster/data/cavPor3/bed/blastzSpeTri0
-# ### =======
 ln -s blastzSpeTri0.2008-05-16 /cluster/data/cavPor3/bed/blastz.speTri0
 
     # ### 1 crashed job in axtChain:
@@ -3931,10 +4006,6 @@ zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
 
      
 
-
-
-
-
     # NOTE: be sure to ls the data in above script on workhorse machine before starting script
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
     -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
@@ -4011,6 +4082,187 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+#  3way Rodent Multiz (special for Jurgens (Schmitz & co.) in Muenster
+#  Previously, Robert Baertsch handled these.  I committed to these
+#  many months ago...
+# 2008-07-26 kate
+# Redo with unfiltered net mafs to maximize squirrel sequence (2008-11-08 kate)
+
+    ssh kkstore05
+    cd /cluster/data/cavPor3/bed
+    mkdir multiz3way
+    cd multiz3way
+    mkdir -p /san/sanvol1/scratch/cavPor3/multiz3way/
+    cd /san/sanvol1/scratch/cavPor3/multiz3way
+
+    # copy mafs to cluster-friendly disk
+    # mm9 - high quality mammalian genome, so use syntenic net
+    mafSplit /dev/null -byTarget mm9/ /cluster/data/cavPor3/bed/blastz.mm9/axtChain/cavPor3.mm9.synNet.maf.gz
+    cd mm9
+    # rename to reflect chrom name
+    foreach f (*.maf)
+        set c = `head -3 $f | grep cavPor3 | awk '{print $2}' | sed 's/cavPor3.//'`
+        echo $c
+        mv $f $c.maf
+    end
+
+    # speTri0 - low quality mammalian genome, so use reciprocal best net
+    # mafSplit /dev/null -byTarget speTri0/ /cluster/data/cavPor3/bed/blastz.speTri0/mafRBestNet/cavPor3.speTri0.rbest.maf.gz
+    # redo with full net, to get more sequence
+    mafSplit /dev/null -byTarget speTri0/ /cluster/data/cavPor3/bed/blastz.speTri0/mafNet/cavPor3.speTri0.net.maf.gz
+    cd speTri0
+    # rename to reflect chrom name
+    foreach f (*.maf)
+        set c = `head -3 $f | grep cavPor3 | awk '{print $2}' | sed 's/cavPor3.//'`
+        echo $c
+        mv $f $c.maf
+    end
+
+    cd /san/sanvol1/scratch/cavPor3/multiz3way
+
+    # get latest PSU utilities
+    mkdir penn
+    set p=/cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba
+    cp -p $p/{autoMZ,multiz,maf_project} penn
+
+    # the autoMultiz cluster run
+    ssh pk
+    cd /cluster/data/cavPor3/bed/multiz3way
+
+    # create species list and stripped down tree for autoMZ
+    cat > tree.nh << 'EOF'
+((cavPor3 mm9) speTri0)
+'EOF'
+    cat > species.lst << 'EOF'
+cavPor3 mm9 speTri0
+'EOF'
+    mkdir run maf
+    cd run
+
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = cavPor3
+set c = $1
+set maf = $2
+set binDir = /san/sanvol1/scratch/$db/multiz3way/penn
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/$db/multiz3way
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x autoMultiz
+
+cat  << '_EOF_' > template
+#LOOP
+./autoMultiz $(root1) {check out line+ /cluster/data/cavPor3/bed/multiz3way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    mkdir /cluster/data/cavPor3/bed/multiz3way/maf/
+    awk '{print $1}' /cluster/data/cavPor3/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    # ~3000 jobs
+    para try
+    para check
+    # ~2 hours of run-time
+
+    # remove empty alignment files and package up
+    ssh kkstore05
+    cd /cluster/data/cavPor3/bed/multiz3way/maf
+    mkdir empty
+cat > finish.csh << 'EOF'
+    foreach f (*.maf)
+        head -11 $f | grep -q 's cavPor3'
+        if ($status == 1) then
+            echo "$f empty"
+            mv $f empty
+        else
+            echo "   $f NOT empty"
+        endif
+    end
+'EOF'
+    # oops, forgot to mkdir, so 'empty' files were lost
+    ls *.maf | wc -l 
+    # 1491
+    tar cvfz rodent3way.tar.gz *.maf
+
+
+    #########
+    # Also do a multiz with non-filtered mouse mafs:
+    # mm9 syntenic net mafs are sparse (cover only ~300 scaffolds), so check net
+    ssh hgwdev
+    cd /cluster/data/cavPor3/bed/blastz.mm9/axtChain
+    netFilter -minGap=10 cavPor3.mm9.syn.net.gz | hgLoadNet -verbose=0 cavPor3 synNetMm9 stdin
+    # select distinct(tName) shows 302 rows
+
+    mkdir -p /san/sanvol1/scratch/cavPor3/multiz3way.full/
+    cd /san/sanvol1/scratch/cavPor3/multiz3way.full
+    mafSplit /dev/null -byTarget mm9/ /cluster/data/cavPor3/bed/blastz.mm9//cavPor3.mm9.net.maf.gz
+    cd mm9
+    # rename to reflect chrom name
+    foreach f (*.maf)
+        set c = `head -3 $f | grep cavPor3 | awk '{print $2}' | sed 's/cavPor3.//'`
+        echo $c
+        mv $f $c.maf
+    end
+
+    # copy and link various files from first run
+    ln -s ../multiz3way/{speTri0,penn} .
+    cp ../multiz3way/{species.lst,tree.nh} .
+
+    mkdir run maf
+    cp ../multiz3way/run/chrom.lst run
+    sed 's/multiz3way/multiz3way.full/' ../multiz3way/run/autoMultiz > run/autoMultiz
+    sed 's/multiz3way/multiz3way.full/' ../multiz3way/run/template > run/template
+    # check it
+    chmod +x run/autoMultiz
+
+    mkdir -p /cluster/data/cavPor3/bed/multiz3way.full/maf
+
+    ssh pk
+    cd /san/sanvol1/scratch/cavPor3/multiz3way.full/run
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    para try
+    para check
+    # ~2 hours of run-time
+
+    ssh kkstore05
+    cd /cluster/data/cavPor3/bed/multiz3way.full/maf
+    mkdir empty
+    csh ../../multiz3way/maf/finish.csh >&! finish.log &
+
+    # post to hgwdev downloads area
+    ssh hgwdev
+    cd /cluster/data/cavPor3/bed/multiz3way
+    mv *.gz /usr/local/apache/htdocs/goldenPath/cavPor3/multizRodent3way/syntenic
+    cd /cluster/data/cavPor3/bed/multiz3way.full
+    mv *.gz /usr/local/apache/htdocs/goldenPath/cavPor3/multizRodent3way/full
+
 
 ################################################
 # AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
