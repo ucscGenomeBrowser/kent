@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "targetDb.h"
 
-static char const rcsid[] = "$Id: targetDb.c,v 1.2 2008/09/03 19:19:27 markd Exp $";
+static char const rcsid[] = "$Id: targetDb.c,v 1.3 2008/11/10 21:00:52 angie Exp $";
 
 void targetDbStaticLoad(char **row, struct targetDb *ret)
 /* Load a row from targetDb table into ret.  The contents of ret will
@@ -24,6 +24,7 @@ ret->extFileTable = row[5];
 ret->seqFile = row[6];
 ret->priority = sqlFloat(row[7]);
 ret->time = row[8];
+ret->settings = row[9];
 }
 
 struct targetDb *targetDbLoad(char **row)
@@ -42,6 +43,7 @@ ret->extFileTable = cloneString(row[5]);
 ret->seqFile = cloneString(row[6]);
 ret->priority = sqlFloat(row[7]);
 ret->time = cloneString(row[8]);
+ret->settings = cloneString(row[9]);
 return ret;
 }
 
@@ -51,7 +53,7 @@ struct targetDb *targetDbLoadAll(char *fileName)
 {
 struct targetDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileRow(lf, row))
     {
@@ -69,7 +71,7 @@ struct targetDb *targetDbLoadAllByChar(char *fileName, char chopper)
 {
 struct targetDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -99,6 +101,7 @@ ret->extFileTable = sqlStringComma(&s);
 ret->seqFile = sqlStringComma(&s);
 ret->priority = sqlFloatComma(&s);
 ret->time = sqlStringComma(&s);
+ret->settings = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -118,6 +121,7 @@ freeMem(el->seqTable);
 freeMem(el->extFileTable);
 freeMem(el->seqFile);
 freeMem(el->time);
+freeMem(el->settings);
 freez(pEl);
 }
 
@@ -170,6 +174,10 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->time);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->settings);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
@@ -177,6 +185,7 @@ fputc(lastSep,f);
 
 #include "portable.h"
 #include "hdb.h"
+#include "ra.h"
 
 static boolean timeMoreRecentThanTable(int time, struct sqlConnection *conn,
 				char *table)
@@ -212,6 +221,7 @@ if (timeMoreRecentThanTable(time, conn, target.pslTable) &&
      timeMoreRecentThanTable(time, conn, target.seqTable)) &&
     (isEmpty(target.extFileTable) ||
      timeMoreRecentThanTable(time, conn, target.extFileTable)) &&
+/* Here is where we could add a configurable slush factor: */
     timeMoreRecentThanFile(time, target.seqFile))
     {
     return targetDbLoad(row);
@@ -231,16 +241,18 @@ struct targetDb *targetDbLookup(char *db, char *name)
  * central database targetDb table and load the results.  Remove 
  * entries that are out of sync or have missing tables. */
 {
-struct targetDb *targetList = NULL;
 struct sqlConnection *conn = hConnectCentral();
+if (! sqlTableExists(conn, "targetDb"))
+    {
+    hDisconnectCentral(&conn);
+    return NULL;
+    }
+
+struct targetDb *targetList = NULL;
 struct sqlConnection *conn2 = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 char query[2048];
-
-if (! sqlTableExists(conn, "targetDb"))
-    return NULL;
-
 safef(query, sizeof(query), "select * from targetDb where db = '%s' "
       "%s%s%s order by priority", db,
       isNotEmpty(name) ? "and name = '" : "",
@@ -257,5 +269,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 hFreeConn(&conn2);
 hDisconnectCentral(&conn);
 return targetList;
+}
+
+char *targetDbSetting(struct targetDb *tdb, char *name)
+/* Return setting string or NULL if none exists. */
+{
+if (tdb == NULL)
+    errAbort("Program error: null tdb passed to targetDbSetting.");
+if (tdb->settingsHash == NULL)
+    tdb->settingsHash = raFromString(tdb->settings);
+return hashFindVal(tdb->settingsHash, name);
 }
 

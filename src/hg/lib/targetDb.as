@@ -10,4 +10,5 @@ table targetDb
     string seqFile;	"Target sequence file path (typically /gbdb/$db/targetDb/$name.2bit)"
     float priority;     "Relative priority compared to other targets for same db (smaller numbers are higher priority)"
     timestamp time;	"Time at which this record was updated -- should be newer than db tables (so should blat server)"
+    lstring settings;	".ra-formatted metadata"
     )

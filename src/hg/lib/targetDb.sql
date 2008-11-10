@@ -14,6 +14,7 @@ CREATE TABLE targetDb (
     seqFile varchar(255) not null,	# Target sequence file path (typically /gbdb/$db/targetDb/$name.2bit)
     priority float not null,		# Relative priority compared to other targets for same db (smaller numbers are higher priority)
     time datetime not null,	# Time at which this record was updated -- should be newer than db tables (so should blat server)
+    settings longblob not null,	# .ra-formatted metadata
               #Indices
     PRIMARY KEY(name),
     INDEX(db)

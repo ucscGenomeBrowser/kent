@@ -5,7 +5,7 @@
 #ifndef TARGETDB_H
 #define TARGETDB_H
 
-#define TARGETDB_NUM_COLS 9
+#define TARGETDB_NUM_COLS 10
 
 struct targetDb
 /* Description of non-genomic target sequences (e.g. native mRNAs for PCR) */
@@ -20,6 +20,9 @@ struct targetDb
     char *seqFile;	/* Target sequence file path (typically /gbdb/$db/targetDb/$name.2bit) */
     float priority;	/* Relative priority compared to other targets for same db (smaller numbers are higher priority) */
     char *time;	/* Time at which this record was updated -- should be newer than db tables (so should blat server) */
+    char *settings;	/* .ra-formatted metadata */
+    struct hash *settingsHash;  /* Hash for settings. Not saved in database.
+                                 * Don't use directly, rely on targetDbSetting to access. */
     };
 
 void targetDbStaticLoad(char **row, struct targetDb *ret);
@@ -77,6 +80,9 @@ struct targetDb *targetDbLookup(char *db, char *name);
  * (or NULL to get all available PCR targets for db), query the
  * central database targetDb table and load the results.  Remove 
  * entries that are out of sync or have missing tables. */
+
+char *targetDbSetting(struct targetDb *tdb, char *name);
+/* Return setting string or NULL if none exists. */
 
 #endif /* TARGETDB_H */
 
