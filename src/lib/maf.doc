@@ -24,9 +24,9 @@ with three sequences each:
 #mblastz 8.91 02-Jan-2005
 
 a score=0.128
-s human_hoxa 100  9 + 100257 ACA-TTACT
-s horse_hoxa 120 10 -  98892 ACAATTGCT
-s fugu_hoxa   88  8  + 90788 ACA--TGCT
+s human_hoxa 100  9 + 100257 ACA-TTACTA
+s horse_hoxa 120 10 -  98892 ACAATTGCTA
+s fugu_hoxa   88  8  + 90788 ACA--TGCTA
 
 a score=0.071
 s human_unc 9077 8 + 10998 ACAGTATT
