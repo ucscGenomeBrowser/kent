@@ -5,9 +5,8 @@ int main(int argc, char *argv[])
 {
 char *url, *dnaFileName;
 struct htmlPage *rootPage, *page;
-struct htmlForm *form, *mainForm;
+struct htmlForm *mainForm;
 struct qaStatus *qs;
-struct htmlFormVar *orgVar;
 if (argc != 3) errAbort("usage: %s url file", argv[0]);
 url = argv[1]; dnaFileName = argv[2];
 qs = qaPageGet(url, &rootPage);

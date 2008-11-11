@@ -204,5 +204,8 @@ ${BIN_DIR}/testQuotedString: mkdirs testQuotedString.o ${MYLIBS}
 testQuotedString:	${BIN_DIR}/testQuotedString mkdirs
 	${BIN_DIR}/testQuotedString -verbose=2 quote this\\ following
 
+miniBlat:  mkdirs miniBlat.o ${MYLIBS}
+	${CC} ${COPT} -o miniBlat miniBlat.o ${MYLIBS}
+
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out
