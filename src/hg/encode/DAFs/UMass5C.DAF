@@ -5,35 +5,43 @@
 
  # Lab and general info
  grant             Dekker
- lab               Dekker
+ lab               UMass
  dataType          5C
  variables         cell
  assembly          hg18
- dafVersion        0.2.2
+ dafVersion        1.0
 
  # Track/view definition
- view             Peaks
+ view             Interactions
  longLabelPrefix  UMass 5C Interactions
- type             gappedPeak
+ type             pairedPeak
  hasReplicates    no
  required         yes
 
- view             Signal
+ view             InteractionSites
+ longLabelPrefix  None
+ type             bed 6
+ hasReplicates    no
+ required         yes
+
+ view             RawInteractions
+ longLabelPrefix  UMass 5C Raw Interactions
+ type             pairedPeak
+ hasReplicates    yes
+ required         yes
+
+ view             RawInteractionSites
+ longLabelPrefix  None
+ type             bed 6
+ hasReplicates    no
+ required         yes
+
+ view             RawSignal
  longLabelPrefix  UMass 5C Interaction Level
  type             wig
- hasReplicates    no
- required         yes
-
- view             Alignments
- longLabelPrefix  UMass 5C Alignments
- type             pairedTagAlign
- hasReplicates    no
+ hasReplicates    yes
  required         yes
 
  view             RawData
- type             fastq
- hasReplicates    no
- required         yes
-
- view             RawData1
  type             download
+ hasReplicates    yes

@@ -1,0 +1,11 @@
+files	view	cell	labVersion	replicate	softwareVersion
+K562/5C_array_K562.ppk	Interactions	K562		peak5c-v1.0
+K562/5C_array_K562.bed	InteractionSites	K562		
+K562/5C_array_K562_rep1.ppk	RawInteractions	K562	1	peak5c-v1.0
+K562/5C_array_K562_rep1.bed	RawInteractionSites	K562	1	
+K562/5C_array_K562_rep1.wig	RawSignal	K562	1	
+K562/5C_array_K562_rep1.cel	RawData	K562	1	
+K562/5C_array_K562_rep2.ppk	RawInteractions	K562	2	peak5c-v1.0
+K562/5C_array_K562_rep2.bed	RawInteractionSites	K562	2	
+K562/5C_array_K562_rep2.wig	RawSignal	K562	2	
+K562/5C_array_K562_rep2.cel	RawData	K562	2	
