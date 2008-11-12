@@ -40,7 +40,7 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1520 2008/11/08 00:31:38 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1521 2008/11/11 20:58:22 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -3725,7 +3725,7 @@ if (showTrackControls)
 		{
 		char *encodedMapName = cgiEncode(track->mapName);
                 if(trackDbSetting(track->tdb, "wgEncode") != NULL)
-                    hPrintf("<img src='../images/encode.ico'>\n");
+                    hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
 		hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
 		    cartSessionVarName(), cartSessionId(cart),
 		    chromName, encodedMapName);

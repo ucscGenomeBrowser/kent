@@ -24,9 +24,9 @@ with three sequences each:
 #mblastz 8.91 02-Jan-2005
 
 a score=0.128
-s human_hoxa 100  9 + 100257 ACA-TTACT
-s horse_hoxa 120 10 -  98892 ACAATTGCT
-s fugu_hoxa   88  8  + 90788 ACA--TGCT
+s human_hoxa 100  9 + 100257 ACA-TTACTA
+s horse_hoxa 120 10 -  98892 ACAATTGCTA
+s fugu_hoxa   88  8  + 90788 ACA--TGCTA
 
 a score=0.071
 s human_unc 9077 8 + 10998 ACAGTATT
@@ -124,11 +124,13 @@ position rather than name=value pairs.
 	    This should match the s line above the i line.
     leftStatus - the syntenic status of the alignment before us vis a vis ourselves.  
 	    Possible Values:
-	    MAF_INVERSE_STATUS	'V'
-	    MAF_INSERT_STATUS	'I'
+	    MAF_INVERSE_STATUS		'V'
+	    MAF_INSERT_STATUS		'I'
 	    MAF_DUP_STATUS		'D'
 	    MAF_NEW_STATUS		'N'
-	    MAF_CONTIG_STATUS	'C'
+	    MAF_NEW_NESTED_STATUS	'n'
+	    MAF_CONTIG_STATUS		'C'
+	    MAF_TANDEM_STATUS		'T'
             
     leftLen - length related information for the previous alignment for the species
     rightStatus - the syntenic status of the alignment after us vis a vis ourselves 
