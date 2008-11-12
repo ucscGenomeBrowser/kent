@@ -14,7 +14,7 @@
  # Track/view definition
  view             Interactions
  longLabelPrefix  UMass 5C Interactions
- type             pairedPeak
+ type             pairedInteraction
  hasReplicates    no
  required         yes
 
@@ -26,7 +26,7 @@
 
  view             RawInteractions
  longLabelPrefix  UMass 5C Raw Interactions
- type             pairedPeak
+ type             pairedInteraction
  hasReplicates    yes
  required         yes
 
