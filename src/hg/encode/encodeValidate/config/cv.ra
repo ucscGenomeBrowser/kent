@@ -380,7 +380,7 @@ termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:000
 
 term polysome
 type localization
-description Strand of mRNA with ribosomes attatched
+description Strand of mRNA with ribosomes attached
 termId GO:0005844
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005844
 
