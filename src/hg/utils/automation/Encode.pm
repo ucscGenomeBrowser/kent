@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.30 2008/11/10 02:35:51 tdreszer Exp $
+# $Id: Encode.pm,v 1.31 2008/11/12 19:55:07 mikep Exp $
 
 package Encode;
 
@@ -390,6 +390,13 @@ sub wigMinMaxPlaceHolder
 # This is a placeholder used to let the loader fixup the min/max ranges for wig's
     my ($tableName) = @_;
     return uc("${tableName}_MinMaxRange");
+}
+
+sub isTarZipped
+# true if file ends in [.tar.gz] or [.tgz]
+{
+    my ($filePath) = @_;
+    return $filePath =~ m/\.(tar\.|t)gz$/;
 }
 
 sub isZipped
