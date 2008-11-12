@@ -24336,23 +24336,24 @@ See hg18.txt for details.
 
 
 ############################################################################
-# DGV V5 (DATABASE OF GENOMIC VARIANTS) (DONE 8/11/08 angie)
-# (replaces DGV V4 done 5/9/08)
+# DGV V6 (DATABASE OF GENOMIC VARIANTS) (DONE 11/12/08 angie)
+# DGV V5 done 8/11/08
+# DGV V4 done 5/9/08
     ssh hgwdev
-    mkdir /cluster/data/hg17/bed/dgv.v5
-    cd /cluster/data/hg17/bed/dgv.v5
+    mkdir /cluster/data/hg17/bed/dgv.v6
+    cd /cluster/data/hg17/bed/dgv.v6
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg17.v5.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg17.v6.nov.2008.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg17.v5.txt
-    # shuffle fields into bed8+ (input has some start coords==0, but min 
-    # size of 99 not 100 implies most coords are 1-based):
-    foreach f (*.v5.txt)
+      http://projects.tcag.ca/variation/downloads/indel.hg17.v6.nov.2008.txt
+    # shuffle fields into bed8+ (input has one start coord==0, but min 
+    # nonzero size of 99 not 100 implies most coords are 1-based):
+    foreach f (*.v6.*.txt)
       tail +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
          $locChr, $locStart, $locEnd, $ref, $pmid, $method, \
-         undef, undef, undef, $sample) = split("\t"); \
+         undef, undef, undef, undef, $sample) = split("\t"); \
         die "chr $chr != loc $locChr" if ($chr ne $locChr); \
         $id =~ s/^Variation_//; \
         $chromStart = $start < $locStart ? $start : $locStart; \
@@ -24370,6 +24371,7 @@ See hg18.txt for details.
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
+    hgsql hg17 -e 'rename table dgv to dgvV5'
     hgLoadBed hg17 dgv *.bed \
       -onServer -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
 
