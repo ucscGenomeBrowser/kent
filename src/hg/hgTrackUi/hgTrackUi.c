@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.459 2008/11/07 17:48:57 ann Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.460 2008/11/13 22:40:51 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1683,7 +1683,7 @@ hFreeConn(&conn);
 void wikiTrackUi(struct trackDb *tdb)
 /* UI for wiki track user annotations */
 {
-printf("this is the wikiTrack Ui<BR>\n");
+return;	// currently empty
 }
 
 void rulerUi(struct trackDb *tdb)
