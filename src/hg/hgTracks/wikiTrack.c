@@ -10,7 +10,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.18 2008/11/13 22:04:07 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.19 2008/11/13 22:39:09 hiram Exp $";
 
 
 static void wikiTrackMapItem(struct track *tg, struct hvGfx *hvg, void *item,
@@ -219,7 +219,7 @@ if (wikiTrackEnabled(database, NULL))
     tg->mapName = WIKI_TRACK_TABLE;
     tg->canPack = TRUE;
     tg->visibility = tvHide;
-    tg->hasUi = FALSE;
+    tg->hasUi = TRUE;
     tg->shortLabel = cloneString(WIKI_TRACK_LABEL);
     safef(longLabel, sizeof(longLabel), WIKI_TRACK_LONGLABEL);
     tg->longLabel = longLabel;
