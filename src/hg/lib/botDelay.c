@@ -6,17 +6,18 @@
 #include "net.h"
 #include "portable.h"
 #include "hgConfig.h"
+#include "cheapcgi.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: botDelay.c,v 1.12 2008/09/17 18:10:13 kent Exp $";
+static char const rcsid[] = "$Id: botDelay.c,v 1.13 2008/11/13 19:41:30 galt Exp $";
 
-int botDelayTime(char *host, int port, char *ip)
+int botDelayTime(char *host, int port, char *botCheckString)
 /* Figure out suggested delay time for ip address in
  * milliseconds. */
 {
 int sd = netMustConnect(host, port);
 char buf[256];
-netSendString(sd, ip);
+netSendString(sd, botCheckString);
 netRecieveString(sd, buf);
 close(sd);
 return atoi(buf);
@@ -56,6 +57,30 @@ errAbort("There is an exceedingly high volume of traffic coming from your "
        "conditions.  (code %d)", ip, asctime(localtime(&now)), millis);
 }
 
+static char *getCookieUser()
+/* get user from hguid cookie */
+{
+char *user = NULL;
+char *centralCookie = cfgOption("central.cookie");
+
+if (centralCookie)
+    user = findCookieData(centralCookie);
+
+return user;
+}
+
+static char *getBotCheckString(char *ip)
+/* compose user.ip string for bot check */
+{
+char *user = getCookieUser();
+char *botCheckString = needMem(256);
+if (user)
+  safef(botCheckString, 256, "%s.%s", user, ip);
+else
+  safef(botCheckString, 256, "%s", ip);
+return botCheckString;
+}
+
 void botDelayCgi(char *host, int port)
 /* Connect with bottleneck server and sleep the
  * amount it suggests for IP address calling CGI script. */
@@ -64,7 +89,9 @@ int millis;
 char *ip = getenv("REMOTE_ADDR");
 if (ip != NULL)
     {
-    millis = botDelayTime(host, port, ip);
+    char *botCheckString = getBotCheckString(ip);    
+    millis = botDelayTime(host, port, botCheckString);
+    freeMem(botCheckString);
     if (millis > 0)
 	{
 	if (millis > 10000)
@@ -85,6 +112,7 @@ void hgBotDelay()
 {
 char *host = cfgOption("bottleneck.host");
 char *port = cfgOption("bottleneck.port");
+
 if (host != NULL && port != NULL)
     botDelayCgi(host, atoi(port));
 }
@@ -95,9 +123,14 @@ int hgBotDelayTime()
 char *ip = getenv("REMOTE_ADDR");
 char *host = cfgOption("bottleneck.host");
 char *port = cfgOption("bottleneck.port");
+
 int delay = 0;
 if (host != NULL && port != NULL && ip != NULL)
-    delay =  botDelayTime(host, atoi(port), ip);
+    {
+    char *botCheckString = getBotCheckString(ip);    
+    delay = botDelayTime(host, atoi(port), botCheckString);
+    freeMem(botCheckString);
+    }
 return delay;
 }
 
