@@ -22446,63 +22446,6 @@ Estimated complete:                 0s       0.00m     0.00h    0.00d
     hgLoadSeq -replace hg18 /gbdb/hg18/uniGene/Hs.seq.uniq.simpleHeader.fa
 
 #############################################################################
-# BLASTZ/CHAIN/NET vicPac1 (not done)
-    ssh kkstore02
-    screen #	use screen to control this multi-day job
-    mkdir /cluster/data/hg18/bed/blastz.vicPac1.2008-07-13
-    cd /cluster/data/hg18/bed/blastz.vicPac1.2008-07-13
-    cat << _EOF_ > DEF
-# Human vs. Alpaca
-
-BLASTZ_M=50
-
-# TARGET: Human Hg18
-SEQ1_DIR=/scratch/data/hg18/nib
-SEQ1_LEN=/cluster/data/hg18/chrom.sizes
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-
-# QUERY: Alpaca
-SEQ2_DIR=/san/sanvol1/scratch/vicPac1/vicPac1.2bit
-SEQ2_LEN=/san/sanvol1/scratch/vicPac1/chrom.sizes
-SEQ2_CHUNK=20000000
-SEQ2_LIMIT=100
-SEQ2_LAP=0
-
-BASE=/cluster/data/hg18/bed/blastz.vicPac1.2008-07-13
-TMPDIR=/scratch/tmp
-_EOF_
-
-    # << happy emacs
-
-    time doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk  \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/vicPac1/blastz.hg18 > do.log 2>&1 &
-
-    # para got changed, had to recover and restart
-
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=cat \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/vicPac1/blastz.hg18 > do2.log 2>&1 &
-
-    # memk died on chr19 in chainRun (ran on kolossus)
-    nice doBlastzChainNet.pl `pwd`/DEF \
-	-verbose=2 -bigClusterHub=pk -syntenicNet -continue=chainMerge \
-      -chainMinScore=3000 -chainLinearGap=medium \
-      -blastzOutRoot /cluster/bluearc/vicPac1/blastz.hg18 > do3.log 2>&1 &
-
-    ln -s blastz.vicPac1.2008-07-13 /cluster/data/hg18/bed/blastz.vicPac1
-
-    featureBits hg18 chainVicPac1Link
-    # 1139695079 bases of 2881515245 (39.552%) in intersection
-
-    cd /cluster/data/hg18/bed/blastz.vicPac1.2008-07-13
-
-    time nice -n +19 /cluster/bin/scripts/doRecipBest.pl hg18 vicPac1 > rbest.log 2>&1 &
-
-#############################################################################
 # BLASTZ/CHAIN/NET dipOrd1 (DONE - 2008-10-22 - Hiram)
     screen #	use screen to control this multi-day job
     mkdir /hive/data/genomes/hg18/bed/blastzDipOrd1.2008-10-21
@@ -22954,6 +22897,55 @@ TMPDIR=/scratch/tmp
 
     time nice -n +19 doRecipBest.pl hg18 vicPac1 > rbest.log 2>&1 &
     #	real    380m17.963s
+
+#############################################################################
+# BLASTZ/CHAIN/NET Gorilla gorGor1 (DONE - 2008-11-04,05 - Hiram)
+    screen #	use screen to control this multi-day job
+    mkdir /hive/data/genomes/hg18/bed/blastzGorGor1.2008-11-04
+    cd /hive/data/genomes/hg18/bed/blastzGorGor1.2008-11-04
+    cat << '_EOF_' > DEF
+# Human vs. Alpaca
+
+BLASTZ_M=50
+BLASTZ=lastz
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=100000000
+SEQ1_LAP=10000
+
+# QUERY: Alpaca
+SEQ2_DIR=/scratch/data/gorGor1/gorGor1.2bit
+SEQ2_LEN=/scratch/data/gorGor1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=284
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg18/bed/blastzGorGor1.2008-11-04
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-bigClusterHub=swarm -syntenicNet \
+      -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    644m45.816s
+    cat fb.hg18.chainGorGor1Link.txt 
+    #	1778801556 bases of 2881515245 (61.731%) in intersection
+
+    cd /cluster/data/hg18/bed/blastzGorGor1.2008-11-04
+
+    time nice -n +19 doRecipBest.pl hg18 gorGor1 > rbest.log 2>&1 &
+    #	real    171m42.585s
+    #	failed, need to finish manually
+    cd /hive/data/genomes/hg18/bed/blastz.gorGor1/axtChain
+    # alter the doRecipBest.csh script to finiRecipBest.csh and run:
+    time ./finiRecipBest.csh > finiRecipBest.log 2>&1
+    #	real    1177m37.534s
+    #	then, continuing:
+    doRecipBest.pl -continue=download hg18 gorGor1
 
 #############################################################################
 # BLASTZ/CHAIN/NET ochPri2 (DONE braney 2008-07-30)
@@ -24309,3 +24301,474 @@ chmod 755 makeWig.sh
 # time nice -n +19 hgLoadBed hg18 barskiChIPseqCTCF     BarskiChIPseqCTCF.bed
 # .............. I have not loaded the tags !!!
 
+#########################################################################
+## 44-Way Multiz (WORKING - 2008-11-10 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg18/bed/multiz44way
+    cd /hive/data/genomes/hg18/bed/multiz44way
+
+    #	starting with the 44way tree that Brian made earlier:
+    cp -p ../multiz44way.2008-08-06/44way.db.nh ./44way.nh
+
+    sed -e "s/oryLat1/hg18/; s/danRer4/danRer5/; s/oryLat1/oryLat2/" \
+	/cluster/data/oryLat1/bed/multiz44way/44way.nh > 44way.nh
+    #	this file looks like:
+
+    cat << '_EOF_' > 44way.nh
+  (((tetraodon_tetNig1:0.199381,fugu_fr2:0.239894):0.2,
+    (stickleback_gasAcu1:0.2,medaka_hg18:0.2):0.2):0.292961,
+        zebrafish_danRer5:0.782561);
+'_EOF_'
+    # << happy emacs
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/hg18_44way.gif
+
+    /cluster/bin/phast/all_dists 44way.nh > 44way.distances.txt
+    #	Use this output to create the table below, with this perl script:
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "grep -y hg18 44way.distances.txt | sort -k3,3n|") or
+        die "can not read 44way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($hg18, $D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/hg18/bed/blastz.$D/fb.hg18." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    printf "# %02d  %.4f - %s %s\t(%% %.3f)\n", $count, $dist, $orgName, $D,
+        $chainLinkMeasure
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                        chainOryLat1Link   chain    linearGap
+#    distance                      on hg18    on other   minScore
+# 01  0.0092 - Chimp panTro2    (% 94.888)
+# 02  0.0267 - Gorilla gorGor1  (% 61.731)
+# 03  0.0467 - Orangutan ponAbe2        (% 92.892)
+# 04  0.0667 - Marmoset calJac1 (% 78.351)
+# 05  0.0783 - Rhesus rheMac2   (% 85.552)
+# 06  0.1767 - Tarsier tarSyr1  (% 47.999)
+# 07  0.2448 - Mouse lemur micMur1      (% 46.445)
+# 08  0.3061 - Bushbaby otoGar1 (% 44.638)
+# 09  0.3367 - Rabbit oryCun1   (% 34.015)
+# 10  0.3507 - TreeShrew tupBel1        (% 37.348)
+# 11  0.3567 - Squirrel speTri1 (% 35.828)
+# 12  0.4067 - Guinea Pig cavPor3       (% 43.971)
+# 13  0.4067 - Alpaca vicPac1   (% 39.531)
+# 14  0.4098 - Megabat pteVam1  (% 45.502)
+# 15  0.4099 - Microbat myoLuc1 (% 33.044)
+# 16  0.4154 - Cat felCat3      (% 35.888)
+# 17  0.4293 - Elephant loxAfr2 (% 35.204)
+# 18  0.4314 - Dog canFam2      (% 52.915)
+# 19  0.4317 - Mouse mm9        (% 35.201)
+# 20  0.4362 - Rat rn4  (% 32.893)
+# 21  0.4367 - Pika ochPri2     (% 27.974)
+# 22  0.4639 - Horse equCab2    (% 57.162)
+# 23  0.4693 - Rock hyrax proCap1       (% 30.935)
+# 24  0.4767 - Dolphin turTru1  (% 48.537)
+# 25  0.5067 - Kangaroo rat dipOrd1     (% 27.282)
+# 26  0.5187 - Armadillo dasNov2        (% 33.663)
+# 27  0.5191 - Cow bosTau4      (% 46.689)
+# 28  0.5298 - hedgehog eriEur1 (% 19.622)
+# 29  0.5399 - Sloth choHof1    (% 34.463)
+# 30  0.5605 - Shrew sorAra1    (% 20.056)
+# 31  0.5815 - Tenrec echTel1   (% 23.645)
+# 32  0.7309 - Opossum monDom4  (% 12.385)
+# 33  0.9870 - Platypus ornAna1 (% 7.870)
+# 34  1.0313 - Zebra finch taeGut1      (% 3.503)
+# 35  1.0436 - Lamprey petMar1  (% 1.251)
+# 36  1.1013 - Chicken galGal3  (% 3.589)
+# 37  1.2253 - Lizard anoCar1   (% 4.774)
+# 38  1.5473 - X. tropicalis xenTro2    (% 2.623)
+# 39  1.8337 - Stickleback gasAcu1      (% 1.923)
+# 40  1.8482 - Zebrafish danRer5        (% 2.565)
+# 41  1.8721 - Tetraodon tetNig1        (% 2.001)
+# 42  1.9077 - Fugu fr2 (% 1.766)
+# 43  2.0215 - Medaka oryLat2   (% 1.829)
+
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	44way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    cd /hive/data/genomes/hg18/bed/multiz44way
+    #	bash shell syntax here ...
+    export H=/hive/data/genomes/hg18/bed
+    mkdir mafLinks
+    for G in `sed -e "s/hg18 //" species.list`
+    do
+	mkdir mafLinks/$G
+	if [ -s ${H}/blastz.${G}/mafRBestNet/chr1.maf.gz ]; then
+	    echo "$G - recipBest"
+	    ln -s ${H}/blastz.$G/mafRBestNet/*.maf.gz ./mafLinks/$G
+	else
+	    if [ -s ${H}/blastz.${G}/mafSynNet/chr1.maf.gz ]; then
+		echo "$G - synNet"
+		ln -s ${H}/blastz.$G/mafSynNet/*.maf.gz ./mafLinks/$G
+	    else
+		if [ -s ${H}/blastz.${G}/mafNet/chr1.maf.gz ]; then
+		    echo "$G - mafNet"
+		    ln -s ${H}/blastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+		else
+		    echo "missing directory blastz.${G}/*Net"
+		fi
+	    fi
+	fi
+    done
+
+    #	need to split these things up into smaller pieces for
+    #	efficient kluster run.  Using the new hive architecture.
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz44way
+    mkdir mafSplit
+    #	mafSplitPos splits on repeat areas that will not have any chains
+    mafSplitPos -minGap=50000 hg18 10 mafSplit.bed
+
+    for G in `sed -e "s/hg18 //" species.list`
+    for G in danRer5 oryLat2
+do
+    echo -n "working ${G} ..."
+    rm -fr mafSplit/${G}
+    mkdir mafSplit/${G}
+    cd mafSplit/${G}
+    mafSplit ../../mafSplit.bed hg18_ ../../mafLinks/${G}/chr*.maf.gz \
+	-verbose=2 
+    cd /hive/data/genomes/hg18/bed/multiz44way
+    echo " done"
+done
+
+    #	create a run-time list of files to operate on, not all file names
+    #	exist for all assemblies
+    cd mafSplit
+    for D in *
+do
+    cd "${D}"
+    find . -type f
+    cd ..
+done | sort -u | sed -e "s#./##" > ../44-way.split.list
+    wc -l ../44-way.split.list
+    #	267 ../44-way.split.list
+    
+    # the autoMultiz cluster run
+    ssh swarm
+    cd /hive/data/genomes/hg18/bed/multiz44way/
+
+    mkdir splitRun
+    cd splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = hg18
+set c = $1
+set result = $2
+set run = `pwd`
+set tmp = $run/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/hg18/bed/multiz44way/mafSplit
+rm -fr $tmp
+mkdir -p $tmp
+cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp
+foreach s (`sed -e "s/ $db//" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        zcat $in.gz > $out
+    else if (-e $in) then
+        cp -p $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+rm -f $result
+cp -p $tmp/$c.maf $result
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $run/tmp/$db
+rmdir --ignore-fail-on-non-empty $run/tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/hg18/bed/multiz44way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    gensub2 ../../44-way.split.list single template jobList
+    para create jobList
+    #	initial run experience suggest some of the big jobs reach 8 Gb
+    #	of memory usage, so, tell parasol to limit the number of jobs per
+    #	node to avoid thrashing
+    para -ram=6g push
+XXXX - running 2008-11-12 - Wed Nov 12 15:29:39 PST 2008
+
+# Completed: 792 of 792 jobs
+# CPU time in finished jobs:       5423s      90.38m     1.51h    0.06d  0.000 y
+# IO & Wait Time:                138287s    2304.79m    38.41h    1.60d  0.004 y
+# Average job time:                 181s       3.02m     0.05h    0.00d
+# Longest finished job:             404s       6.73m     0.11h    0.00d
+# Submission to last job:           436s       7.27m     0.12h    0.01d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    # put the split maf results back together into a single maf file
+    #	eliminate duplicate comments
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz44way/splitRun
+    grep "^##maf version" maf/0/0/scaf11300.maf \
+	| sort -u > hg18.44way.maf
+    for F in `find ./maf -depth -type f`
+do
+    grep -h "^#" "${F}" | egrep -v "maf version=1|eof maf" \
+	| sed -e "s#/_MZ_[^ ]* # #g; s#__[0-9]##g"
+done | sort -u >> hg18.44way.maf
+    for F in `find ./maf -depth -type f`
+do
+    grep -v -h "^#" "${F}"
+done >> hg18.44way.maf
+    grep "^##eof maf" maf/0/0/scaf11300.maf \
+	| sort -u >> hg18.44way.maf
+
+    # load tables for a look
+    ssh hgwdev
+    mkdir -p /gbdb/hg18/multiz44way/maf
+    cd /hive/data/genomes/hg18/bed/multiz44way/maf
+    ln -s `pwd`/*.maf /gbdb/hg18/multiz44way/maf
+
+    # this generates an immense multiz44way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/hg18/multiz44way/maf hg18 multiz44way
+    #	real    1m10.380s
+    #	Loaded 1366931 mafs in 1 files from /gbdb/hg18/multiz44way/maf
+    # load summary table
+    time nice -n +19 cat /gbdb/hg18/multiz44way/maf/*.maf \
+	| hgLoadMafSummary hg18 -minSize=30000 -mergeGap=1500 \
+	 -maxSize=200000  multiz44waySummary stdin
+    #	real    2m39.822
+    #	Created 353577 summary blocks from 2852890 components and 1197504 mafs
+    #	from stdin
+
+    # Gap Annotation
+    # prepare bed files with gap info
+    mkdir /hive/data/genomes/hg18/bed/multiz44way/anno
+    cd /hive/data/genomes/hg18/bed/multiz44way/anno
+    mkdir maf run
+
+    #	these actually already all exist from previous multiple alignments
+    for DB in `cat ../species.list`
+do
+    CDIR="/cluster/data/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+	echo "creating ${DB}.N.bed"
+	echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+	ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    rm -f nBeds sizes
+    for DB in `sed -e "s/ hg18//" ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    ssh memk
+    #	need to split up the single maf file into individual
+    #	per-scaffold maf files to run annotation on
+    mkdir /hive/data/genomes/hg18/bed/multiz44way/anno/splitMaf
+    cd /hive/data/genomes/hg18/bed/multiz44way/anno/splitMaf
+    #	create bed files to list approximately 112 scaffolds in
+    #	a single list, approximately 64 lists
+    cat << '_EOF_' > mkBedLists.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $bedCount = 0;
+my $i = 0;
+
+my $bedFile = sprintf("file_%d.bed", $bedCount);
+
+open (BF,">$bedFile") or die "can not write to $bedFile $!";
+
+open (FH,"</hive/data/genomes/hg18/chrom.sizes") or
+        die "can not read /hive/data/genomes/hg18/chrom.sizes $!";
+while (my $line = <FH>) {
+    chomp $line;
+    if ( (($i + 1) % 111) == 0 )  {
+        printf "%s\n", $line;
+        close (BF);
+        ++$bedCount;
+        $bedFile = sprintf("file_%d.bed", $bedCount);
+        open (BF,">$bedFile") or die "can not write to $bedFile $!";
+    }
+    ++$i;
+    my ($chr, $size) = split('\s+',$line);
+    printf BF "%s\t0\t%d\t%s\n", $chr, $size, $chr;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkBedLists.pl
+    ./mkBedLists.pl
+
+    #	now, run a mafsInRegion on each one of those lists
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set runDir = `pwd`
+set resultDir = $1
+set bedFile = $resultDir.bed
+mkdir -p $resultDir
+mkdir -p /scratch/tmp/hg18/$resultDir
+pushd /scratch/tmp/hg18/$resultDir
+mafsInRegion $runDir/$bedFile -outDir . \
+	/hive/data/genomes/hg18/bed/multiz44way/splitRun/hg18.44way.maf
+popd
+rsync -q -a /scratch/tmp/hg18/$resultDir/ ./$resultDir/
+rm -fr /scratch/tmp/hg18/$resultDir
+rmdir --ignore-fail-on-non-empty /scratch/tmp/hg18
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls file*.bed > runList
+    gensub2 runList single template jobList
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 65 of 65 jobs
+# CPU time in finished jobs:       2615s      43.58m     0.73h    0.03d  0.000 y
+# IO & Wait Time:                 11436s     190.60m     3.18h    0.13d  0.000 y
+# Average job time:                 216s       3.60m     0.06h    0.00d
+# Longest finished job:             493s       8.22m     0.14h    0.01d
+# Submission to last job:          3875s      64.58m     1.08h    0.04d
+
+    cd /hive/data/genomes/hg18/bed/multiz44way/anno/run
+
+    cat << '_EOF_' > doAnno.csh
+#!/bin/csh -ef
+set outDir = ../maf/$2
+set result = $3
+set input = $1
+mkdir -p $outDir
+cat $input | \
+nice mafAddIRows -nBeds=nBeds stdin /hive/data/genomes/hg18/hg18.2bit $result
+'_EOF_'
+    # << happy emacs
+    chmod +x doAnno.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./doAnno.csh $(path1) $(lastDir1) {check out line+ ../maf/$(lastDir1)/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../splitMaf -type f -name "*.maf" > maf.list
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc.
+# Completed: 5542 of 5542 jobs
+# CPU time in finished jobs:        725s      12.09m     0.20h    0.01d  0.000 y
+# IO & Wait Time:                 37945s     632.41m    10.54h    0.44d  0.001 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest finished job:              53s       0.88m     0.01h    0.00d
+# Submission to last job:           243s       4.05m     0.07h    0.00d
+
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz44way/anno
+    grep "^##maf version" maf/file_0/chr1.maf \
+	| sort -u > hg18.44way.maf
+    find ./maf -type f -depth -name "*.maf" | while read F
+do
+    grep -v -h "^#" "${F}"
+done >> hg18.44way.maf
+    echo "##eof maf" >> hg18.44way.maf
+
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz44way/anno
+    mkdir -p /gbdb/hg18/multiz44way/anno
+    ln -s `pwd`/hg18.44way.maf \
+                /gbdb/hg18/multiz44way/anno/multiz44way.maf
+    #	by loading this into the table multiz44way, it will replace the
+    #	previously loaded table with the unannotated mafs
+    #	huge temp files are made, do them on local disk
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/hg18/multiz44way/anno \
+                hg18 multiz44way
+    #	Loaded 1620199 mafs in 1 files from /gbdb/hg18/multiz44way/anno
+    #	real    3m19.209s
+
+    #	normally filter this for chrom size > 1,000,000 and only load
+    #	those chroms.  But this is a scaffold assembly, load everything:
+    time nice -n +19 hgLoadMafSummary hg18 -minSize=30000 -mergeGap=1500 \
+	-maxSize=200000  multiz44waySummary \
+	    /gbdb/hg18/multiz44way/anno/multiz44way.maf
+    #	Created 353577 summary blocks from 2852890 components and 1428024 mafs
+    #	from /gbdb/hg18/multiz44way/anno/multiz44way.maf
+    #	real    3m49.692s
+
+    #	by loading this into the table multiz44waySummary, it will replace
+    #	the previously loaded table with the unannotated mafs
+    #	remove the multiz44way*.tab files in this /scratch/tmp directory
+    rm multiz44way*.tab
+    #	And, you can remove the previously loaded non-annotated maf file link:
+    rm /gbdb/hg18/multiz44way/maf/multiz44way.maf
+    rmdir /gbdb/hg18/multiz44way/maf
+
+#########################################################################
