@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.102 2008/11/13 18:27:31 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.103 2008/11/13 19:04:03 mikep Exp $
 
 use warnings;
 use strict;
@@ -546,7 +546,7 @@ sub validateGappedPeak
 sub validateFastQ
 {
     # Syntax per http://maq.sourceforge.net/fastq.shtml
-    # I added '/' in the seqNameRegEx even though it wasnt in the spec
+    # I added '/' in the seqNameRegEx and plusLine even though it wasnt in the spec
     #   because this is what Colin Kingswood (Gingeras project) 
     #   is getting in the fastq files from GIS for the GisPet project
     #   and they are being sent on to us
@@ -561,7 +561,7 @@ sub validateFastQ
     my $qualRegEx = "[!-~\n]+";
     my $states = {firstLine => {REGEX => "\@($seqNameRegEx)", NEXT => 'seqLine'},
                   seqLine => {REGEX => $seqRegEx, NEXT => 'plusLine'},
-                  plusLine => {REGEX => "\\\+([A-Za-z0-9_.:-]*)", NEXT => 'qualLine'},
+                  plusLine => {REGEX => "\\\+($seqNameRegEx)", NEXT => 'qualLine'},
                   qualLine => {REGEX => $qualRegEx, NEXT => 'firstLine'}};
     while(<$fh>) {
         chomp;
