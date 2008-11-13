@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.103 2008/11/13 19:04:03 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.104 2008/11/13 19:07:47 mikep Exp $
 
 use warnings;
 use strict;
@@ -561,7 +561,7 @@ sub validateFastQ
     my $qualRegEx = "[!-~\n]+";
     my $states = {firstLine => {REGEX => "\@($seqNameRegEx)", NEXT => 'seqLine'},
                   seqLine => {REGEX => $seqRegEx, NEXT => 'plusLine'},
-                  plusLine => {REGEX => "\\\+($seqNameRegEx)", NEXT => 'qualLine'},
+                  plusLine => {REGEX => "\\\+([A-Za-z0-9_.:/-]*)", NEXT => 'qualLine'},
                   qualLine => {REGEX => $qualRegEx, NEXT => 'firstLine'}};
     while(<$fh>) {
         chomp;
