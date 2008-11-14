@@ -189,6 +189,40 @@ termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 tier 3
 
+term SK-N-SH(+RA) 
+type Cell Line
+description neuroblastoma cell line differentiated w/ retinoic acid
+vendorName ATCC
+vendorId HTB-11
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
+lineage Unknown
+karyotype Unknown
+termId BTO:0002372 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
+tier 3
+
+term GM06990
+type Cell Line
+description lymphoblastoid (CEPH)
+vendorName Coriell
+vendorId GM06990
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM06990&PgId=166
+lineage Unknown
+karyotype Unknown
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
+
+term Th1
+type Cell Line
+description primary human Th1 T cells 
+vendorName 
+vendorId 
+orderUrl
+lineage Unknown
+karyotype Unknown
+termId 
+termUrl 
+
 # Gene types
 term Known
 type Gene Type
