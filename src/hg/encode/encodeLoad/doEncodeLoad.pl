@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# ~/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.41 2008/11/14 22:15:27 mikep Exp $
 
 # Usage:
 #
