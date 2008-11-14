@@ -230,6 +230,8 @@ for (group = groupList; group != NULL; group = group->next)
         if (tdbIsSuperTrackChild(tdb))
             /* indent members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
+        if(trackDbSetting(track->tdb, "wgEncode") != NULL)
+            hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
 	if (track->hasUi)
 	    hPrintf("<A %s%s%s HREF=\"%s?%s=%u&g=%s&hgTracksConfigPage=configure\">", 
                 tdb->parent ? "TITLE=\"Part of super track: " : "", 
