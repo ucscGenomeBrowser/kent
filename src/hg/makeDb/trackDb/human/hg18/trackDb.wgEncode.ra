@@ -755,6 +755,22 @@ wgEncode 1
 	localization	nucleus
 	cell	K562
 
+track wgEncodeUwDnaseSeq
+compositeTrack on
+shortLabel UW DNase Seq
+longLabel ENCODE - UW DNase Seq
+group regulation
+subGroup1 view Views Hotspots=Hot_Spots Peaks=Peaks Signal=Signal RawSignal=Raw_Signal 
+subGroup2 cellType Cell_Line GM06990=GM06990 HeLa-S3=HeLa-S3 HepG2=HepG2 SKNSH=SKNSH TH1=TH1
+sortOrder cellType=+ view=+
+dragAndDrop subTracks
+visibilityViewDefaults Hotspots=pack Peaks=pack Signal=full RawSignal=hide 
+controlledVocabulary encode/cv.ra cellType 
+priority 0
+type bed 3
+wgEncode 1
+
+
 track wgEncodeYaleChIPseq
 compositeTrack on
 shortLabel Yale TFBS
