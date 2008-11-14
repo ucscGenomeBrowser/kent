@@ -12,7 +12,7 @@
 #include "itsa.h"
 
 
-static char const rcsid[] = "$Id: itsaMake.c,v 1.3 2008/10/30 06:54:15 kent Exp $";
+static char const rcsid[] = "$Id: itsaMake.c,v 1.4 2008/11/14 21:56:41 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -471,9 +471,9 @@ dnaSeqFreeList(&seqList);
 bits32 *index13;
 AllocArray(index13, itsaSlotCount);
 bits32 *offsetArray = needHugeMem(totalDnaSize * sizeof(bits32));
-bits32 *listArray = needHugeZeroedMem(totalDnaSize * sizeof(bits32));;
+bits32 *listArray = needHugeZeroedMem(totalDnaSize * sizeof(bits32));
 verboseTime(1, "Allocated buffers %lld bytes total", 
-	9LL*totalDnaSize + itsaSlotCount*sizeof(bits32));
+	(long long)(9LL*totalDnaSize + itsaSlotCount*sizeof(bits32)));
 
 /* Where normally we'd keep some sort of structure with a next element to form a list
  * of matching positions in each slot of our index,  to conserve memory we'll do this
