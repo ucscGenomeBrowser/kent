@@ -31,13 +31,7 @@ void encodeRnaMethods(struct track *tg);
 void encodePeakMethods(struct track *tg);
 /* Methods for ENCODE peak track uses mostly linkedFeatures. */
 
-void narrowPeakMethods(struct track *tg);
-/* Methods for ENCODE narrowPeak track. */
-
-void broadPeakMethods(struct track *tg);
-/* Methods for ENCODE broadPeak track. */
-
-void gappedPeakMethods(struct track *tg);
-/* Methods for ENCODE gappedPeak track. */
+void encodePeakMethodsCt(struct track *tg);
+/* Methods for ENCODE peak track uses mostly linkedFeatures. */
 
 #endif /* ENCODE_H */

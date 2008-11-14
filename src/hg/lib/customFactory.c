@@ -23,8 +23,9 @@
 #include "customFactory.h"
 #include "trashDir.h"
 #include "jsHelper.h"
+#include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.89 2008/09/22 05:18:59 larrym Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.90 2008/11/14 16:00:09 aamp Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -554,6 +555,158 @@ static struct customFactory coloredExonFactory =
     "coloredExon",
     coloredExonRecognizer,
     coloredExonLoader,
+    };
+
+/**** ENCODE PEAK Factory - closely related to BED but not quite ***/
+
+static boolean encodePeakRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type, 
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling an encodePeak track */
+{
+enum encodePeakType pt = 0;
+if (type != NULL && !sameType(type, fac->name) && 
+    !sameString(type, "narrowPeak") && !sameString(type, "broadPeak") && !sameString(type, "gappedPeak"))
+    return FALSE;
+char *line = customFactoryNextRealTilTrack(cpp);
+if (line == NULL)
+    return FALSE;
+char *dupe = cloneString(line);
+char *row[ENCODE_PEAK_KNOWN_FIELDS+1];
+int wordCount = chopLine(dupe, row);
+pt = encodePeakInferType(wordCount, type);
+freeMem(dupe);
+track->fieldCount = wordCount;
+customPpReuse(cpp, line);
+return (pt != 0);
+}
+
+static struct pipeline *encodePeakLoaderPipe(struct customTrack *track)
+/* Set up pipeline that will load the encodePeak into database. */
+{
+char *db = customTrackTempDb();
+/* running the single command:
+ *	hgLoadBed -customTrackLoader -sqlTable=loader/encodePeak.sql -renameSqlTable 
+ *                -trimSqlTable -notItemRgb -tmpDir=/data/tmp
+ *		-maxChromNameLength=${nameLength} db tableName stdin
+ */
+struct dyString *tmpDy = newDyString(0);
+char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader",
+	"-sqlTable=loader/encodePeak.sql", "-renameSqlTable", "-trimSqlTable", "-notItemRgb", NULL, NULL, NULL, NULL, NULL, NULL};
+char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
+struct stat statBuf;
+int index = 6;
+
+if (stat(tmpDir,&statBuf))
+    errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
+	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
+dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+dyStringPrintf(tmpDy, "%s", db);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+dyStringPrintf(tmpDy, "%s", track->dbTableName);
+cmd1[index++] = dyStringCannibalize(&tmpDy);
+cmd1[index++] = "stdin";
+assert(index <= ArraySize(cmd1));
+
+/* the "/dev/null" file isn't actually used for anything, but it is used
+ * in the pipeLineOpen to properly get a pipe started that isn't simply
+ * to STDOUT which is what a NULL would do here instead of this name.
+ *	This function exits if it can't get the pipe created
+ *	The dbStderrFile will get stderr messages from hgLoadBed into the
+ *	our private error log so we can send it back to the user
+ */
+return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
+	"/dev/null", track->dbStderrFile);
+}
+
+/* Need customTrackEncodePeak */
+static struct encodePeak *customTrackEncodePeak(char *db, char **row, enum encodePeakType pt,
+	struct hash *chromHash, struct lineFile *lf)
+/* Convert a row of strings to a bed. */
+{
+struct encodePeak *peak = encodePeakLineFileLoad(row, pt, lf);
+hashStoreName(chromHash, peak->chrom);
+customFactoryCheckChromNameDb(db, peak->chrom, lf);
+return peak;
+}
+
+/*   remember to set all the custom track settings necessary */
+static struct customTrack *encodePeakFinish(struct customTrack *track, struct encodePeak *peakList, enum encodePeakType pt)
+/* Finish up bed tracks (and others that create track->bedList). */
+{
+struct encodePeak *peak;
+char buf[20];
+track->fieldCount = ENCODEPEAK_NUM_COLS;
+if ((pt == narrowPeak) || (pt == broadPeak))
+    track->fieldCount = ENCODE_PEAK_NARROW_PEAK_FIELDS;
+track->tdb->type = cloneString("encodePeak");
+track->dbTrackType = cloneString("encodePeak");
+safef(buf, sizeof(buf), "%d", track->fieldCount);
+ctAddToSettings(track, "fieldCount", cloneString(buf));
+
+/* If necessary add track offsets. */
+int offset = track->offset;
+if (offset != 0)
+    {
+    /* Add track offsets if any */
+    for (peak = peakList; peak != NULL; peak = peak->next)
+	{
+	peak->chromStart += offset;
+	peak->chromEnd += offset;
+	}
+    track->offset = 0;	/*	so DB load later won't do this again */
+    hashMayRemove(track->tdb->settingsHash, "offset"); /* nor the file reader*/
+    }
+
+/* If necessary load database */
+customFactorySetupDbTrack(track);
+struct pipeline *dataPipe = encodePeakLoaderPipe(track);
+FILE *out = pipelineFile(dataPipe);
+for (peak = peakList; peak != NULL; peak = peak->next)
+    encodePeakOutputWithType(peak, encodePeak, out);
+fflush(out);		/* help see error from loader failure */
+if(ferror(out) || pipelineWait(dataPipe))
+    pipelineFailExit(track);	/* prints error and exits */
+unlink(track->dbStderrFile);	/* no errors, not used */
+pipelineFree(&dataPipe);
+restorePrevEnv();			/* restore environment */
+return track;
+}
+
+static struct customTrack *encodePeakLoader(struct customFactory *fac,  
+	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up encodePeak data until get next track line. */
+{
+char *line;
+char *db = ctGenomeOrCurrent(track);
+struct encodePeak *peakList = NULL;
+enum encodePeakType pt = encodePeakInferType(track->fieldCount, track->tdb->type);
+if (!dbRequested)
+    errAbort("encodePeak custom track type unavailable without custom trash database. Please set that up in your hg.conf");
+while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
+    {
+    char *row[ENCODE_PEAK_KNOWN_FIELDS];
+    int wordCount = chopLine(line, row);
+    struct lineFile *lf = cpp->fileStack;
+    lineFileExpectAtLeast(lf, track->fieldCount, wordCount);
+    struct encodePeak *peak = customTrackEncodePeak(db, row, pt, chromHash, lf);
+    slAddHead(&peakList, peak);
+    }
+slReverse(&peakList);
+return encodePeakFinish(track, peakList, pt);
+}
+
+static struct customFactory encodePeakFactory = 
+/* Factory for bed tracks */
+    {
+    NULL,
+    "encodePeak",
+    encodePeakRecognizer,
+    encodePeakLoader,
     };
 
 /*** GFF/GTF Factory - converts to BED ***/
@@ -1345,6 +1498,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &bedGraphFactory);
     slAddTail(&factoryList, &microarrayFactory);
     slAddTail(&factoryList, &coloredExonFactory);
+    slAddTail(&factoryList, &encodePeakFactory);
     }
 }
 

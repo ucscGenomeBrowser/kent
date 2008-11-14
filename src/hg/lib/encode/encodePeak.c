@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encodePeak.c,v 1.5 2008/09/03 19:19:28 markd Exp $";
+static char const rcsid[] = "$Id: encodePeak.c,v 1.6 2008/11/14 16:00:12 aamp Exp $";
 
 struct encodePeak *encodePeakLoad(char **row)
 /* Load a encodePeak from row fetched with select * from encodePeak
@@ -18,21 +18,25 @@ struct encodePeak *encodePeakLoad(char **row)
 struct encodePeak *ret;
 
 AllocVar(ret);
-ret->blockCount = sqlUnsigned(row[6]);
+ret->blockCount = sqlUnsigned(row[10]);
 ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
-ret->signalValue = sqlFloat(row[3]);
-ret->pValue = sqlFloat(row[4]);
-ret->peak = sqlSigned(row[5]);
+ret->name = cloneString(row[3]);
+ret->score = sqlUnsigned(row[4]);
+safecpy(ret->strand, sizeof(ret->strand), row[5]);
+ret->signalValue = sqlFloat(row[6]);
+ret->pValue = sqlFloat(row[7]);
+ret->qValue = sqlFloat(row[8]);
+ret->peak = sqlSigned(row[9]);
 {
 int sizeOne;
-sqlUnsignedDynamicArray(row[7], &ret->blockSizes, &sizeOne);
+sqlUnsignedDynamicArray(row[11], &ret->blockSizes, &sizeOne);
 assert(sizeOne == ret->blockCount);
 }
 {
 int sizeOne;
-sqlUnsignedDynamicArray(row[8], &ret->chromStarts, &sizeOne);
+sqlUnsignedDynamicArray(row[12], &ret->blockStarts, &sizeOne);
 assert(sizeOne == ret->blockCount);
 }
 return ret;
@@ -44,7 +48,7 @@ struct encodePeak *encodePeakLoadAll(char *fileName)
 {
 struct encodePeak *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[13];
 
 while (lineFileRow(lf, row))
     {
@@ -62,7 +66,7 @@ struct encodePeak *encodePeakLoadAllByChar(char *fileName, char chopper)
 {
 struct encodePeak *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[13];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -86,8 +90,12 @@ if (ret == NULL)
 ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
+ret->score = sqlUnsignedComma(&s);
+sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->signalValue = sqlFloatComma(&s);
 ret->pValue = sqlFloatComma(&s);
+ret->qValue = sqlFloatComma(&s);
 ret->peak = sqlSignedComma(&s);
 ret->blockCount = sqlUnsignedComma(&s);
 {
@@ -104,10 +112,10 @@ s = sqlEatChar(s, ',');
 {
 int i;
 s = sqlEatChar(s, '{');
-AllocArray(ret->chromStarts, ret->blockCount);
+AllocArray(ret->blockStarts, ret->blockCount);
 for (i=0; i<ret->blockCount; ++i)
     {
-    ret->chromStarts[i] = sqlUnsignedComma(&s);
+    ret->blockStarts[i] = sqlUnsignedComma(&s);
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
@@ -124,8 +132,9 @@ struct encodePeak *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
+freeMem(el->name);
 freeMem(el->blockSizes);
-freeMem(el->chromStarts);
+freeMem(el->blockStarts);
 freez(pEl);
 }
 
@@ -153,9 +162,21 @@ fprintf(f, "%u", el->chromStart);
 fputc(sep,f);
 fprintf(f, "%u", el->chromEnd);
 fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->score);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
 fprintf(f, "%g", el->signalValue);
 fputc(sep,f);
 fprintf(f, "%g", el->pValue);
+fputc(sep,f);
+fprintf(f, "%g", el->qValue);
 fputc(sep,f);
 fprintf(f, "%d", el->peak);
 fputc(sep,f);
@@ -177,7 +198,7 @@ int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->blockCount; ++i)
     {
-    fprintf(f, "%u", el->chromStarts[i]);
+    fprintf(f, "%u", el->blockStarts[i]);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
@@ -186,6 +207,25 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+enum encodePeakType encodePeakInferType(int numFields, char *type)
+/* Given a track type string and number of fields in a row, infer the type */
+{
+if (!type)
+    errAbort("Unknown encodePeak type");
+if (((sameString(type, "narrowPeak") || sameString(type, "encodePeak")) 
+     && (numFields == ENCODE_PEAK_NARROW_PEAK_FIELDS)))
+    return narrowPeak;
+else if (((sameString(type, "broadPeak") || sameString(type, "encodePeak")) 
+     && (numFields == ENCODE_PEAK_BROAD_PEAK_FIELDS)))
+    return broadPeak;
+else if (((sameString(type, "gappedPeak") || sameString(type, "encodePeak"))
+     && (numFields == ENCODE_PEAK_GAPPED_PEAK_FIELDS)))
+    return gappedPeak;
+else if (sameString(type, "encodePeak") && (numFields == ENCODEPEAK_NUM_COLS))
+    return encodePeak;
+return 0;
+}
 
 int encodePeakNumFields(char *db, char *trackName)
 /* Just quickly count th number of fields. */
@@ -200,27 +240,227 @@ slFreeList(&fieldNames);
 return numFields;
 }
 
-enum encodePeakType encodePeakInferType(char *db, struct trackDb *tdb)
+enum encodePeakType encodePeakInferTypeFromTable(char *db, char *table, char *tdbType)
 /* Given the trackDb figure out the peak type. Returns zero on error. */ 
 {
-int numFields = encodePeakNumFields(db, tdb->tableName);
-if (!tdb->type)
-    errAbort("unknown type in table %s", tdb->tableName);
-if (sameString(tdb->type, "encodePeak"))
+int numFields = encodePeakNumFields(db, table);
+if (!tdbType)
+    errAbort("unknown type in table %s", table);
+return encodePeakInferType(numFields, tdbType);
+}
+
+struct encodePeak *encodePeakGeneralLoad(char **row, enum encodePeakType pt)
+/* Make a new encodePeak and return it. */
+{
+struct encodePeak *peak;
+if (!pt)
+    return NULL;
+if (pt == encodePeak)
+    return encodePeakLoad(row);
+AllocVar(peak);
+peak->chrom = cloneString(row[0]);
+peak->chromStart = sqlUnsigned(row[1]);
+peak->chromEnd = sqlUnsigned(row[2]);
+peak->name = cloneString(row[3]);
+peak->score = sqlUnsigned(row[4]);
+peak->peak = -1;
+safecpy(peak->strand, sizeof(peak->strand), row[5]);
+if ((pt == broadPeak) || (pt == narrowPeak))
     {
-    switch (numFields)
-	{
-	case 5: return encodePeak5;
-        case 6: return encodePeak6;
-        case 9: return encodePeak9;
-        default: return 0;
+    peak->signalValue = sqlFloat(row[6]);
+    peak->pValue = sqlFloat(row[7]);
+    peak->qValue = sqlFloat(row[8]);
+    if (pt == narrowPeak)
+	peak->peak = sqlSigned(row[9]);
+    }
+else  /* must be gappedPeak */
+    {
+    int sizeOne;
+    peak->blockCount = sqlUnsigned(row[9]);
+    sqlUnsignedDynamicArray(row[10], &peak->blockSizes, &sizeOne);
+    assert(sizeOne == peak->blockCount);
+    sqlUnsignedDynamicArray(row[11], &peak->blockStarts, &sizeOne);
+    assert(sizeOne == peak->blockCount);
+    peak->signalValue = sqlFloat(row[12]);
+    peak->pValue = sqlFloat(row[13]);
+    peak->qValue = sqlFloat(row[14]);
+    }
+return peak;
+}
+
+struct encodePeak *narrowPeakLoad(char **row)
+/* Load a narrowPeak */
+{
+return encodePeakGeneralLoad(row, narrowPeak);
+}
+
+struct encodePeak *broadPeakLoad(char **row)
+/* Load a broadPeak */
+{
+return encodePeakGeneralLoad(row, broadPeak);
+}
+
+struct encodePeak *gappedPeakLoad(char **row)
+/* Load a gappedPeak */
+{
+return encodePeakGeneralLoad(row, gappedPeak);
+}
+
+struct encodePeak *encodePeakLineFileLoad(char **row, enum encodePeakType pt, struct lineFile *lf)
+/* From a linefile line, load an encodePeak row.  Errors outputted */
+/* have line numbers, etc. Does more error checking as well. */
+{
+struct encodePeak *peak;
+if (!pt)
+    errAbort("Unknown peak type set for track");
+AllocVar(peak);
+peak->chrom = cloneString(row[0]);
+peak->chromStart = lineFileNeedNum(lf, row, 1);
+peak->chromEnd = lineFileNeedNum(lf, row, 2);
+peak->peak = -1;
+if (peak->chromEnd < 1)
+    lineFileAbort(lf, "chromEnd less than 1 (%d)", peak->chromEnd);
+if (peak->chromEnd < peak->chromStart)
+    lineFileAbort(lf, "chromStart after chromEnd (%d > %d)", 
+    	peak->chromStart, peak->chromEnd);
+peak->name = cloneString(row[3]);
+peak->score = lineFileNeedNum(lf, row, 4);
+safecpy(peak->strand, sizeof(peak->strand), row[5]);
+if (peak->strand[0] != '+' && peak->strand[0] != '-' && peak->strand[0] != '.')
+    lineFileAbort(lf, "Expecting +, -, or . in strand");
+if (pt != gappedPeak)
+/* deal with signalValue, pValue, qValue, and peak */
+    {
+    peak->signalValue = (float)lineFileNeedDouble(lf, row, 6);
+    peak->pValue = (float)lineFileNeedDouble(lf, row, 7);
+    peak->qValue = (float)lineFileNeedDouble(lf, row, 8);
+    if ((pt == narrowPeak) || (pt == encodePeak))
+	{	
+	peak->peak = lineFileNeedNum(lf, row, 9);
+	if (peak->peak >= (int)peak->chromEnd)
+	    lineFileAbort(lf, "peak site past chromEnd (%d > %d)", peak->peak, peak->chromEnd);
 	}
     }
-else if ((sameString(tdb->type, "narrowPeak") && (numFields == 9)))
-    return narrowPeak;
-else if ((sameString(tdb->type, "broadPeak") && (numFields == 8)))
-    return broadPeak;
-else if ((sameString(tdb->type, "gappedPeak") && (numFields == 14)))
-    return gappedPeak;
-return 0;
+else  /* must be gappedPeak */
+/* deal with thickStart, thickEnd, itemRgb even though they're not used */
+    {
+    int thickStart = lineFileNeedNum(lf, row, 6);
+    int thickEnd = lineFileNeedNum(lf, row, 7);
+    int itemRgb = 0;
+    char *comma;
+    /*	Allow comma separated list of rgb values here	*/
+    comma = strchr(row[8], ',');
+    if (comma)
+	itemRgb = bedParseRgb(row[8]);
+    else
+	itemRgb = lineFileNeedNum(lf, row, 8);
+    if ((thickStart != 0) || (thickEnd != 0) || (itemRgb != 0))
+	lineFileAbort(lf, "thickStart, thickEnd, and itemRgb columns not used in gappedPeak type, set all to 0");
+    }
+/* Deal with blocks */
+if ((pt == gappedPeak) || (pt == encodePeak))
+    {
+    int i, count;
+    int lastEnd, lastStart;
+    int blockCountIx, blockSizesIx, blockStartsIx;
+    if (pt == gappedPeak)
+	{
+	blockCountIx = 9;
+	blockSizesIx = 10;
+	blockStartsIx = 11;
+	}
+    else
+	{
+	blockCountIx = 10;
+	blockSizesIx = 11;
+	blockStartsIx = 12;
+	}
+    peak->blockCount = lineFileNeedNum(lf, row, blockCountIx);
+    sqlUnsignedDynamicArray(row[blockSizesIx], &peak->blockSizes, &count);
+    if (count != peak->blockCount)
+	lineFileAbort(lf,  "expecting %d elements in array", peak->blockCount);
+    sqlUnsignedDynamicArray(row[blockStartsIx], &peak->blockStarts, &count);
+    if (count != peak->blockCount)
+	lineFileAbort(lf, "expecting %d elements in array", peak->blockCount);
+    // tell the user if they appear to be using absolute starts rather than 
+    // relative... easy to forget!  Also check block order, coord ranges...
+    lastStart = -1;
+    lastEnd = 0;
+    for (i=0;  i < peak->blockCount;  i++)
+	{
+	if (peak->blockStarts[i]+peak->chromStart >= peak->chromEnd)
+	    {
+	    if (peak->blockStarts[i] >= peak->chromStart)
+		lineFileAbort(lf, 
+		    "BED blockStarts offsets must be relative to chromStart, "
+		    "not absolute.  Try subtracting chromStart from each offset "
+		    "in blockStarts.");
+	    else
+		lineFileAbort(lf, 
+		    "BED blockStarts[i]+chromStart must be less than chromEnd.");
+	    }
+	lastStart = peak->blockStarts[i];
+	lastEnd = peak->chromStart + peak->blockStarts[i] + peak->blockSizes[i];
+	}
+    if (peak->blockStarts[0] != 0)
+	lineFileAbort(lf, 
+	    "BED blocks must span chromStart to chromEnd.  "
+	    "BED blockStarts[0] must be 0 (==%d) so that (chromStart + "
+	    "blockStarts[0]) equals chromStart.", peak->blockStarts[0]);
+    i = peak->blockCount-1;
+    if ((peak->chromStart + peak->blockStarts[i] + peak->blockSizes[i]) !=
+	peak->chromEnd)
+	{
+	lineFileAbort(lf, 
+	    "BED blocks must span chromStart to chromEnd.  (chromStart + "
+	    "blockStarts[last] + blockSizes[last]) must equal chromEnd.");
+	}
+    }
+if (pt == gappedPeak)
+    /* deal with final three columns of a gappedPeak */
+    {
+    peak->signalValue = (float)lineFileNeedDouble(lf, row, 12);
+    peak->pValue = (float)lineFileNeedDouble(lf, row, 13);
+    peak->qValue = (float)lineFileNeedDouble(lf, row, 14);    
+    }
+return peak;
+}
+
+void encodePeakOutputWithType(struct encodePeak *el, enum encodePeakType pt, FILE *f)
+/* Print out encodePeak different ways depending on narrowPeak, broadPeak, etc. */
+/* but make it tab-separated. */
+{
+if (!pt)
+    errAbort("cannot output using invalid peak type");
+fprintf(f, "%s\t%u\t%u\t%s\t%u\t%s\t", el->chrom, el->chromStart, el->chromEnd, 
+	el->name, el->score, el->strand);
+if (pt != gappedPeak)
+    {
+    fprintf(f, "%g\t%g\t%g", el->signalValue, el->pValue, el->qValue);
+    if (pt != broadPeak)
+	fprintf(f, "\t%d", el->peak);
+    if ((pt == encodePeak) && (el->blockCount > 0))
+	{
+	int i;
+	fprintf(f, "\t%u\t", el->blockCount);
+	for (i = 0; i < el->blockCount; i++)
+	    fprintf(f, "%u,", el->blockSizes[i]);
+	fputc('\t', f);
+	for (i = 0; i < el->blockCount; i++)
+	    fprintf(f, "%u,", el->blockStarts[i]);
+	}
+    }
+else
+    {
+    int i;
+    fprintf(f, "0\t0\t0\t%u\t", el->blockCount);
+    for (i = 0; i < el->blockCount; i++)
+	fprintf(f, "%u,", el->blockSizes[i]);
+    fputc('\t', f);
+    for (i = 0; i < el->blockCount; i++)
+	fprintf(f, "%u,", el->blockStarts[i]);
+    fputc('\t', f);
+    fprintf(f, "%g\t%g\t%g", el->signalValue, el->pValue, el->qValue);
+    }
+fputc('\n', f);
 }

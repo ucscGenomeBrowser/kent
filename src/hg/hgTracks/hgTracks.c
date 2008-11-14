@@ -39,8 +39,9 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 #include "hgConfig.h"
+#include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1521 2008/11/11 20:58:22 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1522 2008/11/14 15:59:56 aamp Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2597,6 +2598,13 @@ else if (sameString(type, "coloredExon"))
     {
     tg = trackFromTrackDb(tdb);
     coloredExonMethodsFromCt(tg);
+    tg->labelNextItemButtonable = TRUE;
+    tg->customPt = ct;
+    }
+else if (sameString(type, "encodePeak"))
+    {
+    tg = trackFromTrackDb(tdb);
+    encodePeakMethodsCt(tg);
     tg->labelNextItemButtonable = TRUE;
     tg->customPt = ct;
     }

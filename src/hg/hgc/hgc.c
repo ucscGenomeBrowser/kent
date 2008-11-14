@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1470 2008/10/30 18:00:12 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1471 2008/11/14 16:00:02 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3404,7 +3404,7 @@ if (wordCount > 0)
     else if (sameString(type, "encodePeak") || sameString(type, "narrowPeak") || 
 	     sameString(type, "broadPeak") || sameString(type, "gappedPeak"))
 	{
-	doEncodePeak(tdb);
+	doEncodePeak(tdb, NULL);
 	}
     else if (sameString(type, "chromGraph"))
 	{
@@ -16850,6 +16850,8 @@ itemName = skipLeadingSpaces(fileItem);
 printf("<H2>%s</H2>\n", ct->tdb->longLabel);
 if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
+else if (sameWord(type, "encodePeak"))
+    doEncodePeak(ct->tdb, ct);
 else if (ct->wiggle)
     {
     if (ct->dbTrack)
