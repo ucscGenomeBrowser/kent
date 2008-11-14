@@ -2,6 +2,9 @@ include ../inc/common.mk
 
 all:
 	cd bfastMafFix && ${MAKE}
+	cd bwtFind && ${MAKE}
+	cd bwtMake && ${MAKE}
+	cd bwtReverse && ${MAKE}
 	cd elandToSplat && ${MAKE}
 	cd i16Find && ${MAKE}
 	cd itsaDump && ${MAKE}
