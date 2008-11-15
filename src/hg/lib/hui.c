@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.134 2008/11/11 01:35:31 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.135 2008/11/15 00:50:41 kate Exp $";
 
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add"
@@ -2869,28 +2869,11 @@ struct sqlResult *sr;
 
 
 puts("\n<P><B>Species selection:</B>&nbsp;");
-char *defaultOffSpecies = trackDbSetting(tdb, "speciesDefaultOff");
-
-/* initialize species cart variables if not yet set (haven't displayed track in browser yet) */
-if (defaultOffSpecies)
-    {
-    char *words[MAX_SP_SIZE];
-    int wordCt = chopLine(defaultOffSpecies, words);
-    int i;
-    for (i = 0; i < wordCt; i++)
-        {
-        safef(option, sizeof(option), "%s.%s", name, words[i]);
-        if (!cartOptionalString(cart, option))
-            cartSetBoolean(cart, option, FALSE);
-        }
-    }
 
 if(differentString(name,tdb->tableName))
     {
     PLUS_BUTTON( "id", "plus_pw","cb_maf_","_maf_");
     MINUS_BUTTON("id","minus_pw","cb_maf_","_maf_");
-
-    // TODO: add back 'defaults' button
     }
 else
     {
@@ -2900,6 +2883,7 @@ else
 
     char prefix[512];
     safef(prefix, sizeof prefix, "%s.", name);
+    char *defaultOffSpecies = trackDbSetting(tdb, "speciesDefaultOff");
     if (defaultOffSpecies)
         {
         safecpy(buttonVar, sizeof buttonVar, "set_defaults_button");
@@ -3042,7 +3026,6 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
 	}
     else
     	{
-
     	puts("<TD>");
     	safef(option, sizeof(option), "%s.%s", name, wmSpecies->name);
 	wmSpecies->on = cartUsualBoolean(cart, option, TRUE);
