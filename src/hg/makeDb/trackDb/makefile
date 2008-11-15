@@ -32,6 +32,7 @@ include ../../../inc/common.mk
 DBS = 	hg16 hg17 hg18\
 	venter1 \
 	panTro1 panTro2 \
+	gorGor1 \
 	ponAbe1 ponAbe2 \
 	rheMac2 \
 	calJac1 \
@@ -39,7 +40,7 @@ DBS = 	hg16 hg17 hg18\
 	canFam1 canFam2 \
 	felCat3 \
 	mm6 mm7 mm8 mm9 \
-	rn3 rn4 \
+	rn3 rn4 rn5 \
 	speTri1 cavPor3 \
 	oryCun1 \
 	bosTau2 bosTau3 bosTau4 \
