@@ -1,0 +1,69 @@
+# for emacs: -*- mode: sh; -*-
+#
+#	the above keeps emacs happy while working with this text document
+
+# This file describes how we made the browser database on the Rattus 
+# Norvegicus genome, March 2008 update (Rnor4.0) from Baylor.
+
+#########################################################################
+## Download sequence (DONE - 2008-11-13 - Hiram)
+    mkdir /hive/data/genomes/rn5
+    mkdir /hive/data/genomes/rn5/baylor
+    cd /hive/data/genomes/rn5/baylor
+
+    #	assuming BASH sequence here
+    F="ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Rnorvegicus/Rnor4.0/LinearizedChromosomes"
+    for S in fa.gz fa.qual.gz
+do
+    wget --timestamping  ${F}/Rat20080227.${S}
+done
+
+    F="ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Rnorvegicus/Rnor4.0"
+    for S in htm txt
+do
+    wget --timestamping ${F}/README_Rnor4.${S}
+done
+
+    F="ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Rnorvegicus/Rnor4.0/Contigs"
+    for S in .agp _contigs.fa _contigs_fa.qual \
+	_contig_scaffold.agp _scaffold_chr.agp _BACS.fa \
+	_BACS.fa.qual _accnum.agp _ctg_name.agp _contigs_accnum
+do
+    wget --timestamping ${F}/Rat20080227${S}.gz
+done
+
+#########################################################################
+# fixup names to correspond to UCSC syntax (DONE - Hiram - 2008-11-13)
+    cd /hive/data/genomes/rn5/baylor
+    zcat Rat20080227.fa.gz | sed -e "s/gnl.Rnor4.0.chr0/chr/; s/gnl.Rnor4.0.chr1/chr1/; s/gnl.Rnor4.0.chr2/chr2/; s/gnl.Rnor4.0.chrX/chrX/; s/gnl.Rnor4.0.chrUn/chrUn/;" \
+| gzip -c > Rnor4.chroms.fa.gz
+
+    zcat Rat20080227.fa.qual.gz | sed -e "s/gnl.Rnor4.0.chr0/chr/; s/gnl.Rnor4.0.chr1/chr1/; s/gnl.Rnor4.0.chr2/chr2/; s/gnl.Rnor4.0.chrX/chrX/; s/gnl.Rnor4.0.chrUn/chrUn/;" \
+| gzip -c > Rnor4.chroms.fa.qual.gz
+
+    zcat Rat20080227_scaffold_chr.agp.gz \
+    | sed -e "s/^chr0/chr/; s/chr0\([1-9]*.scaffold\)/chr\1/; s/[\t]*#.*//;" \
+	> Rnor4.scaffold_chr.agp
+
+#########################################################################
+# Create .ra file and run makeGenomeDb.pl (DONE - Hiram - 2008-11-14)
+    cd /hive/data/genomes/rn4
+    cat << '_EOF_' >rn5.config.ra
+# Config parameters for makeGenomeDb.pl:
+db rn5
+clade mammal
+scientificName Rattus norvegicus
+commonName Rat
+assemblyDate Mar. 2008
+assemblyLabel Baylor BCM-HGSC Rnor4.0 (NCBI project ID: 10621)
+orderKey 177
+mitoAcc AC_000022
+fastaFiles /hive/data/genomes/rn5/baylor/Rnor4.chroms.fa.gz
+agpFiles /hive/data/genomes/rn5/baylor/Rnor4.scaffold_chr.agp
+qualFiles /hive/data/genomes/rn5/baylor/Rnor4.chroms.fa.qual.gz
+dbDbSpeciesDir rat
+'_EOF_'
+    # << happy emacs
+
+    #	this was run manually step by step, the results were not recorded
+    makeGenomeDb.pl rn5.config.ra
