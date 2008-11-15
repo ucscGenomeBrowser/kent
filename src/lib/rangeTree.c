@@ -13,7 +13,7 @@
 #include "rbTree.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: rangeTree.c,v 1.20 2008/09/17 17:51:32 mikep Exp $";
+static char const rcsid[] = "$Id: rangeTree.c,v 1.21 2008/11/15 07:07:30 markd Exp $";
 
 int rangeCmp(void *va, void *vb)
 /* Return -1 if a before b,  0 if a and b overlap,
@@ -40,7 +40,7 @@ return a;
 }
 
 
-struct range *rangeTreeAddVal(struct rbTree *tree, int start, int end, void *val, void *(*mergeVals)(void *existing, void *new) )
+struct range *rangeTreeAddVal(struct rbTree *tree, int start, int end, void *val, void *(*mergeVals)(void *existingVal, void *newVal) )
 /* Add range to tree, merging with existing ranges if need be. 
  * If this is a new range, set the value to this val.
  * If there are existing items for this range, and if mergeVals function is not null, 

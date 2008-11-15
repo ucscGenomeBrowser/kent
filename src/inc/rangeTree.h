@@ -31,7 +31,7 @@ int rangeCmp(void *va, void *vb);
  * and 1 if a after b. */
 
 
-struct range *rangeTreeAddVal(struct rbTree *tree, int start, int end, void *val, void *(*mergeVals)(void *existing, void *new) );
+struct range *rangeTreeAddVal(struct rbTree *tree, int start, int end, void *val, void *(*mergeVals)(void *existingVal, void *newVal) );
 /* Add range to tree, merging with existing ranges if need be. 
  * If this is a new range, set the value to this val.
  * If there are existing items for this range, and if mergeVals function is not null, 
