@@ -5,7 +5,7 @@
 # existing status.  Statuses that can be changed manually do not
 # overlap statuses set by the pipeline automation.
 #
-# $Id: encodeStatus.pl,v 1.3 2008/08/26 22:36:17 larrym Exp $
+# $Id: encodeStatus.pl,v 1.4 2008/11/15 01:14:01 kate Exp $
 
 use warnings;
 use strict;
@@ -68,6 +68,8 @@ for my $i (0 .. @statuses - 1) {
             usage("ERROR: New status '$newStatus' cannot follow '$oldStatus'\n");
         }
         $db->execute("UPDATE projects SET status = ? WHERE id = ?", $newStatus, $id);
+        $db->execute("INSERT INTO project_status_logs (project_id, status, created_at, who) \
+                        VALUES (?, ?, NOW(), ?)", $id, $newStatus, getlogin());
         print "Project '$project' successfully updated from '$oldStatus' to '$newStatus'\n";
         if($newStatus eq 'approved') {
             my $pushQFile = "$dir/out/$Encode::pushQFile";
