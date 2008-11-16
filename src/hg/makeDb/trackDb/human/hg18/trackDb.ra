@@ -3570,3 +3570,29 @@ type bed 3
     noInherit on
     configurable on
     priority 23
+
+track multiz44way
+shortLabel 44-way Cons
+longLabel Vertebrate Multiz Alignment & PhastCons Conservation (44 Species)
+irows on
+summary multiz44waySummary
+# frames multiz44wayFrames
+# wiggle phastCons44wayPlacMammal Mammal Placental_Mammal phastCons44way Vertebrate Vertebrate
+spanList 1
+maxHeightPixels 100:40:11
+autoScaleDefault Off
+windowingFunction mean
+group compGeno
+priority 103.3
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+speciesCodonDefault hg18
+speciesGroups Primate Placental_Mammal Vertebrate
+sGroup_Primate gorGor1 panTro2 ponAbe2 rheMac2 calJac1 tarSyr1 otoGar1 micMur1
+sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 sorAra1 eriEur1 canFam2 felCat3 equCab2 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 dasNov2 choHof1 loxAfr2 echTel1 proCap1
+sGroup_Vertebrate monDom4 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 danRer5 tetNig1 fr2 gasAcu1 oryLat2 petMar1
+speciesDefaultOff gorGor1 panTro2 ponAbe2 calJac1 tarSyr1 otoGar1 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 dasNov2 choHof1 echTel1 loxAfr2 taeGut1 proCap1 danRer5 tetNig1 fr2 oryLat2 petMar1
+itemFirstCharCase noChange
+treeImage phylo/hg18_44way.gif
