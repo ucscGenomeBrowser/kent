@@ -24302,7 +24302,7 @@ chmod 755 makeWig.sh
 # .............. I have not loaded the tags !!!
 
 #########################################################################
-## 44-Way Multiz (WORKING - 2008-11-10 - Hiram)
+## 44-Way Multiz (DONE - 2008-11-10,15 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/hg18/bed/multiz44way
     cd /hive/data/genomes/hg18/bed/multiz44way
@@ -24456,7 +24456,6 @@ close (FH);
     mafSplitPos -minGap=50000 hg18 10 mafSplit.bed
 
     for G in `sed -e "s/hg18 //" species.list`
-    for G in danRer5 oryLat2
 do
     echo -n "working ${G} ..."
     rm -fr mafSplit/${G}
@@ -24502,17 +24501,17 @@ set result = $2
 set run = `pwd`
 set tmp = $run/tmp/$db/multiz.$c
 set pairs = /hive/data/genomes/hg18/bed/multiz44way/mafSplit
-rm -fr $tmp
-mkdir -p $tmp
-cp -p ../../tree.nh ../../species.list $tmp
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
 pushd $tmp
 foreach s (`sed -e "s/ $db//" species.list`)
     set in = $pairs/$s/$c.maf
     set out = $db.$s.sing.maf
     if (-e $in.gz) then
-        zcat $in.gz > $out
+        /bin/zcat $in.gz > $out
     else if (-e $in) then
-        cp -p $in $out
+        /bin/cp -p $in $out
     else
         echo "##maf version=1 scoring=autoMZ" > $out
     endif
@@ -24520,11 +24519,11 @@ end
 set path = ($run/penn $path); rehash
 $run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
 popd
-rm -f $result
-cp -p $tmp/$c.maf $result
-rm -fr $tmp
-rmdir --ignore-fail-on-non-empty $run/tmp/$db
-rmdir --ignore-fail-on-non-empty $run/tmp
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $run/tmp/$db
+/bin/rmdir --ignore-fail-on-non-empty $run/tmp
 '_EOF_'
 # << happy emacs
     chmod +x autoMultiz.csh
@@ -24542,6 +24541,7 @@ rmdir --ignore-fail-on-non-empty $run/tmp
     #	of memory usage, so, tell parasol to limit the number of jobs per
     #	node to avoid thrashing
     para -ram=6g push
+    #	8 jobs were finished manually on hgwdev, kolossus and memk nodes
 XXXX - running 2008-11-12 - Wed Nov 12 15:29:39 PST 2008
 
 # Completed: 792 of 792 jobs
@@ -24556,19 +24556,25 @@ XXXX - running 2008-11-12 - Wed Nov 12 15:29:39 PST 2008
     #	eliminate duplicate comments
     ssh hgwdev
     cd /hive/data/genomes/hg18/bed/multiz44way/splitRun
-    grep "^##maf version" maf/0/0/scaf11300.maf \
-	| sort -u > hg18.44way.maf
-    for F in `find ./maf -depth -type f`
+    mkdir ../maf
+    #	the sed edits take out partitioning name information from the comments
+    #	so the multiple parts will condense to smaller number of lines
+    #	this takes almost 2 hours of time, resulting in a bit over 150 Gb,
+    #	almost all chrom files over 1 Gb, up to almost 10 Gb for chr2
+    #	HOWEVER, this is actually not necessary to maintain these comments,
+    #	they are lost during the mafAddIRows
+    ls maf | sed -e "s/hg18_//; s/\..*//" | sort -u | while read C
 do
-    grep -h "^#" "${F}" | egrep -v "maf version=1|eof maf" \
-	| sed -e "s#/_MZ_[^ ]* # #g; s#__[0-9]##g"
-done | sort -u >> hg18.44way.maf
-    for F in `find ./maf -depth -type f`
-do
-    grep -v -h "^#" "${F}"
-done >> hg18.44way.maf
-    grep "^##eof maf" maf/0/0/scaf11300.maf \
-	| sort -u >> hg18.44way.maf
+    echo "==========  $C  =============="
+    rm -f ../maf/${C}.maf.gz
+    head -q -n 1 maf/hg18_${C}.*.maf | sort -u > ../maf/${C}.maf
+    grep -h "^#" maf/hg18_${C}.*.maf | egrep -v "maf version=1|eof maf" | \
+        sed -e "s#${C}.[0-9][0-9]*#${C}#g; s#_MZ_[^ ]* # #g;" \
+        | sort -u >> ../maf/${C}.maf
+    grep -h -v "^#" `ls maf/hg18_${C}.*.maf | sort -t. -k2,2n` \
+        >> ../maf/${C}.maf
+    tail -q -n 1 maf/hg18_${C}.*.maf | sort -u >> ../maf/${C}.maf
+done
 
     # load tables for a look
     ssh hgwdev
@@ -24597,10 +24603,12 @@ done >> hg18.44way.maf
     cd /hive/data/genomes/hg18/bed/multiz44way/anno
     mkdir maf run
 
-    #	these actually already all exist from previous multiple alignments
+    #	most of these will already exist from previous multiple alignments
+    #	remove the echo from in front of the twoBitInfo command to get them
+    #	to run if this loop appears to be correct
     for DB in `cat ../species.list`
 do
-    CDIR="/cluster/data/${DB}"
+    CDIR="/hive/data/genomes/${DB}"
     if [ ! -f ${CDIR}/${DB}.N.bed ]; then
 	echo "creating ${DB}.N.bed"
 	echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
@@ -24611,164 +24619,74 @@ done
 
     cd run
     rm -f nBeds sizes
-    for DB in `sed -e "s/ hg18//" ../../species.list`
+    for DB in `sed -e "s/hg18 //" ../../species.list`
 do
     echo "${DB} "
-    ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
     echo ${DB}.bed  >> nBeds
-    ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
     echo ${DB}.len  >> sizes
 done
 
+    #	the annotation step requires large memory, run on memk nodes
     ssh memk
-    #	need to split up the single maf file into individual
-    #	per-scaffold maf files to run annotation on
-    mkdir /hive/data/genomes/hg18/bed/multiz44way/anno/splitMaf
-    cd /hive/data/genomes/hg18/bed/multiz44way/anno/splitMaf
-    #	create bed files to list approximately 112 scaffolds in
-    #	a single list, approximately 64 lists
-    cat << '_EOF_' > mkBedLists.pl
-#!/usr/bin/env perl
-
-use strict;
-use warnings;
-
-my $bedCount = 0;
-my $i = 0;
-
-my $bedFile = sprintf("file_%d.bed", $bedCount);
-
-open (BF,">$bedFile") or die "can not write to $bedFile $!";
-
-open (FH,"</hive/data/genomes/hg18/chrom.sizes") or
-        die "can not read /hive/data/genomes/hg18/chrom.sizes $!";
-while (my $line = <FH>) {
-    chomp $line;
-    if ( (($i + 1) % 111) == 0 )  {
-        printf "%s\n", $line;
-        close (BF);
-        ++$bedCount;
-        $bedFile = sprintf("file_%d.bed", $bedCount);
-        open (BF,">$bedFile") or die "can not write to $bedFile $!";
-    }
-    ++$i;
-    my ($chr, $size) = split('\s+',$line);
-    printf BF "%s\t0\t%d\t%s\n", $chr, $size, $chr;
-}
-close (FH);
-'_EOF_'
-    # << happy emacs
-    chmod +x mkBedLists.pl
-    ./mkBedLists.pl
-
-    #	now, run a mafsInRegion on each one of those lists
-    cat << '_EOF_' > runOne
-#!/bin/csh -fe
-set runDir = `pwd`
-set resultDir = $1
-set bedFile = $resultDir.bed
-mkdir -p $resultDir
-mkdir -p /scratch/tmp/hg18/$resultDir
-pushd /scratch/tmp/hg18/$resultDir
-mafsInRegion $runDir/$bedFile -outDir . \
-	/hive/data/genomes/hg18/bed/multiz44way/splitRun/hg18.44way.maf
-popd
-rsync -q -a /scratch/tmp/hg18/$resultDir/ ./$resultDir/
-rm -fr /scratch/tmp/hg18/$resultDir
-rmdir --ignore-fail-on-non-empty /scratch/tmp/hg18
-'_EOF_'
-    # << happy emacs
-    chmod +x runOne
-
-    cat << '_EOF_' > template
-#LOOP
-./runOne $(root1)
-#ENDLOOP
-'_EOF_'
-    # << happy emacs
-
-    ls file*.bed > runList
-    gensub2 runList single template jobList
-    para create jobList
-    para try ... check ... push ... etc
-# Completed: 65 of 65 jobs
-# CPU time in finished jobs:       2615s      43.58m     0.73h    0.03d  0.000 y
-# IO & Wait Time:                 11436s     190.60m     3.18h    0.13d  0.000 y
-# Average job time:                 216s       3.60m     0.06h    0.00d
-# Longest finished job:             493s       8.22m     0.14h    0.01d
-# Submission to last job:          3875s      64.58m     1.08h    0.04d
-
     cd /hive/data/genomes/hg18/bed/multiz44way/anno/run
-
-    cat << '_EOF_' > doAnno.csh
-#!/bin/csh -ef
-set outDir = ../maf/$2
-set result = $3
-set input = $1
-mkdir -p $outDir
-cat $input | \
-nice mafAddIRows -nBeds=nBeds stdin /hive/data/genomes/hg18/hg18.2bit $result
-'_EOF_'
-    # << happy emacs
-    chmod +x doAnno.csh
-
+    ls ../../maf | sed -e "s/.maf//" > chr.list
     cat << '_EOF_' > template
 #LOOP
-./doAnno.csh $(path1) $(lastDir1) {check out line+ ../maf/$(lastDir1)/$(root1).maf}
+./anno.csh $(root1) {check out line+ ../maf/$(root1).maf}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
 
-    find ../splitMaf -type f -name "*.maf" > maf.list
-    gensub2 maf.list single template jobList
+    cat << '_EOF_' > anno.csh
+#!/bin/csh -fe
+
+set inMaf = ../../maf/$1.maf
+set outMaf = ../maf/$1.maf
+rm -f $outMaf
+mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/hg18/hg18.2bit $outMaf
+'_EOF_'
+    # << happy emacs
+    chmod +x anno.csh
+
+    gensub2 chr.list single template jobList
     para create jobList
-    para try ... check ... push ... etc.
-# Completed: 5542 of 5542 jobs
-# CPU time in finished jobs:        725s      12.09m     0.20h    0.01d  0.000 y
-# IO & Wait Time:                 37945s     632.41m    10.54h    0.44d  0.001 y
-# Average job time:                   7s       0.12m     0.00h    0.00d
-# Longest finished job:              53s       0.88m     0.01h    0.00d
-# Submission to last job:           243s       4.05m     0.07h    0.00d
+    #	specify lots of ram to get one job per node
+    para -ram=30g push
 
     ssh hgwdev
-    cd /hive/data/genomes/hg18/bed/multiz44way/anno
-    grep "^##maf version" maf/file_0/chr1.maf \
-	| sort -u > hg18.44way.maf
-    find ./maf -type f -depth -name "*.maf" | while read F
-do
-    grep -v -h "^#" "${F}"
-done >> hg18.44way.maf
-    echo "##eof maf" >> hg18.44way.maf
-
-    ssh hgwdev
-    cd /hive/data/genomes/hg18/bed/multiz44way/anno
-    mkdir -p /gbdb/hg18/multiz44way/anno
-    ln -s `pwd`/hg18.44way.maf \
-                /gbdb/hg18/multiz44way/anno/multiz44way.maf
+    rm -fr /gbdb/hg18/multiz44way/maf
+    mkdir /gbdb/hg18/multiz44way/maf
+    cd /hive/data/genomes/hg18/bed/multiz44way/anno/maf
+    ln -s `pwd`/*.maf /gbdb/hg18/multiz44way/maf/
     #	by loading this into the table multiz44way, it will replace the
     #	previously loaded table with the unannotated mafs
     #	huge temp files are made, do them on local disk
-    cd /scratch/tmp
-    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/hg18/multiz44way/anno \
-                hg18 multiz44way
-    #	Loaded 1620199 mafs in 1 files from /gbdb/hg18/multiz44way/anno
-    #	real    3m19.209s
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/hg18/multiz44way/maf hg18 multiz44way
+    #	Loaded 35154852 mafs in 49 files from /gbdb/hg18/multiz44way/maf
+    #	real    71m5.594s
 
-    #	normally filter this for chrom size > 1,000,000 and only load
-    #	those chroms.  But this is a scaffold assembly, load everything:
-    time nice -n +19 hgLoadMafSummary hg18 -minSize=30000 -mergeGap=1500 \
-	-maxSize=200000  multiz44waySummary \
-	    /gbdb/hg18/multiz44way/anno/multiz44way.maf
-    #	Created 353577 summary blocks from 2852890 components and 1428024 mafs
-    #	from /gbdb/hg18/multiz44way/anno/multiz44way.maf
-    #	real    3m49.692s
+    time nice -n +19 cat /gbdb/hg18/multiz44way/maf/*.maf \
+	| hgLoadMafSummary hg18 -minSize=30000 -mergeGap=1500 \
+                 -maxSize=200000  multiz44waySummary stdin
+    #	Created 8514078 summary blocks from 604683213 components
+    #	and 35125649 mafs from stdin
+    #	real    130m55.115s
+    #	user    71m37.409s
+    #	sys     8m5.110s
 
     #	by loading this into the table multiz44waySummary, it will replace
     #	the previously loaded table with the unannotated mafs
-    #	remove the multiz44way*.tab files in this /scratch/tmp directory
+    #	remove the multiz44way*.tab files in this /data/tmp directory
+# -rw-rw-r--   1 1949221892 Nov 15 14:04 multiz44way.tab
+# -rw-rw-r--   1  417994189 Nov 15 20:57 multiz44waySummary.tab
+    wc -l multiz44way*.tab
+    #	33964377 multiz44way.tab
+    #	 8514078 multiz44waySummary.tab
+    #	42478455 total
     rm multiz44way*.tab
-    #	And, you can remove the previously loaded non-annotated maf file link:
-    rm /gbdb/hg18/multiz44way/maf/multiz44way.maf
-    rmdir /gbdb/hg18/multiz44way/maf
 
 #########################################################################
