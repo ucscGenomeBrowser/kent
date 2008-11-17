@@ -8,7 +8,7 @@
 #include "genePred.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: genePredToGtf.c,v 1.16 2008/09/13 00:47:08 markd Exp $";
+static char const rcsid[] = "$Id: genePredToGtf.c,v 1.17 2008/11/17 22:35:20 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -29,6 +29,12 @@ errAbort(
   "Note: use refFlat or extended genePred table to include geneName\n"
   );
 }
+
+/* FIXME:
+ *   - right now, if not using -honorCdsStat and the CDS is not a multiple of
+ *     three, a start_codon is written but not a stop_codon.  This is
+ *     deceptive.  Should really not output either, maybe add a comment.
+ */
 
 static struct optionSpec options[] = {
    {"utr", OPTION_BOOLEAN},
