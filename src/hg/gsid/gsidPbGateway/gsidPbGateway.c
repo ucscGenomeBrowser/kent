@@ -49,6 +49,7 @@ puts("<BR><B>Enter a VAX003 or VAX004 protein ID: </B>");
 puts("<input type=\"text\" name=\"proteinID\" >\n");
 puts("<INPUT TYPE=SUBMIT>");
 
+puts("<BR><BR>For example: p1.T-001c1");
 puts("</FORM>\n"
 );
 
