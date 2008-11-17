@@ -37,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.381 2008/11/17 21:25:59 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.382 2008/11/17 23:36:17 braney Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -260,21 +260,6 @@ safef(query, sizeof(query), "select name from dbDbArch where name = '%s'",
 res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 hDisconnectCentral(&conn);
 return res;
-}
-
-boolean hDbIsFound(char *database)
-/* Function to check if we can connect to database */
-{
-struct sqlConnection *testCon = sqlMayConnect(database);
-boolean dbIsFound = FALSE;
-
-if (testCon != NULL)
-    {
-    dbIsFound = TRUE;
-    sqlDisconnect(&testCon);
-    }
-
-return dbIsFound;
 }
 
 boolean hDbExists(char *database)
