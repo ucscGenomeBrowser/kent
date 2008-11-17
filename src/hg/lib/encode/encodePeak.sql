@@ -14,7 +14,7 @@ CREATE TABLE encodePeak (
     signalValue float not null,	# Measurement of average enrichment for the region
     pValue float not null,	# Statistical significance of signal value (-log10)
     qValue float not null,	# Statistical significance normalized/corrected across datasets. Use -1 if no qValue is assigned.
-    peak int not null,	# Point-source called for this peak; 0-based offset from chromStart (use -1 if no point-source called)
+    peak int not null,	# Point source called for this peak
     blockCount int unsigned not null,	# Number of blocks
     blockSizes longblob not null,	# Comma separated list of block sizes
     blockStarts longblob not null,	# Start positions relative to chromStart
