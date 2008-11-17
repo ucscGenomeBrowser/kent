@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.105 2008/11/13 23:51:25 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.106 2008/11/17 19:41:20 mikep Exp $
 
 use warnings;
 use strict;
@@ -330,9 +330,9 @@ sub validateBed {
     my $fh = openUtil($path, $file);
     while(<$fh>) {
         chomp;
+        $line++;
         next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
         my @fields = split /\s+/;
-        $line++;
         my $fieldCount = @fields;
         next if(!$fieldCount);
         my $prefix = "Failed bed validation, file '$file'; line $line:";
@@ -377,8 +377,9 @@ sub validateBedGraph {
     my $fh = openUtil($path, $file);
     while(<$fh>) {
         chomp;
-        my @fields = split /\s+/;
         $line++;
+        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
+        my @fields = split /\s+/;
         my $fieldCount = @fields;
         next if(!$fieldCount);
         my $prefix = "Failed bedGraph validation, file '$file'; line $line:";
@@ -473,6 +474,7 @@ sub validateTagAlign
     my $fh = openUtil($path, $file);
     while(<$fh>) {
         $line++;
+        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
 	# MJP: for now, allow colorspace sequences as well as DNA + dot
         if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[0-3ATCGN\.]+\s+\d+\s+[+-]$/)) {
             chomp;
@@ -494,6 +496,7 @@ sub validateNarrowPeak
     doTime("beginning validateNarrowPeak") if $opt_timing;
     while(<$fh>) {
         $line++;
+        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
         if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+$floatRegEx\s+$floatRegEx\s+$floatRegEx\s+[+-]?\d+$/)) {
             chomp;
             return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validateNarrowPeak]");
@@ -514,6 +517,7 @@ sub validateBroadPeak
     doTime("beginning validateBroadPeak") if $opt_timing;
     while(<$fh>) {
         $line++;
+        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
         if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+$floatRegEx\s+$floatRegEx\s+$floatRegEx$/)) {
             chomp;
             return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validateBroadPeak]");
@@ -534,6 +538,7 @@ sub validateGappedPeak
     doTime("beginning validateGappedPeak") if $opt_timing;
     while(<$fh>) {
         $line++;
+        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
         if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+\d+\s+\d+\s+\S+\s+\d+\s+\S+\s+\S+\s+$floatRegEx\s+$floatRegEx\s+$floatRegEx$/)) {
             chomp;
             return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validateGappedPeak]");
