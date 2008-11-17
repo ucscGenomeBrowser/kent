@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.141 2008/10/28 13:46:14 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.142 2008/11/17 00:27:20 braney Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -2191,7 +2191,9 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
     /* TODO: leave lower case in to indicate masking ?
        * NOTE: want to make sure that all sequences are soft-masked
        * if we do this */
-    //alignSeqToUpperN(line);
+    /* HAVE DONE:  David doesn't like lower case by default
+     * TODO: casing based on quality values ?? */
+    alignSeqToUpperN(line);
     if (complementBases)
         {
 	complement(line, strlen(line));
