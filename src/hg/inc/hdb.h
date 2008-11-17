@@ -98,9 +98,6 @@ boolean hArchiveDbExists(char *database);
 /* Function to check if this is a valid db name in the dbDbArch table 
    of archived databases. */
 
-boolean hDbIsFound(char *database);
-/* Function to check if we can connect to database */
-
 boolean hDbExists(char *database);
 /* Function to check if this is a valid db name */
 
