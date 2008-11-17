@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.15 2008/01/15 00:26:54 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.16 2008/11/17 21:58:20 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -356,29 +356,33 @@ sub makeUnmasked2bit {
   # Traditionally we have split to 5M in prep for RM -- but let the RM take
   # care of its own splitting (better yet, make it use 2bit specs).
 
+  my $acat = "cat";
+  my $fcat = "cat";
+  foreach my $file (`ls $fastaFiles 2> /dev/null`) {
+    if ($file =~ m/\.gz$/) {
+      $fcat = "zcat";
+      last;
+    }
+  }
+  foreach my $file (`ls $agpFiles 2> /dev/null`) {
+    if ($file =~ m/\.gz$/) {
+      $acat = "zcat";
+      last;
+    }
+  }
   if ($gotAgp) {
     $bossScript->add(<<_EOF_
 # Get sorted IDs from fasta sequence files:
-if (`ls $fastaFiles | grep \.gz | wc -l`) then
-  set fcat = zcat
-else
-  set fcat = cat
-endif
 set fastaIds = `mktemp -p /tmp makeGenomeDb.fastaIds.XXXXXX`
-\$fcat $fastaFiles | grep '^>' | perl -wpe 's/^>(\\S+).*/\$1/' | sort \\
+$fcat $fastaFiles | grep '^>' | perl -wpe 's/^>(\\S+).*/\$1/' | sort \\
   > \$fastaIds
 
 # Get sorted "big" (1st column) and "little" (6th column) IDs from AGP files:
-if (`ls $agpFiles | grep \.gz | wc -l`) then
-  set acat = zcat
-else
-  set acat = cat
-endif
 set agpBigIds = `mktemp -p /tmp makeGenomeDb.agpIds.XXXXXX`
-\$acat $agpFiles | awk '{print \$1;}' | sort -u \\
+$acat $agpFiles | awk '{print \$1;}' | sort -u \\
   > \$agpBigIds
 set agpLittleIds = `mktemp -p /tmp makeGenomeDb.agpIds.XXXXXX`
-\$acat $agpFiles | awk '\$5 != "N" {print \$6;}' | sort -u \\
+$acat $agpFiles | awk '\$5 != "N" {print \$6;}' | sort -u \\
   > \$agpLittleIds
 
 # Compare fasta IDs to first and sixth columns of AGP:
@@ -389,8 +393,8 @@ set diffLittleCount = `comm -3 \$fastaIds \$agpLittleIds | wc -l`
 # If AGP "little" IDs match sequence IDs, assemble sequence with agpToFa.
 if (\$diffLittleCount == 0) then
   set agpTmp = `mktemp -p /tmp makeGenomeDb.agp.XXXXXX`
-  \$acat $agpFiles > \$agpTmp
-  \$fcat $fastaFiles \\
+  $acat $agpFiles > \$agpTmp
+  $fcat $fastaFiles \\
   | agpToFa -simpleMultiMixed \$agpTmp all stdout stdin \\
   | faToTwoBit -noMask stdin $chrM $db.unmasked.2bit
   rm -f \$agpTmp
@@ -433,7 +437,7 @@ _EOF_
 
 if (`wc -l < chrom.sizes` < 1000) then
   # Install per-chrom .agp files for download.
-  \$acat $agpFiles \\
+  $acat $agpFiles \\
   | splitFileByColumn -col=1 -ending=.agp stdin $topDir -chromDirs
 endif
 _EOF_
@@ -508,18 +512,20 @@ sub checkAgp {
     my $allAgp = "$topDir/$db.agp";
     # If we added chrM from GenBank, exclude it from fasta:
     my $exclude = ($mitoAcc eq 'none') ? "" : "-exclude=chrM";
+    my $acat = "cat";
+    foreach my $file (`ls $agpFiles 2> /dev/null`) {
+	if ($file =~ m/\.gz$/) {
+	    $acat = "zcat";
+	    last;
+	}
+    }
     $bossScript->add(<<_EOF_
 # When per-chrom AGP and fasta files are given, it would be much more
 # efficient to run this one chrom at a time.  However, since the filenames
 # are arbitrary, I'm not sure how to identify the pairings of AGP and fa
 # files.  So cat 'em all together and check everything at once:
 
-if (`ls $agpFiles | grep \.gz | wc -l`) then
-  set acat = zcat
-else
-  set acat = cat
-endif
-\$acat $agpFiles | sort -k1,1 -k2n,2n > $allAgp
+$acat $agpFiles | sort -k1,1 -k2n,2n > $allAgp
 
 set result = `checkAgpAndFa $exclude $allAgp $db.unmasked.2bit | tail -1`
 

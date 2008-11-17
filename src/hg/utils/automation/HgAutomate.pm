@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.16 2008/09/19 04:36:22 angie Exp $
+# $Id: HgAutomate.pm,v 1.17 2008/11/17 21:58:19 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -96,6 +96,9 @@ sub choosePermanentStorage {
 	$bestRaid = $raid;
       }
     }
+  }
+  if (! defined $bestRaid) {
+    $bestRaid = "/hive/data/genomes";
   }
   confess "Could not df any /cluster/store's" if (! defined $bestRaid);
   return $bestRaid;
