@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1472 2008/11/17 21:30:23 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1473 2008/11/17 23:37:35 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3497,7 +3497,7 @@ struct hTableInfo *hti = NULL;
 char *tbl = cgiUsualString("table", "");
 char rootName[256];
 char parsedChrom[32];
-boolean dbIsFound = hDbIsFound(database); 
+boolean dbIsFound = sqlDatabaseExists(database); 
 if (dbIsFound)
     {
     hParseTableName(database, tbl, rootName, parsedChrom);
@@ -4014,7 +4014,7 @@ char *pos = NULL;
 char *chrom = NULL;
 int start = 0;
 int end = 0;
-boolean dbIsFound = hDbIsFound(database); 
+boolean dbIsFound = sqlDatabaseExists(database); 
 
 if (sameString(action, EXTENDED_DNA_BUTTON))
     {
@@ -20185,7 +20185,7 @@ scientificName = hScientificName(database);
 protDbName = hPdbFromGdb(database);
 protDbConn = sqlConnect(protDbName);
 
-boolean dbIsFound = hDbIsFound(database);
+boolean dbIsFound = sqlDatabaseExists(database);
 
 if (dbIsFound)
     seqName = hgOfficialChromName(database, cartString(cart, "c"));
