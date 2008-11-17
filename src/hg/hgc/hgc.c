@@ -219,7 +219,7 @@
 #include "gbWarn.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1471 2008/11/14 16:00:02 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1472 2008/11/17 21:30:23 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3497,8 +3497,8 @@ struct hTableInfo *hti = NULL;
 char *tbl = cgiUsualString("table", "");
 char rootName[256];
 char parsedChrom[32];
-boolean dbIsActive = hDbIsActive(database); 
-if (dbIsActive)
+boolean dbIsFound = hDbIsFound(database); 
+if (dbIsFound)
     {
     hParseTableName(database, tbl, rootName, parsedChrom);
     hti = hFindTableInfo(database, seqName, rootName);
@@ -3541,10 +3541,10 @@ if (!hIsGsidServer())
 hgSeqOptionsHtiCart(hti,cart);
 puts("<P>");
 cgiMakeButton("submit", "get DNA");
-if (dbIsActive)
+if (dbIsFound)
     cgiMakeButton("submit", EXTENDED_DNA_BUTTON);
 puts("</FORM><P>");
-if (dbIsActive)
+if (dbIsFound)
 puts("Note: The \"Mask repeats\" option applies only to \"get DNA\", not to \"extended case/color options\". <P>");
 }
 
@@ -4014,7 +4014,7 @@ char *pos = NULL;
 char *chrom = NULL;
 int start = 0;
 int end = 0;
-boolean dbIsActive = hDbIsActive(database); 
+boolean dbIsFound = hDbIsFound(database); 
 
 if (sameString(action, EXTENDED_DNA_BUTTON))
     {
@@ -4028,7 +4028,7 @@ if (tbl[0] == 0)
     {
     itemCount = 1;
     if ( NULL != (pos = stripCommas(cartOptionalString(cart, "getDnaPos"))) &&
-         hgParseChromRange((dbIsActive ? database : NULL), pos, &chrom, &start, &end))
+         hgParseChromRange((dbIsFound ? database : NULL), pos, &chrom, &start, &end))
         {
         hgSeqRange(database, chrom, start, end, '?', "dna");
         }
@@ -20185,9 +20185,9 @@ scientificName = hScientificName(database);
 protDbName = hPdbFromGdb(database);
 protDbConn = sqlConnect(protDbName);
 
-boolean dbIsActive = hDbIsActive(database); 
+boolean dbIsFound = hDbIsFound(database);
 
-if (dbIsActive)
+if (dbIsFound)
     seqName = hgOfficialChromName(database, cartString(cart, "c"));
 else 
     seqName = cartString(cart, "c");
@@ -20216,7 +20216,7 @@ if (isCustomTrack(track))
 	    break;
     }
 
-if ((!isCustomTrack(track) && dbIsActive)  || 
+if ((!isCustomTrack(track) && dbIsFound)  || 
 	((ct!= NULL) && (ct->dbTrackType != NULL) &&
 	    sameString(ct->dbTrackType, "maf")))
     {
