@@ -66,4 +66,72 @@ dbDbSpeciesDir rat
     # << happy emacs
 
     #	this was run manually step by step, the results were not recorded
-    makeGenomeDb.pl rn5.config.ra
+    makeGenomeDb.pl rn5.config.ra > makeGenomeDb.log 2>&1
+    #	real    41m44.090s
+
+#########################################################################
+## Repeat Masker (DONE - 2008-11-14 - Hiram)
+    screen	# to manage this several day job
+    mkdir /hive/data/genomes/rn5/bed/repeatMasker
+    cd /hive/data/genomes/rn5/bed/repeatMasker
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	-workhorse=hgwdev -bigClusterHub=swarm \
+	-buildDir=`pwd` rn5 > do.log 2>&1 &
+    #	real    475m44.607s
+    cat faSize.rmsk.txt 
+    #	3613304564 bases (785910941 N's 2827393623 real 1586542816 upper
+    #	1240850807 lower) in 23 sequences in 1 files
+    #	%34.34 masked total, %43.89 masked real
+
+#########################################################################
+# SIMPLE REPEATS TRF (DONE - 2008-11-14,17 - Hiram)
+    screen # use a screen to manage this job
+    mkdir /hive/data/genomes/rn5/bed/simpleRepeat
+    cd /hive/data/genomes/rn5/bed/simpleRepeat
+    # 
+    time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-buildDir=/cluster/data/rn5/bed/simpleRepeat rn5 > do.log 2>&1 &
+    #	real    30m4.231s
+    #	having trouble with one of them: chrM - has no result ...
+    $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+	-continue=filter -buildDir=/cluster/data/rn5/bed/simpleRepeat \
+	rn5 > filter.log 2>&1
+
+    cat fb.simpleRepeat
+    #	90043163 bases of 3372561689 (2.670%) in intersection
+
+    #	after RM run is done, add this mask:
+    cd /hive/data/genomes/rn5
+    rm rn5.2bit
+    twoBitMask rn5.rmsk.2bit -add bed/simpleRepeat/trfMask.bed rn5.2bit
+    #	can safely ignore warning about >=13 fields in bed file
+
+    twoBitToFa rn5.2bit stdout | faSize stdin > rn5.2bit.faSize.txt
+# 3613304564 bases (785910941 N's 2827393623 real 1584580949 upper 1242812674
+# lower) in 23 sequences in 1 files
+# %34.40 masked total, %43.96 masked real
+
+    #	link to gbdb
+    ln -s `pwd`/rn5.2bit /gbdb/rn5
+
+###########################################################################
+# prepare for kluster runs (DONE _ 2008-11-17 - Hiram)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	rn5: 2827393623
+    # thus: 1024 * 2827393623/2881421696 = 1004
+    #	rounding up to 1100 for a more conservative masking
+    cd /hive/data/genomes/rn5
+    time blat rn5.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=rn5.11.ooc -repMatch=1100
+    #	Wrote 31521 overused 11-mers to rn5.11.ooc
+    #	real    2m9.494s
+
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/rn5
+    cp -p rn5.2bit chrom.sizes rn5.11.ooc \
+	/hive/data/staging/data/rn5
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
+
+###########################################################################
