@@ -431,6 +431,10 @@ termId GO:0005730
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005730
 
 # RNA extracts
+term total
+type rnaExtract
+description Total RNA from whole cell
+
 term short
 type rnaExtract
 description RNA shorter than 200 nt
