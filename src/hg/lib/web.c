@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.154 2008/11/17 21:26:58 braney Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.155 2008/11/17 23:36:32 braney Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -93,7 +93,7 @@ boolean isEncode = FALSE;
 boolean isGsid   = hIsGsidServer();
 if (db == NULL)
     db = hDefaultDb();
-boolean dbIsFound = hDbIsFound(db);
+boolean dbIsFound = sqlDatabaseExists(db);
 
 if (scriptName == NULL)
     scriptName = cloneString("");
