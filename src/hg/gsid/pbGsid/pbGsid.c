@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGsid.c,v 1.5 2008/09/08 17:20:03 markd Exp $";
+static char const rcsid[] = "$Id: pbGsid.c,v 1.6 2008/11/18 23:51:12 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -197,7 +197,7 @@ doTracks(proteinID, mrnaID, protSeq, &iypos, psOutput);
 if (!hTableExists(database, "pbStamp")) goto histDone; 
 
 pbScale = 3;
-pixWidth = 765;
+pixWidth = 520;
 insideWidth = pixWidth-gfxBorder;
 
 pixHeight = 350;
