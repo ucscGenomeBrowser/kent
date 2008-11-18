@@ -15499,6 +15499,90 @@ cat > listPp.csh << 'EOF'
 # Submission to last job:          1528s      25.47m     0.42h    0.02d
 
     ########################################################################
+    # phyloP scoring method experiments on chr7   (2008-11-11 kate)
+
+    ssh pk
+    cd /cluster/data/hg18/bed/multiz28way/cons
+    mkdir -p run.phyloPMethod
+    cd run.phyloPMethod
+
+cat > doPhyloP.csh << 'EOF'
+    set method = $1
+    set f = $2
+    set out = $3
+    set c = $f:r:r
+    set n = $f:r:e
+    set tmp = /scratch/tmp/$f
+    mkdir -p $tmp
+    cp -p /san/sanvol1/scratch/hg18/multiz28way/phyloP/ss/$c/$n/$f.ss ../tree.mod $tmp
+    pushd $tmp > /dev/null
+
+    # Built phast from CornellCVS on 11/11/08 in /cluster/bin/phast.build.
+    # Symlinked the bin to /cluster/bin/phast.2008
+    set PHASTBIN = /cluster/bin/phast.2008-11-13
+    # PHAST version is 0.9.9.8b
+    $PHASTBIN/phyloP --method $method --mode CONACC --wig-scores --chrom $c \
+                -i SS tree.mod $f.ss > $f.wig
+
+    popd > /dev/null
+    mkdir -p $out:h
+    mv $tmp/$f.wig $out
+    rm -fr $tmp
+'EOF'
+    # Create list of chunks (just chr7 for now)
+    pushd /san/sanvol1/scratch/hg18/multiz28way/phyloP/ss
+    ls chr7/*/chr7.*.ss | sed -e 's/.ss$//' -e 's/^\.\///' > \
+        /cluster/data/hg18/bed/multiz28way/cons/run.phyloPMethod/in.list
+
+    # setup run
+    mkdir -p all
+    cd all
+    cp ../../28way.mod tree.mod
+    mkdir -p SCORE
+    cd SCORE
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat > template << 'EOF'
+#LOOP
+csh ../../doPhyloP.csh SCORE $(file1) {check out line+ /san/sanvol1/scratch/hg18/multiz28way/phyloPMethod/all/SCORE/$(path1).wig}
+#ENDLOOP
+'EOF'
+
+    # << happy emacs
+    gensub2 ../../in.list single template jobList
+    para create jobList
+    para try
+    para check
+    para push
+
+    # Completed: 1552 of 1552 jobs
+    # CPU time in finished jobs:      15411s     256.84m     4.28h    0.18d  0.000 y
+    # IO & Wait Time:                  7678s     127.97m     2.13h    0.09d  0.000 y
+    # Average job time:                  15s       0.25m     0.00h    0.00d
+    # Longest finished job:              29s       0.48m     0.01h    0.00d
+    # Submission to last job:           236s       3.93m     0.07h    0.00d
+    # Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    cd ..
+    mkdir -p LRT
+    cd LRT
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat > template << 'EOF'
+#LOOP
+csh ../../doPhyloP.csh LRT $(file1) {check out line+ /san/sanvol1/scratch/hg18/multiz28way/phyloPMethod/all/LRT/$(path1).wig}
+#ENDLOOP
+'EOF'
+    # << happy emacs
+    gensub2 ../../in.list single template jobList
+    para create jobList
+    para try
+    para check
+    para push
+
+    ########################################################################
     # run new phyloP for contextual zooming
     ssh memk
     cd /cluster/data/hg18/bed/multiz28way/cons
@@ -15667,6 +15751,12 @@ cat > listPp.csh << 'EOF'
      0.900000 * 2940535
      1.000000 * 1383115
 
+    ############################################################################
+    # PhyloP experiments with new scoring methods:  LRT and SCORE, implemented in 2008
+    # Using new PHAST package (rebuilt from cornellCVS)
+    # chr7-only
+    # 2008-11-11 kate
+
 ############################################################################
 # DOWNLOADS FOR 28WAY (2007-05-30 kate)
 
@@ -15801,6 +15891,45 @@ cat > downloads4.csh << 'EOF'
     end
 'EOF'
     # EDIT README's to include reciprocal best chains & nets
+
+
+############################################################################
+# 28-way PhyloP downloads
+# 2008-10-21 kate
+
+    ssh kolossus
+    cd /san/sanvol1/scratch/hg18/multiz28way/phyloP
+cat > merge.csh << 'EOF'
+    set out = $1
+    rm -f *.lst
+    foreach c (`ls -d chr*`)
+        echo $c
+        touch $c.lst
+        foreach d (`ls -d $c/[1-9]* | sort -t/ -k2 -n`)
+            ls -1 $d/*.wig | sort -n -t\. -k3 >> $c.lst
+            xargs < $c.lst cat > $out/$c.wigFix
+        end
+    end
+'EOF'
+    # all species
+    cd all 
+    csh ../merge.csh /cluster/data/hg18/bed/multiz28way/cons/phyloP/all > merge.log
+
+    cd ../placental
+    csh ../merge.csh /cluster/data/hg18/bed/multiz28way/cons/phyloP/placental > merge.log
+
+    cd /cluster/data/hg18/bed/multiz28way/cons/phyloP
+   
+    # post to downloads
+    cd /usr/local/apache/htdocs/goldenPath/hg18
+    mkdir phyloP28way
+    cd phyloP28way
+    ln -s /cluster/data/hg18/bed/multiz28way/cons/phyloP/{all,placental} .
+
+    cd all
+    nice gzip $out/$c.wigFix
+    cd ../placental
+    nice gzip $out/$c.wigFix
 
 ############################################################################
 # Reload CCDS (ccdsInfo, ccdsGene, ccdsKgMap) (2007-03-02 markd)
