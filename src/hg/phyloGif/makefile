@@ -11,7 +11,9 @@ O = ${A}.o
 include ../../inc/cgi_build_rules.mk
 
 my:: compile
-	cp ${CGI_BIN}-${USER}/$A ${BINDIR}/
+	if [ -d "${BINDIR}" ]; then \
+	    cp ${CGI_BIN}-${USER}/$A ${BINDIR}/; \
+	fi
 
 compile: $O
 	${CC} $O ${MYLIBS} ${L}
