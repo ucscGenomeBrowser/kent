@@ -19,7 +19,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.46 2008/11/10 22:45:41 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.47 2008/11/18 00:58:47 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -995,6 +995,9 @@ if ((row = sqlNextRow(sr)) != NULL)
 	settings = row[2];
     char *description = getSetting(settings, "description");
     if (description == NULL) description = "";
+
+    dyStringPrintf(dyMessage, "<A HREF=\"../goldenPath/help/hgSessionHelp.html#Details\" "
+		   "TARGET=_BLANK>Session Details Help</A><P/>\n");
 
 #define highlightAccChanges "{ var b = document.getElementById('" hgsDoSessionChange "'); " \
                             "  if (b) { b.style.background = '#ff9999'; } }"
