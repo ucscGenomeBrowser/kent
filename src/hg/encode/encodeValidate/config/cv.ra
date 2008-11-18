@@ -402,6 +402,22 @@ vendorName Santa Cruz Biotech
 vendorId sc-5261 lot B2508
 orderUrl http://www.scbt.com/
 
+term IMP-1
+type ripAntibody
+antibodyDescription Goat monoclonal
+targetDescription IMP-1 RNA binding protein
+vendorName Santa Cruz Biotech
+vendorId sc-21027 lot I0607
+orderUrl http://www.scbt.com/
+
+term PABP
+type ripAntibody
+antibodyDescription Mouse monoclonal
+targetDescription PABP RNA binding protein
+vendorName Sigma Chemical Co.
+vendorId P 6246 lot 044K4810
+orderUrl http://www.sigmaaldrich.com/
+
 term SLBP
 type ripAntibody
 antibodyDescription Mouse monoclonal
