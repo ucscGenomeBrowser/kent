@@ -393,6 +393,23 @@ vendorName Santa Cruz Biotech
 vendorId sc-764
 orderUrl http://www.scbt.com/product.php?datasheet=764
 
+# ripAntibody - Tenenbaum RIP-chip / RIP-seq project
+term HuR/ELAV1
+type ripAntibody
+antibodyDescription Mouse monoclonal
+targetDescription HuR/ELAV1 RNA binding protein
+vendorName Santa Cruz Biotech
+vendorId sc-5261 lot B2508
+orderUrl http://www.scbt.com/
+
+term SLBP
+type ripAntibody
+antibodyDescription Mouse monoclonal
+targetDescription SLBP RNA binding protein
+vendorName ABR-Affinity Bioreagents
+vendorId MA156353 lot 7308-S2
+orderUrl http://www.bioreagents.com/
+
 # localization
 term cell
 type localization
