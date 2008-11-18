@@ -19,7 +19,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.47 2008/11/18 00:58:47 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.48 2008/11/18 20:18:35 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -374,8 +374,11 @@ if (isNotEmpty(userName))
 	dyStringAppend(js, "var si = document.getElementsByName('" hgsNewSessionName "'); ");
 	dyStringAppend(js, "if (si[0] && ( ");
 	for (sn = existingSessionNames;  sn != NULL;  sn = sn->next)
-	    dyStringPrintf(js, "si[0].value == '%s'%s",
-			   sn->name, (sn->next ? " || " : " )) { "));
+	    {
+	    dyStringPrintf(js, "si[0].value == ");
+	    dyStringQuoteString(js, '\'', sn->name);
+	    dyStringPrintf(js, "%s", (sn->next ? " || " : " )) { "));
+	    }
 	dyStringAppend(js, "return confirm('This will overwrite the contents of the existing "
 		       "session ' + si[0].value + '.  Proceed?'); ");
 	dyStringAppend(js, "}");
