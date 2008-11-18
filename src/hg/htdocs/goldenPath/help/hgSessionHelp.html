@@ -36,6 +36,7 @@
      <LI><A CLASS="toc" HREF="#Introduction">Introduction</A>
      <LI><A CLASS="toc" HREF="#Example">Some Simple Examples</A>
      <LI><A CLASS="toc" HREF="#Create">Creating a Session</A>
+     <LI><A CLASS="toc" HREF="#Details">Session Details</A>     
      <LI><A CLASS="toc" HREF="#Share">Sharing Sessions</A>
 <!--
      <UL>
@@ -103,7 +104,9 @@
    for at least 48 hours after the last time they are viewed.</A>
    The creation date of a session can be viewed in the Session
    Management menu. This date only reflects the inital creation of the
-   Session and is not updated when sessions are edited.
+   Session and is not updated when sessions are edited. Descriptive 
+   text can also be added to a session in the 
+   <A HREF="#Details">Session Details</A> menu.
 
    <P>This feature may be accessed via the <B>Session</B> link in the top 
    blue navigation bar in any assembly. To ensure privacy and security, you 
@@ -391,7 +394,7 @@ hgS_otherUserName=Example&hgS_otherUserSessionName=hg17_chr2_primate</A></TT>.
    the Session page. Each session entry is listed by name and offers the 
    following options to open, share, and manipulate it:
    <UL>
-   <LI><B>Load as current session.</B> Click this button to load the session as
+   <LI><B>Use this session.</B> Click this button to load the session as
    your current session without launching the Genome Browser. This allows you to
    perform other configuration tasks on the session before opening it in the 
    browser. To launch the Genome Browser using this session, click the 
@@ -413,6 +416,42 @@ hgS_otherUserName=Example&hgS_otherUserSessionName=hg17_chr2_primate</A></TT>.
 </TD></TR>
 </TABLE>
 <P>
+
+<!------Details-------------------------->
+<A NAME="Details"></A>
+ <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+ <TR><TD>
+   <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+   <TR><TD>
+     <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+     <TR><TD>
+     <FONT SIZE="4"><B>&nbsp; Session Details </B></FONT>
+     </TD></TR>
+     </TABLE>
+    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+    <TR><TH HEIGHT=10></TH></TR>
+    <TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+<P>
+Each session has an associated details page that you can click into from the
+<A HREF="../../cgi-bin/hgSession" target="_blank">Session Management</A>
+menu. The Session Details menu allows you to edit the Session Name, 
+to add descriptive text and to change whether or not the session is shared with others.
+Like the Session Management menu, if you click "use" that session will be loaded
+as the current session and if you click "delete" the session will be deleted. The 
+"Created on" date reflects the date that the session was originally created and will
+not be updated to reflect any edits. 
+</P>
+
+
+  </TD><TD WIDTH=15></TD></TR>                                                                                                                         
+   </TABLE>                                                                                                                                             
+  <BR></TD></TR>                                                                                                                                        
+  </TABLE>                                                                                                                                              
+  </TD></TR>                                                                                                                                            
+ </TABLE>                                                                                                                                               
+						                              
+<P>									       
 
 <!-------Sharing a Session-------------------------->
 <A NAME="Share"></A>
@@ -503,7 +542,7 @@ hgS_otherUserName=Example&hgS_otherUserSessionName=hg17_chr2_primate</A></TT>.
  settings, you should first save your own settings as a session before opening 
  a new session, or open a new tab or window in your internet browser before
  loading the new session.</P> 
- <P>There are three ways to open a shared session, depending on what 
+ <P>There are four ways to open a shared session, depending on what 
  information you have about the session. The instructions below assume that you
  want to replace your current session the new session. Be sure to preserve your
  original session first if you don't want to overwrite it.
@@ -513,6 +552,11 @@ hgS_otherUserName=Example&hgS_otherUserSessionName=hg17_chr2_primate</A></TT>.
   <LI><B>Open a session from an email link.</B> If you receive an email message 
   with a link to a colleague's shared session, simply click on the link to
   view the Genome Browser with the session settings.  </LI>
+  <LI><B>Open another user's session.</B> If you know the name of another user's
+  shared session you can type in the user and session name in the "Restore Settings"
+  section and click "submit". This will generate an "Updated Session" message 
+  and you can click on the Browser link to load the browser with the settings saved
+  in this session.</LI>
   <LI><B>Open a session from a settings file.</B> Open the Session tool, 
   then scroll down to <em>Load Settings</em> in the <em>Session Management</em>
   section. Type in the name of the settings file, or click 
@@ -555,7 +599,15 @@ hgS_otherUserName=Example&hgS_otherUserSessionName=hg17_chr2_primate</A></TT>.
    <TR><TD WIDTH=10>&nbsp;</TD><TD>
    <P>It's easy to make changes to an existing session.  Reconfigure
    the Genome Browser as you wish, then resave the session with the same name.
-   The Session tool will inform you that your session is being overwritten.</P>
+   The Session tool will warn you that you are about to overwrite an existing 
+   session. </P>
+
+   <P>You can also edit any descriptive text associated with your session 
+   as well as whether or not the session can be shared in the
+   <A HREF="#Details">Session Details</A> menu. Note that editing a session
+   will not alter the creation date listed in the 
+   <A HREF="../../cgi-bin/hgSession" target="_blank">Session Management</A>
+   menu. </P>
 
    <P>If you previously shared this session with others, they will not see the
    changes until they <A HREF="#Open">reload</A> your newly-edited session.</P>
