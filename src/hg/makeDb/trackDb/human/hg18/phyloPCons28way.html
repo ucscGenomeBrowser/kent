@@ -1,17 +1,16 @@
 <H2>Description</H2>
 <P>
 This track shows measures of evolutionary conservation 
-generated using the <em>phyloP</em> (Phylogenetic P-Values)
-program from the  <A HREF="http://compgen.bscb.cornell.edu/phast">
-PHAST package
-</A>
-developed by
-<A HREF="http://compgen.bscb.cornell.edu/~acs/software.html" TARGET=_blank>
-Adam Siepel</A> at Cornell University.
+generated using the 
+<em>phyloP</em> (Phylogenetic P-Values) program from the  
+<A HREF="http://compgen.bscb.cornell.edu/phast"> PHAST package</A>
 Two measurements are provided: 
 conservation across 28 species, and an alternative measurement 
 restricted to the placental mammal subset (17 species plus human) 
 of the multiple alignment.
+</P>
+<P>
+PhyloP differs from <em>phastCons</em> -- which is used to produce the scores in the main Conservation track -- in several key ways.  The scores produced by phyloP reflect individual alignment columns, and do not take into account conservation at neighboring sites.  As a result, the phyloP conservation plot has a less smooth appearance, with more "texture" at individual bases, than the phastCons plot.  In addition, this property makes phyloP more appropriate than phastCons for evaluating signatures of selection at particular bases or classes of bases in the genome (e.g., all third codon positions).  In addition, phyloP requires fewer assumptions than phastCons, by depending only on a model of neutral evolution, rather than on models of both neutral evolution and negative selection (conservation).  Finally, rather than representing probabilities of negative selection and ranging between 0 and 1, the phyloP scores represent -log p-values under a null hypothesis of neutral evolution, and range from 0 to infinity (although in practice there is a maximum achievable value for any particular data set).
 </P>
 <P>
 See the <em>Conservation</em> track description for information about
@@ -24,10 +23,14 @@ The track configuration options allow the user to display either
 the vertebrate or placental mammal conservation scores, or both
 simultaneously.
 In full and pack display modes, conservation scores are displayed as a
-<EM>wiggle track</EM> (histogram) in which the height reflects the 
+<EM>wiggle track</EM> in which the height reflects the 
 size of the score. 
 The conservation wiggles can be configured in a variety of ways to 
 highlight different aspects of the displayed information. 
+For example, the 'Windowing function' option controls how
+scores are combined across sites, with averaging as the default.
+This will have a strong effect on how the plot appears when zoomed out.
+<P>
 Click the <A HREF="../goldenPath/help/hgWiggleTrackHelp.html" 
 TARGET=_blank>Graph configuration help</A> link for an explanation 
 of the configuration options.</P>
@@ -78,10 +81,11 @@ consensus in the vertebrate phylogeny community as of March 2007.
 
 <H2>References</H2>
 <P>
-Siepel, A., Pollard, K.S. and Haussler,
-D. <A href="http://compgen.bscb.cornell.edu/~acs/dless.pdf" TARGET=_blank>New methods for
-detecting lineage-specific selection.</A> In Proc. 10th Int'l Conf. on
-Research in Computational Molecular Biology (RECOMB '06) (2006).
+Siepel A, Pollard KS, Haussler D. 
+<A href="http://compgen.bscb.cornell.edu/~acs/dless.pdf" TARGET=_blank>New methods for
+detecting lineage-specific selection.</A> 
+<em>Proc. 10th Int'l Conf. on Research in Computational Molecular Biolog (RECOMB '06)</em>.
+2006.
 </P>
 <P>
 Murphy WJ, Eizirik E, O'Brien SJ, Madsen O, Scally M, Douady CJ, Teeling E,
