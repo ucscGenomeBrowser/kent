@@ -2,7 +2,7 @@
 
 # hgShowEncodeSubmissions - generate web page listing projects with status and metadata
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeStatus/hgShowEncodeSubmissions,v 1.6 2008/11/06 19:03:23 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeStatus/hgShowEncodeSubmissions,v 1.7 2008/11/19 21:36:08 kate Exp $
 
 echo "Content-Type:text/html"
 echo ""
@@ -13,6 +13,7 @@ echo "<HTML><BODY>"
             status "Status", \
             DATE_FORMAT(updated_at,"%Y-%m-%d") "Updated", \
             metadata "Metadata Terms", \
+            id "ID", \
             CONCAT("<A HREF=\"http://genome-test.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg18&g=", track, "\" target=\"newtab\">", track, "</A>") \
                         "Browser Track" from projects where status<>"new" order by status, updated_at desc, name' | \
     sed -e 's/TABLE/TABLE BGCOLOR="#FFFEE8" STYLE=\"border-collapse: collapse\" CELLPADDING=3/' \
