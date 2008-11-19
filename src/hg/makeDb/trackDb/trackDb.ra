@@ -3328,7 +3328,7 @@ type netAlign calJac1 chainCalJac1
 otherDb calJac1
 
 track chainEquCab1
-shortLabel $o_db Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 235
@@ -3342,7 +3342,7 @@ type chain equCab1
 otherDb equCab1
 
 track netEquCab1
-shortLabel $o_db Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 235.1

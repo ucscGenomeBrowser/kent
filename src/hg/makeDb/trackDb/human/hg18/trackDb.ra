@@ -965,7 +965,7 @@ type netAlign bosTau2 chainBosTau2
 otherDb bosTau2
 
 track netEquCab1
-shortLabel $o_db Net
+shortLabel  $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 235.1
