@@ -94,9 +94,9 @@ expScale 2.0
 expStep 0.2
 groupings ucsfNeveCGHGroups
 
-track maserAgilentExp
-shortLabel Gene Expression (Maser. et.al 2007)
-longLabel Multi-tissue Human Agilent 1A Exon Array from DFCI (Maher et. al 2006)
+track maser22Kcgh
+shortLabel Agilent 1A 22K CGH (Maser. et.al 2007)
+longLabel Agilent 1A 22K CGH (Maher et. al 2006)
 group x
 priority 45.1
 visibility hide
@@ -104,7 +104,7 @@ type expRatio
 logicalDb localDb
 expScale 2.0
 expStep 0.1
-groupings maserAgilentExpGroups
+groupings maser22KcghGroups
 
 track maser44Bcgh
 shortLabel Agilent 44B CGH (Maser. et.al 2007)
@@ -292,3 +292,39 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings kaiser2007Groups
+
+track ding2008
+shortLabel Gene Expression (Ding et al. 2008)
+longLabel Gene Expression (Ding et al. 2008)
+group x
+priority 48
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings ding2008Groups
+
+track jones2008cgh
+shortLabel CGH (Jones et al. 2008)
+longLabel CGH (Jones et al. 2008)
+group x
+priority 49
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings jones2008cghGroups
+
+track parsons2008cgh
+shortLabel CGH (Parsons et al. 2008)
+longLabel CGH (Parsons et al. 2008)
+group x
+priority 49
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings parsons2008cghGroups
