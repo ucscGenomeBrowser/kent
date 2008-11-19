@@ -14,7 +14,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: doStamps.c,v 1.6 2008/09/03 19:20:58 markd Exp $";
+static char const rcsid[] = "$Id: doStamps.c,v 1.7 2008/11/19 18:57:43 fanhsu Exp $";
 
 Color boundaryColor;
 
@@ -407,7 +407,6 @@ int i;
 
 conn2= hAllocConn(database);
 safef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", database, stampName);
-//safef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", "proteins060115", stampName);
     	
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
@@ -720,36 +719,41 @@ else
     pbStampFree(&stampDataPtr);
     }
 
-/* draw Mol Wt stamp */
-safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
-answer = sqlGetField(database, "pepMwAa", "MolWeight", cond_str);
-if (answer != NULL)
+/* skip Mol Wt, if it is GSID */
+if (!hIsGsidServer())
     {
-    safef(valStr2, sizeof(valStr2), "%s Da", answer);
-    molWeight  = (double)atof(answer);
-    stampDataPtr = getStampData("pepMolWt");
-    xPosition = xPosition + stampWidth + stampWidth/8;
-    setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
-    drawPbStamp(stampDataPtr, stampPictPtr);
-    drawXScaleMW(stampDataPtr, stampPictPtr, 50000);
-    markStamp(stampDataPtr, stampPictPtr, molWeight, valStr2, tx, ty);
-    pbStampFree(&stampDataPtr);
-    }
-else
-    {
-    safef(valStr2, sizeof(valStr2), "N/A");
-    stampDataPtr = getStampData("pepMolWt");
-    xPosition = xPosition + stampWidth + stampWidth/8;
-    setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
-    drawPbStamp(stampDataPtr, stampPictPtr);
-    drawXScaleMW(stampDataPtr, stampPictPtr, 50000);
-    markStamp0(stampDataPtr, stampPictPtr, molWeight, valStr2, tx, ty);
-    pbStampFree(&stampDataPtr);
+    /* draw Mol Wt stamp */
+    safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+    answer = sqlGetField(database, "pepMwAa", "MolWeight", cond_str);
+    if (answer != NULL)
+    	{
+    	safef(valStr2, sizeof(valStr2), "%s Da", answer);
+    	molWeight  = (double)atof(answer);
+    	stampDataPtr = getStampData("pepMolWt");
+    	xPosition = xPosition + stampWidth + stampWidth/8;
+    	setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
+    	drawPbStamp(stampDataPtr, stampPictPtr);
+    	drawXScaleMW(stampDataPtr, stampPictPtr, 50000);
+    	markStamp(stampDataPtr, stampPictPtr, molWeight, valStr2, tx, ty);
+    	pbStampFree(&stampDataPtr);
+    	}
+    else
+    	{
+    	safef(valStr2, sizeof(valStr2), "N/A");
+    	stampDataPtr = getStampData("pepMolWt");
+    	xPosition = xPosition + stampWidth + stampWidth/8;
+    	setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
+    	drawPbStamp(stampDataPtr, stampPictPtr);
+    	drawXScaleMW(stampDataPtr, stampPictPtr, 50000);
+    	markStamp0(stampDataPtr, stampPictPtr, molWeight, valStr2, tx, ty);
+    	pbStampFree(&stampDataPtr);
+    	}
     }
     
 if (!proteinInSupportedGenome)
 	{
-	xPosition = xPosition + stampWidth + stampWidth/8;
+	if (!hIsGsidServer())
+	    xPosition = xPosition + stampWidth + stampWidth/8;
 	goto skip_exon;
 	}
 	
@@ -776,46 +780,56 @@ if (answer != NULL)
     pbStampFree(&stampDataPtr);
     }
 skip_exon:
-/* draw AA residual anomolies stamp */
-if (answer != NULL)
+
+if (!hIsGsidServer())
     {
-    stampDataPtr = getStampData("pepRes");
-    xPosition = xPosition + stampWidth + stampWidth/8;
-    setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, 3*stampWidth/2, stampHeight);
-    drawPbStamp(stampDataPtr, stampPictPtr);
-    for (i=0; i<20; i++)
-	{
-        markResStamp(aaAlphabet[i], stampDataPtr, stampPictPtr, i, aaResFreqDouble[i], 
+    /* draw AA residual anomolies stamp */
+    if (answer != NULL)
+    	{
+    	stampDataPtr = getStampData("pepRes");
+    	xPosition = xPosition + stampWidth + stampWidth/8;
+    	setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, 
+		       3*stampWidth/2, stampHeight);
+    	drawPbStamp(stampDataPtr, stampPictPtr);
+    	for (i=0; i<20; i++)
+	    {
+            markResStamp(aaAlphabet[i], stampDataPtr, stampPictPtr, i, aaResFreqDouble[i], 
 			tx, ty, avg, stddev);
-	}
-    pbStampFree(&stampDataPtr);
+	    }
+    	pbStampFree(&stampDataPtr);
+    	}
+
+    xPosition = 15;
+    yPosition = yPosition + 170;
     }
 
-xPosition = 15;
-yPosition = yPosition + 170;
+/* skip swInterPro if it is GSID */
+if (!hIsGsidServer())
+    {
 
-/* draw family size stamp */
-safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
-answer = sqlGetField(protDbName, "swInterPro", "count(*)", cond_str);
-if (answer != NULL)
-    {
-    valStr       = cloneString(answer);
-    stampDataPtr = getStampData("intPCnt");
-    setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
-    drawPbStamp(stampDataPtr, stampPictPtr);
-    drawXScale(stampDataPtr, stampPictPtr, 1);
-    markStamp(stampDataPtr, stampPictPtr, (double)(atoi(answer)), valStr, tx, ty);
-    pbStampFree(&stampDataPtr);
-    }
-else
-    {
-    valStr       = cloneString("N/A");
-    stampDataPtr = getStampData("intPCnt");
-    setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
-    drawPbStamp(stampDataPtr, stampPictPtr);
-    drawXScale(stampDataPtr, stampPictPtr, 1);
-    markStamp0(stampDataPtr, stampPictPtr, (double)(atoi(answer)), valStr, tx, ty);
-    pbStampFree(&stampDataPtr);
+    /* draw family size stamp */
+    safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
+    answer = sqlGetField(protDbName, "swInterPro", "count(*)", cond_str);
+    if (answer != NULL)
+    	{
+    	valStr       = cloneString(answer);
+    	stampDataPtr = getStampData("intPCnt");
+    	setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
+    	drawPbStamp(stampDataPtr, stampPictPtr);
+    	drawXScale(stampDataPtr, stampPictPtr, 1);
+    	markStamp(stampDataPtr, stampPictPtr, (double)(atoi(answer)), valStr, tx, ty);
+    	pbStampFree(&stampDataPtr);
+    	}
+    else
+    	{
+    	valStr       = cloneString("N/A");
+    	stampDataPtr = getStampData("intPCnt");
+    	setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
+    	drawPbStamp(stampDataPtr, stampPictPtr);
+    	drawXScale(stampDataPtr, stampPictPtr, 1);
+    	markStamp0(stampDataPtr, stampPictPtr, (double)(atoi(answer)), valStr, tx, ty);
+    	pbStampFree(&stampDataPtr);
+    	}
     }
 
 /* draw hydrophobicity stamp */
@@ -852,12 +866,42 @@ safef(valStr2, sizeof(valStr2), "%d", cCnt);
 markStamp(stampDataPtr, stampPictPtr, (double)cCnt, valStr2, tx, ty);
 pbStampFree(&stampDataPtr);
 
+/* if it is GSID, draw AA residual anomolies here */
+if (hIsGsidServer())
+    {
+    xPosition = 15;
+    yPosition = yPosition + 170;
+
+    /* draw AA residual anomolies stamp */
+    if (answer != NULL)
+    	{
+    	stampDataPtr = getStampData("pepRes");
+        setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, 
+	3*stampWidth/2, stampHeight);
+    	drawPbStamp(stampDataPtr, stampPictPtr);
+    	for (i=0; i<20; i++)
+            {
+            markResStamp(aaAlphabet[i], stampDataPtr, stampPictPtr, i, aaResFreqDouble[i],
+                         tx, ty, avg, stddev);
+            }
+    	pbStampFree(&stampDataPtr);
+    	}
+    }
+
 /* draw AA residual anomolies stddev stamp */
 if (answer != NULL)
     {
     exonCount    = (double)atof(answer);
     stampDataPtr = getStampData("pepRes");
+if (hIsGsidServer())
+    {
+    xPosition = xPosition + stampWidth*1.62 + stampWidth/8;
+    }
+else
+    {
     xPosition = xPosition + stampWidth + stampWidth/8;
+    }
+
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, 3*stampWidth/2, stampHeight);
     
     stampDataPtr->ymin = -4.0;
