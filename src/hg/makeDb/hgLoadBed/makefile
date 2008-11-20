@@ -22,9 +22,9 @@ cgi:: compile
 	fi
 	rm -f ${CGI_BIN}-${USER}/loader/$A
 	mv $A${EXE} ${CGI_BIN}-${USER}/loader/$A
+	chmod a+r ${SQL_FILES}
+	chmod g+w ${SQL_FILES}
 	cp ${SQL_FILES} ${CGI_BIN}-${USER}/loader
-	chmod a+r ${CGI_BIN}-${USER}/loader/*.sql
-	chmod g+w ${CGI_BIN}-${USER}/loader/*.sql
 
 alpha:: strip
 	@if [ ! -d "${CGI_BIN}/loader" ]; then \
@@ -32,9 +32,9 @@ alpha:: strip
 	fi
 	rm -f ${CGI_BIN}/loader/$A
 	mv $A${EXE} ${CGI_BIN}/loader/$A
+	chmod a+r ${SQL_FILES}
+	chmod g+w ${SQL_FILES}
 	cp ${SQL_FILES} ${CGI_BIN}/loader
-	chmod a+r ${CGI_BIN}/loader/*.sql
-	chmod g+w ${CGI_BIN}/loader/*.sql
 
 beta:: strip
 	@if [ ! -d "${CGI_BIN}-beta/loader" ]; then \
@@ -42,9 +42,9 @@ beta:: strip
 	fi
 	rm -f ${CGI_BIN}-beta/loader/$A
 	mv $A${EXE} ${CGI_BIN}-beta/loader/$A
+	chmod a+r ${SQL_FILES}
+	chmod g+w ${SQL_FILES}
 	cp ${SQL_FILES} ${CGI_BIN}-beta/loader
-	chmod a+r ${CGI_BIN}-beta/loader/*.sql
-	chmod g+w ${CGI_BIN}-beta/loader/*.sql
 
 strip::  compile
 	${STRIP} $A${EXE}
@@ -57,9 +57,9 @@ install::  strip
 	fi
 	rm -f ${DESTDIR}${CGI_BIN}/loader/$A
 	mv $A${EXE} ${DESTDIR}${CGI_BIN}/loader/$A
+	chmod a+r ${SQL_FILES}
+	chmod g+w ${SQL_FILES}
 	cp ${SQL_FILES} ${DESTDIR}${CGI_BIN}/loader
-	chmod a+r ${DESTDIR}${CGI_BIN}/loader/*.sql
-	chmod g+w ${DESTDIR}${CGI_BIN}/loader/*.sql
 
 debug:: $O
 	${CC} $O ${MYLIBS} ${L}
