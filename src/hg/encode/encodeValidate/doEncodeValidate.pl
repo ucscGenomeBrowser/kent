@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.106 2008/11/17 19:41:20 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.107 2008/11/20 21:49:24 larrym Exp $
 
 use warnings;
 use strict;
@@ -488,20 +488,64 @@ sub validateTagAlign
     return ();
 }
 
+sub validateWithList
+{
+# Validate $line using a validation list; $validateList is a reference to a list of: {NAME, REGEX or TYPE}
+# returns error string or undef if line passes validation
+# This is designed to give better feedback to user; ideally we would load the validation list from the .as files
+    my ($line, $validateList) = @_;
+    my @list = split(/\s+/, $line);
+    if(@list != @{$validateList}) {
+        return "not enough fields";
+    } else {
+        for my $validateField (@{$validateList}) {
+            my $type = $validateField->{TYPE};
+            my $regex;
+            if($type) {
+                my %typeMap = (int => "[+-]?\\d+", uint => "\\d+", float => $floatRegEx, string => "\\S+");
+                if(!($regex = $typeMap{$type})) {
+                    die "PROGRAM ERROR: invalid TYPE: $type\n";
+                }
+            } elsif(!($regex = $validateField->{REGEX})) {
+                die "PROGRAM ERROR: invalid type list (missing required REGEX or TYPE)\n";
+            }
+            my $val = shift(@list);
+            if($val !~ /^$regex$/) {
+                my $error = "value '$val' is an invalid value for field '$validateField->{NAME}'";
+                if($type) {
+                    $error .= "; must be type '$type'";
+                }
+                return $error;
+            }
+        }
+    }
+    return undef;
+}
+
 sub validateNarrowPeak
 {
     my ($path, $file, $type) = @_;
     my $fh = openUtil($path, $file);
-    my $line = 0;
+    my $lineNumber = 0;
     doTime("beginning validateNarrowPeak") if $opt_timing;
-    while(<$fh>) {
-        $line++;
-        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+$floatRegEx\s+$floatRegEx\s+$floatRegEx\s+[+-]?\d+$/)) {
-            chomp;
-            return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validateNarrowPeak]");
+    while(my $line = <$fh>) {
+        chomp $line;
+        $lineNumber++;
+        next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
+        my @list = ({REGEX => "chr(\\d+|M|X|Y)", NAME => "chrom"},
+                    {TYPE => "uint", NAME => "chromStart"},
+                    {TYPE => "uint", NAME => "chromEnd"},
+                    {TYPE => "string", NAME => "name"},
+                    {TYPE => "uint", NAME => "score"},
+                    {REGEX => "[+-\\.]", NAME => "strand"},
+                    {TYPE => "float", NAME => "signalValue"},
+                    {TYPE => "float", NAME => "pValue"},
+                    {TYPE => "float", NAME => "qValue"},
+                    {TYPE => "int", NAME => "peak"});
+        if(my $error = validateWithList($line, \@list)) {
+            return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $_ [validateNarrowPeak]");
         }
-        last if($opt_quick && $line >= $quickCount);
+        last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
@@ -513,16 +557,25 @@ sub validateBroadPeak
 {
     my ($path, $file, $type) = @_;
     my $fh = openUtil($path, $file);
-    my $line = 0;
+    my $lineNumber = 0;
     doTime("beginning validateBroadPeak") if $opt_timing;
-    while(<$fh>) {
-        $line++;
-        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+$floatRegEx\s+$floatRegEx\s+$floatRegEx$/)) {
-            chomp;
-            return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validateBroadPeak]");
+    while (my $line = <$fh>) {
+        chomp $line;
+        $lineNumber++;
+        next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
+        my @list = ({REGEX => "chr(\\d+|M|X|Y)", NAME => "chrom"},
+                    {TYPE => "uint", NAME => "chromStart"},
+                    {TYPE => "uint", NAME => "chromEnd"},
+                    {TYPE => "string", NAME => "name"},
+                    {TYPE => "uint", NAME => "score"},
+                    {REGEX => "[+-\\.]", NAME => "strand"},
+                    {TYPE => "float", NAME => "signalValue"},
+                    {TYPE => "float", NAME => "pValue"},
+                    {TYPE => "float", NAME => "qValue"});
+        if(my $error = validateWithList($line, \@list)) {
+            return ("Invalid $type file; line $lineNumber in file '$file';\nerror: $error;\nline: $line [validateBroadPeak]");
         }
-        last if($opt_quick && $line >= $quickCount);
+        last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
