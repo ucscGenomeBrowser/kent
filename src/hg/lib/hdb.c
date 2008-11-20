@@ -37,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.382 2008/11/17 23:36:17 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.383 2008/11/20 01:42:09 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -216,16 +216,18 @@ struct hash *nameHash = newHash(4);
 
 for(; tdbList; tdbList = tdbList->next)
     {
-    char query[2048];
+    if (hTableExists(sqlGetDatabase(conn), tdbList->name))
+        {
+        char query[2048];
+        safef(query, sizeof query, 
+            "select tableName from %s where type like '%s'", tdbList->name, type);
 
-    safef(query, sizeof query, 
-	"select tableName from %s where type like '%s'", tdbList->name, type);
-
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row;
-    while ((row = sqlNextRow(sr)) != NULL)
-	hashStore(nameHash, row[0]);
-    sqlFreeResult(&sr);
+        struct sqlResult *sr = sqlGetResult(conn, query);
+        char **row;
+        while ((row = sqlNextRow(sr)) != NULL)
+            hashStore(nameHash, row[0]);
+        sqlFreeResult(&sr);
+        }
     }
 
 struct slName *list = NULL;
