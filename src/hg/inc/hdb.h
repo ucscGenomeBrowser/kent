@@ -426,8 +426,7 @@ struct trackDb *hCompositeTrackDbForSubtrack(char *db, struct trackDb *sTdb);
 void hTrackDbLoadSuper(char *db, struct trackDb *tdb);
 /* Populate child trackDbs of this supertrack */
 
-struct hTableInfo *hFindTableInfoWithConn(char *db, char *chrom, char *rootName,
-                                          struct sqlConnection *conn);
+struct hTableInfo *hFindTableInfoWithConn(struct sqlConnection *conn, char *chrom, char *rootName);
 /* Find table information, with conn as part of input parameters.  Return NULL if no table.  */
 
 struct hTableInfo *hFindTableInfo(char *db, char *chrom, char *rootName);
