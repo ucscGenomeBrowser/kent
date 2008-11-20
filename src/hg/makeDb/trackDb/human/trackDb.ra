@@ -728,24 +728,8 @@ visibility hide
 color 150,0,150
 type bed 4 +
 
-track dgv
-release beta
-shortLabel DGV Struct Var
-longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
-group varRep
-priority 144.8
-visibility hide
-color 0,100,0
-itemRgb on
-type bed 9 +
-noScoreFilter .
-exonArrows off
-urlLabel DGV Browser and Report: 
-url http://projects.tcag.ca/variation/cgi-bin/tbrowse/xview?source=$D&view=variation&id=Variation_$$
-dataVersion v5
 
 track dgv
-release alpha
 shortLabel DGV Struct Var
 longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
 group varRep
