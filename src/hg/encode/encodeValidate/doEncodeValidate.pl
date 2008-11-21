@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.108 2008/11/21 19:59:24 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.109 2008/11/21 22:32:52 mikep Exp $
 
 use warnings;
 use strict;
@@ -304,11 +304,11 @@ sub validateWig
     my @cmds;
     if(Encode::isZipped($filePath)) {
         # wigEncode knows how to handle zipped files.
-        push(@cmds, "wigEncode $filePath /dev/null /dev/null");
+        push(@cmds, "/cluster/bin/x86_64/wigEncode -noOverlapSpanData $filePath /dev/null /dev/null");
     } else {
         # XXXX why not do the whole thing, rather than just 1000 lines?
         push(@cmds, "head -1000 $filePath");
-        push(@cmds, "wigEncode stdin /dev/null /dev/null");
+        push(@cmds, "/cluster/bin/x86_64/wigEncode -noOverlapSpanData stdin /dev/null /dev/null");
     }
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose - 1);
     if(my $err = $safe->exec()) {

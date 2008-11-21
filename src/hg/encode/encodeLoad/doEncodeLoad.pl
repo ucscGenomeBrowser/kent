@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.42 2008/11/17 23:55:29 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.43 2008/11/21 22:32:52 mikep Exp $
 
 # Usage:
 #
@@ -93,7 +93,7 @@ sub loadWig
 
     HgAutomate::verbose(2, "loadWig ($assembly, $tableName, $fileList, $pushQ)\n");
     my $catCmd = $opt_debug ? "head -1000 $fileList" : "cat $fileList"; # load 1000 records if $opt_debug
-    my @cmds = ($catCmd, "/cluster/bin/x86_64/wigEncode stdin stdout $tableName.wib", "/cluster/bin/x86_64/hgLoadWiggle -pathPrefix=/gbdb/$assembly/wib -tmpDir=$tempDir $assembly $tableName stdin");
+    my @cmds = ($catCmd, "/cluster/bin/x86_64/wigEncode -noOverlapSpanData stdin stdout $tableName.wib", "/cluster/bin/x86_64/hgLoadWiggle -pathPrefix=/gbdb/$assembly/wib -tmpDir=$tempDir $assembly $tableName stdin");
     HgAutomate::verbose(2, "loadWig cmds [".join(" ; ",@cmds)."]\n");
     my $stderrFile = "out/$tableName.err";
     unlink($stderrFile);
