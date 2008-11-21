@@ -87,7 +87,7 @@ tier 2
 ###### type 3 cells once they have been submitted.
 term A549
 type Cell Line
-description epithelial cell line derived from a lung carcinoma tissue 
+description epithelial cell line derived from a lung carcinoma tissue
 vendorName ATCC
 vendorId CCl-185
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-185&Template=cellBiology
@@ -99,7 +99,7 @@ tier 3
 
 term GM18507
 type Cell Line
-description lymphoblastoid 
+description lymphoblastoid
 vendorName Coriell
 vendorId GM18507
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18507
@@ -121,11 +121,11 @@ tier 3
 
 term Jurkat
 type Cell Line
-description T lymphoblastoid cell line derived from an acute T cell leukemia 
+description T lymphoblastoid cell line derived from an acute T cell leukemia
 vendorName ATCC
 vendorId TIB-152
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
-lineage mesoderm 
+lineage mesoderm
 karyotype cancer
 termId BTO:0001948
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
@@ -133,7 +133,7 @@ tier 3
 
 term LNCaP
 type Cell Line
-description prostate adenocarcinoma 
+description prostate adenocarcinoma
 vendorName ATCC
 vendorId CRL-1740
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1740&Template=cellBiology
@@ -156,7 +156,7 @@ tier 3
 
 term PFSK-1
 type Cell Line
-description neuroectodermal cell line derived from a human cerebral brain tumor 
+description neuroectodermal cell line derived from a human cerebral brain tumor
 vendorName ATCC
 vendorId CRL-2060
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2060&Template=cellBiology
@@ -168,7 +168,7 @@ tier 3
 
 term SK-N-MC
 type Cell Line
-description neuroepithelioma cell line derived from a metastatic supra-orbital human brain tumor 
+description neuroepithelioma cell line derived from a metastatic supra-orbital human brain tumor
 vendorName ATCC
 vendorId HTB-10
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-10&Template=cellBiology
@@ -189,7 +189,7 @@ termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 tier 3
 
-term SK-N-SH(+RA) 
+term SK-N-SH(+RA)
 type Cell Line
 description neuroblastoma cell line differentiated w/ retinoic acid
 vendorName ATCC
@@ -214,14 +214,14 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 
 term Th1
 type Cell Line
-description primary human Th1 T cells 
-vendorName 
-vendorId 
+description primary human Th1 T cells
+vendorName
+vendorId
 orderUrl
 lineage Unknown
 karyotype Unknown
-termId 
-termUrl 
+termId
+termUrl
 
 # Gene types
 term Known
@@ -241,6 +241,54 @@ type Gene Type
 description pseudogene
 
 # Antibodies
+term c-Fos
+type Antibody
+antibodyDescription Rabbit polyclonal to amino acids 210-335 mapping at the C-terminus of c-Fos of human origin
+targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1.  Proto-oncogene c-Jun is a leucine-zipper.
+vendorName Santa Cruz Biotech
+vendorId sc-7202
+orderUrl http://www.scbt.com/product.php?datasheet=7202
+
+term c-Myc
+type Antibody
+antibodyDescription rabbit polyclonal to amino acids 1-262 of c-Myc human origin
+targetDescription transcription factor; c-Myc-encoded proteins function in cell proliferation,differentiation and neoplastic disease
+vendorName Santa Cruz Biotech
+vendorId sc-764
+orderUrl http://www.scbt.com/product.php?datasheet=764
+
+term c-Jun
+type Antibody
+antibodyDescription Rabbit polyclonal to amino acids 1-79 mapping at the N-terminus of c-Jun p39 of human origin
+targetDescription Heterodimer of Fos and Jun constitute transcription factor AP1.  Proto-oncogene c-Jun is a leucine-zipper.
+vendorName Santa Cruz Biotech
+vendorId sc-1694
+orderUrl http://www.scbt.com/product.php?datasheet=1694
+
+term CTCF
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription CTCF zinc finger transcription factor
+orderUrl http://www.millipore.com/catalogue/item/07-729
+vendorName Millipore
+vendorId 07-729
+
+term CtBP1
+type Antibody
+antibodyDescription mouse monoclonal
+targetDescription C-terminal binding protein 1
+orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229303
+vendorName BD Biosciences
+vendorId 612042
+
+term CtBP2
+type Antibody
+antibodyDescription mouse monoclonal
+targetDescription C-terminal binding protein 2
+orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229326
+vendorName BD Biosciences
+vendorId 612044
+
 term FOXP2
 type Antibody
 targetDescription transcriptional repressor, involved in development of speech
@@ -248,6 +296,62 @@ antibodyDescription rabbit polyclonal
 vendorName Abcam
 vendorId ab16046
 orderUrl http://www.abcam.com/index.html?datasheet=16046
+
+term GABP
+type Antibody
+targetDescription The transcription factor GA-binding protein (GABP) is composed of two subunits, alpha and beta. Alpha binds to a specific DNA sequence.
+antibodyDescription Mouse monoclonal, GABPa(G-1), IgG1
+vendorName Santa Cruz Biotech
+vendorId sc-28312
+orderUrl http://www.scbt.com/product.php?datasheet=28312
+
+term GR
+type Antibody
+targetDescription Glucocorticoid Receptor
+antibodyDescription Rabbit Polyclonal
+vendorName Santa Cruz Biotech
+vendorId sc-1004
+orderUrl http://www.scbt.com/product.php?datasheet=1004
+
+term H3K4me3
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H3 (tri methyl K4)
+orderUrl http://www.abcam.com/index.html?datasheet=8580
+vendorName Abcam
+vendorId ab8580
+
+term H3K4me2
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H3 (di methyl K4)
+orderUrl http://www.abcam.com/index.html?datasheet=7766
+vendorName Abcam
+vendorId ab7766
+
+term H3K4me1
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H3 (mono methyl K4)
+orderUrl http://www.abcam.com/index.html?datasheet=8895
+vendorName Abcam
+vendorId ab8895
+
+term H3K9ac
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H3 (acetyl K9)
+orderUrl http://www.abcam.com/index.html?datasheet=4441
+vendorName Abcam
+vendorId ab4441
+
+term H3K9me1
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H3 (mono-methyl K9)
+orderUrl http://www.abcam.com/index.html?datasheet=8896
+vendorName Abcam
+vendorId ab8896
 
 term H3K9me3
 type Antibody
@@ -257,6 +361,38 @@ vendorName Abcam
 vendorId ab8898
 orderUrl http://www.abcam.com/index.html?datasheet=8898
 
+term H4K20me1
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H4 (mono-methyl K20)
+orderUrl http://www.abcam.com/index.html?datasheet=9051
+vendorName Abcam
+vendorId ab9051
+
+term H3K27ac
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H3 (acetyl K27)
+orderUrl http://www.abcam.com/index.html?datasheet=4729
+vendorName Abcam
+vendorId ab4729
+
+term H3K27me3
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H3 (tri-methyl K27)
+orderUrl http://www.millipore.com/catalogue/item/07-449
+vendorName Millipore
+vendorId 07-449
+
+term H3K36me3
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H3 (tri-methyl K36)
+orderUrl http://www.abcam.com/index.html?datasheet=9050
+vendorName Abcam
+vendorId ab9050
+
 term KAP1
 type Antibody
 antibodyDescription rabbit polyclonal
@@ -264,6 +400,14 @@ targetDescription KRAB Associated Protein 1, helps regulate transcriptional repr
 vendorName Abcam
 vendorId ab10483
 orderUrl http://www.abcam.com/index.html?datasheet=10483
+
+term NRSF
+type Antibody
+antibodyDescription Mouse monoclonal
+targetDescription Neuron-restrictive silencer transcription factor
+vendorName David Anderson, Caltech
+vendorId
+orderUrl Made by Protein Expression Center: pec@caltech.edu
 
 term Pol2
 type Antibody
@@ -273,6 +417,22 @@ vendorName Covance
 vendorId MMS-126R
 orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
 
+term Pol2(b)
+type Antibody
+antibodyDescription mouse monoclonal, clone CTD4H8
+targetDescription RNA polymerase II
+orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
+vendorName Covance
+vendorId MMS-128P
+
+term SRF
+type Antibody
+targetDescription Serum response transcription factor
+antibodyDescription Rabbit polyclonal
+vendorName Santa Cruz Biotech
+vendorId sc-335
+orderUrl http://www.scbt.com/product.php?datasheet=335
+
 term STAT1
 type Antibody
 targetDescription transcription factor, activated by interferon signalling
@@ -281,117 +441,13 @@ vendorName Santa Cruz Biotech
 vendorId sc-345
 orderUrl http://www.scbt.com/product.php?datasheet=345
 
-term H3K4me3
+term TAF-II
 type Antibody
-antibodyDescription rabbit polyclonal
-targetDescription Histone H3 (tri methyl K4)
-orderUrl http://www.abcam.com/index.html?datasheet=8580
-vendorName Abcam 
-vendorId ab8580
-
-term H3K4me2 
-type Antibody
-antibodyDescription rabbit polyclonal 
-targetDescription Histone H3 (di methyl K4) 
-orderUrl http://www.abcam.com/index.html?datasheet=7766 
-vendorName Abcam 
-vendorId ab7766
-
-term H3K4me1 
-type Antibody
-antibodyDescription rabbit polyclonal 
-targetDescription Histone H3 (mono methyl K4) 
-orderUrl http://www.abcam.com/index.html?datasheet=8895 
-vendorName Abcam 
-vendorId ab8895 
-
-term H3K27me3 
-type Antibody
-antibodyDescription rabbit polyclonal 
-targetDescription Histone H3 (tri-methyl K27) 
-orderUrl http://www.millipore.com/catalogue/item/07-449 
-vendorName Millipore 
-vendorId 07-449 
-
-term H3K36me3 
-type Antibody
-antibodyDescription rabbit polyclonal 
-targetDescription Histone H3 (tri-methyl K36) 
-orderUrl http://www.abcam.com/index.html?datasheet=9050 
-vendorName Abcam 
-vendorId ab9050
-
-term H3K9me1 
-type Antibody
-antibodyDescription rabbit polyclonal 
-targetDescription Histone H3 (mono-methyl K9) 
-orderUrl http://www.abcam.com/index.html?datasheet=8896 
-vendorName Abcam 
-vendorId ab8896
-
-term H4K20me1 
-type Antibody
-antibodyDescription rabbit polyclonal 
-targetDescription Histone H4 (mono-methyl K20) 
-orderUrl http://www.abcam.com/index.html?datasheet=9051 
-vendorName Abcam 
-vendorId ab9051
-
-term H3K9ac 
-type Antibody
-antibodyDescription rabbit polyclonal 
-targetDescription Histone H3 (acetyl K9) 
-orderUrl http://www.abcam.com/index.html?datasheet=4441 
-vendorName Abcam 
-vendorId ab4441 
-
-term H3K27ac 
-type Antibody
-antibodyDescription rabbit polyclonal 
-targetDescription Histone H3 (acetyl K27) 
-orderUrl http://www.abcam.com/index.html?datasheet=4729 
-vendorName Abcam 
-vendorId ab4729 
-
-term CTCF 
-type Antibody
-antibodyDescription rabbit polyclonal 
-targetDescription CTCF zinc finger transcription factor 
-orderUrl http://www.millipore.com/catalogue/item/07-729 
-vendorName Millipore 
-vendorId 07-729
-
-term Pol2(b)  
-type Antibody
-antibodyDescription mouse monoclonal, clone CTD4H8 
-targetDescription RNA polymerase II 
-orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P 
-vendorName Covance 
-vendorId MMS-128P
-
-term CtBP1  
-type Antibody
-antibodyDescription mouse monoclonal 
-targetDescription C-terminal binding protein 1 
-orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229303  
-vendorName BD Biosciences 
-vendorId 612042 
-
-term CtBP2  
-type Antibody
-antibodyDescription mouse monoclonal 
-targetDescription C-terminal binding protein 2 
-orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229326 
-vendorName BD Biosciences 
-vendorId 612044 
-
-term c-Myc
-type Antibody
-antibodyDescription rabbit polyclonal to amino acids 1-262 of c-Myc human origin
-targetDescription transcription factor; c-Myc-encoded proteins function in cell proliferation,differentiation and neoplastic disease
+targetDescription General transcription factor; TBP-associated factor p250kDa
+antibodyDescription Mouse monoclonal (p250)
 vendorName Santa Cruz Biotech
-vendorId sc-764
-orderUrl http://www.scbt.com/product.php?datasheet=764
+vendorId sc-735
+orderUrl http://www.scbt.com/product.php?datasheet=735
 
 # ripAntibody - Tenenbaum RIP-chip / RIP-seq project
 term HuR/ELAV1
@@ -482,12 +538,12 @@ description Poly(A)- RNA longer than 200 nt
 
 term proteinRnaExtracts
 type rnaExtract
-description RNA associated with RNA binding proteins 
+description RNA associated with RNA binding proteins
 
 # promoters
 term SV40
 type promoter
-description Simian Virus 40 (SV40) Early Core Promoter 
+description Simian Virus 40 (SV40) Early Core Promoter
 
 term G-gamma
 type promoter
