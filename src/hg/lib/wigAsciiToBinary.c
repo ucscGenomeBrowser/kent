@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.25 2008/09/10 22:57:05 larrym Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.26 2008/11/21 22:17:33 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -62,6 +62,7 @@ static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.25 2008/09/10 22:57:05 
 static unsigned long lineCount = 0;	/* counting all input lines	*/
 static long long add_offset = 0;	/* to allow "lifting" of the data */
 static boolean noOverlap = FALSE;	/* check for overlapping data */
+static boolean flagOverlapSpanData = FALSE;// verify span data doesn't overlap
 static long long binsize = 1024;	/* # of data points per table row */
 static long long dataSpan = 1;		/* bases spanned per data point */
 
@@ -342,6 +343,8 @@ if (options != NULL)
 	add_offset = options->lift;
     if (options->noOverlap)
 	noOverlap = TRUE;
+    if (options->flagOverlapSpanData)
+	flagOverlapSpanData = TRUE;
     if (options->wibSizeLimit > 0)
 	wibSizeLimit = options->wibSizeLimit;
     }
@@ -563,9 +566,15 @@ while (lineFileNext(lf, &line, NULL))
     readingFrameSlipped = FALSE;
     if ((validLines > 1) && (dataSpan > 1))
 	{
+	unsigned long long prevEnd = previousOffset + dataSpan;
 	int skippedBases;
 	int spansSkipped;
 	skippedBases = Offset - previousOffset;
+	if (flagOverlapSpanData && (prevEnd > Offset))
+	    errAbort("ERROR: data points overlapping at input line %lu.\n"
+		"previous data point position: %s:%llu-%llu overlaps current: %s:%llu-%llu",
+		lineCount, chromName, BASE_1(previousOffset), prevEnd,
+		chromName, BASE_1(Offset),Offset+dataSpan);
 	spansSkipped = skippedBases / dataSpan;
 	if ((spansSkipped * dataSpan) != skippedBases)
 	    readingFrameSlipped = TRUE;

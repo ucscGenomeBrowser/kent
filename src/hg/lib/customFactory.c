@@ -25,7 +25,7 @@
 #include "jsHelper.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.90 2008/11/14 16:00:09 aamp Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.91 2008/11/21 22:17:33 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1394,6 +1394,7 @@ else
     ZeroVar(&options);	/*	all is zero	*/
     options.lift = 0;
     options.noOverlap = FALSE;
+    options.flagOverlapSpanData = TRUE;
     options.wibSizeLimit = 300000000; /* 300Mb limit*/
     wigAsciiToBinary(wigAscii, track->wigFile,
 	track->wibFile, &upperLimit, &lowerLimit, &options);

@@ -284,6 +284,7 @@ struct wigEncodeOptions
     {
     int lift;	/*	lift all incoming coordinates by this amount	*/
     boolean noOverlap;	/*	enforce no overlapping data verification */
+    boolean flagOverlapSpanData;	/* verify span data doesn't overlap */
     long long wibSizeLimit;	/*	governor on ct trash files */
     };
 

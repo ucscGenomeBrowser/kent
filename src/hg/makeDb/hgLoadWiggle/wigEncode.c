@@ -1,6 +1,6 @@
 /* wigEncode - Convert wiggle ascii to wiggle binary format */
 
-static char const rcsid[] = "$Id: wigEncode.c,v 1.10 2008/04/29 17:16:39 hiram Exp $";
+static char const rcsid[] = "$Id: wigEncode.c,v 1.11 2008/11/21 22:17:35 hiram Exp $";
 
 #include "common.h"
 #include "wiggle.h"
@@ -25,6 +25,7 @@ errAbort("wigEncode - convert Wiggle ascii data to binary format\n\n"
     "    -allowOverlap - allow overlapping data, default: overlap not allowed\n"
     "              - only effective for fixedStep and if fixedStep declarations\n"
     "              - are in order by chromName,chromStart\n"
+    "    -noOverlapSpanData - check for overlapping span data\n"
     "    -wibSizeLimit=<N> - ignore rest of input when wib size is >= N\n"
     "\n"
     "Example:\n"
@@ -41,6 +42,7 @@ static struct optionSpec optionSpecs[] = {
     {"lift", OPTION_INT},
     {"noOverlap", OPTION_BOOLEAN},
     {"allowOverlap", OPTION_BOOLEAN},
+    {"noOverlapSpanData", OPTION_BOOLEAN},
     {"wibSizeLimit", OPTION_LONG_LONG},
     {NULL, 0}
 };
@@ -48,19 +50,21 @@ static struct optionSpec optionSpecs[] = {
 static int lift = 0;		/*	offset to lift positions on input */
 static boolean noOverlap = TRUE;	/*	check for overlapping data */
 static boolean allowOverlap = FALSE;	/* do not check for overlapping data */
+static boolean noOverlapSpanData = FALSE; /* verify span data doesn't overlap */
 static long long wibSizeLimit = 0;	/*	governor on ct trash sizes */
 
 void wigEncode(char *bedFile, char *wigFile, char *wibFile)
 /* Convert BED file to wiggle binary representation */
 {
 double upper, lower;
-if ((lift != 0) || noOverlap || (wibSizeLimit > 0))
+if ((lift != 0) || noOverlap || noOverlapSpanData || (wibSizeLimit > 0))
     {
     struct wigEncodeOptions options;
 
     ZeroVar(&options);	/*	make sure everything is zero	*/
     options.lift = lift;
     options.noOverlap = noOverlap;
+    options.flagOverlapSpanData = noOverlapSpanData;
     options.wibSizeLimit = wibSizeLimit;
     wigAsciiToBinary(bedFile, wigFile, wibFile, &upper, &lower, &options);
     if ((wibSizeLimit > 0) && (options.wibSizeLimit >= wibSizeLimit))
@@ -82,6 +86,7 @@ optionInit(&argc, argv, optionSpecs);
 lift = optionInt("lift", 0);
 wibSizeLimit = optionLongLong("wibSizeLimit", 0);
 allowOverlap = optionExists("allowOverlap");
+noOverlapSpanData = optionExists("noOverlapSpanData");
 if (wibSizeLimit < 0)	/*	protect against negative limits	*/
     {
     wibSizeLimit = 0;
@@ -105,6 +110,10 @@ if (lift != 0)
     verbose(2,"option lift=%d to lift all positions by %d\n", lift, lift);
 if (wibSizeLimit > 0)
     verbose(2,"option wibSizeLimit=%lld\n", wibSizeLimit);
+if (noOverlapSpanData)
+    {
+    verbose(2,"option noOverlapSpanData on, will *not* allow overlapping spanned data\n" );
+    }
 if (allowOverlap)
     {
     verbose(2,"option allowOverlap on, will allow overlapping data\n" );
