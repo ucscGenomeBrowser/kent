@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.107 2008/11/20 21:49:24 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.108 2008/11/21 19:59:24 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -284,9 +284,9 @@ sub openUtil
     my ($path, $file) = @_;
     my $fh = new IO::File;
     my $filePath = defined($path) ? "$path/$file" : $file;
-    open($fh, Encode::isTarZipped($filePath) ? "/bin/tar -Ozxf $filePath |" 
-	      : ( Encode::isZipped($filePath) ? "/bin/gunzip -c $filePath |" 
-		  : $filePath ) 
+    open($fh, Encode::isTarZipped($filePath) ? "/bin/tar -Ozxf $filePath |"
+	      : ( Encode::isZipped($filePath) ? "/bin/gunzip -c $filePath |"
+		  : $filePath )
 	) or die "Couldn't open file '$file'; error: $!\n";
     return $fh;
 }
@@ -543,7 +543,7 @@ sub validateNarrowPeak
                     {TYPE => "float", NAME => "qValue"},
                     {TYPE => "int", NAME => "peak"});
         if(my $error = validateWithList($line, \@list)) {
-            return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $_ [validateNarrowPeak]");
+            return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validateNarrowPeak]");
         }
         last if($opt_quick && $lineNumber >= $quickCount);
     }
@@ -608,7 +608,7 @@ sub validateFastQ
 {
     # Syntax per http://maq.sourceforge.net/fastq.shtml
     # I added '/' in the seqNameRegEx and plusLine even though it wasnt in the spec
-    #   because this is what Colin Kingswood (Gingeras project) 
+    #   because this is what Colin Kingswood (Gingeras project)
     #   is getting in the fastq files from GIS for the GisPet project
     #   and they are being sent on to us
     my ($path, $file, $type) = @_;
@@ -618,7 +618,7 @@ sub validateFastQ
     my $line = 0;
     my $state = 'firstLine';
     my $seqName;
-    my $seqNameRegEx = "[A-Za-z0-9_.:/-]+"; 
+    my $seqNameRegEx = "[A-Za-z0-9_.:/-]+";
     my $seqRegEx = "[A-Za-z\n\.~]+";
     my $qualRegEx = "[!-~\n]+";
     my $states = {firstLine => {REGEX => "\@($seqNameRegEx)", NEXT => 'seqLine'},
