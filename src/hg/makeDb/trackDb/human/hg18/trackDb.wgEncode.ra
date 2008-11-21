@@ -760,12 +760,12 @@ compositeTrack on
 shortLabel UW DNase Seq
 longLabel ENCODE - UW DNase Seq
 group regulation
-subGroup1 view Views Hotspots=Hot_Spots Peaks=Peaks Signal=Signal RawSignal=Raw_Signal 
+subGroup1 view Views Hotspots=Hot_Spots Peaks=Peaks Signal=Signal RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM06990=GM06990 HeLa-S3=HeLa-S3 HepG2=HepG2 SKNSH=SKNSH TH1=TH1
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults Hotspots=pack Peaks=pack Signal=full RawSignal=hide 
-controlledVocabulary encode/cv.ra cellType 
+visibilityViewDefaults Hotspots=pack Peaks=pack Signal=full RawSignal=hide
+controlledVocabulary encode/cv.ra cellType
 priority 0
 type bed 3
 wgEncode 1
@@ -781,8 +781,8 @@ type bed 3
 useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
-subGroup2 cellType Cell_Line HeLa-S3=HeLa-S3 HeLa-S3_IFNg=HeLa-S3_IFNg K562=K562
-subGroup3 factor Antibody CTRL=Input Pol2=Pol2 STAT1=STAT1
+subGroup2 cellType Cell_Line HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg K562=K562
+subGroup3 factor Antibody CTRL=Input Pol2=Pol2 STAT1=STAT1 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
@@ -796,7 +796,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Inp Sig
         longLabel       ENCODE Yale ChIP-Seq Signal (Input in HeLa-S3 cells)
-        subGroups       view=Signal factor=CTRL cellType=HeLa-S3
+        subGroups       view=Signal factor=CTRL cellType=HeLa
         type            wig 0.00 8316.00
         defaultViewLimits 2:2000
         dateSubmitted   2008-09-29 14:52:0
@@ -817,7 +817,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Inp Raw
         longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in HeLa-S3 cells)
-        subGroups       view=zRAW factor=CTRL cellType=HeLa-S3
+        subGroups       view=zRAW factor=CTRL cellType=HeLa
         type            wig 1.00 4247.00
         dateSubmitted   2008-09-29 14:52:0
         dateReleased    2009-06-29
@@ -835,7 +835,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Pol2 Pk
         longLabel       ENCODE Yale ChIP-Seq Peaks (Pol2 in HeLa-S3 cells)
-        subGroups       view=Peaks factor=Pol2 cellType=HeLa-S3
+        subGroups       view=Peaks factor=Pol2 cellType=HeLa
         type            narrowPeak
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
@@ -851,7 +851,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Pol2 Sig
         longLabel       ENCODE Yale ChIP-Seq Signal (Pol2 in HeLa-S3 cells)
-        subGroups       view=Signal factor=Pol2 cellType=HeLa-S3
+        subGroups       view=Signal factor=Pol2 cellType=HeLa
         type            wig 0.00 14600.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
@@ -869,9 +869,9 @@ wgEncode 1
 
         track           wgEncodeYaleChIPseqRawSignalRep1Helas3Pol2
         subTrack        wgEncodeYaleChIPseq
-        shortLabel      HeLa Pol2 Raw 1
+        shortLabel      HeLa Pol2 Raw1
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in HeLa-S3 cells)
-        subGroups       view=zRAW factor=Pol2 cellType=HeLa-S3
+        subGroups       view=zRAW factor=Pol2 cellType=HeLa
         type            wig 1.00 2079.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
@@ -887,9 +887,9 @@ wgEncode 1
 
         track           wgEncodeYaleChIPseqRawSignalRep2Helas3Pol2
         subTrack        wgEncodeYaleChIPseq
-        shortLabel      HeLa Pol2 Raw 2
+        shortLabel      HeLa Pol2 Raw2
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (Pol2 in HeLa-S3 cells)
-        subGroups       view=zRAW factor=Pol2 cellType=HeLa-S3
+        subGroups       view=zRAW factor=Pol2 cellType=HeLa
         type            wig 1.00 3795.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
@@ -905,9 +905,9 @@ wgEncode 1
 
         track           wgEncodeYaleChIPseqRawSignalRep3Helas3Pol2
         subTrack        wgEncodeYaleChIPseq
-        shortLabel      HeLa Pol2 Raw 3
+        shortLabel      HeLa Pol2 Raw3
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 3 (Pol2 in HeLa-S3 cells)
-        subGroups       view=zRAW factor=Pol2 cellType=HeLa-S3
+        subGroups       view=zRAW factor=Pol2 cellType=HeLa
         type            wig 1.00 3649.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
@@ -925,7 +925,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa-IF Inp Sig
         longLabel       ENCODE Yale ChIP-Seq Signal (Input in HeLa-S3_IFNg cells)
-        subGroups       view=Signal factor=CTRL cellType=HeLa-S3_IFNg
+        subGroups       view=Signal factor=CTRL cellType=HeLa-IF
         type            wig 0.00 11690.00
         dateSubmitted   2008-09-29 14:12:28
         dateReleased    2009-06-29
@@ -945,7 +945,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa-IF Inp Raw
         longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in HeLa-S3_IFNg cells)
-        subGroups       view=zRAW factor=CTRL cellType=HeLa-S3_IFNg
+        subGroups       view=zRAW factor=CTRL cellType=HeLa-IF
         type            wig 1.00 4733.00
         dateSubmitted   2008-09-29 14:12:28
         dateReleased    2009-06-29
@@ -963,7 +963,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa-IF STAT1 Pk
         longLabel       ENCODE Yale ChIP-Seq Peaks (STAT1 in HeLa-S3_IFNg cells)
-        subGroups       view=Peaks factor=STAT1 cellType=HeLa-S3_IFNg
+        subGroups       view=Peaks factor=STAT1 cellType=HeLa-IF
         type            narrowPeak
         dateSubmitted   2008-10-1 10:6:2
         dateReleased    2009-07-01
@@ -979,7 +979,7 @@ wgEncode 1
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa-IF STAT1 Sig
         longLabel       ENCODE Yale ChIP-Seq Signal (STAT1 in HeLa-S3_IFNg cells)
-        subGroups       view=Signal factor=STAT1 cellType=HeLa-S3_IFNg
+        subGroups       view=Signal factor=STAT1 cellType=HeLa-IF
         type            wig 0.00 20910.00
         dateSubmitted   2008-10-1 10:6:2
         dateReleased    2009-07-01
@@ -997,9 +997,9 @@ wgEncode 1
 
         track           wgEncodeYaleChIPseqRawSignalRep1Helas3ifngStat1
         subTrack        wgEncodeYaleChIPseq
-        shortLabel      HeLa-IF STAT1 Raw 1
+        shortLabel      HeLa-IF STAT1 Raw1
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (STAT1 in HeLa-S3_IFNg cells)
-        subGroups       view=zRAW factor=STAT1 cellType=HeLa-S3_IFNg
+        subGroups       view=zRAW factor=STAT1 cellType=HeLa-IF
         type            wig 1.00 14648.00
         dateSubmitted   2008-10-1 10:6:2
         dateReleased    2009-07-01
@@ -1015,9 +1015,9 @@ wgEncode 1
 
         track           wgEncodeYaleChIPseqRawSignalRep2Helas3ifngStat1
         subTrack        wgEncodeYaleChIPseq
-        shortLabel      HeLa-IF STAT1 Raw 2
+        shortLabel      HeLa-IF STAT1 Raw2
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (STAT1 in HeLa-S3_IFNg cells)
-        subGroups       view=zRAW factor=STAT1 cellType=HeLa-S3_IFNg
+        subGroups       view=zRAW factor=STAT1 cellType=HeLa-IF
         type            wig 1.00 6262.00
         dateSubmitted   2008-10-1 10:6:2
         dateReleased    2009-07-01
@@ -1039,7 +1039,7 @@ wgEncode 1
         type            wig 0.00 4661.00
         dateSubmitted   2008-10-14 11:39:9
         dateReleased    2009-07-14
-        priority        13
+        priority        20
         noInherit       on
         visibility      full
         spanList        1
@@ -1057,7 +1057,7 @@ wgEncode 1
         type            wig 1.00 1315.00
         dateSubmitted   2008-10-14 11:39:9
         dateReleased    2009-07-14
-        priority        14
+        priority        21
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -1074,7 +1074,7 @@ wgEncode 1
         type            narrowPeak
         dateSubmitted   2008-10-14 13:29:42
         dateReleased    2009-07-14
-        priority        15
+        priority        30
         noInherit       on
         cell    K562
         antibody        Pol2
@@ -1088,7 +1088,7 @@ wgEncode 1
         type            wig 0.00 18226.00
         dateSubmitted   2008-10-14 13:29:42
         dateReleased    2009-07-14
-        priority        16
+        priority        31
         noInherit       on
         visibility      full
         spanList        1
@@ -1100,13 +1100,13 @@ wgEncode 1
 
         track           wgEncodeYaleChIPseqRawSignalRep1K562Pol2
         subTrack        wgEncodeYaleChIPseq
-        shortLabel      K562 Pol2 Raw 1
+        shortLabel      K562 Pol2 Raw1
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in K562 cells)
         subGroups       view=zRAW factor=Pol2 cellType=K562
         type            wig 1.00 7121.00
         dateSubmitted   2008-10-27 11:57:19
         dateReleased    2009-07-27
-        priority        17
+        priority        32
         noInherit       on
         configurable    off
         spanList        1
@@ -1117,13 +1117,13 @@ wgEncode 1
 
         track           wgEncodeYaleChIPseqRawSignalRep2K562Pol2
         subTrack        wgEncodeYaleChIPseq
-        shortLabel      K562 Pol2 Raw 2
+        shortLabel      K562 Pol2 Raw2
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (Pol2 in K562 cells)
         subGroups       view=zRAW factor=Pol2 cellType=K562
         type            wig 1.00 6180.00
         dateSubmitted   2008-10-27 11:57:19
         dateReleased    2009-07-27
-        priority        19
+        priority        33
         noInherit       on
         configurable    off
         spanList        1
@@ -1131,6 +1131,218 @@ wgEncode 1
         maxHeightPixels 100:16:16
         cell            K562
         antibody        Pol2
+
+        track		    wgEncodeYaleChIPseqPeaksK562Cfos
+        subTrack	    wgEncodeYaleChIPseq
+        shortLabel	    K562 c-Fos Pk
+        longLabel	    ENCODE Yale ChIP-Seq Peaks (c-Fos in K562 cells)
+        subGroups	    view=Peaks factor=c-Fos cellType=K562
+        type		    narrowPeak
+        dateSubmitted	2008-11-21 13:23:36
+        dateReleased	2009-08-21
+        priority        34
+        noInherit	    on
+        configurable	on
+        cell		    K562
+        antibody	    c-Fos
+
+        track		    wgEncodeYaleChIPseqSignalK562Cfos
+        subTrack	    wgEncodeYaleChIPseq
+        shortLabel	    K562 c-Fos Sig
+        longLabel	    ENCODE Yale ChIP-Seq Signal (c-Fos in K562 cells)
+        subGroups	    view=Signal factor=c-Fos cellType=K562
+        type		    wig 0.00 13555.00
+        dateSubmitted	2008-11-21 13:23:36
+        dateReleased	2009-08-21
+        priority	    35
+        noInherit	    on
+        configurable	on
+        spanList 	    1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		    K562
+        antibody	    c-Fos
+
+        track			wgEncodeYaleChIPseqRawSignalRep1K562Cfos
+        subTrack		wgEncodeYaleChIPseq
+        shortLabel		K562 c-Fos Raw1
+        longLabel		ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (c-Fos in K562 cells)
+        subGroups		view=zRAW factor=c-Fos cellType=K562
+        type			wig 1.00 1333.00
+        dateSubmitted	2008-11-21 13:23:36
+        dateReleased	2009-08-21
+        priority		36
+        noInherit		on
+        configurable	off
+        spanList		1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell			K562
+        antibody		c-Fos
+
+        track			wgEncodeYaleChIPseqRawSignalRep2K562Cfos
+        subTrack		wgEncodeYaleChIPseq
+        shortLabel		K562 c-Fos Raw2
+        longLabel		ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (c-Fos in K562 cells)
+        subGroups		view=zRAW factor=c-Fos cellType=K562
+        type			wig 1.00 972.00
+        dateSubmitted	2008-11-21 13:23:36
+        dateReleased	2009-08-21
+        priority		37
+        noInherit		on
+        configurable	off
+        spanList		1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell			K562
+        antibody		c-Fos
+
+        track			wgEncodeYaleChIPseqRawSignalRep3K562Cfos
+        subTrack		wgEncodeYaleChIPseq
+        shortLabel		K562 c-Fos Raw3
+        longLabel		ENCODE Yale ChIP-Seq Raw Signal Replicate 3 (c-Fos in K562 cells)
+        subGroups		view=zRAW factor=c-Fos cellType=K562
+        type			wig 1.00 823.00
+        dateSubmitted	2008-11-21 13:23:36
+        dateReleased	2009-08-21
+        priority		38
+        noInherit		on
+        configurable	off
+        spanList		1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell			K562
+        antibody		c-Fos
+
+        track			wgEncodeYaleChIPseqPeaksK562Cjun
+        subTrack		wgEncodeYaleChIPseq
+        shortLabel		K562 c-Jun Pk
+        longLabel		ENCODE Yale ChIP-Seq Peaks (c-Jun in K562 cells)
+        subGroups		view=Peaks factor=c-Jun cellType=K562
+        type			narrowPeak
+        dateSubmitted	2008-11-21 12:38:7
+        dateReleased	2009-08-21
+        priority		39
+        noInherit		on
+        configurable	on
+        cell			K562
+        antibody		c-Jun
+
+        track			wgEncodeYaleChIPseqSignalK562Cjun
+        subTrack		wgEncodeYaleChIPseq
+        shortLabel		K562 c-Jun Sig
+        longLabel		ENCODE Yale ChIP-Seq Signal (c-Jun in K562 cells)
+        subGroups		view=Signal factor=c-Jun cellType=K562
+        type			wig 0.00 16981.00
+        dateSubmitted	2008-11-21 12:38:7
+        dateReleased	2009-08-21
+        priority		40
+        noInherit		on
+        configurable	on
+        spanList		1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell			K562
+        antibody		c-Jun
+
+        track			wgEncodeYaleChIPseqRawSignalRep1K562Cjun
+        subTrack		wgEncodeYaleChIPseq
+        shortLabel		K562 c-Jun Raw1
+        longLabel		ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (c-Jun in K562 cells)
+        subGroups		view=zRAW factor=c-Jun cellType=K562
+        type			wig 1.00 2229.00
+        dateSubmitted	2008-11-21 12:38:7
+        dateReleased	2009-08-21
+        priority		41
+        noInherit		on
+        configurable	off
+        spanList		1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell			K562
+        antibody		c-Jun
+
+        track			wgEncodeYaleChIPseqRawSignalRep2K562Cjun
+        subTrack		wgEncodeYaleChIPseq
+        shortLabel		K562 c-Jun Raw2
+        longLabel		ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (c-Jun in K562 cells)
+        subGroups		view=zRAW factor=c-Jun cellType=K562
+        type			wig 1.00 972.00
+        dateSubmitted	2008-11-21 12:38:7
+        dateReleased	2009-08-21
+        priority		42
+        noInherit		on
+        configurable	off
+        spanList		1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell			K562
+        antibody		c-Jun
+
+        track			wgEncodeYaleChIPseqPeaksK562Cmyc
+        subTrack		wgEncodeYaleChIPseq
+        shortLabel		K562 c-Myc Pk
+        longLabel		ENCODE Yale ChIP-Seq Peaks (c-Myc in K562 cells)
+        subGroups		view=Peaks factor=c-Myc cellType=K562
+        type			narrowPeak
+        dateSubmitted	2008-11-21 13:51:54
+        dateReleased	2009-08-21
+        priority		43
+        noInherit		on
+        configurable	on
+        cell			K562
+        antibody		c-Myc
+
+        track			wgEncodeYaleChIPseqSignalK562Cmyc
+        subTrack		wgEncodeYaleChIPseq
+        shortLabel		K562 c-Myc Sig
+        longLabel		ENCODE Yale ChIP-Seq Signal (c-Myc in K562 cells)
+        subGroups		view=Signal factor=c-Myc cellType=K562
+        type			wig 0.00 2983.00
+        dateSubmitted	2008-11-21 13:51:54
+        dateReleased	2009-08-21
+        priority		44
+        noInherit		on
+        configurable	on
+        spanList		1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell			K562
+        antibody		c-Myc
+
+        track			wgEncodeYaleChIPseqRawSignalRep1K562Cmyc
+        subTrack		wgEncodeYaleChIPseq
+        shortLabel		K562 c-Myc Raw1
+        longLabel		ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (c-Myc in K562 cells)
+        subGroups		view=zRAW factor=c-Myc cellType=K562
+        type			wig 1.00 753.00
+        dateSubmitted	2008-11-21 13:51:54
+        dateReleased	2009-08-21
+        priority		45
+        noInherit		on
+        configurable	off
+        spanList		1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell			K562
+        antibody		c-Myc
+
+        track			wgEncodeYaleChIPseqRawSignalRep2K562Cmyc
+        subTrack		wgEncodeYaleChIPseq
+        shortLabel		K562 c-Myc Raw2
+        longLabel		ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (c-Myc in K562 cells)
+        subGroups		view=zRAW factor=c-Myc cellType=K562
+        type			wig 1.00 440.00
+        dateSubmitted	2008-11-21 13:51:54
+        dateReleased	2009-08-21
+        priority		46
+        noInherit		on
+        configurable	off
+        spanList		1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell			K562
+        antibody		c-Myc
 
 track wgEncodeHudsonalphaChipSeq
 compositeTrack on
