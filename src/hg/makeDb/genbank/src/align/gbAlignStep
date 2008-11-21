@@ -63,7 +63,7 @@ Alignment step, runs:
 ";
 
 #
-# $Id: gbAlignStep,v 1.21 2008/11/06 23:12:51 markd Exp $
+# $Id: gbAlignStep,v 1.22 2008/11/21 16:02:09 markd Exp $
 #
 use strict;
 use warnings;
@@ -84,6 +84,7 @@ sub holdOpenDir($) {
     }
 }
 sub openNfsDirsHack() {
+    holdOpenDir("/cluster/data");
     holdOpenDir("/cluster/genbank");
     holdOpenDir("/cluster/bin");
 }
