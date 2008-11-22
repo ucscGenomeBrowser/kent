@@ -208,7 +208,7 @@ compositeTrack	on
 shortLabel	Chromatin Map
 longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
 group		regulation
-subGroup1	view Views Peaks=Peaks Signal=Signal zRAW=RawSignal
+subGroup1	view Views Peaks=Peaks Signal=Signal SignalBO=Base_Overlap_Signal zRAW=RawSignal
 subGroup2	cellType Cell_Line GM12878=GM12878
 subGroup3	EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF zINP=Input
 sortOrder	cellType=+ EXP=+ view=+
@@ -330,28 +330,28 @@ wgEncode	1
 	maxHeightPixels	100:32:16
 	cell           GM12878
 
+    track           wgEncodeUncFAIREseqBaseOverlapSignalGm12878
+    subTrack        wgEncodeChromatinMap
+    shortLabel      FAIRE GM12878 BO
+    longLabel       ENCODE UNC FAIRE-Seq Base Overlap Signal (in GM12878 cells)
+    subGroups       view=SignalBO EXP=FAIRE cellType=GM12878
+    type            wig 0.00 5342.00
+    dateSubmitted   2008-11-21 16:50:53
+    dateReleased    2009-08-21
+    priority        203
+    noInherit       on
+    configurable    on
+    spanList        1
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    cell            GM12878
+
 	track          wgEncodeUncFAIREseqRawSignalRep1Gm12878
 	subTrack       wgEncodeChromatinMap
 	shortLabel     FAIRE GM12878 Raw1
 	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 1 (in GM12878 cells)
 	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
 	type           wig 0.00 22.93
-	dateSubmitted  2008-11-4 10:18:16
-	dateReleased   2009-08-04
-	priority       203
-	noInherit      on
-	configurable   off
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	cell           GM12878
-
-	track          wgEncodeUncFAIREseqRawSignalRep2Gm12878
-	subTrack       wgEncodeChromatinMap
-	shortLabel     FAIRE GM12878 Raw 2
-	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 2 (in GM12878 cells)
-	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
-	type           wig 0.00 50.40
 	dateSubmitted  2008-11-4 10:18:16
 	dateReleased   2009-08-04
 	priority       204
@@ -362,15 +362,31 @@ wgEncode	1
 	maxHeightPixels	100:32:16
 	cell           GM12878
 
+	track          wgEncodeUncFAIREseqRawSignalRep2Gm12878
+	subTrack       wgEncodeChromatinMap
+	shortLabel     FAIRE GM12878 Raw2
+	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 2 (in GM12878 cells)
+	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
+	type           wig 0.00 50.40
+	dateSubmitted  2008-11-4 10:18:16
+	dateReleased   2009-08-04
+	priority       205
+	noInherit      on
+	configurable   off
+	spanList       1
+	windowingFunction mean
+	maxHeightPixels	100:32:16
+	cell           GM12878
+
 	track          wgEncodeUncFAIREseqRawSignalRep3Gm12878
 	subTrack       wgEncodeChromatinMap
-	shortLabel     FAIRE GM12878 Raw 3
+	shortLabel     FAIRE GM12878 Raw3
 	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 3 (in GM12878 cells)
 	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
 	type           wig 0.00 112.28
 	dateSubmitted  2008-11-4 10:18:16
 	dateReleased   2009-08-04
-	priority       205
+	priority       206
 	noInherit      on
 	configurable   off
 	spanList       1
