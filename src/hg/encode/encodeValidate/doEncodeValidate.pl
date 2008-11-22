@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.109 2008/11/21 22:32:52 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.110 2008/11/22 00:54:13 mikep Exp $
 
 use warnings;
 use strict;
@@ -270,6 +270,7 @@ our %formatCheckers = (
     genePred => \&validateGene,
     gtf => \&validateGtf,
     tagAlign => \&validateTagAlign,
+    pairedTagAlign => \&validatePairedTagAlign,
     narrowPeak => \&validateNarrowPeak,
     broadPeak => \&validateBroadPeak,
     gappedPeak => \&validateGappedPeak,
@@ -488,6 +489,28 @@ sub validateTagAlign
     return ();
 }
 
+sub validatePairedTagAlign
+# This is like tag align but with two additional sequence fields appended; seq1 and seq2
+{
+    my ($path, $file, $type) = @_;
+    my $line = 0;
+    doTime("beginning validatePairedTagAlign") if $opt_timing;
+    my $fh = openUtil($path, $file);
+    while(<$fh>) {
+        $line++;
+	# MJP: for now, allow colorspace sequences as well as DNA + dot
+        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[0-3ATCGN\.]+\s+\d+\s+[+-]\s+[0-3ATCGN\.]+\s+[0-3ATCGN\.]+$/)) {
+            chomp;
+            return "Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validatePairedTagAlign]";
+        }
+        last if($opt_quick && $line >= $quickCount);
+    }
+    $fh->close();
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validatePairedTagAlign") if $opt_timing;
+    return ();
+}
+
 sub validateWithList
 {
 # Validate $line using a validation list; $validateList is a reference to a list of: {NAME, REGEX or TYPE}
@@ -592,10 +615,27 @@ sub validateGappedPeak
     while(<$fh>) {
         $line++;
         next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+\S+\s+\d+\s+[+-\.]\s+\d+\s+\d+\s+\S+\s+\d+\s+\S+\s+\S+\s+$floatRegEx\s+$floatRegEx\s+$floatRegEx$/)) {
-            chomp;
-            return ("Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validateGappedPeak]");
-        }
+	chomp;
+	my @c = split /\s+/; # validate field by field
+	my $msg1 = "Invalid $type file; line $line in file '$file' is invalid: Invalid";
+	my $msg2 = "\nline: $_ [validateGappedPeak]";
+	my $err = "";
+	$c[0] =~ m/chr(\d+|M|X|Y)/ or $err .= "chrom=[$c[0]], ";
+	$c[1] =~ m/\d+/ or $err .= "start=[$c[1]], ";
+	$c[2] =~ m/\d+/ or $err .= "end=[$c[2]], ";
+	$c[3] =~ m/\S+/ or $err .= "name=[$c[3]], ";
+	$c[4] =~ m/\d+/ or $err .= "score=[$c[4]], ";
+	$c[5] =~ m/[+\.-]/ or $err .= "strand=[$c[5]], ";
+	$c[6] =~ m/\d+/ or $err .= "thickStart=[$c[6]], ";
+	$c[7] =~ m/\d+/ or $err .= "thickEnd=[$c[7]], ";
+	$c[8] =~ m/\S+/ or $err .= "itemRgb=[$c[8]], ";
+	$c[9] =~ m/\d+/ or $err .= "blockCount=[$c[9]], ";
+	$c[10] =~ m/\S+/ or $err .= "blockSizes=[$c[10]], ";
+	$c[11] =~ m/\S+/ or $err .= "blockStarts=[$c[11]], ";
+	$c[12] =~ m/$floatRegEx/ or $err .= "signalValue=[$c[12]], ";
+	$c[13] =~ m/$floatRegEx/ or $err .= "pValue=[$c[13]], ";
+	$c[14] =~ m/$floatRegEx/ or $err .= "qValue=[$c[14]], ";
+	return ("$msg1 $err $msg2") if $err;
         last if($opt_quick && $line >= $quickCount);
     }
     $fh->close();
