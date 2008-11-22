@@ -64,8 +64,8 @@ groupings uncHmiRNAGroups
 priority 5.0
 
 # Methylation Data
-track jhuUscIllMethyl
-shortLabel GBM JHU-USC Methyl
+track jhuUscIllMethyl2Beta
+shortLabel GBM JHU-USC Methyl Avg Beta
 longLabel TCGA GBM JHU-USC Methylation Array
 group tcga
 visibility hide
@@ -73,6 +73,32 @@ type expRatio
 logicalDb localDb
 expScale 3.0
 expStep 0.2
-groupings jhuUscIllMethylGroups
+groupings jhuUscIllMethyl2BetaGroups
 priority 6.0
 
+# Methylation Data
+track jhuUscIllMethyl2
+shortLabel GBM JHU-USC Methyl Cy3/Cy5
+longLabel TCGA GBM JHU-USC Methylation Array
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 3.0
+expStep 0.2
+groupings jhuUscIllMethyl2Groups
+priority 6.0
+
+
+
+track harvardOVCGH
+shortLabel OV Harvard CGH
+longLabel TCGA Ovarian Harvard CGH Array 244A 
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings harvardOVCGHGroups
+priority 7.5

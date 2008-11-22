@@ -2,56 +2,6 @@
 
 #TCGA Controlled Access Data
 
-# Mutation Data
-
-track allABI_SomaticNS
-shortLabel GBM All ABI Som. Non-Silent
-longLabel TCGA GBM All ABI Somatic Non-Silent
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.1
-groupings allABI_SomaticNSGroups
-priority 0.05
-
-track allABI_SomaticS
-shortLabel GBM All ABI Som. Silent
-longLabel TCGA GBM All ABI Somatic Silent
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.1
-groupings allABI_SomaticSGroups
-priority 0.1
-
-track allABI_GermlineNS
-shortLabel GBM All ABI Germ. Non-Silent
-longLabel TCGA GBM All ABI Germline Non-Silent
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.1
-groupings allABI_GermlineNSGroups
-priority 0.2
-
-track allABI_GermlineS
-shortLabel GBM All ABI Germ. Silent
-longLabel TCGA GBM All ABI Germline Silent
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.1
-groupings allABI_GermlineSGroups
-priority 0.3
-
 track hgscABI_SomaticNS
 shortLabel GBM Baylor ABI Som. Non-Silent
 longLabel TCGA GBM Baylor ABI Somatic Non-Silent
@@ -258,3 +208,103 @@ expStep 0.2
 groupings lblHuEx1Groups
 priority 4.1
 
+track uncAgiExp
+shortLabel GBM UNC Expression
+longLabel TCGA GBM UNC Agilent Expression Array G4502A
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings uncAgiExpGroups
+priority 4.2
+
+# miRNA data
+name uncHmiRNA
+shortLabel GBM UNC miRNA 
+longLabel TCGA GBM UNC H-miRNA Array
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings uncHmiRNAGroups
+priority 4.3
+
+# Methylation Data
+track jhuUscIllMethyl2Beta
+shortLabel GBM JHU-USC Methyl Avg Beta
+longLabel TCGA GBM JHU-USC Methylation Array
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 3.0
+expStep 0.2
+groupings jhuUscIllMethyl2BetaGroups
+priority 6.0
+
+track jhuUscIllMethyl2
+shortLabel GBM JHU-USC Methyl Cy3/Cy5
+longLabel TCGA GBM JHU-USC Methylation Array
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 3.0
+expStep 0.2
+groupings jhuUscIllMethyl2Groups
+priority 6.0
+
+
+## Ovarian Data
+
+track broadOVABI_SomaticNS
+shortLabel OV Broad ABI Som. Non-Silent
+longLabel TCGA Ovarian Broad ABI Som. Non-Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings broadOVABI_SomaticNSGroups
+priority 7.0
+
+track broadOVABI_SomaticS
+shortLabel OV Broad ABI Som. Silent
+longLabel TCGA Ovarian Broad ABI Somatic Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings broadOVABI_SomaticSGroups
+priority 7.1
+
+track broadOVABI_GermlineNS
+shortLabel OV Broad ABI Germ. Non-Silent
+longLabel TCGA Ovarian Broad ABI Germline Non-Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings broadOVABI_GermlineNSGroups
+priority 7.2
+
+track broadOVABI_GermlineS
+shortLabel OV Broad ABI Germ. Silent
+longLabel TCGA Ovarian Broad ABI Germline Silent
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings broadOVABI_GermlineSGroups
+priority 7.3
