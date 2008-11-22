@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.110 2008/11/22 00:54:13 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.111 2008/11/22 23:48:39 larrym Exp $
 
 use warnings;
 use strict;
@@ -61,6 +61,7 @@ our $outPath;           # full path of output directory
 our %terms;             # controlled vocabulary
 our $quickCount=100;
 our $time0 = time;
+our $tempDir = "/data/tmp";
 
 sub usage {
     print STDERR <<END;
@@ -1249,7 +1250,7 @@ if(!@errors) {
                         } else {
                             $sortFiles = $files;
                         }
-                        push @cmds, "sort -k1,1 -k2,2n $sortFiles";
+                        push @cmds, "sort -T $tempDir -k1,1 -k2,2n $sortFiles";
 			push @cmds, "gawk '\$6 == \"+\" {print}'" if $newView eq "PlusRawSignal";
 			push @cmds, "gawk '\$6 == \"-\" {print}'" if $newView eq "MinusRawSignal";
                         push @cmds, "bedItemOverlapCount $daf->{assembly} stdin";
