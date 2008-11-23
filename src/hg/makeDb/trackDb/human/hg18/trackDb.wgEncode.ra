@@ -1518,6 +1518,40 @@ wgEncode 1
 	antibody	FOXP2
         color 107,112,43
 
+	track		wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	Control GM12878 Raw 1
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (Control in GM12878 cells)
+	subGroups	view=RawSignal factor=Control cellType=GM12878
+	type		wig 1.00 2399.00
+	dateSubmitted	2008-11-22 16:27:3
+	dateReleased	2009-08-22
+	priority	11
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	control
+
+	track		wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	Control GM12878 Raw 2
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (Control in GM12878 cells)
+	subGroups	view=RawSignal factor=Control cellType=GM12878
+	type		wig 1.00 2714.00
+	dateSubmitted	2008-11-22 16:27:3
+	dateReleased	2009-08-22
+	priority	12
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	control
+
 	track		wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf
 	subTrack	wgEncodeHudsonalphaChipSeq
 	shortLabel	SRF GM12878 Pk 1
@@ -1526,7 +1560,7 @@ wgEncode 1
 	type		narrowPeak
 	dateSubmitted	2008-11-22 15:39:43
 	dateReleased	2009-08-22
-	priority	11
+	priority	13
 	noInherit	on
 	configurable	on
 	cell		GM12878
@@ -1540,7 +1574,7 @@ wgEncode 1
 	type		wig 1.00 3711.00
 	dateSubmitted	2008-11-22 15:39:43
 	dateReleased	2009-08-22
-	priority	12
+	priority	14
 	noInherit	on
 	configurable	off
 	spanList	1
@@ -1557,7 +1591,7 @@ wgEncode 1
 	type		narrowPeak
 	dateSubmitted	2008-11-22 15:39:43
 	dateReleased	2009-08-22
-	priority	13
+	priority	15
 	noInherit	on
 	configurable	on
 	cell		GM12878
@@ -1571,7 +1605,7 @@ wgEncode 1
 	type		wig 1.00 3169.00
 	dateSubmitted	2008-11-22 15:39:43
 	dateReleased	2009-08-22
-	priority	14
+	priority	16
 	noInherit	on
 	configurable	off
 	spanList	1
@@ -1579,6 +1613,40 @@ wgEncode 1
 	maxHeightPixels	100:16:16
 	cell		GM12878
 	antibody	SRF
+
+	track		wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	Control K562 Raw 1
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (Control in K562 cells)
+	subGroups	view=RawSignal factor=Control cellType=K562
+	type		wig 1.00 6252.00
+	dateSubmitted	2008-11-22 16:27:3
+	dateReleased	2009-08-22
+	priority	17
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+	antibody	control
+
+	track		wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	Control K562 Raw 2
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (Control in K562 cells)
+	subGroups	view=RawSignal factor=Control cellType=K562
+	type		wig 1.00 3777.00
+	dateSubmitted	2008-11-22 16:27:3
+	dateReleased	2009-08-22
+	priority	18
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+	antibody	control
 
 	track		wgEncodeHudsonalphaChipSeqPeaksRep1K562Srf
 	subTrack	wgEncodeHudsonalphaChipSeq
@@ -1588,7 +1656,7 @@ wgEncode 1
 	type		narrowPeak
 	dateSubmitted	2008-11-22 15:39:43
 	dateReleased	2009-08-22
-	priority	15
+	priority	19
 	noInherit	on
 	configurable	on
 	cell		K562
@@ -1602,7 +1670,7 @@ wgEncode 1
 	type		wig 1.00 8435.00
 	dateSubmitted	2008-11-22 15:39:43
 	dateReleased	2009-08-22
-	priority	16
+	priority	20
 	noInherit	on
 	configurable	off
 	spanList	1
@@ -1619,7 +1687,7 @@ wgEncode 1
 	type		narrowPeak
 	dateSubmitted	2008-11-22 15:39:43
 	dateReleased	2009-08-22
-	priority	17
+	priority	21
 	noInherit	on
 	configurable	on
 	cell		K562
@@ -1633,7 +1701,7 @@ wgEncode 1
 	type		wig 1.00 3612.00
 	dateSubmitted	2008-11-22 15:39:43
 	dateReleased	2009-08-22
-	priority	18
+	priority	22
 	noInherit	on
 	configurable	off
 	spanList	1
