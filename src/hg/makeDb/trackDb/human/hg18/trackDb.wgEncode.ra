@@ -208,7 +208,7 @@ compositeTrack	on
 shortLabel	Chromatin Map
 longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
 group		regulation
-subGroup1	view Views Peaks=Peaks Signal=Signal SignalBO=Base_Overlap_Signal zRAW=RawSignal
+subGroup1	view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) zRAW=RawSignal
 subGroup2	cellType Cell_Line GM12878=GM12878
 subGroup3	EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF zINP=Input
 sortOrder	cellType=+ EXP=+ view=+
@@ -252,6 +252,22 @@ wgEncode	1
 	maxHeightPixels	100:32:16
 	cell           GM12878
 
+        track           wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878
+        subTrack        wgEncodeChromatinMap
+        shortLabel      DNase GM12878 BO
+        longLabel       ENCODE Duke DNase-Seq Base Overlap Signal (in GM12878 cells)
+        subGroups       view=SignalBO EXP=DNase cellType=GM12878
+        type            wig 0.00 417.00
+        dateSubmitted   2008-11-22 15:8:6
+        dateReleased    2009-08-22
+        priority        103
+        noInherit       on
+        configurable    on
+        spanList        1
+        windowingFunction mean
+        maxHeightPixels 100:32:16
+        cell            GM12878
+
 	track          wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
 	subTrack       wgEncodeChromatinMap
 	shortLabel     DNase GM12878 Raw1
@@ -260,7 +276,7 @@ wgEncode	1
 	type           wig 0.00 10.46
 	dateSubmitted  2008-11-4 8:33:46
 	dateReleased   2009-08-04
-	priority       103
+	priority       104
 	noInherit      on
 	configurable   off
 	spanList       1
@@ -276,7 +292,7 @@ wgEncode	1
 	type           wig 0.00 9.77
 	dateSubmitted  2008-11-4 8:33:46
 	dateReleased   2009-08-04
-	priority       104
+	priority       105
 	noInherit      on
 	configurable   off
 	spanList       1
@@ -292,7 +308,7 @@ wgEncode	1
 	type           wig 0.00 39.64
 	dateSubmitted  2008-11-4 8:33:46
 	dateReleased   2009-08-04
-	priority       105
+	priority       106
 	noInherit      on
 	configurable   off
 	spanList       1
@@ -343,7 +359,7 @@ wgEncode	1
     configurable    on
     spanList        1
     windowingFunction mean
-    maxHeightPixels 100:16:16
+    maxHeightPixels 100:32:16
     cell            GM12878
 
 	track          wgEncodeUncFAIREseqRawSignalRep1Gm12878
