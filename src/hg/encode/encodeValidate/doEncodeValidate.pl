@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.111 2008/11/22 23:48:39 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.112 2008/11/23 08:08:26 larrym Exp $
 
 use warnings;
 use strict;
@@ -61,7 +61,6 @@ our $outPath;           # full path of output directory
 our %terms;             # controlled vocabulary
 our $quickCount=100;
 our $time0 = time;
-our $tempDir = "/data/tmp";
 
 sub usage {
     print STDERR <<END;
@@ -936,6 +935,8 @@ usage() if (scalar(@ARGV) < 2);
 my $submitType = $ARGV[0];	# currently not used
 my $submitDir = $ARGV[1];
 
+$ENV{TMPDIR} = $Encode::tempDir;
+
 if($opt_validateFile && $opt_fileType) {
     if(my @errors = checkDataFormat($opt_fileType, $submitDir)) {
         die "Invalid file: " . join(", ", @errors) . "\n";
@@ -1250,7 +1251,7 @@ if(!@errors) {
                         } else {
                             $sortFiles = $files;
                         }
-                        push @cmds, "sort -T $tempDir -k1,1 -k2,2n $sortFiles";
+                        push @cmds, "sort -T $Encode::tempDir -k1,1 -k2,2n $sortFiles";
 			push @cmds, "gawk '\$6 == \"+\" {print}'" if $newView eq "PlusRawSignal";
 			push @cmds, "gawk '\$6 == \"-\" {print}'" if $newView eq "MinusRawSignal";
                         push @cmds, "bedItemOverlapCount $daf->{assembly} stdin";
