@@ -1578,6 +1578,30 @@ type bed 3
     color 50,150,50
     priority 3
 
+track sangamoDnaseHs 
+superTrack sangamoDnaseHs dense
+compositeTrack on
+shortLabel SGMO/EIO CD34 HS
+longLabel Sangamo - Eur. Inst. Oncology DNase Hypersensitive Sites
+group regulation
+visibility hide
+priority 0
+type bed 5 .
+
+    track sangamoDnaseHsNeg
+    subTrack sangamoDnaseHs
+    shortLabel SGMO/EIO CD34- HS
+    longLabel Sangamo - Eur. Inst. Oncology DNase CD34- Hypersensitive Sites 
+    priority 2
+    color 100,30,250
+
+    track sangamoDnaseHsPos
+    subTrack sangamoDnaseHs
+    shortLabel SGMO/EIO CD34+ HS
+    longLabel Sangamo - Eur. Inst. Oncology DNase CD34+ Hypersensitive Sites
+    priority 1
+    color 100,30,150
+
 # AFFY TRANSCRIPTOME SUPERTRACK
         track affyTxnPhase3Super
         superTrack on
