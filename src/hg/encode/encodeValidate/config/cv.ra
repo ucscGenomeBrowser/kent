@@ -1,6 +1,7 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
 # Cell types
+
 term GM12878
 type Cell Line
 description lymphoblastoid
@@ -97,6 +98,66 @@ termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 tier 3
 
+term astrocytes
+type Cell Line
+description Normal human astrocytes
+vendorName Lonza
+vendorId CC-2565
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
+lineage
+karyotype normal
+termId BTO:0000099
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
+tier 3
+
+term BJ-tert
+type Cell Line
+description skin fibroblast
+vendorName ATCC
+vendorId CRL-2522
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2522&Template=cellBiology
+lineage ectoderm
+karyotype normal
+termId BTO:0001255
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
+tier 3
+
+term caco-2
+type Cell Line
+description colorectal adenocarcinoma
+vendorName ATCC
+vendorId HTB-37
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-37&Template=cellBiology
+lineage
+karyotype cancer
+termId BTO:0000195
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000195&termName=Caco-2%20cell
+tier 3
+
+term fibroblast
+type Cell Line
+description Normal child fibroblast; donor sex: female
+vendorName Coriell
+vendorId AG08470
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08470&PgId=166
+lineage
+karyotype normal
+termId BTO:0000452
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452&termName=fibroblast
+tier 3
+
+term GM06990
+type Cell Line
+description lymphoblastoid (CEPH)
+vendorName Coriell
+vendorId GM06990
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM06990&PgId=166
+lineage
+karyotype cancer
+termId BTO:0002062 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
+tier 3
+
 term GM18507
 type Cell Line
 description lymphoblastoid
@@ -117,6 +178,18 @@ vendorId CCL247
 lineage endoderm
 karyotype cancer
 termId BTO:0002254
+tier 3
+
+term HEK293
+type Cell Line
+description embryonic kidney
+vendorName ATCC
+vendorId CRL-1573
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
+lineage endoderm
+karyotype cancer
+termId BTO:0000007
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
 tier 3
 
 term Jurkat
@@ -142,6 +215,30 @@ karyotype cancer
 termId BTO:0002021
 tier 3
 
+term MCF-7
+type Cell Line
+description mammary gland, adenocarcinoma
+vendorName ATCC
+vendorId HTB-22
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-22&Template=cellBiology
+lineage
+karyotype cancer
+termId BTO:0000093
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093&termName=MCF-7%20cell
+tier 3
+
+term NB4
+type Cell Line
+description acute promyelocytic leukemia cell line
+vendorName
+vendorId
+orderUrl
+lineage
+karyotype cancer
+termId BTO:0002489
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489&termName=promyelocytic%20leukemia%20cell%20line
+tier 3
+
 term NT2/D1
 type Cell Line
 description malignant pluripotent embryonal carcinoma (Ntera2)
@@ -152,6 +249,30 @@ lineage embryonic
 karyotype cancer
 termId BTO:0000946
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000946
+tier 3
+
+term osteoblast
+type Cell Line
+description Normal human osteoblasts (NHOst)
+vendorName Lonza
+vendorId CC-2538
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
+lineage
+karyotype normal
+termId BTO:0001593
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001593&termName=osteoblast
+tier 3
+
+term ovcar-3
+type Cell Line
+description ovarian adenocarcinoma
+vendorName ATCC
+vendorId HTB-161
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-161&Template=cellBiology
+lineage The NIH:OVCAR-3 line was established in 1982 by T.C. Hamilton, et al. from the malignant ascites of a patient with progressive adenocarcinoma of the ovary.
+karyotype cancer
+termId BTO:0000812
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000812&termName=OVCAR-3%20cell
 tier 3
 
 term PFSK-1
@@ -166,6 +287,28 @@ termId BTO:0000690 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000690
 tier 3
 
+term progeria
+type Cell Line
+description HGPS (HGADFN167, progeria research foundation)
+vendorName
+orderUrl
+lineage
+karyotype
+termId
+termUrl
+tier 3
+
+term prostate
+type Cell Line
+description prostate tissue purchased for Gingeras project
+vendorName Unknown
+orderUrl http://www.atcc.org/
+lineage
+karyotype
+termId BTO:0001129
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
+tier 3
+
 term SK-N-MC
 type Cell Line
 description neuroepithelioma cell line derived from a metastatic supra-orbital human brain tumor
@@ -178,39 +321,17 @@ termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 tier 3
 
-term prostate
-type Cell Line
-description prostate tissue purchased for Gingeras project
-vendorName Unknown
-orderUrl http://www.atcc.org/
-lineage Unknown
-karyotype Unknown
-termId BTO:0001129
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
-tier 3
-
 term SK-N-SH(+RA)
 type Cell Line
 description neuroblastoma cell line differentiated w/ retinoic acid
 vendorName ATCC
 vendorId HTB-11
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
-lineage Unknown
-karyotype Unknown
+lineage ectoderm
+karyotype cancer
 termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
 tier 3
-
-term GM06990
-type Cell Line
-description lymphoblastoid (CEPH)
-vendorName Coriell
-vendorId GM06990
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM06990&PgId=166
-lineage Unknown
-karyotype Unknown
-termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 
 term Th1
 type Cell Line
@@ -218,10 +339,11 @@ description primary human Th1 T cells
 vendorName
 vendorId
 orderUrl
-lineage Unknown
-karyotype Unknown
-termId
-termUrl
+lineage
+karyotype
+termId BTO:0001678
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001678&termName=Th1%20cell
+tier 3
 
 # Gene types
 term Known
