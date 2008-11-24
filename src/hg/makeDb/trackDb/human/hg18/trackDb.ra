@@ -1579,7 +1579,6 @@ type bed 3
     priority 3
 
 track sangamoDnaseHs 
-superTrack sangamoDnaseHs dense
 compositeTrack on
 shortLabel SGMO/EIO CD34 HS
 longLabel Sangamo - Eur. Inst. Oncology DNase Hypersensitive Sites
