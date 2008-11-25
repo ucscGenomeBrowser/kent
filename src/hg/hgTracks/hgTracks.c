@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1523 2008/11/25 07:17:44 mikep Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1524 2008/11/25 22:48:07 angie Exp $";
 
 #define SMALLBUF 64
 
@@ -1394,6 +1394,8 @@ switch (track->limitedVis)
 	    {
         if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
 		{
+		if (isWithCenterLabels(track))
+		    y += fontHeight;
 		struct track *subtrack;
 		for (subtrack = track->subtracks;  subtrack != NULL;
 		     subtrack = subtrack->next)
