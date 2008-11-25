@@ -821,6 +821,72 @@ priority        0
 type            bed 3   
 wgEncode        1  
 
+	track		wgEncodeAffyRnaChipFilteredTransfragsProstateCellLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA prostate cell
+	longLabel	ENCODE Affy Filtered Transfrags (from longNonPolyA in prostate cell cell)
+	subGroups	view=FilteredTransfrags cellType=prostate localization=cell rnaExtract=longNonPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-24 21:27:26
+	dateReleased	2009-08-24
+	priority	2
+	noInherit	on
+	configurable	on
+	rnaExtract	longNonPolyA
+	localization	cell
+	cell		prostate
+
+	track		wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA prostate cell
+	longLabel	ENCODE Affy Transfrags (from longNonPolyA in prostate cell cell)
+	subGroups	view=Transfrags cellType=prostate localization=cell rnaExtract=longNonPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-24 21:27:26
+	dateReleased	2009-08-24
+	priority	1
+	noInherit	on
+	configurable	on
+	rnaExtract	longNonPolyA
+	localization	cell
+	cell		prostate
+
+	track		wgEncodeAffyRnaChipFilteredRawSignalProstateCellLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA prostate cell
+	longLabel	ENCODE (from longNonPolyA in prostate cell cell)
+	subGroups	view=FilteredRawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
+	type		wig -62124.00 54385.00
+	dateSubmitted	2008-11-24 21:27:26
+	dateReleased	2009-08-24
+	priority	3
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	cell
+	cell		prostate
+
+	track		wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA prostate cell Raw
+	longLabel	ENCODE (from longNonPolyA in prostate cell cell)
+	subGroups	view=RawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
+	type		wig -62124.00 50627.00
+	dateSubmitted	2008-11-24 21:27:26
+	dateReleased	2009-08-24
+	priority	4
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	cell
+	cell		prostate
+
 
 track wgEncodeYaleChIPseq
 compositeTrack on
