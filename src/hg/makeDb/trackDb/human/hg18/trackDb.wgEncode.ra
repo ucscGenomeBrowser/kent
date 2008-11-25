@@ -1085,6 +1085,72 @@ wgEncode        1
 	localization	cell
 	cell		K562
 
+	track		wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA K562 nucleus
+	longLabel	ENCODE Affy Transfrags (from longPolyA in K562 cell nucleus)
+	subGroups	view=Transfrags cellType=K562 localization=nucleus rnaExtract=longPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-25 0:44:34
+	dateReleased	2009-08-25
+	priority	13
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	nucleus
+	cell		K562
+
+	track		wgEncodeAffyRnaChipFilteredTransfragsK562NucleusLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA K562 nucleus
+	longLabel	ENCODE Affy Filtered Transfrags (from longPolyA in K562 cell nucleus)
+	subGroups	view=FilteredTransfrags cellType=K562 localization=nucleus rnaExtract=longPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-25 0:44:34
+	dateReleased	2009-08-25
+	priority	14
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	nucleus
+	cell		K562
+
+	track		wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA K562 nucleus Raw
+	longLabel	ENCODE (from longPolyA in K562 cell nucleus)
+	subGroups	view=RawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
+	type		wig WGENCODEAFFYRNACHIPRAWSIGNALK562NUCLEUSLONGPOLYA_MINMAXRANGE
+	dateSubmitted	2008-11-25 0:44:34
+	dateReleased	2009-08-25
+	priority	16
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	nucleus
+	cell		K562
+
+	track		wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA K562 nucleus
+	longLabel	ENCODE (from longPolyA in K562 cell nucleus)
+	subGroups	view=FilteredRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
+	type		wig WGENCODEAFFYRNACHIPFILTEREDRAWSIGNALK562NUCLEUSLONGPOLYA_MINMAXRANGE
+	dateSubmitted	2008-11-25 0:44:34
+	dateReleased	2009-08-25
+	priority	15
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	nucleus
+	cell		K562
+
 
 track wgEncodeYaleChIPseq
 compositeTrack on
