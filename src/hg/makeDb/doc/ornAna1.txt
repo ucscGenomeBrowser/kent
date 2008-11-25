@@ -1397,4 +1397,18 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
+
+############################################################################
+# QUALITY TRACK (DONE - 2008-11-24 - Hiram)
+    mkdir /hive/data/genomes/ornAna1/downloads
+    cd /hive/data/genomes/ornAna1/downloads
+    qaToQac contigs.fa.qual.gz assembly.qac
+    qacAgpLift ../ornAna1.agp assembly.qac scaffolds.qac
+    mkdir /hive/data/genomes/ornAna1/bed/qual
+    cd /hive/data/genomes/ornAna1/bed/qual
+    #	the qac file was created by Rico during 28-way annotations
+    qacToWig -fixed ../../downloads/scaffolds.qac stdout \
+	| wigEncode stdin qual.wig qual.wib
+    ln -s `pwd`/qual.wib /gbdb/ornAna1/wib
+    hgLoadWiggle -pathPrefix=/gbdb/ornAna1/wib ornAna1 quality qual.wig
 ############################################################################
