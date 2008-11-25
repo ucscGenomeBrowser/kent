@@ -809,9 +809,9 @@ shortLabel      Affy RnaChip
 longLabel       ENCODE Affy Gingeras RnaChip
 group           regulation
 subGroup1       view Views Transfrags=Transfrags FilteredTransfrags=FilteredTransfrags RawSignal=RawSignal FilteredRawSignal=FilteredRawSignal
-subGroup2       cellType Cell_Line prostate=prostate
-subGroup3       localization Localization cell=cell
-subGroup4       rnaExtract RnaExtract longNonPolyA=longNonPolyA
+subGroup2       cellType Cell_Line prostate=prostate K562=K562 
+subGroup3       localization Localization cell=cell nucleus=nucleus 
+subGroup4       rnaExtract RnaExtract longNonPolyA=longNonPolyA longPolyA=longPolyA total=total 
 dimensions      dimensionX=cellType     dimensionY=localization dimensionZ=rnaExtract
 sortOrder       cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary    encode/cv.ra cellType localization rnaExtract
