@@ -18,7 +18,7 @@
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.14 2008/11/25 01:28:23 mikep Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.15 2008/11/25 19:20:48 mikep Exp $";
 
 static char *cv_file()
 {
@@ -53,7 +53,7 @@ else if (sameString(type,"ripAntibody"))
     }
 else if (sameString(type,"ripTgtProtein"))
     {
-    puts("  <TH>Term</TH><TH>Description</TH>");
+    puts("  <TH>Term</TH><TH>Alternative Symbols</TH><TH>Description</TH><TH>URL</TH>");
     }
 else if (sameString(type,"localization"))
     {
@@ -137,8 +137,15 @@ else if (sameString(type,"ripTgtProtein"))
     ++(*total);
     puts("<TR>");
     printf("  <TD>%s</TD>\n", term);
+    s = hashFindVal(ra, "alternativeSymbols");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
     s = hashFindVal(ra, "description");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
+    s = hashFindVal(ra, "url");
+    if (s)
+	printf("  <TD><A HREF=\"%s\">Source URL</A></TD>\n", s);
+    else
+	printf("  <TD>&nbsp;</TD>\n");
     puts("</TR>");
     }
 else if (sameString(type,"localization"))
