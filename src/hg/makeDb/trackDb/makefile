@@ -52,7 +52,7 @@ DBS = 	hg16 hg17 hg18\
 	dasNov1 dasNov2 \
 	loxAfr1 loxAfr2 \
 	echTel1 \
-	monDom1 monDom4 \
+	monDom1 monDom4 monDom5 \
 	anoCar1 \
 	galGal2 galGal3 \
 	taeGut1 \
