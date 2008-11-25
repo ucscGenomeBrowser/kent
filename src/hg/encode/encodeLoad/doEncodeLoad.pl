@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.43 2008/11/21 22:32:52 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.44 2008/11/25 08:02:01 mikep Exp $
 
 # Usage:
 #
@@ -238,6 +238,9 @@ if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
 # Add a suffix for non-production loads (to avoid loading over existing tables).
 
 my $tableSuffix = "";
+if ($submitDir eq ".") { # make sure command-line use specifies full path and directory
+    die "ERROR: please specify full path to directory\n";
+}
 if(dirname($submitDir) =~ /_(.*)/) {
     if($1 ne 'prod') {
         # yank out "beta" from encinstance_beta
