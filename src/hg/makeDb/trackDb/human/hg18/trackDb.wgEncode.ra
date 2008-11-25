@@ -210,7 +210,7 @@ longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
 group		regulation
 subGroup1	view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) zRAW=RawSignal
 subGroup2	cellType Cell_Line GM12878=GM12878
-subGroup3	EXP Experiment DNase=DNase-seq FAIRE=FAIRE-seq IP-CTCF=ChIP-seq_CTCF zCTRL=Input
+subGroup3	EXP Experiment DNase=DNase-Seq FAIRE=FAIRE-Seq IP-CTCF=ChIP-Seq_CTCF zCTRL=Input
 sortOrder	cellType=+ EXP=+ view=+
 controlledVocabulary	encode/cv.ra cellType
 dimensions  dimensionX=cellType dimensionY=EXP
@@ -546,16 +546,61 @@ priority 0
 type bed 3
 wgEncode 1
 
-        track   wgEncodeNhgriNreSilencersK562SV40
-        subTrack        wgEncodeNhgriNre
-        shortLabel      NHGRI NRE K562
-        longLabel       ENCODE NHGRI Negative Regulatory Elements - Silencers in K562 cells
-        subGroups       view=SI cellType=K562 promoter=SV40
-        type    bed 6
-        dateSubmitted   2008-09-18 17:19:9
-        priority        1
-        noInherit       on
-        cell    K562
+	track		wgEncodeNhgriNRESilencersK562Ggamma
+	subTrack	wgEncodeNhgriNre
+	shortLabel	K562
+	longLabel	ENCODE Elnitski Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
+	subGroups	view=SI cellType=K562 promoter=Ggam
+	type		bed 6
+	dateSubmitted	2008-11-25 13:50:43
+	dateReleased	2009-08-25
+	priority	1
+	noInherit	on
+	configurable	on
+	promoter	G-gamma
+	cell		K562
+
+	track		wgEncodeNhgriNREEnhancerBlockersK562Ggamma
+	subTrack	wgEncodeNhgriNre
+	shortLabel	K562
+	longLabel	ENCODE Elnitski Negative Regulatory Elements - Enhancer Blockers (NRE-EBs) (in K562 cells)
+	subGroups	view=EB cellType=K562 promoter=Ggam
+	type		bed 6
+	dateSubmitted	2008-11-25 13:50:43
+	dateReleased	2009-08-25
+	priority	2
+	noInherit	on
+	configurable	on
+	promoter	G-gamma
+	cell		K562
+
+	track		wgEncodeNhgriNRESilencersK562Sv40
+	subTrack	wgEncodeNhgriNre
+	shortLabel	K562
+	longLabel	ENCODE Elnitski Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
+	subGroups	view=SI cellType=K562 promoter=SV40
+	type		bed 6
+	dateSubmitted	2008-11-25 13:50:43
+	dateReleased	2009-08-25
+	priority	101
+	noInherit	on
+	configurable	on
+	promoter	SV40
+	cell		K562
+
+	track		wgEncodeNhgriNREEnhancerBlockersK562Sv40
+	subTrack	wgEncodeNhgriNre
+	shortLabel	K562
+	longLabel	ENCODE Elnitski Negative Regulatory Elements - Enhancer Blockers (NRE-EBs) (in K562 cells)
+	subGroups	view=EB cellType=K562 promoter=SV40
+	type		bed 6
+	dateSubmitted	2008-11-25 13:50:43
+	dateReleased	2009-08-25
+	priority	102
+	noInherit	on
+	configurable	on
+	promoter	SV40
+	cell		K562
 
 track wgEncodeRikenCage
 compositeTrack on
