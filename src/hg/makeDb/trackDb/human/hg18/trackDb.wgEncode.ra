@@ -887,6 +887,204 @@ wgEncode        1
 	localization	cell
 	cell		prostate
 
+	track		wgEncodeAffyRnaChipTransfragsProstateCellLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA prostate cell
+	longLabel	ENCODE Affy Transfrags (from longPolyA in prostate cell cell)
+	subGroups	view=Transfrags cellType=prostate localization=cell rnaExtract=longPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-24 23:22:15
+	dateReleased	2009-08-24
+	priority	5
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	cell
+	cell		prostate
+
+	track		wgEncodeAffyRnaChipFilteredTransfragsProstateCellLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA prostate cell
+	longLabel	ENCODE Affy Filtered Transfrags (from longPolyA in prostate cell cell)
+	subGroups	view=FilteredTransfrags cellType=prostate localization=cell rnaExtract=longPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-24 23:22:15
+	dateReleased	2009-08-24
+	priority	6
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	cell
+	cell		prostate
+
+	track		wgEncodeAffyRnaChipRawSignalProstateCellLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA prostate cell Raw
+	longLabel	ENCODE (from longPolyA in prostate cell cell)
+	subGroups	view=RawSignal cellType=prostate localization=cell rnaExtract=longPolyA
+	type		wig -62728.00 58726.00
+	dateSubmitted	2008-11-24 23:22:15
+	dateReleased	2009-08-24
+	priority	8
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	cell
+	cell		prostate
+
+	track		wgEncodeAffyRnaChipFilteredRawSignalProstateCellLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA prostate cell
+	longLabel	ENCODE (from longPolyA in prostate cell cell)
+	subGroups	view=FilteredRawSignal cellType=prostate localization=cell rnaExtract=longPolyA
+	type		wig -62728.00 56449.00
+	dateSubmitted	2008-11-24 23:22:15
+	dateReleased	2009-08-24
+	priority	7
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	cell
+	cell		prostate
+
+	track		wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA K562 nucleus
+	longLabel	ENCODE Affy Transfrags (from longNonPolyA in K562 cell nucleus)
+	subGroups	view=Transfrags cellType=K562 localization=nucleus rnaExtract=longNonPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-25 0:7:42
+	dateReleased	2009-08-25
+	priority	9
+	noInherit	on
+	configurable	on
+	rnaExtract	longNonPolyA
+	localization	nucleus
+	cell		K562
+
+	track		wgEncodeAffyRnaChipFilteredTransfragsK562NucleusLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA K562 nucleus
+	longLabel	ENCODE Affy Filtered Transfrags (from longNonPolyA in K562 cell nucleus)
+	subGroups	view=FilteredTransfrags cellType=K562 localization=nucleus rnaExtract=longNonPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-25 0:7:42
+	dateReleased	2009-08-25
+	priority	10
+	noInherit	on
+	configurable	on
+	rnaExtract	longNonPolyA
+	localization	nucleus
+	cell		K562
+
+	track		wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA K562 nucleus Raw
+	longLabel	ENCODE (from longNonPolyA in K562 cell nucleus)
+	subGroups	view=RawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
+	type		wig -56486.00 59077.00
+	dateSubmitted	2008-11-25 0:7:42
+	dateReleased	2009-08-25
+	priority	12
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	nucleus
+	cell		K562
+
+	track		wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA K562 nucleus
+	longLabel	ENCODE (from longNonPolyA in K562 cell nucleus)
+	subGroups	view=FilteredRawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
+	type		wig -56486.00 45415.00
+	dateSubmitted	2008-11-25 0:7:42
+	dateReleased	2009-08-25
+	priority	11
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	nucleus
+	cell		K562
+
+	track		wgEncodeAffyRnaChipTransfragsK562CellTotal
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	total K562 cell
+	longLabel	ENCODE Affy Transfrags (from total in K562 cell cell)
+	subGroups	view=Transfrags cellType=K562 localization=cell rnaExtract=total
+	type		broadPeak
+	dateSubmitted	2008-11-25 0:7:1
+	dateReleased	2009-08-25
+	priority	9
+	noInherit	on
+	configurable	on
+	rnaExtract	total
+	localization	cell
+	cell		K562
+
+	track		wgEncodeAffyRnaChipFilteredTransfragsK562CellTotal
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	total K562 cell
+	longLabel	ENCODE Affy Filtered Transfrags (from total in K562 cell cell)
+	subGroups	view=FilteredTransfrags cellType=K562 localization=cell rnaExtract=total
+	type		broadPeak
+	dateSubmitted	2008-11-25 0:7:1
+	dateReleased	2009-08-25
+	priority	10
+	noInherit	on
+	configurable	on
+	rnaExtract	total
+	localization	cell
+	cell		K562
+
+	track		wgEncodeAffyRnaChipFilteredRawSignalK562CellTotal
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	total K562 cell
+	longLabel	ENCODE (from total in K562 cell cell)
+	subGroups	view=FilteredRawSignal cellType=K562 localization=cell rnaExtract=total
+	type		wig -40989.00 59494.00
+	dateSubmitted	2008-11-25 0:7:1
+	dateReleased	2009-08-25
+	priority	11
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	total
+	localization	cell
+	cell		K562
+
+	track		wgEncodeAffyRnaChipRawSignalK562CellTotal
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	total K562 cell Raw
+	longLabel	ENCODE (from total in K562 cell cell)
+	subGroups	view=RawSignal cellType=K562 localization=cell rnaExtract=total
+	type		wig -43345.00 59494.00
+	dateSubmitted	2008-11-25 0:7:1
+	dateReleased	2009-08-25
+	priority	12
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	total
+	localization	cell
+	cell		K562
+
 
 track wgEncodeYaleChIPseq
 compositeTrack on
