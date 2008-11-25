@@ -1415,6 +1415,73 @@ wgEncode        1
 	localization	nucleus
 	cell		GM12878
 
+	track		wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA GM12878 cytosol
+	longLabel	ENCODE Affy Transfrags (from longPolyA in GM12878 cell cytosol)
+	subGroups	view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=longPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-25 10:26:0
+	dateReleased	2009-08-25
+	priority	21
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	cytosol
+	cell		GM12878
+
+	track		wgEncodeAffyRnaChipFilteredTransfragsGm12878CytosolLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA GM12878 cytosol
+	longLabel	ENCODE Affy Filtered Transfrags (from longPolyA in GM12878 cell cytosol)
+	subGroups	view=FilteredTransfrags cellType=GM12878 localization=cytosol rnaExtract=longPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-25 10:26:0
+	dateReleased	2009-08-25
+	priority	22
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	cytosol
+	cell		GM12878
+
+	track		wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA GM12878 cytosol Raw
+	longLabel	ENCODE (from longPolyA in GM12878 cell cytosol)
+	subGroups	view=RawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
+	type		wig -61519.00 60416.00
+	dateSubmitted	2008-11-25 10:26:0
+	dateReleased	2009-08-25
+	priority	24
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	cytosol
+	cell		GM12878
+
+	track		wgEncodeAffyRnaChipFilteredRawSignalGm12878CytosolLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA GM12878 cytosol
+	longLabel	ENCODE (from longPolyA in GM12878 cell cytosol)
+	subGroups	view=FilteredRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
+	type		wig -61519.00 60470.00
+	dateSubmitted	2008-11-25 10:26:0
+	dateReleased	2009-08-25
+	priority	23
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	cytosol
+	cell		GM12878
+
+
 
 track wgEncodeYaleChIPseq
 compositeTrack on
