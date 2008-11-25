@@ -9,7 +9,9 @@
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encode.c,v 1.11 2008/11/14 15:59:56 aamp Exp $";
+static char const rcsid[] = "$Id: encode.c,v 1.12 2008/11/25 07:17:44 mikep Exp $";
+
+#define SMALLBUF 128
 
 char *encodeErgeName(struct track *tg, void *item)
 /* return the actual data name, in form xx/yyyy cut off xx/ return yyyy */
@@ -84,7 +86,7 @@ char *encodeRnaName(struct track *tg, void *item)
 {
 struct encodeRna *el = item;
 char *full = el->name;
-static char abbrev[64];
+static char abbrev[SMALLBUF];
 char *e;
 
 strcpy(abbrev, skipChr(full));

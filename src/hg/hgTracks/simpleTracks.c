@@ -124,9 +124,11 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.43 2008/11/14 15:59:57 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.44 2008/11/25 07:17:45 mikep Exp $";
 
 #define CHROM_COLORS 26
+#define SMALLBUF 128
+#define SMALLDYBUF 64
 
 int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
 /* Declare our color gradients and the the number of colors in them */
@@ -1276,7 +1278,7 @@ if (!useHgvs && !useCommon && !useId)
 
 for (el = tg->items; el != NULL; el = el->next)
     {
-    struct dyString *name = dyStringNew(64);
+    struct dyString *name = dyStringNew(SMALLDYBUF);
     labelStarted = FALSE; /* reset for each item */
     if (useHgvs)
         {
@@ -2711,7 +2713,7 @@ if (withLeftLabels && firstOverflow)
 	    overflowCount++;
     hvGfxUnclip(hvg);
     hvGfxSetClip(hvg, leftLabelX, yOff, insideWidth, tg->height);
-    char nameBuff[64];
+    char nameBuff[SMALLBUF];
     safef(nameBuff, sizeof(nameBuff), "Last Row: %d", overflowCount);
     mgFontStringWidth(font, nameBuff);
     hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth-1, tg->lineHeight,
@@ -3359,7 +3361,7 @@ struct sqlResult *sr;
 char **row;
 int rowOffset;
 struct dbRIP *loadItem, *itemList = NULL;
-struct dyString *query = dyStringNew(64);
+struct dyString *query = dyStringNew(SMALLDYBUF);
 char *option = NULL;
 double freqLow = sqlFloat(cartCgiUsualString(cart, ALLELE_FREQ_LOW, "0.0"));
 double freqHi = sqlFloat(cartCgiUsualString(cart, ALLELE_FREQ_HI, "1.0"));
@@ -3665,7 +3667,7 @@ int grayIx = maxShade;
 struct genePredReader *gpr = NULL;
 struct genePred *gp = NULL;
 boolean nmdTrackFilter = sameString(trackDbSettingOrDefault(tg->tdb, "nmdFilter", "off"), "on");
-char varName[64];
+char varName[SMALLBUF];
 safef(varName, sizeof(varName), "%s.%s", table, HIDE_NONCODING_SUFFIX);
 boolean hideNoncoding = cartUsualBoolean(cart, varName, HIDE_NONCODING_DEFAULT);
 boolean doNmd = FALSE;
@@ -3971,7 +3973,7 @@ if (hTableExists(database, "kgXref"))
     {
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
-        struct dyString *name = dyStringNew(64);
+        struct dyString *name = dyStringNew(SMALLDYBUF);
     	if (useGeneSymbol)
             {
             sprintf(cond_str, "kgID='%s'", lf->name);
@@ -4103,7 +4105,7 @@ if (hTableExists(database, "kgXref"))
 
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
-        struct dyString *name = dyStringNew(64);
+        struct dyString *name = dyStringNew(SMALLDYBUF);
         struct knownGenesExtra *kgE;
         AllocVar(kgE);
         labelStarted = FALSE; /* reset between items */
@@ -4189,7 +4191,7 @@ void loadKnownGene(struct track *tg)
 {
 struct trackDb *tdb = tg->tdb;
 loadGenePredWithName2(tg);
-char varName[64];
+char varName[SMALLBUF];
 safef(varName, sizeof(varName), "%s.show.noncoding", tdb->tableName);
 boolean showNoncoding = cartUsualBoolean(cart, varName, TRUE);
 safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->tableName);
@@ -4999,7 +5001,7 @@ for (label = refGeneLabels; label != NULL; label = label->next)
 
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
-    struct dyString *name = dyStringNew(64);
+    struct dyString *name = dyStringNew(SMALLDYBUF);
     labelStarted = FALSE; /* reset for each item in track */
     if ((useGeneName || useAcc || useMim) &&
         (!isNative || isNewChimp(database)))
@@ -5048,10 +5050,10 @@ void lookupProteinNames(struct track *tg)
 {
 struct linkedFeatures *lf;
 boolean useGene, useAcc, useSprot, usePos;
-char geneName[64];
-char accName[64];
-char sprotName[64];
-char posName[64];
+char geneName[SMALLBUF];
+char accName[SMALLBUF];
+char sprotName[SMALLBUF];
+char posName[SMALLBUF];
 char *blastRef;
 char *buffer;
 char *table = NULL;
@@ -5175,7 +5177,7 @@ int col = tg->ixColor;
 char *acc;
 char *colon, *pos;
 char *buffer;
-char cMode[64];
+char cMode[SMALLBUF];
 int colorMode;
 char *blastRef;
 
@@ -5411,7 +5413,7 @@ int cDnaReadDirectionForMrna(struct sqlConnection *conn, char *acc)
 {
 int direction = -1;
 char query[512];
-char buf[64], *s = NULL;
+char buf[SMALLBUF], *s = NULL;
 sprintf(query, "select direction from gbCdnaInfo where acc='%s'", acc);
 if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
     {
@@ -5484,7 +5486,7 @@ char *sanger22Name(struct track *tg, void *item)
 {
 struct linkedFeatures *lf = item;
 char *full = lf->name;
-static char abbrev[64];
+static char abbrev[SMALLBUF];
 
 strncpy(abbrev, full, sizeof(abbrev));
 abbr(abbrev, "Em:");
@@ -5618,7 +5620,7 @@ if (hTableExists(database,  infoTable))
     char *symbol = NULL;
     char *ptr = strchr(name, '-');
     char query[256];
-    char buf[64];
+    char buf[SMALLBUF];
     if (ptr != NULL)
 	*ptr = 0;
     safef(query, sizeof(query),
@@ -5655,7 +5657,7 @@ if (isNotEmpty(infoTable) && hTableExists(database,  infoTable))
     struct sqlConnection *conn = hAllocConn(database);
     char *symbol = NULL;
     char query[256];
-    char buf[64];
+    char buf[SMALLBUF];
     safef(query, sizeof(query),
 	  "select symbol from %s where name = '%s';", infoTable, name);
     symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -5683,7 +5685,7 @@ struct linkedFeatures *lf = item;
 char *name = lf->name;
 char *symbol = NULL;
 char query[256];
-char buf[64];
+char buf[SMALLBUF];
 safef(query, sizeof(query),
       "select value from sgdToName where name = '%s'", name);
 symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -6068,7 +6070,7 @@ char *isochoreName(struct track *tg, void *item)
 /* Return name of gold track item. */
 {
 struct isochores *iso = item;
-static char buf[64];
+static char buf[SMALLBUF];
 sprintf(buf, "%3.1f%% GC", 0.1*iso->gcPpt);
 return buf;
 }
@@ -6155,7 +6157,7 @@ char *celeraDupPositiveName(struct track *tg, void *item)
 {
 struct celeraDupPositive *gd = item;
 char *full = gd->name;
-static char abbrev[64];
+static char abbrev[SMALLBUF];
 
 strcpy(abbrev, skipChr(full));
 abbr(abbrev, "om");
@@ -6218,7 +6220,7 @@ char *celeraCoverageName(struct track *tg, void *item)
 {
 struct celeraCoverage *gd = item;
 char *full = gd->name;
-static char abbrev[64];
+static char abbrev[SMALLBUF];
 
 strcpy(abbrev, skipChr(full));
 abbr(abbrev, "om");
@@ -6285,7 +6287,7 @@ char *genomicSuperDupsName(struct track *tg, void *item)
 {
 struct genomicSuperDups *gd = item;
 char *full = gd->name;
-static char abbrev[64];
+static char abbrev[SMALLBUF];
 char *s = strchr(full, '.');
 if (s != NULL)
     full = s+1;
@@ -6359,7 +6361,7 @@ char *genomicDupsName(struct track *tg, void *item)
 {
 struct genomicDups *gd = item;
 char *full = gd->name;
-static char abbrev[64];
+static char abbrev[SMALLBUF];
 
 strcpy(abbrev, skipChr(full));
 abbr(abbrev, "om");
@@ -7020,7 +7022,7 @@ if (org == NULL)
     return name;
 else
     {
-    static char compName[64];
+    static char compName[SMALLBUF];
     char *s;
     s = skipToSpaces(org);
     if (s != NULL)
@@ -7251,7 +7253,7 @@ char *rnaGeneName(struct track *tg, void *item)
 {
 struct rnaGene *el = item;
 char *full = el->name;
-static char abbrev[64];
+static char abbrev[SMALLBUF];
 char *e;
 
 strcpy(abbrev, skipChr(full));
@@ -8659,7 +8661,7 @@ bool isSubtrackVisible(struct track *subtrack)
 if (subtrack->limitedVisSet && subtrack->limitedVis == tvHide)
     return FALSE;
 bool enabledInTdb = subtrackEnabledInTdb(subtrack);
-char option[64];
+char option[SMALLBUF];
 safef(option, sizeof(option), "%s_sel", subtrack->mapName);
 boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
 /* Remove redundant cart settings to avoid cart bloat. */
@@ -8735,7 +8737,7 @@ int subtrackCt = subtrackCount(track->subtracks);
 if (subtrackCt == 0)
     for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	{
-	char option[64];
+	char option[SMALLBUF];
 	safef(option, sizeof(option), "%s_sel", subtrack->mapName);
 	cartRemove(cart, option);
 	}
@@ -9051,7 +9053,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 	    touppers(pattern);
 	    for(lf = *pLfList; lf != NULL; lf=lf->next)
 		{
-		char copy[64];
+		char copy[SMALLBUF];
 		boolean gotMatch;
 		safef(copy, sizeof(copy), "%s", lf->name);
 		touppers(copy);
@@ -9784,7 +9786,7 @@ void loadGenePredWithConfiguredName(struct track *tg)
 /* Convert gene pred info in window to linked feature. Include name
  * in "extra" field (gene name, accession, or both, depending on UI) */
 {
-char buf[64];
+char buf[SMALLBUF];
 char *geneLabel;
 boolean useGeneName, useAcc;
 struct linkedFeatures *lf;
@@ -9797,7 +9799,7 @@ useAcc = sameString(geneLabel, "accession") || sameString(geneLabel, "both");
 loadGenePredWithName2(tg);
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
-    struct dyString *name = dyStringNew(64);
+    struct dyString *name = dyStringNew(SMALLDYBUF);
     if (useGeneName && lf->extra)
         dyStringAppend(name, lf->extra);
     if (useGeneName && useAcc)
@@ -9827,7 +9829,7 @@ char *geneClasses = trackDbSetting(tg->tdb, GENEPRED_CLASS_VAR);
 char *gClassesClone = NULL;
 int class, classCt = 0;
 char *classes[20];
-char gClass[64];
+char gClass[SMALLBUF];
 char *classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
 struct linkedFeatures *lf = item;
 struct sqlConnection *conn = hAllocConn(database);
@@ -10881,7 +10883,7 @@ int subtrackCt = slCount(tdb->subtracks);
 int altColors = subtrackCt - 1;
 struct track *subtrack = NULL;
 TrackHandler handler;
-char table[64];
+char table[SMALLBUF];
 struct hashEl *hel, *hels = NULL;
 int len;
 boolean smart = FALSE;

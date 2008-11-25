@@ -16,7 +16,9 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.83 2008/09/03 19:19:06 markd Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.84 2008/11/25 07:17:45 mikep Exp $";
+
+#define SMALLBUF 128
 
 struct wigItem
 /* A wig track item. */
@@ -414,7 +416,7 @@ struct hash *spans = NULL;	/* Spans encountered during load */
 int basesPerPixel = (int)((double)(winEnd - winStart)/(double)insideWidth);
 char *span1K = "Span >= 1000 limit 1";
 char *spanOver1K = "Span >= 1000";
-char whereSpan[64];
+char whereSpan[SMALLBUF];
 int spanMinimum = 1;
 char *dbTableName = NULL;
 struct trackDb *tdb = NULL; 

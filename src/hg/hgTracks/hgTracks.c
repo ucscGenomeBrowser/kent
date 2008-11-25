@@ -41,7 +41,9 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1522 2008/11/14 15:59:56 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1523 2008/11/25 07:17:44 mikep Exp $";
+
+#define SMALLBUF 64
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -1599,7 +1601,7 @@ for (track = trackList; track != NULL; track = track->next)
             }
 	if (maxSafeHeight < (pixHeight+trackPlusLabelHeight(track,fontHeight)))
 	    {
-	    char numBuf[64];
+	    char numBuf[SMALLBUF];
 	    sprintLongWithCommas(numBuf, maxSafeHeight);
 	    printf("warning: image is over %s pixels high at "
 		"track '%s',<BR>remaining tracks set to hide "
@@ -1710,7 +1712,7 @@ if (withLeftLabels)
 	    }
 	if (baseShowRuler)
 	    {
-	    char rulerLabel[64];
+	    char rulerLabel[SMALLBUF];
 	    if (hvg->rc)
 		safef(rulerLabel,ArraySize(rulerLabel),":%s",chromName);
 	    else
@@ -1792,7 +1794,7 @@ if (rulerMode != tvHide)
     if (baseShowPos||baseShowAsm)
 	{
 	char txt[256];
-	char numBuf[64];
+	char numBuf[SMALLBUF];
 	char *freezeName = NULL;
 	freezeName = hFreezeFromDb(database);
 	sprintLongWithCommas(numBuf, winEnd-winStart);
@@ -2128,7 +2130,7 @@ void makeHgGenomeTrackVisible(struct track *track)
 {
 struct hashEl *hels;
 struct hashEl *hel;
-char prefix[64];
+char prefix[SMALLBUF];
 /* First check if the click was from hgGenome.  If not, leave. */
 /* get the names of the tracks in the cart */
 safef(prefix, sizeof(prefix), "%s_", hggGraphPrefix);
@@ -2152,7 +2154,7 @@ for (hel = hels; hel != NULL; hel = hel->next)
 	    {
 	    if (sameString(subtrack->tableName, table))
 		{
-		char selName[64];
+		char selName[SMALLBUF];
 		char selVal[2];
 		track->visibility = tvFull;
 		track->tdb->visibility = tvFull;
@@ -2660,7 +2662,7 @@ struct slName *bl;
 char *visAll = cartCgiUsualString(cart, "hgt.visAllFromCt", NULL);
 if (visAll)
     {
-    char buf[64];
+    char buf[SMALLBUF];
     safef(buf, sizeof buf, "browser %s %s", visAll, "all");
     slAddTail(&browserLines, slNameNew(buf));
     }
