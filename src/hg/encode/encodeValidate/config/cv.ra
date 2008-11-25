@@ -609,7 +609,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-21027 lot I0607
 orderUrl http://www.scbt.com/
 
-term PABP
+term PABP_1
 type ripAntibody
 antibodyDescription Mouse monoclonal
 targetDescription PABP RNA binding protein
@@ -617,7 +617,7 @@ vendorName Sigma Chemical Co.
 vendorId P 6246 lot 044K4810
 orderUrl http://www.sigmaaldrich.com/
 
-term SLBP
+term SLBP_1
 type ripAntibody
 antibodyDescription Mouse monoclonal
 targetDescription SLBP RNA binding protein
