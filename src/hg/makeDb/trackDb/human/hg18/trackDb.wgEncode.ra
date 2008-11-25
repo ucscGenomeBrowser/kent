@@ -810,7 +810,7 @@ longLabel       ENCODE Affy Gingeras RnaChip
 group           regulation
 subGroup1       view Views Transfrags=Transfrags FilteredTransfrags=FilteredTransfrags RawSignal=RawSignal FilteredRawSignal=FilteredRawSignal
 subGroup2       cellType Cell_Line prostate=prostate K562=K562 
-subGroup3       localization Localization cell=cell nucleus=nucleus 
+subGroup3       localization Localization cell=cell nucleus=nucleus cytosol=cytosol 
 subGroup4       rnaExtract RnaExtract longNonPolyA=longNonPolyA longPolyA=longPolyA total=total 
 dimensions      dimensionX=cellType     dimensionY=localization dimensionZ=rnaExtract
 sortOrder       cellType=+ localization=+ rnaExtract=+ view=+
@@ -1149,6 +1149,138 @@ wgEncode        1
 	maxHeightPixels	100:16:16
 	rnaExtract	longPolyA
 	localization	nucleus
+	cell		K562
+
+	track		wgEncodeAffyRnaChipFilteredTransfragsK562CytosolLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA K562 cytosol
+	longLabel	ENCODE Affy Filtered Transfrags (from longNonPolyA in K562 cell cytosol)
+	subGroups	view=FilteredTransfrags cellType=K562 localization=cytosol rnaExtract=longNonPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-25 0:44:24
+	dateReleased	2009-08-25
+	priority	14
+	noInherit	on
+	configurable	on
+	rnaExtract	longNonPolyA
+	localization	cytosol
+	cell		K562
+
+	track		wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA K562 cytosol
+	longLabel	ENCODE Affy Transfrags (from longNonPolyA in K562 cell cytosol)
+	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=longNonPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-25 0:44:24
+	dateReleased	2009-08-25
+	priority	13
+	noInherit	on
+	configurable	on
+	rnaExtract	longNonPolyA
+	localization	cytosol
+	cell		K562
+
+	track		wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA K562 cytosol Raw
+	longLabel	ENCODE (from longNonPolyA in K562 cell cytosol)
+	subGroups	view=RawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
+	type		wig -52894.00 56092.00
+	dateSubmitted	2008-11-25 0:44:24
+	dateReleased	2009-08-25
+	priority	16
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	cytosol
+	cell		K562
+
+	track		wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA K562 cytosol
+	longLabel	ENCODE (from longNonPolyA in K562 cell cytosol)
+	subGroups	view=FilteredRawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
+	type		wig -55473.00 56092.00
+	dateSubmitted	2008-11-25 0:44:24
+	dateReleased	2009-08-25
+	priority	15
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	cytosol
+	cell		K562
+
+	track		wgEncodeAffyRnaChipFilteredTransfragsK562CytosolLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA K562 cytosol
+	longLabel	ENCODE Affy Filtered Transfrags (from longPolyA in K562 cell cytosol)
+	subGroups	view=FilteredTransfrags cellType=K562 localization=cytosol rnaExtract=longPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-25 1:2:47
+	dateReleased	2009-08-25
+	priority	18
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	cytosol
+	cell		K562
+
+	track		wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA K562 cytosol
+	longLabel	ENCODE Affy Transfrags (from longPolyA in K562 cell cytosol)
+	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=longPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-25 1:2:47
+	dateReleased	2009-08-25
+	priority	17
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	cytosol
+	cell		K562
+
+	track		wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA K562 cytosol
+	longLabel	ENCODE (from longPolyA in K562 cell cytosol)
+	subGroups	view=FilteredRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
+	type		wig -42328.00 61956.00
+	dateSubmitted	2008-11-25 1:2:47
+	dateReleased	2009-08-25
+	priority	19
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	cytosol
+	cell		K562
+
+	track		wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longPolyA K562 cytosol Raw
+	longLabel	ENCODE (from longPolyA in K562 cell cytosol)
+	subGroups	view=RawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
+	type		wig -58407.00 60582.00
+	dateSubmitted	2008-11-25 1:2:47
+	dateReleased	2009-08-25
+	priority	20
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	cytosol
 	cell		K562
 
 
