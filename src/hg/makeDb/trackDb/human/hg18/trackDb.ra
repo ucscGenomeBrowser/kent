@@ -1581,7 +1581,7 @@ type bed 3
 track sangamoDnaseHs 
 compositeTrack on
 shortLabel EIO/JCVI NAS
-longLabel Eur. Inst. Oncology - J. Craig Venter Institute Nuclease Accessible sites (NAS)
+longLabel Eur. Inst. Oncology/J. C. Venter Inst. Nuclease Accessible Sites 
 group regulation
 visibility hide
 priority 0
