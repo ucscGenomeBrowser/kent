@@ -576,21 +576,35 @@ vendorId sc-735
 orderUrl http://www.scbt.com/product.php?datasheet=735
 
 # ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
-term G10
+term T7Tag
 type ripTgtProtein
-description G10 protein
+alternativeSymbols Novagen T7 Tag Cat# 69522
+description Negative Control Ab (T7 Tag Mouse Monoclonal)
+url http://www.emdbiosciences.com/Products/ProductDisplay.asp?catno=69522
 
-term HuR
+term ELAVL1
 type ripTgtProtein
-description HuR
+alternativeSymbols HUR; Hua; MelG; ELAV1; ELAVL1 
+description ELAV (embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/1994
 
-term Imp
+term IGF2BP1
 type ripTgtProtein
-description Imp
+alternativeSymbols IMP1; ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
+description insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/10642
 
-term PABP
+term PABPC1
 type ripTgtProtein
-description PABP
+alternativeSymbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC1
+description poly(A) binding protein, cytoplasmic 1 (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/26986
+
+term SLBP
+type ripTgtProtein
+alternativeSymbols HBP; SLBP
+description stem-loop binding protein (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/7884
 
 # ripAntibody - Tenenbaum RIP-chip / RIP-seq project
 term HuR/ELAV1
