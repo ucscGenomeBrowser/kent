@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.113 2008/11/25 03:35:17 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.114 2008/11/25 23:14:02 larrym Exp $
 
 use warnings;
 use strict;
@@ -42,8 +42,10 @@ use vars qw/
     $opt_allowReloads
     $opt_configDir
     $opt_fileType
+    $opt_metaDataOnly
     $opt_outDir
     $opt_quick
+    $opt_skipAll
     $opt_skipAutoCreation
     $opt_skipOutput
     $opt_skipValidateFiles
@@ -77,13 +79,17 @@ options:
     -configDir=dir      Path of configuration directory, containing
                         metadata .ra files (default: submission-dir/../config)
     -fileType=type	used only with validateFile option; e.g. narrowPeak
+    -metaDataOnly       Process DAF/DDF and just update the projects.metadata field;
+                        equal to -allowReloads -skipAll
     -quick		Validate only first $quickCount lines of files
+    -skipAll            Turn on all "-skip..." options
     -skipAutoCreation   Tells script skip creating the auto-created files (e.g. RawSignal, PlusRawSignal, MinusRawSignal)
                         this can save you a lot of time when you are debugging and re-running the script on large projects
     -skipOutput         Don't write the various output files
     -skipValidateFiles  Tells script skip the file validation step; to save a lot of time during testing
     -validateDaf	exit after validating DAF file (project-submission-dir is the DAF file name).
-    -validateFile	exit after validating file (project-submission-dir is the file name; requires -fileType option as well)
+    -validateFile	exit after validating file (project-submission-dir is the file name;
+                        requires -fileType option as well)
     -verbose=num        Set verbose level to num (default 1).
     -outDir=dir         Path of output directory, for validation files
                         (default: submission-dir/out)
@@ -225,6 +231,7 @@ sub validateLocalization {
 
 sub validateRipAntibody {
     my ($val) = @_;
+    # Mike, please change this to use Encode::isControlInput (LRM)
     return defined(lc($val) eq 'input' || lc($val) eq 'control' || $terms{'ripAntibody'}{$val}) ? () : ("ripAntibody \'$val\' is not known");
 }
 
@@ -245,7 +252,7 @@ sub validatePromoter {
 
 sub validateAntibody {
     my ($val) = @_;
-    if(lc($val) eq 'input' || lc($val) eq 'control' || defined($terms{'Antibody'}{$val})) {
+    if(Encode::isControlInput($val) || defined($terms{'Antibody'}{$val})) {
         return ();
     } else {
         return ("Antibody \'$val\' is not known");
@@ -926,9 +933,11 @@ my $wd = cwd();
 my $ok = GetOptions("allowReloads",
                     "configDir=s",
                     "fileType=s",
+                    "metaDataOnly",
                     "outDir=s",
                     "quick",
                     "timing",
+                    "skipAll",
                     "skipAutoCreation",
                     "skipOutput",
                     "skipValidateFiles",
@@ -940,6 +949,15 @@ my $ok = GetOptions("allowReloads",
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
 $opt_sendEmail = 0 if (!defined $opt_sendEmail);
+
+if($opt_skipAll) {
+    $opt_skipAutoCreation = $opt_skipOutput = $opt_skipValidateFiles = 1;
+}
+
+if($opt_metaDataOnly) {
+    $opt_skipAutoCreation = $opt_skipOutput = $opt_skipValidateFiles = 1;
+    $opt_allowReloads = 1;
+}
 
 usage() if (scalar(@ARGV) < 2);
 
@@ -1120,7 +1138,10 @@ while (@{$lines}) {
         $line{$ddfHeader[$i]} = $val;
         $i++;
     }
-
+    if(exists($line{antibody}) && Encode::isControlInput($line{antibody})) {
+        # lc "CONTROL" etc.; we may want to normalize to a single value here ("control-input"?)
+        $line{antibody} = lc($line{antibody});
+    }
     if(my @tmp = Encode::validateValueList(\%line, $fields, 'ddf')) {
         pushError(\@errors, $errorPrefix . "\n" . join("\n", @tmp));
         next;
