@@ -575,6 +575,23 @@ vendorName Santa Cruz Biotech
 vendorId sc-735
 orderUrl http://www.scbt.com/product.php?datasheet=735
 
+# ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
+term G10
+type ripTgtProtein
+description G10 protein
+
+term HuR
+type ripTgtProtein
+description HuR
+
+term Imp
+type ripTgtProtein
+description Imp
+
+term PAPB
+type ripTgtProtein
+description PABP
+
 # ripAntibody - Tenenbaum RIP-chip / RIP-seq project
 term HuR/ELAV1
 type ripAntibody
