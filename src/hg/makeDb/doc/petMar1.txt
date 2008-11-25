@@ -4,7 +4,7 @@
 # This file describes browser build for the Sea Lamprey
 # genome, Petromyzon marinus, March 2007, v.3.0 from WUSTL
 #
-#       "$Id: petMar1.txt,v 1.19 2008/10/17 01:06:35 markd Exp $"
+#       "$Id: petMar1.txt,v 1.20 2008/11/25 20:22:45 hiram Exp $"
 #
 
 ##########################################################################
@@ -1722,3 +1722,16 @@ see doc/builds.txt for specific details.
 update genbank.conf:
 petMar1.upstreamGeneTbl = xenoRefGene
 petMar1.upstreamMaf = multiz6way /hive/data/genomes/petMar1/bed/multiz6way/species.list
+
+############################################################################
+# QUALITY TRACK (DONE - 2008-11-25 - Hiram)
+    cd /hive/data/genomes/petMar1/downloads
+    qaToQac contigs.fa.quals.gz assembly.qac
+    qacAgpLift ../petMar1.agp assembly.qac scaffolds.qac
+    mkdir /hive/data/genomes/petMar1/bed/qual
+    cd /hive/data/genomes/petMar1/bed/qual
+    qacToWig -fixed ../../downloads/scaffolds.qac stdout \
+        | wigEncode stdin qual.wig qual.wib
+    ln -s `pwd`/qual.wib /gbdb/petMar1/wib
+    hgLoadWiggle -pathPrefix=/gbdb/petMar1/wib petMar1 quality qual.wig
+

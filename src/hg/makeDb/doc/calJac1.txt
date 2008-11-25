@@ -4,7 +4,7 @@
 # This file describes browser build for the Marmoset
 # genome, July 2007
 #
-#	"$Id: calJac1.txt,v 1.17 2008/10/17 01:06:30 markd Exp $"
+#	"$Id: calJac1.txt,v 1.18 2008/11/25 20:22:45 hiram Exp $"
 #
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-08-21 - Hiram)
@@ -1626,3 +1626,13 @@ see doc/builds.txt for specific details.
 update genbank.conf:
 calJac1.upstreamGeneTbl = xenoRefGene
 calJac1.upstreamMaf = multiz9way /hive/data/genomes/calJac1/bed/multiz9way/species.list
+
+############################################################################
+# QUALITY TRACK (DONE - 2008-11-25 - Hiram)
+    mkdir /hive/data/genomes/calJac1/bed/qual
+    cd /hive/data/genomes/calJac1/bed/qual
+    #	the qac file was created by Rico during 28-way annotations
+    qacToWig -fixed ../quality/calJac1.qac stdout \
+	| wigEncode stdin qual.wig qual.wib
+    ln -s `pwd`/qual.wib /gbdb/calJac1/wib
+    hgLoadWiggle -pathPrefix=/gbdb/calJac1/wib calJac1 quality qual.wig

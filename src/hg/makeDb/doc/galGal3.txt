@@ -2618,3 +2618,31 @@ _EOF_
 update genbank.conf:
 galGal3.upstreamGeneTbl = refGene
 galGal3.upstreamMaf = multiz7way /hive/data/genomes/galGal3/bed/multiz7way/species.lst
+
+############################################################################
+# QUALITY TRACK (DONE - 2008-11-24 - Hiram)
+    cd /hive/data/genomes/galGal3
+    # create an agp file
+for C in `cut -f1 chrom.sizes | grep -v random | sed -e "s/chr//" | sort`
+do
+    cat $C/chr${C}.agp
+done > galGal3.agp
+
+for C in `cut -f1 chrom.sizes | grep -v random | sed -e "s/chr//" | sort`
+do
+    F=$C/chr${C}_random.agp
+    if [ -s $F ]; then
+        cat $F
+    fi
+done >> galGal3.agp
+
+    cd /hive/data/genomes/galGal3/downloads
+    qaToQac contigs.fa.qual.gz assembly.qac
+    qacAgpLift -mScore=99 -verbose=2 ../galGal3.agp assembly.qac scaffolds.qac
+
+    mkdir /hive/data/genomes/galGal3/bed/qual
+    cd /hive/data/genomes/galGal3/bed/qual
+    qacToWig -fixed ../../downloads/scaffolds.qac stdout \
+        | wigEncode stdin qual.wig qual.wib
+    ln -s `pwd`/qual.wib /gbdb/galGal3/wib
+    hgLoadWiggle -pathPrefix=/gbdb/galGal3/wib galGal3 quality qual.wig
