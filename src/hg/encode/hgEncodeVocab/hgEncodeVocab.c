@@ -18,7 +18,7 @@
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.13 2008/10/23 23:33:10 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.14 2008/11/25 01:28:23 mikep Exp $";
 
 static char *cv_file()
 {
@@ -46,6 +46,14 @@ void doTypeHeader(char *type)
 if (sameString(type,"Antibody"))
     {
     puts("  <TH>Term</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH>");
+    }
+else if (sameString(type,"ripAntibody"))
+    {
+    puts("  <TH>Term</TH><TH>Antibody Description</TH><TH>Target Description</TH><TH>Vendor ID</TH>");
+    }
+else if (sameString(type,"ripTgtProtein"))
+    {
+    puts("  <TH>Term</TH><TH>Description</TH>");
     }
 else if (sameString(type,"localization"))
     {
@@ -100,6 +108,37 @@ if (sameString(type,"Antibody"))
         printf("</A>");
     puts("</TD>");
 
+    puts("</TR>");
+    }
+else if (sameString(type,"ripAntibody"))
+    {
+    ++(*total);
+    puts("<TR>");
+    printf("  <TD>%s</TD>\n", term);
+    s = hashFindVal(ra, "antibodyDescription");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
+    s = hashFindVal(ra, "targetDescription");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
+    s = hashFindVal(ra, "vendorName");
+    char *t = hashFindVal(ra, "vendorId");
+    char *u = hashFindVal(ra, "orderUrl");
+    printf("  <TD>");
+    if (u)
+        printf("<A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=%s>", u);
+    printf("%s %s", s ? s : "&nbsp;", t ? t : "&nbsp;");
+    if (u)
+        printf("</A>");
+    puts("</TD>");
+
+    puts("</TR>");
+    }
+else if (sameString(type,"ripTgtProtein"))
+    {
+    ++(*total);
+    puts("<TR>");
+    printf("  <TD>%s</TD>\n", term);
+    s = hashFindVal(ra, "description");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
     puts("</TR>");
     }
 else if (sameString(type,"localization"))
