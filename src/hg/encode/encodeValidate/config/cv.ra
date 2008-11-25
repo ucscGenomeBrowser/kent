@@ -588,7 +588,7 @@ term Imp
 type ripTgtProtein
 description Imp
 
-term PAPB
+term PABP
 type ripTgtProtein
 description PABP
 
