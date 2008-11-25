@@ -1,7 +1,6 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
 # Cell types
-
 term GM12878
 type Cell Line
 description lymphoblastoid
@@ -9,7 +8,7 @@ vendorName Coriell
 vendorId GM12878
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&PgId=166
 karyotype relatively normal
-lineage mesoderm
+lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus
 termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 tier 1
@@ -21,7 +20,7 @@ vendorName ATCC
 vendorId CCL-243
 orderUrl http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL-243
 karyotype cancer
-lineage mesoderm
+lineage The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises.
 termId BTO:0000664
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
 tier 1
@@ -92,7 +91,7 @@ description epithelial cell line derived from a lung carcinoma tissue
 vendorName ATCC
 vendorId CCl-185
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-185&Template=cellBiology
-lineage endoderm
+lineage This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old Caucasian male.
 karyotype cancer
 termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
@@ -116,13 +115,13 @@ description skin fibroblast
 vendorName ATCC
 vendorId CRL-2522
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2522&Template=cellBiology
-lineage ectoderm
+lineage The line was established from skin taken from normal foreskin.
 karyotype normal
 termId BTO:0001255
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
 tier 3
 
-term caco-2
+term Caco-2
 type Cell Line
 description colorectal adenocarcinoma
 vendorName ATCC
@@ -152,8 +151,8 @@ description lymphoblastoid (CEPH)
 vendorName Coriell
 vendorId GM06990
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM06990&PgId=166
-lineage
-karyotype cancer
+lineage CEPH/Utah - European Caucasion; Epstein-Barr Virus
+karyotype relatively normal
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 tier 3
@@ -164,7 +163,7 @@ description lymphoblastoid
 vendorName Coriell
 vendorId GM18507
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18507
-lineage mesoderm
+lineage International HapMap Project - Yoruba in Ibadan, Nigeria; Epstein-Barr Virus
 karyotype relatively normal
 termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
@@ -172,12 +171,14 @@ tier 3
 
 term HCT-116
 type Cell Line
-orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-247&Template=cellBiology
+description colorectal carcinoma
 vendorName ATCC
-vendorId CCL247
+vendorId CCL-247
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-247&Template=cellBiology
 lineage endoderm
 karyotype cancer
 termId BTO:0002254
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002254
 tier 3
 
 term HEK293
@@ -198,7 +199,7 @@ description T lymphoblastoid cell line derived from an acute T cell leukemia
 vendorName ATCC
 vendorId TIB-152
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
-lineage mesoderm
+lineage The Jurkat cell line was established from the peripheral blood of a 14 year old boy by Schneider et al., and was originally designated JM.
 karyotype cancer
 termId BTO:0001948
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
@@ -210,9 +211,10 @@ description prostate adenocarcinoma
 vendorName ATCC
 vendorId CRL-1740
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1740&Template=cellBiology
-lineage endoderm
+lineage LNCaP clone FGC was isolated in 1977 by J.S. Horoszewicz, et al., from a needle aspiration biopsy of the left supraclavicular lymph node of a 50-year-old Caucasian male (blood type B+) with confirmed diagnosis of metastatic prostate carcinoma.
 karyotype cancer
 termId BTO:0002021
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002021
 tier 3
 
 term MCF-7
@@ -230,9 +232,9 @@ tier 3
 term NB4
 type Cell Line
 description acute promyelocytic leukemia cell line
-vendorName
+vendorName National Cell Culture Center
 vendorId
-orderUrl
+orderUrl http://www.nccc.com/
 lineage
 karyotype cancer
 termId BTO:0002489
@@ -245,7 +247,7 @@ description malignant pluripotent embryonal carcinoma (Ntera2)
 vendorName ATCC
 vendorId CRL-1973
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1973&Template=cellBiology
-lineage embryonic
+lineage The NTERA-2 cl.D1 cell line is a pluripotent human testicular embryonal carcinoma cell line derived by cloning the NTERA-2 cell line.
 karyotype cancer
 termId BTO:0000946
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000946
@@ -290,18 +292,20 @@ tier 3
 term progeria
 type Cell Line
 description HGPS (HGADFN167, progeria research foundation)
-vendorName
-orderUrl
+vendorName Projeria Research Foundation
+vendorId
+orderUrl http://www.progeriaresearch.org/
 lineage
-karyotype
-termId
-termUrl
+karyotype projeria
+termId BTO:0001255 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
 tier 3
 
 term prostate
 type Cell Line
 description prostate tissue purchased for Gingeras project
-vendorName Unknown
+vendorName ATCC
+vendorId
 orderUrl http://www.atcc.org/
 lineage
 karyotype
@@ -315,7 +319,7 @@ description neuroepithelioma cell line derived from a metastatic supra-orbital h
 vendorName ATCC
 vendorId HTB-10
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-10&Template=cellBiology
-lineage ectoderm
+lineage SK-N-MC was isolated in September of l971 and was found to have moderate dopamine - beta - hydroxylase activity as well as formaldehyde induced fluorescence indicative of intracellular catecholamines.
 karyotype cancer
 termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
@@ -327,7 +331,7 @@ description neuroblastoma cell line differentiated w/ retinoic acid
 vendorName ATCC
 vendorId HTB-11
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
-lineage ectoderm
+lineage SK-N-MC was isolated in September of l971 and was found to have moderate dopamine - beta - hydroxylase activity as well as formaldehyde induced fluorescence indicative of intracellular catecholamines.
 karyotype cancer
 termId BTO:0002372 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
