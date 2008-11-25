@@ -28,7 +28,6 @@ visibility hide
 color 173,17,162
 type genePred
 
-release alpha
 track phyloPCons28way
 shortLabel Basewise Conserv
 compositeTrack on
