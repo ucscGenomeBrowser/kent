@@ -21,7 +21,7 @@ class PipelineController < ApplicationController
   def list
     sort_init 'name'
     sort_update
-    @autoRefresh = true
+    #@autoRefresh = true
     @sort_key = params[:sort_key]
     if @sort_key == "pi" || @sort_key == "login"
       @projects = Project.find(:all, :include => :user, :order => sort_clause)
