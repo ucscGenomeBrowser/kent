@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/Encode.pm instead.
 #
-# $Id: Encode.pm,v 1.32 2008/11/23 08:03:18 larrym Exp $
+# $Id: Encode.pm,v 1.33 2008/11/25 23:11:13 larrym Exp $
 
 package Encode;
 
@@ -405,6 +405,12 @@ sub isZipped
 {
     my ($filePath) = @_;
     return $filePath =~ m/\.gz$/;
+}
+
+sub isControlInput
+{
+    my ($str) = @_;
+    return lc($str) eq 'control' || lc($str) eq 'input';
 }
 
 1;
