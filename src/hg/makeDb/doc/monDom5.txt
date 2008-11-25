@@ -1,0 +1,230 @@
+# for emacs: -*- mode: sh; -*-
+
+
+#	Creating the assembly for Monodelphis domestica
+#	South American, Short-tailed Opossum
+#	http://www.genome.gov/11510687
+#	http://www.genome.gov/12512285
+
+#  NOTE:  this doc may have genePred loads that fail to include
+#  the bin column.  Please correct that for the next build by adding
+#  a bin column when you make any of these tables:
+#
+#  mysql> SELECT tableName, type FROM trackDb WHERE type LIKE "%Pred%";
+#  +-------------+---------------------------------+
+#  | tableName   | type                            |
+#  +-------------+---------------------------------+
+#  | refGene     | genePred refPep refMrna         |
+#  | xenoRefGene | genePred xenoRefPep xenoRefMrna |
+#  | ensGene     | genePred ensPep                 |
+#  | genscan     | genePred genscanPep             |
+#  +-------------+---------------------------------+
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2007-05-11 - Hiram)
+    ssh kkstore04
+    mkdir -p /cluster/store8/monDom5/broad
+    ln -s /cluster/store8/monDom5 /cluster/data/monDom5
+    cd /cluster/data/monDom4/broad.mit.edu
+    time nice -n +19 wget --timestamping \
+	'ftp://broad.mit.edu/pub/assemblies/mammals/monodelphis/monDom5/*'
+    #	real    52m48.859s
+    #	user    0m2.122s
+    #	sys     0m22.031s
+    #	This was a symlink to ../monDom2/
+# lrwxrwxrwx  1 36 May 10 16:00 BACread_2_BACclone.txt.gz -> ../monDom2/BACread_2_BACclone.txt.gz
+    #	so actually fetch the file here
+    rm  BACread_2_BACclone.txt.gz
+    time nice -n +19 wget --timestamping \
+'ftp://broad.mit.edu/pub/assemblies/mammals/monodelphis/monDom2/BACread_2_BACclone.txt.gz'
+    #	it looks like they've been using our tools, their agp file has
+    #	the extra gap at the end of chrUn:
+# chrUn   103240612       103241611       16995   N       1000    clone   no
+    #	Their fasta file is in 5,000,000 chunks
+
+    #	fixup the split fasta files
+    time nice -n +19 gunzip Monodelphis5.0.agp.chromosome.qual.gz \
+	Monodelphis5.0.agp.chromosome.fasta.gz
+    #	real    5m24.942s
+    #	user    1m31.895s
+    #	sys     0m51.726s
+    mkdir splitFa
+    time nice -n +19 faSplit -verbose=2 byname \
+	Monodelphis5.0.agp.chromosome.fasta splitFa/
+    #	2m44s
+
+    mkdir chrFa
+    #	combine the Broad split files into single chrom fasta files
+time for C in 1 2 3 4 5 6 7 8 X Un
+do
+    rm -f chrFa/chr${C}.fa
+    echo ">chr${C}" > chrFa/chr${C}.fa
+    echo -n "chrFa/chr${C}.fa working ... "
+    ls splitFa/${C}.*-*.fa | sort -t"." -k2,2n | while read F
+    do
+        grep -v "^>" ${F} >> chrFa/chr${C}.fa
+    done
+    echo "done"
+done
+
+    #	verify nothing was lost, should be the same totals here
+    faSize chrFa/chr*.fa
+    #	3605614649 bases (103971429 N's 3501643220 real 3501643220 upper 0
+    #	lower) in 10 sequences in 10 files
+    faSize Monodelphis5.0.agp.chromosome.fasta
+    #	3605614649 bases (103971429 N's 3501643220 real 3501643220 upper 0
+    #	lower) in 726 sequences in 1 files
+
+    #	put them together into a single file:
+    cat chrFa/chr*.fa > ucscChroms.fa
+
+    #	create a lift file from the information in the fasta headers
+    cat << '_EOF_' > liftBroadToChroms.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, 'grep "^>" Monodelphis5.0.agp.chromosome.fasta|') or
+	die "can not grep Monodelphis5.0.agp.chromosome.fasta";
+
+my %liftSpec;	# key is chrom_start, value is end
+my %chrSize;	# key is chrom, value is size
+my @liftLines;	# index is line number, value is line to output
+
+$chrSize{'1'} = 0;
+$chrSize{'2'} = 0;
+$chrSize{'3'} = 0;
+$chrSize{'4'} = 0;
+$chrSize{'5'} = 0;
+$chrSize{'6'} = 0;
+$chrSize{'7'} = 0;
+$chrSize{'8'} = 0;
+$chrSize{'X'} = 0;
+$chrSize{'Un'} = 0;
+
+my $lineCount = 0;
+my $prevChr = "";
+my $chrStart = 0;
+while (my $line = <FH>) {
+    my ($chr_pos, $name) = split('\s+',$line);
+    my ($chr, $range) = split('\.',$chr_pos);
+    $chr =~ s/>//;
+    if ($chr ne $prevChr) {
+	$chrStart = 0;
+	$prevChr = $chr;
+	print STDERR "chr$chr starting\n";
+    }
+    my ($start,$end) = split('-',$range);
+    my $key = sprintf("%s_%d", $chr, $start);
+    $liftSpec{$key} = $end;
+    $chrSize{$chr} = $end if ($end > $chrSize{$chr});
+    my $fragSize = $end - $start + 1;
+    $liftLines[$lineCount++] = sprintf "%d\t%s.%d-%d\t%d\tchr%s",
+	$chrStart, $chr, $start, $end, $fragSize, $chr;
+    $chrStart += $fragSize;
+}
+
+close (FH);
+
+for (my $i = 0; $i < $lineCount; ++$i) {
+    my ($chrStart, $fragName, $fragSize, $chr) = split('\t',$liftLines[$i]);
+    $chr =~ s/chr//;
+    printf "%s\t%d\n", $liftLines[$i], $chrSize{$chr};
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x liftBroadToChroms.pl
+
+    ./liftBroadToChroms.pl liftBroad.lft
+    #	split up the quality file to get it put together into a single
+    #	chrom based file
+    cat << '_EOF_' > splitQual.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<Monodelphis5.0.agp.chromosome.qual") or
+        die "can not read Monodelphis5.0.agp.chromosome.qual";
+
+# open an initial output file to get OUT established, not a real chr name
+my $fileName = "splitQual/0.1.fa";
+open (OUT,">$fileName") or die "can not write to $fileName";
+
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        close(OUT);
+        $line =~ s/>//;
+        $line =~ s/-.*//;
+        $fileName = "splitQual/$line";
+        open (OUT,">$fileName") or die "can not write to $fileName";
+        printf STDERR "writing to $fileName";
+    } else {
+        print OUT $line;
+    }
+}
+
+close (FH);
+close (OUT);
+'_EOF_'
+    # << happy emacs
+    chmod +x splitQual.pl
+    mkdir splitQual
+    ./splitQual.pl
+    # put them back together in order as full chroms
+for C in 1 2 3 4 5 6 7 8 X Un
+do
+    echo ">chr${C}" > chrQual/chr${C}.qual.fa
+    ls splitQual/${C}.* | sort -t'.' -k2,2n | while read F
+do
+    cat $F >> chrQual/chr${C}.qual.fa
+done
+done
+    #	real    6m7.079s
+    #	and as a single file
+for C in 1 2 3 4 5 6 7 8 X Un
+do
+    cat chrQual/chr${C}.qual.fa
+done | gzip -c > ucscChroms.qual.fa.gz
+    #	real    4m41.229s
+    #	and turn it into a qac file
+    qaToQac ucscChroms.qual.fa.gz ucscChroms.qac
+    #	real    3m49.380s
+
+#########################################################################
+# create genome assembly database (DONE - 2008-11-25 - Hiram)
+    cd /hive/data/genomes/monDom5/
+    cat << '_EOF_' > monDom5.config.ra
+# Config parameters for makeGenomeDb.pl:
+db monDom5
+clade mammal
+scientificName Monodelphis domestica
+commonName Opossum
+assemblyDate Oct. 2006
+assemblyLabel Broad Institute monDom5 (NCBI project 12561, accession AAFR03000000)
+orderKey 354
+mitoAcc NC_006299
+fastaFiles /hive/data/genomes/monDom5/broad/ucscChroms.fa
+agpFiles /hive/data/genomes/monDom5/broad/Monodelphis5.0.agp
+qualFiles /hive/data/genomes/monDom5/broad/ucscChroms.qac
+dbDbSpeciesDir opossum
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -verbose=2 -stop=seq monDom5.config.ra > seq.log 2>&1
+    #	real    3m3.414s
+    time makeGenomeDb.pl -verbose=2 -continue=agp -stop=agp monDom5.config.ra \
+	> agp.log 2>&1
+    #	real    0m36.723s
+    time makeGenomeDb.pl -verbose=2 -continue=db -stop=db monDom5.config.ra \
+	> db.log 2>&1
+    #	real    36m30.041
+    time makeGenomeDb.pl -verbose=2 -continue=dbDb -stop=dbDb \
+	monDom5.config.ra > dbDb.log 2>&1
+    #	real    0m1.074s
+    time makeGenomeDb.pl -verbose=2 -continue=trackDb -stop=trackDb \
+	monDom5.config.ra > trackDb.log 2>&1
+    #	check in the trackDb files and the browser should be up and running
+
+#########################################################################
