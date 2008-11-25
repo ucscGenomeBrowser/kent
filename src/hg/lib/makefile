@@ -1,5 +1,7 @@
 include ../../inc/common.mk
 XINC = -I$(MYSQLINC)
+# MJP: -pg for gprof output 
+#CFLAGS = -ggdb -pg 
 CFLAGS = -ggdb
 
 L = -lm $(MYSQLLIBS)

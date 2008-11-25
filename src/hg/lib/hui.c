@@ -19,8 +19,9 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.135 2008/11/15 00:50:41 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.136 2008/11/25 07:20:53 mikep Exp $";
 
+#define SMALLBUF 128
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add"
 #define CLEAR_BUTTON_LABEL      "clear"
@@ -1449,7 +1450,7 @@ if (selectedName == NULL)
 
 /* Make drop-down list. */
     {
-    char javascript[64], *autoSubmit;
+    char javascript[SMALLBUF], *autoSubmit;
     int nameCount = slCount(nameList);
     char **menu;
     int i;
@@ -1639,7 +1640,7 @@ if(hierarchy->setting == NULL)
     return NULL;
     }
 int cnt,ix;
-char *words[64];
+char *words[SMALLBUF];
 cnt = chopLine(hierarchy->setting, words);
 assert(cnt<=ArraySize(words));
 if(cnt <= 1)
@@ -1705,7 +1706,7 @@ if(dimensions->setting == NULL)
     return NULL;
     }
 int cnt,ix;
-char *words[64];
+char *words[SMALLBUF];
 cnt = chopLine(dimensions->setting,words);
 assert(cnt<=ArraySize(words));
 if(cnt <= 0)
@@ -1807,7 +1808,7 @@ if(setting == NULL)
     return NULL;
 members_t *members = needMem(sizeof(members_t));
 members->setting = cloneString(setting);
-char *words[64];
+char *words[SMALLBUF];
 cnt = chopLine(members->setting, words);
 assert(cnt <= ArraySize(words));
 if(cnt <= 1)
@@ -1888,7 +1889,7 @@ if(membership->setting == NULL)
     }
 
 int ix,cnt;
-char *words[64];
+char *words[SMALLBUF];
 cnt = chopLine(membership->setting, words);
 assert(cnt <= ArraySize(words));
 if(cnt <= 0)
@@ -2877,7 +2878,7 @@ if(differentString(name,tdb->tableName))
     }
 else
     {
-    char buttonVar[64];
+    char buttonVar[SMALLBUF];
     cgiContinueHiddenVar("g");
     jsInit();
 
@@ -3213,7 +3214,7 @@ if(setting == NULL)
     return FALSE;
 
 char *target = cloneString(setting);
-char *words[64];
+char *words[SMALLBUF];
 cnt = chopLine(target, words);
 for(ix=0;ix<cnt;ix++)
     {
@@ -3249,7 +3250,7 @@ static boolean hCompositeDisplayViewDropDowns(char *db, struct cart *cart, struc
 {
 int ix;
 struct trackDb *subtrack;
-char objName[64];
+char objName[SMALLBUF];
 char javascript[JBUFSIZE];
 #define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"Configure View Settings\">%s</A></B>\n"
 #define MAKE_CFG_LINK(name,title) printf(CFG_LINK, (name),(name),(name),(title))
@@ -3404,9 +3405,9 @@ static boolean hCompositeUiByMatrix(char *db, struct cart *cart, struct trackDb 
 /* UI for composite tracks: matrix of checkboxes. */
 {
 //int ix;
-char objName[64];
+char objName[SMALLBUF];
 char javascript[JBUFSIZE];
-char option[64];
+char option[SMALLBUF];
 boolean alreadySet = TRUE;
 struct trackDb *subtrack;
 
@@ -3596,8 +3597,8 @@ static boolean hCompositeUiNoMatrix(char *db, struct cart *cart, struct trackDb 
 without matrix controls. */
 {
 int i, j, k;
-char *words[64];
-char option[64];
+char *words[SMALLBUF];
+char option[SMALLBUF];
 int wordCnt;
 char javascript[JBUFSIZE];
 char *primaryType = getPrimaryType(primarySubtrack, parentTdb);

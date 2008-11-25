@@ -1,4 +1,9 @@
 /* hdb - human genome browser database. */
+//#ifndef MJP
+//#define MJP(v) verbose((v),"%s[%3d]: ", __func__, __LINE__);
+//#endif
+
+
 #include "common.h"
 #include "obscure.h"
 #include "hash.h"
@@ -37,7 +42,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.384 2008/11/20 19:39:41 fanhsu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.385 2008/11/25 07:20:53 mikep Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -755,7 +760,9 @@ return FALSE;
 
 char *hTableForTrack(char *db, char *trackName)
 /* Return a table for a track in db. Returns one of the split
- * tables, or main table if not split */
+ * tables, or main table if not split.
+ * In addition, caches all the tracks and tables in db the first
+ * time it is called (could be many thousand tables). */
 {
 struct hash *hash = tableListGetDbHash(db);
 struct slName *tableNames = NULL;
@@ -2298,6 +2305,7 @@ if (oldDatabase != NULL && !sameString(database, oldDatabase))
     }
 if (subList == NULL)
     hAddDbSubVars("", database, &subList);
+
 subOutAll(tdb, subList);
 
 if (tdb->settings != NULL && tdb->settings[0] != 0)
@@ -3413,7 +3421,14 @@ struct trackDb *hTrackDb(char *db, char *chrom)
  * all).  Supertracks are loaded as a trackDb, but are not in the returned list,
  * but are accessible via the parent pointers of the member tracks.  Also,
  * the supertrack trackDb subtrack fields are not set here (would be
- * incompatible with the returned list) */
+ * incompatible with the returned list) 
+ * Note that this is a relatively expensive call if you are only interested
+ * in a few tables.  The first time this function is called it queries and 
+ * caches all tracks in db. In addition, it substitutes text in the shortLabel,
+ * longLabel, and html fields (amongst others) (for example, replace 
+ * $ORGANISM with HUMAN). At Sep 2008, hg18 database (9000 tables)
+ * this results in >12M calls to lib/subText.c:firstInList() 
+ * for the substitution process. */
 {
 struct trackDb *tdbList = loadTrackDb(db, NULL);
 struct trackDb *tdbFullList = NULL, *tdbSubtrackedList = NULL;
