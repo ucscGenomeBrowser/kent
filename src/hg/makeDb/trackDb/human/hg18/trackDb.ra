@@ -1580,8 +1580,8 @@ type bed 3
 
 track sangamoDnaseHs 
 compositeTrack on
-shortLabel SGMO/EIO CD34 HS
-longLabel Sangamo - Eur. Inst. Oncology DNase Hypersensitive Sites
+shortLabel EIO/JCVI NAS
+longLabel Eur. Inst. Oncology - J. Craig Venter Institute Nuclease Accessible sites (NAS)
 group regulation
 visibility hide
 priority 0
@@ -1589,15 +1589,15 @@ type bed 5 .
 
     track sangamoDnaseHsNeg
     subTrack sangamoDnaseHs
-    shortLabel SGMO/EIO CD34- HS
-    longLabel Sangamo - Eur. Inst. Oncology DNase CD34- Hypersensitive Sites 
+    shortLabel EIO/JCVI CD34- NAS
+    longLabel CD34- cells Nuclease Accessible sites
     priority 2
     color 100,30,250
 
     track sangamoDnaseHsPos
     subTrack sangamoDnaseHs
-    shortLabel SGMO/EIO CD34+ HS
-    longLabel Sangamo - Eur. Inst. Oncology DNase CD34+ Hypersensitive Sites
+    shortLabel EIO/JCVI CD34+ NAS 
+    longLabel CD34+ cells Nuclease Accessible sites
     priority 1
     color 100,30,150
 
