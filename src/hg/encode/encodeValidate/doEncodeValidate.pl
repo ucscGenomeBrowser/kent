@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.112 2008/11/23 08:08:26 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.113 2008/11/25 03:35:17 mikep Exp $
 
 use warnings;
 use strict;
@@ -135,6 +135,8 @@ our %validators = (
     antibody => \&validateAntibody,
     rnaExtract => \&validateRnaExtract,
     localization => \&validateLocalization,
+    ripAntibody => \&validateRipAntibody,
+    ripTgtProtein => \&validateRipTgtProtein,
     freezeDate => \&validateFreezeDate,
     replicate => \&validateReplicate,
     );
@@ -219,6 +221,16 @@ sub validateRnaExtract {
 sub validateLocalization {
     my ($val) = @_;
     return defined($terms{'localization'}{$val}) ? () : ("localization \'$val\' is not known");
+}
+
+sub validateRipAntibody {
+    my ($val) = @_;
+    return defined(lc($val) eq 'input' || lc($val) eq 'control' || $terms{'ripAntibody'}{$val}) ? () : ("ripAntibody \'$val\' is not known");
+}
+
+sub validateRipTgtProtein {
+    my ($val) = @_;
+    return defined($terms{'ripTgtProtein'}{$val}) ? () : ("ripTgtProtein \'$val\' is not known");
 }
 
 sub validateGeneType {
