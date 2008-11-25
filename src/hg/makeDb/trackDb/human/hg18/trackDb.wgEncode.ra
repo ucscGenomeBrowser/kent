@@ -809,7 +809,7 @@ shortLabel      Affy RnaChip
 longLabel       ENCODE Affy Gingeras RnaChip
 group           regulation
 subGroup1       view Views Transfrags=Transfrags FilteredTransfrags=FilteredTransfrags RawSignal=RawSignal FilteredRawSignal=FilteredRawSignal
-subGroup2       cellType Cell_Line prostate=prostate K562=K562 
+subGroup2       cellType Cell_Line prostate=prostate K562=K562 GM12878=GM12878
 subGroup3       localization Localization cell=cell nucleus=nucleus cytosol=cytosol polysome=polysome
 subGroup4       rnaExtract RnaExtract longNonPolyA=longNonPolyA longPolyA=longPolyA total=total 
 dimensions      dimensionX=cellType     dimensionY=localization dimensionZ=rnaExtract
@@ -1348,6 +1348,72 @@ wgEncode        1
 	rnaExtract	longNonPolyA
 	localization	polysome
 	cell		K562
+
+	track		wgEncodeAffyRnaChipFilteredTransfragsGm12878NucleusLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA GM12878 nucleus
+	longLabel	ENCODE Affy Filtered Transfrags (from longNonPolyA in GM12878 cell nucleus)
+	subGroups	view=FilteredTransfrags cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-25 10:26:17
+	dateReleased	2009-08-25
+	priority	26
+	noInherit	on
+	configurable	on
+	rnaExtract	longNonPolyA
+	localization	nucleus
+	cell		GM12878
+
+	track		wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA GM12878 nucleus
+	longLabel	ENCODE Affy Transfrags (from longNonPolyA in GM12878 cell nucleus)
+	subGroups	view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-25 10:26:17
+	dateReleased	2009-08-25
+	priority	25
+	noInherit	on
+	configurable	on
+	rnaExtract	longNonPolyA
+	localization	nucleus
+	cell		GM12878
+
+	track		wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA GM12878 nucleus Raw
+	longLabel	ENCODE (from longNonPolyA in GM12878 cell nucleus)
+	subGroups	view=RawSignal cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
+	type		wig -59319.00 55161.00
+	dateSubmitted	2008-11-25 10:26:17
+	dateReleased	2009-08-25
+	priority	28
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	nucleus
+	cell		GM12878
+
+	track		wgEncodeAffyRnaChipFilteredRawSignalGm12878NucleusLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA GM12878 nucleus
+	longLabel	ENCODE (from longNonPolyA in GM12878 cell nucleus)
+	subGroups	view=FilteredRawSignal cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
+	type		wig -52768.00 58546.00
+	dateSubmitted	2008-11-25 10:26:17
+	dateReleased	2009-08-25
+	priority	27
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	nucleus
+	cell		GM12878
 
 
 track wgEncodeYaleChIPseq
