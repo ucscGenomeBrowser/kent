@@ -9,7 +9,6 @@ subGroup1 view Views align=Alignments cons=Conservation
 visibilityViewDefaults align=full+ cons=dense
 dragAndDrop subTracks
 type bed 4
-wgEncode 1
 dataVersion ENCODE Nov 2008 Freeze
 priority 1
 
