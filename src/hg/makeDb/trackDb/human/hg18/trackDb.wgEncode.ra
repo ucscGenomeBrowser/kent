@@ -934,6 +934,48 @@ wgEncode 1
 	configurable	on
 	cell		HeLa-S3
 
+	track		wgEncodeUwDnaseSeqRawSignalRep1Hepg2
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	HepG2 Raw 1
+	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in HepG2 cells)
+	subGroups	view=RawSignal cellType=HepG2
+	type		wig 1.00 127303.00
+	dateSubmitted	2008-11-18 20:0:41
+	dateReleased	2009-08-18
+	priority	4
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		HepG2
+
+	track		wgEncodeUwDnaseSeqPeaksHepg2
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	HepG2 Pk
+	longLabel	ENCODE UW DNase-Seq Peaks (in HepG2 cells)
+	subGroups	view=Peaks cellType=HepG2
+	type		narrowPeak
+	dateSubmitted	2008-11-18 20:0:41
+	dateReleased	2009-08-18
+	priority	2
+	noInherit	on
+	configurable	on
+	cell		HepG2
+
+	track		wgEncodeUwDnaseSeqHotspotsHepg2
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	HepG2
+	longLabel	ENCODE UW DNase-Seq Hotspots (in HepG2 cells)
+	subGroups	view=Hotspots cellType=HepG2
+	type		broadPeak
+	dateSubmitted	2008-11-18 20:0:41
+	dateReleased	2009-08-18
+	priority	1
+	noInherit	on
+	configurable	on
+	cell		HepG2
+
 
 track           wgEncodeAffyRnaChip
 compositeTrack  on
