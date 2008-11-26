@@ -50,6 +50,9 @@ module PipelineBackground
       load_background(project_id)
     else
       new_status project, "validate failed"
+      # send email notification
+      user = User.find(project.user_id)
+      UserNotifier.deliver_failure_notification(user, project, "validate")
     end
 
   end 
@@ -71,12 +74,13 @@ module PipelineBackground
     if exitCode == 0
       project.status = "loaded"
       # send email notification
-      if ActiveRecord::Base.configurations[RAILS_ENV]['emailOnLoad']
-        user = User.find(project.user_id)
-        UserNotifier.deliver_load_notification(user, project)
-      end
+      user = User.find(project.user_id)
+      UserNotifier.deliver_load_notification(user, project)
     else
       project.status = "load failed"
+      # send email notification
+      user = User.find(project.user_id)
+      UserNotifier.deliver_failure_notification(user, project, "load")
     end
     new_status project, project.status
 
@@ -205,6 +209,9 @@ module PipelineBackground
       exitCode = run_with_timeout(cmd, timeout)
       if exitCode != 0
         new_status project, "upload failed"
+        # send email notification
+        user = User.find(project.user_id)
+        UserNotifier.deliver_failure_notification(user, project, "upload")
         return
       end
 
@@ -635,6 +642,30 @@ private
       end
     end
     return true
+  end
+
+  def getErrText(project, filename)
+    # get error output file
+    errFile = path_to_file(project.id, filename)
+    return File.open(errFile, "rb") { |f| f.read }
+  rescue
+    return ""
+  end
+
+  def getUploadErrText(project)
+    return getErrText(project, "upload_error")
+  end
+
+  def getValidateErrText(project)
+    return getErrText(project, "validate_error")
+  end
+
+  def getLoadErrText(project)
+    return getErrText(project, "load_error")
+  end
+
+  def getUnloadErrText(project)
+    return getErrText(project, "unload_error")
   end
 
 end

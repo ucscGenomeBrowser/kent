@@ -59,13 +59,13 @@ class PipelineController < ApplicationController
     @errText = ""
     case @project.status
       when "validate failed"
-        @errText = getErrText
+        @errText = getValidateErrText(@project)
       when "load failed"
-        @errText = getLoadErrText
+        @errText = getLoadErrText(@project)
       when "unload failed"
-	@errText = getUnloadErrText
+	@errText = getUnloadErrText(@project)
       when "upload failed"
-	@errText = getUploadErrText
+	@errText = getUploadErrText(@project)
       when "uploading"
         projectDir = path_to_project_dir(@project.id)
  	upText = getUploadErrText.split("\n")
@@ -462,42 +462,6 @@ private
       return false
     end
     return true
-  end
-
-  def getErrText
-    # get error output file
-    @filename = "validate_error"
-    errFile = path_to_file(@project.id, @filename)
-    return File.open(errFile, "rb") { |f| f.read }
-  rescue
-    return ""
-  end
-
-  def getLoadErrText
-    # get error output file
-    @filename = "load_error"
-    errFile = path_to_file(@project.id, @filename)
-    return File.open(errFile, "rb") { |f| f.read }
-  rescue
-    return ""
-  end
-
-  def getUnloadErrText
-    # get error output file
-    @filename = "unload_error"
-    errFile = path_to_file(@project.id, @filename)
-    return File.open(errFile, "rb") { |f| f.read }
-  rescue
-    return ""
-  end
-
-  def getUploadErrText
-    # get error output file
-    @filename = "upload_error"
-    errFile = path_to_file(@project.id, @filename)
-    return File.open(errFile, "rb") { |f| f.read }
-  rescue
-    return ""
   end
 
   def queue_job(source)

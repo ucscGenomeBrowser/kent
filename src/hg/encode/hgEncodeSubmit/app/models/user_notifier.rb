@@ -1,12 +1,37 @@
 class UserNotifier < ActionMailer::Base
 
   def load_notification(user, project)
-    setup_email(user)
-    @recipients  = ActiveRecord::Base.configurations[RAILS_ENV]['emailOnLoad']
+    setup_email(user)  
+    # also notify the emailOnLoad person
+    emailOnLoad = ActiveRecord::Base.configurations[RAILS_ENV]['emailOnLoad']
+    if (emailOnLoad)    
+      @bcc = emailOnLoad
+    end
     db = ActiveRecord::Base.configurations[RAILS_ENV]['database']
     @subject    += "Submission #{db} #{project.id} #{project.name} loaded"
     @body[:project] = project
     @body[:database] = db
+  end
+  
+  def failure_notification(user, project, failureType)
+    setup_email(user)
+    db = ActiveRecord::Base.configurations[RAILS_ENV]['database']
+    @subject    += "Submission #{db} #{project.id} #{project.name} #{failureType} failed"
+    @body[:project] = project
+    @body[:database] = db
+    @body[:failure_type] = failureType
+    errText = ""
+    case project.status
+      when "upload failed"
+        errText = getUploadErrText(project)
+      when "validate failed"
+        errText = getValidateErrText(project)
+      when "load failed"
+        errText = getLoadErrText(project)
+      when "unload failed"
+        errText = getUnloadErrText(project)
+    end 
+    @body[:error_text] = errText
   end
   
   def signup_notification(user)
