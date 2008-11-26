@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.44 2008/11/25 08:02:01 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.45 2008/11/26 18:39:49 mikep Exp $
 
 # Usage:
 #
@@ -67,6 +67,34 @@ sub dieFile
     die join("", <FILE>) . "\n";
 }
 
+sub makeCatCmd
+# return the cat command, checking whether the files in the list are all zipped or not
+{
+    my $cmdName = shift;
+    my $fileList = shift;
+    my @files = split(/\s+/, $fileList);    
+    my $catCmd;
+    if ($opt_debug) {
+        $catCmd = "head -1000 $fileList"; # load 1000 records if $opt_debug
+    } else {
+        my $numZipped = 0;
+        for my $f (@files) {
+            ++$numZipped if $f =~ /.gz$/;
+        }
+        if ($numZipped > 0) { # check how many zipped files are in the list
+            if (scalar(@files) != $numZipped) {
+                die("ERROR: zipped and unzipped files in [$cmdName] file list\n");
+            }
+            else {
+                $catCmd = "zcat $fileList";
+            }
+        } else {
+            $catCmd = "cat $fileList"; # cat possibly a list of files
+        }
+    }
+    return $catCmd;
+}
+
 sub loadGene
 {
     my ($assembly, $tableName, $fileList, $pushQ, $ldHgGeneFlags) = @_;
@@ -92,7 +120,7 @@ sub loadWig
     my ($assembly, $tableName, $fileList, $pushQ) = @_;
 
     HgAutomate::verbose(2, "loadWig ($assembly, $tableName, $fileList, $pushQ)\n");
-    my $catCmd = $opt_debug ? "head -1000 $fileList" : "cat $fileList"; # load 1000 records if $opt_debug
+    my $catCmd = makeCatCmd("loadWig", $fileList);
     my @cmds = ($catCmd, "/cluster/bin/x86_64/wigEncode -noOverlapSpanData stdin stdout $tableName.wib", "/cluster/bin/x86_64/hgLoadWiggle -pathPrefix=/gbdb/$assembly/wib -tmpDir=$tempDir $assembly $tableName stdin");
     HgAutomate::verbose(2, "loadWig cmds [".join(" ; ",@cmds)."]\n");
     my $stderrFile = "out/$tableName.err";
@@ -128,7 +156,7 @@ sub loadBed
 {
     my ($assembly, $tableName, $fileList, $pushQ) = @_;
     HgAutomate::verbose(2, "loadBed ($assembly, $tableName, $fileList, $pushQ)\n");
-    my $catCmd = $opt_debug ? "head -1000 $fileList" : "cat $fileList"; # load 1000 records if $opt_debug
+    my $catCmd = makeCatCmd("loadBed", $fileList);
     my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir");
     HgAutomate::verbose(2, "loadBed cmds [".join(" ; ",@cmds)."]\n");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_debug);
@@ -144,7 +172,7 @@ sub loadBedGraph
 {
     my ($assembly, $tableName, $fileList, $pushQ) = @_;
     HgAutomate::verbose(2, "loadBedGraph ($assembly, $tableName, $fileList, $pushQ)\n");
-    my $catCmd = Encode::isZipped($fileList) ? "/bin/zcat $fileList" : "/bin/cat $fileList";
+    my $catCmd = makeCatCmd("loadBedGraph", $fileList);
     my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $assembly $tableName -bedGraph=4 stdin -tmpDir=$tempDir");
     HgAutomate::verbose(2, "loadBedGraph cmds [".join(" ; ",@cmds)."]\n");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_debug);
@@ -171,7 +199,7 @@ sub loadBedFromSchema
         # fill in zero score columns for narrowPeaks etc.
         $fillInArg = "-fillInScore=signalValue ";
     }
-    my $catCmd = $opt_debug ? "head -1000 $fileList" : "cat $fileList"; # load 1000 records if $opt_debug
+    my $catCmd = makeCatCmd("loadBedFromSchema", $fileList);
     my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
     HgAutomate::verbose(2, "loadBedFromSchema cmds [".join(" ; ",@cmds)."]\n");
     my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
