@@ -16,7 +16,7 @@ of a canonical nucleosome.
 </P><P>
 <B>FAIRE data</B>: FAIRE (Formaldehyde Assisted Isolation of Regulatory Elements) is a method to isolate and
 identify nucleosome-depleted regions of the genome. FAIRE was initially discovered in yeast, but
-subsequently was shown to also identify active regulatory elements in human cells (Giresi et al., 2006).
+subsequently was shown to also identify active regulatory elements in human cells (Giresi <em>et al.</em>, 2006).
 Most DNA fragments isolated by FAIRE are 200 bp in length.
 </P><P>
 <B>ChIP data</B>: ChIP (Chromatin Immunoprecipitation) is a method to identify the specific location of proteins
@@ -28,20 +28,20 @@ the functional annotation of the open chromatin regions identified by DNaseI HS 
 <H2>Methods</H2>
 <P>
 DNaseI hypersensitive sites were isolated using methods called DNase-seq or DNase-chip
-(Boyle et al., 2008, Crawford et al., 2006). Briefly, cells were lysed with NP40 and
+(Boyle <em>et al.</em>, 2008, Crawford <em>et al.</em>, 2006). Briefly, cells were lysed with NP40 and
 intact nuclei were digested with optimal levels of DNaseI enzyme. DNaseI digested
 ends were captured from three different DNase concentrations and material was sequenced
 using Illumina (Solexa) sequencing. DNase-seq data was verified using material that was
 hybridized to NimbleGen Human ENCODE tiled array (1% of the genome).
 </P><P>
-FAIRE was performed (Giresi et al., 2007) by cross-linking proteins to DNA using 1% formaldehyde
+FAIRE was performed (Giresi <em>et al.</em>, 2007) by cross-linking proteins to DNA using 1% formaldehyde
 solution, the complex was sheared using sonication, and a phenol/chloroform extraction was
 performed to remove DNA fragments crosslinked to protein. The DNA recovered in the aqueous
 phase was sequenced using the Illumina sequencing and hybridized to NimbleGen Human ENCODE
 arrays (1% of the genome).
 </P><P>
 To perform ChIP, proteins were cross-linked to DNA in vivo using 1% formaldehyde solution
-(Bhinge et al., 2007, ENCODE Project Consortium., 2007). Crosslinked chromatin was sheared
+(Bhinge <em>et al.</em>, 2007, ENCODE Project Consortium., 2007). Crosslinked chromatin was sheared
 by sonication and immunoprecipitated using a specific antibody against the protein of interest.
 After reversal of the crosslinks, the immunoprecipitated DNA was used to identify the genomic
 location of transcription factor binding. This was accomplished by Solexa sequencing of the
@@ -50,11 +50,14 @@ immunoprecipitated DNA to NimbleGen Human ENCODE tiling arrays (1% of the genome
 the input DNA as reference (ChIP-chip).
 
 <H3>High-Throughput Sequence Data Analysis:</H3>
-ENCODE Array Data Analysis: Discrete DNase HS, FAIRE, and ChIP sites were identified from
-DNase/FAIRE/ChIP-seq by setting a parzen cutoff based on ROC curve analysis using peaks and
-non-peaks identified from DNase/FAIRE/ChIP-chip using 1% ENCODE NimbleGen arrays. Tiled array
-peaks were identified using ChIPOTle (Buck et al., 2005), and non-peaks were identified using
-less stringent peak calling cutoffs.
+ENCODE Array Data Analysis: Sequences from each experiment were aligned to the genome using
+Maq (Li <em>et al.</em>, 2008) and those aligned to 4 or less locations were retained. This
+digital signal was converted to a continuous wiggle track using F-Seq that employs Parzen
+kernel density estimation to create base pair scores (Boyle <em>et al.</em>, 2008b). Discrete
+DNase HS, FAIRE, and ChIP sites were identified from DNase/FAIRE/ChIP-seq using F-Seq by setting
+a Parzen cutoff based on ROC curve analysis using peaks and non-peaks identified from DNase/FAIRE/ChIP-chip
+using 1% ENCODE NimbleGen arrays. Tiled array peaks were identified using ChIPOTle (Buck <em>et al.</em>,
+2005), and non-peaks were identified using less stringent peak calling cutoffs.
 </P>
 
 <H2>Credits</H2>
@@ -95,6 +98,12 @@ Boyle AP, Davis S, Shulha HP, Meltzer P, Margulies EH, Weng Z, Furey TS, Crawfor
  <i>Cell.</i> 2008 Jan 25;<B>132</B>(2):311-22.
 </P><P>
 
+Boyle AP, Guinney J, Crawford GE, and Furey TS.
+ <A HREF="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/btn480" TARGET=_blank>
+ F-Seq: a feature density estimator for high-throughput sequence tags.</A>
+ <i>Bioinformatics.</i> 2008;<B>24</B>(21):2537-8.
+</P><P>
+
 Buck MJ, Nobel AB, Lieb JD,
  <A HREF="http://genomebiology.com/2005/6/11/R97" TARGET=_blank>
  ChIPOTle: a user-friendly tool for the analysis of ChIP-chip data.</A>
@@ -117,4 +126,10 @@ Giresi PG, Kim J, McDaniel RM, Iyer VR, Lieb JD.
  <A HREF="http://www.genome.org/cgi/content/abstract/17/6/877" TARGET=_blank>
  FAIRE (Formaldehyde-Assisted Isolation of Regulatory Elements) isolated active regulatory elements in human chromatin.</A>
  <i>Genome Res.</i> 2007;<B>17</B>:877-885.
+</P><P>
+
+Li H, Ruan J, and Durbin R.
+ <A HREF="http://genome.cshlp.org/content/early/2008/09/25/gr.078212.108.short" TARGET=_blank>
+ Mapping short DNA sequencing reads and calling variants using mapping quality scores.</A>
+ <i>Genome Res.</i> 2008;<B>18</B>(11):1851-8.
 </P>
