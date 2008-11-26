@@ -1577,7 +1577,7 @@ type bed 3
     color 50,150,50
     priority 3
 
-track sangamoDnaseHs 
+track eioJcviNAS 
 compositeTrack on
 shortLabel EIO/JCVI NAS
 longLabel Eur. Inst. Oncology/J. C. Venter Inst. Nuclease Accessible Sites 
@@ -1585,18 +1585,18 @@ group regulation
 visibility hide
 scoreFilterMax 3817
 priority 0
-type bed 5 .
+type bed 3 .
 
-    track sangamoDnaseHsNeg
-    subTrack sangamoDnaseHs
+    track eioJcviNASNeg
+    subTrack eioJcviNAS
     shortLabel EIO/JCVI CD34- NAS
     longLabel CD34- cells Nuclease Accessible sites
     scoreFilterMax 1538
     priority 2
     color 100,30,250
 
-    track sangamoDnaseHsPos
-    subTrack sangamoDnaseHs
+    track eioJcviNASPos
+    subTrack eioJcviNAS
     shortLabel EIO/JCVI CD34+ NAS 
     longLabel CD34+ cells Nuclease Accessible sites
     scoreFilterMax 3817 
