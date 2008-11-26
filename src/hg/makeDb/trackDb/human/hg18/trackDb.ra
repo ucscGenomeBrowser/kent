@@ -31,7 +31,7 @@ type genePred
 track phyloPCons28way
 shortLabel Basewise Conserv
 compositeTrack on
-longLabel Basewise Conservation by PhyloP for 28-Species Vertebrate Multiz Alignment
+longLabel Basewise Conservation by PhyloP for 28-Species Multiz Align.
 spanList 1
 maxHeightPixels 100:40:11
 autoScaleDefault Off
