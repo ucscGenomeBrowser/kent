@@ -2833,7 +2833,7 @@ group regulation
 # subGroup1 view Views Sites=Sites Counts=Counts
 subGroup1 view Views Peaks=Peaks RawSignal=RawSignal
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 PFSK-1=PFSK-1 SK-N-MC=SK-N-MC
-subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP SRF=SRF Control=Control
+subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF POL2=POL2 SRF=SRF Control=Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
@@ -3079,6 +3079,130 @@ wgEncode 1
 	cell		GM12878
 	antibody	GABP
 
+	track		wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	NRSF GM12878 Pk 1
+	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 1 (NRSF in GM12878 cells)
+	subGroups	view=Peaks factor=NRSF cellType=GM12878
+	type		narrowPeak
+	dateSubmitted	2008-11-25 15:0:30
+	dateReleased	2009-08-25
+	priority	31
+	noInherit	on
+	configurable	on
+	cell		GM12878
+	antibody	NRSF
+
+	track		wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	NRSF GM12878 Pk 2
+	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 2 (NRSF in GM12878 cells)
+	subGroups	view=Peaks factor=NRSF cellType=GM12878
+	type		narrowPeak
+	dateSubmitted	2008-11-25 15:0:30
+	dateReleased	2009-08-25
+	priority	31
+	noInherit	on
+	configurable	on
+	cell		GM12878
+	antibody	NRSF
+
+	track		wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	NRSF GM12878 Raw 1
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (NRSF in GM12878 cells)
+	subGroups	view=RawSignal factor=NRSF cellType=GM12878
+	type		wig 1.00 19628.00
+	dateSubmitted	2008-11-25 15:0:30
+	dateReleased	2009-08-25
+	priority	32
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	NRSF
+
+	track		wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Nrsf
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	NRSF GM12878 Raw 2
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (NRSF in GM12878 cells)
+	subGroups	view=RawSignal factor=NRSF cellType=GM12878
+	type		wig 1.00 16142.00
+	dateSubmitted	2008-11-25 15:0:30
+	dateReleased	2009-08-25
+	priority	32
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	NRSF
+
+	track		wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	Pol2 GM12878 Pk 1
+	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 1 (Pol2 in GM12878 cells)
+	subGroups	view=Peaks factor=Pol2 cellType=GM12878
+	type		narrowPeak
+	dateSubmitted	2008-11-25 14:58:10
+	dateReleased	2009-08-25
+	priority	31
+	noInherit	on
+	configurable	on
+	cell		GM12878
+	antibody	Pol2
+
+	track		wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	Pol2 GM12878 Pk 2
+	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 2 (Pol2 in GM12878 cells)
+	subGroups	view=Peaks factor=Pol2 cellType=GM12878
+	type		narrowPeak
+	dateSubmitted	2008-11-25 14:58:10
+	dateReleased	2009-08-25
+	priority	31
+	noInherit	on
+	configurable	on
+	cell		GM12878
+	antibody	Pol2
+
+	track		wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	Pol2 GM12878 Raw 1
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (Pol2 in GM12878 cells)
+	subGroups	view=RawSignal factor=Pol2 cellType=GM12878
+	type		wig 1.00 8689.00
+	dateSubmitted	2008-11-25 14:58:10
+	dateReleased	2009-08-25
+	priority	32
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	Pol2
+
+	track		wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	Pol2 GM12878 Raw 2
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (Pol2 in GM12878 cells)
+	subGroups	view=RawSignal factor=Pol2 cellType=GM12878
+	type		wig 1.00 9957.00
+	dateSubmitted	2008-11-25 14:58:10
+	dateReleased	2009-08-25
+	priority	32
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	Pol2
+
 	track		wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf
 	subTrack	wgEncodeHudsonalphaChipSeq
 	shortLabel	SRF GM12878 Pk 1
@@ -3237,6 +3361,130 @@ wgEncode 1
 	cell		K562
 	antibody	GABP
 
+	track		wgEncodeHudsonalphaChipSeqPeaksRep1K562Nrsf
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	NRSF K562 Pk 1
+	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 1 (NRSF in K562 cells)
+	subGroups	view=Peaks factor=NRSF cellType=K562
+	type		narrowPeak
+	dateSubmitted	2008-11-25 15:0:30
+	dateReleased	2009-08-25
+	priority	31
+	noInherit	on
+	configurable	on
+	cell		K562
+	antibody	NRSF
+
+	track		wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	NRSF K562 Pk 2
+	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 2 (NRSF in K562 cells)
+	subGroups	view=Peaks factor=NRSF cellType=K562
+	type		narrowPeak
+	dateSubmitted	2008-11-25 15:0:30
+	dateReleased	2009-08-25
+	priority	31
+	noInherit	on
+	configurable	on
+	cell		K562
+	antibody	NRSF
+
+	track		wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	NRSF K562 Raw 1
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (NRSF in K562 cells)
+	subGroups	view=RawSignal factor=NRSF cellType=K562
+	type		wig 1.00 47957.00
+	dateSubmitted	2008-11-25 15:0:30
+	dateReleased	2009-08-25
+	priority	32
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+	antibody	NRSF
+
+	track		wgEncodeHudsonalphaChipSeqRawSignalRep2K562Nrsf
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	NRSF K562 Raw 2
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (NRSF in K562 cells)
+	subGroups	view=RawSignal factor=NRSF cellType=K562
+	type		wig 1.00 29181.00
+	dateSubmitted	2008-11-25 15:0:30
+	dateReleased	2009-08-25
+	priority	32
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+	antibody	NRSF
+
+	track		wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol2
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	Pol2 K562 Pk 1
+	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 1 (Pol2 in K562 cells)
+	subGroups	view=Peaks factor=Pol2 cellType=K562
+	type		narrowPeak
+	dateSubmitted	2008-11-25 14:58:10
+	dateReleased	2009-08-25
+	priority	31
+	noInherit	on
+	configurable	on
+	cell		K562
+	antibody	Pol2
+
+	track		wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	Pol2 K562 Pk 2
+	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 2 (Pol2 in K562 cells)
+	subGroups	view=Peaks factor=Pol2 cellType=K562
+	type		narrowPeak
+	dateSubmitted	2008-11-25 14:58:10
+	dateReleased	2009-08-25
+	priority	31
+	noInherit	on
+	configurable	on
+	cell		K562
+	antibody	Pol2
+
+	track		wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	Pol2 K562 Raw 1
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (Pol2 in K562 cells)
+	subGroups	view=RawSignal factor=Pol2 cellType=K562
+	type		wig 1.00 14400.00
+	dateSubmitted	2008-11-25 14:58:10
+	dateReleased	2009-08-25
+	priority	32
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+	antibody	Pol2
+
+	track		wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	Pol2 K562 Raw 2
+	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (Pol2 in K562 cells)
+	subGroups	view=RawSignal factor=Pol2 cellType=K562
+	type		wig 1.00 10312.00
+	dateSubmitted	2008-11-25 14:58:10
+	dateReleased	2009-08-25
+	priority	32
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+	antibody	Pol2
+
 	track		wgEncodeHudsonalphaChipSeqPeaksRep1K562Srf
 	subTrack	wgEncodeHudsonalphaChipSeq
 	shortLabel	SRF K562 Pk 1
@@ -3246,6 +3494,20 @@ wgEncode 1
 	dateSubmitted	2008-11-22 15:39:43
 	dateReleased	2009-08-22
 	priority	27
+	noInherit	on
+	configurable	on
+	cell		K562
+	antibody	SRF
+
+	track		wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf
+	subTrack	wgEncodeHudsonalphaChipSeq
+	shortLabel	SRF K562 Pk 2
+	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 2 (SRF in K562 cells)
+	subGroups	view=Peaks factor=SRF cellType=K562
+	type		narrowPeak
+	dateSubmitted	2008-11-22 15:39:43
+	dateReleased	2009-08-22
+	priority	29
 	noInherit	on
 	configurable	on
 	cell		K562
@@ -3268,19 +3530,6 @@ wgEncode 1
 	cell		K562
 	antibody	SRF
 
-	track		wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf
-	subTrack	wgEncodeHudsonalphaChipSeq
-	shortLabel	SRF K562 Pk 2
-	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 2 (SRF in K562 cells)
-	subGroups	view=Peaks factor=SRF cellType=K562
-	type		narrowPeak
-	dateSubmitted	2008-11-22 15:39:43
-	dateReleased	2009-08-22
-	priority	29
-	noInherit	on
-	configurable	on
-	cell		K562
-	antibody	SRF
 
 	track		wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf
 	subTrack	wgEncodeHudsonalphaChipSeq
@@ -3298,6 +3547,7 @@ wgEncode 1
 	maxHeightPixels	100:16:16
 	cell		K562
 	antibody	SRF
+
 
 track wgEncodeSangerGencode
 compositeTrack on
