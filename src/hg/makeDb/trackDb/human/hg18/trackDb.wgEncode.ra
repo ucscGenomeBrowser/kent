@@ -840,7 +840,7 @@ shortLabel UW DNase Seq
 longLabel ENCODE - UW DNase Seq
 group regulation
 subGroup1 view Views Hotspots=Hot_Spots Peaks=Peaks Signal=Signal RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line GM06990=GM06990 HeLa-S3=HeLa-S3 HepG2=HepG2 SKNSH=SKNSH Th1=Th1
+subGroup2 cellType Cell_Line GM06990=GM06990 HeLa-S3=HeLa-S3 HepG2=HepG2 Th1=Th1 SK-N-SH(+RA)=SK-N-SH(+RA)
 dimensions dimensionX=cellType 
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
@@ -1017,6 +1017,48 @@ wgEncode 1
 	noInherit	on
 	configurable	on
 	cell		Th1
+
+	track		wgEncodeUwDnaseSeqRawSignalRep1Sknshra
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	SK-N-SH(+RA) Raw 1
+	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in SK-N-SH(+RA) cells)
+	subGroups	view=RawSignal cellType=SK-N-SH(+RA)
+	type		wig 1.00 24217.00
+	dateSubmitted	2008-11-20 13:53:39
+	dateReleased	2009-08-20
+	priority	4
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		SK-N-SH(+RA)
+
+	track		wgEncodeUwDnaseSeqPeaksSknshra
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	SK-N-SH(+RA) Pk
+	longLabel	ENCODE UW DNase-Seq Peaks (in SK-N-SH(+RA) cells)
+	subGroups	view=Peaks cellType=SK-N-SH(+RA)
+	type		narrowPeak
+	dateSubmitted	2008-11-20 13:53:39
+	dateReleased	2009-08-20
+	priority	2
+	noInherit	on
+	configurable	on
+	cell		SK-N-SH(+RA)
+
+	track		wgEncodeUwDnaseSeqHotspotsSknshra
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	SK-N-SH(+RA)
+	longLabel	ENCODE UW DNase-Seq Hotspots (in SK-N-SH(+RA) cells)
+	subGroups	view=Hotspots cellType=SK-N-SH(+RA)
+	type		broadPeak
+	dateSubmitted	2008-11-20 13:53:39
+	dateReleased	2009-08-20
+	priority	1
+	noInherit	on
+	configurable	on
+	cell		SK-N-SH(+RA)
 
 
 track           wgEncodeAffyRnaChip
