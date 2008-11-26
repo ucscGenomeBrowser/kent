@@ -1571,6 +1571,73 @@ wgEncode        1
 	localization	cytosol
 	cell		GM12878
 
+	track		wgEncodeAffyRnaChipFilteredTransfragsGm12878CytosolLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA GM12878 cytosol
+	longLabel	ENCODE Affy Filtered Transfrags (from longNonPolyA in GM12878 cell cytosol)
+	subGroups	view=FilteredTransfrags cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-26 10:21:15
+	dateReleased	2009-08-26
+	priority	30
+	noInherit	on
+	configurable	on
+	rnaExtract	longNonPolyA
+	localization	cytosol
+	cell		GM12878
+
+	track		wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA GM12878 cytosol
+	longLabel	ENCODE Affy Transfrags (from longNonPolyA in GM12878 cell cytosol)
+	subGroups	view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
+	type		broadPeak
+	dateSubmitted	2008-11-26 10:21:15
+	dateReleased	2009-08-26
+	priority	29
+	noInherit	on
+	configurable	on
+	rnaExtract	longNonPolyA
+	localization	cytosol
+	cell		GM12878
+
+	track		wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA GM12878 cytosol Raw
+	longLabel	ENCODE (from longNonPolyA in GM12878 cell cytosol)
+	subGroups	view=RawSignal cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
+	type		wig -58491.00 56453.00
+	dateSubmitted	2008-11-26 10:21:15
+	dateReleased	2009-08-26
+	priority	32
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	cytosol
+	cell		GM12878
+
+	track		wgEncodeAffyRnaChipFilteredRawSignalGm12878CytosolLongnonpolya
+	subTrack	wgEncodeAffyRnaChip
+	shortLabel	longNonPolyA GM12878 cytosol
+	longLabel	ENCODE (from longNonPolyA in GM12878 cell cytosol)
+	subGroups	view=FilteredRawSignal cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
+	type		wig -58491.00 61097.00
+	dateSubmitted	2008-11-26 10:21:15
+	dateReleased	2009-08-26
+	priority	31
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longNonPolyA
+	localization	cytosol
+	cell		GM12878
+
+
 track		wgEncodeSunyalbanyRnaGeneChip
 compositeTrack	on
 shortLabel	SunyAlbany RnaGeneChip
