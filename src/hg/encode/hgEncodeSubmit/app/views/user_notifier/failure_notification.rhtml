@@ -1,10 +1,13 @@
-Submission Failed
 
-<%= @user.login -%> : 
- submission <%= @project.id -%> <%= @project.name -%>
- on <%= @database -%>.
+Hello, <%= @user.login.capitalize -%>,
+Your submission "<%= @project.name -%>" to the ENCODE pipeline produced 
+<%= @failure_type -%> error (see below).  
 
-<%= @failure_type -%> failed:
+Please contact your data wrangler if you need further details 
+or assistance with correcting the problem.
+
+   Thank you,
+        The ENCODE DCC Team
 
 ------------------
 

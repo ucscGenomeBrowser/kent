@@ -16,7 +16,7 @@ class UserNotifier < ActionMailer::Base
   def failure_notification(user, project, failureType)
     setup_email(user)
     db = ActiveRecord::Base.configurations[RAILS_ENV]['database']
-    @subject    += "Submission #{db} #{project.id} #{project.name} #{failureType} failed"
+    @subject    += "Submission \"#{project.name}\": #{failureType} error"
     @body[:project] = project
     @body[:database] = db
     @body[:failure_type] = failureType

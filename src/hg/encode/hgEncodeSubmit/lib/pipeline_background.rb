@@ -52,7 +52,7 @@ module PipelineBackground
       new_status project, "validate failed"
       # send email notification
       user = User.find(project.user_id)
-      UserNotifier.deliver_failure_notification(user, project, "validate")
+      UserNotifier.deliver_failure_notification(user, project, "a validation")
     end
 
   end 
@@ -80,7 +80,7 @@ module PipelineBackground
       project.status = "load failed"
       # send email notification
       user = User.find(project.user_id)
-      UserNotifier.deliver_failure_notification(user, project, "load")
+      UserNotifier.deliver_failure_notification(user, project, "a database load")
     end
     new_status project, project.status
 
@@ -211,7 +211,7 @@ module PipelineBackground
         new_status project, "upload failed"
         # send email notification
         user = User.find(project.user_id)
-        UserNotifier.deliver_failure_notification(user, project, "upload")
+        UserNotifier.deliver_failure_notification(user, project, "an upload")
         return
       end
 
