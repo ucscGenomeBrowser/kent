@@ -191,12 +191,9 @@ module PipelineBackground
       return
     end
 
-    if upload.blank?
-      # just in case, remove it if it already exists 
-      #  but currently this happens if local file upload
-      #  because the client creates it before upload_background is called
-      File.delete(pf) if File.exists?(pf)
-    end
+    #  cases where file will "pre-exist":
+    #    if local file upload the rails foreground creates it before upload_background is called
+    #    if url with resume, keep it.
     
     unless upurl.blank?
 
@@ -225,6 +222,7 @@ module PipelineBackground
           return
         end
         #FileUtils.copy(ftpPath, pf)
+        File.delete(pf) if File.exists?(pf)
         File.rename(ftpPath, pf)
         File.delete(ftpPath) if File.exists?(ftpPath) and File.exists(pf)  # just in case rename doesn't cleanup
       else
