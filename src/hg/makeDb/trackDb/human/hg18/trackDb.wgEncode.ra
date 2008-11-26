@@ -892,6 +892,48 @@ wgEncode 1
 	configurable	on
 	cell		GM06990
 
+	track		wgEncodeUwDnaseSeqRawSignalRep1Helas3
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	HeLa-S3 Raw 1
+	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in HeLa-S3 cells)
+	subGroups	view=RawSignal cellType=HeLa-S3
+	type		wig 1.00 18313.00
+	dateSubmitted	2008-11-18 19:19:51
+	dateReleased	2009-08-18
+	priority	4
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		HeLa-S3
+
+	track		wgEncodeUwDnaseSeqPeaksHelas3
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	HeLa-S3 Pk
+	longLabel	ENCODE UW DNase-Seq Peaks (in HeLa-S3 cells)
+	subGroups	view=Peaks cellType=HeLa-S3
+	type		narrowPeak
+	dateSubmitted	2008-11-18 19:19:51
+	dateReleased	2009-08-18
+	priority	2
+	noInherit	on
+	configurable	on
+	cell		HeLa-S3
+
+	track		wgEncodeUwDnaseSeqHotspotsHelas3
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	HeLa-S3
+	longLabel	ENCODE UW DNase-Seq Hotspots (in HeLa-S3 cells)
+	subGroups	view=Hotspots cellType=HeLa-S3
+	type		broadPeak
+	dateSubmitted	2008-11-18 19:19:51
+	dateReleased	2009-08-18
+	priority	1
+	noInherit	on
+	configurable	on
+	cell		HeLa-S3
+
 
 track           wgEncodeAffyRnaChip
 compositeTrack  on
