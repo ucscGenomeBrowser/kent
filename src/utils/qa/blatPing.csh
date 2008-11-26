@@ -7,7 +7,8 @@ if ( "$HOST" != "hgwdev" ) then
     exit 1
 endif
 
-hgsql -h genome-centdb hgcentral -B --skip-column-names -e "select db, host, port from blatServers order by db, host, port" > blatList
+hgsql -h genome-centdb hgcentral -B -N -e "SELECT db, host, port FROM blatServers \
+  ORDER BY db, host, port" > blatList
 set list = (`cat blatList`)
 
 # next line just for testing:
@@ -20,14 +21,14 @@ while ( "$list" != "" )
     shift list
     set port = $list[1]
     shift list
-    #-- use to remove monotonous long running blat failures:
+    #-- use to remove monotonous long-running blat failures:
     #if ("$db" != "rn2") then
      echo "$db $host $port"
      gfServer status $host $port > /dev/null
      set err = $status
      if ( $err ) then
  	echo "error $err on ${db} ${host}:${port}"
- 	set problems = ($problems "${db} ${host}:${port}\n")
+ 	set problems = ($problems"${db} ${host}:${port}\n")
      endif
     #endif
 end
