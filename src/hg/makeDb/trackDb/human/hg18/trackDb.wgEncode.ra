@@ -833,6 +833,7 @@ wgEncode 1
 	localization	nucleus
 	cell	K562
 
+
 track wgEncodeUwDnaseSeq
 compositeTrack on
 shortLabel UW DNase Seq
@@ -840,6 +841,7 @@ longLabel ENCODE - UW DNase Seq
 group regulation
 subGroup1 view Views Hotspots=Hot_Spots Peaks=Peaks Signal=Signal RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM06990=GM06990 HeLa-S3=HeLa-S3 HepG2=HepG2 SKNSH=SKNSH TH1=TH1
+dimensions dimensionX=cellType 
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Hotspots=pack Peaks=pack Signal=full RawSignal=hide
@@ -847,6 +849,48 @@ controlledVocabulary encode/cv.ra cellType
 priority 0
 type bed 3
 wgEncode 1
+
+	track		wgEncodeUwDnaseSeqRawSignalRep1Gm06990
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	GM06990 Raw 1
+	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in GM06990 cells)
+	subGroups	view=RawSignal cellType=GM06990
+	type		wig 1.00 69023.00
+	dateSubmitted	2008-11-25 23:3:5
+	dateReleased	2009-08-25
+	priority	4
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM06990
+
+	track		wgEncodeUwDnaseSeqPeaksGm06990
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	GM06990 Pk
+	longLabel	ENCODE UW DNase-Seq Peaks (in GM06990 cells)
+	subGroups	view=Peaks cellType=GM06990
+	type		narrowPeak
+	dateSubmitted	2008-11-25 23:3:5
+	dateReleased	2009-08-25
+	priority	2
+	noInherit	on
+	configurable	on
+	cell		GM06990
+
+	track		wgEncodeUwDnaseSeqHotspotsGm06990
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	GM06990
+	longLabel	ENCODE UW DNase-Seq Hotspots (in GM06990 cells)
+	subGroups	view=Hotspots cellType=GM06990
+	type		broadPeak
+	dateSubmitted	2008-11-25 23:3:5
+	dateReleased	2009-08-25
+	priority	1
+	noInherit	on
+	configurable	on
+	cell		GM06990
 
 
 track           wgEncodeAffyRnaChip
