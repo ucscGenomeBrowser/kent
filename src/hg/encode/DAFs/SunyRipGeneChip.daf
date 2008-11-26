@@ -1,4 +1,4 @@
-# Data Agreement File for RIP-genechip project $Revision: 1.4 $
+# Data Agreement File for RIP-genechip project $Revision: 1.5 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -12,19 +12,19 @@ assembly          hg18
 dafVersion        0.2.2
 
 # Track/view definition
-view             FunctionallyValidatesBindingSites
+view             FuncValidBS
 longLabelPrefix  SUNY Albany Functionally Validated  RBP Binding Sites
 type             broadPeak
 required         no
 hasReplicates    no
 
-view             ExperimentalSites
+view             ExpBS
 longLabelPrefix  SUNY Albany Experimentally Predicted RBP Binding Sites
 type             broadPeak
 required         no
 hasReplicates    no
 
-view             ComputationalSites
+view             CompBS
 longLabelPrefix  SUNY Albany Computationally Predicted RBP Binding Sites
 type             broadPeak
 required         no
