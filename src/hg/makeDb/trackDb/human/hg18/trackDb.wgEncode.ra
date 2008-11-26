@@ -548,8 +548,8 @@ wgEncode 1
 
 	track		wgEncodeNhgriNRESilencersK562Ggamma
 	subTrack	wgEncodeNhgriNre
-	shortLabel	K562
-	longLabel	ENCODE Elnitski Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
+	shortLabel	K562 gamma Si
+	longLabel	ENCODE NHGRI Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
 	subGroups	view=SI cellType=K562 promoter=Ggam
 	type		bed 6
 	dateSubmitted	2008-11-25 13:50:43
@@ -562,8 +562,8 @@ wgEncode 1
 
 	track		wgEncodeNhgriNREEnhancerBlockersK562Ggamma
 	subTrack	wgEncodeNhgriNre
-	shortLabel	K562
-	longLabel	ENCODE Elnitski Negative Regulatory Elements - Enhancer Blockers (NRE-EBs) (in K562 cells)
+	shortLabel	K562 gamma EB
+	longLabel	ENCODE NHGRI Negative Regulatory Elements - Enhancer Blockers (NRE-EBs) (in K562 cells)
 	subGroups	view=EB cellType=K562 promoter=Ggam
 	type		bed 6
 	dateSubmitted	2008-11-25 13:50:43
@@ -576,8 +576,8 @@ wgEncode 1
 
 	track		wgEncodeNhgriNRESilencersK562Sv40
 	subTrack	wgEncodeNhgriNre
-	shortLabel	K562
-	longLabel	ENCODE Elnitski Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
+	shortLabel	K562 SV40 Si
+	longLabel	ENCODE NHGRI Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
 	subGroups	view=SI cellType=K562 promoter=SV40
 	type		bed 6
 	dateSubmitted	2008-11-25 13:50:43
@@ -590,8 +590,8 @@ wgEncode 1
 
 	track		wgEncodeNhgriNREEnhancerBlockersK562Sv40
 	subTrack	wgEncodeNhgriNre
-	shortLabel	K562
-	longLabel	ENCODE Elnitski Negative Regulatory Elements - Enhancer Blockers (NRE-EBs) (in K562 cells)
+	shortLabel	K562 SV40 EB
+	longLabel	ENCODE NHGRI Negative Regulatory Elements - Enhancer Blockers (NRE-EBs) (in K562 cells)
 	subGroups	view=EB cellType=K562 promoter=SV40
 	type		bed 6
 	dateSubmitted	2008-11-25 13:50:43
@@ -894,22 +894,22 @@ wgEncode 1
 
 
 track           wgEncodeAffyRnaChip
-compositeTrack  on      
+compositeTrack  on
 shortLabel      Affy RnaChip
 longLabel       ENCODE Affy Gingeras RnaChip
 group           regulation
 subGroup1       view Views Transfrags=Transfrags FilteredTransfrags=FilteredTransfrags RawSignal=RawSignal FilteredRawSignal=FilteredRawSignal
 subGroup2       cellType Cell_Line prostate=prostate K562=K562 GM12878=GM12878
 subGroup3       localization Localization cell=cell nucleus=nucleus cytosol=cytosol polysome=polysome
-subGroup4       rnaExtract RnaExtract longNonPolyA=longNonPolyA longPolyA=longPolyA total=total 
+subGroup4       rnaExtract RnaExtract longNonPolyA=longNonPolyA longPolyA=longPolyA total=total
 dimensions      dimensionX=cellType     dimensionY=localization dimensionZ=rnaExtract
 sortOrder       cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary    encode/cv.ra cellType localization rnaExtract
-dragAndDrop     subTracks 
+dragAndDrop     subTracks
 visibilityViewDefaults   Transfrags=hide FilteredTransfrags=hide RawSignal=hide FilteredRawSignal=hide
 priority        0
-type            bed 3   
-wgEncode        1  
+type            bed 3
+wgEncode        1
 
 	track		wgEncodeAffyRnaChipFilteredTransfragsProstateCellLongnonpolya
 	subTrack	wgEncodeAffyRnaChip
@@ -2012,15 +2012,15 @@ compositeTrack	on
 shortLabel	SunyAlbany RnaGeneChip
 longLabel	ENCODE SunyAlbany Tenenbaum RnaGeneChip
 group		regulation
-subGroup1	view Views RbpAssocRna=RbpAssocRna 
-subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562 
+subGroup1	view Views RbpAssocRna=RbpAssocRna
+subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup3	ripAntibody RipAntibody T7Tag_69522=T7Tag_69522 PABPC1_P6246=PABPC1_P6246 ELAVL1_5261=ELAVL1_5261 IGF2BP1_21027=IGF2BP1_21027
 subGroup4	ripTgtProtein RipTgtProtein T7Tag=T7Tag PABPC1=PABPC1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1
 dimensions	dimensionX=cellType	dimensionY=ripAntibody	dimensionZ=ripTgtProtein
 sortOrder	cellType=+ ripAntibody=+ ripTgtProtein=+ view=+
 controlledVocabulary	encode/cv.ra cellType ripAntibody ripTgtProtein
 dragAndDrop	subTracks
-visibilityViewDefaults	 RbpAssocRna=hide 
+visibilityViewDefaults	 RbpAssocRna=hide
 priority	0
 type		bed 3
 wgEncode	1
@@ -2134,7 +2134,7 @@ wgEncode	1
 track wgEncodeYaleChIPseq
 compositeTrack on
 shortLabel Yale TFBS
-longLabel ENCODE - Yale ChIP-seq Transcription Factor Binding Sites
+longLabel ENCODE - Yale ChIP-Seq Transcription Factor Binding Sites
 group regulation
 priority 0
 type bed 3
@@ -2944,7 +2944,7 @@ group regulation
 # subGroup1 view Views Sites=Sites Counts=Counts
 subGroup1 view Views Peaks=Peaks RawSignal=RawSignal
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 PFSK-1=PFSK-1 SK-N-MC=SK-N-MC
-subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF POL2=POL2 SRF=SRF Control=Control
+subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF Pol2=Pol2 SRF=SRF Control=Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
