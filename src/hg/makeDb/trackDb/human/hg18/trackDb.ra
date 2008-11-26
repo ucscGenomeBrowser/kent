@@ -1583,7 +1583,6 @@ shortLabel EIO/JCVI NAS
 longLabel Eur. Inst. Oncology/J. C. Venter Inst. Nuclease Accessible Sites 
 group regulation
 visibility hide
-scoreFilterMax 3817
 priority 0
 type bed 3 .
 
@@ -1591,7 +1590,6 @@ type bed 3 .
     subTrack eioJcviNAS
     shortLabel EIO/JCVI CD34- NAS
     longLabel CD34- cells Nuclease Accessible sites
-    scoreFilterMax 1538
     priority 2
     color 100,30,250
 
@@ -1599,7 +1597,6 @@ type bed 3 .
     subTrack eioJcviNAS
     shortLabel EIO/JCVI CD34+ NAS 
     longLabel CD34+ cells Nuclease Accessible sites
-    scoreFilterMax 3817 
     priority 1
     color 100,30,150
 
