@@ -92,22 +92,22 @@ class PipelineController < ApplicationController
 
   def valid_status
     @project = Project.find(params[:id])
-    @errText = getErrText
+    @errText = getValidateErrText(@project)
   end
 
   def load_status
     @project = Project.find(params[:id])
-    @errText = getLoadErrText
+    @errText = getLoadErrText(@project)
   end
 
   def unload_status
     @project = Project.find(params[:id])
-    @errText = getUnloadErrText
+    @errText = getUnloadErrText(@project)
   end
 
   def upload_status
     @project = Project.find(params[:id])
-    @errText = getUploadErrText
+    @errText = getUploadErrText(@project)
   end
 
   def db_load
