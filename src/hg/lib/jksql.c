@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.121 2008/10/31 16:22:53 fanhsu Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.122 2008/11/26 06:08:03 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -256,6 +256,33 @@ if (sp == NULL)
 return sp;
 }
 
+static void replaceStr(char **str, char *val)
+/* free str and replace with clone new value */
+{
+freeMem(*str);
+*str = cloneString(val);
+}
+
+void sqlProfileConfig(char *profileName, char *host, char *user, char *password)
+/* Set configuration for the profile.  This overrides an existing profile in
+ * hg.conf or defines a new one.  Results are unpredictable if a connect cache
+ * has been established for this profile. */
+{
+struct sqlProfile* sp = sqlProfileGet(profileName, NULL);
+if (sp == NULL)
+    return  sqlProfileCreate(profileName, host, user, password);
+replaceStr(&sp->host, host);
+replaceStr(&sp->user, user);
+replaceStr(&sp->password, password);
+}
+
+void sqlProfileConfigDefault(char *host, char *user, char *password)
+/* Set configuration for the default profile.  This overrides an existing
+ * profile in hg.conf or defines a new one.  Results are unpredictable if a
+ * connect cache has been established for this profile. */
+{
+sqlProfileConfig(defaultProfileName, host, user, password);
+}
 
 static void monitorInit(void)
 /* initialize monitoring on the first call */

@@ -66,6 +66,16 @@ struct sqlConnection *sqlMayConnectRemote(char *host, char *user, char *password
 /* Connect to database somewhere as somebody. Database maybe NULL to
  * just connect to the server.  Return NULL can't connect */
 
+void sqlProfileConfig(char *profileName, char *host, char *user, char *password);
+/* Set configuration for the profile.  This overrides an existing profile in
+ * hg.conf or defines a new one.  Results are unpredictable if a connect cache
+ * has been established for this profile. */
+
+void sqlProfileConfigDefault(char *host, char *user, char *password);
+/* Set configuration for the default profile.  This overrides an existing
+ * profile in hg.conf or defines a new one.  Results are unpredictable if a
+ * connect cache has been established for this profile. */
+
 struct hash *sqlHashOfDatabases(void);
 /* Get hash table with names of all databases that are online. */
 
