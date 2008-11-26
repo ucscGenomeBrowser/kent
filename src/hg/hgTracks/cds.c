@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.87 2008/09/25 23:11:00 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.88 2008/11/26 21:59:32 angie Exp $";
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -1510,7 +1510,7 @@ if (indelShowPolyA && mrnaSeq)
 	if (polyTSize > 0 && (polyTSize + 3) >= psl->qStarts[0])
 	    {
 	    if (psl->strand[1] == '-')
-		s = psl->tSize - psl->tStarts[0];
+		s = psl->tSize - psl->tStarts[0] - 1;
 	    else
 		s = psl->tStarts[0];
 	    drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
@@ -1546,7 +1546,7 @@ if (indelShowPolyA && mrnaSeq)
 		 (psl->qSize -
 		  (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]))))
 		{
-		s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
+		s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk] - 1;
 		drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
 			     cdsColor[CDS_POLY_A]);
 		gotPolyAEnd = TRUE;
@@ -1561,7 +1561,7 @@ if (indelShowQInsert)
 	{
 	/* Insert at beginning of query -- draw vertical blue line 
 	 * unless it's polyA. */
-	s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[0]) :
+	s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[0] - 1) :
 				      psl->tStarts[0];
 	drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
 		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
@@ -1579,7 +1579,7 @@ if (indelShowQInsert)
 	    if (tBlkStart <= tPrevBlkEnd)
 		{
 		/* Insert in query only -- draw vertical orange line. */
-		s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[i]) :
+		s = (psl->strand[1] == '-') ? (psl->tSize - psl->tStarts[i] - 1) :
 					      psl->tStarts[i];
 		drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
 			     cdsColor[CDS_QUERY_INSERTION]);
@@ -1598,7 +1598,7 @@ if (indelShowQInsert)
 	 * all polyA. */
 	s = (psl->strand[1] == '-') ?
 	    (psl->tSize - (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk])) :
-	    (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk]);
+	    (psl->tStarts[lastBlk] + psl->blockSizes[lastBlk] - 1);
 	drawVertLine(lf, hvg, s, xOff, y, heightPer-1, scale,
 		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
 	}
