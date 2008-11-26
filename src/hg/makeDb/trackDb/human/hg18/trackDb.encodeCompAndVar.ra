@@ -53,7 +53,7 @@ priority 1
     longLabel Conserved Elements in TBA 36-Way Alignments in the ENCODE Regions, Chai Method
     subGroups view=cons
     noInherit on
-    type bed 3
+    type bed 4
     color 100, 10, 0
     priority 2
     dataVersion ENCODE Nov 2008 Freeze

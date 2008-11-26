@@ -1215,10 +1215,11 @@ cat > getGenes.csh << 'EOF'
     echo "select chromStart, name, chromEnd-chromStart, chrom from encodeRegions" | hgsql -N hg18 | sed 's/$/\t30000000/' > /cluster/data/encode/MSA/encodeRegions.lft
 
     liftUp ChaiCons.bed /cluster/data/encode/MSA/encodeRegions.lft warn lab/CHAI.bed
-    wc -l ChaiCons.bed lab/CHAI.bed
+    wc -l ChaiCons.bed3 lab/CHAI.bed
      #208916 ChaiCons.bed
      #208916 lab/CHAI.bed
-    hgLoadBed hg18 encodeTbaChaiConsDec07 ChaiCons.bed
+    awk '{printf "%s\t%d\t%d\tchai.%d\n", $1, $2, $3, NR}' ChaiCons.bed3 > ChaiCons.bed4
+    hgLoadBed hg18 encodeTbaChaiConsDec07 ChaiCons.bed4
     # Loaded 208916 elements of size 3
 
     cd ../../BinCons/2008-03-24
