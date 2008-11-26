@@ -3606,7 +3606,7 @@ autoScaleDefault Off
 windowingFunction mean
 group compGeno
 priority 103.3
-visibility pack
+visibility hide
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
