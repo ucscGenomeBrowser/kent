@@ -24817,30 +24817,26 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/hg18/hg18.2bit $outMaf
     #	 8514078 multiz44waySummary.tab
     #	42478455 total
     rm multiz44way*.tab
-
 #########################################################################
-# Sangamo/EIO DNaseI Hypersensitive Sites (2008-11-24 Fan)
-# (Sangamo Biosciences and European Inst. Oncology)
+# EIO/JCVI NAS TRACK (2008-11-25 Fan)
 # Contact: Gaetano Gargiulo [gaetano.gargiulo@ifom-ieo-campus.it]
 
     cd /hive/data/genomes/hg18/bed
-    mkdir sangamo
-    cd sangamo
+    mkdir eioJcviNAS
+    cd eioJcviNAS
 
 # receive the doc and two bed files and put them there.
-					    
-    fgrep -v description HG18_NAS_CD34_pos.bed| \
-    hgLoadBed -noBin hg18 sangamoDnaseHsPos stdin
-    checkTableCoords -table=sangamoDnaseHsPos hg18
 
     fgrep -v description HG18_NAS_CD34_neg.bed| \
-    hgLoadBed -noBin hg18 sangamoDnaseHsNeg stdin
-    checkTableCoords -table=sangamoDnaseHsNeg hg18
-					 
-# Copy the description file, sangamoDnaseHs.html, from hg17 to 
-# kent/src/hg/makeDb/trackDb/human/hg18 and then edit the content 
+    cut -f 1-3 |hgLoadBed -noBin hg18 eioJcviNASNeg stdin
+    checkTableCoords -table=eioJcviNASNeg hg18
+
+    fgrep -v description HG18_NAS_CD34_pos.bed| \
+    cut -f 1-3 |hgLoadBed -noBin hg18 eioJcviNASPos stdin
+    checkTableCoords -table=eioJcviNASPos hg18
+
+# Create the description file, eioJcviNAS.html, according to 
 # according to the latest doc file from Gaetano.
 #
 # Add the two composite sub-tracks to human/hg18/trackDb.ra.
-#########################################################################
-
+ #########################################################################
