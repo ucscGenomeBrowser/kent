@@ -2309,7 +2309,7 @@ type bed 3
 useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
-subGroup2 cellType Cell_Line HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg GM12878=GM12878 K562=K562 NB4=NB4
+subGroup2 cellType Cell_Line GM12878=GM12878 HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg K562=K562 NB4=NB4
 subGroup3 factor Antibody Pol2=Pol2 STAT1=STAT1 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
@@ -2320,6 +2320,187 @@ settingsByView Signal:defaultViewLimits=5:500,viewLimits=0:20910  zRAW:defaultVi
 dataVersion ENCODE Submitted September 2008
 wgEncode 1
 
+	track		wgEncodeYaleChIPseqPeaksGm12878Pol2
+	subTrack	wgEncodeYaleChIPseq
+	shortLabel	GM12878 Pol2 Pk
+	longLabel	ENCODE Yale ChIP-Seq Peaks (Pol2 in GM12878 cells)
+	subGroups	view=Peaks factor=Pol2 cellType=GM12878
+	type		narrowPeak
+	dateSubmitted	2008-11-26 15:55:33
+	dateReleased	2009-08-26
+	priority	1
+	noInherit	on
+	configurable	on
+	cell		GM12878
+	antibody	Pol2
+
+	track		wgEncodeYaleChIPseqSignalGm12878Pol2
+	subTrack	wgEncodeYaleChIPseq
+	shortLabel	GM12878 Pol2 Sig
+	longLabel	ENCODE Yale ChIP-Seq Signal (Pol2 in GM12878 cells)
+	subGroups	view=Signal factor=Pol2 cellType=GM12878
+	type		wig 0.00 9844.00
+	dateSubmitted	2008-11-26 15:55:33
+	dateReleased	2009-08-26
+	priority	2
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	Pol2
+
+	track		wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol2
+	subTrack	wgEncodeYaleChIPseq
+	shortLabel	GM12878 Pol2 Raw1
+	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in GM12878 cells)
+	subGroups	view=zRAW factor=Pol2 cellType=GM12878
+	type		wig 1.00 702.00
+	dateSubmitted	2008-11-26 15:55:33
+	dateReleased	2009-08-26
+	priority	3
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	Pol2
+
+	track		wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol2
+	subTrack	wgEncodeYaleChIPseq
+	shortLabel	GM12878 Pol2 Raw2
+	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (Pol2 in GM12878 cells)
+	subGroups	view=zRAW factor=Pol2 cellType=GM12878
+	type		wig 1.00 379.00
+	dateSubmitted	2008-11-26 15:55:33
+	dateReleased	2009-08-26
+	priority	4
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	Pol2
+
+	track		wgEncodeYaleChIPseqPeaksGm12878Cfos
+	subTrack	wgEncodeYaleChIPseq
+	shortLabel	GM12878 c-Fos Pk
+	longLabel	ENCODE Yale ChIP-Seq Peaks (c-Fos in GM12878 cells)
+	subGroups	view=Peaks factor=c-Fos cellType=GM12878
+	type		narrowPeak
+	dateSubmitted	2008-11-24 19:16:9
+	dateReleased	2009-08-24
+	priority	11
+	noInherit	on
+	configurable	on
+	cell		GM12878
+	antibody	c-Fos
+
+	track		wgEncodeYaleChIPseqSignalGm12878Cfos
+	subTrack	wgEncodeYaleChIPseq
+	shortLabel	GM12878 c-Fos Sig
+	longLabel	ENCODE Yale ChIP-Seq Signal (c-Fos in GM12878 cells)
+	subGroups	view=Signal factor=c-Fos cellType=GM12878
+	type		wig 0.00 4648.00
+	dateSubmitted	2008-11-24 19:16:9
+	dateReleased	2009-08-24
+	priority	12
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:32:16
+	cell		GM12878
+	antibody	c-Fos
+
+	track		wgEncodeYaleChIPseqRawSignalRep1Gm12878Cfos
+	subTrack	wgEncodeYaleChIPseq
+	shortLabel	GM12878 c-Fos Raw1
+	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (c-Fos in GM12878 cells)
+	subGroups	view=zRAW factor=c-Fos cellType=GM12878
+	type		wig 1.00 714.00
+	dateSubmitted	2008-11-24 19:16:9
+	dateReleased	2009-08-24
+	priority	13
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	c-Fos
+
+	track		wgEncodeYaleChIPseqRawSignalRep2Gm12878Cfos
+	subTrack	wgEncodeYaleChIPseq
+	shortLabel	GM12878 c-Fos Raw2
+	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (c-Fos in GM12878 cells)
+	subGroups	view=zRAW factor=c-Fos cellType=GM12878
+	type		wig 1.00 630.00
+	dateSubmitted	2008-11-24 19:16:9
+	dateReleased	2009-08-24
+	priority	14
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	c-Fos
+
+	track		wgEncodeYaleChIPseqRawSignalRep3Gm12878Cfos
+	subTrack	wgEncodeYaleChIPseq
+	shortLabel	GM12878 c-Fos Raw3
+	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 3 (c-Fos in GM12878 cells)
+	subGroups	view=zRAW factor=c-Fos cellType=GM12878
+	type		wig 1.00 862.00
+	dateSubmitted	2008-11-24 19:16:9
+	dateReleased	2009-08-24
+	priority	15
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	c-Fos
+
+        track           wgEncodeYaleChIPseqSignalGm12878Input
+        subTrack        wgEncodeYaleChIPseq
+        shortLabel      GM12878 Input Sig
+        longLabel       ENCODE Yale ChIP-Seq Signal (Input in GM12878 cells)
+        subGroups       view=Signal factor=zCTRL cellType=GM12878
+        type            wig 0.00 7237.00
+        dateSubmitted   2008-11-25 10:1:33
+        dateReleased    2009-08-25
+        priority        92
+        noInherit       on
+        configurable    on
+        spanList        1
+        windowingFunction mean
+        maxHeightPixels 100:32:16
+        cell            GM12878
+        antibody        Input
+
+        track           wgEncodeYaleChIPseqRawSignalGm12878Input
+        subTrack        wgEncodeYaleChIPseq
+        shortLabel      GM12878 Input Raw
+        longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in GM12878 cells)
+        subGroups       view=zRAW factor=zCTRL cellType=GM12878
+        type            wig 1.00 310.00
+        dateSubmitted   2008-11-25 10:1:33
+        dateReleased    2009-08-25
+        priority        93
+        noInherit       on
+        configurable    off
+        spanList        1
+        windowingFunction mean
+        maxHeightPixels 100:16:16
+        cell            GM12878
+        antibody        Input
+
         track           wgEncodeYaleChIPseqPeaksHelas3Pol2
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Pol2 Pk
@@ -2328,7 +2509,7 @@ wgEncode 1
         type            narrowPeak
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
-        priority        1
+        priority        101
         noInherit       on
         cell            HeLa-S3
         antibody        Pol2
@@ -2344,7 +2525,7 @@ wgEncode 1
         type            wig 0.00 14600.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
-        priority        2
+        priority        102
         noInherit       on
         visibility      full
         spanList        1
@@ -2364,7 +2545,7 @@ wgEncode 1
         type            wig 1.00 2079.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
-        priority        3
+        priority        103
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -2382,7 +2563,7 @@ wgEncode 1
         type            wig 1.00 3795.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
-        priority        4
+        priority        104
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -2400,7 +2581,7 @@ wgEncode 1
         type            wig 1.00 3649.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
-        priority        5
+        priority        105
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -2419,7 +2600,7 @@ wgEncode 1
         defaultViewLimits 2:2000
         dateSubmitted   2008-09-29 14:52:0
         dateReleased    2009-06-29
-        priority        92
+        priority        192
         noInherit       on
         visibility      full
         spanList        1
@@ -2439,7 +2620,7 @@ wgEncode 1
         type            wig 1.00 4247.00
         dateSubmitted   2008-09-29 14:52:0
         dateReleased    2009-06-29
-        priority        93
+        priority        193
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -2457,7 +2638,7 @@ wgEncode 1
         type            narrowPeak
         dateSubmitted   2008-10-1 10:6:2
         dateReleased    2009-07-01
-        priority        101
+        priority        201
         noInherit       on
         cell            HeLa-S3_IFNg
         antibody        STAT1
@@ -2473,7 +2654,7 @@ wgEncode 1
         type            wig 0.00 20910.00
         dateSubmitted   2008-10-1 10:6:2
         dateReleased    2009-07-01
-        priority        102
+        priority        202
         noInherit       on
         visibility      full
         spanList        1
@@ -2493,7 +2674,7 @@ wgEncode 1
         type            wig 1.00 14648.00
         dateSubmitted   2008-10-1 10:6:2
         dateReleased    2009-07-01
-        priority        103
+        priority        203
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -2511,7 +2692,7 @@ wgEncode 1
         type            wig 1.00 6262.00
         dateSubmitted   2008-10-1 10:6:2
         dateReleased    2009-07-01
-        priority        104
+        priority        204
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -2529,7 +2710,7 @@ wgEncode 1
         type            wig 0.00 11690.00
         dateSubmitted   2008-09-29 14:12:28
         dateReleased    2009-06-29
-        priority        192
+        priority        292
         noInherit       on
         visibility      full
         spanList        1
@@ -2549,7 +2730,7 @@ wgEncode 1
         type            wig 1.00 4733.00
         dateSubmitted   2008-09-29 14:12:28
         dateReleased    2009-06-29
-        priority        193
+        priority        293
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -2558,187 +2739,6 @@ wgEncode 1
         antibody        Input
         color           112,103,174
         accession       GSE12782
-
-	track		wgEncodeYaleChIPseqPeaksGm12878Pol2
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 Pol2 Pk
-	longLabel	ENCODE Yale ChIP-Seq Peaks (Pol2 in GM12878 cells)
-	subGroups	view=Peaks factor=Pol2 cellType=GM12878
-	type		narrowPeak
-	dateSubmitted	2008-11-26 15:55:33
-	dateReleased	2009-08-26
-	priority	201
-	noInherit	on
-	configurable	on
-	cell		GM12878
-	antibody	Pol2
-
-	track		wgEncodeYaleChIPseqSignalGm12878Pol2
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 Pol2 Sig
-	longLabel	ENCODE Yale ChIP-Seq Signal (Pol2 in GM12878 cells)
-	subGroups	view=Signal factor=Pol2 cellType=GM12878
-	type		wig 0.00 9844.00
-	dateSubmitted	2008-11-26 15:55:33
-	dateReleased	2009-08-26
-	priority	202
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM12878
-	antibody	Pol2
-
-	track		wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol2
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 Pol2 Raw1
-	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in GM12878 cells)
-	subGroups	view=zRAW factor=Pol2 cellType=GM12878
-	type		wig 1.00 702.00
-	dateSubmitted	2008-11-26 15:55:33
-	dateReleased	2009-08-26
-	priority	203
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM12878
-	antibody	Pol2
-
-	track		wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol2
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 Pol2 Raw2
-	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (Pol2 in GM12878 cells)
-	subGroups	view=zRAW factor=Pol2 cellType=GM12878
-	type		wig 1.00 379.00
-	dateSubmitted	2008-11-26 15:55:33
-	dateReleased	2009-08-26
-	priority	204
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM12878
-	antibody	Pol2
-
-	track		wgEncodeYaleChIPseqPeaksGm12878Cfos
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 c-Fos Pk
-	longLabel	ENCODE Yale ChIP-Seq Peaks (c-Fos in GM12878 cells)
-	subGroups	view=Peaks factor=c-Fos cellType=GM12878
-	type		narrowPeak
-	dateSubmitted	2008-11-24 19:16:9
-	dateReleased	2009-08-24
-	priority	211
-	noInherit	on
-	configurable	on
-	cell		GM12878
-	antibody	c-Fos
-
-	track		wgEncodeYaleChIPseqSignalGm12878Cfos
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 c-Fos Sig
-	longLabel	ENCODE Yale ChIP-Seq Signal (c-Fos in GM12878 cells)
-	subGroups	view=Signal factor=c-Fos cellType=GM12878
-	type		wig 0.00 4648.00
-	dateSubmitted	2008-11-24 19:16:9
-	dateReleased	2009-08-24
-	priority	212
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	cell		GM12878
-	antibody	c-Fos
-
-	track		wgEncodeYaleChIPseqRawSignalRep1Gm12878Cfos
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 c-Fos Raw1
-	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (c-Fos in GM12878 cells)
-	subGroups	view=zRAW factor=c-Fos cellType=GM12878
-	type		wig 1.00 714.00
-	dateSubmitted	2008-11-24 19:16:9
-	dateReleased	2009-08-24
-	priority	213
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM12878
-	antibody	c-Fos
-
-	track		wgEncodeYaleChIPseqRawSignalRep2Gm12878Cfos
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 c-Fos Raw2
-	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (c-Fos in GM12878 cells)
-	subGroups	view=zRAW factor=c-Fos cellType=GM12878
-	type		wig 1.00 630.00
-	dateSubmitted	2008-11-24 19:16:9
-	dateReleased	2009-08-24
-	priority	214
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM12878
-	antibody	c-Fos
-
-	track		wgEncodeYaleChIPseqRawSignalRep3Gm12878Cfos
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 c-Fos Raw3
-	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 3 (c-Fos in GM12878 cells)
-	subGroups	view=zRAW factor=c-Fos cellType=GM12878
-	type		wig 1.00 862.00
-	dateSubmitted	2008-11-24 19:16:9
-	dateReleased	2009-08-24
-	priority	215
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM12878
-	antibody	c-Fos
-
-        track           wgEncodeYaleChIPseqSignalGm12878Input
-        subTrack        wgEncodeYaleChIPseq
-        shortLabel      GM12878 Input Sig
-        longLabel       ENCODE Yale ChIP-Seq Signal (Input in GM12878 cells)
-        subGroups       view=Signal factor=zCTRL cellType=GM12878
-        type            wig 0.00 7237.00
-        dateSubmitted   2008-11-25 10:1:33
-        dateReleased    2009-08-25
-        priority        292
-        noInherit       on
-        configurable    on
-        spanList        1
-        windowingFunction mean
-        maxHeightPixels 100:32:16
-        cell            GM12878
-        antibody        Input
-
-        track           wgEncodeYaleChIPseqRawSignalGm12878Input
-        subTrack        wgEncodeYaleChIPseq
-        shortLabel      GM12878 Input Raw
-        longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in GM12878 cells)
-        subGroups       view=zRAW factor=zCTRL cellType=GM12878
-        type            wig 1.00 310.00
-        dateSubmitted   2008-11-25 10:1:33
-        dateReleased    2009-08-25
-        priority        293
-        noInherit       on
-        configurable    off
-        spanList        1
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        cell            GM12878
-        antibody        Input
 
         track           wgEncodeYaleChIPseqPeaksK562Pol2
         subTrack        wgEncodeYaleChIPseq
