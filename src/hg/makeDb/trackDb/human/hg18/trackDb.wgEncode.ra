@@ -841,7 +841,7 @@ longLabel ENCODE - UW DNase Seq
 group regulation
 subGroup1 view Views Hotspots=Hot_Spots Peaks=Peaks Signal=Signal RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM06990=GM06990 HeLa-S3=HeLa-S3 HepG2=HepG2 Th1=Th1 SK-N-SH(+RA)=SK-N-SH(+RA)
-dimensions dimensionX=cellType 
+dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Hotspots=pack Peaks=pack Signal=full RawSignal=hide
@@ -2559,6 +2559,71 @@ wgEncode 1
         color           112,103,174
         accession       GSE12782
 
+	track		wgEncodeYaleChIPseqPeaksGm12878Pol2
+	subTrack	wgEncodeYaleChIPseq
+	shortLabel	GM12878 Pol2 Pk
+	longLabel	ENCODE Yale ChIP-Seq Peaks (Pol2 in GM12878 cells)
+	subGroups	view=Peaks factor=Pol2 cellType=GM12878
+	type		narrowPeak
+	dateSubmitted	2008-11-26 15:55:33
+	dateReleased	2009-08-26
+	priority	201
+	noInherit	on
+	configurable	on
+	cell		GM12878
+	antibody	Pol2
+
+	track		wgEncodeYaleChIPseqSignalGm12878Pol2
+	subTrack	wgEncodeYaleChIPseq
+	shortLabel	GM12878 Pol2 Sig
+	longLabel	ENCODE Yale ChIP-Seq Signal (Pol2 in GM12878 cells)
+	subGroups	view=Signal factor=Pol2 cellType=GM12878
+	type		wig 0.00 9844.00
+	dateSubmitted	2008-11-26 15:55:33
+	dateReleased	2009-08-26
+	priority	202
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	Pol2
+
+	track		wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol2
+	subTrack	wgEncodeYaleChIPseq
+	shortLabel	GM12878 Pol2 Raw1
+	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in GM12878 cells)
+	subGroups	view=zRAW factor=Pol2 cellType=GM12878
+	type		wig 1.00 702.00
+	dateSubmitted	2008-11-26 15:55:33
+	dateReleased	2009-08-26
+	priority	203
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	Pol2
+
+	track		wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol2
+	subTrack	wgEncodeYaleChIPseq
+	shortLabel	GM12878 Pol2 Raw2
+	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (Pol2 in GM12878 cells)
+	subGroups	view=zRAW factor=Pol2 cellType=GM12878
+	type		wig 1.00 379.00
+	dateSubmitted	2008-11-26 15:55:33
+	dateReleased	2009-08-26
+	priority	204
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		GM12878
+	antibody	Pol2
+
 	track		wgEncodeYaleChIPseqPeaksGm12878Cfos
 	subTrack	wgEncodeYaleChIPseq
 	shortLabel	GM12878 c-Fos Pk
@@ -2567,7 +2632,7 @@ wgEncode 1
 	type		narrowPeak
 	dateSubmitted	2008-11-24 19:16:9
 	dateReleased	2009-08-24
-	priority	201
+	priority	211
 	noInherit	on
 	configurable	on
 	cell		GM12878
@@ -2581,7 +2646,7 @@ wgEncode 1
 	type		wig 0.00 4648.00
 	dateSubmitted	2008-11-24 19:16:9
 	dateReleased	2009-08-24
-	priority	202
+	priority	212
 	noInherit	on
 	configurable	on
 	spanList	1
@@ -2598,7 +2663,7 @@ wgEncode 1
 	type		wig 1.00 714.00
 	dateSubmitted	2008-11-24 19:16:9
 	dateReleased	2009-08-24
-	priority	203
+	priority	213
 	noInherit	on
 	configurable	off
 	spanList	1
@@ -2615,7 +2680,7 @@ wgEncode 1
 	type		wig 1.00 630.00
 	dateSubmitted	2008-11-24 19:16:9
 	dateReleased	2009-08-24
-	priority	204
+	priority	214
 	noInherit	on
 	configurable	off
 	spanList	1
@@ -2632,7 +2697,7 @@ wgEncode 1
 	type		wig 1.00 862.00
 	dateSubmitted	2008-11-24 19:16:9
 	dateReleased	2009-08-24
-	priority	205
+	priority	215
 	noInherit	on
 	configurable	off
 	spanList	1
