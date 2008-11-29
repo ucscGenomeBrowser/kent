@@ -64,7 +64,7 @@ LI {		line-height: 1.5;
 
 /* used by CCDS details page in hgc */ 
 TABLE.hgcCcds, TABLE.hgcCcds TH, TABLE.hgcCcds TD {
-    border: 3px lightgrey ridge;
+    border: 3px gray ridge;
     border-collapse: collapse;
     text-align: left;
     vertical-align: top;
@@ -79,12 +79,12 @@ TABLE.hgcCcds TBODY {
 TABLE.hgcCcds CAPTION {
     caption-side: top; 
     text-align: left;
-    font: large, bold;
+    font: medium bold;
 }
 
 /* used by transMap details page in hgc */ 
 TABLE.transMap, TABLE.transMap TH, TABLE.transMap TD {
-    border: 3px lightgrey ridge;
+    border: 3px gray ridge;
     border-collapse: collapse;
     text-align: right;
     vertical-align: top;
@@ -99,7 +99,7 @@ TABLE.transMap TBODY {
 TABLE.transMap CAPTION {
     caption-side: top; 
     text-align: left;
-    font: large, bold;
+    font: medium bold;
 }
 TABLE.transMapLayout TR TD {
     vertical-align: top;
