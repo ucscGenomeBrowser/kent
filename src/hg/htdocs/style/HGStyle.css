@@ -120,3 +120,23 @@ TR.transMapLeft TD {
     background-color: #f8ff30;
 }
 
+
+/* Used by LS-SNP protein structure mappings page in hgc.  Each row has
+ * multiple columns that are grouped together with a seperator border */
+TABLE.hgcLsSnp {
+    border: 2px black solid;
+    border-collapse: collapse;
+    white-space: nowrap inherit;
+}
+TABLE.hgcLsSnp TD.hgcLsSnpSep {
+    border-right: 2px black solid;
+    border-collapse: collapse;
+}
+TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
+    border: 1px gray ridge;
+    border-collapse: collapse;
+    text-align: left;
+    vertical-align: top;
+    padding-left: 5px;
+    padding-right: 5px;
+}
