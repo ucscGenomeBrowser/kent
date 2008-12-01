@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.136 2008/11/25 07:20:53 mikep Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.137 2008/12/01 23:26:18 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -28,8 +28,10 @@ static char const rcsid[] = "$Id: hui.c,v 1.136 2008/11/25 07:20:53 mikep Exp $"
 #define JBUFSIZE 2048
 
 #define PM_BUTTON "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG height=18 width=18 onclick=\"return (setCheckBoxesThatContain('%s',%s,true,'%s','%s') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
-#define  PLUS_BUTTON(nameOrId,anc,str1,str2) printf(PM_BUTTON, (anc),(anc),(nameOrId),"true",(str1),(str2),(anc),"add_sm.gif","+")
-#define MINUS_BUTTON(nameOrId,anc,str1,str2) printf(PM_BUTTON, (anc),(anc),(nameOrId),"false",(str1),(str2),(anc),"remove_sm.gif","-")
+#define DEF_BUTTON "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG onclick=\"setCheckBoxesThatContain('%s',true,false,'%s','%s'); return (setCheckBoxesThatContain('%s',false,false,'%s','%s','_defOff') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
+#define DEFAULT_BUTTON(nameOrId,anc,str1,str2) printf(DEF_BUTTON, (anc),(anc),(nameOrId),(str1),(str2),(nameOrId),(str1),(str2),(anc),"defaults_sm.png","default")
+#define    PLUS_BUTTON(nameOrId,anc,str1,str2) printf(PM_BUTTON, (anc),(anc),(nameOrId),"true",(str1),(str2),(anc),"add_sm.gif","+")
+#define   MINUS_BUTTON(nameOrId,anc,str1,str2) printf(PM_BUTTON, (anc),(anc),(nameOrId),"false",(str1),(str2),(anc),"remove_sm.gif","-")
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -2867,52 +2869,25 @@ char query[256];
 char **row;
 struct sqlConnection *conn;
 struct sqlResult *sr;
+char *words[MAX_SP_SIZE];
+int defaultOffSpeciesCnt = 0;
 
-
+jsIncludeFile("utils.js",NULL);
+//jsInit();
 puts("\n<P><B>Species selection:</B>&nbsp;");
 
-if(differentString(name,tdb->tableName))
-    {
-    PLUS_BUTTON( "id", "plus_pw","cb_maf_","_maf_");
-    MINUS_BUTTON("id","minus_pw","cb_maf_","_maf_");
-    }
-else
-    {
-    char buttonVar[SMALLBUF];
-    cgiContinueHiddenVar("g");
-    jsInit();
+PLUS_BUTTON( "id", "plus_pw","cb_maf_","_maf_");
+MINUS_BUTTON("id","minus_pw","cb_maf_","_maf_");
+cgiContinueHiddenVar("g");
 
-    char prefix[512];
-    safef(prefix, sizeof prefix, "%s.", name);
-    char *defaultOffSpecies = trackDbSetting(tdb, "speciesDefaultOff");
-    if (defaultOffSpecies)
-        {
-        safecpy(buttonVar, sizeof buttonVar, "set_defaults_button");
-        /* make button and turn on all species (if button was pressed) */
-        jsMakeSetClearButton(cart, "mainForm", buttonVar, JS_DEFAULTS_BUTTON_LABEL,
-                prefix, speciesList, NULL, FALSE, TRUE);
-        if (isNotEmpty(cgiOptionalString(buttonVar)))
-            {
-            char *words[MAX_SP_SIZE];
-            int wordCt = chopLine(defaultOffSpecies, words);
-            /* turn off those that are default off */
-            int i;
-            for (i = 0; i < wordCt; i++)
-                {
-                safef(option, sizeof(option), "%s%s", prefix, words[i]);
-                cartSetBoolean(cart, option, FALSE);
-                }
-            }
-        }
-
-    puts("&nbsp;");
-    safef(buttonVar, sizeof buttonVar, "%s", "set_all_button");
-    jsMakeSetClearButton(cart, "mainForm", buttonVar, JS_SET_ALL_BUTTON_LABEL,
-                prefix, speciesList, NULL, FALSE, TRUE);
-    puts("&nbsp;");
-    safef(buttonVar, sizeof buttonVar, "%s", "clear_all_button");
-    jsMakeSetClearButton(cart, "mainForm", buttonVar, JS_CLEAR_ALL_BUTTON_LABEL,
-                prefix, speciesList, NULL, FALSE, FALSE);
+char prefix[512];
+safef(prefix, sizeof prefix, "%s.", name);
+char *defaultOffSpecies = trackDbSetting(tdb, "speciesDefaultOff");
+if (defaultOffSpecies)
+    {
+    DEFAULT_BUTTON( "id", "default_pw","cb_maf_","_maf_");
+    int wordCt = chopLine(defaultOffSpecies, words);
+    defaultOffSpeciesCnt = wordCt;
     }
 
 if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
@@ -2929,11 +2904,11 @@ if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
     path = phyloNodeNames(tree);
     numNodes = chopLine(path, nodeNames);
     for(ii=0; ii < numNodes; ii++)
-	{
-	if ((orgName = hOrganism(nodeNames[ii])) != NULL)
-	    nodeNames[ii] = orgName;
-	nodeNames[ii][0] = toupper(nodeNames[ii][0]);
-	}
+        {
+        if ((orgName = hOrganism(nodeNames[ii])) != NULL)
+            nodeNames[ii] = orgName;
+        nodeNames[ii][0] = toupper(nodeNames[ii][0]);
+        }
 
     cgiMakeDropList(SPECIES_HTML_TARGET, nodeNames, numNodes,
 	cartUsualString(cart, SPECIES_HTML_TARGET, speciesTarget));
@@ -2961,14 +2936,11 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
         /* replace underscores in group names */
         subChar(groups[group], '_', ' ');
 	printf("<P>&nbsp;&nbsp;<B><EM>%s</EM></B>", groups[group]);
-    if(differentString(name,tdb->tableName))
-        {
-        printf("&nbsp;&nbsp;");
-        safef(option, sizeof(option), "plus_%s", groups[group]);
-        PLUS_BUTTON( "id",option,"cb_maf_",groups[group]);
-        safef(option, sizeof(option),"minus_%s", groups[group]);
-        MINUS_BUTTON("id",option,"cb_maf_",groups[group]);
-        }
+    printf("&nbsp;&nbsp;");
+    safef(option, sizeof(option), "plus_%s", groups[group]);
+    PLUS_BUTTON( "id",option,"cb_maf_",groups[group]);
+    safef(option, sizeof(option),"minus_%s", groups[group]);
+    MINUS_BUTTON("id",option,"cb_maf_",groups[group]);
 
 	puts("\n<TABLE><TR>");
 	}
@@ -2979,65 +2951,69 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
 
     /* new logic to decide if line break should be displayed here */
     if ((j != 0 && (j % numberPerRow) == 0) && (lineBreakJustPrinted == FALSE))
-	{
-	puts("</TR><TR>");
-    	lineBreakJustPrinted = TRUE;
-	}
+        {
+        puts("</TR><TR>");
+        lineBreakJustPrinted = TRUE;
+        }
+
+    char id[MAX_SP_SIZE];
+    if(defaultOffSpeciesCnt > 0)
+        {
+        if(stringArrayIx(wmSpecies->name,words,defaultOffSpeciesCnt) == -1)
+            safef(id, sizeof(id), "cb_maf_%s_%s", groups[group], wmSpecies->name);
+        else
+            safef(id, sizeof(id), "cb_maf_%s_%s_defOff", groups[group], wmSpecies->name);
+        }
+    else
+        safef(id, sizeof(id), "cb_maf_%s_%s", groups[group], wmSpecies->name);
 
     if (hIsGsidServer())
-    	{
-	char *chp;
-	/* for GSID maf, display only entries belong to the specific MSA selected */
+        {
+        char *chp;
+        /* for GSID maf, display only entries belong to the specific MSA selected */
     	safef(option, sizeof(option), "%s.%s", name, wmSpecies->name);
     	label = hOrganism(wmSpecies->name);
     	if (label == NULL)
             label = wmSpecies->name;
-	strcpy(trackName, tdb->tableName);
+        strcpy(trackName, tdb->tableName);
 
-	/* try AaMaf first */
-	chp = strstr(trackName, "AaMaf");
-	/* if it is not a AaMaf track, try Maf next */
-	if (chp == NULL) chp = strstr(trackName, "Maf");
+        /* try AaMaf first */
+        chp = strstr(trackName, "AaMaf");
+        /* if it is not a AaMaf track, try Maf next */
+        if (chp == NULL) chp = strstr(trackName, "Maf");
 
-	/* test if the entry actually is part of the specific maf track data */
-	if (chp != NULL)
-	    {
-	    *chp = '\0';
-	    safef(query, sizeof(query),
-	    "select id from %sMsa where id = 'ss.%s'", trackName, label);
+        /* test if the entry actually is part of the specific maf track data */
+        if (chp != NULL)
+            {
+            *chp = '\0';
+            safef(query, sizeof(query),
+            "select id from %sMsa where id = 'ss.%s'", trackName, label);
 
-	    conn = hAllocConn(db);
-	    sr = sqlGetResult(conn, query);
-	    row = sqlNextRow(sr);
+            conn = hAllocConn(db);
+            sr = sqlGetResult(conn, query);
+            row = sqlNextRow(sr);
 
-	    /* offer it only if the entry is found in current maf data set */
-	    if (row != NULL)
-		{
-    		puts("<TD>");
-    		cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
-		printf ("%s", label);
-    		puts("</TD>");
-		fflush(stdout);
-		lineBreakJustPrinted = FALSE;
-		j++;
-		}
-	    sqlFreeResult(&sr);
-	    hFreeConn(&conn);
-	    }
-	}
+            /* offer it only if the entry is found in current maf data set */
+            if (row != NULL)
+                {
+                puts("<TD>");
+                cgiMakeCheckBoxWithId(option, cartUsualBoolean(cart, option, TRUE),id);
+                printf ("%s", label);
+                puts("</TD>");
+                fflush(stdout);
+                lineBreakJustPrinted = FALSE;
+                j++;
+                }
+            sqlFreeResult(&sr);
+            hFreeConn(&conn);
+            }
+        }
     else
     	{
     	puts("<TD>");
     	safef(option, sizeof(option), "%s.%s", name, wmSpecies->name);
-	wmSpecies->on = cartUsualBoolean(cart, option, TRUE);
-        if(sameString(name,tdb->tableName))
-            cgiMakeCheckBox(option, wmSpecies->on);
-        else   // This is part of a dropdown
-            {
-            char id[MAX_SP_SIZE];
-            safef(id, sizeof(id), "cb_maf_%s_%s", groups[group], wmSpecies->name);
-            cgiMakeCheckBoxWithId(option, wmSpecies->on,id);
-            }
+        wmSpecies->on = cartUsualBoolean(cart, option, TRUE);
+        cgiMakeCheckBoxWithId(option, wmSpecies->on,id);
     	label = hOrganism(wmSpecies->name);
     	if (label == NULL)
 		label = wmSpecies->name;
@@ -3045,9 +3021,9 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
             *label = tolower(*label);
     	printf ("%s<BR>", label);
     	puts("</TD>");
-	lineBreakJustPrinted = FALSE;
-	j++;
-	}
+        lineBreakJustPrinted = FALSE;
+        j++;
+        }
     }
 puts("</TR></TABLE><BR>\n");
 return wmSpeciesList;
