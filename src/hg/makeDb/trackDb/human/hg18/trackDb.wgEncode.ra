@@ -210,7 +210,7 @@ longLabel	ENCODE Broad Bernstein ChipSeq
 group		regulation
 subGroup1	view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2	cellType Cell_Line K562=K562 
-subGroup3	factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H4K20me1=H4K20me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 Pol2(b)=Pol2(b)
+subGroup3	factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H4K20me1=H4K20me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 Pol2(b)=Pol2(b) control=Control
 dimensions	dimensionX=cellType	dimensionY=factor
 sortOrder	cellType=+ factor=+ view=+
 controlledVocabulary	encode/cv.ra cellType factor
@@ -219,7 +219,7 @@ visibilityViewDefaults	 Peaks=dense Signal=full zRAW=hide
 priority	0
 type		bed 3
 wgEncode	1
-settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultViewLimits=5:500,viewLimits=1:12424
+settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultViewLimits=5:500,viewLimits=1:19563
 
 	track		wgEncodeBroadChipSeqPeaksK562Ctcf
 	subTrack	wgEncodeBroadChipSeq
@@ -935,6 +935,40 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	maxHeightPixels	100:16:16
 	cell		K562
 	antibody	Pol2(b)
+
+	track		wgEncodeBroadChipSeqRawSignalRep1K562Control
+	subTrack	wgEncodeBroadChipSeq
+	shortLabel	control K562 Raw1
+	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (control in K562 cells)
+	subGroups	view=zRAW factor=control cellType=K562
+	type		wig 1.00 12185.00
+	dateSubmitted	2008-11-30 11:29:37
+	dateReleased	2009-08-30
+	priority	603
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+	antibody	control
+
+	track		wgEncodeBroadChipSeqRawSignalRep2K562Control
+	subTrack	wgEncodeBroadChipSeq
+	shortLabel	control K562 Raw2
+	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (control in K562 cells)
+	subGroups	view=zRAW factor=control cellType=K562
+	type		wig 1.00 19563.00
+	dateSubmitted	2008-11-30 11:29:37
+	dateReleased	2009-08-30
+	priority	604
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+	antibody	control
 
 track		wgEncodeChromatinMap
 compositeTrack	on
