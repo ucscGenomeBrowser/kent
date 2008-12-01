@@ -1,47 +1,68 @@
-<P>
-<EM><B>PROTOTYPE FEATURE UNDER DEVELOPMENT June 2008</B></EM>
-</P>
-
 <H3>Description</H3>
 <P>
-The Wiki Track contains user added annotations.  There is no curation
-of the annotations.  Users can add annotations after completing a
-login to the <A HREF="http://genomewiki.ucsc.edu/"
-TARGET=_blank>genomewiki</A> system.  Notations can be attached to
-UCSC genes, or to genome locations.
-</P>
-<P>
-To add notes to a UCSC gene, click on the gene in the browser display, then
-via the <em>Sequence and Links to Tools and Databases</em> section,
-specifically the link <em>User annotations</em>.  Notes added to genes will
-appear in the Wiki Track covering that gene locus as identified by its
-gene symbol.  If that gene symbol has additional loci, it will appear
-multiple times in the Wiki Track.
-</P>
-<P>
-Notes can also be added to genome locations by clicking on the red item
-displayed at the top of the Wiki Track.  The position annotated is the
-position of the current genome browser view.
+The Wiki track displays genome annotations added by the Genome Browser user 
+community. 
+These annotations have <B><em>not</em></B> been curated.
 </P>
 
-<H3>Methods</H3>
-The initial genome browser entry forms for annotations are simple text entry
-forms.  The text submitted is sent to the <em>genomewiki</em> system
-for archival storage.  The notes will be tagged with a date/time stamp,
-and the user's wiki login name.  Subsequent notes or corrections to
-existing notes are added to the Wiki article in the Wiki editing system.
+<H3>Adding an annotation</H3>
+<P>
+To add or edit an annotation in this track, you must first 
+<A HREF="http://genomewiki.ucsc.edu/index.php?title=Special:UserLogin&returnto=Main_Page"
+TARGET=_blank>create a login</A> on the UCSC Genome Browser
+<A HREF="http://genomewiki.ucsc.edu/" TARGET=_blank>genomewiki</A>.  
+You can then attach or update a notation to a UCSC gene or a genomic location.
+</P>
+<P>
+<B>Annotating a UCSC gene:</B> To add or update an annotation for a UCSC gene, 
+open the UCSC Genes track in the 
+Genome Browser to your gene of interest, then click on the gene to display its 
+information page.
+Click <em>Sequence and Links</em>, then click <em>User annotations</em>
+within the &quot;Sequence and Links to Tools and Databases&quot; section. 
+If you have not logged in to the genomewiki, you will be prompted to do
+so. If no annotation exists for the selected gene, the Genome Browser will 
+display a text entry form for adding a new annotation. If notes have already
+been added for the gene, the browser will display the corresponding 
+genomewiki page, which may be edited using the genomewiki editor. 
+</P>
+Once an annotation has been added for a gene, it will display 
+in the Genome Browser Wiki track in the coordinate range corresponding to the
+gene locus identified by the annotated gene symbol. If additional loci are
+associated with the gene symbol, the annotation will appear in the 
+positions corresponding to these loci as well.
+</P>
+<P>
+<B>Annotating a genomic location:</B> In addition to annotating specific genes, 
+notes can be added to genome 
+locations by clicking on the red bar at the top of the Wiki track.  By
+default, the annotated position will correspond to the coordinate range of
+the current Genome Browser view.
+</P>
+<P>
+Initial annotations for a specific gene or position are created in a simple 
+text entry form. The text is submitted to the genomewiki system
+for archival storage.  The notes are tagged with a date/time stamp
+and the creator's wiki login name.  Subsequent notes or corrections to
+existing notes may be added by editing the wiki page for the annotation using
+the Wiki editing system.
+</P>
 
 <H3>Policies</H3>
+<P>
 <UL>
 <LI>The UCSC Genome Browser group reserves the right to remove any annotations.
-<LI>There is no curation of the annotations.  User's with areas of expertise
+<LI>Annotations are not curated by UCSC. Individuals with areas of expertise
 	are welcome and encouraged to monitor annotations of interest and
 	add notes of correction as appropriate.  Use the page watch
 	function in the genomewiki to monitor changes to annotations.
-<LI>The user starting the initial annotation is the "Owner" of the annotation.
-<LI>Annotation "Owners" have deletion privileges.
-<LI>Deletion merely removes an item from appearing on the Wiki Track.
-	The actual annotation continues to exist in the genomewiki system,
-	with a note attached that it has been deleted.
-<LI>Currently annotations are enabled only on Human March 2006 Hg18, and
-	Mouse July 2007 Mm9 genome browsers.
+<LI>The individual who creates the initial annotation is the &quot;owner&quot; 
+of the annotation.
+<LI>Annotation &quot;owners&quot;" have deletion privileges.
+<LI>Deletion merely removes an item from the Wiki track display in the Genome
+Browser. The actual annotation still exists in the genomewiki system,
+	with an attached note that it has been deleted.
+<LI>Annotations are enabled currently only on the human hg18 (March 2006) and
+	mouse mm9 (July 2007) Genome Browsers.
+</UL>
+</P>
