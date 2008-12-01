@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.18 2008/09/03 19:19:43 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.19 2008/12/01 21:11:27 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -215,7 +215,7 @@ while ((ms = (struct mafSummary *)hashNextVal(&hc)) != NULL)
 void hgLoadMafSummary(char *db, char *table, char *fileName)
 /* hgLoadMafSummary - Load a summary table of pairs in a maf into a database. */
 {
-long mafCount = 0;
+long mafCount = 0, allMafCount = 0;
 struct mafComp *mcMaster = NULL;
 struct mafAli *maf;
 struct mafFile *mf = mafOpen(fileName);
@@ -235,6 +235,7 @@ verbose(1, "Indexing and tabulating %s\n", fileName);
 while ((maf = mafNext(mf)) != NULL)
     {
     mcMaster = mafMaster(maf, mf, fileName);
+    allMafCount++;
     if (mcMaster->srcSize < minSeqSize)
 	continue;
     while (mcMaster->size > maxSize)
@@ -267,7 +268,7 @@ mafFileFree(&mf);
 flushSummaryBlocks(componentHash, f);
 verbose(1, 
     "Created %ld summary blocks from %ld components and %ld mafs from %s\n",
-        summaryCount, componentCount, mafCount, fileName);
+        summaryCount, componentCount, allMafCount, fileName);
 if (test)
     return;
 verbose(1, "Loading into %s table %s...\n", database, table);
