@@ -40,7 +40,9 @@ The data for these RIP-Chip profiling tracks are for HuR, IMP-1, PABP, and G10 a
 </P>
 
 <PRE>
-apt-probeset-summarize -a rma-bg,pm-gcbg,med-polish -a pm-gcbg,plier -a pm-only,dabg.neglog10=true  --precision 10 -p lib/HuEx-1_0-st-v2.r2.pgf -c lib/HuEx-1_0-st-v2.r2.clf -b lib/HuEx-1_0-st-v2.r2.antigenomic.bgp -m lib/HuEx-1_0-st-v2.r2.dt1.hg18.full.mps -o gene/ --cel-files cel_list
+apt-probeset-summarize -a rma-bg,pm-gcbg,med-polish -a pm-gcbg,plier -a pm-only,dabg.neglog10=true  \\
+--precision 10 -p lib/HuEx-1_0-st-v2.r2.pgf -c lib/HuEx-1_0-st-v2.r2.clf -b lib/HuEx-1_0-st-v2.r2.antigenomic.bgp \\
+-m lib/HuEx-1_0-st-v2.r2.dt1.hg18.full.mps -o gene/ --cel-files cel_list
 </PRE>
 
 <P>An R session was used to import the expression values and experiment descriptions so that the following steps could be performed.
@@ -61,7 +63,7 @@ apt-probeset-summarize -a rma-bg,pm-gcbg,med-polish -a pm-gcbg,plier -a pm-only,
 </LI>
 <LI> A default score of -10 is set and for all probesets present in IP, scores are replaced by -log10(max.p-value)*(min.log2.fold-change) [ranging from ~-.5 to ~15]
 </LI>
-<LI> Scores are scaled according to: x = 10*(x+10)+1 &dash; now absent in IP probesets have a score of 1 and present in IP probesets range from ~100 to ~1000.
+<LI> Scores are scaled according to: x = 10*(x+10)+1 &mdash; now absent in IP probesets have a score of 1 and present in IP probesets range from ~100 to ~1000.
 </LI>
 <LI> A broadPeak bed file is created corresponding to the core gene-level probesets for each cell-line with the score field containing our scaled score, the signal field containing our minimum log2 fold-change, and the p-value field containing -log10 of our maximum p-value. The q-value is left at the default of -1.
 </LI>
