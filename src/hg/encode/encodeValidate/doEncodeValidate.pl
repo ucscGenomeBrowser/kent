@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.114 2008/11/25 23:14:02 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.115 2008/12/01 05:39:29 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -1201,7 +1201,9 @@ if(!@errors) {
         for my $view (keys %{$daf->{TRACKS}}) {
             if($daf->{TRACKS}{$view}{required}) {
                 if(!defined($ddfSets{$key}{VIEWS}{$view})) {
-                    pushError(\@errors, "view '$view' missing for $key");
+                    if($key !~ /^.+=control/i && $key !~ /^.+=input/i) {
+                        pushError(\@errors, "view '$view' missing for $key");
+                    }
                 }
             }
         }
