@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.17 2008/11/04 07:19:34 angie Exp $
+# $Id: makeDownloads.pl,v 1.18 2008/12/02 17:36:44 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -837,7 +837,7 @@ This directory contains the data files required as input to the
 liftOver utility. This tool -- which requires a Linux platform --
 allows the mass conversion of coordinates from one assembly to
 another. The executable file for the utility can be downloaded from
-http://genome-test.cse.ucsc.edu/~kent/exe/linux/liftOver.gz.
+http://hgdownload.cse.ucsc.edu/admin/exe/liftOver.gz .
 
 The file names reflect the assembly conversion data contained within
 in the format <db1>To<Db2>.over.chain.gz. For example, a file named
