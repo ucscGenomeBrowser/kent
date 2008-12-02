@@ -304,11 +304,28 @@ while ((ma = mafNext(mf)) != NULL)
             /* set a pointer to the beginning of the quality data in memory */
             if (mc->strand == '-')
                 {
+				/* check qac, maf for sanity */
+				if ((mc->srcSize - mc->start - mc->size < 0)
+						|| (mc->srcSize - mc->start > qd->qa->size))
+					{
+					fprintf(stderr, "Range mismatch: %s qual 0-%d\n",
+								mc->src, qd->qa->size);
+					mafWrite(stderr, ma);
+					exit(EXIT_FAILURE);
+					}
                 q = qd->qa->qa + qd->qa->size - 1 - mc->start;
                 inc = -1;
                 }
             else
                 {
+				/* check qac, maf for sanity */
+				if ((mc->start < 0) || (mc->start + mc->size > qd->qa->size))
+					{
+					fprintf(stderr, "Range mismatch: %s qual 0-%d\n",
+								mc->src, qd->qa->size);
+					mafWrite(stderr, ma);
+					exit(EXIT_FAILURE);
+					}
                 q = qd->qa->qa + mc->start;
                 inc = +1;
                 }
