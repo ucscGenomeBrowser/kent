@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.44 2008/11/25 07:17:45 mikep Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.45 2008/12/02 14:13:48 aamp Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128
@@ -1698,6 +1698,11 @@ for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
 	    start = 0;
 	}
     size = end - start;
+    if (end == 0)
+	{
+	items = NULL;
+	break;
+	}
     }
 /* Finally, we got something. */
 sizeWanted = winEnd - winStart;
