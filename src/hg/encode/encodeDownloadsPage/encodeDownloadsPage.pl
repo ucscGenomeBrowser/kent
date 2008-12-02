@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.3 2008/11/07 20:44:56 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.4 2008/12/02 00:17:48 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -195,7 +195,7 @@ for my $line (@fileList) {
                     my ($YYYY,$MM,$DD) = split('-',$pair[1]);
                     my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
                     $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
-                } elsif($pair[0] eq "cell" || $pair[0] eq "antibody") {
+                } elsif($pair[0] eq "cell" || $pair[0] eq "antibody" || $pair[0] eq "promoter") {
                     $metaData .= "$pair[0]:$pair[1] ";
                 }
             }
@@ -204,7 +204,9 @@ for my $line (@fileList) {
         if($dataType eq "fastq" || $dataType eq "tagAlign" || $dataType eq "csfasta" || $dataType eq "csqual") {
             $metaData = "ENCODE Type:$dataType";
             my ($YYYY,$MM,$DD) = split('-',$file[3]);
+            $MM = $MM - 1;
             my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
+            $rMon = $rMon + 1;
             $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
         }
     }
