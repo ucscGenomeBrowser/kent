@@ -32,8 +32,8 @@ test:
 	for dir in $(DIRS); do \
 		${PROG} -allowReloads -configDir=../config x input/$$dir && \
 		for file in $(FILES); do \
-			egrep -v '(priority|dateSubmitted|data RESTRICTED)' input/$$dir/out/$$file > ${TMP_FILE_1} && \
-			egrep -v '(priority|dateSubmitted|data RESTRICTED)' expected/$$dir/$$file > ${TMP_FILE_2} && \
+			egrep -v '(priority|dateSubmitted|dateReleased|data RESTRICTED)' input/$$dir/out/$$file > ${TMP_FILE_1} && \
+			egrep -v '(priority|dateSubmitted|dateReleased|data RESTRICTED)' expected/$$dir/$$file > ${TMP_FILE_2} && \
 			diff ${TMP_FILE_2} ${TMP_FILE_1} && \
 			rm ${TMP_FILE_1} ${TMP_FILE_2}; \
 		done \
