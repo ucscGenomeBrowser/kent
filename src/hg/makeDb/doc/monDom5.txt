@@ -249,6 +249,28 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
  *** All done!  (through the 'makeDoc' step)
  *** Steps were performed in /hive/data/genomes/monDom5/bed/ensGene.50
 
+############################################################################
+#  monDom5 - Opossum - Ensembl Genes version 51  (DONE - 2008-12-02 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/monDom5
+    cat << '_EOF_' > monDom5.ensGene.ra
+# required db variable
+db monDom5
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 monDom5.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/monDom5/bed/ensGene.51
+    featureBits monDom5 ensGene
+    # 32959755 bases of 3501660299 (0.941%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/monDom5/bed/ensGene.51
+
 #########################################################################
 ## REPEATMASKER (DONE 2008-11-26 Andy)
     screen -S monDom5RepeatMasker	# to manage this several day job
@@ -334,6 +356,4 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
 
 ##########################################################################
 # CPG ISLANDS (in progress 2008-12-02, Andy)
-
-
 
