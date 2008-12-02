@@ -30,7 +30,10 @@ def displayPdb(pdbId, snps):
 
     for snp in snps:
         (snpId, chain, snpPos) = snp[0:3]
-        color = "red" if ((len(snp) > 3) and snp[3]) else "gold"
+        if ((len(snp) > 3) and snp[3]):
+            color = "red" 
+        else:
+            color = "gold"
         spec = "%s:%s.%s@CA" % (modelSpec, snpPos, chain)
         runCommand("color %s %s" % (color, spec))
         runCommand("setattr r label \"%s\" %s" % (snpId, spec))
