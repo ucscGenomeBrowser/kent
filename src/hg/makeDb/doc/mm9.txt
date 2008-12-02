@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.86 2008/11/10 20:28:18 angie Exp $"
+#	"$Id: mm9.txt,v 1.87 2008/12/02 18:17:04 hiram Exp $"
 #
 
 #######################################################################
@@ -8736,6 +8736,7 @@ blat -fine -ooc=/scratch/data/mm9/11.ooc /scratch/data/mm9/nib/$(path1).nib $(pa
     pslToBed affyMOE430v2.psl affyMOE430v2Probes.bed
     hgLoadBed -tmpDir=/scratch/tmp mm9 affyMOE430v2Probes affyMOE430v2Probes.bed
     Loaded 46193 elements of size 12
+    # this is temporary, for use with bedMergeExpData below
 
     #	Create a similar formatted file to the one used in MOE430
     zcat geoData/GSE10246_series_matrix.txt.gz \
@@ -8743,55 +8744,58 @@ blat -fine -ooc=/scratch/data/mm9/11.ooc /scratch/data/mm9/nib/$(path1).nib $(pa
 	| sed -e "s/\!Sample_title/#Probe Set/; s#\!Sample_source_name_ch1##;" \
 	| sed -e "s/\"//g" > gnfMOE430v2.AD.txt
 
-    #	create tables gnfMOE430v2AllExps and gnfMOE430v2All tables in hgFixed
-    grep "^1" gnfMOE430v2.AD.txt \
-    	| hgGenericMicroarray hgFixed gnfMOE430v2All stdin
+    #	create gnfMouseAtlas3AllExps and gnfMouseAtlas3All tables in hgFixed
+    hgGnfMicroarray gnfMouseAtlas3AllExps gnfMouseAtlas3All \
+	gnfMOE430v2.AD.txt -chip=affyMOE430v2
+    #	182 experiments
     #	from that table, create median ratio table
-    hgRatioMicroarray -minAbsVal=0 gnfMOE430v2All gnfMOE430v2AllRatio
-    # add those ratio's to the probe locations to make a bed 15 microarray type
-    bedMergeExpData hgFixed.gnfMOE430v2AllRatio mm9.affyMOE430v2Probes \
-	gnfMOE430v2AllRatio.bed
-    hgLoadBed mm9 gnfMOE430v2 gnfMOE430v2AllRatio.bed
-    hgMapToGene mm9 gnfMOE430v2 knownGene knownToGnfMOE430v2 '-type=bed 12'
-    hgExpDistance mm9 hgFixed.gnfMOE430v2AllRatio \
-	hgFixed.gnfMOE430v2AllExps gnfMOE430v2Distance \
-	-lookup=knownToGnfMOE430v2
-    #	Have 45037 elements in hgFixed.gnfMOE430v2AllRatio
-    #	Got 39872 unique elements in hgFixed.gnfMOE430v2AllRatio
-    #	Loaded gnfMOE430v2Distance
-    #	real    30m58.034s
-    #	user    60m26.362s
-    #	sys     3m16.217s
-
-
-    #	do not need this table for the genome browser display
-    hgsql -e "drop table gnfMOE430v2Probes;" mm9
-
-    #	The hgGenericMicroarray business above did not properly create
-    #	the AllExps table, to do this properly:
-
-    hgGnfMicroarray gnfMOE430v2AllExps gnfMOE430v2All \
-	gnfMOE430v2.AD.txt -chip=MOE430v2
     # create table gnfMOE430v2AllRatio in hgFixed from hgFixed.gnfMOE430v2All
     #	and classification file ../hgMedianMicroarray/gnfMOE430v2.ra
-    hgRatioMicroarray gnfMOE430v2All gnfMOE430v2AllRatio \
+    hgRatioMicroarray gnfMouseAtlas3All gnfMouseAtlas3AllRatio \
 	-clump=$HOME/kent/src/hg/makeDb/hgMedianMicroarray/gnfMOE430v2.ra
-    # Take the median value over multiple replicants creating
-    # hgFixed.gnfMOE430v2MedianRatio and gnfMOE430v2MedianExps
-    cd ../hgMedianMicroarray
-    hgMedianMicroarray hgFixed gnfMOE430v2AllRatio gnfMOE430v2AllExps \
-	$HOME/kent/src/hg/makeDb/hgMedianMicroarray/gnfMOE430v2.ra \
-	gnfMOE430v2MedianRatio gnfMOE430v2MedianExps -minExps=1
-    # Also make a median version of the absolute measurements
-    hgMedianMicroarray hgFixed gnfMOE430v2All gnfMOE430v2AllExps \
-	$HOME/kent/src/hg/makeDb/hgMedianMicroarray/gnfMOE430v2.ra \
-	gnfMOE430v2Median gnfMOE430v2MedianExps -minExps=1
 
-    hgExpDistance mm9 hgFixed.gnfMOE430v2MedianRatio \
-	hgFixed.gnfMOE430v2MedianExps gnfMOE430v2Distance \
-	-lookup=knownToGnfMOE430v2
-    #	Have 45037 elements in hgFixed.gnfMOE430v2MedianRatio
-    #	Got 39872 unique elements in hgFixed.gnfMOE430v2MedianRatio
+    # add those ratio's to the probe locations to make a bed 15 microarray type
+    bedMergeExpData hgFixed.gnfMouseAtlas3AllRatio mm9.affyMOE430v2Probes \
+	gnfMouseAtlas3AllRatio.bed
+    #	no longer need this table
+    #	do not need this table for the genome browser display
+    hgsql -e "drop table affyMOE430v2Probes;" mm9
+
+    hgLoadBed mm9 gnfMouseAtlas3 gnfMouseAtlas3AllRatio.bed
+
+    hgMapToGene mm9 gnfMouseAtlas3 knownGene \
+	knownToGnfMouseAtlas3 '-type=bed 12'
+
+    time hgExpDistance mm9 hgFixed.gnfMouseAtlas3AllRatio \
+	hgFixed.gnfMouseAtlas3AllExps gnfMouseAtlas3Distance \
+	-lookup=knownToGnfMouseAtlas3
+    #	Have 45036 elements in hgFixed.gnfMouseAtlas3AllRatio
+    #	Got 39872 unique elements in hgFixed.gnfMouseAtlas3AllRatio
+
+    #	Loaded gnfMouseAtlas3Distance
+    #	real    34m56.844s
+    #	user    58m1.892s
+    #	sys     1m44.821s
+
+    # Take the median value over multiple replicants creating
+    # hgFixed.gnfMouseAtlas3MedianRatio and gnfMouseAtlas3MedianExps
+    cd ../hgMedianMicroarray
+    hgMedianMicroarray hgFixed gnfMouseAtlas3AllRatio gnfMouseAtlas3AllExps \
+	$HOME/kent/src/hg/makeDb/hgMedianMicroarray/gnfMOE430v2.ra \
+	gnfMouseAtlas3MedianRatio gnfMouseAtlas3MedianExps -minExps=1
+
+    # Also make a median version of the absolute measurements
+    hgMedianMicroarray hgFixed gnfMouseAtlas3All gnfMouseAtlas3AllExps \
+	$HOME/kent/src/hg/makeDb/hgMedianMicroarray/gnfMOE430v2.ra \
+	gnfMouseAtlas3AllMedian gnfMouseAtlas3AllMedianExps -minExps=1
+
+    time hgExpDistance mm9 hgFixed.gnfMouseAtlas3MedianRatio \
+	hgFixed.gnfMouseAtlas3MedianExps gnfMouseAtlas3MedianDistance \
+	-lookup=knownToGnfMouseAtlas3
+# Have 45037 elements in hgFixed.gnfMouseAtlas3MedianRatio
+# Got 39872 unique elements in hgFixed.gnfMouseAtlas3MedianRatio
+XXX - working Mon Nov 24 10:01:43 PST 2008
+
     #	real    16m5.102s
     #	user    41m54.581s
     #	sys     1m28.595s
@@ -9039,5 +9043,74 @@ mm9.upstreamMaf = multiz30way /hive/data/genomes/mm9/bed/multiz30way/species.lis
          "mm9", "kgTargetAli", "", "", \
          "/gbdb/mm9/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
+
+#############################################################################
+# TEST BLASTZ with Rn5 (DONE - 2008-11-26,30 - Hiram)
+    mkdir /hive/data/genomes/mm9/bed/blastzRn5.2008-11-26
+    cd /hive/data/genomes/mm9/bed/blastzRn5.2008-11-26
+
+    cat << '_EOF_' > DEF
+# mouse vs rat
+# Specially tuned blastz parameters from Webb Miller
+
+BLASTZ=blastz
+BLASTZ_ABRIDGE_REPEATS=0
+BLASTZ_O=600
+BLASTZ_E=55
+BLASTZ_Y=15000
+BLASTZ_T=2
+BLASTZ_K=4500
+BLASTZ_Q=/scratch/data/blastz/mouse_rat.q
+
+# TARGET: Mouse Mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn5
+SEQ2_DIR=/scratch/data/rn5/rn5.2bit
+SEQ2_LEN=/scratch/data/rn5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm9/bed/blastzRn5.2008-11-26
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    cd /hive/data/genomes/mm9/bed/blastzRn5.2008-11-26
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=medium \
+	-stop=net `pwd`/DEF > do.log 2>&1 &
+    #	real    403m22.371s
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=pk \
+	-debug -chainMinScore=5000 -chainLinearGap=medium \
+	-continue=load -stop=load `pwd`/DEF > load.log 2>&1 &
+    #	real    44m59.528s
+    cat fb.mm9.chainRn5BlastzLink.txt
+    #	1751593467 bases of 2620346127 (66.846%) in intersection
+    cat /cluster/data/mm9/bed/blastzRn4.2007-08-31/fb.mm9.chainRn4Link.txt
+    #	1713186474 bases of 2620346127 (65.380%) in intersection
+
+    mkdir /hive/data/genomes/rn5/bed/blastz.mm9.swap
+    cd /hive/data/genomes/rn5/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/blastzRn5.2008-11-26/DEF \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=medium \
+	-swap -stop=net > swap.log 2>&1 &
+    #	real    63m51.690s
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/blastzRn5.2008-11-26/DEF \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=medium \
+	-debug -swap -continue=load -stop=load > load.log 2>&1 &
+    cat fb.rn5.chainMm9BlastzLink.txt
+    #	1901280009 bases of 3372561689 (56.375%) in intersection
 
 #############################################################################
