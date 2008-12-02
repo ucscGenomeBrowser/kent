@@ -58,7 +58,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     jgiGene.o \
     kgAlias.o kgColor.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
     ld.o ld2.o lfs.o liftOver.o liftOverChain.o liftUp.o \
-    llaInfo.o mafFrames.o mafGene.o mafSummary.o mammalPsg.o mapSts.o \
+    llaInfo.o lsSnpPdb.o lsSnpPdbChimera.o mafFrames.o mafGene.o mafSummary.o mammalPsg.o mapSts.o \
     mcnBreakpoints.o metaChromGraph.o microarray.o \
     minChromSize.o minGeneInfo.o mrnaMisMatch.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \

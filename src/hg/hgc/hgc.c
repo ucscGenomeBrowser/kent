@@ -218,8 +218,9 @@
 #include "chromInfo.h"
 #include "gbWarn.h"
 #include "mammalPsg.h"
+#include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1473 2008/11/17 23:37:35 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1474 2008/12/02 01:36:59 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12850,51 +12851,6 @@ if (snp.avHet>0)
 printf("<BR>\n");
 }
 
-void printLsSnpLinks(struct snp snp)
-/* print links to ModBase and LS-SNP at UCSF */
-{
-struct sqlConnection *conn = hAllocConn(database);
-struct sqlResult *sr1, *sr2;
-char **row;
-char   query[256];
-char   baseUrl[] = "http://salilab.org/LS-SNP-cgi/";
-char   options[] = "&RequestType=QueryById&idtype=rsID&PropertySelect=";
-char  *snpScript = NULL;
-
-if (sameString("hg17", database))
-    snpScript = cloneString("LS_SNP_query.pl");
-else if (sameString("hg16", database))
-    snpScript = cloneString("SNP_query.pl");
-else
-    return;
-
-if (hTableExists(database, "lsSnpStructure"))
-    {
-    safef(query, sizeof(query), "select distinct uniProtId, rsId from lsSnpStructure "
-	  "where rsId='%s' order by uniProtId", snp.name);
-    sr1=sqlGetResult(conn, query);
-    if ( (sr1 != NULL) && ((row=sqlNextRow(sr1)) != NULL))
-	{
-	printf("<BR><A HREF=\"%s%s?idvalue=%s%s", baseUrl, snpScript, row[1], options);
-	printf("Protein_structure\" TARGET=_blank>LS-SNP Protein Structure Prediction</A>\n");
-	}
-    sqlFreeResult(&sr1);
-    }
-if (hTableExists(database, "lsSnpFunction"))
-    {
-    safef(query, sizeof(query), "select distinct uniProtId, rsId from lsSnpFunction "
-	  "where rsId='%s' order by uniProtId", snp.name);
-    sr2=sqlGetResult(conn, query);
-    if ( (sr2 != NULL) && ((row=sqlNextRow(sr2)) != NULL))
-	{
-	printf("<BR><A HREF=\"%s%s?idvalue=%s%s", baseUrl, snpScript, row[1], options);
-	printf("Functional\" TARGET=_blank>LS-SNP Protein Function Prediction</A>\n");
-	}
-    sqlFreeResult(&sr2);
-    }
-hFreeConn(&conn);
-}
-
 off_t getSnpSeqFileOffset(struct trackDb *tdb, struct snp *snp)
 /* do a lookup in snpSeq for the offset */
 {
@@ -13044,7 +13000,7 @@ int gapExtendPenalty = 50;
 struct axtScoreScheme *ss = axtScoreSchemeSimpleDna(matchScore, misMatchScore, gapOpenPenalty, gapExtendPenalty);
 struct axt *axt = axtAffine(qSeq, tSeq, ss), *axtBlock=axt;
 
-hPrintf("<TT><PRE>");
+hPrintf("<PRE>");
 if (axt == NULL)
    {
    printf("%s and %s don't align\n", tSeq->name, qSeq->name);
@@ -13064,7 +13020,7 @@ for (axtBlock=axt;  axtBlock !=NULL;  axtBlock = axtBlock->next)
     }
 
 axtFree(&axt);
-hPrintf("</PRE></TT>");
+hPrintf("</PRE>");
 }
 
 void printSnpAlignment(struct trackDb *tdb, struct snp *snp)
@@ -13216,8 +13172,8 @@ safef(betterName, sizeof(betterName), "%s %s:%d-%d",
       database, seqName, start+1, end);
 seqNib->name = cloneString(betterName);
 
-printf("\n<BR><B>Re-alignment of the SNP's flanking sequences to the "
-       "genomic sequence:</B><BR>\n"
+printf("\n<H3>Re-alignment of the SNP's flanking sequences to the "
+       "genomic sequence</H3>\n"
        "Note: this alignment was computed by UCSC and may not be identical to "
        "NCBI's alignment used to map the SNP.\n");
 
@@ -13239,7 +13195,7 @@ printf("</PRE>\n");
 printf("\n<PRE><B>dbSNP flanking sequences and observed allele code for %s"
        ":</B>\n", snp->name);
 printf("(Uses ");
-printf("<A HREF=\" http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html#tab1 \"" );
+printf("<A HREF=\"http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html#tab1\"" );
 printf("TARGET=_BLANK>IUPAC ambiguity codes</A>");
 printf(")\n");
 if (leftFlankTrimmed)
@@ -13314,7 +13270,6 @@ if (startsWith("rs",itemName))
     printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
     doSnpEntrezGeneLink(tdb, itemName);
     }
-printLsSnpLinks(snp);
 if (hTableExists(database, "snpExceptions") && differentString(exception,"0"))
     writeSnpException(exception, itemName, rowOffset, chrom, chromStart, tdb);
 printTrackHtml(tdb);
@@ -14065,7 +14020,7 @@ if (!sameString(orthoAllele, "?"))
     }
 else
     printf(FOURBLANKCELLS"\n");
-printf("</TR>\n<TR>");
+printf("</TR>\n");
 }
 
 
@@ -14255,6 +14210,65 @@ printf("<BR><B><A HREF=\"%s&hapmapSnps=dense\"> HapMap SNP</A> </B><BR>\n",
 hFreeConn(&conn);
 }
 
+static void printLsSnpPdb(struct sqlConnection *conn, char *pdbId, char *snpId)
+/* generate LS-SNP and chimera links for a PDB id */
+{
+char *lsSnpUrl = lsSnpPdbGetUrlPdbSnp(pdbId, snpId);
+struct tempName chimerax;
+lsSnpPdbChimeraSnpAnn(conn, pdbId, snpId, &chimerax);
+printf("<TD>%s<TD>%s<TD><A HREF=\"%s\" target=_blank>LS-SNP</A><td class=\"hgcLsSnpSep\"><A HREF=\"%s\">Chimera</A>\n",
+       pdbId, lsSnpPdbChimeraGetStructType(conn, pdbId),
+       lsSnpUrl, chimerax.forHtml);
+freeMem(lsSnpUrl);
+}
+
+static void printLsSnpMappings(struct sqlConnection *conn, struct slName *pdbIds, char *snpId)
+/* Print lsSnp mappings. */
+{
+printf("<H3>Mappings to PDB protein structures</H3>\n");
+printf("<TABLE class=\"hgcLsSnp\">\n");
+printf("<TBODY>\n");
+int numPdbs = slCount(pdbIds);
+// limit column groups if just one row
+int numCols = (numPdbs < 3) ? numPdbs : 3;
+int iCol = 0;
+struct slName *pdbId;
+for (pdbId = pdbIds; pdbId != NULL; pdbId = pdbId->next)
+    {
+    if (iCol == 0)
+        printf("<TR>\n");
+    printLsSnpPdb(conn, pdbId->name, snpId);
+    iCol++;
+    if (iCol == numCols)
+        {
+        printf("</TR>\n");
+        iCol = 0;
+        }
+    }
+if (iCol < numCols)
+    {
+    // fill in last row
+    for (; iCol < numCols; iCol++)
+        printf("<TD colspan=4 class=\"hgcLsSnpSep\">\n");
+    printf("</TR>\n");
+    }
+printf("</TBODY>\n");
+printf("</TABLE>\n");
+printf("<A href=\"../goldenPath/help/chimera.html\">Chimera help</A>\n");
+}
+
+static void checkForLsSnpMappings(struct sqlConnection *conn, char *snpId)
+/* check if this SNP is mapped to any protein by LS-SNP, and if so print
+* the information. */
+{
+struct slName *pdbIds = lsSnpPdbChimeraGetSnpPdbs(conn, snpId);
+if (pdbIds != NULL)
+    {
+    printLsSnpMappings(conn, pdbIds, snpId);
+    slFreeList(&pdbIds);
+    }
+}
+
 void doSnpWithVersion(struct trackDb *tdb, char *itemName, int version)
 /* Process SNP details. */
 {
@@ -14308,6 +14322,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 checkForHapmap(tdb, itemName);
+if (hIsPrivateHost()) // only on hgwdev for now
+    checkForLsSnpMappings(conn, itemName);
 printSnpAlignment(tdb, snpAlign);
 printTrackHtml(tdb);
 hFreeConn(&conn);

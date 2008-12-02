@@ -1,14 +1,16 @@
 /* domains - do protein domains section. */
 
 #include "common.h"
+#include "trashDir.h"
 #include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
 #include "spDb.h"
 #include "hgGene.h"
 #include "hdb.h"
+#include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.25 2008/09/03 19:18:49 markd Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.26 2008/12/02 01:36:59 markd Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -179,11 +181,20 @@ if (list != NULL)
 	hPrintf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s\" TARGET=_blank>", row[0]);
 	if (rowCount < 1)
 	    hPrintf("<IMG SRC=\"http://www.rcsb.org/pdb/images/%s_asym_r_250.jpe\"><BR>", row[0]);
-	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
+        if (hIsPrivateHost()) // only on hgwdev for now
+            {
+            struct tempName chimerax;
+            lsSnpPdbChimeraSnpAnn(conn, row[0], NULL, &chimerax);
+            hPrintf("%s</A> - %s <A HREF=\"%s\">Chimera</A> <BR>\n",
+                    row[0], row[1], chimerax.forHtml);
+            }
+        else
+            hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
 	hPrintf("</TD>");
 	}
     hPrintf("</TR></TABLE>\n");
-    hPrintf("<BR>\n");
+    printf("<A href=\"../goldenPath/help/chimera.html\">Chimera help</A>\n");
+    hPrintf("<BR><BR>\n");
     slFreeList(&list);
     }
 
