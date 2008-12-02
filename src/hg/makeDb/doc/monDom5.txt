@@ -249,4 +249,91 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
  *** All done!  (through the 'makeDoc' step)
  *** Steps were performed in /hive/data/genomes/monDom5/bed/ensGene.50
 
-############################################################################
+#########################################################################
+## REPEATMASKER (DONE 2008-11-26 Andy)
+    screen -S monDom5RepeatMasker	# to manage this several day job
+    mkdir /hive/data/genomes/monDom5/bed/repeatMasker
+    cd /hive/data/genomes/monDom5/bed/repeatMasker
+    time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl -workhorse=hgwdev \
+         -bigClusterHub=swarm -buildDir=`pwd` monDom5 > do.log
+## (detach screen Ctrl+A+D)
+## ... (reattach on hgwdev: screen -r monDom5RepeatMasker)
+#
+#Checking finished jobs
+#cat run.time
+#HgStepManager: executing step 'cat' Wed Nov 26 07:29:04 2008.
+#Use of uninitialized value in substitution (s///) at /cluster/home/aamp/kent/src/hg/utils/automation/HgAutomate.pm line 262.
+#Could not extract server from output of "df /hive/data/genomes/monDom5/bed/repeatMasker":
+#/dev/hivedev         171434397696 55883525376 115550872320  33% /hive
+#...
+#user    0m0.099s
+#sys     0m0.070s
+
+## checking the problem, it's that I don't have a $HOST in my env.
+## ... so, tcsh it is.
+     tcsh
+     time $HOME/kent/src/hg/utils/automation/doRepeatMasker.pl -continue=cat \
+         -workhorse=hgwdev -bigClusterHub=swarm -buildDir=`pwd` \ 
+         monDom5 > doAfterCat.log
+#0.389u 0.348s 1:12:48.52 0.0%   0+0k 0+0io 1pf+0w
+
+#########################################################################
+## SIMPLE REPEATS TRF (DONE 2008-11-26 - Andy)
+    screen
+    mkdir /hive/data/genomes/monDom5/bed/simpleRepeat
+    cd /hive/data/genomes/monDom5/bed/simpleRepeat
+    time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl \
+        -buildDir=/cluster/data/monDom5/bed/simpleRepeat monDom5 > do.log
+#0.233u 0.153s 2:52:17.94 0.0%   0+0k 0+0io 0pf+0w
+
+    cat fb.simpleRepeat
+# 83450133 bases of 3501660299 (2.383%) in intersection
+
+    ##   after RM run is done, add this mask:
+    cd /hive/data/genomes/monDom5
+    rm monDom5.2bit
+    twoBitMask monDom5.rmsk.2bit -add bed/simpleRepeat/trfMask.bed monDom5.2bit
+    ##  can safely ignore warning about >=13 fields in bed file
+    twoBitToFa monDom5.2bit stdout | faSize stdin > monDom5.2bit.faSize.txt
+# 3605631728 bases (103971429 N's 3501660299 real 1542619938 upper 1959040361 lower)
+# %54.33 masked total, %55.95 masked real
+
+    ##   link to gbdb
+    ln -s `pwd`/monDom5.2bit /gbdb/monDom5
+
+###########################################################################
+# WINDOWMASKER (DONE 2008-12-02 Andy)
+    ssh kolossus
+    mkdir /hive/data/genomes/monDom5/bed/WindowMasker
+    cd /hive/data/genomes/monDom5/bed/WindowMasker
+    screen -S monDom5_WindowMasker
+    tcsh
+    ~/kent/src/hg/utils/automation/doWindowMasker.pl monDom5 -buildDir=`pwd` -workhorse=kolossus >& wm.log
+    ## oops forgot to time it (or nice it).  It took less than 8 hrs though
+    ## load result to prep for cleaning
+    ssh hgwdev
+    cd /hive/data/genomes/monDom5/bed/WindowMasker
+    hgLoadBed monDom5 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 1346187 elements of size 3
+    featureBits monDom5 windowmaskerSdust
+    # 1619987578 bases of 3501660299 (46.263%) in intersection
+    #	eliminate the gaps from the masking (WM bug)
+    featureBits monDom5 -not gap -bed=notGap.bed
+    #	170473138 bases of 170473138 (100.000%) in intersection
+    screen -S monDom5_WindowMasker
+    time nice featureBits monDom5 windowmasker.sdust.bed.gz notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+#1516026449 bases of 3501660299 (43.295%) in intersection
+#
+#real    12m17.912s
+#user    3m56.801s
+#sys     0m13.704s
+    #	reload track to get it clean
+    hgLoadBed monDom5 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 22241063 elements of size 4
+
+##########################################################################
+# CPG ISLANDS (in progress 2008-12-02, Andy)
+
+
+
