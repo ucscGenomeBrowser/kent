@@ -2613,378 +2613,9 @@ compositeTrack	on
 shortLabel	SunyAlbany RnaGeneChip
 longLabel	ENCODE SunyAlbany Tenenbaum RnaGeneChip
 group		regulation
-subGroup1	view Views RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna
-subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562 K562=K562 K562=K562 GM12878=GM12878 GM12878=GM12878 K562=K562
-subGroup3	ripAntibody RipAntibody T7Tag_69522=T7Tag_69522 T7Tag_69522=T7Tag_69522 PABPC1_P6246=PABPC1_P6246 ELAVL1_5261=ELAVL1_5261 ELAVL1_5261=ELAVL1_5261 PABPC1_P6246=PABPC1_P6246 IGF2BP1_21027=IGF2BP1_21027
-subGroup4	ripTgtProtein RipTgtProtein T7Tag=T7Tag T7Tag=T7Tag PABPC1=PABPC1 ELAVL1=ELAVL1 ELAVL1=ELAVL1 PABPC1=PABPC1 IGF2BP1=IGF2BP1
-dimensions	dimensionX=cellType	dimensionY=ripAntibody	dimensionZ=ripTgtProtein
-sortOrder	cellType=+ ripAntibody=+ ripTgtProtein=+ view=+
-controlledVocabulary	encode/cv.ra cellType ripAntibody ripTgtProtein
-dragAndDrop	subTracks
-visibilityViewDefaults	 RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide
-priority	0
-type		bed 3
-wgEncode	1
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878T7tag69522T7tag
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	GM12878
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in GM12878 cells)
-	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=T7Tag_69522 ripTgtProtein=T7Tag
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	T7Tag
-	ripAntibody	T7Tag_69522
-	cell		GM12878
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562T7tag69522T7tag
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=T7Tag_69522 ripTgtProtein=T7Tag
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	T7Tag
-	ripAntibody	T7Tag_69522
-	cell		K562
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Elavl15261Elavl1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	GM12878
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in GM12878 cells)
-	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=ELAVL1_5261 ripTgtProtein=ELAVL1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	ELAVL1
-	ripAntibody	ELAVL1_5261
-	cell		GM12878
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Elavl15261Elavl1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=ELAVL1_5261 ripTgtProtein=ELAVL1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	ELAVL1
-	ripAntibody	ELAVL1_5261
-	cell		K562
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Igf2bp121027Igf2bp1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=IGF2BP1_21027 ripTgtProtein=IGF2BP1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	IGF2BP1
-	ripAntibody	IGF2BP1_21027
-	cell		K562
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Pabpc1p6246Pabpc1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	GM12878
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in GM12878 cells)
-	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=PABPC1_P6246 ripTgtProtein=PABPC1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	PABPC1
-	ripAntibody	PABPC1_P6246
-	cell		GM12878
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Pabpc1p6246Pabpc1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=PABPC1_P6246 ripTgtProtein=PABPC1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	PABPC1
-	ripAntibody	PABPC1_P6246
-	cell		K562
-
-ck		wgEncodeSunyalbanyRnaGeneChip
-compositeTrack	on
-shortLabel	SunyAlbany RnaGeneChip
-longLabel	ENCODE SunyAlbany Tenenbaum RnaGeneChip
-group		regulation
-subGroup1	view Views RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna
-subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562 K562=K562 K562=K562 GM12878=GM12878 GM12878=GM12878 K562=K562
-subGroup3	ripAntibody RipAntibody T7Tag_69522=T7Tag_69522 T7Tag_69522=T7Tag_69522 PABPC1_P6246=PABPC1_P6246 ELAVL1_5261=ELAVL1_5261 ELAVL1_5261=ELAVL1_5261 PABPC1_P6246=PABPC1_P6246 IGF2BP1_21027=IGF2BP1_21027
-subGroup4	ripTgtProtein RipTgtProtein T7Tag=T7Tag T7Tag=T7Tag PABPC1=PABPC1 ELAVL1=ELAVL1 ELAVL1=ELAVL1 PABPC1=PABPC1 IGF2BP1=IGF2BP1
-dimensions	dimensionX=cellType	dimensionY=ripAntibody	dimensionZ=ripTgtProtein
-sortOrder	cellType=+ ripAntibody=+ ripTgtProtein=+ view=+
-controlledVocabulary	encode/cv.ra cellType ripAntibody ripTgtProtein
-dragAndDrop	subTracks
-visibilityViewDefaults	 RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide
-priority	0
-type		bed 3
-wgEncode	1
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878T7tag69522T7tag
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	GM12878
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in GM12878 cells)
-	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=T7Tag_69522 ripTgtProtein=T7Tag
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	T7Tag
-	ripAntibody	T7Tag_69522
-	cell		GM12878
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562T7tag69522T7tag
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=T7Tag_69522 ripTgtProtein=T7Tag
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	T7Tag
-	ripAntibody	T7Tag_69522
-	cell		K562
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Elavl15261Elavl1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	GM12878
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in GM12878 cells)
-	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=ELAVL1_5261 ripTgtProtein=ELAVL1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	ELAVL1
-	ripAntibody	ELAVL1_5261
-	cell		GM12878
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Elavl15261Elavl1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=ELAVL1_5261 ripTgtProtein=ELAVL1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	ELAVL1
-	ripAntibody	ELAVL1_5261
-	cell		K562
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Igf2bp121027Igf2bp1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=IGF2BP1_21027 ripTgtProtein=IGF2BP1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	IGF2BP1
-	ripAntibody	IGF2BP1_21027
-	cell		K562
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Pabpc1p6246Pabpc1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	GM12878
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in GM12878 cells)
-	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=PABPC1_P6246 ripTgtProtein=PABPC1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	PABPC1
-	ripAntibody	PABPC1_P6246
-	cell		GM12878
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Pabpc1p6246Pabpc1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=PABPC1_P6246 ripTgtProtein=PABPC1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	PABPC1
-	ripAntibody	PABPC1_P6246
-	cell		K562
-
-track		wgEncodeSunyalbanyRnaGeneChip
-compositeTrack	on
-shortLabel	SunyAlbany RnaGeneChip
-longLabel	ENCODE SunyAlbany Tenenbaum RnaGeneChip
-group		regulation
-subGroup1	view Views RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna RbpAssocRna=RbpAssocRna
-subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562 K562=K562 K562=K562 GM12878=GM12878 GM12878=GM12878 K562=K562
-subGroup3	ripAntibody RipAntibody T7Tag_69522=T7Tag_69522 T7Tag_69522=T7Tag_69522 PABPC1_P6246=PABPC1_P6246 ELAVL1_5261=ELAVL1_5261 ELAVL1_5261=ELAVL1_5261 PABPC1_P6246=PABPC1_P6246 IGF2BP1_21027=IGF2BP1_21027
-subGroup4	ripTgtProtein RipTgtProtein T7Tag=T7Tag T7Tag=T7Tag PABPC1=PABPC1 ELAVL1=ELAVL1 ELAVL1=ELAVL1 PABPC1=PABPC1 IGF2BP1=IGF2BP1
-dimensions	dimensionX=cellType	dimensionY=ripAntibody	dimensionZ=ripTgtProtein
-sortOrder	cellType=+ ripAntibody=+ ripTgtProtein=+ view=+
-controlledVocabulary	encode/cv.ra cellType ripAntibody ripTgtProtein
-dragAndDrop	subTracks
-visibilityViewDefaults	 RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide RbpAssocRna=hide
-priority	0
-type		bed 3
-wgEncode	1
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878T7tag69522T7tag
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	GM12878
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in GM12878 cells)
-	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=T7Tag_69522 ripTgtProtein=T7Tag
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	T7Tag
-	ripAntibody	T7Tag_69522
-	cell		GM12878
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562T7tag69522T7tag
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=T7Tag_69522 ripTgtProtein=T7Tag
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	T7Tag
-	ripAntibody	T7Tag_69522
-	cell		K562
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Elavl15261Elavl1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	GM12878
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in GM12878 cells)
-	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=ELAVL1_5261 ripTgtProtein=ELAVL1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	ELAVL1
-	ripAntibody	ELAVL1_5261
-	cell		GM12878
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Elavl15261Elavl1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=ELAVL1_5261 ripTgtProtein=ELAVL1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	ELAVL1
-	ripAntibody	ELAVL1_5261
-	cell		K562
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Igf2bp121027Igf2bp1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=IGF2BP1_21027 ripTgtProtein=IGF2BP1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	IGF2BP1
-	ripAntibody	IGF2BP1_21027
-	cell		K562
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Pabpc1p6246Pabpc1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	GM12878
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in GM12878 cells)
-	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=PABPC1_P6246 ripTgtProtein=PABPC1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	PABPC1
-	ripAntibody	PABPC1_P6246
-	cell		GM12878
-
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Pabpc1p6246Pabpc1
-	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=PABPC1_P6246 ripTgtProtein=PABPC1
-	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
-	noInherit	on
-	configurable	on
-	ripTgtProtein	PABPC1
-	ripAntibody	PABPC1_P6246
-	cell		K562
-
-track		wgEncodeSunyalbanyRnaGeneChip
-compositeTrack	on
-shortLabel	SunyAlbany RnaGeneChip
-longLabel	ENCODE SunyAlbany Tenenbaum RnaGeneChip
-group		regulation
 subGroup1	view Views RbpAssocRna=RbpAssocRna
 subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562
-subGroup3	ripAntibody RipAntibody T7Tag_69522=T7Tag_69522 PABPC1_P6246=PABPC1_P6246 ELAVL1_5261=ELAVL1_5261 IGF2BP1_21027=IGF2BP1_21027
+subGroup3	ripAntibody RipAntibody Nov_69522=Nov_69522 Sig_P6246=Sig_P6246 SC_5261=SC_5261 SC_21027=SC_21027
 subGroup4	ripTgtProtein RipTgtProtein T7Tag=T7Tag PABPC1=PABPC1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1
 dimensions	dimensionX=cellType	dimensionY=ripAntibody	dimensionZ=ripTgtProtein
 sortOrder	cellType=+ ripAntibody=+ ripTgtProtein=+ view=+
@@ -2995,109 +2626,109 @@ priority	0
 type		bed 3
 wgEncode	1
 
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878T7tag69522T7tag
+	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Nov69522T7tag
 	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	GM12878
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in GM12878 cells)
-	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=T7Tag_69522 ripTgtProtein=T7Tag
+	shortLabel	T7Tag GM12878 Nov_69522
+	longLabel	ENCODE SUNY Albany RBP Associated RNA (T7Tag in GM12878 cells using Nov_69522)
+	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=Nov_69522 ripTgtProtein=T7Tag
 	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
+	dateSubmitted	2008-12-02 13:5:0
+	dateReleased	2009-09-02
+	priority	8
 	noInherit	on
 	configurable	on
 	ripTgtProtein	T7Tag
-	ripAntibody	T7Tag_69522
+	ripAntibody	Nov_69522
 	cell		GM12878
 
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562T7tag69522T7tag
+	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Nov69522T7tag
 	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=T7Tag_69522 ripTgtProtein=T7Tag
+	shortLabel	T7Tag K562 Nov_69522
+	longLabel	ENCODE SUNY Albany RBP Associated RNA (T7Tag in K562 cells using Nov_69522)
+	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=Nov_69522 ripTgtProtein=T7Tag
 	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
+	dateSubmitted	2008-12-02 13:5:0
+	dateReleased	2009-09-02
+	priority	8
 	noInherit	on
 	configurable	on
 	ripTgtProtein	T7Tag
-	ripAntibody	T7Tag_69522
+	ripAntibody	Nov_69522
 	cell		K562
 
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Elavl15261Elavl1
+	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sc5261Elavl1
 	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	GM12878
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in GM12878 cells)
-	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=ELAVL1_5261 ripTgtProtein=ELAVL1
+	shortLabel	ELAVL1 GM12878 SC_5261
+	longLabel	ENCODE SUNY Albany RBP Associated RNA (ELAVL1 in GM12878 cells using SC_5261)
+	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=SC_5261 ripTgtProtein=ELAVL1
 	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
+	dateSubmitted	2008-12-02 13:5:0
+	dateReleased	2009-09-02
+	priority	8
 	noInherit	on
 	configurable	on
 	ripTgtProtein	ELAVL1
-	ripAntibody	ELAVL1_5261
+	ripAntibody	SC_5261
 	cell		GM12878
 
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Elavl15261Elavl1
+	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc5261Elavl1
 	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=ELAVL1_5261 ripTgtProtein=ELAVL1
+	shortLabel	ELAVL1 K562 SC_5261
+	longLabel	ENCODE SUNY Albany RBP Associated RNA (ELAVL1 in K562 cells using SC_5261)
+	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=SC_5261 ripTgtProtein=ELAVL1
 	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
+	dateSubmitted	2008-12-02 13:5:0
+	dateReleased	2009-09-02
+	priority	8
 	noInherit	on
 	configurable	on
 	ripTgtProtein	ELAVL1
-	ripAntibody	ELAVL1_5261
+	ripAntibody	SC_5261
 	cell		K562
 
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Igf2bp121027Igf2bp1
+	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc21027Igf2bp1
 	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=IGF2BP1_21027 ripTgtProtein=IGF2BP1
+	shortLabel	IGF2BP1 K562 SC_21027
+	longLabel	ENCODE SUNY Albany RBP Associated RNA (IGF2BP1 in K562 cells using SC_21027)
+	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=SC_21027 ripTgtProtein=IGF2BP1
 	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
+	dateSubmitted	2008-12-02 13:5:0
+	dateReleased	2009-09-02
+	priority	8
 	noInherit	on
 	configurable	on
 	ripTgtProtein	IGF2BP1
-	ripAntibody	IGF2BP1_21027
+	ripAntibody	SC_21027
 	cell		K562
 
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Pabpc1p6246Pabpc1
+	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sigp6246Pabpc1
 	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	GM12878
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in GM12878 cells)
-	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=PABPC1_P6246 ripTgtProtein=PABPC1
+	shortLabel	PABPC1 GM12878 Sig_P6246
+	longLabel	ENCODE SUNY Albany RBP Associated RNA (PABPC1 in GM12878 cells using Sig_P6246)
+	subGroups	view=RbpAssocRna cellType=GM12878 ripAntibody=Sig_P6246 ripTgtProtein=PABPC1
 	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
+	dateSubmitted	2008-12-02 13:5:0
+	dateReleased	2009-09-02
+	priority	8
 	noInherit	on
 	configurable	on
 	ripTgtProtein	PABPC1
-	ripAntibody	PABPC1_P6246
+	ripAntibody	Sig_P6246
 	cell		GM12878
 
-	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Pabpc1p6246Pabpc1
+	track		wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1
 	subTrack	wgEncodeSunyalbanyRnaGeneChip
-	shortLabel	K562
-	longLabel	ENCODE SUNY Albany RBP Associated RNA (in K562 cells)
-	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=PABPC1_P6246 ripTgtProtein=PABPC1
+	shortLabel	PABPC1 K562 Sig_P6246
+	longLabel	ENCODE SUNY Albany RBP Associated RNA (PABPC1 in K562 cells using Sig_P6246)
+	subGroups	view=RbpAssocRna cellType=K562 ripAntibody=Sig_P6246 ripTgtProtein=PABPC1
 	type		broadPeak
-	dateSubmitted	2008-11-25 14:26:35
-	dateReleased	2009-08-25
-	priority	4
+	dateSubmitted	2008-12-02 13:5:0
+	dateReleased	2009-09-02
+	priority	8
 	noInherit	on
 	configurable	on
 	ripTgtProtein	PABPC1
-	ripAntibody	PABPC1_P6246
+	ripAntibody	Sig_P6246
 	cell		K562
 
 
