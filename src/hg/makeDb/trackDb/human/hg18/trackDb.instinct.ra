@@ -213,7 +213,18 @@ expScale 1.0
 expStep 0.1  
 groupings uncAgiExpGroups
 
-track broadAffyExp
+track broadOVexp_affy
+shortLabel TCGA OV broadAffyExp
+longLabel TCGA OV Broad Affymetrix Expression array U133A
+group x
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 3.0
+expStep 0.2
+groupings broadOVexp_affyGroups
+
+track broadGBMexp_affy
 shortLabel TCGA GBM broadAffyExp
 longLabel TCGA GBM Broad Affymetrix Expression array U133A
 group x
@@ -222,7 +233,7 @@ type expRatio
 logicalDb localDb
 expScale 3.0
 expStep 0.2
-groupings broadAffyExpGroups
+groupings broadGBMexp_affyGroups
 
 track CaMPScoreExternal
 shortLabel CaMPScoreExternal 
