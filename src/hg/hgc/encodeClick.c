@@ -84,5 +84,4 @@ if (row != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-printTrackHtml(tdb);
 }
