@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.45 2008/05/21 18:29:04 hiram Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.46 2008/12/02 01:34:56 markd Exp $";
 
 jmp_buf htmlRecover;
 
@@ -68,13 +68,13 @@ va_end(args);
 void htmlHorizontalLine()
 /* Print a horizontal line. */
 {
-htmlParagraph("<HR ALIGN=\"CENTER\">");
+printf("<HR ALIGN=\"CENTER\">");
 }
 
 void htmHorizontalLine(FILE *f)
 /* Print a horizontal line. */
 {
-fprintf(f, "<P><HR ALIGN=\"CENTER\"></P>");
+fprintf(f, "<HR ALIGN=\"CENTER\">");
 }
 
 void htmlNbSpaces(int count)
