@@ -607,7 +607,7 @@ description stem-loop binding protein (Homo sapiens)
 url http://view.ncbi.nlm.nih.gov/gene/7884
 
 # ripAntibody - Tenenbaum RIP-chip / RIP-seq project
-term T7Tag_69522
+term Nov_69522
 type ripAntibody
 antibodyDescription Negative Control Ab (T7 Tag Mouse Monoclonal)
 targetDescription T7Tag
@@ -615,7 +615,7 @@ vendorName Novagen
 vendorId 69522
 orderUrl http://www.emdbiosciences.com/Products/ProductDisplay.asp?catno=69522
 
-term ELAVL1_5261
+term SC_5261
 type ripAntibody
 antibodyDescription Mouse monoclonal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin
 targetDescription ELAVL1
@@ -623,7 +623,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-5261 lot B2508(Nov2008)
 orderUrl http://www.scbt.com/datasheet-5261-hur-3a2-antibody.html
 
-term IGF2BP1_21027
+term SC_21027
 type ripAntibody
 antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protein 1 of mus, rat and hum origin
 targetDescription IGF2BP1
@@ -631,7 +631,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-21027 lot I0607(Nov2008)
 orderUrl http://www.scbt.com/datasheet-21027-imp-1-c-20-antibody.html
 
-term PABPC1_P6246
+term Sig_P6246
 type ripAntibody
 antibodyDescription Mouse monoclonal vs PABPC1 of hum, mus, bov, can, hamster, Xenopus origin
 targetDescription PABPC1
@@ -639,7 +639,7 @@ vendorName Sigma Chemical Co.
 vendorId P 6246 lot 044K4810(Nov2008)
 orderUrl http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/P6246
 
-term SLBP_MA156353
+term ABR_MA156353
 type ripAntibody
 antibodyDescription Mouse monoclonal
 targetDescription SLBP
