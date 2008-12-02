@@ -33,11 +33,11 @@ char *hDocumentRoot();
 
 char *hHelpFile(char *fileRoot);
 /* Given a help file root name (e.g. "hgPcrResult" or "cutters"),
- * prepend the complete help directory path and add .html suffix. 
+ * prepend the complete help directory path and add .html suffix.
  * Do not free the statically allocated result. */
 
 char *hFileContentsOrWarning(char *file);
-/* Return the contents of the html file, or a warning message. 
+/* Return the contents of the html file, or a warning message.
  * The file path may begin with hDocumentRoot(); if it doesn't, it is
  * assumed to be relative and hDocumentRoot() will be prepended. */
 
@@ -66,7 +66,7 @@ char *hBackgroundImage();
 #define CUTTERS_TRACK_LONGLABEL "Restriction Enzymes from REBASE"
 
 /* Definition for oligo match track. */
-#define oligoMatchVar "hgt.oligoMatch" 
+#define oligoMatchVar "hgt.oligoMatch"
 #define oligoMatchDefault "aaaaa"
 #define OLIGO_MATCH_TRACK_NAME "oligoMatch"
 #define OLIGO_MATCH_TRACK_LABEL "Short Match"
@@ -144,7 +144,7 @@ void controlGridEndRow(struct controlGrid *cg);
 /* Force end of row. */
 
 /******  Some stuff for hide/dense/full controls ******/
-enum trackVisibility 
+enum trackVisibility
 /* How to look at a track. */
     {
     tvHide=0, 		/* Hide it. */
@@ -152,7 +152,7 @@ enum trackVisibility
     tvFull=2,           /* Expand it out. */
     tvPack=3,           /* Zig zag it up and down. */
     tvSquish=4,         /* Pack with thin boxes and no labels. */
-    };  
+    };
 
 enum trackVisibility hTvFromString(char *s);
 /* Given a string representation of track visibility, return as
@@ -746,7 +746,7 @@ struct trackNameAndLabel
 int trackNameAndLabelCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
 
-struct hash *makeTrackHashWithComposites(char *database, char *chrom, 
+struct hash *makeTrackHashWithComposites(char *database, char *chrom,
                                         bool withComposites);
 /* Make hash of trackDb items for this chromosome, optionally includingc
    omposites, not just the subtracks. */
@@ -754,7 +754,7 @@ struct hash *makeTrackHashWithComposites(char *database, char *chrom,
 struct hash *makeTrackHash(char *database, char *chrom);
 /* Make hash of trackDb items for this chromosome. */
 
-char *genePredDropDown(struct cart *cart, struct hash *trackHash,  
+char *genePredDropDown(struct cart *cart, struct hash *trackHash,
                                         char *formName, char *varName);
 /* Make gene-prediction drop-down().  Return track name of
  * currently selected one.  Return NULL if no gene tracks. */
@@ -785,7 +785,7 @@ void hCompositeUi(char *db, struct cart *cart, struct trackDb *tdb,
 
 boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
                                 int visibleChild);
-/* Displays hide/show dropdown for supertrack.  
+/* Displays hide/show dropdown for supertrack.
  * Set visibleChild to indicate whether 'show' should be grayed
  * out to indicate that no supertrack members are visible:
  *    0 to gray out (no visible children)
@@ -799,7 +799,7 @@ boolean dimensionsExist(struct trackDb *parentTdb);
 
 int subgroupCount(struct trackDb *parentTdb);
 /* How many subGroup setting does this parent have? */
-        
+
 char * subgroupSettingByTagOrName(struct trackDb *parentTdb, char *groupNameOrTag);
 /* look for a subGroup by name (ie subGroup1) or tag (ie view) and return an unallocated char* */
 
@@ -813,7 +813,7 @@ void subgroupFree(char **value);
 /* frees subgroup memory */
 
 int tvConvertToNumericOrder(enum trackVisibility v);
-/* Convert the enum to numeric order of display power full=4,hide=0 */ 
+/* Convert the enum to numeric order of display power full=4,hide=0 */
 
 int tvCompare(enum trackVisibility a, enum trackVisibility b);
 /* enum trackVis isn't in numeric order by visibility, so compare
@@ -835,10 +835,7 @@ void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *na
 
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
 /* UI for maf/wiggle track */
-        
-void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
-/* UI for maf/wiggle track */
-        
+
 void tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
 /* Updates the tdb_>priority from cart then sorts the list anew */
 
