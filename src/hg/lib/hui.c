@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.137 2008/12/01 23:26:18 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.138 2008/12/02 20:12:42 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2957,12 +2957,16 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
         }
 
     char id[MAX_SP_SIZE];
+    boolean checked = TRUE;
     if(defaultOffSpeciesCnt > 0)
         {
         if(stringArrayIx(wmSpecies->name,words,defaultOffSpeciesCnt) == -1)
             safef(id, sizeof(id), "cb_maf_%s_%s", groups[group], wmSpecies->name);
         else
+            {
             safef(id, sizeof(id), "cb_maf_%s_%s_defOff", groups[group], wmSpecies->name);
+            checked = FALSE;
+            }
         }
     else
         safef(id, sizeof(id), "cb_maf_%s_%s", groups[group], wmSpecies->name);
@@ -2997,7 +3001,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
             if (row != NULL)
                 {
                 puts("<TD>");
-                cgiMakeCheckBoxWithId(option, cartUsualBoolean(cart, option, TRUE),id);
+                cgiMakeCheckBoxWithId(option, cartUsualBoolean(cart, option, checked),id);
                 printf ("%s", label);
                 puts("</TD>");
                 fflush(stdout);
@@ -3012,7 +3016,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     	{
     	puts("<TD>");
     	safef(option, sizeof(option), "%s.%s", name, wmSpecies->name);
-        wmSpecies->on = cartUsualBoolean(cart, option, TRUE);
+        wmSpecies->on = cartUsualBoolean(cart, option, checked);
         cgiMakeCheckBoxWithId(option, wmSpecies->on,id);
     	label = hOrganism(wmSpecies->name);
     	if (label == NULL)
