@@ -228,3 +228,25 @@ dbDbSpeciesDir opossum
     #	check in the trackDb files and the browser should be up and running
 
 #########################################################################
+#  monDom5 - Opossum - Ensembl Genes version 50  (DONE - 2008-12-02 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/monDom5
+    cat << '_EOF_' > monDom5.ensGene.ra
+# required db variable
+db monDom5
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=50 monDom5.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/monDom5/bed/ensGene.50
+    featureBits monDom5 ensGene
+    # 32970520 bases of 3501660299 (0.942%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/monDom5/bed/ensGene.50
+
+############################################################################
