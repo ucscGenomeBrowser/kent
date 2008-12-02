@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.134 2008/11/10 19:40:31 kate Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.135 2008/12/02 21:51:09 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -408,11 +408,23 @@ struct outputType
     char *label;	/* User visible label. */
     };
 
-static void showOutDropDown(struct outputType *otList)
+static void showOutDropDown(struct outputType *otList, struct outputType *otDefault)
 /* Display output drop-down. */
 {
 struct outputType *ot;
 char *outputType = cartUsualString(cart, hgtaOutputType, otList->name);
+if (otDefault != NULL && otDefault != otList)
+    {
+    boolean otInOtList = FALSE;
+    for (ot = otList; ot != NULL; ot = ot->next)
+	if (sameString(ot->name, outputType))
+	    {
+	    otInOtList = TRUE;
+	    break;
+	    }
+    if (! otInOtList)
+	outputType = otDefault->name;
+    }
 hPrintf("<SELECT NAME=%s>\n", hgtaOutputType);
 for (ot = otList; ot != NULL; ot = ot->next)
     {
@@ -471,14 +483,18 @@ static void showOutputTypeRow(boolean isWig, boolean isBedGr,
     boolean isPal)
 /* Print output line. */
 {
-struct outputType *otList = NULL;
+struct outputType *otList = NULL, *otDefault = NULL;
+boolean bedifiedOnly = (anySubtrackMerge(database, curTable) || anyIntersection());
 
 hPrintf("<TR><TD><B>output format:</B>\n");
 
 if (isBedGr)
     {
-    slAddTail(&otList, &otAllFields);
-    slAddTail(&otList, &otSelected);
+    if (! bedifiedOnly)
+	{
+	slAddTail(&otList, &otAllFields);
+	slAddTail(&otList, &otSelected);
+	}
     slAddTail(&otList, &otWigData);
     slAddTail(&otList, &otWigBed);
     slAddTail(&otList, &otCustomTrack);
@@ -492,7 +508,8 @@ else if (isWig)
 else if (isMaf)
     {
     slAddTail(&otList, &otMaf);
-    slAddTail(&otList, &otAllFields);
+    if (! bedifiedOnly)
+	slAddTail(&otList, &otAllFields);
     }
 else if (isChromGraphCt)
     {
@@ -500,8 +517,13 @@ else if (isChromGraphCt)
     }
 else if (isPositional)
     {
-    slAddTail(&otList, &otAllFields);
-    slAddTail(&otList, &otSelected);
+    if (! bedifiedOnly)
+	{
+	slAddTail(&otList, &otAllFields);
+	slAddTail(&otList, &otSelected);
+	}
+    else
+	otDefault = &otBed;
     slAddTail(&otList, &otSequence);
     slAddTail(&otList, &otGff);
     if (isPal)
@@ -515,7 +537,7 @@ else
     slAddTail(&otList, &otAllFields);
     slAddTail(&otList, &otSelected);
     }
-showOutDropDown(otList);
+showOutDropDown(otList, otDefault);
 }
 
 void nbSpaces(int count)
@@ -699,7 +721,8 @@ hPrintf("</TD></TR>\n");
 }
 
 /* Composite track subtrack merge line. */
-if (curTrack && tdbIsComposite(curTrack))
+boolean canSubtrackMerge = (curTrack && tdbIsComposite(curTrack));
+if (canSubtrackMerge)
     {
     hPrintf("<TR><TD><B>subtrack merge:</B>\n");
     if (anySubtrackMerge(database, curTable))
@@ -827,13 +850,12 @@ hPrintf("</TABLE>\n");
             " compressed into the wiggle format) -- see the Downloads page."
             "</I><BR>", maxOutput);
 	}
-    else
+    else if (anySubtrackMerge(database, curTable) || anyIntersection())
 	{
-	if (anySubtrackMerge(database, curTable))
-	    hPrintf("<I>Note: Subtrack merge doesn't work with all fields or selected fields output.</I><BR>");
-	if (anyIntersection())
-	    hPrintf("<I>Note: Intersection doesn't work with all fields or selected fields output.</I><BR>");
-        }
+	hPrintf("<I>Note: The all fields and selected fields output formats "
+		"are not available when a%s has been specified.</I><BR>",
+		canSubtrackMerge ? " subtrack merge or intersection" : "n intersection");
+	}
     cgiMakeButton(hgtaDoTopSubmit, "get output");
     hPrintf(" ");
     if (isPositional || isWig)
