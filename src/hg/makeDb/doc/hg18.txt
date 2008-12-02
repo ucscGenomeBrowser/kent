@@ -21129,6 +21129,40 @@ TMPDIR=/scratch/tmp
     cat fb.hg18.chainEquCab2Link.txt
     # 1647122438 bases of 2881515245 (57.162%) in intersection
 
+    #	re-running with fixed UnScaffolds business with fixed chr27:
+    mkdir /hive/data/genomes/hg18/bed/blastzEquCab2.2008-12-01
+    cd /hive/data/genomes/hg18/bed/blastzEquCab2.2008-12-01
+    cat << '_EOF_' > DEF
+# Human vs. Horse
+
+BLASTZ=blastz
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes 
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Horse
+SEQ2_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ2_LEN=/scratch/data/equCab2/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/equCab2/equCab2.UnScaffolds.2bit
+SEQ2_CTGLEN=/hive/data/genomes/equCab2/equCab2.UnScaffolds.sizes
+SEQ2_LIFT=/hive/data/genomes/equCab2/jkStuff/equCab2.chrUn.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg18/bed/blastzEquCab2.2008-12-01
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=pk  \
+	-chainMinScore=3000 -chainLinearGap=medium  > do.log 2>&1
+
 #############################################################################
 # MAKE PCR TARGET FOR UCSC GENES (DONE 4/18/08 angie - UPDATED 11/4/08)
     ssh hgwdev
@@ -24795,12 +24829,26 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/hg18/hg18.2bit $outMaf
     cd /data/tmp
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/hg18/multiz44way/maf hg18 multiz44way
+XXX - running on Irow annotated mafs Fri Nov 28 00:28:09 PST 2008
+    #	Loaded 33320675 mafs in 49 files from /gbdb/hg18/multiz44way/maf
+    #	real    236m15.279s
+XXX - running on bare bones mafs Thu Nov 27 19:29:44 PST 2008
+    #	Loaded 33273351 mafs in 49 files from /gbdb/hg18/multiz44way/maf
+    #	real    198m55.761s - while swarm busy with rebalancing
+    # from before the fixed multiz:
     #	Loaded 35154852 mafs in 49 files from /gbdb/hg18/multiz44way/maf
     #	real    71m5.594s
 
     time nice -n +19 cat /gbdb/hg18/multiz44way/maf/*.maf \
 	| hgLoadMafSummary hg18 -minSize=30000 -mergeGap=1500 \
                  -maxSize=200000  multiz44waySummary stdin
+    #	with the Irow annotations after the multiz fix:
+    #	Created 8514380 summary blocks from 600499937
+    #		components and 33298894 mafs from stdin
+    #	real    184m42.893s
+    #	user    70m44.431s
+    #	sys     8m7.970s
+
     #	Created 8514078 summary blocks from 604683213 components
     #	and 35125649 mafs from stdin
     #	real    130m55.115s
@@ -24817,6 +24865,46 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/hg18/hg18.2bit $outMaf
     #	 8514078 multiz44waySummary.tab
     #	42478455 total
     rm multiz44way*.tab
+
+    # create some downloads
+    mkdir -p /hive/data/genomes/hg18/bed/multiz44way/download/maf
+    cd /hive/data/genomes/hg18/bed/multiz44way/download/maf
+    time cp -p ../../anno/maf/chr*.maf .
+    #	real    72m46.514s
+    #	user    0m1.293s
+    #	sys     5m15.981s
+    time gzip --rsyncable *.maf
+    time gzip --rsyncable *.maf
+    #	real    185m37.884s
+    #	user    179m51.161s
+    #	sys     3m48.016s
+    time md5sum *.gz > md5sum.txt
+    #	real    3m59.009s
+    #	user    1m19.338s
+    #	sys     0m18.976s
+
+#########################################################################
+# Create Syntenic and Recip Best net files to load into tracks to view
+#	on the browser to see what was used during the multiple alignment
+    cd /hive/data/genomes/hg18/bed/blastz.gorGor1/axtChain
+    netClass -verbose=0 -noAr hg18.gorGor1.rbest.net.gz hg18 gorGor1 stdout \
+	| gzip -c > netRBestGorGor1.net.gz
+    hgLoadNet hg18 netRBestGorGor1 netRBestGorGor1.net.gz
+
+    cd /hive/data/genomes/hg18/bed/blastz.ponAbe2/axtChain
+    hgLoadNet hg18 netSyntenyPonAbe2 hg18.ponAbe2.syn.net.gz
+
+    cd /hive/data/genomes/hg18/bed/blastz.calJac1/axtChain
+    netClass -verbose=0 -noAr hg18.calJac1.rbest.net.gz hg18 calJac1 stdout \
+	| gzip -c > netRBestCalJac1.net.gz
+    hgLoadNet hg18 netRBestCalJac1 netRBestCalJac1.net.gz
+
+    cd /hive/data/genomes/hg18/bed/blastz.tarSyr1/axtChain
+    netClass -verbose=0 -noAr hg18.tarSyr1.rbest.net.gz hg18 tarSyr1 stdout \
+	| gzip -c > netRBestTarSyr1.net.gz
+    hgLoadNet hg18 netRBestTarSyr1 netRBestTarSyr1.net.gz
+
+
 #########################################################################
 # EIO/JCVI NAS TRACK (2008-11-25 Fan)
 # Contact: Gaetano Gargiulo [gaetano.gargiulo@ifom-ieo-campus.it]
