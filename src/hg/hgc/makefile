@@ -20,15 +20,16 @@ compile: $O
 	mv ${AOUT} $A${EXE}
 
 my::
+	rm -rf ${CGI_BIN}-${USER}/{hgcData,lsSnpPdbChimera.py}
 	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgcData ../lib/lsSnpPdbChimera.py ${CGI_BIN}-${USER}/
 	chmod -R a+rX ${CGI_BIN}-${USER}/{hgcData,lsSnpPdbChimera.py}
 
 alpha::
-	rm -fr ${CGI_BIN}/hgcData
+	rm -fr ${CGI_BIN}/{hgcData,lsSnpPdbChimera.py}
 	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgcData ../lib/lsSnpPdbChimera.py ${CGI_BIN}/
 	chmod -R a+rX,g+w ${CGI_BIN}/{hgcData,lsSnpPdbChimera.py}
 
 beta::
-	rm -fr ${CGI_BIN}-beta/hgcData
+	rm -fr ${CGI_BIN}-beta/{hgcData,lsSnpPdbChimera.py}
 	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgcData ../lib/lsSnpPdbChimera.py ${CGI_BIN}-beta/
 	chmod -R a+rX,g+w ${CGI_BIN}-beta/{hgcData,lsSnpPdbChimera.py}
