@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.63 2008/10/15 08:37:10 aamp Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.64 2008/12/02 21:28:10 mikep Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -102,7 +102,7 @@ errAbort(
   "   -allowNegativeScores  - sql definition of score column is int, not unsigned\n"
   "   -customTrackLoader  - turns on: -noNameIx, -noHistory, -ignoreEmpty,\n"
   "                         -allowNegativeScores -verbose=0\n"
-  "   -fillInScore=colName - if every score value is zero, then use column 'colName' to fill in the score column (assigning scores 100-1000)\n"
+  "   -fillInScore=colName - if every score value is zero, then use column 'colName' to fill in the score column (assigning scores 300-1000)\n"
   "   -verbose=N - verbose level for extra information to STDERR\n"
   );
 }
@@ -478,9 +478,9 @@ if ( ! noLoad )
                         float max = sqlFloat(row[1]);
                         sqlFreeResult(&sr);
 
-                        // Calculate a, b s/t f(x) = ax + b maps min-max => 100-1000
-                        float a = 900 / (max - min);
-                        float b = 1000 - (900 * max) / (max - min);
+                        // Calculate a, b s/t f(x) = ax + b maps min-max => 300-1000
+                        float a = 700 / (max - min);
+                        float b = 1000 - (700 * max) / (max - min);
 
                         safef(query, sizeof(query), "update %s set score = round((%f * %s) + %f)",  track, a, fillInScoreColumn, b);
                         int changed = sqlUpdateRows(conn, query, NULL);
