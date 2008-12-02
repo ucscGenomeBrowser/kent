@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.460 2008/11/13 22:40:51 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.461 2008/12/02 13:29:08 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2155,7 +2155,7 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
 printf("</TABLE>");
 }
 
-void specificUi(struct trackDb *tdb)
+void specificUi(struct trackDb *tdb, struct customTrack *ct)
 	/* Draw track specific parts of UI. */
 {
 char *track = tdb->tableName;
@@ -2326,6 +2326,11 @@ else if (tdb->type != NULL)
             if (!sameString(track, "tigrGeneIndex") && !sameString(track, "ensGeneNonCoding") && !sameString(track, "encodeGencodeRaceFrags"))
 		baseColorDrawOptDropDown(cart, tdb);
             }
+	else if (sameWord(words[0], "encodePeak") || sameWord(words[0], "narrowPeak") || 
+		 sameWord(words[0], "broadPeak") || sameWord(words[0], "gappedPeak"))
+	    {
+	    encodePeakUi(tdb, ct);
+	    }
 	else if (sameWord(words[0], "expRatio"))
 	    {
 	    expRatioUi(tdb);
@@ -2375,7 +2380,7 @@ else if (tdbIsComposite(tdb))
     hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
 }
 
-void trackUi(struct trackDb *tdb)
+void trackUi(struct trackDb *tdb, struct customTrack *ct)
 /* Put up track-specific user interface. */
 {
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
@@ -2398,7 +2403,7 @@ if (tdbIsSuperTrackChild(tdb))
         }
     }
 
-if (isCustomTrack(tdb->tableName) && sameString(tdb->type, "maf"))
+if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
 
 /* Display visibility menu */
@@ -2422,7 +2427,7 @@ else
     }
 printf("&nbsp;");
 cgiMakeButton("Submit", "Submit");
-if (isCustomTrack(tdb->tableName))
+if (ct)
     {
     puts("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
     cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
@@ -2434,10 +2439,10 @@ if (isCustomTrack(tdb->tableName))
     }
 printf("<BR>\n");
 
-specificUi(tdb);
+specificUi(tdb, ct);
 puts("</FORM>");
 
-if (isCustomTrack(tdb->tableName))
+if (ct)
     {
     /* hidden form for custom tracks CGI */
     printf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
@@ -2533,7 +2538,7 @@ void doMiddle(struct cart *theCart)
 {
 struct trackDb *tdb = NULL;
 char *track;
-struct customTrack *ct, *ctList = NULL;
+struct customTrack *ct = NULL, *ctList = NULL;
 char *ignored;
 cart = theCart;
 track = cartString(cart, "g");
@@ -2581,7 +2586,7 @@ if (super)
     }
 char *title = (tdbIsSuper(tdb) ? "Super-track Settings" : "Track Settings");
 cartWebStart(cart, database, "%s %s", tdb->shortLabel, title);
-trackUi(tdb);
+trackUi(tdb, ct);
 printf("<BR>\n");
 webEnd();
 }

@@ -69,8 +69,6 @@ void encodePeakOutput(struct encodePeak *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-#endif /* ENCODEPEAK_H */
-
 #define ENCODE_PEAK_KNOWN_FIELDS 15
 
 #define ENCODE_PEAK_NARROW_PEAK_FIELDS 10
@@ -115,3 +113,9 @@ struct encodePeak *encodePeakLineFileLoad(char **row, enum encodePeakType pt, st
 void encodePeakOutputWithType(struct encodePeak *el, enum encodePeakType pt, FILE *f);
 /* Print out encodePeak different ways depending on narrowPeak, broadPeak, etc. */
 /* but make it tab-separated. */
+
+#define ENCODE_PEAK_PVAL_FILTER_SUFFIX "pValFilter"
+#define ENCODE_PEAK_QVAL_FILTER_SUFFIX "qValFilter"
+#define ENCODE_PEAK_SCORE_FILTER_SUFFIX "scoreFilter"
+
+#endif /* ENCODEPEAK_H */
