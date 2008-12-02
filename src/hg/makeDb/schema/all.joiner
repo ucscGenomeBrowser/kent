@@ -2519,6 +2519,13 @@ identifier transMapExtFileSplicedEstId
     hgFixed.transMapSeqSplicedEst.extFile dupeOk
     hgFixed.transMapExtFileSplicedEst.id unique
 
+identifier transMapGeneUcscGenesId
+"UCSC Genes and transMapGene table"
+    hgFixed.transMapGeneUcscGenes.id
+    $kgDb3.knownGene.name minCheck=0.60
+
+
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
