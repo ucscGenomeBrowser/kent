@@ -209,8 +209,8 @@ shortLabel	Broad ChipSeq
 longLabel	ENCODE Broad Bernstein ChipSeq
 group		regulation
 subGroup1	view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
-subGroup2	cellType Cell_Line K562=K562 
-subGroup3	factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H4K20me1=H4K20me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 Pol2(b)=Pol2(b) control=Control
+subGroup2	cellType Cell_Line K562=K562
+subGroup3	factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H4K20me1=H4K20me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 Pol2(b)=Pol2(b) zCTRL=Control
 dimensions	dimensionX=cellType	dimensionY=factor
 sortOrder	cellType=+ factor=+ view=+
 controlledVocabulary	encode/cv.ra cellType factor
@@ -219,7 +219,7 @@ visibilityViewDefaults	 Peaks=dense Signal=full zRAW=hide
 priority	0
 type		bed 3
 wgEncode	1
-settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultViewLimits=5:500,viewLimits=1:19563
+settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918,autoScale=off zRAW:defaultViewLimits=5:500,viewLimits=1:19563,autoScale=off
 
 	track		wgEncodeBroadChipSeqPeaksK562Ctcf
 	subTrack	wgEncodeBroadChipSeq
@@ -249,6 +249,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:32:16
+	autoScale   off
 	cell		K562
 	antibody	CTCF
 
@@ -266,6 +267,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	CTCF
 
@@ -283,6 +285,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	CTCF
 
@@ -314,6 +317,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:32:16
+	autoScale   off
 	cell		K562
 	antibody	H3K4me1
 
@@ -331,6 +335,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K4me1
 
@@ -348,6 +353,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K4me1
 
@@ -379,6 +385,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:32:16
+	autoScale   off
 	cell		K562
 	antibody	H3K4me2
 
@@ -396,6 +403,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K4me2
 
@@ -413,6 +421,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K4me2
 
@@ -444,6 +453,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:32:16
+	autoScale   off
 	cell		K562
 	antibody	H3K4me3
 
@@ -461,6 +471,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K4me3
 
@@ -478,6 +489,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K4me3
 
@@ -509,6 +521,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:32:16
+	autoScale   off
 	cell		K562
 	antibody	H3K9ac
 
@@ -526,6 +539,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K9ac
 
@@ -543,6 +557,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K9ac
 
@@ -574,6 +589,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:32:16
+	autoScale   off
 	cell		K562
 	antibody	H3K9me1
 
@@ -591,6 +607,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K9me1
 
@@ -608,6 +625,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K9me1
 
@@ -639,6 +657,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:32:16
+	autoScale   off
 	cell		K562
 	antibody	H4K20me1
 
@@ -656,6 +675,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H4K20me1
 
@@ -673,6 +693,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H4K20me1
 
@@ -704,6 +725,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:32:16
+	autoScale   off
 	cell		K562
 	antibody	H3K27ac
 
@@ -721,6 +743,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K27ac
 
@@ -738,6 +761,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K27ac
 
@@ -769,6 +793,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:32:16
+	autoScale   off
 	cell		K562
 	antibody	H3K27me3
 
@@ -786,6 +811,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K27me3
 
@@ -803,6 +829,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K27me3
 
@@ -834,6 +861,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:32:16
+	autoScale   off
 	cell		K562
 	antibody	H3K36me3
 
@@ -851,6 +879,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K36me3
 
@@ -868,6 +897,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	H3K36me3
 
@@ -899,6 +929,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:32:16
+	autoScale   off
 	cell		K562
 	antibody	Pol2(b)
 
@@ -916,6 +947,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	Pol2(b)
 
@@ -933,6 +965,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	Pol2(b)
 
@@ -940,7 +973,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	subTrack	wgEncodeBroadChipSeq
 	shortLabel	control K562 Raw1
 	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (control in K562 cells)
-	subGroups	view=zRAW factor=control cellType=K562
+	subGroups	view=zRAW factor=zCTRL cellType=K562
 	type		wig 1.00 12185.00
 	dateSubmitted	2008-11-30 11:29:37
 	dateReleased	2009-08-30
@@ -950,6 +983,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	control
 
@@ -957,7 +991,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	subTrack	wgEncodeBroadChipSeq
 	shortLabel	control K562 Raw2
 	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (control in K562 cells)
-	subGroups	view=zRAW factor=control cellType=K562
+	subGroups	view=zRAW factor=zCTRL cellType=K562
 	type		wig 1.00 19563.00
 	dateSubmitted	2008-11-30 11:29:37
 	dateReleased	2009-08-30
@@ -967,6 +1001,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918 zRAW:defaultVie
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
+	autoScale   off
 	cell		K562
 	antibody	control
 
