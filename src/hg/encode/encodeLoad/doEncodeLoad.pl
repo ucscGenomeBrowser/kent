@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.46 2008/12/02 16:55:43 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.47 2008/12/02 22:22:18 larrym Exp $
 
 # Usage:
 #
@@ -28,7 +28,7 @@ use RAFile;
 use SafePipe;
 use HgDb;
 
-use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose $opt_debug/;
+use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose $opt_debug $opt_skipLoad/;
 
 my $loadRa = "out/$Encode::loadFile";
 my $unloadRa = "out/$Encode::unloadFile";
@@ -56,6 +56,8 @@ options:
                         metadata .ra files (default: submission-dir/../config)
     -outDir dir         Path of output directory, for validation files
                         (default: submission-dir/out)
+    -skipLoad           Skip table loading (useful if you just want to generate other 
+                        side-effects, like re-populating the download directory)
 END
 }
 
@@ -99,18 +101,20 @@ sub loadGene
 {
     my ($assembly, $tableName, $fileList, $pushQ, $ldHgGeneFlags) = @_;
 
-    my $stdoutFile = "out/loadGene.out";
-    my $stderrFile = "out/loadGene.err";
-
     HgAutomate::verbose(2, "loadGene ($assembly, $tableName, $fileList, $pushQ, $ldHgGeneFlags)\n");
-    my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "/cluster/bin/x86_64/ldHgGene $ldHgGeneFlags $assembly $tableName stdin ");
-    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $stdoutFile, STDERR => $stderrFile, DEBUG => $opt_debug);
-    if(my $err = $safe->exec()) {
-        print STDERR "ERROR: File(s) '$fileList' ($ldHgGeneFlags) failed gene load.\n";
-        dieFile($stderrFile);
-    } else {
-        print "$fileList loaded into $tableName\n";
-        # debug restore: File.delete "genePred.tab";
+    if(!$opt_skipLoad) {
+        my $stdoutFile = "out/loadGene.out";
+        my $stderrFile = "out/loadGene.err";
+
+        my @cmds = ("cat $fileList", "egrep -v '^track|browser'", "/cluster/bin/x86_64/ldHgGene $ldHgGeneFlags $assembly $tableName stdin ");
+        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $stdoutFile, STDERR => $stderrFile, DEBUG => $opt_debug);
+        if(my $err = $safe->exec()) {
+            print STDERR "ERROR: File(s) '$fileList' ($ldHgGeneFlags) failed gene load.\n";
+            dieFile($stderrFile);
+        } else {
+            print "$fileList loaded into $tableName\n";
+            # debug restore: File.delete "genePred.tab";
+        }
     }
     push(@{$pushQ->{TABLES}}, $tableName);
 }
@@ -120,31 +124,33 @@ sub loadWig
     my ($assembly, $tableName, $fileList, $pushQ) = @_;
 
     HgAutomate::verbose(2, "loadWig ($assembly, $tableName, $fileList, $pushQ)\n");
-    my $catCmd = makeCatCmd("loadWig", $fileList);
-    my @cmds = ($catCmd, "/cluster/bin/x86_64/wigEncode -noOverlapSpanData stdin stdout $tableName.wib", "/cluster/bin/x86_64/hgLoadWiggle -pathPrefix=/gbdb/$assembly/wib -tmpDir=$tempDir $assembly $tableName stdin");
-    HgAutomate::verbose(2, "loadWig cmds [".join(" ; ",@cmds)."]\n");
-    my $stderrFile = "out/$tableName.err";
-    unlink($stderrFile);
-    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", STDERR => $stderrFile, DEBUG => $opt_debug);
-    if(my $err = $safe->exec()) {
-        print STDERR "ERROR: File(s) $fileList failed wiggle load:\n\n";
-        dieFile($stderrFile);
-    } elsif (system("rm -f /gbdb/$assembly/wib/$tableName.wib") ||
-             system("ln -s $submitPath/$tableName.wib /gbdb/$assembly/wib")) {
-        die("ERROR: failed wiggle load ln\n");
-    } else {
-        print "$fileList loaded into $tableName\n";
+    if(!$opt_skipLoad) {
+        my $catCmd = makeCatCmd("loadWig", $fileList);
+        my @cmds = ($catCmd, "/cluster/bin/x86_64/wigEncode -noOverlapSpanData stdin stdout $tableName.wib", "/cluster/bin/x86_64/hgLoadWiggle -pathPrefix=/gbdb/$assembly/wib -tmpDir=$tempDir $assembly $tableName stdin");
+        HgAutomate::verbose(2, "loadWig cmds [".join(" ; ",@cmds)."]\n");
+        my $stderrFile = "out/$tableName.err";
+        unlink($stderrFile);
+        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", STDERR => $stderrFile, DEBUG => $opt_debug);
+        if(my $err = $safe->exec()) {
+            print STDERR "ERROR: File(s) $fileList failed wiggle load:\n\n";
+            dieFile($stderrFile);
+        } elsif (system("rm -f /gbdb/$assembly/wib/$tableName.wib") ||
+                 system("ln -s $submitPath/$tableName.wib /gbdb/$assembly/wib")) {
+            die("ERROR: failed wiggle load ln\n");
+        } else {
+            print "$fileList loaded into $tableName\n";
 
-        # retrieve lower and upper limits from $stderrFile and fix-up trackDb.ra file to add this to wig type line
-        my $lines = Encode::readFile($stderrFile);
-        for my $line (@{$lines}) {
-            if($line =~ /Converted stdin, upper limit (.+), lower limit (.+)/) {
-                my $max = $1;
-                my $min = $2;
-                my $placeHolder = Encode::wigMinMaxPlaceHolder($tableName);
-                my $cmd = "/usr/local/bin/perl -i -ne 's/$placeHolder/$min $max/; print;' $trackDb";
-                HgAutomate::verbose(2, "updating $trackDb to set min/max for $tableName to $min,$max\ncmd: $cmd\n");
-                !system($cmd) || die "trackDb.ra update failed: $?\n";
+            # retrieve lower and upper limits from $stderrFile and fix-up trackDb.ra file to add this to wig type line
+            my $lines = Encode::readFile($stderrFile);
+            for my $line (@{$lines}) {
+                if($line =~ /Converted stdin, upper limit (.+), lower limit (.+)/) {
+                    my $max = $1;
+                    my $min = $2;
+                    my $placeHolder = Encode::wigMinMaxPlaceHolder($tableName);
+                    my $cmd = "/usr/local/bin/perl -i -ne 's/$placeHolder/$min $max/; print;' $trackDb";
+                    HgAutomate::verbose(2, "updating $trackDb to set min/max for $tableName to $min,$max\ncmd: $cmd\n");
+                    !system($cmd) || die "trackDb.ra update failed: $?\n";
+                }
             }
         }
     }
@@ -156,14 +162,16 @@ sub loadBed
 {
     my ($assembly, $tableName, $fileList, $pushQ) = @_;
     HgAutomate::verbose(2, "loadBed ($assembly, $tableName, $fileList, $pushQ)\n");
-    my $catCmd = makeCatCmd("loadBed", $fileList);
-    my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir");
-    HgAutomate::verbose(2, "loadBed cmds [".join(" ; ",@cmds)."]\n");
-    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_debug);
-    if(my $err = $safe->exec()) {
-        die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
-    } else {
-        print "$fileList loaded into $tableName\n";
+    if(!$opt_skipLoad) {
+        my $catCmd = makeCatCmd("loadBed", $fileList);
+        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir");
+        HgAutomate::verbose(2, "loadBed cmds [".join(" ; ",@cmds)."]\n");
+        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_debug);
+        if(my $err = $safe->exec()) {
+            die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
+        } else {
+            print "$fileList loaded into $tableName\n";
+        }
     }
     push(@{$pushQ->{TABLES}}, $tableName);
 }
@@ -172,14 +180,16 @@ sub loadBedGraph
 {
     my ($assembly, $tableName, $fileList, $pushQ) = @_;
     HgAutomate::verbose(2, "loadBedGraph ($assembly, $tableName, $fileList, $pushQ)\n");
-    my $catCmd = makeCatCmd("loadBedGraph", $fileList);
-    my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $assembly $tableName -bedGraph=4 stdin -tmpDir=$tempDir");
-    HgAutomate::verbose(2, "loadBedGraph cmds [".join(" ; ",@cmds)."]\n");
-    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_debug);
-    if(my $err = $safe->exec()) {
-        die("ERROR: File(s) '$fileList' failed bedGraph load:\n" . $safe->stderr() . "\n");
-    } else {
-        print "$fileList loaded into $tableName\n";
+    if(!$opt_skipLoad) {
+        my $catCmd = makeCatCmd("loadBedGraph", $fileList);
+        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $assembly $tableName -bedGraph=4 stdin -tmpDir=$tempDir");
+        HgAutomate::verbose(2, "loadBedGraph cmds [".join(" ; ",@cmds)."]\n");
+        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_debug);
+        if(my $err = $safe->exec()) {
+            die("ERROR: File(s) '$fileList' failed bedGraph load:\n" . $safe->stderr() . "\n");
+        } else {
+            print "$fileList loaded into $tableName\n";
+        }
     }
     push(@{$pushQ->{TABLES}}, $tableName);
 }
@@ -190,36 +200,37 @@ sub loadBedFromSchema
     my ($assembly, $tableName, $fileList, $sqlTable, $pushQ) = @_;
     HgAutomate::verbose(2, "loadBedFromSchema ($assembly, $tableName, $fileList, $sqlTable, $pushQ)\n");
 
-    if(!(-e "$Encode::sqlCreate/${sqlTable}.sql")) {
-        die "SQL schema '$Encode::sqlCreate/${sqlTable}.sql' does not exist\n";
-    }
+    if(!$opt_skipLoad) {
+        if(!(-e "$Encode::sqlCreate/${sqlTable}.sql")) {
+            die "SQL schema '$Encode::sqlCreate/${sqlTable}.sql' does not exist\n";
+        }
 
-    my $fillInArg = "";
-    if($sqlTable =~ /peak/i) {
-        # fill in zero score columns for narrowPeaks etc.
-        $fillInArg = "-fillInScore=signalValue ";
-    }
-    my $catCmd = makeCatCmd("loadBedFromSchema", $fileList);
-    my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
-    HgAutomate::verbose(2, "loadBedFromSchema cmds [".join(" ; ",@cmds)."]\n");
-    my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
+        my $fillInArg = "";
+        if($sqlTable =~ /peak/i) {
+            # fill in zero score columns for narrowPeaks etc.
+            $fillInArg = "-fillInScore=signalValue ";
+        }
+        my $catCmd = makeCatCmd("loadBedFromSchema", $fileList);
+        my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
+        HgAutomate::verbose(2, "loadBedFromSchema cmds [".join(" ; ",@cmds)."]\n");
+        my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
 
-    if(my $err = $safe->exec()) {
-        die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
-    } else {
-        print "$fileList loaded into $tableName\n";
+        if(my $err = $safe->exec()) {
+            die("ERROR: File(s) '$fileList' failed bed load:\n" . $safe->stderr() . "\n");
+        } else {
+            print "$fileList loaded into $tableName\n";
+        }
     }
     # XXXX special case narrowPeak/broadPeak/gappedPeak to convert "." => "" in name column?
     push(@{$pushQ->{TABLES}}, $tableName);
 }
-
 
 ############################################################################
 # Main
 
 my $wd = cwd();
 
-GetOptions("configDir=s", "noEmail", "outDir=s", "verbose=i", "debug") || usage();
+GetOptions("configDir=s", "noEmail", "outDir=s", "verbose=i", "debug", "skipLoad") || usage();
 $opt_verbose = 1 if (!defined $opt_verbose);
 $opt_noEmail = 0 if (!defined $opt_noEmail);
 $opt_debug = 0 if (!defined $opt_debug);
@@ -279,31 +290,33 @@ if(dirname($submitDir) =~ /_(.*)/) {
 }
 
 chdir($submitDir);
-
-# clean out any stuff from previous load
-# We assume unload program is in the same location as loader (fixes problem with misconfigured qateam environment).
-
 my $programDir = dirname($0);
-my $unloader = "$programDir/doEncodeUnload.pl";
-if(!(-e $unloader)) {
-    # let's us use this in cvs tree
-    $unloader = "$wd/doEncodeUnload.pl";
-}
-if(!(-e $unloader)) {
-    die "Can't find unloader ($unloader)\n";
-}
-if(system("$unloader $submitType $submitPath")) {
-    die "unload script failed\n";
-}
 
 if(!(-e $loadRa)) {
     die "ERROR: load.ra not found ($PROG)\n";
 }
 
-#TODO change to : FileUtils.cp $loadRa, $unloadRa
-# XXXX shouldn't we do the cp AFTER we finish everything else successfully?
-if(system("cp $loadRa $unloadRa")) {
-    die "Cannot: cp $loadRa $unloadRa\n";
+if(!$opt_skipLoad) {
+    # clean out any stuff from previous load
+    # We assume unload program is in the same location as loader (fixes problem with misconfigured qateam environment).
+
+    my $unloader = "$programDir/doEncodeUnload.pl";
+    if(!(-e $unloader)) {
+        # let's us use this in cvs tree
+        $unloader = "$wd/doEncodeUnload.pl";
+    }
+    if(!(-e $unloader)) {
+        die "Can't find unloader ($unloader)\n";
+    }
+    if(system("$unloader $submitType $submitPath")) {
+        die "unload script failed\n";
+    }
+
+    #TODO change to : FileUtils.cp $loadRa, $unloadRa
+    # XXXX shouldn't we do the cp AFTER we finish everything else successfully?
+    if(system("cp $loadRa $unloadRa")) {
+        die "Cannot: cp $loadRa $unloadRa\n";
+    }
 }
 
 HgAutomate::verbose(1, "Loading project in directory $submitDir\n");
@@ -311,7 +324,11 @@ HgAutomate::verbose(1, "Loading project in directory $submitDir\n");
 # Load files listed in load.ra
 
 my %ra = RAFile::readRaFile($loadRa, 'tablename');
-my $pushQ = {};
+
+my $pushQ = {};             
+# $pushQ contains the data required to create the pushQ entry:
+# $pushQ->{TABLES} is list of tables generated by loader
+# $pushQ->{FILES} is list of files generated by loader
 $pushQ->{TABLES} = [];
 
 HgAutomate::verbose(2, "loadRa ($loadRa) has: " . scalar(keys %ra) . " records\n");
@@ -410,18 +427,20 @@ for my $key (keys %ra) {
             !system("/bin/gzip $unZippedTarget") || die "gzip failed: $?\n";
         }
         push(@{$pushQ->{FILES}}, $target);
+        # XXXX add to FILES list and then copy files to unloadFiles.txt
     }
 }
 
-# Send "data is ready" email to email contact assigned to $daf{lab}
-
-if($email) {
-    if(!$opt_noEmail) {
-        `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $daf->{grant}/$daf->{lab} lab is ready" $email`;
+if(!$opt_skipLoad) {
+    # Send "data is ready" email to email contact assigned to $daf{lab}
+    if($email) {
+        if(!$opt_noEmail) {
+            `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $daf->{grant}/$daf->{lab} lab is ready" $email`;
+        }
+    } else {
+        # XXXX Should this be fatal? Or s/d we send email to encode alias?
+        # die "No wrangler is configured for '$daf->{grant}'\n";
     }
-} else {
-    # XXXX Should this be fatal? Or s/d we send email to encode alias?
-    # die "No wrangler is configured for '$daf->{grant}'\n";
 }
 
 my $wranglerName;
@@ -494,6 +513,9 @@ if(! -e $preambleFile ) {
 in publication  until the restriction date noted for the given data file.</B></p>
 END
 }
+
+# XXXX Let wrangler add to the README.txt? Otherwise, we inevitably will add redundant
+# entries when reloading.
 
 my $lines = Encode::readFile("out/README.txt");
 print README join("\n", @{$lines});
