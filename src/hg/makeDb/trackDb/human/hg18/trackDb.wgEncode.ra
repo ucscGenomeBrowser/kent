@@ -206,7 +206,7 @@ priority 300
 track		wgEncodeBroadChipSeq
 compositeTrack	on
 shortLabel	Broad ChipSeq
-longLabel	ENCODE Broad Bernstein ChipSeq
+longLabel	ENCODE Broad Bernstein ChIP-Seq
 group		regulation
 subGroup1	view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2	cellType Cell_Line K562=K562
