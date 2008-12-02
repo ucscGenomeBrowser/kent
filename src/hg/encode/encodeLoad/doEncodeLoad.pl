@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.45 2008/11/26 18:39:49 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.46 2008/12/02 16:55:43 tdreszer Exp $
 
 # Usage:
 #
@@ -72,7 +72,7 @@ sub makeCatCmd
 {
     my $cmdName = shift;
     my $fileList = shift;
-    my @files = split(/\s+/, $fileList);    
+    my @files = split(/\s+/, $fileList);
     my $catCmd;
     if ($opt_debug) {
         $catCmd = "head -1000 $fileList"; # load 1000 records if $opt_debug
@@ -364,10 +364,13 @@ for my $key (keys %ra) {
         loadWig($assembly, $tablename, $files, $pushQ);
     } elsif ($extendedTypes{$type}) {
         loadBedFromSchema($assembly, $tablename, $files, $type, $pushQ);
+        $hgdownload = @files;
     } elsif ($type =~ /^bed (3|4|5|6)$/) {
         loadBed($assembly, $tablename, $files, $pushQ);
+        $hgdownload = @files;
     } elsif ($type =~ /^bedGraph (4)$/) {
         loadBedGraph($assembly, $tablename, $files, $pushQ);
+        $hgdownload = @files;
     } else {
         die "ERROR: unknown type: $type in $Encode::loadFile ($PROG)\n";
     }
