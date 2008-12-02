@@ -182,3 +182,11 @@ dbDbSpeciesDir hedgehog
 	/hive/data/staging/data/eriEur1
     #	request to cluster admin to push this to the kluster nodes
     #	/scratch/data/
+
+###########################################################################
+# add NCBI identifiers to the dbDb (DONE - 2008-11-17 - Hiram)
+    hgsql -e 'update dbDb set
+sourceName="Broad Institute eriEur1 (Draft_v1, NCBI project 12575)" where name="eriEur1";' hgcentraltest
+    hgsql -e 'update dbDb set
+organism="Hedgehog" where name="eriEur1";' hgcentraltest
+###########################################################################
