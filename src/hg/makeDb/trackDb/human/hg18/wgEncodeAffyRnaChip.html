@@ -1,0 +1,39 @@
+<H2>General Description</H2>
+
+<P>The Signal track shows an estimate of abundance of RNA molecules and the Transfrags track shows the locations of sites corresponding to these molecules. RNA molecules longer than 200 nt and present in RNA population isolated from different subcellular compartments (such as cytosol, nucleus, polysomes and others) were fractionated into polyA+ and polyA- fractions. Each RNA fraction was converted into double-stranded cDNA using random hexamers, labeled and hybridized to a tiling 91-array set containing probes against the non-repetitive portion of the human genome tiled on average every 5 bp (center-to-center of each consecutive 25-mers). </P>
+
+<H2>Display Conventions and Configuration</H2>
+
+<P>To show only selected subtracks, uncheck the boxes next to the tracks that you wish to hide.</P>
+ 
+<P>Color differences among the subtracks are arbitrary. They provide a visual cue for distinguishing between the different cell types and compartments.</P>
+
+<H2>Methods</H2>
+
+<P>All arrays were scaled to a median array intensity of 330. Within a sliding 61 bp window centered on each probe, an estimate of RNA abundance (signal; see the Affy RNA Signal track) was found by calculating the median of all pairwise average PM-MM values, where PM is a perfect match and MM is a mismatch. Kapranov <EM>et al.</EM> (2002), Cheng <EM>et al.</EM> (2005) , Kapranov <EM>et al.</EM> (2007), and Cawley <EM>et al.</EM> (2004) are good references for the experimental methods. Cawley <EM>et al.</EM> also describes the analytical methods.
+
+<H2>Verification</H2>
+
+<P>The reproducibility of the labeling method was assessed separately. Three independent technical replicates were generated from the same RNA pool for each RNA preparation and hybridized to duplicate arrays (two technical replicates) that contain the ENCODE regions. Labeled RNA samples were then pooled and hybridized to the tiling 91-array set spanning the whole genome. Transcribed regions (transfrags; see the Affy RNA Tranfrag track) were generated from the composite signal track by merging genomic positions to which probes are mapped. This merging was based on a 5% false positive rate cutoff in negative bacterial controls, a maximum gap (MaxGap) of 40 base-pairs and minimum run (MinRun) of 40 base-pairs. </P>
+
+<H2>Credits</H2>
+
+<P>These data were generated and analyzed by the transcriptome group at <A HREF="http://www.affymetrix.com">Affymetrix</A>: P. Kapranov, I. Bell, E. Dumais, J. Drenkow, J. Dumais, N. Garg, M. Lubinsky, T.R. Gingeras.</P>
+
+<H2>References</H2>
+
+<P>Kapranov P, Cheng J, Dike S, Nix DA, Duttagupta R, Willingham AT, Stadler PF, Hertel J, Hackermüller J, Hofacker IL, <EM>et al</EM>.
+<A HREF="http://www.ncbi.nlm.nih.gov/sites/entrez?Db=pubmed&Cmd=ShowDetailView&TermToSearch=17510325&ordinalpos=1&itool=EntrezSystem2.PEntrez.Pubmed.Pubmed_ResultsPanel.Pubmed_RVDocSum">RNA maps reveal new RNA classes and a possible function for pervasive transcription</A>
+<EM>Science</EM>. 2007 June 8;316:1484-1488. </P>
+
+<P>Cheng J, Kapranov P, Drenkow J, Dike S, Brubaker S, Patel S, Long J, Stern D, Tammana H, Helt G, Sementchenko V, Piccolboni A, Bekiranov S, Kampa D, Madhavan G, Ghosh S, Bell I, Gerhard DS, Gingeras TR.
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/15790807?ordinalpos=19&itool=EntrezSystem2.PEntrez.Pubmed.Pubmed_ResultsPanel.Pubmed_RVDocSum">Transcriptional Maps of 10 Human Chromosomes at 5 Nucleotide Resolution</A> 
+<EM>Science</EM>. 2005 May 20;308:1149-1154.</P>
+
+<P>Cawley S, Bekiranov S, Ng HH, Kapranov P, Sekinger EA, Kampa D, Piccolboni A, Sementchenko V, Cheng J, Williams AJ, <EM>et al</EM>. 
+<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=14980218">Unbiased mapping of transcription factor binding sites along human chromosomes 21 and 22 points to widespread regulation of noncoding RNAs</A>
+<EM>Cell</EM>. 2004 Feb 20;116:499-509.</P>
+
+<P>Kapranov P, Cawley SE, Drenkow J, Bekiranov S, Strausberg RL, Fodor SP, and Gingeras TR.
+<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=11988577">Large-scale transcriptional activity in chromosomes 21 and 22</A>
+<EM>Science</EM>. 2002 May 3;296:916-919.</P>
