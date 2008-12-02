@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.122 2008/11/26 06:08:03 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.123 2008/12/02 01:35:54 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -727,7 +727,7 @@ struct sqlConnection *sqlConnectProfile(char *profileName, char *database)
  * override.
  */ 
 {
-struct sqlProfile* sp = sqlProfileGet(profileName, database);
+struct sqlProfile* sp = sqlProfileMustGet(profileName, database);
 return sqlConnectRemote(sp->host, sp->user, sp->password, database);
 }
 
