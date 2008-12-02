@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.23 2008/10/17 01:06:32 markd Exp $"
+#	"$Id: equCab2.txt,v 1.24 2008/12/02 18:01:45 hiram Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.23 2008/10/17 01:06:32 markd Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.24 2008/12/02 18:01:45 hiram Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -362,8 +362,12 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
 
     faSize jkStuff/chr.fa
     2393031066 bases (31925808 N's 2361105258 real 1413583673 upper 947521585 lower) in 33 sequences in 1 files
+    #	corrected chr27:
+    2367070107 bases (31598964 N's 2335471143 real 1397621407 upper 937849736 lower) in 33 sequences in 1 files
 
     2393031066 + 107858955 + (9603 * 1000) = 2510493021
+    #	corrected chr27:
+    2367070107 + 107858955 + (9603 * 1000) = 2484532062
     # i.e. correct size
     
     cd jkStuff
