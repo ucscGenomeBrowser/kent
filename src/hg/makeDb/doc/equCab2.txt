@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # Equus caballus - ??
-#	"$Id: equCab2.txt,v 1.24 2008/12/02 18:01:45 hiram Exp $"
+#	"$Id: equCab2.txt,v 1.25 2008/12/03 01:05:20 markd Exp $"
 #########################################################################
 # DOWNLOAD SEQUENCE (...
 
@@ -224,7 +224,7 @@ i.e. if you take dupes and chrM into account, our data agrees with their raw dat
     #   1004742864 bases of 2454424288 (40.936%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #   RepeatMasker version development-$Id: equCab2.txt,v 1.24 2008/12/02 18:01:45 hiram Exp $
+    #   RepeatMasker version development-$Id: equCab2.txt,v 1.25 2008/12/03 01:05:20 markd Exp $
     #   Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #	CC   RELEASE 20071204
 
@@ -2199,3 +2199,12 @@ no errors
 update genbank.conf:
 equCab2.upstreamGeneTbl = refGene
 equCab2.upstreamMaf = multiz6way /hive/data/genomes/equCab2/bed/multiz6way/species.list
+
+################################################
+# Fixed tSizes in transMap tracks  (2008-10-15 markd)
+
+update equCab2.transMapAlnUcscGenes set tSize=39960074 where tName="chr27" and tSize=65921033;
+update equCab2.transMapAlnRefSeq set tSize=39960074 where tName="chr27" and tSize=65921033;
+update equCab2.transMapAlnMRna set tSize=39960074 where tName="chr27" and tSize=65921033;
+update equCab2.transMapAlnSplicedEst set tSize=39960074 where tName="chr27" and tSize=65921033;
+
