@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1525 2008/12/02 13:47:14 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1526 2008/12/03 21:19:07 tdreszer Exp $";
 
 #define SMALLBUF 64
 
@@ -1383,41 +1383,46 @@ int doTrackMap(struct track *track, struct hvGfx *hvg, int y, int fontHeight,
 int mapHeight = 0;
 switch (track->limitedVis)
     {
-    case tvHide:
-	break;	/* Do nothing; */
     case tvPack:
     case tvSquish:
-	y += trackPlusLabelHeight(track, fontHeight);
-	break;
+        y += trackPlusLabelHeight(track, fontHeight);
+        break;
     case tvFull:
-	if (!nextItemCompatible(track))
-	    {
-        if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
-		{
-		if (isWithCenterLabels(track))
-		    y += fontHeight;
-		struct track *subtrack;
-		for (subtrack = track->subtracks;  subtrack != NULL;
-		     subtrack = subtrack->next)
-		    if (isSubtrackVisible(subtrack))
-                        y = doMapItems(subtrack, hvg, fontHeight, y);
-		}
-	    else
-		y = doMapItems(track, hvg, fontHeight, y);
-	    }
-	else
-	    y += trackPlusLabelHeight(track, fontHeight);
-	break;
+        if (!nextItemCompatible(track))
+            {
+            if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
+                {
+                if (isWithCenterLabels(track))
+                    y += fontHeight;
+                struct track *subtrack;
+                for (subtrack = track->subtracks;  subtrack != NULL;subtrack = subtrack->next)
+                    {
+                    if (isSubtrackVisible(subtrack))
+                        {
+                        if(subtrack->limitedVis == tvFull)
+                            y = doMapItems(subtrack, hvg, fontHeight, y);
+                        }
+                    }
+                }
+            else
+            y = doMapItems(track, hvg, fontHeight, y);
+            }
+        else
+            y += trackPlusLabelHeight(track, fontHeight);
+        break;
     case tvDense:
-	if (isWithCenterLabels(track))
-	    y += fontHeight;
-	if (tdbIsComposite(track->tdb))
-	    mapHeight = track->height;
-	else
-	    mapHeight = track->lineHeight;
-	mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, mapHeight, track);
-	y += mapHeight;
-	break;
+        if (isWithCenterLabels(track))
+            y += fontHeight;
+        if (tdbIsComposite(track->tdb))
+            mapHeight = track->height;
+        else
+            mapHeight = track->lineHeight;
+        mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, mapHeight, track);
+        y += mapHeight;
+        break;
+    case tvHide:
+    default:
+        break;	/* Do nothing; */
     }
 return y;
 }
