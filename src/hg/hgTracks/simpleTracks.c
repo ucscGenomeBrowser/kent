@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.44 2008/11/25 07:17:45 mikep Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.46 2008/12/02 22:02:33 aamp Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128
@@ -1637,68 +1637,74 @@ else
     }
 size = end - start;
 /* Now it's time to do the search. */
-for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
-    {
-#ifndef GBROWSE
-    if (sameWord(tg->mapName, WIKI_TRACK_TABLE))
-	items = wikiTrackGetBedRange(tg->mapName, chromName, start, end);
-    else if (sameWord(tg->mapName, "gvPos"))
-	items = loadGvAsBed(tg, chromName, start, end);
-    else if (sameWord(tg->mapName, "oreganno"))
-        items = loadOregannoAsBed(tg, chromName, start, end);
-    else
-#endif /* GBROWSE */
+if (end > start)
+    for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
 	{
-	if (isCustomTrack(tg->mapName))
+#ifndef GBROWSE
+	if (sameWord(tg->mapName, WIKI_TRACK_TABLE))
+	    items = wikiTrackGetBedRange(tg->mapName, chromName, start, end);
+	else if (sameWord(tg->mapName, "gvPos"))
+	    items = loadGvAsBed(tg, chromName, start, end);
+	else if (sameWord(tg->mapName, "oreganno"))
+	    items = loadOregannoAsBed(tg, chromName, start, end);
+	else
+#endif /* GBROWSE */
 	    {
-	    struct customTrack *ct = tg->customPt;
-	    items = hGetBedRange(CUSTOM_TRASH, ct->dbTableName, chromName, start, end, NULL);
+	    if (isCustomTrack(tg->mapName))
+		{
+		struct customTrack *ct = tg->customPt;
+		items = hGetBedRange(CUSTOM_TRASH, ct->dbTableName, chromName, start, end, NULL);
+		}
+	    else
+		items = hGetBedRange(database, tg->mapName, chromName, start, end, NULL);
+	    }
+	/* If we got something, or weren't able to search as big as we wanted to */
+	/* (in case we're at the end of the chrom).  */
+	if ((items != NULL) || (size < sizeWanted))
+	    {
+	    /* If none of these were on the original screen, we're done. */
+	    /* Remove the ones that were on the original screen. */
+	    struct bed *item;
+	    struct bed *goodList = NULL;
+	    while ((item = slPopHead(&items)) != NULL)
+		{
+		item->next = NULL;
+		if (((item->chromStart >= winStart) && (item->chromStart < winEnd)) ||
+		    ((item->chromEnd > winStart) && (item->chromEnd <= winEnd)) ||
+		    ((item->chromStart <= winStart) && (item->chromEnd >= winEnd)))
+		    bedFree(&item);
+		else
+		    slAddHead(&goodList, item);
+		}
+	    if (goodList)
+		{
+		slReverse(&goodList);
+		items = goodList;
+		break;
+		}
+	    }
+	sizeWanted *= 2;
+	if (next)
+	    {
+	    start = end;
+	    end += sizeWanted;
+	    if (end > seqBaseCount)
+		end = seqBaseCount;
 	    }
 	else
-	    items = hGetBedRange(database, tg->mapName, chromName, start, end, NULL);
-	}
-    /* If we got something, or weren't able to search as big as we wanted to */
-    /* (in case we're at the end of the chrom).  */
-    if ((items != NULL) || (size < sizeWanted))
-	{
-	/* If none of these were on the original screen, we're done. */
-	/* Remove the ones that were on the original screen. */
-	struct bed *item;
-	struct bed *goodList = NULL;
-	while ((item = slPopHead(&items)) != NULL)
 	    {
-	    item->next = NULL;
-	    if (((item->chromStart >= winStart) && (item->chromStart < winEnd)) ||
-		((item->chromEnd > winStart) && (item->chromEnd <= winEnd)) ||
-		((item->chromStart <= winStart) && (item->chromEnd >= winEnd)))
-		bedFree(&item);
-	    else
-		slAddHead(&goodList, item);
+	    end = start;
+	    start -= sizeWanted;
+	    if (start < 0)
+		start = 0;
 	    }
-	if (goodList)
+	size = end - start;
+	if (end == 0)
 	    {
-	    slReverse(&goodList);
-	    items = goodList;
+	    items = NULL;
 	    break;
 	    }
 	}
-    sizeWanted *= 2;
-    if (next)
-	{
-	start = end;
-	end += sizeWanted;
-	if (end > seqBaseCount)
-	    end = seqBaseCount;
-	}
-    else
-	{
-	end = start;
-	start -= sizeWanted;
-	if (start < 0)
-	    start = 0;
-	}
-    size = end - start;
-    }
 /* Finally, we got something. */
 sizeWanted = winEnd - winStart;
 bufferToEdge = (int)(0.05 * (float)sizeWanted);

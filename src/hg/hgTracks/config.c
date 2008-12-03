@@ -396,7 +396,7 @@ hPrintf("Next/previous item navigation");
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
-hCheckBox("nextExonArrows", cartUsualBoolean(cart, "nextExonArrows", FALSE));
+hCheckBox("nextExonArrows", cartUsualBoolean(cart, "nextExonArrows", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Next/previous exon navigation");
 hPrintf("</TD></TR>\n");

@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1524 2008/11/25 22:48:07 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1525 2008/12/02 13:47:14 aamp Exp $";
 
 #define SMALLBUF 64
 
@@ -4093,7 +4093,7 @@ withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
-withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", FALSE);
+withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
 if (!hIsGsidServer())
     {
     revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
