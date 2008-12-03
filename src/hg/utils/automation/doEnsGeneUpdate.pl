@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.17 2008/08/08 20:58:55 hiram Exp $
+# $Id: doEnsGeneUpdate.pl,v 1.18 2008/12/03 19:54:07 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -272,7 +272,7 @@ _EOF_
 } # doLoad
 
 #########################################################################
-# * step: process [fileServer]
+# * step: process [dbHost]
 sub doProcess {
   my $runDir = "$buildDir/process";
   # First, make sure we're starting clean.
@@ -284,23 +284,19 @@ sub doProcess {
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "process downloaded data from Ensembl FTP site into locally usable data.";
-  my $fileServer = &HgAutomate::chooseFileServer($runDir);
   my $lifting = 0;
   my $bossScript;
   if (defined $liftRandoms) {
       $lifting = 1;
-      $bossScript = new HgRemoteScript("$runDir/doProcess.csh", $dbHost,
-				      $runDir, $whatItDoes);
-  } else {
-      $bossScript = new HgRemoteScript("$runDir/doProcess.csh", $fileServer,
-				      $runDir, $whatItDoes);
   }
+  $bossScript = new HgRemoteScript("$runDir/doProcess.csh", $dbHost,
+				  $runDir, $whatItDoes);
   #  if lifting, create the lift file
   if ($lifting) {
       $bossScript->add(<<_EOF_
 rm -f randoms.$db.lift
-foreach C (`cut -f1 /cluster/data/$db/chrom.sizes | grep random`)
-   set size = `grep \$C /cluster/data/$db/chrom.sizes | cut -f2`
+foreach C (`cut -f1 /hive/data/genomes/$db/chrom.sizes | grep random`)
+   set size = `grep \$C /hive/data/genomes/$db/chrom.sizes | cut -f2`
    hgsql -N -e \\
 "select chromStart,contig,size,chrom,\$size from ctgPos where chrom='\$C';" \\
 	$db  | awk '{gsub("\\\\.[0-9]+", "", \$2); print }' >> randoms.$db.lift
@@ -460,7 +456,7 @@ sub doMakeDoc {
 ############################################################################
 #  $db - $organism - Ensembl Genes version $ensVersion  (DONE - $updateTime - $ENV{'USER'})
     ssh $fileServer
-    cd /cluster/data/$db
+    cd /hive/data/genomes/$db
     cat << '_EOF_' > $db.ensGene.ra
 _EOF_
   ;
@@ -469,7 +465,7 @@ _EOF_
   print "#  << happy emacs\n\n";
   print "    doEnsGeneUpdate.pl -ensVersion=$ensVersion $db.ensGene.ra\n";
   print "    ssh hgwdev\n";
-  print "    cd /cluster/data/$db/bed/ensGene.$ensVersion\n";
+  print "    cd /hive/data/genomes/$db/bed/ensGene.$ensVersion\n";
   print "    featureBits $db ensGene\n";
   print "    # ";
   print `featureBits $db ensGene`;
@@ -564,7 +560,7 @@ sub parseConfig {
       . "    " . join(", ", @stragglers) . "\n" .
       "For a detailed list of supported variables, run \"$base -help\".\n";
   }
-  $topDir = "/cluster/data/$db";
+  $topDir = "/hive/data/genomes/$db";
 } # parseConfig
 
 
