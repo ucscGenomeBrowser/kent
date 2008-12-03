@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.17 2008/11/17 21:58:19 hiram Exp $
+# $Id: HgAutomate.pm,v 1.18 2008/12/03 19:56:05 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -55,9 +55,6 @@ use vars qw( %cluster %clusterFilesystem $defaultDbHost );
       'pk' =>
         { 'enabled' => 1, 'gigaHz' => 2.0, 'ram' => 4,
 	  'hostCount' => 394, },
-      'kk' =>
-        { 'enabled' => 0, 'gigaHz' => 0.8, 'ram' => 1,
-	  'hostCount' => 600, },
       'memk' =>
         { 'enabled' => 1, 'gigaHz' => 1.0, 'ram' => 32,
 	  'hostCount' => 32, },
@@ -76,7 +73,7 @@ my @allClusters = (keys %cluster);
       'san' =>
         { root => '/san/sanvol1/scratch', clusterLocality => 0.5,
 	  distrHost => ['pk', 'kkstore*'], distrCommand => '',
-	  inputFor => ['pk', 'memk'], outputFor => ['pk', 'kk', 'memk'], },
+	  inputFor => ['pk', 'memk'], outputFor => ['pk', 'memk'], },
     );
 
 $defaultDbHost = 'hgwdev';
@@ -206,9 +203,10 @@ sub getWorkhorseLoads {
   #*** Would be nice to parameterize instead of hardcoding hostnames...
   # Return a hash of workhorses (kolossus and all idle small cluster machines),
   # associated with their load factors.
+  # swarm and hgwdev are now valid workhorses since they have access to hive.
   confess "Too many arguments" if (scalar(@_) != 0);
   my %horses = ();
-  foreach my $machLine ('kolossus',
+  foreach my $machLine ('swarm', 'kolossus', 'hgwdev',
 		    `ssh -x memk parasol list machines | grep idle`) {
     my $mach = $machLine;
     $mach =~ s/[\. ].*//;
@@ -486,7 +484,7 @@ $paraRun = ("$para make jobList\n" .
 $centralDbSql = "hgsql -h genome-testdb -A -N hgcentraltest";
 $cvs = "/usr/bin/cvs";
 
-$clusterData = '/cluster/data';
+$clusterData = '/hive/data/genomes';
 $trackBuild = 'bed';
 my $apacheRoot = '/usr/local/apache';
 $goldenPath = "$apacheRoot/htdocs/goldenPath";
