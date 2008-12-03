@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.116 2008/12/02 21:10:34 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.117 2008/12/03 12:37:13 mikep Exp $
 
 use warnings;
 use strict;
@@ -315,6 +315,40 @@ my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
 # my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|[eE]{1}?[+-]{1}?\\d+))";  # Tim's attempt
 # my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|))";                      # Original
 
+sub validateWithList
+{
+# Validate $line using a validation list; $validateList is a reference to a list of: {NAME, REGEX or TYPE}
+# returns error string or undef if line passes validation
+# This is designed to give better feedback to user; ideally we would load the validation list from the .as files
+    my ($line, $validateList) = @_;
+    my @list = split(/\s+/, $line);
+    if(@list != @{$validateList}) {
+        return "not enough fields";
+    } else {
+        for my $validateField (@{$validateList}) {
+            my $type = $validateField->{TYPE};
+            my $regex;
+            if($type) {
+                my %typeMap = (int => "[+-]?\\d+", uint => "\\d+", float => $floatRegEx, string => "\\S+");
+                if(!($regex = $typeMap{$type})) {
+                    die "PROGRAM ERROR: invalid TYPE: $type\n";
+                }
+            } elsif(!($regex = $validateField->{REGEX})) {
+                die "PROGRAM ERROR: invalid type list (missing required REGEX or TYPE)\n";
+            }
+            my $val = shift(@list);
+            if($val !~ /^$regex$/) {
+                my $error = "value '$val' is an invalid value for field '$validateField->{NAME}'";
+                if($type) {
+                    $error .= "; must be type '$type'";
+                }
+                return $error;
+            }
+        }
+    }
+    return undef;
+}
+
 sub validateWig
 {
     my ($path, $file, $type) = @_;
@@ -461,7 +495,6 @@ sub validateGtf {
     return @res;
 }
 
-
 sub validateGene {
     my ($path, $file, $type) = @_;
     my $outFile = "validateGene.out";
@@ -512,56 +545,30 @@ sub validatePairedTagAlign
 # This is like tag align but with two additional sequence fields appended; seq1 and seq2
 {
     my ($path, $file, $type) = @_;
-    my $line = 0;
+    my $lineNumber = 0;
     doTime("beginning validatePairedTagAlign") if $opt_timing;
     my $fh = openUtil($path, $file);
-    while(<$fh>) {
-        $line++;
-	# MJP: for now, allow colorspace sequences as well as DNA + dot
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[0-3ATCGN\.]+\s+\d+\s+[+-]\s+[0-3ATCGN\.]+\s+[0-3ATCGN\.]+$/)) {
-            chomp;
-            return "Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validatePairedTagAlign]";
+    while(my $line = <$fh>) {
+        chomp $line;
+        $lineNumber++;
+        next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
+        my @list = ({REGEX => "chr(\\d+|M|X|Y)", NAME => "chrom"},
+                    {TYPE => "uint", NAME => "chromStart"},
+                    {TYPE => "uint", NAME => "chromEnd"},
+                    {TYPE => "string", NAME => "name"},
+                    {TYPE => "uint", NAME => "score"},
+                    {REGEX => "[+-\\.]", NAME => "strand"},
+                    {REGEX => "[ACGTNacgtn]*", NAME => "seq1"},
+                    {REGEX => "[ACGTNacgtn]*", NAME => "seq2"});
+        if(my $error = validateWithList($line, \@list)) {
+            return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validatePairedTagAlign]");
         }
-        last if($opt_quick && $line >= $quickCount);
+        last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
     doTime("done validatePairedTagAlign") if $opt_timing;
     return ();
-}
-
-sub validateWithList
-{
-# Validate $line using a validation list; $validateList is a reference to a list of: {NAME, REGEX or TYPE}
-# returns error string or undef if line passes validation
-# This is designed to give better feedback to user; ideally we would load the validation list from the .as files
-    my ($line, $validateList) = @_;
-    my @list = split(/\s+/, $line);
-    if(@list != @{$validateList}) {
-        return "not enough fields";
-    } else {
-        for my $validateField (@{$validateList}) {
-            my $type = $validateField->{TYPE};
-            my $regex;
-            if($type) {
-                my %typeMap = (int => "[+-]?\\d+", uint => "\\d+", float => $floatRegEx, string => "\\S+");
-                if(!($regex = $typeMap{$type})) {
-                    die "PROGRAM ERROR: invalid TYPE: $type\n";
-                }
-            } elsif(!($regex = $validateField->{REGEX})) {
-                die "PROGRAM ERROR: invalid type list (missing required REGEX or TYPE)\n";
-            }
-            my $val = shift(@list);
-            if($val !~ /^$regex$/) {
-                my $error = "value '$val' is an invalid value for field '$validateField->{NAME}'";
-                if($type) {
-                    $error .= "; must be type '$type'";
-                }
-                return $error;
-            }
-        }
-    }
-    return undef;
 }
 
 sub validateNarrowPeak
