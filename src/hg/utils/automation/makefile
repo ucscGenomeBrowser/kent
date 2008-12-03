@@ -27,6 +27,7 @@ SCRIPT_FILES = \
 	doSameSpeciesLiftOver.pl \
 	ensVersions \
 	extractNestedRepeats.pl \
+	extractGtf.pl \
 	Encode.pm \
 	EnsGeneAutomate.pm \
 	HgAutomate.pm \
