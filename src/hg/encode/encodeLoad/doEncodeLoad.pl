@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.48 2008/12/03 08:24:19 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.49 2008/12/03 11:30:26 mikep Exp $
 
 # Usage:
 #
@@ -210,7 +210,7 @@ sub loadBedFromSchema
             # fill in zero score columns for narrowPeaks etc.
             $fillInArg = "-fillInScore=signalValue ";
 	    # change minScore for Stam Lab
-	    $fillInArg .= "-minScore=200 " if $tableName =~ /^wgEncodeUwDnaseSeq/;
+	    $fillInArg .= "-minScore=500 " if $tableName =~ /^wgEncodeUwDnaseSeq/;
         }
         my $catCmd = makeCatCmd("loadBedFromSchema", $fileList);
         my @cmds = ($catCmd, "egrep -v '^track|browser'", "/cluster/bin/x86_64/hgLoadBed $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
