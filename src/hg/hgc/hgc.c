@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1476 2008/12/02 23:34:34 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1477 2008/12/03 21:47:39 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8436,6 +8436,80 @@ void doGad(struct trackDb *tdb, char *item, char *itemForUrl)
 {
 genericHeader(tdb, item);
 printGadDetails(tdb, item, FALSE);
+printTrackHtml(tdb);
+}
+
+void printOmimGeneDetails(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print details of an OMIM Gene entry. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *url = tdb->url;
+char *kgId= NULL;
+char *title1 = NULL;
+char *title2 = NULL;
+
+if (url != NULL && url[0] != 0)
+    {
+    safef(query, sizeof(query), "select alignId from omimGene where name='%s';", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	kgId = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
+    
+    safef(query, sizeof(query), "select geneSymbol from kgXref where kgId='%s';", kgId);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	printf("<H3>Gene Symbol: %s", row[0]);
+	printf("</H3>");
+	}
+    sqlFreeResult(&sr);
+    
+    safef(query, sizeof(query), 
+    	  "select title1, title2 from omimGeneMap where omimId='%s';", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	title1 = cloneString(row[0]);
+	title2 = cloneString(row[1]);
+	}
+    sqlFreeResult(&sr);
+    
+    printf("<H3>OMIM Database ");
+    printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
+    printf("%s</A>: %s", itemName, title1);
+    if (strlen(title2) > 0) printf(" %s ", title2);
+    printf("</H3>\n");
+
+    printf("<H3>UCSC Gene ");
+    printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>", 
+	   "../cgi-bin/hgGene?hgg_gene=", kgId);
+    printf("%s</A>: ", kgId);
+    safef(query, sizeof(query), "select description from kgXref where kgId='%s';", kgId);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	printf("%s", row[0]);
+	}
+    sqlFreeResult(&sr);
+    printf("</H3>");
+    } 
+}
+
+void doOmimGene(struct trackDb *tdb, char *item)
+/* Put up OmimGene track info. */
+{
+genericHeader(tdb, item);
+printOmimGeneDetails(tdb, item, FALSE);
 printTrackHtml(tdb);
 }
 
@@ -20756,6 +20830,10 @@ else if (sameWord(track, "rgdSslp"))
 else if (sameWord(track, "gad"))
     {
     doGad(tdb, item, NULL);
+    }
+else if (sameWord(track, "omimGene"))
+    {
+    doOmimGene(tdb, item);
     }
 else if (sameWord(track, "rgdQtl") || sameWord(track, "rgdRatQtl"))
     {
