@@ -11,7 +11,7 @@
 #include "hPrint.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.11 2008/10/07 19:25:19 braney Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.12 2008/12/03 16:27:42 braney Exp $";
 
 #define hgtaCGIGeneMafTable "hgta_mafGeneMafTable" 
 #define hgtaJSGeneMafTable  "mafGeneMafTable" 
@@ -248,7 +248,7 @@ void palOptions(struct cart *cart,
 {
 char *database = sqlGetDatabase(conn);
 
-hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=GET>\n", cgiScriptName());
+hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=POST>\n", cgiScriptName());
 cartSaveSession(cart);
 
 char *mafTable = outMafTableDrop(cart, conn);
