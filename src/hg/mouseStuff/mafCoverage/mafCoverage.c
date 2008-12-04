@@ -14,7 +14,7 @@
 
 #define MAXALIGN 50  /* max number of species to align */
 #define DEFCOUNT 3   /* require 3 species to match before counting as covered */
-static char const rcsid[] = "$Id: mafCoverage.c,v 1.9 2008/12/04 21:45:52 hiram Exp $";
+static char const rcsid[] = "$Id: mafCoverage.c,v 1.10 2008/12/04 22:26:31 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -329,7 +329,7 @@ while ((ali = mafNext(mf)) != NULL)
     int cCount = slCount(ali->components);
     int i = 1;
     int nextStart, idNextStart;
-    
+
     comp = ali->components; 
     tPtr[0] = comp->text;
     chrom = strchr(comp->src,'.')+1;
@@ -368,9 +368,14 @@ while ((ali = mafNext(mf)) != NULL)
     incNoOverflow(cov+start, comp->size);
     for (comp = ali->components->next; comp != NULL; comp = comp->next)
         {
-        tPtr[i] = comp->text;
-        i++;
-        assert (i < MAXALIGN-1);
+	if (comp->size > 0)	// do not process e lines
+	    {
+	    tPtr[i] = comp->text;
+	    i++;
+	    assert (i < MAXALIGN-1);
+	    }
+	else
+	    --cCount;
         }
     size = 0;
     assert(cs != NULL);
