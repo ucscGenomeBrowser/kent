@@ -210,7 +210,7 @@ longLabel	ENCODE Broad Bernstein ChIP-Seq
 group		regulation
 subGroup1	view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2	cellType Cell_Line K562=K562
-subGroup3	factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H4K20me1=H4K20me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 Pol2(b)=Pol2(b) zCTRL=Control
+subGroup3	factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2(b)=Pol2(b) zCTRL=Control
 dimensions	dimensionX=cellType	dimensionY=factor
 sortOrder	cellType=+ factor=+ view=+
 controlledVocabulary	encode/cv.ra cellType factor
@@ -219,841 +219,841 @@ visibilityViewDefaults	 Peaks=dense Signal=full zRAW=hide
 priority	0
 type		bed 3
 wgEncode	1
-settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918,autoScale=off zRAW:defaultViewLimits=5:500,viewLimits=1:19563,autoScale=off
+settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918,autoScale=off zRAW:defaultViewLimits=5:500,viewLimits=1:21178,autoScale=off
 
-	track		wgEncodeBroadChipSeqPeaksK562Ctcf
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 CTCF Pk
-	longLabel	ENCODE Broad ChIP-Seq Peaks (CTCF in K562 cells)
-	subGroups	view=Peaks factor=CTCF cellType=K562
-	type		broadPeak
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	1
-	noInherit	on
-	configurable	on
-	cell		K562
-	antibody	CTCF
+        track		wgEncodeBroadChipSeqPeaksK562Ctcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 CTCF Pk
+        longLabel	ENCODE Broad ChIP-Seq Peaks (CTCF in K562 cells)
+        subGroups	view=Peaks factor=CTCF cellType=K562
+        type		broadPeak
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	1
+        noInherit	on
+        configurable	on
+        cell		K562
+        antibody	CTCF
 
-	track		wgEncodeBroadChipSeqSignalK562Ctcf
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 CTCF Sig
-	longLabel	ENCODE Broad ChIP-Seq Signal (CTCF in K562 cells)
-	subGroups	view=Signal factor=CTCF cellType=K562
-	type		wig -1.00 2918.25
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	2
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	autoScale   off
-	cell		K562
-	antibody	CTCF
+        track		wgEncodeBroadChipSeqSignalK562Ctcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 CTCF Sig
+        longLabel	ENCODE Broad ChIP-Seq Signal (CTCF in K562 cells)
+        subGroups	view=Signal factor=CTCF cellType=K562
+        type		wig -1.00 2918.25
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	2
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        autoScale   off
+        cell		K562
+        antibody	CTCF
 
-	track		wgEncodeBroadChipSeqRawSignalRep1K562Ctcf
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 CTCF Raw1
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (CTCF in K562 cells)
-	subGroups	view=zRAW factor=CTCF cellType=K562
-	type		wig 1.00 7882.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	3
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	CTCF
+        track		wgEncodeBroadChipSeqRawSignalRep1K562Ctcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 CTCF Raw1
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (CTCF in K562 cells)
+        subGroups	view=zRAW factor=CTCF cellType=K562
+        type		wig 1.00 8965.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	3
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	CTCF
 
-	track		wgEncodeBroadChipSeqRawSignalRep2K562Ctcf
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 CTCF Raw2
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (CTCF in K562 cells)
-	subGroups	view=zRAW factor=CTCF cellType=K562
-	type		wig 1.00 7418.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	4
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	CTCF
+        track		wgEncodeBroadChipSeqRawSignalRep2K562Ctcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 CTCF Raw2
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (CTCF in K562 cells)
+        subGroups	view=zRAW factor=CTCF cellType=K562
+        type		wig 1.00 8726.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	4
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	CTCF
 
-	track		wgEncodeBroadChipSeqPeaksK562H3k4me1
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K4me1 Pk
-	longLabel	ENCODE Broad ChIP-Seq Peaks (H3K4me1 in K562 cells)
-	subGroups	view=Peaks factor=H3K04me1 cellType=K562
-	type		broadPeak
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	11
-	noInherit	on
-	configurable	on
-	cell		K562
-	antibody	H3K4me1
+        track		wgEncodeBroadChipSeqPeaksK562H3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K4me1 Pk
+        longLabel	ENCODE Broad ChIP-Seq Peaks (H3K4me1 in K562 cells)
+        subGroups	view=Peaks factor=H3K04me1 cellType=K562
+        type		broadPeak
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	11
+        noInherit	on
+        configurable	on
+        cell		K562
+        antibody	H3K4me1
 
-	track		wgEncodeBroadChipSeqSignalK562H3k4me1
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K4me1 Sig
-	longLabel	ENCODE Broad ChIP-Seq Signal (H3K4me1 in K562 cells)
-	subGroups	view=Signal factor=H3K04me1 cellType=K562
-	type		wig -1.00 274.25
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	12
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	autoScale   off
-	cell		K562
-	antibody	H3K4me1
+        track		wgEncodeBroadChipSeqSignalK562H3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K4me1 Sig
+        longLabel	ENCODE Broad ChIP-Seq Signal (H3K4me1 in K562 cells)
+        subGroups	view=Signal factor=H3K04me1 cellType=K562
+        type		wig -1.00 274.25
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	12
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        autoScale   off
+        cell		K562
+        antibody	H3K4me1
 
-	track		wgEncodeBroadChipSeqRawSignalRep1K562H3k4me1
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K4me1 Raw1
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me1 in K562 cells)
-	subGroups	view=zRAW factor=H3K04me1 cellType=K562
-	type		wig 1.00 2699.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	13
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K4me1
+        track		wgEncodeBroadChipSeqRawSignalRep1K562H3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K4me1 Raw1
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me1 in K562 cells)
+        subGroups	view=zRAW factor=H3K04me1 cellType=K562
+        type		wig 1.00 3067.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	13
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K4me1
 
-	track		wgEncodeBroadChipSeqRawSignalRep2K562H3k4me1
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K4me1 Raw2
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me1 in K562 cells)
-	subGroups	view=zRAW factor=H3K04me1 cellType=K562
-	type		wig 1.00 3901.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	14
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K4me1
+        track		wgEncodeBroadChipSeqRawSignalRep2K562H3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K4me1 Raw2
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me1 in K562 cells)
+        subGroups	view=zRAW factor=H3K04me1 cellType=K562
+        type		wig 1.00 4288.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	14
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K4me1
 
-	track		wgEncodeBroadChipSeqPeaksK562H3k4me2
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K4me2 Pk
-	longLabel	ENCODE Broad ChIP-Seq Peaks (H3K4me2 in K562 cells)
-	subGroups	view=Peaks factor=H3K04me2 cellType=K562
-	type		broadPeak
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	21
-	noInherit	on
-	configurable	on
-	cell		K562
-	antibody	H3K4me2
+        track		wgEncodeBroadChipSeqPeaksK562H3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K4me2 Pk
+        longLabel	ENCODE Broad ChIP-Seq Peaks (H3K4me2 in K562 cells)
+        subGroups	view=Peaks factor=H3K04me2 cellType=K562
+        type		broadPeak
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	21
+        noInherit	on
+        configurable	on
+        cell		K562
+        antibody	H3K4me2
 
-	track		wgEncodeBroadChipSeqSignalK562H3k4me2
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K4me2 Sig
-	longLabel	ENCODE Broad ChIP-Seq Signal (H3K4me2 in K562 cells)
-	subGroups	view=Signal factor=H3K04me2 cellType=K562
-	type		wig -1.00 1190.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	22
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	autoScale   off
-	cell		K562
-	antibody	H3K4me2
+        track		wgEncodeBroadChipSeqSignalK562H3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K4me2 Sig
+        longLabel	ENCODE Broad ChIP-Seq Signal (H3K4me2 in K562 cells)
+        subGroups	view=Signal factor=H3K04me2 cellType=K562
+        type		wig -1.00 1190.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	22
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        autoScale   off
+        cell		K562
+        antibody	H3K4me2
 
-	track		wgEncodeBroadChipSeqRawSignalRep1K562H3k4me2
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K4me2 Raw1
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me2 in K562 cells)
-	subGroups	view=zRAW factor=H3K04me2 cellType=K562
-	type		wig 1.00 3793.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	23
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K4me2
+        track		wgEncodeBroadChipSeqRawSignalRep1K562H3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K4me2 Raw1
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me2 in K562 cells)
+        subGroups	view=zRAW factor=H3K04me2 cellType=K562
+        type		wig 1.00 4239.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	23
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K4me2
 
-	track		wgEncodeBroadChipSeqRawSignalRep2K562H3k4me2
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K4me2 Raw2
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me2 in K562 cells)
-	subGroups	view=zRAW factor=H3K04me2 cellType=K562
-	type		wig 1.00 2382.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	24
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K4me2
+        track		wgEncodeBroadChipSeqRawSignalRep2K562H3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K4me2 Raw2
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me2 in K562 cells)
+        subGroups	view=zRAW factor=H3K04me2 cellType=K562
+        type		wig 1.00 2741.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	24
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K4me2
 
-	track		wgEncodeBroadChipSeqPeaksK562H3k4me3
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K4me3 Pk
-	longLabel	ENCODE Broad ChIP-Seq Peaks (H3K4me3 in K562 cells)
-	subGroups	view=Peaks factor=H3K04me3 cellType=K562
-	type		broadPeak
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	31
-	noInherit	on
-	configurable	on
-	cell		K562
-	antibody	H3K4me3
+        track		wgEncodeBroadChipSeqPeaksK562H3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K4me3 Pk
+        longLabel	ENCODE Broad ChIP-Seq Peaks (H3K4me3 in K562 cells)
+        subGroups	view=Peaks factor=H3K04me3 cellType=K562
+        type		broadPeak
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	31
+        noInherit	on
+        configurable	on
+        cell		K562
+        antibody	H3K4me3
 
-	track		wgEncodeBroadChipSeqSignalK562H3k4me3
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K4me3 Sig
-	longLabel	ENCODE Broad ChIP-Seq Signal (H3K4me3 in K562 cells)
-	subGroups	view=Signal factor=H3K04me3 cellType=K562
-	type		wig -1.00 732.25
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	32
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	autoScale   off
-	cell		K562
-	antibody	H3K4me3
+        track		wgEncodeBroadChipSeqSignalK562H3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K4me3 Sig
+        longLabel	ENCODE Broad ChIP-Seq Signal (H3K4me3 in K562 cells)
+        subGroups	view=Signal factor=H3K04me3 cellType=K562
+        type		wig -1.00 732.25
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	32
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        autoScale   off
+        cell		K562
+        antibody	H3K4me3
 
-	track		wgEncodeBroadChipSeqRawSignalRep1K562H3k4me3
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K4me3 Raw1
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in K562 cells)
-	subGroups	view=zRAW factor=H3K04me3 cellType=K562
-	type		wig 1.00 8697.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	33
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K4me3
+        track		wgEncodeBroadChipSeqRawSignalRep1K562H3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K4me3 Raw1
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in K562 cells)
+        subGroups	view=zRAW factor=H3K04me3 cellType=K562
+        type		wig 1.00 9457.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	33
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K4me3
 
-	track		wgEncodeBroadChipSeqRawSignalRep2K562H3k4me3
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K4me3 Raw2
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in K562 cells)
-	subGroups	view=zRAW factor=H3K04me3 cellType=K562
-	type		wig 1.00 5113.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	34
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K4me3
+        track		wgEncodeBroadChipSeqRawSignalRep2K562H3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K4me3 Raw2
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in K562 cells)
+        subGroups	view=zRAW factor=H3K04me3 cellType=K562
+        type		wig 1.00 5643.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	34
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K4me3
 
-	track		wgEncodeBroadChipSeqPeaksK562H3k9ac
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K9ac Pk
-	longLabel	ENCODE Broad ChIP-Seq Peaks (H3K9ac in K562 cells)
-	subGroups	view=Peaks factor=H3K09ac cellType=K562
-	type		broadPeak
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	101
-	noInherit	on
-	configurable	on
-	cell		K562
-	antibody	H3K9ac
+        track		wgEncodeBroadChipSeqPeaksK562H3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K9ac Pk
+        longLabel	ENCODE Broad ChIP-Seq Peaks (H3K9ac in K562 cells)
+        subGroups	view=Peaks factor=H3K09ac cellType=K562
+        type		broadPeak
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	101
+        noInherit	on
+        configurable	on
+        cell		K562
+        antibody	H3K9ac
 
-	track		wgEncodeBroadChipSeqSignalK562H3k9ac
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K9ac Sig
-	longLabel	ENCODE Broad ChIP-Seq Signal (H3K9ac in K562 cells)
-	subGroups	view=Signal factor=H3K09ac cellType=K562
-	type		wig -1.00 1405.25
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	102
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	autoScale   off
-	cell		K562
-	antibody	H3K9ac
+        track		wgEncodeBroadChipSeqSignalK562H3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K9ac Sig
+        longLabel	ENCODE Broad ChIP-Seq Signal (H3K9ac in K562 cells)
+        subGroups	view=Signal factor=H3K09ac cellType=K562
+        type		wig -1.00 1405.25
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	102
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        autoScale   off
+        cell		K562
+        antibody	H3K9ac
 
-	track		wgEncodeBroadChipSeqRawSignalRep1K562H3k9ac
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K9ac Raw1
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K9ac in K562 cells)
-	subGroups	view=zRAW factor=H3K09ac cellType=K562
-	type		wig 1.00 7792.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	103
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K9ac
+        track		wgEncodeBroadChipSeqRawSignalRep1K562H3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K9ac Raw1
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K9ac in K562 cells)
+        subGroups	view=zRAW factor=H3K09ac cellType=K562
+        type		wig 1.00 8656.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	103
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K9ac
 
-	track		wgEncodeBroadChipSeqRawSignalRep2K562H3k9ac
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K9ac Raw2
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K9ac in K562 cells)
-	subGroups	view=zRAW factor=H3K09ac cellType=K562
-	type		wig 1.00 6916.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	104
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K9ac
+        track		wgEncodeBroadChipSeqRawSignalRep2K562H3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K9ac Raw2
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K9ac in K562 cells)
+        subGroups	view=zRAW factor=H3K09ac cellType=K562
+        type		wig 1.00 7472.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	104
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K9ac
 
-	track		wgEncodeBroadChipSeqPeaksK562H3k9me1
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K9me1 Pk
-	longLabel	ENCODE Broad ChIP-Seq Peaks (H3K9me1 in K562 cells)
-	subGroups	view=Peaks factor=H3K09me1 cellType=K562
-	type		broadPeak
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	111
-	noInherit	on
-	configurable	on
-	cell		K562
-	antibody	H3K9me1
+        track		wgEncodeBroadChipSeqPeaksK562H3k9me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K9me1 Pk
+        longLabel	ENCODE Broad ChIP-Seq Peaks (H3K9me1 in K562 cells)
+        subGroups	view=Peaks factor=H3K09me1 cellType=K562
+        type		broadPeak
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	111
+        noInherit	on
+        configurable	on
+        cell		K562
+        antibody	H3K9me1
 
-	track		wgEncodeBroadChipSeqSignalK562H3k9me1
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K9me1 Sig
-	longLabel	ENCODE Broad ChIP-Seq Signal (H3K9me1 in K562 cells)
-	subGroups	view=Signal factor=H3K09me1 cellType=K562
-	type		wig -1.00 136.75
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	112
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	autoScale   off
-	cell		K562
-	antibody	H3K9me1
+        track		wgEncodeBroadChipSeqSignalK562H3k9me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K9me1 Sig
+        longLabel	ENCODE Broad ChIP-Seq Signal (H3K9me1 in K562 cells)
+        subGroups	view=Signal factor=H3K09me1 cellType=K562
+        type		wig -1.00 136.75
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	112
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        autoScale   off
+        cell		K562
+        antibody	H3K9me1
 
-	track		wgEncodeBroadChipSeqRawSignalRep1K562H3k9me1
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K9me1 Raw1
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K9me1 in K562 cells)
-	subGroups	view=zRAW factor=H3K09me1 cellType=K562
-	type		wig 1.00 11726.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	113
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K9me1
+        track		wgEncodeBroadChipSeqRawSignalRep1K562H3k9me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K9me1 Raw1
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K9me1 in K562 cells)
+        subGroups	view=zRAW factor=H3K09me1 cellType=K562
+        type		wig 1.00 12895.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	113
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K9me1
 
-	track		wgEncodeBroadChipSeqRawSignalRep2K562H3k9me1
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K9me1 Raw2
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K9me1 in K562 cells)
-	subGroups	view=zRAW factor=H3K09me1 cellType=K562
-	type		wig 1.00 12424.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	114
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K9me1
+        track		wgEncodeBroadChipSeqRawSignalRep2K562H3k9me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K9me1 Raw2
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K9me1 in K562 cells)
+        subGroups	view=zRAW factor=H3K09me1 cellType=K562
+        type		wig 1.00 13150.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	114
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K9me1
 
-	track		wgEncodeBroadChipSeqPeaksK562H4k20me1
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H4K20me1 Pk
-	longLabel	ENCODE Broad ChIP-Seq Peaks (H4K20me1 in K562 cells)
-	subGroups	view=Peaks factor=H4K20me1 cellType=K562
-	type		broadPeak
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	201
-	noInherit	on
-	configurable	on
-	cell		K562
-	antibody	H4K20me1
+        track		wgEncodeBroadChipSeqPeaksK562H3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K27ac Pk
+        longLabel	ENCODE Broad ChIP-Seq Peaks (H3K27ac in K562 cells)
+        subGroups	view=Peaks factor=H3K27ac cellType=K562
+        type		broadPeak
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	201
+        noInherit	on
+        configurable	on
+        cell		K562
+        antibody	H3K27ac
 
-	track		wgEncodeBroadChipSeqSignalK562H4k20me1
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H4K20me1 Sig
-	longLabel	ENCODE Broad ChIP-Seq Signal (H4K20me1 in K562 cells)
-	subGroups	view=Signal factor=H4K20me1 cellType=K562
-	type		wig -1.00 150.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	202
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	autoScale   off
-	cell		K562
-	antibody	H4K20me1
+        track		wgEncodeBroadChipSeqSignalK562H3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K27ac Sig
+        longLabel	ENCODE Broad ChIP-Seq Signal (H3K27ac in K562 cells)
+        subGroups	view=Signal factor=H3K27ac cellType=K562
+        type		wig -1.00 2905.75
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	202
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        autoScale   off
+        cell		K562
+        antibody	H3K27ac
 
-	track		wgEncodeBroadChipSeqRawSignalRep1K562H4k20me1
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H4K20me1 Raw1
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H4K20me1 in K562 cells)
-	subGroups	view=zRAW factor=H4K20me1 cellType=K562
-	type		wig 1.00 7808.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	203
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H4K20me1
+        track		wgEncodeBroadChipSeqRawSignalRep1K562H3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K27ac Raw1
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K27ac in K562 cells)
+        subGroups	view=zRAW factor=H3K27ac cellType=K562
+        type		wig 1.00 5596.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	203
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K27ac
 
-	track		wgEncodeBroadChipSeqRawSignalRep2K562H4k20me1
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H4K20me1 Raw2
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H4K20me1 in K562 cells)
-	subGroups	view=zRAW factor=H4K20me1 cellType=K562
-	type		wig 1.00 12114.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	204
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H4K20me1
+        track		wgEncodeBroadChipSeqRawSignalRep2K562H3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K27ac Raw2
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K27ac in K562 cells)
+        subGroups	view=zRAW factor=H3K27ac cellType=K562
+        type		wig 1.00 3641.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	204
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K27ac
 
-	track		wgEncodeBroadChipSeqPeaksK562H3k27ac
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K27ac Pk
-	longLabel	ENCODE Broad ChIP-Seq Peaks (H3K27ac in K562 cells)
-	subGroups	view=Peaks factor=H3K27ac cellType=K562
-	type		broadPeak
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	301
-	noInherit	on
-	configurable	on
-	cell		K562
-	antibody	H3K27ac
+        track		wgEncodeBroadChipSeqPeaksK562H3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K27me3 Pk
+        longLabel	ENCODE Broad ChIP-Seq Peaks (H3K27me3 in K562 cells)
+        subGroups	view=Peaks factor=H3K27me3 cellType=K562
+        type		broadPeak
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	211
+        noInherit	on
+        configurable	on
+        cell		K562
+        antibody	H3K27me3
 
-	track		wgEncodeBroadChipSeqSignalK562H3k27ac
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K27ac Sig
-	longLabel	ENCODE Broad ChIP-Seq Signal (H3K27ac in K562 cells)
-	subGroups	view=Signal factor=H3K27ac cellType=K562
-	type		wig -1.00 2905.75
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	302
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	autoScale   off
-	cell		K562
-	antibody	H3K27ac
+        track		wgEncodeBroadChipSeqSignalK562H3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K27me3 Sig
+        longLabel	ENCODE Broad ChIP-Seq Signal (H3K27me3 in K562 cells)
+        subGroups	view=Signal factor=H3K27me3 cellType=K562
+        type		wig -1.00 111.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	212
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        autoScale   off
+        cell		K562
+        antibody	H3K27me3
 
-	track		wgEncodeBroadChipSeqRawSignalRep1K562H3k27ac
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K27ac Raw1
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K27ac in K562 cells)
-	subGroups	view=zRAW factor=H3K27ac cellType=K562
-	type		wig 1.00 4769.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	303
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K27ac
+        track		wgEncodeBroadChipSeqRawSignalRep1K562H3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K27me3 Raw1
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in K562 cells)
+        subGroups	view=zRAW factor=H3K27me3 cellType=K562
+        type		wig 1.00 10724.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	213
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K27me3
 
-	track		wgEncodeBroadChipSeqRawSignalRep2K562H3k27ac
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K27ac Raw2
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K27ac in K562 cells)
-	subGroups	view=zRAW factor=H3K27ac cellType=K562
-	type		wig 1.00 3397.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	304
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K27ac
+        track		wgEncodeBroadChipSeqRawSignalRep2K562H3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K27me3 Raw2
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in K562 cells)
+        subGroups	view=zRAW factor=H3K27me3 cellType=K562
+        type		wig 1.00 5383.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	214
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K27me3
 
-	track		wgEncodeBroadChipSeqPeaksK562H3k27me3
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K27me3 Pk
-	longLabel	ENCODE Broad ChIP-Seq Peaks (H3K27me3 in K562 cells)
-	subGroups	view=Peaks factor=H3K27me3 cellType=K562
-	type		broadPeak
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	311
-	noInherit	on
-	configurable	on
-	cell		K562
-	antibody	H3K27me3
+        track		wgEncodeBroadChipSeqPeaksK562H3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K36me3 Pk
+        longLabel	ENCODE Broad ChIP-Seq Peaks (H3K36me3 in K562 cells)
+        subGroups	view=Peaks factor=H3K36me3 cellType=K562
+        type		broadPeak
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	301
+        noInherit	on
+        configurable	on
+        cell		K562
+        antibody	H3K36me3
 
-	track		wgEncodeBroadChipSeqSignalK562H3k27me3
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K27me3 Sig
-	longLabel	ENCODE Broad ChIP-Seq Signal (H3K27me3 in K562 cells)
-	subGroups	view=Signal factor=H3K27me3 cellType=K562
-	type		wig -1.00 111.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	312
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	autoScale   off
-	cell		K562
-	antibody	H3K27me3
+        track		wgEncodeBroadChipSeqSignalK562H3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K36me3 Sig
+        longLabel	ENCODE Broad ChIP-Seq Signal (H3K36me3 in K562 cells)
+        subGroups	view=Signal factor=H3K36me3 cellType=K562
+        type		wig -1.00 115.50
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	302
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        autoScale   off
+        cell		K562
+        antibody	H3K36me3
 
-	track		wgEncodeBroadChipSeqRawSignalRep1K562H3k27me3
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K27me3 Raw1
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in K562 cells)
-	subGroups	view=zRAW factor=H3K27me3 cellType=K562
-	type		wig 1.00 9773.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	313
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K27me3
+        track		wgEncodeBroadChipSeqRawSignalRep1K562H3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K36me3 Raw1
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in K562 cells)
+        subGroups	view=zRAW factor=H3K36me3 cellType=K562
+        type		wig 1.00 8325.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	303
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K36me3
 
-	track		wgEncodeBroadChipSeqRawSignalRep2K562H3k27me3
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K27me3 Raw2
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in K562 cells)
-	subGroups	view=zRAW factor=H3K27me3 cellType=K562
-	type		wig 1.00 4633.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	314
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K27me3
+        track		wgEncodeBroadChipSeqRawSignalRep2K562H3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H3K36me3 Raw2
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in K562 cells)
+        subGroups	view=zRAW factor=H3K36me3 cellType=K562
+        type		wig 1.00 5306.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	304
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H3K36me3
 
-	track		wgEncodeBroadChipSeqPeaksK562H3k36me3
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K36me3 Pk
-	longLabel	ENCODE Broad ChIP-Seq Peaks (H3K36me3 in K562 cells)
-	subGroups	view=Peaks factor=H3K36me3 cellType=K562
-	type		broadPeak
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	401
-	noInherit	on
-	configurable	on
-	cell		K562
-	antibody	H3K36me3
+        track		wgEncodeBroadChipSeqPeaksK562H4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H4K20me1 Pk
+        longLabel	ENCODE Broad ChIP-Seq Peaks (H4K20me1 in K562 cells)
+        subGroups	view=Peaks factor=H4K20me1 cellType=K562
+        type		broadPeak
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	401
+        noInherit	on
+        configurable	on
+        cell		K562
+        antibody	H4K20me1
 
-	track		wgEncodeBroadChipSeqSignalK562H3k36me3
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K36me3 Sig
-	longLabel	ENCODE Broad ChIP-Seq Signal (H3K36me3 in K562 cells)
-	subGroups	view=Signal factor=H3K36me3 cellType=K562
-	type		wig -1.00 115.50
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	402
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	autoScale   off
-	cell		K562
-	antibody	H3K36me3
+        track		wgEncodeBroadChipSeqSignalK562H4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H4K20me1 Sig
+        longLabel	ENCODE Broad ChIP-Seq Signal (H4K20me1 in K562 cells)
+        subGroups	view=Signal factor=H4K20me1 cellType=K562
+        type		wig -1.00 150.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	402
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        autoScale   off
+        cell		K562
+        antibody	H4K20me1
 
-	track		wgEncodeBroadChipSeqRawSignalRep1K562H3k36me3
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K36me3 Raw1
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in K562 cells)
-	subGroups	view=zRAW factor=H3K36me3 cellType=K562
-	type		wig 1.00 5653.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	403
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K36me3
+        track		wgEncodeBroadChipSeqRawSignalRep1K562H4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H4K20me1 Raw1
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (H4K20me1 in K562 cells)
+        subGroups	view=zRAW factor=H4K20me1 cellType=K562
+        type		wig 1.00 8371.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	403
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H4K20me1
 
-	track		wgEncodeBroadChipSeqRawSignalRep2K562H3k36me3
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 H3K36me3 Raw2
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in K562 cells)
-	subGroups	view=zRAW factor=H3K36me3 cellType=K562
-	type		wig 1.00 4983.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	404
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	H3K36me3
+        track		wgEncodeBroadChipSeqRawSignalRep2K562H4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 H4K20me1 Raw2
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (H4K20me1 in K562 cells)
+        subGroups	view=zRAW factor=H4K20me1 cellType=K562
+        type		wig 1.00 13503.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	404
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	H4K20me1
 
-	track		wgEncodeBroadChipSeqPeaksK562Pol2b
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 Pol2(b) Pk
-	longLabel	ENCODE Broad ChIP-Seq Peaks (Pol2(b) in K562 cells)
-	subGroups	view=Peaks factor=Pol2(b) cellType=K562
-	type		broadPeak
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	501
-	noInherit	on
-	configurable	on
-	cell		K562
-	antibody	Pol2(b)
+        track		wgEncodeBroadChipSeqPeaksK562Pol2b
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 Pol2(b) Pk
+        longLabel	ENCODE Broad ChIP-Seq Peaks (Pol2(b) in K562 cells)
+        subGroups	view=Peaks factor=Pol2(b) cellType=K562
+        type		broadPeak
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	501
+        noInherit	on
+        configurable	on
+        cell		K562
+        antibody	Pol2(b)
 
-	track		wgEncodeBroadChipSeqSignalK562Pol2b
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 Pol2(b) Sig
-	longLabel	ENCODE Broad ChIP-Seq Signal (Pol2(b) in K562 cells)
-	subGroups	view=Signal factor=Pol2(b) cellType=K562
-	type		wig -1.00 889.75
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	502
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	autoScale   off
-	cell		K562
-	antibody	Pol2(b)
+        track		wgEncodeBroadChipSeqSignalK562Pol2b
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 Pol2(b) Sig
+        longLabel	ENCODE Broad ChIP-Seq Signal (Pol2(b) in K562 cells)
+        subGroups	view=Signal factor=Pol2(b) cellType=K562
+        type		wig -1.00 889.75
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	502
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        autoScale   off
+        cell		K562
+        antibody	Pol2(b)
 
-	track		wgEncodeBroadChipSeqRawSignalRep1K562Pol2b
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 Pol2(b) Raw1
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (Pol2(b) in K562 cells)
-	subGroups	view=zRAW factor=Pol2(b) cellType=K562
-	type		wig 1.00 6265.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	503
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	Pol2(b)
+        track		wgEncodeBroadChipSeqRawSignalRep1K562Pol2b
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 Pol2(b) Raw1
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (Pol2(b) in K562 cells)
+        subGroups	view=zRAW factor=Pol2(b) cellType=K562
+        type		wig 1.00 6759.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	503
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	Pol2(b)
 
-	track		wgEncodeBroadChipSeqRawSignalRep2K562Pol2b
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	K562 Pol2(b) Raw2
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (Pol2(b) in K562 cells)
-	subGroups	view=zRAW factor=Pol2(b) cellType=K562
-	type		wig 1.00 10054.00
-	dateSubmitted	2008-11-27 12:13:2
-	dateReleased	2009-08-27
-	priority	504
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	Pol2(b)
+        track		wgEncodeBroadChipSeqRawSignalRep2K562Pol2b
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 Pol2(b) Raw2
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (Pol2(b) in K562 cells)
+        subGroups	view=zRAW factor=Pol2(b) cellType=K562
+        type		wig 1.00 11027.00
+        dateSubmitted	2008-11-27 12:13:2
+        dateReleased	2009-08-27
+        priority	504
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	Pol2(b)
 
-	track		wgEncodeBroadChipSeqRawSignalRep1K562Control
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	control K562 Raw1
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (control in K562 cells)
-	subGroups	view=zRAW factor=zCTRL cellType=K562
-	type		wig 1.00 12185.00
-	dateSubmitted	2008-11-30 11:29:37
-	dateReleased	2009-08-30
-	priority	603
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	control
+        track		wgEncodeBroadChipSeqRawSignalRep1K562Control
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	control K562 Raw1
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 1 (control in K562 cells)
+        subGroups	view=zRAW factor=zCTRL cellType=K562
+        type		wig 1.00 13356.00
+        dateSubmitted	2008-11-30 11:29:37
+        dateReleased	2009-08-30
+        priority	603
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	control
 
-	track		wgEncodeBroadChipSeqRawSignalRep2K562Control
-	subTrack	wgEncodeBroadChipSeq
-	shortLabel	control K562 Raw2
-	longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (control in K562 cells)
-	subGroups	view=zRAW factor=zCTRL cellType=K562
-	type		wig 1.00 19563.00
-	dateSubmitted	2008-11-30 11:29:37
-	dateReleased	2009-08-30
-	priority	604
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	autoScale   off
-	cell		K562
-	antibody	control
+        track		wgEncodeBroadChipSeqRawSignalRep2K562Control
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	control K562 Raw2
+        longLabel	ENCODE Broad ChIP-Seq Raw Signal Replicate 2 (control in K562 cells)
+        subGroups	view=zRAW factor=zCTRL cellType=K562
+        type		wig 1.00 21178.00
+        dateSubmitted	2008-11-30 11:29:37
+        dateReleased	2009-08-30
+        priority	604
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        autoScale   off
+        cell		K562
+        antibody	control
 
 track		wgEncodeChromatinMap
 compositeTrack	on
 shortLabel	Chromatin Map
 longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
 group		regulation
-subGroup1	view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) zRAW=RawSignal
-subGroup2	cellType Cell_Line GM12878=GM12878
-subGroup3	EXP Experiment DNase=DNase-Seq FAIRE=FAIRE-Seq IP-CTCF=ChIP-Seq_CTCF zCTRL=Input
+subGroup1	view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=RawSignal sXREG=Regions_Excluded u20=Uniqueness_20bp u24=Uniqueness_24bp u35=Uniqueness_35bp
+subGroup2	cellType Cell_Line GM12878=GM12878 zzRG=Reference_Genome
+subGroup3	EXP Experiment DNase=DNase-Seq FAIRE=FAIRE-Seq IP-CTCF=ChIP-Seq_CTCF zCTRL=Input zzREF=Extra_Tracks
 sortOrder	cellType=+ EXP=+ view=+
 controlledVocabulary	encode/cv.ra cellType
 dimensions  dimensionX=cellType dimensionY=EXP
 dragAndDrop	subTracks
-visibilityViewDefaults	 Peaks=dense Signal=full zRAW=hide
-controlledVocabulary encode/cv.ra cellType EXP=Input,CTCF
-settingsByView Signal:defaultViewLimits=5:35,viewLimits=0:40 SignalBO:defaultViewLimits=5:400,viewLimits=0:5342 zRAW:defaultViewLimits=5:35,viewLimits=0:112
+visibilityViewDefaults	 Peaks=dense Signal=full rRAW=hide
+controlledVocabulary encode/cv.ra cellType=GM12878 EXP=Input,CTCF
+settingsByView Signal:defaultViewLimits=5:35,viewLimits=0:40 SignalBO:defaultViewLimits=5:400,viewLimits=0:5342 rRAW:defaultViewLimits=5:35,viewLimits=0:112
 useScore    	0
 priority	0
 type		bed 3
 wgEncode	1
 
-	track          wgEncodeDukeDNaseSeqPeaksGm12878
-	subTrack       wgEncodeChromatinMap
-	shortLabel     DNase GM12878 Pk
-	longLabel      ENCODE Chromatin Map Duke DNase-Seq Peaks (in GM12878 cells)
-	subGroups      view=Peaks EXP=DNase cellType=GM12878
-	type           narrowPeak
+        track          wgEncodeDukeDNaseSeqPeaksGm12878
+        subTrack       wgEncodeChromatinMap
+        shortLabel     DNase GM12878 Pk
+        longLabel      ENCODE Chromatin Map Duke DNase-Seq Peaks (in GM12878 cells)
+        subGroups      view=Peaks EXP=DNase cellType=GM12878
+        type           narrowPeak
         useScore       0
-	dateSubmitted  2008-11-4 8:33:46
-	dateReleased   2009-08-04
-	priority       101
-	noInherit      on
-	configurable   on
-	cell           GM12878
+        dateSubmitted  2008-11-4 8:33:46
+        dateReleased   2009-08-04
+        priority       101
+        noInherit      on
+        configurable   on
+        cell           GM12878
 
-	track          wgEncodeDukeDNaseSeqSignalGm12878
-	subTrack       wgEncodeChromatinMap
-	shortLabel     DNase GM12878 Sig
-	longLabel      ENCODE Chromatin Map Duke DNase-Seq Signal (in GM12878 cells)
-	subGroups      view=Signal EXP=DNase cellType=GM12878
-	type           wig 0.00 39.64
-	dateSubmitted  2008-11-4 8:33:46
-	dateReleased   2009-08-04
-	priority       102
-	noInherit      on
-	configurable   on
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	cell           GM12878
+        track          wgEncodeDukeDNaseSeqSignalGm12878
+        subTrack       wgEncodeChromatinMap
+        shortLabel     DNase GM12878 Sig
+        longLabel      ENCODE Chromatin Map Duke DNase-Seq Signal (in GM12878 cells)
+        subGroups      view=Signal EXP=DNase cellType=GM12878
+        type           wig 0.00 39.64
+        dateSubmitted  2008-11-4 8:33:46
+        dateReleased   2009-08-04
+        priority       102
+        noInherit      on
+        configurable   on
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        cell           GM12878
 
         track           wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878
         subTrack        wgEncodeChromatinMap
@@ -1071,264 +1071,317 @@ wgEncode	1
         maxHeightPixels 100:32:16
         cell            GM12878
 
-	track          wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
-	subTrack       wgEncodeChromatinMap
-	shortLabel     DNase GM12878 Raw1
-	longLabel      ENCODE Chromatin Map Duke DNase-Seq Raw Signal Replicate 1 (in GM12878 cells)
-	subGroups      view=zRAW EXP=DNase cellType=GM12878
-	type           wig 0.00 10.46
-	dateSubmitted  2008-11-4 8:33:46
-	dateReleased   2009-08-04
-	priority       104
-	noInherit      on
-	configurable   off
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell           GM12878
+        track          wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
+        subTrack       wgEncodeChromatinMap
+        shortLabel     DNase GM12878 Raw1
+        longLabel      ENCODE Chromatin Map Duke DNase-Seq Raw Signal Replicate 1 (in GM12878 cells)
+        subGroups      view=rRAW EXP=DNase cellType=GM12878
+        type           wig 0.00 10.46
+        dateSubmitted  2008-11-4 8:33:46
+        dateReleased   2009-08-04
+        priority       104
+        noInherit      on
+        configurable   off
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell           GM12878
 
-	track          wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
-	subTrack       wgEncodeChromatinMap
-	shortLabel     DNase GM12878 Raw2
-	longLabel      ENCODE Chromatin Map Duke DNase-Seq Raw Signal Replicate 2 (in GM12878 cells)
-	subGroups      view=zRAW EXP=DNase cellType=GM12878
-	type           wig 0.00 9.77
-	dateSubmitted  2008-11-4 8:33:46
-	dateReleased   2009-08-04
-	priority       105
-	noInherit      on
-	configurable   off
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell           GM12878
+        track          wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
+        subTrack       wgEncodeChromatinMap
+        shortLabel     DNase GM12878 Raw2
+        longLabel      ENCODE Chromatin Map Duke DNase-Seq Raw Signal Replicate 2 (in GM12878 cells)
+        subGroups      view=rRAW EXP=DNase cellType=GM12878
+        type           wig 0.00 9.77
+        dateSubmitted  2008-11-4 8:33:46
+        dateReleased   2009-08-04
+        priority       105
+        noInherit      on
+        configurable   off
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell           GM12878
 
-	track          wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
-	subTrack       wgEncodeChromatinMap
-	shortLabel     DNase GM12878 Raw3
-	longLabel      ENCODE Chromatin Map Duke DNase-Seq Raw Signal Replicate 3 (in GM12878 cells)
-	subGroups      view=zRAW EXP=DNase cellType=GM12878
-	type           wig 0.00 39.64
-	dateSubmitted  2008-11-4 8:33:46
-	dateReleased   2009-08-04
-	priority       106
-	noInherit      on
-	configurable   off
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell           GM12878
+        track          wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
+        subTrack       wgEncodeChromatinMap
+        shortLabel     DNase GM12878 Raw3
+        longLabel      ENCODE Chromatin Map Duke DNase-Seq Raw Signal Replicate 3 (in GM12878 cells)
+        subGroups      view=rRAW EXP=DNase cellType=GM12878
+        type           wig 0.00 39.64
+        dateSubmitted  2008-11-4 8:33:46
+        dateReleased   2009-08-04
+        priority       106
+        noInherit      on
+        configurable   off
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell           GM12878
 
-	track          wgEncodeUncFAIREseqPeaksGm12878
-	subTrack       wgEncodeChromatinMap
-	shortLabel     FAIRE GM12878 Pk
-	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Peaks (in GM12878 cells)
-	subGroups      view=Peaks EXP=FAIRE cellType=GM12878
-	type           narrowPeak
-    useScore       0
-	dateSubmitted  2008-11-4 10:18:16
-	dateReleased   2009-08-04
-	priority       201
-	noInherit      on
-	configurable   on
-	cell           GM12878
+        track          wgEncodeUncFAIREseqPeaksGm12878
+        subTrack       wgEncodeChromatinMap
+        shortLabel     FAIRE GM12878 Pk
+        longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Peaks (in GM12878 cells)
+        subGroups      view=Peaks EXP=FAIRE cellType=GM12878
+        type           narrowPeak
+        useScore       0
+        dateSubmitted  2008-11-4 10:18:16
+        dateReleased   2009-08-04
+        priority       201
+        noInherit      on
+        configurable   on
+        cell           GM12878
 
-	track          wgEncodeUncFAIREseqSignalGm12878
-	subTrack       wgEncodeChromatinMap
-	shortLabel     FAIRE GM12878 Sig
-	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Signal (in GM12878 cells)
-	subGroups      view=Signal EXP=FAIRE cellType=GM12878
-	type           wig 0.00 18.37
-	dateSubmitted  2008-11-4 10:18:16
-	dateReleased   2009-08-04
-	priority       202
-	noInherit      on
-	configurable   on
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	cell           GM12878
+        track          wgEncodeUncFAIREseqSignalGm12878
+        subTrack       wgEncodeChromatinMap
+        shortLabel     FAIRE GM12878 Sig
+        longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Signal (in GM12878 cells)
+        subGroups      view=Signal EXP=FAIRE cellType=GM12878
+        type           wig 0.00 18.37
+        dateSubmitted  2008-11-4 10:18:16
+        dateReleased   2009-08-04
+        priority       202
+        noInherit      on
+        configurable   on
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        cell           GM12878
 
-    track           wgEncodeUncFAIREseqBaseOverlapSignalGm12878
-    subTrack        wgEncodeChromatinMap
-    shortLabel      FAIRE GM12878 BO
-    longLabel       ENCODE UNC FAIRE-Seq Base Overlap Signal (in GM12878 cells)
-    subGroups       view=SignalBO EXP=FAIRE cellType=GM12878
-    type            wig 0.00 5342.00
-    dateSubmitted   2008-11-21 16:50:53
-    dateReleased    2009-08-21
-    priority        203
-    noInherit       on
-    configurable    on
-    spanList        1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    cell            GM12878
+        track           wgEncodeUncFAIREseqBaseOverlapSignalGm12878
+        subTrack        wgEncodeChromatinMap
+        shortLabel      FAIRE GM12878 BO
+        longLabel       ENCODE UNC FAIRE-Seq Base Overlap Signal (in GM12878 cells)
+        subGroups       view=SignalBO EXP=FAIRE cellType=GM12878
+        type            wig 0.00 5342.00
+        dateSubmitted   2008-11-21 16:50:53
+        dateReleased    2009-08-21
+        priority        203
+        noInherit       on
+        configurable    on
+        spanList        1
+        windowingFunction mean
+        maxHeightPixels 100:32:16
+        cell            GM12878
 
-	track          wgEncodeUncFAIREseqRawSignalRep1Gm12878
-	subTrack       wgEncodeChromatinMap
-	shortLabel     FAIRE GM12878 Raw1
-	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 1 (in GM12878 cells)
-	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
-	type           wig 0.00 22.93
-	dateSubmitted  2008-11-4 10:18:16
-	dateReleased   2009-08-04
-	priority       204
-	noInherit      on
-	configurable   off
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell           GM12878
+        track          wgEncodeUncFAIREseqRawSignalRep1Gm12878
+        subTrack       wgEncodeChromatinMap
+        shortLabel     FAIRE GM12878 Raw1
+        longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 1 (in GM12878 cells)
+        subGroups      view=rRAW EXP=FAIRE cellType=GM12878
+        type           wig 0.00 22.93
+        dateSubmitted  2008-11-4 10:18:16
+        dateReleased   2009-08-04
+        priority       204
+        noInherit      on
+        configurable   off
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell           GM12878
 
-	track          wgEncodeUncFAIREseqRawSignalRep2Gm12878
-	subTrack       wgEncodeChromatinMap
-	shortLabel     FAIRE GM12878 Raw2
-	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 2 (in GM12878 cells)
-	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
-	type           wig 0.00 50.40
-	dateSubmitted  2008-11-4 10:18:16
-	dateReleased   2009-08-04
-	priority       205
-	noInherit      on
-	configurable   off
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell           GM12878
+        track          wgEncodeUncFAIREseqRawSignalRep2Gm12878
+        subTrack       wgEncodeChromatinMap
+        shortLabel     FAIRE GM12878 Raw2
+        longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 2 (in GM12878 cells)
+        subGroups      view=rRAW EXP=FAIRE cellType=GM12878
+        type           wig 0.00 50.40
+        dateSubmitted  2008-11-4 10:18:16
+        dateReleased   2009-08-04
+        priority       205
+        noInherit      on
+        configurable   off
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell           GM12878
 
-	track          wgEncodeUncFAIREseqRawSignalRep3Gm12878
-	subTrack       wgEncodeChromatinMap
-	shortLabel     FAIRE GM12878 Raw3
-	longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 3 (in GM12878 cells)
-	subGroups      view=zRAW EXP=FAIRE cellType=GM12878
-	type           wig 0.00 112.28
-	dateSubmitted  2008-11-4 10:18:16
-	dateReleased   2009-08-04
-	priority       206
-	noInherit      on
-	configurable   off
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell           GM12878
+        track          wgEncodeUncFAIREseqRawSignalRep3Gm12878
+        subTrack       wgEncodeChromatinMap
+        shortLabel     FAIRE GM12878 Raw3
+        longLabel      ENCODE Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 3 (in GM12878 cells)
+        subGroups      view=rRAW EXP=FAIRE cellType=GM12878
+        type           wig 0.00 112.28
+        dateSubmitted  2008-11-4 10:18:16
+        dateReleased   2009-08-04
+        priority       206
+        noInherit      on
+        configurable   off
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell           GM12878
 
-	track          wgEncodeUtaChIPseqPeaksGm12878Ctcf
-	subTrack       wgEncodeChromatinMap
-	shortLabel     CTCF GM12878 Pk
-	longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Peaks (CTCF in GM12878 cells)
-	subGroups      view=Peaks EXP=IP-CTCF cellType=GM12878
-	type           narrowPeak
-    	useScore       0
-	dateSubmitted  2008-11-4 11:37:19
-	dateReleased   2009-08-04
-	priority       301
-	noInherit      on
-	configurable   on
-	cell           GM12878
-	antibody       CTCF
+        track          wgEncodeUtaChIPseqPeaksGm12878Ctcf
+        subTrack       wgEncodeChromatinMap
+        shortLabel     CTCF GM12878 Pk
+        longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Peaks (CTCF in GM12878 cells)
+        subGroups      view=Peaks EXP=IP-CTCF cellType=GM12878
+        type           narrowPeak
+        useScore       0
+        dateSubmitted  2008-11-4 11:37:19
+        dateReleased   2009-08-04
+        priority       301
+        noInherit      on
+        configurable   on
+        cell           GM12878
+        antibody       CTCF
 
-	track          wgEncodeUtaChIPseqSignalGm12878Ctcf
-	subTrack       wgEncodeChromatinMap
-	shortLabel     CTCF GM12878 Sig
-	longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Signal (CTCF in GM12878 cells)
-	subGroups      view=Signal EXP=IP-CTCF cellType=GM12878
-	type           wig 0.00 14.01
-	dateSubmitted  2008-11-4 11:37:19
-	dateReleased   2009-08-04
-	priority       302
-	noInherit      on
-	configurable   on
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	cell           GM12878
-	antibody       CTCF
+        track          wgEncodeUtaChIPseqSignalGm12878Ctcf
+        subTrack       wgEncodeChromatinMap
+        shortLabel     CTCF GM12878 Sig
+        longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Signal (CTCF in GM12878 cells)
+        subGroups      view=Signal EXP=IP-CTCF cellType=GM12878
+        type           wig 0.00 14.01
+        dateSubmitted  2008-11-4 11:37:19
+        dateReleased   2009-08-04
+        priority       302
+        noInherit      on
+        configurable   on
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        cell           GM12878
+        antibody       CTCF
 
-	track          wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf
-	subTrack       wgEncodeChromatinMap
-	shortLabel     CTCF GM12878 Raw1
-	longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12878 cells)
-	subGroups      view=zRAW EXP=IP-CTCF cellType=GM12878
-	type           wig 0.00 6.71
-	dateSubmitted  2008-11-4 11:37:19
-	dateReleased   2009-08-04
-	priority       303
-	noInherit      on
-	configurable   off
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell           GM12878
-	antibody       CTCF
+        track          wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf
+        subTrack       wgEncodeChromatinMap
+        shortLabel     CTCF GM12878 Raw1
+        longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12878 cells)
+        subGroups      view=rRAW EXP=IP-CTCF cellType=GM12878
+        type           wig 0.00 6.71
+        dateSubmitted  2008-11-4 11:37:19
+        dateReleased   2009-08-04
+        priority       303
+        noInherit      on
+        configurable   off
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell           GM12878
+        antibody       CTCF
 
-	track          wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
-	subTrack       wgEncodeChromatinMap
-	shortLabel     CTCF GM12878 Raw2
-	longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Raw Signal Replicate 2 (CTCF in GM12878 cells)
-	subGroups      view=zRAW EXP=IP-CTCF cellType=GM12878
-	type           wig 0.00 7.24
-	dateSubmitted  2008-11-4 11:37:19
-	dateReleased   2009-08-04
-	priority       304
-	noInherit      on
-	configurable   off
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell           GM12878
-	antibody       CTCF
+        track          wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
+        subTrack       wgEncodeChromatinMap
+        shortLabel     CTCF GM12878 Raw2
+        longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Raw Signal Replicate 2 (CTCF in GM12878 cells)
+        subGroups      view=rRAW EXP=IP-CTCF cellType=GM12878
+        type           wig 0.00 7.24
+        dateSubmitted  2008-11-4 11:37:19
+        dateReleased   2009-08-04
+        priority       304
+        noInherit      on
+        configurable   off
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell           GM12878
+        antibody       CTCF
 
-	track          wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
-	subTrack       wgEncodeChromatinMap
-	shortLabel     CTCF GM12878 Raw3
-	longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Raw Signal Replicate 3 (CTCF in GM12878 cells)
-	subGroups      view=zRAW EXP=IP-CTCF cellType=GM12878
-	type           wig 0.00 14.01
-	dateSubmitted  2008-11-4 11:37:19
-	dateReleased   2009-08-04
-	priority       305
-	noInherit      on
-	configurable   off
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell           GM12878
-	antibody       CTCF
+        track          wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
+        subTrack       wgEncodeChromatinMap
+        shortLabel     CTCF GM12878 Raw3
+        longLabel      ENCODE Chromatin Map UT-Austin ChIP-Seq Raw Signal Replicate 3 (CTCF in GM12878 cells)
+        subGroups      view=rRAW EXP=IP-CTCF cellType=GM12878
+        type           wig 0.00 14.01
+        dateSubmitted  2008-11-4 11:37:19
+        dateReleased   2009-08-04
+        priority       305
+        noInherit      on
+        configurable   off
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell           GM12878
+        antibody       CTCF
 
-	track		   wgEncodeUtaustinChIPseqSignalGm12878Input
-	subTrack       wgEncodeChromatinMap
-	shortLabel	   INP GM12878 Sig
-	longLabel      ENCODE Chromatin Map UT-Austin Input Signal (GM12878 cells)
-	subGroups      view=Signal EXP=zCTRL cellType=GM12878
-	type           wig 0.00 29.05
-	dateSubmitted  2008-11-4 12:11:48
-	dateReleased   2009-08-04
-	priority       401
-	noInherit      on
-	configurable   on
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	cell           GM12878
-	antibody       Input
+        track		   wgEncodeUtaustinChIPseqSignalGm12878Input
+        subTrack       wgEncodeChromatinMap
+        shortLabel	   INP GM12878 Sig
+        longLabel      ENCODE Chromatin Map UT-Austin Input Signal (GM12878 cells)
+        subGroups      view=Signal EXP=zCTRL cellType=GM12878
+        type           wig 0.00 29.05
+        dateSubmitted  2008-11-4 12:11:48
+        dateReleased   2009-08-04
+        priority       401
+        noInherit      on
+        configurable   on
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        cell           GM12878
+        antibody       Input
 
-	track          wgEncodeUtaustinChIPseqRawSignalGm12878Input
-	subTrack       wgEncodeChromatinMap
-	shortLabel     INP GM12878 Raw
-	longLabel      ENCODE Chromatin Map UT-Austin Input Raw Signal (GM12878 cells)
-	subGroups      view=zRAW EXP=zCTRL cellType=GM12878
-	type           wig 0.00 29.05
-	dateSubmitted  2008-11-4 12:11:48
-	dateReleased   2009-08-04
-	priority       402
-	noInherit      on
-	configurable   off
-	spanList       1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell           GM12878
-	antibody       Input
+        track          wgEncodeUtaustinChIPseqRawSignalGm12878Input
+        subTrack       wgEncodeChromatinMap
+        shortLabel     INP GM12878 Raw
+        longLabel      ENCODE Chromatin Map UT-Austin Input Raw Signal (GM12878 cells)
+        subGroups      view=rRAW EXP=zCTRL cellType=GM12878
+        type           wig 0.00 29.05
+        dateSubmitted  2008-11-4 12:11:48
+        dateReleased   2009-08-04
+        priority       402
+        noInherit      on
+        configurable   off
+        spanList       1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell           GM12878
+        antibody       Input
+
+        track		wgEncodeDukeDNaseSeqRegionsExcludedGm12878
+        subTrack	wgEncodeChromatinMap
+        shortLabel	Excluded Regions
+        longLabel	ENCODE Chromatin Map Regions Excluded
+        subGroups	view=sXREG EXP=zzREF cellType=zzRG
+        type		bed 6
+        dateSubmitted	2008-12-03 23:19:49
+        dateReleased	2009-09-03
+        priority	9001
+        noInherit	on
+
+        track		wgEncodeDukeDNaseSeqUniqueness20bpGm12878
+        subTrack	wgEncodeChromatinMap
+        shortLabel	Uniqueness 20bp
+        longLabel	ENCODE Chromatin Map Uniqueness of 20bp Windows
+        subGroups	view=u20 EXP=zzREF cellType=zzRG
+        type		wig 0.00 1.00
+        dateSubmitted	2008-12-03 23:19:49
+        dateReleased	2009-09-03
+        priority	9002
+        noInherit	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+
+        track		wgEncodeDukeDNaseSeqUniqueness24bpGm12878
+        subTrack	wgEncodeChromatinMap
+        shortLabel	Uniqueness 24bp
+        longLabel	ENCODE Chromatin Map Uniqueness of 24bp Windows
+        subGroups	view=u24 EXP=zzREF cellType=zzRG
+        type		wig 0.00 1.00
+        dateSubmitted	2008-12-03 23:19:49
+        dateReleased	2009-09-03
+        priority	9003
+        noInherit	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+
+        track		wgEncodeDukeDNaseSeqUniqueness35bpGm12878
+        subTrack	wgEncodeChromatinMap
+        shortLabel	Uniqueness 35bp
+        longLabel	ENCODE Chromatin Map Uniqueness of 35bp Windows
+        subGroups	view=u35 EXP=zzREF cellType=zzRG
+        type		wig 0.00 1.00
+        dateSubmitted	2008-12-03 23:19:49
+        dateReleased	2009-09-03
+        priority	9004
+        noInherit	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
 
 track wgEncodeNhgriNre
 compositeTrack on
@@ -1348,61 +1401,61 @@ priority 0
 type bed 3
 wgEncode 1
 
-	track		wgEncodeNhgriNRESilencersK562Ggamma
-	subTrack	wgEncodeNhgriNre
-	shortLabel	K562 gamma Si
-	longLabel	ENCODE NHGRI Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
-	subGroups	view=SI cellType=K562 promoter=Ggam
-	type		bed 6
-	dateSubmitted	2008-11-25 13:50:43
-	dateReleased	2009-08-25
-	priority	1
-	noInherit	on
-	configurable	on
-	promoter	G-gamma
-	cell		K562
+        track		wgEncodeNhgriNRESilencersK562Ggamma
+        subTrack	wgEncodeNhgriNre
+        shortLabel	K562 gamma Si
+        longLabel	ENCODE NHGRI Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
+        subGroups	view=SI cellType=K562 promoter=Ggam
+        type		bed 6
+        dateSubmitted	2008-11-25 13:50:43
+        dateReleased	2009-08-25
+        priority	1
+        noInherit	on
+        configurable	on
+        promoter	G-gamma
+        cell		K562
 
-	track		wgEncodeNhgriNREEnhancerBlockersK562Ggamma
-	subTrack	wgEncodeNhgriNre
-	shortLabel	K562 gamma EB
-	longLabel	ENCODE NHGRI Negative Regulatory Elements - Enhancer Blockers (NRE-EBs) (in K562 cells)
-	subGroups	view=EB cellType=K562 promoter=Ggam
-	type		bed 6
-	dateSubmitted	2008-11-25 13:50:43
-	dateReleased	2009-08-25
-	priority	2
-	noInherit	on
-	configurable	on
-	promoter	G-gamma
-	cell		K562
+        track		wgEncodeNhgriNREEnhancerBlockersK562Ggamma
+        subTrack	wgEncodeNhgriNre
+        shortLabel	K562 gamma EB
+        longLabel	ENCODE NHGRI Negative Regulatory Elements - Enhancer Blockers (NRE-EBs) (in K562 cells)
+        subGroups	view=EB cellType=K562 promoter=Ggam
+        type		bed 6
+        dateSubmitted	2008-11-25 13:50:43
+        dateReleased	2009-08-25
+        priority	2
+        noInherit	on
+        configurable	on
+        promoter	G-gamma
+        cell		K562
 
-	track		wgEncodeNhgriNRESilencersK562Sv40
-	subTrack	wgEncodeNhgriNre
-	shortLabel	K562 SV40 Si
-	longLabel	ENCODE NHGRI Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
-	subGroups	view=SI cellType=K562 promoter=SV40
-	type		bed 6
-	dateSubmitted	2008-11-25 13:50:43
-	dateReleased	2009-08-25
-	priority	101
-	noInherit	on
-	configurable	on
-	promoter	SV40
-	cell		K562
+        track		wgEncodeNhgriNRESilencersK562Sv40
+        subTrack	wgEncodeNhgriNre
+        shortLabel	K562 SV40 Si
+        longLabel	ENCODE NHGRI Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
+        subGroups	view=SI cellType=K562 promoter=SV40
+        type		bed 6
+        dateSubmitted	2008-11-25 13:50:43
+        dateReleased	2009-08-25
+        priority	101
+        noInherit	on
+        configurable	on
+        promoter	SV40
+        cell		K562
 
-	track		wgEncodeNhgriNREEnhancerBlockersK562Sv40
-	subTrack	wgEncodeNhgriNre
-	shortLabel	K562 SV40 EB
-	longLabel	ENCODE NHGRI Negative Regulatory Elements - Enhancer Blockers (NRE-EBs) (in K562 cells)
-	subGroups	view=EB cellType=K562 promoter=SV40
-	type		bed 6
-	dateSubmitted	2008-11-25 13:50:43
-	dateReleased	2009-08-25
-	priority	102
-	noInherit	on
-	configurable	on
-	promoter	SV40
-	cell		K562
+        track		wgEncodeNhgriNREEnhancerBlockersK562Sv40
+        subTrack	wgEncodeNhgriNre
+        shortLabel	K562 SV40 EB
+        longLabel	ENCODE NHGRI Negative Regulatory Elements - Enhancer Blockers (NRE-EBs) (in K562 cells)
+        subGroups	view=EB cellType=K562 promoter=SV40
+        type		bed 6
+        dateSubmitted	2008-11-25 13:50:43
+        dateReleased	2009-08-25
+        priority	102
+        noInherit	on
+        configurable	on
+        promoter	SV40
+        cell		K562
 
 track wgEncodeRikenCage
 compositeTrack on
@@ -2768,152 +2821,152 @@ settingsByView Signal:defaultViewLimits=5:500,viewLimits=0:20910  zRAW:defaultVi
 dataVersion ENCODE Submitted September 2008
 wgEncode 1
 
-	track		wgEncodeYaleChIPseqPeaksGm12878Pol2
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 Pol2 Pk
-	longLabel	ENCODE Yale ChIP-Seq Peaks (Pol2 in GM12878 cells)
-	subGroups	view=Peaks factor=Pol2 cellType=GM12878
-	type		narrowPeak
-	dateSubmitted	2008-11-26 15:55:33
-	dateReleased	2009-08-26
-	priority	1
-	noInherit	on
-	configurable	on
-	cell		GM12878
-	antibody	Pol2
+        track		wgEncodeYaleChIPseqPeaksGm12878Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	GM12878 Pol2 Pk
+        longLabel	ENCODE Yale ChIP-Seq Peaks (Pol2 in GM12878 cells)
+        subGroups	view=Peaks factor=Pol2 cellType=GM12878
+        type		narrowPeak
+        dateSubmitted	2008-11-26 15:55:33
+        dateReleased	2009-08-26
+        priority	1
+        noInherit	on
+        configurable	on
+        cell		GM12878
+        antibody	Pol2
 
-	track		wgEncodeYaleChIPseqSignalGm12878Pol2
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 Pol2 Sig
-	longLabel	ENCODE Yale ChIP-Seq Signal (Pol2 in GM12878 cells)
-	subGroups	view=Signal factor=Pol2 cellType=GM12878
-	type		wig 0.00 9844.00
-	dateSubmitted	2008-11-26 15:55:33
-	dateReleased	2009-08-26
-	priority	2
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM12878
-	antibody	Pol2
+        track		wgEncodeYaleChIPseqSignalGm12878Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	GM12878 Pol2 Sig
+        longLabel	ENCODE Yale ChIP-Seq Signal (Pol2 in GM12878 cells)
+        subGroups	view=Signal factor=Pol2 cellType=GM12878
+        type		wig 0.00 9844.00
+        dateSubmitted	2008-11-26 15:55:33
+        dateReleased	2009-08-26
+        priority	2
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		GM12878
+        antibody	Pol2
 
-	track		wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol2
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 Pol2 Raw1
-	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in GM12878 cells)
-	subGroups	view=zRAW factor=Pol2 cellType=GM12878
-	type		wig 1.00 702.00
-	dateSubmitted	2008-11-26 15:55:33
-	dateReleased	2009-08-26
-	priority	3
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM12878
-	antibody	Pol2
+        track		wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	GM12878 Pol2 Raw1
+        longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in GM12878 cells)
+        subGroups	view=zRAW factor=Pol2 cellType=GM12878
+        type		wig 1.00 1653.00
+        dateSubmitted	2008-11-26 15:55:33
+        dateReleased	2009-08-26
+        priority	3
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		GM12878
+        antibody	Pol2
 
-	track		wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol2
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 Pol2 Raw2
-	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (Pol2 in GM12878 cells)
-	subGroups	view=zRAW factor=Pol2 cellType=GM12878
-	type		wig 1.00 379.00
-	dateSubmitted	2008-11-26 15:55:33
-	dateReleased	2009-08-26
-	priority	4
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM12878
-	antibody	Pol2
+        track		wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	GM12878 Pol2 Raw2
+        longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (Pol2 in GM12878 cells)
+        subGroups	view=zRAW factor=Pol2 cellType=GM12878
+        type		wig 1.00 993.00
+        dateSubmitted	2008-11-26 15:55:33
+        dateReleased	2009-08-26
+        priority	4
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		GM12878
+        antibody	Pol2
 
-	track		wgEncodeYaleChIPseqPeaksGm12878Cfos
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 c-Fos Pk
-	longLabel	ENCODE Yale ChIP-Seq Peaks (c-Fos in GM12878 cells)
-	subGroups	view=Peaks factor=c-Fos cellType=GM12878
-	type		narrowPeak
-	dateSubmitted	2008-11-24 19:16:9
-	dateReleased	2009-08-24
-	priority	11
-	noInherit	on
-	configurable	on
-	cell		GM12878
-	antibody	c-Fos
+        track		wgEncodeYaleChIPseqPeaksGm12878Cfos
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	GM12878 c-Fos Pk
+        longLabel	ENCODE Yale ChIP-Seq Peaks (c-Fos in GM12878 cells)
+        subGroups	view=Peaks factor=c-Fos cellType=GM12878
+        type		narrowPeak
+        dateSubmitted	2008-11-24 19:16:9
+        dateReleased	2009-08-24
+        priority	11
+        noInherit	on
+        configurable	on
+        cell		GM12878
+        antibody	c-Fos
 
-	track		wgEncodeYaleChIPseqSignalGm12878Cfos
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 c-Fos Sig
-	longLabel	ENCODE Yale ChIP-Seq Signal (c-Fos in GM12878 cells)
-	subGroups	view=Signal factor=c-Fos cellType=GM12878
-	type		wig 0.00 4648.00
-	dateSubmitted	2008-11-24 19:16:9
-	dateReleased	2009-08-24
-	priority	12
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	cell		GM12878
-	antibody	c-Fos
+        track		wgEncodeYaleChIPseqSignalGm12878Cfos
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	GM12878 c-Fos Sig
+        longLabel	ENCODE Yale ChIP-Seq Signal (c-Fos in GM12878 cells)
+        subGroups	view=Signal factor=c-Fos cellType=GM12878
+        type		wig 0.00 4648.00
+        dateSubmitted	2008-11-24 19:16:9
+        dateReleased	2009-08-24
+        priority	12
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        cell		GM12878
+        antibody	c-Fos
 
-	track		wgEncodeYaleChIPseqRawSignalRep1Gm12878Cfos
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 c-Fos Raw1
-	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (c-Fos in GM12878 cells)
-	subGroups	view=zRAW factor=c-Fos cellType=GM12878
-	type		wig 1.00 714.00
-	dateSubmitted	2008-11-24 19:16:9
-	dateReleased	2009-08-24
-	priority	13
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM12878
-	antibody	c-Fos
+        track		wgEncodeYaleChIPseqRawSignalRep1Gm12878Cfos
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	GM12878 c-Fos Raw1
+        longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (c-Fos in GM12878 cells)
+        subGroups	view=zRAW factor=c-Fos cellType=GM12878
+        type		wig 1.00 1507.00
+        dateSubmitted	2008-11-24 19:16:9
+        dateReleased	2009-08-24
+        priority	13
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		GM12878
+        antibody	c-Fos
 
-	track		wgEncodeYaleChIPseqRawSignalRep2Gm12878Cfos
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 c-Fos Raw2
-	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (c-Fos in GM12878 cells)
-	subGroups	view=zRAW factor=c-Fos cellType=GM12878
-	type		wig 1.00 630.00
-	dateSubmitted	2008-11-24 19:16:9
-	dateReleased	2009-08-24
-	priority	14
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM12878
-	antibody	c-Fos
+        track		wgEncodeYaleChIPseqRawSignalRep2Gm12878Cfos
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	GM12878 c-Fos Raw2
+        longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (c-Fos in GM12878 cells)
+        subGroups	view=zRAW factor=c-Fos cellType=GM12878
+        type		wig 1.00 1828.00
+        dateSubmitted	2008-11-24 19:16:9
+        dateReleased	2009-08-24
+        priority	14
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		GM12878
+        antibody	c-Fos
 
-	track		wgEncodeYaleChIPseqRawSignalRep3Gm12878Cfos
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	GM12878 c-Fos Raw3
-	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 3 (c-Fos in GM12878 cells)
-	subGroups	view=zRAW factor=c-Fos cellType=GM12878
-	type		wig 1.00 862.00
-	dateSubmitted	2008-11-24 19:16:9
-	dateReleased	2009-08-24
-	priority	15
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM12878
-	antibody	c-Fos
+        track		wgEncodeYaleChIPseqRawSignalRep3Gm12878Cfos
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	GM12878 c-Fos Raw3
+        longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 3 (c-Fos in GM12878 cells)
+        subGroups	view=zRAW factor=c-Fos cellType=GM12878
+        type		wig 1.00 1740.00
+        dateSubmitted	2008-11-24 19:16:9
+        dateReleased	2009-08-24
+        priority	15
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		GM12878
+        antibody	c-Fos
 
         track           wgEncodeYaleChIPseqSignalGm12878Input
         subTrack        wgEncodeYaleChIPseq
@@ -2937,7 +2990,7 @@ wgEncode 1
         shortLabel      GM12878 Input Raw
         longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in GM12878 cells)
         subGroups       view=zRAW factor=zCTRL cellType=GM12878
-        type            wig 1.00 310.00
+        type            wig 1.00 1488.00
         dateSubmitted   2008-11-25 10:1:33
         dateReleased    2009-08-25
         priority        93
@@ -2990,7 +3043,7 @@ wgEncode 1
         shortLabel      HeLa Pol2 Raw1
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in HeLa-S3 cells)
         subGroups       view=zRAW factor=Pol2 cellType=HeLa
-        type            wig 1.00 2079.00
+        type            wig 1.00 3673.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
         priority        103
@@ -3008,7 +3061,7 @@ wgEncode 1
         shortLabel      HeLa Pol2 Raw2
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (Pol2 in HeLa-S3 cells)
         subGroups       view=zRAW factor=Pol2 cellType=HeLa
-        type            wig 1.00 3795.00
+        type            wig 1.00 6153.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
         priority        104
@@ -3026,7 +3079,7 @@ wgEncode 1
         shortLabel      HeLa Pol2 Raw3
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 3 (Pol2 in HeLa-S3 cells)
         subGroups       view=zRAW factor=Pol2 cellType=HeLa
-        type            wig 1.00 3649.00
+        type            wig 1.00 4989.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
         priority        105
@@ -3065,7 +3118,7 @@ wgEncode 1
         shortLabel      HeLa Inp Raw
         longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in HeLa-S3 cells)
         subGroups       view=zRAW factor=zCTRL cellType=HeLa
-        type            wig 1.00 4247.00
+        type            wig 1.00 8316.00
         dateSubmitted   2008-09-29 14:52:0
         dateReleased    2009-06-29
         priority        193
@@ -3175,7 +3228,7 @@ wgEncode 1
         shortLabel      HeLa-IF Inp Raw
         longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in HeLa-S3_IFNg cells)
         subGroups       view=zRAW factor=zCTRL cellType=HeLa-IF
-        type            wig 1.00 4733.00
+        type            wig 1.00 11690.00
         dateSubmitted   2008-09-29 14:12:28
         dateReleased    2009-06-29
         priority        293
@@ -3225,7 +3278,7 @@ wgEncode 1
         shortLabel      K562 Pol2 Raw1
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in K562 cells)
         subGroups       view=zRAW factor=Pol2 cellType=K562
-        type            wig 1.00 7121.00
+        type            wig 1.00 9783.00
         dateSubmitted   2008-10-27 11:57:19
         dateReleased    2009-07-27
         priority        303
@@ -3242,7 +3295,7 @@ wgEncode 1
         shortLabel      K562 Pol2 Raw2
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (Pol2 in K562 cells)
         subGroups       view=zRAW factor=Pol2 cellType=K562
-        type            wig 1.00 6180.00
+        type            wig 1.00 8446.00
         dateSubmitted   2008-10-27 11:57:19
         dateReleased    2009-07-27
         priority        304
@@ -3290,7 +3343,7 @@ wgEncode 1
         shortLabel	K562 c-Fos Raw1
         longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (c-Fos in K562 cells)
         subGroups	view=zRAW factor=c-Fos cellType=K562
-        type		wig 1.00 1333.00
+        type		wig 1.00 6107.00
         dateSubmitted	2008-11-21 13:23:36
         dateReleased	2009-08-21
         priority	313
@@ -3307,7 +3360,7 @@ wgEncode 1
         shortLabel	K562 c-Fos Raw2
         longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (c-Fos in K562 cells)
         subGroups	view=zRAW factor=c-Fos cellType=K562
-        type		wig 1.00 972.00
+        type		wig 1.00 3561.00
         dateSubmitted	2008-11-21 13:23:36
         dateReleased	2009-08-21
         priority	314
@@ -3324,7 +3377,7 @@ wgEncode 1
         shortLabel	K562 c-Fos Raw3
         longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 3 (c-Fos in K562 cells)
         subGroups	view=zRAW factor=c-Fos cellType=K562
-        type		wig 1.00 823.00
+        type		wig 1.00 3921.00
         dateSubmitted	2008-11-21 13:23:36
         dateReleased	2009-08-21
         priority	315
@@ -3372,7 +3425,7 @@ wgEncode 1
         shortLabel	K562 c-Jun Raw1
         longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (c-Jun in K562 cells)
         subGroups	view=zRAW factor=c-Jun cellType=K562
-        type		wig 1.00 2229.00
+        type		wig 1.00 11614.00
         dateSubmitted	2008-11-21 12:38:7
         dateReleased	2009-08-21
         priority	323
@@ -3389,7 +3442,7 @@ wgEncode 1
         shortLabel	K562 c-Jun Raw2
         longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (c-Jun in K562 cells)
         subGroups	view=zRAW factor=c-Jun cellType=K562
-        type		wig 1.00 972.00
+        type		wig 1.00 5368.00
         dateSubmitted	2008-11-21 12:38:7
         dateReleased	2009-08-21
         priority	324
@@ -3437,7 +3490,7 @@ wgEncode 1
         shortLabel	K562 c-Myc Raw1
         longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (c-Myc in K562 cells)
         subGroups	view=zRAW factor=c-Myc cellType=K562
-        type		wig 1.00 753.00
+        type		wig 1.00 1590.00
         dateSubmitted	2008-11-21 13:51:54
         dateReleased	2009-08-21
         priority	333
@@ -3454,7 +3507,7 @@ wgEncode 1
         shortLabel	K562 c-Myc Raw2
         longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (c-Myc in K562 cells)
         subGroups	view=zRAW factor=c-Myc cellType=K562
-        type		wig 1.00 440.00
+        type		wig 1.00 1603.00
         dateSubmitted	2008-11-21 13:51:54
         dateReleased	2009-08-21
         priority	334
@@ -3489,7 +3542,7 @@ wgEncode 1
         shortLabel      K562 Inp Raw
         longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in K562 cells)
         subGroups       view=zRAW factor=zCTRL cellType=K562
-        type            wig 1.00 1315.00
+        type            wig 1.00 4661.00
         dateSubmitted   2008-10-14 11:39:9
         dateReleased    2009-07-14
         priority        393
@@ -3501,87 +3554,87 @@ wgEncode 1
         antibody        Input
         configurable    on
 
-	track		wgEncodeYaleChIPseqPeaksNb4Pol2
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	NB4 Pol2 Pk
-	longLabel	ENCODE Yale ChIP-Seq Peaks (Pol2 in NB4 cells)
-	subGroups	view=Peaks factor=Pol2 cellType=NB4
-	type		narrowPeak
-	dateSubmitted	2008-11-25 9:50:26
-	dateReleased	2009-08-25
-	priority	401
-	noInherit	on
-	configurable	on
-	cell		NB4
-	antibody	Pol2
+        track		wgEncodeYaleChIPseqPeaksNb4Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	NB4 Pol2 Pk
+        longLabel	ENCODE Yale ChIP-Seq Peaks (Pol2 in NB4 cells)
+        subGroups	view=Peaks factor=Pol2 cellType=NB4
+        type		narrowPeak
+        dateSubmitted	2008-11-25 9:50:26
+        dateReleased	2009-08-25
+        priority	401
+        noInherit	on
+        configurable	on
+        cell		NB4
+        antibody	Pol2
 
-	track		wgEncodeYaleChIPseqSignalNb4Pol2
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	NB4 Pol2 Sig
-	longLabel	ENCODE Yale ChIP-Seq Signal (Pol2 in NB4 cells)
-	subGroups	view=Signal factor=Pol2 cellType=NB4
-	type		wig 0.00 20774.00
-	dateSubmitted	2008-11-25 9:50:26
-	dateReleased	2009-08-25
-	priority	402
-	noInherit	on
-	configurable	on
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:32:16
-	cell		NB4
-	antibody	Pol2
+        track		wgEncodeYaleChIPseqSignalNb4Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	NB4 Pol2 Sig
+        longLabel	ENCODE Yale ChIP-Seq Signal (Pol2 in NB4 cells)
+        subGroups	view=Signal factor=Pol2 cellType=NB4
+        type		wig 0.00 20774.00
+        dateSubmitted	2008-11-25 9:50:26
+        dateReleased	2009-08-25
+        priority	402
+        noInherit	on
+        configurable	on
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        cell		NB4
+        antibody	Pol2
 
-	track		wgEncodeYaleChIPseqRawSignalRep1Nb4Pol2
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	NB4 Pol2 Raw1
-	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in NB4 cells)
-	subGroups	view=zRAW factor=Pol2 cellType=NB4
-	type		wig 1.00 7861.00
-	dateSubmitted	2008-11-25 9:50:26
-	dateReleased	2009-08-25
-	priority	403
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		NB4
-	antibody	Pol2
+        track		wgEncodeYaleChIPseqRawSignalRep1Nb4Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	NB4 Pol2 Raw1
+        longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in NB4 cells)
+        subGroups	view=zRAW factor=Pol2 cellType=NB4
+        type		wig 1.00 10895.00
+        dateSubmitted	2008-11-25 9:50:26
+        dateReleased	2009-08-25
+        priority	403
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		NB4
+        antibody	Pol2
 
-	track		wgEncodeYaleChIPseqRawSignalRep2Nb4Pol2
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	NB4 Pol2 Raw2
-	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (Pol2 in NB4 cells)
-	subGroups	view=zRAW factor=Pol2 cellType=NB4
-	type		wig 1.00 4101.00
-	dateSubmitted	2008-11-25 9:50:26
-	dateReleased	2009-08-25
-	priority	404
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		NB4
-	antibody	Pol2
+        track		wgEncodeYaleChIPseqRawSignalRep2Nb4Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	NB4 Pol2 Raw2
+        longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (Pol2 in NB4 cells)
+        subGroups	view=zRAW factor=Pol2 cellType=NB4
+        type		wig 1.00 5847.00
+        dateSubmitted	2008-11-25 9:50:26
+        dateReleased	2009-08-25
+        priority	404
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		NB4
+        antibody	Pol2
 
-	track		wgEncodeYaleChIPseqRawSignalRep3Nb4Pol2
-	subTrack	wgEncodeYaleChIPseq
-	shortLabel	NB4 Pol2 Raw3
-	longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 3 (Pol2 in NB4 cells)
-	subGroups	view=zRAW factor=Pol2 cellType=NB4
-	type		wig 1.00 2900.00
-	dateSubmitted	2008-11-25 9:50:26
-	dateReleased	2009-08-25
-	priority	405
-	noInherit	on
-	configurable	off
-	spanList	1
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		NB4
-	antibody	Pol2
+        track		wgEncodeYaleChIPseqRawSignalRep3Nb4Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	NB4 Pol2 Raw3
+        longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 3 (Pol2 in NB4 cells)
+        subGroups	view=zRAW factor=Pol2 cellType=NB4
+        type		wig 1.00 4034.00
+        dateSubmitted	2008-11-25 9:50:26
+        dateReleased	2009-08-25
+        priority	405
+        noInherit	on
+        configurable	off
+        spanList	1
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		NB4
+        antibody	Pol2
 
         track           wgEncodeYaleChIPseqSignalNb4Input
         subTrack        wgEncodeYaleChIPseq
@@ -3605,7 +3658,7 @@ wgEncode 1
         shortLabel      NB4 Input Raw
         longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in NB4 cells)
         subGroups       view=zRAW factor=zCTRL cellType=NB4
-        type            wig 1.00 1370.00
+        type            wig 1.00 2842.00
         dateSubmitted   2008-11-25 10:29:19
         dateReleased    2009-08-25
         priority        493
@@ -4390,14 +4443,14 @@ shortLabel	Gis Pet
 longLabel	ENCODE Gis Gingeras Pet
 group		regulation
 subGroup1       view Views Alignments=Alignments Tags=Tags PlusRawSignal=PlusRawSignal MinusRawSignal=MinusRawSignal
-subGroup2       cellType Cell_Line K562=K562 prostate=prostate 
-subGroup3       localization Localization cytosol=cytosol cell=cell polysome=polysome nucleus=nucleus                                                     
-subGroup4       rnaExtract RnaExtract longPolyA=longPolyA 
+subGroup2       cellType Cell_Line K562=K562 prostate=prostate
+subGroup3       localization Localization cytosol=cytosol cell=cell polysome=polysome nucleus=nucleus
+subGroup4       rnaExtract RnaExtract longPolyA=longPolyA
 dimensions	dimensionX=cellType	dimensionY=localization	dimensionZ=rnaExtract
 sortOrder	cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary	encode/cv.ra cellType localization rnaExtract
 dragAndDrop	subTracks
-visibilityViewDefaults   Alignments=hide Tags=hide                          
+visibilityViewDefaults   Alignments=hide Tags=hide
 priority	0
 type		bed 3
 wgEncode	1
@@ -4696,8 +4749,8 @@ wgEncode 1
 	itemRgb on
 	noInherit	on
 	cell	HepG2
-	
-	
+
+
 	track	wgEncodeHudsonalphaMethyl27HepG2r2
 	subTrack	wgEncodeHudsonalphaMethyl27
 	shortLabel	Methyl27HepG2r1
@@ -4709,8 +4762,8 @@ wgEncode 1
 	itemRgb on
 	noInherit	on
 	cell	HepG2
-	
-	
+
+
 	track	wgEncodeHudsonalphaMethyl27GM12878r1
 	subTrack	wgEncodeHudsonalphaMethyl27
 	shortLabel	Methyl27GM12878r1
@@ -4722,7 +4775,7 @@ wgEncode 1
 	itemRgb on
 	noInherit	on
 	cell	GM12878
-	
+
 	track	wgEncodeHudsonalphaMethyl27GM12878r2
 	subTrack	wgEncodeHudsonalphaMethyl27
 	shortLabel	Methyl27GM12878r1
@@ -4734,7 +4787,7 @@ wgEncode 1
 	itemRgb on
 	noInherit	on
 	cell	GM12878
-	
+
 	track	wgEncodeHudsonalphaMethyl27K562r1
 	subTrack	wgEncodeHudsonalphaMethyl27
 	shortLabel	Methyl27K562r1
@@ -4746,7 +4799,7 @@ wgEncode 1
 	itemRgb on
 	noInherit	on
 	cell	K562
-	
+
 	track	wgEncodeHudsonalphaMethyl27K562r2
 	subTrack	wgEncodeHudsonalphaMethyl27
 	shortLabel	Methyl27K562r1
