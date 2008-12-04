@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1477 2008/12/03 21:47:39 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1478 2008/12/04 19:42:13 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8472,27 +8472,36 @@ if (url != NULL && url[0] != 0)
 	}
     sqlFreeResult(&sr);
     
+    printf("<H3>OMIM Database ");fflush(stdout);
+    printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
+    printf("%s</A> ", itemName);
+    
     safef(query, sizeof(query), 
-    	  "select title1, title2 from omimGeneMap where omimId='%s';", itemName);
+    	  "select title1, title2 from omimGeneMap where omimId=%s;", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
     	{
-	title1 = cloneString(row[0]);
-	title2 = cloneString(row[1]);
+	if (row[0] != NULL)
+	    {
+	    title1 = cloneString(row[0]);
+    	    printf(": %s", title1);
+	    }
+	if (row[1] != NULL)
+	    {
+	    title2 = cloneString(row[1]);
+    	    printf(" %s ", title2);
+	    }
 	}
     sqlFreeResult(&sr);
     
-    printf("<H3>OMIM Database ");
-    printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
-    printf("%s</A>: %s", itemName, title1);
-    if (strlen(title2) > 0) printf(" %s ", title2);
     printf("</H3>\n");
 
     printf("<H3>UCSC Gene ");
     printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>", 
 	   "../cgi-bin/hgGene?hgg_gene=", kgId);
     printf("%s</A>: ", kgId);
+
     safef(query, sizeof(query), "select description from kgXref where kgId='%s';", kgId);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
