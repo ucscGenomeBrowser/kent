@@ -14,14 +14,14 @@
     <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
 
 <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../inc/FAQ.topbar.html"--></TD></TR>
-<!--Content Tables------------------------------------------------------->
+<!--Content Tables-->
     <TR><TD COLSPAN=2 CELLPADDING=10>
     <!--outer table is for border purposes-->
    	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
 	    <TR><TD>
            	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 		    <TR><TD>
-            		<TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+            		<TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
                 	    <TR><TD> <FONT SIZE="4"><b>&nbsp;   Frequently Asked Questions: Data File Formats</b></FONT> 
 			    </TD></TR>
 			</TABLE>
@@ -54,14 +54,14 @@
 	</TABLE>
 	<BR>
 
-<!--Content Table------------------------------------------------------------>
+<!--Content Table-->
 <A NAME="format1"></A>
     <!--outer table is for border purposes-->        
     	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
              <TR><TD>            
         	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    	     <TR><TD>                
-  	    		<TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+  	    		<TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
 	        	     <TR><TD>                
 	        	     <!--cheap trick to get background on row to be continuous-->
 	   			<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
@@ -143,14 +143,14 @@ chr22 2000 6000 cloneB 900 - 2000 6000 0 2 433,399, 0,3601</TT></PRE>
     	</TABLE>
 	<BR>
 
-<!--Content Table------------------------------------------------------------>
+<!--Content Table-->
 <A NAME="format2"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
@@ -219,26 +219,25 @@ However, in the <I>qStarts</I> list, the coordinates are reversed.</P>
 <B><I>Example:</I></B><BR>
 Here is a 30-mer containing 2 blocks that align on the minus strand and
 2 blocks that align on the plus strand (this sometimes can happen in response to
-assembly errors): <BR><BR>
-<TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0 BORDER=0>
-<TR><TD><PRE>0         1         2         3 tens position in query   </TD></TR>
-<TR><TD><PRE>0123456789012345678901234567890 ones position in query   </TD></TR>
-<TR><TD><PRE>            ++++          +++++ plus strand alignment on query   </TD></TR>
-<TR><TD><PRE>    --------    ----------      minus strand alignment on query   </TD></TR>
-<TR><TD></TD></TD>
-<TR><TD><PRE></TD></TD>
-<TR><TD><PRE>Plus strand:   </TD></TR>
-<TR><TD><PRE>     qStart=12 </TD></TR>
-<TR><TD><PRE>     qEnd=31 </TD></TR>
-<TR><TD><PRE>     blockSizes=4,5 </TD></TR>
-<TR><TD><PRE>     qStarts=12,26   </TD></TR>
-<TR><TD><PRE>                      </TD></TR>
-<TR><TD><PRE>Minus strand:   </TD></TR>
-<TR><TD><PRE>     qStart=4 </TD></TR>
-<TR><TD><PRE>     qEnd=26 </TD></TR>
-<TR><TD><PRE>     blockSizes=10,8 </TD></TR>
-<TR><TD><PRE>     qStarts=5,19    </TD></TR>
-</TABLE><BR>
+assembly errors): 
+<BR><BR>
+<PRE><TT>0         1         2         3 tens position in query  
+0123456789012345678901234567890 ones position in query   
+            ++++          +++++ plus strand alignment on query   
+    --------    ----------      minus strand alignment on query   
+
+Plus strand:   
+     qStart=12 
+     qEnd=31 
+     blockSizes=4,5 
+     qStarts=12,26 
+                  
+Minus strand:   
+     qStart=4 
+     qEnd=26 
+     blockSizes=10,8 
+     qStarts=5,19   
+</TT></PRE>
 Essentially, the minus strand <I>blockSizes</I> and <I>qStarts</I> are
 what you would get if you reverse-complemented the query.
 However, the <I>qStart</I> and <I>qEnd</I> are not reversed. To convert one to the other:
@@ -254,14 +253,14 @@ However, the <I>qStart</I> and <I>qEnd</I> are not reversed. To convert one to t
     	</TABLE>
 	<BR>
 
-<!--Content Table------------------------------------------------------------>
+<!--Content Table-->
 <A NAME="format3"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
@@ -325,14 +324,14 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
     	</TABLE>
 	<BR>
 
-<!--Content Table------------------------------------------------------------>
+<!--Content Table-->
 <A NAME="format4"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
@@ -357,14 +356,14 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
     	</TABLE>
 	<BR>
 
-<!--Content Table------------------------------------------------------------>
+<!--Content Table-->
 <A NAME="format5"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
@@ -490,7 +489,7 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
                     used to run the alignment program.
 		    <FONT color="#0000FF"><PRE><TT> # tba.v8 (((human chimp) baboon) (mouse rat))</TT></PRE></FONT>
                     <P>
-		    <B>Alignment Block Lines</B> (lines starting with 'a' -- parameters for a new alignment block)</B>
+		    <B>Alignment Block Lines</B> (lines starting with 'a' -- parameters for a new alignment block)
 		    <P>                    
 		    <FONT color="#0000FF"><PRE><TT> a score=23262.0</TT></PRE></FONT>
                     Each alignment begins with an 'a' line that set 
@@ -558,7 +557,7 @@ chr22  TeleGene promoter  1020000  1020000  800 -  .  touch2
 		    <B>Lines starting with 'i' -- information about what's 
 		    happening before and after this block in the aligning 
 		    species</B> 
-                    <P><FONT color=#0000ff>
+                    <P><FONT color="#0000ff">
 <PRE><TT> s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
  i panTro1.chr6 N 0 C 0
  s baboon         249182 13 +   4622798 gcagctgaaaaca
@@ -756,14 +755,14 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
     	</TABLE>
 	<BR>
 
-<!--Content Table------------------------------------------------------------>
+<!--Content Table-->
 <A NAME="format6"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
@@ -791,14 +790,14 @@ information.</P>
     	</TABLE>
 	<BR>
 
-<!--Content Table------------------------------------------------------------>
+<!--Content Table-->
 <A NAME="format6.5"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
@@ -842,14 +841,14 @@ TARGET=_blank>Genome Browser Wiki</A>.
     	</TABLE>
 	<BR>
 
-<!--Content Table------------------------------------------------------------>
+<!--Content Table-->
 <A NAME="format7"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
@@ -864,7 +863,6 @@ TARGET=_blank>Genome Browser Wiki</A>.
 	        <TR><TH HEIGHT=10></TH></TR>
                 <TR><TD WIDTH=10>&nbsp;</TD>
 		    <TD>
-	            <P>
 <P>
 A .2bit file stores multiple DNA sequences (up to 4 Gb total) in a compact 
 randomly-accessible format. The file contains masking information as well 
@@ -879,7 +877,7 @@ created the file
 higher than 0.
 <LI>sequenceCount - the number of sequences in the file.
 <LI>reserved - always zero for now
-</UL></P>
+</UL>
 <P>
 All fields are 32 bits unless noted. If the signature value is not as given, 
 the reader program should byte-swap the signature and check if the swapped 
@@ -894,7 +892,7 @@ each sequence. Each index entry contains three fields:
 <LI>name - the sequence name itself, of variable length depending on nameSize
 <LI>offset - the 32-bit offset of the sequence data relative to the start of the
 file
-</UL></P>
+</UL>
 <P>
 The index is followed by the sequence records, which contain nine fields:
 <UL>
@@ -913,7 +911,7 @@ T - 00, C - 01, A - 10, G - 11.  The first base is in the most significant
 sequence TCAG is represented as 00011011. The packedDna field is padded with 0 
 bits as necessary to take an even multiple of 32 bits in the file, which 
 improves I/O performance on some machines.
-</UL></P>
+</UL>
 			    </TD><TD WIDTH=15></TD></TR>
 	    		</TABLE><BR>
 		     </TD></TR>
@@ -922,14 +920,14 @@ improves I/O performance on some machines.
     	</TABLE>
 	<BR>
 
-<!--Content Table------------------------------------------------------------>
+<!--Content Table-->
 <A NAME="format8"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
@@ -976,18 +974,15 @@ The most significant bit in a nibble is set if the base is masked. </P>
      	     </TD></TR>
     	</TABLE>
 	<BR>
-    </TD><TD WIDTH=15></TD></TR>
-</TABLE>
-</BODY></HTML>
 
-<!--Content Table------------------------------------------------------------>
+<!--Content Table-->
 <A NAME="format9"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
@@ -1002,9 +997,7 @@ The most significant bit in a nibble is set if the base is masked. </P>
 	        <TR><TH HEIGHT=10></TH></TR>
                 <TR><TD WIDTH=10>&nbsp;</TD>
 		    <TD>
-	            <P>
 <P>
-
 genePred is a table format commonly used for gene prediction tracks in the
 Genome Browser. Variations of the genePred format are listed below.
 
@@ -1072,7 +1065,6 @@ this table.
     uint[exonCount] exonEnds;   "Exon end positions"
     )
 </PRE>
-</UL></P>
 			    </TD><TD WIDTH=15></TD></TR>
 	    		</TABLE><BR>
 		     </TD></TR>
@@ -1080,4 +1072,6 @@ this table.
      	     </TD></TR>
     	</TABLE>
 	<BR>
-
+    </TD><TD WIDTH=15></TD></TR>
+</TABLE>
+</BODY></HTML>
