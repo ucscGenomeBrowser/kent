@@ -17,5 +17,8 @@ test:	test1 test2
 	diff output/$@.txt expected/$@.txt
 	rm output/$@.txt
 
+compile: $O ${MYLIBS}
+	${CC} ${COPT} -o mafCoverage $O ${MYLIBS} $L
+
 clean::
 	rm -fr output ${O}

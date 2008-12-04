@@ -14,7 +14,7 @@
 
 #define MAXALIGN 50  /* max number of species to align */
 #define DEFCOUNT 3   /* require 3 species to match before counting as covered */
-static char const rcsid[] = "$Id: mafCoverage.c,v 1.8 2008/12/04 19:17:53 hiram Exp $";
+static char const rcsid[] = "$Id: mafCoverage.c,v 1.9 2008/12/04 21:45:52 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -375,8 +375,9 @@ while ((ali = mafNext(mf)) != NULL)
     size = 0;
     assert(cs != NULL);
     /* count gapless columns */
-    for (j = 0 ; j<=ali->textSize ; j++)
+    for (j = 0 ; j<ali->textSize ; j++)
         {
+	hit = TRUE;
         /* look for aligning bases in query seqs , abort if any is a gap */
         for (i = 1 ; i < cCount ; i++)
             {
@@ -389,10 +390,6 @@ while ((ali = mafNext(mf)) != NULL)
                 size = 0;
                 hit = FALSE;
                 break;
-                }
-            else
-                {
-                hit = TRUE;
                 }
             }
         if (hit)
@@ -421,8 +418,9 @@ while ((ali = mafNext(mf)) != NULL)
     /* count percent id */
     idSize = 0;
     assert(cs != NULL);
-    for (k = 0 ; k<=ali->textSize ; k++)
+    for (k = 0 ; k<ali->textSize ; k++)
         {
+	hit = TRUE;
         char tc = toupper(tPtr[0][k]);
         for (i = 1 ; i < cCount ; i++)
             {
@@ -433,10 +431,6 @@ while ((ali = mafNext(mf)) != NULL)
                 idSize = 0;
                 hit = FALSE;
                 break;
-                }
-            else
-                {
-                hit = TRUE;
                 }
             }
         if (hit)
