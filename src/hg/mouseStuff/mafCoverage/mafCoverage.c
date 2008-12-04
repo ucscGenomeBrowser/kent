@@ -12,9 +12,9 @@
 #include "memalloc.h"
 #include "maf.h"
 
-#define MAXALIGN 30  /* max number of species to align */
+#define MAXALIGN 50  /* max number of species to align */
 #define DEFCOUNT 3   /* require 3 species to match before counting as covered */
-static char const rcsid[] = "$Id: mafCoverage.c,v 1.7 2008/09/03 19:20:36 markd Exp $";
+static char const rcsid[] = "$Id: mafCoverage.c,v 1.8 2008/12/04 19:17:53 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -50,8 +50,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&ciList, ci);
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
-//hFreeConn(&conn);
+hFreeConn(&conn);
 slReverse(&ciList);
 return ciList;
 }
@@ -202,8 +201,7 @@ for (ci = ciList; ci != NULL; ci = ci->next)
 	}
     sqlFreeResult(&sr);
     }
-sqlDisconnect(&conn);
-//hFreeConn(&conn);
+hFreeConn(&conn);
 slReverse(&csList);
 *retHash = hash;
 *retList = csList;
@@ -293,8 +291,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     memset(cov + s, restricted, e - s);
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
-//hFreeConn(&conn);
+hFreeConn(&conn);
 }
 
 int calcUnrestrictedSize(UBYTE *cov, int size)
