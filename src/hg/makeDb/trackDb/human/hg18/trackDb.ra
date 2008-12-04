@@ -457,6 +457,28 @@ oldToNew kg3ToKg4
 baseColorUseCds given
 baseColorDefault genomicCodons
 
+track omimGene
+shortLabel OMIM Genes
+longLabel OMIM Related Genes
+group phenDis
+priority 29.6
+visibility hide
+color 200, 0, 125
+type genePred
+hgsid on
+url http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=Search&db=omim&doptcmdl=Detailed&tool=genome.ucsc.edu&term=
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+searchName omimGeneAcc
+searchTable omimGene
+searchMethod exact
+searchType genePred
+shortCircuit 1
+semiShortCircuit 1
+termRegex ([0-9]*)
+searchPriority 10
+
 track pgSnp
 compositeTrack on
 shortLabel Genome Variants
@@ -3618,3 +3640,5 @@ sGroup_Vertebrate monDom4 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig1 fr2 ga
 speciesDefaultOff panTro2 gorGor1 ponAbe2 calJac1 tarSyr1 otoGar1 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 dasNov2 choHof1 echTel1 loxAfr2 taeGut1 proCap1 danRer5 tetNig1 fr2 oryLat2 petMar1
 itemFirstCharCase noChange
 treeImage phylo/hg18_44way.gif
+
+
