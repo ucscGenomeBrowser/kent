@@ -1,12 +1,7 @@
 class UserNotifier < ActionMailer::Base
 
-  def load_notification(user, project)
-    setup_email(user)  
-    # also notify the emailOnLoad person
-    emailOnLoad = ActiveRecord::Base.configurations[RAILS_ENV]['emailOnLoad']
-    if (emailOnLoad)    
-      @bcc = emailOnLoad
-    end
+  def load_notification(emailAddress, user, project)
+    setup_email_with_address(emailAddress, user)
     db = ActiveRecord::Base.configurations[RAILS_ENV]['database']
     @subject    += "Submission #{db} #{project.id} #{project.name} loaded"
     @body[:project] = project
@@ -72,11 +67,17 @@ class UserNotifier < ActionMailer::Base
   end
  
   protected
-  def setup_email(user)
-    @recipients  = "#{user.email}"
+
+  def setup_email_with_address(emailAddress, user)
+    @recipients  = "#{emailAddress}"
     @from        = "#{ActiveRecord::Base.configurations[RAILS_ENV]['from']}"
     @subject     = "ENCODE DCC: "
     @sent_on     = Time.now
     @body[:user] = user
   end
+
+  def setup_email(user)
+    setup_email_with_address(user.email, user)
+  end
+
 end

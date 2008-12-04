@@ -75,7 +75,12 @@ module PipelineBackground
       project.status = "loaded"
       # send email notification
       user = User.find(project.user_id)
-      UserNotifier.deliver_load_notification(user, project)
+      UserNotifier.deliver_load_notification(user.email, user, project)
+      # also notify the emailOnLoad person
+      emailOnLoad = ActiveRecord::Base.configurations[RAILS_ENV]['emailOnLoad']
+      if (emailOnLoad)
+        UserNotifier.deliver_load_notification(emailOnLoad, user, project)
+      end
     else
       project.status = "load failed"
       # send email notification
