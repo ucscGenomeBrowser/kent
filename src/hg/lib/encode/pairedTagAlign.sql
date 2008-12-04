@@ -14,5 +14,5 @@ CREATE TABLE pairedTagAlign (
     seq1 varchar(255) not null,	# Sequence of first read
     seq2 varchar(255) not null,	# Sequence of second read
               #Indices
-    PRIMARY KEY(chrom)
+    INDEX chromStart (chrom(8), chromStart)
 );
