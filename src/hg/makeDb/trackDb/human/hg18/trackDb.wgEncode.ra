@@ -4384,24 +4384,287 @@ wgEncode 1
 	configurable	on
 	noInherit	on
 
-track           wgEncodeGisPet                                                       
-compositeTrack  on                                                                   
-shortLabel      Gis Pet                                                              
-longLabel       ENCODE Gis Gingeras Pet                                              
-group           regulation                                                           
+track		wgEncodeGisPet
+compositeTrack	on
+shortLabel	Gis Pet
+longLabel	ENCODE Gis Gingeras Pet
+group		regulation
 subGroup1       view Views Alignments=Alignments Tags=Tags
 subGroup2       cellType Cell_Line K562=K562 prostate=prostate 
 subGroup3       localization Localization cytosol=cytosol cell=cell polysome=polysome nucleus=nucleus                                                     
 subGroup4       rnaExtract RnaExtract longPolyA=longPolyA 
-dimensions      dimensionX=cellType     dimensionY=localization dimensionZ=rnaExtract                                                                     
-sortOrder       cellType=+ localization=+ rnaExtract=+ view=+                                                                                             
-controlledVocabulary    encode/cv.ra cellType localization rnaExtract                                                                                     
-dragAndDrop     subTracks                                                                                                                                 
+dimensions	dimensionX=cellType	dimensionY=localization	dimensionZ=rnaExtract
+sortOrder	cellType=+ localization=+ rnaExtract=+ view=+
+controlledVocabulary	encode/cv.ra cellType localization rnaExtract
+dragAndDrop	subTracks
 visibilityViewDefaults   Alignments=hide Tags=hide                          
-priority        0                                                                                                                                         
-type            bed 3                                                                                                                                     
-wgEncode        1                                                                                                                                         
+priority	0
+type		bed 3
+wgEncode	1
 
+	track		wgEncodeGisPetTagsProstateCellLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA prostate cell
+	longLabel	ENCODE GIS PET Tags (longPolyA in prostate cell cell)
+	subGroups	view=Tags cellType=prostate localization=cell rnaExtract=longPolyA
+	type		gappedPeak
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	1
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	cell
+	cell		prostate
+
+	track		wgEncodeGisPetTagsK562CytosolLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA K562 cytosol
+	longLabel	ENCODE GIS PET Tags (longPolyA in K562 cell cytosol)
+	subGroups	view=Tags cellType=K562 localization=cytosol rnaExtract=longPolyA
+	type		gappedPeak
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	1
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	cytosol
+	cell		K562
+
+	track		wgEncodeGisPetTagsK562NucleusLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA K562 nucleus
+	longLabel	ENCODE GIS PET Tags (longPolyA in K562 cell nucleus)
+	subGroups	view=Tags cellType=K562 localization=nucleus rnaExtract=longPolyA
+	type		gappedPeak
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	1
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	nucleus
+	cell		K562
+
+	track		wgEncodeGisPetTagsK562PolysomeLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA K562 polysome
+	longLabel	ENCODE GIS PET Tags (longPolyA in K562 cell polysome)
+	subGroups	view=Tags cellType=K562 localization=polysome rnaExtract=longPolyA
+	type		gappedPeak
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	1
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	polysome
+	cell		K562
+
+	track		wgEncodeGisPetAlignmentsProstateCellLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA prostate cell
+	longLabel	ENCODE GIS PET Alignments (longPolyA in prostate cell cell)
+	subGroups	view=Alignments cellType=prostate localization=cell rnaExtract=longPolyA
+	type		pairedTagAlign
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	4
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	cell
+	cell		prostate
+
+	track		wgEncodeGisPetAlignmentsK562CytosolLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA K562 cytosol
+	longLabel	ENCODE GIS PET Alignments (longPolyA in K562 cell cytosol)
+	subGroups	view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
+	type		pairedTagAlign
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	4
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	cytosol
+	cell		K562
+
+	track		wgEncodeGisPetAlignmentsK562NucleusLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA K562 nucleus
+	longLabel	ENCODE GIS PET Alignments (longPolyA in K562 cell nucleus)
+	subGroups	view=Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA
+	type		pairedTagAlign
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	4
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	nucleus
+	cell		K562
+
+	track		wgEncodeGisPetAlignmentsK562PolysomeLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA K562 polysome
+	longLabel	ENCODE GIS PET Alignments (longPolyA in K562 cell polysome)
+	subGroups	view=Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
+	type		pairedTagAlign
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	4
+	noInherit	on
+	configurable	on
+	rnaExtract	longPolyA
+	localization	polysome
+	cell		K562
+
+	track		wgEncodeGisPetPlusRawSignalK562CytosolLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA K562 cytosol PlusRaw
+	longLabel	ENCODE GIS PET Raw Signal (plus strand) (longPolyA in K562 cell cytosol)
+	subGroups	view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
+	type		wig 1.00 4523.00
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	2
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	cytosol
+	cell		K562
+
+	track		wgEncodeGisPetMinusRawSignalK562CytosolLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA K562 cytosol MinusRaw
+	longLabel	ENCODE GIS PET Raw Signal (minus strand) (longPolyA in K562 cell cytosol)
+	subGroups	view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
+	type		wig 1.00 10978.00
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	3
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	cytosol
+	cell		K562
+
+	track		wgEncodeGisPetPlusRawSignalProstateCellLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA prostate cell PlusRaw
+	longLabel	ENCODE GIS PET Raw Signal (plus strand) (longPolyA in prostate cell cell)
+	subGroups	view=PlusRawSignal cellType=prostate localization=cell rnaExtract=longPolyA
+	type		wig 1.00 5889.00
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	2
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	cell
+	cell		prostate
+
+	track		wgEncodeGisPetMinusRawSignalProstateCellLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA prostate cell MinusRaw
+	longLabel	ENCODE GIS PET Raw Signal (minus strand) (longPolyA in prostate cell cell)
+	subGroups	view=MinusRawSignal cellType=prostate localization=cell rnaExtract=longPolyA
+	type		wig 1.00 5693.00
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	3
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	cell
+	cell		prostate
+
+	track		wgEncodeGisPetPlusRawSignalK562PolysomeLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA K562 polysome PlusRaw
+	longLabel	ENCODE GIS PET Raw Signal (plus strand) (longPolyA in K562 cell polysome)
+	subGroups	view=PlusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
+	type		wig 1.00 9657.00
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	2
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	polysome
+	cell		K562
+
+	track		wgEncodeGisPetMinusRawSignalK562PolysomeLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA K562 polysome MinusRaw
+	longLabel	ENCODE GIS PET Raw Signal (minus strand) (longPolyA in K562 cell polysome)
+	subGroups	view=MinusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
+	type		wig 1.00 14175.00
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	3
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	polysome
+	cell		K562
+
+	track		wgEncodeGisPetPlusRawSignalK562NucleusLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA K562 nucleus PlusRaw
+	longLabel	ENCODE GIS PET Raw Signal (plus strand) (longPolyA in K562 cell nucleus)
+	subGroups	view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
+	type		wig 1.00 2902.00
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	2
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	nucleus
+	cell		K562
+
+	track		wgEncodeGisPetMinusRawSignalK562NucleusLongpolya
+	subTrack	wgEncodeGisPet
+	shortLabel	longPolyA K562 nucleus MinusRaw
+	longLabel	ENCODE GIS PET Raw Signal (minus strand) (longPolyA in K562 cell nucleus)
+	subGroups	view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
+	type		wig 1.00 3938.00
+	dateSubmitted	2008-12-03 4:37:32
+	dateReleased	2009-09-03
+	priority	3
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	rnaExtract	longPolyA
+	localization	nucleus
+	cell		K562
 
 
 track wgEncodeHudsonalphaMethyl27
