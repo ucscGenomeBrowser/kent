@@ -24928,3 +24928,76 @@ XXX - running on bare bones mafs Thu Nov 27 19:29:44 PST 2008
 #
 # Add the two composite sub-tracks to human/hg18/trackDb.ra.
  #########################################################################
+# BUILD OMIM RELATED GENES TRACK (Done 12/4/08 Fan)
+
+ssh hgwdev
+cd /hive/data/genomes/gs.19/build36/bed
+mkdir omimGene
+cd omimGene
+
+# download the file genemap from OMIM
+
+mkdir omim
+cd omim
+wget --timestamping ftp://ftp.ncbi.nih.gov/repository/OMIM/genemap
+cat genemap|sed -e 's/|/\t/g' > genemap.tab
+autoSql ~/src/hg/lib/omimGeneMap.as x
+cat x.sql |sed -e 's/PRIMARY KEY(numbering)/KEY(omimId)/' >omimGeneMap.sql
+hgLoadSqlTab -warn hg18 omimGeneMap omimGeneMap.sql genemap.tab
+
+# got warning on 3 records, just ignore them
+Warning: load of omimGeneMap did not go as planned: 11456 record(s), 0 row(s) skipped, 3 warning(s) loading genemap.tab
+
+rm x.c x.h
+cd ..
+
+
+# get all UCSC genes (from the knownGene table) that cross-reference to a RefSeq gene 
+# that has a non-empty OMIM ID according to the refLink table.  And use OMIM ID as
+# the gene name for this new table.  Please note the alignId field still holds the KG ID.
+
+hgsql hg18 -N -e \
+'select omimId, kg.* from knownGene kg, kgXref x, refLink l where refseq != "" and omimId != 0 and mrnaAcc=refseq and kg.name=kgId ' \
+|cut -f 1,3-13 >o1.tab
+
+# collect more OMIM related genes via the MIM external DB links from UniProt
+
+hgsql hg18 -N -e \
+'select extAC, kg.* from knownGene kg, kgXref k, proteome.spXref2 p where spId=p.accession and extDB="MIM" and kg.name=kgId ' \
+|cut -f 1,3-13 >o2.tab
+
+# concatenate the above two gene sets and remove duplications.
+
+cat o1.tab o2.tab |sort -u >o3.tab
+
+# load the result into a temp table, fanO3
+hgLoadSqlTab hg18 fanO3 ~/src/hg/lib/knownGene.sql o3.tab
+
+# while holding onto the OMIM ID, get the canonical gene (via the knownGene, knowIsoforms, 
+# and knownCanonical tables) that represent a cluster which contains 
+# initial OMIM gene in the fanO3 table
+
+hgsql hg18 -N -e \
+'select f3.name, kg.* from fanO3 f3, knownGene kg, knownCanonical c, knownIsoforms i where f3.alignId=i.transcript and kg.name=c.transcript and c.clusterId=i.clusterId'\
+> o4.tab
+
+# first column is the OMIM ID
+cut -f 1 o4.tab >j1.tmp
+
+# col 3-13 is the gene structure of the canonical KG
+cut -f 3-13 o4.tab >j2.tmp
+
+# stitch them together and remove duplicates, load the result into fanO4 table
+paste j1.tmp j2.tmp |sort -u >fanO4.tab
+hgLoadSqlTab hg18 fanO4  ~/src/hg/lib/knownGene.sql fanO4.tab
+
+# finally sort the table and load it as the omimGene table
+hgsql hg18 -N -e 'select * from fanO4 order by chrom, txStart, txEnd' >omimGene.tab
+hgLoadSqlTab hg18 omimGene ~/src/hg/lib/knownGene.sql omimGene.tab
+
+# The following clean up could be done.
+# hgsql hg18 -e 'drop table fanO3'
+# hgsql hg18 -e 'drop table fanO4'
+# rm j*.tmp
+# rm o1.tab o2.tab o3.tab o4.tab
+#############################################################################
