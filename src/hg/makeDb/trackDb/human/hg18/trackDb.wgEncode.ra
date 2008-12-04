@@ -4389,7 +4389,7 @@ compositeTrack	on
 shortLabel	Gis Pet
 longLabel	ENCODE Gis Gingeras Pet
 group		regulation
-subGroup1       view Views Alignments=Alignments Tags=Tags
+subGroup1       view Views Alignments=Alignments Tags=Tags PlusRawSignal=PlusRawSignal MinusRawSignal=MinusRawSignal
 subGroup2       cellType Cell_Line K562=K562 prostate=prostate 
 subGroup3       localization Localization cytosol=cytosol cell=cell polysome=polysome nucleus=nucleus                                                     
 subGroup4       rnaExtract RnaExtract longPolyA=longPolyA 
