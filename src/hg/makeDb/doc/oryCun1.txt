@@ -1061,4 +1061,33 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
+
+############################################################################
+#  oryCun1 - Rabbit - Ensembl Genes version 51  (DONE - 2008-12-03 - hiram)
+    ssh kolossus
+    cd /hive/data/genomes/oryCun1
+    cat << '_EOF_' > oryCun1.ensGene.ra
+# required db variable
+db oryCun1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the three genes that have invalid structures from Ensembl:
+# 24994: ENSOCUT00000009485 no exonFrame on CDS exon 9
+# 26897: ENSOCUT00000004627 no exonFrame on CDS exon 3
+# 32794: ENSOCUT00000014840 no exonFrame on CDS exon 3
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 oryCun1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/oryCun1/bed/ensGene.51
+    featureBits oryCun1 ensGene
+    # 22733387 bases of 2076044328 (1.095%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/oryCun1/bed/ensGene.51
+
 ############################################################################

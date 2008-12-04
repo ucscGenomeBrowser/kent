@@ -1020,3 +1020,29 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+#  loxAfr1 - Elephant - Ensembl Genes version 51  (DONE - 2008-12-03 - hiram)
+    ssh kkr14u07
+    cd /hive/data/genomes/loxAfr1
+    cat << '_EOF_' > loxAfr1.ensGene.ra
+# required db variable
+db loxAfr1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the one gene that has an invalid structure from Ensembl:
+# 13002: ENSLAFT00000000586 no exonFrame on CDS exon 1
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 loxAfr1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/loxAfr1/bed/ensGene.51
+    featureBits loxAfr1 ensGene
+    # 21666114 bases of 2295548473 (0.944%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/loxAfr1/bed/ensGene.51
+
+############################################################################

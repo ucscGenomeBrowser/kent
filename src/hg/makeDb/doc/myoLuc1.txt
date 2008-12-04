@@ -171,4 +171,32 @@ cut -f 2 chrom.sizes | ave stdin
     cp /cluster/data/myoLuc1/myoLuc1.2bit /san/sanvol1/scratch/myoLuc1
     cp /cluster/data/myoLuc1/chrom.sizes /san/sanvol1/scratch/myoLuc1
 
+############################################################################
+#  myoLuc1 - Microbat - Ensembl Genes version 51  (DONE - 2008-12-03 - hiram)
+    ssh kolossus
+    cd /hive/data/genomes/myoLuc1
+    cat << '_EOF_' > myoLuc1.ensGene.ra
+# required db variable
+db myoLuc1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the three genes that have invalid structures from Ensembl:
+# 1265: ENSMLUT00000004658 no exonFrame on CDS exon 1
+# 17770: ENSMLUT00000003427 no exonFrame on CDS exon 10
+# 32743: ENSMLUT00000009601 no exonFrame on CDS exon 1
+'_EOF_'
+#  << happy emacs
 
+    doEnsGeneUpdate.pl -ensVersion=51 myoLuc1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/myoLuc1/bed/ensGene.51
+    featureBits myoLuc1 ensGene
+    # 24559555 bases of 1673855868 (1.467%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/myoLuc1/bed/ensGene.51
+
+############################################################################
