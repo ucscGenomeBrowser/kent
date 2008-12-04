@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.16 2008/11/10 17:40:02 kate Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.17 2008/12/04 01:00:27 hiram Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -4269,3 +4269,28 @@ cat > finish.csh << 'EOF'
 update genbank.conf:
 cavPor3.upstreamGeneTbl = xenoRefGene
 cavPor3.upstreamMaf = multiz8way /hive/data/genomes/cavPor3/bed/multiz8way/species.list
+
+############################################################################
+#  cavPor3 - Guinea Pig - Ensembl Genes version 51  (DONE - 2008-12-02 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/cavPor3
+    cat << '_EOF_' > cavPor3.ensGene.ra
+# required db variable
+db cavPor3
+# do we need to translate geneScaffold coordinates
+# geneScaffolds yes
+nameTranslation "s/^MT/chrM/;"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 cavPor3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/cavPor3/bed/ensGene.51
+    featureBits cavPor3 ensGene
+    # 30699872 bases of 2663369733 (1.153%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/cavPor3/bed/ensGene.51
+
+############################################################################
+

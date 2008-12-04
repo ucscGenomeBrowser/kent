@@ -136,4 +136,33 @@ _EOF_
 # add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
     hgsql -e 'update dbDb set
 sourceName="Broad Institute proCap1 (NCBI project 13972, ABRQ01000000)" where name="proCap1";' hgcentraltest
+
+############################################################################
+#  proCap1 - Rock hyrax - Ensembl Genes version 51  (DONE - 2008-12-02 -
+#  hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/proCap1
+    cat << '_EOF_' > proCap1.ensGene.ra
+# required db variable
+db proCap1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#       names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the two genes that have invalid structures from Ensembl:
+# 4595: ENSPCAT00000007286 no exonFrame on CDS exon 1
+# 28894: ENSPCAT00000000699 no exonFrame on CDS exon 4
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 proCap1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/proCap1/bed/ensGene.51
+    featureBits proCap1 ensGene
+    # 25217399 bases of 2407847681 (1.047%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/proCap1/bed/ensGene.51
+
 ###########################################################################

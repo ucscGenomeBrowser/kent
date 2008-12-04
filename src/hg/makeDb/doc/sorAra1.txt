@@ -187,4 +187,26 @@ dbDbSpeciesDir shrew
 # add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
     hgsql -e 'update dbDb set
 sourceName="Broad Institute sorAra1 (NCBI project 20325, ABRP01000000)" where name="sorAra1";' hgcentraltest
-###########################################################################
+
+############################################################################
+#  sorAra1 - Shrew - Ensembl Genes version 51  (DONE - 2008-12-02 - hiram)
+    ssh kkr14u06
+    cd /hive/data/genomes/sorAra1
+    cat << '_EOF_' > sorAra1.ensGene.ra
+# required db variable
+db sorAra1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 sorAra1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/sorAra1/bed/ensGene.51
+    featureBits sorAra1 ensGene
+    # 19400431 bases of 1832864697 (1.058%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/sorAra1/bed/ensGene.51
+
+############################################################################
