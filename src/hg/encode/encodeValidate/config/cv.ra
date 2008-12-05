@@ -394,7 +394,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=1694
 term CTCF
 type Antibody
 antibodyDescription rabbit polyclonal
-targetDescription CTCF zinc finger transcription factor
+targetDescription CTCF zinc finger transcription factor. A sequence specific DNA binding protein that functions as an insulator, blocking enhancer activity. It has also been suggested to block the spreading of chromatin structure in certain instances.
 orderUrl http://www.millipore.com/catalogue/item/07-729
 vendorName Millipore
 vendorId 07-729
@@ -439,34 +439,34 @@ vendorName Santa Cruz Biotech
 vendorId sc-1004
 orderUrl http://www.scbt.com/product.php?datasheet=1004
 
-term H3K4me3
-type Antibody
-antibodyDescription rabbit polyclonal
-targetDescription Histone H3 (tri methyl K4)
-orderUrl http://www.abcam.com/index.html?datasheet=8580
-vendorName Abcam
-vendorId ab8580
-
-term H3K4me2
-type Antibody
-antibodyDescription rabbit polyclonal
-targetDescription Histone H3 (di methyl K4)
-orderUrl http://www.abcam.com/index.html?datasheet=7766
-vendorName Abcam
-vendorId ab7766
-
 term H3K4me1
 type Antibody
 antibodyDescription rabbit polyclonal
-targetDescription Histone H3 (mono methyl K4)
+targetDescription Histone H3 (mono methyl K4). Is associated with enhancers, and downstream of transcription starts.
 orderUrl http://www.abcam.com/index.html?datasheet=8895
 vendorName Abcam
 vendorId ab8895
 
+term H3K4me2
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H3 (di methyl K4). Marks promoters and enhancers. Most CpG islands are marked by H3K4me2 in primary cells. May be associated also with poised promoters.
+orderUrl http://www.abcam.com/index.html?datasheet=7766
+vendorName Abcam
+vendorId ab7766
+
+term H3K4me3
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H3 (tri methyl K4). Marks promoters that are active or poised to be activated.
+orderUrl http://www.abcam.com/index.html?datasheet=8580
+vendorName Abcam
+vendorId ab8580
+
 term H3K9ac
 type Antibody
 antibodyDescription rabbit polyclonal
-targetDescription Histone H3 (acetyl K9)
+targetDescription Histone H3 (acetyl K9). As with H3K27ac, associated with transcriptional initiation and open chromatin structure. It remains unknown whether acetylation has can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.
 orderUrl http://www.abcam.com/index.html?datasheet=4441
 vendorName Abcam
 vendorId ab4441
@@ -474,7 +474,7 @@ vendorId ab4441
 term H3K9me1
 type Antibody
 antibodyDescription rabbit polyclonal
-targetDescription Histone H3 (mono-methyl K9)
+targetDescription Histone H3 (mono-methyl K9). Is associated with active and accessible regions. NOTE CONTRAST to H3K9me3 which is associated with repressive heterochromatic state.
 orderUrl http://www.abcam.com/index.html?datasheet=8896
 vendorName Abcam
 vendorId ab8896
@@ -482,23 +482,15 @@ vendorId ab8896
 term H3K9me3
 type Antibody
 antibodyDescription rabbit polyclonal, ChIP grade
-targetDescription Histone H3 (tri methyl K9), a marker of silenced chromatin
+targetDescription Histone H3 (tri methyl K9). Is associated with repressive heterochromatic state (silenced chromatin). NOTE CONTRAST to H3K9me1 which is associated with active and accessible regions.
 vendorName Abcam
 vendorId ab8898
 orderUrl http://www.abcam.com/index.html?datasheet=8898
 
-term H4K20me1
-type Antibody
-antibodyDescription rabbit polyclonal
-targetDescription Histone H4 (mono-methyl K20)
-orderUrl http://www.abcam.com/index.html?datasheet=9051
-vendorName Abcam
-vendorId ab9051
-
 term H3K27ac
 type Antibody
 antibodyDescription rabbit polyclonal
-targetDescription Histone H3 (acetyl K27)
+targetDescription Histone H3 (acetyl K27). As with H3K9ac, associated with transcriptional initiation and open chromatin structure. It remains unknown whether acetylation has can have different consequences depending on the specific lysine residue targeted. In general, though, there appears to be high redundancy. Histone acetylation is notable for susceptibility to small molecules and drugs that target histone deacetylases.
 orderUrl http://www.abcam.com/index.html?datasheet=4729
 vendorName Abcam
 vendorId ab4729
@@ -506,7 +498,7 @@ vendorId ab4729
 term H3K27me3
 type Antibody
 antibodyDescription rabbit polyclonal
-targetDescription Histone H3 (tri-methyl K27)
+targetDescription Histone H3 (tri-methyl K27). Marks promoters that are silenced by Polycomb proteins in a given lineage; large domains are found at inactive developmental loci.
 orderUrl http://www.millipore.com/catalogue/item/07-449
 vendorName Millipore
 vendorId 07-449
@@ -514,10 +506,18 @@ vendorId 07-449
 term H3K36me3
 type Antibody
 antibodyDescription rabbit polyclonal
-targetDescription Histone H3 (tri-methyl K36)
+targetDescription Histone H3 (tri-methyl K36). Marks regions of RNAPII elongation, including coding and non-coding transcripts.
 orderUrl http://www.abcam.com/index.html?datasheet=9050
 vendorName Abcam
 vendorId ab9050
+
+term H4K20me1
+type Antibody
+antibodyDescription rabbit polyclonal
+targetDescription Histone H4 (mono-methyl K20). Is associated with active and accessible regions. In mammals, PR-Set7 specifically catalyzes H4K20 monomethylation. NOTE CONTRAST to H3K20me3 which is associated with heterochromatin and DNA repair.
+orderUrl http://www.abcam.com/index.html?datasheet=9051
+vendorName Abcam
+vendorId ab9051
 
 term KAP1
 type Antibody
@@ -546,7 +546,7 @@ orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
 term Pol2(b)
 type Antibody
 antibodyDescription mouse monoclonal, clone CTD4H8
-targetDescription RNA polymerase II
+targetDescription RNA polymerase II. Is responsible for RNA transcription. It is generally enriched at 5? gene ends, probably due to higher rate of occupancy associated with transition from initiation to elongation.
 orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
 vendorName Covance
 vendorId MMS-128P
