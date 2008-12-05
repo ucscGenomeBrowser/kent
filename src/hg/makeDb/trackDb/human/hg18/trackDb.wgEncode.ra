@@ -4424,8 +4424,7 @@ wgEncode 1
 	dateSubmitted	2008-10-21 12:24:57
 	priority	2
 	configurable	on
-	noInherit	on
-
+	noInherit	on 
 	track	wgEncodeSangerGencodeGencodeAuto20081001
 	subTrack	wgEncodeSangerGencode
 	shortLabel	Sanger Gencode Auto (2008-10-01)
@@ -4445,6 +4444,7 @@ group		regulation
 subGroup1       view Views Alignments=Alignments Tags=Tags PlusRawSignal=PlusRawSignal MinusRawSignal=MinusRawSignal
 subGroup2       cellType Cell_Line K562=K562 prostate=prostate
 subGroup3       localization Localization cytosol=cytosol cell=cell polysome=polysome nucleus=nucleus
+subGroup4       rnaExtract RnaExtract longPolyA=longPolyA
 subGroup4       rnaExtract RnaExtract longPolyA=longPolyA
 dimensions	dimensionX=cellType	dimensionY=localization	dimensionZ=rnaExtract
 sortOrder	cellType=+ localization=+ rnaExtract=+ view=+
@@ -4520,7 +4520,8 @@ wgEncode	1
 	shortLabel	longPolyA prostate cell
 	longLabel	ENCODE GIS PET Alignments (longPolyA in prostate cell cell)
 	subGroups	view=Alignments cellType=prostate localization=cell rnaExtract=longPolyA
-	type		pairedTagAlign
+	type		bed 6
+	#type		pairedTagAlign
 	dateSubmitted	2008-12-03 4:37:32
 	dateReleased	2009-09-03
 	priority	4
@@ -4535,7 +4536,8 @@ wgEncode	1
 	shortLabel	longPolyA K562 cytosol
 	longLabel	ENCODE GIS PET Alignments (longPolyA in K562 cell cytosol)
 	subGroups	view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
-	type		pairedTagAlign
+	type		bed 6
+	#type		pairedTagAlign
 	dateSubmitted	2008-12-03 4:37:32
 	dateReleased	2009-09-03
 	priority	4
@@ -4550,7 +4552,8 @@ wgEncode	1
 	shortLabel	longPolyA K562 nucleus
 	longLabel	ENCODE GIS PET Alignments (longPolyA in K562 cell nucleus)
 	subGroups	view=Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA
-	type		pairedTagAlign
+	type		bed 6
+	#type		pairedTagAlign
 	dateSubmitted	2008-12-03 4:37:32
 	dateReleased	2009-09-03
 	priority	4
@@ -4565,7 +4568,8 @@ wgEncode	1
 	shortLabel	longPolyA K562 polysome
 	longLabel	ENCODE GIS PET Alignments (longPolyA in K562 cell polysome)
 	subGroups	view=Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
-	type		pairedTagAlign
+	type		bed 6
+	#type		pairedTagAlign
 	dateSubmitted	2008-12-03 4:37:32
 	dateReleased	2009-09-03
 	priority	4
