@@ -15687,7 +15687,7 @@ csh ../doPhyloP.csh $(file1) {check out line+ /san/sanvol1/scratch/hg18/multiz28
     # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
     ssh pk
-    cd /san/sanvol1/scratch/hg18/multiz28way/phyloP/all
+    cd /san/sanvol1/scratch/hg18/multiz28way/phyloP/placental
 cat > listPp.csh << 'EOF'
     foreach c (`ls -d chr*`)
         foreach d (`ls -d $c/[1-9]* | sort -t/ -k2 -n`)
