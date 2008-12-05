@@ -1010,7 +1010,7 @@ compositeTrack	on
 shortLabel	Chromatin Map
 longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
 group		regulation
-subGroup1	view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=RawSignal sXREG=Regions_Excluded u20=Uniqueness_20bp u24=Uniqueness_24bp u35=Uniqueness_35bp
+subGroup1	view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal sXREG=Regions_Excluded u20=Uniqueness_20bp u24=Uniqueness_24bp u35=Uniqueness_35bp
 subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562 zzRG=Reference_Genome
 subGroup3	EXP Experiment DNase=DNase-Seq FAIRE=FAIRE-Seq IP-CTCF=ChIP-Seq_CTCF zCTRL=Input zzREF=Extra_Tracks
 sortOrder	cellType=+ EXP=+ view=+
@@ -1970,7 +1970,7 @@ compositeTrack  on
 shortLabel      Affy RnaChip
 longLabel       ENCODE Affy Gingeras RnaChip
 group           regulation
-subGroup1       view Views Transfrags=Transfrags FilteredTransfrags=FilteredTransfrags RawSignal=RawSignal FilteredRawSignal=FilteredRawSignal
+subGroup1       view Views Transfrags=Transfrags FilteredTransfrags=Filtered_Transfrags RawSignal=Raw_Signal FilteredRawSignal=Filtered_Raw_Signal
 subGroup2       cellType Cell_Line prostate=prostate K562=K562 GM12878=GM12878
 subGroup3       localization Localization cell=cell nucleus=nucleus cytosol=cytosol polysome=polysome
 subGroup4       rnaExtract RnaExtract longNonPolyA=longNonPolyA longPolyA=longPolyA total=total
@@ -3710,7 +3710,7 @@ shortLabel HudsonAlpha ChIP
 longLabel ENCODE HudsonAlpha ChIP-Seq
 group regulation
 # subGroup1 view Views Sites=Sites Counts=Counts
-subGroup1 view Views Peaks=Peaks RawSignal=RawSignal
+subGroup1 view Views Peaks=Peaks RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 PFSK-1=PFSK-1 SK-N-MC=SK-N-MC
 subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF Pol2=Pol2 SRF=SRF Control=Control
 dimensions dimensionX=cellType dimensionY=factor
