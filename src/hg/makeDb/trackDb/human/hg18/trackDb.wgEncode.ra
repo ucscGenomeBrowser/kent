@@ -1011,14 +1011,14 @@ shortLabel	Chromatin Map
 longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
 group		regulation
 subGroup1	view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=RawSignal sXREG=Regions_Excluded u20=Uniqueness_20bp u24=Uniqueness_24bp u35=Uniqueness_35bp
-subGroup2	cellType Cell_Line GM12878=GM12878 zzRG=Reference_Genome
+subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562 zzRG=Reference_Genome
 subGroup3	EXP Experiment DNase=DNase-Seq FAIRE=FAIRE-Seq IP-CTCF=ChIP-Seq_CTCF zCTRL=Input zzREF=Extra_Tracks
 sortOrder	cellType=+ EXP=+ view=+
 controlledVocabulary	encode/cv.ra cellType
 dimensions  dimensionX=cellType dimensionY=EXP
 dragAndDrop	subTracks
 visibilityViewDefaults	 Peaks=dense Signal=full rRAW=hide
-controlledVocabulary encode/cv.ra cellType=GM12878 EXP=Input,CTCF
+controlledVocabulary encode/cv.ra cellType=GM12878,K562 EXP=Input,CTCF
 settingsByView Signal:defaultViewLimits=5:35,viewLimits=0:40 SignalBO:defaultViewLimits=5:400,viewLimits=0:5342 rRAW:defaultViewLimits=5:35,viewLimits=0:112
 useScore    	0
 priority	0
@@ -1329,6 +1329,40 @@ wgEncode	1
         maxHeightPixels	100:16:16
         cell           GM12878
         antibody       Input
+
+        track           wgEncodeUtaustinChIPseqSignalK562Input
+        subTrack        wgEncodeChromatinMap
+        shortLabel      INP K562 Sig
+        longLabel       ENCODE UT-Austin Input Signal (input in K562 cells)
+        subGroups       view=Signal EXP=zCTRL cellType=K562
+        type            wig 0.00 2.98
+        dateSubmitted   2008-12-04 21:8:21
+        dateReleased    2009-09-04
+        priority        1
+        noInherit       on
+        configurable    on
+        spanList        1401
+        windowingFunction mean
+        maxHeightPixels 100:16:16
+        cell            K562
+        antibody        input
+
+        track           wgEncodeUtaustinChIPseqRawSignalK562Input
+        subTrack        wgEncodeChromatinMap
+        shortLabel      INP K562 Raw
+        longLabel       ENCODE UT-Austin Input Raw Signal (input in K562 cells)
+        subGroups       view=rRAW EXP=zCTRL cellType=K562
+        type            wig 0.00 37.78
+        dateSubmitted   2008-12-04 21:8:21
+        dateReleased    2009-09-04
+        priority        1402
+        noInherit       on
+        configurable    off
+        spanList        1
+        windowingFunction mean
+        maxHeightPixels 100:16:16
+        cell            K562
+        antibody        input
 
         track		wgEncodeDukeDNaseSeqRegionsExcludedGm12878
         subTrack	wgEncodeChromatinMap
@@ -4424,7 +4458,7 @@ wgEncode 1
 	dateSubmitted	2008-10-21 12:24:57
 	priority	2
 	configurable	on
-	noInherit	on 
+	noInherit	on
 	track	wgEncodeSangerGencodeGencodeAuto20081001
 	subTrack	wgEncodeSangerGencode
 	shortLabel	Sanger Gencode Auto (2008-10-01)
