@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.46 2008/12/02 22:02:33 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.47 2008/12/05 08:17:11 mikep Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128
@@ -10827,6 +10827,8 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (isSubtrackVisible(subtrack))
 	{
 	lastTime = clock1000();
+	if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
+	    errAbort("Error: Null pointer subtrack->loadItems in compositeLoad() for track(%s) subtrack(%s)\n", track->mapName, subtrack->mapName);
         subtrack->loadItems(subtrack);
 	if (measureTiming)
 	    {
