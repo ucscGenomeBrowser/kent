@@ -1,0 +1,37 @@
+<H2>Description</H2>
+<P>
+The <A HREF="http://www.ncbi.nlm.nih.gov/sites/entrez?db=omim">
+OMIM</A> Related Genes are a set of UCSC canonical genes that 
+might be referenced by OMIM (Online Mendelian Inheritance in Man) database, 
+based on the cross-reference info from RefSeq and UniProt.
+<H2>Methods</H2>
+<P>
+First, compile a set of all UCSC genes having cross-reference to RefSeq genes 
+that have non-empty OMIM IDs (according to the refLink table).
+Then compile another set of UCSC genes that their corresponding UniProt proteins
+have MIM external DB links (using the spXref2 table of the proteome database).
+Put these two gene sets (each gene now has the associated OMIM ID in addition to UCSC Gene ID) 
+together and remove duplicates.
+<P>
+Leverage the UCSC canonical gene set (represented by the knownIsoforms and knownCanonical tables)
+to replace each individual UCSC gene in the above gene set with its UCSC canonical gene, remove duplicates, sort and load the result into the omimGene table.
+<P>
+The genemap file downloaded from OMIM web site is loaded as the omimGeneMap table.  The title lines of this table are used in the OMIM Related Genes details page. 
+
+<H2>References</H2>
+<P>
+<UL>
+<LI>
+Hamosh, A., Scott, A.F., Amberger, J.S., Bocchini, C.A. and McKusick, V.A. 
+<A HREF="http://nar.oxfordjournals.org/cgi/content/full/33/suppl_1/D514">
+Online Mendelian Inheritance in Man (OMIM),
+a knowledgebase of human genes and genetic disorders</A>. 
+Nucleic Acids Res. 2005,33(Database issue):D514-7.
+<LI>
+Amberger J, Bocchini CA, Scott AF, Hamosh A.  
+<A HREF="http://nar.oxfordjournals.org/cgi/content/full/gkn665v1">
+McKusick's Online Mendelian Inheritance in Man (OMIM(R))</A>.  
+Nucleic Acids Res. 2008 Oct 8. [Epub ahead of print]
+</UL>
+
+</P>
