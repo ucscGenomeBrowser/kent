@@ -205,8 +205,8 @@ priority 300
 
 track		wgEncodeBroadChipSeq
 compositeTrack	on
-shortLabel	Broad ChipSeq
-longLabel	ENCODE Broad Bernstein ChIP-Seq
+shortLabel	Broad Histone
+longLabel	ENCODE Broad Institute Histone Modifications by ChIP-seq
 group		regulation
 subGroup1	view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2	cellType Cell_Line K562=K562
@@ -215,11 +215,11 @@ dimensions	dimensionX=cellType	dimensionY=factor
 sortOrder	cellType=+ factor=+ view=+
 controlledVocabulary	encode/cv.ra cellType factor
 dragAndDrop	subTracks
-visibilityViewDefaults	 Peaks=dense Signal=full zRAW=hide
+visibilityViewDefaults	 Peaks=hide Signal=dense zRAW=hide
 priority	0
 type		bed 3
 wgEncode	1
-settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918,autoScale=off zRAW:defaultViewLimits=5:500,viewLimits=1:21178,autoScale=off
+settingsByView  Signal:defaultViewLimits=1:5,viewLimits=0:2918,autoScale=off zRAW:defaultViewLimits=1:5,viewLimits=1:21178,autoScale=off
 
         track		wgEncodeBroadChipSeqPeaksK562Ctcf
         subTrack	wgEncodeBroadChipSeq
@@ -494,7 +494,7 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918,autoScale=off z
         antibody	H3K4me3
 
         track		wgEncodeBroadChipSeqPeaksK562H3k9ac
-        subTrack	wgEncodeBroadChipSeq
+        subTrack	wgEncodeBroadChipSeq 
         shortLabel	K562 H3K9ac Pk
         longLabel	ENCODE Broad ChIP-Seq Peaks (H3K9ac in K562 cells)
         subGroups	view=Peaks factor=H3K09ac cellType=K562
@@ -1007,17 +1007,17 @@ settingsByView  Signal:defaultViewLimits=5:100,viewLimits=0:2918,autoScale=off z
 
 track		wgEncodeChromatinMap
 compositeTrack	on
-shortLabel	Chromatin Map
-longLabel	ENCODE Chromatin Map (Duke, UNC, UT-Austin)
+shortLabel	Open Chromatin
+longLabel	ENCODE Duke/UNC/UT-Austin Open Chromatin Map
 group		regulation
 subGroup1	view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rRAW=Raw_Signal sXREG=Regions_Excluded u20=Uniqueness_20bp u24=Uniqueness_24bp u35=Uniqueness_35bp
-subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562 zzRG=Reference_Genome
+subGroup2	cellType Cell_Line GM12878=GM12878_(Tier1) K562=K562_(Tier1) zzRG=Reference_Genome
 subGroup3	EXP Experiment DNase=DNase-Seq FAIRE=FAIRE-Seq IP-CTCF=ChIP-Seq_CTCF zCTRL=Input zzREF=Extra_Tracks
 sortOrder	cellType=+ EXP=+ view=+
 controlledVocabulary	encode/cv.ra cellType
 dimensions  dimensionX=cellType dimensionY=EXP
 dragAndDrop	subTracks
-visibilityViewDefaults	 Peaks=dense Signal=full rRAW=hide
+visibilityViewDefaults	 Peaks=hide Signal=dense rRAW=hide
 controlledVocabulary encode/cv.ra cellType=GM12878,K562 EXP=Input,CTCF
 settingsByView Signal:defaultViewLimits=5:35,viewLimits=0:40 SignalBO:defaultViewLimits=5:400,viewLimits=0:5342 rRAW:defaultViewLimits=5:35,viewLimits=0:112
 useScore    	0
@@ -1420,7 +1420,7 @@ wgEncode	1
 track wgEncodeNhgriNre
 compositeTrack on
 shortLabel NHGRI NRE
-longLabel ENCODE NHGRI (Elnitski) Negative Regulatory Elements
+longLabel ENCODE NHGRI Negative Regulatory Elements
 group regulation
 subGroup1 view Views SI=Silencers EB=Enhancer_Blockers
 subGroup2 cellType Cell_Line K562=K562 Hela=HeLa-S3
@@ -1428,7 +1428,7 @@ subGroup3 promoter Promoter SV40=SV40 Ggam=G-gamma
 dimensions dimensionX=cellType dimensionY=promoter
 sortOrder view=+ cellType=+ promoter=+
 dragAndDrop subTracks
-visibilityViewDefaults SI=pack EB=pack
+visibilityViewDefaults SI=dense EB=dense
 controlledVocabulary encode/cv.ra cellType promoter
 dataVersion ENCODE Submitted September 2008
 priority 0
@@ -1493,9 +1493,9 @@ wgEncode 1
 
 track wgEncodeRikenCage
 compositeTrack on
-shortLabel RIKEN CAGE
-longLabel ENCODE - RIKEN CAGE
-group regulation
+shortLabel RIKEN Local CAGE
+longLabel ENCODE RIKEN RNA Subcellular Localization by CAGE Tags
+group expression
 subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal Alignments=Alignments
 subGroup2 cellType Cell_Line K562=K562 prostate=Prostate
 subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus
@@ -1503,7 +1503,7 @@ subGroup4 rnaExtract RNA_Extract longNonPolyA=longNonPolyA
 dimensions dimensionY=rnaExtract dimensionX=cellType dimensionZ=localization
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults PlusClusters=full MinusClusters=full PlusRawSignal=hide MinusRawSignal=hide Alignments=hide
+visibilityViewDefaults PlusClusters=dense MinusClusters=dense PlusRawSignal=hide MinusRawSignal=hide Alignments=hide
 controlledVocabulary encode/cv.ra cellType localization rnaExtract
 priority 0
 type bed 3
@@ -1527,7 +1527,7 @@ wgEncode 1
 	subTrack	wgEncodeRikenCage
 	shortLabel	longNonPolyA K562 cytosol
 	longLabel	ENCODE RIKEN CAGE Tags (from longNonPolyA in K562 cell cytosol)
-	subGroups	view=Alignments cellType=K562 localization=cytosol rnaExtract=longNonPolyA
+	subGroups	view=Alignments cellType=K562 localization=Cytosol rnaExtract=longNonPolyA
 	type	bed 6
 	dateSubmitted	2008-10-20 14:48:58
 	priority	17
@@ -1740,15 +1740,16 @@ wgEncode 1
 
 track wgEncodeUwDnaseSeq
 compositeTrack on
-shortLabel UW DNase Seq
-longLabel ENCODE - UW DNase Seq
+shortLabel UW DNaseI HS
+longLabel ENCODE Univ. Washington DNaseI Hypersensitivity by DNase-seq
 group regulation
-subGroup1 view Views Hotspots=Hot_Spots Peaks=Peaks Signal=Signal RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line GM06990=GM06990 HeLa-S3=HeLa-S3 HepG2=HepG2 Th1=Th1 SK-N-SH(+RA)=SK-N-SH(+RA)
+subGroup1 view Views Hotspots=Hot_Spots Peaks=Peaks RawSignal=Raw_Signal
+subGroup2 cellType Cell_Line GM06990=GM06990 HeLa-S3=HeLa-S3 HepG2=HepG2 SK-N-SH(+RA)=SK-N-SH(+RA) Th1=Th1 
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults Hotspots=pack Peaks=pack Signal=full RawSignal=hide
+visibilityViewDefaults Hotspots=hide Peaks=hide RawSignal=hide
+settingsByView  RawSignal:defaultViewLimits=1:10,autoScale=off
 controlledVocabulary encode/cv.ra cellType
 priority 0
 type bed 3
@@ -1967,26 +1968,27 @@ wgEncode 1
 
 track           wgEncodeAffyRnaChip
 compositeTrack  on
-shortLabel      Affy RnaChip
-longLabel       ENCODE Affy Gingeras RnaChip
-group           regulation
-subGroup1       view Views Transfrags=Transfrags FilteredTransfrags=Filtered_Transfrags RawSignal=Raw_Signal FilteredRawSignal=Filtered_Raw_Signal
-subGroup2       cellType Cell_Line prostate=prostate K562=K562 GM12878=GM12878
-subGroup3       localization Localization cell=cell nucleus=nucleus cytosol=cytosol polysome=polysome
+<<<<<<< trackDb.wgEncode.ra
+shortLabel      Affy Local RNA 
+longLabel       ENCODE Affymetrix Subcellular RNA Localization
+group           expression
+subGroup1       view Views Transfrags=Transfrags FilteredTransfrags=FilteredTransfrags RawSignal=RawSignal FilteredRawSignal=FilteredRawSignal
+subGroup2       cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate 
+subGroup3       localization Localization cell=Cell nucleus=Nucleus cytosol=Cytosol polysome=Polysome
 subGroup4       rnaExtract RnaExtract longNonPolyA=longNonPolyA longPolyA=longPolyA total=total
 dimensions      dimensionX=cellType     dimensionY=localization dimensionZ=rnaExtract
 sortOrder       cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary    encode/cv.ra cellType localization rnaExtract
 dragAndDrop     subTracks
-visibilityViewDefaults   Transfrags=hide FilteredTransfrags=hide RawSignal=hide FilteredRawSignal=hide
+visibilityViewDefaults   Transfrags=hide FilteredTransfrags=hide RawSignal=hide FilteredRawSignal=dense
 priority        0
 type            bed 3
 wgEncode        1
 
 	track		wgEncodeAffyRnaChipFilteredTransfragsProstateCellLongnonpolya
 	subTrack	wgEncodeAffyRnaChip
-	shortLabel	longNonPolyA prostate cell
-	longLabel	ENCODE Affy Filtered Transfrags (from longNonPolyA in prostate cell cell)
+	shortLabel	Long PolyA- Pros
+	longLabel	ENCODE Transcriptome - Affymetrix Filtered Transfrags (Long Non-PolyA RNA in prostate cells)
 	subGroups	view=FilteredTransfrags cellType=prostate localization=cell rnaExtract=longNonPolyA
 	type		broadPeak
 	dateSubmitted	2008-11-24 21:27:26
@@ -2000,8 +2002,8 @@ wgEncode        1
 
 	track		wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya
 	subTrack	wgEncodeAffyRnaChip
-	shortLabel	longNonPolyA prostate cell
-	longLabel	ENCODE Affy Transfrags (from longNonPolyA in prostate cell cell)
+	shortLabel	Long PolyA-Pros
+	longLabel	ENCODE Transcriptome - Affymetrix Transfrags (Long Non-PolyA RNA in prostate cells)
 	subGroups	view=Transfrags cellType=prostate localization=cell rnaExtract=longNonPolyA
 	type		broadPeak
 	dateSubmitted	2008-11-24 21:27:26
@@ -2015,8 +2017,8 @@ wgEncode        1
 
 	track		wgEncodeAffyRnaChipFilteredRawSignalProstateCellLongnonpolya
 	subTrack	wgEncodeAffyRnaChip
-	shortLabel	longNonPolyA prostate cell
-	longLabel	ENCODE (from longNonPolyA in prostate cell cell)
+	shortLabel	Long PolyA- Pros
+	longLabel	ENCODE Transcriptome - Affymetrix Filtered Signal (Long Non-PolyA RNA in prostate cells)
 	subGroups	view=FilteredRawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
 	type		wig -62124.00 54385.00
 	dateSubmitted	2008-11-24 21:27:26
@@ -2033,8 +2035,8 @@ wgEncode        1
 
 	track		wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya
 	subTrack	wgEncodeAffyRnaChip
-	shortLabel	longNonPolyA prostate cell Raw
-	longLabel	ENCODE (from longNonPolyA in prostate cell cell)
+	shortLabel	Long PolyA- Pros Raw
+	longLabel	ENCODE Transcriptome - Affymetrix Raw Signal (Long Non-PolyA RNA in prostate cells)
 	subGroups	view=RawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
 	type		wig -62124.00 50627.00
 	dateSubmitted	2008-11-24 21:27:26
@@ -2712,8 +2714,8 @@ wgEncode        1
 
 track		wgEncodeSunyalbanyRnaGeneChip
 compositeTrack	on
-shortLabel	SunyAlbany RnaGeneChip
-longLabel	ENCODE SunyAlbany Tenenbaum RnaGeneChip
+shortLabel	SUNY-Albany RIP
+longLabel	ENCODE SUNY-Albany RNA Binding Proteins by RIP
 group		regulation
 subGroup1	view Views RbpAssocRna=RbpAssocRna
 subGroup2	cellType Cell_Line GM12878=GM12878 K562=K562
@@ -2723,7 +2725,7 @@ dimensions	dimensionX=cellType	dimensionY=ripAntibody	dimensionZ=ripTgtProtein
 sortOrder	cellType=+ ripAntibody=+ ripTgtProtein=+ view=+
 controlledVocabulary	encode/cv.ra cellType ripAntibody ripTgtProtein
 dragAndDrop	subTracks
-visibilityViewDefaults	 RbpAssocRna=hide
+visibilityViewDefaults	 RbpAssocRna=dense
 priority	0
 type		bed 3
 wgEncode	1
@@ -2837,21 +2839,21 @@ wgEncode	1
 track wgEncodeYaleChIPseq
 compositeTrack on
 shortLabel Yale TFBS
-longLabel ENCODE - Yale ChIP-Seq Transcription Factor Binding Sites
+longLabel ENCODE Yale Transcription Factor Binding Sites by ChIP-seq
 group regulation
 priority 0
 type bed 3
 useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg K562=K562 NB4=NB4
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg NB4=NB4
 subGroup3 factor Antibody Pol2=Pol2 STAT1=STAT1 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults Peaks=pack Signal=full zRAW=hide
+visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
 controlledVocabulary encode/cv.ra cellType factor
-settingsByView Signal:defaultViewLimits=5:500,viewLimits=0:20910  zRAW:defaultViewLimits=5:500,viewLimits=0:14648
+settingsByView Signal:defaultViewLimits=0:10,viewLimits=0:20910,autoScale=off  zRAW:defaultViewLimits=5:500,viewLimits=0:14648,autoScale=off
 dataVersion ENCODE Submitted September 2008
 wgEncode 1
 
@@ -3166,7 +3168,7 @@ wgEncode 1
         accession       GSE12781
 
         track           wgEncodeYaleChIPseqPeaksHelas3ifngStat1
-        subTrack        wgEncodeYaleChIPseq
+        subTrack        wgEncodeYaleChIPseq hide
         shortLabel      HeLa-IF STAT1 Pk
         longLabel       ENCODE Yale ChIP-Seq Peaks (STAT1 in HeLa-S3_IFNg cells)
         subGroups       view=Peaks factor=STAT1 cellType=HeLa-IF
@@ -3182,7 +3184,7 @@ wgEncode 1
         configurable    on
 
         track           wgEncodeYaleChIPseqSignalHelas3ifngStat1
-        subTrack        wgEncodeYaleChIPseq
+        subTrack        wgEncodeYaleChIPseq hide
         shortLabel      HeLa-IF STAT1 Sig
         longLabel       ENCODE Yale ChIP-Seq Signal (STAT1 in HeLa-S3_IFNg cells)
         subGroups       view=Signal factor=STAT1 cellType=HeLa-IF
@@ -3202,7 +3204,7 @@ wgEncode 1
         configurable    on
 
         track           wgEncodeYaleChIPseqRawSignalRep1Helas3ifngStat1
-        subTrack        wgEncodeYaleChIPseq
+        subTrack        wgEncodeYaleChIPseq hide
         shortLabel      HeLa-IF STAT1 Raw1
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (STAT1 in HeLa-S3_IFNg cells)
         subGroups       view=zRAW factor=STAT1 cellType=HeLa-IF
@@ -3220,7 +3222,7 @@ wgEncode 1
         accession       GSE12782
 
         track           wgEncodeYaleChIPseqRawSignalRep2Helas3ifngStat1
-        subTrack        wgEncodeYaleChIPseq
+        subTrack        wgEncodeYaleChIPseq hide
         shortLabel      HeLa-IF STAT1 Raw2
         longLabel       ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (STAT1 in HeLa-S3_IFNg cells)
         subGroups       view=zRAW factor=STAT1 cellType=HeLa-IF
@@ -3238,7 +3240,7 @@ wgEncode 1
         accession       GSE12782
 
         track           wgEncodeYaleChIPseqSignalHelas3ifngInput
-        subTrack        wgEncodeYaleChIPseq
+        subTrack        wgEncodeYaleChIPseq hide
         shortLabel      HeLa-IF Inp Sig
         longLabel       ENCODE Yale ChIP-Seq Signal (Input in HeLa-S3_IFNg cells)
         subGroups       view=Signal factor=zCTRL cellType=HeLa-IF
@@ -3258,7 +3260,7 @@ wgEncode 1
         configurable    on
 
         track           wgEncodeYaleChIPseqRawSignalHelas3ifngInput
-        subTrack        wgEncodeYaleChIPseq
+        subTrack        wgEncodeYaleChIPseq hide
         shortLabel      HeLa-IF Inp Raw
         longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in HeLa-S3_IFNg cells)
         subGroups       view=zRAW factor=zCTRL cellType=HeLa-IF
@@ -3589,7 +3591,7 @@ wgEncode 1
         configurable    on
 
         track		wgEncodeYaleChIPseqPeaksNb4Pol2
-        subTrack	wgEncodeYaleChIPseq
+        subTrack	wgEncodeYaleChIPseq hide
         shortLabel	NB4 Pol2 Pk
         longLabel	ENCODE Yale ChIP-Seq Peaks (Pol2 in NB4 cells)
         subGroups	view=Peaks factor=Pol2 cellType=NB4
@@ -3603,7 +3605,7 @@ wgEncode 1
         antibody	Pol2
 
         track		wgEncodeYaleChIPseqSignalNb4Pol2
-        subTrack	wgEncodeYaleChIPseq
+        subTrack	wgEncodeYaleChIPseq hide
         shortLabel	NB4 Pol2 Sig
         longLabel	ENCODE Yale ChIP-Seq Signal (Pol2 in NB4 cells)
         subGroups	view=Signal factor=Pol2 cellType=NB4
@@ -3620,7 +3622,7 @@ wgEncode 1
         antibody	Pol2
 
         track		wgEncodeYaleChIPseqRawSignalRep1Nb4Pol2
-        subTrack	wgEncodeYaleChIPseq
+        subTrack	wgEncodeYaleChIPseq hide
         shortLabel	NB4 Pol2 Raw1
         longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (Pol2 in NB4 cells)
         subGroups	view=zRAW factor=Pol2 cellType=NB4
@@ -3637,7 +3639,7 @@ wgEncode 1
         antibody	Pol2
 
         track		wgEncodeYaleChIPseqRawSignalRep2Nb4Pol2
-        subTrack	wgEncodeYaleChIPseq
+        subTrack	wgEncodeYaleChIPseq hide
         shortLabel	NB4 Pol2 Raw2
         longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (Pol2 in NB4 cells)
         subGroups	view=zRAW factor=Pol2 cellType=NB4
@@ -3654,7 +3656,7 @@ wgEncode 1
         antibody	Pol2
 
         track		wgEncodeYaleChIPseqRawSignalRep3Nb4Pol2
-        subTrack	wgEncodeYaleChIPseq
+        subTrack	wgEncodeYaleChIPseq hide
         shortLabel	NB4 Pol2 Raw3
         longLabel	ENCODE Yale ChIP-Seq Raw Signal Replicate 3 (Pol2 in NB4 cells)
         subGroups	view=zRAW factor=Pol2 cellType=NB4
@@ -3671,7 +3673,7 @@ wgEncode 1
         antibody	Pol2
 
         track           wgEncodeYaleChIPseqSignalNb4Input
-        subTrack        wgEncodeYaleChIPseq
+        subTrack        wgEncodeYaleChIPseq hide
         shortLabel      NB4 Input Sig
         longLabel       ENCODE Yale ChIP-Seq Signal (Input in NB4 cells)
         subGroups       view=Signal factor=zCTRL cellType=NB4
@@ -3688,7 +3690,7 @@ wgEncode 1
         antibody        Input
 
         track           wgEncodeYaleChIPseqRawSignalNb4Input
-        subTrack        wgEncodeYaleChIPseq
+        subTrack        wgEncodeYaleChIPseq hide
         shortLabel      NB4 Input Raw
         longLabel       ENCODE Yale ChIP-Seq Raw Signal (Input in NB4 cells)
         subGroups       view=zRAW factor=zCTRL cellType=NB4
@@ -3706,8 +3708,8 @@ wgEncode 1
 
 track wgEncodeHudsonalphaChipSeq
 compositeTrack on
-shortLabel HudsonAlpha ChIP
-longLabel ENCODE HudsonAlpha ChIP-Seq
+shortLabel HudsonAlpha TFBS
+longLabel ENCODE HudsonAlpha Transcription Factor Binding Sites by ChIP-seq
 group regulation
 # subGroup1 view Views Sites=Sites Counts=Counts
 subGroup1 view Views Peaks=Peaks RawSignal=Raw_Signal
@@ -3716,14 +3718,15 @@ subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF Pol2=Pol2 SRF=SRF Contro
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults Peaks=full Signal=full RawSignal=full
+visibilityViewDefaults Peaks=hide RawSignal=dense
+settingsByView RawSignal:defaultViewLimits=1:10,,autoScale=off
 controlledVocabulary encode/cv.ra cellType factor
 priority	0
 type bed 3
 wgEncode 1
 
 	track	wgEncodeHudsonalphaChipSeqRawSignalPfsk1Control
-	subTrack	wgEncodeHudsonalphaChipSeq
+	subTrack	wgEncodeHudsonalphaChipSeq hide
 	shortLabel	Control PFSK1
 	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal (Control in PFSK-1 cells)
 	subGroups	view=RawSignal factor=Control cellType=PFSK-1
@@ -3735,7 +3738,7 @@ wgEncode 1
 	antibody	control
 
 	track	wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Foxp2
-	subTrack	wgEncodeHudsonalphaChipSeq
+	subTrack	wgEncodeHudsonalphaChipSeq hide
 	shortLabel	FOXP2 PFSK1 Pk 1
 	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 1 (FOXP2 in PFSK-1 cells)
 	subGroups	view=Peaks factor=FOXP2 cellType=PFSK-1
@@ -3748,7 +3751,7 @@ wgEncode 1
         color 107,112,43
 
 	track	wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Foxp2
-	subTrack	wgEncodeHudsonalphaChipSeq
+	subTrack	wgEncodeHudsonalphaChipSeq hide
 	shortLabel	FOXP2 PFSK1 Raw 1
 	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (FOXP2 in PFSK-1 cells)
 	subGroups	view=RawSignal factor=FOXP2 cellType=PFSK-1
@@ -3764,7 +3767,7 @@ wgEncode 1
         color 107,112,43
 
 	track	wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Foxp2
-	subTrack	wgEncodeHudsonalphaChipSeq
+	subTrack	wgEncodeHudsonalphaChipSeq hide
 	shortLabel	FOXP2 PFSK1 Pk 2
 	longLabel	ENCODE HudsonAlpha ChIP/Seq Peaks Replicate 2 (FOXP2 in PFSK-1 cells)
 	subGroups	view=Peaks factor=FOXP2 cellType=PFSK-1
@@ -3777,7 +3780,7 @@ wgEncode 1
         color 107,112,43
 
 	track	wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Foxp2
-	subTrack	wgEncodeHudsonalphaChipSeq
+	subTrack	wgEncodeHudsonalphaChipSeq hide
 	shortLabel	FOXP2 PFSK1 Raw 2
 	longLabel	ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (FOXP2 in PFSK-1 cells)
 	subGroups	view=RawSignal factor=FOXP2 cellType=PFSK-1
@@ -4430,7 +4433,7 @@ wgEncode 1
 track wgEncodeSangerGencode
 compositeTrack on
 shortLabel Gencode Genes
-longLabel ENCODE - Sanger Gencode Genes
+longLabel ENCODE Gencode Gene Annotations
 group genes
 subGroup1 view Views GencodeManual=Gencode_Manual GencodeAuto=Gencode_Automatic
 subGroup2 freezeDate Freeze_Date 2008-10-01=2008-10-01
@@ -4451,8 +4454,8 @@ wgEncode 1
 
 	track	wgEncodeSangerGencodeGencodeManual20081001
 	subTrack	wgEncodeSangerGencode
-	shortLabel	Sanger Gencode Manual (2008-10-01)
-	longLabel	ENCODE Sanger Gencode Manual Gene predictions (level 1+2) (2008-10-01)
+	shortLabel	Manual (Oct08)
+	longLabel	ENCODE Gencode Manual Gene Annotations (level 1+2) (Oct-08
 	subGroups	view=GencodeManual freezeDate=2008-10-01
 	type	genePred
 	dateSubmitted	2008-10-21 12:24:57
@@ -4461,8 +4464,8 @@ wgEncode 1
 	noInherit	on
 	track	wgEncodeSangerGencodeGencodeAuto20081001
 	subTrack	wgEncodeSangerGencode
-	shortLabel	Sanger Gencode Auto (2008-10-01)
-	longLabel	ENCODE Sanger Gencode Automated Gene predictions (level 3) (2008-10-01)
+	shortLabel	Auto (Oct08)
+	longLabel	ENCODE Gencode Automated Gene Annotations (level 3) (Oct-08)
 	subGroups	view=GencodeAuto freezeDate=2008-10-01
 	type	genePred
 	dateSubmitted	2008-10-21 12:24:57
@@ -4470,14 +4473,14 @@ wgEncode 1
 	configurable	on
 	noInherit	on
 
-track		wgEncodeGisPet
-compositeTrack	on
-shortLabel	Gis Pet
-longLabel	ENCODE Gis Gingeras Pet
-group		regulation
-subGroup1       view Views Alignments=Alignments Tags=Tags PlusRawSignal=PlusRawSignal MinusRawSignal=MinusRawSignal
-subGroup2       cellType Cell_Line K562=K562 prostate=prostate
-subGroup3       localization Localization cytosol=cytosol cell=cell polysome=polysome nucleus=nucleus
+track           wgEncodeGisPet                                                       
+compositeTrack  on                                                                   
+shortLabel      GIS Local PET
+longLabel       ENCODE GIS Subcellular RNA Localization by Paired End diTag Sequencing
+group           expression
+subGroup1       view Views Tags=Tags PlusRawSignal=PlusRawSignal MinusRawSignal=MinusRawSignal Alignments=Alignments 
+subGroup2       cellType Cell_Line K562=K562 prostate=Prostate
+subGroup3       localization Localization cytosol=Cytosol cell=Cell polysome=Polysome nucleus=Nucleus
 subGroup4       rnaExtract RnaExtract longPolyA=longPolyA
 subGroup4       rnaExtract RnaExtract longPolyA=longPolyA
 dimensions	dimensionX=cellType	dimensionY=localization	dimensionZ=rnaExtract
@@ -4760,8 +4763,8 @@ wgEncode	1
 
 track wgEncodeHudsonalphaMethyl27
 compositeTrack on
-shortLabel HudsonAlpha Methyl27
-longLabel ENCODE HudsonAlpha Methyl27
+shortLabel HudsonAlpha Met
+longLabel ENCODE HudsonAlpha CpG Methylation by Illumina Methyl27
 group regulation
 subGroup1 view Views Peaks=Peaks
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 HepG2=HepG2
@@ -4769,7 +4772,7 @@ subGroup3 replicate Replicate RP1=RP1 RP2=RP2
 dimensions dimensionX=cellType dimensionY=replicate
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
-visibilityViewDefaults Peaks=full
+visibilityViewDefaults Peaks=dense
 controlledVocabulary encode/cv.ra cellType factor
 priority	0
 itemRgb on
