@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1478 2008/12/04 19:42:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1479 2008/12/06 05:44:17 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14279,6 +14279,107 @@ return dyStringCannibalize(&dy);
 
 #define firstTwoColumnsPctS "<TR><TD>%s</TD><TD>%s</TD><TD>"
 
+void getSnp125RefCodonAndSnpPos(struct snp125 *snp, struct genePred *gene, int exonIx,
+				int *pSnpCodonPos, char refCodon[4], char *pRefAA)
+/* Given a single-base snp and a coding gene/exon containing it, determine the snp's position
+ * in the codon and the reference codon & amino acid. */
+{
+boolean geneIsRc = sameString(gene->strand, "-");
+int snpStart = snp->chromStart, snpEnd = snp->chromEnd;
+int exonStart = gene->exonStarts[exonIx], exonEnd = gene->exonEnds[exonIx];
+int cdsStart = gene->cdsStart, cdsEnd = gene->cdsEnd;
+int exonFrame = gene->exonFrames[exonIx];
+if (exonFrame == -1)
+    exonFrame = 0;
+if (cdsEnd < exonEnd) exonEnd = cdsEnd;
+if (cdsStart > exonStart) exonStart = cdsStart;
+int snpCodonPos = geneIsRc ? (2 - ((exonEnd - snpEnd) + exonFrame) % 3) :
+			     (((snpStart - exonStart) + exonFrame) % 3);
+refCodon[0] = getSnpTxBase(gene, exonIx, snpStart, -snpCodonPos);
+refCodon[1] = getSnpTxBase(gene, exonIx, snpStart, 1 - snpCodonPos);
+refCodon[2] = getSnpTxBase(gene, exonIx, snpStart, 2 - snpCodonPos);
+refCodon[3] = '\0';
+if (geneIsRc)
+    {
+    reverseComplement(refCodon, strlen(refCodon));
+    snpCodonPos = 2 - snpCodonPos;
+    }
+if (pSnpCodonPos != NULL)
+    *pSnpCodonPos = snpCodonPos;
+if (pRefAA != NULL)
+    {
+    *pRefAA = lookupCodon(refCodon);
+    if (*pRefAA == '\0') *pRefAA = '*';
+    }
+}
+
+void printSnp125FunctionInCDS(struct snp125 *snp, char *geneTable, char *geneTrack,
+			      struct genePred *gene, int exonIx, char *geneName)
+/* Show the effect of each observed allele of snp on the given exon of gene. */
+{
+char refAllele[256];
+safecpy(refAllele, sizeof(refAllele), snp->refUCSC);
+boolean refIsAlpha = isalpha(refAllele[0]);
+boolean geneIsRc = sameString(gene->strand, "-"), snpIsRc = sameString(snp->strand, "-");
+if (geneIsRc && refIsAlpha)
+    reverseComplement(refAllele, strlen(refAllele));
+int refAlleleSize = sameString(refAllele, "-") ? 0 : refIsAlpha ? strlen(refAllele) : -1;
+boolean refIsSingleBase = (refAlleleSize == 1 && refIsAlpha);
+int snpCodonPos = 0;
+char refCodon[4], refAA = '\0';
+if (refIsSingleBase)
+    getSnp125RefCodonAndSnpPos(snp, gene, exonIx, &snpCodonPos, refCodon, &refAA);
+char alleleStr[256];
+safecpy(alleleStr, sizeof(alleleStr), snp->observed);
+char *indivAlleles[64];
+int alleleCount = chopString(alleleStr, "/", indivAlleles, ArraySize(indivAlleles));
+int j;
+for (j = 0;  j < alleleCount;  j++)
+    {
+    char *al = indivAlleles[j];
+    boolean alIsAlpha = (isalpha(al[0]) && !sameString(al, "lengthTooLong"));
+    if ((snpIsRc ^ geneIsRc) && alIsAlpha)
+	reverseComplement(al, strlen(al));
+    char alBase = al[0];
+    if (alBase == '\0' || sameString(al, refAllele))
+	continue;
+    int alSize = sameString(al, "-") ? 0 : alIsAlpha ? strlen(al) : -1;
+    if (alSize != refAlleleSize && alSize >= 0 && refAlleleSize >=0)
+	{
+	int diff = alSize - refAlleleSize;
+	if ((diff % 3) != 0)
+	    printf(firstTwoColumnsPctS "cds-reference, frameshift</TD></TR>\n",
+		   geneTrack, geneName);
+	else if (diff > 0)
+	    printf(firstTwoColumnsPctS "cds-reference, insertion of %d codon%s</TD></TR>\n",
+		   geneTrack, geneName, (int)(diff/3), (diff > 3) ?  "s" : "");
+	else
+	    printf(firstTwoColumnsPctS "cds-reference, deletion of %d codon%s</TD></TR>\n",
+		   geneTrack, geneName, (int)(-diff/3), (diff < -3) ?  "s" : "");
+	}
+    else if (alSize == 1 && refIsSingleBase)
+	{
+	char snpCodon[4];
+	safecpy(snpCodon, sizeof(snpCodon), refCodon);
+	snpCodon[snpCodonPos] = alBase;
+	char snpAA = lookupCodon(snpCodon);
+	if (snpAA == '\0') snpAA = '*';
+	if (refAA != snpAA)
+	    printf(firstTwoColumnsPctS "cds-reference, %ssense %c (%s) --> %c (%s)</TD></TR>\n",
+		   geneTrack, geneName,
+		   ((refAA == '*' || snpAA == '*') ? "non" : "mis"),
+		   refAA, refCodon, snpAA, snpCodon);
+	else
+	    printf(firstTwoColumnsPctS
+		   "cds-reference, coding-synon %c (%s) --> %c (%s)</TD></TR>\n",
+		   geneTrack, geneName, refAA, refCodon, snpAA, snpCodon);
+	}
+    else
+	printf(firstTwoColumnsPctS "cds-reference, %s -> %s</TD></TR>\n",
+	       geneTrack, geneName, refAllele, al);
+    }
+}
+
 void printSnp125FunctionInGene(struct snp125 *snp, char *geneTable, char *geneTrack,
 			       struct genePred *gene)
 /* Given a SNP and a gene that overlaps it, say where in the gene it overlaps 
@@ -14286,14 +14387,7 @@ void printSnp125FunctionInGene(struct snp125 *snp, char *geneTable, char *geneTr
 {
 int snpStart = snp->chromStart, snpEnd = snp->chromEnd;
 int cdsStart = gene->cdsStart, cdsEnd = gene->cdsEnd;
-boolean geneIsRc = sameString(gene->strand, "-"), snpIsRc = sameString(snp->strand, "-");
-char refAllele[256];
-safecpy(refAllele, sizeof(refAllele), snp->refUCSC);
-boolean refIsAlpha = isalpha(refAllele[0]);
-if (geneIsRc && refIsAlpha)
-    reverseComplement(refAllele, strlen(refAllele));
-int refAlleleSize = sameString(refAllele, "-") ? 0 : refIsAlpha ? strlen(refAllele) : -1;
-boolean refIsSingleBase = (refAlleleSize == 1 && refIsAlpha);
+boolean geneIsRc = sameString(gene->strand, "-");
 char *geneName = getSymbolForGeneName(geneTable, gene->name);
 int i, iStart = 0, iEnd = gene->exonCount, iIncr = 1;
 if (geneIsRc)
@@ -14301,112 +14395,27 @@ if (geneIsRc)
 for (i = iStart;  i != iEnd;  i += iIncr)
     {
     int exonStart = gene->exonStarts[i], exonEnd = gene->exonEnds[i];
-    int exonFrame = gene->exonFrames[i];
     if (snpEnd > exonStart && snpStart < exonEnd)
 	{
 	if (snpEnd > cdsStart && snpStart < cdsEnd)
-	    {
-	    if (exonFrame == -1)
-		exonFrame = 0;
-	    int snpCodonPos = 0;
-	    char refCodon[4];
-	    char refAA = '\0';
-	    if (refIsSingleBase)
-		{
-		// If we are working with a single-base mapping, we can show codon change:
-		if (cdsEnd < exonEnd) exonEnd = cdsEnd;
-		if (cdsStart > exonStart) exonStart = cdsStart;
-		snpCodonPos = geneIsRc ? (2 - ((exonEnd - snpEnd) + exonFrame) % 3) :
-					 (((snpStart - exonStart) + exonFrame) % 3);
-		refCodon[3] = '\0';
-		refCodon[snpCodonPos] = getSnpTxBase(gene, i, snpStart, 0);
-		if (snpCodonPos == 0)
-		    {
-		    refCodon[1] = getSnpTxBase(gene, i, snpStart, 1);
-		    refCodon[2] = getSnpTxBase(gene, i, snpStart, 2);
-		    }
-		else if (snpCodonPos == 1)
-		    {
-		    refCodon[0] = getSnpTxBase(gene, i, snpStart, -1);
-		    refCodon[2] = getSnpTxBase(gene, i, snpStart, 1);
-		    }
-		else
-		    {
-		    refCodon[0] = getSnpTxBase(gene, i, snpStart, -2);
-		    refCodon[1] = getSnpTxBase(gene, i, snpStart, -1);
-		    }
-		if (geneIsRc)
-		    {
-		    reverseComplement(refCodon, strlen(refCodon));
-		    snpCodonPos = 2 - snpCodonPos;
-		    }
-		refAA = lookupCodon(refCodon);
-		if (refAA == '\0') refAA = '*';
-		}
-	    char alleleStr[256];
-	    safecpy(alleleStr, sizeof(alleleStr), snp->observed);
-	    char *indivAlleles[64];
-	    int alleleCount = chopString(alleleStr, "/", indivAlleles, ArraySize(indivAlleles));
-	    int j;
-	    for (j = 0;  j < alleleCount;  j++)
-		{
-		char *al = indivAlleles[j];
-		boolean alIsAlpha = (isalpha(al[0]) && !sameString(al, "lengthTooLong"));
-		if ((snpIsRc ^ geneIsRc) && alIsAlpha)
-		    reverseComplement(al, strlen(al));
-		char alBase = al[0];
-		if (alBase == '\0' || sameString(al, refAllele))
-		    continue;
-		int alSize = sameString(al, "-") ? 0 : alIsAlpha ? strlen(al) : -1;
-		if (alSize != refAlleleSize && alSize >= 0 && refAlleleSize >=0)
-		    {
-		    int diff = alSize - refAlleleSize;
-		    if ((diff % 3) != 0)
-			printf(firstTwoColumnsPctS "CDS: frameshift</TD></TR>\n",
-			       geneTrack, geneName);
-		    else if (diff > 0)
-			printf(firstTwoColumnsPctS "CDS: insertion of %d codon%s</TD></TR>\n",
-			       geneTrack, geneName, (int)(diff/3), (diff > 3) ?  "s" : "");
-		    else
-			printf(firstTwoColumnsPctS "CDS: deletion of %d codon%s</TD></TR>\n",
-			       geneTrack, geneName, (int)(-diff/3), (diff < -3) ?  "s" : "");
-		    }
-		else if (alSize == 1 && refIsSingleBase)
-		    {
-		    char snpCodon[4];
-		    safecpy(snpCodon, sizeof(snpCodon), refCodon);
-		    snpCodon[snpCodonPos] = alBase;
-		    char snpAA = lookupCodon(snpCodon);
-		    if (snpAA == '\0') snpAA = '*';
-		    if (refAA != snpAA)
-			printf(firstTwoColumnsPctS "missense %c (%s) --> %c (%s)</TD></TR>\n",
-			       geneTrack, geneName, refAA, refCodon, snpAA, snpCodon);
-		    else
-			printf(firstTwoColumnsPctS "coding-synon %c (%s) --> %c (%s)</TD></TR>\n",
-			       geneTrack, geneName, refAA, refCodon, snpAA, snpCodon);
-		    }
-		else
-		    printf(firstTwoColumnsPctS "CDS: %s -> %s</TD></TR>\n",
-			   geneTrack, geneName, refAllele, al);
-		}
-	    }
+	    printSnp125FunctionInCDS(snp, geneTable, geneTrack, gene, i, geneName);
 	else if (cdsEnd > cdsStart)
-	    printf(firstTwoColumnsPctS "%d' UTR</TD></TR>\n", geneTrack, geneName,
+	    printf(firstTwoColumnsPctS "untranslated-%d</TD></TR>\n", geneTrack, geneName,
 		   (geneIsRc ^ (snpEnd < cdsStart)) ? 5 : 3);
 	else
 	    printf(firstTwoColumnsPctS "noncoding gene</TD></TR>\n", geneTrack, geneName);
 	}
-    else if (i > 0)
+    if (i > 0)
 	{
 	int intronStart = gene->exonEnds[i-1], intronEnd = gene->exonStarts[i];
 	if (snpStart < intronStart+2 && snpEnd > intronStart)
-	    printf(firstTwoColumnsPctS "intron, %d' splice junction</TD></TR>\n",
+	    printf(firstTwoColumnsPctS "intron, splice-%d</TD></TR>\n",
 		   geneTrack, geneName,
 		   (geneIsRc ? 3 : 5));
 	else if (snpStart < intronEnd-2 && snpEnd > intronStart+2)
 	    printf(firstTwoColumnsPctS "intron</TD></TR>\n", geneTrack, geneName);
 	else if (snpStart < intronEnd && snpEnd > intronEnd-2)
-	    printf(firstTwoColumnsPctS "intron, %d' splice junction</TD></TR>\n",
+	    printf(firstTwoColumnsPctS "intron, splice-%d</TD></TR>\n",
 		   geneTrack, geneName,
 		   (geneIsRc ? 5 : 3));
 	}
