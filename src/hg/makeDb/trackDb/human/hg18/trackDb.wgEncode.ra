@@ -1968,7 +1968,6 @@ wgEncode 1
 
 track           wgEncodeAffyRnaChip
 compositeTrack  on
-<<<<<<< trackDb.wgEncode.ra
 shortLabel      Affy Local RNA 
 longLabel       ENCODE Affymetrix Subcellular RNA Localization
 group           expression
