@@ -457,28 +457,6 @@ oldToNew kg3ToKg4
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-track omimGene
-shortLabel OMIM Genes
-longLabel OMIM Related Genes
-group phenDis
-priority 29.6
-visibility hide
-color 200, 0, 125
-type genePred
-hgsid on
-url http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=Search&db=omim&doptcmdl=Detailed&tool=genome.ucsc.edu&term=
-baseColorUseCds given
-baseColorDefault genomicCodons
-
-searchName omimGeneAcc
-searchTable omimGene
-searchMethod exact
-searchType genePred
-shortCircuit 1
-semiShortCircuit 1
-termRegex ([0-9]*)
-searchPriority 10
-
 track pgSnp
 compositeTrack on
 shortLabel Genome Variants

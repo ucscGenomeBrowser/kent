@@ -2335,6 +2335,31 @@ visibility hide
 color 0,100,100
 type bed 4 +
 
+track affyExonTissues
+shortLabel Affy Exon Tissues
+longLabel Affymetrix Exon Array 1.0: Normal Tissues
+group expression
+priority 79.1
+visibility hide
+type expRatio
+expScale 3.0
+expStep 0.5
+expTable affyExonTissuesExps
+groupings affyExonTissuesGroups
+
+track omimGene
+shortLabel OMIM Genes
+longLabel OMIM Related Genes
+group phenDis
+priority 29.6
+visibility hide
+color 200, 0, 125
+type genePred
+hgsid on
+url http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=Search&db=omim&doptcmdl=Detailed&tool=genome.ucsc.edu&term=
+baseColorUseCds given
+baseColorDefault genomicCodons
+
 # in priority.ra 
 #
 # track chainDanRer4
@@ -2685,14 +2710,11 @@ xrefQuery select name, cloneAcc from %s where cloneAcc = '%s'
 termRegex AC[0-9]{6}
 searchPriority 52
 
-track affyExonTissues
-shortLabel Affy Exon Tissues
-longLabel Affymetrix Exon Array 1.0: Normal Tissues
-group expression
-priority 79.1
-visibility hide
-type expRatio
-expScale 3.0
-expStep 0.5
-expTable affyExonTissuesExps
-groupings affyExonTissuesGroups
+searchName omimGeneAcc
+searchTable omimGene
+searchMethod exact
+searchType genePred
+shortCircuit 1
+semiShortCircuit 1
+termRegex ([0-9]*)
+searchPriority 10
