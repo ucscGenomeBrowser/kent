@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1479 2008/12/06 05:44:17 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1480 2008/12/06 06:56:29 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5552,8 +5552,9 @@ if (psl->strand[0] == '-')
     reverseComplement(dna, productSize);
 printf("<TT><PRE>");
 /* The rest of this is loosely copied from gfPcrLib.c:outputFa(): */
+char *tNameForPos = (target != NULL ? pcrResultItemAccession(psl->tName) : psl->tName);
 printf("><A HREF=\"%s?%s&db=%s&position=%s",
-       hgTracksName(), cartSidUrlString(cart), database, psl->tName);
+       hgTracksName(), cartSidUrlString(cart), database, tNameForPos);
 if (target == NULL)
     printf(":%d-%d", psl->tStart+1, psl->tEnd);
 printf("\">%s:%d%c%d</A> %dbp %s %s\n",
