@@ -1826,7 +1826,7 @@ shortLabel UW DNaseI HS
 longLabel ENCODE Univ. Washington DNaseI Hypersensitivity by DNase-seq
 group regulation
 subGroup1 view Views Hotspots=Hot_Spots Peaks=Peaks RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line GM06990=GM06990 HeLa-S3=HeLa-S3 HepG2=HepG2 SK-N-SH(+RA)=SK-N-SH(+RA) Th1=Th1
+subGroup2 cellType Cell_Line K562=K562 GM06990=GM06990 HeLa-S3=HeLa-S3 HepG2=HepG2 SK-N-SH(+RA)=SK-N-SH(+RA) Th1=Th1
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
@@ -2046,6 +2046,91 @@ wgEncode 1
 	noInherit	on
 	configurable	on
 	cell		SK-N-SH(+RA)
+
+	track		wgEncodeUwDnaseSeqRawSignalRep1K562
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	K562 Raw 1
+	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in K562 cells)
+	subGroups	view=RawSignal cellType=K562
+	type		wig 1.00 47529.00
+	dateSubmitted	2008-12-04 9:0:48
+	dateReleased	2009-09-04
+	priority	8
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+
+	track		wgEncodeUwDnaseSeqRawSignalRep2K562
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	K562 Raw 2
+	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 2 (in K562 cells)
+	subGroups	view=RawSignal cellType=K562
+	type		wig 1.00 62912.00
+	dateSubmitted	2008-12-04 9:0:48
+	dateReleased	2009-09-04
+	priority	8
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+
+	track		wgEncodeUwDnaseSeqPeaksK562
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	K562 Pk
+	longLabel	ENCODE UW DNase-Seq Peaks (in K562 cells)
+	subGroups	view=Peaks cellType=K562
+	type		narrowPeak
+	dateSubmitted	2008-12-04 9:0:48
+	dateReleased	2009-09-04
+	priority	6
+	noInherit	on
+	configurable	on
+	cell		K562
+
+	track		wgEncodeUwDnaseSeqPeaksK562
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	K562 Pk
+	longLabel	ENCODE UW DNase-Seq Peaks (in K562 cells)
+	subGroups	view=Peaks cellType=K562
+	type		narrowPeak
+	dateSubmitted	2008-12-04 9:0:48
+	dateReleased	2009-09-04
+	priority	6
+	noInherit	on
+	configurable	on
+	cell		K562
+
+	track		wgEncodeUwDnaseSeqHotspotsK562
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	K562
+	longLabel	ENCODE UW DNase-Seq Hotspots (in K562 cells)
+	subGroups	view=Hotspots cellType=K562
+	type		broadPeak
+	dateSubmitted	2008-12-04 9:0:48
+	dateReleased	2009-09-04
+	priority	5
+	noInherit	on
+	configurable	on
+	cell		K562
+
+	track		wgEncodeUwDnaseSeqHotspotsK562
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	K562
+	longLabel	ENCODE UW DNase-Seq Hotspots (in K562 cells)
+	subGroups	view=Hotspots cellType=K562
+	type		broadPeak
+	dateSubmitted	2008-12-04 9:0:48
+	dateReleased	2009-09-04
+	priority	5
+	noInherit	on
+	configurable	on
+	cell		K562
+
 
 
 track           wgEncodeAffyRnaChip
