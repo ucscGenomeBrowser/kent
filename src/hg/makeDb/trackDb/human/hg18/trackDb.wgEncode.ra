@@ -1089,7 +1089,7 @@ dimensions  dimensionX=cellType dimensionY=EXP
 dragAndDrop	subTracks
 visibilityViewDefaults	 Peaks=hide Signal=dense rRAW=hide
 controlledVocabulary encode/cv.ra cellType=GM12878,K562 EXP=Input,CTCF
-settingsByView Signal:defaultViewLimits=0:0.02,viewLimits=0:40,autoScale=off SignalBO:defaultViewLimits=0.5:2,viewLimits=0:5342,autoScale=off rRAW:defaultViewLimits=0:1,viewLimits=0:112,autoScale=off
+settingsByView Peaks:useScore=0 Signal:defaultViewLimits=0:0.02,viewLimits=0:40,autoScale=off SignalBO:defaultViewLimits=0.5:2,viewLimits=0:8719,autoScale=off rRAW:defaultViewLimits=0:1,viewLimits=0:112,autoScale=off
 useScore    	0
 priority	0
 type		bed 3
@@ -1232,7 +1232,7 @@ wgEncode	1
         subGroups       view=SignalBO EXP=FAIRE cellType=GM12878
         type            wig 0.00 5342.00
         viewLimits      2:15
-        autoScale      off
+        autoScale       off
         dateSubmitted   2008-11-21 16:50:53
         dateReleased    2009-08-21
         priority        203
@@ -1411,6 +1411,202 @@ wgEncode	1
         maxHeightPixels	100:16:16
         cell           GM12878
         antibody       Input
+
+	track		wgEncodeDukeDNaseSeqPeaksK562
+	subTrack	wgEncodeChromatinMap
+	shortLabel	DNase K562 Pk
+	longLabel	ENCODE Open Chromatin Map Duke DNase-Seq Peaks (in K562 cells)
+	subGroups	view=Peaks EXP=DNase cellType=K562
+	type		narrowPeak
+        useScore        0
+	dateSubmitted	2008-12-06 16:13:42
+	dateReleased	2009-09-06
+	priority	1001
+	noInherit	on
+	configurable	on
+	cell		K562
+
+	track		wgEncodeDukeDNaseSeqSignalK562
+	subTrack	wgEncodeChromatinMap
+	shortLabel	DNase K562 Sig
+	longLabel	ENCODE Open Chromatin Map Duke DNase-Seq Signal (in K562 cells)
+	subGroups	view=Signal EXP=DNase cellType=K562
+	type		wig 0.00 3.11
+        viewLimits      0:0.02
+        autoScale       off
+	dateSubmitted	2008-12-06 16:13:42
+	dateReleased	2009-09-06
+	priority	1002
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+
+	track		wgEncodeDukeDNaseSeqBaseOverlapSignalK562
+	subTrack	wgEncodeChromatinMap
+	shortLabel	DNase K562 BO
+	longLabel	ENCODE Open Chromatin Map Duke DNase-Seq Base Overlap Signal (in K562 cells)
+	subGroups	view=SignalBO EXP=DNase cellType=K562
+	type		wig 0.00 445.00
+        viewLimits      2:15
+        autoScale       off
+	dateSubmitted	2008-12-06 16:13:42
+	dateReleased	2009-09-06
+	priority	1003
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+
+	track		wgEncodeDukeDNaseSeqRawSignalRep1K562
+	subTrack	wgEncodeChromatinMap
+	shortLabel	DNase K562 Raw1
+	longLabel	ENCODE Open Chromatin Map Duke DNase-Seq Raw Signal Replicate 1 (in K562 cells)
+	subGroups	view=rRAW EXP=DNase cellType=K562
+	type		wig 0.00 12.92
+	dateSubmitted	2008-12-06 16:13:42
+	dateReleased	2009-09-06
+	priority	1004
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+
+	track		wgEncodeDukeDNaseSeqRawSignalRep2K562
+	subTrack	wgEncodeChromatinMap
+	shortLabel	DNase K562 Raw2
+	longLabel	ENCODE Open Chromatin Map Duke DNase-Seq Raw Signal Replicate 2 (in K562 cells)
+	subGroups	view=rRAW EXP=DNase cellType=K562
+	type		wig 0.00 37.72
+	dateSubmitted	2008-12-06 16:13:42
+	dateReleased	2009-09-06
+	priority	1005
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+
+	track		wgEncodeDukeDNaseSeqRawSignalRep3K562
+	subTrack	wgEncodeChromatinMap
+	shortLabel	DNase K562 Raw3
+	longLabel	ENCODE Open Chromatin Map Duke DNase-Seq Raw Signal Replicate 3 (in K562 cells)
+	subGroups	view=rRAW EXP=DNase cellType=K562
+	type		wig 0.00 34.81
+	dateSubmitted	2008-12-06 16:13:42
+	dateReleased	2009-09-06
+	priority	1006
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+
+	track		wgEncodeUncFAIREseqPeaksK562
+	subTrack	wgEncodeChromatinMap
+	shortLabel	FAIRE K562 Pk
+	longLabel	ENCODE Open Chromatin Map UNC FAIRE-Seq Peaks (in K562 cells)
+	subGroups	view=Peaks EXP=FAIRE cellType=K562
+	type		narrowPeak
+        useScore        0
+	dateSubmitted	2008-12-06 21:21:39
+	dateReleased	2009-09-06
+	priority	1101
+	noInherit	on
+	configurable	on
+	cell		K562
+
+	track		wgEncodeUncFAIREseqSignalK562
+	subTrack	wgEncodeChromatinMap
+	shortLabel	FAIRE K562 Sig
+	longLabel	ENCODE Open Chromatin Map UNC FAIRE-Seq Signal (in K562 cells)
+	subGroups	view=Signal EXP=FAIRE cellType=K562
+	type		wig 0.00 31.50
+        viewLimits      0:0.02
+        autoScale       off
+	dateSubmitted	2008-12-06 21:21:39
+	dateReleased	2009-09-06
+	priority	1102
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+
+	track		wgEncodeUncFAIREseqBaseOverlapSignalK562
+	subTrack	wgEncodeChromatinMap
+	shortLabel	FAIRE K562 BO
+	longLabel	ENCODE Open Chromatin Map UNC FAIRE-Seq Base Overlap Signal (in K562 cells)
+	subGroups	view=SignalBO EXP=FAIRE cellType=K562
+	type		wig 0.00 8719.00
+        viewLimits      2:15
+        autoScale       off
+	dateSubmitted	2008-12-06 21:21:39
+	dateReleased	2009-09-06
+	priority	1103
+	noInherit	on
+	configurable	on
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+
+	track		wgEncodeUncFAIREseqRawSignalRep1K562
+	subTrack	wgEncodeChromatinMap
+	shortLabel	FAIRE K562 Raw1
+	longLabel	ENCODE Open Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 1 (in K562 cells)
+	subGroups	view=rRAW EXP=FAIRE cellType=K562
+	type		wig 0.00 74.86
+	dateSubmitted	2008-12-06 21:21:39
+	dateReleased	2009-09-06
+	priority	1104
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+
+	track		wgEncodeUncFAIREseqRawSignalRep2K562
+	subTrack	wgEncodeChromatinMap
+	shortLabel	FAIRE K562 Raw2
+	longLabel	ENCODE Open Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 2 (in K562 cells)
+	subGroups	view=rRAW EXP=FAIRE cellType=K562
+	type		wig 0.00 63.65
+	dateSubmitted	2008-12-06 21:21:39
+	dateReleased	2009-09-06
+	priority	1105
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
+
+	track		wgEncodeUncFAIREseqRawSignalRep3K562
+	subTrack	wgEncodeChromatinMap
+	shortLabel	FAIRE K562 Raw3
+	longLabel	ENCODE Open Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 3 (in K562 cells)
+	subGroups	view=rRAW EXP=FAIRE cellType=K562
+	type		wig 0.00 67.60
+	dateSubmitted	2008-12-06 21:21:39
+	dateReleased	2009-09-06
+	priority	1106
+	noInherit	on
+	configurable	off
+	spanList	1
+	windowingFunction mean
+	maxHeightPixels	100:16:16
+	cell		K562
 
         track           wgEncodeUtaustinChIPseqSignalK562Input
         subTrack        wgEncodeChromatinMap
@@ -1859,6 +2055,7 @@ wgEncode 1
 	longLabel	ENCODE UW DNase-Seq Peaks (in GM06990 cells)
 	subGroups	view=Peaks cellType=GM06990
 	type		narrowPeak
+        useScore        0
 	dateSubmitted	2008-11-25 23:3:5
 	dateReleased	2009-08-25
 	priority	2
