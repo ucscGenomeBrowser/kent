@@ -19,6 +19,9 @@
     cat *.fa | sed 's/Chr/chr/' | sed 's/LG/chrLG/' |  gzip -c > ../assembly.bases.gz
     cat *.agp | sed 's/Chr/chr/' | sed 's/LG/chrLG/' > ../assembly.agp
     # some scaffolds missing quality values
+XXX - this is broken.  These *qual files are already in chrom coordinates,
+XXX - they do not need a lift.  The lift had the effect of applying -mScore=98
+XXX - to all values.  --Hiram 2008-12-04
     cat *qual | sed 's/Chr/chr/' | sed 's/LG/chrLG/'  | qaToQac stdin  stdout | qacAgpLift -mScore=98 ../assembly.agp stdin ../taeGut1.qual.qac
     cd ..
 
