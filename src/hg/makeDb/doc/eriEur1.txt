@@ -189,4 +189,33 @@ dbDbSpeciesDir hedgehog
 sourceName="Broad Institute eriEur1 (Draft_v1, NCBI project 12575)" where name="eriEur1";' hgcentraltest
     hgsql -e 'update dbDb set
 organism="Hedgehog" where name="eriEur1";' hgcentraltest
-###########################################################################
+
+############################################################################
+#  eriEur1 - Hedgehog - Ensembl Genes version 51  (DONE - 2008-12-04 - hiram)
+    ssh kkr14u08
+    cd /hive/data/genomes/eriEur1
+    cat << '_EOF_' > eriEur1.ensGene.ra
+# required db variable
+db eriEur1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#       names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the three genes that have invalid structures from Ensembl:
+# 4691: ENSEEUT00000004188 no exonFrame on CDS exon 7
+# 35795: ENSEEUT00000003156 no exonFrame on CDS exon 4
+# 40908: ENSEEUT00000001064 no exonFrame on CDS exon 2
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 eriEur1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/eriEur1/bed/ensGene.51
+    featureBits eriEur1 ensGene
+    #	21932124 bases of 2133134836 (1.028%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/eriEur1/bed/ensGene.51
+
+############################################################################

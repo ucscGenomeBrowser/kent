@@ -204,4 +204,30 @@ cut -f 2 chrom.sizes | ave stdin
 # fix the scientific name (DONE - 2008-10-22 - Hiram)
     hgsql -e 'update dbDb set
 scientificName="Vicugna pacos" where name="vicPac1";' hgcentraltest
-###########################################################################
+
+############################################################################
+#  vicPac1 - Alpaca - Ensembl Genes version 51  (DONE - 2008-12-04 - hiram)
+    ssh swarm
+    cd /hive/data/genomes/vicPac1
+    cat << '_EOF_' > vicPac1.ensGene.ra
+# required db variable
+db vicPac1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the 53 genes that do not translate properly to UCSC coordinates
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 vicPac1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/vicPac1/bed/ensGene.51
+    featureBits vicPac1 ensGene
+    # 17730015 bases of 1922910435 (0.922%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/vicPac1/bed/ensGene.51
+
+############################################################################
