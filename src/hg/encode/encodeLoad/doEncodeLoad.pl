@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.50 2008/12/04 20:31:24 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.51 2008/12/08 17:24:04 mikep Exp $
 
 # Usage:
 #
@@ -371,6 +371,7 @@ for my $key (keys %ra) {
         $hgdownload = 1;
     } elsif($type eq "gtf") {
         loadGene($assembly, $tablename, $files, $pushQ, "-gtf -genePredExt");
+        $hgdownload = @files;
     } elsif($type eq "genePred" ) {
         loadGene($assembly, $tablename, $files, $pushQ, "-genePredExt");
     } elsif ($type eq "wig") {
