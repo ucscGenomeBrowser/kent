@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGsid.c,v 1.7 2008/12/08 19:24:40 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbGsid.c,v 1.8 2008/12/08 19:28:17 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -281,7 +281,7 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELL
 hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbGsid?%s=%u&pbt.psOutput=on\">%s</A></TD>\n",
         cartSessionVarName(), cartSessionId(cart), wrapWhiteFont("PDF/PS"));
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbGateway\">%s</A></TD>", wrapWhiteFont("New Query"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidPbGateway\">%s</A></TD>", wrapWhiteFont("New Query"));
 if (proteinInSupportedGenome)
     {
     hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml\" TARGET=_blank>%s</A></TD>",
