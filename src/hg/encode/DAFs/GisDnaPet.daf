@@ -1,0 +1,36 @@
+# Data Agreement File for Genomic DNA PET Ditag project $Revision: 1.1 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# Lab and general info
+grant             Gingeras
+lab               Gis
+dataType          DnaPet
+variables         cell fragSize
+assembly          hg18
+dafVersion        0.2.2
+
+# Track/view definition
+view             Tags
+longLabelPrefix  GIS DNA PET Tags
+type             gappedPeak
+hasReplicates    no
+required         no
+
+view             RawSignal
+longLabelPrefix  GIS DNA PET Raw Signal
+type             wig
+hasReplicates    no
+required         no
+
+view             Alignments
+longLabelPrefix  GIS DNA PET Alignments
+type             pairedTagAlign
+hasReplicates    no
+required         yes
+
+view             RawData
+type             fastq
+hasReplicates    no
+required         yes
