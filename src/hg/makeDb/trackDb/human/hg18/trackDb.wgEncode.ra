@@ -2022,7 +2022,7 @@ shortLabel UW DNaseI HS
 longLabel ENCODE Univ. Washington DNaseI Hypersensitivity by DNase-seq
 group regulation
 subGroup1 view Views Hotspots=Hot_Spots Peaks=Peaks RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line K562=K562 GM06990=GM06990 HeLa-S3=HeLa-S3 HepG2=HepG2 SK-N-SH(+RA)=SK-N-SH(+RA) Th1=Th1
+subGroup2 cellType Cell_Line GM06990=GM06990 K562=K562 HeLa-S3=HeLa-S3 HepG2=HepG2 SK-N-SH(+RA)=SK-N-SH(+RA) Th1=Th1
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
@@ -2254,7 +2254,7 @@ wgEncode 1
 	dateReleased	2009-09-04
 	priority	8
 	noInherit	on
-	configurable	off
+	configurable	on
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
@@ -2270,7 +2270,7 @@ wgEncode 1
 	dateReleased	2009-09-04
 	priority	8
 	noInherit	on
-	configurable	off
+	configurable	on
 	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
