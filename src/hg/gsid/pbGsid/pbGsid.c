@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGsid.c,v 1.6 2008/11/18 23:51:12 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbGsid.c,v 1.7 2008/12/08 19:24:40 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -419,9 +419,18 @@ else
 	    answer = uniProtFindPrimAcc(queryID);
 	    if (answer == NULL)
 		{
-	        errAbort(
-		"'%s' does not seem to be a valid UniProt(Swiss-Prot/TrEMBL) protein ID or a gene symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> to start another query."
-		    	, queryID);
+	        if (hIsGsidServer())
+		    {
+		    errAbort(
+		    "'%s' does not seem to be a valid protein ID.<br><br>Click <A HREF=\"../cgi-bin/gsidPbGateway\">here</A> to start another query."
+		    	    , queryID);
+		    }
+		else
+		    {
+		    errAbort(
+		    "'%s' does not seem to be a valid UniProt(Swiss-Prot/TrEMBL) protein ID or a gene symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> to start another query."
+		    	    , queryID);
+		    }
 	    	}
 	    
 	    proteinInSupportedGenome = FALSE;
