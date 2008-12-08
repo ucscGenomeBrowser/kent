@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.138 2008/12/02 20:12:42 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.139 2008/12/08 19:07:06 angie Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2722,6 +2722,52 @@ if(boxed)
 cfgEndBox(boxed);
 }
 
+void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, int scoreMax)
+/* If scoreMin has been set, let user select the shade of gray for that score, in case 
+ * the default is too light to see or darker than necessary. */
+{
+char *scoreMinStr = trackDbSetting(tdb, "scoreMin");
+if (scoreMinStr != NULL)
+    {
+    int scoreMin = atoi(scoreMinStr);
+    // maxShade=9 taken from hgTracks/simpleTracks.c.  Ignore the 10 in shadesOfGray[10+1] --
+    // maxShade is used to access the array.
+    int maxShade = 9;  
+    int scoreMinGrayLevel = scoreMin * maxShade/scoreMax;
+    if (scoreMinGrayLevel <= 0) scoreMinGrayLevel = 1;
+    char setting[256];
+    safef(setting, sizeof(setting), "%s_minGrayLevel", tdb->tableName);
+    int minGrayLevel = cartUsualInt(cart, setting, scoreMinGrayLevel);
+    if (minGrayLevel <= 0) minGrayLevel = 1;
+    if (minGrayLevel > maxShade) minGrayLevel = maxShade;
+    puts("\n<P><B>Shade of lowest-scoring items: </B>");
+    // Add class and javascript to select so that its color is consistent with option colors:
+    printf("<SELECT NAME=\"%s\" class=grayShade%d onchange='", setting, minGrayLevel);
+    int i, level;
+    for (i = 1;  i < maxShade;  i++)
+	{
+	level = 255 - (255*i / maxShade);
+	if (i > 1)
+	    printf("else ");
+	printf ("if (this.value == \"%d\") {this.style.color = \"#%02x%02x%02x\";} ",
+		i, level, level, level);
+	}
+    level = 255 - (255*i / maxShade);
+    printf("else {this.style.color = \"#%02x%02x%02x\";}'>\n", level, level, level);
+    // Use class to set color of each option:
+    for (i = 1;  i <= maxShade;  i++)
+	{
+	printf("<OPTION%s CLASS=grayShade%d VALUE=%d>",
+	       (minGrayLevel == i ? " SELECTED" : ""), i, i);
+	if (i == maxShade)
+	    printf("&bull; black</OPTION>\n");
+	else
+	    printf("&bull; gray (%d%%)</OPTION>\n", i * (100/maxShade));
+	}
+    printf("</SELECT>\n");
+    }
+}
+
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name, char *title,  int maxScore, boolean boxed)
 /* Put up UI for filtering bed track based on a score */
 {
@@ -2748,6 +2794,8 @@ snprintf(option, sizeof(option), "%s.scoreFilter", name);
 scoreSetting = cartUsualInt(cart,  option,  scoreVal);
 cgiMakeIntVar(option, scoreSetting, 11);
 printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
+
+scoreGrayLevelCfgUi(cart, parentTdb, maxScore);
 
 if (scoreCtString != NULL)
     {
