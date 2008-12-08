@@ -647,6 +647,15 @@ vendorName ABR-Affinity Bioreagents
 vendorId MA156353 lot 7308-S2(Nov2008)
 orderUrl http://www.bioreagents.com/
 
+# fragSize : DNA Fragment Size for GIS DNA PET (gPET)
+term 1k
+type fragSize
+description 1kb DNA fragments
+
+term 10k
+type fragSize
+description 10kb DNA fragments
+
 # localization
 term cell
 type localization
