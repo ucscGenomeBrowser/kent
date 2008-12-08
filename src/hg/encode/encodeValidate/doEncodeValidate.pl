@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.117 2008/12/03 12:37:13 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.118 2008/12/08 22:38:41 mikep Exp $
 
 use warnings;
 use strict;
@@ -49,6 +49,7 @@ use vars qw/
     $opt_skipAutoCreation
     $opt_skipOutput
     $opt_skipValidateFiles
+    $opt_skipValidateFastQ
     $opt_validateDaf
     $opt_validateFile
     $opt_sendEmail
@@ -679,6 +680,7 @@ sub validateFastQ
     #   and they are being sent on to us
     my ($path, $file, $type) = @_;
     HgAutomate::verbose(2, "validateFastQ($path,$file,$type)\n");
+    return () if $opt_skipValidateFastQ;
     doTime("beginning validateFastQ") if $opt_timing;
     my $fh = openUtil($path, $file);
     my $line = 0;
@@ -948,6 +950,7 @@ my $ok = GetOptions("allowReloads",
                     "skipAutoCreation",
                     "skipOutput",
                     "skipValidateFiles",
+                    "skipValidateFastQ",
                     "validateDaf",
                     "validateFile",
                     "sendEmail",
