@@ -35,6 +35,6 @@ Protein Browser:
 information on selenocysteine, see Kryukov et al., 
 <A HREF="http://www.sciencemag.org/cgi/content/full/300/5624/1439" 
 TARGET=_blank>Characterization of Mammalian Selenoproteomes</A>. 
-<em>Science</em> 2003 300: 1439-1443).
+<em>Science</em> 2003 May 30;300(5624):1439-43).
 </BLOCKQUOTE>
 <P>
