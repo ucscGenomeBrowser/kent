@@ -1,0 +1,79 @@
+# for emacs: -*- mode: sh; -*-
+
+#	Creating the assembly for Macropus eugenii
+#	Tammar wallaby
+#       http://www.hgsc.bcm.tmc.edu/projects/wallaby/
+#       
+#       This isn't a full browser.  Just a 2x coverage genome
+#       for use in comparative genomics.
+
+#########################################################################
+# DOWNLOAD SEQUENCE, ASSEMBLE, MAKE DB (2008-12-04 Andy) 
+       ssh hgwdev
+       mkdir -p /hive/data/genomes/macEug1/baylor/chroms
+       cd /hive/data/genomes/macEug1/baylor
+       wget --timestamping "ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Meugenii/fasta/Meug20071125/contigs/Meug20071125-contigs*"
+       cd chroms/
+       wget --timestamping "ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Meugenii/fasta/Meug20071125/linearScaffolds/*"
+       cd ../
+       zcat Meug20071125-contigs.fa.gz | grep "^>" | \
+           sed 's/^>//' | tr '|' '\t' | awk 'BEGIN{OFS="\t"}{print $2, $1;}' > contigs.lst
+       tabGrep -replace contigs.lst 6 Meug20071125-contigs.agp.gz > macEug1.agp
+       zcat Meug20071125-contigs.fa.gz | sed 's/^>\(Contig[[:digit:]]\+\).*/>\1/' \
+           | gzip -c > macEug1.contigs.fa.gz
+       cut -f6 macEug1.agp > contigs.agp.lst
+       faSomeRecords macEug1.contigs.fa.gz contigs.agp.lst stdout | gzip -c > tmp.fa.gz
+       mv tmp.fa.gz macEug1.contigs.fa.gz
+       cd ../
+       cat << '_EOF_' > macEug1.config.ra
+db macEug1
+clade mammal
+scientificName Macropus eugenii
+assemblyDate Nov. 2007
+assemblyLabel Baylor Release 1.0
+orderKey 278
+dbDbSpeciesDir wallaby
+mitoAcc none
+agpFiles /hive/data/genomes/macEug1/baylor/macEug1.agp
+fastaFiles /hive/data/genomes/macEug1/baylor/macEug1.contigs.fa.gz
+commonName Wallaby
+'_EOF_'
+# <<   emacs
+       tcsh 
+       ~/kent/src/hg/utils/automation/makeGenomeDb.pl -stop db -workhorse=hgwdev
+
+###########################################################################
+# WINDOWMASKER (DONE 2008-12-05 Andy)
+    ssh hgwdev
+    mkdir /hive/data/genomes/macEug1/bed/WindowMasker
+    screen -S macEug1_WindowMasker
+    ssh kolossus
+    cd /hive/data/genomes/macEug1/bed/WindowMasker
+    tcsh
+    ~/kent/src/hg/utils/automation/doWindowMasker.pl macEug1 -buildDir=`pwd` -workhorse=hgwdev >& wm.log
+    rm macEug1.wmsk.2bit
+    cd ../../
+    ln -s bed/WindowMasker/macEug1.wmsk.sdust.2bit macEug1.wmsk.2bit
+
+#########################################################################
+## SIMPLE REPEATS TRF (DONE 2008-11-26 - Andy)
+    ssh hgwdev
+    screen -S macEug1_trf
+    mkdir /hive/data/genomes/macEug1/bed/simpleRepeat
+    cd /hive/data/genomes/macEug1/bed/simpleRepeat
+    tcsh
+    time $HOME/kent/src/hg/utils/automation/doSimpleRepeat.pl -buildDir=`pwd` macEug1 > do.log
+# *** All done!
+# *** Steps were performed in /hive/data/genomes/macEug1/bed/simpleRepeat
+#0.559u 0.401s 6:56:42.34 0.0%   0+0k 0+0io 2pf+0w
+    cat fb.simpleRepeat
+# 38751844 bases of 2541767339 (1.525%) in intersection
+    cd ../../
+    twoBitMask macEug1.wmsk.2bit -add bed/simpleRepeat/trfMask.bed macEug1.2bit
+    ##  can safely ignore warning about >=13 fields in bed file
+    twoBitToFa macEug1.2bit stdout | faSize stdin > macEug1.2bit.faSize.txt
+# 
+# %31.28 masked total, %36.24 masked real
+    ##   link to gbdb
+    ln -s `pwd`/macEug1.2bit /gbdb/macEug1
+
