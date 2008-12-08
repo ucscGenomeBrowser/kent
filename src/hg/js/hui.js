@@ -96,12 +96,13 @@ function compositeCfgUpdateSubtrackCfgs(inp)
         var list = document.getElementsByTagName('select');
         for (var ix=0;ix<list.length;ix++) {
             if(list[ix].name.lastIndexOf(suffix) == list[ix].name.length - suffix.length ) {
-                list[ix].value = inp.value;
+                list[ix].selectedIndex = inp.selectedIndex;
                 count++;
             }
         }
     }
     //alert("compositeCfgUpdateSubtrackCfgs("+suffix+") updated "+count+" inputs.")
+    return true;
 }
 
 function compositeCfgRegisterOnchangeAction(prefix)
