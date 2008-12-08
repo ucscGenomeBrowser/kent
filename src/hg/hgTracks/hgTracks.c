@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1526 2008/12/03 21:19:07 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1527 2008/12/08 23:54:31 angie Exp $";
 
 #define SMALLBUF 64
 
@@ -1401,6 +1401,12 @@ switch (track->limitedVis)
                         {
                         if(subtrack->limitedVis == tvFull)
                             y = doMapItems(subtrack, hvg, fontHeight, y);
+			else
+			    {
+			    if (isWithCenterLabels(subtrack))
+				y += fontHeight;
+			    y += subtrack->totalHeight(subtrack, subtrack->limitedVis);
+			    }
                         }
                     }
                 }
