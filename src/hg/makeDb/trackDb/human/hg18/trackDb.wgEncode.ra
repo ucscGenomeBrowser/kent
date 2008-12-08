@@ -2044,7 +2044,7 @@ wgEncode 1
 	priority	4
 	noInherit	on
 	configurable	on
-	spanList	1
+	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
 	cell		GM06990
@@ -2087,7 +2087,7 @@ wgEncode 1
 	priority	4
 	noInherit	on
 	configurable	on
-	spanList	1
+	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
 	cell		HeLa-S3
@@ -2129,7 +2129,7 @@ wgEncode 1
 	priority	4
 	noInherit	on
 	configurable	on
-	spanList	1
+	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
 	cell		HepG2
@@ -2171,7 +2171,7 @@ wgEncode 1
 	priority	4
 	noInherit	on
 	configurable	on
-	spanList	1
+	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
 	cell		Th1
@@ -2213,7 +2213,7 @@ wgEncode 1
 	priority	4
 	noInherit	on
 	configurable	on
-	spanList	1
+	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
 	cell		SK-N-SH(+RA)
@@ -2255,7 +2255,7 @@ wgEncode 1
 	priority	8
 	noInherit	on
 	configurable	on
-	spanList	1
+	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
 	cell		K562
@@ -2271,7 +2271,7 @@ wgEncode 1
 	priority	8
 	noInherit	on
 	configurable	on
-	spanList	1
+	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
 	cell		K562
