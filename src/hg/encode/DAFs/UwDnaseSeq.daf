@@ -1,4 +1,4 @@
-# Data Agreement File for DNASE-seq project $Revision: 1.5 $
+# Data Agreement File for DNASE-seq project $Revision: 1.6 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -16,7 +16,7 @@ view             Hotspots
 longLabelPrefix  UW DNase-Seq Hotspots
 type             broadPeak
 required         yes
-hasReplicates    no
+hasReplicates    yes
 
 view             Peaks
 longLabelPrefix  UW DNase-Seq Peaks
