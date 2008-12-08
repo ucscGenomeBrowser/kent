@@ -4849,9 +4849,13 @@ wgEncode 1
 	subGroups	view=GencodeManual freezeDate=2008-10-01
 	type	genePred
 	dateSubmitted	2008-10-21 12:24:57
+        dateReleased    2009-09-08
+        accession       2008-10-01
 	priority	2
 	configurable	on
 	noInherit	on
+	freezeDate 	2008-10-01
+
 	track	wgEncodeSangerGencodeGencodeAuto20081001
 	subTrack	wgEncodeSangerGencode
 	shortLabel	Auto (Oct08)
@@ -4859,9 +4863,12 @@ wgEncode 1
 	subGroups	view=GencodeAuto freezeDate=2008-10-01
 	type	genePred
 	dateSubmitted	2008-10-21 12:24:57
+        dateReleased    2009-09-08
+        accession       2008-10-01
 	priority	3
 	configurable	on
 	noInherit	on
+	freezeDate 	2008-10-01
 
 track           wgEncodeGisPet
 compositeTrack  on
