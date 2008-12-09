@@ -2,7 +2,7 @@
 # in various databases.
 
 # Define databases used for various organisms
-set hg hg15,hg16,hg17,hg18
+set hg hg16,hg17,hg18
 set mm mm3,mm5,mm6,mm7,mm8,mm9
 set rn rn3,rn4
 set fr fr1,fr2
@@ -91,7 +91,7 @@ set chainDest Hg16,Hg17,Hg18,Mm5,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
 # Older format (KG 2)
-set kgDb2 hg15,hg16,hg17,mm3,mm5,mm6,mm7,mm8,rn3,rn4
+set kgDb2 hg16,hg17,mm3,mm5,mm6,mm7,mm8,rn3,rn4
 # Newer format (KG 3 aka UCSC Genes)
 set kgDb3 hg18,mm9
 
@@ -611,8 +611,7 @@ identifier augustusAbinitioName dependency
 identifier vegaName
 "Link together various VEGA human curated gene annotation"
     $gbd.vegaInfo.transcriptId
-    $gbd,!hg15.vegaGene.name
-    hg15.vegaGene.name minCheck=0.01
+    $gbd.vegaGene.name
     $gbd.vegaPseudoGene.name
 
 identifier vegaGeneName typeOf=vegaName dependency
@@ -648,7 +647,6 @@ identifier vegaPseudogeneName typeOf=vegaName
 #identifier pseudoGeneName
 #"Link together pseudo predicted gene structure and peptide"
 #	$hg.pseudoMrna.qName dupeOk
-#	hg15.pseudoGeneLink.name minCheck=0.85
 #	hg16,hg17,hg18.pseudoGeneLink.name minCheck=0.99
 
 identifier mrnaBlastzName
@@ -1039,12 +1037,6 @@ identifier rBestChainPanTro1Id
     hg16.rBestChainPanTro1Link.chainId $split full
     hg16.rBestNetPanTro1.chainId exclude=0
 
-identifier mouseChainId 
-"Link together chain/net on hg15 for mouse"
-    hg15.mouseChain.id $split
-    hg15.mouseChainLink.chainId $split full 
-    hg15.mouseNet.chainId exclude=0
-
 identifier humanChainId 
 "Link together chain/net on mm3 for human"
     mm3.humanChain.id $split
@@ -1095,8 +1087,6 @@ identifier humanBacAccession typeOf=bacAccession
     hg18.gold.frag chopAfter=. $split minCheck=0.98
     hg16.certificate.accession1 
     hg16.certificate.accession2
-    hg15.certificate.accession1 minCheck=0.98
-    hg15.certificate.accession2 minCheck=0.98
     $hg,!hg18.gl.frag chopAfter=. $split
     hg18.gl.frag chopAfter=. $split minCheck=0.95
     $hg.fishClones.accNames chopAfter=. comma minCheck=0.70
@@ -1209,7 +1199,7 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd,!mm5,!rn3.mrnaRefseq.refseq minCheck=0.25
     mm5.mrnaRefseq.refseq minCheck=0.22
     rn3.mrnaRefseq.refseq minCheck=0.03
-    $gbd,!hg15,!bosTau2,!bosTau3,!canFam1,!canFam2,!droSim1,!droYak1,!droYak2,!panTro1,!rheMac1,!rheMac2,!dp2,!dp3.mrnaOrientInfo.name minCheck=0.0
+    $gbd,!bosTau2,!bosTau3,!canFam1,!canFam2,!droSim1,!droYak1,!droYak2,!panTro1,!rheMac1,!rheMac2,!dp2,!dp3.mrnaOrientInfo.name minCheck=0.0
 # The rule above should only apply to mrnaOrientInfo entries from refSeq (not
 # the regular genBank mRNAs).  The minCheck=0.0 preserves table relationshps.
     $gbd.refFlat.name
@@ -1231,7 +1221,6 @@ identifier refSeqId typeOf=mrnaAccession
     hg17.spMrna.mrnaID minCheck=0.50
     hg17.dupSpMrna.mrnaID minCheck=0.40
     hg17.dupSpMrna.dupMrnaID minCheck=0.20
-    hg15.geneBands.mrnaAcc
     hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.37
 
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
@@ -1261,10 +1250,10 @@ identifier knownGeneId dependency
     $kgDb.mmBlastTab.query
     $kgDb.rnBlastTab.query
     $kgDb.scBlastTab.query
-    $kgDb,!rn3,!mm5,!hg15.dupSpMrna.mrnaID
-    rn3,mm5,hg15.dupSpMrna.mrnaID minCheck=0.90
-#   $kgDb,!hg15,!hg16,!hg17.pseudoGeneLink.kgName exclude=noKg
-#   hg15,hg16,hg17.pseudoGeneLink.kgName minCheck=0.18 exclude=noKg
+    $kgDb,!rn3,!mm5.dupSpMrna.mrnaID
+    rn3,mm5.dupSpMrna.mrnaID minCheck=0.90
+#   $kgDb,!hg16,!hg17.pseudoGeneLink.kgName exclude=noKg
+#   hg16,hg17.pseudoGeneLink.kgName minCheck=0.18 exclude=noKg
     $kgDb.foldUtr3.name
     $kgDb.foldUtr5.name
     $hg.gnfU95Distance.query
@@ -1460,9 +1449,8 @@ identifier genBankSource
 identifier genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
     $gbd.tissue.id
-    $gbd,!hg15.gbCdnaInfo.tissue 
-    hg15.gbCdnaInfo.tissue minCheck=0.99
-    $gbd,!hg15.altGraphX.mrnaTissues comma
+    $gbd.gbCdnaInfo.tissue 
+    $gbd.altGraphX.mrnaTissues comma
 
 # Some misc clone-oriented identifiers
 
@@ -1514,15 +1502,15 @@ identifier stsName fuzzy
  
 identifier stsTrueName typeOf=stsName
 "STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
-    $gbd,!hg16,!hg15.stsInfo2.name
+    $gbd,!hg16.stsInfo2.name
     $gbd.stsAlias.trueName
     $gbd.stsMap.name
 
 identifier stsTrueNameHg16 typeOf=stsName
-"STS (Sequenced Tagged Site, aka mapping sequence) Unique Name for hg16, hg15"
-    hg16,hg15.stsInfo2.name dupeOk
-    hg16,hg15.stsAlias.trueName
-    hg16,hg15.stsMap.name
+"STS (Sequenced Tagged Site, aka mapping sequence) Unique Name for hg16"
+    hg16.stsInfo2.name dupeOk
+    hg16.stsAlias.trueName
+    hg16.stsMap.name
 
 identifier mouseStsTrueName typeOf=stsName
 "Mouse STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
@@ -1568,7 +1556,6 @@ identifier hugoName external=HUGO fuzzy
     $hg.kgXref.geneSymbol
     $hg.refFlat.geneName
     $hg.jaxOrtholog.humanSymbol
-    hg15.geneBands.name
     visiGene.gene.name
 
 identifier mouseGeneName fuzzy
@@ -1909,19 +1896,13 @@ identifier cgapId
 
 identifier cgapMapId
 "NCI Cancer Genome Annotation Project Map ID"
-    $gbd,!hg15.cgapBiocDesc.mapID
+    $gbd.cgapBiocDesc.mapID
     $gbd.cgapBiocPathway.mapID
 
 identifier cgapAlias
 "NCI Cancer Genome Annotation Project Alias"
     $gbd.cgapAlias.alias dupeOk
-    $gbd,!mm5,!hg15,!hg16,!hg18.knownGene.name minCheck=0.20
-
-identifier cgapMapIdHg15
-"NCI Cancer Genome Annotation Project Map ID for hg15"
-    hg15.cgapBiocDesc.mapID dupeOk
-    hg15.cgapBiocPathway.mapID
-
+    $gbd,!mm5,!hg16,!hg18.knownGene.name minCheck=0.20
 
 # SNP (Simple Nucleotide Polymorphism) Stuff
 
@@ -2111,7 +2092,6 @@ identifier extFileId
     $gbd.extFile.id
     $gbd.seq.extFile
     hg16.multizMm3Rn3GalGal2_phyloHMM.extFile
-    hg15.multizMm3Rn2.extFile
     rn3.multizHg15Mm3.extFile
     $sacCer.multizYeast.extFile
     $dm.a_gambiae_mypa.extFile
@@ -2704,7 +2684,6 @@ type expDistance
 type chain
     $gbd.chr%_chain%
     $gbd.chr%_chainSelf
-    hg15.chr%_mouseChain
     mm3.chr%_humanChain
     ce1.chr%_cb1Chain
     cb1.chr%_ce1Chain
@@ -3281,10 +3260,6 @@ tablesIgnored mm3
     chr%_mm3Hg15L
     ensEst
     recombRateMouse
-
-tablesIgnored hg15
-    chr%_hg15Mm3L
-    refPep
 
 tablesIgnored hg16
     humorMm3Rn3
