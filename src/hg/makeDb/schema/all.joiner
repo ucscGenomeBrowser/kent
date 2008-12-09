@@ -4,7 +4,7 @@
 # Define databases used for various organisms
 set hg hg15,hg16,hg17,hg18
 set mm mm3,mm4,mm5,mm6,mm7,mm8,mm9
-set rn rn2,rn3,rn4
+set rn rn3,rn4
 set fr fr1,fr2
 set ce ce1,ce2,ce4,ce6
 set cb cb1,cb3
@@ -91,7 +91,7 @@ set chainDest Hg16,Hg17,Hg18,Mm5,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
 # Older format (KG 2)
-set kgDb2 hg15,hg16,hg17,mm3,mm4,mm5,mm6,mm7,mm8,rn2,rn3,rn4
+set kgDb2 hg15,hg16,hg17,mm3,mm4,mm5,mm6,mm7,mm8,rn3,rn4
 # Newer format (KG 3 aka UCSC Genes)
 set kgDb3 hg18,mm9
 
@@ -1167,7 +1167,7 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     ce2.mrnaOrientInfo.name minCheck=0.08
     $gbd,!mm6,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.mrnaID minCheck=0.80
     $gbd,!mm6,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.dupMrnaID minCheck=0.95
-    $gbd,!mm6,!mm7,!mm8,!mm9,!hg17,!rn2,!rn3,!rn4.mrnaRefseq.mrna minCheck=0.25
+    $gbd,!mm6,!mm7,!mm8,!mm9,!hg17,!rn3,!rn4.mrnaRefseq.mrna minCheck=0.25
     mm6.mrnaRefseq.mrna minCheck=0.80
     mm7.mrnaRefseq.mrna minCheck=0.30
     mm8.mrnaRefseq.mrna minCheck=0.30
@@ -1206,9 +1206,9 @@ identifier refSeqId typeOf=mrnaAccession
     hg16,hg17,mm5.knownToRefSeq.value minCheck=0.95
     $kgDb.refSeqKg.refseq minCheck=0.60
     $ccdsDb,!hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.35
-    $gbd,!mm5,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
+    $gbd,!mm5,!rn3.mrnaRefseq.refseq minCheck=0.25
     mm5.mrnaRefseq.refseq minCheck=0.22
-    rn2,rn3.mrnaRefseq.refseq minCheck=0.03
+    rn3.mrnaRefseq.refseq minCheck=0.03
     $gbd,!hg15,!bosTau2,!bosTau3,!canFam1,!canFam2,!droSim1,!droYak1,!droYak2,!panTro1,!rheMac1,!rheMac2,!dp2,!dp3.mrnaOrientInfo.name minCheck=0.0
 # The rule above should only apply to mrnaOrientInfo entries from refSeq (not
 # the regular genBank mRNAs).  The minCheck=0.0 preserves table relationshps.
@@ -1460,8 +1460,8 @@ identifier genBankSource
 identifier genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
     $gbd.tissue.id
-    $gbd,!rn2,!hg15.gbCdnaInfo.tissue 
-    hg15,rn2.gbCdnaInfo.tissue minCheck=0.99
+    $gbd,!hg15.gbCdnaInfo.tissue 
+    hg15.gbCdnaInfo.tissue minCheck=0.99
     $gbd,!hg15.altGraphX.mrnaTissues comma
 
 # Some misc clone-oriented identifiers
@@ -1831,7 +1831,7 @@ identifier ensemblTranscriptId external=Ensembl dependency
     mm4.ensPep.name chopAfter=. minCheck=0.94
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd.ensInfo.name minCheck=0.9
-    $kgDb,!rn2.knownToEnsembl.value chopAfter=.
+    $kgDb.knownToEnsembl.value chopAfter=.
     $gbd.sfDescription.name chopAfter=.
     mm3.superfamily.name chopAfter=.
     $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30
@@ -3283,9 +3283,6 @@ tablesIgnored mm3
     chr%_mm3Hg15L
     ensEst
     recombRateMouse
-
-tablesIgnored rn2
-    refPep
 
 tablesIgnored hg15
     chr%_hg15Mm3L
