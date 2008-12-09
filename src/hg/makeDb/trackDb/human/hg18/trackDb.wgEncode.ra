@@ -2036,215 +2036,65 @@ wgEncode 1
 noScoreFilter .
 scoreMin 500
 
-	track		wgEncodeUwDnaseSeqRawSignalRep1Gm06990
+	track		wgEncodeUwDnaseSeqRawSignalRep2Hepg2
 	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	GM06990 Raw 1
-	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in GM06990 cells)
-	subGroups	view=RawSignal cellType=GM06990
-	type		wig 1.00 69023.00
-	dateSubmitted	2008-12-08 16:28:26
-	dateReleased	2009-09-08
-	priority	12
-	noInherit	on
-	configurable	on
-	spanList	20
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM06990
-
-	track		wgEncodeUwDnaseSeqPeaksRep1Gm06990
-	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	GM06990 Pk 1
-	longLabel	ENCODE UW DNase-Seq Peaks Replicate 1 (in GM06990 cells)
-	subGroups	view=Peaks cellType=GM06990
-	type		narrowPeak
-	dateSubmitted	2008-12-08 16:28:26
-	dateReleased	2009-09-08
-	priority	10
-	noInherit	on
-	configurable	on
-	cell		GM06990
-
-	track		wgEncodeUwDnaseSeqHotspotsRep1Gm06990
-	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	GM06990 1
-	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 1 (in GM06990 cells)
-	subGroups	view=Hotspots cellType=GM06990
-	type		broadPeak
-	dateSubmitted	2008-12-08 16:28:26
-	dateReleased	2009-09-08
-	priority	9
-	noInherit	on
-	configurable	on
-	cell		GM06990
-
-	track		wgEncodeUwDnaseSeqRawSignalRep1Helas3
-	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	HeLa-S3 Raw 1
-	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in HeLa-S3 cells)
-	subGroups	view=RawSignal cellType=HeLa-S3
-	type		wig 1.00 18313.00
-	dateSubmitted	2008-12-08 16:26:15
-	dateReleased	2009-09-08
-	priority	12
-	noInherit	on
-	configurable	on
-	spanList	20
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		HeLa-S3
-
-	track		wgEncodeUwDnaseSeqPeaksRep1Helas3
-	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	HeLa-S3 Pk 1
-	longLabel	ENCODE UW DNase-Seq Peaks Replicate 1 (in HeLa-S3 cells)
-	subGroups	view=Peaks cellType=HeLa-S3
-	type		narrowPeak
-	dateSubmitted	2008-12-08 16:26:15
-	dateReleased	2009-09-08
-	priority	10
-	noInherit	on
-	configurable	on
-	cell		HeLa-S3
-
-	track		wgEncodeUwDnaseSeqHotspotsRep1Helas3
-	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	HeLa-S3 1
-	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 1 (in HeLa-S3 cells)
-	subGroups	view=Hotspots cellType=HeLa-S3
-	type		broadPeak
-	dateSubmitted	2008-12-08 16:26:15
-	dateReleased	2009-09-08
-	priority	9
-	noInherit	on
-	configurable	on
-	cell		HeLa-S3
-
-	track		wgEncodeUwDnaseSeqRawSignalRep1Th1
-	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	Th1 Raw 1
-	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in Th1 cells)
-	subGroups	view=RawSignal cellType=Th1
-	type		wig 1.00 66149.00
-	dateSubmitted	2008-12-08 16:8:25
-	dateReleased	2009-09-08
-	priority	12
-	noInherit	on
-	configurable	on
-	spanList	20
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		Th1
-
-	track		wgEncodeUwDnaseSeqPeaksRep1Th1
-	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	Th1 Pk 1
-	longLabel	ENCODE UW DNase-Seq Peaks Replicate 1 (in Th1 cells)
-	subGroups	view=Peaks cellType=Th1
-	type		narrowPeak
-	dateSubmitted	2008-12-08 16:8:25
-	dateReleased	2009-09-08
-	priority	10
-	noInherit	on
-	configurable	on
-	cell		Th1
-
-	track		wgEncodeUwDnaseSeqHotspotsRep1Th1
-	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	Th1 1
-	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 1 (in Th1 cells)
-	subGroups	view=Hotspots cellType=Th1
-	type		broadPeak
-	dateSubmitted	2008-12-08 16:8:25
-	dateReleased	2009-09-08
-	priority	9
-	noInherit	on
-	configurable	on
-	cell		Th1
-
-	track		wgEncodeUwDnaseSeqRawSignalRep1Hepg2
-	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	HepG2 Raw 1
-	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in HepG2 cells)
+	shortLabel	HepG2 Raw 2
+	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 2 (in HepG2 cells)
 	subGroups	view=RawSignal cellType=HepG2
-	type		wig 1.00 127303.00
-	dateSubmitted	2008-12-08 16:10:55
-	dateReleased	2009-09-08
-	priority	12
+	type		wig 1.00 54453.00
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	16
 	noInherit	on
 	configurable	on
 	spanList	20
-	windowingFunction mean
-	maxHeightPixels	100:16:16
+	windowingFunction maximum
+	maxHeightPixels	100:50:16
+	viewLimits	1:150
 	cell		HepG2
 
-	track		wgEncodeUwDnaseSeqPeaksRep1Hepg2
+	track		wgEncodeUwDnaseSeqHotspotsRep2Hepg2
 	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	HepG2 Pk 1
-	longLabel	ENCODE UW DNase-Seq Peaks Replicate 1 (in HepG2 cells)
-	subGroups	view=Peaks cellType=HepG2
-	type		narrowPeak
-	dateSubmitted	2008-12-08 16:10:55
-	dateReleased	2009-09-08
-	priority	10
-	noInherit	on
-	configurable	on
-	cell		HepG2
-
-	track		wgEncodeUwDnaseSeqHotspotsRep1Hepg2
-	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	HepG2 1
-	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 1 (in HepG2 cells)
+	shortLabel	HepG2 2
+	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 2 (in HepG2 cells)
 	subGroups	view=Hotspots cellType=HepG2
 	type		broadPeak
-	dateSubmitted	2008-12-08 16:10:55
-	dateReleased	2009-09-08
-	priority	9
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	13
 	noInherit	on
 	configurable	on
 	cell		HepG2
 
-	track		wgEncodeUwDnaseSeqRawSignalRep1Sknshra
+	track		wgEncodeUwDnaseSeqRawSignalRep2Gm06990
 	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	SK-N-SH(+RA) Raw 1
-	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in SK-N-SH(+RA) cells)
-	subGroups	view=RawSignal cellType=SK-N-SH(+RA)
-	type		wig 1.00 24217.00
-	dateSubmitted	2008-12-08 15:24:21
-	dateReleased	2009-09-08
-	priority	12
+	shortLabel	GM06990 Raw 2
+	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 2 (in GM06990 cells)
+	subGroups	view=RawSignal cellType=GM06990
+	type		wig 1.00 111633.00
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	16
 	noInherit	on
 	configurable	on
 	spanList	20
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		SK-N-SH(+RA)
+	windowingFunction maximum
+	maxHeightPixels	100:50:16
+	viewLimits	1:150
+	cell		GM06990
 
-	track		wgEncodeUwDnaseSeqPeaksRep1Sknshra
+	track		wgEncodeUwDnaseSeqHotspotsRep2Gm06990
 	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	SK-N-SH(+RA) Pk 1
-	longLabel	ENCODE UW DNase-Seq Peaks Replicate 1 (in SK-N-SH(+RA) cells)
-	subGroups	view=Peaks cellType=SK-N-SH(+RA)
-	type		narrowPeak
-	dateSubmitted	2008-12-08 15:24:21
-	dateReleased	2009-09-08
-	priority	10
-	noInherit	on
-	configurable	on
-	cell		SK-N-SH(+RA)
-
-	track		wgEncodeUwDnaseSeqHotspotsRep1Sknshra
-	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	SK-N-SH(+RA) 1
-	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 1 (in SK-N-SH(+RA) cells)
-	subGroups	view=Hotspots cellType=SK-N-SH(+RA)
+	shortLabel	GM06990 2
+	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 2 (in GM06990 cells)
+	subGroups	view=Hotspots cellType=GM06990
 	type		broadPeak
-	dateSubmitted	2008-12-08 15:24:21
-	dateReleased	2009-09-08
-	priority	9
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	13
 	noInherit	on
 	configurable	on
-	cell		SK-N-SH(+RA)
+	cell		GM06990
 
 	track		wgEncodeUwDnaseSeqRawSignalRep1K562
 	subTrack	wgEncodeUwDnaseSeq
@@ -2252,14 +2102,15 @@ scoreMin 500
 	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in K562 cells)
 	subGroups	view=RawSignal cellType=K562
 	type		wig 1.00 47529.00
-	dateSubmitted	2008-12-08 15:9:37
-	dateReleased	2009-09-08
-	priority	12
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	16
 	noInherit	on
 	configurable	on
 	spanList	20
-	windowingFunction mean
-	maxHeightPixels	100:16:16
+	windowingFunction maximum
+	maxHeightPixels	100:50:16
+	viewLimits	1:150
 	cell		K562
 
 	track		wgEncodeUwDnaseSeqRawSignalRep2K562
@@ -2268,38 +2119,26 @@ scoreMin 500
 	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 2 (in K562 cells)
 	subGroups	view=RawSignal cellType=K562
 	type		wig 1.00 62912.00
-	dateSubmitted	2008-12-08 15:9:37
-	dateReleased	2009-09-08
-	priority	12
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	16
 	noInherit	on
 	configurable	on
 	spanList	20
-	windowingFunction mean
-	maxHeightPixels	100:16:16
+	windowingFunction maximum
+	maxHeightPixels	100:50:16
+	viewLimits	1:150
 	cell		K562
 
-	track		wgEncodeUwDnaseSeqPeaksRep1K562
+	track		wgEncodeUwDnaseSeqPeaksK562
 	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	K562 Pk 1
-	longLabel	ENCODE UW DNase-Seq Peaks Replicate 1 (in K562 cells)
+	shortLabel	K562 Pk
+	longLabel	ENCODE UW DNase-Seq Peaks (in K562 cells)
 	subGroups	view=Peaks cellType=K562
 	type		narrowPeak
-	dateSubmitted	2008-12-08 15:9:37
-	dateReleased	2009-09-08
-	priority	10
-	noInherit	on
-	configurable	on
-	cell		K562
-
-	track		wgEncodeUwDnaseSeqPeaksRep2K562
-	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	K562 Pk 2
-	longLabel	ENCODE UW DNase-Seq Peaks Replicate 2 (in K562 cells)
-	subGroups	view=Peaks cellType=K562
-	type		narrowPeak
-	dateSubmitted	2008-12-08 15:9:37
-	dateReleased	2009-09-08
-	priority	10
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	14
 	noInherit	on
 	configurable	on
 	cell		K562
@@ -2310,9 +2149,9 @@ scoreMin 500
 	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 1 (in K562 cells)
 	subGroups	view=Hotspots cellType=K562
 	type		broadPeak
-	dateSubmitted	2008-12-08 15:9:37
-	dateReleased	2009-09-08
-	priority	9
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	13
 	noInherit	on
 	configurable	on
 	cell		K562
@@ -2323,96 +2162,227 @@ scoreMin 500
 	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 2 (in K562 cells)
 	subGroups	view=Hotspots cellType=K562
 	type		broadPeak
-	dateSubmitted	2008-12-08 15:9:37
-	dateReleased	2009-09-08
-	priority	9
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	13
 	noInherit	on
 	configurable	on
 	cell		K562
 
-	track		wgEncodeUwDnaseSeqRawSignalRep2Gm06990
+	track		wgEncodeUwDnaseSeqRawSignalRep1Sknshra
 	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	GM06990 Raw 2
-	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 2 (in GM06990 cells)
-	subGroups	view=RawSignal cellType=GM06990
-	type		wig 1.00 111633.00
-	dateSubmitted	2008-12-08 14:52:8
-	dateReleased	2009-09-08
-	priority	12
+	shortLabel	SK-N-SH(+RA) Raw 1
+	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in SK-N-SH(+RA) cells)
+	subGroups	view=RawSignal cellType=SK-N-SH(+RA)
+	type		wig 1.00 24217.00
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	16
 	noInherit	on
 	configurable	on
 	spanList	20
-	windowingFunction mean
-	maxHeightPixels	100:16:16
-	cell		GM06990
+	windowingFunction maximum
+	maxHeightPixels	100:50:16
+	viewLimits	1:150
+	cell		SK-N-SH(+RA)
 
-	track		wgEncodeUwDnaseSeqPeaksRep2Gm06990
+	track		wgEncodeUwDnaseSeqPeaksSknshra
 	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	GM06990 Pk 2
-	longLabel	ENCODE UW DNase-Seq Peaks Replicate 2 (in GM06990 cells)
-	subGroups	view=Peaks cellType=GM06990
+	shortLabel	SK-N-SH(+RA) Pk
+	longLabel	ENCODE UW DNase-Seq Peaks (in SK-N-SH(+RA) cells)
+	subGroups	view=Peaks cellType=SK-N-SH(+RA)
 	type		narrowPeak
-	dateSubmitted	2008-12-08 14:52:8
-	dateReleased	2009-09-08
-	priority	10
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	14
 	noInherit	on
 	configurable	on
-	cell		GM06990
+	cell		SK-N-SH(+RA)
 
-	track		wgEncodeUwDnaseSeqHotspotsRep2Gm06990
+	track		wgEncodeUwDnaseSeqHotspotsRep1Sknshra
 	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	GM06990 2
-	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 2 (in GM06990 cells)
-	subGroups	view=Hotspots cellType=GM06990
+	shortLabel	SK-N-SH(+RA) 1
+	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 1 (in SK-N-SH(+RA) cells)
+	subGroups	view=Hotspots cellType=SK-N-SH(+RA)
 	type		broadPeak
-	dateSubmitted	2008-12-08 14:52:8
-	dateReleased	2009-09-08
-	priority	9
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	13
 	noInherit	on
 	configurable	on
-	cell		GM06990
+	cell		SK-N-SH(+RA)
 
-	track		wgEncodeUwDnaseSeqRawSignalRep2Hepg2
+	track		wgEncodeUwDnaseSeqRawSignalRep1Hepg2
 	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	HepG2 Raw 2
-	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 2 (in HepG2 cells)
+	shortLabel	HepG2 Raw 1
+	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in HepG2 cells)
 	subGroups	view=RawSignal cellType=HepG2
-	type		wig 1.00 54453.00
-	dateSubmitted	2008-12-08 14:55:25
-	dateReleased	2009-09-08
-	priority	12
+	type		wig 1.00 127303.00
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	16
 	noInherit	on
 	configurable	on
 	spanList	20
-	windowingFunction mean
-	maxHeightPixels	100:16:16
+	windowingFunction maximum
+	maxHeightPixels	100:50:16
+	viewLimits	1:150
 	cell		HepG2
 
-	track		wgEncodeUwDnaseSeqPeaksRep2Hepg2
+	track		wgEncodeUwDnaseSeqPeaksHepg2
 	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	HepG2 Pk 2
-	longLabel	ENCODE UW DNase-Seq Peaks Replicate 2 (in HepG2 cells)
+	shortLabel	HepG2 Pk
+	longLabel	ENCODE UW DNase-Seq Peaks (in HepG2 cells)
 	subGroups	view=Peaks cellType=HepG2
 	type		narrowPeak
-	dateSubmitted	2008-12-08 14:55:25
-	dateReleased	2009-09-08
-	priority	10
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	14
 	noInherit	on
 	configurable	on
 	cell		HepG2
 
-	track		wgEncodeUwDnaseSeqHotspotsRep2Hepg2
+	track		wgEncodeUwDnaseSeqHotspotsRep1Hepg2
 	subTrack	wgEncodeUwDnaseSeq
-	shortLabel	HepG2 2
-	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 2 (in HepG2 cells)
+	shortLabel	HepG2 1
+	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 1 (in HepG2 cells)
 	subGroups	view=Hotspots cellType=HepG2
 	type		broadPeak
-	dateSubmitted	2008-12-08 14:55:25
-	dateReleased	2009-09-08
-	priority	9
+	dateSubmitted	2008-12-09 4:41:7
+	dateReleased	2009-09-09
+	priority	13
 	noInherit	on
 	configurable	on
 	cell		HepG2
+
+	track		wgEncodeUwDnaseSeqRawSignalRep1Th1
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	Th1 Raw 1
+	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in Th1 cells)
+	subGroups	view=RawSignal cellType=Th1
+	type		wig 1.00 66149.00
+	dateSubmitted	2008-12-09 4:41:8
+	dateReleased	2009-09-09
+	priority	16
+	noInherit	on
+	configurable	on
+	spanList	20
+	windowingFunction maximum
+	maxHeightPixels	100:50:16
+	viewLimits	1:150
+	cell		Th1
+
+	track		wgEncodeUwDnaseSeqPeaksTh1
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	Th1 Pk
+	longLabel	ENCODE UW DNase-Seq Peaks (in Th1 cells)
+	subGroups	view=Peaks cellType=Th1
+	type		narrowPeak
+	dateSubmitted	2008-12-09 4:41:8
+	dateReleased	2009-09-09
+	priority	14
+	noInherit	on
+	configurable	on
+	cell		Th1
+
+	track		wgEncodeUwDnaseSeqHotspotsRep1Th1
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	Th1 1
+	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 1 (in Th1 cells)
+	subGroups	view=Hotspots cellType=Th1
+	type		broadPeak
+	dateSubmitted	2008-12-09 4:41:8
+	dateReleased	2009-09-09
+	priority	13
+	noInherit	on
+	configurable	on
+	cell		Th1
+
+	track		wgEncodeUwDnaseSeqRawSignalRep1Helas3
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	HeLa-S3 Raw 1
+	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in HeLa-S3 cells)
+	subGroups	view=RawSignal cellType=HeLa-S3
+	type		wig 1.00 18313.00
+	dateSubmitted	2008-12-09 4:41:8
+	dateReleased	2009-09-09
+	priority	16
+	noInherit	on
+	configurable	on
+	spanList	20
+	windowingFunction maximum
+	maxHeightPixels	100:50:16
+	viewLimits	1:150
+	cell		HeLa-S3
+
+	track		wgEncodeUwDnaseSeqPeaksHelas3
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	HeLa-S3 Pk
+	longLabel	ENCODE UW DNase-Seq Peaks (in HeLa-S3 cells)
+	subGroups	view=Peaks cellType=HeLa-S3
+	type		narrowPeak
+	dateSubmitted	2008-12-09 4:41:8
+	dateReleased	2009-09-09
+	priority	14
+	noInherit	on
+	configurable	on
+	cell		HeLa-S3
+
+	track		wgEncodeUwDnaseSeqHotspotsRep1Helas3
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	HeLa-S3 1
+	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 1 (in HeLa-S3 cells)
+	subGroups	view=Hotspots cellType=HeLa-S3
+	type		broadPeak
+	dateSubmitted	2008-12-09 4:41:8
+	dateReleased	2009-09-09
+	priority	13
+	noInherit	on
+	configurable	on
+	cell		HeLa-S3
+
+	track		wgEncodeUwDnaseSeqRawSignalRep1Gm06990
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	GM06990 Raw 1
+	longLabel	ENCODE UW DNase-Seq Raw Signal Replicate 1 (in GM06990 cells)
+	subGroups	view=RawSignal cellType=GM06990
+	type		wig 1.00 69023.00
+	dateSubmitted	2008-12-09 4:41:8
+	dateReleased	2009-09-09
+	priority	16
+	noInherit	on
+	configurable	on
+	spanList	20
+	windowingFunction maximum
+	maxHeightPixels	100:50:16
+	viewLimits	1:150
+	cell		GM06990
+
+	track		wgEncodeUwDnaseSeqPeaksGm06990
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	GM06990 Pk
+	longLabel	ENCODE UW DNase-Seq Peaks (in GM06990 cells)
+	subGroups	view=Peaks cellType=GM06990
+	type		narrowPeak
+	dateSubmitted	2008-12-09 4:41:8
+	dateReleased	2009-09-09
+	priority	14
+	noInherit	on
+	configurable	on
+	cell		GM06990
+
+	track		wgEncodeUwDnaseSeqHotspotsRep1Gm06990
+	subTrack	wgEncodeUwDnaseSeq
+	shortLabel	GM06990 1
+	longLabel	ENCODE UW DNase-Seq Hotspots Replicate 1 (in GM06990 cells)
+	subGroups	view=Hotspots cellType=GM06990
+	type		broadPeak
+	dateSubmitted	2008-12-09 4:41:8
+	dateReleased	2009-09-09
+	priority	13
+	noInherit	on
+	configurable	on
+	cell		GM06990
 
 
 
