@@ -34,7 +34,7 @@ set hg hg16,hg17,hg18
 set mm mm7,mm8,mm9
 set monDom monDom1,monDom4
 set ornAna ornAna1
-set oryLat oryLat1,oryLat2
+set oryLat oryLat2
 set panTro panTro1,panTro2
 set petMar petMar1
 set ponAbe ponAbe2
@@ -78,7 +78,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 
 # Define transMap databases
 # transMapDb not public: dasNov1,echTel1,loxAfr1,oryCun1,otoGar1
-set transMapDb anoCar1,bosTau4,calJac1,canFam2,cavPor3,danRer5,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,mm9,monDom4,ornAna1,oryLat1,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,tetNig1,xenTro2
+set transMapDb anoCar1,bosTau4,calJac1,canFam2,cavPor3,danRer5,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,mm9,monDom4,ornAna1,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,tetNig1,xenTro2
 
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
@@ -2197,7 +2197,6 @@ identifier blastHg18KGPep04Id
      strPur1.blastHg18KG.qName
      strPur2.blastHg18KG.qName
      bosTau2.blastHg18KG.qName
-     oryLat1.blastHg18KG.qName
      ornAna1.blastHg18KG.qName
      equCab1.blastHg18KG.qName
      equCab2.blastHg18KG.qName
@@ -2226,7 +2225,6 @@ identifier blastHg18KGRef04Id
      strPur1.blastHg18KG.qName
      strPur2.blastHg18KG.qName
      bosTau2.blastHg18KG.qName
-     oryLat1.blastHg18KG.qName
      ornAna1.blastHg18KG.qName
      equCab1.blastHg18KG.qName
      equCab2.blastHg18KG.qName
