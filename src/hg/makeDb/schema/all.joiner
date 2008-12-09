@@ -6,7 +6,7 @@ set hg hg16,hg17,hg18
 set mm mm5,mm6,mm7,mm8,mm9
 set rn rn3,rn4
 set fr fr1,fr2
-set ce ce1,ce2,ce4,ce6
+set ce ce2,ce4,ce6
 set cb cb1,cb3
 set dm dm1,dm2,dm3
 set dp dp2,dp3
@@ -1037,16 +1037,6 @@ identifier rBestChainPanTro1Id
     hg16.rBestChainPanTro1Link.chainId $split full
     hg16.rBestNetPanTro1.chainId exclude=0
 
-identifier cb1ChainId 
-"Link together chain/net on ce1 for cb1"
-    ce1.cb1Chain.id $split
-    ce1.cb1ChainLink.chainId $split full
-
-identifier ce1ChainId 
-"Link together chain/net on cb1 for ce1"
-    cb1.ce1Chain.id $split
-    cb1.ce1ChainLink.chainId $split full
-
 # Genbank/trEMBL Accessions and meaningful subsets thereof
 identifier genbankAccession external=genbank
 "Generic Genbank Accession.  More specific Genbank accessions follow"
@@ -1576,10 +1566,8 @@ identifier wormBaseId external=WormBase dependency
     $ce.kimExpDistance.query minCheck=0.68
     $ce.kimExpDistance.target minCheck=0.66
     $ce.orfToGene.name
-    $ce,!ce1.sangerBlastTab.query
-    $ce,!ce1.sangerBlastTab.target
-    ce1.sangerBlastTab.query minCheck=0.96
-    ce1.sangerBlastTab.target minCheck=0.96
+    $ce.sangerBlastTab.query
+    $ce.sangerBlastTab.target
     $ce.sangerCanonical.transcript
     $ce.sangerIsoforms.transcript
     $ce.sangerLinks.orfName minCheck=0.96
@@ -2166,7 +2154,6 @@ identifier blastHg17KGPep01Id
      hg17.blastKGRef01.acc full
      monDom1.blastHg17KG.qName
      danRer2.blastHg17KG.qName
-     ce1.blastHg17KG.qName
      fr1.blastHg17KG.qName
      tetNig1.blastHg17KG.qName
      xenTro1.blastHg17KG.qName
@@ -2176,7 +2163,6 @@ identifier blastHg17KGRef01Id
      hg17.blastKGRef01.acc
      monDom1.blastHg17KG.qName
      danRer2.blastHg17KG.qName
-     ce1.blastHg17KG.qName
      fr1.blastHg17KG.qName
      tetNig1.blastHg17KG.qName
      xenTro1.blastHg17KG.qName
@@ -2672,8 +2658,6 @@ type expDistance
 type chain
     $gbd.chr%_chain%
     $gbd.chr%_chainSelf
-    ce1.chr%_cb1Chain
-    cb1.chr%_ce1Chain
 
 type agpFrag
     $gbd.chr%_gold
