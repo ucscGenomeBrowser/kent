@@ -14,7 +14,7 @@ set sacCer sacCer1
 set panTro panTro1,panTro2
 set galGal galGal2,galGal3
 set ci ci1,ci2
-set danRer danRer2,danRer3,danRer4,danRer5
+set danRer danRer3,danRer4,danRer5
 set canFam canFam1,canFam2
 set droYak droYak1,droYak2
 set droMoj droMoj1,droMoj2
@@ -2151,7 +2151,6 @@ identifier blastHg17KGPep01Id
      hg17.knownGene.name  minCheck=0.30
      hg17.blastKGRef01.acc full
      monDom1.blastHg17KG.qName
-     danRer2.blastHg17KG.qName
      fr1.blastHg17KG.qName
      tetNig1.blastHg17KG.qName
      xenTro1.blastHg17KG.qName
@@ -2160,7 +2159,6 @@ identifier blastHg17KGRef01Id
 "hg17 ref 01"
      hg17.blastKGRef01.acc
      monDom1.blastHg17KG.qName
-     danRer2.blastHg17KG.qName
      fr1.blastHg17KG.qName
      tetNig1.blastHg17KG.qName
      xenTro1.blastHg17KG.qName
@@ -2899,9 +2897,6 @@ tablesIgnored $fr
 tablesIgnored $galGal
     chr%_gold
     supercontig
-
-tablesIgnored danRer2
-    rhMap
 
 tablesIgnored $danRer
     chr%_gold
