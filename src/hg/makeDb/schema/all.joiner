@@ -1874,7 +1874,9 @@ identifier cgapMapId
 identifier cgapAlias
 "NCI Cancer Genome Annotation Project Alias"
     $gbd.cgapAlias.alias dupeOk
-    $gbd,!hg16,!hg18.knownGene.name minCheck=0.20
+    $gbd,!hg16,!hg18.knownGene.name minCheck=0.50
+    hg16.knownGene.name minCheck=0.05
+    hg18.kgXref.geneSymbol minCheck=0.85
 
 # SNP (Simple Nucleotide Polymorphism) Stuff
 
