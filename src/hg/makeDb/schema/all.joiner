@@ -28,7 +28,7 @@ set tetNig tetNig1
 set xenTro xenTro1,xenTro2
 set monDom monDom1,monDom4
 set bosTau bosTau2,bosTau3,bosTau4
-set rheMac rheMac1,rheMac2
+set rheMac rheMac2
 set strPur strPur1,strPur2
 set felCat felCat3
 set gasAcu gasAcu1
@@ -1183,7 +1183,7 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd,!mm5,!rn3.mrnaRefseq.refseq minCheck=0.25
     mm5.mrnaRefseq.refseq minCheck=0.22
     rn3.mrnaRefseq.refseq minCheck=0.03
-    $gbd,!bosTau2,!bosTau3,!canFam1,!canFam2,!droSim1,!droYak1,!droYak2,!panTro1,!rheMac1,!rheMac2,!dp2,!dp3.mrnaOrientInfo.name minCheck=0.0
+    $gbd,!bosTau2,!bosTau3,!canFam1,!canFam2,!droSim1,!droYak1,!droYak2,!panTro1,!rheMac2,!dp2,!dp3.mrnaOrientInfo.name minCheck=0.0
 # The rule above should only apply to mrnaOrientInfo entries from refSeq (not
 # the regular genBank mRNAs).  The minCheck=0.0 preserves table relationshps.
     $gbd.refFlat.name
