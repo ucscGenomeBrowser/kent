@@ -2044,7 +2044,7 @@ wgEncode 1
 	dateReleased	2009-09-08
 	priority	12
 	noInherit	on
-	configurable	off
+	configurable	on
 	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
@@ -2086,7 +2086,7 @@ wgEncode 1
 	dateReleased	2009-09-08
 	priority	12
 	noInherit	on
-	configurable	off
+	configurable	on
 	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
@@ -2128,7 +2128,7 @@ wgEncode 1
 	dateReleased	2009-09-08
 	priority	12
 	noInherit	on
-	configurable	off
+	configurable	on
 	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
@@ -2170,7 +2170,7 @@ wgEncode 1
 	dateReleased	2009-09-08
 	priority	12
 	noInherit	on
-	configurable	off
+	configurable	on
 	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
@@ -2212,7 +2212,7 @@ wgEncode 1
 	dateReleased	2009-09-08
 	priority	12
 	noInherit	on
-	configurable	off
+	configurable	on
 	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
@@ -2254,7 +2254,7 @@ wgEncode 1
 	dateReleased	2009-09-08
 	priority	12
 	noInherit	on
-	configurable	off
+	configurable	on
 	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
@@ -2270,7 +2270,7 @@ wgEncode 1
 	dateReleased	2009-09-08
 	priority	12
 	noInherit	on
-	configurable	off
+	configurable	on
 	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
@@ -2338,7 +2338,7 @@ wgEncode 1
 	dateReleased	2009-09-08
 	priority	12
 	noInherit	on
-	configurable	off
+	configurable	on
 	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
@@ -2380,7 +2380,7 @@ wgEncode 1
 	dateReleased	2009-09-08
 	priority	12
 	noInherit	on
-	configurable	off
+	configurable	on
 	spanList	20
 	windowingFunction mean
 	maxHeightPixels	100:16:16
