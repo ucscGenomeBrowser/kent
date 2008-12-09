@@ -3,7 +3,7 @@
 
 # Define databases used for various organisms
 set hg hg15,hg16,hg17,hg18
-set mm mm3,mm4,mm5,mm6,mm7,mm8,mm9
+set mm mm3,mm5,mm6,mm7,mm8,mm9
 set rn rn3,rn4
 set fr fr1,fr2
 set ce ce1,ce2,ce4,ce6
@@ -91,14 +91,14 @@ set chainDest Hg16,Hg17,Hg18,Mm5,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
 # Older format (KG 2)
-set kgDb2 hg15,hg16,hg17,mm3,mm4,mm5,mm6,mm7,mm8,rn3,rn4
+set kgDb2 hg15,hg16,hg17,mm3,mm5,mm6,mm7,mm8,rn3,rn4
 # Newer format (KG 3 aka UCSC Genes)
 set kgDb3 hg18,mm9
 
 # Protein browser databases.
-set pbDb hg18,hg17,hg16,mm4,mm6,mm7,mm8,mm9,rn3 
-set pbDb1 hg17,hg16,mm4,mm6,mm7,mm8,mm9,rn3 
-set pbDb2 mm4,rn3
+set pbDb hg18,hg17,hg16,mm6,mm7,mm8,mm9,rn3 
+set pbDb1 hg17,hg16,mm6,mm7,mm8,mm9,rn3 
+set pbDb2 rn3
 set pbDb3 hg16,hg17,hg18
 
 # Define databases that support family browser (gene sorter)
@@ -1825,10 +1825,8 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
     mm3.ensemblXref.transcript_name chopAfter=. minCheck=0.20
     mm3.ensemblXref2.transcript_name chopAfter=. minCheck=0.20
-    $gbd,!mm4.ensGtp.transcript chopAfter=. minCheck=0.94
-    mm4.ensGtp.transcript chopAfter=. minCheck=0.94
-    $gbd,!mm4.ensPep.name chopAfter=. minCheck=0.96
-    mm4.ensPep.name chopAfter=. minCheck=0.94
+    $gbd.ensGtp.transcript chopAfter=. minCheck=0.94
+    $gbd.ensPep.name chopAfter=. minCheck=0.96
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd.ensInfo.name minCheck=0.9
     $kgDb.knownToEnsembl.value chopAfter=.
