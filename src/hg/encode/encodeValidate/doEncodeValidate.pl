@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.118 2008/12/08 22:38:41 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.119 2008/12/09 12:39:06 mikep Exp $
 
 use warnings;
 use strict;
@@ -1512,7 +1512,7 @@ foreach my $ddfLine (@ddfLines) {
         print TRACK_RA "\tpriority\t" . ($priority + $daf->{TRACKS}{$view}{order}) . "\n";
         # noInherit is necessary b/c composite track will often have a different dummy type setting.
         print TRACK_RA "\tnoInherit\ton\n";
-        if($view eq 'RawSignal') {
+        if($view eq 'RawSignal' and 0) { # Sorry tim, you will have to list your projects here
             print TRACK_RA "\tconfigurable\toff\n";
         } else {
             print TRACK_RA "\tconfigurable\ton\n";
