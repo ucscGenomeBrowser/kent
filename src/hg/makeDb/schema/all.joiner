@@ -3,7 +3,7 @@
 
 # Define databases used for various organisms
 set hg hg16,hg17,hg18
-set mm mm3,mm5,mm6,mm7,mm8,mm9
+set mm mm5,mm6,mm7,mm8,mm9
 set rn rn3,rn4
 set fr fr1,fr2
 set ce ce1,ce2,ce4,ce6
@@ -91,7 +91,7 @@ set chainDest Hg16,Hg17,Hg18,Mm5,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
 # Older format (KG 2)
-set kgDb2 hg16,hg17,mm3,mm5,mm6,mm7,mm8,rn3,rn4
+set kgDb2 hg16,hg17,mm5,mm6,mm7,mm8,rn3,rn4
 # Newer format (KG 3 aka UCSC Genes)
 set kgDb3 hg18,mm9
 
@@ -1037,12 +1037,6 @@ identifier rBestChainPanTro1Id
     hg16.rBestChainPanTro1Link.chainId $split full
     hg16.rBestNetPanTro1.chainId exclude=0
 
-identifier humanChainId 
-"Link together chain/net on mm3 for human"
-    mm3.humanChain.id $split
-    mm3.humanChainLink.chainId $split full
-    mm3.humanNet.chainId exclude=0
-
 identifier cb1ChainId 
 "Link together chain/net on ce1 for cb1"
     ce1.cb1Chain.id $split
@@ -1785,7 +1779,6 @@ identifier ensemblGeneId external=Ensembl
     $gbd.ensTranscript.gene_name dupeOk
     $gbd.ensGtp.gene chopAfter=. 
     $gbd.ensGeneXref.gene_name
-    mm3.ensemblXref.gene_name
 
 identifier ensemblGeneId3 external=Ensembl
 "Ensemble Gene ID"
@@ -1795,7 +1788,6 @@ identifier ensemblProteinId external=Ensembl
 "Ensemble Translated Protein ID"
     $gbd.ensTranscript.translation_name dupeOk
     $gbd.ensGtp.protein chopAfter=.
-    mm3.ensemblXref2.translation_name
     $gbd.sfDescription.proteinID minCheck=0.10
     $gbd.sfAssign.seqID minCheck=0.01
 
@@ -1810,15 +1802,12 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $gbd,!ce6,!felCat3.ensGene.name chopAfter=.
     $gbd.superfamily.name
     $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
-    mm3.ensemblXref.transcript_name chopAfter=. minCheck=0.20
-    mm3.ensemblXref2.transcript_name chopAfter=. minCheck=0.20
     $gbd.ensGtp.transcript chopAfter=. minCheck=0.94
     $gbd.ensPep.name chopAfter=. minCheck=0.96
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd.ensInfo.name minCheck=0.9
     $kgDb.knownToEnsembl.value chopAfter=.
     $gbd.sfDescription.name chopAfter=.
-    mm3.superfamily.name chopAfter=.
     $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30
     $danRer.ensZfishBlastTab.query
     $danRer.ensZfishBlastTab.target
@@ -2091,7 +2080,6 @@ identifier extFileId
 "External file ID"
     $gbd.extFile.id
     $gbd.seq.extFile
-    hg16.multizMm3Rn3GalGal2_phyloHMM.extFile
     rn3.multizHg15Mm3.extFile
     $sacCer.multizYeast.extFile
     $dm.a_gambiae_mypa.extFile
@@ -2684,7 +2672,6 @@ type expDistance
 type chain
     $gbd.chr%_chain%
     $gbd.chr%_chainSelf
-    mm3.chr%_humanChain
     ce1.chr%_cb1Chain
     cb1.chr%_ce1Chain
 
@@ -3256,17 +3243,10 @@ tablesIgnored $felCat
     intronEst
     microsat
 
-tablesIgnored mm3
-    chr%_mm3Hg15L
-    ensEst
-    recombRateMouse
-
 tablesIgnored hg16
-    humorMm3Rn3
     chicken_hmrg
     rat_hmrg
     mouse_hmrg
-    syntenyMm3
     syntenyMm4
 
 tablesIgnored hg17
