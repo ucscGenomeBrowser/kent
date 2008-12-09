@@ -1,0 +1,17 @@
+file	view	cell	rnaExtract	localization	mapAlgorithm	replicate	labVersion
+GM12878rnaseqr1.graph	RawSignal	GM12878	longPolyA	cell	erange3.0beta	1		
+GM12878rnaseqr2.graph	RawSignal	GM12878	longPolyA	cell	erange3.0beta	2	
+GM_2x75_blat.all.bed	Alignments	GM12878	longPolyA	cell	blat34x2		
+GM_2x75_blat.graph	Signal	GM12878	longPolyA	cell	blat34x2		
+GM_2x75_blat.splices.bed	Alignments	GM12878	longPolyA	cell	blat34x2		
+GM_2x75_bowtie.all.bed	Alignments	GM12878	longPolyA	cell	bowtie0.98		
+GM_2x75_bowtie.graph	Signal	GM12878	longPolyA	cell	bowtie0.98		
+GM_2x75_bowtie.splices.bed	Alignments	GM12878	longPolyA	cell	bowtie0.98		
+K562_2x75_blat.graph	Signal	K562	longPolyA	cell	blat34x2		
+K562_2x75_blat.all.bed	Alignments	K562	longPolyA	cell	blat34x2			
+K562_2x75_blat.splices.bed	Alignments	K562	longPolyA	cell	blat34x2			
+K562_2x75_bowtie.all.bed	Alignments	K562	longPolyA	cell	bowtie0.98			
+K562_2x75_bowtie.graph	Signal	K562	longPolyA	cell	bowtie0.98		
+K562_2x75_bowtie.splices.bed	Alignments	K562	longPolyA	cell	bowtie0.98		
+K562rnaseqr1.graph	RawSignal	K562	longPolyA	cell	erange3.0beta	1	
+K562rnaseqr2.graph	RawSignal	K562	longPolyA	cell	erange3.0beta	2
