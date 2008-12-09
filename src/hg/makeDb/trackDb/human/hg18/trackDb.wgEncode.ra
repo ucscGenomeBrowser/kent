@@ -205,8 +205,8 @@ priority 300
 
 track		wgEncodeBroadChipSeq
 compositeTrack	on
-shortLabel	Broad Histone
-longLabel	ENCODE Broad Institute Histone Modifications by ChIP-seq
+shortLabel	Histone Modifications
+longLabel	ENCODE Histone Modifications by Broad Institute ChIP-seq
 group		regulation
 subGroup1	view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2	cellType Cell_Line K562=K562
@@ -224,7 +224,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqPeaksK562Ctcf
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 CTCF Pk
-        longLabel	ENCODE Broad Histone ChIP-Seq Peaks (CTCF in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (CTCF in K562 cells)
         subGroups	view=Peaks factor=CTCF cellType=K562
         type		broadPeak
         dateSubmitted	2008-11-27 12:13:2
@@ -238,7 +238,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqSignalK562Ctcf
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 CTCF Sig
-        longLabel	ENCODE Broad Histone ChIP-Seq Signal (CTCF in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (CTCF in K562 cells)
         subGroups	view=Signal factor=CTCF cellType=K562
         type		wig -1.00 2918.25
         viewLimits  0:20
@@ -258,7 +258,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep1K562Ctcf
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 CTCF Raw1
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 1 (CTCF in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (CTCF in K562 cells)
         subGroups	view=zRAW factor=CTCF cellType=K562
         type		wig 1.00 8965.00
         viewLimits  0:20
@@ -278,7 +278,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep2K562Ctcf
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 CTCF Raw2
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 2 (CTCF in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (CTCF in K562 cells)
         subGroups	view=zRAW factor=CTCF cellType=K562
         type		wig 1.00 8726.00
         viewLimits  0:20
@@ -298,7 +298,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqPeaksK562H3k4me1
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K4me1 Pk
-        longLabel	ENCODE Broad Histone ChIP-Seq Peaks (H3K4me1 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me1 in K562 cells)
         subGroups	view=Peaks factor=H3K04me1 cellType=K562
         type		broadPeak
         dateSubmitted	2008-11-27 12:13:2
@@ -312,7 +312,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqSignalK562H3k4me1
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K4me1 Sig
-        longLabel	ENCODE Broad Histone ChIP-Seq Signal (H3K4me1 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me1 in K562 cells)
         subGroups	view=Signal factor=H3K04me1 cellType=K562
         type		wig -1.00 274.25
         viewLimits  0:20
@@ -332,7 +332,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep1K562H3k4me1
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K4me1 Raw1
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 1 (H3K4me1 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me1 in K562 cells)
         subGroups	view=zRAW factor=H3K04me1 cellType=K562
         type		wig 1.00 3067.00
         viewLimits  0:20
@@ -352,7 +352,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep2K562H3k4me1
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K4me1 Raw2
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 2 (H3K4me1 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me1 in K562 cells)
         subGroups	view=zRAW factor=H3K04me1 cellType=K562
         type		wig 1.00 4288.00
         viewLimits  0:20
@@ -372,7 +372,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqPeaksK562H3k4me2
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K4me2 Pk
-        longLabel	ENCODE Broad Histone ChIP-Seq Peaks (H3K4me2 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me2 in K562 cells)
         subGroups	view=Peaks factor=H3K04me2 cellType=K562
         type		broadPeak
         dateSubmitted	2008-11-27 12:13:2
@@ -386,7 +386,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqSignalK562H3k4me2
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K4me2 Sig
-        longLabel	ENCODE Broad Histone ChIP-Seq Signal (H3K4me2 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me2 in K562 cells)
         subGroups	view=Signal factor=H3K04me2 cellType=K562
         type		wig -1.00 1190.00
         viewLimits  0:20
@@ -406,7 +406,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep1K562H3k4me2
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K4me2 Raw1
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 1 (H3K4me2 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me2 in K562 cells)
         subGroups	view=zRAW factor=H3K04me2 cellType=K562
         type		wig 1.00 4239.00
         viewLimits  0:20
@@ -426,7 +426,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep2K562H3k4me2
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K4me2 Raw2
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 2 (H3K4me2 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me2 in K562 cells)
         subGroups	view=zRAW factor=H3K04me2 cellType=K562
         type		wig 1.00 2741.00
         viewLimits  0:20
@@ -446,7 +446,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqPeaksK562H3k4me3
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K4me3 Pk
-        longLabel	ENCODE Broad Histone ChIP-Seq Peaks (H3K4me3 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me3 in K562 cells)
         subGroups	view=Peaks factor=H3K04me3 cellType=K562
         type		broadPeak
         dateSubmitted	2008-11-27 12:13:2
@@ -460,7 +460,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqSignalK562H3k4me3
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K4me3 Sig
-        longLabel	ENCODE Broad Histone ChIP-Seq Signal (H3K4me3 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me3 in K562 cells)
         subGroups	view=Signal factor=H3K04me3 cellType=K562
         type		wig -1.00 732.25
         viewLimits  0:20
@@ -480,7 +480,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep1K562H3k4me3
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K4me3 Raw1
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in K562 cells)
         subGroups	view=zRAW factor=H3K04me3 cellType=K562
         type		wig 1.00 9457.00
         viewLimits  0:20
@@ -500,7 +500,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep2K562H3k4me3
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K4me3 Raw2
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in K562 cells)
         subGroups	view=zRAW factor=H3K04me3 cellType=K562
         type		wig 1.00 5643.00
         viewLimits  0:20
@@ -520,7 +520,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqPeaksK562H3k9ac
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K9ac Pk
-        longLabel	ENCODE Broad Histone ChIP-Seq Peaks (H3K9ac in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K9ac in K562 cells)
         subGroups	view=Peaks factor=H3K09ac cellType=K562
         type		broadPeak
         dateSubmitted	2008-11-27 12:13:2
@@ -534,7 +534,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqSignalK562H3k9ac
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K9ac Sig
-        longLabel	ENCODE Broad Histone ChIP-Seq Signal (H3K9ac in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K9ac in K562 cells)
         subGroups	view=Signal factor=H3K09ac cellType=K562
         type		wig -1.00 1405.25
         viewLimits  0:20
@@ -554,7 +554,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep1K562H3k9ac
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K9ac Raw1
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 1 (H3K9ac in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K9ac in K562 cells)
         subGroups	view=zRAW factor=H3K09ac cellType=K562
         type		wig 1.00 8656.00
         viewLimits  0:20
@@ -574,7 +574,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep2K562H3k9ac
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K9ac Raw2
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 2 (H3K9ac in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K9ac in K562 cells)
         subGroups	view=zRAW factor=H3K09ac cellType=K562
         type		wig 1.00 7472.00
         viewLimits  0:20
@@ -594,7 +594,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqPeaksK562H3k9me1
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K9me1 Pk
-        longLabel	ENCODE Broad Histone ChIP-Seq Peaks (H3K9me1 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K9me1 in K562 cells)
         subGroups	view=Peaks factor=H3K09me1 cellType=K562
         type		broadPeak
         dateSubmitted	2008-11-27 12:13:2
@@ -608,7 +608,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqSignalK562H3k9me1
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K9me1 Sig
-        longLabel	ENCODE Broad Histone ChIP-Seq Signal (H3K9me1 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K9me1 in K562 cells)
         subGroups	view=Signal factor=H3K09me1 cellType=K562
         type		wig -1.00 136.75
         viewLimits  0:20
@@ -628,7 +628,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep1K562H3k9me1
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K9me1 Raw1
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 1 (H3K9me1 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K9me1 in K562 cells)
         subGroups	view=zRAW factor=H3K09me1 cellType=K562
         type		wig 1.00 12895.00
         viewLimits  0:20
@@ -648,7 +648,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep2K562H3k9me1
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K9me1 Raw2
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 2 (H3K9me1 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K9me1 in K562 cells)
         subGroups	view=zRAW factor=H3K09me1 cellType=K562
         type		wig 1.00 13150.00
         viewLimits  0:20
@@ -668,7 +668,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqPeaksK562H3k27ac
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K27ac Pk
-        longLabel	ENCODE Broad Histone ChIP-Seq Peaks (H3K27ac in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K27ac in K562 cells)
         subGroups	view=Peaks factor=H3K27ac cellType=K562
         type		broadPeak
         dateSubmitted	2008-11-27 12:13:2
@@ -682,7 +682,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqSignalK562H3k27ac
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K27ac Sig
-        longLabel	ENCODE Broad Histone ChIP-Seq Signal (H3K27ac in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K27ac in K562 cells)
         subGroups	view=Signal factor=H3K27ac cellType=K562
         type		wig -1.00 2905.75
         viewLimits  0:20
@@ -702,7 +702,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep1K562H3k27ac
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K27ac Raw1
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 1 (H3K27ac in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K27ac in K562 cells)
         subGroups	view=zRAW factor=H3K27ac cellType=K562
         type		wig 1.00 5596.00
         viewLimits  0:20
@@ -722,7 +722,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep2K562H3k27ac
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K27ac Raw2
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 2 (H3K27ac in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K27ac in K562 cells)
         subGroups	view=zRAW factor=H3K27ac cellType=K562
         type		wig 1.00 3641.00
         viewLimits  0:20
@@ -742,7 +742,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqPeaksK562H3k27me3
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K27me3 Pk
-        longLabel	ENCODE Broad Histone ChIP-Seq Peaks (H3K27me3 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K27me3 in K562 cells)
         subGroups	view=Peaks factor=H3K27me3 cellType=K562
         type		broadPeak
         dateSubmitted	2008-11-27 12:13:2
@@ -756,7 +756,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqSignalK562H3k27me3
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K27me3 Sig
-        longLabel	ENCODE Broad Histone ChIP-Seq Signal (H3K27me3 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K27me3 in K562 cells)
         subGroups	view=Signal factor=H3K27me3 cellType=K562
         type		wig -1.00 111.00
         viewLimits  0:20
@@ -776,7 +776,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep1K562H3k27me3
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K27me3 Raw1
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in K562 cells)
         subGroups	view=zRAW factor=H3K27me3 cellType=K562
         type		wig 1.00 10724.00
         viewLimits  0:20
@@ -796,7 +796,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep2K562H3k27me3
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K27me3 Raw2
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in K562 cells)
         subGroups	view=zRAW factor=H3K27me3 cellType=K562
         type		wig 1.00 5383.00
         viewLimits  0:20
@@ -816,7 +816,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqPeaksK562H3k36me3
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K36me3 Pk
-        longLabel	ENCODE Broad Histone ChIP-Seq Peaks (H3K36me3 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K36me3 in K562 cells)
         subGroups	view=Peaks factor=H3K36me3 cellType=K562
         type		broadPeak
         dateSubmitted	2008-11-27 12:13:2
@@ -830,7 +830,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqSignalK562H3k36me3
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K36me3 Sig
-        longLabel	ENCODE Broad Histone ChIP-Seq Signal (H3K36me3 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K36me3 in K562 cells)
         subGroups	view=Signal factor=H3K36me3 cellType=K562
         type		wig -1.00 115.50
         viewLimits  0:20
@@ -850,7 +850,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep1K562H3k36me3
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K36me3 Raw1
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in K562 cells)
         subGroups	view=zRAW factor=H3K36me3 cellType=K562
         type		wig 1.00 8325.00
         viewLimits  0:20
@@ -870,7 +870,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep2K562H3k36me3
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H3K36me3 Raw2
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in K562 cells)
         subGroups	view=zRAW factor=H3K36me3 cellType=K562
         type		wig 1.00 5306.00
         viewLimits  0:20
@@ -890,7 +890,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqPeaksK562H4k20me1
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H4K20me1 Pk
-        longLabel	ENCODE Broad Histone ChIP-Seq Peaks (H4K20me1 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H4K20me1 in K562 cells)
         subGroups	view=Peaks factor=H4K20me1 cellType=K562
         type		broadPeak
         dateSubmitted	2008-11-27 12:13:2
@@ -904,7 +904,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqSignalK562H4k20me1
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H4K20me1 Sig
-        longLabel	ENCODE Broad Histone ChIP-Seq Signal (H4K20me1 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H4K20me1 in K562 cells)
         subGroups	view=Signal factor=H4K20me1 cellType=K562
         type		wig -1.00 150.00
         viewLimits  0:20
@@ -924,7 +924,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep1K562H4k20me1
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H4K20me1 Raw1
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 1 (H4K20me1 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H4K20me1 in K562 cells)
         subGroups	view=zRAW factor=H4K20me1 cellType=K562
         type		wig 1.00 8371.00
         viewLimits  0:20
@@ -944,7 +944,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep2K562H4k20me1
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 H4K20me1 Raw2
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 2 (H4K20me1 in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H4K20me1 in K562 cells)
         subGroups	view=zRAW factor=H4K20me1 cellType=K562
         type		wig 1.00 13503.00
         viewLimits  0:20
@@ -964,7 +964,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqPeaksK562Pol2b
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 Pol2(b) Pk
-        longLabel	ENCODE Broad Histone ChIP-Seq Peaks (Pol2(b) in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (Pol2(b) in K562 cells)
         subGroups	view=Peaks factor=Pol2(b) cellType=K562
         type		broadPeak
         dateSubmitted	2008-11-27 12:13:2
@@ -978,7 +978,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqSignalK562Pol2b
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 Pol2(b) Sig
-        longLabel	ENCODE Broad Histone ChIP-Seq Signal (Pol2(b) in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (Pol2(b) in K562 cells)
         subGroups	view=Signal factor=Pol2(b) cellType=K562
         type		wig -1.00 889.75
         viewLimits  0:20
@@ -998,7 +998,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep1K562Pol2b
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 Pol2(b) Raw1
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 1 (Pol2(b) in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (Pol2(b) in K562 cells)
         subGroups	view=zRAW factor=Pol2(b) cellType=K562
         type		wig 1.00 6759.00
         viewLimits  0:20
@@ -1018,7 +1018,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep2K562Pol2b
         subTrack	wgEncodeBroadChipSeq
         shortLabel	K562 Pol2(b) Raw2
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 2 (Pol2(b) in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (Pol2(b) in K562 cells)
         subGroups	view=zRAW factor=Pol2(b) cellType=K562
         type		wig 1.00 11027.00
         viewLimits  0:20
@@ -1038,7 +1038,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep1K562Control
         subTrack	wgEncodeBroadChipSeq
         shortLabel	control K562 Raw1
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 1 (control in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (control in K562 cells)
         subGroups	view=zRAW factor=zCTRL cellType=K562
         type		wig 1.00 13356.00
         viewLimits  0:20
@@ -1058,7 +1058,7 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         track		wgEncodeBroadChipSeqRawSignalRep2K562Control
         subTrack	wgEncodeBroadChipSeq
         shortLabel	control K562 Raw2
-        longLabel	ENCODE Broad Histone ChIP-Seq Raw Signal Replicate 2 (control in K562 cells)
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (control in K562 cells)
         subGroups	view=zRAW factor=zCTRL cellType=K562
         type		wig 1.00 21178.00
         viewLimits  0:20
@@ -3285,8 +3285,8 @@ wgEncode	1
 
 track wgEncodeYaleChIPseq
 compositeTrack on
-shortLabel Yale TFBS
-longLabel ENCODE Yale Transcription Factor Binding Sites by ChIP-seq
+shortLabel TFSB Yale
+longLabel ENCODE Transcription Factor Binding Sites by Yale/UCDavis/Harvard ChIP-seq
 group regulation
 priority 0
 type bed 3
@@ -3307,7 +3307,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqPeaksGm12878Pol2
         subTrack	wgEncodeYaleChIPseq
         shortLabel	GM12878 Pol2 Pk
-        longLabel	ENCODE Yale TFBS ChIP-Seq Peaks (Pol2 in GM12878 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Peaks (Pol2 in GM12878 cells)
         subGroups	view=Peaks factor=Pol2 cellType=GM12878
         type		narrowPeak
         dateSubmitted	2008-11-26 15:55:33
@@ -3321,7 +3321,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqSignalGm12878Pol2
         subTrack	wgEncodeYaleChIPseq
         shortLabel	GM12878 Pol2 Sig
-        longLabel	ENCODE Yale TFBS ChIP-Seq Signal (Pol2 in GM12878 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Pol2 in GM12878 cells)
         subGroups	view=Signal factor=Pol2 cellType=GM12878
         type		wig 0.00 9844.00
         viewLimits  4:7
@@ -3340,7 +3340,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol2
         subTrack	wgEncodeYaleChIPseq
         shortLabel	GM12878 Pol2 Raw1
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 1 (Pol2 in GM12878 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (Pol2 in GM12878 cells)
         subGroups	view=zRAW factor=Pol2 cellType=GM12878
         type		wig 1.00 1653.00
         dateSubmitted	2008-11-26 15:55:33
@@ -3357,7 +3357,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol2
         subTrack	wgEncodeYaleChIPseq
         shortLabel	GM12878 Pol2 Raw2
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 2 (Pol2 in GM12878 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (Pol2 in GM12878 cells)
         subGroups	view=zRAW factor=Pol2 cellType=GM12878
         type		wig 1.00 993.00
         dateSubmitted	2008-11-26 15:55:33
@@ -3374,7 +3374,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqPeaksGm12878Cfos
         subTrack	wgEncodeYaleChIPseq
         shortLabel	GM12878 c-Fos Pk
-        longLabel	ENCODE Yale TFBS ChIP-Seq Peaks (c-Fos in GM12878 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Peaks (c-Fos in GM12878 cells)
         subGroups	view=Peaks factor=c-Fos cellType=GM12878
         type		narrowPeak
         dateSubmitted	2008-11-24 19:16:9
@@ -3388,7 +3388,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqSignalGm12878Cfos
         subTrack	wgEncodeYaleChIPseq
         shortLabel	GM12878 c-Fos Sig
-        longLabel	ENCODE Yale TFBS ChIP-Seq Signal (c-Fos in GM12878 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (c-Fos in GM12878 cells)
         subGroups	view=Signal factor=c-Fos cellType=GM12878
         viewLimits  4:7
         type		wig 0.00 4648.00
@@ -3406,7 +3406,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep1Gm12878Cfos
         subTrack	wgEncodeYaleChIPseq
         shortLabel	GM12878 c-Fos Raw1
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 1 (c-Fos in GM12878 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (c-Fos in GM12878 cells)
         subGroups	view=zRAW factor=c-Fos cellType=GM12878
         type		wig 1.00 1507.00
         dateSubmitted	2008-11-24 19:16:9
@@ -3423,7 +3423,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep2Gm12878Cfos
         subTrack	wgEncodeYaleChIPseq
         shortLabel	GM12878 c-Fos Raw2
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 2 (c-Fos in GM12878 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (c-Fos in GM12878 cells)
         subGroups	view=zRAW factor=c-Fos cellType=GM12878
         type		wig 1.00 1828.00
         dateSubmitted	2008-11-24 19:16:9
@@ -3440,7 +3440,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep3Gm12878Cfos
         subTrack	wgEncodeYaleChIPseq
         shortLabel	GM12878 c-Fos Raw3
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 3 (c-Fos in GM12878 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 3 (c-Fos in GM12878 cells)
         subGroups	view=zRAW factor=c-Fos cellType=GM12878
         type		wig 1.00 1740.00
         dateSubmitted	2008-11-24 19:16:9
@@ -3457,7 +3457,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqSignalGm12878Input
         subTrack        wgEncodeYaleChIPseq
         shortLabel      GM12878 Input Sig
-        longLabel       ENCODE Yale TFBS ChIP-Seq Signal (Input in GM12878 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Input in GM12878 cells)
         subGroups       view=Signal factor=zCTRL cellType=GM12878
         type            wig 0.00 7237.00
         viewLimits      4:7
@@ -3476,7 +3476,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqRawSignalGm12878Input
         subTrack        wgEncodeYaleChIPseq
         shortLabel      GM12878 Input Raw
-        longLabel       ENCODE Yale TFBS ChIP-Seq Raw Signal (Input in GM12878 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal (Input in GM12878 cells)
         subGroups       view=zRAW factor=zCTRL cellType=GM12878
         type            wig 1.00 1488.00
         dateSubmitted   2008-11-25 10:1:33
@@ -3493,7 +3493,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqPeaksHelas3Pol2
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Pol2 Pk
-        longLabel       ENCODE Yale TFBS ChIP-Seq Peaks (Pol2 in HeLa-S3 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Peaks (Pol2 in HeLa-S3 cells)
         subGroups       view=Peaks factor=Pol2 cellType=HeLa
         type            narrowPeak
         dateSubmitted   2008-10-1 9:27:32
@@ -3509,7 +3509,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqSignalHelas3Pol2
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Pol2 Sig
-        longLabel       ENCODE Yale TFBS ChIP-Seq Signal (Pol2 in HeLa-S3 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Pol2 in HeLa-S3 cells)
         subGroups       view=Signal factor=Pol2 cellType=HeLa
         type            wig 0.00 14600.00
         viewLimits      4:7
@@ -3531,7 +3531,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqRawSignalRep1Helas3Pol2
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Pol2 Raw1
-        longLabel       ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 1 (Pol2 in HeLa-S3 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (Pol2 in HeLa-S3 cells)
         subGroups       view=zRAW factor=Pol2 cellType=HeLa
         type            wig 1.00 3673.00
         dateSubmitted   2008-10-1 9:27:32
@@ -3549,7 +3549,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqRawSignalRep2Helas3Pol2
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Pol2 Raw2
-        longLabel       ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 2 (Pol2 in HeLa-S3 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (Pol2 in HeLa-S3 cells)
         subGroups       view=zRAW factor=Pol2 cellType=HeLa
         type            wig 1.00 6153.00
         dateSubmitted   2008-10-1 9:27:32
@@ -3567,7 +3567,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqRawSignalRep3Helas3Pol2
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Pol2 Raw3
-        longLabel       ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 3 (Pol2 in HeLa-S3 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 3 (Pol2 in HeLa-S3 cells)
         subGroups       view=zRAW factor=Pol2 cellType=HeLa
         type            wig 1.00 4989.00
         dateSubmitted   2008-10-1 9:27:32
@@ -3585,7 +3585,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqSignalHelas3Input
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Inp Sig
-        longLabel       ENCODE Yale TFBS ChIP-Seq Signal (Input in HeLa-S3 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Input in HeLa-S3 cells)
         subGroups       view=Signal factor=zCTRL cellType=HeLa
         type            wig 0.00 8316.00
         viewLimits      4:7
@@ -3608,7 +3608,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqRawSignalHelas3Input
         subTrack        wgEncodeYaleChIPseq
         shortLabel      HeLa Inp Raw
-        longLabel       ENCODE Yale TFBS ChIP-Seq Raw Signal (Input in HeLa-S3 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal (Input in HeLa-S3 cells)
         subGroups       view=zRAW factor=zCTRL cellType=HeLa
         type            wig 1.00 8316.00
         dateSubmitted   2008-09-29 14:52:0
@@ -3626,7 +3626,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqPeaksHelas3ifngStat1
         subTrack        wgEncodeYaleChIPseq hide
         shortLabel      HeLa-IF STAT1 Pk
-        longLabel       ENCODE Yale TFBS ChIP-Seq Peaks (STAT1 in HeLa-S3_IFNg cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Peaks (STAT1 in HeLa-S3_IFNg cells)
         subGroups       view=Peaks factor=STAT1 cellType=HeLa-IF
         type            narrowPeak
         dateSubmitted   2008-10-1 10:6:2
@@ -3642,7 +3642,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqSignalHelas3ifngStat1
         subTrack        wgEncodeYaleChIPseq hide
         shortLabel      HeLa-IF STAT1 Sig
-        longLabel       ENCODE Yale TFBS ChIP-Seq Signal (STAT1 in HeLa-S3_IFNg cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (STAT1 in HeLa-S3_IFNg cells)
         subGroups       view=Signal factor=STAT1 cellType=HeLa-IF
         type            wig 0.00 20910.00
         viewLimits      4:7
@@ -3664,7 +3664,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqRawSignalRep1Helas3ifngStat1
         subTrack        wgEncodeYaleChIPseq hide
         shortLabel      HeLa-IF STAT1 Raw1
-        longLabel       ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 1 (STAT1 in HeLa-S3_IFNg cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (STAT1 in HeLa-S3_IFNg cells)
         subGroups       view=zRAW factor=STAT1 cellType=HeLa-IF
         type            wig 1.00 14648.00
         dateSubmitted   2008-10-1 10:6:2
@@ -3682,7 +3682,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqRawSignalRep2Helas3ifngStat1
         subTrack        wgEncodeYaleChIPseq hide
         shortLabel      HeLa-IF STAT1 Raw2
-        longLabel       ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 2 (STAT1 in HeLa-S3_IFNg cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (STAT1 in HeLa-S3_IFNg cells)
         subGroups       view=zRAW factor=STAT1 cellType=HeLa-IF
         type            wig 1.00 6262.00
         dateSubmitted   2008-10-1 10:6:2
@@ -3700,7 +3700,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqSignalHelas3ifngInput
         subTrack        wgEncodeYaleChIPseq hide
         shortLabel      HeLa-IF Inp Sig
-        longLabel       ENCODE Yale TFBS ChIP-Seq Signal (Input in HeLa-S3_IFNg cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Input in HeLa-S3_IFNg cells)
         subGroups       view=Signal factor=zCTRL cellType=HeLa-IF
         type            wig 0.00 11690.00
         viewLimits      4:7
@@ -3722,7 +3722,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqRawSignalHelas3ifngInput
         subTrack        wgEncodeYaleChIPseq hide
         shortLabel      HeLa-IF Inp Raw
-        longLabel       ENCODE Yale TFBS ChIP-Seq Raw Signal (Input in HeLa-S3_IFNg cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal (Input in HeLa-S3_IFNg cells)
         subGroups       view=zRAW factor=zCTRL cellType=HeLa-IF
         type            wig 1.00 11690.00
         dateSubmitted   2008-09-29 14:12:28
@@ -3740,7 +3740,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqPeaksK562Pol2
         subTrack        wgEncodeYaleChIPseq
         shortLabel      K562 Pol2 Pk
-        longLabel       ENCODE Yale TFBS ChIP-Seq Peaks (Pol2 in K562 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Peaks (Pol2 in K562 cells)
         subGroups       view=Peaks factor=Pol2 cellType=K562
         type            narrowPeak
         dateSubmitted   2008-10-14 13:29:42
@@ -3754,7 +3754,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqSignalK562Pol2
         subTrack        wgEncodeYaleChIPseq
         shortLabel      K562 Pol2 Sig
-        longLabel       ENCODE Yale TFBS ChIP-Seq Signal (Pol2 in K562 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Pol2 in K562 cells)
         subGroups       view=Signal factor=Pol2 cellType=K562
         type            wig 0.00 18226.00
         viewLimits      4:7
@@ -3774,7 +3774,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqRawSignalRep1K562Pol2
         subTrack        wgEncodeYaleChIPseq
         shortLabel      K562 Pol2 Raw1
-        longLabel       ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 1 (Pol2 in K562 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (Pol2 in K562 cells)
         subGroups       view=zRAW factor=Pol2 cellType=K562
         type            wig 1.00 9783.00
         dateSubmitted   2008-10-27 11:57:19
@@ -3791,7 +3791,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqRawSignalRep2K562Pol2
         subTrack        wgEncodeYaleChIPseq
         shortLabel      K562 Pol2 Raw2
-        longLabel       ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 2 (Pol2 in K562 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (Pol2 in K562 cells)
         subGroups       view=zRAW factor=Pol2 cellType=K562
         type            wig 1.00 8446.00
         dateSubmitted   2008-10-27 11:57:19
@@ -3808,7 +3808,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqPeaksK562Cfos
         subTrack	wgEncodeYaleChIPseq
         shortLabel	K562 c-Fos Pk
-        longLabel	ENCODE Yale TFBS ChIP-Seq Peaks (c-Fos in K562 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Peaks (c-Fos in K562 cells)
         subGroups	view=Peaks factor=c-Fos cellType=K562
         type		narrowPeak
         dateSubmitted	2008-11-21 13:23:36
@@ -3822,7 +3822,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqSignalK562Cfos
         subTrack	wgEncodeYaleChIPseq
         shortLabel	K562 c-Fos Sig
-        longLabel	ENCODE Yale TFBS ChIP-Seq Signal (c-Fos in K562 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (c-Fos in K562 cells)
         subGroups	view=Signal factor=c-Fos cellType=K562
         type		wig 0.00 13555.00
         viewLimits  4:7
@@ -3841,7 +3841,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep1K562Cfos
         subTrack	wgEncodeYaleChIPseq
         shortLabel	K562 c-Fos Raw1
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 1 (c-Fos in K562 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (c-Fos in K562 cells)
         subGroups	view=zRAW factor=c-Fos cellType=K562
         type		wig 1.00 6107.00
         dateSubmitted	2008-11-21 13:23:36
@@ -3858,7 +3858,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep2K562Cfos
         subTrack	wgEncodeYaleChIPseq
         shortLabel	K562 c-Fos Raw2
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 2 (c-Fos in K562 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (c-Fos in K562 cells)
         subGroups	view=zRAW factor=c-Fos cellType=K562
         type		wig 1.00 3561.00
         dateSubmitted	2008-11-21 13:23:36
@@ -3875,7 +3875,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep3K562Cfos
         subTrack	wgEncodeYaleChIPseq
         shortLabel	K562 c-Fos Raw3
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 3 (c-Fos in K562 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 3 (c-Fos in K562 cells)
         subGroups	view=zRAW factor=c-Fos cellType=K562
         type		wig 1.00 3921.00
         dateSubmitted	2008-11-21 13:23:36
@@ -3892,7 +3892,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqPeaksK562Cjun
         subTrack	wgEncodeYaleChIPseq
         shortLabel	K562 c-Jun Pk
-        longLabel	ENCODE Yale TFBS ChIP-Seq Peaks (c-Jun in K562 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Peaks (c-Jun in K562 cells)
         subGroups	view=Peaks factor=c-Jun cellType=K562
         type		narrowPeak
         dateSubmitted	2008-11-21 12:38:7
@@ -3906,7 +3906,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqSignalK562Cjun
         subTrack	wgEncodeYaleChIPseq
         shortLabel	K562 c-Jun Sig
-        longLabel	ENCODE Yale TFBS ChIP-Seq Signal (c-Jun in K562 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (c-Jun in K562 cells)
         subGroups	view=Signal factor=c-Jun cellType=K562
         type		wig 0.00 16981.00
         viewLimits  4:7
@@ -3925,7 +3925,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep1K562Cjun
         subTrack	wgEncodeYaleChIPseq
         shortLabel	K562 c-Jun Raw1
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 1 (c-Jun in K562 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (c-Jun in K562 cells)
         subGroups	view=zRAW factor=c-Jun cellType=K562
         type		wig 1.00 11614.00
         dateSubmitted	2008-11-21 12:38:7
@@ -3942,7 +3942,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep2K562Cjun
         subTrack	wgEncodeYaleChIPseq
         shortLabel	K562 c-Jun Raw2
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 2 (c-Jun in K562 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (c-Jun in K562 cells)
         subGroups	view=zRAW factor=c-Jun cellType=K562
         type		wig 1.00 5368.00
         dateSubmitted	2008-11-21 12:38:7
@@ -3959,7 +3959,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqPeaksK562Cmyc
         subTrack	wgEncodeYaleChIPseq
         shortLabel	K562 c-Myc Pk
-        longLabel	ENCODE Yale TFBS ChIP-Seq Peaks (c-Myc in K562 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Peaks (c-Myc in K562 cells)
         subGroups	view=Peaks factor=c-Myc cellType=K562
         type		narrowPeak
         dateSubmitted	2008-11-21 13:51:54
@@ -3973,7 +3973,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqSignalK562Cmyc
         subTrack	wgEncodeYaleChIPseq
         shortLabel	K562 c-Myc Sig
-        longLabel	ENCODE Yale TFBS ChIP-Seq Signal (c-Myc in K562 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (c-Myc in K562 cells)
         subGroups	view=Signal factor=c-Myc cellType=K562
         type		wig 0.00 2983.00
         viewLimits  4:7
@@ -3992,7 +3992,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep1K562Cmyc
         subTrack	wgEncodeYaleChIPseq
         shortLabel	K562 c-Myc Raw1
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 1 (c-Myc in K562 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (c-Myc in K562 cells)
         subGroups	view=zRAW factor=c-Myc cellType=K562
         type		wig 1.00 1590.00
         dateSubmitted	2008-11-21 13:51:54
@@ -4009,7 +4009,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep2K562Cmyc
         subTrack	wgEncodeYaleChIPseq
         shortLabel	K562 c-Myc Raw2
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 2 (c-Myc in K562 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (c-Myc in K562 cells)
         subGroups	view=zRAW factor=c-Myc cellType=K562
         type		wig 1.00 1603.00
         dateSubmitted	2008-11-21 13:51:54
@@ -4026,7 +4026,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqSignalK562Input
         subTrack        wgEncodeYaleChIPseq
         shortLabel      K562 Inp Sig
-        longLabel       ENCODE Yale TFBS ChIP-Seq Signal (Input in K562 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Input in K562 cells)
         subGroups       view=Signal factor=zCTRL cellType=K562
         type            wig 0.00 4661.00
         viewLimits      4:7
@@ -4046,7 +4046,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqRawSignalK562Input
         subTrack        wgEncodeYaleChIPseq
         shortLabel      K562 Inp Raw
-        longLabel       ENCODE Yale TFBS ChIP-Seq Raw Signal (Input in K562 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal (Input in K562 cells)
         subGroups       view=zRAW factor=zCTRL cellType=K562
         type            wig 1.00 4661.00
         dateSubmitted   2008-10-14 11:39:9
@@ -4063,7 +4063,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqPeaksNb4Pol2
         subTrack	wgEncodeYaleChIPseq hide
         shortLabel	NB4 Pol2 Pk
-        longLabel	ENCODE Yale TFBS ChIP-Seq Peaks (Pol2 in NB4 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Peaks (Pol2 in NB4 cells)
         subGroups	view=Peaks factor=Pol2 cellType=NB4
         type		narrowPeak
         dateSubmitted	2008-11-25 9:50:26
@@ -4077,7 +4077,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqSignalNb4Pol2
         subTrack	wgEncodeYaleChIPseq hide
         shortLabel	NB4 Pol2 Sig
-        longLabel	ENCODE Yale TFBS ChIP-Seq Signal (Pol2 in NB4 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Pol2 in NB4 cells)
         subGroups	view=Signal factor=Pol2 cellType=NB4
         type		wig 0.00 20774.00
         viewLimits  4:7
@@ -4096,7 +4096,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep1Nb4Pol2
         subTrack	wgEncodeYaleChIPseq hide
         shortLabel	NB4 Pol2 Raw1
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 1 (Pol2 in NB4 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (Pol2 in NB4 cells)
         subGroups	view=zRAW factor=Pol2 cellType=NB4
         type		wig 1.00 10895.00
         dateSubmitted	2008-11-25 9:50:26
@@ -4113,7 +4113,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep2Nb4Pol2
         subTrack	wgEncodeYaleChIPseq hide
         shortLabel	NB4 Pol2 Raw2
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 2 (Pol2 in NB4 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (Pol2 in NB4 cells)
         subGroups	view=zRAW factor=Pol2 cellType=NB4
         type		wig 1.00 5847.00
         dateSubmitted	2008-11-25 9:50:26
@@ -4130,7 +4130,7 @@ wgEncode 1
         track		wgEncodeYaleChIPseqRawSignalRep3Nb4Pol2
         subTrack	wgEncodeYaleChIPseq hide
         shortLabel	NB4 Pol2 Raw3
-        longLabel	ENCODE Yale TFBS ChIP-Seq Raw Signal Replicate 3 (Pol2 in NB4 cells)
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 3 (Pol2 in NB4 cells)
         subGroups	view=zRAW factor=Pol2 cellType=NB4
         type		wig 1.00 4034.00
         dateSubmitted	2008-11-25 9:50:26
@@ -4147,7 +4147,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqSignalNb4Input
         subTrack        wgEncodeYaleChIPseq hide
         shortLabel      NB4 Input Sig
-        longLabel       ENCODE Yale TFBS ChIP-Seq Signal (Input in NB4 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Input in NB4 cells)
         subGroups       view=Signal factor=zCTRL cellType=NB4
         type            wig 0.00 2842.00
         viewLimits      4:7
@@ -4166,7 +4166,7 @@ wgEncode 1
         track           wgEncodeYaleChIPseqRawSignalNb4Input
         subTrack        wgEncodeYaleChIPseq hide
         shortLabel      NB4 Input Raw
-        longLabel       ENCODE Yale TFBS ChIP-Seq Raw Signal (Input in NB4 cells)
+        longLabel       ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal (Input in NB4 cells)
         subGroups       view=zRAW factor=zCTRL cellType=NB4
         type            wig 1.00 2842.00
         dateSubmitted   2008-11-25 10:29:19
