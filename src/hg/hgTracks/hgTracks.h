@@ -580,6 +580,13 @@ void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the thing loaded in (1). */
 
+void adjustBedScoreGrayLevel(char *trackName, struct bed *bed, int scoreMin, int scoreMax);
+/* For each distinct trackName passed in, check cart for trackName_minGrayLevel; if 
+ * that is different from the gray level implied by scoreMin's place in [0..scoreMax], 
+ * then linearly transform bed->score from the range of [scoreMin,scoreMax] to 
+ * [(cartMinGrayLevel*scoreMax)/maxShade,scoreMax]. 
+ * Note: this assumes that scoreMin and scoreMax are constant for each track. */
+
 struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin, int scoreMax);
 /* Return a linked feature from a (full) bed. */
 

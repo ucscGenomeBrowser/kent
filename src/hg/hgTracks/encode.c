@@ -9,7 +9,7 @@
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encode.c,v 1.13 2008/12/02 13:29:18 aamp Exp $";
+static char const rcsid[] = "$Id: encode.c,v 1.14 2008/12/09 07:13:42 angie Exp $";
 
 #define SMALLBUF 128
 
@@ -107,8 +107,9 @@ tg->itemColor = encodeRnaColor;
 tg->itemNameColor = encodeRnaColor;
 }
 
-struct linkedFeatures *lfFromEncodePeak(struct slList *item)
-/* Translate a switchDbTss thing into a linkedFeatures. */
+struct linkedFeatures *lfFromEncodePeak(struct slList *item, char *trackName,
+					int scoreMin, int scoreMax)
+/* Translate an {encode,narrow,broad,gapped}Peak item into a linkedFeatures. */
 {
 struct encodePeak *peak = (struct encodePeak *)item;
 struct linkedFeatures *lf;
@@ -125,6 +126,7 @@ if (peak->peak > -1)
     }
 lf->filterColor = -1;
 lf->orientation = orientFromChar(peak->strand[0]);
+adjustBedScoreGrayLevel(trackName, (struct bed *)peak, scoreMin, scoreMax);
 lf->grayIx = grayInRange((int)peak->score, 0, 1000);
 safecpy(lf->name, sizeof(lf->name), peak->name);
 if (peak->blockCount > 0)
@@ -213,6 +215,9 @@ char *filterConstraints = NULL;
 int rowOffset;
 struct linkedFeatures *lfList = NULL;
 enum encodePeakType pt = 0;
+struct trackDb *parentTdb = tg->tdb ? tg->tdb->parent : tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(parentTdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(parentTdb, "scoreMax", "1000"));
 if (ct)
     {
     db = CUSTOM_TRASH;
@@ -231,7 +236,8 @@ sr = hRangeQuery(conn, table, chromName, winStart, winEnd, filterConstraints, &r
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct encodePeak *peak = encodePeakGeneralLoad(row + rowOffset, pt);
-    struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak);
+    struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, parentTdb->tableName,
+						 scoreMin, scoreMax);
     if (lf)
 	slAddHead(&lfList, lf);
     }
