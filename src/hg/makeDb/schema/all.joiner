@@ -3,7 +3,7 @@
 
 # Define databases used for various organisms
 set hg hg16,hg17,hg18
-set mm mm6,mm7,mm8,mm9
+set mm mm7,mm8,mm9
 set rn rn3,rn4
 set fr fr1,fr2
 set ce ce2,ce4,ce6
@@ -91,13 +91,13 @@ set chainDest Hg16,Hg17,Hg18,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
 # Older format (KG 2)
-set kgDb2 hg16,hg17,mm6,mm7,mm8,rn3,rn4
+set kgDb2 hg16,hg17,mm7,mm8,rn3,rn4
 # Newer format (KG 3 aka UCSC Genes)
 set kgDb3 hg18,mm9
 
 # Protein browser databases.
-set pbDb hg18,hg17,hg16,mm6,mm7,mm8,mm9,rn3 
-set pbDb1 hg17,hg16,mm6,mm7,mm8,mm9,rn3 
+set pbDb hg18,hg17,hg16,mm7,mm8,mm9,rn3 
+set pbDb1 hg17,hg16,mm7,mm8,mm9,rn3 
 set pbDb2 rn3
 set pbDb3 hg16,hg17,hg18
 
@@ -1139,16 +1139,15 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     $gbd.all_mrna.qName dupeOk
     $gbd,!ce2.mrnaOrientInfo.name full minCheck=0.01
     ce2.mrnaOrientInfo.name minCheck=0.08
-    $gbd,!mm6,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.mrnaID minCheck=0.80
-    $gbd,!mm6,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.dupMrnaID minCheck=0.95
-    $gbd,!mm6,!mm7,!mm8,!mm9,!hg17,!rn3,!rn4.mrnaRefseq.mrna minCheck=0.25
-    mm6.mrnaRefseq.mrna minCheck=0.80
+    $gbd,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.mrnaID minCheck=0.80
+    $gbd,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.dupMrnaID minCheck=0.95
+    $gbd,!mm7,!mm8,!mm9,!hg17,!rn3,!rn4.mrnaRefseq.mrna minCheck=0.25
     mm7.mrnaRefseq.mrna minCheck=0.30
     mm8.mrnaRefseq.mrna minCheck=0.30
     mm9.mrnaRefseq.mrna minCheck=0.30
     hg17.mrnaRefseq.mrna minCheck=0.80
     $rn.mrnaRefseq.mrna minCheck=0.03
-    $gbd,!mm6,!mm7,!mm8,!mm9,!hg17,!hg18,!rn4.spMrna.mrnaID minCheck=0.98
+    $gbd,!mm7,!mm8,!mm9,!hg17,!hg18,!rn4.spMrna.mrnaID minCheck=0.98
     $mm.spMrna.mrnaID minCheck=0.20
     $mm.dupSpMrna.mrnaID minCheck=0.10
     $mm.dupSpMrna.dupMrnaID minCheck=0.10
@@ -1175,8 +1174,8 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refLink.mrnaAcc 
     $gbd.refSeqStatus.mrnaAcc minCheck=0.10
     $kgDb.kgXref.refseq exclude= minCheck=0.50
-    $kgDb,!hg16,!hg17,!hg18,!mm6,!mm7,!mm8,!mm9.knownToRefSeq.value minCheck=0.98
-    hg18,mm6,mm7,mm8,mm9.knownToRefSeq.value minCheck=0.96
+    $kgDb,!hg16,!hg17,!hg18,!mm7,!mm8,!mm9.knownToRefSeq.value minCheck=0.98
+    hg18,mm7,mm8,mm9.knownToRefSeq.value minCheck=0.96
     hg16,hg17.knownToRefSeq.value minCheck=0.95
     $kgDb.refSeqKg.refseq minCheck=0.60
     $ccdsDb,!hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.35
@@ -1192,14 +1191,12 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
     dm1.bdgpToRefSeq.value minCheck=0.94
     $dm,!dm1.flyBaseToRefSeq.value minCheck=0.96
-    $mm,!mm6.mrnaRefseq.mrna minCheck=0.03
-    $mm,!mm6.spMrna.mrnaID minCheck=0.40
+    $mm.mrnaRefseq.mrna minCheck=0.03
+    $mm.spMrna.mrnaID minCheck=0.40
     $mm.dupSpMrna.mrnaID minCheck=0.60
     $mm,!mm8,!mm9.dupSpMrna.dupMrnaID minCheck=0.20
     mm9.dupSpMrna.dupMrnaID minCheck=0.19
     mm8.dupSpMrna.dupMrnaID minCheck=0.19
-    mm6.mrnaRefseq.mrna minCheck=0.10
-    mm6.spMrna.mrnaID minCheck=0.50
     hg17.mrnaRefseq.mrna minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.50
     hg17.dupSpMrna.mrnaID minCheck=0.40
@@ -1216,7 +1213,6 @@ identifier xenoRefSeqId typeOf=xenoMrnaAccession
 identifier knownToRefSeqId typeOf=mrnaAccession 
 "RefSeq mRNA accession in knownToRefSeq table"
     $kgDb.knownToRefSeq.value dupeOk
-    mm6.geneNetworkId.id minCheck=0.70
     mm7.geneNetworkId.id minCheck=0.80
     mm8.geneNetworkId.id minCheck=0.80
     mm9.geneNetworkId.id minCheck=0.80
@@ -1614,7 +1610,7 @@ identifier flyBaseGeneId external=FlyBase
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
     $dm,!dm1.flyBase2004Xref.fbgn minCheck=0.90
     $dm,!dm1.pscreen.geneIds comma minCheck=0.95
-    $gbd,!hg17,!hg18,!danRer3,!mm6,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!sacCer1.dmBlastTab.target minCheck=0.90
+    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!sacCer1.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
@@ -2015,8 +2011,8 @@ identifier locusLinkId external=LocusLink
 "NCBI LocusLink ID"
     $gbd.refLink.locusLinkId dupeOk
     $gbd.keggPathway.locusID minCheck=0.98
-    $kgDb,!hg16,!mm8,!mm6.knownToLocusLink.value minCheck=0.98
-    hg16,mm6,mm8.knownToLocusLink.value minCheck=0.96
+    $kgDb,!hg16,!mm8.knownToLocusLink.value minCheck=0.98
+    hg16,mm8.knownToLocusLink.value minCheck=0.96
 
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
@@ -2317,7 +2313,6 @@ identifier jaxPhenotypeName external=MGI
     $mm.jaxPhenotype.name dupeOk
     $mm.jaxPhenotypeAlias.name
     mm8.jaxAllelePheno.transcript minCheck=0.9
-    mm6.jaxAllelePheno.transcript minCheck=0.8
 
 #links between the UniProt variants tables
 identifier protVarId
@@ -2485,17 +2480,17 @@ dependency dm1.arbExpDistance dm1.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio
 dependency $dm,!dm1.arbExpDistance $dm,!dm1.flyBaseToCG hgFixed.arbFlyLifeMedianRatio 
 dependency $sacCer.choExpDistance hgFixed.yeastChoCellCycle
 
-# FAN says: the following hg17 and mm6 tables are an exception
-dependency $pbDb,!hg17,!mm6.pbAnomLimit $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pbResAvgStd $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepCCntDist $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepExonCntDist $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepHydroDist $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepIPCntDist $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepMolWtDist $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepPi $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepPiDist $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepResDist $pbDb.knownGenePep
+# FAN says: the following hg17 tables are an exception
+dependency $pbDb,!hg17.pbAnomLimit $pbDb.knownGenePep
+dependency $pbDb,!hg17.pbResAvgStd $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepCCntDist $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepExonCntDist $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepHydroDist $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepIPCntDist $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepMolWtDist $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepPi $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepPiDist $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepResDist $pbDb.knownGenePep
 dependency $pbDb.pepMwAaDist $pbDb.knownGenePep
 dependency $pbDb.pbAaDistA $pbDb.knownGenePep
 dependency $pbDb.pbAaDistC $pbDb.knownGenePep
