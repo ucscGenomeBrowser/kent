@@ -14,7 +14,7 @@ set sacCer sacCer1
 set panTro panTro1,panTro2
 set galGal galGal2,galGal3
 set ci ci1,ci2
-set danRer danRer1,danRer2,danRer3,danRer4,danRer5
+set danRer danRer2,danRer3,danRer4,danRer5
 set canFam canFam1,canFam2
 set droYak droYak1,droYak2
 set droMoj droMoj1,droMoj2
@@ -2121,7 +2121,6 @@ identifier blastHg16KGPepId
      ce2.blastHg16KG.qName
      ci1.blastHg16KG.qName
      cioSav1.blastHg16KG.qName
-     danRer1.blastHg16KG.qName
      dm1.blastHg16KG.qName
      galGal2.blastHg16KG.qName
 
@@ -2132,7 +2131,6 @@ identifier blastHg16KGRefId
      ce2.blastHg16KG.qName
      ci1.blastHg16KG.qName
      cioSav1.blastHg16KG.qName
-     danRer1.blastHg16KG.qName
      dm1.blastHg16KG.qName
      galGal2.blastHg16KG.qName
 
@@ -2901,9 +2899,6 @@ tablesIgnored $fr
 tablesIgnored $galGal
     chr%_gold
     supercontig
-
-tablesIgnored danRer1
-    rhMap
 
 tablesIgnored danRer2
     rhMap
