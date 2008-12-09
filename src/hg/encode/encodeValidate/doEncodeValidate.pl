@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.119 2008/12/09 12:39:06 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.120 2008/12/09 16:47:53 mikep Exp $
 
 use warnings;
 use strict;
@@ -142,6 +142,7 @@ our %validators = (
     antibody => \&validateAntibody,
     rnaExtract => \&validateRnaExtract,
     localization => \&validateLocalization,
+    mapAlgorithm => \&validateMapAlgorithm,
     ripAntibody => \&validateRipAntibody,
     ripTgtProtein => \&validateRipTgtProtein,
     freezeDate => \&validateFreezeDate,
@@ -228,6 +229,11 @@ sub validateRnaExtract {
 sub validateLocalization {
     my ($val) = @_;
     return defined($terms{'localization'}{$val}) ? () : ("localization \'$val\' is not known");
+}
+
+sub validateMapAlgorithm {
+    my ($val) = @_;
+    return defined($terms{'mapAlgorithm'}{$val}) ? () : ("mapAlgorithm \'$val\' is not known");
 }
 
 sub validateRipAntibody {
@@ -1407,8 +1413,9 @@ foreach my $ddfLine (@ddfLines) {
             $pushQDescription = $longSuffix;
             $shortSuffix = "$hash{'ripTgtProtein'} $hash{'cell'} $hash{'ripAntibody'}";
         } elsif($hash{'rnaExtract'} && $hash{'localization'} && $hash{'cell'}) {
-            $shortSuffix = "$hash{'rnaExtract'} $hash{'cell'} $hash{'localization'}";
-            $longSuffix = "$hash{'rnaExtract'} in $hash{'cell'} cell $hash{'localization'}";
+	    my $suf = $hash{'mapAlgorithm'} ? "$hash{'mapAlgorithm'}" : "";
+            $shortSuffix = "$hash{'rnaExtract'} $hash{'cell'} $hash{'localization'} $suf";
+            $longSuffix = "$hash{'rnaExtract'} in $hash{'cell'} cell $hash{'localization'} using $suf";
             $pushQDescription = $longSuffix;
         } elsif($hash{'freezeDate'}) {
             $shortSuffix = $hash{'freezeDate'};
