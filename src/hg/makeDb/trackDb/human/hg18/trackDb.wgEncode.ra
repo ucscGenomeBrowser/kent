@@ -2030,9 +2030,11 @@ visibilityViewDefaults Hotspots=hide Peaks=hide RawSignal=hide
 settingsByView  RawSignal:defaultViewLimits=1:10,autoScale=off
 controlledVocabulary encode/cv.ra cellType
 priority 0
-type bed 3
+type bed 3 +
 wgEncode 1
 # project dirs: 111 110 106 50 48 49 47 46
+noScoreFilter .
+scoreMin 500
 
 	track		wgEncodeUwDnaseSeqRawSignalRep1Gm06990
 	subTrack	wgEncodeUwDnaseSeq
