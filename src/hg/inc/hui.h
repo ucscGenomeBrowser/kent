@@ -833,6 +833,10 @@ void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,bool
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
 
+void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, int scoreMax);
+/* If scoreMin has been set, let user select the shade of gray for that score, in case 
+ * the default is too light to see or darker than necessary. */
+
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
 /* UI for maf/wiggle track */
 

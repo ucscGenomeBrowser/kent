@@ -3,6 +3,7 @@
 #include "hgTrackUi.h"
 #include "jksql.h"
 #include "hdb.h"
+#include "hui.h"
 #include "trackDb.h"
 #include "customTrack.h"
 #include "encode/encodePeak.h"
@@ -34,6 +35,8 @@ if (useScore)
     safef(scoreVarName, sizeof(scoreVarName), "%s.%s", trackName, ENCODE_PEAK_SCORE_FILTER_SUFFIX);
     puts("<BR><B>Minimum score (0-1000):</B>");
     cgiMakeTextVar(scoreVarName, cartCgiUsualString(cart, scoreVarName, "0"), 4);
+    int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+    scoreGrayLevelCfgUi(cart, tdb, tdb->tableName, scoreMax);
     }
 else
     {

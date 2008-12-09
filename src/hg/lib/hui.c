@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.139 2008/12/08 19:07:06 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.140 2008/12/09 07:18:27 angie Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2722,7 +2722,7 @@ if(boxed)
 cfgEndBox(boxed);
 }
 
-void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, int scoreMax)
+void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, int scoreMax)
 /* If scoreMin has been set, let user select the shade of gray for that score, in case 
  * the default is too light to see or darker than necessary. */
 {
@@ -2736,14 +2736,16 @@ if (scoreMinStr != NULL)
     int scoreMinGrayLevel = scoreMin * maxShade/scoreMax;
     if (scoreMinGrayLevel <= 0) scoreMinGrayLevel = 1;
     char setting[256];
-    safef(setting, sizeof(setting), "%s_minGrayLevel", tdb->tableName);
+    safef(setting, sizeof(setting), "%s_minGrayLevel", prefix);
     int minGrayLevel = cartUsualInt(cart, setting, scoreMinGrayLevel);
     if (minGrayLevel <= 0) minGrayLevel = 1;
     if (minGrayLevel > maxShade) minGrayLevel = maxShade;
     puts("\n<P><B>Shade of lowest-scoring items: </B>");
-    // Add class and javascript to select so that its color is consistent with option colors:
-    printf("<SELECT NAME=\"%s\" class=grayShade%d onchange='", setting, minGrayLevel);
-    int i, level;
+    // Add javascript to select so that its color is consistent with option colors:
+    int level = 255 - (255*minGrayLevel / maxShade);
+    printf("<SELECT NAME=\"%s\" STYLE='color: #%02x%02x%02x' ONCHANGE='",
+	   setting, level, level, level);
+    int i;
     for (i = 1;  i < maxShade;  i++)
 	{
 	level = 255 - (255*i / maxShade);
@@ -2757,14 +2759,15 @@ if (scoreMinStr != NULL)
     // Use class to set color of each option:
     for (i = 1;  i <= maxShade;  i++)
 	{
-	printf("<OPTION%s CLASS=grayShade%d VALUE=%d>",
-	       (minGrayLevel == i ? " SELECTED" : ""), i, i);
+	level = 255 - (255*i / maxShade);
+	printf("<OPTION%s STYLE='color: #%02x%02x%02x' VALUE=%d>",
+	       (minGrayLevel == i ? " SELECTED" : ""), level, level, level, i);
 	if (i == maxShade)
 	    printf("&bull; black</OPTION>\n");
 	else
 	    printf("&bull; gray (%d%%)</OPTION>\n", i * (100/maxShade));
 	}
-    printf("</SELECT>\n");
+    printf("</SELECT></P>\n");
     }
 }
 
@@ -2772,6 +2775,11 @@ void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *na
 /* Put up UI for filtering bed track based on a score */
 {
 char option[256];
+
+boolean scoreFilterOk = (trackDbSetting(parentTdb, "noScoreFilter") == NULL);
+boolean gotScoreMin = (trackDbSetting(parentTdb, "scoreMin") != NULL);
+if (! (scoreFilterOk || gotScoreMin))
+    return;
 
 char *scoreValString = trackDbSetting(parentTdb, "scoreFilter");
 int scoreSetting;
@@ -2785,17 +2793,21 @@ bool doScoreCtFilter = FALSE;
 
 cfgBeginBoxAndTitle(boxed, title);
 
-/* initial value of score theshold is 0, unless
- * overridden by the scoreFilter setting in the track */
-if (scoreValString != NULL)
-    scoreVal = atoi(scoreValString);
-printf("<b>Show only items with score at or above:</b> ");
-snprintf(option, sizeof(option), "%s.scoreFilter", name);
-scoreSetting = cartUsualInt(cart,  option,  scoreVal);
-cgiMakeIntVar(option, scoreSetting, 11);
-printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
+if (scoreFilterOk)
+    {
+    /* initial value of score theshold is 0, unless
+     * overridden by the scoreFilter setting in the track */
+    if (scoreValString != NULL)
+	scoreVal = atoi(scoreValString);
+    printf("<b>Show only items with score at or above:</b> ");
+    snprintf(option, sizeof(option), "%s.scoreFilter", name);
+    scoreSetting = cartUsualInt(cart,  option,  scoreVal);
+    cgiMakeIntVar(option, scoreSetting, 11);
+    printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
+    }
 
-scoreGrayLevelCfgUi(cart, parentTdb, maxScore);
+if (gotScoreMin)
+    scoreGrayLevelCfgUi(cart, parentTdb, name, maxScore);
 
 if (scoreCtString != NULL)
     {
