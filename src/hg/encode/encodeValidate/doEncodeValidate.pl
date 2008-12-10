@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.121 2008/12/10 19:48:16 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.122 2008/12/10 22:06:07 larrym Exp $
 
 use warnings;
 use strict;
@@ -64,6 +64,7 @@ our $outPath;           # full path of output directory
 our %terms;             # controlled vocabulary
 our $quickCount=100;
 our $time0 = time;
+our %chromInfo;         # chromInfo from assembly for chrom validation
 
 sub usage {
     print STDERR <<END;
@@ -333,23 +334,29 @@ sub validateWithList
         return "not enough fields";
     } else {
         for my $validateField (@{$validateList}) {
-            my $type = $validateField->{TYPE};
-            my $regex;
-            if($type) {
-                my %typeMap = (int => "[+-]?\\d+", uint => "\\d+", float => $floatRegEx, string => "\\S+");
-                if(!($regex = $typeMap{$type})) {
-                    die "PROGRAM ERROR: invalid TYPE: $type\n";
-                }
-            } elsif(!($regex = $validateField->{REGEX})) {
-                die "PROGRAM ERROR: invalid type list (missing required REGEX or TYPE)\n";
-            }
             my $val = shift(@list);
-            if($val !~ /^$regex$/) {
-                my $error = "value '$val' is an invalid value for field '$validateField->{NAME}'";
-                if($type) {
-                    $error .= "; must be type '$type'";
+            my $type = $validateField->{TYPE};
+            if(defined($type) && $type eq 'chrom') {
+                if(!$chromInfo{$val}) {
+                    return "value '$val' for field '$validateField->{NAME}' is an invalid chromosome";
                 }
-                return $error;
+            } else {
+                my $regex;
+                if($type) {
+                    my %typeMap = (int => "[+-]?\\d+", uint => "\\d+", float => $floatRegEx, string => "\\S+");
+                    if(!($regex = $typeMap{$type})) {
+                        die "PROGRAM ERROR: invalid TYPE: $type\n";
+                    }
+                } elsif(!($regex = $validateField->{REGEX})) {
+                    die "PROGRAM ERROR: invalid type list (missing required REGEX or TYPE)\n";
+                }
+                if($val !~ /^$regex$/) {
+                    my $error = "value '$val' is an invalid value for field '$validateField->{NAME}'";
+                    if($type) {
+                        $error .= "; must be type '$type'";
+                    }
+                    return $error;
+                }
             }
         }
     }
@@ -401,9 +408,7 @@ sub validateBed {
             ;
         } elsif($fieldCount < 5) {
             die "$prefix not enough fields; " . scalar(@fields) . " present; at least 5 are required\n";
-        } elsif ($fields[0] !~ /^chr(\d+|M|X|Y)$/) {
-            # I have seen non-standard chrom names (e.g. "chr2_hap2" from Wold) and we want
-            # to make sure we don't import those.
+        } elsif (!$chromInfo{$fields[0]}) {
             die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
         } elsif ($fields[1] !~ /^\d+$/) {
             die "$prefix field 2 value ($fields[1]) is invalid; value must be a positive number\n";
@@ -448,9 +453,7 @@ sub validateBedGraph {
             ;
         } elsif($fieldCount != 4) {
             die "$prefix found " . scalar(@fields) . " fields; need 4\n";
-        } elsif ($fields[0] !~ /^chr(\d+|M|X|Y)$/) {
-            # I have seen non-standard chrom names (e.g. "chr2_hap2" from Wold) and we want
-            # to make sure we don't import those.
+        } elsif (!$chromInfo{$fields[0]}) {
             die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
         } elsif ($fields[1] !~ /^\d+$/) {
             die "$prefix field 2 value ($fields[1]) is invalid; value must be a positive number\n";
@@ -529,18 +532,24 @@ sub validateGene {
 sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
-    my $line = 0;
+    my $lineNumber = 0;
     doTime("beginning validateTagAlign") if $opt_timing;
     my $fh = openUtil($path, $file);
-    while(<$fh>) {
-        $line++;
-        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
+    while(my $line = <$fh>) {
+        chomp $line;
+        $lineNumber++;
+        next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
 	# MJP: for now, allow colorspace sequences as well as DNA + dot
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[0-3ATCGN\.]+\s+\d+\s+[+-]$/)) {
-            chomp;
-            return "Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validateTagAlign]";
+        my @list = ({TYPE => "chrom", NAME => "chrom"},
+                    {TYPE => "uint", NAME => "chromStart"},
+                    {TYPE => "uint", NAME => "chromEnd"},
+                    {REGEX => "[0-3ATCGN\\.]+", NAME => "sequence"},
+                    {TYPE => "uint", NAME => "score"},
+                    {REGEX => "[+-\\.]", NAME => "strand"});
+        if(my $error = validateWithList($line, \@list)) {
+            return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validateTagAlign]");
         }
-        last if($opt_quick && $line >= $quickCount);
+        last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
@@ -559,10 +568,10 @@ sub validatePairedTagAlign
         chomp $line;
         $lineNumber++;
         next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
-        my @list = ({REGEX => "chr(\\d+|M|X|Y)", NAME => "chrom"},
+        my @list = ({TYPE => "chrom", NAME => "chrom"},
                     {TYPE => "uint", NAME => "chromStart"},
                     {TYPE => "uint", NAME => "chromEnd"},
-                    {TYPE => "string", NAME => "name"},
+                    {TYPE => "string", NAME => "sequence"},
                     {TYPE => "uint", NAME => "score"},
                     {REGEX => "[+-\\.]", NAME => "strand"},
                     {REGEX => "[ACGTNacgtn]*", NAME => "seq1"},
@@ -588,7 +597,7 @@ sub validateNarrowPeak
         chomp $line;
         $lineNumber++;
         next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
-        my @list = ({REGEX => "chr(\\d+|M|X|Y)", NAME => "chrom"},
+        my @list = ({TYPE => "chrom", NAME => "chrom"},
                     {TYPE => "uint", NAME => "chromStart"},
                     {TYPE => "uint", NAME => "chromEnd"},
                     {TYPE => "string", NAME => "name"},
@@ -619,7 +628,7 @@ sub validateBroadPeak
         chomp $line;
         $lineNumber++;
         next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
-        my @list = ({REGEX => "chr(\\d+|M|X|Y)", NAME => "chrom"},
+        my @list = ({TYPE => "chrom", NAME => "chrom"},
                     {TYPE => "uint", NAME => "chromStart"},
                     {TYPE => "uint", NAME => "chromEnd"},
                     {TYPE => "string", NAME => "name"},
@@ -653,6 +662,7 @@ sub validateGappedPeak
 	my $msg1 = "Invalid $type file; line $line in file '$file' is invalid: Invalid";
 	my $msg2 = "\nline: $_ [validateGappedPeak]";
 	my $err = "";
+        # XXXX mikep, please fix this to use %chromInfo; thanks, -larry
 	$c[0] =~ m/chr(\d+|M|X|Y)/ or $err .= "chrom=[$c[0]], ";
 	$c[1] =~ m/\d+/ or $err .= "start=[$c[1]], ";
 	$c[2] =~ m/\d+/ or $err .= "end=[$c[2]], ";
@@ -984,6 +994,9 @@ my $submitDir = $ARGV[1];
 $ENV{TMPDIR} = $Encode::tempDir;
 
 if($opt_validateFile && $opt_fileType) {
+    # kludgy, but we need chromInfo populated to validate files, so we assume we are using hg18
+    my $db = HgDb->new(DB => 'hg18');
+    $db->getChromInfo(\%chromInfo);
     if(my @errors = checkDataFormat($opt_fileType, $submitDir)) {
         die "Invalid file: " . join(", ", @errors) . "\n";
     } else {
@@ -1053,6 +1066,7 @@ if($opt_validateDaf) {
 my $daf = Encode::getDaf($submitDir, $grants, $fields);
 
 my $db = HgDb->new(DB => $daf->{assembly});
+$db->getChromInfo(\%chromInfo);
 
 if($opt_sendEmail) {
     if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
