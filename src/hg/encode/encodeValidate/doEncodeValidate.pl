@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.120 2008/12/09 16:47:53 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.121 2008/12/10 19:48:16 mikep Exp $
 
 use warnings;
 use strict;
@@ -1526,7 +1526,7 @@ foreach my $ddfLine (@ddfLines) {
         }
         if($type eq 'wig') {
             print TRACK_RA <<END;
-	spanList	1
+	spanList	first
 	windowingFunction mean
 	maxHeightPixels	100:16:16
 END
