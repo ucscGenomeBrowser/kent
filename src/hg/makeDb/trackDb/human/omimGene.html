@@ -2,7 +2,8 @@
 <P>
 This track shows a set of UCSC canonical genes that 
 might be referenced by the Online Mendelian Inheritance in Man 
-(<A HREF="http://www.ncbi.nlm.nih.gov/sites/entck rez?db=omim">OMIM</A>)
+(<A HREF="http://www.ncbi.nlm.nih.gov/sites/entrez?db=omim"
+TARGET=_blank>OMIM</A>)
 database, based on cross-reference information from RefSeq and UniProt.
 </P>
 
@@ -28,23 +29,25 @@ diagnosis and for answers to personal questions.
 <P>
 This annotation was constructed as follows: 
 <UL>
-<LI>Compile a set of UCSC genes that have cross-references to RefSeq 
-genes with OMIM IDs, as defined in the Genome Browser database refLink table. 
-<LI>Compile a second set of UCSC genes in which the corresponding 
-UniProt proteins have external links to MIM, based on data in the spXref2 table 
-in the UCSC proteome database. 
-<LI>Combine the two gene sets and remove duplicates, resulting in a subset of 
+<LI>A set of UCSC genes with cross-references to RefSeq genes with associated
+OMIM IDs, as defined in the Genome Browser database <TT>refLink</TT> table,
+was compiled.
+<LI>A second set of UCSC genes was compiled in which the corresponding
+UniProt proteins had external links to OMIM, based on data in the <TT>spXref2</TT>
+table in the UCSC proteome database.
+<LI>The two gene sets were combined and duplicates removed, resulting in a subset of
 UCSC genes that have associated OMIM IDs.
-<LI>Replace each of the genes in the combined set with its associated
-canonical gene, based on data from the UCSC canonical gene set defined by 
-the knownIsoforms and knownCanonical tables. 
-<LI>Remove duplicates from the canonical set, sort the data and load it into 
-the omimGene table.
+<LI>Each of the genes in the combined set was replaced with its associated
+canonical gene, based on data from the UCSC canonical gene set defined by
+the <TT>knownIsoforms</TT> and <TT>knownCanonical</TT> tables.
+<LI>Duplicates were removed from the canonical set, and the data were
+sorted and loaded into the <TT>omimGene</TT> table.
 </UL>
 <P>
-In addition, we loaded the data from the OMIM genemap file into the omimGeneMap 
-table in the Genome Browser database. Descriptive information from
-this table is displayed on the OMIM Related Genes details pages. 
+In addition, data from the OMIM <TT>genemap</TT> file were loaded into the
+<TT>omimGeneMap</TT> table in the Genome Browser database. Descriptive
+information from this table is displayed on the OMIM Related Genes details
+pages.
 </P>
 
 <H2>Credits</H2>
@@ -58,10 +61,10 @@ Hamosh A, Scott AF, Amberger JS, Bocchini CA, McKusick VA.
 <A HREF="http://nar.oxfordjournals.org/cgi/content/full/33/suppl_1/D514"
 TARGET=_blank>Online Mendelian Inheritance in Man (OMIM), a knowledgebase of 
 human genes and genetic disorders</A>. 
-<em>Nucleic Acids Res</em>. 2005,33(Database issue):D514-7.
+<em>Nucleic Acids Res</em>. 2005 Jan 1;33(Database issue):D514-7.
 </P>
 
-<P> Amberger J, Bocchini CA, Scott AF, Hamosh A.  
+<P>Amberger J, Bocchini CA, Scott AF, Hamosh A.  
 <A HREF="http://nar.oxfordjournals.org/cgi/content/full/gkn665v1"
 TARGET=_blank>McKusick's Online Mendelian Inheritance in Man (OMIM(R))</A>.  
 <em>Nucleic Acids Res.</em> 2008 Oct 8. [Epub ahead of print]
