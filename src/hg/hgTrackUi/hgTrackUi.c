@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.462 2008/12/09 07:18:28 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.463 2008/12/10 17:46:33 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -166,6 +166,42 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
 
 /* A comment for the purposes of brancht-tag-move demo. */
 
+void snp125OfferGeneTracksForFunction(struct trackDb *tdb)
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct slName *genePredTables = hTrackTablesOfType(conn, "genePred%%"), *gt;
+if (genePredTables != NULL)
+    {
+    struct trackDb *geneTdbList = NULL, *gTdb;
+    for (gt = genePredTables;  gt != NULL;  gt = gt->next)
+	{
+	gTdb = hTrackDbForTrack(database, gt->name);
+	if (gTdb && sameString(gTdb->grp, "genes"))
+	    {
+	    if (gTdb->parent)
+		gTdb->priority = (gTdb->parent->priority + gTdb->priority/1000);
+	    slAddHead(&geneTdbList, gTdb);
+	    }
+	}
+    slSort(&geneTdbList, trackDbCmp);
+    printf("<BR><B>On details page, show function and coding differences relative to: </B> ");
+    char cartVar[256];
+    safef(cartVar, sizeof(cartVar), "%s_geneTrack", tdb->tableName);
+    struct slName *selectedGeneTracks = cartOptionalSlNameList(cart, cartVar);
+    int numCols = 4, i;
+    int menuSize = slCount(geneTdbList);
+    char **values = needMem(menuSize*sizeof(char *));
+    char **labels = needMem(menuSize*sizeof(char *));
+    for (i = 0, gTdb = geneTdbList;  i < menuSize && gTdb != NULL;  i++, gTdb = gTdb->next)
+	{
+	values[i] = gTdb->tableName;
+	labels[i] = gTdb->shortLabel;
+	}
+    cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedGeneTracks, numCols);
+    }
+hFreeConn(&conn);
+}
+
 #define SNP125_FILTER_COLUMNS 4
 #define SNP125_SET_ALL "snp125SetAll"
 #define SNP125_CLEAR_ALL "snp125ClearAll"
@@ -276,6 +312,8 @@ if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
     printf("<BR>(If enabled, chimp allele is displayed first, then '>', then human alleles). </B>&nbsp;");
     printf("<BR>");
     }
+
+snp125OfferGeneTracksForFunction(tdb);
 
 snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0"));
 printf("<BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
