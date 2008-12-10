@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.106 2008/10/06 23:27:15 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.107 2008/12/10 17:51:39 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1199,20 +1199,22 @@ safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "1");
 }
 
-void cgiMakeCheckboxGroup(char *name, char *menu[], int menuSize, struct slName *checked,
-			  int tableColumns)
+void cgiMakeCheckboxGroupWithVals(char *name, char *menu[], char *values[], int menuSize,
+				  struct slName *checked, int tableColumns)
 /* Make a table of checkboxes that have the same variable name but different
- * values (same behavior as a multi-select input). */
+ * values (same behavior as a multi-select input), with nice labels in menu[]. */
 {
 int i;
 if (checked == NULL) checked = slNameNew(menu[0]);
+if (values == NULL) values = menu;
+if (menu == NULL) menu = values;
 puts("<TABLE BORDERWIDTH=0><TR>");
 for (i = 0;  i < menuSize;  i++)
     {
     if (i > 0 && (i % tableColumns) == 0)
 	printf("</TR><TR>");
-    printf("<TD><INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=%s %s> %s</TD>\n", name, menu[i],
-	   (slNameInList(checked, menu[i]) ? "CHECKED" : ""), menu[i]);
+    printf("<TD><INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=%s %s> %s</TD>\n", name, values[i],
+	   (slNameInList(checked, values[i]) ? "CHECKED" : ""), menu[i]);
     }
 if ((i % tableColumns) != 0)
     while ((i++ % tableColumns) != 0)
@@ -1221,6 +1223,14 @@ puts("</TR></TABLE>");
 char buf[512];
 safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "1");
+}
+
+void cgiMakeCheckboxGroup(char *name, char *menu[], int menuSize, struct slName *checked,
+			  int tableColumns)
+/* Make a table of checkboxes that have the same variable name but different
+ * values (same behavior as a multi-select input). */
+{
+cgiMakeCheckboxGroupWithVals(name, menu, NULL, menuSize, checked, tableColumns);
 }
 
 void cgiMakeDropListFull(char *name, char *menu[], char *values[], 
