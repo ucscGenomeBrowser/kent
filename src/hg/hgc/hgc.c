@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1481 2008/12/08 23:19:43 donnak Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1482 2008/12/10 17:46:00 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14483,9 +14483,14 @@ char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int fieldCount = hasBin + (hasFrames ? 15 : 10);
-    struct genePred *gp = genePredExtLoad(row+hasBin, fieldCount);
-    if (! hasFrames)
+    struct genePred *gp;
+    if (hasFrames)
+	gp = genePredExtLoad(row+hasBin, fieldCount);
+    else
+	{
+	gp = genePredLoad(row+hasBin);
 	genePredAddExonFrames(gp);
+	}
     slAddHead(&gpList, gp);
     }
 sqlFreeResult(&sr);
@@ -14504,7 +14509,7 @@ if (geneTracks == NULL)
     return;
 struct sqlConnection *conn = hAllocConn(database);
 struct slName *gt;
-printf("<B>UCSC's predicted function relative to selected gene tracks:</B>\n");
+printf("<BR><B>UCSC's predicted function relative to selected gene tracks:</B>\n");
 printf("<TABLE BORDERWIDTH=0>\n");
 for (gt = geneTracks;  gt != NULL;  gt = gt->next)
     if (sqlTableExists(conn, gt->name))
