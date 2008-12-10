@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.107 2008/12/10 17:51:39 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.108 2008/12/10 19:05:16 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1213,7 +1213,7 @@ for (i = 0;  i < menuSize;  i++)
     {
     if (i > 0 && (i % tableColumns) == 0)
 	printf("</TR><TR>");
-    printf("<TD><INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=%s %s> %s</TD>\n", name, values[i],
+    printf("<TD><INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=\"%s\" %s> %s</TD>\n", name, values[i],
 	   (slNameInList(checked, values[i]) ? "CHECKED" : ""), menu[i]);
     }
 if ((i % tableColumns) != 0)
