@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.18 2008/12/03 19:56:05 hiram Exp $
+# $Id: HgAutomate.pm,v 1.19 2008/12/10 19:07:23 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -256,7 +256,7 @@ sub getFileServer {
   if ($host =~ /(\S+):\/.*/) {
     return $1;
   } elsif ($host =~ /^\/\w/) {
-    my $localhost = $ENV{'HOST'};
+    my $localhost = `uname -n`;	# HOST not always present
     if ($localhost =~ s/^(\w+)(\..*)?$/$1/) {
       return $localhost;
     }
