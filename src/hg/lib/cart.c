@@ -21,7 +21,7 @@
 #endif /* GBROWSE */
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.96 2008/10/02 23:15:47 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.97 2008/12/10 19:02:53 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -326,7 +326,6 @@ for (cv = cvList; cv != NULL; cv = cv->next)
 	    {
 	    storeInOldVars(cart, oldVars, multVar);
 	    cartRemove(cart, multVar);
-	    hashAdd(cgiHash, multVar, NULL);
 	    }
 	}
     }
