@@ -1871,7 +1871,7 @@ groupings sestanBrainAtlasGroups
 
 track agilentProbes
 shortLabel Agilent Array
-longLabel Agilent Microarray probesets
+longLabel Agilent Microarray Probesets
 compositeTrack on
 group expression
 priority 0
