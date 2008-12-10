@@ -1889,7 +1889,7 @@ type bed 6 .
     subTrack agilentProbes
     shortLabel Ag CGH 2x400k
     longLabel Agilent CGH SurePrint G3 Microarray 2x400K AMADID 021850
-    color 0,128,0
+    color 255,128,0
     priority 2
 
     track agilentCgh4x180k
@@ -1903,7 +1903,7 @@ type bed 6 .
     subTrack agilentProbes
     shortLabel Ag CGH 8x60k
     longLabel Agilent CGH SurePrint G3 Microarray 8x60K AMADID 021924
-    color 0,128,0
+    color 255,128,0
     priority 4
 
     track agilentCnv2x400k
@@ -1917,7 +1917,7 @@ type bed 6 .
     subTrack agilentProbes
     shortLabel Ag CGH 244a
     longLabel Agilent Microarray 244A AMADID 014693
-    color 0,128,0
+    color 255,128,0
     priority 6
 
     track agilentCgh105a
@@ -1931,7 +1931,7 @@ type bed 6 .
     subTrack agilentProbes
     shortLabel Ag CGH 44k
     longLabel Agilent Microarray 44K AMADID 014950
-    color 0,128,0
+    color 255,128,0
     priority 8
 
 track xTBAmaf
