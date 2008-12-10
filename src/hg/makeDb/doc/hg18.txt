@@ -21354,8 +21354,8 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
    ssh hgwdev
    bash
    cd /cluster/data/hg18/bed
-   mkdir agilentCgh
-   cd agilentCgh/
+   mkdir agilentProbes
+   cd agilentProbes/
    cp /usr/local/apache/htdocs/donna/Agilent/Agilent_Human_CGH.zip .
 # (agilent-provided zips)
 # what a pain... this zipfile isn't unzippable using linux unzip.
@@ -21389,6 +21389,18 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
    tail +3 015223_D_UCSCTrack_20070820.txt | bedSort stdin stdout > agilentCgh244a.bed
    tail +3 015235_D_UCSCTrack_20070820.txt | bedSort stdin stdout > agilentCgh105a.bed
    for bed in *.bed; do hgLoadBed rn4 ${bed%.bed}{,.bed}; done
+
+############################################################################
+# AGILENT HUMAN SUREPRINT G3 ARRAY PROBESETS (DONE 2008-12-09, Andy)
+    ssh hgwdev
+    cd /hive/data/hg18/bed/agilentProbes
+    wget --timestamping --user=microarray --password=<get-it-from-agilent> \
+        "ftp://ftp.agilent.com/restricted/UCSC_BED_FILES/*"
+    zcat 021365_D_UCSCTrack_20081204.txt.gz | tail +3 | hgLoadBed hg18 agilentCnv2x400k stdin
+    zcat 021529_D_UCSCTrack_20081204.txt.gz | tail +3 | hgLoadBed hg18 agilentCgh1x1m stdin
+    zcat 021850_D_UCSCTrack_20081204.txt.gz | tail +3 | hgLoadBed hg18 agilentCgh2x400k stdin
+    zcat 021924_D_UCSCTrack_20081204.txt.gz | tail +3 | hgLoadBed hg18 agilentCgh8x60k stdin
+    zcat 022060_D_UCSCTrack_20081204.txt.gz | tail +3 | hgLoadBed hg18 agilentCgh4x180k stdin
 
 ############################################################################
 ############################################################################

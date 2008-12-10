@@ -1577,6 +1577,33 @@ pred dm1.blastFBPep00
 blastRef dm1.blastFBRef00
 url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 
+track encodePeakTest
+shortLabel Peaks Test
+longLabel ENCODE Peaks type test
+group x
+priority 124
+visibility full
+canPack on
+type encodePeak
+
+track narrowPeakTest
+shortLabel Narrow Peaks Test
+longLabel ENCODE Peaks type test
+group x
+priority 125
+visibility full
+canPack on
+type narrowPeak
+
+track gappedPeakTest
+shortLabel Gapped Peaks Test
+longLabel ENCODE Peaks type test
+group x
+priority 126
+visibility pack
+canPack on
+type gappedPeak
+
 track chainFr1ProtEx
 shortLabel chainFr1ProtEx
 longLabel chainFr1ProtEx
@@ -1842,35 +1869,70 @@ expStep 0.5
 expTable sestanBrainAtlasExps
 groupings sestanBrainAtlasGroups
 
-track agilentCgh
-shortLabel Agilent CGH
-longLabel Agilent CGH Microarray probesets
+track agilentProbes
+shortLabel Agilent Array
+longLabel Agilent Microarray probesets
 compositeTrack on
 group expression
 priority 0
 visibility hide
 type bed 6 .
 
-    track agilentCgh244a
-    subTrack agilentCgh
-    shortLabel Ag CGH 244a
-    longLabel Agilent Microarray 244A AMADID 014693
+    track agilentCgh1x1m
+    subTrack agilentProbes
+    shortLabel Ag CGH 1x1m
+    longLabel Agilent CGH SurePrint G3 Microarray 1x1M AMADID 021529
     color 0,128,0
     priority 1
 
-    track agilentCgh105a
-    subTrack agilentCgh
-    shortLabel Ag CGH 105a
-    longLabel Agilent Microarray 105A AMADID 014698
+    track agilentCgh2x400k
+    subTrack agilentProbes
+    shortLabel Ag CGH 2x400k
+    longLabel Agilent CGH SurePrint G3 Microarray 2x400K AMADID 021850
     color 0,128,0
     priority 2
 
+    track agilentCgh4x180k
+    subTrack agilentProbes
+    shortLabel Ag CGH 4x180k
+    longLabel Agilent CGH SurePrint G3 Microarray 4x180K AMADID 022060
+    color 0,128,0
+    priority 3
+
+    track agilentCgh8x60k
+    subTrack agilentProbes
+    shortLabel Ag CGH 8x60k
+    longLabel Agilent CGH SurePrint G3 Microarray 8x60K AMADID 021924
+    color 0,128,0
+    priority 4
+
+    track agilentCnv2x400k
+    subTrack agilentProbes
+    shortLabel Ag CGH 2x400k
+    longLabel Agilent CNV SurePrint G3 Microarray 2x400K AMADID 021365
+    color 0,128,0
+    priority 5
+
+    track agilentCgh244a
+    subTrack agilentProbes
+    shortLabel Ag CGH 244a
+    longLabel Agilent Microarray 244A AMADID 014693
+    color 0,128,0
+    priority 6
+
+    track agilentCgh105a
+    subTrack agilentProbes
+    shortLabel Ag CGH 105a
+    longLabel Agilent Microarray 105A AMADID 014698
+    color 0,128,0
+    priority 7
+
     track agilentCgh44k
-    subTrack agilentCgh
+    subTrack agilentProbes
     shortLabel Ag CGH 44k
     longLabel Agilent Microarray 44K AMADID 014950
     color 0,128,0
-    priority 3
+    priority 8
 
 track xTBAmaf
 shortLabel xTBAmaf
