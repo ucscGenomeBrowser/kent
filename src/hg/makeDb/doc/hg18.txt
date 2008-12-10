@@ -24913,6 +24913,238 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/hg18/hg18.2bit $outMaf
     #	user    1m19.338s
     #	sys     0m18.976s
 
+#############################################################################
+## Annotate 44-way multiple alignment with gene annotations
+##		(WORKING - 2008-12-08 - Hiram)
+    # Gene frames
+    ## survey all genomes to see what type of gene track to use
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg18/bed/multiz44way/frames
+    cd /hive/data/genomes/hg18/bed/multiz44way/frames
+    #
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+	if ($table == "ensGene" || $table == "refGene" || $table == "mgcGenes" || \
+	    $table == "knownGene") then
+		set count = `hgsql $db -N -e "select count(*) from $table"`
+		echo -n "${table}: ${count}, "
+	endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+	    "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql hg18 -N -e \
+	    "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+	echo "Mrnas: 0"
+    else
+	set count = `hgsql hg18 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+	echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    #	rearrange that output to create four sections:
+    #	1. knownGenes for hg18, mm9
+    #	2. ensGene for almost everything else
+    #	3. Mrnas for taeGut1, anoCar1, petMar1, calJac1
+    #	4. nothing for loxAfr2, dasNov2, choHof1, gorGor1
+
+    mkdir genes
+    # knownGene
+    for DB in hg18 mm9
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    # ensGene
+    for DB in bosTau4 canFam2 cavPor3 danRer5 dipOrd1 echTel1 equCab2 \
+	eriEur1 felCat3 fr2 galGal3 gasAcu1 micMur1 monDom4 myoLuc1 \
+	ochPri2 ornAna1 oryCun1 oryLat2 otoGar1 panTro2 ponAbe2 proCap1 \
+	pteVam1 rheMac2 rn4 sorAra1 speTri1 tarSyr1 tetNig1 tupBel1 \
+	turTru1 vicPac1 xenTro2
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    #	use Mrnas for  taeGut1 anoCar1 petMar1 calJac1
+    for DB in taeGut1 anoCar1 petMar1 calJac1
+do
+tmpExt=`mktemp temp.XXXXXX`
+tmpMrnaCds=${DB}.mrna-cds.${tmpExt}
+tmpMrna=${DB}.mrna.${tmpExt}
+tmpCds=${DB}.cds.${tmpExt}
+hgsql -N -e 'select all_mrna.qName,cds.name,all_mrna.* \
+	   from all_mrna,gbCdnaInfo,cds \
+	   where (all_mrna.qName = gbCdnaInfo.acc) and \
+	     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+$DB > ${tmpMrnaCds}
+cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} stdout | \
+genePredSingleCover stdin stdout | gzip -2c > /scratch/tmp/$DB.tmp.gz
+rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+mv /scratch/tmp/$DB.tmp.gz genes/$DB.gp.gz
+rm -f $tmpExt
+echo "${DB} done"
+done
+
+    # leaving out loxAfr2, dasNov2, choHof1, gorGor1 since no gene preds there
+    #	Create this command with this script:
+    cat << '_EOF_' > mkCmd.sh
+#!/bin/sh
+
+echo "time (cat ../quals/maf/*.maf | nice -n +19 genePredToMafFrames hg18 stdin stdout \\"
+if [ ! -s genes/mm9.gp.gz ]; then
+    echo "missing genes/mm9.gp.gz"
+    exit 255
+fi
+echo "mm9 genes/mm9.gp.gz \\"
+for D in `sort ensGene.list`
+do
+    if [ ! -s genes/${D}.gp.gz ]; then
+        echo "missing genes/${D}.gp.gz"
+        exit 255
+    fi
+    echo -n "${D} genes/${D}.gp.gz "
+done
+echo "\\"
+for D in `sort mrna.list`
+do
+    if [ ! -s genes/${D}.gp.gz ]; then
+        echo "missing genes/${D}.gp.gz"
+        exit 255
+    fi
+    echo -n "${D} genes/${D}.gp.gz "
+done
+echo "\\"
+echo "    | gzip > multiz44way.mafFrames.gz) > frames.log 2>&1"
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkCmd.sh
+
+    time (cat ../quals/maf/*.maf | nice -n +19 genePredToMafFrames hg18 stdin stdout \
+mm9 genes/mm9.gp.gz \
+bosTau4 genes/bosTau4.gp.gz canFam2 genes/canFam2.gp.gz cavPor3 genes/cavPor3.gp.gz danRer5 genes/danRer5.gp.gz dipOrd1 genes/dipOrd1.gp.gz echTel1 genes/echTel1.gp.gz equCab2 genes/equCab2.gp.gz eriEur1 genes/eriEur1.gp.gz felCat3 genes/felCat3.gp.gz fr2 genes/fr2.gp.gz galGal3 genes/galGal3.gp.gz gasAcu1 genes/gasAcu1.gp.gz micMur1 genes/micMur1.gp.gz monDom4 genes/monDom4.gp.gz myoLuc1 genes/myoLuc1.gp.gz ochPri2 genes/ochPri2.gp.gz ornAna1 genes/ornAna1.gp.gz oryCun1 genes/oryCun1.gp.gz oryLat2 genes/oryLat2.gp.gz otoGar1 genes/otoGar1.gp.gz panTro2 genes/panTro2.gp.gz ponAbe2 genes/ponAbe2.gp.gz proCap1 genes/proCap1.gp.gz pteVam1 genes/pteVam1.gp.gz rheMac2 genes/rheMac2.gp.gz rn4 genes/rn4.gp.gz sorAra1 genes/sorAra1.gp.gz speTri1 genes/speTri1.gp.gz tarSyr1 genes/tarSyr1.gp.gz tetNig1 genes/tetNig1.gp.gz tupBel1 genes/tupBel1.gp.gz turTru1 genes/turTru1.gp.gz vicPac1 genes/vicPac1.gp.gz xenTro2 genes/xenTro2.gp.gz \
+anoCar1 genes/anoCar1.gp.gz calJac1 genes/calJac1.gp.gz petMar1 genes/petMar1.gp.gz taeGut1 genes/taeGut1.gp.gz \
+    | gzip > multiz44way.mafFrames.gz) > frames.log 2>&1
+
+    #	that doesn't work on any 32 Gb computer, requires much more memory
+    #	turn it into a kluster job
+    ssh swarm
+    cd /hive/data/genomes/hg18/bed/multiz44way/frames
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+
+set C = $1
+set G = $2
+
+cat ../quals/maf/${C}.maf | genePredToMafFrames hg18 stdin stdout \
+        ${G} genes/${G}.gp.gz | gzip > parts/${C}.${G}.mafFrames.gz
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    ls ../quals/maf | sed -e "s/.maf//" > chr.list
+    ls genes | sed -e "s/.gp.gz//" | grep -v hg18 > gene.list
+
+    cat << '_EOF_' > template
+#LOOP
+runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    mkdir parts
+    gensub2 chr.list gene.list template jobList
+    para -ram=8g create jobList
+    para try ... check ... push
+# Completed: 1911 of 1911 jobs
+# CPU time in finished jobs:     126751s    2112.52m    35.21h    1.47d  0.004 y
+# IO & Wait Time:               2573543s   42892.38m   714.87h   29.79d  0.082 y
+# Average job time:                1413s      23.55m     0.39h    0.02d
+# Longest finished job:            6490s     108.17m     1.80h    0.08d
+# Submission to last job:         11310s     188.50m     3.14h    0.13d
+
+    # see what it looks like in terms of number of annotations per DB:
+    find ./parts -type f | while read F
+do
+    zcat ${F}
+done | cut -f4 | sort | uniq -c | sort -n
+    165 anoCar1
+   2807 calJac1
+   3306 taeGut1
+   5416 petMar1
+ 141256 tarSyr1
+ 142346 vicPac1
+ 163854 sorAra1
+ 164475 galGal3
+ 174150 felCat3
+ 178531 oryCun1
+ 178744 ornAna1
+ 179511 turTru1
+ 190622 eriEur1
+ 191477 tupBel1
+ 197338 panTro2
+ 198063 speTri1
+ 199541 micMur1
+ 207391 ponAbe2
+ 208629 rheMac2
+ 208850 otoGar1
+ 212751 myoLuc1
+ 212857 dipOrd1
+ 213343 proCap1
+ 214972 echTel1
+ 216367 monDom4
+ 220724 ochPri2
+ 223159 equCab2
+ 227928 bosTau4
+ 231351 cavPor3
+ 231553 pteVam1
+ 233980 mm9
+ 234268 rn4
+ 249016 canFam2
+ 258191 xenTro2
+ 315098 danRer5
+ 365824 oryLat2
+ 387739 fr2
+ 423941 gasAcu1
+ 549846 tetNig1
+
+    #	load the resulting file
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz44way/frames
+    find ./parts -type f | while read F
+do
+    zcat ${F}
+done | sort -k1,1 -k2,2n | hgLoadMafFrames hg18 multiz44wayFrames stdin
+
+    find ./parts -type f | while read F
+do
+    zcat ${F}
+done | sort -k1,1 -k2,2n > multiz44wayFrames.bed
+    featureBits -countGaps hg18 multiz44wayFrames.bed
+    #	62315198 bases of 3107677273 (2.005%) in intersection
+    featureBits -countGaps hg18 multiz28wayFrames
+    #	48236360 bases of 3107677273 (1.552%) in intersection
+
+    #	enable the trackDb entries:
+# frames multiz44wayFrames
+# irows on
+    #	appears to work OK
+
 #########################################################################
 # Create Syntenic and Recip Best net files to load into tracks to view
 #	on the browser to see what was used during the multiple alignment
