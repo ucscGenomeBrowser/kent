@@ -2440,6 +2440,22 @@ identifier transMapSrcInfoSplicedEstId
     hgFixed.transMapSrcSplicedEst.id dupeOk
     $transMapDb.transMapInfoSplicedEst.srcId
 
+# transMap aln table and hgFixed src tables
+identifier transMapSrcAlnUcscGenesId
+"transMap UcscGenes alignment to source"
+    hgFixed.transMapSrcUcscGenes.id dupeOk chopAfter=-
+    $transMapDb.transMapAlnUcscGenes.qName chopAfter=-
+
+identifier transMapSrcAlnRefSeqId
+"transMap RefSeqs alignment to source"
+    hgFixed.transMapSrcRefSeq.id dupeOk chopAfter=-
+    $transMapDb.transMapAlnRefSeq.qName chopAfter=-
+
+identifier transMapSrcAlnSplicedEstId
+"transMap SplicedEsts alignment to source"
+    hgFixed.transMapSrcSplicedEst.id dupeOk chopAfter=-
+    $transMapDb.transMapAlnSplicedEst.qName chopAfter=-
+
 # transMap source tables
 identifier transMapSrcRefSeqId
 "transMap RefSeq source gene and sequences "
