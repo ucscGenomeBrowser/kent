@@ -657,11 +657,37 @@ identifier mrnaBlastzName
 
 # Microarray stuff.
 
-identifier agilentCghHg18Id
-"Agilent CGH probe ID"
-    hg18.agilentCgh244a.name minCheck=0.99
-    hg18.agilentCgh105a.name minCheck=0.30
-    hg18.agilentCgh44k.name minCheck=0.10
+identifier agilentCgh105aHg18Id
+"Agilent CGH 105a probe ID"
+    hg18.agilentCgh105a.name
+
+identifier agilentCgh1x1mHg18Id
+"Agilent CGH 1x1m probe ID"
+    hg18.agilentCgh1x1m.name dupeOk
+
+identifier agilentCgh244aHg18Id
+"Agilent CGH 244a probe ID"
+    hg18.agilentCgh244a.name
+
+identifier agilentCgh2x400kHg18Id
+"Agilent CGH 2x400k probe ID"
+    hg18.agilentCgh2x400k.name dupeOk
+
+identifier agilentCgh44kHg18Id
+"Agilent CGH 44k probe ID"
+    hg18.agilentCgh44k.name
+
+identifier agilentCgh4x180kHg18Id
+"Agilent CGH 4x180k probe ID"
+    hg18.agilentCgh4x180k.name dupeOk
+
+identifier agilentCgh8x60kHg18Id
+"Agilent CGH 8x60k probe ID"
+    hg18.agilentCgh8x60k.name dupeOk
+
+identifier agilentCnv2x400kHg18Id
+"Agilent CNV 2x400k probe ID"
+    hg18.agilentCnv2x400k.name dupeOk
 
 identifier agilentCghMm8Id
 "Agilent CGH probe ID"
