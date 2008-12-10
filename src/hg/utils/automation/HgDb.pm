@@ -5,7 +5,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgDb.pm instead.
 
-# $Id: HgDb.pm,v 1.5 2008/08/29 22:16:10 larrym Exp $
+# $Id: HgDb.pm,v 1.6 2008/12/10 21:58:35 larrym Exp $
 
 package HgDb;
 
@@ -109,6 +109,16 @@ sub dropTableIfExist
     my ($db, $tableName) = @_;
     if(tableExist($db, $tableName)) {
         dropTable($db, $tableName);
+    }
+}
+
+sub getChromInfo
+{
+# populate a chromInfo hash reference
+    my ($db, $chromInfo) = @_;
+    my $sth = $db->execute("select chrom from chromInfo");
+    while(my @row = $sth->fetchrow_array()) {
+        $chromInfo->{$row[0]}++;
     }
 }
 
