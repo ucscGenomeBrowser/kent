@@ -2507,12 +2507,21 @@ identifier transMapExtFileSplicedEstId
     hgFixed.transMapSeqSplicedEst.extFile dupeOk
     hgFixed.transMapExtFileSplicedEst.id unique
 
+# transMap and knownGenes
 identifier transMapGeneUcscGenesId
 "UCSC Genes and transMapGene table"
     hgFixed.transMapGeneUcscGenes.id
     $kgDb3.knownGene.name minCheck=0.60
 
+identifier transMapAlnKnownGeneHgId
+"UCSC Genes and transMapAln table"
+    mm9.knownGene.name
+    hg18.transMapAlnUcscGenes.qName chopAfter=-
 
+identifier transMapAlnKnownGeneMmId
+"UCSC Genes and transMapAln table"
+    hg18.knownGene.name
+    mm9.transMapAlnUcscGenes.qName minCheck=0.70 chopAfter=-
 
 # Dependencies not already captured in identifiers
 
