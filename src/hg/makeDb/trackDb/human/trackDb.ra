@@ -1577,15 +1577,6 @@ pred dm1.blastFBPep00
 blastRef dm1.blastFBRef00
 url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 
-track encodePeakTest
-shortLabel Peaks Test
-longLabel ENCODE Peaks type test
-group x
-priority 124
-visibility full
-canPack on
-type encodePeak
-
 track narrowPeakTest
 shortLabel Narrow Peaks Test
 longLabel ENCODE Peaks type test
@@ -2411,7 +2402,7 @@ groupings affyExonTissuesGroups
 
 track omimGene
 shortLabel OMIM Genes
-longLabel OMIM Related Genes
+longLabel OMIM-Related Genes
 group phenDis
 priority 29.6
 visibility hide
