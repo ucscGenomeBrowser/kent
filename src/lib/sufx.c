@@ -41,7 +41,11 @@ verbose(2, "sufx file %s size %lld\n", fileName, h.size);
 struct sufxFileHeader *header ;
 if (memoryMap)
     {
+#ifdef MACHTYPE_sparc
+    header = (struct sufxFileHeader *)mmap(NULL, h.size, PROT_READ, MAP_SHARED, fd, 0);
+#else
     header = mmap(NULL, h.size, PROT_READ, MAP_FILE|MAP_SHARED, fd, 0);
+#endif
     if (header == (void*)(-1))
 	errnoAbort("Couldn't mmap %s, sorry", fileName);
     }
@@ -116,7 +120,7 @@ if (sufx != NULL)
     freeMem(sufx->chromNames);
     freeMem(sufx->chromOffsets);
     if (sufx->isMapped)
-	munmap(sufx->header, sufx->header->size);
+	munmap((void *)sufx->header, sufx->header->size);
     else
 	freeMem(sufx->header);
     freez(pSufx);
