@@ -265,8 +265,24 @@ echo
 
 echo "\n\n----------------------"
 echo "----------------------"
-echo "Now for the seq & extFile table magic..."
 
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo "You can either follow by hand the usual seq and extFile directions"
+echo "(listed below) or instead you can use the new script that moves the"
+echo "rows of the seq and extFile tables from dev to beta for you."
+echo "Use it like so for mm9 (be sure to follow the directions in the script"
+echo "output):\n\n"
+echo "copyExtSeqRows.csh mm9 /gbdb/mm9/igtc/genetrap.$update.fasta update setup\n"
+echo "Then review the output and files from the script, as prompted."
+echo "If after reviewing the output, you think everything is set up OK, then"
+echo "run the script again using the real paramater like so\n"
+echo "copyExtSeqRows.csh mm9 /gbdb/mm9/igtc/genetrap.$update.fasta update real\n"
+echo "Repeat those steps for mm8 then for mm7"
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+
+
+echo "\n\nOr, do the seq & extFile table manipulations by hand..."
 # print what's currently in the extFile table on dev and beta for all mice
 echo "Contents of extFile table on dev and beta:"
 echo "(what you should expect to see is this month's file on dev and"
