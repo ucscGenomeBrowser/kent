@@ -2,52 +2,53 @@
 <a name="Description"></a><h2> Description </h2>
 <p>These
 tracks display the methylation status of specific CpG dinucleotides in the
-given cell types as identified by Illumina<sup>¨</sup> Infinium
+given cell types as identified by Illumina Infinium
 HumanMethylation27 BeadArray platform. The Methyl27K platform uses bisulfite
 treated genomic DNA to assay the methylation status of specific CpG
-dinucleotides.<span style="mso-spacerun: yes">&nbsp; </span>Genomic DNA treated
+dinucleotides. Genomic DNA treated
 with sodium bisulfite converts unmethylated cytosine of a CpG dinucleotides
-into uracil; methylated cytosines do not get converted.<span
-style="mso-spacerun: yes">&nbsp; </span>After bisulfite treatment, the
+into uracil; methylated cytosines do not get converted.
+After bisulfite treatment, the
 methylation status of a site is assayed by single base-pair extension with a
 Cy3 or Cy5 labeled nucleotide on oligo-beads specific for the methylated or
-unmethylated state.<span style="mso-spacerun: yes">&nbsp; </span>A beta value
-is calculated by Illumina's Bead Studio software for each CpG target.<span
-style="mso-spacerun: yes">&nbsp; </span>This value represents the intensity value
+unmethylated state. A beta value
+is calculated by Illumina's Bead Studio software for each CpG target.
+This value represents the intensity value
 from the methylated bead type divided by the sum of the intensity values from
-the methylated and unmethylated bead types for any given CpG target.<span
-style="mso-spacerun: yes">&nbsp; </span>  
+the methylated and unmethylated bead types for any given CpG target.
 </p>
 <p>
 This
 method was used to validate Methyl-seq data generated in collaboration with the
 laboratory of Dr. Julie Baker at Stanford University to study methylation and
 gene expression changes that occur in human embryonic stem cells before and
-after differentiation to definitive endoderm.<span style="mso-spacerun:
-yes">&nbsp; </span>Based on the results of these experiments, cut-off beta
-values to call "methylated" and "unmethylated" are selected.<span
-style="mso-spacerun: yes">&nbsp; </span>Any beta value equal to or greater than
-0.6 is considered fully methylated.<span style="mso-spacerun: yes">&nbsp;
-</span>Any beta value equal to or less than 0.2 is considered to be fully
-unmethylated.<span style="mso-spacerun: yes">&nbsp; </span>Beta values between
-0.2 and 0.6 are considered to be partially methylated.<span
-style="mso-spacerun: yes">&nbsp; </span>Beta-values are quality filtered and
+after differentiation to definitive endoderm.
+Based on the results of these experiments, cut-off beta
+values to call "methylated" and "unmethylated" are selected.
+Any beta value equal to or greater than
+0.6 is considered fully methylated.
+Any beta value equal to or less than 0.2 is considered to be fully
+unmethylated. Beta values between
+0.2 and 0.6 are considered to be partially methylated.
+Beta-values are quality filtered and
 spots that fall below the minimum intensity threshold are displayed as "NA".
 </p>
 <p>
 Scores associated with each site are beta value multiplies by 1000. Methylation
-status are color-coded as: <br>
-red = methylated <br>
-purple = partial methylated <br>
-bright blue = unmethylated <br>
-black = NA
+status are color-coded as:
+<ul>
+<li>red = methylated</li>
+<li>purple = partial methylated</li>
+<li>bright blue = unmethylated</li>
+<li>black = NA</li>
+</ul>
 </p>
 <p>
 The
 data sets we submit are in a tab-delimited format with Illumina CpG Identifier,
 chromosome number, genomic coordinate, gene symbol for the nearest gene, and
 beta value for each cell line, and we perform the experiment for two replicates
-for each cell line.<span style="mso-spacerun: yes">&nbsp; </span>Detailed
+for each cell line. Detailed
 information for the CpG targets are on Illumina's website: 
 <a href="http://www.illumina.com/downloads/Illumina_HumanMethylation27_v1_Content.zip">
 http://www.illumina.com/downloads/Illumina_HumanMethylation27_v1_Content.zip
@@ -60,28 +61,25 @@ http://www.illumina.com/downloads/Illumina_HumanMethylation27_v1_Content.zip
 <p>Genomic
 DNA is isolated from biological replicates of each cell line by using the
 QIAGEN DNeasy Blood &amp; Tissue Kit according to the instructions provided by
-the manufacturer.<span style="mso-spacerun: yes">&nbsp; </span>DNA
+the manufacturer. DNA
 concentrations and a level of quality of each preparation is determined by UV
 absorbance. 
 </p>
 
 <p><b> Sodium Bisulfite Conversion </b>
 </p>
-<p>Bisulfite conversion reaction was done using the Zymo Research<sup>¨</sup> EZ-96 DNA 
-Methylation<sup>TM</sup> Kit protocol posted at 
-http://www.zymoresearch.com/protocols/dna/%5BD5003%5D%20EZ-96%20DNA%20methylation%20instruction%20v1.2.pdf. 
+<p>Bisulfite conversion reaction was done using the
+<a href='http://www.zymoresearch.com/protocols/dna/%5BD5003%5D%20EZ-96%20DNA%20methylation%20instruction%20v1.2.pdf'>Zymo Research EZ-96 DNA Methylation<sup>TM</sup> Kit protocol</a>.
 One step of the protocol was modified. During the incubation, we included 
 a 30 sec 95<sup>o</sup>C denaturing step every hour to increase reaction efficiency as 
-recommended by the Illumina<sup>¨</sup> Infinium Human Methylation27 protocol. 
+recommended by the Illumina Infinium Human Methylation27 protocol. 
 </p>
 <p><b> Infinium HumanMethylation27 BeadArray </b>
 </p>
-<p>The bead arrays were ran according to the protocol provided by Illumina<sup>¨</sup>. 
-The protocol for this assay is posted on their website at 
-<a href="http://www.illumina.com/pagesnrn.ilmn?ID=275">
-http://www.illumina.com/pagesnrn.ilmn?ID=275</a>.
+<p>The bead arrays were ran according to the 
+<a href="http://www.illumina.com/pagesnrn.ilmn?ID=275">protocol</a> provided by Illumina.
 </p>
-<br>
+
 <b> Processing and analysis software used </b>
 </p>
 <p>The intensity data from the BeadArray was processed using Illumina's 
@@ -95,13 +93,10 @@ Mr. Yuya Kobayashi (yuyak@stanford.edu) <br>
 Dr. Devin M. Absher (dabsher@hudsonalpha.org) <br>
 Dr. Rebekka O. Sprouse (rsprouse@hudsonalpha.org) <br>
 </p>
-<a name="References"></a><h2> References </h2>
-<p>Illumina: <br>
-<a href="http://www.illumina.com/pages.ilmn?ID=243">http://www.illumina.com/pages.ilmn?ID=243</a> 
+<a name="References"></a><h2>References</h2>
+<p><a href="http://www.illumina.com/pages.ilmn?ID=243">Illumina DNA analysis solutions: humanmethylation27</a>
 </p>
-<p>Zymo Research:   <br>
-<a href="http://www.zymoresearch.com/protocols/dna/%5BD5003%5D%20EZ-96%20DNA%20methylation%20instruction%20v1.2.pdf">
-http://www.zymoresearch.com/protocols/dna/%5BD5003%5D%20EZ-96%20DNA%20methylation%20instruction%20v1.2.pdf</a> 
+<p><a href="http://www.zymoresearch.com/protocols/dna/%5BD5003%5D%20EZ-96%20DNA%20methylation%20instruction%20v1.2.pdf">Zymo Research: EZ-96 DNA Methylation Kit</a>
 </p>
 <p>Brunner, A. L., Johnson, D. S., Kim, S. W., Valouev, A., Reddy, T. E., 
 Neff, N. F., Anton, E., Medina, C., Nguyen. L., Chiao, E., Oyolu, C. B., 
