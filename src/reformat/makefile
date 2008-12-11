@@ -1,6 +1,5 @@
 all:
 	cd fatont4 && ${MAKE}
-	cd fixcr && ${MAKE}
 	cd gbtofa && ${MAKE}
 	cd geniegff && ${MAKE}
 	cd gffgenes && ${MAKE}
