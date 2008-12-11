@@ -38,7 +38,11 @@ struct splix *splix;
 struct splixFileHeader *header ;
 if (memoryMap)
     {
+#ifdef MACHTYPE_sparc
+    header = (struct itsaFileHeader *)mmap(NULL, h.size, PROT_READ, MAP_SHARED, fd, 0);
+#else
     header = mmap(NULL, h.size, PROT_READ, MAP_FILE|MAP_SHARED, fd, 0);
+#endif
     if (header == (void*)(-1))
 	errnoAbort("Couldn't mmap %s, sorry", fileName);
     }
@@ -121,7 +125,7 @@ struct splix *splix = *pSplix;
 if (splix != NULL)
     {
     if (splix->isMapped)
-	munmap(splix->header, splix->header->size);
+	munmap((void *)splix->header, splix->header->size);
     else
 	freeMem(splix->header);
     freez(pSplix);
