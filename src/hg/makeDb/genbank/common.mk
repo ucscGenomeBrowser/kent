@@ -12,8 +12,27 @@ ifeq (${MYSQLLIBS},)
 $(error must set MYSQLLIBS env var)
 endif
 
+ifeq (${HG_WARN},)
+  ifeq (darwin,$(findstring darwin,${OSTYPE}))
+      HG_WARN = -Wall -Wno-unused-variable -Wno-long-double
+      HG_WARN_UNINIT=
+  else
+    ifeq (solaris,$(findstring solaris,${OSTYPE}))
+      HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
+      HG_WARN_UNINIT=-Wuninitialized
+    else
+      HG_WARN = -Wall -Werror -Wformat -Wimplicit -Wreturn-type
+      HG_WARN_UNINIT=-Wuninitialized
+    endif
+  endif
+  # -Wuninitialized generates a warning without optimization
+  ifeq ($(findstring -O,${COPT}),-O)
+     HG_WARN += ${HG_WARN_UNINIT}
+  endif
+endif
+
 INCL = -I${GBROOT}/src/inc -I${KENT}/inc -I${KENT}/hg/inc
-CFLAGS = ${COPT} ${STATIC} -DJK_WARN -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wall -Werror ${INCL}
+CFLAGS = ${COPT} ${STATIC} -DJK_WARN -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE ${HG_WARN} ${INCL}
 
 GB_BINDIR = ${GBROOT}/bin
 GB_BINARCH = ${GB_BINDIR}/${MACHTYPE}
