@@ -25407,9 +25407,19 @@ cut -f 3-13 o4.tab >j2.tmp
 paste j1.tmp j2.tmp |sort -u >fanO4.tab
 hgLoadSqlTab hg18 fanO4  ~/src/hg/lib/knownGene.sql fanO4.tab
 
-# finally sort the table and load it as the omimGene table
-hgsql hg18 -N -e 'select * from fanO4 order by chrom, txStart, txEnd' >omimGene.tab
-hgLoadSqlTab hg18 omimGene ~/src/hg/lib/knownGene.sql omimGene.tab
+# finally sort the table and create bed 4 file and load it as the omimGene table
+
+hgsql hg18 -N -e 'select chrom, txStart, txEnd, name from fanO4 order by
+chrom, txStart, txEnd' >omimGene.bed
+hgLoadBed hg18 omimGene omimGene.bed
+
+# create and load the omimToKnownCanonical table.
+
+hgsql hg18 -N -e 'select name, alignId from fanO4 order by name'\
+> omimToKnownCanonical.tab
+
+hgLoadSqlTab hg18 omimToKnownCanonical  \
+~/src/hg/lib/omimToKnownCanonical.sql omimToKnownCanonical.tab
 
 # The following clean up could be done.
 # hgsql hg18 -e 'drop table fanO3'
