@@ -25,7 +25,7 @@
 #include "jsHelper.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.91 2008/11/21 22:17:33 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.92 2008/12/11 00:07:00 aamp Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -575,9 +575,10 @@ char *dupe = cloneString(line);
 char *row[ENCODE_PEAK_KNOWN_FIELDS+1];
 int wordCount = chopLine(dupe, row);
 pt = encodePeakInferType(wordCount, type);
+if (pt)
+    track->fieldCount = wordCount;
 freeMem(dupe);
-track->fieldCount = wordCount;
-customPpReuse(cpp, line);
+customPpReuse(cpp, line);   
 return (pt != 0);
 }
 
