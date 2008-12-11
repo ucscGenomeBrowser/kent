@@ -13,7 +13,7 @@
 #include "portimpl.h"
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: osunix.c,v 1.34 2008/09/09 04:17:39 markd Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.35 2008/12/11 22:48:19 hiram Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -349,7 +349,7 @@ static void execPStack(pid_t ppid)
 /* exec pstack on the specified pid */
 {
 char *cmd[3], pidStr[32];
-safef(pidStr, sizeof(pidStr), "%d", ppid);
+safef(pidStr, sizeof(pidStr), "%ld", (long)ppid);
 cmd[0] = "pstack";
 cmd[1] = pidStr;
 cmd[2] = NULL;
