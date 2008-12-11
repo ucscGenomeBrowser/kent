@@ -4444,7 +4444,7 @@ wgEncode 1
 	priority	18
 	noInherit	on
 	configurable	on
-	spanList	first
+	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
 	cell		GM12878
@@ -4757,7 +4757,7 @@ wgEncode 1
 	priority	38
 	noInherit	on
 	configurable	on
-	spanList	first
+	spanList	1
 	windowingFunction mean
 	maxHeightPixels	100:16:16
 	cell		K562
