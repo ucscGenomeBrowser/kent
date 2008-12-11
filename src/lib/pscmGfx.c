@@ -5,6 +5,10 @@
  * granted for all use - public, private or commercial. */
 
 #include <math.h>
+#ifdef MACHTYPE_sparc
+#include <ieeefp.h>
+int isinf(double x) { return !finite(x) && x==x; }
+#endif
 #include "common.h"
 #include "hash.h"
 #include "memgfx.h"
@@ -16,7 +20,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.26 2008/07/10 07:45:37 markd Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.27 2008/12/11 23:02:10 hiram Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
