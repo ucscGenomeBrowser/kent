@@ -42,7 +42,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.385 2008/11/25 07:20:53 mikep Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.386 2008/12/11 23:32:25 hiram Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -545,7 +545,7 @@ struct sqlConnection *conn = sqlConnCacheMayAlloc(centralCc, centralDb);
 if ((conn == NULL) || !cartTablesOk(conn))
     {
     fprintf(stderr, "ASH: hConnectCentral failed over to backupcentral!  "
-            "pid=%d\n", getpid());
+            "pid=%ld\n", (long)getpid());
     sqlConnCacheDealloc(centralCc, &conn);
     sqlConnCacheFree(&centralCc);
     centralDb = cfgOption2("backupcentral", "database");

@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.123 2008/12/02 01:35:54 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.124 2008/12/11 23:32:26 hiram Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -659,8 +659,8 @@ if (mysql_real_connect(
 	    database, host, user, mysql_error(conn));
     else
 	fprintf(stderr, "ASH: Couldn't connect to database %s on %s as %s.  "
-		"pid=%d\nASH: mysql: %s  pid=%d\n", 
-	    database, host, user, getpid(), mysql_error(conn), getpid());
+		"pid=%ld\nASH: mysql: %s  pid=%ld\n", 
+	    database, host, user, (long)getpid(), mysql_error(conn), (long)getpid());
     return NULL;
     }
 
@@ -1041,8 +1041,8 @@ boolean ret = TRUE;
 safef(query, sizeof(query), "select * from %s limit 1,1", table);
 if ((sr = sqlUseOrStore(sc, query, mysql_use_result, FALSE)) == NULL)
     {
-    fprintf(stderr, "ASH: Got nothing from select on %s.%s.  pid=%d\n",
-	    sc->conn->db, table, getpid());
+    fprintf(stderr, "ASH: Got nothing from select on %s.%s.  pid=%ld\n",
+	    sc->conn->db, table, (long)getpid());
     /* An error here is OK if and only if the table exists and is empty: */
     return (sqlTableSizeIfExists(sc, table) == 0);
     }
@@ -1051,8 +1051,8 @@ else
     sqlMaybeNextRow(sr, &ret);
 sqlFreeResult(&sr);
 if (ret == FALSE)
-    fprintf(stderr, "ASH: Error reading result of select on %s.%s!  pid=%d\n",
-	    sc->conn->db, table, getpid());
+    fprintf(stderr, "ASH: Error reading result of select on %s.%s!  pid=%ld\n",
+	    sc->conn->db, table, (long)getpid());
 return ret;
 }
 
