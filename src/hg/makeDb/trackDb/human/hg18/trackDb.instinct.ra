@@ -1,3 +1,77 @@
+track COSMIClung
+shortLabel COSMIC Lung Data
+longLabel COSMIC Lung Data
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings COSMIClungGroups
+
+track COSMICbreast
+shortLabel COSMIC Breast Data
+longLabel COSMIC Breast Data
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings COSMICbreastGroups
+
+track COSMICbrain
+shortLabel COSMIC Brain Data
+longLabel COSMIC Brain Data
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings COSMICbrainGroups
+
+track COSMICovary
+shortLabel COSMIC Ovary Data
+longLabel COSMIC Ovary Data
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings COSMICOvaryGroups
+
+track COSMICpancreas
+shortLabel COSMIC Pancreas Data
+longLabel COSMIC Pancreas Data
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings COSMICpancreasGroups
+
+track COSMICskin
+shortLabel COSMIC Skin Data
+longLabel COSMIC Skin Data
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings COSMICskinGroups
+
+##########################
+
 track ispyMipCGH
 shortLabel ispy CGH by MIP
 longLabel Koei(Gray lab) CGH by MIP (~20K) 
