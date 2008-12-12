@@ -1849,6 +1849,7 @@ compositeTrack on
 group expression
 priority 0
 visibility hide
+noScoreFilter .
 type bed 6 .
 
     track agilentCgh1x1m
