@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.122 2008/12/10 22:06:07 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.123 2008/12/13 00:41:03 mikep Exp $
 
 use warnings;
 use strict;
@@ -652,33 +652,31 @@ sub validateGappedPeak
 {
     my ($path, $file, $type) = @_;
     my $fh = openUtil($path, $file);
-    my $line = 0;
+    my $lineNumber = 0;
     doTime("beginning validateGappedPeak") if $opt_timing;
-    while(<$fh>) {
-        $line++;
+    while(my $line = <$fh>) {
+	chomp $line;
+        $lineNumber++;
         next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-	chomp;
-	my @c = split /\s+/; # validate field by field
-	my $msg1 = "Invalid $type file; line $line in file '$file' is invalid: Invalid";
-	my $msg2 = "\nline: $_ [validateGappedPeak]";
-	my $err = "";
-        # XXXX mikep, please fix this to use %chromInfo; thanks, -larry
-	$c[0] =~ m/chr(\d+|M|X|Y)/ or $err .= "chrom=[$c[0]], ";
-	$c[1] =~ m/\d+/ or $err .= "start=[$c[1]], ";
-	$c[2] =~ m/\d+/ or $err .= "end=[$c[2]], ";
-	$c[3] =~ m/\S+/ or $err .= "name=[$c[3]], ";
-	$c[4] =~ m/\d+/ or $err .= "score=[$c[4]], ";
-	$c[5] =~ m/[+\.-]/ or $err .= "strand=[$c[5]], ";
-	$c[6] =~ m/\d+/ or $err .= "thickStart=[$c[6]], ";
-	$c[7] =~ m/\d+/ or $err .= "thickEnd=[$c[7]], ";
-	$c[8] =~ m/\S+/ or $err .= "itemRgb=[$c[8]], ";
-	$c[9] =~ m/\d+/ or $err .= "blockCount=[$c[9]], ";
-	$c[10] =~ m/\S+/ or $err .= "blockSizes=[$c[10]], ";
-	$c[11] =~ m/\S+/ or $err .= "blockStarts=[$c[11]], ";
-	$c[12] =~ m/$floatRegEx/ or $err .= "signalValue=[$c[12]], ";
-	$c[13] =~ m/$floatRegEx/ or $err .= "pValue=[$c[13]], ";
-	$c[14] =~ m/$floatRegEx/ or $err .= "qValue=[$c[14]], ";
-	return ("$msg1 $err $msg2") if $err;
+        my @list = ({TYPE => "chrom", NAME => "chrom"},
+                    {TYPE => "uint", NAME => "chromStart"},
+                    {TYPE => "uint", NAME => "chromEnd"},
+                    {TYPE => "string", NAME => "name"},
+                    {TYPE => "uint", NAME => "score"},
+                    {REGEX => "[+-\\.]", NAME => "strand"},
+                    {TYPE => "uint", NAME => "thickStart"},
+                    {TYPE => "uint", NAME => "thickEnd"},
+                    {TYPE => "string", NAME => "itemRgb"},
+                    {TYPE => "uint", NAME => "blockCount"},
+                    {TYPE => "string", NAME => "blockSizes"},
+                    {TYPE => "string", NAME => "blockStarts"},
+                    {TYPE => "float", NAME => "signalValue"},
+                    {TYPE => "float", NAME => "pValue"},
+                    {TYPE => "float", NAME => "qValue"} 
+		    );
+        if(my $error = validateWithList($line, \@list)) {
+            return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validateGappedPeak]");
+	}
         last if($opt_quick && $line >= $quickCount);
     }
     $fh->close();
@@ -1245,6 +1243,7 @@ if(!@errors) {
 	# note this loop assumes these are on a per replicate basis.
 	# Also note that any project (like transcriptome) that doesnt have replicates should also use
 	# this for their auto-create signals.
+	HgAutomate::verbose(2, "ddfReplicateSets loop key=[$key] aln=[".(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}))."] rawsig=[".(defined($ddfReplicateSets{$key}{VIEWS}{RawSignal}))."]\n"); 
 
         if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
 		&& !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})
@@ -1274,7 +1273,7 @@ if(!@errors) {
                 $line{type} = 'wig';
                 $ddfReplicateSets{$key}{VIEWS}{$newView} = \%line;
                 my @unzippedFiles = ();
-                doTime("beginning unzipping replicates files for view [$newView]") if $opt_timing;
+                doTime("beginning unzipping replicates files for view [$newView] key=[$key]") if $opt_timing;
                 for my $file (@{$alignmentLine->{files}}) {
                     # Unzip any zipped files - only works if they are with .gz suffix
                     my ($fbase,$dir,$suf) = fileparse($file, ".gz");
@@ -1317,6 +1316,7 @@ if(!@errors) {
                             $sortFiles = $files;
                         }
                         push @cmds, "sort -T $Encode::tempDir -k1,1 -k2,2n $sortFiles";
+			push @cmds, "grep -v -E \"^track\" ";
 			push @cmds, "gawk '\$6 == \"+\" {print}'" if $newView eq "PlusRawSignal";
 			push @cmds, "gawk '\$6 == \"-\" {print}'" if $newView eq "MinusRawSignal";
                         push @cmds, "bedItemOverlapCount $daf->{assembly} stdin";
