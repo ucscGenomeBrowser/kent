@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.123 2008/12/13 00:41:03 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.124 2008/12/13 01:03:06 mikep Exp $
 
 use warnings;
 use strict;
@@ -1322,7 +1322,7 @@ if(!@errors) {
                         push @cmds, "bedItemOverlapCount $daf->{assembly} stdin";
                         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
                         if(my $err = $safe->exec()) {
-                            print STDERR  "ERROR: failed creation of wiggle for $key" . $safe->stderr() . "\n";
+                            print STDERR  "ERROR: failed auto bedItemOverlap creation of bedGraph for $key" . $safe->stderr() . "\n";
                             # don't show end-user pipe error(s)
                             pushError(\@errors, "failed creation of wiggle for '$key'");
                         }
