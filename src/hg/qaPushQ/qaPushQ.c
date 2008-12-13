@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.103 2008/09/25 20:47:42 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.104 2008/12/13 00:16:44 ann Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3330,7 +3330,7 @@ printf(" For more information about the tracks and tables listed on this page, r
 "<a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>\n");
 
 strftime (now, sizeof(now), "%02d %b %Y", loctime); /* default to today's date */
-printf("<em>Last updated %s. <a HREF=\"mailto:genome@soe.ucsc.edu\">Inquiries and feedback welcome</a>.</em>\n",now);
+printf("<em>Last updated %s. <a HREF=\"../contacts.html\">Inquiries and feedback welcome</a>.</em>\n",now);
 /* 10 LATEST CHANGES */
 webNewSection("<A NAME=recent></A> 10 Latest Changes (all assemblies)");
 
