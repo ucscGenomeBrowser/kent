@@ -1,4 +1,6 @@
 include ../../../inc/common.mk
+# !!! NOTE we use gcc34 here to avoid a compiler compatibility issue with openss
+CC = gcc34
 
 XINC = -I/usr/include
 L = $(MYSQLLIBS) -lm -lcrypt -lssl
