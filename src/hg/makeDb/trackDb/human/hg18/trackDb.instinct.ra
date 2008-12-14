@@ -1,3 +1,16 @@
+track COSMICsummary
+shortLabel COSMIC Data
+longLabel COSMIC Data
+group x
+priority 45
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings COSMICsummaryGroups
+
+
 track COSMIClung
 shortLabel COSMIC Lung Data
 longLabel COSMIC Lung Data

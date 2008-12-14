@@ -1,6 +1,17 @@
 
 ### COSMIC mutation datasets #####
 
+name COSMICsummaryGroups
+type groupings
+all COSMICsummaryAll
+
+name COSMICsummaryAll
+type all
+description All Arrays
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,
+groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+names salivary_gland,breast,penis,peritoneum,parathyroid,liver,genital_tract,oesophagus,adrenal_gland,meninges,cervix,large_intestine,central_nervous_system,biliary_tract,paratesticular_tissues,ovary,pleura,vulva,bone,stomach,haematopoietic_and_lymphoid_tissue,kidney,urinary_tract,soft_tissue,pancreas,autonomic_ganglia,gastrointestinal_tract_site_indeterminate,pituitary,skin,prostate,lung,thyroid,upper_aerodigestive_tract,testis,thymus,eye,small_intestine,endometrium,
+
 name COSMIClungGroups
 type groupings
 all COSMIClungAll
