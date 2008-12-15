@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1483 2008/12/11 17:49:50 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1484 2008/12/15 22:10:38 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8451,9 +8451,22 @@ char *url = tdb->url;
 char *kgId= NULL;
 char *title1 = NULL;
 char *title2 = NULL;
+char *geneSymbols = NULL;
 
 if (url != NULL && url[0] != 0)
     {
+    /* check if the entry is in morbidmap, if so remember the assoicated gene symbols */
+    safef(query, sizeof(query), 
+    	  "select geneSymbols from omimMorbidMap where omimId=%s;", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	geneSymbols = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
+    
+    /* get corresponding KG ID */
     safef(query, sizeof(query), 
     	  "select kgId from omimToKnownCanonical where omimId='%s';", itemName);
     sr = sqlMustGetResult(conn, query);
@@ -8464,16 +8477,37 @@ if (url != NULL && url[0] != 0)
 	}
     sqlFreeResult(&sr);
     
-    safef(query, sizeof(query), "select geneSymbol from kgXref where kgId='%s';", kgId);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
+    /* use geneSymbols from omimMorbidMap if available */
+    if (geneSymbols!= NULL)
     	{
-	printf("<B>Gene Symbol:</B> %s", row[0]);
+	printf("<B>Gene Symbol:</B> %s", geneSymbols);
 	printf("<BR>\n");
+
+	/* display disorder for genes in morbidmap */
+    	safef(query, sizeof(query), "select description from omimMorbidMap where omimId=%s;", itemName);
+    	sr = sqlMustGetResult(conn, query);
+    	row = sqlNextRow(sr);
+    	if (row != NULL)
+    	    {
+ 	    printf("<B>Disorder:</B> %s", row[0]);
+	    printf("<BR>\n");
+	    }
+    	sqlFreeResult(&sr);
 	}
-    sqlFreeResult(&sr);
-    
+    else
+    	{
+	/* get gene symbol from kgXref if the entry is not in morbidmap */
+    	safef(query, sizeof(query), "select geneSymbol from kgXref where kgId='%s';", kgId);
+    	sr = sqlMustGetResult(conn, query);
+    	row = sqlNextRow(sr);
+    	if (row != NULL)
+    	    {
+ 	    printf("<B>Gene Symbol:</B> %s", row[0]);
+	    printf("<BR>\n");
+	    }
+    	sqlFreeResult(&sr);
+    	}
+
     printf("<B>OMIM Database ");fflush(stdout);
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
