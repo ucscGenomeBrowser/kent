@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.48 2008/12/09 07:13:42 angie Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.49 2008/12/15 20:09:53 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128
@@ -10435,6 +10435,71 @@ tg->labelNextItemButtonable = TRUE;
 tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
+char *omimGeneName(struct track *tg, void *item)
+/* set name for omimGene track */
+{
+struct bed *el = item;
+char *geneSymbols;
+char query[256];
+struct sqlConnection *conn = hAllocConn(database);
+
+/* show gene symbols from morbidmap if the OMIM entry is in it */
+safef(query, sizeof(query), "select geneSymbols from omimMorbidMap where omimId=%s", el->name);
+geneSymbols = sqlQuickString(conn, query);
+if (geneSymbols != NULL)
+    {
+    hFreeConn(&conn);
+    return(cloneString(geneSymbols));
+    }
+else
+    {
+    /* if not in morbidmap, grab gene symbol from kgXref */
+    safef(query, sizeof(query), 
+    	  "select geneSymbol from kgXref x, omimToKnownCanonical c where c.omimId=%s and x.kgId=c.kgId", el->name);
+    geneSymbols = sqlQuickString(conn, query);
+    if (geneSymbols != NULL)
+    	{
+    	hFreeConn(&conn);
+    	return(cloneString(geneSymbols));
+	}
+    else
+    	{
+	/* for non-KG entry, return OMIM ID */
+    	hFreeConn(&conn);
+	return(el->name);
+	}
+    }
+}
+
+Color omimGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* set the color for omimGene track items */
+{
+struct bed *el = item;
+char *geneSymbols;
+char query[256];
+struct sqlConnection *conn = hAllocConn(database);
+
+/* set the color to red if the entry is listed in morbidmap */
+safef(query, sizeof(query), "select geneSymbols from omimMorbidMap where omimId=%s", el->name);
+geneSymbols = sqlQuickString(conn, query);
+hFreeConn(&conn);
+if (geneSymbols != NULL)
+    {
+    return hvGfxFindColorIx(hvg, 255, 0, 0);
+    }
+else
+    {
+    return hvGfxFindColorIx(hvg, 200, 0, 125);
+    }
+}
+
+void omimGeneMethods (struct track *tg)
+{
+tg->itemColor 	  = omimGeneColor;
+tg->itemNameColor = omimGeneColor;
+tg->itemName      = omimGeneName;
+}
+
 void omiciaMethods (struct track *tg)
 /* color set by score */
 {
@@ -11417,6 +11482,7 @@ registerTrackHandler("kiddEichlerValid", kiddEichlerMethods);
 
 registerTrackHandler("hapmapSnps", hapmapMethods);
 registerTrackHandler("omicia", omiciaMethods);
+registerTrackHandler("omimGene", omimGeneMethods);
 #endif /* GBROWSE */
 }
 
