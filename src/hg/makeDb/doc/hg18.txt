@@ -25351,10 +25351,11 @@ cd /hive/data/genomes/gs.19/build36/bed
 mkdir omimGene
 cd omimGene
 
-# download the file genemap from OMIM
+# download the file morbidmap and genemap from OMIM
 
 mkdir omim
 cd omim
+wget --timestamping ftp://ftp.ncbi.nih.gov/repository/OMIM/morbidmap
 wget --timestamping ftp://ftp.ncbi.nih.gov/repository/OMIM/genemap
 cat genemap|sed -e 's/|/\t/g' > genemap.tab
 autoSql ~/src/hg/lib/omimGeneMap.as x
@@ -25366,7 +25367,10 @@ Warning: load of omimGeneMap did not go as planned: 11456 record(s), 0 row(s) sk
 
 rm x.c x.h
 cd ..
-
+cat omim/morbidmap|sed -e 's/|/\t/g' > mobidmap.tab
+autoSql ~/src/hg/lib/omimMorbidMap.as x 
+cat x.sql |sed -e 's/PRIMARY KEY(description)/KEY(omimId)/' >omimMorbidMap.sql
+hgLoadSqlTab -warn hg18 omimMorbidMap omimMorbidMap.sql mobidmap.tab
 
 # get all UCSC genes (from the knownGene table) that cross-reference to a RefSeq gene 
 # that has a non-empty OMIM ID according to the refLink table.  And use OMIM ID as
