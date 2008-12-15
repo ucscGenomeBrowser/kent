@@ -6,7 +6,7 @@
 #include "chainNet.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: netStats.c,v 1.4 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: netStats.c,v 1.5 2008/12/15 19:45:49 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,13 +29,11 @@ errAbort(
 FILE *logFile;
 
 void logIt(char *format, ...)
-/* Record something to log and to standard out. */
+/* Record something to log. */
 {
 va_list args;
 va_start(args, format);
-vprintf(format, args);
-if (logFile != NULL && logFile != stdout)
-    vfprintf(logFile, format, args);
+vfprintf(logFile, format, args);
 va_end(args);
 }
 
