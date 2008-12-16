@@ -1754,13 +1754,11 @@ identifier ensemblProteinId external=Ensembl
 "Ensemble Translated Protein ID"
     $gbd.ensTranscript.translation_name dupeOk
     $gbd.ensGtp.protein chopAfter=.
-    $gbd.sfDescription.proteinID minCheck=0.10
     $gbd.sfAssign.seqID minCheck=0.01
 
 identifier ensemblProteinId3 external=Ensembl
 "Ensemble Translated Protein ID"
     $gbd.ensemblXref3.protein dupeOk
-    $gbd.sfDescription.proteinID minCheck=0.10
     $gbd.sfAssign.seqID minCheck=0.01
 
 identifier ensemblTranscriptId external=Ensembl dependency
@@ -1772,7 +1770,6 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd.ensInfo.name minCheck=0.9
     $kgDb.knownToEnsembl.value chopAfter=.
-    $gbd.sfDescription.name chopAfter=.
     $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30
     $danRer.ensZfishBlastTab.query
     $danRer.ensZfishBlastTab.target
@@ -2518,8 +2515,6 @@ dependency $pbDb.pbAaDistT $pbDb.knownGenePep
 dependency $pbDb.pbAaDistV $pbDb.knownGenePep
 dependency $pbDb.pbAaDistW $pbDb.knownGenePep
 dependency $pbDb.pbAaDistY $pbDb.knownGenePep
-dependency $pbDb2.superfamily $pbDb.ensGene $pbDb.ensTranscript $pbDb.sfAssign $pbDb.sfDes $pbDb.sfDescription
-dependency $pbDb3.superfamily $pbDb.ensGene $pbDb.ensemblXref3 $pbDb.sfAssign $pbDb.sfDes $pbDb.sfDescription
 
 
 # Table types - only needed when the table does not have the same name .as file record.
