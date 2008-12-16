@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.49 2008/12/15 20:09:53 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.50 2008/12/16 22:18:37 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128
@@ -10439,36 +10439,37 @@ char *omimGeneName(struct track *tg, void *item)
 /* set name for omimGene track */
 {
 struct bed *el = item;
-char *geneSymbols;
 char query[256];
 struct sqlConnection *conn = hAllocConn(database);
+char *geneLabel = NULL;
 
-/* show gene symbols from morbidmap if the OMIM entry is in it */
-safef(query, sizeof(query), "select geneSymbols from omimMorbidMap where omimId=%s", el->name);
-geneSymbols = sqlQuickString(conn, query);
-if (geneSymbols != NULL)
+char *omimGeneLabel = cartUsualString(cart, "omimGene.label", "OMIM ID");
+
+if (sameWord(omimGeneLabel, "OMIM ID"))
     {
-    hFreeConn(&conn);
-    return(cloneString(geneSymbols));
+    geneLabel = el->name;
     }
 else
     {
-    /* if not in morbidmap, grab gene symbol from kgXref */
-    safef(query, sizeof(query), 
-    	  "select geneSymbol from kgXref x, omimToKnownCanonical c where c.omimId=%s and x.kgId=c.kgId", el->name);
-    geneSymbols = sqlQuickString(conn, query);
-    if (geneSymbols != NULL)
-    	{
-    	hFreeConn(&conn);
-    	return(cloneString(geneSymbols));
+    if (sameWord(omimGeneLabel, "UCSC Gene Symbol"))
+	{
+	safef(query, sizeof(query), 
+	"select x.geneSymbol from kgXref x, omimToKnownCanonical c where c.omimId='%s' and c.kgId=x.kgId", el->name);
+	geneLabel = sqlQuickString(conn, query);
 	}
     else
     	{
-	/* for non-KG entry, return OMIM ID */
-    	hFreeConn(&conn);
-	return(el->name);
+	safef(query, sizeof(query), 
+	"select geneSymbol from omimGeneMap where omimId='%s'", el->name);
+	geneLabel = sqlQuickString(conn, query);
+	if (geneLabel == NULL)
+	    {
+	    geneLabel = el->name;
+	    }
 	}
     }
+hFreeConn(&conn);
+return(cloneString(geneLabel));
 }
 
 Color omimGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
@@ -10489,8 +10490,9 @@ if (geneSymbols != NULL)
     }
 else
     {
-    return hvGfxFindColorIx(hvg, 200, 0, 125);
+    return hvGfxFindColorIx(hvg, 0, 0, 200);
     }
+hFreeConn(&conn);
 }
 
 void omimGeneMethods (struct track *tg)
