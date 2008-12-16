@@ -2392,7 +2392,7 @@ visibility hide
 color 200, 0, 125
 type genePred
 hgsid on
-url http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=Search&db=omim&doptcmdl=Detailed&tool=genome.ucsc.edu&term=
+url http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=
 baseColorUseCds given
 baseColorDefault genomicCodons
 
