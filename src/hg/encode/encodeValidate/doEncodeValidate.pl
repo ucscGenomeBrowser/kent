@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.124 2008/12/13 01:03:06 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.125 2008/12/16 01:33:50 larrym Exp $
 
 use warnings;
 use strict;
@@ -533,19 +533,19 @@ sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
     my $lineNumber = 0;
-    doTime("beginning validateTagAlign") if $opt_timing;
     my $fh = openUtil($path, $file);
+    my @list = ({TYPE => "chrom", NAME => "chrom"},
+                {TYPE => "uint", NAME => "chromStart"},
+                {TYPE => "uint", NAME => "chromEnd"},
+                {REGEX => "[0-3ATCGN\\.]+", NAME => "sequence"},
+                {TYPE => "uint", NAME => "score"},
+                {REGEX => "[+-\\.]", NAME => "strand"});
+    doTime("beginning validateTagAlign") if $opt_timing;
     while(my $line = <$fh>) {
         chomp $line;
         $lineNumber++;
         next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
 	# MJP: for now, allow colorspace sequences as well as DNA + dot
-        my @list = ({TYPE => "chrom", NAME => "chrom"},
-                    {TYPE => "uint", NAME => "chromStart"},
-                    {TYPE => "uint", NAME => "chromEnd"},
-                    {REGEX => "[0-3ATCGN\\.]+", NAME => "sequence"},
-                    {TYPE => "uint", NAME => "score"},
-                    {REGEX => "[+-\\.]", NAME => "strand"});
         if(my $error = validateWithList($line, \@list)) {
             return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validateTagAlign]");
         }
@@ -562,20 +562,20 @@ sub validatePairedTagAlign
 {
     my ($path, $file, $type) = @_;
     my $lineNumber = 0;
-    doTime("beginning validatePairedTagAlign") if $opt_timing;
     my $fh = openUtil($path, $file);
+    my @list = ({TYPE => "chrom", NAME => "chrom"},
+                {TYPE => "uint", NAME => "chromStart"},
+                {TYPE => "uint", NAME => "chromEnd"},
+                {TYPE => "string", NAME => "sequence"},
+                {TYPE => "uint", NAME => "score"},
+                {REGEX => "[+-\\.]", NAME => "strand"},
+                {REGEX => "[ACGTNacgtn]*", NAME => "seq1"},
+                {REGEX => "[ACGTNacgtn]*", NAME => "seq2"});
+    doTime("beginning validatePairedTagAlign") if $opt_timing;
     while(my $line = <$fh>) {
         chomp $line;
         $lineNumber++;
         next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
-        my @list = ({TYPE => "chrom", NAME => "chrom"},
-                    {TYPE => "uint", NAME => "chromStart"},
-                    {TYPE => "uint", NAME => "chromEnd"},
-                    {TYPE => "string", NAME => "sequence"},
-                    {TYPE => "uint", NAME => "score"},
-                    {REGEX => "[+-\\.]", NAME => "strand"},
-                    {REGEX => "[ACGTNacgtn]*", NAME => "seq1"},
-                    {REGEX => "[ACGTNacgtn]*", NAME => "seq2"});
         if(my $error = validateWithList($line, \@list)) {
             return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validatePairedTagAlign]");
         }
@@ -592,21 +592,21 @@ sub validateNarrowPeak
     my ($path, $file, $type) = @_;
     my $fh = openUtil($path, $file);
     my $lineNumber = 0;
+    my @list = ({TYPE => "chrom", NAME => "chrom"},
+                {TYPE => "uint", NAME => "chromStart"},
+                {TYPE => "uint", NAME => "chromEnd"},
+                {TYPE => "string", NAME => "name"},
+                {TYPE => "uint", NAME => "score"},
+                {REGEX => "[+-\\.]", NAME => "strand"},
+                {TYPE => "float", NAME => "signalValue"},
+                {TYPE => "float", NAME => "pValue"},
+                {TYPE => "float", NAME => "qValue"},
+                {TYPE => "int", NAME => "peak"});
     doTime("beginning validateNarrowPeak") if $opt_timing;
     while(my $line = <$fh>) {
         chomp $line;
         $lineNumber++;
         next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
-        my @list = ({TYPE => "chrom", NAME => "chrom"},
-                    {TYPE => "uint", NAME => "chromStart"},
-                    {TYPE => "uint", NAME => "chromEnd"},
-                    {TYPE => "string", NAME => "name"},
-                    {TYPE => "uint", NAME => "score"},
-                    {REGEX => "[+-\\.]", NAME => "strand"},
-                    {TYPE => "float", NAME => "signalValue"},
-                    {TYPE => "float", NAME => "pValue"},
-                    {TYPE => "float", NAME => "qValue"},
-                    {TYPE => "int", NAME => "peak"});
         if(my $error = validateWithList($line, \@list)) {
             return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validateNarrowPeak]");
         }
@@ -623,20 +623,20 @@ sub validateBroadPeak
     my ($path, $file, $type) = @_;
     my $fh = openUtil($path, $file);
     my $lineNumber = 0;
+    my @list = ({TYPE => "chrom", NAME => "chrom"},
+                {TYPE => "uint", NAME => "chromStart"},
+                {TYPE => "uint", NAME => "chromEnd"},
+                {TYPE => "string", NAME => "name"},
+                {TYPE => "uint", NAME => "score"},
+                {REGEX => "[+-\\.]", NAME => "strand"},
+                {TYPE => "float", NAME => "signalValue"},
+                {TYPE => "float", NAME => "pValue"},
+                {TYPE => "float", NAME => "qValue"});
     doTime("beginning validateBroadPeak") if $opt_timing;
     while (my $line = <$fh>) {
         chomp $line;
         $lineNumber++;
         next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
-        my @list = ({TYPE => "chrom", NAME => "chrom"},
-                    {TYPE => "uint", NAME => "chromStart"},
-                    {TYPE => "uint", NAME => "chromEnd"},
-                    {TYPE => "string", NAME => "name"},
-                    {TYPE => "uint", NAME => "score"},
-                    {REGEX => "[+-\\.]", NAME => "strand"},
-                    {TYPE => "float", NAME => "signalValue"},
-                    {TYPE => "float", NAME => "pValue"},
-                    {TYPE => "float", NAME => "qValue"});
         if(my $error = validateWithList($line, \@list)) {
             return ("Invalid $type file; line $lineNumber in file '$file';\nerror: $error;\nline: $line [validateBroadPeak]");
         }
@@ -653,27 +653,27 @@ sub validateGappedPeak
     my ($path, $file, $type) = @_;
     my $fh = openUtil($path, $file);
     my $lineNumber = 0;
+    my @list = ({TYPE => "chrom", NAME => "chrom"},
+                {TYPE => "uint", NAME => "chromStart"},
+                {TYPE => "uint", NAME => "chromEnd"},
+                {TYPE => "string", NAME => "name"},
+                {TYPE => "uint", NAME => "score"},
+                {REGEX => "[+-\\.]", NAME => "strand"},
+                {TYPE => "uint", NAME => "thickStart"},
+                {TYPE => "uint", NAME => "thickEnd"},
+                {TYPE => "string", NAME => "itemRgb"},
+                {TYPE => "uint", NAME => "blockCount"},
+                {TYPE => "string", NAME => "blockSizes"},
+                {TYPE => "string", NAME => "blockStarts"},
+                {TYPE => "float", NAME => "signalValue"},
+                {TYPE => "float", NAME => "pValue"},
+                {TYPE => "float", NAME => "qValue"} 
+                );
     doTime("beginning validateGappedPeak") if $opt_timing;
     while(my $line = <$fh>) {
 	chomp $line;
         $lineNumber++;
         next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-        my @list = ({TYPE => "chrom", NAME => "chrom"},
-                    {TYPE => "uint", NAME => "chromStart"},
-                    {TYPE => "uint", NAME => "chromEnd"},
-                    {TYPE => "string", NAME => "name"},
-                    {TYPE => "uint", NAME => "score"},
-                    {REGEX => "[+-\\.]", NAME => "strand"},
-                    {TYPE => "uint", NAME => "thickStart"},
-                    {TYPE => "uint", NAME => "thickEnd"},
-                    {TYPE => "string", NAME => "itemRgb"},
-                    {TYPE => "uint", NAME => "blockCount"},
-                    {TYPE => "string", NAME => "blockSizes"},
-                    {TYPE => "string", NAME => "blockStarts"},
-                    {TYPE => "float", NAME => "signalValue"},
-                    {TYPE => "float", NAME => "pValue"},
-                    {TYPE => "float", NAME => "qValue"} 
-		    );
         if(my $error = validateWithList($line, \@list)) {
             return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validateGappedPeak]");
 	}
