@@ -2390,11 +2390,9 @@ group phenDis
 priority 29.6
 visibility hide
 color 200, 0, 125
-type genePred
+type bed 4
 hgsid on
 url http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=
-baseColorUseCds given
-baseColorDefault genomicCodons
 
 # in priority.ra 
 #
