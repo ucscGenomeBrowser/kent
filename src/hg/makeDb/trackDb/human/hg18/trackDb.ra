@@ -2693,6 +2693,7 @@ group phenDis
 priority 50
 exonArrows off
 type bed 6 .
+chromosomes chr22
 
     track omiciaAuto
     subTrack omicia
