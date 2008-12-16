@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.463 2008/12/10 17:46:33 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.464 2008/12/16 22:21:32 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1305,6 +1305,19 @@ hg17KgIdConfig(tdb);
 baseColorDrawOptDropDown(cart, tdb);
 }
 
+void omimGeneIdConfig(struct trackDb *tdb)
+/* Put up gene ID track controls */
+{
+char varName[64];
+char *geneLabel;
+safef(varName, sizeof(varName), "%s.label", tdb->tableName);
+geneLabel = cartUsualString(cart, varName, "OMIM ID");
+printf("<BR><B>Label:</B> ");
+radioButton(varName, geneLabel, "OMIM ID");
+radioButton(varName, geneLabel, "OMIM Gene Symbol(s)");
+radioButton(varName, geneLabel, "UCSC Gene Symbol");
+}
+
 void knownGeneIdConfig(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
@@ -1352,6 +1365,12 @@ void knownGeneUI(struct trackDb *tdb)
 knownGeneIdConfig(tdb); 
 knownGeneShowWhatUi(tdb);
 baseColorDrawOptDropDown(cart, tdb);
+}
+
+void omimGeneUI(struct trackDb *tdb)
+/* Put up omimGene-specific controls */
+{
+omimGeneIdConfig(tdb); 
 }
 
 void geneIdConfig(struct trackDb *tdb)
@@ -2238,6 +2257,8 @@ else if (sameString(track, "refGene"))
         refGeneUI(tdb);
 else if (sameString(track, "knownGene"))
         knownGeneUI(tdb);
+else if (sameString(track, "omimGene"))
+        omimGeneUI(tdb);
 else if (sameString(track, "hg17Kg"))
         hg17KgUI(tdb);
 else if (sameString(track, "pseudoGeneLink") || startsWith("retroMrnaInfo", track))
