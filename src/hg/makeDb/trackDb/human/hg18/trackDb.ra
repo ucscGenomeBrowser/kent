@@ -457,17 +457,6 @@ oldToNew kg3ToKg4
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-track omimGene
-shortLabel OMIM Genes
-longLabel OMIM Related Genes
-group phenDis
-priority 29.6
-visibility hide
-color 200, 0, 125
-type bed 4
-hgsid on
-url http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=Search&db=omim&doptcmdl=Detailed&tool=genome.ucsc.edu&term=
-
 searchName omimGeneAcc
 searchTable omimGene
 searchMethod exact
