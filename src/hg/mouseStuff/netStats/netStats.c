@@ -6,7 +6,7 @@
 #include "chainNet.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: netStats.c,v 1.5 2008/12/15 19:45:49 markd Exp $";
+static char const rcsid[] = "$Id: netStats.c,v 1.6 2008/12/17 21:36:31 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,6 +27,11 @@ errAbort(
 }
 
 FILE *logFile;
+
+#if defined(__GNUC__)
+void logIt(char *format, ...)
+__attribute__((format(printf, 1, 2)));
+#endif
 
 void logIt(char *format, ...)
 /* Record something to log. */
@@ -87,7 +92,7 @@ if (depthMax < level)
 }
 
 
-double gapSizeT, gapSizeQ;
+long long gapSizeT, gapSizeQ;
 int gapCount;
 
 void gapGather(struct cnFill *fill, int level, FILE *f)
@@ -124,7 +129,7 @@ struct fillStats
 /* Information on fills. */
     {
     int count;
-    double totalAli;			/* Total alignments. */
+    long long totalAli;			/* Total alignments. */
     struct intList *spanT, *spanQ;	/* Coverage with gaps. */
     struct intList *ali;		/* Coverage no gaps. */
     struct intList *qFar;		/* Total farness. */
@@ -222,10 +227,12 @@ void logListStats(struct intList **pList)
 /* Write out some stats to log file. */
 {
 struct intList *el;
-double total = 0;
-int minVal = 0, medVal = 0, maxVal = 0;
+long long total = 0;
+int minVal = 0, medVal0 = 0, medVal1 = 0, maxVal = 0;
 int count = slCount(*pList);
 int i, middle = count/2;
+float medVal;
+
 
 if (count != 0)
     {
@@ -237,10 +244,16 @@ if (count != 0)
 	total += val;
 	maxVal = val;
 	if (i == middle)
-	    medVal = val;
+	    medVal0 = val;
+	else if (i == middle+1)
+	    medVal1 = val;
 	}
-    logIt("ave %3.1f, min %d, max %d, median %d", 
-	    total/count, minVal, maxVal, medVal);
+    if (((count % 2) == 0) && (count > 1))
+        medVal = (medVal0+medVal1)/2.0;
+    else
+        medVal = medVal0;
+    logIt("ave: %0.1f  min: %d  max: %d  median: %0.1f  total: %lld", 
+          total/(double)count, minVal, maxVal, medVal, total);
     }
 logIt("\n");
 }
@@ -249,22 +262,23 @@ void logFillStats(char *name, struct fillStats *stats)
 /* Write out info on stats */
 {
 logIt("%s count: %d\n", name, stats->count);
+logIt("%s aligned: %lld\n", name, stats->totalAli);
 logIt("%s percent of total: %3.1f%%\n", name, 
 	100.0*stats->totalAli/fillStats.totalAli);
-logIt("%s span T: ", name);
+logIt("%s span-T: ", name);
 logListStats(&stats->spanT);
-logIt("%s span Q: ", name);
+logIt("%s span-Q: ", name);
 logListStats(&stats->spanQ);
 logIt("%s aligning: ", name);
 logListStats(&stats->ali);
 if (stats->qDup != NULL)
     {
-    logIt("%s ave qDup: ", name);
+    logIt("%s ave-qDup: ", name);
     logListStats(&stats->qDup);
     }
 if (stats->qFar != NULL)
     {
-    logIt("%s ave qFar: ", name);
+    logIt("%s ave-qFar: ", name);
     logListStats(&stats->qFar);
     }
 }
@@ -310,8 +324,8 @@ for (i=0; i<inCount; ++i)
 logIt("net chromosomes: %d\n", netCount);
 logIt("max depth: %d\n", depthMax);
 logIt("gap count: %d\n",  gapCount);
-logIt("gap average size T: %4.1f\n", gapSizeT/gapCount);
-logIt("gap average size Q: %4.1f\n", gapSizeQ/gapCount);
+logIt("gap average size T: %4.1f\n", gapSizeT/(double)gapCount);
+logIt("gap average size Q: %4.1f\n", gapSizeQ/(double)gapCount);
 logFillStats("fill", &fillStats);
 logFillStats("top", &topStats);
 logFillStats("nonSyn", &nonSynStats);
