@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.126 2008/12/16 23:35:04 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.127 2008/12/17 00:28:44 larrym Exp $
 
 use warnings;
 use strict;
@@ -329,9 +329,9 @@ sub listToRegExp
 # Return a regular expression for given list of field specific tests.
 #
 # $validateList is a reference to a list of hashes with: {NAME, REGEX or TYPE}
-# If a line fails this regular expression, you should then call validateWithList with this line
+# If a line fails this regular expression, you should then call validateWithListUtil with this line
 # and validation list to generate a field specific error message; this is a speedup hack,
-# because we want to avoid calling validateWithList for every line (because validateWithList is really 
+# because we want to avoid calling validateWithListUtil for every line (because validateWithListUtil is really 
 # slow).
 #
 # Note that the 'chrom' field is captured, so you should test %chromInfo (e.g. $chromInfo($1))
@@ -354,18 +354,20 @@ sub listToRegExp
             push(@list, $regex);
         }
     }
-    return join("\\s+", @list);
+    return "^" . join("\\s+", @list) . "\$";
 }
 
-sub validateWithList
+sub validateWithListUtil
 {
 # Validate $line using a validation list.
 # returns error string or undef if line passes validation
 # This is designed to give better feedback to user; ideally we would load the validation list from the .as files
     my ($line, $validateList) = @_;
     my @list = split(/\s+/, $line);
-    if(@list != @{$validateList}) {
+    if(@list < @{$validateList}) {
         return "not enough fields";
+    } elsif(@list > @{$validateList}) {
+        return "too many fields";
     } else {
         for my $validateField (@{$validateList}) {
             my $val = shift(@list);
@@ -395,6 +397,46 @@ sub validateWithList
     }
     return undef;
 }
+
+sub validateWithList
+{
+# open a file and validate each line with $validateList
+# $name is the caller's subroutine name (used in error and debug messages).
+    my ($path, $file, $type, $name, $validateList) = @_;
+    my $lineNumber = 0;
+    my $fh = openUtil($path, $file);
+    my $regexp = listToRegExp($validateList);
+    my $hasChrom = 0;
+    for my $rec (@{$validateList}) {
+        $hasChrom++ if($rec->{NAME} eq "chrom");
+    }
+    doTime("beginning $name") if $opt_timing;
+    while(my $line = <$fh>) {
+        chomp $line;
+        $lineNumber++;
+        next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
+        if($line =~ /$regexp/) {
+            if($hasChrom) {
+                my $chrom = $1;
+                if(!$chromInfo{$1}) {
+                    return ("Invalid $type file; line $lineNumber in file '$file';\nerror: invalid chrom '$chrom';\nline: $line");
+                }
+            }
+        } else {
+            if(my $error = validateWithListUtil($line, $validateList)) {
+                return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line");
+            } else {
+                die "PROGRAM ERROR: inconsistent results from validateWithListUtil\n";
+            }
+        }
+        last if($opt_quick && $lineNumber >= $quickCount);
+    }
+    $fh->close();
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done $name") if $opt_timing;
+    return ();
+}
+
 
 sub validateWig
 {
@@ -565,8 +607,6 @@ sub validateGene {
 sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
-    my $lineNumber = 0;
-    my $fh = openUtil($path, $file);
     # MJP: for now, allow colorspace sequences as well as DNA + dot
     my @list = ({TYPE => "chrom", NAME => "chrom"},
                 {TYPE => "uint", NAME => "chromStart"},
@@ -574,38 +614,13 @@ sub validateTagAlign
                 {REGEX => "[0-3ATCGN\\.]+", NAME => "sequence"},
                 {TYPE => "uint", NAME => "score"},
                 {REGEX => "[+-\\.]", NAME => "strand"});
-    my $regexp = listToRegExp(\@list);
-    doTime("beginning validateTagAlign") if $opt_timing;
-    while(my $line = <$fh>) {
-        chomp $line;
-        $lineNumber++;
-        next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
-        if($line =~ /$regexp/) {
-            my $chrom = $1;
-            if(!$chromInfo{$1}) {
-                return ("Invalid $type file; line $lineNumber in file '$file';\nerror: invalid chrom '$chrom';\nline: $line [validateTagAlign]");
-            }
-        } else {
-            if(my $error = validateWithList($line, \@list)) {
-                return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validateTagAlign]");
-            } else {
-                die "PROGRAM ERROR: inconsistent results from validateWithList\n";
-            }
-        }
-        last if($opt_quick && $lineNumber >= $quickCount);
-    }
-    $fh->close();
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateTagAlign") if $opt_timing;
-    return ();
+    return validateWithList($path, $file, $type, "validateTagAlign", \@list);
 }
 
 sub validatePairedTagAlign
 # This is like tag align but with two additional sequence fields appended; seq1 and seq2
 {
     my ($path, $file, $type) = @_;
-    my $lineNumber = 0;
-    my $fh = openUtil($path, $file);
     my @list = ({TYPE => "chrom", NAME => "chrom"},
                 {TYPE => "uint", NAME => "chromStart"},
                 {TYPE => "uint", NAME => "chromEnd"},
@@ -614,27 +629,12 @@ sub validatePairedTagAlign
                 {REGEX => "[+-\\.]", NAME => "strand"},
                 {REGEX => "[ACGTNacgtn]*", NAME => "seq1"},
                 {REGEX => "[ACGTNacgtn]*", NAME => "seq2"});
-    doTime("beginning validatePairedTagAlign") if $opt_timing;
-    while(my $line = <$fh>) {
-        chomp $line;
-        $lineNumber++;
-        next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
-        if(my $error = validateWithList($line, \@list)) {
-            return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validatePairedTagAlign]");
-        }
-        last if($opt_quick && $lineNumber >= $quickCount);
-    }
-    $fh->close();
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validatePairedTagAlign") if $opt_timing;
-    return ();
+    return validateWithList($path, $file, $type, "validatePairedTagAlign", \@list);
 }
 
 sub validateNarrowPeak
 {
     my ($path, $file, $type) = @_;
-    my $fh = openUtil($path, $file);
-    my $lineNumber = 0;
     my @list = ({TYPE => "chrom", NAME => "chrom"},
                 {TYPE => "uint", NAME => "chromStart"},
                 {TYPE => "uint", NAME => "chromEnd"},
@@ -645,37 +645,12 @@ sub validateNarrowPeak
                 {TYPE => "float", NAME => "pValue"},
                 {TYPE => "float", NAME => "qValue"},
                 {TYPE => "int", NAME => "peak"});
-    doTime("beginning validateNarrowPeak") if $opt_timing;
-    my $regexp = listToRegExp(\@list);
-    while(my $line = <$fh>) {
-        chomp $line;
-        $lineNumber++;
-        next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
-        if($line =~ /$regexp/) {
-            my $chrom = $1;
-            if(!$chromInfo{$1}) {
-                return ("Invalid $type file; line $lineNumber in file '$file';\nerror: invalid chrom '$chrom';\nline: $line [validateNarrowPeak]");
-            }
-        } else {
-            if(my $error = validateWithList($line, \@list)) {
-                return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validateNarrowPeak]");
-            } else {
-                die "PROGRAM ERROR: inconsistent results from validateWithList\n";
-            }
-        }
-        last if($opt_quick && $lineNumber >= $quickCount);
-    }
-    $fh->close();
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateNarrorPeak") if $opt_timing;
-    return ();
+    return validateWithList($path, $file, $type, "validateNarrowPeak", \@list);
 }
 
 sub validateBroadPeak
 {
     my ($path, $file, $type) = @_;
-    my $fh = openUtil($path, $file);
-    my $lineNumber = 0;
     my @list = ({TYPE => "chrom", NAME => "chrom"},
                 {TYPE => "uint", NAME => "chromStart"},
                 {TYPE => "uint", NAME => "chromEnd"},
@@ -685,37 +660,12 @@ sub validateBroadPeak
                 {TYPE => "float", NAME => "signalValue"},
                 {TYPE => "float", NAME => "pValue"},
                 {TYPE => "float", NAME => "qValue"});
-    my $regexp = listToRegExp(\@list);
-    doTime("beginning validateBroadPeak") if $opt_timing;
-    while (my $line = <$fh>) {
-        chomp $line;
-        $lineNumber++;
-        next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
-        if($line =~ /$regexp/) {
-            my $chrom = $1;
-            if(!$chromInfo{$1}) {
-                return ("Invalid $type file; line $lineNumber in file '$file';\nerror: invalid chrom '$chrom';\nline: $line [validateBroadPeak]");
-            }
-        } else {
-            if(my $error = validateWithList($line, \@list)) {
-                return ("Invalid $type file; line $lineNumber in file '$file';\nerror: $error;\nline: $line [validateBroadPeak]");
-            } else {
-                die "PROGRAM ERROR: inconsistent results from validateWithList\n";
-            }
-        }
-        last if($opt_quick && $lineNumber >= $quickCount);
-    }
-    $fh->close();
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateBroadPeak") if $opt_timing;
-    return ();
+    return validateWithList($path, $file, $type, "validateBroadPeak", \@list);
 }
 
 sub validateGappedPeak
 {
     my ($path, $file, $type) = @_;
-    my $fh = openUtil($path, $file);
-    my $lineNumber = 0;
     my @list = ({TYPE => "chrom", NAME => "chrom"},
                 {TYPE => "uint", NAME => "chromStart"},
                 {TYPE => "uint", NAME => "chromEnd"},
@@ -732,20 +682,7 @@ sub validateGappedPeak
                 {TYPE => "float", NAME => "pValue"},
                 {TYPE => "float", NAME => "qValue"} 
                 );
-    doTime("beginning validateGappedPeak") if $opt_timing;
-    while(my $line = <$fh>) {
-	chomp $line;
-        $lineNumber++;
-        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-        if(my $error = validateWithList($line, \@list)) {
-            return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validateGappedPeak]");
-	}
-        last if($opt_quick && $line >= $quickCount);
-    }
-    $fh->close();
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateGappedPeak") if $opt_timing;
-    return ();
+    return validateWithList($path, $file, $type, "validateGappedPeak", \@list);
 }
 
 sub validateFastQ
