@@ -2747,7 +2747,7 @@ searchPriority 52
 searchName omimGeneAcc
 searchTable omimGene
 searchMethod exact
-searchType genePred
+searchType bed
 shortCircuit 1
 semiShortCircuit 1
 termRegex ([0-9]{6})
