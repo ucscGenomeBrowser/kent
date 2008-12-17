@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.464 2008/12/16 22:21:32 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.465 2008/12/17 21:45:42 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -187,6 +187,8 @@ if (genePredTables != NULL)
     printf("<BR><B>On details page, show function and coding differences relative to: </B> ");
     char cartVar[256];
     safef(cartVar, sizeof(cartVar), "%s_geneTrack", tdb->tableName);
+    jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
+    jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
     struct slName *selectedGeneTracks = cartOptionalSlNameList(cart, cartVar);
     int numCols = 4, i;
     int menuSize = slCount(geneTdbList);
@@ -310,7 +312,7 @@ if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
     printf("<BR><B>Include Chimp state and observed human alleles in name: </B>&nbsp;");
     cgiMakeCheckBox("snp125ExtendedNames",snp125ExtendedNames);
     printf("<BR>(If enabled, chimp allele is displayed first, then '>', then human alleles). </B>&nbsp;");
-    printf("<BR>");
+    printf("<BR>\n");
     }
 
 snp125OfferGeneTracksForFunction(tdb);
