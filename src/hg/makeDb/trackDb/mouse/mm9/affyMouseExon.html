@@ -1,0 +1,88 @@
+<H2>Description</H2>
+<P>
+The
+<A HREF="http://www.affymetrix.com/products/arrays/specific/mouse_exon.affx"
+TARGET=_blank>GeneChip Mouse Exon 1.0 ST Array</A> 
+contains approximately 1.2 million
+probe sets that interrogate about 1 million exons from the mouse
+transcriptome.  This track shows the alignments of the 25-mer
+oligonucleotide probes and transcript clusters(groups of putative
+alternatively spliced transcripts from the same gene).  The intron/exon
+structure of each transcript cluster is also included in the display.
+</P>
+
+Exons were derived from a variety of annotations that have been divided
+into the classes Core, Extended and Full, Free and Ambiguous.
+<UL> 
+  <LI><B>Core:
+    </B>RefSeq transcripts, full-length GenBank mRNAs</LI>
+  <LI><B>Extended:</B> 
+    dbEst alignments, Ensembl annotations, syntenic mRNA from rat and mouse, 
+    microRNA annotations, MITOMAP annotations, Vega genes, Vega pseudogenes
+  <LI><B>Full:</B>
+    Geneid genes, Genscan genes, Genscan Subopt, Exoniphy, RNA genes, SGP genes,
+    Twinscan genes
+  </LI>
+  <LI><B>Free:</B>
+    Designed against annotations which were merged such that no
+    single annotation (or evidence) contains the probe set.
+  </LI>
+  <LI><B>Ambiguous:</B>
+    Can not be unambiguously assigned to a particular transcript cluster
+  </LI>
+</UL></P> 
+
+<P>
+Probe sets are colored by class with the Core probe sets being the
+darkest and the Ambiguous being the lightest color.  Score vs. class:
+<UL>
+<LI> 1000 - Core
+<LI>  700 - Extended
+<LI>  400 - Full
+<LI>  200 - Free
+<LI>   50 - Ambiguous
+</UL>
+</P>
+
+<H2>Lifting Details</H2>
+<P>
+Probes were originally placed according to the mm8 (Feb. 2006) genome.
+They were lifted to mm9 (July 2007) using the <B>liftOver</B> program. 
+<P/>
+<P>
+4,549,154 of 4,549,897 probes in the Affy Exon Probe table lifted without
+without incident.  Of the ones that did not:
+<UL>
+<LI>354 were deleted in mm9
+  (<A HREF="../goldenPath/mm9/unlifted/affyMoEx1Probe.mm8Deleted.bed">download mm8 bed</A>)
+</LI>
+<LI>199 were partially deleted in mm9
+  (<A HREF="../goldenPath/mm9/unlifted/affyMoEx1Probe.mm8PartiallyDeleted.bed">download mm8 bed</A>)
+</LI>
+<LI>190 were split in mm9
+  (<A HREF="../goldenPath/mm9/unlifted/affyMoEx1Probe.mm8Split.bed">download mm8 bed</A>)
+</LI>
+</UL>
+<P>
+269,775 of 270,140 datapoints in the Affy Exon Transcript table lifted
+without incident.  Of those that did not:
+<UL>
+<LI>1 was deleted in mm9
+  (<A HREF="../goldenPath/mm9/unlifted/affyMoEx1Transcript.mm8Deleted.bed">download mm8 bed</A>)
+</LI>
+<LI>254 were partially deleted in mm9
+  (<A HREF="../goldenPath/mm9/unlifted/affyMoEx1Transcript.mm8PartiallyDeleted.bed">download mm8 bed</A>)
+</LI>
+</UL>
+</P>
+
+<H2>Credits and References</H2>
+<P>
+The probes were designed by 
+<A HREF = "http://affymetrix.com" TARGET = _BLANK>Affymetrix</A>
+from sequences obtained from various sources
+such as mouse RefSeq, GenBank mRNAs and dbEST.  Gene predictions from
+published algorithms such as GENSCAN, GENSCAN suboptimal, Ensembl,
+geneid, sgp and TWINSCAN were also included.  Other miscellaneous
+content on the array includes the microRNA Registry.
+</P>

@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.87 2008/12/02 18:17:04 hiram Exp $"
+#	"$Id: mm9.txt,v 1.88 2008/12/17 22:59:03 aamp Exp $"
 #
 
 #######################################################################
@@ -9112,5 +9112,45 @@ TMPDIR=/scratch/tmp
 	-debug -swap -continue=load -stop=load > load.log 2>&1 &
     cat fb.rn5.chainMm9BlastzLink.txt
     #	1901280009 bases of 3372561689 (56.375%) in intersection
+
+#############################################################################
+# AFFY EXON PROBE LIFT MM8->MM9 (DONE, 2008-12-17 Andy)
+    ssh hgwdev
+    cd /hive/data/genomes/mm9/bed
+    mkdir affyMoEx1
+    cd affyMoEx1/
+    echo "select * from affyMoEx1Probe" | \
+       hgsql mm8 | tail +2 | cut -f2- > mm8.affyMoEx1Probe.bed
+    liftOver mm8.affyMoEx1Probe.bed /gbdb/mm8/liftOver/mm8ToMm9.over.chain.gz \
+       affyMoEx1Probe.bed unmapped.txt
+    grep Partially unmapped.txt | wc -l
+#199
+    grep Split unmapped.txt | wc -l
+#190
+    grep Deleted unmapped.txt | wc -l
+#354
+    wc -l mm8.affyMoEx1Probe.bed
+#4549897
+    ## Out of 4.5 million probes in mm8, we've lost 743 in different ways
+    ## attempting to lift.  That's an acceptable number.
+    hgLoadBed mm9 affyMoEx1Probe{,.bed}
+    echo "select * from affyMoEx1Transcript" | \
+       hgsql mm8 | tail +2 | cut -f2- > mm8.affyMoEx1Transcript.bed
+    liftOver mm8.affyMoEx1Transcript.bed /gbdb/mm8/liftOver/mm8ToMm9.over.chain.gz \
+       affyMoEx1Transcript.bed unmapped.txt
+    hgLoadBed mm9 affyMoEx1Transcript{,.bed}
+    ## Put unlifted IDs into a downloadable file.
+    mkdir /usr/local/apache/htdocs/goldenPath/mm9/unlifted
+    grep -A1 Deleted unmapped.txt | grep "^chr" > affyMoEx1Probe.mm8Deleted.bed
+    grep -A1 Partially unmapped.txt | grep "^chr" > affyMoEx1Probe.mm8PartiallyDeleted.bed
+    grep -A1 Split unmapped.txt | grep "^chr" > affyMoEx1Probe.mm8Split.bed
+    grep -A1 Deleted unmappedTranscripts.txt | grep "^chr" > affyMoEx1Transcript.mm8Deleted.bed
+    grep -A1 Partially unmappedTranscripts.txt | grep "^chr" > affyMoEx1Transcript.mm8PartiallyDeleted.bed
+    cp affyMoEx1*.mm8*.bed /usr/local/apache/htdocs/goldenPath/mm9/unlifted
+    ## mm8 and mm9 track descriptions differ: 
+    ## 1. Copy mouse/trackDb.ra setting to mouse/mm9/trackDb.ra and add
+    ##    origAssembly mm8 line.
+    ## 2. Make a new paragraph in a new affyMouseExon.html in mm9 to include
+    ##    details about the lift and how many didn't lift.
 
 #############################################################################
