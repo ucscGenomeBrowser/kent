@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.128 2008/12/17 07:56:28 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.129 2008/12/17 08:10:16 mikep Exp $
 
 use warnings;
 use strict;
@@ -66,6 +66,8 @@ our $quickCount=100;
 our $time0 = time;
 our $timeStart = time;
 our %chromInfo;         # chromInfo from assembly for chrom validation
+our $maxBedRows=50_000_000; # number of rows to allow in a bed-type file
+
 
 sub usage {
     print STDERR <<END;
@@ -405,7 +407,7 @@ sub validateWithList
 {
 # open a file and validate each line with $validateList
 # $name is the caller's subroutine name (used in error and debug messages).
-    my ($path, $file, $type, $name, $validateList) = @_;
+    my ($path, $file, $type, $maxRows, $name, $validateList) = @_;
     my $lineNumber = 0;
     my $fh = openUtil($path, $file);
     my $regexp = listToRegExp($validateList);
@@ -413,10 +415,11 @@ sub validateWithList
     for my $rec (@{$validateList}) {
         $hasChrom++ if($rec->{NAME} eq "chrom");
     }
-    doTime("beginning validateWithList $name,$type") if $opt_timing;
+    doTime("beginning validateWithList $name,$type,$maxRows") if $opt_timing;
     while(my $line = <$fh>) {
         chomp $line;
         $lineNumber++;
+        return ("Invalid $type file; line $lineNumber in file '$file';\nerror: exceeded maximum number of rows allowed ($maxRows) \nline: $line") if $lineNumber > $maxRows;
         next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
         if($line =~ /$regexp/) {
             if($hasChrom) {
@@ -436,7 +439,7 @@ sub validateWithList
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateWithList $name,$type",$lineNumber) if $opt_timing;
+    doTime("done validateWithList $name,$type,$maxRows",$lineNumber) if $opt_timing;
     return ();
 }
 
@@ -618,7 +621,7 @@ sub validateTagAlign
                 {REGEX => "[0-3ATCGN\\.]+", NAME => "sequence"},
                 {TYPE => "uint", NAME => "score"},
                 {REGEX => "[+-\\.]", NAME => "strand"});
-    return validateWithList($path, $file, $type, "validateTagAlign", \@list);
+    return validateWithList($path, $file, $type, $maxBedRows, "validateTagAlign", \@list);
 }
 
 sub validatePairedTagAlign
@@ -633,7 +636,7 @@ sub validatePairedTagAlign
                 {REGEX => "[+-\\.]", NAME => "strand"},
                 {REGEX => "[ACGTNacgtn]*", NAME => "seq1"},
                 {REGEX => "[ACGTNacgtn]*", NAME => "seq2"});
-    return validateWithList($path, $file, $type, "validatePairedTagAlign", \@list);
+    return validateWithList($path, $file, $type, $maxBedRows, "validatePairedTagAlign", \@list);
 }
 
 sub validateNarrowPeak
@@ -649,7 +652,7 @@ sub validateNarrowPeak
                 {TYPE => "float", NAME => "pValue"},
                 {TYPE => "float", NAME => "qValue"},
                 {TYPE => "int", NAME => "peak"});
-    return validateWithList($path, $file, $type, "validateNarrowPeak", \@list);
+    return validateWithList($path, $file, $type, $maxBedRows, "validateNarrowPeak", \@list);
 }
 
 sub validateBroadPeak
@@ -664,7 +667,7 @@ sub validateBroadPeak
                 {TYPE => "float", NAME => "signalValue"},
                 {TYPE => "float", NAME => "pValue"},
                 {TYPE => "float", NAME => "qValue"});
-    return validateWithList($path, $file, $type, "validateBroadPeak", \@list);
+    return validateWithList($path, $file, $type, $maxBedRows, "validateBroadPeak", \@list);
 }
 
 sub validateGappedPeak
@@ -686,7 +689,7 @@ sub validateGappedPeak
                 {TYPE => "float", NAME => "pValue"},
                 {TYPE => "float", NAME => "qValue"}
                 );
-    return validateWithList($path, $file, $type, "validateGappedPeak", \@list);
+    return validateWithList($path, $file, $type, $maxBedRows, "validateGappedPeak", \@list);
 }
 
 sub validateFastQ
