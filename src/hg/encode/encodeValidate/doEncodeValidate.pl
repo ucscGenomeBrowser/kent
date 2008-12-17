@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.127 2008/12/17 00:28:44 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.128 2008/12/17 07:56:28 mikep Exp $
 
 use warnings;
 use strict;
@@ -64,6 +64,7 @@ our $outPath;           # full path of output directory
 our %terms;             # controlled vocabulary
 our $quickCount=100;
 our $time0 = time;
+our $timeStart = time;
 our %chromInfo;         # chromInfo from assembly for chrom validation
 
 sub usage {
@@ -87,7 +88,7 @@ options:
     -skipAll            Turn on all "-skip..." options
     -skipAutoCreation   Tells script skip creating the auto-created files (e.g. RawSignal, PlusRawSignal, MinusRawSignal)
                         this can save you a lot of time when you are debugging and re-running the script on large projects
-    -skipOutput         Don't write the various output files
+    -skipOutput         Dont write the various output files
     -skipValidateFiles  Tells script skip the file validation step; to save a lot of time during testing
     -validateDaf	exit after validating DAF file (project-submission-dir is the DAF file name).
     -validateFile	exit after validating file (project-submission-dir is the file name;
@@ -112,8 +113,10 @@ sub doTime
 # print out time difference in seconds since last call to this function, or the program started.
 {
     my $msg = shift || "";
+    my $lines = shift || 0;
     my $time1 = time;
-    warn("# $msg : ".($time1-$time0)." secs");
+    my $t = $time1-$time0;
+    warn("# $msg : $t secs".(($lines>0 and $t>0) ? "  (".(int($lines/$t))." lines/sec)" : ""));
     $time0 = time;
 }
 
@@ -410,7 +413,7 @@ sub validateWithList
     for my $rec (@{$validateList}) {
         $hasChrom++ if($rec->{NAME} eq "chrom");
     }
-    doTime("beginning $name") if $opt_timing;
+    doTime("beginning validateWithList $name,$type") if $opt_timing;
     while(my $line = <$fh>) {
         chomp $line;
         $lineNumber++;
@@ -433,7 +436,7 @@ sub validateWithList
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done $name") if $opt_timing;
+    doTime("done validateWithList $name,$type",$lineNumber) if $opt_timing;
     return ();
 }
 
@@ -444,6 +447,7 @@ sub validateWig
     my $filePath = defined($path) ? "$path/$file" : $file;
     doTime("beginning validateWig") if $opt_timing;
 
+    HgAutomate::verbose(2, "validateWig($file,$type) -> wigEncode\n");
     my @cmds;
     if(Encode::isZipped($filePath)) {
         # wigEncode knows how to handle zipped files.
@@ -468,17 +472,17 @@ sub validateWig
 sub validateBed {
 # Validate each line of a bed 5 or greater file.
     my ($path, $file, $type) = @_;
-    my $line = 0;
+    my $lineNumber = 0;
     doTime("beginning validateBed") if $opt_timing;
     my $fh = openUtil($path, $file);
     while(<$fh>) {
         chomp;
-        $line++;
+        $lineNumber++;
         next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
         my @fields = split /\s+/;
         my $fieldCount = @fields;
         next if(!$fieldCount);
-        my $prefix = "Failed bed validation, file '$file'; line $line:";
+        my $prefix = "Failed bed validation, file '$file'; line $lineNumber:";
         if(/^(track|browser)/) {
             ;
         } elsif($fieldCount < 5) {
@@ -502,28 +506,28 @@ sub validateBed {
         } else {
             ;
         }
-        last if($opt_quick && $line >= $quickCount);
+        last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed bed validation\n");
-    doTime("done validateBed") if $opt_timing;
+    doTime("done validateBed",$lineNumber) if $opt_timing;
     return ();
 }
 
 sub validateBedGraph {
 # Validate each line of a bedGraph file.
     my ($path, $file, $type) = @_;
-    my $line = 0;
+    my $lineNumber = 0;
     doTime("beginning validateBedGraph") if $opt_timing;
     my $fh = openUtil($path, $file);
     while(<$fh>) {
         chomp;
-        $line++;
+        $lineNumber++;
         next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
         my @fields = split /\s+/;
         my $fieldCount = @fields;
         next if(!$fieldCount);
-        my $prefix = "Failed bedGraph validation, file '$file'; line $line:";
+        my $prefix = "Failed bedGraph validation, file '$file'; line $lineNumber:";
         if(/^(track|browser)/) {
             ;
         } elsif($fieldCount != 4) {
@@ -541,11 +545,11 @@ sub validateBedGraph {
         } else {
             ;
         }
-        last if($opt_quick && $line >= $quickCount);
+        last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed bedGraph validation\n");
-    doTime("done validateBedGraph") if $opt_timing;
+    doTime("done validateBedGraph", $lineNumber) if $opt_timing;
     return ();
 }
 
@@ -680,7 +684,7 @@ sub validateGappedPeak
                 {TYPE => "string", NAME => "blockStarts"},
                 {TYPE => "float", NAME => "signalValue"},
                 {TYPE => "float", NAME => "pValue"},
-                {TYPE => "float", NAME => "qValue"} 
+                {TYPE => "float", NAME => "qValue"}
                 );
     return validateWithList($path, $file, $type, "validateGappedPeak", \@list);
 }
@@ -725,7 +729,7 @@ sub validateFastQ
      }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateFastQ") if $opt_timing;
+    doTime("done validateFastQ", $line) if $opt_timing;
     return ();
 }
 
@@ -766,7 +770,7 @@ sub validateCsfasta
      }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateCsfasta") if $opt_timing;
+    doTime("done validateCsfasta", $line) if $opt_timing;
     return ();
 }
 
@@ -807,7 +811,7 @@ sub validateCsqual
      }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateCsqual") if $opt_timing;
+    doTime("done validateCsqual", $line) if $opt_timing;
     return ();
 }
 
@@ -1569,5 +1573,6 @@ if($submitDir =~ /(\d+)$/) {
                          $count, $metadata, $daf->{lab}, $daf->{dataType}, $compositeTrack, $id);
     }
 }
-
+$time0=$timeStart;
+doTime("done. ") if $opt_timing;
 exit 0;
