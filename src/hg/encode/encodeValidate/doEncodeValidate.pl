@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.129 2008/12/17 08:10:16 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.130 2008/12/17 08:17:54 mikep Exp $
 
 use warnings;
 use strict;
@@ -118,7 +118,8 @@ sub doTime
     my $lines = shift || 0;
     my $time1 = time;
     my $t = $time1-$time0;
-    warn("# $msg : $t secs".(($lines>0 and $t>0) ? "  (".(int($lines/$t))." lines/sec)" : ""));
+    $t = 1 if ($lines>0 and $t<1);
+    warn("# $msg : $t secs".($lines>0 ? "  ($lines lines, ".(int($lines/$t))." lines/sec)" : ""));
     $time0 = time;
 }
 
