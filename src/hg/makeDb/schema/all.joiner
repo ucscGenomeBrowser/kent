@@ -2295,10 +2295,10 @@ identifier protVarId
     hg18.protVarPos.name
 
 #links between UniProt and the variants tables
-identifier protVarIdUni fuzzy
+identifier protVarIdUni
 "UniProt Variants track mutation identifier contains UniProt ID"
-    hg18.protVar.name chopAfter=: 
     uniProt.protein.acc
+    hg18.protVar.name chopAfter=: 
 
 #links between gv (the new Locus Variants) and related tables 
 identifier gvId
