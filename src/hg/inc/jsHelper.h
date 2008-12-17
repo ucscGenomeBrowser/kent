@@ -87,6 +87,10 @@ void jsMakeSetClearButton(struct cart *cart,
  * If currentPos, anchor is ignored and jsSetVerticalPosition is used so
  * that the new page gets the same vertical offset as the current page. */
 
+void jsMakeCheckboxGroupSetClearButton(char *buttonVar, boolean isSet);
+/* Make a button for setting or clearing a set of checkboxes with the same name. 
+ * Uses only javascript to change the checkboxes, no resubmit. */
+
 char *jsPressOnEnter(char *button);
 /* Returns a javascript statement that clicks button when the Enter key
  * has been pressed; typically this would go in a text input.

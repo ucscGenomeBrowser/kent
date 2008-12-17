@@ -22,7 +22,7 @@
 #include "hui.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.20 2008/12/11 22:41:56 hiram Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.21 2008/12/17 21:44:33 angie Exp $";
 
 static boolean jsInited = FALSE;
 struct hash *includedFiles = NULL;
@@ -288,7 +288,7 @@ safef(javascript, sizeof javascript,
       "document.%s.submit();",
       form, cgiScriptName(),
       (isNotEmpty(anchor) ? "#" : ""), (isNotEmpty(anchor) ? anchor : ""),
-      form, buttonVar, buttonLabel, jsSetVerticalPosition(form), form);
+      form, buttonVar, buttonLabel, vertPosJs, form);
 cgiMakeOnClickButton(javascript, buttonLabel);
 
 if (isNotEmpty(cgiOptionalString(buttonVar)))
@@ -302,6 +302,17 @@ if (isNotEmpty(cgiOptionalString(buttonVar)))
         cartSetBoolean(cart, option, isSet);
         }
     }
+}
+
+void jsMakeCheckboxGroupSetClearButton(char *buttonVar, boolean isSet)
+/* Make a button for setting or clearing a set of checkboxes with the same name. 
+ * Uses only javascript to change the checkboxes, no resubmit. */
+{
+char javascript[256];
+safef(javascript, sizeof(javascript), "var list = document.getElementsByName('%s'); "
+      "for (var ix = 0; ix < list.length; ix++) {list[ix].checked = %s}", buttonVar,
+      isSet ? "true" : "false");
+cgiMakeOnClickButton(javascript, isSet ? JS_SET_ALL_BUTTON_LABEL : JS_CLEAR_ALL_BUTTON_LABEL);
 }
 
 char *jsPressOnEnter(char *button)
