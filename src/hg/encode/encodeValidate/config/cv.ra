@@ -706,6 +706,18 @@ description The part of the nucleus where ribosomal RNA is actively transcribed
 termId GO:0005730
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005730
 
+term nucleoplasm
+type localization
+description That part of the nuclear content other than the chromosomes or the nucleolus.
+termId GO:0005654
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005654
+
+term nuclearMatrix
+type localization
+description The dense fibrillar network lying on the inner side of the nuclear membrane. 
+termId GO:0016363
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0016363
+
 # RNA extracts
 term total
 type rnaExtract
