@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.132 2008/12/17 10:24:40 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.133 2008/12/17 10:40:04 mikep Exp $
 
 use warnings;
 use strict;
@@ -622,7 +622,8 @@ sub validateTagAlign
                 {REGEX => "[0-3ATCGN\\.]+", NAME => "sequence"},
                 {TYPE => "uint", NAME => "score"},
                 {REGEX => "[+-\\.]", NAME => "strand"});
-    return validateWithList($path, $file, $type, $maxBedRows, "validateTagAlign", \@list);
+    # MJP: for now, allow 10x more tagAlign records for Cshl project as we are not loading them
+    return validateWithList($path, $file, $type, 10*$maxBedRows, "validateTagAlign", \@list); 
 }
 
 sub validatePairedTagAlign
