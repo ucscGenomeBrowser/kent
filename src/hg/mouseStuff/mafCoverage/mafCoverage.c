@@ -12,9 +12,9 @@
 #include "memalloc.h"
 #include "maf.h"
 
-#define MAXALIGN 30  /* max number of species to align */
+#define MAXALIGN 50  /* max number of species to align */
 #define DEFCOUNT 3   /* require 3 species to match before counting as covered */
-static char const rcsid[] = "$Id: mafCoverage.c,v 1.7 2008/09/03 19:20:36 markd Exp $";
+static char const rcsid[] = "$Id: mafCoverage.c,v 1.10 2008/12/04 22:26:31 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -50,8 +50,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&ciList, ci);
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
-//hFreeConn(&conn);
+hFreeConn(&conn);
 slReverse(&ciList);
 return ciList;
 }
@@ -202,8 +201,7 @@ for (ci = ciList; ci != NULL; ci = ci->next)
 	}
     sqlFreeResult(&sr);
     }
-sqlDisconnect(&conn);
-//hFreeConn(&conn);
+hFreeConn(&conn);
 slReverse(&csList);
 *retHash = hash;
 *retList = csList;
@@ -293,8 +291,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     memset(cov + s, restricted, e - s);
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
-//hFreeConn(&conn);
+hFreeConn(&conn);
 }
 
 int calcUnrestrictedSize(UBYTE *cov, int size)
@@ -332,7 +329,7 @@ while ((ali = mafNext(mf)) != NULL)
     int cCount = slCount(ali->components);
     int i = 1;
     int nextStart, idNextStart;
-    
+
     comp = ali->components; 
     tPtr[0] = comp->text;
     chrom = strchr(comp->src,'.')+1;
@@ -371,15 +368,21 @@ while ((ali = mafNext(mf)) != NULL)
     incNoOverflow(cov+start, comp->size);
     for (comp = ali->components->next; comp != NULL; comp = comp->next)
         {
-        tPtr[i] = comp->text;
-        i++;
-        assert (i < MAXALIGN-1);
+	if (comp->size > 0)	// do not process e lines
+	    {
+	    tPtr[i] = comp->text;
+	    i++;
+	    assert (i < MAXALIGN-1);
+	    }
+	else
+	    --cCount;
         }
     size = 0;
     assert(cs != NULL);
     /* count gapless columns */
-    for (j = 0 ; j<=ali->textSize ; j++)
+    for (j = 0 ; j<ali->textSize ; j++)
         {
+	hit = TRUE;
         /* look for aligning bases in query seqs , abort if any is a gap */
         for (i = 1 ; i < cCount ; i++)
             {
@@ -392,10 +395,6 @@ while ((ali = mafNext(mf)) != NULL)
                 size = 0;
                 hit = FALSE;
                 break;
-                }
-            else
-                {
-                hit = TRUE;
                 }
             }
         if (hit)
@@ -424,8 +423,9 @@ while ((ali = mafNext(mf)) != NULL)
     /* count percent id */
     idSize = 0;
     assert(cs != NULL);
-    for (k = 0 ; k<=ali->textSize ; k++)
+    for (k = 0 ; k<ali->textSize ; k++)
         {
+	hit = TRUE;
         char tc = toupper(tPtr[0][k]);
         for (i = 1 ; i < cCount ; i++)
             {
@@ -436,10 +436,6 @@ while ((ali = mafNext(mf)) != NULL)
                 idSize = 0;
                 hit = FALSE;
                 break;
-                }
-            else
-                {
-                hit = TRUE;
                 }
             }
         if (hit)

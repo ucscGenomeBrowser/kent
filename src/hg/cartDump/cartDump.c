@@ -6,7 +6,7 @@
 #include "cart.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cartDump.c,v 1.13 2008/06/05 01:51:47 larrym Exp $";
+static char const rcsid[] = "$Id: cartDump.c,v 1.14 2008/12/09 00:41:20 angie Exp $";
 
 void doMiddle(struct cart *cart)
 /* cartDump - Dump contents of cart. */
@@ -23,6 +23,8 @@ if (cgiVarExists("submit"))
     char *newValue = cgiOptionalString(vVal);
     if (isNotEmpty(varName) && isNotEmpty(newValue))
         {
+	varName = skipLeadingSpaces(varName);
+	eraseTrailingSpaces(varName);
 	if (sameString(newValue, "n/a"))
 	    cartRemove(cart, varName);
 	else

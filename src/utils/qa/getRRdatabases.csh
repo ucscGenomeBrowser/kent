@@ -104,6 +104,6 @@ if ( active != $active ) then
   $betacommand ls -1 $fullpath1 | grep "tbls" | sed -e "s/\.tbls//" | sort
   echo "last dump: $dirname1"
 else
-  hgsql -h genome-centdb -Ne "SELECT name FROM dbDb WHERE active = 1 \
-   ORDER BY name" hgcentral
+  ssh hgwdev "hgsql -h genome-centdb -Ne '"SELECT name FROM dbDb WHERE \
+   active = 1 ORDER BY name"' hgcentral"
 endif

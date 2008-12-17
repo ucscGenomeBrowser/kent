@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.17 2008/10/13 22:59:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.18 2008/12/06 00:29:48 tdreszer Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -113,9 +113,9 @@ if(tdbIsCompositeChild(tdb)
                 // parse viewLimits "0:20910"
                 words[ix] = strSwapChar(words[ix]+strlen(VIEWLIMITS)+1,':',' ');
                 if(tDbMin != NULL && words[ix][0] != 0)
-                    *tDbMin = sqlUnsigned(nextWord(&words[ix]));
+                    *tDbMin = sqlDouble(nextWord(&words[ix]));
                 if(tDbMax != NULL && words[ix][0] != 0)
-                    *tDbMax = sqlUnsigned(words[ix]);
+                    *tDbMax = sqlDouble(words[ix]);
                 if(tDbMin != NULL && tDbMax != NULL)
                     correctOrder(*tDbMin,*tDbMax);
                 }
@@ -126,9 +126,9 @@ if(tdbIsCompositeChild(tdb)
                 if(words[ix][0] != 0)
                     {
                     assert(min != NULL && max != NULL);
-                    *min = sqlUnsigned(nextWord(&words[ix]));
+                    *min = sqlDouble(nextWord(&words[ix]));
                     if(words[ix][0] != 0)
-                        *max = sqlUnsigned(words[ix]);
+                        *max = sqlDouble(words[ix]);
                     correctOrder(*min,*max);
                     }
                 }

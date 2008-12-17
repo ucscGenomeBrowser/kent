@@ -12,7 +12,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.47 2008/09/03 19:19:28 markd Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.48 2008/12/12 06:06:55 mikep Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -209,7 +209,7 @@ prevTdb = tdb;
 prevTdbSpanList = FALSE;
 
 if (tdb)
-    tdbSpanList = wiggleSpanList(tdb);
+    tdbSpanList = wiggleSpanList(conn, tdb);
 
 if (tdbSpanList)
     {
@@ -347,8 +347,11 @@ return spanInUse;
  */
 /*	Return is an array of integers, last one of value zero to indicate the
  *	end of the array.  In case of nothing found in trackDb, return
- *	a NULL pointer indicating no results. */
-int *wiggleSpanList(struct trackDb *tdb)
+ *	a NULL pointer indicating no results. 
+ *
+ *      If the value is 'first' then use the first span value from the table.
+ *      Assumes that all values in the table are the same. */
+int *wiggleSpanList(struct sqlConnection *conn, struct trackDb *tdb)
 {
 char *tdbDefault = cloneString(trackDbSettingOrDefault(tdb, SPANLIST, "NONE"));
 int *ret = (int *)NULL;
@@ -370,9 +373,18 @@ if (sameWord("NONE",tdbDefault))
 	    }
 	}
     }
-
 /*	If something found, let's parse it	*/
-if (differentWord("NONE",tdbDefault))
+else if (sameWord("first",tdbDefault))
+    {
+    char query[1024];
+    snprintf(query, sizeof(query), "SELECT span FROM %s limit 1", tdb->tableName );
+    char *tmpSpan = sqlQuickString(conn, query);
+    AllocArray(ret,2);
+    ret[0] = sqlUnsigned(tmpSpan);
+    ret[1] = 0;
+    freeMem(tmpSpan);
+    }
+else 
     {
     int i;
     char *words[MAX_SPAN_COUNT];

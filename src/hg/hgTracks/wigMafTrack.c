@@ -19,7 +19,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.142 2008/11/17 00:27:20 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.143 2008/12/15 23:17:45 tdreszer Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000
@@ -760,13 +760,16 @@ static int wigMafTotalHeight(struct track *track, enum trackVisibility vis)
 /* Return total height of maf track.  */
 {
 struct wigMafItem *mi;
-int total = 0;
+int total = 0,count=0;
 for (mi = track->items; mi != NULL; mi = mi->next)
+    {
     total += mi->height;
+    count++;
+    }
 
 track->height = total;
 if (track->limitedVis == tvDense)
-    track->height=tl.fontHeight+1; // Evidence that track-height comes in as 9 but should be 10!
+    track->height=(tl.fontHeight+1)*count; // Evidence that track-height comes in as 9 but should be 10!
 return track->height;
 }
 
@@ -776,7 +779,6 @@ static int wigMafItemHeight(struct track *track, void *item)
 struct wigMafItem *mi = item;
 return mi->height;
 }
-
 
 static void wigMafFree(struct track *track)
 /* Free up maf items. */

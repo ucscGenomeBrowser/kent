@@ -1004,4 +1004,32 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
+
+############################################################################
+#  echTel1 - Tenrec - Ensembl Genes version 51  (DONE - 2008-12-03 - hiram)
+    ssh swarm
+    cd /hive/data/genomes/echTel1
+    cat << '_EOF_' > echTel1.ensGene.ra
+# required db variable
+db echTel1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the two genes that have invalid structures from Ensembl:
+# 29277: ENSETET00000011172 no exonFrame on CDS exon 14
+# 44942: ENSETET00000018714 no exonFrame on CDS exon 1
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 echTel1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/echTel1/bed/ensGene.51
+    featureBits echTel1 ensGene
+    # 25441754 bases of 2111581369 (1.205%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/echTel1/bed/ensGene.51
+
 ############################################################################

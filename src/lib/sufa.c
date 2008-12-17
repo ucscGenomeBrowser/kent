@@ -40,7 +40,11 @@ verbose(2, "sufa file %s size %lld\n", fileName, h.size);
 struct sufaFileHeader *header ;
 if (memoryMap)
     {
+#ifdef MACHTYPE_sparc
+    header = (struct sufaFileHeader *)mmap(NULL, h.size, PROT_READ, MAP_SHARED, fd, 0);
+#else
     header = mmap(NULL, h.size, PROT_READ, MAP_FILE|MAP_SHARED, fd, 0);
+#endif
     if (header == (void*)(-1))
 	errnoAbort("Couldn't mmap %s, sorry", fileName);
     }
@@ -112,7 +116,7 @@ if (sufa != NULL)
     freeMem(sufa->chromNames);
     freeMem(sufa->chromOffsets);
     if (sufa->isMapped)
-	munmap(sufa->header, sufa->header->size);
+	munmap((void *)sufa->header, sufa->header->size);
     else
 	freeMem(sufa->header);
     freez(pSufa);

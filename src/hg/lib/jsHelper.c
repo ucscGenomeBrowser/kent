@@ -11,8 +11,8 @@
  * to 'ripple' to other controls.  The onChange also submits the
  * control. */
 
-#include <regex.h>
 #include "common.h"
+#include <regex.h>
 #include "dystring.h"
 #include "cheapcgi.h"
 #include "cart.h"
@@ -22,7 +22,7 @@
 #include "hui.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.19 2008/06/10 17:16:48 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.20 2008/12/11 22:41:56 hiram Exp $";
 
 static boolean jsInited = FALSE;
 struct hash *includedFiles = NULL;

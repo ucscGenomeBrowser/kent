@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGsid.c,v 1.6 2008/11/18 23:51:12 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbGsid.c,v 1.9 2008/12/09 23:23:25 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -158,13 +158,31 @@ char *mapName = "map";
 int pixWidth, pixHeight;
 
 struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+
 int  iypos;
 char *spDisplayId;
 char *oldDisplayId;
 conn  = sqlConnect(UNIPROT_DB_NAME);
 printf("<BR>");
-hPrintf("<BR><font size=4><B>protein: ");
-hPrintf("%s</B><BR>", proteinID);
+hPrintf("<BR><font size=4><B>Protein: ");
+hPrintf("%s</B>", proteinID);
+
+/* Please note the hiv database name is hard wired here.*/
+safef(query, sizeof(query), 
+"select subjId from hivVax003Vax004.gsIdXref where aaSeqId = '%s'", proteinID);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    printf("<BR>");
+    hPrintf("<font size=4><B>Subject: ");
+    hPrintf("<A HREF=\"../cgi-bin/gsidSubj?hgs_subj=%s&submit=Go!\">", row[0]);
+    hPrintf("%s</A></B><BR>", row[0]);
+    }
+sqlFreeResult(&sr);
 
 spDisplayId = spAccToId(conn, spFindAcc(conn, proteinID));
 if (strstr(spDisplayId, spFindAcc(conn, proteinID)) == NULL)
@@ -281,7 +299,7 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELL
 hPrintf("<TD ALIGN=LEFT><A HREF=\"../index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbGsid?%s=%u&pbt.psOutput=on\">%s</A></TD>\n",
         cartSessionVarName(), cartSessionId(cart), wrapWhiteFont("PDF/PS"));
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbGateway\">%s</A></TD>", wrapWhiteFont("New Query"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidPbGateway\">%s</A></TD>", wrapWhiteFont("New Query"));
 if (proteinInSupportedGenome)
     {
     hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml\" TARGET=_blank>%s</A></TD>",
@@ -419,9 +437,18 @@ else
 	    answer = uniProtFindPrimAcc(queryID);
 	    if (answer == NULL)
 		{
-	        errAbort(
-		"'%s' does not seem to be a valid UniProt(Swiss-Prot/TrEMBL) protein ID or a gene symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> to start another query."
-		    	, queryID);
+	        if (hIsGsidServer())
+		    {
+		    errAbort(
+		    "'%s' does not seem to be a valid protein ID.<br><br>Click <A HREF=\"../cgi-bin/gsidPbGateway\">here</A> to start another query."
+		    	    , queryID);
+		    }
+		else
+		    {
+		    errAbort(
+		    "'%s' does not seem to be a valid UniProt(Swiss-Prot/TrEMBL) protein ID or a gene symbol.<br><br>Click <A HREF=\"../cgi-bin/pbGateway\">here</A> to start another query."
+		    	    , queryID);
+		    }
 	    	}
 	    
 	    proteinInSupportedGenome = FALSE;

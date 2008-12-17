@@ -4839,3 +4839,82 @@ see doc/builds.txt for specific details.
 update genbank.conf:
 rn4.upstreamGeneTbl = refGene
 rn4.upstreamMaf = multiz9way /hive/data/genomes/rn4/bed/multiz9way/species.lst
+
+#############################################################################
+# TEST LASTZ Mouse Mm9 (DONE - 2008-11-26,12-01 - Hiram)
+#	to compare like with like for Rn5 lastz
+    screen	# use screen to manage this job
+    mkdir /hive/data/genomes/rn4/bed/blastzMm9.2008-11-26
+    cd /hive/data/genomes/rn4/bed/blastzMm9.2008-11-26
+    cat << '_EOF_' > DEF
+# rat vs mouse
+# Specially tuned blastz parameters from Webb Miller
+BLASTZ=lastz
+BLASTZ_M=254
+BLASTZ_ABRIDGE_REPEATS=0
+BLASTZ_O=600
+BLASTZ_E=55
+BLASTZ_Y=15000
+BLASTZ_T=2
+BLASTZ_K=4500
+BLASTZ_Q=/hive/data/genomes/rn4/bed/lastzMm9.2008-11-26/mouse_rat.q
+
+# TARGET: Rat Rn4
+SEQ1_DIR=/scratch/data/rn4/nib
+SEQ1_LEN=/scratch/data/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm9
+SEQ2_DIR=/scratch/data/mm9/nib
+SEQ2_LEN=/scratch/data/mm9/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/rn4/bed/lastzMm9.2008-11-26
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=medium \
+	-stop=net `pwd`/DEF > do.log 2>&1 &
+    #	real    313m17.777s
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=medium \
+	-continue=cat -stop=net `pwd`/DEF >cat.log 2>&1
+
+    #	create a loadUp.csh file so it can be modified to change
+    #	the table names to not clash with existing Mm9 tables
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=medium \
+	-debug -continue=load -stop=load `pwd`/DEF >load.log 2>&1
+    #	real    79m48.305s
+    cd /hive/data/genomes/rn4/bed/lastzMm9.2008-11-26/axtChain
+    time ./load.csh
+    #	real    23m39.747s
+    cat fb.rn4.chainMm9LastzLink.txt
+    #	1710794258 bases of 2571531505 (66.528%) in intersection
+
+    mkdir /hive/data/genomes/mm9/bed/blastz.rn4.swap
+    cd /hive/data/genomes/mm9/bed/blastz.rn4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn4/bed/lastzMm9.2008-11-26/DEF \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=medium \
+	-swap -stop=net > swap.log 2>&1 &
+    #	real    120m41.998s
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn4/bed/lastzMm9.2008-11-26/DEF \
+	-workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=medium \
+	-debug -swap -continue=load -stop=load > load.log 2>&1 &
+    #	real    27m24.819s
+    cat fb.mm9.chainRn4LastzLink.txt 
+    #	1713323126 bases of 2620346127 (65.385%) in intersection
+
+#############################################################################

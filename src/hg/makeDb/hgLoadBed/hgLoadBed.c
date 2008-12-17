@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.63 2008/10/15 08:37:10 aamp Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.66 2008/12/04 17:21:13 mikep Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -24,6 +24,7 @@ boolean noHistory = FALSE;	/* Do not add history table comments */
 boolean itemRgb = TRUE;		/* parse field nine as r,g,b when commas seen */
 boolean notItemRgb = FALSE;	/* do NOT parse field nine as r,g,b */
 boolean noStrict = FALSE;	/* skip the coord sanity checks */
+int minScore = 0;		/* minimum score for fillInScore option */
 int bedGraph = 0;		/* bedGraph column option, non-zero means yes */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 boolean renameSqlTable = FALSE;	/* Rename table created with -sqlTable to */
@@ -55,6 +56,7 @@ static struct optionSpec optionSpecs[] = {
     {"noLoad", OPTION_BOOLEAN},
     {"noHistory", OPTION_BOOLEAN},
     {"bedGraph", OPTION_INT},
+    {"minScore", OPTION_INT},
     {"notItemRgb", OPTION_BOOLEAN},
     {"noStrict", OPTION_BOOLEAN},
     {"nostrict", OPTION_BOOLEAN},
@@ -102,7 +104,8 @@ errAbort(
   "   -allowNegativeScores  - sql definition of score column is int, not unsigned\n"
   "   -customTrackLoader  - turns on: -noNameIx, -noHistory, -ignoreEmpty,\n"
   "                         -allowNegativeScores -verbose=0\n"
-  "   -fillInScore=colName - if every score value is zero, then use column 'colName' to fill in the score column (assigning scores 100-1000)\n"
+  "   -fillInScore=colName - if every score value is zero, then use column 'colName' to fill in the score column (from minScore-1000)\n"
+  "   -minScore=N - minimum value for score field for -fillInScore option (default 100)\n"
   "   -verbose=N - verbose level for extra information to STDERR\n"
   );
 }
@@ -476,11 +479,13 @@ if ( ! noLoad )
                         {
                         float min = sqlFloat(row[0]);
                         float max = sqlFloat(row[1]);
+			if (max == min || sameString(row[0],row[1])) // this will lead to 'inf' score value in SQL update causing an error
+			    errAbort("Could not set score in table %s max(%s)=min(%s)=%s\n", track, fillInScoreColumn, fillInScoreColumn, row[0]);
                         sqlFreeResult(&sr);
 
-                        // Calculate a, b s/t f(x) = ax + b maps min-max => 100-1000
-                        float a = 900 / (max - min);
-                        float b = 1000 - (900 * max) / (max - min);
+                        // Calculate a, b s/t f(x) = ax + b maps min-max => minScore-1000
+                        float a = (1000-minScore) / (max - min);
+                        float b = 1000 - ((1000-minScore) * max) / (max - min);
 
                         safef(query, sizeof(query), "update %s set score = round((%f * %s) + %f)",  track, a, fillInScoreColumn, b);
                         int changed = sqlUpdateRows(conn, query, NULL);
@@ -572,6 +577,9 @@ hasBin = optionExists("hasBin");
 noLoad = optionExists("noLoad");
 noHistory = optionExists("noHistory");
 bedGraph = optionInt("bedGraph",0);
+minScore = optionInt("minScore",100);
+if (minScore<0 || minScore>1000)
+    errAbort("minScore must be between 0-1000\n");
 notItemRgb = optionExists("notItemRgb");
 if (notItemRgb) itemRgb = FALSE;
 maxChromNameLength = optionInt("maxChromNameLength",0);

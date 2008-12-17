@@ -241,6 +241,11 @@ void cgiMakeCheckboxGroup(char *name, char *menu[], int menuSize, struct slName 
 /* Make a table of checkboxes that have the same variable name but different
  * values (same behavior as a multi-select input). */
 
+void cgiMakeCheckboxGroupWithVals(char *name, char *menu[], char *values[], int menuSize,
+				  struct slName *checked, int tableColumns);
+/* Make a table of checkboxes that have the same variable name but different
+ * values (same behavior as a multi-select input), with nice labels in menu[]. */
+
 void cgiMakeHiddenVar(char *varName, char *string);
 /* Store string in hidden input for next time around. */
 

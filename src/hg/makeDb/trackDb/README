@@ -189,7 +189,7 @@ The format of the type fields:
       viewLimits        lower:upper    # default is from the type line limits
       yLineMark         real-value     # default is 0.0
       yLineOnOff        on|off         # default is off (draw y=yLineMark line)
-      windowingFunction maximum|mean|minimum # default is maximum
+      windowingFunction maximum|mean|minimum # default is mean
       smoothingWindow   off|[2-16]           # default is off
       wigColorBy        <bed table>          # use colors in bed for wiggle
                                              #   in overlapping regions

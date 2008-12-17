@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1474 2008/12/02 01:36:59 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1485 2008/12/17 18:02:24 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5552,8 +5552,9 @@ if (psl->strand[0] == '-')
     reverseComplement(dna, productSize);
 printf("<TT><PRE>");
 /* The rest of this is loosely copied from gfPcrLib.c:outputFa(): */
+char *tNameForPos = (target != NULL ? pcrResultItemAccession(psl->tName) : psl->tName);
 printf("><A HREF=\"%s?%s&db=%s&position=%s",
-       hgTracksName(), cartSidUrlString(cart), database, psl->tName);
+       hgTracksName(), cartSidUrlString(cart), database, tNameForPos);
 if (target == NULL)
     printf(":%d-%d", psl->tStart+1, psl->tEnd);
 printf("\">%s:%d%c%d</A> %dbp %s %s\n",
@@ -8436,6 +8437,124 @@ void doGad(struct trackDb *tdb, char *item, char *itemForUrl)
 {
 genericHeader(tdb, item);
 printGadDetails(tdb, item, FALSE);
+printTrackHtml(tdb);
+}
+
+void printOmimGeneDetails(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print details of an OMIM Gene entry. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *url = tdb->url;
+char *kgId= NULL;
+char *title1 = NULL;
+char *title2 = NULL;
+char *geneSymbols = NULL;
+
+if (url != NULL && url[0] != 0)
+    {
+    /* check if the entry is in morbidmap, if so remember the assoicated gene symbols */
+    safef(query, sizeof(query), 
+    	  "select geneSymbols from omimMorbidMap where omimId=%s;", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	geneSymbols = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
+    
+    /* get corresponding KG ID */
+    safef(query, sizeof(query), 
+    	  "select kgId from omimToKnownCanonical where omimId='%s';", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	kgId = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
+    
+    /* use geneSymbols from omimMorbidMap if available */
+    if (geneSymbols!= NULL)
+    	{
+	printf("<B>Gene Symbol:</B> %s", geneSymbols);
+	printf("<BR>\n");
+
+	/* display disorder for genes in morbidmap */
+    	safef(query, sizeof(query), "select description from omimMorbidMap where omimId=%s;", itemName);
+    	sr = sqlMustGetResult(conn, query);
+    	row = sqlNextRow(sr);
+    	if (row != NULL)
+    	    {
+ 	    printf("<B>Disorder:</B> %s", row[0]);
+	    printf("<BR>\n");
+	    }
+    	sqlFreeResult(&sr);
+	}
+    else
+    	{
+	/* get gene symbol from kgXref if the entry is not in morbidmap */
+    	safef(query, sizeof(query), "select geneSymbol from kgXref where kgId='%s';", kgId);
+    	sr = sqlMustGetResult(conn, query);
+    	row = sqlNextRow(sr);
+    	if (row != NULL)
+    	    {
+ 	    printf("<B>Gene Symbol:</B> %s", row[0]);
+	    printf("<BR>\n");
+	    }
+    	sqlFreeResult(&sr);
+    	}
+
+    printf("<B>OMIM Database ");fflush(stdout);
+    printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
+    printf("%s</A></B>", itemName);
+    
+    safef(query, sizeof(query), 
+    	  "select title1, title2 from omimGeneMap where omimId=%s;", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	if (row[0] != NULL)
+	    {
+	    title1 = cloneString(row[0]);
+    	    printf(": %s", title1);
+	    }
+	if (row[1] != NULL)
+	    {
+	    title2 = cloneString(row[1]);
+    	    printf(" %s ", title2);
+	    }
+	}
+    sqlFreeResult(&sr);
+    
+    printf("<BR>\n");
+
+    printf("<B>UCSC Gene ");
+    printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>", 
+	   "../cgi-bin/hgGene?hgg_gene=", kgId);
+    printf("%s</A></B>: ", kgId);
+
+    safef(query, sizeof(query), "select description from kgXref where kgId='%s';", kgId);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	printf("%s", row[0]);
+	}
+    sqlFreeResult(&sr);
+    printf("<BR>\n");
+    } 
+}
+
+void doOmimGene(struct trackDb *tdb, char *item)
+/* Put up OmimGene track info. */
+{
+genericHeader(tdb, item);
+printOmimGeneDetails(tdb, item, FALSE);
 printTrackHtml(tdb);
 }
 
@@ -14114,6 +14233,339 @@ printSnpOrthoRows(tdb, snp);
 printf("</TABLE>");
 }
 
+static char getSnpTxBase(struct genePred *gene, int exonIx, int snpStart, int offset)
+/* Find the reference assembly base that is offset bases from snpStart in the translated sequence
+ * of the gene. */
+// Room for improvement: check for mRNA sequence associated with this gene, and use it if exists.
+{
+char base = 'N';
+boolean ranOffEnd = FALSE;
+int i;
+int snpPlusOffset = snpStart;
+if (offset >= 0)
+    {
+    int exonEnd = gene->exonEnds[exonIx];
+    for (i = 0;  i < offset;  i++)
+	{
+	snpPlusOffset++;
+	if (exonEnd <= snpPlusOffset)
+	    {
+	    if (++exonIx < gene->exonCount)
+		{
+		exonEnd = gene->exonEnds[exonIx];
+		snpPlusOffset = gene->exonStarts[exonIx];
+		}
+	    else
+		ranOffEnd = TRUE;
+	    }
+	}
+    }
+else
+    {
+    int exonStart = gene->exonStarts[exonIx];
+    for (i = 0;  i > offset;  i--)
+	{
+	snpPlusOffset--;
+	if (exonStart > snpPlusOffset)
+	    {
+	    if (--exonIx >= 0)
+		{
+		exonStart = gene->exonStarts[exonIx];
+		snpPlusOffset = gene->exonEnds[exonIx];
+		}
+	    else
+		ranOffEnd = TRUE;
+	    }
+	}
+    }
+if (! ranOffEnd)
+    {
+    struct dnaSeq *seq =
+	hDnaFromSeq(database, gene->chrom, snpPlusOffset, snpPlusOffset+1, dnaUpper);
+    base = seq->dna[0];
+    }
+return base;
+}
+
+char *getSymbolForGeneName(char *geneTable, char *geneId)
+/* Given a gene track and gene accession, look up the symbol if we know where to look
+ * and if we find it, return a string with both symbol and acc. */
+{
+struct dyString *dy = dyStringNew(32);
+char buf[256];
+char *sym = NULL;
+if (sameString(geneTable, "knownGene") || sameString(geneTable, "refGene"))
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    char query[256];
+    query[0] = '\0';
+    if (sameString(geneTable, "knownGene"))
+	safef(query, sizeof(query), "select geneSymbol from kgXref where kgID = '%s'", geneId);
+    else if (sameString(geneTable, "refGene"))
+	safef(query, sizeof(query), "select name from refLink where mrnaAcc = '%s'", geneId);
+    sym = sqlQuickQuery(conn, query, buf, sizeof(buf)-1);
+    hFreeConn(&conn);
+    }
+if (sym != NULL)
+    dyStringPrintf(dy, "%s (%s)", sym, geneId);
+else
+    dyStringAppend(dy, geneId);
+return dyStringCannibalize(&dy);
+}
+
+#define firstTwoColumnsPctS "<TR><TD>%s</TD><TD>%s</TD><TD>"
+
+void getSnp125RefCodonAndSnpPos(struct snp125 *snp, struct genePred *gene, int exonIx,
+				int *pSnpCodonPos, char refCodon[4], char *pRefAA)
+/* Given a single-base snp and a coding gene/exon containing it, determine the snp's position
+ * in the codon and the reference codon & amino acid. */
+{
+boolean geneIsRc = sameString(gene->strand, "-");
+int snpStart = snp->chromStart, snpEnd = snp->chromEnd;
+int exonStart = gene->exonStarts[exonIx], exonEnd = gene->exonEnds[exonIx];
+int cdsStart = gene->cdsStart, cdsEnd = gene->cdsEnd;
+int exonFrame = gene->exonFrames[exonIx];
+if (exonFrame == -1)
+    exonFrame = 0;
+if (cdsEnd < exonEnd) exonEnd = cdsEnd;
+if (cdsStart > exonStart) exonStart = cdsStart;
+int snpCodonPos = geneIsRc ? (2 - ((exonEnd - snpEnd) + exonFrame) % 3) :
+			     (((snpStart - exonStart) + exonFrame) % 3);
+refCodon[0] = getSnpTxBase(gene, exonIx, snpStart, -snpCodonPos);
+refCodon[1] = getSnpTxBase(gene, exonIx, snpStart, 1 - snpCodonPos);
+refCodon[2] = getSnpTxBase(gene, exonIx, snpStart, 2 - snpCodonPos);
+refCodon[3] = '\0';
+if (geneIsRc)
+    {
+    reverseComplement(refCodon, strlen(refCodon));
+    snpCodonPos = 2 - snpCodonPos;
+    }
+if (pSnpCodonPos != NULL)
+    *pSnpCodonPos = snpCodonPos;
+if (pRefAA != NULL)
+    {
+    *pRefAA = lookupCodon(refCodon);
+    if (*pRefAA == '\0') *pRefAA = '*';
+    }
+}
+
+void printSnp125FunctionInCDS(struct snp125 *snp, char *geneTable, char *geneTrack,
+			      struct genePred *gene, int exonIx, char *geneName)
+/* Show the effect of each observed allele of snp on the given exon of gene. */
+{
+char refAllele[256];
+safecpy(refAllele, sizeof(refAllele), snp->refUCSC);
+boolean refIsAlpha = isalpha(refAllele[0]);
+boolean geneIsRc = sameString(gene->strand, "-"), snpIsRc = sameString(snp->strand, "-");
+if (geneIsRc && refIsAlpha)
+    reverseComplement(refAllele, strlen(refAllele));
+int refAlleleSize = sameString(refAllele, "-") ? 0 : refIsAlpha ? strlen(refAllele) : -1;
+boolean refIsSingleBase = (refAlleleSize == 1 && refIsAlpha);
+int snpCodonPos = 0;
+char refCodon[4], refAA = '\0';
+if (refIsSingleBase)
+    getSnp125RefCodonAndSnpPos(snp, gene, exonIx, &snpCodonPos, refCodon, &refAA);
+char alleleStr[256];
+safecpy(alleleStr, sizeof(alleleStr), snp->observed);
+char *indivAlleles[64];
+int alleleCount = chopString(alleleStr, "/", indivAlleles, ArraySize(indivAlleles));
+int j;
+for (j = 0;  j < alleleCount;  j++)
+    {
+    char *al = indivAlleles[j];
+    boolean alIsAlpha = (isalpha(al[0]) && !sameString(al, "lengthTooLong"));
+    if ((snpIsRc ^ geneIsRc) && alIsAlpha)
+	reverseComplement(al, strlen(al));
+    char alBase = al[0];
+    if (alBase == '\0' || sameString(al, refAllele))
+	continue;
+    int alSize = sameString(al, "-") ? 0 : alIsAlpha ? strlen(al) : -1;
+    if (alSize != refAlleleSize && alSize >= 0 && refAlleleSize >=0)
+	{
+	int diff = alSize - refAlleleSize;
+	if ((diff % 3) != 0)
+	    printf(firstTwoColumnsPctS "cds-reference, frameshift</TD></TR>\n",
+		   geneTrack, geneName);
+	else if (diff > 0)
+	    printf(firstTwoColumnsPctS "cds-reference, insertion of %d codon%s</TD></TR>\n",
+		   geneTrack, geneName, (int)(diff/3), (diff > 3) ?  "s" : "");
+	else
+	    printf(firstTwoColumnsPctS "cds-reference, deletion of %d codon%s</TD></TR>\n",
+		   geneTrack, geneName, (int)(-diff/3), (diff < -3) ?  "s" : "");
+	}
+    else if (alSize == 1 && refIsSingleBase)
+	{
+	char snpCodon[4];
+	safecpy(snpCodon, sizeof(snpCodon), refCodon);
+	snpCodon[snpCodonPos] = alBase;
+	char snpAA = lookupCodon(snpCodon);
+	if (snpAA == '\0') snpAA = '*';
+	if (refAA != snpAA)
+	    printf(firstTwoColumnsPctS "cds-reference, %ssense %c (%s) --> %c (%s)</TD></TR>\n",
+		   geneTrack, geneName,
+		   ((refAA == '*' || snpAA == '*') ? "non" : "mis"),
+		   refAA, refCodon, snpAA, snpCodon);
+	else
+	    printf(firstTwoColumnsPctS
+		   "cds-reference, coding-synon %c (%s) --> %c (%s)</TD></TR>\n",
+		   geneTrack, geneName, refAA, refCodon, snpAA, snpCodon);
+	}
+    else
+	printf(firstTwoColumnsPctS "cds-reference, %s -> %s</TD></TR>\n",
+	       geneTrack, geneName, refAllele, al);
+    }
+}
+
+void printSnp125FunctionInGene(struct snp125 *snp, char *geneTable, char *geneTrack,
+			       struct genePred *gene)
+/* Given a SNP and a gene that overlaps it, say where in the gene it overlaps 
+ * and if in CDS, say what effect the coding alleles have. */
+{
+int snpStart = snp->chromStart, snpEnd = snp->chromEnd;
+int cdsStart = gene->cdsStart, cdsEnd = gene->cdsEnd;
+boolean geneIsRc = sameString(gene->strand, "-");
+char *geneName = getSymbolForGeneName(geneTable, gene->name);
+int i, iStart = 0, iEnd = gene->exonCount, iIncr = 1;
+if (geneIsRc)
+    { iStart = gene->exonCount - 1;  iEnd = -1;  iIncr = -1; }
+for (i = iStart;  i != iEnd;  i += iIncr)
+    {
+    int exonStart = gene->exonStarts[i], exonEnd = gene->exonEnds[i];
+    if (snpEnd > exonStart && snpStart < exonEnd)
+	{
+	if (snpEnd > cdsStart && snpStart < cdsEnd)
+	    printSnp125FunctionInCDS(snp, geneTable, geneTrack, gene, i, geneName);
+	else if (cdsEnd > cdsStart)
+	    printf(firstTwoColumnsPctS "untranslated-%d</TD></TR>\n", geneTrack, geneName,
+		   (geneIsRc ^ (snpEnd < cdsStart)) ? 5 : 3);
+	else
+	    printf(firstTwoColumnsPctS "noncoding gene</TD></TR>\n", geneTrack, geneName);
+	}
+    if (i > 0)
+	{
+	int intronStart = gene->exonEnds[i-1], intronEnd = gene->exonStarts[i];
+	if (snpStart < intronStart+2 && snpEnd > intronStart)
+	    printf(firstTwoColumnsPctS "intron, splice-%d</TD></TR>\n",
+		   geneTrack, geneName,
+		   (geneIsRc ? 3 : 5));
+	else if (snpStart < intronEnd-2 && snpEnd > intronStart+2)
+	    printf(firstTwoColumnsPctS "intron</TD></TR>\n", geneTrack, geneName);
+	else if (snpStart < intronEnd && snpEnd > intronEnd-2)
+	    printf(firstTwoColumnsPctS "intron, splice-%d</TD></TR>\n",
+		   geneTrack, geneName,
+		   (geneIsRc ? 5 : 3));
+	}
+    }
+}
+
+void printSnp125NearGenes(struct sqlConnection *conn, struct snp125 *snp, char *geneTable,
+			  char *geneTrack)
+/* Search upstream and downstream of snp for neigh */
+{
+struct sqlResult *sr;
+char query[512];
+char **row;
+int snpStart = snp->chromStart, snpEnd = snp->chromEnd;
+int nearCount = 0;
+int maxDistance = 10000;
+/* query to the left: */
+safef(query, sizeof(query), "select name,txEnd,strand from %s "
+      "where chrom = '%s' and txStart < %d and txEnd > %d",
+      geneTable, snp->chrom, snpStart, snpStart - maxDistance);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *gene = row[0];
+    int end = sqlUnsigned(row[1]);
+    char *strand = row[2];
+    printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
+	   geneTable, gene, (snpStart - end + 1),
+	   (strand[0] == '-' ? "up" : "down"));
+    nearCount++;
+    }
+sqlFreeResult(&sr);
+/* query to the right: */
+safef(query, sizeof(query), "select name,txStart,strand from %s "
+      "where chrom = '%s' and txStart < %d and txEnd > %d",
+      geneTable, snp->chrom, snpEnd + maxDistance, snpEnd);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *gene = row[0];
+    int start = sqlUnsigned(row[1]);
+    char *strand = row[2];
+    printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
+	   geneTable, gene, (start - snpEnd + 1),
+	   (strand[0] == '-' ? "down" : "up"));
+    nearCount++;
+    }
+sqlFreeResult(&sr);
+if (nearCount == 0)
+    printf("<TR><TD>%s</TD><TD></TD><TD>intergenic</TD></TR>", geneTrack);
+}
+
+static struct genePred *getGPsWithFrames(struct sqlConnection *conn, char *geneTable,
+					 char *chrom, int start, int end)
+/* Given a known-to-exist genePred table name and a range, return
+ * genePreds in range with exonFrames populated. */
+{
+struct genePred *gpList = NULL;
+boolean hasBin;
+struct sqlResult *sr = hRangeQuery(conn, geneTable, chrom, start, end, NULL, &hasBin);
+struct sqlConnection *conn2 = hAllocConn(database);
+boolean hasFrames = (sqlFieldIndex(conn2, geneTable, "exonFrames") == hasBin + 14);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    int fieldCount = hasBin + (hasFrames ? 15 : 10);
+    struct genePred *gp;
+    if (hasFrames)
+	gp = genePredExtLoad(row+hasBin, fieldCount);
+    else
+	{
+	gp = genePredLoad(row+hasBin);
+	genePredAddExonFrames(gp);
+	}
+    slAddHead(&gpList, gp);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn2);
+return gpList;
+}
+
+void printSnp125Function(struct trackDb *tdb, struct snp125 *snp)
+/* If the user has selected a gene track for functional annotation,
+ * report how this SNP relates to any nearby genes. */
+{
+char varName[512];
+safef(varName, sizeof(varName), "%s_geneTrack", tdb->tableName);
+struct slName *geneTracks = cartOptionalSlNameList(cart, varName);
+if (geneTracks == NULL)
+    return;
+struct sqlConnection *conn = hAllocConn(database);
+struct slName *gt;
+printf("<BR><B>UCSC's predicted function relative to selected gene tracks:</B>\n");
+printf("<TABLE BORDERWIDTH=0>\n");
+for (gt = geneTracks;  gt != NULL;  gt = gt->next)
+    if (sqlTableExists(conn, gt->name))
+	{
+	struct genePred *geneList = getGPsWithFrames(conn, gt->name, snp->chrom,
+						     snp->chromStart, snp->chromEnd);
+	struct genePred *gene;
+	char query[256];
+	char buf[256];
+	safef(query, sizeof(query), "select shortLabel from trackDb where tableName='%s'",
+	      gt->name);
+	char *shortLabel = sqlQuickQuery(conn, query, buf, sizeof(buf)-1);
+	if (shortLabel == NULL) shortLabel = gt->name;
+	for (gene = geneList;  gene != NULL;  gene = gene->next)
+	    printSnp125FunctionInGene(snp, gt->name, shortLabel, gene);
+	if (geneList == NULL)
+	    printSnp125NearGenes(conn, snp, gt->name, shortLabel);
+	}
+printf("</TABLE>\n");
+hFreeConn(&conn);
+}
 
 void printSnp125Info(struct trackDb *tdb, struct snp125 snp, int version)
 /* print info on a snp125 */
@@ -14134,6 +14586,7 @@ if (snp.avHet>0)
     printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
 printf("<BR><B><A HREF=\"#Weight\">Weight</A>: </B>%d",           snp.weight);
 printf("<BR>\n");
+printSnp125Function(tdb, &snp);
 }   
     
 void writeSnpExceptionWithVersion(char *table, char *itemName, int version)
@@ -20436,6 +20889,10 @@ else if (sameWord(track, "rgdSslp"))
 else if (sameWord(track, "gad"))
     {
     doGad(tdb, item, NULL);
+    }
+else if (sameWord(track, "omimGene"))
+    {
+    doOmimGene(tdb, item);
     }
 else if (sameWord(track, "rgdQtl") || sameWord(track, "rgdRatQtl"))
     {

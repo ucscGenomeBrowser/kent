@@ -13,8 +13,8 @@ set directory=""
 set today=""
 set dirPath=""
 set urlPath=""
-set hgwdevString=""
-set hgwbetaString=""
+set devString=""
+set betaString=""
 set rrString=""
  
 if ($#argv == 0 || $#argv > 1) then

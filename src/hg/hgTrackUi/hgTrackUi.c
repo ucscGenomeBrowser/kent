@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.460 2008/11/13 22:40:51 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.463 2008/12/10 17:46:33 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -166,6 +166,42 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
 
 /* A comment for the purposes of brancht-tag-move demo. */
 
+void snp125OfferGeneTracksForFunction(struct trackDb *tdb)
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct slName *genePredTables = hTrackTablesOfType(conn, "genePred%%"), *gt;
+if (genePredTables != NULL)
+    {
+    struct trackDb *geneTdbList = NULL, *gTdb;
+    for (gt = genePredTables;  gt != NULL;  gt = gt->next)
+	{
+	gTdb = hTrackDbForTrack(database, gt->name);
+	if (gTdb && sameString(gTdb->grp, "genes"))
+	    {
+	    if (gTdb->parent)
+		gTdb->priority = (gTdb->parent->priority + gTdb->priority/1000);
+	    slAddHead(&geneTdbList, gTdb);
+	    }
+	}
+    slSort(&geneTdbList, trackDbCmp);
+    printf("<BR><B>On details page, show function and coding differences relative to: </B> ");
+    char cartVar[256];
+    safef(cartVar, sizeof(cartVar), "%s_geneTrack", tdb->tableName);
+    struct slName *selectedGeneTracks = cartOptionalSlNameList(cart, cartVar);
+    int numCols = 4, i;
+    int menuSize = slCount(geneTdbList);
+    char **values = needMem(menuSize*sizeof(char *));
+    char **labels = needMem(menuSize*sizeof(char *));
+    for (i = 0, gTdb = geneTdbList;  i < menuSize && gTdb != NULL;  i++, gTdb = gTdb->next)
+	{
+	values[i] = gTdb->tableName;
+	labels[i] = gTdb->shortLabel;
+	}
+    cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedGeneTracks, numCols);
+    }
+hFreeConn(&conn);
+}
+
 #define SNP125_FILTER_COLUMNS 4
 #define SNP125_SET_ALL "snp125SetAll"
 #define SNP125_CLEAR_ALL "snp125ClearAll"
@@ -276,6 +312,8 @@ if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
     printf("<BR>(If enabled, chimp allele is displayed first, then '>', then human alleles). </B>&nbsp;");
     printf("<BR>");
     }
+
+snp125OfferGeneTracksForFunction(tdb);
 
 snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0"));
 printf("<BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
@@ -2155,7 +2193,7 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
 printf("</TABLE>");
 }
 
-void specificUi(struct trackDb *tdb)
+void specificUi(struct trackDb *tdb, struct customTrack *ct)
 	/* Draw track specific parts of UI. */
 {
 char *track = tdb->tableName;
@@ -2326,6 +2364,11 @@ else if (tdb->type != NULL)
             if (!sameString(track, "tigrGeneIndex") && !sameString(track, "ensGeneNonCoding") && !sameString(track, "encodeGencodeRaceFrags"))
 		baseColorDrawOptDropDown(cart, tdb);
             }
+	else if (sameWord(words[0], "encodePeak") || sameWord(words[0], "narrowPeak") || 
+		 sameWord(words[0], "broadPeak") || sameWord(words[0], "gappedPeak"))
+	    {
+	    encodePeakUi(tdb, ct);
+	    }
 	else if (sameWord(words[0], "expRatio"))
 	    {
 	    expRatioUi(tdb);
@@ -2345,7 +2388,8 @@ else if (tdb->type != NULL)
 	     wgRna table has a new field 'type', which is used to store RNA 
 	     type info and from which to determine the display color of each entry.
 	    */
-	    if ((atoi(words[1])>4) && !trackDbSetting(tdb, "noScoreFilter") &&
+	    int bedFieldCount = atoi(words[1]);
+	    if ((bedFieldCount >= 5 || trackDbSetting(tdb, "scoreMin") != NULL) &&
 		!sameString(track, "jaxQTL3") && !sameString(track, "wgRna") &&
 		!startsWith("encodeGencodeIntron", track))
 		{
@@ -2375,7 +2419,7 @@ else if (tdbIsComposite(tdb))
     hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
 }
 
-void trackUi(struct trackDb *tdb)
+void trackUi(struct trackDb *tdb, struct customTrack *ct)
 /* Put up track-specific user interface. */
 {
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
@@ -2398,7 +2442,7 @@ if (tdbIsSuperTrackChild(tdb))
         }
     }
 
-if (isCustomTrack(tdb->tableName) && sameString(tdb->type, "maf"))
+if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
 
 /* Display visibility menu */
@@ -2422,7 +2466,7 @@ else
     }
 printf("&nbsp;");
 cgiMakeButton("Submit", "Submit");
-if (isCustomTrack(tdb->tableName))
+if (ct)
     {
     puts("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
     cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
@@ -2434,10 +2478,10 @@ if (isCustomTrack(tdb->tableName))
     }
 printf("<BR>\n");
 
-specificUi(tdb);
+specificUi(tdb, ct);
 puts("</FORM>");
 
-if (isCustomTrack(tdb->tableName))
+if (ct)
     {
     /* hidden form for custom tracks CGI */
     printf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
@@ -2533,7 +2577,7 @@ void doMiddle(struct cart *theCart)
 {
 struct trackDb *tdb = NULL;
 char *track;
-struct customTrack *ct, *ctList = NULL;
+struct customTrack *ct = NULL, *ctList = NULL;
 char *ignored;
 cart = theCart;
 track = cartString(cart, "g");
@@ -2581,7 +2625,7 @@ if (super)
     }
 char *title = (tdbIsSuper(tdb) ? "Super-track Settings" : "Track Settings");
 cartWebStart(cart, database, "%s %s", tdb->shortLabel, title);
-trackUi(tdb);
+trackUi(tdb, ct);
 printf("<BR>\n");
 webEnd();
 }

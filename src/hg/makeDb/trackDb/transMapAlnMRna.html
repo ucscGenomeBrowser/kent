@@ -9,6 +9,21 @@ orthologous genes in $organism.
 </P>
 
 <!-- everything below here common to all transMap*.html pages -->
+
+<em>TransMap</em> maps genes and related annotations in one species to another
+using synteny-filtered pairwise genome alignments (chains and nets) to
+determine the most likely orthologs.  For example, for the mRNA TransMap track
+on the human assembly, more than 400,000 mRNAs from 23 vertebrate species were
+aligned at high stringency to the native assembly using BLAT.  The alignments
+were then mapped to the human assembly using the chain and net alignments
+produced using blastz, which has higher sensitivity than BLAT for diverged
+organisms.
+<P>
+Compared to translated BLAT, TransMap finds fewer paralogs and aligns more UTR
+bases.  For closely related low-coverage assemblies, a reciprocal-best
+relationship is used in the chains and nets to improve the synteny prediction.
+<P>
+
 <H2>Display Conventions and Configuration</H2>
 <P>
 This track follows the display conventions for 

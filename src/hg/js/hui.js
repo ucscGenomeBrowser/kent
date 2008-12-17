@@ -96,12 +96,13 @@ function compositeCfgUpdateSubtrackCfgs(inp)
         var list = document.getElementsByTagName('select');
         for (var ix=0;ix<list.length;ix++) {
             if(list[ix].name.lastIndexOf(suffix) == list[ix].name.length - suffix.length ) {
-                list[ix].value = inp.value;
+                list[ix].selectedIndex = inp.selectedIndex;
                 count++;
             }
         }
     }
     //alert("compositeCfgUpdateSubtrackCfgs("+suffix+") updated "+count+" inputs.")
+    return true;
 }
 
 function compositeCfgRegisterOnchangeAction(prefix)
@@ -164,7 +165,7 @@ function showConfigControls(name)
         for (var ix=0;ix<list.length;ix++) {
             var tblRow = list[ix];
             if(tblRow.id.indexOf("tr_cfg_") == 0) {  // marked as tr containing a cfg's
-                if(tblRow.id.indexOf(name) == 7 && tblRow.style.display == 'none') {
+                if(tblRow.id.lastIndexOf(name) == 7 && tblRow.id.length == name.length + 7 && tblRow.style.display == 'none') {
                     tblRow.style.display = '';
                 } else {
                     tblRow.style.display = 'none';

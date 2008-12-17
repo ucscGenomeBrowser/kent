@@ -2,6 +2,7 @@
      o (in 34x1) Making total query output reporting a 64 bit number to avoid 
        overflow when people using more than 4 gig of query sequence.
      o (in 34x2) Fixed -out=blast to use +/- instead of -/+ for non-translated.
+     o (in 34x3) Fixed -minScore, filter was not working when over half query-size.
      
 
 34:

@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.46 2008/12/02 22:02:33 aamp Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.49 2008/12/15 20:09:53 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128
@@ -5707,6 +5707,35 @@ void sgdGeneMethods(struct track *tg)
 tg->itemName = sgdGeneName;
 }
 
+void adjustBedScoreGrayLevel(char *trackName, struct bed *bed, int scoreMin, int scoreMax)
+/* For each distinct trackName passed in, check cart for trackName_minGrayLevel; if 
+ * that is different from the gray level implied by scoreMin's place in [0..scoreMax], 
+ * then linearly transform bed->score from the range of [scoreMin,scoreMax] to 
+ * [(cartMinGrayLevel*scoreMax)/maxShade,scoreMax]. 
+ * Note: this assumes that scoreMin and scoreMax are constant for each track. */
+{
+static char *prevTrackName = NULL;
+static int scoreMinGrayLevel = 0;
+static int cartMinGrayLevel = 0;
+static float newScoreMin = 0;
+
+if (trackName != prevTrackName)
+    {
+    scoreMinGrayLevel = scoreMin * maxShade/scoreMax;
+    if (scoreMinGrayLevel <= 0) scoreMinGrayLevel = 1;
+    char setting[256];
+    safef(setting, sizeof(setting), "%s_minGrayLevel", trackName);
+    cartMinGrayLevel = cartUsualInt(cart, setting, scoreMinGrayLevel);
+    newScoreMin = cartMinGrayLevel * scoreMax/maxShade;
+    prevTrackName = trackName;
+    }
+if (cartMinGrayLevel != scoreMinGrayLevel)
+    {
+    float realScore = (float)(bed->score - scoreMin) / (scoreMax - scoreMin);
+    bed->score = newScoreMin + (realScore * (scoreMax - newScoreMin)) + 0.5;
+    }
+}
+
 void bedLoadItemByQuery(struct track *tg, char *table,
 			char *query, ItemLoader loader)
 /* Generic tg->item loader. If query is NULL use generic
@@ -5825,10 +5854,10 @@ boolean thickDrawItem = (trackDbSetting(tdb, "thickDrawItem") != NULL);
 
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, hvg);
-else
+else if (tg->colorShades)
     {
-    if (tg->colorShades)
-	color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
+    adjustBedScoreGrayLevel(tdb->tableName, bed, scoreMin, scoreMax);
+    color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
     }
 w = x2-x1;
 if (w < 1)
@@ -8917,6 +8946,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 9);
     bed8To12(bed);
+    adjustBedScoreGrayLevel(tdb->tableName, bed, scoreMin, scoreMax);
     lf = lfFromBedExtra(bed, scoreMin, scoreMax);
     if (useItemRgb)
 	{
@@ -8971,6 +9001,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 8);
     bed8To12(bed);
+    adjustBedScoreGrayLevel(tdb->tableName, bed, scoreMin, scoreMax);
     lf = lfFromBedExtra(bed, scoreMin, scoreMax);
     if (useItemRgb)
 	{
@@ -9172,6 +9203,7 @@ else
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoad12(row+rowOffset);
+    adjustBedScoreGrayLevel(tdb->tableName, bed, scoreMin, scoreMax);
     lf = lfFromBedExtra(bed, scoreMin, scoreMax);
     if (useItemRgb)
 	{
@@ -10403,6 +10435,71 @@ tg->labelNextItemButtonable = TRUE;
 tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
+char *omimGeneName(struct track *tg, void *item)
+/* set name for omimGene track */
+{
+struct bed *el = item;
+char *geneSymbols;
+char query[256];
+struct sqlConnection *conn = hAllocConn(database);
+
+/* show gene symbols from morbidmap if the OMIM entry is in it */
+safef(query, sizeof(query), "select geneSymbols from omimMorbidMap where omimId=%s", el->name);
+geneSymbols = sqlQuickString(conn, query);
+if (geneSymbols != NULL)
+    {
+    hFreeConn(&conn);
+    return(cloneString(geneSymbols));
+    }
+else
+    {
+    /* if not in morbidmap, grab gene symbol from kgXref */
+    safef(query, sizeof(query), 
+    	  "select geneSymbol from kgXref x, omimToKnownCanonical c where c.omimId=%s and x.kgId=c.kgId", el->name);
+    geneSymbols = sqlQuickString(conn, query);
+    if (geneSymbols != NULL)
+    	{
+    	hFreeConn(&conn);
+    	return(cloneString(geneSymbols));
+	}
+    else
+    	{
+	/* for non-KG entry, return OMIM ID */
+    	hFreeConn(&conn);
+	return(el->name);
+	}
+    }
+}
+
+Color omimGeneColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* set the color for omimGene track items */
+{
+struct bed *el = item;
+char *geneSymbols;
+char query[256];
+struct sqlConnection *conn = hAllocConn(database);
+
+/* set the color to red if the entry is listed in morbidmap */
+safef(query, sizeof(query), "select geneSymbols from omimMorbidMap where omimId=%s", el->name);
+geneSymbols = sqlQuickString(conn, query);
+hFreeConn(&conn);
+if (geneSymbols != NULL)
+    {
+    return hvGfxFindColorIx(hvg, 255, 0, 0);
+    }
+else
+    {
+    return hvGfxFindColorIx(hvg, 200, 0, 125);
+    }
+}
+
+void omimGeneMethods (struct track *tg)
+{
+tg->itemColor 	  = omimGeneColor;
+tg->itemNameColor = omimGeneColor;
+tg->itemName      = omimGeneName;
+}
+
 void omiciaMethods (struct track *tg)
 /* color set by score */
 {
@@ -10422,6 +10519,8 @@ void loadBed12Source(struct track *tg)
  * Sort items by source. */
 {
 struct linkedFeatures *list = NULL;
+int scoreMin = atoi(trackDbSettingOrDefault(tg->tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tg->tdb, "scoreMax", "1000"));
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -10432,7 +10531,9 @@ sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct bed12Source *el = bed12SourceLoad(row+rowOffset);
-    struct linkedFeatures *lf = lfFromBed((struct bed *)el);
+    struct bed *bedPart = (struct bed *)el;
+    adjustBedScoreGrayLevel(tg->tdb->tableName, bedPart, scoreMin, scoreMax);
+    struct linkedFeatures *lf = lfFromBed(bedPart);
     lf->extra = (void *)cloneString(el->source);
     bed12SourceFree(&el);
     slAddHead(&list, lf);
@@ -10827,6 +10928,8 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (isSubtrackVisible(subtrack))
 	{
 	lastTime = clock1000();
+	if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
+	    errAbort("Error: Null pointer subtrack->loadItems in compositeLoad() for track(%s) subtrack(%s)\n", track->mapName, subtrack->mapName);
         subtrack->loadItems(subtrack);
 	if (measureTiming)
 	    {
@@ -11379,6 +11482,7 @@ registerTrackHandler("kiddEichlerValid", kiddEichlerMethods);
 
 registerTrackHandler("hapmapSnps", hapmapMethods);
 registerTrackHandler("omicia", omiciaMethods);
+registerTrackHandler("omimGene", omimGeneMethods);
 #endif /* GBROWSE */
 }
 

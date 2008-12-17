@@ -120,4 +120,32 @@ _EOF_
 # add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
     hgsql -e 'update dbDb set
 sourceName="Broad Institute turTru1 (NCBI project 20367, ABRN01000000)" where name="turTru1";' hgcentraltest
-###########################################################################
+
+############################################################################
+#  turTru1 - Hedgehog - Ensembl Genes version 51  (DONE - 2008-12-04 - hiram)
+    ssh swarm
+    cd /hive/data/genomes/turTru1
+    cat << '_EOF_' > turTru1.ensGene.ra
+# required db variable
+db turTru1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the 14,543 genes (of 26,340) that do not map to UCSC coordinates
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 turTru1.ensGene.ra
+    #	This did not pass the check during load of coverage of
+    #	peptides vs. gene counts
+    ssh hgwdev
+    cd /hive/data/genomes/turTru1/bed/ensGene.51
+    featureBits turTru1 ensGene
+    #	10421083 bases of 2298444090 (0.453%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/turTru1/bed/ensGene.51
+
+############################################################################

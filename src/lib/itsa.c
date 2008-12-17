@@ -74,7 +74,11 @@ verbose(2, "itsa file %s size %lld\n", fileName, h.size);
 struct itsaFileHeader *header ;
 if (memoryMap)
     {
+#ifdef MACHTYPE_sparc
+    header = (struct itsaFileHeader *)mmap(NULL, h.size, PROT_READ, MAP_SHARED, fd, 0);
+#else
     header = mmap(NULL, h.size, PROT_READ, MAP_FILE|MAP_SHARED, fd, 0);
+#endif
     if (header == (void*)(-1))
 	errnoAbort("Couldn't mmap %s, sorry", fileName);
     }
@@ -157,7 +161,7 @@ if (itsa != NULL)
     freeMem(itsa->chromNames);
     freeMem(itsa->chromOffsets);
     if (itsa->isMapped)
-	munmap(itsa->header, itsa->header->size);
+	munmap((void *)itsa->header, itsa->header->size);
     else
 	freeMem(itsa->header);
     freez(pItsa);

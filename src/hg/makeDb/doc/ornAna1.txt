@@ -1411,4 +1411,30 @@ see doc/builds.txt for specific details.
 	| wigEncode stdin qual.wig qual.wib
     ln -s `pwd`/qual.wib /gbdb/ornAna1/wib
     hgLoadWiggle -pathPrefix=/gbdb/ornAna1/wib ornAna1 quality qual.wig
+
+############################################################################
+#  ornAna1 - Platypus - Ensembl Genes version 51  (DONE - 2008-12-03 - hiram)
+    ssh kolossus
+    cd /hive/data/genomes/ornAna1
+    cat << '_EOF_' > ornAna1.ensGene.ra
+# required db variable
+db ornAna1
+# optional nameTranslation, the sed command that will transform
+#	Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9][0-9]*\)/chr\1/; s/^\(X[0-9]\)/chr\1/; s/^MT/chrM/"
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly, 365 items
+skipInvalid yes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 ornAna1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/ornAna1/bed/ensGene.51
+    featureBits ornAna1 ensGene
+    # 24491979 bases of 1842236818 (1.329%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/ornAna1/bed/ensGene.51
+
 ############################################################################

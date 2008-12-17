@@ -2,50 +2,50 @@
 # in various databases.
 
 # Define databases used for various organisms
-set hg hg15,hg16,hg17,hg18
-set mm mm3,mm4,mm5,mm6,mm7,mm8,mm9
-set rn rn2,rn3,rn4
-set fr fr1,fr2
-set ce ce1,ce2,ce4,ce6
-set cb cb1,cb3
-set dm dm1,dm2,dm3
-set dp dp2,dp3
-set sacCer sacCer1
-set panTro panTro1,panTro2
-set galGal galGal2,galGal3
-set ci ci1,ci2
-set danRer danRer1,danRer2,danRer3,danRer4,danRer5
-set canFam canFam1,canFam2
-set droYak droYak1,droYak2
-set droMoj droMoj1,droMoj2
-set droVir droVir1,droVir2
-set droEre droEre1
-set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droGri1,droPer1,droSec1,droWil1
+set anoCar anoCar1
 set anoGam anoGam1
 set apiMel apiMel1,apiMel2
-set cioSav cioSav1
-set tetNig tetNig1
-set xenTro xenTro1,xenTro2
-set monDom monDom1,monDom4
-set bosTau bosTau1,bosTau2,bosTau3,bosTau4
-set rheMac rheMac1,rheMac2
-set strPur strPur1,strPur2
-set felCat felCat3
-set gasAcu gasAcu1
-set oryLat oryLat1,oryLat2
-set equCab equCab1,equCab2
-set anoCar anoCar1
-set ornAna ornAna1
+set bosTau bosTau2,bosTau3,bosTau4
+set braFlo braFlo1
+set caeJap caeJap1
 set caePb caePb1,caePb2
 set caeRem caeRem2,caeRem3
-set caeJap caeJap1
-set priPac priPac1
-set ponAbe ponAbe2
 set calJac calJac1
+set canFam canFam1,canFam2
 set cavPor cavPor3
+set cb cb1,cb3
+set ce ce2,ce4,ce6
+set ci ci1,ci2
+set cioSav cioSav1
+set danRer danRer3,danRer4,danRer5
+set dm dm1,dm2,dm3
+set dp dp2,dp3
+set droEre droEre1
+set droMoj droMoj1,droMoj2
+set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droGri1,droPer1,droSec1,droWil1
+set droVir droVir1,droVir2
+set droYak droYak1,droYak2
+set equCab equCab1,equCab2
+set felCat felCat3
+set fr fr1,fr2
+set galGal galGal2,galGal3
+set gasAcu gasAcu1
+set hg hg16,hg17,hg18
+set mm mm7,mm8,mm9
+set monDom monDom1,monDom4
+set ornAna ornAna1
+set oryLat oryLat2
+set panTro panTro1,panTro2
 set petMar petMar1
-set braFlo braFlo1
+set ponAbe ponAbe2
+set priPac priPac1
+set rheMac rheMac2
+set rn rn3,rn4
+set sacCer sacCer1
+set strPur strPur1,strPur2
 set taeGut taeGut1
+set tetNig tetNig1
+set xenTro xenTro1,xenTro2
 
 # Define all organism/assembly-specific databases.
 set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut
@@ -78,7 +78,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 
 # Define transMap databases
 # transMapDb not public: dasNov1,echTel1,loxAfr1,oryCun1,otoGar1
-set transMapDb anoCar1,bosTau4,calJac1,canFam2,cavPor3,danRer5,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,mm9,monDom4,ornAna1,oryLat1,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,tetNig1,xenTro2
+set transMapDb anoCar1,bosTau4,calJac1,canFam2,cavPor3,danRer5,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,mm9,monDom4,ornAna1,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,tetNig1,xenTro2
 
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
@@ -86,19 +86,19 @@ databasesChecked $gbd,$otherDb
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330
 
 # Define various non-self chains
-set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Mm9,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar1,Ce1,Ce2,Ce4,Ce6,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap1,Cb3,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CavPor3,PetMar1,BraFlo1,TaeGut1
+set chainDest Hg16,Hg17,Hg18,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar1,Ce2,Ce4,Ce6,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap1,Cb3,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CavPor3,PetMar1,BraFlo1,TaeGut1
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
 # Older format (KG 2)
-set kgDb2 hg15,hg16,hg17,mm3,mm4,mm5,mm6,mm7,mm8,rn2,rn3,rn4
+set kgDb2 hg16,hg17,mm7,mm8,rn3,rn4
 # Newer format (KG 3 aka UCSC Genes)
 set kgDb3 hg18,mm9
 
 # Protein browser databases.
-set pbDb hg18,hg17,hg16,mm4,mm6,mm7,mm8,mm9,rn3 
-set pbDb1 hg17,hg16,mm4,mm6,mm7,mm8,mm9,rn3 
-set pbDb2 mm4,rn3
+set pbDb hg18,hg17,hg16,mm7,mm8,mm9,rn3 
+set pbDb1 hg17,hg16,mm7,mm8,mm9,rn3 
+set pbDb2 rn3
 set pbDb3 hg16,hg17,hg18
 
 # Define databases that support family browser (gene sorter)
@@ -611,8 +611,7 @@ identifier augustusAbinitioName dependency
 identifier vegaName
 "Link together various VEGA human curated gene annotation"
     $gbd.vegaInfo.transcriptId
-    $gbd,!hg15.vegaGene.name
-    hg15.vegaGene.name minCheck=0.01
+    $gbd.vegaGene.name
     $gbd.vegaPseudoGene.name
 
 identifier vegaGeneName typeOf=vegaName dependency
@@ -648,7 +647,6 @@ identifier vegaPseudogeneName typeOf=vegaName
 #identifier pseudoGeneName
 #"Link together pseudo predicted gene structure and peptide"
 #	$hg.pseudoMrna.qName dupeOk
-#	hg15.pseudoGeneLink.name minCheck=0.85
 #	hg16,hg17,hg18.pseudoGeneLink.name minCheck=0.99
 
 identifier mrnaBlastzName
@@ -658,23 +656,6 @@ identifier mrnaBlastzName
     hg16.pseudoMrna.qName minCheck=0.76
 
 # Microarray stuff.
-
-identifier agilentCghHg18Id
-"Agilent CGH probe ID"
-    hg18.agilentCgh244a.name minCheck=0.99
-    hg18.agilentCgh105a.name minCheck=0.30
-    hg18.agilentCgh44k.name minCheck=0.10
-
-identifier agilentCghMm8Id
-"Agilent CGH probe ID"
-    mm8.agilentCgh244a.name minCheck=0.99
-    mm8.agilentCgh105a.name minCheck=0.30
-    mm8.agilentCgh44k.name minCheck=0.10
-
-identifier agilentCghRn4Id
-"Agilent CGH probe ID"
-    rn4.agilentCgh244a.name minCheck=0.99
-    rn4.agilentCgh105a.name minCheck=0.30
 
 identifier affyHumanExon
 "Affymetrix all human exon array probe id"
@@ -1039,28 +1020,6 @@ identifier rBestChainPanTro1Id
     hg16.rBestChainPanTro1Link.chainId $split full
     hg16.rBestNetPanTro1.chainId exclude=0
 
-identifier mouseChainId 
-"Link together chain/net on hg15 for mouse"
-    hg15.mouseChain.id $split
-    hg15.mouseChainLink.chainId $split full 
-    hg15.mouseNet.chainId exclude=0
-
-identifier humanChainId 
-"Link together chain/net on mm3 for human"
-    mm3.humanChain.id $split
-    mm3.humanChainLink.chainId $split full
-    mm3.humanNet.chainId exclude=0
-
-identifier cb1ChainId 
-"Link together chain/net on ce1 for cb1"
-    ce1.cb1Chain.id $split
-    ce1.cb1ChainLink.chainId $split full
-
-identifier ce1ChainId 
-"Link together chain/net on cb1 for ce1"
-    cb1.ce1Chain.id $split
-    cb1.ce1ChainLink.chainId $split full
-
 # Genbank/trEMBL Accessions and meaningful subsets thereof
 identifier genbankAccession external=genbank
 "Generic Genbank Accession.  More specific Genbank accessions follow"
@@ -1095,8 +1054,6 @@ identifier humanBacAccession typeOf=bacAccession
     hg18.gold.frag chopAfter=. $split minCheck=0.98
     hg16.certificate.accession1 
     hg16.certificate.accession2
-    hg15.certificate.accession1 minCheck=0.98
-    hg15.certificate.accession2 minCheck=0.98
     $hg,!hg18.gl.frag chopAfter=. $split
     hg18.gl.frag chopAfter=. $split minCheck=0.95
     $hg.fishClones.accNames chopAfter=. comma minCheck=0.70
@@ -1165,16 +1122,15 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     $gbd.all_mrna.qName dupeOk
     $gbd,!ce2.mrnaOrientInfo.name full minCheck=0.01
     ce2.mrnaOrientInfo.name minCheck=0.08
-    $gbd,!mm6,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.mrnaID minCheck=0.80
-    $gbd,!mm6,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.dupMrnaID minCheck=0.95
-    $gbd,!mm6,!mm7,!mm8,!mm9,!hg17,!rn2,!rn3,!rn4.mrnaRefseq.mrna minCheck=0.25
-    mm6.mrnaRefseq.mrna minCheck=0.80
+    $gbd,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.mrnaID minCheck=0.80
+    $gbd,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.dupMrnaID minCheck=0.95
+    $gbd,!mm7,!mm8,!mm9,!hg17,!rn3,!rn4.mrnaRefseq.mrna minCheck=0.25
     mm7.mrnaRefseq.mrna minCheck=0.30
     mm8.mrnaRefseq.mrna minCheck=0.30
     mm9.mrnaRefseq.mrna minCheck=0.30
     hg17.mrnaRefseq.mrna minCheck=0.80
     $rn.mrnaRefseq.mrna minCheck=0.03
-    $gbd,!mm6,!mm7,!mm8,!mm9,!hg17,!hg18,!rn4.spMrna.mrnaID minCheck=0.98
+    $gbd,!mm7,!mm8,!mm9,!hg17,!hg18,!rn4.spMrna.mrnaID minCheck=0.98
     $mm.spMrna.mrnaID minCheck=0.20
     $mm.dupSpMrna.mrnaID minCheck=0.10
     $mm.dupSpMrna.dupMrnaID minCheck=0.10
@@ -1201,15 +1157,14 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refLink.mrnaAcc 
     $gbd.refSeqStatus.mrnaAcc minCheck=0.10
     $kgDb.kgXref.refseq exclude= minCheck=0.50
-    $kgDb,!hg16,!hg17,!hg18,!mm5,!mm6,!mm7,!mm8,!mm9.knownToRefSeq.value minCheck=0.98
-    hg18,mm6,mm7,mm8,mm9.knownToRefSeq.value minCheck=0.96
-    hg16,hg17,mm5.knownToRefSeq.value minCheck=0.95
+    $kgDb,!hg16,!hg17,!hg18,!mm7,!mm8,!mm9.knownToRefSeq.value minCheck=0.98
+    hg18,mm7,mm8,mm9.knownToRefSeq.value minCheck=0.96
+    hg16,hg17.knownToRefSeq.value minCheck=0.94
     $kgDb.refSeqKg.refseq minCheck=0.60
     $ccdsDb,!hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.35
-    $gbd,!mm5,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
-    mm5.mrnaRefseq.refseq minCheck=0.22
-    rn2,rn3.mrnaRefseq.refseq minCheck=0.03
-    $gbd,!hg15,!bosTau1,!bosTau2,!bosTau3,!canFam1,!canFam2,!droSim1,!droYak1,!droYak2,!panTro1,!rheMac1,!rheMac2,!dp2,!dp3.mrnaOrientInfo.name minCheck=0.0
+    $gbd,!rn3.mrnaRefseq.refseq minCheck=0.25
+    rn3.mrnaRefseq.refseq minCheck=0.03
+    $gbd,!bosTau2,!bosTau3,!canFam1,!canFam2,!droSim1,!droYak1,!droYak2,!panTro1,!rheMac2,!dp2,!dp3.mrnaOrientInfo.name minCheck=0.0
 # The rule above should only apply to mrnaOrientInfo entries from refSeq (not
 # the regular genBank mRNAs).  The minCheck=0.0 preserves table relationshps.
     $gbd.refFlat.name
@@ -1219,19 +1174,16 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
     dm1.bdgpToRefSeq.value minCheck=0.94
     $dm,!dm1.flyBaseToRefSeq.value minCheck=0.96
-    $mm,!mm6,!mm5.mrnaRefseq.mrna minCheck=0.03
-    $mm,!mm6,!mm5.spMrna.mrnaID minCheck=0.40
-    $mm,!mm5.dupSpMrna.mrnaID minCheck=0.60
-    $mm,!mm5,!mm8,!mm9.dupSpMrna.dupMrnaID minCheck=0.20
+    $mm.mrnaRefseq.mrna minCheck=0.03
+    $mm.spMrna.mrnaID minCheck=0.40
+    $mm.dupSpMrna.mrnaID minCheck=0.60
+    $mm,!mm8,!mm9.dupSpMrna.dupMrnaID minCheck=0.20
     mm9.dupSpMrna.dupMrnaID minCheck=0.19
     mm8.dupSpMrna.dupMrnaID minCheck=0.19
-    mm6.mrnaRefseq.mrna minCheck=0.10
-    mm6.spMrna.mrnaID minCheck=0.50
     hg17.mrnaRefseq.mrna minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.50
     hg17.dupSpMrna.mrnaID minCheck=0.40
     hg17.dupSpMrna.dupMrnaID minCheck=0.20
-    hg15.geneBands.mrnaAcc
     hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.37
 
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
@@ -1244,7 +1196,6 @@ identifier xenoRefSeqId typeOf=xenoMrnaAccession
 identifier knownToRefSeqId typeOf=mrnaAccession 
 "RefSeq mRNA accession in knownToRefSeq table"
     $kgDb.knownToRefSeq.value dupeOk
-    mm6.geneNetworkId.id minCheck=0.70
     mm7.geneNetworkId.id minCheck=0.80
     mm8.geneNetworkId.id minCheck=0.80
     mm9.geneNetworkId.id minCheck=0.80
@@ -1261,10 +1212,10 @@ identifier knownGeneId dependency
     $kgDb.mmBlastTab.query
     $kgDb.rnBlastTab.query
     $kgDb.scBlastTab.query
-    $kgDb,!rn3,!mm5,!hg15.dupSpMrna.mrnaID
-    rn3,mm5,hg15.dupSpMrna.mrnaID minCheck=0.90
-#   $kgDb,!hg15,!hg16,!hg17.pseudoGeneLink.kgName exclude=noKg
-#   hg15,hg16,hg17.pseudoGeneLink.kgName minCheck=0.18 exclude=noKg
+    $kgDb,!rn3.dupSpMrna.mrnaID
+    rn3.dupSpMrna.mrnaID minCheck=0.90
+#   $kgDb,!hg16,!hg17.pseudoGeneLink.kgName exclude=noKg
+#   hg16,hg17.pseudoGeneLink.kgName minCheck=0.18 exclude=noKg
     $kgDb.foldUtr3.name
     $kgDb.foldUtr5.name
     $hg.gnfU95Distance.query
@@ -1460,9 +1411,8 @@ identifier genBankSource
 identifier genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
     $gbd.tissue.id
-    $gbd,!rn2,!hg15.gbCdnaInfo.tissue 
-    hg15,rn2.gbCdnaInfo.tissue minCheck=0.99
-    $gbd,!hg15.altGraphX.mrnaTissues comma
+    $gbd.gbCdnaInfo.tissue 
+    $gbd.altGraphX.mrnaTissues comma
 
 # Some misc clone-oriented identifiers
 
@@ -1514,15 +1464,15 @@ identifier stsName fuzzy
  
 identifier stsTrueName typeOf=stsName
 "STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
-    $gbd,!hg16,!hg15.stsInfo2.name
+    $gbd,!hg16.stsInfo2.name
     $gbd.stsAlias.trueName
     $gbd.stsMap.name
 
 identifier stsTrueNameHg16 typeOf=stsName
-"STS (Sequenced Tagged Site, aka mapping sequence) Unique Name for hg16, hg15"
-    hg16,hg15.stsInfo2.name dupeOk
-    hg16,hg15.stsAlias.trueName
-    hg16,hg15.stsMap.name
+"STS (Sequenced Tagged Site, aka mapping sequence) Unique Name for hg16"
+    hg16.stsInfo2.name dupeOk
+    hg16.stsAlias.trueName
+    hg16.stsMap.name
 
 identifier mouseStsTrueName typeOf=stsName
 "Mouse STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
@@ -1568,7 +1518,6 @@ identifier hugoName external=HUGO fuzzy
     $hg.kgXref.geneSymbol
     $hg.refFlat.geneName
     $hg.jaxOrtholog.humanSymbol
-    hg15.geneBands.name
     visiGene.gene.name
 
 identifier mouseGeneName fuzzy
@@ -1595,10 +1544,8 @@ identifier wormBaseId external=WormBase dependency
     $ce.kimExpDistance.query minCheck=0.68
     $ce.kimExpDistance.target minCheck=0.66
     $ce.orfToGene.name
-    $ce,!ce1.sangerBlastTab.query
-    $ce,!ce1.sangerBlastTab.target
-    ce1.sangerBlastTab.query minCheck=0.96
-    ce1.sangerBlastTab.target minCheck=0.96
+    $ce.sangerBlastTab.query
+    $ce.sangerBlastTab.target
     $ce.sangerCanonical.transcript
     $ce.sangerIsoforms.transcript
     $ce.sangerLinks.orfName minCheck=0.96
@@ -1646,7 +1593,7 @@ identifier flyBaseGeneId external=FlyBase
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
     $dm,!dm1.flyBase2004Xref.fbgn minCheck=0.90
     $dm,!dm1.pscreen.geneIds comma minCheck=0.95
-    $gbd,!hg17,!hg18,!danRer3,!mm5,!mm6,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!sacCer1.dmBlastTab.target minCheck=0.90
+    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!sacCer1.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
@@ -1798,7 +1745,6 @@ identifier ensemblGeneId external=Ensembl
     $gbd.ensTranscript.gene_name dupeOk
     $gbd.ensGtp.gene chopAfter=. 
     $gbd.ensGeneXref.gene_name
-    mm3.ensemblXref.gene_name
 
 identifier ensemblGeneId3 external=Ensembl
 "Ensemble Gene ID"
@@ -1808,7 +1754,6 @@ identifier ensemblProteinId external=Ensembl
 "Ensemble Translated Protein ID"
     $gbd.ensTranscript.translation_name dupeOk
     $gbd.ensGtp.protein chopAfter=.
-    mm3.ensemblXref2.translation_name
     $gbd.sfDescription.proteinID minCheck=0.10
     $gbd.sfAssign.seqID minCheck=0.01
 
@@ -1823,17 +1768,12 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $gbd,!ce6,!felCat3.ensGene.name chopAfter=.
     $gbd.superfamily.name
     $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
-    mm3.ensemblXref.transcript_name chopAfter=. minCheck=0.20
-    mm3.ensemblXref2.transcript_name chopAfter=. minCheck=0.20
-    $gbd,!mm4.ensGtp.transcript chopAfter=. minCheck=0.94
-    mm4.ensGtp.transcript chopAfter=. minCheck=0.94
-    $gbd,!mm4.ensPep.name chopAfter=. minCheck=0.96
-    mm4.ensPep.name chopAfter=. minCheck=0.94
+    $gbd.ensGtp.transcript chopAfter=. minCheck=0.94
+    $gbd.ensPep.name chopAfter=. minCheck=0.96
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd.ensInfo.name minCheck=0.9
-    $kgDb,!rn2.knownToEnsembl.value chopAfter=.
+    $kgDb.knownToEnsembl.value chopAfter=.
     $gbd.sfDescription.name chopAfter=.
-    mm3.superfamily.name chopAfter=.
     $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30
     $danRer.ensZfishBlastTab.query
     $danRer.ensZfishBlastTab.target
@@ -1911,19 +1851,15 @@ identifier cgapId
 
 identifier cgapMapId
 "NCI Cancer Genome Annotation Project Map ID"
-    $gbd,!hg15.cgapBiocDesc.mapID
+    $gbd.cgapBiocDesc.mapID
     $gbd.cgapBiocPathway.mapID
 
 identifier cgapAlias
 "NCI Cancer Genome Annotation Project Alias"
     $gbd.cgapAlias.alias dupeOk
-    $gbd,!mm5,!hg15,!hg16,!hg18.knownGene.name minCheck=0.20
-
-identifier cgapMapIdHg15
-"NCI Cancer Genome Annotation Project Map ID for hg15"
-    hg15.cgapBiocDesc.mapID dupeOk
-    hg15.cgapBiocPathway.mapID
-
+    $gbd,!hg16,!hg18.knownGene.name minCheck=0.50
+    hg16.knownGene.name minCheck=0.05
+    hg18.kgXref.geneSymbol minCheck=0.85
 
 # SNP (Simple Nucleotide Polymorphism) Stuff
 
@@ -2060,8 +1996,8 @@ identifier locusLinkId external=LocusLink
 "NCBI LocusLink ID"
     $gbd.refLink.locusLinkId dupeOk
     $gbd.keggPathway.locusID minCheck=0.98
-    $kgDb,!hg16,!mm8,!mm6,!mm5.knownToLocusLink.value minCheck=0.98
-    hg16,mm6,mm5,mm8.knownToLocusLink.value minCheck=0.96
+    $kgDb,!hg16,!mm8.knownToLocusLink.value minCheck=0.98
+    hg16,mm8.knownToLocusLink.value minCheck=0.96
 
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
@@ -2112,8 +2048,6 @@ identifier extFileId
 "External file ID"
     $gbd.extFile.id
     $gbd.seq.extFile
-    hg16.multizMm3Rn3GalGal2_phyloHMM.extFile
-    hg15.multizMm3Rn2.extFile
     rn3.multizHg15Mm3.extFile
     $sacCer.multizYeast.extFile
     $dm.a_gambiae_mypa.extFile
@@ -2167,7 +2101,6 @@ identifier blastHg16KGPepId
      ce2.blastHg16KG.qName
      ci1.blastHg16KG.qName
      cioSav1.blastHg16KG.qName
-     danRer1.blastHg16KG.qName
      dm1.blastHg16KG.qName
      galGal2.blastHg16KG.qName
 
@@ -2178,7 +2111,6 @@ identifier blastHg16KGRefId
      ce2.blastHg16KG.qName
      ci1.blastHg16KG.qName
      cioSav1.blastHg16KG.qName
-     danRer1.blastHg16KG.qName
      dm1.blastHg16KG.qName
      galGal2.blastHg16KG.qName
 
@@ -2199,9 +2131,6 @@ identifier blastHg17KGPep01Id
      hg17.knownGene.name  minCheck=0.30
      hg17.blastKGRef01.acc full
      monDom1.blastHg17KG.qName
-     danRer2.blastHg17KG.qName
-     bosTau1.blastHg17KG.qName
-     ce1.blastHg17KG.qName
      fr1.blastHg17KG.qName
      tetNig1.blastHg17KG.qName
      xenTro1.blastHg17KG.qName
@@ -2210,9 +2139,6 @@ identifier blastHg17KGRef01Id
 "hg17 ref 01"
      hg17.blastKGRef01.acc
      monDom1.blastHg17KG.qName
-     danRer2.blastHg17KG.qName
-     bosTau1.blastHg17KG.qName
-     ce1.blastHg17KG.qName
      fr1.blastHg17KG.qName
      tetNig1.blastHg17KG.qName
      xenTro1.blastHg17KG.qName
@@ -2256,7 +2182,6 @@ identifier blastHg18KGPep04Id
      strPur1.blastHg18KG.qName
      strPur2.blastHg18KG.qName
      bosTau2.blastHg18KG.qName
-     oryLat1.blastHg18KG.qName
      ornAna1.blastHg18KG.qName
      equCab1.blastHg18KG.qName
      equCab2.blastHg18KG.qName
@@ -2285,7 +2210,6 @@ identifier blastHg18KGRef04Id
      strPur1.blastHg18KG.qName
      strPur2.blastHg18KG.qName
      bosTau2.blastHg18KG.qName
-     oryLat1.blastHg18KG.qName
      ornAna1.blastHg18KG.qName
      equCab1.blastHg18KG.qName
      equCab2.blastHg18KG.qName
@@ -2372,7 +2296,6 @@ identifier jaxPhenotypeName external=MGI
     $mm.jaxPhenotype.name dupeOk
     $mm.jaxPhenotypeAlias.name
     mm8.jaxAllelePheno.transcript minCheck=0.9
-    mm6.jaxAllelePheno.transcript minCheck=0.8
 
 #links between the UniProt variants tables
 identifier protVarId
@@ -2381,6 +2304,12 @@ identifier protVarId
     hg18.protVarAttr.id
     hg18.protVarLink.id
     hg18.protVarPos.name
+
+#links between UniProt and the variants tables
+identifier protVarIdUni fuzzy
+"UniProt Variants track mutation identifier contains UniProt ID"
+    hg18.protVar.name chopAfter=: 
+    uniProt.protein.acc
 
 #links between gv (the new Locus Variants) and related tables 
 identifier gvId
@@ -2474,6 +2403,22 @@ identifier transMapSrcInfoSplicedEstId
     hgFixed.transMapSrcSplicedEst.id dupeOk
     $transMapDb.transMapInfoSplicedEst.srcId
 
+# transMap aln table and hgFixed src tables
+identifier transMapSrcAlnUcscGenesId
+"transMap UcscGenes alignment to source"
+    hgFixed.transMapSrcUcscGenes.id dupeOk chopAfter=-
+    $transMapDb.transMapAlnUcscGenes.qName chopAfter=-
+
+identifier transMapSrcAlnRefSeqId
+"transMap RefSeqs alignment to source"
+    hgFixed.transMapSrcRefSeq.id dupeOk chopAfter=-
+    $transMapDb.transMapAlnRefSeq.qName chopAfter=-
+
+identifier transMapSrcAlnSplicedEstId
+"transMap SplicedEsts alignment to source"
+    hgFixed.transMapSrcSplicedEst.id dupeOk chopAfter=-
+    $transMapDb.transMapAlnSplicedEst.qName chopAfter=-
+
 # transMap source tables
 identifier transMapSrcRefSeqId
 "transMap RefSeq source gene and sequences "
@@ -2519,6 +2464,22 @@ identifier transMapExtFileSplicedEstId
     hgFixed.transMapSeqSplicedEst.extFile dupeOk
     hgFixed.transMapExtFileSplicedEst.id unique
 
+# transMap and knownGenes
+identifier transMapGeneUcscGenesId
+"UCSC Genes and transMapGene table"
+    hgFixed.transMapGeneUcscGenes.id
+    $kgDb3.knownGene.name minCheck=0.60
+
+identifier transMapAlnKnownGeneHgId
+"UCSC Genes and transMapAln table"
+    mm9.knownGene.name
+    hg18.transMapAlnUcscGenes.qName chopAfter=-
+
+identifier transMapAlnKnownGeneMmId
+"UCSC Genes and transMapAln table"
+    hg18.knownGene.name
+    mm9.transMapAlnUcscGenes.qName minCheck=0.70 chopAfter=-
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
@@ -2533,17 +2494,17 @@ dependency dm1.arbExpDistance dm1.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio
 dependency $dm,!dm1.arbExpDistance $dm,!dm1.flyBaseToCG hgFixed.arbFlyLifeMedianRatio 
 dependency $sacCer.choExpDistance hgFixed.yeastChoCellCycle
 
-# FAN says: the following hg17 and mm6 tables are an exception
-dependency $pbDb,!hg17,!mm6.pbAnomLimit $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pbResAvgStd $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepCCntDist $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepExonCntDist $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepHydroDist $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepIPCntDist $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepMolWtDist $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepPi $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepPiDist $pbDb.knownGenePep
-dependency $pbDb,!hg17,!mm6.pepResDist $pbDb.knownGenePep
+# FAN says: the following hg17 tables are an exception
+dependency $pbDb,!hg17.pbAnomLimit $pbDb.knownGenePep
+dependency $pbDb,!hg17.pbResAvgStd $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepCCntDist $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepExonCntDist $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepHydroDist $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepIPCntDist $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepMolWtDist $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepPi $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepPiDist $pbDb.knownGenePep
+dependency $pbDb,!hg17.pepResDist $pbDb.knownGenePep
 dependency $pbDb.pepMwAaDist $pbDb.knownGenePep
 dependency $pbDb.pbAaDistA $pbDb.knownGenePep
 dependency $pbDb.pbAaDistC $pbDb.knownGenePep
@@ -2701,10 +2662,6 @@ type expDistance
 type chain
     $gbd.chr%_chain%
     $gbd.chr%_chainSelf
-    hg15.chr%_mouseChain
-    mm3.chr%_humanChain
-    ce1.chr%_cb1Chain
-    cb1.chr%_ce1Chain
 
 type agpFrag
     $gbd.chr%_gold
@@ -2949,12 +2906,6 @@ tablesIgnored $galGal
     chr%_gold
     supercontig
 
-tablesIgnored danRer1
-    rhMap
-
-tablesIgnored danRer2
-    rhMap
-
 tablesIgnored $danRer
     chr%_gold
     ctgPos2
@@ -3050,6 +3001,14 @@ tablesIgnored $hg
     affyTxnPhase3HeLaTopStrand
     affyTxnPhase3HepG2BottomStrand
     affyTxnPhase3HepG2TopStrand
+    agilentCgh105a
+    agilentCgh1x1m
+    agilentCgh244a
+    agilentCgh2x400k
+    agilentCgh44k
+    agilentCgh4x180k
+    agilentCgh8x60k
+    agilentCnv2x400k
     chimpDels
     chimpParalogy
     chimpSimpleDiff
@@ -3240,6 +3199,9 @@ tablesIgnored $hg
     kiddEichlerValidG248
 
 tablesIgnored $mm
+    agilentCgh105a
+    agilentCgh244a
+    agilentCgh44k
     chr%_gold
     syntenyRat
     syntenyHuman
@@ -3253,6 +3215,8 @@ tablesIgnored $panTro
     humanDels
 
 tablesIgnored $rn
+    agilentCgh105a
+    agilentCgh244a
     chr%_gold
     all_sts_primer
     bactigPos
@@ -3274,24 +3238,10 @@ tablesIgnored $felCat
     intronEst
     microsat
 
-tablesIgnored mm3
-    chr%_mm3Hg15L
-    ensEst
-    recombRateMouse
-
-tablesIgnored rn2
-    refPep
-
-tablesIgnored hg15
-    chr%_hg15Mm3L
-    refPep
-
 tablesIgnored hg16
-    humorMm3Rn3
     chicken_hmrg
     rat_hmrg
     mouse_hmrg
-    syntenyMm3
     syntenyMm4
 
 tablesIgnored hg17

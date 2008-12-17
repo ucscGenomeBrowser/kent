@@ -128,4 +128,33 @@ _EOF_
 # add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
     hgsql -e 'update dbDb set
 sourceName="Broad Institute dipOrd1 (NCBI project 20385, ABRO01000000)" where name="dipOrd1";' hgcentraltest
+
 ###########################################################################
+#  dipOrd1 - Kangaroo rat - Ensembl Genes version 51  (DONE - 2008-12-02 -
+#  hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/dipOrd1
+    cat << '_EOF_' > dipOrd1.ensGene.ra
+# required db variable
+db dipOrd1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#       names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the single gene that have invalid structures from Ensembl:
+# 11275: ENSDORT00000004734 no exonFrame on CDS exon 12
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 dipOrd1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/dipOrd1/bed/ensGene.51
+    featureBits dipOrd1 ensGene
+    # 25129085 bases of 1844961421 (1.362%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/dipOrd1/bed/ensGene.51
+
+############################################################################
+

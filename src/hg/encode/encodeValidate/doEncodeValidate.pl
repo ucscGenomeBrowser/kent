@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.115 2008/12/01 05:39:29 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.125 2008/12/16 01:33:50 larrym Exp $
 
 use warnings;
 use strict;
@@ -49,6 +49,7 @@ use vars qw/
     $opt_skipAutoCreation
     $opt_skipOutput
     $opt_skipValidateFiles
+    $opt_skipValidateFastQ
     $opt_validateDaf
     $opt_validateFile
     $opt_sendEmail
@@ -63,6 +64,7 @@ our $outPath;           # full path of output directory
 our %terms;             # controlled vocabulary
 our $quickCount=100;
 our $time0 = time;
+our %chromInfo;         # chromInfo from assembly for chrom validation
 
 sub usage {
     print STDERR <<END;
@@ -141,6 +143,7 @@ our %validators = (
     antibody => \&validateAntibody,
     rnaExtract => \&validateRnaExtract,
     localization => \&validateLocalization,
+    mapAlgorithm => \&validateMapAlgorithm,
     ripAntibody => \&validateRipAntibody,
     ripTgtProtein => \&validateRipTgtProtein,
     freezeDate => \&validateFreezeDate,
@@ -229,6 +232,11 @@ sub validateLocalization {
     return defined($terms{'localization'}{$val}) ? () : ("localization \'$val\' is not known");
 }
 
+sub validateMapAlgorithm {
+    my ($val) = @_;
+    return defined($terms{'mapAlgorithm'}{$val}) ? () : ("mapAlgorithm \'$val\' is not known");
+}
+
 sub validateRipAntibody {
     my ($val) = @_;
     # Mike, please change this to use Encode::isControlInput (LRM)
@@ -315,6 +323,46 @@ my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
 # my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|[eE]{1}?[+-]{1}?\\d+))";  # Tim's attempt
 # my $floatRegEx = "[+-]?(?:\\.\\d+|\\d+(?:\\.\\d+|))";                      # Original
 
+sub validateWithList
+{
+# Validate $line using a validation list; $validateList is a reference to a list of: {NAME, REGEX or TYPE}
+# returns error string or undef if line passes validation
+# This is designed to give better feedback to user; ideally we would load the validation list from the .as files
+    my ($line, $validateList) = @_;
+    my @list = split(/\s+/, $line);
+    if(@list != @{$validateList}) {
+        return "not enough fields";
+    } else {
+        for my $validateField (@{$validateList}) {
+            my $val = shift(@list);
+            my $type = $validateField->{TYPE};
+            if(defined($type) && $type eq 'chrom') {
+                if(!$chromInfo{$val}) {
+                    return "value '$val' for field '$validateField->{NAME}' is an invalid chromosome";
+                }
+            } else {
+                my $regex;
+                if($type) {
+                    my %typeMap = (int => "[+-]?\\d+", uint => "\\d+", float => $floatRegEx, string => "\\S+");
+                    if(!($regex = $typeMap{$type})) {
+                        die "PROGRAM ERROR: invalid TYPE: $type\n";
+                    }
+                } elsif(!($regex = $validateField->{REGEX})) {
+                    die "PROGRAM ERROR: invalid type list (missing required REGEX or TYPE)\n";
+                }
+                if($val !~ /^$regex$/) {
+                    my $error = "value '$val' is an invalid value for field '$validateField->{NAME}'";
+                    if($type) {
+                        $error .= "; must be type '$type'";
+                    }
+                    return $error;
+                }
+            }
+        }
+    }
+    return undef;
+}
+
 sub validateWig
 {
     my ($path, $file, $type) = @_;
@@ -360,9 +408,7 @@ sub validateBed {
             ;
         } elsif($fieldCount < 5) {
             die "$prefix not enough fields; " . scalar(@fields) . " present; at least 5 are required\n";
-        } elsif ($fields[0] !~ /^chr(\d+|M|X|Y)$/) {
-            # I have seen non-standard chrom names (e.g. "chr2_hap2" from Wold) and we want
-            # to make sure we don't import those.
+        } elsif (!$chromInfo{$fields[0]}) {
             die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
         } elsif ($fields[1] !~ /^\d+$/) {
             die "$prefix field 2 value ($fields[1]) is invalid; value must be a positive number\n";
@@ -407,9 +453,7 @@ sub validateBedGraph {
             ;
         } elsif($fieldCount != 4) {
             die "$prefix found " . scalar(@fields) . " fields; need 4\n";
-        } elsif ($fields[0] !~ /^chr(\d+|M|X|Y)$/) {
-            # I have seen non-standard chrom names (e.g. "chr2_hap2" from Wold) and we want
-            # to make sure we don't import those.
+        } elsif (!$chromInfo{$fields[0]}) {
             die "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
         } elsif ($fields[1] !~ /^\d+$/) {
             die "$prefix field 2 value ($fields[1]) is invalid; value must be a positive number\n";
@@ -461,7 +505,6 @@ sub validateGtf {
     return @res;
 }
 
-
 sub validateGene {
     my ($path, $file, $type) = @_;
     my $outFile = "validateGene.out";
@@ -489,18 +532,24 @@ sub validateGene {
 sub validateTagAlign
 {
     my ($path, $file, $type) = @_;
-    my $line = 0;
-    doTime("beginning validateTagAlign") if $opt_timing;
+    my $lineNumber = 0;
     my $fh = openUtil($path, $file);
-    while(<$fh>) {
-        $line++;
-        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
+    my @list = ({TYPE => "chrom", NAME => "chrom"},
+                {TYPE => "uint", NAME => "chromStart"},
+                {TYPE => "uint", NAME => "chromEnd"},
+                {REGEX => "[0-3ATCGN\\.]+", NAME => "sequence"},
+                {TYPE => "uint", NAME => "score"},
+                {REGEX => "[+-\\.]", NAME => "strand"});
+    doTime("beginning validateTagAlign") if $opt_timing;
+    while(my $line = <$fh>) {
+        chomp $line;
+        $lineNumber++;
+        next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
 	# MJP: for now, allow colorspace sequences as well as DNA + dot
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[0-3ATCGN\.]+\s+\d+\s+[+-]$/)) {
-            chomp;
-            return "Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validateTagAlign]";
+        if(my $error = validateWithList($line, \@list)) {
+            return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validateTagAlign]");
         }
-        last if($opt_quick && $line >= $quickCount);
+        last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
@@ -512,17 +561,25 @@ sub validatePairedTagAlign
 # This is like tag align but with two additional sequence fields appended; seq1 and seq2
 {
     my ($path, $file, $type) = @_;
-    my $line = 0;
-    doTime("beginning validatePairedTagAlign") if $opt_timing;
+    my $lineNumber = 0;
     my $fh = openUtil($path, $file);
-    while(<$fh>) {
-        $line++;
-	# MJP: for now, allow colorspace sequences as well as DNA + dot
-        if(!(/^chr(\d+|M|X|Y)\s+\d+\s+\d+\s+[0-3ATCGN\.]+\s+\d+\s+[+-]\s+[0-3ATCGN\.]+\s+[0-3ATCGN\.]+$/)) {
-            chomp;
-            return "Invalid $type file; line $line in file '$file' is invalid:\nline: $_ [validatePairedTagAlign]";
+    my @list = ({TYPE => "chrom", NAME => "chrom"},
+                {TYPE => "uint", NAME => "chromStart"},
+                {TYPE => "uint", NAME => "chromEnd"},
+                {TYPE => "string", NAME => "sequence"},
+                {TYPE => "uint", NAME => "score"},
+                {REGEX => "[+-\\.]", NAME => "strand"},
+                {REGEX => "[ACGTNacgtn]*", NAME => "seq1"},
+                {REGEX => "[ACGTNacgtn]*", NAME => "seq2"});
+    doTime("beginning validatePairedTagAlign") if $opt_timing;
+    while(my $line = <$fh>) {
+        chomp $line;
+        $lineNumber++;
+        next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
+        if(my $error = validateWithList($line, \@list)) {
+            return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validatePairedTagAlign]");
         }
-        last if($opt_quick && $line >= $quickCount);
+        last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
@@ -530,60 +587,26 @@ sub validatePairedTagAlign
     return ();
 }
 
-sub validateWithList
-{
-# Validate $line using a validation list; $validateList is a reference to a list of: {NAME, REGEX or TYPE}
-# returns error string or undef if line passes validation
-# This is designed to give better feedback to user; ideally we would load the validation list from the .as files
-    my ($line, $validateList) = @_;
-    my @list = split(/\s+/, $line);
-    if(@list != @{$validateList}) {
-        return "not enough fields";
-    } else {
-        for my $validateField (@{$validateList}) {
-            my $type = $validateField->{TYPE};
-            my $regex;
-            if($type) {
-                my %typeMap = (int => "[+-]?\\d+", uint => "\\d+", float => $floatRegEx, string => "\\S+");
-                if(!($regex = $typeMap{$type})) {
-                    die "PROGRAM ERROR: invalid TYPE: $type\n";
-                }
-            } elsif(!($regex = $validateField->{REGEX})) {
-                die "PROGRAM ERROR: invalid type list (missing required REGEX or TYPE)\n";
-            }
-            my $val = shift(@list);
-            if($val !~ /^$regex$/) {
-                my $error = "value '$val' is an invalid value for field '$validateField->{NAME}'";
-                if($type) {
-                    $error .= "; must be type '$type'";
-                }
-                return $error;
-            }
-        }
-    }
-    return undef;
-}
-
 sub validateNarrowPeak
 {
     my ($path, $file, $type) = @_;
     my $fh = openUtil($path, $file);
     my $lineNumber = 0;
+    my @list = ({TYPE => "chrom", NAME => "chrom"},
+                {TYPE => "uint", NAME => "chromStart"},
+                {TYPE => "uint", NAME => "chromEnd"},
+                {TYPE => "string", NAME => "name"},
+                {TYPE => "uint", NAME => "score"},
+                {REGEX => "[+-\\.]", NAME => "strand"},
+                {TYPE => "float", NAME => "signalValue"},
+                {TYPE => "float", NAME => "pValue"},
+                {TYPE => "float", NAME => "qValue"},
+                {TYPE => "int", NAME => "peak"});
     doTime("beginning validateNarrowPeak") if $opt_timing;
     while(my $line = <$fh>) {
         chomp $line;
         $lineNumber++;
         next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
-        my @list = ({REGEX => "chr(\\d+|M|X|Y)", NAME => "chrom"},
-                    {TYPE => "uint", NAME => "chromStart"},
-                    {TYPE => "uint", NAME => "chromEnd"},
-                    {TYPE => "string", NAME => "name"},
-                    {TYPE => "uint", NAME => "score"},
-                    {REGEX => "[+-\\.]", NAME => "strand"},
-                    {TYPE => "float", NAME => "signalValue"},
-                    {TYPE => "float", NAME => "pValue"},
-                    {TYPE => "float", NAME => "qValue"},
-                    {TYPE => "int", NAME => "peak"});
         if(my $error = validateWithList($line, \@list)) {
             return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validateNarrowPeak]");
         }
@@ -600,20 +623,20 @@ sub validateBroadPeak
     my ($path, $file, $type) = @_;
     my $fh = openUtil($path, $file);
     my $lineNumber = 0;
+    my @list = ({TYPE => "chrom", NAME => "chrom"},
+                {TYPE => "uint", NAME => "chromStart"},
+                {TYPE => "uint", NAME => "chromEnd"},
+                {TYPE => "string", NAME => "name"},
+                {TYPE => "uint", NAME => "score"},
+                {REGEX => "[+-\\.]", NAME => "strand"},
+                {TYPE => "float", NAME => "signalValue"},
+                {TYPE => "float", NAME => "pValue"},
+                {TYPE => "float", NAME => "qValue"});
     doTime("beginning validateBroadPeak") if $opt_timing;
     while (my $line = <$fh>) {
         chomp $line;
         $lineNumber++;
         next if($line =~ m/^#/); # allow comment lines, consistent with lineFile and hgLoadBed
-        my @list = ({REGEX => "chr(\\d+|M|X|Y)", NAME => "chrom"},
-                    {TYPE => "uint", NAME => "chromStart"},
-                    {TYPE => "uint", NAME => "chromEnd"},
-                    {TYPE => "string", NAME => "name"},
-                    {TYPE => "uint", NAME => "score"},
-                    {REGEX => "[+-\\.]", NAME => "strand"},
-                    {TYPE => "float", NAME => "signalValue"},
-                    {TYPE => "float", NAME => "pValue"},
-                    {TYPE => "float", NAME => "qValue"});
         if(my $error = validateWithList($line, \@list)) {
             return ("Invalid $type file; line $lineNumber in file '$file';\nerror: $error;\nline: $line [validateBroadPeak]");
         }
@@ -629,32 +652,31 @@ sub validateGappedPeak
 {
     my ($path, $file, $type) = @_;
     my $fh = openUtil($path, $file);
-    my $line = 0;
+    my $lineNumber = 0;
+    my @list = ({TYPE => "chrom", NAME => "chrom"},
+                {TYPE => "uint", NAME => "chromStart"},
+                {TYPE => "uint", NAME => "chromEnd"},
+                {TYPE => "string", NAME => "name"},
+                {TYPE => "uint", NAME => "score"},
+                {REGEX => "[+-\\.]", NAME => "strand"},
+                {TYPE => "uint", NAME => "thickStart"},
+                {TYPE => "uint", NAME => "thickEnd"},
+                {TYPE => "string", NAME => "itemRgb"},
+                {TYPE => "uint", NAME => "blockCount"},
+                {TYPE => "string", NAME => "blockSizes"},
+                {TYPE => "string", NAME => "blockStarts"},
+                {TYPE => "float", NAME => "signalValue"},
+                {TYPE => "float", NAME => "pValue"},
+                {TYPE => "float", NAME => "qValue"} 
+                );
     doTime("beginning validateGappedPeak") if $opt_timing;
-    while(<$fh>) {
-        $line++;
+    while(my $line = <$fh>) {
+	chomp $line;
+        $lineNumber++;
         next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-	chomp;
-	my @c = split /\s+/; # validate field by field
-	my $msg1 = "Invalid $type file; line $line in file '$file' is invalid: Invalid";
-	my $msg2 = "\nline: $_ [validateGappedPeak]";
-	my $err = "";
-	$c[0] =~ m/chr(\d+|M|X|Y)/ or $err .= "chrom=[$c[0]], ";
-	$c[1] =~ m/\d+/ or $err .= "start=[$c[1]], ";
-	$c[2] =~ m/\d+/ or $err .= "end=[$c[2]], ";
-	$c[3] =~ m/\S+/ or $err .= "name=[$c[3]], ";
-	$c[4] =~ m/\d+/ or $err .= "score=[$c[4]], ";
-	$c[5] =~ m/[+\.-]/ or $err .= "strand=[$c[5]], ";
-	$c[6] =~ m/\d+/ or $err .= "thickStart=[$c[6]], ";
-	$c[7] =~ m/\d+/ or $err .= "thickEnd=[$c[7]], ";
-	$c[8] =~ m/\S+/ or $err .= "itemRgb=[$c[8]], ";
-	$c[9] =~ m/\d+/ or $err .= "blockCount=[$c[9]], ";
-	$c[10] =~ m/\S+/ or $err .= "blockSizes=[$c[10]], ";
-	$c[11] =~ m/\S+/ or $err .= "blockStarts=[$c[11]], ";
-	$c[12] =~ m/$floatRegEx/ or $err .= "signalValue=[$c[12]], ";
-	$c[13] =~ m/$floatRegEx/ or $err .= "pValue=[$c[13]], ";
-	$c[14] =~ m/$floatRegEx/ or $err .= "qValue=[$c[14]], ";
-	return ("$msg1 $err $msg2") if $err;
+        if(my $error = validateWithList($line, \@list)) {
+            return ("Invalid $type file; line $lineNumber in file '$file' is invalid;\n$error;\nline: $line [validateGappedPeak]");
+	}
         last if($opt_quick && $line >= $quickCount);
     }
     $fh->close();
@@ -672,6 +694,7 @@ sub validateFastQ
     #   and they are being sent on to us
     my ($path, $file, $type) = @_;
     HgAutomate::verbose(2, "validateFastQ($path,$file,$type)\n");
+    return () if $opt_skipValidateFastQ;
     doTime("beginning validateFastQ") if $opt_timing;
     my $fh = openUtil($path, $file);
     my $line = 0;
@@ -941,6 +964,7 @@ my $ok = GetOptions("allowReloads",
                     "skipAutoCreation",
                     "skipOutput",
                     "skipValidateFiles",
+                    "skipValidateFastQ",
                     "validateDaf",
                     "validateFile",
                     "sendEmail",
@@ -968,6 +992,9 @@ my $submitDir = $ARGV[1];
 $ENV{TMPDIR} = $Encode::tempDir;
 
 if($opt_validateFile && $opt_fileType) {
+    # kludgy, but we need chromInfo populated to validate files, so we assume we are using hg18
+    my $db = HgDb->new(DB => 'hg18');
+    $db->getChromInfo(\%chromInfo);
     if(my @errors = checkDataFormat($opt_fileType, $submitDir)) {
         die "Invalid file: " . join(", ", @errors) . "\n";
     } else {
@@ -1037,6 +1064,7 @@ if($opt_validateDaf) {
 my $daf = Encode::getDaf($submitDir, $grants, $fields);
 
 my $db = HgDb->new(DB => $daf->{assembly});
+$db->getChromInfo(\%chromInfo);
 
 if($opt_sendEmail) {
     if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
@@ -1215,6 +1243,7 @@ if(!@errors) {
 	# note this loop assumes these are on a per replicate basis.
 	# Also note that any project (like transcriptome) that doesnt have replicates should also use
 	# this for their auto-create signals.
+	HgAutomate::verbose(2, "ddfReplicateSets loop key=[$key] aln=[".(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}))."] rawsig=[".(defined($ddfReplicateSets{$key}{VIEWS}{RawSignal}))."]\n"); 
 
         if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
 		&& !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})
@@ -1244,7 +1273,7 @@ if(!@errors) {
                 $line{type} = 'wig';
                 $ddfReplicateSets{$key}{VIEWS}{$newView} = \%line;
                 my @unzippedFiles = ();
-                doTime("beginning unzipping replicates files for view [$newView]") if $opt_timing;
+                doTime("beginning unzipping replicates files for view [$newView] key=[$key]") if $opt_timing;
                 for my $file (@{$alignmentLine->{files}}) {
                     # Unzip any zipped files - only works if they are with .gz suffix
                     my ($fbase,$dir,$suf) = fileparse($file, ".gz");
@@ -1287,12 +1316,13 @@ if(!@errors) {
                             $sortFiles = $files;
                         }
                         push @cmds, "sort -T $Encode::tempDir -k1,1 -k2,2n $sortFiles";
+			push @cmds, "grep -v -E \"^track\" ";
 			push @cmds, "gawk '\$6 == \"+\" {print}'" if $newView eq "PlusRawSignal";
 			push @cmds, "gawk '\$6 == \"-\" {print}'" if $newView eq "MinusRawSignal";
                         push @cmds, "bedItemOverlapCount $daf->{assembly} stdin";
                         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => $tmpFile, DEBUG => $opt_verbose - 1);
                         if(my $err = $safe->exec()) {
-                            print STDERR  "ERROR: failed creation of wiggle for $key" . $safe->stderr() . "\n";
+                            print STDERR  "ERROR: failed auto bedItemOverlap creation of bedGraph for $key" . $safe->stderr() . "\n";
                             # don't show end-user pipe error(s)
                             pushError(\@errors, "failed creation of wiggle for '$key'");
                         }
@@ -1392,14 +1422,19 @@ foreach my $ddfLine (@ddfLines) {
             $pushQDescription = "$hash{'antibody'} in $hash{'cell'}";
             $shortSuffix = "$hash{'antibody'} $hash{'cell'}";
             $longSuffix = "$hash{'antibody'} in $hash{'cell'} cells";
+        } elsif($hash{'ripAntibody'} && $hash{'ripTgtProtein'} && $hash{'cell'}) {
+            $longSuffix = "$hash{'ripTgtProtein'} in $hash{'cell'} cells using $hash{'ripAntibody'}";
+            $pushQDescription = $longSuffix;
+            $shortSuffix = "$hash{'ripTgtProtein'} $hash{'cell'} $hash{'ripAntibody'}";
         } elsif($hash{'rnaExtract'} && $hash{'localization'} && $hash{'cell'}) {
-            $pushQDescription = "$hash{'rnaExtract'} in $hash{'cell'} $hash{'localization'}";
-            $shortSuffix = "$hash{'rnaExtract'} $hash{'cell'} $hash{'localization'}";
-            $longSuffix = "from $hash{'rnaExtract'} in $hash{'cell'} cell $hash{'localization'}";
+	    my $suf = $hash{'mapAlgorithm'} ? "$hash{'mapAlgorithm'}" : "";
+            $shortSuffix = "$hash{'rnaExtract'} $hash{'cell'} $hash{'localization'} $suf";
+            $longSuffix = "$hash{'rnaExtract'} in $hash{'cell'} cell $hash{'localization'} using $suf";
+            $pushQDescription = $longSuffix;
         } elsif($hash{'freezeDate'}) {
-            $pushQDescription = $hash{'freezeDate'};
             $shortSuffix = $hash{'freezeDate'};
             $longSuffix = $hash{'freezeDate'};
+            $pushQDescription = $longSuffix;
         } elsif ($hash{"cell"}) {
             $pushQDescription = "$hash{'cell'}";
             $shortSuffix = "$hash{'cell'}";
@@ -1498,14 +1533,14 @@ foreach my $ddfLine (@ddfLines) {
         print TRACK_RA "\tpriority\t" . ($priority + $daf->{TRACKS}{$view}{order}) . "\n";
         # noInherit is necessary b/c composite track will often have a different dummy type setting.
         print TRACK_RA "\tnoInherit\ton\n";
-        if($view eq 'RawSignal') {
+        if($view eq 'RawSignal' and 0) { # Sorry tim, you will have to list your projects here
             print TRACK_RA "\tconfigurable\toff\n";
         } else {
             print TRACK_RA "\tconfigurable\ton\n";
         }
         if($type eq 'wig') {
             print TRACK_RA <<END;
-	spanList	1
+	spanList	first
 	windowingFunction mean
 	maxHeightPixels	100:16:16
 END

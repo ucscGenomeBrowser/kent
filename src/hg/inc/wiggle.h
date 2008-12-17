@@ -232,7 +232,7 @@ extern void wigFetchYLineMarkValueWithCart(struct cart *cart,struct trackDb *tdb
         wigFetchYLineMarkValueWithCart(cart,(tdb),(tdb)->tableName,(tDbYMark))
 /* return value for the y line marker to be drawn   */
 
-int *wiggleSpanList(struct trackDb *tdb);
+int *wiggleSpanList(struct sqlConnection *conn, struct trackDb *tdb);
 /******	spanList - fetch list of spans from trackDb *********************/
 
 /*	cart and trackDb strings	*/

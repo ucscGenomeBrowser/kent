@@ -210,4 +210,32 @@ cut -f 2 chrom.sizes | ave stdin
 # add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
     hgsql -e 'update dbDb set
 sourceName="Broad Institute tarSyr1 (NCBI project 20335, ABRT000000000)" where name="tarSyr1";' hgcentraltest
-###########################################################################
+
+############################################################################
+#  tarSyr1 - Tarsier - Ensembl Genes version 51  (DONE - 2008-12-04 - hiram)
+    ssh kkr14u02
+    cd /hive/data/genomes/tarSyr1
+    cat << '_EOF_' > tarSyr1.ensGene.ra
+# required db variable
+db tarSyr1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#       names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the 2,819 genes that do not translate properly to UCSC # coordinates
+#       out of 43,529 genes
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 tarSyr1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/tarSyr1/bed/ensGene.51
+    featureBits tarSyr1 ensGene
+    # 20086184 bases of 2768536343 (0.726%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/tarSyr1/bed/ensGene.51
+
+############################################################################
+

@@ -5,7 +5,7 @@
 #                        corresponding tableName in order to look up the dateReleased in trackDb.
 #                        Called by automated submission pipeline
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.4 2008/12/02 00:17:48 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeDownloadsPage/encodeDownloadsPage.pl,v 1.5 2008/12/02 22:09:12 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -193,7 +193,9 @@ for my $line (@fileList) {
                     $releaseDate = $pair[1];
                 } elsif($pair[0] eq "dateSubmitted" && length($releaseDate) == 0) {
                     my ($YYYY,$MM,$DD) = split('-',$pair[1]);
+                    $MM = $MM - 1;
                     my (undef, undef, undef, $rMDay, $rMon, $rYear) = Encode::restrictionDate(timelocal(0,0,0,$DD,$MM,$YYYY));
+                    $rMon = $rMon + 1;
                     $releaseDate = sprintf("%04d-%02d-%02d", (1900 + $rYear),$rMon,$rMDay);
                 } elsif($pair[0] eq "cell" || $pair[0] eq "antibody" || $pair[0] eq "promoter") {
                     $metaData .= "$pair[0]:$pair[1] ";

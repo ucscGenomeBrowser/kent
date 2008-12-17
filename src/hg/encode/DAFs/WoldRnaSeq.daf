@@ -1,0 +1,36 @@
+# Data Agreement File for RNA-seq project $Revision: 1.1 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# Lab and general info
+grant             Wold
+lab               Caltech
+dataType          RnaSeq
+variables         cell, localization, rnaExtract, mapAlgorithm
+assembly          hg18
+dafVersion        0.2.2
+
+# Track/view definition
+view             Signal
+longLabelPrefix  Caltech RNA-Seq Map Algorithm Signal
+type             wig
+hasReplicates    no
+required         no
+
+view             RawSignal
+longLabelPrefix  Caltech RNA-Seq Raw Signal
+type             wig
+hasReplicates    yes
+required         no
+
+view             Alignments
+longLabelPrefix  Caltech RNA-Seq Map Algorithm Alignments
+type             bed 12
+hasReplicates    no
+required         no
+
+view             RawData
+type             fastq
+hasReplicates    yes
+required         no

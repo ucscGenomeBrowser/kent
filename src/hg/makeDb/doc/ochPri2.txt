@@ -148,4 +148,30 @@ cut -f 2 chrom.sizes | ave stdin
     cp /cluster/data/ochPri2/ochPri2.2bit /san/sanvol1/scratch/ochPri2
     cp /cluster/data/ochPri2/chrom.sizes /san/sanvol1/scratch/ochPri2
 
+############################################################################
+#  ochPri2 - Pika - Ensembl Genes version 51  (DONE - 2008-12-03 - hiram)
+    ssh kolossus
+    cd /hive/data/genomes/ochPri2
+    cat << '_EOF_' > ochPri2.ensGene.ra
+# required db variable
+db ochPri2
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the single gene that has an invalid structure from Ensembl:
+# 10995: ENSOPRT00000002716 no exonFrame on CDS exon 2
+'_EOF_'
+#  << happy emacs
 
+    doEnsGeneUpdate.pl -ensVersion=51 ochPri2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/ochPri2/bed/ensGene.51
+    featureBits ochPri2 ensGene
+    # 25200422 bases of 1923624051 (1.310%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/ochPri2/bed/ensGene.51
+
+############################################################################

@@ -15687,7 +15687,7 @@ csh ../doPhyloP.csh $(file1) {check out line+ /san/sanvol1/scratch/hg18/multiz28
     # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
     ssh pk
-    cd /san/sanvol1/scratch/hg18/multiz28way/phyloP/all
+    cd /san/sanvol1/scratch/hg18/multiz28way/phyloP/placental
 cat > listPp.csh << 'EOF'
     foreach c (`ls -d chr*`)
         foreach d (`ls -d $c/[1-9]* | sort -t/ -k2 -n`)
@@ -21129,6 +21129,50 @@ TMPDIR=/scratch/tmp
     cat fb.hg18.chainEquCab2Link.txt
     # 1647122438 bases of 2881515245 (57.162%) in intersection
 
+    #	re-running with fixed UnScaffolds business with fixed chr27:
+    mkdir /hive/data/genomes/hg18/bed/blastzEquCab2.2008-12-01
+    cd /hive/data/genomes/hg18/bed/blastzEquCab2.2008-12-01
+    cat << '_EOF_' > DEF
+# Human vs. Horse
+
+BLASTZ=blastz
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/data/hg18/nib
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes 
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Horse
+SEQ2_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ2_LEN=/scratch/data/equCab2/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/equCab2/equCab2.UnScaffolds.2bit
+SEQ2_CTGLEN=/hive/data/genomes/equCab2/equCab2.UnScaffolds.sizes
+SEQ2_LIFT=/hive/data/genomes/equCab2/jkStuff/equCab2.chrUn.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg18/bed/blastzEquCab2.2008-12-01
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
+	-verbose=2 -workhorse=hgwdev -smallClusterHub=pk -bigClusterHub=pk  \
+	-chainMinScore=3000 -chainLinearGap=medium  > do.log 2>&1
+    #	broken chain step for chr19, ran manually all day long on swarm, then
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
+	-continue=chainMerge -verbose=2 -workhorse=hgwdev \
+	-stop=net -smallClusterHub=pk -bigClusterHub=pk  \
+	-chainMinScore=3000 -chainLinearGap=medium > chainMerge.log 2>&1
+XXX - running Tue Dec  2 15:42:18 PST 2008
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
+	-continue=syntenicNet -syntenicNet -verbose=2 -workhorse=hgwdev \
+	-stop=syntenicNet -smallClusterHub=pk -bigClusterHub=pk  \
+	-debug -chainMinScore=3000 -chainLinearGap=medium > syntenicNet.log 2>&1
+
 #############################################################################
 # MAKE PCR TARGET FOR UCSC GENES (DONE 4/18/08 angie - UPDATED 11/4/08)
     ssh hgwdev
@@ -21310,8 +21354,8 @@ TMPDIR=/scratch/tmp
    ssh hgwdev
    bash
    cd /cluster/data/hg18/bed
-   mkdir agilentCgh
-   cd agilentCgh/
+   mkdir agilentProbes
+   cd agilentProbes/
    cp /usr/local/apache/htdocs/donna/Agilent/Agilent_Human_CGH.zip .
 # (agilent-provided zips)
 # what a pain... this zipfile isn't unzippable using linux unzip.
@@ -21345,6 +21389,18 @@ TMPDIR=/scratch/tmp
    tail +3 015223_D_UCSCTrack_20070820.txt | bedSort stdin stdout > agilentCgh244a.bed
    tail +3 015235_D_UCSCTrack_20070820.txt | bedSort stdin stdout > agilentCgh105a.bed
    for bed in *.bed; do hgLoadBed rn4 ${bed%.bed}{,.bed}; done
+
+############################################################################
+# AGILENT HUMAN SUREPRINT G3 ARRAY PROBESETS (DONE 2008-12-09, Andy)
+    ssh hgwdev
+    cd /hive/data/hg18/bed/agilentProbes
+    wget --timestamping --user=microarray --password=<get-it-from-agilent> \
+        "ftp://ftp.agilent.com/restricted/UCSC_BED_FILES/*"
+    zcat 021365_D_UCSCTrack_20081204.txt.gz | tail +3 | hgLoadBed hg18 agilentCnv2x400k stdin
+    zcat 021529_D_UCSCTrack_20081204.txt.gz | tail +3 | hgLoadBed hg18 agilentCgh1x1m stdin
+    zcat 021850_D_UCSCTrack_20081204.txt.gz | tail +3 | hgLoadBed hg18 agilentCgh2x400k stdin
+    zcat 021924_D_UCSCTrack_20081204.txt.gz | tail +3 | hgLoadBed hg18 agilentCgh8x60k stdin
+    zcat 022060_D_UCSCTrack_20081204.txt.gz | tail +3 | hgLoadBed hg18 agilentCgh4x180k stdin
 
 ############################################################################
 ############################################################################
@@ -24053,7 +24109,7 @@ foreach my $id (sort keys %idInfo) {
 
 
 ############################################################################
-# hgPal downloads
+# hgPal downloads 28way refGene, knownGene, knownCanonical
     ssh hgwdev
     screen
     bash
@@ -24640,7 +24696,7 @@ foreach s (`sed -e "s/ $db//" species.list`)
     if (-e $in.gz) then
         /bin/zcat $in.gz > $out
     else if (-e $in) then
-        /bin/cp -p $in $out
+        ln -s $in $out
     else
         echo "##maf version=1 scoring=autoMZ" > $out
     endif
@@ -24795,12 +24851,34 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/hg18/hg18.2bit $outMaf
     cd /data/tmp
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/hg18/multiz44way/maf hg18 multiz44way
+    #	with final set of quality annotated files:
+    #	Loaded 33320838 mafs in 49 files from /gbdb/hg18/multiz44way/maf
+    #	real    91m46.889s
+    #	running on Irow annotated mafs Fri Nov 28 00:28:09 PST 2008
+    #	Loaded 33320675 mafs in 49 files from /gbdb/hg18/multiz44way/maf
+    #	real    236m15.279s
+    #	running on bare bones mafs Thu Nov 27 19:29:44 PST 2008
+    #	Loaded 33273351 mafs in 49 files from /gbdb/hg18/multiz44way/maf
+    #	real    198m55.761s - while swarm busy with rebalancing
+    # from before the fixed multiz:
     #	Loaded 35154852 mafs in 49 files from /gbdb/hg18/multiz44way/maf
     #	real    71m5.594s
 
     time nice -n +19 cat /gbdb/hg18/multiz44way/maf/*.maf \
 	| hgLoadMafSummary hg18 -minSize=30000 -mergeGap=1500 \
                  -maxSize=200000  multiz44waySummary stdin
+    #	with the quality annotated mafs, and mem interference on hgwdev:
+    #	Created 8514381 summary blocks from 600504256 components \
+    #	and 33320838 mafs from stdin
+    #	real    169m56.936s
+
+    #	with the Irow annotations after the multiz fix:
+    #	Created 8514380 summary blocks from 600499937
+    #		components and 33298894 mafs from stdin
+    #	real    184m42.893s
+    #	user    70m44.431s
+    #	sys     8m7.970s
+
     #	Created 8514078 summary blocks from 604683213 components
     #	and 35125649 mafs from stdin
     #	real    130m55.115s
@@ -24817,6 +24895,278 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/hg18/hg18.2bit $outMaf
     #	 8514078 multiz44waySummary.tab
     #	42478455 total
     rm multiz44way*.tab
+
+    # create some downloads
+    mkdir -p /hive/data/genomes/hg18/bed/multiz44way/download/maf
+    cd /hive/data/genomes/hg18/bed/multiz44way/download/maf
+    time cp -p ../../anno/maf/chr*.maf .
+    #	real    72m46.514s
+    #	user    0m1.293s
+    #	sys     5m15.981s
+    time gzip --rsyncable *.maf
+    time gzip --rsyncable *.maf
+    #	real    185m37.884s
+    #	user    179m51.161s
+    #	sys     3m48.016s
+    time md5sum *.gz > md5sum.txt
+    #	real    3m59.009s
+    #	user    1m19.338s
+    #	sys     0m18.976s
+
+#############################################################################
+## Annotate 44-way multiple alignment with gene annotations
+##		(WORKING - 2008-12-08 - Hiram)
+    # Gene frames
+    ## survey all genomes to see what type of gene track to use
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg18/bed/multiz44way/frames
+    cd /hive/data/genomes/hg18/bed/multiz44way/frames
+    #
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+	if ($table == "ensGene" || $table == "refGene" || $table == "mgcGenes" || \
+	    $table == "knownGene") then
+		set count = `hgsql $db -N -e "select count(*) from $table"`
+		echo -n "${table}: ${count}, "
+	endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+	    "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql hg18 -N -e \
+	    "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+	echo "Mrnas: 0"
+    else
+	set count = `hgsql hg18 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+	echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    #	rearrange that output to create four sections:
+    #	1. knownGenes for hg18, mm9
+    #	2. ensGene for almost everything else
+    #	3. Mrnas for taeGut1, anoCar1, petMar1, calJac1
+    #	4. nothing for loxAfr2, dasNov2, choHof1, gorGor1
+
+    mkdir genes
+    # knownGene
+    for DB in hg18 mm9
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    # ensGene
+    for DB in bosTau4 canFam2 cavPor3 danRer5 dipOrd1 echTel1 equCab2 \
+	eriEur1 felCat3 fr2 galGal3 gasAcu1 micMur1 monDom4 myoLuc1 \
+	ochPri2 ornAna1 oryCun1 oryLat2 otoGar1 panTro2 ponAbe2 proCap1 \
+	pteVam1 rheMac2 rn4 sorAra1 speTri1 tarSyr1 tetNig1 tupBel1 \
+	turTru1 vicPac1 xenTro2
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    #	use Mrnas for  taeGut1 anoCar1 petMar1 calJac1
+    for DB in taeGut1 anoCar1 petMar1 calJac1
+do
+tmpExt=`mktemp temp.XXXXXX`
+tmpMrnaCds=${DB}.mrna-cds.${tmpExt}
+tmpMrna=${DB}.mrna.${tmpExt}
+tmpCds=${DB}.cds.${tmpExt}
+hgsql -N -e 'select all_mrna.qName,cds.name,all_mrna.* \
+	   from all_mrna,gbCdnaInfo,cds \
+	   where (all_mrna.qName = gbCdnaInfo.acc) and \
+	     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+$DB > ${tmpMrnaCds}
+cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} stdout | \
+genePredSingleCover stdin stdout | gzip -2c > /scratch/tmp/$DB.tmp.gz
+rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+mv /scratch/tmp/$DB.tmp.gz genes/$DB.gp.gz
+rm -f $tmpExt
+echo "${DB} done"
+done
+
+    # leaving out loxAfr2, dasNov2, choHof1, gorGor1 since no gene preds there
+    #	Create this command with this script:
+    cat << '_EOF_' > mkCmd.sh
+#!/bin/sh
+
+echo "time (cat ../quals/maf/*.maf | nice -n +19 genePredToMafFrames hg18 stdin stdout \\"
+if [ ! -s genes/mm9.gp.gz ]; then
+    echo "missing genes/mm9.gp.gz"
+    exit 255
+fi
+echo "mm9 genes/mm9.gp.gz \\"
+for D in `sort ensGene.list`
+do
+    if [ ! -s genes/${D}.gp.gz ]; then
+        echo "missing genes/${D}.gp.gz"
+        exit 255
+    fi
+    echo -n "${D} genes/${D}.gp.gz "
+done
+echo "\\"
+for D in `sort mrna.list`
+do
+    if [ ! -s genes/${D}.gp.gz ]; then
+        echo "missing genes/${D}.gp.gz"
+        exit 255
+    fi
+    echo -n "${D} genes/${D}.gp.gz "
+done
+echo "\\"
+echo "    | gzip > multiz44way.mafFrames.gz) > frames.log 2>&1"
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkCmd.sh
+
+    time (cat ../quals/maf/*.maf | nice -n +19 genePredToMafFrames hg18 stdin stdout \
+mm9 genes/mm9.gp.gz \
+bosTau4 genes/bosTau4.gp.gz canFam2 genes/canFam2.gp.gz cavPor3 genes/cavPor3.gp.gz danRer5 genes/danRer5.gp.gz dipOrd1 genes/dipOrd1.gp.gz echTel1 genes/echTel1.gp.gz equCab2 genes/equCab2.gp.gz eriEur1 genes/eriEur1.gp.gz felCat3 genes/felCat3.gp.gz fr2 genes/fr2.gp.gz galGal3 genes/galGal3.gp.gz gasAcu1 genes/gasAcu1.gp.gz micMur1 genes/micMur1.gp.gz monDom4 genes/monDom4.gp.gz myoLuc1 genes/myoLuc1.gp.gz ochPri2 genes/ochPri2.gp.gz ornAna1 genes/ornAna1.gp.gz oryCun1 genes/oryCun1.gp.gz oryLat2 genes/oryLat2.gp.gz otoGar1 genes/otoGar1.gp.gz panTro2 genes/panTro2.gp.gz ponAbe2 genes/ponAbe2.gp.gz proCap1 genes/proCap1.gp.gz pteVam1 genes/pteVam1.gp.gz rheMac2 genes/rheMac2.gp.gz rn4 genes/rn4.gp.gz sorAra1 genes/sorAra1.gp.gz speTri1 genes/speTri1.gp.gz tarSyr1 genes/tarSyr1.gp.gz tetNig1 genes/tetNig1.gp.gz tupBel1 genes/tupBel1.gp.gz turTru1 genes/turTru1.gp.gz vicPac1 genes/vicPac1.gp.gz xenTro2 genes/xenTro2.gp.gz \
+anoCar1 genes/anoCar1.gp.gz calJac1 genes/calJac1.gp.gz petMar1 genes/petMar1.gp.gz taeGut1 genes/taeGut1.gp.gz \
+    | gzip > multiz44way.mafFrames.gz) > frames.log 2>&1
+
+    #	that doesn't work on any 32 Gb computer, requires much more memory
+    #	turn it into a kluster job
+    ssh swarm
+    cd /hive/data/genomes/hg18/bed/multiz44way/frames
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+
+set C = $1
+set G = $2
+
+cat ../quals/maf/${C}.maf | genePredToMafFrames hg18 stdin stdout \
+        ${G} genes/${G}.gp.gz | gzip > parts/${C}.${G}.mafFrames.gz
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    ls ../quals/maf | sed -e "s/.maf//" > chr.list
+    ls genes | sed -e "s/.gp.gz//" | grep -v hg18 > gene.list
+
+    cat << '_EOF_' > template
+#LOOP
+runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    mkdir parts
+    gensub2 chr.list gene.list template jobList
+    para -ram=8g create jobList
+    para try ... check ... push
+# Completed: 1911 of 1911 jobs
+# CPU time in finished jobs:     126751s    2112.52m    35.21h    1.47d  0.004 y
+# IO & Wait Time:               2573543s   42892.38m   714.87h   29.79d  0.082 y
+# Average job time:                1413s      23.55m     0.39h    0.02d
+# Longest finished job:            6490s     108.17m     1.80h    0.08d
+# Submission to last job:         11310s     188.50m     3.14h    0.13d
+
+    # see what it looks like in terms of number of annotations per DB:
+    find ./parts -type f | while read F
+do
+    zcat ${F}
+done | cut -f4 | sort | uniq -c | sort -n
+    165 anoCar1
+   2807 calJac1
+   3306 taeGut1
+   5416 petMar1
+ 141256 tarSyr1
+ 142346 vicPac1
+ 163854 sorAra1
+ 164475 galGal3
+ 174150 felCat3
+ 178531 oryCun1
+ 178744 ornAna1
+ 179511 turTru1
+ 190622 eriEur1
+ 191477 tupBel1
+ 197338 panTro2
+ 198063 speTri1
+ 199541 micMur1
+ 207391 ponAbe2
+ 208629 rheMac2
+ 208850 otoGar1
+ 212751 myoLuc1
+ 212857 dipOrd1
+ 213343 proCap1
+ 214972 echTel1
+ 216367 monDom4
+ 220724 ochPri2
+ 223159 equCab2
+ 227928 bosTau4
+ 231351 cavPor3
+ 231553 pteVam1
+ 233980 mm9
+ 234268 rn4
+ 249016 canFam2
+ 258191 xenTro2
+ 315098 danRer5
+ 365824 oryLat2
+ 387739 fr2
+ 423941 gasAcu1
+ 549846 tetNig1
+
+    #	load the resulting file
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz44way/frames
+    find ./parts -type f | while read F
+do
+    zcat ${F}
+done | sort -k1,1 -k2,2n | hgLoadMafFrames hg18 multiz44wayFrames stdin
+
+    find ./parts -type f | while read F
+do
+    zcat ${F}
+done | sort -k1,1 -k2,2n > multiz44wayFrames.bed
+    featureBits -countGaps hg18 multiz44wayFrames.bed
+    #	62315198 bases of 3107677273 (2.005%) in intersection
+    featureBits -countGaps hg18 multiz28wayFrames
+    #	48236360 bases of 3107677273 (1.552%) in intersection
+
+    #	enable the trackDb entries:
+# frames multiz44wayFrames
+# irows on
+    #	appears to work OK
+
+#########################################################################
+# Create Syntenic and Recip Best net files to load into tracks to view
+#	on the browser to see what was used during the multiple alignment
+    cd /hive/data/genomes/hg18/bed/blastz.gorGor1/axtChain
+    netClass -verbose=0 -noAr hg18.gorGor1.rbest.net.gz hg18 gorGor1 stdout \
+	| gzip -c > netRBestGorGor1.net.gz
+    hgLoadNet hg18 netRBestGorGor1 netRBestGorGor1.net.gz
+
+    cd /hive/data/genomes/hg18/bed/blastz.ponAbe2/axtChain
+    hgLoadNet hg18 netSyntenyPonAbe2 hg18.ponAbe2.syn.net.gz
+
+    cd /hive/data/genomes/hg18/bed/blastz.calJac1/axtChain
+    netClass -verbose=0 -noAr hg18.calJac1.rbest.net.gz hg18 calJac1 stdout \
+	| gzip -c > netRBestCalJac1.net.gz
+    hgLoadNet hg18 netRBestCalJac1 netRBestCalJac1.net.gz
+
+    cd /hive/data/genomes/hg18/bed/blastz.tarSyr1/axtChain
+    netClass -verbose=0 -noAr hg18.tarSyr1.rbest.net.gz hg18 tarSyr1 stdout \
+	| gzip -c > netRBestTarSyr1.net.gz
+    hgLoadNet hg18 netRBestTarSyr1 netRBestTarSyr1.net.gz
+
+
 #########################################################################
 # EIO/JCVI NAS TRACK (2008-11-25 Fan)
 # Contact: Gaetano Gargiulo [gaetano.gargiulo@ifom-ieo-campus.it]
@@ -24839,4 +25189,245 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/hg18/hg18.2bit $outMaf
 # according to the latest doc file from Gaetano.
 #
 # Add the two composite sub-tracks to human/hg18/trackDb.ra.
- #########################################################################
+
+#########################################################################
+# hgPal downloads (DONE braney 2008-12-07)
+#   FASTA from 44way for refGene, knownGene, knownCanonical 
+
+    ssh hgwdev
+    screen
+    bash
+    rm -rf /cluster/data/hg18/bed/multiz44way/pal
+    mkdir /cluster/data/hg18/bed/multiz44way/pal
+    cd /cluster/data/hg18/bed/multiz44way/pal
+    echo hg18 | cat - /cluster/data/hg18/bed/multiz44way/ordered.list > order.lst
+
+    mz=multiz44way
+    gp=refGene
+    db=hg18
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+# real    525m57.376s
+# user    25m36.072s
+# sys     7m41.565s
+
+    ssh kolossus
+    mz=multiz44way
+    gp=refGene
+    db=hg18
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz44way
+    gp=refGene
+    db=hg18
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    mz=multiz44way
+    gp=knownGene
+    db=hg18
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 &
+    sleep 1
+    tail -f $gp.$mz.job.log
+
+# real    442m46.735s
+# user    43m3.060s
+# sys     10m45.635s
+
+
+    mz=multiz44way
+    gp=knownGene
+    db=hg18
+
+    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    mz=multiz44way
+    gp=knownGene
+    db=hg18
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    # now do the canonical set
+    cd /cluster/data/hg18/bed/multiz44way/pal
+    mz=multiz44way
+    gp=knownCanonical
+    db=hg18
+    for j in `awk '{print $1}' /cluster/data/hg18/chrom.sizes`
+    do
+	echo "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$j'" | hgsql $db | tail -n +2 > $j.known.bed
+    done
+
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -geneBeds=$j.known.bed  $db $mz knownGene order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -geneBeds=$j.known.bed -noTrans $db $mz knownGene order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -geneBeds=$j.known.bed -exons -noTrans $db $mz knownGene order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -geneBeds=$j.known.bed -exons $db $mz knownGene order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 &
+    sleep 1
+    tail -f $gp.$mz.job.log
+
+# real    326m12.849s
+# user    17m40.850s
+# sys     3m59.648s
+
+    rm *.known.bed
+    mz=multiz44way
+    gp=knownCanonical
+    db=hg18
+    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    mz=multiz44way
+    gp=knownCanonical
+    db=hg18
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+#########################################################################
+# BUILD OMIM RELATED GENES TRACK (Done 12/4/08 Fan)
+
+ssh hgwdev
+cd /hive/data/genomes/gs.19/build36/bed
+mkdir omimGene
+cd omimGene
+
+# download the file morbidmap and genemap from OMIM
+
+mkdir omim
+cd omim
+wget --timestamping ftp://ftp.ncbi.nih.gov/repository/OMIM/morbidmap
+wget --timestamping ftp://ftp.ncbi.nih.gov/repository/OMIM/genemap
+cat genemap|sed -e 's/|/\t/g' > genemap.tab
+autoSql ~/src/hg/lib/omimGeneMap.as x
+cat x.sql |sed -e 's/PRIMARY KEY(numbering)/KEY(omimId)/' >omimGeneMap.sql
+hgLoadSqlTab -warn hg18 omimGeneMap omimGeneMap.sql genemap.tab
+
+# got warning on 3 records, just ignore them
+Warning: load of omimGeneMap did not go as planned: 11456 record(s), 0 row(s) skipped, 3 warning(s) loading genemap.tab
+
+rm x.c x.h
+cd ..
+cat omim/morbidmap|sed -e 's/|/\t/g' > mobidmap.tab
+autoSql ~/src/hg/lib/omimMorbidMap.as x 
+cat x.sql |sed -e 's/PRIMARY KEY(description)/KEY(omimId)/' >omimMorbidMap.sql
+hgLoadSqlTab -warn hg18 omimMorbidMap omimMorbidMap.sql mobidmap.tab
+
+# get all UCSC genes (from the knownGene table) that cross-reference to a RefSeq gene 
+# that has a non-empty OMIM ID according to the refLink table.  And use OMIM ID as
+# the gene name for this new table.  Please note the alignId field still holds the KG ID.
+
+hgsql hg18 -N -e \
+'select omimId, kg.* from knownGene kg, kgXref x, refLink l where refseq != "" and omimId != 0 and mrnaAcc=refseq and kg.name=kgId ' \
+|cut -f 1,3-13 >o1.tab
+
+# collect more OMIM related genes via the MIM external DB links from UniProt
+
+hgsql hg18 -N -e \
+'select extAC, kg.* from knownGene kg, kgXref k, proteome.spXref2 p where spId=p.accession and extDB="MIM" and kg.name=kgId ' \
+|cut -f 1,3-13 >o2.tab
+
+# concatenate the above two gene sets and remove duplications.
+
+cat o1.tab o2.tab |sort -u >o3.tab
+
+# load the result into a temp table, fanO3
+hgLoadSqlTab hg18 fanO3 ~/src/hg/lib/knownGene.sql o3.tab
+
+# while holding onto the OMIM ID, get the canonical gene (via the knownGene, knowIsoforms, 
+# and knownCanonical tables) that represent a cluster which contains 
+# initial OMIM gene in the fanO3 table
+
+hgsql hg18 -N -e \
+'select f3.name, kg.* from fanO3 f3, knownGene kg, knownCanonical c, knownIsoforms i where f3.alignId=i.transcript and kg.name=c.transcript and c.clusterId=i.clusterId'\
+> o4.tab
+
+# first column is the OMIM ID
+cut -f 1 o4.tab >j1.tmp
+
+# col 3-13 is the gene structure of the canonical KG
+cut -f 3-13 o4.tab >j2.tmp
+
+# stitch them together and remove duplicates, load the result into fanO4 table
+paste j1.tmp j2.tmp |sort -u >fanO4.tab
+hgLoadSqlTab hg18 fanO4  ~/src/hg/lib/knownGene.sql fanO4.tab
+
+# finally sort the table and create bed 4 file and load it as the omimGene table
+
+hgsql hg18 -N -e 'select chrom, txStart, txEnd, name from fanO4 order by
+chrom, txStart, txEnd' >omimGene.bed
+hgLoadBed hg18 omimGene omimGene.bed
+
+# create and load the omimToKnownCanonical table.
+
+hgsql hg18 -N -e 'select name, alignId from fanO4 order by name'\
+> omimToKnownCanonical.tab
+
+hgLoadSqlTab hg18 omimToKnownCanonical  \
+~/src/hg/lib/omimToKnownCanonical.sql omimToKnownCanonical.tab
+
+# The following clean up could be done.
+# hgsql hg18 -e 'drop table fanO3'
+# hgsql hg18 -e 'drop table fanO4'
+# rm j*.tmp
+# rm o1.tab o2.tab o3.tab o4.tab
+#############################################################################

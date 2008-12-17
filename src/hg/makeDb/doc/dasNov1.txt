@@ -814,4 +814,33 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2008-06-30
 
 see doc/builds.txt for specific details.
+
+############################################################################
+#  dasNov1 - Armadillo - Ensembl Genes version 51  (DONE - 2008-12-03 - hiram)
+    ssh kkr14u07
+    cd /hive/data/genomes/dasNov1
+    cat << '_EOF_' > dasNov1.ensGene.ra
+# required db variable
+db dasNov1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the three genes that have invalid structures from Ensembl:
+# 18192: ENSDNOT00000004471 no exonFrame on CDS exon 7
+# 35247: ENSDNOT00000007696 no exonFrame on CDS exon 8
+# 38952: ENSDNOT00000019234 no exonFrame on CDS exon 0
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 dasNov1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/dasNov1/bed/ensGene.51
+    featureBits dasNov1 ensGene
+    # 22658142 bases of 2146362222 (1.056%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/dasNov1/bed/ensGene.51
+
 ############################################################################

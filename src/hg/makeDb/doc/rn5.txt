@@ -47,7 +47,7 @@ done
 
 #########################################################################
 # Create .ra file and run makeGenomeDb.pl (DONE - Hiram - 2008-11-14)
-    cd /hive/data/genomes/rn4
+    cd /hive/data/genomes/rn5
     cat << '_EOF_' >rn5.config.ra
 # Config parameters for makeGenomeDb.pl:
 db rn5
@@ -135,3 +135,227 @@ dbDbSpeciesDir rat
     #	/scratch/data/
 
 ###########################################################################
+#  BLATSERVERS ENTRY (DONE - 2008-11-18 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rn5", "blatx", "17788", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rn5", "blatx", "17789", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+###########################################################################
+#  GENBANK operation (DONE - 2008-11-18,26 - Hiram)
+    #	need a liftUp file for the chrUn bits
+    cd /hive/data/genomes/rn5/jkStuff
+    grep chrUn ../rn5.agp | /cluster/bin/scripts/agpToLift > chrUn.lift
+
+    # align with latest genbank process.
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add rn5 just before rn4, the entry looks like:
+
+# rn5
+rn5.serverGenome = /hive/data/genomes/rn5/rn5.2bit
+rn5.clusterGenome = /scratch/data/rn5/rn5.2bit
+rn5.ooc = /scratch/data/rn5/rn5.11.ooc
+rn5.align.unplacedChroms = chrUn
+rn5.lift = /hive/data/genomes/rn5/jkStuff/chrUn.lift
+rn5.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+rn5.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+rn5.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+rn5.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+rn5.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+rn5.downloadDir = rn5
+rn5.refseq.mrna.xeno.load  = yes
+rn5.refseq.mrna.xeno.loadDesc = yes
+rn5.mgc = yes
+rn5.upstreamGeneTbl = refGene
+# rn5.upstreamMaf = multiz9way
+# /hive/data/genomes/rn5/bed/multiz9way/species.lst
+
+    cvs ci -m "Added rn5" etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen  # control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    #	start the alignments
+    time nice -n +19 bin/gbAlignStep -initial rn5 &
+    # logFile: var/build/logs/2008.11.18-14:10:02.rn5.initalign.log
+    #	real    487m2.796s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad rn5
+    #	logFile: var/dbload/hgwdev/logs/2008.11.19-21:16:48.dbload.log
+    #	real    51m7.581s
+
+    #	catch up to refSeq.32 since above initial alignment was done
+    time nice -n +19 bin/gbAlignStep rn5 &
+    #	var/build/logs/2008.11.26-10:22:43.align.log
+    #	real    43m46.613s
+    time nice -n +19 ./bin/gbDbLoadStep rn5
+    #	var/dbload/hgwdev/logs/2008.11.26-11:25:43.dbload.log
+    #	real    8m39.589s
+
+    # enable daily alignment and update of hgwdev (DONE - 2008-11-26 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add rn5 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added rn5" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+###########################################################################
+# PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2008-11-18 - Hiram)
+    ssh memk
+    mkdir /hive/data/genomes/rn5/bed/lineageSpecificRepeats
+    cd /hive/data/genomes/rn5/bed/lineageSpecificRepeats
+
+    cat << '_EOF_' > mkLSR.csh
+#!/bin/csh -fe
+rm -f ./chr$1.dateRepeats.txt
+rm -f /hive/data/genomes/rn5/$1/chr$1.fa.out_mus-musculus_homo-sapiens_canis-familiaris_bos-taurus_oryctolagus-cuniculus
+/scratch/data/RepeatMasker/DateRepeats \
+    /hive/data/genomes/rn5/$1/chr$1.fa.out -query rat -comp mouse \
+	-comp human -comp dog -comp cow -comp rabbit
+cp -p /hive/data/genomes/rn5/$1/chr$1.fa.out_mus-musculus_homo-sapiens_canis-familiaris_bos-taurus_oryctolagus-cuniculus ./$1.dateRepeats.txt
+rm -f /hive/data/genomes/rn5/$1/chr$1.fa.out_mus-musculus_homo-sapiens_canis-familiaris_bos-taurus_oryctolagus-cuniculus
+'_EOF_'
+    #	<< happy emacs
+    chmod +x mkLSR.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./mkLSR.csh $(path1) {check out line+ chr$(path1).dateRepeats.txt}
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    cut -f1 ../../chrom.sizes | sed -e "s/chr//" > chr.list
+
+    gensub2 chr.list single template jobList
+    para try ... check ... push ... etc...
+    para time
+# Completed: 23 of 23 jobs
+# CPU time in finished jobs:       1109s      18.48m     0.31h    0.01d  0.000 y
+# IO & Wait Time:                   116s       1.94m     0.03h    0.00d  0.000 y
+# Average job time:                  53s       0.89m     0.01h    0.00d
+# Longest finished job:              97s       1.62m     0.03h    0.00d
+# Submission to last job:           161s       2.68m     0.04h    0.00d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    mkdir notInMouse notInHuman notInDog notInCow notInRabbit
+    for F in chr*.dateRepeats.txt
+    do
+	B=${F/.dateRepeats.txt/}
+	echo $B 
+        /cluster/bin/scripts/extractRepeats 1 ${F} > \
+		notInMouse/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 2 ${F} > \
+		notInHuman/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 3 ${F} > \
+		notInDog/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 4 ${F} > \
+		notInCow/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 5 ${F} > \
+		notInRabbit/${B}.out.spec
+    done
+
+    #	the notInHuman, notInDog, notInCow and notInRabbit ended up being
+    #	identical.  Only the notInMouse was different than them
+    #	To check identical
+    find . -name "*.out.spec" | \
+	while read FN; do echo `cat ${FN} | sum -r` ${FN}; done \
+	| sort -k1,1n | sort -t"/" -k3,3
+    #	Copy to scratch staging for use in kluster runs
+    mkdir /hive/data/staging/data/rn5/notInMouse
+    mkdir /hive/data/staging/data/rn5/notInOthers
+    cp -p notInMouse/*.out.spec /hive/data/staging/data/rn5/notInMouse
+    cp -p notInHuman/*.out.spec /hive/data/staging/data/rn5/notInOthers
+
+    # We also need the nibs for blastz runs with lineage specific repeats
+    cd /hive/data/genomes/rn5
+    mkdir nib
+    for C in `cut -f1 chrom.sizes`
+do
+    echo $C
+    twoBitToFa -seq=$C rn5.2bit stdout | faToNib -softMask stdin nib/$C.nib
+done
+    mkdir /hive/data/staging/data/rn5/nib
+    cp -p nib/*.nib /hive/data/staging/data/rn5/nib
+
+    # Ask cluster-admin to sync /scratch/ filesystem to kluster nodes
+
+#############################################################################
+# BLASTZ Mouse Mm9 (DONE - 2008-11-18,12-01 - Hiram)
+    screen	# use screen to manage this job
+    mkdir /hive/data/genomes/rn5/bed/blastzMm9.2008-11-18
+    cd /hive/data/genomes/rn5/bed/blastzMm9.2008-11-18
+    cat << '_EOF_' > DEF
+# rat vs mouse
+# Specially tuned blastz parameters from Webb Miller
+BLASTZ=lastz
+BLASTZ_M=254
+BLASTZ_ABRIDGE_REPEATS=0
+BLASTZ_O=600
+BLASTZ_E=55
+BLASTZ_Y=15000
+BLASTZ_T=2
+BLASTZ_K=4500
+BLASTZ_Q=/hive/data/genomes/rn5/bed/blastzMm9.2008-11-18/mouse_rat.q
+
+# TARGET: Rat Rn5
+SEQ1_DIR=/scratch/data/rn5/nib
+SEQ1_LEN=/scratch/data/rn5/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm9
+SEQ2_DIR=/scratch/data/mm9/nib
+SEQ2_LEN=/scratch/data/mm9/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/rn5/bed/blastzMm9.2008-11-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=swarm -chainMinScore=5000 -chainLinearGap=medium \
+	`pwd`/DEF > do.log 2>&1 &
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=swarm -chainMinScore=5000 -chainLinearGap=medium \
+	-continue=cat `pwd`/DEF > cat.log 2>&1 &
+    cat fb.rn5.chainMm9Link.txt 
+    #	1900898298 bases of 3372561689 (56.364%) in intersection
+
+    mkdir /hive/data/genomes/mm9/bed/blastz.rn5.swap
+    cd /hive/data/genomes/mm9/bed/blastz.rn5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn5/bed/blastzMm9.2008-11-18/DEF \
+	-workhorse=hgwdev -smallClusterHub=swarm -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium \
+	-swap -stop=net > swap.log 2>&1 &
+    #	real    67m39.044s
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn5/bed/blastzMm9.2008-11-18/DEF \
+	-workhorse=hgwdev -smallClusterHub=swarm -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=medium \
+	-debug -swap -continue=load -stop=load > load.log 2>&1 &
+    #	running the loadUp.csh manually after fixing the table names to
+    #	not clash with existing rn5 tables in mm9
+    #	real    24m13.143s
+    cat fb.mm9.chainRn5LastzLink.txt 
+    #	1751703421 bases of 2620346127 (66.850%) in intersection
+
+#############################################################################

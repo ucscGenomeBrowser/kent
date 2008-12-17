@@ -18,7 +18,7 @@
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.15 2008/11/25 19:20:48 mikep Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.16 2008/12/05 22:08:13 mikep Exp $";
 
 static char *cv_file()
 {
@@ -143,7 +143,7 @@ else if (sameString(type,"ripTgtProtein"))
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
     s = hashFindVal(ra, "url");
     if (s)
-	printf("  <TD><A HREF=\"%s\">Source URL</A></TD>\n", s);
+	printf("  <TD><A STYLE=\"text-decoration:none\" TARGET=_BLANK HREF=\"%s\">Source URL</A></TD>\n", s);
     else
 	printf("  <TD>&nbsp;</TD>\n");
     puts("</TR>");

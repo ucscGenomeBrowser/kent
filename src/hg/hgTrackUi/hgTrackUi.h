@@ -19,6 +19,10 @@
 #include "trackDb.h"
 #endif
 
+#ifndef CUSTOM_TRACK_H
+#include "customTrack.h"
+#endif
+
 extern struct cart *cart;	/* Cookie cart with UI settings */
 extern char *database;		/* Current database. */
 extern char *chromosome;	        /* Chromosome. */
@@ -27,5 +31,8 @@ extern char *chromosome;	        /* Chromosome. */
 
 void cgapSageUi(struct trackDb *tdb);
 /* CGAP SAGE UI options. Highlight certain libs/tissues and filter by score. */
+
+void encodePeakUi(struct trackDb *tdb, struct customTrack *ct);
+/* ENCODE peak UI options. */
 
 #endif /* HGTRACKUI_H */

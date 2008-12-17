@@ -155,4 +155,30 @@ cut -f 2 chrom.sizes | ave stdin
     cp /cluster/data/speTri1/speTri1.2bit /san/sanvol1/scratch/speTri1
     cp /cluster/data/speTri1/chrom.sizes /san/sanvol1/scratch/speTri1
 
+############################################################################
+#  speTri1 - Squirrel - Ensembl Genes version 51  (DONE - 2008-12-03 - hiram)
+    ssh kkr14u07
+    cd /hive/data/genomes/speTri1
+    cat << '_EOF_' > speTri1.ensGene.ra
+# required db variable
+db speTri1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#	names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the single gene that has an invalid structure from Ensembl:
+# 1071: ENSSTOT00000007455 no exonFrame on CDS exon 1
+'_EOF_'
+#  << happy emacs
 
+    doEnsGeneUpdate.pl -ensVersion=51 speTri1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/speTri1/bed/ensGene.51
+    featureBits speTri1 ensGene
+    # 21525994 bases of 1913367893 (1.125%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/speTri1/bed/ensGene.51
+
+############################################################################

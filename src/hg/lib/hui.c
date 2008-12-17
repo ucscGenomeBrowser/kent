@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.137 2008/12/01 23:26:18 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.140 2008/12/09 07:18:27 angie Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2722,10 +2722,64 @@ if(boxed)
 cfgEndBox(boxed);
 }
 
+void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, int scoreMax)
+/* If scoreMin has been set, let user select the shade of gray for that score, in case 
+ * the default is too light to see or darker than necessary. */
+{
+char *scoreMinStr = trackDbSetting(tdb, "scoreMin");
+if (scoreMinStr != NULL)
+    {
+    int scoreMin = atoi(scoreMinStr);
+    // maxShade=9 taken from hgTracks/simpleTracks.c.  Ignore the 10 in shadesOfGray[10+1] --
+    // maxShade is used to access the array.
+    int maxShade = 9;  
+    int scoreMinGrayLevel = scoreMin * maxShade/scoreMax;
+    if (scoreMinGrayLevel <= 0) scoreMinGrayLevel = 1;
+    char setting[256];
+    safef(setting, sizeof(setting), "%s_minGrayLevel", prefix);
+    int minGrayLevel = cartUsualInt(cart, setting, scoreMinGrayLevel);
+    if (minGrayLevel <= 0) minGrayLevel = 1;
+    if (minGrayLevel > maxShade) minGrayLevel = maxShade;
+    puts("\n<P><B>Shade of lowest-scoring items: </B>");
+    // Add javascript to select so that its color is consistent with option colors:
+    int level = 255 - (255*minGrayLevel / maxShade);
+    printf("<SELECT NAME=\"%s\" STYLE='color: #%02x%02x%02x' ONCHANGE='",
+	   setting, level, level, level);
+    int i;
+    for (i = 1;  i < maxShade;  i++)
+	{
+	level = 255 - (255*i / maxShade);
+	if (i > 1)
+	    printf("else ");
+	printf ("if (this.value == \"%d\") {this.style.color = \"#%02x%02x%02x\";} ",
+		i, level, level, level);
+	}
+    level = 255 - (255*i / maxShade);
+    printf("else {this.style.color = \"#%02x%02x%02x\";}'>\n", level, level, level);
+    // Use class to set color of each option:
+    for (i = 1;  i <= maxShade;  i++)
+	{
+	level = 255 - (255*i / maxShade);
+	printf("<OPTION%s STYLE='color: #%02x%02x%02x' VALUE=%d>",
+	       (minGrayLevel == i ? " SELECTED" : ""), level, level, level, i);
+	if (i == maxShade)
+	    printf("&bull; black</OPTION>\n");
+	else
+	    printf("&bull; gray (%d%%)</OPTION>\n", i * (100/maxShade));
+	}
+    printf("</SELECT></P>\n");
+    }
+}
+
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name, char *title,  int maxScore, boolean boxed)
 /* Put up UI for filtering bed track based on a score */
 {
 char option[256];
+
+boolean scoreFilterOk = (trackDbSetting(parentTdb, "noScoreFilter") == NULL);
+boolean gotScoreMin = (trackDbSetting(parentTdb, "scoreMin") != NULL);
+if (! (scoreFilterOk || gotScoreMin))
+    return;
 
 char *scoreValString = trackDbSetting(parentTdb, "scoreFilter");
 int scoreSetting;
@@ -2739,15 +2793,21 @@ bool doScoreCtFilter = FALSE;
 
 cfgBeginBoxAndTitle(boxed, title);
 
-/* initial value of score theshold is 0, unless
- * overridden by the scoreFilter setting in the track */
-if (scoreValString != NULL)
-    scoreVal = atoi(scoreValString);
-printf("<b>Show only items with score at or above:</b> ");
-snprintf(option, sizeof(option), "%s.scoreFilter", name);
-scoreSetting = cartUsualInt(cart,  option,  scoreVal);
-cgiMakeIntVar(option, scoreSetting, 11);
-printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
+if (scoreFilterOk)
+    {
+    /* initial value of score theshold is 0, unless
+     * overridden by the scoreFilter setting in the track */
+    if (scoreValString != NULL)
+	scoreVal = atoi(scoreValString);
+    printf("<b>Show only items with score at or above:</b> ");
+    snprintf(option, sizeof(option), "%s.scoreFilter", name);
+    scoreSetting = cartUsualInt(cart,  option,  scoreVal);
+    cgiMakeIntVar(option, scoreSetting, 11);
+    printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
+    }
+
+if (gotScoreMin)
+    scoreGrayLevelCfgUi(cart, parentTdb, name, maxScore);
 
 if (scoreCtString != NULL)
     {
@@ -2957,12 +3017,16 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
         }
 
     char id[MAX_SP_SIZE];
+    boolean checked = TRUE;
     if(defaultOffSpeciesCnt > 0)
         {
         if(stringArrayIx(wmSpecies->name,words,defaultOffSpeciesCnt) == -1)
             safef(id, sizeof(id), "cb_maf_%s_%s", groups[group], wmSpecies->name);
         else
+            {
             safef(id, sizeof(id), "cb_maf_%s_%s_defOff", groups[group], wmSpecies->name);
+            checked = FALSE;
+            }
         }
     else
         safef(id, sizeof(id), "cb_maf_%s_%s", groups[group], wmSpecies->name);
@@ -2997,7 +3061,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
             if (row != NULL)
                 {
                 puts("<TD>");
-                cgiMakeCheckBoxWithId(option, cartUsualBoolean(cart, option, TRUE),id);
+                cgiMakeCheckBoxWithId(option, cartUsualBoolean(cart, option, checked),id);
                 printf ("%s", label);
                 puts("</TD>");
                 fflush(stdout);
@@ -3012,7 +3076,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
     	{
     	puts("<TD>");
     	safef(option, sizeof(option), "%s.%s", name, wmSpecies->name);
-        wmSpecies->on = cartUsualBoolean(cart, option, TRUE);
+        wmSpecies->on = cartUsualBoolean(cart, option, checked);
         cgiMakeCheckBoxWithId(option, wmSpecies->on,id);
     	label = hOrganism(wmSpecies->name);
     	if (label == NULL)

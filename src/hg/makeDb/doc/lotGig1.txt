@@ -1,0 +1,164 @@
+# for emacs: -*- mode: sh; -*-
+# Lottia gigantea 
+
+#########################################################################
+# DOWNLOAD SEQUENCE (todo
+    ssh kolossus
+    mkdir /hive/data/genomes/lotGig1
+    ln -s /hive/data/genomes/lotGig1 /cluster/data
+    mkdir /cluster/data/lotGig1/jgi
+    cd /cluster/data/lotGig1/jgi
+
+    wget --timestamping \
+ftp://ftp.jgi-psf.org/pub/JGI_data/Lottia_gigantea/v1.0/Lotgi1_assembly_scaffolds.fasta.gz
+    md5sum Lotgi1* > assembly.md5sum
+
+# no quals yet
+#    qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin lotGig1.qual.qac
+
+   faSize Lotgi1_assembly_scaffolds.fasta.gz
+# 359512207 bases (60610637 N's 298901570 real 298901570 upper 0 lower) in 4475 sequences in 1 files
+# Total size: mean 80337.9 sd 438106.3 min 1000 (sca_18165) max 9386848 (sca_1) median 3622
+# N count: mean 13544.3 sd 53307.5
+# U count: mean 66793.6 sd 391964.5
+# L count: mean 0.0 sd 0.0
+# %0.00 masked total, %0.00 masked real
+
+
+#########################################################################
+# Create .ra file and run makeGenomeDb.pl  (todo..
+    ssh hgwdev
+    screen
+    cd /cluster/data/lotGig1
+cat << _EOF_ >lotGig1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db lotGig1
+clade deuterostome
+genomeCladePriority 35
+scientificName  Lottia gigantea
+commonName Gastropod snail
+assemblyDate Jul. 2007
+assemblyLabel JGI
+orderKey 236.5
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/lotGig1/jgi/Lotgi1_assembly_scaffolds.fasta.gz
+fakeAgpMinContigGap 25
+fakeAgpMinScaffoldGap 25 
+# agpFiles /cluster/data/lotGig1/broad/assembly.agp
+# qualFiles /cluster/data/lotGig1/broad/lotGig1.qual.qac
+dbDbSpeciesDir mollusc
+_EOF_
+
+    makeGenomeDb.pl -workhorse kolossus -verbose=2 lotGig1.config.ra > makeGenomeDb.out 2>&1 &
+
+# 'ctl-a ctl -d' returns to previous shell
+cut -f 2 chrom.sizes | ave stdin
+# Q1 7169.500000
+# median 13298.000000
+# Q3 55788.500000
+# average 866164.007952
+# min 3002.000000
+# max 88675666.000000
+# count 3144
+# total 2723219641.000000
+# standard deviation 5316243.688364
+
+
+#########################################################################
+# REPEATMASKER (not done)
+    screen # use a screen to manage this job
+    mkdir /cluster/data/lotGig1/bed/repeatMasker
+    cd /cluster/data/lotGig1/bed/repeatMasker
+    /cluster/bin/scripts/doRepeatMasker.pl -species "tarsier" \
+	-buildDir=/cluster/data/lotGig1/bed/repeatMasker    \
+	lotGig1 > do.log 2>&1 &
+
+# new parasol, lots of crashes, no times
+
+    /cluster/bin/scripts/doRepeatMasker.pl -species "tarsier" \
+	-continue cat -buildDir=/cluster/data/lotGig1/bed/repeatMasker    \
+	lotGig1 > do2.log 2>&1 &
+
+
+    time nice -n +19 featureBits lotGig1 rmsk > fb.lotGig1.rmsk.txt 2>&1 &
+    # 1154651023 bases of 2771976320 (41.654%) in intersection
+
+
+#########################################################################
+# SIMPLE REPEATS TRF (not done)
+    screen # use a screen to manage this job
+    mkdir /cluster/data/lotGig1/bed/simpleRepeat
+    cd /cluster/data/lotGig1/bed/simpleRepeat
+    # 
+    doSimpleRepeat.pl -buildDir=/cluster/data/lotGig1/bed/simpleRepeat \
+	lotGig1 > do.log 2>&1 &
+
+    #### When done
+    ssh pk
+    para time
+    # Completed: 51 of 51 jobs
+    # CPU time in finished jobs:      24985s     416.41m     6.94h    0.29d
+    # 0.001 y
+    # IO & Wait Time:                   101s       1.69m     0.03h    0.00d
+    # 0.000 y
+    # Average job time:                 492s       8.20m     0.14h    0.01d
+    # Longest finished job:            3887s      64.78m     1.08h    0.04d
+    # Submission to last job:          3911s      65.18m     1.09h    0.05d
+
+    featureBits lotGig1 simpleRepeat
+    # 50851363 bases of 2771976320 (1.834%) in intersection
+
+    #	after RM run is done, add this mask:
+    cd /cluster/data/lotGig1
+    twoBitMask lotGig1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed lotGig1.2bit
+
+    twoBitToFa lotGig1.2bit stdout | faSize stdin
+#    3183347966 bases (411371646 N's 2771976320 real 1619032005 upper
+#    1152944315 lower) in 659020 sequences in 1 files
+#    Total size: mean 4830.4 sd 8873.5 min 600 (scaffold_659019) max 329427
+#    (scaffold_0) median 1645
+#    N count: mean 624.2 sd 1398.1
+#    U count: mean 2456.7 sd 5229.3
+#    L count: mean 1749.5 sd 2909.8
+#    %36.22 masked total, %41.59 masked real
+
+    twoBitToFa lotGig1.rmsk.2bit stdout | faSize stdin
+# 3183347966 bases (411371646 N's 2771976320 real 1619660149 upper 1152316171
+# lower) in 659020 sequences in 1 files
+# Total size: mean 4830.4 sd 8873.5 min 600 (scaffold_659019) max 329427
+# (scaffold_0) median 1645
+# N count: mean 624.2 sd 1398.1
+# U count: mean 2457.7 sd 5230.7
+# L count: mean 1748.5 sd 2908.4
+# %36.20 masked total, %41.57 masked real
+
+
+    # Link to it from /gbdb
+    ln -s /cluster/data/lotGig1/lotGig1.2bit /gbdb/lotGig1/lotGig1.2bit
+
+    # mkdir /san/sanvol1/scratch/lotGig1
+    cp /cluster/data/lotGig1/lotGig1.2bit /san/sanvol1/scratch/lotGig1
+    cp /cluster/data/lotGig1/chrom.sizes /san/sanvol1/scratch/lotGig1
+
+
+###########################################################################
+# prepare for kluster runs (not done)
+    # compare to size of real bases to adjust the repMatch
+    #	hg18: 2881421696
+    #	lotGig1: 2768536343
+    # thus: 1024 * 2768536343/2881421696 = 983
+    #	rounding up to 1000 for a bit more conservative masking
+    cd /hive/data/genomes/lotGig1
+    time blat lotGig1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=lotGig1.11.ooc -repMatch=1000
+    #	Wrote 31947 overused 11-mers to lotGig1.11.ooc
+    #	real    2m30.155s
+    #	and staging data for push to kluster nodes
+    mkdir /hive/data/staging/data/lotGig1
+    cp -p lotGig1.2bit chrom.sizes lotGig1.11.ooc \
+	/hive/data/staging/data/lotGig1
+    #	request to cluster admin to push this to the kluster nodes
+    #	/scratch/data/
+
+###########################################################################

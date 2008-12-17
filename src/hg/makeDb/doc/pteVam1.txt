@@ -122,4 +122,32 @@ XXX - waiting for RM to complete 2008-10-15 13:32
 # add NCBI identifiers to the dbDb (DONE - 2008-10-21 - Hiram)
     hgsql -e 'update dbDb set
 sourceName="Broad Institute pteVam1 (NCBI project 20325, ABRP01000000)" where name="pteVam1";' hgcentraltest
-###########################################################################
+
+############################################################################
+#  pteVam1 - Megabat - Ensembl Genes version 51  (DONE - 2008-12-02 - hiram)
+    ssh kkr14u07
+    cd /hive/data/genomes/pteVam1
+    cat << '_EOF_' > pteVam1.ensGene.ra
+# required db variable
+db pteVam1
+# do we need to translate geneScaffold coordinates
+geneScaffolds yes
+# ignore genes that do not properly convert to a gene pred, and contig
+#       names that are not in the UCSC assembly
+skipInvalid yes
+# ignore the two genes that have invalid structures from Ensembl:
+#       6381: ENSPVAT00000012919 no exonFrame on CDS exon 14
+#       23522: ENSPVAT00000010661 no exonFrame on CDS exon 0
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=51 pteVam1.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/pteVam1/bed/ensGene.51
+    featureBits pteVam1 ensGene
+    # 28722584 bases of 1839436660 (1.561%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/pteVam1/bed/ensGene.51
+
+############################################################################

@@ -26,7 +26,7 @@ groupings mskccCGHGroups
 priority 3.5
 
 # Expression Data
-track broadAffyExp
+track broadGBMexp_affy
 shortLabel GBM Broad Expression
 longLabel TCGA GBM Broad Affymetrix Expression Array U133A
 group tcga
@@ -35,7 +35,19 @@ type expRatio
 logicalDb localDb
 expScale 4.0
 expStep 0.2
-groupings broadAffyExpGroups
+groupings broadGBMexp_affyGroups
+priority 4.0
+
+track broadOVexp_affy
+shortLabel OV Broad Expression
+longLabel TCGA OV Broad Affymetrix Expression Array U133A
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 4.0
+expStep 0.2
+groupings broadOVexp_affyGroups
 priority 4.0
 
 track uncAgiExp

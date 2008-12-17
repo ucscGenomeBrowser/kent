@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encodePeak.c,v 1.6 2008/11/14 16:00:12 aamp Exp $";
+static char const rcsid[] = "$Id: encodePeak.c,v 1.7 2008/12/11 00:07:21 aamp Exp $";
 
 struct encodePeak *encodePeakLoad(char **row)
 /* Load a encodePeak from row fetched with select * from encodePeak
@@ -212,7 +212,7 @@ enum encodePeakType encodePeakInferType(int numFields, char *type)
 /* Given a track type string and number of fields in a row, infer the type */
 {
 if (!type)
-    errAbort("Unknown encodePeak type");
+    return 0;
 if (((sameString(type, "narrowPeak") || sameString(type, "encodePeak")) 
      && (numFields == ENCODE_PEAK_NARROW_PEAK_FIELDS)))
     return narrowPeak;
