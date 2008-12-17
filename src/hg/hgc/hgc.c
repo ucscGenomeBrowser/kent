@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1484 2008/12/15 22:10:38 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1485 2008/12/17 18:02:24 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14479,7 +14479,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     int end = sqlUnsigned(row[1]);
     char *strand = row[2];
     printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTable, gene, (snpStart - end),
+	   geneTable, gene, (snpStart - end + 1),
 	   (strand[0] == '-' ? "up" : "down"));
     nearCount++;
     }
@@ -14495,7 +14495,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     int start = sqlUnsigned(row[1]);
     char *strand = row[2];
     printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTable, gene, (start - snpEnd),
+	   geneTable, gene, (start - snpEnd + 1),
 	   (strand[0] == '-' ? "down" : "up"));
     nearCount++;
     }
