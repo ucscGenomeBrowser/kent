@@ -3,7 +3,7 @@
 
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: hPrint.c,v 1.9 2008/09/17 18:10:13 kent Exp $";
+static char const rcsid[] = "$Id: hPrint.c,v 1.10 2008/12/18 05:54:58 larrym Exp $";
 
 static boolean suppressHtml = FALSE;
 /* If doing PostScript output we'll suppress most of HTML output. */
@@ -94,6 +94,13 @@ void hButtonWithMsg(char *name, char *label, char *msg)
 {
 if (!suppressHtml)
     cgiMakeButtonWithMsg(name, label, msg);
+}
+
+void hButtonWithOnClick(char *name, char *label, char *msg, char *onClick)
+/* Write out button with onclick javascript if not suppressed. */
+{
+if (!suppressHtml)
+    cgiMakeButtonWithOnClick(name, label, msg, onClick);
 }
 
 void hOnClickButton(char *command, char *label)

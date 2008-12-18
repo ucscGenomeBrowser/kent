@@ -47,6 +47,9 @@ void hButton(char *name, char *label);
 void hButtonWithMsg(char *name, char *label, char *msg);
 /* Write out button with msg if not suppressed. */
 
+void hButtonWithOnClick(char *name, char *label, char *msg, char *onClick);
+/* Write out button with onclick javascript if not suppressed. */
+
 void hOnClickButton(char *command, char *label);
 /* Write out push button if not suppressed. */
 
