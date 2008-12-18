@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.108 2008/12/10 19:05:16 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.109 2008/12/18 05:53:24 larrym Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -854,6 +854,14 @@ void cgiMakeButtonWithMsg(char *name, char *value, char *msg)
 {
 printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" %s%s%s>", 
         name, value, 
+        (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ));
+}
+
+void cgiMakeButtonWithOnClick(char *name, char *value, char *msg, char *onClick)
+/* Make 'submit' type button, with onclick javascript */
+{
+printf("<input type=\"submit\" name=\"%s\" value=\"%s\" onclick=\"%s\" %s%s%s>", 
+        name, value, onClick,
         (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ));
 }
 

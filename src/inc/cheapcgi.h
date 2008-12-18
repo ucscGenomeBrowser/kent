@@ -140,6 +140,9 @@ char *cgiEncodeFull(char *inString);
 void cgiMakeButtonWithMsg(char *name, char *value, char *msg);
 /* Make 'submit' type button. Display msg on mouseover, if present*/
 
+void cgiMakeButtonWithOnClick(char *name, char *value, char *msg, char *onClick);
+/* Make 'submit' type button, with onclick javascript */
+
 void cgiMakeButton(char *name, char *value);
 /* Make 'submit' type button. */
 
