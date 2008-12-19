@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1530 2008/12/19 07:14:07 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1531 2008/12/19 20:14:18 larrym Exp $";
 
 #define SMALLBUF 64
 
@@ -4134,7 +4134,6 @@ if (!hIsGsidServer())
     }
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 insideX = trackOffsetX();
-hPrintf("<input type='hidden' id='hgt.insideX' name='insideX' value='%d'>\n", insideX);
 insideWidth = tl.picWidth-gfxBorder-insideX;
 
 
@@ -4150,6 +4149,9 @@ if (sameString(baseTitle, ""))
 if  (cgiVarExists("hgt.toggleRevCmplDisp"))
     toggleRevCmplDisp();
 setRulerMode();
+
+hPrintf("<input type='hidden' id='hgt.insideX' name='insideX' value='%d'>\n", insideX);
+hPrintf("<input type='hidden' id='hgt.revCmplDisp' name='revCmplDisp' value='%d'>\n", revCmplDisp);
 
 /* Do zoom/scroll if they hit it. */
 if (cgiVarExists("hgt.left3"))
@@ -4544,7 +4546,7 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 			"hgt.tui", "hgt.hideAll", "hgt.visAllFromCt",
                         "hgt.psOutput", "hideControls", "hgt.toggleRevCmplDisp",
                         "hgt.chromName", "hgt.winStart", "hgt.winEnd", "hgt.newWinWidth",
-                        "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection",
+                        "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection", "hgt.revCmplDisp",
                         "hgt.collapseGroups", "hgt.expandGroups",
 			NULL };
 
