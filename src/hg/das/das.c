@@ -19,7 +19,7 @@
 #include "trackTable.h"
 
 
-static char const rcsid[] = "$Id: das.c,v 1.43 2008/09/08 07:45:14 markd Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.44 2008/12/19 09:11:46 markd Exp $";
 
 /* Including the count in the types response can be very slow for large
  * regions and is optional.  Inclusion of count if controlled by this compile-
@@ -699,6 +699,18 @@ for (i=0; i<gp->exonCount; ++i)
     }
 }
 
+static void dasOutGpSegment(struct sqlResult *sr, int rowOffset, struct tableDef *td, struct trackTable *tt)
+/* output genePreds resulting from query */
+{
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct genePred *gp = genePredLoad(row+rowOffset);
+    dasOutGp(gp, td, tt);
+    genePredFree(&gp);
+    }
+}
+
 static void dasOutPsl(struct psl *psl, struct tableDef *td, struct trackTable *tt)
 /* Write out DAS info on a psl alignment. */
 {
@@ -754,6 +766,18 @@ for (i=0; i<psl->blockCount; ++i)
     }
 }
 
+static void dasOutPslSegment(struct sqlResult *sr, int rowOffset, struct tableDef *td, struct trackTable *tt)
+/* output psls resulting from query */
+{
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct psl *psl = pslLoad(row+rowOffset);
+    dasOutPsl(psl, td, tt);
+    pslFree(&psl);
+    }
+}
+
 static void dasOutBed(char *chrom, int start, int end, 
 	char *name, char *strand, char *score, 
 	struct tableDef *td, struct trackTable *tt)
@@ -777,90 +801,79 @@ printf(" </GROUP>\n");
 printf("</FEATURE>\n");
 }
 
-static int fieldIndex(char *table, char *field)
-/* Returns index of field in a row from table, or -1 if it 
- * doesn't exist. */
+static void dasOutBedSegment(struct sqlResult *sr, int rowOffset, char *table, struct tableDef *td, struct trackTable *tt)
+/* output BEDs and BED like tables resulting from query */
 {
-struct sqlConnection *conn = hAllocConn(database);
-int ix = sqlFieldIndex(conn, table, field);
-hFreeConn(&conn);
-return ix;
+char **row;
+int scoreIx = sqlFieldColumn(sr, "score");
+int strandIx = sqlFieldColumn(sr, "strand");
+int nameIx = sqlFieldColumn(sr, "name");
+    
+if (scoreIx == -1)
+    scoreIx = sqlFieldColumn(sr, "gcPpt");
+if (scoreIx == -1)
+    scoreIx = sqlFieldColumn(sr, "dataValue");  // bedGraph
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *strand = (strandIx >= 0 ? row[strandIx] : "0");
+    char *score = (scoreIx >= 0 ? row[scoreIx] : "-");
+    char *name = (nameIx >= 0 ? row[nameIx] : td->name);
+    dasOutBed(row[0+rowOffset], 
+              sqlUnsigned(row[1+rowOffset]), 
+              sqlUnsigned(row[2+rowOffset]), 
+              name, strand, score, td, tt);
+    }
 }
 
+static void writeSegmentFeaturesTable(struct segment *segment,
+                                      struct tableDef *td,
+                                      struct hash *trackHash,
+                                      struct sqlConnection *conn)
+/* write segments features for a table */
+{
+int rowOffset;
+boolean hasBin;
+char table[64];
+
+verbose(2, "track %s\n", td->name);
+hFindSplitTable(database, segment->seq, td->name, table, &hasBin);
+struct trackTable *tt = hashFindVal(trackHash, td->name);
+struct sqlResult *sr = hRangeQuery(conn, td->name, segment->seq, segment->start, segment->end, NULL, &rowOffset);
+// FIXME: should use trackDb to determine type, as field names are
+// not always unique.
+if (sameString(td->startField, "tStart") && (sqlFieldColumn(sr, "qStart") >= 0))
+    {
+    dasOutPslSegment(sr, rowOffset, td, tt);
+    }
+else if (sameString(td->startField, "txStart"))
+    {
+    dasOutGpSegment(sr, rowOffset, td, tt);
+    }
+else if (sameString(td->startField, "chromStart"))
+    {
+    dasOutBedSegment(sr, rowOffset, table, td, tt);
+    }
+sqlFreeResult(&sr);
+}
 
 static void writeSegmentFeatures(struct segment *segment,
                                  struct filters *filters,
                                  struct tableDef *tdList,
                                  struct hash *trackHash,
-                                 struct sqlConnection *conn,
-                                 struct sqlConnection *conn2)
+                                 struct sqlConnection *conn)
 /* write features for a segment */
 {
 /* Print segment header. */
-char *seq = segment->seq;
-int start = segment->start;
-int end = segment->end;
-char *seqName = segment->seqName;
 printf(
 "<SEGMENT id=\"%s\" start=\"%d\" stop=\"%d\" version=\"%s\" label=\"%s\">\n",
-       seqName, start+1, end, version, seqName);
+       segment->seqName, segment->start+1, segment->end, version, segment->seqName);
 
 /* Query database and output features. */
 struct tableDef *td;
 for (td = tdList; td != NULL; td = td->next)
     {
     if (trackFilter(filters, td))
-        {
-        int rowOffset;
-        boolean hasBin;
-        char table[64];
-        char **row;
-
-        verbose(2, "track %s\n", td->name);
-        hFindSplitTable(database, seq, td->name, table, &hasBin);
-        struct trackTable *tt = hashFindVal(trackHash, td->name);
-        struct sqlResult *sr = hRangeQuery(conn, td->name, seq, start, end, NULL, &rowOffset);
-        // FIXME: should use trackDb to determine type, as field names are
-        // not always unique.
-        if (sameString(td->startField, "tStart") && (sqlFieldIndex(conn2, table, "qStart") >= 0))
-            {
-            while ((row = sqlNextRow(sr)) != NULL)
-                {
-                struct psl *psl = pslLoad(row+rowOffset);
-                dasOutPsl(psl, td, tt);
-                pslFree(&psl);
-                }
-            }
-        else if (sameString(td->startField, "txStart"))
-            {
-            while ((row = sqlNextRow(sr)) != NULL)
-                {
-                struct genePred *gp = genePredLoad(row+rowOffset);
-                dasOutGp(gp, td, tt);
-                genePredFree(&gp);
-                }
-            }
-        else if (sameString(td->startField, "chromStart"))
-            {
-            int scoreIx = fieldIndex(table, "score");
-            int strandIx = fieldIndex(table, "strand");
-            int nameIx = fieldIndex(table, "name");
-
-            if (scoreIx == -1)
-                scoreIx = fieldIndex(table, "gcPpt");
-            while ((row = sqlNextRow(sr)) != NULL)
-                {
-                char *strand = (strandIx >= 0 ? row[strandIx] : "0");
-                char *score = (scoreIx >= 0 ? row[scoreIx] : "-");
-                char *name = (nameIx >= 0 ? row[nameIx] : td->name);
-                dasOutBed(row[0+rowOffset], 
-                    sqlUnsigned(row[1+rowOffset]), 
-                    sqlUnsigned(row[2+rowOffset]), 
-                    name, strand, score, td, tt);
-                }
-            }
-        sqlFreeResult(&sr);
-        }
+        writeSegmentFeaturesTable(segment, td, trackHash, conn);
     }
 printf("</SEGMENT>\n");
 }
@@ -873,7 +886,6 @@ struct hash *trackHash = hashOfTracks();
 struct tableDef *tdList = getTables();
 struct filters *filters = filtersNew();
 struct sqlConnection *conn = hAllocConn(database);
-struct sqlConnection *conn2 = hAllocConn(database);
 
 /* Write out DAS features header. */
 normalHeader();
@@ -883,14 +895,13 @@ printf(
 "<GFF version=\"1.0\" href=\"%s\">\n", currentUrl());
 
 for (segment = segmentList; segment != NULL; segment = segment->next)
-    writeSegmentFeatures(segment, filters, tdList, trackHash, conn, conn2);
+    writeSegmentFeatures(segment, filters, tdList, trackHash, conn);
 
 /* Write out DAS footer. */
 printf("</GFF></DASGFF>\n");
 
 /* Clean up. */
 freeHash(&trackHash);
-hFreeConn(&conn2);
 hFreeConn(&conn);
 }
 

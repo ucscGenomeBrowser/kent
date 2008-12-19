@@ -30,7 +30,8 @@ test:	dsnTest \
 	featuresTest \
 	featuresTypeTest \
 	featuresTypeExactTest \
-	featuresType2Test
+	featuresType2Test \
+	bedGraphTest
 
 dsnTest:
 	@${MAKE} doTest id=$@ request='${dasUrl}/dsn'
@@ -53,6 +54,10 @@ featuresTypeExactTest:
 # two types
 featuresType2Test:
 	@${MAKE} doTest id=$@ request='${testUrl}/features?segment=${testSeg}&type=transMapAlnMRna&type=transMapAlnRefSeq'
+
+# score in bedGraph
+bedGraphTest:
+	@${MAKE} doTest id=$@ request='${testUrl}/features?segment=7:115404471,117281897&type=encodeSangerChipH3K36me3'
 
 # recursive target, call with: id, request
 # saves response headers and body, then splits them, dropping date for easy diffing
