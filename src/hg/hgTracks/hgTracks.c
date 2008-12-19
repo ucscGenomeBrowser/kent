@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1532 2008/12/19 22:58:39 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1533 2008/12/19 23:32:01 larrym Exp $";
 
 #define SMALLBUF 64
 
@@ -86,9 +86,9 @@ char *protDbName;               /* Name of proteome database for this genome. */
 #define MEDIUM 2
 #define BRIGHT 3
 #define MAXCHAINS 50000000
-#define DRAGSELECTION 0       /* set this to 1 to turn on Drag Selection functionality */
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 int imagePixelHeight = 0;
+boolean dragZooming = FALSE;
 struct hash *oldVars = NULL;
 
 boolean hideControls = FALSE;		/* Hide all controls? */
@@ -1875,7 +1875,7 @@ if (rulerMode != tvHide)
         errAbort("invalid zoom type %s", zoomType);
     hPrintf("<input type='hidden' id='hgt.newWinWidth' value='%d'>\n", newWinWidth);
     hPrintf("<input type='hidden' id='hgt.rulerClickHeight' value='%d'>\n", rulerClickHeight);
-    hPrintf("<input type='hidden' id='hgt.dragSelection' value='%d'>\n", DRAGSELECTION);
+    hPrintf("<input type='hidden' id='hgt.dragSelection' value='%d'>\n", dragZooming ? 1 : 0);
 
     if (newWinWidth < 1)
 	newWinWidth = 1;
@@ -1899,10 +1899,11 @@ if (rulerMode != tvHide)
 	    ns -= (ne - seqBaseCount);
 	    ne = seqBaseCount;
 	    }
-#if !DRAGSELECTION
-	mapBoxJumpTo(hvg, ps+insideX,rulerClickY,pe-ps,rulerClickHeight,
-		        chromName, ns, ne, message);
-#endif
+        if(!dragZooming)
+            {
+            mapBoxJumpTo(hvg, ps+insideX,rulerClickY,pe-ps,rulerClickHeight,
+                         chromName, ns, ne, message);
+            }
 	}
     }
     if (zoomedToBaseLevel || rulerCds)
@@ -3620,11 +3621,7 @@ if (!hideControls)
     hButton("hgt.dinkLR", " > ");
     hPrintf("</TD><TD COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
-#if DRAGSELECTION
-    hWrites("Click or drag in the base position track to zoom in. ");
-#else
-    hWrites("Click on base position to zoom in around cursor. ");
-#endif
+    hWrites(dragZooming ? "Click or drag in the base position track to zoom in. " : "Click on base position to zoom in around cursor. ");
     hWrites("Click gray/blue bars on left for track options and descriptions.");
     hPrintf("</TD><TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
     hPrintf("move end<BR>");
@@ -4447,13 +4444,16 @@ else
 initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
+dragZooming = cartUsualBoolean(cart, "dragZooming", FALSE);
+
 /* Do main display. */
 
-#if DRAGSELECTION
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("jquery.imgareaselect.js", NULL);
-jsIncludeFile("utils.js", NULL);
-#endif
+if(dragZooming)
+    {
+    jsIncludeFile("jquery.js", NULL);
+    jsIncludeFile("jquery.imgareaselect.js", NULL);
+    jsIncludeFile("utils.js", NULL);
+    }
 jsIncludeFile("hgTracks.js", NULL);
 
 if (cartVarExists(cart, "chromInfoPage"))
