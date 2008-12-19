@@ -1,11 +1,11 @@
 <h2> Description </h2>
 
-<p>These tracks show probable binding sites of the specified transcription factors
+<p>These tracks show probable binding sites of the specified transcription factors (TFs)
 in the given cell types as determined by chromatin immunoprecipitation followed by
-high throughput sequencing (CHIP-seq). The tracks are grouped by TF targeted antibody
+high throughput sequencing (ChIP-Seq). The tracks are grouped by TF targeted antibody
 and by cell type.  Included for each cell type is the input signal, which represents the
 control condition where no antibody targeting was performed.
-Within a grouping their will be one or more of the following:
+Within a grouping there will be one or more of the following tracks:
 <ul>
 <li><B><i>Raw Signal</i></B> of aligned read density
 <li><B><i>Signal</i></B> of replicate combined and input (control) subtracted read density
@@ -13,59 +13,23 @@ Within a grouping their will be one or more of the following:
 evidence of TF binding obtained from these experiments.
 </ul>
 </p>
-<!--
-<h3> Cell Types </h3>
-<table border="1">
-<tr><th>Cell line</th><th>Description</th><th>Source</th><th>Term ID</th></tr>
-<tr><td><a href="http://encodewiki.ucsc.edu/EncodeDCC/index.php/GM12878_%28Tier_1%29" title="GM12878 (Tier 1)">GM12878 (Tier 1)</a></td>
-    <td>lymphoblastoid cell line</td>
-    <td><a href="http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&amp;PgId=166" title="http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&amp;PgId=166" rel="nofollow">Coriell GM12878</a></td>
-    </tr>
-<tr><td><a href="http://encodewiki.ucsc.edu/EncodeDCC/index.php/K562_%28Tier_1%29" title="K562 (Tier 1)">K562 (Tier 1)</a></td><td>chronic myeloid leukemia</td>
-    <td><a href="http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&amp;Template=cellBiology" title="http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&amp;Template=cellBiology" rel="nofollow">ATCC CCL-243</a></td>
-    <td><a href="http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&amp;termId=BTO%3A0000664" title="http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&amp;termId=BTO%3A0000664" rel="nofollow">BTO:0000664</a></td>
-    </tr>
-<tr><td><a href="http://encodewiki.ucsc.edu/EncodeDCC/index.php/HepG2_%28Tier_2%29" title="HepG2 (Tier 2)">HepG2 (Tier 2)</a></td><td>hepatocellular carcinoma</td>
-    <td><a href="http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&amp;Template=cellBiology" title="http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HB-8065&amp;Template=cellBiology" rel="nofollow">ATCC HB-8065</a></td>
-    <td><a href="http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&amp;termId=BTO%3A0000599" title="http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&amp;termId=BTO%3A0000599" rel="nofollow">BTO:0000599</a></td>
-    </tr>
-<tr><td><a href="http://encodewiki.ucsc.edu/EncodeDCC/index.php/HeLa-S3_%28Tier_2%29" title="HeLa-S3 (Tier 2)">HeLa-S3 (Tier 2)</a></td>
-    <td>cervical carcinoma</td><td><a href="http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&amp;Template=cellBiology" title="http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&amp;Template=cellBiology" rel="nofollow">ATCC CCL-2.2</a></td>
-    <td><a href="http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&amp;termId=BTO%3A0000568" title="http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&amp;termId=BTO%3A0000568" rel="nofollow">BTO:0000568</a></td>
-    </tr>
-<tr><td>HEK<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
 
-<tr><td>NB4<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-</table><br>
-
-<table border="1">
-<tr>
-<th> Antibody </th><th> Description </th><th> Source </th><th> Lot(s)
-</th></tr>
-<tr><td> Pol2 </td>
-    <td> RNA Polymerase II Clone 8WG16, Mouse monoclonal </td>
-    <td> <a href="https://store.crpinc.com/datasheet.aspx?UpProd=&amp;catalogno=MMS-126R" title="https://store.crpinc.com/datasheet.aspx?UpProd=&amp;catalogno=MMS-126R" rel="nofollow">Covance Cat# MMS-126R</a> </td>
-    <td> 14861301</td>
-    </tr>
-<tr><td> Stat1 </td>
-    <td> Stat1 (alpha) p-91 (C-24) Rabbit polyclonal </td>
-    <td> <a href="http://www.scbt.com/product.php?datasheet=345" title="http://www.scbt.com/product.php?datasheet=345" rel="nofollow">Santa Cruz Cat# sc-345</a> </td>
-    <td> G2406 and K2106</td>
-    </tr>
-</table>
--->
 <h2> Methods </h2>
-<p>Similar to those previously published with the exceptions that the cells were unstimulated and sodium orthovanadate was omitted from the buffers:
+<p>
+Similar to those previously published with the exceptions that the cells were unstimulated and sodium orthovanadate was omitted from the buffers:
 <a href="http://www.genome.org/cgi/content/abstract/17/6/898" title="http://www.genome.org/cgi/content/abstract/17/6/898" rel="nofollow">Euskirchen <em>et al.</em>, Nature 2007.</a>
 </p>
 
 <h3> Extraction protocol </h3>
 <p>HeLa S3 cells were grown either: (PolII and Input) at the National Cell Culture Center (Minneapolis, MN )
-in Joklik?s modified MEM supplemented 5% Newborn Calf Serum to a density of 5 x10^5 cells/ml.; or (Stat1 and
+in Joklik's modified MEM supplemented 5% Newborn Calf Serum to a density of 5 x10^5 cells/ml.; or (Stat1 and
 Input) in Minimum Essential Medium modified for Suspension (SMEM, Invitrogen), supplemented with glutamine,
-10% FBS, and antibiotics (penicillin-streptomycin) at 37C in 5% CO2, to a density of 5 x10^5 cells/ml and
-then stimulated at these same growth conditions for 30 min with 5 ng/ml human recombinant IFN-? (R&amp;D Systems #285-IF).
-</p><p>All cells were then were fixed with 1% formaldehyde at room temperature for 10 min. Fixation was
+10% FBS, and antibiotics (penicillin-streptomycin) at 37&deg;C in 5% CO<sub>2</sub>, to a density of 5 x10^5 cells/ml and
+then stimulated at these same growth conditions for 30 min with 5 ng/ml human recombinant 
+IFN-? (R&amp;D Systems #285-IF).
+</p>
+<p>
+All cells were then were fixed with 1% formaldehyde at room temperature for 10 min. Fixation was
 terminated with 125 mM glycine, and cells were washed twice in cold 1x PBS, and then swelled on ice in
 hypotonic lysis buffer (20 mM Hepes, pH 7.9, 10 mM KCl, 1 mM EDTA, pH 8, 10% glycerol, 1 mM DTT, 0.5 mM
 PMSF, 0.1 mM sodium orthovanadate and Roche complete protease inhibitors). Cell lysates were homogenized
@@ -74,20 +38,24 @@ with 30 strokes in a Dounce homogenizer (Kontes, pestle B). Nuclear pellets were
 mM PMSF, 1 mM DTT, 0.1 mM sodium orthovanadate and protease inhibitors). Chromatin was sheared with a
 Branson 250 Sonifier (output setting 2, 100% duty cycle, seven 30-second pulses) to an average of 700
 bp as verified on a 1.5% agarose gel.
-</p><p>Clarified lysates for ChIP samples were agitated overnight at 4C with antibody. Following this
-incubation Protein A agarose beads (Upstate-Millipore #16-156) were added and allowed to bind for 60
-min at 4C. Immunoprecipitates were washed three times in 1x RIPA, once in 1x PBS, and then eluted in
-1xTE/1%SDS.  Clarified lysates for Input DNA samples were stored overnight at 4C in parallel with ChIP
+</p><p>Clarified lysates for ChIP samples were agitated overnight at 4&deg;C with antibody. Following this
+incubation, Protein A agarose beads (Upstate-Millipore #16-156) were added and allowed to bind for 60
+min at 4&deg;C. Immunoprecipitates were washed three times in 1x RIPA, once in 1x PBS, and then eluted in
+1xTE/1%SDS.  Clarified lysates for Input DNA samples were stored overnight at 4&deg;C in parallel with ChIP
 experiments.
-</p><p>For ChIP and Input samples, crosslinks were reversed overnight at 65C. ChIP DNA was purified
-by incubation with RNase A for 1 h at 37C, with 200 ug/ml Proteinase K for 2 h at 45C, phenol:chloroform:isoamyl
+</p>
+<p>
+For ChIP and Input samples, crosslinks were reversed overnight at 65&deg;C. ChIP DNA was purified
+by incubation with RNase A for 1 h at 37C, with 200 ug/ml Proteinase K for 2 h at 45&deg;C, phenol:chloroform:isoamyl
 alcohol extraction, and precipitation with 0.1 volumes of 3M sodium acetate, 2 volumes of 100% ethanol
 and 1.5 ul of pellet paint (Novagen).
-</p><p>ChIP-DNA sequencing libraries were prepared according to Illumina's instructions accompanying
+</p>
+<p>
+ChIP-DNA sequencing libraries were prepared according to Illumina's instructions accompanying
 the DNA Sample Kit (Part# 0801-0303).
 </p>
 
-<h3> Scoring of ChIP-Seq Data </h3>
+<h3>Scoring of ChIP-Seq Data</h3>
 <p>Only sequence reads (length ~30 bps) that align uniquely (using Eland) with at most two mismatches
 against the hg18 build of the human genome are used. From the mapped tags a signal map of ChIP DNA
 fragments (average fragment length ~ 200 bps) is constructed where the signal height is the number of
