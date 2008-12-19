@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1527 2008/12/08 23:54:31 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1528 2008/12/19 05:50:37 larrym Exp $";
 
 #define SMALLBUF 64
 
@@ -86,6 +86,7 @@ char *protDbName;               /* Name of proteome database for this genome. */
 #define MEDIUM 2
 #define BRIGHT 3
 #define MAXCHAINS 50000000
+#define DRAGSELECTION 1       /* set this to 1 to turn on Drag Selection functionality */
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 int imagePixelHeight = 0;
 struct hash *oldVars = NULL;
@@ -1872,6 +1873,9 @@ if (rulerMode != tvHide)
         newWinWidth = insideWidth/tl.mWidth;
     else
         errAbort("invalid zoom type %s", zoomType);
+    hPrintf("<input type='hidden' id='hgt.newWinWidth' value='%d'>\n", newWinWidth);
+    hPrintf("<input type='hidden' id='hgt.rulerClickHeight' value='%d'>\n", rulerClickHeight);
+    hPrintf("<input type='hidden' id='hgt.dragSelection' value='%d'>\n", DRAGSELECTION);
 
     if (newWinWidth < 1)
 	newWinWidth = 1;
@@ -1895,8 +1899,10 @@ if (rulerMode != tvHide)
 	    ns -= (ne - seqBaseCount);
 	    ne = seqBaseCount;
 	    }
+#if !DRAGSELECTION
 	mapBoxJumpTo(hvg, ps+insideX,rulerClickY,pe-ps,rulerClickHeight,
 		        chromName, ns, ne, message);
+#endif
 	}
     }
     if (zoomedToBaseLevel || rulerCds)
@@ -2099,7 +2105,7 @@ hPrintf("</MAP>\n");
 
 /* Save out picture and tell html file about it. */
 hvGfxClose(&hvg);
-hPrintf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s ",
+hPrintf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s id='trackMap'",
     gifTn.forHtml, pixWidth, pixHeight, mapName);
 hPrintf("><BR>\n");
 }
@@ -3512,12 +3518,12 @@ if (!hideControls)
     hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
     /* Put up scroll and zoom controls. */
     hWrites("move ");
-    hButton("hgt.left3", "<<<");
-    hButton("hgt.left2", " <<");
-    hButton("hgt.left1", " < ");
-    hButton("hgt.right1", " > ");
-    hButton("hgt.right2", ">> ");
-    hButton("hgt.right3", ">>>");
+    hButtonWithMsg("hgt.left3", "<<<", "move 95% to the left");
+    hButtonWithMsg("hgt.left2", " <<", "move 45% to the left");
+    hButtonWithMsg("hgt.left1", " < ", "move 10% to the left");
+    hButtonWithMsg("hgt.right1", " > ", "move 10% to the right");
+    hButtonWithMsg("hgt.right2", ">> ", "move 45% to the right");
+    hButtonWithMsg("hgt.right3", ">>>", "move 95% to the right");
     hWrites(" zoom in ");
     /* use button maker that determines padding, so we can share constants */
     topButton("hgt.in1", ZOOM_1PT5X);
@@ -3542,7 +3548,7 @@ if (!hideControls)
 	 * we need to repeat the position in a hidden variable here
 	 * so that zoom/scrolling always has current position to work
 	 * from. */
-	hPrintf("<INPUT TYPE=HIDDEN NAME=\"position\" "
+	hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
 		"VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
         hPrintf("\n%s", trackGroupsHidden1->string);
 	hPrintf("</CENTER></FORM>\n");
@@ -3575,7 +3581,7 @@ if (!hideControls)
 	hWrites(" ");
 	hButton("submit", "jump");
 	hOnClickButton(clearButtonJavascript,"clear");
-	hPrintf(" size %s bp. ", buf);
+	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
         hButton("hgTracksConfigPage", "configure");
 #define SURVEY 1
 #ifdef SURVEY
@@ -3583,6 +3589,11 @@ if (!hideControls)
 	if (survey && sameWord(survey, "on"))
 	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Take survey</EM></B></A></FONT>\n");
 #endif
+        // info for drag selection javascript
+        hPrintf("<input type='hidden' id='hgt.winStart' name='winStart' value='%d'>\n", winStart);
+        hPrintf("<input type='hidden' id='hgt.winEnd' name='winEnd' value='%d'>\n", winEnd);
+        hPrintf("<input type='hidden' id='hgt.chromName' name='chromName' value='%s'>\n", chromName);
+
 	hPutc('\n');
 
 	}
@@ -3606,9 +3617,13 @@ if (!hideControls)
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     hButton("hgt.dinkLR", " > ");
     hPrintf("</TD><TD COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
-    hWrites("Click on a feature for details. "
-            "Click on base position to zoom in around cursor. "
-            "Click gray/blue bars on left for track options and descriptions." );
+    hWrites("Click on a feature for details. ");
+#if DRAGSELECTION
+    hWrites("Click or drag in the base position track to zoom in. ");
+#else
+    hWrites("Click on base position to zoom in around cursor. ");
+#endif
+    hWrites("Click gray/blue bars on left for track options and descriptions.");
     hPrintf("</TD><TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
     hPrintf("move end<BR>");
     hButton("hgt.dinkRL", " < ");
@@ -3626,6 +3641,12 @@ if (!hideControls)
 	}
 
     hPrintf(" ");
+    hButtonWithOnClick("hgt.collapseGroups", "collapse groups", NULL, "return setAllTrackGroupVisibility(false)");
+
+    hPrintf(" ");
+    hButtonWithOnClick("hgt.expandGroups", "expand groups", NULL, "return setAllTrackGroupVisibility(true)");
+
+    hPrintf(" ");
     hOnClickButton("document.customTrackForm.submit();return false;",
                         hasCustomTracks ?
                             CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
@@ -3639,6 +3660,7 @@ if (!hideControls)
         hButton("hgt.toggleRevCmplDisp", "reverse");
         hPrintf(" ");
 	}
+
     hButton("submit", "refresh");
 
     hPrintf("<BR>\n");
@@ -3654,7 +3676,6 @@ if (showTrackControls)
     /* Display viewing options for each track. */
     /* Chuck: This is going to be wrapped in a table so that
      * the controls don't wrap around randomly */
-    jsIncludeFile("hgTracks.js", NULL);
     hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
     hPrintf("<tr><td colspan='5' align='CENTER' nowrap>"
 	   "Use drop-down controls below and press refresh to alter tracks "
@@ -4111,6 +4132,7 @@ if (!hIsGsidServer())
     }
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 insideX = trackOffsetX();
+hPrintf("<input type='hidden' id='hgt.insideX' name='insideX' value='%d'>\n", insideX);
 insideWidth = tl.picWidth-gfxBorder-insideX;
 
 
@@ -4422,6 +4444,14 @@ initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 /* Do main display. */
+
+#if DRAGSELECTION
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("jquery.imageareaselect.js", NULL);
+jsIncludeFile("utils.js", NULL);
+#endif
+jsIncludeFile("hgTracks.js", NULL);
+
 if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");
@@ -4511,6 +4541,9 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 			"hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
 			"hgt.tui", "hgt.hideAll", "hgt.visAllFromCt",
                         "hgt.psOutput", "hideControls", "hgt.toggleRevCmplDisp",
+                        "hgt.chromName", "hgt.winStart", "hgt.winEnd", "hgt.newWinWidth",
+                        "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection",
+                        "hgt.collapseGroups", "hgt.expandGroups",
 			NULL };
 
 int main(int argc, char *argv[])
