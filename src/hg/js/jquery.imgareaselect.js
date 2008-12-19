@@ -8,6 +8,12 @@
  * and GPL (GPL-LICENSE.txt) licenses.
  *
  * http://odyniec.net/projects/imgareaselect/
+ * 
+ * modified by larrym to support hgTracks functionality; added:
+ * 
+ * o options.clickHeight - allows click through to map items
+ *
+ * o selection.event - provides callbacks access mouse event object
  *
  */
 
@@ -25,7 +31,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
         adjusted, zIndex = 0, fixed, $p, startX, startY, moveX, moveY,
         resizeMargin = 10, resize = [ ], V = 0, H = 1,
         keyDown, d, aspectRatio, x1, x2, y1, y2, x, y,
-        selection = { x1: 0, y1: 0, x2: 0, y2: 0, width: 0, height: 0 };
+        selection = { x1: 0, y1: 0, x2: 0, y2: 0, width: 0, height: 0, event: null};
 
     var $a = $area.add($border1).add($border2);
     var $o = $outLeft.add($outTop).add($outRight).add($outBottom);
@@ -256,6 +262,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
     function selectingMouseMove(event)
     {
+        selection.event = event;
         x2 = !resize.length || resize[H] || aspectRatio ? evX(event) : viewX(selection.x2);
         y2 = !resize.length || resize[V] || aspectRatio ? evY(event) : viewY(selection.y2);
 
@@ -281,6 +288,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
     function movingMouseMove(event)
     {
+        selection.event = event;
         var newX1 = Math.max(left, Math.min(moveX + evX(event) - startX,
             left + imgWidth - selection.width));
         var newY1 = Math.max(top, Math.min(moveY + evY(event) - startY,
@@ -300,7 +308,13 @@ jQuery.imgAreaSelect.init = function (img, options) {
         selection.y1 = selection.y2 = selY(startY = y1 = y2 = evY(event));
         selection.width = 0;
         selection.height = 0;
-
+        selection.event = event;
+        
+        if(options.clickClipHeight != null && selection.y1 > options.clickClipHeight) {
+                // This is necessary on IE to support clicks in an image which has map items.
+                return false;
+        }
+        
         resize = [ ];
 
         update();
