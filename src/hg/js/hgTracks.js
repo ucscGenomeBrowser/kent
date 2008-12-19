@@ -2,6 +2,7 @@
 
 var debug = false;
 var originalPosition;
+var originalSize;
 
 function commify (str) {
     if(typeof(str) == "number")
@@ -19,9 +20,9 @@ function commify (str) {
 
 function selectStart(img, selection)
 {
-    // XXXX work on remembering initial position and size so we can restore it if user cancels
-    //originalPosition = document.getElementById("positionHidden").value;
-    ;
+    // remember initial position and size so we can restore it if user cancels
+    originalPosition = $('#positionHidden').val();
+    originalSize = $('#size').text();
 }
 
 function updatePosition(img, selection, singleClick)
@@ -101,6 +102,19 @@ function selectEnd(img, selection)
 	if(updatePosition(img, selection, selection.x2 <= (selection.x1 + 10))) {
 	    document.TrackHeaderForm.submit();
 	}
+    } else {
+        if(originalPosition) {
+	    var tags = document.getElementsByTagName("input");
+	    for (var i = 0; i < tags.length; i++) { 
+	        var ele = tags[i];
+	        if(ele.name == "position") {
+		    ele.value = originalPosition;
+	        }
+	    }
+        }
+        if(originalSize) {
+            $('#size').text(originalSize);
+        }
     }
     return true;
 }
