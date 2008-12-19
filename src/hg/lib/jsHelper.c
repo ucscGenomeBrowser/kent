@@ -22,9 +22,10 @@
 #include "hui.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.21 2008/12/17 21:44:33 angie Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.22 2008/12/19 05:44:53 larrym Exp $";
 
 static boolean jsInited = FALSE;
+static boolean defaultWarningShown = FALSE;
 struct hash *includedFiles = NULL;
 
 void jsInit()
@@ -371,9 +372,12 @@ if(hashLookup(includedFiles, fileName) == NULL)
             }
         }
     hashAdd(includedFiles, fileName, NULL);
-    if(noScriptMsg == NULL)
+    if(noScriptMsg == NULL && !defaultWarningShown)
+        {
         noScriptMsg = "<b>Your browser does not support JavaScript so some functionality may be missing!</b>";
-    if(strlen(noScriptMsg))
+        defaultWarningShown = 1;
+        }
+    if(noScriptMsg && strlen(noScriptMsg))
         safef(noScriptBuf, sizeof(noScriptBuf), "<noscript>%s</noscript>\n", noScriptMsg);
     else
         noScriptBuf[0] = 0;
