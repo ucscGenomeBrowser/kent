@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1531 2008/12/19 20:14:18 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1532 2008/12/19 22:58:39 larrym Exp $";
 
 #define SMALLBUF 64
 
@@ -86,7 +86,7 @@ char *protDbName;               /* Name of proteome database for this genome. */
 #define MEDIUM 2
 #define BRIGHT 3
 #define MAXCHAINS 50000000
-#define DRAGSELECTION 1       /* set this to 1 to turn on Drag Selection functionality */
+#define DRAGSELECTION 0       /* set this to 1 to turn on Drag Selection functionality */
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 int imagePixelHeight = 0;
 struct hash *oldVars = NULL;
