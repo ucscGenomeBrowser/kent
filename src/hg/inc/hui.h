@@ -104,7 +104,9 @@ char *hBackgroundImage();
 #define PSL_SEQUENCE_DEFAULT	"no"
 
 /******  Some stuff for tables of controls ******/
-#define CONTROL_TABLE_WIDTH 610
+#define CONTROL_TABLE_WIDTH 790
+/* this number is 10 less than hgDefaultPixWidth and DEFAULT_PIX_WIDTH
+ *	defined in hCommon.h */
 
 #define EXTENDED_DNA_BUTTON "extended case/color options"
 

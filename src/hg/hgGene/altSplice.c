@@ -1,6 +1,7 @@
 /* altSplice - altSplicing diagram. */
 
 #include "common.h"
+#include "hCommon.h"
 #include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
@@ -10,7 +11,7 @@
 #include "altGraphX.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: altSplice.c,v 1.11 2008/09/03 19:18:49 markd Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.12 2008/12/19 07:14:02 hiram Exp $";
 
 static int gpBedBasesShared(struct genePred *gp, struct bed *bed)
 /* Return number of bases genePred and bed share. */
@@ -83,7 +84,7 @@ struct spaceSaver *ssList = NULL;
 struct hash *heightHash = NULL;
 int rowCount = 0;
 struct tempName gifTn;
-int pixWidth = atoi(cartUsualString(cart, "pix", "620" ));
+int pixWidth = atoi(cartUsualString(cart, "pix", DEFAULT_PIX_WIDTH ));
 int pixHeight = 0;
 struct hvGfx *hvg;
 int lineHeight = 0;

@@ -12,7 +12,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.48 2008/12/12 06:06:55 mikep Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.49 2008/12/19 07:14:04 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -280,7 +280,7 @@ int spanCount = 0;
 struct hash *spans = newHash(0);	/*	list of spans in this table */
 struct hashEl *el;
 int insideX = hgDefaultGfxBorder;
-int pixWidth = atoi(cartUsualString(cart, "pix", "620" ));
+int pixWidth = atoi(cartUsualString(cart, "pix", DEFAULT_PIX_WIDTH ));
 boolean withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 
 /*	winEnd less than 1 (i.e. == 0), we need to find this chrom size	*/

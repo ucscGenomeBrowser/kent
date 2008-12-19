@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1529 2008/12/19 06:02:02 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1530 2008/12/19 07:14:07 hiram Exp $";
 
 #define SMALLBUF 64
 
@@ -81,7 +81,7 @@ char *rulerMenu[] =
 
 static long enteredMainTime = 0;	/* time at beginning of main()	*/
 char *protDbName;               /* Name of proteome database for this genome. */
-#define MAX_CONTROL_COLUMNS 5
+#define MAX_CONTROL_COLUMNS 6
 #define LOW 1
 #define MEDIUM 2
 #define BRIGHT 3
@@ -3609,6 +3609,8 @@ if (!hideControls)
     {
     struct controlGrid *cg = NULL;
 
+    /* note a trick of WIDTH=27 going on here.  The 6,15,6 widths following
+     * go along with this trick */
     hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n",
     	tl.picWidth, 27);
     hPrintf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
@@ -3677,11 +3679,11 @@ if (showTrackControls)
     /* Chuck: This is going to be wrapped in a table so that
      * the controls don't wrap around randomly */
     hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
-    hPrintf("<tr><td colspan='5' align='CENTER' nowrap>"
+    hPrintf("<tr><td colspan='%d' align='CENTER' nowrap>"
 	   "Use drop-down controls below and press refresh to alter tracks "
 	   "displayed.<BR>"
 	   "Tracks with lots of items will automatically be displayed in "
-	   "more compact modes.</td></tr>\n");
+	   "more compact modes.</td></tr>\n", MAX_CONTROL_COLUMNS );
     if (!hIsGsidServer())
     	{
 	cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");

@@ -78,8 +78,10 @@ void hTableStart();
 void hTableEnd();
 /* Close out table started with hTableStart() */
 
-#define hgDefaultPixWidth 620
-#define DEFAULT_PIX_WIDTH "620"
+#define hgDefaultPixWidth 800
+#define DEFAULT_PIX_WIDTH "800"
+/* if this default pix width is changed, also note relationship in
+ * CONTROL_TABLE_WIDTH in hui.h */
 #define	hgDefaultLeftLabelWidth	120
 #define	hgDefaultGfxBorder	1
 
