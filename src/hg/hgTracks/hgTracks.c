@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1528 2008/12/19 05:50:37 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1529 2008/12/19 06:02:02 larrym Exp $";
 
 #define SMALLBUF 64
 
@@ -4447,7 +4447,7 @@ char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 
 #if DRAGSELECTION
 jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("jquery.imageareaselect.js", NULL);
+jsIncludeFile("jquery.imgareaselect.js", NULL);
 jsIncludeFile("utils.js", NULL);
 #endif
 jsIncludeFile("hgTracks.js", NULL);
