@@ -409,6 +409,13 @@ hPrintf("</TD><TD>");
 hPrintf("Enable track re-ordering");
 hPrintf("</TD></TR>\n");
 
+hPrintf("<TR><TD>");
+hCheckBox("dragZooming", cartUsualBoolean(cart, "dragZooming", FALSE));
+hPrintf("</TD><TD>");
+hPrintf("Drag Selection/Zooming");
+hPrintf("</TD></TR>\n");
+
+
 hTableEnd();
 
 char buf[128];
