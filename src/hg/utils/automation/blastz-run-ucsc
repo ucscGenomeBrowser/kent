@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.8 2008/10/23 22:58:42 hiram Exp $
+# $Id: blastz-run-ucsc,v 1.9 2008/12/19 21:25:40 rico Exp $
 
 use Getopt::Long;
 use strict;
@@ -322,7 +322,7 @@ sub emptyLav {
   print FH <<_EOF_
 #:lav
 d {
-  "blastz target query B=0 H=2000 M=40000000
+  "blastz target query H=2000
      A    C    G    T
     91 -114  -31 -123
   -114  100 -125  -31
@@ -537,7 +537,6 @@ print STDERR "temp files in $TMP -- will attempt cleanup before die-ing.\n";
 # Some internal defaults for blastz params, carried over from 
 # Scott's blastz-run:
 $defVars{'BLASTZ_H'} = 2000 if (! defined $defVars{'BLASTZ_H'});
-$defVars{'BLASTZ_M'} = 40000000 if (! defined $defVars{'BLASTZ_M'});
 
 my $blastzOptions = &getBlastzParams(%defVars);
 
