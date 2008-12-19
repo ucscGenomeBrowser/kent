@@ -29,41 +29,65 @@ function updatePosition(img, selection, singleClick)
 {
     // singleClick is true when the mouse hasn't moved (or has only moved a small amount).
     var insideX = parseInt(document.getElementById("hgt.insideX").value);
+    var revCmplDisp = parseInt(document.getElementById("hgt.revCmplDisp").value) == 0 ? false : true;
     var newWinWidth = parseInt(document.getElementById("hgt.newWinWidth").value);
     var chromName = document.getElementById("hgt.chromName").value;
     var winStart = parseInt(document.getElementById("hgt.winStart").value);
     var winEnd = parseInt(document.getElementById("hgt.winEnd").value);
+    var imgWidth = jQuery(img).width() - insideX;
 
     var update = false;
-    if(selection.x1 < insideX) {
-	selection.x1 = insideX;
-	update = true;
-    }
-    if(selection.x2 < insideX) {
-	selection.x2 = insideX;
-	update = true;
+    if(revCmplDisp) {
+        // clip selection
+        if(selection.x1 > imgWidth) {
+	    selection.x1 = imgWidth;
+	    update = true;
+        }
+        if(selection.x2 > imgWidth) {
+	    selection.x2 = imgWidth;
+	    update = true;
+        }
+    } else {
+        if(selection.x1 < insideX) {
+	    selection.x1 = insideX;
+	    update = true;
+        }
+        if(selection.x2 < insideX) {
+	    selection.x2 = insideX;
+	    update = true;
+        }
     }
     if(update) {
 	// Force update of selection box
 	jQuery(img).imgAreaSelect({x1: selection.x1,x2: selection.x2,y1: selection.y1,y2: selection.y2});
     }
 
-    var width = winEnd - winStart;
-    var imgWidth = jQuery(img).width() - insideX;
+    var width = winEnd - winStart + 1;
     var newPos = null;
     var newSize = null;
-
     var mult = width / imgWidth;			    // mult is bp/pixel multiplier
-    var x1 = Math.max(insideX, selection.x1);
-    var startDelta = parseInt(mult * (x1 - insideX));       // startDelta is how many bp's to the right
+    var x1, startDelta;                                     // startDelta is how many bp's to the right
+    if(revCmplDisp) {
+        x1 = Math.min(imgWidth, selection.x1);
+        startDelta = Math.round(mult * x1);
+    } else {
+        x1 = Math.max(insideX, selection.x1);
+        startDelta = Math.round(mult * (x1 - insideX));
+    }
     if(singleClick) {
 	var newStart = winStart + startDelta - Math.floor(newWinWidth / 2);
 	var newEnd = winStart + startDelta + Math.floor(newWinWidth / 2);
 	newPos = chromName + ":" + newStart + "-" + newEnd;
 	newSize = newEnd - newStart + 1;
     } else {
-	var x2 = Math.max(insideX, selection.x2);
-	var endDelta = parseInt(mult * (x2 - insideX));
+        var x2, endDelta;
+        if(revCmplDisp) {
+            x2 = Math.min(imgWidth, selection.x2);
+	    endDelta = Math.round(mult * x2);
+        } else {
+            x2 = Math.max(insideX, selection.x2);
+	    endDelta = Math.round(mult * (x2 - insideX));
+        }
 	newPos = chromName + ":" + (winStart + startDelta) + "-" + (winStart + endDelta);
 	newSize = endDelta - startDelta + 1;
     }
