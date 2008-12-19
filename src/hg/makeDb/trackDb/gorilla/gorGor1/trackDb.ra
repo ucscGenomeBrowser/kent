@@ -50,3 +50,11 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
+# Local declaration so that local ctgPos2.html is picked up.
+track ctgPos2
+shortLabel Scaffolds
+longLabel Ensembl scaffold names
+group map
+priority 10
+visibility hide
+type ctgPos
