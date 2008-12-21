@@ -1,3 +1,89 @@
+track CGHBreastCancerStanford
+shortLabel CGH cDNA Array (Pollack et al. 2002)
+longLabel CGH cDNA Array (Pollack et al. 2002) 
+group cancerGenomics
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings CGHBreastCancerStanfordGroups
+
+track vantVeerExp
+shortLabel Gene Expression (van 't Veer et al. 2002)
+longLabel Gene Expression (van 't Veer et al. Nature 2002)
+group cancerGenomics
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings vantVeerExpGroups
+
+track vijver2002
+shortLabel Gene Expression (van de Vijver et al. 2002)
+longLabel Gene Expression (van de Vijver et al. NEJM 2002)
+group cancerGenomics
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings vijver2002Groups
+
+track desmedt2007
+shortLabel Lymph-Node-Neg Gene Exp.(Desmedt et al. 2007)
+longLabel Lymph-Node-Negative Gene Expression (Desmedt et al. CCR 2007)
+group cancerGenomics
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings desmedt2007Groups
+
+track lajosJCO2006
+shortLabel Neoadjuvant Therapy Gene Exp. (Hess K. et al. 2006)
+longLabel Neoadjuvant Therapy Gene Expression (Hess K. et al. JCO 2006)
+group cancerGenomics
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings lajosJCO2006Groups
+
+track jhuUscIllMethyl2Beta
+shortLabel JHU-USC GBM Methyl. Array Avg Beta
+longLabel JHU-USC GBM Methylation Array Avg Beta OMA002
+group cancerGenomics
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings jhuUscIllMethyl2BetaGroups
+
+track uncHmiRNA
+shortLabel UNC GBM H-miRNA Array
+longLabel UNC GBM H-miRNA Array
+group cancerGenomics
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings uncHmiRNAGroups
+
+
+
 track ucsfNeveExp
 shortLabel Breast Cell Line Expression (Neve. et.al)
 longLabel breast cancer cell line gene expression (Neve et.al.Cancer Cell 2006)
@@ -9,6 +95,7 @@ logicalDb localDb
 expScale 2.0
 expStep 0.2
 groupings ucsfNeveExpGroups
+
 
 track ucsfNeveCGH
 shortLabel Breast Cell Line CGH (Neve. et.al)
@@ -23,7 +110,7 @@ expStep 0.2
 groupings ucsfNeveCGHGroups
 
 track maserAgilentExp
-shortLabel Gene Expression (Maser. et.al 2007)
+shortLabel Agilent 1A 22K CGH (Maser et al. 2007)
 longLabel Multi-tissue Human Agilent 1A Exon Array from DFCI (Maher et. al 2006)
 group cancerGenomics
 priority 45.1
