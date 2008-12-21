@@ -228,16 +228,16 @@ expScale 1.0
 expStep 0.1  
 groupings uncAgiExpGroups
 
-track broadAffyExp
-shortLabel TCGA GBM broadAffyExp
-longLabel TCGA GBM Broad Affymetrix Expression array U133A
+track broadGBMexp_affy
+shortLabel TCGA GBM Broad GBM Exp. array Affy U133A
+longLabel TCGA GBM Broad GBM Affymetrix Expression array U133A
 group cancerGenomics
 visibility hide
 type expRatio
 logicalDb localDb
 expScale 3.0
 expStep 0.2
-groupings broadAffyExpGroups
+groupings broadGBMexp_affyGroups
 
 track CaMPScoreExternal
 shortLabel CaMPScoreExternal 
