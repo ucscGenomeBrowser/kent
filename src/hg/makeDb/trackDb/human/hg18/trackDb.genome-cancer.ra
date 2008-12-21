@@ -109,9 +109,9 @@ expScale 2.0
 expStep 0.2
 groupings ucsfNeveCGHGroups
 
-track maserAgilentExp
+track maser22Kcgh
 shortLabel Agilent 1A 22K CGH (Maser et al. 2007)
-longLabel Multi-tissue Human Agilent 1A Exon Array from DFCI (Maher et. al 2006)
+longLabel Agilent 1A 22K CGH (Maser et al. 2007)
 group cancerGenomics
 priority 45.1
 visibility hide
@@ -119,7 +119,7 @@ type expRatio
 logicalDb localDb
 expScale 2.0
 expStep 0.1
-groupings maserAgilentExpGroups
+groupings maser22KcghGroups
 
 track maser44Bcgh
 shortLabel Agilent 44B CGH (Maser. et.al 2007)
