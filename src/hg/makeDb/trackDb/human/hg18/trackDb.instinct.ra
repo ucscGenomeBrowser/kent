@@ -328,6 +328,7 @@ longLabel CaMPScoreExternal Science 2007 volelstein
 group cancerGenomics
 visibility hide
 type bed
+priority 50
 
 # Johnson & Johnson 
 
@@ -354,6 +355,18 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings chin2006ExpGroups
+
+track ucsfChinCGH2006
+shortLabel  Breast Cancer CGH (Chin et. al Cancer Cell 2006)
+longLabel Breast Cancer CGH (Chin et. al. Cancer Cell 2006)
+group cancerGenomics
+priority 46
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 1.0
+expStep 0.2
+groupings ucsfChinCGH2006Groups
 
 track chinSFGenomeBio2007
 shortLabel Breast Cancer Tumor CGH (ChinSF et al. 2007)
