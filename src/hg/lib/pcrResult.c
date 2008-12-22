@@ -7,7 +7,7 @@
 #include "targetDb.h"
 #include "pcrResult.h"
 
-static char const rcsid[] = "$Id: pcrResult.c,v 1.10 2008/11/08 00:31:38 angie Exp $";
+static char const rcsid[] = "$Id: pcrResult.c,v 1.11 2008/12/22 21:06:01 angie Exp $";
 
 char *pcrResultCartVar(char *db)
 /* Returns the cart variable name for PCR result track info for db. 
@@ -109,7 +109,7 @@ while (lineFileRow(lf, pslFields))
     boolean gotIt = FALSE;
     if (target != NULL)
 	{
-	if (sameString(psl->tName, item))
+	if (sameString(psl->tName, item) && psl->tStart == itemStart && psl->tEnd == itemEnd)
 	    gotIt = TRUE;
 	}
     else if (sameString(psl->tName, chrom) && psl->tStart == itemStart &&
