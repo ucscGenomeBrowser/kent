@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1534 2008/12/22 20:38:32 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1535 2008/12/22 21:03:53 angie Exp $";
 
 #define SMALLBUF 64
 
@@ -623,7 +623,10 @@ if (target != NULL)
 		    lf = lfFromPslx(trimmed, 1, FALSE, FALSE, tg);
 		    }
 		safecpy(lf->name, sizeof(lf->name), itemAcc);
-		lf->extra = cloneString(itemName);
+		char extraInfo[512];
+		safef(extraInfo, sizeof(extraInfo), "%s|%d|%d",
+		      itemName, tpsl->tStart, tpsl->tEnd);
+		lf->extra = cloneString(extraInfo);
 		slAddHead(&itemList, lf);
 		pslFree(&trimmed);
 		}
@@ -656,8 +659,16 @@ char *pcrResultTrackItemName(struct track *tg, void *item)
  * Otherwise default to item name. */
 {
 struct linkedFeatures *lf = item;
-if (lf->extra != NULL)
-    return lf->extra;
+char *extra = (char *)lf->extra;
+if (isNotEmpty(extra))
+    {
+    static char displayName[512];
+    safecpy(displayName, sizeof(displayName), extra);
+    char *ptr = strchr(displayName, '|');
+    if (ptr != NULL)
+	*ptr = '\0';
+    return displayName;
+    }
 else
     return lf->name;
 }

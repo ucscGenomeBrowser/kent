@@ -37,7 +37,7 @@
 #include "pcrResult.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: cds.c,v 1.88 2008/11/26 21:59:32 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.89 2008/12/22 21:03:54 angie Exp $";
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -738,12 +738,17 @@ reverseComplement(rPrimer, rPrimerSize);
 if (target != NULL)
     {
     struct psl *tpsl;
-    char *realName = pcrResultItemAccName(lf->name, lf->extra);
+    char *words[3];
+    int wordCount = chopByChar(cloneString(lf->extra), '|', words, ArraySize(words));
+    if (wordCount != 3)
+	errAbort("maybeGetPcrResultSeq: expected 3 |-sep'd words but got '%s'",
+		 (char *)lf->extra);
+    char *displayName = words[0];
+    int ampStart = atoi(words[1]), ampEnd = atoi(words[2]);
+    char *realName = pcrResultItemAccName(lf->name, displayName);
     /* isPcr results are so sparse that I think the performance impact 
      * of re-reading the psl file in the draw function is negligible. */
-    pcrResultGetPsl(pslFileName, target, realName,
-		    chromName, lf->start, lf->end,
-		    &tpsl, NULL);
+    pcrResultGetPsl(pslFileName, target, realName, chromName, ampStart, ampEnd, &tpsl, NULL);
     /* Use seq+extFile if specified; otherwise just retrieve from seqFile. */
     if (isNotEmpty(target->seqTable) && isNotEmpty(target->extFileTable))
 	{
