@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1486 2008/12/22 21:05:28 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1487 2008/12/22 22:23:22 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5427,8 +5427,8 @@ void printPcrTargetMatch(struct targetDb *target, struct psl *tpsl,
 char *acc = pcrResultItemAccession(tpsl->tName);
 char *name = pcrResultItemName(tpsl->tName);
 char niceName[256];
-if (sameString(acc, name))
-    safecpy(niceName, sizeof(niceName), name);
+if (name == NULL || sameString(acc, name))
+    safecpy(niceName, sizeof(niceName), acc);
 else
     safef(niceName, sizeof(niceName), "%s (%s)", name, acc);
 printf("<B>Position in %s:</B> <A HREF=\"%s?%s&db=%s&position=%s\">%s</A>"
@@ -5602,6 +5602,8 @@ if (target != NULL)
     if (wordCount != 3)
 	errAbort("doPcrResult: expected 3 |-sep'd words but got '%s'", item);
     char *targetSeqName = words[0];
+    if (endsWith(targetSeqName, "__"))
+	targetSeqName[strlen(targetSeqName)-2] = '\0';
     int ampStart = atoi(words[1]), ampEnd = atoi(words[2]);
     pcrResultGetPsl(pslFileName, target, targetSeqName, seqName, ampStart, ampEnd,
 		    &itemPsl, &otherPsls);
