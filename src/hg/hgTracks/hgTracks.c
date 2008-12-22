@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1536 2008/12/22 22:23:22 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1537 2008/12/22 23:36:45 fanhsu Exp $";
 
 #define SMALLBUF 64
 
@@ -3699,7 +3699,7 @@ if (showTrackControls)
     else
 	{
 	/* 4 cols fit GSID's display better */
-    	cg = startControlGrid(MAX_CONTROL_COLUMNS-1, "left");
+    	cg = startControlGrid(4, "left");
 	}
     boolean isFirstNotCtGroup = TRUE;
     for (group = groupList; group != NULL; group = group->next)
