@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.15 2008/09/03 19:18:24 markd Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.16 2008/12/22 19:13:23 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -160,9 +160,10 @@ while ((row = sqlNextRow(sr)) != NULL)
      *	so if it fails, then check the Create_time
      */
     timeIxUsed = updateTimeIx;
-    if (sscanf(row[updateTimeIx], "%4d-%2d-%2d %2d:%2d:%2d",
-	&(tm.tm_year), &(tm.tm_mon), &(tm.tm_mday),
-	    &(tm.tm_hour), &(tm.tm_min), &(tm.tm_sec)) != 6)
+    if ((row[updateTimeIx] != NULL) &&
+	    (sscanf(row[updateTimeIx], "%4d-%2d-%2d %2d:%2d:%2d",
+		&(tm.tm_year), &(tm.tm_mon), &(tm.tm_mday),
+		    &(tm.tm_hour), &(tm.tm_min), &(tm.tm_sec)) != 6) )
 	{
 	timeIxUsed = createTimeIx;
 	if (sscanf(row[createTimeIx], "%4d-%2d-%2d %2d:%2d:%2d",
