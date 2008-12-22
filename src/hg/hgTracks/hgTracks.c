@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1533 2008/12/19 23:32:01 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1534 2008/12/22 20:38:32 larrym Exp $";
 
 #define SMALLBUF 64
 
@@ -4448,9 +4448,9 @@ dragZooming = cartUsualBoolean(cart, "dragZooming", FALSE);
 
 /* Do main display. */
 
+jsIncludeFile("jquery.js", NULL);
 if(dragZooming)
     {
-    jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("jquery.imgareaselect.js", NULL);
     jsIncludeFile("utils.js", NULL);
     }
