@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1485 2008/12/17 18:02:24 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1486 2008/12/22 21:05:28 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5593,25 +5593,39 @@ if (target != NULL)
     printf("<B>Search target:</B> %s<BR>\n", target->description);
 
 struct psl *itemPsl = NULL, *otherPsls = NULL, *psl;
-pcrResultGetPsl(pslFileName, target, item,
-		seqName, cartInt(cart, "o"), cartInt(cart, "t"),
-		&itemPsl, &otherPsls);
 if (target != NULL)
+    {
+    /* item (from hgTracks) is |-separated: target sequence name,
+     * amplicon start offset in target sequence, and amplicon end offset. */
+    char *words[3];
+    int wordCount = chopByChar(cloneString(item), '|', words, ArraySize(words));
+    if (wordCount != 3)
+	errAbort("doPcrResult: expected 3 |-sep'd words but got '%s'", item);
+    char *targetSeqName = words[0];
+    int ampStart = atoi(words[1]), ampEnd = atoi(words[2]);
+    pcrResultGetPsl(pslFileName, target, targetSeqName, seqName, ampStart, ampEnd,
+		    &itemPsl, &otherPsls);
     printPcrTargetMatch(target, itemPsl, TRUE);
+    }
 else
+    {
+    pcrResultGetPsl(pslFileName, target, item,
+		    seqName, cartInt(cart, "o"), cartInt(cart, "t"),
+		    &itemPsl, &otherPsls);
     printPosOnChrom(itemPsl->tName, itemPsl->tStart, itemPsl->tEnd,
 		    itemPsl->strand, FALSE, NULL);
+    }
 
 if (otherPsls != NULL)
     {
     puts("<HR>");
     printf("<B>Other matches for these primers:</B><BR>\n");
-for (psl = otherPsls;  psl != NULL;  psl = psl->next)
-    if (target != NULL)
-	printPcrTargetMatch(target, psl, FALSE);
-    else
-	printPosOnChrom(psl->tName, psl->tStart, psl->tEnd,
-			psl->strand, FALSE, NULL);
+    for (psl = otherPsls;  psl != NULL;  psl = psl->next)
+	if (target != NULL)
+	    printPcrTargetMatch(target, psl, FALSE);
+	else
+	    printPosOnChrom(psl->tName, psl->tStart, psl->tEnd,
+			    psl->strand, FALSE, NULL);
     puts("<HR>");
     }
 printPcrSequence(target, itemPsl, fPrimer, rPrimer);
