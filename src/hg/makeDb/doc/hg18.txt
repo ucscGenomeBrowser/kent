@@ -15688,6 +15688,7 @@ csh ../doPhyloP.csh $(file1) {check out line+ /san/sanvol1/scratch/hg18/multiz28
     #  for wigEncode
     ssh pk
     cd /san/sanvol1/scratch/hg18/multiz28way/phyloP/placental
+# check for clean dir here -- chr* will match garbage if it's there
 cat > listPp.csh << 'EOF'
     foreach c (`ls -d chr*`)
         foreach d (`ls -d $c/[1-9]* | sort -t/ -k2 -n`)
@@ -25144,6 +25145,109 @@ done | sort -k1,1 -k2,2n > multiz44wayFrames.bed
 # frames multiz44wayFrames
 # irows on
     #	appears to work OK
+
+#########################################################################
+# Phylogenetic tree from 44-way  (2008-12-06 kate)
+
+    # Extract 4-fold degenerate sites based on 
+    # of RefSeq Reviewed, coding
+    ssh pk
+    cd /hive/data/genomes/hg18/bed/multiz44way
+    mkdir 4d
+    cd 4d
+
+    hgsql hg18 -Ne \
+    "select * from refGene,refSeqStatus where refGene.name=refSeqStatus.mrnaAcc and refSeqStatus.status='Reviewed' and mol='mRNA'" | cut -f 2-20 >  refSeqReviewed.gp
+    wc -l refSeqReviewed.gp
+    #12684 refSeqReviewed.gp
+    genePredSingleCover refSeqReviewed.gp stdout | sort > refSeqReviewedNR.gp
+    wc -l refSeqReviewedNR.gp
+    #7365 refSeqReviewedNR.gp
+
+    mkdir run
+    cd run
+
+# chopped up mafs version
+# run on swarm with -ram=8g
+cat > 4d.csh << 'EOF'
+    set infile = $1
+    set outfile = $2
+    set c = `echo $1 | sed 's/^.*hg18_\(chr[^.][^.]*\).*.maf/\1/'`
+    echo $c
+    cd /scratch/tmp
+    # 'clean' maf
+    perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+    awk -v C=$c '$2 == C {print}' /cluster/data/hg18/bed/multiz44way/4d/refSeqReviewedNR.gp > $c.gp
+    set PHASTBIN=/cluster/bin/phast.2008-11-30
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
+    #rm -f $c.gp $c.maf $c.ss
+'EOF'
+
+# whole chrom mafs version, using new version of 
+# uses memory-efficient version of phast, from Melissa Hubisz at Cornell (mjhubisz@gmail.com)
+cat > 4d.csh << 'EOF'
+    set c = $1
+    set infile = $2
+    set outfile = $3
+    echo $c
+    cd /scratch/tmp
+    # 'clean' maf
+    perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+    awk -v C=$c '$2 == C {print}' /cluster/data/hg18/bed/multiz44way/4d/refSeqReviewedNR.gp > $c.gp
+    set PHASTBIN=/cluster/bin/phast.2008-12-18
+    $PHASTBIN/msa_view --4d --features --do-cats 3 $c.gp -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
+    rm -f $c.gp $c.maf $c.ss
+'EOF'
+
+    ls -1S /hive/data/genomes/hg18/bed/multiz44way/maf/*.maf | \
+        grep -v random | grep -v chrM | grep -v hap > in.lst
+
+cat << 'EOF' > template
+#LOOP
+csh 4d.csh $(root1) {check in line+ $(path1)}  {check out line+ /cluster/data/hg18/bed/multiz44way/4d/mfa/$(root1).mfa}
+#ENDLOOP
+'EOF'
+# << this line makes emacs coloring happy
+
+cat << 'EOF' > template
+#LOOP
+csh 4d.csh $(root1) {check in line+ $(path1)}  {check out line+ /cluster/data/hg18/bed/multiz44way/4d/mfa2/$(root1).mfa}
+#ENDLOOP
+'EOF'
+# << this line makes emacs coloring happy
+
+    gensub2 in.lst single template stdout | tac > jobList
+    rm -fr /cluster/data/hg18/bed/multiz44way/4d/mfa
+    mkdir /cluster/data/hg18/bed/multiz44way/4d/mfa
+    para create jobList
+    para try
+    para check
+    para push
+
+    # combine mfa files
+    cd ..
+    sed -e "s/ /,/g" ../species.list > species.lst
+    /cluster/bin/phast/msa_view --aggregate `cat species.lst` mfa/*.mfa | \
+        sed s/"> "/">"/ > 4d.all.mfa
+
+    sed -e 's/,monDom4.*//' species.lst > placentals.lst
+    /cluster/bin/phast/msa_view --aggregate `cat placentals.lst` mfa/*.mfa | \
+        sed s/"> "/">"/ > 4d.placentals.mfa
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    set PHASTBIN=/cluster/bin/phast.2008-12-18
+    $PHASTBIN/phyloFit --EM --precision MED --msa-format FASTA --subst-mod REV --tree ../tree-commas.nh 4d.all.mfa
+    # started at 5:50pm
+    # ended at 7:27 => ~90 min on swarm
+    mv phyloFit.mod phyloFit.all.mod
+    grep TREE phyloFit.all.mod | sed 's/TREE\:\ //' > tree_4d.44way.nh
+
+    $PHASTBIN/tree_doctor \
+        --prune=monDom4,ornAna1,taeGut1,petMar1,galGal3,anoCar1,xenTro2,gasAcu1,danRer5,tetNig1,fr2,oryLat2 \
+                tree_4d.44way.nh > tree_4d.44way.placental.nh
+
 
 #########################################################################
 # Create Syntenic and Recip Best net files to load into tracks to view
