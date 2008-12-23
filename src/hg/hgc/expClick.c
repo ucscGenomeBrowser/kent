@@ -12,7 +12,10 @@
 #include "affyAllExonProbe.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.21 2008/10/09 18:32:05 hiram Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.22 2008/12/23 20:18:38 fanhsu Exp $";
+
+/* global flag to indicate if the track is a cancer genomics track */
+boolean isCancerGenomicsTrack = FALSE;
 
 static struct rgbColor getColorForExprBed(float val, float max,
 	boolean redGreen, boolean redBlueOnWhite)
@@ -166,8 +169,17 @@ printf("<tr>\n");
 if(strstr(er->name, expName))
     printf("<td align=left bgcolor=\"D9E4F8\"> %s</td>\n",er->name);
 else
-    printf("<td align=left> %s</td>\n", er->name);
-
+    {
+    if (isCancerGenomicsTrack)
+	{
+    	printf("<td align=left><A HREF=\"../cgi-bin/subjectView?sv_dataset=%s&sv_subjectId=%s\" TARGET=_blank>%s</A></td>\n",
+	cartString(cart, "g"), er->name, er->name);
+    	}
+    else
+	{
+    	printf("<td align=left> %s</td>\n", er->name);
+    	}
+    }
 for(bed = bedList;bed != NULL; bed = bed->next)
     {
     /* use the background colors to creat patterns */
@@ -415,6 +427,12 @@ char *expName = (item == NULL) ? itemName : item;
 boolean redGreen = TRUE;
 boolean redBlueOnWhite = FALSE;
 char colorVarName[256];
+
+if (sameWord(tdb->grp, "cancerGenomics"))
+    {
+    /* set global flag */
+    isCancerGenomicsTrack = TRUE;
+    }
 
 safef(colorVarName, sizeof(colorVarName), "%s.color", tdb->tableName);
 /* decide color scheme flags */
