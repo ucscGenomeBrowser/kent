@@ -9,6 +9,7 @@ logicalDb localDb
 expScale 1.0
 expStep 0.2
 groupings COSMICsummaryGroups
+maxItems 2000
 
 track CGHBreastCancerStanford
 shortLabel Breast CGH (Pollack et al. 2002)
@@ -21,6 +22,7 @@ logicalDb localDb
 expScale 1.0
 expStep 0.2
 groupings CGHBreastCancerStanfordGroups
+maxItems 2000
 
 track vantVeerExp
 shortLabel Breast Gene Exp. (van 't Veer et al. 2002)
@@ -33,6 +35,7 @@ logicalDb localDb
 expScale 1.0
 expStep 0.2
 groupings vantVeerExpGroups
+maxItems 2000
 
 track vijver2002
 shortLabel Breast Gene Exp. (van de Vijver et al. 2002)
@@ -45,6 +48,7 @@ logicalDb localDb
 expScale 1.0
 expStep 0.2
 groupings vijver2002Groups
+maxItems 2000
 
 track desmedt2007
 shortLabel Breast Lymph-Node-Neg Gene Exp.(Desmedt et al. 2007)
@@ -57,6 +61,7 @@ logicalDb localDb
 expScale 1.0
 expStep 0.2
 groupings desmedt2007Groups
+maxItems 2000
 
 track lajosJCO2006
 shortLabel Breast Neo. Therapy Gene Exp. (Hess K. et al. 2006)
@@ -69,7 +74,7 @@ logicalDb localDb
 expScale 1.0
 expStep 0.2
 groupings lajosJCO2006Groups
-
+maxItems 2000
 
 track ucsfNeveExp
 shortLabel Breast Cell Line Exp. (Neve. et.al)
@@ -82,7 +87,7 @@ logicalDb localDb
 expScale 2.0
 expStep 0.2
 groupings ucsfNeveExpGroups
-
+maxItems 2000
 
 track ucsfNeveCGH
 shortLabel Breast Cell Line CGH (Neve. et.al)
@@ -95,6 +100,7 @@ logicalDb localDb
 expScale 2.0
 expStep 0.2
 groupings ucsfNeveCGHGroups
+maxItems 2000
 
 # Johnson & Johnson 
 
@@ -109,6 +115,7 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings wang2005ExpGroups
+maxItems 2000
 
 track chin2006Exp
 shortLabel  Breast Cancer Gene Exp. (Chin et al. 2006)
@@ -121,6 +128,7 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings chin2006ExpGroups
+maxItems 2000
 
 track chinSFGenomeBio2007
 shortLabel Breast Cancer Tumor CGH (Chin, SF et al. 2007)
@@ -133,6 +141,7 @@ logicalDb localDb
 expScale 2.0
 expStep 0.2
 groupings chinSFGenomeBio2007Groups
+maxItems 2000
 
 track naderi2007Exp
 shortLabel Breast Cancer Gene Exp. (Naderi et al. Oncogene 2007)
@@ -145,7 +154,7 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings naderi2007ExpGroups
-
+maxItems 2000
 
 track maser22Kcgh
 shortLabel Multi-Tissue 22K CGH (Maser et al. 2007)
@@ -158,6 +167,7 @@ logicalDb localDb
 expScale 2.0
 expStep 0.1
 groupings maser22KcghGroups
+maxItems 2000
 
 track maser44Bcgh
 shortLabel Multi-Tissue 44B CGH (Maser. et.al 2007)
@@ -170,6 +180,7 @@ logicalDb localDb
 expScale 2.0
 expStep 0.1
 groupings maser44BcghGroups
+maxItems 2000
 
 track maser244Acgh
 shortLabel Multi-Tissue 244A CGH (Maser et. al 2007)
@@ -182,6 +193,7 @@ logicalDb localDb
 expScale 2.0
 expStep 0.1
 groupings maser244AcghGroups
+maxItems 2000
 
 track lin2008Exp
 shortLabel Melanoma Gene Exp. (Lin. et.al 2008)
@@ -194,6 +206,7 @@ logicalDb localDb
 expScale 2.0
 expStep 0.1
 groupings lin2008ExpGroups
+maxItems 2000
 
 track lin2008cnv50K
 shortLabel Melanoma 50K CNV (Lin. et.al 2008)
@@ -206,6 +219,7 @@ logicalDb localDb
 expScale 2.0
 expStep 0.1
 groupings lin2008cnv50KGroups
+maxItems 2000
 
 track lin2008cnv250K
 shortLabel Melanoma 250K CNV (Lin. et.al 2008)
@@ -218,6 +232,7 @@ logicalDb localDb
 expScale 2.0
 expStep 0.1
 groupings lin2008cnv250KGroups
+maxItems 2000
 
 track weir2007
 shortLabel Lung CNV (Weir. et.al 2007)
@@ -230,6 +245,7 @@ logicalDb localDb
 expScale 2.0
 expStep 0.1
 groupings weir2007Groups
+maxItems 2000
 
 #TCGA
 
@@ -243,6 +259,7 @@ logicalDb localDb
 expScale 0.5
 expStep 0.05
 groupings mskccCGHGroups
+maxItems 2000
 
 track harvardCGH
 shortLabel TCGA GBM Harvard CGH
@@ -254,6 +271,7 @@ logicalDb localDb
 expScale 1.0
 expStep 0.1
 groupings harvardCGHGroups
+maxItems 2000
 
 track uncAgiExp
 shortLabel TCGA GBM UNC 4x44K Gene Exp.
@@ -265,6 +283,7 @@ logicalDb localDb
 expScale 1.0
 expStep 0.1  
 groupings uncAgiExpGroups
+maxItems 2000
 
 track broadGBMexp_affy
 shortLabel TCGA GBM Broad GBM Gene Exp. 
@@ -276,6 +295,7 @@ logicalDb localDb
 expScale 3.0
 expStep 0.2
 groupings broadGBMexp_affyGroups
+maxItems 2000
 
 track jhuUscIllMethyl2Beta
 shortLabel TCGA JHU-USC GBM Methyl. Array Avg Beta
@@ -288,6 +308,7 @@ logicalDb localDb
 expScale 1.0
 expStep 0.2
 groupings jhuUscIllMethyl2BetaGroups
+maxItems 2000
 
 track uncHmiRNA
 shortLabel TCGA UNC GBM H-miRNA Array
@@ -300,7 +321,7 @@ logicalDb localDb
 expScale 1.0
 expStep 0.2
 groupings uncHmiRNAGroups
-
+maxItems 2000
 
 track kaiser2007
 shortLabel Colon Cancer Gene Exp. (Kaiser et al. 2007)
@@ -313,6 +334,7 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings kaiser2007Groups
+maxItems 2000
 
 track CaMPScoreExternal
 shortLabel Colon CaMP Score (Wood et al. 2007)
