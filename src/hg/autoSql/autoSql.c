@@ -18,9 +18,10 @@
 #include "asParse.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.35 2008/09/03 19:18:17 markd Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.36 2008/12/24 14:59:43 lslater Exp $";
 
 boolean withNull = FALSE;
+boolean makeJson = FALSE;
 boolean addRcsId = TRUE;
 
 void usage()
@@ -30,7 +31,7 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
          "a structure in database and loading it back into memory\n"
 	 "based on a specification file\n"
 	 "usage:\n"
-	 "    autoSql specFile outRoot {optional: -dbLink -withNull} \n"
+	 "    autoSql specFile outRoot {optional: -dbLink -withNull -json} \n"
 	 "This will create outRoot.sql outRoot.c and outRoot.h based\n"
 	 "on the contents of specFile. \n"
          "\n"
@@ -41,13 +42,15 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
          "              applications to accept and load data into objects\n"
 	 "              with potential 'missing data' (NULL in SQL)\n"
          "              situations.\n"
-         "  -noRcsIds - don't add rcsid definitions to generate code.\n");
+         "  -noRcsIds - don't add rcsid definitions to generate code.\n"
+	 "  -json - generate method to output the object in JSON format.\n");
 }
 
 static struct optionSpec optionSpecs[] = {
     {"dbLink", OPTION_BOOLEAN},
     {"withNull", OPTION_BOOLEAN},
     {"noRcsIds", OPTION_BOOLEAN},
+    {"json", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -1413,6 +1416,57 @@ fprintf(f, "}\n");
 fprintf(f, "fputc(%s,f);\n", lineEnd);
 }
 
+void makeArrayColJsonOutput(struct asColumn *col, boolean mightNeedQuotes,
+                        		char *outString, FILE *f)
+/* Make code that prints one array or list column to a tab delimited file. */
+{
+struct asTypeInfo *lt = col->lowType;
+struct asObject *obType = col->obType;
+char *indent = "";
+fprintf(f, "{\n");
+fprintf(f, "int i;\n");
+if (obType != NULL)
+    {
+    fprintf(f, "/* Loading %s list. */\n", obType->name);
+    fprintf(f, "    {\n    struct %s *it = el->%s;\n",        obType->name, col->name);
+    indent = "    ";
+    }
+fprintf(f, "%sfputc('[',f);\n", indent);
+if (col->fixedSize)
+    fprintf(f, "%sfor (i=0; i<%d; ++i)\n", indent, col->fixedSize);
+else
+    fprintf(f, "%sfor (i=0; i<el->%s; ++i)\n", indent, col->linkedSize->name);
+fprintf(f, "%s    {\n", indent);
+if (lt->type == t_object)
+    {
+    fprintf(f, "%s    %sJsonOutput(it,f);\n", indent, obType->name);
+    fprintf(f, "%s    it = it->next;\n", indent);
+    }
+else if (lt->type == t_simple)
+    {
+    fprintf(f, "%s    %sJsonOutput(&it[i],f);\n", indent, obType->name);
+    }
+else
+    {
+    if (mightNeedQuotes)
+        fprintf(f, "%s    fputc('\"',f);\n", indent);
+    fprintf(f, "%s    fprintf(f, \"%s\", el->%s[i]);\n", indent, outString,
+            col->name);
+    if (mightNeedQuotes)
+        fprintf(f, "%s    fputc('\"',f);\n", indent);
+    }
+if (col->fixedSize)
+    fprintf(f, "%s    if (i<%d)\n", indent, (col->fixedSize)-1);
+else
+    fprintf(f, "%s    if (i<(el->%s)-1)\n", indent, col->linkedSize->name);
+fprintf(f, "%s%s    fputc(',',f);\n", indent, indent);
+fprintf(f, "%s    }\n", indent);
+fprintf(f, "%sfputc(']',f);\n", indent);
+if (obType != NULL)
+    fprintf(f, "    }\n");
+fprintf(f, "}\n");
+}
+
 void makeScalarColOutput(struct asColumn *col, boolean mightNeedQuotes,
                          char *outString, char *lineEnd, FILE *f)
 /* Make code that prints one scalar column to a tab delimited file. */
@@ -1464,6 +1518,50 @@ else
     }
 }
 
+void makeScalarColJsonOutput(struct asColumn *col, boolean mightNeedQuotes,
+                         			char *outString, FILE *f)
+/* Make code that prints one scalar column to a tab delimited file. */
+{
+struct asTypeInfo *lt = col->lowType;
+if (lt->type == t_object)
+    {
+    struct asObject *obj = col->obType;
+    fprintf(f, "if(el->%s != NULL)", col->name);
+    fprintf(f, "    %sJsonOutput(el->%s,f);\n", obj->name, col->name);
+    }
+else if (lt->type == t_simple)
+    {
+    struct asObject *obj = col->obType;
+    fprintf(f, "%sJsonOutput(&el->%s,f);\n", obj->name, col->name);
+    }
+else
+    {
+    if (mightNeedQuotes)
+        fprintf(f, "fputc('\"',f);\n");
+    if (!withNull)
+        {
+        fprintf(f, "fprintf(f, \"%s\", el->%s);\n", outString,
+            col->name);
+        }
+    else
+        {
+        if (! ((lt->type == t_string) || (lt->type == t_lstring)) )
+            {
+            fprintf(f, "fprintf(f, \"%s\", *(el->%s));\n", outString,
+                col->name);
+            }
+        else
+            {
+            fprintf(f, "fprintf(f, \"%s\", el->%s);\n", outString,
+                col->name);
+            }
+        }
+
+    if (mightNeedQuotes)
+        fprintf(f, "fputc('\"',f);\n");
+    }
+}
+
 void makeSymColOutput(struct asColumn *col, char *lineEnd, FILE *f)
 /* Make code that prints one symbolic column to a tab delimited file. */
 {
@@ -1472,6 +1570,15 @@ fprintf(f, "sql%sPrint(f, el->%s, values_%s);\n",
         col->lowType->nummyName, col->name, col->name);
 fprintf(f, "if (sep == ',') fputc('\"',f);\n");
 fprintf(f, "fputc(%s,f);\n", lineEnd);
+}
+
+void makeSymColJsonOutput(struct asColumn *col, FILE *f)
+/* Make code that prints one symbolic column to a tab delimited file. */
+{
+fprintf(f, "fputc('\"',f);\n");
+fprintf(f, "sql%sPrint(f, el->%s, values_%s);\n",
+        col->lowType->nummyName, col->name, col->name);
+fprintf(f, "fputc('\"',f);\n");
 }
 
 void makeColOutput(struct asColumn *col, FILE *f)
@@ -1505,6 +1612,42 @@ else if ((lt->type == t_enum) || (lt->type == t_set))
     makeSymColOutput(col, lineEnd, f);
 else
     makeScalarColOutput(col, mightNeedQuotes, outString, lineEnd, f);
+}
+
+void makeColJsonOutput(struct asColumn *col, FILE *f)
+/* Make code that prints one column to a tab delimited file. */
+{
+char *outString = NULL;
+struct asTypeInfo *lt = col->lowType;
+enum asTypes type = lt->type;
+boolean mightNeedQuotes = FALSE;
+
+switch(type)
+    {
+    case t_char:
+        outString = (col->fixedSize > 0) ? "%s" : "%c";
+        mightNeedQuotes = TRUE;
+        break;
+    case t_string:
+    case t_lstring:
+        outString = "%s";
+        mightNeedQuotes = TRUE;
+        break;
+    default:
+        outString = lt->outFormat;
+        break;
+    }
+
+fprintf(f, "fputc('\"',f);\n");
+fprintf(f, "fprintf(f,\"%s\");\n", col->name);
+fprintf(f, "fputc('\"',f);\n");
+fprintf(f, "fputc(':',f);\n");
+if (col->isList || col->isArray)
+    makeArrayColJsonOutput(col, mightNeedQuotes, outString, f);
+else if ((lt->type == t_enum) || (lt->type == t_set))
+    makeSymColJsonOutput(col, f);
+else
+    makeScalarColJsonOutput(col, mightNeedQuotes, outString, f);
 }
 
 void makeOutput(struct asObject *table, FILE *f, FILE *hFile)
@@ -1541,6 +1684,33 @@ for (col = table->columnList; col != NULL; col = col->next)
     makeColOutput(col, f);
 fprintf(f, "}\n\n");
 }
+
+void makeJsonOutput(struct asObject *table, FILE *f, FILE *hFile)
+/* Make function that prints table to tab delimited file. */
+{
+char *tableName = table->name;
+struct asColumn *col;
+
+fprintf(hFile,
+  "void %sJsonOutput(struct %s *el, FILE *f);\n", tableName, tableName);
+fprintf(hFile, "/* Print out %s in JSON format. */\n\n", tableName);
+
+fprintf(f,
+  "void %sJsonOutput(struct %s *el, FILE *f) \n", tableName, tableName);
+fprintf(f, "/* Print out %s in JSON format. */\n", tableName);
+
+fprintf(f, "{\n");
+fprintf(f, "fputc('{',f);\n");
+for (col = table->columnList; col != NULL; col = col->next)
+    {
+    makeColJsonOutput(col, f);
+    if (col->next != NULL)
+        fprintf(f, "fputc(',',f);\n");
+    }
+fprintf(f, "fputc('}',f);\n");
+fprintf(f, "}\n\n");
+}
+
 
 void cSymColumnDef(struct asColumn *col, FILE *cFile)
 /* output definition used for parsing and formating a symbolic column field */
@@ -1588,6 +1758,9 @@ if (obj->isTable)
         }
     }
 makeCommaIn(obj, cFile, hFile);
+/*if (makeJson)
+    makeJsonInput(obj, cFile, hFile);*/
+
 if (obj->isSimple)
     {
     if (internalsNeedFree(obj))
@@ -1599,6 +1772,8 @@ else
     makeFreeList(obj, cFile, hFile);
     }
 makeOutput(obj, cFile, hFile);
+if (makeJson)
+    makeJsonOutput(obj, cFile, hFile);
 printf("Made %s object\n", obj->name);
 }
 
@@ -1614,10 +1789,13 @@ FILE *hFile;
 FILE *sqlFile;
 char defineName[256];
 boolean doDbLoadAndSave = FALSE;
+
 optionInit(&argc, argv, optionSpecs);
 doDbLoadAndSave = optionExists("dbLink");
 withNull = optionExists("withNull");
 addRcsId = !optionExists("noRcsIds");
+makeJson = optionExists("json");
+
 if (argc != 3)
     usage();
 
