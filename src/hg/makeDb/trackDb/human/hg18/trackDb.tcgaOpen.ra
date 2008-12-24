@@ -38,18 +38,6 @@ expStep 0.2
 groupings broadGBMexp_affyGroups
 priority 4.0
 
-track broadOVexp_affy
-shortLabel OV Broad Expression
-longLabel TCGA OV Broad Affymetrix Expression Array U133A
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 4.0
-expStep 0.2
-groupings broadOVexp_affyGroups
-priority 4.0
-
 track uncAgiExp
 shortLabel GBM UNC Expression
 longLabel TCGA GBM UNC Agilent Expression Array G4502A
@@ -88,20 +76,17 @@ expStep 0.2
 groupings jhuUscIllMethyl2BetaGroups
 priority 6.0
 
-# Methylation Data
-track jhuUscIllMethyl2
-shortLabel GBM JHU-USC Methyl Cy3/Cy5
-longLabel TCGA GBM JHU-USC Methylation Array
+track broadOVexp_affy
+shortLabel OV Broad Expression
+longLabel TCGA OV Broad Affymetrix Expression Array U133A
 group tcga
 visibility hide
 type expRatio
 logicalDb localDb
-expScale 3.0
+expScale 4.0
 expStep 0.2
-groupings jhuUscIllMethyl2Groups
-priority 6.0
-
-
+groupings broadOVexp_affyGroups
+priority 4.0
 
 track harvardOVCGH
 shortLabel OV Harvard CGH

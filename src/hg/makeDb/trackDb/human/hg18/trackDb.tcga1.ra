@@ -208,57 +208,6 @@ expStep 0.2
 groupings lblHuEx1Groups
 priority 4.1
 
-track uncAgiExp
-shortLabel GBM UNC Expression
-longLabel TCGA GBM UNC Agilent Expression Array G4502A
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.1
-groupings uncAgiExpGroups
-priority 4.2
-
-# miRNA data
-name uncHmiRNA
-shortLabel GBM UNC miRNA 
-longLabel TCGA GBM UNC H-miRNA Array
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.1
-groupings uncHmiRNAGroups
-priority 4.3
-
-# Methylation Data
-track jhuUscIllMethyl2Beta
-shortLabel GBM JHU-USC Methyl Avg Beta
-longLabel TCGA GBM JHU-USC Methylation Array
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 3.0
-expStep 0.2
-groupings jhuUscIllMethyl2BetaGroups
-priority 6.0
-
-track jhuUscIllMethyl2
-shortLabel GBM JHU-USC Methyl Cy3/Cy5
-longLabel TCGA GBM JHU-USC Methylation Array
-group tcga
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 3.0
-expStep 0.2
-groupings jhuUscIllMethyl2Groups
-priority 6.0
-
-
 ## Ovarian Data
 
 track broadOVABI_SomaticNS
