@@ -1,5 +1,8 @@
 #include trackDb.encode.ra
 #include trackDb.wgEncode.ra
+#include trackDb.instinct.ra
+#include trackDb.tcgaOpen.ra
+#include trackDb.genome-cancer.ra
 
 track clonePos
 priority 14

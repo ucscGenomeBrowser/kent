@@ -1,6 +1,18 @@
+track COSMICsummary
+shortLabel COSMIC Summary
+longLabel COSMIC Summary Mutations by Tissue Type
+group cancerGenomics
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.2
+groupings COSMICsummaryGroups
+
 track CGHBreastCancerStanford
-shortLabel CGH cDNA Array (Pollack et al. 2002)
-longLabel CGH cDNA Array (Pollack et al. 2002) 
+shortLabel Breast CGH (Pollack et al. 2002)
+longLabel Breast CGH cDNA Array (Pollack et al. 2002) 
 group cancerGenomics
 priority 44
 visibility hide
@@ -11,8 +23,8 @@ expStep 0.2
 groupings CGHBreastCancerStanfordGroups
 
 track vantVeerExp
-shortLabel Gene Expression (van 't Veer et al. 2002)
-longLabel Gene Expression (van 't Veer et al. Nature 2002)
+shortLabel Breast Gene Exp. (van 't Veer et al. 2002)
+longLabel Breast Gene Expression (van 't Veer et al. Nature 2002)
 group cancerGenomics
 priority 44
 visibility hide
@@ -23,8 +35,8 @@ expStep 0.2
 groupings vantVeerExpGroups
 
 track vijver2002
-shortLabel Gene Expression (van de Vijver et al. 2002)
-longLabel Gene Expression (van de Vijver et al. NEJM 2002)
+shortLabel Breast Gene Exp. (van de Vijver et al. 2002)
+longLabel Breast Gene Expression (van de Vijver et al. NEJM 2002)
 group cancerGenomics
 priority 44
 visibility hide
@@ -35,8 +47,8 @@ expStep 0.2
 groupings vijver2002Groups
 
 track desmedt2007
-shortLabel Lymph-Node-Neg Gene Exp.(Desmedt et al. 2007)
-longLabel Lymph-Node-Negative Gene Expression (Desmedt et al. CCR 2007)
+shortLabel Breast Lymph-Node-Neg Gene Exp.(Desmedt et al. 2007)
+longLabel Lymph-Node-Negative Breast Gene Expression (Desmedt et al. CCR 2007)
 group cancerGenomics
 priority 44
 visibility hide
@@ -47,8 +59,8 @@ expStep 0.2
 groupings desmedt2007Groups
 
 track lajosJCO2006
-shortLabel Neoadjuvant Therapy Gene Exp. (Hess K. et al. 2006)
-longLabel Neoadjuvant Therapy Gene Expression (Hess K. et al. JCO 2006)
+shortLabel Breast Neo. Therapy Gene Exp. (Hess K. et al. 2006)
+longLabel Breast Neoadjuvant Therapy Gene Expression (Hess K. et al. JCO 2006)
 group cancerGenomics
 priority 44
 visibility hide
@@ -58,35 +70,10 @@ expScale 1.0
 expStep 0.2
 groupings lajosJCO2006Groups
 
-track jhuUscIllMethyl2Beta
-shortLabel JHU-USC GBM Methyl. Array Avg Beta
-longLabel JHU-USC GBM Methylation Array Avg Beta OMA002
-group cancerGenomics
-priority 44
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.2
-groupings jhuUscIllMethyl2BetaGroups
-
-track uncHmiRNA
-shortLabel UNC GBM H-miRNA Array
-longLabel UNC GBM H-miRNA Array
-group cancerGenomics
-priority 44
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 1.0
-expStep 0.2
-groupings uncHmiRNAGroups
-
-
 
 track ucsfNeveExp
-shortLabel Breast Cell Line Expression (Neve. et.al)
-longLabel breast cancer cell line gene expression (Neve et.al.Cancer Cell 2006)
+shortLabel Breast Cell Line Exp. (Neve. et.al)
+longLabel Breast Cancer Cell Line Gene Expression (Neve et.al.Cancer Cell 2006)
 group cancerGenomics
 priority 44
 visibility hide
@@ -99,7 +86,7 @@ groupings ucsfNeveExpGroups
 
 track ucsfNeveCGH
 shortLabel Breast Cell Line CGH (Neve. et.al)
-longLabel breast cancer cell line CGH (Neve et.al.Cancer Cell 2006)
+longLabel Breast Cancer Cell Line CGH (Neve et.al.Cancer Cell 2006)
 group cancerGenomics
 priority 44
 visibility hide
@@ -109,9 +96,60 @@ expScale 2.0
 expStep 0.2
 groupings ucsfNeveCGHGroups
 
+# Johnson & Johnson 
+
+track wang2005Exp
+shortLabel  Breast Cancer Gene Exp. (Wang et al. 2005)
+longLabel Lymph-Node-Negative Breast Cancer Gene Exp. (Wang et al. Lancet 2005)
+group cancerGenomics
+priority 44
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings wang2005ExpGroups
+
+track chin2006Exp
+shortLabel  Breast Cancer Gene Exp. (Chin et al. 2006)
+longLabel Breast Cancer Gene Expression (Chin et al. Cancer Cell 2006)
+group cancerGenomics
+priority 45
+visibility pack
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings chin2006ExpGroups
+
+track chinSFGenomeBio2007
+shortLabel Breast Cancer Tumor CGH (Chin, SF et al. 2007)
+longLabel Breast Cancer Tumor CGH (Chin, SF et al. Genome Bio 2007)
+group cancerGenomics
+priority 44
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 2.0
+expStep 0.2
+groupings chinSFGenomeBio2007Groups
+
+track naderi2007Exp
+shortLabel Breast Cancer Gene Exp. (Naderi et al. Oncogene 2007)
+longLabel Breast Cancer Gene Expression (Naderi et al. Oncogene 2007)
+group cancerGenomics
+priority 46
+visibility hide
+logicalDb localDb
+type expRatio
+expScale 2.0
+expStep 0.2
+groupings naderi2007ExpGroups
+
+
 track maser22Kcgh
-shortLabel Agilent 1A 22K CGH (Maser et al. 2007)
-longLabel Agilent 1A 22K CGH (Maser et al. 2007)
+shortLabel Multi-Tissue 22K CGH (Maser et al. 2007)
+longLabel Multi-Tissue Agilent 1A 22K CGH (Maser et al. 2007)
 group cancerGenomics
 priority 45.1
 visibility hide
@@ -122,8 +160,8 @@ expStep 0.1
 groupings maser22KcghGroups
 
 track maser44Bcgh
-shortLabel Agilent 44B CGH (Maser. et.al 2007)
-longLabel Multi-tissue Agilent 44B CGH Array from DFCI (Maher et. al 2006)
+shortLabel Multi-Tissue 44B CGH (Maser. et.al 2007)
+longLabel Multi-Tissue Agilent 44B CGH Array from DFCI (Maher et. al 2006)
 group cancerGenomics
 priority 45.2
 visibility hide
@@ -134,7 +172,7 @@ expStep 0.1
 groupings maser44BcghGroups
 
 track maser244Acgh
-shortLabel Agilent 244A CGH (Maser et. al 2007)
+shortLabel Multi-Tissue 244A CGH (Maser et. al 2007)
 longLabel Multi-tissue Agilent 244A CGH Array from DFCI (Maher et. al 2006)
 group cancerGenomics
 priority 45.3
@@ -146,7 +184,7 @@ expStep 0.1
 groupings maser244AcghGroups
 
 track lin2008Exp
-shortLabel Melanoma Gene Expression (Lin. et.al 2008)
+shortLabel Melanoma Gene Exp. (Lin. et.al 2008)
 longLabel Melanoma Gene Expression (Lin et. al 2008)
 group cancerGenomics
 priority 46.1
@@ -196,7 +234,7 @@ groupings weir2007Groups
 #TCGA
 
 track mskccCGH
-shortLabel TCGA GBM mskccCGH
+shortLabel TCGA GBM MSKCC CGH
 longLabel TCGA GBM mskcc CGH array 244A 
 group cancerGenomics
 visibility hide
@@ -207,7 +245,7 @@ expStep 0.05
 groupings mskccCGHGroups
 
 track harvardCGH
-shortLabel TCGA GBM harvardCGH
+shortLabel TCGA GBM Harvard CGH
 longLabel TCGA GBM harvard CGH array 244A 
 group cancerGenomics
 visibility hide
@@ -218,8 +256,8 @@ expStep 0.1
 groupings harvardCGHGroups
 
 track uncAgiExp
-shortLabel TCGA GBM uncAgiExp
-longLabel TCGA GBM unc Agilent Expression array 4x44k
+shortLabel TCGA GBM UNC 4x44K Gene Exp.
+longLabel TCGA GBM UNC Agilent Expression array 4x44k
 group cancerGenomics
 visibility hide
 type expRatio
@@ -229,7 +267,7 @@ expStep 0.1
 groupings uncAgiExpGroups
 
 track broadGBMexp_affy
-shortLabel TCGA GBM Broad GBM Exp. array Affy U133A
+shortLabel TCGA GBM Broad GBM Gene Exp. 
 longLabel TCGA GBM Broad GBM Affymetrix Expression array U133A
 group cancerGenomics
 visibility hide
@@ -239,66 +277,33 @@ expScale 3.0
 expStep 0.2
 groupings broadGBMexp_affyGroups
 
-track CaMPScoreExternal
-shortLabel CaMPScoreExternal 
-longLabel CaMPScoreExternal Science 2007 volelstein
-logicalDb localDb
-group cancerGenomics
-visibility hide
-type bed
-
-# Johnson & Johnson 
-
-track wang2005Exp
-shortLabel  Breast Cancer Gene Expression (Wang et. al. Lancet 2005)
-longLabel Lymph-Node-Negative Breast Cancer Gene Exp. (Wang et. al. Lancet 2005)
-group cancerGenomics
-priority 44
-visibility hide
-logicalDb localDb
-type expRatio
-expScale 2.0
-expStep 0.2
-groupings wang2005ExpGroups
-
-track chin2006Exp
-shortLabel  Breast Cancer Gene Expression (Chin et. al Cancer Cell 2006)
-longLabel Breast Cancer Gene Expression (Chin et. al. Cancer Cell 2006)
-group cancerGenomics
-priority 45
-visibility pack
-logicalDb localDb
-type expRatio
-expScale 2.0
-expStep 0.2
-groupings chin2006ExpGroups
-
-track chinSFGenomeBio2007
-shortLabel Breast Cancer Tumor CGH (ChinSF et al. 2007)
-longLabel Breast Cancer Tumor CGH (ChinSF et al. Genome Bio 2007)
+track jhuUscIllMethyl2Beta
+shortLabel TCGA JHU-USC GBM Methyl. Array Avg Beta
+longLabel TCGA JHU-USC GBM Methylation Array Avg Beta OMA002
 group cancerGenomics
 priority 44
 visibility hide
 type expRatio
 logicalDb localDb
-expScale 2.0
+expScale 1.0
 expStep 0.2
-groupings chinSFGenomeBio2007Groups
+groupings jhuUscIllMethyl2BetaGroups
 
-track naderi2007Exp
-shortLabel Breast Cancer Gene Expression (Naderi et al. Oncogene 2007)
-longLabel Breast Cancer Gene Expression (Naderi et al. Oncogene 2007)
+track uncHmiRNA
+shortLabel TCGA UNC GBM H-miRNA Array
+longLabel TCGA UNC GBM H-miRNA Array
 group cancerGenomics
-priority 46
+priority 44
 visibility hide
-logicalDb localDb
 type expRatio
-expScale 2.0
+logicalDb localDb
+expScale 1.0
 expStep 0.2
-groupings naderi2007ExpGroups
+groupings uncHmiRNAGroups
+
 
 track kaiser2007
-shortLabel Colon Cancer Gene Expression (Kaiser et al. 2007)
+shortLabel Colon Cancer Gene Exp. (Kaiser et al. 2007)
 longLabel Colon Cancer Gene Expression (Kaiser et al. 2007)
 group cancerGenomics
 priority 47
@@ -308,3 +313,14 @@ type expRatio
 expScale 2.0
 expStep 0.2
 groupings kaiser2007Groups
+
+track CaMPScoreExternal
+shortLabel Colon CaMP Score (Wood et al. 2007)
+longLabel Color CaMP Score External Science (Wood et al. Science 2007)
+logicalDb localDb
+group cancerGenomics
+visibility hide
+type bed
+
+
+
