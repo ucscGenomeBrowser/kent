@@ -2,6 +2,7 @@ include ../../../inc/common.mk
 
 HG_WARN = ${HG_WARN_ERR}
 AUTOSQL = ${BINDIR}/autoSql -noRcsIds
+AUTOSQLJSON = ${BINDIR}/autoSql -noRcsIds -json
 DIFF = diff -u
 XINC = -I.
 
@@ -10,8 +11,8 @@ MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 # .as not used as dependencies, as we want to run everything each time
-test:   hardTest  newTest  polyTest  simpleTest mainTest \
-        testHarness dbLinkTest symTest symColsTest
+test:   hardTest  newTest  polyTest  simpleTest mainTest doc doc2 \
+        testHarness dbLinkTest symTest symColsTest jsonTest
 
 # hardTest
 hardTest: mkout
@@ -48,6 +49,21 @@ mainTest: mkout
 	${DIFF} expected/mainTest.sql output/mainTest.sql
 	${DIFF} expected/mainTest.h   output/mainTest.h  
 	${DIFF} expected/mainTest.c   output/mainTest.c  
+
+# doc
+doc: mkout
+	${AUTOSQLJSON} input/doc.as output/doc
+	${DIFF} expected/doc.sql output/doc.sql
+	${DIFF} expected/doc.h   output/doc.h  
+	${DIFF} expected/doc.c   output/doc.c  
+
+# doc2
+doc2: mkout
+	${AUTOSQLJSON} input/doc2.as output/doc2
+	${DIFF} expected/doc2.sql output/doc2.sql
+	${DIFF} expected/doc2.h   output/doc2.h  
+	${DIFF} expected/doc2.c   output/doc2.c  
+
 
 # testHarness
 testHarness: output/mainTest.o output/simpleTest.o testHarness.o
@@ -86,8 +102,17 @@ symColsTest: testSymCols.o output/symTest.o
 
 testSymCols.o: output/symTest.c
 
+# test of JSON output
+jsonTest: output/doc.o output/doc2.o jsonTest.o
+	${CC} -o jsonTest jsonTest.o output/doc.o output/doc2.o ${MYLIBS} ${MYSQLLIBS} ${L}
+	./jsonTest >& output/jsonTest.out
+	${DIFF} expected/jsonTest.out output/jsonTest.out
+
+output/doc.c: doc
+output/doc2.c: doc2
+
 mkout:
 	@${MKDIR} output
 
 clean:
-	rm -rf output *.o testHarness dbLinkTest
+	rm -rf output *.o testHarness dbLinkTest jsonTest
