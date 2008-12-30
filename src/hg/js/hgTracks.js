@@ -66,12 +66,12 @@ function updatePosition(img, selection, singleClick)
     var newPos = null;
     var newSize = null;
     var mult = width / imgWidth;			    // mult is bp/pixel multiplier
-    var x1, startDelta;                                     // startDelta is how many bp's to the right
+    var startDelta;                                     // startDelta is how many bp's to the right/left
     if(revCmplDisp) {
-        x1 = Math.min(imgWidth, selection.x1);
-        startDelta = Math.round(mult * x1);
+        var x1 = Math.min(imgWidth, selection.x1);
+        startDelta = Math.round(mult * (imgWidth - x1));
     } else {
-        x1 = Math.max(insideX, selection.x1);
+        var x1 = Math.max(insideX, selection.x1);
         startDelta = Math.round(mult * (x1 - insideX));
     }
     if(singleClick) {
@@ -80,16 +80,16 @@ function updatePosition(img, selection, singleClick)
 	newPos = chromName + ":" + newStart + "-" + newEnd;
 	newSize = newEnd - newStart + 1;
     } else {
-        var x2, endDelta;
+        var endDelta;
         if(revCmplDisp) {
-            x2 = Math.min(imgWidth, selection.x2);
-	    endDelta = Math.round(mult * x2);
+            var x2 = Math.min(imgWidth, selection.x2);
+	    endDelta = Math.round(mult * (imgWidth - x2));
         } else {
-            x2 = Math.max(insideX, selection.x2);
+            var x2 = Math.max(insideX, selection.x2);
 	    endDelta = Math.round(mult * (x2 - insideX));
         }
-	newPos = chromName + ":" + (winStart + startDelta) + "-" + (winStart + endDelta);
-	newSize = endDelta - startDelta + 1;
+        newPos = chromName + ":" + (winStart + startDelta) + "-" + (winStart + endDelta);
+        newSize = endDelta - startDelta + 1;
     }
 
     if(newPos != null) {
