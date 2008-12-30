@@ -148,7 +148,7 @@ $(window).load(function () {
 	var rulerEle = document.getElementById("hgt.rulerClickHeight");
 	var dragSelectionEle = document.getElementById("hgt.dragSelection");
 	// disable if ruler is not visible.
-	if((dragSelectionEle != null) && dragSelectionEle.value && (rulerEle != null)) {
+	if((dragSelectionEle != null) && dragSelectionEle.value == '1' && (rulerEle != null)) {
 		var img = $('#trackMap');
 		var imgHeight = jQuery(img).height();
 		var imgWidth = jQuery(img).width();
