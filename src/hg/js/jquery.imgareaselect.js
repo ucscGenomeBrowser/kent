@@ -8,6 +8,12 @@
  * and GPL (GPL-LICENSE.txt) licenses.
  *
  * http://odyniec.net/projects/imgareaselect/
+ * 
+ * modified by larrym to support hgTracks functionality; added:
+ * 
+ * o options.clickClipHeight - allows click through to map items
+ *
+ * o selection.event - provides access mouse event object to callbacks
  *
  */
 
@@ -25,7 +31,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
         adjusted, zIndex = 0, fixed, $p, startX, startY, moveX, moveY,
         resizeMargin = 10, resize = [ ], V = 0, H = 1,
         keyDown, d, aspectRatio, x1, x2, y1, y2, x, y,
-        selection = { x1: 0, y1: 0, x2: 0, y2: 0, width: 0, height: 0 };
+        selection = { x1: 0, y1: 0, x2: 0, y2: 0, width: 0, height: 0, event: null};
 
     var $a = $area.add($border1).add($border2);
     var $o = $outLeft.add($outTop).add($outRight).add($outBottom);
@@ -137,6 +143,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
     function areaMouseDown(event)
     {
         if (event.which != 1) return false;
+        selection.event = event;
 
         adjust();
 
@@ -149,7 +156,8 @@ jQuery.imgAreaSelect.init = function (img, options) {
             jQuery(document).mousemove(selectingMouseMove);
             $border2.unbind('mousemove', areaMouseMove);
 
-            jQuery(document).one('mouseup', function () {
+            jQuery(document).one('mouseup', function (event) {
+                selection.event = event;
                 resize = [ ];
 
                 jQuery('body').css('cursor', '');
@@ -170,7 +178,8 @@ jQuery.imgAreaSelect.init = function (img, options) {
             startY = evY(event);
 
             jQuery(document).mousemove(movingMouseMove)
-                .one('mouseup', function () {
+                .one('mouseup', function (event) {
+                    selection.event = event;
                     options.onSelectEnd(img, selection);
 
                     jQuery(document).unbind('mousemove', movingMouseMove);
@@ -256,6 +265,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
     function selectingMouseMove(event)
     {
+        selection.event = event;
         x2 = !resize.length || resize[H] || aspectRatio ? evX(event) : viewX(selection.x2);
         y2 = !resize.length || resize[V] || aspectRatio ? evY(event) : viewY(selection.y2);
 
@@ -281,6 +291,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
     function movingMouseMove(event)
     {
+        selection.event = event;
         var newX1 = Math.max(left, Math.min(moveX + evX(event) - startX,
             left + imgWidth - selection.width));
         var newY1 = Math.max(top, Math.min(moveY + evY(event) - startY,
@@ -300,6 +311,12 @@ jQuery.imgAreaSelect.init = function (img, options) {
         selection.y1 = selection.y2 = selY(startY = y1 = y2 = evY(event));
         selection.width = 0;
         selection.height = 0;
+        selection.event = event;
+        
+        if(options.clickClipHeight != null && selection.y1 > options.clickClipHeight) {
+            // This is necessary on IE to support clicks in an image which has map items.
+            return false;
+        }
 
         resize = [ ];
 
@@ -312,7 +329,8 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
         options.onSelectStart(img, selection);
 
-        jQuery(document).one('mouseup', function () {
+        jQuery(document).one('mouseup', function (event) {
+            selection.event = event;
             if (options.autoHide || (selection.width * selection.height == 0))
                 $a.add($o).hide();
 
@@ -323,13 +341,16 @@ jQuery.imgAreaSelect.init = function (img, options) {
         });
     }
 
-    function cancelSelection()
+    function cancelSelection(event)
     {
+        // The default behavior of imgareaselect is to cancel selection if the user let's go of the mouse before
+        // moving it; we change the behavior so we can treat this as a single click, centering event.
+        selection.event = event;
         jQuery(document).unbind('mousemove', startSelection);
         $a.add($o).hide();
         
-        selection.x1 = selection.y1 = selection.x2 = selection.y2 = 
-            selection.width = selection.height = 0;
+        selection.x1 = selection.x2 = selX(startX = x1 = x2 = evX(event));
+        selection.y1 = selection.y2 = selY(startY = y1 = y2 = evY(event));
 
         options.onSelectChange(img, selection);
         options.onSelectEnd(img, selection);
