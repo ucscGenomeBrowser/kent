@@ -82,8 +82,9 @@ function updatePosition(img, selection, singleClick)
     } else {
         var endDelta;
         if(revCmplDisp) {
+            endDelta = startDelta;
             var x2 = Math.min(imgWidth, selection.x2);
-	    endDelta = Math.round(mult * (imgWidth - x2));
+	    startDelta = Math.round(mult * (imgWidth - x2));
         } else {
             var x2 = Math.max(insideX, selection.x2);
 	    endDelta = Math.round(mult * (x2 - insideX));
@@ -144,11 +145,11 @@ function selectEnd(img, selection)
 }
 
 $(window).load(function () {
-        // jscript load function with stuff to support drag selection in track img
+        // jQuery load function with stuff to support drag selection in track img
 	var rulerEle = document.getElementById("hgt.rulerClickHeight");
 	var dragSelectionEle = document.getElementById("hgt.dragSelection");
 	// disable if ruler is not visible.
-	if((dragSelectionEle != null) && dragSelectionEle.value == '1' && (rulerEle != null)) {
+	if((dragSelectionEle != null) && (dragSelectionEle.value == '1') && (rulerEle != null)) {
 		var img = $('#trackMap');
 		var imgHeight = jQuery(img).height();
 		var imgWidth = jQuery(img).width();
