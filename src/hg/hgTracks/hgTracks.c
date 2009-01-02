@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1537 2008/12/22 23:36:45 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1538 2009/01/02 18:01:30 tdreszer Exp $";
 
 #define SMALLBUF 64
 
@@ -554,13 +554,13 @@ hPrintf("<TABLE BORDER=0 CELLPADDING=0>");
 if (doIdeo && !psOutput)
     {
     hPrintf("<TR><TD HEIGHT=5></TD></TR>");
-    hPrintf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s >",
+    hPrintf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s id='chrom'>",
 	    ideoTn->forHtml, ideoWidth, ideoHeight, mapName);
     hPrintf("</TD></TR>");
-    hPrintf("<TR><TD HEIGHT=5></TD></TR></TABLE>");
+    hPrintf("<TR><TD HEIGHT=5></TD></TR></TABLE>\n");
     }
 else
-    hPrintf("<TR><TD HEIGHT=10></TD></TR></TABLE>");
+    hPrintf("<TR><TD HEIGHT=10></TD></TR></TABLE>\n");
 if(ideoTrack != NULL)
     {
     ideoTrack->limitedVisSet = TRUE;
@@ -1760,19 +1760,21 @@ if (withLeftLabels)
 	}
     for (track = trackList; track != NULL; track = track->next)
         {
-	if (track->limitedVis == tvHide)
-	    continue;
+        if (track->limitedVis == tvHide)
+            continue;
         if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
             {
-	    struct track *subtrack;
-	    if (isWithCenterLabels(track))
-		y += fontHeight;
-            for (subtrack = track->subtracks; subtrack != NULL;
-		 subtrack = subtrack->next)
+            struct track *subtrack;
+            if (isWithCenterLabels(track))
+                y += fontHeight;
+            for (subtrack = track->subtracks; subtrack != NULL;subtrack = subtrack->next)
+                {
                 if (isSubtrackVisible(subtrack))
                     y = doLeftLabels(subtrack, hvg, font, y);
-	    if (track->limitedVis == tvDense)
-		track->labelNextItemButtonable = FALSE;
+                //if (track->limitedVis == tvDense)
+                //track->labelNextItemButtonable = FALSE;
+                }
+            track->labelNextItemButtonable = FALSE; // Composites are not NextItemButtonable (but subtracks may be)
             }
         else
             y = doLeftLabels(track, hvg, font, y);
