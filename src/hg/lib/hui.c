@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.140 2008/12/09 07:18:27 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.141 2009/01/02 23:44:05 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2723,7 +2723,7 @@ cfgEndBox(boxed);
 }
 
 void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, int scoreMax)
-/* If scoreMin has been set, let user select the shade of gray for that score, in case 
+/* If scoreMin has been set, let user select the shade of gray for that score, in case
  * the default is too light to see or darker than necessary. */
 {
 char *scoreMinStr = trackDbSetting(tdb, "scoreMin");
@@ -2732,7 +2732,7 @@ if (scoreMinStr != NULL)
     int scoreMin = atoi(scoreMinStr);
     // maxShade=9 taken from hgTracks/simpleTracks.c.  Ignore the 10 in shadesOfGray[10+1] --
     // maxShade is used to access the array.
-    int maxShade = 9;  
+    int maxShade = 9;
     int scoreMinGrayLevel = scoreMin * maxShade/scoreMax;
     if (scoreMinGrayLevel <= 0) scoreMinGrayLevel = 1;
     char setting[256];
@@ -3341,6 +3341,9 @@ for (ix = 0; ix < membersOfView->count; ix++)
     printf("<TD>");
     hTvDropDownWithJavascript(objName, tv, parentTdb->canPack,javascript);
     puts(" &nbsp; &nbsp; &nbsp;</TD>");
+    // Until the cfg boxes are inserted here, this divorces the relationship
+    //if(membersOfView->count > 6 && ix == ((membersOfView->count+1)/2)-1)  // An attempt at 2 rows of cfg's No good!
+    //    puts("</tr><tr><td>&nbsp;</td></tr><tr>");
     }
 puts("</TR>");
 if(makeCfgRows)
@@ -3357,7 +3360,7 @@ if(makeCfgRows)
             safef(objName, sizeof(objName), "%s.%s", parentTdb->tableName,membersOfView->names[ix]);
             cfgByCfgType(configurable[ix],db,cart,matchedSubtracks[ix],objName,membersOfView->values[ix],TRUE);
             if(configurable[ix] != cfgNone)
-                printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>",objName);
+                printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>\n",objName);
             }
         }
     }
@@ -3380,45 +3383,41 @@ char *words[15];
 char *prefix=NULL;
 char *suffix=NULL;
 int count,ix;
-char buffer[128];
-buffer[0] = 0;
+boolean found=FALSE;
 if((count = chopByWhite(cloneString(vocab), words,15)) <= 1)
     return cloneString(label);
-for(ix=1;ix<count;ix++)
+for(ix=1;ix<count && !found;ix++)
     {
-    if(sameString(vocabType,words[ix]))
+    if(sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag so all labels are linked
        break;
-    else if(countChars(words[ix],'=') == 1)
+    else if(countChars(words[ix],'=') == 1) // A list of individual vocab words must be matched
         {
-            strSwapChar(words[ix],'=',0);
-            if(sameString(vocabType,words[ix]))
+        strSwapChar(words[ix],'=',0);
+        if(sameString(vocabType,words[ix]))  // tags match, but search for label
+            {
+            char * lookForSet = words[ix] + strlen(words[ix]) + 1;
+            char * lookFor = NULL;
+            strSwapChar(lookForSet,'_',' '); // Underbar in labels already removed.  Do so in vocab terms
+            while(!found && (lookFor = cloneNextWordByDelimiter(&lookForSet,',')))
                 {
-                char * lookForSet = words[ix] + strlen(words[ix]) + 1;
-                char * lookFor = NULL;
-                boolean found = FALSE;
-                while(!found && (lookFor = cloneNextWordByDelimiter(&lookForSet,',')))
+                if(sameString(label,lookFor))
+                    found = TRUE;
+                else if(startsWith(lookFor,label) && label[strlen(lookFor)] == ' ')
                     {
-                    if(sameString(label,lookFor))
-                        found = TRUE;
-                    else if(startsWith(lookFor,label) && label[strlen(lookFor)] == ' ')
-                        {
-                        suffix = buffer;
-                        strcpy(suffix,label+strlen(lookFor));
-                        label = lookFor;
-                        found = TRUE;
-                        }
-                    else if(endsWith(label,lookFor) && label[strlen(label) - strlen(lookFor) - 1] == ' ')
-                        {
-                        prefix = buffer;
-                        strcpy(prefix,label);
-                        prefix[strlen(label) - strlen(lookFor)] = 0;
-                        label = lookFor;
-                        found = TRUE;
-                        }
+                    suffix = cloneString(label);
+                    strcpy(suffix,label+strlen(lookFor));
+                    label = lookFor;
+                    found = TRUE;
                     }
-                if(found)
-                    break;
+                else if(endsWith(label,lookFor) && label[strlen(label) - strlen(lookFor) - 1] == ' ')
+                    {
+                    prefix = cloneString(label);
+                    prefix[strlen(label) - strlen(lookFor)] = 0;
+                    label = lookFor;
+                    found = TRUE;
+                    }
                 }
+            }
         }
     }
 if(ix==count)
@@ -3428,16 +3427,28 @@ if(ix==count)
     }
 
 #define VOCAB_LINK "%s<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' TARGET=_BLANK>%s</A>%s\n"
-int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(vocabType)+2*strlen(label) + strlen(buffer) + 2;
-char *link=needMem(sz);
-char *term = strSwapChar(cloneString(label),' ','_');
+int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(vocabType)+2*strlen(label) + 2;
+char *link=NULL;
+char *term = strSwapChar(cloneString(label),' ','_'); // term must be one_word
 if(prefix)
+    {
+    link=needMem(strlen(prefix)+sz);
     safef(link,sz,VOCAB_LINK,prefix,words[0],term,label,"");
+    freeMem(prefix);
+    }
 else if(suffix)
+    {
+    link=needMem(sz+strlen(suffix));
     safef(link,sz,VOCAB_LINK,"",words[0],term,label,suffix);
+    freeMem(suffix);
+    }
 else
+    {
+    link=needMem(sz);
     safef(link,sz,VOCAB_LINK,"",words[0],term,label,"");
+    }
 freeMem(words[0]);
+freeMem(term);
 return link;
 }
 
@@ -3719,6 +3730,8 @@ for (i = 0; i < MAX_SUBGROUP; i++)
     if (wordCnt < 2)
         continue;
     subGroup = cloneString(words[0]);
+    if(sameWord(subGroup,"view"))
+        continue;  // Multi-view should have taken care of "view" subgroup already
     puts ("<TABLE>");
     printf("<TR><TD><EM><B>&nbsp; &nbsp; %s</EM></B></TD></TR>", words[1]);
     for (j = 2; j < wordCnt; j++)
