@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1538 2009/01/02 18:01:30 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1539 2009/01/02 19:56:51 larrym Exp $";
 
 #define SMALLBUF 64
 
@@ -2119,8 +2119,9 @@ hPrintf("</MAP>\n");
 
 /* Save out picture and tell html file about it. */
 hvGfxClose(&hvg);
-hPrintf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s id='trackMap'",
-    gifTn.forHtml, pixWidth, pixHeight, mapName);
+char *titleAttr = dragZooming ? "title='click or drag mouse in base position track to zoom in'" : "";
+hPrintf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s %s id='trackMap'",
+    gifTn.forHtml, pixWidth, pixHeight, mapName, titleAttr);
 hPrintf("><BR>\n");
 }
 
