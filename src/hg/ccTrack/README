@@ -1,0 +1,33 @@
+This directory contains stuff for the composite custom tracks.  A composite custom track is a 
+binary file which lives predominantly on the user's machine.  It is set up so that a minimum
+amount of information for a particular genomic view needs to be sent.
+
+The overall structure of the file is:
+
+Fixed size file header
+   Magic number
+   Header size
+   Version
+   Assembly id (hg18, etc)
+Table of contents and metadata
+   Track1
+      name, parent name
+      settings (name/value ascii pairs)
+      zoom info
+         zoom level (1 for full)
+	 file offset
+   Track2 
+      ...
+Track1 Data
+   Full resolution 
+       index
+       data
+   Zoomed out 
+       index
+       data
+Track2 Data
+    ...
+
+The table of contents and metadata are small enough to fit into memory and to be sent in most 
+cases with the first block of the file.  
+
