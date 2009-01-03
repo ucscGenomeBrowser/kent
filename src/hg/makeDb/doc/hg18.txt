@@ -24916,7 +24916,7 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/hg18/hg18.2bit $outMaf
 
 #############################################################################
 ## Annotate 44-way multiple alignment with gene annotations
-##		(WORKING - 2008-12-08 - Hiram)
+##		(DONE - 2008-12-08,23 - Hiram)
     # Gene frames
     ## survey all genomes to see what type of gene track to use
     ssh hgwdev
@@ -25126,18 +25126,19 @@ done | cut -f4 | sort | uniq -c | sort -n
 
     #	load the resulting file
     ssh hgwdev
-    cd /cluster/data/hg18/bed/multiz44way/frames
-    find ./parts -type f | while read F
-do
-    zcat ${F}
-done | sort -k1,1 -k2,2n | hgLoadMafFrames hg18 multiz44wayFrames stdin
-
+    cd /hive/data/genomes/hg18/bed/multiz44way/frames
     find ./parts -type f | while read F
 do
     zcat ${F}
 done | sort -k1,1 -k2,2n > multiz44wayFrames.bed
+
+    time nice -n +19 hgLoadMafFrames hg18 multiz44wayFrames \
+	multiz44wayFrames.bed
+    #	real    2m21.114s
+
     featureBits -countGaps hg18 multiz44wayFrames.bed
-    #	62315198 bases of 3107677273 (2.005%) in intersection
+    #	62708567 bases of 3107677273 (2.018%) in intersection
+    #	real    18m54.209s
     featureBits -countGaps hg18 multiz28wayFrames
     #	48236360 bases of 3107677273 (1.552%) in intersection
 
@@ -25248,6 +25249,480 @@ csh 4d.csh $(root1) {check in line+ $(path1)}  {check out line+ /cluster/data/hg
         --prune=monDom4,ornAna1,taeGut1,petMar1,galGal3,anoCar1,xenTro2,gasAcu1,danRer5,tetNig1,fr2,oryLat2 \
                 tree_4d.44way.nh > tree_4d.44way.placental.nh
 
+#############################################################################
+# phastCons 44-way (DONE - 2008-12-23 - 2009-01-02 - Hiram)
+
+    # split 44way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh memk
+    mkdir -p /hive/data/genomes/hg18/bed/multiz44way/cons/msa.split
+    mkdir /hive/data/genomes/hg18/bed/multiz44way/cons/ss
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/msa.split
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/hg18/bed/multiz44way/maf/$c.maf
+set WINDOWS = /hive/data/genomes/hg18/bed/multiz44way/cons/ss/$c
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+twoBitToFa -seq=$c /hive/data/genomes/hg18/hg18.2bit hg18.$c.fa
+/cluster/bin/phast/$MACHTYPE/msa_split $MAF -i MAF \
+    -M hg18.$c.fa -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+rm -f hg18.$c.fa
+popd > /dev/null
+date >> $c.done
+'_EOF_'
+    # << happy emacs
+    chmod +x doSplit.csh
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(root1) {check out line+ $(root1).done}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    ls -1S -r ../maf | sed -e "s/.maf//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para -ram=32g create jobList
+    para try ... check ... etc
+    #	this takes a really long time.  memk was down to 2 usable
+    #	machines - got it finished manually on a combination of hgwdevnew CPUs
+    #	and other machines
+
+    # Estimate phastCons parameters
+    #	experimented with this as a parasol job on hgwdevnew to try a number
+    #	of SS files.  With a command of:
+
+/cluster/bin/phast/x86_64/phyloFit -i SS ${SS} \
+--tree "(((((((((((((((((hg18,panTro2),gorGor1),ponAbe2),rheMac2),calJac1),tarSyr1),(micMur1,otoGar1)),tupBel1),(((((mm9,rn4),dipOrd1),cavPor3),speTri1),(oryCun1,ochPri2))),(((vicPac1,(turTru1,bosTau4)),((equCab2,(felCat3,canFam2)),(myoLuc1,pteVam1))),(eriEur1,sorAra1))),(((loxAfr2,proCap1),echTel1),(dasNov2,choHof1))),monDom4),ornAna1),((galGal3,taeGut1),anoCar1)),xenTro2),(((tetNig1,fr2),(gasAcu1,oryLat2)),danRer5)),petMar1)" \
+--out-root=$OUT/starting_tree
+
+    #	running over the input files ../ss/*/*.ss results to
+#.../genomes/hg18/bed/multiz44way/cons/startingTree/result/*/starting-tree.mod
+
+    # add up the C and G:
+    find ./result -type f | while read F
+do
+    echo -n `dirname $F`" - "
+    grep BACKGROUND ${F} | awk '{printf "%0.3f\n", $3 + $4;}'
+done
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    ssh swarm
+    mkdir -p /hive/data/genomes/hg18/bed/multiz44way/cons/run.cons
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/run.cons
+
+    #	there are going to be several different phastCons runs using
+    #	this same script.  They trigger off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is one of:
+    #	all euarchontogliers placentals
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast/x86_64
+set c = $1
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/hg18/bed/multiz44way/cons
+set tmp = $cons/tmp/$f
+mkdir -p $tmp
+set ssSrc = $cons
+if (-s $cons/$grp/$grp.non-inf) then
+  ln -s $cons/$grp/$grp.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+  ln -s $ssSrc/ss/$c/$f.ss $tmp
+  ln -s $cons/$grp/$grp.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+else
+  ln -s $ssSrc/ss/$c/$f.ss $tmp
+  ln -s $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $grp.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
+popd > /dev/null
+mkdir -p pp/$c bed/$c
+sleep 4
+touch pp/$c bed/$c
+rm -f pp/$c/$f.pp
+rm -f bed/$c/$f.bed
+mv $tmp/$f.pp pp/$c
+mv $tmp/$f.bed bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ bed/$(root1)/$(file1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # Create parasol batch and run it
+    ls -1 ../ss/chr*/chr*.ss | sed 's/.ss$//' > ss.list
+
+    # run for all species
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons
+    mkdir -p all run.cons/all
+    cd all
+    cp ../startingTree/result/chr10_random.1-113275/starting_tree.mod all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList
+    para try ... check ... push ... etc.
+    #	two bed files end up empty:
+    #	bed/chr18_random/chr18_random.1-4262.bed is empty
+    #	bed/chr19_random/chr19_random.1-301858.bed is empty
+    #	all of the pp files appear to be there:
+# Completed: 320 of 322 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:      37630s     627.16m    10.45h    0.44d  0.001 y
+# IO & Wait Time:                173405s    2890.09m    48.17h    2.01d  0.005 y
+# Average job time:                 659s      10.99m     0.18h    0.01d
+# Longest finished job:            1051s      17.52m     0.29h    0.01d
+# Submission to last job:          1179s      19.65m     0.33h    0.01d
+
+    # create Most Conserved track
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons
+    cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/all
+    time nice -n +19 hgLoadBed hg18 phastConsElements44way mostConserved.bed
+    #	Loaded 4383352 elements of size 5
+
+    #	real    1m15.673s
+    # compare with previous tracks
+    hgsql hg18 -s -N -e "select count(*) from phastConsElements44way"
+    #	4383352
+    hgsql hg18 -s -N -e "select count(*) from phastConsElements28way"
+    #	2906254
+
+    # Try for 5% overall cov, and 70% CDS cov 
+    #	--rho .31 --expected-length 45 --target-coverage .3
+    featureBits hg18 -enrichment refGene:cds phastConsElements44way
+    #	refGene:cds 1.144%, phastConsElements44way 4.706%,
+    #	both 0.824%, cover 72.07%, enrich 15.31x
+    featureBits hg18 -enrichment knownGene:cds phastConsElements44way
+    #	knownGene:cds 1.205%, phastConsElements44way 4.706%,
+    #	both 0.844%, cover 70.05%, enrich 14.88x
+
+    featureBits hg18 -enrichment refGene:cds phastConsElements28way
+    #	refGene:cds 1.144%, phastConsElements28way 4.920%,
+    #	both 0.858%, cover 74.96%, enrich 15.24x
+    featureBits hg18 -enrichment knownGene:cds phastConsElements28way
+    #	knownGene:cds 1.205%, phastConsElements28way 4.920%,
+    #	both 0.878%, cover 72.88%, enrich 14.81x
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/all
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p phastCons44wayScores
+
+for D in pp/chr*
+do
+    C=${D/pp\/}
+    out=phastCons44wayScores/${C}.data.gz
+    echo "${D} > ${C}.data.gz"
+    ls $D/*.pp | sort -n -t\. -k2 | xargs cat | \
+	gzip > ${out}
+done
+'_EOF_'
+    #	<< happy emacs
+    chmod +x gzipAscii.sh
+    time nice -n +19 ./gzipAscii.sh
+
+    #	encode those files into wiggle data
+    zcat phastCons44wayScores/*.data.gz \
+	| wigEncode stdin phastCons44way.wig phastCons44way.wib
+# Converted stdin, upper limit 1.00, lower limit 0.00
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/all
+    ln -s `pwd`/phastCons44way.wib /gbdb/hg18/multiz44way/phastCons44way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 \
+	phastCons44way phastCons44way.wig
+    #	real    14m0.643s
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/all
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=hg18 phastCons44way > histogram.data 2>&1
+    #	real    28m24.388s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg18 Histogram phastCons44way track"
+set xlabel " phastCons44way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    ### Create a phastCons data set for Euarchontoglires
+
+    # setup euarchontoglires-only run
+    ssh swarm
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons
+    mkdir euarchontoglires run.cons/euarchontoglires
+    cd euarchontoglires
+    # euarchontoglires-only: exclude all but these for phastCons tree:
+
+
+    /cluster/bin/phast/x86_64/tree_doctor ../all/all.mod \
+	--prune-all-but=hg18,panTro2,gorGor1,ponAbe2,rheMac2,calJac1,tarSyr1,micMur1,otoGar1,tupBel1,mm9,rn4,dipOrd1,cavPor3,speTri1,oryCun1,ochPri2 \
+	> euarchontoglires.mod
+    #	and place the removed ones in the non-inf file so phastCons will
+    #	truly ignore them:
+    echo "vicPac1,turTru1,bosTau4,equCab2,felCat3,canFam2,myoLuc1,pteVam1,eriEur1,sorAra1,loxAfr2,proCap1,echTel1,dasNov2,choHof1,monDom4,ornAna1,galGal3,taeGut1,anoCar1,xenTro2,tetNig1,fr2,gasAcu1,oryLat2,danRer5,petMar1" \
+	> euarchontoglires.non-inf
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList
+    para try ... check ... push ... etc.
+    #	Two of these jobs fail to produce any output in the bed file:
+    #	I believe this is because there is a missing sequence in these files
+    #	compared to the ones specified in euarchontoglires.mod:
+    #	bed/chr18_random/chr18_random.1-4262.bed is empty
+    #	bed/chr19_random/chr19_random.1-301858.bed is empty
+# Completed: 320 of 322 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:      25746s     429.10m     7.15h    0.30d  0.001 y
+# IO & Wait Time:                183130s    3052.17m    50.87h    2.12d  0.006 y
+# Average job time:                 653s      10.88m     0.18h    0.01d
+# Longest finished job:             975s      16.25m     0.27h    0.01d
+# Submission to last job:          2914s      48.57m     0.81h    0.03d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/hg18/multiz44way/cons/euarchontoglires
+    cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/euarchontoglires
+    time nice -n +19 hgLoadBed hg18 phastConsElements44wayEuarch \
+	mostConserved.bed
+    #	Loaded 1623656 elements of size 5
+    #	real    4m15.125s
+    # verify coverage
+    featureBits hg18 phastConsElements44wayEuarch
+    #	109221588 bases of 2881515245 (3.790%) in intersection
+
+    #	Create the downloads .pp files, from which the phastCons wiggle data
+    #	is calculated
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    cd /san/sanvol1/scratch/hg18/multiz44way/cons/euarchontoglires
+    mkdir downloads
+    for D in pp/chr*
+do
+    C=${D/pp\//}
+    ls $D/*.pp | sort -n -t\. -k2 | xargs cat | gzip -c \
+	> downloads/${C}.euarchontoglires.pp.data.gz
+    echo $D $C done
+done
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /san/sanvol1/scratch/hg18/multiz44way/cons/euarchontoglires
+    zcat phastCons44wayScores/chr*.data.gz \
+	 | wigEncode stdin phastCons44wayEuarch.wig phastCons44wayEuarch.wib
+# Converted stdin, upper limit 1.00, lower limit 0.00
+
+    ## load table with wiggle data
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/euarchontoglires
+    ln -s `pwd`/phastCons44wayEuarch.wib \
+	/gbdb/hg18/multiz44way/phastCons44wayEuarch.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 \
+	phastCons44wayEuarch phastCons44wayEuarch.wig
+    #	real     0m46.871s
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=hg18 phastCons44wayEuarch > histogram.data 2>&1
+    #	real    3m22.364s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Mouse Hg18 Histogram phastCons44wayEuarch track"
+set xlabel " phastCons44wayEuarch score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    ### Create a phastCons data set for Placentals
+    # setup placental-only run
+    ssh swarm
+    mkdir /hive/data/genomes/hg18/bed/multiz44way/cons/placental
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/placental
+
+    # placental-only: exclude all but these for phastCons tree:
+    /cluster/bin/phast/x86_64/tree_doctor ../all/all.mod \
+	--prune-all-but=hg18,panTro2,gorGor1,ponAbe2,rheMac2,calJac1,tarSyr1,micMur1,otoGar1,tupBel1,mm9,rn4,dipOrd1,cavPor3,speTri1,oryCun1,ochPri2,vicPac1,turTru1,bosTau4,equCab2,felCat3,canFam2,myoLuc1,pteVam1,eriEur1,sorAra1,loxAfr2,proCap1,echTel1,dasNov2,choHof1 \
+	> placental.mod
+    #	and place the removed ones in the non-inf file so phastCons will
+    #	truly ignore them:
+    echo "monDom4,ornAna1,galGal3,taeGut1,anoCar1,xenTro2,tetNig1,fr2,gasAcu1,oryLat2,danRer5,petMar1" \
+        > placental.non-inf
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList
+    para try ... check ... push ... etc.
+    #	Two of these jobs fail to produce any output:
+    #	bed/chr18_random/chr18_random.1-4262.bed is empty
+    #	bed/chr19_random/chr19_random.1-301858.bed is empty
+
+# Completed: 320 of 322 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:      38167s     636.12m    10.60h    0.44d  0.001 y
+# IO & Wait Time:                176101s    2935.02m    48.92h    2.04d  0.006 y
+# Average job time:                 670s      11.16m     0.19h    0.01d
+# Longest finished job:             925s      15.42m     0.26h    0.01d
+# Submission to last job:          1079s      17.98m     0.30h    0.01d
+
+    # create Most Conserved track
+    cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/placental
+    time nice -n +19 hgLoadBed hg18 phastConsElements44wayPlacental \
+	mostConserved.bed
+    #	Loaded 3550704 elements of size 5
+    #	real    1m25.630s
+    # verify coverage
+    featureBits hg18 phastConsElements44wayPlacental
+    #	118546732 bases of 2881515245 (4.114%) in intersection
+
+    #	Create the downloads .pp files, from which the phastCons wiggle data
+    #	is calculated
+    # currently doesn't matter where this is performed, the san is the same
+    # network distance from all machines.
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    cd /san/sanvol1/scratch/hg18/multiz44way/cons/placental
+    mkdir downloads
+    for D in pp/chr*
+do
+    C=${D/pp\//}
+    ls $D/*.pp | sort -n -t\. -k2 | xargs cat | gzip -c \
+	> downloads/${C}.placental.pp.data.gz
+    echo $D $C done
+done
+
+    # Create merged posterier probability file and wiggle track data files
+    zcat downloads/chr*.data.gz \
+	| wigEncode stdin phastCons44wayPlacental.wig \
+		phastCons44wayPlacental.wib
+# Converted stdin, upper limit 1.00, lower limit 0.00
+
+    ## load table with wiggle data
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/placental
+    ln -s `pwd`/phastCons44wayPlacental.wib \
+	/gbdb/hg18/multiz44way/phastCons44wayPlacental.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 \
+	phastCons44wayPlacental phastCons44wayPlacental.wig
+    #	real    0m46.689s
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=hg18 phastCons44wayPlacental > histogram.data 2>&1
+    #	real    4m30.495s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg18 Histogram phastCons44wayPlacental track"
+set xlabel " phastCons44wayPlacental score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
 
 #########################################################################
 # Create Syntenic and Recip Best net files to load into tracks to view
