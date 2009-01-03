@@ -3600,7 +3600,7 @@ longLabel Vertebrate Multiz Alignment & PhastCons Conservation (44 Species)
 irows on
 summary multiz44waySummary
 frames multiz44wayFrames
-# wiggle phastCons44wayPlacMammal Mammal Placental_Mammal phastCons44way Vertebrate Vertebrate
+wiggle phastCons44wayPlacental Mammal Placental_Mammal phastCons44wayEuarch Euarch Euarchontoglires phastCons44way Vertebrate Vertebrate
 spanList 1
 maxHeightPixels 100:40:11
 autoScaleDefault Off
