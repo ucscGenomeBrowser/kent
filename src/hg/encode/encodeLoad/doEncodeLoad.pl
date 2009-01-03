@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.51 2008/12/08 17:24:04 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.52 2009/01/03 00:09:54 tdreszer Exp $
 
 # Usage:
 #
@@ -338,7 +338,12 @@ HgAutomate::verbose(2, "loadRa ($loadRa) has: " . scalar(keys %ra) . " records\n
 my $compositeTrack = Encode::compositeTrackName($daf);
 my $downloadDir = Encode::downloadDir($daf);
 if(!(-d $downloadDir)) {
-    mkdir $downloadDir || die ("Can't create download directory (error: '$!'); please contact your wrangler at: $email\n");
+    # Change of plans: simlink to /cluster/data/encode/pipeline/downloads
+    if(!(-d "/cluster/data/encode/pipeline/downloads/$compositeTrack")) {
+        mkdir "/cluster/data/encode/pipeline/downloads/$compositeTrack" || die ("Can't create download directory (error: '$!'); please contact your wrangler at: $email\n");
+    }
+    link("/cluster/data/encode/pipeline/downloads/$compositeTrack",$downloadDir) || die ("Can't link to download directory (error: '$!'); please contact your wrangler at: $email\n");
+    #mkdir $downloadDir || die ("Can't create download directory (error: '$!'); please contact your wrangler at: $email\n");
 }
 
 for my $key (keys %ra) {
