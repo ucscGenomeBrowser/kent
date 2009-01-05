@@ -15,7 +15,7 @@
 #include "wikiTrack.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.24 2008/09/03 19:18:58 markd Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.25 2009/01/05 20:49:55 angie Exp $";
 
 
 static boolean forCurTable()
@@ -103,7 +103,7 @@ if (!isCustomTrack(curTable))
 	hPrintf("<TT>%s</TT><BR>\n", tmp);
 	freeMem(tmp);
 	}
-    if (aliasField != NULL)
+    if (aliasField != NULL && differentString(xrefTable, curTable))
 	{
 	char tmpTable[512];
 	char query[2048];
