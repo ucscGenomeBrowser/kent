@@ -36,7 +36,8 @@ posted at <a href="http://myers.hudsonalpha.org/content/protocols.html"  title="
 <h3>Processing and analysis software used</h3>
 <p>Sequence data produced by the Illumina data pipeline software
 were quality filtered and then mapped to hg18 using its integrated
-Eland software, with multiply mapped reads discarded. 
+Eland software; only the first 25 bp of reads were used for alignment;
+up to two mismatches were tolerated; multiply mapped reads were discarded.
 To identify likely binding sites, Peak Calling was
 applied on the aligned sequence data sets using quantitative enrichment of sequence tags 
 (<a href="http://mendel.stanford.edu/sidowlab/downloads/quest"  title="http://mendel.stanford.edu/sidowlab/downloads/quest">QuEST</a>)&nbsp;[2].
