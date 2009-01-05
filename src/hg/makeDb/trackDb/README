@@ -398,6 +398,9 @@ Some settings used by various tracks:
       zoomed at no more than basesPerPixel (a float). showCdsAllScales should
       be set and showDiffBasesMaxZoom should be set to a value not more
       than showCdsMaxZoom  to make this useful.
+    o nextItemButton off - For tracks that have next-item buttons that
+      shouldn't, turn the buttons off until whatever else is fixed.
+
 
 Note: We have a restriction on table names: Track names (i.e. table
 names, but omitting any chr*_ prefix) should not contain any
