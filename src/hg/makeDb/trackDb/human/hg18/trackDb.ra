@@ -3606,7 +3606,7 @@ maxHeightPixels 100:40:11
 autoScaleDefault Off
 windowingFunction mean
 group compGeno
-priority 103.3
+priority 103.29
 visibility hide
 color 0, 10, 100
 altColor 0,90,10
@@ -3620,4 +3620,34 @@ speciesDefaultOff panTro2 gorGor1 ponAbe2 calJac1 tarSyr1 otoGar1 micMur1 tupBel
 itemFirstCharCase noChange
 treeImage phylo/hg18_44way.gif
 
+track mostConserved44way
+compositeTrack on
+shortLabel 44-way Most Conserved
+longLabel PhastCons Conserved Elements, 44-way Vertebrate Multiz Alignment
+group compGeno
+priority 103.39
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
 
+    track phastConsElements44wayEuarch
+    subTrack mostConserved44way
+    shortLabel Euarch
+    longLabel PhastCons Euarchontoglires Conserved Elements, 44-way Multiz Alignment
+    color 80,30,230
+    priority 1
+
+    track phastConsElements44wayPlacental
+    subTrack mostConserved44way
+    shortLabel Mammal
+    longLabel PhastCons Placental Mammal Conserved Elements, 44-way Multiz Alignment
+    color 100,50,170
+    priority 2
+
+    track phastConsElements44way
+    subTrack mostConserved44way
+    shortLabel Vertebrate
+    longLabel PhastCons Vertebrate Conserved Elements, 44-way Multiz Alignment
+    color 170,100,50
+    priority 3
