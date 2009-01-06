@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.169 2008/09/11 21:40:37 braney Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.170 2009/01/06 19:51:44 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -950,7 +950,25 @@ freez(&splitTable);
 return count;
 }
 
-static void itemRgbDataOut(char **row, int lastCol, int itemRgbCol)
+static void hOrFPrintf(FILE *f, char *format, ...)
+/* fprintf if f is non-null, else hPrintf. */
+{
+va_list(args);
+va_start(args, format);
+if (f != NULL)
+    {
+    vfprintf(f, format, args);
+    if (ferror(f))
+	noWarnAbort();
+    }
+else
+    hvPrintf(format, args);
+va_end(args);
+}
+
+
+
+static void itemRgbDataOut(FILE *f, char **row, int lastCol, int itemRgbCol)
 /*	display bed data, show "reserved" column as r,g,b	*/
 {
 int colIx;
@@ -958,26 +976,26 @@ int rgb;
 
 /*	Print up to itemRgbCol	*/
 for (colIx = 0; (colIx < itemRgbCol) && (colIx < lastCol); ++colIx)
-    hPrintf("%s\t", row[colIx]);
+    hOrFPrintf(f, "%s\t", row[colIx]);
 
 /*	Print out the itemRgbCol column	*/
 rgb = atoi(row[itemRgbCol]);
-hPrintf("%d,%d,%d", (rgb & 0xff0000) >> 16,
+hOrFPrintf(f, "%d,%d,%d", (rgb & 0xff0000) >> 16,
 	(rgb & 0xff00) >> 8, (rgb & 0xff));
 
 /*	Print the rest if there are any	*/
 if (itemRgbCol < lastCol)
     {
-    hPrintf("\t");
+    hOrFPrintf(f, "\t");
     for (colIx = itemRgbCol+1; colIx < lastCol; ++colIx)
-	hPrintf("%s\t", row[colIx]);
-    hPrintf("%s\n", row[lastCol]);
+	hOrFPrintf(f, "%s\t", row[colIx]);
+    hOrFPrintf(f, "%s\n", row[lastCol]);
     }
 else
-    hPrintf("\n");	/*	itemRgbCol was the last column	*/
+    hOrFPrintf(f, "\n");	/*	itemRgbCol was the last column	*/
 }
 
-static int itemRgbHeader(struct sqlResult *sr, int lastCol)
+static int itemRgbHeader(FILE *f, struct sqlResult *sr, int lastCol)
 /*	print out bed header, recognize "reserved" column, return which
  *	column it is, or -1 if not found
  */
@@ -989,25 +1007,25 @@ for (colIx = 0; colIx < lastCol; ++colIx)
     {
     if (sameWord("reserved",field))
 	{
-	hPrintf("itemRgb\t");
+	hOrFPrintf(f, "itemRgb\t");
 	ret = colIx;
 	}
     else
-	hPrintf("%s\t", field);
+	hOrFPrintf(f, "%s\t", field);
     field = sqlFieldName(sr);
     }
 if (sameWord("reserved",field))
     {
-    hPrintf("itemRgb\n");
+    hOrFPrintf(f, "itemRgb\n");
     ret = lastCol;
     }
 else
-    hPrintf("%s\n", field);
+    hOrFPrintf(f, "%s\n", field);
 
 return(ret);
 }
 
-static void doTabOutDb( char *db, char *table, 
+static void doTabOutDb( char *db, char *table, FILE *f,
 	struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
@@ -1072,19 +1090,19 @@ for (region = regionList; region != NULL; region = region->next)
     if (! printedColumns)
         {
 	if (filter != NULL)
-	    hPrintf("#filter: %s\n", filter);
-	hPrintf("#");
+	    hOrFPrintf(f, "#filter: %s\n", filter);
+	hOrFPrintf(f, "#");
 	if (showItemRgb)
 	    {
-	    itemRgbCol = itemRgbHeader(sr, lastCol);
+	    itemRgbCol = itemRgbHeader(f, sr, lastCol);
 	    if (itemRgbCol == -1)
 		showItemRgb = FALSE;	/*  did not find "reserved" */
 	    }
 	else
 	    {
 	    for (colIx = 0; colIx < lastCol; ++colIx)
-		hPrintf("%s\t", sqlFieldName(sr));
-	    hPrintf("%s\n", sqlFieldName(sr));
+		hOrFPrintf(f, "%s\t", sqlFieldName(sr));
+	    hOrFPrintf(f, "%s\n", sqlFieldName(sr));
 	    }
 	printedColumns = TRUE;
 	}
@@ -1093,120 +1111,12 @@ for (region = regionList; region != NULL; region = region->next)
 	if (idHash == NULL || hashLookup(idHash, row[fieldCount]))
 	    {
 	    if (showItemRgb)
-		itemRgbDataOut(row, lastCol, itemRgbCol);
+		itemRgbDataOut(f, row, lastCol, itemRgbCol);
 	    else
 		{
 		for (colIx = 0; colIx < lastCol; ++colIx)
-		    hPrintf("%s\t", row[colIx]);
-		hPrintf("%s\n", row[lastCol]);
-		}
-	    ++outCount;
-	    }
-	}
-    sqlFreeResult(&sr);
-    if (!isPositional)
-        break;	/* No need to iterate across regions in this case. */
-    freez(&filter);
-    }
-
-/* Do some error diagnostics for user. */
-if (outCount == 0)
-    explainWhyNoResults(NULL);
-hashFree(&idHash);
-}
-
-static void doTabOutDbFile( char *db, char *table, FILE *f,
-        struct sqlConnection *conn, char *fields)
-/* Do tab-separated output on fields of a single table, to a file. */
-{
-struct region *regionList = getRegions();
-struct region *region;
-struct hTableInfo *hti = NULL;
-struct dyString *fieldSpec = newDyString(256);
-struct hash *idHash = NULL;
-int outCount = 0;
-boolean isPositional;
-int fieldCount;
-char *idField;
-boolean showItemRgb = FALSE;
-int itemRgbCol = -1;	/*	-1 means not found	*/
-boolean printedColumns = FALSE;
-
-hti = getHti(db, table);
-idField = getIdField(db, curTrack, table, hti);
-showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
-					/*	instead of "reserved" */
-
-/* If they didn't pass in a field list assume they want all fields. */
-if (fields != NULL)
-    {
-    dyStringAppend(fieldSpec, fields);
-    fieldCount = countChars(fields, ',') + 1;
-    }
-else
-    {
-    dyStringAppend(fieldSpec, "*");
-    fieldCount = countTableColumns(conn, table);
-    }
-
-/* If can find id field for table then get
- * uploaded list of identifiers, create identifier hash
- * and add identifier column to end of result set. */
-if (idField != NULL)
-    {
-    idHash = identifierHash(db, table);
-    if (idHash != NULL)
-	{
-	dyStringAppendC(fieldSpec, ',');
-	dyStringAppend(fieldSpec, idField);
-	}
-    }
-isPositional = htiIsPositional(hti);
-
-/* Loop through each region. */
-for (region = regionList; region != NULL; region = region->next)
-    {
-    struct sqlResult *sr;
-    char **row;
-    int colIx, lastCol = fieldCount-1;
-    char *filter = filterClause(db, table, region->chrom);
-
-    sr = regionQuery(conn, table, fieldSpec->string, 
-    	region, isPositional, filter);
-    if (sr == NULL)
-	continue;
-
-    /* First time through print column names. */
-    if (! printedColumns)
-        {
-	if (filter != NULL)
-	    fprintf(f, "#filter: %s\n", filter);
-	fprintf(f, "#");
-	if (showItemRgb)
-	    {
-	    itemRgbCol = itemRgbHeader(sr, lastCol);
-	    if (itemRgbCol == -1)
-		showItemRgb = FALSE;	/*  did not find "reserved" */
-	    }
-	else
-	    {
-	    for (colIx = 0; colIx < lastCol; ++colIx)
-		fprintf(f, "%s\t", sqlFieldName(sr));
-	    fprintf(f, "%s\n", sqlFieldName(sr));
-	    }
-	printedColumns = TRUE;
-	}
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	if (idHash == NULL || hashLookup(idHash, row[fieldCount]))
-	    {
-	    if (showItemRgb)
-		itemRgbDataOut(row, lastCol, itemRgbCol);
-	    else
-		{
-		for (colIx = 0; colIx < lastCol; ++colIx)
-		    fprintf(f, "%s\t", row[colIx]);
-		fprintf(f, "%s\n", row[lastCol]);
+		    hOrFPrintf(f, "%s\t", row[colIx]);
+		hOrFPrintf(f, "%s\n", row[lastCol]);
 		}
 	    ++outCount;
 	    }
@@ -1232,12 +1142,7 @@ if (isCustomTrack(table))
     doTabOutCustomTracks(track, conn, fields, f);
     }
 else
-    {
-    if (f == NULL)
-        doTabOutDb(db, table, conn, fields);
-    else
-        doTabOutDbFile(db, table, f, conn, fields);
-    }
+    doTabOutDb(db, table, f, conn, fields);
 }
 
 struct slName *fullTableFields(char *db, char *table)
