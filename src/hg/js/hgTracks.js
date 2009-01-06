@@ -3,6 +3,7 @@
 var debug = false;
 var originalPosition;
 var originalSize;
+var start;
 
 function commify (str) {
     if(typeof(str) == "number")
@@ -23,6 +24,8 @@ function selectStart(img, selection)
     // remember initial position and size so we can restore it if user cancels
     originalPosition = $('#positionHidden').val();
     originalSize = $('#size').text();
+    var now = new Date();
+    start = now.getTime();
 }
 
 function updatePosition(img, selection, singleClick)
@@ -122,9 +125,11 @@ function selectEnd(img, selection)
     var imgOfs = jQuery(img).offset();
     // ignore releases outside of the image rectangle (allowing a 10 pixel slop)
     var slop = 10;
+    var now = new Date();
     if((selection.event.pageX >= (imgOfs.left - slop)) && (selection.event.pageX < (imgOfs.left + imgWidth + slop)) 
        && (selection.event.pageY >= (imgOfs.top - slop)) && (selection.event.pageY < (imgOfs.top + imgHeight + slop))) {
-	if(updatePosition(img, selection, selection.x2 <= (selection.x1 + 10))) {
+        // start is null if mouse has never been moved
+	if(updatePosition(img, selection, (selection.x2 == selection.x1) || start == null || (now.getTime() - start) < 100)) {
 	    document.TrackHeaderForm.submit();
 	}
     } else {
