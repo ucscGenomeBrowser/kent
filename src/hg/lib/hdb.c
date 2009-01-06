@@ -1,9 +1,4 @@
 /* hdb - human genome browser database. */
-//#ifndef MJP
-//#define MJP(v) verbose((v),"%s[%3d]: ", __func__, __LINE__);
-//#endif
-
-
 #include "common.h"
 #include "obscure.h"
 #include "hash.h"
@@ -42,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.386 2008/12/11 23:32:25 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.387 2009/01/06 19:12:17 mikep Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
