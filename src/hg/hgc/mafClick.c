@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.59 2008/10/29 14:05:22 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.60 2009/01/06 00:22:10 kate Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -508,7 +508,7 @@ static void mafOrAxtClick2(struct sqlConnection *conn, struct sqlConnection *con
 hgBotDelay();
 if (winEnd - winStart > 30000)
     {
-    printf("Zoom so that window is 30,000 bases or less to see base-by-base alignments\n");
+    printf("Zoom so that window is 30,000 bases or less to see alignments and conservation statistics\n");
     }
 else
     {
@@ -703,6 +703,15 @@ else
                 }
             }
         puts("</P>\n");
+
+        /* no alignment to display when in visibilities where only wiggle is shown */
+        char *vis = cartOptionalString(cart, tdb->tableName);
+        if (vis)
+            {
+            enum trackVisibility tv = hTvFromStringNoAbort(vis);
+            if (tv == tvSquish || tv == tvDense)
+                return;
+            }
 
 #ifdef ADDEXONCAPITAL
 	puts("<FORM ACTION=\"../cgi-bin/hgc\" NAME=\"gpForm\" METHOD=\"GET\">");
