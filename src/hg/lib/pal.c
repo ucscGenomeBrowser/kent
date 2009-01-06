@@ -11,7 +11,7 @@
 #include "hPrint.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.12 2008/12/03 16:27:42 braney Exp $";
+static char const rcsid[] = "$Id: pal.c,v 1.13 2009/01/06 17:26:22 ann Exp $";
 
 #define hgtaCGIGeneMafTable "hgta_mafGeneMafTable" 
 #define hgtaJSGeneMafTable  "mafGeneMafTable" 
@@ -258,7 +258,7 @@ printf("<BR><BR><B>Formatting options:</B><BR>\n");
 jsMakeTrackingCheckBox(cart, hgtaCGIGeneExons, hgtaJSGeneExons, FALSE);
 printf("Separate into exons<BR>");
 jsMakeTrackingCheckBox(cart, hgtaCGIGeneNoTrans, hgtaJSGeneNoTrans, FALSE);
-printf("Show nucelotides<BR>");
+printf("Show nucleotides<BR>");
 jsMakeTrackingCheckBox(cart, hgtaCGIGeneOutBlank, hgtaJSGeneOutBlank, FALSE);
 printf("Output lines with just dashes<BR>");
 jsMakeTrackingCheckBox(cart, hgtaCGIOutTable, hgtaJSOutTable, FALSE);
