@@ -350,6 +350,13 @@ struct bed *hGetBedRange(char *db, char *table, char *chrom, int chromStart,
  * in the given range in table.  If chromEnd is 0, omit the range (whole chrom).
  * WARNING: this does not use the bin column and maybe slower than you would like.*/
 
+int hGetBedRangeCount(char *db, char *table, char *chrom, int chromStart,
+                         int chromEnd, char *sqlConstraints);
+/* Return a count of all the items (that match sqlConstraints, if nonNULL)
+ * in the given range in table.  If chromEnd is 0, omit the range (whole chrom).
+ * WARNING: this does not use the bin column and maybe slower than you would like.
+ * C.f. hGetBedRange() but returns only the result of SELECT COUNT(*) FROM ...  */
+
 struct bed *hGetFullBed(char *db, char *table);
 /* Return a genome-wide bed list of the table. */
 /* WARNING: This isn't designed for CGI use. It's a looped call to */

@@ -37,7 +37,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.387 2009/01/06 19:12:17 mikep Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.388 2009/01/06 23:41:32 mikep Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -1845,6 +1845,61 @@ hFreeConn(&conn);
 return(bedList);
 }
 
+int hGetBedRangeCount(char *db, char *table, char *chrom, int chromStart,
+			 int chromEnd, char *sqlConstraints)
+/* Return a count of all the items (that match sqlConstraints, if nonNULL) 
+ * in the given range in table.  If chromEnd is 0, omit the range (whole chrom).
+ * WARNING: this does not use the bin column and maybe slower than you would like.
+ * C.f. hGetBedRange() but returns only the result of SELECT COUNT(*) FROM ...  */
+{
+struct dyString *query = newDyString(512);
+struct sqlConnection *conn = hAllocConn(db);
+struct hTableInfo *hti;
+char parsedChrom[HDB_MAX_CHROM_STRING];
+char rootName[256];
+char fullTableName[256];
+int count;
+boolean useSqlConstraints = sqlConstraints != NULL && sqlConstraints[0] != 0;
+boolean gotWhere = FALSE;
+
+/* Caller can give us either a full table name or root table name. */
+hParseTableName(db, table, rootName, parsedChrom);
+hti = hFindTableInfo(db, chrom, rootName);
+if (hti == NULL)
+    errAbort("Could not find table info for table %s (%s)",
+	     rootName, table);
+if (hti->isSplit)
+    safef(fullTableName, sizeof(fullTableName), "%s_%s", chrom, rootName);
+else
+    safef(fullTableName, sizeof(fullTableName), "%s", rootName);
+
+dyStringClear(query);
+dyStringPrintf(query, "SELECT count(*) FROM %s", fullTableName);
+if (chromEnd != 0)
+    {
+    dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
+		   hti->startField, chromEnd, hti->endField, chromStart);
+    gotWhere = TRUE;
+    }
+if (hti->chromField[0] != 0)
+    {
+    dyStringPrintf(query, " %s %s = '%s'",
+		   (gotWhere ? "AND" : "WHERE"), hti->chromField, chrom);
+    gotWhere = TRUE;
+    }
+if (useSqlConstraints)
+    {
+    dyStringPrintf(query, " %s %s",
+		   (gotWhere ? "AND" : "WHERE"), sqlConstraints);
+    gotWhere = TRUE;
+    }
+
+count = sqlQuickNum(conn, query->string);
+
+dyStringFree(&query);
+hFreeConn(&conn);
+return count;
+}
 
 struct bed *hGetFullBed(char *db, char *table)
 /* Return a genome-wide bed list of the table. */
