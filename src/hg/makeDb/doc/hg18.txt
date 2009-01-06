@@ -25436,17 +25436,21 @@ rm -fr $tmp
     #	2906254
 
     # Try for 5% overall cov, and 70% CDS cov 
-    #	--rho .31 --expected-length 45 --target-coverage .3
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     featureBits hg18 -enrichment refGene:cds phastConsElements44way
     #	refGene:cds 1.144%, mostConserved.bed 4.490%,
     #	both 0.821%, cover 71.75%, enrich 15.98x
 
+    #	--rho .31 --expected-length 45 --target-coverage .3
     #	refGene:cds 1.144%, phastConsElements44way 4.706%,
     #	both 0.824%, cover 72.07%, enrich 15.31x
+
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     featureBits hg18 -enrichment knownGene:cds phastConsElements44way
     #	knownGene:cds 1.205%, mostConserved.bed 4.490%,
     #	both 0.840%, cover 69.74%, enrich 15.53x
 
+    #	--rho .31 --expected-length 45 --target-coverage .3
     #	knownGene:cds 1.205%, phastConsElements44way 4.706%,
     #	both 0.844%, cover 70.05%, enrich 14.88x
 
@@ -25576,16 +25580,22 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # verify coverage
     featureBits hg18 phastConsElements44wayEuarch
     #	109221588 bases of 2881515245 (3.790%) in intersection
+
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     featureBits hg18 -enrichment refGene:cds phastConsElements44wayEuarch
     #	refGene:cds 1.144%, mostConserved.bed 3.696%,
     #	both 0.822%, cover 71.87%, enrich 19.45x
 
+    #	--rho 0.31 --expected-length 45 --target-coverage 0.3
     #	refGene:cds 1.144%, phastConsElements44wayEuarch 3.790%,
     #	both 0.822%, cover 71.79%, enrich 18.94x
+
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     featureBits hg18 -enrichment knownGene:cds phastConsElements44wayEuarch
     #	knownGene:cds 1.205%, mostConserved.bed 3.696%,
     #	both 0.839%, cover 69.59%, enrich 18.83x
 
+    #	--rho 0.31 --expected-length 45 --target-coverage 0.3
     #	knownGene:cds 1.205%, phastConsElements44wayEuarch 3.790%,
     #	both 0.838%, cover 69.51%, enrich 18.34x
 
@@ -25698,13 +25708,14 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # verify coverage
     featureBits hg18 phastConsElements44wayPlacental
     #	118546732 bases of 2881515245 (4.114%) in intersection
+
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     featureBits hg18 -enrichment refGene:cds phastConsElements44wayPlacental
     #	refGene:cds 1.144%, phastConsElements44wayPlacental 4.114%,
     #	both 0.813%, cover 71.05%, enrich 17.27x
     featureBits hg18 -enrichment knownGene:cds phastConsElements44wayPlacental
     #	knownGene:cds 1.205%, phastConsElements44wayPlacental 4.114%,
     #	both 0.830%, cover 68.88%, enrich 16.74x
-
 
     #	Create the downloads .pp files, from which the phastCons wiggle data
     #	is calculated
