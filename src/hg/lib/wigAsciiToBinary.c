@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.26 2008/11/21 22:17:33 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.27 2009/01/06 19:13:23 mikep Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -507,7 +507,7 @@ while (lineFileNext(lf, &line, NULL))
 	    errAbort("Limit of 10,000,000 length specification for bed format at line %lu, found: %llu)",
 		lineCount, bedChromEnd-bedChromStart);
 	if ((validLines > 0) && (bedChromStart < previousOffset))
-	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset, bedChromStart);
+	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current (bed)", lineCount, previousOffset, bedChromStart);
 	freez(&prevChromName);
 	prevChromName = cloneString(chromName);
 	}
@@ -555,7 +555,7 @@ while (lineFileNext(lf, &line, NULL))
 	verbose(2, "first offset: %llu\n", chromStart);
 	}
     else if ((validLines > 1) && (Offset <= previousOffset))
-	errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, BASE_1(previousOffset), BASE_1(Offset));
+	errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current (offset)", lineCount, BASE_1(previousOffset), BASE_1(Offset));
 
     /* if we are working on a zoom level and the data is not exactly
      * spaced according to the span, then we need to put each value
