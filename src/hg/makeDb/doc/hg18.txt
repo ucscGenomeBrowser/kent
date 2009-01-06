@@ -25126,19 +25126,18 @@ done | cut -f4 | sort | uniq -c | sort -n
 
     #	load the resulting file
     ssh hgwdev
-    cd /hive/data/genomes/hg18/bed/multiz44way/frames
+    cd /cluster/data/hg18/bed/multiz44way/frames
+    find ./parts -type f | while read F
+do
+    zcat ${F}
+done | sort -k1,1 -k2,2n | hgLoadMafFrames hg18 multiz44wayFrames stdin
+
     find ./parts -type f | while read F
 do
     zcat ${F}
 done | sort -k1,1 -k2,2n > multiz44wayFrames.bed
-
-    time nice -n +19 hgLoadMafFrames hg18 multiz44wayFrames \
-	multiz44wayFrames.bed
-    #	real    2m21.114s
-
     featureBits -countGaps hg18 multiz44wayFrames.bed
-    #	62708567 bases of 3107677273 (2.018%) in intersection
-    #	real    18m54.209s
+    #	62315198 bases of 3107677273 (2.005%) in intersection
     featureBits -countGaps hg18 multiz28wayFrames
     #	48236360 bases of 3107677273 (1.552%) in intersection
 
@@ -25306,10 +25305,19 @@ doSplit.csh $(root1) {check out line+ $(root1).done}
 #.../genomes/hg18/bed/multiz44way/cons/startingTree/result/*/starting-tree.mod
 
     # add up the C and G:
-    find ./result -type f | while read F
+    find ./result -type f | xargs ls -rt | while read F
 do
-    echo -n `dirname $F`" - "
+    D=`dirname $F`
+    echo -n `basename $D`" - "
     grep BACKGROUND ${F} | awk '{printf "%0.3f\n", $3 + $4;}'
+done
+    #	counting number of species seen in the maf file:
+    find ./result -type f | xargs ls -rt | while read F
+do
+    D=`dirname $F`
+    echo -n `basename $D`" - "
+    grep TREE $F | sed -e \
+"s/TREE: //; s/(//g; s/)//g; s/[0-9].[0-9][0-9][0-9][0-9][0-9][0-9]//g; s/://g"  | tr ',' '\n' | wc -l
 done
 
     # Run phastCons
@@ -25375,7 +25383,7 @@ rm -fr $tmp
     #	root1 == chrom name, file1 == ss file name without .ss suffix
     cat << '_EOF_' > template
 #LOOP
-../run.cons/doPhast.csh $(root1) $(file1) 45 .3 .31 {check out line+ bed/$(root1)/$(file1).bed}
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ bed/$(root1)/$(file1).bed}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
@@ -25387,22 +25395,25 @@ rm -fr $tmp
     cd /hive/data/genomes/hg18/bed/multiz44way/cons
     mkdir -p all run.cons/all
     cd all
-    cp ../startingTree/result/chr10_random.1-113275/starting_tree.mod all.mod
+    # from the experiments with the SS files above, although it does not seem
+    #	to be extremely critical at this time, the most average GC file with
+    #	44 results is chr1.120000001-130000000/starting_tree.mod, so using
+    #	that file, but with the TREE from Kate's 4d business:
+    grep -v "TREE: " \
+	../startingTree/result/chr1.120000001-130000000/starting_tree.mod \
+	> all.mod
+    grep "TREE: " ../../4d/44way.all.mod >> all.mod
 
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
     para -ram=8g create jobList
     para try ... check ... push ... etc.
-    #	two bed files end up empty:
-    #	bed/chr18_random/chr18_random.1-4262.bed is empty
-    #	bed/chr19_random/chr19_random.1-301858.bed is empty
-    #	all of the pp files appear to be there:
-# Completed: 320 of 322 jobs
-# Crashed: 2 jobs
-# CPU time in finished jobs:      37630s     627.16m    10.45h    0.44d  0.001 y
-# IO & Wait Time:                173405s    2890.09m    48.17h    2.01d  0.005 y
-# Average job time:                 659s      10.99m     0.18h    0.01d
-# Longest finished job:            1051s      17.52m     0.29h    0.01d
-# Submission to last job:          1179s      19.65m     0.33h    0.01d
+# Completed: 322 of 322 jobs
+# CPU time in finished jobs:      47478s     791.29m    13.19h    0.55d  0.002 y
+# IO & Wait Time:                 39056s     650.94m    10.85h    0.45d  0.001 y
+# Average job time:                 269s       4.48m     0.07h    0.00d
+# Longest finished job:             381s       6.35m     0.11h    0.00d
+# Submission to last job:           449s       7.48m     0.12h    0.01d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
 
     # create Most Conserved track
     cd /hive/data/genomes/hg18/bed/multiz44way/cons
@@ -25427,9 +25438,15 @@ rm -fr $tmp
     # Try for 5% overall cov, and 70% CDS cov 
     #	--rho .31 --expected-length 45 --target-coverage .3
     featureBits hg18 -enrichment refGene:cds phastConsElements44way
+    #	refGene:cds 1.144%, mostConserved.bed 4.490%,
+    #	both 0.821%, cover 71.75%, enrich 15.98x
+
     #	refGene:cds 1.144%, phastConsElements44way 4.706%,
     #	both 0.824%, cover 72.07%, enrich 15.31x
     featureBits hg18 -enrichment knownGene:cds phastConsElements44way
+    #	knownGene:cds 1.205%, mostConserved.bed 4.490%,
+    #	both 0.840%, cover 69.74%, enrich 15.53x
+
     #	knownGene:cds 1.205%, phastConsElements44way 4.706%,
     #	both 0.844%, cover 70.05%, enrich 14.88x
 
@@ -25448,13 +25465,13 @@ rm -fr $tmp
 TOP=`pwd`
 export TOP
 
-mkdir -p phastCons44wayScores
+mkdir -p downloads
 
 for D in pp/chr*
 do
     C=${D/pp\/}
-    out=phastCons44wayScores/${C}.data.gz
-    echo "${D} > ${C}.data.gz"
+    out=downloads/${C}.phastCons44way.data.gz
+    echo "${D} > ${C}.phastCons44way.data.gz"
     ls $D/*.pp | sort -n -t\. -k2 | xargs cat | \
 	gzip > ${out}
 done
@@ -25462,11 +25479,13 @@ done
     #	<< happy emacs
     chmod +x gzipAscii.sh
     time nice -n +19 ./gzipAscii.sh
+    #	real    24m46.071s
 
     #	encode those files into wiggle data
-    zcat phastCons44wayScores/*.data.gz \
+    zcat downloads/*.data.gz \
 	| wigEncode stdin phastCons44way.wig phastCons44way.wib
-# Converted stdin, upper limit 1.00, lower limit 0.00
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    22m54.291s
 
     # Load gbdb and database with wiggle.
     ssh hgwdev
@@ -25474,7 +25493,7 @@ done
     ln -s `pwd`/phastCons44way.wib /gbdb/hg18/multiz44way/phastCons44way.wib
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 \
 	phastCons44way phastCons44way.wig
-    #	real    14m0.643s
+    #	real    1m13.681s
 
     #  Create histogram to get an overview of all the data
     ssh hgwdev
@@ -25482,7 +25501,7 @@ done
     time nice -n +19 hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    -db=hg18 phastCons44way > histogram.data 2>&1
-    #	real    28m24.388s
+    #	real    8m6.841s
 
     #	create plot of histogram:
 
@@ -25535,15 +25554,14 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	bed/chr19_random/chr19_random.1-301858.bed is empty
 # Completed: 320 of 322 jobs
 # Crashed: 2 jobs
-# CPU time in finished jobs:      25746s     429.10m     7.15h    0.30d  0.001 y
-# IO & Wait Time:                183130s    3052.17m    50.87h    2.12d  0.006 y
-# Average job time:                 653s      10.88m     0.18h    0.01d
-# Longest finished job:             975s      16.25m     0.27h    0.01d
-# Submission to last job:          2914s      48.57m     0.81h    0.03d
+# CPU time in finished jobs:      25869s     431.14m     7.19h    0.30d  0.001 y
+# IO & Wait Time:                 34404s     573.41m     9.56h    0.40d  0.001 y
+# Average job time:                 188s       3.14m     0.05h    0.00d
+# Longest finished job:             272s       4.53m     0.08h    0.00d
+# Submission to last job:           309s       5.15m     0.09h    0.00d
 
     # create Most Conserved track
-    ssh kolossus
-    cd /san/sanvol1/scratch/hg18/multiz44way/cons/euarchontoglires
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/euarchontoglires
     cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
         awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
             /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
@@ -25558,13 +25576,27 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # verify coverage
     featureBits hg18 phastConsElements44wayEuarch
     #	109221588 bases of 2881515245 (3.790%) in intersection
+    featureBits hg18 -enrichment refGene:cds phastConsElements44wayEuarch
+    #	refGene:cds 1.144%, mostConserved.bed 3.696%,
+    #	both 0.822%, cover 71.87%, enrich 19.45x
+
+    #	refGene:cds 1.144%, phastConsElements44wayEuarch 3.790%,
+    #	both 0.822%, cover 71.79%, enrich 18.94x
+    featureBits hg18 -enrichment knownGene:cds phastConsElements44wayEuarch
+    #	knownGene:cds 1.205%, mostConserved.bed 3.696%,
+    #	both 0.839%, cover 69.59%, enrich 18.83x
+
+    #	knownGene:cds 1.205%, phastConsElements44wayEuarch 3.790%,
+    #	both 0.838%, cover 69.51%, enrich 18.34x
 
     #	Create the downloads .pp files, from which the phastCons wiggle data
     #	is calculated
     # sort by chromName, chromStart so that items are in numerical order 
     #  for wigEncode
-    cd /san/sanvol1/scratch/hg18/multiz44way/cons/euarchontoglires
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/euarchontoglires
     mkdir downloads
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
     for D in pp/chr*
 do
     C=${D/pp\//}
@@ -25572,12 +25604,16 @@ do
 	> downloads/${C}.euarchontoglires.pp.data.gz
     echo $D $C done
 done
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 ./gzipAscii.sh
+    #	real    26m54.263s
 
     # Create merged posterier probability file and wiggle track data files
-    cd /san/sanvol1/scratch/hg18/multiz44way/cons/euarchontoglires
-    zcat phastCons44wayScores/chr*.data.gz \
+    zcat downloads/chr*.data.gz \
 	 | wigEncode stdin phastCons44wayEuarch.wig phastCons44wayEuarch.wib
-# Converted stdin, upper limit 1.00, lower limit 0.00
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    18m15.693s
 
     ## load table with wiggle data
     ssh hgwdev
@@ -25586,13 +25622,13 @@ done
 	/gbdb/hg18/multiz44way/phastCons44wayEuarch.wib
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 \
 	phastCons44wayEuarch phastCons44wayEuarch.wig
-    #	real     0m46.871s
+    #	real     0m57.590s
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    -db=hg18 phastCons44wayEuarch > histogram.data 2>&1
-    #	real    3m22.364s
+    #	real    6m37.512s
 
     #	create plot of histogram:
 
@@ -25639,14 +25675,13 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	Two of these jobs fail to produce any output:
     #	bed/chr18_random/chr18_random.1-4262.bed is empty
     #	bed/chr19_random/chr19_random.1-301858.bed is empty
-
 # Completed: 320 of 322 jobs
 # Crashed: 2 jobs
-# CPU time in finished jobs:      38167s     636.12m    10.60h    0.44d  0.001 y
-# IO & Wait Time:                176101s    2935.02m    48.92h    2.04d  0.006 y
-# Average job time:                 670s      11.16m     0.19h    0.01d
-# Longest finished job:             925s      15.42m     0.26h    0.01d
-# Submission to last job:          1079s      17.98m     0.30h    0.01d
+# CPU time in finished jobs:      38088s     634.80m    10.58h    0.44d  0.001 y
+# IO & Wait Time:                 28726s     478.77m     7.98h    0.33d  0.001 y
+# Average job time:                 209s       3.48m     0.06h    0.00d
+# Longest finished job:             281s       4.68m     0.08h    0.00d
+# Submission to last job:          2128s      35.47m     0.59h    0.02d
 
     # create Most Conserved track
     cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
@@ -25663,6 +25698,13 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # verify coverage
     featureBits hg18 phastConsElements44wayPlacental
     #	118546732 bases of 2881515245 (4.114%) in intersection
+    featureBits hg18 -enrichment refGene:cds phastConsElements44wayPlacental
+    #	refGene:cds 1.144%, phastConsElements44wayPlacental 4.114%,
+    #	both 0.813%, cover 71.05%, enrich 17.27x
+    featureBits hg18 -enrichment knownGene:cds phastConsElements44wayPlacental
+    #	knownGene:cds 1.205%, phastConsElements44wayPlacental 4.114%,
+    #	both 0.830%, cover 68.88%, enrich 16.74x
+
 
     #	Create the downloads .pp files, from which the phastCons wiggle data
     #	is calculated
@@ -25670,8 +25712,10 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # network distance from all machines.
     # sort by chromName, chromStart so that items are in numerical order 
     #  for wigEncode
-    cd /san/sanvol1/scratch/hg18/multiz44way/cons/placental
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/placental
     mkdir downloads
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
     for D in pp/chr*
 do
     C=${D/pp\//}
@@ -25679,12 +25723,17 @@ do
 	> downloads/${C}.placental.pp.data.gz
     echo $D $C done
 done
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 ./gzipAscii.sh
+    #	real    22m4.408s
 
     # Create merged posterier probability file and wiggle track data files
     zcat downloads/chr*.data.gz \
 	| wigEncode stdin phastCons44wayPlacental.wig \
 		phastCons44wayPlacental.wib
-# Converted stdin, upper limit 1.00, lower limit 0.00
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    16m46.896s
 
     ## load table with wiggle data
     ssh hgwdev
@@ -25693,13 +25742,13 @@ done
 	/gbdb/hg18/multiz44way/phastCons44wayPlacental.wib
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 \
 	phastCons44wayPlacental phastCons44wayPlacental.wig
-    #	real    0m46.689s
+    #	real    1m16.900s
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    -db=hg18 phastCons44wayPlacental > histogram.data 2>&1
-    #	real    4m30.495s
+    #	real    8m15.623s
 
     #	create plot of histogram:
 
