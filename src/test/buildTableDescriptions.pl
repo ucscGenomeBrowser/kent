@@ -29,6 +29,8 @@ my $debug         = 0;
 # These are ignored to avoid errors about duplicate table/object definitions.
 my %autoSqlIgnore = ( "hg/autoSql/tests/input/polyTest.as" => "",
 		      "hg/autoSql/tests/input/newTest.as" => "",
+		      "hg/autoSql/tests/input/doc.as" => "",
+		      "hg/autoSql/tests/input/doc2.as" => "",
 		      "hg/autoSql/doc.as" => "",
 		      "hg/autoSql/doc2.as" => "",
 		      "hg/instinct/instinctMember/members.as" => "",
