@@ -1,6 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
-# Tarsier syrichta
+# Tarsius syrichta
+# (original doc had incorrect name of Tarsier syrichta)
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE braney 2008-10-07)
     ssh kolossus
