@@ -2399,8 +2399,8 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:473622.75,autoScale=
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H4K20me1 in K562 cells)
         subGroups	view=Peaks factor=H4K20me1 cellType=K562
         type		broadPeak
-        type		wig 0.00 16178.00
         dateSubmitted	2009-01-06 18:32:6
+        dateReleased	2009-10-06
         priority	4090
         noInherit	on
         configurable	on
@@ -2412,9 +2412,9 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:473622.75,autoScale=
         shortLabel	K562 H4K20me1 Sig
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H4K20me1 in K562 cells)
         subGroups	view=Signal factor=H4K20me1 cellType=K562
-        subGroups	view=Signal factor=H4K20me1 cellType=K562
         type		wig 0.00 16178.00
         dateSubmitted	2009-01-06 18:32:6
+        dateReleased	2009-10-06
         priority	4091
         noInherit	on
         configurable	on
@@ -2432,8 +2432,8 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:473622.75,autoScale=
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H4K20me1 in K562 cells)
         subGroups	view=zRAW factor=H4K20me1 cellType=K562
         type		wig 1.00 2268.00
-        type		wig 0.00 16178.00
         dateSubmitted	2009-01-06 18:32:6
+        dateReleased	2009-10-06
         priority	4092
         noInherit	on
         configurable	off
@@ -2451,8 +2451,8 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:473622.75,autoScale=
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H4K20me1 in K562 cells)
         subGroups	view=zRAW factor=H4K20me1 cellType=K562
         type		wig 1.00 16566.00
-        type		wig 0.00 16178.00
         dateSubmitted	2009-01-06 18:32:6
+        dateReleased	2009-10-06
         priority	4093
         noInherit	on
         configurable	off
