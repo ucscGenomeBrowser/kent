@@ -209,17 +209,2389 @@ shortLabel	Histone Modifications
 longLabel	ENCODE Histone Modifications by Broad Institute ChIP-seq
 group		regulation
 subGroup1	view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
-subGroup2	cellType Cell_Line K562=K562
+subGroup2	cellType Cell_Line GM12878=GM12878_(Tier1) HUVEC=HUVEC Keratinocyte=Keratinocyte K562=K562_(Tier1)
 subGroup3	factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2(b)=Pol2(b) zCTRL=Control
 dimensions	dimensionX=cellType	dimensionY=factor
 sortOrder	cellType=+ factor=+ view=+
-controlledVocabulary	encode/cv.ra cellType factor
+controlledVocabulary	encode/cv.ra cellType=GM12878,HUVEC,Keratinocyte,K562 factor
 dragAndDrop	subTracks
 visibilityViewDefaults	 Peaks=hide Signal=dense zRAW=hide
 priority	0
 type		bed 3
 wgEncode	1
-settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=off zRAW:defaultViewLimits=1:20,viewLimits=1:21178,autoScale=off
+settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:473622.75,autoScale=off zRAW:defaultViewLimits=1:20,viewLimits=1:21178,autoScale=off
+
+        track		wgEncodeBroadChipSeqPeaksGm12878Ctcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 CTCF Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (CTCF in GM12878 cells)
+        subGroups	view=Peaks factor=CTCF cellType=GM12878
+        type		broadPeak
+        dateSubmitted	2009-01-05 0:23:37
+        dateReleased	2009-10-05
+        priority	1000
+        noInherit	on
+        configurable	on
+        cell		GM12878
+        antibody	CTCF
+
+        track		wgEncodeBroadChipSeqSignalGm12878Ctcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 CTCF Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (CTCF in GM12878 cells)
+        subGroups	view=Signal factor=CTCF cellType=GM12878
+        type		wig 0.00 14530.00
+        dateSubmitted	2009-01-05 0:23:37
+        dateReleased	2009-10-05
+        priority	1001
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	CTCF
+
+        track		wgEncodeBroadChipSeqRawSignalRep1Gm12878Ctcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 CTCF Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12878 cells)
+        subGroups	view=zRAW factor=CTCF cellType=GM12878
+        type		wig 1.00 10017.00
+        dateSubmitted	2009-01-05 0:23:37
+        dateReleased	2009-10-05
+        priority	1002
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	CTCF
+
+        track		wgEncodeBroadChipSeqRawSignalRep2Gm12878Ctcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 CTCF Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (CTCF in GM12878 cells)
+        subGroups	view=zRAW factor=CTCF cellType=GM12878
+        type		wig 1.00 6886.00
+        dateSubmitted	2009-01-05 0:23:37
+        dateReleased	2009-10-05
+        priority	1003
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	CTCF
+
+        track		wgEncodeBroadChipSeqPeaksGm12878H3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K4me1 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me1 in GM12878 cells)
+        subGroups	view=Peaks factor=H3K04me1 cellType=GM12878
+        type		broadPeak
+        dateSubmitted	2009-01-04 17:48:5
+        dateReleased	2009-10-04
+        priority	1010
+        noInherit	on
+        configurable	on
+        cell		GM12878
+        antibody	H3K4me1
+
+        track		wgEncodeBroadChipSeqSignalGm12878H3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K4me1 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me1 in GM12878 cells)
+        subGroups	view=Signal factor=H3K04me1 cellType=GM12878
+        type		wig 0.00 9323.50
+        dateSubmitted	2009-01-04 17:48:5
+        dateReleased	2009-10-04
+        priority	1011
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K4me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K4me1 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me1 in GM12878 cells)
+        subGroups	view=zRAW factor=H3K04me1 cellType=GM12878
+        type		wig 1.00 5673.00
+        dateSubmitted	2009-01-04 17:48:5
+        dateReleased	2009-10-04
+        priority	1012
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K4me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K4me1 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me1 in GM12878 cells)
+        subGroups	view=zRAW factor=H3K04me1 cellType=GM12878
+        type		wig 1.00 5022.00
+        dateSubmitted	2009-01-04 17:48:5
+        dateReleased	2009-10-04
+        priority	1013
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K4me1
+
+        track		wgEncodeBroadChipSeqPeaksGm12878H3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K4me2 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me2 in GM12878 cells)
+        subGroups	view=Peaks factor=H3K04me2 cellType=GM12878
+        type		broadPeak
+        dateSubmitted	2009-01-04 17:2:48
+        dateReleased	2009-10-04
+        priority	1020
+        noInherit	on
+        configurable	on
+        cell		GM12878
+        antibody	H3K4me2
+
+        track		wgEncodeBroadChipSeqSignalGm12878H3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K4me2 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me2 in GM12878 cells)
+        subGroups	view=Signal factor=H3K04me2 cellType=GM12878
+        type		wig 0.00 15071.00
+        dateSubmitted	2009-01-04 17:2:48
+        dateReleased	2009-10-04
+        priority	1021
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K4me2
+
+        track		wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K4me2 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me2 in GM12878 cells)
+        subGroups	view=zRAW factor=H3K04me2 cellType=GM12878
+        type		wig 1.00 14054.00
+        dateSubmitted	2009-01-04 17:2:48
+        dateReleased	2009-10-04
+        priority	1022
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K4me2
+
+        track		wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K4me2 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me2 in GM12878 cells)
+        subGroups	view=zRAW factor=H3K04me2 cellType=GM12878
+        type		wig 1.00 2470.00
+        dateSubmitted	2009-01-04 17:2:48
+        dateReleased	2009-10-04
+        priority	1023
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K4me2
+
+        track		wgEncodeBroadChipSeqPeaksGm12878H3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K4me3 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me3 in GM12878 cells)
+        subGroups	view=Peaks factor=H3K04me3 cellType=GM12878
+        type		broadPeak
+        dateSubmitted	2009-01-04 15:59:46
+        dateReleased	2009-10-04
+        priority	1030
+        noInherit	on
+        configurable	on
+        cell		GM12878
+        antibody	H3K4me3
+
+        track		wgEncodeBroadChipSeqSignalGm12878H3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K4me3 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me3 in GM12878 cells)
+        subGroups	view=Signal factor=H3K04me3 cellType=GM12878
+        type		wig 0.00 100593.50
+        dateSubmitted	2009-01-04 15:59:46
+        dateReleased	2009-10-04
+        priority	1031
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K4me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K4me3 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in GM12878 cells)
+        subGroups	view=zRAW factor=H3K04me3 cellType=GM12878
+        type		wig 1.00 65341.00
+        dateSubmitted	2009-01-04 15:59:46
+        dateReleased	2009-10-04
+        priority	1032
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K4me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K4me3 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in GM12878 cells)
+        subGroups	view=zRAW factor=H3K04me3 cellType=GM12878
+        type		wig 1.00 4691.00
+        dateSubmitted	2009-01-04 15:59:46
+        dateReleased	2009-10-04
+        priority	1033
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K4me3
+
+        track		wgEncodeBroadChipSeqPeaksGm12878H3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K9ac Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K9ac in GM12878 cells)
+        subGroups	view=Peaks factor=H3K09ac cellType=GM12878
+        type		broadPeak
+        dateSubmitted	2009-01-04 22:24:24
+        dateReleased	2009-10-04
+        priority	1040
+        noInherit	on
+        configurable	on
+        cell		GM12878
+        antibody	H3K9ac
+
+        track		wgEncodeBroadChipSeqSignalGm12878H3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K9ac Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K9ac in GM12878 cells)
+        subGroups	view=Signal factor=H3K09ac cellType=GM12878
+        type		wig 0.00 8338.25
+        dateSubmitted	2009-01-04 22:24:24
+        dateReleased	2009-10-04
+        priority	1041
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K9ac
+
+        track		wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K9ac Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K9ac in GM12878 cells)
+        subGroups	view=zRAW factor=H3K09ac cellType=GM12878
+        type		wig 1.00 5305.00
+        dateSubmitted	2009-01-04 22:24:24
+        dateReleased	2009-10-04
+        priority	1042
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K9ac
+
+        track		wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K9ac Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K9ac in GM12878 cells)
+        subGroups	view=zRAW factor=H3K09ac cellType=GM12878
+        type		wig 1.00 4291.00
+        dateSubmitted	2009-01-04 22:24:24
+        dateReleased	2009-10-04
+        priority	1043
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K9ac
+
+        track		wgEncodeBroadChipSeqPeaksGm12878H4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H4K20me1 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H4K20me1 in GM12878 cells)
+        subGroups	view=Peaks factor=H4K20me1 cellType=GM12878
+        type		broadPeak
+        dateSubmitted	2009-01-04 23:19:49
+        dateReleased	2009-10-04
+        priority	1060
+        noInherit	on
+        configurable	on
+        cell		GM12878
+        antibody	H4K20me1
+
+        track		wgEncodeBroadChipSeqSignalGm12878H4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H4K20me1 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H4K20me1 in GM12878 cells)
+        subGroups	view=Signal factor=H4K20me1 cellType=GM12878
+        type		wig 0.00 10750.00
+        dateSubmitted	2009-01-04 23:19:49
+        dateReleased	2009-10-04
+        priority	1061
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H4K20me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep1Gm12878H4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H4K20me1 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H4K20me1 in GM12878 cells)
+        subGroups	view=zRAW factor=H4K20me1 cellType=GM12878
+        type		wig 1.00 6918.00
+        dateSubmitted	2009-01-04 23:19:49
+        dateReleased	2009-10-04
+        priority	1062
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H4K20me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep2Gm12878H4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H4K20me1 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H4K20me1 in GM12878 cells)
+        subGroups	view=zRAW factor=H4K20me1 cellType=GM12878
+        type		wig 1.00 5568.00
+        dateSubmitted	2009-01-04 23:19:49
+        dateReleased	2009-10-04
+        priority	1063
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H4K20me1
+
+        track		wgEncodeBroadChipSeqPeaksGm12878H3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K27ac Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K27ac in GM12878 cells)
+        subGroups	view=Peaks factor=H3K27ac cellType=GM12878
+        type		broadPeak
+        dateSubmitted	2009-01-04 21:19:1
+        dateReleased	2009-10-04
+        priority	1070
+        noInherit	on
+        configurable	on
+        cell		GM12878
+        antibody	H3K27ac
+
+        track		wgEncodeBroadChipSeqSignalGm12878H3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K27ac Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K27ac in GM12878 cells)
+        subGroups	view=Signal factor=H3K27ac cellType=GM12878
+        type		wig 0.00 473622.75
+        dateSubmitted	2009-01-04 21:19:1
+        dateReleased	2009-10-04
+        priority	1071
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K27ac
+
+        track		wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K27ac Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K27ac in GM12878 cells)
+        subGroups	view=zRAW factor=H3K27ac cellType=GM12878
+        type		wig 1.00 65477.00
+        dateSubmitted	2009-01-04 21:19:1
+        dateReleased	2009-10-04
+        priority	1072
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K27ac
+
+        track		wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K27ac Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K27ac in GM12878 cells)
+        subGroups	view=zRAW factor=H3K27ac cellType=GM12878
+        type		wig 1.00 3640.00
+        dateSubmitted	2009-01-04 21:19:1
+        dateReleased	2009-10-04
+        priority	1073
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K27ac
+
+        track		wgEncodeBroadChipSeqPeaksGm12878H3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K27me3 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K27me3 in GM12878 cells)
+        subGroups	view=Peaks factor=H3K27me3 cellType=GM12878
+        type		broadPeak
+        dateSubmitted	2009-01-04 20:6:7
+        dateReleased	2009-10-04
+        priority	1080
+        noInherit	on
+        configurable	on
+        cell		GM12878
+        antibody	H3K27me3
+
+        track		wgEncodeBroadChipSeqSignalGm12878H3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K27me3 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K27me3 in GM12878 cells)
+        subGroups	view=Signal factor=H3K27me3 cellType=GM12878
+        type		wig 0.00 60338.25
+        dateSubmitted	2009-01-04 20:6:7
+        dateReleased	2009-10-04
+        priority	1081
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K27me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K27me3 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in GM12878 cells)
+        subGroups	view=zRAW factor=H3K27me3 cellType=GM12878
+        type		wig 1.00 65374.00
+        dateSubmitted	2009-01-04 20:6:7
+        dateReleased	2009-10-04
+        priority	1082
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K27me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K27me3 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in GM12878 cells)
+        subGroups	view=zRAW factor=H3K27me3 cellType=GM12878
+        type		wig 1.00 4241.00
+        dateSubmitted	2009-01-04 20:6:7
+        dateReleased	2009-10-04
+        priority	1083
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K27me3
+
+        track		wgEncodeBroadChipSeqPeaksGm12878H3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K36me3 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K36me3 in GM12878 cells)
+        subGroups	view=Peaks factor=H3K36me3 cellType=GM12878
+        type		broadPeak
+        dateSubmitted	2009-01-04 18:54:30
+        dateReleased	2009-10-04
+        priority	1090
+        noInherit	on
+        configurable	on
+        cell		GM12878
+        antibody	H3K36me3
+
+        track		wgEncodeBroadChipSeqSignalGm12878H3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K36me3 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K36me3 in GM12878 cells)
+        subGroups	view=Signal factor=H3K36me3 cellType=GM12878
+        type		wig 0.00 15797.75
+        dateSubmitted	2009-01-04 18:54:30
+        dateReleased	2009-10-04
+        priority	1091
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K36me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K36me3 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in GM12878 cells)
+        subGroups	view=zRAW factor=H3K36me3 cellType=GM12878
+        type		wig 1.00 13112.00
+        dateSubmitted	2009-01-04 18:54:30
+        dateReleased	2009-10-04
+        priority	1092
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K36me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 H3K36me3 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in GM12878 cells)
+        subGroups	view=zRAW factor=H3K36me3 cellType=GM12878
+        type		wig 1.00 5241.00
+        dateSubmitted	2009-01-04 18:54:30
+        dateReleased	2009-10-04
+        priority	1093
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	H3K36me3
+
+        track		wgEncodeBroadChipSeqSignalGm12878Control
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 WCE Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (GM12878 WCE Control)
+        subGroups	view=Signal factor=zCTRL cellType=GM12878
+        type		wig 0.00 13725.50
+        dateSubmitted	2009-01-05 10:14:15
+        dateReleased	2009-10-05
+        priority	1111
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	control
+
+        track		wgEncodeBroadChipSeqRawSignalRep1Gm12878Control
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 WCE Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (GM12878 WCE Control)
+        subGroups	view=zRAW factor=zCTRL cellType=GM12878
+        type		wig 1.00 8512.00
+        dateSubmitted	2009-01-05 10:14:15
+        dateReleased	2009-10-05
+        priority	1112
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	control
+
+        track		wgEncodeBroadChipSeqRawSignalRep2Gm12878Control
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	GM12878 WCE Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (GM12878 WCE Control)
+        subGroups	view=zRAW factor=zCTRL cellType=GM12878
+        type		wig 1.00 7182.00
+        dateSubmitted	2009-01-05 10:14:15
+        dateReleased	2009-10-05
+        priority	1113
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		GM12878
+        antibody	control
+
+        track		wgEncodeBroadChipSeqPeaksHuvecCtcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC CTCF Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (CTCF in HUVEC cells)
+        subGroups	view=Peaks factor=CTCF cellType=HUVEC
+        type		broadPeak
+        dateSubmitted	2009-01-05 22:43:39
+        dateReleased	2009-10-05
+        priority	2000
+        noInherit	on
+        configurable	on
+        cell		HUVEC
+        antibody	CTCF
+
+        track		wgEncodeBroadChipSeqSignalHuvecCtcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC CTCF Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (CTCF in HUVEC cells)
+        subGroups	view=Signal factor=CTCF cellType=HUVEC
+        type		wig 0.00 7013.25
+        dateSubmitted	2009-01-05 22:43:39
+        dateReleased	2009-10-05
+        priority	2001
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	CTCF
+
+        track		wgEncodeBroadChipSeqRawSignalRep1HuvecCtcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC CTCF Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (CTCF in HUVEC cells)
+        subGroups	view=zRAW factor=CTCF cellType=HUVEC
+        type		wig 1.00 6968.00
+        dateSubmitted	2009-01-05 22:43:39
+        dateReleased	2009-10-05
+        priority	2002
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	CTCF
+
+        track		wgEncodeBroadChipSeqRawSignalRep2HuvecCtcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC CTCF Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (CTCF in HUVEC cells)
+        subGroups	view=zRAW factor=CTCF cellType=HUVEC
+        type		wig 1.00 3205.00
+        dateSubmitted	2009-01-05 22:43:39
+        dateReleased	2009-10-05
+        priority	2003
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	CTCF
+
+        track		wgEncodeBroadChipSeqPeaksHuvecH3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K4me1 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me1 in HUVEC cells)
+        subGroups	view=Peaks factor=H3K04me1 cellType=HUVEC
+        type		broadPeak
+        dateSubmitted	2009-01-05 13:50:2
+        dateReleased	2009-10-05
+        priority	2010
+        noInherit	on
+        configurable	on
+        cell		HUVEC
+        antibody	H3K4me1
+
+        track		wgEncodeBroadChipSeqSignalHuvecH3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K4me1 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me1 in HUVEC cells)
+        subGroups	view=Signal factor=H3K04me1 cellType=HUVEC
+        type		wig 0.00 5259.25
+        dateSubmitted	2009-01-05 13:50:2
+        dateReleased	2009-10-05
+        priority	2011
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K4me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K4me1 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me1 in HUVEC cells)
+        subGroups	view=zRAW factor=H3K04me1 cellType=HUVEC
+        type		wig 1.00 5158.00
+        dateSubmitted	2009-01-05 13:50:2
+        dateReleased	2009-10-05
+        priority	2012
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K4me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K4me1 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me1 in HUVEC cells)
+        subGroups	view=zRAW factor=H3K04me1 cellType=HUVEC
+        type		wig 1.00 875.00
+        dateSubmitted	2009-01-05 13:50:2
+        dateReleased	2009-10-05
+        priority	2013
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K4me1
+
+        track		wgEncodeBroadChipSeqPeaksHuvecH3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K4me2 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me2 in HUVEC cells)
+        subGroups	view=Peaks factor=H3K04me2 cellType=HUVEC
+        type		broadPeak
+        dateSubmitted	2009-01-05 12:30:42
+        dateReleased	2009-10-05
+        priority	2020
+        noInherit	on
+        configurable	on
+        cell		HUVEC
+        antibody	H3K4me2
+
+        track		wgEncodeBroadChipSeqSignalHuvecH3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K4me2 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me2 in HUVEC cells)
+        subGroups	view=Signal factor=H3K04me2 cellType=HUVEC
+        type		wig 0.00 7088.00
+        dateSubmitted	2009-01-05 12:30:42
+        dateReleased	2009-10-05
+        priority	2021
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K4me2
+
+        track		wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K4me2 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me2 in HUVEC cells)
+        subGroups	view=zRAW factor=H3K04me2 cellType=HUVEC
+        type		wig 1.00 7163.00
+        dateSubmitted	2009-01-05 12:30:42
+        dateReleased	2009-10-05
+        priority	2022
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K4me2
+
+        track		wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K4me2 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me2 in HUVEC cells)
+        subGroups	view=zRAW factor=H3K04me2 cellType=HUVEC
+        type		wig 1.00 3502.00
+        dateSubmitted	2009-01-05 12:30:42
+        dateReleased	2009-10-05
+        priority	2023
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K4me2
+
+        track		wgEncodeBroadChipSeqPeaksHuvecH3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K4me3 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me3 in HUVEC cells)
+        subGroups	view=Peaks factor=H3K04me3 cellType=HUVEC
+        type		broadPeak
+        dateSubmitted	2009-01-05 11:10:53
+        dateReleased	2009-10-05
+        priority	2030
+        noInherit	on
+        configurable	on
+        cell		HUVEC
+        antibody	H3K4me3
+
+        track		wgEncodeBroadChipSeqSignalHuvecH3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K4me3 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me3 in HUVEC cells)
+        subGroups	view=Signal factor=H3K04me3 cellType=HUVEC
+        type		wig 0.00 9954.75
+        dateSubmitted	2009-01-05 11:10:53
+        dateReleased	2009-10-05
+        priority	2031
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K4me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K4me3 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in HUVEC cells)
+        subGroups	view=zRAW factor=H3K04me3 cellType=HUVEC
+        type		wig 1.00 9994.00
+        dateSubmitted	2009-01-05 11:10:53
+        dateReleased	2009-10-05
+        priority	2032
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K4me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K4me3 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in HUVEC cells)
+        subGroups	view=zRAW factor=H3K04me3 cellType=HUVEC
+        type		wig 1.00 5437.00
+        dateSubmitted	2009-01-05 11:10:53
+        dateReleased	2009-10-05
+        priority	2033
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K4me3
+
+        track		wgEncodeBroadChipSeqPeaksHuvecH3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K9ac Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K9ac in HUVEC cells)
+        subGroups	view=Peaks factor=H3K09ac cellType=HUVEC
+        type		broadPeak
+        dateSubmitted	2009-01-05 17:58:8
+        dateReleased	2009-10-05
+        priority	2040
+        noInherit	on
+        configurable	on
+        cell		HUVEC
+        antibody	H3K9ac
+
+        track		wgEncodeBroadChipSeqSignalHuvecH3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K9ac Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K9ac in HUVEC cells)
+        subGroups	view=Signal factor=H3K09ac cellType=HUVEC
+        type		wig 0.00 8831.00
+        dateSubmitted	2009-01-05 17:58:8
+        dateReleased	2009-10-05
+        priority	2041
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K9ac
+
+        track		wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K9ac Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K9ac in HUVEC cells)
+        subGroups	view=zRAW factor=H3K09ac cellType=HUVEC
+        type		wig 1.00 8827.00
+        dateSubmitted	2009-01-05 17:58:8
+        dateReleased	2009-10-05
+        priority	2042
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K9ac
+
+        track		wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K9ac Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K9ac in HUVEC cells)
+        subGroups	view=zRAW factor=H3K09ac cellType=HUVEC
+        type		wig 1.00 1340.00
+        dateSubmitted	2009-01-05 17:58:8
+        dateReleased	2009-10-05
+        priority	2043
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K9ac
+
+        track		wgEncodeBroadChipSeqPeaksHuvecH3k9me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K9me1 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K9me1 in HUVEC cells)
+        subGroups	view=Peaks factor=H3K09me1 cellType=HUVEC
+        type		broadPeak
+        dateSubmitted	2009-01-05 20:13:5
+        dateReleased	2009-10-05
+        priority	2050
+        noInherit	on
+        configurable	on
+        cell		HUVEC
+        antibody	H3K9me1
+
+        track		wgEncodeBroadChipSeqSignalHuvecH3k9me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K9me1 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K9me1 in HUVEC cells)
+        subGroups	view=Signal factor=H3K09me1 cellType=HUVEC
+        type		wig 0.00 6743.75
+        dateSubmitted	2009-01-05 20:13:5
+        dateReleased	2009-10-05
+        priority	2051
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K9me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K9me1 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K9me1 in HUVEC cells)
+        subGroups	view=zRAW factor=H3K09me1 cellType=HUVEC
+        type		wig 1.00 5977.00
+        dateSubmitted	2009-01-05 20:13:5
+        dateReleased	2009-10-05
+        priority	2052
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K9me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K9me1 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K9me1 in HUVEC cells)
+        subGroups	view=zRAW factor=H3K09me1 cellType=HUVEC
+        type		wig 1.00 1956.00
+        dateSubmitted	2009-01-05 20:13:5
+        dateReleased	2009-10-05
+        priority	2053
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K9me1
+
+        track		wgEncodeBroadChipSeqPeaksHuvecH3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K27ac Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K27ac in HUVEC cells)
+        subGroups	view=Peaks factor=H3K27ac cellType=HUVEC
+        type		broadPeak
+        dateSubmitted	2009-01-05 18:53:4
+        dateReleased	2009-10-05
+        priority	2060
+        noInherit	on
+        configurable	on
+        cell		HUVEC
+        antibody	H3K27ac
+
+        track		wgEncodeBroadChipSeqSignalHuvecH3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K27ac Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K27ac in HUVEC cells)
+        subGroups	view=Signal factor=H3K27ac cellType=HUVEC
+        type		wig 0.00 4855.00
+        dateSubmitted	2009-01-05 18:53:4
+        dateReleased	2009-10-05
+        priority	2061
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K27ac
+
+        track		wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K27ac Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K27ac in HUVEC cells)
+        subGroups	view=zRAW factor=H3K27ac cellType=HUVEC
+        type		wig 1.00 3753.00
+        dateSubmitted	2009-01-05 18:53:4
+        dateReleased	2009-10-05
+        priority	2062
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K27ac
+
+        track		wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K27ac Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K27ac in HUVEC cells)
+        subGroups	view=zRAW factor=H3K27ac cellType=HUVEC
+        type		wig 1.00 4291.00
+        dateSubmitted	2009-01-05 18:53:4
+        dateReleased	2009-10-05
+        priority	2063
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K27ac
+
+        track		wgEncodeBroadChipSeqPeaksHuvecH3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K27me3 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K27me3 in HUVEC cells)
+        subGroups	view=Peaks factor=H3K27me3 cellType=HUVEC
+        type		broadPeak
+        dateSubmitted	2009-01-05 15:23:34
+        dateReleased	2009-10-05
+        priority	2070
+        noInherit	on
+        configurable	on
+        cell		HUVEC
+        antibody	H3K27me3
+
+        track		wgEncodeBroadChipSeqSignalHuvecH3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K27me3 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K27me3 in HUVEC cells)
+        subGroups	view=Signal factor=H3K27me3 cellType=HUVEC
+        type		wig 0.00 7453.25
+        dateSubmitted	2009-01-05 15:23:34
+        dateReleased	2009-10-05
+        priority	2071
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K27me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K27me3 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in HUVEC cells)
+        subGroups	view=zRAW factor=H3K27me3 cellType=HUVEC
+        type		wig 1.00 6723.00
+        dateSubmitted	2009-01-05 15:23:34
+        dateReleased	2009-10-05
+        priority	2072
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K27me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K27me3 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in HUVEC cells)
+        subGroups	view=zRAW factor=H3K27me3 cellType=HUVEC
+        type		wig 1.00 2059.00
+        dateSubmitted	2009-01-05 15:23:34
+        dateReleased	2009-10-05
+        priority	2073
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K27me3
+
+        track		wgEncodeBroadChipSeqPeaksHuvecH3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K36me3 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K36me3 in HUVEC cells)
+        subGroups	view=Peaks factor=H3K36me3 cellType=HUVEC
+        type		broadPeak
+        dateSubmitted	2009-01-05 16:46:27
+        dateReleased	2009-10-05
+        priority	2080
+        noInherit	on
+        configurable	on
+        cell		HUVEC
+        antibody	H3K36me3
+
+        track		wgEncodeBroadChipSeqSignalHuvecH3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K36me3 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K36me3 in HUVEC cells)
+        subGroups	view=Signal factor=H3K36me3 cellType=HUVEC
+        type		wig 0.00 7456.25
+        dateSubmitted	2009-01-05 16:46:27
+        dateReleased	2009-10-05
+        priority	2081
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K36me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep1HuvecH3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K36me3 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in HUVEC cells)
+        subGroups	view=zRAW factor=H3K36me3 cellType=HUVEC
+        type		wig 1.00 7162.00
+        dateSubmitted	2009-01-05 16:46:27
+        dateReleased	2009-10-05
+        priority	2082
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K36me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep2HuvecH3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H3K36me3 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in HUVEC cells)
+        subGroups	view=zRAW factor=H3K36me3 cellType=HUVEC
+        type		wig 1.00 6629.00
+        dateSubmitted	2009-01-05 16:46:27
+        dateReleased	2009-10-05
+        priority	2083
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H3K36me3
+
+        track		wgEncodeBroadChipSeqPeaksHuvecH4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H4K20me1 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H4K20me1 in HUVEC cells)
+        subGroups	view=Peaks factor=H4K20me1 cellType=HUVEC
+        type		broadPeak
+        dateSubmitted	2009-01-05 21:16:35
+        dateReleased	2009-10-05
+        priority	2090
+        noInherit	on
+        configurable	on
+        cell		HUVEC
+        antibody	H4K20me1
+
+        track		wgEncodeBroadChipSeqSignalHuvecH4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H4K20me1 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H4K20me1 in HUVEC cells)
+        subGroups	view=Signal factor=H4K20me1 cellType=HUVEC
+        type		wig 0.00 15868.50
+        dateSubmitted	2009-01-05 21:16:35
+        dateReleased	2009-10-05
+        priority	2091
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H4K20me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep1HuvecH4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H4K20me1 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H4K20me1 in HUVEC cells)
+        subGroups	view=zRAW factor=H4K20me1 cellType=HUVEC
+        type		wig 1.00 15917.00
+        dateSubmitted	2009-01-05 21:16:35
+        dateReleased	2009-10-05
+        priority	2092
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H4K20me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep2HuvecH4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC H4K20me1 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H4K20me1 in HUVEC cells)
+        subGroups	view=zRAW factor=H4K20me1 cellType=HUVEC
+        type		wig 1.00 2494.00
+        dateSubmitted	2009-01-05 21:16:35
+        dateReleased	2009-10-05
+        priority	2093
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	H4K20me1
+
+        track		wgEncodeBroadChipSeqPeaksHuvecPol2b
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC Pol2(b) Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (Pol2(b) in HUVEC cells)
+        subGroups	view=Peaks factor=Pol2(b) cellType=HUVEC
+        type		broadPeak
+        dateSubmitted	2009-01-06 12:6:54
+        dateReleased	2009-10-06
+        priority	2100
+        noInherit	on
+        configurable	on
+        cell		HUVEC
+        antibody	Pol2(b)
+
+        track		wgEncodeBroadChipSeqSignalHuvecPol2b
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC Pol2(b) Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (Pol2(b) in HUVEC cells)
+        subGroups	view=Signal factor=Pol2(b) cellType=HUVEC
+        type		wig 0.00 8889.75
+        dateSubmitted	2009-01-06 12:6:54
+        dateReleased	2009-10-06
+        priority	2101
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	Pol2(b)
+
+        track		wgEncodeBroadChipSeqRawSignalRep1HuvecPol2b
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC Pol2(b) Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (Pol2(b) in HUVEC cells)
+        subGroups	view=zRAW factor=Pol2(b) cellType=HUVEC
+        type		wig 1.00 6156.00
+        dateSubmitted	2009-01-06 12:6:54
+        dateReleased	2009-10-06
+        priority	2102
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	Pol2(b)
+
+        track		wgEncodeBroadChipSeqRawSignalRep2HuvecPol2b
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC Pol2(b) Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (Pol2(b) in HUVEC cells)
+        subGroups	view=zRAW factor=Pol2(b) cellType=HUVEC
+        type		wig 1.00 4077.00
+        dateSubmitted	2009-01-06 12:6:54
+        dateReleased	2009-10-06
+        priority	2103
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	Pol2(b)
+
+        track		wgEncodeBroadChipSeqSignalHuvecControl
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC control Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (control in HUVEC cells)
+        subGroups	view=Signal factor=zCTRL cellType=HUVEC
+        type		wig 0.00 16710.75
+        dateSubmitted	2009-01-07 2:18:36
+        dateReleased	2009-10-07
+        priority	2111
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	control
+
+        track		wgEncodeBroadChipSeqRawSignalRep1HuvecControl
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC control Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (control in HUVEC cells)
+        subGroups	view=zRAW factor=zCTRL cellType=HUVEC
+        type		wig 1.00 17736.00
+        dateSubmitted	2009-01-07 2:18:36
+        dateReleased	2009-10-07
+        priority	2112
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	control
+
+        track		wgEncodeBroadChipSeqRawSignalRep2HuvecControl
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	HUVEC control Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (control in HUVEC cells)
+        subGroups	view=zRAW factor=zCTRL cellType=HUVEC
+        type		wig 1.00 2790.00
+        dateSubmitted	2009-01-07 2:18:36
+        dateReleased	2009-10-07
+        priority	2113
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		HUVEC
+        antibody	control
+
+        track		wgEncodeBroadChipSeqPeaksNhekCtcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte CTCF Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (CTCF in Keratinocyte cells)
+        subGroups	view=Peaks factor=CTCF cellType=Keratinocyte
+        type		broadPeak
+        dateSubmitted	2009-01-06 23:34:18
+        dateReleased	2009-10-06
+        priority	3000
+        noInherit	on
+        configurable	on
+        cell		Keratinocyte
+        antibody	CTCF
+
+        track		wgEncodeBroadChipSeqSignalNhekCtcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte CTCF Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (CTCF in Keratinocyte cells)
+        subGroups	view=Signal factor=CTCF cellType=Keratinocyte
+        type		wig 0.00 4674.50
+        dateSubmitted	2009-01-06 23:34:18
+        dateReleased	2009-10-06
+        priority	3001
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	CTCF
+
+        track		wgEncodeBroadChipSeqRawSignalRep1NhekCtcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte CTCF Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (CTCF in Keratinocyte cells)
+        subGroups	view=zRAW factor=CTCF cellType=Keratinocyte
+        type		wig 1.00 4288.00
+        dateSubmitted	2009-01-06 23:34:18
+        dateReleased	2009-10-06
+        priority	3002
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	CTCF
+
+        track		wgEncodeBroadChipSeqRawSignalRep2NhekCtcf
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	CTCF Keratinocyte Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (CTCF in Keratinocyte cells)
+        subGroups	view=zRAW factor=CTCF cellType=Keratinocyte
+        type		wig 1.00 1316.00
+        dateSubmitted	2009-01-06 23:34:18
+        dateReleased	2009-10-06
+        priority	3003
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	CTCF
+
+        track		wgEncodeBroadChipSeqPeaksNhekH3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K4me1 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me1 in Keratinocyte cells)
+        subGroups	view=Peaks factor=H3K04me1 cellType=Keratinocyte
+        type		broadPeak
+        dateSubmitted	2009-01-06 15:22:13
+        dateReleased	2009-10-06
+        priority	3010
+        noInherit	on
+        configurable	on
+        cell		Keratinocyte
+        antibody	H3K4me1
+
+        track		wgEncodeBroadChipSeqSignalNhekH3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K4me1 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me1 in Keratinocyte cells)
+        subGroups	view=Signal factor=H3K04me1 cellType=Keratinocyte
+        type		wig 0.00 4240.50
+        dateSubmitted	2009-01-06 15:22:13
+        dateReleased	2009-10-06
+        priority	3011
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K4me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K4me1 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me1 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K04me1 cellType=Keratinocyte
+        type		wig 1.00 4868.00
+        dateSubmitted	2009-01-06 15:22:13
+        dateReleased	2009-10-06
+        priority	3012
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K4me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K4me1 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me1 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K04me1 cellType=Keratinocyte
+        type		wig 1.00 593.00
+        dateSubmitted	2009-01-06 15:22:13
+        dateReleased	2009-10-06
+        priority	3013
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K4me1
+
+        track		wgEncodeBroadChipSeqPeaksNhekH3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K4me2 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me2 in Keratinocyte cells)
+        subGroups	view=Peaks factor=H3K04me2 cellType=Keratinocyte
+        type		broadPeak
+        dateSubmitted	2009-01-07 4:41:46
+        dateReleased	2009-10-07
+        priority	3020
+        noInherit	on
+        configurable	on
+        cell		Keratinocyte
+        antibody	H3K4me2
+
+        track		wgEncodeBroadChipSeqSignalNhekH3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K4me2 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me2 in Keratinocyte cells)
+        subGroups	view=Signal factor=H3K04me2 cellType=Keratinocyte
+        type		wig 0.00 3789.50
+        dateSubmitted	2009-01-07 4:41:46
+        dateReleased	2009-10-07
+        priority	3021
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K4me2
+
+        track		wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K4me2 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me2 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K04me2 cellType=Keratinocyte
+        type		wig 1.00 3324.00
+        dateSubmitted	2009-01-07 4:41:46
+        dateReleased	2009-10-07
+        priority	3022
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K4me2
+
+        track		wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me2
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K4me2 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me2 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K04me2 cellType=Keratinocyte
+        type		wig 1.00 2225.00
+        dateSubmitted	2009-01-07 4:41:46
+        dateReleased	2009-10-07
+        priority	3023
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K4me2
+
+        track		wgEncodeBroadChipSeqPeaksNhekH3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K4me3 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me3 in Keratinocyte cells)
+        subGroups	view=Peaks factor=H3K04me3 cellType=Keratinocyte
+        type		broadPeak
+        dateSubmitted	2009-01-07 3:40:28
+        dateReleased	2009-10-07
+        priority	3030
+        noInherit	on
+        configurable	on
+        cell		Keratinocyte
+        antibody	H3K4me3
+
+        track		wgEncodeBroadChipSeqSignalNhekH3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K4me3 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me3 in Keratinocyte cells)
+        subGroups	view=Signal factor=H3K04me3 cellType=Keratinocyte
+        type		wig 0.00 12229.50
+        dateSubmitted	2009-01-07 3:40:28
+        dateReleased	2009-10-07
+        priority	3031
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K4me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K4me3 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K04me3 cellType=Keratinocyte
+        type		wig 1.00 15514.00
+        dateSubmitted	2009-01-07 3:40:28
+        dateReleased	2009-10-07
+        priority	3032
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K4me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K4me3 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K04me3 cellType=Keratinocyte
+        type		wig 1.00 2050.00
+        dateSubmitted	2009-01-07 3:40:28
+        dateReleased	2009-10-07
+        priority	3033
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K4me3
+
+        track		wgEncodeBroadChipSeqPeaksNhekH3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K9ac Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K9ac in Keratinocyte cells)
+        subGroups	view=Peaks factor=H3K09ac cellType=Keratinocyte
+        type		broadPeak
+        dateSubmitted	2009-01-06 18:41:20
+        dateReleased	2009-10-06
+        priority	3040
+        noInherit	on
+        configurable	on
+        cell		Keratinocyte
+        antibody	H3K9ac
+
+        track		wgEncodeBroadChipSeqSignalNhekH3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K9ac Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K9ac in Keratinocyte cells)
+        subGroups	view=Signal factor=H3K09ac cellType=Keratinocyte
+        type		wig 0.00 3816.00
+        dateSubmitted	2009-01-06 18:41:20
+        dateReleased	2009-10-06
+        priority	3041
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K9ac
+
+        track		wgEncodeBroadChipSeqRawSignalRep1NhekH3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K9ac Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K9ac in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K09ac cellType=Keratinocyte
+        type		wig 1.00 3068.00
+        dateSubmitted	2009-01-06 18:41:20
+        dateReleased	2009-10-06
+        priority	3042
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K9ac
+
+        track		wgEncodeBroadChipSeqRawSignalRep2NhekH3k9ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K9ac Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K9ac in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K09ac cellType=Keratinocyte
+        type		wig 1.00 1329.00
+        dateSubmitted	2009-01-06 18:41:20
+        dateReleased	2009-10-06
+        priority	3043
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K9ac
+
+        track		wgEncodeBroadChipSeqPeaksNhekH3k9me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K9me1 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K9me1 in Keratinocyte cells)
+        subGroups	view=Peaks factor=H3K09me1 cellType=Keratinocyte
+        type		broadPeak
+        dateSubmitted	2009-01-06 21:5:15
+        dateReleased	2009-10-06
+        priority	3050
+        noInherit	on
+        configurable	on
+        cell		Keratinocyte
+        antibody	H3K9me1
+
+        track		wgEncodeBroadChipSeqSignalNhekH3k9me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K9me1 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K9me1 in Keratinocyte cells)
+        subGroups	view=Signal factor=H3K09me1 cellType=Keratinocyte
+        type		wig 0.00 6121.25
+        dateSubmitted	2009-01-06 21:5:15
+        dateReleased	2009-10-06
+        priority	3051
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K9me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep1NhekH3k9me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K9me1 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K9me1 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K09me1 cellType=Keratinocyte
+        type		wig 1.00 5283.00
+        dateSubmitted	2009-01-06 21:5:15
+        dateReleased	2009-10-06
+        priority	3052
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K9me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep2NhekH3k9me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K9me1 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K9me1 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K09me1 cellType=Keratinocyte
+        type		wig 1.00 1890.00
+        dateSubmitted	2009-01-06 21:5:15
+        dateReleased	2009-10-06
+        priority	3053
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K9me1
+
+        track		wgEncodeBroadChipSeqPeaksNhekH3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K27ac Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K27ac in Keratinocyte cells)
+        subGroups	view=Peaks factor=H3K27ac cellType=Keratinocyte
+        type		broadPeak
+        dateSubmitted	2009-01-06 19:51:16
+        dateReleased	2009-10-06
+        priority	3060
+        noInherit	on
+        configurable	on
+        cell		Keratinocyte
+        antibody	H3K27ac
+
+        track		wgEncodeBroadChipSeqSignalNhekH3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K27ac Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K27ac in Keratinocyte cells)
+        subGroups	view=Signal factor=H3K27ac cellType=Keratinocyte
+        type		wig 0.00 45249.50
+        dateSubmitted	2009-01-06 19:51:16
+        dateReleased	2009-10-06
+        priority	3061
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K27ac
+
+        track		wgEncodeBroadChipSeqRawSignalRep1NhekH3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K27ac Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K27ac in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K27ac cellType=Keratinocyte
+        type		wig 1.00 57869.00
+        dateSubmitted	2009-01-06 19:51:16
+        dateReleased	2009-10-06
+        priority	3062
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K27ac
+
+        track		wgEncodeBroadChipSeqRawSignalRep2NhekH3k27ac
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K27ac Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K27ac in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K27ac cellType=Keratinocyte
+        type		wig 1.00 2101.00
+        dateSubmitted	2009-01-06 19:51:16
+        dateReleased	2009-10-06
+        priority	3063
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K27ac
+
+        track		wgEncodeBroadChipSeqPeaksNhekH3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K27me3 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K27me3 in Keratinocyte cells)
+        subGroups	view=Peaks factor=H3K27me3 cellType=Keratinocyte
+        type		broadPeak
+        dateSubmitted	2009-01-06 16:35:59
+        dateReleased	2009-10-06
+        priority	3070
+        noInherit	on
+        configurable	on
+        cell		Keratinocyte
+        antibody	H3K27me3
+
+        track		wgEncodeBroadChipSeqSignalNhekH3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K27me3 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K27me3 in Keratinocyte cells)
+        subGroups	view=Signal factor=H3K27me3 cellType=Keratinocyte
+        type		wig 0.00 5062.25
+        dateSubmitted	2009-01-06 16:35:59
+        dateReleased	2009-10-06
+        priority	3071
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K27me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep1NhekH3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K27me3 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K27me3 cellType=Keratinocyte
+        type		wig 1.00 4744.00
+        dateSubmitted	2009-01-06 16:35:59
+        dateReleased	2009-10-06
+        priority	3072
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K27me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep2NhekH3k27me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K27me3 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K27me3 cellType=Keratinocyte
+        type		wig 1.00 1257.00
+        dateSubmitted	2009-01-06 16:35:59
+        dateReleased	2009-10-06
+        priority	3073
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K27me3
+
+        track		wgEncodeBroadChipSeqPeaksNhekH3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K36me3 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K36me3 in Keratinocyte cells)
+        subGroups	view=Peaks factor=H3K36me3 cellType=Keratinocyte
+        type		broadPeak
+        dateSubmitted	2009-01-06 17:38:25
+        dateReleased	2009-10-06
+        priority	3080
+        noInherit	on
+        configurable	on
+        cell		Keratinocyte
+        antibody	H3K36me3
+
+        track		wgEncodeBroadChipSeqSignalNhekH3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K36me3 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K36me3 in Keratinocyte cells)
+        subGroups	view=Signal factor=H3K36me3 cellType=Keratinocyte
+        type		wig 0.00 4663.25
+        dateSubmitted	2009-01-06 17:38:25
+        dateReleased	2009-10-06
+        priority	3081
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K36me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep1NhekH3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K36me3 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K36me3 cellType=Keratinocyte
+        type		wig 1.00 4566.00
+        dateSubmitted	2009-01-06 17:38:25
+        dateReleased	2009-10-06
+        priority	3082
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K36me3
+
+        track		wgEncodeBroadChipSeqRawSignalRep2NhekH3k36me3
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H3K36me3 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H3K36me3 cellType=Keratinocyte
+        type		wig 1.00 711.00
+        dateSubmitted	2009-01-06 17:38:25
+        dateReleased	2009-10-06
+        priority	3083
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H3K36me3
+
+        track		wgEncodeBroadChipSeqPeaksNhekH4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H4K20me1 Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H4K20me1 in Keratinocyte cells)
+        subGroups	view=Peaks factor=H4K20me1 cellType=Keratinocyte
+        type		broadPeak
+        dateSubmitted	2009-01-06 22:19:45
+        dateReleased	2009-10-06
+        priority	3090
+        noInherit	on
+        configurable	on
+        cell		Keratinocyte
+        antibody	H4K20me1
+
+        track		wgEncodeBroadChipSeqSignalNhekH4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H4K20me1 Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H4K20me1 in Keratinocyte cells)
+        subGroups	view=Signal factor=H4K20me1 cellType=Keratinocyte
+        type		wig 0.00 7443.75
+        dateSubmitted	2009-01-06 22:19:45
+        dateReleased	2009-10-06
+        priority	3091
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H4K20me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep1NhekH4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H4K20me1 Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H4K20me1 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H4K20me1 cellType=Keratinocyte
+        type		wig 1.00 7374.00
+        dateSubmitted	2009-01-06 22:19:45
+        dateReleased	2009-10-06
+        priority	3092
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H4K20me1
+
+        track		wgEncodeBroadChipSeqRawSignalRep2NhekH4k20me1
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte H4K20me1 Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H4K20me1 in Keratinocyte cells)
+        subGroups	view=zRAW factor=H4K20me1 cellType=Keratinocyte
+        type		wig 1.00 3335.00
+        dateSubmitted	2009-01-06 22:19:45
+        dateReleased	2009-10-06
+        priority	3093
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	H4K20me1
+
+        track		wgEncodeBroadChipSeqPeaksNhekPol2b
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte Pol2(b) Pk
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (Pol2(b) in Keratinocyte cells)
+        subGroups	view=Peaks factor=Pol2(b) cellType=Keratinocyte
+        type		broadPeak
+        dateSubmitted	2009-01-07 0:36:12
+        dateReleased	2009-10-07
+        priority	3100
+        noInherit	on
+        configurable	on
+        cell		Keratinocyte
+        antibody	Pol2(b)
+
+        track		wgEncodeBroadChipSeqSignalNhekPol2b
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte Pol2(b) Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (Pol2(b) in Keratinocyte cells)
+        subGroups	view=Signal factor=Pol2(b) cellType=Keratinocyte
+        type		wig 0.00 5604.25
+        dateSubmitted	2009-01-07 0:36:12
+        dateReleased	2009-10-07
+        priority	3101
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	Pol2(b)
+
+        track		wgEncodeBroadChipSeqRawSignalRep1NhekPol2b
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte Pol2(b) Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (Pol2(b) in Keratinocyte cells)
+        subGroups	view=zRAW factor=Pol2(b) cellType=Keratinocyte
+        type		wig 1.00 2360.00
+        dateSubmitted	2009-01-07 0:36:12
+        dateReleased	2009-10-07
+        priority	3102
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	Pol2(b)
+
+        track		wgEncodeBroadChipSeqRawSignalRep2NhekPol2b
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte Pol2(b) Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (Pol2(b) in Keratinocyte cells)
+        subGroups	view=zRAW factor=Pol2(b) cellType=Keratinocyte
+        type		wig 1.00 1938.00
+        dateSubmitted	2009-01-07 0:36:12
+        dateReleased	2009-10-07
+        priority	3103
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	Pol2(b)
+
+        track		wgEncodeBroadChipSeqSignalNhekControl
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte control Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (control in Keratinocyte cells)
+        subGroups	view=Signal factor=zCTRL cellType=Keratinocyte
+        type		wig 0.00 13497.25
+        dateSubmitted	2009-01-07 7:29:45
+        dateReleased	2009-10-07
+        priority	3111
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	control
+
+        track		wgEncodeBroadChipSeqRawSignalRep1NhekControl
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte control Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (control in Keratinocyte cells)
+        subGroups	view=zRAW factor=zCTRL cellType=Keratinocyte
+        type		wig 1.00 12234.00
+        dateSubmitted	2009-01-07 7:29:45
+        dateReleased	2009-10-07
+        priority	3112
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        viewLimits  0:20
+        autoScale   off
+        cell		Keratinocyte
+        antibody	control
+
+        track		wgEncodeBroadChipSeqRawSignalRep2NhekControl
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	Keratinocyte control Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (control in Keratinocyte cells)
+        subGroups	view=zRAW factor=zCTRL cellType=Keratinocyte
+        type		wig 1.00 3360.00
+        dateSubmitted	2009-01-07 7:29:45
+        dateReleased	2009-10-07
+        priority	3113
+        noInherit	on
+        configurable	off
+        spanList	first
+        windowingFunction mean
+        viewLimits  0:20
+        autoScale   off
+        maxHeightPixels	100:16:16
+        cell		Keratinocyte
+        antibody	control
 
         track		wgEncodeBroadChipSeqPeaksK562Ctcf
         subTrack	wgEncodeBroadChipSeq
@@ -227,9 +2599,9 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (CTCF in K562 cells)
         subGroups	view=Peaks factor=CTCF cellType=K562
         type		broadPeak
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	1
+        dateSubmitted	2009-01-06 15:41:8
+        dateReleased	2009-10-06
+        priority	4000
         noInherit	on
         configurable	on
         cell		K562
@@ -240,17 +2612,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 CTCF Sig
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (CTCF in K562 cells)
         subGroups	view=Signal factor=CTCF cellType=K562
-        type		wig -1.00 2918.25
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	2
+        type		wig 0.00 13401.75
+        dateSubmitted	2009-01-06 15:41:8
+        dateReleased	2009-10-06
+        priority	4001
         noInherit	on
         configurable	on
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:32:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	CTCF
@@ -260,17 +2631,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 CTCF Raw1
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (CTCF in K562 cells)
         subGroups	view=zRAW factor=CTCF cellType=K562
-        type		wig 1.00 8965.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	3
+        type		wig 1.00 7149.00
+        dateSubmitted	2009-01-06 15:41:8
+        dateReleased	2009-10-06
+        priority	4002
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	CTCF
@@ -280,17 +2650,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 CTCF Raw2
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (CTCF in K562 cells)
         subGroups	view=zRAW factor=CTCF cellType=K562
-        type		wig 1.00 8726.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	4
+        type		wig 1.00 9663.00
+        dateSubmitted	2009-01-06 15:41:8
+        dateReleased	2009-10-06
+        priority	4003
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	CTCF
@@ -301,9 +2670,9 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me1 in K562 cells)
         subGroups	view=Peaks factor=H3K04me1 cellType=K562
         type		broadPeak
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	11
+        dateSubmitted	2009-01-05 15:15:5
+        dateReleased	2009-10-05
+        priority	4010
         noInherit	on
         configurable	on
         cell		K562
@@ -314,17 +2683,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K4me1 Sig
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me1 in K562 cells)
         subGroups	view=Signal factor=H3K04me1 cellType=K562
-        type		wig -1.00 274.25
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	12
+        type		wig 0.00 8682.25
+        dateSubmitted	2009-01-05 15:15:5
+        dateReleased	2009-10-05
+        priority	4011
         noInherit	on
         configurable	on
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:32:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K4me1
@@ -334,17 +2702,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K4me1 Raw1
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me1 in K562 cells)
         subGroups	view=zRAW factor=H3K04me1 cellType=K562
-        type		wig 1.00 3067.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	13
+        type		wig 1.00 4238.00
+        dateSubmitted	2009-01-05 15:15:5
+        dateReleased	2009-10-05
+        priority	4012
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K4me1
@@ -354,17 +2721,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K4me1 Raw2
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me1 in K562 cells)
         subGroups	view=zRAW factor=H3K04me1 cellType=K562
-        type		wig 1.00 4288.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	14
+        type		wig 1.00 5992.00
+        dateSubmitted	2009-01-05 15:15:5
+        dateReleased	2009-10-05
+        priority	4013
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K4me1
@@ -375,9 +2741,9 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me2 in K562 cells)
         subGroups	view=Peaks factor=H3K04me2 cellType=K562
         type		broadPeak
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	21
+        dateSubmitted	2009-01-05 13:52:52
+        dateReleased	2009-10-05
+        priority	4020
         noInherit	on
         configurable	on
         cell		K562
@@ -388,17 +2754,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K4me2 Sig
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me2 in K562 cells)
         subGroups	view=Signal factor=H3K04me2 cellType=K562
-        type		wig -1.00 1190.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	22
+        type		wig 0.00 5002.00
+        dateSubmitted	2009-01-05 13:52:52
+        dateReleased	2009-10-05
+        priority	4021
         noInherit	on
         configurable	on
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:32:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K4me2
@@ -408,17 +2773,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K4me2 Raw1
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me2 in K562 cells)
         subGroups	view=zRAW factor=H3K04me2 cellType=K562
-        type		wig 1.00 4239.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	23
+        type		wig 1.00 2072.00
+        dateSubmitted	2009-01-05 13:52:52
+        dateReleased	2009-10-05
+        priority	4022
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K4me2
@@ -428,17 +2792,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K4me2 Raw2
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me2 in K562 cells)
         subGroups	view=zRAW factor=H3K04me2 cellType=K562
-        type		wig 1.00 2741.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	24
+        type		wig 1.00 4060.00
+        dateSubmitted	2009-01-05 13:52:52
+        dateReleased	2009-10-05
+        priority	4023
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K4me2
@@ -449,9 +2812,9 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K4me3 in K562 cells)
         subGroups	view=Peaks factor=H3K04me3 cellType=K562
         type		broadPeak
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	31
+        dateSubmitted	2009-01-05 11:40:6
+        dateReleased	2009-10-05
+        priority	4030
         noInherit	on
         configurable	on
         cell		K562
@@ -462,17 +2825,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K4me3 Sig
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K4me3 in K562 cells)
         subGroups	view=Signal factor=H3K04me3 cellType=K562
-        type		wig -1.00 732.25
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	32
+        type		wig 0.00 16145.25
+        dateSubmitted	2009-01-05 11:40:6
+        dateReleased	2009-10-05
+        priority	4031
         noInherit	on
         configurable	on
-        spanList	1
+        spanList	first
         windowingFunction mean
         maxHeightPixels	100:32:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K4me3
@@ -482,17 +2844,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K4me3 Raw1
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K4me3 in K562 cells)
         subGroups	view=zRAW factor=H3K04me3 cellType=K562
-        type		wig 1.00 9457.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	33
+        type		wig 1.00 11553.00
+        dateSubmitted	2009-01-05 11:40:6
+        dateReleased	2009-10-05
+        priority	4032
         noInherit	on
         configurable	off
-        spanList	1
+        spanList	first
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K4me3
@@ -502,17 +2863,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K4me3 Raw2
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K4me3 in K562 cells)
         subGroups	view=zRAW factor=H3K04me3 cellType=K562
-        type		wig 1.00 5643.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	34
+        type		wig 1.00 7133.00
+        dateSubmitted	2009-01-05 11:40:6
+        dateReleased	2009-10-05
+        priority	4033
         noInherit	on
         configurable	off
-        spanList	1
+        spanList	first
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K4me3
@@ -523,9 +2883,9 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K9ac in K562 cells)
         subGroups	view=Peaks factor=H3K09ac cellType=K562
         type		broadPeak
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	101
+        dateSubmitted	2009-01-06 11:30:35
+        dateReleased	2009-10-06
+        priority	4040
         noInherit	on
         configurable	on
         cell		K562
@@ -536,17 +2896,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K9ac Sig
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K9ac in K562 cells)
         subGroups	view=Signal factor=H3K09ac cellType=K562
-        type		wig -1.00 1405.25
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	102
+        type		wig 0.00 17517.00
+        dateSubmitted	2009-01-06 11:30:35
+        dateReleased	2009-10-06
+        priority	4041
         noInherit	on
         configurable	on
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:32:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K9ac
@@ -556,17 +2915,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K9ac Raw1
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K9ac in K562 cells)
         subGroups	view=zRAW factor=H3K09ac cellType=K562
-        type		wig 1.00 8656.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	103
+        type		wig 1.00 9931.00
+        dateSubmitted	2009-01-06 11:30:35
+        dateReleased	2009-10-06
+        priority	4042
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K9ac
@@ -576,17 +2934,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K9ac Raw2
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K9ac in K562 cells)
         subGroups	view=zRAW factor=H3K09ac cellType=K562
-        type		wig 1.00 7472.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	104
+        type		wig 1.00 13285.00
+        dateSubmitted	2009-01-06 11:30:35
+        dateReleased	2009-10-06
+        priority	4043
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K9ac
@@ -597,9 +2954,9 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K9me1 in K562 cells)
         subGroups	view=Peaks factor=H3K09me1 cellType=K562
         type		broadPeak
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	111
+        dateSubmitted	2009-01-06 16:51:50
+        dateReleased	2009-10-06
+        priority	4050
         noInherit	on
         configurable	on
         cell		K562
@@ -610,17 +2967,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K9me1 Sig
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K9me1 in K562 cells)
         subGroups	view=Signal factor=H3K09me1 cellType=K562
-        type		wig -1.00 136.75
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	112
+        type		wig 0.00 27376.00
+        dateSubmitted	2009-01-06 16:51:50
+        dateReleased	2009-10-06
+        priority	4051
         noInherit	on
         configurable	on
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:32:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K9me1
@@ -630,17 +2986,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K9me1 Raw1
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K9me1 in K562 cells)
         subGroups	view=zRAW factor=H3K09me1 cellType=K562
-        type		wig 1.00 12895.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	113
+        type		wig 1.00 14561.00
+        dateSubmitted	2009-01-06 16:51:50
+        dateReleased	2009-10-06
+        priority	4052
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K9me1
@@ -650,17 +3005,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K9me1 Raw2
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K9me1 in K562 cells)
         subGroups	view=zRAW factor=H3K09me1 cellType=K562
-        type		wig 1.00 13150.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	114
+        type		wig 1.00 16644.00
+        dateSubmitted	2009-01-06 16:51:50
+        dateReleased	2009-10-06
+        priority	4053
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K9me1
@@ -671,9 +3025,9 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K27ac in K562 cells)
         subGroups	view=Peaks factor=H3K27ac cellType=K562
         type		broadPeak
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	201
+        dateSubmitted	2009-01-06 14:10:41
+        dateReleased	2009-10-06
+        priority	4060
         noInherit	on
         configurable	on
         cell		K562
@@ -684,17 +3038,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K27ac Sig
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K27ac in K562 cells)
         subGroups	view=Signal factor=H3K27ac cellType=K562
-        type		wig -1.00 2905.75
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	202
+        type		wig 0.00 9215.25
+        dateSubmitted	2009-01-06 14:10:41
+        dateReleased	2009-10-06
+        priority	4061
         noInherit	on
         configurable	on
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:32:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K27ac
@@ -704,17 +3057,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K27ac Raw1
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K27ac in K562 cells)
         subGroups	view=zRAW factor=H3K27ac cellType=K562
-        type		wig 1.00 5596.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	203
+        type		wig 1.00 6647.00
+        dateSubmitted	2009-01-06 14:10:41
+        dateReleased	2009-10-06
+        priority	4062
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K27ac
@@ -724,17 +3076,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K27ac Raw2
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K27ac in K562 cells)
         subGroups	view=zRAW factor=H3K27ac cellType=K562
-        type		wig 1.00 3641.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	204
+        type		wig 1.00 4622.00
+        dateSubmitted	2009-01-06 14:10:41
+        dateReleased	2009-10-06
+        priority	4063
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K27ac
@@ -745,9 +3096,9 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K27me3 in K562 cells)
         subGroups	view=Peaks factor=H3K27me3 cellType=K562
         type		broadPeak
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	211
+        dateSubmitted	2009-01-05 17:04:42
+        dateReleased	2009-10-05
+        priority	4070
         noInherit	on
         configurable	on
         cell		K562
@@ -758,17 +3109,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K27me3 Sig
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K27me3 in K562 cells)
         subGroups	view=Signal factor=H3K27me3 cellType=K562
-        type		wig -1.00 111.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	212
+        type		wig 0.00 17135.00
+        dateSubmitted	2009-01-05 17:04:42
+        dateReleased	2009-10-05
+        priority	4071
         noInherit	on
         configurable	on
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:32:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K27me3
@@ -778,17 +3128,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K27me3 Raw1
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K27me3 in K562 cells)
         subGroups	view=zRAW factor=H3K27me3 cellType=K562
-        type		wig 1.00 10724.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	213
+        type		wig 1.00 13354.00
+        dateSubmitted	2009-01-05 17:04:42
+        dateReleased	2009-10-05
+        priority	4072
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K27me3
@@ -798,17 +3147,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K27me3 Raw2
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K27me3 in K562 cells)
         subGroups	view=zRAW factor=H3K27me3 cellType=K562
-        type		wig 1.00 5383.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	214
+        type		wig 1.00 7235.00
+        dateSubmitted	2009-01-05 17:04:42
+        dateReleased	2009-10-05
+        priority	4073
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K27me3
@@ -819,9 +3167,9 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H3K36me3 in K562 cells)
         subGroups	view=Peaks factor=H3K36me3 cellType=K562
         type		broadPeak
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	301
+        dateSubmitted	2009-01-06 10:31:41
+        dateReleased	2009-10-06
+        priority	4080
         noInherit	on
         configurable	on
         cell		K562
@@ -832,17 +3180,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K36me3 Sig
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H3K36me3 in K562 cells)
         subGroups	view=Signal factor=H3K36me3 cellType=K562
-        type		wig -1.00 115.50
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	302
+        type		wig 0.00 10114.25
+        dateSubmitted	2009-01-06 10:31:41
+        dateReleased	2009-10-06
+        priority	4081
         noInherit	on
         configurable	on
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:32:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K36me3
@@ -852,12 +3199,10 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K36me3 Raw1
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H3K36me3 in K562 cells)
         subGroups	view=zRAW factor=H3K36me3 cellType=K562
-        type		wig 1.00 8325.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	303
+        type		wig 1.00 11433.00
+        dateSubmitted	2009-01-06 10:31:41
+        dateReleased	2009-10-06
+        priority	4082
         noInherit	on
         configurable	off
         spanList	1
@@ -872,17 +3217,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H3K36me3 Raw2
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H3K36me3 in K562 cells)
         subGroups	view=zRAW factor=H3K36me3 cellType=K562
-        type		wig 1.00 5306.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	304
+        type		wig 1.00 7087.00
+        dateSubmitted	2009-01-06 10:31:41
+        dateReleased	2009-10-06
+        priority	4083
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H3K36me3
@@ -893,9 +3237,9 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (H4K20me1 in K562 cells)
         subGroups	view=Peaks factor=H4K20me1 cellType=K562
         type		broadPeak
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	401
+        type		wig 0.00 16178.00
+        dateSubmitted	2009-01-06 18:32:6
+        priority	4090
         noInherit	on
         configurable	on
         cell		K562
@@ -906,17 +3250,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H4K20me1 Sig
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (H4K20me1 in K562 cells)
         subGroups	view=Signal factor=H4K20me1 cellType=K562
-        type		wig -1.00 150.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	402
+        subGroups	view=Signal factor=H4K20me1 cellType=K562
+        type		wig 0.00 16178.00
+        dateSubmitted	2009-01-06 18:32:6
+        priority	4091
         noInherit	on
         configurable	on
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:32:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H4K20me1
@@ -926,17 +3269,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H4K20me1 Raw1
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (H4K20me1 in K562 cells)
         subGroups	view=zRAW factor=H4K20me1 cellType=K562
-        type		wig 1.00 8371.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	403
+        type		wig 1.00 2268.00
+        type		wig 0.00 16178.00
+        dateSubmitted	2009-01-06 18:32:6
+        priority	4092
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H4K20me1
@@ -946,17 +3288,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 H4K20me1 Raw2
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (H4K20me1 in K562 cells)
         subGroups	view=zRAW factor=H4K20me1 cellType=K562
-        type		wig 1.00 13503.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	404
+        type		wig 1.00 16566.00
+        type		wig 0.00 16178.00
+        dateSubmitted	2009-01-06 18:32:6
+        priority	4093
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	H4K20me1
@@ -967,9 +3308,9 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Peaks (Pol2(b) in K562 cells)
         subGroups	view=Peaks factor=Pol2(b) cellType=K562
         type		broadPeak
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	501
+        dateSubmitted	2009-01-06 20:39:56
+        dateReleased	2009-10-06
+        priority	4100
         noInherit	on
         configurable	on
         cell		K562
@@ -980,17 +3321,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 Pol2(b) Sig
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (Pol2(b) in K562 cells)
         subGroups	view=Signal factor=Pol2(b) cellType=K562
-        type		wig -1.00 889.75
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	502
+        type		wig 0.00 17110.00
+        dateSubmitted	2009-01-06 20:39:56
+        dateReleased	2009-10-06
+        priority	4101
         noInherit	on
         configurable	on
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:32:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	Pol2(b)
@@ -1000,17 +3340,16 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 Pol2(b) Raw1
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (Pol2(b) in K562 cells)
         subGroups	view=zRAW factor=Pol2(b) cellType=K562
-        type		wig 1.00 6759.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	503
+        type		wig 1.00 6599.00
+        dateSubmitted	2009-01-06 20:39:56
+        dateReleased	2009-10-06
+        priority	4102
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	Pol2(b)
@@ -1020,57 +3359,73 @@ settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:2918.25,autoScale=of
         shortLabel	K562 Pol2(b) Raw2
         longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (Pol2(b) in K562 cells)
         subGroups	view=zRAW factor=Pol2(b) cellType=K562
-        type		wig 1.00 11027.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-27 12:13:2
-        dateReleased	2009-08-27
-        priority	504
+        type		wig 1.00 13248.00
+        dateSubmitted	2009-01-06 20:39:56
+        dateReleased	2009-10-06
+        priority	4103
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	Pol2(b)
 
-        track		wgEncodeBroadChipSeqRawSignalRep1K562Control
+        track		wgEncodeBroadChipSeqSignalK562Control
         subTrack	wgEncodeBroadChipSeq
-        shortLabel	control K562 Raw1
-        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (control in K562 cells)
-        subGroups	view=zRAW factor=zCTRL cellType=K562
-        type		wig 1.00 13356.00
+        shortLabel	K562 control Sig
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Signal (control in K562 cells)
+        subGroups	view=Signal factor=zCTRL cellType=K562
+        type		wig 0.00 23372.25
+        dateSubmitted	2009-01-06 22:28:18
+        dateReleased	2009-10-06
+        priority	4111
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
         viewLimits  0:20
         autoScale   off
-        dateSubmitted	2008-11-30 11:29:37
-        dateReleased	2009-08-30
-        priority	603
+        cell		K562
+        antibody	control
+
+        track		wgEncodeBroadChipSeqRawSignalRep1K562Control
+        subTrack	wgEncodeBroadChipSeq
+        shortLabel	K562 control Raw1
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 1 (K562 WCE control)
+        subGroups	view=zRAW factor=zCTRL cellType=K562
+        type		wig 1.00 15525.00
+        dateSubmitted	2009-01-06 22:28:18
+        dateReleased	2009-10-06
+        priority	4112
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	control
 
         track		wgEncodeBroadChipSeqRawSignalRep2K562Control
         subTrack	wgEncodeBroadChipSeq
-        shortLabel	control K562 Raw2
-        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (control in K562 cells)
+        shortLabel	K562 control Raw2
+        longLabel	ENCODE Histone Modifications Broad ChIP-Seq Raw Signal Replicate 2 (K562 WCE control)
         subGroups	view=zRAW factor=zCTRL cellType=K562
-        type		wig 1.00 21178.00
-        viewLimits  0:20
-        autoScale   off
-        dateSubmitted	2008-11-30 11:29:37
-        dateReleased	2009-08-30
-        priority	604
+        type		wig 1.00 10925.00
+        dateSubmitted	2009-01-06 22:28:18
+        dateReleased	2009-10-06
+        priority	4113
         noInherit	on
         configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
+        viewLimits  0:20
         autoScale   off
         cell		K562
         antibody	control
@@ -2559,7 +4914,7 @@ wgEncode        1
 	type		broadPeak
 	dateSubmitted	2008-11-25 0:7:42
 	dateReleased	2009-08-25
-	priority	10
+    priority	10
 	noInherit	on
 	configurable	on
 	rnaExtract	longNonPolyA
@@ -3257,7 +5612,7 @@ wgEncode	1
 
 track wgEncodeYaleChIPseq
 compositeTrack on
-shortLabel TFSB Yale
+shortLabel Yale TFBS
 longLabel ENCODE Transcription Factor Binding Sites by Yale/UCDavis/Harvard ChIP-seq
 group regulation
 priority 0
@@ -4958,6 +7313,18 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 baseColorUseCds given
 baseColorDefault genomicCodons
 wgEncode 1
+#cdsDrawDefault genomic\ codons
+#itemClassTbl encodeGencodeGeneClassMar07
+#geneClasses Artifact Known Novel_CDS Novel_Transcript Putative TEC Polymorphic Processed_pseudogene Unprocessed_pseudogene
+#gClass_Known 33,91,51
+#gClass_Novel_CDS 33,91,51
+#gClass_Novel_Transcript  84,188,0
+#gClass_TEC  84,188,0
+#gClass_Putative  84,188,0
+#gClass_Artifact 163,168,163
+#gClass_Polymorphic 160,32,240
+#gClass_Processed_pseudogene 0,91,191
+#gClass_Unprocessed_pseudogene 0,91,191
 
 	track	wgEncodeSangerGencodeGencodeManual20081001
 	subTrack	wgEncodeSangerGencode
