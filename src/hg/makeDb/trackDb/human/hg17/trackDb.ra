@@ -2739,3 +2739,13 @@ searchType bed
 searchPriority 10
 termRegex har[0-9]+
 
+track fox2ClipSeq
+shortLabel FOX2 CLIPseq
+longLabel FOX2 adaptor-trimmed CLIPseq reads
+group regulation
+priority 250
+visibility hide
+color 0,96,0
+type bed 9 .
+itemRgb on
+
