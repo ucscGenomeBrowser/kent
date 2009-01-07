@@ -15763,7 +15763,7 @@ cat > listPp.csh << 'EOF'
 
     ssh kkstore02
     cd /cluster/data/hg18/bed/multiz28way
-cat > downloads.csh << 'EOF'
+    cat > downloads.csh << 'EOF'
     date
     set dir = /cluster/data/hg18/bed/multiz28way
     mkdir -p mafDownloads
@@ -25783,6 +25783,126 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	<< happy emacs
 
     display histo.png &
+
+#########################################################################
+# phyloP conservation for 44-way (2009-01-05 kate)
+#
+# Vertebrate, Placental
+# Also doing Euarchontoglire, since Hiram did
+#
+# Using newer scoring method LRT (replaces SPH), based
+# on scoring method experiments, above (compared to SCORE method).
+# Using phast from Adam's student Melissa Hubisz, with fixes needed for LRT scoring
+# Will replace with version from CVS if/when these fixes are integrated
+# PHAST version is 0.9.9.9b
+
+    # split SS files into 1M chunks (tried 10M used for phastCons, and these
+    #   took 5hrs/chunk w/ LRT scoring)
+
+    ssh swarm
+    cd /cluster/data/hg18/bed/multiz44way
+    mkdir consPhyloP
+    cd consPhyloP
+    mkdir ss run.split
+    cd run.split
+
+cat << 'EOF' > doSplit.csh
+    set c = $1
+    set d = /cluster/data/hg18/bed/multiz44way
+    set in =  $d/cons/ss
+    set out = $d/consPhyloP/ss
+    set PHASTBIN = /cluster/bin/phast.2008-12-18
+    @ i=0
+    foreach f (`ls $in/$c/*.ss | sort -n -t\. -k2`)
+        @ i++
+        mkdir -p $out/$c/$i
+        $PHASTBIN/msa_split $f -i SS -o SS \
+            -r $out/$c/$i/$c.$i -w 1000000,0 -I 1000 -B 5000
+    end
+    echo "Done" >> $out/$c.done
+'EOF'
+# << happy emacs
+
+    set d = /cluster/data/hg18/bed/multiz44way/consPhyloP
+    set JOBS = $d/run.split/jobList
+    rm -f $JOBS
+    touch $JOBS
+    foreach c (`awk '{print $1}' /cluster/data/hg18/chrom.sizes`)
+        echo "csh doSplit.csh $c {check out line+ $d/ss/$c.done}" >> $JOBS
+    end
+
+    para create jobList
+        # 49 jobs
+    para try
+    para check
+    para push
+    para time
+
+    # run phyloP with score=LRT 
+    ssh swarm
+    cd /cluster/data/hg18/bed/multiz44way/consPhyloP
+    mkdir run.phyloP
+    cd run.phyloP
+
+    # Adjust model file base composition background and rate matrix to be
+    # representative of whole-genome (.41 -- as was done for ENCODE)
+    # using utility, 'modFreqs' from PHAST package
+
+    set PHASTBIN = /cluster/bin/phast.2008-12-18
+    set gc = `grep BACKGROUND /cluster/data/hg18/bed/multiz17way/cons/elliotsEncode.mod |  awk '{printf "%0.3f\n", $3 + $4}'`
+    echo $gc
+    # .410
+    # NOTE: this corresponds well to Hiram's GC values from his phyloFit runs
+    # on the 44-way ss files
+    $PHASTBIN/modFreqs ../../4d/phyloFit.all.mod $gc > ../../4d/44way.all.mod
+
+cat > doPhyloP.csh << 'EOF'
+    set f = $1
+    set out = $2
+    set c = $f:r:r
+    set n = $f:r:e
+    set tmp = /scratch/tmp/$f
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp -p /cluster/data/hg18/bed/multiz44way/consPhyloP/ss/$c/$n/$f.ss $tmp
+    cp -p tree.mod $tmp
+    pushd $tmp > /dev/null
+    set PHASTBIN = /cluster/bin/phast.2008-12-18
+    $PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $c \
+                -i SS tree.mod $f.ss > $f.wig
+    popd > /dev/null
+    mkdir -p $out:h
+    mv $tmp/$f.wig $out
+    rm -fr $tmp
+'EOF'
+
+    # Create list of chunks
+    pushd /cluster/data/hg18/bed/multiz44way/consPhyloP/ss
+    ls chr*/*/chr*.*.ss | sed -e 's/.ss$//' -e 's/^\.\///' > \
+        /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/in.list
+    popd > /dev/null
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat > template << 'EOF'
+#LOOP
+csh ../doPhyloP.csh $(file1) {check out line+ wig/$(dir1)/$(file1).wig}
+#ENDLOOP
+'EOF'
+    # setup run for all species
+    mkdir all
+    cd all
+    cp ../../../4d/44way.all.mod tree.mod
+    rm -fr wig
+    mkdir wig
+
+    # << happy emacs
+    gensub2 ../in.list single ../template jobList
+    # 2823 jobs
+    para create jobList
+    para try
+    para check
+    para push
 
 #########################################################################
 # Create Syntenic and Recip Best net files to load into tracks to view
