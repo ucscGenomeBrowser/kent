@@ -39,47 +39,21 @@ function updatePosition(img, selection, singleClick)
     var winEnd = parseInt(document.getElementById("hgt.winEnd").value);
     var imgWidth = jQuery(img).width() - insideX;
 
-    var update = false;
-    if(revCmplDisp) {
-        // clip selection
-        if(selection.x1 > imgWidth) {
-	    selection.x1 = imgWidth;
-	    update = true;
-        }
-        if(selection.x2 > imgWidth) {
-	    selection.x2 = imgWidth;
-	    update = true;
-        }
-    } else {
-        if(selection.x1 < insideX) {
-	    selection.x1 = insideX;
-	    update = true;
-        }
-        if(selection.x2 < insideX) {
-	    selection.x2 = insideX;
-	    update = true;
-        }
-    }
-    if(update) {
-	// Force update of selection box
-	jQuery(img).imgAreaSelect({x1: selection.x1,x2: selection.x2,y1: selection.y1,y2: selection.y2});
-    }
-
-    var width = winEnd - winStart + 1;
+    var width = winEnd - winStart;
     var newPos = null;
     var newSize = null;
     var mult = width / imgWidth;			    // mult is bp/pixel multiplier
     var startDelta;                                     // startDelta is how many bp's to the right/left
     if(revCmplDisp) {
         var x1 = Math.min(imgWidth, selection.x1);
-        startDelta = Math.round(mult * (imgWidth - x1));
+        startDelta = Math.floor(mult * (imgWidth - x1));
     } else {
         var x1 = Math.max(insideX, selection.x1);
-        startDelta = Math.round(mult * (x1 - insideX));
+        startDelta = Math.floor(mult * (x1 - insideX));
     }
     if(singleClick) {
-	var newStart = winStart + startDelta - Math.floor(newWinWidth / 2);
-	var newEnd = winStart + startDelta + Math.floor(newWinWidth / 2);
+	var newStart = (winStart + 1) + (startDelta - Math.floor(newWinWidth / 2));
+	var newEnd = (winStart + 1) + (startDelta + Math.floor(newWinWidth / 2));
 	newPos = chromName + ":" + newStart + "-" + newEnd;
 	newSize = newEnd - newStart + 1;
     } else {
@@ -87,13 +61,18 @@ function updatePosition(img, selection, singleClick)
         if(revCmplDisp) {
             endDelta = startDelta;
             var x2 = Math.min(imgWidth, selection.x2);
-	    startDelta = Math.round(mult * (imgWidth - x2));
+	    startDelta = Math.floor(mult * (imgWidth - x2));
         } else {
             var x2 = Math.max(insideX, selection.x2);
-	    endDelta = Math.round(mult * (x2 - insideX));
+	    endDelta = Math.floor(mult * (x2 - insideX));
         }
-        newPos = chromName + ":" + (winStart + startDelta) + "-" + (winStart + endDelta);
-        newSize = endDelta - startDelta + 1;
+        var newStart = winStart + 1 + startDelta;
+        var newEnd = winStart + 1 + endDelta;
+        if(newEnd > winEnd) {
+            newEnd = winEnd;
+        }
+        newPos = chromName + ":" + newStart + "-" + newEnd;
+        newSize = newEnd - newStart + 1;
     }
 
     if(newPos != null) {
