@@ -7329,7 +7329,7 @@ wgEncode 1
 	track	wgEncodeSangerGencodeGencodeManual20081001
 	subTrack	wgEncodeSangerGencode
 	shortLabel	Manual (Oct08)
-	longLabel	ENCODE Gencode Manual Gene Annotations (level 1+2) (Oct-08
+	longLabel	ENCODE Gencode Manual Gene Annotations (level 1+2) (Oct-08)
 	subGroups	view=GencodeManual freezeDate=2008-10-01
 	type	genePred
 	dateSubmitted	2008-10-21 12:24:57
