@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.16 2008/11/17 21:58:20 hiram Exp $
+# $Id: makeGenomeDb.pl,v 1.17 2009/01/07 01:12:46 markd Exp $
 
 use Getopt::Long;
 use warnings;
@@ -97,6 +97,9 @@ dbDbSpeciesDir dirName
     will be added.  For vertebrates, this is often a lower-cased common name,
     but various patterns have been used especially for non-vertebrates.
 
+taxId ncbiTaxId
+  - The NCBI numeric taxonomy id.  If a pseudo-genome, like a reconstruction
+    is being built, specify 0.
 
 -----------------------------------------------------------------------------
 Conditionally required config.ra settings:
@@ -158,7 +161,7 @@ use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
 # Required config parameters:
 my ($db, $scientificName, $assemblyDate, $assemblyLabel, $orderKey,
-    $mitoAcc, $fastaFiles, $dbDbSpeciesDir);
+    $mitoAcc, $fastaFiles, $dbDbSpeciesDir, $taxId);
 # Conditionally required config parameters:
 my ($fakeAgpMinContigGap, $fakeAgpMinScaffoldGap,
     $clade, $genomeCladePriority);
@@ -229,6 +232,7 @@ sub parseConfig {
   $mitoAcc = &requireVar('mitoAcc', \%config);
   $fastaFiles = &requireVar('fastaFiles', \%config);
   $dbDbSpeciesDir = &requireVar('dbDbSpeciesDir', \%config);
+  $taxId = &requireVar('taxId', \%config);
   # Conditionally required variables -- optional here, but they might be
   # required later on in some cases.
   $fakeAgpMinContigGap = &optionalVar('fakeAgpMinContigGap', \%config);
@@ -787,11 +791,12 @@ DELETE from dbDb where name = "$db";
 INSERT INTO dbDb
     (name, description, nibPath, organism,
      defaultPos, active, orderKey, genome, scientificName,
-     htmlPath, hgNearOk, hgPbOk, sourceName)
+     htmlPath, hgNearOk, hgPbOk, sourceName, taxId)
 VALUES
     ("$db", "$assemblyDate", "$HgAutomate::gbdb/$db", "$genome",
      "$defaultPos", 1, $orderKey, "$genome", "$scientificName",
-     "$HgAutomate::gbdb/$db/html/description.html", 0, 0, "$assemblyLabel");
+     "$HgAutomate::gbdb/$db/html/description.html", 0, 0, "$assemblyLabel",
+    $taxId);
 _EOF_
   ;
   close($fh);
