@@ -42,6 +42,12 @@ void dumpCookieList();
 boolean cgiIsOnWeb();
 /* Return TRUE if looks like we're being run as a CGI. */
 
+char *cgiRequestMethod();
+/* Return CGI REQUEST_METHOD (such as 'GET/POST/PUT/DELETE/HEAD') */
+
+char *cgiRequestUri();
+/* Return CGI REQUEST_URI */
+
 char *cgiScriptName();
 /* Return name of script so libs can do context-sensitive stuff. */
 
@@ -361,5 +367,12 @@ void logCgiToStderr();
 void cgiResetState();
 /* This is for reloading CGI settings multiple times in the same program
  * execution.  No effect if state has not yet been initialized. */
+
+void initCgiInputMethod(char *method);
+/* Initialize CGI input stuff assuming HTTP "method"
+ * such as "GET" or "POST".
+ * After this CGI vars are
+ * stored in an internal hash/list regardless of how they
+ * were passed to the program. */
 
 #endif /* CHEAPCGI_H */

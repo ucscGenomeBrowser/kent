@@ -15,7 +15,7 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.109 2008/12/18 05:53:24 larrym Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.109.2.1 2009/01/08 05:36:24 mikep Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -48,6 +48,18 @@ boolean cgiIsOnWeb()
 /* Return TRUE if looks like we're being run as a CGI. */
 {
 return getenv("REQUEST_METHOD") != NULL;
+}
+
+char *cgiRequestMethod()
+/* Return CGI REQUEST_METHOD (such as 'GET/POST/PUT/DELETE/HEAD') */
+{
+return getenv("REQUEST_METHOD");
+}
+
+char *cgiRequestUri()
+/* Return CGI REQUEST_URI */
+{
+return getenv("REQUEST_URI");
 }
 
 char *cgiScriptName()
@@ -513,12 +525,22 @@ static void initCgiInput()
  * stored in an internal hash/list regardless of how they
  * were passed to the program. */
 {
+initCgiInputMethod(NULL);
+}
+
+void initCgiInputMethod(char *method)
+/* Initialize CGI input stuff assuming HTTP "method"
+ * such as "GET" or "POST".
+ * After this CGI vars are
+ * stored in an internal hash/list regardless of how they
+ * were passed to the program. */
+{
 char* s;
 
 if (inputString != NULL)
     return;
 
-_cgiFindInput(NULL);
+_cgiFindInput(method);
 
 #ifndef GBROWSE
 /* check to see if the input is a multipart form */
