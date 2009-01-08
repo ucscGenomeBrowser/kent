@@ -2739,13 +2739,55 @@ searchType bed
 searchPriority 10
 termRegex har[0-9]+
 
-track fox2ClipSeq
+track fox2ClipSeqComp
+compositeTrack on
 shortLabel FOX2 CLIPseq
 longLabel FOX2 adaptor-trimmed CLIPseq reads
+subGroup1	view Tracks reads=Reads density=Density
 group regulation
 priority 250
 visibility hide
-color 0,96,0
-type bed 9 .
-itemRgb on
+visibilityViewDefaults	reads=pack density=full
+type bed 3 .
 
+    track fox2ClipSeq
+    subTrack fox2ClipSeqComp
+    shortLabel FOX2 CLIPseq
+    longLabel FOX2 adaptor-trimmed CLIPseq reads
+    subGroups	view=reads
+    priority 1
+    type bed 9 .
+    itemRgb on
+    noInherit	on
+
+    track fox2ClipSeqDensityPlus
+    subTrack fox2ClipSeqComp
+    shortLabel Density Plus
+    longLabel FOX2 adaptor-trimmed CLIPseq Density Plus Strand
+    subGroups	view=density
+    priority 2
+    type wig 0 2401
+    configurable	on
+    noInherit	on
+    defaultViewLimits 0.0:1000.0
+    spanList 1
+    autoScaleDefault On
+    maxHeightPixels 128:36:16
+    graphTypeDefault Bar
+    windowingFunction mean
+
+    track fox2ClipSeqDensityNegative
+    subTrack fox2ClipSeqComp
+    shortLabel Density Negative
+    longLabel FOX2 adaptor-trimmed CLIPseq Density Negative Strand
+    subGroups	view=density
+    priority 3
+    type wig 0 2401
+    configurable	on
+    noInherit	on
+    defaultViewLimits 0.0:1000.0
+    spanList 1
+    autoScaleDefault On
+    maxHeightPixels 128:36:16
+    graphTypeDefault Bar
+    windowingFunction mean
