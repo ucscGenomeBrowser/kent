@@ -15582,65 +15582,6 @@ csh ../../doPhyloP.csh LRT $(file1) {check out line+ /san/sanvol1/scratch/hg18/m
     para check
     para push
 
-    ########################################################################
-    # run new phyloP for contextual zooming
-    ssh memk
-    cd /cluster/data/hg18/bed/multiz28way/cons
-    mkdir run.phyloPcz
-    cd run.phyloPcz
-cat > doPhyloP.csh << 'EOF'
-    set f = $1
-    set out = $2
-    set c = $f:r:r
-    set n = $f:r:e
-    set grp = $cwd:t
-    set tmp = /scratch/tmp/$f
-    mkdir -p $tmp
-    set san = /san/sanvol1/scratch/hg18/multiz28way/phyloPcz
-    cp -p $san/ss/$c/$n/$f.ss tree.mod $tmp
-    pushd $tmp > /dev/null
-
-    # Built phast from CornellCVS on 3/8/06 in /cluster/bin/phast.build.
-    # Symlinked the bin to /cluster/bin/phast.cz
-    set PHASTBIN = /cluster/bin/phast.cz
-    $PHASTBIN/phyloP --wig-scores --chrom $c \
-                -i SS tree.mod $f.ss > $f.wig
-
-    popd > /dev/null
-    mkdir -p $out:h
-    mv $tmp/$f.wig $out
-    rm -fr $tmp
-'EOF'
-    # Create list of chunks (just chr7 for now)
-    pushd /san/sanvol1/scratch/hg18/multiz28way/phyloP/ss
-    find . -name "chr7.ss" -print | sed -e 's/.ss$//' -e 's/^\.\///' > \
-        /cluster/data/hg18/bed/multiz28way/cons/run.phyloPcz/in.list
-    popd
-
-    # setup run
-    mkdir -p all
-    cd all
-    cp ../../28way.mod tree.mod
-
-    # Create template file
-    #	file1 == $chr/$chunk/file name without .ss suffix
-    cat > template << 'EOF'
-#LOOP
-csh ../doPhyloP.csh $(file1) {check out line+ /san/sanvol1/scratch/hg18/multiz28way/phyloPcz/all/$(path1).wig}
-#ENDLOOP
-'EOF'
-
-    # << happy emacs
-    gensub2 ../in.list single template jobList
-    para create jobList
-    para try
-    para check
-    para push
-    # 29000 jobs
-    # avg. job 4min, longest job 8min
-    # 2 hippos (11 hrs) stopped and restarted.
-    # Should take a few hours ?
-
     # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
     cd /san/sanvol1/scratch/hg18/multiz28way/phyloP/all
@@ -15682,7 +15623,6 @@ csh ../doPhyloP.csh $(file1) {check out line+ /san/sanvol1/scratch/hg18/multiz28
     #Longest running job:                0s       0.00m     0.00h    0.00d
     #Longest finished job:             147s       2.45m     0.04h    0.00d
     #Submission to last job:         37642s     627.37m    10.46h    0.44d
-
 
     # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
@@ -25903,6 +25843,110 @@ csh ../doPhyloP.csh $(file1) {check out line+ wig/$(dir1)/$(file1).wig}
     para try
     para check
     para push
+
+    para time
+    #Completed: 2823 of 2823 jobs
+    #CPU time in finished jobs:    4691641s   78194.02m  1303.23h   54.30d  0.149 y
+    #IO & Wait Time:                171343s    2855.71m    47.60h    1.98d  0.005 y
+    #Average job time:                1723s      28.71m     0.48h    0.02d
+    #Longest finished job:            2451s      40.85m     0.68h    0.03d
+    #Submission to last job:          6055s     100.92m     1.68h    0.07d
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP
+# check for clean dir here -- chr* will match garbage if it's there
+cat > listWig.csh << 'EOF'
+    foreach c (`ls -d chr*`)
+        foreach d (`ls -d $c/[1-9]* | sort -t/ -k2 -n`)
+            ls -1 $d/*.wig | sort -n -t\. -k3
+        end
+    end
+'EOF'
+    cd all/wig
+    csh ../../listWig.csh | xargs cat | nice wigEncode stdin phyloP44wayAll.wig phyloP44wayAll.wib
+    #Converted stdin, upper limit 7.13, lower limit -15.41
+    # Load gbdb and database with wiggle.
+    ln -s  \
+        /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/all/wig/phyloP44wayAll.wib \
+        /gbdb/hg18/multiz44way/phyloP44wayAll.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 phyloP44wayAll phyloP44wayAll.wig
+
+    # placental-only: exclude all but these: 
+    cd /cluster/data/hg18/bed/multiz44way/4d
+    set PHASTBIN = /cluster/bin/phast.2008-12-18
+    $PHASTBIN/tree_doctor 44way.all.mod \
+	--prune-all-but=hg18,panTro2,gorGor1,ponAbe2,rheMac2,calJac1,tarSyr1,\
+          micMur1,otoGar1,tupBel1,mm9,rn4,dipOrd1,cavPor3,speTri1,oryCun1,ochPri2,\
+          vicPac1,turTru1,bosTau4,equCab2,felCat3,canFam2,myoLuc1,pteVam1,eriEur1,\
+          sorAra1,loxAfr2,proCap1,echTel1,dasNov2,choHof1 \
+	> 44way.placental.mod
+    cd ../consPhyloP/run.phyloP
+    mkdir placental
+    cd placental
+    cp ../../../4d/44way.placental.mod tree.mod
+    mkdir wig
+    gensub2 ../in.list single ../template jobList
+    # 2823 jobs
+    para create jobList
+    para try
+    para check
+    para push
+
+    para time
+    #Completed: 2823 of 2823 jobs
+    #CPU time in finished jobs:    3358003s   55966.71m   932.78h   38.87d  0.106 y
+    #IO & Wait Time:                142664s    2377.74m    39.63h    1.65d  0.005 y
+    #Average job time:                1240s      20.67m     0.34h    0.01d
+    #Longest finished job:            1781s      29.68m     0.49h    0.02d
+    #Submission to last job:          4383s      73.05m     1.22h    0.05d
+
+    # load wiggle
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/placental/wig
+    csh ../../listWig.csh | xargs cat | nice wigEncode stdin phyloP44wayPlacMammal.wig phyloP44wayPlacMammal.wib
+    # Load gbdb and database with wiggle.
+    ln -s  \
+        /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/placental/wig/phyloP44wayPlacMammal.wib \
+        /gbdb/hg18/multiz44way/phyloP44wayPlacMammal.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 phyloP44wayPlacMammal phyloP44wayPlacMammal.wig
+
+    cd /cluster/data/hg18/bed/multiz44way/4d
+    set PHASTBIN = /cluster/bin/phast.2008-12-18
+    $PHASTBIN/tree_doctor 44way.all.mod \
+	--prune-all-but=hg18,panTro2,gorGor1,ponAbe2,rheMac2,calJac1,tarSyr1,micMur1,otoGar1,tupBel1,mm9,rn4,dipOrd1,cavPor3,speTri1,oryCun1,ochPri2 \
+	> 44way.euarchontoglires.mod
+
+    # euarchontoglires only: exclude all but these: 
+    cd ../consPhyloP/run.phyloP
+    mkdir euarch
+    cd euarch
+    cp ../../../4d/44way.euarchontoglires.mod tree.mod
+    mkdir wig
+    gensub2 ../in.list single ../template jobList
+    # 2823 jobs
+    para create jobList
+    para try
+    para check
+    para push
+
+    para time
+    #Completed: 2823 of 2823 jobs
+    #CPU time in finished jobs:    1646910s   27448.49m   457.47h   19.06d  0.052 y
+    #IO & Wait Time:                 94310s    1571.84m    26.20h    1.09d  0.003 y
+    #Average job time:                 617s      10.28m     0.17h    0.01d
+    #Longest finished job:             901s      15.02m     0.25h    0.01d
+    #Submission to last job:          2127s      35.45m     0.59h    0.02d
+
+    # process results and load wiggle
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/euarch/wig
+    csh ../../listWig.csh | xargs cat | nice wigEncode stdin phyloP44wayEuarch.wig phyloP44wayEuarch.wib
+    #Converted stdin, upper limit 2.03, lower limit -9.78
+    ln -s  \
+        /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/euarch/wig/phyloP44wayEuarch.wib \
+        /gbdb/hg18/multiz44way/phyloP44wayEuarch.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 phyloP44wayEuarch phyloP44wayEuarch.wig
+
 
 #########################################################################
 # Create Syntenic and Recip Best net files to load into tracks to view
