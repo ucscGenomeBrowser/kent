@@ -821,7 +821,7 @@ track chainTetNig1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 300
+priority 150
 visibility hide
 color 100,50,0
 altColor 255,240,200
