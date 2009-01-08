@@ -1,0 +1,23 @@
+
+The files:
+
+SpecialUserloginUCSC.php
+SpecialUserlogoutUCSC.php
+
+Are installed in the Mediawiki version 1.13.0 source in the directory:
+	includes/specials/
+
+
+The template file:
+UserloginUCSC.php
+
+is installed in the Mediawiki versions 1.13.0 source in the directory:
+	includes/templates/
+
+This business is used in the wiki by adding the lines:
+
+require_once( "$IP/extensions/SpecialUserloginUCSC.php" );
+require_once( "$IP/extensions/SpecialUserlogoutUCSC.php" );
+
+To the LocalSettings.php configuration file in the Wiki
+
