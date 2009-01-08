@@ -1,3 +1,0 @@
-1	Evidence at protein level
-2	Evidence at transcript level
-3	Inferred from homology

@@ -1,5 +1,0 @@
-
-string s = "This is a test string.";
-print(s);
-for ((string w,int pos) = s.nextWord(0); w; (w,pos) = s.nextWord(pos))
-    print(w);

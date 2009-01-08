@@ -1,7 +1,0 @@
-int i = 1, j = 2;
-array of int ar = (i);
-array of int ar2 = (i,j);
-array of float coo = (8);
-array of int foo = ();
-array of int choo = (1,2);
-array of int hoo = (3,4,5);

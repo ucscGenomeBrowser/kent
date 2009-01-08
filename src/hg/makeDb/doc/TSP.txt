@@ -1,8 +1,0 @@
-#!/bin/csh -f
-exit
-
-# This is the make doc for the Tumor Sequencing Project
-
-    # create work area
-    mkdir /cluster/data/TSP
-    cd  /cluster/data/TSP

@@ -1,4 +1,0 @@
-array of string sa = ("one", "two", "three");
-sa.append(4);
-print(sa);
-
