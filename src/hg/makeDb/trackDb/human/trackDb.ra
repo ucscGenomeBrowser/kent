@@ -2080,7 +2080,7 @@ type netAlign
 
     track netSyntenyPanTro2
     subTrack syntenicNet
-    shortLabel Chimp Syntenic Net
+    shortLabel $o_Organism Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
     priority 1
@@ -2089,12 +2089,23 @@ type netAlign
     type netAlign panTro2 chainPanTro2
     otherDb panTro2
 
-    track netSyntenyRheMac2
+    track netSyntenyPonAbe2
     subTrack syntenicNet
-    shortLabel Rhesus Net
+    shortLabel $o_Organism Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
     priority 2
+    visibility hide
+    spectrum on
+    type netAlign ponAbe2 chainPonAbe2
+    otherDb ponAbe2
+
+    track netSyntenyRheMac2
+    subTrack syntenicNet
+    shortLabel $o_Organism Syn Net
+    longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+    group compGeno
+    priority 3
     visibility hide
     spectrum on
     type netAlign rheMac2 chainRheMac2
@@ -2102,10 +2113,10 @@ type netAlign
 
     track netSyntenyMm8
     subTrack syntenicNet
-    shortLabel Mouse Syntenic Net
+    shortLabel Mouse Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
-    priority 3
+    priority 4
     visibility hide
     spectrum on
     type netAlign mm8 chainMm8
@@ -2113,7 +2124,7 @@ type netAlign
 
     track netSyntenyRn4
     subTrack syntenicNet
-    shortLabel Rat Syntenic Net
+    shortLabel Rat Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
     priority 5
@@ -2124,7 +2135,7 @@ type netAlign
 
     track netSyntenyCanFam2
     subTrack syntenicNet
-    shortLabel Dog Syntenic Net
+    shortLabel Dog Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
     priority 6
@@ -2135,7 +2146,7 @@ type netAlign
 
     track netSyntenyEquCab1
     subTrack syntenicNet
-    shortLabel Horse Syntenic Net
+    shortLabel Horse Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
     priority 7
@@ -2146,7 +2157,7 @@ type netAlign
 
     track netSyntenyMonDom4
     subTrack syntenicNet
-    shortLabel Opossum Syntenic Net
+    shortLabel Opossum Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
     priority 9
@@ -2157,7 +2168,7 @@ type netAlign
 
     track netSyntenyBosTau2
     subTrack syntenicNet
-    shortLabel Cow Syntenic Net
+    shortLabel Cow Syn Net
     longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
     group compGeno
     priority 8
@@ -2176,16 +2187,71 @@ visibility hide
 spectrum on
 type netAlign
 
-    track netRBestOtoGar1
+    track netRBestGorGor1
     subTrack rBestNet
-    shortLabel Bushbaby RBest Net
+    shortLabel $o_Organism RBest Net
     longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
     group compGeno
-    priority 301.5
+    priority 1
+    visibility hide
+    spectrum on
+    type netAlign gorGor1 chainGorGor1
+    otherDb gorGor1
+
+    track netRBestCalJac1
+    subTrack rBestNet
+    shortLabel $o_Organism RBest Net
+    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    group compGeno
+    priority 2
+    visibility hide
+    spectrum on
+    type netAlign calJac1 chainCalJac1
+    otherDb calJac1
+
+    track netRBestTarSyr1
+    subTrack rBestNet
+    shortLabel $o_Organism RBest Net
+    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    group compGeno
+    priority 3
+    visibility hide
+    spectrum on
+    type netAlign tarSyr1 chainTarSyr1
+    otherDb tarSyr1
+
+    track netRBestOtoGar1
+    subTrack rBestNet
+    shortLabel $o_Organism RBest Net
+    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    group compGeno
+    priority 4
     visibility hide
     spectrum on
     type netAlign otoGar1 chainOtoGar1
     otherDb otoGar1
+
+    track netRBestMicMur1
+    subTrack rBestNet
+    shortLabel $o_Organism RBest Net
+    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    group compGeno
+    priority 5
+    visibility hide
+    spectrum on
+    type netAlign micMur1 chainMicMur1
+    otherDb micMur1
+
+    track netRBestTupBel1
+    subTrack rBestNet
+    shortLabel $o_Organism RBest Net
+    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    group compGeno
+    priority 6
+    visibility hide
+    spectrum on
+    type netAlign tupBel1 chainTupBel1
+    otherDb tupBel1
 
     track netRBestOryCun1
     subTrack rBestNet
@@ -2752,3 +2818,52 @@ shortCircuit 1
 semiShortCircuit 1
 termRegex ([0-9]{6})
 searchPriority 10
+
+track fox2ClipSeqComp
+compositeTrack on
+shortLabel FOX2 CLIPseq
+longLabel FOX2 adaptor-trimmed CLIPseq reads
+subGroup1	view Tracks reads=Reads density=Density
+group regulation
+priority 250
+visibility hide
+visibilityViewDefaults	reads=pack density=full
+type bed 3 .
+
+    track fox2ClipSeq
+    subTrack fox2ClipSeqComp
+    shortLabel FOX2 CLIPseq
+    longLabel FOX2 adaptor-trimmed CLIPseq reads
+    subGroups	view=reads
+    priority 1
+    type bed 9 .
+    itemRgb on
+    noInherit	on
+
+    track fox2ClipSeqDensityPlus
+    subTrack fox2ClipSeqComp
+    shortLabel Density Plus
+    longLabel FOX2 adaptor-trimmed CLIPseq Density Plus Strand
+    subGroups	view=density
+    priority 2
+    type wig 0 2401
+    configurable	on
+    spanList 1
+    maxHeightPixels 128:36:16
+    graphTypeDefault Bar
+    windowingFunction mean
+    noInherit	on
+
+    track fox2ClipSeqDensityNegative
+    subTrack fox2ClipSeqComp
+    shortLabel Density Negative
+    longLabel FOX2 adaptor-trimmed CLIPseq Density Negative Strand
+    subGroups	view=density
+    priority 3
+    type wig 0 1406
+    configurable	on
+    spanList 1
+    maxHeightPixels 128:36:16
+    graphTypeDefault Bar
+    windowingFunction mean
+    noInherit	on
