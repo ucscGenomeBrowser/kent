@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGlobal.c,v 1.42 2008/09/03 19:21:00 markd Exp $";
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.43 2009/01/08 18:04:07 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -172,7 +172,7 @@ char *oldDisplayId;
 conn  = sqlConnect(UNIPROT_DB_NAME);
 hPrintf("<br><font size=4>Protein ");
 
-hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank><B>%s</B></A>\n", 
+hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" TARGET=_blank><B>%s</B></A>\n", 
 	proteinID, proteinID);
 
 spDisplayId = spAccToId(conn, spFindAcc(conn, proteinID));
