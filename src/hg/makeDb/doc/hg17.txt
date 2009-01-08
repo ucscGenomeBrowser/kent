@@ -24649,3 +24649,36 @@ hg17.upstreamMaf = multiz17way /hive/data/genomes/hg17/bed/multiz17way/species.l
 
 
 #############################################################################
+# fox2ClipSeq from Gene Yeo (DONE - 2009-01-08 - Hiram)
+    mkdir /hive/data/genomes/hg17/bed/fox2ClipSeq
+    cd /hive/data/genomes/hg17/bed/fox2ClipSeq
+    #	fetch data
+    wget --timestamping \
+'http://www.snl.salk.edu/~geneyeo/stuff/FOX2.rmsk.BED.gz' \
+        -O FOX2.rmsk.BED.gz
+    #	remove track line and sort
+    zcat FOX2.rmsk.BED.gz | grep -v "^track" | sort -k1,1 -k2,2n \
+        | gzip > sorted.bed.gz
+    #	separate strand data
+    zcat sorted.bed.gz | awk '$6 == "+"' | gzip > plusStrand.bed.gz
+    zcat sorted.bed.gz | awk '$6 == "-"' | gzip > negativeStrand.bed.gz
+    #	make positive strand items blue color
+    zcat plusStrand.bed.gz | sed -e "s/255,0,0/0,0,255/" \
+	| gzip -c > plusStrandBlue.bed.gz
+    #	turn into wiggle density plot
+    zcat plusStrandBlue.bed.gz | bedItemOverlapCount hg17 stdin \
+        | wigEncode stdin fox2ClipSeqDensityPlus.wig fox2ClipSeqDensityPlus.wib
+    #	Converted stdin, upper limit 2401.00, lower limit 1.00
+    zcat negativeStrand.bed.gz | bedItemOverlapCount hg17 stdin \
+        | wigEncode stdin fox2ClipSeqDensityNegative.wig \
+		fox2ClipSeqDensityNegative.wib
+    #	Converted stdin, upper limit 1406.00, lower limit 1.00
+    #	and load tables
+    zcat plusStrandBlue.bed.gz negativeStrand.bed.gz \
+	| hgLoadBed hg17 fox2ClipSeq stdin
+    ln -s `pwd`/*.wib /gbdb/hg17/wib
+    hgLoadWiggle hg17 fox2ClipSeqDensityNegative fox2ClipSeqDensityNegative.wig
+    hgLoadWiggle hg17 fox2ClipSeqDensityPlus fox2ClipSeqDensityPlus.wig
+    #	add composite track definitions to makeDb/trackDb/human/trackDb.ra
+
+#############################################################################

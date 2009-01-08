@@ -25333,7 +25333,7 @@ rm -fr $tmp
 
     # run for all species
     cd /hive/data/genomes/hg18/bed/multiz44way/cons
-    mkdir -p all run.cons/all
+    mkdir -p all
     cd all
     # from the experiments with the SS files above, although it does not seem
     #	to be extremely critical at this time, the most average GC file with
@@ -25470,12 +25470,137 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     display histo.png &
 
+    ########################################################################
+    ### Create a phastCons data set for Primates
+
+    # setup primates-only run
+    ssh swarm
+    mkdir /hive/data/genomes/hg18/bed/multiz44way/cons/primates
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/primates
+    # primates-only: exclude all but these for phastCons tree:
+
+    /cluster/bin/phast/x86_64/tree_doctor ../all/all.mod \
+	--prune-all-but=hg18,panTro2,gorGor1,ponAbe2,rheMac2,calJac1,tarSyr1,micMur1,otoGar1 \
+	> primates.mod
+    #	and place the removed ones in the non-inf file so phastCons will
+    #	truly ignore them:
+    echo "tupBel1,mm9,rn4,dipOrd1,cavPor3,speTri1,oryCun1,ochPri2,vicPac1,turTru1,bosTau4,equCab2,felCat3,canFam2,myoLuc1,pteVam1,eriEur1,sorAra1,loxAfr2,proCap1,echTel1,dasNov2,choHof1,monDom4,ornAna1,galGal3,taeGut1,anoCar1,xenTro2,tetNig1,fr2,gasAcu1,oryLat2,danRer5,petMar1" \
+	> primates.non-inf
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList
+    para try ... check ... push ... etc.
+    #	the jobs that fail have messages like this:
+# bed/chrM/chrM.1-16571.bed is empty
+# WARNING: No match for name "tupBel1" in alignment.
+# WARNING: No match for name "sorAra1" in alignment.
+
+# Completed: 318 of 322 jobs
+# Crashed: 4 jobs
+# CPU time in finished jobs:      20253s     337.54m     5.63h    0.23d  0.001 y
+# IO & Wait Time:                 33093s     551.56m     9.19h    0.38d  0.001 y
+# Average job time:                 168s       2.80m     0.05h    0.00d
+# Longest finished job:             249s       4.15m     0.07h    0.00d
+# Submission to last job:           282s       4.70m     0.08h    0.00d
+
+    # create Most Conserved track
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/primates
+    cat bed/*/chr*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/primates
+    time nice -n +19 hgLoadBed hg18 phastConsElements44wayPrimates \
+	mostConserved.bed
+    #	Loaded 742371 elements of size 5
+    #	real    0m16.817s
+    # verify coverage
+    featureBits hg18 phastConsElements44wayPrimates
+    #	113268574 bases of 2881515245 (3.931%) in intersection
+
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    featureBits hg18 -enrichment refGene:cds phastConsElements44wayPrimates
+    #	refGene:cds 1.144%, phastConsElements44wayPrimates 3.931%,
+    #	both 0.734%, cover 64.17%, enrich 16.32x
+
+    featureBits hg18 -enrichment knownGene:cds phastConsElements44wayPrimates
+    #	knownGene:cds 1.205%, phastConsElements44wayPrimates 3.931%,
+    #	both 0.747%, cover 62.00%, enrich 15.77x
+
+    #	Create the downloads .pp files, from which the phastCons wiggle data
+    #	is calculated
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/primates
+    mkdir downloads
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+    for D in pp/chr*
+do
+    C=${D/pp\//}
+    ls $D/*.pp | sort -n -t\. -k2 | xargs cat | gzip -c \
+	> downloads/${C}.primates.pp.data.gz
+    echo $D $C done
+done
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 ./gzipAscii.sh
+    #	real    26m54.263s
+
+    # Create merged posterier probability file and wiggle track data files
+    zcat downloads/chr*.data.gz \
+	 | wigEncode stdin phastCons44wayPrimates.wig phastCons44wayPrimates.wib
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    24m15.688s
+
+    ## load table with wiggle data
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz44way/cons/primates
+    ln -s `pwd`/phastCons44wayPrimates.wib \
+	/gbdb/hg18/multiz44way/phastCons44wayPrimates.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 \
+	phastCons44wayPrimates phastCons44wayPrimates.wig
+    #	real    0m48.942s
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=hg18 phastCons44wayPrimates > histogram.data 2>&1
+    #	real    5m50.154s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Mouse Hg18 Histogram phastCons44wayPrimates track"
+set xlabel " phastCons44wayPrimates score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    ########################################################################
     ### Create a phastCons data set for Euarchontoglires
 
     # setup euarchontoglires-only run
     ssh swarm
     cd /hive/data/genomes/hg18/bed/multiz44way/cons
-    mkdir euarchontoglires run.cons/euarchontoglires
+    mkdir euarchontoglires
     cd euarchontoglires
     # euarchontoglires-only: exclude all but these for phastCons tree:
 
@@ -25604,6 +25729,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     display histo.png &
 
+    ########################################################################
     ### Create a phastCons data set for Placentals
     # setup placental-only run
     ssh swarm
@@ -26239,5 +26365,36 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
 # Livia (apache@vital-it.ch ) from ExPASy.
 
     hgsql hg18 -e 'update omimGene set name="611016" where name="608636"'
+
+#############################################################################
+# fox2ClipSeq from Gene Yeo (DONE - 2009-01-08 - Hiram)
+    mkdir /hive/data/genomes/hg18/bed/fox2ClipSeq
+    cd /hive/data/genomes/hg18/bed/fox2ClipSeq
+    #	lift the hg17 data to here
+    liftOver -bedPlus=9 \
+	/hive/data/genomes/hg17/bed/fox2ClipSeq/plusStrandBlue.bed.gz \
+/usr/local/apache/htdocs/goldenPath/hg17/liftOver/hg17ToHg18.over.chain.gz \
+	    stdout plusStrand.unMapped | gzip -c > plusStrandBlue.bed.gz
+
+    liftOver -bedPlus=9 \
+	/hive/data/genomes/hg17/bed/fox2ClipSeq/negativeStrand.bed.gz \
+/usr/local/apache/htdocs/goldenPath/hg17/liftOver/hg17ToHg18.over.chain.gz \
+	    stdout negativeStrand.unMapped | gzip -c > negativeStrand.bed.gz
+
+    #	turn into wiggle density plot
+    zcat plusStrandBlue.bed.gz | bedItemOverlapCount hg18 stdin \
+        | wigEncode stdin fox2ClipSeqDensityPlus.wig fox2ClipSeqDensityPlus.wib
+    #	Converted stdin, upper limit 2401.00, lower limit 1.00
+    zcat negativeStrand.bed.gz | bedItemOverlapCount hg18 stdin \
+        | wigEncode stdin fox2ClipSeqDensityNegative.wig \
+		fox2ClipSeqDensityNegative.wib
+    #	Converted stdin, upper limit 1406.00, lower limit 1.00
+    #	and load tables
+    zcat plusStrandBlue.bed.gz negativeStrand.bed.gz \
+	| hgLoadBed hg18 fox2ClipSeq stdin
+    ln -s `pwd`/*.wib /gbdb/hg18/wib
+    hgLoadWiggle hg18 fox2ClipSeqDensityNegative fox2ClipSeqDensityNegative.wig
+    hgLoadWiggle hg18 fox2ClipSeqDensityPlus fox2ClipSeqDensityPlus.wig
+    #	add composite track definitions to makeDb/trackDb/human/trackDb.ra
 
 #############################################################################
