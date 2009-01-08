@@ -37,6 +37,24 @@ function selectStart(img, selection)
     start = now.getTime();
 }
 
+function setPosition(position, size)
+{
+// Set value of position and size (in hiddens and input elements).
+// We assume size has already been commified.
+// Either position or size may be null.
+    if(position) {
+        // XXXX There are multiple tags with name == "position":^(
+	var tags = document.getElementsByName("position");
+	for (var i = 0; i < tags.length; i++) { 
+	    var ele = tags[i];
+	    ele.value = position;
+	}
+    }
+    if(size) {
+        $('#size').text(size);
+    }
+}
+
 function updatePosition(img, selection, singleClick)
 {
     // singleClick is true when the mouse hasn't moved (or has only moved a small amount).
@@ -85,17 +103,7 @@ function updatePosition(img, selection, singleClick)
     }
 
     if(newPos != null) {
-	// XXXX There are multiple tags with name == "position":^(
-	// The jQuery syntax for this is noticeably slow (don't know why).
-	// 	$("input[name='position']").value = newPos;
-	var tags = document.getElementsByTagName("input");
-	for (var i = 0; i < tags.length; i++) { 
-	    var ele = tags[i];
-	    if(ele.name == "position") {
-		ele.value = newPos;
-	    }
-	}
-	$('#size').text(commify(newSize));
+        setPosition(newPos, commify(newSize));
 	return true;
     }
 }
@@ -128,18 +136,7 @@ function selectEnd(img, selection)
 	    document.TrackHeaderForm.submit();
 	}
     } else {
-        if(originalPosition) {
-	    var tags = document.getElementsByTagName("input");
-	    for (var i = 0; i < tags.length; i++) { 
-	        var ele = tags[i];
-	        if(ele.name == "position") {
-		    ele.value = originalPosition;
-	        }
-	    }
-        }
-        if(originalSize) {
-            $('#size').text(originalSize);
-        }
+        setPosition(originalPosition, originalSize);
         originalPosition = originalSize = null;
     }
     start = null;
