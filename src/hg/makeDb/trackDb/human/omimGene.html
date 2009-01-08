@@ -29,13 +29,14 @@ diagnosis and for answers to personal questions.
 <P>
 This annotation was constructed as follows: 
 <UL>
-<LI>A set of UCSC genes with cross-references to RefSeq genes with associated
-OMIM IDs, as defined in the Genome Browser database <TT>refLink</TT> table,
-was compiled.
+<LI>A set of UCSC genes  was compiled that have cross-references to 
+RefSeq genes with associated OMIM IDs, as defined in the Genome Browser 
+database <TT>refLink</TT> table.
 <LI>A second set of UCSC genes was compiled in which the corresponding
-UniProt proteins had external links to OMIM, based on data in the <TT>spXref2</TT>
-table in the UCSC proteome database.
-<LI>The two gene sets were combined and duplicates removed, resulting in a subset of
+UniProt proteins have external links to OMIM, based on data in the 
+<TT>spXref2</TT> table in the UCSC proteome database.
+<LI>The two gene sets were combined and duplicates removed, resulting in 
+a subset of
 UCSC genes that have associated OMIM IDs.
 <LI>Each of the genes in the combined set was replaced with its associated
 canonical gene, based on data from the UCSC canonical gene set defined by
@@ -44,10 +45,13 @@ the <TT>knownIsoforms</TT> and <TT>knownCanonical</TT> tables.
 sorted and loaded into the <TT>omimGene</TT> table.
 </UL>
 <P>
-In addition, data from the OMIM <TT>genemap, morbidmap</TT> files were loaded into the
-<TT>omimGeneMap, omimMorbidMap</TT> tables in the Genome Browser database. Descriptive
+In addition, data from the OMIM <TT>genemap, morbidmap</TT> files were 
+loaded into the
+<TT>omimGeneMap, omimMorbidMap</TT> tables in the Genome Browser database. 
+Descriptive
 information from this table is displayed on the OMIM Related Genes details
-pages.  If an OMIM entry is listed in morbidmap, the entry is marked with red color.
+pages.  If an OMIM entry is listed in morbidmap, the entry is marked with 
+red color.
 </P>
 
 <H2>Credits</H2>
