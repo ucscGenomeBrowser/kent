@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.122 2008/10/23 23:31:39 angie Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.123 2009/01/08 00:30:03 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1931,6 +1931,26 @@ bits32 val;
 mustReadOne(f, val);
 if (isSwapped)
     val = byteSwap32(val);
+return val;
+}
+
+bits16 byteSwap16(bits16 a)
+/* Return byte-swapped version of a */
+{
+union {bits16 whole; UBYTE bytes[2];} u,v;
+u.whole = a;
+v.bytes[0] = u.bytes[1];
+v.bytes[1] = u.bytes[0];
+return v.whole;
+}
+
+bits16 readBits16(FILE *f, boolean isSwapped)
+/* Read and optionally byte-swap 16 bit entity. */
+{
+bits16 val;
+mustReadOne(f, val);
+if (isSwapped)
+    val = byteSwap16(val);
 return val;
 }
 

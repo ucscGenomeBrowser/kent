@@ -969,6 +969,12 @@ bits32 byteSwap32(bits32 a);
 bits32 readBits32(FILE *f, boolean isSwapped);
 /* Read and optionally byte-swap 32 bit entity. */
 
+bits16 byteSwap16(bits16 a);
+/* Swap from intel to sparc order of a 16 bit quantity. */
+
+bits16 readBits16(FILE *f, boolean isSwapped);
+/* Read and optionally byte-swap 16 bit entity. */
+
 void removeReturns(char* dest, char* src);
 /* Removes the '\r' character from a string.
  * the source and destination strings can be the same,
