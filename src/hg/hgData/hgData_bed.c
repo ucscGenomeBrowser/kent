@@ -5,7 +5,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.1 2009/01/08 05:22:39 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.2 2009/01/08 17:14:12 mikep Exp $";
 
 void printBed(struct bed *b, struct hTableInfo *hti)
 // print out rows of bed data, each row as a list of columns
@@ -57,13 +57,13 @@ for (t = b ; t ; t = t->next)
         printf("%d,", t->blockCount);
     if (hti->startsField[0] != 0)
 	{
-	char *tmp = sqlUnsignedArrayToString(t->chromStarts, t->blockCount);
+	char *tmp = sqlSignedArrayToString(t->chromStarts, t->blockCount);
         printf("[%s],", tmp);
 	freez(&tmp);
 	}
     if (hti->endsSizesField[0] != 0)
 	{
-	char *tmp = sqlUnsignedArrayToString(t->blockSizes, t->blockCount);
+	char *tmp = sqlSignedArrayToString(t->blockSizes, t->blockCount);
         printf("[%s],", tmp);
 	freez(&tmp);
 	}
