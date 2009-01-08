@@ -780,6 +780,9 @@ void eraseWhiteSpace(char *s);
 char *trimSpaces(char *s);
 /* Remove leading and trailing white space. */
 
+void repeatCharOut(FILE *f, char c, int count);
+/* Write character to file repeatedly. */
+
 void spaceOut(FILE *f, int count);
 /* Put out some spaces to file. */
 
@@ -912,10 +915,10 @@ boolean fastReadString(FILE *f, char buf[256]);
  * to hold it.  String is in 'writeString' format.
  * Returns FALSE at EOF. */
 
-void writeBits64(FILE *f, bits64 x);
+void msbFirstWriteBits64(FILE *f, bits64 x);
 /* Write out 64 bit number in manner that is portable across architectures */
 
-bits64 readBits64(FILE *f);
+bits64 msbFirstReadBits64(FILE *f);
 /* Write out 64 bit number in manner that is portable across architectures */
 
 void carefulClose(FILE **pFile);
@@ -962,6 +965,12 @@ int  rangeIntersection(int start1, int end1, int start2, int end2);
 int  positiveRangeIntersection(int start1, int end1, int start2, int end2);
 /* Return amount of bases two ranges intersect over, 0 if no
  * intersection. */
+
+bits64 byteSwap64(bits64 a);
+/* Swap from intel to sparc order of a 64 bit quantity. */
+
+bits64 readBits64(FILE *f, boolean isSwapped);
+/* Read and optionally byte-swap 64 bit entity. */
 
 bits32 byteSwap32(bits32 a);
 /* Swap from intel to sparc order of a 32 bit quantity. */

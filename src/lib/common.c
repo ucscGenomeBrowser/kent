@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.123 2009/01/08 00:30:03 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.124 2009/01/08 22:48:17 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1463,18 +1463,23 @@ if (s != NULL)
 return s;
 }
 
+void repeatCharOut(FILE *f, char c, int count)
+/* Write character to file repeatedly. */
+{
+while (--count >= 0)
+    fputc(c, f);
+}
+
 void spaceOut(FILE *f, int count)
 /* Put out some spaces to file. */
 {
-while (--count >= 0)
-    fputc(' ', f);
+repeatCharOut(f, ' ', count);
 }
 
 void starOut(FILE *f, int count)
 /* Put out some asterisks to file. */
 {
-while (--count >= 0)
-    fputc('*', f);
+repeatCharOut(f, '*', count);
 }
 
 boolean hasWhiteSpace(char *s)
@@ -1757,7 +1762,7 @@ buf[len] = 0;
 return TRUE;
 }
 
-void writeBits64(FILE *f, bits64 x)
+void msbFirstWriteBits64(FILE *f, bits64 x)
 /* Write out 64 bit number in manner that is portable across architectures */
 {
 int i;
@@ -1770,7 +1775,7 @@ for (i=7; i>=0; --i)
 mustWrite(f, buf, 8);
 }
 
-bits64 readBits64(FILE *f)
+bits64 msbFirstReadBits64(FILE *f)
 /* Write out 64 bit number in manner that is portable across architectures */
 {
 int i;
@@ -1911,6 +1916,33 @@ if (ret < 0)
     ret = 0;
 return ret;
 }
+
+bits64 byteSwap64(bits64 a)
+/* Return byte-swapped version of a */
+{
+union {bits64 whole; UBYTE bytes[4];} u,v;
+u.whole = a;
+v.bytes[0] = u.bytes[7];
+v.bytes[1] = u.bytes[6];
+v.bytes[2] = u.bytes[5];
+v.bytes[3] = u.bytes[4];
+v.bytes[4] = u.bytes[3];
+v.bytes[5] = u.bytes[2];
+v.bytes[6] = u.bytes[1];
+v.bytes[7] = u.bytes[0];
+return v.whole;
+}
+
+bits64 readBits64(FILE *f, boolean isSwapped)
+/* Read and optionally byte-swap 64 bit entity. */
+{
+bits64 val;
+mustReadOne(f, val);
+if (isSwapped)
+    val = byteSwap64(val);
+return val;
+}
+
 
 bits32 byteSwap32(bits32 a)
 /* Return byte-swapped version of a */

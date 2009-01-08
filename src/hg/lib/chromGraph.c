@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.15 2007/03/13 22:37:25 galt Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.16 2009/01/08 22:48:18 kent Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -413,7 +413,7 @@ fgetpos(f, &indexPos);
 for (ci = ciList; ci != NULL; ci = ci->next)
     {
     writeString(f, ci->name);
-    writeBits64(f, ci->offset);
+    msbFirstWriteBits64(f, ci->offset);
     }
 
 /* Write data. */
@@ -435,7 +435,7 @@ fsetpos(f, &indexPos);
 for (ci = ciList; ci != NULL; ci = ci->next)
     {
     writeString(f, ci->name);
-    writeBits64(f, ci->offset);
+    msbFirstWriteBits64(f, ci->offset);
     }
 carefulClose(&f);
 slFreeList(&ciList);
@@ -503,7 +503,7 @@ for (i=0; i<chromCount; ++i)
     {
     AllocVar(chrom);
     chrom->name =  readString(f);
-    chrom->offset = readBits64(f);
+    chrom->offset = msbFirstReadBits64(f);
     slAddHead(&cgb->chromList, chrom);
     hashAdd(cgb->chromHash, chrom->name, chrom);
     }
