@@ -17,7 +17,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.53 2008/09/03 19:21:00 markd Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.54 2009/01/08 18:02:01 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -163,7 +163,7 @@ char *spDisplayId;
 
 hPrintf("<br><font size=4>");
 hPrintf("%s protein: ", organism);
-hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank><B>%s</B></A>\n", 
+hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" TARGET=_blank><B>%s</B></A>\n", 
 	proteinID, proteinID);
 
 /* show SWISS-PROT display ID if it is different than the accession ID */
