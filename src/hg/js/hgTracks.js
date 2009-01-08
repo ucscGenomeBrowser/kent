@@ -3,6 +3,7 @@
 var debug = false;
 var originalPosition;
 var originalSize;
+var clickClipHeight;
 var start;
 
 function commify (str) {
@@ -19,11 +20,19 @@ function commify (str) {
     }
 }
 
+function initVars(img)
+{
+// There are various entry points, so we call initVars in several places to make sure this variables get updated.
+    if(!originalPosition) {
+        // remember initial position and size so we can restore it if user cancels
+        originalPosition = $('#positionHidden').val();
+        originalSize = $('#size').text();
+    }
+}
+
 function selectStart(img, selection)
 {
-    // remember initial position and size so we can restore it if user cancels
-    originalPosition = $('#positionHidden').val();
-    originalSize = $('#size').text();
+    initVars();
     var now = new Date();
     start = now.getTime();
 }
@@ -93,6 +102,7 @@ function updatePosition(img, selection, singleClick)
 
 function selectChange(img, selection)
 {
+    initVars();
     updatePosition(img, selection, false);
     return true;
 }
@@ -105,8 +115,14 @@ function selectEnd(img, selection)
     // ignore releases outside of the image rectangle (allowing a 10 pixel slop)
     var slop = 10;
     var now = new Date();
+    var doIt = false;
     if((selection.event.pageX >= (imgOfs.left - slop)) && (selection.event.pageX < (imgOfs.left + imgWidth + slop)) 
        && (selection.event.pageY >= (imgOfs.top - slop)) && (selection.event.pageY < (imgOfs.top + imgHeight + slop))) {
+       // ignore single clicks that aren't in the top of the image (this happens b/c the clickClipHeight test in selectStart
+       // doesn't occur when the user single clicks).
+       doIt = start != null || selection.y1 <= clickClipHeight;
+    }
+    if(doIt) {
         // start is null if mouse has never been moved
 	if(updatePosition(img, selection, (selection.x2 == selection.x1) || start == null || (now.getTime() - start) < 100)) {
 	    document.TrackHeaderForm.submit();
@@ -124,7 +140,9 @@ function selectEnd(img, selection)
         if(originalSize) {
             $('#size').text(originalSize);
         }
+        originalPosition = originalSize = null;
     }
+    start = null;
     return true;
 }
 
@@ -138,7 +156,7 @@ $(window).load(function () {
 		var imgHeight = jQuery(img).height();
 		var imgWidth = jQuery(img).width();
 		var imgOfs = jQuery(img).offset();
-		var clickClipHeight = parseInt(rulerEle.value);
+		clickClipHeight = parseInt(rulerEle.value);
 
 		img.imgAreaSelect({ selectionColor: 'blue', outerColor: '',
 			minHeight: imgHeight, maxHeight: imgHeight,
