@@ -216,7 +216,7 @@ return levels;
 static bits32 writeIndexLevel(bits16 blockSize, 
 	void *itemArray, int itemSize, int itemCount, 
 	bits32 indexOffset, int level, 
-	void (*fetchKey)(const void *va, char *keyBuf), bits32 keySize,
+	void (*fetchKey)(const void *va, char *keyBuf), bits32 keySize, bits32 valSize,
 	FILE *f)
 /* Write out a non-leaf level. */
 {
@@ -228,8 +228,10 @@ int nodeSizePer = slotSizePer * blockSize;  // Number of items per node
 int nodeCount = (itemCount + nodeSizePer - 1)/nodeSizePer;	
 
 /* Calculate sizes and offsets. */
-int bytesInBlock = (bptBlockHeaderSize + blockSize * (keySize+sizeof(bits64)));
-bits64 levelSize = nodeCount * bytesInBlock;
+int bytesInIndexBlock = (bptBlockHeaderSize + blockSize * (keySize+sizeof(bits64)));
+int bytesInLeafBlock = (bptBlockHeaderSize + blockSize * (keySize+valSize));
+bits64 bytesInNextLevelBlock = (level == 1 ? bytesInLeafBlock : bytesInIndexBlock);
+bits64 levelSize = nodeCount * bytesInIndexBlock;
 bits64 endLevel = indexOffset + levelSize;
 bits64 nextChild = endLevel;
 
@@ -263,7 +265,7 @@ for (i=0; i<itemCount; i += nodeSizePer)
 	(*fetchKey)(item, keyBuf);
 	mustWrite(f, keyBuf, keySize);
 	writeOne(f, nextChild);
-	nextChild += bytesInBlock;
+	nextChild += bytesInNextLevelBlock;
 	++slotsUsed;
 	}
     assert(slotsUsed == countOne);
@@ -346,7 +348,7 @@ int i;
 for (i=levels-1; i > 0; --i)
     {
     bits32 endLevelOffset = writeIndexLevel(blockSize, itemArray, itemSize, itemCount, indexOffset, 
-    	i, fetchKey, keySize, f);
+    	i, fetchKey, keySize, valSize, f);
     indexOffset = ftell(f);
     if (endLevelOffset != indexOffset)
         internalErr();
