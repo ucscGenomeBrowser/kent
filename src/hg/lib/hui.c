@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.141 2009/01/02 23:44:05 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.142 2009/01/09 04:15:47 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2495,7 +2495,18 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 printf(" class='trDraggable' title='Drag to Reorder' onmouseover=\"hintForDraggableRow(this)\"");
 
             printf(" id=\"tr_%s\" nowrap>\n<TD>",id);
-            cgiMakeCheckBoxIdAndJS(htmlIdentifier,alreadySet,id,"onclick=\"matSubtrackCbClick(this);\" onmouseover=\"this.style.cursor='default';\"");
+            struct dyString *dyJS = newDyString(100);
+            dyStringPrintf(dyJS, "onclick='matSubtrackCbClick(this);' onmouseover=\"this.style.cursor='default';\" class=\"subtrackCB");
+            for(di=0;di<dimMax;di++)
+                {
+                if(dimensions[di])
+                    {
+                    dyStringPrintf(dyJS, " %s",membership->membership[stringArrayIx(dimensions[di]->tag, membership->subgroups, membership->count)]);
+                    //dyStringPrintf(dyJS, " %s",dimensions[di]->tag);
+                    }
+                }
+            dyStringAppendC(dyJS,'"');
+            cgiMakeCheckBoxIdAndJS(htmlIdentifier,alreadySet,id,dyStringCannibalize(&dyJS));
             if(sortOrder != NULL || useDragAndDrop)
                 {
                 safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", subtrack->tableName);
@@ -3336,7 +3347,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
     enum trackVisibility tv =
         hTvFromString(cartUsualString(cart, objName,hStringFromTv(visCompositeViewDefault(parentTdb,membersOfView->names[ix]))));
 
-    safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'_%s');\"", membersOfView->names[ix]);
+    safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\"", membersOfView->names[ix]);
 
     printf("<TD>");
     hTvDropDownWithJavascript(objName, tv, parentTdb->canPack,javascript);
@@ -3458,7 +3469,6 @@ static boolean hCompositeUiByMatrix(char *db, struct cart *cart, struct trackDb 
 //int ix;
 char objName[SMALLBUF];
 char javascript[JBUFSIZE];
-char option[SMALLBUF];
 boolean alreadySet = TRUE;
 struct trackDb *subtrack;
 
@@ -3517,8 +3527,15 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     if(dimensionX && dimensionY)
         {
         printf("<TH ALIGN=LEFT WIDTH='100'>All&nbsp;&nbsp;");
-        PLUS_BUTTON( "name", "plus_all","mat_","_cb");
-        MINUS_BUTTON("name","minus_all","mat_","_cb");
+#define PM_BUTTON_UC "<A NAME='%s'></A><A HREF='#%s'><IMG height=18 width=18 onclick=\"return (matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' src='../images/%s'></A>"
+#define    BUTTON_PLUS_ALL()                   printf(PM_BUTTON_UC, "plus_all", "plus_all", "true",  "",     "",   "",      "", "", "plus_all",   "add_sm.gif")
+#define    BUTTON_MINUS_ALL()                  printf(PM_BUTTON_UC,"minus_all","minus_all","false",  "",     "",   "",      "", "","minus_all","remove_sm.gif")
+#define    BUTTON_PLUS_ONE( name,class)        printf(PM_BUTTON_UC,     (name),     (name), "true",",'",(class),  "'",      "", "",     (name),   "add_sm.gif")
+#define    BUTTON_MINUS_ONE(name,class)        printf(PM_BUTTON_UC,     (name),     (name),"false",",'",(class),  "'",      "", "",     (name),"remove_sm.gif")
+//#define    BUTTON_PLUS_TWO( name,class,class2) printf(PM_BUTTON_UC,     (name),     (name), "true",",'",(class),"','",(class2),"'",     (name),   "add_sm.gif")
+//#define    BUTTON_MINUS_TWO(name,class,class2) printf(PM_BUTTON_UC,     (name),     (name),"false",",'",(class),"','",(class2),"'",     (name),"remove_sm.gif")
+        BUTTON_PLUS_ALL();
+        BUTTON_MINUS_ALL();
         puts("</TH>");
         }
     else if(dimensionX)
@@ -3537,8 +3554,8 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     else if(dimensionY)
         {
         printf("<TH ALIGN=CENTER WIDTH=\"100\">");
-        PLUS_BUTTON( "name", "plus_all","mat_","_cb");
-        MINUS_BUTTON("name","minus_all","mat_","_cb");
+        BUTTON_PLUS_ALL();
+        BUTTON_MINUS_ALL();
         puts("</TH>");
         }
     puts("</TR>\n");
@@ -3550,11 +3567,9 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         for (ixX = 0; ixX < dimensionX->count; ixX++)    // Special row of +- +- +-
             {
             puts("<TD>");
-            safef(option, sizeof(option), "mat_%s_", dimensionX->names[ixX]);
             safef(objName, sizeof(objName), "plus_%s_all", dimensionX->names[ixX]);
-            PLUS_BUTTON( "name",objName,option,"_cb");
-            safef(objName, sizeof(objName), "minus_%s_all", dimensionX->names[ixX]);
-            MINUS_BUTTON("name",objName,option,"_cb");
+            BUTTON_PLUS_ONE( objName,dimensionX->names[ixX]);
+            BUTTON_MINUS_ONE(objName,dimensionX->names[ixX]);
             puts("</TD>");
             }
         puts("</TR>\n");
@@ -3568,8 +3583,8 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         if(dimensionY == NULL) // 'All' buttons go here if no Y dimension
             {
             printf("<TH ALIGN=CENTER WIDTH=\"100\">");
-            PLUS_BUTTON( "name", "plus_all","mat_","_cb");
-            MINUS_BUTTON("name","minus_all","mat_","_cb");
+            BUTTON_PLUS_ALL();
+            BUTTON_MINUS_ALL();
             puts("</TH>");
             }
         else if(ixY < dimensionY->count)
@@ -3580,11 +3595,9 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         if(dimensionX && dimensionY) // Both X and Y, then column of buttons
             {
             puts("<TD>");
-            safef(option, sizeof(option), "_%s_cb", dimensionY->names[ixY]);
             safef(objName, sizeof(objName), "plus_all_%s", dimensionY->names[ixY]);
-            PLUS_BUTTON( "name",objName,"mat_",option);
-            safef(objName, sizeof(objName), "minus_all_%s", dimensionY->names[ixY]);
-            MINUS_BUTTON("name",objName,"mat_",option);
+            BUTTON_PLUS_ONE( objName,dimensionY->names[ixY]);
+            BUTTON_MINUS_ONE(objName,dimensionY->names[ixY]);
             puts("</TD>");
             }
         for (ixX = 0; ixX < sizeOfX; ixX++)
@@ -3597,18 +3610,26 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 if(dimensionX && dimensionY)
                     {
                     safef(objName, sizeof(objName), "mat_%s_%s_cb", dimensionX->names[ixX],dimensionY->names[ixY]);
-                    safef(javascript, sizeof(javascript), "onclick=\"matSetCheckBoxesThatContain('id',this.checked,true,'cb_','_%s_%s_','_cb');\"",
+                    safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\",\"%s\");'",
                           dimensionX->names[ixX],dimensionY->names[ixY]);
                     }
                 else
                     {
                     safef(objName, sizeof(objName), "mat_%s_cb", (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
-                    safef(javascript, sizeof(javascript), "onclick=\"matSetCheckBoxesThatContain('id',this.checked,true,'cb_','_%s_','_cb');\"",
+                    safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",
                           (dimensionX ? dimensionX->names[ixX] : dimensionY->names[ixY]));
                     }
                 alreadySet = cartUsualBoolean(cart, objName, alreadySet);
                 puts("<TD>");
-                cgiMakeCheckBoxJS(objName,alreadySet,javascript);
+                struct dyString *dyJS = newDyString(100);
+                dyStringPrintf(dyJS, javascript);
+                dyStringPrintf(dyJS, " class=\"matrixCB");
+                if(dimensionX)
+                    dyStringPrintf(dyJS, " %s",dimensionX->names[ixX]);
+                if(dimensionY)
+                    dyStringPrintf(dyJS, " %s",dimensionY->names[ixY]);
+                dyStringAppendC(dyJS,'"');
+                cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
                 puts("</TD>");
                 }
             else
@@ -3627,10 +3648,12 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 {
                 printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                 safef(objName, sizeof(objName), "mat_%s_dimZ_cb",dimensionZ->names[ixZ]);
-                safef(javascript, sizeof(javascript), "onclick=\"matSetCheckBoxesThatContain('id',this.checked,true,'cb_','_%s_','_cb');\"",
-                      dimensionZ->names[ixZ]);
+                safef(javascript, sizeof(javascript), "onclick='matSetSubtrackCheckBoxes(this.checked,\"%s\");'",dimensionZ->names[ixZ]);
                 alreadySet = cartUsualBoolean(cart, objName, alreadySet);
-                cgiMakeCheckBoxJS(objName,alreadySet,javascript);
+                struct dyString *dyJS = newDyString(100);
+                dyStringPrintf(dyJS, javascript);
+                dyStringPrintf(dyJS, " class=\"matrixCB %s\"",dimensionZ->names[ixZ]);
+                cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
                 printf("%s",labelWithControlledVocabLink(parentTdb,dimensionZ->tag,dimensionZ->values[ixZ]));
                 }
         }
