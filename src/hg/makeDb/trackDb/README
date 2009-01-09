@@ -260,6 +260,8 @@ chromosomes  -    comma separated list        - only these chroms have data
                                               - for this track, this track is
                                               - not shown on other chroms
 scoreFilterMax -  integer                     - for score column trackUi filter
+noScoreFilter . - to turn off Ui options for bed 5+ tracks, I don't know
+		- what the . is for, but it always appears to be used.
 
 The shortLabel and longLabel fields may have the following
 variables, which will be substituted:
