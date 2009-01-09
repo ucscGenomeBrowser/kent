@@ -5,14 +5,54 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.3 2009/01/09 07:41:36 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.4 2009/01/09 20:53:28 mikep Exp $";
 
-void printBed(struct bed *b, struct hTableInfo *hti)
+void printBedAsAnnoj(struct bed *b, struct hTableInfo *hti)
+// print out rows of bed data formatted as AnnoJ nested model
+{
+struct bed *t;
+int id = 0, exon = 0;
+printf("{ success: true,\nmessage: 'Found %d models',\ndata: [\n", slCount(b));
+for (t = b ; t ; t = t->next)
+    {
+    ++id;
+    // name <- bed name, or 'id.N', can be duplicated?
+    // strand <- '.' if strand unknown 
+    // class <- table name
+    // start <- zero-based
+    //   nested id <- can be duplicated between top-level ids?
+    //   start <- zero-based
+    //   if no exons - should we have 1 block here, or none?
+    //   
+    printf("[");
+    if (hti->endField[0] != 0)
+	printf("'%s'", t->name);
+    else
+	printf("'id.%d'", id);
+    printf(",'%c','%s',%d,%d,[\n", (hti->strandField[0] == 0 ? '.' : t->strand[0]), 
+	hti->rootName, t->chromStart, t->chromEnd-t->chromStart); 
+    if (hti->countField[0] != 0) // there are exons
+	{
+	if (hti->startsField[0] == 0 || hti->endsSizesField[0] == 0)
+	    errAbort("blocks but no starts/ends");
+    	for (exon = 0 ; exon < t->blockCount ; ++exon)
+    	    {
+	    printf("['e.%d','%s',%d,%d]%c\n", exon+1, "EXON", t->chromStarts[exon], t->blockSizes[exon], 
+		(exon < t->blockCount-1 ? ',' : ' '));
+	    }
+	}
+    printf("]\n]%c\n", (t->next ? ',' : ' '));
+    }
+printf("]\n}\n");
+}
+
+void printBed(struct bed *b, char *db, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti)
 // print out rows of bed data, each row as a list of columns
 {
 struct bed *t;
-if (!b)
-    return;
+printf("{ \"db\" : \"%s\",\n\"track\" : \"%s\",\n\"tableName\" : \"%s\",\n\"chrom\" : \"%s\",\n\"start\" : %d,\n\"end\" : %d,\n\"rowCount\" : %d,\n\"hasCDS\" : %s,\n\"hasBlocks\" : %s,\n\"type\" : \"%s\",\n",
+    db, track, hti->rootName, chrom, start, end, slCount(b),
+    (hti->hasCDS ? "true" : "false"), (hti->hasBlocks ? "true" : "false"), type );
 printf("\"bedColumns\" : [");
 if (hti->startField[0] != 0)
     printf("\"%s\",", hti->startField);
@@ -69,7 +109,7 @@ for (t = b ; t ; t = t->next)
 	}
     printf("],\n");
     }
-printf("]\n");
+printf("]\n}\n");
 }
 
 static void printBedOneColumn(struct bed *b, char *column)

@@ -25,7 +25,8 @@
 // - for example, if app asks for JSON, send this: 
 //#define okSendHeader() fprintf(stdout,"Content-type: application/json\n\n") // this triggers download by browser client
 // - otherwise if browser, then send same content but this type:
-#define okSendHeader() fprintf(stdout,"Content-type: text/plain\n\n")
+#define okSendHeader(format) fprintf(stdout,"Content-type: text/%s\n\n", ((format) ? (format) : "plain"))
+#define FMT_JSON_ANNOJ "x-json-annoj"
 
 // Error responses
 #define ERR_INVALID_COMMAND(cmd) errClientCode(400, "Invalid request %s", (cmd))
@@ -38,7 +39,8 @@
 #define ERR_TRACK_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track %s not found in database %s", (track), (db))
 #define ERR_TRACK_INFO_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track info for %s not found in database %s", (track), (db))
 #define ERR_TABLE_NOT_FOUND(table, chrom, tableRoot, db) errClientStatus(420, "Request error", "Table %s not found using chrom %s and tableRoot %s in database %s", (table), (chrom), (tableRoot), (db))
-#define ERR_TYPE_NOT_FOUND(type) errClientStatus(420, "Request error", "Type %s not found", (type))
+#define ERR_BAD_FORMAT(format) errClientStatus(420, "Format %s is not supported", (format))
+#define ERR_BAD_TRACK_TYPE(track, type) errClientStatus(420, "Track %s of type %s is not supported", (track), (type))
 
 /* Global Variables */
 char quoteBuf[1024];
@@ -81,7 +83,10 @@ void errClient(char *format, ...);
 // create a HTTP response code "400 Bad Request",
 // and format specifying the error message content
 
-void printBed(struct bed *b, struct hTableInfo *hti);
+void printBedAsAnnoj(struct bed *b, struct hTableInfo *hti);
+// print out rows of bed data formatted as AnnoJ nested model
+
+void printBed(struct bed *b, char *db, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti);
 // print out rows of bed data, each row as a list of columns
 
 void printBedByColumn(struct bed *b, struct hTableInfo *hti);
