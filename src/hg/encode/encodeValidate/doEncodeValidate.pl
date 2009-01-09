@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.133 2008/12/17 10:40:04 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.134 2009/01/09 20:03:55 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -245,8 +245,9 @@ sub validateMapAlgorithm {
 
 sub validateRipAntibody {
     my ($val) = @_;
-    # Mike, please change this to use Encode::isControlInput (LRM)
-    return defined(lc($val) eq 'input' || lc($val) eq 'control' || $terms{'ripAntibody'}{$val}) ? () : ("ripAntibody \'$val\' is not known");
+    # TODO: Remove Encode::isControlInput after testing
+    # return defined(lc($val) eq 'input' || lc($val) eq 'control' || $terms{'ripAntibody'}{$val}) ? () : ("ripAntibody \'$val\' is not known");
+    return defined($terms{'ripAntibody'}{$val} || $terms{'control'}{$val}) ? () : ("ripAntibody \'$val\' is not known");
 }
 
 sub validateRipTgtProtein {
@@ -266,7 +267,7 @@ sub validatePromoter {
 
 sub validateAntibody {
     my ($val) = @_;
-    if(Encode::isControlInput($val) || defined($terms{'Antibody'}{$val})) {
+    if(defined($terms{'Antibody'}{$val}) || defined($terms{'control'}{$val})) {
         return ();
     } else {
         return ("Antibody \'$val\' is not known");
@@ -337,7 +338,7 @@ sub listToRegExp
 # $validateList is a reference to a list of hashes with: {NAME, REGEX or TYPE}
 # If a line fails this regular expression, you should then call validateWithListUtil with this line
 # and validation list to generate a field specific error message; this is a speedup hack,
-# because we want to avoid calling validateWithListUtil for every line (because validateWithListUtil is really 
+# because we want to avoid calling validateWithListUtil for every line (because validateWithListUtil is really
 # slow).
 #
 # Note that the 'chrom' field is captured, so you should test %chromInfo (e.g. $chromInfo($1))
@@ -623,7 +624,7 @@ sub validateTagAlign
                 {TYPE => "uint", NAME => "score"},
                 {REGEX => "[+-\\.]", NAME => "strand"});
     # MJP: for now, allow 10x more tagAlign records for Cshl project as we are not loading them
-    return validateWithList($path, $file, $type, 10*$maxBedRows, "validateTagAlign", \@list); 
+    return validateWithList($path, $file, $type, 10*$maxBedRows, "validateTagAlign", \@list);
 }
 
 sub validatePairedTagAlign
@@ -886,7 +887,7 @@ sub printCompositeTdbSettings {
     for my $view (keys %{$daf->{TRACKS}}) {
         for my $key (keys %ddfSets) {
             if(defined($ddfSets{$key}{VIEWS}{$view})) {
-		# Load alignments for all Gingeras labs except CSHL as these are currently 100-400M rows 
+		# Load alignments for all Gingeras labs except CSHL as these are currently 100-400M rows
                 my $downloadOnly = $view eq 'RawData' || $view eq 'RawData2' || ($view eq 'Alignments' and ($daf->{grant} ne "Gingeras" or $daf->{lab} eq "Cshl")) ? 1 : 0;
                 if(!$downloadOnly) {
                     $setting = $setting . " " . $view . "=" . $view;
@@ -1176,10 +1177,6 @@ while (@{$lines}) {
         $line{$ddfHeader[$i]} = $val;
         $i++;
     }
-    if(exists($line{antibody}) && Encode::isControlInput($line{antibody})) {
-        # lc "CONTROL" etc.; we may want to normalize to a single value here ("control-input"?)
-        $line{antibody} = lc($line{antibody});
-    }
     if(my @tmp = Encode::validateValueList(\%line, $fields, 'ddf')) {
         pushError(\@errors, $errorPrefix . "\n" . join("\n", @tmp));
         next;
@@ -1239,9 +1236,7 @@ if(!@errors) {
         for my $view (keys %{$daf->{TRACKS}}) {
             if($daf->{TRACKS}{$view}{required}) {
                 if(!defined($ddfSets{$key}{VIEWS}{$view})) {
-                    if($key !~ /^.+=control/i && $key !~ /^.+=input/i) {
-                        pushError(\@errors, "view '$view' missing for $key");
-                    }
+                    pushError(\@errors, "view '$view' missing for $key");
                 }
             }
         }
@@ -1253,7 +1248,7 @@ if(!@errors) {
 	# note this loop assumes these are on a per replicate basis.
 	# Also note that any project (like transcriptome) that doesnt have replicates should also use
 	# this for their auto-create signals.
-	HgAutomate::verbose(2, "ddfReplicateSets loop key=[$key] aln=[".(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}))."] rawsig=[".(defined($ddfReplicateSets{$key}{VIEWS}{RawSignal}))."]\n"); 
+	HgAutomate::verbose(2, "ddfReplicateSets loop key=[$key] aln=[".(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}))."] rawsig=[".(defined($ddfReplicateSets{$key}{VIEWS}{RawSignal}))."]\n");
 
         if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
 		&& !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})
