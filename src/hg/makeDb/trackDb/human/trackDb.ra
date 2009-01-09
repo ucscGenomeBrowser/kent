@@ -2840,10 +2840,10 @@ type bed 3 .
     itemRgb on
     noInherit	on
 
-    track fox2ClipSeqDensityPlus
+    track fox2ClipSeqDensityForwardStrand
     subTrack fox2ClipSeqComp
-    shortLabel Density Plus
-    longLabel FOX2 adaptor-trimmed CLIPseq Density Plus Strand
+    shortLabel Density Forward
+    longLabel FOX2 adaptor-trimmed CLIPseq Density Forward Strand
     subGroups	view=density
     priority 2
     type wig 0 2401
@@ -2854,10 +2854,10 @@ type bed 3 .
     windowingFunction mean
     noInherit	on
 
-    track fox2ClipSeqDensityNegative
+    track fox2ClipSeqDensityReverseStrand
     subTrack fox2ClipSeqComp
-    shortLabel Density Negative
-    longLabel FOX2 adaptor-trimmed CLIPseq Density Negative Strand
+    shortLabel Density Reverse
+    longLabel FOX2 adaptor-trimmed CLIPseq Density Reverse Strand
     subGroups	view=density
     priority 3
     type wig 0 1406
