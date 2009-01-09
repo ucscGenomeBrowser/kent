@@ -3044,6 +3044,9 @@ tablesIgnored $hg
     dgv
     eponine
     exaptedRepeats
+    fox2ClipSeq
+    fox2ClipSeqDensityForwardStrand
+    fox2ClipSeqDensityReverseStrand
     geneTests
     genomicSuperDups
     haplotype
