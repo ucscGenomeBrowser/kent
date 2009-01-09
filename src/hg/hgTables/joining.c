@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.50 2008/05/27 23:48:28 hiram Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.51 2009/01/09 00:58:27 angie Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -560,18 +560,26 @@ struct joinerPair *jp;
 int fieldCount = 0, keyCount = 0;
 int idFieldIx = -1;
 struct sqlConnection *conn = sqlConnect(tj->database);
-char *filter = filterClause(tj->database, tj->table, regionList->chrom);
+char *identifierFilter = NULL;
+char *filter;
 boolean needUpdateFilter = FALSE;
 struct joinedRow *jr;
 
+if (isFirst)
+    identifierFilter = identifierWhereClause(idField, idHash);
+filter = filterClause(tj->database, tj->table, regionList->chrom, identifierFilter);
+
 /* Record combined filter. */
-if (filter != NULL)
+// Show only the SQL filter built from filter page options, not identifierFilter,
+// because identifierFilter can get enormous (like 126kB for 12,500 rsIDs).
+char *filterNoIds = filterClause(tj->database, tj->table, regionList->chrom, NULL);
+if (filterNoIds != NULL)
     {
     if (joined->filter == NULL)
 	joined->filter = dyStringNew(0);
     else
 	dyStringAppend(joined->filter, " AND ");
-    dyStringAppend(joined->filter, filter);
+    dyStringAppend(joined->filter, filterNoIds);
     if (!isFirst)
 	{
         needUpdateFilter = TRUE;
@@ -609,11 +617,10 @@ if (idHash != NULL)
 for (region = regionList; region != NULL; region = region->next)
     {
     char **row;
-    char *filter = filterClause(tj->database, tj->table, region->chrom);
+    /* We free at end of loop so we get new one for each chromosome. */
+    char *filter = filterClause(tj->database, tj->table, region->chrom, identifierFilter);
     struct sqlResult *sr = regionQuery(conn, tj->table, 
     	sqlFields->string, region, isPositional, filter);
-    if (filter == NULL)	/* We free at end of loop so we get new one for each chromosome. */
-	filter = filterClause(tj->database, tj->table, region->chrom);
     while (sr != NULL && (row = sqlNextRow(sr)) != NULL)
         {
 	if (idFieldIx < 0)
@@ -1110,13 +1117,15 @@ boolean doJoin = joinRequired(database, table,
 			      fieldList, &dtfList, &filterTables);
 struct region *region;
 struct bed *bedList = NULL;
+char *idField = getIdField(database, curTrack, table, hti);
 struct hash *idHash = identifierHash(database, table);
 
 if (! doJoin)
     {
     for (region = regionList; region != NULL; region = region->next)
 	{
-	char *filter = filterClause(database, table, region->chrom);
+	char *identifierFilter = identifierWhereClause(idField, idHash);
+	char *filter = filterClause(database, table, region->chrom, identifierFilter);
 	struct bed *bedListRegion = getRegionAsMergedBed(database, table,
 				    region, filter, idHash, lm, retFieldCount);
 	struct bed *bed, *nextBed;

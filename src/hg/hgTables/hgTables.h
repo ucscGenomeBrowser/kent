@@ -279,7 +279,7 @@ struct joinerDtf *filteringTables();
 /* Get list of tables we're filtering on as joinerDtf list (with
  * the field entry NULL). */
 
-char *filterClause(char *db, char *table, char *chrom);
+char *filterClause(char *db, char *table, char *chrom, char *extraClause);
 /* Get filter clause (something to put after 'where')
  * for table */
 
@@ -535,6 +535,9 @@ struct hash *identifierHash(char *db, char *table);
 char *getIdField(char *db, struct trackDb *track, char *table, 
 	struct hTableInfo *hti);
 /* Get ID field for table, or NULL if none.  FreeMem result when done */
+
+char *identifierWhereClause(char *idField, struct hash *idHash);
+/* If the number of pasted IDs is reasonably low, return a where-clause component for the IDs. */
 
 /* --------- Summary and stats stuff -------------- */
 long long basesInRegion(struct region *regionList, int limit);

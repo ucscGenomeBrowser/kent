@@ -22,7 +22,7 @@
 #include "bedGraph.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.69 2008/10/13 16:08:26 larrym Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.70 2009/01/09 00:58:26 angie Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -609,7 +609,7 @@ if (NULL != table->dbTableName)
  */
 if (table->isBedGraph)
     {
-    char *filter = filterClause(database, table->actualTable, region->chrom);
+    char *filter = filterClause(database, table->actualTable, region->chrom, NULL);
     char fields[256];
     struct sqlResult *sr = NULL;
     char **row;

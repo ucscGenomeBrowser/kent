@@ -7,7 +7,7 @@
 #include "wikiTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.1 2008/05/27 23:48:28 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.2 2009/01/09 00:58:27 angie Exp $";
 
 void wikiTrackDb(struct trackDb **list)
 /* create a trackDb entry for the wiki track */
@@ -78,7 +78,7 @@ struct sqlConnection *wikiConn = wikiConnect();
 struct sqlResult *sr = NULL;
 char where[512];
 
-char *filter = filterClause(wikiDbName(), WIKI_TRACK_TABLE, region->chrom);
+char *filter = filterClause(wikiDbName(), WIKI_TRACK_TABLE, region->chrom, NULL);
 
 if (filter)
     safef(where, sizeof(where), "db='%s' AND %s", database, filter);

@@ -29,7 +29,7 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.170 2009/01/06 19:51:44 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.171 2009/01/09 00:58:26 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -950,6 +950,11 @@ freez(&splitTable);
 return count;
 }
 
+#if defined(__GNUC__)
+static void hOrFPrintf(FILE *f, char *format, ...)
+__attribute__((format(printf, 2, 3)));
+#endif
+
 static void hOrFPrintf(FILE *f, char *format, ...)
 /* fprintf if f is non-null, else hPrintf. */
 {
@@ -1062,13 +1067,18 @@ else
 /* If can find id field for table then get
  * uploaded list of identifiers, create identifier hash
  * and add identifier column to end of result set. */
+char *identifierFilter = NULL;
 if (idField != NULL)
     {
     idHash = identifierHash(db, table);
     if (idHash != NULL)
 	{
-	dyStringAppendC(fieldSpec, ',');
-	dyStringAppend(fieldSpec, idField);
+	identifierFilter = identifierWhereClause(idField, idHash);
+	if (isEmpty(identifierFilter))
+	    {
+	    dyStringAppendC(fieldSpec, ',');
+	    dyStringAppend(fieldSpec, idField);
+	    }
 	}
     }
 isPositional = htiIsPositional(hti);
@@ -1079,7 +1089,7 @@ for (region = regionList; region != NULL; region = region->next)
     struct sqlResult *sr;
     char **row;
     int colIx, lastCol = fieldCount-1;
-    char *filter = filterClause(db, table, region->chrom);
+    char *filter = filterClause(db, table, region->chrom, identifierFilter);
 
     sr = regionQuery(conn, table, fieldSpec->string, 
     	region, isPositional, filter);
@@ -1089,8 +1099,11 @@ for (region = regionList; region != NULL; region = region->next)
     /* First time through print column names. */
     if (! printedColumns)
         {
-	if (filter != NULL)
-	    hOrFPrintf(f, "#filter: %s\n", filter);
+	// Show only the SQL filter built from filter page options, not identifierFilter,
+	// because identifierFilter can get enormous (like 126kB for 12,500 rsIDs).
+	char *filterNoIds = filterClause(db, table, region->chrom, NULL);
+	if (filterNoIds != NULL)
+	    hOrFPrintf(f, "#filter: %s\n", filterNoIds);
 	hOrFPrintf(f, "#");
 	if (showItemRgb)
 	    {
@@ -1108,7 +1121,7 @@ for (region = regionList; region != NULL; region = region->next)
 	}
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	if (idHash == NULL || hashLookup(idHash, row[fieldCount]))
+	if (idHash == NULL || isNotEmpty(identifierFilter) || hashLookup(idHash, row[fieldCount]))
 	    {
 	    if (showItemRgb)
 		itemRgbDataOut(f, row, lastCol, itemRgbCol);

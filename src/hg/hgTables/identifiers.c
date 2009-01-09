@@ -15,7 +15,7 @@
 #include "wikiTrack.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.25 2009/01/05 20:49:55 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.26 2009/01/09 00:58:27 angie Exp $";
 
 
 static boolean forCurTable()
@@ -103,18 +103,23 @@ if (!isCustomTrack(curTable))
 	hPrintf("<TT>%s</TT><BR>\n", tmp);
 	freeMem(tmp);
 	}
-    if (aliasField != NULL && differentString(xrefTable, curTable))
+    if (aliasField != NULL)
 	{
 	char tmpTable[512];
 	char query[2048];
 	safef(tmpTable, sizeof(tmpTable), "tmp%s%s", curTable, xrefTable);
-	safef(query, sizeof(query),
-	      "create temporary table %s "
-	      "select %s.%s as %s from %s,%s "
-	      "where %s.%s = %s.%s and %s.%s != %s.%s limit 100000",
-	      tmpTable, xrefTable, aliasField, aliasField, xrefTable, curTable,
-	      xrefTable, xrefIdField, curTable, idField,
-	      xrefTable, xrefIdField, xrefTable, aliasField);
+	if (differentString(xrefTable, curTable))
+	    safef(query, sizeof(query),
+		  "create temporary table %s select %s.%s as %s from %s,%s "
+		  "where %s.%s = %s.%s and %s.%s != %s.%s limit 100000",
+		  tmpTable, xrefTable, aliasField, aliasField, xrefTable, curTable,
+		  xrefTable, xrefIdField, curTable, idField,
+		  xrefTable, xrefIdField, xrefTable, aliasField);
+	else
+	    safef(query, sizeof(query),
+		  "create temporary table %s select %s from %s "
+		  "where %s != %s limit 100000",
+		  tmpTable, aliasField, xrefTable, aliasField, xrefIdField);
 	sqlUpdate(conn, query);
 	exampleList = getExamples(conn, tmpTable, aliasField, 3);
 	for (ex = exampleList;  ex != NULL;  ex = ex->next)
@@ -190,18 +195,21 @@ htmlClose();
 
 static void addPrimaryIdsToHash(struct sqlConnection *conn, struct hash *hash,
 				char *idField, struct slName *tableList,
-				struct lm *lm)
+				struct lm *lm, char *extraWhere)
 /* For each table in tableList, query all idField values and add to hash,
  * id -> uppercased id for case-insensitive matching. */
 {
 struct slName *table;
 struct sqlResult *sr;
 char **row;
-char query[1024];
+struct dyString *query = dyStringNew(0);
 for (table = tableList;  table != NULL;  table = table->next)
     {
-    safef(query, sizeof(query), "select %s from %s", idField, table->name);
-    sr = sqlGetResult(conn, query);
+    dyStringClear(query);
+    dyStringPrintf(query, "select %s from %s", idField, table->name);
+    if (extraWhere != NULL)
+	dyStringPrintf(query, " where %s", extraWhere);
+    sr = sqlGetResult(conn, query->string);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	if (isNotEmpty(row[0]))
@@ -217,7 +225,7 @@ for (table = tableList;  table != NULL;  table = table->next)
 
 static void addXrefIdsToHash(struct sqlConnection *conn, struct hash *hash,
 			     char *idField, char *xrefTable, char *xrefIdField,
-			     char *aliasField, struct lm *lm)
+			     char *aliasField, struct lm *lm, char *extraWhere)
 /* Query all id-alias pairs from xrefTable (where id actually appears
  * in curTable) and hash alias -> id.  Convert alias to upper case for
  * case-insensitive matching.
@@ -225,18 +233,23 @@ static void addXrefIdsToHash(struct sqlConnection *conn, struct hash *hash,
 {
 struct sqlResult *sr;
 char **row;
-char query[1024];
+struct dyString *query = dyStringNew(0);
 if (sameString(xrefTable, curTable))
-    safef(query, sizeof(query), "select %s,%s from %s",
-      aliasField, xrefIdField, xrefTable);
+    dyStringPrintf(query, "select %s,%s from %s", aliasField, xrefIdField, xrefTable);
 else
     /* Get only the aliases for items actually in curTable.idField: */
-    safef(query, sizeof(query),
+    dyStringPrintf(query,
 	  "select %s.%s,%s.%s from %s,%s where %s.%s = %s.%s",
 	  xrefTable, aliasField, xrefTable, xrefIdField,
 	  xrefTable, curTable,
 	  xrefTable, xrefIdField, curTable, idField);
-sr = sqlGetResult(conn, query);
+if (extraWhere != NULL)
+    // extraWhere begins w/ID field of curTable=xrefTable.  Skip that field name and 
+    // use "xrefTable.aliasField" with the IN (...) condition that follows:
+    dyStringPrintf(query, " %s %s.%s %s",
+		   (sameString(xrefTable, curTable) ? "where" : "and"),
+		   xrefTable, aliasField, skipToSpaces(extraWhere));
+sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (sameString(row[0], row[1]))
@@ -248,23 +261,17 @@ sqlFreeResult(&sr);
 }
 
 static struct hash *getAllPossibleIds(struct sqlConnection *conn,
-				      struct lm *lm, char **retIdField)
+				      struct lm *lm, char *idField, char *extraWhere)
 /* Make a hash of all identifiers in curTable (and alias tables if specified) 
  * so that we can check the validity of pasted/uploaded identifiers. */
 {
 struct hash *matchHash = hashNew(20);
 struct slName *tableList;
-struct hTableInfo *hti = maybeGetHti(database, curTable);
-char *idField = NULL;
 char *xrefTable = NULL, *xrefIdField = NULL, *aliasField = NULL;
-char *actualDb = database;
 struct sqlConnection *alternateConn = conn;
 
 if (sameWord(curTable, WIKI_TRACK_TABLE))
-    {
-    actualDb = wikiDbName();
     alternateConn = wikiConnect();
-    }
 
 if (isCustomTrack(curTable))
     /* Currently we don't check whether these are valid CT item
@@ -276,23 +283,42 @@ else if (strchr(curTable, '.'))
     tableList = slNameNew(curTable);
 else
     tableList = hSplitTableNames(database, curTable);
-idField = getIdField(actualDb, curTrack, curTable, hti);
 if (idField != NULL)
-    addPrimaryIdsToHash(alternateConn, matchHash, idField, tableList, lm);
-if (retIdField != NULL)
-    *retIdField = idField;
+    addPrimaryIdsToHash(alternateConn, matchHash, idField, tableList, lm, extraWhere);
 getXrefInfo(alternateConn, &xrefTable, &xrefIdField, &aliasField);
 if (xrefTable != NULL)
     {
     addXrefIdsToHash(alternateConn, matchHash, idField,
-		     xrefTable, xrefIdField, aliasField, lm);
+		     xrefTable, xrefIdField, aliasField, lm, extraWhere);
     }
 if (sameWord(curTable, WIKI_TRACK_TABLE))
     wikiDisconnect(&alternateConn);
 return matchHash;
 }
 
+static char *slNameToInExpression(char *field, struct slName *allTerms)
+/* Given an slName list, return a SQL "field IN ('term1', 'term2', ...)" expression
+ * to be used in a WHERE clause. */
+{
+struct dyString *dy = dyStringNew(0);
+dyStringPrintf(dy, "%s in (", field);
+boolean first = TRUE;
+struct slName *term;
+for (term = allTerms;  term != NULL;  term = term->next)
+    {
+    if (first)
+	first = FALSE;
+    else
+	dyStringAppend(dy, ", ");
+    dyStringPrintf(dy, "'%s'", term->name);
+    }
+dyStringAppend(dy, ")");
+return dyStringCannibalize(&dy);
+}
+
 #define MAX_IDTEXT (64 * 1024)
+#define DEFAULT_MAX_IDS_IN_WHERE 10000
+
 
 void doPastedIdentifiers(struct sqlConnection *conn)
 /* Process submit in paste identifiers page. */
@@ -311,9 +337,11 @@ if (isNotEmpty(idText))
     FILE *f;
     int totalTerms = 0, foundTerms = 0;
     char *exampleMiss = NULL;
-    char *idField = NULL;
-    struct lm *lm = lmInit(0);
-    struct hash *matchHash = getAllPossibleIds(conn, lm, &idField);
+    char *actualDb = database;
+    if (sameWord(curTable, WIKI_TRACK_TABLE))
+	actualDb = wikiDbName();
+    struct hTableInfo *hti = maybeGetHti(actualDb, curTable);
+    char *idField = getIdField(actualDb, curTrack, curTable, hti);
     if (idField == NULL)
 	{
 	warn("Sorry, I can't tell which field of table %s to treat as the "
@@ -326,54 +354,67 @@ if (isNotEmpty(idText))
 	htmlClose();
 	return;
 	}
-    trashDirFile(&tn, "hgtData", "identifiers", ".key");
-    f = mustOpen(tn.forCgi, "w");
+    struct slName *allTerms = NULL, *term;
     while (lineFileNext(lf, &line, NULL))
 	{
 	while ((word = nextWord(&line)) != NULL)
 	    {
-	    struct slName *matchList = NULL, *match;
+	    term = slNameNew(word);
+	    slAddHead(&allTerms, term);
 	    totalTerms++;
-	    if (isCustomTrack(curTable))
+	    }
+	}
+    lineFileClose(&lf);
+    char *extraWhere = NULL;
+    int maxIdsInWhere = cartUsualInt(cart, "hgt_maxIdsInWhere", DEFAULT_MAX_IDS_IN_WHERE);
+    if (totalTerms > 0 && totalTerms <= maxIdsInWhere)
+	extraWhere = slNameToInExpression(idField, allTerms);
+
+    struct lm *lm = lmInit(0);
+    struct hash *matchHash = getAllPossibleIds(conn, lm, idField, extraWhere);
+    trashDirFile(&tn, "hgtData", "identifiers", ".key");
+    f = mustOpen(tn.forCgi, "w");
+    for (term = allTerms;  term != NULL;  term = term->next)
+	{
+	struct slName *matchList = NULL, *match;
+	if (isCustomTrack(curTable))
+	    {
+	    /* Currently we don't check whether these are valid CT item
+	     * names or not.  matchHash is empty for CTs. */
+	    matchList = slNameNew(term->name);
+	    }
+	else
+	    {
+	    /* Support multiple alias->id mappings: */
+	    char upcased[1024];
+	    safecpy(upcased, sizeof(upcased), term->name);
+	    touppers(upcased);
+	    struct hashEl *hel = hashLookup(matchHash, upcased);
+	    if (hel != NULL)
 		{
-		/* Currently we don't check whether these are valid CT item
-		 * names or not.  matchHash is empty for CTs. */
-		matchList = slNameNew(word);
-		}
-	    else
-		{
-		/* Support multiple alias->id mappings: */
-		char upcased[1024];
-		safecpy(upcased, sizeof(upcased), word);
-		touppers(upcased);
-		struct hashEl *hel = hashLookup(matchHash, upcased);
-		if (hel != NULL)
+		matchList = slNameNew((char *)hel->val);
+		while ((hel = hashLookupNext(hel)) != NULL)
 		    {
-		    matchList = slNameNew((char *)hel->val);
-		    while ((hel = hashLookupNext(hel)) != NULL)
-			{
-			match = slNameNew((char *)hel->val);
-			slAddHead(&matchList, match);
-			}
+		    match = slNameNew((char *)hel->val);
+		    slAddHead(&matchList, match);
 		    }
 		}
-	    if (matchList != NULL)
+	    }
+	if (matchList != NULL)
+	    {
+	    foundTerms++;
+	    for (match = matchList;  match != NULL;  match = match->next)
 		{
-		foundTerms++;
-		for (match = matchList;  match != NULL;  match = match->next)
-		    {
-		    mustWrite(f, match->name, strlen(match->name));
-		    mustWrite(f, "\n", 1);
-		    }
+		mustWrite(f, match->name, strlen(match->name));
+		mustWrite(f, "\n", 1);
 		}
-	    else if (exampleMiss == NULL)
-		{
-		exampleMiss = cloneString(word);
-		}
+	    }
+	else if (exampleMiss == NULL)
+	    {
+	    exampleMiss = cloneString(term->name);
 	    }
 	}
     carefulClose(&f);
-    lineFileClose(&lf);
     cartSetString(cart, hgtaIdentifierDb, database);
     cartSetString(cart, hgtaIdentifierTable, curTable);
     cartSetString(cart, hgtaIdentifierFile, tn.forCgi);
@@ -455,6 +496,34 @@ else
     lineFileClose(&lf);
     return hash;
     }
+}
+
+char *identifierWhereClause(char *idField, struct hash *idHash)
+/* If the number of pasted IDs is reasonably low, return a where-clause component for the IDs. */
+{
+if (idHash == NULL || idField == NULL)
+    return NULL;
+int numIds = hashNumEntries(idHash);
+int maxIdsInWhere = cartUsualInt(cart, "hgt_maxIdsInWhere", DEFAULT_MAX_IDS_IN_WHERE);
+if (numIds > 0 && numIds <= maxIdsInWhere)
+    {
+    struct dyString *dy = dyStringNew(16 * numIds);
+    dyStringPrintf(dy, "%s in (", idField);
+    struct hashCookie hc = hashFirst(idHash);
+    boolean first = TRUE;
+    char *id;
+    while ((id = hashNextName(&hc)) != NULL)
+	{
+	if (first)
+	    first = FALSE;
+	else
+	    dyStringAppend(dy, ", ");
+	dyStringPrintf(dy, "'%s'", id);
+	}
+    dyStringAppend(dy, ")");
+    return dyStringCannibalize(&dy);
+    }
+return NULL;
 }
 
 void doClearPasteIdentifierText(struct sqlConnection *conn)

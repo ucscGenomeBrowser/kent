@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.61 2008/10/07 22:39:58 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.62 2009/01/09 00:58:26 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1300,7 +1300,7 @@ for (pat = *pPatList;  pat != NULL;  pat = nextPat)
 *pPatList = patListOut;
 }
 
-char *filterClause(char *db, char *table, char *chrom)
+char *filterClause(char *db, char *table, char *chrom, char *extraClause)
 /* Get filter clause (something to put after 'where')
  * for table */
 {
@@ -1316,9 +1316,9 @@ char explicitDb[128];
 char splitTable[256];
 char explicitDbTable[512];
 
-/* Return NULL if no filter on us. */
+/* Return just extraClause (which may be NULL) if no filter on us. */
 if (! (anyFilter() && filteredOrLinked(db, table)))
-    return NULL;
+    return cloneString(extraClause);
 conn = sqlConnect(db);
 
 safef(oldDb, sizeof(oldDb), "%s", db);
@@ -1342,7 +1342,7 @@ varList = cartFindPrefix(cart, varPrefix);
 if (varList == NULL)
     {
     sqlDisconnect(&conn);
-    return NULL;
+    return cloneString(extraClause);
     }
 
 /* Create filter clause string, stepping through vars. */
@@ -1483,10 +1483,14 @@ hashElFreeList(&varList);
 if (dy->stringSize == 0)
     {
     dyStringFree(&dy);
-    return NULL;
+    return cloneString(extraClause);
     }
 else
+    {
+    if (isNotEmpty(extraClause))
+	dyStringPrintf(dy, " and %s", extraClause);
     return dyStringCannibalize(&dy);
+    }
 }
 
 
@@ -1497,7 +1501,7 @@ void doTest(struct sqlConnection *conn)
 char *s = NULL;
 textOpen();
 hPrintf("Doing test!\n");
-s = filterClause("hg16", "knownGene", "chrX");
+s = filterClause("hg16", "knownGene", "chrX", NULL);
 if (s != NULL)
     hPrintf("%s\n", s);
 else
