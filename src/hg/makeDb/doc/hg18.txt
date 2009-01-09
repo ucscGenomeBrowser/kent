@@ -26075,15 +26075,90 @@ cat > listWig.csh << 'EOF'
         /gbdb/hg18/multiz44way/phyloP44wayEuarch.wib
     hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 phyloP44wayEuarch phyloP44wayEuarch.wig
 
+    # primates only: exclude all but these: 
+    cd /cluster/data/hg18/bed/multiz44way/4d
+    set PHASTBIN = /cluster/bin/phast.2008-12-18
+    $PHASTBIN/tree_doctor 44way.all.mod \
+	--prune-all-but=hg18,panTro2,gorGor1,ponAbe2,rheMac2,calJac1,tarSyr1,micMur1,otoGar1 \
+	> 44way.primate.mod
+    cd ../consPhyloP/run.phyloP
+    mkdir primate
+    cd primate
+    cp ../../../4d/44way.primate.mod tree.mod
+    mkdir wig
+    gensub2 ../in.list single ../template jobList
+    para create jobList
+    # 2823 jobs
+    para try
+    para check
+    para push
+
+    # quick!
+    para time
+    #Completed: 2823 of 2823 jobs
+    #CPU time in finished jobs:     895998s   14933.30m   248.89h   10.37d  0.028 y
+    #IO & Wait Time:                 66654s    1110.90m    18.52h    0.77d  0.002 y
+    #Average job time:                 341s       5.68m     0.09h    0.00d
+    #Longest finished job:             503s       8.38m     0.14h    0.01d
+    #Submission to last job:          1190s      19.83m     0.33h    0.01d
+
+    # process results and load wiggle
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/primate/wig
+    csh ../../listWig.csh | xargs cat | nice wigEncode stdin phyloP44wayPrimate.wig phyloP44wayPrimate.wib
+    #Converted stdin, upper limit 0.99, lower limit -8.17
+    ln -s  /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/primate/wig/phyloP44wayPrimate.wib /gbdb/hg18/multiz44way/phyloP44wayPrimate.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 phyloP44wayPrimate phyloP44wayPrimate.wig
+    
     # get stats
     cd run.phyloP/all
     hgWiggle -db=hg18 -verbose=2 -doStats phyloP44wayAll > stats.out
+    hgWiggle -db=hg18 -chr=chr20 -rawDataOut phyloP44wayAll | textHistogram -real stdin -minVal=-20 -maxBinCount=30 >&! histo.out
+
     cd ../placental
     hgWiggle -db=hg18 -verbose=2 -doStats phyloP44wayPlacMammal > stats.out
+    hgWiggle -db=hg18 -chr=chr20 -rawDataOut phyloP44wayPlacMammal | textHistogram -real stdin -minVal=-20 -maxBinCount=30 >&! histo.out
+
     cd ../euarch
     hgWiggle -db=hg18 -verbose=2 -doStats phyloP44wayEuarch > stats.out
+    hgWiggle -db=hg18 -chr=chr20 -rawDataOut phyloP44wayEuarch | textHistogram -real stdin -minVal=-20 -maxBinCount=30 >&! histo.out
 
+    cd ../primate
+    hgWiggle -db=hg18 -verbose=2 -doStats phyloP44wayPrimate > stats.out
+    hgWiggle -db=hg18 -chr=chr20 -rawDataOut phyloP44wayPrimate | textHistogram -real stdin -minVal=-20 -maxBinCount=30 >&! histo.out
 
+    # Lineage-specific runs
+    # uses --subtree option of phyloP
+
+    # name ancestor nodes 
+    cd /cluster/data/hg18/bed/multiz44way/4d
+    set PHASTBIN = /cluster/bin/phast.2008-12-18
+    $PHASTBIN/tree_doctor 44way.all.mod --name-ancestors >44way.all-ancestors.mod 
+    cd ../consPhyloP/run.phyloP
+    sed 's/phyloP/phyloP --subtree=$3/' doPhyloP.csh > doPhyloPSubtree.csh
+    # visually inspect shell script
+
+    cat > template.subtree << 'EOF'
+#LOOP
+csh .//./doPhyloPSubtree.csh $(file1) {check out line+ wig/$(dir1)/$(file1).wig} SUBTREE
+#ENDLOOP
+'EOF'
+
+    # primate lineage-specific
+    cd /cluster/data/hg18/bed/multiz44way/4d/consPhyloP/run.phyloP
+    mkdir primate-ls
+    cd primate-ls
+    cp ../../../4d/44way.all-ancestors.mod tree.mod
+    mkdir wig
+    sed 's/SUBTREE/hg18-micMur1/' ../template.subtree > template.ls
+    gensub2 ../in.list single template.ls jobList
+    para create jobList
+    # 2823 jobs
+    para try
+    para check
+    para push
+
+    #human LS:  --subtree hg18
 
 #########################################################################
 # Create Syntenic and Recip Best net files to load into tracks to view
