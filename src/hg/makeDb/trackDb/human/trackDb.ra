@@ -2869,3 +2869,11 @@ dataVersion January 2009
     graphTypeDefault Bar
     windowingFunction mean
     noInherit	on
+
+searchName fox2ClipSeq
+searchTable fox2ClipSeq
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex ES_[0-9]+_[0-9]+
+searchPriority 30
