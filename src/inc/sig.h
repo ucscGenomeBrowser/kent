@@ -75,6 +75,12 @@
 #define genomeRangeTreeSwapSig 0x0481fbf7
 /* Signature of genomeRangeTree binary data file */
 
+#define bptSig 0x78CA8C91
+/* Signature of generic b+ tree index file. */
+
+#define bptSwapped 0x918CCA78
+/* Signature of generic b+ tree index file. */
+
 #endif /* SIG_H */
 
 
