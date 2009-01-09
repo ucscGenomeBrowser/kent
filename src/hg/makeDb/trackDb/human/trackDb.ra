@@ -2829,7 +2829,7 @@ priority 250
 visibility hide
 visibilityViewDefaults	reads=pack density=full
 type bed 3 .
-dataVersion November 2009
+dataVersion January 2009
 
     track fox2ClipSeq
     subTrack fox2ClipSeqComp
