@@ -18,6 +18,11 @@ my::
 	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgGeneData ${CGI_BIN}-${USER}/
 	chmod -R a+rX ${CGI_BIN}-${USER}/hgGeneData
 
+install::
+	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgGeneData \
+		${DESTDIR}${CGI_BIN}/hgGeneData/
+	chmod -R a+rX ${DESTDIR}${CGI_BIN}/hgGeneData
+
 alpha::
 	rm -fr ${CGI_BIN}/hgGeneData
 	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgGeneData ${CGI_BIN}/

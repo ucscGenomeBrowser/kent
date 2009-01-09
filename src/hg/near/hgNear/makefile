@@ -15,6 +15,11 @@ my::
 	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgNearData ${CGI_BIN}-${USER}/
 	chmod -R a+rX ${CGI_BIN}-${USER}/hgNearData
 
+install::
+	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgNearData \
+		${DESTDIR}${CGI_BIN}/
+	chmod -R a+rX ${DESTDIR}${CGI_BIN}/hgNearData
+
 alpha::
 	rm -fr ${CGI_BIN}/hgNearData
 	rsync -ar --exclude=CVS/ --exclude=.svn/ --delete hgNearData ${CGI_BIN}/
