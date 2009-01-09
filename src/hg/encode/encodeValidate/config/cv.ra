@@ -529,11 +529,19 @@ orderUrl http://www.abcam.com/index.html?datasheet=10483
 
 term Max
 type Antibody
-antibodyDescription rabbit polyclonal
-targetDescription MYC associated factor X, epitope mapping at the C-terminus
+antibodyDescription rabbit polyclonal, epitope mapping at the C-terminus of Max of human origin
+targetDescription MYC associated factor X
 vendorName Santa Cruz Biotech
 vendorId sc-197
 orderUrl http://www.scbt.com/product.php?datasheet=197
+
+term NF-E2
+type Antibody
+antibodyDescription Rabbit polyclonal, epitope mapping at the C-terminus of NF-E2 of mouse origin and recommended for detection of protein of rat, mouse and human origin.
+targetDescription Nuclear factor, erythroid-derived 2
+vendorName Santa Cruz Biotech
+vendorId sc-291
+orderUrl http://www.scbt.com/product.php?datasheet=291
 
 term NRSF
 type Antibody
