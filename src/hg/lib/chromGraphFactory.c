@@ -15,7 +15,7 @@
 #include "chromGraphFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.13 2008/09/17 18:10:13 kent Exp $";
+static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.14 2009/01/09 00:14:35 galt Exp $";
 
 #define affy500Table "snpArrayAffy500"
 #define affy6Table "snpArrayAffy6"
@@ -682,6 +682,7 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     chopper(line, row, colCount);
     char *name = row[0];
+    char *marker = cloneString(name);
     touppers(name);
     ++total;
     pos = hashFindVal(hash, name);
@@ -705,9 +706,14 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
 		cg->chrom = pos->chrom;
 		cg->chromStart = pos->pos;
 		cg->val = cppNeedDouble(cpp, row, i);
+		cg->marker = marker;
 		slAddHead(&fileEl->cgList, cg);
 		}
 	    }
+	}
+    else
+	{
+	freeMem(marker);
 	}
     }
 if (report)

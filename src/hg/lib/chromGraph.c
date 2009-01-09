@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.16 2009/01/08 22:48:18 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.17 2009/01/09 00:14:34 galt Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -385,6 +385,14 @@ void chromGraphToBinGetMinMax(struct chromGraph *list, char *fileName,
 {
 struct chromGraph *el;
 FILE *f = mustOpen(fileName, "wb");
+
+/* make a .cgm text file in parallel with binary for use by GS 
+ * or other programs requiring marker label preservation */
+char cgmName[256];
+safef(cgmName, sizeof(cgmName), "%s.cgm", fileName);
+FILE *m = mustOpen(cgmName, "w");
+int cgmCount = 0;
+
 bits32 sig = chromGraphSig;
 bits32 endMarker = (bits32)(-1);
 struct cInfo *ci, *ciList = cInfoMake(list, fileName);
@@ -426,6 +434,12 @@ for (ci = ciList; ci  != NULL; ci = ci->next)
 	bits32 pos = el->chromStart;
 	writeOne(f, pos);
 	writeOne(f, el->val);
+        if (el->marker)
+	    {
+	    fprintf(m, "%s\t%s\t%d\t%f\n", el->marker, ci->name, el->chromStart, el->val);
+            freeMem(el->marker);
+	    ++cgmCount;
+	    }
 	}
     writeOne(f, endMarker);
     }
@@ -438,6 +452,9 @@ for (ci = ciList; ci != NULL; ci = ci->next)
     msbFirstWriteBits64(f, ci->offset);
     }
 carefulClose(&f);
+carefulClose(&m);
+if (cgmCount < 1)
+    remove(cgmName);
 slFreeList(&ciList);
 
 /* Save return variables */
