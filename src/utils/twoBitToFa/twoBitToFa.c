@@ -6,8 +6,9 @@
 #include "dnaseq.h"
 #include "fa.h"
 #include "twoBit.h"
+#include "bPlusTree.h"
 
-static char const rcsid[] = "$Id: twoBitToFa.c,v 1.11 2006/10/16 21:21:12 galt Exp $";
+static char const rcsid[] = "$Id: twoBitToFa.c,v 1.12 2009/01/09 10:14:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +25,7 @@ errAbort(
   "                    in the format seqSpec[:start-end], e.g. chr1 or chr1:0-189\n"
   "                    where coordinates are half-open zero-based, i.e. [start,end)\n"
   "   -noMask - convert sequence to all upper case\n"
+  "   -bpt=index.bpt - use bpt index instead of built in one\n"
   "\n"
   "Sequence and range may also be specified as part of the input\n"
   "file name using the syntax:\n"
@@ -40,6 +42,7 @@ int clStart = 0;	/* Start from command line. */
 int clEnd = 0;		/* End from command line. */
 char *clSeqList = NULL; /* file containing list of seq names */
 bool noMask = FALSE;  /* convert seq to upper case */
+char *clBpt = NULL;	/* External index file. */
 
 static struct optionSpec options[] = {
    {"seq", OPTION_STRING},
@@ -47,6 +50,7 @@ static struct optionSpec options[] = {
    {"start", OPTION_INT},
    {"end", OPTION_INT},
    {"noMask", OPTION_BOOLEAN},
+   {"bpt", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -98,7 +102,10 @@ else if (clSeqList != NULL)
     tbs = twoBitSpecNewFile(inName, clSeqList);
 else
     tbs = twoBitSpecNew(inName);
-tbf = twoBitOpen(tbs->fileName);
+if (tbs->seqs != NULL && clBpt != NULL)
+    tbf = twoBitOpenExternalBptIndex(tbs->fileName, clBpt);
+else
+    tbf = twoBitOpen(tbs->fileName);
 if (tbs->seqs == NULL)
     processAllSeqs(tbf, outFile);
 else
@@ -118,6 +125,7 @@ clSeq = optionVal("seq", clSeq);
 clStart = optionInt("start", clStart);
 clEnd = optionInt("end", clEnd);
 clSeqList = optionVal("seqList", clSeqList);
+clBpt = optionVal("bpt", clBpt);
 if ((clStart > clEnd) && (clSeq == NULL))
     errAbort("must specify -seq with -start and -end");
 if ((clSeq != NULL) && (clSeqList != NULL))
