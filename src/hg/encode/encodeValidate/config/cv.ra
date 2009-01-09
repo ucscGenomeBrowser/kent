@@ -760,3 +760,28 @@ description promoter for the G-gamma globulin genes
 term 2008-10-01
 type freezeDate
 description 2008-10-01 freeze
+
+# Control Terms
+term Control
+type control
+description This data represents a control being compared with the other tracks in the set.
+
+term Input
+type control
+description Control raw signal which may be subtracted from experimental raw signal before peaks are called.
+
+term Large_Fragment
+type control
+description Control signal from large fragment Sono-Seq DNA (350-800 bp).
+
+term MNase
+type control
+description Control signal from MNase digested DNA.
+
+term Mouse_IgG
+type control
+description Control signal from Normal Mouse IgG ChIP-seq.
+
+term Naked_DNA
+type control
+description Control signal from Naked DNA.
