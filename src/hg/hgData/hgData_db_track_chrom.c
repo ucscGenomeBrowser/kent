@@ -5,7 +5,7 @@
 #include "chromInfo.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgData_db_track_chrom.c,v 1.1.2.1 2009/01/08 05:22:39 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_db_track_chrom.c,v 1.1.2.2 2009/01/09 07:41:36 mikep Exp $";
 
 static struct dbDbClade *dbDbCladeLoad(char **row)
 /* Load a dbDbClade from row fetched with select * from dbDb
@@ -150,7 +150,7 @@ static void printDbOneColumn(struct dbDbClade *db, char *column)
 // print an array of all values for one column in the db table
 {
 struct dbDbClade *t;
-printf(" \"%s\" : [", column);
+printf("\"%s\" : [", column);
 for (t = db ; t ; t = t->next)
   {
   if (sameOk(column,"orderKey"))
@@ -219,7 +219,7 @@ static void printTrackDbOneColumn(struct trackDb *db, char *column)
 // print a column of trackDb data 
 {
 struct trackDb *t;
-printf(" \"%s\" : [", column);
+printf("\"%s\" : [", column);
 for (t = db ; t ; t = t->next)
         printf(" %s,", sameOk(column, "tableName") ? quote(t->tableName) :
             (sameOk(column, "type") ? quote(t->type) :
@@ -265,7 +265,7 @@ static void printChromsOneColumn(struct chromInfo *ci, char *column)
 // print a list of chromInfo data by column
 {
 struct chromInfo *t;
-printf(" \"%s\" : [", column);
+printf("\"%s\" : [", column);
 for (t = ci ; t ; t = t->next)
     {
     if (sameOk("size", column))

@@ -5,7 +5,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.2 2009/01/08 17:14:12 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.3 2009/01/09 07:41:36 mikep Exp $";
 
 void printBed(struct bed *b, struct hTableInfo *hti)
 // print out rows of bed data, each row as a list of columns
@@ -13,7 +13,7 @@ void printBed(struct bed *b, struct hTableInfo *hti)
 struct bed *t;
 if (!b)
     return;
-printf(" \"bedColumns\" : [");
+printf("\"bedColumns\" : [");
 if (hti->startField[0] != 0)
     printf("\"%s\",", hti->startField);
 if (hti->endField[0] != 0)
@@ -78,15 +78,15 @@ static void printBedOneColumn(struct bed *b, char *column)
 struct bed *t;
 if (!b)
     return;
-printf(" \"%s\" : [", column);
+printf("\"%s\" : [", column);
 for (t = b ; t ; t = t->next)
     {
     if (sameOk("chromStart", column))
-        printf(" %d,", t->chromStart);
+        printf("%d,", t->chromStart);
     else if (sameOk("chromEnd", column))
-        printf(" %d,", t->chromEnd);
+        printf("%d,", t->chromEnd);
     else
-        printf(" \"%s\",", sameOk(column, "chrom") ? t->chrom : "") ;
+        printf("\"%s\",", sameOk(column, "chrom") ? t->chrom : "") ;
     }
 printf("]\n");
 }

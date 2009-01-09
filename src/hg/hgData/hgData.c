@@ -3,8 +3,10 @@
 #include "hgData.h"
 #include "dystring.h"
 #include "cheapcgi.h"
+#include "bedGraph.h"
+#include "bed.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.1 2009/01/08 05:22:37 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.2 2009/01/09 07:41:35 mikep Exp $";
 #define HGDATA_URI "/data"
 
 /* Commands : 
@@ -31,8 +33,8 @@ if (sameOk(cgiRequestMethod(), "GET"))
 /data/chroms/_DB_                hgData?cmd=chroms&db=_DB_
 /data/chromsByColumns/_DB_       hgData?cmd=chromsByColumns&db=_DB_
 /data/chrom/_DB_/_CHROM_         hgData?cmd=chrom&db=hg18&chrom=hg18
-/data/dataCount/_DB_/_POSITION_  hgData?cmd=dataCount&db=_DB_&position=_POSITION_
-/data/data/_DB_/_POSITION_       hgData?cmd=data&db=_DB_&position=_POSITION_
+/data/dataCount/_DB_/_POSITION_  hgData?cmd=dataCount&db=_DB_&chrom=_POSITION_
+/data/data/_DB_/_POSITION_       hgData?cmd=data&db=_DB_&chrom=_POSITION_
 
 /data/database
 */
@@ -40,16 +42,22 @@ if (sameOk(cgiRequestMethod(), "GET"))
 
 void doGet()
 {
-char *chrom; // chrom from position
-int start, end;  // start,end from position
 // these optional cgi strings are set to NULL if not present
-AllocArray(chrom, 128);
+struct chromInfo *ci = NULL;
+struct trackDb *tdb = NULL;
+struct dbDbClade *dbs = NULL;
+struct hTableInfo *hti = NULL;
+struct bed *b = NULL;
 char *cmd = cgiOptionalString("cmd");
 char *db = cgiOptionalString("db");
 char *track = cgiOptionalString("track");
-char *position = cgiOptionalString("position");
+char *chrom = cgiOptionalString("chrom");
+char *type = cgiOptionalString("type");
+int start = cgiOptionalInt("start",0);
+int end   = cgiOptionalInt("end",0);
+MJP(2); verbose(2,"cmd=[%s] db=[%s] track=[%s] chrom=[%s] start=%d end=%d\n", cmd, db, track, chrom, start,  end);
 // list information about all active databases
-if (!cmd && !db && !track && !position)
+if (!cmd && !db && !track)
     {
     okSendHeader();
     printf("/%s\n/databases\ndatabasesByColumn\ndatabase\n", HGDATA_URI);
@@ -58,38 +66,38 @@ if (!cmd && !db && !track && !position)
     }
 else if (sameOk("databases", cmd) || sameOk("databasesByColumns", cmd)) 
     {
-    struct dbDbClade *dbs = hGetIndexedDbClade(NULL);
-    if (!dbs)
+    MJP(2); verbose(2,"databases code\n");
+    if (!(dbs = hGetIndexedDbClade(NULL)))
 	ERR_NO_DBS_FOUND;
     okSendHeader();
-    printf("{ \n");
+    printf("{\n");
     if (sameOk("databases", cmd))
 	printDb(dbs);
     else
 	printDbByColumn(dbs);	    
     printf("}\n");
-    dbDbCladeFreeList(&dbs);
     }
 // list information about database "db"
 else if (sameOk("database", cmd))
     {
+    MJP(2); verbose(2,"database code\n");
     if (!db)
 	ERR_NO_DATABASE;
-    struct dbDbClade *dbs = hGetIndexedDbClade(db);
-    if (!dbs)
+    if (!(dbs = hGetIndexedDbClade(db)))
 	ERR_DB_NOT_FOUND(db);
     okSendHeader();
     printf("{\n");
     printOneDb(dbs);
     printf("}\n");
-    dbDbCladeFreeList(&dbs);
     }
 // list information about tracks in database "db"
 else if (sameOk("tracks", cmd) || sameOk("tracksByColumns", cmd))
     {
+    MJP(2); verbose(2,"tracks code\n");
     if (!db)
 	ERR_NO_DATABASE;
-    struct trackDb *tdb = hTrackDb(db, NULL);
+    if (!(tdb = hTrackDb(db, NULL)))
+        ERR_TRACK_NOT_FOUND(track, db);
     okSendHeader();
     printf("{ \"db\" : \"%s\",\n", db );
     if (sameOk("tracks", cmd))
@@ -97,27 +105,30 @@ else if (sameOk("tracks", cmd) || sameOk("tracksByColumns", cmd))
     else
 	printTrackDbByColumn(tdb);
     printf("}\n");
-    trackDbFree(&tdb);
     }
 // list information about one track "track" in database "db"
 else if (sameOk("track", cmd))
     {
+    MJP(2); verbose(2,"track code\n");
     if (!db)
 	ERR_NO_DATABASE;
     struct sqlConnection *conn = hAllocConn(db);
-    struct trackDb *tdb = hTrackInfo(conn, track);
+    if (!conn)
+        ERR_NO_DB_CONNECTION(db);
+    if (!(tdb = hTrackInfo(conn, track)))
+        ERR_TRACK_INFO_NOT_FOUND(track, db);
     okSendHeader();
     printf("{ \"db\" : \"%s\",\n\"track\" : \"%s\",\n", db, track);
     printOneTrackDb(tdb);
     printf("}\n");
-    trackDbFree(&tdb);
     hFreeConn(&conn);
     }
 else if (sameOk("chroms", cmd) || sameOk("chromsByColumns", cmd)) // list info for all chroms
     {
+    MJP(2); verbose(2,"chroms code\n");
     if (!db)
 	ERR_NO_DATABASE;
-    struct chromInfo *ci = getAllChromInfo(db);
+    ci = getAllChromInfo(db); // if no chroms found, just print emtpy list
     okSendHeader();
     printf("{ \"db\" : \"%s\",\n\"chromCount\" : %d,\n", db, slCount(ci) );
     if (sameOk("chroms", cmd))
@@ -125,63 +136,130 @@ else if (sameOk("chroms", cmd) || sameOk("chromsByColumns", cmd)) // list info f
     else
 	printChromsByColumn(ci);
     printf("}\n");
-    chromInfoFree(&ci);
     }
 else if (sameOk("chrom", cmd)) // info for one chrom
     {
+    MJP(2); verbose(2,"chrom code\n");
     if (!db)
 	ERR_NO_DATABASE;
     if (!chrom)
 	ERR_NO_CHROM;
-    struct chromInfo *ci = hGetChromInfo(db, chrom);
+    if (!(ci = hGetChromInfo(db, chrom)))
+	ERR_CHROM_NOT_FOUND(db, chrom);
     okSendHeader();
     printf("{ \"db\" : \"%s\",\n", db );
     printOneChrom(ci);
     printf("}\n");
-    chromInfoFree(&ci);
     }
 else if (sameOk("dataCount", cmd)) // get data from track
     {
+    MJP(2); verbose(2,"dataCount code\n");
     if (!db)
 	ERR_NO_DATABASE;
-    if (!hgParseChromRange(db, position, &chrom, &start, &end))
-	ERR_CANT_PARSE_POSITION(position, db);
-    struct trackDb *tdb = hTrackDbForTrack(db, track);
+    if (!chrom)
+	ERR_NO_CHROM;
+    if (!(ci = hGetChromInfo(db, chrom)))
+	ERR_CHROM_NOT_FOUND(db, chrom);
+    if (start<0)
+	start = 0;
+    if (end<0)
+	end = 0;
+    if (end==0)
+	end = ci->size; // MJP FIXME: potential overflow problem, int <- unsigned
+    if (!(tdb = hTrackDbForTrack(db, track)))
+        ERR_TRACK_NOT_FOUND(track, db);
     int n = hGetBedRangeCount(db, tdb->tableName, chrom, start, end, NULL);
     okSendHeader();
     printf("{ \"db\" : \"%s\",\n\"track\" : \"%s\",\n\"tableName\" : \"%s\",\n\"chrom\" : \"%s\",\n\"start\" : %d,\n\"end\" : %d,\n\"rowCount\" : %d,\n}\n", db, track, tdb->tableName, chrom, start, end, n );
-    trackDbFree(&tdb);
     }
-else if (sameOk("data", cmd) ) // get data from track
+else if (sameOk("data", cmd) ) // get data from track using track 'type'
     {
-    if (!db)
-	ERR_NO_DATABASE;
+    MJP(2); verbose(2,"data code\n");
+    char *trackType[4] = {NULL,NULL,NULL,NULL};
+    int typeWords;
     char parsedChrom[HDB_MAX_CHROM_STRING];
     char rootName[256];
-    if (!hgParseChromRange(db, position, &chrom, &start, &end))
-	ERR_CANT_PARSE_POSITION(position, db);
-    struct trackDb *tdb = hTrackDbForTrack(db, track);
-    if (tdb == NULL)
-	ERR_TRACK_NOT_FOUND(track, db);
+    if (!db)
+        ERR_NO_DATABASE;
+    if (!chrom)
+	ERR_NO_CHROM;
+    if (!(ci = hGetChromInfo(db, chrom)))
+	ERR_CHROM_NOT_FOUND(db, chrom);
+    if (start<0)
+	start = 0;
+    if (end<0)
+	end = 0;
+    if (end==0)
+	end = ci->size; // MJP FIXME: potential overflow problem, int <- unsigned
+    if (!(tdb = hTrackDbForTrack(db, track)))
+        ERR_TRACK_NOT_FOUND(track, db);
     hParseTableName(db, tdb->tableName, rootName, parsedChrom);
-    struct hTableInfo *hti = hFindTableInfo(db, chrom, rootName);
-    if (hti == NULL)
-	ERR_TABLE_NOT_FOUND(rootName, tdb->tableName, db);
-    struct bed *b = hGetBedRange(db, tdb->tableName, chrom, start, end, NULL);
+    if (!(hti = hFindTableInfo(db, chrom, rootName)))
+        ERR_TABLE_NOT_FOUND(tdb->tableName, chrom, rootName, db);
+    MJP(2); verbose(2,"tdb tableName=[%s] chrom=%s root=%s type=[%s]\n", tdb->tableName, chrom, rootName, tdb->type);
+    typeWords = chopByWhite(tdb->type, trackType, sizeof(trackType));
+    if (type && differentString("bed",type))
+	ERR_TYPE_NOT_FOUND("bed");
+    if (sameOk("bed",type)) // client requested BED format or track is BED format
+	{
+	MJP(2); verbose(2,"type=bed code (%s,%s,%s,%d,%d)\n", db, tdb->tableName, chrom, start, end);
+	b = hGetBedRange(db, tdb->tableName, chrom, start, end, NULL);
+	okSendHeader();
+	printf("{ \"db\" : \"%s\",\n\"track\" : \"%s\",\n\"tableName\" : \"%s\",\n\"chrom\" : \"%s\",\n\"start\" : %d,\n\"end\" : %d,\n\"rowCount\" : %d,\n\"hasCDS\" : %s,\n\"hasBlocks\" : %s,\n\"type\" : \"%s\",\n",
+	    db, track, tdb->tableName, chrom, start, end, slCount(b),
+	    (hti->hasCDS ? "true" : "false"), (hti->hasBlocks ? "true" : "false"), tdb->type );
+	printBed(b, hti);
+	printf("}\n");
+	}
+    else
+	{
+	// note: bedGraph not supported: where is graphColumn specified (see hg/hgTracks/bedGraph.c)
+	// note: genePred not supported: there are different schemas with fields not in C struct (c.f. refGene & knownGene tables)
+	// note: bed N not supported: need to figure out how to support different schemas like bed3, 4+, 6+, etc
+	errAbort("Track type %s not supported\n", tdb->type);
+	}
+    }
+else if (sameOk("dataAsBed", cmd) ) // get data from track in 'BED' format
+    {
+    MJP(2); verbose(2,"dataAsBed code\n");
+    char parsedChrom[HDB_MAX_CHROM_STRING];
+    char rootName[256];
+    if (!db)
+        ERR_NO_DATABASE;
+    if (!chrom)
+        ERR_NO_CHROM;
+    if (!(ci = hGetChromInfo(db, chrom)))
+        ERR_CHROM_NOT_FOUND(db, chrom);
+    if (start<0)
+        start = 0;
+    if (end<0)
+        end = 0;
+    if (end==0)
+	end = ci->size; // MJP FIXME: potential overflow problem, int <- unsigned
+    if (!(tdb = hTrackDbForTrack(db, track)))
+        ERR_TRACK_NOT_FOUND(track, db);
+    hParseTableName(db, tdb->tableName, rootName, parsedChrom);
+    if (!(hti = hFindTableInfo(db, chrom, rootName)))
+        ERR_TABLE_NOT_FOUND(tdb->tableName, chrom, rootName, db);
+    MJP(2); verbose(2,"tdb tableName=[%s] chrom=%s root=%s type=[%s]\n", tdb->tableName, chrom, rootName, tdb->type);
+    b = hGetBedRange(db, tdb->tableName, chrom, start, end, NULL);
     okSendHeader();
-    printf("{ \"db\" : \"%s\",\n\"track\" : \"%s\",\n\"tableName\" : \"%s\",\n\"position\" : \"%s\",\n\
-\"chrom\" : \"%s\",\n\"start\" : %d,\n\"end\" : %d,\n\"rowCount\" : %d,\n\
-\"hasCDS\" : %s,\n\"hasBlocks\" : %s,\n\"type\" : \"%s\",\n", 
-	db, track, tdb->tableName, position, hti->chromField, start, end, slCount(b), 
+    printf("{ \"db\" : \"%s\",\n\"track\" : \"%s\",\n\"tableName\" : \"%s\",\n\"chrom\" : \"%s\",\n\"start\" : %d,\n\"end\" : %d,\n\"rowCount\" : %d,\n\"hasCDS\" : %s,\n\"hasBlocks\" : %s,\n\"type\" : \"%s\",\n", 
+	db, track, tdb->tableName, chrom, start, end, slCount(b), 
 	(hti->hasCDS ? "true" : "false"), (hti->hasBlocks ? "true" : "false"),
 	tdb->type );
     printBed(b, hti);
     printf("}\n");
-    bedFree(&b);
-    trackDbFree(&tdb);
     }
 else
+    {
     ERR_INVALID_COMMAND(cmd);
+    }
+dbDbCladeFreeList(&dbs);
+chromInfoFreeList(&ci);
+trackDbFree(&tdb);
+freez(&hti);
+bedFreeList(&b);
 }
 
 int main(int argc, char *argv[])
@@ -199,3 +277,4 @@ else
     errAbort("request_method %s not implemented\n", cgiRequestMethod());
 return 0;
 }
+

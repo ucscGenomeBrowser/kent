@@ -29,13 +29,16 @@
 
 // Error responses
 #define ERR_INVALID_COMMAND(cmd) errClientCode(400, "Invalid request %s", (cmd))
-#define ERR_NO_DATABASE	errClientStatus(420, "Request error", "Please supply database")
+#define ERR_NO_DATABASE	errClientStatus(420, "Request error", "Database required")
+#define ERR_NO_DB_CONNECTION(db) errClientStatus(420, "Request error", "Could not connect to database %s", (db))
 #define ERR_NO_DBS_FOUND errClientStatus(420, "Request error", "No databases found") // maybe this should be a server error
-#define ERR_DB_NOT_FOUND(db) errClientStatus(420, "Request error", "Database %s not found", (db));
-#define ERR_NO_CHROM errClientStatus(420, "Request error", "Please supply chrom")
-#define ERR_CANT_PARSE_POSITION(pos, db) errClientStatus(420, "Request error", "Cant parse %s into chrom:start-end in database %s", (pos), (db));
-#define ERR_TRACK_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Cant find track %s in database %s", (track), (db));
-#define ERR_TABLE_NOT_FOUND(root, table, db) errClientStatus(420, "Request error", "Cant find root table %s for table %s in database %s", (root), (table), (db));
+#define ERR_DB_NOT_FOUND(db) errClientStatus(420, "Request error", "Database %s not found", (db))
+#define ERR_NO_CHROM errClientStatus(420, "Request error", "Chrom required")
+#define ERR_CHROM_NOT_FOUND(db,chrom) errClientStatus(420, "Request error", "Chrom %s not found in database %s", (chrom), (db))
+#define ERR_TRACK_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track %s not found in database %s", (track), (db))
+#define ERR_TRACK_INFO_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track info for %s not found in database %s", (track), (db))
+#define ERR_TABLE_NOT_FOUND(table, chrom, tableRoot, db) errClientStatus(420, "Request error", "Table %s not found using chrom %s and tableRoot %s in database %s", (table), (chrom), (tableRoot), (db))
+#define ERR_TYPE_NOT_FOUND(type) errClientStatus(420, "Request error", "Type %s not found", (type))
 
 /* Global Variables */
 char quoteBuf[1024];
