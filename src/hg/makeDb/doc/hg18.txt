@@ -26030,6 +26030,8 @@ cat > listWig.csh << 'EOF'
     ssh hgwdev
     cd /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/placental/wig
     csh ../../listWig.csh | xargs cat | nice wigEncode stdin phyloP44wayPlacMammal.wig phyloP44wayPlacMammal.wib
+    #Converted stdin, upper limit 3.46, lower limit -14.42
+
     # Load gbdb and database with wiggle.
     ln -s  \
         /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/placental/wig/phyloP44wayPlacMammal.wib \
@@ -26072,6 +26074,15 @@ cat > listWig.csh << 'EOF'
         /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/euarch/wig/phyloP44wayEuarch.wib \
         /gbdb/hg18/multiz44way/phyloP44wayEuarch.wib
     hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 phyloP44wayEuarch phyloP44wayEuarch.wig
+
+    # get stats
+    cd run.phyloP/all
+    hgWiggle -db=hg18 -verbose=2 -doStats phyloP44wayAll > stats.out
+    cd ../placental
+    hgWiggle -db=hg18 -verbose=2 -doStats phyloP44wayPlacMammal > stats.out
+    cd ../euarch
+    hgWiggle -db=hg18 -verbose=2 -doStats phyloP44wayEuarch > stats.out
+
 
 
 #########################################################################
