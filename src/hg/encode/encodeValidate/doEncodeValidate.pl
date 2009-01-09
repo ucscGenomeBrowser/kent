@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.134 2009/01/09 20:03:55 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.135 2009/01/09 23:37:58 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -225,7 +225,7 @@ sub validateNoValidation {
 
 sub validateCellLine {
     my ($val) = @_;
-    return defined($terms{'Cell Line'}{$val}) ? () : ("Cell line \'$val\' is not known");
+    return defined($terms{'Cell Line'}{$val} || $terms{'control'}{$val}) ? () : ("Cell line \'$val\' is not known");
 }
 
 sub validateRnaExtract {
