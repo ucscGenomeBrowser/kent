@@ -2,7 +2,7 @@ include ../inc/common.mk
 
 O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     base64.o binRange.o bits.o blastOut.o blastParse.o boxClump.o \
-    boxLump.o \
+    boxLump.o bPlusTree.o \
     cda.o chain.o chainBlock.o chainConnect.o chainToAxt.o chainToPsl.o \
     cheapcgi.o codebias.o colHash.o common.o correlate.o \
     dgRange.o diGraph.o dlist.o dnaLoad.o dnaMarkov.o dnaMotif.o dnaseq.o \
