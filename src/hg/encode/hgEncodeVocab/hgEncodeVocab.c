@@ -18,7 +18,9 @@
  *    tier=N         : If type="Cell Line" then this is the tier to display
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.16 2008/12/05 22:08:13 mikep Exp $";
+//#define HANDLE_IMPLICIT_CONTROL
+
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.17 2009/01/09 18:49:55 tdreszer Exp $";
 
 static char *cv_file()
 {
@@ -63,11 +65,13 @@ else if (sameString(type,"Cell Line"))
     {
     puts("  <TH>Term</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Vendor ID</TH><TH>Term ID</TH>");
     }
+#ifdef HANDLE_IMPLICIT_CONTROL
 else if (sameWord(type,"control") || sameWord(type,"input"))
     {
     puts("  <TH>Term</TH><TH>Description</TH></TR><TR>");
     printf("  <Td>%s</Td><Td>This data represents a control being compared with the other tracks in the set.</Td>\n",type);
     }
+#endif//def HANDLE_IMPLICIT_CONTROL
 else
     puts("  <TH>Term</TH><TH>Description</TH>");
 }
@@ -277,11 +281,13 @@ if(type==NULL)    // If not type, but term, then search for first term and use i
     if(term==NULL)
         errAbort("Error: Required 'term' or 'type' argument not found\n");
     (void)stripChar(term,'\"');
+#ifdef HANDLE_IMPLICIT_CONTROL
     if(sameWord(term,"control") || sameWord(term,"input"))
         {
         type = term;
         }
     else
+#endif//def HANDLE_IMPLICIT_CONTROL
         {
         while ((hEl = hashNext(&hc)) != NULL)
             {
@@ -316,7 +322,9 @@ type = findType(cvHash);
 doTypeHeader(type);
 puts("</TR>");
 
+#ifdef HANDLE_IMPLICIT_CONTROL
 if(differentWord(type,"control") && differentWord(type,"input"))
+#endif//def HANDLE_IMPLICIT_CONTROL
     {
     while ((hEl = hashNext(&hc)) != NULL)
         {
