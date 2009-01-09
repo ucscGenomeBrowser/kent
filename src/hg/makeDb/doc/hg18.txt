@@ -26383,29 +26383,33 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
     cd /hive/data/genomes/hg18/bed/fox2ClipSeq
     #	lift the hg17 data to here
     liftOver -bedPlus=9 \
-	/hive/data/genomes/hg17/bed/fox2ClipSeq/plusStrandBlue.bed.gz \
+	/hive/data/genomes/hg17/bed/fox2ClipSeq/forwardStrand.bed.gz \
 /usr/local/apache/htdocs/goldenPath/hg17/liftOver/hg17ToHg18.over.chain.gz \
-	    stdout plusStrand.unMapped | gzip -c > plusStrandBlue.bed.gz
+	    stdout forwardStrand.unMapped | gzip -c > forwardStrand.bed.gz
 
     liftOver -bedPlus=9 \
-	/hive/data/genomes/hg17/bed/fox2ClipSeq/negativeStrand.bed.gz \
+	/hive/data/genomes/hg17/bed/fox2ClipSeq/reverseStrand.bed.gz \
 /usr/local/apache/htdocs/goldenPath/hg17/liftOver/hg17ToHg18.over.chain.gz \
-	    stdout negativeStrand.unMapped | gzip -c > negativeStrand.bed.gz
+	    stdout reverseStrand.unMapped | gzip -c > reverseStrand.bed.gz
 
     #	turn into wiggle density plot
-    zcat plusStrandBlue.bed.gz | bedItemOverlapCount hg18 stdin \
-        | wigEncode stdin fox2ClipSeqDensityPlus.wig fox2ClipSeqDensityPlus.wib
+    zcat forwardStrand.bed.gz | bedItemOverlapCount hg18 stdin \
+        | wigEncode stdin fox2ClipSeqDensityForwardStrand.wig \
+	fox2ClipSeqDensityForwardStrand.wib
     #	Converted stdin, upper limit 2401.00, lower limit 1.00
-    zcat negativeStrand.bed.gz | bedItemOverlapCount hg18 stdin \
-        | wigEncode stdin fox2ClipSeqDensityNegative.wig \
-		fox2ClipSeqDensityNegative.wib
+    zcat reverseStrand.bed.gz | bedItemOverlapCount hg18 stdin \
+        | wigEncode stdin fox2ClipSeqDensityReverseStrand.wig \
+		fox2ClipSeqDensityReverseStrand.wib
     #	Converted stdin, upper limit 1406.00, lower limit 1.00
     #	and load tables
-    zcat plusStrandBlue.bed.gz negativeStrand.bed.gz \
+    zcat forwardStrand.bed.gz reverseStrand.bed.gz \
 	| hgLoadBed hg18 fox2ClipSeq stdin
+    #	Loaded 4418298 elements of size 9
     ln -s `pwd`/*.wib /gbdb/hg18/wib
-    hgLoadWiggle hg18 fox2ClipSeqDensityNegative fox2ClipSeqDensityNegative.wig
-    hgLoadWiggle hg18 fox2ClipSeqDensityPlus fox2ClipSeqDensityPlus.wig
+    hgLoadWiggle hg18 fox2ClipSeqDensityForwardStrand \
+	fox2ClipSeqDensityForwardStrand.wig
+    hgLoadWiggle hg18 fox2ClipSeqDensityReverseStrand \
+	fox2ClipSeqDensityReverseStrand.wig
     #	add composite track definitions to makeDb/trackDb/human/trackDb.ra
 
 #############################################################################
