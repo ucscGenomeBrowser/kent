@@ -2829,6 +2829,7 @@ priority 250
 visibility hide
 visibilityViewDefaults	reads=pack density=full
 type bed 3 .
+dataVersion November 2009
 
     track fox2ClipSeq
     subTrack fox2ClipSeqComp
@@ -2839,6 +2840,7 @@ type bed 3 .
     type bed 9 .
     itemRgb on
     noInherit	on
+    noScoreFilter .
 
     track fox2ClipSeqDensityForwardStrand
     subTrack fox2ClipSeqComp
