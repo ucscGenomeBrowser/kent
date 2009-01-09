@@ -793,3 +793,7 @@ description Control signal from Normal Mouse IgG ChIP-seq.
 term Naked_DNA
 type control
 description Control signal from Naked DNA.
+
+term Reference_Genome
+type control
+description The refernce human genome is currently hg18 - March 2006 (NCBI Build 36.1).
