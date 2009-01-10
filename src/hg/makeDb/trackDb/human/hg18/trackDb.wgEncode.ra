@@ -219,7 +219,7 @@ visibilityViewDefaults	 Peaks=hide Signal=dense zRAW=hide
 priority	0
 type		bed 3
 wgEncode	1
-settingsByView  Signal:defaultViewLimits=1:20,viewLimits=-1:473622.75,autoScale=off zRAW:defaultViewLimits=1:20,viewLimits=1:21178,autoScale=off
+settingsByView  Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off
 
         track		wgEncodeBroadChipSeqPeaksGm12878Ctcf
         subTrack	wgEncodeBroadChipSeq
@@ -3439,12 +3439,11 @@ subGroup1	view Views Peaks=Peaks Signal=Signal SignalBO=Signal_(Base_Overlap) rR
 subGroup2	cellType Cell_Line GM12878=GM12878_(Tier1) K562=K562_(Tier1) zzRG=Reference_Genome
 subGroup3	EXP Experiment DNase=DNase-Seq FAIRE=FAIRE-Seq IP-CTCF=ChIP-Seq_CTCF zCTRL=Input zzREF=Extra_Tracks
 sortOrder	cellType=+ EXP=+ view=+
-controlledVocabulary	encode/cv.ra cellType
 dimensions  dimensionX=cellType dimensionY=EXP
 dragAndDrop	subTracks
 visibilityViewDefaults	 Peaks=hide Signal=dense rRAW=hide
-controlledVocabulary encode/cv.ra cellType=GM12878,K562 EXP=Input,CTCF
-settingsByView Peaks:useScore=0 Signal:defaultViewLimits=0:0.02,viewLimits=0:40,autoScale=off SignalBO:defaultViewLimits=0.5:2,viewLimits=0:8719,autoScale=off rRAW:defaultViewLimits=0:1,viewLimits=0:112,autoScale=off
+controlledVocabulary encode/cv.ra cellType=GM12878,K562,Reference_Genome EXP=CTCF,Input
+settingsByView Peaks:useScore=0 Signal:viewLimits=0:0.02,viewLimitsMax=0:40,autoScale=off SignalBO:viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off rRAW:defaultViewLimits=0:1,viewLimits=0:112,autoScale=off
 useScore    	0
 priority	0
 type		bed 3
@@ -4382,7 +4381,7 @@ dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Hotspots=hide Peaks=hide RawSignal=hide
-settingsByView  RawSignal:defaultViewLimits=1:10,autoScale=off
+settingsByView  RawSignal:viewLimits=1:10,autoScale=off
 controlledVocabulary encode/cv.ra cellType
 priority 0
 type bed 3 +
@@ -5627,7 +5626,7 @@ sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
 controlledVocabulary encode/cv.ra cellType=GM12878,HeLa-S3_IFNg,HeLa-S3,K562,NB4 factor
-settingsByView Signal:defaultViewLimits=4:7,viewLimits=0:20910,autoScale=off  zRAW:defaultViewLimits=3:7,viewLimits=0:14648,autoScale=off
+settingsByView Signal:viewLimits=4:7,viewLimitsMax=0:20910,autoScale=off  zRAW:viewLimits=3:7,viewLimitsMax=0:14648,autoScale=off
 dataVersion ENCODE Submitted September 2008
 wgEncode 1
 
@@ -6520,7 +6519,7 @@ dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide RawSignal=dense
-settingsByView RawSignal:defaultViewLimits=1:10,autoScale=off
+settingsByView RawSignal:viewLimits=1:10,autoScale=off
 controlledVocabulary encode/cv.ra cellType factor
 priority	0
 type bed 3
