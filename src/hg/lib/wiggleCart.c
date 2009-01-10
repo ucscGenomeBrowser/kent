@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.18 2008/12/06 00:29:48 tdreszer Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.19 2009/01/10 00:43:25 tdreszer Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -89,7 +89,7 @@ if(tdbIsCompositeChild(tdb)
     if(subgroupFind(tdb,"view",&view)) // Find out view of tdb
         {
         char *settings = cloneString(trackDbSetting(tdb->parent,"settingsByView"));
-        // retrieve settingsByView from parent "settingsByView Signal:defaultViewLimits=5:500,viewLimits=0:20910 ..."
+        // retrieve settingsByView from parent "settingsByView Signal:viewLimits=5:500,viewLimitsMax=0:20910 ..."
         cnt = chopLine(settings, words);
         for(ix=0;ix<cnt;ix++)
             {
@@ -104,14 +104,14 @@ if(tdbIsCompositeChild(tdb)
         }
     if(limitsByView != NULL) // found a match
         {
-        // parse limitsByView "defaultViewLimits=5:500,viewLimits=0:20910"
+        // parse limitsByView "viewLimits=5:500,viewLimitsMax=0:20910"
         cnt = chopByChar(limitsByView,',',words,ArraySize(words));
         for(ix=0;ix<cnt;ix++)
             {
-            if(startsWithWordByDelimiter(VIEWLIMITS,'=',words[ix]))
+            if(startsWithWordByDelimiter(VIEWLIMITSMAX,'=',words[ix]))
                 {
-                // parse viewLimits "0:20910"
-                words[ix] = strSwapChar(words[ix]+strlen(VIEWLIMITS)+1,':',' ');
+                // parse viewLimitsMax "0:20910"
+                words[ix] = strSwapChar(words[ix]+strlen(VIEWLIMITSMAX)+1,':',' ');
                 if(tDbMin != NULL && words[ix][0] != 0)
                     *tDbMin = sqlDouble(nextWord(&words[ix]));
                 if(tDbMax != NULL && words[ix][0] != 0)
@@ -119,10 +119,10 @@ if(tdbIsCompositeChild(tdb)
                 if(tDbMin != NULL && tDbMax != NULL)
                     correctOrder(*tDbMin,*tDbMax);
                 }
-            else if(startsWithWordByDelimiter(DEFAULTVIEWLIMITS,'=',words[ix]))
+            else if(startsWithWordByDelimiter(VIEWLIMITS,'=',words[ix]))
                 {
-                words[ix] = strSwapChar(words[ix]+strlen(DEFAULTVIEWLIMITS)+1,':',' ');
-                // parse defaultViewLimits "5:500"
+                words[ix] = strSwapChar(words[ix]+strlen(VIEWLIMITS)+1,':',' ');
+                // parse viewLimits "5:500"
                 if(words[ix][0] != 0)
                     {
                     assert(min != NULL && max != NULL);
