@@ -28,6 +28,52 @@ visibility hide
 color 173,17,162
 type genePred
 
+track phyloPCons44way
+shortLabel 44way PhyloP Cons
+compositeTrack on
+longLabel Basewise Conservation by PhyloP for 44-Species Multiz Align.
+maxHeightPixels 128:52:16
+autoScaleDefault Off
+windowingFunction mean
+spanList 1
+group compGeno
+priority 103.4
+visibility hide
+type wig -15.41 7.13
+viewLimits -1:2
+
+    track phyloP44wayPrimate
+    subTrack phyloPCons44way
+    shortLabel Primate Cons
+    longLabel Primate Basewise Conservation by PhyloP
+    color 10,10,115
+    altColor 115,10,10
+    priority 1
+
+    track phyloP44wayEuarch
+    subTrack phyloPCons44way
+    shortLabel Euarch Cons
+    longLabel Euarchontoglire (Primate and Rodent) Basewise Conservation by PhyloP
+    color 25,25,130
+    altColor 130,25,25
+    priority 2
+
+    track phyloP44wayPlacMammal
+    subTrack phyloPCons44way
+    shortLabel Mammal Cons
+    longLabel Placental Mammal Basewise Conservation by PhyloP
+    color 45,45,145
+    altColor 145,45,45
+    priority 3
+
+    track phyloP44wayAll
+    subTrack phyloPCons44way
+    shortLabel Vertebrate Cons
+    longLabel Vertebrate Basewise Conservation by PhyloP
+    color 60,60,160
+    altColor 160,60,60
+    priority 4
+
 track phyloPCons28way
 shortLabel Basewise Conserv
 compositeTrack on
