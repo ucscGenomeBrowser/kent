@@ -7,8 +7,7 @@
 #include "psl.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: gsidPosSelect.c,v 1.1 2009/01/06 19:05:44 fanhsu Exp $";
-char database[255];
+static char const rcsid[] = "$Id: gsidPosSelect.c,v 1.2 2009/01/12 19:13:31 fanhsu Exp $";
 void usage()
 /* Explain usage and exit. */
 {
@@ -75,7 +74,7 @@ while (row3 != NULL)
 	    pos =  blkStart + (aaPos - qStart)*3 - 1;
 	    if ((pos > blkStart) && (pos <= (blkStart+blkSize*3)))
 		{
-		fprintf(outf, "chr1\t%d\t%d\t%d%s\t%d\n", pos-1, pos, pos, aa, (int)(Pr*1000));
+		fprintf(outf, "chr1\t%d\t%d\t%s\t%d\n", pos-2, pos+1, aa, (int)(Pr*1000));
 	    	}
 	    }
     	pslFree(&thePsl);
