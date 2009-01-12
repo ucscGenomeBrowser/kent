@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1487 2008/12/22 22:23:22 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1488 2009/01/12 18:12:38 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8502,8 +8502,7 @@ if (url != NULL && url[0] != 0)
 	/* display disorder for genes in morbidmap */
     	safef(query, sizeof(query), "select description from omimMorbidMap where omimId=%s;", itemName);
     	sr = sqlMustGetResult(conn, query);
-    	row = sqlNextRow(sr);
-    	if (row != NULL)
+        while ((row = sqlNextRow(sr)) != NULL)
     	    {
  	    printf("<B>Disorder:</B> %s", row[0]);
 	    printf("<BR>\n");
