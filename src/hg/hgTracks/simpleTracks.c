@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.50 2008/12/16 22:18:37 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.51 2009/01/12 17:42:44 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128
@@ -547,6 +547,7 @@ void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height,
 {
 mapBoxReinvoke(hvg, x, y, width, height, NULL, newChrom, newStart, newEnd,
 	       message, NULL);
+
 }
 
 
@@ -5708,10 +5709,10 @@ tg->itemName = sgdGeneName;
 }
 
 void adjustBedScoreGrayLevel(char *trackName, struct bed *bed, int scoreMin, int scoreMax)
-/* For each distinct trackName passed in, check cart for trackName_minGrayLevel; if 
- * that is different from the gray level implied by scoreMin's place in [0..scoreMax], 
- * then linearly transform bed->score from the range of [scoreMin,scoreMax] to 
- * [(cartMinGrayLevel*scoreMax)/maxShade,scoreMax]. 
+/* For each distinct trackName passed in, check cart for trackName_minGrayLevel; if
+ * that is different from the gray level implied by scoreMin's place in [0..scoreMax],
+ * then linearly transform bed->score from the range of [scoreMin,scoreMax] to
+ * [(cartMinGrayLevel*scoreMax)/maxShade,scoreMax].
  * Note: this assumes that scoreMin and scoreMax are constant for each track. */
 {
 static char *prevTrackName = NULL;
@@ -9831,7 +9832,7 @@ struct linkedFeatures *lf;
 
 safef(buf, sizeof buf, "%s.label", tg->mapName);
 geneLabel = cartUsualString(cart, buf, "gene");
-useGeneName = sameString(geneLabel, "gene") || sameString(geneLabel, "both");
+useGeneName = sameString(geneLabel, "gene") || sameString(geneLabel, "name") || sameString(geneLabel, "both");
 useAcc = sameString(geneLabel, "accession") || sameString(geneLabel, "both");
 
 loadGenePredWithName2(tg);
@@ -10453,13 +10454,13 @@ else
     {
     if (sameWord(omimGeneLabel, "UCSC Gene Symbol"))
 	{
-	safef(query, sizeof(query), 
+	safef(query, sizeof(query),
 	"select x.geneSymbol from kgXref x, omimToKnownCanonical c where c.omimId='%s' and c.kgId=x.kgId", el->name);
 	geneLabel = sqlQuickString(conn, query);
 	}
     else
     	{
-	safef(query, sizeof(query), 
+	safef(query, sizeof(query),
 	"select geneSymbol from omimGeneMap where omimId='%s'", el->name);
 	geneLabel = sqlQuickString(conn, query);
 	if (geneLabel == NULL)
@@ -11460,6 +11461,9 @@ registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
+registerTrackHandler("wgEncodeSangerGencode", gencodeGeneMethods);
+registerTrackHandler("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
+registerTrackHandler("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
 registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
 registerTrackHandler("encodeGencodeGeneJun05", gencodeGeneMethods);
 registerTrackHandler("encodeGencodeGeneOct05", gencodeGeneMethods);
