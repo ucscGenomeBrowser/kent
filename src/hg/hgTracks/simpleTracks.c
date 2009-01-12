@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.51 2009/01/12 17:42:44 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.52 2009/01/12 19:06:05 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128
@@ -10463,10 +10463,11 @@ else
 	safef(query, sizeof(query),
 	"select geneSymbol from omimGeneMap where omimId='%s'", el->name);
 	geneLabel = sqlQuickString(conn, query);
-	if (geneLabel == NULL)
-	    {
-	    geneLabel = el->name;
-	    }
+	}
+
+    if (geneLabel == NULL)
+	{
+	geneLabel = el->name;
 	}
     }
 hFreeConn(&conn);
