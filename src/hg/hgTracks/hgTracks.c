@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1539 2009/01/02 19:56:51 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1540 2009/01/12 21:46:19 larrym Exp $";
 
 #define SMALLBUF 64
 
@@ -1652,7 +1652,7 @@ hvg->rc = revCmplDisp;
 initColors(hvg);
 
 /* Start up client side map. */
-hPrintf("<MAP Name=%s>\n", mapName);
+hPrintf("<MAP id='map' Name=%s>\n", mapName);
 
 /* Find colors to draw in. */
 findTrackColors(hvg, trackList);
@@ -3654,12 +3654,6 @@ if (!hideControls)
 	}
 
     hPrintf(" ");
-    hButtonWithOnClick("hgt.collapseGroups", "collapse groups", NULL, "return setAllTrackGroupVisibility(false)");
-
-    hPrintf(" ");
-    hButtonWithOnClick("hgt.expandGroups", "expand groups", NULL, "return setAllTrackGroupVisibility(true)");
-
-    hPrintf(" ");
     hOnClickButton("document.customTrackForm.submit();return false;",
                         hasCustomTracks ?
                             CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
@@ -3690,11 +3684,21 @@ if (showTrackControls)
     /* Chuck: This is going to be wrapped in a table so that
      * the controls don't wrap around randomly */
     hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
-    hPrintf("<tr><td colspan='%d' align='CENTER' nowrap>"
+    hPrintf("<tr><td align='left'>\n");
+
+    hButtonWithOnClick("hgt.collapseGroups", "collapse groups", NULL, "return setAllTrackGroupVisibility(false)");
+    hPrintf("</td>");
+
+    hPrintf("<td colspan='%d' align='CENTER' nowrap>"
 	   "Use drop-down controls below and press refresh to alter tracks "
 	   "displayed.<BR>"
 	   "Tracks with lots of items will automatically be displayed in "
-	   "more compact modes.</td></tr>\n", MAX_CONTROL_COLUMNS );
+	   "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
+
+    hPrintf("<td align='right'>");
+    hButtonWithOnClick("hgt.expandGroups", "expand groups", NULL, "return setAllTrackGroupVisibility(true)");
+    hPrintf("</td></tr>");
+
     if (!hIsGsidServer())
     	{
 	cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
