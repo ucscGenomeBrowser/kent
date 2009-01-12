@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1488 2009/01/12 18:12:38 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1489 2009/01/12 20:00:27 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8496,7 +8496,7 @@ if (url != NULL && url[0] != 0)
     /* use geneSymbols from omimMorbidMap if available */
     if (geneSymbols!= NULL)
     	{
-	printf("<B>Gene Symbol:</B> %s", geneSymbols);
+	printf("<B>OMIM gene or symdrome:</B> %s", geneSymbols);
 	printf("<BR>\n");
 
 	/* display disorder for genes in morbidmap */
