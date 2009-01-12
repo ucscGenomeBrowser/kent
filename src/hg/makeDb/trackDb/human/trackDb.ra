@@ -2824,6 +2824,7 @@ compositeTrack on
 shortLabel FOX2 CLIPseq
 longLabel FOX2 adaptor-trimmed CLIPseq reads
 subGroup1	view Tracks reads=Reads density=Density
+settingsByView	density:viewLimitsMax=0:2401
 group regulation
 priority 250
 visibility hide
