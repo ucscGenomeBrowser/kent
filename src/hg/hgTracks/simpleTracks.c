@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.52 2009/01/12 19:06:05 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.53 2009/01/12 22:12:46 fanhsu Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128
@@ -10452,10 +10452,12 @@ if (sameWord(omimGeneLabel, "OMIM ID"))
     }
 else
     {
-    if (sameWord(omimGeneLabel, "UCSC Gene Symbol"))
+    if (sameWord(omimGeneLabel, "UCSC gene symbol"))
 	{
+	/* get the gene symbol of the exact KG that matches not only ID but also genomic position */
 	safef(query, sizeof(query),
-	"select x.geneSymbol from kgXref x, omimToKnownCanonical c where c.omimId='%s' and c.kgId=x.kgId", el->name);
+	"select x.geneSymbol from kgXref x, omimToKnownCanonical c, knownGene k, omimGene o where c.omimId='%s' and c.kgId=x.kgId and k.name=x.kgId and o.name=c.omimId and o.chrom=k.chrom and k.txStart=%d and k.txEnd=%d", 
+	el->name, el->chromStart, el->chromEnd);
 	geneLabel = sqlQuickString(conn, query);
 	}
     else
