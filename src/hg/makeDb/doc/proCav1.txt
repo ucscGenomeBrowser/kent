@@ -1,5 +1,8 @@
 # for emacs: -*- mode: sh; -*-
 
+# This is actually supposed to be proCap1.
+# You will find the correct building of rock hyrax in the proCap1.txt doc.
+
 # rock hyrax ( Procavia capensis )
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE braney 2008-07-11)
