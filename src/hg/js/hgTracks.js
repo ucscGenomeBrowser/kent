@@ -5,6 +5,8 @@ var originalPosition;
 var originalSize;
 var clickClipHeight;
 var start;
+var mapHtml;
+var newWinWidth;
 
 function commify (str) {
     if(typeof(str) == "number")
@@ -35,6 +37,16 @@ function selectStart(img, selection)
     initVars();
     var now = new Date();
     start = now.getTime();
+    jQuery.each(jQuery.browser, function(i, val) {
+        if(i=="msie" && val) {
+            // Very hacky way to solve following probem specif to IE:
+            // If the user ends selection with the mouse in a map box item, the map item
+            // is choosen instead of the selection; to fix this, we remove map box items
+            // during the mouse selection process.
+            mapHtml = $('#map').html();
+            $('#map').empty();
+        }
+    });
 }
 
 function setPosition(position, size)
@@ -60,7 +72,6 @@ function updatePosition(img, selection, singleClick)
     // singleClick is true when the mouse hasn't moved (or has only moved a small amount).
     var insideX = parseInt(document.getElementById("hgt.insideX").value);
     var revCmplDisp = parseInt(document.getElementById("hgt.revCmplDisp").value) == 0 ? false : true;
-    var newWinWidth = parseInt(document.getElementById("hgt.newWinWidth").value);
     var chromName = document.getElementById("hgt.chromName").value;
     var winStart = parseInt(document.getElementById("hgt.winStart").value);
     var winEnd = parseInt(document.getElementById("hgt.winEnd").value);
@@ -138,8 +149,11 @@ function selectEnd(img, selection)
     } else {
         setPosition(originalPosition, originalSize);
         originalPosition = originalSize = null;
+        if(mapHtml) {
+            $('#map').append(mapHtml);
+        }
     }
-    start = null;
+    mapHtml = start = null;
     return true;
 }
 
@@ -154,6 +168,7 @@ $(window).load(function () {
 		var imgWidth = jQuery(img).width();
 		var imgOfs = jQuery(img).offset();
 		clickClipHeight = parseInt(rulerEle.value);
+                newWinWidth = parseInt(document.getElementById("hgt.newWinWidth").value);
 
 		img.imgAreaSelect({ selectionColor: 'blue', outerColor: '',
 			minHeight: imgHeight, maxHeight: imgHeight,
