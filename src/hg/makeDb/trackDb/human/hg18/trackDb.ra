@@ -3603,7 +3603,7 @@ subGroup2 clade Clade primate=Primate euarch=Euarchontoglire(Primate&Rodent) mam
 dragAndDrop subTracks
 dimensions dimensionX=clade
 visibilityViewDefaults align=pack+ phastcons=hide phyloP=full elements=hide
-settingsByView elements:exonArrows=off,showTopScorers=200  phastcons:viewLimits=0:1,autoScale=off,windowingFunction=mean,spanList=1,maxHeightPixels=100:40:11 phyloP:defaultViewLimits=-1:2,autoScale=off,windowingFunction=mean,maxHeightPixels=128:64:16,spanList=1
+settingsByView phyloP:viewLimits=-.3:1.5,viewLimitsMax=-15.41:7.13
 # NOTE: composite type not used in this track, but required by code
 type bed 4
 group compGeno
@@ -3627,7 +3627,7 @@ speciesGroups Primate Placental_Mammal Vertebrate
 sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 calJac1 tarSyr1 micMur1 otoGar1
 sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 vicPac1 turTru1 bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 loxAfr2 proCap1 echTel1 dasNov2 choHof1
 sGroup_Vertebrate monDom4 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig1 fr2 gasAcu1 oryLat2 danRer5 petMar1
-speciesDefaultOff panTro2 gorGor1 ponAbe2 calJac1 tarSyr1 otoGar1 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 dasNov2 choHof1 echTel1 loxAfr2 taeGut1 proCap1 danRer5 tetNig1 fr2 oryLat2 petMar1
+speciesDefaultOff panTro2 gorGor1 ponAbe2 calJac1 tarSyr1 otoGar1 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 loxAfr2 taeGut1 proCap1 danRer5 tetNig1 fr2 oryLat2 petMar1
 itemFirstCharCase noChange
 treeImage phylo/hg18_44way.gif
 priority 100
@@ -3682,6 +3682,10 @@ priority 100
     noInherit on
     configurable on
     type wig -8.17 .99
+    maxHeightPixels 100:50:11
+    autoScale off
+    spanList 1
+    windowingFunction mean
     color 5,5,50
     altColor 50,5,5
     priority 1
@@ -3694,6 +3698,10 @@ priority 100
     noInherit on
     configurable on
     type wig -9.78 2.03
+    maxHeightPixels 100:50:11
+    autoScale off
+    spanList 1
+    windowingFunction mean
     color 10,10,70
     altColor 70,10,10
     priority 2
@@ -3706,6 +3714,10 @@ priority 100
     noInherit on
     configurable on
     type wig -14.42 3.46
+    maxHeightPixels 100:50:11
+    autoScale off
+    spanList 1
+    windowingFunction mean
     color 25,25,95
     altColor 95,25,25
     priority 3
@@ -3718,6 +3730,10 @@ priority 100
     noInherit on
     configurable on
     type wig -15.41 7.13
+    maxHeightPixels 100:50:11
+    autoScale off
+    spanList 1
+    windowingFunction mean
     color 40,40,120
     altColor 120,40,40
     priority 4
@@ -3731,6 +3747,10 @@ priority 100
     noInherit on
     configurable on
     type wig 0 1
+    maxHeightPixels 100:40:11
+    autoScale off
+    spanList 1
+    windowingFunction mean
     color 5,50,5
     altColor 50,5,5
     priority 10
@@ -3743,6 +3763,10 @@ priority 100
     noInherit on
     configurable on
     type wig 0 1
+    maxHeightPixels 100:40:11
+    autoScale off
+    spanList 1
+    windowingFunction mean
     color 10,70,10
     altColor 70,10,10
     priority 11
@@ -3753,10 +3777,14 @@ priority 100
     shortLabel Mammal Cons
     longLabel Placental Mammal Conservation by PhastCons
     noInherit on
+    configurable on
     type wig 0 1
+    maxHeightPixels 100:40:11
+    autoScale off
+    spanList 1
+    windowingFunction mean
     color 25,95,25
     altColor 95,25,25
-    configurable on
     priority 12
 
     track phastCons44way
@@ -3765,8 +3793,12 @@ priority 100
     shortLabel Vertebrate Cons
     longLabel Vertebrate Conservation by PhastCons
     noInherit on
-    type wig 0 1
     configurable on
+    type wig 0 1
+    maxHeightPixels 100:40:11
+    autoScale off
+    spanList 1
+    windowingFunction mean
     color 40,120,40
     altColor 120,40,40
     priority 13
