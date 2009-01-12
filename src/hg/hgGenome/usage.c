@@ -3,7 +3,7 @@
 #include "common.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.8 2009/01/09 00:53:36 galt Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.9 2009/01/12 18:42:47 ann Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -56,8 +56,8 @@ hPrintf("%s",
 "        display only those genes in regions that are above the "
 "        <EM>significance threshold</EM>. If the graph was uploaded using"
 "        markers, then a custom Gene Sorter column with the same name as the "
-"        graph will also be created which lists the markers with values"
-"        over the threshold for each gene."
+"        graph will be created.  This column will list all markers for each "
+"        gene that contain values above the significance threshold."
 "        </LI>\n"
 "        </UL>\n");
 }
