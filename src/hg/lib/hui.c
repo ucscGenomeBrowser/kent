@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.142 2009/01/09 04:15:47 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.143 2009/01/13 22:33:24 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2499,11 +2499,8 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             dyStringPrintf(dyJS, "onclick='matSubtrackCbClick(this);' onmouseover=\"this.style.cursor='default';\" class=\"subtrackCB");
             for(di=0;di<dimMax;di++)
                 {
-                if(dimensions[di])
-                    {
-                    dyStringPrintf(dyJS, " %s",membership->membership[stringArrayIx(dimensions[di]->tag, membership->subgroups, membership->count)]);
-                    //dyStringPrintf(dyJS, " %s",dimensions[di]->tag);
-                    }
+                if(dimensions[di] && -1 != (ix = stringArrayIx(dimensions[di]->tag, membership->subgroups, membership->count)))
+                    dyStringPrintf(dyJS, " %s",membership->membership[ix]);
                 }
             dyStringAppendC(dyJS,'"');
             cgiMakeCheckBoxIdAndJS(htmlIdentifier,alreadySet,id,dyStringCannibalize(&dyJS));
