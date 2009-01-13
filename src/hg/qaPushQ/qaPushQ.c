@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.105 2008/12/19 01:54:04 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.106 2009/01/13 18:57:51 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1629,7 +1629,7 @@ if (!isOK)
     {
     isRedo = TRUE;
     }
-if ((q->sizeMB < 0) || (q->sizeMB > 100000))
+if ((q->sizeMB < 0) || (q->sizeMB > 1000000))
     {
     safef(msg,sizeof(msg),"Size(MB): invalid size. <br>\n");
     isRedo = TRUE;
