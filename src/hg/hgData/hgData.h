@@ -26,11 +26,12 @@
 //#define okSendHeader() fprintf(stdout,"Content-type: application/json\n\n") // this triggers download by browser client
 // - otherwise if browser, then send same content but this type:
 #define okSendHeader(format) fprintf(stdout,"Content-type: text/%s\n\n", ((format) ? (format) : "plain"))
-#define FMT_JSON_ANNOJ "x-json-annoj"
+#define FMT_JSON_ANNOJ "json-annoj"
 
 // Error responses
 #define ERR_INVALID_COMMAND(cmd) errClientCode(400, "Invalid request %s", (cmd))
 #define ERR_NO_DATABASE	errClientStatus(420, "Request error", "Database required")
+#define ERR_NO_TRACK	errClientStatus(420, "Request error", "Track required")
 #define ERR_NO_DB_CONNECTION(db) errClientStatus(420, "Request error", "Could not connect to database %s", (db))
 #define ERR_NO_DBS_FOUND errClientStatus(420, "Request error", "No databases found") // maybe this should be a server error
 #define ERR_DB_NOT_FOUND(db) errClientStatus(420, "Request error", "Database %s not found", (db))
@@ -39,8 +40,9 @@
 #define ERR_TRACK_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track %s not found in database %s", (track), (db))
 #define ERR_TRACK_INFO_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track info for %s not found in database %s", (track), (db))
 #define ERR_TABLE_NOT_FOUND(table, chrom, tableRoot, db) errClientStatus(420, "Request error", "Table %s not found using chrom %s and tableRoot %s in database %s", (table), (chrom), (tableRoot), (db))
-#define ERR_BAD_FORMAT(format) errClientStatus(420, "Format %s is not supported", (format))
-#define ERR_BAD_TRACK_TYPE(track, type) errClientStatus(420, "Track %s of type %s is not supported", (track), (type))
+#define ERR_BAD_FORMAT(format) errClientStatus(420, "Request error", "Format %s is not supported", (format))
+#define ERR_BAD_ACTION(action, track, db) errClientStatus(420, "Request error", "Action %s unknown for track %s in database %s", (action), (track), (db))
+#define ERR_BAD_TRACK_TYPE(track, type) errClientStatus(420, "Request error", "Track %s of type %s is not supported", (track), (type))
 
 /* Global Variables */
 char quoteBuf[1024];
@@ -71,6 +73,15 @@ char *quote(char *field);
 struct chromInfo *getAllChromInfo(char *db);
 /* Query db.chromInfo for all chrom info. */
 
+void dbDbCladeFreeList(struct dbDbClade **pList);
+/* Free a list of dynamically allocated dbDbClade's */
+
+struct dbDbClade *hGetIndexedDbClade(char *db);
+/* Get list of active databases and clade
+ * Only get details for one 'db' unless NULL
+ * in which case get all databases.
+ * Dispose of this with dbDbCladeFreeList. */
+
 void errClientStatus(int code, char *status, char *format, ...);
 // create a HTTP response code 400-499 and status, 
 // with format specifying the error message content
@@ -86,47 +97,33 @@ void errClient(char *format, ...);
 void printBedAsAnnoj(struct bed *b, struct hTableInfo *hti);
 // print out rows of bed data formatted as AnnoJ nested model
 
-void printBed(struct bed *b, char *db, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti);
+void printBed(int n, struct bed *b, char *db, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti);
 // print out rows of bed data, each row as a list of columns
 
 void printBedByColumn(struct bed *b, struct hTableInfo *hti);
 // print out a list of bed records by column
 
 void printDb(struct dbDbClade *db);
-// print an array of all active data in dbDb,clade table
+// print information for one database
 
-void printOneDb(struct dbDbClade *db);
-// print one db from dbDb table
+void printDbs(struct dbDbClade *db);
+// print an array of all databases
 
-void printDbByColumn(struct dbDbClade *db);
-// print an array of all values in the db,clade tables by column
-
-void printTrackDb(struct trackDb *tdb);
-// print a list of rows of trackDb data for every track
-
-void printOneTrackDb(struct trackDb *tdb);
-// print trackDb data for a single track
-
-void printTrackDbByColumn(struct trackDb *db);
-// print a list of trackDb data by column
+void printChrom(struct chromInfo *ci);
+// print a chromosome 
 
 void printChroms(struct chromInfo *ci);
-// print a list of rows of chromInfo for every chrom
+// print an array of all chromosomes
 
-void printOneChrom(struct chromInfo *ci);
-// print chromInfo for a single chrom
+void printGenomeAsAnnoj(struct dbDbClade *db, struct chromInfo *ci);
+// print information for a genome - the database and all its chromosomes
+// using AnnoJ format (http://www.annoj.org)
 
-void printChromsByColumn(struct chromInfo *ci);
-// print a list of chromInfo data by column
+void printGenome(struct dbDbClade *db, struct chromInfo *ci);
+// print information for a genome - the database and all its chromosomes
 
-void dbDbCladeFreeList(struct dbDbClade **pList);
-/* Free a list of dynamically allocated dbDbClade's */
-
-struct dbDbClade *hGetIndexedDbClade(char *db);
-/* Get list of active databases and clade
- * Only get details for one 'db' unless NULL
- * in which case get all databases.
- * Dispose of this with dbDbCladeFreeList. */
+void printTrackInfo(char *db, char *track, struct trackDb *tdb);
+// print database and track information
 
 
 #endif /* HGTRACKS_H */

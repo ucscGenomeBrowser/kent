@@ -5,7 +5,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.4 2009/01/09 20:53:28 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.5 2009/01/13 15:48:53 mikep Exp $";
 
 void printBedAsAnnoj(struct bed *b, struct hTableInfo *hti)
 // print out rows of bed data formatted as AnnoJ nested model
@@ -46,68 +46,70 @@ for (t = b ; t ; t = t->next)
 printf("]\n}\n");
 }
 
-void printBed(struct bed *b, char *db, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti)
+void printBed(int n, struct bed *b, char *db, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti)
 // print out rows of bed data, each row as a list of columns
 {
 struct bed *t;
-printf("{ \"db\" : \"%s\",\n\"track\" : \"%s\",\n\"tableName\" : \"%s\",\n\"chrom\" : \"%s\",\n\"start\" : %d,\n\"end\" : %d,\n\"rowCount\" : %d,\n\"hasCDS\" : %s,\n\"hasBlocks\" : %s,\n\"type\" : \"%s\",\n",
-    db, track, hti->rootName, chrom, start, end, slCount(b),
+printf("{ \"db\" : \"%s\",\n\"track\" : \"%s\",\n\"tableName\" : \"%s\",\n\"chrom\" : \"%s\",\n\"start\" : %d,\n\"end\" : %d,\n\"count\" : %d,\n\"hasCDS\" : %s,\n\"hasBlocks\" : %s,\n\"type\" : \"%s\",\n",
+    db, track, hti->rootName, chrom, start, end, n,
     (hti->hasCDS ? "true" : "false"), (hti->hasBlocks ? "true" : "false"), type );
 printf("\"bedColumns\" : [");
+int c = 0; // number of columns, to decide when to print ',' between name:value pairs
 if (hti->startField[0] != 0)
-    printf("\"%s\",", hti->startField);
+    printf("%c\"%s\"", c++ ? ',' : ' ', hti->startField);
 if (hti->endField[0] != 0)
-    printf("\"%s\",", hti->endField);
+    printf("%c\"%s\"", c++ ? ',' : ' ', hti->endField);
 if (hti->nameField[0] != 0)
-    printf("\"%s\",", hti->nameField);
+    printf("%c\"%s\"", c++ ? ',' : ' ', hti->nameField);
 if (hti->scoreField[0] != 0)
-    printf("\"%s\",", hti->scoreField);
+    printf("%c\"%s\"", c++ ? ',' : ' ', hti->scoreField);
 if (hti->strandField[0] != 0)
-    printf("\"%s\",", hti->strandField);
+    printf("%c\"%s\"", c++ ? ',' : ' ', hti->strandField);
 if (hti->cdsStartField[0] != 0)
-    printf("\"%s\",", hti->cdsStartField);
+    printf("%c\"%s\"", c++ ? ',' : ' ', hti->cdsStartField);
 if (hti->cdsEndField[0] != 0)
-    printf("\"%s\",", hti->cdsEndField);
+    printf("%c\"%s\"", c++ ? ',' : ' ', hti->cdsEndField);
 if (hti->countField[0] != 0)
-    printf("\"%s\",", hti->countField);
+    printf("%c\"%s\"", c++ ? ',' : ' ', hti->countField);
 if (hti->startsField[0] != 0)
-    printf("\"%s\",", hti->startsField);
+    printf("%c\"%s\"", c++ ? ',' : ' ', hti->startsField);
 if (hti->endsSizesField[0] != 0)
-    printf("\"%s\",", hti->endsSizesField);
+    printf("%c\"%s\"", c++ ? ',' : ' ', hti->endsSizesField);
 
 printf("],\n\"bed\" : [\n");
 for (t = b ; t ; t = t->next)
     {
+    c = 0; // number of columns printed this row
     printf("[");
     if (hti->startField[0] != 0)
-        printf("%d,", t->chromStart);
+        printf("%c%d", c++ ? ',' : ' ', t->chromStart);
     if (hti->endField[0] != 0)
-        printf("%d,", t->chromEnd);
+        printf("%c%d", c++ ? ',' : ' ', t->chromEnd);
     if (hti->nameField[0] != 0)
-        printf("\"%s\",", t->name);
+        printf("%c\"%s\"", c++ ? ',' : ' ', t->name);
     if (hti->scoreField[0] != 0)
-        printf("%d,", t->score);
+        printf("%c%d", c++ ? ',' : ' ', t->score);
     if (hti->strandField[0] != 0)
-        printf("\'%c\',", t->strand[0]);
+        printf("%c\'%c\'", c++ ? ',' : ' ', t->strand[0]);
     if (hti->cdsStartField[0] != 0)
-        printf("%d,", t->thickStart);
+        printf("%c%d", c++ ? ',' : ' ', t->thickStart);
     if (hti->cdsEndField[0] != 0)
-        printf("%d,", t->thickEnd);
+        printf("%c%d", c++ ? ',' : ' ', t->thickEnd);
     if (hti->countField[0] != 0)
-        printf("%d,", t->blockCount);
+        printf("%c%d", c++ ? ',' : ' ', t->blockCount);
     if (hti->startsField[0] != 0)
 	{
 	char *tmp = sqlSignedArrayToString(t->chromStarts, t->blockCount);
-        printf("[%s],", tmp);
+        printf("%c[%s]", c++ ? ',' : ' ', tmp);
 	freez(&tmp);
 	}
     if (hti->endsSizesField[0] != 0)
 	{
 	char *tmp = sqlSignedArrayToString(t->blockSizes, t->blockCount);
-        printf("[%s],", tmp);
+        printf("%c[%s]", c++ ? ',' : ' ', tmp);
 	freez(&tmp);
 	}
-    printf("],\n");
+    printf("]%c\n", t->next ? ',' : ' ');
     }
 printf("]\n}\n");
 }
