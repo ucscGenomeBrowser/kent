@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.466 2009/01/12 21:15:17 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.467 2009/01/13 00:20:34 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2439,7 +2439,11 @@ else if (tdb->type != NULL)
 if (tdbIsSuperTrack(tdb))
     superTrackUi(tdb);
 else if (tdbIsComposite(tdb))
+    {
     hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
+    if (trackDbSetting(tdb, "dimensions"))
+        cgiMakeButton("Submit", "Submit");
+    }
 }
 
 void trackUi(struct trackDb *tdb, struct customTrack *ct)
