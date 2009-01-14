@@ -539,6 +539,7 @@ public class HgTracks {
     WebRequest req = new GetMethodWebRequest(myURL);
 
     try {
+      HttpUnitOptions.setScriptingEnabled( false ); /* dont run the javascript */
       WebResponse page = wc.getResponse(req);
       int code = page.getResponseCode();
       if (code != 200) {
