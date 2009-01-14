@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.107 2009/01/14 23:34:26 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.108 2009/01/14 23:50:58 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2526,7 +2526,7 @@ sqlFreeResult(&sr);
 
 if (c == 0)
     {
-    printf("<tr><td>%s</td><td>%s</td></tr>\n",tbl,"error fetching");
+    printf("<tr><td style=\"color:red\">%s</td><td style=\"color:red\">%s</td></tr>\n",tbl,"error fetching");
     ++(*errCount);
     }
 
@@ -2793,15 +2793,15 @@ if (!sameString(q->cgis,""))
 		size=fileSize(cgiPath);
 		if (size == -1)
 		    {
-		    safef(nicenumber,sizeof(nicenumber),"not found");
+		    printf("<tr><td style=\"color:red\">%s<td/><td style=\"color:red\">not found</td></tr>\n",gVal);
 		    ++errCount;
 		    }
 		else
 		    {
 		    totalsize+=size;
 		    sprintLongWithCommas(nicenumber, size);
+		    printf("<tr><td>%s<td/><td>%s</td></tr>\n",gVal,nicenumber);
 		    }
-		printf("<tr><td>%s<td/><td>%s</td></tr>\n",gVal,nicenumber);
 		}   
 	     }
 	 }
@@ -2859,15 +2859,15 @@ if (!sameString(q->files,""))
 		    size=fileSize(pathName);
 		    if (size == -1)
 			{
-			safef(nicenumber,sizeof(nicenumber),"not found");
+			printf("<tr><td style=\"color:red\">%s<td/><td style=\"color:red\">not found</td></tr>\n",gVal);
 			++errCount;
 			}
 		    else
 			{
 			totalsize+=size;
 			sprintLongWithCommas(nicenumber, size);
+			printf("<tr><td>%s<td/><td>%s</td></tr>\n",gVal,nicenumber);
 			}
-		    printf("<tr><td>%s<td/><td>%s</td></tr>\n",gVal,nicenumber);
 		    }
 		else
 		    { /* wildcards found in name, use listDirX */
@@ -2889,12 +2889,14 @@ if (!sameString(q->files,""))
 			{
 			if (fi->statFailed)  // usually due to bad symlink
 			    {
-    			    printf("<tr><td>%s<td/><td>stat() failed: bad symlink or not found</td></tr>\n",fi->name);
+    			    printf("<tr><td style=\"color:red\">%s<td/>"
+				"<td style=\"color:red\">stat() failed: bad symlink or not found</td></tr>\n"
+				,fi->name);
 			    ++errCount;
 			    }
 			else if (fi->isDir)
 			    {
-			    printf("<tr><td>error: %s is a directory<td/></tr>\n",fi->name);
+			    printf("<tr><td style=\"color:red\">error: %s is a directory<td/></tr>\n",fi->name);
 			    ++errCount;
 			    }
 			else
