@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.84 2008/11/25 07:17:45 mikep Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.85 2009/01/14 18:59:16 hiram Exp $";
 
 #define SMALLBUF 128
 
@@ -558,8 +558,8 @@ preDraw = (struct preDrawElement *) needMem ((size_t)
 for (i = 0; i < *preDrawSize; ++i)
     {
     preDraw[i].count = 0;
-    preDraw[i].max = -1.0e+300;
-    preDraw[i].min = 1.0e+300;
+    preDraw[i].max = wigEncodeStartingUpperLimit;
+    preDraw[i].min = wigEncodeStartingLowerLimit;
     }
 return preDraw;
 }
@@ -649,8 +649,8 @@ double preDrawLimits(struct preDrawElement *preDraw, int preDrawZero,
 int i;
 
 /*	Just in case they haven't been initialized before	*/
-*overallUpperLimit = -1.0e+300;
-*overallLowerLimit = 1.0e+300;
+*overallUpperLimit = wigEncodeStartingUpperLimit;
+*overallLowerLimit = wigEncodeStartingLowerLimit;
 for (i = preDrawZero; i < preDrawZero+width; ++i)
     {
     /*	count is non-zero meaning valid data exists here	*/
@@ -679,8 +679,9 @@ if (autoScale == wiggleScaleAuto)
     {
     int i;
 
-    *overallUpperLimit = -1.0e+300;	/* reset limits for auto scale */
-    *overallLowerLimit = 1.0e+300;
+    /* reset limits for auto scale */
+    *overallUpperLimit = wigEncodeStartingUpperLimit;
+    *overallLowerLimit = wigEncodeStartingLowerLimit;
     for (i = preDrawZero; i < preDrawZero+width; ++i)
 	{
 	/*	count is non-zero meaning valid data exists here	*/
@@ -1032,8 +1033,9 @@ struct preDrawElement *preDraw;	/* to accumulate everything in prep for draw */
 int preDrawZero;		/* location in preDraw where screen starts */
 int preDrawSize;		/* size of preDraw array */
 int i;				/* an integer loop counter	*/
-double overallUpperLimit = -1.0e+300;	/*	determined from data	*/
-double overallLowerLimit = 1.0e+300;	/*	determined from data	*/
+/*	determined from data	*/
+double overallUpperLimit = wigEncodeStartingUpperLimit;
+double overallLowerLimit = wigEncodeStartingLowerLimit;
 double overallRange;		/*	determined from data	*/
 double graphUpperLimit;		/*	scaling choice will set these	*/
 double graphLowerLimit;		/*	scaling choice will set these	*/
@@ -1240,8 +1242,8 @@ void wigFindItemLimits(void *items,
 /*	find upper and lower limits of graphed items (wigItem)	*/
 {
 struct wigItem *wi;
-*graphUpperLimit = -1.0e+300;
-*graphLowerLimit = 1.0e+300;
+*graphUpperLimit = wigEncodeStartingUpperLimit;
+*graphLowerLimit = wigEncodeStartingLowerLimit;
 
 for (wi = items; wi != NULL; wi = wi->next)
     {
@@ -1292,8 +1294,8 @@ else if (tg->limitedVis == tvFull)
     if (height >= (3 * fontHeight))
 	{
 	boolean zeroOK = TRUE;
-	double graphUpperLimit = -1.0e+300;
-	double graphLowerLimit = 1.0e+300;
+	double graphUpperLimit = wigEncodeStartingUpperLimit;
+	double graphLowerLimit = wigEncodeStartingLowerLimit;
 	char upper[128];
 	char lower[128];
 	char upperTic = '-';	/* as close as we can get with ASCII */

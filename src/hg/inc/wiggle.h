@@ -289,6 +289,13 @@ struct wigEncodeOptions
     long long wibSizeLimit;	/*	governor on ct trash files */
     };
 
+/* during wigAsciiToBinary, these starting limits are for the complete set
+ *	of data, they must change from these initial defaults during
+ *	processing
+ */
+#define	wigEncodeStartingUpperLimit -1.0e+300
+#define	wigEncodeStartingLowerLimit 1.0e+300
+
 void wigAsciiToBinary(char *wigAscii, char *wigFile, char *wibFile,
    double *upperLimit, double *lowerLimit, struct wigEncodeOptions *options );
 /*	given the three file names, read the wigAscii file and produce

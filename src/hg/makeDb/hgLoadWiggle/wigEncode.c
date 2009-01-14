@@ -1,6 +1,6 @@
 /* wigEncode - Convert wiggle ascii to wiggle binary format */
 
-static char const rcsid[] = "$Id: wigEncode.c,v 1.11 2008/11/21 22:17:35 hiram Exp $";
+static char const rcsid[] = "$Id: wigEncode.c,v 1.12 2009/01/14 18:59:18 hiram Exp $";
 
 #include "common.h"
 #include "wiggle.h"
@@ -56,7 +56,7 @@ static long long wibSizeLimit = 0;	/*	governor on ct trash sizes */
 void wigEncode(char *bedFile, char *wigFile, char *wibFile)
 /* Convert BED file to wiggle binary representation */
 {
-double upper, lower;
+double upper=wigEncodeStartingUpperLimit, lower=wigEncodeStartingLowerLimit;
 if ((lift != 0) || noOverlap || noOverlapSpanData || (wibSizeLimit > 0))
     {
     struct wigEncodeOptions options;
@@ -73,6 +73,10 @@ if ((lift != 0) || noOverlap || noOverlapSpanData || (wibSizeLimit > 0))
     }
 else
     wigAsciiToBinary(bedFile, wigFile, wibFile, &upper, &lower, NULL);
+
+if ( (wigEncodeStartingUpperLimit == upper) &&
+	(wigEncodeStartingLowerLimit == lower) )
+    errAbort("ERROR: wigEncode: empty input file: '%s'", bedFile );
 
 verbose(1, "Converted %s, upper limit %.2f, lower limit %.2f\n",
                         bedFile, upper, lower);

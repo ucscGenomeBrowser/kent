@@ -12,7 +12,7 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.49 2008/12/19 07:14:04 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.50 2009/01/14 18:59:14 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -474,8 +474,10 @@ unsigned chromPosition = 0;
 unsigned validCount = 0;
 long int chromStart = -1;
 unsigned chromEnd = 0;
-double lowerLimit = 1.0e+300;
-double upperLimit = -1.0e+300;
+/* limits for the complete set of data, they must change from these initial
+	defaults during processing */
+double lowerLimit = wigEncodeStartingLowerLimit;
+double upperLimit = wigEncodeStartingUpperLimit;
 double sumData = 0.0;
 double sumSquares = 0.0;
 
@@ -654,8 +656,10 @@ static void resetStats(struct wigStatsAcc *wsa)
 wsa->span = 0;
 wsa->start = BIGNUM;
 wsa->end = 0;
-wsa->lowerLimit = 1.0e+300;
-wsa->upperLimit = -1.0e+300;
+/* limits for the complete set of data, they must change from these initial
+	defaults during processing */
+wsa->lowerLimit = wigEncodeStartingLowerLimit;
+wsa->upperLimit = wigEncodeStartingUpperLimit;
 wsa->count = 0;
 wsa->sumData = 0.0;
 wsa->sumSquares = 0.0;

@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.14 2008/09/03 19:19:01 markd Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.15 2009/01/14 18:59:16 hiram Exp $";
 
 struct bedGraphItem
 /* A bedGraph track item. */
@@ -123,8 +123,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bg->name = cloneString(name);
 	}
     bg->dataValue = sqlFloat(row[graphColumn]);
-    bg->graphUpperLimit = -1.0e+300; /* filled in by DrawItems	*/
-    bg->graphLowerLimit = 1.0e+300; /* filled in by DrawItems	*/
+    /* filled in by DrawItems	*/
+    bg->graphUpperLimit = wigEncodeStartingUpperLimit;
+    bg->graphLowerLimit = wigEncodeStartingLowerLimit;
     slAddHead(&bgList, bg);
     bedFree(&bed);
     }
@@ -158,8 +159,9 @@ struct preDrawElement *preDraw;	/* to accumulate everything in prep for draw */
 int preDrawZero;		/* location in preDraw where screen starts */
 int preDrawSize;		/* size of preDraw array */
 int i;				/* an integer loop counter	*/
-double overallUpperLimit = -1.0e+300;	/*	determined from data	*/
-double overallLowerLimit = 1.0e+300;	/*	determined from data	*/
+/*	determined from data	*/
+double overallUpperLimit = wigEncodeStartingUpperLimit;
+double overallLowerLimit = wigEncodeStartingLowerLimit;
 double overallRange;		/*	determined from data	*/
 double graphUpperLimit;		/*	scaling choice will set these	*/
 double graphLowerLimit;		/*	scaling choice will set these	*/
@@ -306,8 +308,8 @@ void wigBedGraphFindItemLimits(void *items,
 /*	find upper and lower limits of graphed items (bedGraphItem)	*/
 {
 struct bedGraphItem *wi;
-*graphUpperLimit = -1.0e+300;
-*graphLowerLimit = 1.0e+300;
+*graphUpperLimit = wigEncodeStartingUpperLimit;
+*graphLowerLimit = wigEncodeStartingLowerLimit;
 
 for (wi = items; wi != NULL; wi = wi->next)
     {
