@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.144 2009/01/14 18:54:53 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.145 2009/01/14 22:49:28 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3850,13 +3850,11 @@ boolean displayAll =
     sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
 boolean isMatrix = dimensionsExist(tdb);
 
+jsIncludeFile("jquery.js",NULL);
 jsIncludeFile("utils.js",NULL);
-if(sameOk("subTracks",trackDbSetting(tdb, "dragAndDrop")))
-    {
-    jsIncludeFile("jquery.js", NULL);
+if(trackDbSetting(tdb, "dragAndDrop") != NULL)
     jsIncludeFile("jquery.tablednd.js", NULL);
-    }
-    commonCssStyles();
+commonCssStyles();
 jsIncludeFile("hui.js",NULL);
 
 puts("<P>");
