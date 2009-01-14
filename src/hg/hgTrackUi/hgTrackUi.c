@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.467 2009/01/13 00:20:34 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.468 2009/01/14 16:51:43 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1316,7 +1316,7 @@ safef(varName, sizeof(varName), "%s.label", tdb->tableName);
 geneLabel = cartUsualString(cart, varName, "OMIM ID");
 printf("<BR><B>Label:</B> ");
 radioButton(varName, geneLabel, "OMIM ID");
-radioButton(varName, geneLabel, "OMIM gene or symdrome");
+radioButton(varName, geneLabel, "OMIM gene or syndrome");
 radioButton(varName, geneLabel, "UCSC gene symbol");
 }
 
