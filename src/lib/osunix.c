@@ -13,7 +13,7 @@
 #include "portimpl.h"
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: osunix.c,v 1.35 2008/12/11 22:48:19 hiram Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.36 2009/01/14 23:06:29 galt Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -111,13 +111,14 @@ slNameSort(&list);
 return list;
 }
 
-struct fileInfo *newFileInfo(char *name, off_t size, bool isDir)
+struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, bool statFailed)
 /* Return a new fileInfo. */
 {
 int len = strlen(name);
 struct fileInfo *fi = needMem(sizeof(*fi) + len);
 fi->size = size;
 fi->isDir = isDir;
+fi->statFailed = statFailed;
 strcpy(fi->name, name);
 return fi;
 }
@@ -149,7 +150,7 @@ return TRUE;
 }
 
 
-struct fileInfo *listDirX(char *dir, char *pattern, boolean fullPath)
+struct fileInfo *listDirXExt(char *dir, char *pattern, boolean fullPath, boolean ignoreStatFailures)
 /* Return list of files matching wildcard pattern with
  * extra info. If full path is true then the path will be
  * included in the name of each file. */
@@ -175,14 +176,20 @@ while ((de = readdir(d)) != NULL)
 	    {
 	    struct stat st;
 	    bool isDir = FALSE;
+	    bool statFailed = FALSE;
 	    strcpy(pathName+fileNameOffset, fileName);
 	    if (stat(pathName, &st) < 0)
-		errAbort("stat failed in listDirX");
+		{
+		if (ignoreStatFailures)
+		    statFailed = TRUE;
+		else
+    		    errAbort("stat failed in listDirX");
+		}
 	    if (S_ISDIR(st.st_mode))
 		isDir = TRUE;
 	    if (fullPath)
 		fileName = pathName;
-	    el = newFileInfo(fileName, st.st_size, isDir);
+	    el = newFileInfo(fileName, st.st_size, isDir, statFailed);
 	    slAddHead(&list, el);
 	    }
 	}
@@ -190,6 +197,14 @@ while ((de = readdir(d)) != NULL)
 closedir(d);
 slSort(&list, cmpFileInfo);
 return list;
+}
+
+struct fileInfo *listDirX(char *dir, char *pattern, boolean fullPath)
+/* Return list of files matching wildcard pattern with
+ * extra info. If full path is true then the path will be
+ * included in the name of each file. */
+{
+return listDirXExt(dir, pattern, fullPath, FALSE);
 }
 
 unsigned long fileModTime(char *pathName)

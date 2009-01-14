@@ -2,7 +2,7 @@
 #include "common.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: rmskOoJobs.c,v 1.2 2003/05/06 07:22:16 kate Exp $";
+static char const rcsid[] = "$Id: rmskOoJobs.c,v 1.3 2009/01/14 23:05:19 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,7 +38,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	    size = fileSize(faName);
 	    if (size > 0)
 	        {
-		fi = newFileInfo(faName, size, FALSE);
+		fi = newFileInfo(faName, size, FALSE, FALSE);
 		slAddHead(&fiList, fi);
 		}
 	    }

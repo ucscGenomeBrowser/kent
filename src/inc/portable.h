@@ -20,11 +20,18 @@ struct fileInfo
     struct fileInfo  *next;	/* Next in list. */
     off_t size;		/* Size in bytes. */
     bool isDir;		/* True if file is a directory. */
+    bool statFailed;	/* True if stat failed (e.g. bad symlink). */
     char name[1];	/* Allocated at run time. */
     };
 
-struct fileInfo *newFileInfo(char *name, off_t size, bool isDir);
+struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, bool statFailed);
 /* Return a new fileInfo. */
+
+struct fileInfo *listDirXExt(char *dir, char *pattern, boolean fullPath, boolean ignoreStatFailures);
+/* Return list of files matching wildcard pattern with
+ * extra info. If full path is true then the path will be
+ * included in the name of each file.  You can free the
+ * resulting list with slFreeList. */
 
 struct fileInfo *listDirX(char *dir, char *pattern, boolean fullPath);
 /* Return list of files matching wildcard pattern with
