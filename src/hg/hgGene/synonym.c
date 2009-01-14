@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: synonym.c,v 1.8 2008/09/10 18:02:08 hiram Exp $";
+static char const rcsid[] = "$Id: synonym.c,v 1.9 2009/01/14 22:06:12 fanhsu Exp $";
 
 static void printOurMrnaUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
@@ -261,16 +261,16 @@ if (protAcc != NULL)
 	*chp = '\0';
 	
         /* show variant splice protein and the UniProt link here */
-	hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
+	hPrintf("<A HREF=\"http://www.uniprot.org/uniprot%s\" "
 	    "TARGET=_blank>%s</A></B>, splice isoform of ",
 	    kgProteinID, kgProteinID);
-        hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
+        hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" "
 	    "TARGET=_blank>%s</A></B>\n",
 	    parAcc, parAcc);
 	}
     else
         {
-        hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
+        hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" "
 	    "TARGET=_blank>%s</A></B>\n",
 	    protAcc, protAcc);
 	}
