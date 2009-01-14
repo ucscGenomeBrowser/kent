@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.143 2009/01/13 22:33:24 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.144 2009/01/14 18:54:53 angie Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1592,6 +1592,13 @@ if (primarySubtrack)
 return type;
 }
 
+boolean hSameTrackDbType(char *type1, char *type2)
+/* Compare type strings: require same string unless both are wig tracks. */
+{
+return (sameString(type1, type2) ||
+	(startsWith("wig ", type1) && startsWith("wig ", type2)));
+}
+
 typedef struct _dividers {
     int count;
     char**subgroups;
@@ -2465,7 +2472,8 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             printf ("</TD><TD>%s [selected on main page]</TD></TR>\n",
                 subtrack->longLabel);
             }
-        else if (sameString(primaryType, subtrack->type) && hTableExists(db, subtrack->tableName))
+        else if (hSameTrackDbType(primaryType, subtrack->type) &&
+		 hTableExists(db, subtrack->tableName))
             {
             puts("<TR><TD>");
             cgiMakeCheckBox(htmlIdentifier, alreadySet);
@@ -3730,7 +3738,7 @@ if (isNotEmpty(button))
             {
             if (sameString(subtrack->tableName, primarySubtrack))
                 newVal = TRUE;
-            if (sameString(subtrack->type, primaryType))
+            if (hSameTrackDbType(primaryType, subtrack->type))
                 cartSetBoolean(cart, option, newVal);
             }
         else
@@ -3805,7 +3813,7 @@ for (i = 0; i < MAX_SUBGROUP; i++)
                         {
                         if (sameString(subtrack->tableName, primarySubtrack))
                             newVal = TRUE;
-                        if (sameString(subtrack->type, primaryType))
+                        if (hSameTrackDbType(primaryType, subtrack->type))
                             cartSetBoolean(cart, option, newVal);
                         }
                     else

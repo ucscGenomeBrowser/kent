@@ -848,4 +848,7 @@ void tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
 enum trackVisibility visCompositeViewDefault(struct trackDb *parentTdb,char *view);
 /* returns the default track visibility of particular view within a composite track */
 
+boolean hSameTrackDbType(char *type1, char *type2);
+/* Compare type strings: require same string unless both are wig tracks. */
+
 #endif /* HUI_H */

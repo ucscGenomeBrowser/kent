@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.65 2008/09/03 19:18:59 markd Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.66 2009/01/14 18:54:54 angie Exp $";
 
 extern char *maxOutMenu[];
 
@@ -394,7 +394,7 @@ for (sTdb = cTdb->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
     {
     if (isSubtrackMerged(sTdb->tableName) &&
 	! sameString(tdb1->tableName, sTdb->tableName) &&
-	sameString(tdb1->type, sTdb->type))
+	hSameTrackDbType(tdb1->type, sTdb->type))
 	{
 	struct trackTable *tt2 = trackTableNew(sTdb, sTdb->tableName, conn);
 	struct dataVector *dataVector2 = dataVectorFetchOneRegion(tt2, region,
