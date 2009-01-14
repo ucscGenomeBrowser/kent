@@ -590,3 +590,43 @@ do1 vax004Msa
 
 # See details in hivVax003Vax004.txt.
 ##############################################################
+# Create Positive Selection tracks for VAX003 subtype B
+
+cd /hive/groups/gsid/medical/hiv/hivmn2
+mkdir posSelection
+cd posSelection
+
+# BLAT /hive/groups/gsid/medical/hiv/hiva244/posSelection/BMsaAaConsensus.fa
+# against hivmn2 base genome, select psl without header option
+# cut and paste the result into the file BMsa.psl
+
+hgLoadPsl -keep -table=BMsaPsl -nobin hivmn2 BMsa.psl 
+
+# will get the following error:
+
+#Processing BMsa.psl
+#Can't start query:
+#LOAD DATA CONCURRENT  INFILE
+'/cluster/hive/groups/gsid/medical/hiv/hivmn2/posSelection/BMsa.psl'  INTO
+TABLE BMsaPsl
+
+#mySQL error 13: Can't get stat of
+'/cluster/hive/groups/gsid/medical/hiv/hivmn2/posSelection/BMsa.psl' (Errcode:
+13)
+
+# load manually then
+
+hgsql hivmn2
+load data local infile "BMsa.psl" into table BMsaPsl;
+quit
+
+# build the positive selection tracks for model 2 and model 8.
+
+gsidPosSelect hivmn2  BMsaPsl posSelBuild pSelectBModel2  posSelModel2.bed
+hgLoadBed hivmn2 posSelModel2 posSelModel2.bed
+
+gsidPosSelect hivmn2 BMsaPsl posSelBuild pSelectBModel8  posSelModel8.bed
+hgLoadBed hivmn2 posSelModel8 posSelModel8.bed
+
+##############################################################
+

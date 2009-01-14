@@ -666,3 +666,46 @@ hgsql hiva244 -e 'delete from gsidClinicRecWithSeq where subjId like "GSID3%"'
 hgsql hiva244 -e 'load data local infile "gsidClinicRecWithSeq.vax003.tab" into table gsidClinicRecWithSeq'
 
 ######################################################################################
+
+# Create VAX003 subtype B Positive Selection tracks for hivVax003Vax004
+
+cd /hive/groups/gsid/medical/hiv/hivVax003Vax004
+mkdir posSelection
+cd posSelection
+
+# BLAT /hive/groups/gsid/medical/hiv/hiva244/posSelection/BMsaAaConsensus.fa
+# against hivVax003Vax004 base genome, select psl without header option
+# cut and paste the result into the file BMsa.psl
+
+hgLoadPsl -keep -table=BMsaPsl -nobin hivVax003Vax004 BMsa.psl 
+
+# will get the following error:
+#Processing BMsa.psl
+#Can't start query:
+#LOAD DATA CONCURRENT  INFILE
+'/cluster/hive/groups/gsid/medical/hiv/hivVax003Vax004/posSelection/BMsa.psl'
+INTO TABLE BMsaPsl
+
+#mySQL error 13: Can't get stat of
+'/cluster/hive/groups/gsid/medical/hiv/hivVax003Vax004/posSelection/BMsa.psl'
+(Errcode: 13)
+
+# load manually then
+
+hgsql hivVax003Vax004
+load data local infile "BMsa.psl" into table BMsaPsl;
+quit
+
+# build the positive selection tracks for model 2 and model 8.
+
+gsidPosSelect hivVax003Vax004  BMsaPsl posSelBuild pSelectBModel2
+posSelModel2.bed
+hgLoadBed hivVax003Vax004 posSelModel2 posSelModel2.bed
+
+gsidPosSelect hivVax003Vax004 BMsaPsl posSelBuild pSelectBModel8
+posSelModel8.bed
+hgLoadBed hivVax003Vax004 posSelModel8 posSelModel8.bed
+
+
+######################################################################################
+
