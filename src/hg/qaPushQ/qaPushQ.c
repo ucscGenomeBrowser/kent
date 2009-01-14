@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.106 2009/01/13 18:57:51 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.107 2009/01/14 23:34:26 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2440,7 +2440,7 @@ freez(&temp);
 
 
 
-long long pq_getTableSize(char *rhost, char *db, char *tbl)  /* added extension pq_ to supress name conflict in hdb.c */
+long long pq_getTableSize(char *rhost, char *db, char *tbl, int *errCount)  /* added extension pq_ to supress name conflict in hdb.c */
 /* Get table size via show table status command. Return -1 if err. Will match multiple if "%" used in tbl */ 
 {
 char query[256];
@@ -2527,6 +2527,7 @@ sqlFreeResult(&sr);
 if (c == 0)
     {
     printf("<tr><td>%s</td><td>%s</td></tr>\n",tbl,"error fetching");
+    ++(*errCount);
     }
 
 sqlDisconnect(&conn);
@@ -2590,6 +2591,7 @@ char  db[1024] = "";
 off_t size = 0;
 off_t totalsize = 0;
 unsigned long sizeMB = 0;
+int errCount = 0;
 int i = 0, ii = 0, iii = 0;
 int j = 0, jj = 0, jjj = 0;
 int g = 0, gg = 0, ggg = 0;
@@ -2737,7 +2739,7 @@ for(j=0;parseList(q->dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 		    if (tempVal[0]!=0) 
 			{
 			safef(tbl,sizeof(tbl),"%s",tempVal);
-			totalsize += pq_getTableSize(q->currLoc,db,tbl);
+			totalsize += pq_getTableSize(q->currLoc,db,tbl,&errCount);
 			}
 		    }
 		}
@@ -2792,6 +2794,7 @@ if (!sameString(q->cgis,""))
 		if (size == -1)
 		    {
 		    safef(nicenumber,sizeof(nicenumber),"not found");
+		    ++errCount;
 		    }
 		else
 		    {
@@ -2857,6 +2860,7 @@ if (!sameString(q->files,""))
 		    if (size == -1)
 			{
 			safef(nicenumber,sizeof(nicenumber),"not found");
+			++errCount;
 			}
 		    else
 			{
@@ -2881,15 +2885,24 @@ if (!sameString(q->files,""))
 			found++;
 			safef(fileName,sizeof(fileName),"%s",found);
 			}
-		    for (fi = listDirX(filePath,fileName,FALSE);fi!=NULL;fi=fi->next)
+		    for (fi = listDirXExt(filePath,fileName,FALSE,TRUE);fi!=NULL;fi=fi->next)
 			{
-			if (fi->isDir)
+			if (fi->statFailed)  // usually due to bad symlink
+			    {
+    			    printf("<tr><td>%s<td/><td>stat() failed: bad symlink or not found</td></tr>\n",fi->name);
+			    ++errCount;
+			    }
+			else if (fi->isDir)
 			    {
 			    printf("<tr><td>error: %s is a directory<td/></tr>\n",fi->name);
+			    ++errCount;
 			    }
-			totalsize+=fi->size;
-			sprintLongWithCommas(nicenumber, fi->size);
-			printf("<tr><td>%s<td/><td>%s</td></tr>\n",fi->name,nicenumber);
+			else
+			    {
+    			    totalsize+=fi->size;
+    			    sprintLongWithCommas(nicenumber, fi->size);
+    			    printf("<tr><td>%s<td/><td>%s</td></tr>\n",fi->name,nicenumber);
+			    }
 			}
 		    printf("<tr><td>&nbsp;<td/></tr>\n"); /* spacer */
 		    }
@@ -2911,7 +2924,13 @@ if ((sizeMB == 0) && (totalsize > 0))
     sizeMB = 1;
     }
 sprintLongWithCommas(nicenumber, sizeMB );
-printf("<p style=\"color:red\">Total: %s MB</p>\n",nicenumber);
+printf("<p style=\"color:red\">Total: %s MB",nicenumber);
+if (errCount)
+    {
+    printf("&nbsp;&nbsp; Errors: %d",errCount);
+    }
+printf("</p>\n");
+
 
 printf(" <br>\n");
 printf("<a href=\"%s/cgi-bin/qaPushQ?action=setSize&qid=%s&sizeMB=%lu&cb=%s\">"
