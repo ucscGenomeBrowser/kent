@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1490 2009/01/14 16:49:52 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1491 2009/01/14 22:12:56 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -269,7 +269,7 @@ char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
 char *cloneRegScript = "http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=";
 char *traceScript = "http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=retrieve&val=";
 char *genMapDbScript = "http://genomics.med.upenn.edu/perl/genmapdb/byclonesearch.pl?clone=";
-char *uniprotFormat = "http://www.expasy.org/cgi-bin/niceprot.pl?%s";
+char *uniprotFormat = "http://www.uniprot.org/uniprot/%s";
 
 /* variables for gv tables */
 char *gvPrevCat = NULL;
