@@ -706,6 +706,46 @@ gsidPosSelect hivVax003Vax004 BMsaPsl posSelBuild pSelectBModel8
 posSelModel8.bed
 hgLoadBed hivVax003Vax004 posSelModel8 posSelModel8.bed
 
+##########################################################################
+# BUILD THE POSITIVE SELECTION TRACKS FOR VAX003 SUBTYPE AE
 
-######################################################################################
+    ssh hiv1
+    mkdir -p /hive/groups/gsid/medical/hiv/posSelection/AE/hivVax003Vax004
+    cd /hive/groups/gsid/medical/hiv/posSelection/AE/hivVax003Vax004
+
+# BLAT
+# /cluster/hive/groups/gsid/medical/hiv/posSelection/AE/AEMsaAaConsensus.fa
+# against hivVax003Vax004 base genome, select psl without header option
+# cut and paste the result into the file AEMsa.psl
+
+hgLoadPsl -keep -table=AEMsaPsl -nobin hivVax003Vax004 AEMsa.psl 
+
+# will get the following error:
+#Processing AEMsa.psl
+#Can't start query:
+#LOAD DATA CONCURRENT  INFILE
+#'/cluster/hive/groups/gsid/medical/hiv/posSelection/AE/hivVax003Vax004/AEMsa.ps#l'
+INTO TABLE AEMsaPsl
+
+#mySQL error 13: Can't get stat of
+#'/cluster/hive/groups/gsid/medical/hiv/posSelection/AE/hivVax003Vax004/AEMsa.ps#l'
+(Errcode: 13)
+
+# load manually then
+
+hgsql hivVax003Vax004
+load data local infile "AEMsa.psl" into table AEMsaPsl;
+quit
+
+# build positive selection tracks for model 2 and model 8.
+
+gsidPosSelect hivVax003Vax004  AEMsaPsl posSelBuild pSelectAEModel2
+posSelAEModel2.bed
+hgLoadBed hivVax003Vax004 posSelAEModel2 posSelAEModel2.bed
+
+gsidPosSelect hivVax003Vax004 AEMsaPsl posSelBuild pSelectAEModel8
+posSelAEModel8.bed
+hgLoadBed hivVax003Vax004 posSelAEModel8 posSelAEModel8.bed
+
+##########################################################################
 
