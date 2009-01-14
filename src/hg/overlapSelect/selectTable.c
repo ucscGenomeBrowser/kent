@@ -142,20 +142,20 @@ static boolean isOverlapped(unsigned opts, struct chromAnn *inCa, struct chromAn
 {
 boolean anyCriteria = FALSE;
 boolean overlapped = FALSE;
-boolean notOverlapped = FALSE;  // negative crieria (ceiling)
 unsigned overBases = selectOverlapBases(inCa, selCa);
+// positive criteria first
+if (criteria->bases >= 0)
+    {
+    // base overlap
+    if (overBases >= criteria->bases)
+        overlapped = TRUE;
+    anyCriteria = TRUE;
+    }
 if (criteria->similarity > 0.0)
     {
     // similarity
     if (selectFracSimilarity(inCa, selCa, overBases) >= criteria->similarity)
         overlapped = TRUE;
-    anyCriteria = TRUE;
-    }
-if (criteria->similarityCeil <= 1.0)
-    {
-    // bi-directional ceiling
-    if (selectFracSimilarity(inCa, selCa, overBases) >= criteria->similarityCeil)
-        notOverlapped = TRUE;
     anyCriteria = TRUE;
     }
 if (criteria->threshold > 0.0)
@@ -165,26 +165,26 @@ if (criteria->threshold > 0.0)
         overlapped = TRUE;
     anyCriteria = TRUE;
     }
-if (criteria->thresholdCeil <= 1.0)
-    {
-    // uni-directional ceiling
-    if (selectFracOverlap(inCa, overBases) >= criteria->thresholdCeil)
-        notOverlapped = TRUE;
-    anyCriteria = TRUE;
-    }
-if (criteria->bases >= 0)
-    {
-    // base overlap
-    if (overBases >= criteria->bases)
-        overlapped = TRUE;
-    anyCriteria = TRUE;
-    }
-
 if (!anyCriteria)
     {
     // test for any overlap
     if (overBases > 0)
         overlapped = TRUE;
+    }
+
+// negative criteria (ceiling)
+boolean notOverlapped = FALSE;
+if (criteria->thresholdCeil <= 1.0)
+    {
+    // uni-directional ceiling
+    if (selectFracOverlap(inCa, overBases) >= criteria->thresholdCeil)
+        notOverlapped = TRUE;
+    }
+if (criteria->similarityCeil <= 1.0)
+    {
+    // bi-directional ceiling
+    if (selectFracSimilarity(inCa, selCa, overBases) >= criteria->similarityCeil)
+        notOverlapped = TRUE;
     }
 return overlapped && !notOverlapped;
 }

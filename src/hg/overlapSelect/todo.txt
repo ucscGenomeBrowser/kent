@@ -42,3 +42,4 @@
     computed with an awk script.
 
 - add featureBits type of feature specifications (e.g. :intron)
+

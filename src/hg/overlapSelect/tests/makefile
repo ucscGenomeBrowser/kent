@@ -450,7 +450,7 @@ psl_gp_threshold_ceil: mkout
 similarityTests: psl_gp_similarity  psl_gp_non_similarity \
 	gp_gp_similarity95 gp_gp_similarity75 gp_gp_similarity100 \
 	gp_gp_similarityCds95 gp_gp_similarityCds75 gp_gp_similarityCds100 \
-	psl_gp_similarity_ceil
+	psl_gp_similarity_ceil bed_threshold_ceil_only bed_threshold_ceil_only_no
 
 # select psls overlaping NM_015110 with gp and overlapSimilarity
 psl_gp_similarity: mkout
@@ -511,6 +511,15 @@ psl_gp_similarity_ceil: mkout
 	${OVERSEL} -overlapSimilarity=0.4 -overlapSimilarityCeil=0.75 -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
 	${DIFF} expected/$@.psl output/$@.psl
 	${DIFF} expected/$@.drop.psl output/$@.drop.psl
+
+# only threshold ceiling
+bed_threshold_ceil_only: mkout
+	${OVERSEL} -overlapThresholdCeil=0.2 input/ceil1.sel.bed input/ceil1.in.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
+bed_threshold_ceil_only_no: mkout
+	${OVERSEL} -overlapThresholdCeil=0.01 input/ceil1.sel.bed input/ceil1.in.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
+
 
 ###
 # -overlapBases tests
