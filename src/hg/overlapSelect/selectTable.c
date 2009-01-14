@@ -111,11 +111,9 @@ for (ca1Blk = ca1->blocks; ca1Blk != NULL; ca1Blk = ca1Blk->next)
     {
     for (ca2Blk = ca2->blocks; ca2Blk != NULL; ca2Blk = ca2Blk->next)
         {
-        if ((ca1Blk->start < ca2Blk->end) && (ca1Blk->end > ca2Blk->start))
-            {
-            overBases += min(ca1Blk->end, ca2Blk->end)
-                - max(ca1Blk->start, ca2Blk->start);
-            }
+        int ob = min(ca1Blk->end, ca2Blk->end) - max(ca1Blk->start, ca2Blk->start);
+        if (ob > 0)
+            overBases += ob;
         }
     }
 return overBases;
