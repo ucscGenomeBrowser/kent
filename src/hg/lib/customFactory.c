@@ -25,7 +25,7 @@
 #include "jsHelper.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.92 2008/12/11 00:07:00 aamp Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.93 2009/01/15 06:41:58 mikep Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -98,7 +98,7 @@ char *customTrackTempDb()
 /* set environment for pipeline commands, but don't override if
  * already set for debugging. */
 saveCurrentEnv();
-if (!isEmpty(getenv("HGDB_CONF")))
+if (isEmpty(getenv("HGDB_CONF")))
     envUpdate("HGDB_CONF", "./hg.conf");
 return (CUSTOM_TRASH);
 }
