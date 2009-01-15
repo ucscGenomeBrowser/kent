@@ -35,7 +35,7 @@ queryFull select kgID,spDisplayID from kgXref
 queryOne select spDisplayId,spID from kgXref where kgID = '%s'
 invQueryOne select kgID from kgXref where spDisplayId = '%s'
 search fuzzy
-itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
+itemUrl http://www.uniprot.org/uniprot/%s
 
 name proteinAcc
 shortLabel UniProt Acc
@@ -44,7 +44,7 @@ priority 2.15
 visibility off
 type lookup kgXref kgID spID
 search exact
-itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
+itemUrl http://www.uniprot.org/uniprot/%s
 
 name refSeq
 shortLabel RefSeq
