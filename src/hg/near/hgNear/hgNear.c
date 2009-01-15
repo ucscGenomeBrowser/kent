@@ -9,7 +9,7 @@
 #include "memalloc.h"
 #include "jksql.h"
 #include "htmshell.h"
-#include "subText.h"
+#include "hVarSubst.h"
 #include "cart.h"
 #include "dbDb.h"
 #include "hdb.h"
@@ -21,7 +21,7 @@
 #include "versionInfo.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.181 2008/09/03 19:20:42 markd Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.182 2009/01/15 07:12:51 markd Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1787,15 +1787,11 @@ hPrintf("<H2>Column %s - %s</H2>\n", col->shortLabel, col->longLabel);
 htmlFileName = colHtmlFileName(col);
 if (fileExists(htmlFileName))
     {
-    char *raw, *cooked;
-    struct subText *subs = NULL;
-    hAddDbSubVars("", database, &subs);
-    readInGulp(htmlFileName, &raw, NULL);
-    cooked = subTextString(subs, raw);
-    hPrintf("%s", cooked);
-    freez(&cooked);
-    freez(&raw);
-    subTextFreeList(&subs);
+    char *html;
+    readInGulp(htmlFileName, &html, NULL);
+    hVarSubstInVar(colName,  NULL,database, &html);
+    hPrintf("%s", html);
+    freez(&html);
     }
 else
     {

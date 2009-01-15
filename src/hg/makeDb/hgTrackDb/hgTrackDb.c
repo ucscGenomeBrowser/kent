@@ -7,11 +7,12 @@
 #include "jksql.h"
 #include "trackDb.h"
 #include "hdb.h"
+#include "hVarSubst.h"
 #include "obscure.h"
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.42 2008/10/01 17:21:01 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.43 2009/01/15 07:12:50 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -54,99 +55,102 @@ static struct optionSpec optionSpecs[] = {
 static char *raName = "trackDb.ra";
 static char *release = "alpha";
 
+static void pruneStrict(struct trackDb **tdListPtr, char *database)
+/* purge unused trackDb entries */
+{
+struct trackDb *tdList = *tdListPtr, *td, *tdNext;
+struct trackDb *strictList = NULL;
+struct hash *compositeHash = hashNew(0);
+struct trackDb *compositeList = NULL;
+struct hash *superHash = hashNew(0);
+struct trackDb *superList = NULL;
+char *setting, *words[1];
+
+for (td = tdList; td != NULL; td = tdNext)
+    {
+    tdNext = td->next;
+    if (hTableOrSplitExists(database, td->tableName))
+        {
+        if (verboseLevel() > 2)
+            printf("%s table exists\n", td->tableName);
+        slAddHead(&strictList, td);
+        if ((setting = trackDbSetting(td, "subTrack")) != NULL)
+            {
+            /* note subtracks with tables so we can later add 
+             * the composite trackdb */
+            chopLine(cloneString(setting), words);
+            hashStore(compositeHash, words[0]);
+            }
+        else if ((setting = trackDbSetting(td, "superTrack")) != NULL)
+            {
+            /* note super track member tracks with tables so we can later add 
+             * the super track trackdb */
+            chopLine(cloneString(setting), words);
+            hashStore(superHash, words[0]);
+            }
+        }
+    else
+        {
+        if (trackDbSetting(td, "compositeTrack"))
+            {
+            slAddHead(&compositeList, td);
+            }
+        else if (sameOk("on", trackDbSetting(td, "superTrack")))
+            {
+            slAddHead(&superList, td);
+            }
+        else
+            {
+            if (verboseLevel() > 1)
+                printf("%s missing\n", td->tableName);
+            trackDbFree(&td);
+            }
+        }
+    }
+/* add all composite tracks that have a subtrack with a table */
+for (td = compositeList; td != NULL; td = tdNext)
+    {
+    tdNext = td->next;
+    if (hashLookup(compositeHash, td->tableName))
+        {
+        slAddHead(&strictList, td);
+        if ((setting = trackDbSetting(td, "superTrack")) != NULL)
+            {
+            /* note that this is part of a super track so the
+             * super track will be added to the strict list */
+            chopLine(cloneString(setting), words);
+            hashStore(superHash, words[0]);
+            }
+        }
+    }
+hashFree(&compositeHash);
+
+/* add all super tracks that have a member (simple or composite) with a table */
+for (td = superList; td != NULL; td = tdNext)
+    {
+    tdNext = td->next;
+    if (hashLookup(superHash, td->tableName))
+        {
+        slAddHead(&strictList, td);
+        }
+    }
+hashFree(&superHash);
+
+/* No need to slReverse, it's sorted later. */
+*tdListPtr = strictList;
+}
+
 void addVersion(boolean strict, char *database, char *dirName, char *raName, 
     struct hash *uniqHash,
     struct hash *htmlHash,
     struct trackDb **pTrackList)
 /* Read in tracks from raName and add them to list/database if new. */
 {
-struct trackDb *tdList = NULL, *td, *tdNext;
+struct trackDb *tdList = trackDbFromRa(raName), *td, *tdNext;
 char fileName[512];
-char *words[1];
-
-tdList = trackDbFromRa(raName);
 
 if (strict) 
-    {
-    struct trackDb *strictList = NULL;
-    struct hash *compositeHash = hashNew(0);
-    struct trackDb *compositeList = NULL;
-    struct hash *superHash = hashNew(0);
-    struct trackDb *superList = NULL;
-    char *setting;
-    for (td = tdList; td != NULL; td = tdNext)
-        {
-        tdNext = td->next;
-        if (hTableOrSplitExists(database, td->tableName))
-            {
-            if (verboseLevel() > 2)
-                printf("%s table exists\n", td->tableName);
-	    slAddHead(&strictList, td);
-            if ((setting = trackDbSetting(td, "subTrack")) != NULL)
-                {
-                /* note subtracks with tables so we can later add 
-                 * the composite trackdb */
-                chopLine(cloneString(setting), words);
-                hashStore(compositeHash, words[0]);
-                }
-            else if ((setting = trackDbSetting(td, "superTrack")) != NULL)
-                {
-                /* note super track member tracks with tables so we can later add 
-                 * the super track trackdb */
-                chopLine(cloneString(setting), words);
-                hashStore(superHash, words[0]);
-                }
-            }
-	else
-	    {
-            if (trackDbSetting(td, "compositeTrack"))
-                {
-                slAddHead(&compositeList, td);
-                }
-            else if (sameOk("on", trackDbSetting(td, "superTrack")))
-                {
-                slAddHead(&superList, td);
-                }
-            else
-                {
-                if (verboseLevel() > 1)
-                    printf("%s missing\n", td->tableName);
-                trackDbFree(&td);
-                }
-	    }
-        }
-    /* add all composite tracks that have a subtrack with a table */
-    for (td = compositeList; td != NULL; td = tdNext)
-        {
-        tdNext = td->next;
-        if (hashLookup(compositeHash, td->tableName))
-            {
-	    slAddHead(&strictList, td);
-            if ((setting = trackDbSetting(td, "superTrack")) != NULL)
-                {
-                /* note that this is part of a super track so the
-                 * super track will be added to the strict list */
-                chopLine(cloneString(setting), words);
-                hashStore(superHash, words[0]);
-                }
-            }
-        }
-    hashFree(&compositeHash);
-
-    /* add all super tracks that have a member (simple or composite) with a table */
-    for (td = superList; td != NULL; td = tdNext)
-        {
-        tdNext = td->next;
-        if (hashLookup(superHash, td->tableName))
-            {
-	    slAddHead(&strictList, td);
-            }
-        }
-    hashFree(&superHash);
-
-    /* No need to slReverse, it's sorted later. */
-    tdList = strictList;
-    }
+    pruneStrict(&tdList, database);
 
 /* prune out alternate track entries for another release */
 for (td = tdList; td != NULL; td = tdNext)
@@ -156,13 +160,13 @@ for (td = tdList; td != NULL; td = tdNext)
     if ((rel = trackDbSetting(td, "release")) != NULL)
         {
         if (differentString(rel, release))
-           slRemoveEl(&tdList, td);
+            slRemoveEl(&tdList, td);
         else
             /* remove release setting from trackDb entry -- there
              * should only be a single entry for the track, so 
              * the release setting is no longer relevant (and it
              * confuses Q/A */
-        hashRemove(td->settingsHash, "release");
+            hashRemove(td->settingsHash, "release");
         }
     }
 
@@ -177,8 +181,8 @@ for (td = tdList; td != NULL; td = tdNext)
     }
 for (td = *pTrackList; td != NULL; td = td->next)
     {
-    char *htmlName;
-    if ((htmlName = trackDbSetting(td, "html")) == NULL)
+    char *htmlName = trackDbSetting(td, "html");
+    if (htmlName == NULL)
         htmlName = td->tableName;
     if (!hashLookup(htmlHash, td->tableName))
 	{
@@ -190,6 +194,9 @@ for (td = *pTrackList; td != NULL; td = td->next)
 	    hashAdd(htmlHash, td->tableName, s);
 	    }
 	}
+#ifdef NEW_VAR_SUBST // FIXME: tmp disabled until roll over
+    hVarSubstTrackDb(td, database);
+#endif
     }
 }
 

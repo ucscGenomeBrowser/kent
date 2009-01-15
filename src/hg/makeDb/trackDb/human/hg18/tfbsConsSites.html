@@ -98,16 +98,16 @@ all bind the same factor often appear together.  For example, consider the follo
 binding sites:<br>
 <BLOCKQUOTE>
 <PRE>
-585     chr1    4021    4042    V$MEF2_02       875     -       2.83
-585     chr1    4021    4042    V$MEF2_03       917     -       3.38
-585     chr1    4021    4042    V$MEF2_04       844     -       3.45
-585     chr1    4022    4037    V$HMEF2_Q6      810     -       2.34
-585     chr1    4022    4037    V$MEF2_01       802     -       2.47
-585     chr1    4022    4038    V$RSRFC4_Q2     875     -       2.65
-585     chr1    4022    4039    V$AMEF2_Q6      823     -       2.44
-585     chr1    4023    4038    V$RSRFC4_01     878     +       2.53
-585     chr1    4024    4035    V$MEF2_Q6_01    913     +       2.41
-585     chr1    4024    4039    V$MMEF2_Q6      861     -       2.39
+585     chr1    4021    4042    V$$MEF2_02       875     -       2.83
+585     chr1    4021    4042    V$$MEF2_03       917     -       3.38
+585     chr1    4021    4042    V$$MEF2_04       844     -       3.45
+585     chr1    4022    4037    V$$HMEF2_Q6      810     -       2.34
+585     chr1    4022    4037    V$$MEF2_01       802     -       2.47
+585     chr1    4022    4038    V$$RSRFC4_Q2     875     -       2.65
+585     chr1    4022    4039    V$$AMEF2_Q6      823     -       2.44
+585     chr1    4023    4038    V$$RSRFC4_01     878     +       2.53
+585     chr1    4024    4035    V$$MEF2_Q6_01    913     +       2.41
+585     chr1    4024    4039    V$$MMEF2_Q6      861     -       2.39
 </BLOCKQUOTE>
 </PRE>
 These 10 overlapping binding sites bind a total of 19 factors.  However,
@@ -120,10 +120,10 @@ then has the following four lines, since these four binding sites account for
 all 7 of the unique factors:<br>
 <BLOCKQUOTE>
 <PRE>
-585     chr1    4021    4042    V$MEF2_04       844     -       3.45
-585     chr1    4022    4038    V$RSRFC4_Q2     875     -       2.65
-585     chr1    4024    4035    V$MEF2_Q6_01    913     +       2.41
-585     chr1    4024    4039    V$MMEF2_Q6      861     -       2.39
+585     chr1    4021    4042    V$$MEF2_04       844     -       3.45
+585     chr1    4022    4038    V$$RSRFC4_Q2     875     -       2.65
+585     chr1    4024    4035    V$$MEF2_Q6_01    913     +       2.41
+585     chr1    4024    4039    V$$MMEF2_Q6      861     -       2.39
 </BLOCKQUOTE>
 </PRE>
 In the event that multiple binding sites bind the same factors, the site with 
@@ -158,16 +158,16 @@ To get the corresponding transcription factor information for a given binding ma
 tfbsConsFactors.  The format of the tfbsConsFactors sql table is:<br>
 <BLOCKQUOTE>
 <PRE>
-V$MYOD_01       M00001  mouse   MyoD    P10085
-V$E47_01        M00002  human   E47     N
-V$CMYB_01       M00004  mouse   c-Myb   P06876
-V$AP4_01        M00005  human   AP-4    Q01664
-V$MEF2_01       M00006  mouse   aMEF-2  Q60929
-V$MEF2_01       M00006  rat     MEF-2   N
-V$MEF2_01       M00006  human   MEF-2A  Q02078
-V$ELK1_01       M00007  human   Elk-1   P19419
-V$SP1_01        M00008  human   Sp1     P08047
-V$EVI1_06       M00011  mouse   Evi-1   P14404
+V$$MYOD_01       M00001  mouse   MyoD    P10085
+V$$E47_01        M00002  human   E47     N
+V$$CMYB_01       M00004  mouse   c-Myb   P06876
+V$$AP4_01        M00005  human   AP-4    Q01664
+V$$MEF2_01       M00006  mouse   aMEF-2  Q60929
+V$$MEF2_01       M00006  rat     MEF-2   N
+V$$MEF2_01       M00006  human   MEF-2A  Q02078
+V$$ELK1_01       M00007  human   Elk-1   P19419
+V$$SP1_01        M00008  human   Sp1     P08047
+V$$EVI1_06       M00011  mouse   Evi-1   P14404
 </PRE>
 </BLOCKQUOTE>
 The columns are (from left to right): transfac binding matrix id, 

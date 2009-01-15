@@ -16,7 +16,10 @@
 #include "trackDb.h"
 #include "hCommon.h"
 #include "dbDb.h"
+#define OLD_SUBST_CODE // FIXME: remove when rolled over
+#ifdef OLD_SUBST_CODE
 #include "subText.h"
+#endif
 #include "blatServers.h"
 #include "bed.h"
 #include "defaultDb.h"
@@ -37,7 +40,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.388 2009/01/06 23:41:32 mikep Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.389 2009/01/15 07:12:50 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2180,6 +2183,13 @@ char *hFreezeDate(char *database)
 return hDbDbField(database, "description");
 }
 
+char *hFreezeDateOpt(char *database)
+/* Return freeze date of database or NULL if unknown database
+ *  Use freeMem when done. */
+{
+return hDbDbOptionalField(database, "description");
+}
+
 int hOrganismID(char *database)
 /* Get organism ID from relational organism table */
 /* Return 0 if not found. */
@@ -2239,6 +2249,7 @@ else
     }
 }
 
+#ifdef OLD_SUBST_CODE  // FIXME: delete after roll over
 static void addSubVar(char *prefix, char *name, 
 	char *value, struct subText **pList)
 /* Add substitution to list. */
@@ -2379,6 +2390,7 @@ if (tdb->settings != NULL && tdb->settings[0] != 0)
     subTextFreeList(&subList);
     }
 }
+#endif
 
 struct dbDb *hDbDb(char *database)
 /* Return dbDb entry for a database */
