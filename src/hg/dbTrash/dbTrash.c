@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.16 2008/12/22 19:13:23 hiram Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.17 2009/01/15 20:29:01 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -68,6 +68,13 @@ char **row;
 char buffer[4 * 1024];
 char *name = buffer;
 struct slName *list = NULL;
+
+if (! sqlTableExists(conn, CT_EXTFILE))
+    {
+    verbose(2,"WARNING: -extFile option specified, extFile table does not exist\n");
+    verbose(2,"at this time (Jan 2009), the extFile table is unused.\n");
+    return;
+    }
 
 safef(query,sizeof(query),"select id,path from %s",CT_EXTFILE);
 sr = sqlGetResult(conn, query);
