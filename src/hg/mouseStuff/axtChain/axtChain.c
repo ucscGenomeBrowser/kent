@@ -16,7 +16,7 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.36 2006/06/19 14:50:29 angie Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.37 2009/01/15 06:37:16 markd Exp $";
 
 /* Variables set via command line. */
 int minScore = 1000;
@@ -37,7 +37,7 @@ errAbort(
   "options:\n"
   "   -psl Use psl instead of axt format for input\n"
   "   -faQ qNibDir is a fasta file with multiple sequences for query\n"
-  "   -faT tNibDir is a fasta file with multiple sequences for query\n"
+  "   -faT tNibDir is a fasta file with multiple sequences for target\n"
   "   -minScore=N  Minimum score for chain, default %d\n"
   "   -details=fileName Output some additional chain details\n"
   "   -scoreScheme=fileName Read the scoring matrix from a blastz-format file\n"
