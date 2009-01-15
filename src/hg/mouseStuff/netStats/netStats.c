@@ -6,7 +6,7 @@
 #include "chainNet.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: netStats.c,v 1.6 2008/12/17 21:36:31 markd Exp $";
+static char const rcsid[] = "$Id: netStats.c,v 1.7 2009/01/15 06:35:27 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,7 +49,9 @@ FILE *optionalFile(char *optionName)
 char *name = optionVal(optionName, NULL);
 if (name == NULL)
     return NULL;
-return mustOpen(name, "w");
+FILE *f = mustOpen(name, "w");
+fprintf(f, "#tSize\tqSize\tali\tqDup\tqFar\n");
+return f;
 }
 
 
