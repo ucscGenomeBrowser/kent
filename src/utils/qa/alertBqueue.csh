@@ -13,8 +13,8 @@
 set go=""
 # make lists of substitutions for email addresses
 set counter=( 1 2 3 4 5 6 7 8 9 10 11 12 13 )
-set alias=( andy belinda  brian  brooke bob  fan    jim  jing larry  mark  rachel  ting     zach     )
-set email=( aamp giardine braney rhead  kuhn fanhsu kent jzhu larrym markd hartera tingwang jsanborn )
+set alias=( andy belinda  brian  brooke bob  fan    jim  jing larry  mark  rachel  zach     )
+set email=( aamp giardine braney rhead  kuhn fanhsu kent jzhu larrym markd hartera jsanborn )
 
 
 if ( $#argv != 1  ) then
