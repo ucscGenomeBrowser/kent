@@ -2822,8 +2822,8 @@ searchPriority 10
 
 track fox2ClipSeqComp
 compositeTrack on
-shortLabel FOX2 CLIPseq
-longLabel FOX2 adaptor-trimmed CLIPseq reads
+shortLabel FOX2 CLIP-seq
+longLabel FOX2 adaptor-trimmed CLIP-seq reads
 subGroup1	view Tracks reads=Reads density=Density
 settingsByView	density:viewLimitsMax=0:2401
 group regulation
@@ -2835,8 +2835,8 @@ dataVersion January 2009
 
     track fox2ClipSeq
     subTrack fox2ClipSeqComp
-    shortLabel FOX2 CLIPseq
-    longLabel FOX2 adaptor-trimmed CLIPseq reads
+    shortLabel FOX2 CLIP-seq
+    longLabel FOX2 adaptor-trimmed CLIP-seq reads
     subGroups	view=reads
     priority 1
     type bed 9 .
@@ -2847,7 +2847,7 @@ dataVersion January 2009
     track fox2ClipSeqDensityForwardStrand
     subTrack fox2ClipSeqComp
     shortLabel Density Forward
-    longLabel FOX2 adaptor-trimmed CLIPseq Density Forward Strand
+    longLabel FOX2 adaptor-trimmed CLIP-seq Density Forward Strand
     subGroups	view=density
     priority 2
     type wig 0 2401
@@ -2861,7 +2861,7 @@ dataVersion January 2009
     track fox2ClipSeqDensityReverseStrand
     subTrack fox2ClipSeqComp
     shortLabel Density Reverse
-    longLabel FOX2 adaptor-trimmed CLIPseq Density Reverse Strand
+    longLabel FOX2 adaptor-trimmed CLIP-seq Density Reverse Strand
     subGroups	view=density
     priority 3
     type wig 0 1406
