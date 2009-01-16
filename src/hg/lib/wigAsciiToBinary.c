@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.29 2009/01/16 00:04:39 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.30 2009/01/16 05:23:04 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -157,9 +157,9 @@ if (bincount)
 #endif
 	    }
 	}
-    }
     if (validCount < 1) {
 	errAbort("wigAsciiToBinary internal error: empty row being produced at row: %lld, line: %lu\n", rowCount, lineCount);
+    }
 
     dataRange = upperLimit - lowerLimit;
 
