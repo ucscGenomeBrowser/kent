@@ -81,7 +81,6 @@ struct slName *bedFields = sqlListFields(conn, table);
 struct slName *awesome12 = idealizedBed12();
 struct slName *field = bedFields;
 struct slName *bed;
-int bin;
 int numFields = 0;
 *binOffset = 0;
 if (!bedFields)
