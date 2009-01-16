@@ -25,7 +25,7 @@
 #include "jsHelper.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.93 2009/01/15 06:41:58 mikep Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.94 2009/01/16 00:04:38 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -98,8 +98,6 @@ char *customTrackTempDb()
 /* set environment for pipeline commands, but don't override if
  * already set for debugging. */
 saveCurrentEnv();
-if (isEmpty(getenv("HGDB_CONF")))
-    envUpdate("HGDB_CONF", "./hg.conf");
 return (CUSTOM_TRASH);
 }
 
@@ -253,7 +251,7 @@ struct dyString *errDy = newDyString(0);
 struct lineFile *lf;
 char *line;
 int i;
-dyStringPrintf(errDy, "track load error:<BR>\n");
+dyStringPrintf(errDy, "track load error (track name='%s'):<BR>\n", track->tdb->tableName);
 lf = lineFileOpen(track->dbStderrFile, TRUE);
 i = 0;
 while( (i < 3) && lineFileNext(lf, &line, NULL))

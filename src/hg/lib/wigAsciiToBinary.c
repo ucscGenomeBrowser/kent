@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.28 2009/01/14 18:59:14 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.29 2009/01/16 00:04:39 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -557,6 +557,8 @@ while (lineFileNext(lf, &line, NULL))
 	Offset = bedChromStart;
 	dataValue = bedDataValue;
 	}
+    if (dataValue > overallUpperLimit) overallUpperLimit = dataValue;
+    if (dataValue < overallLowerLimit) overallLowerLimit = dataValue;
 
     /* see if this is the first time through, establish chromStart 	*/
     if (validLines == 1)
