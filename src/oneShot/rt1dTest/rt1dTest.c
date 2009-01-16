@@ -6,9 +6,10 @@
 #include "sqlNum.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: rt1dTest.c,v 1.4 2009/01/16 22:37:47 kent Exp $";
+static char const rcsid[] = "$Id: rt1dTest.c,v 1.5 2009/01/16 22:44:50 kent Exp $";
 
 int blockSize = 64;
+int itemsPerSlot = 32;	/* Set in main. */
 
 void usage()
 /* Explain usage and exit. */
@@ -24,12 +25,14 @@ errAbort(
   "The index created will associate ranges with positions in the input file\n"
   "options:\n"
   "   -blockSize=N - number of children per node in b+ tree. Default %d\n"
+  "   -itemsPerSlot=N - number of items per index slot. Default is half block size\n"
   , blockSize
   );
 }
 
 static struct optionSpec options[] = {
    {"blockSize", OPTION_INT},
+   {"itemsPerSlot", OPTION_INT},
    {NULL, 0},
 };
 
@@ -691,7 +694,7 @@ qsort(array, count, sizeof(array[0]), chromRangeCmp);
 #endif /* NEEDS_TO_BE_SORTED_ALREADY_IN_FILE */
 /* Sort array */
 
-crTreeFileCreate(array, sizeof(array[0]), count, blockSize, (blockSize+1)/2,
+crTreeFileCreate(array, sizeof(array[0]), count, blockSize, itemsPerSlot,
 	chromRangeKey, chromRangeOffset, chromRangeSize, fileSize, outTree);
 }
 
@@ -733,6 +736,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
+itemsPerSlot = optionInt("itemsPerSlot", (blockSize+1)/2);
 if (argc < 2)
     usage();
 char *command = argv[1];
