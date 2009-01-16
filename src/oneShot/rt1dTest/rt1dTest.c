@@ -6,7 +6,7 @@
 #include "sqlNum.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: rt1dTest.c,v 1.1 2009/01/15 23:22:35 kent Exp $";
+static char const rcsid[] = "$Id: rt1dTest.c,v 1.2 2009/01/16 20:36:15 kent Exp $";
 
 int blockSize = 64;
 
@@ -72,6 +72,7 @@ while (lineFileRow(lf, row))
     el->start = sqlUnsigned(row[1]);
     el->end = sqlUnsigned(row[2]);
     el->fileOffset = lineFileTell(lf);
+    // uglyf("read %u %u %u at %llu\n", el->chromIx, el->start, el->end, el->fileOffset);
     slAddHead(&list, el);
     }
 slReverse(&list);
@@ -138,13 +139,13 @@ return nodeHeaderSize + leafSlotSize * blockSize;
 }
 
 
-static bits64 rWriteIndexLevel(bits16 blockSize, int iNodeSize,
+static bits64 rWriteIndexLevel(bits16 blockSize, int childNodeSize,
 	struct rTree *tree, int curLevel, int destLevel,
 	bits64 offsetOfFirstChild, FILE *f)
 /* Recursively write an index level, skipping levels below destLevel,
  * writing out destLevel. */
 {
-uglyf("rWriteIndexLevel blockSize=%d, iNodeSize=%d, offsetOfFirstChild=%llu, curLevel=%d, destLevel=%d slCount(tree)=%d\n", blockSize, iNodeSize, offsetOfFirstChild, curLevel, destLevel, slCount(tree->children));
+uglyf("rWriteIndexLevel blockSize=%d, childNodeSize=%d, offsetOfFirstChild=%llu, curLevel=%d, destLevel=%d slCount(tree)=%d\n", blockSize, childNodeSize, offsetOfFirstChild, curLevel, destLevel, slCount(tree->children));
 struct rTree *el;
 bits64 offset = offsetOfFirstChild;
 if (curLevel == destLevel)
@@ -165,7 +166,7 @@ if (curLevel == destLevel)
 	writeOne(f, el->endChromIx);
 	writeOne(f, el->endBase);
 	writeOne(f, offset);
-	offset += iNodeSize;
+	offset += childNodeSize;
 	}
 
     /* Write out zeroes for empty slots in node. */
@@ -177,17 +178,17 @@ else
     {
     /* Otherwise recurse on children. */
     for (el = tree->children; el != NULL; el = el->next)
-	offset = rWriteIndexLevel(blockSize, iNodeSize, el, curLevel+1, destLevel,
+	offset = rWriteIndexLevel(blockSize, childNodeSize, el, curLevel+1, destLevel,
 		offset, f);
     }
 return offset;
 }
 
-static void writeIndexLevel(int blockSize, int iNodeSize, 
+static void writeIndexLevel(int blockSize, int childNodeSize, 
 	struct rTree *tree, bits64 offsetOfFirstChild, int level, FILE *f)
 /* Write out a non-leaf level nodes at given level. */
 {
-rWriteIndexLevel(blockSize, iNodeSize, tree, 0, level, offsetOfFirstChild, f);
+rWriteIndexLevel(blockSize, childNodeSize, tree, 0, level, offsetOfFirstChild, f);
 }
 
 static void rWriteLeaves(int blockSize, int lNodeSize, struct rTree *tree, int curLevel,
@@ -197,6 +198,7 @@ static void rWriteLeaves(int blockSize, int lNodeSize, struct rTree *tree, int c
 if (curLevel == leafLevel)
     {
     /* We've reached the right level, write out a node header. */
+    uglyf("rWriteLeaves ftell()=%llu\n", (bits64)ftell(f));
     UBYTE reserved = 0;
     UBYTE isLeaf = TRUE;
     bits16 countOne = slCount(tree->children);
@@ -208,6 +210,7 @@ if (curLevel == leafLevel)
     struct rTree *el;
     for (el = tree->children; el != NULL; el = el->next)
 	{
+	uglyf("wrote leaf %u:%u-%u:%u at %llu\n", el->startChromIx, el->startBase, el->endChromIx, el->endBase, el->startFileOffset);
 	writeOne(f, el->startChromIx);
 	writeOne(f, el->startBase);
 	writeOne(f, el->endChromIx);
@@ -277,6 +280,7 @@ for (i=0; i<itemCount; i += blockSize)
     el->endBase = key.end;
     el->startFileOffset = (*fetchOffset)(startItem);
     el->endFileOffset = (*fetchOffset)(endItem) + (*fetchSize)(endItem);
+    uglyf("calc leaf %u:%u-%u:%u at %llu\n", el->startChromIx, el->startBase, el->endChromIx, el->endBase, el->startFileOffset);
     int j;
     for (j=1; j<oneSize; ++j)
         {
@@ -289,7 +293,7 @@ for (i=0; i<itemCount; i += blockSize)
 	    }
 	else if (key.chromIx == el->startChromIx)
 	    {
-	    if (el->startBase < key.start)
+	    if (key.start < el->startBase)
 	        el->startBase = key.start;
 	    }
 	if (key.chromIx > el->endChromIx)
@@ -382,6 +386,7 @@ calcLevelSizes(tree, levelSizes, 0, levelCount-1);
 bits64 levelOffsets[levelCount];
 bits64 offset = fileHeaderSize;
 bits64 iNodeSize = indexNodeSize(blockSize);
+bits64 lNodeSize = leafNodeSize(blockSize);
 for (i=0; i<levelCount; ++i)
     {
     levelOffsets[i] = offset;
@@ -394,10 +399,12 @@ for (i=0; i<levelCount; ++i) uglyf(" %d", levelSizes[i]);
 uglyf("\n");
 
 /* Write out index levels. */
-for (i=0; i<levelCount-2; ++i)
+int finalLevel = levelCount-3;
+for (i=0; i<=finalLevel; ++i)
     {
     uglyf("writing level %d\n", i);
-    writeIndexLevel(blockSize, iNodeSize, tree,
+    bits64 childNodeSize = (i==finalLevel ? lNodeSize : iNodeSize);
+    writeIndexLevel(blockSize, childNodeSize, tree,
     	levelOffsets[i+1], i, f);
     if (ftell(f) != levelOffsets[i+1])
         errAbort("Internal error: offset mismatch (%llu vs %llu) line %d of %s\n", (bits64)ftell(f), levelOffsets[i+1], __LINE__, __FILE__);
@@ -416,12 +423,10 @@ void crTreeFileBulkIndexToOpenFile(
 /* Create a b+ tree index from a sorted array, writing output starting at current position
  * of an already open file.  See rTreeFileCreate for explanation of parameters. */
 {
-uglyf("ok 3.1\n");
 int levelCount;
 struct lm *lm = lmInit(0);
 struct rTree *tree = rTreeFromChromRangeArray(lm, blockSize, 
 	itemArray, itemSize, itemCount, fetchKey, fetchOffset, fetchSize, &levelCount);
-uglyf("ok 3.2\n");
 bits32 magic = crTreeSig;
 bits32 reserved = 0;
 writeOne(f, magic);
@@ -434,18 +439,15 @@ writeOne(f, tree->endBase);
 writeOne(f, totalFileSize);
 writeOne(f, reserved);
 writeOne(f, reserved);
-uglyf("ok 3.3\n");
 writeTreeToOpenFile(tree, levelCount, f);
-uglyf("ok 3.4\n");
 lmCleanup(&lm);
-uglyf("ok 3.5\n");
 }
 
 void crTreeFileCreate(
 	void *itemArray, 	/* Sorted array of things to index. */
 	int itemSize, 		/* Size of each element in array. */
 	bits64 itemCount, 	/* Number of elements in array. */
-	bits32 blockSize,	/* B+ tree block size - # of children for each node. */
+	bits32 blockSize,	/* R tree block size - # of children for each node. */
 	struct crTreeRange (*fetchKey)(const void *va),   /* Givenitem, return key. */
 	bits64 (*fetchOffset)(const void *va), 		 /* Given item, return file offset */
 	bits64 (*fetchSize)(const void *va), 		 /* Given item, return size in file */
@@ -527,10 +529,29 @@ struct crTreeBlock
    bits64	size;		/* Size of block. */
    };
 
+inline int cmpTwoBits32(bits32 aHi, bits32 aLo, bits32 bHi, bits32 bLo)
+/* Return - if b is less than a , 0 if equal, else +*/
+{
+if (aHi < bHi)
+    return 1;
+else if (aHi > bHi)
+    return -1;
+else
+    {
+    if (aLo < bLo)
+       return 1;
+    else if (aLo > bLo)
+       return -1;
+    else
+       return 0;
+    }
+}
+
 inline boolean _crTreeOverlaps(int qChrom, int qStart, int qEnd, 
 	int rStartChrom, int rStartBase, int rEndChrom, int rEndBase)
 {
-return qChrom <= rEndChrom && qStart < rEndBase && qChrom >= rStartChrom && qEnd > rStartBase;
+return cmpTwoBits32(qChrom, qStart, rEndChrom, rEndBase) > 0 &&
+       cmpTwoBits32(qChrom, qEnd, rStartChrom, rStartBase) < 0;
 }
 
 boolean crTreeOverlaps(int qChrom, int qStart, int qEnd, 
@@ -666,10 +687,8 @@ return a->fileSize;
 void rt1dCreate(char *inBed, char *outTree)
 /* rt1dCreate - create a one dimensional range tree. */
 {
-uglyf("ok 1\n");
 bits64 fileSize;
 struct chromRange **array, *el, *list = chromRangeLoadAll(inBed, &fileSize);
-uglyf("ok 2\n");
 int count = slCount(list);
 verbose(1, "read %d from %s\n", count, inBed);
 
@@ -679,13 +698,14 @@ int i;
 for (i=0, el=list; i<count; ++i, el=el->next)
     array[i] = el;
 
+#ifdef NEEDS_TO_BE_SORTED_ALREADY_IN_FILE
 /* Sort array */
 qsort(array, count, sizeof(array[0]), chromRangeCmp);
-uglyf("ok 3\n");
+#endif /* NEEDS_TO_BE_SORTED_ALREADY_IN_FILE */
+/* Sort array */
 
 crTreeFileCreate(array, sizeof(array[0]), count, blockSize, 
 	chromRangeKey, chromRangeOffset, chromRangeSize, fileSize, outTree);
-uglyf("ok 4\n");
 }
 
 void rt1dFind(char *tabFile, char *treeFile, bits32 chromIx, bits32 start, bits32 end)
@@ -699,14 +719,15 @@ for (block = blockList; block != NULL; block = block->next)
     {
     uglyf("block->offset %llu, block->size %llu\n", block->offset, block->size);
     lineFileSeek(lf, block->offset, SEEK_SET);
-    bits64 endPos = block->offset + block->size;
-    while (lineFileTell(lf) < endPos)
+    bits64 sizeUsed = 0;
+    while (sizeUsed < block->size)
         {
 	char *line;
 	int size;
 	if (!lineFileNext(lf, &line, &size))
-	    errAbort("Couldn't read line of %s\n", lf->fileName);
+	    errAbort("Couldn't read %s\n", lf->fileName);
 	mustWrite(stdout, line, size);
+	sizeUsed += size;
 	}
     }
 }
