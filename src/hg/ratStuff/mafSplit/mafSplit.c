@@ -9,7 +9,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafSplit.c,v 1.4 2007/04/30 22:23:18 angie Exp $";
+static char const rcsid[] = "$Id: mafSplit.c,v 1.5 2009/01/16 05:40:49 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -256,7 +256,7 @@ while (1)
     if (nextFile)
         {
         verbose(2, "file %d, pos: %d\n", ix, splitPos);
-        safef(outFile, sizeof(outFile), "%s/%s%s.%d.maf", 
+        safef(outFile, sizeof(outFile), "%s/%s%s.%02d.maf", 
                     outDir, outPrefix, chrom, ix);
         f = mustOpen(outFile, "w");
         mafWriteStart(f, mf->scoring);
