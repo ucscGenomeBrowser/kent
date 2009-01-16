@@ -3058,7 +3058,7 @@ dimensions dimensionX=ACT dimensionY=FAC dimensionZ=STRAND
 sortOrder FAC=+ ACT=+ STRAND=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults PK=pack SIG=full
-settingsByView SIG:defaultViewLimits=0:10520,viewLimits=0:10520
+settingsByView SIG:viewLimits=0:10520,viewLimitsMax=0:10520
 chromosomes chr1
 
     track zhaoLabActivatedNucleosomeFwd
@@ -3312,7 +3312,7 @@ subGroup3 METH Methylation m1=me1 m2=me2 m3=me3 NA=N/A
 dimensions dimensionX=METH dimensionY=AB
 sortOrder AB=+ METH=+ view=+
 dragAndDrop subTracks
-settingsByView Signal:viewLimits=0:319
+settingsByView Signal:viewLimitsMax=0:319
 #settingsByView Signal:defaultViewLimits=.2:1.6,viewLimits=0:319
 visibility hide
 priority 0
