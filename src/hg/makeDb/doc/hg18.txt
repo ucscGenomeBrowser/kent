@@ -25939,6 +25939,12 @@ cat > doPhyloP.csh << 'EOF'
         /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/in.list
     popd > /dev/null
 
+    # need to fill in chr8, neglected in main run
+    pushd /cluster/data/hg18/bed/multiz44way/consPhyloP/ss
+    ls chr8/*/chr*.*.ss | sed -e 's/.ss$//' -e 's/^\.\///' > \
+        /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/in.chr8.list
+    popd > /dev/null
+
     # Create template file
     #	file1 == $chr/$chunk/file name without .ss suffix
     cat > template << 'EOF'
@@ -25979,8 +25985,10 @@ cat > listWig.csh << 'EOF'
         end
     end
 'EOF'
+
     cd all/wig
     csh ../../listWig.csh | xargs cat | nice wigEncode stdin phyloP44wayAll.wig phyloP44wayAll.wib
+    # Reloaded to include chr8 (2008-01-15 kate)
     #Converted stdin, upper limit 7.13, lower limit -15.41
     # Load gbdb and database with wiggle.
     ln -s  \
@@ -26118,6 +26126,47 @@ cat > listWig.csh << 'EOF'
     hgWiggle -db=hg18 -verbose=2 -doStats phyloP44wayPrimate > stats.out
     hgWiggle -db=hg18 -chr=chr20 -rawDataOut phyloP44wayPrimate | textHistogram -real stdin -minVal=-20 -maxBinCount=30 >&! histo.out
 
+    # Downloads
+    cd /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP
+    cat > listWigsByChrom.csh << 'EOF'
+            setee = $1
+            foreach d (`ls -d $c/[1-9]* | sort -t/ -k2 -n`)
+                ls -1 $d/*.wig | sort -n -t\. -k3
+            end
+    'EOF'
+
+    cat > downloads.csh << 'EOF'
+        mkdir ../downloads
+        foreach c (`ls -d chr*`)
+            echo $c
+            csh ../../listWigsByChrom.csh $c > ../downloads/$c.lst
+            csh ../../listWigsByChrom.csh $c | xargs cat | gzip -c > ../downloads/$c.$1.wigFix.gz
+            end
+        cd ../downloads
+        md5sum *.wigFix.gz > md5sum.txt
+        end
+    'EOF'
+
+    cd all/wig
+    csh ../../downloads.csh phyloP44way >&! downloads.log &
+
+    cd ../../placental/wig
+    csh ../../downloads.csh phyloP44way.placental >&! downloads.log &
+    cd ../../primate/wig
+    csh ../../downloads.csh phyloP44way.primate >&! downloads.log &
+
+    # add create web downloads dir and add symlinks to files
+    cd /usr/local/apache/htdocs/goldenPath/hg18
+    mkdir vertebrate
+    cd vertebrate
+    ln /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/all/downloads/{*.gz,md5sum.txt} .
+    mkdir placentalMammals
+    cd placentalMammals
+    ln /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/all/downloads/{*.gz,md5sum.txt} .
+    mkdir primates
+    cd primates
+    ln /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/all/downloads/{*.gz,md5sum.txt} .
+
     # Lineage-specific runs
     # uses --subtree option of phyloP
 
@@ -26131,7 +26180,7 @@ cat > listWig.csh << 'EOF'
 
     cat > template.subtree << 'EOF'
 #LOOP
-csh .//./doPhyloPSubtree.csh $(file1) {check out line+ wig/$(dir1)/$(file1).wig} SUBTREE
+csh ../doPhyloPSubtree.csh $(file1) {check out line+ wig/$(dir1)/$(file1).wig} SUBTREE
 #ENDLOOP
 'EOF'
 
@@ -26148,6 +26197,9 @@ csh .//./doPhyloPSubtree.csh $(file1) {check out line+ wig/$(dir1)/$(file1).wig}
     para try
     para check
     para push
+
+    # Mostly crashes -- sending error to Adam
+    # GOT HERE
 
     #human LS:  --subtree hg18
 
