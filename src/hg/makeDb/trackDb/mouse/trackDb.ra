@@ -239,6 +239,7 @@ compositeTrack on
 group regulation
 exonArrows on
 noScoreFilter .
+nextItemButton off
 priority 79.5
 visibility hide
 type bed 6 .

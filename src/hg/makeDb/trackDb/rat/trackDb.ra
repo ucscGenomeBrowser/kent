@@ -349,6 +349,7 @@ group regulation
 priority 79.5
 visibility hide
 exonArrows on
+nextItemButton off
 noScoreFilter .
 type bed 6 .
 

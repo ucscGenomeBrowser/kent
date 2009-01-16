@@ -1850,6 +1850,7 @@ group expression
 priority 0
 visibility hide
 noScoreFilter .
+nextItemButton off
 type bed 6 .
 
     track agilentCgh1x1m
