@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1540 2009/01/12 21:46:19 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1541 2009/01/13 20:17:37 larrym Exp $";
 
 #define SMALLBUF 64
 
@@ -3686,7 +3686,7 @@ if (showTrackControls)
     hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
     hPrintf("<tr><td align='left'>\n");
 
-    hButtonWithOnClick("hgt.collapseGroups", "collapse groups", NULL, "return setAllTrackGroupVisibility(false)");
+    hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups", "return setAllTrackGroupVisibility(false)");
     hPrintf("</td>");
 
     hPrintf("<td colspan='%d' align='CENTER' nowrap>"
@@ -3696,7 +3696,7 @@ if (showTrackControls)
 	   "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
 
     hPrintf("<td align='right'>");
-    hButtonWithOnClick("hgt.expandGroups", "expand groups", NULL, "return setAllTrackGroupVisibility(true)");
+    hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups", "return setAllTrackGroupVisibility(true)");
     hPrintf("</td></tr>");
 
     if (!hIsGsidServer())
