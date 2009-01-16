@@ -348,6 +348,8 @@ compositeTrack on
 group regulation
 priority 79.5
 visibility hide
+exonArrows on
+noScoreFilter .
 type bed 6 .
 
     track agilentCgh244a
@@ -363,13 +365,6 @@ type bed 6 .
     longLabel Agilent Microarray 105A AMADID 014698
     color 0,128,0
     priority 2
-
-    track agilentCgh44k
-    subTrack agilentCgh
-    shortLabel Ag CGH 44k
-    longLabel Agilent Microarray 44K AMADID 014950
-    color 0,128,0
-    priority 3
 
 track affyRAE230
 shortLabel Affy RAE230

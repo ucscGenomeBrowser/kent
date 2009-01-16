@@ -237,6 +237,8 @@ shortLabel Agilent CGH
 longLabel Agilent CGH Microarray probesets
 compositeTrack on
 group regulation
+exonArrows on
+noScoreFilter .
 priority 79.5
 visibility hide
 type bed 6 .
