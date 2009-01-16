@@ -6,7 +6,7 @@
 #include "sqlNum.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: rt1dTest.c,v 1.3 2009/01/16 22:19:46 kent Exp $";
+static char const rcsid[] = "$Id: rt1dTest.c,v 1.4 2009/01/16 22:37:47 kent Exp $";
 
 int blockSize = 64;
 
@@ -189,7 +189,7 @@ static void writeIndexLevel(int blockSize, int childNodeSize,
 rWriteIndexLevel(blockSize, childNodeSize, tree, 0, level, offsetOfFirstChild, f);
 }
 
-static void rWriteLeaves(int blockSize, int lNodeSize, struct rTree *tree, int curLevel,
+static void rWriteLeaves(int itemsPerSlot, int lNodeSize, struct rTree *tree, int curLevel,
 	int leafLevel, FILE *f)
 /* Write out leaf-level nodes. */
 {
@@ -218,7 +218,7 @@ if (curLevel == leafLevel)
 
     /* Write out zeroes for empty slots in node. */
     int i;
-    for (i=countOne; i<blockSize; ++i)
+    for (i=countOne; i<itemsPerSlot; ++i)
 	repeatCharOut(f, 0, indexSlotSize);
     }
 else
@@ -226,14 +226,14 @@ else
     /* Otherwise recurse on children. */
     struct rTree *el;
     for (el = tree->children; el != NULL; el = el->next)
-	rWriteLeaves(blockSize, lNodeSize, el, curLevel+1, leafLevel, f);
+	rWriteLeaves(itemsPerSlot, lNodeSize, el, curLevel+1, leafLevel, f);
     }
 }
 
-static void writeLeaves(int blockSize, int lNodeSize, struct rTree *tree, int leafLevel, FILE *f)
+static void writeLeaves(int itemsPerSlot, int lNodeSize, struct rTree *tree, int leafLevel, FILE *f)
 /* Write out leaf-level nodes. */
 {
-rWriteLeaves(blockSize, lNodeSize, tree, 0, leafLevel, f);
+rWriteLeaves(itemsPerSlot, lNodeSize, tree, 0, leafLevel, f);
 }
 
 void calcLevelSizes(struct rTree *tree, int *levelSizes, int level, int maxLevel)
@@ -248,7 +248,7 @@ for (el = tree; el != NULL; el = el->next)
     }
 }
 
-struct rTree *rTreeFromChromRangeArray( struct lm *lm, int blockSize,
+struct rTree *rTreeFromChromRangeArray( struct lm *lm, int blockSize, int itemsPerSlot,
 	void *itemArray, int itemSize, bits64 itemCount, 
 	struct crTreeRange (*fetchKey)(const void *va),
 	bits64 (*fetchOffset)(const void *va), bits64 (*fetchSize)(const void *va),
@@ -259,11 +259,11 @@ struct rTree *el, *list=NULL, *tree = NULL;
 
 /* Make first level above leaf. */
 bits64 i;
-for (i=0; i<itemCount; i += blockSize)
+for (i=0; i<itemCount; i += itemsPerSlot)
     {
     int oneSize = itemCount-i;
-    if (oneSize > blockSize)
-        oneSize = blockSize;
+    if (oneSize > itemsPerSlot)
+        oneSize = itemsPerSlot;
     lmAllocVar(lm, el);
     slAddHead(&list, el);
 
@@ -365,7 +365,7 @@ while (tree->next != NULL)
 return tree;
 }
 
-static void writeTreeToOpenFile(struct rTree *tree, int levelCount, FILE *f)
+static void writeTreeToOpenFile(struct rTree *tree, int blockSize, int levelCount, FILE *f)
 /* Write out tree to a file that is open already - writing out index nodes from 
  * highest to lowest level, and then leaf nodes. */
 {
@@ -409,7 +409,7 @@ writeLeaves(blockSize, leafNodeSize(blockSize), tree, levelCount-2, f);
 
 void crTreeFileBulkIndexToOpenFile(
 	void *itemArray, int itemSize, bits64 itemCount, 
-	bits32 blockSize,
+	bits32 blockSize, bits32 itemsPerSlot,
 	struct crTreeRange (*fetchKey)(const void *va),
 	bits64 (*fetchOffset)(const void *va), bits64 (*fetchSize)(const void *va), 
 	bits64 totalFileSize, FILE *f)
@@ -418,7 +418,7 @@ void crTreeFileBulkIndexToOpenFile(
 {
 int levelCount;
 struct lm *lm = lmInit(0);
-struct rTree *tree = rTreeFromChromRangeArray(lm, blockSize, 
+struct rTree *tree = rTreeFromChromRangeArray(lm, blockSize, itemsPerSlot,
 	itemArray, itemSize, itemCount, fetchKey, fetchOffset, fetchSize, &levelCount);
 bits32 magic = crTreeSig;
 bits32 reserved = 0;
@@ -430,9 +430,9 @@ writeOne(f, tree->startBase);
 writeOne(f, tree->endChromIx);
 writeOne(f, tree->endBase);
 writeOne(f, totalFileSize);
+writeOne(f, itemsPerSlot);
 writeOne(f, reserved);
-writeOne(f, reserved);
-writeTreeToOpenFile(tree, levelCount, f);
+writeTreeToOpenFile(tree, blockSize, levelCount, f);
 lmCleanup(&lm);
 }
 
@@ -441,6 +441,7 @@ void crTreeFileCreate(
 	int itemSize, 		/* Size of each element in array. */
 	bits64 itemCount, 	/* Number of elements in array. */
 	bits32 blockSize,	/* R tree block size - # of children for each node. */
+	bits32 itemsPerSlot,	/* Number of items to put in each index slot at lowest level. */
 	struct crTreeRange (*fetchKey)(const void *va),   /* Givenitem, return key. */
 	bits64 (*fetchOffset)(const void *va), 		 /* Given item, return file offset */
 	bits64 (*fetchSize)(const void *va), 		 /* Given item, return size in file */
@@ -450,8 +451,8 @@ void crTreeFileCreate(
 {
 /* Open file and write header. */
 FILE *f = mustOpen(fileName, "wb");
-crTreeFileBulkIndexToOpenFile(itemArray, itemSize, itemCount, blockSize, fetchKey, 
-	fetchOffset, fetchSize, totalFileSize, f);
+crTreeFileBulkIndexToOpenFile(itemArray, itemSize, itemCount, blockSize, itemsPerSlot,
+	fetchKey, fetchOffset, fetchSize, totalFileSize, f);
 carefulClose(&f);
 }
 
@@ -470,6 +471,7 @@ struct crTreeFile
     bits32 endChromIx;		/* Ending chromosome in file. */
     bits32 endBase;		/* Ending base position. */
     bits64 fileSize;		/* Total size of index file. */
+    bits32 itemsPerSlot;	/* Max number of items to put in each index slot at lowest level. */
     };
 
 struct crTreeFile *crTreeFileOpen(char *fileName)
@@ -502,10 +504,10 @@ crt->startBase = readBits32(f, isSwapped);
 crt->endChromIx = readBits32(f, isSwapped);
 crt->endBase = readBits32(f, isSwapped);
 crt->fileSize = readBits64(f, isSwapped);
+crt->itemsPerSlot = readBits32(f, isSwapped);
 
 /* Skip over reserved bits of header. */
 bits32 reserved32;
-mustReadOne(f, reserved32);
 mustReadOne(f, reserved32);
 
 /* Save position of root block of r tree. */
@@ -689,7 +691,7 @@ qsort(array, count, sizeof(array[0]), chromRangeCmp);
 #endif /* NEEDS_TO_BE_SORTED_ALREADY_IN_FILE */
 /* Sort array */
 
-crTreeFileCreate(array, sizeof(array[0]), count, blockSize, 
+crTreeFileCreate(array, sizeof(array[0]), count, blockSize, (blockSize+1)/2,
 	chromRangeKey, chromRangeOffset, chromRangeSize, fileSize, outTree);
 }
 
