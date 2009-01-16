@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.62 2009/01/09 00:58:26 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.63 2009/01/16 21:11:10 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1501,7 +1501,7 @@ void doTest(struct sqlConnection *conn)
 char *s = NULL;
 textOpen();
 hPrintf("Doing test!\n");
-s = filterClause("hg16", "knownGene", "chrX", NULL);
+s = filterClause("hg18", "knownGene", "chrX", NULL);
 if (s != NULL)
     hPrintf("%s\n", s);
 else
