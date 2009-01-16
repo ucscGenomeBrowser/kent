@@ -193,6 +193,18 @@ termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
 tier 3
 
+term HEK293(b)
+type Cell Line
+description embryonic kidney (alternate protocol)
+vendorName ATCC
+vendorId CRL-1573
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1573&Template=cellBiology
+lineage endoderm
+karyotype cancer
+termId BTO:0000007
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
+tier 3
+
 term Jurkat
 type Cell Line
 description T lymphoblastoid cell line derived from an acute T cell leukemia
