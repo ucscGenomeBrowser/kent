@@ -6,7 +6,7 @@
 #include "sqlNum.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: rt1dTest.c,v 1.2 2009/01/16 20:36:15 kent Exp $";
+static char const rcsid[] = "$Id: rt1dTest.c,v 1.3 2009/01/16 22:19:46 kent Exp $";
 
 int blockSize = 64;
 
@@ -72,7 +72,6 @@ while (lineFileRow(lf, row))
     el->start = sqlUnsigned(row[1]);
     el->end = sqlUnsigned(row[2]);
     el->fileOffset = lineFileTell(lf);
-    // uglyf("read %u %u %u at %llu\n", el->chromIx, el->start, el->end, el->fileOffset);
     slAddHead(&list, el);
     }
 slReverse(&list);
@@ -84,7 +83,6 @@ for (el = list; el != NULL; el = next)
 	{
 	bits64 fileSize = *retFileSize = lineFileTell(lf);
         el->fileSize = fileSize - el->fileOffset;
-	uglyf("Final size %llu, file size %llu\n", el->fileSize, fileSize);
 	}
     else
         el->fileSize = next->fileOffset - el->fileOffset;
@@ -198,7 +196,6 @@ static void rWriteLeaves(int blockSize, int lNodeSize, struct rTree *tree, int c
 if (curLevel == leafLevel)
     {
     /* We've reached the right level, write out a node header. */
-    uglyf("rWriteLeaves ftell()=%llu\n", (bits64)ftell(f));
     UBYTE reserved = 0;
     UBYTE isLeaf = TRUE;
     bits16 countOne = slCount(tree->children);
@@ -210,7 +207,6 @@ if (curLevel == leafLevel)
     struct rTree *el;
     for (el = tree->children; el != NULL; el = el->next)
 	{
-	uglyf("wrote leaf %u:%u-%u:%u at %llu\n", el->startChromIx, el->startBase, el->endChromIx, el->endBase, el->startFileOffset);
 	writeOne(f, el->startChromIx);
 	writeOne(f, el->startBase);
 	writeOne(f, el->endChromIx);
@@ -280,7 +276,6 @@ for (i=0; i<itemCount; i += blockSize)
     el->endBase = key.end;
     el->startFileOffset = (*fetchOffset)(startItem);
     el->endFileOffset = (*fetchOffset)(endItem) + (*fetchSize)(endItem);
-    uglyf("calc leaf %u:%u-%u:%u at %llu\n", el->startChromIx, el->startBase, el->endChromIx, el->endBase, el->startFileOffset);
     int j;
     for (j=1; j<oneSize; ++j)
         {
@@ -363,7 +358,6 @@ while (tree->next != NULL)
     slReverse(&list);
     for (el = list; el != NULL; el = el->next)
         slReverse(&el->children);
-    uglyf("Now %d items in list\n", slCount(list));
     tree = list;
     levelCount += 1;
     }
@@ -402,7 +396,6 @@ uglyf("\n");
 int finalLevel = levelCount-3;
 for (i=0; i<=finalLevel; ++i)
     {
-    uglyf("writing level %d\n", i);
     bits64 childNodeSize = (i==finalLevel ? lNodeSize : iNodeSize);
     writeIndexLevel(blockSize, childNodeSize, tree,
     	levelOffsets[i+1], i, f);
@@ -547,19 +540,11 @@ else
     }
 }
 
-inline boolean _crTreeOverlaps(int qChrom, int qStart, int qEnd, 
+static inline boolean crTreeOverlaps(int qChrom, int qStart, int qEnd, 
 	int rStartChrom, int rStartBase, int rEndChrom, int rEndBase)
 {
 return cmpTwoBits32(qChrom, qStart, rEndChrom, rEndBase) > 0 &&
        cmpTwoBits32(qChrom, qEnd, rStartChrom, rStartBase) < 0;
-}
-
-boolean crTreeOverlaps(int qChrom, int qStart, int qEnd, 
-	int rStartChrom, int rStartBase, int rEndChrom, int rEndBase)
-{
-boolean res = _crTreeOverlaps(qChrom, qStart, qEnd, rStartChrom, rStartBase, rEndChrom, rEndBase);
-uglyf("crTreeOverlaps(%d %d %d in %d %d %d %d) = %d\n", qChrom, qStart, qEnd, rStartChrom, rStartBase, rEndChrom, rEndBase, res);
-return res;
 }
 
 static void rFindOverlappingBlocks(struct crTreeFile *crf, bits64 indexFileOffset,
@@ -711,7 +696,7 @@ crTreeFileCreate(array, sizeof(array[0]), count, blockSize,
 void rt1dFind(char *tabFile, char *treeFile, bits32 chromIx, bits32 start, bits32 end)
 /* rt1dCreate - find items in 1-D range tree. */
 {
-struct lineFile *lf = lineFileOpen(tabFile, FALSE);
+struct lineFile *lf = lineFileOpen(tabFile, TRUE);
 struct crTreeFile *crf = crTreeFileOpen(treeFile);
 struct crTreeBlock *block, *blockList = crTreeFindOverlappingBlocks(crf, chromIx, start, end);
 uglyf("Got %d overlapping blocks\n", slCount(blockList));
@@ -726,7 +711,16 @@ for (block = blockList; block != NULL; block = block->next)
 	int size;
 	if (!lineFileNext(lf, &line, &size))
 	    errAbort("Couldn't read %s\n", lf->fileName);
-	mustWrite(stdout, line, size);
+	char *parsedLine = cloneString(line);
+	char *row[3];
+	if (chopLine(parsedLine, row) != ArraySize(row))
+	    errAbort("Badly formatted line of %s\n%s", lf->fileName, line);
+	bits32 bedChromIx = sqlUnsigned(row[0]);
+	bits32 bedStart = sqlUnsigned(row[1]);
+	bits32 bedEnd = sqlUnsigned(row[2]);
+	if (bedChromIx == chromIx && rangeIntersection(bedStart, bedEnd, start, end) > 0)
+	    fprintf(stdout, "%s\n", line);
+	freeMem(parsedLine);
 	sizeUsed += size;
 	}
     }
