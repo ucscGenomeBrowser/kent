@@ -4,7 +4,7 @@ L = -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-O = rt1dTest.o
+O = cirTree.o rt1dTest.o
 
 rt1dTest: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/rt1dTest $O ${MYLIBS} $L
