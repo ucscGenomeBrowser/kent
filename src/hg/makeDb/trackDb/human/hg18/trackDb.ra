@@ -482,6 +482,63 @@ type bed 4 .
     priority 2
     color 153,0,0
 
+    track pgYoruban2
+    subTrack pgSnp
+    shortLabel Yoruban SNPs
+    longLabel Yoruban SNPs from Solid
+    group varRep
+    priority 4
+    color 128,0,128
+
+    track pgYoruban3
+    subTrack pgSnp
+    shortLabel Yoruban SNPs
+    longLabel Yoruban SNPs from Solexa
+    group varRep
+    priority 5
+    color 128,0,128
+
+    track pgYh1
+    subTrack pgSnp
+    shortLabel Asian SNPs
+    longLabel Asian SNPs from the YanHuang Project
+    group varRep
+    priority 6
+    color 0,128,128
+
+    track pgNA12878
+    subTrack pgSnp
+    shortLabel CEU trio 878
+    longLabel 1000 Genomes CEU trio NA12878
+    group varRep
+    priority 7
+    color 128,64,0
+
+    track pgNA12891
+    subTrack pgSnp
+    shortLabel CEU trio 891
+    longLabel 1000 Genomes CEU trio NA12891
+    group varRep
+    priority 8
+    color 128,64,0
+
+    track pgNA12892
+    subTrack pgSnp
+    shortLabel CEU trio 892
+    longLabel 1000 Genomes CEU trio NA12892
+    group varRep
+    priority 9
+    color 128,64,0
+
+    track pgNA19240
+    subTrack pgSnp
+    shortLabel YRI 9240
+    longLabel 1000 Genomes YRI daughter NA19240
+    group varRep
+    priority 10
+    color 128,64,0
+
+
 track pgPop
 compositeTrack on
 shortLabel Population Vars
@@ -520,14 +577,6 @@ type bed 4 .
     group varRep
     priority 4
 
-track pgTest
-shortLabel Test SNPs
-longLabel Test SNPs
-group varRep
-priority 502.4
-visibility hide
-color 0,153,0
-type bed 4 .
 
 track augustus
 compositeTrack on
@@ -2198,6 +2247,65 @@ type wig
     maxHeightPixels 128:64:11
     color 25,150,25
     priority 6
+
+    track divChimpRpd129
+    subTrack divMKAR
+    shortLabel dbSNP129 log2 r_pd
+    longLabel dbSNP129 log2 (r_pd) divergence from chimp
+    subGroups specRec=ch
+    color 200,100,0
+    altcolor 0,0,250
+    priority 7
+
+    track divChimpFet129
+    subTrack divMKAR
+    shortLabel dbSNP129 -log10 p-value
+    longLabel dbSNP129 -log10 (p-value) divergence from chimp
+    subGroups specRec=ch
+    priority 8
+
+    track divChimpFdr129
+    subTrack divMKAR
+    shortLabel dbSNP129 -log10 FDR
+    longLabel dbSNP129 -log10 (FDR) divergence from chimp
+    subGroups specRec=ch
+    noInherit on
+    type wig
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 128:64:11
+    color 25,150,25
+    priority 9
+
+    track divChimpRpdPg8
+    subTrack divMKAR
+    shortLabel pgSnp8 log2 r_pd
+    longLabel 8 Personal Genomes log2 (r_pd) divergence from chimp
+    subGroups specRec=ch
+    color 200,100,0
+    altcolor 0,0,250
+    priority 10
+
+    track divChimpFetPg8
+    subTrack divMKAR
+    shortLabel pgSnp8 -log10 p-value
+    longLabel 8 Personal Genomes -log10 (p-value) divergence from chimp
+    subGroups specRec=ch
+    priority 11
+
+    track divChimpFdrPg8
+    subTrack divMKAR
+    shortLabel pgSnp8 -log10 FDR
+    longLabel 8 Personal Genomes -log10 (FDR) divergence from chimp
+    subGroups specRec=ch
+    noInherit on
+    type wig
+    yLineOnOff On
+    yLineMark 1.0
+    maxHeightPixels 128:64:11
+    color 25,150,25
+    priority 12
+
 
 
 track vsigMaf
