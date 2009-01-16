@@ -8,7 +8,7 @@ O = mafCoverage.o
 
 mafCoverage: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/mafCoverage $O ${MYLIBS} $L
-#	${STRIP} ${BINDIR}/mafCoverage${EXE}
+	${STRIP} ${BINDIR}/mafCoverage${EXE}
 
 test:	test1 test2
 %:	input/%.maf
