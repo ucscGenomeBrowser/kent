@@ -1,4 +1,4 @@
-/* Sort Genes - handle click on sort genes button. Set up
+/* Sort Genes - handle click on sort genes button. Set up 
  * things so can go to gene sorter on genes inside regions
  * over threshold. */
 
@@ -16,7 +16,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: sortGenes.c,v 1.11 2009/01/17 02:07:18 galt Exp $";
+static char const rcsid[] = "$Id: sortGenes.c,v 1.12 2009/01/17 02:23:09 galt Exp $";
 
 struct colTrack
 /* Genome browser track/gene sorter column correspondence. */
@@ -60,14 +60,11 @@ struct tempName snpTn;
 if (m)
     {
     /* Create custom column output file. */
-    trashDirFile(&snpTn, "hgg", "marker", ".mrk");   // TODO maybe something better?
+    trashDirFile(&snpTn, "hgg", "marker", ".mrk");  
     g = mustOpen(snpTn.forCgi, "w");
-    // TODO DEBUG maybe a better value for name here? 
     fprintf(g, 
 	"column name=\"%s Markers\" shortLabel=\"%s Markers over threshold\" longLabel=\"%s Markers in regions over threshold\" " 
 	"visibility=on priority=99 "
-	//"itemUrl=http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%%s "
-	//"labelUrl=http://genome.ucsc.edu search=fuzzy"
         "\n"
         , gg->shortLabel
         , gg->shortLabel
@@ -82,9 +79,6 @@ struct hash *transcriptHash = hashNew(16);
  * the bedList being sorted by chromosome. */
 for (bed = bedList; bed != NULL; )
     {
-
-    // DEBUG remove
-    //fprintf(stderr, "GALT: hgGenome sortGenes chrom: %s\n", bed->chrom); fflush(stderr);
 
     /* Make binKeeper and stuff in all regions in this chromosome into it. */
     char *chrom = bed->chrom;
@@ -190,9 +184,6 @@ if (m)
     hPrintf("Installed a Gene Sorter custom column called \"%s Markers\" with these markers.<BR>\n", gg->shortLabel);
     }
 
-//if (m)  // DEBUG
-//    hPrintf("DEBUG: %s.<BR>\n", snpTn.forCgi);
-
 /* close custom column output file */
 if (m)
     {
@@ -208,21 +199,13 @@ cartSetString(cart, keyCartName, keyTn.forCgi);
 
 cartSetString(cart, customFileVarName, snpTn.forCgi);
 
-char snpVisCartName[256];
-safef(snpVisCartName, sizeof(snpVisCartName), "%s%s.vis",
+char snpVisCartNameTemp[256];
+char *snpVisCartName = NULL;
+safef(snpVisCartNameTemp, sizeof(snpVisCartNameTemp), "%s%s Markers.vis",
 	colConfigPrefix, gg->shortLabel);
+snpVisCartName = replaceChars(snpVisCartNameTemp, " ", "_");
 cartSetString(cart, snpVisCartName, "1");
-// The examples show comment-lines starting with pound-char '#',
-//  but these lines cause error messages,
-//  we should just make it ignore these lines.
-//  Is there any chance that we should try to make it 
-//  be an appended field?
-//  Did the err messages cause it to fail to actually write the output file? weird.
-
-// near.col.MyLab_Data.vis 1
-// near.customFile ../trash/near_genome_4e80_ef98e0.col
-
-// change hgg and gs to use another subdir path for the col temp file?
+freeMem(snpVisCartName);
 
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
 cartSaveSession(cart);
