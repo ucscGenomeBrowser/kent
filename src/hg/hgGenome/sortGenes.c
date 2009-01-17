@@ -16,7 +16,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: sortGenes.c,v 1.10 2009/01/09 00:14:34 galt Exp $";
+static char const rcsid[] = "$Id: sortGenes.c,v 1.11 2009/01/17 02:07:18 galt Exp $";
 
 struct colTrack
 /* Genome browser track/gene sorter column correspondence. */
@@ -209,8 +209,8 @@ cartSetString(cart, keyCartName, keyTn.forCgi);
 cartSetString(cart, customFileVarName, snpTn.forCgi);
 
 char snpVisCartName[256];
-safef(snpVisCartName, sizeof(snpVisCartName), "%s.ggSnpData.vis",
-	colConfigPrefix);
+safef(snpVisCartName, sizeof(snpVisCartName), "%s%s.vis",
+	colConfigPrefix, gg->shortLabel);
 cartSetString(cart, snpVisCartName, "1");
 // The examples show comment-lines starting with pound-char '#',
 //  but these lines cause error messages,
