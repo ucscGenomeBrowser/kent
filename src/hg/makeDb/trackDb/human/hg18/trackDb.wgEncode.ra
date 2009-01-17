@@ -5619,14 +5619,14 @@ type bed 3
 useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878_(Tier_1) HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg K562=K562_(Tier_1) NB4=NB4
-subGroup3 factor Antibody Max=Max NF-E2=NF-E2 Pol2=Pol2 STAT1=STAT1 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input
+subGroup2 cellType Cell_Line GM12878=GM12878_(Tier_1) HEK293b=HEK293(b) HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg K562=K562_(Tier_1) NB4=NB4
+subGroup3 factor Antibody Max=Max NF-E2=NF-E2 Pol2=Pol2 STAT1=STAT1 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input zLarge=Large_Fragment zMNase=MNase zMouseIG=Mouse_IgG zNaked=Naked_DNA
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
-controlledVocabulary encode/cv.ra cellType=GM12878,HeLa-S3_IFNg,HeLa-S3,K562,Max,NB4,NF-E2 factor
-settingsByView Signal:viewLimits=4:7,viewLimitsMax=0:20910,autoScale=off  zRAW:viewLimits=3:7,viewLimitsMax=0:14648,autoScale=off
+controlledVocabulary encode/cv.ra cellType=GM12878,HEK293(b),HeLa-S3_IFNg,HeLa-S3,K562,Max,NB4,NF-E2 factor
+settingsByView Signal:viewLimits=4:7,viewLimitsMax=0:20910,autoScale=off zRAW:viewLimits=3:7,viewLimitsMax=0:14648,autoScale=off
 dataVersion ENCODE Submitted September 2008
 wgEncode 1
 
@@ -5638,7 +5638,7 @@ wgEncode 1
         type		narrowPeak
         dateSubmitted	2009-01-09 15:39:59
         dateReleased	2009-10-09
-        priority	10
+        priority	1011
         noInherit	on
         configurable	on
         cell		GM12878
@@ -5654,7 +5654,7 @@ wgEncode 1
         autoScale       off
         dateSubmitted	2009-01-09 15:39:59
         dateReleased	2009-10-09
-        priority	11
+        priority	1012
         noInherit	on
         configurable	on
         spanList	first
@@ -5671,9 +5671,8 @@ wgEncode 1
         type		wig 1.00 4163.00
         dateSubmitted	2009-01-09 15:39:59
         dateReleased	2009-10-09
-        priority	12
+        priority	1013
         noInherit	on
-        configurable	on
         spanList	first
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -5688,9 +5687,8 @@ wgEncode 1
         type		wig 1.00 3671.00
         dateSubmitted	2009-01-09 15:39:59
         dateReleased	2009-10-09
-        priority	13
+        priority	1014
         noInherit	on
-        configurable	on
         spanList	first
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -5705,7 +5703,7 @@ wgEncode 1
         type		narrowPeak
         dateSubmitted	2008-11-26 15:55:33
         dateReleased	2009-08-26
-        priority	20
+        priority	1031
         noInherit	on
         configurable	on
         cell		GM12878
@@ -5721,7 +5719,7 @@ wgEncode 1
         autoScale   off
         dateSubmitted	2008-11-26 15:55:33
         dateReleased	2009-08-26
-        priority	21
+        priority	1032
         noInherit	on
         configurable	on
         spanList	1
@@ -5738,9 +5736,8 @@ wgEncode 1
         type		wig 1.00 1653.00
         dateSubmitted	2008-11-26 15:55:33
         dateReleased	2009-08-26
-        priority	22
+        priority	1033
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -5755,9 +5752,8 @@ wgEncode 1
         type		wig 1.00 993.00
         dateSubmitted	2008-11-26 15:55:33
         dateReleased	2009-08-26
-        priority	23
+        priority	1034
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -5772,7 +5768,7 @@ wgEncode 1
         type		narrowPeak
         dateSubmitted	2008-11-24 19:16:9
         dateReleased	2009-08-24
-        priority	30
+        priority	1051
         noInherit	on
         configurable	on
         cell		GM12878
@@ -5788,7 +5784,7 @@ wgEncode 1
         autoScale       off
         dateSubmitted	2008-11-24 19:16:9
         dateReleased	2009-08-24
-        priority	31
+        priority	1052
         noInherit	on
         configurable	on
         spanList	1
@@ -5805,9 +5801,8 @@ wgEncode 1
         type		wig 1.00 1507.00
         dateSubmitted	2008-11-24 19:16:9
         dateReleased	2009-08-24
-        priority	32
+        priority	1053
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -5822,9 +5817,8 @@ wgEncode 1
         type		wig 1.00 1828.00
         dateSubmitted	2008-11-24 19:16:9
         dateReleased	2009-08-24
-        priority	33
+        priority	1054
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -5839,9 +5833,8 @@ wgEncode 1
         type		wig 1.00 1740.00
         dateSubmitted	2008-11-24 19:16:9
         dateReleased	2009-08-24
-        priority	34
+        priority	1055
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -5858,7 +5851,7 @@ wgEncode 1
         autoScale   off
         dateSubmitted   2008-11-25 10:1:33
         dateReleased    2009-08-25
-        priority        91
+        priority        1082
         noInherit       on
         configurable    on
         spanList        1
@@ -5875,14 +5868,129 @@ wgEncode 1
         type            wig 1.00 1488.00
         dateSubmitted   2008-11-25 10:1:33
         dateReleased    2009-08-25
-        priority        92
+        priority        1083
         noInherit       on
-        configurable    off
         spanList        1
         windowingFunction mean
         maxHeightPixels 100:16:16
         cell            GM12878
         antibody        Input
+
+        track		wgEncodeYaleChIPseqPeaksHek293Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HEK293 Pol2 Pk
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Peaks (Pol2 in HEK293 cells)
+        subGroups	view=Peaks factor=Pol2 cellType=HEK293b
+        type		narrowPeak
+        dateSubmitted	2009-01-14 15:15:3
+        dateReleased	2009-10-14
+        priority	2031
+        noInherit	on
+        configurable	on
+        cell		HEK293(b)
+        antibody	Pol2
+
+        track		wgEncodeYaleChIPseqSignalHek293Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HEK293 Pol2 Sig
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Pol2 in HEK293 cells)
+        subGroups	view=Signal factor=Pol2 cellType=HEK293b
+        type		wig 0.00 5116.00
+        dateSubmitted	2009-01-14 15:15:3
+        dateReleased	2009-10-14
+        priority	2032
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  4:7
+        autoScale       off
+        cell		HEK293(b)
+        antibody	Pol2
+
+        track		wgEncodeYaleChIPseqRawSignalRep1Hek293Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HEK293 Pol2 Raw1
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (Pol2 in HEK293 cells)
+        subGroups	view=zRAW factor=Pol2 cellType=HEK293b
+        type		wig 1.00 1605.00
+        dateSubmitted	2009-01-14 15:15:3
+        dateReleased	2009-10-14
+        priority	2033
+        noInherit	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		HEK293(b)
+        antibody	Pol2
+
+        track		wgEncodeYaleChIPseqRawSignalRep2Hek293Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HEK293 Pol2 Raw2
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (Pol2 in HEK293 cells)
+        subGroups	view=zRAW factor=Pol2 cellType=HEK293b
+        type		wig 1.00 908.00
+        dateSubmitted	2009-01-14 15:15:3
+        dateReleased	2009-10-14
+        priority	2034
+        noInherit	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		HEK293(b)
+        antibody	Pol2
+
+        track		wgEncodeYaleChIPseqRawSignalRep3Hek293Pol2
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HEK293 Pol2 Raw3
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 3 (Pol2 in HEK293 cells)
+        subGroups	view=zRAW factor=Pol2 cellType=HEK293b
+        type		wig 1.00 1592.00
+        dateSubmitted	2009-01-14 15:15:3
+        dateReleased	2009-10-14
+        priority	2035
+        noInherit	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		HEK293(b)
+        antibody	Pol2
+
+        track		wgEncodeYaleChIPseqSignalHek293Input
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HEK293 Input Sig
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Input in HEK293 cells)
+        subGroups	view=Signal factor=zCTRL cellType=HEK293b
+        type		wig 0.00 4758.00
+        dateSubmitted	2009-01-14 22:24:53
+        dateReleased	2009-10-14
+        priority	2082
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  4:7
+        autoScale       off
+        cell		HEK293(b)
+        antibody	Input
+
+        track		wgEncodeYaleChIPseqRawSignalHek293Input
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HEK293 Input Raw
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal (Input in HEK293 cells)
+        subGroups	view=zRAW factor=zCTRL cellType=HEK293b
+        type		wig 1.00 2937.00
+        dateSubmitted	2009-01-14 22:24:53
+        dateReleased	2009-10-14
+        priority	2083
+        noInherit	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		HEK293(b)
+        antibody	Input
 
         track           wgEncodeYaleChIPseqPeaksHelas3Pol2
         subTrack        wgEncodeYaleChIPseq
@@ -5892,7 +6000,7 @@ wgEncode 1
         type            narrowPeak
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
-        priority        101
+        priority        3031
         noInherit       on
         cell            HeLa-S3
         antibody        Pol2
@@ -5910,7 +6018,7 @@ wgEncode 1
         autoScale       off
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
-        priority        102
+        priority        3032
         noInherit       on
         visibility      full
         spanList        1
@@ -5930,7 +6038,7 @@ wgEncode 1
         type            wig 1.00 3673.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
-        priority        103
+        priority        3033
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -5948,7 +6056,7 @@ wgEncode 1
         type            wig 1.00 6153.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
-        priority        104
+        priority        3034
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -5966,7 +6074,7 @@ wgEncode 1
         type            wig 1.00 4989.00
         dateSubmitted   2008-10-1 9:27:32
         dateReleased    2009-07-01
-        priority        105
+        priority        3035
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -5987,7 +6095,7 @@ wgEncode 1
         defaultViewLimits 2:2000
         dateSubmitted   2008-09-29 14:52:0
         dateReleased    2009-06-29
-        priority        192
+        priority        3082
         noInherit       on
         visibility      full
         spanList        1
@@ -6007,7 +6115,7 @@ wgEncode 1
         type            wig 1.00 8316.00
         dateSubmitted   2008-09-29 14:52:0
         dateReleased    2009-06-29
-        priority        193
+        priority        3083
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -6017,6 +6125,254 @@ wgEncode 1
         color           112,63,174
         accession       GSE12781
 
+        track		wgEncodeYaleChIPseqPeaksHelas3Largefragment
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa LargeFrag Pk
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Peaks (Large_Fragment in HeLa-S3 cells)
+        subGroups	view=Peaks factor=zLarge cellType=HeLa
+        type		narrowPeak
+        dateSubmitted	2009-01-15 12:36:22
+        dateReleased	2009-10-15
+        priority	3091
+        noInherit	on
+        configurable	on
+        cell		HeLa-S3
+        antibody	Large_Fragment
+
+        track		wgEncodeYaleChIPseqSignalHelas3Largefragment
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa LargeFrag Sig
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Large_Fragment in HeLa-S3 cells)
+        subGroups	view=Signal factor=zLarge cellType=HeLa
+        type		wig 0.00 5906.00
+        dateSubmitted	2009-01-15 12:36:22
+        dateReleased	2009-10-15
+        priority	3092
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  4:7
+        autoScale       off
+        cell		HeLa-S3
+        antibody	Large_Fragment
+
+        track		wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa LargeFrag Raw1
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (Large_Fragment in HeLa-S3 cells)
+        subGroups	view=zRAW factor=zLarge cellType=HeLa
+        type		wig 1.00 2345.00
+        dateSubmitted	2009-01-15 12:36:22
+        dateReleased	2009-10-15
+        priority	3093
+        noInherit	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		HeLa-S3
+        antibody	Large_Fragment
+
+        track		wgEncodeYaleChIPseqRawSignalRep2Helas3Largefragment
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa LargeFrag Raw2
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (Large_Fragment in HeLa-S3 cells)
+        subGroups	view=zRAW factor=zLarge cellType=HeLa
+        type		wig 1.00 1186.00
+        dateSubmitted	2009-01-15 12:36:22
+        dateReleased	2009-10-15
+        priority	3094
+        noInherit	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		HeLa-S3
+        antibody	Large_Fragment
+
+        track		wgEncodeYaleChIPseqSignalHelas3Mnase
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa MNase Sig
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (MNase in HeLa-S3 cells)
+        subGroups	view=Signal factor=zMNase cellType=HeLa
+        type		wig 0.00 13908.00
+        dateSubmitted	2009-01-15 10:8:35
+        dateReleased	2009-10-15
+        priority	3102
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  4:7
+        autoScale       off
+        cell		HeLa-S3
+        antibody	MNase
+
+        track		wgEncodeYaleChIPseqRawSignalRep1Helas3Mnase
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa MNase Raw1
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (MNase in HeLa-S3 cells)
+        subGroups	view=zRAW factor=zMNase cellType=HeLa
+        type		wig 1.00 5827.00
+        dateSubmitted	2009-01-16 12:7:58
+        dateReleased	2009-10-16
+        priority	3103
+        noInherit	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		HeLa-S3
+        antibody	MNase
+
+        track		wgEncodeYaleChIPseqRawSignalRep2Helas3Mnase
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa MNase Raw2
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (MNase in HeLa-S3 cells)
+        subGroups	view=zRAW factor=zMNase cellType=HeLa
+        type		wig 1.00 4709.00
+        dateSubmitted	2009-01-16 12:7:58
+        dateReleased	2009-10-16
+        priority	3104
+        noInherit	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+
+        cell		HeLa-S3
+        antibody	MNase
+        track		wgEncodeYaleChIPseqPeaksHelas3Mouseigg
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa MouseIgG Pk
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Peaks (Mouse_IgG in HeLa-S3 cells)
+        subGroups	view=Peaks factor=zMouseIG cellType=HeLa
+        type		narrowPeak
+        dateSubmitted	2009-01-15 11:38:10
+        dateReleased	2009-10-15
+        priority	3111
+        noInherit	on
+        configurable	on
+        cell		HeLa-S3
+        antibody	Mouse_IgG
+
+        track		wgEncodeYaleChIPseqSignalHelas3Mouseigg
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa MouseIgG Sig
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Mouse_IgG in HeLa-S3 cells)
+        subGroups	view=Signal factor=zMouseIG cellType=HeLa
+        type		wig 0.00 6717.00
+        dateSubmitted	2009-01-15 11:38:10
+        dateReleased	2009-10-15
+        priority	3112
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  4:7
+        autoScale       off
+        cell		HeLa-S3
+        antibody	Mouse_IgG
+
+        track		wgEncodeYaleChIPseqRawSignalRep1Helas3Mouseigg
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa MouseIgG Raw 1
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (Mouse_IgG in HeLa-S3 cells)
+        subGroups	view=zRAW factor=zMouseIG cellType=HeLa
+        type		wig 1.00 1800.00
+        dateSubmitted	2009-01-15 11:38:10
+        dateReleased	2009-10-15
+        priority	3113
+        noInherit	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		HeLa-S3
+        antibody	Mouse_IgG
+
+        track		wgEncodeYaleChIPseqRawSignalRep2Helas3Mouseigg
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa MouseIgG Raw 2
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (Mouse_IgG in HeLa-S3 cells)
+        subGroups	view=zRAW factor=zMouseIG cellType=HeLa
+        type		wig 1.00 1679.00
+        dateSubmitted	2009-01-15 11:38:10
+        dateReleased	2009-10-15
+        priority	3114
+        noInherit	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		HeLa-S3
+        antibody	Mouse_IgG
+
+        track		wgEncodeYaleChIPseqSignalHelas3Nakeddna
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa NakedDNA Sig
+        longLabel	ENCODE TFBS by Yale/UCDavis/Harvard ChIP-Seq Signal (Naked_DNA in HeLa-S3 cells)
+        subGroups	view=Signal factor=zNaked cellType=HeLa
+        type		wig 0.00 8487.00
+        dateSubmitted	2009-01-15 13:41:50
+        dateReleased	2009-10-15
+        priority	3122
+        noInherit	on
+        configurable	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:32:16
+        viewLimits  4:7
+        autoScale       off
+        cell		HeLa-S3
+        antibody	Naked_DNA
+
+        track		wgEncodeYaleChIPseqRawSignalRep1Helas3Nakeddna
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa NakedDNA Raw1
+        longLabel	ENCODE Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 1 (Naked_DNA in HeLa-S3 cells)
+        subGroups	view=zRAW factor=zNaked cellType=HeLa
+        type		wig 1.00 1652.00
+        dateSubmitted	2009-01-16 13:12:14
+        dateReleased	2009-10-16
+        priority	3123
+        noInherit	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		HeLa-S3
+        antibody	Naked_DNA
+
+        track		wgEncodeYaleChIPseqRawSignalRep2Helas3Nakeddna
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa NakedDNA Raw2
+        longLabel	ENCODE Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 2 (Naked_DNA in HeLa-S3 cells)
+        subGroups	view=zRAW factor=zNaked cellType=HeLa
+        type		wig 1.00 1721.00
+        dateSubmitted	2009-01-16 13:12:14
+        dateReleased	2009-10-16
+        priority	3124
+        noInherit	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		HeLa-S3
+        antibody	Naked_DNA
+
+        track		wgEncodeYaleChIPseqRawSignalRep3Helas3Nakeddna
+        subTrack	wgEncodeYaleChIPseq
+        shortLabel	HeLa NakedDNA Raw3
+        longLabel	ENCODE Yale/UCDavis/Harvard ChIP-Seq Raw Signal Replicate 3 (Naked_DNA in HeLa-S3 cells)
+        subGroups	view=zRAW factor=zNaked cellType=HeLa
+        type		wig 1.00 1331.00
+        dateSubmitted	2009-01-16 13:12:14
+        dateReleased	2009-10-16
+        priority	3125
+        noInherit	on
+        spanList	first
+        windowingFunction mean
+        maxHeightPixels	100:16:16
+        cell		HeLa-S3
+        antibody	Naked_DNA
+
         track           wgEncodeYaleChIPseqPeaksHelas3ifngStat1
         subTrack        wgEncodeYaleChIPseq hide
         shortLabel      HeLa-IF STAT1 Pk
@@ -6025,7 +6381,7 @@ wgEncode 1
         type            narrowPeak
         dateSubmitted   2008-10-1 10:6:2
         dateReleased    2009-07-01
-        priority        201
+        priority        4041
         noInherit       on
         cell            HeLa-S3_IFNg
         antibody        STAT1
@@ -6043,7 +6399,7 @@ wgEncode 1
         autoScale       off
         dateSubmitted   2008-10-1 10:6:2
         dateReleased    2009-07-01
-        priority        202
+        priority        4042
         noInherit       on
         visibility      full
         spanList        1
@@ -6063,7 +6419,7 @@ wgEncode 1
         type            wig 1.00 14648.00
         dateSubmitted   2008-10-1 10:6:2
         dateReleased    2009-07-01
-        priority        203
+        priority        4043
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -6081,7 +6437,7 @@ wgEncode 1
         type            wig 1.00 6262.00
         dateSubmitted   2008-10-1 10:6:2
         dateReleased    2009-07-01
-        priority        204
+        priority        4044
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -6101,7 +6457,7 @@ wgEncode 1
         autoScale       off
         dateSubmitted   2008-09-29 14:12:28
         dateReleased    2009-06-29
-        priority        292
+        priority        4082
         noInherit       on
         visibility      full
         spanList        1
@@ -6121,7 +6477,7 @@ wgEncode 1
         type            wig 1.00 11690.00
         dateSubmitted   2008-09-29 14:12:28
         dateReleased    2009-06-29
-        priority        293
+        priority        4083
         noInherit       on
         spanList        1
         windowingFunction       mean
@@ -6139,7 +6495,7 @@ wgEncode 1
         type		narrowPeak
         dateSubmitted	2009-01-09 15:11:58
         dateReleased	2009-10-09
-        priority	310
+        priority	5021
         noInherit	on
         configurable	on
         cell		K562
@@ -6155,7 +6511,7 @@ wgEncode 1
         autoScale   off
         dateSubmitted	2009-01-09 15:11:58
         dateReleased	2009-10-09
-        priority	311
+        priority	5022
         noInherit	on
         configurable	on
         spanList	first
@@ -6172,9 +6528,8 @@ wgEncode 1
         type		wig 1.00 10629.00
         dateSubmitted	2009-01-09 15:11:58
         dateReleased	2009-10-09
-        priority	312
+        priority	5023
         noInherit	on
-        configurable	on
         spanList	first
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -6189,9 +6544,8 @@ wgEncode 1
         type		wig 1.00 9043.00
         dateSubmitted	2009-01-09 15:11:58
         dateReleased	2009-10-09
-        priority	313
+        priority	5024
         noInherit	on
-        configurable	on
         spanList	first
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -6206,7 +6560,7 @@ wgEncode 1
         type            narrowPeak
         dateSubmitted   2008-10-14 13:29:42
         dateReleased    2009-07-14
-        priority        320
+        priority        5031
         noInherit       on
         cell    K562
         antibody        Pol2
@@ -6222,7 +6576,7 @@ wgEncode 1
         autoScale       off
         dateSubmitted   2008-10-14 13:29:42
         dateReleased    2009-07-14
-        priority        321
+        priority        5032
         noInherit       on
         visibility      full
         spanList        1
@@ -6240,9 +6594,8 @@ wgEncode 1
         type            wig 1.00 9783.00
         dateSubmitted   2008-10-27 11:57:19
         dateReleased    2009-07-27
-        priority        322
+        priority        5033
         noInherit       on
-        configurable    off
         spanList        1
         windowingFunction mean
         maxHeightPixels 100:16:16
@@ -6257,9 +6610,8 @@ wgEncode 1
         type            wig 1.00 8446.00
         dateSubmitted   2008-10-27 11:57:19
         dateReleased    2009-07-27
-        priority        323
+        priority        5034
         noInherit       on
-        configurable    off
         spanList        1
         windowingFunction mean
         maxHeightPixels 100:16:16
@@ -6274,7 +6626,7 @@ wgEncode 1
         type		narrowPeak
         dateSubmitted	2008-11-21 13:23:36
         dateReleased	2009-08-21
-        priority        330
+        priority        5051
         noInherit	on
         configurable	on
         cell		K562
@@ -6290,7 +6642,7 @@ wgEncode 1
         autoScale   off
         dateSubmitted	2008-11-21 13:23:36
         dateReleased	2009-08-21
-        priority	331
+        priority	5052
         noInherit	on
         configurable	on
         spanList 	1
@@ -6307,9 +6659,8 @@ wgEncode 1
         type		wig 1.00 6107.00
         dateSubmitted	2008-11-21 13:23:36
         dateReleased	2009-08-21
-        priority	332
+        priority	5053
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -6324,9 +6675,8 @@ wgEncode 1
         type		wig 1.00 3561.00
         dateSubmitted	2008-11-21 13:23:36
         dateReleased	2009-08-21
-        priority	333
+        priority	5054
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -6341,9 +6691,8 @@ wgEncode 1
         type		wig 1.00 3921.00
         dateSubmitted	2008-11-21 13:23:36
         dateReleased	2009-08-21
-        priority	334
+        priority	5055
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -6358,7 +6707,7 @@ wgEncode 1
         type		narrowPeak
         dateSubmitted	2008-11-21 12:38:7
         dateReleased	2009-08-21
-        priority	340
+        priority	5061
         noInherit	on
         configurable	on
         cell		K562
@@ -6374,7 +6723,7 @@ wgEncode 1
         autoScale   off
         dateSubmitted	2008-11-21 12:38:7
         dateReleased	2009-08-21
-        priority	341
+        priority	5062
         noInherit	on
         configurable	on
         spanList	1
@@ -6391,9 +6740,8 @@ wgEncode 1
         type		wig 1.00 11614.00
         dateSubmitted	2008-11-21 12:38:7
         dateReleased	2009-08-21
-        priority	342
+        priority	5063
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -6408,9 +6756,8 @@ wgEncode 1
         type		wig 1.00 5368.00
         dateSubmitted	2008-11-21 12:38:7
         dateReleased	2009-08-21
-        priority	343
+        priority	5064
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -6425,7 +6772,7 @@ wgEncode 1
         type		narrowPeak
         dateSubmitted	2008-11-21 13:51:54
         dateReleased	2009-08-21
-        priority	350
+        priority	5071
         noInherit	on
         configurable	on
         cell		K562
@@ -6441,7 +6788,7 @@ wgEncode 1
         autoScale   off
         dateSubmitted	2008-11-21 13:51:54
         dateReleased	2009-08-21
-        priority	351
+        priority	5072
         noInherit	on
         configurable	on
         spanList	1
@@ -6458,9 +6805,8 @@ wgEncode 1
         type		wig 1.00 1590.00
         dateSubmitted	2008-11-21 13:51:54
         dateReleased	2009-08-21
-        priority	352
+        priority	5073
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -6475,9 +6821,8 @@ wgEncode 1
         type		wig 1.00 1603.00
         dateSubmitted	2008-11-21 13:51:54
         dateReleased	2009-08-21
-        priority	353
+        priority	5074
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -6494,7 +6839,7 @@ wgEncode 1
         autoScale       off
         dateSubmitted   2008-10-14 11:39:9
         dateReleased    2009-07-14
-        priority        391
+        priority        5082
         noInherit       on
         visibility      full
         spanList        1
@@ -6512,14 +6857,13 @@ wgEncode 1
         type            wig 1.00 4661.00
         dateSubmitted   2008-10-14 11:39:9
         dateReleased    2009-07-14
-        priority        392
+        priority        5083
         noInherit       on
         spanList        1
         windowingFunction mean
         maxHeightPixels 100:16:16
         cell    	K562
         antibody        Input
-        configurable    on
 
         track		wgEncodeYaleChIPseqPeaksNb4Pol2
         subTrack	wgEncodeYaleChIPseq hide
@@ -6529,7 +6873,7 @@ wgEncode 1
         type		narrowPeak
         dateSubmitted	2008-11-25 9:50:26
         dateReleased	2009-08-25
-        priority	401
+        priority	6031
         noInherit	on
         configurable	on
         cell		NB4
@@ -6545,7 +6889,7 @@ wgEncode 1
         autoScale   off
         dateSubmitted	2008-11-25 9:50:26
         dateReleased	2009-08-25
-        priority	402
+        priority	6032
         noInherit	on
         configurable	on
         spanList	1
@@ -6562,9 +6906,8 @@ wgEncode 1
         type		wig 1.00 10895.00
         dateSubmitted	2008-11-25 9:50:26
         dateReleased	2009-08-25
-        priority	403
+        priority	6033
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -6579,9 +6922,8 @@ wgEncode 1
         type		wig 1.00 5847.00
         dateSubmitted	2008-11-25 9:50:26
         dateReleased	2009-08-25
-        priority	404
+        priority	6034
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -6596,9 +6938,8 @@ wgEncode 1
         type		wig 1.00 4034.00
         dateSubmitted	2008-11-25 9:50:26
         dateReleased	2009-08-25
-        priority	405
+        priority	6035
         noInherit	on
-        configurable	off
         spanList	1
         windowingFunction mean
         maxHeightPixels	100:16:16
@@ -6615,7 +6956,7 @@ wgEncode 1
         autoScale       off
         dateSubmitted   2008-11-25 10:29:19
         dateReleased    2009-08-25
-        priority        492
+        priority        6082
         noInherit       on
         configurable    on
         spanList        1
@@ -6632,9 +6973,8 @@ wgEncode 1
         type            wig 1.00 2842.00
         dateSubmitted   2008-11-25 10:29:19
         dateReleased    2009-08-25
-        priority        493
+        priority        6083
         noInherit       on
-        configurable    off
         spanList        1
         windowingFunction mean
         maxHeightPixels 100:16:16
