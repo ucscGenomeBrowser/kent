@@ -21,7 +21,7 @@
 #include "versionInfo.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.182 2009/01/15 07:12:51 markd Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.183 2009/01/17 01:54:54 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -480,8 +480,10 @@ if ((labelUrl = columnSetting(col, "labelUrl", NULL)) != NULL)
 else
     {
     char url[512];
+    char *encoded = cgiEncode(col->name);
     safef(url, sizeof(url), "../cgi-bin/hgNear?%s&%s=%s",
-	    cartSidUrlString(cart), colInfoVarName, col->name);
+	    cartSidUrlString(cart), colInfoVarName, encoded);
+    freeMem(encoded);
     return cloneString(url);
     }
 }
