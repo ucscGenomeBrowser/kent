@@ -271,7 +271,7 @@ type Cell Line
 description Normal human osteoblasts (NHOst)
 vendorName Lonza
 vendorId CC-2538
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
+orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2166EFB7B0F18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
 lineage
 karyotype normal
 termId BTO:0001593
@@ -354,7 +354,7 @@ term Th1
 type Cell Line
 description primary human Th1 T cells
 vendorName
-vendorId
+vendorId None (primary pheresis of single normal subject)
 orderUrl
 lineage
 karyotype
