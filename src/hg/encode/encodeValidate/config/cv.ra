@@ -18,7 +18,7 @@ type Cell Line
 description leukemia
 vendorName ATCC
 vendorId CCL-243
-orderUrl http://www.atcc.org/common/catalog/numSearch/numResults.cfm?atccNum=CCL-243
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
 karyotype cancer
 lineage "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 termId BTO:0000664
