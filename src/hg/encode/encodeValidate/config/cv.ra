@@ -58,6 +58,7 @@ vendorId CCL-2.2
 lineage ectoderm
 karyotype cancer
 termId BTO:0000568
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
 tier 3
 
 term HUVEC
