@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1491 2009/01/14 22:12:56 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1492 2009/01/20 19:05:14 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -21635,6 +21635,15 @@ else if (sameString("pgVenter", track) ||
          sameString("pgChb", track)    ||
          sameString("pgJpt", track)    || 
          sameString("pgYoruban1", track) ||
+         sameString("pgYoruban2", track) ||
+         sameString("pgYoruban3", track) ||
+         sameString("pgNA12878", track) ||
+         sameString("pgNA12891", track) ||
+         sameString("pgNA12892", track) ||
+         sameString("pgNA19240", track) ||
+         sameString("hbPgTest", track) ||
+         sameString("hbPgWild", track) ||
+	 sameString("pgYh1", track) ||
          sameString("pgTest", track) )
     {
     doPgSnp(tdb, item);
