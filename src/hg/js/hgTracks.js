@@ -57,7 +57,7 @@ function setPosition(position, size)
     if(position) {
         // XXXX There are multiple tags with name == "position":^(
 	var tags = document.getElementsByName("position");
-	for (var i = 0; i < tags.length; i++) { 
+	for (var i = 0; i < tags.length; i++) {
 	    var ele = tags[i];
 	    ele.value = position;
 	}
@@ -135,7 +135,7 @@ function selectEnd(img, selection)
     var slop = 10;
     var now = new Date();
     var doIt = false;
-    if((selection.event.pageX >= (imgOfs.left - slop)) && (selection.event.pageX < (imgOfs.left + imgWidth + slop)) 
+    if((selection.event.pageX >= (imgOfs.left - slop)) && (selection.event.pageX < (imgOfs.left + imgWidth + slop))
        && (selection.event.pageY >= (imgOfs.top - slop)) && (selection.event.pageY < (imgOfs.top + imgHeight + slop))) {
        // ignore single clicks that aren't in the top of the image (this happens b/c the clickClipHeight test in selectStart
        // doesn't occur when the user single clicks).
@@ -172,15 +172,15 @@ $(window).load(function () {
 
 		img.imgAreaSelect({ selectionColor: 'blue', outerColor: '',
 			minHeight: imgHeight, maxHeight: imgHeight,
-			onSelectStart: selectStart, onSelectChange: selectChange, onSelectEnd: selectEnd, 
-			autoHide: true, movable: false, 
+			onSelectStart: selectStart, onSelectChange: selectChange, onSelectEnd: selectEnd,
+			autoHide: true, movable: false,
 			clickClipHeight: clickClipHeight});
 	}
 });
 
 function toggleTrackGroupVisibility(obj, prefix)
 {
-// toggle visibility of a track group; prefix is the prefix of all the id's of tr's in the 
+// toggle visibility of a track group; prefix is the prefix of all the id's of tr's in the
 // relevant group. This code also modifies the corresponding hidden fields and the gif of the +/- img tag.
     var retval = true;
     if (document.getElementsByTagName){
@@ -315,3 +315,252 @@ function setAllTrackGroupVisibility(newState)
     }
     return retval;
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ *
+ * http://www.gnu.org/licenses/gpl.txt
+ *
+ *
+ * Creates a image like div with the image as background with ability to
+ * pan it with mouse.
+ *
+ * @name        panFullSize
+ * @author      Esa-Matti Suuronen
+ * @contact     esa-matti [a] suuronen [dot] org
+ * @license     GPL
+ * @version     1.02
+ *
+ *
+ *
+ * Takes only img-elements (and custom pan-divs). Otherwise exception is thrown.
+ *
+ * Example: $("img#mypic").panFullSize(300,200);
+ *
+ *
+ *
+ */
+jQuery.fn.panFullSize = function(x, y){
+this.each(function(){
+
+    var pic;
+    var pic_real_width;
+    var pic_real_height;
+    var picX_start = 0;
+    var picY_start = 0;
+    var prevX = 0;
+    var prevY = 0;
+    var newX = 0;
+    var newY = 0;
+    var mousedown = false;
+
+    //alert("panFullSize: "+ $(this).attr("id"));
+
+    if ( $(this).is("img") ) {
+        pic = $(this);
+    }
+    else if ( $(this).is("div.panFullSize")  ) { // from custom pan-div
+        pic = $(this).prev("img"); // Get the real pic
+    }
+    else {
+        throw "Not an image! panFullSize can only be used with images.";
+    }
+
+    var pan = getPan();
+    //var exists = pan.length > 0 ;
+    var exists = pan.is("*");
+
+    if (exists) {
+        if (!x) x = pan.width()
+        if (!y) y = pan.height();
+    }
+    else {
+        // Defaults from img-element
+        if (!x) x = pic.width()
+        if (!y) y = pic.height();
+    }
+
+    var box_width = x;
+    var box_height = y;
+
+    if ( !exists ) {
+        // new pan-div
+        // The space in div is required
+        pic.after('<div id="pan' + pic.attr("id") +'" class="panFullSize"> </div>');
+        pan = getPan().hide();
+        // On creating pan-div, we need to wait for the image to load before we can initialize pan-div.
+        // Otherwise getting the real image width&heigth fails...
+        pic.load(initialize);
+    }
+    else {
+        initialize();
+    }
+    center();
+    show();
+
+    function initialize(){
+
+        pic.hide();
+
+        pan.css( 'width', box_width + "px").css( 'height', box_height + "px" );
+        pan.css( 'display', 'inline-block');  // Make div to act like img. inline-block does not work in FF2?
+        // It's only needed to add size-attributes if we already have pan-div
+        if ( exists ) return;
+
+        //pan.css( 'background-color', "red" ); // For debugging. Should not be seen ever.
+        pan.css( 'background-image', 'url("' + pic.attr("src") + '")' );
+        pan.css( 'background-repeat', "no-repeat" );
+
+        // Get the real size of the image
+        var pic_orig_width = pic.width();
+        var pic_orig_height = pic.height();
+        pic.removeAttr("width");
+        pic.removeAttr("height");
+        pic_real_width = pic.width();
+        pic_real_height = pic.height();
+        pic.width(pic_orig_width).height(pic_orig_height);
+        //pan.css( 'overflow', "scroll" );
+        //pan.css( 'height', pic.height() + 10 );
+        // Doesn't do any good here because the img is background
+
+        pan.mousedown(function(e){
+            //alert("Mousedown");
+            mousedown = true;
+
+            box_width = pan.width();
+            box_height = pan.height();
+
+            picX_start = e.clientX;
+            picY_start = e.clientY;
+        });
+
+        $(document).mousemove(onpan);
+
+        $(document).mouseup(function(e){
+            onpan(e);
+            mousedown = false;
+
+            prevX = newX;
+            prevY = newY;
+
+        });
+
+    }
+
+
+
+    /**
+     * BUG: Gets stuck in corners?
+     */
+    function onpan(e){
+
+
+        var diffX = e.clientX - picX_start;
+        var diffY = e.clientY - picY_start;
+
+         if ( mousedown ){
+
+          var in_areaX = true;
+          var in_areaY = true;
+
+          if ( prevX + diffX >= 0 )
+              in_areaX = false;
+          if ( -(prevX + diffX) > pic_real_width - box_width )
+              in_areaX = false;
+          if (in_areaX)  newX = prevX + diffX;
+
+
+          if ( prevY + diffY >= 0 )
+              in_areaY = false;
+          if ( -(prevY + diffY) > pic_real_height - box_height )
+              in_areaY = false;
+          if (in_areaY)  newY = prevY + diffY;
+
+
+            pan.css( {backgroundPosition:  newX.toString() +"px " + newY.toString() + "px"} )
+
+
+         }
+
+     }
+
+     function getPan(){
+         return pic.next("div.panFullSize");
+     }
+
+     function center(){
+        //alert("pan.center(img:"+$(this).attr("id")+") pic.width()"+pic.width()+ " box_width:"+box_width);
+        if(pic.width() > box_width)
+            newX = (box_width - pic.width())/2;
+        if(pic.height() > box_height)
+            newY = (box_height - pic.height())/2;
+        if(newX!=prevX || newY!=prevY){
+            //alert("pan.center(img:"+$(this).attr("id")+") pic.width()"+pic.width()+ " box_width:"+box_width+" newX:"+newX);
+            pan.css( {backgroundPosition:  newX.toString() +"px " + newY.toString() + "px"} );
+            prevX = newX;
+            prevY = newY;
+        }
+    }
+
+    function hide(){
+        pan.css( {visibility: "hidden"} );
+    }
+    function show(){
+        pan.css( {visibility: "visible"} );
+        pic.css( {visibility: "visible"} );
+    }
+});
+
+// Lets return the new pan-divs
+return $(this).next("div.panFullSize");
+
+
+};
+
+
+/**
+ * Restores normal image view
+ */
+jQuery.fn.normalView = function(){
+ this.each(function(){
+    if ( $(this).is("div.panFullSize") ){
+        $(this).hide();
+        $(this).prev("img").show();
+
+    }
+    else if ( $(this).is("img") && $(this).next("div.panFullSize").is("*") ) {
+        $(this).show();
+        $(this).next("div.panFullSize").hide();
+
+    }
+
+ });
+
+
+if ( $(this).is("div.panFullSize")  )
+    return $(this).prev("img");
+return $(this);
+
+};
+
+jQuery.fn.isPan = function(){
+    return $(this).is("div.panFullSize");
+};
+
+
+$(document).ready( function() {
+    //$("img#trackMap").panFullSize($("img#trackMap").width()/2, $("img#trackMap").height());
+    $("img#chrom").panFullSize($("img#chrom").width()/2, $("img#chrom").height());
+
+});

@@ -8,7 +8,7 @@ function clickIt(obj,state,force)
     if(obj.checked != state) {
         obj.click();
     } else if (force) {
-        obj.click();    
+        obj.click();
         obj.click();    //force onclick event
     }
 }
@@ -26,16 +26,17 @@ function setCheckBoxesWithPrefix(obj, prefix, state)
 function setCheckBoxesThatContain(nameOrId, state, force, sub1)
 {
 // Set all checkboxes which contain 1 or more given substrings in NAME or ID to state boolean
-// This can force the 'onclick() js of the checkbox, even if it is already in the state 
+// First substring: must begin with it; 2 subs: beg and end; 3: begin, middle and end.
+// This can force the 'onclick() js of the checkbox, even if it is already in the state
     if(debug)
         alert("setCheckBoxesContains is about to set the checkBoxes to "+state);
     var list;
     if(arguments.length == 4)
-        list = inputArrayThatMatches("checkbox",nameOrId,"","",sub1);
+        list = inputArrayThatMatches("checkbox",nameOrId,sub1,"");
     else if(arguments.length == 5)
-        list = inputArrayThatMatches("checkbox",nameOrId,"","",sub1,arguments[4]);
+        list = inputArrayThatMatches("checkbox",nameOrId,sub1,arguments[4]);
     else if(arguments.length == 6)
-        list = inputArrayThatMatches("checkbox",nameOrId,"","",sub1,arguments[4],arguments[5]);
+        list = inputArrayThatMatches("checkbox",nameOrId,sub1,arguments[4],arguments[5]);
     for (var ix=0;ix<list.length;ix++) {
         clickIt(list[ix],state,force);
     }
@@ -46,10 +47,10 @@ function getViewsSelected(nameMatches,on)
 {
 // Returns an array of all views that are on or off (hide)
 // views are "select" drop downs containing 'hide','dense',...
-// To be clear, an array of strings with the view suffix are returned.  
+// To be clear, an array of strings with the view suffix are returned.
 // name="broadChromatinChIPSeq_dd_WIN" nameMatches='_dd_' returns 'WIN'
    var views = new Array();
-   
+
    if (document.getElementsByTagName) {
         var list = document.getElementsByTagName('select');
         var vIx=0;
@@ -58,7 +59,7 @@ function getViewsSelected(nameMatches,on)
             var nameIx = ele.name.indexOf(nameMatches);
             if(nameIx >= 0) {
                 if((on && ele.selectedIndex>0) || (!on && ele.selectedIndex==0)) {
-                    views[vIx] = ele.name.substring(nameIx+nameMatches.length,ele.name.length); 
+                    views[vIx] = ele.name.substring(nameIx+nameMatches.length,ele.name.length);
                     vIx++;
                 }
             }
@@ -131,7 +132,7 @@ function showSubTrackCheckBoxes(onlySelected)
                     var associated_cb = tblRow.id.substring(3,tblRow.id.length);
                     chkBox = document.getElementById(associated_cb);
                     if(chkBox!=undefined && chkBox.checked)
-                        tblRow.style.display = ''; 
+                        tblRow.style.display = '';
                     else
                         tblRow.style.display = 'none';
                 }
@@ -147,7 +148,7 @@ function showSubTrackCheckBoxes(onlySelected)
            alert("showSubTrackCheckBoxes is unimplemented for this browser");
    }
 }
-        
+
 function hideOrShowSubtrack(obj)
 {
 // This can show/hide a tablerow that contains a specific object
@@ -169,7 +170,7 @@ function hideOrShowSubtrack(obj)
         }
     }
     else
-        tblRow.style.display = ''; 
+        tblRow.style.display = '';
 }
 
 function waitCursor(obj)

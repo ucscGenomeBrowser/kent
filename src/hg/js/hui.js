@@ -10,8 +10,10 @@ function matSelectViewForSubTracks(obj,view)
 // Handle any necessary changes to subtrack checkboxes when the view changes
 // views are "select" drop downs on a subtrack configuration page
     if( obj.selectedIndex == 0) { // hide
-        if(tieDDandCB)
+        if(tieDDandCB) {
             matSetSubtrackCheckBoxes(false,view);
+            $(":checkbox").filter(".matrixCB").filter(":checked").each( function (i) { matChkBoxNormalize(this); } );
+        }
     } else {
         // Make main display dropdown show full if currently hide
         var trackName = obj.name.substring(0,obj.name.indexOf("_dd_"))
@@ -34,7 +36,7 @@ function matSelectViewForSubTracks(obj,view)
             var CBs = $(":checkbox").filter(".matrixCB").filter(":checked");
             if(CBs.length > 0) {
                 var classSets = new Array();
-                CBs.each( function (i) { classSets.push( $(this).attr("class") ); } );  // clip "matrixCB"
+                CBs.each( function (i) { classSets.push( $(this).attr("class") ); } );
                 if(CBs.length > 0 && classSets.length > 0) {
                     // Now it would be good to create a list of all subtrack CBs that match view,unchecked, and a class set (pair or triplet!)
                     CBs = $(":checkbox").filter(".subtrackCB").filter("."+view).not(":checked");
@@ -49,6 +51,7 @@ function matSelectViewForSubTracks(obj,view)
                                     JustTheseCBs = JustTheseCBs.filter("."+classes.pop());
                                 }
                                 JustTheseCBs.each( function (i) { this.checked = true; } );
+                                //JustTheseCBs.each( function (i) { matChkBoxNormalize(this); } );
                             }
                         }
                         showOrHideSelectedSubtracks();
@@ -56,6 +59,7 @@ function matSelectViewForSubTracks(obj,view)
                 }
             } else
                 matSetSubtrackCheckBoxes(true,view);
+            //matChkBoxesNormalized();
         }
     }
 }
@@ -87,14 +91,21 @@ function matReclickMatrixCheckBoxes()
 function matSetMatrixCheckBoxes(state)
 {
 // Set all Matrix checkboxes to state.  If additional arguments are passed in, the list of CBs will be narrowed by the classes
-    var CBs = $(":checkbox").filter(".matrixCB");
+    var CBs;
+    if(state)
+        CBs = $(":checkbox").filter(".matrixCB").not(":checked");
+    else
+        CBs = $(":checkbox").filter(".matrixCB").filter(":checked");
     for(var vIx=1;vIx<arguments.length;vIx++) {
         CBs = CBs.filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
     CBs.each( function (i) { this.checked = state;} )
     //CBs.each( function (i) { if(this.checked != state) this.click();} )
 
-    var CBs = $(":checkbox").filter(".subtrackCB");
+    if(state)
+        CBs = $(":checkbox").filter(".subtrackCB").not(":checked");
+    else
+        CBs = $(":checkbox").filter(".subtrackCB").filter(":checked");
     for(var vIx=1;vIx<arguments.length;vIx++) {
         CBs = CBs.filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
@@ -655,22 +666,28 @@ function tableReOrderColumns(table,cellIxFrom,cellIxTo)
     }
 }
 
+//var tmpOnce = false;
 function matChkBoxNormalize(matCb)
 {
-// check/unchecks a single matrix checkbox based upon subtrack checkboxes
-    var cntChecked=0;
-    var tags=matCb.name.substring(3,matCb.name.length - 3);
-    if(tags.substring(tags.length - 5,tags.length) == "_dimZ")
-        tags = tags.substring(0,tags.length - 6);
-    var sublist = inputArrayThatMatches("checkbox","id","cb_","",tags);
-    for (var ix=0;ix<sublist.length;ix++) {
-        if(sublist[ix].checked)
-            cntChecked++;
+    var classes =  $( matCb ).attr("class").split(" ");
+    var CBs = $(":checkbox").filter(".subtrackCB");
+    while(classes.length > 0) {
+        var thisClass = classes.pop();
+        if(thisClass != "matrixCB")
+            CBs = CBs.filter("."+thisClass);  // Filter subtrack CBs with only matrixCB's classes (Must redefine CBs each time)
     }
-    if(cntChecked == sublist.length)
+    var CBsChecked = CBs.filter(":checked");
+    if(CBsChecked.length == CBs.length)
         matCb.checked=true;
-    else if(cntChecked == 0)
+    else if(CBsChecked.length == 0)
         matCb.checked=false;
+
+//    var cntChecked=0;
+//    CBs.each( function (i) { if(this.checked) { cntChecked++; } } );
+//    if(cntChecked == CBs.length)
+//        matCb.checked=true;
+//    else if(cntChecked == 0)
+//        matCb.checked=false;
 }
 
 function matChkBoxNormalizeMatching(subCb)
@@ -710,10 +727,7 @@ function matChkBoxNormalizeMatching(subCb)
 function matChkBoxesNormalized()
 {
 // check/unchecks matrix checkboxes based upon subtrack checkboxes
-    var list = inputArrayThatMatches("checkbox","name","mat_","_cb");
-    for (var ix=0;ix<list.length;ix++) {
-        matChkBoxNormalize(list[ix]);
-    }
+    $(":checkbox").filter(".matrixCB").each( function (i) { matChkBoxNormalize(this); } );
 }
 
 function showOrHideSelectedSubtracks(inp)
