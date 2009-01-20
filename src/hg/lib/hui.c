@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.145 2009/01/14 22:49:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.146 2009/01/20 23:56:41 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -27,11 +27,11 @@ static char const rcsid[] = "$Id: hui.c,v 1.145 2009/01/14 22:49:28 tdreszer Exp
 #define CLEAR_BUTTON_LABEL      "clear"
 #define JBUFSIZE 2048
 
-#define PM_BUTTON "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG height=18 width=18 onclick=\"return (setCheckBoxesThatContain('%s',%s,true,'%s','%s') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
-#define DEF_BUTTON "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG onclick=\"setCheckBoxesThatContain('%s',true,false,'%s','%s'); return (setCheckBoxesThatContain('%s',false,false,'%s','%s','_defOff') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
-#define DEFAULT_BUTTON(nameOrId,anc,str1,str2) printf(DEF_BUTTON, (anc),(anc),(nameOrId),(str1),(str2),(nameOrId),(str1),(str2),(anc),"defaults_sm.png","default")
-#define    PLUS_BUTTON(nameOrId,anc,str1,str2) printf(PM_BUTTON, (anc),(anc),(nameOrId),"true",(str1),(str2),(anc),"add_sm.gif","+")
-#define   MINUS_BUTTON(nameOrId,anc,str1,str2) printf(PM_BUTTON, (anc),(anc),(nameOrId),"false",(str1),(str2),(anc),"remove_sm.gif","-")
+#define PM_BUTTON "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG height=18 width=18 onclick=\"return (setCheckBoxesThatContain('%s',%s,true,'%s','','%s') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
+#define DEF_BUTTON "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG onclick=\"setCheckBoxesThatContain('%s',true,false,'%s','','%s'); return (setCheckBoxesThatContain('%s',false,false,'%s','_defOff','%s') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
+#define DEFAULT_BUTTON(nameOrId,anc,beg,contains) printf(DEF_BUTTON,(anc),(anc),(nameOrId),        (beg),(contains),(nameOrId),(beg),(contains),(anc),"defaults_sm.png","default")
+#define    PLUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (anc),(anc),(nameOrId),"true", (beg),(contains),(anc),"add_sm.gif",   "+")
+#define   MINUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (anc),(anc),(nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -787,16 +787,13 @@ enum baseColorDrawOpt baseColorDrawOptEnabled(struct cart *cart,
 /* Query cart & trackDb to determine what drawing mode (if any) is enabled. */
 {
 char *stringVal = NULL;
-char optionStr[256];
 assert(cart);
 assert(tdb);
 
 /* trackDb can override default of OFF; cart can override trackDb. */
 stringVal = trackDbSettingOrDefault(tdb, BASE_COLOR_DEFAULT,
 				    BASE_COLOR_DRAW_OFF);
-safef(optionStr, sizeof(optionStr), "%s." BASE_COLOR_VAR_SUFFIX,
-      tdb->tableName);
-stringVal = cartUsualString(cart, optionStr, stringVal);
+stringVal = cartUsualStringClosestToHome(cart, tdb, FALSE, BASE_COLOR_VAR_SUFFIX,stringVal);
 
 return baseColorDrawOptStringToEnum(stringVal);
 }
@@ -2301,13 +2298,17 @@ int maxScore;
 switch(cType)
     {
     case cfgBedScore:
-    case cfgPeak:       scoreMax = trackDbSetting(tdb, "scoreFilterMax");
+    case cfgPeak:
+                        scoreMax = trackDbSettingClosestToHome(tdb, "scoreFilterMax");
                         maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
-                        scoreCfgUi(db, cart,tdb->parent,prefix,title,maxScore,TRUE);
+                        scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
                         break;
-    case cfgWig:        wigCfgUi(cart,tdb,prefix,title,TRUE);
+    //case cfgPeak:
+    //                    encodePeakCfgUi(cart,tdb,prefix,title,boxed);
+    //                    break;
+    case cfgWig:        wigCfgUi(cart,tdb,prefix,title,boxed);
                         break;
-    case cfgWigMaf:     wigMafCfgUi(cart,tdb,prefix,title,TRUE, db);
+    case cfgWigMaf:     wigMafCfgUi(cart,tdb,prefix,title,boxed, db);
                         break;
     default:            break;
     }
@@ -2473,7 +2474,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 subtrack->longLabel);
             }
         else if (hSameTrackDbType(primaryType, subtrack->type) &&
-		 hTableExists(db, subtrack->tableName))
+                     hTableExists(db, subtrack->tableName))
             {
             puts("<TR><TD>");
             cgiMakeCheckBox(htmlIdentifier, alreadySet);
@@ -2622,7 +2623,7 @@ static void cfgBeginBoxAndTitle(boolean boxed, char *title)
 {
 if (boxed)
     {
-    printf("<TABLE class='blueBox' bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>", COLOR_BG_ALTDEFAULT, COLOR_BG_ALTDEFAULT);
+    printf("<TABLE class='blueBox' bgcolor=\"%s\" borderColor=\"%s\"><TR><TD align='RIGHT'>", COLOR_BG_ALTDEFAULT, COLOR_BG_ALTDEFAULT);
     if (title)
         printf("<CENTER><B>%s Configuration</B></CENTER>\n", title);
     }
@@ -2738,11 +2739,22 @@ if(boxed)
 cfgEndBox(boxed);
 }
 
+#define  SCORE_FILTER     "scoreFilter"
+#define SIGNAL_FILTER    "signalFilter"
+#define PVALUE_FILTER    "pValueFilter"
+#define QVALUE_FILTER    "qValueFilter"
+#define _LIMITS          "Limits"
+#define _MIN             "Min"
+#define _MAX             "Max"
+#define  SCORE_MIN       "scoreMin"
+#define  MIN_GRAY_LEVEL  "minGrayLevel"
+
 void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, int scoreMax)
 /* If scoreMin has been set, let user select the shade of gray for that score, in case
  * the default is too light to see or darker than necessary. */
 {
-char *scoreMinStr = trackDbSetting(tdb, "scoreMin");
+boolean compositeLevel = isNameAtCompositeLevel(tdb,prefix);
+char *scoreMinStr = trackDbSettingClosestToHome(tdb, SCORE_MIN);
 if (scoreMinStr != NULL)
     {
     int scoreMin = atoi(scoreMinStr);
@@ -2751,61 +2763,50 @@ if (scoreMinStr != NULL)
     int maxShade = 9;
     int scoreMinGrayLevel = scoreMin * maxShade/scoreMax;
     if (scoreMinGrayLevel <= 0) scoreMinGrayLevel = 1;
-    char setting[256];
-    safef(setting, sizeof(setting), "%s_minGrayLevel", prefix);
-    int minGrayLevel = cartUsualInt(cart, setting, scoreMinGrayLevel);
+    int minGrayLevel = cartUsualIntClosestToHome(cart, tdb, compositeLevel, MIN_GRAY_LEVEL, scoreMinGrayLevel);
     if (minGrayLevel <= 0) minGrayLevel = 1;
     if (minGrayLevel > maxShade) minGrayLevel = maxShade;
     puts("\n<P><B>Shade of lowest-scoring items: </B>");
     // Add javascript to select so that its color is consistent with option colors:
     int level = 255 - (255*minGrayLevel / maxShade);
-    printf("<SELECT NAME=\"%s\" STYLE='color: #%02x%02x%02x' ONCHANGE='",
-	   setting, level, level, level);
+    printf("<SELECT NAME=\"%s.%s\" STYLE='color: #%02x%02x%02x' onchange=\"",
+	   prefix, MIN_GRAY_LEVEL, level, level, level);
     int i;
     for (i = 1;  i < maxShade;  i++)
-	{
-	level = 255 - (255*i / maxShade);
-	if (i > 1)
-	    printf("else ");
-	printf ("if (this.value == \"%d\") {this.style.color = \"#%02x%02x%02x\";} ",
-		i, level, level, level);
-	}
+        {
+        level = 255 - (255*i / maxShade);
+        if (i > 1)
+            printf("else ");
+        printf ("if (this.value == '%d') {this.style.color = '#%02x%02x%02x';} ",
+            i, level, level, level);
+        }
     level = 255 - (255*i / maxShade);
-    printf("else {this.style.color = \"#%02x%02x%02x\";}'>\n", level, level, level);
+    printf("else {this.style.color = '#%02x%02x%02x';};>\"\n", level, level, level);
     // Use class to set color of each option:
     for (i = 1;  i <= maxShade;  i++)
-	{
-	level = 255 - (255*i / maxShade);
-	printf("<OPTION%s STYLE='color: #%02x%02x%02x' VALUE=%d>",
-	       (minGrayLevel == i ? " SELECTED" : ""), level, level, level, i);
-	if (i == maxShade)
-	    printf("&bull; black</OPTION>\n");
-	else
-	    printf("&bull; gray (%d%%)</OPTION>\n", i * (100/maxShade));
-	}
+        {
+        level = 255 - (255*i / maxShade);
+        printf("<OPTION%s STYLE='color: #%02x%02x%02x' VALUE=%d>",
+            (minGrayLevel == i ? " SELECTED" : ""), level, level, level, i);
+        if (i == maxShade)
+            printf("&bull; black</OPTION>\n");
+        else
+            printf("&bull; gray (%d%%)</OPTION>\n", i * (100/maxShade));
+        }
     printf("</SELECT></P>\n");
     }
 }
 
-void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name, char *title,  int maxScore, boolean boxed)
+void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,  int maxScore, boolean boxed)
 /* Put up UI for filtering bed track based on a score */
 {
 char option[256];
+boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 
-boolean scoreFilterOk = (trackDbSetting(parentTdb, "noScoreFilter") == NULL);
-boolean gotScoreMin = (trackDbSetting(parentTdb, "scoreMin") != NULL);
+boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, "noScoreFilter") == NULL);
+boolean gotScoreMin = (trackDbSettingClosestToHome(tdb, SCORE_MIN) != NULL);
 if (! (scoreFilterOk || gotScoreMin))
     return;
-
-char *scoreValString = trackDbSetting(parentTdb, "scoreFilter");
-int scoreSetting;
-int scoreVal = 0;
-char *words[2];
-
-/* filter top-scoring N items in track */
-char *scoreCtString = trackDbSetting(parentTdb, "filterTopScorers");
-char *scoreFilterCt = NULL;
-bool doScoreCtFilter = FALSE;
 
 cfgBeginBoxAndTitle(boxed, title);
 
@@ -2813,41 +2814,134 @@ if (scoreFilterOk)
     {
     /* initial value of score theshold is 0, unless
      * overridden by the scoreFilter setting in the track */
+    char *scoreValString = trackDbSettingClosestToHome(tdb, SCORE_FILTER);
+    int scoreVal = 0;
     if (scoreValString != NULL)
-	scoreVal = atoi(scoreValString);
+	   scoreVal = atoi(scoreValString);
     printf("<b>Show only items with score at or above:</b> ");
-    snprintf(option, sizeof(option), "%s.scoreFilter", name);
-    scoreSetting = cartUsualInt(cart,  option,  scoreVal);
-    cgiMakeIntVar(option, scoreSetting, 11);
+    snprintf(option, sizeof(option), "%s.%s", name,SCORE_FILTER);
+    cgiMakeIntVar(option, cartUsualIntClosestToHome(cart, tdb, compositeLevel, SCORE_FILTER,  scoreVal), 11);
     printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
     }
 
 if (gotScoreMin)
-    scoreGrayLevelCfgUi(cart, parentTdb, name, maxScore);
+    scoreGrayLevelCfgUi(cart, tdb, name, maxScore);
 
+/* filter top-scoring N items in track */
+char *scoreCtString = trackDbSettingClosestToHome(tdb, "filterTopScorers");
 if (scoreCtString != NULL)
     {
     /* show only top-scoring items. This option only displayed if trackDb
      * setting exists.  Format:  filterTopScorers <on|off> <count> <table> */
+    char *words[2];
+    char *scoreFilterCt = NULL;
     chopLine(cloneString(scoreCtString), words);
     safef(option, sizeof(option), "%s.filterTopScorersOn", name);
-    doScoreCtFilter =
-        cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
+    bool doScoreCtFilter =
+        cartUsualBooleanClosestToHome(cart, tdb, compositeLevel, "filterTopScorersOn", sameString(words[0], "on"));
     puts("<P>");
-    cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, doScoreCtFilter));
+    cgiMakeCheckBox(option, doScoreCtFilter);
     safef(option, sizeof(option), "%s.filterTopScorersCt", name);
-    scoreFilterCt = cartCgiUsualString(cart, option, words[1]);
+    scoreFilterCt = cartUsualStringClosestToHome(cart, tdb, compositeLevel, "filterTopScorersCt", words[1]);
 
     puts("&nbsp; <B> Show only items in top-scoring </B>");
     cgiMakeTextVar(option, scoreFilterCt, 5);
     /* Only check size of table if track does not have subtracks */
-    if (!tdbIsComposite(parentTdb))
-        printf("&nbsp; (range: 1 to 100000, total items: %d)",
-               getTableSize(db, parentTdb->tableName));
+    if (!compositeLevel)
+        printf("&nbsp; (range: 1 to 100000, total items: %d)",getTableSize(db, tdb->tableName));
     }
 cfgEndBox(boxed);
 }
 
+void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
+/* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
+{
+char option[256];
+boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+
+cfgBeginBoxAndTitle(boxed, title);
+
+char *setting;
+char *min;
+char *max;
+printf("<TABLE>");
+//setting = trackDbSettingClosestToHome(tdb, SCORE_FILTER);//,"0:1000");
+setting = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,"0:1000");
+if(setting)
+    {
+    min = strSwapChar(cloneString(setting),':',0);
+    max = min + strlen(min) + 1;
+    puts("<TR><TD align='right'><B>Filter score range:  min:</B><TD align='left'>");
+    safef(option, sizeof(option), "%s.%s", name, SCORE_FILTER _MIN);
+    cgiMakeTextVar(option, cartUsualStringClosestToHome(cart, tdb, compositeLevel, SCORE_FILTER _MIN, min), 4);
+    puts("<TD align='right'><B>max:</B><TD align='left'>");
+    safef(option, sizeof(option), "%s.%s", name, SCORE_FILTER _MAX);
+    cgiMakeTextVar(option, cartUsualStringClosestToHome(cart, tdb, compositeLevel, SCORE_FILTER _MAX, max), 4);
+    puts("<TD align='left'> (0 to 1000)</TR>");
+    }
+//if(trackDbSettingClosestToHome(tdb, SCORE_MIN) != NULL)
+    scoreGrayLevelCfgUi(cart, tdb, name, 1000);
+
+//setting = trackDbSettingClosestToHome(tdb, SIGNAL_FILTER _MIN);//,"0.0");
+setting = trackDbSettingClosestToHomeOrDefault(tdb, SIGNAL_FILTER _MIN,"0.0");
+if(setting)
+    {
+    min = strSwapChar(cloneString(setting),':',0);
+    max = min + strlen(min) + 1;
+    puts("<TR><TD align='right'><B>Minimum Signal value:</B><TD align='left'>");
+    safef(option, sizeof(option), "%s.%s", name, SIGNAL_FILTER _MIN);
+    cgiMakeTextVar(option, cartUsualStringClosestToHome(cart, tdb, compositeLevel, SIGNAL_FILTER _MIN, min), 4);
+    //setting = trackDbSettingClosestToHome(tdb, SIGNAL_FILTER _LIMITS);//,"0.0:100.0");
+    setting = trackDbSettingClosestToHomeOrDefault(tdb, SIGNAL_FILTER _LIMITS,"0.0:100.0");
+    if(setting)
+        {
+        min = strSwapChar(cloneString(setting),':',0);
+        max = min + strlen(min) + 1;
+        printf("<TD align='left' colspan=3> (%s to %s)",min,max);
+        }
+    puts("</TR>");
+    }
+//setting = trackDbSettingClosestToHome(tdb, PVALUE_FILTER _MIN);//,"0.0");
+setting = trackDbSettingClosestToHomeOrDefault(tdb, PVALUE_FILTER _MIN,"0.0");
+if(setting)
+    {
+    min = strSwapChar(cloneString(setting),':',0);
+    max = min + strlen(min) + 1;
+    puts("<TR><TD align='right'><B>Minimum P-Value (-log 10):</B><TD align='left'>");
+    safef(option, sizeof(option), "%s.%s", name, PVALUE_FILTER _MIN);
+    cgiMakeTextVar(option, cartUsualStringClosestToHome(cart, tdb, compositeLevel, PVALUE_FILTER _MIN, min), 4);
+    //setting = trackDbSettingClosestToHome(tdb, PVALUE_FILTER _LIMITS);//,"0.0:20.0");
+    setting = trackDbSettingClosestToHomeOrDefault(tdb, PVALUE_FILTER _LIMITS,"0.0:20.0");
+    if(setting)
+        {
+        min = strSwapChar(cloneString(setting),':',0);
+        max = min + strlen(min) + 1;
+        printf("<TD align='left' colspan=3> (%s to %s)",min,max);
+        }
+    puts("</TR>");
+    }
+//setting = trackDbSettingClosestToHome(tdb, QVALUE_FILTER _MIN);//,"0.0");
+setting = trackDbSettingClosestToHomeOrDefault(tdb, QVALUE_FILTER _MIN,"0.0");
+if(setting)
+    {
+    min = strSwapChar(cloneString(setting),':',0);
+    max = min + strlen(min) + 1;
+    puts("<TR><TD align='right'><B>Minimum Q-Value:</B><TD align='left'>");
+    safef(option, sizeof(option), "%s.%s", name, QVALUE_FILTER _MIN);
+    cgiMakeTextVar(option, cartUsualStringClosestToHome(cart, tdb, compositeLevel, QVALUE_FILTER _MIN, min), 4);
+    //setting = trackDbSettingClosestToHome(tdb, QVALUE_FILTER _LIMITS);//,"0.0:2.0");
+    setting = trackDbSettingClosestToHomeOrDefault(tdb, QVALUE_FILTER _LIMITS,"0.0:2.0");
+    if(setting)
+        {
+        min = strSwapChar(cloneString(setting),':',0);
+        max = min + strlen(min) + 1;
+        printf("<TD align='left' colspan=3> (%s to %s)",min,max);
+        }
+    puts("</TR>");
+    }
+    puts("</TABLE>");
+cfgEndBox(boxed);
+}
 
 char **wigMafGetSpecies(struct cart *cart, struct trackDb *tdb, char *db, struct wigMafSpecies **list, int *groupCt)
 {
@@ -3850,7 +3944,7 @@ boolean displayAll =
     sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
 boolean isMatrix = dimensionsExist(tdb);
 
-jsIncludeFile("jquery.js",NULL);
+jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js",NULL);
 if(trackDbSetting(tdb, "dragAndDrop") != NULL)
     jsIncludeFile("jquery.tablednd.js", NULL);
@@ -3878,12 +3972,20 @@ if (displayAll)
 else
     compositeUiSelectedSubtracks(db, cart, tdb, primarySubtrack);
 
-// Downloads directory if this is ENCODE
-if(trackDbSetting(tdb, "wgEncode") != NULL)
+if (primarySubtrack == NULL)  // This is set for tableBrowser but not hgTrackUi
     {
+        if (slCount(tdb->subtracks) > 5)
+        {
+        cgiMakeButton("Submit", "Submit");
+        puts("<P>");
+        }
+    // Downloads directory if this is ENCODE
+    if(trackDbSetting(tdb, "wgEncode") != NULL)
+        {
 #define DOWNLOADS_LINK "<A HREF=\"../goldenPath/%s/%s/\" TARGET=_BLANK>Downloads</A>\n"
-    printf(DOWNLOADS_LINK,(trackDbSetting(tdb, "origAssembly") != NULL ?
-                           trackDbSetting(tdb, "origAssembly"):"hg18"),tdb->tableName);
+        printf(DOWNLOADS_LINK,(trackDbSetting(tdb, "origAssembly") != NULL ?
+                            trackDbSetting(tdb, "origAssembly"):"hg18"),tdb->tableName);
+        }
     }
 }
 
@@ -3957,22 +4059,28 @@ char *compositeViewControlNameFromTdb(struct trackDb *tdb)
 char *stView   = NULL;
 char *name     = NULL;
 char *rootName = NULL;
-if(tdbIsCompositeChild(tdb) == TRUE && subgroupFind(tdb,"view",&stView) && trackDbSetting(tdb, "subTrack") != NULL)
+// This routine should give these results: compositeName.viewName or else subtrackName.viewName or else compositeName or else subtrackName
+if(tdbIsCompositeChild(tdb) == TRUE && trackDbSetting(tdb, "subTrack") != NULL)
     {
     if(trackDbSettingOn(tdb, "configurable"))
-        rootName = tdb->tableName;
+        rootName = tdb->tableName;  // subtrackName
     else
-        rootName = firstWordInLine(cloneString(trackDbSetting(tdb, "subTrack")));
+        rootName = firstWordInLine(cloneString(trackDbSetting(tdb, "subTrack"))); // compositeName
     }
 if(rootName != NULL)
     {
-    int len = strlen(rootName) + strlen(stView) + 3;
-    name = needMem(len);
-    safef(name,len,"%s.%s",rootName,stView);
+    if(subgroupFind(tdb,"view",&stView))
+        {
+        int len = strlen(rootName) + strlen(stView) + 3;
+        name = needMem(len);
+        safef(name,len,"%s.%s",rootName,stView);
+        subgroupFree(&stView);
+        }
+    else
+        name = cloneString(rootName);
     }
 else
     name = cloneString(tdb->tableName);
-subgroupFree(&stView);
 return name;
 }
 void compositeViewControlNameFree(char **name)
@@ -3981,3 +4089,15 @@ void compositeViewControlNameFree(char **name)
 if(name && *name)
     freez(name);
 }
+
+boolean isNameAtCompositeLevel(struct trackDb *tdb,char *name)
+/* cfgUi controls are passed a prefix name that may be at the composite or at the subtrack level
+   returns TRUE for composite level name */
+{
+if(tdbIsCompositeChild(tdb)
+&& startsWith(tdb->parent->tableName,name)
+&& name[strlen(tdb->parent->tableName)] == '.')  // Cfg name at composite view level
+    return TRUE;
+return FALSE;
+}
+
