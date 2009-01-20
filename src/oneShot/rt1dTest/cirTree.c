@@ -294,7 +294,7 @@ calcLevelSizes(tree, levelSizes, 0, levelCount-1);
 
 /* Calc offsets of each level. */
 bits64 levelOffsets[levelCount];
-bits64 offset = fileHeaderSize;
+bits64 offset = ftell(f);
 bits64 iNodeSize = indexNodeSize(blockSize);
 bits64 lNodeSize = leafNodeSize(blockSize);
 for (i=0; i<levelCount; ++i)
@@ -379,7 +379,7 @@ struct cirTreeFile *cirTreeFileAttach(char *fileName, FILE *f)
 {
 /* Open file and allocate structure to hold info from header etc. */
 struct cirTreeFile *crt = needMem(sizeof(*crt));
-crt->fileName = cloneString(fileName);
+crt->fileName = fileName;
 crt->f = f;
 
 /* Read magic number at head of file and use it to see if we are proper file type, and
@@ -392,7 +392,7 @@ if (magic != cirTreeSig)
     magic = byteSwap32(magic);
     isSwapped = crt->isSwapped = TRUE;
     if (magic != cirTreeSig)
-       errAbort("%s is not a crt b-plus tree index file", fileName);
+       errAbort("%s is not a chromosome id r-tree index file", fileName);
     }
 
 /* Read rest of defined bits of header, byte swapping as needed. */
@@ -418,19 +418,13 @@ return crt;
 struct cirTreeFile *cirTreeFileOpen(char *fileName)
 /* Open up r-tree index file - reading header and verifying things. */
 {
-FILE *f = mustOpen(fileName, "rb");
-return cirTreeFileAttach(fileName, f);
+return cirTreeFileAttach(cloneString(fileName), mustOpen(fileName, "rb"));
 }
 
 void cirTreeFileDetach(struct cirTreeFile **pCrt)
 /* Detatch and free up cirTree file opened with cirTreeFileAttach. */
 {
-struct cirTreeFile *crt = *pCrt;
-if (crt != NULL)
-    {
-    freeMem(crt->fileName);
-    freez(pCrt);
-    }
+freez(pCrt);
 }
 
 void cirTreeFileClose(struct cirTreeFile **pCrt)
@@ -439,6 +433,7 @@ void cirTreeFileClose(struct cirTreeFile **pCrt)
 struct cirTreeFile *crt = *pCrt;
 if (crt != NULL)
     {
+    freez(&crt->fileName);
     carefulClose(&crt->f);
     cirTreeFileDetach(pCrt);
     }

@@ -39,7 +39,7 @@ struct cirTreeFile *cirTreeFileAttach(char *fileName, FILE *f);
  * header at current file position. */
 
 void cirTreeFileDetach(struct cirTreeFile **pCrt);
-/* Detatch and free up cirTree file opened with cirTreeFileAttach. */
+/* Detach and free up cirTree file opened with cirTreeFileAttach. */
 
 struct fileOffsetSize *cirTreeFindOverlappingBlocks(struct cirTreeFile *crf, 
 	bits32 chromIx, bits32 start, bits32 end);

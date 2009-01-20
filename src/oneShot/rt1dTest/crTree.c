@@ -183,3 +183,81 @@ freez(&name32Array);
 carefulClose(&f);
 }
 
+/****** Start of reading and searching (as opposed to file creation) code *******/
+
+struct crTreeFile *crTreeFileOpen(char *fileName)
+/* Open up r-tree index file - reading headers and verifying things. */
+{
+FILE *f = mustOpen(fileName, "rb");
+/* Open file and allocate structure to hold info from header etc. */
+struct crTreeFile *crt = needMem(sizeof(*crt));
+fileName = crt->fileName = cloneString(fileName);
+crt->f = f;
+
+/* Read magic number at head of file and use it to see if we are proper file type, and
+ * see if we are byte-swapped. */
+bits32 magic;
+boolean isSwapped = FALSE;
+mustReadOne(f, magic);
+if (magic != crTreeSig)
+    {
+    magic = byteSwap32(magic);
+    isSwapped = crt->isSwapped = TRUE;
+    if (magic != crTreeSig)
+       errAbort("%s is not a chromosome r-tree index file", fileName);
+    }
+
+/* Read rest of high level header including notably the offsets to the
+ * chromosome and range indexes. */
+bits32 reserved32;
+mustReadOne(f, reserved32);
+crt->chromOffset = readBits64(f, isSwapped);
+crt->cirOffset = readBits64(f, isSwapped);
+
+/* Read in the chromosome index header. */
+fseek(f, crt->chromOffset, SEEK_SET);
+crt->chromBpt = bptFileAttach(fileName, f);
+
+/* Read in range index header. */
+fseek(f, crt->cirOffset, SEEK_SET);
+crt->cir = cirTreeFileAttach(fileName, f);
+
+return crt;
+}
+
+void crTreeFileClose(struct crTreeFile **pCrt)
+/* Close and free up crTree file opened with crTreeFileAttach. */
+{
+struct crTreeFile *crt = *pCrt;
+if (crt != NULL)
+    {
+    cirTreeFileDetach(&crt->cir);
+    bptFileDetach(&crt->chromBpt);
+    carefulClose(&crt->f);
+    freez(&crt->fileName);
+    freez(pCrt);
+    }
+}
+
+
+struct fileOffsetSize *crTreeFindOverlappingBlocks(struct crTreeFile *crt, 
+	char *chrom, bits32 start, bits32 end)
+/* Return list of file blocks that between them contain all items that overlap
+ * start/end on chromIx.  Also there will be likely some non-overlapping items
+ * in these blocks too. When done, use slListFree to dispose of the result. */
+{
+/* Copy chromosome to full sized buffer.  (Awkward interface to bPlusTree!) */
+int keySize = crt->chromBpt->keySize;
+char chromKey[keySize+1];
+zeroBytes(chromKey, keySize);
+strcpy(chromKey, chrom);
+
+/* Find chromosome index.  Return NULL if no such chromosome*/
+bits32 chromIx;
+if (!bptFileFind(crt->chromBpt, chromKey, keySize, &chromIx, sizeof(chromIx)))
+    return NULL;
+
+return cirTreeFindOverlappingBlocks(crt->cir, chromIx, start, end);
+}
+
+

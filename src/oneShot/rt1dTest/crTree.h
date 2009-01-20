@@ -7,6 +7,8 @@ struct crTreeFile
 /* R tree index file handle. */
     {
     struct crTreeFile *next;	/* Next in list of index files if any. */
+    char *fileName;		/* Name of file - for better error reporting. */
+    FILE *f;			/* Open file handle. */
     struct bptFile *chromBpt;	/* Index of chromosomes. */
     struct cirTreeFile *cir;	/* Index of ranges. */
     boolean isSwapped;		/* If TRUE need to byte swap everything. */
@@ -20,8 +22,8 @@ struct crTreeFile *crTreeFileOpen(char *fileName);
 void crTreeFileClose(struct crTreeFile **pCrt);
 /* Close and free up crTree file opened with crTreeFileAttach. */
 
-struct fileOffsetSize *crTreeFindOverlappingBlocks(struct crTreeFile *crf, 
-	bits32 chromIx, bits32 start, bits32 end);
+struct fileOffsetSize *crTreeFindOverlappingBlocks(struct crTreeFile *crt, 
+	char *chrom, bits32 start, bits32 end);
 /* Return list of file blocks that between them contain all items that overlap
  * start/end on chromIx.  Also there will be likely some non-overlapping items
  * in these blocks too. When done, use slListFree to dispose of the result. */

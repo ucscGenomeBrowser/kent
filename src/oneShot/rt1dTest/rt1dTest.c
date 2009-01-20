@@ -7,7 +7,7 @@
 #include "cirTree.h"
 #include "crTree.h"
 
-static char const rcsid[] = "$Id: rt1dTest.c,v 1.7 2009/01/20 20:02:40 kent Exp $";
+static char const rcsid[] = "$Id: rt1dTest.c,v 1.8 2009/01/20 21:16:53 kent Exp $";
 
 int blockSize = 64;
 int itemsPerSlot = 32;	/* Set in main. */
@@ -250,9 +250,38 @@ crTreeFileCreate(chromArray, chromCount, itemArray, sizeof(itemArray[0]), itemCo
 	blockSize, itemsPerSlot, chromRangeKey, chromRangeOffset, 0, fileSize, outTree);
 }
 
-void rt1dFind(char *tabFile, char *treeFile, bits32 chrom, bits32 start, bits32 end)
+void rt1dFind(char *tabFile, char *treeFile, char *chrom, bits32 start, bits32 end)
 /* rt1dCreate - find items in 1-D range tree. */
 {
+struct lineFile *lf = lineFileOpen(tabFile, TRUE);
+struct crTreeFile *crf = crTreeFileOpen(treeFile);
+struct fileOffsetSize *block, *blockList = crTreeFindOverlappingBlocks(crf, chrom, start, end);
+uglyf("Got %d overlapping blocks\n", slCount(blockList));
+for (block = blockList; block != NULL; block = block->next)
+    {
+    uglyf("block->offset %llu, block->size %llu\n", block->offset, block->size);
+    lineFileSeek(lf, block->offset, SEEK_SET);
+    bits64 sizeUsed = 0;
+    while (sizeUsed < block->size)
+        {
+	char *line;
+	int size;
+	if (!lineFileNext(lf, &line, &size))
+	    errAbort("Couldn't read %s\n", lf->fileName);
+	char *parsedLine = cloneString(line);
+	char *row[3];
+	if (chopLine(parsedLine, row) != ArraySize(row))
+	    errAbort("Badly formatted line of %s\n%s", lf->fileName, line);
+	char *bedChrom = row[0];
+	bits32 bedStart = sqlUnsigned(row[1]);
+	bits32 bedEnd = sqlUnsigned(row[2]);
+	if (sameString(bedChrom, chrom) && rangeIntersection(bedStart, bedEnd, start, end) > 0)
+	    fprintf(stdout, "%s\n", line);
+	freeMem(parsedLine);
+	sizeUsed += size;
+	}
+    }
+crTreeFileClose(&crf);
 }
 
 int main(int argc, char *argv[])
@@ -274,7 +303,7 @@ else if (sameWord(command, "find"))
     {
     if (argc != 7)
         usage();
-    rt1dFind(argv[2], argv[3], sqlUnsigned(argv[4]), sqlUnsigned(argv[5]), sqlUnsigned(argv[6]));
+    rt1dFind(argv[2], argv[3], argv[4], sqlUnsigned(argv[5]), sqlUnsigned(argv[6]));
     }
 else if (sameWord(command, "createOld"))
     {
