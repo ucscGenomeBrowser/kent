@@ -5,8 +5,9 @@
 #include "options.h"
 #include "sqlNum.h"
 #include "cirTree.h"
+#include "crTree.h"
 
-static char const rcsid[] = "$Id: rt1dTest.c,v 1.6 2009/01/16 23:58:04 kent Exp $";
+static char const rcsid[] = "$Id: rt1dTest.c,v 1.7 2009/01/20 20:02:40 kent Exp $";
 
 int blockSize = 64;
 int itemsPerSlot = 32;	/* Set in main. */
@@ -38,22 +39,21 @@ static struct optionSpec options[] = {
 
 #define CHROMRANGE_NUM_COLS 3
 
-struct chromRange
+struct chromIxRange
 /* A chromosome and an interval inside it. */
     {
-    struct chromRange *next;  /* Next in singly linked list. */
+    struct chromIxRange *next;  /* Next in singly linked list. */
     bits32 chromIx;	/* Index into chromosome table. */
     bits32 start;	/* Start position in chromosome. */
     bits32 end;	/* One past last base in interval in chromosome. */
     bits64 fileOffset;	/* Offset of item in file we are indexing. */
-    bits64 fileSize;	/* Size in file. */
     };
 
-struct chromRange *chromRangeLoadAll(char *fileName, bits64 *retFileSize) 
-/* Load all chromRange from a whitespace-separated file.
- * Dispose of this with chromRangeFreeList(). */
+struct chromIxRange *chromIxRangeLoadAll(char *fileName, bits64 *retFileSize) 
+/* Load all chromIxRange from a whitespace-separated file.
+ * Dispose of this with chromIxRangeFreeList(). */
 {
-struct chromRange *list = NULL, *el;
+struct chromIxRange *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[3];
 
@@ -66,28 +66,17 @@ while (lineFileRow(lf, row))
     el->fileOffset = lineFileTell(lf);
     slAddHead(&list, el);
     }
-slReverse(&list);
-struct chromRange *next;
-for (el = list; el != NULL; el = next)
-    {
-    next = el->next;
-    if (next == NULL)
-	{
-	bits64 fileSize = *retFileSize = lineFileTell(lf);
-        el->fileSize = fileSize - el->fileOffset;
-	}
-    else
-        el->fileSize = next->fileOffset - el->fileOffset;
-    }
+*retFileSize = lineFileTell(lf);
 lineFileClose(&lf);
+slReverse(&list);
 return list;
 }
 
-int chromRangeCmp(const void *va, const void *vb)
+int chromIxRangeCmp(const void *va, const void *vb)
 /* Compare to sort based on chromIx,start,-end. */
 {
-const struct chromRange *a = *((struct chromRange **)va);
-const struct chromRange *b = *((struct chromRange **)vb);
+const struct chromIxRange *a = *((struct chromIxRange **)va);
+const struct chromIxRange *b = *((struct chromIxRange **)vb);
 int dif;
 dif = a->chromIx - b->chromIx;
 if (dif == 0)
@@ -97,10 +86,10 @@ if (dif == 0)
 return dif;
 }
 
-struct cirTreeRange chromRangeKey(const void *va)
+struct cirTreeRange chromIxRangeKey(const void *va, void *context)
 /* Get key fields. */
 {
-const struct chromRange *a = *((struct chromRange **)va);
+const struct chromIxRange *a = *((struct chromIxRange **)va);
 struct cirTreeRange ret;
 ret.chromIx = a->chromIx;
 ret.start = a->start;
@@ -108,23 +97,17 @@ ret.end = a->end;
 return ret;
 }
 
-bits64 chromRangeOffset(const void *va)
+bits64 chromIxRangeOffset(const void *va, void *context)
 {
-const struct chromRange *a = *((struct chromRange **)va);
+const struct chromIxRange *a = *((struct chromIxRange **)va);
 return a->fileOffset;
 }
 
-bits64 chromRangeSize(const void *va)
-{
-const struct chromRange *a = *((struct chromRange **)va);
-return a->fileSize;
-}
-
-void rt1dCreate(char *inBed, char *outTree)
+void rt1dCreateOld(char *inBed, char *outTree)
 /* rt1dCreate - create a one dimensional range tree. */
 {
 bits64 fileSize;
-struct chromRange **array, *el, *list = chromRangeLoadAll(inBed, &fileSize);
+struct chromIxRange **array, *el, *list = chromIxRangeLoadAll(inBed, &fileSize);
 int count = slCount(list);
 verbose(1, "read %d from %s\n", count, inBed);
 
@@ -134,11 +117,11 @@ int i;
 for (i=0, el=list; i<count; ++i, el=el->next)
     array[i] = el;
 
-cirTreeFileCreate(array, sizeof(array[0]), count, blockSize, itemsPerSlot,
-	chromRangeKey, chromRangeOffset, chromRangeSize, fileSize, outTree);
+cirTreeFileCreate(array, sizeof(array[0]), count, blockSize, itemsPerSlot, NULL,
+	chromIxRangeKey, chromIxRangeOffset, fileSize, outTree);
 }
 
-void rt1dFind(char *tabFile, char *treeFile, bits32 chromIx, bits32 start, bits32 end)
+void rt1dFindOld(char *tabFile, char *treeFile, bits32 chromIx, bits32 start, bits32 end)
 /* rt1dCreate - find items in 1-D range tree. */
 {
 struct lineFile *lf = lineFileOpen(tabFile, TRUE);
@@ -171,6 +154,107 @@ for (block = blockList; block != NULL; block = block->next)
     }
 }
 
+struct chromRange
+/* A chromosome and an interval inside it. */
+    {
+    struct chromRange *next;  /* Next in singly linked list. */
+    char *chrom;	/* Name of chromosome not allocated here. */
+    bits32 start;	/* Start position in chromosome. */
+    bits32 end;	/* One past last base in interval in chromosome. */
+    bits64 fileOffset;	/* Offset of item in file we are indexing. */
+    };
+
+struct chromRange *chromRangeLoadAll(char *fileName, struct hash *chromNameHash, 
+	bits64 *retFileSize) 
+/* Load all chromRange from a whitespace-separated file.
+ * Dispose of this with chromRangeFreeList(). */
+{
+struct chromRange *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileRow(lf, row))
+    {
+    AllocVar(el);
+    el->chrom = hashStoreName(chromNameHash, row[0]);
+    el->start = sqlUnsigned(row[1]);
+    el->end = sqlUnsigned(row[2]);
+    el->fileOffset = lineFileTell(lf);
+    slAddHead(&list, el);
+    }
+*retFileSize = lineFileTell(lf);
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+int chromRangeCmp(const void *va, const void *vb)
+/* Compare to sort based on chrom,start,-end. */
+{
+const struct chromRange *a = *((struct chromRange **)va);
+const struct chromRange *b = *((struct chromRange **)vb);
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->start - b->start;
+if (dif == 0)
+    dif = b->end - a->end;
+return dif;
+}
+
+struct crTreeRange chromRangeKey(const void *va)
+/* Get key fields. */
+{
+const struct chromRange *a = *((struct chromRange **)va);
+struct crTreeRange ret;
+ret.chrom = a->chrom;
+ret.start = a->start;
+ret.end = a->end;
+return ret;
+}
+
+bits64 chromRangeOffset(const void *va)
+{
+const struct chromRange *a = *((struct chromRange **)va);
+return a->fileOffset;
+}
+
+void rt1dCreate(char *inBed, char *outTree)
+/* rt1dCreate - create a one dimensional range tree. */
+{
+/* Load input and create chromosome hash. */
+struct hash *chromHash = hashNew(0);
+bits64 fileSize;
+struct chromRange *item, *itemList = chromRangeLoadAll(inBed, chromHash, &fileSize);
+
+/* Make array of pointers out of linked list. */
+struct chromRange **itemArray;
+bits32 itemCount = slCount(itemList);
+AllocArray(itemArray, itemCount);
+int itemIx;
+for (itemIx=0, item=itemList; itemIx<itemCount; ++itemIx, item=item->next)
+    itemArray[itemIx] = item;
+
+/* Make up chromosome array. */
+int chromCount = chromHash->elCount;
+char **chromArray;
+AllocArray(chromArray, chromCount);
+struct hashEl *el, *list = hashElListHash(chromHash);
+bits32 chromIx;
+for (el = list, chromIx=0; el != NULL; el = el->next, ++chromIx)
+    chromArray[chromIx] = el->name;
+slFreeList(&list);
+
+/* Call function to make index file. */
+crTreeFileCreate(chromArray, chromCount, itemArray, sizeof(itemArray[0]), itemCount,
+	blockSize, itemsPerSlot, chromRangeKey, chromRangeOffset, 0, fileSize, outTree);
+}
+
+void rt1dFind(char *tabFile, char *treeFile, bits32 chrom, bits32 start, bits32 end)
+/* rt1dCreate - find items in 1-D range tree. */
+{
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -191,6 +275,18 @@ else if (sameWord(command, "find"))
     if (argc != 7)
         usage();
     rt1dFind(argv[2], argv[3], sqlUnsigned(argv[4]), sqlUnsigned(argv[5]), sqlUnsigned(argv[6]));
+    }
+else if (sameWord(command, "createOld"))
+    {
+    if (argc != 4)
+        usage();
+    rt1dCreateOld(argv[2], argv[3]);
+    }
+else if (sameWord(command, "findOld"))
+    {
+    if (argc != 7)
+        usage();
+    rt1dFindOld(argv[2], argv[3], sqlUnsigned(argv[4]), sqlUnsigned(argv[5]), sqlUnsigned(argv[6]));
     }
 else
     usage();

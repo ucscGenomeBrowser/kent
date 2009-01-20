@@ -145,10 +145,10 @@ for (el = tree; el != NULL; el = el->next)
     }
 }
 
-struct rTree *rTreeFromChromRangeArray( struct lm *lm, int blockSize, int itemsPerSlot,
-	void *itemArray, int itemSize, bits64 itemCount, 
-	struct cirTreeRange (*fetchKey)(const void *va),
-	bits64 (*fetchOffset)(const void *va), bits64 (*fetchSize)(const void *va),
+static struct rTree *rTreeFromChromRangeArray( struct lm *lm, int blockSize, int itemsPerSlot,
+	void *itemArray, int itemSize, bits64 itemCount,  void *context,
+	struct cirTreeRange (*fetchKey)(const void *va, void *context),
+	bits64 (*fetchOffset)(const void *va, void *context), bits64 totalFileSize,
 	int *retLevelCount)
 {
 char *items = itemArray;
@@ -156,28 +156,47 @@ struct rTree *el, *list=NULL, *tree = NULL;
 
 /* Make first level above leaf. */
 bits64 i;
+bits64 nextOffset = (*fetchOffset)(items, context);
 for (i=0; i<itemCount; i += itemsPerSlot)
     {
+    /* Figure out if we are on final iteration through loop, and the
+     * count of items in this iteration. */
+    boolean finalIteration = FALSE;
     int oneSize = itemCount-i;
     if (oneSize > itemsPerSlot)
         oneSize = itemsPerSlot;
+    else
+        finalIteration = TRUE;
+
+    /* Allocate element and put on list. */
     lmAllocVar(lm, el);
     slAddHead(&list, el);
 
-    /* Figure out area spanned. */
+    /* Fill out most of element from first item in element. */
     char *startItem = items + itemSize * i;
-    char *endItem = startItem + itemSize*(oneSize-1);
-    struct cirTreeRange key = (*fetchKey)(startItem);
+    struct cirTreeRange key = (*fetchKey)(startItem, context);
     el->startChromIx = el->endChromIx = key.chromIx;
     el->startBase = key.start;
     el->endBase = key.end;
-    el->startFileOffset = (*fetchOffset)(startItem);
-    el->endFileOffset = (*fetchOffset)(endItem) + (*fetchSize)(endItem);
+    el->startFileOffset = nextOffset;
+
+    /* Figure out end of element from offset of next element (or file size
+     * for final element.) */
+    if (finalIteration)
+	nextOffset = totalFileSize;
+    else
+        {
+	char *endItem = startItem + itemSize*oneSize;
+        nextOffset = (*fetchOffset)(endItem, context);
+	}
+    el->endFileOffset = nextOffset;
+
+    /* Expand area spanned to include all items in block. */
     int j;
     for (j=1; j<oneSize; ++j)
         {
 	void *item = items + itemSize*(i+j);
-	key = (*fetchKey)(item);
+	key = (*fetchKey)(item, context);
 	if (key.chromIx < el->startChromIx)
 	    {
 	    el->startChromIx = key.chromIx;
@@ -307,8 +326,9 @@ writeLeaves(blockSize, leafNodeSize(blockSize), tree, levelCount-2, f);
 void cirTreeFileBulkIndexToOpenFile(
 	void *itemArray, int itemSize, bits64 itemCount, 
 	bits32 blockSize, bits32 itemsPerSlot,
-	struct cirTreeRange (*fetchKey)(const void *va),
-	bits64 (*fetchOffset)(const void *va), bits64 (*fetchSize)(const void *va), 
+	void *context,
+	struct cirTreeRange (*fetchKey)(const void *va, void *context),
+	bits64 (*fetchOffset)(const void *va, void *context), 
 	bits64 totalFileSize, FILE *f)
 /* Create a r tree index from a sorted array, writing output starting at current position
  * of an already open file.  See rTreeFileCreate for explanation of parameters. */
@@ -316,7 +336,8 @@ void cirTreeFileBulkIndexToOpenFile(
 int levelCount;
 struct lm *lm = lmInit(0);
 struct rTree *tree = rTreeFromChromRangeArray(lm, blockSize, itemsPerSlot,
-	itemArray, itemSize, itemCount, fetchKey, fetchOffset, fetchSize, &levelCount);
+	itemArray, itemSize, itemCount, context, fetchKey, fetchOffset, totalFileSize,
+	&levelCount);
 bits32 magic = cirTreeSig;
 bits32 reserved = 0;
 writeOne(f, magic);
@@ -339,17 +360,16 @@ void cirTreeFileCreate(
 	bits64 itemCount, 	/* Number of elements in array. */
 	bits32 blockSize,	/* R tree block size - # of children for each node. */
 	bits32 itemsPerSlot,	/* Number of items to put in each index slot at lowest level. */
-	struct cirTreeRange (*fetchKey)(const void *va),   /* Givenitem, return key. */
-	bits64 (*fetchOffset)(const void *va), 		 /* Given item, return file offset */
-	bits64 (*fetchSize)(const void *va), 		 /* Given item, return size in file */
+	void *context,		/* Context pointer for use by fetch call-back functions. */
+	struct cirTreeRange (*fetchKey)(const void *va, void *context),/* Given item, return key. */
+	bits64 (*fetchOffset)(const void *va, void *context), /* Given item, return file offset */
 	bits64 totalFileSize,				 /* Total size of file we are indexing. */
 	char *fileName)                                  /* Name of output file. */
 /* Create a r tree index file from a sorted array. */
 {
-/* Open file and write header. */
 FILE *f = mustOpen(fileName, "wb");
 cirTreeFileBulkIndexToOpenFile(itemArray, itemSize, itemCount, blockSize, itemsPerSlot,
-	fetchKey, fetchOffset, fetchSize, totalFileSize, f);
+	context, fetchKey, fetchOffset, totalFileSize, f);
 carefulClose(&f);
 }
 
