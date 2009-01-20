@@ -836,8 +836,11 @@ void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *na
 /* Put up UI for filtering bed track based on a score */
 
 void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, int scoreMax);
-/* If scoreMin has been set, let user select the shade of gray for that score, in case 
+/* If scoreMin has been set, let user select the shade of gray for that score, in case
  * the default is too light to see or darker than necessary. */
+
+void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
+/* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
 
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
 /* UI for maf/wiggle track */
@@ -847,6 +850,10 @@ void tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
 
 enum trackVisibility visCompositeViewDefault(struct trackDb *parentTdb,char *view);
 /* returns the default track visibility of particular view within a composite track */
+
+boolean isNameAtCompositeLevel(struct trackDb *tdb,char *name);
+/* cfgUi controls are passed a prefix name that may be at the composite or at the subtrack level
+   returns TRUE for composite level name */
 
 boolean hSameTrackDbType(char *type1, char *type2);
 /* Compare type strings: require same string unless both are wig tracks. */
