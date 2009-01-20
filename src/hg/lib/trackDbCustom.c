@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.45 2008/09/16 23:18:56 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.46 2009/01/20 23:23:45 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -32,9 +32,9 @@ else
    return 1;
 }
 
-static void parseColor(struct lineFile *lf, char *text, 
+static void parseColor(struct lineFile *lf, char *text,
 	unsigned char *r, unsigned char *g, unsigned char *b)
-/* Turn comma-separated string of three numbers into three 
+/* Turn comma-separated string of three numbers into three
  * color components. */
 {
 char *words[4];
@@ -62,12 +62,12 @@ else if (sameString(value, "pack") || sameString(value, "3"))
 else if (sameString(value, "squish") || sameString(value, "4"))
     return tvSquish;
 else
-    errAbort("Unknown visibility %s line %d of %s", 
+    errAbort("Unknown visibility %s line %d of %s",
              value, lf->lineIx, lf->fileName);
 return tvHide;  /* never reached */
 }
 
-static void trackDbAddInfo(struct trackDb *bt, 
+static void trackDbAddInfo(struct trackDb *bt,
 	char *var, char *value, struct lineFile *lf)
 /* Add info from a variable/value pair to browser table. */
 {
@@ -128,10 +128,10 @@ static boolean packableType(char *type)
 {
 char *t = cloneString(type);
 char *s = firstWordInLine(t);
-boolean canPack = (sameString("psl", s) || sameString("chain", s) || 
-                   sameString("bed", s) || sameString("genePred", s) || 
+boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
+                   sameString("bed", s) || sameString("genePred", s) ||
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
-		   sameString("factorSource", s) || sameString("bed5FloatScore", s) || 
+		   sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s));
 freeMem(t);
 return canPack;
@@ -186,7 +186,7 @@ if (bt->settings == NULL)
 }
 
 char *trackDbInclude(char *raFile, char *line)
-/* Get include filename from trackDb line.  
+/* Get include filename from trackDb line.
    Return NULL if line doesn't contain #include */
 {
 static char incFile[256];
@@ -277,7 +277,7 @@ for (bt = btList; bt != NULL; bt = bt->next)
     char *compositeName;
     if ((compositeName = trackDbSetting(bt, "subTrack")) != NULL &&
         trackDbSetting(bt, "noInherit") == NULL)
-            if ((compositeTdb = 
+            if ((compositeTdb =
                     hashFindVal(compositeHash, compositeName)) != NULL)
                 trackDbInherit(bt, compositeTdb);
     trackDbPolish(bt);
@@ -288,7 +288,7 @@ return btList;
 
 void trackDbOverrideVisbility(struct hash *tdHash, char *visibilityRa,
 			      boolean hideFirst)
-/* Override visbility settings using a ra file.  If hideFirst, set all 
+/* Override visbility settings using a ra file.  If hideFirst, set all
  * visibilities to hide before applying visibilityRa. */
 {
 struct lineFile *lf;
@@ -370,8 +370,8 @@ boolean trackDbSettingOn(struct trackDb *tdb, char *name)
 /* Return true if a tdb setting is "on" "true" or "enabled". */
 {
 char *setting = trackDbSetting(tdb,name);
-return  (setting && (   sameWord(setting,"on") 
-                     || sameWord(setting,"true") 
+return  (setting && (   sameWord(setting,"on")
+                     || sameWord(setting,"true")
                      || sameWord(setting,"enabled")));
 }
 
@@ -402,7 +402,7 @@ float trackDbFloatSettingOrDefault(struct trackDb *tdb, char *name, float defaul
 }
 
 struct hashEl *trackDbSettingsLike(struct trackDb *tdb, char *wildStr)
-/* Return a list of settings whose names match wildStr (may contain wildcard 
+/* Return a list of settings whose names match wildStr (may contain wildcard
  * characters).  Free the result with hashElFreeList. */
 {
 struct hashEl *allSettings = hashElListHash(tdb->settingsHash);
@@ -552,4 +552,88 @@ if (origAssembly)
     }
 }
 
+char *trackDbCompositeSettingByView(struct trackDb *parentTdb, char* view, char *name)
+/* Get a trackDb setting at the view level for a multiview composite.
+   returns a string that must be freed */
+{
+char *trackSetting = NULL;
+char *settingsByView = cloneString(trackDbSetting(parentTdb,"settingsByView"));
+if(settingsByView != NULL)
+    {
+    char *settingForAView = NULL;
+    char *words[8];
+    int cnt,ix;
+    // parse settingsByView "Signal:viewLimits=5:500,viewLimitsMax=0:20910 ..."
+    cnt = chopLine(cloneString(settingsByView), words);
+    for(ix=0;ix<cnt;ix++)
+        {
+        if(startsWithWordByDelimiter(view,':',words[ix]))
+            {
+            settingForAView = cloneString(words[ix]+(strlen(view)+1));
+            break;
+            }
+        }
+    freeMem(settingsByView);
+    if(settingForAView != NULL) // found a match
+        {
+        // parse settingByView: "viewLimits=5:500,viewLimitsMax=0:20910"
+        cnt = chopByChar(settingForAView,',',words,ArraySize(words));
+        for(ix=0;ix<cnt;ix++)
+            {
+            if(startsWithWordByDelimiter(name,'=',words[ix]))
+                {
+                trackSetting = cloneString(words[ix]+strlen(name)+1);
+                break;
+                }
+            }
+        freeMem(settingForAView);
+        }
+    }
+return trackSetting;
+}
 
+char *trackDbSettingByView(struct trackDb *tdb, char *name)
+/* For a subtrack of a multiview composite, get a setting stored in the parent settingByView.
+   returns a string that must be freed */
+{
+char * view;
+if(tdbIsCompositeChild(tdb) && subgroupFind(tdb,"view",&view))
+    {
+    return trackDbCompositeSettingByView(tdb->parent,view,name);
+    }
+return NULL;
+}
+
+
+char *trackDbSettingClosestToHome(struct trackDb *tdb, char *name)
+/* Look for a trackDb setting from lowest level on up:
+   from subtrack, then composite, then settingsByView, then composite */
+{
+char *trackSetting = trackDbSetting(tdb,name);
+if(trackSetting == NULL && tdbIsCompositeChild(tdb))
+    {
+    trackSetting = trackDbSettingByView(tdb,name);
+    if(trackSetting == NULL)
+        trackSetting = trackDbSetting(tdb->parent,name);
+    }
+return trackSetting;
+}
+
+char *trackDbSettingClosestToHomeOrDefault(struct trackDb *tdb, char *name, char *defaultVal)
+/* Look for a trackDb setting (or default) from lowest level on up:
+   from subtrack, then composite, then settingsByView, then composite */
+{
+char *trackSetting = trackDbSettingClosestToHome(tdb,name);
+if(trackSetting == NULL)
+    trackSetting = defaultVal;
+return trackSetting;
+}
+
+boolean trackDbSettingClosestToHomeOn(struct trackDb *tdb, char *name)
+/* Return true if a tdb setting closest to home is "on" "true" or "enabled". */
+{
+char *setting = trackDbSettingClosestToHome(tdb,name);
+return  (setting && (   sameWord(setting,"on")
+                     || sameWord(setting,"true")
+                     || sameWord(setting,"enabled")));
+}
