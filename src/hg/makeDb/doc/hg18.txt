@@ -24893,7 +24893,7 @@ end
     #	1. knownGenes for hg18, mm9
     #	2. ensGene for almost everything else
     #	3. Mrnas for taeGut1, anoCar1, petMar1, calJac1
-    #	4. nothing for loxAfr2, dasNov2, choHof1, gorGor1
+    #	4. nothing for loxAfr2, dasNov2, choHof1
 
     mkdir genes
     # knownGene
@@ -24908,7 +24908,7 @@ done
 
     # ensGene
     for DB in bosTau4 canFam2 cavPor3 danRer5 dipOrd1 echTel1 equCab2 \
-	eriEur1 felCat3 fr2 galGal3 gasAcu1 micMur1 monDom4 myoLuc1 \
+	eriEur1 felCat3 fr2 galGal3 gasAcu1 gorGor1 micMur1 monDom4 myoLuc1 \
 	ochPri2 ornAna1 oryCun1 oryLat2 otoGar1 panTro2 ponAbe2 proCap1 \
 	pteVam1 rheMac2 rn4 sorAra1 speTri1 tarSyr1 tetNig1 tupBel1 \
 	turTru1 vicPac1 xenTro2
@@ -24942,7 +24942,7 @@ rm -f $tmpExt
 echo "${DB} done"
 done
 
-    # leaving out loxAfr2, dasNov2, choHof1, gorGor1 since no gene preds there
+    # leaving out loxAfr2, dasNov2, choHof1 since no gene preds there
     #	Create this command with this script:
     cat << '_EOF_' > mkCmd.sh
 #!/bin/sh
@@ -26273,8 +26273,9 @@ phyloP44wayPrimate
 
     #	MySQL tables:	5,624,932,756 = 5,364 Mb
     #	gbdb files:	271,318,361,985 = 258,749 Mb
-    #	apache htdocs:	56,149,639,497 = 53,548 Mb
-    #	Total 333,092,934,238 = 317,662 Mb
+    #	apache htdocs:	58,767,852,372 = 56,045 Mb
+    #	Total 335,711,147,113  = 320,159 Mb
+
 #########################################################################
 # Create Syntenic and Recip Best net files to load into tracks to view
 #	on the browser to see what was used during the multiple alignment
