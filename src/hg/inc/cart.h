@@ -1,4 +1,4 @@
-/* cart - stuff to manage variables that persist from 
+/* cart - stuff to manage variables that persist from
  * one invocation of a cgi script to another (variables
  * that are carted around).  */
 
@@ -9,11 +9,12 @@
 #include "errabort.h"
 #include "dystring.h"
 #include "linefile.h"
+#include "trackDb.h"
 
-typedef struct sqlConnection *(*DbConnector)();  
+typedef struct sqlConnection *(*DbConnector)();
 /* funtion type used to get a connection to database */
 
-typedef void (*DbDisconnect)(struct sqlConnection **pConn); 
+typedef void (*DbDisconnect)(struct sqlConnection **pConn);
 /* function type used to cleanup a connection from database */
 
 
@@ -37,13 +38,13 @@ boolean cartTablesOk(struct sqlConnection *conn);
 /* Return TRUE if cart tables are accessible (otherwise, the connection
  * doesn't do us any good). */
 
-struct cart *cartNew(unsigned int userId, unsigned int sessionId, 
+struct cart *cartNew(unsigned int userId, unsigned int sessionId,
 	char **exclude, struct hash *oldVars);
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
  * strings to not include. oldVars is an optional hash to put in values
  * that were just overwritten by cgi-variables. */
 
-struct cart *cartNewEmpty(unsigned int userId, unsigned int sessionId, 
+struct cart *cartNewEmpty(unsigned int userId, unsigned int sessionId,
 	char **exclude, struct hash *oldVars);
 /* Create a new empty cart structure without reading from the database. */
 
@@ -282,15 +283,15 @@ void cartDumpLike(struct cart *cart, char *wildcard);
 /* Dump all cart variables matching wildcard */
 
 struct hashEl *cartFindPrefix(struct cart *cart, char *prefix);
-/* Return list of name/val pairs from cart where name starts with 
+/* Return list of name/val pairs from cart where name starts with
  * prefix.  Free when done with hashElFreeList. */
 
 struct hashEl *cartFindLike(struct cart *cart, char *wildCard);
-/* Return list of name/val pairs from cart where name matches 
+/* Return list of name/val pairs from cart where name matches
  * wildcard.  Free when done with hashElFreeList. */
 
 char *cartFindFirstLike(struct cart *cart, char *wildCard);
-/* Find name of first variable that matches wildCard in cart. 
+/* Find name of first variable that matches wildCard in cart.
  * Return NULL if none. */
 
 void cartResetInDb(char *cookieName);
@@ -302,11 +303,11 @@ void cartEarlyWarningHandler(char *format, va_list args);
 void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, WarnHandler warner);
 /* Wrap error and warning handlers around doMiddl. */
 
-void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName, 
+void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName,
 	char **exclude, struct hash *oldVars);
 /* Get cart and cookies and set up error handling, but don't start writing any
  * html yet. The doMiddleFunction has to call cartHtmlStart(title), and
- * cartHtmlEnd(), as well as writing the body of the HTML. 
+ * cartHtmlEnd(), as well as writing the body of the HTML.
  * oldVars - those in cart that are overlayed by cgi-vars are
  * put in optional hash oldVars. */
 
@@ -345,7 +346,7 @@ void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart
  * variables that you don't want to save in the cart between
  * invocations of the cgi-script. */
 
-void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), 
+void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart),
 	char *cookieName, char **exclude, struct hash *oldVars);
 /* Load cart from cookie and session cgi variable.  Write web-page preamble, call doMiddle
  * with cart, and write end of web-page.   Exclude may be NULL.  If it exists it's a
@@ -372,23 +373,23 @@ void cartHtmlShellPbGlobal(char *title, void (*doMiddle)(struct cart *cart),
 void cartWriteCookie(struct cart *cart, char *cookieName);
 /* Write out HTTP Set-Cookie statement for cart. */
 
-struct cart *cartAndCookie(char *cookieName, char **exclude, 
+struct cart *cartAndCookie(char *cookieName, char **exclude,
 	struct hash *oldVars);
-/* Load cart from cookie and session cgi variable.  Write cookie and 
+/* Load cart from cookie and session cgi variable.  Write cookie and
  * content-type part HTTP preamble to web page.  Don't write any HTML though. */
 
-struct cart *cartAndCookieNoContent(char *cookieName, char **exclude, 
+struct cart *cartAndCookieNoContent(char *cookieName, char **exclude,
 	struct hash *oldVars);
 /* Load cart from cookie and session cgi variable. Don't write out
  * content type or any HTML. */
 
-struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude, 
+struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
 	struct hash *oldVars, boolean doContentType);
-/* Load cart from cookie and session cgi variable.  Write cookie 
- * and optionally content-type part HTTP preamble to web page.  Don't 
+/* Load cart from cookie and session cgi variable.  Write cookie
+ * and optionally content-type part HTTP preamble to web page.  Don't
  * write any HTML though. */
 
-struct cart *cartForSession(char *cookieName, char **exclude, 
+struct cart *cartForSession(char *cookieName, char **exclude,
 	struct hash *oldVars);
 /* This gets the cart without writing any HTTP lines at all to stdout. */
 
@@ -401,7 +402,7 @@ void cartSetDbDisconnector(DbDisconnect disconnector);
  * database. Default disconnector is hDisconnectCart */
 
 
-/* Libified constants and code that originally belonged only to hgSession 
+/* Libified constants and code that originally belonged only to hgSession
  * (now hgTracks uses them too): */
 #define hgSessionPrefix "hgS_"
 
@@ -436,11 +437,44 @@ void cartLoadSettings(struct lineFile *lf, struct cart *cart,
  * CGI action variable that sent us here. */
 
 char *cartGetOrderFromFile(char *genomeDb, struct cart *cart, char *speciesUseFile);
-/* Look in a cart variable that holds the filename that has a list of 
+/* Look in a cart variable that holds the filename that has a list of
  * species to show in a maf file */
 
 char *cartGetOrderFromFileAndMsaTable(char *genomeDb, struct cart *cart, char *speciesUseFile, char *msaTable);
-/* Look in a cart variable that holds the filename that has a list of 
+/* Look in a cart variable that holds the filename that has a list of
  * species to show in a maf file */
+
+void cartRemoveVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
+/* Looks for then removes a cart variable from lowest level on up:
+   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
+
+char *cartOptionalStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
+/* Returns value or NULL for a cart string from lowest level on up:
+   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
+
+char *cartStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
+/* Returns value or Aborts for a cart string from lowest level on up:
+   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
+
+boolean cartVarExistsAnyLevel(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
+/* Returns TRUE if variable exists anywhere, looking from lowest level on up:
+   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
+
+char *cartUsualStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, char *usual);
+/* Returns value or {usual} for a cart string from lowest level on up:
+   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
+
+boolean cartBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
+/* Returns value or Aborts for a cart boolean ('on' or != 0) from lowest level on up:
+   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
+
+int cartUsualIntClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, int usual);
+/* Returns value or {usual} for a cart int from lowest level on up:
+   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
+#define cartUsualBooleanClosestToHome(cart,tdb,compositeLevel,suffix,usual) cartUsualIntClosestToHome((cart),(tdb),(compositeLevel),(suffix),(usual))
+
+double cartUsualDoubleClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, double usual);
+/* Returns value or {usual} for a cart fp double from lowest level on up:
+   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 #endif /* CART_H */
 
