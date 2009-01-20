@@ -460,6 +460,7 @@ else
 static inline boolean cirTreeOverlaps(int qChrom, int qStart, int qEnd, 
 	int rStartChrom, int rStartBase, int rEndChrom, int rEndBase)
 {
+// uglyf("cirTreeOverlaps(query %d:%d-%d, range %d:%d - %d:%d)\n", qChrom, qStart, qEnd, rStartChrom, rStartBase, rEndChrom, rEndBase);
 return cmpTwoBits32(qChrom, qStart, rEndChrom, rEndBase) > 0 &&
        cmpTwoBits32(qChrom, qEnd, rStartChrom, rStartBase) < 0;
 }
