@@ -39,7 +39,7 @@ struct splixFileHeader *header ;
 if (memoryMap)
     {
 #ifdef MACHTYPE_sparc
-    header = (struct itsaFileHeader *)mmap(NULL, h.size, PROT_READ, MAP_SHARED, fd, 0);
+    header = (struct splixFileHeader *)mmap(NULL, h.size, PROT_READ, MAP_SHARED, fd, 0);
 #else
     header = mmap(NULL, h.size, PROT_READ, MAP_FILE|MAP_SHARED, fd, 0);
 #endif
