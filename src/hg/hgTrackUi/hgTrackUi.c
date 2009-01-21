@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.468 2009/01/14 16:51:43 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.469 2009/01/21 00:28:48 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -119,7 +119,7 @@ void snpColorFilterButtons(char *filterTypeVar, char *filterTypeVal)
 int i;
 for (i=0; i<snpColorSourceLabelsSize; i++)
     {
-    cgiMakeRadioButton(filterTypeVar, snpColorSourceStrings[i], 
+    cgiMakeRadioButton(filterTypeVar, snpColorSourceStrings[i],
 		       sameString(snpColorSourceStrings[i], filterTypeVal));
     printf("%s &nbsp;", snpColorSourceLabels[i]);
     }
@@ -149,7 +149,7 @@ if (strncmp(database,"hg",2))
 printf("<BR><B>Variant Sources:</B><BR>\n");
 for (snpMapSource=0; snpMapSource<snpMapSourceCartSize; snpMapSource++)
     {
-    snpMapSourceCart[snpMapSource] = 
+    snpMapSourceCart[snpMapSource] =
 	cartUsualString(cart, snpMapSourceStrings[snpMapSource], snpMapSourceDefault[snpMapSource]);
     snpFilterButtons(snpMapSourceStrings[snpMapSource], snpMapSourceCart[snpMapSource]);
     printf(" - <B>%s</B><BR>\n", snpMapSourceLabels[snpMapSource]);
@@ -157,7 +157,7 @@ for (snpMapSource=0; snpMapSource<snpMapSourceCartSize; snpMapSource++)
 printf("<BR><B>Variant Types:</B><BR>\n");
 for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
     {
-    snpMapTypeCart[snpMapType] = 
+    snpMapTypeCart[snpMapType] =
 	cartUsualString(cart, snpMapTypeStrings[snpMapType], snpMapTypeDefault[snpMapType]);
     snpMapTypeFilterButtons(snpMapTypeStrings[snpMapType], snpMapTypeCart[snpMapType]);
     printf(" - <B>%s</B><BR>\n", snpMapTypeLabels[snpMapType]);
@@ -210,7 +210,7 @@ hFreeConn(&conn);
 #define SNP125_DEFAULTS "snp125Defaults"
 
 void snp125PrintFilterColGroup()
-/* Print the fancy COLGROUP for the table enclosing all filter checkbox 
+/* Print the fancy COLGROUP for the table enclosing all filter checkbox
  * groups. */
 {
 int i;
@@ -224,7 +224,7 @@ for (i = 0;  i < SNP125_FILTER_COLUMNS;  i++)
 void snp125PrintFilterControls(char *attributeName,
 			       char *vars[], char *labels[], boolean checked[],
 			       boolean defaults[], int varCount)
-/* Print two or more rows (attribute name header and row(s) of checkboxes) 
+/* Print two or more rows (attribute name header and row(s) of checkboxes)
  * of a table displaying snp125 attribute filter checkboxes. */
 {
 struct slName *varList = slNameListFromStringArray(vars, varCount);
@@ -274,7 +274,7 @@ for (i=0; i < varCount; i++)
 	}
     printf("<TD align=right>%s</TD><TD>", labels[i]);
     selected[i] = cartUsualString(cart, vars[i], defaults[i]);
-    cgiMakeDropListWithVals(vars[i], snp125ColorLabel, snp125ColorLabel, 
+    cgiMakeDropListWithVals(vars[i], snp125ColorLabel, snp125ColorLabel,
 			    snp125ColorLabelSize, selected[i]);
     printf("</TD><TD>&nbsp;&nbsp;&nbsp;</TD>");
     }
@@ -283,8 +283,8 @@ printf("</TABLE>\n");
 
 void cartSetStringArray(struct cart *cart, char *vars[], char *defaults[],
 			int varCount)
-/* Given parallel arrays of variable names and default values, set those 
- * cart variables to the default values.  If a NULL is encountered in 
+/* Given parallel arrays of variable names and default values, set those
+ * cart variables to the default values.  If a NULL is encountered in
  * vars[], assume vars[] is NULL-terminated even if varCount has not
  * been reached. */
 {
@@ -536,7 +536,7 @@ printf("&nbsp;LOD<BR>");
 printf("<BR><B>Track Geometry:</B><BR>&nbsp;&nbsp;\n");
 
 safef(var, sizeof(var), "%s_trm", tdb->tableName);
-cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldTrmDefault)); 
+cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldTrmDefault));
 printf("&nbsp;Trim to triangle<BR>\n");
 
 if (tdbIsComposite(tdb))
@@ -549,17 +549,17 @@ if (tdbIsComposite(tdb))
 	if (hTableExists(database, subTdb->tableName))
 	    {
 	    safef(var, sizeof(var), "%s_inv", subTdb->tableName);
-	    cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldInvDefault)); 
+	    cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldInvDefault));
 	    printf("&nbsp;Invert display for %s<BR>&nbsp;&nbsp;\n",
 		   subTdb->longLabel);
 	    }
 	}
     }
-else 
+else
     {
     safef(var, sizeof(var), "%s_inv", tdb->tableName);
     printf("&nbsp;&nbsp;&nbsp;");
-    cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldInvDefault)); 
+    cgiMakeCheckBox(var, cartUsualBoolean(cart, var, ldInvDefault));
     printf("&nbsp;Invert the display<BR>&nbsp;&nbsp;\n");
     }
 printf("<BR><B>Colors:</B>\n");
@@ -655,14 +655,14 @@ for (i = 0; i < gvSrcSize; i++)
         {
         if (sameString(gvSrcDbValue[i], "UniProt (Swiss-Prot/TrEMBL)"))
             {
-            // exclude Swiss-Prot data by default, can be misleading 
+            // exclude Swiss-Prot data by default, can be misleading
             cartMakeCheckBox(cart, gvSrcString[i], TRUE);
             }
         else
             {
             cartMakeCheckBox(cart, gvSrcString[i], FALSE);
             }
-        printf (" %s<BR>", gvSrcDbValue[i]); // label with db value 
+        printf (" %s<BR>", gvSrcDbValue[i]); // label with db value
         }
     else
         {
@@ -692,7 +692,7 @@ for (i = 0; i < gvLocationSize; i++)
     printf (" %s<BR>", gvLocationLabel[i]);
     }
 
-/* 
+/*
 printf("<BR><B>Exclude phenotype association</B><BR>");
 for (i = 0; i < gvFilterDASize; i++)
     {
@@ -724,7 +724,7 @@ printf("<BR>");
 */
 /* only on development page for now, but need to check in other changes */
 /*
-if (startsWith("hgwdev-giardine", cgiServerName())) 
+if (startsWith("hgwdev-giardine", cgiServerName()))
     {
     cartMakeRadioButton(cart, "gvPos.filter.colorby", "count", "type");
     printf("<B>Color mutations by count of positions associated with a mutation</B><BR>");
@@ -739,7 +739,7 @@ if (startsWith("hgwdev-giardine", cgiServerName()))
 */
 }
 
-void retroposonsUi(struct trackDb *tdb) 
+void retroposonsUi(struct trackDb *tdb)
 {
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
@@ -1019,7 +1019,7 @@ if (defaultSetting == NULL)
     defaultSetting = allSetting;
 cartSetting = cartUsualString(cart, dropDownName, defaultSetting);
 printf(" <b>Combine arrays</b>: ");
-cgiMakeDropListWithVals(dropDownName, menuArray, valArray, 
+cgiMakeDropListWithVals(dropDownName, menuArray, valArray,
                          size, cartSetting);
 }
 
@@ -1137,7 +1137,7 @@ if (scoreValString != NULL)
 printf("<p><b>Filter TSSs by score:</b> ");
 scoreSetting = cartUsualInt(cart,  option,  scoreVal);
 safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
-cgiMakeDropListWithVals(option, menu, values, 
+cgiMakeDropListWithVals(option, menu, values,
 			ArraySize(menu), tempScore);
 printf("<p><b>Include TSSs for predicted pseudogenes</b> ");
 cartMakeCheckBox(cart, pseudo, FALSE);
@@ -1364,7 +1364,7 @@ void knownGeneUI(struct trackDb *tdb)
 /* Put up refGene-specific controls */
 {
 /* This is incompatible with adding Protein ID to lf->extra */
-knownGeneIdConfig(tdb); 
+knownGeneIdConfig(tdb);
 knownGeneShowWhatUi(tdb);
 baseColorDrawOptDropDown(cart, tdb);
 }
@@ -1372,7 +1372,7 @@ baseColorDrawOptDropDown(cart, tdb);
 void omimGeneUI(struct trackDb *tdb)
 /* Put up omimGene-specific controls */
 {
-omimGeneIdConfig(tdb); 
+omimGeneIdConfig(tdb);
 }
 
 void geneIdConfig(struct trackDb *tdb)
@@ -1665,13 +1665,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     snprintf( option, sizeof(option), "zooSpecies.%s", sample->name );
     if( cartUsualBoolean(cart, option, TRUE ) )
 	cgiMakeCheckBox(option, TRUE );
-    else 
+    else
 	cgiMakeCheckBox(option, FALSE );
     printf("%s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", sample->name );
 
     newRow++;
     if( newRow % 5 == 0 ) printf("<br>");
-		    
+
     sampleFree(&sample);
     }
 
@@ -1854,7 +1854,7 @@ if( optionNum >= 7 )
     }
 }
 
-void affyTxnPhase2Ui(struct trackDb *tdb) 
+void affyTxnPhase2Ui(struct trackDb *tdb)
 /* Ui for affymetrix transcriptome phase 2 data. */
 {
 enum trackVisibility tnfgVis = tvHide;
@@ -1954,7 +1954,7 @@ void ancientRUi(struct trackDb *tdb)
 }
 
 
-void affyTransfragUi(struct trackDb *tdb) 
+void affyTransfragUi(struct trackDb *tdb)
 /* Options for filtering affymetrix transfrag track based on score. */
 {
 boolean skipPseudos = cartUsualBoolean(cart, "affyTransfrags.skipPseudos", TRUE);
@@ -1988,7 +1988,7 @@ menuPos = 0;
 menu[menuPos++] = "no filter";
 menu[menuPos++] = "pos";
 menu[menuPos++] = "neg";
-cgiMakeDropList(UCSF_DEMO_ER, menu, menuSize, 
+cgiMakeDropList(UCSF_DEMO_ER, menu, menuSize,
     cartCgiUsualString(cart, UCSF_DEMO_ER, UCSF_DEMO_ER_DEFAULT));
 freez(&menu);
 
@@ -1999,7 +1999,7 @@ menuPos = 0;
 menu[menuPos++] = "no filter";
 menu[menuPos++] = "pos";
 menu[menuPos++] = "neg";
-cgiMakeDropList(UCSF_DEMO_PR, menu, menuSize, 
+cgiMakeDropList(UCSF_DEMO_PR, menu, menuSize,
     cartCgiUsualString(cart, UCSF_DEMO_PR, UCSF_DEMO_PR_DEFAULT));
 freez(&menu);
 
@@ -2033,7 +2033,7 @@ menuPos = 0;
 menu[menuPos++] = "no filter";
 menu[menuPos++] = "all 4 populations";
 menu[menuPos++] = "1-3 populations";
-cgiMakeDropList(HAP_POP_COUNT, menu, menuSize, 
+cgiMakeDropList(HAP_POP_COUNT, menu, menuSize,
     cartCgiUsualString(cart, HAP_POP_COUNT, HAP_POP_COUNT_DEFAULT));
 freez(&menu);
 
@@ -2044,7 +2044,7 @@ menuPos = 0;
 menu[menuPos++] = "no filter";
 menu[menuPos++] = "mixed";
 menu[menuPos++] = "not mixed";
-cgiMakeDropList(HAP_POP_MIXED, menu, menuSize, 
+cgiMakeDropList(HAP_POP_MIXED, menu, menuSize,
     cartCgiUsualString(cart, HAP_POP_MIXED, HAP_POP_MIXED_DEFAULT));
 freez(&menu);
 
@@ -2056,7 +2056,7 @@ menuPos = 0;
 menu[menuPos++] = "no filter";
 menu[menuPos++] = "yes";
 menu[menuPos++] = "no";
-cgiMakeDropList(HAP_MONO_CEU, menu, menuSize, 
+cgiMakeDropList(HAP_MONO_CEU, menu, menuSize,
     cartCgiUsualString(cart, HAP_MONO_CEU, HAP_MONO_DEFAULT));
 freez(&menu);
 puts("<B>CHB:</B>&nbsp;");
@@ -2066,7 +2066,7 @@ menuPos = 0;
 menu[menuPos++] = "no filter";
 menu[menuPos++] = "yes";
 menu[menuPos++] = "no";
-cgiMakeDropList(HAP_MONO_CHB, menu, menuSize, 
+cgiMakeDropList(HAP_MONO_CHB, menu, menuSize,
     cartCgiUsualString(cart, HAP_MONO_CHB, HAP_MONO_DEFAULT));
 freez(&menu);
 puts("<B>JPT:</B>&nbsp;");
@@ -2076,7 +2076,7 @@ menuPos = 0;
 menu[menuPos++] = "no filter";
 menu[menuPos++] = "yes";
 menu[menuPos++] = "no";
-cgiMakeDropList(HAP_MONO_JPT, menu, menuSize, 
+cgiMakeDropList(HAP_MONO_JPT, menu, menuSize,
     cartCgiUsualString(cart, HAP_MONO_JPT, HAP_MONO_DEFAULT));
 freez(&menu);
 puts("<B>YRI:</B>&nbsp;");
@@ -2086,7 +2086,7 @@ menuPos = 0;
 menu[menuPos++] = "no filter";
 menu[menuPos++] = "yes";
 menu[menuPos++] = "no";
-cgiMakeDropList(HAP_MONO_YRI, menu, menuSize, 
+cgiMakeDropList(HAP_MONO_YRI, menu, menuSize,
     cartCgiUsualString(cart, HAP_MONO_YRI, HAP_MONO_DEFAULT));
 freez(&menu);
 
@@ -2099,7 +2099,7 @@ menu[menuPos++] = "bi-allelic";
 menu[menuPos++] = "transition";
 menu[menuPos++] = "transversion";
 menu[menuPos++] = "complex";
-cgiMakeDropList(HAP_TYPE, menu, menuSize, 
+cgiMakeDropList(HAP_TYPE, menu, menuSize,
     cartCgiUsualString(cart, HAP_TYPE, HAP_TYPE_DEFAULT));
 freez(&menu);
 
@@ -2131,7 +2131,7 @@ menu[menuPos++] = "available";
 menu[menuPos++] = "matches major human allele";
 menu[menuPos++] = "matches minor human allele";
 menu[menuPos++] = "matches neither human allele";
-cgiMakeDropList(HAP_CHIMP, menu, menuSize, 
+cgiMakeDropList(HAP_CHIMP, menu, menuSize,
     cartCgiUsualString(cart, HAP_CHIMP, HAP_CHIMP_DEFAULT));
 freez(&menu);
 
@@ -2149,7 +2149,7 @@ menu[menuPos++] = "available";
 menu[menuPos++] = "matches major human allele";
 menu[menuPos++] = "matches minor human allele";
 menu[menuPos++] = "matches neither human allele";
-cgiMakeDropList(HAP_MACAQUE, menu, menuSize, 
+cgiMakeDropList(HAP_MACAQUE, menu, menuSize,
     cartCgiUsualString(cart, HAP_MACAQUE, HAP_MACAQUE_DEFAULT));
 freez(&menu);
 
@@ -2195,15 +2195,15 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     if (!hTableOrSplitExists(database, tdb->tableName) && trackDbSetting(tdb, "compositeTrack") == NULL) // NOTE: tdb if composite, is not yet populated with it's own subtracks!
         continue;
     printf("<TR>");
-    printf("<TD NOWRAP><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>", 
+    printf("<TD NOWRAP><A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A>&nbsp;</TD>",
                 hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                 chromosome, cgiEncode(tdb->tableName), tdb->shortLabel);
     printf("<TD>");
-    enum trackVisibility tv = 
-                    hTvFromString(cartUsualString(cart, tdb->tableName, 
+    enum trackVisibility tv =
+                    hTvFromString(cartUsualString(cart, tdb->tableName,
                                             hStringFromTv(tdb->visibility)));
-    hTvDropDownClassVisOnly(tdb->tableName, tv, tdb->canPack, 
-                            tv == tvHide ?  "hiddenText" : "normalText", 
+    hTvDropDownClassVisOnly(tdb->tableName, tv, tdb->canPack,
+                            tv == tvHide ?  "hiddenText" : "normalText",
                             trackDbSetting(tdb, "onlyVisibility"));
     printf("<TD>%s", tdb->longLabel);
     char *dataVersion = trackDbSetting(tdb, "dataVersion");
@@ -2293,7 +2293,7 @@ else if (startsWith("blastDm", track))
         blastFBUi(tdb);
 else if (sameString(track, "blastSacCer1SG"))
         blastSGUi(tdb);
-else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG") 
+else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG")
         || sameString(track, "blastCe3WB") || sameString(track, "blastHg18KG")
         || sameString(track, "blatzHg17KG")|| startsWith("mrnaMap", track)|| startsWith("mrnaXeno", track))
         blastUi(tdb);
@@ -2381,13 +2381,13 @@ else if (tdb->type != NULL)
             {
             if (sameString(track, "acembly"))
                 acemblyUi(tdb);
-            else if (startsWith("encodeGencode", track) && !sameString("encodeGencodeRaceFrags", track))
+            else if (sameString("wgEncodeSangerGencode", track) || (startsWith("encodeGencode", track) && !sameString("encodeGencodeRaceFrags", track)))
                 gencodeUI(tdb);
             nmdFilterOptions(tdb);
             if (!sameString(track, "tigrGeneIndex") && !sameString(track, "ensGeneNonCoding") && !sameString(track, "encodeGencodeRaceFrags"))
 		baseColorDrawOptDropDown(cart, tdb);
             }
-	else if (sameWord(words[0], "encodePeak") || sameWord(words[0], "narrowPeak") || 
+	else if (sameWord(words[0], "encodePeak") || sameWord(words[0], "narrowPeak") ||
 		 sameWord(words[0], "broadPeak") || sameWord(words[0], "gappedPeak"))
 	    {
 	    encodePeakUi(tdb, ct);
@@ -2395,7 +2395,7 @@ else if (tdb->type != NULL)
 	else if (sameWord(words[0], "expRatio"))
 	    {
 	    expRatioUi(tdb);
-	    }	
+	    }
 	else if (sameWord(words[0], "array"))
         /* not quite the same as an "expRatio" type (custom tracks) */
 	    {
@@ -2404,11 +2404,11 @@ else if (tdb->type != NULL)
 	/* if bed has score then show optional filter based on score */
 	else if (sameWord(words[0], "bed") && wordCount == 3)
 	    {
-	    /* Note: jaxQTL3 is a bed 8 format track because of 
+	    /* Note: jaxQTL3 is a bed 8 format track because of
 	     thickStart/thickStart, but there is no valid score.
 	     Similarly, the score field for wgRna track is no long used either.
-	     It originally was usd to depict different RNA types.  But the new 
-	     wgRna table has a new field 'type', which is used to store RNA 
+	     It originally was usd to depict different RNA types.  But the new
+	     wgRna table has a new field 'type', which is used to store RNA
 	     type info and from which to determine the display color of each entry.
 	    */
 	    int bedFieldCount = atoi(words[1]);
@@ -2423,7 +2423,7 @@ else if (tdb->type != NULL)
                     scoreCfgUi(database, cart,tdb,tdb->tableName,NULL,1000,FALSE);
 		}
 	    }
-        else if (sameWord(words[0], "bed5FloatScore") || 
+        else if (sameWord(words[0], "bed5FloatScore") ||
                 sameWord(words[0], "bed5FloatScoreWithFdr"))
             scoreCfgUi(database, cart,tdb,tdb->tableName,NULL,1000,FALSE);
 	else if (sameWord(words[0], "psl"))
@@ -2441,8 +2441,6 @@ if (tdbIsSuperTrack(tdb))
 else if (tdbIsComposite(tdb))
     {
     hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
-    if (trackDbSetting(tdb, "dimensions"))
-        cgiMakeButton("Submit", "Submit");
     }
 }
 
@@ -2462,7 +2460,7 @@ if (tdbIsSuperTrackChild(tdb))
     if (superTdb)
         {
         char *encodedMapName = cgiEncode(superTdb->tableName);
-        printf("<H3>Member of super-track: <A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A></H3>", 
+        printf("<H3>Member of super-track: <A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A></H3>",
                     hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                     chromosome, encodedMapName, superTdb->shortLabel);
         freeMem(encodedMapName);
@@ -2475,7 +2473,7 @@ if (ct && sameString(tdb->type, "maf"))
 /* Display visibility menu */
 if (tdbIsComposite(tdb) && dimensionsExist(tdb))
     printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
-else    
+else
     printf("<B>Display&nbsp;mode:&nbsp;</B>");
 if (tdbIsSuper(tdb))
     {
@@ -2556,7 +2554,7 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     }
 }	/*	void trackUi(struct trackDb *tdb)	*/
 
-struct trackDb *trackDbForPseudoTrack(char *tableName, char *shortLabel, 
+struct trackDb *trackDbForPseudoTrack(char *tableName, char *shortLabel,
 	char *longLabel, int defaultVis, boolean canPack)
 /* Create trackDb for a track without a corresponding table. */
 {
