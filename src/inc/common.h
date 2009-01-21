@@ -932,6 +932,13 @@ boolean carefulCloseWarn(FILE **pFile);
 char *firstWordInFile(char *fileName, char *wordBuf, int wordBufSize);
 /* Read the first word in file into wordBuf. */
 
+struct fileOffsetSize
+/* A piece of a file. */
+   {
+   struct fileOffsetSize *next;	/* Next in list. */
+   bits64	offset;		/* Start offset of block. */
+   bits64	size;		/* Size of block. */
+   };
 
 int roundingScale(int a, int p, int q);
 /* returns rounded a*p/q */
