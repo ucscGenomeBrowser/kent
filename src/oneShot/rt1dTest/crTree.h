@@ -34,9 +34,6 @@
 #ifndef CRTREE_H
 #define CRTREE_H
 
-
-#define crTreeSig 0x2369ADE1
-
 struct crTreeFile
 /* R tree index file handle. */
     {
@@ -62,14 +59,6 @@ struct fileOffsetSize *crTreeFindOverlappingBlocks(struct crTreeFile *crt,
  * start/end on chromIx.  Also there will be likely some non-overlapping items
  * in these blocks too. When done, use slListFree to dispose of the result. */
 
-struct crTreeRange
-/* A chromosome id and an interval inside it. */
-    {
-    char *chrom;	/* Chromosome id. String memory owned in hash. */
-    bits32 start;	/* Start position in chromosome. */
-    bits32 end;		/* One past last base in interval in chromosome. */
-    };
-
 struct crTreeItem
 /* A chromosome and an interval inside it. */
     {
@@ -79,6 +68,11 @@ struct crTreeItem
     bits32 end;	/* One past last base in interval in chromosome. */
     bits64 fileOffset;	/* Offset of item in file we are indexing. */
     };
+
+void crTreeFileCreateInputCheck(struct crTreeItem *itemList, struct hash *chromHash, 
+	bits32 blockSize, bits32 itemsPerSlot, bits64 endPosition, char *fileName);
+/* Do sanity checking on itemList and chromHash and endPosition.  Make sure that itemList is
+ * sorted properly mostly. */
 
 void crTreeFileCreate(
 	struct crTreeItem *itemList,  /* List of all items - sorted here and in underlying file. */

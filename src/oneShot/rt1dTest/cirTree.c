@@ -10,6 +10,7 @@
 
 #include "common.h"
 #include "localmem.h"
+#include "sig.h"
 #include "cirTree.h"
 
 struct rTree

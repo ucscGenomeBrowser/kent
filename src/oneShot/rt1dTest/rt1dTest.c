@@ -7,10 +7,11 @@
 #include "cirTree.h"
 #include "crTree.h"
 
-static char const rcsid[] = "$Id: rt1dTest.c,v 1.10 2009/01/21 18:23:25 kent Exp $";
+static char const rcsid[] = "$Id: rt1dTest.c,v 1.11 2009/01/21 19:43:15 kent Exp $";
 
 int blockSize = 64;
 int itemsPerSlot = 32;	/* Set in main. */
+boolean noCheckSort = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -27,6 +28,7 @@ errAbort(
   "options:\n"
   "   -blockSize=N - number of children per node in b+ tree. Default %d\n"
   "   -itemsPerSlot=N - number of items per index slot. Default is half block size\n"
+  "   -noCheckSort - Don't check sorting order of in.tab\n"
   , blockSize
   );
 }
@@ -34,6 +36,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"blockSize", OPTION_INT},
    {"itemsPerSlot", OPTION_INT},
+   {"noCheckSort", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -187,6 +190,8 @@ bits64 fileSize;
 struct crTreeItem *itemList = scanAll(inBed, chromHash, &fileSize);
 
 /* Call library function to create index file. */
+if (!noCheckSort)
+    crTreeFileCreateInputCheck(itemList, chromHash, blockSize, itemsPerSlot, fileSize, outTree);
 crTreeFileCreate(itemList, chromHash, blockSize, itemsPerSlot, fileSize, outTree);
 }
 
@@ -230,6 +235,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", (blockSize+1)/2);
+noCheckSort = optionExists("noCheckSort");
 if (argc < 2)
     usage();
 char *command = argv[1];

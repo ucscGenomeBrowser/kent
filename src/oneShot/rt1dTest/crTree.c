@@ -33,6 +33,7 @@
 #include "common.h"
 #include "hash.h"
 #include "bPlusTree.h"
+#include "sig.h"
 #include "cirTree.h"
 #include "crTree.h"
 
@@ -69,6 +70,14 @@ static void *name32Val(const void *va)
 const struct name32 *a = ((struct name32 *)va);
 return (void*)(&a->val);
 }
+
+struct crTreeRange
+/* A chromosome id and an interval inside it. */
+    {
+    char *chrom;	/* Chromosome id. String memory owned in hash. */
+    bits32 start;	/* Start position in chromosome. */
+    bits32 end;		/* One past last base in interval in chromosome. */
+    };
 
 struct ciContext 
 /* A structure that carries around context for the fetchKey and fetchOffset callbacks. */
@@ -229,7 +238,7 @@ dif = strcmp(a->chrom, b->chrom);
 if (dif == 0)
     dif = a->start - b->start;
 if (dif == 0)
-    dif = b->end - a->end;
+    dif = a->end - b->end;
 return dif;
 }
 
@@ -251,6 +260,26 @@ const struct crTreeItem *a = *((struct crTreeItem **)va);
 return a->fileOffset;
 }
 
+void crTreeFileCreateInputCheck(struct crTreeItem *itemList, struct hash *chromHash, 
+	bits32 blockSize, bits32 itemsPerSlot, bits64 endPosition, char *fileName)
+/* Do sanity checking on itemList and chromHash and endPosition.  Make sure that itemList is
+ * sorted properly mostly. */
+{
+struct crTreeItem *item, *next;
+for (item = itemList; item != NULL; item = next)
+    {
+    next = item->next;
+    if (next != NULL)
+	{
+        if (crTreeItemCmp(item, next) > 0)
+	    errAbort("Out of order itemList in crTreeFileCreateInputCheck");
+	if (item->fileOffset > next->fileOffset)
+	    errAbort("Out of sequence itemList in crTreeFileCreateInputCheck");
+	}
+    }
+}
+
+
 void crTreeFileCreate(
 	struct crTreeItem *itemList,  /* List of all items - sorted here and in underlying file. */
 	struct hash *chromHash,	      /* Hash of all chromosome names. */
@@ -261,7 +290,9 @@ void crTreeFileCreate(
 	char *fileName)        /* Name of output file. */
 /* Create a cr tree index of file. The itemList contains the position of each item in the
  * chromosome and in the file being indexed.  Both the file and the itemList must be sorted
- * by chromosome (alphabetic), start (numerical), end (numerical). */
+ * by chromosome (alphabetic), start (numerical), end (numerical). 
+ *    We recommend you run crTreeFileCreateInputCheck on the input parameters right before
+ * calling this if you have problems. */
 {
 /* We can't handle empty input... */
 if (itemList == NULL)

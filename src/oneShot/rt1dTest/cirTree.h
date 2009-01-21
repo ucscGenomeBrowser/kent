@@ -11,8 +11,6 @@
 #ifndef CIRTREE_H
 #define CIRTREE_H
 
-#define cirTreeSig 0x2468ACE0
-
 struct cirTreeFile
 /* R tree index file handle. */
     {
