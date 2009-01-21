@@ -1,5 +1,7 @@
-/* crTree chromosome r tree. This module creates and uses an index that can find items
- * that overlap with a chromosome range - something of the form chrN:start-end. */
+/* crTree chromosome r tree. This module creates and uses a disk-based index that can find items
+ * that overlap with a chromosome range - something of the form chrN:start-end - with a
+ * minimum of disk access.  It is implemented with a combination of bPlusTrees and r-trees. 
+ * The items being indexed can overlap with each other.  */
 
 #define crTreeSig 0x2369ADE1
 
@@ -39,7 +41,7 @@ struct crTreeRange
 void crTreeFileCreate(
 	char **chromNames,	/* All chromosome (or contig) names */
 	int chromCount,		/* Number of chromosomes. */
-	void *itemArray, 	/* Sorted array of things to index. */
+	void *itemArray, 	/* Sorted array of things to index. Must sort by chrom,start. */
 	int itemSize, 		/* Size of each element in array. */
 	bits64 itemCount, 	/* Number of elements in array. */
 	bits32 blockSize,	/* R tree block size - # of children for each node. */

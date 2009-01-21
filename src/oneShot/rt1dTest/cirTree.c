@@ -1,3 +1,13 @@
+/* cirTree chromosome id r tree.  Part of a system to index chromosome ranges - things of
+ * form chrN:start-end.  Generally you'll be using the crTree module - which
+ * makes use of this module and the bPlusTree module - rather than this module directly.
+ * This module works with chromosomes mapped to small integers rather than chromosomes
+ * as strings, saving space and speeding things up in the process, but requiring the
+ * separate bPlusTree to map the names to IDs. 
+ *   This module implements a one dimensional R-tree index treating the chromosome ID
+ * as the most significant part of a two-part key, and the base position as the least 
+ * significant part of the key. */
+
 #include "common.h"
 #include "localmem.h"
 #include "cirTree.h"

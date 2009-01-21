@@ -66,7 +66,7 @@ void cirTreeFileBulkIndexToOpenFile(
  * of an already open file.  See cirTreeFileCreate for explanation of parameters. */
 
 void cirTreeFileCreate(
-	void *itemArray, 	/* Sorted array of things to index. */
+	void *itemArray, 	/* Sorted array of things to index.  Sort on chromIx,start. */
 	int itemSize, 		/* Size of each element in array. */
 	bits64 itemCount, 	/* Number of elements in array. */
 	bits32 blockSize,	/* R tree block size - # of children for each node. */
