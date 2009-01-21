@@ -229,10 +229,10 @@ carefulClose(&f);
 }
 
 int crTreeItemCmp(const void *va, const void *vb)
-/* Compare to sort based on chrom,start,-end. */
+/* Compare to sort based on chrom,start,end. */
 {
-const struct crTreeItem *a = *((struct crTreeItem **)va);
-const struct crTreeItem *b = *((struct crTreeItem **)vb);
+const struct crTreeItem *a = ((struct crTreeItem *)va);
+const struct crTreeItem *b = ((struct crTreeItem *)vb);
 int dif;
 dif = strcmp(a->chrom, b->chrom);
 if (dif == 0)
