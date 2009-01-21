@@ -1,7 +1,37 @@
-/* crTree chromosome r tree. This module creates and uses an index that can find items
- * that overlap with a chromosome range - something of the form chrN:start-end. */
+/* crTree chromosome r tree. This module creates and uses a disk-based index that can find items
+ * that overlap with a chromosome range - something of the form chrN:start-end - with a
+ * minimum of disk access.  It is implemented with a combination of bPlusTrees and r-trees. 
+ * The items being indexed can overlap with each other.  
+ * 
+ * There's two main sides to using this module - creating an index, and using it.
+ *
+ * The first step of index creation is actually to insure that the file being indexed
+ * is ordered by chromosome,start,end.  For a .bed file you can insure this
+ * with the command:
+ *     sort -k1,1 -k2,2n -k3,3n unsorted.bed > sorted.bed
+ * Note that the the chromosome field is sorted alphabetically and the start and end
+ * fields are sorted numerically.
+ *
+ * Once this is done then the index creation program scans the input file, and
+ * makes a list of crTreeItems, one for each item in the file, and passed this
+ * to the function crTreeFileCreate. A crTreeItem just contains the chromosome
+ * range and file offset for an item.
+ *
+ * Using an index is done in two steps.  First you open the index with crTreeFileOpen,
+ * and then you use crTreeFindOverlappingBlocks to find parts of the file the overlap
+ * with your query range.  The result of a crTreeFindOverlappingBlocks call is a list
+ * of regions in the file.  These regions typically include some non-overlapping items
+ * as well.  It is up to the caller to parse through the resulting region list to
+ * convert it from just bytes on disk into the memory data structure.  During this
+ * parsing you should ignore items that don't overlap your range of interest.
+ *
+ * The programs crTreeIndexBed and crTreeSearchBed create and search a crTree index
+ * for a bed file, and are useful examples to view for other programs that want to
+ * use the crTree system. */
+
 
 #include "common.h"
+#include "hash.h"
 #include "bPlusTree.h"
 #include "cirTree.h"
 #include "crTree.h"
@@ -87,7 +117,7 @@ if (el == NULL)
 return el->val;
 }
 
-void crTreeFileCreate(
+static void crTreeFileCreateLow(
 	char **chromNames,	/* All chromosome (or contig) names */
 	int chromCount,		/* Number of chromosomes. */
 	void *itemArray, 	/* Sorted array of things to index. */
@@ -187,6 +217,79 @@ writeOne(f, cirOffset);
 /* Clean up */
 freez(&name32Array);
 carefulClose(&f);
+}
+
+int crTreeItemCmp(const void *va, const void *vb)
+/* Compare to sort based on chrom,start,-end. */
+{
+const struct crTreeItem *a = *((struct crTreeItem **)va);
+const struct crTreeItem *b = *((struct crTreeItem **)vb);
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->start - b->start;
+if (dif == 0)
+    dif = b->end - a->end;
+return dif;
+}
+
+struct crTreeRange crTreeItemKey(const void *va)
+/* Get key fields. */
+{
+const struct crTreeItem *a = *((struct crTreeItem **)va);
+struct crTreeRange ret;
+ret.chrom = a->chrom;
+ret.start = a->start;
+ret.end = a->end;
+return ret;
+}
+
+bits64 crTreeItemOffset(const void *va)
+/* Get offset of item in file. */
+{
+const struct crTreeItem *a = *((struct crTreeItem **)va);
+return a->fileOffset;
+}
+
+void crTreeFileCreate(
+	struct crTreeItem *itemList,  /* List of all items - sorted here and in underlying file. */
+	struct hash *chromHash,	      /* Hash of all chromosome names. */
+	bits32 blockSize,	/* R tree block size - # of children for each node. 1024 is good. */
+	bits32 itemsPerSlot,	/* Number of items to put in each index slot at lowest level.
+				 * Typically either blockSize/2 or 1. */
+	bits64 endPosition,	/* File offset after have read all items in file. */
+	char *fileName)        /* Name of output file. */
+/* Create a cr tree index of file. The itemList contains the position of each item in the
+ * chromosome and in the file being indexed.  Both the file and the itemList must be sorted
+ * by chromosome (alphabetic), start (numerical), end (numerical). */
+{
+/* We can't handle empty input... */
+if (itemList == NULL)
+    errAbort("crTreeFileCreate can't handle empty itemList.");
+
+/* Make array of pointers out of linked list. */
+struct crTreeItem **itemArray;
+bits32 itemCount = slCount(itemList);
+AllocArray(itemArray, itemCount);
+struct crTreeItem *item;
+int itemIx;
+for (itemIx=0, item=itemList; itemIx<itemCount; ++itemIx, item=item->next)
+    itemArray[itemIx] = item;
+
+/* Make up chromosome array. */
+int chromCount = chromHash->elCount;
+char **chromArray;
+AllocArray(chromArray, chromCount);
+struct hashEl *el, *list = hashElListHash(chromHash);
+bits32 chromIx;
+for (el = list, chromIx=0; el != NULL; el = el->next, ++chromIx)
+    chromArray[chromIx] = el->name;
+slFreeList(&list);
+
+/* Call function to make index file. */
+crTreeFileCreateLow(chromArray, chromCount, itemArray, sizeof(itemArray[0]), itemCount,
+	blockSize, itemsPerSlot, crTreeItemKey, crTreeItemOffset, itemList->fileOffset, 
+	endPosition, fileName);
 }
 
 /****** Start of reading and searching (as opposed to file creation) code *******/

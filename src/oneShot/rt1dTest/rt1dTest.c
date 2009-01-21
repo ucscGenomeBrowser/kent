@@ -7,7 +7,7 @@
 #include "cirTree.h"
 #include "crTree.h"
 
-static char const rcsid[] = "$Id: rt1dTest.c,v 1.9 2009/01/21 00:44:41 kent Exp $";
+static char const rcsid[] = "$Id: rt1dTest.c,v 1.10 2009/01/21 18:23:25 kent Exp $";
 
 int blockSize = 64;
 int itemsPerSlot = 32;	/* Set in main. */
@@ -154,22 +154,12 @@ for (block = blockList; block != NULL; block = block->next)
     }
 }
 
-struct chromRange
-/* A chromosome and an interval inside it. */
-    {
-    struct chromRange *next;  /* Next in singly linked list. */
-    char *chrom;	/* Name of chromosome not allocated here. */
-    bits32 start;	/* Start position in chromosome. */
-    bits32 end;	/* One past last base in interval in chromosome. */
-    bits64 fileOffset;	/* Offset of item in file we are indexing. */
-    };
-
-struct chromRange *chromRangeLoadAll(char *fileName, struct hash *chromNameHash, 
+struct crTreeItem *scanAll(char *fileName, struct hash *chromNameHash, 
 	bits64 *retFileSize) 
-/* Load all chromRange from a whitespace-separated file.
+/* Load all crTreeItem from a whitespace-separated file.
  * Dispose of this with chromRangeFreeList(). */
 {
-struct chromRange *list = NULL, *el;
+struct crTreeItem *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[3];
 
@@ -188,66 +178,16 @@ slReverse(&list);
 return list;
 }
 
-int chromRangeCmp(const void *va, const void *vb)
-/* Compare to sort based on chrom,start,-end. */
-{
-const struct chromRange *a = *((struct chromRange **)va);
-const struct chromRange *b = *((struct chromRange **)vb);
-int dif;
-dif = strcmp(a->chrom, b->chrom);
-if (dif == 0)
-    dif = a->start - b->start;
-if (dif == 0)
-    dif = b->end - a->end;
-return dif;
-}
-
-struct crTreeRange chromRangeKey(const void *va)
-/* Get key fields. */
-{
-const struct chromRange *a = *((struct chromRange **)va);
-struct crTreeRange ret;
-ret.chrom = a->chrom;
-ret.start = a->start;
-ret.end = a->end;
-return ret;
-}
-
-bits64 chromRangeOffset(const void *va)
-{
-const struct chromRange *a = *((struct chromRange **)va);
-return a->fileOffset;
-}
-
 void rt1dCreate(char *inBed, char *outTree)
 /* rt1dCreate - create a one dimensional range tree. */
 {
 /* Load input and create chromosome hash. */
 struct hash *chromHash = hashNew(0);
 bits64 fileSize;
-struct chromRange *item, *itemList = chromRangeLoadAll(inBed, chromHash, &fileSize);
+struct crTreeItem *itemList = scanAll(inBed, chromHash, &fileSize);
 
-/* Make array of pointers out of linked list. */
-struct chromRange **itemArray;
-bits32 itemCount = slCount(itemList);
-AllocArray(itemArray, itemCount);
-int itemIx;
-for (itemIx=0, item=itemList; itemIx<itemCount; ++itemIx, item=item->next)
-    itemArray[itemIx] = item;
-
-/* Make up chromosome array. */
-int chromCount = chromHash->elCount;
-char **chromArray;
-AllocArray(chromArray, chromCount);
-struct hashEl *el, *list = hashElListHash(chromHash);
-bits32 chromIx;
-for (el = list, chromIx=0; el != NULL; el = el->next, ++chromIx)
-    chromArray[chromIx] = el->name;
-slFreeList(&list);
-
-/* Call function to make index file. */
-crTreeFileCreate(chromArray, chromCount, itemArray, sizeof(itemArray[0]), itemCount,
-	blockSize, itemsPerSlot, chromRangeKey, chromRangeOffset, 0, fileSize, outTree);
+/* Call library function to create index file. */
+crTreeFileCreate(itemList, chromHash, blockSize, itemsPerSlot, fileSize, outTree);
 }
 
 void rt1dFind(char *tabFile, char *treeFile, char *chrom, bits32 start, bits32 end)

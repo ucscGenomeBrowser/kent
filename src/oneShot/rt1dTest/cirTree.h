@@ -6,7 +6,10 @@
  * separate bPlusTree to map the names to IDs. 
  *   This module implements a one dimensional R-tree index treating the chromosome ID
  * as the most significant part of a two-part key, and the base position as the least 
- * significant part of the key. */
+ * significant part of the key.  */
+
+#ifndef CIRTREE_H
+#define CIRTREE_H
 
 #define cirTreeSig 0x2468ACE0
 
@@ -78,3 +81,4 @@ void cirTreeFileCreate(
 	char *fileName);                                 /* Name of output file. */
 /* Create a r tree index file from a sorted array. */
 
+#endif /* CIRTREE_H */
