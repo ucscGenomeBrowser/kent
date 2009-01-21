@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.43 2009/01/15 07:12:50 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.44 2009/01/21 00:27:55 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -194,9 +194,7 @@ for (td = *pTrackList; td != NULL; td = td->next)
 	    hashAdd(htmlHash, td->tableName, s);
 	    }
 	}
-#ifdef NEW_VAR_SUBST // FIXME: tmp disabled until roll over
     hVarSubstTrackDb(td, database);
-#endif
     }
 }
 
@@ -482,6 +480,9 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
 	    }
 	else
 	    {
+            char *subHtml = hVarSubst(td->tableName, td, database, html);
+            if (subHtml != NULL)
+                html = subHtml;
 	    updateBigTextField(conn,  trackDbName, "tableName", td->tableName, 
 	    	"html", html);
 	    }
