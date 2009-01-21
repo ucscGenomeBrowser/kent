@@ -1,4 +1,5 @@
 // JavaScript Especially for hui.c
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.16 2009/01/21 00:15:34 tdreszer Exp $
 
 var debugLevel = 0;
 var tieDDandCB = true;//false;
