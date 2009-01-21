@@ -81,6 +81,13 @@
 #define bptSwapped 0x918CCA78
 /* Signature of generic b+ tree index file. */
 
+#define cirTreeSig 0x2468ACE0
+/* Signature of a chromosome id r-tree index file. */
+
+#define crTreeSig 0x2369ADE1
+/* Signature of a chromosome r-tree index file. */
+
+
 #endif /* SIG_H */
 
 
