@@ -1,10 +1,9 @@
-i
 # EnsGeneAutomate: mapping Ensembl species/gff file names to UCSC db
 #
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.15 2009/01/21 19:19:53 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.16 2009/01/21 19:55:32 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
