@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1493 2009/01/21 18:00:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1494 2009/01/21 18:26:11 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8489,8 +8489,8 @@ if (url != NULL && url[0] != 0)
     
     /* get corresponding KG ID */
     safef(query, sizeof(query), 
-          "select k.name from kgXref x, knownGene k, omimToKnownCanonical o where k.chrom='%s' and k.txStart=%s and k.txEnd=%s and k.name=x.kgId and o.kgId=k.name and o.omimId=%s",
-	  chrom, chromStart, chromEnd, itemName);
+          "select k.name from kgXref x, knownGene k where k.chrom='%s' and k.txStart=%s and k.txEnd=%s and k.name=x.kgId ",
+	  chrom, chromStart, chromEnd);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
