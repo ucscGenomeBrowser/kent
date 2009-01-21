@@ -40,7 +40,7 @@ static bits64 rWriteIndexLevel(bits16 blockSize, int childNodeSize,
 /* Recursively write an index level, skipping levels below destLevel,
  * writing out destLevel. */
 {
-uglyf("rWriteIndexLevel blockSize=%d, childNodeSize=%d, offsetOfFirstChild=%llu, curLevel=%d, destLevel=%d slCount(tree)=%d\n", blockSize, childNodeSize, offsetOfFirstChild, curLevel, destLevel, slCount(tree->children));
+// uglyf("rWriteIndexLevel blockSize=%d, childNodeSize=%d, offsetOfFirstChild=%llu, curLevel=%d, destLevel=%d slCount(tree)=%d\n", blockSize, childNodeSize, offsetOfFirstChild, curLevel, destLevel, slCount(tree->children));
 struct rTree *el;
 bits64 offset = offsetOfFirstChild;
 if (curLevel == destLevel)
@@ -301,12 +301,12 @@ for (i=0; i<levelCount; ++i)
     {
     levelOffsets[i] = offset;
     offset += levelSizes[i] * iNodeSize;
-    uglyf("level %d: size %d, offset %llu\n", i, levelSizes[i], levelOffsets[i]);
+    verbose(2, "level %d: size %d, offset %llu\n", i, levelSizes[i], levelOffsets[i]);
     }
 
-uglyf("%d levels.  Level sizes are", levelCount);
-for (i=0; i<levelCount; ++i) uglyf(" %d", levelSizes[i]);
-uglyf("\n");
+verbose(2, "%d levels.  Level sizes are", levelCount);
+for (i=0; i<levelCount; ++i) verbose(2, " %d", levelSizes[i]);
+verbose(2, "\n");
 
 /* Write out index levels. */
 int finalLevel = levelCount-3;
@@ -465,7 +465,7 @@ return cmpTwoBits32(qChrom, qStart, rEndChrom, rEndBase) > 0 &&
        cmpTwoBits32(qChrom, qEnd, rStartChrom, rStartBase) < 0;
 }
 
-static void rFindOverlappingBlocks(struct cirTreeFile *crf, bits64 indexFileOffset,
+static void rFindOverlappingBlocks(struct cirTreeFile *crf, int level, bits64 indexFileOffset,
 	bits32 chromIx, bits32 start, bits32 end, struct fileOffsetSize **retList)
 /* Recursively find blocks with data. */
 {
@@ -483,7 +483,7 @@ mustReadOne(f, reserved);
 boolean isSwapped = crf->isSwapped;
 childCount = readBits16(f, isSwapped);
 
-uglyf("rFindOverlappingBlocks %llu %u:%u-%u.  childCount %d. isLeaf %d\n", indexFileOffset, chromIx, start, end, (int)childCount, (int)isLeaf);
+// uglyf("rFindOverlappingBlocks %llu %u:%u-%u.  childCount %d. isLeaf %d\n", indexFileOffset, chromIx, start, end, (int)childCount, (int)isLeaf);
 
 if (isLeaf)
     {
@@ -527,7 +527,7 @@ else
 	if (cirTreeOverlaps(chromIx, start, end, startChromIx[i], startBase[i], 
 		endChromIx[i], endBase[i]))
 	    {
-	    rFindOverlappingBlocks(crf, offset[i], chromIx, start, end, retList);
+	    rFindOverlappingBlocks(crf, level+1, offset[i], chromIx, start, end, retList);
 	    }
 	}
     }
@@ -557,7 +557,7 @@ if (crf->itemCount <= crf->blockSize)
     }
 else
     {
-    rFindOverlappingBlocks(crf, crf->rootOffset, chromIx, start, end, &blockList);
+    rFindOverlappingBlocks(crf, 0, crf->rootOffset, chromIx, start, end, &blockList);
     }
 
 slReverse(&blockList);

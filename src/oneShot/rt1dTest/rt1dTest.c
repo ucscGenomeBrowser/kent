@@ -7,7 +7,7 @@
 #include "cirTree.h"
 #include "crTree.h"
 
-static char const rcsid[] = "$Id: rt1dTest.c,v 1.8 2009/01/20 21:16:53 kent Exp $";
+static char const rcsid[] = "$Id: rt1dTest.c,v 1.9 2009/01/21 00:44:41 kent Exp $";
 
 int blockSize = 64;
 int itemsPerSlot = 32;	/* Set in main. */
@@ -256,10 +256,10 @@ void rt1dFind(char *tabFile, char *treeFile, char *chrom, bits32 start, bits32 e
 struct lineFile *lf = lineFileOpen(tabFile, TRUE);
 struct crTreeFile *crf = crTreeFileOpen(treeFile);
 struct fileOffsetSize *block, *blockList = crTreeFindOverlappingBlocks(crf, chrom, start, end);
-uglyf("Got %d overlapping blocks\n", slCount(blockList));
+verbose(2, "Got %d overlapping blocks\n", slCount(blockList));
 for (block = blockList; block != NULL; block = block->next)
     {
-    uglyf("block->offset %llu, block->size %llu\n", block->offset, block->size);
+    verbose(2, "block->offset %llu, block->size %llu\n", block->offset, block->size);
     lineFileSeek(lf, block->offset, SEEK_SET);
     bits64 sizeUsed = 0;
     while (sizeUsed < block->size)

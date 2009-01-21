@@ -103,7 +103,7 @@ void crTreeFileCreate(
 /* Create a r tree index file from an array of chromosomes and an array of items with
  * basic bed (chromosome,start,end) and file offset information. */
 {
-uglyf("crTreeFileCreate %s itemCount=%llu, chromCount=%d\n", fileName, itemCount, chromCount);
+// uglyf("crTreeFileCreate %s itemCount=%llu, chromCount=%d\n", fileName, itemCount, chromCount);
 /* Open file and write header. */
 FILE *f = mustOpen(fileName, "wb");
 bits32 magic = crTreeSig;
@@ -132,12 +132,16 @@ for (chromIx=0; chromIx<chromCount; ++chromIx)
     struct name32 *name32 = &name32Array[chromIx];
     char *name = chromNames[chromIx];
     name32->name = name;
-    name32->val = chromIx;
     int nameSize = strlen(name);
     if (nameSize > maxChromNameSize)
         maxChromNameSize = nameSize;
     }
 qsort(name32Array, chromCount, sizeof(name32Array[0]), name32Cmp);
+for (chromIx=0; chromIx<chromCount; ++chromIx)
+    {
+    struct name32 *name32 = &name32Array[chromIx];
+    name32->val = chromIx;
+    }
 
 /* Write out bPlusTree index of chromosome IDs. */
 int chromBlockSize = min(blockSize, chromCount);
