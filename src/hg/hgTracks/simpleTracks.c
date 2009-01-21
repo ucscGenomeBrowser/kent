@@ -124,7 +124,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.53 2009/01/12 22:12:46 fanhsu Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.54 2009/01/21 00:40:15 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128
@@ -1765,6 +1765,8 @@ else
 
 enum {blackShadeIx=9,whiteShadeIx=0};
 
+#define SCORE_FILTER "scoreFilter"
+
 void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader)(char **row),
 				   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
 				   char *scoreColumn, char *moreWhere, boolean (*itemFilter)(struct slList *item))
@@ -1777,20 +1779,17 @@ struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
 struct linkedFeatures *lfList = NULL;
-char optionScoreStr[128]; /* Option -  score filter */
 int optionScore;
 char extraWhere[128] ;
 /* Use tg->tdb->tableName because subtracks inherit composite track's tdb
  * by default, and the variable is named after the composite track. */
-safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
-      tg->tdb->tableName);
-if ((scoreColumn != NULL) && (cartVarExists(cart, optionScoreStr)))
+if ((scoreColumn != NULL) && (cartVarExistsAnyLevel(cart, tg->tdb, FALSE, SCORE_FILTER)))
     {
-    optionScore = cartUsualInt(cart, optionScoreStr, 0);
+    optionScore = cartUsualIntClosestToHome(cart, tg->tdb, FALSE, SCORE_FILTER, 0);
     if (optionScore < 0)
 	{
 	warn("%d is an invalid score for the filter on the %s track. Please choose a score in the valid range", optionScore, tg->tdb->tableName);
-	cartRemove(cart, optionScoreStr);
+	cartRemoveVariableClosestToHome(cart, tg->tdb, FALSE, SCORE_FILTER);
 	optionScore = 0;
 	}
     if (moreWhere)
@@ -3315,7 +3314,7 @@ struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 char optionScoreStr[128]; /* Option -  score filter */
 int optionScore;
 
-safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", table);
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.%s", table,SCORE_FILTER);
 optionScore = cartUsualInt(cart, optionScoreStr, 0);
 if (optionScore > 0)
     {
@@ -3676,7 +3675,7 @@ struct genePred *gp = NULL;
 boolean nmdTrackFilter = sameString(trackDbSettingOrDefault(tg->tdb, "nmdFilter", "off"), "on");
 char varName[SMALLBUF];
 safef(varName, sizeof(varName), "%s.%s", table, HIDE_NONCODING_SUFFIX);
-boolean hideNoncoding = cartUsualBoolean(cart, varName, HIDE_NONCODING_DEFAULT);
+boolean hideNoncoding = cartUsualBoolean(cart, varName, HIDE_NONCODING_DEFAULT);  // TODO: Use cartUsualBooleanClosestToHome if tableName == tg->tdb->tableName
 boolean doNmd = FALSE;
 char buff[256];
 enum baseColorDrawOpt drawOpt = baseColorDrawOff;
@@ -5708,8 +5707,8 @@ void sgdGeneMethods(struct track *tg)
 tg->itemName = sgdGeneName;
 }
 
-void adjustBedScoreGrayLevel(char *trackName, struct bed *bed, int scoreMin, int scoreMax)
-/* For each distinct trackName passed in, check cart for trackName_minGrayLevel; if
+void adjustBedScoreGrayLevel(struct trackDb *tdb, struct bed *bed, int scoreMin, int scoreMax)
+/* For each distinct trackName passed in, check cart for trackName.minGrayLevel; if
  * that is different from the gray level implied by scoreMin's place in [0..scoreMax],
  * then linearly transform bed->score from the range of [scoreMin,scoreMax] to
  * [(cartMinGrayLevel*scoreMax)/maxShade,scoreMax].
@@ -5720,15 +5719,13 @@ static int scoreMinGrayLevel = 0;
 static int cartMinGrayLevel = 0;
 static float newScoreMin = 0;
 
-if (trackName != prevTrackName)
+if (tdb->tableName != prevTrackName)
     {
     scoreMinGrayLevel = scoreMin * maxShade/scoreMax;
     if (scoreMinGrayLevel <= 0) scoreMinGrayLevel = 1;
-    char setting[256];
-    safef(setting, sizeof(setting), "%s_minGrayLevel", trackName);
-    cartMinGrayLevel = cartUsualInt(cart, setting, scoreMinGrayLevel);
+    cartMinGrayLevel = cartUsualIntClosestToHome(cart, tdb, FALSE, "minGrayLevel", scoreMinGrayLevel);
     newScoreMin = cartMinGrayLevel * scoreMax/maxShade;
-    prevTrackName = trackName;
+    prevTrackName = tdb->tableName;
     }
 if (cartMinGrayLevel != scoreMinGrayLevel)
     {
@@ -5857,7 +5854,7 @@ if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, hvg);
 else if (tg->colorShades)
     {
-    adjustBedScoreGrayLevel(tdb->tableName, bed, scoreMin, scoreMax);
+    adjustBedScoreGrayLevel(tdb, bed, scoreMin, scoreMax);
     color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
     }
 w = x2-x1;
@@ -8803,7 +8800,6 @@ struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
-char option[128]; /* Option -  score filter */
 char *words[3];
 int wordCt;
 char *optionScoreVal;
@@ -8823,53 +8819,46 @@ else if (tg->bedSize == 5)
 else
     loader = bedLoad6;
 
-char *name = compositeViewControlNameFromTdb(tg->tdb);
-
 /* limit to a specified count of top scoring items.
  * If this is selected, it overrides selecting item by specified score */
-if ((setting = trackDbSetting(tg->tdb, "filterTopScorers")) != NULL)
+if ((setting = trackDbSettingClosestToHome(tg->tdb, "filterTopScorers")) != NULL)
     {
     wordCt = chopLine(cloneString(setting), words);
     if (wordCt >= 3)
         {
-        safef(option, sizeof(option), "%s.filterTopScorersOn", name);
-        doScoreCtFilter =
-            cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
-        safef(option, sizeof(option), "%s.filterTopScorersCt", name);
-        scoreFilterCt = cartCgiUsualInt(cart, option, atoi(words[1]));
+        doScoreCtFilter = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
+                             "filterTopScorersOn",sameString(words[0], "on"));
+        scoreFilterCt = cartUsualIntClosestToHome(cart, tg->tdb, FALSE,
+                             "filterTopScorersCt", atoi(words[1]));
         topTable = words[2];
         /* if there are not too many rows in the table then can define */
         /* top table as the track or subtrack table */
         if (sameWord(topTable, "self"))
-            topTable = cloneString(name);
+            topTable = cloneString(tg->mapName);
         }
     }
 
 /* limit to items above a specified score */
-safef(option, sizeof(option), "%s.scoreFilter", name);
-optionScoreVal = trackDbSetting(tg->tdb, "scoreFilter");
+optionScoreVal = trackDbSettingClosestToHome(tg->tdb, SCORE_FILTER);
 if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
-optionScore = cartUsualInt(cart, option, optionScore);
+optionScore = cartUsualIntClosestToHome(cart,tg->tdb,FALSE,SCORE_FILTER,optionScore);
 
-if (doScoreCtFilter && (topTable != NULL) && hTableExists(database,  topTable))
+if (doScoreCtFilter && (topTable != NULL) && hTableExists(database, topTable))
     {
-    safef(query, sizeof(query),
-                "select * from %s order by score desc limit %d",
-                                topTable, scoreFilterCt);
+    safef(query, sizeof(query),"select * from %s order by score desc limit %d",
+          topTable, scoreFilterCt);
     sr = sqlGetResult(conn, query);
     rowOffset = hOffsetPastBin(database, hDefaultChrom(database), topTable);
     }
 else if (optionScore > 0 && tg->bedSize >= 5)
     {
     safef(query, sizeof(query), "score >= %d",optionScore);
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
-                         query, &rowOffset);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, query, &rowOffset);
     }
 else
     {
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
-                         NULL, &rowOffset);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
     }
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -8879,15 +8868,13 @@ while ((row = sqlNextRow(sr)) != NULL)
 if (doScoreCtFilter)
     {
     /* filter out items not in this window */
-    struct bed *newList =
-        bedFilterListInRange(list, NULL, chromName, winStart, winEnd);
+    struct bed *newList = bedFilterListInRange(list, NULL, chromName, winStart, winEnd);
     list = newList;
     }
 slReverse(&list);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 tg->items = list;
-compositeViewControlNameFree(&name);
 }
 
 void bed8To12(struct bed *bed)
@@ -8920,17 +8907,15 @@ int rowOffset;
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
 struct trackDb *tdb = tg->tdb;
-int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
-int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
 boolean useItemRgb = FALSE;
-char optionScoreStr[128];
 int optionScore;
 char extraWhere[128] ;
 
 useItemRgb = bedItemRgb(tdb);
 
-safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
-optionScore = cartUsualInt(cart, optionScoreStr, 0);
+optionScore = cartUsualIntClosestToHome(cart, tdb,FALSE,SCORE_FILTER, 0);
 if (optionScore > 0)
     {
     safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
@@ -8947,7 +8932,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 9);
     bed8To12(bed);
-    adjustBedScoreGrayLevel(tdb->tableName, bed, scoreMin, scoreMax);
+    adjustBedScoreGrayLevel(tdb, bed, scoreMin, scoreMax);
     lf = lfFromBedExtra(bed, scoreMin, scoreMax);
     if (useItemRgb)
 	{
@@ -8978,14 +8963,12 @@ struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 boolean useItemRgb = FALSE;
-char optionScoreStr[128];
 int optionScore;
 char extraWhere[128] ;
 
 useItemRgb = bedItemRgb(tdb);
 
-safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
-optionScore = cartUsualInt(cart, optionScoreStr, 0);
+optionScore = cartUsualIntClosestToHome(cart, tg->tdb, FALSE, SCORE_FILTER, 0);
 if (optionScore > 0)
     {
     safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
@@ -9002,7 +8985,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 8);
     bed8To12(bed);
-    adjustBedScoreGrayLevel(tdb->tableName, bed, scoreMin, scoreMax);
+    adjustBedScoreGrayLevel(tdb, bed, scoreMin, scoreMax);
     lf = lfFromBedExtra(bed, scoreMin, scoreMax);
     if (useItemRgb)
 	{
@@ -9180,7 +9163,6 @@ struct linkedFeatures *lfList = NULL, *lf;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
-char optionScoreStr[128]; /* Option -  score filter */
 int optionScore;
 char extraWhere[128] ;
 boolean useItemRgb = FALSE;
@@ -9189,9 +9171,7 @@ useItemRgb = bedItemRgb(tdb);
 
 /* Use tg->tdb->tableName because subtracks inherit composite track's tdb
  * by default, and the variable is named after the composite track. */
-safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
-      tg->tdb->tableName);
-optionScore = cartUsualInt(cart, optionScoreStr, 0);
+optionScore = cartUsualIntClosestToHome(cart, tg->tdb,FALSE,SCORE_FILTER, 0);
 if (optionScore > 0)
     {
     safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
@@ -9204,7 +9184,7 @@ else
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoad12(row+rowOffset);
-    adjustBedScoreGrayLevel(tdb->tableName, bed, scoreMin, scoreMax);
+    adjustBedScoreGrayLevel(tdb, bed, scoreMin, scoreMax);
     lf = lfFromBedExtra(bed, scoreMin, scoreMax);
     if (useItemRgb)
 	{
@@ -9728,14 +9708,11 @@ char **row;
 int rowOffset;
 struct bed *bed;
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
-char optionScoreStr[128]; /* Option -  score filter */
 int optionScore;
 char extraWhere[128] ;
 /* Use tg->tdb->tableName because subtracks inherit composite track's tdb
  * by default, and the variable is named after the composite track. */
-safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
-      tg->tdb->tableName);
-optionScore = cartUsualInt(cart, optionScoreStr, 0);
+optionScore = cartUsualIntClosestToHome(cart, tg->tdb,FALSE,SCORE_FILTER, 0);
 if (optionScore > 0)
     {
     safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
@@ -9825,13 +9802,11 @@ void loadGenePredWithConfiguredName(struct track *tg)
 /* Convert gene pred info in window to linked feature. Include name
  * in "extra" field (gene name, accession, or both, depending on UI) */
 {
-char buf[SMALLBUF];
 char *geneLabel;
 boolean useGeneName, useAcc;
 struct linkedFeatures *lf;
 
-safef(buf, sizeof buf, "%s.label", tg->mapName);
-geneLabel = cartUsualString(cart, buf, "gene");
+geneLabel = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "label","gene");
 useGeneName = sameString(geneLabel, "gene") || sameString(geneLabel, "name") || sameString(geneLabel, "both");
 useAcc = sameString(geneLabel, "accession") || sameString(geneLabel, "both");
 
@@ -9936,10 +9911,8 @@ return color;
 void drawColorMethods(struct track *tg)
 /* Fill in color track items based on chrom  */
 {
-char option[128]; /* Option -  rainbow chromosome color */
 char *optionStr ;
-safef( option, sizeof(option), "%s.color", tg->mapName);
-optionStr = cartUsualString(cart, option, "off");
+optionStr = cartUsualStringClosestToHome(cart, tg->tdb,FALSE,"color", "off");
 tg->mapItemName = lfMapNameFromExtra;
 if( sameString( optionStr, "on" )) /*use chromosome coloring*/
     tg->itemColor = lfChromColor;
@@ -10456,7 +10429,7 @@ else
 	{
 	/* get the gene symbol of the exact KG that matches not only ID but also genomic position */
 	safef(query, sizeof(query),
-	"select x.geneSymbol from kgXref x, omimToKnownCanonical c, knownGene k, omimGene o where c.omimId='%s' and c.kgId=x.kgId and k.name=x.kgId and o.name=c.omimId and o.chrom=k.chrom and k.txStart=%d and k.txEnd=%d", 
+	"select x.geneSymbol from kgXref x, omimToKnownCanonical c, knownGene k, omimGene o where c.omimId='%s' and c.kgId=x.kgId and k.name=x.kgId and o.name=c.omimId and o.chrom=k.chrom and k.txStart=%d and k.txEnd=%d",
 	el->name, el->chromStart, el->chromEnd);
 	geneLabel = sqlQuickString(conn, query);
 	}
@@ -10538,7 +10511,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct bed12Source *el = bed12SourceLoad(row+rowOffset);
     struct bed *bedPart = (struct bed *)el;
-    adjustBedScoreGrayLevel(tg->tdb->tableName, bedPart, scoreMin, scoreMax);
+    adjustBedScoreGrayLevel(tg->tdb, bedPart, scoreMin, scoreMax);
     struct linkedFeatures *lf = lfFromBed(bedPart);
     lf->extra = (void *)cloneString(el->source);
     bed12SourceFree(&el);
