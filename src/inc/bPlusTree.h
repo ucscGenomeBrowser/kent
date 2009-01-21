@@ -68,6 +68,12 @@ struct bptFile *bptFileOpen(char *fileName);
 void bptFileClose(struct bptFile **pBpt);
 /* Close down and deallocate index file. */
 
+struct bptFile *bptFileAttach(char *fileName, FILE *f);
+/* Open up index file on previously open file, with header at current file position. */
+
+void bptFileDetach(struct bptFile **pBpt);
+/* Detach and free up cirTree file opened with cirTreeFileAttach. */
+
 boolean bptFileFind(struct bptFile *bpt, void *key, int keySize, void *val, int valSize);
 /* Find value associated with key.  Return TRUE if it's found. 
 *  Parameters:
@@ -76,10 +82,23 @@ boolean bptFileFind(struct bptFile *bpt, void *key, int keySize, void *val, int 
 *     val - pointer to where to put retrieved value
 */
 
-void bptFileCreate(void *itemArray, int itemSize, bits64 itemCount, bits32 blockSize,
+void bptFileCreate(
+	void *itemArray, 	/* Sorted array of things to index. */
+	int itemSize, 		/* Size of each element in array. */
+	bits64 itemCount, 	/* Number of elements in array. */
+	bits32 blockSize,	/* B+ tree block size - # of children for each node. */
+	void (*fetchKey)(const void *va, char *keyBuf),  /* Given item, copy key to keyBuf */ 
+	bits32 keySize,					 /* Size of key */
+	void* (*fetchVal)(const void *va), 		 /* Given item, return pointer to value */
+	bits32 valSize, 				 /* Size of value */
+	char *fileName);                                 /* Name of output file. */
+/* Create a b+ tree index file from a sorted array. */
+
+void bptFileBulkIndexToOpenFile(void *itemArray, int itemSize, bits64 itemCount, bits32 blockSize,
 	void (*fetchKey)(const void *va, char *keyBuf), bits32 keySize,
-	void* (*fetchVal)(const void *va), bits32 valSize, char *fileName);
-/* Create a b+ tree index from a sorted array. */
+	void* (*fetchVal)(const void *va), bits32 valSize, FILE *f);
+/* Create a b+ tree index from a sorted array, writing output starting at current position
+ * of an already open file.  See bptFileCreate for explanation of parameters. */
 
 #define bptFileHeaderSize 32
 #define bptBlockHeaderSize 4
