@@ -50,13 +50,12 @@
 
 /* This section of code deals with locating a value in a b+ tree. */
 
-struct bptFile *bptFileOpen(char *fileName)
-/* Open up index file - reading header and verifying things. */
+struct bptFile *bptFileAttach(char *fileName, FILE *f)
+/* Open up index file on previously open file, with header at current file position. */
 {
 /* Open file and allocate structure to hold info from header etc. */
 struct bptFile *bpt = needMem(sizeof(*bpt));
-bpt->fileName = cloneString(fileName);
-FILE *f = mustOpen(fileName, "rb");
+bpt->fileName = fileName;
 bpt->f = f;
 
 /* Read magic number at head of file and use it to see if we are proper file type, and
@@ -89,6 +88,18 @@ bpt->rootOffset = ftell(f);
 return bpt;
 }
 
+void bptFileDetach(struct bptFile **pBpt)
+/* Detach and free up cirTree file opened with cirTreeFileAttach. */
+{
+freez(pBpt);
+}
+
+struct bptFile *bptFileOpen(char *fileName)
+/* Open up index file - reading header and verifying things. */
+{
+return bptFileAttach(cloneString(fileName), mustOpen(fileName, "rb"));
+}
+
 void bptFileClose(struct bptFile **pBpt)
 /* Close down and deallocate index file. */
 {
@@ -97,7 +108,7 @@ if (bpt != NULL)
     {
     carefulClose(&bpt->f);
     freeMem(bpt->fileName);
-    freez(&bpt);
+    bptFileDetach(pBpt);
     }
 }
 
@@ -323,14 +334,12 @@ for (i=0; i<itemCount; i += countOne)
     }
 }
 
-
-void bptFileCreate(void *itemArray, int itemSize, bits64 itemCount, bits32 blockSize,
+void bptFileBulkIndexToOpenFile(void *itemArray, int itemSize, bits64 itemCount, bits32 blockSize,
 	void (*fetchKey)(const void *va, char *keyBuf), bits32 keySize,
-	void* (*fetchVal)(const void *va), bits32 valSize, char *fileName)
-/* Create a b+ tree index from a sorted array. */
+	void* (*fetchVal)(const void *va), bits32 valSize, FILE *f)
+/* Create a b+ tree index from a sorted array, writing output starting at current position
+ * of an already open file.  See bptFileCreate for explanation of parameters. */
 {
-/* Open file and write header. */
-FILE *f = mustOpen(fileName, "wb");
 bits32 magic = bptSig;
 bits32 reserved = 0;
 writeOne(f, magic);
@@ -357,5 +366,25 @@ for (i=levels-1; i > 0; --i)
 /* Write leaf nodes */
 writeLeafLevel(blockSize, itemArray, itemSize, itemCount, 
 	fetchKey, keySize, fetchVal, valSize, f);
+}
+
+void bptFileCreate(
+	void *itemArray, 	/* Sorted array of things to index. */
+	int itemSize, 		/* Size of each element in array. */
+	bits64 itemCount, 	/* Number of elements in array. */
+	bits32 blockSize,	/* B+ tree block size - # of children for each node. */
+	void (*fetchKey)(const void *va, char *keyBuf),  /* Given item, copy key to keyBuf */ 
+	bits32 keySize,					 /* Size of key */
+	void* (*fetchVal)(const void *va), 		 /* Given item, return pointer to value */
+	bits32 valSize, 				 /* Size of value */
+	char *fileName)                                  /* Name of output file. */
+/* Create a b+ tree index file from a sorted array. */
+
+{
+/* Open file and write header. */
+FILE *f = mustOpen(fileName, "wb");
+bptFileBulkIndexToOpenFile(itemArray, itemSize, itemCount, blockSize, fetchKey, keySize, 
+	fetchVal, valSize, f);
+carefulClose(&f);
 }
 
