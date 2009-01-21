@@ -9,7 +9,7 @@
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encode.c,v 1.14 2008/12/09 07:13:42 angie Exp $";
+static char const rcsid[] = "$Id: encode.c,v 1.15 2009/01/21 00:29:55 tdreszer Exp $";
 
 #define SMALLBUF 128
 
@@ -107,7 +107,7 @@ tg->itemColor = encodeRnaColor;
 tg->itemNameColor = encodeRnaColor;
 }
 
-struct linkedFeatures *lfFromEncodePeak(struct slList *item, char *trackName,
+static struct linkedFeatures *lfFromEncodePeak(struct slList *item, struct trackDb *tdb,
 					int scoreMin, int scoreMax)
 /* Translate an {encode,narrow,broad,gapped}Peak item into a linkedFeatures. */
 {
@@ -126,7 +126,7 @@ if (peak->peak > -1)
     }
 lf->filterColor = -1;
 lf->orientation = orientFromChar(peak->strand[0]);
-adjustBedScoreGrayLevel(trackName, (struct bed *)peak, scoreMin, scoreMax);
+adjustBedScoreGrayLevel(tdb, (struct bed *)peak, scoreMin, scoreMax);
 lf->grayIx = grayInRange((int)peak->score, 0, 1000);
 safecpy(lf->name, sizeof(lf->name), peak->name);
 if (peak->blockCount > 0)
@@ -157,46 +157,37 @@ return lf;
 static char *encodePeakFilter(char *trackName, struct trackDb *tdb, boolean isCustom)
 {
 struct dyString *extraWhere = newDyString(128);
-char pValVarName[256];
-char qValVarName[256];
-char scoreVarName[256];
 boolean useScore = FALSE;
-safef(pValVarName, sizeof(pValVarName), "%s.%s", trackName, ENCODE_PEAK_PVAL_FILTER_SUFFIX);
-safef(qValVarName, sizeof(qValVarName), "%s.%s", trackName, ENCODE_PEAK_QVAL_FILTER_SUFFIX);
-safef(scoreVarName, sizeof(scoreVarName), "%s.%s", trackName, ENCODE_PEAK_SCORE_FILTER_SUFFIX);
-if (!trackDbSettingOn(tdb, "filterPvalQval"))
+if (!trackDbSettingClosestToHomeOn(tdb, "filterPvalQval"))
     useScore = TRUE;
-if (useScore && cartVarExists(cart, scoreVarName))
+if (useScore && cartVarExistsAnyLevel(cart,tdb,FALSE,ENCODE_PEAK_SCORE_FILTER_SUFFIX))
     {
-    int score = cartUsualInt(cart, scoreVarName, -1);
+    int score = cartUsualIntClosestToHome(cart,tdb,FALSE,ENCODE_PEAK_SCORE_FILTER_SUFFIX, -1);
     if ((score < 0) || (score > 1000))
-	{
-	warn("invalid score %s set in filter for track %s",
-	     cartString(cart, scoreVarName), trackName);
-	cartRemove(cart, scoreVarName);	     
-	}
-    else 
-	dyStringPrintf(extraWhere, "(score >= %d)", score);
+        {
+        warn("invalid score %d set in filter for track %s", score, trackName);
+        cartRemoveVariableClosestToHome(cart,tdb,FALSE,ENCODE_PEAK_SCORE_FILTER_SUFFIX);
+        }
+    else
+    	dyStringPrintf(extraWhere, "(score >= %d)", score);
     }
 else if (!useScore)
     {
-    double pVal = cartUsualDouble(cart, pValVarName, 0);
-    double qVal = cartUsualDouble(cart, qValVarName, 0);
+    double pVal = cartUsualDoubleClosestToHome(cart,tdb,FALSE,ENCODE_PEAK_PVAL_FILTER_SUFFIX, 0);
     if (pVal < 0)
-	{
-	warn("invalid p-value %s set in filter for track %s", 
-	     cartString(cart, pValVarName), trackName);
-	cartRemove(cart, pValVarName);
-	pVal = 0;
-	}
+        {
+        warn("invalid p-value %lf set in filter for track %s", pVal, trackName);
+        cartRemoveVariableClosestToHome(cart,tdb,FALSE,ENCODE_PEAK_PVAL_FILTER_SUFFIX);
+        pVal = 0;
+        }
+    double qVal = cartUsualDoubleClosestToHome(cart,tdb,FALSE,ENCODE_PEAK_QVAL_FILTER_SUFFIX, 0);
     if ((qVal < 0) || (qVal > 1))
-	{
-	warn("invalid q-value %s set in filter for track %s", 
-	     cartString(cart, qValVarName), trackName);
-	cartRemove(cart, qValVarName);
-	qVal = 0;
-	}
-    dyStringPrintf(extraWhere, "(pValue >= %f) and (qValue >= %f)", pVal, qVal);    
+        {
+        warn("invalid q-value %lf set in filter for track %s", qVal, trackName);
+        cartRemoveVariableClosestToHome(cart,tdb,FALSE,ENCODE_PEAK_QVAL_FILTER_SUFFIX);
+        qVal = 0;
+        }
+    dyStringPrintf(extraWhere, "(pValue >= %f) and (qValue >= %f)", pVal, qVal);
     }
 
 if (sameString(extraWhere->string, ""))
@@ -216,12 +207,12 @@ int rowOffset;
 struct linkedFeatures *lfList = NULL;
 enum encodePeakType pt = 0;
 struct trackDb *parentTdb = tg->tdb ? tg->tdb->parent : tg->tdb;
-int scoreMin = atoi(trackDbSettingOrDefault(parentTdb, "scoreMin", "0"));
-int scoreMax = atoi(trackDbSettingOrDefault(parentTdb, "scoreMax", "1000"));
+int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(parentTdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(parentTdb, "scoreMax", "1000"));
 if (ct)
     {
     db = CUSTOM_TRASH;
-    table = ct->dbTableName;    
+    table = ct->dbTableName;
     }
 else
     {
@@ -236,7 +227,7 @@ sr = hRangeQuery(conn, table, chromName, winStart, winEnd, filterConstraints, &r
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct encodePeak *peak = encodePeakGeneralLoad(row + rowOffset, pt);
-    struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, parentTdb->tableName,
+    struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, parentTdb,
 						 scoreMin, scoreMax);
     if (lf)
 	slAddHead(&lfList, lf);
