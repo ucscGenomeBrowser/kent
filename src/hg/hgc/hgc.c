@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1494 2009/01/21 18:26:11 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1495 2009/01/21 19:09:29 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8573,7 +8573,10 @@ if (url != NULL && url[0] != 0)
 	sqlFreeResult(&sr);
         printf("<BR>\n");
 	}
-    } 
+    }
+
+printf("<HR>");
+printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
 }
 
 void doOmimGene(struct trackDb *tdb, char *item)
