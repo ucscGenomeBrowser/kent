@@ -350,10 +350,89 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
 #real    12m17.912s
 #user    3m56.801s
 #sys     0m13.704s
-    #	reload track to get it clean
+    ##	reload track to get it clean
     hgLoadBed monDom5 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 22241063 elements of size 4
+    ##	Loaded 22241063 elements of size 4
 
 ##########################################################################
-# CPG ISLANDS (in progress 2008-12-02, Andy)
+## CPG ISLANDS (DONE 2008-12-03, Andy)
+    ssh hgwdev
+    screen -S monDom5_CpG
+    ~/kent/src/hg/utils/automation/doCpgIslands.pl monDom5 
+    ## [detach screen]
+    ## took an hour or two
+    featureBits monDom5 cpgIslandExt
+# 14553072 bases of 3501660299 (0.416%) in intersection
 
+##########################################################################
+## LIFTOVER CHAIN MONDOM4->MONDOM5 (DONE 2008-12-06, Andy)
+    ssh hgwdev
+    screen -S monDom5_liftOver
+    tcsh
+    ~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl monDom4 monDom5
+    ## [detach]
+    ## ... 8 hippos
+        ssh swarm
+        cd /hive/data/genomes/monDom4/bed/blat.monDom5.2008-12-04/run.blat
+        ## edit job.csh and add -maxIntron=1 -mask=lower 
+        ## to blat command and up minScore to 5000 and minIdentity to 99
+        para stop
+        para push
+    ## Took several hours after hippos were dealt with and -continue net
+    ## had to be run as well after it crashed running out of tmp disk space
+    cd /hive/data/genomes/monDom4/bed/blat.monDom5.2008-12-04
+    rm -rf run.chain/ run.blat/
+    mv monDom4ToMonDom5.over.chain.gz ../liftOver/
+    cd /gbdb/monDom4/liftOver
+
+#######################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE 2008-12-11, Andy)
+    ssh hgwdev
+    screen -S monDom5_11.ooc
+    cd /hive/data/genomes/monDom5
+    ##	use repMatch of 1228 as this genome is ~ %20 larger than human
+    ##	1024 + (1024 * 0.2) = 1228
+    time nice blat monDom5.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=11.ooc -repMatch=1228
+    #	Wrote 43992 overused 11-mers to 11.ooc
+    #	real    3m24.793s
+
+#######################################################################
+# GENBANK AUTOUPDATE SETUP (DONE 2008-12-15 Andy)
+    ssh hgwdev
+    screen -S monDom5_genbank
+    cd ~/kent/src/hg/makeDb/genbank/conf/
+    ## edit genbank.conf: search monDom4, copy and paste that whole entry
+    ## and replace monDom4 with monDom5:
+    ## cvs ci genbank.conf
+    make etc-update 
+    ssh genbank
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial monDom5 &
+    # logFile: var/build/logs/2008.12.11-16:37:37.monDom5.initalign.log 
+#real    633m58.880s
+##user    96m10.868s
+#sys     35m42.207s
+    exit 
+    ## we're back on hgwdev 
+    nice -n 19 ./bin/gbDbLoadStep -drop -initialLoad  monDom5 &
+#logFile: var/dbload/genbank/logs/2008.12.15-10:44:36.dbload.log    
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    ## add monDom5 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added monDom5" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+##########################################################################
+## BLAT (DONE 2008-01-20 Andy)
+# e-mail cluster-admin and ask for a server and tell them about 
+# /gbdb/monDom5/monDom5.2bit
+# then
+ssh hgwdev
+hgsql -N hgcentraltest
+mysql> insert into blatServers (db, host, port, isTrans, canPcr) values ('monDom5', 'blatx', '17778', '1', '0');
+Query OK, 1 row affected (0.01 sec)
+mysql> insert into blatServers (db, host, port, isTrans, canPcr) values ('monDom5', 'blatx', '17779', '0', '1');
+Query OK, 1 row affected (0.00 sec)
