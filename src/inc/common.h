@@ -287,6 +287,14 @@ __attribute__((format(printf, 2, 3)))
 #endif
     ;
 
+void verboseTime(int verbosity, char *label, ...)
+/* Print label and how long it's been since last call.  Call with
+ * a NULL label to initialize.  Verbosity level 1 */
+#if defined(__GNUC__)
+__attribute__((format(printf, 2, 3)))
+#endif
+    ;
+
 void verboseDot();
 /* Write I'm alive dot (at verbosity level 1) */
 
