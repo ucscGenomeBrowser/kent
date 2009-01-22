@@ -35,7 +35,7 @@
 #define CRTREE_H
 
 struct crTreeFile
-/* R tree index file handle. */
+/* Chromosome R tree index file handle. */
     {
     struct crTreeFile *next;	/* Next in list of index files if any. */
     char *fileName;		/* Name of file - for better error reporting. */
