@@ -56,7 +56,7 @@ STRINGIFY = stringify
 
 $(GB_BINARCH)/%: ${O} makefile ${LIBGENBANK}
 	@${MKDIR} -p ${GB_BINARCH}
-	gcc ${CFLAGS} -o $@ $O $(LIBS)
+	${CC} ${CFLAGS} -o $@ $O $(LIBS)
 
 ${GB_BINDIR}/%: %
 	@${MKDIR} -p ${GB_BINDIR}

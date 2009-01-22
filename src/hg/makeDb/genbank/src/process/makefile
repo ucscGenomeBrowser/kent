@@ -8,11 +8,9 @@ O = gbProcess.o gbParse.o
 
 all: ${PROGS}
 
-${GB_BINARCH}/gbProcess: ${O}
+${GB_BINARCH}/gbProcess: ${O} ${LIBGENBANK}
 
-${GB_BINARCH}/gbProcessedCheck: gbProcessedCheck.c makefile ${LIBGENBANK}
-	@${MKDIR} ${GB_BINARCH}
-	${CC} ${COPT} ${CFLAGS} ${CFLAGS} -o $@ gbProcessedCheck.c $(LIBS)
+${GB_BINARCH}/gbProcessedCheck: ${O} ${LIBGENBANK}
 
 clean:
 	rm -f $(PROGS) ${O}
