@@ -6,7 +6,7 @@
 #include "localmem.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: bwTest.c,v 1.1 2009/01/22 21:15:01 kent Exp $";
+static char const rcsid[] = "$Id: bwTest.c,v 1.2 2009/01/22 21:48:08 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 512;
@@ -88,6 +88,8 @@ void sectionWriteBedGraphAsAscii(struct bigWigSection *section, FILE *f)
 /* Write out a bedGraph section. */
 {
 struct bigWigBedGraphItem *item;
+fprintf(f, "#bedGraph chrom=%s start=%u end=%u\n",
+	section->chrom, (unsigned)section->start+1, (unsigned)section->end+1);
 for (item = section->itemList.bedGraph; item != NULL; item = item->next)
     fprintf(f, "%s\t%u\t%u\t%g\n",  section->chrom, (unsigned)item->start, (unsigned)item->end,
     	item->val);
@@ -133,15 +135,19 @@ switch (section->type)
     }
 }
 
+boolean stepTypeLine(char *line)
+/* Return TRUE if it's a variableStep or fixedStep line. */
+{
+return (startsWithWord("variableStep", line) || startsWithWord("fixedStep", line));
+}
+
 boolean steppedSectionEnd(char *line, int maxWords)
 /* Return TRUE if line indicates the start of another section. */
 {
 int wordCount = chopByWhite(line, NULL, 5);
 if (wordCount > maxWords)
     return TRUE;
-if (stringIn("chrom=", line))
-    return TRUE;
-return FALSE;
+return stepTypeLine(line);
 }
 
 void parseFixedStepSection(struct lineFile *lf, struct lm *lm,
@@ -152,7 +158,6 @@ void parseFixedStepSection(struct lineFile *lf, struct lm *lm,
 /* Stream through section until get to end of file or next section,
  * adding values from single column to list. */
 char *words[1];
-int itemCount=0;
 char *line;
 struct bigWigFixedStepItem *item, *itemList = NULL;
 while (lineFileNextReal(lf, &line))
@@ -166,7 +171,6 @@ while (lineFileNextReal(lf, &line))
     lmAllocVar(lm, item);
     item->val = lineFileNeedDouble(lf, words, 0);
     slAddHead(&itemList, item);
-    ++itemCount;
     }
 slReverse(&itemList);
 
@@ -212,7 +216,6 @@ void parseVariableStepSection(struct lineFile *lf, struct lm *lm,
 /* Stream through section until get to end of file or next section,
  * adding values from single column to list. */
 char *words[2];
-int itemCount=0;
 char *line;
 struct bigWigVariableStepItem *item, *itemList = NULL;
 while (lineFileNextReal(lf, &line))
@@ -227,9 +230,10 @@ while (lineFileNextReal(lf, &line))
     item->start = lineFileNeedNum(lf, words, 0) - 1;
     item->val = lineFileNeedDouble(lf, words, 1);
     slAddHead(&itemList, item);
-    ++itemCount;
     }
 slReverse(&itemList);
+
+    /* TODO: sort item list. */
 
 /* Break up into sections of no more than items-per-slot size. */
 struct bigWigVariableStepItem *startItem, *endItem, *nextStartItem = itemList;
@@ -275,7 +279,7 @@ return sqlUnsigned(val);
 }
 
 void parseSteppedSection(struct lineFile *lf, char *initialLine, 
-	struct lm *lm, struct bigWigSection **pList)
+	struct lm *lm, struct bigWigSection **pSectionList)
 /* Parse out a variableStep or fixedStep section and add it to list, breaking it up as need be. */
 {
 /* Parse out first word of initial line and make sure it is something we recognize. */
@@ -326,7 +330,7 @@ if (type == bwstFixedStep)
 	errAbort("Missing start= setting line %d of %s\n", lf->lineIx, lf->fileName);
     if (step == 0)
 	errAbort("Missing step= setting line %d of %s\n", lf->lineIx, lf->fileName);
-    parseFixedStepSection(lf, lm, chrom, span, start-1, step, pList);
+    parseFixedStepSection(lf, lm, chrom, span, start-1, step, pSectionList);
     }
 else
     {
@@ -334,9 +338,113 @@ else
 	errAbort("Extra start= setting line %d of %s\n", lf->lineIx, lf->fileName);
     if (step != 0)
 	errAbort("Extra step= setting line %d of %s\n", lf->lineIx, lf->fileName);
-    parseVariableStepSection(lf, lm, chrom, span, pList);
+    parseVariableStepSection(lf, lm, chrom, span, pSectionList);
     }
 }
+
+struct bedGraphChrom
+/* A chromosome in bed graph format. */
+    {
+    struct bedGraphChrom *next;		/* Next in list. */
+    char *name;			/* Chromosome name - not allocated here. */
+    struct bigWigBedGraphItem *itemList;	/* List of items. */
+    };
+
+int bedGraphChromCmpName(const void *va, const void *vb)
+/* Compare to sort based on query start. */
+{
+const struct bedGraphChrom *a = *((struct bedGraphChrom **)va);
+const struct bedGraphChrom *b = *((struct bedGraphChrom **)vb);
+return strcmp(a->name, b->name);
+}
+
+void parseBedGraphSection(struct lineFile *lf, struct lm *lm, struct bigWigSection **pSectionList)
+/* Parse out bedGraph section until we get to something that is not in bedGraph format. */
+{
+/* Set up hash and list to store chromosomes. */
+struct hash *chromHash = hashNew(0);
+struct bedGraphChrom *chrom, *chromList = NULL;
+
+/* Collect lines in items on appropriate chromosomes. */
+struct bigWigBedGraphItem *item, *itemList = NULL;
+char *line;
+while (lineFileNextReal(lf, &line))
+    {
+    /* Check for end of section. */
+    if (stepTypeLine(line))
+        {
+	lineFileReuse(lf);
+	break;
+	}
+
+    /* Parse out our line and make sure it has exactly 4 columns. */
+    char *words[5];
+    int wordCount = chopLine(line, words);
+    lineFileExpectWords(lf, 4, wordCount);
+
+    /* Get chromosome. */
+    char *chromName = words[0];
+    chrom = hashFindVal(chromHash, chromName);
+    if (chrom == NULL)
+        {
+	lmAllocVar(chromHash->lm, chrom);
+	hashAddSaveName(chromHash, chromName, chrom, &chrom->name);
+	slAddHead(&chromList, chrom);
+	}
+
+    /* TODO: sort item list. */
+
+    /* Convert to item and add to chromosome list. */
+    lmAllocVar(lm, item);
+    item->start = lineFileNeedNum(lf, words, 1);
+    item->end = lineFileNeedNum(lf, words, 2);
+    item->val = lineFileNeedDouble(lf, words, 3);
+    slAddHead(&chrom->itemList, item);
+    }
+slSort(&chromList, bedGraphChromCmpName);
+
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    slReverse(&chrom->itemList);
+
+    /* Break up into sections of no more than items-per-slot size. */
+    struct bigWigBedGraphItem *startItem, *endItem, *nextStartItem = chrom->itemList;
+    for (startItem = chrom->itemList; startItem != NULL; startItem = nextStartItem)
+	{
+	/* Find end item of this section, and start item for next section.
+	 * Terminate list at end item. */
+	int sectionSize = 0;
+	int i;
+	endItem = startItem;
+	for (i=0; i<itemsPerSlot; ++i)
+	    {
+	    if (nextStartItem == NULL)
+		break;
+	    endItem = nextStartItem;
+	    nextStartItem = nextStartItem->next;
+	    ++sectionSize;
+	    }
+	endItem->next = NULL;
+
+	/* Fill in section and add it to section list. */
+	struct bigWigSection *section;
+	lmAllocVar(lm, section);
+	section->chrom = cloneString(chrom->name);
+	section->start = startItem->start;
+	section->end = endItem->end;
+	section->type = bwstBedGraph;
+	section->itemList.bedGraph = startItem;
+	section->itemCount = sectionSize;
+	slAddHead(pSectionList, section);
+	}
+    }
+
+/* Free up hash, no longer needed. Free's chromList as a side effect since chromList is in 
+ * hash's memory. */
+hashFree(&chromHash);
+chromList = NULL;
+}
+
 
 void bwTest(char *inName, char *outName)
 /* bwTest - Test out some big wig related things. */
@@ -366,11 +474,9 @@ while (lineFileNextReal(lf, &line))
 	int end = lineFileNeedNum(lf, words, 2);
 	double val = lineFileNeedDouble(lf, words, 3);
 
-#ifdef SOON
 	/* Push back line and call bed parser. */
 	lineFileReuse(lf);
-	parseBedSection(lf, &sectionList);
-#endif /* SOON */
+	parseBedGraphSection(lf, lm, &sectionList);
 	}
     }
 
