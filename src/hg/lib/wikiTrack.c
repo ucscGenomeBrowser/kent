@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.25 2008/09/18 21:47:05 hiram Exp $";
+static char const rcsid[] = "$Id: wikiTrack.c,v 1.26 2009/01/23 22:39:53 hiram Exp $";
 
 void wikiTrackStaticLoad(char **row, struct wikiTrack *ret)
 /* Load a row from wikiTrack table into ret.  The contents of ret will
@@ -378,7 +378,10 @@ if (validDb && wikiLinkEnabled() &&
     if ( (wikiUser) &&
 	(findCookieData(cfgOption(CFG_WIKI_SESSION_COOKIE)) != NULL) )
 	{
-	    userName = wikiUser;	/* save result for next time */
+	    struct htmlPage *page = fetchEditPage(TEST_EMAIL_VERIFIED);
+	    char *loginExpired = stringIn(LOGIN_EXPIRED, page->fullText);
+	    if (loginExpired == NULL)
+		userName = wikiUser;	/* save result for next time */
 	}
     /* see if table exists, create it if it is not yet there */
     struct sqlConnection *wikiConn = wikiConnect();
@@ -1007,14 +1010,14 @@ boolean emailVerified(boolean showMessage)
 /* TRUE indicates email has been verified for this wiki user */
 {
 struct htmlPage *page = fetchEditPage(TEST_EMAIL_VERIFIED);
-char *stringFound = stringIn(EMAIL_NEEDS_TO_BE_VERIFIED, page->fullText);
+char *verifyEmail = stringIn(EMAIL_NEEDS_TO_BE_VERIFIED, page->fullText);
 /* sometimes the genome browser thinks the user is logged in, but the
  *	wiki doesn't think so.  So, verify that an editform exists
  *	within the edit page to confirm edit is OK.
  */
 struct htmlForm *currentEditForm = htmlFormGet(page,"editform");
 htmlPageFree(&page);
-if ((currentEditForm != NULL) && (NULL == stringFound))
+if ((currentEditForm != NULL) && (verifyEmail == NULL))
     return TRUE;
 else
     {
