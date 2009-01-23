@@ -146,6 +146,8 @@ void wikiTrackOutput(struct wikiTrack *el, FILE *f, char sep, char lastSep);
 #define USER_PREFERENCES_MESSAGE \
     "Please set and validate your e-mail address through your"
 #define GENE_CLASS "Genes and Gene Prediction Tracks"
+#define LOGIN_EXPIRED \
+    "You do not have permission to edit pages, for the following reasons:"
 
 boolean wikiTrackEnabled(char *database, char **wikiUserName);
 /*determine if wikiTrack can be used, and is this user logged into the wiki ?*/
