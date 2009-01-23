@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1543 2009/01/23 06:38:42 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1544 2009/01/23 23:04:54 hiram Exp $";
 
 #define SMALLBUF 64
 
@@ -2154,6 +2154,18 @@ if (sameWord(scientificName, "Takifugu rubripes"))
         /* position doesn't appear on Ensembl browser.
          * Ensembl doesn't show scaffolds < 2K */
         return;
+    }
+else if (sameWord(scientificName, "Ciona intestinalis"))
+    {
+    if (stringIn("chr0", chromName))
+	{
+	char *fixupName = replaceChars(chromName, "chr0", "chr"); 
+	name = fixupName;
+	}
+    else
+	name = chromName;
+    start = winStart;
+    end = winEnd;
     }
 else
     {
