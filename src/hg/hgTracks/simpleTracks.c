@@ -125,7 +125,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.55 2009/01/23 22:19:45 markd Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.56 2009/01/23 23:11:28 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128
@@ -11016,7 +11016,7 @@ if (!smart)
 for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
 {
     /* initialize from composite track settings */
-    if (trackDbSetting(subTdb, "noInherit") == NULL)
+    if (trackDbSettingClosestToHome(subTdb, "noInherit") == NULL)
 	{
 	/* install parent's track handler */
 	subtrack = trackFromTrackDb(tdb);
@@ -11030,7 +11030,7 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
 	}
     if (handler != NULL)
 	handler(subtrack);
-    if (trackDbSetting(subTdb, "noInherit") == NULL)
+    if (trackDbSettingClosestToHome(subTdb, "noInherit") == NULL)
 	{
         if (!smart)
             {
