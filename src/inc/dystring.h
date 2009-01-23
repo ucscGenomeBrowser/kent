@@ -1,4 +1,4 @@
-/* dystring - dynamically resizing string. 
+/* dystring - dynamically resizing string.
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
@@ -38,12 +38,12 @@ void dyStringAppendN(struct dyString *ds, char *string, int stringSize);
 /* Append string of given size to end of string. */
 
 char dyStringAppendC(struct dyString *ds, char c);
-/* Append char to end of string. */ 
+/* Append char to end of string. */
 
 void dyStringAppendMultiC(struct dyString *ds, char c, int n);
-/* Append N copies of char to end of string. */ 
+/* Append N copies of char to end of string. */
 
-void dyStringAppendEscapeQuotes(struct dyString *dy, char *string, 
+void dyStringAppendEscapeQuotes(struct dyString *dy, char *string,
 	char quot, char esc);
 /* Append escaped-for-quotation version of string to dy. */
 
@@ -71,6 +71,12 @@ char *dyStringCannibalize(struct dyString **pDy);
 /* Kill dyString, but return the string it is wrapping
  * (formerly dy->string).  This should be free'd at your
  * convenience. */
+
+#define dyStringContents(ds) (ds)->string
+/* return raw string. */
+
+#define dyStringLen(ds) strlen((ds)->string)
+/* return raw string length. */
 
 void dyStringResize(struct dyString *ds, int newSize);
 /* resize a string, if the string expands, blanks are appended */
