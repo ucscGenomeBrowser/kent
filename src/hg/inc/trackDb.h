@@ -49,6 +49,10 @@ struct trackDb
     struct trackDb *subtracks;  /* children of composite (TODO: or supertrack) */ // NOTE: can only be on one sl at a time!
     char *parentName;           /* set if this is a supertrack member */
     boolean isShow;             /* for supertracks tracks: true if this is a supertrack with pseudo-vis 'show' */
+    struct hash *overrides;     /* If not NULL, this is an trackOverride
+                                 * entry.  It contains the names, but not the
+                                 * values of the fields and settings that were
+                                 * specified in the entry. */
     };
 
 #define SUPERTRACK_MASK                 0x10
@@ -225,14 +229,17 @@ void trackDbSuperSettings(struct trackDb *tdbList);
  * Returns NULL if there is no such setting */
 
 char *trackDbInclude(char *raFile, char *line);
-/* Get include filename from trackDb line.
-   Return NULL if line doesn't contain #include */
+/* Get include filename from trackDb line.  
+   Return NULL if line doesn't contain include */
 
 char *trackDbOrigAssembly(struct trackDb *tdb);
 /* return setting from trackDb, if any */
 
 void trackDbPrintOrigAssembly(struct trackDb *tdb, char *database);
 /* Print lift information from trackDb, if any */
+
+void trackDbOverride(struct trackDb *td, struct trackDb *overTd);
+/* apply an trackOverride trackDb entry to a trackDb entry */
 
 char *trackDbCompositeSettingByView(struct trackDb *parentTdb, char* view, char *name);
 /* Get a trackDb setting at the view level for a multiview composite.
@@ -252,5 +259,6 @@ char *trackDbSettingClosestToHomeOrDefault(struct trackDb *tdb, char *name, char
 
 boolean trackDbSettingClosestToHomeOn(struct trackDb *tdb, char *name);
 /* Return true if a tdb setting closest to home is "on" "true" or "enabled". */
+
 #endif /* TRACKDB_H */
 

@@ -16,9 +16,9 @@
 #include "trackDb.h"
 #include "hCommon.h"
 #include "dbDb.h"
-#define OLD_SUBST_CODE // FIXME: remove when rolled over
-#ifdef OLD_SUBST_CODE
-#include "subText.h"
+#define RUNTIME_SUBST_CODE // FIXME: remove when rolled over to load time
+#ifdef RUNTIME_SUBST_CODE
+#include "hVarSubst.h"
 #endif
 #include "blatServers.h"
 #include "bed.h"
@@ -40,7 +40,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.389 2009/01/15 07:12:50 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.390 2009/01/23 22:19:46 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2249,146 +2249,11 @@ else
     }
 }
 
-#ifdef OLD_SUBST_CODE  // FIXME: delete after roll over
-static void addSubVar(char *prefix, char *name, 
-	char *value, struct subText **pList)
-/* Add substitution to list. */
-{
-struct subText *sub;
-char fullName[HDB_MAX_TABLE_STRING];
-safef(fullName, sizeof(fullName), "$%s%s", prefix, name);
-sub = subTextNew(fullName, value);
-slAddHead(pList, sub);
-}
-
-static boolean isAbbrevScientificName(char *name)
-/* Return true if name looks like an abbreviated scientific name 
-* (e.g. D. yakuba). */
-{
-return (name != NULL && strlen(name) > 4 &&
-	isalpha(name[0]) &&
-	name[1] == '.' && name[2] == ' ' &&
-	isalpha(name[3]));
-}
-
-void hAddDbSubVars(char *prefix, char *database, struct subText **pList)
-/* Add substitution variables associated with database to list. */
-{
-char *organism = hOrganism(database);
-if (organism != NULL)
-    {
-    char *lcOrg = cloneString(organism);
-    char *ucOrg = cloneString(organism);
-    char *date = hFreezeDate(database);
-    if (! isAbbrevScientificName(organism))
-	tolowers(lcOrg);
-    touppers(ucOrg);
-    addSubVar(prefix, "Organism", organism, pList);
-    addSubVar(prefix, "ORGANISM", ucOrg, pList);
-    addSubVar(prefix, "organism", lcOrg, pList);
-    addSubVar(prefix, "date", date, pList);
-    freez(&date);
-    freez(&ucOrg);
-    freez(&lcOrg);
-    freez(&organism);
-    }
-addSubVar(prefix, "db", database, pList);
-}
-
-static void subOut(struct trackDb *tdb, char **pString, struct subText *subList)
-/* Substitute one string. */
-{
-char *old = *pString;
-*pString = subTextString(subList, old);
-freeMem(old);
-}
-
-static void subOutAll(struct trackDb *tdb, struct subText *subList)
-/* Substitute all strings that need substitution. */
-{
-subOut(tdb, &tdb->shortLabel, subList);
-subOut(tdb, &tdb->longLabel, subList);
-subOut(tdb, &tdb->html, subList);
-}
-
-static char *matrixHtml(char *matrix, char *matrixHeader)
-    /* Generate HTML table from $matrix setting in trackDb */
-{
-    char *words[100];
-    char *headerWords[10];
-    struct dyString *m;
-    int size;
-    int i, j, k;
-    int wordCount = 0, headerCount = 0;
-
-    wordCount = chopString(cloneString(matrix), ", \t", words, ArraySize(words));
-    if (matrixHeader != NULL)
-        headerCount = chopString(cloneString(matrixHeader), 
-                        ", \t", headerWords, ArraySize(headerWords));
-    m = dyStringNew(0);
-    size = sqrt(sqlDouble(words[0]));
-    if (errno)
-        errAbort("Invalid matrix size in doc: %s\n", words[0]);
-    dyStringAppend(m, "The following matrix was used:<P>\n");
-    k = 1;
-    dyStringAppend(m, "<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR=\"#aaaaaa\">\n");
-    if (matrixHeader)
-        {
-        dyStringAppend(m, "<TR ALIGN=right><TD></TD>");
-        for (i = 0; i < size && i < headerCount; i++)
-            dyStringPrintf(m, "<TD><B>%s</B></TD>", headerWords[i]);
-        dyStringAppend(m, "</TR>\n");
-        }
-    for (i = 0; i < size; i++)
-        {
-        dyStringAppend(m, "<TR ALIGN=right>");
-        if (matrixHeader)
-            dyStringPrintf(m, "<TD><B>%s<B></TD>", headerWords[i]);
-        for (j = 0; j < size && k < wordCount ; j++)
-            dyStringPrintf(m, "<TD>%s</TD>", words[k++]);
-        dyStringAppend(m, "</TR>\n");
-        }
-    dyStringAppend(m, "</TABLE></BLOCKQUOTE></P>\n");
-    return m->string;
-}
-
+#ifdef RUNTIME_SUBST_CODE
 void hLookupStringsInTdb(struct trackDb *tdb, char *database)
 /* Lookup strings in track database. */
 {
-static struct subText *subList = NULL;
-static char *oldDatabase = NULL;
-
-if (oldDatabase != NULL && !sameString(database, oldDatabase))
-    {
-    subTextFreeList(&subList);
-    freez(&oldDatabase);
-    oldDatabase = cloneString(database);
-    }
-if (subList == NULL)
-    hAddDbSubVars("", database, &subList);
-
-subOutAll(tdb, subList);
-
-if (tdb->settings != NULL && tdb->settings[0] != 0)
-    {
-    struct subText *subList = NULL;
-    char *otherDb = trackDbSetting(tdb, "otherDb");
-    char *blurb = trackDbSetting(tdb, "blurb");
-    char *matrix = trackDbSetting(tdb, "matrix");
-    char *matrixHeader = trackDbSetting(tdb, "matrixHeader");
-    char *matrixSub = NULL;
-    if (blurb != NULL)
-	addSubVar("", "blurb", blurb, &subList);
-    if (otherDb != NULL)
-	hAddDbSubVars("o_", otherDb, &subList);
-    if (matrix != NULL)
-        matrixSub = matrixHtml(matrix, matrixHeader);
-    if (matrixSub == NULL)
-        matrixSub = "";
-    addSubVar("", "matrix", matrixSub, &subList);
-    subOutAll(tdb, subList);
-    subTextFreeList(&subList);
-    }
+hVarSubstTrackDb(tdb, database);
 }
 #endif
 

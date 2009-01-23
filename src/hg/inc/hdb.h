@@ -15,10 +15,6 @@
 #include "dystring.h"
 #endif
 
-#ifndef SUBTEXT_H
-#include "subText.h"
-#endif
-
 #ifndef JKSQL_H
 #include "jksql.h"
 #endif 
@@ -706,9 +702,6 @@ boolean hGotClade(void);
 char *hClade(char *genome);
 /* If central database has clade tables, return the clade for the 
  * given genome; otherwise return NULL. */
-
-void hAddDbSubVars(char *prefix, char *database, struct subText **pList);
-/* Add substitution variables associated with database to list. */
 
 void hLookupStringsInTdb(struct trackDb *tdb, char *database);
 /* Lookup strings in track database. */

@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.46 2009/01/20 23:23:45 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.47 2009/01/23 22:19:47 markd Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -71,9 +71,11 @@ static void trackDbAddInfo(struct trackDb *bt,
 	char *var, char *value, struct lineFile *lf)
 /* Add info from a variable/value pair to browser table. */
 {
-if (sameString(var, "track"))
+if (sameString(var, "track") || sameString(var, "trackOverride"))
     {
     bt->tableName = cloneString(value);
+    if (sameString(var, "trackOverride"))
+        bt->overrides = hashNew(0);
     }
 else if (sameString(var, "shortLabel") || sameString(var, "name"))
     bt->shortLabel = cloneString(value);
@@ -121,6 +123,86 @@ else	/* Add to settings. */
 	bt->settingsHash = hashNew(7);
     hashAdd(bt->settingsHash, var, cloneString(value));
     }
+if (bt->overrides != NULL)
+    hashAdd(bt->overrides, var, NULL);
+
+}
+
+static void replaceStr(char **varPtr, char *val)
+/** replace string in varPtr with val */
+{
+freeMem(*varPtr);
+*varPtr = cloneString(val);
+}
+
+static void overrideField(struct trackDb *td, struct trackDb *overTd,
+                          char *var)
+/* Update override one field from override. */
+{
+if (sameString(var, "track") || sameString(var, "trackOverride"))
+    {
+    // skip
+    }
+else if (sameString(var, "shortLabel") || sameString(var, "name"))
+    replaceStr(&td->shortLabel, overTd->shortLabel);
+else if (sameString(var, "longLabel") || sameString(var, "description"))
+    replaceStr(&td->longLabel, overTd->longLabel);
+else if (sameString(var, "priority"))
+    td->priority = overTd->priority;
+else if (sameWord(var, "url"))
+    replaceStr(&td->url, overTd->url);
+else if (sameString(var, "visibility"))
+    td->visibility =  overTd->visibility;
+else if (sameWord(var, "color"))
+    {
+    td->colorR = overTd->colorR;
+    td->colorG = overTd->colorG;
+    td->colorB = overTd->colorB;
+    }
+else if (sameWord(var, "altColor"))
+    {
+    td->altColorR = overTd->altColorR;
+    td->altColorG = overTd->altColorG;
+    td->altColorB = overTd->altColorB;
+    }
+else if (sameWord(var, "type"))
+    replaceStr(&td->type, overTd->type);
+else if (sameWord(var, "spectrum") || sameWord(var, "useScore"))
+    td->useScore = overTd->useScore;
+else if (sameWord(var, "canPack"))
+    td->canPack = overTd->canPack;
+else if (sameWord(var, "chromosomes"))
+    {
+    // just format and re-parse
+    char *sa = sqlStringArrayToString(overTd->restrictList, overTd->restrictCount);
+    sqlStringFreeDynamicArray(&td->restrictList);
+    sqlStringDynamicArray(sa, &td->restrictList, &td->restrictCount);
+    freeMem(sa);
+    }
+else if (sameWord(var, "private"))
+    td->private = overTd->private;
+else if (sameWord(var, "group"))
+    {
+    replaceStr(&td->grp, overTd->grp);
+    }
+else	/* Add to settings. */
+    {
+    if (td->settingsHash == NULL)
+	td->settingsHash = hashNew(7);
+    char *val = hashMustFindVal(overTd->settingsHash, var);
+    struct hashEl *hel = hashStore(td->settingsHash, var);
+    replaceStr((char**)&hel->val, val);
+    }
+}
+
+void trackDbOverride(struct trackDb *td, struct trackDb *overTd)
+/* apply an trackOverride trackDb entry to a trackDb entry */
+{
+assert(overTd->overrides != NULL);
+struct hashEl *hel;
+struct hashCookie hc = hashFirst(overTd->overrides);
+while ((hel = hashNext(&hc)) != NULL)
+    overrideField(td, overTd, hel->name);
 }
 
 static boolean packableType(char *type)
@@ -186,21 +268,18 @@ if (bt->settings == NULL)
 }
 
 char *trackDbInclude(char *raFile, char *line)
-/* Get include filename from trackDb line.
-   Return NULL if line doesn't contain #include */
+/* Get include filename from trackDb line.  
+   Return NULL if line doesn't contain include */
 {
 static char incFile[256];
 char *file;
 
-/* For transition, allow with or without leading #.
-   Later, we'll only allow w/o # */
-if (startsWith("#include", line) || startsWith("include", line))
+if (startsWith("include", line))
     {
     splitPath(raFile, incFile, NULL, NULL);
     nextWord(&line);
     file = nextQuotedWord(&line);
     strcat(incFile, file);
-    printf("found include file: %s\n", incFile);
     return cloneString(incFile);
     }
 else
@@ -228,7 +307,7 @@ for (;;)
 	   break;
 	   }
 	line = skipLeadingSpaces(line);
-        if (startsWith("track", line))
+        if (startsWithWord("track", line) || startsWithWord("trackOverride", line))
             {
             lineFileReuse(lf);
             break;

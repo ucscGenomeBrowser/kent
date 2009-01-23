@@ -267,16 +267,8 @@ spectrum on
 type netAlign oryLat1 chainOryLat1
 otherDb oryLat1
 
-track nscanGene
-shortLabel N-SCAN
-longLabel N-SCAN Gene Predictions
-group genes
-priority 45.1
-visibility hide
-color 34,139,34
-type genePred nscanPep
-baseColorUseCds given
-baseColorDefault genomicCodons
+trackOverride nscanGene
+informant Zebrafish N-SCAN uses fugu (fr1) as the informant.
 
 searchTable ctgPos2
 searchMethod exact
@@ -290,8 +282,3 @@ searchMethod prefix
 searchType psl
 termRegex [[:alnum:]]*-?[[:alnum:]\._:\-]+
 searchPriority 11
-
-searchTable nscanGene
-searchType genePred
-termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
-searchPriority 50

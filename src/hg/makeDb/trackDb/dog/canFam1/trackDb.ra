@@ -217,16 +217,8 @@ visibility hide
 color 0,100,100
 type genePred twinscanPep
 
-track nscanGene
-shortLabel N-SCAN
-longLabel N-SCAN Gene Predictions
-group genes
-priority 45.1
-visibility hide
-color 34,139,34
-type genePred nscanPep
-baseColorUseCds given
-baseColorDefault genomicCodons
+trackOverride nscanGene
+informant Dog N-SCAN uses human (hg17) as the informant and iterative pseudogene masking.
 
 track blastHg17KG
 shortLabel Human Proteins

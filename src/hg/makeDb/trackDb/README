@@ -18,8 +18,12 @@ value separated by white space.
 
 The html text about a track is in separate
 files named xxx.html where xxx is a
-track name.  The contents of the HTML  is subject
+track name.  The contents of the HTML is subject
 to variable substitution as described below.
+Note that the html file in lower-level directories
+can override the html in higher-level directories
+without requiring an entry in trackDb.ra.
+
 
 There may be subdirectories for each organism such
 as 'mouse', and underneath these directories for
@@ -38,6 +42,18 @@ to do it on genome-test do
     make alpha
 You can also restrict a track to alpha or beta using
 by using the release field.
+
+THE TRACK or TRACKOVERRIDE FIELD
+
+Each entry in trackDb.ra should start with a track or
+trackOverride field:
+              track trackName
+or
+              trackOverride trackName
+
+trackOverride entries are used in lower-level trackDb.ra
+file to override fields in higher-level ones.  Fields
+not specified in the trackOverride entry are not changed.
 
 THE TYPE FIELD
 

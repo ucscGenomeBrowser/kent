@@ -129,6 +129,14 @@ return (strcasecmp(varBase, "organism") == 0)
     || (strcasecmp(varBase, "db") == 0);
 }
 
+static char *valOrDb(char *val, char *database)
+/* return val if not-null, or a clone of database if it is null */
+{
+if (val == NULL)
+    val = cloneString(database);
+return val;
+}
+
 static void substDatabaseVar(char *database, char *varBase,
                              struct dyString *dest)
 /* substitute a variable resolved from the database name.
@@ -137,50 +145,35 @@ static void substDatabaseVar(char *database, char *varBase,
 {
 if (sameString(varBase, "Organism"))
     {
-    char *org = hOrganism(database);
-    if (org == NULL)
-        dyStringAppend(dest, database);
-    else
-        {
-        dyStringAppend(dest, org);
-        freeMem(org);
-        }
+    char *org = valOrDb(hOrganism(database), database);
+    dyStringAppend(dest, org);
+    freeMem(org);
     }
 else if (sameString(varBase, "ORGANISM"))
     {
     char *org = hOrganism(database);
-    if (org == NULL)
-        dyStringAppend(dest, database);
-    else
-        {
+    if (org != NULL)
         touppers(org);
-        dyStringAppend(dest, org);
-        freeMem(org);
-        }
+    else
+        org = valOrDb(org, database);
+    dyStringAppend(dest, org);
+    freeMem(org);
     }
 else if (sameString(varBase, "organism"))
     {
     char *org = hOrganism(database);
-    if (org == NULL)
-        dyStringAppend(dest, database);
-    else
-        {
-        if (!isAbbrevScientificName(org))
+    if ((org != NULL) && !isAbbrevScientificName(org))
             tolowers(org);
-        dyStringAppend(dest, org);
-        freeMem(org);
-        }
+        else 
+            org = valOrDb(org, database);
+    dyStringAppend(dest, org);
+    freeMem(org);
     }
 else if (sameString(varBase, "date"))
     {
-    char *date = hFreezeDateOpt(database);
-    if (date == NULL)
-        dyStringAppend(dest, database);
-    else
-        {
-        dyStringAppend(dest, date);
-        freeMem(date);
-        }
+    char *date = valOrDb(hFreezeDateOpt(database), database);
+    dyStringAppend(dest, date);
+    freeMem(date);
     }
 else if (sameString(varBase, "db"))
     dyStringAppend(dest, database);
@@ -215,7 +208,7 @@ else
 char *hVarSubst(char *desc, struct trackDb *tdb, char *database, char *src)
 /* Parse a string and substitute variable references.  Return NULL if
  * no variable references were found.  Error on missing variables (except
- * $matrix).  desc is a brief description to print on error to help with
+ * $matrix).  desc is a brief description to print on an error to help with
  * debugging. tdb maybe NULL to only do substitutions based on database
  * and organism. See trackDb/README for more information.*/
 {

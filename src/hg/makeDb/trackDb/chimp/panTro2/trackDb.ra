@@ -52,16 +52,9 @@ visibility hide
 color 12,12,120
 type genePred
 
-track nscanGene
-shortLabel N-SCAN
-longLabel N-SCAN Gene Predictions
-group genes
-priority 45.1
+trackOverride nscanGene
 visibility dense
-color 34,139,34
-type genePred nscanPep
-baseColorUseCds given
-baseColorDefault genomicCodons
+informant Chimp N-SCAN uses mouse (mm8) as the informant and iterative pseudogene masking.
 
 track augustus
 shortLabel Augustus

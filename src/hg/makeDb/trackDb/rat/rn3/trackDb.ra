@@ -57,16 +57,9 @@ color 0,100,100
 altColor 0,50,50
 type genePred twinscanPep
 
-track nscanGene
-shortLabel N-SCAN
-longLabel N-SCAN Gene Predictions
-group genes
-priority 45.1
+trackOverride nscanGene
 visibility dense
-color 34,139,34
-type genePred nscanPep
-baseColorUseCds given
-baseColorDefault genomicCodons
+informant Rat N-SCAN uses human (hg17) as the informant and iterative pseudogene masking.
 
 track blastzTightHg15
 shortLabel Human Tight Hg15
@@ -441,8 +434,3 @@ visibility hide
 spectrum on
 type netAlign hg17 chainHg17
 otherDb hg17
-
-searchTable nscanGene
-searchType genePred
-termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]
-searchPriority 50

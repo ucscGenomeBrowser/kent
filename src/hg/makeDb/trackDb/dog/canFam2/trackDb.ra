@@ -107,16 +107,9 @@ visibility hide
 color 150,0,0
 type bed 5 .
 
-track nscanGene
-shortLabel N-SCAN
-longLabel N-SCAN Gene Predictions
-group genes
-priority 45.1
+trackOverride nscanGene
 visibility dense
-color 34,139,34
-type genePred nscanPep
-baseColorUseCds given
-baseColorDefault genomicCodons
+informant Dog N-SCAN uses human (hg17) as the informant and iterative pseudogene masking.
 
 track atom97565
 shortLabel atom97565 
@@ -134,7 +127,3 @@ priority 1.1
 visibility hide
 type bed 6
 
-searchTable nscanGene
-searchType genePred
-termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]
-searchPriority 50

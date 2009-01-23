@@ -7,8 +7,9 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "trackDb.h"
+#include "hash.h"
 
-static char const rcsid[] = "$Id: trackDb.c,v 1.8 2005/04/13 06:25:58 markd Exp $";
+static char const rcsid[] = "$Id: trackDb.c,v 1.9 2009/01/23 22:19:47 markd Exp $";
 
 struct trackDb *trackDbLoad(char **row)
 /* Load a trackDb from row fetched with select * from trackDb
@@ -166,6 +167,8 @@ freeMem(el->url);
 freeMem(el->html);
 freeMem(el->grp);
 freeMem(el->settings);
+hashFree(&el->settingsHash);
+hashFree(&el->overrides);
 freez(pEl);
 }
 

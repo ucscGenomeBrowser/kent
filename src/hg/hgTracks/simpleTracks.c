@@ -23,6 +23,7 @@
 #include "grp.h"
 #include "chromColors.h"
 #include "hgTracks.h"
+#include "subText.h"
 #include "cds.h"
 #include "mafTrack.h"
 #include "wigCommon.h"
@@ -124,7 +125,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.54 2009/01/21 00:40:15 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.55 2009/01/23 22:19:45 markd Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128

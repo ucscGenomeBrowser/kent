@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.45 2009/01/23 08:38:28 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.46 2009/01/23 22:19:47 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -55,10 +55,37 @@ static struct optionSpec optionSpecs[] = {
 static char *raName = "trackDb.ra";
 static char *release = "alpha";
 
+static boolean hasNonAsciiChars(char *text)
+/* check if text has any non-printing or non-ascii characters */
+{
+char *c;
+for (c = text; *c != '\0'; c++)
+    {
+    if ((*c <= 7) || ((14 <= *c) && (*c <= 31)) || (*c >= 127))
+        {
+        return TRUE;
+        }
+    }
+return FALSE;
+}
+
+
+static struct trackDb *trackDbListFromHash(struct hash *tdHash)
+/* build a list of the tracks in hash.  List will be threaded through
+ * the entries. */
+{
+struct trackDb *tdList = NULL;
+struct hashCookie cookie = hashFirst(tdHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    slSafeAddHead(&tdList, (struct trackDb*)hel->val);
+return tdList;
+}
+
 static void pruneStrict(struct trackDb **tdListPtr, char *database)
 /* purge unused trackDb entries */
 {
-struct trackDb *tdList = *tdListPtr, *td, *tdNext;
+struct trackDb *td;
 struct trackDb *strictList = NULL;
 struct hash *compositeHash = hashNew(0);
 struct trackDb *compositeList = NULL;
@@ -66,13 +93,16 @@ struct hash *superHash = hashNew(0);
 struct trackDb *superList = NULL;
 char *setting, *words[1];
 
-for (td = tdList; td != NULL; td = tdNext)
+while ((td = slPopHead(tdListPtr)) != NULL)
     {
-    tdNext = td->next;
-    if (hTableOrSplitExists(database, td->tableName))
+    if (td->overrides != NULL)
         {
-        if (verboseLevel() > 2)
-            printf("%s table exists\n", td->tableName);
+        // override entry, just keep it in the list for now
+        slAddHead(&strictList, td);
+        }
+    else if (hTableOrSplitExists(database, td->tableName))
+        {
+        verbose(2, "%s table exists\n", td->tableName);
         slAddHead(&strictList, td);
         if ((setting = trackDbSetting(td, "subTrack")) != NULL)
             {
@@ -101,16 +131,14 @@ for (td = tdList; td != NULL; td = tdNext)
             }
         else
             {
-            if (verboseLevel() > 1)
-                printf("%s missing\n", td->tableName);
+            verbose(2, "%s missing\n", td->tableName);
             trackDbFree(&td);
             }
         }
     }
 /* add all composite tracks that have a subtrack with a table */
-for (td = compositeList; td != NULL; td = tdNext)
+while ((td = slPopHead(&compositeList)) != NULL)
     {
-    tdNext = td->next;
     if (hashLookup(compositeHash, td->tableName))
         {
         slAddHead(&strictList, td);
@@ -126,9 +154,8 @@ for (td = compositeList; td != NULL; td = tdNext)
 hashFree(&compositeHash);
 
 /* add all super tracks that have a member (simple or composite) with a table */
-for (td = superList; td != NULL; td = tdNext)
+while ((td = slPopHead(&superList)) != NULL)
     {
-    tdNext = td->next;
     if (hashLookup(superHash, td->tableName))
         {
         slAddHead(&strictList, td);
@@ -140,77 +167,61 @@ hashFree(&superHash);
 *tdListPtr = strictList;
 }
 
-static boolean hasUnallowedChars(char *text)
-/* check if text has any non-printing or non-ascii characters */
-{
-char *c;
-for (c = text; *c != '\0'; c++)
-    {
-    if ((*c <= 7) || ((14 <= *c) && (*c <= 31)) || (*c >= 127))
-        {
-        return TRUE;
-        }
-    }
-return FALSE;
-}
-
-void addVersion(boolean strict, char *database, char *dirName, char *raName, 
-    struct hash *uniqHash,
-    struct hash *htmlHash,
-    struct trackDb **pTrackList)
-/* Read in tracks from raName and add them to list/database if new. */
-{
-struct trackDb *tdList = trackDbFromRa(raName), *td, *tdNext;
-char fileName[512];
-
-if (strict) 
-    pruneStrict(&tdList, database);
-
+static void pruneRelease(struct trackDb **tdListPtr, char *database)
 /* prune out alternate track entries for another release */
-for (td = tdList; td != NULL; td = tdNext)
+{
+struct trackDb *td;
+struct trackDb *relList = NULL;
+
+while ((td = slPopHead(tdListPtr)) != NULL)
     {
-    char *rel;
-    tdNext = td->next;
-    if ((rel = trackDbSetting(td, "release")) != NULL)
+    char *rel = trackDbSetting(td, "release");
+    if (rel != NULL)
         {
-        if (differentString(rel, release))
-            slRemoveEl(&tdList, td);
-        else
+        if (sameString(rel, release))
+            {
             /* remove release setting from trackDb entry -- there
              * should only be a single entry for the track, so 
              * the release setting is no longer relevant (and it
              * confuses Q/A */
             hashRemove(td->settingsHash, "release");
+            slSafeAddHead(&relList, td);
+            }
         }
+    else
+        slSafeAddHead(&relList, td);
     }
+*tdListPtr = relList;
+}
 
-for (td = tdList; td != NULL; td = tdNext)
+static void applyOverride(struct hash *uniqHash,
+                          struct trackDb *overTd)
+/* apply a trackDb override to a track, if it exists */
+{
+struct trackDb *td = hashFindVal(uniqHash, overTd->tableName);
+if (td != NULL)
+    trackDbOverride(td, overTd);
+}
+
+static void addVersionRa(boolean strict, char *database, char *dirName, char *raName, 
+                         struct hash *uniqHash)
+/* Read in tracks from raName and add them to table, pruning as required. Call
+ * top-down so that trackOverride will work. */
+{
+struct trackDb *tdList = trackDbFromRa(raName), *td;
+
+if (strict) 
+    pruneStrict(&tdList, database);
+pruneRelease(&tdList, database);
+
+/* load tracks, replacing higher-level ones with lower-level and
+ * applying overrides*/
+while ((td = slPopHead(&tdList)) != NULL)
     {
-    tdNext = td->next;
-    if (!hashLookup(uniqHash, td->tableName))
-        {
-	hashAdd(uniqHash, td->tableName, td);
-        slAddHead(pTrackList, td);
-	}
-    }
-for (td = *pTrackList; td != NULL; td = td->next)
-    {
-    char *htmlName = trackDbSetting(td, "html");
-    if (htmlName == NULL)
-        htmlName = td->tableName;
-    if (!hashLookup(htmlHash, td->tableName))
-	{
-	sprintf(fileName, "%s/%s.html", dirName, htmlName);
-	if (fileExists(fileName))
-	    {
-	    char *s;
-	    readInGulp(fileName, &s, NULL);
-	    hashAdd(htmlHash, td->tableName, s);
-            if (hasUnallowedChars(s))
-                fprintf(stderr, "Warning: non-printing or non-ASCII characters in %s\n", fileName);
-	    }
-	}
-    hVarSubstTrackDb(td, database);
+    if (td->overrides != NULL)
+        applyOverride(uniqHash, td);
+    else
+        hashStore(uniqHash, td->tableName)->val = td;
     }
 }
 
@@ -252,15 +263,14 @@ if(rear == NULL)
 front += 5;
 *front = '\0';
 
-snprintf(newCreate, length , "%s %s %s", create, tableName, rear);
+safef(newCreate, length , "%s %s %s", create, tableName, rear);
 return cloneString(newCreate);
 }
 
-
-void layerOn(boolean strict, char *database, char *dir, struct hash *uniqHash, 
-	struct hash *htmlHash,  boolean mustExist, struct trackDb **tdList)
-/* Read trackDb.ra from directory and any associated .html files,
- * and layer them on top of whatever is in tdList. */
+void layerOnRa(boolean strict, char *database, char *dir, struct hash *uniqHash, 
+               boolean raMustExist)
+/* Read trackDb.ra from directory and layer them on top of whatever is in tdList.
+ * Must call top-down (root->org->assembly) */
 {
 char raFile[512];
 if (raName[0] != '/') 
@@ -269,15 +279,39 @@ else
     safef(raFile, sizeof(raFile), "%s", raName);
 if (fileExists(raFile))
     {
-    addVersion(strict, database, dir, raFile, uniqHash, htmlHash, tdList);
+    addVersionRa(strict, database, dir, raFile, uniqHash);
     }
 else 
     {
-    if (mustExist)
+    if (raMustExist)
         errAbort("%s doesn't exist!", raFile);
     }
 }
 
+static void layerOnHtml(char *dirName, struct trackDb *tdList)
+/* Read in track HTML call bottom-up. */
+{
+char fileName[512];
+struct trackDb *td;
+for (td = tdList; td != NULL; td = td->next)
+    {
+    if (isEmpty(td->html))
+        {
+        char *htmlName = trackDbSetting(td, "html");
+        if (htmlName == NULL)
+            htmlName = td->tableName;
+	safef(fileName, sizeof(fileName), "%s/%s.html", dirName, htmlName);
+	if (fileExists(fileName))
+            {
+	    readInGulp(fileName, &td->html, NULL);
+            // Check for note ASCII characters at higher levels of verboseness.
+            // Normally, these are acceptable ISO-8859-1 characters
+            if  ((verboseLevel() >= 2) && hasNonAsciiChars(td->html))
+                verbose(2, "Note: non-printing or non-ASCII characters in %s\n", fileName);
+            }
+        }
+    }
+}
 
 static char *settingsFromHash(struct hash *hash)
 /* Create settings string from settings hash. */
@@ -422,46 +456,68 @@ for (td = tdList; td != NULL; td = tdNext)
 	    }
 	}
     }
-
-
 }
 
+static struct trackDb *buildTrackDb(char *org, char *database, char *hgRoot,
+                                    char *visibilityRa, char *priorityRa, 
+                                    boolean strict)
+/* build trackDb objects from files. */
+{
+struct hash *uniqHash = newHash(8);
+char rootDir[PATH_LEN], orgDir[PATH_LEN], asmDir[PATH_LEN];
+
+/* Create track list from hgRoot and hgRoot/org and hgRoot/org/assembly 
+ * ra format database. */
+safef(rootDir, sizeof(rootDir), "%s", hgRoot);
+safef(orgDir, sizeof(orgDir), "%s/%s", hgRoot, org);
+safef(asmDir, sizeof(asmDir), "%s/%s/%s", hgRoot, org, database);
+
+// must call these top-down
+layerOnRa(strict, database, rootDir, uniqHash, TRUE);
+layerOnRa(strict, database, orgDir, uniqHash, FALSE);
+layerOnRa(strict, database, asmDir, uniqHash, FALSE);
+
+struct trackDb *tdList = trackDbListFromHash(uniqHash);
+
+// must call these bottom-up
+layerOnHtml(asmDir, tdList);
+layerOnHtml(orgDir, tdList);
+layerOnHtml(rootDir, tdList);
+
+if (visibilityRa != NULL)
+    trackDbOverrideVisbility(uniqHash, visibilityRa, optionExists("hideFirst"));
+if (priorityRa != NULL)
+    trackDbOverridePriority(uniqHash, priorityRa);
+slSort(&tdList, trackDbCmp);
+hashFree(&uniqHash);
+return tdList;
+}
 
 void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot,
                char *visibilityRa, char *priorityRa, boolean strict)
 /* hgTrackDb - Create trackDb table from text files. */
 {
-struct hash *uniqHash = newHash(8);
-struct hash *htmlHash = newHash(8);
-struct trackDb *tdList = NULL, *td;
-char rootDir[512], orgDir[512], asmDir[512];
-char tab[512];
-snprintf(tab, sizeof(tab), "%s.tab", trackDbName);
+struct trackDb *td;
+char tab[PATH_LEN];
+safef(tab, sizeof(tab), "%s.tab", trackDbName);
 
-/* Create track list from hgRoot and hgRoot/org and hgRoot/org/assembly 
- * ra format database. */
-sprintf(rootDir, "%s", hgRoot);
-sprintf(orgDir, "%s/%s", hgRoot, org);
-sprintf(asmDir, "%s/%s/%s", hgRoot, org, database);
-layerOn(strict, database, asmDir, uniqHash, htmlHash, FALSE, &tdList);
-layerOn(strict, database, orgDir, uniqHash, htmlHash, FALSE, &tdList);
-layerOn(strict, database, rootDir, uniqHash, htmlHash, TRUE, &tdList);
-if (visibilityRa != NULL)
-    trackDbOverrideVisbility(uniqHash, visibilityRa,
-			     optionExists("hideFirst"));
-if (priorityRa != NULL)
-    trackDbOverridePriority(uniqHash, priorityRa);
-slSort(&tdList, trackDbCmp);
-
+struct trackDb *tdList = buildTrackDb(org, database, hgRoot,
+                                      visibilityRa, priorityRa, strict);
 checkSubGroups(tdList); 
 
-printf("Loaded %d track descriptions total\n", slCount(tdList));
+verbose(1, "Loaded %d track descriptions total\n", slCount(tdList));
 
-/* Write to tab-separated file. */
+/* Write to tab-separated file; hold off on html, since it must be encoded */
     {
     FILE *f = mustOpen(tab, "w");
     for (td = tdList; td != NULL; td = td->next)
+        {
+        hVarSubstTrackDb(td, database);
+        char *hold = td->html;
+        td->html = "";
 	trackDbTabOut(td, f);
+        td->html = hold;
+        }
     carefulClose(&f);
     }
 
@@ -480,27 +536,23 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
     sqlRemakeTable(conn, trackDbName, create);
 
     /* Load in regular fields. */
-    sprintf(query, "load data local infile '%s' into table %s", tab, trackDbName);
+    safef(query, sizeof(query), "load data local infile '%s' into table %s", tab, trackDbName);
     sqlUpdate(conn, query);
 
     /* Load in html and settings fields. */
     for (td = tdList; td != NULL; td = td->next)
 	{
-	char *html = hashFindVal(htmlHash, td->tableName);
-        if (html == NULL)
+        if (isEmpty(td->html))
 	    {
 	    if (strict && !trackDbSetting(td, "subTrack") && !sameString(td->tableName,"cytoBandIdeo"))
 		{
-		printf("html missing for %s %s %s '%s'\n",org, database, td->tableName, td->shortLabel);
+		fprintf(stderr, "Warning: html missing for %s %s %s '%s'\n",org, database, td->tableName, td->shortLabel);
 		}
 	    }
 	else
 	    {
-            char *subHtml = hVarSubst(td->tableName, td, database, html);
-            if (subHtml != NULL)
-                html = subHtml;
 	    updateBigTextField(conn,  trackDbName, "tableName", td->tableName, 
-	    	"html", html);
+	    	"html", td->html);
 	    }
 	if (td->settingsHash != NULL)
 	    {
@@ -512,7 +564,7 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
 	}
 
     sqlDisconnect(&conn);
-    printf("Loaded database %s\n", database);
+    verbose(1, "Loaded database %s\n", database);
     }
 }
 
