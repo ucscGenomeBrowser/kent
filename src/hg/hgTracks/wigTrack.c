@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.85 2009/01/14 18:59:16 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.86 2009/01/23 23:10:09 tdreszer Exp $";
 
 #define SMALLBUF 128
 
@@ -98,7 +98,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     }
 }
 
-void wigFillInColorArray(struct track *wigTrack, struct hvGfx *hvg, 
+void wigFillInColorArray(struct track *wigTrack, struct hvGfx *hvg,
 			 Color *colorArray, int colSize, struct track *colorTrack)
 /* Fill in a color array with the colorTrack's color where
    it would normally have an exon. */
@@ -314,13 +314,13 @@ if ( el == NULL)
 }
 
 #ifndef GBROWSE
-void ctWigLoadItems(struct track *tg) 
+void ctWigLoadItems(struct track *tg)
 /*	load custom wiggle track data	*/
 {
 struct customTrack *ct;
 char *row[13];
 struct lineFile *lf = NULL;
-struct wiggle wiggle; 
+struct wiggle wiggle;
 struct wigItem *wiList = NULL;
 int itemsLoaded = 0;
 struct hash *spans = NULL;	/* Spans encountered during load */
@@ -350,7 +350,7 @@ lf = lineFileOpen(ct->wigFile, TRUE);
 while (lineFileChopNextTab(lf, row, ArraySize(row)))
     {
 
-    wiggleStaticLoad(row, &wiggle); 
+    wiggleStaticLoad(row, &wiggle);
     /*	we have to do hRangeQuery's job here since we are reading a
      *	file.  We need to be on the correct chromosome, and the data
      *	needs to be in the current view.
@@ -376,7 +376,7 @@ lineFileClose(&lf);
 }
 #endif /* GBROWSE */
 
-void wigLoadItems(struct track *tg) 
+void wigLoadItems(struct track *tg)
 /*	wigLoadItems - read the table rows that hRangeQuery returns
  *	With appropriate adjustment to help hRangeQuery limit its
  *	result to specific "Span" based on the basesPerPixel.
@@ -419,7 +419,7 @@ char *spanOver1K = "Span >= 1000";
 char whereSpan[SMALLBUF];
 int spanMinimum = 1;
 char *dbTableName = NULL;
-struct trackDb *tdb = NULL; 
+struct trackDb *tdb = NULL;
 int loadStart = winStart, loadEnd = winEnd;
 
 #ifndef GBROWSE
@@ -582,7 +582,7 @@ for (i = 0; i < preDrawSize; ++i)
 		if (fabs(preDraw[i].min)
 				< fabs(preDraw[i].max))
 		    dataValue = preDraw[i].min;
-		else 
+		else
 		    dataValue = preDraw[i].max;
 		break;
 	case (wiggleWindowingMean):
@@ -594,7 +594,7 @@ for (i = 0; i < preDrawSize; ++i)
 		if (fabs(preDraw[i].min)
 			> fabs(preDraw[i].max))
 		    dataValue = preDraw[i].min;
-		else 
+		else
 		    dataValue = preDraw[i].max;
 		break;
 	}
@@ -730,7 +730,7 @@ Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
 
 /*	Set up the color by array. Determine color of each pixel
  *	based initially on the sign of the data point. If a colorTrack
- *	is specified also fill in the color array with that. 
+ *	is specified also fill in the color array with that.
  */
 AllocArray(colorArray, width);
 for(x1 = 0; x1 < width; ++x1)
@@ -750,7 +750,7 @@ for(x1 = 0; x1 < width; ++x1)
     }
 
 /* Fill in colors from alternate track if necessary. */
-if(colorTrack != NULL) 
+if(colorTrack != NULL)
     {
     struct track *cTrack = hashMustFindVal(trackHash, colorTrack);
 
@@ -978,7 +978,7 @@ if (tg->mapsSelf)
 #endif /* GBROWSE */
 	itemName = cloneString(tg->mapName);
 
-    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
+    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName,
             itemName, NULL);
     freeMem(itemName);
     }
@@ -1125,7 +1125,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	x1 = (wi->start - seqStart) * pixelsPerBase;
 	x2 = ((wi->start+(wi->count * usingDataSpan))-seqStart) * pixelsPerBase;
 
-	if (x2 > x1) 
+	if (x2 > x1)
 	    {
 	    unsigned char *readData;	/* the bytes read in from the file */
 	    lseek(wibFH, wi->offset, SEEK_SET);
@@ -1160,8 +1160,8 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		    }
 		}
 	    freeMem(readData);
-	    } 
-	else 
+	    }
+	else
 	    {	/*	only one pixel for this block of data */
 	    int xCoord = preDrawZero + x1;
 	    /*	if the point falls within our array, record it.
@@ -1402,7 +1402,7 @@ else if (tg->limitedVis == tvFull)
  *	 by hgTracks from its cart UI setting.  When called in
  *	 TotalHeight it will then be the requested visibility.
  */
-void wigMethods(struct track *track, struct trackDb *tdb, 
+void wigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[])
 {
 int defaultHeight;	/*	truncated by limits	*/
@@ -1416,22 +1416,21 @@ int maxHeight = atoi(DEFAULT_HEIGHT_PER);
 int minHeight = MIN_HEIGHT_PER;
 
 AllocVar(wigCart);
-char *name = compositeViewControlNameFromTdb(tdb);
 
 /*	These Fetch functions look for variables in the cart bounded by
  *	limits specified in trackDb or returning defaults
  */
-wigCart->lineBar = wigFetchGraphTypeWithCart(cart,tdb,name, (char **) NULL);
-wigCart->horizontalGrid = wigFetchHorizontalGridWithCart(cart,tdb,name, (char **) NULL);
+wigCart->lineBar = wigFetchGraphTypeWithCart(cart,tdb,tdb->tableName, (char **) NULL);
+wigCart->horizontalGrid = wigFetchHorizontalGridWithCart(cart,tdb,tdb->tableName, (char **) NULL);
 
-wigCart->autoScale = wigFetchAutoScaleWithCart(cart,tdb,name, (char **) NULL);
-wigCart->windowingFunction = wigFetchWindowingFunctionWithCart(cart,tdb,name, (char **) NULL);
-wigCart->smoothingWindow = wigFetchSmoothingWindowWithCart(cart,tdb,name, (char **) NULL);
+wigCart->autoScale = wigFetchAutoScaleWithCart(cart,tdb,tdb->tableName, (char **) NULL);
+wigCart->windowingFunction = wigFetchWindowingFunctionWithCart(cart,tdb,tdb->tableName, (char **) NULL);
+wigCart->smoothingWindow = wigFetchSmoothingWindowWithCart(cart,tdb,tdb->tableName, (char **) NULL);
 
-wigFetchMinMaxPixelsWithCart(cart,tdb,name, &minHeight, &maxHeight, &defaultHeight);
-wigFetchYLineMarkValueWithCart(cart,tdb,name, &yLineMark);
+wigFetchMinMaxPixelsWithCart(cart,tdb,tdb->tableName, &minHeight, &maxHeight, &defaultHeight);
+wigFetchYLineMarkValueWithCart(cart,tdb,tdb->tableName, &yLineMark);
 wigCart->yLineMark = yLineMark;
-wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,name, (char **) NULL);
+wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,tdb->tableName, (char **) NULL);
 
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;
@@ -1440,7 +1439,7 @@ wigCart->minHeight = minHeight;
 if(trackDbSetting(tdb, "wigColorBy") != NULL)
     wigCart->colorTrack = trackDbSetting(tdb, "wigColorBy");
 
-wigFetchMinMaxYWithCart(cart,tdb,name, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
+wigFetchMinMaxYWithCart(cart,tdb,tdb->tableName, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 track->minRange = minY;
 track->maxRange = maxY;
 
@@ -1466,5 +1465,4 @@ track->drawLeftLabels = wigLeftLabels;
 /*	the lfSubSample type makes the image map function correctly */
 track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 
-compositeViewControlNameFree(&name);
 }	/*	wigMethods()	*/
