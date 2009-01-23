@@ -41,7 +41,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1542 2009/01/16 01:54:33 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1543 2009/01/23 06:38:42 larrym Exp $";
 
 #define SMALLBUF 64
 
@@ -1534,6 +1534,8 @@ int yAfterRuler = gfxBorder;
 int yAfterBases = yAfterRuler;  // differs if base-level translation shown
 int relNumOff;
 boolean rulerCds = zoomedToCdsColorLevel;
+int rulerClickHeight = 0;
+int newWinWidth = 0;
 
 /* Start a global track hash. */
 trackHash = newHash(8);
@@ -1806,7 +1808,7 @@ if (rulerMode != tvHide)
     {
     struct dnaSeq *seq = NULL;
     int rulerClickY = 0;
-    int rulerClickHeight = rulerHeight;
+    rulerClickHeight = rulerHeight;
 
     y = rulerClickY;
     hvGfxSetClip(hvg, insideX, y, insideWidth, yAfterRuler-y+1);
@@ -1868,7 +1870,7 @@ if (rulerMode != tvHide)
     /* Make hit boxes that will zoom program around ruler. */
     int boxes = 30;
     int winWidth = winEnd - winStart;
-    int newWinWidth = winWidth;
+    newWinWidth = winWidth;
     int i, ws, we = 0, ps, pe = 0;
     int mid, ns, ne;
     double wScale = (double)winWidth/boxes;
@@ -1887,9 +1889,6 @@ if (rulerMode != tvHide)
         newWinWidth = insideWidth/tl.mWidth;
     else
         errAbort("invalid zoom type %s", zoomType);
-    hPrintf("<input type='hidden' id='hgt.newWinWidth' value='%d'>\n", newWinWidth);
-    hPrintf("<input type='hidden' id='hgt.rulerClickHeight' value='%d'>\n", rulerClickHeight);
-    hPrintf("<input type='hidden' id='hgt.dragSelection' value='%d'>\n", dragZooming ? 1 : 0);
 
     if (newWinWidth < 1)
 	newWinWidth = 1;
@@ -2117,6 +2116,16 @@ for (track = trackList; track != NULL; track = track->next)
 
 /* Finish map. */
 hPrintf("</MAP>\n");
+
+hPrintf("<input type='hidden' id='hgt.dragSelection' name='dragSelection' value='%d'>\n", dragZooming ? 1 : 0);
+if(rulerClickHeight)
+    {
+    hPrintf("<input type='hidden' id='hgt.rulerClickHeight' name='rulerClickHeight' value='%d'>\n", rulerClickHeight);
+    }
+if(newWinWidth)
+    {
+    hPrintf("<input type='hidden' id='hgt.newWinWidth' name='newWinWidth' value='%d'>\n", newWinWidth);
+    }
 
 /* Save out picture and tell html file about it. */
 hvGfxClose(&hvg);
@@ -3416,7 +3425,9 @@ if (psOutput != NULL)
    }
 
 /* Tell browser where to go when they click on image. */
-hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracksName());
+hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" METHOD=\"GET\">\n\n", hgTracksName());
+hPrintf("<input type='hidden' id='hgt.insideX' name='insideX' value='%d'>\n", insideX);
+hPrintf("<input type='hidden' id='hgt.revCmplDisp' name='revCmplDisp' value='%d'>\n", revCmplDisp);
 if (!psOutput) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''";
 
@@ -3568,7 +3579,7 @@ if (!hideControls)
 		"VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
         hPrintf("\n%s", trackGroupsHidden1->string);
 	hPrintf("</CENTER></FORM>\n");
-	hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
+	hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" id=\"TrackForm\" METHOD=\"POST\">\n\n", hgTracksName());
         hPrintf(trackGroupsHidden2->string);
         freeDyString(&trackGroupsHidden1);
         freeDyString(&trackGroupsHidden2);
@@ -4165,9 +4176,6 @@ if (sameString(baseTitle, ""))
 if  (cgiVarExists("hgt.toggleRevCmplDisp"))
     toggleRevCmplDisp();
 setRulerMode();
-
-hPrintf("<input type='hidden' id='hgt.insideX' name='insideX' value='%d'>\n", insideX);
-hPrintf("<input type='hidden' id='hgt.revCmplDisp' name='revCmplDisp' value='%d'>\n", revCmplDisp);
 
 /* Do zoom/scroll if they hit it. */
 if (cgiVarExists("hgt.left3"))
