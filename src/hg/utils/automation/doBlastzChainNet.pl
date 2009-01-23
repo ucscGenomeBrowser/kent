@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.25 2008/10/22 17:00:25 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.26 2009/01/23 22:07:32 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -111,8 +111,8 @@ print STDERR <<_EOF_
                                   axtChain command.
     -chainLinearGap type  Add -linearGap=<loose|medium|filename> to the
                                   axtChain command.  (default: loose)
-    -tRepeats table       Add -tRepeats=table to netClass (default: none)
-    -qRepeats table       Add -qRepeats=table to netClass (default: none)
+    -tRepeats table       Add -tRepeats=table to netClass (default: rmsk)
+    -qRepeats table       Add -qRepeats=table to netClass (default: rmsk)
     -ignoreSelf           Do not assume self alignments even if tDb == qDb
     -syntenicNet          Perform optional syntenicNet step
     -noDbNameCheck        ignore Db name format
