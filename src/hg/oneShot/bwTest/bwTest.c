@@ -1,12 +1,42 @@
 /* bwTest - Test out some big wig related things.. */
+
+/* bigWig file structure:
+ *     fixedWidthHeader
+ *         magic# 		4 bytes
+ *	   zoomLevels		4 bytes
+ *           ... other overall data about file ...
+ *         chromosomeTreeOffset	8 bytes
+ *         unzoomedDataOffset	8 bytes
+ *	   unzoomedIndexOffset	8 bytes
+ *           ... about 32 reserved bytes ...
+ *     zoomHeaders
+ *         zoomFactor		float (4 bytes)
+ *	   reserved		4 bytes
+ *	   dataOffset		8 bytes
+ *         indexOffset          8 bytes
+ *     chromosome b+ tree
+ *     unzoomed data
+ *         sectionCount		4 bytes
+ *         sectionData
+ *     unzoomed index
+ *     zoom info
+ *         zoomed data
+ *             sectionCount		4 bytes
+ *             sectionData
+ *         zoomed index
+ */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "localmem.h"
 #include "sqlNum.h"
+#include "sig.h"
+#include "bPlusTree.h"
+#include "cirTree.h"
 
-static char const rcsid[] = "$Id: bwTest.c,v 1.2 2009/01/22 21:48:08 kent Exp $";
+static char const rcsid[] = "$Id: bwTest.c,v 1.3 2009/01/23 00:50:03 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 512;
@@ -32,7 +62,7 @@ static struct optionSpec options[] = {
 };
 
 struct bigWigBedGraphItem
-/* An bedGraph-type item in a bigWigSection. */
+/* An bedGraph-type item in a bigWigSect. */
     {
     struct bigWigBedGraphItem *next;	/* Next in list. */
     bits32 start,end;		/* Range of chromosome covered. */
@@ -40,7 +70,7 @@ struct bigWigBedGraphItem
     };
 
 struct bigWigVariableStepItem
-/* An variableStep type item in a bigWigSection. */
+/* An variableStep type item in a bigWigSect. */
     {
     struct bigWigVariableStepItem *next;	/* Next in list. */
     bits32 start;		/* Start position in chromosome. */
@@ -48,13 +78,13 @@ struct bigWigVariableStepItem
     };
 
 struct bigWigFixedStepItem
-/* An fixedStep type item in a bigWigSection. */
+/* An fixedStep type item in a bigWigSect. */
     {
     struct bigWigFixedStepItem *next;	/* Next in list. */
     double val;			/* Value. */
     };
 
-enum bigWigSectionType 
+enum bigWigSectType 
 /* Code to indicate section type. */
     {
     bwstBedGraph=1,
@@ -70,21 +100,112 @@ union bigWigItem
     struct bigWigFixedStepItem *fixedStep;
     };
 
-
-struct bigWigSection
-/* A section of a bigWig file - all on same chrom */
+struct bigWigSect
+/* A section of a bigWig file - all on same chrom.  This is a somewhat fat data
+ * structure used by the bigWig creation code.  See also bigWigSection for the
+ * structure returned by the bigWig reading code. */
     {
-    struct bigWigSection *next;		/* Next in list. */
+    struct bigWigSect *next;		/* Next in list. */
     char *chrom;			/* Chromosome name. */
     bits32 start,end;			/* Range of chromosome covered. */
-    enum bigWigSectionType type;
+    enum bigWigSectType type;
     union bigWigItem itemList;		/* List of items in this section. */
-    int itemStep;			/* Step within item if applicable. */
-    int itemSpan;			/* Item span if applicable. */
-    int itemCount;			/* Number of items in section. */
+    bits32 itemStep;			/* Step within item if applicable. */
+    bits32 itemSpan;			/* Item span if applicable. */
+    bits16 itemCount;			/* Number of items in section. */
+    bits32 chromId;			/* Unique small integer value for chromosome. */
+    bits64 fileOffset;			/* Offset of section in file. */
     };
 
-void sectionWriteBedGraphAsAscii(struct bigWigSection *section, FILE *f)
+void bigWigSectWrite(struct bigWigSect *section, FILE *f)
+/* Write out section to file, filling in section->fileOffset. */
+{
+UBYTE type = section->type;
+UBYTE reserved8 = 0;
+
+section->fileOffset = ftell(f);
+writeOne(f, section->chromId);
+writeOne(f, section->start);
+writeOne(f, section->end);
+writeOne(f, section->itemStep);
+writeOne(f, section->itemSpan);
+writeOne(f, type);
+writeOne(f, reserved8);
+writeOne(f, section->itemCount);
+
+switch (section->type)
+    {
+    case bwstBedGraph:
+	{
+	struct bigWigBedGraphItem *item;
+	for (item = section->itemList.bedGraph; item != NULL; item = item->next)
+	    {
+	    writeOne(f, item->start);
+	    writeOne(f, item->end);
+	    writeOne(f, item->val);
+	    }
+	break;
+	}
+    case bwstVariableStep:
+	{
+	struct bigWigVariableStepItem *item;
+	for (item = section->itemList.variableStep; item != NULL; item = item->next)
+	    {
+	    writeOne(f, item->start);
+	    writeOne(f, item->val);
+	    }
+	break;
+	}
+    case bwstFixedStep:
+	{
+	struct bigWigFixedStepItem *item;
+	for (item = section->itemList.fixedStep; item != NULL; item = item->next)
+	    {
+	    writeOne(f, item->val);
+	    }
+	break;
+	break;
+	}
+    default:
+        internalErr();
+	break;
+    }
+}
+
+int bigWigSectCmp(const void *va, const void *vb)
+/* Compare to sort based on query start. */
+{
+const struct bigWigSect *a = *((struct bigWigSect **)va);
+const struct bigWigSect *b = *((struct bigWigSect **)vb);
+int dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    {
+    dif = (int)a->start - (int)b->start;
+    if (dif == 0)
+	dif = (int)a->end - (int)b->end;
+    }
+return dif;
+}
+
+struct cirTreeRange bigWigSectFetchKey(const void *va, void *context)
+/* Fetch bigWigSect key for r-tree */
+{
+struct cirTreeRange res;
+const struct bigWigSect *a = *((struct bigWigSect **)va);
+res.chromIx = a->chromId;
+res.start = a->start;
+res.end = a->end;
+return res;
+}
+
+bits64 bigWigSectFetchOffset(const void *va, void *context)
+/* Fetch bigWigSect file offset for r-tree */
+{
+const struct bigWigSect *a = *((struct bigWigSect **)va);
+return a->fileOffset;
+}
+
+void sectionWriteBedGraphAsAscii(struct bigWigSect *section, FILE *f)
 /* Write out a bedGraph section. */
 {
 struct bigWigBedGraphItem *item;
@@ -96,7 +217,7 @@ for (item = section->itemList.bedGraph; item != NULL; item = item->next)
 
 }
 
-void sectionWriteFixedStepAsAscii(struct bigWigSection *section, FILE *f)
+void sectionWriteFixedStepAsAscii(struct bigWigSect *section, FILE *f)
 /* Write out a fixedStep section. */
 {
 struct bigWigFixedStepItem *item;
@@ -106,7 +227,7 @@ for (item = section->itemList.fixedStep; item != NULL; item = item->next)
     fprintf(f, "%g\n", item->val);
 }
 
-void sectionWriteVariableStepAsAscii(struct bigWigSection *section, FILE *f)
+void sectionWriteVariableStepAsAscii(struct bigWigSect *section, FILE *f)
 /* Write out a variableStep section. */
 {
 struct bigWigVariableStepItem *item;
@@ -115,7 +236,7 @@ for (item = section->itemList.variableStep; item != NULL; item = item->next)
     fprintf(f, "%u\t%g\n", (unsigned)item->start+1, item->val);
 }
 
-void sectionWriteAsAscii(struct bigWigSection *section, FILE *f)
+void sectionWriteAsAscii(struct bigWigSect *section, FILE *f)
 /* Write out ascii representation of section (which will be wig-file readable). */
 {
 switch (section->type)
@@ -152,7 +273,7 @@ return stepTypeLine(line);
 
 void parseFixedStepSection(struct lineFile *lf, struct lm *lm,
 	char *chrom, bits32 span, bits32 sectionStart, 
-	bits32 step, struct bigWigSection **pSectionList)
+	bits32 step, struct bigWigSect **pSectionList)
 /* Read the single column data in section until get to end. */
 {
 /* Stream through section until get to end of file or next section,
@@ -194,7 +315,7 @@ for (startItem = nextStartItem; startItem != NULL; startItem = nextStartItem)
     endItem->next = NULL;
 
     /* Fill in section and add it to list. */
-    struct bigWigSection *section;
+    struct bigWigSect *section;
     lmAllocVar(lm, section);
     section->chrom = chrom;
     section->start = sectionStart;
@@ -210,7 +331,7 @@ for (startItem = nextStartItem; startItem != NULL; startItem = nextStartItem)
 }
 
 void parseVariableStepSection(struct lineFile *lf, struct lm *lm,
-	char *chrom, bits32 span, struct bigWigSection **pSectionList)
+	char *chrom, bits32 span, struct bigWigSect **pSectionList)
 /* Read the single column data in section until get to end. */
 {
 /* Stream through section until get to end of file or next section,
@@ -255,7 +376,7 @@ for (startItem = itemList; startItem != NULL; startItem = nextStartItem)
     endItem->next = NULL;
 
     /* Fill in section and add it to list. */
-    struct bigWigSection *section;
+    struct bigWigSect *section;
     lmAllocVar(lm, section);
     section->chrom = chrom;
     section->start = startItem->start;
@@ -279,12 +400,12 @@ return sqlUnsigned(val);
 }
 
 void parseSteppedSection(struct lineFile *lf, char *initialLine, 
-	struct lm *lm, struct bigWigSection **pSectionList)
+	struct lm *lm, struct bigWigSect **pSectionList)
 /* Parse out a variableStep or fixedStep section and add it to list, breaking it up as need be. */
 {
 /* Parse out first word of initial line and make sure it is something we recognize. */
 char *typeWord = nextWord(&initialLine);
-enum bigWigSectionType type = bwstFixedStep;
+enum bigWigSectType type = bwstFixedStep;
 if (sameString(typeWord, "variableStep"))
     type = bwstVariableStep;
 else if (sameString(typeWord, "fixedStep"))
@@ -358,7 +479,7 @@ const struct bedGraphChrom *b = *((struct bedGraphChrom **)vb);
 return strcmp(a->name, b->name);
 }
 
-void parseBedGraphSection(struct lineFile *lf, struct lm *lm, struct bigWigSection **pSectionList)
+void parseBedGraphSection(struct lineFile *lf, struct lm *lm, struct bigWigSect **pSectionList)
 /* Parse out bedGraph section until we get to something that is not in bedGraph format. */
 {
 /* Set up hash and list to store chromosomes. */
@@ -427,7 +548,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	endItem->next = NULL;
 
 	/* Fill in section and add it to section list. */
-	struct bigWigSection *section;
+	struct bigWigSect *section;
 	lmAllocVar(lm, section);
 	section->chrom = cloneString(chrom->name);
 	section->start = startItem->start;
@@ -445,14 +566,149 @@ hashFree(&chromHash);
 chromList = NULL;
 }
 
+struct name32
+/* Pair of a name and a 32-bit integer. Used to assign IDs to chromosomes. */
+    {
+    struct name32 *next;
+    char *name;
+    bits32 val;
+    };
+
+static void name32Key(const void *va, char *keyBuf)
+/* Get key field. */
+{
+const struct name32 *a = ((struct name32 *)va);
+strcpy(keyBuf, a->name);
+}
+
+static void *name32Val(const void *va)
+/* Get key field. */
+{
+const struct name32 *a = ((struct name32 *)va);
+return (void*)(&a->val);
+}
+
+static void makeChromIds(struct bigWigSect *sectionList,
+	int *retChromCount, struct name32 **retChromArray,
+	int *retMaxChromNameSize)
+/* Fill in chromId field in sectionList.  Return array of chromosome name/ids. */
+{
+/* Build up list of unique chromosome names. */
+struct bigWigSect *section;
+char *chromName = "";
+int chromCount = 0;
+int maxChromNameSize = 0;
+struct slRef *uniq, *uniqList = NULL;
+for (section = sectionList; section != NULL; section = section->next)
+    {
+    if (!sameString(section->chrom, chromName))
+        {
+	chromName = section->chrom;
+	refAdd(&uniqList, chromName);
+	++chromCount;
+	int len = strlen(chromName);
+	if (len > maxChromNameSize)
+	    maxChromNameSize = len;
+	}
+    section->chromId = chromCount-1;
+    }
+slReverse(&uniqList);
+
+/* Allocate and fill in results array. */
+struct name32 *chromArray;
+AllocArray(chromArray, chromCount);
+int i;
+for (i = 0, uniq = uniqList; i < chromCount; ++i, uniq = uniq->next)
+    {
+    chromArray[i].name = uniq->val;
+    chromArray[i].val = i;
+    }
+
+/* Clean up, set return values and go home. */
+slFreeList(&uniqList);
+*retChromCount = chromCount;
+*retChromArray = chromArray;
+*retMaxChromNameSize = maxChromNameSize;
+}
+
+void bigWigCreate(struct bigWigSect *sectionList, char *fileName)
+/* Create a bigWig file out of a sorted sectionList. */
+{
+int sectionCount = slCount(sectionList);
+FILE *f = mustOpen(fileName, "wb");
+bits32 sig = bigWigSig;
+bits32 zoomCount = 0;
+bits32 reserved32 = 0;
+bits64 dataOffset = 0, dataOffsetPos;
+bits64 indexOffset = 0, indexOffsetPos;
+bits64 chromTreeOffset = 0, chromTreeOffsetPos;
+int i;
+
+/* Write fixed header. */
+writeOne(f, sig);
+writeOne(f, zoomCount);
+chromTreeOffsetPos = ftell(f);
+writeOne(f, chromTreeOffset);
+dataOffsetPos = ftell(f);
+writeOne(f, dataOffset);
+indexOffsetPos = ftell(f);
+writeOne(f, indexOffset);
+for (i=0; i<8; ++i)
+    writeOne(f, reserved32);
+
+/* Write zoom index. */
+
+/* Write chromosome bPlusTree */
+chromTreeOffset = ftell(f);
+struct name32 *chromIdArray;
+int chromCount, maxChromNameSize;
+makeChromIds(sectionList, &chromCount, &chromIdArray, &maxChromNameSize);
+int chromBlockSize = min(blockSize, chromCount);
+bptFileBulkIndexToOpenFile(chromIdArray, sizeof(chromIdArray[0]), chromCount, chromBlockSize,
+    name32Key, maxChromNameSize, name32Val, sizeof(chromIdArray[0].val), f);
+
+/* Write out data sections. */
+dataOffset = ftell(f);
+struct bigWigSect *section;
+for (section = sectionList; section != NULL; section = section->next)
+    bigWigSectWrite(section, f);
+
+/* Write out index - creating a temporary array rather than list representation of
+ * sections in the process. */
+indexOffset = ftell(f);
+struct bigWigSect **sectionArray;
+AllocArray(sectionArray, sectionCount);
+for (section = sectionList, i=0; section != NULL; section = section->next, ++i)
+    sectionArray[i] = section;
+cirTreeFileBulkIndexToOpenFile(sectionArray, sizeof(sectionArray[0]), sectionCount,
+    blockSize, 1, NULL, bigWigSectFetchKey, bigWigSectFetchOffset, 
+    indexOffset - dataOffset, f);
+freez(&sectionArray);
+
+/* Go back and fill in offsets properly in header. */
+fseek(f, dataOffsetPos, SEEK_SET);
+writeOne(f, dataOffset);
+fseek(f, indexOffsetPos, SEEK_SET);
+writeOne(f, indexOffset);
+fseek(f, chromTreeOffsetPos, SEEK_SET);
+writeOne(f, chromTreeOffset);
+
+
+uglyf("chromTreeOffsetPos %llu, chromTreeOffset %llu\n", chromTreeOffsetPos, chromTreeOffset);
+uglyf("dataOffsetPos %llu, dataOffset %llu\n", dataOffsetPos, dataOffset);
+uglyf("indexOffsetPos %llu, indexOffset %llu\n", indexOffsetPos, indexOffset);
+/* Clean up */
+freez(&chromIdArray);
+carefulClose(&f);
+}
+
 
 void bwTest(char *inName, char *outName)
 /* bwTest - Test out some big wig related things. */
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
-FILE *f = mustOpen(outName, "wb");
 char *line;
-struct bigWigSection *sectionList = NULL;
+struct bigWigSect *sectionList = NULL;
 struct lm *lm = lmInit(0);
 while (lineFileNextReal(lf, &line))
     {
@@ -480,15 +736,9 @@ while (lineFileNextReal(lf, &line))
 	}
     }
 
-slReverse(&sectionList);
-struct bigWigSection *section;
-for (section = sectionList; section != NULL; section = section->next)
-    {
-    sectionWriteAsAscii(section, f);
-    }
+slSort(&sectionList, bigWigSectCmp);
 
-
-carefulClose(&f);
+bigWigCreate(sectionList, outName);
 }
 
 int main(int argc, char *argv[])
