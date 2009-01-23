@@ -798,6 +798,31 @@ term 2008-10-01
 type freezeDate
 description 2008-10-01 freeze
 
+# Species
+term hg18
+type species
+description The reference genome: Homo sapiens; March 2006 release
+
+term panTro2
+type species
+description Chimpanzee: Pan troglodytes; March 2006 release
+
+term rheMac2
+type species
+description Monkey: Rhesus macaque; January 2006 release
+
+term mm9
+type species
+description Mouse: Mus musculus; July 2007 release
+
+term rn4
+type species
+description Rat: Rattus norvegicus; November 2004 release
+
+term bosTau4
+type species
+description Cow: Bos Taurus; October 2007 release
+
 # Control Terms
 term Control
 type control
