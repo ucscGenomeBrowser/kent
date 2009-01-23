@@ -101,6 +101,7 @@ DIRS = \
 	pslToXa \
 	randomLines \
 	raToTab \
+	raToLines \
 	rmFaDups \
 	rowsToCols \
 	scaffoldFaToAgp \
