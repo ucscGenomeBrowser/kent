@@ -705,10 +705,12 @@ void toLowerN(char *s, int n);
 void toggleCase(char *s, int size);
 /* toggle upper and lower case chars in string. */
 
-void touppers(char *s);
+char *strUpper(char *s);
+#define touppers(s) (void)strUpper(s)
 /* Convert entire string to upper case. */
 
-void tolowers(char *s);
+char *strLower(char *s);
+#define tolowers(s) (void)strLower(s)
 /* Convert entire string to lower case */
 
 char *replaceChars(char *string, char *oldStr, char *newStr);
