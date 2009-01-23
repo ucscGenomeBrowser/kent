@@ -2,7 +2,6 @@
                     Record display time. */
 
 #include "common.h"
-
 #include "chromInfo.h"
 #include "dystring.h"
 #include "hash.h"
@@ -13,10 +12,18 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.13 2008/09/03 19:20:53 markd Exp $";
+static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.14 2009/01/23 22:24:06 hiram Exp $";
 
 static char *database = NULL;
+static boolean quiet = FALSE;
 static struct hash *chromHash = NULL;
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"machines", OPTION_STRING},
+    {"quiet", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 struct machine 
     {
@@ -31,9 +38,11 @@ void usage()
 {
 errAbort(
   "hgTracksRandom - Time default view for random position\n"
-  "machines is a file listing the machines to test\n"
   "usage:\n"
-  "  hgTracksRandom machines\n");
+  "  hgTracksRandom <machines> [options]\n"
+  "options:\n"
+  "   <machines> is a file listing the machines to test\n"
+  "   -quiet - only outputs the timing numbers, no machine names\n");
 }
 
 void getMachines(char *filename)
@@ -131,10 +140,14 @@ char testTime[100];
 char testDate[100];
 long elapsedTime = 0;
 
+optionInit(&argc, argv, optionSpecs);
+
+quiet = optionExists("quiet");
 now = time(NULL);
 strftime(testTime, 100, "%H:%M", localtime(&now));
 strftime(testDate, 100, "%B %d, %Y", localtime(&now));
-printf("%s %s\n", testDate, testTime);
+if (!quiet)
+    printf("%s %s\n", testDate, testTime);
 
 if (argc != 2)
     usage();
@@ -147,7 +160,8 @@ strcpy(database, "hg17");
 chromHash = loadAllChromInfo();
 chromSize = getChromSize(chrom);
 startPos = getStartPos(chromSize, windowSize);
-printf("%s:%d-%d\n\n", chrom, startPos, startPos + windowSize);
+if (! quiet)
+    printf("%s:%d-%d\n\n", chrom, startPos, startPos + windowSize);
 
 getMachines(argv[1]);
 
@@ -157,12 +171,20 @@ for (machinePos = machineList; machinePos != NULL; machinePos = machinePos->next
     dyStringPrintf(dy, "%s/cgi-bin/hgTracks?db=hg17&position=%s:%d-%d", machinePos->name, 
                    chrom, startPos, startPos + windowSize);
     elapsedTime = hgTracksRandom(dy->string);
-    if (elapsedTime > 5000)
-        printf("%s %ld <---\n", machinePos->name, elapsedTime);
+    if (quiet)
+	{
+	printf("%ld\n", elapsedTime);
+	}
     else
-        printf("%s %ld\n", machinePos->name, elapsedTime);
+	{
+	if (elapsedTime > 5000)
+	    printf("%s %ld <---\n", machinePos->name, elapsedTime);
+	else
+	    printf("%s %ld\n", machinePos->name, elapsedTime);
+	}
     }
-printf("----------------------------------\n");
+if (! quiet)
+    printf("----------------------------------\n");
 
 /* free machine list */
 return 0;
