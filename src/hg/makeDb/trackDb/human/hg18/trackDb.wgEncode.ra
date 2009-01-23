@@ -6578,6 +6578,7 @@ wgEncode 1
         maxHeightPixels	100:16:16
         cell		HeLa-S3
         antibody	MNase
+
         track		wgEncodeYaleChIPseqPeaksHelas3Mouseigg
         subTrack	wgEncodeYaleChIPseq off
         shortLabel	HeLa MouseIgG Pk
