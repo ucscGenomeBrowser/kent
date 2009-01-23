@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.124 2009/01/08 22:48:17 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.125 2009/01/23 23:28:43 tdreszer Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1116,15 +1116,17 @@ for (i=0; i<size; ++i)
 }
 
 
-void touppers(char *s)
+char *strUpper(char *s)
 /* Convert entire string to upper case. */
 {
 char c;
+char *ss=s;
 for (;;)
     {
-    if ((c = *s) == 0) break;
-    *s++ = toupper(c);
+    if ((c = *ss) == 0) break;
+    *ss++ = toupper(c);
     }
+return s;
 }
 
 char *replaceChars(char *string, char *old, char *new)
@@ -1169,15 +1171,17 @@ strcpy(resultPtr, string);
 return result;
 }
 
-void tolowers(char *s)
+char *strLower(char *s)
 /* Convert entire string to lower case */
 {
 char c;
+char *ss=s;
 for (;;)
     {
-    if ((c = *s) == 0) break;
-    *s++ = tolower(c);
+    if ((c = *ss) == 0) break;
+    *ss++ = tolower(c);
     }
+return s;
 }
 
 char * memSwapChar(char *s, int len, char oldChar, char newChar)
