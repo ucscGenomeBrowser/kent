@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.44 2009/01/21 00:27:55 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.45 2009/01/23 08:38:28 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -140,6 +140,20 @@ hashFree(&superHash);
 *tdListPtr = strictList;
 }
 
+static boolean hasUnallowedChars(char *text)
+/* check if text has any non-printing or non-ascii characters */
+{
+char *c;
+for (c = text; *c != '\0'; c++)
+    {
+    if ((*c <= 7) || ((14 <= *c) && (*c <= 31)) || (*c >= 127))
+        {
+        return TRUE;
+        }
+    }
+return FALSE;
+}
+
 void addVersion(boolean strict, char *database, char *dirName, char *raName, 
     struct hash *uniqHash,
     struct hash *htmlHash,
@@ -192,6 +206,8 @@ for (td = *pTrackList; td != NULL; td = td->next)
 	    char *s;
 	    readInGulp(fileName, &s, NULL);
 	    hashAdd(htmlHash, td->tableName, s);
+            if (hasUnallowedChars(s))
+                fprintf(stderr, "Warning: non-printing or non-ASCII characters in %s\n", fileName);
 	    }
 	}
     hVarSubstTrackDb(td, database);
