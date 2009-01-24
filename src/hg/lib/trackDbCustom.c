@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.49 2009/01/24 02:58:10 markd Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.50 2009/01/24 22:13:37 markd Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -67,23 +67,29 @@ else
 return tvHide;  /* never reached */
 }
 
+static void parseTrackLine(struct trackDb *bt, char *value,
+                           struct lineFile *lf)
+/* parse the track line */
+{
+char *val2 = cloneString(value);
+bt->tableName = nextWord(&val2);
+
+// check for override option
+if (val2 != NULL)
+    {
+    val2 = trimSpaces(val2);
+    if (!sameString(val2, "override"))
+        errAbort("invalid track line: %s:%d: track %s", lf->fileName, lf->lineIx, value);
+    bt->overrides = hashNew(0);
+    }
+}
+
 static void trackDbAddInfo(struct trackDb *bt,
 	char *var, char *value, struct lineFile *lf)
 /* Add info from a variable/value pair to browser table. */
 {
 if (sameString(var, "track"))
-    {
-    bt->tableName = cloneString(value);
-    // check for override option
-    char *val2 = nextWord(&bt->tableName);
-    if (val2 != NULL)
-        {
-        val2 = trimSpaces(val2);
-        if (!sameString(val2, "override"))
-            errAbort("invalid track line: %s %s", var, value);
-        bt->overrides = hashNew(0);
-        }
-    }
+    parseTrackLine(bt, value, lf);
 else if (sameString(var, "shortLabel") || sameString(var, "name"))
     bt->shortLabel = cloneString(value);
 else if (sameString(var, "longLabel") || sameString(var, "description"))
@@ -313,7 +319,7 @@ for (;;)
 	   break;
 	   }
 	line = skipLeadingSpaces(line);
-        if (startsWithWord("track", line) || startsWithWord("trackOverride", line))
+        if (startsWithWord("track", line))
             {
             lineFileReuse(lf);
             break;
