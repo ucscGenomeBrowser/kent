@@ -1,4 +1,5 @@
 // Utility JavaScript
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.12 2009/01/24 00:01:17 tdreszer Exp $
 
 var debug = false;
 
@@ -131,10 +132,10 @@ function showSubTrackCheckBoxes(onlySelected)
                 } else {
                     var associated_cb = tblRow.id.substring(3,tblRow.id.length);
                     chkBox = document.getElementById(associated_cb);
-                    if(chkBox!=undefined && chkBox.checked)
+                    if(chkBox!=undefined && chkBox.checked && chkBox.disabled == false)
                         tblRow.style.display = '';
                     else
-                        tblRow.style.display = 'none';
+                        tblRow.style.display = 'none';  // hides
                 }
             }
         }
@@ -156,17 +157,17 @@ function hideOrShowSubtrack(obj)
 // Also, this relies upon the "displaySubtracks" radio button control
     var tblRow = document.getElementById("tr_"+obj.id);
 
-    if(!obj.checked)
+    if(!obj.checked || obj.disabled)
     {
         var list = document.getElementsByName("displaySubtracks");
         for (var ix=0;ix<list.length;ix++) {
-            if(list[ix].value.match("selected") == null)
-                continue;
-            if(list[ix].checked)
-                tblRow.style.display = 'none';
-            else
-                tblRow.style.display = ''; //'table-row' doesn't work in some browsers (ie: IE)
-            break;
+            if(list[ix].value == "selected") {
+                if(list[ix].checked)
+                    tblRow.style.display = 'none';  // hides
+                else
+                    tblRow.style.display = ''; //'table-row' doesn't work in some browsers (ie: IE)
+                break;
+            }
         }
     }
     else
