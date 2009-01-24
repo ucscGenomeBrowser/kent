@@ -231,7 +231,7 @@ for (i=0; i<itemCount; i += itemsPerSlot)
 	}
     }
 slReverse(&list);
-verbose(1, "Made %d primary index nodes out of %llu items\n", slCount(list), itemCount);
+verbose(2, "Made %d primary index nodes out of %llu items\n", slCount(list), itemCount);
 
 /* Now iterate through making more and more condensed versions until have just one. */
 int levelCount = 1;
@@ -476,11 +476,11 @@ return cmpTwoBits32(qChrom, qStart, rEndChrom, rEndBase) > 0 &&
        cmpTwoBits32(qChrom, qEnd, rStartChrom, rStartBase) < 0;
 }
 
-static void rFindOverlappingBlocks(struct cirTreeFile *crf, int level, bits64 indexFileOffset,
+static void rFindOverlappingBlocks(struct cirTreeFile *crt, int level, bits64 indexFileOffset,
 	bits32 chromIx, bits32 start, bits32 end, struct fileOffsetSize **retList)
 /* Recursively find blocks with data. */
 {
-FILE *f = crf->f;
+FILE *f = crt->f;
 
 /* Seek to start of block. */
 fseek(f, indexFileOffset, SEEK_SET);
@@ -491,7 +491,7 @@ UBYTE reserved;
 bits16 i, childCount;
 mustReadOne(f, isLeaf);
 mustReadOne(f, reserved);
-boolean isSwapped = crf->isSwapped;
+boolean isSwapped = crt->isSwapped;
 childCount = readBits16(f, isSwapped);
 
 // uglyf("rFindOverlappingBlocks %llu %u:%u-%u.  childCount %d. isLeaf %d\n", indexFileOffset, chromIx, start, end, (int)childCount, (int)isLeaf);
@@ -538,13 +538,13 @@ else
 	if (cirTreeOverlaps(chromIx, start, end, startChromIx[i], startBase[i], 
 		endChromIx[i], endBase[i]))
 	    {
-	    rFindOverlappingBlocks(crf, level+1, offset[i], chromIx, start, end, retList);
+	    rFindOverlappingBlocks(crt, level+1, offset[i], chromIx, start, end, retList);
 	    }
 	}
     }
 }
 
-struct fileOffsetSize *cirTreeFindOverlappingBlocks(struct cirTreeFile *crf, 
+struct fileOffsetSize *cirTreeFindOverlappingBlocks(struct cirTreeFile *crt, 
 	bits32 chromIx, bits32 start, bits32 end)
 /* Return list of file blocks that between them contain all items that overlap
  * start/end on chromIx.  Also there will be likely some non-overlapping items
@@ -552,25 +552,7 @@ struct fileOffsetSize *cirTreeFindOverlappingBlocks(struct cirTreeFile *crf,
 {
 struct fileOffsetSize *blockList = NULL;
 
-/* Deal with case where there are not enough items to even build an index. */
-if (crf->itemCount <= crf->blockSize)
-    {
-    if (crf->itemCount != 0)
-        {
-	if (cirTreeOverlaps(chromIx, start, end, 
-		crf->startChromIx, crf->startBase, crf->endChromIx, crf->endBase)) 
-	    {
-	    AllocVar(blockList);
-	    blockList->offset = 0;
-	    blockList->size = crf->fileSize;
-	    }
-	}
-    }
-else
-    {
-    rFindOverlappingBlocks(crf, 0, crf->rootOffset, chromIx, start, end, &blockList);
-    }
-
+rFindOverlappingBlocks(crt, 0, crt->rootOffset, chromIx, start, end, &blockList);
 slReverse(&blockList);
 return blockList;
 }
