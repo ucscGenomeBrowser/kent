@@ -4,17 +4,16 @@
  *     fixedWidthHeader
  *         magic# 		4 bytes
  *	   zoomLevels		4 bytes
- *           ... other overall data about file ...
  *         chromosomeTreeOffset	8 bytes
  *         unzoomedDataOffset	8 bytes
  *	   unzoomedIndexOffset	8 bytes
- *           ... about 32 reserved bytes ...
+ *         reserved            32 bytes
  *     zoomHeaders
  *         zoomFactor		float (4 bytes)
  *	   reserved		4 bytes
  *	   dataOffset		8 bytes
  *         indexOffset          8 bytes
- *     chromosome b+ tree
+ *     chromosome b+ tree       
  *     unzoomed data
  *         sectionCount		4 bytes
  *         sectionData
@@ -35,8 +34,9 @@
 #include "sig.h"
 #include "bPlusTree.h"
 #include "cirTree.h"
+#include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwTest.c,v 1.3 2009/01/23 00:50:03 kent Exp $";
+static char const rcsid[] = "$Id: bwTest.c,v 1.4 2009/01/24 02:05:40 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 512;
@@ -84,14 +84,6 @@ struct bigWigFixedStepItem
     double val;			/* Value. */
     };
 
-enum bigWigSectType 
-/* Code to indicate section type. */
-    {
-    bwstBedGraph=1,
-    bwstVariableStep=2,
-    bwstFixedStep=3,
-    };
-
 union bigWigItem
 /* Union of item pointers for all possible section types. */
     {
@@ -135,7 +127,7 @@ writeOne(f, section->itemCount);
 
 switch (section->type)
     {
-    case bwstBedGraph:
+    case bigWigTypeBedGraph:
 	{
 	struct bigWigBedGraphItem *item;
 	for (item = section->itemList.bedGraph; item != NULL; item = item->next)
@@ -146,7 +138,7 @@ switch (section->type)
 	    }
 	break;
 	}
-    case bwstVariableStep:
+    case bigWigTypeVariableStep:
 	{
 	struct bigWigVariableStepItem *item;
 	for (item = section->itemList.variableStep; item != NULL; item = item->next)
@@ -156,7 +148,7 @@ switch (section->type)
 	    }
 	break;
 	}
-    case bwstFixedStep:
+    case bigWigTypeFixedStep:
 	{
 	struct bigWigFixedStepItem *item;
 	for (item = section->itemList.fixedStep; item != NULL; item = item->next)
@@ -241,13 +233,13 @@ void sectionWriteAsAscii(struct bigWigSect *section, FILE *f)
 {
 switch (section->type)
     {
-    case bwstBedGraph:
+    case bigWigTypeBedGraph:
 	sectionWriteBedGraphAsAscii(section, f);
 	break;
-    case bwstVariableStep:
+    case bigWigTypeVariableStep:
 	sectionWriteVariableStepAsAscii(section, f);
 	break;
-    case bwstFixedStep:
+    case bigWigTypeFixedStep:
 	sectionWriteFixedStepAsAscii(section, f);
 	break;
     default:
@@ -321,7 +313,7 @@ for (startItem = nextStartItem; startItem != NULL; startItem = nextStartItem)
     section->start = sectionStart;
     sectionStart += sectionSize * step;
     section->end = sectionStart - step + span;
-    section->type = bwstFixedStep;
+    section->type = bigWigTypeFixedStep;
     section->itemList.fixedStep = startItem;
     section->itemStep = step;
     section->itemSpan = span;
@@ -381,7 +373,7 @@ for (startItem = itemList; startItem != NULL; startItem = nextStartItem)
     section->chrom = chrom;
     section->start = startItem->start;
     section->end = endItem->start + span;
-    section->type = bwstVariableStep;
+    section->type = bigWigTypeVariableStep;
     section->itemList.variableStep = startItem;
     section->itemSpan = span;
     section->itemCount = sectionSize;
@@ -405,11 +397,11 @@ void parseSteppedSection(struct lineFile *lf, char *initialLine,
 {
 /* Parse out first word of initial line and make sure it is something we recognize. */
 char *typeWord = nextWord(&initialLine);
-enum bigWigSectType type = bwstFixedStep;
+enum bigWigSectType type = bigWigTypeFixedStep;
 if (sameString(typeWord, "variableStep"))
-    type = bwstVariableStep;
+    type = bigWigTypeVariableStep;
 else if (sameString(typeWord, "fixedStep"))
-    type = bwstFixedStep;
+    type = bigWigTypeFixedStep;
 else
     errAbort("Unknown type %s\n", typeWord);
 
@@ -445,7 +437,7 @@ while ((varEqVal = nextWord(&initialLine)) != NULL)
  * rest of section. */
 if (chrom == NULL)
     errAbort("Missing chrom= setting line %d of %s\n", lf->lineIx, lf->fileName);
-if (type == bwstFixedStep)
+if (type == bigWigTypeFixedStep)
     {
     if (start == 0)
 	errAbort("Missing start= setting line %d of %s\n", lf->lineIx, lf->fileName);
@@ -553,7 +545,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	section->chrom = cloneString(chrom->name);
 	section->start = startItem->start;
 	section->end = endItem->end;
-	section->type = bwstBedGraph;
+	section->type = bigWigTypeBedGraph;
 	section->itemList.bedGraph = startItem;
 	section->itemCount = sectionSize;
 	slAddHead(pSectionList, section);
@@ -634,7 +626,7 @@ slFreeList(&uniqList);
 void bigWigCreate(struct bigWigSect *sectionList, char *fileName)
 /* Create a bigWig file out of a sorted sectionList. */
 {
-int sectionCount = slCount(sectionList);
+bits32 sectionCount = slCount(sectionList);
 FILE *f = mustOpen(fileName, "wb");
 bits32 sig = bigWigSig;
 bits32 zoomCount = 0;
@@ -667,8 +659,9 @@ int chromBlockSize = min(blockSize, chromCount);
 bptFileBulkIndexToOpenFile(chromIdArray, sizeof(chromIdArray[0]), chromCount, chromBlockSize,
     name32Key, maxChromNameSize, name32Val, sizeof(chromIdArray[0].val), f);
 
-/* Write out data sections. */
+/* Write out data section count and sections themselves. */
 dataOffset = ftell(f);
+writeOne(f, sectionCount);
 struct bigWigSect *section;
 for (section = sectionList; section != NULL; section = section->next)
     bigWigSectWrite(section, f);

@@ -9,7 +9,7 @@
 #include "cirTree.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwTestRead.c,v 1.1 2009/01/23 21:16:24 kent Exp $";
+static char const rcsid[] = "$Id: bwTestRead.c,v 1.2 2009/01/24 02:05:53 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -105,7 +105,7 @@ double val;
 
 switch (type)
     {
-    case bwstBedGraph:
+    case bigWigTypeBedGraph:
 	{
 	fprintf(out, "#bedGraph section %s:%u-%u\n",  chrom, start, end);
 	for (i=0; i<itemCount; ++i)
@@ -117,7 +117,7 @@ switch (type)
 	    }
 	break;
 	}
-    case bwstVariableStep:
+    case bigWigTypeVariableStep:
 	{
 	fprintf(out, "variableStep chrom=%s span=%u\n", chrom, itemSpan);
 	for (i=0; i<itemCount; ++i)
@@ -128,7 +128,7 @@ switch (type)
 	    }
 	break;
 	}
-    case bwstFixedStep:
+    case bigWigTypeFixedStep:
 	{
 	fprintf(out, "fixedStep chrom=%s start=%u step=%u span=%u\n", 
 		chrom, start, itemStep, itemSpan);
