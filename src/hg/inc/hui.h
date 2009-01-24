@@ -845,8 +845,9 @@ void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *t
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
 /* UI for maf/wiggle track */
 
-void tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
-/* Updates the tdb_>priority from cart then sorts the list anew */
+boolean tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
+/* Updates the tdb->priority from cart then sorts the list anew.
+   Returns TRUE if priorities obtained from cart */
 
 enum trackVisibility visCompositeViewDefault(struct trackDb *parentTdb,char *view);
 /* returns the default track visibility of particular view within a composite track */
