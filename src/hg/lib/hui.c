@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.146 2009/01/20 23:56:41 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.147 2009/01/24 00:21:43 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2241,57 +2241,28 @@ if(strptime (date,format, &tp))
 return newDate;  // newDate is never freed!
 }
 
-void tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList)
-/* Updates the tdb_>priority from cart then sorts the list anew */
+boolean tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList)
+/* Updates the tdb->priority from cart then sorts the list anew.
+   Returns TRUE if priorities obtained from cart */
 {
 char htmlIdentifier[128];
 struct trackDb *tdb;
+boolean cartPriorities = FALSE;
 for (tdb = *tdbList; tdb != NULL; tdb = tdb->next)
     {
         safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", tdb->tableName);
-        tdb->priority = (float)cartUsualDouble(cart, htmlIdentifier, tdb->priority);
+        char *cartHas = cartOptionalString(cart,htmlIdentifier);
+        if(cartHas != NULL)
+            {
+            tdb->priority = atof(cartHas);
+            cartPriorities = TRUE;
+            }
     }
-slSort(tdbList, trackDbCmp);
+    slSort(tdbList, trackDbCmp);
+return cartPriorities;
 }
 
-// Not all track types have separate configuration
-enum cfgType
-{
-    cfgNone    =0,
-    cfgBedScore=1,
-    cfgWig     =2,
-    cfgWigMaf  =3,
-    cfgPeak    =4
-};
-
-static enum cfgType cfgTypeFromTdb(struct trackDb *tdb)
-/* determine what kind of track specific configuration is needed */
-{
-enum cfgType cType = cfgNone;
-if(startsWith("wigMaf", tdb->type))
-    cType = cfgWigMaf;
-else if(startsWith("wig", tdb->type))
-    cType = cfgWig;
-else if(startsWith("bedGraph", tdb->type))
-    cType = cfgWig;
-else if(sameWord("bed5FloatScore",       tdb->type)
-     || sameWord("bed5FloatScoreWithFdr",tdb->type))
-    cType = cfgBedScore;
-else if(sameWord("narrowPeak",tdb->type)
-     || sameWord("broadPeak", tdb->type))
-    cType = cfgPeak;
-else if(startsWith("bed ", tdb->type)) // TODO: Only these are configurable so far
-    {
-    char *words[3];
-    chopLine(cloneString( tdb->type), words);
-    if (atoi(words[1]) >= 5 && trackDbSetting(tdb, "noScoreFilter") == NULL)
-        cType = cfgBedScore;
-    }
-
-return cType;
-}
-
-static void cfgByCfgType(enum cfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed)
+static void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed)
 {
 char *scoreMax;
 int maxScore;
@@ -2310,7 +2281,8 @@ switch(cType)
                         break;
     case cfgWigMaf:     wigMafCfgUi(cart,tdb,prefix,title,boxed, db);
                         break;
-    default:            break;
+    default:            warn("Track type is not known to multi-view composites.");
+                        break;
     }
 }
 
@@ -2334,7 +2306,8 @@ static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *pa
 {
 struct trackDb *subtrack;
 char *primaryType = getPrimaryType(primarySubtrack, parentTdb);
-char htmlIdentifier[128];
+char htmlIdentifier[SMALLBUF];
+struct dyString *dyHtml = newDyString(SMALLBUF);
 char *words[5];
 char *colors[2]   = { COLOR_BG_DEFAULT,
                       COLOR_BG_ALTDEFAULT };
@@ -2363,6 +2336,7 @@ dimensions[dimV]=subgroupMembersGet(parentTdb,"view");
 int dimCount=0,di;
 for(di=0;di<dimMax;di++) { if(dimensions[di]) dimCount++; }
 sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
+boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
 
 // Now we can start in on the table of subtracks
@@ -2370,13 +2344,19 @@ printf("\n<TABLE CELLSPACING='2' CELLPADDING='0' border='0'");
 if(sortOrder != NULL)
     {
     printf(" id='subtracks.%s.sortable'",parentTdb->tableName);
+    dyStringClear(dyHtml);
+    dyStringPrintf(dyHtml, "tableSortable");
     colorIx = COLOR_BG_ALTDEFAULT_IX;
     }
 else
     printf(" id='subtracks.%s'",parentTdb->tableName);
 if(useDragAndDrop)
     {
-    printf(" class='tableWithDragAndDrop'");
+    if(dyStringLen(dyHtml) > 0)
+        dyStringAppendC(dyHtml,' ');
+    dyStringPrintf(dyHtml, "tableWithDragAndDrop");
+    printf(" class='%s'",dyStringContents(dyHtml));
+    dyStringClear(dyHtml);
     colorIx = COLOR_BG_ALTDEFAULT_IX;
     }
 puts("><THEAD>");
@@ -2399,13 +2379,13 @@ if (!primarySubtrack)
     printf("<TR");
     if(useDragAndDrop)
         printf(" id=\"noDrag\" class='nodrop nodrag'");
-    printf("><TD colspan='%d'><B>Show checkboxes for:</B>&nbsp;",(sortOrder != NULL?sortOrder->count+2:3));
+    printf("><TD colspan='%d'><B>List subtracks:&nbsp;",(sortOrder != NULL?sortOrder->count+2:3));
     safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
     cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
-    puts("Only selected subtracks &nbsp;");
+    puts("only selected/visible &nbsp;&nbsp;");
     safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(false);\"");
     cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
-    puts("All subtracks&nbsp;&nbsp;&nbsp;&nbsp;</TD>");
+    puts("all</B></TD>");
 
     if(sortOrder != NULL)   // Add some sort buttons
         {
@@ -2437,12 +2417,13 @@ if (!primarySubtrack)
 
 if(sortOrder != NULL || useDragAndDrop)
     {
-    tdbSortPrioritiesFromCart(cart, &(parentTdb->subtracks)); // preserves user's prev sort/drags
+    preSorted = tdbSortPrioritiesFromCart(cart, &(parentTdb->subtracks)); // preserves user's prev sort/drags
     puts("</TR></THEAD><TBODY id='sortable_tbody'>");
     }
 else
     {
     slSort(&(parentTdb->subtracks), trackDbCmp);  // straight from trackDb.ra
+    preSorted = TRUE;
     puts("</TR></THEAD><TBODY>");
     }
 
@@ -2483,8 +2464,8 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         }
     else
         {
-        enum cfgType cType = cfgTypeFromTdb(subtrack);
-        if(trackDbSettingOn(subtrack, "configurable") == FALSE)
+        eCfgType cType = cfgTypeFromTdb(subtrack);
+        if(trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
             cType = cfgNone;
         membership_t *membership = subgroupMembershipGet(subtrack);
         if (hTableExists(db, subtrack->tableName))
@@ -2504,15 +2485,15 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 printf(" class='trDraggable' title='Drag to Reorder' onmouseover=\"hintForDraggableRow(this)\"");
 
             printf(" id=\"tr_%s\" nowrap>\n<TD>",id);
-            struct dyString *dyJS = newDyString(100);
-            dyStringPrintf(dyJS, "onclick='matSubtrackCbClick(this);' onmouseover=\"this.style.cursor='default';\" class=\"subtrackCB");
+            dyStringClear(dyHtml);
+            dyStringPrintf(dyHtml, "onclick='matSubtrackCbClick(this);' onmouseover=\"this.style.cursor='default';\" class=\"subtrackCB");
             for(di=0;di<dimMax;di++)
                 {
                 if(dimensions[di] && -1 != (ix = stringArrayIx(dimensions[di]->tag, membership->subgroups, membership->count)))
-                    dyStringPrintf(dyJS, " %s",membership->membership[ix]);
+                    dyStringPrintf(dyHtml, " %s",membership->membership[ix]);
                 }
-            dyStringAppendC(dyJS,'"');
-            cgiMakeCheckBoxIdAndJS(htmlIdentifier,alreadySet,id,dyStringCannibalize(&dyJS));
+            dyStringAppendC(dyHtml,'"');
+            cgiMakeCheckBoxIdAndJS(htmlIdentifier,alreadySet,id,dyStringContents(dyHtml));
             if(sortOrder != NULL || useDragAndDrop)
                 {
                 safef(htmlIdentifier, sizeof(htmlIdentifier), "%s.priority", subtrack->tableName);
@@ -2530,7 +2511,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                         {
 #define CFG_SUBTRACK_LINK  "<A NAME=\"a_cfg_%s\"></A><A HREF=\"#a_cfg_%s\" onclick=\"return (subtrackCfgShow(this) == false);\" title=\"Configure Subtrack Settings\">%s</A>\n"
 #define MAKE_CFG_SUBTRACK_LINK(name,title) printf(CFG_SUBTRACK_LINK, (name),(name),(title))
-                        printf ("<TD id='%s' abbr='%s' align='left'>&nbsp;",sortOrder->column[sIx],membership->membership[ix]);
+                        printf ("<TD id='%s' nowrap abbr='%s' align='left'>&nbsp;",sortOrder->column[sIx],membership->membership[ix]);
                         if(cType != cfgNone && sameString("view",sortOrder->column[sIx]))
                             MAKE_CFG_SUBTRACK_LINK(subtrack->tableName,membership->titles[ix]);
                         else
@@ -2577,10 +2558,13 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
 puts("</TBODY><TFOOT></TFOOT>");
 puts("</TABLE>");
 puts("<P>");
+if (!preSorted && sortOrder != NULL)
+    puts("<script type='text/javascript'>tableSortAtStartup();</script>");
 if (!primarySubtrack)
     puts("<script type='text/javascript'>matInitializeMatrix();</script>");
 for(di=dimX;di<dimMax;di++)
     subgroupMembersFree(&dimensions[di]);
+dyStringFree(&dyHtml)
 sortOrderFree(&sortOrder);
 dividersFree(&dividers);
 hierarchyFree(&hierarchy);
@@ -3619,7 +3603,18 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     }
 
     // Regardless of whether there is a dimension X or Y, there will be 'all' buttons
-    puts("<B>Select subtracks:</B><BR>");
+    //puts("<B>Select subtracks by characterization:</B><BR>");
+    printf("<B>Select subtracks by ");
+    if(dimensionX && !dimensionY)
+        safef(javascript, sizeof(javascript), "%s:</B><BR>",dimensionX->title);
+    else if(!dimensionX && dimensionY)
+        safef(javascript, sizeof(javascript), "%s:</B><BR>",dimensionY->title);
+    else if(dimensionX && dimensionY && !dimensionZ)
+        safef(javascript, sizeof(javascript), "%s and %s:</B><BR>",dimensionX->title,dimensionY->title);
+    else //if(dimensionX && dimensionY && dimensionZ)
+        safef(javascript, sizeof(javascript), "%s, %s and %s:</B><BR>",dimensionX->title,dimensionY->title,dimensionZ->title);
+    puts(strLower(javascript));
+
     printf("<TABLE class='greenBox' bgcolor='%s' borderColor='%s'}>\n",COLOR_BG_DEFAULT,COLOR_BG_DEFAULT);
 
     printf("<TR ALIGN=CENTER BGCOLOR='%s'>\n",COLOR_BG_ALTDEFAULT);
@@ -3761,6 +3756,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     subgroupMembersFree(&dimensionY);
     subgroupMembersFree(&dimensionZ);
     puts("<BR>\n");
+
     return TRUE;
 }
 
