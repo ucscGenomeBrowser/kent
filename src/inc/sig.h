@@ -87,6 +87,8 @@
 #define crTreeSig 0x2369ADE1
 /* Signature of a chromosome r-tree index file. */
 
+#define bigWigSig 0x888FFC25
+/* Signature for a big wig file. */
 
 #endif /* SIG_H */
 
