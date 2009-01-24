@@ -144,7 +144,7 @@ cut -f 2 chrom.sizes | ave stdin
     # 732765485 bases of 2663369733 (27.513%) in intersection
 
     # RepeatMasker and lib version from do.log:
-    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.17 2008/12/04 01:00:27 hiram Exp $
+    #    RepeatMasker version development-$Id: cavPor3.txt,v 1.18 2009/01/24 02:35:21 tdreszer Exp $
     #    Jan 11 2008 (open-3-1-9) version of RepeatMasker
     #    CC   RELEASE 20071204;
 
@@ -2941,9 +2941,9 @@ done >> cavPor3.anno.8way.maf
     # and 10209337 mafs from /gbdb/cavPor3/multiz8way/anno/multiz8way.maf
     # real    6m29.261s
 
-    #	by loading this into the table multiz5waySummary, it will replace
+    #	by loading this into the table multiz8waySummary, it will replace
     #	the previously loaded table with the unannotated mafs
-    #	remove the multiz5way*.tab files in this /scratch/tmp directory
+    #	remove the multiz8way*.tab files in this /scratch/tmp directory
     rm multiz8way*.tab
     #	And, you can remove the previously loaded non-annotated maf file link:
     rm /gbdb/cavPor3/multiz8way/maf/multiz8way.maf
@@ -2956,6 +2956,15 @@ done >> cavPor3.anno.8way.maf
 # ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far
 # ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far
 
+##################
+# Effort to move to hive
+##################
+ 
+ssh hgwdev
+mv /hive/archive/store12/cavPor3 /hive/data/genomes/cavPor3
+ln -sf /hive/data/genomes/cavPor3 /cluster/data/cavPor3
+find /gbdb/cavPor3 /usr/local/apache/htdocs/goldenPath/cavPor3 -type l -ls | grep /cluster/store
+
 
 ################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
 ################## EVERYTHING THAT FOLLOWS IS TEMPLATE FOR WHAT NEEDS TO BE DONE ######################
@@ -2965,7 +2974,7 @@ done >> cavPor3.anno.8way.maf
 
 ###########################################################################
 ## Annotate 5-way multiple alignment with gene annotations
-##		(DONE - 2008-03-18 - Hiram)
+##		(START - 2008-07-14 - Tim)
     # Gene frames
     ## given previous survey done for 9-way alignment on Marmoset
     ## and the appearance of new ensGene tables on everything
@@ -2974,11 +2983,11 @@ done >> cavPor3.anno.8way.maf
     #	and refGene for cavPor3
 
     ssh hgwdev
-    mkdir /cluster/data/cavPor3/bed/multiz5way/frames
-    cd /cluster/data/cavPor3/bed/multiz5way/frames
+    mkdir /cluster/data/cavPor3/bed/multiz8way/frames
+    cd /cluster/data/cavPor3/bed/multiz8way/frames
     mkdir genes
     # knownGene
-    for DB in hg18 mm9
+    for DB in hg18 mm9 rn4
 do
     hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
@@ -2987,7 +2996,7 @@ do
     echo "${DB} done"
 done
     # ensGene
-    for DB in canFam2 ornAna1
+    for DB in oryCun1 ornAna1
 do
     hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
