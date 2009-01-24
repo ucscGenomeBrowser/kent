@@ -9,7 +9,7 @@
 #include "cirTree.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwTestRead.c,v 1.2 2009/01/24 02:05:53 kent Exp $";
+static char const rcsid[] = "$Id: bwTestRead.c,v 1.3 2009/01/24 06:38:43 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -101,7 +101,7 @@ UBYTE type = getc(f);
 UBYTE reserved8 = getc(f);
 bits16 itemCount = readBits16(f, isSwapped);
 bits16 i;
-double val;
+float val;
 
 switch (type)
     {
@@ -154,7 +154,7 @@ struct bigWigView
     struct cirTreeFile *index;	/* Index of items in view. */
     };
 
-struct bigWigView *bigWigViewOpen(struct bigWigFile *bwf, double zoomLevel)
+struct bigWigView *bigWigViewOpen(struct bigWigFile *bwf, float zoomLevel)
 /* Open up a view at given zoom level. */
 {
 struct bigWigView *view;

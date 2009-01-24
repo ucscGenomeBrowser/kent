@@ -36,7 +36,7 @@
 #include "cirTree.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwTest.c,v 1.4 2009/01/24 02:05:40 kent Exp $";
+static char const rcsid[] = "$Id: bwTest.c,v 1.5 2009/01/24 06:38:35 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 512;
@@ -66,22 +66,53 @@ struct bigWigBedGraphItem
     {
     struct bigWigBedGraphItem *next;	/* Next in list. */
     bits32 start,end;		/* Range of chromosome covered. */
-    double val;			/* Value. */
+    float val;			/* Value. */
     };
+
+int bigWigBedGraphItemCmp(const void *va, const void *vb)
+/* Compare to sort based on query start. */
+{
+const struct bigWigBedGraphItem *a = *((struct bigWigBedGraphItem **)va);
+const struct bigWigBedGraphItem *b = *((struct bigWigBedGraphItem **)vb);
+int dif = (int)a->start - (int)b->start;
+if (dif == 0)
+    dif = (int)a->end - (int)b->end;
+return dif;
+}
 
 struct bigWigVariableStepItem
 /* An variableStep type item in a bigWigSect. */
     {
     struct bigWigVariableStepItem *next;	/* Next in list. */
     bits32 start;		/* Start position in chromosome. */
-    double val;			/* Value. */
+    float val;			/* Value. */
     };
+
+int bigWigVariableStepItemCmp(const void *va, const void *vb)
+/* Compare to sort based on query start. */
+{
+const struct bigWigVariableStepItem *a = *((struct bigWigVariableStepItem **)va);
+const struct bigWigVariableStepItem *b = *((struct bigWigVariableStepItem **)vb);
+return (int)a->start - (int)b->start;
+}
 
 struct bigWigFixedStepItem
 /* An fixedStep type item in a bigWigSect. */
     {
     struct bigWigFixedStepItem *next;	/* Next in list. */
-    double val;			/* Value. */
+    float val;			/* Value. */
+    };
+
+struct bigWigSummaryItem
+/* A summary type item. */
+    {
+    struct bigWigSummaryItem *next;
+    bits32 start,end;		/* Range of chromosome covered. */
+    bits32 validCount;		/* Count of (bases) with actual data. */
+    float lowerLimit;		/* Minimum value of items */
+    float dataRange;		/* lowerLimit + dataRange = upperLimit. */
+    float sumData;		/* sum of values for each base. */
+    float sumSquares;		/* sum of squares for each base. */
     };
 
 union bigWigItem
@@ -90,6 +121,7 @@ union bigWigItem
     struct bigWigBedGraphItem *bedGraph;
     struct bigWigVariableStepItem *variableStep;
     struct bigWigFixedStepItem *fixedStep;
+    struct bigWigSummaryItem *summary;
     };
 
 struct bigWigSect
@@ -100,7 +132,7 @@ struct bigWigSect
     struct bigWigSect *next;		/* Next in list. */
     char *chrom;			/* Chromosome name. */
     bits32 start,end;			/* Range of chromosome covered. */
-    enum bigWigSectType type;
+    enum bigWigSectionType type;
     union bigWigItem itemList;		/* List of items in this section. */
     bits32 itemStep;			/* Step within item if applicable. */
     bits32 itemSpan;			/* Item span if applicable. */
@@ -163,6 +195,7 @@ switch (section->type)
 	break;
     }
 }
+
 
 int bigWigSectCmp(const void *va, const void *vb)
 /* Compare to sort based on query start. */
@@ -344,9 +377,7 @@ while (lineFileNextReal(lf, &line))
     item->val = lineFileNeedDouble(lf, words, 1);
     slAddHead(&itemList, item);
     }
-slReverse(&itemList);
-
-    /* TODO: sort item list. */
+slSort(&itemList, bigWigVariableStepItemCmp);
 
 /* Break up into sections of no more than items-per-slot size. */
 struct bigWigVariableStepItem *startItem, *endItem, *nextStartItem = itemList;
@@ -397,7 +428,7 @@ void parseSteppedSection(struct lineFile *lf, char *initialLine,
 {
 /* Parse out first word of initial line and make sure it is something we recognize. */
 char *typeWord = nextWord(&initialLine);
-enum bigWigSectType type = bigWigTypeFixedStep;
+enum bigWigSectionType type = bigWigTypeFixedStep;
 if (sameString(typeWord, "variableStep"))
     type = bigWigTypeVariableStep;
 else if (sameString(typeWord, "fixedStep"))
@@ -505,8 +536,6 @@ while (lineFileNextReal(lf, &line))
 	slAddHead(&chromList, chrom);
 	}
 
-    /* TODO: sort item list. */
-
     /* Convert to item and add to chromosome list. */
     lmAllocVar(lm, item);
     item->start = lineFileNeedNum(lf, words, 1);
@@ -518,7 +547,7 @@ slSort(&chromList, bedGraphChromCmpName);
 
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    slReverse(&chrom->itemList);
+    slSort(&chrom->itemList, bigWigBedGraphItemCmp);
 
     /* Break up into sections of no more than items-per-slot size. */
     struct bigWigBedGraphItem *startItem, *endItem, *nextStartItem = chrom->itemList;
@@ -623,6 +652,71 @@ slFreeList(&uniqList);
 *retMaxChromNameSize = maxChromNameSize;
 }
 
+int smallestSpan(struct bigWigSect *sectionList)
+/* Return smallest span in section list. */
+{
+if (sectionList == NULL)
+    return 1;
+int minSpan = sectionList->itemSpan;
+struct bigWigSect *section;
+for (section = sectionList; section != NULL; section = section->next)
+    {
+    int sectionSpan = sectionList->itemSpan;
+    if (section->type == bigWigTypeBedGraph)
+        {
+	struct bigWigBedGraphItem *item;
+	sectionSpan = BIGNUM;
+	for (item = section->itemList.bedGraph; item != NULL; item = item->next)
+	    {
+	    int size = item->end - item->start;
+	    if (sectionSpan > size)
+	        sectionSpan = size;
+	    }
+	}
+    if (minSpan > sectionSpan)
+        minSpan = sectionSpan;
+    }
+return minSpan;
+}
+
+#define bigWigSectionHeaderSize 24
+
+int bigWigItemSize(enum bigWigSectionType type)
+/* Return size of an item inside a particular section. */
+{
+switch (type)
+    {
+    case bigWigTypeBedGraph:
+	return 16;
+	break;
+    case bigWigTypeVariableStep:
+	return 12;
+	break;
+    case bigWigTypeFixedStep:
+	return 8;
+	break;
+    default:
+        internalErr();
+	return 0;
+    }
+}
+
+int bigWigSectSize(struct bigWigSect *section)
+/* Return size (on disk) of section. */
+{
+return bigWigSectionHeaderSize + bigWigItemSize(section->type) * section->itemCount;
+}
+
+bits64 bigWigTotalSectSize(struct bigWigSect *sectionList)
+/* Return total size of all sections. */
+{
+bits64 total = 0;
+struct bigWigSect *section;
+for (section = sectionList; section != NULL; section = section->next)
+    total += bigWigSectSize(section);
+return total;
+}
+
 void bigWigCreate(struct bigWigSect *sectionList, char *fileName)
 /* Create a bigWig file out of a sorted sectionList. */
 {
@@ -721,7 +815,7 @@ while (lineFileNextReal(lf, &line))
 	char *chrom = words[0];
 	int start = lineFileNeedNum(lf, words, 1);
 	int end = lineFileNeedNum(lf, words, 2);
-	double val = lineFileNeedDouble(lf, words, 3);
+	float val = lineFileNeedDouble(lf, words, 3);
 
 	/* Push back line and call bed parser. */
 	lineFileReuse(lf);
