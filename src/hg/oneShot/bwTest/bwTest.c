@@ -36,7 +36,7 @@
 #include "cirTree.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwTest.c,v 1.5 2009/01/24 06:38:35 kent Exp $";
+static char const rcsid[] = "$Id: bwTest.c,v 1.6 2009/01/24 21:06:12 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 512;
@@ -103,25 +103,12 @@ struct bigWigFixedStepItem
     float val;			/* Value. */
     };
 
-struct bigWigSummaryItem
-/* A summary type item. */
-    {
-    struct bigWigSummaryItem *next;
-    bits32 start,end;		/* Range of chromosome covered. */
-    bits32 validCount;		/* Count of (bases) with actual data. */
-    float lowerLimit;		/* Minimum value of items */
-    float dataRange;		/* lowerLimit + dataRange = upperLimit. */
-    float sumData;		/* sum of values for each base. */
-    float sumSquares;		/* sum of squares for each base. */
-    };
-
 union bigWigItem
 /* Union of item pointers for all possible section types. */
     {
     struct bigWigBedGraphItem *bedGraph;
     struct bigWigVariableStepItem *variableStep;
     struct bigWigFixedStepItem *fixedStep;
-    struct bigWigSummaryItem *summary;
     };
 
 struct bigWigSect
@@ -140,6 +127,27 @@ struct bigWigSect
     bits32 chromId;			/* Unique small integer value for chromosome. */
     bits64 fileOffset;			/* Offset of section in file. */
     };
+
+struct bigWigSummary
+/* A summary type item. */
+    {
+    struct bigWigSummary *next;
+    bits32 chromId;		/* ID of associated chromosome. */
+    bits32 start,end;		/* Range of chromosome covered. */
+    bits32 validCount;		/* Count of (bases) with actual data. */
+    float lowerLimit;		/* Minimum value of items */
+    float upperLimit;		/* Maximum value of items */
+    float sumData;		/* sum of values for each base. */
+    float sumSquares;		/* sum of squares for each base. */
+    };
+
+void bigWigDumpSummary(struct bigWigSummary *sum, FILE *f)
+/* Write out summary info to file. */
+{
+fprintf(f, "summary %d:%d-%d min=%f, max=%f, sum=%f, sumSquares=%f, validCount=%d, mean=%f\n",
+     sum->chromId, sum->start, sum->end, sum->lowerLimit, sum->upperLimit, sum->sumData,
+     sum->sumSquares, sum->validCount, sum->sumData/sum->validCount);
+}
 
 void bigWigSectWrite(struct bigWigSect *section, FILE *f)
 /* Write out section to file, filling in section->fileOffset. */
@@ -687,13 +695,13 @@ int bigWigItemSize(enum bigWigSectionType type)
 switch (type)
     {
     case bigWigTypeBedGraph:
-	return 16;
+	return 2*sizeof(bits32) + sizeof(float);
 	break;
     case bigWigTypeVariableStep:
-	return 12;
+	return sizeof(bits32) + sizeof(float);
 	break;
     case bigWigTypeFixedStep:
-	return 8;
+	return sizeof(float);
 	break;
     default:
         internalErr();
@@ -717,6 +725,116 @@ for (section = sectionList; section != NULL; section = section->next)
 return total;
 }
 
+void addToSummary(bits32 chromId, bits32 start, bits32 end, float val, int reduction,
+	struct bigWigSummary **pOutList)
+/* Add chromosome range to summary - putting it onto top of list if possible, otherwise
+ * expanding list. */
+{
+struct bigWigSummary *sum = *pOutList;
+while (start < end)
+    {
+    /* See if need to allocate a new summary. */
+    if (sum == NULL || sum->chromId != chromId || sum->end <= start)
+        {
+	struct bigWigSummary *newSum;
+	AllocVar(newSum);
+	newSum->chromId = chromId;
+	if (sum == NULL || sum->chromId != chromId || sum->end + reduction <= start)
+	    newSum->start = start;
+	else
+	    newSum->start = sum->end;
+	newSum->end = newSum->start + reduction;
+	newSum->lowerLimit = newSum->upperLimit = val;
+	sum = newSum;
+	slAddHead(pOutList, sum);
+	}
+
+    /* Figure out amount of overlap between current summary and item */
+    int overlap = rangeIntersection(start, end, sum->start, sum->end);
+    assert(overlap > 0);
+
+    /* Fold overlapping bits into output. */
+    sum->validCount += overlap;
+    if (sum->lowerLimit > val)
+        sum->lowerLimit = val;
+    if (sum->upperLimit < val)
+        sum->upperLimit = val;
+    sum->sumData += overlap * val;
+    sum->sumSquares += overlap * val * val;
+
+    /* Advance over overlapping bits. */
+    start += overlap;
+    }
+}
+
+
+void bigWigReduceBedGraph(struct bigWigSect *section, int reduction, 
+	struct bigWigSummary **pOutList)
+/*Reduce a bedGraph section onto outList. */
+{
+struct bigWigBedGraphItem *item;
+for (item = section->itemList.bedGraph; item != NULL; item = item->next)
+    addToSummary(section->chromId, item->start, item->end, item->val, reduction, pOutList);
+}
+
+void bigWigReduceVariableStep(struct bigWigSect *section, int reduction, 
+	struct bigWigSummary **pOutList)
+/*Reduce a variableStep section onto outList. */
+{
+struct bigWigVariableStepItem *item;
+for (item = section->itemList.variableStep; item != NULL; item = item->next)
+    addToSummary(section->chromId, item->start, item->start + section->itemSpan, item->val, 
+    	reduction, pOutList);
+}
+
+void bigWigReduceFixedStep(struct bigWigSect *section, int reduction, 
+	struct bigWigSummary **pOutList)
+/*Reduce a variableStep section onto outList. */
+{
+struct bigWigFixedStepItem *item;
+int start = section->start;
+for (item = section->itemList.fixedStep; item != NULL; item = item->next)
+    {
+    addToSummary(section->chromId, start, start + section->itemSpan, item->val, 
+    	reduction, pOutList);
+    start += section->itemStep;
+    }
+}
+
+struct bigWigSummary *bigWigReduceSectionList(struct bigWigSect *sectionList, int reduction)
+/* Reduce section by given amount. */
+{
+uglyf("bigWigReduceSectionList(%d %d)\n", slCount(sectionList), reduction);
+struct bigWigSummary *outList = NULL;
+struct bigWigSect *section = NULL;
+
+/* Loop through input section list reducing into outList. */
+for (section = sectionList; section != NULL; section = section->next)
+    {
+    switch (section->type)
+        {
+	case bigWigTypeBedGraph:
+	    bigWigReduceBedGraph(section, reduction, &outList);
+	    break;
+	case bigWigTypeVariableStep:
+	    bigWigReduceVariableStep(section, reduction, &outList);
+	    break;
+	case bigWigTypeFixedStep:
+	    bigWigReduceFixedStep(section, reduction, &outList);
+	    break;
+	default:
+	    internalErr();
+	    return 0;
+	}
+    }
+
+slReverse(&outList);
+
+struct bigWigSummary *sum;
+for (sum = outList; sum != NULL; sum = sum->next) bigWigDumpSummary(sum, uglyOut);
+return outList;
+}
+
 void bigWigCreate(struct bigWigSect *sectionList, char *fileName)
 /* Create a bigWig file out of a sorted sectionList. */
 {
@@ -728,6 +846,7 @@ bits32 reserved32 = 0;
 bits64 dataOffset = 0, dataOffsetPos;
 bits64 indexOffset = 0, indexOffsetPos;
 bits64 chromTreeOffset = 0, chromTreeOffsetPos;
+struct bigWigSummary *zoomSummaries[10];
 int i;
 
 /* Write fixed header. */
@@ -742,13 +861,19 @@ writeOne(f, indexOffset);
 for (i=0; i<8; ++i)
     writeOne(f, reserved32);
 
-/* Write zoom index. */
-
-/* Write chromosome bPlusTree */
-chromTreeOffset = ftell(f);
+/* Figure out chromosome ID's. */
 struct name32 *chromIdArray;
 int chromCount, maxChromNameSize;
 makeChromIds(sectionList, &chromCount, &chromIdArray, &maxChromNameSize);
+
+/* Write zoom index. */
+int minSpan = smallestSpan(sectionList);
+int initialReduction = minSpan*10;
+uglyf("minSpan=%d, initialReduction=%d\n", minSpan, initialReduction);
+zoomSummaries[0] = bigWigReduceSectionList(sectionList, initialReduction);
+
+/* Write chromosome bPlusTree */
+chromTreeOffset = ftell(f);
 int chromBlockSize = min(blockSize, chromCount);
 bptFileBulkIndexToOpenFile(chromIdArray, sizeof(chromIdArray[0]), chromCount, chromBlockSize,
     name32Key, maxChromNameSize, name32Val, sizeof(chromIdArray[0].val), f);
