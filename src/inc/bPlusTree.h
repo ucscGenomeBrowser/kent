@@ -78,9 +78,17 @@ boolean bptFileFind(struct bptFile *bpt, void *key, int keySize, void *val, int 
 /* Find value associated with key.  Return TRUE if it's found. 
 *  Parameters:
 *     bpt - file handle returned by bptFileOpen
-*     key - pointer to key string, which needs to be bpt->keySize long
+*     key - pointer to key string
+*     keySize - size of key.  Normally just strlen(key)
 *     val - pointer to where to put retrieved value
+*     valSize - size of memory buffer that will hold val.  Should match bpt->valSize.
 */
+
+void bptFileTraverse(struct bptFile *bpt, void *context,
+    void (*callback)(void *context, void *key, int keySize, void *val, int valSize) );
+/* Traverse bPlusTree on file, calling supplied callback function at each
+ * leaf item. */
+
 
 void bptFileCreate(
 	void *itemArray, 	/* Sorted array of things to index. */
