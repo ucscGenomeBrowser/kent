@@ -39,6 +39,6 @@ if ( "$HOST" != "hgwdev" ) then
 endif
 
 hgsql -t -e "SELECT name, organism $date FROM dbDb WHERE NAME LIKE '$db%' \
-  ORDER BY name" hgcentraltest  | tail +3
+  ORDER BY name" hgcentraltest  | tail -n3
 
 exit 0
