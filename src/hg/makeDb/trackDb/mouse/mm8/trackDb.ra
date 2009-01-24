@@ -172,7 +172,7 @@ spectrum on
 type netAlign mm8 chainSelf
 otherDb mm8
 
-trackOverride nscanGene
+track nscanGene override
 informant Mouse N-SCAN uses rhesus (rheMac2) as the informant and iterative pseudogene masking.
 
 track augustus

@@ -56,22 +56,6 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
-track nscanGene
-shortLabel N-SCAN
-longLabel N-SCAN Gene Predictions
-group genes
-priority 45.1
-visibility hide
-color 34,139,34
-type genePred nscanPep
-baseColorUseCds given
-baseColorDefault genomicCodons
-
-searchTable nscanGene
-searchType genePred
-termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
-searchPriority 50
-
 track atomHomIni20_1
 shortLabel atomHomIni20_1
 longLabel atomHomIni20_1 (ponAbe2=green,homIni20=blue,homPan20=brick,panTro2=dk blue,hg18=dk green)

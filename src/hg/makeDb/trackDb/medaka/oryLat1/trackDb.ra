@@ -85,5 +85,5 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
-trackOverride nscanGene
+track nscanGene override
 informant Medaka N-SCAN uses zebrafish (danRer4) as the informant.

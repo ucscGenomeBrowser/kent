@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.48 2009/01/24 00:13:51 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.49 2009/01/24 02:58:10 markd Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -71,11 +71,18 @@ static void trackDbAddInfo(struct trackDb *bt,
 	char *var, char *value, struct lineFile *lf)
 /* Add info from a variable/value pair to browser table. */
 {
-if (sameString(var, "track") || sameString(var, "trackOverride"))
+if (sameString(var, "track"))
     {
     bt->tableName = cloneString(value);
-    if (sameString(var, "trackOverride"))
+    // check for override option
+    char *val2 = nextWord(&bt->tableName);
+    if (val2 != NULL)
+        {
+        val2 = trimSpaces(val2);
+        if (!sameString(val2, "override"))
+            errAbort("invalid track line: %s %s", var, value);
         bt->overrides = hashNew(0);
+        }
     }
 else if (sameString(var, "shortLabel") || sameString(var, "name"))
     bt->shortLabel = cloneString(value);
@@ -125,7 +132,6 @@ else	/* Add to settings. */
     }
 if (bt->overrides != NULL)
     hashAdd(bt->overrides, var, NULL);
-
 }
 
 static void replaceStr(char **varPtr, char *val)

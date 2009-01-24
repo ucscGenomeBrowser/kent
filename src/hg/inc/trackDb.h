@@ -49,7 +49,7 @@ struct trackDb
     struct trackDb *subtracks;  /* children of composite (TODO: or supertrack) */ // NOTE: can only be on one sl at a time!
     char *parentName;           /* set if this is a supertrack member */
     boolean isShow;             /* for supertracks tracks: true if this is a supertrack with pseudo-vis 'show' */
-    struct hash *overrides;     /* If not NULL, this is an trackOverride
+    struct hash *overrides;     /* If not NULL, this is an override
                                  * entry.  It contains the names, but not the
                                  * values of the fields and settings that were
                                  * specified in the entry. */

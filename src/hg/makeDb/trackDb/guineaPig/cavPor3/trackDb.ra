@@ -80,16 +80,8 @@ spectrum on
 type chain mm9
 otherDb mm9
 
-track nscanGene
-shortLabel N-SCAN
-longLabel N-SCAN Gene Predictions
-group genes
-priority 45.1
+track nscanGene override
 visibility pack
-color 34,139,34
-type genePred nscanPep
-baseColorUseCds given
-baseColorDefault genomicCodons
 
 searchTable nscanGene
 searchType genePred

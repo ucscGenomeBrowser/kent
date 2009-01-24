@@ -107,7 +107,7 @@ baseColorDefault genomicCodons
     color 34,139,34
     priority 1
 
-    trackOverride nscanGene
+    track nscanGene override
     subTrack nscan
     color 84,119,34
     priority 2

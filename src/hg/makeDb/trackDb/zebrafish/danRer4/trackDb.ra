@@ -267,7 +267,7 @@ spectrum on
 type netAlign oryLat1 chainOryLat1
 otherDb oryLat1
 
-trackOverride nscanGene
+track nscanGene override
 informant Zebrafish N-SCAN uses fugu (fr1) as the informant.
 
 searchTable ctgPos2

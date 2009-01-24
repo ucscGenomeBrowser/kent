@@ -277,7 +277,7 @@ type bed 5 .
     color 170,100,50
     priority 3
 
-trackOverride nscanGene
+track nscanGene override
 informant Mouse N-SCAN uses human (hg18) as the informant and iterative pseudogene masking.
 
 track transcriptome

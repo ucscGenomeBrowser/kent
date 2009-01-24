@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.46 2009/01/23 22:19:47 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.47 2009/01/24 02:58:10 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -206,7 +206,7 @@ if (td != NULL)
 static void addVersionRa(boolean strict, char *database, char *dirName, char *raName, 
                          struct hash *uniqHash)
 /* Read in tracks from raName and add them to table, pruning as required. Call
- * top-down so that trackOverride will work. */
+ * top-down so that track override will work. */
 {
 struct trackDb *tdList = trackDbFromRa(raName), *td;
 

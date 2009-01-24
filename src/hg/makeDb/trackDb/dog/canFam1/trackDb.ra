@@ -217,7 +217,7 @@ visibility hide
 color 0,100,100
 type genePred twinscanPep
 
-trackOverride nscanGene
+track nscanGene override
 informant Dog N-SCAN uses human (hg17) as the informant and iterative pseudogene masking.
 
 track blastHg17KG

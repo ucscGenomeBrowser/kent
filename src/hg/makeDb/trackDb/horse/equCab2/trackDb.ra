@@ -26,17 +26,6 @@ priority 10
 visibility hide
 type ctgPos
 
-track nscanGene
-shortLabel N-SCAN
-longLabel N-SCAN Gene Predictions
-group genes
-priority 45.1
-visibility hide
-color 34,139,34
-type genePred nscanPep
-baseColorUseCds given
-baseColorDefault genomicCodons
-
 track multiz6way
 shortLabel Conservation
 longLabel 6-Way Multiz Alignment & Conservation 

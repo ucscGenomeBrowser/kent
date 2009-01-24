@@ -55,7 +55,7 @@ visibility dense
 color 186,85,211
 type genePred
 
-trackOverride nscanGene
+track nscanGene override
 informant Rhesus N-SCAN uses mouse (mm8) as the informant and iterative pseudogene masking.
 visibility dense
 

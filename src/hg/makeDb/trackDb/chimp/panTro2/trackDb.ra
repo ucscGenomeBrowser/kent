@@ -52,7 +52,7 @@ visibility hide
 color 12,12,120
 type genePred
 
-trackOverride nscanGene
+track nscanGene override
 visibility dense
 informant Chimp N-SCAN uses mouse (mm8) as the informant and iterative pseudogene masking.
 

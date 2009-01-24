@@ -133,7 +133,7 @@ type psl protein
 pred hg18.blastKGPep04
 blastRef hg18.blastKGRef04
 
-trackOverride nscanGene
+track nscanGene override
 visibility pack
 informant Opossum N-SCAN uses human (hg18) as the informant.
 

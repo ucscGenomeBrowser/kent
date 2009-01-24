@@ -872,7 +872,7 @@ spectrum on
 type chain droVir1
 otherDb droVir1
 
-trackOverride nscanGene
+track nscanGene override
 informant <em>Drosophila melanogaster</em> N-SCAN uses <em>Drosophila yakuba</em> (droYak1), <em>Drosophila pseudoobscura</em> (dp2), and <em>Anopheles gambiae</em> (anoGam1) as informants.
 
 track multizMetazoan

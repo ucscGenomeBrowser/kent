@@ -67,7 +67,7 @@ visibility hide
 color 180,0,0
 type genePred
 
-trackOverride nscanGene
+track nscanGene override
 informant Cat N-SCAN uses human (hg18) as the informant and iterative pseudogene masking.
 
 searchTable nscanGene

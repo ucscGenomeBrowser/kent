@@ -43,17 +43,15 @@ to do it on genome-test do
 You can also restrict a track to alpha or beta using
 by using the release field.
 
-THE TRACK or TRACKOVERRIDE FIELD
+THE TRACK FIELD
 
-Each entry in trackDb.ra should start with a track or
-trackOverride field:
-              track trackName
-or
-              trackOverride trackName
+Each entry in trackDb.ra should start with a track 
+field:
+   track trackName [override]
 
-trackOverride entries are used in lower-level trackDb.ra
-file to override fields in higher-level ones.  Fields
-not specified in the trackOverride entry are not changed.
+If override is specified, the entries are used in lower-level
+trackDb.ra file to override fields in higher-level ones.  Fields
+not specified in the track override entry are not changed.
 
 THE TYPE FIELD
 

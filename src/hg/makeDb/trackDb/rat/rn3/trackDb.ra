@@ -57,7 +57,7 @@ color 0,100,100
 altColor 0,50,50
 type genePred twinscanPep
 
-trackOverride nscanGene
+track nscanGene override
 visibility dense
 informant Rat N-SCAN uses human (hg17) as the informant and iterative pseudogene masking.
 
