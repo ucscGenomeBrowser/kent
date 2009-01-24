@@ -224,7 +224,8 @@ visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
 priority 0
 type bed 3
 wgEncode 1
-settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off
+noInherit on
+settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 
     track wgEncodeBroadChipSeqPeaksGm12878Ctcf
     subTrack wgEncodeBroadChipSeq
@@ -235,9 +236,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 0:23:37
     dateReleased 2009-10-05
-    priority 1000
-    noInherit on
-    configurable on
     cell GM12878
     antibody CTCF
 
@@ -250,14 +248,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 0:23:37
     dateReleased 2009-10-05
-    priority 1001
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody CTCF
 
@@ -270,14 +261,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 0:23:37
     dateReleased 2009-10-05
-    priority 1002
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody CTCF
 
@@ -290,14 +274,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 0:23:37
     dateReleased 2009-10-05
-    priority 1003
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody CTCF
 
@@ -310,9 +287,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 17:48:5
     dateReleased 2009-10-04
-    priority 1010
-    noInherit on
-    configurable on
     cell GM12878
     antibody H3K4me1
 
@@ -325,14 +299,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 17:48:5
     dateReleased 2009-10-04
-    priority 1011
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K4me1
 
@@ -345,14 +312,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 17:48:5
     dateReleased 2009-10-04
-    priority 1012
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K4me1
 
@@ -365,14 +325,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 17:48:5
     dateReleased 2009-10-04
-    priority 1013
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K4me1
 
@@ -385,9 +338,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 17:2:48
     dateReleased 2009-10-04
-    priority 1020
-    noInherit on
-    configurable on
     cell GM12878
     antibody H3K4me2
 
@@ -400,14 +350,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 17:2:48
     dateReleased 2009-10-04
-    priority 1021
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K4me2
 
@@ -420,14 +363,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 17:2:48
     dateReleased 2009-10-04
-    priority 1022
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K4me2
 
@@ -440,14 +376,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 17:2:48
     dateReleased 2009-10-04
-    priority 1023
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K4me2
 
@@ -460,9 +389,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 15:59:46
     dateReleased 2009-10-04
-    priority 1030
-    noInherit on
-    configurable on
     cell GM12878
     antibody H3K4me3
 
@@ -475,14 +401,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 15:59:46
     dateReleased 2009-10-04
-    priority 1031
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K4me3
 
@@ -495,14 +414,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 15:59:46
     dateReleased 2009-10-04
-    priority 1032
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K4me3
 
@@ -515,14 +427,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 15:59:46
     dateReleased 2009-10-04
-    priority 1033
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K4me3
 
@@ -535,9 +440,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 22:24:24
     dateReleased 2009-10-04
-    priority 1040
-    noInherit on
-    configurable on
     cell GM12878
     antibody H3K9ac
 
@@ -550,14 +452,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 22:24:24
     dateReleased 2009-10-04
-    priority 1041
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K9ac
 
@@ -570,14 +465,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 22:24:24
     dateReleased 2009-10-04
-    priority 1042
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K9ac
 
@@ -590,14 +478,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 22:24:24
     dateReleased 2009-10-04
-    priority 1043
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K9ac
 
@@ -610,9 +491,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 23:19:49
     dateReleased 2009-10-04
-    priority 1060
-    noInherit on
-    configurable on
     cell GM12878
     antibody H4K20me1
 
@@ -625,14 +503,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 23:19:49
     dateReleased 2009-10-04
-    priority 1061
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H4K20me1
 
@@ -645,14 +516,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 23:19:49
     dateReleased 2009-10-04
-    priority 1062
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H4K20me1
 
@@ -665,14 +529,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 23:19:49
     dateReleased 2009-10-04
-    priority 1063
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H4K20me1
 
@@ -685,9 +542,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 21:19:1
     dateReleased 2009-10-04
-    priority 1070
-    noInherit on
-    configurable on
     cell GM12878
     antibody H3K27ac
 
@@ -700,14 +554,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 21:19:1
     dateReleased 2009-10-04
-    priority 1071
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K27ac
 
@@ -720,14 +567,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 21:19:1
     dateReleased 2009-10-04
-    priority 1072
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K27ac
 
@@ -740,14 +580,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 21:19:1
     dateReleased 2009-10-04
-    priority 1073
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K27ac
 
@@ -760,9 +593,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 20:6:7
     dateReleased 2009-10-04
-    priority 1080
-    noInherit on
-    configurable on
     cell GM12878
     antibody H3K27me3
 
@@ -775,14 +605,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 20:6:7
     dateReleased 2009-10-04
-    priority 1081
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K27me3
 
@@ -795,14 +618,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 20:6:7
     dateReleased 2009-10-04
-    priority 1082
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K27me3
 
@@ -815,14 +631,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 20:6:7
     dateReleased 2009-10-04
-    priority 1083
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K27me3
 
@@ -835,9 +644,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 18:54:30
     dateReleased 2009-10-04
-    priority 1090
-    noInherit on
-    configurable on
     cell GM12878
     antibody H3K36me3
 
@@ -850,14 +656,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 18:54:30
     dateReleased 2009-10-04
-    priority 1091
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K36me3
 
@@ -870,14 +669,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 18:54:30
     dateReleased 2009-10-04
-    priority 1092
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K36me3
 
@@ -890,14 +682,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04 18:54:30
     dateReleased 2009-10-04
-    priority 1093
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody H3K36me3
 
@@ -910,14 +695,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 10:14:15
     dateReleased 2009-10-05
-    priority 1111
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody control
 
@@ -930,14 +708,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 10:14:15
     dateReleased 2009-10-05
-    priority 1112
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody control
 
@@ -950,14 +721,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 10:14:15
     dateReleased 2009-10-05
-    priority 1113
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell GM12878
     antibody control
 
@@ -970,9 +734,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 22:43:39
     dateReleased 2009-10-05
-    priority 2000
-    noInherit on
-    configurable on
     cell HUVEC
     antibody CTCF
 
@@ -985,14 +746,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 22:43:39
     dateReleased 2009-10-05
-    priority 2001
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody CTCF
 
@@ -1005,14 +759,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 22:43:39
     dateReleased 2009-10-05
-    priority 2002
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody CTCF
 
@@ -1025,14 +772,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 22:43:39
     dateReleased 2009-10-05
-    priority 2003
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody CTCF
 
@@ -1045,9 +785,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 13:50:2
     dateReleased 2009-10-05
-    priority 2010
-    noInherit on
-    configurable on
     cell HUVEC
     antibody H3K4me1
 
@@ -1060,14 +797,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 13:50:2
     dateReleased 2009-10-05
-    priority 2011
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K4me1
 
@@ -1080,14 +810,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 13:50:2
     dateReleased 2009-10-05
-    priority 2012
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K4me1
 
@@ -1100,14 +823,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 13:50:2
     dateReleased 2009-10-05
-    priority 2013
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K4me1
 
@@ -1120,9 +836,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 12:30:42
     dateReleased 2009-10-05
-    priority 2020
-    noInherit on
-    configurable on
     cell HUVEC
     antibody H3K4me2
 
@@ -1135,14 +848,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 12:30:42
     dateReleased 2009-10-05
-    priority 2021
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K4me2
 
@@ -1155,14 +861,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 12:30:42
     dateReleased 2009-10-05
-    priority 2022
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K4me2
 
@@ -1175,14 +874,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 12:30:42
     dateReleased 2009-10-05
-    priority 2023
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K4me2
 
@@ -1195,9 +887,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 11:10:53
     dateReleased 2009-10-05
-    priority 2030
-    noInherit on
-    configurable on
     cell HUVEC
     antibody H3K4me3
 
@@ -1210,14 +899,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 11:10:53
     dateReleased 2009-10-05
-    priority 2031
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K4me3
 
@@ -1230,14 +912,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 11:10:53
     dateReleased 2009-10-05
-    priority 2032
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K4me3
 
@@ -1250,14 +925,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 11:10:53
     dateReleased 2009-10-05
-    priority 2033
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K4me3
 
@@ -1270,9 +938,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 17:58:8
     dateReleased 2009-10-05
-    priority 2040
-    noInherit on
-    configurable on
     cell HUVEC
     antibody H3K9ac
 
@@ -1285,14 +950,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 17:58:8
     dateReleased 2009-10-05
-    priority 2041
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K9ac
 
@@ -1305,14 +963,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 17:58:8
     dateReleased 2009-10-05
-    priority 2042
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K9ac
 
@@ -1325,14 +976,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 17:58:8
     dateReleased 2009-10-05
-    priority 2043
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K9ac
 
@@ -1345,9 +989,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 20:13:5
     dateReleased 2009-10-05
-    priority 2050
-    noInherit on
-    configurable on
     cell HUVEC
     antibody H3K9me1
 
@@ -1360,14 +1001,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 20:13:5
     dateReleased 2009-10-05
-    priority 2051
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K9me1
 
@@ -1380,14 +1014,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 20:13:5
     dateReleased 2009-10-05
-    priority 2052
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K9me1
 
@@ -1400,14 +1027,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 20:13:5
     dateReleased 2009-10-05
-    priority 2053
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K9me1
 
@@ -1420,9 +1040,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 18:53:4
     dateReleased 2009-10-05
-    priority 2060
-    noInherit on
-    configurable on
     cell HUVEC
     antibody H3K27ac
 
@@ -1435,14 +1052,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 18:53:4
     dateReleased 2009-10-05
-    priority 2061
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K27ac
 
@@ -1455,14 +1065,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 18:53:4
     dateReleased 2009-10-05
-    priority 2062
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K27ac
 
@@ -1475,14 +1078,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 18:53:4
     dateReleased 2009-10-05
-    priority 2063
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K27ac
 
@@ -1495,9 +1091,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 15:23:34
     dateReleased 2009-10-05
-    priority 2070
-    noInherit on
-    configurable on
     cell HUVEC
     antibody H3K27me3
 
@@ -1510,14 +1103,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 15:23:34
     dateReleased 2009-10-05
-    priority 2071
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K27me3
 
@@ -1530,14 +1116,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 15:23:34
     dateReleased 2009-10-05
-    priority 2072
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K27me3
 
@@ -1550,14 +1129,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 15:23:34
     dateReleased 2009-10-05
-    priority 2073
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K27me3
 
@@ -1570,9 +1142,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 16:46:27
     dateReleased 2009-10-05
-    priority 2080
-    noInherit on
-    configurable on
     cell HUVEC
     antibody H3K36me3
 
@@ -1585,14 +1154,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 16:46:27
     dateReleased 2009-10-05
-    priority 2081
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K36me3
 
@@ -1605,14 +1167,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 16:46:27
     dateReleased 2009-10-05
-    priority 2082
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K36me3
 
@@ -1625,14 +1180,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 16:46:27
     dateReleased 2009-10-05
-    priority 2083
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H3K36me3
 
@@ -1645,9 +1193,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 21:16:35
     dateReleased 2009-10-05
-    priority 2090
-    noInherit on
-    configurable on
     cell HUVEC
     antibody H4K20me1
 
@@ -1660,14 +1205,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 21:16:35
     dateReleased 2009-10-05
-    priority 2091
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H4K20me1
 
@@ -1680,14 +1218,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 21:16:35
     dateReleased 2009-10-05
-    priority 2092
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H4K20me1
 
@@ -1700,14 +1231,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 21:16:35
     dateReleased 2009-10-05
-    priority 2093
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody H4K20me1
 
@@ -1720,9 +1244,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 12:6:54
     dateReleased 2009-10-06
-    priority 2100
-    noInherit on
-    configurable on
     cell HUVEC
     antibody Pol2(b)
 
@@ -1735,14 +1256,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 12:6:54
     dateReleased 2009-10-06
-    priority 2101
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody Pol2(b)
 
@@ -1755,14 +1269,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 12:6:54
     dateReleased 2009-10-06
-    priority 2102
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody Pol2(b)
 
@@ -1775,14 +1282,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 12:6:54
     dateReleased 2009-10-06
-    priority 2103
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody Pol2(b)
 
@@ -1795,14 +1295,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 2:18:36
     dateReleased 2009-10-07
-    priority 2111
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody control
 
@@ -1815,14 +1308,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 2:18:36
     dateReleased 2009-10-07
-    priority 2112
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody control
 
@@ -1835,14 +1321,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 2:18:36
     dateReleased 2009-10-07
-    priority 2113
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell HUVEC
     antibody control
 
@@ -1855,9 +1334,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 15:41:8
     dateReleased 2009-10-06
-    priority 4000
-    noInherit on
-    configurable on
     cell K562
     antibody CTCF
 
@@ -1870,14 +1346,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 15:41:8
     dateReleased 2009-10-06
-    priority 4001
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody CTCF
 
@@ -1890,14 +1359,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 15:41:8
     dateReleased 2009-10-06
-    priority 4002
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody CTCF
 
@@ -1910,14 +1372,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 15:41:8
     dateReleased 2009-10-06
-    priority 4003
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody CTCF
 
@@ -1930,9 +1385,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 15:15:5
     dateReleased 2009-10-05
-    priority 4010
-    noInherit on
-    configurable on
     cell K562
     antibody H3K4me1
 
@@ -1945,14 +1397,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 15:15:5
     dateReleased 2009-10-05
-    priority 4011
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K4me1
 
@@ -1965,14 +1410,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 15:15:5
     dateReleased 2009-10-05
-    priority 4012
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K4me1
 
@@ -1985,14 +1423,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 15:15:5
     dateReleased 2009-10-05
-    priority 4013
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K4me1
 
@@ -2005,9 +1436,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 13:52:52
     dateReleased 2009-10-05
-    priority 4020
-    noInherit on
-    configurable on
     cell K562
     antibody H3K4me2
 
@@ -2020,14 +1448,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 13:52:52
     dateReleased 2009-10-05
-    priority 4021
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K4me2
 
@@ -2040,14 +1461,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 13:52:52
     dateReleased 2009-10-05
-    priority 4022
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K4me2
 
@@ -2060,14 +1474,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 13:52:52
     dateReleased 2009-10-05
-    priority 4023
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K4me2
 
@@ -2080,9 +1487,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 11:40:6
     dateReleased 2009-10-05
-    priority 4030
-    noInherit on
-    configurable on
     cell K562
     antibody H3K4me3
 
@@ -2095,14 +1499,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 11:40:6
     dateReleased 2009-10-05
-    priority 4031
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K4me3
 
@@ -2115,14 +1512,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 11:40:6
     dateReleased 2009-10-05
-    priority 4032
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K4me3
 
@@ -2135,14 +1525,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 11:40:6
     dateReleased 2009-10-05
-    priority 4033
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K4me3
 
@@ -2155,9 +1538,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 11:30:35
     dateReleased 2009-10-06
-    priority 4040
-    noInherit on
-    configurable on
     cell K562
     antibody H3K9ac
 
@@ -2170,14 +1550,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 11:30:35
     dateReleased 2009-10-06
-    priority 4041
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K9ac
 
@@ -2190,14 +1563,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 11:30:35
     dateReleased 2009-10-06
-    priority 4042
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K9ac
 
@@ -2210,14 +1576,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 11:30:35
     dateReleased 2009-10-06
-    priority 4043
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K9ac
 
@@ -2230,9 +1589,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 16:51:50
     dateReleased 2009-10-06
-    priority 4050
-    noInherit on
-    configurable on
     cell K562
     antibody H3K9me1
 
@@ -2245,14 +1601,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 16:51:50
     dateReleased 2009-10-06
-    priority 4051
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K9me1
 
@@ -2265,14 +1614,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 16:51:50
     dateReleased 2009-10-06
-    priority 4052
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K9me1
 
@@ -2285,14 +1627,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 16:51:50
     dateReleased 2009-10-06
-    priority 4053
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K9me1
 
@@ -2305,9 +1640,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 14:10:41
     dateReleased 2009-10-06
-    priority 4060
-    noInherit on
-    configurable on
     cell K562
     antibody H3K27ac
 
@@ -2320,14 +1652,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 14:10:41
     dateReleased 2009-10-06
-    priority 4061
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K27ac
 
@@ -2340,14 +1665,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 14:10:41
     dateReleased 2009-10-06
-    priority 4062
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K27ac
 
@@ -2360,14 +1678,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 14:10:41
     dateReleased 2009-10-06
-    priority 4063
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K27ac
 
@@ -2380,9 +1691,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 17:04:42
     dateReleased 2009-10-05
-    priority 4070
-    noInherit on
-    configurable on
     cell K562
     antibody H3K27me3
 
@@ -2395,14 +1703,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 17:04:42
     dateReleased 2009-10-05
-    priority 4071
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K27me3
 
@@ -2415,14 +1716,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 17:04:42
     dateReleased 2009-10-05
-    priority 4072
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K27me3
 
@@ -2435,14 +1729,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05 17:04:42
     dateReleased 2009-10-05
-    priority 4073
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K27me3
 
@@ -2455,9 +1742,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 10:31:41
     dateReleased 2009-10-06
-    priority 4080
-    noInherit on
-    configurable on
     cell K562
     antibody H3K36me3
 
@@ -2470,14 +1754,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 10:31:41
     dateReleased 2009-10-06
-    priority 4081
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K36me3
 
@@ -2490,13 +1767,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 10:31:41
     dateReleased 2009-10-06
-    priority 4082
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    autoScale off
     cell K562
     antibody H3K36me3
 
@@ -2509,14 +1780,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 10:31:41
     dateReleased 2009-10-06
-    priority 4083
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H3K36me3
 
@@ -2529,9 +1793,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 18:32:6
     dateReleased 2009-10-06
-    priority 4090
-    noInherit on
-    configurable on
     cell K562
     antibody H4K20me1
 
@@ -2544,14 +1805,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 18:32:6
     dateReleased 2009-10-06
-    priority 4091
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H4K20me1
 
@@ -2564,14 +1818,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 18:32:6
     dateReleased 2009-10-06
-    priority 4092
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H4K20me1
 
@@ -2584,14 +1831,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 18:32:6
     dateReleased 2009-10-06
-    priority 4093
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody H4K20me1
 
@@ -2604,9 +1844,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 20:39:56
     dateReleased 2009-10-06
-    priority 4100
-    noInherit on
-    configurable on
     cell K562
     antibody Pol2(b)
 
@@ -2619,14 +1856,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 20:39:56
     dateReleased 2009-10-06
-    priority 4101
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody Pol2(b)
 
@@ -2639,14 +1869,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 20:39:56
     dateReleased 2009-10-06
-    priority 4102
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody Pol2(b)
 
@@ -2659,14 +1882,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 20:39:56
     dateReleased 2009-10-06
-    priority 4103
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody Pol2(b)
 
@@ -2679,14 +1895,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 22:28:18
     dateReleased 2009-10-06
-    priority 4111
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody control
 
@@ -2699,14 +1908,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 22:28:18
     dateReleased 2009-10-06
-    priority 4112
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody control
 
@@ -2719,14 +1921,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 22:28:18
     dateReleased 2009-10-06
-    priority 4113
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell K562
     antibody control
 
@@ -2739,9 +1934,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 23:34:18
     dateReleased 2009-10-06
-    priority 5000
-    noInherit on
-    configurable on
     cell Keratinocyte
     antibody CTCF
 
@@ -2754,14 +1946,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 23:34:18
     dateReleased 2009-10-06
-    priority 5001
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody CTCF
 
@@ -2774,14 +1959,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 23:34:18
     dateReleased 2009-10-06
-    priority 5002
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody CTCF
 
@@ -2794,14 +1972,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 23:34:18
     dateReleased 2009-10-06
-    priority 5003
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody CTCF
 
@@ -2814,9 +1985,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 15:22:13
     dateReleased 2009-10-06
-    priority 5010
-    noInherit on
-    configurable on
     cell Keratinocyte
     antibody H3K4me1
 
@@ -2829,14 +1997,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 15:22:13
     dateReleased 2009-10-06
-    priority 5011
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K4me1
 
@@ -2849,14 +2010,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 15:22:13
     dateReleased 2009-10-06
-    priority 5012
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K4me1
 
@@ -2869,14 +2023,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 15:22:13
     dateReleased 2009-10-06
-    priority 5013
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K4me1
 
@@ -2889,9 +2036,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 4:41:46
     dateReleased 2009-10-07
-    priority 5020
-    noInherit on
-    configurable on
     cell Keratinocyte
     antibody H3K4me2
 
@@ -2904,14 +2048,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 4:41:46
     dateReleased 2009-10-07
-    priority 5021
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K4me2
 
@@ -2924,14 +2061,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 4:41:46
     dateReleased 2009-10-07
-    priority 5022
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K4me2
 
@@ -2944,14 +2074,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 4:41:46
     dateReleased 2009-10-07
-    priority 5023
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K4me2
 
@@ -2964,9 +2087,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 3:40:28
     dateReleased 2009-10-07
-    priority 5030
-    noInherit on
-    configurable on
     cell Keratinocyte
     antibody H3K4me3
 
@@ -2979,14 +2099,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 3:40:28
     dateReleased 2009-10-07
-    priority 5031
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K4me3
 
@@ -2999,14 +2112,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 3:40:28
     dateReleased 2009-10-07
-    priority 5032
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K4me3
 
@@ -3019,14 +2125,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 3:40:28
     dateReleased 2009-10-07
-    priority 5033
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K4me3
 
@@ -3039,9 +2138,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 18:41:20
     dateReleased 2009-10-06
-    priority 5040
-    noInherit on
-    configurable on
     cell Keratinocyte
     antibody H3K9ac
 
@@ -3054,14 +2150,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 18:41:20
     dateReleased 2009-10-06
-    priority 5041
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K9ac
 
@@ -3074,14 +2163,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 18:41:20
     dateReleased 2009-10-06
-    priority 5042
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K9ac
 
@@ -3094,14 +2176,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 18:41:20
     dateReleased 2009-10-06
-    priority 5043
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K9ac
 
@@ -3114,9 +2189,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 21:5:15
     dateReleased 2009-10-06
-    priority 5050
-    noInherit on
-    configurable on
     cell Keratinocyte
     antibody H3K9me1
 
@@ -3129,14 +2201,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 21:5:15
     dateReleased 2009-10-06
-    priority 5051
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K9me1
 
@@ -3149,14 +2214,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 21:5:15
     dateReleased 2009-10-06
-    priority 5052
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K9me1
 
@@ -3169,14 +2227,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 21:5:15
     dateReleased 2009-10-06
-    priority 5053
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K9me1
 
@@ -3189,9 +2240,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 19:51:16
     dateReleased 2009-10-06
-    priority 5060
-    noInherit on
-    configurable on
     cell Keratinocyte
     antibody H3K27ac
 
@@ -3204,14 +2252,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 19:51:16
     dateReleased 2009-10-06
-    priority 5061
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K27ac
 
@@ -3224,14 +2265,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 19:51:16
     dateReleased 2009-10-06
-    priority 5062
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K27ac
 
@@ -3244,14 +2278,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 19:51:16
     dateReleased 2009-10-06
-    priority 5063
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K27ac
 
@@ -3264,9 +2291,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 16:35:59
     dateReleased 2009-10-06
-    priority 5070
-    noInherit on
-    configurable on
     cell Keratinocyte
     antibody H3K27me3
 
@@ -3279,14 +2303,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 16:35:59
     dateReleased 2009-10-06
-    priority 5071
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K27me3
 
@@ -3299,14 +2316,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 16:35:59
     dateReleased 2009-10-06
-    priority 5072
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K27me3
 
@@ -3319,14 +2329,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 16:35:59
     dateReleased 2009-10-06
-    priority 5073
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K27me3
 
@@ -3339,9 +2342,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 17:38:25
     dateReleased 2009-10-06
-    priority 5080
-    noInherit on
-    configurable on
     cell Keratinocyte
     antibody H3K36me3
 
@@ -3354,14 +2354,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 17:38:25
     dateReleased 2009-10-06
-    priority 5081
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K36me3
 
@@ -3374,14 +2367,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 17:38:25
     dateReleased 2009-10-06
-    priority 5082
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K36me3
 
@@ -3394,14 +2380,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 17:38:25
     dateReleased 2009-10-06
-    priority 5083
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H3K36me3
 
@@ -3414,9 +2393,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 22:19:45
     dateReleased 2009-10-06
-    priority 5090
-    noInherit on
-    configurable on
     cell Keratinocyte
     antibody H4K20me1
 
@@ -3429,14 +2405,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 22:19:45
     dateReleased 2009-10-06
-    priority 5091
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H4K20me1
 
@@ -3449,14 +2418,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 22:19:45
     dateReleased 2009-10-06
-    priority 5092
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H4K20me1
 
@@ -3469,14 +2431,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06 22:19:45
     dateReleased 2009-10-06
-    priority 5093
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody H4K20me1
 
@@ -3489,9 +2444,6 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 0:36:12
     dateReleased 2009-10-07
-    priority 5100
-    noInherit on
-    configurable on
     cell Keratinocyte
     antibody Pol2(b)
 
@@ -3504,14 +2456,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 0:36:12
     dateReleased 2009-10-07
-    priority 5101
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody Pol2(b)
 
@@ -3524,14 +2469,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 0:36:12
     dateReleased 2009-10-07
-    priority 5102
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody Pol2(b)
 
@@ -3544,14 +2482,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 0:36:12
     dateReleased 2009-10-07
-    priority 5103
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody Pol2(b)
 
@@ -3564,14 +2495,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 7:29:45
     dateReleased 2009-10-07
-    priority 5111
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody control
 
@@ -3584,14 +2508,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 7:29:45
     dateReleased 2009-10-07
-    priority 5112
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-    viewLimits 0:20
-    autoScale off
     cell Keratinocyte
     antibody control
 
@@ -3604,14 +2521,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off z
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07 7:29:45
     dateReleased 2009-10-07
-    priority 5113
-    noInherit on
-    configurable off
     spanList first
-    windowingFunction mean
-    viewLimits 0:20
-    autoScale off
-    maxHeightPixels 100:16:16
     cell Keratinocyte
     antibody control
 
@@ -3631,7 +2541,8 @@ dimensions dimensionX=cellType dimensionY=EXP
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense rRAW=hide
 controlledVocabulary encode/cv.ra cellType=GM12878,K562,Reference_Genome EXP=CTCF,Input
-settingsByView Peaks:useScore=0 Signal:viewLimits=0:0.02,viewLimitsMax=0:40,autoScale=off SignalBO:viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off rRAW:defaultViewLimits=0:1,viewLimits=0:112,autoScale=off
+noInherit on
+settingsByView Peaks:configurable=on,useScore=0 Signal:configurable=on,viewLimits=0:0.02,viewLimitsMax=0:40,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 SignalBO:configurable=on,viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 rRAW:configurable=ff,defaultViewLimits=0:1,viewLimits=0:112,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 useScore 0
 priority 0
 type bed 3
@@ -3646,9 +2557,6 @@ wgEncode 1
     useScore 0
     dateSubmitted 2008-11-4 8:33:46
     dateReleased 2009-08-04
-    priority 101
-    noInherit on
-    configurable on
     cell GM12878
 
     track wgEncodeDukeDNaseSeqSignalGm12878
@@ -3657,16 +2565,9 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Signal (in GM12878 cells)
     subGroups view=Signal EXP=DNase cellType=GM12878
     type wig 0.00 39.64
-    viewLimits 0:0.02
-    autoScale off
     dateSubmitted 2008-11-4 8:33:46
     dateReleased 2009-08-04
-    priority 102
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell GM12878
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878
@@ -3675,16 +2576,9 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Base Overlap Signal (in GM12878 cells)
     subGroups view=SignalBO EXP=DNase cellType=GM12878
     type wig 0.00 417.00
-    viewLimits 0.5:2
-    autoScale off
     dateSubmitted 2008-11-22 15:8:6
     dateReleased 2009-08-22
-    priority 103
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell GM12878
 
     track wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
@@ -3695,12 +2589,7 @@ wgEncode 1
     type wig 0.00 10.46
     dateSubmitted 2008-11-4 8:33:46
     dateReleased 2009-08-04
-    priority 104
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
 
     track wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
@@ -3711,12 +2600,7 @@ wgEncode 1
     type wig 0.00 9.77
     dateSubmitted 2008-11-4 8:33:46
     dateReleased 2009-08-04
-    priority 105
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
 
     track wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
@@ -3727,12 +2611,7 @@ wgEncode 1
     type wig 0.00 39.64
     dateSubmitted 2008-11-4 8:33:46
     dateReleased 2009-08-04
-    priority 106
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
 
     track wgEncodeUncFAIREseqPeaksGm12878
@@ -3744,9 +2623,6 @@ wgEncode 1
     useScore 0
     dateSubmitted 2008-11-4 10:18:16
     dateReleased 2009-08-04
-    priority 201
-    noInherit on
-    configurable on
     cell GM12878
 
     track wgEncodeUncFAIREseqSignalGm12878
@@ -3755,16 +2631,9 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Signal (in GM12878 cells)
     subGroups view=Signal EXP=FAIRE cellType=GM12878
     type wig 0.00 18.37
-    viewLimits 0.1:0.25
-    autoScale off
     dateSubmitted 2008-11-4 10:18:16
     dateReleased 2009-08-04
-    priority 202
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell GM12878
 
     track wgEncodeUncFAIREseqBaseOverlapSignalGm12878
@@ -3773,16 +2642,9 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Base Overlap Signal (in GM12878 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=GM12878
     type wig 0.00 5342.00
-    viewLimits 2:15
-    autoScale off
     dateSubmitted 2008-11-21 16:50:53
     dateReleased 2009-08-21
-    priority 203
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell GM12878
 
     track wgEncodeUncFAIREseqRawSignalRep1Gm12878
@@ -3793,12 +2655,7 @@ wgEncode 1
     type wig 0.00 22.93
     dateSubmitted 2008-11-4 10:18:16
     dateReleased 2009-08-04
-    priority 204
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
 
     track wgEncodeUncFAIREseqRawSignalRep2Gm12878
@@ -3809,12 +2666,7 @@ wgEncode 1
     type wig 0.00 50.40
     dateSubmitted 2008-11-4 10:18:16
     dateReleased 2009-08-04
-    priority 205
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
 
     track wgEncodeUncFAIREseqRawSignalRep3Gm12878
@@ -3825,12 +2677,7 @@ wgEncode 1
     type wig 0.00 112.28
     dateSubmitted 2008-11-4 10:18:16
     dateReleased 2009-08-04
-    priority 206
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
 
     track wgEncodeUtaChIPseqPeaksGm12878Ctcf
@@ -3842,9 +2689,6 @@ wgEncode 1
     useScore 0
     dateSubmitted 2008-11-4 11:37:19
     dateReleased 2009-08-04
-    priority 301
-    noInherit on
-    configurable on
     cell GM12878
     antibody CTCF
 
@@ -3854,16 +2698,9 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UT-Austin ChIP-seq Signal (CTCF in GM12878 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=GM12878
     type wig 0.00 14.01
-    viewLimits 0:0.02
-    autoScale off
     dateSubmitted 2008-11-4 11:37:19
     dateReleased 2009-08-04
-    priority 302
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell GM12878
     antibody CTCF
 
@@ -3875,12 +2712,7 @@ wgEncode 1
     type wig 0.00 6.71
     dateSubmitted 2008-11-4 11:37:19
     dateReleased 2009-08-04
-    priority 303
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody CTCF
 
@@ -3892,12 +2724,7 @@ wgEncode 1
     type wig 0.00 7.24
     dateSubmitted 2008-11-4 11:37:19
     dateReleased 2009-08-04
-    priority 304
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody CTCF
 
@@ -3909,12 +2736,7 @@ wgEncode 1
     type wig 0.00 14.01
     dateSubmitted 2008-11-4 11:37:19
     dateReleased 2009-08-04
-    priority 305
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody CTCF
 
@@ -3924,16 +2746,9 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UT-Austin Input Signal (GM12878 cells)
     subGroups view=Signal EXP=zCTRL cellType=GM12878
     type wig 0.00 29.05
-    viewLimits 0:0.02
-    autoScale off
     dateSubmitted 2008-11-4 12:11:48
     dateReleased 2009-08-04
-    priority 401
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell GM12878
     antibody Input
 
@@ -3945,12 +2760,7 @@ wgEncode 1
     type wig 0.00 29.05
     dateSubmitted 2008-11-4 12:11:48
     dateReleased 2009-08-04
-    priority 402
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody Input
 
@@ -3964,9 +2774,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06 16:13:42
     dateReleased 2009-09-06
-    priority 1001
-    noInherit on
-    configurable on
     cell K562
 
     track wgEncodeDukeDNaseSeqSignalK562
@@ -3975,17 +2782,10 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Signal (in K562 cells)
     subGroups view=Signal EXP=DNase cellType=K562
     type wig 0.00 3.11
-    viewLimits 0:0.02
-    autoScale off
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06 16:13:42
     dateReleased 2009-09-06
-    priority 1002
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalK562
@@ -3994,17 +2794,10 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Base Overlap Signal (in K562 cells)
     subGroups view=SignalBO EXP=DNase cellType=K562
     type wig 0.00 445.00
-    viewLimits 2:15
-    autoScale off
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06 16:13:42
     dateReleased 2009-09-06
-    priority 1003
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
 
     track wgEncodeDukeDNaseSeqRawSignalRep1K562
@@ -4016,12 +2809,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06 16:13:42
     dateReleased 2009-09-06
-    priority 1004
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
 
     track wgEncodeDukeDNaseSeqRawSignalRep2K562
@@ -4033,12 +2821,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06 16:13:42
     dateReleased 2009-09-06
-    priority 1005
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
 
     track wgEncodeDukeDNaseSeqRawSignalRep3K562
@@ -4050,12 +2833,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06 16:13:42
     dateReleased 2009-09-06
-    priority 1006
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
 
     track wgEncodeUncFAIREseqPeaksK562
@@ -4068,9 +2846,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06 21:21:39
     dateReleased 2009-09-06
-    priority 1101
-    noInherit on
-    configurable on
     cell K562
 
     track wgEncodeUncFAIREseqSignalK562
@@ -4079,17 +2854,10 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Signal (in K562 cells)
     subGroups view=Signal EXP=FAIRE cellType=K562
     type wig 0.00 31.50
-    viewLimits 0:0.02
-    autoScale off
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06 21:21:39
     dateReleased 2009-09-06
-    priority 1102
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
 
     track wgEncodeUncFAIREseqBaseOverlapSignalK562
@@ -4098,17 +2866,10 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Base Overlap Signal (in K562 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=K562
     type wig 0.00 8719.00
-    viewLimits 2:15
-    autoScale off
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06 21:21:39
     dateReleased 2009-09-06
-    priority 1103
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
 
     track wgEncodeUncFAIREseqRawSignalRep1K562
@@ -4120,12 +2881,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06 21:21:39
     dateReleased 2009-09-06
-    priority 1104
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
 
     track wgEncodeUncFAIREseqRawSignalRep2K562
@@ -4137,12 +2893,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06 21:21:39
     dateReleased 2009-09-06
-    priority 1105
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
 
     track wgEncodeUncFAIREseqRawSignalRep3K562
@@ -4154,12 +2905,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06 21:21:39
     dateReleased 2009-09-06
-    priority 1106
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
 
     track wgEncodeUtaustinChIPseqSignalK562Input
@@ -4170,12 +2916,7 @@ wgEncode 1
     type wig 0.00 2.98
     dateSubmitted 2008-12-04 21:8:21
     dateReleased 2009-09-04
-    priority 1402
-    noInherit on
-    configurable on
     spanList 1401
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody input
 
@@ -4187,12 +2928,7 @@ wgEncode 1
     type wig 0.00 37.78
     dateSubmitted 2008-12-04 21:8:21
     dateReleased 2009-09-04
-    priority 1404
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody input
 
@@ -4205,8 +2941,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 23:19:49
     dateReleased 2009-09-03
-    priority 9001
-    noInherit on
 
     track wgEncodeDukeDNaseSeqUniqueness20bpGm12878
     subTrack wgEncodeChromatinMap
@@ -4217,11 +2951,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 23:19:49
     dateReleased 2009-09-03
-    priority 9002
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
 
     track wgEncodeDukeDNaseSeqUniqueness24bpGm12878
     subTrack wgEncodeChromatinMap
@@ -4232,11 +2962,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 23:19:49
     dateReleased 2009-09-03
-    priority 9003
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
 
     track wgEncodeDukeDNaseSeqUniqueness35bpGm12878
     subTrack wgEncodeChromatinMap
@@ -4247,11 +2973,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 23:19:49
     dateReleased 2009-09-03
-    priority 9004
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
 
 
 # NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
@@ -4269,6 +2991,8 @@ sortOrder view=+ cellType=+ promoter=+
 dragAndDrop subTracks
 visibilityViewDefaults SI=dense EB=dense
 controlledVocabulary encode/cv.ra cellType promoter
+noInherit on
+settingsByView SI:configurable=on EB:configurable=on
 dataVersion ENCODE Nov 2008 Freeze
 priority 0
 type bed 3
@@ -4283,9 +3007,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 13:50:43
     dateReleased 2009-08-25
-    priority 1
-    noInherit on
-    configurable on
     promoter G-gamma
     cell K562
 
@@ -4298,9 +3019,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 13:50:43
     dateReleased 2009-08-25
-    priority 2
-    noInherit on
-    configurable on
     promoter G-gamma
     cell K562
 
@@ -4313,9 +3031,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 13:50:43
     dateReleased 2009-08-25
-    priority 101
-    noInherit on
-    configurable on
     promoter SV40
     cell K562
 
@@ -4328,9 +3043,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 13:50:43
     dateReleased 2009-08-25
-    priority 102
-    noInherit on
-    configurable on
     promoter SV40
     cell K562
 
@@ -4351,6 +3063,8 @@ sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults PlusClusters=dense MinusClusters=dense PlusRawSignal=hide MinusRawSignal=hide Alignments=hide
 controlledVocabulary encode/cv.ra cellType localization rnaExtract
+noInherit on
+settingsByView Alignments:configurable=on PlusClusters:configurable=on MinusClusters:configurable=on PlusRawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean MinusRawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3
 wgEncode 1
@@ -4363,9 +3077,6 @@ wgEncode 1
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 17
-    configurable on
-    noInherit on
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -4378,9 +3089,6 @@ wgEncode 1
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 17
-    configurable on
-    noInherit on
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -4393,9 +3101,6 @@ wgEncode 1
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 17
-    configurable on
-    noInherit on
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -4408,9 +3113,6 @@ wgEncode 1
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 13
-    configurable on
-    noInherit on
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -4423,9 +3125,6 @@ wgEncode 1
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 14
-    configurable on
-    noInherit on
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -4438,9 +3137,6 @@ wgEncode 1
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 13
-    configurable on
-    noInherit on
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -4453,9 +3149,6 @@ wgEncode 1
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 14
-    configurable on
-    noInherit on
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -4468,9 +3161,6 @@ wgEncode 1
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 13
-    configurable on
-    noInherit on
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -4483,9 +3173,6 @@ wgEncode 1
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 14
-    configurable on
-    noInherit on
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -4498,12 +3185,7 @@ wgEncode 1
     type wig 1.00 63823.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 15
-    configurable on
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -4516,12 +3198,7 @@ wgEncode 1
     type wig 1.00 63540.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 16
-    configurable on
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -4534,12 +3211,7 @@ wgEncode 1
     type wig 1.00 61689.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 15
-    configurable on
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -4552,12 +3224,7 @@ wgEncode 1
     type wig 1.00 65524.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 16
-    configurable on
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -4570,12 +3237,7 @@ wgEncode 1
     type wig 1.00 45083.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 15
-    configurable on
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -4588,12 +3250,7 @@ wgEncode 1
     type wig 1.00 14562.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-20 14:48:58
-    priority 16
-    configurable on
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -4612,8 +3269,9 @@ dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Hotspots=hide Peaks=hide RawSignal=hide
-settingsByView RawSignal:viewLimits=1:10,autoScale=off
+noInherit on
 controlledVocabulary encode/cv.ra cellType
+settingsByView Hotspots:configurable=on Peaks:configurable=on RawSignal:configurable=on,viewLimits=1:10,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3 +
 wgEncode 1
@@ -4630,13 +3288,7 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 16
-    noInherit on
-    configurable on
     spanList 20
-    windowingFunction maximum
-    maxHeightPixels 100:50:16
-    viewLimits 1:150
     cell HepG2
 
     track wgEncodeUwDnaseSeqHotspotsRep2Hepg2
@@ -4648,9 +3300,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 13
-    noInherit on
-    configurable on
     cell HepG2
 
     track wgEncodeUwDnaseSeqRawSignalRep2Gm06990
@@ -4662,13 +3311,7 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 16
-    noInherit on
-    configurable on
     spanList 20
-    windowingFunction maximum
-    maxHeightPixels 100:50:16
-    viewLimits 1:150
     cell GM06990
 
     track wgEncodeUwDnaseSeqHotspotsRep2Gm06990
@@ -4680,9 +3323,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 13
-    noInherit on
-    configurable on
     cell GM06990
 
     track wgEncodeUwDnaseSeqRawSignalRep1K562
@@ -4694,13 +3334,7 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 16
-    noInherit on
-    configurable on
     spanList 20
-    windowingFunction maximum
-    maxHeightPixels 100:50:16
-    viewLimits 1:150
     cell K562
 
     track wgEncodeUwDnaseSeqRawSignalRep2K562
@@ -4712,13 +3346,7 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 16
-    noInherit on
-    configurable on
     spanList 20
-    windowingFunction maximum
-    maxHeightPixels 100:50:16
-    viewLimits 1:150
     cell K562
 
     track wgEncodeUwDnaseSeqPeaksK562
@@ -4730,9 +3358,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 14
-    noInherit on
-    configurable on
     cell K562
 
     track wgEncodeUwDnaseSeqHotspotsRep1K562
@@ -4744,9 +3369,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 13
-    noInherit on
-    configurable on
     cell K562
 
     track wgEncodeUwDnaseSeqHotspotsRep2K562
@@ -4758,9 +3380,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 13
-    noInherit on
-    configurable on
     cell K562
 
     track wgEncodeUwDnaseSeqRawSignalRep1Sknshra
@@ -4772,13 +3391,7 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 16
-    noInherit on
-    configurable on
     spanList 20
-    windowingFunction maximum
-    maxHeightPixels 100:50:16
-    viewLimits 1:150
     cell SK-N-SH(+RA)
 
     track wgEncodeUwDnaseSeqPeaksSknshra
@@ -4790,9 +3403,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 14
-    noInherit on
-    configurable on
     cell SK-N-SH(+RA)
 
     track wgEncodeUwDnaseSeqHotspotsRep1Sknshra
@@ -4804,9 +3414,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 13
-    noInherit on
-    configurable on
     cell SK-N-SH(+RA)
 
     track wgEncodeUwDnaseSeqRawSignalRep1Hepg2
@@ -4818,13 +3425,7 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 16
-    noInherit on
-    configurable on
     spanList 20
-    windowingFunction maximum
-    maxHeightPixels 100:50:16
-    viewLimits 1:150
     cell HepG2
 
     track wgEncodeUwDnaseSeqPeaksHepg2
@@ -4836,9 +3437,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 14
-    noInherit on
-    configurable on
     cell HepG2
 
     track wgEncodeUwDnaseSeqHotspotsRep1Hepg2
@@ -4850,9 +3448,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:7
     dateReleased 2009-09-09
-    priority 13
-    noInherit on
-    configurable on
     cell HepG2
 
     track wgEncodeUwDnaseSeqRawSignalRep1Th1
@@ -4864,13 +3459,7 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:8
     dateReleased 2009-09-09
-    priority 16
-    noInherit on
-    configurable on
     spanList 20
-    windowingFunction maximum
-    maxHeightPixels 100:50:16
-    viewLimits 1:150
     cell Th1
 
     track wgEncodeUwDnaseSeqPeaksTh1
@@ -4882,9 +3471,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:8
     dateReleased 2009-09-09
-    priority 14
-    noInherit on
-    configurable on
     cell Th1
 
     track wgEncodeUwDnaseSeqHotspotsRep1Th1
@@ -4896,9 +3482,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:8
     dateReleased 2009-09-09
-    priority 13
-    noInherit on
-    configurable on
     cell Th1
 
     track wgEncodeUwDnaseSeqRawSignalRep1Helas3
@@ -4910,13 +3493,7 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:8
     dateReleased 2009-09-09
-    priority 16
-    noInherit on
-    configurable on
     spanList 20
-    windowingFunction maximum
-    maxHeightPixels 100:50:16
-    viewLimits 1:150
     cell HeLa-S3
 
     track wgEncodeUwDnaseSeqPeaksHelas3
@@ -4928,9 +3505,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:8
     dateReleased 2009-09-09
-    priority 14
-    noInherit on
-    configurable on
     cell HeLa-S3
 
     track wgEncodeUwDnaseSeqHotspotsRep1Helas3
@@ -4942,9 +3516,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:8
     dateReleased 2009-09-09
-    priority 13
-    noInherit on
-    configurable on
     cell HeLa-S3
 
     track wgEncodeUwDnaseSeqRawSignalRep1Gm06990
@@ -4956,13 +3527,7 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:8
     dateReleased 2009-09-09
-    priority 16
-    noInherit on
-    configurable on
     spanList 20
-    windowingFunction maximum
-    maxHeightPixels 100:50:16
-    viewLimits 1:150
     cell GM06990
 
     track wgEncodeUwDnaseSeqPeaksGm06990
@@ -4974,9 +3539,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:8
     dateReleased 2009-09-09
-    priority 14
-    noInherit on
-    configurable on
     cell GM06990
 
     track wgEncodeUwDnaseSeqHotspotsRep1Gm06990
@@ -4988,9 +3550,6 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09 4:41:8
     dateReleased 2009-09-09
-    priority 13
-    noInherit on
-    configurable on
     cell GM06990
 
 
@@ -5010,6 +3569,8 @@ sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType localization rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults Transfrags=hide FilteredTransfrags=hide RawSignal=hide FilteredRawSignal=dense
+noInherit on
+settingsByView Transfrags:configurable=on FilteredTransfrags:configurable=on RawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean FilteredRawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3
 wgEncode 1
@@ -5023,9 +3584,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24 21:27:26
     dateReleased 2009-08-24
-    priority 2
-    noInherit on
-    configurable on
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -5039,9 +3597,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24 21:27:26
     dateReleased 2009-08-24
-    priority 1
-    noInherit on
-    configurable on
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -5055,12 +3610,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24 21:27:26
     dateReleased 2009-08-24
-    priority 3
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -5074,12 +3624,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24 21:27:26
     dateReleased 2009-08-24
-    priority 4
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -5093,9 +3638,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24 23:22:15
     dateReleased 2009-08-24
-    priority 5
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cell
     cell prostate
@@ -5109,9 +3651,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24 23:22:15
     dateReleased 2009-08-24
-    priority 6
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cell
     cell prostate
@@ -5125,12 +3664,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24 23:22:15
     dateReleased 2009-08-24
-    priority 8
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization cell
     cell prostate
@@ -5144,12 +3678,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24 23:22:15
     dateReleased 2009-08-24
-    priority 7
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization cell
     cell prostate
@@ -5163,9 +3692,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:7:42
     dateReleased 2009-08-25
-    priority 9
-    noInherit on
-    configurable on
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -5179,9 +3705,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:7:42
     dateReleased 2009-08-25
-    priority 10
-    noInherit on
-    configurable on
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -5195,12 +3718,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:7:42
     dateReleased 2009-08-25
-    priority 12
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -5214,12 +3732,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:7:42
     dateReleased 2009-08-25
-    priority 11
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -5233,9 +3746,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:7:1
     dateReleased 2009-08-25
-    priority 9
-    noInherit on
-    configurable on
     rnaExtract total
     localization cell
     cell K562
@@ -5249,9 +3759,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:7:1
     dateReleased 2009-08-25
-    priority 10
-    noInherit on
-    configurable on
     rnaExtract total
     localization cell
     cell K562
@@ -5265,12 +3772,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:7:1
     dateReleased 2009-08-25
-    priority 11
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract total
     localization cell
     cell K562
@@ -5284,12 +3786,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:7:1
     dateReleased 2009-08-25
-    priority 12
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract total
     localization cell
     cell K562
@@ -5303,9 +3800,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:44:34
     dateReleased 2009-08-25
-    priority 13
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -5319,9 +3813,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:44:34
     dateReleased 2009-08-25
-    priority 14
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -5335,12 +3826,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:44:34
     dateReleased 2009-08-25
-    priority 16
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -5354,12 +3840,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:44:34
     dateReleased 2009-08-25
-    priority 15
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -5373,9 +3854,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:44:24
     dateReleased 2009-08-25
-    priority 14
-    noInherit on
-    configurable on
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -5389,9 +3867,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:44:24
     dateReleased 2009-08-25
-    priority 13
-    noInherit on
-    configurable on
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -5405,12 +3880,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:44:24
     dateReleased 2009-08-25
-    priority 16
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -5424,12 +3894,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 0:44:24
     dateReleased 2009-08-25
-    priority 15
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -5443,9 +3908,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 1:2:47
     dateReleased 2009-08-25
-    priority 18
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -5459,9 +3921,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 1:2:47
     dateReleased 2009-08-25
-    priority 17
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -5475,12 +3934,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 1:2:47
     dateReleased 2009-08-25
-    priority 19
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -5494,12 +3948,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 1:2:47
     dateReleased 2009-08-25
-    priority 20
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -5513,9 +3962,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 8:13:49
     dateReleased 2009-08-25
-    priority 22
-    noInherit on
-    configurable on
     rnaExtract longNonPolyA
     localization polysome
     cell K562
@@ -5529,9 +3975,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 8:13:49
     dateReleased 2009-08-25
-    priority 21
-    noInherit on
-    configurable on
     rnaExtract longNonPolyA
     localization polysome
     cell K562
@@ -5545,12 +3988,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 8:13:49
     dateReleased 2009-08-25
-    priority 24
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization polysome
     cell K562
@@ -5564,12 +4002,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 8:13:49
     dateReleased 2009-08-25
-    priority 23
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization polysome
     cell K562
@@ -5583,9 +4016,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 10:26:17
     dateReleased 2009-08-25
-    priority 26
-    noInherit on
-    configurable on
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
@@ -5599,9 +4029,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 10:26:17
     dateReleased 2009-08-25
-    priority 25
-    noInherit on
-    configurable on
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
@@ -5615,12 +4042,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 10:26:17
     dateReleased 2009-08-25
-    priority 28
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
@@ -5634,12 +4056,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 10:26:17
     dateReleased 2009-08-25
-    priority 27
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
@@ -5653,9 +4070,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 10:26:0
     dateReleased 2009-08-25
-    priority 21
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
@@ -5669,9 +4083,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 10:26:0
     dateReleased 2009-08-25
-    priority 22
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
@@ -5685,12 +4096,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 10:26:0
     dateReleased 2009-08-25
-    priority 24
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
@@ -5704,12 +4110,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 10:26:0
     dateReleased 2009-08-25
-    priority 23
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
@@ -5723,9 +4124,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26 10:21:15
     dateReleased 2009-08-26
-    priority 30
-    noInherit on
-    configurable on
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
@@ -5739,9 +4137,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26 10:21:15
     dateReleased 2009-08-26
-    priority 29
-    noInherit on
-    configurable on
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
@@ -5755,12 +4150,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26 10:21:15
     dateReleased 2009-08-26
-    priority 32
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
@@ -5774,12 +4164,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26 10:21:15
     dateReleased 2009-08-26
-    priority 31
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
@@ -5801,6 +4186,8 @@ sortOrder cellType=+ ripAntibody=+ ripTgtProtein=+ view=+
 controlledVocabulary encode/cv.ra cellType ripAntibody ripTgtProtein
 dragAndDrop subTracks
 visibilityViewDefaults RbpAssocRna=dense
+noInherit on
+settingsByView RbpAssocRna:configurable=on
 priority 0
 type bed 3
 wgEncode 1
@@ -5814,9 +4201,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02 13:5:0
     dateReleased 2009-09-02
-    priority 8
-    noInherit on
-    configurable on
     ripTgtProtein T7Tag
     ripAntibody Nov_69522
     cell GM12878
@@ -5830,9 +4214,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02 13:5:0
     dateReleased 2009-09-02
-    priority 8
-    noInherit on
-    configurable on
     ripTgtProtein T7Tag
     ripAntibody Nov_69522
     cell K562
@@ -5846,9 +4227,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02 13:5:0
     dateReleased 2009-09-02
-    priority 8
-    noInherit on
-    configurable on
     ripTgtProtein ELAVL1
     ripAntibody SC_5261
     cell GM12878
@@ -5862,9 +4240,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02 13:5:0
     dateReleased 2009-09-02
-    priority 8
-    noInherit on
-    configurable on
     ripTgtProtein ELAVL1
     ripAntibody SC_5261
     cell K562
@@ -5878,9 +4253,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02 13:5:0
     dateReleased 2009-09-02
-    priority 8
-    noInherit on
-    configurable on
     ripTgtProtein IGF2BP1
     ripAntibody SC_21027
     cell K562
@@ -5894,9 +4266,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02 13:5:0
     dateReleased 2009-09-02
-    priority 8
-    noInherit on
-    configurable on
     ripTgtProtein PABPC1
     ripAntibody Sig_P6246
     cell GM12878
@@ -5910,9 +4279,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02 13:5:0
     dateReleased 2009-09-02
-    priority 8
-    noInherit on
-    configurable on
     ripTgtProtein PABPC1
     ripAntibody Sig_P6246
     cell K562
@@ -5937,7 +4303,8 @@ sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
 controlledVocabulary encode/cv.ra cellType=GM12878,HEK293(b),HeLa-S3_IFNg,HeLa-S3,K562,Max,NB4,NF-E2 factor
-settingsByView Signal:viewLimits=4:7,viewLimitsMax=0:20910,autoScale=off zRAW:viewLimits=3:7,viewLimitsMax=0:14648,autoScale=off
+noInherit on
+settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=4:7,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:configurable=off,viewLimits=3:7,viewLimitsMax=0:14648,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 wgEncode 1
 
@@ -5950,9 +4317,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09 15:39:59
     dateReleased 2009-10-09
-    priority 1011
-    noInherit on
-    configurable on
     cell GM12878
     antibody Max
 
@@ -5962,17 +4326,10 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Max in GM12878 cells)
     subGroups view=Signal factor=Max cellType=GM12878
     type wig 0.00 4334.00
-    viewLimits 4:7
-    autoScale off
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09 15:39:59
     dateReleased 2009-10-09
-    priority 1012
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody Max
 
@@ -5985,11 +4342,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09 15:39:59
     dateReleased 2009-10-09
-    priority 1013
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody Max
 
@@ -6002,11 +4355,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09 15:39:59
     dateReleased 2009-10-09
-    priority 1014
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody Max
 
@@ -6019,9 +4368,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26 15:55:33
     dateReleased 2009-08-26
-    priority 1031
-    noInherit on
-    configurable on
     cell GM12878
     antibody Pol2
 
@@ -6031,17 +4377,10 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Pol2 in GM12878 cells)
     subGroups view=Signal factor=Pol2 cellType=GM12878
     type wig 0.00 9844.00
-    viewLimits 4:7
-    autoScale off
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26 15:55:33
     dateReleased 2009-08-26
-    priority 1032
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody Pol2
 
@@ -6054,11 +4393,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26 15:55:33
     dateReleased 2009-08-26
-    priority 1033
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody Pol2
 
@@ -6071,11 +4406,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26 15:55:33
     dateReleased 2009-08-26
-    priority 1034
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody Pol2
 
@@ -6088,9 +4419,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24 19:16:9
     dateReleased 2009-08-24
-    priority 1051
-    noInherit on
-    configurable on
     cell GM12878
     antibody c-Fos
 
@@ -6100,17 +4428,10 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (c-Fos in GM12878 cells)
     subGroups view=Signal factor=c-Fos cellType=GM12878
     type wig 0.00 4648.00
-    viewLimits 4:7
-    autoScale off
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24 19:16:9
     dateReleased 2009-08-24
-    priority 1052
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell GM12878
     antibody c-Fos
 
@@ -6123,11 +4444,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24 19:16:9
     dateReleased 2009-08-24
-    priority 1053
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody c-Fos
 
@@ -6140,11 +4457,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24 19:16:9
     dateReleased 2009-08-24
-    priority 1054
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody c-Fos
 
@@ -6157,11 +4470,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24 19:16:9
     dateReleased 2009-08-24
-    priority 1055
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody c-Fos
 
@@ -6171,16 +4480,9 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in GM12878 cells)
     subGroups view=Signal factor=zCTRL cellType=GM12878
     type wig 0.00 7237.00
-    viewLimits 4:7
-    autoScale off
     dateSubmitted 2008-11-25 10:1:33
     dateReleased 2009-08-25
-    priority 1082
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell GM12878
     antibody Input
 
@@ -6192,11 +4494,7 @@ wgEncode 1
     type wig 1.00 1488.00
     dateSubmitted 2008-11-25 10:1:33
     dateReleased 2009-08-25
-    priority 1083
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody Input
 
@@ -6209,9 +4507,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14 15:15:3
     dateReleased 2009-10-14
-    priority 2031
-    noInherit on
-    configurable on
     cell HEK293(b)
     antibody Pol2
 
@@ -6224,14 +4519,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14 15:15:3
     dateReleased 2009-10-14
-    priority 2032
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 4:7
-    autoScale off
     cell HEK293(b)
     antibody Pol2
 
@@ -6244,11 +4532,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14 15:15:3
     dateReleased 2009-10-14
-    priority 2033
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HEK293(b)
     antibody Pol2
 
@@ -6261,11 +4545,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14 15:15:3
     dateReleased 2009-10-14
-    priority 2034
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HEK293(b)
     antibody Pol2
 
@@ -6278,11 +4558,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14 15:15:3
     dateReleased 2009-10-14
-    priority 2035
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HEK293(b)
     antibody Pol2
 
@@ -6295,14 +4571,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14 22:24:53
     dateReleased 2009-10-14
-    priority 2082
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 4:7
-    autoScale off
     cell HEK293(b)
     antibody Input
 
@@ -6315,11 +4584,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14 22:24:53
     dateReleased 2009-10-14
-    priority 2083
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HEK293(b)
     antibody Input
 
@@ -6331,13 +4596,10 @@ wgEncode 1
     type narrowPeak
     dateSubmitted 2008-10-1 9:27:32
     dateReleased 2009-07-01
-    priority 3031
-    noInherit on
     cell HeLa-S3
     antibody Pol2
     color 112,63,174
     accession GSE12781
-    configurable on
 
     track wgEncodeYaleChIPseqSignalHelas3Pol2
     subTrack wgEncodeYaleChIPseq off
@@ -6345,21 +4607,14 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Pol2 in HeLa-S3 cells)
     subGroups view=Signal factor=Pol2 cellType=HeLa
     type wig 0.00 14600.00
-    viewLimits 4:7
-    autoScale off
     dateSubmitted 2008-10-1 9:27:32
     dateReleased 2009-07-01
-    priority 3032
-    noInherit on
     visibility full
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell HeLa-S3
     antibody Pol2
     color 112,63,174
     accession GSE12781
-    configurable on
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Pol2
     subTrack wgEncodeYaleChIPseq off
@@ -6369,11 +4624,7 @@ wgEncode 1
     type wig 1.00 3673.00
     dateSubmitted 2008-10-1 9:27:32
     dateReleased 2009-07-01
-    priority 3033
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3
     antibody Pol2
     accession GSE12781
@@ -6387,11 +4638,7 @@ wgEncode 1
     type wig 1.00 6153.00
     dateSubmitted 2008-10-1 9:27:32
     dateReleased 2009-07-01
-    priority 3034
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3
     antibody Pol2
     color 112,63,174
@@ -6405,11 +4652,7 @@ wgEncode 1
     type wig 1.00 4989.00
     dateSubmitted 2008-10-1 9:27:32
     dateReleased 2009-07-01
-    priority 3035
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3
     antibody Pol2
     color 112,63,174
@@ -6421,22 +4664,15 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in HeLa-S3 cells)
     subGroups view=Signal factor=zCTRL cellType=HeLa
     type wig 0.00 8316.00
-    viewLimits 4:7
-    autoScale off
     defaultViewLimits 2:2000
     dateSubmitted 2008-09-29 14:52:0
     dateReleased 2009-06-29
-    priority 3082
-    noInherit on
     visibility full
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell HeLa-S3
     antibody Input
     color 112,63,174
     accession GSE12781
-    configurable on
 
     track wgEncodeYaleChIPseqRawSignalHelas3Input
     subTrack wgEncodeYaleChIPseq off
@@ -6446,11 +4682,7 @@ wgEncode 1
     type wig 1.00 8316.00
     dateSubmitted 2008-09-29 14:52:0
     dateReleased 2009-06-29
-    priority 3083
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3
     antibody Input
     color 112,63,174
@@ -6465,9 +4697,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15 12:36:22
     dateReleased 2009-10-15
-    priority 3091
-    noInherit on
-    configurable on
     cell HeLa-S3
     antibody Large_Fragment
 
@@ -6480,14 +4709,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15 12:36:22
     dateReleased 2009-10-15
-    priority 3092
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 4:7
-    autoScale off
     cell HeLa-S3
     antibody Large_Fragment
 
@@ -6500,11 +4722,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15 12:36:22
     dateReleased 2009-10-15
-    priority 3093
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3
     antibody Large_Fragment
 
@@ -6517,11 +4735,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15 12:36:22
     dateReleased 2009-10-15
-    priority 3094
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3
     antibody Large_Fragment
 
@@ -6534,14 +4748,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15 10:8:35
     dateReleased 2009-10-15
-    priority 3102
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 4:7
-    autoScale off
     cell HeLa-S3
     antibody MNase
 
@@ -6554,11 +4761,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16 12:7:58
     dateReleased 2009-10-16
-    priority 3103
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3
     antibody MNase
 
@@ -6571,11 +4774,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16 12:7:58
     dateReleased 2009-10-16
-    priority 3104
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3
     antibody MNase
 
@@ -6588,9 +4787,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15 11:38:10
     dateReleased 2009-10-15
-    priority 3111
-    noInherit on
-    configurable on
     cell HeLa-S3
     antibody Mouse_IgG
 
@@ -6603,14 +4799,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15 11:38:10
     dateReleased 2009-10-15
-    priority 3112
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 4:7
-    autoScale off
     cell HeLa-S3
     antibody Mouse_IgG
 
@@ -6623,11 +4812,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15 11:38:10
     dateReleased 2009-10-15
-    priority 3113
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3
     antibody Mouse_IgG
 
@@ -6640,11 +4825,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15 11:38:10
     dateReleased 2009-10-15
-    priority 3114
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3
     antibody Mouse_IgG
 
@@ -6657,14 +4838,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15 13:41:50
     dateReleased 2009-10-15
-    priority 3122
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-    viewLimits 4:7
-    autoScale off
     cell HeLa-S3
     antibody Naked_DNA
 
@@ -6677,11 +4851,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16 13:12:14
     dateReleased 2009-10-16
-    priority 3123
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3
     antibody Naked_DNA
 
@@ -6694,11 +4864,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16 13:12:14
     dateReleased 2009-10-16
-    priority 3124
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3
     antibody Naked_DNA
 
@@ -6711,11 +4877,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16 13:12:14
     dateReleased 2009-10-16
-    priority 3125
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3
     antibody Naked_DNA
 
@@ -6727,13 +4889,10 @@ wgEncode 1
     type narrowPeak
     dateSubmitted 2008-10-1 10:6:2
     dateReleased 2009-07-01
-    priority 4041
-    noInherit on
     cell HeLa-S3_IFNg
     antibody STAT1
     color 112,103,174
     accession GSE12782
-    configurable on
 
     track wgEncodeYaleChIPseqSignalHelas3ifngStat1
     subTrack wgEncodeYaleChIPseq off
@@ -6741,21 +4900,14 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (STAT1 in HeLa-S3_IFNg cells)
     subGroups view=Signal factor=STAT1 cellType=HeLa-IF
     type wig 0.00 20910.00
-    viewLimits 4:7
-    autoScale off
     dateSubmitted 2008-10-1 10:6:2
     dateReleased 2009-07-01
-    priority 4042
-    noInherit on
     visibility full
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell HeLa-S3_IFNg
     antibody STAT1
     color 112,103,174
     accession GSE12782
-    configurable on
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3ifngStat1
     subTrack wgEncodeYaleChIPseq off
@@ -6765,11 +4917,7 @@ wgEncode 1
     type wig 1.00 14648.00
     dateSubmitted 2008-10-1 10:6:2
     dateReleased 2009-07-01
-    priority 4043
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3_IFNg
     antibody STAT1
     color 112,103,174
@@ -6783,11 +4931,7 @@ wgEncode 1
     type wig 1.00 6262.00
     dateSubmitted 2008-10-1 10:6:2
     dateReleased 2009-07-01
-    priority 4044
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3_IFNg
     antibody STAT1
     color 112,103,174
@@ -6799,21 +4943,14 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in HeLa-S3_IFNg cells)
     subGroups view=Signal factor=zCTRL cellType=HeLa-IF
     type wig 0.00 11690.00
-    viewLimits 4:7
-    autoScale off
     dateSubmitted 2008-09-29 14:12:28
     dateReleased 2009-06-29
-    priority 4082
-    noInherit on
     visibility full
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell HeLa-S3_IFNg
     antibody Input
     color 112,103,174
     accession GSE12782
-    configurable on
 
     track wgEncodeYaleChIPseqRawSignalHelas3ifngInput
     subTrack wgEncodeYaleChIPseq off
@@ -6823,11 +4960,7 @@ wgEncode 1
     type wig 1.00 11690.00
     dateSubmitted 2008-09-29 14:12:28
     dateReleased 2009-06-29
-    priority 4083
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell HeLa-S3_IFNg
     antibody Input
     color 112,103,174
@@ -6842,9 +4975,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09 15:11:58
     dateReleased 2009-10-09
-    priority 5021
-    noInherit on
-    configurable on
     cell K562
     antibody NF-E2
 
@@ -6854,17 +4984,10 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (NF-E2 in K562 cells)
     subGroups view=Signal factor=NF-E2 cellType=K562
     type wig 0.00 15242.00
-    viewLimits 4:7
-    autoScale off
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09 15:11:58
     dateReleased 2009-10-09
-    priority 5022
-    noInherit on
-    configurable on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell K562
     antibody NF-E2
 
@@ -6877,11 +5000,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09 15:11:58
     dateReleased 2009-10-09
-    priority 5023
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody NF-E2
 
@@ -6894,11 +5013,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09 15:11:58
     dateReleased 2009-10-09
-    priority 5024
-    noInherit on
     spanList first
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody NF-E2
 
@@ -6910,11 +5025,8 @@ wgEncode 1
     type narrowPeak
     dateSubmitted 2008-10-14 13:29:42
     dateReleased 2009-07-14
-    priority 5031
-    noInherit on
     cell K562
     antibody Pol2
-    configurable on
 
     track wgEncodeYaleChIPseqSignalK562Pol2
     subTrack wgEncodeYaleChIPseq
@@ -6922,19 +5034,12 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Pol2 in K562 cells)
     subGroups view=Signal factor=Pol2 cellType=K562
     type wig 0.00 18226.00
-    viewLimits 4:7
-    autoScale off
     dateSubmitted 2008-10-14 13:29:42
     dateReleased 2009-07-14
-    priority 5032
-    noInherit on
     visibility full
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell K562
     antibody Pol2
-    configurable on
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Pol2
     subTrack wgEncodeYaleChIPseq
@@ -6944,11 +5049,7 @@ wgEncode 1
     type wig 1.00 9783.00
     dateSubmitted 2008-10-27 11:57:19
     dateReleased 2009-07-27
-    priority 5033
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody Pol2
 
@@ -6960,11 +5061,7 @@ wgEncode 1
     type wig 1.00 8446.00
     dateSubmitted 2008-10-27 11:57:19
     dateReleased 2009-07-27
-    priority 5034
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody Pol2
 
@@ -6977,9 +5074,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21 13:23:36
     dateReleased 2009-08-21
-    priority 5051
-    noInherit on
-    configurable on
     cell K562
     antibody c-Fos
 
@@ -6989,17 +5083,10 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (c-Fos in K562 cells)
     subGroups view=Signal factor=c-Fos cellType=K562
     type wig 0.00 13555.00
-    viewLimits 4:7
-    autoScale off
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21 13:23:36
     dateReleased 2009-08-21
-    priority 5052
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell K562
     antibody c-Fos
 
@@ -7012,11 +5099,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21 13:23:36
     dateReleased 2009-08-21
-    priority 5053
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody c-Fos
 
@@ -7029,11 +5112,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21 13:23:36
     dateReleased 2009-08-21
-    priority 5054
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody c-Fos
 
@@ -7046,11 +5125,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21 13:23:36
     dateReleased 2009-08-21
-    priority 5055
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody c-Fos
 
@@ -7063,9 +5138,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21 12:38:7
     dateReleased 2009-08-21
-    priority 5061
-    noInherit on
-    configurable on
     cell K562
     antibody c-Jun
 
@@ -7075,17 +5147,10 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (c-Jun in K562 cells)
     subGroups view=Signal factor=c-Jun cellType=K562
     type wig 0.00 16981.00
-    viewLimits 4:7
-    autoScale off
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21 12:38:7
     dateReleased 2009-08-21
-    priority 5062
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell K562
     antibody c-Jun
 
@@ -7098,11 +5163,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21 12:38:7
     dateReleased 2009-08-21
-    priority 5063
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody c-Jun
 
@@ -7115,11 +5176,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21 12:38:7
     dateReleased 2009-08-21
-    priority 5064
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody c-Jun
 
@@ -7132,9 +5189,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21 13:51:54
     dateReleased 2009-08-21
-    priority 5071
-    noInherit on
-    configurable on
     cell K562
     antibody c-Myc
 
@@ -7144,17 +5198,10 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (c-Myc in K562 cells)
     subGroups view=Signal factor=c-Myc cellType=K562
     type wig 0.00 2983.00
-    viewLimits 4:7
-    autoScale off
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21 13:51:54
     dateReleased 2009-08-21
-    priority 5072
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell K562
     antibody c-Myc
 
@@ -7167,11 +5214,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21 13:51:54
     dateReleased 2009-08-21
-    priority 5073
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody c-Myc
 
@@ -7184,11 +5227,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21 13:51:54
     dateReleased 2009-08-21
-    priority 5074
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody c-Myc
 
@@ -7198,19 +5237,12 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in K562 cells)
     subGroups view=Signal factor=zCTRL cellType=K562
     type wig 0.00 4661.00
-    viewLimits 4:7
-    autoScale off
     dateSubmitted 2008-10-14 11:39:9
     dateReleased 2009-07-14
-    priority 5082
-    noInherit on
     visibility full
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell K562
     antibody Input
-    configurable on
 
     track wgEncodeYaleChIPseqRawSignalK562Input
     subTrack wgEncodeYaleChIPseq
@@ -7220,11 +5252,7 @@ wgEncode 1
     type wig 1.00 4661.00
     dateSubmitted 2008-10-14 11:39:9
     dateReleased 2009-07-14
-    priority 5083
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody Input
 
@@ -7237,9 +5265,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 9:50:26
     dateReleased 2009-08-25
-    priority 6031
-    noInherit on
-    configurable on
     cell NB4
     antibody Pol2
 
@@ -7249,17 +5274,10 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Pol2 in NB4 cells)
     subGroups view=Signal factor=Pol2 cellType=NB4
     type wig 0.00 20774.00
-    viewLimits 4:7
-    autoScale off
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 9:50:26
     dateReleased 2009-08-25
-    priority 6032
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell NB4
     antibody Pol2
 
@@ -7272,11 +5290,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 9:50:26
     dateReleased 2009-08-25
-    priority 6033
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell NB4
     antibody Pol2
 
@@ -7289,11 +5303,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 9:50:26
     dateReleased 2009-08-25
-    priority 6034
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell NB4
     antibody Pol2
 
@@ -7306,11 +5316,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 9:50:26
     dateReleased 2009-08-25
-    priority 6035
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell NB4
     antibody Pol2
 
@@ -7320,16 +5326,9 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in NB4 cells)
     subGroups view=Signal factor=zCTRL cellType=NB4
     type wig 0.00 2842.00
-    viewLimits 4:7
-    autoScale off
     dateSubmitted 2008-11-25 10:29:19
     dateReleased 2009-08-25
-    priority 6082
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:32:16
     cell NB4
     antibody Input
 
@@ -7341,11 +5340,7 @@ wgEncode 1
     type wig 1.00 2842.00
     dateSubmitted 2008-11-25 10:29:19
     dateReleased 2009-08-25
-    priority 6083
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell NB4
     antibody Input
 
@@ -7365,8 +5360,9 @@ dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide RawSignal=dense
-settingsByView RawSignal:viewLimits=1:10,autoScale=off
 controlledVocabulary encode/cv.ra cellType factor
+noInherit on
+settingsByView Peaks:configurable=on RawSignal:configurable=off,viewLimits=1:10,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3
 wgEncode 1
@@ -7381,9 +5377,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23 0:10:4
     dateReleased 2009-08-23
-    priority 1
-    noInherit on
-    configurable on
     cell GM12878
     antibody GABP
 
@@ -7396,9 +5389,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23 0:10:4
     dateReleased 2009-08-23
-    priority 2
-    noInherit on
-    configurable on
     cell GM12878
     antibody GABP
 
@@ -7411,12 +5401,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23 0:10:4
     dateReleased 2009-08-23
-    priority 3
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody GABP
 
@@ -7429,12 +5414,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23 0:10:4
     dateReleased 2009-08-23
-    priority 4
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody GABP
 
@@ -7447,9 +5427,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 15:0:30
     dateReleased 2009-08-25
-    priority 5
-    noInherit on
-    configurable on
     cell GM12878
     antibody NRSF
 
@@ -7462,9 +5439,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 15:0:30
     dateReleased 2009-08-25
-    priority 6
-    noInherit on
-    configurable on
     cell GM12878
     antibody NRSF
 
@@ -7477,12 +5451,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 15:0:30
     dateReleased 2009-08-25
-    priority 7
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody NRSF
 
@@ -7495,12 +5464,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 15:0:30
     dateReleased 2009-08-25
-    priority 8
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody NRSF
 
@@ -7513,9 +5477,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 14:58:10
     dateReleased 2009-08-25
-    priority 9
-    noInherit on
-    configurable on
     cell GM12878
     antibody Pol2
 
@@ -7528,9 +5489,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 14:58:10
     dateReleased 2009-08-25
-    priority 10
-    noInherit on
-    configurable on
     cell GM12878
     antibody Pol2
 
@@ -7543,12 +5501,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 14:58:10
     dateReleased 2009-08-25
-    priority 11
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody Pol2
 
@@ -7561,12 +5514,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 14:58:10
     dateReleased 2009-08-25
-    priority 12
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody Pol2
 
@@ -7579,9 +5527,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22 15:39:43
     dateReleased 2009-08-22
-    priority 13
-    noInherit on
-    configurable on
     cell GM12878
     antibody SRF
 
@@ -7594,9 +5539,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22 15:39:43
     dateReleased 2009-08-22
-    priority 14
-    noInherit on
-    configurable on
     cell GM12878
     antibody SRF
 
@@ -7609,12 +5551,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22 15:39:43
     dateReleased 2009-08-22
-    priority 15
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody SRF
 
@@ -7627,12 +5564,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22 15:39:43
     dateReleased 2009-08-22
-    priority 16
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody SRF
 
@@ -7645,9 +5577,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2008-12-11 10:34:55
     dateReleased 2009-09-11
-    priority 17
-    noInherit on
-    configurable on
     cell GM12878
     antibody TAF-II
 
@@ -7660,12 +5589,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2008-12-11 10:34:55
     dateReleased 2009-09-11
-    priority 18
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody TAF-II
 
@@ -7678,12 +5602,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22 16:27:3
     dateReleased 2009-08-22
-    priority 19
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody control
 
@@ -7696,12 +5615,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22 16:27:3
     dateReleased 2009-08-22
-    priority 20
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell GM12878
     antibody control
 
@@ -7714,9 +5628,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23 0:10:4
     dateReleased 2009-08-23
-    priority 21
-    noInherit on
-    configurable on
     cell K562
     antibody GABP
 
@@ -7729,9 +5640,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23 0:10:4
     dateReleased 2009-08-23
-    priority 22
-    noInherit on
-    configurable on
     cell K562
     antibody GABP
 
@@ -7744,12 +5652,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23 0:10:4
     dateReleased 2009-08-23
-    priority 23
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody GABP
 
@@ -7762,12 +5665,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23 0:10:4
     dateReleased 2009-08-23
-    priority 24
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody GABP
 
@@ -7780,9 +5678,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 15:0:30
     dateReleased 2009-08-25
-    priority 25
-    noInherit on
-    configurable on
     cell K562
     antibody NRSF
 
@@ -7795,9 +5690,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 15:0:30
     dateReleased 2009-08-25
-    priority 26
-    noInherit on
-    configurable on
     cell K562
     antibody NRSF
 
@@ -7810,12 +5702,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 15:0:30
     dateReleased 2009-08-25
-    priority 27
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody NRSF
 
@@ -7828,12 +5715,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 15:0:30
     dateReleased 2009-08-25
-    priority 28
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody NRSF
 
@@ -7846,9 +5728,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 14:58:10
     dateReleased 2009-08-25
-    priority 29
-    noInherit on
-    configurable on
     cell K562
     antibody Pol2
 
@@ -7861,9 +5740,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 14:58:10
     dateReleased 2009-08-25
-    priority 30
-    noInherit on
-    configurable on
     cell K562
     antibody Pol2
 
@@ -7876,12 +5752,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 14:58:10
     dateReleased 2009-08-25
-    priority 31
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody Pol2
 
@@ -7894,12 +5765,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25 14:58:10
     dateReleased 2009-08-25
-    priority 32
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody Pol2
 
@@ -7912,9 +5778,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22 15:39:43
     dateReleased 2009-08-22
-    priority 33
-    noInherit on
-    configurable on
     cell K562
     antibody SRF
 
@@ -7927,9 +5790,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22 15:39:43
     dateReleased 2009-08-22
-    priority 34
-    noInherit on
-    configurable on
     cell K562
     antibody SRF
 
@@ -7942,12 +5802,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22 15:39:43
     dateReleased 2009-08-22
-    priority 35
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody SRF
 
@@ -7960,12 +5815,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22 15:39:43
     dateReleased 2009-08-22
-    priority 36
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody SRF
 
@@ -7978,9 +5828,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2008-12-11 10:57:51
     dateReleased 2009-09-11
-    priority 37
-    noInherit on
-    configurable on
     cell K562
     antibody TAF-II
 
@@ -7993,12 +5840,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2008-12-11 10:57:51
     dateReleased 2009-09-11
-    priority 38
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody TAF-II
 
@@ -8011,12 +5853,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22 16:27:3
     dateReleased 2009-08-22
-    priority 39
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody control
 
@@ -8029,12 +5866,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22 16:27:3
     dateReleased 2009-08-22
-    priority 40
-    noInherit on
-    configurable off
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell K562
     antibody control
 
@@ -8046,8 +5878,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-25 12:6:0
-    priority 41
-    noInherit on
     cell PFSK-1
     antibody FOXP2
     color 107,112,43
@@ -8060,8 +5890,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-25 12:6:0
-    priority 42
-    noInherit on
     cell PFSK-1
     antibody FOXP2
     color 107,112,43
@@ -8074,11 +5902,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 894.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-25 12:6:0
-    priority 43
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell PFSK-1
     antibody FOXP2
     color 107,112,43
@@ -8091,11 +5915,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 524.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-25 12:6:0
-    priority 44
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell PFSK-1
     antibody FOXP2
     color 107,112,43
@@ -8108,8 +5928,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 4125.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-11 20:49:12
-    priority 45
-    noInherit on
     cell PFSK-1
     antibody control
 
@@ -8121,8 +5939,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-25 12:6:0
-    priority 46
-    noInherit on
     cell SK-N-MC
     antibody FOXP2
     color 107,112,43
@@ -8135,8 +5951,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-25 12:6:0
-    priority 47
-    noInherit on
     cell SK-N-MC
     antibody FOXP2
     color 107,112,43
@@ -8149,11 +5963,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 1030.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-25 12:6:0
-    priority 48
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell SK-N-MC
     antibody FOXP2
     color 107,112,43
@@ -8166,11 +5976,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 813.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-25 12:6:0
-    priority 49
-    noInherit on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     cell SK-N-MC
     antibody FOXP2
     color 107,112,43
@@ -8183,8 +5989,6 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 835.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-11 20:49:12
-    priority 50
-    noInherit on
     cell SK-N-MC
     antibody control
 
@@ -8211,6 +6015,8 @@ hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 baseColorUseCds given
 baseColorDefault genomicCodons
+noInherit on
+settingsByView GencodeManual:configurable=on GencodeAuto:configurable=on
 wgEncode 1
 #cdsDrawDefault genomic\ codons
 #itemClassTbl encodeGencodeGeneClassMar07
@@ -8236,8 +6042,6 @@ wgEncode 1
     dateReleased 2009-09-08
     accession 2008-10-01
     priority 2
-    configurable on
-    noInherit on
     freezeDate 2008-10-01
 
     track wgEncodeSangerGencodeGencodeAuto20081001
@@ -8251,8 +6055,6 @@ wgEncode 1
     dateReleased 2009-09-08
     accession 2008-10-01
     priority 3
-    configurable on
-    noInherit on
     freezeDate 2008-10-01
 
 
@@ -8273,6 +6075,8 @@ sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType localization rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults Alignments=hide Tags=hide
+noInherit on
+settingsByView Tags:configurable=on PlusRawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean MinusRawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean Alignments:configurable=on
 priority 0
 type bed 3
 wgEncode 1
@@ -8286,9 +6090,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 1
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cell
     cell prostate
@@ -8302,9 +6103,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 1
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -8318,9 +6116,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 1
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -8334,9 +6129,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 1
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization polysome
     cell K562
@@ -8351,9 +6143,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 4
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cell
     cell prostate
@@ -8368,9 +6157,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 4
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -8385,9 +6171,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 4
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -8402,9 +6185,6 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 4
-    noInherit on
-    configurable on
     rnaExtract longPolyA
     localization polysome
     cell K562
@@ -8418,12 +6198,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 2
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -8437,12 +6212,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 3
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -8456,12 +6226,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 2
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization cell
     cell prostate
@@ -8475,12 +6240,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 3
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization cell
     cell prostate
@@ -8494,12 +6254,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 2
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization polysome
     cell K562
@@ -8513,12 +6268,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 3
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization polysome
     cell K562
@@ -8532,12 +6282,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 2
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -8551,12 +6296,7 @@ wgEncode 1
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03 4:37:32
     dateReleased 2009-09-03
-    priority 3
-    noInherit on
-    configurable on
     spanList 1
-    windowingFunction mean
-    maxHeightPixels 100:16:16
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -8577,6 +6317,8 @@ sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=dense
 controlledVocabulary encode/cv.ra cellType factor
+noInherit on
+settingsByView Peaks:configurable=off
 priority 0
 itemRgb on
 type bed 12
@@ -8590,9 +6332,7 @@ wgEncode 1
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    priority 1
     itemRgb on
-    noInherit on
     cell HepG2
 
     track wgEncodeHudsonalphaMethyl27HepG2r2
@@ -8603,9 +6343,7 @@ wgEncode 1
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    priority 1
     itemRgb on
-    noInherit on
     cell HepG2
 
 
@@ -8617,9 +6355,7 @@ wgEncode 1
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    priority 1
     itemRgb on
-    noInherit on
     cell GM12878
 
     track wgEncodeHudsonalphaMethyl27GM12878r2
@@ -8630,9 +6366,7 @@ wgEncode 1
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    priority 1
     itemRgb on
-    noInherit on
     cell GM12878
 
     track wgEncodeHudsonalphaMethyl27K562r1
@@ -8643,9 +6377,7 @@ wgEncode 1
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    priority 1
     itemRgb on
-    noInherit on
     cell K562
 
     track wgEncodeHudsonalphaMethyl27K562r2
@@ -8656,9 +6388,7 @@ wgEncode 1
     type bed 12
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    priority 1
     itemRgb on
-    noInherit on
     cell K562
 
 
