@@ -18,7 +18,7 @@ group map
 visibility dense
 type bed 3 +
 
-trackOverride nscanGene
+track nscanGene override
 informant Horse N-SCAN uses human (hg18) as the informant and iterative pseudogene masking. 
 
 searchTable gold
