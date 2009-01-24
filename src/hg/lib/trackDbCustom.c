@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.47 2009/01/23 22:19:47 markd Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.48 2009/01/24 00:13:51 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -268,7 +268,7 @@ if (bt->settings == NULL)
 }
 
 char *trackDbInclude(char *raFile, char *line)
-/* Get include filename from trackDb line.  
+/* Get include filename from trackDb line.
    Return NULL if line doesn't contain include */
 {
 static char incFile[256];
@@ -355,7 +355,7 @@ for (bt = btList; bt != NULL; bt = bt->next)
     struct trackDb *compositeTdb;
     char *compositeName;
     if ((compositeName = trackDbSetting(bt, "subTrack")) != NULL &&
-        trackDbSetting(bt, "noInherit") == NULL)
+        trackDbSettingClosestToHome(bt, "noInherit") == NULL)
             if ((compositeTdb =
                     hashFindVal(compositeHash, compositeName)) != NULL)
                 trackDbInherit(bt, compositeTdb);
@@ -629,6 +629,34 @@ if (origAssembly)
         printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"../goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> %s %s%s%s<BR>\n", freeze ? freeze : "", freeze ? "(" : "", origAssembly, freeze ? ")":"");
         }
     }
+}
+
+eCfgType cfgTypeFromTdb(struct trackDb *tdb)
+/* determine what kind of track specific configuration is needed */
+{
+eCfgType cType = cfgNone;
+if(startsWith("wigMaf", tdb->type))
+    cType = cfgWigMaf;
+else if(startsWith("wig", tdb->type))
+    cType = cfgWig;
+else if(startsWith("bedGraph", tdb->type))
+    cType = cfgWig;
+else if(sameWord("bed5FloatScore",       tdb->type)
+     || sameWord("bed5FloatScoreWithFdr",tdb->type))
+    cType = cfgBedScore;
+else if(sameWord("narrowPeak",tdb->type)
+     || sameWord("broadPeak", tdb->type))
+    cType = cfgPeak;
+else if(startsWith("bed ", tdb->type)) // TODO: Only these are configurable so far
+    {
+    char *words[3];
+    chopLine(cloneString( tdb->type), words);
+    if (atoi(words[1]) >= 5 && trackDbSetting(tdb, "noScoreFilter") == NULL)
+        cType = cfgBedScore;
+    }
+else
+    warn("Track type %s is not yet support in multi-view composites.",tdb->type);
+return cType;
 }
 
 char *trackDbCompositeSettingByView(struct trackDb *parentTdb, char* view, char *name)
