@@ -386,15 +386,9 @@ struct fileOffsetSize *crTreeFindOverlappingBlocks(struct crTreeFile *crt,
  * start/end on chromIx.  Also there will be likely some non-overlapping items
  * in these blocks too. When done, use slListFree to dispose of the result. */
 {
-/* Copy chromosome to full sized buffer.  (Awkward interface to bPlusTree!) */
-int keySize = crt->chromBpt->keySize;
-char chromKey[keySize+1];
-zeroBytes(chromKey, keySize);
-strcpy(chromKey, chrom);
-
 /* Find chromosome index.  Return NULL if no such chromosome*/
 bits32 chromIx;
-if (!bptFileFind(crt->chromBpt, chromKey, keySize, &chromIx, sizeof(chromIx)))
+if (!bptFileFind(crt->chromBpt, chrom, strlen(chrom), &chromIx, sizeof(chromIx)))
     return NULL;
 
 return cirTreeFindOverlappingBlocks(crt->cir, chromIx, start, end);
