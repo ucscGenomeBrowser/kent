@@ -161,6 +161,44 @@ else
     }
 }
 
+void rTraverse(struct bptFile *bpt, bits64 blockStart, void *context, 
+    void (*callback)(void *context, void *key, int keySize, void *val, int valSize) )
+/* Recursively go across tree, calling callback at leaves. */
+{
+/* Seek to start of block. */
+fseek(bpt->f, blockStart, SEEK_SET);
+
+/* Read block header. */
+UBYTE isLeaf;
+UBYTE reserved;
+bits16 i, childCount;
+mustReadOne(bpt->f, isLeaf);
+mustReadOne(bpt->f, reserved);
+boolean isSwapped = bpt->isSwapped;
+childCount = readBits16(bpt->f, isSwapped);
+
+char keyBuf[bpt->keySize], valBuf[bpt->valSize];
+if (isLeaf)
+    {
+    for (i=0; i<childCount; ++i)
+        {
+	mustRead(bpt->f, keyBuf, bpt->keySize);
+	mustRead(bpt->f, valBuf, bpt->valSize);
+	callback(context, keyBuf, bpt->keySize, valBuf, bpt->valSize);
+	}
+    }
+else
+    {
+    /* Loop through remainder. */
+    for (i=0; i<childCount; ++i)
+	{
+	mustRead(bpt->f, keyBuf, bpt->keySize);
+	bits64 fileOffset = readBits64(bpt->f, isSwapped);
+	rTraverse(bpt, fileOffset, context, callback);
+	}
+    }
+}
+
 boolean bptFileFind(struct bptFile *bpt, void *key, int keySize, void *val, int valSize)
 /* Find value associated with key.  Return TRUE if it's found. 
 *  Parameters:
@@ -188,6 +226,14 @@ if (valSize != bpt->valSize)
 
 /* Call recursive finder. */
 return rFind(bpt, bpt->rootOffset, key, val);
+}
+
+void bptFileTraverse(struct bptFile *bpt, void *context,
+    void (*callback)(void *context, void *key, int keySize, void *val, int valSize) )
+/* Traverse bPlusTree on file, calling supplied callback function at each
+ * leaf item. */
+{
+return rTraverse(bpt, bpt->rootOffset, context, callback);
 }
 
 
