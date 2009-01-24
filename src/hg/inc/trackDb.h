@@ -229,7 +229,7 @@ void trackDbSuperSettings(struct trackDb *tdbList);
  * Returns NULL if there is no such setting */
 
 char *trackDbInclude(char *raFile, char *line);
-/* Get include filename from trackDb line.  
+/* Get include filename from trackDb line.
    Return NULL if line doesn't contain include */
 
 char *trackDbOrigAssembly(struct trackDb *tdb);
@@ -237,6 +237,19 @@ char *trackDbOrigAssembly(struct trackDb *tdb);
 
 void trackDbPrintOrigAssembly(struct trackDb *tdb, char *database);
 /* Print lift information from trackDb, if any */
+
+// Not all track types have separate configuration
+typedef enum _eCfgType
+{
+    cfgNone    =0,
+    cfgBedScore=1,
+    cfgWig     =2,
+    cfgWigMaf  =3,
+    cfgPeak    =4
+} eCfgType;
+
+eCfgType cfgTypeFromTdb(struct trackDb *tdb);
+/* determine what kind of track specific configuration is needed */
 
 void trackDbOverride(struct trackDb *td, struct trackDb *overTd);
 /* apply an trackOverride trackDb entry to a trackDb entry */
