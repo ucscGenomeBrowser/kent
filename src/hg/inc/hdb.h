@@ -703,9 +703,6 @@ char *hClade(char *genome);
 /* If central database has clade tables, return the clade for the 
  * given genome; otherwise return NULL. */
 
-void hLookupStringsInTdb(struct trackDb *tdb, char *database);
-/* Lookup strings in track database. */
-
 char *hDefaultDbForGenome(char *genome);
 /*
 Purpose: Return the default database matching the organism.

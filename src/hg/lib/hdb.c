@@ -16,10 +16,6 @@
 #include "trackDb.h"
 #include "hCommon.h"
 #include "dbDb.h"
-#define RUNTIME_SUBST_CODE // FIXME: remove when rolled over to load time
-#ifdef RUNTIME_SUBST_CODE
-#include "hVarSubst.h"
-#endif
 #include "blatServers.h"
 #include "bed.h"
 #include "defaultDb.h"
@@ -40,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.391 2009/01/23 23:38:10 tdreszer Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.392 2009/01/25 04:08:18 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -2249,14 +2245,6 @@ else
     }
 }
 
-#ifdef RUNTIME_SUBST_CODE
-void hLookupStringsInTdb(struct trackDb *tdb, char *database)
-/* Lookup strings in track database. */
-{
-hVarSubstTrackDb(tdb, database);
-}
-#endif
-
 struct dbDb *hDbDb(char *database)
 /* Return dbDb entry for a database */
 {
@@ -3306,7 +3294,6 @@ static void processTrackDb(char *database, struct trackDb *tdb, char *chrom,
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
-hLookupStringsInTdb(tdb, database);
 if ((!tdb->private || privateHost) && hTableForTrack(database, tdb->tableName) != NULL)
     slAddHead(tdbRetList, tdb);
 else
@@ -3373,12 +3360,10 @@ while (tdbList != NULL)
     if (tdbIsSuper(tdb))
 	{
         /* save supertrack entries, but don't add to list */
-	hLookupStringsInTdb(tdb, db);
         hashAdd(superHash, tdb->tableName, tdb);
 	}
     else if (trackDbSetting(tdb, "compositeTrack"))
         {
-	hLookupStringsInTdb(tdb, db);
         slAddHead(&tdbFullList, tdb);
         hashAdd(compositeHash, tdb->tableName, tdb);
         }
@@ -3440,10 +3425,7 @@ static struct trackDb *loadAndLookupTrackDb(struct sqlConnection *conn,
 					    char *where)
 /* Load trackDb object(s). Nothing done for composite tracks here. */
 {
-struct trackDb *tdb, *tdbs = loadTrackDb(sqlGetDatabase(conn), where);
-for (tdb = tdbs; tdb != NULL; tdb = tdb->next)
-    hLookupStringsInTdb(tdb, sqlGetDatabase(conn));
-return tdbs;
+return loadTrackDb(sqlGetDatabase(conn), where);
 }
 
 static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn,

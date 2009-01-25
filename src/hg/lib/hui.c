@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.147 2009/01/24 00:21:43 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.148 2009/01/25 04:08:19 markd Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1496,7 +1496,6 @@ struct hash *trackHash = newHash(7);
 while (tdbs != NULL)
     {
     struct trackDb *tdb = slPopHead(&tdbs);
-    hLookupStringsInTdb(tdb, database);
     if (hTrackOnChrom(tdb, chrom))
         {
         if (tdb->subtracks)
