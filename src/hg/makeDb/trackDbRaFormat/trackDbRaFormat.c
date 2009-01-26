@@ -5,7 +5,7 @@
 #include "ra.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDbRaFormat/trackDbRaFormat.c,v 1.2 2009/01/23 23:42:39 kate Exp $";
+static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDbRaFormat/trackDbRaFormat.c,v 1.3 2009/01/26 23:24:58 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,6 +16,10 @@ errAbort(
   "   trackDbRaFormat in.ra out.ra\n"
   );
 }
+
+/* for checking label lengths */
+#define MAX_SHORT_LABEL 16
+#define MAX_LONG_LABEL 64
 
 static struct optionSpec options[] = {
    {NULL, 0},
@@ -35,6 +39,8 @@ struct hash *ra;
 char *setting;
 boolean stanza = FALSE;
 int i;
+char *label;
+int len;
 
 /* load all ra stanzas into hash so we can lookup type while
  * processing line by line */
@@ -77,6 +83,18 @@ while (lineFileNext(lf, &line, NULL))
             }
         spaceOut(of, indent);
         fprintf(of, "track %s\n", trackName);
+
+        /* check label lengths */
+        label = hashFindVal(ra, "shortLabel");
+        if (label)
+            if ((len = strlen(label)) > MAX_SHORT_LABEL)
+                verbose(1, "Short label '%s' too long (%d chars) for track '%s'\n", 
+                                label, len-MAX_SHORT_LABEL, trackName);
+        label = hashFindVal(ra, "longLabel");
+        if (label)
+            if ((len = strlen(label)) > MAX_LONG_LABEL)
+                verbose(1, "Long label '%s' too long (%d chars) for track '%s'\n", 
+                                label, len - MAX_LONG_LABEL, trackName);
         }
     else 
         {
