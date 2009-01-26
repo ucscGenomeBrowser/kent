@@ -126,7 +126,7 @@ superTrack wgEncodeUcsdNgTaf1Super dense
 group regulation
 shortLabel LI TAF1 Signal
 longLabel Ludwig Institute NimbleGen ChIP-chip Signal: TAF1 antibody, IMR90 cells
-maxHeightPixels
+maxHeightPixels 128:16:16
 type wig -5.61 6.47
 spanList 50
 viewLimits -1:2
@@ -168,7 +168,7 @@ shortLabel LI TAF1 Valid
 longLabel Ludwig Institute ChIP-chip Validation: TAF1 in IMR90 cells
 group regulation
 type bedGraph 4
-maxHeightPixels
+maxHeightPixels 128:16:16
 minLimit -8
 maxLimit 8
 viewLimits -1:3
