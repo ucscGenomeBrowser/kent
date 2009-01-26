@@ -38,12 +38,12 @@ autoScaleDefault Off
 windowingFunction mean
 summary multiz6waySummary
 speciesOrder caeRem3 cb3 caePb2 caeJap1 priPac1
-treeImage phylo/ce6_6way.gif
-speciesCodonDefault ce6
+treeImage phylo/ce5_6way.gif
+speciesCodonDefault ce5
 
 track phastConsElements6way
 shortLabel Most Conserved
-longLabel PhastCons Conserved Elements, 5-way Multiz Alignment
+longLabel PhastCons Conserved Elements, 6-way Multiz Alignment
 group compGeno
 priority 104.4
 visibility hide
