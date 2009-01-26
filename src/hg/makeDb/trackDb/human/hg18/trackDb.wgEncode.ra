@@ -235,7 +235,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell GM12878
     antibody CTCF
 
@@ -247,7 +247,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 14530.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell GM12878
     antibody CTCF
@@ -260,7 +260,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 10017.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell GM12878
     antibody CTCF
@@ -273,7 +273,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 6886.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell GM12878
     antibody CTCF
@@ -286,7 +286,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     cell GM12878
     antibody H3K4me1
 
@@ -298,7 +298,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 9323.50
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K4me1
@@ -311,7 +311,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 5673.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K4me1
@@ -324,7 +324,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 5022.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K4me1
@@ -337,7 +337,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     cell GM12878
     antibody H3K4me2
 
@@ -349,7 +349,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 15071.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K4me2
@@ -362,7 +362,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 14054.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K4me2
@@ -375,7 +375,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 2470.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K4me2
@@ -388,7 +388,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     cell GM12878
     antibody H3K4me3
 
@@ -400,7 +400,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 100593.50
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K4me3
@@ -413,7 +413,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 65341.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K4me3
@@ -426,7 +426,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 4691.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K4me3
@@ -439,7 +439,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     cell GM12878
     antibody H3K9ac
 
@@ -451,7 +451,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 8338.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K9ac
@@ -464,7 +464,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 5305.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K9ac
@@ -477,7 +477,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 4291.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K9ac
@@ -490,7 +490,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     cell GM12878
     antibody H4K20me1
 
@@ -502,7 +502,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 10750.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H4K20me1
@@ -515,7 +515,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 6918.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H4K20me1
@@ -528,7 +528,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 5568.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H4K20me1
@@ -541,7 +541,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     cell GM12878
     antibody H3K27ac
 
@@ -553,7 +553,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 473622.75
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K27ac
@@ -566,7 +566,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 65477.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K27ac
@@ -579,7 +579,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 3640.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K27ac
@@ -592,7 +592,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     cell GM12878
     antibody H3K27me3
 
@@ -604,7 +604,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 60338.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K27me3
@@ -617,7 +617,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 65374.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K27me3
@@ -630,7 +630,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 4241.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K27me3
@@ -643,7 +643,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     cell GM12878
     antibody H3K36me3
 
@@ -655,7 +655,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 15797.75
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K36me3
@@ -668,7 +668,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 13112.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K36me3
@@ -681,7 +681,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 5241.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-04
-    dateReleased 2009-10-04
+    dateUnrestricted 2009-10-04
     spanList first
     cell GM12878
     antibody H3K36me3
@@ -694,7 +694,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 13725.50
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell GM12878
     antibody control
@@ -707,7 +707,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 8512.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell GM12878
     antibody control
@@ -720,7 +720,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 7182.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell GM12878
     antibody control
@@ -733,7 +733,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell HUVEC
     antibody CTCF
 
@@ -745,7 +745,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 7013.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody CTCF
@@ -758,7 +758,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 6968.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody CTCF
@@ -771,7 +771,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 3205.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody CTCF
@@ -784,7 +784,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell HUVEC
     antibody H3K4me1
 
@@ -796,7 +796,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 5259.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K4me1
@@ -809,7 +809,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 5158.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K4me1
@@ -822,7 +822,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 875.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K4me1
@@ -835,7 +835,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell HUVEC
     antibody H3K4me2
 
@@ -847,7 +847,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 7088.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K4me2
@@ -860,7 +860,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 7163.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K4me2
@@ -873,7 +873,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 3502.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K4me2
@@ -886,7 +886,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell HUVEC
     antibody H3K4me3
 
@@ -898,7 +898,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 9954.75
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K4me3
@@ -911,7 +911,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 9994.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K4me3
@@ -924,7 +924,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 5437.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K4me3
@@ -937,7 +937,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell HUVEC
     antibody H3K9ac
 
@@ -949,7 +949,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 8831.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K9ac
@@ -962,7 +962,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 8827.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K9ac
@@ -975,7 +975,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 1340.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K9ac
@@ -988,7 +988,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell HUVEC
     antibody H3K9me1
 
@@ -1000,7 +1000,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 6743.75
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K9me1
@@ -1013,7 +1013,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 5977.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K9me1
@@ -1026,7 +1026,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 1956.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K9me1
@@ -1039,7 +1039,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell HUVEC
     antibody H3K27ac
 
@@ -1051,7 +1051,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 4855.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K27ac
@@ -1064,7 +1064,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 3753.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K27ac
@@ -1077,7 +1077,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 4291.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K27ac
@@ -1090,7 +1090,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell HUVEC
     antibody H3K27me3
 
@@ -1102,7 +1102,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 7453.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K27me3
@@ -1115,7 +1115,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 6723.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K27me3
@@ -1128,7 +1128,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 2059.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K27me3
@@ -1141,7 +1141,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell HUVEC
     antibody H3K36me3
 
@@ -1153,7 +1153,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 7456.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K36me3
@@ -1166,7 +1166,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 7162.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K36me3
@@ -1179,7 +1179,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 6629.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H3K36me3
@@ -1192,7 +1192,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell HUVEC
     antibody H4K20me1
 
@@ -1204,7 +1204,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 15868.50
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H4K20me1
@@ -1217,7 +1217,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 15917.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H4K20me1
@@ -1230,7 +1230,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 2494.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell HUVEC
     antibody H4K20me1
@@ -1243,7 +1243,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell HUVEC
     antibody Pol2(b)
 
@@ -1255,7 +1255,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 8889.75
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell HUVEC
     antibody Pol2(b)
@@ -1268,7 +1268,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 6156.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell HUVEC
     antibody Pol2(b)
@@ -1281,7 +1281,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 4077.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell HUVEC
     antibody Pol2(b)
@@ -1294,7 +1294,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 16710.75
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell HUVEC
     antibody control
@@ -1307,7 +1307,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 17736.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell HUVEC
     antibody control
@@ -1320,7 +1320,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 2790.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell HUVEC
     antibody control
@@ -1333,7 +1333,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell K562
     antibody CTCF
 
@@ -1345,7 +1345,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 13401.75
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody CTCF
@@ -1358,7 +1358,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 7149.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody CTCF
@@ -1371,7 +1371,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 9663.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody CTCF
@@ -1384,7 +1384,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell K562
     antibody H3K4me1
 
@@ -1396,7 +1396,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 8682.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList 1
     cell K562
     antibody H3K4me1
@@ -1409,7 +1409,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 4238.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList 1
     cell K562
     antibody H3K4me1
@@ -1422,7 +1422,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 5992.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList 1
     cell K562
     antibody H3K4me1
@@ -1435,7 +1435,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell K562
     antibody H3K4me2
 
@@ -1447,7 +1447,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 5002.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList 1
     cell K562
     antibody H3K4me2
@@ -1460,7 +1460,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 2072.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList 1
     cell K562
     antibody H3K4me2
@@ -1473,7 +1473,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 4060.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList 1
     cell K562
     antibody H3K4me2
@@ -1486,7 +1486,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell K562
     antibody H3K4me3
 
@@ -1498,7 +1498,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 16145.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell K562
     antibody H3K4me3
@@ -1511,7 +1511,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 11553.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell K562
     antibody H3K4me3
@@ -1524,7 +1524,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 7133.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList first
     cell K562
     antibody H3K4me3
@@ -1537,7 +1537,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell K562
     antibody H3K9ac
 
@@ -1549,7 +1549,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 17517.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H3K9ac
@@ -1562,7 +1562,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 9931.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H3K9ac
@@ -1575,7 +1575,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 13285.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H3K9ac
@@ -1588,7 +1588,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell K562
     antibody H3K9me1
 
@@ -1600,7 +1600,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 27376.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H3K9me1
@@ -1613,7 +1613,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 14561.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H3K9me1
@@ -1626,7 +1626,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 16644.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H3K9me1
@@ -1639,7 +1639,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell K562
     antibody H3K27ac
 
@@ -1651,7 +1651,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 9215.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H3K27ac
@@ -1664,7 +1664,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 6647.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H3K27ac
@@ -1677,7 +1677,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 4622.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H3K27ac
@@ -1690,7 +1690,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     cell K562
     antibody H3K27me3
 
@@ -1702,7 +1702,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 17135.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList 1
     cell K562
     antibody H3K27me3
@@ -1715,7 +1715,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 13354.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList 1
     cell K562
     antibody H3K27me3
@@ -1728,7 +1728,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 7235.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-05
-    dateReleased 2009-10-05
+    dateUnrestricted 2009-10-05
     spanList 1
     cell K562
     antibody H3K27me3
@@ -1741,7 +1741,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell K562
     antibody H3K36me3
 
@@ -1753,7 +1753,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 10114.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H3K36me3
@@ -1766,7 +1766,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 11433.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H3K36me3
@@ -1779,7 +1779,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 7087.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H3K36me3
@@ -1792,7 +1792,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell K562
     antibody H4K20me1
 
@@ -1804,7 +1804,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 16178.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H4K20me1
@@ -1817,7 +1817,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 2268.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H4K20me1
@@ -1830,7 +1830,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 16566.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody H4K20me1
@@ -1843,7 +1843,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell K562
     antibody Pol2(b)
 
@@ -1855,7 +1855,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 17110.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody Pol2(b)
@@ -1868,7 +1868,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 6599.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody Pol2(b)
@@ -1881,7 +1881,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 13248.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody Pol2(b)
@@ -1894,7 +1894,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 23372.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell K562
     antibody control
@@ -1907,7 +1907,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 15525.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody control
@@ -1920,7 +1920,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 10925.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList 1
     cell K562
     antibody control
@@ -1933,7 +1933,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell Keratinocyte
     antibody CTCF
 
@@ -1945,7 +1945,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 4674.50
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody CTCF
@@ -1958,7 +1958,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 4288.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody CTCF
@@ -1971,7 +1971,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 1316.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody CTCF
@@ -1984,7 +1984,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell Keratinocyte
     antibody H3K4me1
 
@@ -1996,7 +1996,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 4240.50
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K4me1
@@ -2009,7 +2009,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 4868.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K4me1
@@ -2022,7 +2022,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 593.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K4me1
@@ -2035,7 +2035,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     cell Keratinocyte
     antibody H3K4me2
 
@@ -2047,7 +2047,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 3789.50
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
     antibody H3K4me2
@@ -2060,7 +2060,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 3324.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
     antibody H3K4me2
@@ -2073,7 +2073,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 2225.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
     antibody H3K4me2
@@ -2086,7 +2086,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     cell Keratinocyte
     antibody H3K4me3
 
@@ -2098,7 +2098,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 12229.50
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
     antibody H3K4me3
@@ -2111,7 +2111,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 15514.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
     antibody H3K4me3
@@ -2124,7 +2124,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 2050.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
     antibody H3K4me3
@@ -2137,7 +2137,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell Keratinocyte
     antibody H3K9ac
 
@@ -2149,7 +2149,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 3816.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K9ac
@@ -2162,7 +2162,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 3068.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K9ac
@@ -2175,7 +2175,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 1329.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K9ac
@@ -2188,7 +2188,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell Keratinocyte
     antibody H3K9me1
 
@@ -2200,7 +2200,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 6121.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K9me1
@@ -2213,7 +2213,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 5283.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K9me1
@@ -2226,7 +2226,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 1890.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K9me1
@@ -2239,7 +2239,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell Keratinocyte
     antibody H3K27ac
 
@@ -2251,7 +2251,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 45249.50
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K27ac
@@ -2264,7 +2264,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 57869.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K27ac
@@ -2277,7 +2277,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 2101.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K27ac
@@ -2290,7 +2290,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell Keratinocyte
     antibody H3K27me3
 
@@ -2302,7 +2302,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 5062.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K27me3
@@ -2315,7 +2315,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 4744.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K27me3
@@ -2328,7 +2328,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 1257.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K27me3
@@ -2341,7 +2341,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell Keratinocyte
     antibody H3K36me3
 
@@ -2353,7 +2353,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 4663.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K36me3
@@ -2366,7 +2366,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 4566.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K36me3
@@ -2379,7 +2379,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 711.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H3K36me3
@@ -2392,7 +2392,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     cell Keratinocyte
     antibody H4K20me1
 
@@ -2404,7 +2404,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 7443.75
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H4K20me1
@@ -2417,7 +2417,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 7374.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H4K20me1
@@ -2430,7 +2430,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 3335.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
-    dateReleased 2009-10-06
+    dateUnrestricted 2009-10-06
     spanList first
     cell Keratinocyte
     antibody H4K20me1
@@ -2443,7 +2443,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     cell Keratinocyte
     antibody Pol2(b)
 
@@ -2455,7 +2455,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 5604.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
     antibody Pol2(b)
@@ -2468,7 +2468,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 2360.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
     antibody Pol2(b)
@@ -2481,7 +2481,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 1938.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
     antibody Pol2(b)
@@ -2494,7 +2494,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 0.00 13497.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
     antibody control
@@ -2507,7 +2507,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 12234.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
     antibody control
@@ -2520,7 +2520,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     type wig 1.00 3360.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
-    dateReleased 2009-10-07
+    dateUnrestricted 2009-10-07
     spanList first
     cell Keratinocyte
     antibody control
@@ -2557,7 +2557,7 @@ wgEncode 1
     useScore 0
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     cell GM12878
 
     track wgEncodeDukeDNaseSeqSignalGm12878
@@ -2568,7 +2568,7 @@ wgEncode 1
     type wig 0.00 39.64
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
 
@@ -2580,7 +2580,7 @@ wgEncode 1
     type wig 0.00 417.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
-    dateReleased 2009-08-22
+    dateUnrestricted 2009-08-22
     spanList 1
     cell GM12878
 
@@ -2592,7 +2592,7 @@ wgEncode 1
     type wig 0.00 10.46
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
 
@@ -2604,7 +2604,7 @@ wgEncode 1
     type wig 0.00 9.77
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
 
@@ -2616,7 +2616,7 @@ wgEncode 1
     type wig 0.00 39.64
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
 
@@ -2629,7 +2629,7 @@ wgEncode 1
     useScore 0
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     cell GM12878
 
     track wgEncodeUncFAIREseqSignalGm12878
@@ -2640,7 +2640,7 @@ wgEncode 1
     type wig 0.00 18.37
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
 
@@ -2652,7 +2652,7 @@ wgEncode 1
     type wig 0.00 5342.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     spanList 1
     cell GM12878
 
@@ -2664,7 +2664,7 @@ wgEncode 1
     type wig 0.00 22.93
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
 
@@ -2676,7 +2676,7 @@ wgEncode 1
     type wig 0.00 50.40
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
 
@@ -2688,7 +2688,7 @@ wgEncode 1
     type wig 0.00 112.28
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
 
@@ -2701,7 +2701,7 @@ wgEncode 1
     useScore 0
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     cell GM12878
     antibody CTCF
 
@@ -2713,7 +2713,7 @@ wgEncode 1
     type wig 0.00 14.01
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
     antibody CTCF
@@ -2726,7 +2726,7 @@ wgEncode 1
     type wig 0.00 6.71
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
     antibody CTCF
@@ -2739,7 +2739,7 @@ wgEncode 1
     type wig 0.00 7.24
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
     antibody CTCF
@@ -2752,7 +2752,7 @@ wgEncode 1
     type wig 0.00 14.01
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
     antibody CTCF
@@ -2765,7 +2765,7 @@ wgEncode 1
     type wig 0.00 29.05
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
     antibody Input
@@ -2778,7 +2778,7 @@ wgEncode 1
     type wig 0.00 29.05
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-04
-    dateReleased 2009-08-04
+    dateUnrestricted 2009-08-04
     spanList 1
     cell GM12878
     antibody Input
@@ -2792,7 +2792,7 @@ wgEncode 1
     useScore 0
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06
-    dateReleased 2009-09-06
+    dateUnrestricted 2009-09-06
     cell K562
 
     track wgEncodeDukeDNaseSeqSignalK562
@@ -2803,7 +2803,7 @@ wgEncode 1
     type wig 0.00 3.11
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06
-    dateReleased 2009-09-06
+    dateUnrestricted 2009-09-06
     spanList 1
     cell K562
 
@@ -2815,7 +2815,7 @@ wgEncode 1
     type wig 0.00 445.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06
-    dateReleased 2009-09-06
+    dateUnrestricted 2009-09-06
     spanList 1
     cell K562
 
@@ -2827,7 +2827,7 @@ wgEncode 1
     type wig 0.00 12.92
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06
-    dateReleased 2009-09-06
+    dateUnrestricted 2009-09-06
     spanList 1
     cell K562
 
@@ -2839,7 +2839,7 @@ wgEncode 1
     type wig 0.00 37.72
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06
-    dateReleased 2009-09-06
+    dateUnrestricted 2009-09-06
     spanList 1
     cell K562
 
@@ -2851,7 +2851,7 @@ wgEncode 1
     type wig 0.00 34.81
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06
-    dateReleased 2009-09-06
+    dateUnrestricted 2009-09-06
     spanList 1
     cell K562
 
@@ -2864,7 +2864,7 @@ wgEncode 1
     useScore 0
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06
-    dateReleased 2009-09-06
+    dateUnrestricted 2009-09-06
     cell K562
 
     track wgEncodeUncFAIREseqSignalK562
@@ -2875,7 +2875,7 @@ wgEncode 1
     type wig 0.00 31.50
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06
-    dateReleased 2009-09-06
+    dateUnrestricted 2009-09-06
     spanList 1
     cell K562
 
@@ -2887,7 +2887,7 @@ wgEncode 1
     type wig 0.00 8719.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06
-    dateReleased 2009-09-06
+    dateUnrestricted 2009-09-06
     spanList 1
     cell K562
 
@@ -2899,7 +2899,7 @@ wgEncode 1
     type wig 0.00 74.86
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06
-    dateReleased 2009-09-06
+    dateUnrestricted 2009-09-06
     spanList 1
     cell K562
 
@@ -2911,7 +2911,7 @@ wgEncode 1
     type wig 0.00 63.65
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06
-    dateReleased 2009-09-06
+    dateUnrestricted 2009-09-06
     spanList 1
     cell K562
 
@@ -2923,7 +2923,7 @@ wgEncode 1
     type wig 0.00 67.60
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-06
-    dateReleased 2009-09-06
+    dateUnrestricted 2009-09-06
     spanList 1
     cell K562
 
@@ -2935,7 +2935,7 @@ wgEncode 1
     type wig 0.00 2.98
     dataVersion ENCODE Nov 2008
     dateSubmitted 2008-12-04
-    dateReleased 2009-09-04
+    dateUnrestricted 2009-09-04
     spanList 1401
     cell K562
     antibody input
@@ -2948,7 +2948,7 @@ wgEncode 1
     type wig 0.00 37.78
     dataVersion ENCODE Nov 2008
     dateSubmitted 2008-12-04
-    dateReleased 2009-09-04
+    dateUnrestricted 2009-09-04
     spanList 1
     cell K562
     antibody input
@@ -2961,7 +2961,7 @@ wgEncode 1
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
 
     track wgEncodeDukeDNaseSeqUniqueness20bpGm12878
     subTrack wgEncodeChromatinMap
@@ -2971,7 +2971,7 @@ wgEncode 1
     type wig 0.00 1.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     spanList 1
 
     track wgEncodeDukeDNaseSeqUniqueness24bpGm12878
@@ -2982,7 +2982,7 @@ wgEncode 1
     type wig 0.00 1.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     spanList 1
 
     track wgEncodeDukeDNaseSeqUniqueness35bpGm12878
@@ -2993,7 +2993,7 @@ wgEncode 1
     type wig 0.00 1.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     spanList 1
 
 
@@ -3027,7 +3027,7 @@ wgEncode 1
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     promoter G-gamma
     cell K562
 
@@ -3039,7 +3039,7 @@ wgEncode 1
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     promoter G-gamma
     cell K562
 
@@ -3051,7 +3051,7 @@ wgEncode 1
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     promoter SV40
     cell K562
 
@@ -3063,7 +3063,7 @@ wgEncode 1
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     promoter SV40
     cell K562
 
@@ -3308,7 +3308,7 @@ scoreMin 500
     type wig 1.00 54453.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     spanList 20
     cell HepG2
 
@@ -3320,7 +3320,7 @@ scoreMin 500
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell HepG2
 
     track wgEncodeUwDnaseSeqRawSignalRep2Gm06990
@@ -3331,7 +3331,7 @@ scoreMin 500
     type wig 1.00 111633.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     spanList 20
     cell GM06990
 
@@ -3343,7 +3343,7 @@ scoreMin 500
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell GM06990
 
     track wgEncodeUwDnaseSeqRawSignalRep1K562
@@ -3354,7 +3354,7 @@ scoreMin 500
     type wig 1.00 47529.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     spanList 20
     cell K562
 
@@ -3366,7 +3366,7 @@ scoreMin 500
     type wig 1.00 62912.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     spanList 20
     cell K562
 
@@ -3378,7 +3378,7 @@ scoreMin 500
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell K562
 
     track wgEncodeUwDnaseSeqHotspotsRep1K562
@@ -3389,7 +3389,7 @@ scoreMin 500
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell K562
 
     track wgEncodeUwDnaseSeqHotspotsRep2K562
@@ -3400,7 +3400,7 @@ scoreMin 500
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell K562
 
     track wgEncodeUwDnaseSeqRawSignalRep1Sknshra
@@ -3411,7 +3411,7 @@ scoreMin 500
     type wig 1.00 24217.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     spanList 20
     cell SK-N-SH(+RA)
 
@@ -3423,7 +3423,7 @@ scoreMin 500
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell SK-N-SH(+RA)
 
     track wgEncodeUwDnaseSeqHotspotsRep1Sknshra
@@ -3434,7 +3434,7 @@ scoreMin 500
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell SK-N-SH(+RA)
 
     track wgEncodeUwDnaseSeqRawSignalRep1Hepg2
@@ -3445,7 +3445,7 @@ scoreMin 500
     type wig 1.00 127303.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     spanList 20
     cell HepG2
 
@@ -3457,7 +3457,7 @@ scoreMin 500
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell HepG2
 
     track wgEncodeUwDnaseSeqHotspotsRep1Hepg2
@@ -3468,7 +3468,7 @@ scoreMin 500
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell HepG2
 
     track wgEncodeUwDnaseSeqRawSignalRep1Th1
@@ -3479,7 +3479,7 @@ scoreMin 500
     type wig 1.00 66149.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     spanList 20
     cell Th1
 
@@ -3491,7 +3491,7 @@ scoreMin 500
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell Th1
 
     track wgEncodeUwDnaseSeqHotspotsRep1Th1
@@ -3502,7 +3502,7 @@ scoreMin 500
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell Th1
 
     track wgEncodeUwDnaseSeqRawSignalRep1Helas3
@@ -3513,7 +3513,7 @@ scoreMin 500
     type wig 1.00 18313.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     spanList 20
     cell HeLa-S3
 
@@ -3525,7 +3525,7 @@ scoreMin 500
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell HeLa-S3
 
     track wgEncodeUwDnaseSeqHotspotsRep1Helas3
@@ -3536,7 +3536,7 @@ scoreMin 500
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell HeLa-S3
 
     track wgEncodeUwDnaseSeqRawSignalRep1Gm06990
@@ -3547,7 +3547,7 @@ scoreMin 500
     type wig 1.00 69023.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     spanList 20
     cell GM06990
 
@@ -3559,7 +3559,7 @@ scoreMin 500
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell GM06990
 
     track wgEncodeUwDnaseSeqHotspotsRep1Gm06990
@@ -3570,7 +3570,7 @@ scoreMin 500
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
-    dateReleased 2009-09-09
+    dateUnrestricted 2009-09-09
     cell GM06990
 
 
@@ -3604,7 +3604,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
-    dateReleased 2009-08-24
+    dateUnrestricted 2009-08-24
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -3617,7 +3617,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
-    dateReleased 2009-08-24
+    dateUnrestricted 2009-08-24
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -3630,7 +3630,7 @@ wgEncode 1
     type wig -62124.00 54385.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
-    dateReleased 2009-08-24
+    dateUnrestricted 2009-08-24
     spanList 1
     rnaExtract longNonPolyA
     localization cell
@@ -3644,7 +3644,7 @@ wgEncode 1
     type wig -62124.00 50627.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
-    dateReleased 2009-08-24
+    dateUnrestricted 2009-08-24
     spanList 1
     rnaExtract longNonPolyA
     localization cell
@@ -3658,7 +3658,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
-    dateReleased 2009-08-24
+    dateUnrestricted 2009-08-24
     rnaExtract longPolyA
     localization cell
     cell prostate
@@ -3671,7 +3671,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
-    dateReleased 2009-08-24
+    dateUnrestricted 2009-08-24
     rnaExtract longPolyA
     localization cell
     cell prostate
@@ -3684,7 +3684,7 @@ wgEncode 1
     type wig -62728.00 58726.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
-    dateReleased 2009-08-24
+    dateUnrestricted 2009-08-24
     spanList 1
     rnaExtract longPolyA
     localization cell
@@ -3698,7 +3698,7 @@ wgEncode 1
     type wig -62728.00 56449.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
-    dateReleased 2009-08-24
+    dateUnrestricted 2009-08-24
     spanList 1
     rnaExtract longPolyA
     localization cell
@@ -3712,7 +3712,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -3725,7 +3725,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -3738,7 +3738,7 @@ wgEncode 1
     type wig -56486.00 59077.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
     localization nucleus
@@ -3752,7 +3752,7 @@ wgEncode 1
     type wig -56486.00 45415.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
     localization nucleus
@@ -3766,7 +3766,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract total
     localization cell
     cell K562
@@ -3779,7 +3779,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract total
     localization cell
     cell K562
@@ -3792,7 +3792,7 @@ wgEncode 1
     type wig -40989.00 59494.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract total
     localization cell
@@ -3806,7 +3806,7 @@ wgEncode 1
     type wig -43345.00 59494.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract total
     localization cell
@@ -3820,7 +3820,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -3833,7 +3833,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -3846,7 +3846,7 @@ wgEncode 1
     type wig -47465.00 52826.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longPolyA
     localization nucleus
@@ -3860,7 +3860,7 @@ wgEncode 1
     type wig -49290.00 43018.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longPolyA
     localization nucleus
@@ -3874,7 +3874,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -3887,7 +3887,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -3900,7 +3900,7 @@ wgEncode 1
     type wig -52894.00 56092.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
     localization cytosol
@@ -3914,7 +3914,7 @@ wgEncode 1
     type wig -55473.00 56092.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
     localization cytosol
@@ -3928,7 +3928,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -3941,7 +3941,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -3954,7 +3954,7 @@ wgEncode 1
     type wig -42328.00 61956.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longPolyA
     localization cytosol
@@ -3968,7 +3968,7 @@ wgEncode 1
     type wig -58407.00 60582.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longPolyA
     localization cytosol
@@ -3982,7 +3982,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longNonPolyA
     localization polysome
     cell K562
@@ -3995,7 +3995,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longNonPolyA
     localization polysome
     cell K562
@@ -4008,7 +4008,7 @@ wgEncode 1
     type wig -50161.00 55400.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
     localization polysome
@@ -4022,7 +4022,7 @@ wgEncode 1
     type wig -52880.00 48739.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
     localization polysome
@@ -4036,7 +4036,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
@@ -4049,7 +4049,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longNonPolyA
     localization nucleus
     cell GM12878
@@ -4062,7 +4062,7 @@ wgEncode 1
     type wig -59319.00 55161.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
     localization nucleus
@@ -4076,7 +4076,7 @@ wgEncode 1
     type wig -52768.00 58546.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
     localization nucleus
@@ -4090,7 +4090,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
@@ -4103,7 +4103,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
@@ -4116,7 +4116,7 @@ wgEncode 1
     type wig -61519.00 60416.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longPolyA
     localization cytosol
@@ -4130,7 +4130,7 @@ wgEncode 1
     type wig -61519.00 60470.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     rnaExtract longPolyA
     localization cytosol
@@ -4144,7 +4144,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26
-    dateReleased 2009-08-26
+    dateUnrestricted 2009-08-26
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
@@ -4157,7 +4157,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26
-    dateReleased 2009-08-26
+    dateUnrestricted 2009-08-26
     rnaExtract longNonPolyA
     localization cytosol
     cell GM12878
@@ -4170,7 +4170,7 @@ wgEncode 1
     type wig -58491.00 56453.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26
-    dateReleased 2009-08-26
+    dateUnrestricted 2009-08-26
     spanList 1
     rnaExtract longNonPolyA
     localization cytosol
@@ -4184,7 +4184,7 @@ wgEncode 1
     type wig -58491.00 61097.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26
-    dateReleased 2009-08-26
+    dateUnrestricted 2009-08-26
     spanList 1
     rnaExtract longNonPolyA
     localization cytosol
@@ -4221,7 +4221,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02
-    dateReleased 2009-09-02
+    dateUnrestricted 2009-09-02
     ripTgtProtein T7Tag
     ripAntibody Nov_69522
     cell GM12878
@@ -4234,7 +4234,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02
-    dateReleased 2009-09-02
+    dateUnrestricted 2009-09-02
     ripTgtProtein T7Tag
     ripAntibody Nov_69522
     cell K562
@@ -4247,7 +4247,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02
-    dateReleased 2009-09-02
+    dateUnrestricted 2009-09-02
     ripTgtProtein ELAVL1
     ripAntibody SC_5261
     cell GM12878
@@ -4260,7 +4260,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02
-    dateReleased 2009-09-02
+    dateUnrestricted 2009-09-02
     ripTgtProtein ELAVL1
     ripAntibody SC_5261
     cell K562
@@ -4273,7 +4273,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02
-    dateReleased 2009-09-02
+    dateUnrestricted 2009-09-02
     ripTgtProtein IGF2BP1
     ripAntibody SC_21027
     cell K562
@@ -4286,7 +4286,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02
-    dateReleased 2009-09-02
+    dateUnrestricted 2009-09-02
     ripTgtProtein PABPC1
     ripAntibody Sig_P6246
     cell GM12878
@@ -4299,7 +4299,7 @@ wgEncode 1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-02
-    dateReleased 2009-09-02
+    dateUnrestricted 2009-09-02
     ripTgtProtein PABPC1
     ripAntibody Sig_P6246
     cell K562
@@ -4337,7 +4337,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09
-    dateReleased 2009-10-09
+    dateUnrestricted 2009-10-09
     cell GM12878
     antibody Max
 
@@ -4349,7 +4349,7 @@ wgEncode 1
     type wig 0.00 4334.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09
-    dateReleased 2009-10-09
+    dateUnrestricted 2009-10-09
     spanList first
     cell GM12878
     antibody Max
@@ -4362,7 +4362,7 @@ wgEncode 1
     type wig 1.00 4163.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09
-    dateReleased 2009-10-09
+    dateUnrestricted 2009-10-09
     spanList first
     cell GM12878
     antibody Max
@@ -4375,7 +4375,7 @@ wgEncode 1
     type wig 1.00 3671.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09
-    dateReleased 2009-10-09
+    dateUnrestricted 2009-10-09
     spanList first
     cell GM12878
     antibody Max
@@ -4388,7 +4388,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26
-    dateReleased 2009-08-26
+    dateUnrestricted 2009-08-26
     cell GM12878
     antibody Pol2
 
@@ -4400,7 +4400,7 @@ wgEncode 1
     type wig 0.00 9844.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26
-    dateReleased 2009-08-26
+    dateUnrestricted 2009-08-26
     spanList 1
     cell GM12878
     antibody Pol2
@@ -4413,7 +4413,7 @@ wgEncode 1
     type wig 1.00 1653.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26
-    dateReleased 2009-08-26
+    dateUnrestricted 2009-08-26
     spanList 1
     cell GM12878
     antibody Pol2
@@ -4426,7 +4426,7 @@ wgEncode 1
     type wig 1.00 993.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26
-    dateReleased 2009-08-26
+    dateUnrestricted 2009-08-26
     spanList 1
     cell GM12878
     antibody Pol2
@@ -4439,7 +4439,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
-    dateReleased 2009-08-24
+    dateUnrestricted 2009-08-24
     cell GM12878
     antibody c-Fos
 
@@ -4451,7 +4451,7 @@ wgEncode 1
     type wig 0.00 4648.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
-    dateReleased 2009-08-24
+    dateUnrestricted 2009-08-24
     spanList 1
     cell GM12878
     antibody c-Fos
@@ -4464,7 +4464,7 @@ wgEncode 1
     type wig 1.00 1507.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
-    dateReleased 2009-08-24
+    dateUnrestricted 2009-08-24
     spanList 1
     cell GM12878
     antibody c-Fos
@@ -4477,7 +4477,7 @@ wgEncode 1
     type wig 1.00 1828.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
-    dateReleased 2009-08-24
+    dateUnrestricted 2009-08-24
     spanList 1
     cell GM12878
     antibody c-Fos
@@ -4490,7 +4490,7 @@ wgEncode 1
     type wig 1.00 1740.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-24
-    dateReleased 2009-08-24
+    dateUnrestricted 2009-08-24
     spanList 1
     cell GM12878
     antibody c-Fos
@@ -4503,7 +4503,7 @@ wgEncode 1
     type wig 0.00 7237.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell GM12878
     antibody Input
@@ -4516,7 +4516,7 @@ wgEncode 1
     type wig 1.00 1488.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell GM12878
     antibody Input
@@ -4529,7 +4529,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14
-    dateReleased 2009-10-14
+    dateUnrestricted 2009-10-14
     cell HEK293(b)
     antibody Pol2
 
@@ -4541,7 +4541,7 @@ wgEncode 1
     type wig 0.00 5116.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14
-    dateReleased 2009-10-14
+    dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
     antibody Pol2
@@ -4554,7 +4554,7 @@ wgEncode 1
     type wig 1.00 1605.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14
-    dateReleased 2009-10-14
+    dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
     antibody Pol2
@@ -4567,7 +4567,7 @@ wgEncode 1
     type wig 1.00 908.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14
-    dateReleased 2009-10-14
+    dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
     antibody Pol2
@@ -4580,7 +4580,7 @@ wgEncode 1
     type wig 1.00 1592.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14
-    dateReleased 2009-10-14
+    dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
     antibody Pol2
@@ -4593,7 +4593,7 @@ wgEncode 1
     type wig 0.00 4758.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14
-    dateReleased 2009-10-14
+    dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
     antibody Input
@@ -4606,7 +4606,7 @@ wgEncode 1
     type wig 1.00 2937.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14
-    dateReleased 2009-10-14
+    dateUnrestricted 2009-10-14
     spanList first
     cell HEK293(b)
     antibody Input
@@ -4619,7 +4619,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-01
-    dateReleased 2009-07-01
+    dateUnrestricted 2009-07-01
     cell HeLa-S3
     antibody Pol2
     color 112,63,174
@@ -4633,7 +4633,7 @@ wgEncode 1
     type wig 0.00 14600.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-01
-    dateReleased 2009-07-01
+    dateUnrestricted 2009-07-01
     visibility full
     spanList 1
     cell HeLa-S3
@@ -4649,7 +4649,7 @@ wgEncode 1
     type wig 1.00 3673.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-01
-    dateReleased 2009-07-01
+    dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3
     antibody Pol2
@@ -4664,7 +4664,7 @@ wgEncode 1
     type wig 1.00 6153.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-01
-    dateReleased 2009-07-01
+    dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3
     antibody Pol2
@@ -4679,7 +4679,7 @@ wgEncode 1
     type wig 1.00 4989.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-01
-    dateReleased 2009-07-01
+    dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3
     antibody Pol2
@@ -4695,7 +4695,7 @@ wgEncode 1
     defaultViewLimits 2:2000
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-29
-    dateReleased 2009-06-29
+    dateUnrestricted 2009-06-29
     visibility full
     spanList 1
     cell HeLa-S3
@@ -4711,7 +4711,7 @@ wgEncode 1
     type wig 1.00 8316.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-29
-    dateReleased 2009-06-29
+    dateUnrestricted 2009-06-29
     spanList 1
     cell HeLa-S3
     antibody Input
@@ -4726,7 +4726,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
-    dateReleased 2009-10-15
+    dateUnrestricted 2009-10-15
     cell HeLa-S3
     antibody Large_Fragment
 
@@ -4738,7 +4738,7 @@ wgEncode 1
     type wig 0.00 5906.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
-    dateReleased 2009-10-15
+    dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
     antibody Large_Fragment
@@ -4751,7 +4751,7 @@ wgEncode 1
     type wig 1.00 2345.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
-    dateReleased 2009-10-15
+    dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
     antibody Large_Fragment
@@ -4764,7 +4764,7 @@ wgEncode 1
     type wig 1.00 1186.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
-    dateReleased 2009-10-15
+    dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
     antibody Large_Fragment
@@ -4777,7 +4777,7 @@ wgEncode 1
     type wig 0.00 13908.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
-    dateReleased 2009-10-15
+    dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
     antibody MNase
@@ -4790,7 +4790,7 @@ wgEncode 1
     type wig 1.00 5827.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16
-    dateReleased 2009-10-16
+    dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
     antibody MNase
@@ -4803,7 +4803,7 @@ wgEncode 1
     type wig 1.00 4709.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16
-    dateReleased 2009-10-16
+    dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
     antibody MNase
@@ -4816,7 +4816,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
-    dateReleased 2009-10-15
+    dateUnrestricted 2009-10-15
     cell HeLa-S3
     antibody Mouse_IgG
 
@@ -4828,7 +4828,7 @@ wgEncode 1
     type wig 0.00 6717.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
-    dateReleased 2009-10-15
+    dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
     antibody Mouse_IgG
@@ -4841,7 +4841,7 @@ wgEncode 1
     type wig 1.00 1800.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
-    dateReleased 2009-10-15
+    dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
     antibody Mouse_IgG
@@ -4854,7 +4854,7 @@ wgEncode 1
     type wig 1.00 1679.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
-    dateReleased 2009-10-15
+    dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
     antibody Mouse_IgG
@@ -4867,7 +4867,7 @@ wgEncode 1
     type wig 0.00 8487.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
-    dateReleased 2009-10-15
+    dateUnrestricted 2009-10-15
     spanList first
     cell HeLa-S3
     antibody Naked_DNA
@@ -4880,7 +4880,7 @@ wgEncode 1
     type wig 1.00 1652.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16
-    dateReleased 2009-10-16
+    dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
     antibody Naked_DNA
@@ -4893,7 +4893,7 @@ wgEncode 1
     type wig 1.00 1721.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16
-    dateReleased 2009-10-16
+    dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
     antibody Naked_DNA
@@ -4906,7 +4906,7 @@ wgEncode 1
     type wig 1.00 1331.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16
-    dateReleased 2009-10-16
+    dateUnrestricted 2009-10-16
     spanList first
     cell HeLa-S3
     antibody Naked_DNA
@@ -4919,7 +4919,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-01
-    dateReleased 2009-07-01
+    dateUnrestricted 2009-07-01
     cell HeLa-S3_IFNg
     antibody STAT1
     color 112,103,174
@@ -4933,7 +4933,7 @@ wgEncode 1
     type wig 0.00 20910.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-01
-    dateReleased 2009-07-01
+    dateUnrestricted 2009-07-01
     visibility full
     spanList 1
     cell HeLa-S3_IFNg
@@ -4949,7 +4949,7 @@ wgEncode 1
     type wig 1.00 14648.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-01
-    dateReleased 2009-07-01
+    dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3_IFNg
     antibody STAT1
@@ -4964,7 +4964,7 @@ wgEncode 1
     type wig 1.00 6262.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-01
-    dateReleased 2009-07-01
+    dateUnrestricted 2009-07-01
     spanList 1
     cell HeLa-S3_IFNg
     antibody STAT1
@@ -4979,7 +4979,7 @@ wgEncode 1
     type wig 0.00 11690.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-29
-    dateReleased 2009-06-29
+    dateUnrestricted 2009-06-29
     visibility full
     spanList 1
     cell HeLa-S3_IFNg
@@ -4995,7 +4995,7 @@ wgEncode 1
     type wig 1.00 11690.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-09-29
-    dateReleased 2009-06-29
+    dateUnrestricted 2009-06-29
     spanList 1
     cell HeLa-S3_IFNg
     antibody Input
@@ -5010,7 +5010,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09
-    dateReleased 2009-10-09
+    dateUnrestricted 2009-10-09
     cell K562
     antibody NF-E2
 
@@ -5022,7 +5022,7 @@ wgEncode 1
     type wig 0.00 15242.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09
-    dateReleased 2009-10-09
+    dateUnrestricted 2009-10-09
     spanList first
     cell K562
     antibody NF-E2
@@ -5035,7 +5035,7 @@ wgEncode 1
     type wig 1.00 10629.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09
-    dateReleased 2009-10-09
+    dateUnrestricted 2009-10-09
     spanList first
     cell K562
     antibody NF-E2
@@ -5048,7 +5048,7 @@ wgEncode 1
     type wig 1.00 9043.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-09
-    dateReleased 2009-10-09
+    dateUnrestricted 2009-10-09
     spanList first
     cell K562
     antibody NF-E2
@@ -5061,7 +5061,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-14
-    dateReleased 2009-07-14
+    dateUnrestricted 2009-07-14
     cell K562
     antibody Pol2
 
@@ -5073,7 +5073,7 @@ wgEncode 1
     type wig 0.00 18226.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-14
-    dateReleased 2009-07-14
+    dateUnrestricted 2009-07-14
     visibility full
     spanList 1
     cell K562
@@ -5087,7 +5087,7 @@ wgEncode 1
     type wig 1.00 9783.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-27
-    dateReleased 2009-07-27
+    dateUnrestricted 2009-07-27
     spanList 1
     cell K562
     antibody Pol2
@@ -5100,7 +5100,7 @@ wgEncode 1
     type wig 1.00 8446.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-27
-    dateReleased 2009-07-27
+    dateUnrestricted 2009-07-27
     spanList 1
     cell K562
     antibody Pol2
@@ -5113,7 +5113,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     cell K562
     antibody c-Fos
 
@@ -5125,7 +5125,7 @@ wgEncode 1
     type wig 0.00 13555.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     spanList 1
     cell K562
     antibody c-Fos
@@ -5138,7 +5138,7 @@ wgEncode 1
     type wig 1.00 6107.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     spanList 1
     cell K562
     antibody c-Fos
@@ -5151,7 +5151,7 @@ wgEncode 1
     type wig 1.00 3561.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     spanList 1
     cell K562
     antibody c-Fos
@@ -5164,7 +5164,7 @@ wgEncode 1
     type wig 1.00 3921.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     spanList 1
     cell K562
     antibody c-Fos
@@ -5177,7 +5177,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     cell K562
     antibody c-Jun
 
@@ -5189,7 +5189,7 @@ wgEncode 1
     type wig 0.00 16981.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     spanList 1
     cell K562
     antibody c-Jun
@@ -5202,7 +5202,7 @@ wgEncode 1
     type wig 1.00 11614.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     spanList 1
     cell K562
     antibody c-Jun
@@ -5215,7 +5215,7 @@ wgEncode 1
     type wig 1.00 5368.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     spanList 1
     cell K562
     antibody c-Jun
@@ -5228,7 +5228,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     cell K562
     antibody c-Myc
 
@@ -5240,7 +5240,7 @@ wgEncode 1
     type wig 0.00 2983.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     spanList 1
     cell K562
     antibody c-Myc
@@ -5253,7 +5253,7 @@ wgEncode 1
     type wig 1.00 1590.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     spanList 1
     cell K562
     antibody c-Myc
@@ -5266,7 +5266,7 @@ wgEncode 1
     type wig 1.00 1603.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-21
-    dateReleased 2009-08-21
+    dateUnrestricted 2009-08-21
     spanList 1
     cell K562
     antibody c-Myc
@@ -5279,7 +5279,7 @@ wgEncode 1
     type wig 0.00 4661.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-14
-    dateReleased 2009-07-14
+    dateUnrestricted 2009-07-14
     visibility full
     spanList 1
     cell K562
@@ -5293,7 +5293,7 @@ wgEncode 1
     type wig 1.00 4661.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-14
-    dateReleased 2009-07-14
+    dateUnrestricted 2009-07-14
     spanList 1
     cell K562
     antibody Input
@@ -5306,7 +5306,7 @@ wgEncode 1
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     cell NB4
     antibody Pol2
 
@@ -5318,7 +5318,7 @@ wgEncode 1
     type wig 0.00 20774.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell NB4
     antibody Pol2
@@ -5331,7 +5331,7 @@ wgEncode 1
     type wig 1.00 10895.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell NB4
     antibody Pol2
@@ -5344,7 +5344,7 @@ wgEncode 1
     type wig 1.00 5847.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell NB4
     antibody Pol2
@@ -5357,7 +5357,7 @@ wgEncode 1
     type wig 1.00 4034.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell NB4
     antibody Pol2
@@ -5370,7 +5370,7 @@ wgEncode 1
     type wig 0.00 2842.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell NB4
     antibody Input
@@ -5383,7 +5383,7 @@ wgEncode 1
     type wig 1.00 2842.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell NB4
     antibody Input
@@ -5420,7 +5420,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23
-    dateReleased 2009-08-23
+    dateUnrestricted 2009-08-23
     cell GM12878
     antibody GABP
 
@@ -5432,7 +5432,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23
-    dateReleased 2009-08-23
+    dateUnrestricted 2009-08-23
     cell GM12878
     antibody GABP
 
@@ -5444,7 +5444,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 6821.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23
-    dateReleased 2009-08-23
+    dateUnrestricted 2009-08-23
     spanList 1
     cell GM12878
     antibody GABP
@@ -5457,7 +5457,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 6113.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23
-    dateReleased 2009-08-23
+    dateUnrestricted 2009-08-23
     spanList 1
     cell GM12878
     antibody GABP
@@ -5470,7 +5470,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     cell GM12878
     antibody NRSF
 
@@ -5482,7 +5482,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     cell GM12878
     antibody NRSF
 
@@ -5494,7 +5494,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 19628.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell GM12878
     antibody NRSF
@@ -5507,7 +5507,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 16142.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell GM12878
     antibody NRSF
@@ -5520,7 +5520,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     cell GM12878
     antibody Pol2
 
@@ -5532,7 +5532,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     cell GM12878
     antibody Pol2
 
@@ -5544,7 +5544,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 8689.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell GM12878
     antibody Pol2
@@ -5557,7 +5557,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 9957.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell GM12878
     antibody Pol2
@@ -5570,7 +5570,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
-    dateReleased 2009-08-22
+    dateUnrestricted 2009-08-22
     cell GM12878
     antibody SRF
 
@@ -5582,7 +5582,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
-    dateReleased 2009-08-22
+    dateUnrestricted 2009-08-22
     cell GM12878
     antibody SRF
 
@@ -5594,7 +5594,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 3711.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
-    dateReleased 2009-08-22
+    dateUnrestricted 2009-08-22
     spanList 1
     cell GM12878
     antibody SRF
@@ -5607,7 +5607,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 3169.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
-    dateReleased 2009-08-22
+    dateUnrestricted 2009-08-22
     spanList 1
     cell GM12878
     antibody SRF
@@ -5620,7 +5620,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2008-12-11
-    dateReleased 2009-09-11
+    dateUnrestricted 2009-09-11
     cell GM12878
     antibody TAF-II
 
@@ -5632,7 +5632,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 2230.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2008-12-11
-    dateReleased 2009-09-11
+    dateUnrestricted 2009-09-11
     spanList 1
     cell GM12878
     antibody TAF-II
@@ -5645,7 +5645,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 2399.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
-    dateReleased 2009-08-22
+    dateUnrestricted 2009-08-22
     spanList 1
     cell GM12878
     antibody control
@@ -5658,7 +5658,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 2714.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
-    dateReleased 2009-08-22
+    dateUnrestricted 2009-08-22
     spanList 1
     cell GM12878
     antibody control
@@ -5671,7 +5671,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23
-    dateReleased 2009-08-23
+    dateUnrestricted 2009-08-23
     cell K562
     antibody GABP
 
@@ -5683,7 +5683,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23
-    dateReleased 2009-08-23
+    dateUnrestricted 2009-08-23
     cell K562
     antibody GABP
 
@@ -5695,7 +5695,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 15650.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23
-    dateReleased 2009-08-23
+    dateUnrestricted 2009-08-23
     spanList 1
     cell K562
     antibody GABP
@@ -5708,7 +5708,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 18479.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-23
-    dateReleased 2009-08-23
+    dateUnrestricted 2009-08-23
     spanList 1
     cell K562
     antibody GABP
@@ -5721,7 +5721,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     cell K562
     antibody NRSF
 
@@ -5733,7 +5733,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     cell K562
     antibody NRSF
 
@@ -5745,7 +5745,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 47957.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell K562
     antibody NRSF
@@ -5758,7 +5758,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 29181.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell K562
     antibody NRSF
@@ -5771,7 +5771,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     cell K562
     antibody Pol2
 
@@ -5783,7 +5783,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     cell K562
     antibody Pol2
 
@@ -5795,7 +5795,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 14400.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell K562
     antibody Pol2
@@ -5808,7 +5808,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 10312.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
-    dateReleased 2009-08-25
+    dateUnrestricted 2009-08-25
     spanList 1
     cell K562
     antibody Pol2
@@ -5821,7 +5821,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
-    dateReleased 2009-08-22
+    dateUnrestricted 2009-08-22
     cell K562
     antibody SRF
 
@@ -5833,7 +5833,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
-    dateReleased 2009-08-22
+    dateUnrestricted 2009-08-22
     cell K562
     antibody SRF
 
@@ -5845,7 +5845,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 8435.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
-    dateReleased 2009-08-22
+    dateUnrestricted 2009-08-22
     spanList 1
     cell K562
     antibody SRF
@@ -5858,7 +5858,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 3612.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
-    dateReleased 2009-08-22
+    dateUnrestricted 2009-08-22
     spanList 1
     cell K562
     antibody SRF
@@ -5871,7 +5871,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2008-12-11
-    dateReleased 2009-09-11
+    dateUnrestricted 2009-09-11
     cell K562
     antibody TAF-II
 
@@ -5883,7 +5883,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 2856.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2008-12-11
-    dateReleased 2009-09-11
+    dateUnrestricted 2009-09-11
     spanList 1
     cell K562
     antibody TAF-II
@@ -5896,7 +5896,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 6252.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
-    dateReleased 2009-08-22
+    dateUnrestricted 2009-08-22
     spanList 1
     cell K562
     antibody control
@@ -5909,7 +5909,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     type wig 1.00 3777.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-22
-    dateReleased 2009-08-22
+    dateUnrestricted 2009-08-22
     spanList 1
     cell K562
     antibody control
@@ -6083,7 +6083,7 @@ wgEncode 1
     type genePred
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-21
-    dateReleased 2009-09-08
+    dateUnrestricted 2009-09-08
     accession 2008-10-01
     priority 2
     freezeDate 2008-10-01
@@ -6096,7 +6096,7 @@ wgEncode 1
     type genePred
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-21
-    dateReleased 2009-09-08
+    dateUnrestricted 2009-09-08
     accession 2008-10-01
     priority 3
     freezeDate 2008-10-01
@@ -6133,7 +6133,7 @@ wgEncode 1
     type gappedPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     rnaExtract longPolyA
     localization cell
     cell prostate
@@ -6146,7 +6146,7 @@ wgEncode 1
     type gappedPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -6159,7 +6159,7 @@ wgEncode 1
     type gappedPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -6172,7 +6172,7 @@ wgEncode 1
     type gappedPeak
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     rnaExtract longPolyA
     localization polysome
     cell K562
@@ -6186,7 +6186,7 @@ wgEncode 1
 	#type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     rnaExtract longPolyA
     localization cell
     cell prostate
@@ -6200,7 +6200,7 @@ wgEncode 1
 	#type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -6214,7 +6214,7 @@ wgEncode 1
 	#type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -6228,7 +6228,7 @@ wgEncode 1
 	#type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     rnaExtract longPolyA
     localization polysome
     cell K562
@@ -6241,7 +6241,7 @@ wgEncode 1
     type wig 1.00 4523.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     spanList 1
     rnaExtract longPolyA
     localization cytosol
@@ -6255,7 +6255,7 @@ wgEncode 1
     type wig 1.00 10978.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     spanList 1
     rnaExtract longPolyA
     localization cytosol
@@ -6269,7 +6269,7 @@ wgEncode 1
     type wig 1.00 5889.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     spanList 1
     rnaExtract longPolyA
     localization cell
@@ -6283,7 +6283,7 @@ wgEncode 1
     type wig 1.00 5693.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     spanList 1
     rnaExtract longPolyA
     localization cell
@@ -6297,7 +6297,7 @@ wgEncode 1
     type wig 1.00 9657.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     spanList 1
     rnaExtract longPolyA
     localization polysome
@@ -6311,7 +6311,7 @@ wgEncode 1
     type wig 1.00 14175.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     spanList 1
     rnaExtract longPolyA
     localization polysome
@@ -6325,7 +6325,7 @@ wgEncode 1
     type wig 1.00 2902.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     spanList 1
     rnaExtract longPolyA
     localization nucleus
@@ -6339,7 +6339,7 @@ wgEncode 1
     type wig 1.00 3938.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
-    dateReleased 2009-09-03
+    dateUnrestricted 2009-09-03
     spanList 1
     rnaExtract longPolyA
     localization nucleus

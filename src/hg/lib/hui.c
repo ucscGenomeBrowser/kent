@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.148 2009/01/25 04:08:19 markd Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.149 2009/01/26 18:23:41 kate Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2290,7 +2290,7 @@ char *encodeRestrictionDateDisplay(struct trackDb *trackDb)
 {
 if (!trackDb)
     return NULL;
-char *date = trackDbSetting(trackDb, "dateReleased");
+char *date = trackDbSetting(trackDb, "dateUnrestricted");
 if (date)
     return strSwapChar(cloneString(date), ' ', 0);   // Truncate time
 date = trackDbSetting(trackDb, "dateSubmitted");
