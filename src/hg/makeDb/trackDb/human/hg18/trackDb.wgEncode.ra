@@ -126,7 +126,7 @@ superTrack wgEncodeUcsdNgTaf1Super dense
 group regulation
 shortLabel LI TAF1 Signal
 longLabel Ludwig Institute NimbleGen ChIP-chip Signal: TAF1 antibody, IMR90 cells
-maxHeightPixels 128:16:16
+maxHeightPixels
 type wig -5.61 6.47
 spanList 50
 viewLimits -1:2
@@ -168,7 +168,7 @@ shortLabel LI TAF1 Valid
 longLabel Ludwig Institute ChIP-chip Validation: TAF1 in IMR90 cells
 group regulation
 type bedGraph 4
-maxHeightPixels 128:16:16
+maxHeightPixels
 minLimit -8
 maxLimit 8
 viewLimits -1:3
@@ -234,7 +234,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=CTCF cellType=GM12878
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 0:23:37
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell GM12878
     antibody CTCF
@@ -246,7 +246,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=CTCF cellType=GM12878
     type wig 0.00 14530.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 0:23:37
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell GM12878
@@ -259,7 +259,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=CTCF cellType=GM12878
     type wig 1.00 10017.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 0:23:37
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell GM12878
@@ -272,7 +272,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=CTCF cellType=GM12878
     type wig 1.00 6886.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 0:23:37
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell GM12878
@@ -285,7 +285,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K04me1 cellType=GM12878
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 17:48:5
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     cell GM12878
     antibody H3K4me1
@@ -297,7 +297,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K04me1 cellType=GM12878
     type wig 0.00 9323.50
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 17:48:5
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -310,7 +310,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me1 cellType=GM12878
     type wig 1.00 5673.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 17:48:5
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -323,7 +323,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me1 cellType=GM12878
     type wig 1.00 5022.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 17:48:5
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -336,7 +336,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K04me2 cellType=GM12878
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 17:2:48
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     cell GM12878
     antibody H3K4me2
@@ -348,7 +348,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K04me2 cellType=GM12878
     type wig 0.00 15071.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 17:2:48
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -361,7 +361,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me2 cellType=GM12878
     type wig 1.00 14054.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 17:2:48
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -374,7 +374,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me2 cellType=GM12878
     type wig 1.00 2470.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 17:2:48
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -387,7 +387,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K04me3 cellType=GM12878
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 15:59:46
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     cell GM12878
     antibody H3K4me3
@@ -399,7 +399,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K04me3 cellType=GM12878
     type wig 0.00 100593.50
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 15:59:46
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -412,7 +412,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me3 cellType=GM12878
     type wig 1.00 65341.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 15:59:46
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -425,7 +425,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me3 cellType=GM12878
     type wig 1.00 4691.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 15:59:46
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -438,7 +438,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K09ac cellType=GM12878
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 22:24:24
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     cell GM12878
     antibody H3K9ac
@@ -450,7 +450,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K09ac cellType=GM12878
     type wig 0.00 8338.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 22:24:24
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -463,7 +463,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09ac cellType=GM12878
     type wig 1.00 5305.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 22:24:24
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -476,7 +476,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09ac cellType=GM12878
     type wig 1.00 4291.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 22:24:24
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -489,7 +489,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H4K20me1 cellType=GM12878
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 23:19:49
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     cell GM12878
     antibody H4K20me1
@@ -501,7 +501,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H4K20me1 cellType=GM12878
     type wig 0.00 10750.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 23:19:49
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -514,7 +514,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H4K20me1 cellType=GM12878
     type wig 1.00 6918.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 23:19:49
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -527,7 +527,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H4K20me1 cellType=GM12878
     type wig 1.00 5568.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 23:19:49
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -540,7 +540,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K27ac cellType=GM12878
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 21:19:1
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     cell GM12878
     antibody H3K27ac
@@ -552,7 +552,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K27ac cellType=GM12878
     type wig 0.00 473622.75
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 21:19:1
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -565,7 +565,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27ac cellType=GM12878
     type wig 1.00 65477.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 21:19:1
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -578,7 +578,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27ac cellType=GM12878
     type wig 1.00 3640.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 21:19:1
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -591,7 +591,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K27me3 cellType=GM12878
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 20:6:7
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     cell GM12878
     antibody H3K27me3
@@ -603,7 +603,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K27me3 cellType=GM12878
     type wig 0.00 60338.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 20:6:7
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -616,7 +616,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27me3 cellType=GM12878
     type wig 1.00 65374.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 20:6:7
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -629,7 +629,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27me3 cellType=GM12878
     type wig 1.00 4241.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 20:6:7
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -642,7 +642,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K36me3 cellType=GM12878
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 18:54:30
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     cell GM12878
     antibody H3K36me3
@@ -654,7 +654,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K36me3 cellType=GM12878
     type wig 0.00 15797.75
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 18:54:30
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -667,7 +667,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K36me3 cellType=GM12878
     type wig 1.00 13112.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 18:54:30
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -680,7 +680,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K36me3 cellType=GM12878
     type wig 1.00 5241.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-04 18:54:30
+    dateSubmitted 2009-01-04
     dateReleased 2009-10-04
     spanList first
     cell GM12878
@@ -693,7 +693,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=zCTRL cellType=GM12878
     type wig 0.00 13725.50
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 10:14:15
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell GM12878
@@ -706,7 +706,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=zCTRL cellType=GM12878
     type wig 1.00 8512.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 10:14:15
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell GM12878
@@ -719,7 +719,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=zCTRL cellType=GM12878
     type wig 1.00 7182.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 10:14:15
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell GM12878
@@ -732,7 +732,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=CTCF cellType=HUVEC
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 22:43:39
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell HUVEC
     antibody CTCF
@@ -744,7 +744,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=CTCF cellType=HUVEC
     type wig 0.00 7013.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 22:43:39
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -757,7 +757,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=CTCF cellType=HUVEC
     type wig 1.00 6968.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 22:43:39
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -770,7 +770,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=CTCF cellType=HUVEC
     type wig 1.00 3205.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 22:43:39
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -783,7 +783,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K04me1 cellType=HUVEC
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 13:50:2
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell HUVEC
     antibody H3K4me1
@@ -795,7 +795,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K04me1 cellType=HUVEC
     type wig 0.00 5259.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 13:50:2
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -808,7 +808,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me1 cellType=HUVEC
     type wig 1.00 5158.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 13:50:2
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -821,7 +821,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me1 cellType=HUVEC
     type wig 1.00 875.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 13:50:2
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -834,7 +834,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K04me2 cellType=HUVEC
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 12:30:42
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell HUVEC
     antibody H3K4me2
@@ -846,7 +846,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K04me2 cellType=HUVEC
     type wig 0.00 7088.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 12:30:42
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -859,7 +859,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me2 cellType=HUVEC
     type wig 1.00 7163.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 12:30:42
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -872,7 +872,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me2 cellType=HUVEC
     type wig 1.00 3502.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 12:30:42
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -885,7 +885,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K04me3 cellType=HUVEC
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 11:10:53
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell HUVEC
     antibody H3K4me3
@@ -897,7 +897,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K04me3 cellType=HUVEC
     type wig 0.00 9954.75
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 11:10:53
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -910,7 +910,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me3 cellType=HUVEC
     type wig 1.00 9994.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 11:10:53
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -923,7 +923,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me3 cellType=HUVEC
     type wig 1.00 5437.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 11:10:53
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -936,7 +936,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K09ac cellType=HUVEC
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 17:58:8
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell HUVEC
     antibody H3K9ac
@@ -948,7 +948,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K09ac cellType=HUVEC
     type wig 0.00 8831.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 17:58:8
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -961,7 +961,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09ac cellType=HUVEC
     type wig 1.00 8827.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 17:58:8
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -974,7 +974,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09ac cellType=HUVEC
     type wig 1.00 1340.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 17:58:8
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -987,7 +987,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K09me1 cellType=HUVEC
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 20:13:5
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell HUVEC
     antibody H3K9me1
@@ -999,7 +999,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K09me1 cellType=HUVEC
     type wig 0.00 6743.75
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 20:13:5
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1012,7 +1012,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09me1 cellType=HUVEC
     type wig 1.00 5977.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 20:13:5
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1025,7 +1025,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09me1 cellType=HUVEC
     type wig 1.00 1956.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 20:13:5
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1038,7 +1038,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K27ac cellType=HUVEC
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 18:53:4
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell HUVEC
     antibody H3K27ac
@@ -1050,7 +1050,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K27ac cellType=HUVEC
     type wig 0.00 4855.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 18:53:4
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1063,7 +1063,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27ac cellType=HUVEC
     type wig 1.00 3753.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 18:53:4
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1076,7 +1076,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27ac cellType=HUVEC
     type wig 1.00 4291.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 18:53:4
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1089,7 +1089,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K27me3 cellType=HUVEC
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 15:23:34
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell HUVEC
     antibody H3K27me3
@@ -1101,7 +1101,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K27me3 cellType=HUVEC
     type wig 0.00 7453.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 15:23:34
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1114,7 +1114,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27me3 cellType=HUVEC
     type wig 1.00 6723.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 15:23:34
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1127,7 +1127,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27me3 cellType=HUVEC
     type wig 1.00 2059.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 15:23:34
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1140,7 +1140,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K36me3 cellType=HUVEC
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 16:46:27
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell HUVEC
     antibody H3K36me3
@@ -1152,7 +1152,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K36me3 cellType=HUVEC
     type wig 0.00 7456.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 16:46:27
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1165,7 +1165,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K36me3 cellType=HUVEC
     type wig 1.00 7162.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 16:46:27
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1178,7 +1178,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K36me3 cellType=HUVEC
     type wig 1.00 6629.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 16:46:27
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1191,7 +1191,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H4K20me1 cellType=HUVEC
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 21:16:35
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell HUVEC
     antibody H4K20me1
@@ -1203,7 +1203,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H4K20me1 cellType=HUVEC
     type wig 0.00 15868.50
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 21:16:35
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1216,7 +1216,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H4K20me1 cellType=HUVEC
     type wig 1.00 15917.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 21:16:35
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1229,7 +1229,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H4K20me1 cellType=HUVEC
     type wig 1.00 2494.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 21:16:35
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell HUVEC
@@ -1242,7 +1242,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=Pol2(b) cellType=HUVEC
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 12:6:54
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell HUVEC
     antibody Pol2(b)
@@ -1254,7 +1254,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=Pol2(b) cellType=HUVEC
     type wig 0.00 8889.75
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 12:6:54
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell HUVEC
@@ -1267,7 +1267,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=Pol2(b) cellType=HUVEC
     type wig 1.00 6156.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 12:6:54
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell HUVEC
@@ -1280,7 +1280,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=Pol2(b) cellType=HUVEC
     type wig 1.00 4077.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 12:6:54
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell HUVEC
@@ -1293,7 +1293,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=zCTRL cellType=HUVEC
     type wig 0.00 16710.75
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 2:18:36
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell HUVEC
@@ -1306,7 +1306,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=zCTRL cellType=HUVEC
     type wig 1.00 17736.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 2:18:36
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell HUVEC
@@ -1319,7 +1319,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=zCTRL cellType=HUVEC
     type wig 1.00 2790.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 2:18:36
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell HUVEC
@@ -1332,7 +1332,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=CTCF cellType=K562
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 15:41:8
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell K562
     antibody CTCF
@@ -1344,7 +1344,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=CTCF cellType=K562
     type wig 0.00 13401.75
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 15:41:8
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1357,7 +1357,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=CTCF cellType=K562
     type wig 1.00 7149.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 15:41:8
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1370,7 +1370,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=CTCF cellType=K562
     type wig 1.00 9663.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 15:41:8
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1383,7 +1383,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K04me1 cellType=K562
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 15:15:5
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell K562
     antibody H3K4me1
@@ -1395,7 +1395,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K04me1 cellType=K562
     type wig 0.00 8682.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 15:15:5
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList 1
     cell K562
@@ -1408,7 +1408,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me1 cellType=K562
     type wig 1.00 4238.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 15:15:5
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList 1
     cell K562
@@ -1421,7 +1421,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me1 cellType=K562
     type wig 1.00 5992.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 15:15:5
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList 1
     cell K562
@@ -1434,7 +1434,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K04me2 cellType=K562
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 13:52:52
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell K562
     antibody H3K4me2
@@ -1446,7 +1446,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K04me2 cellType=K562
     type wig 0.00 5002.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 13:52:52
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList 1
     cell K562
@@ -1459,7 +1459,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me2 cellType=K562
     type wig 1.00 2072.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 13:52:52
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList 1
     cell K562
@@ -1472,7 +1472,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me2 cellType=K562
     type wig 1.00 4060.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 13:52:52
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList 1
     cell K562
@@ -1485,7 +1485,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K04me3 cellType=K562
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 11:40:6
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell K562
     antibody H3K4me3
@@ -1497,7 +1497,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K04me3 cellType=K562
     type wig 0.00 16145.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 11:40:6
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell K562
@@ -1510,7 +1510,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me3 cellType=K562
     type wig 1.00 11553.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 11:40:6
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell K562
@@ -1523,7 +1523,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me3 cellType=K562
     type wig 1.00 7133.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 11:40:6
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList first
     cell K562
@@ -1536,7 +1536,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K09ac cellType=K562
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 11:30:35
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell K562
     antibody H3K9ac
@@ -1548,7 +1548,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K09ac cellType=K562
     type wig 0.00 17517.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 11:30:35
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1561,7 +1561,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09ac cellType=K562
     type wig 1.00 9931.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 11:30:35
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1574,7 +1574,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09ac cellType=K562
     type wig 1.00 13285.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 11:30:35
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1587,7 +1587,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K09me1 cellType=K562
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 16:51:50
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell K562
     antibody H3K9me1
@@ -1599,7 +1599,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K09me1 cellType=K562
     type wig 0.00 27376.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 16:51:50
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1612,7 +1612,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09me1 cellType=K562
     type wig 1.00 14561.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 16:51:50
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1625,7 +1625,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09me1 cellType=K562
     type wig 1.00 16644.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 16:51:50
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1638,7 +1638,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K27ac cellType=K562
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 14:10:41
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell K562
     antibody H3K27ac
@@ -1650,7 +1650,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K27ac cellType=K562
     type wig 0.00 9215.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 14:10:41
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1663,7 +1663,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27ac cellType=K562
     type wig 1.00 6647.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 14:10:41
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1676,7 +1676,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27ac cellType=K562
     type wig 1.00 4622.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 14:10:41
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1689,7 +1689,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K27me3 cellType=K562
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 17:04:42
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     cell K562
     antibody H3K27me3
@@ -1701,7 +1701,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K27me3 cellType=K562
     type wig 0.00 17135.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 17:04:42
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList 1
     cell K562
@@ -1714,7 +1714,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27me3 cellType=K562
     type wig 1.00 13354.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 17:04:42
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList 1
     cell K562
@@ -1727,7 +1727,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27me3 cellType=K562
     type wig 1.00 7235.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-05 17:04:42
+    dateSubmitted 2009-01-05
     dateReleased 2009-10-05
     spanList 1
     cell K562
@@ -1740,7 +1740,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K36me3 cellType=K562
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 10:31:41
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell K562
     antibody H3K36me3
@@ -1752,7 +1752,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K36me3 cellType=K562
     type wig 0.00 10114.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 10:31:41
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1765,7 +1765,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K36me3 cellType=K562
     type wig 1.00 11433.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 10:31:41
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1778,7 +1778,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K36me3 cellType=K562
     type wig 1.00 7087.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 10:31:41
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1791,7 +1791,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H4K20me1 cellType=K562
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 18:32:6
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell K562
     antibody H4K20me1
@@ -1803,7 +1803,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H4K20me1 cellType=K562
     type wig 0.00 16178.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 18:32:6
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1816,7 +1816,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H4K20me1 cellType=K562
     type wig 1.00 2268.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 18:32:6
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1829,7 +1829,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H4K20me1 cellType=K562
     type wig 1.00 16566.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 18:32:6
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1842,7 +1842,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=Pol2(b) cellType=K562
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 20:39:56
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell K562
     antibody Pol2(b)
@@ -1854,7 +1854,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=Pol2(b) cellType=K562
     type wig 0.00 17110.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 20:39:56
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1867,7 +1867,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=Pol2(b) cellType=K562
     type wig 1.00 6599.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 20:39:56
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1880,7 +1880,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=Pol2(b) cellType=K562
     type wig 1.00 13248.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 20:39:56
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1893,7 +1893,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=zCTRL cellType=K562
     type wig 0.00 23372.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 22:28:18
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell K562
@@ -1906,7 +1906,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=zCTRL cellType=K562
     type wig 1.00 15525.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 22:28:18
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1919,7 +1919,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=zCTRL cellType=K562
     type wig 1.00 10925.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 22:28:18
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList 1
     cell K562
@@ -1932,7 +1932,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=CTCF cellType=Kera
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 23:34:18
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell Keratinocyte
     antibody CTCF
@@ -1944,7 +1944,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=CTCF cellType=Kera
     type wig 0.00 4674.50
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 23:34:18
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -1957,7 +1957,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=CTCF cellType=Kera
     type wig 1.00 4288.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 23:34:18
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -1970,7 +1970,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=CTCF cellType=Kera
     type wig 1.00 1316.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 23:34:18
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -1983,7 +1983,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K04me1 cellType=Kera
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 15:22:13
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell Keratinocyte
     antibody H3K4me1
@@ -1995,7 +1995,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K04me1 cellType=Kera
     type wig 0.00 4240.50
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 15:22:13
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2008,7 +2008,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me1 cellType=Kera
     type wig 1.00 4868.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 15:22:13
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2021,7 +2021,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me1 cellType=Kera
     type wig 1.00 593.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 15:22:13
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2034,7 +2034,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K04me2 cellType=Kera
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 4:41:46
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     cell Keratinocyte
     antibody H3K4me2
@@ -2046,7 +2046,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K04me2 cellType=Kera
     type wig 0.00 3789.50
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 4:41:46
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell Keratinocyte
@@ -2059,7 +2059,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me2 cellType=Kera
     type wig 1.00 3324.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 4:41:46
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell Keratinocyte
@@ -2072,7 +2072,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me2 cellType=Kera
     type wig 1.00 2225.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 4:41:46
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell Keratinocyte
@@ -2085,7 +2085,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K04me3 cellType=Kera
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 3:40:28
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     cell Keratinocyte
     antibody H3K4me3
@@ -2097,7 +2097,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K04me3 cellType=Kera
     type wig 0.00 12229.50
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 3:40:28
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell Keratinocyte
@@ -2110,7 +2110,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me3 cellType=Kera
     type wig 1.00 15514.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 3:40:28
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell Keratinocyte
@@ -2123,7 +2123,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K04me3 cellType=Kera
     type wig 1.00 2050.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 3:40:28
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell Keratinocyte
@@ -2136,7 +2136,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K09ac cellType=Kera
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 18:41:20
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell Keratinocyte
     antibody H3K9ac
@@ -2148,7 +2148,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K09ac cellType=Kera
     type wig 0.00 3816.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 18:41:20
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2161,7 +2161,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09ac cellType=Kera
     type wig 1.00 3068.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 18:41:20
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2174,7 +2174,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09ac cellType=Kera
     type wig 1.00 1329.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 18:41:20
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2187,7 +2187,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K09me1 cellType=Kera
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 21:5:15
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell Keratinocyte
     antibody H3K9me1
@@ -2199,7 +2199,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K09me1 cellType=Kera
     type wig 0.00 6121.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 21:5:15
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2212,7 +2212,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09me1 cellType=Kera
     type wig 1.00 5283.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 21:5:15
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2225,7 +2225,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K09me1 cellType=Kera
     type wig 1.00 1890.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 21:5:15
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2238,7 +2238,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K27ac cellType=Kera
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 19:51:16
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell Keratinocyte
     antibody H3K27ac
@@ -2250,7 +2250,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K27ac cellType=Kera
     type wig 0.00 45249.50
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 19:51:16
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2263,7 +2263,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27ac cellType=Kera
     type wig 1.00 57869.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 19:51:16
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2276,7 +2276,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27ac cellType=Kera
     type wig 1.00 2101.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 19:51:16
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2289,7 +2289,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K27me3 cellType=Kera
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 16:35:59
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell Keratinocyte
     antibody H3K27me3
@@ -2301,7 +2301,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K27me3 cellType=Kera
     type wig 0.00 5062.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 16:35:59
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2314,7 +2314,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27me3 cellType=Kera
     type wig 1.00 4744.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 16:35:59
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2327,7 +2327,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K27me3 cellType=Kera
     type wig 1.00 1257.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 16:35:59
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2340,7 +2340,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H3K36me3 cellType=Kera
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 17:38:25
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell Keratinocyte
     antibody H3K36me3
@@ -2352,7 +2352,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H3K36me3 cellType=Kera
     type wig 0.00 4663.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 17:38:25
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2365,7 +2365,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K36me3 cellType=Kera
     type wig 1.00 4566.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 17:38:25
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2378,7 +2378,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H3K36me3 cellType=Kera
     type wig 1.00 711.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 17:38:25
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2391,7 +2391,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=H4K20me1 cellType=Kera
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 22:19:45
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     cell Keratinocyte
     antibody H4K20me1
@@ -2403,7 +2403,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=H4K20me1 cellType=Kera
     type wig 0.00 7443.75
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 22:19:45
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2416,7 +2416,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H4K20me1 cellType=Kera
     type wig 1.00 7374.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 22:19:45
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2429,7 +2429,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=H4K20me1 cellType=Kera
     type wig 1.00 3335.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-06 22:19:45
+    dateSubmitted 2009-01-06
     dateReleased 2009-10-06
     spanList first
     cell Keratinocyte
@@ -2442,7 +2442,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Peaks factor=Pol2(b) cellType=Kera
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 0:36:12
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     cell Keratinocyte
     antibody Pol2(b)
@@ -2454,7 +2454,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=Pol2(b) cellType=Kera
     type wig 0.00 5604.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 0:36:12
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell Keratinocyte
@@ -2467,7 +2467,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=Pol2(b) cellType=Kera
     type wig 1.00 2360.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 0:36:12
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell Keratinocyte
@@ -2480,7 +2480,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=Pol2(b) cellType=Kera
     type wig 1.00 1938.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 0:36:12
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell Keratinocyte
@@ -2493,7 +2493,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=Signal factor=zCTRL cellType=Kera
     type wig 0.00 13497.25
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 7:29:45
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell Keratinocyte
@@ -2506,7 +2506,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=zCTRL cellType=Kera
     type wig 1.00 12234.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 7:29:45
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell Keratinocyte
@@ -2519,7 +2519,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subGroups view=zRAW factor=zCTRL cellType=Kera
     type wig 1.00 3360.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-07 7:29:45
+    dateSubmitted 2009-01-07
     dateReleased 2009-10-07
     spanList first
     cell Keratinocyte
@@ -2555,7 +2555,8 @@ wgEncode 1
     subGroups view=Peaks EXP=DNase cellType=GM12878
     type narrowPeak
     useScore 0
-    dateSubmitted 2008-11-4 8:33:46
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     cell GM12878
 
@@ -2565,7 +2566,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Signal (in GM12878 cells)
     subGroups view=Signal EXP=DNase cellType=GM12878
     type wig 0.00 39.64
-    dateSubmitted 2008-11-4 8:33:46
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2576,7 +2578,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Base Overlap Signal (in GM12878 cells)
     subGroups view=SignalBO EXP=DNase cellType=GM12878
     type wig 0.00 417.00
-    dateSubmitted 2008-11-22 15:8:6
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-22
     dateReleased 2009-08-22
     spanList 1
     cell GM12878
@@ -2587,7 +2590,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Raw Signal Replicate 1 (in GM12878 cells)
     subGroups view=rRAW EXP=DNase cellType=GM12878
     type wig 0.00 10.46
-    dateSubmitted 2008-11-4 8:33:46
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2598,7 +2602,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Raw Signal Replicate 2 (in GM12878 cells)
     subGroups view=rRAW EXP=DNase cellType=GM12878
     type wig 0.00 9.77
-    dateSubmitted 2008-11-4 8:33:46
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2609,7 +2614,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Raw Signal Replicate 3 (in GM12878 cells)
     subGroups view=rRAW EXP=DNase cellType=GM12878
     type wig 0.00 39.64
-    dateSubmitted 2008-11-4 8:33:46
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2621,7 +2627,8 @@ wgEncode 1
     subGroups view=Peaks EXP=FAIRE cellType=GM12878
     type narrowPeak
     useScore 0
-    dateSubmitted 2008-11-4 10:18:16
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     cell GM12878
 
@@ -2631,7 +2638,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Signal (in GM12878 cells)
     subGroups view=Signal EXP=FAIRE cellType=GM12878
     type wig 0.00 18.37
-    dateSubmitted 2008-11-4 10:18:16
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2642,7 +2650,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Base Overlap Signal (in GM12878 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=GM12878
     type wig 0.00 5342.00
-    dateSubmitted 2008-11-21 16:50:53
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     spanList 1
     cell GM12878
@@ -2653,7 +2662,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 1 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 0.00 22.93
-    dateSubmitted 2008-11-4 10:18:16
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2664,7 +2674,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 2 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 0.00 50.40
-    dateSubmitted 2008-11-4 10:18:16
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2675,7 +2686,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 3 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 0.00 112.28
-    dateSubmitted 2008-11-4 10:18:16
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2687,7 +2699,8 @@ wgEncode 1
     subGroups view=Peaks EXP=IP-CTCF cellType=GM12878
     type narrowPeak
     useScore 0
-    dateSubmitted 2008-11-4 11:37:19
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     cell GM12878
     antibody CTCF
@@ -2698,7 +2711,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UT-Austin ChIP-seq Signal (CTCF in GM12878 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=GM12878
     type wig 0.00 14.01
-    dateSubmitted 2008-11-4 11:37:19
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2710,7 +2724,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UT-Austin ChIP-seq Raw Signal Replicate 1 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 0.00 6.71
-    dateSubmitted 2008-11-4 11:37:19
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2722,7 +2737,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UT-Austin ChIP-seq Raw Signal Replicate 2 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 0.00 7.24
-    dateSubmitted 2008-11-4 11:37:19
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2734,7 +2750,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UT-Austin ChIP-seq Raw Signal Replicate 3 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 0.00 14.01
-    dateSubmitted 2008-11-4 11:37:19
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2746,7 +2763,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UT-Austin Input Signal (GM12878 cells)
     subGroups view=Signal EXP=zCTRL cellType=GM12878
     type wig 0.00 29.05
-    dateSubmitted 2008-11-4 12:11:48
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2758,7 +2776,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UT-Austin Input Raw Signal (GM12878 cells)
     subGroups view=rRAW EXP=zCTRL cellType=GM12878
     type wig 0.00 29.05
-    dateSubmitted 2008-11-4 12:11:48
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
     dateReleased 2009-08-04
     spanList 1
     cell GM12878
@@ -2772,7 +2791,7 @@ wgEncode 1
     type narrowPeak
     useScore 0
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06 16:13:42
+    dateSubmitted 2008-12-06
     dateReleased 2009-09-06
     cell K562
 
@@ -2783,7 +2802,7 @@ wgEncode 1
     subGroups view=Signal EXP=DNase cellType=K562
     type wig 0.00 3.11
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06 16:13:42
+    dateSubmitted 2008-12-06
     dateReleased 2009-09-06
     spanList 1
     cell K562
@@ -2795,7 +2814,7 @@ wgEncode 1
     subGroups view=SignalBO EXP=DNase cellType=K562
     type wig 0.00 445.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06 16:13:42
+    dateSubmitted 2008-12-06
     dateReleased 2009-09-06
     spanList 1
     cell K562
@@ -2807,7 +2826,7 @@ wgEncode 1
     subGroups view=rRAW EXP=DNase cellType=K562
     type wig 0.00 12.92
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06 16:13:42
+    dateSubmitted 2008-12-06
     dateReleased 2009-09-06
     spanList 1
     cell K562
@@ -2819,7 +2838,7 @@ wgEncode 1
     subGroups view=rRAW EXP=DNase cellType=K562
     type wig 0.00 37.72
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06 16:13:42
+    dateSubmitted 2008-12-06
     dateReleased 2009-09-06
     spanList 1
     cell K562
@@ -2831,7 +2850,7 @@ wgEncode 1
     subGroups view=rRAW EXP=DNase cellType=K562
     type wig 0.00 34.81
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06 16:13:42
+    dateSubmitted 2008-12-06
     dateReleased 2009-09-06
     spanList 1
     cell K562
@@ -2844,7 +2863,7 @@ wgEncode 1
     type narrowPeak
     useScore 0
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06 21:21:39
+    dateSubmitted 2008-12-06
     dateReleased 2009-09-06
     cell K562
 
@@ -2855,7 +2874,7 @@ wgEncode 1
     subGroups view=Signal EXP=FAIRE cellType=K562
     type wig 0.00 31.50
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06 21:21:39
+    dateSubmitted 2008-12-06
     dateReleased 2009-09-06
     spanList 1
     cell K562
@@ -2867,7 +2886,7 @@ wgEncode 1
     subGroups view=SignalBO EXP=FAIRE cellType=K562
     type wig 0.00 8719.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06 21:21:39
+    dateSubmitted 2008-12-06
     dateReleased 2009-09-06
     spanList 1
     cell K562
@@ -2879,7 +2898,7 @@ wgEncode 1
     subGroups view=rRAW EXP=FAIRE cellType=K562
     type wig 0.00 74.86
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06 21:21:39
+    dateSubmitted 2008-12-06
     dateReleased 2009-09-06
     spanList 1
     cell K562
@@ -2891,7 +2910,7 @@ wgEncode 1
     subGroups view=rRAW EXP=FAIRE cellType=K562
     type wig 0.00 63.65
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06 21:21:39
+    dateSubmitted 2008-12-06
     dateReleased 2009-09-06
     spanList 1
     cell K562
@@ -2903,7 +2922,7 @@ wgEncode 1
     subGroups view=rRAW EXP=FAIRE cellType=K562
     type wig 0.00 67.60
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06 21:21:39
+    dateSubmitted 2008-12-06
     dateReleased 2009-09-06
     spanList 1
     cell K562
@@ -2914,7 +2933,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UT-Austin Input Signal (input in K562 cells)
     subGroups view=Signal EXP=zCTRL cellType=K562
     type wig 0.00 2.98
-    dateSubmitted 2008-12-04 21:8:21
+    dataVersion ENCODE Nov 2008
+    dateSubmitted 2008-12-04
     dateReleased 2009-09-04
     spanList 1401
     cell K562
@@ -2926,7 +2946,8 @@ wgEncode 1
     longLabel ENCODE Open Chromatin Map UT-Austin Input Raw Signal (input in K562 cells)
     subGroups view=rRAW EXP=zCTRL cellType=K562
     type wig 0.00 37.78
-    dateSubmitted 2008-12-04 21:8:21
+    dataVersion ENCODE Nov 2008
+    dateSubmitted 2008-12-04
     dateReleased 2009-09-04
     spanList 1
     cell K562
@@ -2939,7 +2960,7 @@ wgEncode 1
     subGroups view=sXREG EXP=zzREF cellType=zzRG
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 23:19:49
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
 
     track wgEncodeDukeDNaseSeqUniqueness20bpGm12878
@@ -2949,7 +2970,7 @@ wgEncode 1
     subGroups view=u20 EXP=zzREF cellType=zzRG
     type wig 0.00 1.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 23:19:49
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     spanList 1
 
@@ -2960,7 +2981,7 @@ wgEncode 1
     subGroups view=u24 EXP=zzREF cellType=zzRG
     type wig 0.00 1.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 23:19:49
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     spanList 1
 
@@ -2971,7 +2992,7 @@ wgEncode 1
     subGroups view=u35 EXP=zzREF cellType=zzRG
     type wig 0.00 1.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 23:19:49
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     spanList 1
 
@@ -3005,7 +3026,7 @@ wgEncode 1
     subGroups view=SI cellType=K562 promoter=Ggam
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 13:50:43
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     promoter G-gamma
     cell K562
@@ -3017,7 +3038,7 @@ wgEncode 1
     subGroups view=EB cellType=K562 promoter=Ggam
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 13:50:43
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     promoter G-gamma
     cell K562
@@ -3029,7 +3050,7 @@ wgEncode 1
     subGroups view=SI cellType=K562 promoter=SV40
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 13:50:43
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     promoter SV40
     cell K562
@@ -3041,7 +3062,7 @@ wgEncode 1
     subGroups view=EB cellType=K562 promoter=SV40
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 13:50:43
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     promoter SV40
     cell K562
@@ -3076,7 +3097,7 @@ wgEncode 1
     subGroups view=Alignments cellType=prostate localization=cell rnaExtract=longNonPolyA
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -3088,7 +3109,7 @@ wgEncode 1
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -3100,7 +3121,7 @@ wgEncode 1
     subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type bed 6
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -3112,7 +3133,7 @@ wgEncode 1
     subGroups view=PlusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -3124,7 +3145,7 @@ wgEncode 1
     subGroups view=MinusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     rnaExtract longNonPolyA
     localization cell
     cell prostate
@@ -3136,7 +3157,7 @@ wgEncode 1
     subGroups view=PlusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -3148,7 +3169,7 @@ wgEncode 1
     subGroups view=MinusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     rnaExtract longNonPolyA
     localization cytosol
     cell K562
@@ -3160,7 +3181,7 @@ wgEncode 1
     subGroups view=PlusClusters cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -3172,7 +3193,7 @@ wgEncode 1
     subGroups view=MinusClusters cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type bedGraph 4
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     rnaExtract longNonPolyA
     localization nucleus
     cell K562
@@ -3184,7 +3205,7 @@ wgEncode 1
     subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type wig 1.00 63823.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     spanList 1
     rnaExtract longNonPolyA
     localization cytosol
@@ -3197,7 +3218,7 @@ wgEncode 1
     subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type wig 1.00 63540.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     spanList 1
     rnaExtract longNonPolyA
     localization cytosol
@@ -3210,7 +3231,7 @@ wgEncode 1
     subGroups view=PlusRawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
     type wig 1.00 61689.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     spanList 1
     rnaExtract longNonPolyA
     localization cell
@@ -3223,7 +3244,7 @@ wgEncode 1
     subGroups view=MinusRawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
     type wig 1.00 65524.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     spanList 1
     rnaExtract longNonPolyA
     localization cell
@@ -3236,7 +3257,7 @@ wgEncode 1
     subGroups view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type wig 1.00 45083.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     spanList 1
     rnaExtract longNonPolyA
     localization nucleus
@@ -3249,7 +3270,7 @@ wgEncode 1
     subGroups view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type wig 1.00 14562.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-20 14:48:58
+    dateSubmitted 2008-10-20
     spanList 1
     rnaExtract longNonPolyA
     localization nucleus
@@ -3286,7 +3307,7 @@ scoreMin 500
     subGroups view=RawSignal cellType=HepG2
     type wig 1.00 54453.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     spanList 20
     cell HepG2
@@ -3298,7 +3319,7 @@ scoreMin 500
     subGroups view=Hotspots cellType=HepG2
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell HepG2
 
@@ -3309,7 +3330,7 @@ scoreMin 500
     subGroups view=RawSignal cellType=GM06990
     type wig 1.00 111633.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     spanList 20
     cell GM06990
@@ -3321,7 +3342,7 @@ scoreMin 500
     subGroups view=Hotspots cellType=GM06990
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell GM06990
 
@@ -3332,7 +3353,7 @@ scoreMin 500
     subGroups view=RawSignal cellType=K562
     type wig 1.00 47529.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     spanList 20
     cell K562
@@ -3344,7 +3365,7 @@ scoreMin 500
     subGroups view=RawSignal cellType=K562
     type wig 1.00 62912.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     spanList 20
     cell K562
@@ -3356,7 +3377,7 @@ scoreMin 500
     subGroups view=Peaks cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell K562
 
@@ -3367,7 +3388,7 @@ scoreMin 500
     subGroups view=Hotspots cellType=K562
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell K562
 
@@ -3378,7 +3399,7 @@ scoreMin 500
     subGroups view=Hotspots cellType=K562
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell K562
 
@@ -3389,7 +3410,7 @@ scoreMin 500
     subGroups view=RawSignal cellType=SK-N-SH(+RA)
     type wig 1.00 24217.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     spanList 20
     cell SK-N-SH(+RA)
@@ -3401,7 +3422,7 @@ scoreMin 500
     subGroups view=Peaks cellType=SK-N-SH(+RA)
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell SK-N-SH(+RA)
 
@@ -3412,7 +3433,7 @@ scoreMin 500
     subGroups view=Hotspots cellType=SK-N-SH(+RA)
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell SK-N-SH(+RA)
 
@@ -3423,7 +3444,7 @@ scoreMin 500
     subGroups view=RawSignal cellType=HepG2
     type wig 1.00 127303.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     spanList 20
     cell HepG2
@@ -3435,7 +3456,7 @@ scoreMin 500
     subGroups view=Peaks cellType=HepG2
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell HepG2
 
@@ -3446,7 +3467,7 @@ scoreMin 500
     subGroups view=Hotspots cellType=HepG2
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:7
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell HepG2
 
@@ -3457,7 +3478,7 @@ scoreMin 500
     subGroups view=RawSignal cellType=Th1
     type wig 1.00 66149.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:8
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     spanList 20
     cell Th1
@@ -3469,7 +3490,7 @@ scoreMin 500
     subGroups view=Peaks cellType=Th1
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:8
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell Th1
 
@@ -3480,7 +3501,7 @@ scoreMin 500
     subGroups view=Hotspots cellType=Th1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:8
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell Th1
 
@@ -3491,7 +3512,7 @@ scoreMin 500
     subGroups view=RawSignal cellType=HeLa-S3
     type wig 1.00 18313.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:8
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     spanList 20
     cell HeLa-S3
@@ -3503,7 +3524,7 @@ scoreMin 500
     subGroups view=Peaks cellType=HeLa-S3
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:8
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell HeLa-S3
 
@@ -3514,7 +3535,7 @@ scoreMin 500
     subGroups view=Hotspots cellType=HeLa-S3
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:8
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell HeLa-S3
 
@@ -3525,7 +3546,7 @@ scoreMin 500
     subGroups view=RawSignal cellType=GM06990
     type wig 1.00 69023.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:8
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     spanList 20
     cell GM06990
@@ -3537,7 +3558,7 @@ scoreMin 500
     subGroups view=Peaks cellType=GM06990
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:8
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell GM06990
 
@@ -3548,7 +3569,7 @@ scoreMin 500
     subGroups view=Hotspots cellType=GM06990
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-09 4:41:8
+    dateSubmitted 2008-12-09
     dateReleased 2009-09-09
     cell GM06990
 
@@ -3582,7 +3603,7 @@ wgEncode 1
     subGroups view=FilteredTransfrags cellType=prostate localization=cell rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-24 21:27:26
+    dateSubmitted 2008-11-24
     dateReleased 2009-08-24
     rnaExtract longNonPolyA
     localization cell
@@ -3595,7 +3616,7 @@ wgEncode 1
     subGroups view=Transfrags cellType=prostate localization=cell rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-24 21:27:26
+    dateSubmitted 2008-11-24
     dateReleased 2009-08-24
     rnaExtract longNonPolyA
     localization cell
@@ -3608,7 +3629,7 @@ wgEncode 1
     subGroups view=FilteredRawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
     type wig -62124.00 54385.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-24 21:27:26
+    dateSubmitted 2008-11-24
     dateReleased 2009-08-24
     spanList 1
     rnaExtract longNonPolyA
@@ -3622,7 +3643,7 @@ wgEncode 1
     subGroups view=RawSignal cellType=prostate localization=cell rnaExtract=longNonPolyA
     type wig -62124.00 50627.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-24 21:27:26
+    dateSubmitted 2008-11-24
     dateReleased 2009-08-24
     spanList 1
     rnaExtract longNonPolyA
@@ -3636,7 +3657,7 @@ wgEncode 1
     subGroups view=Transfrags cellType=prostate localization=cell rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-24 23:22:15
+    dateSubmitted 2008-11-24
     dateReleased 2009-08-24
     rnaExtract longPolyA
     localization cell
@@ -3649,7 +3670,7 @@ wgEncode 1
     subGroups view=FilteredTransfrags cellType=prostate localization=cell rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-24 23:22:15
+    dateSubmitted 2008-11-24
     dateReleased 2009-08-24
     rnaExtract longPolyA
     localization cell
@@ -3662,7 +3683,7 @@ wgEncode 1
     subGroups view=RawSignal cellType=prostate localization=cell rnaExtract=longPolyA
     type wig -62728.00 58726.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-24 23:22:15
+    dateSubmitted 2008-11-24
     dateReleased 2009-08-24
     spanList 1
     rnaExtract longPolyA
@@ -3676,7 +3697,7 @@ wgEncode 1
     subGroups view=FilteredRawSignal cellType=prostate localization=cell rnaExtract=longPolyA
     type wig -62728.00 56449.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-24 23:22:15
+    dateSubmitted 2008-11-24
     dateReleased 2009-08-24
     spanList 1
     rnaExtract longPolyA
@@ -3690,7 +3711,7 @@ wgEncode 1
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:7:42
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longNonPolyA
     localization nucleus
@@ -3703,7 +3724,7 @@ wgEncode 1
     subGroups view=FilteredTransfrags cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:7:42
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longNonPolyA
     localization nucleus
@@ -3716,7 +3737,7 @@ wgEncode 1
     subGroups view=RawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type wig -56486.00 59077.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:7:42
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
@@ -3730,7 +3751,7 @@ wgEncode 1
     subGroups view=FilteredRawSignal cellType=K562 localization=nucleus rnaExtract=longNonPolyA
     type wig -56486.00 45415.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:7:42
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
@@ -3744,7 +3765,7 @@ wgEncode 1
     subGroups view=Transfrags cellType=K562 localization=cell rnaExtract=total
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:7:1
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract total
     localization cell
@@ -3757,7 +3778,7 @@ wgEncode 1
     subGroups view=FilteredTransfrags cellType=K562 localization=cell rnaExtract=total
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:7:1
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract total
     localization cell
@@ -3770,7 +3791,7 @@ wgEncode 1
     subGroups view=FilteredRawSignal cellType=K562 localization=cell rnaExtract=total
     type wig -40989.00 59494.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:7:1
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract total
@@ -3784,7 +3805,7 @@ wgEncode 1
     subGroups view=RawSignal cellType=K562 localization=cell rnaExtract=total
     type wig -43345.00 59494.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:7:1
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract total
@@ -3798,7 +3819,7 @@ wgEncode 1
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:44:34
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longPolyA
     localization nucleus
@@ -3811,7 +3832,7 @@ wgEncode 1
     subGroups view=FilteredTransfrags cellType=K562 localization=nucleus rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:44:34
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longPolyA
     localization nucleus
@@ -3824,7 +3845,7 @@ wgEncode 1
     subGroups view=RawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig -47465.00 52826.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:44:34
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longPolyA
@@ -3838,7 +3859,7 @@ wgEncode 1
     subGroups view=FilteredRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig -49290.00 43018.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:44:34
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longPolyA
@@ -3852,7 +3873,7 @@ wgEncode 1
     subGroups view=FilteredTransfrags cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:44:24
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longNonPolyA
     localization cytosol
@@ -3865,7 +3886,7 @@ wgEncode 1
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:44:24
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longNonPolyA
     localization cytosol
@@ -3878,7 +3899,7 @@ wgEncode 1
     subGroups view=RawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type wig -52894.00 56092.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:44:24
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
@@ -3892,7 +3913,7 @@ wgEncode 1
     subGroups view=FilteredRawSignal cellType=K562 localization=cytosol rnaExtract=longNonPolyA
     type wig -55473.00 56092.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 0:44:24
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
@@ -3906,7 +3927,7 @@ wgEncode 1
     subGroups view=FilteredTransfrags cellType=K562 localization=cytosol rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 1:2:47
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longPolyA
     localization cytosol
@@ -3919,7 +3940,7 @@ wgEncode 1
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 1:2:47
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longPolyA
     localization cytosol
@@ -3932,7 +3953,7 @@ wgEncode 1
     subGroups view=FilteredRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig -42328.00 61956.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 1:2:47
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longPolyA
@@ -3946,7 +3967,7 @@ wgEncode 1
     subGroups view=RawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig -58407.00 60582.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 1:2:47
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longPolyA
@@ -3960,7 +3981,7 @@ wgEncode 1
     subGroups view=FilteredTransfrags cellType=K562 localization=polysome rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 8:13:49
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longNonPolyA
     localization polysome
@@ -3973,7 +3994,7 @@ wgEncode 1
     subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 8:13:49
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longNonPolyA
     localization polysome
@@ -3986,7 +4007,7 @@ wgEncode 1
     subGroups view=RawSignal cellType=K562 localization=polysome rnaExtract=longNonPolyA
     type wig -50161.00 55400.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 8:13:49
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
@@ -4000,7 +4021,7 @@ wgEncode 1
     subGroups view=FilteredRawSignal cellType=K562 localization=polysome rnaExtract=longNonPolyA
     type wig -52880.00 48739.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 8:13:49
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
@@ -4014,7 +4035,7 @@ wgEncode 1
     subGroups view=FilteredTransfrags cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 10:26:17
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longNonPolyA
     localization nucleus
@@ -4027,7 +4048,7 @@ wgEncode 1
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 10:26:17
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longNonPolyA
     localization nucleus
@@ -4040,7 +4061,7 @@ wgEncode 1
     subGroups view=RawSignal cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type wig -59319.00 55161.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 10:26:17
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
@@ -4054,7 +4075,7 @@ wgEncode 1
     subGroups view=FilteredRawSignal cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA
     type wig -52768.00 58546.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 10:26:17
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longNonPolyA
@@ -4068,7 +4089,7 @@ wgEncode 1
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 10:26:0
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longPolyA
     localization cytosol
@@ -4081,7 +4102,7 @@ wgEncode 1
     subGroups view=FilteredTransfrags cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 10:26:0
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     rnaExtract longPolyA
     localization cytosol
@@ -4094,7 +4115,7 @@ wgEncode 1
     subGroups view=RawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type wig -61519.00 60416.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 10:26:0
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longPolyA
@@ -4108,7 +4129,7 @@ wgEncode 1
     subGroups view=FilteredRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type wig -61519.00 60470.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 10:26:0
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     rnaExtract longPolyA
@@ -4122,7 +4143,7 @@ wgEncode 1
     subGroups view=FilteredTransfrags cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-26 10:21:15
+    dateSubmitted 2008-11-26
     dateReleased 2009-08-26
     rnaExtract longNonPolyA
     localization cytosol
@@ -4135,7 +4156,7 @@ wgEncode 1
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-26 10:21:15
+    dateSubmitted 2008-11-26
     dateReleased 2009-08-26
     rnaExtract longNonPolyA
     localization cytosol
@@ -4148,7 +4169,7 @@ wgEncode 1
     subGroups view=RawSignal cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type wig -58491.00 56453.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-26 10:21:15
+    dateSubmitted 2008-11-26
     dateReleased 2009-08-26
     spanList 1
     rnaExtract longNonPolyA
@@ -4162,7 +4183,7 @@ wgEncode 1
     subGroups view=FilteredRawSignal cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA
     type wig -58491.00 61097.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-26 10:21:15
+    dateSubmitted 2008-11-26
     dateReleased 2009-08-26
     spanList 1
     rnaExtract longNonPolyA
@@ -4199,7 +4220,7 @@ wgEncode 1
     subGroups view=RbpAssocRna cellType=GM12878 ripAntibody=Nov_69522 ripTgtProtein=T7Tag
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-02 13:5:0
+    dateSubmitted 2008-12-02
     dateReleased 2009-09-02
     ripTgtProtein T7Tag
     ripAntibody Nov_69522
@@ -4212,7 +4233,7 @@ wgEncode 1
     subGroups view=RbpAssocRna cellType=K562 ripAntibody=Nov_69522 ripTgtProtein=T7Tag
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-02 13:5:0
+    dateSubmitted 2008-12-02
     dateReleased 2009-09-02
     ripTgtProtein T7Tag
     ripAntibody Nov_69522
@@ -4225,7 +4246,7 @@ wgEncode 1
     subGroups view=RbpAssocRna cellType=GM12878 ripAntibody=SC_5261 ripTgtProtein=ELAVL1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-02 13:5:0
+    dateSubmitted 2008-12-02
     dateReleased 2009-09-02
     ripTgtProtein ELAVL1
     ripAntibody SC_5261
@@ -4238,7 +4259,7 @@ wgEncode 1
     subGroups view=RbpAssocRna cellType=K562 ripAntibody=SC_5261 ripTgtProtein=ELAVL1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-02 13:5:0
+    dateSubmitted 2008-12-02
     dateReleased 2009-09-02
     ripTgtProtein ELAVL1
     ripAntibody SC_5261
@@ -4251,7 +4272,7 @@ wgEncode 1
     subGroups view=RbpAssocRna cellType=K562 ripAntibody=SC_21027 ripTgtProtein=IGF2BP1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-02 13:5:0
+    dateSubmitted 2008-12-02
     dateReleased 2009-09-02
     ripTgtProtein IGF2BP1
     ripAntibody SC_21027
@@ -4264,7 +4285,7 @@ wgEncode 1
     subGroups view=RbpAssocRna cellType=GM12878 ripAntibody=Sig_P6246 ripTgtProtein=PABPC1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-02 13:5:0
+    dateSubmitted 2008-12-02
     dateReleased 2009-09-02
     ripTgtProtein PABPC1
     ripAntibody Sig_P6246
@@ -4277,7 +4298,7 @@ wgEncode 1
     subGroups view=RbpAssocRna cellType=K562 ripAntibody=Sig_P6246 ripTgtProtein=PABPC1
     type broadPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-02 13:5:0
+    dateSubmitted 2008-12-02
     dateReleased 2009-09-02
     ripTgtProtein PABPC1
     ripAntibody Sig_P6246
@@ -4315,7 +4336,7 @@ wgEncode 1
     subGroups view=Peaks factor=Max cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-09 15:39:59
+    dateSubmitted 2009-01-09
     dateReleased 2009-10-09
     cell GM12878
     antibody Max
@@ -4327,7 +4348,7 @@ wgEncode 1
     subGroups view=Signal factor=Max cellType=GM12878
     type wig 0.00 4334.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-09 15:39:59
+    dateSubmitted 2009-01-09
     dateReleased 2009-10-09
     spanList first
     cell GM12878
@@ -4340,7 +4361,7 @@ wgEncode 1
     subGroups view=zRAW factor=Max cellType=GM12878
     type wig 1.00 4163.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-09 15:39:59
+    dateSubmitted 2009-01-09
     dateReleased 2009-10-09
     spanList first
     cell GM12878
@@ -4353,7 +4374,7 @@ wgEncode 1
     subGroups view=zRAW factor=Max cellType=GM12878
     type wig 1.00 3671.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-09 15:39:59
+    dateSubmitted 2009-01-09
     dateReleased 2009-10-09
     spanList first
     cell GM12878
@@ -4366,7 +4387,7 @@ wgEncode 1
     subGroups view=Peaks factor=Pol2 cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-26 15:55:33
+    dateSubmitted 2008-11-26
     dateReleased 2009-08-26
     cell GM12878
     antibody Pol2
@@ -4378,7 +4399,7 @@ wgEncode 1
     subGroups view=Signal factor=Pol2 cellType=GM12878
     type wig 0.00 9844.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-26 15:55:33
+    dateSubmitted 2008-11-26
     dateReleased 2009-08-26
     spanList 1
     cell GM12878
@@ -4391,7 +4412,7 @@ wgEncode 1
     subGroups view=zRAW factor=Pol2 cellType=GM12878
     type wig 1.00 1653.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-26 15:55:33
+    dateSubmitted 2008-11-26
     dateReleased 2009-08-26
     spanList 1
     cell GM12878
@@ -4404,7 +4425,7 @@ wgEncode 1
     subGroups view=zRAW factor=Pol2 cellType=GM12878
     type wig 1.00 993.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-26 15:55:33
+    dateSubmitted 2008-11-26
     dateReleased 2009-08-26
     spanList 1
     cell GM12878
@@ -4417,7 +4438,7 @@ wgEncode 1
     subGroups view=Peaks factor=c-Fos cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-24 19:16:9
+    dateSubmitted 2008-11-24
     dateReleased 2009-08-24
     cell GM12878
     antibody c-Fos
@@ -4429,7 +4450,7 @@ wgEncode 1
     subGroups view=Signal factor=c-Fos cellType=GM12878
     type wig 0.00 4648.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-24 19:16:9
+    dateSubmitted 2008-11-24
     dateReleased 2009-08-24
     spanList 1
     cell GM12878
@@ -4442,7 +4463,7 @@ wgEncode 1
     subGroups view=zRAW factor=c-Fos cellType=GM12878
     type wig 1.00 1507.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-24 19:16:9
+    dateSubmitted 2008-11-24
     dateReleased 2009-08-24
     spanList 1
     cell GM12878
@@ -4455,7 +4476,7 @@ wgEncode 1
     subGroups view=zRAW factor=c-Fos cellType=GM12878
     type wig 1.00 1828.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-24 19:16:9
+    dateSubmitted 2008-11-24
     dateReleased 2009-08-24
     spanList 1
     cell GM12878
@@ -4468,7 +4489,7 @@ wgEncode 1
     subGroups view=zRAW factor=c-Fos cellType=GM12878
     type wig 1.00 1740.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-24 19:16:9
+    dateSubmitted 2008-11-24
     dateReleased 2009-08-24
     spanList 1
     cell GM12878
@@ -4480,7 +4501,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in GM12878 cells)
     subGroups view=Signal factor=zCTRL cellType=GM12878
     type wig 0.00 7237.00
-    dateSubmitted 2008-11-25 10:1:33
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell GM12878
@@ -4492,7 +4514,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal (Input in GM12878 cells)
     subGroups view=zRAW factor=zCTRL cellType=GM12878
     type wig 1.00 1488.00
-    dateSubmitted 2008-11-25 10:1:33
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell GM12878
@@ -4505,7 +4528,7 @@ wgEncode 1
     subGroups view=Peaks factor=Pol2 cellType=HEK293b
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-14 15:15:3
+    dateSubmitted 2009-01-14
     dateReleased 2009-10-14
     cell HEK293(b)
     antibody Pol2
@@ -4517,7 +4540,7 @@ wgEncode 1
     subGroups view=Signal factor=Pol2 cellType=HEK293b
     type wig 0.00 5116.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-14 15:15:3
+    dateSubmitted 2009-01-14
     dateReleased 2009-10-14
     spanList first
     cell HEK293(b)
@@ -4530,7 +4553,7 @@ wgEncode 1
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
     type wig 1.00 1605.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-14 15:15:3
+    dateSubmitted 2009-01-14
     dateReleased 2009-10-14
     spanList first
     cell HEK293(b)
@@ -4543,7 +4566,7 @@ wgEncode 1
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
     type wig 1.00 908.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-14 15:15:3
+    dateSubmitted 2009-01-14
     dateReleased 2009-10-14
     spanList first
     cell HEK293(b)
@@ -4556,7 +4579,7 @@ wgEncode 1
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
     type wig 1.00 1592.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-14 15:15:3
+    dateSubmitted 2009-01-14
     dateReleased 2009-10-14
     spanList first
     cell HEK293(b)
@@ -4569,7 +4592,7 @@ wgEncode 1
     subGroups view=Signal factor=zCTRL cellType=HEK293b
     type wig 0.00 4758.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-14 22:24:53
+    dateSubmitted 2009-01-14
     dateReleased 2009-10-14
     spanList first
     cell HEK293(b)
@@ -4582,7 +4605,7 @@ wgEncode 1
     subGroups view=zRAW factor=zCTRL cellType=HEK293b
     type wig 1.00 2937.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-14 22:24:53
+    dateSubmitted 2009-01-14
     dateReleased 2009-10-14
     spanList first
     cell HEK293(b)
@@ -4594,7 +4617,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (Pol2 in HeLa-S3 cells)
     subGroups view=Peaks factor=Pol2 cellType=HeLa
     type narrowPeak
-    dateSubmitted 2008-10-1 9:27:32
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-01
     dateReleased 2009-07-01
     cell HeLa-S3
     antibody Pol2
@@ -4607,7 +4631,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Pol2 in HeLa-S3 cells)
     subGroups view=Signal factor=Pol2 cellType=HeLa
     type wig 0.00 14600.00
-    dateSubmitted 2008-10-1 9:27:32
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-01
     dateReleased 2009-07-01
     visibility full
     spanList 1
@@ -4622,7 +4647,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (Pol2 in HeLa-S3 cells)
     subGroups view=zRAW factor=Pol2 cellType=HeLa
     type wig 1.00 3673.00
-    dateSubmitted 2008-10-1 9:27:32
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-01
     dateReleased 2009-07-01
     spanList 1
     cell HeLa-S3
@@ -4636,7 +4662,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (Pol2 in HeLa-S3 cells)
     subGroups view=zRAW factor=Pol2 cellType=HeLa
     type wig 1.00 6153.00
-    dateSubmitted 2008-10-1 9:27:32
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-01
     dateReleased 2009-07-01
     spanList 1
     cell HeLa-S3
@@ -4650,7 +4677,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 3 (Pol2 in HeLa-S3 cells)
     subGroups view=zRAW factor=Pol2 cellType=HeLa
     type wig 1.00 4989.00
-    dateSubmitted 2008-10-1 9:27:32
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-01
     dateReleased 2009-07-01
     spanList 1
     cell HeLa-S3
@@ -4665,7 +4693,8 @@ wgEncode 1
     subGroups view=Signal factor=zCTRL cellType=HeLa
     type wig 0.00 8316.00
     defaultViewLimits 2:2000
-    dateSubmitted 2008-09-29 14:52:0
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-09-29
     dateReleased 2009-06-29
     visibility full
     spanList 1
@@ -4680,7 +4709,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal (Input in HeLa-S3 cells)
     subGroups view=zRAW factor=zCTRL cellType=HeLa
     type wig 1.00 8316.00
-    dateSubmitted 2008-09-29 14:52:0
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-09-29
     dateReleased 2009-06-29
     spanList 1
     cell HeLa-S3
@@ -4695,7 +4725,7 @@ wgEncode 1
     subGroups view=Peaks factor=zLarge cellType=HeLa
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-15 12:36:22
+    dateSubmitted 2009-01-15
     dateReleased 2009-10-15
     cell HeLa-S3
     antibody Large_Fragment
@@ -4707,7 +4737,7 @@ wgEncode 1
     subGroups view=Signal factor=zLarge cellType=HeLa
     type wig 0.00 5906.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-15 12:36:22
+    dateSubmitted 2009-01-15
     dateReleased 2009-10-15
     spanList first
     cell HeLa-S3
@@ -4720,7 +4750,7 @@ wgEncode 1
     subGroups view=zRAW factor=zLarge cellType=HeLa
     type wig 1.00 2345.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-15 12:36:22
+    dateSubmitted 2009-01-15
     dateReleased 2009-10-15
     spanList first
     cell HeLa-S3
@@ -4733,7 +4763,7 @@ wgEncode 1
     subGroups view=zRAW factor=zLarge cellType=HeLa
     type wig 1.00 1186.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-15 12:36:22
+    dateSubmitted 2009-01-15
     dateReleased 2009-10-15
     spanList first
     cell HeLa-S3
@@ -4746,7 +4776,7 @@ wgEncode 1
     subGroups view=Signal factor=zMNase cellType=HeLa
     type wig 0.00 13908.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-15 10:8:35
+    dateSubmitted 2009-01-15
     dateReleased 2009-10-15
     spanList first
     cell HeLa-S3
@@ -4759,7 +4789,7 @@ wgEncode 1
     subGroups view=zRAW factor=zMNase cellType=HeLa
     type wig 1.00 5827.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-16 12:7:58
+    dateSubmitted 2009-01-16
     dateReleased 2009-10-16
     spanList first
     cell HeLa-S3
@@ -4772,7 +4802,7 @@ wgEncode 1
     subGroups view=zRAW factor=zMNase cellType=HeLa
     type wig 1.00 4709.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-16 12:7:58
+    dateSubmitted 2009-01-16
     dateReleased 2009-10-16
     spanList first
     cell HeLa-S3
@@ -4785,7 +4815,7 @@ wgEncode 1
     subGroups view=Peaks factor=zMouseIG cellType=HeLa
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-15 11:38:10
+    dateSubmitted 2009-01-15
     dateReleased 2009-10-15
     cell HeLa-S3
     antibody Mouse_IgG
@@ -4797,7 +4827,7 @@ wgEncode 1
     subGroups view=Signal factor=zMouseIG cellType=HeLa
     type wig 0.00 6717.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-15 11:38:10
+    dateSubmitted 2009-01-15
     dateReleased 2009-10-15
     spanList first
     cell HeLa-S3
@@ -4810,7 +4840,7 @@ wgEncode 1
     subGroups view=zRAW factor=zMouseIG cellType=HeLa
     type wig 1.00 1800.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-15 11:38:10
+    dateSubmitted 2009-01-15
     dateReleased 2009-10-15
     spanList first
     cell HeLa-S3
@@ -4823,7 +4853,7 @@ wgEncode 1
     subGroups view=zRAW factor=zMouseIG cellType=HeLa
     type wig 1.00 1679.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-15 11:38:10
+    dateSubmitted 2009-01-15
     dateReleased 2009-10-15
     spanList first
     cell HeLa-S3
@@ -4836,7 +4866,7 @@ wgEncode 1
     subGroups view=Signal factor=zNaked cellType=HeLa
     type wig 0.00 8487.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-15 13:41:50
+    dateSubmitted 2009-01-15
     dateReleased 2009-10-15
     spanList first
     cell HeLa-S3
@@ -4849,7 +4879,7 @@ wgEncode 1
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 1652.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-16 13:12:14
+    dateSubmitted 2009-01-16
     dateReleased 2009-10-16
     spanList first
     cell HeLa-S3
@@ -4862,7 +4892,7 @@ wgEncode 1
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 1721.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-16 13:12:14
+    dateSubmitted 2009-01-16
     dateReleased 2009-10-16
     spanList first
     cell HeLa-S3
@@ -4875,7 +4905,7 @@ wgEncode 1
     subGroups view=zRAW factor=zNaked cellType=HeLa
     type wig 1.00 1331.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-16 13:12:14
+    dateSubmitted 2009-01-16
     dateReleased 2009-10-16
     spanList first
     cell HeLa-S3
@@ -4887,7 +4917,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (STAT1 in HeLa-S3_IFNg cells)
     subGroups view=Peaks factor=STAT1 cellType=HeLa-IF
     type narrowPeak
-    dateSubmitted 2008-10-1 10:6:2
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-01
     dateReleased 2009-07-01
     cell HeLa-S3_IFNg
     antibody STAT1
@@ -4900,7 +4931,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (STAT1 in HeLa-S3_IFNg cells)
     subGroups view=Signal factor=STAT1 cellType=HeLa-IF
     type wig 0.00 20910.00
-    dateSubmitted 2008-10-1 10:6:2
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-01
     dateReleased 2009-07-01
     visibility full
     spanList 1
@@ -4915,7 +4947,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (STAT1 in HeLa-S3_IFNg cells)
     subGroups view=zRAW factor=STAT1 cellType=HeLa-IF
     type wig 1.00 14648.00
-    dateSubmitted 2008-10-1 10:6:2
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-01
     dateReleased 2009-07-01
     spanList 1
     cell HeLa-S3_IFNg
@@ -4929,7 +4962,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (STAT1 in HeLa-S3_IFNg cells)
     subGroups view=zRAW factor=STAT1 cellType=HeLa-IF
     type wig 1.00 6262.00
-    dateSubmitted 2008-10-1 10:6:2
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-01
     dateReleased 2009-07-01
     spanList 1
     cell HeLa-S3_IFNg
@@ -4943,7 +4977,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in HeLa-S3_IFNg cells)
     subGroups view=Signal factor=zCTRL cellType=HeLa-IF
     type wig 0.00 11690.00
-    dateSubmitted 2008-09-29 14:12:28
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-09-29
     dateReleased 2009-06-29
     visibility full
     spanList 1
@@ -4958,7 +4993,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal (Input in HeLa-S3_IFNg cells)
     subGroups view=zRAW factor=zCTRL cellType=HeLa-IF
     type wig 1.00 11690.00
-    dateSubmitted 2008-09-29 14:12:28
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-09-29
     dateReleased 2009-06-29
     spanList 1
     cell HeLa-S3_IFNg
@@ -4973,7 +5009,7 @@ wgEncode 1
     subGroups view=Peaks factor=NF-E2 cellType=K562
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-09 15:11:58
+    dateSubmitted 2009-01-09
     dateReleased 2009-10-09
     cell K562
     antibody NF-E2
@@ -4985,7 +5021,7 @@ wgEncode 1
     subGroups view=Signal factor=NF-E2 cellType=K562
     type wig 0.00 15242.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-09 15:11:58
+    dateSubmitted 2009-01-09
     dateReleased 2009-10-09
     spanList first
     cell K562
@@ -4998,7 +5034,7 @@ wgEncode 1
     subGroups view=zRAW factor=NF-E2 cellType=K562
     type wig 1.00 10629.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-09 15:11:58
+    dateSubmitted 2009-01-09
     dateReleased 2009-10-09
     spanList first
     cell K562
@@ -5011,7 +5047,7 @@ wgEncode 1
     subGroups view=zRAW factor=NF-E2 cellType=K562
     type wig 1.00 9043.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2009-01-09 15:11:58
+    dateSubmitted 2009-01-09
     dateReleased 2009-10-09
     spanList first
     cell K562
@@ -5023,7 +5059,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (Pol2 in K562 cells)
     subGroups view=Peaks factor=Pol2 cellType=K562
     type narrowPeak
-    dateSubmitted 2008-10-14 13:29:42
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-14
     dateReleased 2009-07-14
     cell K562
     antibody Pol2
@@ -5034,7 +5071,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Pol2 in K562 cells)
     subGroups view=Signal factor=Pol2 cellType=K562
     type wig 0.00 18226.00
-    dateSubmitted 2008-10-14 13:29:42
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-14
     dateReleased 2009-07-14
     visibility full
     spanList 1
@@ -5047,7 +5085,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (Pol2 in K562 cells)
     subGroups view=zRAW factor=Pol2 cellType=K562
     type wig 1.00 9783.00
-    dateSubmitted 2008-10-27 11:57:19
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-27
     dateReleased 2009-07-27
     spanList 1
     cell K562
@@ -5059,7 +5098,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (Pol2 in K562 cells)
     subGroups view=zRAW factor=Pol2 cellType=K562
     type wig 1.00 8446.00
-    dateSubmitted 2008-10-27 11:57:19
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-27
     dateReleased 2009-07-27
     spanList 1
     cell K562
@@ -5072,7 +5112,7 @@ wgEncode 1
     subGroups view=Peaks factor=c-Fos cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21 13:23:36
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     cell K562
     antibody c-Fos
@@ -5084,7 +5124,7 @@ wgEncode 1
     subGroups view=Signal factor=c-Fos cellType=K562
     type wig 0.00 13555.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21 13:23:36
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     spanList 1
     cell K562
@@ -5097,7 +5137,7 @@ wgEncode 1
     subGroups view=zRAW factor=c-Fos cellType=K562
     type wig 1.00 6107.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21 13:23:36
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     spanList 1
     cell K562
@@ -5110,7 +5150,7 @@ wgEncode 1
     subGroups view=zRAW factor=c-Fos cellType=K562
     type wig 1.00 3561.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21 13:23:36
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     spanList 1
     cell K562
@@ -5123,7 +5163,7 @@ wgEncode 1
     subGroups view=zRAW factor=c-Fos cellType=K562
     type wig 1.00 3921.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21 13:23:36
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     spanList 1
     cell K562
@@ -5136,7 +5176,7 @@ wgEncode 1
     subGroups view=Peaks factor=c-Jun cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21 12:38:7
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     cell K562
     antibody c-Jun
@@ -5148,7 +5188,7 @@ wgEncode 1
     subGroups view=Signal factor=c-Jun cellType=K562
     type wig 0.00 16981.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21 12:38:7
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     spanList 1
     cell K562
@@ -5161,7 +5201,7 @@ wgEncode 1
     subGroups view=zRAW factor=c-Jun cellType=K562
     type wig 1.00 11614.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21 12:38:7
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     spanList 1
     cell K562
@@ -5174,7 +5214,7 @@ wgEncode 1
     subGroups view=zRAW factor=c-Jun cellType=K562
     type wig 1.00 5368.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21 12:38:7
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     spanList 1
     cell K562
@@ -5187,7 +5227,7 @@ wgEncode 1
     subGroups view=Peaks factor=c-Myc cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21 13:51:54
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     cell K562
     antibody c-Myc
@@ -5199,7 +5239,7 @@ wgEncode 1
     subGroups view=Signal factor=c-Myc cellType=K562
     type wig 0.00 2983.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21 13:51:54
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     spanList 1
     cell K562
@@ -5212,7 +5252,7 @@ wgEncode 1
     subGroups view=zRAW factor=c-Myc cellType=K562
     type wig 1.00 1590.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21 13:51:54
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     spanList 1
     cell K562
@@ -5225,7 +5265,7 @@ wgEncode 1
     subGroups view=zRAW factor=c-Myc cellType=K562
     type wig 1.00 1603.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21 13:51:54
+    dateSubmitted 2008-11-21
     dateReleased 2009-08-21
     spanList 1
     cell K562
@@ -5237,7 +5277,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in K562 cells)
     subGroups view=Signal factor=zCTRL cellType=K562
     type wig 0.00 4661.00
-    dateSubmitted 2008-10-14 11:39:9
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-14
     dateReleased 2009-07-14
     visibility full
     spanList 1
@@ -5250,7 +5291,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal (Input in K562 cells)
     subGroups view=zRAW factor=zCTRL cellType=K562
     type wig 1.00 4661.00
-    dateSubmitted 2008-10-14 11:39:9
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-14
     dateReleased 2009-07-14
     spanList 1
     cell K562
@@ -5263,7 +5305,7 @@ wgEncode 1
     subGroups view=Peaks factor=Pol2 cellType=NB4
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 9:50:26
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     cell NB4
     antibody Pol2
@@ -5275,7 +5317,7 @@ wgEncode 1
     subGroups view=Signal factor=Pol2 cellType=NB4
     type wig 0.00 20774.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 9:50:26
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell NB4
@@ -5288,7 +5330,7 @@ wgEncode 1
     subGroups view=zRAW factor=Pol2 cellType=NB4
     type wig 1.00 10895.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 9:50:26
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell NB4
@@ -5301,7 +5343,7 @@ wgEncode 1
     subGroups view=zRAW factor=Pol2 cellType=NB4
     type wig 1.00 5847.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 9:50:26
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell NB4
@@ -5314,7 +5356,7 @@ wgEncode 1
     subGroups view=zRAW factor=Pol2 cellType=NB4
     type wig 1.00 4034.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 9:50:26
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell NB4
@@ -5326,7 +5368,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in NB4 cells)
     subGroups view=Signal factor=zCTRL cellType=NB4
     type wig 0.00 2842.00
-    dateSubmitted 2008-11-25 10:29:19
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell NB4
@@ -5338,7 +5381,8 @@ wgEncode 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal (Input in NB4 cells)
     subGroups view=zRAW factor=zCTRL cellType=NB4
     type wig 1.00 2842.00
-    dateSubmitted 2008-11-25 10:29:19
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell NB4
@@ -5375,7 +5419,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=GABP cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-23 0:10:4
+    dateSubmitted 2008-11-23
     dateReleased 2009-08-23
     cell GM12878
     antibody GABP
@@ -5387,7 +5431,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=GABP cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-23 0:10:4
+    dateSubmitted 2008-11-23
     dateReleased 2009-08-23
     cell GM12878
     antibody GABP
@@ -5399,7 +5443,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=GABP cellType=GM12878
     type wig 1.00 6821.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-23 0:10:4
+    dateSubmitted 2008-11-23
     dateReleased 2009-08-23
     spanList 1
     cell GM12878
@@ -5412,7 +5456,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=GABP cellType=GM12878
     type wig 1.00 6113.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-23 0:10:4
+    dateSubmitted 2008-11-23
     dateReleased 2009-08-23
     spanList 1
     cell GM12878
@@ -5425,7 +5469,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=NRSF cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 15:0:30
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     cell GM12878
     antibody NRSF
@@ -5437,7 +5481,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=NRSF cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 15:0:30
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     cell GM12878
     antibody NRSF
@@ -5449,7 +5493,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=NRSF cellType=GM12878
     type wig 1.00 19628.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 15:0:30
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell GM12878
@@ -5462,7 +5506,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=NRSF cellType=GM12878
     type wig 1.00 16142.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 15:0:30
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell GM12878
@@ -5475,7 +5519,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=Pol2 cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 14:58:10
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     cell GM12878
     antibody Pol2
@@ -5487,7 +5531,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=Pol2 cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 14:58:10
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     cell GM12878
     antibody Pol2
@@ -5499,7 +5543,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=Pol2 cellType=GM12878
     type wig 1.00 8689.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 14:58:10
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell GM12878
@@ -5512,7 +5556,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=Pol2 cellType=GM12878
     type wig 1.00 9957.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 14:58:10
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell GM12878
@@ -5525,7 +5569,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=SRF cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-22 15:39:43
+    dateSubmitted 2008-11-22
     dateReleased 2009-08-22
     cell GM12878
     antibody SRF
@@ -5537,7 +5581,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=SRF cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-22 15:39:43
+    dateSubmitted 2008-11-22
     dateReleased 2009-08-22
     cell GM12878
     antibody SRF
@@ -5549,7 +5593,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=SRF cellType=GM12878
     type wig 1.00 3711.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-22 15:39:43
+    dateSubmitted 2008-11-22
     dateReleased 2009-08-22
     spanList 1
     cell GM12878
@@ -5562,7 +5606,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=SRF cellType=GM12878
     type wig 1.00 3169.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-22 15:39:43
+    dateSubmitted 2008-11-22
     dateReleased 2009-08-22
     spanList 1
     cell GM12878
@@ -5575,7 +5619,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=TAF-II cellType=GM12878
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2008-12-11 10:34:55
+    dateSubmitted 2008-12-11
     dateReleased 2009-09-11
     cell GM12878
     antibody TAF-II
@@ -5587,7 +5631,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=TAF-II cellType=GM12878
     type wig 1.00 2230.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2008-12-11 10:34:55
+    dateSubmitted 2008-12-11
     dateReleased 2009-09-11
     spanList 1
     cell GM12878
@@ -5600,7 +5644,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=Control cellType=GM12878
     type wig 1.00 2399.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-22 16:27:3
+    dateSubmitted 2008-11-22
     dateReleased 2009-08-22
     spanList 1
     cell GM12878
@@ -5613,7 +5657,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=Control cellType=GM12878
     type wig 1.00 2714.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-22 16:27:3
+    dateSubmitted 2008-11-22
     dateReleased 2009-08-22
     spanList 1
     cell GM12878
@@ -5626,7 +5670,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=GABP cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-23 0:10:4
+    dateSubmitted 2008-11-23
     dateReleased 2009-08-23
     cell K562
     antibody GABP
@@ -5638,7 +5682,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=GABP cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-23 0:10:4
+    dateSubmitted 2008-11-23
     dateReleased 2009-08-23
     cell K562
     antibody GABP
@@ -5650,7 +5694,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=GABP cellType=K562
     type wig 1.00 15650.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-23 0:10:4
+    dateSubmitted 2008-11-23
     dateReleased 2009-08-23
     spanList 1
     cell K562
@@ -5663,7 +5707,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=GABP cellType=K562
     type wig 1.00 18479.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-23 0:10:4
+    dateSubmitted 2008-11-23
     dateReleased 2009-08-23
     spanList 1
     cell K562
@@ -5676,7 +5720,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=NRSF cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 15:0:30
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     cell K562
     antibody NRSF
@@ -5688,7 +5732,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=NRSF cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 15:0:30
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     cell K562
     antibody NRSF
@@ -5700,7 +5744,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=NRSF cellType=K562
     type wig 1.00 47957.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 15:0:30
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell K562
@@ -5713,7 +5757,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=NRSF cellType=K562
     type wig 1.00 29181.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 15:0:30
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell K562
@@ -5726,7 +5770,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=Pol2 cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 14:58:10
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     cell K562
     antibody Pol2
@@ -5738,7 +5782,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=Pol2 cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 14:58:10
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     cell K562
     antibody Pol2
@@ -5750,7 +5794,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=Pol2 cellType=K562
     type wig 1.00 14400.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 14:58:10
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell K562
@@ -5763,7 +5807,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=Pol2 cellType=K562
     type wig 1.00 10312.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-25 14:58:10
+    dateSubmitted 2008-11-25
     dateReleased 2009-08-25
     spanList 1
     cell K562
@@ -5776,7 +5820,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=SRF cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-22 15:39:43
+    dateSubmitted 2008-11-22
     dateReleased 2009-08-22
     cell K562
     antibody SRF
@@ -5788,7 +5832,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=SRF cellType=K562
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-22 15:39:43
+    dateSubmitted 2008-11-22
     dateReleased 2009-08-22
     cell K562
     antibody SRF
@@ -5800,7 +5844,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=SRF cellType=K562
     type wig 1.00 8435.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-22 15:39:43
+    dateSubmitted 2008-11-22
     dateReleased 2009-08-22
     spanList 1
     cell K562
@@ -5813,7 +5857,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=SRF cellType=K562
     type wig 1.00 3612.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-22 15:39:43
+    dateSubmitted 2008-11-22
     dateReleased 2009-08-22
     spanList 1
     cell K562
@@ -5826,7 +5870,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=TAF-II cellType=K562
     type narrowPeak
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2008-12-11 10:57:51
+    dateSubmitted 2008-12-11
     dateReleased 2009-09-11
     cell K562
     antibody TAF-II
@@ -5838,7 +5882,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=TAF-II cellType=K562
     type wig 1.00 2856.00
     dataVersion ENCODE Feb 2009 Freeze
-    dateSubmitted 2008-12-11 10:57:51
+    dateSubmitted 2008-12-11
     dateReleased 2009-09-11
     spanList 1
     cell K562
@@ -5851,7 +5895,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=Control cellType=K562
     type wig 1.00 6252.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-22 16:27:3
+    dateSubmitted 2008-11-22
     dateReleased 2009-08-22
     spanList 1
     cell K562
@@ -5864,7 +5908,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=Control cellType=K562
     type wig 1.00 3777.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-22 16:27:3
+    dateSubmitted 2008-11-22
     dateReleased 2009-08-22
     spanList 1
     cell K562
@@ -5877,7 +5921,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=FOXP2 cellType=PFSK-1
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-09-25 12:6:0
+    dateSubmitted 2008-09-25
     cell PFSK-1
     antibody FOXP2
     color 107,112,43
@@ -5889,7 +5933,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=FOXP2 cellType=PFSK-1
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-09-25 12:6:0
+    dateSubmitted 2008-09-25
     cell PFSK-1
     antibody FOXP2
     color 107,112,43
@@ -5901,7 +5945,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=FOXP2 cellType=PFSK-1
     type wig 1.00 894.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-09-25 12:6:0
+    dateSubmitted 2008-09-25
     spanList 1
     cell PFSK-1
     antibody FOXP2
@@ -5914,7 +5958,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=FOXP2 cellType=PFSK-1
     type wig 1.00 524.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-09-25 12:6:0
+    dateSubmitted 2008-09-25
     spanList 1
     cell PFSK-1
     antibody FOXP2
@@ -5927,7 +5971,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=Control cellType=PFSK-1
     type wig 1.00 4125.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-09-11 20:49:12
+    dateSubmitted 2008-09-11
     cell PFSK-1
     antibody control
 
@@ -5938,7 +5982,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=FOXP2 cellType=SK-N-MC
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-09-25 12:6:0
+    dateSubmitted 2008-09-25
     cell SK-N-MC
     antibody FOXP2
     color 107,112,43
@@ -5950,7 +5994,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=Peaks factor=FOXP2 cellType=SK-N-MC
     type narrowPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-09-25 12:6:0
+    dateSubmitted 2008-09-25
     cell SK-N-MC
     antibody FOXP2
     color 107,112,43
@@ -5962,7 +6006,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=FOXP2 cellType=SK-N-MC
     type wig 1.00 1030.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-09-25 12:6:0
+    dateSubmitted 2008-09-25
     spanList 1
     cell SK-N-MC
     antibody FOXP2
@@ -5975,7 +6019,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=FOXP2 cellType=SK-N-MC
     type wig 1.00 813.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-09-25 12:6:0
+    dateSubmitted 2008-09-25
     spanList 1
     cell SK-N-MC
     antibody FOXP2
@@ -5988,7 +6032,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     subGroups view=RawSignal factor=Control cellType=SK-N-MC
     type wig 1.00 835.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-09-11 20:49:12
+    dateSubmitted 2008-09-11
     cell SK-N-MC
     antibody control
 
@@ -6038,7 +6082,7 @@ wgEncode 1
     subGroups view=GencodeManual freezeDate=2008-10-01
     type genePred
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-21 12:24:57
+    dateSubmitted 2008-10-21
     dateReleased 2009-09-08
     accession 2008-10-01
     priority 2
@@ -6051,7 +6095,7 @@ wgEncode 1
     subGroups view=GencodeAuto freezeDate=2008-10-01
     type genePred
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-21 12:24:57
+    dateSubmitted 2008-10-21
     dateReleased 2009-09-08
     accession 2008-10-01
     priority 3
@@ -6088,7 +6132,7 @@ wgEncode 1
     subGroups view=Tags cellType=prostate localization=cell rnaExtract=longPolyA
     type gappedPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     rnaExtract longPolyA
     localization cell
@@ -6101,7 +6145,7 @@ wgEncode 1
     subGroups view=Tags cellType=K562 localization=cytosol rnaExtract=longPolyA
     type gappedPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     rnaExtract longPolyA
     localization cytosol
@@ -6114,7 +6158,7 @@ wgEncode 1
     subGroups view=Tags cellType=K562 localization=nucleus rnaExtract=longPolyA
     type gappedPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     rnaExtract longPolyA
     localization nucleus
@@ -6127,7 +6171,7 @@ wgEncode 1
     subGroups view=Tags cellType=K562 localization=polysome rnaExtract=longPolyA
     type gappedPeak
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     rnaExtract longPolyA
     localization polysome
@@ -6141,7 +6185,7 @@ wgEncode 1
     type bed 6
 	#type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     rnaExtract longPolyA
     localization cell
@@ -6155,7 +6199,7 @@ wgEncode 1
     type bed 6
 	#type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     rnaExtract longPolyA
     localization cytosol
@@ -6169,7 +6213,7 @@ wgEncode 1
     type bed 6
 	#type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     rnaExtract longPolyA
     localization nucleus
@@ -6183,7 +6227,7 @@ wgEncode 1
     type bed 6
 	#type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     rnaExtract longPolyA
     localization polysome
@@ -6196,7 +6240,7 @@ wgEncode 1
     subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 4523.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     spanList 1
     rnaExtract longPolyA
@@ -6210,7 +6254,7 @@ wgEncode 1
     subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 10978.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     spanList 1
     rnaExtract longPolyA
@@ -6224,7 +6268,7 @@ wgEncode 1
     subGroups view=PlusRawSignal cellType=prostate localization=cell rnaExtract=longPolyA
     type wig 1.00 5889.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     spanList 1
     rnaExtract longPolyA
@@ -6238,7 +6282,7 @@ wgEncode 1
     subGroups view=MinusRawSignal cellType=prostate localization=cell rnaExtract=longPolyA
     type wig 1.00 5693.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     spanList 1
     rnaExtract longPolyA
@@ -6252,7 +6296,7 @@ wgEncode 1
     subGroups view=PlusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
     type wig 1.00 9657.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     spanList 1
     rnaExtract longPolyA
@@ -6266,7 +6310,7 @@ wgEncode 1
     subGroups view=MinusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
     type wig 1.00 14175.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     spanList 1
     rnaExtract longPolyA
@@ -6280,7 +6324,7 @@ wgEncode 1
     subGroups view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 2902.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     spanList 1
     rnaExtract longPolyA
@@ -6294,7 +6338,7 @@ wgEncode 1
     subGroups view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 3938.00
     dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-03 4:37:32
+    dateSubmitted 2008-12-03
     dateReleased 2009-09-03
     spanList 1
     rnaExtract longPolyA
