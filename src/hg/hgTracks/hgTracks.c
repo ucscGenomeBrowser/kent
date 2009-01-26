@@ -28,6 +28,7 @@
 #include "cds.h"
 #include "cutterTrack.h"
 #include "wikiTrack.h"
+#include "ctgPos.h"
 #include "bed.h"
 #include "bedCart.h"
 #include "customTrack.h"
@@ -41,7 +42,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1544 2009/01/23 23:04:54 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1545 2009/01/26 18:31:22 hiram Exp $";
 
 #define SMALLBUF 64
 
@@ -2136,47 +2137,55 @@ hPrintf("><BR>\n");
 }
 
 
-static void printEnsemblAnchor(char *database, char* archive)
+static void printEnsemblAnchor(char *database, char* archive,
+	char *chrName, int start, int end)
 /* Print anchor to Ensembl display on same window. */
 {
 char *scientificName = hScientificName(database);
 char *dir = ensOrgNameFromScientificName(scientificName);
 struct dyString *ensUrl;
 char *name;
-int start, end;
+int localStart, localEnd;
 
 if (sameWord(scientificName, "Takifugu rubripes"))
     {
     /* for Fugu, must give scaffold, not chr coordinates */
     /* Also, must give "chrom" as "scaffold_N", name below. */
-    if (!hScaffoldPos(database, chromName, winStart, winEnd,
-                        &name, &start, &end))
+    if (differentWord(chromName,"chrM") &&
+	!hScaffoldPos(database, chromName, winStart, winEnd,
+                        &name, &localStart, &localEnd))
         /* position doesn't appear on Ensembl browser.
          * Ensembl doesn't show scaffolds < 2K */
         return;
     }
-else if (sameWord(scientificName, "Ciona intestinalis"))
+if (sameWord(scientificName, "Ciona intestinalis"))
     {
-    if (stringIn("chr0", chromName))
+    if (stringIn("chr0", chrName))
 	{
-	char *fixupName = replaceChars(chromName, "chr0", "chr"); 
+	char *fixupName = replaceChars(chrName, "chr0", "chr"); 
 	name = fixupName;
 	}
     else
-	name = chromName;
-    start = winStart;
-    end = winEnd;
+	name = chrName;
+    localStart = start;
+    localEnd = end;
     }
 else
     {
-    name = chromName;
-    start = winStart;
-    end = winEnd;
+    if (sameWord(chrName, "chrM"))
+	name = "chrMt";
+    else
+	name = chrName;
+    localStart = start;
+    localEnd = end;
     }
-start += 1;
-ensUrl = ensContigViewUrl(dir, name, seqBaseCount, start, end, archive);
+localStart += 1;		// Ensembl base-1 display coordinates
+fprintf(stderr, "hgTracks: ensUrl: %s:%d-%d\n", name, localStart, localEnd);
+ensUrl = ensContigViewUrl(dir, name, seqBaseCount, localStart, localEnd, archive);
 hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\">", ensUrl->string);
-/* NOTE: probably should free mem from dir and scientificName ?*/
+/* NOTE: you can not freeMem(dir) because sometimes it is a literal
+ * constant */
+freeMem(scientificName);
 dyStringFree(&ensUrl);
 }
 
@@ -2906,15 +2915,61 @@ if (trackVersionExists)
     }
 
 /* Print Ensembl anchor for latest assembly of organisms we have
- * supported by Ensembl (human, mouse, rat, fugu) */
-if (ensVersionString[0] && !isUnknownChrom(database, chromName))
+ * supported by Ensembl == if versionString from trackVersion exists */
+if (ensVersionString[0])
     {
     char *archive = NULL;
     if (ensDateReference[0] && differentWord("current", ensDateReference))
-            archive = cloneString(ensDateReference);
-    hPuts("<TD ALIGN=CENTER>");
-    printEnsemblAnchor(database, archive);
-    hPrintf("%s</A></TD>", "Ensembl");
+	    archive = cloneString(ensDateReference);
+    /*	Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
+    if (isUnknownChrom(database, chromName))
+	{
+	/* see if we are entirely within a single contig */
+	if (hTableExists(database, "ctgPos"))
+	    {
+	    struct sqlConnection *conn = hAllocConn(database);
+	    struct sqlResult *sr = NULL;
+	    char **row = NULL;
+	    char query[256];
+	    safef(query, sizeof(query),
+"select * from ctgPos where chrom = '%s' and chromStart<%u and chromEnd>%u",
+		chromName, winEnd, winStart);
+	    sr = sqlGetResult(conn, query);
+
+	    int ctgCount = 0;
+	    struct ctgPos *ctgItem = NULL;
+	    while ((row = sqlNextRow(sr)) != NULL)
+		{
+		ctgPosFree(&ctgItem);	// if there is a second one
+		ctgItem = ctgPosLoad(row);
+		++ctgCount;
+		if (ctgCount > 1)
+		    break;
+		}
+	    sqlFreeResult(&sr);
+	    hFreeConn(&conn);
+	    if (1 == ctgCount)
+		{	// verify *entirely* within single contig
+		if ((winEnd <= ctgItem->chromEnd) &&
+		    (winStart >= ctgItem->chromStart))
+		    {
+		    int ctgStart = winStart - ctgItem->chromStart;
+		    int ctgEnd = ctgStart + winEnd - winStart;
+		    hPuts("<TD ALIGN=CENTER>");
+		    printEnsemblAnchor(database, archive, ctgItem->contig,
+			ctgStart, ctgEnd);
+		    hPrintf("%s</A></TD>", "Ensembl");
+		    }
+		}
+	    ctgPosFree(&ctgItem);	// the one we maybe used
+	    }
+	}
+    else
+	{
+	hPuts("<TD ALIGN=CENTER>");
+	printEnsemblAnchor(database, archive, chromName, winStart, winEnd);
+	hPrintf("%s</A></TD>", "Ensembl");
+	}
     }
 
 /* Print NCBI MapView anchor */
