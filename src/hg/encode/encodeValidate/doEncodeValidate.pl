@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.135 2009/01/09 23:37:58 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.136 2009/01/26 23:29:52 kate Exp $
 
 use warnings;
 use strict;
@@ -1515,33 +1515,35 @@ foreach my $ddfLine (@ddfLines) {
         print README "\n";
     }
     if(!$downloadOnly) {
-        print TRACK_RA "\ttrack\t\t$tableName\n";
-        print TRACK_RA "\tsubTrack\t$compositeTrack\n";
-        print TRACK_RA "\tshortLabel\t$shortLabel\n";
-        print TRACK_RA "\tlongLabel\t$longLabel\n";
-        print TRACK_RA "\tsubGroups\t$subGroups\n";
+        print TRACK_RA "    track $tableName\n";
+        print TRACK_RA "    release alpha\n";
+        print TRACK_RA "    subTrack $compositeTrack\n";
+        print TRACK_RA "    shortLabel $shortLabel\n";
+        print TRACK_RA "    longLabel $longLabel\n";
+        print TRACK_RA "    subGroups $subGroups\n";
         if($type eq 'wig') {
             my $placeHolder = Encode::wigMinMaxPlaceHolder($tableName);
-            print TRACK_RA "\ttype\t\t$type $placeHolder\n";
+            print TRACK_RA "    type $type $placeHolder\n";
         } elsif($type eq 'gtf') { # GTF is converted to and loaded as genePred
-            print TRACK_RA "\ttype\t\tgenePred\n";
+            print TRACK_RA "    type genePred\n";
         } elsif($type eq 'tagAlign') { # tagAligns are bed 6 but with column called 'sequence' instead of 'name'
-            print TRACK_RA "\ttype\t\tbed 6\n";
+            print TRACK_RA "    type bed 6\n";
         } else {
-            print TRACK_RA "\ttype\t\t$type\n";
+            print TRACK_RA "    type $type\n";
         }
-        print TRACK_RA sprintf("\tdateSubmitted\t%04d-%02d-%02d %d:%d:%d\n", 1900 + $year, $mon + 1, $mday, $hour, $min, $sec);
-        print TRACK_RA sprintf("\tdateReleased\t%04d-%02d-%02d\n",1900 + $rYear, $rMon + 1, $rMDay);
+        print TRACK_RA sprintf("    dateSubmitted %04d-%02d-%02d\n", 1900 + $year, $mon + 1, $mday);
+        print TRACK_RA sprintf("    dateUnrestricted %04d-%02d-%02d\n", 1900 + $rYear, $rMon + 1, $rMDay);
+        print TRACK_RA sprintf("    dataVersion %s\n", $data_version);
         if(defined($ddfLine->{accession}) && length($ddfLine->{accession}) > 0) {
-            print TRACK_RA sprintf("\taccession\t%s\n",$ddfLine->{accession});
+            print TRACK_RA sprintf("    accession %s\n",$ddfLine->{accession});
         }
-        print TRACK_RA "\tpriority\t" . ($priority + $daf->{TRACKS}{$view}{order}) . "\n";
+        print TRACK_RA "    priority " . ($priority + $daf->{TRACKS}{$view}{order}) . "\n";
         # noInherit is necessary b/c composite track will often have a different dummy type setting.
-        print TRACK_RA "\tnoInherit\ton\n";
+        print TRACK_RA "    noInherit on\n";
         if($view eq 'RawSignal' and 0) { # Sorry tim, you will have to list your projects here
-            print TRACK_RA "\tconfigurable\toff\n";
+            print TRACK_RA "    configurable off\n";
         } else {
-            print TRACK_RA "\tconfigurable\ton\n";
+            print TRACK_RA "    configurable on\n";
         }
         if($type eq 'wig') {
             print TRACK_RA <<END;
@@ -1550,7 +1552,7 @@ foreach my $ddfLine (@ddfLines) {
 	maxHeightPixels	100:16:16
 END
 	} elsif($type eq 'bed 5 +') {
-		print TRACK_RA "\tuseScore\t1\n";
+		print TRACK_RA "    useScore 1\n";
 	}
         print TRACK_RA $additional;
     }
