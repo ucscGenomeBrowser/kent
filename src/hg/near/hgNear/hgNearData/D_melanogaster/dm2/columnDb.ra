@@ -5,7 +5,7 @@ type lookup flyBase2004Xref name symbol
 selfLink on
 
 name proteinName
-type lookup flyBaseToUniprot name alias
+type lookup flyBaseToUniProt name alias
 search fuzzy
 itemUrl http://www.uniprot.org/uniprot/%s
 
