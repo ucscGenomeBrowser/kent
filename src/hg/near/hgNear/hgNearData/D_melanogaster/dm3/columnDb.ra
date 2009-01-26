@@ -7,7 +7,7 @@ selfLink on
 name proteinName
 type lookup flyBaseToUniprot name alias
 search fuzzy
-itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
+itemUrl http://www.uniprot.org/uniprot/%s
 
 name refSeq
 type lookup flyBaseToRefSeq name value
