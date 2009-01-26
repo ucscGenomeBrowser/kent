@@ -14,7 +14,7 @@ itemUrl http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=%s
 name proteinName
 type lookup sgdToSwissProt name value
 search prefix
-itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
+itemUrl http://www.uniprot.org/uniprot/%s
 
 #name refSeq
 #type lookup sgdToRefSeq name value
