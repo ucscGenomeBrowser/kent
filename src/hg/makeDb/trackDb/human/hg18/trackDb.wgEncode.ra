@@ -228,6 +228,7 @@ noInherit on
 settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 
     track wgEncodeBroadChipSeqPeaksGm12878Ctcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 CTCF Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (CTCF in GM12878 cells)
@@ -240,6 +241,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqSignalGm12878Ctcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 CTCF Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (CTCF in GM12878 cells)
@@ -253,6 +255,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878Ctcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 CTCF Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (CTCF in GM12878 cells)
@@ -266,6 +269,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878Ctcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 CTCF Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (CTCF in GM12878 cells)
@@ -279,6 +283,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me1 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K4me1 in GM12878 cells)
@@ -291,6 +296,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqSignalGm12878H3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me1 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K4me1 in GM12878 cells)
@@ -304,6 +310,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me1 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K4me1 in GM12878 cells)
@@ -317,6 +324,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me1 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K4me1 in GM12878 cells)
@@ -330,6 +338,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me2 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K4me2 in GM12878 cells)
@@ -342,6 +351,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqSignalGm12878H3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me2 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K4me2 in GM12878 cells)
@@ -355,6 +365,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me2 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K4me2 in GM12878 cells)
@@ -368,6 +379,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me2 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K4me2 in GM12878 cells)
@@ -381,6 +393,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me3 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K4me3 in GM12878 cells)
@@ -393,6 +406,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqSignalGm12878H3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me3 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K4me3 in GM12878 cells)
@@ -406,6 +420,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me3 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K4me3 in GM12878 cells)
@@ -419,6 +434,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K4me3 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K4me3 in GM12878 cells)
@@ -432,6 +448,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K9ac Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K9ac in GM12878 cells)
@@ -444,6 +461,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqSignalGm12878H3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K9ac Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K9ac in GM12878 cells)
@@ -457,6 +475,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K9ac Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K9ac in GM12878 cells)
@@ -470,6 +489,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K9ac Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K9ac in GM12878 cells)
@@ -483,6 +503,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqPeaksGm12878H4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H4K20me1 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H4K20me1 in GM12878 cells)
@@ -495,6 +516,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqSignalGm12878H4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H4K20me1 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H4K20me1 in GM12878 cells)
@@ -508,6 +530,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H4K20me1 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H4K20me1 in GM12878 cells)
@@ -521,6 +544,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H4K20me1 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H4K20me1 in GM12878 cells)
@@ -534,6 +558,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27ac Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K27ac in GM12878 cells)
@@ -546,6 +571,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqSignalGm12878H3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27ac Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K27ac in GM12878 cells)
@@ -559,6 +585,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27ac Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K27ac in GM12878 cells)
@@ -572,6 +599,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27ac Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K27ac in GM12878 cells)
@@ -585,6 +613,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27me3 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K27me3 in GM12878 cells)
@@ -597,6 +626,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqSignalGm12878H3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27me3 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K27me3 in GM12878 cells)
@@ -610,6 +640,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27me3 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K27me3 in GM12878 cells)
@@ -623,6 +654,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K27me3 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K27me3 in GM12878 cells)
@@ -636,6 +668,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqPeaksGm12878H3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K36me3 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K36me3 in GM12878 cells)
@@ -648,6 +681,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalGm12878H3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K36me3 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K36me3 in GM12878 cells)
@@ -661,6 +695,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K36me3 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K36me3 in GM12878 cells)
@@ -674,6 +709,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 H3K36me3 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K36me3 in GM12878 cells)
@@ -687,6 +723,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalGm12878Control
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 WCE Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (GM12878 WCE Control)
@@ -700,6 +737,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878Control
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 WCE Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (GM12878 WCE Control)
@@ -713,6 +751,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878Control
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel GM12878 WCE Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (GM12878 WCE Control)
@@ -726,6 +765,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody control
 
     track wgEncodeBroadChipSeqPeaksHuvecCtcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC CTCF Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (CTCF in HUVEC cells)
@@ -738,6 +778,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqSignalHuvecCtcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC CTCF Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (CTCF in HUVEC cells)
@@ -751,6 +792,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecCtcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC CTCF Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (CTCF in HUVEC cells)
@@ -764,6 +806,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecCtcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC CTCF Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (CTCF in HUVEC cells)
@@ -777,6 +820,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K4me1 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K4me1 in HUVEC cells)
@@ -789,6 +833,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqSignalHuvecH3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K4me1 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K4me1 in HUVEC cells)
@@ -802,6 +847,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K4me1 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K4me1 in HUVEC cells)
@@ -815,6 +861,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K4me1 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K4me1 in HUVEC cells)
@@ -828,6 +875,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K4me2 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K4me2 in HUVEC cells)
@@ -840,6 +888,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqSignalHuvecH3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K4me2 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K4me2 in HUVEC cells)
@@ -853,6 +902,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K4me2 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K4me2 in HUVEC cells)
@@ -866,6 +916,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K4me2 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K4me2 in HUVEC cells)
@@ -879,6 +930,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K4me3 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K4me3 in HUVEC cells)
@@ -891,6 +943,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqSignalHuvecH3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K4me3 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K4me3 in HUVEC cells)
@@ -904,6 +957,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K4me3 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K4me3 in HUVEC cells)
@@ -917,6 +971,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K4me3 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K4me3 in HUVEC cells)
@@ -930,6 +985,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K9ac Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K9ac in HUVEC cells)
@@ -942,6 +998,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqSignalHuvecH3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K9ac Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K9ac in HUVEC cells)
@@ -955,6 +1012,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K9ac Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K9ac in HUVEC cells)
@@ -968,6 +1026,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K9ac Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K9ac in HUVEC cells)
@@ -981,6 +1040,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k9me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K9me1 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K9me1 in HUVEC cells)
@@ -993,6 +1053,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqSignalHuvecH3k9me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K9me1 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K9me1 in HUVEC cells)
@@ -1006,6 +1067,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K9me1 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K9me1 in HUVEC cells)
@@ -1019,6 +1081,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K9me1 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K9me1 in HUVEC cells)
@@ -1032,6 +1095,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K27ac Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K27ac in HUVEC cells)
@@ -1044,6 +1108,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqSignalHuvecH3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K27ac Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K27ac in HUVEC cells)
@@ -1057,6 +1122,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K27ac Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K27ac in HUVEC cells)
@@ -1070,6 +1136,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K27ac Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K27ac in HUVEC cells)
@@ -1083,6 +1150,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K27me3 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K27me3 in HUVEC cells)
@@ -1095,6 +1163,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqSignalHuvecH3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K27me3 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K27me3 in HUVEC cells)
@@ -1108,6 +1177,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K27me3 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K27me3 in HUVEC cells)
@@ -1121,6 +1191,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K27me3 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K27me3 in HUVEC cells)
@@ -1134,6 +1205,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqPeaksHuvecH3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K36me3 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K36me3 in HUVEC cells)
@@ -1146,6 +1218,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalHuvecH3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K36me3 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K36me3 in HUVEC cells)
@@ -1159,6 +1232,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K36me3 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K36me3 in HUVEC cells)
@@ -1172,6 +1246,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H3K36me3 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K36me3 in HUVEC cells)
@@ -1185,6 +1260,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqPeaksHuvecH4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H4K20me1 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H4K20me1 in HUVEC cells)
@@ -1197,6 +1273,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqSignalHuvecH4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H4K20me1 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H4K20me1 in HUVEC cells)
@@ -1210,6 +1287,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H4K20me1 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H4K20me1 in HUVEC cells)
@@ -1223,6 +1301,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC H4K20me1 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H4K20me1 in HUVEC cells)
@@ -1236,6 +1315,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqPeaksHuvecPol2b
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC Pol2(b) Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (Pol2(b) in HUVEC cells)
@@ -1248,6 +1328,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalHuvecPol2b
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC Pol2(b) Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (Pol2(b) in HUVEC cells)
@@ -1261,6 +1342,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecPol2b
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC Pol2(b) Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (Pol2(b) in HUVEC cells)
@@ -1274,6 +1356,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecPol2b
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC Pol2(b) Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (Pol2(b) in HUVEC cells)
@@ -1287,6 +1370,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalHuvecControl
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC control Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (control in HUVEC cells)
@@ -1300,6 +1384,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep1HuvecControl
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC control Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (control in HUVEC cells)
@@ -1313,6 +1398,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep2HuvecControl
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC control Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (control in HUVEC cells)
@@ -1326,6 +1412,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody control
 
     track wgEncodeBroadChipSeqPeaksK562Ctcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 CTCF Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (CTCF in K562 cells)
@@ -1338,6 +1425,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqSignalK562Ctcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 CTCF Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (CTCF in K562 cells)
@@ -1351,6 +1439,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep1K562Ctcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 CTCF Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (CTCF in K562 cells)
@@ -1364,6 +1453,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep2K562Ctcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 CTCF Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (CTCF in K562 cells)
@@ -1377,6 +1467,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqPeaksK562H3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me1 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K4me1 in K562 cells)
@@ -1389,6 +1480,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqSignalK562H3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me1 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K4me1 in K562 cells)
@@ -1402,6 +1494,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me1 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K4me1 in K562 cells)
@@ -1415,6 +1508,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me1 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K4me1 in K562 cells)
@@ -1428,6 +1522,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqPeaksK562H3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me2 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K4me2 in K562 cells)
@@ -1440,6 +1535,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqSignalK562H3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me2 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K4me2 in K562 cells)
@@ -1453,6 +1549,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me2 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K4me2 in K562 cells)
@@ -1466,6 +1563,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me2 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K4me2 in K562 cells)
@@ -1479,6 +1577,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqPeaksK562H3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me3 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K4me3 in K562 cells)
@@ -1491,6 +1590,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqSignalK562H3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me3 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K4me3 in K562 cells)
@@ -1504,6 +1604,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me3 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K4me3 in K562 cells)
@@ -1517,6 +1618,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K4me3 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K4me3 in K562 cells)
@@ -1530,6 +1632,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqPeaksK562H3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9ac Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K9ac in K562 cells)
@@ -1542,6 +1645,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqSignalK562H3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9ac Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K9ac in K562 cells)
@@ -1555,6 +1659,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9ac Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K9ac in K562 cells)
@@ -1568,6 +1673,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9ac Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K9ac in K562 cells)
@@ -1581,6 +1687,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqPeaksK562H3k9me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9me1 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K9me1 in K562 cells)
@@ -1593,6 +1700,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqSignalK562H3k9me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9me1 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K9me1 in K562 cells)
@@ -1606,6 +1714,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k9me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9me1 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K9me1 in K562 cells)
@@ -1619,6 +1728,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k9me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K9me1 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K9me1 in K562 cells)
@@ -1632,6 +1742,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqPeaksK562H3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27ac Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K27ac in K562 cells)
@@ -1644,6 +1755,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqSignalK562H3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27ac Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K27ac in K562 cells)
@@ -1657,6 +1769,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27ac Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K27ac in K562 cells)
@@ -1670,6 +1783,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27ac Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K27ac in K562 cells)
@@ -1683,6 +1797,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqPeaksK562H3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27me3 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K27me3 in K562 cells)
@@ -1695,6 +1810,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqSignalK562H3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27me3 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K27me3 in K562 cells)
@@ -1708,6 +1824,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27me3 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K27me3 in K562 cells)
@@ -1721,6 +1838,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K27me3 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K27me3 in K562 cells)
@@ -1734,6 +1852,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqPeaksK562H3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K36me3 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K36me3 in K562 cells)
@@ -1746,6 +1865,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalK562H3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K36me3 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K36me3 in K562 cells)
@@ -1759,6 +1879,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K36me3 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K36me3 in K562 cells)
@@ -1772,6 +1893,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H3K36me3 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K36me3 in K562 cells)
@@ -1785,6 +1907,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqPeaksK562H4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H4K20me1 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H4K20me1 in K562 cells)
@@ -1797,6 +1920,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqSignalK562H4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H4K20me1 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H4K20me1 in K562 cells)
@@ -1810,6 +1934,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep1K562H4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H4K20me1 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H4K20me1 in K562 cells)
@@ -1823,6 +1948,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep2K562H4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 H4K20me1 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H4K20me1 in K562 cells)
@@ -1836,6 +1962,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqPeaksK562Pol2b
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (Pol2(b) in K562 cells)
@@ -1848,6 +1975,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalK562Pol2b
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (Pol2(b) in K562 cells)
@@ -1861,6 +1989,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep1K562Pol2b
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (Pol2(b) in K562 cells)
@@ -1874,6 +2003,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep2K562Pol2b
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (Pol2(b) in K562 cells)
@@ -1887,6 +2017,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalK562Control
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 control Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (control in K562 cells)
@@ -1900,6 +2031,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep1K562Control
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 control Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (K562 WCE control)
@@ -1913,6 +2045,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep2K562Control
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 control Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (K562 WCE control)
@@ -1926,6 +2059,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody control
 
     track wgEncodeBroadChipSeqPeaksNhekCtcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera CTCF Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (CTCF in Keratinocyte cells)
@@ -1938,6 +2072,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqSignalNhekCtcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera CTCF Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (CTCF in Keratinocyte cells)
@@ -1951,6 +2086,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekCtcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera CTCF Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (CTCF in Keratinocyte cells)
@@ -1964,6 +2100,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekCtcf
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel CTCF Kera Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (CTCF in Keratinocyte cells)
@@ -1977,6 +2114,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody CTCF
 
     track wgEncodeBroadChipSeqPeaksNhekH3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K4me1 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K4me1 in Keratinocyte cells)
@@ -1989,6 +2127,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqSignalNhekH3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K4me1 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K4me1 in Keratinocyte cells)
@@ -2002,6 +2141,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K4me1 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K4me1 in Keratinocyte cells)
@@ -2015,6 +2155,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K4me1 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K4me1 in Keratinocyte cells)
@@ -2028,6 +2169,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me1
 
     track wgEncodeBroadChipSeqPeaksNhekH3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K4me2 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K4me2 in Keratinocyte cells)
@@ -2040,6 +2182,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqSignalNhekH3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K4me2 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K4me2 in Keratinocyte cells)
@@ -2053,6 +2196,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K4me2 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K4me2 in Keratinocyte cells)
@@ -2066,6 +2210,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me2
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K4me2 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K4me2 in Keratinocyte cells)
@@ -2079,6 +2224,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me2
 
     track wgEncodeBroadChipSeqPeaksNhekH3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K4me3 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K4me3 in Keratinocyte cells)
@@ -2091,6 +2237,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqSignalNhekH3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K4me3 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K4me3 in Keratinocyte cells)
@@ -2104,6 +2251,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K4me3 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K4me3 in Keratinocyte cells)
@@ -2117,6 +2265,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K4me3 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K4me3 in Keratinocyte cells)
@@ -2130,6 +2279,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K4me3
 
     track wgEncodeBroadChipSeqPeaksNhekH3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K9ac Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K9ac in Keratinocyte cells)
@@ -2142,6 +2292,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqSignalNhekH3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K9ac Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K9ac in Keratinocyte cells)
@@ -2155,6 +2306,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K9ac Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K9ac in Keratinocyte cells)
@@ -2168,6 +2320,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k9ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K9ac Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K9ac in Keratinocyte cells)
@@ -2181,6 +2334,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9ac
 
     track wgEncodeBroadChipSeqPeaksNhekH3k9me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K9me1 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K9me1 in Keratinocyte cells)
@@ -2193,6 +2347,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqSignalNhekH3k9me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K9me1 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K9me1 in Keratinocyte cells)
@@ -2206,6 +2361,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k9me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K9me1 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K9me1 in Keratinocyte cells)
@@ -2219,6 +2375,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k9me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K9me1 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K9me1 in Keratinocyte cells)
@@ -2232,6 +2389,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K9me1
 
     track wgEncodeBroadChipSeqPeaksNhekH3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K27ac Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K27ac in Keratinocyte cells)
@@ -2244,6 +2402,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqSignalNhekH3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K27ac Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K27ac in Keratinocyte cells)
@@ -2257,6 +2416,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K27ac Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K27ac in Keratinocyte cells)
@@ -2270,6 +2430,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k27ac
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K27ac Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K27ac in Keratinocyte cells)
@@ -2283,6 +2444,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27ac
 
     track wgEncodeBroadChipSeqPeaksNhekH3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K27me3 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K27me3 in Keratinocyte cells)
@@ -2295,6 +2457,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqSignalNhekH3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K27me3 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K27me3 in Keratinocyte cells)
@@ -2308,6 +2471,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K27me3 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K27me3 in Keratinocyte cells)
@@ -2321,6 +2485,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k27me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K27me3 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K27me3 in Keratinocyte cells)
@@ -2334,6 +2499,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K27me3
 
     track wgEncodeBroadChipSeqPeaksNhekH3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K36me3 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H3K36me3 in Keratinocyte cells)
@@ -2346,6 +2512,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqSignalNhekH3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K36me3 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H3K36me3 in Keratinocyte cells)
@@ -2359,6 +2526,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K36me3 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H3K36me3 in Keratinocyte cells)
@@ -2372,6 +2540,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k36me3
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H3K36me3 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H3K36me3 in Keratinocyte cells)
@@ -2385,6 +2554,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H3K36me3
 
     track wgEncodeBroadChipSeqPeaksNhekH4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H4K20me1 Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (H4K20me1 in Keratinocyte cells)
@@ -2397,6 +2567,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqSignalNhekH4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H4K20me1 Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (H4K20me1 in Keratinocyte cells)
@@ -2410,6 +2581,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekH4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H4K20me1 Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (H4K20me1 in Keratinocyte cells)
@@ -2423,6 +2595,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekH4k20me1
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera H4K20me1 Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (H4K20me1 in Keratinocyte cells)
@@ -2436,6 +2609,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody H4K20me1
 
     track wgEncodeBroadChipSeqPeaksNhekPol2b
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera Pol2(b) Pk
     longLabel ENCODE Histone Modifications Broad ChIP-seq Peaks (Pol2(b) in Keratinocyte cells)
@@ -2448,6 +2622,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalNhekPol2b
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera Pol2(b) Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (Pol2(b) in Keratinocyte cells)
@@ -2461,6 +2636,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekPol2b
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera Pol2(b) Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (Pol2(b) in Keratinocyte cells)
@@ -2474,6 +2650,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekPol2b
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera Pol2(b) Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (Pol2(b) in Keratinocyte cells)
@@ -2487,6 +2664,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody Pol2(b)
 
     track wgEncodeBroadChipSeqSignalNhekControl
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera control Sig
     longLabel ENCODE Histone Modifications Broad ChIP-seq Signal (control in Keratinocyte cells)
@@ -2500,6 +2678,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep1NhekControl
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera control Raw1
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 1 (control in Keratinocyte cells)
@@ -2513,6 +2692,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     antibody control
 
     track wgEncodeBroadChipSeqRawSignalRep2NhekControl
+    release alpha
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera control Raw2
     longLabel ENCODE Histone Modifications Broad ChIP-seq Raw Signal Replicate 2 (control in Keratinocyte cells)
@@ -2549,6 +2729,7 @@ type bed 3
 wgEncode 1
 
     track wgEncodeDukeDNaseSeqPeaksGm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel DNase GM12878 Pk
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Peaks (in GM12878 cells)
@@ -2561,6 +2742,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeDukeDNaseSeqSignalGm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel DNase GM12878 Sig
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Signal (in GM12878 cells)
@@ -2573,6 +2755,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel DNase GM12878 BO
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Base Overlap Signal (in GM12878 cells)
@@ -2585,6 +2768,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel DNase GM12878 Raw1
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Raw Signal Replicate 1 (in GM12878 cells)
@@ -2597,6 +2781,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel DNase GM12878 Raw2
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Raw Signal Replicate 2 (in GM12878 cells)
@@ -2609,6 +2794,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel DNase GM12878 Raw3
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Raw Signal Replicate 3 (in GM12878 cells)
@@ -2621,6 +2807,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeUncFAIREseqPeaksGm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel FAIRE GM12878 Pk
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Peaks (in GM12878 cells)
@@ -2633,6 +2820,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeUncFAIREseqSignalGm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel FAIRE GM12878 Sig
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Signal (in GM12878 cells)
@@ -2645,6 +2833,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeUncFAIREseqBaseOverlapSignalGm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel FAIRE GM12878 BO
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Base Overlap Signal (in GM12878 cells)
@@ -2657,6 +2846,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeUncFAIREseqRawSignalRep1Gm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel FAIRE GM12878 Raw1
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 1 (in GM12878 cells)
@@ -2669,6 +2859,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeUncFAIREseqRawSignalRep2Gm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel FAIRE GM12878 Raw2
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 2 (in GM12878 cells)
@@ -2681,6 +2872,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeUncFAIREseqRawSignalRep3Gm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel FAIRE GM12878 Raw3
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 3 (in GM12878 cells)
@@ -2693,6 +2885,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeUtaChIPseqPeaksGm12878Ctcf
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel CTCF GM12878 Pk
     longLabel ENCODE Open Chromatin Map UT-Austin ChIP-seq Peaks (CTCF in GM12878 cells)
@@ -2706,6 +2899,7 @@ wgEncode 1
     antibody CTCF
 
     track wgEncodeUtaChIPseqSignalGm12878Ctcf
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel CTCF GM12878 Sig
     longLabel ENCODE Open Chromatin Map UT-Austin ChIP-seq Signal (CTCF in GM12878 cells)
@@ -2719,6 +2913,7 @@ wgEncode 1
     antibody CTCF
 
     track wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel CTCF GM12878 Raw1
     longLabel ENCODE Open Chromatin Map UT-Austin ChIP-seq Raw Signal Replicate 1 (CTCF in GM12878 cells)
@@ -2732,6 +2927,7 @@ wgEncode 1
     antibody CTCF
 
     track wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel CTCF GM12878 Raw2
     longLabel ENCODE Open Chromatin Map UT-Austin ChIP-seq Raw Signal Replicate 2 (CTCF in GM12878 cells)
@@ -2745,6 +2941,7 @@ wgEncode 1
     antibody CTCF
 
     track wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel CTCF GM12878 Raw3
     longLabel ENCODE Open Chromatin Map UT-Austin ChIP-seq Raw Signal Replicate 3 (CTCF in GM12878 cells)
@@ -2758,6 +2955,7 @@ wgEncode 1
     antibody CTCF
 
     track wgEncodeUtaustinChIPseqSignalGm12878Input
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel INP GM12878 Sig
     longLabel ENCODE Open Chromatin Map UT-Austin Input Signal (GM12878 cells)
@@ -2771,6 +2969,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeUtaustinChIPseqRawSignalGm12878Input
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel INP GM12878 Raw
     longLabel ENCODE Open Chromatin Map UT-Austin Input Raw Signal (GM12878 cells)
@@ -2784,6 +2983,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeDukeDNaseSeqPeaksK562
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel DNase K562 Pk
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Peaks (in K562 cells)
@@ -2796,6 +2996,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeDukeDNaseSeqSignalK562
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel DNase K562 Sig
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Signal (in K562 cells)
@@ -2808,6 +3009,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeDukeDNaseSeqBaseOverlapSignalK562
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel DNase K562 BO
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Base Overlap Signal (in K562 cells)
@@ -2820,6 +3022,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeDukeDNaseSeqRawSignalRep1K562
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel DNase K562 Raw1
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Raw Signal Replicate 1 (in K562 cells)
@@ -2832,6 +3035,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeDukeDNaseSeqRawSignalRep2K562
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel DNase K562 Raw2
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Raw Signal Replicate 2 (in K562 cells)
@@ -2844,6 +3048,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeDukeDNaseSeqRawSignalRep3K562
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel DNase K562 Raw3
     longLabel ENCODE Open Chromatin Map Duke DNase-Seq Raw Signal Replicate 3 (in K562 cells)
@@ -2856,6 +3061,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeUncFAIREseqPeaksK562
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel FAIRE K562 Pk
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Peaks (in K562 cells)
@@ -2868,6 +3074,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeUncFAIREseqSignalK562
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel FAIRE K562 Sig
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Signal (in K562 cells)
@@ -2880,6 +3087,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeUncFAIREseqBaseOverlapSignalK562
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel FAIRE K562 BO
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Base Overlap Signal (in K562 cells)
@@ -2892,6 +3100,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeUncFAIREseqRawSignalRep1K562
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel FAIRE K562 Raw1
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 1 (in K562 cells)
@@ -2904,6 +3113,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeUncFAIREseqRawSignalRep2K562
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel FAIRE K562 Raw2
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 2 (in K562 cells)
@@ -2916,6 +3126,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeUncFAIREseqRawSignalRep3K562
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel FAIRE K562 Raw3
     longLabel ENCODE Open Chromatin Map UNC FAIRE-Seq Raw Signal Replicate 3 (in K562 cells)
@@ -2928,6 +3139,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeUtaustinChIPseqSignalK562Input
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel INP K562 Sig
     longLabel ENCODE Open Chromatin Map UT-Austin Input Signal (input in K562 cells)
@@ -2941,6 +3153,7 @@ wgEncode 1
     antibody input
 
     track wgEncodeUtaustinChIPseqRawSignalK562Input
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel INP K562 Raw
     longLabel ENCODE Open Chromatin Map UT-Austin Input Raw Signal (input in K562 cells)
@@ -2954,6 +3167,7 @@ wgEncode 1
     antibody input
 
     track wgEncodeDukeDNaseSeqRegionsExcludedGm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel Excluded Regions
     longLabel ENCODE Open Chromatin Map Regions Excluded
@@ -2964,6 +3178,7 @@ wgEncode 1
     dateUnrestricted 2009-09-03
 
     track wgEncodeDukeDNaseSeqUniqueness20bpGm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel Uniqueness 20bp
     longLabel ENCODE Reference Genome Uniqueness of 20bp Windows
@@ -2975,6 +3190,7 @@ wgEncode 1
     spanList 1
 
     track wgEncodeDukeDNaseSeqUniqueness24bpGm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel Uniqueness 24bp
     longLabel ENCODE Reference Genome Uniqueness of 24bp Windows
@@ -2986,6 +3202,7 @@ wgEncode 1
     spanList 1
 
     track wgEncodeDukeDNaseSeqUniqueness35bpGm12878
+    release alpha
     subTrack wgEncodeChromatinMap
     shortLabel Uniqueness 35bp
     longLabel ENCODE Reference Genome Uniqueness of 35bp Windows
@@ -3020,6 +3237,7 @@ type bed 3
 wgEncode 1
 
     track wgEncodeNhgriNRESilencersK562Ggamma
+    release alpha
     subTrack wgEncodeNhgriNre
     shortLabel K562 gamma Si
     longLabel ENCODE NHGRI Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
@@ -3032,6 +3250,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeNhgriNREEnhancerBlockersK562Ggamma
+    release alpha
     subTrack wgEncodeNhgriNre
     shortLabel K562 gamma EB
     longLabel ENCODE NHGRI Negative Regulatory Elements - Enhancer Blockers (NRE-EBs) (in K562 cells)
@@ -3044,6 +3263,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeNhgriNRESilencersK562Sv40
+    release alpha
     subTrack wgEncodeNhgriNre
     shortLabel K562 SV40 Si
     longLabel ENCODE NHGRI Negative Regulatory Elements - Silencers (NRE-Si) (in K562 cells)
@@ -3056,6 +3276,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeNhgriNREEnhancerBlockersK562Sv40
+    release alpha
     subTrack wgEncodeNhgriNre
     shortLabel K562 SV40 EB
     longLabel ENCODE NHGRI Negative Regulatory Elements - Enhancer Blockers (NRE-EBs) (in K562 cells)
@@ -3091,6 +3312,7 @@ type bed 3
 wgEncode 1
 
     track wgEncodeRikenCageAlignmentsProstateCellLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA prostate cell
     longLabel ENCODE RIKEN CAGE Tags (from longNonPolyA in prostate cell cell)
@@ -3103,6 +3325,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA K562 cytosol
     longLabel ENCODE RIKEN CAGE Tags (from longNonPolyA in K562 cell cytosol)
@@ -3115,6 +3338,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA K562 nucleus
     longLabel ENCODE RIKEN CAGE Tags (from longNonPolyA in K562 cell nucleus)
@@ -3127,6 +3351,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeRikenCagePlusClustersProstateCellLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA prostate cell
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (from longNonPolyA in prostate cell cell)
@@ -3139,6 +3364,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeRikenCageMinusClustersProstateCellLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA prostate cell
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (from longNonPolyA in prostate cell cell)
@@ -3151,6 +3377,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA K562 cytosol
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (from longNonPolyA in K562 cell cytosol)
@@ -3163,6 +3390,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA K562 cytosol
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (from longNonPolyA in K562 cell cytosol)
@@ -3175,6 +3403,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA K562 nucleus
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (from longNonPolyA in K562 cell nucleus)
@@ -3187,6 +3416,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA K562 nucleus
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (from longNonPolyA in K562 cell nucleus)
@@ -3199,6 +3429,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeRikenCagePlusRawSignalK562CytosolLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA K562 cytosol PlusRaw
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (from longNonPolyA in K562 cell cytosol)
@@ -3212,6 +3443,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeRikenCageMinusRawSignalK562CytosolLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA K562 cytosol MinusRaw
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (from longNonPolyA in K562 cell cytosol)
@@ -3225,6 +3457,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeRikenCagePlusRawSignalProstateCellLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA prostate cell PlusRaw
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (from longNonPolyA in prostate cell cell)
@@ -3238,6 +3471,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeRikenCageMinusRawSignalProstateCellLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA prostate cell MinusRaw
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (from longNonPolyA in prostate cell cell)
@@ -3251,6 +3485,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeRikenCagePlusRawSignalK562NucleusLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA K562 nucleus PlusRaw
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (from longNonPolyA in K562 cell nucleus)
@@ -3264,6 +3499,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeRikenCageMinusRawSignalK562NucleusLongnonpolya
+    release alpha
     subTrack wgEncodeRikenCage
     shortLabel longNonPolyA K562 nucleus MinusRaw
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (from longNonPolyA in K562 cell nucleus)
@@ -3301,6 +3537,7 @@ noScoreFilter .
 scoreMin 500
 
     track wgEncodeUwDnaseSeqRawSignalRep2Hepg2
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel HepG2 Raw 2
     longLabel ENCODE UW DNase-Seq Raw Signal Replicate 2 (in HepG2 cells)
@@ -3313,6 +3550,7 @@ scoreMin 500
     cell HepG2
 
     track wgEncodeUwDnaseSeqHotspotsRep2Hepg2
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel HepG2 2
     longLabel ENCODE UW DNase-Seq Hotspots Replicate 2 (in HepG2 cells)
@@ -3324,6 +3562,7 @@ scoreMin 500
     cell HepG2
 
     track wgEncodeUwDnaseSeqRawSignalRep2Gm06990
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel GM06990 Raw 2
     longLabel ENCODE UW DNase-Seq Raw Signal Replicate 2 (in GM06990 cells)
@@ -3336,6 +3575,7 @@ scoreMin 500
     cell GM06990
 
     track wgEncodeUwDnaseSeqHotspotsRep2Gm06990
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel GM06990 2
     longLabel ENCODE UW DNase-Seq Hotspots Replicate 2 (in GM06990 cells)
@@ -3347,6 +3587,7 @@ scoreMin 500
     cell GM06990
 
     track wgEncodeUwDnaseSeqRawSignalRep1K562
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel K562 Raw 1
     longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in K562 cells)
@@ -3359,6 +3600,7 @@ scoreMin 500
     cell K562
 
     track wgEncodeUwDnaseSeqRawSignalRep2K562
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel K562 Raw 2
     longLabel ENCODE UW DNase-Seq Raw Signal Replicate 2 (in K562 cells)
@@ -3371,6 +3613,7 @@ scoreMin 500
     cell K562
 
     track wgEncodeUwDnaseSeqPeaksK562
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel K562 Pk
     longLabel ENCODE UW DNase-Seq Peaks (in K562 cells)
@@ -3382,6 +3625,7 @@ scoreMin 500
     cell K562
 
     track wgEncodeUwDnaseSeqHotspotsRep1K562
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel K562 1
     longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in K562 cells)
@@ -3393,6 +3637,7 @@ scoreMin 500
     cell K562
 
     track wgEncodeUwDnaseSeqHotspotsRep2K562
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel K562 2
     longLabel ENCODE UW DNase-Seq Hotspots Replicate 2 (in K562 cells)
@@ -3404,6 +3649,7 @@ scoreMin 500
     cell K562
 
     track wgEncodeUwDnaseSeqRawSignalRep1Sknshra
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel SK-N-SH(+RA) Raw 1
     longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in SK-N-SH(+RA) cells)
@@ -3416,6 +3662,7 @@ scoreMin 500
     cell SK-N-SH(+RA)
 
     track wgEncodeUwDnaseSeqPeaksSknshra
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel SK-N-SH(+RA) Pk
     longLabel ENCODE UW DNase-Seq Peaks (in SK-N-SH(+RA) cells)
@@ -3427,6 +3674,7 @@ scoreMin 500
     cell SK-N-SH(+RA)
 
     track wgEncodeUwDnaseSeqHotspotsRep1Sknshra
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel SK-N-SH(+RA) 1
     longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in SK-N-SH(+RA) cells)
@@ -3438,6 +3686,7 @@ scoreMin 500
     cell SK-N-SH(+RA)
 
     track wgEncodeUwDnaseSeqRawSignalRep1Hepg2
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel HepG2 Raw 1
     longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in HepG2 cells)
@@ -3450,6 +3699,7 @@ scoreMin 500
     cell HepG2
 
     track wgEncodeUwDnaseSeqPeaksHepg2
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel HepG2 Pk
     longLabel ENCODE UW DNase-Seq Peaks (in HepG2 cells)
@@ -3461,6 +3711,7 @@ scoreMin 500
     cell HepG2
 
     track wgEncodeUwDnaseSeqHotspotsRep1Hepg2
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel HepG2 1
     longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in HepG2 cells)
@@ -3472,6 +3723,7 @@ scoreMin 500
     cell HepG2
 
     track wgEncodeUwDnaseSeqRawSignalRep1Th1
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel Th1 Raw 1
     longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in Th1 cells)
@@ -3484,6 +3736,7 @@ scoreMin 500
     cell Th1
 
     track wgEncodeUwDnaseSeqPeaksTh1
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel Th1 Pk
     longLabel ENCODE UW DNase-Seq Peaks (in Th1 cells)
@@ -3495,6 +3748,7 @@ scoreMin 500
     cell Th1
 
     track wgEncodeUwDnaseSeqHotspotsRep1Th1
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel Th1 1
     longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in Th1 cells)
@@ -3506,6 +3760,7 @@ scoreMin 500
     cell Th1
 
     track wgEncodeUwDnaseSeqRawSignalRep1Helas3
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel HeLa-S3 Raw 1
     longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in HeLa-S3 cells)
@@ -3518,6 +3773,7 @@ scoreMin 500
     cell HeLa-S3
 
     track wgEncodeUwDnaseSeqPeaksHelas3
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel HeLa-S3 Pk
     longLabel ENCODE UW DNase-Seq Peaks (in HeLa-S3 cells)
@@ -3529,6 +3785,7 @@ scoreMin 500
     cell HeLa-S3
 
     track wgEncodeUwDnaseSeqHotspotsRep1Helas3
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel HeLa-S3 1
     longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in HeLa-S3 cells)
@@ -3540,6 +3797,7 @@ scoreMin 500
     cell HeLa-S3
 
     track wgEncodeUwDnaseSeqRawSignalRep1Gm06990
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel GM06990 Raw 1
     longLabel ENCODE UW DNase-Seq Raw Signal Replicate 1 (in GM06990 cells)
@@ -3552,6 +3810,7 @@ scoreMin 500
     cell GM06990
 
     track wgEncodeUwDnaseSeqPeaksGm06990
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel GM06990 Pk
     longLabel ENCODE UW DNase-Seq Peaks (in GM06990 cells)
@@ -3563,6 +3822,7 @@ scoreMin 500
     cell GM06990
 
     track wgEncodeUwDnaseSeqHotspotsRep1Gm06990
+    release alpha
     subTrack wgEncodeUwDnaseSeq
     shortLabel GM06990 1
     longLabel ENCODE UW DNase-Seq Hotspots Replicate 1 (in GM06990 cells)
@@ -3597,6 +3857,7 @@ type bed 3
 wgEncode 1
 
     track wgEncodeAffyRnaChipFilteredTransfragsProstateCellLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel Long PolyA- Pros
     longLabel ENCODE Transcriptome - Affymetrix Filtered Transfrags (Long Non-PolyA RNA in prostate cells)
@@ -3610,6 +3871,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel Long PolyA-Pros
     longLabel ENCODE Transcriptome - Affymetrix Transfrags (Long Non-PolyA RNA in prostate cells)
@@ -3623,6 +3885,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeAffyRnaChipFilteredRawSignalProstateCellLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel Long PolyA- Pros
     longLabel ENCODE Transcriptome - Affymetrix Filtered Signal (Long Non-PolyA RNA in prostate cells)
@@ -3637,6 +3900,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel Long PolyA- Pros Raw
     longLabel ENCODE Transcriptome - Affymetrix Raw Signal (Long Non-PolyA RNA in prostate cells)
@@ -3651,6 +3915,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeAffyRnaChipTransfragsProstateCellLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA prostate cell
     longLabel ENCODE Affy Transfrags (from longPolyA in prostate cell cell)
@@ -3664,6 +3929,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeAffyRnaChipFilteredTransfragsProstateCellLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA prostate cell
     longLabel ENCODE Affy Filtered Transfrags (from longPolyA in prostate cell cell)
@@ -3677,6 +3943,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeAffyRnaChipRawSignalProstateCellLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA prostate cell Raw
     longLabel ENCODE (from longPolyA in prostate cell cell)
@@ -3691,6 +3958,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeAffyRnaChipFilteredRawSignalProstateCellLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA prostate cell
     longLabel ENCODE (from longPolyA in prostate cell cell)
@@ -3705,6 +3973,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA K562 nucleus
     longLabel ENCODE Affy Transfrags (from longNonPolyA in K562 cell nucleus)
@@ -3718,6 +3987,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562NucleusLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA K562 nucleus
     longLabel ENCODE Affy Filtered Transfrags (from longNonPolyA in K562 cell nucleus)
@@ -3731,6 +4001,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA K562 nucleus Raw
     longLabel ENCODE (from longNonPolyA in K562 cell nucleus)
@@ -3745,6 +4016,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA K562 nucleus
     longLabel ENCODE (from longNonPolyA in K562 cell nucleus)
@@ -3759,6 +4031,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipTransfragsK562CellTotal
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel total K562 cell
     longLabel ENCODE Affy Transfrags (from total in K562 cell cell)
@@ -3772,6 +4045,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562CellTotal
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel total K562 cell
     longLabel ENCODE Affy Filtered Transfrags (from total in K562 cell cell)
@@ -3785,6 +4059,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562CellTotal
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel total K562 cell
     longLabel ENCODE (from total in K562 cell cell)
@@ -3799,6 +4074,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipRawSignalK562CellTotal
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel total K562 cell Raw
     longLabel ENCODE (from total in K562 cell cell)
@@ -3813,6 +4089,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA K562 nucleus
     longLabel ENCODE Affy Transfrags (from longPolyA in K562 cell nucleus)
@@ -3826,6 +4103,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562NucleusLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA K562 nucleus
     longLabel ENCODE Affy Filtered Transfrags (from longPolyA in K562 cell nucleus)
@@ -3839,6 +4117,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA K562 nucleus Raw
     longLabel ENCODE (from longPolyA in K562 cell nucleus)
@@ -3853,6 +4132,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562NucleusLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA K562 nucleus
     longLabel ENCODE (from longPolyA in K562 cell nucleus)
@@ -3867,6 +4147,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562CytosolLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA K562 cytosol
     longLabel ENCODE Affy Filtered Transfrags (from longNonPolyA in K562 cell cytosol)
@@ -3880,6 +4161,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA K562 cytosol
     longLabel ENCODE Affy Transfrags (from longNonPolyA in K562 cell cytosol)
@@ -3893,6 +4175,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA K562 cytosol Raw
     longLabel ENCODE (from longNonPolyA in K562 cell cytosol)
@@ -3907,6 +4190,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA K562 cytosol
     longLabel ENCODE (from longNonPolyA in K562 cell cytosol)
@@ -3921,6 +4205,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562CytosolLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA K562 cytosol
     longLabel ENCODE Affy Filtered Transfrags (from longPolyA in K562 cell cytosol)
@@ -3934,6 +4219,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA K562 cytosol
     longLabel ENCODE Affy Transfrags (from longPolyA in K562 cell cytosol)
@@ -3947,6 +4233,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562CytosolLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA K562 cytosol
     longLabel ENCODE (from longPolyA in K562 cell cytosol)
@@ -3961,6 +4248,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA K562 cytosol Raw
     longLabel ENCODE (from longPolyA in K562 cell cytosol)
@@ -3975,6 +4263,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipFilteredTransfragsK562PolysomeLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA K562 polysome
     longLabel ENCODE Affy Filtered Transfrags (from longNonPolyA in K562 cell polysome)
@@ -3988,6 +4277,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA K562 polysome
     longLabel ENCODE Affy Transfrags (from longNonPolyA in K562 cell polysome)
@@ -4001,6 +4291,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA K562 polysome Raw
     longLabel ENCODE (from longNonPolyA in K562 cell polysome)
@@ -4015,6 +4306,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipFilteredRawSignalK562PolysomeLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA K562 polysome
     longLabel ENCODE (from longNonPolyA in K562 cell polysome)
@@ -4029,6 +4321,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeAffyRnaChipFilteredTransfragsGm12878NucleusLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA GM12878 nucleus
     longLabel ENCODE Affy Filtered Transfrags (from longNonPolyA in GM12878 cell nucleus)
@@ -4042,6 +4335,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA GM12878 nucleus
     longLabel ENCODE Affy Transfrags (from longNonPolyA in GM12878 cell nucleus)
@@ -4055,6 +4349,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA GM12878 nucleus Raw
     longLabel ENCODE (from longNonPolyA in GM12878 cell nucleus)
@@ -4069,6 +4364,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeAffyRnaChipFilteredRawSignalGm12878NucleusLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA GM12878 nucleus
     longLabel ENCODE (from longNonPolyA in GM12878 cell nucleus)
@@ -4083,6 +4379,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA GM12878 cytosol
     longLabel ENCODE Affy Transfrags (from longPolyA in GM12878 cell cytosol)
@@ -4096,6 +4393,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeAffyRnaChipFilteredTransfragsGm12878CytosolLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA GM12878 cytosol
     longLabel ENCODE Affy Filtered Transfrags (from longPolyA in GM12878 cell cytosol)
@@ -4109,6 +4407,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA GM12878 cytosol Raw
     longLabel ENCODE (from longPolyA in GM12878 cell cytosol)
@@ -4123,6 +4422,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeAffyRnaChipFilteredRawSignalGm12878CytosolLongpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longPolyA GM12878 cytosol
     longLabel ENCODE (from longPolyA in GM12878 cell cytosol)
@@ -4137,6 +4437,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeAffyRnaChipFilteredTransfragsGm12878CytosolLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA GM12878 cytosol
     longLabel ENCODE Affy Filtered Transfrags (from longNonPolyA in GM12878 cell cytosol)
@@ -4150,6 +4451,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA GM12878 cytosol
     longLabel ENCODE Affy Transfrags (from longNonPolyA in GM12878 cell cytosol)
@@ -4163,6 +4465,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA GM12878 cytosol Raw
     longLabel ENCODE (from longNonPolyA in GM12878 cell cytosol)
@@ -4177,6 +4480,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeAffyRnaChipFilteredRawSignalGm12878CytosolLongnonpolya
+    release alpha
     subTrack wgEncodeAffyRnaChip
     shortLabel longNonPolyA GM12878 cytosol
     longLabel ENCODE (from longNonPolyA in GM12878 cell cytosol)
@@ -4214,6 +4518,7 @@ type bed 3
 wgEncode 1
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Nov69522T7tag
+    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel T7Tag GM12878 Nov_69522
     longLabel ENCODE SUNY Albany RBP Associated RNA (T7Tag in GM12878 cells using Nov_69522)
@@ -4227,6 +4532,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Nov69522T7tag
+    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel T7Tag K562 Nov_69522
     longLabel ENCODE SUNY Albany RBP Associated RNA (T7Tag in K562 cells using Nov_69522)
@@ -4240,6 +4546,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sc5261Elavl1
+    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel ELAVL1 GM12878 SC_5261
     longLabel ENCODE SUNY Albany RBP Associated RNA (ELAVL1 in GM12878 cells using SC_5261)
@@ -4253,6 +4560,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc5261Elavl1
+    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel ELAVL1 K562 SC_5261
     longLabel ENCODE SUNY Albany RBP Associated RNA (ELAVL1 in K562 cells using SC_5261)
@@ -4266,6 +4574,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc21027Igf2bp1
+    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel IGF2BP1 K562 SC_21027
     longLabel ENCODE SUNY Albany RBP Associated RNA (IGF2BP1 in K562 cells using SC_21027)
@@ -4279,6 +4588,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sigp6246Pabpc1
+    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel PABPC1 GM12878 Sig_P6246
     longLabel ENCODE SUNY Albany RBP Associated RNA (PABPC1 in GM12878 cells using Sig_P6246)
@@ -4292,6 +4602,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1
+    release alpha
     subTrack wgEncodeSunyalbanyRnaGeneChip
     shortLabel PABPC1 K562 Sig_P6246
     longLabel ENCODE SUNY Albany RBP Associated RNA (PABPC1 in K562 cells using Sig_P6246)
@@ -4330,6 +4641,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 wgEncode 1
 
     track wgEncodeYaleChIPseqPeaksGm12878Max
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Max Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (Max in GM12878 cells)
@@ -4342,6 +4654,7 @@ wgEncode 1
     antibody Max
 
     track wgEncodeYaleChIPseqSignalGm12878Max
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Max Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Max in GM12878 cells)
@@ -4355,6 +4668,7 @@ wgEncode 1
     antibody Max
 
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Max
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Max Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (Max in GM12878 cells)
@@ -4368,6 +4682,7 @@ wgEncode 1
     antibody Max
 
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Max
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Max Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (Max in GM12878 cells)
@@ -4381,6 +4696,7 @@ wgEncode 1
     antibody Max
 
     track wgEncodeYaleChIPseqPeaksGm12878Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Pol2 Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (Pol2 in GM12878 cells)
@@ -4393,6 +4709,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalGm12878Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Pol2 Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Pol2 in GM12878 cells)
@@ -4406,6 +4723,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Pol2 Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (Pol2 in GM12878 cells)
@@ -4419,6 +4737,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Pol2 Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (Pol2 in GM12878 cells)
@@ -4432,6 +4751,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqPeaksGm12878Cfos
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 c-Fos Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (c-Fos in GM12878 cells)
@@ -4444,6 +4764,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqSignalGm12878Cfos
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 c-Fos Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (c-Fos in GM12878 cells)
@@ -4457,6 +4778,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Cfos
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 c-Fos Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (c-Fos in GM12878 cells)
@@ -4470,6 +4792,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Cfos
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 c-Fos Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (c-Fos in GM12878 cells)
@@ -4483,6 +4806,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep3Gm12878Cfos
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 c-Fos Raw3
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 3 (c-Fos in GM12878 cells)
@@ -4496,6 +4820,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqSignalGm12878Input
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Input Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in GM12878 cells)
@@ -4509,6 +4834,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalGm12878Input
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel GM12878 Input Raw
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal (Input in GM12878 cells)
@@ -4522,6 +4848,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksHek293Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (Pol2 in HEK293 cells)
@@ -4534,6 +4861,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalHek293Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Pol2 in HEK293 cells)
@@ -4547,6 +4875,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1Hek293Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (Pol2 in HEK293 cells)
@@ -4560,6 +4889,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2Hek293Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (Pol2 in HEK293 cells)
@@ -4573,6 +4903,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep3Hek293Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Pol2 Raw3
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 3 (Pol2 in HEK293 cells)
@@ -4586,6 +4917,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalHek293Input
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Input Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in HEK293 cells)
@@ -4599,6 +4931,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalHek293Input
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HEK293 Input Raw
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal (Input in HEK293 cells)
@@ -4612,6 +4945,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksHelas3Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (Pol2 in HeLa-S3 cells)
@@ -4626,6 +4960,7 @@ wgEncode 1
     accession GSE12781
 
     track wgEncodeYaleChIPseqSignalHelas3Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Pol2 in HeLa-S3 cells)
@@ -4642,6 +4977,7 @@ wgEncode 1
     accession GSE12781
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (Pol2 in HeLa-S3 cells)
@@ -4657,6 +4993,7 @@ wgEncode 1
     color 112,63,174
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (Pol2 in HeLa-S3 cells)
@@ -4672,6 +5009,7 @@ wgEncode 1
     accession GSE12781
 
     track wgEncodeYaleChIPseqRawSignalRep3Helas3Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Pol2 Raw3
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 3 (Pol2 in HeLa-S3 cells)
@@ -4687,6 +5025,7 @@ wgEncode 1
     accession GSE12781
 
     track wgEncodeYaleChIPseqSignalHelas3Input
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Inp Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in HeLa-S3 cells)
@@ -4704,6 +5043,7 @@ wgEncode 1
     accession GSE12781
 
     track wgEncodeYaleChIPseqRawSignalHelas3Input
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa Inp Raw
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal (Input in HeLa-S3 cells)
@@ -4719,6 +5059,7 @@ wgEncode 1
     accession GSE12781
 
     track wgEncodeYaleChIPseqPeaksHelas3Largefragment
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LargeFrag Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (Large_Fragment in HeLa-S3 cells)
@@ -4731,6 +5072,7 @@ wgEncode 1
     antibody Large_Fragment
 
     track wgEncodeYaleChIPseqSignalHelas3Largefragment
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LargeFrag Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Large_Fragment in HeLa-S3 cells)
@@ -4744,6 +5086,7 @@ wgEncode 1
     antibody Large_Fragment
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LargeFrag Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (Large_Fragment in HeLa-S3 cells)
@@ -4757,6 +5100,7 @@ wgEncode 1
     antibody Large_Fragment
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Largefragment
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa LargeFrag Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (Large_Fragment in HeLa-S3 cells)
@@ -4770,6 +5114,7 @@ wgEncode 1
     antibody Large_Fragment
 
     track wgEncodeYaleChIPseqSignalHelas3Mnase
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MNase Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (MNase in HeLa-S3 cells)
@@ -4783,6 +5128,7 @@ wgEncode 1
     antibody MNase
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mnase
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MNase Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (MNase in HeLa-S3 cells)
@@ -4796,6 +5142,7 @@ wgEncode 1
     antibody MNase
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mnase
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MNase Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (MNase in HeLa-S3 cells)
@@ -4809,6 +5156,7 @@ wgEncode 1
     antibody MNase
 
     track wgEncodeYaleChIPseqPeaksHelas3Mouseigg
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MouseIgG Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (Mouse_IgG in HeLa-S3 cells)
@@ -4821,6 +5169,7 @@ wgEncode 1
     antibody Mouse_IgG
 
     track wgEncodeYaleChIPseqSignalHelas3Mouseigg
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MouseIgG Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Mouse_IgG in HeLa-S3 cells)
@@ -4834,6 +5183,7 @@ wgEncode 1
     antibody Mouse_IgG
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mouseigg
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MouseIgG Raw 1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (Mouse_IgG in HeLa-S3 cells)
@@ -4847,6 +5197,7 @@ wgEncode 1
     antibody Mouse_IgG
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mouseigg
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa MouseIgG Raw 2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (Mouse_IgG in HeLa-S3 cells)
@@ -4860,6 +5211,7 @@ wgEncode 1
     antibody Mouse_IgG
 
     track wgEncodeYaleChIPseqSignalHelas3Nakeddna
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa NakedDNA Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Naked_DNA in HeLa-S3 cells)
@@ -4873,6 +5225,7 @@ wgEncode 1
     antibody Naked_DNA
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Nakeddna
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa NakedDNA Raw1
     longLabel ENCODE Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (Naked_DNA in HeLa-S3 cells)
@@ -4886,6 +5239,7 @@ wgEncode 1
     antibody Naked_DNA
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Nakeddna
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa NakedDNA Raw2
     longLabel ENCODE Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (Naked_DNA in HeLa-S3 cells)
@@ -4899,6 +5253,7 @@ wgEncode 1
     antibody Naked_DNA
 
     track wgEncodeYaleChIPseqRawSignalRep3Helas3Nakeddna
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa NakedDNA Raw3
     longLabel ENCODE Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 3 (Naked_DNA in HeLa-S3 cells)
@@ -4912,6 +5267,7 @@ wgEncode 1
     antibody Naked_DNA
 
     track wgEncodeYaleChIPseqPeaksHelas3ifngStat1
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (STAT1 in HeLa-S3_IFNg cells)
@@ -4926,6 +5282,7 @@ wgEncode 1
     accession GSE12782
 
     track wgEncodeYaleChIPseqSignalHelas3ifngStat1
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (STAT1 in HeLa-S3_IFNg cells)
@@ -4942,6 +5299,7 @@ wgEncode 1
     accession GSE12782
 
     track wgEncodeYaleChIPseqRawSignalRep1Helas3ifngStat1
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (STAT1 in HeLa-S3_IFNg cells)
@@ -4957,6 +5315,7 @@ wgEncode 1
     accession GSE12782
 
     track wgEncodeYaleChIPseqRawSignalRep2Helas3ifngStat1
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF STAT1 Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (STAT1 in HeLa-S3_IFNg cells)
@@ -4972,6 +5331,7 @@ wgEncode 1
     accession GSE12782
 
     track wgEncodeYaleChIPseqSignalHelas3ifngInput
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF Inp Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in HeLa-S3_IFNg cells)
@@ -4988,6 +5348,7 @@ wgEncode 1
     accession GSE12782
 
     track wgEncodeYaleChIPseqRawSignalHelas3ifngInput
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel HeLa-IF Inp Raw
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal (Input in HeLa-S3_IFNg cells)
@@ -5003,6 +5364,7 @@ wgEncode 1
     accession GSE12782
 
     track wgEncodeYaleChIPseqPeaksK562Nfe2
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 NF-E2 Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (NF-E2 in K562 cells)
@@ -5015,6 +5377,7 @@ wgEncode 1
     antibody NF-E2
 
     track wgEncodeYaleChIPseqSignalK562Nfe2
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 NF-E2 Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (NF-E2 in K562 cells)
@@ -5028,6 +5391,7 @@ wgEncode 1
     antibody NF-E2
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Nfe2
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 NF-E2 Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (NF-E2 in K562 cells)
@@ -5041,6 +5405,7 @@ wgEncode 1
     antibody NF-E2
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Nfe2
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 NF-E2 Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (NF-E2 in K562 cells)
@@ -5054,6 +5419,7 @@ wgEncode 1
     antibody NF-E2
 
     track wgEncodeYaleChIPseqPeaksK562Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Pol2 Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (Pol2 in K562 cells)
@@ -5066,6 +5432,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalK562Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Pol2 Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Pol2 in K562 cells)
@@ -5080,6 +5447,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Pol2 Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (Pol2 in K562 cells)
@@ -5093,6 +5461,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Pol2 Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (Pol2 in K562 cells)
@@ -5106,6 +5475,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqPeaksK562Cfos
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Fos Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (c-Fos in K562 cells)
@@ -5118,6 +5488,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqSignalK562Cfos
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Fos Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (c-Fos in K562 cells)
@@ -5131,6 +5502,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Cfos
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Fos Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (c-Fos in K562 cells)
@@ -5144,6 +5516,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Cfos
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Fos Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (c-Fos in K562 cells)
@@ -5157,6 +5530,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqRawSignalRep3K562Cfos
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Fos Raw3
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 3 (c-Fos in K562 cells)
@@ -5170,6 +5544,7 @@ wgEncode 1
     antibody c-Fos
 
     track wgEncodeYaleChIPseqPeaksK562Cjun
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Jun Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (c-Jun in K562 cells)
@@ -5182,6 +5557,7 @@ wgEncode 1
     antibody c-Jun
 
     track wgEncodeYaleChIPseqSignalK562Cjun
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Jun Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (c-Jun in K562 cells)
@@ -5195,6 +5571,7 @@ wgEncode 1
     antibody c-Jun
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Cjun
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Jun Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (c-Jun in K562 cells)
@@ -5208,6 +5585,7 @@ wgEncode 1
     antibody c-Jun
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Cjun
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Jun Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (c-Jun in K562 cells)
@@ -5221,6 +5599,7 @@ wgEncode 1
     antibody c-Jun
 
     track wgEncodeYaleChIPseqPeaksK562Cmyc
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Myc Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (c-Myc in K562 cells)
@@ -5233,6 +5612,7 @@ wgEncode 1
     antibody c-Myc
 
     track wgEncodeYaleChIPseqSignalK562Cmyc
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Myc Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (c-Myc in K562 cells)
@@ -5246,6 +5626,7 @@ wgEncode 1
     antibody c-Myc
 
     track wgEncodeYaleChIPseqRawSignalRep1K562Cmyc
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Myc Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (c-Myc in K562 cells)
@@ -5259,6 +5640,7 @@ wgEncode 1
     antibody c-Myc
 
     track wgEncodeYaleChIPseqRawSignalRep2K562Cmyc
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 c-Myc Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (c-Myc in K562 cells)
@@ -5272,6 +5654,7 @@ wgEncode 1
     antibody c-Myc
 
     track wgEncodeYaleChIPseqSignalK562Input
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Inp Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in K562 cells)
@@ -5286,6 +5669,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalK562Input
+    release alpha
     subTrack wgEncodeYaleChIPseq
     shortLabel K562 Inp Raw
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal (Input in K562 cells)
@@ -5299,6 +5683,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqPeaksNb4Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 Pk
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Peaks (Pol2 in NB4 cells)
@@ -5311,6 +5696,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalNb4Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Pol2 in NB4 cells)
@@ -5324,6 +5710,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep1Nb4Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 Raw1
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 1 (Pol2 in NB4 cells)
@@ -5337,6 +5724,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep2Nb4Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 Raw2
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 2 (Pol2 in NB4 cells)
@@ -5350,6 +5738,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqRawSignalRep3Nb4Pol2
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Pol2 Raw3
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal Replicate 3 (Pol2 in NB4 cells)
@@ -5363,6 +5752,7 @@ wgEncode 1
     antibody Pol2
 
     track wgEncodeYaleChIPseqSignalNb4Input
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Input Sig
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Signal (Input in NB4 cells)
@@ -5376,6 +5766,7 @@ wgEncode 1
     antibody Input
 
     track wgEncodeYaleChIPseqRawSignalNb4Input
+    release alpha
     subTrack wgEncodeYaleChIPseq off
     shortLabel NB4 Input Raw
     longLabel ENCODE TFBS by Yale/UCDavis/Harvard ChIP-seq Raw Signal (Input in NB4 cells)
@@ -5413,6 +5804,7 @@ wgEncode 1
 dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel GABP GM12878 Pk 1
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (GABP in GM12878 cells)
@@ -5425,6 +5817,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel GABP GM12878 Pk 2
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (GABP in GM12878 cells)
@@ -5437,6 +5830,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel GABP GM12878 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (GABP in GM12878 cells)
@@ -5450,6 +5844,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Gabp
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel GABP GM12878 Raw 2
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (GABP in GM12878 cells)
@@ -5463,6 +5858,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel NRSF GM12878 Pk 1
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (NRSF in GM12878 cells)
@@ -5475,6 +5871,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel NRSF GM12878 Pk 2
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (NRSF in GM12878 cells)
@@ -5487,6 +5884,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel NRSF GM12878 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (NRSF in GM12878 cells)
@@ -5500,6 +5898,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Nrsf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel NRSF GM12878 Raw 2
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (NRSF in GM12878 cells)
@@ -5513,6 +5912,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel Pol2 GM12878 Pk 1
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (Pol2 in GM12878 cells)
@@ -5525,6 +5925,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel Pol2 GM12878 Pk 2
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (Pol2 in GM12878 cells)
@@ -5537,6 +5938,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel Pol2 GM12878 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Pol2 in GM12878 cells)
@@ -5550,6 +5952,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel Pol2 GM12878 Raw 2
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Pol2 in GM12878 cells)
@@ -5563,6 +5966,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel SRF GM12878 Pk 1
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (SRF in GM12878 cells)
@@ -5575,6 +5979,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel SRF GM12878 Pk 2
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (SRF in GM12878 cells)
@@ -5587,6 +5992,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel SRF GM12878 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (SRF in GM12878 cells)
@@ -5600,6 +6006,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Srf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel SRF GM12878 Raw 2
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (SRF in GM12878 cells)
@@ -5613,6 +6020,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tafii
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel TAF-II GM12878 Pk 1
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (TAF-II in GM12878 cells)
@@ -5625,6 +6033,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody TAF-II
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tafii
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel TAF-II GM12878 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (TAF-II in GM12878 cells)
@@ -5638,6 +6047,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody TAF-II
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel Control GM12878 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Control in GM12878 cells)
@@ -5651,6 +6061,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody control
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel Control GM12878 Raw 2
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Control in GM12878 cells)
@@ -5664,6 +6075,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody control
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Gabp
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel GABP K562 Pk 1
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (GABP in K562 cells)
@@ -5676,6 +6088,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Gabp
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel GABP K562 Pk 2
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (GABP in K562 cells)
@@ -5688,6 +6101,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel GABP K562 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (GABP in K562 cells)
@@ -5701,6 +6115,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Gabp
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel GABP K562 Raw 2
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (GABP in K562 cells)
@@ -5714,6 +6129,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody GABP
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Nrsf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel NRSF K562 Pk 1
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (NRSF in K562 cells)
@@ -5726,6 +6142,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel NRSF K562 Pk 2
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (NRSF in K562 cells)
@@ -5738,6 +6155,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel NRSF K562 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (NRSF in K562 cells)
@@ -5751,6 +6169,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Nrsf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel NRSF K562 Raw 2
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (NRSF in K562 cells)
@@ -5764,6 +6183,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody NRSF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel Pol2 K562 Pk 1
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (Pol2 in K562 cells)
@@ -5776,6 +6196,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel Pol2 K562 Pk 2
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (Pol2 in K562 cells)
@@ -5788,6 +6209,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel Pol2 K562 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Pol2 in K562 cells)
@@ -5801,6 +6223,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel Pol2 K562 Raw 2
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Pol2 in K562 cells)
@@ -5814,6 +6237,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody Pol2
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Srf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel SRF K562 Pk 1
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (SRF in K562 cells)
@@ -5826,6 +6250,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel SRF K562 Pk 2
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (SRF in K562 cells)
@@ -5838,6 +6263,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel SRF K562 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (SRF in K562 cells)
@@ -5851,6 +6277,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel SRF K562 Raw 2
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (SRF in K562 cells)
@@ -5864,6 +6291,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody SRF
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1K562Tafii
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel TAF-II K562 Pk 1
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (TAF-II in K562 cells)
@@ -5876,6 +6304,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody TAF-II
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Tafii
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel TAF-II K562 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (TAF-II in K562 cells)
@@ -5889,6 +6318,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody TAF-II
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel Control K562 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Control in K562 cells)
@@ -5902,6 +6332,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody control
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq
     shortLabel Control K562 Raw 2
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Control in K562 cells)
@@ -5915,6 +6346,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody control
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Foxp2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel FOXP2 PFSK1 Pk 1
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (FOXP2 in PFSK-1 cells)
@@ -5927,6 +6359,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     color 107,112,43
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Foxp2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel FOXP2 PFSK1 Pk 2
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (FOXP2 in PFSK-1 cells)
@@ -5939,6 +6372,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     color 107,112,43
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Foxp2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel FOXP2 PFSK1 Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (FOXP2 in PFSK-1 cells)
@@ -5952,6 +6386,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     color 107,112,43
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Foxp2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel FOXP2 PFSK1 Raw 2
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (FOXP2 in PFSK-1 cells)
@@ -5965,6 +6400,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     color 107,112,43
 
     track wgEncodeHudsonalphaChipSeqRawSignalPfsk1Control
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel Control PFSK1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal (Control in PFSK-1 cells)
@@ -5976,6 +6412,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     antibody control
 
     track wgEncodeHudsonalphaChipSeqPeaksRep1SknmcFoxp2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel FOXP2 SKNMC Pk 1
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (FOXP2 in SK-N-MC cells)
@@ -5988,6 +6425,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     color 107,112,43
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2SknmcFoxp2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel FOXP2 SKNMC Pk 2
     longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (FOXP2 in SK-N-MC cells)
@@ -6000,6 +6438,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     color 107,112,43
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel FOXP2 SKNMC Raw 1
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (FOXP2 in SK-N-MC cells)
@@ -6013,6 +6452,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     color 107,112,43
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2SknmcFoxp2
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel FOXP2 SKNMC Raw 2
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (FOXP2 in SK-N-MC cells)
@@ -6026,6 +6466,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     color 107,112,43
 
     track wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
+    release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel Control SKNMC
     longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal (Control in SK-N-MC cells)
@@ -6076,6 +6517,7 @@ wgEncode 1
 #gClass_Unprocessed_pseudogene 0,91,191
 
     track wgEncodeSangerGencodeGencodeManual20081001
+    release alpha
     subTrack wgEncodeSangerGencode
     shortLabel Manual (Oct08)
     longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Oct-08)
@@ -6089,6 +6531,7 @@ wgEncode 1
     freezeDate 2008-10-01
 
     track wgEncodeSangerGencodeGencodeAuto20081001
+    release alpha
     subTrack wgEncodeSangerGencode
     shortLabel Auto (Oct08)
     longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Oct-08)
@@ -6126,6 +6569,7 @@ type bed 3
 wgEncode 1
 
     track wgEncodeGisPetTagsProstateCellLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA prostate cell
     longLabel ENCODE GIS PET Tags (longPolyA in prostate cell cell)
@@ -6139,6 +6583,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeGisPetTagsK562CytosolLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 cytosol
     longLabel ENCODE GIS PET Tags (longPolyA in K562 cell cytosol)
@@ -6152,6 +6597,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeGisPetTagsK562NucleusLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 nucleus
     longLabel ENCODE GIS PET Tags (longPolyA in K562 cell nucleus)
@@ -6165,6 +6611,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeGisPetTagsK562PolysomeLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 polysome
     longLabel ENCODE GIS PET Tags (longPolyA in K562 cell polysome)
@@ -6178,6 +6625,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeGisPetAlignmentsProstateCellLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA prostate cell
     longLabel ENCODE GIS PET Alignments (longPolyA in prostate cell cell)
@@ -6192,6 +6640,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeGisPetAlignmentsK562CytosolLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 cytosol
     longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell cytosol)
@@ -6206,6 +6655,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeGisPetAlignmentsK562NucleusLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 nucleus
     longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell nucleus)
@@ -6220,6 +6670,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeGisPetAlignmentsK562PolysomeLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 polysome
     longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell polysome)
@@ -6234,6 +6685,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeGisPetPlusRawSignalK562CytosolLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 cytosol PlusRaw
     longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in K562 cell cytosol)
@@ -6248,6 +6700,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeGisPetMinusRawSignalK562CytosolLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 cytosol MinusRaw
     longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in K562 cell cytosol)
@@ -6262,6 +6715,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeGisPetPlusRawSignalProstateCellLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA prostate cell PlusRaw
     longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in prostate cell cell)
@@ -6276,6 +6730,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeGisPetMinusRawSignalProstateCellLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA prostate cell MinusRaw
     longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in prostate cell cell)
@@ -6290,6 +6745,7 @@ wgEncode 1
     cell prostate
 
     track wgEncodeGisPetPlusRawSignalK562PolysomeLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 polysome PlusRaw
     longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in K562 cell polysome)
@@ -6304,6 +6760,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeGisPetMinusRawSignalK562PolysomeLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 polysome MinusRaw
     longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in K562 cell polysome)
@@ -6318,6 +6775,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeGisPetPlusRawSignalK562NucleusLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 nucleus PlusRaw
     longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in K562 cell nucleus)
@@ -6332,6 +6790,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeGisPetMinusRawSignalK562NucleusLongpolya
+    release alpha
     subTrack wgEncodeGisPet
     shortLabel longPolyA K562 nucleus MinusRaw
     longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in K562 cell nucleus)
@@ -6369,6 +6828,7 @@ type bed 12
 wgEncode 1
 
     track wgEncodeHudsonalphaMethyl27HepG2r1
+    release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel Methyl27HepG2r1
     longLabel ENCODE HudsonAlpha Methyl27 HepG2 replicate 1
@@ -6380,6 +6840,7 @@ wgEncode 1
     cell HepG2
 
     track wgEncodeHudsonalphaMethyl27HepG2r2
+    release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel Methyl27HepG2r1
     longLabel ENCODE HudsonAlpha Methyl27 HepG2 replicate 2
@@ -6392,6 +6853,7 @@ wgEncode 1
 
 
     track wgEncodeHudsonalphaMethyl27GM12878r1
+    release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel Methyl27GM12878r1
     longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 1
@@ -6403,6 +6865,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeHudsonalphaMethyl27GM12878r2
+    release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel Methyl27GM12878r1
     longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 2
@@ -6414,6 +6877,7 @@ wgEncode 1
     cell GM12878
 
     track wgEncodeHudsonalphaMethyl27K562r1
+    release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel Methyl27K562r1
     longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 1
@@ -6425,6 +6889,7 @@ wgEncode 1
     cell K562
 
     track wgEncodeHudsonalphaMethyl27K562r2
+    release alpha
     subTrack wgEncodeHudsonalphaMethyl27
     shortLabel Methyl27K562r1
     longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 2
@@ -6454,6 +6919,7 @@ controlledVocabulary encode/cv.ra cellType=GM12878,K562,HepG2
 type bed 9 +
 
     track wgEncodeHudsonalphaCnvGM12878Rep1
+    release alpha
     subTrack wgEncodeHudsonalphaCnv
     shortLabel GM12878 CNV Rep1
     longLabel ENCODE Copy Number Variation (GM12878 cells, Rep1)
@@ -6463,6 +6929,7 @@ type bed 9 +
     priority 1
 
     track wgEncodeHudsonalphaCnvGM12878Rep2
+    release alpha
     subTrack wgEncodeHudsonalphaCnv
     shortLabel GM12878 CNV Rep2
     longLabel ENCODE Copy Number Variation (GM12878 cells, Rep2)
@@ -6473,6 +6940,7 @@ type bed 9 +
     track wgEncodeHudsonalphaCnvK562Rep1
     shortLabel K562 CNV Rep1
     longLabel ENCODE Copy Number Variation (K562 cells, Rep1)
+    release alpha
     subTrack wgEncodeHudsonalphaCnv
     subGroups replicate=Rep1 cellType=K562
     cell K562
@@ -6481,6 +6949,7 @@ type bed 9 +
     track wgEncodeHudsonalphaCnvK562Rep2
     shortLabel K562 CNV Rep2
     longLabel ENCODE Copy Number Variation (K562 cells, Rep2)
+    release alpha
     subTrack wgEncodeHudsonalphaCnv
     subGroups replicate=Rep2 cellType=K562
     cell K562
@@ -6489,6 +6958,7 @@ type bed 9 +
     track wgEncodeHudsonalphaCnvHepG2Rep1
     shortLabel HepG2 CNV Rep1
     longLabel ENCODE Copy Number Variation (HepG2 cells, Rep1)
+    release alpha
     subTrack wgEncodeHudsonalphaCnv
     subGroups replicate=Rep1 cellType=HepG2
     cell HepG2
@@ -6497,6 +6967,7 @@ type bed 9 +
     track wgEncodeHudsonalphaCnvHepG2Rep2
     shortLabel HepG2 CNV Rep2
     longLabel ENCODE Copy Number Variation (HepG2 cells, Rep2)
+    release alpha
     subTrack wgEncodeHudsonalphaCnv
     subGroups replicate=Rep2 cellType=HepG2
     cell HepG2
