@@ -42,7 +42,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1545 2009/01/26 18:31:22 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1546 2009/01/26 18:31:39 hiram Exp $";
 
 #define SMALLBUF 64
 
@@ -2180,7 +2180,6 @@ else
     localEnd = end;
     }
 localStart += 1;		// Ensembl base-1 display coordinates
-fprintf(stderr, "hgTracks: ensUrl: %s:%d-%d\n", name, localStart, localEnd);
 ensUrl = ensContigViewUrl(dir, name, seqBaseCount, localStart, localEnd, archive);
 hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\">", ensUrl->string);
 /* NOTE: you can not freeMem(dir) because sometimes it is a literal
