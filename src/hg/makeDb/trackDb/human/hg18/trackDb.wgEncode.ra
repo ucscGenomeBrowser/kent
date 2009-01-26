@@ -3011,7 +3011,7 @@ dimensions dimensionX=cellType dimensionY=promoter
 sortOrder view=+ cellType=+ promoter=+
 dragAndDrop subTracks
 visibilityViewDefaults SI=dense EB=dense
-controlledVocabulary encode/cv.ra cellType promoter
+controlledVocabulary encode/cv.ra cellType=K562,Hela promoter
 noInherit on
 settingsByView SI:configurable=on EB:configurable=on
 dataVersion ENCODE Nov 2008 Freeze
@@ -3291,7 +3291,7 @@ sortOrder cellType=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Hotspots=hide Peaks=hide RawSignal=hide
 noInherit on
-controlledVocabulary encode/cv.ra cellType
+controlledVocabulary encode/cv.ra cellType=GM06990,K562,HeLa-S3,HepG2,SK-N-SH(+RA),Th1
 settingsByView Hotspots:configurable=on Peaks:configurable=on RawSignal:configurable=on,viewLimits=1:10,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3 +
@@ -3587,7 +3587,7 @@ subGroup3 localization Localization cell=Cell nucleus=Nucleus cytosol=Cytosol po
 subGroup4 rnaExtract RnaExtract longNonPolyA=longNonPolyA longPolyA=longPolyA total=total
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary encode/cv.ra cellType localization rnaExtract
+controlledVocabulary encode/cv.ra cellType=GM12878,K562,prostate localization rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults Transfrags=hide FilteredTransfrags=hide RawSignal=hide FilteredRawSignal=dense
 noInherit on
@@ -4204,7 +4204,7 @@ subGroup3 ripAntibody RipAntibody Nov_69522=Nov_69522 Sig_P6246=Sig_P6246 SC_526
 subGroup4 ripTgtProtein RipTgtProtein T7Tag=T7Tag PABPC1=PABPC1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1
 dimensions dimensionX=cellType dimensionY=ripAntibody dimensionZ=ripTgtProtein
 sortOrder cellType=+ ripAntibody=+ ripTgtProtein=+ view=+
-controlledVocabulary encode/cv.ra cellType ripAntibody ripTgtProtein
+controlledVocabulary encode/cv.ra cellType=GM12878,K562 ripAntibody ripTgtProtein
 dragAndDrop subTracks
 visibilityViewDefaults RbpAssocRna=dense
 noInherit on
@@ -5404,7 +5404,7 @@ dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide RawSignal=dense
-controlledVocabulary encode/cv.ra cellType factor
+controlledVocabulary encode/cv.ra cellType=GM12878,K562,PFSK-1,SK-N-MC factor
 noInherit on
 settingsByView Peaks:configurable=on RawSignal:configurable=off,viewLimits=1:10,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
@@ -6116,7 +6116,7 @@ subGroup4 rnaExtract RnaExtract longPolyA=longPolyA
 subGroup4 rnaExtract RnaExtract longPolyA=longPolyA
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary encode/cv.ra cellType localization rnaExtract
+controlledVocabulary encode/cv.ra cellType=K562,prostate localization rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults Alignments=hide Tags=hide
 noInherit on
@@ -6360,7 +6360,7 @@ dimensions dimensionX=cellType dimensionY=replicate
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=dense
-controlledVocabulary encode/cv.ra cellType factor
+controlledVocabulary encode/cv.ra cellType=GM12878,K562,HepG2 factor
 noInherit on
 settingsByView Peaks:configurable=off
 priority 0
@@ -6450,7 +6450,7 @@ subGroup1 cellType Cell_Line GM12878=GM12878_(Tier1) K562=K562_(Tier1) HepG2=Hep
 subGroup2 replicate Replicate Rep1=Rep1 Rep2=Rep2
 dimensions dimensionX=cellType dimensionY=replicate
 dragAndDrop subTracks
-controlledVocabulary encode/cv.ra cellType
+controlledVocabulary encode/cv.ra cellType=GM12878,K562,HepG2
 type bed 9 +
 
     track wgEncodeHudsonalphaCnvGM12878Rep1
