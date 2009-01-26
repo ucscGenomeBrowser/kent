@@ -42,7 +42,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1546 2009/01/26 18:31:39 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1547 2009/01/26 21:48:39 larrym Exp $";
 
 #define SMALLBUF 64
 
@@ -3672,7 +3672,7 @@ if (!hideControls)
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hWrites(" ");
-	hButton("submit", "jump");
+	hButton("hgt.jump", "jump");
 	hOnClickButton(clearButtonJavascript,"clear");
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
         hButton("hgTracksConfigPage", "configure");
@@ -3746,7 +3746,7 @@ if (!hideControls)
         hPrintf(" ");
 	}
 
-    hButton("submit", "refresh");
+    hButton("hgt.refresh", "refresh");
 
     hPrintf("<BR>\n");
 
@@ -3823,7 +3823,7 @@ if (showTrackControls)
 	hPrintf("</td><td align='center' width='100%%'>\n");
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
 	hPrintf("</td><td align='right'>\n");
-	hPrintf("<input type='submit' name='submit' value='refresh'>\n");
+	hPrintf("<input type='submit' name='hgt.refresh' value='refresh'>\n");
 	hPrintf("</td></tr></table></th>\n");
 	controlGridEndRow(cg);
 
@@ -3937,7 +3937,7 @@ if (showTrackControls)
     hPrintf("</DIV>\n");
     }
 if (showTrackControls)
-    hButton("submit", "refresh");
+    hButton("hgt.refresh", "refresh");
 hPrintf("</CENTER>\n");
 
 #ifdef SLOW
@@ -4641,6 +4641,7 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
                         "hgt.chromName", "hgt.winStart", "hgt.winEnd", "hgt.newWinWidth",
                         "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection", "hgt.revCmplDisp",
                         "hgt.collapseGroups", "hgt.expandGroups",
+                        "hgt.jump", "hgt.refresh",
 			NULL };
 
 int main(int argc, char *argv[])
