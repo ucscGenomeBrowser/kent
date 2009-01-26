@@ -7,7 +7,7 @@
 # make ce4 <-> ce5 <-> ce6 liftOver files and compGeno tracks for modENCODE,
 # and a skeletal browser for checking the compGeno tracks.
 
-#  $Id: ce5.txt,v 1.2 2009/01/17 00:25:38 angie Exp $
+#  $Id: ce5.txt,v 1.3 2009/01/26 20:27:39 angie Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE 10/10/07 angie)
@@ -831,6 +831,227 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 '_EOF_'
     # << emacs
     display histo.png &
+
+
+############################################################################
+# PHASTCONS6WAY PARAM RE-ESTIMATION EXPERIMENT (DONE 1/23/09 angie)
+# I wanted to see whether following consEntropy's advice for expected-lengths,
+# and increasing target-coverage to get closer to 68.8%, would make for good
+# results, but it didn't.  Including this here just for the record -- original
+# phastCons6way from above is not changed.
+    # Start with ce6 model and params, but use consEntropy's results
+    # to tune the parameters:
+    mkdir /hive/data/genomes/ce5/bed/multiz6way/phastConsTuned
+    cd /hive/data/genomes/ce5/bed/multiz6way/phastConsTuned
+    sed -e 's/ce6/ce5/g' \
+      /hive/data/genomes/ce6/bed/multiz6way/cons/ave.cons.mod > ce6.ave.cons.mod
+    sed -e 's/ce6/ce5/g' \
+      /hive/data/genomes/ce6/bed/multiz6way/cons/ave.noncons.mod > ce6.ave.noncons.mod
+    /cluster/bin/phast/${MACHTYPE}/consEntropy --NH 9.78 0.55 15 ave.{,non}cons.mod
+#( Solving for new omega: 15.000000 76.253180 42.469155 35.389619 34.810297 34.805819 )
+#Transition parameters: gamma=0.550000, omega=15.000000, mu=0.066667, nu=0.081481
+#Relative entropy: H=1.172307 bits/site
+#Expected min. length: L_min=6.108564 sites
+#Expected max. length: L_max=5.516260 sites
+#Phylogenetic information threshold: PIT=L_min*H=7.161112 bits
+#Recommended expected length: omega=34.805819 sites (for L_min*H=9.780000)
+    # Adam commented in dm1.txt that entropy would decrease with a large 
+    # increase in coverage.  We need to boost the coverage from 61% to 
+    # closer to the target of 68.8% -- not large but not tiny.  Also,
+    # the computed PT is 7.16, already lower than the target of 9.78
+    # (those targets help to make the results more comparable across 
+    # species groups).  So try increasing both target-coverage and 
+    # expected-length from ce6's:
+    /cluster/bin/phast/${MACHTYPE}/consEntropy --NH 9.78 0.75 40 ave.{,non}cons.mod
+#( Solving for new omega: 40.000000 67.304149 61.371424 61.145983 )
+#Transition parameters: gamma=0.750000, omega=40.000000, mu=0.025000, nu=0.075000
+#Relative entropy: H=1.172307 bits/site
+#Expected min. length: L_min=7.137874 sites
+#Expected max. length: L_max=7.010810 sites
+#Phylogenetic information threshold: PIT=L_min*H=8.367780 bits
+#Recommended expected length: omega=61.145983 sites (for L_min*H=9.780000)
+    # Well, with the increased coverage, it is recommending a *very* long
+    # expected-length... but the model figures into this, too.  Use those
+    # params to re-estimate the model.  
+
+    # FIRST ITERATION: use ce6's ave.*.mod and the params tweaked according
+    # to consEntropy's output above.
+    ssh swarm
+    mkdir /hive/data/genomes/ce5/bed/multiz6way/phastConsTuned/run.estimate1
+    cd /hive/data/genomes/ce5/bed/multiz6way/phastConsTuned/run.estimate1
+    cat << '_EOF_' > doEstimate.sh
+#!/bin/csh -ef
+/cluster/bin/phast/phastCons $1 ../ave.noncons.mod --gc 0.383 --nrates 1,1 \
+    --no-post-probs --ignore-missing \
+    --expected-lengths 40 --target-coverage 0.75 \
+    --quiet --log $2 --estimate-trees $3
+'_EOF_'
+    # << emacs
+    chmod a+x doEstimate.sh
+    rm -fr LOG TREES
+    mkdir -p LOG TREES
+    rm -f jobList
+    foreach f (../../phastCons/ss/chr*/*.ss)
+      set root = $f:t:r:r
+      echo doEstimate.sh $f LOG/$root.log TREES/$root >> jobList
+    end
+    para create jobList 
+    para push -maxPush=1, check, shove etc.
+    para time
+#Completed: 29 of 29 jobs
+#CPU time in finished jobs:       2728s      45.47m     0.76h    0.03d  0.000 y
+#IO & Wait Time:                   159s       2.64m     0.04h    0.00d  0.000 y
+#Average job time:                 100s       1.66m     0.03h    0.00d
+#Longest finished job:             155s       2.58m     0.04h    0.00d
+#Submission to last job:           190s       3.17m     0.05h    0.00d
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    ssh kolossus
+    cd /hive/data/genomes/ce5/bed/multiz6way/phastConsTuned/run.estimate1
+    ls -1 TREES/*.cons.mod > cons.txt
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.txt' \
+      --output-average ave.cons.mod > cons_summary.txt
+    ls -1 TREES/*.noncons.mod > noncons.txt
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.txt' \
+      --output-average ave.noncons.mod > noncons_summary.txt
+    grep TREE ave*.mod
+    # FIRST ITERATION:
+#ave.cons.mod:TREE: (((((cb3:0.089855,caeRem3:0.089789):0.023180,caePb2:0.095488):0.030832,ce5:0.100172):0.042051,caeJap1:0.123745):0.132125,priPac1:0.132125);
+#ave.noncons.mod:TREE: (((((cb3:0.310133,caeRem3:0.305886):0.079966,caePb2:0.328879):0.106520,ce5:0.345476):0.145426,caeJap1:0.426104):0.455636,priPac1:0.455636);
+    /cluster/bin/phast/${MACHTYPE}/consEntropy --NH 9.78 0.75 40 ave.{,non}cons.mod
+#( Solving for new omega: 40.000000 68.550455 62.213959 61.964188 )
+#Transition parameters: gamma=0.750000, omega=40.000000, mu=0.025000, nu=0.075000
+#Relative entropy: H=1.053667 bits/site
+#Expected min. length: L_min=7.887543 sites
+#Expected max. length: L_max=7.970539 sites
+#Phylogenetic information threshold: PIT=L_min*H=8.310843 bits
+#Recommended expected length: omega=61.964188 sites (for L_min*H=9.780000)
+    # Hmmm... recommended expected-length went up a tad and PIT decreased 
+    # a smidge, so if anything those measures seemed to worsen with
+    # re-estimation.  Well, let's see what happens to coverage if we run with
+    # the new model and 0.75 40 anyway.
+    cp ave.{,non}cons.mod ..
+
+    ssh swarm
+    mkdir /hive/data/genomes/ce5/bed/multiz6way/phastConsTuned/run.scores
+    cd /hive/data/genomes/ce5/bed/multiz6way/phastConsTuned/run.scores
+    mkdir ppRaw bed
+    cat > doPhast << '_EOF_'
+#!/bin/csh -fe
+mkdir /scratch/tmp/${2}
+cp -p ../../phastCons/ss/${1}/${2}.ss ../ave.cons.mod ../ave.noncons.mod /scratch/tmp/${2}
+pushd /scratch/tmp/${2} > /dev/null
+/cluster/bin/phast/${MACHTYPE}/phastCons ${2}.ss ave.cons.mod,ave.noncons.mod \
+   --expected-lengths 40 --target-coverage 0.75 --quiet \
+        --seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
+popd > /dev/null
+mkdir -p ppRaw/${1}
+mkdir -p bed/${1}
+mv /scratch/tmp/${2}/${2}.pp ppRaw/${1}
+mv /scratch/tmp/${2}/${2}.bed bed/${1}
+rm /scratch/tmp/${2}/ave.{cons,noncons}.mod
+rm /scratch/tmp/${2}/${2}.ss
+rmdir /scratch/tmp/${2}
+'_EOF_'
+    # << emacs
+    chmod +x doPhast
+
+    # root1 == chrom name, file1 == ss file name without .ss suffix
+    cat > template << '_EOF_'
+#LOOP
+doPhast $(root1) $(file1)
+#ENDLOOP
+'_EOF_'
+    # << emacs
+
+    # Create parasol batch and run it
+    ls -1 ../../phastCons/ss/chr*/chr*.ss | sed 's/.ss$//' > in.list
+    gensub2 in.list single template jobList
+    para create jobList
+    para try, check, shove, time
+#Completed: 29 of 29 jobs
+#CPU time in finished jobs:        298s       4.96m     0.08h    0.00d  0.000 y
+#IO & Wait Time:                    90s       1.50m     0.03h    0.00d  0.000 y
+#Average job time:                  13s       0.22m     0.00h    0.00d
+#Longest finished job:              19s       0.32m     0.01h    0.00d
+#Submission to last job:           115s       1.92m     0.03h    0.00d
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    cd /hive/data/genomes/ce5/bed/multiz6way/phastConsTuned/run.scores
+    # The sed's and the sort get the file names in chrom,start order
+    find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+    | sort -k7,7 -k9,9n \
+    | sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+    | /cluster/bin/scripts/lodToBedScore /dev/stdin \
+        > ../phastConsElements6way.bed
+    # As Hiram found when trying even 0.60 as target-cov, there are many
+    # warnings about negative scores.
+    cd ..
+
+    # Aiming for %70 coverage in the following featureBits measurement on CDS,
+    # but as in ce6, will accept 61%:
+    featureBits ce5 -enrichment sangerGeneLO:cds phastConsElements6way.bed
+#sangerGeneLO:cds 25.324%, phastConsElements6way.bed 34.253%, both 16.522%, cover 65.24%, enrich 1.90x
+    # OK, 65.2% is closer to 68.8% than 61%.
+    # What is the actual distribution of conserved element sizes like?
+    awk '{print $3 - $2;}' phastConsElements6way.bed | sort -n > sizes.txt
+    # Average length:
+    awk '{TOTAL += $1; COUNT++; }  END {printf "%d / %d = %.2f\n", TOTAL, COUNT, TOTAL/COUNT; }' \
+      sizes.txt
+#34349436 / 423298 = 81.15
+    # Median:
+    tail -n +`expr 423298 / 2` sizes.txt | head -2
+#51
+#51
+    textHistogram sizes.txt -binSize=10
+#Maximum value 3811.000000
+    # slowly decaying exponential peaking in the 10-19 bin.
+    # Repeated those measurements in ../phastCons -- avg. 49.8, median 31,
+    # bigger peak at 10-19 and faster decay in the histogram.  
+    # So expected-lengths definitely has an effect there... actual lengths
+    # are bigger than expected, and really don't want to be as low as 15.  
+    # hg18 17way avg=66.3, median=38.  dm3 15way avg=43.05, median=26.
+    # ce2 phastConsElementsPaper (undoc'd): avg=269, median=175 -- but that
+    # might have been with only a 2-way alignment w/briggsae. 
+
+    # Load up wiggle and elements to visually compare with original run:
+    cd /hive/data/genomes/ce5/bed/multiz6way/phastConsTuned/run.scores
+    cat << '_EOF_' > catScores.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p ../phastCons6wayScoresT1
+
+for D in ppRaw/chr*
+do
+    C=${D/ppRaw\/}
+    out=../phastCons6wayScoresT1/${C}.scores.gz
+    find ./${D} -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+        | sort -k7,7 -k9,9n \
+        | sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat
+done
+'_EOF_'
+    # << emacs
+    chmod +x catScores.sh
+    ./catScores.sh \
+    | wigEncode stdin phastCons6wayT1.{wig,wib}
+    mv phastCons6wayT1.{wig,wib} ..
+#Converted stdin, upper limit 1.00, lower limit 0.00
+    ssh hgwdev
+    # Load gbdb and database with wiggle.
+    cd /hive/data/genomes/ce5/bed/multiz6way/phastConsTuned
+    ln -s `pwd`/phastCons6wayT1.wib /gbdb/ce5/wib/
+    hgLoadWiggle ce5 phastCons6wayT1 phastCons6wayT1.wig
+    hgLoadBed ce5 phastConsElements6wayT1 phastConsElements6way.bed
+    # They look overinflated -- I see elements extending into gaps,
+    # amplified score-humps over gaps (don't know why those are there at all).
+
+    # Bottom line -- stick with the ce6 model and params from the original 
+    # run above!
 
 
 ############################################################################
