@@ -62,7 +62,7 @@ void cirTreeFileBulkIndexToOpenFile(
 	void *context,
 	struct cirTreeRange (*fetchKey)(const void *va, void *context),
 	bits64 (*fetchOffset)(const void *va, void *context), 
-	bits64 totalFileSize, FILE *f);
+	bits64 endFileOffset, FILE *f);
 /* Create a r tree index from a sorted array, writing output starting at current position
  * of an already open file.  See cirTreeFileCreate for explanation of parameters. */
 
@@ -75,7 +75,7 @@ void cirTreeFileCreate(
 	void *context,		/* Context pointer for use by fetch call-back functions. */
 	struct cirTreeRange (*fetchKey)(const void *va, void *context),/* Given item, return key. */
 	bits64 (*fetchOffset)(const void *va, void *context), /* Given item, return file offset */
-	bits64 totalFileSize,				 /* Total size of file we are indexing. */
+	bits64 endFileOffset,				 /* Last position in file we index. */
 	char *fileName);                                 /* Name of output file. */
 /* Create a r tree index file from a sorted array. */
 
