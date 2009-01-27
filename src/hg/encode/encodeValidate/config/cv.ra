@@ -701,7 +701,7 @@ description 10kb DNA fragments
 # localization
 term cell
 type localization
-description whole cell
+description Whole cell
 termId GO:0005634
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
 
@@ -750,7 +750,7 @@ termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:001
 # RNA extracts
 term total
 type rnaExtract
-description Total RNA from whole cell
+description Total RNA extract
 
 term short
 type rnaExtract
