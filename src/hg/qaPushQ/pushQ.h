@@ -5,11 +5,8 @@
 #ifndef PUSHQ_H
 #define PUSHQ_H
 
-#ifndef JKSQL_H
 #include "jksql.h"
-#endif
-
-#define PUSHQ_NUM_COLS 31
+#define PUSHQ_NUM_COLS 32
 
 struct pushQ
 /* Push Queue */
@@ -46,6 +43,7 @@ struct pushQ
     char lockDateTime[17];	/* When user placed lock, or empty string */
     char *releaseLog;	/* Release Log entry */
     char *featureBits;	/* Feature Bits results */
+    char *releaseLogUrl;	/* Release Log URL */
     };
 
 void pushQStaticLoad(char **row, struct pushQ *ret);

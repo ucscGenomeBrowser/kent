@@ -36,6 +36,7 @@ CREATE TABLE pushQ (
     lockDateTime char(16) not null,	# When user placed lock, or empty string
     releaseLog longblob not null,	# Release Log entry
     featureBits longblob not null,	# Feature Bits results
+    releaseLogUrl longblob not null,	# Release Log URL
               #Indices
     PRIMARY KEY(qid)
 );

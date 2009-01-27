@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.109 2009/01/15 00:33:58 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.110 2009/01/27 10:36:28 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -75,7 +75,7 @@ char *oldRandState = NULL;
 /*
 "qid,pqid,priority,rank,qadate,newYN,track,dbs,tbls,cgis,files,sizeMB,currLoc,"
 "makeDocYN,onlineHelp,ndxYN,joinerYN,stat,sponsor,reviewer,extSource,openIssues,notes,"
-pushState,initdate,bounces,lockUser,lockDateTime,releaseLog";
+pushState,initdate,bounces,lockUser,lockDateTime,releaseLog,featureBits,releaseLogUrl";
 */
 
 /* structural improvements suggested by MarkD:
@@ -127,7 +127,8 @@ static char const *colName[] = {
  "bounces"   , 
  "lockUser"  , 
  "lockDateTime",
- "releaseLog"
+ "releaseLog", 
+ "releaseLogUrl"
 };
 
 
@@ -163,6 +164,7 @@ e_bounces   ,
 e_lockUser  ,
 e_lockDateTime,
 e_releaseLog,
+e_releaseLogUrl,
 e_NUMCOLS
 };
 
@@ -199,7 +201,8 @@ char *colHdr[] = {
 "Bounce Count",
 "Lock User",
 "Lock&nbsp;Date&nbsp;Time",
-"Release&nbsp;Log"
+"Release&nbsp;Log",
+"Release&nbsp;Log&nbsp;Url"
 };
 
 char *numberToMonth[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
@@ -552,6 +555,7 @@ replaceInStr(html, sizeof(html) , "<!openIssues>"  , ki->openIssues);
 replaceInStr(html, sizeof(html) , "<!notes>"       , ki->notes     );
 replaceInStr(html, sizeof(html) , "<!initdate>"    , ki->initdate  ); 
 replaceInStr(html, sizeof(html) , "<!releaseLog>"  , ki->releaseLog); 
+replaceInStr(html, sizeof(html) , "<!releaseLogUrl>", ki->releaseLogUrl); 
 
 replaceInStr(html, sizeof(html) , "<!cb>"          , newRandState  ); 
 
@@ -725,6 +729,7 @@ q.notes   = "";
 strftime (q.initdate, sizeof(q.initdate), "%Y-%m-%d", loctime); /* automatically use today date */
 safef(q.lastdate, sizeof(q.lastdate), "%s", "" );
 q.releaseLog = "";
+q.releaseLogUrl = "";
 
 if (sameString(myUser.role,"dev"))
     {
@@ -931,6 +936,11 @@ switch(col)
 	printf("<td>%s</td>\n", ki->releaseLog   );
 	break;
 	
+    case e_releaseLogUrl:
+	dotdotdot(ki->releaseLogUrl,MAXBLOBSHOW);  /* chr(255) */
+	printf("<td>%s</td>\n", ki->releaseLogUrl  );
+	break;
+
     default:
 	errAbort("drawDisplayLine: unexpected case enum %d.",col);
 	
@@ -1348,7 +1358,7 @@ void pushQUpdateEscaped(struct sqlConnection *conn, struct pushQ *el, char *tabl
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *featureBits, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lastdate, *lockUser, *lockDateTime, *releaseLog;
+char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *featureBits, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lastdate, *lockUser, *lockDateTime, *releaseLog, *releaseLogUrl;
 qid = sqlEscapeString(el->qid);
 pqid = sqlEscapeString(el->pqid);
 priority = sqlEscapeString(el->priority);
@@ -1377,6 +1387,7 @@ lastdate = sqlEscapeString(el->lastdate);
 lockUser = sqlEscapeString(el->lockUser);
 lockDateTime = sqlEscapeString(el->lockDateTime);
 releaseLog = sqlEscapeString(el->releaseLog);
+releaseLogUrl = sqlEscapeString(el->releaseLogUrl);
 
 /* had to split this up because dyStringPrintf only up to 4000 chars at one time */
 dyStringPrintf(update, 
@@ -1395,9 +1406,9 @@ dyStringPrintf(update, "sizeMB=%u,currLoc='%s',"
     sponsor,  reviewer,  extSource);
 dyStringPrintf(update, "openIssues='%s',",openIssues);
 dyStringPrintf(update, "notes='%s',",notes);
-dyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s',featureBits='%s' "
+dyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s',featureBits='%s',releaseLogUrl='%s' "
 	"where qid='%s'", 
-	pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, featureBits,
+	pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, featureBits, releaseLogUrl,
 	qid
 	);
 
@@ -1430,6 +1441,7 @@ freez(&lastdate);
 freez(&lockUser);
 freez(&lockDateTime);
 freez(&releaseLog);
+freez(&releaseLogUrl);
 }
 
 void getCgiData(bool *isOK, bool isPtr, void *ptr, int size, char *name)
@@ -1622,6 +1634,7 @@ getCgiData(&isOK, TRUE ,&q->featureBits, -1                 , "featureBits");
 getCgiData(&isOK, TRUE ,&q->openIssues, -1                  , "openIssues");
 getCgiData(&isOK, TRUE ,&q->notes     , -1                  , "notes"     );
 getCgiData(&isOK, TRUE ,&q->releaseLog, -1                  , "releaseLog");
+getCgiData(&isOK, TRUE ,&q->releaseLogUrl, -1               , "releaseLogUrl");
 
 
 /* check for things too big  */
@@ -3398,7 +3411,7 @@ printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%%\">\n
     "</TR>\n"
     );
 safef(query,sizeof(query),
-    "select releaseLog, dbs, qadate from pushQ "
+    "select releaseLog, dbs, qadate, releaseLogUrl from pushQ "
     "where priority='L' and releaseLog != '' and dbs != '' %s"
     "order by qadate desc, qid desc ", encodeClause 
     );
@@ -3440,12 +3453,20 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (found)
 	    {
 	    topCount++;
-	    printf("<TR valign=top><TD align=left>\n"
-		"%s</td>\n"
-		"<td>%s</td>\n"
+	    printf("<TR valign=top><TD align=left>\n");
+	    if (sameOk(row[3], ""))
+		{
+    		printf("%s", row[0]);
+		}
+	    else
+		{
+    		printf("<a href=\"%s\" target=_blank>%s</a>", row[3], row[0]);
+		}
+	    printf("</td>\n");
+	    printf("<td>%s</td>\n"
 		"<td>%02d %s %s</td>\n"
 		"</tr>\n",
-		row[0], row[1], d, numberToMonth[m-1], cloneStringZ(row[2],4) );
+		row[1], d, numberToMonth[m-1], cloneStringZ(row[2],4) );
 	    }
 
 	freez(&dbs);
@@ -3478,7 +3499,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 	);
     
     safef(query,sizeof(query),
-	"select releaseLog, qadate from pushQ "
+	"select releaseLog, qadate, releaseLogUrl from pushQ "
 	"where priority='L' and releaseLog != '' and dbs like '%%%s%%' %s"
 	"order by qadate desc, qid desc",
 	ki->name,
@@ -3491,11 +3512,20 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 	{
 	sscanf(cloneStringZ(&row[1][5],2),"%d",&m);
 	sscanf(cloneStringZ(&row[1][8],2),"%d",&d);
-	printf("<TR valign=top><TD align=left>\n"
-	    "%s</td>\n"
+	printf("<TR valign=top><TD align=left>\n");
+	if (sameOk(row[2], ""))
+	    {
+	    printf("%s", row[0]);
+	    }
+	else
+	    {
+	    printf("<a href=\"%s\" target=_blank>%s</a>", row[2], row[0]);
+	    }
+	printf("</td>\n");
+	printf(
 	    "<td>%02d %s %s</td>\n"
 	    "</tr>\n",
-	    row[0], d, numberToMonth[m-1], cloneStringZ(row[1],4) );
+	    d, numberToMonth[m-1], cloneStringZ(row[1],4) );
 	}
     sqlFreeResult(&sr);
     printf("</table>\n");

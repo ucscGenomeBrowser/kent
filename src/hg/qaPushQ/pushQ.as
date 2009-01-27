@@ -32,6 +32,7 @@ table pushQ
     char[16]  lockDateTime; "When user placed lock, or empty string"
     lstring   releaseLog;  "Release Log entry"
     lstring   featureBits;"Feature Bits results"
+    lstring   releaseLogUrl;  "Release Log URL"
     )
 
 table users

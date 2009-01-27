@@ -8,44 +8,45 @@
 #include "jksql.h"
 #include "pushQ.h"
 
-static char const rcsid[] = "$Id: pushQ.c,v 1.11 2005/11/26 22:35:31 galt Exp $";
+static char const rcsid[] = "$Id: pushQ.c,v 1.14 2009/12/02 21:42:04 galt Exp $";
 
 void pushQStaticLoad(char **row, struct pushQ *ret)
 /* Load a row from pushQ table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-strcpy(ret->qid, row[0]);
-strcpy(ret->pqid, row[1]);
-strcpy(ret->priority, row[2]);
+safecpy(ret->qid, sizeof(ret->qid), row[0]);
+safecpy(ret->pqid, sizeof(ret->pqid), row[1]);
+safecpy(ret->priority, sizeof(ret->priority), row[2]);
 ret->rank = sqlUnsigned(row[3]);
-strcpy(ret->qadate, row[4]);
-strcpy(ret->newYN, row[5]);
+safecpy(ret->qadate, sizeof(ret->qadate), row[4]);
+safecpy(ret->newYN, sizeof(ret->newYN), row[5]);
 ret->track = row[6];
 ret->dbs = row[7];
 ret->tbls = row[8];
 ret->cgis = row[9];
 ret->files = row[10];
 ret->sizeMB = sqlUnsigned(row[11]);
-strcpy(ret->currLoc, row[12]);
-strcpy(ret->makeDocYN, row[13]);
-strcpy(ret->onlineHelp, row[14]);
-strcpy(ret->ndxYN, row[15]);
-strcpy(ret->joinerYN, row[16]);
+safecpy(ret->currLoc, sizeof(ret->currLoc), row[12]);
+safecpy(ret->makeDocYN, sizeof(ret->makeDocYN), row[13]);
+safecpy(ret->onlineHelp, sizeof(ret->onlineHelp), row[14]);
+safecpy(ret->ndxYN, sizeof(ret->ndxYN), row[15]);
+safecpy(ret->joinerYN, sizeof(ret->joinerYN), row[16]);
 ret->stat = row[17];
-strcpy(ret->sponsor, row[18]);
-strcpy(ret->reviewer, row[19]);
-strcpy(ret->extSource, row[20]);
+safecpy(ret->sponsor, sizeof(ret->sponsor), row[18]);
+safecpy(ret->reviewer, sizeof(ret->reviewer), row[19]);
+safecpy(ret->extSource, sizeof(ret->extSource), row[20]);
 ret->openIssues = row[21];
 ret->notes = row[22];
-strcpy(ret->pushState, row[23]);
-strcpy(ret->initdate, row[24]);
-strcpy(ret->lastdate, row[25]);
+safecpy(ret->pushState, sizeof(ret->pushState), row[23]);
+safecpy(ret->initdate, sizeof(ret->initdate), row[24]);
+safecpy(ret->lastdate, sizeof(ret->lastdate), row[25]);
 ret->bounces = sqlUnsigned(row[26]);
-strcpy(ret->lockUser, row[27]);
-strcpy(ret->lockDateTime, row[28]);
+safecpy(ret->lockUser, sizeof(ret->lockUser), row[27]);
+safecpy(ret->lockDateTime, sizeof(ret->lockDateTime), row[28]);
 ret->releaseLog = row[29];
 ret->featureBits = row[30];
+ret->releaseLogUrl = row[31];
 }
 
 struct pushQ *pushQLoad(char **row)
@@ -55,37 +56,38 @@ struct pushQ *pushQLoad(char **row)
 struct pushQ *ret;
 
 AllocVar(ret);
-strcpy(ret->qid, row[0]);
-strcpy(ret->pqid, row[1]);
-strcpy(ret->priority, row[2]);
+safecpy(ret->qid, sizeof(ret->qid), row[0]);
+safecpy(ret->pqid, sizeof(ret->pqid), row[1]);
+safecpy(ret->priority, sizeof(ret->priority), row[2]);
 ret->rank = sqlUnsigned(row[3]);
-strcpy(ret->qadate, row[4]);
-strcpy(ret->newYN, row[5]);
+safecpy(ret->qadate, sizeof(ret->qadate), row[4]);
+safecpy(ret->newYN, sizeof(ret->newYN), row[5]);
 ret->track = cloneString(row[6]);
 ret->dbs = cloneString(row[7]);
 ret->tbls = cloneString(row[8]);
 ret->cgis = cloneString(row[9]);
 ret->files = cloneString(row[10]);
 ret->sizeMB = sqlUnsigned(row[11]);
-strcpy(ret->currLoc, row[12]);
-strcpy(ret->makeDocYN, row[13]);
-strcpy(ret->onlineHelp, row[14]);
-strcpy(ret->ndxYN, row[15]);
-strcpy(ret->joinerYN, row[16]);
+safecpy(ret->currLoc, sizeof(ret->currLoc), row[12]);
+safecpy(ret->makeDocYN, sizeof(ret->makeDocYN), row[13]);
+safecpy(ret->onlineHelp, sizeof(ret->onlineHelp), row[14]);
+safecpy(ret->ndxYN, sizeof(ret->ndxYN), row[15]);
+safecpy(ret->joinerYN, sizeof(ret->joinerYN), row[16]);
 ret->stat = cloneString(row[17]);
-strcpy(ret->sponsor, row[18]);
-strcpy(ret->reviewer, row[19]);
-strcpy(ret->extSource, row[20]);
+safecpy(ret->sponsor, sizeof(ret->sponsor), row[18]);
+safecpy(ret->reviewer, sizeof(ret->reviewer), row[19]);
+safecpy(ret->extSource, sizeof(ret->extSource), row[20]);
 ret->openIssues = cloneString(row[21]);
 ret->notes = cloneString(row[22]);
-strcpy(ret->pushState, row[23]);
-strcpy(ret->initdate, row[24]);
-strcpy(ret->lastdate, row[25]);
+safecpy(ret->pushState, sizeof(ret->pushState), row[23]);
+safecpy(ret->initdate, sizeof(ret->initdate), row[24]);
+safecpy(ret->lastdate, sizeof(ret->lastdate), row[25]);
 ret->bounces = sqlUnsigned(row[26]);
-strcpy(ret->lockUser, row[27]);
-strcpy(ret->lockDateTime, row[28]);
+safecpy(ret->lockUser, sizeof(ret->lockUser), row[27]);
+safecpy(ret->lockDateTime, sizeof(ret->lockDateTime), row[28]);
 ret->releaseLog = cloneString(row[29]);
 ret->featureBits = cloneString(row[30]);
+ret->releaseLogUrl = cloneString(row[31]);
 return ret;
 }
 
@@ -95,7 +97,7 @@ struct pushQ *pushQLoadAll(char *fileName)
 {
 struct pushQ *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[31];
+char *row[32];
 
 while (lineFileRow(lf, row))
     {
@@ -113,7 +115,7 @@ struct pushQ *pushQLoadAllByChar(char *fileName, char chopper)
 {
 struct pushQ *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[31];
+char *row[32];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -157,8 +159,8 @@ void pushQSaveToDb(struct sqlConnection *conn, struct pushQ *el, char *tableName
  * If worried about this use pushQSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s',%s,'%s',%s,%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s','%s',%u,'%s','%s',%s,%s)", 
-	tableName,  el->qid,  el->pqid,  el->priority,  el->rank,  el->qadate,  el->newYN,  el->track,  el->dbs,  el->tbls,  el->cgis,  el->files,  el->sizeMB,  el->currLoc,  el->makeDocYN,  el->onlineHelp,  el->ndxYN,  el->joinerYN,  el->stat,  el->sponsor,  el->reviewer,  el->extSource,  el->openIssues,  el->notes,  el->pushState,  el->initdate,  el->lastdate,  el->bounces,  el->lockUser,  el->lockDateTime,  el->releaseLog,  el->featureBits);
+dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s',%s,'%s',%s,%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s','%s',%u,'%s','%s',%s,%s,%s)", 
+	tableName,  el->qid,  el->pqid,  el->priority,  el->rank,  el->qadate,  el->newYN,  el->track,  el->dbs,  el->tbls,  el->cgis,  el->files,  el->sizeMB,  el->currLoc,  el->makeDocYN,  el->onlineHelp,  el->ndxYN,  el->joinerYN,  el->stat,  el->sponsor,  el->reviewer,  el->extSource,  el->openIssues,  el->notes,  el->pushState,  el->initdate,  el->lastdate,  el->bounces,  el->lockUser,  el->lockDateTime,  el->releaseLog,  el->featureBits,  el->releaseLogUrl);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -173,7 +175,7 @@ void pushQSaveToDbEscaped(struct sqlConnection *conn, struct pushQ *el, char *ta
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lastdate, *lockUser, *lockDateTime, *releaseLog, *featureBits;
+char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lastdate, *lockUser, *lockDateTime, *releaseLog, *featureBits, *releaseLogUrl;
 qid = sqlEscapeString(el->qid);
 pqid = sqlEscapeString(el->pqid);
 priority = sqlEscapeString(el->priority);
@@ -202,9 +204,10 @@ lockUser = sqlEscapeString(el->lockUser);
 lockDateTime = sqlEscapeString(el->lockDateTime);
 releaseLog = sqlEscapeString(el->releaseLog);
 featureBits = sqlEscapeString(el->featureBits);
+releaseLogUrl = sqlEscapeString(el->releaseLogUrl);
 
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s','%s','%s','%s')", 
-	tableName,  qid,  pqid,  priority, el->rank ,  qadate,  newYN,  track,  dbs,  tbls,  cgis,  files, el->sizeMB ,  currLoc,  makeDocYN,  onlineHelp,  ndxYN,  joinerYN,  stat,  sponsor,  reviewer,  extSource,  openIssues,  notes,  pushState,  initdate,  lastdate, el->bounces ,  lockUser,  lockDateTime,  releaseLog,  featureBits);
+dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s','%s','%s','%s','%s')", 
+	tableName,  qid,  pqid,  priority,  el->rank,  qadate,  newYN,  track,  dbs,  tbls,  cgis,  files,  el->sizeMB,  currLoc,  makeDocYN,  onlineHelp,  ndxYN,  joinerYN,  stat,  sponsor,  reviewer,  extSource,  openIssues,  notes,  pushState,  initdate,  lastdate,  el->bounces,  lockUser,  lockDateTime,  releaseLog,  featureBits,  releaseLogUrl);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&qid);
@@ -235,6 +238,7 @@ freez(&lockUser);
 freez(&lockDateTime);
 freez(&releaseLog);
 freez(&featureBits);
+freez(&releaseLogUrl);
 }
 
 struct pushQ *pushQCommaIn(char **pS, struct pushQ *ret)
@@ -277,6 +281,7 @@ sqlFixedStringComma(&s, ret->lockUser, sizeof(ret->lockUser));
 sqlFixedStringComma(&s, ret->lockDateTime, sizeof(ret->lockDateTime));
 ret->releaseLog = sqlStringComma(&s);
 ret->featureBits = sqlStringComma(&s);
+ret->releaseLogUrl = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -298,6 +303,7 @@ freeMem(el->openIssues);
 freeMem(el->notes);
 freeMem(el->releaseLog);
 freeMem(el->featureBits);
+freeMem(el->releaseLogUrl);
 freez(pEl);
 }
 
@@ -434,6 +440,10 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->featureBits);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->releaseLogUrl);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
@@ -442,9 +452,9 @@ void usersStaticLoad(char **row, struct users *ret)
  * be replaced at the next call to this function. */
 {
 
-strcpy(ret->user, row[0]);
-strcpy(ret->password, row[1]);
-strcpy(ret->role, row[2]);
+safecpy(ret->user, sizeof(ret->user), row[0]);
+safecpy(ret->password, sizeof(ret->password), row[1]);
+safecpy(ret->role, sizeof(ret->role), row[2]);
 ret->contents = row[3];
 }
 
@@ -455,9 +465,9 @@ struct users *usersLoad(char **row)
 struct users *ret;
 
 AllocVar(ret);
-strcpy(ret->user, row[0]);
-strcpy(ret->password, row[1]);
-strcpy(ret->role, row[2]);
+safecpy(ret->user, sizeof(ret->user), row[0]);
+safecpy(ret->password, sizeof(ret->password), row[1]);
+safecpy(ret->role, sizeof(ret->role), row[2]);
 ret->contents = cloneString(row[3]);
 return ret;
 }
