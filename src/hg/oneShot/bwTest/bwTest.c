@@ -3,26 +3,26 @@
 /* bigWig file structure:
  *     fixedWidthHeader
  *         magic# 		4 bytes
- *	   zoomLevels		4 bytes
+ *	   summaryLevels		4 bytes
  *         chromosomeTreeOffset	8 bytes
- *         unzoomedDataOffset	8 bytes
- *	   unzoomedIndexOffset	8 bytes
+ *         fullDataOffset	8 bytes
+ *	   fullIndexOffset	8 bytes
  *         reserved            32 bytes
- *     zoomHeaders
- *         zoomFactor		float (4 bytes)
+ *     summaryHeaders
+ *         summaryFactor	4 bytes
  *	   reserved		4 bytes
  *	   dataOffset		8 bytes
  *         indexOffset          8 bytes
  *     chromosome b+ tree       
- *     unzoomed data
+ *     full data
  *         sectionCount		4 bytes
  *         sectionData
- *     unzoomed index
- *     zoom info
- *         zoomed data
+ *     full index
+ *     summary info
+ *         summary data
  *             sectionCount		4 bytes
  *             sectionData
- *         zoomed index
+ *         summary index
  */
 
 #include "common.h"
@@ -36,7 +36,7 @@
 #include "cirTree.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwTest.c,v 1.7 2009/01/26 22:57:42 kent Exp $";
+static char const rcsid[] = "$Id: bwTest.c,v 1.8 2009/01/27 03:05:47 kent Exp $";
 
 
 int blockSize = 1024;
@@ -48,7 +48,10 @@ void usage()
 errAbort(
   "bwTest - Test out some big wig related things.\n"
   "usage:\n"
-  "   bwTest in.wig out.bw\n"
+  "   bwTest in.wig chrom.sizes out.bw\n"
+  "Where in.wig is in one of the ascii wiggle formats, but not including track lines\n"
+  "and chrom.sizes is two column: <chromosome name> <size in bases>\n"
+  "and out.bw is the output indexed big wig file.\n"
   "options:\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
@@ -140,6 +143,7 @@ struct bigWigSummary
     float maxVal;		/* Maximum value of items */
     float sumData;		/* sum of values for each base. */
     float sumSquares;		/* sum of squares for each base. */
+    bits64 fileOffset;		/* Offset of summary in file. */
     };
 
 #define bigWigSummaryFreeList slFreeList
@@ -598,30 +602,31 @@ hashFree(&chromHash);
 chromList = NULL;
 }
 
-struct name32
+struct chromInfo
 /* Pair of a name and a 32-bit integer. Used to assign IDs to chromosomes. */
     {
-    struct name32 *next;
-    char *name;
-    bits32 val;
+    struct chromInfo *next;
+    char *name;		/* Chromosome name */
+    bits32 id;		/* Chromosome ID - a small number usually */
+    bits32 size;	/* Chromosome size in bases */
     };
 
-static void name32Key(const void *va, char *keyBuf)
+static void chromInfoKey(const void *va, char *keyBuf)
 /* Get key field. */
 {
-const struct name32 *a = ((struct name32 *)va);
+const struct chromInfo *a = ((struct chromInfo *)va);
 strcpy(keyBuf, a->name);
 }
 
-static void *name32Val(const void *va)
+static void *chromInfoVal(const void *va)
 /* Get key field. */
 {
-const struct name32 *a = ((struct name32 *)va);
-return (void*)(&a->val);
+const struct chromInfo *a = ((struct chromInfo *)va);
+return (void*)(&a->id);
 }
 
-static void makeChromIds(struct bigWigSect *sectionList,
-	int *retChromCount, struct name32 **retChromArray,
+static void makeChromInfo(struct bigWigSect *sectionList, struct hash *chromSizeHash,
+	int *retChromCount, struct chromInfo **retChromArray,
 	int *retMaxChromNameSize)
 /* Fill in chromId field in sectionList.  Return array of chromosome name/ids. */
 {
@@ -647,13 +652,14 @@ for (section = sectionList; section != NULL; section = section->next)
 slReverse(&uniqList);
 
 /* Allocate and fill in results array. */
-struct name32 *chromArray;
+struct chromInfo *chromArray;
 AllocArray(chromArray, chromCount);
 int i;
 for (i = 0, uniq = uniqList; i < chromCount; ++i, uniq = uniq->next)
     {
     chromArray[i].name = uniq->val;
-    chromArray[i].val = i;
+    chromArray[i].id = i;
+    chromArray[i].size = hashIntVal(chromSizeHash, uniq->val);
     }
 
 /* Clean up, set return values and go home. */
@@ -771,7 +777,7 @@ for (el = list; el != NULL; el = el->next)
 return total;
 }
 
-void addToSummary(bits32 chromId, bits32 start, bits32 end, bits32 validCount, 
+void addToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end, bits32 validCount, 
 	float minVal, float maxVal, float sumData, float sumSquares,  int reduction,
 	struct bigWigSummary **pOutList)
 /* Add data range to summary - putting it onto top of list if possible, otherwise
@@ -791,6 +797,8 @@ while (start < end)
 	else
 	    newSum->start = sum->end;
 	newSum->end = newSum->start + reduction;
+	if (newSum->end > chromSize)
+	    newSum->end = chromSize;
 	newSum->minVal = minVal;
 	newSum->maxVal = maxVal;
 	sum = newSum;
@@ -821,38 +829,39 @@ while (start < end)
     }
 }
 
-void addRangeToSummary(bits32 chromId, bits32 start, bits32 end, float val, int reduction,
-	struct bigWigSummary **pOutList)
+void addRangeToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end, 
+	float val, int reduction, struct bigWigSummary **pOutList)
 /* Add chromosome range to summary - putting it onto top of list if possible, otherwise
  * expanding list. */
 {
 int size = end-start;
 float sum = size*val;
 float sumSquares = sum*val;
-addToSummary(chromId, start, end, size, val, val, sum, sumSquares, reduction, pOutList);
+addToSummary(chromId, chromSize, start, end, size, val, val, sum, sumSquares, reduction, pOutList);
 }
 
 
-void bigWigReduceBedGraph(struct bigWigSect *section, int reduction, 
+void bigWigReduceBedGraph(struct bigWigSect *section, bits32 chromSize, int reduction, 
 	struct bigWigSummary **pOutList)
 /*Reduce a bedGraph section onto outList. */
 {
 struct bigWigBedGraphItem *item;
 for (item = section->itemList.bedGraph; item != NULL; item = item->next)
-    addRangeToSummary(section->chromId, item->start, item->end, item->val, reduction, pOutList);
+    addRangeToSummary(section->chromId, chromSize, item->start, item->end, 
+    	item->val, reduction, pOutList);
 }
 
-void bigWigReduceVariableStep(struct bigWigSect *section, int reduction, 
+void bigWigReduceVariableStep(struct bigWigSect *section, bits32 chromSize, int reduction, 
 	struct bigWigSummary **pOutList)
 /*Reduce a variableStep section onto outList. */
 {
 struct bigWigVariableStepItem *item;
 for (item = section->itemList.variableStep; item != NULL; item = item->next)
-    addRangeToSummary(section->chromId, item->start, item->start + section->itemSpan, item->val, 
-    	reduction, pOutList);
+    addRangeToSummary(section->chromId, chromSize, item->start, item->start + section->itemSpan, 
+    	item->val, reduction, pOutList);
 }
 
-void bigWigReduceFixedStep(struct bigWigSect *section, int reduction, 
+void bigWigReduceFixedStep(struct bigWigSect *section, bits32 chromSize, int reduction, 
 	struct bigWigSummary **pOutList)
 /*Reduce a variableStep section onto outList. */
 {
@@ -860,25 +869,27 @@ struct bigWigFixedStepItem *item;
 int start = section->start;
 for (item = section->itemList.fixedStep; item != NULL; item = item->next)
     {
-    addRangeToSummary(section->chromId, start, start + section->itemSpan, item->val, 
+    addRangeToSummary(section->chromId, chromSize, start, start + section->itemSpan, item->val, 
     	reduction, pOutList);
     start += section->itemStep;
     }
 }
 
-struct bigWigSummary *bigWigReduceSummaryList(struct bigWigSummary *inList, int reduction)
+struct bigWigSummary *bigWigReduceSummaryList(struct bigWigSummary *inList, 
+	struct chromInfo *chromInfoArray, int reduction)
 /* Reduce summary list to another summary list. */
 {
 struct bigWigSummary *outList = NULL;
 struct bigWigSummary *sum;
 for (sum = inList; sum != NULL; sum = sum->next)
-    addToSummary(sum->chromId, sum->start, sum->end, sum->validCount, sum->minVal,
+    addToSummary(sum->chromId, chromInfoArray[sum->chromId].size, sum->start, sum->end, sum->validCount, sum->minVal,
     	sum->maxVal, sum->sumData, sum->sumSquares, reduction, &outList);
 slReverse(&outList);
 return outList;
 }
 
-struct bigWigSummary *bigWigReduceSectionList(struct bigWigSect *sectionList, int reduction)
+struct bigWigSummary *bigWigReduceSectionList(struct bigWigSect *sectionList, 
+	struct chromInfo *chromInfoArray, int reduction)
 /* Reduce section by given amount. */
 {
 struct bigWigSummary *outList = NULL;
@@ -887,16 +898,17 @@ struct bigWigSect *section = NULL;
 /* Loop through input section list reducing into outList. */
 for (section = sectionList; section != NULL; section = section->next)
     {
+    bits32 chromSize = chromInfoArray[section->chromId].size;
     switch (section->type)
         {
 	case bigWigTypeBedGraph:
-	    bigWigReduceBedGraph(section, reduction, &outList);
+	    bigWigReduceBedGraph(section, chromSize, reduction, &outList);
 	    break;
 	case bigWigTypeVariableStep:
-	    bigWigReduceVariableStep(section, reduction, &outList);
+	    bigWigReduceVariableStep(section, chromSize, reduction, &outList);
 	    break;
 	case bigWigTypeFixedStep:
-	    bigWigReduceFixedStep(section, reduction, &outList);
+	    bigWigReduceFixedStep(section, chromSize, reduction, &outList);
 	    break;
 	default:
 	    internalErr();
@@ -907,75 +919,133 @@ slReverse(&outList);
 return outList;
 }
 
-void bigWigCreate(struct bigWigSect *sectionList, char *fileName)
+bits64 bigWigSummaryFetchOffset(const void *va, void *context)
+/* Fetch bigWigSummary file offset for r-tree */
+{
+const struct bigWigSummary *a = *((struct bigWigSummary **)va);
+return a->fileOffset;
+}
+
+struct cirTreeRange bigWigSummaryFetchKey(const void *va, void *context)
+/* Fetch bigWigSummary key for r-tree */
+{
+struct cirTreeRange res;
+const struct bigWigSummary *a = *((struct bigWigSummary **)va);
+res.chromIx = a->chromId;
+res.start = a->start;
+res.end = a->end;
+return res;
+}
+
+
+bits64 writeSummaryAndIndex(struct bigWigSummary *summaryList, FILE *f)
+/* Write out summary and index to summary, returning start position of
+ * summary index. */
+{
+bits32 i, count = slCount(summaryList);
+struct bigWigSummary **summaryArray;
+AllocArray(summaryArray, count);
+writeOne(f, count);
+bits64 dataOffset = ftell(f);
+struct bigWigSummary *summary;
+for (summary = summaryList, i=0; summary != NULL; summary = summary->next, ++i)
+    {
+    summaryArray[i] = summary;
+    summary->fileOffset = ftell(f);
+    writeOne(f, summary->chromId);
+    writeOne(f, summary->start);
+    writeOne(f, summary->end);
+    writeOne(f, summary->validCount);
+    writeOne(f, summary->minVal);
+    writeOne(f, summary->maxVal);
+    writeOne(f, summary->sumData);
+    writeOne(f, summary->sumSquares);
+    }
+bits64 indexOffset = ftell(f);
+cirTreeFileBulkIndexToOpenFile(summaryArray, sizeof(summaryArray[0]), count,
+    blockSize, itemsPerSlot, NULL, bigWigSummaryFetchKey, bigWigSummaryFetchOffset, 
+    indexOffset, f);
+freez(&summaryArray);
+return indexOffset;
+}
+
+void bigWigCreate(struct bigWigSect *sectionList, struct hash *chromSizeHash, char *fileName)
 /* Create a bigWig file out of a sorted sectionList. */
 {
 bits32 sectionCount = slCount(sectionList);
 FILE *f = mustOpen(fileName, "wb");
 bits32 sig = bigWigSig;
-bits32 zoomCount = 0;
+bits32 summaryCount = 0;
 bits32 reserved32 = 0;
+bits64 reserved64 = 0;
 bits64 dataOffset = 0, dataOffsetPos;
 bits64 indexOffset = 0, indexOffsetPos;
 bits64 chromTreeOffset = 0, chromTreeOffsetPos;
-struct bigWigSummary *zoomSummaries[10];
+struct bigWigSummary *reduceSummaries[10];
+bits32 reductionAmounts[10];
+bits64 reductionDataOffsetPos[10];
+bits64 reductionDataOffsets[10];
+bits64 reductionIndexOffsets[10];
 int i;
 
 /* Figure out chromosome ID's. */
-struct name32 *chromIdArray;
+struct chromInfo *chromInfoArray;
 int chromCount, maxChromNameSize;
-makeChromIds(sectionList, &chromCount, &chromIdArray, &maxChromNameSize);
+makeChromInfo(sectionList, chromSizeHash, &chromCount, &chromInfoArray, &maxChromNameSize);
 
-/* Figure out initial zoom level - starting with a zoom 10 times the amount
- * of the smallest item.  See if zoomed data is smaller than input data, if
- * not bump up reduction by a factor of 2 until it is, or until further zooming
+/* Figure out initial summary level - starting with a summary 10 times the amount
+ * of the smallest item.  See if summarized data is smaller than input data, if
+ * not bump up reduction by a factor of 2 until it is, or until further summarying
  * yeilds no size reduction. */
 int  minRes = usualResolution(sectionList);
 int initialReduction = minRes*10;
 uglyf("minRes=%d, initialReduction=%d\n", minRes, initialReduction);
 bits64 fullSize = bigWigTotalSectSize(sectionList);
-struct bigWigSummary *firstZoomList = NULL, *zoomList = NULL;
-bits64 lastZoomSize = 0, zoomSize;
+struct bigWigSummary *firstSummaryList = NULL, *summaryList = NULL;
+bits64 lastSummarySize = 0, summarySize;
 for (;;)
     {
-    zoomList = bigWigReduceSectionList(sectionList, initialReduction);
-    bits64 zoomSize = bigWigTotalSummarySize(zoomList);
-    uglyf("fullSize %llu,  zoomSize %llu,  initialReduction %d\n", fullSize, zoomSize, initialReduction);
-    if (zoomSize >= fullSize && zoomSize != lastZoomSize)
+    summaryList = bigWigReduceSectionList(sectionList, chromInfoArray, initialReduction);
+    bits64 summarySize = bigWigTotalSummarySize(summaryList);
+    uglyf("fullSize %llu,  summarySize %llu,  initialReduction %d\n", fullSize, summarySize, initialReduction);
+    if (summarySize >= fullSize && summarySize != lastSummarySize)
         {
 	initialReduction *= 2;
-	bigWigSummaryFreeList(&zoomList);
-	lastZoomSize = zoomSize;
+	bigWigSummaryFreeList(&summaryList);
+	lastSummarySize = summarySize;
 	}
     else
         break;
     }
-zoomCount = 1;
-zoomSummaries[0] = firstZoomList = zoomList;
+summaryCount = 1;
+reduceSummaries[0] = firstSummaryList = summaryList;
+reductionAmounts[0] = initialReduction;
 
-/* Now calculate up to 10 levels of further zoom. */
+/* Now calculate up to 10 levels of further summary. */
 bits64 reduction = initialReduction;
-for (i=0; i<ArraySize(zoomSummaries)-1; i++)
+for (i=0; i<ArraySize(reduceSummaries)-1; i++)
     {
     reduction *= 10;
     if (reduction > 1000000000)
         break;
-    zoomList = bigWigReduceSummaryList(zoomSummaries[zoomCount-1], reduction);
-    zoomSize = bigWigTotalSummarySize(zoomList);
-    if (zoomSize != lastZoomSize)
+    summaryList = bigWigReduceSummaryList(reduceSummaries[summaryCount-1], chromInfoArray, 
+    	reduction);
+    summarySize = bigWigTotalSummarySize(summaryList);
+    if (summarySize != lastSummarySize)
         {
- 	zoomSummaries[zoomCount] = zoomList;
-	++zoomCount;
+ 	reduceSummaries[summaryCount] = summaryList;
+	reductionAmounts[summaryCount] = reduction;
+	++summaryCount;
 	}
-    int zoomItemCount = slCount(zoomList);
-    uglyf("Zoom count %d, reducton %llu, items %d\n", zoomCount, reduction, zoomItemCount);
-    if (zoomItemCount <= chromCount)
+    int summaryItemCount = slCount(summaryList);
+    uglyf("Summary count %d, reduction %llu, items %d\n", summaryCount, reduction, summaryItemCount);
+    if (summaryItemCount <= chromCount)
         break;
     }
 
 /* Write fixed header. */
 writeOne(f, sig);
-writeOne(f, zoomCount);
+writeOne(f, summaryCount);
 chromTreeOffsetPos = ftell(f);
 writeOne(f, chromTreeOffset);
 dataOffsetPos = ftell(f);
@@ -985,13 +1055,21 @@ writeOne(f, indexOffset);
 for (i=0; i<8; ++i)
     writeOne(f, reserved32);
 
-
+/* Write summary headers */
+for (i=0; i<summaryCount; ++i)
+    {
+    writeOne(f, reductionAmounts[i]);
+    writeOne(f, reserved32);
+    reductionDataOffsetPos[i] = ftell(f);
+    writeOne(f, reserved64);	// Fill in with data offset later
+    writeOne(f, reserved64);	// Fill in with index offset later
+    }
 
 /* Write chromosome bPlusTree */
 chromTreeOffset = ftell(f);
 int chromBlockSize = min(blockSize, chromCount);
-bptFileBulkIndexToOpenFile(chromIdArray, sizeof(chromIdArray[0]), chromCount, chromBlockSize,
-    name32Key, maxChromNameSize, name32Val, sizeof(chromIdArray[0].val), f);
+bptFileBulkIndexToOpenFile(chromInfoArray, sizeof(chromInfoArray[0]), chromCount, chromBlockSize,
+    chromInfoKey, maxChromNameSize, chromInfoVal, sizeof(chromInfoArray[0].id), f);
 
 /* Write out data section count and sections themselves. */
 dataOffset = ftell(f);
@@ -1009,8 +1087,15 @@ for (section = sectionList, i=0; section != NULL; section = section->next, ++i)
     sectionArray[i] = section;
 cirTreeFileBulkIndexToOpenFile(sectionArray, sizeof(sectionArray[0]), sectionCount,
     blockSize, 1, NULL, bigWigSectFetchKey, bigWigSectFetchOffset, 
-    indexOffset - dataOffset, f);
+    indexOffset, f);
 freez(&sectionArray);
+
+/* Write out summary sections. */
+for (i=0; i<summaryCount; ++i)
+    {
+    reductionDataOffsets[i] = ftell(f);
+    reductionIndexOffsets[i] = writeSummaryAndIndex(reduceSummaries[i], f);
+    }
 
 /* Go back and fill in offsets properly in header. */
 fseek(f, dataOffsetPos, SEEK_SET);
@@ -1020,19 +1105,38 @@ writeOne(f, indexOffset);
 fseek(f, chromTreeOffsetPos, SEEK_SET);
 writeOne(f, chromTreeOffset);
 
+/* Also fill in offsets in zoom headers. */
+for (i=0; i<summaryCount; ++i)
+    {
+    fseek(f, reductionDataOffsetPos[i], SEEK_SET);
+    writeOne(f, reductionDataOffsets[i]);
+    writeOne(f, reductionIndexOffsets[i]);
+    }
+
 
 uglyf("chromTreeOffsetPos %llu, chromTreeOffset %llu\n", chromTreeOffsetPos, chromTreeOffset);
 uglyf("dataOffsetPos %llu, dataOffset %llu\n", dataOffsetPos, dataOffset);
 uglyf("indexOffsetPos %llu, indexOffset %llu\n", indexOffsetPos, indexOffset);
 /* Clean up */
-freez(&chromIdArray);
+freez(&chromInfoArray);
 carefulClose(&f);
 }
 
+struct hash *hashChromSizes(char *fileName)
+/* Read two column file into hash keyed by chrom. */
+{
+struct hash *hash = hashNew(0);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+while (lineFileRow(lf, row))
+    hashAddInt(hash, row[0], sqlUnsigned(row[1]));
+return hash;
+}
 
-void bwTest(char *inName, char *outName)
+void bwTest(char *inName, char *chromSizes, char *outName)
 /* bwTest - Test out some big wig related things. */
 {
+struct hash *chromSizeHash = hashChromSizes(chromSizes);
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 char *line;
 struct bigWigSect *sectionList = NULL;
@@ -1065,7 +1169,7 @@ while (lineFileNextReal(lf, &line))
 
 slSort(&sectionList, bigWigSectCmp);
 
-bigWigCreate(sectionList, outName);
+bigWigCreate(sectionList, chromSizeHash, outName);
 }
 
 int main(int argc, char *argv[])
@@ -1074,8 +1178,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
-if (argc != 3)
+if (argc != 4)
     usage();
-bwTest(argv[1], argv[2]);
+bwTest(argv[1], argv[2], argv[3]);
 return 0;
 }
