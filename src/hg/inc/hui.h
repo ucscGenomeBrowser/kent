@@ -859,4 +859,47 @@ boolean isNameAtCompositeLevel(struct trackDb *tdb,char *name);
 boolean hSameTrackDbType(char *type1, char *type2);
 /* Compare type strings: require same string unless both are wig tracks. */
 
+typedef struct _sortOrder {
+// Sort order is used for sorting trackDb entries (hgTrackDb) and setting up javascript sorting (hui.c)
+    int count;
+    char*sortOrder;      // from cart (eg: CEL=+ FAC=- view=-)
+    char*htmlId;         // {tableName}.sortOrder
+    char**column;        // Always order in trackDb.ra (eg: FAC,CEL,view) TAG
+    char**title;         // Always order in trackDb.ra (eg: Factor,Cell Line,View)
+    boolean* forward;    // Always order in trackDb.ra but value of cart! (eg: -,+,-)
+    int*  order;  // 1 based
+    char *setting;
+} sortOrder_t;
+
+sortOrder_t *sortOrderGet(struct cart *cart,struct trackDb *parentTdb);
+/* Parses any list sort order instructions for parent of subtracks (from cart or trackDb)
+   Some trickiness here.  sortOrder->sortOrder is from cart (changed by user action), as is sortOrder->order,
+   But columns are in original tdb order (unchanging)!  However, if cart is null, all is from trackDb.ra */
+
+void sortOrderFree(sortOrder_t **sortOrder);
+/* frees any previously obtained sortOrder settings */
+
+typedef struct _sortColumn {
+// link list of columns to sort contained in sortableItem
+    struct _sortColumn *next;
+    char *value;                // value to sort on
+    boolean fwd;                // direction
+} sortColumn;
+
+typedef struct _sortableTdbItem {
+// link list of tdb items to sort
+    struct _sortableTdbItem *next;
+    struct trackDb *tdb;        // a contained item is actually a tdb entry
+    sortColumn *columns;        // a link list of values to sort on
+} sortableTdbItem;
+
+sortableTdbItem *sortableTdbItemCreate(struct trackDb *tdbChild,sortOrder_t *sortOrder);
+// creates a sortable tdb item struct, given a child tdb and its parents sort table
+
+void sortTdbItemsAndUpdatePriorities(sortableTdbItem **items);
+// sort tdb items in list and then update priorities of item tdbs
+
+void sortableTdbItemsFree(sortableTdbItem **items);
+// Frees all memory associated with a list of sortable tdb items
+
 #endif /* HUI_H */

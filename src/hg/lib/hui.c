@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.149 2009/01/26 18:23:41 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.150 2009/01/27 19:43:48 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -1982,21 +1982,10 @@ if(value && *value)
     freez(value);
 }
 
-typedef struct _sortOrder {
-    int count;
-    char*sortOrder;      // from cart (eg: CEL=+ FAC=- view=-)
-    char*htmlId;         // {tableName}.sortOrder
-    char**column;        // Always order in trackDb.ra (eg: FAC,CEL,view) TAG
-    char**title;         // Always order in trackDb.ra (eg: Factor,Cell Line,View)
-    boolean* forward;    // Always order in trackDb.ra but value of cart! (eg: -,+,-)
-    int*  order;  // 1 based
-    char *setting;
-} sortOrder_t;
-
-static sortOrder_t *sortOrderGet(struct cart *cart,struct trackDb *parentTdb)
-/* Parses any list sort order instructions for parent of subtracks (from cart or trackDb) */
-// Some trickiness here.  sortOrder->sortOrder is from cart (changed by user action), as is sortOrder->order,
-//                        But columns are in original tdb order (unchanging)!
+sortOrder_t *sortOrderGet(struct cart *cart,struct trackDb *parentTdb)
+/* Parses any list sort order instructions for parent of subtracks (from cart or trackDb)
+   Some trickiness here.  sortOrder->sortOrder is from cart (changed by user action), as is sortOrder->order,
+   But columns are in original tdb order (unchanging)!  However, if cart is null, all is from trackDb.ra */
 {
 int ix;
 char *setting = trackDbSetting(parentTdb, "sortOrder");
@@ -2006,8 +1995,10 @@ if(setting == NULL) // Must be in trackDb or not a sortable table
 sortOrder_t *sortOrder = needMem(sizeof(sortOrder_t));
 sortOrder->htmlId = needMem(strlen(parentTdb->tableName)+15);
 safef(sortOrder->htmlId, (strlen(parentTdb->tableName)+15), "%s.sortOrder", parentTdb->tableName);
-char *cartSetting = cartCgiUsualString(cart, sortOrder->htmlId, setting);
-if(strlen(cartSetting) == strlen(setting))
+char *cartSetting = NULL;
+if(cart != NULL)
+    cartSetting = cartCgiUsualString(cart, sortOrder->htmlId, setting);
+if(cart != NULL && strlen(cartSetting) == strlen(setting))
     sortOrder->sortOrder = cloneString(cartSetting);  // cart order
 else
     sortOrder->sortOrder = cloneString(setting);      // old cart value is abandoned!
@@ -2043,7 +2034,7 @@ for (ix = 0; ix<sortOrder->count; ix++)
     }
 return sortOrder;  // NOTE cloneString:words[0]==*sortOrder->column[0] and will be freed when sortOrder is freed
 }
-static void sortOrderFree(sortOrder_t **sortOrder)
+void sortOrderFree(sortOrder_t **sortOrder)
 /* frees any previously obtained sortOrder settings */
 {
 if(sortOrder && *sortOrder)
@@ -2060,7 +2051,88 @@ if(sortOrder && *sortOrder)
     }
 }
 
+sortableTdbItem *sortableTdbItemCreate(struct trackDb *tdbChild,sortOrder_t *sortOrder)
+// creates a sortable tdb item struct, given a child tdb and its parent's sort table
+{
+sortableTdbItem *item = NULL;
+AllocVar(item);
+item->tdb = tdbChild;
+if(sortOrder != NULL)   // Add some sort buttons
+    {
+    int sIx=0;
+    for(sIx=sortOrder->count - 1;sIx>=0;sIx--) // walk backwards to ensure sort order in columns
+        {
+        sortColumn *column = NULL;
+        AllocVar(column);
+        column->fwd = sortOrder->forward[sIx];
+        if(!subgroupFind(item->tdb,sortOrder->column[sIx],&(column->value)))
+            {
+            char *setting = trackDbSetting(item->tdb,sortOrder->column[sIx]);
+            if(setting != NULL)
+                column->value = cloneString(setting);
+            // No subgroup, assume there is a matching setting (eg longLabel)
+            }
+        if(column->value != NULL)
+            slAddHead(&(item->columns), column);
+        else
+            freez(&column);
+        }
+    }
+return item;
+}
 
+static int sortableTdbItemsCmp(const void *va, const void *vb)
+// Compare two sortable tdb items based upon sort columns.
+{
+const sortableTdbItem *a = *((sortableTdbItem **)va);
+const sortableTdbItem *b = *((sortableTdbItem **)vb);
+sortColumn *colA = a->columns;
+sortColumn *colB = b->columns;
+int compared = 0;
+for (;compared==0 && colA!=NULL && colB!=NULL;colA=colA->next,colB=colB->next)
+    {
+    if(colA->value != NULL && colB->value != NULL)
+        compared = colA->fwd ? strcmp(colA->value, colB->value)
+                             : strcmp(colB->value, colA->value);
+    }
+if(compared != 0)
+    return compared;
+
+return strcmp(a->tdb->shortLabel, b->tdb->shortLabel); // Last chance
+}
+
+void sortTdbItemsAndUpdatePriorities(sortableTdbItem **items)
+// sort items in list and then update priorities of item tdbs
+{
+if(items != NULL && *items != NULL)
+    {
+    slSort(items, sortableTdbItemsCmp);
+    int priority=1;
+    sortableTdbItem *item;
+    for (item = *items; item != NULL; item = item->next)
+        item->tdb->priority = (float)priority++;
+    }
+}
+
+void sortableTdbItemsFree(sortableTdbItem **items)
+// Frees all memory associated with a list of sortable tdb items
+{
+if(items != NULL && *items != NULL)
+    {
+    sortableTdbItem *item;
+    for (item = *items; item != NULL; item = item->next)
+        {
+        sortCoumn *column;
+        for (column = item->columns; column != NULL; column = column->next)
+            {
+            if(column->value != NULL)
+                freeMem(value);
+            }
+        slFreeList(&(item->columns));
+        }
+    slFreeList(items);
+    }
+}
 
 #define COLOR_BG_DEFAULT        "#FFFEE8"
 #define COLOR_BG_ALTDEFAULT     "#FFF9D2"
