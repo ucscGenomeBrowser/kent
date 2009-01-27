@@ -51,9 +51,13 @@ public class HgTracks {
    public static void refreshHGTracks(WebResponse page) throws Exception {
     // System.out.println("Clicking refresh button");
     WebForm form = page.getFormWithName("TrackForm");
-    SubmitButton refreshButton = form.getSubmitButton("submit", "refresh");
+    // Button name changed on v199: SubmitButton refreshButton = form.getSubmitButton("submit", "refresh"); 
+    SubmitButton refreshButton = form.getSubmitButton("hgt.refresh", "refresh");
     if (refreshButton == null) {
       System.err.println("Error getting refresh button");
+      //for (Button b : form.getButtons()) {
+	//System.err.println("Buttons found: name=[" + b.getName() + "] value=[" + b.getValue() + "] type=["+b.getType() + "] string="+b.toString());
+      //}
       // throw Exception
       return;
     }
