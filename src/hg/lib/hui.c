@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.152 2009/01/27 20:36:59 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.153 2009/01/27 21:03:07 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2056,6 +2056,8 @@ sortableTdbItem *sortableTdbItemCreate(struct trackDb *tdbChild,sortOrder_t *sor
 // Errors in interpreting a passed in sortOrder will return NULL
 {
 sortableTdbItem *item = NULL;
+if(tdbChild == NULL || tdbChild->shortLabel == NULL)
+    return NULL;
 AllocVar(item);
 item->tdb = tdbChild;
 if(sortOrder != NULL)   // Add some sort buttons
