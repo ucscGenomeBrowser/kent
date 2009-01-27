@@ -209,6 +209,29 @@ groupings lblHuEx1Groups
 priority 4.1
 
 ## Ovarian Data
+track broadOVexp_affy
+shortLabel OV Broad Expression
+longLabel TCGA OV Broad Affymetrix Expression Array U133A
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 4.0
+expStep 0.2
+groupings broadOVexp_affyGroups
+priority 4.0
+
+track harvardOVCGH
+shortLabel OV Harvard CGH
+longLabel TCGA Ovarian Harvard CGH Array 244A
+group tcga
+visibility hide
+type expRatio
+logicalDb localDb
+expScale 1.0
+expStep 0.1
+groupings harvardOVCGHGroups
+priority 7.5  
 
 track broadOVABI_SomaticNS
 shortLabel OV Broad ABI Som. Non-Silent
