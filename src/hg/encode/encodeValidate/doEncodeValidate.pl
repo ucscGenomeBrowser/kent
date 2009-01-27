@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.138 2009/01/27 17:43:58 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.139 2009/01/27 18:01:22 kate Exp $
 
 use warnings;
 use strict;
@@ -1467,11 +1467,7 @@ foreach my $ddfLine (@ddfLines) {
 	    $groupVar = "factor" if $var eq "antibody";
 	    $groupVar = "cellType" if $var eq "cell";
             $subGroups .= " $groupVar=$hash{$var}";
-            if(length($var) < 6) {
-                $additional = "\t$var\t\t$hash{$var}\n" . $additional;
-            } else {
-                $additional = "\t$var\t$hash{$var}\n" . $additional;
-            }
+            $additional = "    $var $hash{$var}\n" . $additional;
         }
     }
 
@@ -1547,9 +1543,9 @@ foreach my $ddfLine (@ddfLines) {
         }
         if($type eq 'wig') {
             print TRACK_RA <<END;
-	spanList	first
-	windowingFunction mean
-	maxHeightPixels	100:16:16
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
 END
 	} elsif($type eq 'bed 5 +') {
 		print TRACK_RA "    useScore 1\n";
