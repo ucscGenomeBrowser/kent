@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.139 2009/01/27 18:01:22 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.140 2009/01/27 22:55:25 tdreszer Exp $
 
 use warnings;
 use strict;
@@ -154,6 +154,7 @@ our %validators = (
     ripTgtProtein => \&validateRipTgtProtein,
     freezeDate => \&validateFreezeDate,
     replicate => \&validateReplicate,
+    species => \&validateSpecies,
     );
 
 # standard validators (required or optional for all projects)
@@ -283,6 +284,11 @@ sub validateReplicate {
     return ();
 }
 
+
+sub validateSpecies {
+    my ($val) = @_;
+    return defined($terms{'species'}{$val}) ? () : ("species \'$val\' is not known");
+}
 ############################################################################
 # Format checkers - check file format for given types; extend when adding new
 # data formats
@@ -311,6 +317,7 @@ our %formatCheckers = (
     fastq => \&validateFastQ,
     csfasta => \&validateCsfasta,
     csqual  => \&validateCsqual,
+    cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
     );
 
 sub openUtil
@@ -442,6 +449,25 @@ sub validateWithList
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
     doTime("done validateWithList $name,$type,$maxRows",$lineNumber) if $opt_timing;
+    return ();
+}
+
+
+sub validateFreepass
+{
+    my ($path, $file, $type) = @_;
+    doTime("beginning validateFreepass") if $opt_timing;
+    my $fh = openUtil($path, $file);
+    #my $lineNumber = 0;
+    #while(<$fh>) {
+    #    chomp;
+    #    $lineNumber++;
+    #    last if($opt_quick && $lineNumber >= $quickCount);
+    #}
+    $fh->close();
+    HgAutomate::verbose(2, "File \'$file\' free pass on validation\n");
+
+    doTime("done validateFreepass") if $opt_timing;
     return ();
 }
 
@@ -1412,6 +1438,7 @@ foreach my $ddfLine (@ddfLines) {
     my $subGroups = "view=$view";
     my $additional = "\n";
     my $pushQDescription = "";
+    my $species;
     if (@variables) {
         my %hash = map { $_ => $ddfLine->{$_} } @variables;
         for my $var (@variables) {
@@ -1440,6 +1467,12 @@ foreach my $ddfLine (@ddfLines) {
             $shortSuffix = $hash{'freezeDate'};
             $longSuffix = $hash{'freezeDate'};
             $pushQDescription = $longSuffix;
+        } elsif ($hash{"species"}) {
+            $pushQDescription = "$hash{'species'}";
+            $shortSuffix = "$hash{'species'}";
+            $longSuffix = "in $hash{'species'}";
+            $species = "$hash{'species'}";
+            $pushQDescription = "$view $daf->{dataType} $longSuffix";
         } elsif ($hash{"cell"}) {
             $pushQDescription = "$hash{'cell'}";
             $shortSuffix = "$hash{'cell'}";
@@ -1484,12 +1517,16 @@ foreach my $ddfLine (@ddfLines) {
     # XXXX Move the decision about which views have tracks into the DAF?
     # Gingeras group need to see their alignments
     # Riken group have RawData and RawData2 because they have colorspace fasta and quality files
-    my $downloadOnly = $view eq 'RawData' || $view eq 'RawData2' || ($view eq 'Alignments' and $daf->{grant} ne "Gingeras") ? 1 : 0;
+    my $downloadOnly = $view eq 'RawData' || $view eq 'RawData2'|| $view eq 'Comparative' || ($view eq 'Alignments' and $daf->{grant} ne "Gingeras") ? 1 : 0;
 
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "view $view\n";
     print LOADER_RA "type $type\n";
-    print LOADER_RA "assembly $daf->{assembly}\n";
+    if($species) {
+        print LOADER_RA "assembly $species\n";
+    } else {
+        print LOADER_RA "assembly $daf->{assembly}\n";
+    }
     print LOADER_RA "files @{$ddfLine->{files}}\n";
     print LOADER_RA "downloadOnly $downloadOnly\n";
     print LOADER_RA "pushQDescription $pushQDescription\n";
