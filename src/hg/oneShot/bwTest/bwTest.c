@@ -3,26 +3,34 @@
 /* bigWig file structure:
  *     fixedWidthHeader
  *         magic# 		4 bytes
- *	   summaryLevels		4 bytes
+ *	   zoomLevels		4 bytes
  *         chromosomeTreeOffset	8 bytes
  *         fullDataOffset	8 bytes
  *	   fullIndexOffset	8 bytes
  *         reserved            32 bytes
- *     summaryHeaders
- *         summaryFactor	4 bytes
+ *     zoomHeaders		there are zoomLevels number of these
+ *         reductionLevel	4 bytes
  *	   reserved		4 bytes
  *	   dataOffset		8 bytes
  *         indexOffset          8 bytes
- *     chromosome b+ tree       
+ *     chromosome b+ tree       bPlusTree index
  *     full data
  *         sectionCount		4 bytes
- *         sectionData
- *     full index
- *     summary info
- *         summary data
- *             sectionCount		4 bytes
- *             sectionData
- *         summary index
+ *         section data		section count sections, of three types
+ *     full index               ciTree index
+ *     zoom info             one of these for each zoom level
+ *         zoom data
+ *             zoomCount	4 bytes
+ *             zoom data	there are zoomCount of these items
+ *                 chromId	4 bytes
+ *	           chromStart	4 bytes
+ *                 chromEnd     4 bytes
+ *                 validCount	4 bytes
+ *                 minVal       4 bytes float 
+ *                 maxVal       4 bytes float
+ *                 sumData      4 bytes float
+ *                 sumSquares   4 bytes float
+ *         zoom index        	ciTree index
  */
 
 #include "common.h"
@@ -36,7 +44,7 @@
 #include "cirTree.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwTest.c,v 1.8 2009/01/27 03:05:47 kent Exp $";
+static char const rcsid[] = "$Id: bwTest.c,v 1.9 2009/01/27 07:14:24 kent Exp $";
 
 
 int blockSize = 1024;
