@@ -9,7 +9,7 @@
 #include "cirTree.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwTestRead.c,v 1.3 2009/01/24 06:38:43 kent Exp $";
+static char const rcsid[] = "$Id: bwTestRead.c,v 1.4 2009/01/27 03:54:02 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -35,6 +35,16 @@ printf("%s:%d:%u\n", keyString, valSize, *pVal);
 freeMem(keyString);
 }
 
+struct bigWigFileZoomLevel
+/* A zoom level in bigWig file. */
+    {
+    struct bigWigFileZoomLevel *next;	/* Next in list. */
+    bits32 reductionLevel;		/* How many bases per item */
+    bits32 reserved;			/* Zero for now. */
+    bits64 dataOffset;			/* Offset of data for this level in file. */
+    bits64 indexOffset;			/* Offset of index for this level in file. */
+    };
+
 struct bigWigFile 
 /* An open bigWigFile */
     {
@@ -47,6 +57,7 @@ struct bigWigFile
     bits64 chromTreeOffset;	/* Offset to chromosome index. */
     bits64 unzoomedDataOffset;	/* Start of unzoomed data. */
     bits64 unzoomedIndexOffset;	/* Start of unzoomed index. */
+    struct bigWigFileZoomLevel *levelList;	/* List of zoom levels. */
     };
 
 struct bigWigFile *bigWigFileOpen(char *fileName)
@@ -80,6 +91,19 @@ bwf->unzoomedIndexOffset = readBits64(f, isSwapped);
 fseek(f, 32, SEEK_CUR);
 
 /* Read zoom headers. */
+int i;
+struct bigWigFileZoomLevel *level, *levelList = NULL;
+for (i=0; i<bwf->zoomLevels; ++i)
+    {
+    AllocVar(level);
+    level->reductionLevel = readBits32(f, isSwapped);
+    level->reserved = readBits32(f, isSwapped);
+    level->dataOffset = readBits64(f, isSwapped);
+    level->indexOffset = readBits64(f, isSwapped);
+    slAddHead(&levelList, level);
+    }
+slReverse(&levelList);
+bwf->levelList = levelList;
 
 /* Attach B+ tree of chromosome names and ids. */
 bwf->chromBpt =  bptFileAttach(fileName, f);
