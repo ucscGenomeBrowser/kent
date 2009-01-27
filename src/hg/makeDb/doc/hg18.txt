@@ -26156,16 +26156,20 @@ cat > listWig.csh << 'EOF'
     csh ../../downloads.csh phyloP44way.primate >&! downloads.log &
 
     # add create web downloads dir and add symlinks to files
-    cd /usr/local/apache/htdocs/goldenPath/hg18
+    cd ../../
+    mkdir downloads
+    cp /usr/local/apache/htdocs/goldenPath/hg18/phastCons44way/README.txt downloads
+    # edit
+    cd /usr/local/apache/htdocs/goldenPath/hg18/
+    mkdir phyloP44way
+    cd  phyloP44way
+    ln -s /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/downloads/README.txt .
     mkdir vertebrate
-    cd vertebrate
-    ln /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/all/downloads/{*.gz,md5sum.txt} .
+    ln -s /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/all/downloads/{*.gz,md5sum.txt} vertebrate
     mkdir placentalMammals
-    cd placentalMammals
-    ln /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/all/downloads/{*.gz,md5sum.txt} .
+    ln -s /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/placental/downloads/{*.gz,md5sum.txt} placentalMammals
     mkdir primates
-    cd primates
-    ln /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/all/downloads/{*.gz,md5sum.txt} .
+    ln -s /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/primate/downloads/{*.gz,md5sum.txt} primates
 
     # Lineage-specific runs
     # uses --subtree option of phyloP
@@ -26175,7 +26179,9 @@ cat > listWig.csh << 'EOF'
     set PHASTBIN = /cluster/bin/phast.2008-12-18
     $PHASTBIN/tree_doctor 44way.all.mod --name-ancestors >44way.all-ancestors.mod 
     cd ../consPhyloP/run.phyloP
-    sed 's/phyloP/phyloP --subtree=$3/' doPhyloP.csh > doPhyloPSubtree.csh
+    
+    # built new PHAST package with fix from Adam for --subtree problems:w
+    sed -e 's/phyloP/phyloP --subtree=$3/' -e 's/phast.2008-12-18/phast.2009-01-26/' doPhyloP.csh > doPhyloPSubtree.csh
     # visually inspect shell script
 
     cat > template.subtree << 'EOF'
@@ -26185,7 +26191,7 @@ csh ../doPhyloPSubtree.csh $(file1) {check out line+ wig/$(dir1)/$(file1).wig} S
 'EOF'
 
     # primate lineage-specific
-    cd /cluster/data/hg18/bed/multiz44way/4d/consPhyloP/run.phyloP
+    cd /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP
     mkdir primate-ls
     cd primate-ls
     cp ../../../4d/44way.all-ancestors.mod tree.mod
