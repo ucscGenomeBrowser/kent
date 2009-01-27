@@ -819,6 +819,10 @@ term rn4
 type species
 description Rat: Rattus norvegicus; November 2004 release
 
+term canFam2
+type species
+description Dog: Canis lupus familiaris; May 2005 release
+
 term bosTau4
 type species
 description Cow: Bos Taurus; October 2007 release
