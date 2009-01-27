@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.150 2009/01/27 19:43:48 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.151 2009/01/27 19:46:41 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2122,12 +2122,9 @@ if(items != NULL && *items != NULL)
     sortableTdbItem *item;
     for (item = *items; item != NULL; item = item->next)
         {
-        sortCoumn *column;
+        sortColumn *column;
         for (column = item->columns; column != NULL; column = column->next)
-            {
-            if(column->value != NULL)
-                freeMem(value);
-            }
+            freeMem(column->value);
         slFreeList(&(item->columns));
         }
     slFreeList(items);
