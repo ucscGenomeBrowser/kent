@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.137 2009/01/27 17:34:44 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.138 2009/01/27 17:43:58 kate Exp $
 
 use warnings;
 use strict;
@@ -1533,7 +1533,7 @@ foreach my $ddfLine (@ddfLines) {
         }
         print TRACK_RA sprintf("    dateSubmitted %04d-%02d-%02d\n", 1900 + $year, $mon + 1, $mday);
         print TRACK_RA sprintf("    dateUnrestricted %04d-%02d-%02d\n", 1900 + $rYear, $rMon + 1, $rMDay);
-        print TRACK_RA sprintf("    dataVersion %s\n", $Encode::data_version);
+        print TRACK_RA sprintf("    dataVersion %s\n", $Encode::dataVersion);
         if(defined($ddfLine->{accession}) && length($ddfLine->{accession}) > 0) {
             print TRACK_RA sprintf("    accession %s\n",$ddfLine->{accession});
         }
