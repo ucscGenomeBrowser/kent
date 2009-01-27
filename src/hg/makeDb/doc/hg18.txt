@@ -26276,6 +26276,22 @@ phyloP44wayPrimate
     #	apache htdocs:	58,767,852,372 = 56,045 Mb
     #	Total 335,711,147,113  = 320,159 Mb
 
+    #	An extra set of error corrected MAF's from the Siepel lab:
+    mkdir /hive/data/genomes/hg18/bed/multiz44way/errorCorrectedMafs
+    wget --timestamping \
+    "ftp://siepellab:XXXXXX@ftp.biotech.cornell.edu/2x/maf-ec/*"
+    #	not showing the password here on purpose
+    # verify md5sums:
+    md5sum *.maf.gz > md5sum.here
+    diff md5sum.txt md5sum.here
+    #	no difference
+    rm md5sum.here
+    mkdir \
+/usr/local/apache/htdocs/goldenPath/hg18/multiz44way/SiepelLabCorrectedMafs
+    cd \
+/usr/local/apache/htdocs/goldenPath/hg18/multiz44way/SiepelLabCorrectedMafs
+    ln -s /hive/data/genomes/hg18/bed/multiz44way/errorCorrectedMafs/* .
+
 #########################################################################
 # Create Syntenic and Recip Best net files to load into tracks to view
 #	on the browser to see what was used during the multiple alignment
