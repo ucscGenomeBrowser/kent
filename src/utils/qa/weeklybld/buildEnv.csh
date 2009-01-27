@@ -7,7 +7,7 @@ setenv LASTREVIEWDAY 2009-01-06    # preview of v198
 setenv WEEKLYBLD /cluster/bin/build/scripts
 setenv BOX32 titan
 
-setenv CVSROOT /projects/compbiousr/cvsroot
+setenv CVSROOT /projects/compbio/cvsroot
 setenv CVS_RSH ssh
 
 setenv MYSQLINC /usr/include/mysql
@@ -25,5 +25,8 @@ if ( "$HOST" == "hgwbeta" ) then
 endif
 if ( "$HOST" == "hgwdev" ) then
     setenv JAVABUILD /scratch/javaBuild
-    setenv JAVA_HOME /usr/java/jdk1.5.0_10
+    setenv JAVA_HOME /usr/java/default
+    # java and ant wont run on hgwdev now without setting max memory
+    setenv _JAVA_OPTIONS "-Xmx1024m"
 endif
+
