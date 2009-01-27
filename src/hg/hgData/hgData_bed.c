@@ -5,14 +5,55 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.5 2009/01/13 15:48:53 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.6 2009/01/27 22:04:48 mikep Exp $";
+
 
 void printBedAsAnnoj(struct bed *b, struct hTableInfo *hti)
+// print out rows of bed data formatted as AnnoJ flat model
+{
+struct bed *t;
+int id = 0, exon = 0;
+printf("{ success: true,\nmessage: \"Found %d models\",\ndata: ", slCount(b));
+for (t = b ; t ; t = t->next)
+    {
+    char nameBuf[256];
+    ++id;
+    // name <- bed name, or 'id.N', can be duplicated?
+    // strand <- '.' if strand unknown
+    // class <- table name
+    // start <- zero-based
+    //   nested id <- can be duplicated between top-level ids?
+    //   start <- zero-based
+    //   if no exons - should we have 1 block here, or none?
+    nameBuf[0] = 0;
+    if (hti->endField[0] != 0)
+        snprintf(nameBuf, sizeof(nameBuf), "\"%s\"", t->name);
+    else
+        snprintf(nameBuf, sizeof(nameBuf), "\"id.%d\"", id);
+    // print line for parent
+    printf("%c[null,%s,\"%c\",\"%s\",%d,%d]\n", (t==b ? '[' : ','), nameBuf, (hti->strandField[0] == 0 ? '.' : t->strand[0]),
+        hti->rootName, t->chromStart, t->chromEnd-t->chromStart);
+    // print line for each exon
+    if (hti->countField[0] != 0) // there are exons
+        {
+        if (hti->startsField[0] == 0 || hti->endsSizesField[0] == 0)
+            errAbort("blocks but no starts/ends");
+        for (exon = 0 ; exon < t->blockCount ; ++exon)
+            {
+            printf(",[%s,\"e.%d\",\"%c\",\"%s\",%d,%d]\n", nameBuf, exon+1, (hti->strandField[0] == 0 ? '.' : t->strand[0]), "EXON", t->chromStart+t->chromStarts[exon], t->blockSizes[exon]);
+            }
+        }
+    }
+printf("]\n}\n");
+}
+
+
+void printBedAsAnnojNested(struct bed *b, struct hTableInfo *hti)
 // print out rows of bed data formatted as AnnoJ nested model
 {
 struct bed *t;
 int id = 0, exon = 0;
-printf("{ success: true,\nmessage: 'Found %d models',\ndata: [\n", slCount(b));
+printf("{ success: true,\nmessage: \"Found %d models\",\ndata: \n", slCount(b));
 for (t = b ; t ; t = t->next)
     {
     ++id;
@@ -24,24 +65,23 @@ for (t = b ; t ; t = t->next)
     //   start <- zero-based
     //   if no exons - should we have 1 block here, or none?
     //   
-    printf("[");
     if (hti->endField[0] != 0)
-	printf("'%s'", t->name);
+	printf("%c[\"%s\"",    (t==b ? '[' : ','), t->name);
     else
-	printf("'id.%d'", id);
-    printf(",'%c','%s',%d,%d,[\n", (hti->strandField[0] == 0 ? '.' : t->strand[0]), 
+	printf("%c[\"id.%d\"", (t==b ? '[' : ','), id);
+    printf(",\"%c\",\"%s\",%d,%d,[\n", (hti->strandField[0] == 0 ? '.' : t->strand[0]), 
 	hti->rootName, t->chromStart, t->chromEnd-t->chromStart); 
-    if (hti->countField[0] != 0) // there are exons
+    if (0 && hti->countField[0] != 0) // there are exons
 	{
 	if (hti->startsField[0] == 0 || hti->endsSizesField[0] == 0)
 	    errAbort("blocks but no starts/ends");
     	for (exon = 0 ; exon < t->blockCount ; ++exon)
     	    {
-	    printf("['e.%d','%s',%d,%d]%c\n", exon+1, "EXON", t->chromStarts[exon], t->blockSizes[exon], 
+	    printf("[\"e.%d\",\"%s\",%d,%d]%c\n", exon+1, "EXON", t->chromStart+t->chromStarts[exon], t->blockSizes[exon], 
 		(exon < t->blockCount-1 ? ',' : ' '));
 	    }
 	}
-    printf("]\n]%c\n", (t->next ? ',' : ' '));
+    printf("]]\n");
     }
 printf("]\n}\n");
 }
