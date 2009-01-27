@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.20 2008/06/25 16:14:47 hiram Exp $
+# $Id: makePushQSql.pl,v 1.21 2009/01/27 21:29:32 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -496,7 +496,9 @@ CREATE TABLE $db (
   lockUser varchar(8) NOT NULL default '',
   lockDateTime varchar(16) NOT NULL default '',
   releaseLog longblob NOT NULL,
-  featureBits longblob NOT NULL
+  featureBits longblob NOT NULL,
+  releaseLogUrl longblob NOT NULL,
+  PRIMARY KEY  (`qid`)
 ) TYPE=MyISAM;
 
 _EOF_
@@ -513,7 +515,7 @@ sub printEntry($$$$) {
   my $size = 0;  # User will have to use qaPushq to update for now.
   chomp $date;
   print <<_EOF_
-INSERT INTO $db VALUES ('$idStr','','A',$rank,'$date','Y','$entry->{shortLabel}','$localDb','$entry->{tables}','','$entry->{files}',$size,'$dbHost','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','$releaseLog','');
+INSERT INTO $db VALUES ('$idStr','','A',$rank,'$date','Y','$entry->{shortLabel}','$localDb','$entry->{tables}','','$entry->{files}',$size,'$dbHost','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','$releaseLog','','');
 _EOF_
   ;
 } # printEntry
@@ -586,7 +588,7 @@ sub printMainPushQEntry {
   print <<_EOF_
 
 -- New entry in Main Push Queue, to alert QA to existence of $db:
-INSERT INTO pushQ SELECT right(concat("00000",convert(max(qid)+1,CHAR)),6),'','A',$rank,'$date','Y','$db Initial Release','$db','','','',$size,'hgwdev','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','Initial $db release (using $assemblyLabel): see separate push queue $db.','' from pushQ;
+INSERT INTO pushQ SELECT right(concat("00000",convert(max(qid)+1,CHAR)),6),'','A',$rank,'$date','Y','$db Initial Release','$db','','','',$size,'hgwdev','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','Initial $db release (using $assemblyLabel): see separate push queue $db.','','' from pushQ;
 _EOF_
   ;
 } # printMainPushQEntry
