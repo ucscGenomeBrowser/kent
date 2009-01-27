@@ -1,38 +1,5 @@
 /* bwTest - Test out some big wig related things.. */
 
-/* bigWig file structure:
- *     fixedWidthHeader
- *         magic# 		4 bytes
- *	   zoomLevels		4 bytes
- *         chromosomeTreeOffset	8 bytes
- *         fullDataOffset	8 bytes
- *	   fullIndexOffset	8 bytes
- *         reserved            32 bytes
- *     zoomHeaders		there are zoomLevels number of these
- *         reductionLevel	4 bytes
- *	   reserved		4 bytes
- *	   dataOffset		8 bytes
- *         indexOffset          8 bytes
- *     chromosome b+ tree       bPlusTree index
- *     full data
- *         sectionCount		4 bytes
- *         section data		section count sections, of three types
- *     full index               ciTree index
- *     zoom info             one of these for each zoom level
- *         zoom data
- *             zoomCount	4 bytes
- *             zoom data	there are zoomCount of these items
- *                 chromId	4 bytes
- *	           chromStart	4 bytes
- *                 chromEnd     4 bytes
- *                 validCount	4 bytes
- *                 minVal       4 bytes float 
- *                 maxVal       4 bytes float
- *                 sumData      4 bytes float
- *                 sumSquares   4 bytes float
- *         zoom index        	ciTree index
- */
-
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -42,9 +9,10 @@
 #include "sig.h"
 #include "bPlusTree.h"
 #include "cirTree.h"
+#include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwTest.c,v 1.9 2009/01/27 07:14:24 kent Exp $";
+static char const rcsid[] = "$Id: bwTest.c,v 1.10 2009/01/27 22:11:50 kent Exp $";
 
 
 int blockSize = 1024;
@@ -73,66 +41,66 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct bigWigBedGraphItem
-/* An bedGraph-type item in a bigWigSect. */
+struct bwgBedGraphItem
+/* An bedGraph-type item in a bwgSection. */
     {
-    struct bigWigBedGraphItem *next;	/* Next in list. */
+    struct bwgBedGraphItem *next;	/* Next in list. */
     bits32 start,end;		/* Range of chromosome covered. */
     float val;			/* Value. */
     };
 
-int bigWigBedGraphItemCmp(const void *va, const void *vb)
+int bwgBedGraphItemCmp(const void *va, const void *vb)
 /* Compare to sort based on query start. */
 {
-const struct bigWigBedGraphItem *a = *((struct bigWigBedGraphItem **)va);
-const struct bigWigBedGraphItem *b = *((struct bigWigBedGraphItem **)vb);
+const struct bwgBedGraphItem *a = *((struct bwgBedGraphItem **)va);
+const struct bwgBedGraphItem *b = *((struct bwgBedGraphItem **)vb);
 int dif = (int)a->start - (int)b->start;
 if (dif == 0)
     dif = (int)a->end - (int)b->end;
 return dif;
 }
 
-struct bigWigVariableStepItem
-/* An variableStep type item in a bigWigSect. */
+struct bwgVariableStepItem
+/* An variableStep type item in a bwgSection. */
     {
-    struct bigWigVariableStepItem *next;	/* Next in list. */
+    struct bwgVariableStepItem *next;	/* Next in list. */
     bits32 start;		/* Start position in chromosome. */
     float val;			/* Value. */
     };
 
-int bigWigVariableStepItemCmp(const void *va, const void *vb)
+int bwgVariableStepItemCmp(const void *va, const void *vb)
 /* Compare to sort based on query start. */
 {
-const struct bigWigVariableStepItem *a = *((struct bigWigVariableStepItem **)va);
-const struct bigWigVariableStepItem *b = *((struct bigWigVariableStepItem **)vb);
+const struct bwgVariableStepItem *a = *((struct bwgVariableStepItem **)va);
+const struct bwgVariableStepItem *b = *((struct bwgVariableStepItem **)vb);
 return (int)a->start - (int)b->start;
 }
 
-struct bigWigFixedStepItem
-/* An fixedStep type item in a bigWigSect. */
+struct bwgFixedStepItem
+/* An fixedStep type item in a bwgSection. */
     {
-    struct bigWigFixedStepItem *next;	/* Next in list. */
+    struct bwgFixedStepItem *next;	/* Next in list. */
     float val;			/* Value. */
     };
 
-union bigWigItem
+union bwgItem
 /* Union of item pointers for all possible section types. */
     {
-    struct bigWigBedGraphItem *bedGraph;
-    struct bigWigVariableStepItem *variableStep;
-    struct bigWigFixedStepItem *fixedStep;
+    struct bwgBedGraphItem *bedGraph;
+    struct bwgVariableStepItem *variableStep;
+    struct bwgFixedStepItem *fixedStep;
     };
 
-struct bigWigSect
+struct bwgSection
 /* A section of a bigWig file - all on same chrom.  This is a somewhat fat data
- * structure used by the bigWig creation code.  See also bigWigSection for the
+ * structure used by the bigWig creation code.  See also bwgSection for the
  * structure returned by the bigWig reading code. */
     {
-    struct bigWigSect *next;		/* Next in list. */
+    struct bwgSection *next;		/* Next in list. */
     char *chrom;			/* Chromosome name. */
     bits32 start,end;			/* Range of chromosome covered. */
-    enum bigWigSectionType type;
-    union bigWigItem itemList;		/* List of items in this section. */
+    enum bwgSectionType type;
+    union bwgItem itemList;		/* List of items in this section. */
     bits32 itemStep;			/* Step within item if applicable. */
     bits32 itemSpan;			/* Item span if applicable. */
     bits16 itemCount;			/* Number of items in section. */
@@ -140,10 +108,10 @@ struct bigWigSect
     bits64 fileOffset;			/* Offset of section in file. */
     };
 
-struct bigWigSummary
+struct bwgSummary
 /* A summary type item. */
     {
-    struct bigWigSummary *next;
+    struct bwgSummary *next;
     bits32 chromId;		/* ID of associated chromosome. */
     bits32 start,end;		/* Range of chromosome covered. */
     bits32 validCount;		/* Count of (bases) with actual data. */
@@ -154,9 +122,9 @@ struct bigWigSummary
     bits64 fileOffset;		/* Offset of summary in file. */
     };
 
-#define bigWigSummaryFreeList slFreeList
+#define bwgSummaryFreeList slFreeList
 
-void bigWigDumpSummary(struct bigWigSummary *sum, FILE *f)
+void bwgDumpSummary(struct bwgSummary *sum, FILE *f)
 /* Write out summary info to file. */
 {
 fprintf(f, "summary %d:%d-%d min=%f, max=%f, sum=%f, sumSquares=%f, validCount=%d, mean=%f\n",
@@ -164,7 +132,7 @@ fprintf(f, "summary %d:%d-%d min=%f, max=%f, sum=%f, sumSquares=%f, validCount=%
      sum->sumSquares, sum->validCount, sum->sumData/sum->validCount);
 }
 
-void bigWigSectWrite(struct bigWigSect *section, FILE *f)
+void bwgSectionWrite(struct bwgSection *section, FILE *f)
 /* Write out section to file, filling in section->fileOffset. */
 {
 UBYTE type = section->type;
@@ -182,9 +150,9 @@ writeOne(f, section->itemCount);
 
 switch (section->type)
     {
-    case bigWigTypeBedGraph:
+    case bwgTypeBedGraph:
 	{
-	struct bigWigBedGraphItem *item;
+	struct bwgBedGraphItem *item;
 	for (item = section->itemList.bedGraph; item != NULL; item = item->next)
 	    {
 	    writeOne(f, item->start);
@@ -193,9 +161,9 @@ switch (section->type)
 	    }
 	break;
 	}
-    case bigWigTypeVariableStep:
+    case bwgTypeVariableStep:
 	{
-	struct bigWigVariableStepItem *item;
+	struct bwgVariableStepItem *item;
 	for (item = section->itemList.variableStep; item != NULL; item = item->next)
 	    {
 	    writeOne(f, item->start);
@@ -203,9 +171,9 @@ switch (section->type)
 	    }
 	break;
 	}
-    case bigWigTypeFixedStep:
+    case bwgTypeFixedStep:
 	{
-	struct bigWigFixedStepItem *item;
+	struct bwgFixedStepItem *item;
 	for (item = section->itemList.fixedStep; item != NULL; item = item->next)
 	    {
 	    writeOne(f, item->val);
@@ -220,11 +188,11 @@ switch (section->type)
 }
 
 
-int bigWigSectCmp(const void *va, const void *vb)
+int bwgSectionCmp(const void *va, const void *vb)
 /* Compare to sort based on query start. */
 {
-const struct bigWigSect *a = *((struct bigWigSect **)va);
-const struct bigWigSect *b = *((struct bigWigSect **)vb);
+const struct bwgSection *a = *((struct bwgSection **)va);
+const struct bwgSection *b = *((struct bwgSection **)vb);
 int dif = strcmp(a->chrom, b->chrom);
 if (dif == 0)
     {
@@ -235,28 +203,28 @@ if (dif == 0)
 return dif;
 }
 
-struct cirTreeRange bigWigSectFetchKey(const void *va, void *context)
-/* Fetch bigWigSect key for r-tree */
+struct cirTreeRange bwgSectionFetchKey(const void *va, void *context)
+/* Fetch bwgSection key for r-tree */
 {
 struct cirTreeRange res;
-const struct bigWigSect *a = *((struct bigWigSect **)va);
+const struct bwgSection *a = *((struct bwgSection **)va);
 res.chromIx = a->chromId;
 res.start = a->start;
 res.end = a->end;
 return res;
 }
 
-bits64 bigWigSectFetchOffset(const void *va, void *context)
-/* Fetch bigWigSect file offset for r-tree */
+bits64 bwgSectionFetchOffset(const void *va, void *context)
+/* Fetch bwgSection file offset for r-tree */
 {
-const struct bigWigSect *a = *((struct bigWigSect **)va);
+const struct bwgSection *a = *((struct bwgSection **)va);
 return a->fileOffset;
 }
 
-void sectionWriteBedGraphAsAscii(struct bigWigSect *section, FILE *f)
+void sectionWriteBedGraphAsAscii(struct bwgSection *section, FILE *f)
 /* Write out a bedGraph section. */
 {
-struct bigWigBedGraphItem *item;
+struct bwgBedGraphItem *item;
 fprintf(f, "#bedGraph chrom=%s start=%u end=%u\n",
 	section->chrom, (unsigned)section->start+1, (unsigned)section->end+1);
 for (item = section->itemList.bedGraph; item != NULL; item = item->next)
@@ -265,37 +233,37 @@ for (item = section->itemList.bedGraph; item != NULL; item = item->next)
 
 }
 
-void sectionWriteFixedStepAsAscii(struct bigWigSect *section, FILE *f)
+void sectionWriteFixedStepAsAscii(struct bwgSection *section, FILE *f)
 /* Write out a fixedStep section. */
 {
-struct bigWigFixedStepItem *item;
+struct bwgFixedStepItem *item;
 fprintf(f, "fixedStep chrom=%s start=%u step=%d span=%d\n",
 	section->chrom, (unsigned)section->start+1, section->itemStep, section->itemSpan);
 for (item = section->itemList.fixedStep; item != NULL; item = item->next)
     fprintf(f, "%g\n", item->val);
 }
 
-void sectionWriteVariableStepAsAscii(struct bigWigSect *section, FILE *f)
+void sectionWriteVariableStepAsAscii(struct bwgSection *section, FILE *f)
 /* Write out a variableStep section. */
 {
-struct bigWigVariableStepItem *item;
+struct bwgVariableStepItem *item;
 fprintf(f, "variableStep chrom=%s span=%d\n", section->chrom, section->itemSpan);
 for (item = section->itemList.variableStep; item != NULL; item = item->next)
     fprintf(f, "%u\t%g\n", (unsigned)item->start+1, item->val);
 }
 
-void sectionWriteAsAscii(struct bigWigSect *section, FILE *f)
+void sectionWriteAsAscii(struct bwgSection *section, FILE *f)
 /* Write out ascii representation of section (which will be wig-file readable). */
 {
 switch (section->type)
     {
-    case bigWigTypeBedGraph:
+    case bwgTypeBedGraph:
 	sectionWriteBedGraphAsAscii(section, f);
 	break;
-    case bigWigTypeVariableStep:
+    case bwgTypeVariableStep:
 	sectionWriteVariableStepAsAscii(section, f);
 	break;
-    case bigWigTypeFixedStep:
+    case bwgTypeFixedStep:
 	sectionWriteFixedStepAsAscii(section, f);
 	break;
     default:
@@ -321,14 +289,14 @@ return stepTypeLine(line);
 
 void parseFixedStepSection(struct lineFile *lf, struct lm *lm,
 	char *chrom, bits32 span, bits32 sectionStart, 
-	bits32 step, struct bigWigSect **pSectionList)
+	bits32 step, struct bwgSection **pSectionList)
 /* Read the single column data in section until get to end. */
 {
 /* Stream through section until get to end of file or next section,
  * adding values from single column to list. */
 char *words[1];
 char *line;
-struct bigWigFixedStepItem *item, *itemList = NULL;
+struct bwgFixedStepItem *item, *itemList = NULL;
 while (lineFileNextReal(lf, &line))
     {
     if (steppedSectionEnd(line, 1))
@@ -344,7 +312,7 @@ while (lineFileNextReal(lf, &line))
 slReverse(&itemList);
 
 /* Break up into sections of no more than items-per-slot size. */
-struct bigWigFixedStepItem *startItem, *endItem, *nextStartItem = itemList;
+struct bwgFixedStepItem *startItem, *endItem, *nextStartItem = itemList;
 for (startItem = nextStartItem; startItem != NULL; startItem = nextStartItem)
     {
     /* Find end item of this section, and start item for next section.
@@ -363,13 +331,13 @@ for (startItem = nextStartItem; startItem != NULL; startItem = nextStartItem)
     endItem->next = NULL;
 
     /* Fill in section and add it to list. */
-    struct bigWigSect *section;
+    struct bwgSection *section;
     lmAllocVar(lm, section);
     section->chrom = chrom;
     section->start = sectionStart;
     sectionStart += sectionSize * step;
     section->end = sectionStart - step + span;
-    section->type = bigWigTypeFixedStep;
+    section->type = bwgTypeFixedStep;
     section->itemList.fixedStep = startItem;
     section->itemStep = step;
     section->itemSpan = span;
@@ -379,14 +347,14 @@ for (startItem = nextStartItem; startItem != NULL; startItem = nextStartItem)
 }
 
 void parseVariableStepSection(struct lineFile *lf, struct lm *lm,
-	char *chrom, bits32 span, struct bigWigSect **pSectionList)
+	char *chrom, bits32 span, struct bwgSection **pSectionList)
 /* Read the single column data in section until get to end. */
 {
 /* Stream through section until get to end of file or next section,
  * adding values from single column to list. */
 char *words[2];
 char *line;
-struct bigWigVariableStepItem *item, *itemList = NULL;
+struct bwgVariableStepItem *item, *itemList = NULL;
 while (lineFileNextReal(lf, &line))
     {
     if (steppedSectionEnd(line, 2))
@@ -400,10 +368,10 @@ while (lineFileNextReal(lf, &line))
     item->val = lineFileNeedDouble(lf, words, 1);
     slAddHead(&itemList, item);
     }
-slSort(&itemList, bigWigVariableStepItemCmp);
+slSort(&itemList, bwgVariableStepItemCmp);
 
 /* Break up into sections of no more than items-per-slot size. */
-struct bigWigVariableStepItem *startItem, *endItem, *nextStartItem = itemList;
+struct bwgVariableStepItem *startItem, *endItem, *nextStartItem = itemList;
 for (startItem = itemList; startItem != NULL; startItem = nextStartItem)
     {
     /* Find end item of this section, and start item for next section.
@@ -422,12 +390,12 @@ for (startItem = itemList; startItem != NULL; startItem = nextStartItem)
     endItem->next = NULL;
 
     /* Fill in section and add it to list. */
-    struct bigWigSect *section;
+    struct bwgSection *section;
     lmAllocVar(lm, section);
     section->chrom = chrom;
     section->start = startItem->start;
     section->end = endItem->start + span;
-    section->type = bigWigTypeVariableStep;
+    section->type = bwgTypeVariableStep;
     section->itemList.variableStep = startItem;
     section->itemSpan = span;
     section->itemCount = sectionSize;
@@ -446,16 +414,16 @@ return sqlUnsigned(val);
 }
 
 void parseSteppedSection(struct lineFile *lf, char *initialLine, 
-	struct lm *lm, struct bigWigSect **pSectionList)
+	struct lm *lm, struct bwgSection **pSectionList)
 /* Parse out a variableStep or fixedStep section and add it to list, breaking it up as need be. */
 {
 /* Parse out first word of initial line and make sure it is something we recognize. */
 char *typeWord = nextWord(&initialLine);
-enum bigWigSectionType type = bigWigTypeFixedStep;
+enum bwgSectionType type = bwgTypeFixedStep;
 if (sameString(typeWord, "variableStep"))
-    type = bigWigTypeVariableStep;
+    type = bwgTypeVariableStep;
 else if (sameString(typeWord, "fixedStep"))
-    type = bigWigTypeFixedStep;
+    type = bwgTypeFixedStep;
 else
     errAbort("Unknown type %s\n", typeWord);
 
@@ -491,7 +459,7 @@ while ((varEqVal = nextWord(&initialLine)) != NULL)
  * rest of section. */
 if (chrom == NULL)
     errAbort("Missing chrom= setting line %d of %s\n", lf->lineIx, lf->fileName);
-if (type == bigWigTypeFixedStep)
+if (type == bwgTypeFixedStep)
     {
     if (start == 0)
 	errAbort("Missing start= setting line %d of %s\n", lf->lineIx, lf->fileName);
@@ -514,7 +482,7 @@ struct bedGraphChrom
     {
     struct bedGraphChrom *next;		/* Next in list. */
     char *name;			/* Chromosome name - not allocated here. */
-    struct bigWigBedGraphItem *itemList;	/* List of items. */
+    struct bwgBedGraphItem *itemList;	/* List of items. */
     };
 
 int bedGraphChromCmpName(const void *va, const void *vb)
@@ -525,7 +493,7 @@ const struct bedGraphChrom *b = *((struct bedGraphChrom **)vb);
 return strcmp(a->name, b->name);
 }
 
-void parseBedGraphSection(struct lineFile *lf, struct lm *lm, struct bigWigSect **pSectionList)
+void parseBedGraphSection(struct lineFile *lf, struct lm *lm, struct bwgSection **pSectionList)
 /* Parse out bedGraph section until we get to something that is not in bedGraph format. */
 {
 /* Set up hash and list to store chromosomes. */
@@ -533,7 +501,7 @@ struct hash *chromHash = hashNew(0);
 struct bedGraphChrom *chrom, *chromList = NULL;
 
 /* Collect lines in items on appropriate chromosomes. */
-struct bigWigBedGraphItem *item, *itemList = NULL;
+struct bwgBedGraphItem *item, *itemList = NULL;
 char *line;
 while (lineFileNextReal(lf, &line))
     {
@@ -570,10 +538,10 @@ slSort(&chromList, bedGraphChromCmpName);
 
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    slSort(&chrom->itemList, bigWigBedGraphItemCmp);
+    slSort(&chrom->itemList, bwgBedGraphItemCmp);
 
     /* Break up into sections of no more than items-per-slot size. */
-    struct bigWigBedGraphItem *startItem, *endItem, *nextStartItem = chrom->itemList;
+    struct bwgBedGraphItem *startItem, *endItem, *nextStartItem = chrom->itemList;
     for (startItem = chrom->itemList; startItem != NULL; startItem = nextStartItem)
 	{
 	/* Find end item of this section, and start item for next section.
@@ -592,12 +560,12 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	endItem->next = NULL;
 
 	/* Fill in section and add it to section list. */
-	struct bigWigSect *section;
+	struct bwgSection *section;
 	lmAllocVar(lm, section);
 	section->chrom = cloneString(chrom->name);
 	section->start = startItem->start;
 	section->end = endItem->end;
-	section->type = bigWigTypeBedGraph;
+	section->type = bwgTypeBedGraph;
 	section->itemList.bedGraph = startItem;
 	section->itemCount = sectionSize;
 	slAddHead(pSectionList, section);
@@ -633,13 +601,13 @@ const struct chromInfo *a = ((struct chromInfo *)va);
 return (void*)(&a->id);
 }
 
-static void makeChromInfo(struct bigWigSect *sectionList, struct hash *chromSizeHash,
+static void makeChromInfo(struct bwgSection *sectionList, struct hash *chromSizeHash,
 	int *retChromCount, struct chromInfo **retChromArray,
 	int *retMaxChromNameSize)
 /* Fill in chromId field in sectionList.  Return array of chromosome name/ids. */
 {
 /* Build up list of unique chromosome names. */
-struct bigWigSect *section;
+struct bwgSection *section;
 char *chromName = "";
 int chromCount = 0;
 int maxChromNameSize = 0;
@@ -677,22 +645,22 @@ slFreeList(&uniqList);
 *retMaxChromNameSize = maxChromNameSize;
 }
 
-int usualResolution(struct bigWigSect *sectionList)
+int usualResolution(struct bwgSection *sectionList)
 /* Return smallest span in section list. */
 {
 if (sectionList == NULL)
     return 1;
 bits64 totalRes = 0;
 bits32 sectionCount = 0;
-struct bigWigSect *section;
+struct bwgSection *section;
 for (section = sectionList; section != NULL; section = section->next)
     {
     int sectionRes = sectionList->itemSpan;
     switch (section->type)
         {
-	case bigWigTypeBedGraph:
+	case bwgTypeBedGraph:
 	    {
-	    struct bigWigBedGraphItem *item;
+	    struct bwgBedGraphItem *item;
 	    sectionRes = BIGNUM;
 	    for (item = section->itemList.bedGraph; item != NULL; item = item->next)
 		{
@@ -702,9 +670,9 @@ for (section = sectionList; section != NULL; section = section->next)
 		}
 	    break;
 	    }
-	case bigWigTypeVariableStep:
+	case bwgTypeVariableStep:
 	    {
-	    struct bigWigVariableStepItem *item, *next;
+	    struct bwgVariableStepItem *item, *next;
 	    bits32 smallestGap = BIGNUM;
 	    for (item = section->itemList.variableStep; item != NULL; item = next)
 		{
@@ -722,7 +690,7 @@ for (section = sectionList; section != NULL; section = section->next)
 	        sectionRes = section->itemSpan;
 	    break;
 	    }
-	case bigWigTypeFixedStep:
+	case bwgTypeFixedStep:
 	    {
 	    sectionRes = section->itemSpan + section->itemStep;
 	    break;
@@ -737,20 +705,20 @@ for (section = sectionList; section != NULL; section = section->next)
 return (totalRes + sectionCount/2)/sectionCount;
 }
 
-#define bigWigSectionHeaderSize 24
+#define bwgSectionHeaderSize 24	/* Size of section header in file. */
 
-int bigWigItemSize(enum bigWigSectionType type)
+int bigWigItemSize(enum bwgSectionType type)
 /* Return size of an item inside a particular section. */
 {
 switch (type)
     {
-    case bigWigTypeBedGraph:
+    case bwgTypeBedGraph:
 	return 2*sizeof(bits32) + sizeof(float);
 	break;
-    case bigWigTypeVariableStep:
+    case bwgTypeVariableStep:
 	return sizeof(bits32) + sizeof(float);
 	break;
-    case bigWigTypeFixedStep:
+    case bwgTypeFixedStep:
 	return sizeof(float);
 	break;
     default:
@@ -759,26 +727,26 @@ switch (type)
     }
 }
 
-int bigWigSectSize(struct bigWigSect *section)
+int bwgSectionSize(struct bwgSection *section)
 /* Return size (on disk) of section. */
 {
-return bigWigSectionHeaderSize + bigWigItemSize(section->type) * section->itemCount;
+return bwgSectionHeaderSize + bigWigItemSize(section->type) * section->itemCount;
 }
 
-bits64 bigWigTotalSectSize(struct bigWigSect *sectionList)
+bits64 bigWigTotalSectionSize(struct bwgSection *sectionList)
 /* Return total size of all sections. */
 {
 bits64 total = 0;
-struct bigWigSect *section;
+struct bwgSection *section;
 for (section = sectionList; section != NULL; section = section->next)
-    total += bigWigSectSize(section);
+    total += bwgSectionSize(section);
 return total;
 }
 
-bits64 bigWigTotalSummarySize(struct bigWigSummary *list)
+bits64 bigWigTotalSummarySize(struct bwgSummary *list)
 /* Return size on disk of all summaries. */
 {
-struct bigWigSummary *el;
+struct bwgSummary *el;
 bits64 total = 0;
 for (el = list; el != NULL; el = el->next)
     total += 4*sizeof(bits32) + 4*sizeof(double);
@@ -787,17 +755,17 @@ return total;
 
 void addToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end, bits32 validCount, 
 	float minVal, float maxVal, float sumData, float sumSquares,  int reduction,
-	struct bigWigSummary **pOutList)
+	struct bwgSummary **pOutList)
 /* Add data range to summary - putting it onto top of list if possible, otherwise
  * expanding list. */
 {
-struct bigWigSummary *sum = *pOutList;
+struct bwgSummary *sum = *pOutList;
 while (start < end)
     {
     /* See if need to allocate a new summary. */
     if (sum == NULL || sum->chromId != chromId || sum->end <= start)
         {
-	struct bigWigSummary *newSum;
+	struct bwgSummary *newSum;
 	AllocVar(newSum);
 	newSum->chromId = chromId;
 	if (sum == NULL || sum->chromId != chromId || sum->end + reduction <= start)
@@ -838,7 +806,7 @@ while (start < end)
 }
 
 void addRangeToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end, 
-	float val, int reduction, struct bigWigSummary **pOutList)
+	float val, int reduction, struct bwgSummary **pOutList)
 /* Add chromosome range to summary - putting it onto top of list if possible, otherwise
  * expanding list. */
 {
@@ -849,31 +817,31 @@ addToSummary(chromId, chromSize, start, end, size, val, val, sum, sumSquares, re
 }
 
 
-void bigWigReduceBedGraph(struct bigWigSect *section, bits32 chromSize, int reduction, 
-	struct bigWigSummary **pOutList)
+void bigWigReduceBedGraph(struct bwgSection *section, bits32 chromSize, int reduction, 
+	struct bwgSummary **pOutList)
 /*Reduce a bedGraph section onto outList. */
 {
-struct bigWigBedGraphItem *item;
+struct bwgBedGraphItem *item;
 for (item = section->itemList.bedGraph; item != NULL; item = item->next)
     addRangeToSummary(section->chromId, chromSize, item->start, item->end, 
     	item->val, reduction, pOutList);
 }
 
-void bigWigReduceVariableStep(struct bigWigSect *section, bits32 chromSize, int reduction, 
-	struct bigWigSummary **pOutList)
+void bigWigReduceVariableStep(struct bwgSection *section, bits32 chromSize, int reduction, 
+	struct bwgSummary **pOutList)
 /*Reduce a variableStep section onto outList. */
 {
-struct bigWigVariableStepItem *item;
+struct bwgVariableStepItem *item;
 for (item = section->itemList.variableStep; item != NULL; item = item->next)
     addRangeToSummary(section->chromId, chromSize, item->start, item->start + section->itemSpan, 
     	item->val, reduction, pOutList);
 }
 
-void bigWigReduceFixedStep(struct bigWigSect *section, bits32 chromSize, int reduction, 
-	struct bigWigSummary **pOutList)
+void bigWigReduceFixedStep(struct bwgSection *section, bits32 chromSize, int reduction, 
+	struct bwgSummary **pOutList)
 /*Reduce a variableStep section onto outList. */
 {
-struct bigWigFixedStepItem *item;
+struct bwgFixedStepItem *item;
 int start = section->start;
 for (item = section->itemList.fixedStep; item != NULL; item = item->next)
     {
@@ -883,12 +851,12 @@ for (item = section->itemList.fixedStep; item != NULL; item = item->next)
     }
 }
 
-struct bigWigSummary *bigWigReduceSummaryList(struct bigWigSummary *inList, 
+struct bwgSummary *bigWigReduceSummaryList(struct bwgSummary *inList, 
 	struct chromInfo *chromInfoArray, int reduction)
 /* Reduce summary list to another summary list. */
 {
-struct bigWigSummary *outList = NULL;
-struct bigWigSummary *sum;
+struct bwgSummary *outList = NULL;
+struct bwgSummary *sum;
 for (sum = inList; sum != NULL; sum = sum->next)
     addToSummary(sum->chromId, chromInfoArray[sum->chromId].size, sum->start, sum->end, sum->validCount, sum->minVal,
     	sum->maxVal, sum->sumData, sum->sumSquares, reduction, &outList);
@@ -896,12 +864,12 @@ slReverse(&outList);
 return outList;
 }
 
-struct bigWigSummary *bigWigReduceSectionList(struct bigWigSect *sectionList, 
+struct bwgSummary *bigWigReduceSectionList(struct bwgSection *sectionList, 
 	struct chromInfo *chromInfoArray, int reduction)
 /* Reduce section by given amount. */
 {
-struct bigWigSummary *outList = NULL;
-struct bigWigSect *section = NULL;
+struct bwgSummary *outList = NULL;
+struct bwgSection *section = NULL;
 
 /* Loop through input section list reducing into outList. */
 for (section = sectionList; section != NULL; section = section->next)
@@ -909,13 +877,13 @@ for (section = sectionList; section != NULL; section = section->next)
     bits32 chromSize = chromInfoArray[section->chromId].size;
     switch (section->type)
         {
-	case bigWigTypeBedGraph:
+	case bwgTypeBedGraph:
 	    bigWigReduceBedGraph(section, chromSize, reduction, &outList);
 	    break;
-	case bigWigTypeVariableStep:
+	case bwgTypeVariableStep:
 	    bigWigReduceVariableStep(section, chromSize, reduction, &outList);
 	    break;
-	case bigWigTypeFixedStep:
+	case bwgTypeFixedStep:
 	    bigWigReduceFixedStep(section, chromSize, reduction, &outList);
 	    break;
 	default:
@@ -927,18 +895,18 @@ slReverse(&outList);
 return outList;
 }
 
-bits64 bigWigSummaryFetchOffset(const void *va, void *context)
-/* Fetch bigWigSummary file offset for r-tree */
+bits64 bwgSummaryFetchOffset(const void *va, void *context)
+/* Fetch bwgSummary file offset for r-tree */
 {
-const struct bigWigSummary *a = *((struct bigWigSummary **)va);
+const struct bwgSummary *a = *((struct bwgSummary **)va);
 return a->fileOffset;
 }
 
-struct cirTreeRange bigWigSummaryFetchKey(const void *va, void *context)
-/* Fetch bigWigSummary key for r-tree */
+struct cirTreeRange bwgSummaryFetchKey(const void *va, void *context)
+/* Fetch bwgSummary key for r-tree */
 {
 struct cirTreeRange res;
-const struct bigWigSummary *a = *((struct bigWigSummary **)va);
+const struct bwgSummary *a = *((struct bwgSummary **)va);
 res.chromIx = a->chromId;
 res.start = a->start;
 res.end = a->end;
@@ -946,16 +914,16 @@ return res;
 }
 
 
-bits64 writeSummaryAndIndex(struct bigWigSummary *summaryList, FILE *f)
+bits64 writeSummaryAndIndex(struct bwgSummary *summaryList, FILE *f)
 /* Write out summary and index to summary, returning start position of
  * summary index. */
 {
 bits32 i, count = slCount(summaryList);
-struct bigWigSummary **summaryArray;
+struct bwgSummary **summaryArray;
 AllocArray(summaryArray, count);
 writeOne(f, count);
 bits64 dataOffset = ftell(f);
-struct bigWigSummary *summary;
+struct bwgSummary *summary;
 for (summary = summaryList, i=0; summary != NULL; summary = summary->next, ++i)
     {
     summaryArray[i] = summary;
@@ -971,13 +939,13 @@ for (summary = summaryList, i=0; summary != NULL; summary = summary->next, ++i)
     }
 bits64 indexOffset = ftell(f);
 cirTreeFileBulkIndexToOpenFile(summaryArray, sizeof(summaryArray[0]), count,
-    blockSize, itemsPerSlot, NULL, bigWigSummaryFetchKey, bigWigSummaryFetchOffset, 
+    blockSize, itemsPerSlot, NULL, bwgSummaryFetchKey, bwgSummaryFetchOffset, 
     indexOffset, f);
 freez(&summaryArray);
 return indexOffset;
 }
 
-void bigWigCreate(struct bigWigSect *sectionList, struct hash *chromSizeHash, char *fileName)
+void bigWigCreate(struct bwgSection *sectionList, struct hash *chromSizeHash, char *fileName)
 /* Create a bigWig file out of a sorted sectionList. */
 {
 bits32 sectionCount = slCount(sectionList);
@@ -989,7 +957,7 @@ bits64 reserved64 = 0;
 bits64 dataOffset = 0, dataOffsetPos;
 bits64 indexOffset = 0, indexOffsetPos;
 bits64 chromTreeOffset = 0, chromTreeOffsetPos;
-struct bigWigSummary *reduceSummaries[10];
+struct bwgSummary *reduceSummaries[10];
 bits32 reductionAmounts[10];
 bits64 reductionDataOffsetPos[10];
 bits64 reductionDataOffsets[10];
@@ -1008,8 +976,8 @@ makeChromInfo(sectionList, chromSizeHash, &chromCount, &chromInfoArray, &maxChro
 int  minRes = usualResolution(sectionList);
 int initialReduction = minRes*10;
 uglyf("minRes=%d, initialReduction=%d\n", minRes, initialReduction);
-bits64 fullSize = bigWigTotalSectSize(sectionList);
-struct bigWigSummary *firstSummaryList = NULL, *summaryList = NULL;
+bits64 fullSize = bigWigTotalSectionSize(sectionList);
+struct bwgSummary *firstSummaryList = NULL, *summaryList = NULL;
 bits64 lastSummarySize = 0, summarySize;
 for (;;)
     {
@@ -1019,7 +987,7 @@ for (;;)
     if (summarySize >= fullSize && summarySize != lastSummarySize)
         {
 	initialReduction *= 2;
-	bigWigSummaryFreeList(&summaryList);
+	bwgSummaryFreeList(&summaryList);
 	lastSummarySize = summarySize;
 	}
     else
@@ -1082,19 +1050,19 @@ bptFileBulkIndexToOpenFile(chromInfoArray, sizeof(chromInfoArray[0]), chromCount
 /* Write out data section count and sections themselves. */
 dataOffset = ftell(f);
 writeOne(f, sectionCount);
-struct bigWigSect *section;
+struct bwgSection *section;
 for (section = sectionList; section != NULL; section = section->next)
-    bigWigSectWrite(section, f);
+    bwgSectionWrite(section, f);
 
 /* Write out index - creating a temporary array rather than list representation of
  * sections in the process. */
 indexOffset = ftell(f);
-struct bigWigSect **sectionArray;
+struct bwgSection **sectionArray;
 AllocArray(sectionArray, sectionCount);
 for (section = sectionList, i=0; section != NULL; section = section->next, ++i)
     sectionArray[i] = section;
 cirTreeFileBulkIndexToOpenFile(sectionArray, sizeof(sectionArray[0]), sectionCount,
-    blockSize, 1, NULL, bigWigSectFetchKey, bigWigSectFetchOffset, 
+    blockSize, 1, NULL, bwgSectionFetchKey, bwgSectionFetchOffset, 
     indexOffset, f);
 freez(&sectionArray);
 
@@ -1141,14 +1109,12 @@ while (lineFileRow(lf, row))
 return hash;
 }
 
-void bwTest(char *inName, char *chromSizes, char *outName)
-/* bwTest - Test out some big wig related things. */
+struct bwgSection *bwgParseWig(char *fileName, struct lm *lm)
+/* Parse out ascii wig file - allocating memory in lm. */
 {
-struct hash *chromSizeHash = hashChromSizes(chromSizes);
-struct lineFile *lf = lineFileOpen(inName, TRUE);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
-struct bigWigSect *sectionList = NULL;
-struct lm *lm = lmInit(0);
+struct bwgSection *sectionList = NULL;
 while (lineFileNextReal(lf, &line))
     {
     verbose(2, "processing %s\n", line);
@@ -1174,10 +1140,18 @@ while (lineFileNextReal(lf, &line))
 	parseBedGraphSection(lf, lm, &sectionList);
 	}
     }
+slSort(&sectionList, bwgSectionCmp);
+return sectionList;
+}
 
-slSort(&sectionList, bigWigSectCmp);
-
+void bwTest(char *inName, char *chromSizes, char *outName)
+/* bwTest - Test out some big wig related things. */
+{
+struct hash *chromSizeHash = hashChromSizes(chromSizes);
+struct lm *lm = lmInit(0);
+struct bwgSection *sectionList = bwgParseWig(inName, lm);
 bigWigCreate(sectionList, chromSizeHash, outName);
+lmCleanup(&lm);
 }
 
 int main(int argc, char *argv[])

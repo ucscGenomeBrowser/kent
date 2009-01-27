@@ -7,9 +7,10 @@
 #include "sqlNum.h"
 #include "bPlusTree.h"
 #include "cirTree.h"
+#include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwTestRead.c,v 1.4 2009/01/27 03:54:02 kent Exp $";
+static char const rcsid[] = "$Id: bwTestRead.c,v 1.5 2009/01/27 22:15:36 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -129,7 +130,7 @@ float val;
 
 switch (type)
     {
-    case bigWigTypeBedGraph:
+    case bwgTypeBedGraph:
 	{
 	fprintf(out, "#bedGraph section %s:%u-%u\n",  chrom, start, end);
 	for (i=0; i<itemCount; ++i)
@@ -141,7 +142,7 @@ switch (type)
 	    }
 	break;
 	}
-    case bigWigTypeVariableStep:
+    case bwgTypeVariableStep:
 	{
 	fprintf(out, "variableStep chrom=%s span=%u\n", chrom, itemSpan);
 	for (i=0; i<itemCount; ++i)
@@ -152,7 +153,7 @@ switch (type)
 	    }
 	break;
 	}
-    case bigWigTypeFixedStep:
+    case bwgTypeFixedStep:
 	{
 	fprintf(out, "fixedStep chrom=%s start=%u step=%u span=%u\n", 
 		chrom, start, itemStep, itemSpan);
