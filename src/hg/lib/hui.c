@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.153 2009/01/27 21:03:07 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.154 2009/01/27 23:56:40 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2635,8 +2635,8 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
 puts("</TBODY><TFOOT></TFOOT>");
 puts("</TABLE>");
 puts("<P>");
-if (!preSorted && sortOrder != NULL)
-    puts("<script type='text/javascript'>tableSortAtStartup();</script>");
+//if (!preSorted && sortOrder != NULL)  // No longer need to do this since hgTrackDb should sort composites with sortOrder and set priorities
+//    puts("<script type='text/javascript'>tableSortAtStartup();</script>");
 if (!primarySubtrack)
     puts("<script type='text/javascript'>matInitializeMatrix();</script>");
 for(di=dimX;di<dimMax;di++)
