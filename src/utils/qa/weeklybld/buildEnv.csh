@@ -26,6 +26,7 @@ endif
 if ( "$HOST" == "hgwdev" ) then
     setenv JAVABUILD /scratch/javaBuild
     setenv JAVA_HOME /usr/java/default
+    setenv CLASSPATH .:/usr/share/java:/usr/java/default/jre/lib/rt.jar:/usr/java/default/jre/lib:/usr/share/java/httpunit.jar:/cluster/home/heather/transfer/jtidy.jar:/usr/share/java/rhino.jar:/cluster/home/heather/archive/mysql-connector-java-3.0.16-ga-bin.jar
     # java and ant wont run on hgwdev now without setting max memory
     setenv _JAVA_OPTIONS "-Xmx1024m"
 endif
