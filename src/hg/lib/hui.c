@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.151 2009/01/27 19:46:41 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.152 2009/01/27 20:36:59 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2053,6 +2053,7 @@ if(sortOrder && *sortOrder)
 
 sortableTdbItem *sortableTdbItemCreate(struct trackDb *tdbChild,sortOrder_t *sortOrder)
 // creates a sortable tdb item struct, given a child tdb and its parent's sort table
+// Errors in interpreting a passed in sortOrder will return NULL
 {
 sortableTdbItem *item = NULL;
 AllocVar(item);
@@ -2075,7 +2076,13 @@ if(sortOrder != NULL)   // Add some sort buttons
         if(column->value != NULL)
             slAddHead(&(item->columns), column);
         else
+            {
             freez(&column);
+            if(item->columns != NULL)
+                slFreeList(&(item->columns));
+            freeMem(item);
+            return NULL; // sortOrder setting doesn't match items to be sorted.
+            }
         }
     }
 return item;
