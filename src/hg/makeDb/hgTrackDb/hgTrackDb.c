@@ -6,13 +6,14 @@
 #include "sqlList.h"
 #include "jksql.h"
 #include "trackDb.h"
+#include "hui.h"
 #include "hdb.h"
 #include "hVarSubst.h"
 #include "obscure.h"
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.47 2009/01/24 02:58:10 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.48 2009/01/27 23:58:50 tdreszer Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -37,7 +38,7 @@ errAbort(
   "  -hideFirst - Before applying vis.ra, set all visibilities to hide.\n"
   "  -strict - only include tables that exist (and complain about missing html files).\n"
   "  -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
-  "   for the ra files.\n" 
+  "   for the ra files.\n"
   "  -release=alpha|beta - Include trackDb entries with this release only.\n"
   );
 }
@@ -106,14 +107,14 @@ while ((td = slPopHead(tdListPtr)) != NULL)
         slAddHead(&strictList, td);
         if ((setting = trackDbSetting(td, "subTrack")) != NULL)
             {
-            /* note subtracks with tables so we can later add 
+            /* note subtracks with tables so we can later add
              * the composite trackdb */
             chopLine(cloneString(setting), words);
             hashStore(compositeHash, words[0]);
             }
         else if ((setting = trackDbSetting(td, "superTrack")) != NULL)
             {
-            /* note super track member tracks with tables so we can later add 
+            /* note super track member tracks with tables so we can later add
              * the super track trackdb */
             chopLine(cloneString(setting), words);
             hashStore(superHash, words[0]);
@@ -181,7 +182,7 @@ while ((td = slPopHead(tdListPtr)) != NULL)
         if (sameString(rel, release))
             {
             /* remove release setting from trackDb entry -- there
-             * should only be a single entry for the track, so 
+             * should only be a single entry for the track, so
              * the release setting is no longer relevant (and it
              * confuses Q/A */
             hashRemove(td->settingsHash, "release");
@@ -203,14 +204,14 @@ if (td != NULL)
     trackDbOverride(td, overTd);
 }
 
-static void addVersionRa(boolean strict, char *database, char *dirName, char *raName, 
+static void addVersionRa(boolean strict, char *database, char *dirName, char *raName,
                          struct hash *uniqHash)
 /* Read in tracks from raName and add them to table, pruning as required. Call
  * top-down so that track override will work. */
 {
 struct trackDb *tdList = trackDbFromRa(raName), *td;
 
-if (strict) 
+if (strict)
     pruneStrict(&tdList, database);
 pruneRelease(&tdList, database);
 
@@ -226,7 +227,7 @@ while ((td = slPopHead(&tdList)) != NULL)
 }
 
 void updateBigTextField(struct sqlConnection *conn, char *table,
-     char *whereField, char *whereVal,	
+     char *whereField, char *whereVal,
      char *textField, char *textVal)
 /* Generate sql code to update a big text field that may include
  * newlines and stuff. */
@@ -240,7 +241,7 @@ freeDyString(&dy);
 }
 
 char *subTrackName(char *create, char *tableName)
-/* Substitute tableName for whatever is between CREATE TABLE  and  first '(' 
+/* Substitute tableName for whatever is between CREATE TABLE  and  first '('
    freez()'s create passed in. */
 {
 char newCreate[strlen(create) + strlen(tableName) + 10];
@@ -267,13 +268,13 @@ safef(newCreate, length , "%s %s %s", create, tableName, rear);
 return cloneString(newCreate);
 }
 
-void layerOnRa(boolean strict, char *database, char *dir, struct hash *uniqHash, 
+void layerOnRa(boolean strict, char *database, char *dir, struct hash *uniqHash,
                boolean raMustExist)
 /* Read trackDb.ra from directory and layer them on top of whatever is in tdList.
  * Must call top-down (root->org->assembly) */
 {
 char raFile[512];
-if (raName[0] != '/') 
+if (raName[0] != '/')
     safef(raFile, sizeof(raFile), "%s/%s", dir, raName);
 else
     safef(raFile, sizeof(raFile), "%s", raName);
@@ -281,7 +282,7 @@ if (fileExists(raFile))
     {
     addVersionRa(strict, database, dir, raFile, uniqHash);
     }
-else 
+else
     {
     if (raMustExist)
         errAbort("%s doesn't exist!", raFile);
@@ -412,7 +413,7 @@ for (td = tdList; td != NULL; td = tdNext)
 	    char *subGroups = trackDbSetting(td, "subGroups");
 	    if (subGroups && (sgd->numSubGroups == 0))
 		{
-		verbose(1,"parent %s missing subGroups for subtrack %s subGroups=[%s]\n", 
+		verbose(1,"parent %s missing subGroups for subtrack %s subGroups=[%s]\n",
 			trackName, td->tableName, subGroups);
 		continue;
 		}
@@ -439,10 +440,10 @@ for (td = tdList; td != NULL; td = tdNext)
 		    {
 		    verbose(1,"%s: value not found in parent composite : %s=%s\n", td->tableName, slPair->name, (char *)slPair->val);
 		    }
-		++numSubGroups; 
+		++numSubGroups;
 		if (i < lastI)
 		    inOrder = FALSE;
-		lastI = i;	    
+		lastI = i;
 		}
 	    if (numSubGroups != sgd->numSubGroups)
 		{
@@ -458,15 +459,83 @@ for (td = tdList; td != NULL; td = tdNext)
     }
 }
 
+static void sortContainers(struct trackDb *tdbList)
+/* sort containers if they have no priorities already set */
+{
+int countOfSortedContainers = 0;
+
+// Walk through tdbs looking for containers
+struct trackDb *tdbContainer;
+for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->next)
+    {
+    if (trackDbSetting(tdbContainer, "compositeTrack") == NULL) // TODO: Expand beyond composites
+        continue;
+
+    sortOrder_t *sortOrder = sortOrderGet(NULL,tdbContainer);   // TODO: Expand beyond composites
+    boolean needsSorting = TRUE; // default
+    float firstPriority = -1.0;
+    sortableTdbItem *item,*itemsToSort = NULL;
+
+    // Walk through tdbs looking for items contained
+    struct trackDb *tdbItem;
+    for (tdbItem = tdbList; tdbItem != NULL; tdbItem = tdbItem->next)
+        {
+        char *containerName = containerName = trackDbSetting(tdbItem, "subTrack");  // TODO: Expand beyond subtracks
+        if (containerName == NULL)
+            continue;
+
+        containerName = strSwapChar(cloneString(containerName),' ',0);  // subTrack "compositeName off"
+        if(sameString(containerName,tdbContainer->tableName))
+            {
+            if( needsSorting && sortOrder == NULL )  // do we?
+            {
+                if( firstPriority == -1.0)    // all 0 or all the same value
+                    firstPriority = tdbItem->priority;
+                if(firstPriority != tdbItem->priority && (int)(tdbItem->priority + 0.9) > 0)
+                    {
+                    needsSorting = FALSE;
+                    break;
+                    }
+            }
+            // create an Item
+            item = sortableTdbItemCreate(tdbItem,sortOrder);
+            if(item != NULL)
+                slAddHead(&itemsToSort, item);
+            else
+                {
+                verbose(1,"Error: '%s' missing shortLabels or sortOrder setting is inconsistent.\n",tdbContainer->tableName);
+                needsSorting = FALSE;
+                break;
+                }
+            }
+        freeMem(containerName); // good accounting
+        }
+
+    // Does this container need to be sorted?
+    if(needsSorting && slCount(itemsToSort))
+        {
+        verbose(1,"Sorting '%s' with %d items\n",tdbContainer->tableName,slCount(itemsToSort));
+        sortTdbItemsAndUpdatePriorities(&itemsToSort);
+        countOfSortedContainers++;
+        }
+
+    // cleanup
+    sortOrderFree(&sortOrder);
+    sortableTdbItemsFree(&itemsToSort);
+    }
+if(countOfSortedContainers > 0)
+    verbose(1,"Sorted %d containers\n",countOfSortedContainers);
+}
+
 static struct trackDb *buildTrackDb(char *org, char *database, char *hgRoot,
-                                    char *visibilityRa, char *priorityRa, 
+                                    char *visibilityRa, char *priorityRa,
                                     boolean strict)
 /* build trackDb objects from files. */
 {
 struct hash *uniqHash = newHash(8);
 char rootDir[PATH_LEN], orgDir[PATH_LEN], asmDir[PATH_LEN];
 
-/* Create track list from hgRoot and hgRoot/org and hgRoot/org/assembly 
+/* Create track list from hgRoot and hgRoot/org and hgRoot/org/assembly
  * ra format database. */
 safef(rootDir, sizeof(rootDir), "%s", hgRoot);
 safef(orgDir, sizeof(orgDir), "%s/%s", hgRoot, org);
@@ -503,7 +572,8 @@ safef(tab, sizeof(tab), "%s.tab", trackDbName);
 
 struct trackDb *tdList = buildTrackDb(org, database, hgRoot,
                                       visibilityRa, priorityRa, strict);
-checkSubGroups(tdList); 
+checkSubGroups(tdList);
+sortContainers(tdList);
 
 verbose(1, "Loaded %d track descriptions total\n", slCount(tdList));
 
@@ -551,13 +621,13 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdList));
 	    }
 	else
 	    {
-	    updateBigTextField(conn,  trackDbName, "tableName", td->tableName, 
+	    updateBigTextField(conn,  trackDbName, "tableName", td->tableName,
 	    	"html", td->html);
 	    }
 	if (td->settingsHash != NULL)
 	    {
 	    char *settings = settingsFromHash(td->settingsHash);
-	    updateBigTextField(conn, trackDbName, "tableName", td->tableName, 
+	    updateBigTextField(conn, trackDbName, "tableName", td->tableName,
 	    	"settings", settings);
 	    freeMem(settings);
 	    }
@@ -580,7 +650,7 @@ if (strchr(raName, '/') != NULL)
 release = optionVal("release", release);
 
 hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5],
-          optionVal("visibility", NULL), optionVal("priority", NULL), 
+          optionVal("visibility", NULL), optionVal("priority", NULL),
           optionExists("strict"));
 return 0;
 }
