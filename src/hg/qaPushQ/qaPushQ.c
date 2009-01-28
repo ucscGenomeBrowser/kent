@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.111 2009/01/28 21:40:17 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.112 2009/01/28 21:44:44 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2911,10 +2911,12 @@ if (!sameString(q->files,""))
 			{
 			if (fi->statErrno > 0)  // usually due to bad symlink
 			    {
+			    char *errStr = htmlEncode(strerror(fi->statErrno));
     			    printf("<tr><td style=\"color:red\">%s<td/>"
 				"<td style=\"color:red\">stat() failed: %s</td></tr>\n"
 				, fi->name 
-				, cgiEncode(strerror(fi->statErrno)));
+				, errStr);
+			    freeMem(errStr);
 			    ++errCount;
 			    }
 			else if (fi->isDir)
