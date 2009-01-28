@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.155 2008/11/17 23:36:32 braney Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.156 2009/01/28 20:28:37 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -164,7 +164,7 @@ if (withLogo)
 	puts("<A HREF=\"http://www.genome.gov/10005107\" TARGET=\"_BLANK\">"
 	     "<IMG SRC=\"../images/ENCODE_scaleup_logo.png\" height=50 ALT=\"ENCODE Project at NHGRI\">"
 	     "</A>");
-	puts("<IMG SRC=\"../images/encode.jpg\" ALT=\"ENCODE Project at UCSC\">");
+	puts("<IMG SRC=\"../images/encodeDcc.jpg\" ALT=\"ENCODE Project at UCSC\">");
 	}
     else
 	{
