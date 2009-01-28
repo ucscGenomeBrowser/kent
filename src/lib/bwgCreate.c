@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.2 2009/01/28 02:44:43 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.3 2009/01/28 03:12:05 kent Exp $";
 
 static int bwgBedGraphItemCmp(const void *va, const void *vb)
 /* Compare to sort based on query start. */
@@ -360,7 +360,7 @@ struct hash *chromHash = hashNew(0);
 struct bedGraphChrom *chrom, *chromList = NULL;
 
 /* Collect lines in items on appropriate chromosomes. */
-struct bwgBedGraphItem *item, *itemList = NULL;
+struct bwgBedGraphItem *item;
 char *line;
 while (lineFileNextReal(lf, &line))
     {
@@ -772,7 +772,6 @@ bits32 i, count = slCount(summaryList);
 struct bwgSummary **summaryArray;
 AllocArray(summaryArray, count);
 writeOne(f, count);
-bits64 dataOffset = ftell(f);
 struct bwgSummary *summary;
 for (summary = summaryList, i=0; summary != NULL; summary = summary->next, ++i)
     {
@@ -980,6 +979,7 @@ while (lineFileNextReal(lf, &line))
 	int start = lineFileNeedNum(lf, words, 1);
 	int end = lineFileNeedNum(lf, words, 2);
 	float val = lineFileNeedDouble(lf, words, 3);
+	verbose(2, "bedGraph %s:%d-%d@%g\n", chrom, start, end, val);
 
 	/* Push back line and call bed parser. */
 	lineFileReuse(lf);

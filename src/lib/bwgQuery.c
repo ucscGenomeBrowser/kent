@@ -13,7 +13,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.1 2009/01/28 02:40:05 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.2 2009/01/28 03:12:05 kent Exp $";
 
 struct bigWigFileZoomLevel
 /* A zoom level in bigWig file. */
@@ -326,9 +326,6 @@ for (block = blockList; block != NULL; block = block->next)
 	    for (i=0; i<head.itemCount; ++i)
 		{
 		mustReadOne(f, val);
-		bits32 s = readBits32(f, isSwapped);
-		bits32 e = s + head.itemSpan;
-		mustReadOne(f, val);
 		if (s < start) s = start;
 		if (e > end) e = end;
 		if (s < e)
@@ -339,7 +336,6 @@ for (block = blockList; block != NULL; block = block->next)
 		    el->val = val;
 		    slAddHead(&list, el);
 		    }
-
 		s += head.itemStep;
 		e += head.itemStep;
 		}
