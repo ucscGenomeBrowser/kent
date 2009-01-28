@@ -77,7 +77,7 @@ enum bigWigSummaryType
     bigWigSumDataCoverage = 3,  /* Bases in region containing actual data. */
     };
 
-boolean bigWigSummaryArray(char *fileName, char *chrom, int start, int end,
+boolean bigWigSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
 	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues);
 /* Fill in summaryValues with  data from indicated chromosome range in bigWig file.
  * Be sure to initialize summaryValues to a default value, which will not be touched
