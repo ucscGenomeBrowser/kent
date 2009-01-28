@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.3 2009/01/28 03:12:05 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.4 2009/01/28 23:11:32 kent Exp $";
 
 static int bwgBedGraphItemCmp(const void *va, const void *vb)
 /* Compare to sort based on query start. */
@@ -799,6 +799,7 @@ static void bwgCreate(struct bwgSection *sectionList, struct hash *chromSizeHash
 /* Create a bigWig file out of a sorted sectionList. */
 {
 bits32 sectionCount = slCount(sectionList);
+uglyf("bwgCreate on %d sections\n", slCount(sectionList));
 FILE *f = mustOpen(fileName, "wb");
 bits32 sig = bigWigSig;
 bits32 summaryCount = 0;
@@ -916,10 +917,12 @@ cirTreeFileBulkIndexToOpenFile(sectionArray, sizeof(sectionArray[0]), sectionCou
 freez(&sectionArray);
 
 /* Write out summary sections. */
+uglyf("bwgCreate writting %d summaries\n", summaryCount);
 for (i=0; i<summaryCount; ++i)
     {
     reductionDataOffsets[i] = ftell(f);
     reductionIndexOffsets[i] = writeSummaryAndIndex(reduceSummaries[i], blockSize, itemsPerSlot, f);
+    uglyf("wrote %d of data, %d of index on level %d\n", (int)(reductionIndexOffsets[i] - reductionDataOffsets[i]), (int)(ftell(f) - reductionIndexOffsets[i]), i);
     }
 
 /* Go back and fill in offsets properly in header. */

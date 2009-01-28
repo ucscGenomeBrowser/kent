@@ -107,6 +107,7 @@ if (curLevel == leafLevel)
     UBYTE reserved = 0;
     UBYTE isLeaf = TRUE;
     bits16 countOne = slCount(tree->children);
+    uglyf("Correct level! countOne=%d\n", (int)countOne);
     writeOne(f, isLeaf);
     writeOne(f, reserved);
     writeOne(f, countOne);
@@ -141,6 +142,7 @@ else
 static void writeLeaves(int itemsPerSlot, int lNodeSize, struct rTree *tree, int leafLevel, FILE *f)
 /* Write out leaf-level nodes. */
 {
+uglyf("writeLeaves(itemsPerSlot=%d, lNodeSize=%d, leafLevel=%d)\n", itemsPerSlot, lNodeSize, leafLevel);
 rWriteLeaves(itemsPerSlot, lNodeSize, tree, 0, leafLevel, f);
 }
 
@@ -231,12 +233,13 @@ for (i=0; i<itemCount; i += itemsPerSlot)
 	}
     }
 slReverse(&list);
+struct rTree *firstLeaf = list;
 verbose(2, "Made %d primary index nodes out of %llu items\n", slCount(list), itemCount);
 
 /* Now iterate through making more and more condensed versions until have just one. */
 int levelCount = 1;
 tree = list;
-while (tree->next != NULL)
+while (tree->next != NULL || levelCount < 2)
     {
     list = NULL;
     int slotsUsed = blockSize;
@@ -296,6 +299,7 @@ static void writeTreeToOpenFile(struct rTree *tree, int blockSize, int levelCoun
 /* Write out tree to a file that is open already - writing out index nodes from 
  * highest to lowest level, and then leaf nodes. */
 {
+uglyf("writeTreeToOpenFile(%p blockSize=%d, levelCount=%d)\n", tree, blockSize, levelCount);
 /* Calculate sizes of each level. */
 int i;
 int levelSizes[levelCount];
@@ -331,7 +335,8 @@ for (i=0; i<=finalLevel; ++i)
     }
 
 /* Write out leaf level. */
-writeLeaves(blockSize, leafNodeSize(blockSize), tree, levelCount-2, f);
+int leafLevel = levelCount - 2;
+writeLeaves(blockSize, leafNodeSize(blockSize), tree, leafLevel, f);
 }
 
 void cirTreeFileBulkIndexToOpenFile(
@@ -494,11 +499,12 @@ mustReadOne(f, reserved);
 boolean isSwapped = crt->isSwapped;
 childCount = readBits16(f, isSwapped);
 
-// uglyf("rFindOverlappingBlocks %llu %u:%u-%u.  childCount %d. isLeaf %d\n", indexFileOffset, chromIx, start, end, (int)childCount, (int)isLeaf);
+verbose(3, "rFindOverlappingBlocks %llu %u:%u-%u.  childCount %d. isLeaf %d\n", indexFileOffset, chromIx, start, end, (int)childCount, (int)isLeaf);
 
 if (isLeaf)
     {
     /* Loop through node adding overlapping leaves to block list. */
+    uglyf("Leaf with %d children\n", childCount);
     for (i=0; i<childCount; ++i)
         {
 	bits32 startChromIx = readBits32(f, isSwapped);
@@ -507,6 +513,7 @@ if (isLeaf)
 	bits32 endBase = readBits32(f, isSwapped);
 	bits64 offset = readBits64(f, isSwapped);
 	bits64 size = readBits64(f, isSwapped);
+	uglyf("  checking overlap with %d:%d-%d:%d\n", startChromIx, startBase, endChromIx, endBase);
 	if (cirTreeOverlaps(chromIx, start, end, startChromIx, startBase, endChromIx, endBase))
 	    {
 	    struct fileOffsetSize *block;
@@ -551,7 +558,7 @@ struct fileOffsetSize *cirTreeFindOverlappingBlocks(struct cirTreeFile *crt,
  * in these blocks too. When done, use slListFree to dispose of the result. */
 {
 struct fileOffsetSize *blockList = NULL;
-
+uglyf("cirTreeFindOverlappingBlocks(%p %u:%u-%u\n", crt, chromIx, start, end);
 rFindOverlappingBlocks(crt, 0, crt->rootOffset, chromIx, start, end, &blockList);
 slReverse(&blockList);
 return blockList;

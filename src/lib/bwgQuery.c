@@ -13,33 +13,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.2 2009/01/28 03:12:05 kent Exp $";
-
-struct bigWigFileZoomLevel
-/* A zoom level in bigWig file. */
-    {
-    struct bigWigFileZoomLevel *next;	/* Next in list. */
-    bits32 reductionLevel;		/* How many bases per item */
-    bits32 reserved;			/* Zero for now. */
-    bits64 dataOffset;			/* Offset of data for this level in file. */
-    bits64 indexOffset;			/* Offset of index for this level in file. */
-    };
-
-struct bigWigFile 
-/* An open bigWigFile */
-    {
-    struct bigWigFile *next;	/* Next in list. */
-    char *fileName;		/* Name of file - for better error reporting. */
-    FILE *f;			/* Open file handle. */
-    boolean isSwapped;		/* If TRUE need to byte swap everything. */
-    struct bptFile *chromBpt;	/* Index of chromosomes. */
-    bits32 zoomLevels;		/* Number of zoom levels. */
-    bits64 chromTreeOffset;	/* Offset to chromosome index. */
-    bits64 unzoomedDataOffset;	/* Start of unzoomed data. */
-    bits64 unzoomedIndexOffset;	/* Start of unzoomed index. */
-    struct cirTreeFile *unzoomedCir;	/* Unzoomed data index in memory - may be NULL. */
-    struct bigWigFileZoomLevel *levelList;	/* List of zoom levels. */
-    };
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.3 2009/01/28 23:11:33 kent Exp $";
 
 void bptDumpCallback(void *context, void *key, int keySize, void *val, int valSize)
 {
@@ -81,7 +55,7 @@ fseek(f, 32, SEEK_CUR);
 
 /* Read zoom headers. */
 int i;
-struct bigWigFileZoomLevel *level, *levelList = NULL;
+struct bwgZoomLevel *level, *levelList = NULL;
 for (i=0; i<bwf->zoomLevels; ++i)
     {
     AllocVar(level);
@@ -94,10 +68,34 @@ for (i=0; i<bwf->zoomLevels; ++i)
 slReverse(&levelList);
 bwf->levelList = levelList;
 
+#ifdef BADIDEA
+/* Make up a zoom level for "unzoomed" */
+AllocVar(level);
+level->reductionLevel = 1;
+level->dataOffset = bwf->unzoomedDataOffset;
+level->indexOffset = bwf->unzoomedIndexOffset;
+slAddHead(&levelList,  level);
+#endif
+
 /* Attach B+ tree of chromosome names and ids. */
 bwf->chromBpt =  bptFileAttach(fileName, f);
 
 return bwf;
+}
+
+void bigWigFileClose(struct bigWigFile **pBwf)
+/* Close down a big wig file. */
+{
+struct bigWigFile *bwf = *pBwf;
+if (bwf != NULL)
+    {
+    cirTreeFileDetach(&bwf->unzoomedCir);
+    slFreeList(&bwf->levelList);
+    bptFileDetach(&bwf->chromBpt);
+    carefulClose(&bwf->f);
+    freeMem(bwf->fileName);
+    freez(pBwf);
+    }
 }
 
 struct bwgSectionHead
@@ -185,23 +183,23 @@ struct fileOffsetSize *bigWigOverlappingBlocks(struct bigWigFile *bwf, struct ci
 	char *chrom, bits32 start, bits32 end)
 /* Fetch list of file blocks that contain items overlapping chromosome range. */
 {
-bits32 idSize[2];
-if (!bptFileFind(bwf->chromBpt, chrom, strlen(chrom), idSize, sizeof(idSize)))
+struct bwgChromIdSize idSize;
+if (!bptFileFind(bwf->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
     return NULL;
-return cirTreeFindOverlappingBlocks(ctf, idSize[0], start, end);
+return cirTreeFindOverlappingBlocks(ctf, idSize.chromId, start, end);
 }
 
 void chromNameCallback(void *context, void *key, int keySize, void *val, int valSize)
 /* Callback that captures chromInfo from bPlusTree. */
 {
 struct bigWigChromInfo *info;
-bits32 *idSize = val;
+struct bwgChromIdSize *idSize = val;
+assert(valSize == sizeof(*idSize));
 AllocVar(info);
 info->name = cloneStringZ(key, keySize);
-info->id = idSize[0];
-info->size = idSize[1];
+info->id = idSize->chromId;
+info->size = idSize->chromSize;
 struct bigWigChromInfo **pList = context;
-uglyf("%s id=%u size=%u\n", info->name, info->id, info->size);
 slAddHead(pList, info);
 }
 
@@ -217,10 +215,10 @@ return list;
 bits32 bigWigChromSize(struct bigWigFile *bwf, char *chrom)
 /* Return chromosome size, or 0 if no such chromosome in file. */
 {
-bits32 idSize[2];
-if (!bptFileFind(bwf->chromBpt, chrom, strlen(chrom), idSize, sizeof(idSize)))
+struct bwgChromIdSize idSize;
+if (!bptFileFind(bwf->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
     return 0;
-return idSize[1];
+return idSize.chromSize;
 }
 
 void bigWigChromInfoFree(struct bigWigChromInfo **pInfo)
@@ -250,7 +248,7 @@ for (el = *pList; el != NULL; el = next)
 static void bwgAttachUnzoomedCir(struct bigWigFile *bwf)
 /* Make sure unzoomed cir is attached. */
 {
-if (!bwf->unzoomedCir)
+if (bwf->unzoomedCir == NULL)
     {
     fseek(bwf->f, bwf->unzoomedIndexOffset, SEEK_SET);
     bwf->unzoomedCir = cirTreeFileAttach(bwf->fileName, bwf->f);
@@ -270,7 +268,6 @@ FILE *f = bwf->f;
 boolean isSwapped = bwf->isSwapped;
 float val;
 int i;
-uglyf("Got %d blocks on %s:%d-%d\n", slCount(blockList), chrom, start, end);
 for (block = blockList; block != NULL; block = block->next)
     {
     struct bwgSectionHead head;
