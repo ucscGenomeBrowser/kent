@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.1 2009/01/27 22:58:47 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.2 2009/01/28 02:44:43 kent Exp $";
 
 static int bwgBedGraphItemCmp(const void *va, const void *vb)
 /* Compare to sort based on query start. */
@@ -440,19 +440,19 @@ chromList = NULL;
 static void chromInfoKey(const void *va, char *keyBuf)
 /* Get key field. */
 {
-const struct bwgChromInfo *a = ((struct bwgChromInfo *)va);
+const struct bigWigChromInfo *a = ((struct bigWigChromInfo *)va);
 strcpy(keyBuf, a->name);
 }
 
 static void *chromInfoVal(const void *va)
-/* Get key field. */
+/* Get val field. */
 {
-const struct bwgChromInfo *a = ((struct bwgChromInfo *)va);
+const struct bigWigChromInfo *a = ((struct bigWigChromInfo *)va);
 return (void*)(&a->id);
 }
 
 void bwgMakeChromInfo(struct bwgSection *sectionList, struct hash *chromSizeHash,
-	int *retChromCount, struct bwgChromInfo **retChromArray,
+	int *retChromCount, struct bigWigChromInfo **retChromArray,
 	int *retMaxChromNameSize)
 /* Fill in chromId field in sectionList.  Return array of chromosome name/ids. 
  * The chromSizeHash is keyed by name, and has int values. */
@@ -479,7 +479,7 @@ for (section = sectionList; section != NULL; section = section->next)
 slReverse(&uniqList);
 
 /* Allocate and fill in results array. */
-struct bwgChromInfo *chromArray;
+struct bigWigChromInfo *chromArray;
 AllocArray(chromArray, chromCount);
 int i;
 for (i = 0, uniq = uniqList; i < chromCount; ++i, uniq = uniq->next)
@@ -702,7 +702,7 @@ for (item = section->itemList.fixedStep; item != NULL; item = item->next)
 }
 
 struct bwgSummary *bwgReduceSummaryList(struct bwgSummary *inList, 
-	struct bwgChromInfo *chromInfoArray, int reduction)
+	struct bigWigChromInfo *chromInfoArray, int reduction)
 /* Reduce summary list to another summary list. */
 {
 struct bwgSummary *outList = NULL;
@@ -715,7 +715,7 @@ return outList;
 }
 
 struct bwgSummary *bwgReduceSectionList(struct bwgSection *sectionList, 
-	struct bwgChromInfo *chromInfoArray, int reduction)
+	struct bigWigChromInfo *chromInfoArray, int reduction)
 /* Reduce section by given amount. */
 {
 struct bwgSummary *outList = NULL;
@@ -816,7 +816,7 @@ bits64 reductionIndexOffsets[10];
 int i;
 
 /* Figure out chromosome ID's. */
-struct bwgChromInfo *chromInfoArray;
+struct bigWigChromInfo *chromInfoArray;
 int chromCount, maxChromNameSize;
 bwgMakeChromInfo(sectionList, chromSizeHash, &chromCount, &chromInfoArray, &maxChromNameSize);
 
@@ -893,7 +893,9 @@ for (i=0; i<summaryCount; ++i)
 chromTreeOffset = ftell(f);
 int chromBlockSize = min(blockSize, chromCount);
 bptFileBulkIndexToOpenFile(chromInfoArray, sizeof(chromInfoArray[0]), chromCount, chromBlockSize,
-    chromInfoKey, maxChromNameSize, chromInfoVal, sizeof(chromInfoArray[0].id), f);
+    chromInfoKey, maxChromNameSize, chromInfoVal, 
+    sizeof(chromInfoArray[0].id) + sizeof(chromInfoArray[0].size), 
+    f);
 
 /* Write out data section count and sections themselves. */
 dataOffset = ftell(f);
@@ -988,12 +990,14 @@ slSort(&sectionList, bwgSectionCmp);
 return sectionList;
 }
 
-void bigWigCreate(
+void bigWigFileCreate(
 	char *inName, 		/* Input file in ascii wiggle format. */
 	char *chromSizes, 	/* Two column tab-separated file: <chromosome> <size>. */
 	int blockSize,		/* Number of items to bundle in r-tree.  1024 is good. */
 	int itemsPerSlot,	/* Number of items in lowest level of tree.  512 is good. */
 	char *outName)
+/* Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
+ * to binary big wig format. */
 {
 struct hash *chromSizeHash = bwgChromSizesFromFile(chromSizes);
 struct lm *lm = lmInit(0);
