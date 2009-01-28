@@ -85,6 +85,18 @@ termId BTO:0000375
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
 tier 2
 
+term H1_ES
+type Cell Line
+description Human Embryonic Stem Cells
+vendorName Cellular Dynamics
+vendorId
+orderUrl http://www.cellulardynamics.com/
+lineage embryonic stem cells
+karyotype normal
+termId CL:0000007
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL%3A0000007&termName=early%20embryonic%20cell
+tier 2
+
 ###### type 3 cells once they have been submitted.
 term A549
 type Cell Line
