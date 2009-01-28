@@ -1540,7 +1540,14 @@ identifier hugoName external=HUGO fuzzy
     $hg.kgXref.geneSymbol
     $hg.refFlat.geneName
     $hg.jaxOrtholog.humanSymbol
+    $hg.omimMorbidMap.geneSymbols
     visiGene.gene.name
+
+identifier kgGeneSymbol
+"UCSC Genes Gene Symbol"
+    $hg.kgXref.geneSymbol
+    $hg.omimGeneMap.geneSymbol comma minCheck=0.40
+    $hg.omimMorbidMap.geneSymbols comma minCheck=0.25
 
 identifier mouseGeneName fuzzy
 "Mouse gene name from Jackson Labs/RefSeq"
@@ -2013,6 +2020,14 @@ identifier locusLinkId external=LocusLink
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
     $gbd.refLink.omimId dupeOk exclude=0
+
+identifier omimGeneId
+"omimGene ID"
+    $hg.omimGene.name dupeOk
+    $hg.omimGeneMap.omimId minCheck=0.85
+    $hg.refLink.omimId exclude=0 minCheck=0.98 
+    $hg.omimMorbidMap.omimId minCheck=0.80
+    $hg.omimToKnownCanonical.omimId
 
 identifier unigeneId fuzzy
 "NCBI UniGene Cluster ID"
