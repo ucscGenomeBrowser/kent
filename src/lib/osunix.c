@@ -13,7 +13,7 @@
 #include "portimpl.h"
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: osunix.c,v 1.36 2009/01/14 23:06:29 galt Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.37 2009/01/28 21:34:13 galt Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -111,14 +111,14 @@ slNameSort(&list);
 return list;
 }
 
-struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, bool statFailed)
+struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, int statErrno)
 /* Return a new fileInfo. */
 {
 int len = strlen(name);
 struct fileInfo *fi = needMem(sizeof(*fi) + len);
 fi->size = size;
 fi->isDir = isDir;
-fi->statFailed = statFailed;
+fi->statErrno = statErrno;
 strcpy(fi->name, name);
 return fi;
 }
@@ -176,12 +176,12 @@ while ((de = readdir(d)) != NULL)
 	    {
 	    struct stat st;
 	    bool isDir = FALSE;
-	    bool statFailed = FALSE;
+	    int statErrno = 0;
 	    strcpy(pathName+fileNameOffset, fileName);
 	    if (stat(pathName, &st) < 0)
 		{
 		if (ignoreStatFailures)
-		    statFailed = TRUE;
+		    statErrno = errno;
 		else
     		    errAbort("stat failed in listDirX");
 		}
@@ -189,7 +189,7 @@ while ((de = readdir(d)) != NULL)
 		isDir = TRUE;
 	    if (fullPath)
 		fileName = pathName;
-	    el = newFileInfo(fileName, st.st_size, isDir, statFailed);
+	    el = newFileInfo(fileName, st.st_size, isDir, statErrno);
 	    slAddHead(&list, el);
 	    }
 	}

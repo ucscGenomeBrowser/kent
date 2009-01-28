@@ -20,11 +20,11 @@ struct fileInfo
     struct fileInfo  *next;	/* Next in list. */
     off_t size;		/* Size in bytes. */
     bool isDir;		/* True if file is a directory. */
-    bool statFailed;	/* True if stat failed (e.g. bad symlink). */
+    int statErrno;	/* Result of stat (e.g. bad symlink). */
     char name[1];	/* Allocated at run time. */
     };
 
-struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, bool statFailed);
+struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, int statErrno);
 /* Return a new fileInfo. */
 
 struct fileInfo *listDirXExt(char *dir, char *pattern, boolean fullPath, boolean ignoreStatFailures);
