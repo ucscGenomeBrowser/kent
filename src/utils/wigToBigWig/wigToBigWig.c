@@ -7,7 +7,7 @@
 #include "bigWig.h"
 #include "bwgInternal.h"
 
-static char const rcsid[] = "$Id: wigToBigWig.c,v 1.1 2009/01/27 23:02:40 kent Exp $";
+static char const rcsid[] = "$Id: wigToBigWig.c,v 1.2 2009/01/28 17:46:54 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 512;
@@ -40,7 +40,7 @@ void wigToBigWig(char *inName, char *chromSizes, char *outName)
 /* wigToBigWig - Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
  * to binary big wig format.. */
 {
-bigWigCreate(inName, chromSizes, blockSize, itemsPerSlot, outName);
+bigWigFileCreate(inName, chromSizes, blockSize, itemsPerSlot, outName);
 }
 
 int main(int argc, char *argv[])

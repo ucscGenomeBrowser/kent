@@ -4,7 +4,7 @@ L = -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-O = wigToBigWig.o bwgCreate.o
+O = wigToBigWig.o
 
 wigToBigWig: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/wigToBigWig $O ${MYLIBS} $L
