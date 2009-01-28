@@ -3202,6 +3202,7 @@ tablesIgnored $hg
     kiddEichlerValidAbc13
     kiddEichlerValidAbc14
     kiddEichlerValidG248
+    wgEncode%
 
 tablesIgnored $mm
     chr%_gold
