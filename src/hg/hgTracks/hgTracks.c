@@ -42,7 +42,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1547 2009/01/26 21:48:39 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1548 2009/01/28 23:02:43 aamp Exp $";
 
 #define SMALLBUF 64
 
@@ -1243,8 +1243,7 @@ if (track->limitedVis != tvHide)
                         track->labelColor : track->ixColor);
     hvGfxTextCentered(hvg, insideX, y+1, insideWidth, insideHeight,
                         labelColor, font, track->longLabel);
-    if (withNextItemArrows && track->labelNextItemButtonable && track->labelNextPrevItem &&
-	track != parentTrack)
+    if (withNextItemArrows && track->labelNextItemButtonable && track->labelNextPrevItem && !tdbIsComposite(track->tdb))
 	doLabelNextItemButtons(track, parentTrack, hvg, font, y, trackPastTabX,
 			  trackPastTabWidth, fontHeight, insideHeight, labelColor);
     else
