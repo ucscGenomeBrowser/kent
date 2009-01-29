@@ -592,6 +592,33 @@ Genome Browser:</P>
 	the data is displayed. The track will display in shades of gray unless
 	the <I>color</I> attribute is set to 100,50,0 (shades of brown) or
 	0,60,120 (shades of blue). The default setting for <I>useScore</I> is &quot;0&quot;.
+        This table shows the Genome Browser's translation of BED score values into
+        shades of gray:
+<TABLE CELLPADDING=0 BORDER=1>
+<TR><TD style="background-color: white">
+    <TABLE CELLSPACING=5>
+    <TR><TD>shade</TD>
+        <TD style="background-color: #e2e2e2">&nbsp;</TD>
+        <TD style="background-color: #c6c6c6">&nbsp;</TD>
+        <TD style="background-color: #aaaaaa">&nbsp;</TD>
+        <TD style="background-color: #8d8d8d">&nbsp;</TD>
+        <TD style="background-color: #717171">&nbsp;</TD>
+        <TD style="background-color: #555555">&nbsp;</TD>
+        <TD style="background-color: #383838">&nbsp;</TD>
+        <TD style="background-color: #1c1c1c">&nbsp;</TD>
+        <TD style="background-color: #000000">&nbsp;</TD></TR>
+    <TR><TD>score in range&nbsp;&nbsp;</TD>
+        <TD>&le; 166</TD>
+        <TD>167-277</TD>
+        <TD>278-388</TD>
+        <TD>389-499</TD>
+        <TD>500-611</TD>
+        <TD>612-722</TD>
+        <TD>723-833</TD>
+        <TD>834-944</TD>
+        <TD>&ge; 945</TD></TR>
+    </TABLE>
+</TD></TR></TABLE>
 	<LI><B>group=<<I>group</I>></B> - Defines the annotation track group
 	in which the custom track will display in the Genome Browser window.
 	By default, <em>group</em> is set to &quot;user&quot;, which causes
@@ -667,6 +694,33 @@ higher-numbered fields are used.
 	<I>useScore</I> attribute is set to 1 for this annotation data set, the
 	<I>score</I> value will determine the level of gray in which
 	this feature is displayed (higher numbers = darker gray).
+        This table shows the Genome Browser's translation of BED score values into
+        shades of gray:
+<TABLE CELLPADDING=0 BORDER=1>
+<TR><TD style="background-color: white">
+    <TABLE CELLSPACING=5>
+    <TR><TD>shade</TD>
+        <TD style="background-color: #e2e2e2">&nbsp;</TD>
+        <TD style="background-color: #c6c6c6">&nbsp;</TD>
+        <TD style="background-color: #aaaaaa">&nbsp;</TD>
+        <TD style="background-color: #8d8d8d">&nbsp;</TD>
+        <TD style="background-color: #717171">&nbsp;</TD>
+        <TD style="background-color: #555555">&nbsp;</TD>
+        <TD style="background-color: #383838">&nbsp;</TD>
+        <TD style="background-color: #1c1c1c">&nbsp;</TD>
+        <TD style="background-color: #000000">&nbsp;</TD></TR>
+    <TR><TD>score in range&nbsp;&nbsp;</TD>
+        <TD>&le; 166</TD>
+        <TD>167-277</TD>
+        <TD>278-388</TD>
+        <TD>389-499</TD>
+        <TD>500-611</TD>
+        <TD>612-722</TD>
+        <TD>723-833</TD>
+        <TD>834-944</TD>
+        <TD>&ge; 945</TD></TR>
+    </TABLE>
+</TD></TR></TABLE>
 	<LI><B>strand</B> - Defines the strand - either '+' or '-'.
 	<LI><B>thickStart</B> - The starting position at which the feature
 	is drawn thickly (for example, the start codon in gene
