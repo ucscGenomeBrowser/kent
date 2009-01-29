@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.37 2006/06/12 15:57:11 angie Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.38 2009/01/29 19:39:03 angie Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -521,8 +521,9 @@ if (conn != NULL)
 	else
 	    hitsNeeded = total;
 	if (jf->minCheck < 1.0 && hits >= hitsNeeded) okFlag = TRUE;
-	verbose(1, " %s.%s.%s - hits %d of %d%s\n", db, jf->table, jf->field, hits, total, okFlag ? " ok":"");
-	if (hits < hitsNeeded)
+	verbose(1, " %s.%s.%s - hits %d of %d%s\n", db, jf->table, jf->field, hits, total,
+		okFlag ? " ok" : js->isFuzzy ? " fuzzy" : "");
+	if (hits < hitsNeeded && !js->isFuzzy)
 	    {
 	    warn("Error: %d of %d elements of %s.%s.%s are not in key %s.%s line %d of %s\n"
 		 "Example miss: %s"
@@ -561,8 +562,6 @@ struct hash *localKeyHash = NULL;
 struct keyHitInfo *localKhiList = NULL;
 struct joinerField *keyField;
 
-if (js->isFuzzy)
-    return;
 if ((keyField = js->fieldList) == NULL)
     return;
 if (keyHash == NULL)
