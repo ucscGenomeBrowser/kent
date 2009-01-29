@@ -5,7 +5,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: wigTestMaker.c,v 1.1 2009/01/29 18:17:53 kent Exp $";
+static char const rcsid[] = "$Id: wigTestMaker.c,v 1.2 2009/01/29 18:45:40 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -79,8 +79,8 @@ int i;
 FILE *f = mustOpen(fileName, "w");
 for (i=1; i<=contigCount; ++i)
     {
-    fprintf(f, "contig%d\t%d\t%d\t%g\n", i, 10*i, 20*i, 1.0/i);
-    fprintf(f, "contig%d\t%d\t%d\t%g\n", i, 30*i, 40*i, i*1.000001);
+    fprintf(f, "contig%d\t%d\t%d\t%g\n", i, 1000000+i, 1000100+i, 1.0/i);
+    fprintf(f, "contig%d\t%d\t%d\t%g\n", i, 1001000+i, 1001100+i, i*1.000001);
     }
 carefulClose(&f);
 }
@@ -120,7 +120,7 @@ double outerStep = TWOPI/(innerRes*outerRes);
 int chromIx;
 for (chromIx=1; chromIx<=chromCount; ++chromIx)
     {
-    fprintf(f, "variableStep chrom=chr%d step=1 span=1\n", chromIx);
+    fprintf(f, "variableStep chrom=chr%d span=1\n", chromIx);
     double outerAngle = 0, innerAngle = 0;
     int i;
     for (i=0; i<totalSteps; ++i)
@@ -143,7 +143,6 @@ double outerStep = TWOPI/(innerRes*outerRes);
 int chromIx;
 for (chromIx=1; chromIx<=chromCount; ++chromIx)
     {
-    fprintf(f, "variableStep chrom=chr%d step=1 span=1\n", chromIx);
     double outerAngle = 0, innerAngle = 0;
     int i;
     for (i=0; i<totalSteps; ++i)
@@ -212,7 +211,7 @@ void makeContigSizes(char *fileName, int count)
 FILE *f = mustOpen(fileName, "w");
 int i;
 for (i=1; i<=count; ++i)
-    fprintf(f, "contig%d\t%d\n", i, 100000+i);
+    fprintf(f, "contig%d\t%d\n", i, 2000000+i);
 carefulClose(&f);
 }
     
@@ -222,19 +221,19 @@ void wigTestMaker(char *outDir)
 makeDir(outDir);
 setCurrentDir(outDir);
 makeChromSizes("chrom.sizes", 100);
-makeContigSizes("contig.sizes", 666666);
 makeEmpty("empty.wig");
 makeEmptyFixed("emptyFixed.wig");
 makeEmptyVar("emptyVar.wig");
 makeShortFixed("shortFixed.wig");
 makeShortVar("shortVar.wig");
 makeShortBed("shortBed.wig");
-makeManyContigs("contigs.wig", 666666);
 makeSineSineFixed("sineSineFixed.wig", 1000, 500, 10, 8);
 makeSineSineVar("sineSineVar.wig", 1000, 500, 10, 4);
 makeSineSineBed("sineSineBed.wig", 1000, 500, 10, 2);
 makeIncreasing("increasing.wig");
 makeMixem("mixem.wig");
+makeContigSizes("contig.sizes", 666666);
+makeManyContigs("contigs.wig", 666666);
 }
 
 int main(int argc, char *argv[])
