@@ -10,7 +10,7 @@
 #include "bwgInternal.h"	// Just for development - ugly
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigSummary.c,v 1.4 2009/01/29 03:32:44 kent Exp $";
+static char const rcsid[] = "$Id: bigWigSummary.c,v 1.5 2009/01/29 04:01:12 kent Exp $";
 
 char *summaryType = "mean";
 
@@ -34,7 +34,7 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
-   {"summaryType", OPTION_STRING},
+   {"type", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -180,53 +180,146 @@ return sumList;
 }
 
 bits32 bwgSummarySlice(struct bigWigFile *bwf, bits32 baseStart, bits32 baseEnd, 
-	struct bwgSummary *sumList, double *retVal)
+	struct bwgSummary *sumList, enum bigWigSummaryType summaryType, double *retVal)
 /* Update retVal with the average value if there is any data in interval.  Return number
  * of valid data bases in interval. */
 {
-struct bwgSummary *sum;
 bits32 validCount = 0;
-double sumData = 0;
 
-for (sum = sumList; sum != NULL && sum->start < baseEnd; sum = sum->next)
+if (sumList != NULL)
     {
-    int overlap = rangeIntersection(baseStart, baseEnd, sum->start, sum->end);
-    if (overlap > 0)
-        {
-	double overlapFactor = (double)overlap / (sum->end - sum->start);
-	sumData += sum->sumData * overlapFactor;
-	validCount += sum->validCount * overlapFactor;
+    double minVal = sumList->minVal;
+    double maxVal = sumList->maxVal;
+    double sumData = 0;
+
+    struct bwgSummary *sum;
+    for (sum = sumList; sum != NULL && sum->start < baseEnd; sum = sum->next)
+	{
+	int overlap = rangeIntersection(baseStart, baseEnd, sum->start, sum->end);
+	if (overlap > 0)
+	    {
+	    double overlapFactor = (double)overlap / (sum->end - sum->start);
+	    validCount += sum->validCount * overlapFactor;
+	    switch (summaryType)
+	        {
+		case bigWigSumMean:
+		    sumData += sum->sumData * overlapFactor;
+		    break;
+		case bigWigSumMax:
+		    if (maxVal < sum->maxVal)
+		        maxVal = sum->maxVal;
+		    break;
+		case bigWigSumMin:
+		    if (minVal > sum->minVal)
+		        minVal = sum->minVal;
+		    break;
+		case bigWigSumDataCoverage:
+		    break;
+		default:
+		    internalErr();
+		    break;
+		}
+	    }
+	}
+    if (validCount > 0)
+	{
+	double val = 0;
+	switch (summaryType)
+	    {
+	    case bigWigSumMean:
+		val = sumData/validCount;
+		break;
+	    case bigWigSumMax:
+	        val = maxVal;
+		break;
+	    case bigWigSumMin:
+	        val = minVal;
+		break;
+	    case bigWigSumDataCoverage:
+	        val = (double)validCount/(baseEnd-baseStart);
+		break;
+	    default:
+	        internalErr();
+		val = 0.0;
+		break;
+	    }
+	*retVal = val;
 	}
     }
-if (validCount > 0)
-    *retVal = sumData/validCount;
 return validCount;
 }
 
 bits32 bwgIntervalSlice(struct bigWigFile *bwf, bits32 baseStart, bits32 baseEnd, 
-	struct bigWigInterval *intervalList, double *retVal)
+	struct bigWigInterval *intervalList, enum bigWigSummaryType summaryType, double *retVal)
 /* Update retVal with the average value if there is any data in interval.  Return number
  * of valid data bases in interval. */
 {
-struct bwgSummary *sum;
 bits32 validCount = 0;
-double sumData = 0;
-struct bigWigInterval *interval;
-for (interval = intervalList; interval != NULL && interval->start < baseEnd; 
-	interval = interval->next)
+
+if (intervalList != NULL)
     {
-    int overlap = rangeIntersection(baseStart, baseEnd, interval->start, interval->end);
-    if (overlap > 0)
-        {
-	int intervalSize = interval->end - interval->start;
-	double overlapFactor = (double)overlap / intervalSize;
-	double intervalWeight = intervalSize * overlapFactor;
-	sumData += interval->val * intervalWeight;
-	validCount += intervalWeight;
+    struct bigWigInterval *interval;
+    double sumData = 0;
+    double minVal = intervalList->val;
+    double maxVal = intervalList->val;
+
+    for (interval = intervalList; interval != NULL && interval->start < baseEnd; 
+	    interval = interval->next)
+	{
+	int overlap = rangeIntersection(baseStart, baseEnd, interval->start, interval->end);
+	if (overlap > 0)
+	    {
+	    int intervalSize = interval->end - interval->start;
+	    double overlapFactor = (double)overlap / intervalSize;
+	    double intervalWeight = intervalSize * overlapFactor;
+	    validCount += intervalWeight;
+
+	    switch (summaryType)
+	        {
+		case bigWigSumMean:
+		    sumData += interval->val * intervalWeight;
+		    break;
+		case bigWigSumMax:
+		    if (maxVal < interval->val)
+		        maxVal = interval->val;
+		    break;
+		case bigWigSumMin:
+		    if (minVal > interval->val)
+		        minVal = interval->val;
+		    break;
+		case bigWigSumDataCoverage:
+		    break;
+		default:
+		    internalErr();
+		    break;
+		}
+	    }
+	}
+    if (validCount > 0)
+	{
+	double val = 0;
+	switch (summaryType)
+	    {
+	    case bigWigSumMean:
+		val = sumData/validCount;
+		break;
+	    case bigWigSumMax:
+		val = maxVal;
+		break;
+	    case bigWigSumMin:
+		val = minVal;
+		break;
+	    case bigWigSumDataCoverage:
+		val = (double)validCount/(baseEnd-baseStart);
+		break;
+	    default:
+		internalErr();
+		val = 0.0;
+		break;
+	    }
+	*retVal = val;
 	}
     }
-if (validCount > 0)
-    *retVal = sumData/validCount;
 return validCount;
 }
 
@@ -265,7 +358,7 @@ if (sumList != NULL)
 	while (sum != NULL && sum->end <= baseStart)
 	    sum = sum->next;
 
-	if (bwgSummarySlice(bwf, baseStart, baseEnd, sum, &summaryValues[i]))
+	if (bwgSummarySlice(bwf, baseStart, baseEnd, sum, summaryType, &summaryValues[i]))
 	    result = TRUE;
 
 	/* Next time round start where we left off. */
@@ -297,7 +390,7 @@ if (intervalList != NULL);
 	while (interval != NULL && interval->end <= baseStart)
 	    interval = interval->next;
 
-	if (bwgIntervalSlice(bwf, baseStart, baseEnd, interval, &summaryValues[i]))
+	if (bwgIntervalSlice(bwf, baseStart, baseEnd, interval, summaryType, &summaryValues[i]))
 	    result = TRUE;
 
 	/* Next time round start where we left off. */
@@ -349,6 +442,15 @@ bigWigFileClose(&bwf);
 return result;
 }
 
+double bigWigSingleSummary(char *fileName, char *chrom, int start, int end,
+    enum bigWigSummaryType summaryType, double defaultVal)
+/* Return the summarized single value for a range. */
+{
+double arrayOfOne = defaultVal;
+bigWigSummaryArray(fileName, chrom, start, end, summaryType, 1, &arrayOfOne);
+return arrayOfOne;
+}
+
 void bigWigSummary(char *bigWigFile, char *chrom, int start, int end, int dataPoints)
 /* bigWigSummary - Extract summary information from a bigWig file.. */
 {
@@ -386,7 +488,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
-summaryType = optionVal("summaryType", summaryType);
+summaryType = optionVal("type", summaryType);
 bigWigSummary(argv[1], argv[2], sqlUnsigned(argv[3]), sqlUnsigned(argv[4]), sqlUnsigned(argv[5]));
 return 0;
 }
