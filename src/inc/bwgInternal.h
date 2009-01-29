@@ -187,6 +187,9 @@ void bwgMakeChromInfo(struct bwgSection *sectionList, struct hash *chromSizeHash
 int bwgAverageResolution(struct bwgSection *sectionList);
 /* Return the average resolution seen in sectionList. */
 
+void bwgAttachUnzoomedCir(struct bigWigFile *bwf);
+/* Make sure unzoomed cir is attached. */
+
 struct bwgSummary *bwgReduceSectionList(struct bwgSection *sectionList, 
 	struct bigWigChromInfo *chromInfoArray, int reduction);
 /* Reduce section by given amount. */
