@@ -9,7 +9,7 @@
 #include "hgExp.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.15 2008/10/16 18:08:30 hiram Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.16 2009/01/29 21:57:44 aamp Exp $";
 
 static int expSubcellWidth = 21;
 
@@ -93,7 +93,7 @@ for (i=0; i<maxCount; ++i)
 return i;
 }
 
-void hgExpLabelPrint(char *colName, char *subName, int skipName,
+void hgExpLabelPrint(char *database, char *colName, char *subName, int skipName,
 	char *url, int representativeCount, int *representatives,
 	char *expTable, int gifStart)
 /* Print out labels of various experiments. */
@@ -101,7 +101,7 @@ void hgExpLabelPrint(char *colName, char *subName, int skipName,
 int i;
 int groupSize;
 char gifName[128];
-char **experiments = hgExpGetNames("hgFixed", 
+char **experiments = hgExpGetNames(database,
 	expTable, representativeCount, representatives, skipName);
 int height = gifLabelMaxWidth(experiments, representativeCount);
 
