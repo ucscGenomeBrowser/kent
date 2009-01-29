@@ -3781,6 +3781,7 @@ priority 100
     configurable on
     type wig -8.17 .99
     maxHeightPixels 100:50:11
+    viewLimits=-.3:2
     autoScale off
     spanList 1
     windowingFunction mean
@@ -3797,6 +3798,7 @@ priority 100
     configurable on
     type wig -14.42 3.46
     maxHeightPixels 100:50:11
+    viewLimits=-.3:2
     autoScale off
     spanList 1
     windowingFunction mean
@@ -3813,6 +3815,7 @@ priority 100
     configurable on
     type wig -15.41 7.13
     maxHeightPixels 100:50:11
+    viewLimits=-.3:2
     autoScale off
     spanList 1
     windowingFunction mean
