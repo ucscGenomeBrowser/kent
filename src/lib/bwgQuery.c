@@ -13,7 +13,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.5 2009/01/29 05:32:33 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.6 2009/01/29 05:34:36 kent Exp $";
 
 void bptDumpCallback(void *context, void *key, int keySize, void *val, int valSize)
 {
@@ -665,6 +665,7 @@ if (sumList != NULL)
 	/* Next time round start where we left off. */
 	baseStart = baseEnd;
 	}
+    slFreeList(&sumList);
     }
 return result;
 }
