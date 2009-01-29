@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.50 2009/01/24 22:13:37 markd Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.51 2009/01/29 22:55:38 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -666,7 +666,12 @@ else if(startsWith("bed ", tdb->type)) // TODO: Only these are configurable so f
     if (atoi(words[1]) >= 5 && trackDbSetting(tdb, "noScoreFilter") == NULL)
         cType = cfgBedScore;
     }
-else
+else if(sameWord("genePred",tdb->type) && startsWith("wgEncodeSangerGencode", tdb->tableName))
+    {
+        cType = cfgGencode;
+    }
+
+if(cType == cfgNone && subgroupFind(tdb,"view",NULL))
     warn("Track type %s is not yet support in multi-view composites.",tdb->type);
 return cType;
 }
