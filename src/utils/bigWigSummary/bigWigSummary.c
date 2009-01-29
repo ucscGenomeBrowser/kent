@@ -4,12 +4,13 @@
 #include "hash.h"
 #include "options.h"
 #include "sqlNum.h"
+#include "localmem.h"		// Just for development - ugly
 #include "bPlusTree.h"		// Just for development - ugly
 #include "cirTree.h"		// Just for development - ugly
 #include "bwgInternal.h"	// Just for development - ugly
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigSummary.c,v 1.2 2009/01/29 01:27:33 kent Exp $";
+static char const rcsid[] = "$Id: bigWigSummary.c,v 1.3 2009/01/29 03:17:40 kent Exp $";
 
 char *summaryType = "mean";
 
@@ -95,12 +96,6 @@ for (level = bwf->levelList; level != NULL; level = level->next)
 	}
     }
 return closestLevel;
-}
-
-boolean bwgSummaryArrayFromFull(struct bigWigFile *bwf, int chromId, bits32 start, bits32 end,
-	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues)
-{
-return FALSE;
 }
 
 void bwgSummaryOnDiskRead(struct bigWigFile *bwf, struct bwgSummaryOnDisk *sum)
@@ -209,13 +204,50 @@ if (validCount > 0)
 return validCount;
 }
 
+bits32 bwgIntervalSlice(struct bigWigFile *bwf, bits32 baseStart, bits32 baseEnd, 
+	struct bigWigInterval *intervalList, double *retVal)
+/* Update retVal with the average value if there is any data in interval.  Return number
+ * of valid data bases in interval. */
+{
+struct bwgSummary *sum;
+bits32 validCount = 0;
+double sumData = 0;
+struct bigWigInterval *interval;
+for (interval = intervalList; interval != NULL && interval->start < baseEnd; interval = interval->next)
+    {
+    int overlap = rangeIntersection(baseStart, baseEnd, interval->start, interval->end);
+    if (overlap > 0)
+        {
+	int intervalSize = interval->end - interval->start;
+	double overlapFactor = (double)overlap / (intervalSize);
+	sumData += interval->val * intervalSize * overlapFactor;
+	validCount += intervalSize * overlapFactor;
+	}
+    }
+if (validCount > 0)
+    *retVal = sumData/validCount;
+return validCount;
+}
+
+int bwgChromId(struct bigWigFile *bwf, char *chrom)
+/* Return chromosome size */
+{
+struct bwgChromIdSize idSize;
+if (!bptFileFind(bwf->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
+    return -1;
+return idSize.chromId;
+}
+
 boolean bwgSummaryArrayFromZoom(struct bwgZoomLevel *zoom, struct bigWigFile *bwf, 
-	int chromId, bits32 start, bits32 end,
+	char *chrom, bits32 start, bits32 end,
 	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues)
 /* Look up region in index and get data at given zoom level.  Summarize this data
  * in the summaryValues array.  Only update summaryValues we actually do have data. */
 {
 boolean result = FALSE;
+int chromId = bwgChromId(bwf, chrom);
+if (chromId < 0)
+    return FALSE;
 struct bwgSummary *sum, *sumList = bwgSummariesInRegion(zoom, bwf, chromId, start, end);
 if (sumList != NULL)
     {
@@ -239,6 +271,40 @@ if (sumList != NULL)
 	baseStart = baseEnd;
 	}
     }
+return result;
+}
+
+boolean bwgSummaryArrayFromFull(struct bigWigFile *bwf, char *chrom, bits32 start, bits32 end,
+	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues)
+{
+struct bigWigInterval *intervalList, *interval;
+struct lm *lm = lmInit(0);
+intervalList = bigWigIntervalQuery(bwf, chrom, start, end, lm);
+boolean result = FALSE;
+if (intervalList != NULL);
+    {
+    int i;
+    bits32 baseStart = start, baseEnd;
+    bits32 baseCount = end - start;
+    interval = intervalList;
+    for (i=0; i<summarySize; ++i)
+        {
+	/* Calculate end of this part of summary */
+	baseEnd = start + baseCount*(i+1)/summarySize;
+
+        /* Advance interval to skip over parts we are no longer interested in. */
+	while (interval != NULL && interval->end <= baseStart)
+	    interval = interval->next;
+
+	if (bwgIntervalSlice(bwf, baseStart, baseEnd, interval, &summaryValues[i]))
+	    result = TRUE;
+
+	/* Next time round start where we left off. */
+	baseStart = baseEnd;
+	}
+    }
+
+lmCleanup(&lm);
 return result;
 }
 
@@ -269,24 +335,18 @@ uglyf("baseSize %u, summarySize %d, fullReduction %d, zoomLevel %d\n", baseSize,
 
 /* Open up bigWig file and look up chromId. */
 struct bigWigFile *bwf = bigWigFileOpen(fileName);
-struct bwgChromIdSize idSize;
-if (!bptFileFind(bwf->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
-    {
-    bigWigFileClose(&bwf);
-    return result;
-    }
-int chromId = idSize.chromId;
 
 /* Get the closest zoom level less than what we're looking for. */
 struct bwgZoomLevel *zoom = bwgBestZoom(bwf, zoomLevel);
 if (zoom != NULL)
     {
     uglyf("bwgBestZoom = %u\n", zoom->reductionLevel);
-    result = bwgSummaryArrayFromZoom(zoom, bwf, chromId, start, end, summaryType, summarySize, summaryValues);
+    result = bwgSummaryArrayFromZoom(zoom, bwf, chrom, start, end, summaryType, summarySize, summaryValues);
     }
 else
     {
     uglyf("No zoom available, using full resolution.\n");
+    result = bwgSummaryArrayFromFull(bwf, chrom, start, end, summaryType, summarySize, summaryValues);
     }
 bigWigFileClose(&bwf);
 return result;
