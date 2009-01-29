@@ -13,7 +13,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.8 2009/01/29 21:51:39 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.9 2009/01/29 22:11:15 kent Exp $";
 
 void bptDumpCallback(void *context, void *key, int keySize, void *val, int valSize)
 {
@@ -313,13 +313,14 @@ for (block = blockList; block != NULL; block = block->next)
 	    for (i=0; i<head.itemCount; ++i)
 		{
 		mustReadOne(f, val);
-		if (s < start) s = start;
-		if (e > end) e = end;
-		if (s < e)
+		bits32 clippedS = s, clippedE = e;
+		if (clippedS < start) clippedS = start;
+		if (clippedE > end) clippedE = end;
+		if (clippedS < clippedE)
 		    {
 		    lmAllocVar(lm, el);
-		    el->start = s;
-		    el->end = e;
+		    el->start = clippedS;
+		    el->end = clippedE;
 		    el->val = val;
 		    slAddHead(&list, el);
 		    }
