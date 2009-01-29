@@ -1466,6 +1466,39 @@ color 100,50,0
 altColor 0,0,255
 type sample
 
+# Affy Exon supertrack
+        track affyAllExonSuper
+        superTrack on
+        shortLabel Affy Exon
+        longLabel Affymetrix All Exon Microarrays
+        group regulation
+        priority 0
+
+track affyExonTissues
+shortLabel Affy Exon Tissues
+longLabel Affymetrix Exon Array 1.0: Normal Tissues
+superTrack affyAllExonSuper dense
+group regulation
+priority 1.0
+visibility full
+type expRatio
+expScale 3.0
+expStep 0.5
+expTable affyExonTissuesExps
+groupings affyExonTissuesGroups
+
+track affyAllExonProbes
+shortLabel Affy Exon Probes
+longLabel Affymetrix Exon Array 1.0: Probesets
+superTrack affyAllExonSuper dense
+group regulation
+priority 2.0
+visibility pack
+spectrum on
+useScore 1
+exonArrows on
+type bed 6 .
+
 track snp129
 shortLabel SNPs (129)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 129)
