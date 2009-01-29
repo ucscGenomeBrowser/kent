@@ -72,7 +72,7 @@ struct bptFile *bptFileAttach(char *fileName, FILE *f);
 /* Open up index file on previously open file, with header at current file position. */
 
 void bptFileDetach(struct bptFile **pBpt);
-/* Detach and free up cirTree file opened with cirTreeFileAttach. */
+/* Detach and free up bptFile opened with bptFileAttach. */
 
 boolean bptFileFind(struct bptFile *bpt, void *key, int keySize, void *val, int valSize);
 /* Find value associated with key.  Return TRUE if it's found. 
