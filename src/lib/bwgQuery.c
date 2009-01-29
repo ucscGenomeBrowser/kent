@@ -13,7 +13,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.6 2009/01/29 05:34:36 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.7 2009/01/29 19:39:51 kent Exp $";
 
 void bptDumpCallback(void *context, void *key, int keySize, void *val, int valSize)
 {
@@ -67,15 +67,6 @@ for (i=0; i<bwf->zoomLevels; ++i)
     }
 slReverse(&levelList);
 bwf->levelList = levelList;
-
-#ifdef BADIDEA
-/* Make up a zoom level for "unzoomed" */
-AllocVar(level);
-level->reductionLevel = 1;
-level->dataOffset = bwf->unzoomedDataOffset;
-level->indexOffset = bwf->unzoomedIndexOffset;
-slAddHead(&levelList,  level);
-#endif
 
 /* Attach B+ tree of chromosome names and ids. */
 bwf->chromBpt =  bptFileAttach(fileName, f);
@@ -389,8 +380,10 @@ static struct bwgZoomLevel *bwgBestZoom(struct bigWigFile *bwf, int desiredReduc
 /* Return zoom level that is the closest one that is less than or equal to 
  * desiredReduction. */
 {
-if (desiredReduction < 1)
+if (desiredReduction < 0)
    errAbort("bad value %d for desiredReduction in bwgBestZoom", desiredReduction);
+if (desiredReduction <= 1)
+    return NULL;
 int closestDiff = BIGNUM;
 struct bwgZoomLevel *closestLevel = NULL;
 struct bwgZoomLevel *level;
