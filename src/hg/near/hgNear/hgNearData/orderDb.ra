@@ -31,10 +31,10 @@ longLabel Difference in Expression with Selected Gene
 type pair affyGnfU74ADistance query target distance 1
 priority 2
 
-name expAffyHumanExon
+name expAffyExonTissues
 shortLabel Expression (Affy Ex)
 longLabel Difference in Expression Ratio with Selected Gene
-type pair hgFixed.affyHumanExonGsRatioDistance query target distance 1
+type pair affyExonTissuesGsMedianDist query target distance 1
 priority 2.15
 
 name expGladHumES

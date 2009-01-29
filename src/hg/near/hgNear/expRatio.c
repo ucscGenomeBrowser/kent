@@ -13,7 +13,7 @@
 #include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.40 2006/03/06 18:09:41 angie Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.41 2009/01/29 09:06:25 aamp Exp $";
 
 
 static char *expCellVal(struct genePos *gp,
@@ -88,7 +88,7 @@ void expLabelPrint(struct column *col, char *subName,
 {
 int skipName = atoi(columnSetting(col, "skipName", "0"));
 char *url = colInfoUrl(col);
-hgExpLabelPrint(col->name, subName, skipName, url,
+hgExpLabelPrint(database, col->name, subName, skipName, url,
 	representativeCount, representatives, expTable, 0);
 freeMem(url);
 }
@@ -127,7 +127,7 @@ int i;
 int skipName = atoi(columnSetting(col, "skipName", "0"));
 char *experimentType = cloneString(columnSetting(col, "experimentType",
 						 "tissue"));
-char **experiments = hgExpGetNames("hgFixed", experimentTable, 
+char **experiments = hgExpGetNames(database, experimentTable, 
 	representativeCount, representatives, skipName);
 
 hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=0>\n");
