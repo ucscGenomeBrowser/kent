@@ -13,7 +13,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.7 2009/01/29 19:39:51 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.8 2009/01/29 21:51:39 kent Exp $";
 
 void bptDumpCallback(void *context, void *key, int keySize, void *val, int valSize)
 {
@@ -308,7 +308,6 @@ for (block = blockList; block != NULL; block = block->next)
 	    }
 	case bwgTypeFixedStep:
 	    {
-	    mustReadOne(f, val);
 	    bits32 s = head.start;
 	    bits32 e = s + head.itemSpan;
 	    for (i=0; i<head.itemCount; ++i)
