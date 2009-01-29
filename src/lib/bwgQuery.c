@@ -13,7 +13,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.4 2009/01/29 04:10:23 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.5 2009/01/29 05:32:33 kent Exp $";
 
 void bptDumpCallback(void *context, void *key, int keySize, void *val, int valSize)
 {
@@ -348,9 +348,409 @@ slReverse(&list);
 return list;
 }
 
-struct bigWigInterval *bigWigChromData(struct bigWigFile *bwf, char *chrom, struct lm *lm)
-/* Get all data for a chromosome. The returned list will be allocated in lm. */
+enum bigWigSummaryType bigWigSummaryTypeFromString(char *string)
+/* Return summary type givin a descriptive string. */
 {
-return bigWigIntervalQuery(bwf, chrom, 0, bigWigChromSize(bwf, chrom), lm);
+if (sameWord(string, "mean") || sameWord(string, "average"))
+    return bigWigSumMean;
+else if (sameWord(string, "max") || sameWord(string, "maximum"))
+    return bigWigSumMax;
+else if (sameWord(string, "min") || sameWord(string, "minimum"))
+    return bigWigSumMin;
+else if (sameWord(string, "coverage") || sameWord(string, "dataCoverage"))
+    return bigWigSumDataCoverage;
+else
+    {
+    errAbort("Unknown bigWigSummaryType %s", string);
+    return bigWigSumMean;	/* Keep compiler quiet. */
+    }
+}
+
+char *bigWigSummaryTypeToString(enum bigWigSummaryType type)
+/* Convert summary type from enum to string representation. */
+{
+switch (type)
+    {
+    case bigWigSumMean:
+        return "mean";
+    case bigWigSumMax:
+        return "max";
+    case bigWigSumMin:
+        return "min";
+    case bigWigSumDataCoverage:
+        return "coverage";
+    default:
+	errAbort("Unknown bigWigSummaryType %d", (int)type);
+	return NULL;
+    }
+}
+
+static struct bwgZoomLevel *bwgBestZoom(struct bigWigFile *bwf, int desiredReduction)
+/* Return zoom level that is the closest one that is less than or equal to 
+ * desiredReduction. */
+{
+if (desiredReduction < 1)
+   errAbort("bad value %d for desiredReduction in bwgBestZoom", desiredReduction);
+int closestDiff = BIGNUM;
+struct bwgZoomLevel *closestLevel = NULL;
+struct bwgZoomLevel *level;
+
+for (level = bwf->levelList; level != NULL; level = level->next)
+    {
+    int diff = desiredReduction - level->reductionLevel;
+    if (diff >= 0 && diff < closestDiff)
+        {
+	closestDiff = diff;
+	closestLevel = level;
+	}
+    }
+return closestLevel;
+}
+
+static void bwgSummaryOnDiskRead(struct bigWigFile *bwf, struct bwgSummaryOnDisk *sum)
+/* Read in summary from file. */
+{
+FILE *f = bwf->f;
+boolean isSwapped = bwf->isSwapped;
+sum->chromId = readBits32(f, isSwapped);
+sum->start = readBits32(f, isSwapped);
+sum->end = readBits32(f, isSwapped);
+sum->validCount = readBits32(f, isSwapped);
+mustReadOne(f, sum->minVal);
+mustReadOne(f, sum->maxVal);
+mustReadOne(f, sum->sumData);
+mustReadOne(f, sum->sumSquares);
+}
+
+static struct bwgSummary *bwgSummaryFromOnDisk(struct bwgSummaryOnDisk *in)
+/* Create a bwgSummary unlinked to anything from input in onDisk format. */
+{
+struct bwgSummary *out;
+AllocVar(out);
+out->chromId = in->chromId;
+out->start = in->start;
+out->end = in->end;
+out->validCount = in->validCount;
+out->minVal = in->minVal;
+out->maxVal = in->maxVal;
+out->sumData = in->sumData;
+out->sumSquares = in->sumSquares;
+return out;
+}
+
+static struct bwgSummary *bwgSummariesInRegion(struct bwgZoomLevel *zoom, struct bigWigFile *bwf, 
+	int chromId, bits32 start, bits32 end)
+/* Return list of all summaries in region at given zoom level of bigWig. */
+{
+struct bwgSummary *sumList = NULL, *sum;
+FILE *f = bwf->f;
+fseek(f, zoom->indexOffset, SEEK_SET);
+struct cirTreeFile *ctf = cirTreeFileAttach(bwf->fileName, bwf->f);
+struct fileOffsetSize *blockList = cirTreeFindOverlappingBlocks(ctf, chromId, start, end);
+if (blockList != NULL)
+    {
+    struct fileOffsetSize *block;
+    for (block = blockList; block != NULL; block = block->next)
+        {
+	fseek(f, block->offset, SEEK_SET);
+	struct bwgSummaryOnDisk diskSum;
+	int itemSize = sizeof(diskSum);
+	assert(block->size % itemSize == 0);
+	int itemCount = block->size / itemSize;
+	int i;
+	for (i=0; i<itemCount; ++i)
+	    {
+	    bwgSummaryOnDiskRead(bwf, &diskSum);
+	    if (diskSum.chromId == chromId)
+		{
+		int s = max(diskSum.start, start);
+		int e = min(diskSum.end, end);
+		if (s < e)
+		    {
+		    sum = bwgSummaryFromOnDisk(&diskSum);
+		    slAddHead(&sumList, sum);
+		    }
+		}
+	    }
+	}
+    }
+slFreeList(&blockList);
+cirTreeFileDetach(&ctf);
+slReverse(&sumList);
+return sumList;
+}
+
+static bits32 bwgSummarySlice(struct bigWigFile *bwf, bits32 baseStart, bits32 baseEnd, 
+	struct bwgSummary *sumList, enum bigWigSummaryType summaryType, double *retVal)
+/* Update retVal with the average value if there is any data in interval.  Return number
+ * of valid data bases in interval. */
+{
+bits32 validCount = 0;
+
+if (sumList != NULL)
+    {
+    double minVal = sumList->minVal;
+    double maxVal = sumList->maxVal;
+    double sumData = 0;
+
+    struct bwgSummary *sum;
+    for (sum = sumList; sum != NULL && sum->start < baseEnd; sum = sum->next)
+	{
+	int overlap = rangeIntersection(baseStart, baseEnd, sum->start, sum->end);
+	if (overlap > 0)
+	    {
+	    double overlapFactor = (double)overlap / (sum->end - sum->start);
+	    validCount += sum->validCount * overlapFactor;
+	    switch (summaryType)
+	        {
+		case bigWigSumMean:
+		    sumData += sum->sumData * overlapFactor;
+		    break;
+		case bigWigSumMax:
+		    if (maxVal < sum->maxVal)
+		        maxVal = sum->maxVal;
+		    break;
+		case bigWigSumMin:
+		    if (minVal > sum->minVal)
+		        minVal = sum->minVal;
+		    break;
+		case bigWigSumDataCoverage:
+		    break;
+		default:
+		    internalErr();
+		    break;
+		}
+	    }
+	}
+    if (validCount > 0)
+	{
+	double val = 0;
+	switch (summaryType)
+	    {
+	    case bigWigSumMean:
+		val = sumData/validCount;
+		break;
+	    case bigWigSumMax:
+	        val = maxVal;
+		break;
+	    case bigWigSumMin:
+	        val = minVal;
+		break;
+	    case bigWigSumDataCoverage:
+	        val = (double)validCount/(baseEnd-baseStart);
+		break;
+	    default:
+	        internalErr();
+		val = 0.0;
+		break;
+	    }
+	*retVal = val;
+	}
+    }
+return validCount;
+}
+
+static bits32 bwgIntervalSlice(struct bigWigFile *bwf, bits32 baseStart, bits32 baseEnd, 
+	struct bigWigInterval *intervalList, enum bigWigSummaryType summaryType, double *retVal)
+/* Update retVal with the average value if there is any data in interval.  Return number
+ * of valid data bases in interval. */
+{
+bits32 validCount = 0;
+
+if (intervalList != NULL)
+    {
+    struct bigWigInterval *interval;
+    double sumData = 0;
+    double minVal = intervalList->val;
+    double maxVal = intervalList->val;
+
+    for (interval = intervalList; interval != NULL && interval->start < baseEnd; 
+	    interval = interval->next)
+	{
+	int overlap = rangeIntersection(baseStart, baseEnd, interval->start, interval->end);
+	if (overlap > 0)
+	    {
+	    int intervalSize = interval->end - interval->start;
+	    double overlapFactor = (double)overlap / intervalSize;
+	    double intervalWeight = intervalSize * overlapFactor;
+	    validCount += intervalWeight;
+
+	    switch (summaryType)
+	        {
+		case bigWigSumMean:
+		    sumData += interval->val * intervalWeight;
+		    break;
+		case bigWigSumMax:
+		    if (maxVal < interval->val)
+		        maxVal = interval->val;
+		    break;
+		case bigWigSumMin:
+		    if (minVal > interval->val)
+		        minVal = interval->val;
+		    break;
+		case bigWigSumDataCoverage:
+		    break;
+		default:
+		    internalErr();
+		    break;
+		}
+	    }
+	}
+    if (validCount > 0)
+	{
+	double val = 0;
+	switch (summaryType)
+	    {
+	    case bigWigSumMean:
+		val = sumData/validCount;
+		break;
+	    case bigWigSumMax:
+		val = maxVal;
+		break;
+	    case bigWigSumMin:
+		val = minVal;
+		break;
+	    case bigWigSumDataCoverage:
+		val = (double)validCount/(baseEnd-baseStart);
+		break;
+	    default:
+		internalErr();
+		val = 0.0;
+		break;
+	    }
+	*retVal = val;
+	}
+    }
+return validCount;
+}
+
+static int bwgChromId(struct bigWigFile *bwf, char *chrom)
+/* Return chromosome size */
+{
+struct bwgChromIdSize idSize;
+if (!bptFileFind(bwf->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
+    return -1;
+return idSize.chromId;
+}
+
+static boolean bwgSummaryArrayFromZoom(struct bwgZoomLevel *zoom, struct bigWigFile *bwf, 
+	char *chrom, bits32 start, bits32 end,
+	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues)
+/* Look up region in index and get data at given zoom level.  Summarize this data
+ * in the summaryValues array.  Only update summaryValues we actually do have data. */
+{
+boolean result = FALSE;
+int chromId = bwgChromId(bwf, chrom);
+if (chromId < 0)
+    return FALSE;
+struct bwgSummary *sum, *sumList = bwgSummariesInRegion(zoom, bwf, chromId, start, end);
+if (sumList != NULL)
+    {
+    int i;
+    bits32 baseStart = start, baseEnd;
+    bits32 baseCount = end - start;
+    sum = sumList;
+    for (i=0; i<summarySize; ++i)
+        {
+	/* Calculate end of this part of summary */
+	baseEnd = start + baseCount*(i+1)/summarySize;
+
+        /* Advance sum to skip over parts we are no longer interested in. */
+	while (sum != NULL && sum->end <= baseStart)
+	    sum = sum->next;
+
+	if (bwgSummarySlice(bwf, baseStart, baseEnd, sum, summaryType, &summaryValues[i]))
+	    result = TRUE;
+
+	/* Next time round start where we left off. */
+	baseStart = baseEnd;
+	}
+    }
+return result;
+}
+
+static boolean bwgSummaryArrayFromFull(struct bigWigFile *bwf, 
+	char *chrom, bits32 start, bits32 end,
+	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues)
+/* Summarize data, not using zoom. */
+{
+struct bigWigInterval *intervalList, *interval;
+struct lm *lm = lmInit(0);
+intervalList = bigWigIntervalQuery(bwf, chrom, start, end, lm);
+boolean result = FALSE;
+if (intervalList != NULL);
+    {
+    int i;
+    bits32 baseStart = start, baseEnd;
+    bits32 baseCount = end - start;
+    interval = intervalList;
+    for (i=0; i<summarySize; ++i)
+        {
+	/* Calculate end of this part of summary */
+	baseEnd = start + baseCount*(i+1)/summarySize;
+
+        /* Advance interval to skip over parts we are no longer interested in. */
+	while (interval != NULL && interval->end <= baseStart)
+	    interval = interval->next;
+
+	if (bwgIntervalSlice(bwf, baseStart, baseEnd, interval, summaryType, &summaryValues[i]))
+	    result = TRUE;
+
+	/* Next time round start where we left off. */
+	baseStart = baseEnd;
+	}
+    }
+
+lmCleanup(&lm);
+return result;
+}
+
+boolean bigWigSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
+	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues)
+/* Fill in summaryValues with  data from indicated chromosome range in bigWig file.
+ * Be sure to initialize summaryValues to a default value, which will not be touched
+ * for regions without data in file.  (Generally you want the default value to either
+ * be 0.0 or nan(0) depending on the application.)  Returns FALSE if no data
+ * at that position. */
+{
+boolean result = FALSE;
+
+/* Protect from bad input. */
+if (start >= end)
+    return result;
+
+/* Figure out what size of data we want.  We actually want to get 4 data points per summary
+ * value if possible to minimize the effect of a data point being split between summary pixels. */
+bits32 baseSize = end - start; 
+int fullReduction = (baseSize/summarySize);
+int zoomLevel = fullReduction/4;
+if (zoomLevel < 0)
+    zoomLevel = 0;
+
+
+/* Open up bigWig file and look up chromId. */
+struct bigWigFile *bwf = bigWigFileOpen(fileName);
+
+/* Get the closest zoom level less than what we're looking for. */
+struct bwgZoomLevel *zoom = bwgBestZoom(bwf, zoomLevel);
+if (zoom != NULL)
+    {
+    result = bwgSummaryArrayFromZoom(zoom, bwf, chrom, start, end, summaryType, summarySize, summaryValues);
+    }
+else
+    {
+    result = bwgSummaryArrayFromFull(bwf, chrom, start, end, summaryType, summarySize, summaryValues);
+    }
+bigWigFileClose(&bwf);
+return result;
+}
+
+double bigWigSingleSummary(char *fileName, char *chrom, int start, int end,
+    enum bigWigSummaryType summaryType, double defaultVal)
+/* Return the summarized single value for a range. */
+{
+double arrayOfOne = defaultVal;
+bigWigSummaryArray(fileName, chrom, start, end, summaryType, 1, &arrayOfOne);
+return arrayOfOne;
 }
 
