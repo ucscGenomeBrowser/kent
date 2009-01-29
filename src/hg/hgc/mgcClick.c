@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "geneSimilarities.h"
 
-static char const rcsid[] = "$Id: mgcClick.c,v 1.29 2008/10/20 21:14:43 markd Exp $";
+static char const rcsid[] = "$Id: mgcClick.c,v 1.30 2009/01/29 02:01:41 markd Exp $";
 
 static char *findRefSeqSummary(struct sqlConnection *conn,
                                struct geneSimilarities *refSeqs,
@@ -118,7 +118,7 @@ printf("http://www.ncbi.nlm.nih.gov/genome/clone/orderclone.cgi?db=nucleotide&ui
 static void printImageUrl(int imageId)
 /* print out an URL to link to IMAGE database for a clone */
 {
-printf("http://image.llnl.gov/image/IQ/bin/singleCloneQuery?clone_id=%d", imageId);
+printf("http://image.hudsonalpha.org/IQ/bin/singleCloneQuery?clone_id=%d", imageId);
 }
 
 void printMgcDetailsUrl(char *acc, int start)
