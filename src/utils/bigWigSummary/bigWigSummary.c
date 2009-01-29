@@ -9,7 +9,7 @@
 #include "bwgInternal.h"	// Just for development - ugly
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigSummary.c,v 1.1 2009/01/28 23:27:26 kent Exp $";
+static char const rcsid[] = "$Id: bigWigSummary.c,v 1.2 2009/01/29 01:27:33 kent Exp $";
 
 char *summaryType = "mean";
 
@@ -118,18 +118,38 @@ mustReadOne(f, sum->sumData);
 mustReadOne(f, sum->sumSquares);
 }
 
-boolean bwgSummaryArrayFromZoom(struct bwgZoomLevel *zoom, struct bigWigFile *bwf, 
-	int chromId, bits32 start, bits32 end,
-	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues)
-/* Look up region in index and get data at given zoom level.  Summarize this data
- * in the summaryValues array.  Only update summaryValues we actually do have data. */
+struct bwgSummary *bwgSummaryFromOnDisk(struct bwgSummaryOnDisk *in)
+/* Create a bwgSummary unlinked to anything from input in onDisk format. */
 {
-uglyf("bwgSummaryArrayFromZoom\n");
-boolean result = FALSE;
+struct bwgSummary *out;
+AllocVar(out);
+out->chromId = in->chromId;
+out->start = in->start;
+out->end = in->end;
+out->validCount = in->validCount;
+out->minVal = in->minVal;
+out->maxVal = in->maxVal;
+out->sumData = in->sumData;
+out->sumSquares = in->sumSquares;
+return out;
+}
+
+struct bwgSummary *bwgSummaryRead(struct bigWigFile *bwf)
+/* Read in a bwgSummaryOnDisk and convert it to a freshly minted bwgSummary. */
+{
+struct bwgSummaryOnDisk oneSum;
+bwgSummaryOnDiskRead(bwf, &oneSum);
+return bwgSummaryFromOnDisk(&oneSum);
+}
+
+struct bwgSummary *bwgSummariesInRegion(struct bwgZoomLevel *zoom, struct bigWigFile *bwf, 
+	int chromId, bits32 start, bits32 end)
+/* Return list of all summaries in region at given zoom level of bigWig. */
+{
+struct bwgSummary *sumList = NULL, *sum;
 FILE *f = bwf->f;
 fseek(f, zoom->indexOffset, SEEK_SET);
 struct cirTreeFile *ctf = cirTreeFileAttach(bwf->fileName, bwf->f);
-uglyf("ctf->rootOffset = %llu\n", ctf->rootOffset);
 struct fileOffsetSize *blockList = cirTreeFindOverlappingBlocks(ctf, chromId, start, end);
 uglyf("%d blocks in blockList\n", slCount(blockList));
 if (blockList != NULL)
@@ -138,30 +158,87 @@ if (blockList != NULL)
     for (block = blockList; block != NULL; block = block->next)
         {
 	fseek(f, block->offset, SEEK_SET);
-	struct bwgSummaryOnDisk oneSum;
-	int itemSize = sizeof(oneSum);
+	struct bwgSummaryOnDisk diskSum;
+	int itemSize = sizeof(diskSum);
 	assert(block->size % itemSize == 0);
 	int itemCount = block->size / itemSize;
-	uglyf("Block %llu size %llu itemSize=%d itemCount=%d\n", block->offset, block->size, itemSize, itemCount);
 	int i;
 	for (i=0; i<itemCount; ++i)
 	    {
-	    bwgSummaryOnDiskRead(bwf, &oneSum);
-	    uglyf("%u:%u-%u\n", oneSum.chromId, oneSum.start, oneSum.end);
-	    if (oneSum.chromId == chromId)
+	    bwgSummaryOnDiskRead(bwf, &diskSum);
+	    if (diskSum.chromId == chromId)
 		{
-		int s = max(oneSum.start, start);
-		int e = min(oneSum.end, end);
+		int s = max(diskSum.start, start);
+		int e = min(diskSum.end, end);
 		if (s < e)
 		    {
-		    uglyf("  Got match at %u:%d-%d\n", chromId, s, e);
-		    result = TRUE;
+		    sum = bwgSummaryFromOnDisk(&diskSum);
+		    slAddHead(&sumList, sum);
 		    }
 		}
 	    }
 	}
     }
+slFreeList(&blockList);
 cirTreeFileDetach(&ctf);
+slReverse(&sumList);
+return sumList;
+}
+
+bits32 bwgSummarySlice(struct bigWigFile *bwf, bits32 baseStart, bits32 baseEnd, 
+	struct bwgSummary *sumList, double *retVal)
+/* Update retVal with the average value if there is any data in interval.  Return number
+ * of valid data bases in interval. */
+{
+struct bwgSummary *sum;
+bits32 validCount = 0;
+double sumData = 0;
+
+for (sum = sumList; sum != NULL && sum->start < baseEnd; sum = sum->next)
+    {
+    int overlap = rangeIntersection(baseStart, baseEnd, sum->start, sum->end);
+    if (overlap > 0)
+        {
+	double overlapFactor = (double)overlap / (sum->end - sum->start);
+	sumData += sum->sumData * overlapFactor;
+	validCount += sum->validCount * overlapFactor;
+	}
+    }
+if (validCount > 0)
+    *retVal = sumData/validCount;
+return validCount;
+}
+
+boolean bwgSummaryArrayFromZoom(struct bwgZoomLevel *zoom, struct bigWigFile *bwf, 
+	int chromId, bits32 start, bits32 end,
+	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues)
+/* Look up region in index and get data at given zoom level.  Summarize this data
+ * in the summaryValues array.  Only update summaryValues we actually do have data. */
+{
+boolean result = FALSE;
+struct bwgSummary *sum, *sumList = bwgSummariesInRegion(zoom, bwf, chromId, start, end);
+if (sumList != NULL)
+    {
+    int i;
+    bits32 baseStart = start, baseEnd;
+    bits32 baseCount = end - start;
+    sum = sumList;
+    for (i=0; i<summarySize; ++i)
+        {
+	/* Calculate end of this part of summary */
+	baseEnd = start + baseCount*(i+1)/summarySize;
+
+        /* Advance sum to skip over parts we are no longer interested in. */
+	while (sum != NULL && sum->end <= baseStart)
+	    sum = sum->next;
+
+	if (bwgSummarySlice(bwf, baseStart, baseEnd, sum, &summaryValues[i]))
+	    result = TRUE;
+
+	/* Next time round start where we left off. */
+	baseStart = baseEnd;
+	}
+    }
 return result;
 }
 
@@ -199,7 +276,6 @@ if (!bptFileFind(bwf->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
     return result;
     }
 int chromId = idSize.chromId;
-uglyf("chrom %s, chromId %u\n", chrom, chromId);
 
 /* Get the closest zoom level less than what we're looking for. */
 struct bwgZoomLevel *zoom = bwgBestZoom(bwf, zoomLevel);
