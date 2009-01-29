@@ -5,13 +5,12 @@
  * bigWigCreate function, which takes as input an ascii file in fixedStep, variableStep
  * or bedGraph format.
  *
- * To get a section of of a bigWig for display on a browser, use the bigWigSummaryValues
+ * To get a section of of a bigWig for display on a browser, use the bigWigSummaryArray
  * function, which will fill in an array of doubles with on value for each pixel that
  * you want to display.
  *
- * To read all the data out of a bigWig you use bigWigChromData, which fetches
- * the data one chromosome at a time in a uniform large format.  Use bigWigChromList
- * to get a list of all chromosomes represented in the file. 
+ * To read all the data out of a bigWig get the chromosome info with bigWigChromList
+ * and then fetch all of it for each chromosome using bigWigIntervalQuery.
  *
  * See also the module bwgInternal that has a description of they structure of
  * a bigWig file, and lower level routines used to implement this interface.
@@ -76,6 +75,12 @@ enum bigWigSummaryType
     bigWigSumMin = 2,	/* Minimum value */
     bigWigSumDataCoverage = 3,  /* Bases in region containing actual data. */
     };
+
+enum bigWigSummaryType bigWigSummaryTypeFromString(char *string);
+/* Return summary type givin a descriptive string. */
+
+char *bigWigSummaryTypeToString(enum bigWigSummaryType type);
+/* Convert summary type from enum to string representation. */
 
 boolean bigWigSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
 	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues);
