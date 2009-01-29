@@ -13,7 +13,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.3 2009/01/28 23:11:33 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.4 2009/01/29 04:10:23 kent Exp $";
 
 void bptDumpCallback(void *context, void *key, int keySize, void *val, int valSize)
 {
@@ -245,7 +245,7 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-static void bwgAttachUnzoomedCir(struct bigWigFile *bwf)
+void bwgAttachUnzoomedCir(struct bigWigFile *bwf)
 /* Make sure unzoomed cir is attached. */
 {
 if (bwf->unzoomedCir == NULL)
