@@ -29,37 +29,7 @@ color 173,17,162
 type genePred
 
 track phyloPCons28way
-release alpha
 shortLabel 28-Way Base Cons
-compositeTrack on
-longLabel Basewise Conservation by PhyloP for 28-Species Multiz Align.
-spanList 1
-maxHeightPixels 100:40:11
-autoScaleDefault Off
-windowingFunction mean
-group compGeno
-priority 103.4
-visibility hide
-altColor 70,130,70
-color 0,90,20
-type wig 0.0 2.87
-viewLimits .2:1.6
-
-    track phyloP28wayPlacMammal
-    subTrack phyloPCons28way
-    shortLabel Mammal Cons
-    longLabel Placental Mammal Basewise Conservation by PhyloP
-    priority 1
-
-    track phyloP28way
-    subTrack phyloPCons28way
-    shortLabel Vertebrate Cons
-    longLabel Vertebrate Basewise Conservation by PhyloP
-    priority 2
-
-track phyloPCons28way
-release beta
-shortLabel Basewise Conserv
 compositeTrack on
 longLabel Basewise Conservation by PhyloP for 28-Species Multiz Align.
 spanList 1
@@ -115,34 +85,6 @@ type wig 0.0 1.0
     priority 1
 
 track multiz28way
-release beta
-shortLabel Conservation
-longLabel Vertebrate Multiz Alignment & PhastCons Conservation (28 Species)
-irows on
-summary multiz28waySummary
-frames multiz28wayFrames
-wiggle phastCons28wayPlacMammal Mammal Placental_Mammal phastCons28way Vertebrate Vertebrate
-spanList 1
-maxHeightPixels 100:40:11
-autoScaleDefault Off
-windowingFunction mean
-group compGeno
-priority 103.3
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-speciesCodonDefault hg18
-speciesGroups Primate Placental_Mammal Vertebrate
-sGroup_Primate panTro2 rheMac2 otoGar1
-sGroup_Placental_Mammal tupBel1 mm8 rn4 cavPor2 oryCun1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
-sGroup_Vertebrate monDom4 ornAna1 anoCar1 galGal3 xenTro2 danRer4 tetNig1 fr2 gasAcu1 oryLat1
-speciesDefaultOff panTro2 rn4 otoGar1 felCat3 loxAfr1 bosTau3 echTel1 danRer4 fr2 tetNig1 oryLat1 tupBel1 cavPor2 oryCun1 sorAra1 eriEur1
-itemFirstCharCase noChange
-treeImage phylo/hg18_28way.gif
-
-track multiz28way
-release alpha
 shortLabel 28-Way Cons
 longLabel Vertebrate Multiz Alignment & PhastCons Conservation (28 Species)
 irows on
@@ -169,35 +111,8 @@ itemFirstCharCase noChange
 treeImage phylo/hg18_28way.gif
 
 track mostConserved28way
-release alpha
 compositeTrack on
 shortLabel 28-Way Most Cons
-longLabel PhastCons Conserved Elements, 28-way Vertebrate Multiz Alignment
-group compGeno
-priority 103.4
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
-
-    track phastConsElements28wayPlacMammal
-    subTrack mostConserved28way
-    shortLabel Mammal
-    longLabel PhastCons Placental Mammal Conserved Elements, 28-way Multiz Alignment
-    color 100,50,170
-    priority 1
-
-    track phastConsElements28way
-    subTrack mostConserved28way
-    shortLabel Vertebrate
-    longLabel PhastCons Vertebrate Conserved Elements, 28-way Multiz Alignment
-    color 170,100,50
-    priority 2
-
-track mostConserved28way
-release beta
-compositeTrack on
-shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, 28-way Vertebrate Multiz Alignment
 group compGeno
 priority 103.4
@@ -3788,7 +3703,6 @@ type bed 3
     priority 23
 
 track cons44way
-release alpha
 compositeTrack on
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation (44 Species)
@@ -3954,171 +3868,3 @@ priority 100
     color 40,120,40
     altColor 120,40,40
     priority 13
-
-track cons44way
-release beta
-compositeTrack on
-shortLabel 44-way Cons
-longLabel Vertebrate Multiz Alignment & Conservation (44 Species)
-subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
-subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate
-dragAndDrop subTracks
-dimensions dimensionX=clade
-visibilityViewDefaults align=pack+ phastcons=hide phyloP=full elements=hide
-settingsByView phyloP:viewLimits=-.3:2,viewLimitsMax=-15.41:7.13
-type bed 4
-group compGeno
-priority 103.29
-
-track multiz44way
-subTrack cons44way on
-shortLabel Multiz Align
-longLabel Multiz Alignments of 44 Vertebrates
-subGroups view=align clade=vert
-noInherit on
-irows on
-summary multiz44waySummary
-frames multiz44wayFrames
-group compGeno
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-speciesCodonDefault hg18
-speciesGroups Primate Placental_Mammal Vertebrate
-sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 calJac1 tarSyr1 micMur1 otoGar1
-sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 vicPac1 turTru1 bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 loxAfr2 proCap1 echTel1 dasNov2 choHof1
-sGroup_Vertebrate monDom4 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig1 fr2 gasAcu1 oryLat2 danRer5 petMar1
-speciesDefaultOff panTro2 gorGor1 ponAbe2 calJac1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 taeGut1 proCap1 danRer5 tetNig1 fr2 oryLat2 petMar1
-itemFirstCharCase noChange
-treeImage phylo/hg18_44way.gif
-priority 100
-
-    # Conserved Elements (Most Conserved)
-    track phastConsElements44wayPrimates
-    subTrack cons44way off
-    subGroups view=elements clade=primate
-    shortLabel Primate El
-    longLabel Primate Conserved Elements
-    noInherit on
-    type bed 5 .
-    color 170,50,100
-    priority 20
-
-    track phastConsElements44wayPlacental
-    subTrack cons44way on
-    subGroups view=elements clade=mammal
-    shortLabel Mammal El
-    longLabel Placental Mammal Conserved Elements
-    noInherit on
-    type bed 5 .
-    color 100,50,170
-    priority 22
-
-    track phastConsElements44way
-    subTrack cons44way off
-    subGroups view=elements clade=vert
-    shortLabel Vertebrate El
-    longLabel Vertebrate Conserved Elements
-    noInherit on
-    color 170,100,50
-    type bed 5 .
-    priority 23
-
-    # PhyloP conservation
-    track phyloP44wayPrimate
-    subTrack cons44way off
-    subGroups view=phyloP clade=primate
-    shortLabel Primate Cons
-    longLabel Primate Basewise Conservation by PhyloP
-    noInherit on
-    configurable on
-    type wig -8.17 .99
-    maxHeightPixels 100:50:11
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 10,10,70
-    altColor 70,10,10
-    priority 1
-
-    track phyloP44wayPlacMammal
-    subTrack cons44way on
-    subGroups view=phyloP clade=mammal
-    shortLabel Mammal Cons
-    longLabel Placental Mammal Basewise Conservation by PhyloP
-    noInherit on
-    configurable on
-    type wig -14.42 3.46
-    maxHeightPixels 100:50:11
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 25,25,95
-    altColor 95,25,25
-    priority 3
-
-    track phyloP44wayAll
-    subTrack cons44way off
-    subGroups view=phyloP clade=vert
-    shortLabel Vertebrate Cons
-    longLabel Vertebrate Basewise Conservation by PhyloP
-    noInherit on
-    configurable on
-    type wig -15.41 7.13
-    maxHeightPixels 100:50:11
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 40,40,120
-    altColor 120,40,40
-    priority 4
-
-    # phastCons conservation
-    track phastCons44wayPrimates
-    subTrack cons44way off
-    subGroups view=phastcons clade=primate
-    shortLabel Primate Cons
-    longLabel Primate Conservation by PhastCons
-    noInherit on
-    configurable on
-    type wig 0 1
-    maxHeightPixels 100:40:11
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 10,70,10
-    altColor 70,10,10
-    priority 10
-
-    track phastCons44wayPlacental
-    subTrack cons44way on
-    subGroups view=phastcons clade=mammal
-    shortLabel Mammal Cons
-    longLabel Placental Mammal Conservation by PhastCons
-    noInherit on
-    configurable on
-    type wig 0 1
-    maxHeightPixels 100:40:11
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 25,95,25
-    altColor 95,25,25
-    priority 12
-
-    track phastCons44way
-    subTrack cons44way off
-    subGroups view=phastcons clade=vert
-    shortLabel Vertebrate Cons
-    longLabel Vertebrate Conservation by PhastCons
-    noInherit on
-    configurable on
-    type wig 0 1
-    maxHeightPixels 100:40:11
-    autoScale off
-    spanList 1
-    windowingFunction mean
-    color 40,120,40
-    altColor 120,40,40
-    priority 13
-
