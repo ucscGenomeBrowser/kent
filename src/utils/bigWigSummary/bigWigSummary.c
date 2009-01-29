@@ -4,13 +4,9 @@
 #include "hash.h"
 #include "options.h"
 #include "sqlNum.h"
-#include "localmem.h"		// Just for development - ugly
-#include "bPlusTree.h"		// Just for development - ugly
-#include "cirTree.h"		// Just for development - ugly
-#include "bwgInternal.h"	// Just for development - ugly
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigSummary.c,v 1.6 2009/01/29 05:32:33 kent Exp $";
+static char const rcsid[] = "$Id: bigWigSummary.c,v 1.7 2009/01/29 05:35:39 kent Exp $";
 
 char *summaryType = "mean";
 
