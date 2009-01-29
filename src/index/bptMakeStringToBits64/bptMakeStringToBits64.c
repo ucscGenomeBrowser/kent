@@ -8,7 +8,7 @@
 #include "localmem.h"
 #include "bPlusTree.h"
 
-static char const rcsid[] = "$Id: bptMakeStringToBits64.c,v 1.2 2009/01/09 08:09:37 kent Exp $";
+static char const rcsid[] = "$Id: bptMakeStringToBits64.c,v 1.3 2009/01/29 19:53:33 mikep Exp $";
 
 int blockSize = 1000;
 
@@ -20,7 +20,7 @@ errAbort(
   "values. In practice the 64-bit values are often offsets in a file.\n"
   "usage:\n"
   "   bptMakeStringToBits64 input.tab output.bpt\n"
-  "where input.tab is two columns - name/value."
+  "where input.tab is two columns - name/value.\n"
   "options:\n"
   "   -blockSize=N (default %d) Size of block for index purposes\n"
   , blockSize
