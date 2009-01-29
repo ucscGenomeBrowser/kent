@@ -231,7 +231,6 @@ for (i=0; i<itemCount; i += itemsPerSlot)
 	}
     }
 slReverse(&list);
-struct rTree *firstLeaf = list;
 verbose(2, "Made %d primary index nodes out of %llu items\n", slCount(list), itemCount);
 
 /* Now iterate through making more and more condensed versions until have just one. */
