@@ -137,7 +137,7 @@ speciesGroups Primate Placental_Mammal Vertebrate
 sGroup_Primate panTro2 rheMac2 otoGar1
 sGroup_Placental_Mammal tupBel1 mm8 rn4 cavPor2 oryCun1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
 sGroup_Vertebrate monDom4 ornAna1 anoCar1 galGal3 xenTro2 danRer4 tetNig1 fr2 gasAcu1 oryLat1
-speciesDefaultOff panTro2 rn4 otoGar1 felCat3 loxAfr1 bosTau3 echTel1 danRer4 fr2 tetNig1 oryLat1 otoGar1 cavPor2 oryCun1 sorAra1 eriEur1
+speciesDefaultOff panTro2 rn4 otoGar1 felCat3 loxAfr1 bosTau3 echTel1 danRer4 fr2 tetNig1 oryLat1 tupBel1 cavPor2 oryCun1 sorAra1 eriEur1
 itemFirstCharCase noChange
 treeImage phylo/hg18_28way.gif
 
@@ -3821,7 +3821,7 @@ speciesGroups Primate Placental_Mammal Vertebrate
 sGroup_Primate panTro2 gorGor1 ponAbe2 rheMac2 calJac1 tarSyr1 micMur1 otoGar1
 sGroup_Placental_Mammal tupBel1 mm9 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 vicPac1 turTru1 bosTau4 equCab2 felCat3 canFam2 myoLuc1 pteVam1 eriEur1 sorAra1 loxAfr2 proCap1 echTel1 dasNov2 choHof1
 sGroup_Vertebrate monDom4 ornAna1 galGal3 taeGut1 anoCar1 xenTro2 tetNig1 fr2 gasAcu1 oryLat2 danRer5 petMar1
-speciesDefaultOff panTro2 gorGor1 ponAbe2 calJac1 tarSyr1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 taeGut1 proCap1 danRer5 tetNig1 fr2 oryLat2 petMar1
+speciesDefaultOff panTro2 gorGor1 ponAbe2 calJac1 otoGar1 equCab2 micMur1 tupBel1 rn4 dipOrd1 cavPor3 speTri1 oryCun1 ochPri2 sorAra1 eriEur1 felCat3 pteVam1 myoLuc1 turTru1 bosTau4 vicPac1 choHof1 echTel1 dasNov2 taeGut1 proCap1 danRer5 tetNig1 fr2 oryLat2 petMar1
 itemFirstCharCase noChange
 treeImage phylo/hg18_44way.gif
 priority 100
@@ -3866,7 +3866,7 @@ priority 100
     noInherit on
     configurable on
     type wig -8.17 .99
-    viewLimits -.3:1.5
+    viewLimits -.3:2
     maxHeightPixels 100:50:11
     autoScale off
     spanList 1
@@ -3883,7 +3883,7 @@ priority 100
     noInherit on
     configurable on
     type wig -14.42 3.46
-    viewLimits -.3:1.5
+    viewLimits -.3:2
     maxHeightPixels 100:50:11
     autoScale off
     spanList 1
@@ -3900,7 +3900,7 @@ priority 100
     noInherit on
     configurable on
     type wig -15.41 7.13
-    viewLimits -.3:1.5
+    viewLimits -.3:2
     maxHeightPixels 100:50:11
     autoScale off
     spanList 1
