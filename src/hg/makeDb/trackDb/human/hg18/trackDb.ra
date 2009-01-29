@@ -3866,7 +3866,6 @@ priority 100
     noInherit on
     configurable on
     type wig -8.17 .99
-    viewLimits -.3:2
     maxHeightPixels 100:50:11
     autoScale off
     spanList 1
@@ -3883,7 +3882,6 @@ priority 100
     noInherit on
     configurable on
     type wig -14.42 3.46
-    viewLimits -.3:2
     maxHeightPixels 100:50:11
     autoScale off
     spanList 1
@@ -3900,7 +3898,6 @@ priority 100
     noInherit on
     configurable on
     type wig -15.41 7.13
-    viewLimits -.3:2
     maxHeightPixels 100:50:11
     autoScale off
     spanList 1
@@ -4036,7 +4033,6 @@ priority 100
     noInherit on
     configurable on
     type wig -8.17 .99
-    viewLimits -.3:2
     maxHeightPixels 100:50:11
     autoScale off
     spanList 1
@@ -4053,7 +4049,6 @@ priority 100
     noInherit on
     configurable on
     type wig -14.42 3.46
-    viewLimits -.3:2
     maxHeightPixels 100:50:11
     autoScale off
     spanList 1
@@ -4070,7 +4065,6 @@ priority 100
     noInherit on
     configurable on
     type wig -15.41 7.13
-    viewLimits -.3:2
     maxHeightPixels 100:50:11
     autoScale off
     spanList 1
