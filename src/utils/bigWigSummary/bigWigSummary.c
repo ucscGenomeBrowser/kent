@@ -10,7 +10,7 @@
 #include "bwgInternal.h"	// Just for development - ugly
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigSummary.c,v 1.3 2009/01/29 03:17:40 kent Exp $";
+static char const rcsid[] = "$Id: bigWigSummary.c,v 1.4 2009/01/29 03:32:44 kent Exp $";
 
 char *summaryType = "mean";
 
@@ -146,7 +146,6 @@ FILE *f = bwf->f;
 fseek(f, zoom->indexOffset, SEEK_SET);
 struct cirTreeFile *ctf = cirTreeFileAttach(bwf->fileName, bwf->f);
 struct fileOffsetSize *blockList = cirTreeFindOverlappingBlocks(ctf, chromId, start, end);
-uglyf("%d blocks in blockList\n", slCount(blockList));
 if (blockList != NULL)
     {
     struct fileOffsetSize *block;
@@ -213,15 +212,17 @@ struct bwgSummary *sum;
 bits32 validCount = 0;
 double sumData = 0;
 struct bigWigInterval *interval;
-for (interval = intervalList; interval != NULL && interval->start < baseEnd; interval = interval->next)
+for (interval = intervalList; interval != NULL && interval->start < baseEnd; 
+	interval = interval->next)
     {
     int overlap = rangeIntersection(baseStart, baseEnd, interval->start, interval->end);
     if (overlap > 0)
         {
 	int intervalSize = interval->end - interval->start;
-	double overlapFactor = (double)overlap / (intervalSize);
-	sumData += interval->val * intervalSize * overlapFactor;
-	validCount += intervalSize * overlapFactor;
+	double overlapFactor = (double)overlap / intervalSize;
+	double intervalWeight = intervalSize * overlapFactor;
+	sumData += interval->val * intervalWeight;
+	validCount += intervalWeight;
 	}
     }
 if (validCount > 0)
@@ -330,8 +331,6 @@ int zoomLevel = fullReduction/4;
 if (zoomLevel < 0)
     zoomLevel = 0;
 
-uglyf("bigWigSummaryArray %s %s:%u-%u %s summarySize=%d\n", fileName, chrom, start, end, bigWigSummaryTypeToString(summaryType), summarySize);
-uglyf("baseSize %u, summarySize %d, fullReduction %d, zoomLevel %d\n", baseSize, summarySize, fullReduction, zoomLevel);
 
 /* Open up bigWig file and look up chromId. */
 struct bigWigFile *bwf = bigWigFileOpen(fileName);
@@ -340,12 +339,10 @@ struct bigWigFile *bwf = bigWigFileOpen(fileName);
 struct bwgZoomLevel *zoom = bwgBestZoom(bwf, zoomLevel);
 if (zoom != NULL)
     {
-    uglyf("bwgBestZoom = %u\n", zoom->reductionLevel);
     result = bwgSummaryArrayFromZoom(zoom, bwf, chrom, start, end, summaryType, summarySize, summaryValues);
     }
 else
     {
-    uglyf("No zoom available, using full resolution.\n");
     result = bwgSummaryArrayFromFull(bwf, chrom, start, end, summaryType, summarySize, summaryValues);
     }
 bigWigFileClose(&bwf);
