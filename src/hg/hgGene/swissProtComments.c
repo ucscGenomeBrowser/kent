@@ -7,7 +7,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: swissProtComments.c,v 1.14 2009/01/14 22:07:03 fanhsu Exp $";
+static char const rcsid[] = "$Id: swissProtComments.c,v 1.15 2009/01/30 23:20:14 fanhsu Exp $";
 
 struct spComment
 /* Swiss prot comment. */
@@ -123,7 +123,7 @@ char *description;
 char *id = spAnyAccToId(spConn, acc);
 if (id == NULL)
     {
-    errAbort("<br>%s seems no longer a valid protein ID in our latest UniProt DB.", acc);
+    errAbort("<br>%s seems no longer a valid protein ID in our latest UniProtKB.", acc);
     }
     
 /* the new logic below is to handle the situation that an accession may have
