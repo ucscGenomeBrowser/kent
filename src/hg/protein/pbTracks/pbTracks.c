@@ -17,7 +17,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.54 2009/01/08 18:02:01 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.55 2009/01/30 23:38:27 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -188,7 +188,7 @@ hPrintf("</font><br><br>");
 protSeq = getAA(proteinID);
 if (protSeq == NULL)
     {
-    errAbort("%s is not a current valid entry in SWISS-PROT/TrEMBL\n", proteinID);
+    errAbort("%s is not a current valid entry in UniProtKB\n", proteinID);
     }
 protSeqLen = strlen(protSeq);
 
@@ -405,7 +405,7 @@ if (proteinAC == NULL)
     proteinAC = sqlGetField(protDbName, "spXref3", "accession", cond_str);
     if (proteinAC == NULL)
 	{
-	errAbort("'%s' does not seem to be a valid SWISS-PROT/TrEMBL protein ID.", proteinID);
+	errAbort("'%s' does not seem to be a valid UniProtKB protein ID.", proteinID);
 	}
     else
 	{
