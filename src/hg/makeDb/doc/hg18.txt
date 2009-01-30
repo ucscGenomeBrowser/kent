@@ -23891,6 +23891,38 @@ hgLoadSqlTab hgFixed affyMouseExonTissuesAllExps expRecord.sql exps.tab
 rm a.txt n.txt e.txt exps.tab
 ############
 
+########################################################################
+## AFFY ALL EXON PROBESETS (HG18/MM9/RN4) (DONE 2009-01-29, Andy)
+## 1. Log into Affymetrix netaffx site.
+## 2. Use Firefox add-on "Export Cookies" to save a file called cookies.txt 
+ssh hgwdev
+grep affymetrix.com cookies.txt > affycookies.txt
+wget --load-cookies affycookies.txt http://www.affymetrix.com/Auth/analysis/downloads/na27/wtexon/HuEx-1_0-st-v2.na27.hg18.probeset.csv.zip
+wget --load-cookies affycookies.txt http://www.affymetrix.com/Auth/analysis/downloads/na27/wtexon/MoEx-1_0-st-v1.na27.mm9.probeset.csv.zip
+wget --load-cookies affycookies.txt http://www.affymetrix.com/Auth/analysis/downloads/na27/wtexon/RaEx-1_0-st-v1.na27.rn4.probeset.csv.zip
+rm affycookies.txt
+for z in *.zip; do unzip $z; done
+rm *.zip
+ln -s HuEx-1_0-st-v2.na27.hg18.probeset.csv hg18.csv
+ln -s RaEx-1_0-st-v1.na27.rn4.probeset.csv rn4.csv
+ln -s MoEx-1_0-st-v1.na27.mm9.probeset.csv mm9.csv
+
+for csv in {hg18,mm9,rn4}.csv; do
+    bed=${csv%.csv}.bed
+    sed '1,20d' $csv | tr ',' '\t' | sed 's/\"//g' | cut -f1-5,16 \
+     | grep -v "\-\-\-" \
+     | awk 'BEGIN{FS="\t";OFS="\t";}{if ($6 == "core") score = 1000; else if ($6 == "extended") score = 700; else if ($6 == "full") score = 300; else score = 100; name = $1"|"$6; print $2, $4-1, $5, name, score, $3}' \
+     | bedSort stdin $bed
+done
+for db in hg18 mm9 rn4; do hgLoadBed $db affyAllExonProbes $db.bed; done
+rm hg18.csv mm9.csv rn4.csv
+gzip *.bed *.csv
+mkdir -p /hive/data/genomes/{hg18,mm9,rn4}/bed/affyAllExonProbes
+mv HuEx-1_0-st-v2.na27.* hg18.bed.gz /hive/data/genomes/hg18/bed/affyAllExonProbes/
+mv MoEx-1_0-st-v1.na27.* mm9.bed.gz /hive/data/genomes/mm9/bed/affyAllExonProbes/
+mv * /hive/data/genomes/rn4/bed/affyAllExonProbes/
+## forgot mm8 (see mm8.txt for that one)
+
 
 ################################################
 # SPLIT EXPRESSION & REGULATION GROUPS

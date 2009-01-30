@@ -4834,6 +4834,11 @@ see doc/builds.txt for specific details.
 # (to build the affyExonTissues track, see the steps outlined in hg18.txt)
 #############################################################################
 
+########################################################################
+## AFFY ALL EXON PROBESETS (HG18/MM9/RN4) (DONE 2009-01-29, Andy)
+## (instructions are in hg18.txt)
+########################################################################
+
 ################################################
 # AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
 update genbank.conf:

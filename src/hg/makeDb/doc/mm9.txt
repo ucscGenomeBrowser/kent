@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.88 2008/12/17 22:59:03 aamp Exp $"
+#	"$Id: mm9.txt,v 1.89 2009/01/30 00:09:27 aamp Exp $"
 #
 
 #######################################################################
@@ -9001,6 +9001,11 @@ EOF
 # MOUSE TISSUE EXON ARRAYS (Melissa Cline, cline@biology.ucsc.edu, 10/14/08)  
 # (to build the affyExonTissues track, see the steps outlined in hg18.txt)
 #############################################################################
+
+########################################################################
+## AFFY ALL EXON PROBESETS (HG18/MM9/RN4) (DONE 2009-01-29, Andy)
+## (instructions are in hg18.txt)
+########################################################################
 
 ################################################
 # AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
