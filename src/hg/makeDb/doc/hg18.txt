@@ -26658,3 +26658,45 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
     #	add composite track definitions to makeDb/trackDb/human/trackDb.ra
 
 #############################################################################
+# REPEATMASKER UPDATE (DONE 1/30/09 rhubley and angie)
+    # Robert Hubley ran the new and improved version (3.2.7) of RepeatMasker 
+    # but politely deferred to staff to load the results:
+    mkdir /hive/data/genomes/hg18/bed/RMRunRMH
+    cd /hive/data/genomes/hg18/bed/RMRunRMH
+    doRepeatMasker.pl -stop mask -buildDir `pwd` hg18
+    # see do.log, cat.log
+
+    # Angie loaded (first saving original chr*_rmsk tables as chr*_rmskOrig):
+    foreach t (`hgsql hg18 -NBe 'show tables like "chr%_rmsk"'`)
+      hgsql hg18 -e 'rename table '$t' to '$t'Orig'
+    end
+    # [Oops, forgot to rename nestedRepeats -- do that if there's a next time)]
+    doRepeatMasker.pl -continue install -buildDir `pwd` \
+      -workhorse kolossus hg18 >& install.log & tail -f install.log
+    # Oops, doSplit.csh failed because kolossus has an older libc than hgwdev 
+    # where my execs are compiled.  On further inspection, I don't really want 
+    # to overload the original ?{,?}/chr*.fa.out files anyway.  Doing this
+    # modified doSplit (note the extra suffix in -ending) manually on hgwdev:
+    head -3 hg18.fa.out > /tmp/rmskHead.txt
+    tail -n +4 hg18.fa.out \
+    | splitFileByColumn -col=5 stdin /cluster/data/hg18 -chromDirs \
+      -ending=.RM3_2_7.fa.out -head=/tmp/rmskHead.txt
+    doRepeatMasker.pl -continue cleanup -buildDir `pwd` \
+      -fileServer hgwdev hg18 >& cleanup.log & tail -f cleanup.log
+    # Compare coverage to original RepeatMasker run:
+    featureBits hg18 rmsk
+#1457032101 bases of 2881515245 (50.565%) in intersection
+    featureBits hg18 rmskOrig
+#1406290513 bases of 2881515245 (48.804%) in intersection
+    # Wow, Arian got his 50%!  :)
+    # Compare Alu counts, since that is supposed to be an area of improvement:
+    grep SINE/Alu hg18.fa.out | wc -l
+#1186885
+    ls /hive/data/genomes/hg18/?{,?}{,_*_hap[12]}/chr[0-9XYM]{,[0-9]}{,_random,*_hap[12]}.fa.out \
+    | uniq | xargs grep SINE/Alu | wc -l
+#1189976
+    # A decrease... weird.  OK, breaking it down chrom-by-chrom, the _random's
+    # have fewer and the regular chrom's have more Alu's.  Sounds OK to me :)
+
+
+#############################################################################
