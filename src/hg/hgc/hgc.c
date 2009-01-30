@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1495 2009/01/21 19:09:29 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1496 2009/01/30 23:46:53 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17605,7 +17605,7 @@ if (acc != NULL)
     }
 if (!isDm && (prot != NULL) && !sameString("(null)", prot))
     {
-    printf("<B>UniProt:</B> ");
+    printf("<B>UniProtKB:</B> ");
     printf("<A HREF=");
     printSwissProtProteinUrl(stdout, prot);
 
