@@ -317,11 +317,11 @@ tier 3
 term progeria
 type Cell Line
 description HGPS (HGADFN167, progeria research foundation)
-vendorName Projeria Research Foundation
+vendorName Progeria Research Foundation
 vendorId
 orderUrl http://www.progeriaresearch.org/
 lineage
-karyotype projeria
+karyotype progeria
 termId BTO:0001255 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
 tier 3
