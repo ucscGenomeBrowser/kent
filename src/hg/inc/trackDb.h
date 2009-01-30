@@ -241,11 +241,12 @@ void trackDbPrintOrigAssembly(struct trackDb *tdb, char *database);
 // Not all track types have separate configuration
 typedef enum _eCfgType
 {
-    cfgNone    =0,
-    cfgBedScore=1,
-    cfgWig     =2,
-    cfgWigMaf  =3,
-    cfgPeak    =4
+    cfgNone     =0,
+    cfgBedScore =1,
+    cfgWig      =2,
+    cfgWigMaf   =3,
+    cfgPeak     =4,
+    cfgGencode  =5
 } eCfgType;
 
 eCfgType cfgTypeFromTdb(struct trackDb *tdb);
