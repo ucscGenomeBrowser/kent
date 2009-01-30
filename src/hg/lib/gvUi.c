@@ -4,7 +4,7 @@
 #include "cart.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: gvUi.c,v 1.17 2008/09/22 18:53:00 giardine Exp $";
+static char const rcsid[] = "$Id: gvUi.c,v 1.18 2009/01/30 23:34:59 fanhsu Exp $";
 
 /***************Filters**************/
 
@@ -73,7 +73,7 @@ char *gvSrcString[] = {
 };
 
 char *gvSrcDbValue[] = {
-    "UniProt (Swiss-Prot/TrEMBL)",
+    "UniProtKB",
     "LSDB",
 };
 

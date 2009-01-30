@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: synonym.c,v 1.9 2009/01/14 22:06:12 fanhsu Exp $";
+static char const rcsid[] = "$Id: synonym.c,v 1.10 2009/01/30 23:30:55 fanhsu Exp $";
 
 static void printOurMrnaUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
@@ -279,7 +279,7 @@ if (protAcc != NULL)
     spDisplayId = spAnyAccToId(spConn, protAcc);
     if (spDisplayId == NULL) 
     	{
-	errAbort("<br>%s seems to no longer be a valid protein ID in our latest UniProt DB.", protAcc);
+	errAbort("<br>%s seems to no longer be a valid protein ID in our latest UniProtKB DB.", protAcc);
 	}
 	
     if (strstr(spDisplayId, protAcc) == NULL)

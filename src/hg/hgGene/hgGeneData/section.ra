@@ -4,8 +4,8 @@ longLabel Sequence and Links to Tools and Databases
 priority 10
 
 name swissProtComments
-shortLabel UniProt Comments
-longLabel Comments and Description Text from UniProt (Swiss-Prot/TrEMBL)
+shortLabel UniProtKB Comments
+longLabel Comments and Description Text from UniProtKB
 priority 20
 
 #name sequence

@@ -47,7 +47,7 @@ dbInUrl on
 priority 5
 
 name uniProt
-shortLabel UniProt
+shortLabel UniProtKB
 tables kgXref
 idSql select spId from kgXref where kgID = '%s'
 nameSql select spDisplayId from kgXref where kgID = '%s'
