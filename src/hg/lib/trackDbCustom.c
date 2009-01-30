@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.51 2009/01/29 22:55:38 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.52 2009/01/30 01:00:33 markd Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -151,7 +151,7 @@ static void overrideField(struct trackDb *td, struct trackDb *overTd,
                           char *var)
 /* Update override one field from override. */
 {
-if (sameString(var, "track") || sameString(var, "trackOverride"))
+if (sameString(var, "track"))
     {
     // skip
     }
