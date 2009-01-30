@@ -475,7 +475,7 @@ cd /cluster/data/hg18/bed
 mkdir affyAllExonGsColumn
 cd affyAllExonGsColumn/
 echo "select * from knownGene" | \
-   hgsql hg18 | tail +2 > knownGene.gp
+   hgsql hg18 | tail -n+2 > knownGene.gp
 overlapSelect -inFmt=genePred -selectFmt=bed -idOutput \
    ../affyHumanExon/affyHuEx1.bed knownGene.gp ids.txt
 echo "select * from affyHumanExon" | \
@@ -491,3 +491,128 @@ hgMedianMicroarray hgFixed affyHumanExonGsRatio \
    affyHumanExonMedianExps
 hgExpDistance hgFixed affyHumanExonGsRatioMedian \
    affyHumanExonGsMedianExps affyHumanExonGsRatioMedianDist
+
+###############################################################
+## Affy All Exon GeneSorter column human redo, mouse and rat initial
+## DONE (2009-01-29, Andy)
+## human first, although mm8 and rn4 have the most concise instructions
+ssh hgwdev
+cd /hive/data/genomes/hg18/bed/affyAllExonGsColumn
+cp ~/kent/src/hg/lib/exp{Data,Record}.sql .
+echo "select * from knownGene" | \
+   hgsql hg18 | tail -n+2 > knownGene.gp
+zcat ../affyAllExonProbes/hg18.bed.gz \
+   | sed 's/\([[:digit:]]\+\)|[[:alpha:]]\+/\1/' > probes.bed
+overlapSelect -inFmt=genePred -selectFmt=bed -idOutput \
+   probes.bed knownGene.gp ids.txt
+echo "select name,expCount,expScores from affyExonTissues" | \
+   hgsql hg18 | tail -n+2 > expData.txt
+affyAllExonGSColumn expData.txt ids.txt column.txt
+hgLoadSqlTab hg18 affyExonTissuesGs expData.sql column.txt
+hgMedianMicroarray hg18 affyExonTissuesGs affyExonTissuesExps \
+   affyHumanExon.ra affyHumanExonGsMedian affyHumanExonMedianExps
+grep -A5 affyExonTissuesAll ~/hg/makeDb/hgCgiData/Human/microarrayGroups.ra | grep names | sed 's/^names //; s/,$//' | tr ',' '\n' | awk 'BEGIN{OFS="\t"; id=0;}{ print id, $1, $1, "n/a", "n/a", "n/a", "3", "n/a,n/a,"$1","; id = id + 1;}' > all.expRecords
+hgLoadSqlTab hg18 affyExonTissuesGsExps expRecord.sql all.expRecords
+cat << "EOF" > affyExonTissuesGs.ra
+breast breast 0 1 2
+cerebellum cerebellum 3 4 5
+heart heart 6 7 8
+kidney kidney 9 10 11
+liver liver 12 13 14
+muscle muscle 15 16 17
+pancreas pancreas 18 19 20
+prostate prostate 21 22 23
+spleen spleen 24 25 26
+testes testes 27 28 29
+thyroid thyroid 30 31 32
+EOF
+# << emacs;
+hgExpDistance hg18 affyExonTissuesGsMedian \
+   affyExonTissuesGsMedianExps affyExonTissuesGsMedianDist
+
+## mouse
+mkdir /hive/data/genomes/mm9/bed/affyAllExonGsColumn
+cd /hive/data/genomes/mm9/bed/affyAllExonGsColumn
+cp ~/kent/src/hg/lib/exp{Data,Record}.sql .
+echo "select * from knownGene" | \
+   hgsql mm9 | tail -n+2 > knownGene.gp
+echo "create table knownToKnown (name varchar(255) not null, value varchar(255) not null, index(name(7)))" | hgsql mm9
+sed 's/^\(\<.\S\+\>\).*/\1\t\1/' knownGene.gp > knownToKnown.txt
+echo load data local infile \'knownToKnown.txt\' into table knownToKnown | hgsql mm9
+zcat ../affyAllExonProbes/mm9.bed.gz \
+   | sed 's/\([[:digit:]]\+\)|[[:alpha:]]\+/\1/' > probes.bed
+overlapSelect -inFmt=genePred -selectFmt=bed -idOutput \
+   probes.bed knownGene.gp ids.txt
+echo "select name,expCount,expScores from affyExonTissues" | \
+   hgsql mm9 | tail -n+2 > expData.txt
+affyAllExonGSColumn expData.txt ids.txt column.txt
+hgLoadSqlTab mm9 affyExonTissuesGs expData.sql column.txt
+grep -A5 affyExonTissuesGroupByTissueMedian ~/hg/makeDb/hgCgiData/Mouse/microarrayGroups.ra \
+  | grep names | sed 's/names //; s/,$//' | tr ',' '\n' \
+  | awk 'BEGIN{OFS=" "; ix=0;}{print $1, $1, ix, ix+1, ix+2; ix = ix + 3;}' \
+  > affyExonTissuesGs.ra
+grep -A5 affyExonTissuesAll ~/hg/makeDb/hgCgiData/Mouse/microarrayGroups.ra | grep names | sed 's/^names //; s/,$//' | tr ',' '\n' | awk 'BEGIN{OFS="\t"; id=0;}{ print id, $1, $1, "n/a", "n/a", "n/a", "3", "n/a,n/a,"$1","; id = id + 1;}' > all.expRecords
+hgLoadSqlTab mm9 affyExonTissuesGsExps expRecord.sql all.expRecords
+hgMedianMicroarray mm9 affyExonTissuesGs mm9.affyExonTissuesGsExps \
+   affyExonTissuesGs.ra affyExonTissuesGsMedian mm9.affyExonTissuesGsMedianExps
+hgExpDistance mm9 affyExonTissuesGsMedian \
+   affyExonTissuesGsMedianExps affyExonTissuesGsMedianDist
+
+## rat
+mkdir /hive/data/genomes/rn4/bed/affyAllExonGsColumn
+cd /hive/data/genomes/rn4/bed/affyAllExonGsColumn
+cp ~/kent/src/hg/lib/exp{Data,Record}.sql .
+echo "select * from knownGene" | \
+   hgsql rn4 | tail -n+2 > knownGene.gp
+echo "create table knownToKnown (name varchar(255) not null, value varchar(255) not null, index(name(7)))" | hgsql rn4
+sed 's/^\(\<.\S\+\>\).*/\1\t\1/' knownGene.gp > knownToKnown.txt
+echo load data local infile \'knownToKnown.txt\' into table knownToKnown | hgsql rn4
+zcat ../affyAllExonProbes/rn4.bed.gz \
+   | sed 's/\([[:digit:]]\+\)|[[:alpha:]]\+/\1/' > probes.bed
+overlapSelect -inFmt=genePred -selectFmt=bed -idOutput \
+   probes.bed knownGene.gp ids.txt
+echo "select name,expCount,expScores from affyExonTissues" | \
+   hgsql rn4 | tail -n+2 > expData.txt
+affyAllExonGSColumn expData.txt ids.txt column.txt
+hgLoadSqlTab rn4 affyExonTissuesGs expData.sql column.txt
+grep -A5 affyExonTissuesGroupByTissueMedian ~/hg/makeDb/hgCgiData/Mouse/microarrayGroups.ra \
+  | grep names | sed 's/names //; s/,$//' | tr ',' '\n' \
+  | awk 'BEGIN{OFS=" "; ix=0;}{print $1, $1, ix, ix+1, ix+2; ix = ix + 3;}' \
+  > affyExonTissuesGs.ra
+grep -A5 affyExonTissuesAll ~/hg/makeDb/hgCgiData/Mouse/microarrayGroups.ra | grep names | sed 's/^names //; s/,$//' | tr ',' '\n' | awk 'BEGIN{OFS="\t"; id=0;}{ print id, $1, $1, "n/a", "n/a", "n/a", "3", "n/a,n/a,"$1","; id = id + 1;}' > all.expRecords
+hgLoadSqlTab rn4 affyExonTissuesGsExps expRecord.sql all.expRecords
+hgMedianMicroarray rn4 affyExonTissuesGs rn4.affyExonTissuesGsExps \
+   affyExonTissuesGs.ra affyExonTissuesGsMedian rn4.affyExonTissuesGsMedianExps
+hgExpDistance rn4 affyExonTissuesGsMedian \
+   affyExonTissuesGsMedianExps affyExonTissuesGsMedianDist
+
+## mm8
+
+mkdir /hive/data/genomes/mm8/bed/affyAllExonGsColumn
+cd /hive/data/genomes/mm8/bed/affyAllExonGsColumn
+cp ~/kent/src/hg/lib/exp{Data,Record}.sql .
+echo "select * from knownGene" | \
+   hgsql mm8 | tail -n+2 > knownGene.gp
+echo "create table knownToKnown (name varchar(255) not null, value varchar(255) not null, index(name(7)))" | hgsql mm8
+sed 's/^\(\<.\S\+\>\).*/\1\t\1/' knownGene.gp > knownToKnown.txt
+echo load data local infile \'knownToKnown.txt\' into table knownToKnown | hgsql mm8
+zcat ../affyAllExonProbes/mm8.bed.gz \
+   | sed 's/\([[:digit:]]\+\)|[[:alpha:]]\+/\1/' > probes.bed
+overlapSelect -inFmt=genePred -selectFmt=bed -idOutput \
+   probes.bed knownGene.gp ids.txt
+echo "select name,expCount,expScores from affyExonTissues" | \
+   hgsql mm8 | tail -n+2 > expData.txt
+affyAllExonGSColumn expData.txt ids.txt column.txt
+hgLoadSqlTab mm8 affyExonTissuesGs expData.sql column.txt
+grep -A5 affyExonTissuesGroupByTissueMedian ~/hg/makeDb/hgCgiData/Mouse/microarrayGroups.ra \
+  | grep names | sed 's/names //; s/,$//' | tr ',' '\n' \
+  | awk 'BEGIN{OFS=" "; ix=0;}{print $1, $1, ix, ix+1, ix+2; ix = ix + 3;}' \
+  > affyExonTissuesGs.ra
+grep -A5 affyExonTissuesAll ~/hg/makeDb/hgCgiData/Mouse/microarrayGroups.ra \
+  | grep names | sed 's/^names //; s/,$//' | tr ',' '\n' \
+  | awk 'BEGIN{OFS="\t"; id=0;}{ print id, $1, $1, "n/a", "n/a", "n/a", "3", "n/a,n/a,"$1","; id = id + 1;}' > all.expRecords
+hgLoadSqlTab mm8 affyExonTissuesGsExps expRecord.sql all.expRecords
+hgMedianMicroarray mm8 affyExonTissuesGs mm8.affyExonTissuesGsExps \
+   affyExonTissuesGs.ra affyExonTissuesGsMedian mm8.affyExonTissuesGsMedianExps
+hgExpDistance mm8 affyExonTissuesGsMedian \
+   affyExonTissuesGsMedianExps affyExonTissuesGsMedianDist
