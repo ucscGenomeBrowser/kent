@@ -664,3 +664,14 @@ chainOne $(path1)
 # AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
 update genbank.conf:
 taeGut1.upstreamGeneTbl = refGene
+
+#########################################
+# RepeatMasker ( 2009-01-30  RMH and braney)
+
+mkdir /hive/data/genomes/taeGut1/bed/RMRunRMH
+cd /hive/data/genomes/taeGut1/bed/RMRunRMH
+doRepeatMasker.pl -buildDir `pwd` taeGut1
+
+featureBits taeGut1 rmsk
+# 97507442 bases of 1222864691 (7.974%) in intersection
+
