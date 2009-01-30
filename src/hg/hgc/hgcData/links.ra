@@ -22,12 +22,12 @@ acc yes
 
 name UniProtVar
 url http://us.expasy.org/cgi-bin/get-sprot-variant.pl?%s
-label UniProt variant
+label UniProtKB variant
 acc yes
 
 name UniProtSearch
 url http://us.expasy.org/cgi-bin/sprot-search-ful?SEARCH=%s
-label UniProt search
+label UniProtKB search
 acc yes
 
 name OMIM
@@ -57,11 +57,11 @@ label dbSNP
 acc yes
 
 name uniProtDis
-label UniProt disease
+label UniProtKB disease
 dataSql select commentVal.val from uniProt.comment, uniProt.commentVal where comment.acc='%s' and commentType=21 and comment.commentVal=commentVal.id
 
 name uniProtPoly
-label UniProt polymorphism
+label UniProtKB polymorphism
 dataSql select commentVal.val from uniProt.comment, uniProt.commentVal where comment.acc='%s' and commentType=16 and comment.commentVal=commentVal.id
 
 name MPlink

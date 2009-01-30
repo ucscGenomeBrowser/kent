@@ -9,7 +9,7 @@
 #include "trackDb.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: txCdsInfo.c,v 1.8 2008/09/03 19:19:08 markd Exp $";
+static char const rcsid[] = "$Id: txCdsInfo.c,v 1.9 2009/01/30 23:48:49 fanhsu Exp $";
 
 void showTxInfo(char *geneName, struct trackDb *tdb, char *txInfoTable)
 /* Print out stuff from txInfo table. */
@@ -261,7 +261,7 @@ if (sqlTableExists(conn, evTable))
 	sqlFreeResult(&sr);
 	webPrintLinkTableEnd();
 	printf("This table shows CDS predictions for this transcript from a number of "
-	    "sources including alignments against UniProt proteins, alignments against Genbank "
+	    "sources including alignments against UniProtKB proteins, alignments against Genbank "
 	    "mRNAs with CDS regions annotated by the sequence submitter, and "
 	    "Victor Solovyev's bestorf program. Each prediction is assigned an ad-hoc score "
 	    "score is based on several factors including the quality of "

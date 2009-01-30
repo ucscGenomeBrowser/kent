@@ -87,7 +87,7 @@
 #include "memalloc.h"
 #include "rnaHybridization.h"
 
-static char const rcsid[] = "$Id: lowelab.c,v 1.30 2008/09/03 19:19:07 markd Exp $";
+static char const rcsid[] = "$Id: lowelab.c,v 1.31 2009/01/30 23:47:45 fanhsu Exp $";
 
 extern char *uniprotFormat;
 
@@ -299,7 +299,7 @@ if (extraTable != NULL && hTableExists(database, extraTable))
 spAcc = uniProtFindPrimAccFromGene(item, database);
 if (spAcc != NULL)
     {
-    printf("<B>UniProt:</B> ");
+    printf("<B>UniProtKB:</B> ");
     printf("<A HREF=");
     printf(uniprotFormat, spAcc);
     if (spAcc == NULL)
