@@ -1,4 +1,0 @@
-chr1	VEGA_Novel_CDS	exon	148067092	148067478	.	-	.	transcript_id "RP11-126K1.2-001"; gene_id "RP11-126K1.2"; gene_alias ""; exon_id "RP11-126K1.2-001-exon1";
-chr1	VEGA_Novel_CDS	CDS	148067092	148067208	.	-	0	transcript_id "RP11-126K1.2-001"; gene_id "RP11-126K1.2"; gene_alias ""; start_codon_found "1"; stop_codon_found "1"; exon_id "RP11-126K1.2-001-exon1";
-chr1	VEGA_Novel_CDS	exon	148065573	148065807	.	-	.	transcript_id "RP11-126K1.2-001"; gene_id "RP11-126K1.2"; gene_alias ""; exon_id "RP11-126K1.2-001-exon2";
-chr1	VEGA_Novel_CDS	CDS	148065745	148065807	.	-	0	transcript_id "RP11-126K1.2-001"; gene_id "RP11-126K1.2"; gene_alias ""; start_codon_found "1"; stop_codon_found "1"; exon_id "RP11-126K1.2-001-exon2";
