@@ -3,13 +3,14 @@
 #include "common.h"
 #include "hash.h"
 #include "jksql.h"
+#include "hdb.h"
 #include "gifLabel.h"
 #include "cart.h"
 #include "cheapcgi.h"
 #include "hgExp.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.16 2009/01/29 21:57:44 aamp Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.17 2009/01/31 07:28:55 aamp Exp $";
 
 static int expSubcellWidth = 21;
 
@@ -41,10 +42,14 @@ char **hgExpGetNames(char *database, char *table,
 {
 char **names, *name;
 int i;
-struct sqlConnection *conn = sqlConnect(database);
+char *db = database;
+struct sqlConnection *conn;
 char query[256], nameBuf[128];
 int maxLen = 0, len;
 
+if (!hTableExists(database, table))
+    db = "hgFixed";
+conn = sqlConnect(db);
 /* Read into array and figure out longest name. */
 AllocArray(names, expCount);
 for (i=0; i<expCount; ++i)

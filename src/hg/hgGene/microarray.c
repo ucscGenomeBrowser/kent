@@ -10,7 +10,7 @@
 #include "hgExp.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: microarray.c,v 1.13 2009/01/31 06:05:28 aamp Exp $";
+static char const rcsid[] = "$Id: microarray.c,v 1.14 2009/01/31 07:28:50 aamp Exp $";
 
 struct expColumn
 /* An expression column. */
@@ -261,7 +261,7 @@ static void expRatioPrint(struct expColumn *col,
 	char *geneId, boolean useBlue)
 /* Print out label and dots for expression ratio. */
 {
-float ratioMax = atof(hashMustFindVal(col->settings, "max"));
+float ratioMax = atof(hashOptionalVal(col->settings, "max", "3.0"));
 char *dupe = cloneString(col->type);
 char *s = dupe;
 char *repString = cloneString(hashMustFindVal(col->settings, "representatives"));
