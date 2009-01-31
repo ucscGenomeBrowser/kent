@@ -2836,6 +2836,7 @@ tablesIgnored $gbd
     knownAlt
     miRNA
     nestedRepeats
+    nestedRepeatsRM327
     quality
     rnaCluster
     rnaGene
@@ -2855,6 +2856,7 @@ tablesIgnored $gbd
     chr%_blat%
     chr%_gap
     chr%_rmsk
+    chr%_rmskRM327
     gap
     rmsk
     axtNet%
