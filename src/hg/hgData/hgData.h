@@ -30,18 +30,18 @@
 
 // Error responses
 #define ERR_INVALID_COMMAND(cmd) errClientCode(400, "Invalid request %s", (cmd))
-#define ERR_NO_DATABASE	errClientStatus(420, "Request error", "Database required")
+#define ERR_NO_GENOME	errClientStatus(420, "Request error", "Genome required")
 #define ERR_NO_TRACK	errClientStatus(420, "Request error", "Track required")
-#define ERR_NO_DB_CONNECTION(db) errClientStatus(420, "Request error", "Could not connect to database %s", (db))
-#define ERR_NO_DBS_FOUND errClientStatus(420, "Request error", "No databases found") // maybe this should be a server error
-#define ERR_DB_NOT_FOUND(db) errClientStatus(420, "Request error", "Database %s not found", (db))
+#define ERR_NO_GENOME_DB_CONNECTION(db) errClientStatus(420, "Request error", "Could not connect to genome database %s", (db))
+#define ERR_NO_GENOMES_FOUND errClientStatus(420, "Request error", "No genome databases found") // maybe this should be a server error
+#define ERR_GENOME_NOT_FOUND(db) errClientStatus(420, "Request error", "Genome %s not found", (db))
 #define ERR_NO_CHROM errClientStatus(420, "Request error", "Chrom required")
-#define ERR_CHROM_NOT_FOUND(db,chrom) errClientStatus(420, "Request error", "Chrom %s not found in database %s", (chrom), (db))
-#define ERR_TRACK_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track %s not found in database %s", (track), (db))
-#define ERR_TRACK_INFO_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track info for %s not found in database %s", (track), (db))
-#define ERR_TABLE_NOT_FOUND(table, chrom, tableRoot, db) errClientStatus(420, "Request error", "Table %s not found using chrom %s and tableRoot %s in database %s", (table), (chrom), (tableRoot), (db))
+#define ERR_CHROM_NOT_FOUND(db,chrom) errClientStatus(420, "Request error", "Chrom %s not found in genome %s", (chrom), (db))
+#define ERR_TRACK_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track %s not found in genome %s", (track), (db))
+#define ERR_TRACK_INFO_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track info for %s not found in genome %s", (track), (db))
+#define ERR_TABLE_NOT_FOUND(table, chrom, tableRoot, db) errClientStatus(420, "Request error", "Table %s not found using chrom %s and tableRoot %s in genome %s", (table), (chrom), (tableRoot), (db))
 #define ERR_BAD_FORMAT(format) errClientStatus(420, "Request error", "Format %s is not supported", (format))
-#define ERR_BAD_ACTION(action, track, db) errClientStatus(420, "Request error", "Action %s unknown for track %s in database %s", (action), (track), (db))
+#define ERR_BAD_ACTION(action, track, db) errClientStatus(420, "Request error", "Action %s unknown for track %s in genome %s", (action), (track), (db))
 #define ERR_BAD_TRACK_TYPE(track, type) errClientStatus(420, "Request error", "Track %s of type %s is not supported", (track), (type))
 
 /* Global Variables */
@@ -77,9 +77,9 @@ void dbDbCladeFreeList(struct dbDbClade **pList);
 /* Free a list of dynamically allocated dbDbClade's */
 
 struct dbDbClade *hGetIndexedDbClade(char *db);
-/* Get list of active databases and clade
+/* Get list of active genome databases and clade
  * Only get details for one 'db' unless NULL
- * in which case get all databases.
+ * in which case get all genome databases.
  * Dispose of this with dbDbCladeFreeList. */
 
 void errClientStatus(int code, char *status, char *format, ...);
@@ -104,10 +104,10 @@ void printBedByColumn(struct bed *b, struct hTableInfo *hti);
 // print out a list of bed records by column
 
 void printDb(struct dbDbClade *db);
-// print information for one database
+// print information for one genome database
 
 void printDbs(struct dbDbClade *db);
-// print an array of all databases
+// print an array of all genome databases
 
 void printChrom(struct chromInfo *ci);
 // print a chromosome 
@@ -116,14 +116,20 @@ void printChroms(struct chromInfo *ci);
 // print an array of all chromosomes
 
 void printGenomeAsAnnoj(struct dbDbClade *db, struct chromInfo *ci);
-// print information for a genome - the database and all its chromosomes
+// print information for a genome - the genome database and all its chromosomes
 // using AnnoJ format (http://www.annoj.org)
 
 void printGenome(struct dbDbClade *db, struct chromInfo *ci);
-// print information for a genome - the database and all its chromosomes
+// print information for a genome - the genome database and all its chromosomes
 
 void printTrackInfo(char *db, char *track, struct trackDb *tdb);
-// print database and track information
+// print genome database and track information
+
+void printItemAsAnnoj(char *db, char *track, char *type, char *term);
+// print out a description for a track item
+
+void printItem(char *db, char *track, char *type, char *term);
+// print out a description for a track item
 
 
 #endif /* HGTRACKS_H */

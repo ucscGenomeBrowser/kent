@@ -5,11 +5,11 @@
 #include "chromInfo.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgData_db.c,v 1.1.2.1 2009/01/13 15:48:53 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_db.c,v 1.1.2.2 2009/01/31 05:15:36 mikep Exp $";
 
 static struct dbDbClade *dbDbCladeLoad(char **row)
 /* Load a dbDbClade from row fetched with select * from dbDb
- * from database.  Dispose of this with dbDbCladeFree(). */
+ * from genome database.  Dispose of this with dbDbCladeFree(). */
 {
 struct dbDbClade *ret;
 
@@ -59,7 +59,7 @@ for (el = *pList; el != NULL; el = next)
 }
 
 struct dbDbClade *hGetIndexedDbClade(char *db)
-/* Get list of active databases and clade
+/* Get list of active genome databases and clade
  * Only get details for one 'db' unless NULL
  * in which case get all databases.
  * Dispose of this with dbDbCladeFreeList. */

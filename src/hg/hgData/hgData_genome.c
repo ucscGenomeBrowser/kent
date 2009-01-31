@@ -1,15 +1,15 @@
-/* hgData_genome - functions dealing with genomes (databases and chromosomes). */
+/* hgData_genome - functions dealing with genomes (genomes  and chromosomes). */
 #include "common.h"
 #include "hgData.h"
 #include "hdb.h"
 #include "chromInfo.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgData_genome.c,v 1.1.2.1 2009/01/13 15:48:54 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_genome.c,v 1.1.2.2 2009/01/31 05:15:36 mikep Exp $";
 
 
 void printDb(struct dbDbClade *db)
-// print information for one database
+// print information for one genome db
 {
 printf("{\"name\": %s,", quote(db->name));
 printf("\"description\": %s,",  quote(db->description));
@@ -24,10 +24,10 @@ printf("\"priority\": %f}", db->priority);
 }
 
 void printDbs(struct dbDbClade *db)
-// print an array of all databases
+// print an array of all genomes
 {
 struct dbDbClade *t;
-printf("\"databases\": [\n");
+printf("\"genomes\": [\n");
 for (t = db ; t ; t = t->next)
     {
     printDb(t);
@@ -56,7 +56,7 @@ printf("]");
 }
 
 void printGenomeAsAnnoj(struct dbDbClade *db, struct chromInfo *ci)
-// print information for a genome - the database and all its chromosomes
+// print information for a genome - the genome db and all its chromosomes
 // using AnnoJ format (http://www.annoj.org)
 {
 char name[1024];
