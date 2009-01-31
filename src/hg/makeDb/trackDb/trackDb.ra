@@ -1612,6 +1612,25 @@ spectrum on
 type rmsk
 canPack off
 
+track rmskRM327
+shortLabel RepMask 3.2.7
+longLabel Repeating Elements by RepeatMasker version 3.2.7
+group varRep
+priority 149.105
+visibility dense
+spectrum on
+type rmsk
+canPack off
+
+track nestedRepeatsRM327
+shortLabel Intr Rpts 3.2.7
+longLabel Fragments of Interrupted Repeats Joined by RepeatMasker ID (RM version 3.2.7)
+group varRep
+priority 149.115
+visibility hide
+useScore 1
+type bed 12 +
+
 track reconRepeat
 shortLabel Recon Repeats
 longLabel Repeats Determined with Recon
