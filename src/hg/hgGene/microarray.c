@@ -10,7 +10,7 @@
 #include "hgExp.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: microarray.c,v 1.12 2008/06/28 16:37:57 galt Exp $";
+static char const rcsid[] = "$Id: microarray.c,v 1.13 2009/01/31 06:05:28 aamp Exp $";
 
 struct expColumn
 /* An expression column. */
@@ -236,7 +236,7 @@ char *skips;
 if ((skips = hashFindVal(col->settings, "skipName")) != NULL)
     skipName = atoi(skips);
 hPrintf("<TR>\n");
-hgExpLabelPrint(col->name, subName, skipName, NULL,
+hgExpLabelPrint(database, col->name, subName, skipName, NULL,
 	representativeCount, representatives, expTable, nameIxStart);
 hPrintf("<TD> </TD>\n");	/* Dummy entry for labels. */
 hPrintf("</TR>\n");
