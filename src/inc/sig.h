@@ -90,6 +90,9 @@
 #define bigWigSig 0x888FFC26
 /* Signature for a big wig file. */
 
+#define bigBedSig 0x8789F2EA
+/* Signature for a big bed file. */
+
 #endif /* SIG_H */
 
 
