@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.25 2007/10/09 00:26:41 galt Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.26 2009/02/01 04:03:24 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -294,7 +294,7 @@ for (i=begin; i<=end; ++i)
     double ct;
     double binStartR = 0.0;
     int binStart = 0;
-    int count;
+    long count;
 
     if (i != end)
 	count = hist[i];
@@ -378,7 +378,7 @@ for (i=begin; i<=end; ++i)
 	if ((aveCol >= 0) || freq)
 	    printf(" %f\n", ct);
 	else
-	    printf(" %d\n", count);
+	    printf(" %ld\n", count);
 	}
     }
 }	/*	textHistogram()	*/
