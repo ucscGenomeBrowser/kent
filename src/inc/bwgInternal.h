@@ -55,6 +55,7 @@ struct bigWigFile
     struct bigWigFile *next;	/* Next in list. */
     char *fileName;		/* Name of file - for better error reporting. */
     FILE *f;			/* Open file handle. */
+    bits32 typeSig;		/* bigBedSig or bigWigSig for now. */
     boolean isSwapped;		/* If TRUE need to byte swap everything. */
     struct bptFile *chromBpt;	/* Index of chromosomes. */
     bits32 zoomLevels;		/* Number of zoom levels. */
@@ -169,6 +170,12 @@ struct bwgChromIdSize
     bits32 chromSize;	/* Chromosome Size */
     };
 
+struct bigWigChromInfo;		/* Declared in bigWig.h. */
+
+struct bwgZoomLevel *bwgBestZoom(struct bwgZoomLevel *levelList, int desiredReduction);
+/* Return zoom level that is the closest one that is less than or equal to 
+ * desiredReduction. */
+
 void bwgDumpSummary(struct bwgSummary *sum, FILE *f);
 /* Write out summary info to file. */
 
@@ -176,13 +183,11 @@ struct hash *bwgChromSizesFromFile(char *fileName);
 /* Read two column file into hash keyed by chrom. (Here mostly for use
  * with bwgMakeChromInfo.) */
 
-struct bigWigChromInfo;
+void bigWigChromInfoKey(const void *va, char *keyBuf);
+/* Get key field out of bigWigChromInfo. */
 
-void bwgMakeChromInfo(struct bwgSection *sectionList, struct hash *chromSizeHash,
-	int *retChromCount, struct bigWigChromInfo **retChromArray,
-	int *retMaxChromNameSize);
-/* Fill in chromId field in sectionList.  Return array of chromosome name/ids. 
- * The chromSizeHash is keyed by name, and has int values. */
+void *bigWigChromInfoVal(const void *va);
+/* Get val field out of bigWigChromInfo. */
 
 int bwgAverageResolution(struct bwgSection *sectionList);
 /* Return the average resolution seen in sectionList. */
@@ -190,12 +195,32 @@ int bwgAverageResolution(struct bwgSection *sectionList);
 void bwgAttachUnzoomedCir(struct bigWigFile *bwf);
 /* Make sure unzoomed cir is attached. */
 
+void bwgAddRangeToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end, 
+	float val, int reduction, struct bwgSummary **pOutList);
+/* Add chromosome range to summary - putting it onto top of list if possible, otherwise
+ * expanding list. */
+
+bits64 bwgTotalSummarySize(struct bwgSummary *list);
+/* Return size on disk of all summaries. */
+
 struct bwgSummary *bwgReduceSectionList(struct bwgSection *sectionList, 
 	struct bigWigChromInfo *chromInfoArray, int reduction);
 /* Reduce section by given amount. */
 
+struct bwgSummary *bwgReduceSummaryList(struct bwgSummary *inList, 
+	struct bigWigChromInfo *chromInfoArray, int reduction);
+/* Reduce summary list to another summary list. */
+
+bits64 bwgWriteSummaryAndIndex(struct bwgSummary *summaryList, 
+	int blockSize, int itemsPerSlot, FILE *f);
+/* Write out summary and index to summary, returning start position of
+ * summary index. */
+
 #define bwgSummaryFreeList slFreeList
 
+struct fileOffsetSize *bigWigOverlappingBlocks(struct bigWigFile *bwf, struct cirTreeFile *ctf,
+	char *chrom, bits32 start, bits32 end);
+ 
 
 struct bigWigFile *bigWigFileOpen(char *fileName);
 /* Open up a big wig file. */
