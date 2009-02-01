@@ -8,12 +8,16 @@
 #include "options.h"
 #include "sig.h"
 #include "sqlNum.h"
+#include "obscure.h"
+#include "dystring.h"
 #include "bPlusTree.h"
 #include "cirTree.h"
+#include "rangeTree.h"
 #include "bwgInternal.h"
 #include "bigWig.h"
+#include "bigBed.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.9 2009/01/29 22:11:15 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.10 2009/02/01 01:26:44 kent Exp $";
 
 void bptDumpCallback(void *context, void *key, int keySize, void *val, int valSize)
 {
@@ -23,8 +27,8 @@ printf("%s:%d:%u\n", keyString, valSize, *pVal);
 freeMem(keyString);
 }
 
-struct bigWigFile *bigWigFileOpen(char *fileName)
-/* Open up big wig file. */
+struct bigWigFile *bwgFileOpen(char *fileName, bits32 sig, char *typeName)
+/* Open up big wig or big bed file. */
 {
 struct bigWigFile *bwf;
 AllocVar(bwf);
@@ -36,13 +40,14 @@ FILE *f = bwf->f = mustOpen(fileName, "rb");
 bits32 magic;
 boolean isSwapped = bwf->isSwapped = FALSE;
 mustReadOne(f, magic);
-if (magic != bigWigSig)
+if (magic != sig)
     {
     magic = byteSwap32(magic);
     isSwapped = TRUE;
-    if (magic != bigWigSig)
-       errAbort("%s is not a bigWig file", fileName);
+    if (magic != sig)
+       errAbort("%s is not a %s file", fileName, typeName);
     }
+bwf->typeSig = sig;
 
 /* Read rest of defined bits of header, byte swapping as needed. */
 bwf->zoomLevels = readBits32(f, isSwapped);
@@ -72,6 +77,18 @@ bwf->levelList = levelList;
 bwf->chromBpt =  bptFileAttach(fileName, f);
 
 return bwf;
+}
+
+struct bigWigFile *bigWigFileOpen(char *fileName)
+/* Open up big wig file. */
+{
+return bwgFileOpen(fileName, bigWigSig, "big wig");
+}
+
+struct bigWigFile *bigBedFileOpen(char *fileName)
+/* Open up big bed file. */
+{
+return bwgFileOpen(fileName, bigBedSig, "big bed");
 }
 
 void bigWigFileClose(struct bigWigFile **pBwf)
@@ -250,6 +267,8 @@ struct bigWigInterval *bigWigIntervalQuery(struct bigWigFile *bwf, char *chrom, 
 	struct lm *lm)
 /* Get data for interval.  Return list allocated out of lm. */
 {
+if (bwf->typeSig != bigWigSig)
+   errAbort("Trying to do bigWigIntervalQuery on a non big-wig file.");
 bwgAttachUnzoomedCir(bwf);
 struct bigWigInterval *el, *list = NULL;
 struct fileOffsetSize *blockList = bigWigOverlappingBlocks(bwf, bwf->unzoomedCir, 
@@ -376,7 +395,7 @@ switch (type)
     }
 }
 
-static struct bwgZoomLevel *bwgBestZoom(struct bigWigFile *bwf, int desiredReduction)
+struct bwgZoomLevel *bwgBestZoom(struct bwgZoomLevel *levelList, int desiredReduction)
 /* Return zoom level that is the closest one that is less than or equal to 
  * desiredReduction. */
 {
@@ -388,7 +407,7 @@ int closestDiff = BIGNUM;
 struct bwgZoomLevel *closestLevel = NULL;
 struct bwgZoomLevel *level;
 
-for (level = bwf->levelList; level != NULL; level = level->next)
+for (level = levelList; level != NULL; level = level->next)
     {
     int diff = desiredReduction - level->reductionLevel;
     if (diff >= 0 && diff < closestDiff)
@@ -663,14 +682,113 @@ if (sumList != NULL)
 return result;
 }
 
+struct bigBedInterval *bigBedIntervalQuery(struct bigWigFile *bwf, char *chrom, int start, int end,
+	struct lm *lm)
+/* Get data for interval.  Return list allocated out of lm. */
+{
+bwgAttachUnzoomedCir(bwf);
+struct bigBedInterval *el, *list = NULL;
+struct fileOffsetSize *blockList = bigWigOverlappingBlocks(bwf, bwf->unzoomedCir, 
+	chrom, start, end);
+struct fileOffsetSize *block;
+FILE *f = bwf->f;
+boolean isSwapped = bwf->isSwapped;
+float val;
+int i;
+struct dyString *dy = dyStringNew(32);
+for (block = blockList; block != NULL; block = block->next)
+    {
+    bits64 endPos = block->offset + block->size;
+    fseek(f, block->offset, SEEK_SET);
+    while (ftell(f) < endPos)
+        {
+	/* Read next record into local variables. */
+	bits32 chromId = readBits32(f, isSwapped);
+	bits32 s = readBits32(f, isSwapped);
+	bits32 e = readBits32(f, isSwapped);
+	int c;
+	dyStringClear(dy);
+	while ((c = getc(f)) >= 0)
+	    {
+	    if (c == 0)
+	        break;
+	    dyStringAppendC(dy, c);
+	    }
+
+	/* If we're actually in range then copy it into a new  element and add to list. */
+	if (rangeIntersection(s, e, start, end) > 0)
+	    {
+	    lmAllocVar(lm, el);
+	    el->start = s;
+	    el->end = e;
+	    if (dy->stringSize > 0)
+		el->rest = lmCloneString(lm, dy->string);
+	    slAddHead(&list, el);
+	    }
+	}
+    }
+slFreeList(&blockList);
+slReverse(&list);
+return list;
+}
+
+
+struct bigWigInterval *bigBedCoverageIntervals(struct bigWigFile *bwf, 
+	char *chrom, bits32 start, bits32 end, struct lm *lm)
+/* Return intervals where the val is the depth of coverage. */
+{
+/* Get list of overlapping intervals */
+struct bigBedInterval *bi, *biList = bigBedIntervalQuery(bwf, chrom, start, end, lm);
+if (biList == NULL)
+    return NULL;
+
+/* Make a range tree that collects coverage. */
+struct rbTree *rangeTree = rangeTreeNew();
+for (bi = biList; bi != NULL; bi = bi->next)
+    rangeTreeAddRangeToCoverageDepth(rangeTree, bi->start, bi->end);
+struct range *range, *rangeList = rangeTreeList(rangeTree);
+
+/* Convert rangeList to bigWigInterval list. */
+struct bigWigInterval *bwi, *bwiList = NULL;
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    lmAllocVar(lm, bwi);
+    bwi->start = range->start;
+    if (bwi->start < start)
+       bwi->start = start;
+    bwi->end = range->end;
+    if (bwi->end > end)
+       bwi->end = end;
+    bwi->val = ptToInt(range->val);
+    slAddHead(&bwiList, bwi);
+    }
+slReverse(&bwiList);
+
+/* Clean up and go home. */
+rangeTreeFree(&rangeTree);
+return bwiList;
+}
+
+
 static boolean bwgSummaryArrayFromFull(struct bigWigFile *bwf, 
 	char *chrom, bits32 start, bits32 end,
 	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues)
 /* Summarize data, not using zoom. */
 {
-struct bigWigInterval *intervalList, *interval;
+struct bigWigInterval *intervalList = NULL, *interval;
 struct lm *lm = lmInit(0);
-intervalList = bigWigIntervalQuery(bwf, chrom, start, end, lm);
+switch (bwf->typeSig)
+    {
+    case bigWigSig:
+	intervalList = bigWigIntervalQuery(bwf, chrom, start, end, lm);
+	break;
+    case bigBedSig:
+        intervalList = bigBedCoverageIntervals(bwf, chrom, start, end, lm);
+	break;
+    default:
+        internalErr();
+	break;
+    }
 boolean result = FALSE;
 if (intervalList != NULL);
     {
@@ -699,12 +817,12 @@ lmCleanup(&lm);
 return result;
 }
 
-boolean bigWigSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
+boolean bwgSummaryArray(struct bigWigFile *bwf, char *chrom, bits32 start, bits32 end,
 	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues)
 /* Fill in summaryValues with  data from indicated chromosome range in bigWig file.
  * Be sure to initialize summaryValues to a default value, which will not be touched
  * for regions without data in file.  (Generally you want the default value to either
- * be 0.0 or nan(0) depending on the application.)  Returns FALSE if no data
+ * be 0.0 or nan("") depending on the application.)  Returns FALSE if no data
  * at that position. */
 {
 boolean result = FALSE;
@@ -721,12 +839,8 @@ int zoomLevel = fullReduction/4;
 if (zoomLevel < 0)
     zoomLevel = 0;
 
-
-/* Open up bigWig file and look up chromId. */
-struct bigWigFile *bwf = bigWigFileOpen(fileName);
-
 /* Get the closest zoom level less than what we're looking for. */
-struct bwgZoomLevel *zoom = bwgBestZoom(bwf, zoomLevel);
+struct bwgZoomLevel *zoom = bwgBestZoom(bwf->levelList, zoomLevel);
 if (zoom != NULL)
     {
     result = bwgSummaryArrayFromZoom(zoom, bwf, chrom, start, end, summaryType, summarySize, summaryValues);
@@ -735,9 +849,37 @@ else
     {
     result = bwgSummaryArrayFromFull(bwf, chrom, start, end, summaryType, summarySize, summaryValues);
     }
-bigWigFileClose(&bwf);
 return result;
 }
+
+boolean bigWigSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
+	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues)
+/* Fill in summaryValues with  data from indicated chromosome range in bigWig file.
+ * Be sure to initialize summaryValues to a default value, which will not be touched
+ * for regions without data in file.  (Generally you want the default value to either
+ * be 0.0 or nan("") depending on the application.)  Returns FALSE if no data
+ * at that position. */
+{
+struct bigWigFile *bwf = bigWigFileOpen(fileName);
+boolean ret = bwgSummaryArray(bwf, chrom, start, end, summaryType, summarySize, summaryValues);
+bigWigFileClose(&bwf);
+return ret;
+}
+
+boolean bigBedSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
+	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues)
+/* Fill in summaryValues with  data from indicated chromosome range in bigBed file.
+ * Be sure to initialize summaryValues to a default value, which will not be touched
+ * for regions without data in file.  (Generally you want the default value to either
+ * be 0.0 or nan("") depending on the application.)  Returns FALSE if no data
+ * at that position. */
+{
+struct bigWigFile *bwf = bigBedFileOpen(fileName);
+boolean ret = bwgSummaryArray(bwf, chrom, start, end, summaryType, summarySize, summaryValues);
+bigBedFileClose(&bwf);
+return ret;
+}
+
 
 double bigWigSingleSummary(char *fileName, char *chrom, int start, int end,
     enum bigWigSummaryType summaryType, double defaultVal)
