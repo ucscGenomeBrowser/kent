@@ -6,6 +6,10 @@
 #ifndef BIGBED_H
 #define BIGBED_H
 
+#ifndef BIGWIG_H
+#include "bigWig.h"
+#endif
+
 struct bigBedInterval
 /* A partially parsed out bed record plus some extra fields. */
     {
