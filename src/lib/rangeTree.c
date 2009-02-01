@@ -10,10 +10,11 @@
 #include "common.h"
 #include "limits.h"
 #include "localmem.h"
+#include "obscure.h"
 #include "rbTree.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: rangeTree.c,v 1.21 2008/11/15 07:07:30 markd Exp $";
+static char const rcsid[] = "$Id: rangeTree.c,v 1.22 2009/02/01 01:29:51 kent Exp $";
 
 int rangeCmp(void *va, void *vb)
 /* Return -1 if a before b,  0 if a and b overlap,
@@ -90,6 +91,117 @@ struct range *rangeTreeAddValList(struct rbTree *tree, int start, int end, void 
     return rangeTreeAddVal(tree, start, end, val, slCat);
 }
 
+void rangeTreeAddRangeToCoverageDepth(struct rbTree *tree, int start, int end)
+/* Add area from start to end to a tree that is being built up to store the
+ * depth of coverage.  Recover coverage back out by looking at ptToInt(range->val)
+ * on tree elements. */
+{
+struct range q;
+q.start = start;
+q.end = end;
+
+struct range *r, *existing = rbTreeFind(tree, &q);
+if (existing == NULL)
+    {
+    lmAllocVar(tree->lm, r);
+    r->start = start;
+    r->end = end;
+    r->val = intToPt(1);
+    rbTreeAdd(tree, r);
+    }
+else
+    {
+    if (existing->start <= start && existing->end >= end)
+    /* The existing one completely encompasses us */
+        {
+	/* Make a new section for the bit before start. */
+	if (existing->start < start)
+	    {
+	    lmAllocVar(tree->lm, r);
+	    r->start = existing->start;
+	    r->end = start;
+	    r->val = existing->val;
+	    existing->start = start;
+	    rbTreeAdd(tree, r);
+	    }
+	/* Make a new section for the bit after end. */
+	if (existing->end > end)
+	    {
+	    lmAllocVar(tree->lm, r);
+	    r->start = end;
+	    r->end = existing->end;
+	    r->val = existing->val;
+	    existing->end = end;
+	    rbTreeAdd(tree, r);
+	    }
+	/* Increment existing section in overlapping area. */
+        existing->val = (char *)(existing->val) + 1;
+	}
+    else
+    /* In general case fetch list of regions that overlap us. 
+       Remaining cases to handle are: 
+	     r >> e     rrrrrrrrrrrrrrrrrrrr
+			     eeeeeeeeee
+
+	     e < r           rrrrrrrrrrrrrrr
+			eeeeeeeeeeee
+
+	     r < e      rrrrrrrrrrrr
+			     eeeeeeeeeeeee
+     */
+        {
+	struct range *existingList = rangeTreeAllOverlapping(tree, start, end);
+
+#ifdef DEBUG
+	/* Make sure that list is really sorted for debugging... */
+	int lastStart = existingList->start;
+	for (r = existingList; r != NULL; r = r->next)
+	    {
+	    int start = r->start;
+	    if (start < lastStart)
+	        internalErr();
+	    }
+#endif /* DEBUG */
+
+	int s = start, e = end;
+	struct range *prev = NULL;
+	for (existing = existingList; existing != NULL; existing = existing->next)
+	    {
+	    /* Deal with start of new range that comes before existing */
+	    if (s < existing->start)
+	        {
+		lmAllocVar(tree->lm, r);
+		r->start = s;
+		r->end = existing->start;
+		r->val = intToPt(1);
+		s = existing->start;
+		rbTreeAdd(tree, r);
+		}
+	    else if (s > existing->start)
+	        {
+		lmAllocVar(tree->lm, r);
+		r->start = existing->start;
+		r->end = s;
+		r->val = existing->val;
+		existing->start = s;
+		rbTreeAdd(tree, r);
+		}
+	    existing->val = (char *)(existing->val) + 1;
+	    s = existing->end;
+	    }
+	if (s < e)
+	/* Deal with end of new range that doesn't overlap with anything. */
+	    {
+	    lmAllocVar(tree->lm, r);
+	    r->start = s;
+	    r->end = e;
+	    r->val = intToPt(1);
+	    rbTreeAdd(tree, r);
+	    }
+	}
+    }
+
+}
 
 boolean rangeTreeOverlaps(struct rbTree *tree, int start, int end)
 /* Return TRUE if start-end overlaps anything in tree */
@@ -139,7 +251,7 @@ return NULL;
 struct range *rangeTreeAllOverlapping(struct rbTree *tree, int start, int end)
 /* Return list of all items in range tree that overlap interval start-end.
  * Do not free this list, it is owned by tree.  However it is only good until
- * next call to rangeTreeFindInRange or rangTreeList. Not thread safe. */
+ * next call to rangeTreeFindInRange or rangeTreeList. Not thread safe. */
 {
 struct range tempR;
 tempR.start = start;

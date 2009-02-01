@@ -51,6 +51,11 @@ struct range *rangeTreeAddValList(struct rbTree *tree, int start, int end, void 
  * Add val to the list of values (if any) in each range.
  * val must be valid argument to slCat (ie, be a struct with a 'next' pointer as its first member) */
 
+void rangeTreeAddRangeToCoverageDepth(struct rbTree *tree, int start, int end);
+/* Add area from start to end to a tree that is being built up to store the
+ * depth of coverage.  Recover coverage back out by looking at ptToInt(range->val)
+ * on tree elements. */
+
 boolean rangeTreeOverlaps(struct rbTree *tree, int start, int end);
 /* Return TRUE if start-end overlaps anything in tree */
 
