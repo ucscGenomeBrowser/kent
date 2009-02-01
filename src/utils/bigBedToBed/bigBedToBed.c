@@ -3,9 +3,10 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "localmem.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bigBedToBed.c,v 1.1 2009/02/01 02:37:29 kent Exp $";
+static char const rcsid[] = "$Id: bigBedToBed.c,v 1.2 2009/02/01 04:04:07 kent Exp $";
 
 char *clChrom = NULL;
 int clStart = -1;
