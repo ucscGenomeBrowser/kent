@@ -187,7 +187,7 @@ for (chromStart = pbList; chromStart != NULL; chromStart = chromEnd)
 	rangeTreeAddToCoverageDepth(chromRanges, pb->start, pb->end);
 
     struct range *range, *rangeList = rangeTreeList(chromRanges);
-    uglyf("Got %d ranges on %d\n", slCount(rangeList), chromId);
+    verbose(3, "Got %d ranges on %d\n", slCount(rangeList), chromId);
     for (range = rangeList; range != NULL; range = range->next)
         {
 	bwgAddRangeToSummary(chromId, chromInfoArray[chromId].size, range->start, range->end,
@@ -242,7 +242,7 @@ verbose(1, "%d of %d chromosomes used (%4.2f%%)\n", chromCount, chromHash->elCou
 /* Calculate first meaningful reduction size and make first reduction. */
 bits32 summaryCount = 0;
 int initialReduction = ppBedAverageSize(pbList)*10;
-uglyf("averageBedSize=%d\n", initialReduction/10);
+verbose(2, "averageBedSize=%d\n", initialReduction/10);
 bits64 lastSummarySize = 0, summarySize;
 struct bwgSummary *summaryList, *firstSummaryList;
 for (;;)
@@ -261,6 +261,8 @@ for (;;)
 summaryCount = 1;
 reduceSummaries[0] = firstSummaryList = summaryList;
 reductionAmounts[0] = initialReduction;
+verbose(1, "Initial zoom reduction x%d data size %4.2f%%\n", 
+	initialReduction, 100.0 * summarySize/fullSize);
 
 /* Now calculate up to 10 levels of further summary. */
 bits64 reduction = initialReduction;
