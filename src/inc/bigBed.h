@@ -35,5 +35,13 @@ boolean bigBedSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end
  * be 0.0 or nan("") depending on the application.)  Returns FALSE if no data
  * at that position. */
 
+void bigBedFileCreate(
+	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
+	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
+	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
+	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
+	char *outName);   /* BigBed output file name. */
+/* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
+
 #endif /* BIGBED_H */
 

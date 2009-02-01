@@ -12,7 +12,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.5 2009/01/29 18:15:09 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.6 2009/02/01 01:58:01 kent Exp $";
 
 static int bwgBedGraphItemCmp(const void *va, const void *vb)
 /* Compare to sort based on query start. */
@@ -437,15 +437,15 @@ hashFree(&chromHash);
 chromList = NULL;
 }
 
-static void chromInfoKey(const void *va, char *keyBuf)
-/* Get key field. */
+void bigWigChromInfoKey(const void *va, char *keyBuf)
+/* Get key field out of bigWigChromInfo. */
 {
 const struct bigWigChromInfo *a = ((struct bigWigChromInfo *)va);
 strcpy(keyBuf, a->name);
 }
 
-static void *chromInfoVal(const void *va)
-/* Get val field. */
+void *bigWigChromInfoVal(const void *va)
+/* Get val field out of bigWigChromInfo. */
 {
 const struct bigWigChromInfo *a = ((struct bigWigChromInfo *)va);
 return (void*)(&a->id);
@@ -594,7 +594,7 @@ for (section = sectionList; section != NULL; section = section->next)
 return total;
 }
 
-static bits64 bwgTotalSummarySize(struct bwgSummary *list)
+bits64 bwgTotalSummarySize(struct bwgSummary *list)
 /* Return size on disk of all summaries. */
 {
 struct bwgSummary *el;
@@ -656,7 +656,7 @@ while (start < end)
     }
 }
 
-static void addRangeToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end, 
+void bwgAddRangeToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end, 
 	float val, int reduction, struct bwgSummary **pOutList)
 /* Add chromosome range to summary - putting it onto top of list if possible, otherwise
  * expanding list. */
@@ -673,7 +673,7 @@ static void bwgReduceBedGraph(struct bwgSection *section, bits32 chromSize, int 
 {
 struct bwgBedGraphItem *item;
 for (item = section->itemList.bedGraph; item != NULL; item = item->next)
-    addRangeToSummary(section->chromId, chromSize, item->start, item->end, 
+    bwgAddRangeToSummary(section->chromId, chromSize, item->start, item->end, 
     	item->val, reduction, pOutList);
 }
 
@@ -683,7 +683,7 @@ static void bwgReduceVariableStep(struct bwgSection *section, bits32 chromSize, 
 {
 struct bwgVariableStepItem *item;
 for (item = section->itemList.variableStep; item != NULL; item = item->next)
-    addRangeToSummary(section->chromId, chromSize, item->start, item->start + section->itemSpan, 
+    bwgAddRangeToSummary(section->chromId, chromSize, item->start, item->start + section->itemSpan, 
     	item->val, reduction, pOutList);
 }
 
@@ -695,7 +695,7 @@ struct bwgFixedStepItem *item;
 int start = section->start;
 for (item = section->itemList.fixedStep; item != NULL; item = item->next)
     {
-    addRangeToSummary(section->chromId, chromSize, start, start + section->itemSpan, item->val, 
+    bwgAddRangeToSummary(section->chromId, chromSize, start, start + section->itemSpan, item->val, 
     	reduction, pOutList);
     start += section->itemStep;
     }
@@ -763,7 +763,7 @@ res.end = a->end;
 return res;
 }
 
-static bits64 writeSummaryAndIndex(struct bwgSummary *summaryList, 
+bits64 bwgWriteSummaryAndIndex(struct bwgSummary *summaryList, 
 	int blockSize, int itemsPerSlot, FILE *f)
 /* Write out summary and index to summary, returning start position of
  * summary index. */
@@ -892,7 +892,7 @@ for (i=0; i<summaryCount; ++i)
 chromTreeOffset = ftell(f);
 int chromBlockSize = min(blockSize, chromCount);
 bptFileBulkIndexToOpenFile(chromInfoArray, sizeof(chromInfoArray[0]), chromCount, chromBlockSize,
-    chromInfoKey, maxChromNameSize, chromInfoVal, 
+    bigWigChromInfoKey, maxChromNameSize, bigWigChromInfoVal, 
     sizeof(chromInfoArray[0].id) + sizeof(chromInfoArray[0].size), 
     f);
 
@@ -920,7 +920,7 @@ verbose(2, "bwgCreate writting %d summaries\n", summaryCount);
 for (i=0; i<summaryCount; ++i)
     {
     reductionDataOffsets[i] = ftell(f);
-    reductionIndexOffsets[i] = writeSummaryAndIndex(reduceSummaries[i], blockSize, itemsPerSlot, f);
+    reductionIndexOffsets[i] = bwgWriteSummaryAndIndex(reduceSummaries[i], blockSize, itemsPerSlot, f);
     verbose(3, "wrote %d of data, %d of index on level %d\n", (int)(reductionIndexOffsets[i] - reductionDataOffsets[i]), (int)(ftell(f) - reductionIndexOffsets[i]), i);
     }
 
