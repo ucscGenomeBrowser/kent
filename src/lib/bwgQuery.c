@@ -17,7 +17,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.11 2009/02/01 01:30:39 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.12 2009/02/01 01:34:21 kent Exp $";
 
 void bptDumpCallback(void *context, void *key, int keySize, void *val, int valSize)
 {
@@ -743,7 +743,7 @@ if (biList == NULL)
 /* Make a range tree that collects coverage. */
 struct rbTree *rangeTree = rangeTreeNew();
 for (bi = biList; bi != NULL; bi = bi->next)
-    rangeTreeAddRangeToCoverageDepth(rangeTree, bi->start, bi->end);
+    rangeTreeAddToCoverageDepth(rangeTree, bi->start, bi->end);
 struct range *range, *rangeList = rangeTreeList(rangeTree);
 
 /* Convert rangeList to bigWigInterval list. */

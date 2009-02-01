@@ -14,7 +14,7 @@
 #include "rbTree.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: rangeTree.c,v 1.23 2009/02/01 01:30:39 kent Exp $";
+static char const rcsid[] = "$Id: rangeTree.c,v 1.24 2009/02/01 01:34:21 kent Exp $";
 
 int rangeCmp(void *va, void *vb)
 /* Return -1 if a before b,  0 if a and b overlap,
@@ -91,7 +91,7 @@ struct range *rangeTreeAddValList(struct rbTree *tree, int start, int end, void 
     return rangeTreeAddVal(tree, start, end, val, slCat);
 }
 
-void rangeTreeAddRangeToCoverageDepth(struct rbTree *tree, int start, int end)
+void rangeTreeAddToCoverageDepth(struct rbTree *tree, int start, int end)
 /* Add area from start to end to a tree that is being built up to store the
  * depth of coverage.  Recover coverage back out by looking at ptToInt(range->val)
  * on tree elements. */
