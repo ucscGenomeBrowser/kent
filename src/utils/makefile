@@ -48,6 +48,11 @@ DIRS = \
 	addCols \
 	ave \
 	aveCols \
+	bedToBigBed \
+	bigBedSummary \
+	bigBedToBed \
+	bigWigSummary \
+	bigWigToBedGraph \
 	calc \
 	catDir \
 	catUncomment \
@@ -58,7 +63,6 @@ DIRS = \
 	cvsTools \
 	detab \
 	endsInLf \
-	est2genomeToPsl \
 	faAlign \
 	faCmp \
 	faCount \
@@ -128,10 +132,13 @@ DIRS = \
 	upper \
 	venn \
 	weedLines \
+	wigToBigWig \
+	wigTestMaker \
 	wordLine
 
 BAD_DIRS= \
 	ccCpLock \
+	est2genomeToPsl \
 	geneStarts \
 	jimgrep \
 	jkShell \
