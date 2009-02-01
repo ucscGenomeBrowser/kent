@@ -14,7 +14,7 @@
 #include "rbTree.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: rangeTree.c,v 1.22 2009/02/01 01:29:51 kent Exp $";
+static char const rcsid[] = "$Id: rangeTree.c,v 1.23 2009/02/01 01:30:39 kent Exp $";
 
 int rangeCmp(void *va, void *vb)
 /* Return -1 if a before b,  0 if a and b overlap,
@@ -164,7 +164,6 @@ else
 #endif /* DEBUG */
 
 	int s = start, e = end;
-	struct range *prev = NULL;
 	for (existing = existingList; existing != NULL; existing = existing->next)
 	    {
 	    /* Deal with start of new range that comes before existing */

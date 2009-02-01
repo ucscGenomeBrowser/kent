@@ -17,7 +17,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.10 2009/02/01 01:26:44 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.11 2009/02/01 01:30:39 kent Exp $";
 
 void bptDumpCallback(void *context, void *key, int keySize, void *val, int valSize)
 {
@@ -693,8 +693,6 @@ struct fileOffsetSize *blockList = bigWigOverlappingBlocks(bwf, bwf->unzoomedCir
 struct fileOffsetSize *block;
 FILE *f = bwf->f;
 boolean isSwapped = bwf->isSwapped;
-float val;
-int i;
 struct dyString *dy = dyStringNew(32);
 for (block = blockList; block != NULL; block = block->next)
     {
@@ -703,7 +701,7 @@ for (block = blockList; block != NULL; block = block->next)
     while (ftell(f) < endPos)
         {
 	/* Read next record into local variables. */
-	bits32 chromId = readBits32(f, isSwapped);
+	readBits32(f, isSwapped);	// Read and discard chromId
 	bits32 s = readBits32(f, isSwapped);
 	bits32 e = readBits32(f, isSwapped);
 	int c;
