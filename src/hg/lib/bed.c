@@ -2,8 +2,9 @@
  * generated bed.h and bed.sql.  This module links the database and the RAM 
  * representation of objects. */
 
+
 #include "common.h"
-#include "jksql.h"
+#include "sqlNum.h"
 #include "linefile.h"
 #include "rangeTree.h"
 #include "minChromSize.h"
@@ -11,7 +12,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.59 2008/10/07 19:58:03 hiram Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.60 2009/02/02 04:19:38 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -122,19 +123,6 @@ int dif;
 dif = strcmp(a->chrom, b->chrom);
 if (dif == 0)
     dif = a->chromEnd - b->chromEnd;
-return dif;
-}
-
-int bedCmpExtendedChr(const void *va, const void *vb)
-/* Compare to sort based on chrom,chromStart.  Use extended
- * chrom name comparison, that strip prefixes and does numeric compare */
-{
-const struct bed *a = *((struct bed **)va);
-const struct bed *b = *((struct bed **)vb);
-int dif;
-dif = chrNameCmp(a->chrom, b->chrom);
-if (dif == 0)
-    dif = a->chromStart - b->chromStart;
 return dif;
 }
 
@@ -421,7 +409,7 @@ while (lineFileRow(lf, row))
     if(chrom == NULL || sameString(el->chrom, chrom))
         slAddHead(&list, el);
     else
-        freez(&el);
+        bedFree(&el);
     }
 lineFileClose(&lf);
 slReverse(&list);
@@ -505,6 +493,7 @@ if (wordCount > 14)
     sqlFloatDynamicArray(row[15], &bed->expScores, &count);
 return bed;
 }
+
 
 static void bedOutputN_Opt(struct bed *el, int wordCount, FILE *f,
 	char sep, char lastSep, boolean useItemRgb)
@@ -656,6 +645,7 @@ void bedOutputNitemRgb(struct bed *el, int wordCount, FILE *f,
 {
 bedOutputN_Opt(el, wordCount, f, sep, lastSep, TRUE);
 }
+
 
 int bedTotalBlockSize(struct bed *bed)
 /* Return total size of all blocks. */

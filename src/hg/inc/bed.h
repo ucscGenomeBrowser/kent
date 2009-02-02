@@ -110,10 +110,6 @@ int bedCmp(const void *va, const void *vb);
 int bedCmpEnd(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromEnd. */
 
-int bedCmpExtendedChr(const void *va, const void *vb);
-/* Compare to sort based on chrom,chromStart.  Use extended
- * chrom name comparison, that strip prefixes and does numeric compare */
-
 int bedCmpScore(const void *va, const void *vb);
 /* Compare to sort based on score - lowest first. */
 
