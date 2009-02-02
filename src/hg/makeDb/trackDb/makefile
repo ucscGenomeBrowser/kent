@@ -16,10 +16,6 @@
 # or in the cgi-bin-$(USER)/hg.conf file. Something like: 
 # db.trackDb=trackDb_YourUserName
 
-# FIXME: the execution of commands with $$cmd broken on the mgc
-# machine and required using eval $$cmd; I am not sure why this
-# is working other places. 
-
 # note:  new group ARCHIVED_DBS created for assemblies still needed
 # to support Conservation tracks in other assemblies.  These should
 # have only chromInfo table on hgwbeta and RR.  make will not rebuild
@@ -97,14 +93,6 @@ DBS = 	hg16 hg17 hg18\
 	gliRes13 homIni13 homIni14 priMat13 canHg12 borEut13 \
 	rodEnt13 euaGli13 catArr1 homPan20 homIni20
 
-MGC_DBS = \
-	hg16 hg17 hg18\
-	mm5 mm6 mm7 mm8 \
-	rn3 rn4 \
-	danRer2 danRer3 danRer4 danRer5 \
-	xenTro1 xenTro2 \
-	bosTau2
-
 GSID_DBS = \
 	hiv1 vax004 hivgne8 hivmn hivmn1 hivmn2 hivgne8v2 hivVax003Vax004
 
@@ -131,15 +119,6 @@ checkbeta:
 	${CVS} status trackDb.ra | egrep 'v[0-9]+_branch' > /dev/null
 
 beta: checkbeta clean strict
-
-# This target adds trackDbMgc to the mgc-specific server.  Also
-# loads the grpMgc table.
-mgc:
-	ln -sf  human/hg17/exoniphy.html exoniphy.html
-	ln -sf  human/hg17/exoniphyGene.html exoniphyGene.html
-	ln -sf  mgcTwinscan.html mgcTwinscanEst.html
-	ln -sf  mgcNScan.html mgcNScanEst.html
-	./loadTracks -strict -release=beta -raName=trackDbMgc.ra -grpSql=grpMgc.sql trackDbMgc hgFindSpecMgc ${MGC_DBS}
 
 # Get rid of symbolic links (created by lower-level makefiles):
 clean:
