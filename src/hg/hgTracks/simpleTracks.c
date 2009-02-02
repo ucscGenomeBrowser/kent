@@ -125,7 +125,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.56 2009/01/23 23:11:28 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.57 2009/02/02 22:10:50 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128
@@ -1766,7 +1766,63 @@ else
 
 enum {blackShadeIx=9,whiteShadeIx=0};
 
-#define SCORE_FILTER "scoreFilter"
+static char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColumn)
+// Returns "score >= ..." extra where clause if one is needed
+{
+char *extraWhereClause = NULL;
+if(trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) != NULL)
+    return NULL;
+
+if( scoreColumn == NULL)
+    scoreColumn = "score";
+
+if(trackDbSettingClosestToHomeOn(tdb, SCORE_FILTER _BY_RANGE))
+    {
+    char *scoreDefault = strSwapChar(cloneString(trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,"0:1000")),':',0);
+    int defaultMin = atoi(scoreDefault);
+    int defaultMax = atoi(scoreDefault + strlen(scoreDefault) + 1);
+    freeMem(scoreDefault);
+    int scoreRangeMin = cartUsualIntClosestToHome(cart, tdb,FALSE,SCORE_FILTER _MIN, defaultMin);
+    int scoreRangeMax = cartUsualIntClosestToHome(cart, tdb,FALSE,SCORE_FILTER _MAX, defaultMax);
+    if (scoreRangeMin < defaultMin)
+        {
+        warn("%d is an invalid %s for the filter on the %s track. Please choose a score in the valid range",
+             scoreRangeMin, scoreColumn, tdb->tableName);
+	    cartRemoveVariableClosestToHome(cart, tdb, FALSE, SCORE_FILTER _MIN);
+	    scoreRangeMin = defaultMin;
+        }
+    if (scoreRangeMax > defaultMax)
+        {
+        warn("%d is an invalid %s for the filter on the %s track. Please choose a score in the valid range",
+             scoreRangeMax, scoreColumn, tdb->tableName);
+	    cartRemoveVariableClosestToHome(cart, tdb, FALSE, SCORE_FILTER _MAX);
+	    scoreRangeMax = defaultMax;
+        }
+    if (scoreRangeMin > 0 || scoreRangeMax < 1000) // TODO: Here is a possible bug: default range and data range may differ!
+        {
+        extraWhereClause = needMem(64);
+        safef(extraWhereClause, 64, "%s >= %d and %s <= %d", scoreColumn,scoreRangeMin,scoreColumn,scoreRangeMax);
+        }
+    }
+else
+    {
+    int defaultMin =atoi(trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,"0"));
+    int scoreRangeMin = cartUsualIntClosestToHome(cart, tdb,FALSE,SCORE_FILTER, defaultMin);
+    if (scoreRangeMin < defaultMin)
+        {
+        warn("%d is an invalid %s for the filter on the %s track. Please choose a score in the valid range", scoreRangeMin, scoreColumn, tdb->tableName);
+	    cartRemoveVariableClosestToHome(cart, tdb, FALSE, SCORE_FILTER);
+	    scoreRangeMin = defaultMin;
+        }
+    else if (scoreRangeMin > 0) // TODO: Here is a possible bug: default min and data min may differ!
+        {
+        extraWhereClause = needMem(64);
+        safef(extraWhereClause, 64,"%s >= %d", scoreColumn, scoreRangeMin);
+        }
+    }
+return extraWhereClause;
+}
+
 
 void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader)(char **row),
 				   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
@@ -1780,24 +1836,21 @@ struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
 struct linkedFeatures *lfList = NULL;
-int optionScore;
 char extraWhere[128] ;
 /* Use tg->tdb->tableName because subtracks inherit composite track's tdb
  * by default, and the variable is named after the composite track. */
 if ((scoreColumn != NULL) && (cartVarExistsAnyLevel(cart, tg->tdb, FALSE, SCORE_FILTER)))
     {
-    optionScore = cartUsualIntClosestToHome(cart, tg->tdb, FALSE, SCORE_FILTER, 0);
-    if (optionScore < 0)
-	{
-	warn("%d is an invalid score for the filter on the %s track. Please choose a score in the valid range", optionScore, tg->tdb->tableName);
-	cartRemoveVariableClosestToHome(cart, tg->tdb, FALSE, SCORE_FILTER);
-	optionScore = 0;
-	}
-    if (moreWhere)
-	safef(extraWhere, sizeof(extraWhere), "%s >= %d and %s", scoreColumn, optionScore, moreWhere);
-    else
-	safef(extraWhere, sizeof(extraWhere), "%s >= %d", scoreColumn, optionScore);
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+    char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,scoreColumn);
+    if(scoreFilterClause != NULL)
+        {
+        if (moreWhere)
+        safef(extraWhere, sizeof(extraWhere), "%s and %s", scoreFilterClause, moreWhere);
+        else
+        safef(extraWhere, sizeof(extraWhere), "%s", scoreFilterClause);
+        freeMem(scoreFilterClause);
+        sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+        }
     }
 else
     sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, moreWhere, &rowOffset);
@@ -3304,7 +3357,7 @@ lfs->features = lfList;
 return lfs;
 }
 
-struct linkedFeaturesSeries *lfsFromBedsInRange(char *table, int start, int end, char *chromName)
+static struct linkedFeaturesSeries *lfsFromBedsInRange(char *table, int start, int end, char *chromName)
 /* Return linked features from range of table. */
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -3312,11 +3365,10 @@ struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
-char optionScoreStr[128]; /* Option -  score filter */
-int optionScore;
 
-safef(optionScoreStr, sizeof(optionScoreStr), "%s.%s", table,SCORE_FILTER);
-optionScore = cartUsualInt(cart, optionScoreStr, 0);
+char optionScoreStr[128]; /* Option -  score filter */
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.%s", table,SCORE_FILTER); // Special case where getScoreFilterClause is too much trouble
+int optionScore = cartUsualInt(cart, optionScoreStr, 0);   // Special case where CloserToHome not appropriate
 if (optionScore > 0)
     {
     char extraWhere[128];
@@ -8798,13 +8850,11 @@ void loadSimpleBed(struct track *tg)
 struct bed *(*loader)(char **row);
 struct bed *bed, *list = NULL;
 struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-struct sqlResult *sr;
+struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
 char *words[3];
 int wordCt;
-char *optionScoreVal;
-int optionScore = 0;
 char query[128];
 char *setting = NULL;
 bool doScoreCtFilter = FALSE;
@@ -8840,10 +8890,7 @@ if ((setting = trackDbSettingClosestToHome(tg->tdb, "filterTopScorers")) != NULL
     }
 
 /* limit to items above a specified score */
-optionScoreVal = trackDbSettingClosestToHome(tg->tdb, SCORE_FILTER);
-if (optionScoreVal != NULL)
-    optionScore = atoi(optionScoreVal);
-optionScore = cartUsualIntClosestToHome(cart,tg->tdb,FALSE,SCORE_FILTER,optionScore);
+char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
 
 if (doScoreCtFilter && (topTable != NULL) && hTableExists(database, topTable))
     {
@@ -8852,15 +8899,14 @@ if (doScoreCtFilter && (topTable != NULL) && hTableExists(database, topTable))
     sr = sqlGetResult(conn, query);
     rowOffset = hOffsetPastBin(database, hDefaultChrom(database), topTable);
     }
-else if (optionScore > 0 && tg->bedSize >= 5)
-    {
-    safef(query, sizeof(query), "score >= %d",optionScore);
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, query, &rowOffset);
-    }
+else if(scoreFilterClause != NULL && tg->bedSize >= 5)
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, scoreFilterClause, &rowOffset);
 else
     {
     sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
     }
+    freeMem(scoreFilterClause);
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = loader(row+rowOffset);
@@ -8911,17 +8957,14 @@ struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
 boolean useItemRgb = FALSE;
-int optionScore;
-char extraWhere[128] ;
 
 useItemRgb = bedItemRgb(tdb);
 
-optionScore = cartUsualIntClosestToHome(cart, tdb,FALSE,SCORE_FILTER, 0);
-if (optionScore > 0)
+char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
+if (scoreFilterClause != NULL)
     {
-    safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
-		     extraWhere, &rowOffset);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
+    freeMem(scoreFilterClause);
     }
 else
     {
@@ -8964,17 +9007,14 @@ struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 boolean useItemRgb = FALSE;
-int optionScore;
-char extraWhere[128] ;
 
 useItemRgb = bedItemRgb(tdb);
 
-optionScore = cartUsualIntClosestToHome(cart, tg->tdb, FALSE, SCORE_FILTER, 0);
-if (optionScore > 0)
+char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
+if (scoreFilterClause != NULL)
     {
-    safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
-		     extraWhere, &rowOffset);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
+    freeMem(scoreFilterClause);
     }
 else
     {
@@ -9164,19 +9204,17 @@ struct linkedFeatures *lfList = NULL, *lf;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
-int optionScore;
-char extraWhere[128] ;
 boolean useItemRgb = FALSE;
 
 useItemRgb = bedItemRgb(tdb);
 
 /* Use tg->tdb->tableName because subtracks inherit composite track's tdb
  * by default, and the variable is named after the composite track. */
-optionScore = cartUsualIntClosestToHome(cart, tg->tdb,FALSE,SCORE_FILTER, 0);
-if (optionScore > 0)
+char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
+if (scoreFilterClause != NULL)
     {
-    safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
+    freeMem(scoreFilterClause);
     }
 else
     {
@@ -9709,15 +9747,13 @@ char **row;
 int rowOffset;
 struct bed *bed;
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
-int optionScore;
-char extraWhere[128] ;
 /* Use tg->tdb->tableName because subtracks inherit composite track's tdb
  * by default, and the variable is named after the composite track. */
-optionScore = cartUsualIntClosestToHome(cart, tg->tdb,FALSE,SCORE_FILTER, 0);
-if (optionScore > 0)
+char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
+if (scoreFilterClause != NULL)
     {
-    safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,scoreFilterClause, &rowOffset);
+    freeMem(scoreFilterClause);
     }
 else
     {
