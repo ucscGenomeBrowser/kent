@@ -21,8 +21,9 @@
 #include "jsHelper.h"
 #include "hui.h"
 #include "hgConfig.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.22 2008/12/19 05:44:53 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.23 2009/02/02 21:30:36 larrym Exp $";
 
 static boolean jsInited = FALSE;
 static boolean defaultWarningShown = FALSE;
@@ -344,6 +345,7 @@ if(hashLookup(includedFiles, fileName) == NULL)
     {
     char *docRoot = hDocumentRoot();
     char noScriptBuf[2048];
+    long mtime = 0;
     // dirName is configurable to allow developer specific javascript for developers on hgwdev;
     // e.g. "javaScriptDir js/larrym"
     char *dirName = cfgOptionDefault("browser.javaScriptDir", "js");
@@ -364,6 +366,7 @@ if(hashLookup(includedFiles, fileName) == NULL)
                 fprintf(stderr, "jsIncludeFile: javascript fileName: %s doesn't exist.\n", realFileName);
                 return;
                 }
+            mtime = fileModTime(realFileName);
             }
         else
             {
@@ -381,7 +384,9 @@ if(hashLookup(includedFiles, fileName) == NULL)
         safef(noScriptBuf, sizeof(noScriptBuf), "<noscript>%s</noscript>\n", noScriptMsg);
     else
         noScriptBuf[0] = 0;
-    hPrintf("<script type='text/javascript' src='../%s/%s'></script>\n%s", dirName, fileName, noScriptBuf);
+    // we add mtime to create a pseudo-version; this forces browsers to reload js file when it changes,
+    // which fixes bugs, odd behavior that occurs when the browser caches modified js files
+    hPrintf("<script type='text/javascript' src='../%s/%s?v=%ld'></script>\n%s", dirName, fileName, mtime, noScriptBuf);
     }
 }
 
