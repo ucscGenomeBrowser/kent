@@ -13,13 +13,21 @@
 #include "linefile.h"
 #include "localmem.h"
 #include "obscure.h"
+#include "dystring.h"
 #include "rangeTree.h"
 #include "cirTree.h"
 #include "bPlusTree.h"
-#include "bwgInternal.h"
 #include "sig.h"
+#include "bbiFile.h"
+#include "bwgInternal.h"
 #include "bigWig.h"
 #include "bigBed.h"
+
+struct bbiFile *bigBedFileOpen(char *fileName)
+/* Open up big bed file. */
+{
+return bbiFileOpen(fileName, bigBedSig, "big bed");
+}
 
 struct ppBed
 /* A partially parsed out bed record plus some extra fields. */
@@ -121,7 +129,7 @@ return total/count;
 }
 
 static void makeChromInfo(struct ppBed *pbList, struct hash *chromSizeHash,
-	int *retChromCount, struct bigWigChromInfo **retChromArray,
+	int *retChromCount, struct bbiChromInfo **retChromArray,
 	int *retMaxChromNameSize)
 /* Fill in chromId field in pbList.  Return array of chromosome name/ids. 
  * The chromSizeHash is keyed by name, and has int values. */
@@ -148,7 +156,7 @@ for (pb = pbList; pb != NULL; pb = pb->next)
 slReverse(&uniqList);
 
 /* Allocate and fill in results array. */
-struct bigWigChromInfo *chromArray;
+struct bbiChromInfo *chromArray;
 AllocArray(chromArray, chromCount);
 int i;
 for (i = 0, uniq = uniqList; i < chromCount; ++i, uniq = uniq->next)
@@ -165,11 +173,11 @@ slFreeList(&uniqList);
 *retMaxChromNameSize = maxChromNameSize;
 }
 
-static struct bwgSummary *summaryOnDepth(struct ppBed *pbList, struct bigWigChromInfo *chromInfoArray, 
+static struct bbiSummary *summaryOnDepth(struct ppBed *pbList, struct bbiChromInfo *chromInfoArray, 
 	int reduction)
 /* Produce a summary based on depth of coverage. */
 {
-struct bwgSummary *outList = NULL;
+struct bbiSummary *outList = NULL;
 struct ppBed *chromStart, *chromEnd;
 
 for (chromStart = pbList; chromStart != NULL; chromStart = chromEnd)
@@ -215,7 +223,7 @@ bits64 dataOffset = 0, dataOffsetPos;
 bits64 indexOffset = 0, indexOffsetPos;
 bits64 chromTreeOffset = 0, chromTreeOffsetPos;
 bits32 sig = bigBedSig;
-struct bwgSummary *reduceSummaries[10];
+struct bbiSummary *reduceSummaries[10];
 bits32 reductionAmounts[10];
 bits64 reductionDataOffsetPos[10];
 bits64 reductionDataOffsets[10];
@@ -234,7 +242,7 @@ slSort(&pbList, ppBedCmp);
 
 /* Make chromosomes. */
 int chromCount, maxChromNameSize;
-struct bigWigChromInfo *chromInfoArray;
+struct bbiChromInfo *chromInfoArray;
 makeChromInfo(pbList, chromHash, &chromCount, &chromInfoArray, &maxChromNameSize);
 verbose(1, "%d of %d chromosomes used (%4.2f%%)\n", chromCount, chromHash->elCount, 
 	100.0*chromCount/chromHash->elCount);
@@ -244,7 +252,7 @@ bits32 summaryCount = 0;
 int initialReduction = ppBedAverageSize(pbList)*10;
 verbose(2, "averageBedSize=%d\n", initialReduction/10);
 bits64 lastSummarySize = 0, summarySize;
-struct bwgSummary *summaryList, *firstSummaryList;
+struct bbiSummary *summaryList, *firstSummaryList;
 for (;;)
     {
     summaryList = summaryOnDepth(pbList, chromInfoArray, initialReduction);
@@ -374,4 +382,104 @@ for (i=0; i<summaryCount; ++i)
 carefulClose(&f);
 freez(&chromInfoArray);
 }
+
+struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom, 
+	bits32 start, bits32 end, struct lm *lm)
+/* Get data for interval.  Return list allocated out of lm. */
+{
+bbiAttachUnzoomedCir(bbi);
+struct bigBedInterval *el, *list = NULL;
+struct fileOffsetSize *blockList = bbiOverlappingBlocks(bbi, bbi->unzoomedCir, 
+	chrom, start, end);
+struct fileOffsetSize *block;
+FILE *f = bbi->f;
+boolean isSwapped = bbi->isSwapped;
+struct dyString *dy = dyStringNew(32);
+for (block = blockList; block != NULL; block = block->next)
+    {
+    bits64 endPos = block->offset + block->size;
+    fseek(f, block->offset, SEEK_SET);
+    while (ftell(f) < endPos)
+        {
+	/* Read next record into local variables. */
+	readBits32(f, isSwapped);	// Read and discard chromId
+	bits32 s = readBits32(f, isSwapped);
+	bits32 e = readBits32(f, isSwapped);
+	int c;
+	dyStringClear(dy);
+	while ((c = getc(f)) >= 0)
+	    {
+	    if (c == 0)
+	        break;
+	    dyStringAppendC(dy, c);
+	    }
+
+	/* If we're actually in range then copy it into a new  element and add to list. */
+	if (rangeIntersection(s, e, start, end) > 0)
+	    {
+	    lmAllocVar(lm, el);
+	    el->start = s;
+	    el->end = e;
+	    if (dy->stringSize > 0)
+		el->rest = lmCloneString(lm, dy->string);
+	    slAddHead(&list, el);
+	    }
+	}
+    }
+slFreeList(&blockList);
+slReverse(&list);
+return list;
+}
+
+struct bbiInterval *bigBedCoverageIntervals(struct bbiFile *bbi, 
+	char *chrom, bits32 start, bits32 end, struct lm *lm)
+/* Return intervals where the val is the depth of coverage. */
+{
+/* Get list of overlapping intervals */
+struct bigBedInterval *bi, *biList = bigBedIntervalQuery(bbi, chrom, start, end, lm);
+if (biList == NULL)
+    return NULL;
+
+/* Make a range tree that collects coverage. */
+struct rbTree *rangeTree = rangeTreeNew();
+for (bi = biList; bi != NULL; bi = bi->next)
+    rangeTreeAddToCoverageDepth(rangeTree, bi->start, bi->end);
+struct range *range, *rangeList = rangeTreeList(rangeTree);
+
+/* Convert rangeList to bbiInterval list. */
+struct bbiInterval *bwi, *bwiList = NULL;
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    lmAllocVar(lm, bwi);
+    bwi->start = range->start;
+    if (bwi->start < start)
+       bwi->start = start;
+    bwi->end = range->end;
+    if (bwi->end > end)
+       bwi->end = end;
+    bwi->val = ptToInt(range->val);
+    slAddHead(&bwiList, bwi);
+    }
+slReverse(&bwiList);
+
+/* Clean up and go home. */
+rangeTreeFree(&rangeTree);
+return bwiList;
+}
+
+boolean bigBedSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
+	enum bbiSummaryType summaryType, int summarySize, double *summaryValues)
+/* Fill in summaryValues with  data from indicated chromosome range in bigBed file.
+ * Be sure to initialize summaryValues to a default value, which will not be touched
+ * for regions without data in file.  (Generally you want the default value to either
+ * be 0.0 or nan("") depending on the application.)  Returns FALSE if no data
+ * at that position. */
+{
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+boolean ret = bbiSummaryArray(bbi, chrom, start, end, bigBedCoverageIntervals,
+	summaryType, summarySize, summaryValues);
+bbiFileClose(&bbi);
+return ret;
+}
+
 

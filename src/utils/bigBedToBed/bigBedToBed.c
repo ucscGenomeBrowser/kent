@@ -6,7 +6,7 @@
 #include "localmem.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bigBedToBed.c,v 1.2 2009/02/01 04:04:07 kent Exp $";
+static char const rcsid[] = "$Id: bigBedToBed.c,v 1.3 2009/02/02 06:05:52 kent Exp $";
 
 char *clChrom = NULL;
 int clStart = -1;
@@ -36,9 +36,9 @@ static struct optionSpec options[] = {
 void bigBedToBed(char *inFile, char *outFile)
 /* bigBedToBed - Convert from bigBed to ascii bed format.. */
 {
-struct bigWigFile *bwf = bigBedFileOpen(inFile);
+struct bbiFile *bwf = bigBedFileOpen(inFile);
 FILE *f = mustOpen(outFile, "w");
-struct bigWigChromInfo *chrom, *chromList = bigWigChromList(bwf);
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bwf);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     if (clChrom != NULL && !sameString(clChrom, chrom->name))
@@ -56,9 +56,9 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	fprintf(f, "%s\t%u\t%u\t%s\n", chromName, interval->start, interval->end, interval->rest);
     lmCleanup(&lm);
     }
-bigWigChromInfoFreeList(&chromList);
+bbiChromInfoFreeList(&chromList);
 carefulClose(&f);
-bigWigFileClose(&bwf);
+bbiFileClose(&bwf);
 }
 
 int main(int argc, char *argv[])

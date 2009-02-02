@@ -4,9 +4,10 @@
 #include "hash.h"
 #include "options.h"
 #include "localmem.h"
+#include "localmem.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigToBedGraph.c,v 1.2 2009/01/28 23:15:27 kent Exp $";
+static char const rcsid[] = "$Id: bigWigToBedGraph.c,v 1.3 2009/02/02 06:05:52 kent Exp $";
 
 char *clChrom = NULL;
 int clStart = -1;
@@ -36,9 +37,9 @@ static struct optionSpec options[] = {
 void bigWigToBedGraph(char *inFile, char *outFile)
 /* bigWigToBedGraph - Convert from bigWig to bedGraph format.. */
 {
-struct bigWigFile *bwf = bigWigFileOpen(inFile);
+struct bbiFile *bwf = bigWigFileOpen(inFile);
 FILE *f = mustOpen(outFile, "w");
-struct bigWigChromInfo *chrom, *chromList = bigWigChromList(bwf);
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bwf);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     if (clChrom != NULL && !sameString(clChrom, chrom->name))
@@ -50,15 +51,15 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
         start = clStart;
     if (clEnd > 0)
         end = clEnd;
-    struct bigWigInterval *interval, *intervalList = bigWigIntervalQuery(bwf, chromName, 
+    struct bbiInterval *interval, *intervalList = bigWigIntervalQuery(bwf, chromName, 
     	start, end, lm);
     for (interval = intervalList; interval != NULL; interval = interval->next)
         fprintf(f, "%s\t%u\t%u\t%g\n", chromName, interval->start, interval->end, interval->val);
     lmCleanup(&lm);
     }
-bigWigChromInfoFreeList(&chromList);
+bbiChromInfoFreeList(&chromList);
 carefulClose(&f);
-// bigWigFileClose(&bwf);
+bbiFileClose(&bwf);
 }
 
 int main(int argc, char *argv[])

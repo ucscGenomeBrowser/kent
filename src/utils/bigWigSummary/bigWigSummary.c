@@ -6,7 +6,7 @@
 #include "sqlNum.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigSummary.c,v 1.8 2009/02/01 04:02:25 kent Exp $";
+static char const rcsid[] = "$Id: bigWigSummary.c,v 1.9 2009/02/02 06:05:52 kent Exp $";
 
 char *summaryType = "mean";
 
@@ -22,7 +22,7 @@ errAbort(
   "dataPoints equal parts.  (Use dataPoints=1 for simple summary.)\n"
   "options:\n"
   "   -type=X where X is one of:\n"
-  "         mean - average value in region\n"
+  "         mean - average value in region (default)\n"
   "         min - minimum value in region\n"
   "         max - maximum value in region\n"
   "         coverage - %% of region that is covered\n"
@@ -44,7 +44,7 @@ int i;
 for (i=0; i<dataPoints; ++i)
     summaryValues[i] = nan0;
 
-if (bigWigSummaryArray(bigWigFile, chrom, start, end, bigWigSummaryTypeFromString(summaryType), 
+if (bigWigSummaryArray(bigWigFile, chrom, start, end, bbiSummaryTypeFromString(summaryType), 
       dataPoints, summaryValues))
     {
     for (i=0; i<dataPoints; ++i)

@@ -7,7 +7,7 @@
 #include "bigWig.h"
 #include "bwgInternal.h"
 
-static char const rcsid[] = "$Id: wigToBigWig.c,v 1.2 2009/01/28 17:46:54 kent Exp $";
+static char const rcsid[] = "$Id: wigToBigWig.c,v 1.3 2009/02/02 06:05:52 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 512;
@@ -19,7 +19,7 @@ errAbort(
   "wigToBigWig - Convert ascii format wig file (in fixedStep, variableStep or bedGraph\n"
   "format) to binary big wig format.\n"
   "usage:\n"
-  "   wigToBigWig in.wig chrom.sizes out.bigWig\n"
+  "   wigToBigWig in.wig chrom.sizes out.bw\n"
   "Where in.wig is in one of the ascii wiggle formats, but not including track lines\n"
   "and chrom.sizes is two column: <chromosome name> <size in bases>\n"
   "and out.bw is the output indexed big wig file.\n"

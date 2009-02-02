@@ -9,10 +9,11 @@
 #include "sig.h"
 #include "bPlusTree.h"
 #include "cirTree.h"
+#include "bbiFile.h"
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.6 2009/02/01 01:58:01 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.7 2009/02/02 06:02:00 kent Exp $";
 
 static int bwgBedGraphItemCmp(const void *va, const void *vb)
 /* Compare to sort based on query start. */
@@ -33,7 +34,7 @@ const struct bwgVariableStepItem *b = *((struct bwgVariableStepItem **)vb);
 return (int)a->start - (int)b->start;
 }
 
-void bwgDumpSummary(struct bwgSummary *sum, FILE *f)
+void bwgDumpSummary(struct bbiSummary *sum, FILE *f)
 /* Write out summary info to file. */
 {
 fprintf(f, "summary %d:%d-%d min=%f, max=%f, sum=%f, sumSquares=%f, validCount=%d, mean=%f\n",
@@ -438,21 +439,21 @@ chromList = NULL;
 }
 
 void bigWigChromInfoKey(const void *va, char *keyBuf)
-/* Get key field out of bigWigChromInfo. */
+/* Get key field out of bbiChromInfo. */
 {
-const struct bigWigChromInfo *a = ((struct bigWigChromInfo *)va);
+const struct bbiChromInfo *a = ((struct bbiChromInfo *)va);
 strcpy(keyBuf, a->name);
 }
 
 void *bigWigChromInfoVal(const void *va)
-/* Get val field out of bigWigChromInfo. */
+/* Get val field out of bbiChromInfo. */
 {
-const struct bigWigChromInfo *a = ((struct bigWigChromInfo *)va);
+const struct bbiChromInfo *a = ((struct bbiChromInfo *)va);
 return (void*)(&a->id);
 }
 
 void bwgMakeChromInfo(struct bwgSection *sectionList, struct hash *chromSizeHash,
-	int *retChromCount, struct bigWigChromInfo **retChromArray,
+	int *retChromCount, struct bbiChromInfo **retChromArray,
 	int *retMaxChromNameSize)
 /* Fill in chromId field in sectionList.  Return array of chromosome name/ids. 
  * The chromSizeHash is keyed by name, and has int values. */
@@ -479,7 +480,7 @@ for (section = sectionList; section != NULL; section = section->next)
 slReverse(&uniqList);
 
 /* Allocate and fill in results array. */
-struct bigWigChromInfo *chromArray;
+struct bbiChromInfo *chromArray;
 AllocArray(chromArray, chromCount);
 int i;
 for (i = 0, uniq = uniqList; i < chromCount; ++i, uniq = uniq->next)
@@ -594,10 +595,10 @@ for (section = sectionList; section != NULL; section = section->next)
 return total;
 }
 
-bits64 bwgTotalSummarySize(struct bwgSummary *list)
+bits64 bwgTotalSummarySize(struct bbiSummary *list)
 /* Return size on disk of all summaries. */
 {
-struct bwgSummary *el;
+struct bbiSummary *el;
 bits64 total = 0;
 for (el = list; el != NULL; el = el->next)
     total += 4*sizeof(bits32) + 4*sizeof(double);
@@ -606,17 +607,17 @@ return total;
 
 static void addToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end, 
 	bits32 validCount, float minVal, float maxVal, float sumData, float sumSquares,  
-	int reduction, struct bwgSummary **pOutList)
+	int reduction, struct bbiSummary **pOutList)
 /* Add data range to summary - putting it onto top of list if possible, otherwise
  * expanding list. */
 {
-struct bwgSummary *sum = *pOutList;
+struct bbiSummary *sum = *pOutList;
 while (start < end)
     {
     /* See if need to allocate a new summary. */
     if (sum == NULL || sum->chromId != chromId || sum->end <= start)
         {
-	struct bwgSummary *newSum;
+	struct bbiSummary *newSum;
 	AllocVar(newSum);
 	newSum->chromId = chromId;
 	if (sum == NULL || sum->chromId != chromId || sum->end + reduction <= start)
@@ -657,7 +658,7 @@ while (start < end)
 }
 
 void bwgAddRangeToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end, 
-	float val, int reduction, struct bwgSummary **pOutList)
+	float val, int reduction, struct bbiSummary **pOutList)
 /* Add chromosome range to summary - putting it onto top of list if possible, otherwise
  * expanding list. */
 {
@@ -668,7 +669,7 @@ addToSummary(chromId, chromSize, start, end, size, val, val, sum, sumSquares, re
 }
 
 static void bwgReduceBedGraph(struct bwgSection *section, bits32 chromSize, int reduction, 
-	struct bwgSummary **pOutList)
+	struct bbiSummary **pOutList)
 /*Reduce a bedGraph section onto outList. */
 {
 struct bwgBedGraphItem *item;
@@ -678,7 +679,7 @@ for (item = section->itemList.bedGraph; item != NULL; item = item->next)
 }
 
 static void bwgReduceVariableStep(struct bwgSection *section, bits32 chromSize, int reduction, 
-	struct bwgSummary **pOutList)
+	struct bbiSummary **pOutList)
 /*Reduce a variableStep section onto outList. */
 {
 struct bwgVariableStepItem *item;
@@ -688,7 +689,7 @@ for (item = section->itemList.variableStep; item != NULL; item = item->next)
 }
 
 static void bwgReduceFixedStep(struct bwgSection *section, bits32 chromSize, int reduction, 
-	struct bwgSummary **pOutList)
+	struct bbiSummary **pOutList)
 /*Reduce a variableStep section onto outList. */
 {
 struct bwgFixedStepItem *item;
@@ -701,12 +702,12 @@ for (item = section->itemList.fixedStep; item != NULL; item = item->next)
     }
 }
 
-struct bwgSummary *bwgReduceSummaryList(struct bwgSummary *inList, 
-	struct bigWigChromInfo *chromInfoArray, int reduction)
+struct bbiSummary *bwgReduceSummaryList(struct bbiSummary *inList, 
+	struct bbiChromInfo *chromInfoArray, int reduction)
 /* Reduce summary list to another summary list. */
 {
-struct bwgSummary *outList = NULL;
-struct bwgSummary *sum;
+struct bbiSummary *outList = NULL;
+struct bbiSummary *sum;
 for (sum = inList; sum != NULL; sum = sum->next)
     addToSummary(sum->chromId, chromInfoArray[sum->chromId].size, sum->start, sum->end, sum->validCount, sum->minVal,
     	sum->maxVal, sum->sumData, sum->sumSquares, reduction, &outList);
@@ -714,11 +715,11 @@ slReverse(&outList);
 return outList;
 }
 
-struct bwgSummary *bwgReduceSectionList(struct bwgSection *sectionList, 
-	struct bigWigChromInfo *chromInfoArray, int reduction)
+struct bbiSummary *bwgReduceSectionList(struct bwgSection *sectionList, 
+	struct bbiChromInfo *chromInfoArray, int reduction)
 /* Reduce section by given amount. */
 {
-struct bwgSummary *outList = NULL;
+struct bbiSummary *outList = NULL;
 struct bwgSection *section = NULL;
 
 /* Loop through input section list reducing into outList. */
@@ -746,33 +747,33 @@ return outList;
 }
 
 static bits64 bwgSummaryFetchOffset(const void *va, void *context)
-/* Fetch bwgSummary file offset for r-tree */
+/* Fetch bbiSummary file offset for r-tree */
 {
-const struct bwgSummary *a = *((struct bwgSummary **)va);
+const struct bbiSummary *a = *((struct bbiSummary **)va);
 return a->fileOffset;
 }
 
 static struct cirTreeRange bwgSummaryFetchKey(const void *va, void *context)
-/* Fetch bwgSummary key for r-tree */
+/* Fetch bbiSummary key for r-tree */
 {
 struct cirTreeRange res;
-const struct bwgSummary *a = *((struct bwgSummary **)va);
+const struct bbiSummary *a = *((struct bbiSummary **)va);
 res.chromIx = a->chromId;
 res.start = a->start;
 res.end = a->end;
 return res;
 }
 
-bits64 bwgWriteSummaryAndIndex(struct bwgSummary *summaryList, 
+bits64 bwgWriteSummaryAndIndex(struct bbiSummary *summaryList, 
 	int blockSize, int itemsPerSlot, FILE *f)
 /* Write out summary and index to summary, returning start position of
  * summary index. */
 {
 bits32 i, count = slCount(summaryList);
-struct bwgSummary **summaryArray;
+struct bbiSummary **summaryArray;
 AllocArray(summaryArray, count);
 writeOne(f, count);
-struct bwgSummary *summary;
+struct bbiSummary *summary;
 for (summary = summaryList, i=0; summary != NULL; summary = summary->next, ++i)
     {
     summaryArray[i] = summary;
@@ -807,7 +808,7 @@ bits64 reserved64 = 0;
 bits64 dataOffset = 0, dataOffsetPos;
 bits64 indexOffset = 0, indexOffsetPos;
 bits64 chromTreeOffset = 0, chromTreeOffsetPos;
-struct bwgSummary *reduceSummaries[10];
+struct bbiSummary *reduceSummaries[10];
 bits32 reductionAmounts[10];
 bits64 reductionDataOffsetPos[10];
 bits64 reductionDataOffsets[10];
@@ -815,7 +816,7 @@ bits64 reductionIndexOffsets[10];
 int i;
 
 /* Figure out chromosome ID's. */
-struct bigWigChromInfo *chromInfoArray;
+struct bbiChromInfo *chromInfoArray;
 int chromCount, maxChromNameSize;
 bwgMakeChromInfo(sectionList, chromSizeHash, &chromCount, &chromInfoArray, &maxChromNameSize);
 
@@ -826,7 +827,7 @@ bwgMakeChromInfo(sectionList, chromSizeHash, &chromCount, &chromInfoArray, &maxC
 int  minRes = bwgAverageResolution(sectionList);
 int initialReduction = minRes*10;
 bits64 fullSize = bwgTotalSectionSize(sectionList);
-struct bwgSummary *firstSummaryList = NULL, *summaryList = NULL;
+struct bbiSummary *firstSummaryList = NULL, *summaryList = NULL;
 bits64 lastSummarySize = 0, summarySize;
 for (;;)
     {

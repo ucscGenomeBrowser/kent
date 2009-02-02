@@ -39,33 +39,6 @@
  *         zoom index        	ciTree index
  */
 
-struct bwgZoomLevel
-/* A zoom level in bigWig file. */
-    {
-    struct bwgZoomLevel *next;		/* Next in list. */
-    bits32 reductionLevel;		/* How many bases per item */
-    bits32 reserved;			/* Zero for now. */
-    bits64 dataOffset;			/* Offset of data for this level in file. */
-    bits64 indexOffset;			/* Offset of index for this level in file. */
-    };
-
-struct bigWigFile 
-/* An open bigWigFile */
-    {
-    struct bigWigFile *next;	/* Next in list. */
-    char *fileName;		/* Name of file - for better error reporting. */
-    FILE *f;			/* Open file handle. */
-    bits32 typeSig;		/* bigBedSig or bigWigSig for now. */
-    boolean isSwapped;		/* If TRUE need to byte swap everything. */
-    struct bptFile *chromBpt;	/* Index of chromosomes. */
-    bits32 zoomLevels;		/* Number of zoom levels. */
-    bits64 chromTreeOffset;	/* Offset to chromosome index. */
-    bits64 unzoomedDataOffset;	/* Start of unzoomed data. */
-    bits64 unzoomedIndexOffset;	/* Start of unzoomed index. */
-    struct cirTreeFile *unzoomedCir;	/* Unzoomed data index in memory - may be NULL. */
-    struct bwgZoomLevel *levelList;	/* List of zoom levels. */
-    };
-
 enum bwgSectionType 
 /* Code to indicate section type. */
     {
@@ -137,46 +110,9 @@ struct bwgSectionOnDisk
 struct bwgSection *bwgParseWig(char *fileName, int maxSectionSize, struct lm *lm);
 /* Parse out ascii wig file - allocating memory in lm. */
 
-struct bwgSummary
-/* A summary type item. */
-    {
-    struct bwgSummary *next;
-    bits32 chromId;		/* ID of associated chromosome. */
-    bits32 start,end;		/* Range of chromosome covered. */
-    bits32 validCount;		/* Count of (bases) with actual data. */
-    float minVal;		/* Minimum value of items */
-    float maxVal;		/* Maximum value of items */
-    float sumData;		/* sum of values for each base. */
-    float sumSquares;		/* sum of squares for each base. */
-    bits64 fileOffset;		/* Offset of summary in file. */
-    };
+struct bbiChromInfo;		/* Declared in bbiFile.h. */
 
-struct bwgSummaryOnDisk
-/* The part of the summary that ends up on disk - in the same order written to disk. */
-    {
-    bits32 chromId;		/* ID of associated chromosome. */
-    bits32 start,end;		/* Range of chromosome covered. */
-    bits32 validCount;		/* Count of (bases) with actual data. */
-    float minVal;		/* Minimum value of items */
-    float maxVal;		/* Maximum value of items */
-    float sumData;		/* sum of values for each base. */
-    float sumSquares;		/* sum of squares for each base. */
-    };
-
-struct bwgChromIdSize
-/* We store an id/size pair in chromBpt bPlusTree */
-    {
-    bits32 chromId;	/* Chromosome ID */
-    bits32 chromSize;	/* Chromosome Size */
-    };
-
-struct bigWigChromInfo;		/* Declared in bigWig.h. */
-
-struct bwgZoomLevel *bwgBestZoom(struct bwgZoomLevel *levelList, int desiredReduction);
-/* Return zoom level that is the closest one that is less than or equal to 
- * desiredReduction. */
-
-void bwgDumpSummary(struct bwgSummary *sum, FILE *f);
+void bwgDumpSummary(struct bbiSummary *sum, FILE *f);
 /* Write out summary info to file. */
 
 struct hash *bwgChromSizesFromFile(char *fileName);
@@ -184,48 +120,44 @@ struct hash *bwgChromSizesFromFile(char *fileName);
  * with bwgMakeChromInfo.) */
 
 void bigWigChromInfoKey(const void *va, char *keyBuf);
-/* Get key field out of bigWigChromInfo. */
+/* Get key field out of bbiChromInfo. */
 
 void *bigWigChromInfoVal(const void *va);
-/* Get val field out of bigWigChromInfo. */
+/* Get val field out of bbiChromInfo. */
 
 int bwgAverageResolution(struct bwgSection *sectionList);
 /* Return the average resolution seen in sectionList. */
 
-void bwgAttachUnzoomedCir(struct bigWigFile *bwf);
+void bwgAttachUnzoomedCir(struct bbiFile *bwf);
 /* Make sure unzoomed cir is attached. */
 
 void bwgAddRangeToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end, 
-	float val, int reduction, struct bwgSummary **pOutList);
+	float val, int reduction, struct bbiSummary **pOutList);
 /* Add chromosome range to summary - putting it onto top of list if possible, otherwise
  * expanding list. */
 
-bits64 bwgTotalSummarySize(struct bwgSummary *list);
+bits64 bwgTotalSummarySize(struct bbiSummary *list);
 /* Return size on disk of all summaries. */
 
-struct bwgSummary *bwgReduceSectionList(struct bwgSection *sectionList, 
-	struct bigWigChromInfo *chromInfoArray, int reduction);
+struct bbiSummary *bwgReduceSectionList(struct bwgSection *sectionList, 
+	struct bbiChromInfo *chromInfoArray, int reduction);
 /* Reduce section by given amount. */
 
-struct bwgSummary *bwgReduceSummaryList(struct bwgSummary *inList, 
-	struct bigWigChromInfo *chromInfoArray, int reduction);
+struct bbiSummary *bwgReduceSummaryList(struct bbiSummary *inList, 
+	struct bbiChromInfo *chromInfoArray, int reduction);
 /* Reduce summary list to another summary list. */
 
-bits64 bwgWriteSummaryAndIndex(struct bwgSummary *summaryList, 
+bits64 bwgWriteSummaryAndIndex(struct bbiSummary *summaryList, 
 	int blockSize, int itemsPerSlot, FILE *f);
 /* Write out summary and index to summary, returning start position of
  * summary index. */
 
 #define bwgSummaryFreeList slFreeList
 
-struct fileOffsetSize *bigWigOverlappingBlocks(struct bigWigFile *bwf, struct cirTreeFile *ctf,
-	char *chrom, bits32 start, bits32 end);
- 
-
-struct bigWigFile *bigWigFileOpen(char *fileName);
+struct bbiFile *bigWigFileOpen(char *fileName);
 /* Open up a big wig file. */
 
-void bigWigFileClose(struct bigWigFile **pBwf);
+void bigWigFileClose(struct bbiFile **pBwf);
 /* Close down a big wig file. */
 
 

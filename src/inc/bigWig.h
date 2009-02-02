@@ -9,7 +9,7 @@
  * function, which will fill in an array of doubles with on value for each pixel that
  * you want to display.
  *
- * To read all the data out of a bigWig get the chromosome info with bigWigChromList
+ * To read all the data out of a bigWig get the chromosome info with bbiChromList
  * and then fetch all of it for each chromosome using bigWigIntervalQuery.
  *
  * See also the module bwgInternal that has a description of they structure of
@@ -18,6 +18,10 @@
 
 #ifndef BIGWIG_H
 #define BIGWIG_H
+
+#ifndef BBIFILE
+#include "bbiFile.h"
+#endif
 
 
 void bigWigFileCreate(
@@ -29,61 +33,20 @@ void bigWigFileCreate(
 /* Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
  * to binary big wig format. */
 
-struct bigWigFile;	/* Just an anonymous pointer from interface point of view. */
+struct bbiFile;	/* Just an anonymous pointer from interface point of view. */
 
-struct bigWigFile *bigWigFileOpen(char *fileName);
+struct bbiFile *bigWigFileOpen(char *fileName);
 /* Open up a big wig file. */
 
-void bigWigFileClose(struct bigWigFile **pBwf);
+void bigWigFileClose(struct bbiFile **pBwf);
 /* Close down a big wig file. */
 
-struct bigWigInterval
-/* Data on a single interval. */
-    {
-    struct bigWigInterval *next;	/* Next in list. */
-    bits32 start, end;			/* Position in chromosome, half open. */
-    double val;				/* Value at that position. */
-    };
-
-struct bigWigInterval *bigWigIntervalQuery(struct bigWigFile *bwf, char *chrom, int start, int end,
+struct bbiInterval *bigWigIntervalQuery(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end,
 	struct lm *lm);
 /* Get data for interval.  Return list allocated out of lm. */
 
-struct bigWigChromInfo
-/* Pair of a name and a 32-bit integer. Used to assign IDs to chromosomes. */
-    {
-    struct bigWigChromInfo *next;
-    char *name;		/* Chromosome name */
-    bits32 id;		/* Chromosome ID - a small number usually */
-    bits32 size;	/* Chromosome size in bases */
-    };
-
-struct bigWigChromInfo *bigWigChromList(struct bigWigFile *bwf);
-/* Return all chromosomes in file.  Dispose of this with bigWigChromInfoFreeList. */
-
-void bigWigChromInfoFreeList(struct bigWigChromInfo **pList);
-/* Free a list of bigWigChromInfo's */
-
-bits32 bigWigChromSize(struct bigWigFile *bwf, char *chrom);
-/* Returns size of given chromosome. */
-
-enum bigWigSummaryType
-/* Way to summarize data. */
-    {
-    bigWigSumMean = 0,	/* Average value */
-    bigWigSumMax = 1,	/* Maximum value */
-    bigWigSumMin = 2,	/* Minimum value */
-    bigWigSumDataCoverage = 3,  /* Bases in region containing actual data. */
-    };
-
-enum bigWigSummaryType bigWigSummaryTypeFromString(char *string);
-/* Return summary type givin a descriptive string. */
-
-char *bigWigSummaryTypeToString(enum bigWigSummaryType type);
-/* Convert summary type from enum to string representation. */
-
 boolean bigWigSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
-	enum bigWigSummaryType summaryType, int summarySize, double *summaryValues);
+	enum bbiSummaryType summaryType, int summarySize, double *summaryValues);
 /* Fill in summaryValues with  data from indicated chromosome range in bigWig file.
  * Be sure to initialize summaryValues to a default value, which will not be touched
  * for regions without data in file.  (Generally you want the default value to either
@@ -91,7 +54,7 @@ boolean bigWigSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end
  * at that position. */
 
 double bigWigSingleSummary(char *fileName, char *chrom, int start, int end,
-    enum bigWigSummaryType summaryType, double defaultVal);
+    enum bbiSummaryType summaryType, double defaultVal);
 /* Return the summarized single value for a range. */
 
 #endif /* BIGWIG_H */

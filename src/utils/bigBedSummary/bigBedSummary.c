@@ -6,7 +6,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bigBedSummary.c,v 1.1 2009/02/01 03:55:44 kent Exp $";
+static char const rcsid[] = "$Id: bigBedSummary.c,v 1.2 2009/02/02 06:05:52 kent Exp $";
 
 char *summaryType = "coverage";
 
@@ -43,7 +43,7 @@ int i;
 for (i=0; i<dataPoints; ++i)
     summaryValues[i] = nan0;
 
-if (bigBedSummaryArray(fileName, chrom, start, end, bigWigSummaryTypeFromString(summaryType), 
+if (bigBedSummaryArray(fileName, chrom, start, end, bbiSummaryTypeFromString(summaryType), 
       dataPoints, summaryValues))
     {
     for (i=0; i<dataPoints; ++i)
