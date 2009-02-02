@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.392 2009/01/25 04:08:18 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.393 2009/02/02 19:18:17 hiram Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -4409,6 +4409,19 @@ int chrSlNameCmp(const void *el1, const void *el2)
 struct slName *sln1 = *(struct slName **)el1;
 struct slName *sln2 = *(struct slName **)el2;
 return chrNameCmp(sln1->name, sln2->name);
+}
+
+int bedCmpExtendedChr(const void *va, const void *vb)
+/* Compare to sort based on chrom,chromStart.  Use extended
+ * chrom name comparison, that strip prefixes and does numeric compare */
+{
+const struct bed *a = *((struct bed **)va);
+const struct bed *b = *((struct bed **)vb);
+int dif;
+dif = chrNameCmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->chromStart - b->chromStart;
+return dif;
 }
 
 int getTableSize(char *db, char *table)
