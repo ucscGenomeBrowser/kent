@@ -8,7 +8,11 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkSgdSync.c,v 1.2 2006/07/26 04:59:19 markd Exp $";
+static char const rcsid[] = "$Id: checkSgdSync.c,v 1.3 2009/02/02 19:41:44 hiram Exp $";
+
+static char *gffFile = "chromosomal_feature/s_cerevisiae.gff3";
+static char *faExtn = "fsa";
+static int gffRowCount = 10;
 
 void usage()
 /* Explain usage and exit. */
@@ -17,26 +21,41 @@ errAbort(
   "checkSgdSync - Make sure that genes and sequence are in sync for\n"
   "SGD yeast database\n"
   "usage:\n"
-  "   checkSgdSync sgdDownloadDir\n"
+  "   checkSgdSync <sgdDownloadDir>\n"
   "options:\n"
-  "   -verbose=2 - List status of every CDS\n"
+  "   -gffRowCount=N - expected field count in gff file, default: %d\n"
+  "   -faExtn=fastaExtension for sequence files in\n"
+  "          <sgdDownloadDir>/chromosomes - default:'%s'\n"
+  "   -gffFile=pathToGff - default:\n\t<sgdDownloadDir>/%s\n"
+  "   -verbose=2 - show file arguments\n"
+  "   -verbose=3 - show fasta files scanned\n"
+  "   -verbose=4 - List status of every CDS\n"
+  "example: checkSgdSync download -faExtn=fa\\\n\t-gffFile=chromosomal_feature/saccharomyces_cerevisiae.gff", gffRowCount, faExtn, gffFile
   );
 }
 
+
 static struct optionSpec options[] = {
-   {NULL, 0},
+    {"gffRowCount", OPTION_INT},
+    {"faExtn", OPTION_STRING},
+    {"gffFile", OPTION_STRING},
+    {NULL, 0},
 };
 
 struct hash *loadChroms(char *dir)
 /* Load zipped chromosome files into memory. */
 {
 FILE *f;
-struct fileInfo *chromEl, *chromList = listDirX(dir, "*.fsa", TRUE);
+char fastaScan[16];
+safef(fastaScan, sizeof(fastaScan), "*.%s", faExtn);
+struct fileInfo *chromEl, *chromList = listDirX(dir, fastaScan, TRUE);
 struct hash *chromHash = newHash(0);
 struct dnaSeq *seq;
 char chrom[128];
 char *faName;
+int count = 0;
 
+verbose(2, "#    scanning '%s/%s'\n", dir, fastaScan);
 for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
     {
     char *fileName = chromEl->name;
@@ -54,9 +73,13 @@ for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
     seq->dna = cloneMem(seq->dna, seq->size+1);
     toUpperN(seq->dna, seq->size);
     hashAdd(chromHash, chrom, seq);
+    verbose(3, "#    loadChrom %s '%s'\n", fileName, chrom);
     fclose(f);
     f = NULL;
+    count++;
     }
+if (0 == count)
+    errAbort("not fasta files found in '%s/%s'\n", dir, fastaScan);
 return chromHash;
 }
 
@@ -68,7 +91,8 @@ struct lineFile *lf = lineFileOpen(gff, TRUE);
 char *row[10];
 int cdsCount = 0, goodCount = 0, badCount = 0;
 
-while (lineFileRowTab(lf, row))
+verbose(2,"#    scanning %d fields of gff file:\n#\t'%s'\n", gffRowCount, gff);
+while (lineFileNextRowTab(lf, row, gffRowCount))
     {
     if (startsWith("CDS", row[2]))
         {
@@ -90,7 +114,14 @@ while (lineFileRowTab(lf, row))
 	    errAbort("Expecting strand got %s line %d of %s",
 	    	row[6], lf->lineIx, lf->fileName);
 	    }
-	safef(chrom, sizeof(chrom), "chr%s", row[0]);
+	if (startsWith("2-micron", row[0]))  // need to stop processing here
+	    break;
+	if (!startsWith("chr", row[0]))
+	    continue;
+	if (startsWith("chrMito", row[0]))	// change name to UCSC chrM
+	    safef(chrom, sizeof(chrom), "%s", "chrM");
+	else
+	    safef(chrom, sizeof(chrom), "%s", row[0]);
 	if ((seq = hashFindVal(chromHash, chrom)) == NULL)
 	    errAbort("Unknown chromosome %s line %d of %s",
 	    	row[0], lf->lineIx, lf->fileName);
@@ -105,13 +136,21 @@ while (lineFileRowTab(lf, row))
 	if (strand == '-')
 	    reverseComplement(startCodon, size);
 	if (!startsWith("ATG", startCodon))
-	    ++badCount;
-	else
-	    ++goodCount;
-	if (verboseLevel()>=2)
 	    {
 	    char *s = startCodon;
-	    printf("%s\t%d\t%c%c%c\t%c\t%s\n", chrom, start, s[0], s[1], s[2], strand, row[9]);
+	    verbose(3,"# not ATG: %s:%d-%d\t%c%c%c\t%c\n",
+		chrom, start, end, s[0], s[1], s[2], strand);
+	    ++badCount;
+	    }
+	else
+	    ++goodCount;
+	if (verboseLevel()>=4)
+	    {
+	    char *s = startCodon;
+	    if (gffRowCount > 9)
+		printf("%s\t%d\t%c%c%c\t%c\t%s\n", chrom, start, s[0], s[1], s[2], strand, row[9]);
+	    else
+		printf("%s\t%d\t%c%c%c\t%c\t%s\n", chrom, start, s[0], s[1], s[2], strand, row[8]);
 	    }
 	if (strand == '-')
 	    reverseComplement(startCodon, size);
@@ -119,7 +158,7 @@ while (lineFileRowTab(lf, row))
 	}
     }
 lineFileClose(&lf);
-printf("good %d, bad %d, total %d\n", goodCount, badCount, cdsCount);
+printf("#    good %d, bad %d, total %d\n", goodCount, badCount, cdsCount);
 }
 
 void checkSgdSync(char *downloadDir)
@@ -130,8 +169,8 @@ struct hash *chromHash;
 char path[PATH_LEN];
 safef(path, sizeof(path), "%s/%s", downloadDir, "chromosomes");
 chromHash = loadChroms(path);
-safef(path, sizeof(path), "%s/chromosomal_feature/s_cerevisiae.gff3", 
-	downloadDir);
+safef(path, sizeof(path), "%s/%s", 
+	downloadDir, gffFile);
 checkGff(path, chromHash);
 }
 
@@ -141,6 +180,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
+gffRowCount = optionInt("gffRowCount", gffRowCount);
+faExtn = optionVal("faExtn", faExtn);
+gffFile = optionVal("gffFile", gffFile);
 checkSgdSync(argv[1]);
 return 0;
 }
