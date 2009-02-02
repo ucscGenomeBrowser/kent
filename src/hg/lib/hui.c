@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.154 2009/01/27 23:56:40 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.155 2009/02/02 22:10:33 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2358,6 +2358,8 @@ switch(cType)
                         break;
     case cfgWigMaf:     wigMafCfgUi(cart,tdb,prefix,title,boxed, db);
                         break;
+    case cfgGencode:    gencodeCfgUi(cart,tdb,prefix,title,boxed);
+                        break;
     default:            warn("Track type is not known to multi-view composites.");
                         break;
     }
@@ -2619,8 +2621,9 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 cfgByCfgType(cType,db,cart,subtrack,htmlIdentifier,"Subtrack",TRUE);
                 puts("</DIV>\n");
                 }
-#define SCHEMA_LINK "<TD>&nbsp;<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=_BLANK title='View table schema'>schema</A>&nbsp;\n"
-            printf(SCHEMA_LINK, db, parentTdb->grp, parentTdb->tableName, subtrack->tableName);
+            printf("<TD>&nbsp;");
+            makeSchemaLink(db,subtrack,"schema");
+            puts("&nbsp;");
 
             char *dateDisplay = encodeRestrictionDateDisplay(subtrack);
             if (dateDisplay)
@@ -2800,14 +2803,6 @@ if(boxed)
 cfgEndBox(boxed);
 }
 
-#define  SCORE_FILTER     "scoreFilter"
-#define SIGNAL_FILTER    "signalFilter"
-#define PVALUE_FILTER    "pValueFilter"
-#define QVALUE_FILTER    "qValueFilter"
-#define _LIMITS          "Limits"
-#define _MIN             "Min"
-#define _MAX             "Max"
-#define  SCORE_MIN       "scoreMin"
 #define  MIN_GRAY_LEVEL  "minGrayLevel"
 
 void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, int scoreMax)
@@ -2864,7 +2859,7 @@ void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, ch
 char option[256];
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 
-boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, "noScoreFilter") == NULL);
+boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL);
 boolean gotScoreMin = (trackDbSettingClosestToHome(tdb, SCORE_MIN) != NULL);
 if (! (scoreFilterOk || gotScoreMin))
     return;
@@ -2873,16 +2868,40 @@ cfgBeginBoxAndTitle(boxed, title);
 
 if (scoreFilterOk)
     {
-    /* initial value of score theshold is 0, unless
-     * overridden by the scoreFilter setting in the track */
-    char *scoreValString = trackDbSettingClosestToHome(tdb, SCORE_FILTER);
-    int scoreVal = 0;
-    if (scoreValString != NULL)
-	   scoreVal = atoi(scoreValString);
-    printf("<b>Show only items with score at or above:</b> ");
-    snprintf(option, sizeof(option), "%s.%s", name,SCORE_FILTER);
-    cgiMakeIntVar(option, cartUsualIntClosestToHome(cart, tdb, compositeLevel, SCORE_FILTER,  scoreVal), 11);
-    printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
+
+    boolean filterByRange = trackDbSettingClosestToHomeOn(tdb, SCORE_FILTER _BY_RANGE);
+    if (filterByRange)
+        {
+        char *setting = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,"0:1000");
+        char *min = strSwapChar(cloneString(setting),':',0);
+        char *max = min + strlen(min) + 1;
+        min = cartUsualStringClosestToHome(cart, tdb, compositeLevel, SCORE_FILTER _MIN, min);
+        max = cartUsualStringClosestToHome(cart, tdb, compositeLevel, SCORE_FILTER _MAX, max);
+        puts("<B>Filter score range:  min:</B>");
+        safef(option, sizeof(option), "%s.%s", name, SCORE_FILTER _MIN);
+        cgiMakeTextVar(option,(atoi(min)<0?"0":min), 4);
+        puts("<B>max:</B>");
+        safef(option, sizeof(option), "%s.%s", name, SCORE_FILTER _MAX);
+        cgiMakeTextVar(option,(atoi(max)>1000?"1000":max), 4);
+        puts("(0 to 1000)");
+        }
+    else
+        {
+        /* initial value of score theshold is 0, unless
+        * overridden by the scoreFilter setting in the track */
+        char *scoreValString = trackDbSettingClosestToHome(tdb, SCORE_FILTER);
+        int scoreVal = 0;
+        if (scoreValString != NULL)
+        scoreVal = atoi(scoreValString);
+        if( scoreVal < 0)
+            scoreVal = 0;
+        else if(scoreVal > 1000)
+                scoreVal = 1000;
+        printf("<b>Show only items with score at or above:</b> ");
+        snprintf(option, sizeof(option), "%s.%s", name,SCORE_FILTER);
+        cgiMakeIntVar(option, cartUsualIntClosestToHome(cart, tdb, compositeLevel, SCORE_FILTER,  scoreVal), 11);
+        printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;%d)", maxScore);
+        }
     }
 
 if (gotScoreMin)
@@ -3001,6 +3020,29 @@ if(setting)
     puts("</TR>");
     }
     puts("</TABLE>");
+cfgEndBox(boxed);
+}
+
+void gencodeCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
+/* Put up gencode-specific controls */
+{
+char varName[64];
+boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+char *geneLabel = cartUsualStringClosestToHome(cart, tdb,compositeLevel, "label", "gene");
+
+cfgBeginBoxAndTitle(boxed, title);
+
+printf("<B>Label:</B> ");
+safef(varName, sizeof(varName), "%s.label", name);
+cgiMakeRadioButton(varName, "gene", sameString("gene", geneLabel));
+printf("%s ", "gene");
+cgiMakeRadioButton(varName, "accession", sameString("accession", geneLabel));
+printf("%s ", "accession");
+cgiMakeRadioButton(varName, "both", sameString("both", geneLabel));
+printf("%s ", "both");
+cgiMakeRadioButton(varName, "none", sameString("none", geneLabel));
+printf("%s ", "none");
+
 cfgEndBox(boxed);
 }
 
@@ -4052,14 +4094,47 @@ if (primarySubtrack == NULL)  // This is set for tableBrowser but not hgTrackUi
         cgiMakeButton("Submit", "Submit");
         puts("<P>");
         }
-    // Downloads directory if this is ENCODE
-    if(trackDbSetting(tdb, "wgEncode") != NULL)
-        {
-#define DOWNLOADS_LINK "<A HREF=\"../goldenPath/%s/%s/\" TARGET=_BLANK>Downloads</A>\n"
-        printf(DOWNLOADS_LINK,(trackDbSetting(tdb, "origAssembly") != NULL ?
-                            trackDbSetting(tdb, "origAssembly"):"hg18"),tdb->tableName);
-        }
     }
+}
+
+boolean makeDownloadsLink(struct trackDb *tdb)
+// Make a downloads link (if appropriate and then returns TRUE)
+{
+#define DOWNLOADS_LINK "<P><A HREF=\"../goldenPath/%s/%s/\" TARGET=_BLANK>Downloads</A></P>\n"
+// Downloads directory if this is ENCODE
+if(trackDbSetting(tdb, "wgEncode") != NULL)
+    {
+    printf(DOWNLOADS_LINK,
+           (trackDbSetting(tdb, "origAssembly") != NULL ?trackDbSetting(tdb, "origAssembly"):"hg18"),
+            tdb->tableName);
+    return TRUE;
+    }
+return FALSE;
+}
+
+boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
+// Make a table schema link (if appropriate and then returns TRUE)
+{
+#define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=ucscSchema%s>%s</A>\n"
+if (hTableOrSplitExists(db, tdb->tableName))
+    {
+	char *tableName  = tdb->tableName;
+	if (sameString(tableName, "mrna"))
+	    tableName = "all_mrna";
+    char *hint = " title='Open table schema in new window'";
+    if( label == NULL)
+        label = " View table schema";
+    else
+        hint = " title='View table schema'";
+
+    if(tdbIsCompositeChild(tdb))
+        printf(SCHEMA_LINKED, db, tdb->parent->grp, tdb->parent->tableName,tableName,hint,label);
+    else
+        printf(SCHEMA_LINKED, db, tdb->grp, tdb->tableName,tableName,hint,label);
+
+    return TRUE;
+    }
+return FALSE;
 }
 
 boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,

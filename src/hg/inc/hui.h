@@ -832,6 +832,17 @@ void compositeViewControlNameFree(char **name);
 void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed);
 /* UI for the wiggle track */
 
+#define NO_SCORE_FILTER  "noScoreFilter"
+#define  SCORE_FILTER      "scoreFilter"
+#define SIGNAL_FILTER      "signalFilter"
+#define PVALUE_FILTER      "pValueFilter"
+#define QVALUE_FILTER      "qValueFilter"
+#define _LIMITS            "Limits"
+#define _MIN               "Min"
+#define _MAX               "Max"
+#define _BY_RANGE          "ByRange"
+#define  SCORE_MIN         "scoreMin"
+
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
 
@@ -841,6 +852,9 @@ void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, i
 
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
+
+void gencodeCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
+/* Put up gencode-specific controls */
 
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
 /* UI for maf/wiggle track */
@@ -901,5 +915,11 @@ void sortTdbItemsAndUpdatePriorities(sortableTdbItem **items);
 
 void sortableTdbItemsFree(sortableTdbItem **items);
 // Frees all memory associated with a list of sortable tdb items
+
+boolean makeDownloadsLink(struct trackDb *tdb);
+// Make a downloads link (if appropriate and then returns TRUE)
+
+boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
+// Make a table schema link (if appropriate and then returns TRUE)
 
 #endif /* HUI_H */
