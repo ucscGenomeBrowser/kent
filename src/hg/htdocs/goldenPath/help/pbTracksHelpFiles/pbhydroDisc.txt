@@ -6,7 +6,7 @@ surface-exposed (polar) regions, whereas a window size of 20 is better suited fo
 defining transmembrane domains that peak at a local average hydrophobicity 
 score of 1.6 or more. Interior hydrophobic 
 residues, while often packed tightly and critical to protein folding and 
-stability, may be dispersed along the linear sequence. SwissProt offers 
+stability, may be dispersed along the linear sequence. UniProtKB offers 
 <A HREF="http://www.expasy.ch/cgi-bin/protscale.pl" TARGET=_blank>22 other choices</A> of 
 hydrophobicity scales and considerable control over smoothing the
 convolutions. 

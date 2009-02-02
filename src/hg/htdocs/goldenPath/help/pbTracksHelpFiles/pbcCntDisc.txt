@@ -22,7 +22,7 @@ correct pairing (and thus correct folding).
 Cystine-pair information is available when the 3-D structure is known, 
 when the selected protein can be threaded to a known structure, when a 
 satisfactory <em>ab initio</em> model exists, or by sequence alignment
-homology. SwissProt has also collected 
+homology. UniProtKB has also collected 
 experimentally-determined disulfides from the literature. 
 <P>
 Various web tools can predict disulfide bonds with varying degrees of

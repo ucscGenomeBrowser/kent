@@ -35,7 +35,7 @@ explanation.
 Tables of amino acid usage are available elsewhere for other species 
 <A HREF="http://www.kazusa.or.jp/codon/" TARGET=_blank>by codon</A> and for
 <A HREF="http://www.expasy.ch/sprot/relnotes/relstat.html"
-TARGET=_blank>SwissProt</A> as a 
+TARGET=_blank>UniProtKB</A> as a 
 whole. 
 <P>
 <B>Amino acid abundances based on the pepResDist table (July 2003 human assembly)</B>

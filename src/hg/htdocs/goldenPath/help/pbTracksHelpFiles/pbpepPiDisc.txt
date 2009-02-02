@@ -23,7 +23,7 @@ S, T, Y, and amino- and carboxy- termini) derived experimentally for model pepti
 removes predicted signal peptides, but does not consider other modifications. It 
 is least accurate on small proteins with limited intrinsic buffering capacity, 
 with highly basic proteins where pI lacks a solid experimental foundation, and 
-on protein domains buried in membrane. Raw sequence is used when no SwissProt 
+on protein domains buried in membrane. Raw sequence is used when no UniProtKB 
 accession is available. 
 <P>
 Clearly, it is not feasible to precisely predict pI for native proteins

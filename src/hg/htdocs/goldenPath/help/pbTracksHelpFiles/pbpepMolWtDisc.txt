@@ -12,8 +12,8 @@ acids. Processed signal peptides and covalent modifications
 the situation.  
 <P>
 The molecular weights displayed in the Protein Browser have been 
-taken from SwissProt when accession numbers were available; otherwise, 
-they have been based on genomic sequence as processed with the SwissProt 
+taken from UniProtKB when accession numbers were available; otherwise, 
+they have been based on genomic sequence as processed with the UniProtKB 
 <A HREF="http://www.expasy.ch/tools/pi_tool.html" TARGET=_blank>molecular 
 weight tool</A>. This reflects the removal of isotopic 
 abundances and predicted signal peptides, but not modified amino 

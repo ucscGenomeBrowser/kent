@@ -9,7 +9,7 @@ genome-wide distribution range is represented by a red line.
 Genome-wide averages are based on the following Genome Browser
 tables from this assembly: pbAaDist<em>[AA]</em>, pbAnomLimit, and 
 pbResAvgStd. The amino acid data in these tables were obtained from proteins
-in the knownGene table that were found in SwissProt (TrEMBL and TrEMBL-NEW
+in the knownGene table that were found in UniProtKB (UniProtKB and TrEMBL-NEW
 excluded). Standard deviations were 
 derived from compositions of the genome-wide set of proteins.
 <P>

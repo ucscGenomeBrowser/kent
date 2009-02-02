@@ -503,7 +503,7 @@
 <!--
   <LI><A 
   href="#PslInfo">chrN_viralProt</A> 
-  - Alignments between SwissProt viral proteins and the SARS assembly </LI>
+  - Alignments between UniProtKB viral proteins and the SARS assembly </LI>
 -->
 
 <A NAME="CHRN_W_GBD"></A>
@@ -788,7 +788,7 @@
   - tBLASTn alignments peptide sequences
   <LI><A 
   href="#BlastRef">blastKGRef0*</A> 
-  - Associates a known gene ID with a gene name, position, and SwissProt name
+  - Associates a known gene ID with a gene name, position, and UniProtKB name
   for tBLASTn protein tracks
   <LI><A 
   href="#PslInfo">blatChimp</A> 
@@ -1137,7 +1137,7 @@
   - FlyBase genes noncoding RNAs
   <LI><A 
   href="#FlyBaseSwissProt">flyBaseSwissProt</A> 
-  - FlyBase acc to SwissProt acc, plus some other SwissProt info
+  - FlyBase acc to UniProtKB acc, plus some other UniProtKB info
   <LI><A 
   href="#FlyReg">flyreg</A> 
   - FlyReg data (<em>D. melanogaster</em> - dm1)
@@ -1403,7 +1403,7 @@
   - Used with image consortium's cumulative_plate files at: ftp://image.llnl.gov/image/outgoing"</LI>
   <LI><A 
   href="#InterProXref">interProXref</A> 
-  - Associates InterPro ID with Swiss-Prot accessions
+  - Associates InterPro ID with UniProtKB accessions
 
 <A NAME="J_GBD"></A>
   <LI><A 
@@ -1434,10 +1434,10 @@
   - Known Genes protein mapping
   <LI><A 
   href="#KgSpAlias">kgSpAlias</A> 
-  - Links together a Known Gene ID, Swiss-Prot/TrEMBL accession and an alias
+  - Links together a Known Gene ID, UniProtKB accession and an alias
   <LI><A 
   href="#KgXref">kgXref</A> 
-  - Links together a Known Gene ID and mRNA, SwissProt, RefSeq, and NCBI accessions/IDs
+  - Links together a Known Gene ID and mRNA, UniProtKB, RefSeq, and NCBI accessions/IDs
   <LI><A 
   href="#ExpRecord">kimWormLifeAllExps</A> 
   - Experiment descriptive data</LI>
@@ -1461,8 +1461,8 @@
   - Describes the distance between genes in the expression space (UCLA)
   <LI><A 
   href="#KnownGene">knownGene</A> 
-  - Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and 
-TrEMBL-NEW and their corresponding mRNAs from GenBank
+  - Protein coding genes based on proteins from UniProtKB 
+  and their corresponding mRNAs from GenBank
   <LI><A 
   href="#KnownGeneLink">knownGeneLink</A> 
   - Stores the seqType info for Known Genes track entries.
@@ -1799,7 +1799,7 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   - Proteome Browser stamp information
   <LI><A 
   href="#PdbSP">pdbSP</A> 
-  - Links a Swiss-Prot accession ID with a PDB ID
+  - Links a UniProtKB accession ID with a PDB ID
   <LI><A 
   href="#PepCCntDist">pepCCntDist</A> 
   - Proteome Browser cysteine count distribution
@@ -1838,7 +1838,7 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   - Description of Pfam table
   <LI><A 
   href="#PfamXref">pfamXref</A> 
-  - Links Pfam and Swiss-Prot IDs
+  - Links Pfam and UniProtKB IDs
   <LI><A 
   href="#WiggleTrack">pGC</A> 
   - Percentage of bases that are G or C in small regions across the genome 
@@ -2125,7 +2125,7 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   - Associates SGD IDs (<em>S. cerevisiae</em>)
   <LI><A 
   href="#KnownTo">sgdToSwissProt</A> 
-  - Associates SGD IDs and Swiss-Prot IDs (<em>S. cerevisiae</em>)
+  - Associates SGD IDs and UniProtKB IDs (<em>S. cerevisiae</em>)
   <LI><A 
   href="#GenePredictions">sgpGene</A> 
   - SGP gene predictions (GRIB)
@@ -2183,22 +2183,22 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   - Translations of Fgenesh++ gene predictions into corresponding amino acid sequences </LI>
   <LI><A 
   href="#SpDisease">spDisease</A> 
-  - Associates SwissProt IDs with a disease description
+  - Associates UniProtKB IDs with a disease description
   <LI><A 
   href="#SpMrna">spMrna</A> 
-  - Associates SwissProt IDs with mRNA IDs
+  - Associates UniProtKB IDs with mRNA IDs
   <LI><A 
   href="#SpOrganism">spOrganism</A> 
-  - Associates SwissProt IDs with a taxonomy number
+  - Associates UniProtKB IDs with a taxonomy number
   <LI><A 
   href="#SpPsiBlast">spPsiBlast</A> 
   - PSI-BLAST E-value for 2 proteins
   <LI><A 
   href="#SpSecondaryID">spSecondaryID</A> 
-  - Associates SwissProt IDs with secondary accession IDs
+  - Associates UniProtKB IDs with secondary accession IDs
   <LI><A 
   href="#SpXref2">spXref2</A> 
-  - Associates SwissProt IDs with other databases
+  - Associates UniProtKB IDs with other databases
   <LI><A 
   href="#STSalias">stsAlias</A> 
   - STS marker aliases and associated identification numbers  </LI>
@@ -2241,7 +2241,7 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   - Superfamily proteins</LI>
   <LI><A 
   href="#SwInterPro">swInterPro</A> 
-  - Associates Swiss-Prot accession IDs with InterPro IDs
+  - Associates UniProtKB accession IDs with InterPro IDs
   <LI><A 
   href="#BED">syntenyHg16</A> 
   - Human synteny alignnments (hg16)</LI>
@@ -3072,7 +3072,7 @@ the fields.<BR>
 "Duplicate mRNA/Protein entries that have identical CDS structures"
    (
    string mrnaID;        "mRNA ID name"
-   string proteinID;     "Protein ID from SwissProt"
+   string proteinID;     "Protein ID from UniProtKB"
    string dupMrnaID;     "mRNA ID of duplicated entry"
    string dupProteinId;  "Protein ID of duplicated entry"
    )
@@ -3134,9 +3134,9 @@ genes (alternative table used in some assemblies)"
    string transcriptVer;   "Ensembl transcript ID version number"
    string protein;         "Ensembl protein ID"
    string proteinVer;      "Ensembl protein version number"
-   string tremblAcc;       "TrEMBL  protein accession number"
-   string swissDisplayId;  "Swiss-Prot protein display ID"
-   string swissAcc;        "Swiss-Prot protein accession number"
+   string tremblAcc;       "UniProtKB  protein accession number"
+   string swissDisplayId;  "UniProtKB protein display ID"
+   string swissAcc;        "UniProtKB protein accession number"
    )
 </PRE>
 
@@ -3289,14 +3289,14 @@ Last used Apr. 2001.
    )
 </PRE>
 
-<H4><A name=FlyBaseSwissProt></A>FlyBase Accessions Linked to SwissProt Accessions</H4>
+<H4><A name=FlyBaseSwissProt></A>FlyBase Accessions Linked to UniProtKB Accessions</H4>
 <PRE>table flyBaseSwissProt
-"FlyBase acc to SwissProt acc, plus some other SwissProt info"
+"FlyBase acc to UniProtKB acc, plus some other UniProtKB info"
     (
     string flyBaseId;	"FlyBase FBgn ID"
-    string swissProtId;	"SwissProt ID"
-    string spGeneName;	"Gene name from SwissProt (long)"
-    string spSymbol;	"Symbolic-looking gene ID from SwissProt"
+    string swissProtId;	"UniProtKB ID"
+    string spGeneName;	"Gene name from UniProtKB (long)"
+    string spSymbol;	"Symbolic-looking gene ID from UniProtKB"
     )
 </PRE>
 
@@ -3694,7 +3694,7 @@ genscanPep, knownGenePep, refPep, sanger22Pep, softberryPep, twinscanPep, vegaPe
    string widthdraws;      "Withdrawn gene symbols"
    string locuslink;       "LocusLink ID"
    string gdbID;           "GDB ID"
-   string swissprot;       "Swiss-Prot ID"
+   string swissprot;       "UniProtKB ID"
    )
 </PRE>
 
@@ -3736,7 +3736,7 @@ genscanPep, knownGenePep, refPep, sanger22Pep, softberryPep, twinscanPep, vegaPe
 <PRE>table interProXref
 "A cross-reference table for InterPro."
         (
-        string accession;       "SWISS-PROT accession number"
+        string accession;       "UniProtKB accession number"
         string method;          "Method"
         int start;              "Start position"
         int end;                "End position"
@@ -3804,14 +3804,14 @@ genscanPep, knownGenePep, refPep, sanger22Pep, softberryPep, twinscanPep, vegaPe
      int chromEnd;       "End position (non-inclusive). Corresponds to txEnd"
      int clusterId;      "Which cluster of transcripts this belongs to in knownIsoforms"
      string transcript;  "Corresponds to knownGene name field"
-     string protein;     "SwissProt ID of associated protein"
+     string protein;     "UniProtKB ID of associated protein"
      )
 </PRE>
 
 <H4><A name=KnownGene></A>Known Genes</H4>
 <PRE>table knownGene
-"Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and 
-TrEMBL-NEW and their corresponding mRNAs from GenBank"
+"Protein coding genes based on proteins from UniProtKB 
+and their corresponding mRNAs from GenBank"
     (
     string  name;               "Name of gene"
     string  chrom;              "Chromosome name"
@@ -3823,7 +3823,7 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank"
     uint    exonCount;          "Number of exons"
     uint[exonCount] exonStarts; "Exon start positions"
     uint[exonCount] exonEnds;   "Exon end positions"
-    string  proteinID;          "SWISS-PROT ID" 
+    string  proteinID;          "UniProtKB ID" 
     string  alignID;            "Unique identifier for each (known gene, alignment 
                                  position) pair"
     )
@@ -3852,12 +3852,12 @@ IDs and accessions.
 
 <H4><A name=KgXref></A>Known Genes Cross Reference</H4>
 <PRE>table kgXref
-"Links a Known Gene ID with mRNA, SwissProt, RefSeq, and NCBI accessions/IDs"
+"Links a Known Gene ID with mRNA, UniProtKB, RefSeq, and NCBI accessions/IDs"
     (
     string kgID;        "Known Gene ID"
     string mRNA;        "mRNA ID"
-    string spID;        "SWISS-PROT protein Accession number"
-    string spDisplayID; "SWISS-PROT display ID"
+    string spID;        "UniProtKB protein Accession number"
+    string spDisplayID; "UniProtKB display ID"
     string geneSymbol;  "Gene Symbol"
     string refseq;      "RefSeq ID"
     string protAcc;     "NCBI protein Accession number"
@@ -3911,12 +3911,12 @@ of a gene into a cluster.
     )
 </PRE>
 
-<H4><A name=KgSpAlias></A>Known Genes Swiss-Prot Alias</H4>
+<H4><A name=KgSpAlias></A>Known Genes UniProtKB Alias</H4>
 <PRE>table kgSpAlias
 "Links together a Known Gene ID and a protein alias"
     (
     string kgID;        "Known Gene ID"
-    string spID;	"Swiss-Prot/TrEMBL protein accession number"
+    string spID;	"UniProtKB protein accession number"
     string alias;	"Alias - could be either a gene alias or protein alias"
     )
 </PRE>
@@ -4209,13 +4209,13 @@ polyInfo program.
    )
 </PRE>
 
-<H4><A name=PfamXref></A>Pfam and Swiss-Prot Cross Reference</H4>
+<H4><A name=PfamXref></A>Pfam and UniProtKB Cross Reference</H4>
 <PRE>table pfamXref
-"A cross-reference table between Pfam ID and Swiss-Prot IDs."
+"A cross-reference table between Pfam ID and UniProtKB IDs."
    (
    string pfamAC;          "Pfam accession number"
-   string swissAC;         "SWISS-PROT accession number"
-   string swissDisplayID;  "SWISS-PROT display ID"
+   string swissAC;         "UniProtKB accession number"
+   string swissDisplayID;  "UniProtKB display ID"
    )
 </PRE>
 
@@ -4278,7 +4278,7 @@ polyInfo program.
 <PRE>table pepMwAa 
 "Molecular weight and AA length of proteins"
    (
-   string accession;    "SwissProt protein accession number"
+   string accession;    "UniProtKB protein accession number"
    float  molWeight;    "Molecular weight" 
    int    aaLen;        "Length of protein sequence"
    )
@@ -4355,12 +4355,12 @@ polyInfo program.
     )
 </PRE>
 
-<H4><A name=PdbSP></A>PDB and Swiss-Prot ID links</H4>
+<H4><A name=PdbSP></A>PDB and UniProtKB ID links</H4>
 <PRE>table pdbSP
-"A cross-reference table between Swiss-Prot accession IDs and PDB IDs."
+"A cross-reference table between UniProtKB accession IDs and PDB IDs."
     (
     string pdb;             "PDB ID"
-    string sp;              "SWISS-PROT display ID"
+    string sp;              "UniProtKB display ID"
     )
 </PRE>
 
@@ -4867,7 +4867,7 @@ Last used Apr. 2001.
     uint exonCount;     	"Number of exons"
     uint[exonCount] exonStarts; "Exon start positions"
     uint[exonCount] exonEnds;   "Exon end positions"
-    string proteinID;   	"Swiss-Prot protein ID"
+    string proteinID;   	"UniProtKB protein ID"
     )
 </PRE>
 
@@ -5454,41 +5454,41 @@ The bacEndPairs table uses all fields.
    )                                                                           
 </PRE>
 
-<H4><A name=SpDisease></A>Swiss-Prot IDs Linked to Disease Descriptions</H4>
+<H4><A name=SpDisease></A>UniProtKB IDs Linked to Disease Descriptions</H4>
 <PRE>table spDisease
-"A cross-reference table between Swiss-Prot IDs and disease description."
+"A cross-reference table between UniProtKB IDs and disease description."
    (
-   string accession;       "SWISS-PROT accession number"
-   string displayID;       "SWISS-PROT display ID"
+   string accession;       "UniProtKB accession number"
+   string displayID;       "UniProtKB display ID"
    lstring diseaseDesc;    "Disease description"
    )
 </PRE>
 
-<H4><A name=SwInterPro></A>Swiss-Prot IDs Linked to InterPro IDs</H4>
+<H4><A name=SwInterPro></A>UniProtKB IDs Linked to InterPro IDs</H4>
 <PRE>table swInterPro
-"A cross-reference table between Swiss-Prot accession IDs and InterPro IDs."
+"A cross-reference table between UniProtKB accession IDs and InterPro IDs."
         (
-        string accession;       "SWISS-PROT accession number"
+        string accession;       "UniProtKB accession number"
         string  interProId;      "InterPro ID"
         )
 </PRE>
 
-<H4><A name=SpOrganism></A>Swiss-Prot IDs Linked to Organisms</H4>
+<H4><A name=SpOrganism></A>UniProtKB IDs Linked to Organisms</H4>
 <PRE>table spOrganism 
-"A cross-reference table between Swiss-Prot display IDs and taxonomy numbers."
+"A cross-reference table between UniProtKB display IDs and taxonomy numbers."
    (
-   string displayID;       "SWISS-PROT display ID"
+   string displayID;       "UniProtKB display ID"
    string organism;        "Taxonomy number"
    )
 </PRE>
 
-<H4><A name=SpXref2></A>Swiss-Prot IDs Linked to Other Databases</H4>
+<H4><A name=SpXref2></A>UniProtKB IDs Linked to Other Databases</H4>
 <PRE>table spXref2
-"A xref table between SWISS-PROT ids and other databases."
+"A xref table between UniProtKB ids and other databases."
    (
-   string accession;       "SWISS-PROT accession number"
-   string displayID;       "SWISS-PROT display ID"
-   string division;        "SWISS-PROT division"
+   string accession;       "UniProtKB accession number"
+   string displayID;       "UniProtKB display ID"
+   string division;        "UniProtKB division"
    int    bioentryID;      "Biosql bioentry ID"
    int    biodatabaseID;   "Biosql biodatabase ID"
    string description;     "Description"
@@ -5497,28 +5497,28 @@ The bacEndPairs table uses all fields.
    )
 </PRE>
 
-<H4><A name=SpSecondaryID></A>Swiss-Prot IDs Linked to Secondary IDs</H4>
+<H4><A name=SpSecondaryID></A>UniProtKB IDs Linked to Secondary IDs</H4>
 <PRE>table spSecondaryID 
-"A cross-reference table between Swiss-Prot accession IDs and secondary accessions."
+"A cross-reference table between UniProtKB accession IDs and secondary accessions."
    (
-   string displayID;       "SWISS-PROT display ID"
-   string accession;       "SWISS-PROT accession number"
-   string accession2;      "SWISS-PROT secondary accession number"
+   string displayID;       "UniProtKB display ID"
+   string accession;       "UniProtKB accession number"
+   string accession2;      "UniProtKB secondary accession number"
    )
 </PRE>
 
-<H4><A name=SpMrna></A>Swiss-Prot mRNA</H4>
+<H4><A name=SpMrna></A>UniProtKB mRNA</H4>
 <PRE>table spMrna
-"Associates SwissProt IDs with mRNA IDs"
+"Associates UniProtKB IDs with mRNA IDs"
     (
-    string spID; 	"Swiss-Prot ID"
+    string spID; 	"UniProtKB ID"
     string mrnaID;	"mRNA ID"
     )
 </PRE>
 
-<H4><A name=SpPsiBlast></A>Swiss-Prot PSI-BLAST E-value</H4>
+<H4><A name=SpPsiBlast></A>UniProtKB PSI-BLAST E-value</H4>
 <PRE>table spPsiBlast
-"PSI-BLAST all-against-all of Swiss-Prot/TrEMBL proteins. Swiss-Prot accessions 
+"PSI-BLAST all-against-all of UniProtKB proteins. UniProtKB accessions 
 are mapped to Known Genes IDs before being loaded into the table."
     (
     string kgId1;       "Known Gene ID of one protein"
@@ -5534,7 +5534,7 @@ are mapped to Known Genes IDs before being loaded into the table."
     string acc;         "Accession"
     string geneId;      "Gene name"
     string refPos;      "Reference position"
-    string extra1;      "Other link 1 (e.g. SwissProt name)
+    string extra1;      "Other link 1 (e.g. UniProtKB name)
     string extra2;      "Other link 2"
     )
 </PRE>

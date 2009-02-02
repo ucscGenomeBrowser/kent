@@ -2945,7 +2945,7 @@ known genes indentified in the specified Known Genes track.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show position information, 
-	external links to human mRNA and SwissPort information, and links to the alignment
+	external links to human mRNA and UniProtKB information, and links to the alignment
 	and peptide sequences.
 	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -3045,13 +3045,13 @@ This track contains alignments of predicted transcripts from the DOE Joint Genom
 
 <P><B>Known Genes </B><BR>
 The Known Genes track shows known protein coding genes based on proteins from 
-SWISS-PROT, TrEMBL, and TrEMBL-NEW and their corresponding mRNAs from GenBank. 
+UniProtKB the corresponding mRNAs from GenBank. 
 Features are colored according to origin and review status:
 <UL>
 <LI>
 <B>Black</B>: Feature has a corresponding entry in the Protein Data Bank (PDB).
 <LI>
-<B>Dark blue</B>: Feature has a corresponding protein in SWISS-PROT or a corresponding 
+<B>Dark blue</B>: Feature has a corresponding protein in UniProtKB or a corresponding 
 NCBI Reference Sequence mRNA with a "Reviewed" status. 
 <LI>
 <B>Lighter blue</B>: Feature has a corresponding NCBI Reference 
@@ -3062,8 +3062,8 @@ Sequence mRNA with "Provisional" status.
 All mRNAs of a species are aligned against the genome using the BLAT program. 
 When a single mRNA aligns in multiple places, only the best alignments with at
 least 98% sequence identity are kept. The set of alignments is further reduced 
-by keeping only those mRNAs that are referenced by a protein in SWISS-PROT, 
-TrEMBL, or TrEMBL-NEW. When a single protein references multiple mRNAs, the best 
+by keeping only those mRNAs that are referenced by a protein in UniProtKB. 
+When a single protein references multiple mRNAs, the best 
 mRNA is chosen based on a quality score that depends on its length, how good its 
 translation matches the protein sequence, and its release date. The resulting 
 list of mRNA and protein pairs is trimmed by removing short invalid entries and 
@@ -3137,7 +3137,7 @@ and known genes identified in the specified version of the Known Genes track.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an item in full display mode shows positional information,
-	related mRNA and SwissProt links, the protein length, and links to the
+	related mRNA and UniProtKB links, the protein length, and links to the
 	alignment an peptide sequences.
 	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>

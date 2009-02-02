@@ -108,10 +108,10 @@
                                 The Proteome Browser provides a wealth of protein information presented
 				in the form of graphical images and links to external internet sites. 
 				<P>
-				<B>SwissProt information:</B> The top line of the page shows the 
-				SwissProt accession number, entry name,
+				<B>UniProtKB information:</B> The top line of the page shows the 
+				UniProtKB accession number, entry name,
 				and protein name for the current selection. Click on the accession 
-				number to open the record for this protein in the <A HREF="http://www.expasy.org/sprot/" TARGET=_blank>SwissProt</A> database.
+				number to open the record for this protein in the <A HREF="http://www.uniprot.org/" TARGET=_blank>UniProtKB</A> database.
 				<P>
 				<B>Proteome browser tracks:</B> The tracks image displays a set of 
 				aligned tracks showing information about the protein's amino acid
@@ -185,7 +185,7 @@
 				<B>EMBL-EBI <A HREF="http://www.ebi.ac.uk/interpro/" 
 				TARGET=_blank>InterPro</A> website link:</B> Click on the <I>Graphical view of domain
 				structure</I> 
-				link to open a page showing protein matches from the UniProt-SwissProt 
+				link to open a page showing protein matches from the UniProtKB 
 				database. Click on an ID number to display the InterPro 
 				information page for that domain.
 				<LI>
