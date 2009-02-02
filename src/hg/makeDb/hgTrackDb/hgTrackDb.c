@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.48 2009/01/27 23:58:50 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.49 2009/02/02 22:06:39 tdreszer Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -459,8 +459,9 @@ for (td = tdList; td != NULL; td = tdNext)
     }
 }
 
-static void sortContainers(struct trackDb *tdbList)
-/* sort containers if they have no priorities already set */
+static void prioritizeContainerItems(struct trackDb *tdbList)
+/* set priorities in containers if they have no priorities already set
+   priorities are based upon 'sortOrder' setting or else shortLabel */
 {
 int countOfSortedContainers = 0;
 
@@ -557,6 +558,7 @@ if (visibilityRa != NULL)
     trackDbOverrideVisbility(uniqHash, visibilityRa, optionExists("hideFirst"));
 if (priorityRa != NULL)
     trackDbOverridePriority(uniqHash, priorityRa);
+prioritizeContainerItems(tdList);
 slSort(&tdList, trackDbCmp);
 hashFree(&uniqHash);
 return tdList;
@@ -573,7 +575,6 @@ safef(tab, sizeof(tab), "%s.tab", trackDbName);
 struct trackDb *tdList = buildTrackDb(org, database, hgRoot,
                                       visibilityRa, priorityRa, strict);
 checkSubGroups(tdList);
-sortContainers(tdList);
 
 verbose(1, "Loaded %d track descriptions total\n", slCount(tdList));
 
