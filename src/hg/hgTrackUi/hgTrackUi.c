@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.469 2009/01/21 00:28:48 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.470 2009/02/02 22:10:49 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1451,12 +1451,6 @@ geneIdConfig(tdb);
 baseColorDrawOptDropDown(cart, tdb);
 }
 
-void gencodeUI(struct trackDb *tdb)
-/* Put up gencode-specific controls */
-{
-geneIdConfig(tdb);
-}
-
 void ensemblNonCodingTypeConfig(struct trackDb *tdb)
 {
 int i = 0;
@@ -2382,7 +2376,7 @@ else if (tdb->type != NULL)
             if (sameString(track, "acembly"))
                 acemblyUi(tdb);
             else if (sameString("wgEncodeSangerGencode", track) || (startsWith("encodeGencode", track) && !sameString("encodeGencodeRaceFrags", track)))
-                gencodeUI(tdb);
+                gencodeCfgUi(cart,tdb,tdb->tableName,NULL,FALSE);
             nmdFilterOptions(tdb);
             if (!sameString(track, "tigrGeneIndex") && !sameString(track, "ensGeneNonCoding") && !sameString(track, "encodeGencodeRaceFrags"))
 		baseColorDrawOptDropDown(cart, tdb);
@@ -2442,6 +2436,13 @@ else if (tdbIsComposite(tdb))
     {
     hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
     }
+if (!ct)
+    {
+    printf("<P>");
+    makeSchemaLink(database,tdb,NULL);
+    printf("</P>");
+    }
+makeDownloadsLink(tdb);
 }
 
 void trackUi(struct trackDb *tdb, struct customTrack *ct)
@@ -2516,17 +2517,6 @@ if (ct)
     }
 else
     {
-    printf("<P>");
-#define SCHEMA_LINK "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=_BLANK> View table schema</A></P>\n"
-    if (hTableOrSplitExists(database, tdb->tableName))
-	{
-        /* Make link to TB schema */
-	char *tableName = tdb->tableName;
-	if (sameString(tableName, "mrna"))
-	    tableName = "all_mrna";
-        printf(SCHEMA_LINK, database, tdb->grp, tableName, tableName);
-        }
-
     /* Print data version trackDB setting, if any */
     char *version = trackDbSetting(tdb, "dataVersion");
     if (version)
