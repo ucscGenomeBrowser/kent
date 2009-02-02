@@ -387,7 +387,7 @@ if (sumList != NULL)
     for (i=0; i<summarySize; ++i)
         {
 	/* Calculate end of this part of summary */
-	baseEnd = start + baseCount*(i+1)/summarySize;
+	baseEnd = start + (bits64)baseCount*(i+1)/summarySize;
 
         /* Advance sum to skip over parts we are no longer interested in. */
 	while (sum != NULL && sum->end <= baseStart)
