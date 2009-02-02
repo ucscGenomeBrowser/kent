@@ -63,3 +63,7 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
+
+track nscanGene override
+informant Horse N-SCAN uses human (hg18) as the informant.
+

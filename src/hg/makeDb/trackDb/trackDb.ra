@@ -361,7 +361,7 @@ color 34,139,34
 type genePred nscanPep
 baseColorUseCds given
 baseColorDefault genomicCodons
-informant BUG: INFORMAT DESCRIPTION NOT SET IN TRACK DB FILE
+informant BUG: INFORMANT DESCRIPTION NOT SET IN TRACK DB FILE
 
 searchTable nscanGene
 searchType genePred

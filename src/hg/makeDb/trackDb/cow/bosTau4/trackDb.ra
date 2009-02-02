@@ -85,3 +85,6 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
+
+track nscanGene override
+informant Cow N-SCAN uses mouse (mm9) as the informant.

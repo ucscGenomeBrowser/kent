@@ -64,3 +64,5 @@ priority 1.1
 visibility hide
 type bed 6
 
+track nscanGene override
+informant Orangutan N-SCAN uses mouse (mm9) as the informant.

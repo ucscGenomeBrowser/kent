@@ -82,6 +82,7 @@ otherDb mm9
 
 track nscanGene override
 visibility pack
+informant  Guinea pig N-SCAN uses human (hg18) as the informant.
 
 searchTable nscanGene
 searchType genePred

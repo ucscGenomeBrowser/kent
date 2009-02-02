@@ -89,6 +89,7 @@ type bed 5 .
 
 track nscanGene override
 visibility pack
+informant Marmoset N-SCAN uses mouse (mm9) as the informant.
 
 searchTable nscanGene
 searchType genePred
