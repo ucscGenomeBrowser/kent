@@ -51,7 +51,7 @@ indelQueryInsert on
 track bdtnpChipper
 compositeTrack on
 subGroup1 fdr FDR 1=1% 25=25%
-subGroup2 factor Factor BCD=bcd CAD=cad GT=gt HB=hb KNI=kni KR=Kr POLII=PolII Z=zeste D=Dichaete DA=daughterless DL=dorsal FTZ=fushi_tarazu H=hairy HKB=huckebein MAD=Mothers_against_dpp PRD=paired RUN=runt SHN=schnurri SLP=sloppy_paired_1 SNA=snail TFIIB=Transcription_factor_IIB TLL=tailless TWI=twist
+subGroup2 factor Factor BCD=bcd CAD=cad GT=gt HB=hb KNI=kni KR=Kr POLII=PolII Z=zeste D=Dichaete DA=daughterless DL=dorsal FTZ=fushi_tarazu H=hairy HKB=huckebein MAD=Mothers_against_dpp MED=Medea PRD=paired RUN=runt SHN=schnurri SLP=sloppy_paired_1 SNA=snail TFIIB=Transcription_factor_IIB TLL=tailless TWI=twist
 dimensions dimensionX=factor dimensionY=fdr
 shortLabel BDTNP ChIP/chip
 longLabel Berkeley Drosophila Transcription Network Project Transcription Factor ChIP/chip
