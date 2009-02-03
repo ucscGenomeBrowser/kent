@@ -41,8 +41,9 @@
 #include "mafTrack.h"
 #include "hgConfig.h"
 #include "encode.h"
+#include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1549 2009/02/03 08:19:04 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1550 2009/02/03 18:11:32 hiram Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2144,6 +2145,8 @@ struct dyString *ensUrl;
 char *name;
 int localStart, localEnd;
 
+name = chrName;
+
 if (sameWord(scientificName, "Takifugu rubripes"))
     {
     /* for Fugu, must give scaffold, not chr coordinates */
@@ -2155,28 +2158,27 @@ if (sameWord(scientificName, "Takifugu rubripes"))
          * Ensembl doesn't show scaffolds < 2K */
         return;
     }
-if (sameWord(scientificName, "Ciona intestinalis"))
+else if (sameWord(scientificName, "Gasterosteus aculeatus"))
+    {
+    if (differentWord("chrM", chrName))
+	{
+	char *fixupName = replaceChars(chrName, "chr", "group");
+	name = fixupName;
+	}
+    }
+else if (sameWord(scientificName, "Ciona intestinalis"))
     {
     if (stringIn("chr0", chrName))
 	{
 	char *fixupName = replaceChars(chrName, "chr0", "chr"); 
 	name = fixupName;
 	}
-    else
-	name = chrName;
-    localStart = start;
-    localEnd = end;
     }
-else
-    {
-    if (sameWord(chrName, "chrM"))
-	name = "chrMt";
-    else
-	name = chrName;
-    localStart = start;
-    localEnd = end;
-    }
-localStart += 1;		// Ensembl base-1 display coordinates
+
+if (sameWord(chrName, "chrM"))
+    name = "chrMt";
+localStart = start;
+localEnd = end + 1;	// Ensembl base-1 display coordinates
 ensUrl = ensContigViewUrl(dir, name, seqBaseCount, localStart, localEnd, archive);
 hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\">", ensUrl->string);
 /* NOTE: you can not freeMem(dir) because sometimes it is a literal
@@ -2826,6 +2828,45 @@ return (hTableExists("hgFixed", "cutters") &&
 	hTableExists("hgFixed", "rebaseCompanies"));
 }
 
+void fr2ScaffoldEnsemblLink(char *archive)
+{
+    struct sqlConnection *conn = hAllocConn(database);
+    struct sqlResult *sr = NULL;
+    char **row = NULL;
+    char query[256];
+    safef(query, sizeof(query),
+"select * from chrUn_gold where chrom = '%s' and chromStart<%u and chromEnd>%u",
+	chromName, winEnd, winStart);
+    sr = sqlGetResult(conn, query);
+
+    int itemCount = 0;
+    struct agpFrag *agpItem = NULL;
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	agpFragFree(&agpItem);	// if there is a second one
+	agpItem = agpFragLoad(row+1);
+	++itemCount;
+	if (itemCount > 1)
+	    break;
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    if (1 == itemCount)
+	{	// verify *entirely* within single contig
+	if ((winEnd <= agpItem->chromEnd) &&
+	    (winStart >= agpItem->chromStart))
+	    {
+	    int agpStart = winStart - agpItem->chromStart;
+	    int agpEnd = agpStart + winEnd - winStart;
+	    hPuts("<TD ALIGN=CENTER>");
+	    printEnsemblAnchor(database, archive, agpItem->frag,
+		agpStart, agpEnd);
+	    hPrintf("%s</A></TD>", "Ensembl");
+	    }
+	}
+    agpFragFree(&agpItem);	// the one we maybe used
+}
+
 void hotLinks()
 /* Put up the hot links bar. */
 {
@@ -2920,6 +2961,8 @@ if (ensVersionString[0])
     /*	Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
     if (isUnknownChrom(database, chromName))
 	{
+	if (sameWord(database,"fr2"))
+	    fr2ScaffoldEnsemblLink(archive);
 	/* see if we are entirely within a single contig */
 	if (hTableExists(database, "ctgPos"))
 	    {
@@ -2932,19 +2975,19 @@ if (ensVersionString[0])
 		chromName, winEnd, winStart);
 	    sr = sqlGetResult(conn, query);
 
-	    int ctgCount = 0;
+	    int itemCount = 0;
 	    struct ctgPos *ctgItem = NULL;
 	    while ((row = sqlNextRow(sr)) != NULL)
 		{
 		ctgPosFree(&ctgItem);	// if there is a second one
 		ctgItem = ctgPosLoad(row);
-		++ctgCount;
-		if (ctgCount > 1)
+		++itemCount;
+		if (itemCount > 1)
 		    break;
 		}
 	    sqlFreeResult(&sr);
 	    hFreeConn(&conn);
-	    if (1 == ctgCount)
+	    if (1 == itemCount)
 		{	// verify *entirely* within single contig
 		if ((winEnd <= ctgItem->chromEnd) &&
 		    (winStart >= ctgItem->chromStart))
