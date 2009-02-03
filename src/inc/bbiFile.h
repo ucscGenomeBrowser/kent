@@ -78,7 +78,7 @@ void bbiFileClose(struct bbiFile **pBwf);
 /* Close down a big wig/big bed file. */
 
 struct fileOffsetSize *bbiOverlappingBlocks(struct bbiFile *bbi, struct cirTreeFile *ctf,
-	char *chrom, bits32 start, bits32 end);
+	char *chrom, bits32 start, bits32 end, bits32 *retChromId);
 /* Fetch list of file blocks that contain items overlapping chromosome range. */
  
 struct bbiChromIdSize
