@@ -148,6 +148,7 @@ struct track
     float scaleRange;             /* What to scale samples by to get logical 0-1 */
 
     int bedSize;		/* Number of fields if a bed file. */
+    boolean isBigBed;		/* If a bed, is it a bigBed? */
 
     char *otherDb;		/* Other database for an axt track. */
 
@@ -563,6 +564,11 @@ void bedDrawSimpleAt(struct track *tg, void *item,
 	double scale, MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single simple bed item at position. */
 
+void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis);
+/* Draw simple Bed items. */
+
 typedef struct slList *(*ItemLoader)(char **row);
 
 void bedLoadItemByQuery(struct track *tg, char *table,
@@ -592,6 +598,19 @@ struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin, int scoreMa
 
 struct linkedFeatures *lfFromBed(struct bed *bed);
 /* Return a linked feature from a (full) bed. */
+
+void loadSimpleBed(struct track *tg);
+/* Load the items in one track - just move beds in
+ * window... */
+
+void loadBed8(struct track *tg);
+/* Convert bed 8 info in window to linked feature. */
+
+void loadBed9(struct track *tg);
+/* Convert bed 9 info in window to linked feature.  (to handle itemRgb)*/
+
+void loadGappedBed(struct track *tg);
+/* Convert bed info in window to linked feature. */
 
 void linkedFeaturesFreeList(struct linkedFeatures **pList);
 /* Free up a linked features list. */
@@ -951,6 +970,10 @@ struct track *trackNew();
 void bedMethods(struct track *tg);
 /* Fill in methods for (simple) bed tracks. */
 
+void complexBedMethods(struct track *track, struct trackDb *tdb, boolean isBigBed,
+                                int wordCount, char *words[]);
+/* Fill in methods for more complex bed tracks. */
+
 void makeCompositeTrack(struct track *track, struct trackDb *tdb);
 /* Construct track subtrack list from trackDb entry.
  * Sets up color gradient in subtracks if requested */
@@ -1060,6 +1083,11 @@ void registerTrackHandler(char *name, TrackHandler handler);
 
 enum trackVisibility limitedVisFromComposite(struct track *subtrack);
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
+
+char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColumn);
+// Returns "score >= ..." extra where clause if one is needed
+
+#define SMALLBUF 128
 
 #endif /* HGTRACKS_H */
 

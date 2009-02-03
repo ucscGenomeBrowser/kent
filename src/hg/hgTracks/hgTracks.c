@@ -42,9 +42,7 @@
 #include "hgConfig.h"
 #include "encode.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1548 2009/01/28 23:02:43 aamp Exp $";
-
-#define SMALLBUF 64
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1549 2009/02/03 08:19:04 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
