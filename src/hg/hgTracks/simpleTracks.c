@@ -125,7 +125,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.57 2009/02/02 22:10:50 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.58 2009/02/03 02:14:57 kent Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLBUF 128
@@ -10831,6 +10831,10 @@ if (sameWord(type, "bed"))
 else if (sameWord(type, "bedGraph"))
     {
     bedGraphMethods(track, tdb, wordCount, words);
+    }
+else if (sameWord(type, "bigWig"))
+    {
+    bigWigMethods(track, tdb, wordCount, words);
     }
 else
 #endif /* GBROWSE */

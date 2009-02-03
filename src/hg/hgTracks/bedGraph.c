@@ -14,18 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.15 2009/01/14 18:59:16 hiram Exp $";
-
-struct bedGraphItem
-/* A bedGraph track item. */
-    {
-    struct bedGraphItem *next;
-    int start, end;	/* Start/end in chrom coordinates. */
-    char *name;		/* Common name */
-    float dataValue;	/* data value from bed table graphColumn	*/
-    double graphUpperLimit;	/* filled in by DrawItems	*/
-    double graphLowerLimit;	/* filled in by DrawItems	*/
-    };
+static char const rcsid[] = "$Id: bedGraph.c,v 1.16 2009/02/03 02:14:57 kent Exp $";
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -329,38 +318,8 @@ for (wi = items; wi != NULL; wi = wi->next)
 void bedGraphMethods(struct track *track, struct trackDb *tdb, 
 	int wordCount, char *words[])
 {
-int defaultHeight = atoi(DEFAULT_HEIGHT_PER);  /* truncated by limits	*/
-double minY = 0.0;	/*	from trackDb or cart, requested minimum */
-double maxY = 1000.0;	/*	from trackDb or cart, requested maximum */
-double yLineMark;	/*	from trackDb or cart */
-struct wigCartOptions *wigCart;
-int maxHeight = atoi(DEFAULT_HEIGHT_PER);
-int minHeight = MIN_HEIGHT_PER;
-
-AllocVar(wigCart);
-char *name = compositeViewControlNameFromTdb(tdb);
-
-/*	These Fetch functions look for variables in the cart bounded by
- *	limits specified in trackDb or returning defaults
- */
-wigCart->lineBar = wigFetchGraphTypeWithCart(cart, tdb, name, (char **) NULL);
-wigCart->horizontalGrid = wigFetchHorizontalGridWithCart(cart, tdb, name, (char **) NULL);
-
-wigCart->autoScale = wigFetchAutoScaleWithCart(cart, tdb, name,(char **) NULL);
-wigCart->windowingFunction = wigFetchWindowingFunctionWithCart(cart, tdb, name,(char **) NULL);
-wigCart->smoothingWindow = wigFetchSmoothingWindowWithCart(cart, tdb, name,(char **) NULL);
-
-wigFetchMinMaxPixelsWithCart(cart, tdb, name,&minHeight, &maxHeight, &defaultHeight);
-wigFetchYLineMarkValueWithCart(cart, tdb, name,&yLineMark);
-wigCart->yLineMark = yLineMark;
-wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart, tdb, name,(char **) NULL);
-
-wigCart->maxHeight = maxHeight;
-wigCart->defaultHeight = defaultHeight;
-wigCart->minHeight = minHeight;
-
-wigFetchMinMaxLimitsWithCart(cart, tdb, name,&minY, &maxY, (double *)NULL, (double *)NULL);
-
+struct wigCartOptions *wigCart = wigCartOptionsNew(cart, tdb, wordCount, words);
+wigCart->bedGraph = TRUE;	/*	signal to left labels	*/
 switch (wordCount)
     {
 	case 2:
@@ -376,12 +335,8 @@ switch (wordCount)
 	    break;
     } 
 
-track->minRange = minY;
-track->maxRange = maxY;
-
-wigCart->minY = track->minRange;
-wigCart->maxY = track->maxRange;
-wigCart->bedGraph = TRUE;	/*	signal to left labels	*/
+track->minRange = wigCart->minY;
+track->maxRange = wigCart->maxY;
 
 track->loadItems = bedGraphLoadItems;
 track->freeItems = bedGraphFreeItems;

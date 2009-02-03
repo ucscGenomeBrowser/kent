@@ -751,6 +751,8 @@ void wigMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 void bedGraphMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
+void bigWigMethods(struct track *track, struct trackDb *tdb,
+	int wordCount, char *words[]);
 
 /* Make track group for wig - wiggle tracks. */
 
