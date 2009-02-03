@@ -157,12 +157,6 @@ struct bbiSummaryOnDisk
     float sumSquares;		/* sum of squares for each base. */
     };
 
-boolean bbiSummaryArrayFromZoom(struct bbiZoomLevel *zoom, struct bbiFile *bbi, 
-	char *chrom, bits32 start, bits32 end,
-	enum bbiSummaryType summaryType, int summarySize, double *summaryValues);
-/* Look up region in index and get data at given zoom level.  Summarize this data
- * in the summaryValues array.  Only update summaryValues we actually do have data. */
-
 struct bbiInterval
 /* Data on a single interval. */
     {
@@ -177,6 +171,22 @@ typedef struct bbiInterval *(*BbiFetchIntervals)(struct bbiFile *bbi, char *chro
 
 void bbiAttachUnzoomedCir(struct bbiFile *bbi);
 /* Make sure unzoomed cir is attached. */
+
+struct bbiSummaryElement
+/* An element of a summary from the user side. */
+    {
+    bits64 validCount;		/* Count of (bases) with actual data. */
+    double minVal;		/* Minimum value of items */
+    double maxVal;		/* Maximum value of items */
+    double sumData;		/* sum of values for each base. */
+    double sumSquares;		/* sum of squares for each base. */
+    };
+
+boolean bbiSummaryArrayExtended(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
+	BbiFetchIntervals fetchIntervals,
+	int summarySize, struct bbiSummaryElement *summary);
+/* Fill in summary with  data from indicated chromosome range in bigWig file. 
+ * Returns FALSE if no data at that position. */
 
 boolean bbiSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
 	BbiFetchIntervals fetchIntervals,

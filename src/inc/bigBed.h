@@ -33,6 +33,11 @@ boolean bigBedSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end
  * be 0.0 or nan("") depending on the application.)  Returns FALSE if no data
  * at that position. */
 
+boolean bigBedSummaryArrayExtended(char *fileName, char *chrom, bits32 start, bits32 end,
+	int summarySize, struct bbiSummaryElement *summary);
+/* Get extended summary information for summarySize evenely spaced elements into
+ * the summary array. */
+
 void bigBedFileCreate(
 	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
 	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */

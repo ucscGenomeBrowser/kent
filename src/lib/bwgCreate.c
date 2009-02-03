@@ -13,7 +13,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.8 2009/02/03 00:39:44 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.9 2009/02/03 02:50:39 kent Exp $";
 
 struct bwgBedGraphItem
 /* An bedGraph-type item in a bwgSection. */
@@ -240,12 +240,15 @@ while (lineFileNextReal(lf, &line))
 slReverse(&itemList);
 
 /* Break up into sections of no more than items-per-slot size, and convert to packed format. */
+int sizeLeft = originalSectionSize;
 for (item = itemList; item != NULL; )
     {
     /* Figure out size of this section  */
-    int sectionSize = originalSectionSize;
+    int sectionSize = sizeLeft;
     if (sectionSize > itemsPerSlot)
         sectionSize = itemsPerSlot;
+    sizeLeft -= sectionSize;
+
 
     /* Allocate and fill in section. */
     struct bwgSection *section;
@@ -305,12 +308,14 @@ while (lineFileNextReal(lf, &line))
 slSort(&itemList, bwgVariableStepItemCmp);
 
 /* Break up into sections of no more than items-per-slot size. */
+int sizeLeft = originalSectionSize;
 for (item = itemList; item != NULL; )
     {
     /* Figure out size of this section  */
-    int sectionSize = originalSectionSize;
+    int sectionSize = sizeLeft;
     if (sectionSize > itemsPerSlot)
         sectionSize = itemsPerSlot;
+    sizeLeft -= sectionSize;
 
     /* Convert from list to array representation. */
     struct bwgVariableStepPacked *packed, *p;		

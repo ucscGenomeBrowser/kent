@@ -297,7 +297,7 @@ return sumList;
 }
 
 static bits32 bbiSummarySlice(struct bbiFile *bbi, bits32 baseStart, bits32 baseEnd, 
-	struct bbiSummary *sumList, enum bbiSummaryType summaryType, double *retVal)
+	struct bbiSummary *sumList, struct bbiSummaryElement *el)
 /* Update retVal with the average value if there is any data in interval.  Return number
  * of valid data bases in interval. */
 {
@@ -307,7 +307,7 @@ if (sumList != NULL)
     {
     double minVal = sumList->minVal;
     double maxVal = sumList->maxVal;
-    double sumData = 0;
+    double sumData = 0, sumSquares = 0;
 
     struct bbiSummary *sum;
     for (sum = sumList; sum != NULL && sum->start < baseEnd; sum = sum->next)
@@ -317,50 +317,21 @@ if (sumList != NULL)
 	    {
 	    double overlapFactor = (double)overlap / (sum->end - sum->start);
 	    validCount += sum->validCount * overlapFactor;
-	    switch (summaryType)
-	        {
-		case bbiSumMean:
-		    sumData += sum->sumData * overlapFactor;
-		    break;
-		case bbiSumMax:
-		    if (maxVal < sum->maxVal)
-		        maxVal = sum->maxVal;
-		    break;
-		case bbiSumMin:
-		    if (minVal > sum->minVal)
-		        minVal = sum->minVal;
-		    break;
-		case bbiSumCoverage:
-		    break;
-		default:
-		    internalErr();
-		    break;
-		}
+	    sumData += sum->sumData * overlapFactor;
+	    sumSquares += sum->sumSquares * overlapFactor;
+	    if (maxVal < sum->maxVal)
+		maxVal = sum->maxVal;
+	    if (minVal > sum->minVal)
+		minVal = sum->minVal;
 	    }
 	}
     if (validCount > 0)
 	{
-	double val = 0;
-	switch (summaryType)
-	    {
-	    case bbiSumMean:
-		val = sumData/validCount;
-		break;
-	    case bbiSumMax:
-	        val = maxVal;
-		break;
-	    case bbiSumMin:
-	        val = minVal;
-		break;
-	    case bbiSumCoverage:
-	        val = (double)validCount/(baseEnd-baseStart);
-		break;
-	    default:
-	        internalErr();
-		val = 0.0;
-		break;
-	    }
-	*retVal = val;
+	el->validCount = validCount;
+	el->minVal = minVal;
+	el->maxVal = maxVal;
+	el->sumData = sumData;
+	el->sumSquares = sumSquares;
 	}
     }
 return validCount;
@@ -375,11 +346,11 @@ if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
 return idSize.chromId;
 }
 
-boolean bbiSummaryArrayFromZoom(struct bbiZoomLevel *zoom, struct bbiFile *bbi, 
+static boolean bbiSummaryArrayFromZoom(struct bbiZoomLevel *zoom, struct bbiFile *bbi, 
 	char *chrom, bits32 start, bits32 end,
-	enum bbiSummaryType summaryType, int summarySize, double *summaryValues)
+	int summarySize, struct bbiSummaryElement *summary)
 /* Look up region in index and get data at given zoom level.  Summarize this data
- * in the summaryValues array.  Only update summaryValues we actually do have data. */
+ * in the summary array. */
 {
 boolean result = FALSE;
 int chromId = bbiChromId(bbi, chrom);
@@ -401,7 +372,7 @@ if (sumList != NULL)
 	while (sum != NULL && sum->end <= baseStart)
 	    sum = sum->next;
 
-	if (bbiSummarySlice(bbi, baseStart, baseEnd, sum, summaryType, &summaryValues[i]))
+	if (bbiSummarySlice(bbi, baseStart, baseEnd, sum, &summary[i]))
 	    result = TRUE;
 
 	/* Next time round start where we left off. */
@@ -413,7 +384,7 @@ return result;
 }
 
 static bits32 bbiIntervalSlice(struct bbiFile *bbi, bits32 baseStart, bits32 baseEnd, 
-	struct bbiInterval *intervalList, enum bbiSummaryType summaryType, double *retVal)
+	struct bbiInterval *intervalList, struct bbiSummaryElement *el)
 /* Update retVal with the average value if there is any data in interval.  Return number
  * of valid data bases in interval. */
 {
@@ -422,7 +393,7 @@ bits32 validCount = 0;
 if (intervalList != NULL)
     {
     struct bbiInterval *interval;
-    double sumData = 0;
+    double sumData = 0, sumSquares = 0;
     double minVal = intervalList->val;
     double maxVal = intervalList->val;
 
@@ -436,52 +407,19 @@ if (intervalList != NULL)
 	    double overlapFactor = (double)overlap / intervalSize;
 	    double intervalWeight = intervalSize * overlapFactor;
 	    validCount += intervalWeight;
-
-	    switch (summaryType)
-	        {
-		case bbiSumMean:
-		    sumData += interval->val * intervalWeight;
-		    break;
-		case bbiSumMax:
-		    if (maxVal < interval->val)
-		        maxVal = interval->val;
-		    break;
-		case bbiSumMin:
-		    if (minVal > interval->val)
-		        minVal = interval->val;
-		    break;
-		case bbiSumCoverage:
-		    break;
-		default:
-		    internalErr();
-		    break;
-		}
+	    sumData += interval->val * intervalWeight;
+	    sumSquares += interval->val * interval->val * intervalWeight;
+	    if (maxVal < interval->val)
+		maxVal = interval->val;
+	    if (minVal > interval->val)
+		minVal = interval->val;
 	    }
 	}
-    if (validCount > 0)
-	{
-	double val = 0;
-	switch (summaryType)
-	    {
-	    case bbiSumMean:
-		val = sumData/validCount;
-		break;
-	    case bbiSumMax:
-		val = maxVal;
-		break;
-	    case bbiSumMin:
-		val = minVal;
-		break;
-	    case bbiSumCoverage:
-		val = (double)validCount/(baseEnd-baseStart);
-		break;
-	    default:
-		internalErr();
-		val = 0.0;
-		break;
-	    }
-	*retVal = val;
-	}
+    el->validCount = validCount;
+    el->minVal = minVal;
+    el->maxVal = maxVal;
+    el->sumData = sumData;
+    el->sumSquares = sumSquares;
     }
 return validCount;
 }
@@ -489,7 +427,7 @@ return validCount;
 
 static boolean bbiSummaryArrayFromFull(struct bbiFile *bbi, 
 	char *chrom, bits32 start, bits32 end, BbiFetchIntervals fetchIntervals,
-	enum bbiSummaryType summaryType, int summarySize, double *summaryValues)
+	int summarySize, struct bbiSummaryElement *summary)
 /* Summarize data, not using zoom. */
 {
 struct bbiInterval *intervalList = NULL, *interval;
@@ -511,7 +449,7 @@ if (intervalList != NULL);
 	while (interval != NULL && interval->end <= baseStart)
 	    interval = interval->next;
 
-	if (bbiIntervalSlice(bbi, baseStart, baseEnd, interval, summaryType, &summaryValues[i]))
+	if (bbiIntervalSlice(bbi, baseStart, baseEnd, interval, &summary[i]))
 	    result = TRUE;
 
 	/* Next time round start where we left off. */
@@ -522,20 +460,18 @@ lmCleanup(&lm);
 return result;
 }
 
-boolean bbiSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
+boolean bbiSummaryArrayExtended(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
 	BbiFetchIntervals fetchIntervals,
-	enum bbiSummaryType summaryType, int summarySize, double *summaryValues)
-/* Fill in summaryValues with  data from indicated chromosome range in bbiFile file.
- * Be sure to initialize summaryValues to a default value, which will not be touched
- * for regions without data in file.  (Generally you want the default value to either
- * be 0.0 or nan("") depending on the application.)  Returns FALSE if no data
- * at that position. */
+	int summarySize, struct bbiSummaryElement *summary)
+/* Fill in summary with  data from indicated chromosome range in bigWig file. 
+ * Returns FALSE if no data at that position. */
 {
 boolean result = FALSE;
 
 /* Protect from bad input. */
 if (start >= end)
     return result;
+bzero(summary, summarySize * sizeof(summary[0]));
 
 /* Figure out what size of data we want.  We actually want to get 4 data points per summary
  * value if possible to minimize the effect of a data point being split between summary pixels. */
@@ -548,11 +484,52 @@ if (zoomLevel < 0)
 /* Get the closest zoom level less than what we're looking for. */
 struct bbiZoomLevel *zoom = bbiBestZoom(bbi->levelList, zoomLevel);
 if (zoom != NULL)
-    result = bbiSummaryArrayFromZoom(zoom, bbi, chrom, start, end, 
-    	summaryType, summarySize, summaryValues);
+    result = bbiSummaryArrayFromZoom(zoom, bbi, chrom, start, end, summarySize, summary);
 else
-    result = bbiSummaryArrayFromFull(bbi, chrom, start, end, fetchIntervals,
-    	summaryType, summarySize, summaryValues);
+    result = bbiSummaryArrayFromFull(bbi, chrom, start, end, fetchIntervals, summarySize, summary);
 return result;
 }
 
+boolean bbiSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
+	BbiFetchIntervals fetchIntervals,
+	enum bbiSummaryType summaryType, int summarySize, double *summaryValues)
+{
+struct bbiSummaryElement *elements;
+AllocArray(elements, summarySize);
+boolean ret = bbiSummaryArrayExtended(bbi, chrom, start, end, 
+	fetchIntervals, summarySize, elements);
+if (ret)
+    {
+    int i;
+    for (i=0; i<summarySize; ++i)
+        {
+	struct bbiSummaryElement *el = &elements[i];
+	if (el->validCount > 0)
+	    {
+	    double val;
+	    switch (summaryType)
+		{
+		case bbiSumMean:
+		    val = el->sumData/el->validCount;
+		    break;
+		case bbiSumMax:
+		    val = el->maxVal;
+		    break;
+		case bbiSumMin:
+		    val = el->minVal;
+		    break;
+		case bbiSumCoverage:
+		    val = (double)el->validCount/(end-start);
+		    break;
+		default:
+		    internalErr();
+		    val = 0.0;
+		    break;
+		}
+	    summaryValues[i] = val;
+	    }
+	}
+    }
+freeMem(elements);
+return ret;
+}

@@ -48,6 +48,11 @@ boolean bigWigSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end
  * be 0.0 or nan(0) depending on the application.)  Returns FALSE if no data
  * at that position. */
 
+boolean bigWigSummaryArrayExtended(char *fileName, char *chrom, bits32 start, bits32 end,
+	int summarySize, struct bbiSummaryElement *summary);
+/* Get extended summary information for summarySize evenely spaced elements into
+ * the summary array. */
+
 double bigWigSingleSummary(char *fileName, char *chrom, int start, int end,
     enum bbiSummaryType summaryType, double defaultVal);
 /* Return the summarized single value for a range. */

@@ -468,6 +468,18 @@ rangeTreeFree(&rangeTree);
 return bwiList;
 }
 
+boolean bigBedSummaryArrayExtended(char *fileName, char *chrom, bits32 start, bits32 end,
+	int summarySize, struct bbiSummaryElement *summary)
+/* Get extended summary information for summarySize evenely spaced elements into
+ * the summary array. */
+{
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+boolean ret = bbiSummaryArrayExtended(bbi, chrom, start, end, bigBedCoverageIntervals,
+	summarySize, summary);
+bbiFileClose(&bbi);
+return ret;
+}
+
 boolean bigBedSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
 	enum bbiSummaryType summaryType, int summarySize, double *summaryValues)
 /* Fill in summaryValues with  data from indicated chromosome range in bigBed file.
