@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1498 2009/02/03 20:27:50 donnak Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1499 2009/02/03 21:04:03 kent Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3418,6 +3418,10 @@ if (wordCount > 0)
         {
 	genericWiggleClick(conn, tdb, item, start);
         }
+    else if (sameString(type, "bigWig"))
+        {
+	genericBigWigClick(conn, tdb, item, start);
+	}
     else if (sameString(type, "bed5FloatScore") || 
              sameString(type, "bed5FloatScoreWithFdr"))
 	{

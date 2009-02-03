@@ -7,9 +7,11 @@
 #include "hCommon.h"
 #include "hgColors.h"
 #include "obscure.h"
+#include "hmmstats.h"
 #include "customTrack.h"
+#include "bigWig.h"
 
-static char const rcsid[] = "$Id: wiggleClick.c,v 1.29 2008/10/13 17:58:53 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleClick.c,v 1.30 2009/02/03 21:04:04 kent Exp $";
 
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start)
@@ -156,3 +158,90 @@ else
 
 wiggleDataStreamFree(&wds);
 }
+
+void bbiIntervalStatsReport(struct bbiInterval *bbList, char *table, 
+	char *chrom, bits32 start, bits32 end)
+/* Write out little statistical report in HTML */
+{
+/* Loop through list and calculate some stats. */
+bits64 iCount = 0;
+bits64 iTotalSize = 0;
+bits32 biggestSize = 0, smallestSize = BIGNUM;
+struct bbiInterval *bb;
+double sum = 0.0, sumSquares = 0.0;
+double minVal = bbList->val, maxVal = bbList->val;
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    iCount += 1;
+    bits32 size = bb->end - bb->start;
+    iTotalSize += size;
+    if (biggestSize < size)
+        biggestSize = size;
+    if (smallestSize > size)
+        smallestSize = size;
+    double val = bb->val;
+    sum += val;
+    sumSquares += val * val;
+    if (minVal > val)
+        minVal = val;
+    if (maxVal < val)
+        maxVal = val;
+    }
+
+char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
+sprintLongWithCommas(num1Buf, iCount);
+sprintLongWithCommas(num2Buf, iTotalSize);
+bits32 winSize = end-start;
+printf("<B>Statistics on:</B> %s <B>items covering</B> %s bases (%4.2f%% coverage)<BR>\n",
+	num1Buf, num2Buf, 100.0*iTotalSize/winSize);
+printf("<B>Average item spans</B> %4.2f <B>bases.</B> ", (double)iTotalSize/iCount);
+if (biggestSize != smallestSize)
+    {
+    sprintLongWithCommas(num1Buf, biggestSize);
+    sprintLongWithCommas(num2Buf, smallestSize);
+    printf("<B>Minimum span</B> %s <B>maximum span</B> %s", num1Buf, num2Buf);
+    }
+printf("<BR>\n");
+
+printf("<B>Average value</B> %g <B>min</B> %g <B>max</B> %g <B> standard deviation </B> %g<BR>\n",
+	sum/iCount, minVal, maxVal, calcStdFromSums(sum, sumSquares, iCount));
+}
+
+void genericBigWigClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start)
+/* Display details for BigWig data tracks. */
+{
+char *chrom = cartString(cart, "c");
+
+char query[256];
+safef(query, sizeof(query), "select fileName from %s", tdb->tableName);
+char *fileName = sqlQuickString(conn, query);
+if (fileName == NULL)
+    errAbort("Missing fileName in %s table", tdb->tableName);
+
+/* Open BigWig file and get interval list. */
+struct bbiFile *bbi = bigWigFileOpen(fileName);
+struct lm *lm = lmInit(0);
+struct bbiInterval *bbList = bigWigIntervalQuery(bbi, chrom, winStart, winEnd, lm);
+
+char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
+sprintLongWithCommas(num1Buf, BASE_1(winStart));
+sprintLongWithCommas(num2Buf, winEnd);
+printf("<B>Position: </B> %s:%s-%s<BR>\n", chrom, num1Buf, num2Buf );
+sprintLongWithCommas(num1Buf, winEnd-winStart);
+printf("<B>Total Bases in view: </B> %s <BR>\n", num1Buf);
+
+if (bbList != NULL)
+    {
+    bbiIntervalStatsReport(bbList, tdb->tableName, chrom, winStart, winEnd);
+    }
+else
+    {
+    printf("<P>No data overlapping current position.</P>");
+    }
+
+
+lmCleanup(&lm);
+bbiFileClose(&bbi);
+}
+

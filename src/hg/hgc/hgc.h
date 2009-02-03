@@ -144,6 +144,10 @@ void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb,
 	char *item, int start);
 /* Display details for WIGGLE tracks. */
 
+void genericBigWigClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start);
+/* Display details for BigWig  tracks. */
+
 void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start);
 /* Display details for MAF tracks. */
