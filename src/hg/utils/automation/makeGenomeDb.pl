@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.17 2009/01/07 01:12:46 markd Exp $
+# $Id: makeGenomeDb.pl,v 1.18 2009/02/03 20:11:47 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -29,6 +29,7 @@ $base =~ s/^(.*\/)?//;
 
 # Option defaults:
 my $dbHost = 'hgwdev';
+my $maxMitoSize = 25000;  ## Can be overridden in the config.ra file
 
 sub usage {
   # Usage / help / self-documentation:
@@ -147,6 +148,10 @@ qualFiles [/path/to/downloaded.qual | /path/to/qacAgpLift-ed.qac]
     files which have already been downloaded from the sequencing center,
     or a complete path to a single .qac file (in case you need to pre-process
     qual files with qaToQac | qacAgpLift, for example).
+
+mitoSize N
+  - to override the internal default of max size for mitochondrial
+    sequence of $maxMitoSize e.g. for yeast: mitoSize 90000
 " if ($detailed);
   print STDERR "\n";
   exit $status;
@@ -166,7 +171,7 @@ my ($db, $scientificName, $assemblyDate, $assemblyLabel, $orderKey,
 my ($fakeAgpMinContigGap, $fakeAgpMinScaffoldGap,
     $clade, $genomeCladePriority);
 # Optional config parameters:
-my ($commonName, $agpFiles, $qualFiles);
+my ($commonName, $agpFiles, $qualFiles, $mitoSize);
 # Other globals:
 my ($gotMito, $gotAgp, $gotQual, $topDir, $chromBased);
 my ($bedDir, $scriptDir, $endNotes);
@@ -243,6 +248,7 @@ sub parseConfig {
   $commonName = &optionalVar('commonName', \%config);
   $agpFiles = &optionalVar('agpFiles', \%config);
   $qualFiles = &optionalVar('qualFiles', \%config);
+  $mitoSize = &optionalVar('mitoSize', \%config);
   # Make sure no unrecognized variables were given.
   my @stragglers = sort keys %config;
   if (scalar(@stragglers) > 0) {
@@ -281,6 +287,9 @@ sub getMito {
     my $bossScript = new HgRemoteScript("$scriptDir/getMito.csh",
 					$dbHost, $topDir, $whatItDoes,
 					$CONFIG);
+    if ($mitoSize) {
+	$maxMitoSize = $mitoSize;
+    }
     my $mitoFile = "$topDir/M/$mitoAcc.fa";
     $bossScript->add(<<_EOF_
 mkdir M
@@ -297,9 +306,9 @@ endif
 
 # Make sure what we got is of about the right size:
 set mSize = `faSize $mitoFile | grep bases | awk '{print \$1;}'`
-if (\$mSize < 10000 || \$mSize > 25000) then
+if (\$mSize < 10000 || \$mSize > $maxMitoSize) then
   echo "getMito: $mitoFile"
-  echo "         fasta size \$mSize is out of expected range [10000, 25000]"
+  echo "         fasta size \$mSize is out of expected range [10000, $maxMitoSize]"
   exit 1
 endif
 
