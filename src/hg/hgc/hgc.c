@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1497 2009/02/03 07:11:39 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1498 2009/02/03 20:27:50 donnak Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -399,11 +399,14 @@ static void printUnistsUrl(FILE *f, int id)
 fprintf(f, "\"%s%d\"", unistsScript, id);
 }
 
+/* Print URL for GDB browser for an id 
+ * GDB currently inoperative, so have temporarily disabled this function
+ *
 static void printGdbUrl(FILE *f, char *id)
-/* Print URL for GDB browser for an id */
 {
-fprintf(f, "\"%s%s\"", gdbScript, id);
+fprintf(f, "%s", id);
 }
+*/
 
 static void printCloneRegUrl(FILE *f, char *clone)
 /* Print URL for Clone Registry at NCBI for a clone */
@@ -11538,9 +11541,8 @@ if (row != NULL)
 	    printf("<TR><TH ALIGN=left>GDB:</TH>");
 	    for (i = 0; i < infoRow->gdbCount; i++) 
 		{
-		printf("<TD><A HREF=");
-		printGdbUrl(stdout, infoRow->gdb[i]);
-		printf(" TARGET=_BLANK>%s</A></TD>", infoRow->gdb[i]);
+		printf("<TD>");
+		printf("%s</TD>", infoRow->gdb[i]);
 		}
 	    printf("</TR>\n");
 	    } 
