@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.470 2009/02/02 22:10:49 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.471 2009/02/03 03:33:35 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2293,7 +2293,7 @@ else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG")
         blastUi(tdb);
 else if (sameString(track, "hgPcrResult"))
     pcrResultUi(tdb);
-else if (startsWith("bedGraph", tdb->type))
+else if (startsWith("bedGraph", tdb->type) || startsWith("bigWig", tdb->type))
     wigCfgUi(cart,tdb,tdb->tableName,NULL, FALSE);
 else if (startsWith("wig", tdb->type))
         {
