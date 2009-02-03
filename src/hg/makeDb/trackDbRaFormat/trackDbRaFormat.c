@@ -5,7 +5,7 @@
 #include "ra.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDbRaFormat/trackDbRaFormat.c,v 1.3 2009/01/26 23:24:58 kate Exp $";
+static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDbRaFormat/trackDbRaFormat.c,v 1.4 2009/02/03 00:01:21 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,7 +19,7 @@ errAbort(
 
 /* for checking label lengths */
 #define MAX_SHORT_LABEL 16
-#define MAX_LONG_LABEL 64
+#define MAX_LONG_LABEL 80
 
 static struct optionSpec options[] = {
    {NULL, 0},
@@ -36,16 +36,26 @@ char *words[1024];
 int ct;
 char *trackName;
 struct hash *ra;
+struct hash *raHash = hashNew(0);
 char *setting;
 boolean stanza = FALSE;
 int i;
 char *label;
 int len;
 
-/* load all ra stanzas into hash so we can lookup type while
+/* load all track stanzas into hash so we can lookup type while
  * processing line by line */
 
-struct hash *raHash = raReadAll(inFile, "track");
+while ((ra = raNextRecord(lf)) != NULL)
+    {
+    trackName = hashFindVal(ra, "track");
+    if (trackName != NULL)
+        hashAdd(raHash, trackName, ra);
+    }
+
+lineFileSeek(lf, 0, SEEK_SET);
+
+/* read and format line by line */
 
 while (lineFileNext(lf, &line, NULL))
     {
@@ -64,10 +74,10 @@ while (lineFileNext(lf, &line, NULL))
         }
     else if (!stanza)
         {
-        /* first line in ra stanza -- should be track line */
-        stanza = TRUE;
+        /* first line in ra stanza -- test for track line */
         if (differentString(nextWord(&line), "track"))
-            errAbort("%s: not a trackDb.ra file", inFile);
+            continue;
+        stanza = TRUE;
         trackName = nextWord(&line);
         ra = (struct hash *)hashMustFindVal(raHash, trackName);
 
