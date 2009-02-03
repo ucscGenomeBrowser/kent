@@ -10,7 +10,7 @@
 #include "txInfo.h"
 #include "memgfx.h"
 
-static char const rcsid[] = "$Id: txGeneColor.c,v 1.1 2007/03/02 10:31:48 kent Exp $";
+static char const rcsid[] = "$Id: txGeneColor.c,v 1.2 2009/02/03 17:57:28 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -72,6 +72,8 @@ for (info = infoList; info != NULL; info = info->next)
         {
 	char *source = pick->source;
 	if (sameString(source, "RefPepValidated"))
+	    col = &trueBlue;
+	else if (sameString(source, "ccds"))
 	    col = &trueBlue;
 	else if (sameString(source, "RefPepReviewed"))
 	    col = &trueBlue;
