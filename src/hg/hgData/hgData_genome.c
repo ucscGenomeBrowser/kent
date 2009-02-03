@@ -5,7 +5,7 @@
 #include "chromInfo.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgData_genome.c,v 1.1.2.3 2009/02/03 05:19:11 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_genome.c,v 1.1.2.4 2009/02/03 05:26:45 mikep Exp $";
 
 
 static struct json_object *jsonOneGenome(struct dbDbClade *db)
@@ -93,11 +93,13 @@ return c;
 void printGenomes(struct dbDbClade *db, struct chromInfo *ci)
 // print an array of all genomes in list,
 // print genome hierarchy for all genomes
-// if ci is not null, print array of chromosomes in ci list 
+// if only one genome in list, 
+//   print array of chromosomes in ci list (or empty list if null)
 {
 struct json_object *g = jsonAddGenomes(json_object_new_object(), db);
 jsonAddHierarchy(g, db);
-jsonAddChroms(g, ci);
+if (slCount(db) == 1 && ci)
+    jsonAddChroms(g, ci);
 printf(json_object_to_json_string(g));
 json_object_put(g);
 }
