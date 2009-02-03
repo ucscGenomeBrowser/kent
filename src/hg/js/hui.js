@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.17 2009/01/24 00:26:11 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.18 2009/02/03 17:49:12 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -723,6 +723,7 @@ function matInitializeMatrix()
     else if(debugLevel>2) {
         alert("matInitializeMatrix is unimplemented for this browser)");
     }
+   // alert("Time stamped ");
 }
 
 // The following js depends upon the jQuery library
@@ -731,16 +732,18 @@ $(document).ready(function()
     //matInitializeMatrix();
 
     // Allows rows to have their positions updated after a drag event
-    $(".tableWithDragAndDrop").tableDnD({
-        onDragClass: "trDrag",
-        onDrop: function(table, row) {
-                if(tableSetPositions) {
-                    tableSetPositions(table);
+    if($(".tableWithDragAndDrop").length > 0) {
+        $(".tableWithDragAndDrop").tableDnD({
+            onDragClass: "trDrag",
+            onDrop: function(table, row) {
+                    if(tableSetPositions) {
+                        tableSetPositions(table);
+                    }
                 }
-            }
-        });
-    $(".trDraggable").hover(
-        function(){if($(this).hasClass('trDrag') == false) $(this).addClass('pale');},
-        function(){$(this).removeClass('pale');}
-    );
+            });
+        $(".trDraggable").hover(
+            function(){if($(this).hasClass('trDrag') == false) $(this).addClass('pale');},
+            function(){$(this).removeClass('pale');}
+        );
+    }
 });
