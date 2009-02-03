@@ -148,6 +148,10 @@ void genericBigWigClick(struct sqlConnection *conn, struct trackDb *tdb,
 	char *item, int start);
 /* Display details for BigWig  tracks. */
 
+void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
+		     char *item, int start, int bedSize);
+/* Handle click in generic bigBed track. */
+
 void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start);
 /* Display details for MAF tracks. */

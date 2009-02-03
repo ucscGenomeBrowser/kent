@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1499 2009/02/03 21:04:03 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1500 2009/02/03 21:37:40 kent Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3347,6 +3347,14 @@ if (wordCount > 0)
 	    num = atoi(words[1]);
 	if (num < 3) num = 3;
         genericBedClick(conn, tdb, item, start, num);
+	}
+    else if (sameString(type, "bigBed"))
+        {
+	int num = 0;
+	if (wordCount > 1)
+	    num = atoi(words[1]);
+	if (num < 3) num = 3;
+        genericBigBedClick(conn, tdb, item, start, num);
 	}
     else if (sameString(type, "sample"))
 	{

@@ -6,7 +6,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgc
 
-O = $A.o cgapSageClick.o encodeClick.o expClick.o mafClick.o regMotif.o wiggleClick.o retroClick.o \
+O = $A.o bigBedClick.o cgapSageClick.o encodeClick.o expClick.o mafClick.o \
+	regMotif.o wiggleClick.o retroClick.o \
 	lowelab.o rnaFoldClick.o transMapClick.o txCdsInfo.o \
 	ccdsClick.o mgcClick.o dbRIP.o wikiTrack.o
 
