@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.16 2009/02/03 02:14:57 kent Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.17 2009/02/03 03:31:46 kent Exp $";
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -53,11 +53,12 @@ int rowOffset = 0;
 struct bedGraphItem *bgList = NULL;
 int itemsLoaded = 0;
 int colCount = 0;
-struct wigCartOptions *wigCart = (struct wigCartOptions *) NULL;
+struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->extraUiData;
 int graphColumn = 5;
 char *tableName;
 
-wigCart = (struct wigCartOptions *) tg->extraUiData;
+if(sameString(tg->mapName, "affyTranscription"))
+    wigCart->colorTrack = "affyTransfrags";
 graphColumn = wigCart->graphColumn;
 
 
@@ -133,21 +134,15 @@ wigDebugPrint("bedGraphFreeItems");
 #endif
 }
 
-static void bedGraphDrawItems(struct track *tg, int seqStart, int seqEnd,
+void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis)
+	MgFont *font, Color color, enum trackVisibility vis, struct preDrawElement *preDraw,
+	int preDrawZero, int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit)
+/* Draw once we've figured out predraw... */
 {
-struct bedGraphItem *wi;
-double pixelsPerBase = scaleForPixels(width);
-double basesPerPixel = 1.0;
-int itemCount = 0;
-struct wigCartOptions *wigCart;
 enum wiggleYLineMarkEnum yLineOnOff;
 double yLineMark;
-struct preDrawElement *preDraw;	/* to accumulate everything in prep for draw */
-int preDrawZero;		/* location in preDraw where screen starts */
-int preDrawSize;		/* size of preDraw array */
-int i;				/* an integer loop counter	*/
+
 /*	determined from data	*/
 double overallUpperLimit = wigEncodeStartingUpperLimit;
 double overallLowerLimit = wigEncodeStartingLowerLimit;
@@ -156,33 +151,69 @@ double graphUpperLimit;		/*	scaling choice will set these	*/
 double graphLowerLimit;		/*	scaling choice will set these	*/
 double graphRange;		/*	scaling choice will set these	*/
 double epsilon;			/*	range of data in one pixel	*/
-int x1 = 0;			/*	screen coordinates	*/
-int x2 = 0;			/*	screen coordinates	*/
 Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
-wigCart = (struct wigCartOptions *) tg->extraUiData;
-if(sameString(tg->mapName, "affyTranscription"))
-    wigCart->colorTrack = "affyTransfrags";
+struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->extraUiData;
 
 yLineOnOff = wigCart->yLineOnOff;
 yLineMark = wigCart->yLineMark;
-
-if (pixelsPerBase > 0.0)
-    basesPerPixel = 1.0 / pixelsPerBase;
 
 /*	width - width of drawing window in pixels
  *	pixelsPerBase - pixels per base
  *	basesPerPixel - calculated as 1.0/pixelsPerBase
  */
-itemCount = 0;
+preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction);
+preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
+overallRange = preDrawLimits(preDraw, preDrawZero, width,
+    &overallUpperLimit, &overallLowerLimit);
+graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
+    wigCart->autoScale,
+    &overallUpperLimit, &overallLowerLimit,
+    &graphUpperLimit, &graphLowerLimit,
+    &overallRange, &epsilon, tg->lineHeight,
+    wigCart->maxY, wigCart->minY);
 
-preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
+colorArray = allocColorArray(preDraw, width, preDrawZero,
+    wigCart->colorTrack, tg, hvg);
+
+graphPreDraw(preDraw, preDrawZero, width,
+    tg, hvg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
+    epsilon, colorArray, vis, wigCart->lineBar);
+
+drawZeroLine(vis, wigCart->horizontalGrid,
+    graphUpperLimit, graphLowerLimit,
+    hvg, xOff, yOff, width, tg->lineHeight);
+
+drawArbitraryYLine(vis, wigCart->yLineOnOff,
+    graphUpperLimit, graphLowerLimit,
+    hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
+    wigCart->yLineOnOff);
+
+wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
+
+freez(&colorArray);
+if (retGraphUpperLimit != NULL)
+    *retGraphUpperLimit = graphUpperLimit;
+if (retGraphLowerLimit != NULL)
+    *retGraphLowerLimit = graphLowerLimit;
+}
+
+static void bedGraphDrawItems(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis)
+{
+struct bedGraphItem *wi;
+double pixelsPerBase = scaleForPixels(width);
+double basesPerPixel = 1.0;
+int i;				/* an integer loop counter	*/
+if (pixelsPerBase > 0.0)
+    basesPerPixel = 1.0 / pixelsPerBase;
 
 /*	walk through all the data and prepare the preDraw array	*/
+int preDrawZero, preDrawSize;
+struct preDrawElement *preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
 for (wi = tg->items; wi != NULL; wi = wi->next)
     {
     double dataValue = wi->dataValue;	/* the data value to graph */
-
-    ++itemCount;
 
     /*	Ready to draw, what do we know:
     *	the feature being processed:
@@ -200,8 +231,8 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
      *	keep track of pixels before and after the screen for
      *	later smoothing operations
      */
-    x1 = (wi->start - seqStart) * pixelsPerBase;
-    x2 = (wi->end - seqStart) * pixelsPerBase;
+    int x1 = (wi->start - seqStart) * pixelsPerBase;
+    int x2 = (wi->end - seqStart) * pixelsPerBase;
 
     if (x2 > x1)
 	{
@@ -245,16 +276,10 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
  *	cooresponds to a single pixel on the screen
  */
 
-preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction);
-preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
-overallRange = preDrawLimits(preDraw, preDrawZero, width,
-    &overallUpperLimit, &overallLowerLimit);
-graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
-    wigCart->autoScale,
-    &overallUpperLimit, &overallLowerLimit,
-    &graphUpperLimit, &graphLowerLimit,
-    &overallRange, &epsilon, tg->lineHeight,
-    wigCart->maxY, wigCart->minY);
+double graphUpperLimit;		/*	scaling choice will set these	*/
+double graphLowerLimit;		/*	scaling choice will set these	*/
+wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+	       preDraw, preDrawZero, preDrawSize, &graphUpperLimit, &graphLowerLimit);
 
 /*
  *	We need to put the graphing limits back into the items
@@ -270,25 +295,6 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	wi->graphLowerLimit = graphLowerLimit;
     }
 
-colorArray = allocColorArray(preDraw, width, preDrawZero,
-    wigCart->colorTrack, tg, hvg);
-
-graphPreDraw(preDraw, preDrawZero, width,
-    tg, hvg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
-    epsilon, colorArray, vis, wigCart->lineBar);
-
-drawZeroLine(vis, wigCart->horizontalGrid,
-    graphUpperLimit, graphLowerLimit,
-    hvg, xOff, yOff, width, tg->lineHeight);
-
-drawArbitraryYLine(vis, wigCart->yLineOnOff,
-    graphUpperLimit, graphLowerLimit,
-    hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
-    wigCart->yLineOnOff);
-
-wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
-
-freez(&colorArray);
 freeMem(preDraw);
 }	/*	bedGraphDrawItems()	*/
 
