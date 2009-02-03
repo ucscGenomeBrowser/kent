@@ -433,6 +433,27 @@ slReverse(&list);
 return list;
 }
 
+int bigBedIntervalToRow(struct bigBedInterval *interval, char *chrom, char *startBuf, char *endBuf,
+	char **row, int rowSize)
+/* Convert bigBedInterval into an array of chars equivalent to what you'd get by
+ * parsing the bed file. The startBuf and endBuf are used to hold the ascii representation of
+ * start and end.  Note that the interval->rest string will have zeroes inserted as a side effect. 
+ */
+{
+int fieldCount = 3;
+sprintf(startBuf, "%u", interval->start);
+sprintf(endBuf, "%u", interval->end);
+row[0] = chrom;
+row[1] = startBuf;
+row[2] = endBuf;
+if (!isEmpty(interval->rest))
+    {
+    int wordCount = chopByWhite(interval->rest, row+3, rowSize-3);
+    fieldCount += wordCount;
+    }
+return fieldCount;
+}
+
 struct bbiInterval *bigBedCoverageIntervals(struct bbiFile *bbi, 
 	char *chrom, bits32 start, bits32 end, struct lm *lm)
 /* Return intervals where the val is the depth of coverage. */

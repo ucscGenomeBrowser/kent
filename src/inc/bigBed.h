@@ -25,6 +25,13 @@ struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bwf,
 	char *chrom, bits32 start, bits32 end, struct lm *lm);
 /* Get data for interval.  Return list allocated out of lm. */
 
+int bigBedIntervalToRow(struct bigBedInterval *interval, char *chrom, char *startBuf, char *endBuf,
+	char **row, int rowSize);
+/* Convert bigBedInterval into an array of chars equivalent to what you'd get by
+ * parsing the bed file. The startBuf and endBuf are used to hold the ascii representation of
+ * start and end.  Note that the interval->rest string will have zeroes inserted as a side effect. 
+ * Returns number of fields in row.  */
+
 boolean bigBedSummaryArray(char *fileName, char *chrom, bits32 start, bits32 end,
 	enum bbiSummaryType summaryType, int summarySize, double *summaryValues);
 /* Fill in summaryValues with  data from indicated chromosome range in bigBed file.
