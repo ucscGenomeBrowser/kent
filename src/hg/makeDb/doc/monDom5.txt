@@ -436,3 +436,49 @@ mysql> insert into blatServers (db, host, port, isTrans, canPcr) values ('monDom
 Query OK, 1 row affected (0.01 sec)
 mysql> insert into blatServers (db, host, port, isTrans, canPcr) values ('monDom5', 'blatx', '17779', '0', '1');
 Query OK, 1 row affected (0.00 sec)
+
+#########################################################################
+## NSCAN LIFT (FROM MONDOM4) (DONE 2008-12-08 Andy)
+ssh hgwdev
+mkdir /hive/data/genomes/monDom5/bed/nscanGene.lifted
+cd /hive/data/genomes/monDom5/bed/nscanGene.lifted
+echo "select * from nscanGene" | hgsql monDom4 | sed '1d' > nscanGene.monDom4.gp
+liftOver nscanGene.monDom4.gp /gbdb/monDom4/liftOver/monDom4ToMonDom5.over.chain.gz \
+  | nscanGene.monDom5.gp unmapped.gp
+ldHgGene -predTab monDom5 nscanGene nscanGene.monDom5.gp
+
+##########################################################################
+## GENSCAN (DONE 2008-01-22 Andy)
+ssh hgwdev
+mkdir -p /hive/data/genomes/monDom5/bed/genscan/{fasta,gtf,pep,subopt}
+cd /hive/data/genomes/monDom5/bed/genscan
+twoBitToFa ../../monDom5.2bit stdout | maskOutFa stdin hard stdout \
+   | faSplit -maxN=5000000 -lift=chunks.lft gap stdin 8000000 fasta/chunk
+cvs co hg3rdParty/genscanlinux
+cat << '_EOF_' > gsub
+#LOOP
+gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << emacs
+ls -1 fasta/* > chunk.lst
+ssh swarm
+cd /hive/data/genomes/monDom5/bed/genscan
+gensub2 chunk.lst single gsub spec
+para create spec
+para push
+para time
+#Completed: 421 of 421 jobs
+#CPU time in finished jobs:      60788s    1013.13m    16.89h    0.70d  0.002 y
+#IO & Wait Time:                  5097s      84.96m     1.42h    0.06d  0.000 y
+#Average job time:                 156s       2.61m     0.04h    0.00d
+#Longest finished job:             367s       6.12m     0.10h    0.00d
+#Submission to last job:           378s       6.30m     0.10h    0.00d
+catDir subopt | liftUp my.bed chunks.lft error stdin
+sed 's/chunk/opossum/' my.bed > genscan.subopt.bed
+catDir gtf | liftUp my.gtf chunks.lft error stdin
+sed 's/chunk/opossum/g' my.gtf > genscan.gtf
+catDir pep | sed 's/chunk/opossum/' > genscan.pep.fa
+ldHgGene -gtf monDom5 genscan genscan.gtf 
+hgPepPred monDom5 generic genscanPep genscan.pep.fa 
+hgLoadBed monDom5 genscanSubopt genscan.subopt.bed 
