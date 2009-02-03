@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.53 2009/02/03 00:04:48 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.54 2009/02/03 08:20:04 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -224,6 +224,7 @@ char *t = cloneString(type);
 char *s = firstWordInLine(t);
 boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("bed", s) || sameString("genePred", s) ||
+		   sameString("bigBed", s) ||
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
 		   sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s));
