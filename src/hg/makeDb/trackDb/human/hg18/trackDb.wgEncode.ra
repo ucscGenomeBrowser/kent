@@ -3216,21 +3216,38 @@ wgEncode 1
 
 # NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
 
+track wgEncodeNhgriBip
+release alpha
+shortLabel NHGRI BiP
+longLabel ENCODE Elnitski Bi-directional Promoters
+group regulation
+type bed 8 +
+dateSubmitted 2009-01-27
+dateUnrestricted 2009-10-27
+dataVersion ENCODE Feb 2009 Freeze
+priority 0
+scoreFilterByRange on
+cell Reference_Genome
+wgEncode 1
+
+
+# NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
+
 track wgEncodeNhgriNre
 compositeTrack on
 shortLabel NHGRI NRE
 longLabel ENCODE NHGRI Negative Regulatory Elements
 group regulation
 subGroup1 view Views SI=Silencers EB=Enhancer_Blockers
-subGroup2 cellType Cell_Line K562=K562 Hela=HeLa-S3_(Tier2)
+subGroup2 cellType Cell_Line K562=K562_(Tier1) Hela=HeLa-S3_(Tier2)
 subGroup3 promoter Promoter SV40=SV40 Ggam=G-gamma
 dimensions dimensionX=cellType dimensionY=promoter
 sortOrder view=+ cellType=+ promoter=+
 dragAndDrop subTracks
 visibilityViewDefaults SI=dense EB=dense
-controlledVocabulary encode/cv.ra cellType=K562,Hela promoter
+controlledVocabulary encode/cv.ra cellType=K562,HeLa-S3 promoter
 noInherit on
-settingsByView SI:configurable=on EB:configurable=on
+settingsByView SI:configurable=on,scoreFilterByRange=on EB:configurable=on,scoreFilterByRange=on
 dataVersion ENCODE Nov 2008 Freeze
 priority 0
 type bed 3
@@ -6485,11 +6502,8 @@ compositeTrack on
 shortLabel Gencode Genes
 longLabel ENCODE Gencode Gene Annotations
 group genes
-subGroup1 view Views GencodeManual=Gencode_Manual GencodeAuto=Gencode_Automatic
-subGroup2 freezeDate Freeze_Date 2008-10-01=2008-10-01
-dimensions dimensionX=freezeDate
-sortOrder freezeDate=+
-dragAndDrop subTracks
+#subGroup1 view Views GencodeManual=Gencode_Manual GencodeAuto=Gencode_Automatic
+#subGroup2 freezeDate Freeze_Date 2008-10-01=2008-10-01
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
 priority 34
 visibility pack
@@ -6500,48 +6514,69 @@ hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 baseColorUseCds given
 baseColorDefault genomicCodons
-noInherit on
-settingsByView GencodeManual:configurable=on GencodeAuto:configurable=on
+#noInherit on
+#settingsByView GencodeManual:configurable=on GencodeAuto:configurable=on
 wgEncode 1
-#cdsDrawDefault genomic\ codons
-#itemClassTbl encodeGencodeGeneClassMar07
-#geneClasses Artifact Known Novel_CDS Novel_Transcript Putative TEC Polymorphic Processed_pseudogene Unprocessed_pseudogene
-#gClass_Known 33,91,51
-#gClass_Novel_CDS 33,91,51
-#gClass_Novel_Transcript  84,188,0
-#gClass_TEC  84,188,0
-#gClass_Putative  84,188,0
-#gClass_Artifact 163,168,163
-#gClass_Polymorphic 160,32,240
-#gClass_Processed_pseudogene 0,91,191
-#gClass_Unprocessed_pseudogene 0,91,191
-
-    track wgEncodeSangerGencodeGencodeManual20081001
-    release alpha
-    subTrack wgEncodeSangerGencode
-    shortLabel Manual (Oct08)
-    longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Oct-08)
-    subGroups view=GencodeManual freezeDate=2008-10-01
-    type genePred
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-10-21
-    dateUnrestricted 2009-09-08
-    accession 2008-10-01
-    priority 2
-    freezeDate 2008-10-01
+cdsDrawDefault genomic\ codons
+itemClassTbl wgEncodeSangerGencodeClasses
+geneClasses Validated_coding Validated_processed Validated_processed_pseudogene Validated_unprocessed_pseudogene Validated_pseudogene Havana_coding Havana_nonsense Havana_non_coding Havana_processed_pseudogene Havana_unprocessed_pseudogene Havana_pseudogene Havana_TEC Havana_polyA Ensembl_coding Ensembl_RNA Ensembl_pseudogene
+gClass_Validated_coding 174,180,4
+gClass_Validated_processed 255,255,0
+#gClass_Validated_coding 128,255,00       #  Dark Green:#04B404  4,180,4
+#gClass_Validated_processed 255,255,0     # Light Green:#80FF00  128,255,00
+gClass_Validated_processed_pseudogene 95,4,180
+gClass_Validated_unprocessed_pseudogene 154,46,254
+gClass_Validated_pseudogene 190,129,247
+gClass_Havana_coding 223,116,1
+gClass_Havana_nonsense 254,154,46
+gClass_Havana_non_coding 247,190,129
+gClass_Havana_processed_pseudogene 180,4,174
+gClass_Havana_unprocessed_pseudogene 255,0,255
+gClass_Havana_pseudogene 247,129,243
+gClass_Havana_TEC 115,115,115
+gClass_Havana_polyA 0,0,0
+gClass_Ensembl_coding 223,1,1
+gClass_Ensembl_RNA 254,46,46
+gClass_Ensembl_pseudogene 180,4,174
+#gClass_Validated_coding                 Dark Yellow   #AEB404 ? Grennish   Dark Green:#04B404
+#gClass_Validated_processed              Light Yellow  #FFFF00 ? Too Light Light Green:#80FF00    FF FF 00 	255 255   0
+#gClass_Validated_processed_pseudogene   Dark Purple   #5F04B4
+#gClass_Validated_unprocessed_pseudogene Medium Purple #9A2EFE
+#gClass_Validated_pseudogene             Light Purple  #BE81F7
+#gClass_Havana_coding                    Dark Orange   #DF7401
+#gClass_Havana_nonsense                  Medium Orange #FE9A2E
+#gClass_Havana_non_coding                Light Orange  #F7BE81
+#gClass_Havana_processed_pseudogene      Dark Pink     #B404AE ? magenta (Duplicate)
+#gClass_Havana_unprocessed_pseudogene    Medium Pink   #FF00FF
+#gClass_Havana_pseudogene                Light Pink    #F781F3
+#gClass_gClass_Havana_TEC                Grey          #737373
+#gClass_Havana_polyA                     Black         #000000
+#gClass_Ensembl_coding                   Dark Red      #DF0101
+#gClass_Ensembl_RNA                      Light Red     #FE2E2E ? medium
+#gClass_Ensembl_pseudogene               Dark Pink     #B404AE ? magenta
 
     track wgEncodeSangerGencodeGencodeAuto20081001
     release alpha
     subTrack wgEncodeSangerGencode
     shortLabel Auto (Oct08)
     longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Oct-08)
-    subGroups view=GencodeAuto freezeDate=2008-10-01
-    type genePred
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-10-21
     dateUnrestricted 2009-09-08
     accession 2008-10-01
-    priority 3
+    priority 1
+    freezeDate 2008-10-01
+
+    track wgEncodeSangerGencodeGencodeManual20081001
+    release alpha
+    subTrack wgEncodeSangerGencode
+    shortLabel Manual (Oct08)
+    longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Oct-08)
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-10-21
+    dateUnrestricted 2009-09-08
+    accession 2008-10-01
+    priority 2
     freezeDate 2008-10-01
 
 
@@ -6816,7 +6851,7 @@ subGroup1 view Views Peaks=Peaks
 subGroup2 cellType Cell_Line GM12878=GM12878_(Tier1) K562=K562_(Tier1) HepG2=HepG2_(Tier2)
 subGroup3 replicate Replicate RP1=RP1 RP2=RP2
 dimensions dimensionX=cellType dimensionY=replicate
-sortOrder cellType=+ factor=+ view=+
+sortOrder cellType=+ replicate=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=dense
 controlledVocabulary encode/cv.ra cellType=GM12878,K562,HepG2 factor
