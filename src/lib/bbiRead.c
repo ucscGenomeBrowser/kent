@@ -111,12 +111,14 @@ if (bwf != NULL)
 
 
 struct fileOffsetSize *bbiOverlappingBlocks(struct bbiFile *bbi, struct cirTreeFile *ctf,
-	char *chrom, bits32 start, bits32 end)
+	char *chrom, bits32 start, bits32 end, bits32 *retChromId)
 /* Fetch list of file blocks that contain items overlapping chromosome range. */
 {
 struct bbiChromIdSize idSize;
 if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
     return NULL;
+if (retChromId != NULL)
+    *retChromId = idSize.chromId;
 return cirTreeFindOverlappingBlocks(ctf, idSize.chromId, start, end);
 }
 

@@ -390,8 +390,9 @@ struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom,
 {
 bbiAttachUnzoomedCir(bbi);
 struct bigBedInterval *el, *list = NULL;
+bits32 chromId;
 struct fileOffsetSize *blockList = bbiOverlappingBlocks(bbi, bbi->unzoomedCir, 
-	chrom, start, end);
+	chrom, start, end, &chromId);
 struct fileOffsetSize *block;
 FILE *f = bbi->f;
 boolean isSwapped = bbi->isSwapped;
@@ -403,7 +404,7 @@ for (block = blockList; block != NULL; block = block->next)
     while (ftell(f) < endPos)
         {
 	/* Read next record into local variables. */
-	readBits32(f, isSwapped);	// Read and discard chromId
+	bits32 chr = readBits32(f, isSwapped);
 	bits32 s = readBits32(f, isSwapped);
 	bits32 e = readBits32(f, isSwapped);
 	int c;
@@ -416,7 +417,7 @@ for (block = blockList; block != NULL; block = block->next)
 	    }
 
 	/* If we're actually in range then copy it into a new  element and add to list. */
-	if (rangeIntersection(s, e, start, end) > 0)
+	if (chr == chromId && rangeIntersection(s, e, start, end) > 0)
 	    {
 	    lmAllocVar(lm, el);
 	    el->start = s;

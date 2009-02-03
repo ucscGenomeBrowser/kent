@@ -18,7 +18,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.15 2009/02/03 04:31:06 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.16 2009/02/03 04:47:05 kent Exp $";
 
 struct bbiFile *bigWigFileOpen(char *fileName)
 /* Open up big wig file. */
@@ -116,7 +116,7 @@ if (bwf->typeSig != bigWigSig)
 bbiAttachUnzoomedCir(bwf);
 struct bbiInterval *el, *list = NULL;
 struct fileOffsetSize *blockList = bbiOverlappingBlocks(bwf, bwf->unzoomedCir, 
-	chrom, start, end);
+	chrom, start, end, NULL);
 struct fileOffsetSize *block;
 FILE *f = bwf->f;
 boolean isSwapped = bwf->isSwapped;
