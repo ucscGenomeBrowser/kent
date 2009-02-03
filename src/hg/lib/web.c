@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.156 2009/01/28 20:28:37 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.157 2009/02/03 22:40:37 hiram Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -265,7 +265,7 @@ else
 	endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
 	endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
 	{
-	printf("       <A HREF=\"../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet\" class=\"topbar\">\n",
+	printf("       <A HREF=\"../cgi-bin/hgTracks?hgTracksConfigPage=notSet%s\" class=\"topbar\">\n",
 	       uiState);
 	puts("           Genome Browser</A> &nbsp;&nbsp;&nbsp;");
 	}
