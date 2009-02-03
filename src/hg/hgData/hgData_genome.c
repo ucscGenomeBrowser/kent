@@ -5,86 +5,100 @@
 #include "chromInfo.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgData_genome.c,v 1.1.2.2 2009/01/31 05:15:36 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_genome.c,v 1.1.2.3 2009/02/03 05:19:11 mikep Exp $";
 
 
-void printDb(struct dbDbClade *db)
-// print information for one genome db
+static struct json_object *jsonOneGenome(struct dbDbClade *db)
 {
-printf("{\"name\": %s,", quote(db->name));
-printf("\"description\": %s,",  quote(db->description));
-printf("\"organism\": %s,",  quote(db->organism));
-printf("\"genome\": %s,",  quote(db->genome));
-printf("\"scientificName\": %s,",  quote(db->scientificName));
-printf("\"sourceName\": %s,",  quote(db->sourceName));
-printf("\"clade\": %s,",  quote(db->clade));
-printf("\"defaultPos\": %s,",  quote(db->defaultPos));
-printf("\"orderKey\": %d,",  db->orderKey);
-printf("\"priority\": %f}", db->priority);
+struct json_object *res = json_object_new_object();
+struct json_object *g = json_object_new_object();
+char *chrom;
+int start=0, end=0;
+hgParseChromRange(NULL, db->defaultPos, &chrom, &start, &end);
+if (!chrom)
+    chrom = cloneString(db->defaultPos);
+json_object_object_add(res, db->name, g);
+json_object_object_add(g, "name", json_object_new_string(db->name));
+json_object_object_add(g, "organism", json_object_new_string(db->organism));
+json_object_object_add(g, "scientific_name", json_object_new_string(db->scientificName));
+json_object_object_add(g, "ncbi_taxon_id", json_object_new_int(db->taxId));
+json_object_object_add(g, "source_name", json_object_new_string(db->sourceName));
+json_object_object_add(g, "description", json_object_new_string(db->description));
+json_object_object_add(g, "genome", json_object_new_string(db->genome));
+json_object_object_add(g, "clade", json_object_new_string(db->clade));
+json_object_object_add(g, "default_chrom", json_object_new_string(chrom));
+json_object_object_add(g, "default_start", json_object_new_int(start));
+json_object_object_add(g, "default_end", json_object_new_int(end));
+freez(&chrom);
+return res;
 }
 
-void printDbs(struct dbDbClade *db)
-// print an array of all genomes
+static struct json_object *jsonAddGenomes(struct json_object *g, struct dbDbClade *db)
 {
-struct dbDbClade *t;
-printf("\"genomes\": [\n");
-for (t = db ; t ; t = t->next)
+struct json_object *a = json_object_new_array();
+json_object_object_add(g, "genomes", a);
+for ( ; db ; db = db->next)
+    json_object_array_add(a, jsonOneGenome(db));
+return g;
+}
+
+static struct json_object *jsonAddHierarchy(struct json_object *g, struct dbDbClade *db)
+// add a hierarchy of clades deduced from the flat list 
+// hierarchy : [ clade => [ genome => [ description: assembly]]]
+{
+struct json_object *hArr = json_object_new_array();
+struct json_object *cladeArr = NULL, *genomeArr = NULL;
+struct dbDbClade *prev = NULL;
+json_object_object_add(g, "genome_hierarchy", hArr);
+for ( ; db ; db = db->next)
     {
-    printDb(t);
-    printf("%c\n", t->next ? ',' : ' ');
+    if (differentStringNullOk(db->clade, prev ? prev->clade : NULL))
+	{
+	cladeArr = json_object_new_array();
+	struct json_object *clade = json_object_new_object();
+	json_object_object_add(clade, db->clade, cladeArr);
+	json_object_array_add(hArr, clade);
+	}
+    if (differentStringNullOk(db->genome, prev ? prev->genome : NULL))
+	{
+	genomeArr = json_object_new_array();
+	struct json_object *genome = json_object_new_object();
+	json_object_object_add(genome, db->genome, genomeArr);
+	json_object_array_add(cladeArr, genome);
+	}
+    struct json_object *assembly = json_object_new_object();
+    json_object_object_add(assembly, db->description, json_object_new_string(db->name));
+    json_object_array_add(genomeArr, assembly);
+    prev = db;
     }
-printf("]\n");
+return g;
 }
 
-void printChrom(struct chromInfo *ci)
-// print a chromosome 
+static struct json_object *jsonOneChrom(struct chromInfo *ci)
 {
-printf("{\"id\":%s,\"size\":%u}", quote(ci->chrom), ci->size);
+struct json_object *c = json_object_new_object();
+json_object_object_add(c, ci->chrom, json_object_new_int(ci->size));
+return c;
 }
 
-void printChroms(struct chromInfo *ci)
-// print an array of all chromosomes
+static struct json_object *jsonAddChroms(struct json_object *c, struct chromInfo *ci)
 {
-struct chromInfo *t;
-printf("[");
-for (t = ci ; t ; t = t->next)
-    {
-    printChrom(t);
-    printf("%c\n", (t->next ? ',' : ' '));
-    }
-printf("]");
+struct json_object *a = json_object_new_array();
+json_object_object_add(c, "chromosomes", a);
+for ( ; ci ; ci = ci->next)
+    json_object_array_add(a, jsonOneChrom(ci));
+return c;
 }
 
-void printGenomeAsAnnoj(struct dbDbClade *db, struct chromInfo *ci)
-// print information for a genome - the genome db and all its chromosomes
-// using AnnoJ format (http://www.annoj.org)
+void printGenomes(struct dbDbClade *db, struct chromInfo *ci)
+// print an array of all genomes in list,
+// print genome hierarchy for all genomes
+// if ci is not null, print array of chromosomes in ci list 
 {
-char name[1024];
-char desc[1024];
-
-snprintf(name, sizeof(name), "%s (%s)", db->name, db->organism);
-snprintf(desc, sizeof(desc), "%s (%s)", db->scientificName, db->sourceName);
-
-printf("{\"success\": true,\n"
-"\"data\": {"
-"\"institution\": {\"name\":\"UCSC\",\"url\":\"http:\\/\\/genome.ucsc.edu\",\"logo\":\"\\/images\\/title.jpg\"},\n"
-" \"engineer\":{\"name\":\"Mike Pheasant\",\"email\":\"mikep@soe.ucsc.edu\"},\n"
-" \"service\":{\"title\":\"%s\",\"version\":\"%s\",\"description\":\"%s\"},\n"
-" \"genome\":{\"species\":\"%s\",\"access\":\"public\",\"version\":\"%s\",\"description\":\"%s\",\n"
-"  \"assemblies\":", 
-    name, db->sourceName, desc, name, db->sourceName, desc);
-printChroms(ci);
-printf("\n  }\n }\n}\n");
-}
-
-void printGenome(struct dbDbClade *db, struct chromInfo *ci)
-// print information for a genome - the database and all its chromosomes
-{
-printf("\"genome\" : ");
-printDb(db);
-printf(",\n");
-printf("\"chroms\" : ");
-printChroms(ci);
-printf("\n");
+struct json_object *g = jsonAddGenomes(json_object_new_object(), db);
+jsonAddHierarchy(g, db);
+jsonAddChroms(g, ci);
+printf(json_object_to_json_string(g));
+json_object_put(g);
 }
 

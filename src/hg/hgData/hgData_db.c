@@ -5,7 +5,7 @@
 #include "chromInfo.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgData_db.c,v 1.1.2.2 2009/01/31 05:15:36 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_db.c,v 1.1.2.3 2009/02/03 05:19:11 mikep Exp $";
 
 static struct dbDbClade *dbDbCladeLoad(char **row)
 /* Load a dbDbClade from row fetched with select * from dbDb
@@ -14,16 +14,15 @@ static struct dbDbClade *dbDbCladeLoad(char **row)
 struct dbDbClade *ret;
 
 AllocVar(ret);
-ret->name = cloneString(row[0]);
-ret->description = cloneString(row[1]);
-ret->organism = cloneString(row[2]);
-ret->genome = cloneString(row[3]);
-ret->scientificName = cloneString(row[4]);
-ret->sourceName = cloneString(row[5]);
-ret->clade = cloneString(row[6]);
-ret->defaultPos = cloneString(row[7]);
-ret->orderKey = sqlSigned(row[8]);
-ret->priority = atof(row[9]);
+ret->clade = cloneString(row[0]);
+ret->genome = cloneString(row[1]);
+ret->description = cloneString(row[2]);
+ret->name = cloneString(row[3]);
+ret->organism = cloneString(row[4]);
+ret->scientificName = cloneString(row[5]);
+ret->taxId = sqlSigned(row[6]);
+ret->sourceName = cloneString(row[7]);
+ret->defaultPos = cloneString(row[8]);
 return ret;
 }
 
@@ -34,13 +33,13 @@ static void dbDbCladeFree(struct dbDbClade **pEl)
 struct dbDbClade *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->name);
-freeMem(el->description);
-freeMem(el->organism);
+freeMem(el->clade);
 freeMem(el->genome);
+freeMem(el->description);
+freeMem(el->name);
+freeMem(el->organism);
 freeMem(el->scientificName);
 freeMem(el->sourceName);
-freeMem(el->clade);
 freeMem(el->defaultPos);
 freez(pEl);
 }
@@ -58,9 +57,10 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-struct dbDbClade *hGetIndexedDbClade(char *db)
+
+struct dbDbClade *hGetIndexedDbClade(char *genome)
 /* Get list of active genome databases and clade
- * Only get details for one 'db' unless NULL
+ * Only get details for one 'genome' unless NULL
  * in which case get all databases.
  * Dispose of this with dbDbCladeFreeList. */
 {
@@ -70,15 +70,23 @@ char **row;
 struct dbDbClade *dbList = NULL, *dbs;
 
 /* Scan through dbDb table, loading into list */
-if (db)
+if (genome)
   {
     char query[1024];
-    safef(query, sizeof(query), "SELECT name, description, organism, dbDb.genome, scientificName, sourceName, clade, defaultPos, orderKey, priority FROM dbDb,genomeClade WHERE dbDb.active = 1 and dbDb.genome = genomeClade.genome and dbDb.name=\"%s\"", db);
+    safef(query, sizeof(query), "\
+SELECT c.label, g.genome, description, d.name, organism, scientificName, 0 as taxId, sourceName, defaultPos \
+FROM dbDb d join genomeClade g using (genome) join clade c on g.clade=c.name \
+WHERE d.active = 1 AND d.name=\"%s\" \
+ORDER BY c.priority,g.priority,d.orderKey", genome);
     sr = sqlGetResult(conn, query);
   }
 else
   {
-  sr = sqlGetResult(conn, "SELECT name, description, organism, dbDb.genome, scientificName, sourceName, clade, defaultPos, orderKey, priority FROM dbDb,genomeClade WHERE dbDb.active = 1 and dbDb.genome = genomeClade.genome ORDER BY clade,priority,orderKey");
+  sr = sqlGetResult(conn, "\
+SELECT c.label, g.genome, description, d.name, organism, scientificName, 0 as taxId, sourceName, defaultPos \
+FROM dbDb d join genomeClade g using (genome) join clade c on g.clade=c.name \
+WHERE d.active = 1 \
+ORDER BY c.priority,g.priority,d.orderKey");
   }
 while ((row = sqlNextRow(sr)) != NULL)
     {

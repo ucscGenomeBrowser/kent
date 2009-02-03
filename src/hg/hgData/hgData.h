@@ -17,6 +17,12 @@
 #include "chromInfo.h"
 #endif
 
+#ifdef boolean
+#undef boolean
+// common.h defines boolean as int; json.h typedefs boolean as int.
+#include <json/json.h>
+#endif
+
 #ifndef MJP
 #define MJP(v) verbose((v),"%s[%3d]: ", __func__, __LINE__)
 #endif
@@ -37,6 +43,7 @@
 #define ERR_GENOME_NOT_FOUND(db) errClientStatus(420, "Request error", "Genome %s not found", (db))
 #define ERR_NO_CHROM errClientStatus(420, "Request error", "Chrom required")
 #define ERR_CHROM_NOT_FOUND(db,chrom) errClientStatus(420, "Request error", "Chrom %s not found in genome %s", (chrom), (db))
+#define ERR_NO_CHROMS_FOUND(db) errClientStatus(420, "Request error", "No chroms found in genome %s", (db))
 #define ERR_TRACK_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track %s not found in genome %s", (track), (db))
 #define ERR_TRACK_INFO_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track info for %s not found in genome %s", (track), (db))
 #define ERR_TABLE_NOT_FOUND(table, chrom, tableRoot, db) errClientStatus(420, "Request error", "Table %s not found using chrom %s and tableRoot %s in genome %s", (table), (chrom), (tableRoot), (db))
@@ -52,23 +59,18 @@ struct dbDbClade
 /* Description of annotation database including clade */
     {
     struct dbDbClade *next;  /* Next in singly linked list. */
-    char *name; /* Short name of database.  'hg8' or the like */
-    char *description;  /* Short description - 'Aug. 8, 2001' or the like */
-    char *organism;     /* Common name of organism - first letter capitalized */
-    char *genome;       /* Unifying genome collection to which an assembly belongs */
-    char *scientificName;       /* Genus and species of the organism; e.g. Homo sapiens */
-    char *sourceName;   /* Source build/release/version of the assembly */
-    char *clade;        /* organism clade, eg. mammal */
-    char *defaultPos;   /* Default starting position */
-    int orderKey;       /* Int used to control display order within a genome */
-    float priority;     /* Source build/release/version of the assembly */
+    char *clade;             /* organism clade, eg. mammal */
+    char *genome;            /* Unifying genome collection to which an assembly belongs */
+    char *description;       /* Short description - 'Aug. 8, 2001' or the like */
+    char *name;              /* Short name of database.  'hg8' or the like */
+    char *organism;          /* Common name of organism - first letter capitalized */
+    char *scientificName;    /* Genus and species of the organism; e.g. Homo sapiens */
+    int taxId;               /* NCBI Taxon Id */
+    char *sourceName;        /* Source build/release/version of the assembly */
+    char *defaultPos;        /* Default starting position */
     };
 
 /* functions */
-
-char *quote(char *field);
-// format field surrounded by quotes "field" in buf and return buf
-// return 'null' without quotes if field is NULL
 
 struct chromInfo *getAllChromInfo(char *db);
 /* Query db.chromInfo for all chrom info. */
@@ -103,33 +105,26 @@ void printBed(int n, struct bed *b, char *db, char *track, char *type, char *chr
 void printBedByColumn(struct bed *b, struct hTableInfo *hti);
 // print out a list of bed records by column
 
-void printDb(struct dbDbClade *db);
-// print information for one genome database
-
-void printDbs(struct dbDbClade *db);
-// print an array of all genome databases
-
-void printChrom(struct chromInfo *ci);
-// print a chromosome 
-
-void printChroms(struct chromInfo *ci);
-// print an array of all chromosomes
-
-void printGenomeAsAnnoj(struct dbDbClade *db, struct chromInfo *ci);
-// print information for a genome - the genome database and all its chromosomes
-// using AnnoJ format (http://www.annoj.org)
-
-void printGenome(struct dbDbClade *db, struct chromInfo *ci);
-// print information for a genome - the genome database and all its chromosomes
-
-void printTrackInfo(char *db, char *track, struct trackDb *tdb);
-// print genome database and track information
-
 void printItemAsAnnoj(char *db, char *track, char *type, char *term);
 // print out a description for a track item
 
 void printItem(char *db, char *track, char *type, char *term);
 // print out a description for a track item
+
+//////////////////
+
+void printGenomes(struct dbDbClade *db, struct chromInfo *ci);
+// print an array of all genomes in list,
+// print genome hierarchy for all genomes
+// if ci is not null, print array of chromosomes in ci list
+
+void printTrackInfo(char *genome, struct trackDb *tdb);
+// Print genome and track information for the genome
+// If only one track is specified, print full details including html description page
+//
+// tracks => {_genome_ => [{ _track_name_ => {_track_details_},... }] }
+// groups => {_genome_ => [{_group_name_ => [{_track_name_: _track_priority_},... ]}] }
+
 
 
 #endif /* HGTRACKS_H */
