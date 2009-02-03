@@ -18,7 +18,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.14 2009/02/03 02:50:39 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.15 2009/02/03 04:31:06 kent Exp $";
 
 struct bbiFile *bigWigFileOpen(char *fileName)
 /* Open up big wig file. */
@@ -223,7 +223,7 @@ boolean bigWigSummaryArrayExtended(char *fileName, char *chrom, bits32 start, bi
 /* Get extended summary information for summarySize evenely spaced elements into
  * the summary array. */
 {
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi = bigWigFileOpen(fileName);
 boolean ret = bbiSummaryArrayExtended(bbi, chrom, start, end, bigWigIntervalQuery,
 	summarySize, summary);
 bbiFileClose(&bbi);
