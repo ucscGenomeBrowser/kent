@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.101 2009/01/28 01:15:51 tdreszer Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.102 2009/02/03 23:02:04 tdreszer Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -1692,6 +1692,17 @@ boolean cartBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean
 char *setting = cartStringClosestToHome(cart,tdb,compositeLevel,suffix);
 return (sameString(setting, "on") || atoi(setting) != 0);
 }
+
+boolean cartUsualBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix,boolean usual)
+/* Returns value or {usual} for a cart boolean ('on' or != 0) from lowest level on up:
+   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
+{
+char *setting = cartOptionalStringClosestToHome(cart,tdb,compositeLevel,suffix);
+if(setting == NULL)
+    return usual;
+return (sameString(setting, "on") || atoi(setting) != 0);
+}
+
 
 int cartUsualIntClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, int usual)
 /* Returns value or {usual} for a cart int from lowest level on up:

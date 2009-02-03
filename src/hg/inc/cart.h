@@ -468,10 +468,13 @@ boolean cartBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean
 /* Returns value or Aborts for a cart boolean ('on' or != 0) from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 
+boolean cartUsualBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix,boolean usual);
+/* Returns value or {usual} for a cart boolean ('on' or != 0) from lowest level on up:
+   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
+
 int cartUsualIntClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, int usual);
 /* Returns value or {usual} for a cart int from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
-#define cartUsualBooleanClosestToHome(cart,tdb,compositeLevel,suffix,usual) cartUsualIntClosestToHome((cart),(tdb),(compositeLevel),(suffix),(usual))
 
 double cartUsualDoubleClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, double usual);
 /* Returns value or {usual} for a cart fp double from lowest level on up:
