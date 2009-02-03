@@ -33,13 +33,8 @@ void bigWigFileCreate(
 /* Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
  * to binary big wig format. */
 
-struct bbiFile;	/* Just an anonymous pointer from interface point of view. */
-
 struct bbiFile *bigWigFileOpen(char *fileName);
-/* Open up a big wig file. */
-
-void bigWigFileClose(struct bbiFile **pBwf);
-/* Close down a big wig file. */
+/* Open up big wig file.   Free this up with bbiFileFree */
 
 struct bbiInterval *bigWigIntervalQuery(struct bbiFile *bwf, char *chrom, bits32 start, bits32 end,
 	struct lm *lm);

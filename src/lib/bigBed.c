@@ -1,12 +1,5 @@
 /* bigBed - interface to binary file with bed-style values (that is a bunch of
- * possibly overlapping regions.
- *
- * This shares a lot with the bigWig module.  In particular the query side of
- * the interface is implemented in bwgQuery.c in parallel to the bigWig query
- * implementation.  This file just contains the file creation stuff.  Beware
- * that this does have to keep in sync with the bigWig file creation stuff.
- * Except for the initial 4-byte magic number, and the unzoomed bed data,
- * bigWig and bigBed files are the same. */
+ * possibly overlapping regions. */
 
 #include "common.h"
 #include "hash.h"
@@ -19,8 +12,6 @@
 #include "bPlusTree.h"
 #include "sig.h"
 #include "bbiFile.h"
-#include "bwgInternal.h"
-#include "bigWig.h"
 #include "bigBed.h"
 
 struct bbiFile *bigBedFileOpen(char *fileName)
@@ -198,14 +189,13 @@ for (chromStart = pbList; chromStart != NULL; chromStart = chromEnd)
     verbose(3, "Got %d ranges on %d\n", slCount(rangeList), chromId);
     for (range = rangeList; range != NULL; range = range->next)
         {
-	bwgAddRangeToSummary(chromId, chromInfoArray[chromId].size, range->start, range->end,
+	bbiAddRangeToSummary(chromId, chromInfoArray[chromId].size, range->start, range->end,
 		ptToInt(range->val), reduction, &outList);
 	}
     }
 slReverse(&outList);
 return outList;
 }
-
 
 void bigBedFileCreate(
 	char *inName, 	  /* Input file in a tabular bed format <chrom><start><end> + whatever. */
@@ -215,6 +205,13 @@ void bigBedFileCreate(
 	char *outName)    /* BigBed output file name. */
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
 {
+/* This code needs to agree with code in two other places currently - bigWigFileCreate,
+ * and bbiFileOpen.  I'm thinking of refactoring to share at least between
+ * bigBedFileCreate and bigWigFileCreate.  It'd be great so it could be structured
+ * so that it could send the input in one chromosome at a time, and send in the zoom
+ * stuff only after all the chromosomes are done.  This'd potentially reduce the memory
+ * footprint by a factor of 2 or 4.  Still, for now it works. -JK */
+
 /* Declare a bunch of variables. */
 int i;
 bits32 reserved32 = 0;
@@ -230,7 +227,7 @@ bits64 reductionDataOffsets[10];
 bits64 reductionIndexOffsets[10];
 
 /* Load in chromosome sizes. */
-struct hash *chromHash = bwgChromSizesFromFile(chromSizes);
+struct hash *chromHash = bbiChromSizesFromFile(chromSizes);
 verbose(1, "Read %d chromosomes and sizes from %s\n",  chromHash->elCount, chromSizes);
 
 /* Load and sort input file. */
@@ -248,7 +245,8 @@ verbose(1, "%d of %d chromosomes used (%4.2f%%)\n", chromCount, chromHash->elCou
 	100.0*chromCount/chromHash->elCount);
 
 /* Calculate first meaningful reduction size and make first reduction. */
-bits32 summaryCount = 0;
+bits16 summaryCount = 0;
+bits16 version = 1;
 int initialReduction = ppBedAverageSize(pbList)*10;
 verbose(2, "averageBedSize=%d\n", initialReduction/10);
 bits64 lastSummarySize = 0, summarySize;
@@ -256,11 +254,11 @@ struct bbiSummary *summaryList, *firstSummaryList;
 for (;;)
     {
     summaryList = summaryOnDepth(pbList, chromInfoArray, initialReduction);
-    summarySize = bwgTotalSummarySize(summaryList);
+    summarySize = bbiTotalSummarySize(summaryList);
     if (summarySize >= fullSize && summarySize != lastSummarySize)
         {
 	initialReduction *= 2;
-	bwgSummaryFreeList(&summaryList);
+	bbiSummaryFreeList(&summaryList);
 	lastSummarySize = summarySize;
 	}
     else
@@ -279,9 +277,9 @@ for (i=0; i<ArraySize(reduceSummaries)-1; i++)
     reduction *= 10;
     if (reduction > 1000000000)
         break;
-    summaryList = bwgReduceSummaryList(reduceSummaries[summaryCount-1], chromInfoArray, 
+    summaryList = bbiReduceSummaryList(reduceSummaries[summaryCount-1], chromInfoArray, 
     	reduction);
-    summarySize = bwgTotalSummarySize(summaryList);
+    summarySize = bbiTotalSummarySize(summaryList);
     if (summarySize != lastSummarySize)
         {
  	reduceSummaries[summaryCount] = summaryList;
@@ -298,6 +296,7 @@ for (i=0; i<ArraySize(reduceSummaries)-1; i++)
  * offsets we'll fill in later. */
 FILE *f = mustOpen(outName, "wb");
 writeOne(f, sig);
+writeOne(f, version);
 writeOne(f, summaryCount);
 chromTreeOffsetPos = ftell(f);
 writeOne(f, chromTreeOffset);
@@ -322,7 +321,7 @@ for (i=0; i<summaryCount; ++i)
 chromTreeOffset = ftell(f);
 int chromBlockSize = min(blockSize, chromCount);
 bptFileBulkIndexToOpenFile(chromInfoArray, sizeof(chromInfoArray[0]), chromCount, chromBlockSize,
-    bigWigChromInfoKey, maxChromNameSize, bigWigChromInfoVal, 
+    bbiChromInfoKey, maxChromNameSize, bbiChromInfoVal, 
     sizeof(chromInfoArray[0].id) + sizeof(chromInfoArray[0].size), 
     f);
 
@@ -360,7 +359,7 @@ verbose(2, "bigBedFileCreate writing %d summaries\n", summaryCount);
 for (i=0; i<summaryCount; ++i)
     {
     reductionDataOffsets[i] = ftell(f);
-    reductionIndexOffsets[i] = bwgWriteSummaryAndIndex(reduceSummaries[i], blockSize, itemsPerSlot, f);
+    reductionIndexOffsets[i] = bbiWriteSummaryAndIndex(reduceSummaries[i], blockSize, itemsPerSlot, f);
     }
 
 /* Go back and fill in offsets properly in header. */

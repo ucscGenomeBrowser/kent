@@ -18,12 +18,8 @@ struct bigBedInterval
     char *rest;			/* Rest of line. May be NULL*/
     };
 
-struct bbiFile;	/* Declare here but real declaration is in bgwInternal.h. */
-
 struct bbiFile *bigBedFileOpen(char *fileName);
-/* Open up big bed file.  Note - this is the same return structure as bigWigFileOpen,
- * and can be used in most (but not all) bigWig functions.  All but the bigWigIntervalQuery
- * and the bigWigSummaryArray. Use the bigBed equivalents for these - defined below. */
+/* Open up big bed file.   Free this up with bbiFileFree */
 
 struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bwf, 
 	char *chrom, bits32 start, bits32 end, struct lm *lm);

@@ -37,6 +37,12 @@ return closestLevel;
 struct bbiFile *bbiFileOpen(char *fileName, bits32 sig, char *typeName)
 /* Open up big wig or big bed file. */
 {
+/* This code needs to agree with code in two other places currently - bigBedFileCreate,
+ * and bigWigFileCreate.  I'm thinking of refactoring to share at least between
+ * bigBedFileCreate and bigWigFileCreate.  It'd be great so it could be structured
+ * so that it could send the input in one chromosome at a time, and send in the zoom
+ * stuff only after all the chromosomes are done.  This'd potentially reduce the memory
+ * footprint by a factor of 2 or 4.  Still, for now it works. -JK */
 struct bbiFile *bbi;
 AllocVar(bbi);
 bbi->fileName = cloneString(fileName);
@@ -57,7 +63,8 @@ if (magic != sig)
 bbi->typeSig = sig;
 
 /* Read rest of defined bits of header, byte swapping as needed. */
-bbi->zoomLevels = readBits32(f, isSwapped);
+bbi->version = readBits16(f, isSwapped);
+bbi->zoomLevels = readBits16(f, isSwapped);
 bbi->chromTreeOffset = readBits64(f, isSwapped);
 bbi->unzoomedDataOffset = readBits64(f, isSwapped);
 bbi->unzoomedIndexOffset = readBits64(f, isSwapped);
@@ -81,6 +88,7 @@ slReverse(&levelList);
 bbi->levelList = levelList;
 
 /* Attach B+ tree of chromosome names and ids. */
+fseek(f, bbi->chromTreeOffset, SEEK_SET);
 bbi->chromBpt =  bptFileAttach(fileName, f);
 
 return bbi;

@@ -3,6 +3,41 @@
 #ifndef BBIFILE_H
 #define BBIFILE_H
 
+/* bigWig/bigBed file structure:
+ *     fixedWidthHeader
+ *         magic# 		4 bytes
+ *         version              2 bytes
+ *	   zoomLevels		2 bytes
+ *         chromosomeTreeOffset	8 bytes
+ *         fullDataOffset	8 bytes
+ *	   fullIndexOffset	8 bytes
+ *         reserved            32 bytes
+ *     zoomHeaders		there are zoomLevels number of these
+ *         reductionLevel	4 bytes
+ *	   reserved		4 bytes
+ *	   dataOffset		8 bytes
+ *         indexOffset          8 bytes
+ *     chromosome b+ tree       bPlusTree index
+ *     full data
+ *         sectionCount		4 bytes
+ *         section data		section count sections, of three types
+ *     full index               cirTree index
+ *     zoom info             one of these for each zoom level
+ *         zoom data
+ *             zoomCount	4 bytes
+ *             zoom data	there are zoomCount of these items
+ *                 chromId	4 bytes
+ *	           chromStart	4 bytes
+ *                 chromEnd     4 bytes
+ *                 validCount	4 bytes
+ *                 minVal       4 bytes float 
+ *                 maxVal       4 bytes float
+ *                 sumData      4 bytes float
+ *                 sumSquares   4 bytes float
+ *         zoom index        	cirTree index
+ */
+
+
 struct bbiZoomLevel
 /* A zoom level in bigWig file. */
     {
@@ -26,7 +61,8 @@ struct bbiFile
     bits32 typeSig;		/* bigBedSig or bigWigSig for now. */
     boolean isSwapped;		/* If TRUE need to byte swap everything. */
     struct bptFile *chromBpt;	/* Index of chromosomes. */
-    bits32 zoomLevels;		/* Number of zoom levels. */
+    bits16 version;		/* Version number - initially 1. */
+    bits16 zoomLevels;		/* Number of zoom levels. */
     bits64 chromTreeOffset;	/* Offset to chromosome index. */
     bits64 unzoomedDataOffset;	/* Start of unzoomed data. */
     bits64 unzoomedIndexOffset;	/* Start of unzoomed index. */
@@ -70,6 +106,13 @@ void bbiChromInfoFreeList(struct bbiChromInfo **pList);
 bits32 bbiChromSize(struct bbiFile *bbi, char *chrom);
 /* Returns size of given chromosome. */
 
+void bbiChromInfoKey(const void *va, char *keyBuf);
+/* Get key field out of bbiChromInfo. */
+
+void *bbiChromInfoVal(const void *va);
+/* Get val field out of bbiChromInfo. */
+
+
 enum bbiSummaryType
 /* Way to summarize data. */
     {
@@ -98,6 +141,9 @@ struct bbiSummary
     float sumSquares;		/* sum of squares for each base. */
     bits64 fileOffset;		/* Offset of summary in file. */
     };
+
+#define bbiSummaryFreeList slFreeList
+
 
 struct bbiSummaryOnDisk
 /* The part of the summary that ends up on disk - in the same order written to disk. */
@@ -140,5 +186,36 @@ boolean bbiSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 e
  * for regions without data in file.  (Generally you want the default value to either
  * be 0.0 or nan("") depending on the application.)  Returns FALSE if no data
  * at that position. */
+
+/****** Write side of things - implemented in bbiWrite.c ********/
+
+void bbiWriteFloat(FILE *f, float val);
+/* Write out floating point val to file.  Mostly to convert from double... */
+
+struct hash *bbiChromSizesFromFile(char *fileName);
+/* Read two column file into hash keyed by chrom. */
+
+bits64 bbiTotalSummarySize(struct bbiSummary *list);
+/* Return size on disk of all summaries. */
+
+void bbiAddToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end, 
+	bits32 validCount, double minVal, double maxVal, double sumData, double sumSquares,  
+	int reduction, struct bbiSummary **pOutList);
+/* Add data range to summary - putting it onto top of list if possible, otherwise
+ * expanding list. */
+
+void bbiAddRangeToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end, 
+	double val, int reduction, struct bbiSummary **pOutList);
+/* Add chromosome range to summary - putting it onto top of list if possible, otherwise
+ * expanding list. */
+
+struct bbiSummary *bbiReduceSummaryList(struct bbiSummary *inList, 
+	struct bbiChromInfo *chromInfoArray, int reduction);
+/* Reduce summary list to another summary list. */
+
+bits64 bbiWriteSummaryAndIndex(struct bbiSummary *summaryList, 
+	int blockSize, int itemsPerSlot, FILE *f);
+/* Write out summary and index to summary, returning start position of
+ * summary index. */
 
 #endif /* BBIFILE_H */
