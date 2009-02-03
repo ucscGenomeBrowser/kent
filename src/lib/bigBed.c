@@ -249,6 +249,8 @@ bits16 summaryCount = 0;
 bits16 version = 1;
 int initialReduction = ppBedAverageSize(pbList)*10;
 verbose(2, "averageBedSize=%d\n", initialReduction/10);
+if (initialReduction > 10000)
+    initialReduction = 10000;
 bits64 lastSummarySize = 0, summarySize;
 struct bbiSummary *summaryList, *firstSummaryList;
 for (;;)
