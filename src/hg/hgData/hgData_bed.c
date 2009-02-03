@@ -5,7 +5,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.6 2009/01/27 22:04:48 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.7 2009/02/03 10:36:57 mikep Exp $";
 
 
 void printBedAsAnnoj(struct bed *b, struct hTableInfo *hti)
@@ -86,72 +86,86 @@ for (t = b ; t ; t = t->next)
 printf("]\n}\n");
 }
 
-void printBed(int n, struct bed *b, char *db, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti)
+static struct json_object *jsonBedCount(char *genome, char *track, char *chrom, int start, int end, struct hTableInfo *hti, int n)
+{
+struct json_object *b = json_object_new_object();
+struct json_object *props = json_object_new_object();
+json_object_object_add(b, "properties", props);
+json_object_object_add(b, "genome", json_object_new_string(genome));
+json_object_object_add(b, "track", json_object_new_string(track));
+json_object_object_add(b, "chrom", json_object_new_string(chrom));
+json_object_object_add(b, "start", json_object_new_int(start));
+json_object_object_add(b, "end", json_object_new_int(end));
+json_object_object_add(b, "row_count", json_object_new_int(n));
+if (hti)
+    {
+    json_object_object_add(props, "has_CDS", json_object_new_boolean(hti->hasCDS));
+    json_object_object_add(props, "has_blocks", json_object_new_boolean(hti->hasBlocks));
+    json_object_object_add(props, "type", json_object_new_string(hti->type));
+    }
+return b;
+}
+
+static struct json_object *jsonBed(struct hTableInfo *hti, struct bed *b)
 // print out rows of bed data, each row as a list of columns
 {
+struct json_object *data = json_object_new_array();
+struct json_object *arr;
 struct bed *t;
-printf("{ \"db\" : \"%s\",\n\"track\" : \"%s\",\n\"tableName\" : \"%s\",\n\"chrom\" : \"%s\",\n\"start\" : %d,\n\"end\" : %d,\n\"count\" : %d,\n\"hasCDS\" : %s,\n\"hasBlocks\" : %s,\n\"type\" : \"%s\",\n",
-    db, track, hti->rootName, chrom, start, end, n,
-    (hti->hasCDS ? "true" : "false"), (hti->hasBlocks ? "true" : "false"), type );
-printf("\"bedColumns\" : [");
-int c = 0; // number of columns, to decide when to print ',' between name:value pairs
-if (hti->startField[0] != 0)
-    printf("%c\"%s\"", c++ ? ',' : ' ', hti->startField);
-if (hti->endField[0] != 0)
-    printf("%c\"%s\"", c++ ? ',' : ' ', hti->endField);
-if (hti->nameField[0] != 0)
-    printf("%c\"%s\"", c++ ? ',' : ' ', hti->nameField);
-if (hti->scoreField[0] != 0)
-    printf("%c\"%s\"", c++ ? ',' : ' ', hti->scoreField);
-if (hti->strandField[0] != 0)
-    printf("%c\"%s\"", c++ ? ',' : ' ', hti->strandField);
-if (hti->cdsStartField[0] != 0)
-    printf("%c\"%s\"", c++ ? ',' : ' ', hti->cdsStartField);
-if (hti->cdsEndField[0] != 0)
-    printf("%c\"%s\"", c++ ? ',' : ' ', hti->cdsEndField);
-if (hti->countField[0] != 0)
-    printf("%c\"%s\"", c++ ? ',' : ' ', hti->countField);
-if (hti->startsField[0] != 0)
-    printf("%c\"%s\"", c++ ? ',' : ' ', hti->startsField);
-if (hti->endsSizesField[0] != 0)
-    printf("%c\"%s\"", c++ ? ',' : ' ', hti->endsSizesField);
-
-printf("],\n\"bed\" : [\n");
+int i;
 for (t = b ; t ; t = t->next)
     {
-    c = 0; // number of columns printed this row
-    printf("[");
+    struct json_object *r = json_object_new_object();
+    json_object_array_add(data, r); // add this row to the array
     if (hti->startField[0] != 0)
-        printf("%c%d", c++ ? ',' : ' ', t->chromStart);
+	json_object_object_add(r, "s", json_object_new_int(t->chromStart));
     if (hti->endField[0] != 0)
-        printf("%c%d", c++ ? ',' : ' ', t->chromEnd);
+	json_object_object_add(r, "e", json_object_new_int(t->chromEnd));
     if (hti->nameField[0] != 0)
-        printf("%c\"%s\"", c++ ? ',' : ' ', t->name);
+	json_object_object_add(r, "name", json_object_new_string(t->name));
     if (hti->scoreField[0] != 0)
-        printf("%c%d", c++ ? ',' : ' ', t->score);
+	json_object_object_add(r, "score", json_object_new_int(t->score));
     if (hti->strandField[0] != 0)
-        printf("%c\'%c\'", c++ ? ',' : ' ', t->strand[0]);
+	json_object_object_add(r, "strand", json_object_new_string(t->strand));
     if (hti->cdsStartField[0] != 0)
-        printf("%c%d", c++ ? ',' : ' ', t->thickStart);
+	json_object_object_add(r, "thickS", json_object_new_int(t->thickStart));
     if (hti->cdsEndField[0] != 0)
-        printf("%c%d", c++ ? ',' : ' ', t->thickEnd);
+	json_object_object_add(r, "thickE", json_object_new_int(t->thickEnd));
     if (hti->countField[0] != 0)
-        printf("%c%d", c++ ? ',' : ' ', t->blockCount);
+	json_object_object_add(r, "blocks", json_object_new_int(t->blockCount));
     if (hti->startsField[0] != 0)
 	{
-	char *tmp = sqlSignedArrayToString(t->chromStarts, t->blockCount);
-        printf("%c[%s]", c++ ? ',' : ' ', tmp);
-	freez(&tmp);
+	arr = json_object_new_array();
+	json_object_object_add(r, "starts", arr);
+	for (i=0 ; i< t->blockCount; ++i)
+	    json_object_array_add(arr, json_object_new_int(t->chromStarts[i]));
 	}
     if (hti->endsSizesField[0] != 0)
 	{
-	char *tmp = sqlSignedArrayToString(t->blockSizes, t->blockCount);
-        printf("%c[%s]", c++ ? ',' : ' ', tmp);
-	freez(&tmp);
+	arr = json_object_new_array();
+	json_object_object_add(r, "sizes", arr);
+	for (i=0 ; i< t->blockCount; ++i)
+	    json_object_array_add(arr, json_object_new_int(t->blockSizes[i]));
 	}
-    printf("]%c\n", t->next ? ',' : ' ');
     }
-printf("]\n}\n");
+return data;
+}
+
+void printBedCount(char *genome, char *track, char *chrom, int start, int end, struct hTableInfo *hti, int n)
+{
+struct json_object *d = json_object_new_object();
+json_object_object_add(d, "track", jsonBedCount(genome, track, chrom, start, end, hti, n));
+printf(json_object_to_json_string(d));
+json_object_put(d);
+}
+
+void printBed(char *genome, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti, int n, struct bed *b)
+{
+struct json_object *d = json_object_new_object();
+json_object_object_add(d, "track", jsonBedCount(genome, track, chrom, start, end, hti, n));
+json_object_object_add(d, "data", jsonBed(hti, b));
+printf(json_object_to_json_string(d));
+json_object_put(d);
 }
 
 static void printBedOneColumn(struct bed *b, char *column)

@@ -11,7 +11,7 @@
 #include <json/json.h>                                                     
 #endif                                                                     
 
-static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.3 2009/02/03 05:19:11 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.4 2009/02/03 10:36:57 mikep Exp $";
 
 
 static struct json_object *jsonOneTrack(struct trackDb *tdb)
@@ -29,31 +29,43 @@ json_object_object_add(t, "parent_track", tdb->parentName ? json_object_new_stri
 return t;
 }
 
-static void jsonAddOneTrackFull(struct json_object *arr, struct trackDb *tdb)
+static void jsonAddOneTrackFull(struct json_object *arr, struct trackDb *tdb, struct hTableInfo *hti)
 // Detailed information for a single track added to the array 'arr'
 {
 struct json_object *item = json_object_new_object();
+struct json_object *view = json_object_new_object();
+struct json_object *props = json_object_new_object();
 struct json_object *t = jsonOneTrack(tdb);
 struct json_object *restList = json_object_new_array();
 int i;
 json_object_array_add(arr, item); /* add this item to the array */
 json_object_object_add(item, tdb->tableName, t); 
+json_object_object_add(item, "view_properties", view); 
+json_object_object_add(item, "table_properties", props); 
 json_object_object_add(t, "description_html", json_object_new_string(tdb->html)); /* Some html to display about the track */
-json_object_object_add(t, "color_r", json_object_new_int(tdb->colorR)); /* Color red component 0-255 */
-json_object_object_add(t, "color_g", json_object_new_int(tdb->colorG)); /* Color green component 0-255 */
-json_object_object_add(t, "color_b", json_object_new_int(tdb->colorB)); /* Color blue component 0-255 */
-json_object_object_add(t, "alt_color_r", json_object_new_int(tdb->altColorR)); /* Light color red component 0-255 */
-json_object_object_add(t, "alt_color_g", json_object_new_int(tdb->altColorG)); /* Light color green component 0-255 */
-json_object_object_add(t, "alt_color_b", json_object_new_int(tdb->altColorB)); /* Light color blue component 0-255 */
-json_object_object_add(t, "use_score", json_object_new_boolean(tdb->useScore)); /* true if use score, false if not */
+// properties of the view
+json_object_object_add(view, "color_r", json_object_new_int(tdb->colorR)); /* Color red component 0-255 */
+json_object_object_add(view, "color_g", json_object_new_int(tdb->colorG)); /* Color green component 0-255 */
+json_object_object_add(view, "color_b", json_object_new_int(tdb->colorB)); /* Color blue component 0-255 */
+json_object_object_add(view, "alt_color_r", json_object_new_int(tdb->altColorR)); /* Light color red component 0-255 */
+json_object_object_add(view, "alt_color_g", json_object_new_int(tdb->altColorG)); /* Light color green component 0-255 */
+json_object_object_add(view, "alt_color_b", json_object_new_int(tdb->altColorB)); /* Light color blue component 0-255 */
+json_object_object_add(view, "use_score", json_object_new_boolean(tdb->useScore)); /* true if use score, false if not */
 // tdb->settings crashes the json print output.
 // need to instead figure out how to get all the individual settings from settings hash, if we care. 
-//json_object_object_add(t, "settings", json_object_new_string(tdb->settings)); /* Name/value pairs for track-specific stuff */
+//json_object_object_add(view, "settings", json_object_new_string(tdb->settings)); /* Name/value pairs for track-specific stuff */
 //    struct hash *settingsHash;  /* Hash for settings. Not saved in database.  Don't use directly, rely on trackDbSetting to access. */
-json_object_object_add(t, "restrict_count", json_object_new_int(tdb->restrictCount)); /* Number of chromosomes this is on (0=all though!) */
-json_object_object_add(t, "restrict_list", restList); /* List of chromosomes this is on ([]=all though!) */
+json_object_object_add(view, "restrict_count", json_object_new_int(tdb->restrictCount)); /* Number of chromosomes this is on (0=all though!) */
+json_object_object_add(view, "restrict_list", restList); /* List of chromosomes this is on ([]=all though!) */
 for (i = 0; i < tdb->restrictCount ; ++i)
     json_object_array_add(restList, json_object_new_string(tdb->restrictList[i]));
+// Properties of the table
+if (hti)
+    {
+    json_object_object_add(props, "has_CDS", json_object_new_boolean(hti->hasCDS));
+    json_object_object_add(props, "has_blocks", json_object_new_boolean(hti->hasBlocks));
+    json_object_object_add(props, "type", json_object_new_string(hti->type));
+    }
 }
 
 static void jsonAddTracks(struct json_object *arr, struct trackDb *tdb)
@@ -101,7 +113,7 @@ for (t = tdb ; t ; t = t->next)
 freeHash(&hGrp);
 }
 
-void printTrackInfo(char *genome, struct trackDb *tdb)
+void printTrackInfo(char *genome, struct trackDb *tdb, struct hTableInfo *hti)
 // Print genome and track information for the genome 
 // If only one track is specified, print full details including html description page
 // 
@@ -121,7 +133,7 @@ json_object_object_add(trackGen, genome, trackArr);
 json_object_object_add(groupGen, genome, group);
 // add tracks to the track array
 if (tdb && slCount(tdb)==1)
-    jsonAddOneTrackFull(trackArr, tdb);
+    jsonAddOneTrackFull(trackArr, tdb, hti);
 else
     jsonAddTracks(trackArr, tdb);
 jsonAddGroups(group, tdb);

@@ -19,13 +19,17 @@
 #define END_VAR "_END_"
 #define END_ARG "end"
 
-#define CMD_ARG "cmd"
-#define ACTION_ARG "action"
+#define CMD_ARG       "cmd"
+#define ACTION_ARG    "action"
 #define ALLCHROMS_ARG "all_chroms"
 
-#define INFO_ACTION "info"
+#define INFO_ACTION   "info"
+#define ITEM_ACTION   "item"
+#define SEARCH_ACTION "search"
+#define COUNT_ACTION  "count"
+#define RANGE_ACTION  "range"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.6 2009/02/03 05:19:10 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.7 2009/02/03 10:36:56 mikep Exp $";
 
 struct json_object *jsonContact()
 {
@@ -134,7 +138,10 @@ char *term = cgiOptionalString(TERM_ARG);
 char *chrom = cgiOptionalString(CHROM_ARG);
 int start = cgiOptionalInt(START_ARG, 0);
 int end = cgiOptionalInt(END_ARG, 0);
-MJP(2); verbose(2,"cmd=[%s] genome=[%s] track=[%s] chrom=[%s] start=%d end=%d\n", cmd, genome, track, chrom, start,  end);
+char rootName[HDB_MAX_TABLE_STRING];
+char parsedChrom[HDB_MAX_CHROM_STRING];
+char *trackType[4] = {NULL,NULL,NULL,NULL};
+int typeWords;
 if (verboseLevel()>1)
     printf("method=[%s] uri=[%s] params=[%s] query_string=[%s] http_accept=[%s] path_info=[%s] script_name=[%s] path_translated=[%s] \n",cgiRequestMethod(), cgiRequestUri(), cgiUrlString()->string, getenv("QUERY_STRING"), getenv("HTTP_ACCEPT"), getenv("PATH_INFO"), getenv("SCRIPT_NAME"), getenv("PATH_TRANSLATED"));
 // list information about all active genome databases
@@ -177,50 +184,101 @@ else if (sameOk(GENOME_ARG, cmd))
     okSendHeader(NULL);
     printGenomes(dbs, ci);
     }
-//  /data/track/info/_GENOME_ List of all tracks in genome _GENOME_
-//  /data/track/info/_GENOME_/_TRACK_ Information for one track _TRACK_ in genome _GENOME_
+// List of all tracks in genome or detail for one track in genome
+//    /data/track/info/_GENOME_
+//    /data/track/info/_GENOME_/_TRACK_
+// Count of items in a track in a whole chromosome or a range within a chromosome
+//    /data/track/count/_GENOME_/_TRACK_/_CHROM_
+//    /data/track/count/_GENOME_/_TRACK_/_CHROM_/_START_/_END_
+// List of items in a track in a whole chromosome or a range within a chromosome
+//    /data/track/range/_GENOME_/_TRACK_/_CHROM_
+//    /data/track/range/_GENOME_/_TRACK_/_CHROM_/_START_/_END_
 else if (sameOk(TRACK_ARG, cmd))
     {
-    MJP(2); verbose(2,"cmd=%s action=%s genome=%s\n", cmd, action, genome);
     if (!genome)
         ERR_NO_GENOME;
     if (sameOk(INFO_ACTION, action))
 	{
-	MJP(2); verbose(2,"info action tdb=%p\n", tdb);
 	if (track==NULL)
 	    {
-	    MJP(2); verbose(2,"info action no track hTrackDb(%s, NULL)\n", genome);
 	    if (!(tdb = hTrackDb(genome, NULL)))
 		ERR_TRACK_INFO_NOT_FOUND("<any>", genome);
-	    MJP(2); verbose(2,"hTrackDb found %d tracks\n", slCount(tdb));
 	    }
 	else
 	    {
-	    MJP(2); verbose(2,"info one track hTrackInfo(%s,%s)\n", genome, track);
 	    struct sqlConnection *conn = hAllocConn(genome);
 	    if (!conn)
 		ERR_NO_GENOME_DB_CONNECTION(genome);
 	    if (!(tdb = hTrackInfo(conn, track)))
 		ERR_TRACK_INFO_NOT_FOUND(track, genome);
-	    MJP(2); verbose(2,"hTrackInfo found %d tracks\n", slCount(tdb));
+	    //hParseTableName(genome, tdb->tableName, rootName, parsedChrom);
+	    //if (!(hti = hFindTableInfo(genome, chrom, rootName)))
+	//	ERR_TABLE_NOT_FOUND(tdb->tableName, chrom, rootName, genome);
 	    }
-	MJP(2); verbose(2,"found %d tracks\n", slCount(tdb));
 	okSendHeader(NULL);
-	printTrackInfo(genome, tdb);
-	MJP(2); verbose(2,"done\n");
+	printTrackInfo(genome, tdb, hti);
+	}
+    else if (sameOk(SEARCH_ACTION, action))
+	{
+	}
+    else if (sameOk(ITEM_ACTION, action))
+	{
+	}
+    else if (sameOk(COUNT_ACTION, action) || sameOk(RANGE_ACTION, action))
+	{
+        // queries which require location
+	if (!track)
+	    ERR_NO_TRACK;
+	if (!(tdb = hTrackDbForTrack(genome, track)))
+	    ERR_TRACK_NOT_FOUND(track, genome);
+	hParseTableName(genome, tdb->tableName, rootName, parsedChrom);
+        if (!chrom)
+            ERR_NO_CHROM;
+        if (!(ci = hGetChromInfo(genome, chrom)))
+            ERR_CHROM_NOT_FOUND(genome, chrom);
+        if (start<0)
+            start = 0;
+        if (end<0)
+            end = 0;
+        if (end==0)
+            end = ci->size; // MJP FIXME: potential overflow problem, int <- unsigned
+        if (!(hti = hFindTableInfo(genome, chrom, rootName)))
+            ERR_TABLE_NOT_FOUND(tdb->tableName, chrom, rootName, genome);
+        // test how many rows we are about to receive
+        int n = hGetBedRangeCount(genome, tdb->tableName, chrom, start, end, NULL);
+        if (sameOk(COUNT_ACTION, action))
+            {
+	    if (differentString(track, tdb->tableName))
+		errAbort("track name (%s) does not match table name (%s)\n", track, tdb->tableName);
+            okSendHeader(NULL);
+            printBedCount(genome, track, chrom, start, end, hti, n);
+            }
+        else if (sameOk("range", action))
+            {
+            typeWords = chopByWhite(tdb->type, trackType, sizeof(trackType));
+            if (sameOk(trackType[0], "bed") || sameOk(trackType[0], "genePred"))  // need to test table type is supported format
+                {
+                b = hGetBedRange(genome, tdb->tableName, chrom, start, end, NULL);
+                okSendHeader(NULL);
+                printBed(genome, track, tdb->type, chrom, start, end, hti, n, b);
+                }
+            else
+                {
+                ERR_BAD_TRACK_TYPE(track, tdb->type);
+                }
+            }
+	else
+	    {
+	    errAbort("action %s unknown\n", action);
+	    }
 	}
     else
 	{
 	ERR_BAD_ACTION(action, track, genome);
 	}
     }
-else if (sameOk("track", cmd) ) // get data from track using track 'type'
+else if (0 && sameOk("track", cmd) ) // get data from track using track 'type'
     {
-    MJP(2); verbose(2,"data code\n");
-    char *trackType[4] = {NULL,NULL,NULL,NULL};
-    int typeWords;
-    char parsedChrom[HDB_MAX_CHROM_STRING];
-    char rootName[256];
     if (!genome)
         ERR_NO_GENOME;
     if (!track)
@@ -231,17 +289,9 @@ else if (sameOk("track", cmd) ) // get data from track using track 'type'
     // queries which require only db & table 
     if (sameOk("item", action))
 	{
-	MJP(2); verbose(2,"tdb tableName=[%s] action=%s term=%s genome=%s root=%s type=[%s]\n", tdb->tableName, action, term, genome, rootName, tdb->type);
 	typeWords = chopByWhite(tdb->type, trackType, sizeof(trackType));
-	MJP(2); verbose(2,"type=%s code (%s,%s,%s,%d,%d)\n", trackType[0], genome, tdb->tableName, chrom, start, end);
 	okSendHeader(NULL);
 	printItem(genome, track, trackType[0], term);
-	}
-    else if (sameOk("syndicate",action))
-	{
-	okSendHeader(NULL);
-	printf(
-"{\"success\":true,\"data\":{\"institution\":{\"name\":\"UCSC\",\"url\":\"http:\\/\\/genome.ucsc.edu\",\"logo\":\"images\\/title.jpg\"},\"engineer\":{\"name\":\"Michael Pheasant\",\"email\":\"mikep@soe.ucsc.edu\"},\"service\":{\"title\":\"Known Genes\",\"species\":\"Human\",\"access\":\"public\",\"version\":\"hg18\",\"format\":\"Unspecified\",\"server\":\"\",\"description\":\"The UCSC Known Genes.\"}}}\n");
 	}
     else
 	{
@@ -267,14 +317,12 @@ else if (sameOk("track", cmd) ) // get data from track using track 'type'
 	    }
         else if (sameOk("range", action))
 	    {
-	    MJP(2); verbose(2,"tdb tableName=[%s] action=%s chrom=%s root=%s type=[%s]\n", tdb->tableName, action, chrom, rootName, tdb->type);
 	    typeWords = chopByWhite(tdb->type, trackType, sizeof(trackType));
 	    if (1)  // need to test table type is supported format
 		{
-		MJP(2); verbose(2,"type=bed code (%s,%s,%s,%d,%d)\n", genome, tdb->tableName, chrom, start, end);
 		b = hGetBedRange(genome, tdb->tableName, chrom, start, end, NULL);
 		okSendHeader(NULL);
-		printBed(n, b, genome, track, tdb->type, chrom, start, end, hti);
+		//printBed(n, b, genome, track, tdb->type, chrom, start, end, hti);
 		}
 	    else
 		{
@@ -308,7 +356,6 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv); // spoof cgi vars if running from command line
 initCgiInputMethod(cgiRequestMethod()); // otherwise initialize from request_method
 verboseSetLevel(cgiOptionalInt("verbose", 1));
-MJP(2); verbose(2,"method=[%s] uri=[%s] params=[%s]\n",cgiRequestMethod(), cgiRequestUri(), cgiUrlString()->string);
 
 if (sameOk(cgiRequestMethod(), "GET"))
     doGet();

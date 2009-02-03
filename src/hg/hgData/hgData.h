@@ -31,7 +31,7 @@
 // - for example, if app asks for JSON, send this: 
 //#define okSendHeader() fprintf(stdout,"Content-type: application/json\n\n") // this triggers download by browser client
 // - otherwise if browser, then send same content but this type:
-#define okSendHeader(format) fprintf(stdout,"Content-type: text/%s\n\n", ((format) ? (format) : "plain"))
+#define okSendHeader(format) fprintf(stdout,"Content-type: %s\n\n", ((format) ? (format) : "application/json"))
 #define FMT_JSON_ANNOJ "json-annoj"
 
 // Error responses
@@ -99,9 +99,6 @@ void errClient(char *format, ...);
 void printBedAsAnnoj(struct bed *b, struct hTableInfo *hti);
 // print out rows of bed data formatted as AnnoJ nested model
 
-void printBed(int n, struct bed *b, char *db, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti);
-// print out rows of bed data, each row as a list of columns
-
 void printBedByColumn(struct bed *b, struct hTableInfo *hti);
 // print out a list of bed records by column
 
@@ -118,12 +115,17 @@ void printGenomes(struct dbDbClade *db, struct chromInfo *ci);
 // print genome hierarchy for all genomes
 // if ci is not null, print array of chromosomes in ci list
 
-void printTrackInfo(char *genome, struct trackDb *tdb);
+void printTrackInfo(char *genome, struct trackDb *tdb, struct hTableInfo *hti);
 // Print genome and track information for the genome
 // If only one track is specified, print full details including html description page
 //
 // tracks => {_genome_ => [{ _track_name_ => {_track_details_},... }] }
 // groups => {_genome_ => [{_group_name_ => [{_track_name_: _track_priority_},... ]}] }
+
+
+void printBedCount(char *genome, char *track, char *chrom, int start, int end, struct hTableInfo *hti, int n);
+void printBed(char *genome, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti, int n, struct bed *b);
+
 
 
 
