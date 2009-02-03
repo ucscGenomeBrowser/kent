@@ -18,3 +18,5 @@ group map
 visibility dense
 type bed 3 +
 
+track nscanGene override
+origAssembly monDom4
