@@ -5,7 +5,7 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
-    mimeTests base64Tests quotedPTests safeTest hashTest
+    mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest
 	rm -r output
 	@echo tested all
 
@@ -206,6 +206,9 @@ testQuotedString:	${BIN_DIR}/testQuotedString mkdirs
 
 miniBlat:  mkdirs miniBlat.o ${MYLIBS}
 	${CC} ${COPT} -o miniBlat miniBlat.o ${MYLIBS}
+
+fetchUrlTest:  mkdirs fetchUrlTest.o ${MYLIBS}
+	${CC} ${COPT} -o fetchUrlTest fetchUrlTest.o ${MYLIBS}
 
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out
