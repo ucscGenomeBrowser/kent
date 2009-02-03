@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.17 2009/02/03 03:31:46 kent Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.18 2009/02/03 05:04:07 kent Exp $";
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -132,69 +132,6 @@ static void bedGraphFreeItems(struct track *tg) {
 snprintf(dbgMsg, DBGMSGSZ, "I haven't seen bedGraphFreeItems ever called ?");
 wigDebugPrint("bedGraphFreeItems");
 #endif
-}
-
-void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis, struct preDrawElement *preDraw,
-	int preDrawZero, int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit)
-/* Draw once we've figured out predraw... */
-{
-enum wiggleYLineMarkEnum yLineOnOff;
-double yLineMark;
-
-/*	determined from data	*/
-double overallUpperLimit = wigEncodeStartingUpperLimit;
-double overallLowerLimit = wigEncodeStartingLowerLimit;
-double overallRange;		/*	determined from data	*/
-double graphUpperLimit;		/*	scaling choice will set these	*/
-double graphLowerLimit;		/*	scaling choice will set these	*/
-double graphRange;		/*	scaling choice will set these	*/
-double epsilon;			/*	range of data in one pixel	*/
-Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
-struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->extraUiData;
-
-yLineOnOff = wigCart->yLineOnOff;
-yLineMark = wigCart->yLineMark;
-
-/*	width - width of drawing window in pixels
- *	pixelsPerBase - pixels per base
- *	basesPerPixel - calculated as 1.0/pixelsPerBase
- */
-preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction);
-preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
-overallRange = preDrawLimits(preDraw, preDrawZero, width,
-    &overallUpperLimit, &overallLowerLimit);
-graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
-    wigCart->autoScale,
-    &overallUpperLimit, &overallLowerLimit,
-    &graphUpperLimit, &graphLowerLimit,
-    &overallRange, &epsilon, tg->lineHeight,
-    wigCart->maxY, wigCart->minY);
-
-colorArray = allocColorArray(preDraw, width, preDrawZero,
-    wigCart->colorTrack, tg, hvg);
-
-graphPreDraw(preDraw, preDrawZero, width,
-    tg, hvg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
-    epsilon, colorArray, vis, wigCart->lineBar);
-
-drawZeroLine(vis, wigCart->horizontalGrid,
-    graphUpperLimit, graphLowerLimit,
-    hvg, xOff, yOff, width, tg->lineHeight);
-
-drawArbitraryYLine(vis, wigCart->yLineOnOff,
-    graphUpperLimit, graphLowerLimit,
-    hvg, xOff, yOff, width, tg->lineHeight, wigCart->yLineMark, graphRange,
-    wigCart->yLineOnOff);
-
-wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
-
-freez(&colorArray);
-if (retGraphUpperLimit != NULL)
-    *retGraphUpperLimit = graphUpperLimit;
-if (retGraphLowerLimit != NULL)
-    *retGraphLowerLimit = graphLowerLimit;
 }
 
 static void bedGraphDrawItems(struct track *tg, int seqStart, int seqEnd,

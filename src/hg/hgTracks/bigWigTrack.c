@@ -14,13 +14,7 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigTrack.c,v 1.2 2009/02/03 03:31:47 kent Exp $";
-
-void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis, struct preDrawElement *preDraw,
-	int preDrawZero, int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit);
-/* Draw once we've figured out predraw... */
+static char const rcsid[] = "$Id: bigWigTrack.c,v 1.3 2009/02/03 05:04:07 kent Exp $";
 
 static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
@@ -69,39 +63,7 @@ freeMem(summary);
 static void bigWigLoadItems(struct track *tg)
 /* Fill up tg->items with bedGraphItems derived from a bigWig file */
 {
-#ifdef OLD
-/* Figure out bigWig file name. */
-struct sqlConnection *conn = hAllocConn(database);
-char query[256];
-safef(query, sizeof(query), "select fileName from %s", tg->mapName);
-char *wigFileName = sqlQuickString(conn, query);
-if (wigFileName == NULL)
-    errAbort("Missing fileName in %s table", tg->mapName);
-hFreeConn(&conn);
-
-/* Get interval list from bigWig. */
-struct lm *lm = lmInit(0);
-struct bbiFile *bwf = bigWigFileOpen(wigFileName);
-struct bbiInterval *bi, *biList = bigWigIntervalQuery(bwf, chromName, winStart, winEnd, lm);
-
-/* Convert from bigWig's interval structure to bedGraphItem. */
-struct bedGraphItem *bgList = NULL;
-for (bi = biList; bi != NULL; bi = bi->next)
-    {
-    struct bedGraphItem *bg;
-    AllocVar(bg);
-    bg->start = bi->start;
-    bg->end = bi->end;
-    bg->dataValue = bi->val;
-    slAddHead(&bgList, bg);
-    }
-slReverse(&bgList);
-
-/* Clean up and go home. */
-bbiFileClose(&bwf);
-lmCleanup(&lm);
-tg->items = bgList;
-#endif /* OLD */
+/* Really nothing to do here. */
 }
 
 void bigWigMethods(struct track *track, struct trackDb *tdb, 

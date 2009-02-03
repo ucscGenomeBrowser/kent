@@ -119,6 +119,12 @@ void wigFindItemLimits(void *items,
     double *graphUpperLimit, double *graphLowerLimit);
 /*	find upper and lower limits of graphed items (wigItem)	*/
 
+void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis, struct preDrawElement *preDraw,
+	int preDrawZero, int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit);
+/* Draw once we've figured out predraw. */
+
 /******************  in source file bedGraph.c ************************/
 void wigBedGraphFindItemLimits(void *items,
     double *graphUpperLimit, double *graphLowerLimit);
