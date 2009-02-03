@@ -29,7 +29,7 @@
 #define COUNT_ACTION  "count"
 #define RANGE_ACTION  "range"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.7 2009/02/03 10:36:56 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.8 2009/02/03 22:13:13 mikep Exp $";
 
 struct json_object *jsonContact()
 {
@@ -105,13 +105,31 @@ addResource(res, "track_info", "/data/track/info/" GENOME_VAR "/" TRACK_VAR,
 // Count of items in a track in a whole chromosome or a range within a chromosome 
 addResource(res, "track_count_chrom", "/data/track/count/"GENOME_VAR"/"TRACK_VAR"/"CHROM_VAR,
         "Count of items in track "TRACK_VAR" in chrom "CHROM_VAR" in genome " GENOME_VAR, NULL);
-addResource(res, "track_count_range", "/data/track/count/"GENOME_VAR"/"TRACK_VAR"/"CHROM_VAR"/"START_VAR"/"END_VAR,
+addResource(res, "track_count", "/data/track/count/"GENOME_VAR"/"TRACK_VAR"/"CHROM_VAR"/"START_VAR"/"END_VAR,
         "Count of items in track "TRACK_VAR" in range "CHROM_VAR":"START_VAR"-"END_VAR" in genome " GENOME_VAR, NULL);
 // Set of all items in a track in a whole chromosome or a range within a chromosome 
 addResource(res, "track_range_chrom", "/data/track/range/"GENOME_VAR"/"TRACK_VAR"/"CHROM_VAR,
-        "List of items in track "TRACK_VAR" in chrom "CHROM_VAR" in genome " GENOME_VAR, NULL);
-addResource(res, "track_range", "/data/track/count/"GENOME_VAR"/"TRACK_VAR"/"CHROM_VAR"/"START_VAR"/"END_VAR,
-        "List of items in track "TRACK_VAR" in range "CHROM_VAR":"START_VAR"-"END_VAR" in genome " GENOME_VAR, NULL);
+        "List of items in track "TRACK_VAR" in chrom "CHROM_VAR" in genome "GENOME_VAR
+	". Default format is a JSON derivative of the UCSC BED format.", 
+	    addResourceOption(
+	    addResourceOption(json_object_new_array(), 
+	    FORMAT_ARG,
+            json_object_get_string(json_object_new_string(ANNOJ_FLAT_FMT)),
+            "Return data in AnnoJ Flat Model format"),
+	    FORMAT_ARG,
+            json_object_get_string(json_object_new_string(ANNOJ_NESTED_FMT)),
+            "Return data in AnnoJ Nested Model format"));
+addResource(res, "track_range", "/data/track/range/"GENOME_VAR"/"TRACK_VAR"/"CHROM_VAR"/"START_VAR"/"END_VAR,
+        "List of items in track "TRACK_VAR" in range "CHROM_VAR":"START_VAR"-"END_VAR" in genome "GENOME_VAR
+	". Default format is a JSON derivative of the UCSC BED format.", 
+	    addResourceOption(
+	    addResourceOption(json_object_new_array(), 
+	    FORMAT_ARG,
+            json_object_get_string(json_object_new_string(ANNOJ_FLAT_FMT)),
+            "Return data in AnnoJ Flat Model format"),
+	    FORMAT_ARG,
+            json_object_get_string(json_object_new_string(ANNOJ_NESTED_FMT)),
+            "Return data in AnnoJ Nested Model format"));
 // Details for one item in a track in a genome, or a list of all items matching a term
 addResource(res, "track_item", "/data/track/item/"GENOME_VAR"/"TRACK_VAR"/"TERM_VAR,
         "Detailed information for item "TERM_VAR" in track "TRACK_VAR" in genome " GENOME_VAR, NULL);
@@ -132,6 +150,7 @@ struct hTableInfo *hti = NULL;
 struct bed *b = NULL;
 char *cmd = cgiOptionalString(CMD_ARG);
 char *action = cgiOptionalString(ACTION_ARG);
+char *format = cgiOptionalString(FORMAT_ARG);
 char *genome = cgiOptionalString(GENOME_ARG);
 char *track = cgiOptionalString(TRACK_ARG);
 char *term = cgiOptionalString(TERM_ARG);
@@ -260,7 +279,7 @@ else if (sameOk(TRACK_ARG, cmd))
                 {
                 b = hGetBedRange(genome, tdb->tableName, chrom, start, end, NULL);
                 okSendHeader(NULL);
-                printBed(genome, track, tdb->type, chrom, start, end, hti, n, b);
+                printBed(genome, track, tdb->type, chrom, start, end, hti, n, b, format);
                 }
             else
                 {

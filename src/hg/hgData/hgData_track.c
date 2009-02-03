@@ -11,12 +11,13 @@
 #include <json/json.h>                                                     
 #endif                                                                     
 
-static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.4 2009/02/03 10:36:57 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.5 2009/02/03 22:13:14 mikep Exp $";
 
 
 static struct json_object *jsonOneTrack(struct trackDb *tdb)
 // Brief information about a single track
 {
+char *url;
 struct json_object *t = json_object_new_object();
 json_object_object_add(t, "track", json_object_new_string(tdb->tableName)); /* Symbolic ID of Track */
 json_object_object_add(t, "track_group", json_object_new_string(tdb->grp)); /* Which group track belongs to */
@@ -24,7 +25,9 @@ json_object_object_add(t, "track_priority", json_object_new_double(tdb->priority
 json_object_object_add(t, "type", json_object_new_string(tdb->type)); /* Track type: bed, psl, genePred, etc. */
 json_object_object_add(t, "short_label", json_object_new_string(tdb->shortLabel)); /* Short label displayed on left */
 json_object_object_add(t, "long_label", json_object_new_string(tdb->longLabel)); /* Long label displayed in middle */
-json_object_object_add(t, "item_url", json_object_new_string(tdb->url)); /* URL to link to when they click on an item */
+url = replaceChars(tdb->url, "$$", TERM_VAR);
+json_object_object_add(t, "item_url", strlen(url) ? json_object_new_string(url) : NULL); /* URL to link to when they click on an item */
+freez(&url);
 json_object_object_add(t, "parent_track", tdb->parentName ? json_object_new_string(tdb->parentName) : NULL); /* set if this is a supertrack member */
 return t;
 }

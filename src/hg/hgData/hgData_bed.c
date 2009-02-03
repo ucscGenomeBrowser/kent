@@ -5,86 +5,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.7 2009/02/03 10:36:57 mikep Exp $";
-
-
-void printBedAsAnnoj(struct bed *b, struct hTableInfo *hti)
-// print out rows of bed data formatted as AnnoJ flat model
-{
-struct bed *t;
-int id = 0, exon = 0;
-printf("{ success: true,\nmessage: \"Found %d models\",\ndata: ", slCount(b));
-for (t = b ; t ; t = t->next)
-    {
-    char nameBuf[256];
-    ++id;
-    // name <- bed name, or 'id.N', can be duplicated?
-    // strand <- '.' if strand unknown
-    // class <- table name
-    // start <- zero-based
-    //   nested id <- can be duplicated between top-level ids?
-    //   start <- zero-based
-    //   if no exons - should we have 1 block here, or none?
-    nameBuf[0] = 0;
-    if (hti->endField[0] != 0)
-        snprintf(nameBuf, sizeof(nameBuf), "\"%s\"", t->name);
-    else
-        snprintf(nameBuf, sizeof(nameBuf), "\"id.%d\"", id);
-    // print line for parent
-    printf("%c[null,%s,\"%c\",\"%s\",%d,%d]\n", (t==b ? '[' : ','), nameBuf, (hti->strandField[0] == 0 ? '.' : t->strand[0]),
-        hti->rootName, t->chromStart, t->chromEnd-t->chromStart);
-    // print line for each exon
-    if (hti->countField[0] != 0) // there are exons
-        {
-        if (hti->startsField[0] == 0 || hti->endsSizesField[0] == 0)
-            errAbort("blocks but no starts/ends");
-        for (exon = 0 ; exon < t->blockCount ; ++exon)
-            {
-            printf(",[%s,\"e.%d\",\"%c\",\"%s\",%d,%d]\n", nameBuf, exon+1, (hti->strandField[0] == 0 ? '.' : t->strand[0]), "EXON", t->chromStart+t->chromStarts[exon], t->blockSizes[exon]);
-            }
-        }
-    }
-printf("]\n}\n");
-}
-
-
-void printBedAsAnnojNested(struct bed *b, struct hTableInfo *hti)
-// print out rows of bed data formatted as AnnoJ nested model
-{
-struct bed *t;
-int id = 0, exon = 0;
-printf("{ success: true,\nmessage: \"Found %d models\",\ndata: \n", slCount(b));
-for (t = b ; t ; t = t->next)
-    {
-    ++id;
-    // name <- bed name, or 'id.N', can be duplicated?
-    // strand <- '.' if strand unknown 
-    // class <- table name
-    // start <- zero-based
-    //   nested id <- can be duplicated between top-level ids?
-    //   start <- zero-based
-    //   if no exons - should we have 1 block here, or none?
-    //   
-    if (hti->endField[0] != 0)
-	printf("%c[\"%s\"",    (t==b ? '[' : ','), t->name);
-    else
-	printf("%c[\"id.%d\"", (t==b ? '[' : ','), id);
-    printf(",\"%c\",\"%s\",%d,%d,[\n", (hti->strandField[0] == 0 ? '.' : t->strand[0]), 
-	hti->rootName, t->chromStart, t->chromEnd-t->chromStart); 
-    if (0 && hti->countField[0] != 0) // there are exons
-	{
-	if (hti->startsField[0] == 0 || hti->endsSizesField[0] == 0)
-	    errAbort("blocks but no starts/ends");
-    	for (exon = 0 ; exon < t->blockCount ; ++exon)
-    	    {
-	    printf("[\"e.%d\",\"%s\",%d,%d]%c\n", exon+1, "EXON", t->chromStart+t->chromStarts[exon], t->blockSizes[exon], 
-		(exon < t->blockCount-1 ? ',' : ' '));
-	    }
-	}
-    printf("]]\n");
-    }
-printf("]\n}\n");
-}
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.8 2009/02/03 22:13:14 mikep Exp $";
 
 static struct json_object *jsonBedCount(char *genome, char *track, char *chrom, int start, int end, struct hTableInfo *hti, int n)
 {
@@ -104,6 +25,117 @@ if (hti)
     json_object_object_add(props, "type", json_object_new_string(hti->type));
     }
 return b;
+}
+
+static struct json_object *jsonBedAsAnnojFlat(struct hTableInfo *hti, struct bed *b)
+// return json list of bed data as AnnoJ flat model
+{
+struct json_object *data = json_object_new_array();
+struct json_object *row;
+struct bed *t;
+int id = 0, e;
+for (t = b ; t ; t = t->next)
+    {
+    row = json_object_new_array();
+    json_object_array_add(data, row);
+    char nameBuf[1024];
+    char exonBuf[1024];
+    ++id;
+    // name <- bed name, or 'id.N', can be duplicated?
+    // strand <- '.' if strand unknown
+    // class <- table name
+    // start <- zero-based
+    //   nested id <- can be duplicated between top-level ids?
+    //   start <- zero-based
+    //   if no exons - should we have 1 block here, or none?
+    if (hti->endField[0] != 0)
+        snprintf(nameBuf, sizeof(nameBuf), "%s", t->name);
+    else
+        snprintf(nameBuf, sizeof(nameBuf), "id.%d", id);
+    // row for parent
+    json_object_array_add(row, NULL);    // parent is null on first item
+    json_object_array_add(row, json_object_new_string(nameBuf)); // name
+    json_object_array_add(row, json_object_new_string(hti->strandField[0] == 0 ? "." : t->strand));
+    json_object_array_add(row, json_object_new_string(hti->rootName)); // table name
+    json_object_array_add(row, json_object_new_int(t->chromStart)); 
+    json_object_array_add(row, json_object_new_int(t->chromEnd-t->chromStart));
+    // print line for each exon
+    if (hti->countField[0] != 0) // there are exons
+        {
+        if (hti->startsField[0] == 0 || hti->endsSizesField[0] == 0)
+            errAbort("blocks but no starts/ends");
+        for (e = 0 ; e < t->blockCount ; ++e)
+            {
+	    row = json_object_new_array();
+	    json_object_array_add(data, row);
+	    json_object_array_add(row, json_object_new_string(nameBuf)); // parent
+	    snprintf(exonBuf, sizeof(exonBuf), "e.%d", e+1);
+	    json_object_array_add(row, json_object_new_string(exonBuf)); // exon name
+	    json_object_array_add(row, json_object_new_string(hti->strandField[0] == 0 ? "." : t->strand));
+	    json_object_array_add(row, json_object_new_string("EXON")); // need to fix to be utr5, utr3, cds, or exon
+	    json_object_array_add(row, json_object_new_int(t->chromStart + t->chromStarts[e])); 
+	    json_object_array_add(row, json_object_new_int(t->blockSizes[e]));
+            }
+        }
+    }
+return data;
+}
+
+static struct json_object *jsonBedAsAnnojNested(struct hTableInfo *hti, struct bed *b)
+// return json list of bed data as AnnoJ nested model
+{
+struct json_object *data = json_object_new_array();
+struct json_object *row;
+struct json_object *exonList;
+struct json_object *exon;
+struct bed *t;
+int id = 0, e;
+for (t = b ; t ; t = t->next)
+    {
+    // add a row to the data
+    row = json_object_new_array();
+    json_object_array_add(data, row);
+    char nameBuf[1024];
+    char exonBuf[1024];
+    ++id;
+    // name <- bed name, or 'id.N', can be duplicated?
+    // strand <- '.' if strand unknown
+    // class <- table name
+    // start <- zero-based
+    //   nested id <- can be duplicated between top-level ids?
+    //   start <- zero-based
+    //   if no exons - should we have 1 block here, or none?
+    if (hti->endField[0] != 0)
+        snprintf(nameBuf, sizeof(nameBuf), "%s", t->name);
+    else
+        snprintf(nameBuf, sizeof(nameBuf), "id.%d", id);
+    // row for parent
+    json_object_array_add(row, json_object_new_string(nameBuf)); // name
+    json_object_array_add(row, json_object_new_string(hti->strandField[0] == 0 ? "." : t->strand));
+    json_object_array_add(row, json_object_new_string(hti->rootName)); // table name
+    json_object_array_add(row, json_object_new_int(t->chromStart));
+    json_object_array_add(row, json_object_new_int(t->chromEnd-t->chromStart));
+    // add an empty list of exons to row
+    exonList = json_object_new_array();
+    json_object_array_add(row, exonList);
+    if (hti->countField[0] != 0) // there are exons
+        {
+        if (hti->startsField[0] == 0 || hti->endsSizesField[0] == 0)
+            errAbort("blocks but no starts/ends");
+        for (e = 0 ; e < t->blockCount ; ++e)
+            {
+	    // add each exon to exonList
+            exon = json_object_new_array();
+	    json_object_array_add(exonList, exon);
+            snprintf(exonBuf, sizeof(exonBuf), "e.%d", e+1);
+            json_object_array_add(exon, json_object_new_string(exonBuf)); // exon name
+            json_object_array_add(exon, json_object_new_string("EXON")); // need to fix to be utr5, utr3, cds, or exon
+            json_object_array_add(exon, json_object_new_int(t->chromStart + t->chromStarts[e]));
+            json_object_array_add(exon, json_object_new_int(t->blockSizes[e]));
+            }
+        }
+    }
+return data;
 }
 
 static struct json_object *jsonBed(struct hTableInfo *hti, struct bed *b)
@@ -159,45 +191,19 @@ printf(json_object_to_json_string(d));
 json_object_put(d);
 }
 
-void printBed(char *genome, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti, int n, struct bed *b)
+void printBed(char *genome, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti, int n, struct bed *b, char *format)
 {
 struct json_object *d = json_object_new_object();
 json_object_object_add(d, "track", jsonBedCount(genome, track, chrom, start, end, hti, n));
-json_object_object_add(d, "data", jsonBed(hti, b));
+if (format==NULL)
+    json_object_object_add(d, "bed", jsonBed(hti, b));
+else if (sameOk(format, ANNOJ_FLAT_FMT))
+    json_object_object_add(d, format, jsonBedAsAnnojFlat(hti, b));
+else if (sameOk(format, ANNOJ_NESTED_FMT))
+    json_object_object_add(d, format, jsonBedAsAnnojNested(hti, b));
+else
+    ERR_BAD_FORMAT(format);
 printf(json_object_to_json_string(d));
 json_object_put(d);
 }
 
-static void printBedOneColumn(struct bed *b, char *column)
-// print out a column of bed records
-{
-struct bed *t;
-if (!b)
-    return;
-printf("\"%s\" : [", column);
-for (t = b ; t ; t = t->next)
-    {
-    if (sameOk("chromStart", column))
-        printf("%d,", t->chromStart);
-    else if (sameOk("chromEnd", column))
-        printf("%d,", t->chromEnd);
-    else
-        printf("\"%s\",", sameOk(column, "chrom") ? t->chrom : "") ;
-    }
-printf("]\n");
-}
-
-void printBedByColumn(struct bed *b, struct hTableInfo *hti)
-// print out a list of bed records by column
-{
-    printBedOneColumn(b, hti->startField);
-    printBedOneColumn(b, hti->endField);
-    printBedOneColumn(b, hti->nameField);
-    printBedOneColumn(b, hti->scoreField);
-    printBedOneColumn(b, hti->strandField);
-    printBedOneColumn(b, hti->cdsStartField);
-    printBedOneColumn(b, hti->cdsEndField);
-    printBedOneColumn(b, hti->countField);
-    printBedOneColumn(b, hti->startsField);
-    printBedOneColumn(b, hti->endsSizesField);
-}

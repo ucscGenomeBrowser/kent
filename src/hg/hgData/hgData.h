@@ -23,6 +23,23 @@
 #include <json/json.h>
 #endif
 
+#define GENOME_VAR "_GENOME_"
+#define GENOME_ARG "genome"
+#define TRACK_VAR "_TRACK_"
+#define TRACK_ARG "track"
+#define TERM_VAR "_TERM_"
+#define TERM_ARG "term"
+#define CHROM_VAR "_CHROM_"
+#define CHROM_ARG "chrom"
+#define START_VAR "_START_"
+#define START_ARG "start"
+#define END_VAR "_END_"
+#define END_ARG "end"
+#define FORMAT_ARG    "format"
+
+#define ANNOJ_FLAT_FMT "annoj_model_flat"
+#define ANNOJ_NESTED_FMT "annoj_model_nested"
+
 #ifndef MJP
 #define MJP(v) verbose((v),"%s[%3d]: ", __func__, __LINE__)
 #endif
@@ -32,7 +49,6 @@
 //#define okSendHeader() fprintf(stdout,"Content-type: application/json\n\n") // this triggers download by browser client
 // - otherwise if browser, then send same content but this type:
 #define okSendHeader(format) fprintf(stdout,"Content-type: %s\n\n", ((format) ? (format) : "application/json"))
-#define FMT_JSON_ANNOJ "json-annoj"
 
 // Error responses
 #define ERR_INVALID_COMMAND(cmd) errClientCode(400, "Invalid request %s", (cmd))
@@ -96,11 +112,6 @@ void errClient(char *format, ...);
 // create a HTTP response code "400 Bad Request",
 // and format specifying the error message content
 
-void printBedAsAnnoj(struct bed *b, struct hTableInfo *hti);
-// print out rows of bed data formatted as AnnoJ nested model
-
-void printBedByColumn(struct bed *b, struct hTableInfo *hti);
-// print out a list of bed records by column
 
 void printItemAsAnnoj(char *db, char *track, char *type, char *term);
 // print out a description for a track item
@@ -124,9 +135,9 @@ void printTrackInfo(char *genome, struct trackDb *tdb, struct hTableInfo *hti);
 
 
 void printBedCount(char *genome, char *track, char *chrom, int start, int end, struct hTableInfo *hti, int n);
-void printBed(char *genome, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti, int n, struct bed *b);
+void printBed(char *genome, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti, int n, struct bed *b, char *format);
 
 
 
 
-#endif /* HGTRACKS_H */
+#endif /* HGDATA_H */
