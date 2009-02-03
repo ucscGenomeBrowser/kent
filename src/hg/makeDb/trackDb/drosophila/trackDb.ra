@@ -415,6 +415,22 @@ autoScale off
     color 25,150,25
     priority 44
 
+    track bdtnpMed2Fdr1
+    subTrack bdtnpChipper off
+    subGroups fdr=1 factor=MED
+    shortLabel med AB 2 FDR 1%
+    longLabel Medea (med) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+    color 50,50,200
+    priority 44.1
+
+    track bdtnpMed2Fdr25
+    subTrack bdtnpChipper off
+    subGroups fdr=25 factor=MED
+    shortLabel med AB 2 FDR 25%
+    longLabel Medea (med) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+    color 25,150,25
+    priority 44.2
+
     track bdtnpPrd1Fdr1
     subTrack bdtnpChipper off
     subGroups fdr=1 factor=PRD
@@ -514,7 +530,7 @@ autoScale off
     track bdtnpSlp11Fdr1
     subTrack bdtnpChipper off
     subGroups fdr=1 factor=SLP
-    shortLabel slp AB 11 FDR 1%
+    shortLabel slp1 AB 1 FDR 1%
     longLabel sloppy paired 1 (slp1) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
     color 50,50,200
     priority 57
@@ -522,7 +538,7 @@ autoScale off
     track bdtnpSlp11Fdr25
     subTrack bdtnpChipper off
     subGroups fdr=25 factor=SLP
-    shortLabel slp AB 11 FDR 25%
+    shortLabel slp1 AB 1 FDR 25%
     longLabel sloppy paired 1 (slp1) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
     color 25,150,25
     priority 58
