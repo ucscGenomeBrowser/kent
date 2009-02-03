@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.26 2008/12/02 01:36:59 markd Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.27 2009/02/03 07:11:39 markd Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -181,15 +181,11 @@ if (list != NULL)
 	hPrintf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s\" TARGET=_blank>", row[0]);
 	if (rowCount < 1)
 	    hPrintf("<IMG SRC=\"http://www.rcsb.org/pdb/images/%s_asym_r_250.jpe\"><BR>", row[0]);
-        if (hIsPrivateHost()) // only on hgwdev for now
-            {
-            struct tempName chimerax;
-            lsSnpPdbChimeraSnpAnn(conn, row[0], NULL, &chimerax);
-            hPrintf("%s</A> - %s <A HREF=\"%s\">Chimera</A> <BR>\n",
-                    row[0], row[1], chimerax.forHtml);
-            }
-        else
-            hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
+        // include link to view in PDB chimera
+        struct tempName chimerax;
+        lsSnpPdbChimeraSnpAnn(conn, row[0], NULL, &chimerax);
+        hPrintf("%s</A> - %s <A HREF=\"%s\">Chimera</A> <BR>\n",
+                row[0], row[1], chimerax.forHtml);
 	hPrintf("</TD>");
 	}
     hPrintf("</TR></TABLE>\n");

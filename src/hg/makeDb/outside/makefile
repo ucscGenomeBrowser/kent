@@ -20,6 +20,7 @@ DIRS = \
 	hgKegg2 \
 	hgKegg3 \
 	hgLoadEranModules \
+	hgLsSnpPdbLoad \
 	hgPhMouse \
 	hgRnaGenes \
 	hgSoftPromoter \

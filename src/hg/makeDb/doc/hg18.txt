@@ -26699,3 +26699,20 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
     # hgTables: 49,804 rmskRM327 items (4,805,535 bases) have no overlap with rmsk
 
 #############################################################################
+#  Initial import of LSSNP data for SNP and hgGene linking (2009-02-02 markd)
+#############################################################################
+# dump and load LSSNP databases from Johns Hopkins.  This will be automated
+# soon.
+    # download dump into tmp directory LSSNP; must load on bugle as the
+    # database is mysql 5
+    ssh bugle
+    hgsql -e 'create database LSSNP'
+    cat LSSNP/*.sql |hgsql  LSSNP
+    hgsqlimport LSSNP `pwd`/LSSNP/*.txt
+    ssh hgwdev
+    hgLsSnpPdbLoad fetch bugle:LSSNP lsSnpPdb.tab
+    hgLsSnpPdbLoad load hg18 lsSnpPdb lsSnpPdb.tab 
+#############################################################################
+
+
+

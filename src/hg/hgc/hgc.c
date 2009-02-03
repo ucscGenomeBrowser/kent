@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1496 2009/01/30 23:46:53 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1497 2009/02/03 07:11:39 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14727,7 +14727,7 @@ for (pdbId = pdbIds; pdbId != NULL; pdbId = pdbId->next)
         iCol = 0;
         }
     }
-if (iCol < numCols)
+if (iCol != 0)
     {
     // fill in last row
     for (; iCol < numCols; iCol++)
@@ -14804,8 +14804,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 checkForHapmap(tdb, itemName);
-if (hIsPrivateHost()) // only on hgwdev for now
-    checkForLsSnpMappings(conn, itemName);
+checkForLsSnpMappings(conn, itemName);
 printSnpAlignment(tdb, snpAlign);
 printTrackHtml(tdb);
 hFreeConn(&conn);

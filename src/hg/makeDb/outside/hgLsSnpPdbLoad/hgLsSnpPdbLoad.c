@@ -4,30 +4,26 @@
 #include "jksql.h"
 #include "lsSnpPdb.h"
 
-static char const rcsid[] = "$Id: hgLsSnpPdbLoad.c,v 1.1 2008/12/02 01:37:02 markd Exp $";
+static char const rcsid[] = "$Id: hgLsSnpPdbLoad.c,v 1.2 2009/02/03 07:11:41 markd Exp $";
 
-void usage()
+void usage(char *msg)
 /* Explain usage and exit. */
 {
-errAbort(
-  "hgLsSnpPdbLoad - fetch data from LS-SNP PDB mysql server and\n"
-  "                 load table for browser\n"
+errAbort("Error: %s:\n"
+  "hgLsSnpPdbLoad - fetch data from LS-SNP/PDB mysql server or\n"
+  "                 load an lsSnpPdb format table or file\n"
   "usage:\n"
-  "   hgLsSnpPdbLoad lsSnpDb db table\n"
-  "options:\n"
-  "   -noLoad - don't load the table, create a file table.tab.\n"
-  "             The db argument is ignored when specified.\n"
+  "   hgLsSnpPdbLoad fetch lsSnpDb tabOut\n"
+  "   hgLsSnpPdbLoad load db table tabIn\n"
   "\n"
   "lsSnpDb can be either a local database name or profile:database,\n"
-  "to use a profile in ~/.hg.conf to access a remote database.\n"
-  );
+  "to use a profile in ~/.hg.conf to access a remote database.\n",
+  msg);
 }
 
 static struct optionSpec options[] = {
-    {"noLoad", OPTION_BOOLEAN},
     {NULL, 0},
 };
-static boolean noLoad = FALSE;
 
 static char *createSql =
     "CREATE TABLE %s ("
@@ -42,7 +38,7 @@ static char *createSql =
     "    index(snpId));";
 
 static void buildLsSnpPdb(char *lsSnpProf, char *lsSnpDb, char *tabFile)
-/* build lsSnpPdb tab file  */
+/* fetch LSSNP data and create an lsSnpPdb format tab file  */
 {
 struct sqlConnection *conn = sqlConnectProfile(lsSnpProf, lsSnpDb);
 FILE *fh = mustOpen(tabFile, "w");
@@ -73,46 +69,80 @@ carefulClose(&fh);
 sqlDisconnect(&conn);
 }
 
-static void loadLsSnpPdb(char *tabFile, char *db, char *table)
-/* build lsSnpPdb tab file */
+static char *parseLsSnpDb(char **lsSnpDbPtr)
+/* parse lsSnpDb spec, updating ptr and returning profile or null */
 {
-struct sqlConnection * conn = sqlConnect(db);
-sqlDropTable(conn, table);
-char query[512];
-safef(query, sizeof(query), createSql, table);
-sqlUpdate(conn, query);
-sqlLoadTabFile(conn, tabFile, table, 0);
-sqlDisconnect(&conn);
-unlink(tabFile);
-}
-
-static void hgLsSnpPdbLoad(char *lsSnpDb, char *db, char *table)
-/* hgLsSnpPdbLoad - fetch data from LS-SNP PDB mysql server and load table for browser. */
-{
-/* check lsSnpDb for profile */
 char *lsSnpProf = NULL;
-char *sep = strchr(lsSnpDb, ':');
+char *sep = strchr(*lsSnpDbPtr, ':');
 if (sep != NULL)
     {
-    lsSnpProf = lsSnpDb;
+    lsSnpProf = *lsSnpDbPtr;
     *sep = '\0';
-    lsSnpDb = sep+1;
+    *lsSnpDbPtr = sep+1;
     }
+return lsSnpProf;
+}
 
-char tabFile[PATH_LEN];
-safef(tabFile, sizeof(tabFile), "%s.tab", table);
-buildLsSnpPdb(lsSnpProf,lsSnpDb, tabFile);
-if (!noLoad)
-    loadLsSnpPdb(tabFile, db, table);
+static void fetchLsSnpPdb(char *lsSnpDb, char *tabOut)
+/* fetch data from LS-SNP/PDB mysql server */
+{
+char *lsSnpProf = parseLsSnpDb(&lsSnpDb);
+buildLsSnpPdb(lsSnpProf, lsSnpDb, tabOut);
+}
+
+static void loadLsSnpPdb(char *db, char *table, char *tabFile)
+/* load lsSnpPdb table.  A temporary table is created and then
+ * an atomic rename is done once it is loaded. */
+{
+char newTbl[256], oldTbl[256], query[1024];
+safef(newTbl, sizeof(newTbl), "%s_new", table);
+safef(oldTbl, sizeof(oldTbl), "%s_old", table);
+
+struct sqlConnection * conn = sqlConnect(db);
+
+// clean up droppings from previous runs
+sqlDropTable(conn, newTbl);
+sqlDropTable(conn, oldTbl);
+
+// load into tmp table
+safef(query, sizeof(query), createSql, newTbl);
+sqlUpdate(conn, query);
+sqlLoadTabFile(conn, tabFile, newTbl, 0);
+
+// rename into place
+if (sqlTableExists(conn, table))
+    safef(query, sizeof(query), "rename table %s to %s, %s to %s",
+          table, oldTbl, newTbl, table);
+else
+    safef(query, sizeof(query), "rename table %s to %s",
+          newTbl, table);
+sqlUpdate(conn, query);
+
+sqlDropTable(conn, oldTbl);
+sqlDisconnect(&conn);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+static char *wrongArgsMsg = "wrong number of arguments";
 optionInit(&argc, argv, options);
-if (argc != 4)
-    usage();
-noLoad = optionExists("noLoad");
-hgLsSnpPdbLoad(argv[1], argv[2], argv[3]);
+if (argc < 2)
+    usage(wrongArgsMsg);
+if (sameString(argv[1], "fetch"))
+    {
+    if (argc != 4)
+        usage(wrongArgsMsg);
+    fetchLsSnpPdb(argv[2], argv[3]);
+    }
+else if (sameString(argv[1], "load"))
+    {
+    if (argc != 5)
+        usage(wrongArgsMsg);
+    loadLsSnpPdb(argv[2], argv[3], argv[4]);
+    }
+else
+    usage("invalid action");
+
 return 0;
 }

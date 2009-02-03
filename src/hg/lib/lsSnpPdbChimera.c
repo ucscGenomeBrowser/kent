@@ -131,7 +131,7 @@ char *lsSnpPdbGetUrlPdbSnp(char *pdbId, char *snpId)
 /* get LS-SNP/PDB URL for a particular PDB+SNP. */
 {
 char url[256];
-safef(url, sizeof(url), "http://karchinlab.org:8080/LS-SNP_pdb/SNPViewer?pdbId=%s&snpName=%s",
+safef(url, sizeof(url), "http://ls-snp.icm.jhu.edu/ls-snp-pdb/inquire?pdbId=%s&snpId=%s",
       pdbId, snpId);
 return cloneString(url);
 }
