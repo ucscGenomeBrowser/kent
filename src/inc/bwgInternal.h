@@ -14,7 +14,7 @@ enum bwgSectionType
     bwgTypeFixedStep=3,
     };
 
-struct bwgSection *bwgParseWig(char *fileName, struct hash *chromSizeHash,
+struct bwgSection *bwgParseWig(char *fileName, boolean clipDontDie, struct hash *chromSizeHash,
 	int maxSectionSize, struct lm *lm);
 /* Parse out ascii wig file - allocating memory in lm. */
 
