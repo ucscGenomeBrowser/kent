@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.89 2009/02/04 18:38:03 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.90 2009/02/04 23:57:03 kent Exp $";
 
 #define SMALLBUF 128
 
@@ -1442,6 +1442,8 @@ void wigMethods(struct track *track, struct trackDb *tdb,
 struct wigCartOptions *wigCart = wigCartOptionsNew(cart, tdb, wordCount, words);
 track->minRange = wigCart->minY;
 track->maxRange = wigCart->maxY;
+track->graphUpperLimit = wigEncodeStartingUpperLimit;
+track->graphLowerLimit = wigEncodeStartingLowerLimit;
 wigCart->bedGraph = FALSE;	/*	signal to left labels	*/
 
 track->loadItems = wigLoadItems;

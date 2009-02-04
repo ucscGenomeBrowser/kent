@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.19 2009/02/04 18:38:03 kent Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.20 2009/02/04 23:57:03 kent Exp $";
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -248,6 +248,8 @@ switch (wordCount)
 
 track->minRange = wigCart->minY;
 track->maxRange = wigCart->maxY;
+track->graphUpperLimit = wigEncodeStartingUpperLimit;
+track->graphLowerLimit = wigEncodeStartingLowerLimit;
 
 track->loadItems = bedGraphLoadItems;
 track->freeItems = bedGraphFreeItems;
