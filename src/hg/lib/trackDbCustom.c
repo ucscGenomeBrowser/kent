@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.54 2009/02/03 08:20:04 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.55 2009/02/04 20:12:15 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -652,6 +652,8 @@ if(startsWith("wigMaf", tdb->type))
     cType = cfgWigMaf;
 else if(startsWith("wig", tdb->type))
     cType = cfgWig;
+else if(startsWith("bigWig", tdb->type))
+    cType = cfgWig;
 else if(startsWith("bedGraph", tdb->type))
     cType = cfgWig;
 else if(sameWord("bed5FloatScore",       tdb->type)
@@ -669,11 +671,14 @@ else if(startsWith("bed ", tdb->type)) // TODO: Only these are configurable so f
     }
 else if(sameWord("genePred",tdb->type) && startsWith("wgEncodeSangerGencode", tdb->tableName))
     {
-        cType = cfgGencode;
+    cType = cfgGencode;
     }
 
-if(cType == cfgNone && !startsWith("bed ", tdb->type) && subgroupFind(tdb,"view",NULL))
+if(cType == cfgNone && !startsWith("bed ", tdb->type) && !startsWith("bigBed", tdb->type) 
+	&& subgroupFind(tdb,"view",NULL))
+    {
     warn("Track type %s is not yet support in multi-view composites for %s.",tdb->type,tdb->tableName);
+    }
 return cType;
 }
 
