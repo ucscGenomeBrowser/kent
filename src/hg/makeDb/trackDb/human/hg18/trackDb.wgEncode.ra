@@ -4648,12 +4648,12 @@ subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878_(Tier_1) HEK293b=HEK293(b) HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg K562=K562_(Tier_1) NB4=NB4
 subGroup3 factor Antibody Max=Max NF-E2=NF-E2 Pol2=Pol2 STAT1=STAT1 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input zLarge=Large_Fragment zMNase=MNase zMouseIG=Mouse_IgG zNaked=Naked_DNA
 dimensions dimensionX=cellType dimensionY=factor
-sortOrder cellType=+ factor=+ view=+
+sortOrder view=+ factor=+ cellType=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
 controlledVocabulary encode/cv.ra cellType=GM12878,HEK293(b),HeLa-S3_IFNg,HeLa-S3,K562,Max,NB4,NF-E2 factor
 noInherit on
-settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=4:7,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:configurable=off,viewLimits=3:7,viewLimitsMax=0:14648,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:configurable=off,viewLimits=0:15,viewLimitsMax=0:14648,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 wgEncode 1
 
@@ -4669,6 +4669,7 @@ wgEncode 1
     dateUnrestricted 2009-10-09
     cell GM12878
     antibody Max
+    minScore 0
 
     track wgEncodeYaleChIPseqSignalGm12878Max
     release alpha
@@ -5808,12 +5809,12 @@ subGroup1 view Views Peaks=Peaks RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878_(Tier1) K562=K562_(Tier1) PFSK-1=PFSK-1 SK-N-MC=SK-N-MC
 subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF Pol2=Pol2 SRF=SRF TAF-II=TAF-II Control=Input
 dimensions dimensionX=cellType dimensionY=factor
-sortOrder cellType=+ factor=+ view=+
+sortOrder view=+ factor=+ cellType=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide RawSignal=dense
 controlledVocabulary encode/cv.ra cellType=GM12878,K562,PFSK-1,SK-N-MC factor
 noInherit on
-settingsByView Peaks:configurable=on RawSignal:configurable=off,viewLimits=1:100,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView Peaks:configurable=on,minScore=0 RawSignal:configurable=off,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3
 wgEncode 1
@@ -5834,7 +5835,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel GM128 GABP Pk 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (GABP in GM12878 cells)
     subGroups view=Peaks factor=GABP cellType=GM12878
@@ -5861,7 +5862,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Gabp
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel GM128 GABP Raw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (GABP in GM12878 cells)
     subGroups view=RawSignal factor=GABP cellType=GM12878
@@ -5888,7 +5889,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel GM128 NRSF Pk 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in GM12878 cells)
     subGroups view=Peaks factor=NRSF cellType=GM12878
@@ -5915,7 +5916,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Nrsf
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel GM128 NRSF Raw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (NRSF in GM12878 cells)
     subGroups view=RawSignal factor=NRSF cellType=GM12878
@@ -5942,7 +5943,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel GM128 Pol2 Pk 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in GM12878 cells)
     subGroups view=Peaks factor=Pol2 cellType=GM12878
@@ -5969,7 +5970,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel GM128 Pol2 Raw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Pol2 in GM12878 cells)
     subGroups view=RawSignal factor=Pol2 cellType=GM12878
@@ -5996,7 +5997,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel GM128 SRF Pk 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (SRF in GM12878 cells)
     subGroups view=Peaks factor=SRF cellType=GM12878
@@ -6023,7 +6024,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Srf
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel GM128 SRF Raw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (SRF in GM12878 cells)
     subGroups view=RawSignal factor=SRF cellType=GM12878
@@ -6078,7 +6079,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel GM128 Input Rw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Input in GM12878 cells)
     subGroups view=RawSignal factor=Control cellType=GM12878
@@ -6105,7 +6106,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Gabp
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel K562 GABP Pk 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (GABP in K562 cells)
     subGroups view=Peaks factor=GABP cellType=K562
@@ -6132,7 +6133,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Gabp
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel K562 GABP Raw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (GABP in K562 cells)
     subGroups view=RawSignal factor=GABP cellType=K562
@@ -6159,7 +6160,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel K562 NRSF Pk 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in K562 cells)
     subGroups view=Peaks factor=NRSF cellType=K562
@@ -6186,7 +6187,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Nrsf
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel K562 NRSF Raw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (NRSF in K562 cells)
     subGroups view=RawSignal factor=NRSF cellType=K562
@@ -6213,7 +6214,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel K562 Pol2 Pk 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in K562 cells)
     subGroups view=Peaks factor=Pol2 cellType=K562
@@ -6240,7 +6241,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel K562 Pol2 Raw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Pol2 in K562 cells)
     subGroups view=RawSignal factor=Pol2 cellType=K562
@@ -6267,7 +6268,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel K562 SRF Pk 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (SRF in K562 cells)
     subGroups view=Peaks factor=SRF cellType=K562
@@ -6294,7 +6295,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel K562 SRF Raw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (SRF in K562 cells)
     subGroups view=RawSignal factor=SRF cellType=K562
@@ -6349,7 +6350,7 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control
     release alpha
-    subTrack wgEncodeHudsonalphaChipSeq
+    subTrack wgEncodeHudsonalphaChipSeq off
     shortLabel K562 Input Raw 2
     longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Input in K562 cells)
     subGroups view=RawSignal factor=Control cellType=K562
