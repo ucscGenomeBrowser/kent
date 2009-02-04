@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/EnsGeneAutomate.pm instead.
 
-# $Id: EnsGeneAutomate.pm,v 1.16 2009/01/21 19:55:32 hiram Exp $
+# $Id: EnsGeneAutomate.pm,v 1.17 2009/02/04 18:34:49 hiram Exp $
 package EnsGeneAutomate;
 
 use warnings;
@@ -763,7 +763,7 @@ my %ensGeneGtfFileNames_52 = (
 'proCap1' => 'procavia_capensis/Procavia_capensis.proCap1.52.gtf.gz',
 'pteVam1' => 'pteropus_vampyrus/Pteropus_vampyrus.pteVam1.52.gtf.gz',
 'rn4' => 'rattus_norvegicus/Rattus_norvegicus.RGSC3.4.52.gtf.gz',
-'sacCer1' => 'saccharomyces_cerevisiae/Saccharomyces_cerevisiae.SGD1.01.52.gtf.gz',
+'sacCer2' => 'saccharomyces_cerevisiae/Saccharomyces_cerevisiae.SGD1.01.52.gtf.gz',
 'sorAra1' => 'sorex_araneus/Sorex_araneus.COMMON_SHREW1.52.gtf.gz',
 'speTri1' => 'spermophilus_tridecemlineatus/Spermophilus_tridecemlineatus.SQUIRREL.52.gtf.gz',
 'fr2' => 'takifugu_rubripes/Takifugu_rubripes.FUGU4.52.gtf.gz',
@@ -814,7 +814,7 @@ my %ensGeneFtpPeptideFileNames_52 = (
 'proCap1' => 'procavia_capensis/pep/Procavia_capensis.proCap1.52.pep.all.fa.gz',
 'pteVam1' => 'pteropus_vampyrus/pep/Pteropus_vampyrus.pteVam1.52.pep.all.fa.gz',
 'rn4' => 'rattus_norvegicus/pep/Rattus_norvegicus.RGSC3.4.52.pep.all.fa.gz',
-'sacCer1' => 'saccharomyces_cerevisiae/pep/Saccharomyces_cerevisiae.SGD1.01.52.pep.all.fa.gz',
+'sacCer2' => 'saccharomyces_cerevisiae/pep/Saccharomyces_cerevisiae.SGD1.01.52.pep.all.fa.gz',
 'sorAra1' => 'sorex_araneus/pep/Sorex_araneus.COMMON_SHREW1.52.pep.all.fa.gz',
 'speTri1' => 'spermophilus_tridecemlineatus/pep/Spermophilus_tridecemlineatus.SQUIRREL.52.pep.all.fa.gz',
 'fr2' => 'takifugu_rubripes/pep/Takifugu_rubripes.FUGU4.52.pep.all.fa.gz',
@@ -865,7 +865,7 @@ my %ensGeneFtpMySqlFileNames_52 = (
 'proCap1' => 'procavia_capensis_core_52_1a',
 'pteVam1' => 'pteropus_vampyrus_core_52_1a',
 'rn4' => 'rattus_norvegicus_core_52_34u',
-'sacCer1' => 'saccharomyces_cerevisiae_core_52_1i',
+'sacCer2' => 'saccharomyces_cerevisiae_core_52_1i',
 'sorAra1' => 'sorex_araneus_core_52_1e',
 'speTri1' => 'spermophilus_tridecemlineatus_core_52_1g',
 'fr2' => 'takifugu_rubripes_core_52_4k',
