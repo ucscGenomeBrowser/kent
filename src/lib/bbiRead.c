@@ -446,12 +446,15 @@ if (intervalList != NULL);
         {
 	/* Calculate end of this part of summary */
 	baseEnd = start + baseCount*(i+1)/summarySize;
+	int end1 = baseEnd;
+	if (end1 == baseStart)
+	    end1 = baseStart+1;
 
         /* Advance interval to skip over parts we are no longer interested in. */
 	while (interval != NULL && interval->end <= baseStart)
 	    interval = interval->next;
 
-	if (bbiIntervalSlice(bbi, baseStart, baseEnd, interval, &summary[i]))
+	if (bbiIntervalSlice(bbi, baseStart, end1, interval, &summary[i]))
 	    result = TRUE;
 
 	/* Next time round start where we left off. */
