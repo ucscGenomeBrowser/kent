@@ -13,7 +13,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.9 2009/02/03 02:50:39 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.10 2009/02/04 19:57:39 kent Exp $";
 
 struct bwgBedGraphItem
 /* An bedGraph-type item in a bwgSection. */
@@ -212,7 +212,7 @@ return stepTypeLine(line);
 }
 
 static void parseFixedStepSection(struct lineFile *lf, struct lm *lm,
-	int itemsPerSlot, char *chrom, bits32 span, bits32 sectionStart, 
+	int itemsPerSlot, char *chrom, bits32 chromSize, bits32 span, bits32 sectionStart, 
 	bits32 step, struct bwgSection **pSectionList)
 /* Read the single column data in section until get to end. */
 {
@@ -224,6 +224,7 @@ char *words[1];
 char *line;
 struct bwgFixedStepItem *item, *itemList = NULL;
 int originalSectionSize = 0;
+bits32 sectionEnd = sectionStart;
 while (lineFileNextReal(lf, &line))
     {
     if (steppedSectionEnd(line, 1))
@@ -235,6 +236,10 @@ while (lineFileNextReal(lf, &line))
     lmAllocVar(lmLocal, item);
     item->val = lineFileNeedDouble(lf, words, 0);
     slAddHead(&itemList, item);
+    if (sectionEnd + span > chromSize)
+	errAbort("line %d of %s: chromosome %s has %u bases, but item ends at %u",
+	    lf->lineIx, lf->fileName, chrom, chromSize, sectionEnd + span);
+    sectionEnd += step;
     ++originalSectionSize;
     }
 slReverse(&itemList);
@@ -280,7 +285,7 @@ lmCleanup(&lmLocal);
 }
 
 static void parseVariableStepSection(struct lineFile *lf, struct lm *lm,
-	int itemsPerSlot, char *chrom, bits32 span, struct bwgSection **pSectionList)
+	int itemsPerSlot, char *chrom, int chromSize, bits32 span, struct bwgSection **pSectionList)
 /* Read the single column data in section until get to end. */
 {
 struct lm *lmLocal = lmInit(0);
@@ -301,6 +306,9 @@ while (lineFileNextReal(lf, &line))
     chopLine(line, words);
     lmAllocVar(lmLocal, item);
     item->start = lineFileNeedNum(lf, words, 0) - 1;
+    if (item->start + span > chromSize)
+	    errAbort("line %d of %s: chromosome %s has %u bases, but item ends at %u",
+		lf->lineIx, lf->fileName, chrom, chromSize, item->start + span);
     item->val = lineFileNeedDouble(lf, words, 1);
     slAddHead(&itemList, item);
     ++originalSectionSize;
@@ -354,8 +362,8 @@ if (!isdigit(c))
 return sqlUnsigned(val);
 }
 
-static void parseSteppedSection(struct lineFile *lf, char *initialLine, 
-	struct lm *lm, int itemsPerSlot, struct bwgSection **pSectionList)
+static void parseSteppedSection(struct lineFile *lf, struct hash *chromSizeHash, 
+	char *initialLine, struct lm *lm, int itemsPerSlot, struct bwgSection **pSectionList)
 /* Parse out a variableStep or fixedStep section and add it to list, breaking it up as need be. */
 {
 /* Parse out first word of initial line and make sure it is something we recognize. */
@@ -400,13 +408,17 @@ while ((varEqVal = nextWord(&initialLine)) != NULL)
  * rest of section. */
 if (chrom == NULL)
     errAbort("Missing chrom= setting line %d of %s\n", lf->lineIx, lf->fileName);
+bits32 chromSize = hashIntVal(chromSizeHash, chrom);
+if (start >= chromSize)
+    errAbort("line %d of %s: chromosome %s has %u bases, but item starts at %u",
+    	lf->lineIx, lf->fileName, chrom, chromSize, start);
 if (type == bwgTypeFixedStep)
     {
     if (start == 0)
 	errAbort("Missing start= setting line %d of %s\n", lf->lineIx, lf->fileName);
     if (step == 0)
 	errAbort("Missing step= setting line %d of %s\n", lf->lineIx, lf->fileName);
-    parseFixedStepSection(lf, lm, itemsPerSlot, chrom, span, start-1, step, pSectionList);
+    parseFixedStepSection(lf, lm, itemsPerSlot, chrom, chromSize, span, start-1, step, pSectionList);
     }
 else
     {
@@ -414,7 +426,7 @@ else
 	errAbort("Extra start= setting line %d of %s\n", lf->lineIx, lf->fileName);
     if (step != 0)
 	errAbort("Extra step= setting line %d of %s\n", lf->lineIx, lf->fileName);
-    parseVariableStepSection(lf, lm, itemsPerSlot, chrom, span, pSectionList);
+    parseVariableStepSection(lf, lm, itemsPerSlot, chrom, chromSize, span, pSectionList);
     }
 }
 
@@ -423,6 +435,7 @@ struct bedGraphChrom
     {
     struct bedGraphChrom *next;		/* Next in list. */
     char *name;			/* Chromosome name - not allocated here. */
+    bits32 size;		/* Chromosome size. */
     struct bwgBedGraphItem *itemList;	/* List of items. */
     };
 
@@ -434,7 +447,7 @@ const struct bedGraphChrom *b = *((struct bedGraphChrom **)vb);
 return strcmp(a->name, b->name);
 }
 
-static void parseBedGraphSection(struct lineFile *lf, struct lm *lm, 
+static void parseBedGraphSection(struct lineFile *lf, struct hash *chromSizeHash, struct lm *lm, 
 	int itemsPerSlot, struct bwgSection **pSectionList)
 /* Parse out bedGraph section until we get to something that is not in bedGraph format. */
 {
@@ -466,6 +479,7 @@ while (lineFileNextReal(lf, &line))
         {
 	lmAllocVar(chromHash->lm, chrom);
 	hashAddSaveName(chromHash, chromName, chrom, &chrom->name);
+	chrom->size = hashIntVal(chromSizeHash, chromName);
 	slAddHead(&chromList, chrom);
 	}
 
@@ -475,6 +489,14 @@ while (lineFileNextReal(lf, &line))
     item->end = lineFileNeedNum(lf, words, 2);
     item->val = lineFileNeedDouble(lf, words, 3);
     slAddHead(&chrom->itemList, item);
+
+    /* Do sanity checking on coordinates. */
+    if (item->start > item->end)
+        errAbort("bedGraph error: start (%u) after end line (%u) %d of %s.", 
+		item->start, item->end, lf->lineIx, lf->fileName);
+    if (item->end > chrom->size)
+        errAbort("bedGraph error line %d of %s: chromosome %s has size %u but item ends at %u",
+	        lf->lineIx, lf->fileName, chrom->name, chrom->size, item->end);
     }
 slSort(&chromList, bedGraphChromCmpName);
 
@@ -706,7 +728,7 @@ for (i=0; i<section->itemCount; ++i)
 
 struct bbiSummary *bwgReduceSectionList(struct bwgSection *sectionList, 
 	struct bbiChromInfo *chromInfoArray, int reduction)
-/* Reduce section by given amount. */
+/* Return summary of section list reduced by given amount. */
 {
 struct bbiSummary *outList = NULL;
 struct bwgSection *section = NULL;
@@ -888,7 +910,8 @@ freez(&chromInfoArray);
 carefulClose(&f);
 }
 
-struct bwgSection *bwgParseWig(char *fileName, int maxSectionSize, struct lm *lm)
+struct bwgSection *bwgParseWig(char *fileName, struct hash *chromSizeHash,
+	int maxSectionSize, struct lm *lm)
 /* Parse out ascii wig file - allocating memory in lm. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -898,7 +921,7 @@ while (lineFileNextReal(lf, &line))
     {
     verbose(2, "processing %s\n", line);
     if (stringIn("chrom=", line))
-	parseSteppedSection(lf, line, lm, maxSectionSize, &sectionList);
+	parseSteppedSection(lf, chromSizeHash, line, lm, maxSectionSize, &sectionList);
     else
         {
 	/* Check for bed... */
@@ -917,7 +940,7 @@ while (lineFileNextReal(lf, &line))
 
 	/* Push back line and call bed parser. */
 	lineFileReuse(lf);
-	parseBedGraphSection(lf, lm, maxSectionSize, &sectionList);
+	parseBedGraphSection(lf, chromSizeHash, lm, maxSectionSize, &sectionList);
 	}
     }
 slSort(&sectionList, bwgSectionCmp);
@@ -941,7 +964,7 @@ void bigWigFileCreate(
  * footprint by a factor of 2 or 4.  Still, for now it works. -JK */
 struct hash *chromSizeHash = bbiChromSizesFromFile(chromSizes);
 struct lm *lm = lmInit(0);
-struct bwgSection *sectionList = bwgParseWig(inName, itemsPerSlot, lm);
+struct bwgSection *sectionList = bwgParseWig(inName, chromSizeHash, itemsPerSlot, lm);
 if (sectionList == NULL)
     errAbort("%s is empty of data", inName);
 bwgCreate(sectionList, chromSizeHash, blockSize, itemsPerSlot, outName);

@@ -14,7 +14,8 @@ enum bwgSectionType
     bwgTypeFixedStep=3,
     };
 
-struct bwgSection *bwgParseWig(char *fileName, int maxSectionSize, struct lm *lm);
+struct bwgSection *bwgParseWig(char *fileName, struct hash *chromSizeHash,
+	int maxSectionSize, struct lm *lm);
 /* Parse out ascii wig file - allocating memory in lm. */
 
 int bwgAverageResolution(struct bwgSection *sectionList);
@@ -22,6 +23,6 @@ int bwgAverageResolution(struct bwgSection *sectionList);
 
 struct bbiSummary *bwgReduceSectionList(struct bwgSection *sectionList, 
 	struct bbiChromInfo *chromInfoArray, int reduction);
-/* Reduce section by given amount. */
+/* Return summary of section list reduced by given amount. */
 
 #endif /* BIGWIGFILE_H */

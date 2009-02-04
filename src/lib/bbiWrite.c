@@ -44,6 +44,8 @@ void bbiAddToSummary(bits32 chromId, bits32 chromSize, bits32 start, bits32 end,
  * expanding list. */
 {
 struct bbiSummary *sum = *pOutList;
+if (end > chromSize)	// Avoid pathological clipping situation on bad input
+    end = chromSize;
 while (start < end)
     {
     /* See if need to allocate a new summary. */
@@ -69,7 +71,7 @@ while (start < end)
     int overlap = rangeIntersection(start, end, sum->start, sum->end);
     if (overlap <= 0) 
 	{
-        warn("%u %u doesn't intersect %u %u, chromId %d", start, end, sum->start, sum->end, chromId);
+        warn("%u %u doesn't intersect %u %u, chromId %u chromSize %u", start, end, sum->start, sum->end, chromId, chromSize);
 	internalErr();
 	}
     int itemSize = end - start;
