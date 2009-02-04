@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.18 2009/02/03 20:11:47 hiram Exp $
+# $Id: makeGenomeDb.pl,v 1.19 2009/02/04 18:34:25 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -45,7 +45,7 @@ options:
 					        'fileServer' => '');
   print STDERR "
 Automates the first steps of building a genome database:
-    seq:     Translates fasta into /cluster/data/\$db/\$db.unmasked.2bit .
+    seq:     Translates fasta into /hive/data/genomes/\$db/\$db.unmasked.2bit .
     agp:     Checks consistency of fasta and AGP (or runs hgFakeAgp).
     db:      Creates the genome database and basic tables.
     dbDb:    Adds the genome database to central database tables.
