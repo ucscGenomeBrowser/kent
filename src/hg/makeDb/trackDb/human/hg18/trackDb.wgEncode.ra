@@ -5044,7 +5044,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqSignalHelas3Input
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa Inp Sig
+    shortLabel HeLa Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Input in HeLa cells)
     subGroups view=Signal factor=zCTRL cellType=HeLa
     type wig 0.00 8316.00
@@ -5062,7 +5062,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalHelas3Input
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa Inp Raw
+    shortLabel HeLa Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal (Input in HeLa cells)
     subGroups view=zRAW factor=zCTRL cellType=HeLa
     type wig 1.00 8316.00
@@ -5350,7 +5350,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqSignalHelas3ifngInput
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa-IF Inp Sig
+    shortLabel HeLa-IF Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Input in HeLa_IFNg cells)
     subGroups view=Signal factor=zCTRL cellType=HeLa-IF
     type wig 0.00 11690.00
@@ -5367,7 +5367,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalHelas3ifngInput
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa-IF Inp Raw
+    shortLabel HeLa-IF Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal (Input in HeLa_IFNg cells)
     subGroups view=zRAW factor=zCTRL cellType=HeLa-IF
     type wig 1.00 11690.00
@@ -5673,7 +5673,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqSignalK562Input
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Inp Sig
+    shortLabel K562 Input Sig
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Signal (Input in K562 cells)
     subGroups view=Signal factor=zCTRL cellType=K562
     type wig 0.00 4661.00
@@ -5688,7 +5688,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalK562Input
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Inp Raw
+    shortLabel K562 Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal (Input in K562 cells)
     subGroups view=zRAW factor=zCTRL cellType=K562
     type wig 1.00 4661.00
@@ -5807,7 +5807,7 @@ group regulation
 # subGroup1 view Views Sites=Sites Counts=Counts
 subGroup1 view Views Peaks=Peaks RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878_(Tier1) K562=K562_(Tier1) PFSK-1=PFSK-1 SK-N-MC=SK-N-MC
-subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF Pol2=Pol2 SRF=SRF TAF-II=TAF-II Control=Control
+subGroup3 factor Factor FOXP2=FOXP2 GABP=GABP NRSF=NRSF Pol2=Pol2 SRF=SRF TAF-II=TAF-II Control=Input
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
@@ -6066,8 +6066,8 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Control
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel GM12878 Control Raw 1
-    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Control in GM12878 cells)
+    shortLabel GM12878 Input Raw 1
+    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Input in GM12878 cells)
     subGroups view=RawSignal factor=Control cellType=GM12878
     type wig 1.00 2399.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6080,8 +6080,8 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Control
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel GM12878 Control Raw 2
-    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Control in GM12878 cells)
+    shortLabel GM12878 Input Raw 2
+    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Input in GM12878 cells)
     subGroups view=RawSignal factor=Control cellType=GM12878
     type wig 1.00 2714.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6337,8 +6337,8 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Control
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel K562 Control Raw 1
-    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Control in K562 cells)
+    shortLabel K562 Input Raw 1
+    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Input in K562 cells)
     subGroups view=RawSignal factor=Control cellType=K562
     type wig 1.00 6252.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6351,8 +6351,8 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Control
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq
-    shortLabel K562 Control Raw 2
-    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Control in K562 cells)
+    shortLabel K562 Input Raw 2
+    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Input in K562 cells)
     subGroups view=RawSignal factor=Control cellType=K562
     type wig 1.00 3777.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6419,8 +6419,8 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalPfsk1Control
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel PFSK1 Control
-    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal (Control in PFSK-1 cells)
+    shortLabel PFSK1 Input
+    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal (Input in PFSK-1 cells)
     subGroups view=RawSignal factor=Control cellType=PFSK-1
     type wig 1.00 4125.00
     dataVersion ENCODE Nov 2008 Freeze
@@ -6485,8 +6485,8 @@ dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
     track wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
     release alpha
     subTrack wgEncodeHudsonalphaChipSeq off
-    shortLabel SKNMC Control
-    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal (Control in SK-N-MC cells)
+    shortLabel SKNMC Input
+    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal (Input in SK-N-MC cells)
     subGroups view=RawSignal factor=Control cellType=SK-N-MC
     type wig 1.00 835.00
     dataVersion ENCODE Nov 2008 Freeze
