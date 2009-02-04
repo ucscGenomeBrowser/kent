@@ -53,7 +53,7 @@ compositeTrack on
 subGroup1 view Views best1=Best_Antibody_(FDR=1%) best25=Best_Antibody_(FDR=25%) other1=Other_Antibodies_(FDR=1%) other25=Other_Antibodies_(FDR=25%)
 subGroup2 fdr FDR 1=1% 25=25%
 subGroup3 factor Factor BCD=bcd CAD=cad GT=gt HB=hb KNI=kni KR=Kr HKB=huckebein TLL=tailless D=Dichaete FTZ=fushi_tarazu H=hairy PRD=paired RUN=runt SLP=sloppy_paired_1 DA=daughterless DL=dorsal MAD=Mothers_against_dpp MED=Medea  SHN=schnurri SNA=snail TWI=twist Z=zeste POLII=PolII TFIIB=Transcription_factor_IIB
-subGroup4 class Regulatory_class ape=Anterior/Posterior_Early app=Anterior/Posterior_Pair_rule dv=Dorsal/Ventral z=Zeste_Stage_11 gen=General
+subGroup4 class Regulatory_class ape=Anterior-posterior_early app=Anterior-posterior_pair_rule dv=Dorsal-ventral z=Zeste_stage_11 gen=General
 dimensions dimensionX=factor dimensionY=fdr dimensionZ=class
 shortLabel BDTNP ChIP/chip
 longLabel Berkeley Drosophila Transcription Network Project Transcription Factor ChIP/chip
@@ -66,7 +66,7 @@ viewLimits 1:10
 maxHeightPixels 100:15:10
 autoScale off
 
-    # Anterior/posterior early: green
+    # Anterior-posterior early: green
     track bdtnpBcd1Fdr1
     subTrack bdtnpChipper off
     subGroups fdr=1 factor=BCD class=ape view=other1
@@ -307,7 +307,7 @@ autoScale off
     color 0,150,0
     priority 30
 
-    # Anterior/posterior pair rule: orange
+    # Anterior-posterior pair rule: orange
     track bdtnpFtz3Fdr1
     subTrack bdtnpChipper
     subGroups fdr=1 factor=FTZ class=app view=best1
@@ -436,7 +436,7 @@ autoScale off
     color 200,150,0
     priority 46
 
-    # Dorsal/ventral: blue
+    # Dorsal-ventral: blue
     track bdtnpDa2Fdr1
     subTrack bdtnpChipper
     subGroups fdr=1 factor=DA class=dv view=best1
