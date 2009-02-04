@@ -9,7 +9,7 @@
 # to database.
 #
 #
-# $Id: gbMakeDownload,v 1.13 2008/11/10 23:45:40 markd Exp $
+# $Id: gbMakeDownload,v 1.14 2009/02/04 05:17:05 markd Exp $
 #
 use strict;
 use warnings;
@@ -265,19 +265,19 @@ sub getUpstreamGeneTbl($) {
     }
 }    
 
-# Determine get the upstream MAF table and organism file to use to creating
-# upstream MAFS, or (undef,undef) if not specified.
-sub getUpstreamMafTblOrgs($) {
+# Get the paris of upstream MAF tables and organism files to use to creating
+# upstream MAFS, or undef if not specified.
+sub getUpstreamMafTblsOrgs($) {
     my($db) = @_;
     my $spec = getDbConfUndef($db, "upstreamMaf");
     if (!defined($spec)) {
-        return (undef, undef);
+        return undef;
     }
     my @parts = splitSpaceList($spec);
-    if ($#parts != 1) {
-        gbError("expected two arguments to $db.upstreamMaf, got: $spec");
+    if ($#parts+1 & 1) {
+        gbError("expected pairs of arguments to $db.upstreamMaf, got: $spec");
     }
-    return ($parts[0], $parts[1]);
+    return @parts;
 }
 
 # create upstream FASTA file for a database and size if it doesn't exist or
@@ -327,9 +327,8 @@ sub makeUpstreamMafSize($$$$$$) {
 
 # create upstream MAF file for a database and size if it doesn't exist or
 # are out of date.
-sub maybeMakeUpstreamMafSize($$$) {
-    my($justCheck, $db, $size) = @_;
-    my($mafTbl, $mafOrgs) = getUpstreamMafTblOrgs($db);
+sub maybeMakeUpstreamMafSize($$$$$) {
+    my($justCheck, $db, $mafTbl, $mafOrgs, $size) = @_;
     my $geneTbl = getUpstreamGeneTbl($db);
     if (defined($geneTbl) && defined($mafTbl)) {
         
@@ -345,19 +344,32 @@ sub maybeMakeUpstreamMafSize($$$) {
     return 0;
 }
 
-# create upstream download files for a database if they don't exist or are out
-# of date.
-sub maybeMakeUpstreamMaf($$) {
-    my($justCheck, $db) = @_;
+# create upstream MAF download files for a database and table if they don't exist
+# or are out of date.
+sub maybeMakeUpstreamMaf($$$$) {
+    my($justCheck, $db, $mafTbl, $mafOrgs) = @_;
     my $needUpdated = 0;
     foreach my $size (1000, 2000, 5000) {
-        if (maybeMakeUpstreamMafSize($justCheck, $db, $size)) {
+        if (maybeMakeUpstreamMafSize($justCheck, $db, $mafTbl, $mafOrgs, $size)) {
             $needUpdated = 1;
         }
     }
     return $needUpdated;
 }
 
+# create upstream download files for a database  if they don't exist
+# or are out of date.
+sub maybeMakeUpstreamMafs($$) {
+    my($justCheck, $db) = @_;
+    my @pairs = getUpstreamMafTblsOrgs($db);
+    my $needUpdated = 0;
+    for (my $i = 0; $i <= $#pairs; $i+=2) {
+        if (maybeMakeUpstreamMaf($justCheck, $db, $pairs[$i], $pairs[$i+1])) {
+            $needUpdated = 1;
+        }
+    }
+    return $needUpdated;
+}
 
 # make download files, or just check if they need updates
 sub updateDownloadFiles($$) {
@@ -372,7 +384,7 @@ sub updateDownloadFiles($$) {
     if (maybeMakeUpstreamFa($justCheck, $db)) {
         $needUpdated = 1;
     }
-    if (maybeMakeUpstreamMaf($justCheck, $db)) {
+    if (maybeMakeUpstreamMafs($justCheck, $db)) {
         $needUpdated = 1;
     }
     return $needUpdated;
