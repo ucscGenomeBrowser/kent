@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.61 2008/10/30 03:13:08 kent Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.62 2009/02/04 06:59:57 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -466,7 +466,7 @@ int netGetOpenFtp(char *url)
 {
 struct netParsedUrl npu;
 struct dyString *rs = NULL;
-int sd;
+int sd, sdata;
 long timeOut = 1000000; /* wait in microsec */
 char cmd[256];
 
@@ -505,13 +505,58 @@ safef(cmd,sizeof(cmd),"RETR %s\r\n", npu.file);
 */
 sendFtpCommand(sd, cmd, FALSE, TRUE);  
 
-close(sd);
-
-sd = netMustConnect(npu.host, parsePasvPort(rs->string));
+sdata = netMustConnect(npu.host, parsePasvPort(rs->string));
 
 /* Clean up and return handle. */
 dyStringFree(&rs);
-return sd;
+
+/* Because some FTP servers will kill the data connection
+ * as soon as the control connection closes,
+ * we have to develop a workaround using a partner process. */
+
+int pipefd[2];
+
+pipe(pipefd);  /* make a pipe (fds go in pipefd[0] and pipefd[1])  */
+
+int pid = fork();
+
+if (pid < 0)
+    errnoAbort("can't fork in netGetOpenFtp");
+if (pid == 0)
+    {
+    /* child */
+
+    fclose(stdin);
+    fclose(stdout);
+
+    close(pipefd[0]);  /* close unused half of pipe */
+
+    char buf[32768];
+    int rd = 0;
+    while((rd = read(sdata, buf, 32768)) > 0) 
+	{
+	int wt = write(pipefd[1], buf, rd);
+	if (wt == -1)
+	    errnoAbort("error writing ftp data to pipe");
+	}
+    if (rd == -1)
+	errnoAbort("error reading ftp socket");
+    close(pipefd[1]);  /* being safe */
+
+    exit(0);
+
+    /* child will never get to here */
+    }
+
+/* parent */
+
+close(pipefd[1]);  /* close unused unput half of pipe */
+
+/* although the parent closes these, the child has them open still */
+close(sd);   
+close(sdata);
+
+return pipefd[0];
 }
 
 int netHttpConnect(char *url, char *method, char *protocol, char *agent)
