@@ -3315,8 +3315,8 @@ longLabel ENCODE RIKEN RNA Subcellular Localization by CAGE Tags
 group expression
 subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal Alignments=Alignments
 subGroup2 cellType Cell_Line K562=K562 prostate=Prostate
-subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus
-subGroup4 rnaExtract RNA_Extract longNonPolyA=longNonPolyA
+subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus 
+subGroup4 rnaExtract RNA_Extract longNonPolyA=longNonPolyA longPolyA=longPolyA
 dimensions dimensionY=rnaExtract dimensionX=cellType dimensionZ=localization
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 dragAndDrop subTracks
@@ -3526,6 +3526,188 @@ wgEncode 1
     dateSubmitted 2008-10-20
     spanList 1
     rnaExtract longNonPolyA
+    localization nucleus
+    cell K562
+
+    track wgEncodeRikenCagePlusClustersK562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 cytosol 
+    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longPolyA in K562 cell cytosol using )
+    subGroups view=PlusClusters cellType=K562 localization=cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    dateSubmitted 2009-02-04
+    dateUnrestricted 2009-11-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 16
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization cytosol
+    cell K562
+
+    track wgEncodeRikenCageMinusClustersK562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 cytosol 
+    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longPolyA in K562 cell cytosol using )
+    subGroups view=MinusClusters cellType=K562 localization=cytosol rnaExtract=longPolyA
+    type bedGraph 4
+    dateSubmitted 2009-02-04
+    dateUnrestricted 2009-11-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 17
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization cytosol
+    cell K562
+
+    track wgEncodeRikenCagePlusClustersK562NucleusLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 nucleus 
+    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longPolyA in K562 cell nucleus using )
+    subGroups view=PlusClusters cellType=K562 localization=nucleus rnaExtract=longPolyA
+    type bedGraph 4
+    dateSubmitted 2009-02-04
+    dateUnrestricted 2009-11-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 16
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization nucleus
+    cell K562
+
+    track wgEncodeRikenCageMinusClustersK562NucleusLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 nucleus 
+    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longPolyA in K562 cell nucleus using )
+    subGroups view=MinusClusters cellType=K562 localization=nucleus rnaExtract=longPolyA
+    type bedGraph 4
+    dateSubmitted 2009-02-04
+    dateUnrestricted 2009-11-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 17
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization nucleus
+    cell K562
+
+    track wgEncodeRikenCageAlignmentsK562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 cytosol 
+    longLabel ENCODE RIKEN CAGE Tags (longPolyA in K562 cell cytosol using )
+    subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
+    type bed 6
+    dateSubmitted 2009-02-04
+    dateUnrestricted 2009-11-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 20
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization cytosol
+    cell K562
+
+    track wgEncodeRikenCageAlignmentsK562NucleusLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 nucleus 
+    longLabel ENCODE RIKEN CAGE Tags (longPolyA in K562 cell nucleus using )
+    subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA
+    type bed 6
+    dateSubmitted 2009-02-04
+    dateUnrestricted 2009-11-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 20
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization nucleus
+    cell K562
+
+    track wgEncodeRikenCagePlusRawSignalK562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 cytosol  PlusRaw
+    longLabel ENCODE RIKEN CAGE Plus Raw Signal (longPolyA in K562 cell cytosol using )
+    subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
+    type wig 1.00 64144.00
+    dateSubmitted 2009-02-04
+    dateUnrestricted 2009-11-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 18
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization cytosol
+    cell K562
+
+    track wgEncodeRikenCageMinusRawSignalK562CytosolLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 cytosol  MinusRaw
+    longLabel ENCODE RIKEN CAGE Minus Raw Signal (longPolyA in K562 cell cytosol using )
+    subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
+    type wig 1.00 65162.00
+    dateSubmitted 2009-02-04
+    dateUnrestricted 2009-11-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 19
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization cytosol
+    cell K562
+
+    track wgEncodeRikenCagePlusRawSignalK562NucleusLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 nucleus  PlusRaw
+    longLabel ENCODE RIKEN CAGE Plus Raw Signal (longPolyA in K562 cell nucleus using )
+    subGroups view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
+    type wig 1.00 65282.00
+    dateSubmitted 2009-02-04
+    dateUnrestricted 2009-11-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 18
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization nucleus
+    cell K562
+
+    track wgEncodeRikenCageMinusRawSignalK562NucleusLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 nucleus  MinusRaw
+    longLabel ENCODE RIKEN CAGE Minus Raw Signal (longPolyA in K562 cell nucleus using )
+    subGroups view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
+    type wig 1.00 49208.00
+    dateSubmitted 2009-02-04
+    dateUnrestricted 2009-11-04
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 19
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
     localization nucleus
     cell K562
 
