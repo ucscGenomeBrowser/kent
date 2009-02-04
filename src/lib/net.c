@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.62 2009/02/04 06:59:57 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.63 2009/02/04 19:21:52 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -513,6 +513,10 @@ dyStringFree(&rs);
 /* Because some FTP servers will kill the data connection
  * as soon as the control connection closes,
  * we have to develop a workaround using a partner process. */
+
+fflush(stdin);
+fflush(stdout);
+fflush(stderr);
 
 int pipefd[2];
 
