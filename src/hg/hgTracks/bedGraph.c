@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.18 2009/02/03 05:04:07 kent Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.19 2009/02/04 18:38:03 kent Exp $";
 
 /*	The item names have been massaged during the Load.  An
  *	individual item may have been read in on multiple table rows and
@@ -213,44 +213,12 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
  *	cooresponds to a single pixel on the screen
  */
 
-double graphUpperLimit;		/*	scaling choice will set these	*/
-double graphLowerLimit;		/*	scaling choice will set these	*/
 wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	       preDraw, preDrawZero, preDrawSize, &graphUpperLimit, &graphLowerLimit);
-
-/*
- *	We need to put the graphing limits back into the items
- *	so the LeftLabels routine can find these numbers.
- *	This may seem like overkill to put it into each item but
- *	this will become necessary when these graphs stack up upon
- *	each other in a multiple item display, each one will have its
- *	own graph.
- */
-for (wi = tg->items; wi != NULL; wi = wi->next)
-    {
-	wi->graphUpperLimit = graphUpperLimit;
-	wi->graphLowerLimit = graphLowerLimit;
-    }
+	       preDraw, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
 
 freeMem(preDraw);
 }	/*	bedGraphDrawItems()	*/
 
-void wigBedGraphFindItemLimits(void *items,
-    double *graphUpperLimit, double *graphLowerLimit)
-/*	find upper and lower limits of graphed items (bedGraphItem)	*/
-{
-struct bedGraphItem *wi;
-*graphUpperLimit = wigEncodeStartingUpperLimit;
-*graphLowerLimit = wigEncodeStartingLowerLimit;
-
-for (wi = items; wi != NULL; wi = wi->next)
-    {
-    if (wi->graphUpperLimit > *graphUpperLimit)
-	*graphUpperLimit = wi->graphUpperLimit;
-    if (wi->graphLowerLimit < *graphLowerLimit)
-	*graphLowerLimit = wi->graphLowerLimit;
-    }
-}	/*	wigBedGraphFindItemLimits	*/
 
 /*
  *	WARNING ! - track->visibility is merely the default value

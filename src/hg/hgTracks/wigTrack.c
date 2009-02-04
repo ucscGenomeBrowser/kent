@@ -16,7 +16,7 @@
 #endif /* GBROWSE */
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.88 2009/02/03 05:04:07 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.89 2009/02/04 18:38:03 kent Exp $";
 
 #define SMALLBUF 128
 
@@ -1247,44 +1247,12 @@ if (wibFH > 0)
  *	cooresponds to a single pixel on the screen
  */
 
-double graphUpperLimit;		/*	scaling choice will set these	*/
-double graphLowerLimit;		/*	scaling choice will set these	*/
 wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	preDraw, preDrawZero, preDrawSize, &graphUpperLimit, &graphLowerLimit);
+	preDraw, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
 
-/*
- *	We need to put the graphing limits back into the items
- *	so the LeftLabels routine can find these numbers.
- *	This may seem like overkill to put it into each item but
- *	this will become necessary when these graphs stack up upon
- *	each other in a multiple item display, each one will have its
- *	own graph.
- */
-for (wi = tg->items; wi != NULL; wi = wi->next)
-    {
-	wi->graphUpperLimit = graphUpperLimit;
-	wi->graphLowerLimit = graphLowerLimit;
-    }
 
 freeMem(preDraw);
 }	/*	wigDrawItems()	*/
-
-void wigFindItemLimits(void *items,
-    double *graphUpperLimit, double *graphLowerLimit)
-/*	find upper and lower limits of graphed items (wigItem)	*/
-{
-struct wigItem *wi;
-*graphUpperLimit = wigEncodeStartingUpperLimit;
-*graphLowerLimit = wigEncodeStartingLowerLimit;
-
-for (wi = items; wi != NULL; wi = wi->next)
-    {
-    if (wi->graphUpperLimit > *graphUpperLimit)
-	*graphUpperLimit = wi->graphUpperLimit;
-    if (wi->graphLowerLimit < *graphLowerLimit)
-	*graphLowerLimit = wi->graphLowerLimit;
-    }
-}
 
 void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
@@ -1326,8 +1294,8 @@ else if (tg->limitedVis == tvFull)
     if (height >= (3 * fontHeight))
 	{
 	boolean zeroOK = TRUE;
-	double graphUpperLimit = wigEncodeStartingUpperLimit;
-	double graphLowerLimit = wigEncodeStartingLowerLimit;
+	double graphUpperLimit = tg->graphUpperLimit;
+	double graphLowerLimit = tg->graphLowerLimit;
 	char upper[128];
 	char lower[128];
 	char upperTic = '-';	/* as close as we can get with ASCII */
@@ -1340,12 +1308,6 @@ else if (tg->limitedVis == tvFull)
 	    centerOffset = fontHeight;
 	    upperTic = '_';	/*	this is correct	*/
 	    }
-	if (wigCart->bedGraph)
-	    wigBedGraphFindItemLimits(tg->items,
-		&graphUpperLimit, &graphLowerLimit);
-	else
-	    wigFindItemLimits(tg->items,
-		&graphUpperLimit, &graphLowerLimit);
 
 	/*  In areas where there is no data, these limits do not change */
 	if (graphUpperLimit < graphLowerLimit)

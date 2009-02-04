@@ -146,6 +146,7 @@ struct track
 
     float minRange, maxRange;	  /*min and max range for sample tracks 0.0 to 1000.0*/
     float scaleRange;             /* What to scale samples by to get logical 0-1 */
+    double graphUpperLimit, graphLowerLimit;	/* Limits of actual data in window for wigs. */
 
     int bedSize;		/* Number of fields if a bed file. */
     boolean isBigBed;		/* If a bed, is it a bigBed? */

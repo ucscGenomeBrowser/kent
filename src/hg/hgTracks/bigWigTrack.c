@@ -14,7 +14,7 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigTrack.c,v 1.3 2009/02/03 05:04:07 kent Exp $";
+static char const rcsid[] = "$Id: bigWigTrack.c,v 1.4 2009/02/04 18:38:03 kent Exp $";
 
 static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
@@ -53,7 +53,7 @@ if (bigWigSummaryArrayExtended(wigFileName, chromName, winStart, winEnd, summary
 
     /* Call actual graphing routine. */
     wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-		   preDraw, preDrawZero, preDrawSize, NULL, NULL);
+		   preDraw, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
     }
 
 freeMem(preDraw);
