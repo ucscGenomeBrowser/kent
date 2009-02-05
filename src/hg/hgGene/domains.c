@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.27 2009/02/03 07:11:39 markd Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.28 2009/02/05 08:05:17 markd Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -153,6 +153,7 @@ else
 list = spExtDbAcc1List(spConn, swissProtAcc, "PDB");
 if (list != NULL)
     {
+    struct sqlConnection *conn2 = sqlConnect(db);
     char query[256], **row;
     struct sqlResult *sr;
     int column = 0, maxColumn=3, rowCount=0;
@@ -181,17 +182,20 @@ if (list != NULL)
 	hPrintf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s\" TARGET=_blank>", row[0]);
 	if (rowCount < 1)
 	    hPrintf("<IMG SRC=\"http://www.rcsb.org/pdb/images/%s_asym_r_250.jpe\"><BR>", row[0]);
-        // include link to view in PDB chimera
+        hPrintf("%s</A> - %s ", row[0], row[1]);
+        // include links LS-SNP and to launch viewer in PDB chimera
         struct tempName chimerax;
         lsSnpPdbChimeraSnpAnn(conn, row[0], NULL, &chimerax);
-        hPrintf("%s</A> - %s <A HREF=\"%s\">Chimera</A> <BR>\n",
-                row[0], row[1], chimerax.forHtml);
-	hPrintf("</TD>");
+        hPrintf(" <A HREF=\"%s\">Chimera</A>", chimerax.forHtml);
+        if (lsSnpPdbHasPdb(conn2, row[0]))
+            hPrintf(" <A HREF=\"%s\" TARGET=_blank>LS-SNP</A>", lsSnpPdbGetUrlPdbSnp(row[0], NULL));
+	hPrintf("</TD>\n");
 	}
     hPrintf("</TR></TABLE>\n");
-    printf("<A href=\"../goldenPath/help/chimera.html\">Chimera help</A>\n");
+    hPrintf("<A href=\"../goldenPath/help/chimera.html\" TARGET=_blank>Chimera help</A>\n");
     hPrintf("<BR><BR>\n");
     slFreeList(&list);
+    sqlDisconnect(&conn2);
     }
 
 /* Do SAM-T02 sub-section */
@@ -226,7 +230,6 @@ doSamT02(swissProtAcc, database);
 	    "pictures. It is simplest after logging in to just click on "
 	    "the picture again to get to the specific info on that model.</I>");
     }
-
 }
 
 struct section *domainsSection(struct sqlConnection *conn, 
