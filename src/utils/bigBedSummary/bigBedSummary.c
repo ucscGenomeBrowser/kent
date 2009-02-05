@@ -6,7 +6,7 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bigBedSummary.c,v 1.2 2009/02/02 06:05:52 kent Exp $";
+static char const rcsid[] = "$Id: bigBedSummary.c,v 1.3 2009/02/05 20:49:48 kent Exp $";
 
 char *summaryType = "coverage";
 
@@ -37,7 +37,7 @@ void bigBedSummary(char *fileName, char *chrom, int start, int end, int dataPoin
 /* bigBedSummary - Extract summary information from a bigBed file.. */
 {
 /* Make up values array initialized to not-a-number. */
-double nan0 = nan(NULL);
+double nan0 = nan("");
 double summaryValues[dataPoints];
 int i;
 for (i=0; i<dataPoints; ++i)
