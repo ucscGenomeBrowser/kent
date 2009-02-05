@@ -45,10 +45,20 @@ char *getCurrentDir();
 void setCurrentDir(char *newDir);
 /* Set current directory.  Abort if it fails. */
 
+boolean maybeSetCurrentDir(char *newDir);
+/* Change directory, return FALSE (and set errno) if fail. */
+
 boolean makeDir(char *dirName);
 /* Make dir.  Returns TRUE on success.  Returns FALSE
  * if failed because directory exists.  Prints error
  * message and aborts on other error. */
+
+void makeDirsOnPath(char *pathName);
+/* Create directory specified by pathName.  If pathName contains
+ * slashes, create directory at each level of path if it doesn't
+ * already exist.  Abort with error message if there's a problem.
+ * (It's not considered a problem for the directory to already
+ * exist. ) */
 
 long clock1000();
 /* 1000 hz clock */

@@ -13,7 +13,7 @@
 #include "portimpl.h"
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: osunix.c,v 1.37 2009/01/28 21:34:13 galt Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.38 2009/02/05 20:34:45 kent Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -82,6 +82,12 @@ void setCurrentDir(char *newDir)
 {
 if (chdir(newDir) != 0)
     errnoAbort("can't to set current directory: %s", newDir);
+}
+
+boolean maybeSetCurrentDir(char *newDir)
+/* Change directory, return FALSE (and set errno) if fail. */
+{
+return chdir(newDir) == 0;
 }
 
 struct slName *listDir(char *dir, char *pattern)
