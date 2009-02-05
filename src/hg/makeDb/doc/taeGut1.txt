@@ -666,12 +666,15 @@ update genbank.conf:
 taeGut1.upstreamGeneTbl = refGene
 
 #########################################
-# RepeatMasker ( 2009-01-30  RMH and braney)
+# RepeatMasker ( 2009-02-04  RMH and braney)
 
 mkdir /hive/data/genomes/taeGut1/bed/RMRunRMH
 cd /hive/data/genomes/taeGut1/bed/RMRunRMH
 doRepeatMasker.pl -buildDir `pwd` taeGut1
 
 featureBits taeGut1 rmsk
+# 99288448 bases of 1222864691 (8.119%) in intersection
+
+# was earlier...
 # 97507442 bases of 1222864691 (7.974%) in intersection
 
