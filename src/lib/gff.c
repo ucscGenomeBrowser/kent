@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.23 2008/02/08 22:48:31 markd Exp $";
+static char const rcsid[] = "$Id: gff.c,v 1.24 2009/02/05 20:53:24 hiram Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */
@@ -151,7 +151,7 @@ for (;;)
        break;
    s = skipLeadingSpaces(s);
    if (NULL == s || s[0] == 0)
-       errAbort("Unpaired type/val on end of gtf line %d of %s", lineIx, fileName);
+       errAbort("Unpaired type(%s)/val on end of gtf line %d of %s", type, lineIx, fileName);
    if (s[0] == '"' || s[0] == '\'')
        {
        val = s;
