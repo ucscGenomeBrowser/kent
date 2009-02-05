@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.393 2009/02/02 19:18:17 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.394 2009/02/05 00:19:13 angie Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -3311,7 +3311,7 @@ tdbMarkAsCompositeChild(subtrackTdb);
 if (!trackDbSettingClosestToHome(subtrackTdb, "noInherit"))
     {
     /* no longer necessary ? -- this is done in hgTrackDb now */
-    if (subtrackTdb->type == NULL)
+    if (isEmpty(subtrackTdb->type))
         subtrackTdb->type = cloneString(compositeTdb->type);
     subtrackTdb->grp = cloneString(compositeTdb->grp);
 
