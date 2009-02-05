@@ -59,8 +59,8 @@ shortLabel BDTNP ChIP/chip
 longLabel Berkeley Drosophila Transcription Network Project Transcription Factor ChIP/chip
 group regulation
 priority 71
-visibility full
-visibilityViewDefaults best1=dense best25=hide other1=hide other25=hide
+visibility dense
+visibilityViewDefaults best1=full best25=hide other1=hide other25=hide
 type wig 0.0 40.39
 viewLimits 1:10
 maxHeightPixels 100:15:10
