@@ -2507,6 +2507,24 @@ identifier transMapAlnKnownGeneMmId
     hg18.knownGene.name
     mm9.transMapAlnUcscGenes.qName minCheck=0.70 chopAfter=-
 
+# lsSnpPdb tables
+identifier lsSnpPdbProtId
+"lsSnpPdb table protId field"
+    hg18.lsSnpPdb.protId
+    hg18.kgXref.spID minCheck=0.98
+    uniProt.extDbRef.acc minCheck=0.98
+
+identifier lsSnpPdbPdbId
+"lsSnpPdb table pdbId field"
+    hg18.lsSnpPdb.pdbId
+    uniProt.extDbRef.extAcc1 minCheck=0.98
+
+identifier lsSnpPdbSnpId
+"lsSnpPdb table snpId field"
+    hg18.lsSnpPdb.snpId
+    hg18.snp129.name minCheck=0.98
+
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
@@ -2797,6 +2815,7 @@ type transMapGene
     hgFixed.transMapGeneRefSeq
     hgFixed.transMapGeneUcscGenes
     hgFixed.transMapGeneMRna
+
 
 # Ignored tables - no linkage here that we check at least.
 
