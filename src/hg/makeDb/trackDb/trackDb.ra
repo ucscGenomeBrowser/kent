@@ -1617,7 +1617,7 @@ shortLabel RepMask 3.2.7
 longLabel Repeating Elements by RepeatMasker version 3.2.7
 group varRep
 priority 149.105
-visibility dense
+visibility hide
 spectrum on
 type rmsk
 canPack off
