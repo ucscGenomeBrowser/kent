@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.12 2008/10/21 22:49:57 hiram Exp $
+# $Id: doRepeatMasker.pl,v 1.13 2009/02/05 16:29:36 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -381,7 +381,7 @@ _EOF_
 					$runDir, $whatItDoes);
     $bossScript->add(<<_EOF_
 head -3 $db.fa.out > /tmp/rmskHead.txt
-tail +4 $db.fa.out \\
+tail -n +4 $db.fa.out \\
 | splitFileByColumn -col=5 stdin /cluster/data/$db -chromDirs \\
     -ending=.fa.out -head=/tmp/rmskHead.txt
 _EOF_
