@@ -14,7 +14,7 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwgCreate.c,v 1.11 2009/02/04 22:27:20 kent Exp $";
+static char const rcsid[] = "$Id: bwgCreate.c,v 1.12 2009/02/05 20:45:05 kent Exp $";
 
 struct bwgBedGraphItem
 /* An bedGraph-type item in a bwgSection. */
@@ -628,7 +628,7 @@ struct bwgSection *section;
 int i;
 for (section = sectionList; section != NULL; section = section->next)
     {
-    int sectionRes = sectionList->itemSpan;
+    int sectionRes = 0;
     switch (section->type)
         {
 	case bwgTypeBedGraph:
@@ -663,7 +663,7 @@ for (section = sectionList; section != NULL; section = section->next)
 	    }
 	case bwgTypeFixedStep:
 	    {
-	    sectionRes = section->itemSpan + section->itemStep;
+	    sectionRes = section->itemStep;
 	    break;
 	    }
 	default:
@@ -742,7 +742,7 @@ for (i=0; i<section->itemCount; ++i)
 
 static void bwgReduceFixedStep(struct bwgSection *section, bits32 chromSize, int reduction, 
 	struct bbiSummary **pOutList)
-/*Reduce a variableStep section onto outList. */
+/*Reduce a fixedStep section onto outList. */
 {
 struct bwgFixedStepPacked *items = section->items.fixedStepPacked;
 int start = section->start;
