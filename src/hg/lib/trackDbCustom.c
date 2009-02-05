@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.55 2009/02/04 20:12:15 kent Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.56 2009/02/05 00:21:55 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -677,7 +677,7 @@ else if(sameWord("genePred",tdb->type) && startsWith("wgEncodeSangerGencode", td
 if(cType == cfgNone && !startsWith("bed ", tdb->type) && !startsWith("bigBed", tdb->type) 
 	&& subgroupFind(tdb,"view",NULL))
     {
-    warn("Track type %s is not yet support in multi-view composites for %s.",tdb->type,tdb->tableName);
+    warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",tdb->type,tdb->tableName);
     }
 return cType;
 }
