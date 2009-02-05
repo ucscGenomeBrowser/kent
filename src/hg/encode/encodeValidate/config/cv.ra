@@ -706,6 +706,10 @@ term 1k
 type fragSize
 description 1kb DNA fragments
 
+term 5k
+type fragSize
+description 5kb DNA fragments
+
 term 10k
 type fragSize
 description 10kb DNA fragments
