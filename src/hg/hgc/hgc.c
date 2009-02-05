@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1500 2009/02/03 21:37:40 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1501 2009/02/05 08:06:26 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14750,7 +14750,7 @@ if (iCol != 0)
     }
 printf("</TBODY>\n");
 printf("</TABLE>\n");
-printf("<A href=\"../goldenPath/help/chimera.html\">Chimera help</A>\n");
+printf("<A href=\"../goldenPath/help/chimera.html\" TARGET=_blank>Chimera help</A>\n");
 }
 
 static void checkForLsSnpMappings(struct sqlConnection *conn, char *snpId)
