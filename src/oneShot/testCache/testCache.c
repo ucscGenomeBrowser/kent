@@ -36,7 +36,7 @@
 #include "sig.h"
 
 
-static char const rcsid[] = "$Id: testCache.c,v 1.6 2009/02/06 18:51:47 kent Exp $";
+static char const rcsid[] = "$Id: testCache.c,v 1.7 2009/02/06 22:58:29 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -66,6 +66,9 @@ typedef boolean (*UdcInfoCallback)(char *url, struct udcRemoteFileInfo *retInfo)
 
 #define udcBlockSize (8*1024)
 /* All fetch requests are rounded up to block size. */
+
+#define udcMaxBytesPerRemoteFetch (udcBlockSize * 32)
+/* Very large remote reads are broken down into chunks this size. */
 
 #define udcBitmapHeaderSize (64)
 
@@ -309,8 +312,7 @@ if (file->size > 0)
     if (endBlock > 8)
         endBlock = 8;
     int initialCachedBlocks = bitFindClear(&b, 0, endBlock);
-    file->startData = 0;
-    file->endData = endBlock * udcBlockSize;
+    file->endData = initialCachedBlocks * udcBlockSize;
     }
 
 udcBitmapClose(&bits);
@@ -418,18 +420,42 @@ freeMem(bits);
 return allSet;
 }
 
-static void fetchMissingBlocks(struct udcFile *file, int startBlock, int blockCount,
-	int blockSize)
+static void fetchMissingBlocks(struct udcFile *file, struct udcBitmap *bits, 
+	int startBlock, int blockCount, int blockSize)
 /* Fetch missing blocks from remote and put them into file. */
 {
-/* TODO: rework this so that it just fetches something like up to 64k at a time,
- * and locks/updates/unlocks the bitmap around each one of these fetches. */
 bits64 startPos = (bits64)startBlock * blockSize;
-bits64 bufSize = (bits64)blockCount * blockSize;
-void *buf  = needLargeMem(bufSize);
-file->prot->fetchData(file->url, startPos, bufSize, buf);
-fseek(file->fSparse, startPos, SEEK_SET);
-mustWrite(file->fSparse, buf, bufSize);
+bits64 endPos = startPos + (bits64)blockCount * blockSize;
+if (endPos > file->size)
+    endPos = file->size;
+if (endPos > startPos)
+    {
+    bits64 bufSize = endPos - startPos;
+    bits64 s,e;
+    void *buf = NULL;
+    for (s=startPos; s < endPos; s = e)
+        {
+	/* Figure out bounds of this section. */
+	e = s + udcMaxBytesPerRemoteFetch;
+	if (e > endPos)
+	    e = endPos;
+	bits64 readSize = e - s;
+
+	/* Allocate a buffer the first time through.  The next iteration may require a smaller
+	 * buffer at the end, but not a larger one. */
+	if (buf == NULL)
+	    buf = needLargeMem(readSize);
+
+	/* Fetch the data and then write it right back out. */
+	file->prot->fetchData(file->url, s, readSize, buf);
+	fseek(file->fSparse, s, SEEK_SET);
+	mustWrite(file->fSparse, buf, readSize);
+
+	/* TODO: rework this so that it locks/updates/unlocks the bitmap around each one of 
+	 * these fetches. */
+	}
+    freez(&buf);
+    }
 }
 
 static void fetchMissingBits(struct udcFile *file, struct udcBitmap *bits,
@@ -454,7 +480,7 @@ for (;;)
         break;
     int nextSetBit = bitFindSet(b, nextClearBit, e);
     int clearSize =  nextSetBit - nextClearBit;
-    fetchMissingBlocks(file, nextClearBit + partOffset, clearSize, bits->blockSize);
+    fetchMissingBlocks(file, bits, nextClearBit + partOffset, clearSize, bits->blockSize);
     bitSetRange(b, nextClearBit, clearSize);
     dirty = TRUE;
     if (nextSetBit >= e)
@@ -517,23 +543,30 @@ if (!udcCacheContains(file, bits, offset, size))
 udcBitmapClose(&bits);
 }
 
-void udcRead(struct udcFile *file, void *buf, int size)
-/* Read a block from file. */
+int udcRead(struct udcFile *file, void *buf, int size)
+/* Read a block from file.  Return amount actually read. */
 {
-if (file->offset < file->startData || file->offset + size > file->endData)
+bits64 start = file->offset;
+bits64 end = start + size;
+if (end > file->size)
+    end = file->size;
+size = end - start;	/* Clip size. */
+if (start < file->startData || end > file->endData)
     {
-    udcCachePreload(file, file->offset, size);
-    fseek(file->fSparse, file->offset, SEEK_SET);
+    udcCachePreload(file, start, size);
+    fseek(file->fSparse, start, SEEK_SET);
     }
 uglyf("Reading %d from localFile at pos %llu\n", size, file->offset);
 mustRead(file->fSparse, buf, size);
 file->offset += size;
+return size;
 }
 
 void udcSeek(struct udcFile *file, bits64 offset)
 /* Seek to a particular position in file. */
 {
 file->offset = offset;
+fseek(file->fSparse, offset, SEEK_SET);
 }
 
 void testCache(char *sourceUrl, bits64 offset, bits64 size, char *outFile)
@@ -545,8 +578,9 @@ struct udcFile *file = udcFileOpen(sourceUrl);
 /* Read data and write it back out */
 void *buf = needMem(size);
 udcSeek(file, offset);
-udcRead(file, buf, size);
-writeGulp(outFile, buf, size);
+size = udcRead(file, buf, size);
+if (size >= 0)
+    writeGulp(outFile, buf, size);
 
 /* Clean up. */
 udcFileClose(&file);
