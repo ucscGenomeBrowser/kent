@@ -1993,6 +1993,11 @@ identifier snpArrayHg18
     hg18.snpArrayIllumina550.name
     hg18.snpArrayIllumina650.name
 
+identifier snp129ArrayHg18
+"SNP array track for hg18"
+    hg18.snp129.name dupeOk
+    hg18.snpArrayIllumina1M.name minCheck=0.92
+
 identifier snpOrtho126
 "Ortho SNPs for hg18 only (dbSNP 126)"
     hg18.snp126.name dupeOk
