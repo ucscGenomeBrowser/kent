@@ -16,8 +16,9 @@ if ($#argv < 2) then
   echo
   echo "  gets the rowcount for a list of tables from dev and beta."
   echo
-  echo "    usage:  database, tablelist (can be just name of single table),"
-  echo "            [all] (defaults to reporting about only tables that differ)."
+  echo "    usage:  database tablelist [verbose] 
+  echo "      tablelist can be just name of single table"
+  echo "      verbose reports rowcounts even if dev = beta"
   echo
   exit
 else
@@ -28,9 +29,7 @@ else
   endif
 endif
 
-echo
 # echo "database: $db"
-
 
 echo
 if (-e $tablelist) then
