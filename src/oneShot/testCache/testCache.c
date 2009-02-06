@@ -36,7 +36,7 @@
 #include "sig.h"
 
 
-static char const rcsid[] = "$Id: testCache.c,v 1.3 2009/02/06 02:16:58 kent Exp $";
+static char const rcsid[] = "$Id: testCache.c,v 1.4 2009/02/06 04:55:39 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -44,7 +44,7 @@ void usage()
 errAbort(
   "testCache - Experiments with file cacher.\n"
   "usage:\n"
-  "   testCache cacheDir sourceUrl offset size outFile\n"
+  "   testCache sourceUrl offset size outFile\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -122,6 +122,7 @@ return dy;
 void udcBitmapCreate(struct udcFile *file, bits64 remoteUpdate, bits64 remoteSize)
 /* Create a new bitmap file around the given remoteUpdate time. */
 {
+uglyf("udcBitmapCreate(%s %llu %llu)\n", file->url, remoteUpdate, remoteSize);
 struct dyString *fileName = fileNameInCacheDir(file, bitmapName);
 FILE *f = mustOpen(fileName->string, "wb");
 bits32 sig = udcBitmapSig;
@@ -158,14 +159,16 @@ struct udcBitmap *udcBitmapOpen(char *fileName)
 /* Open up a bitmap file and read and verify header.  Return NULL if file doesn't
  * exist, abort on error. */
 {
+uglyf("udcBitmapOpen(%s)\n", fileName);
 /* Open file, returning NULL if can't. */
 FILE *f = fopen(fileName, "rb");
 if (f == NULL)
     return NULL;
 
-/* Get satus info from file. */
+/* Get status info from file. */
 struct stat status;
-fstat(fileno(f), &status);
+int err = fstat(fileno(f), &status);
+uglyf("fstat err = %d\n", err);
 
 /* Read signature and decide if byte-swapping is needed. */
 bits32 magic;
@@ -189,6 +192,8 @@ bits->localUpdate = status.st_mtime;
 bits->localAccess = status.st_atime;
 bits->isSwapped = isSwapped;
 bits->f = f;
+
+uglyf("blockSize %u, remoteUpdate %llu, fileSize %llu\n", bits->blockSize, bits->remoteUpdate, bits->fileSize);
 return bits;
 }
 
@@ -327,9 +332,12 @@ int byteEnd = (bitEnd+7)/8;
 int byteSize = byteEnd - byteStart;
 Bits *bits = needLargeMem(byteSize);
 fseek(f, headerSize + byteStart, SEEK_SET);
+uglyf("readBitsIntoBuf headerSize=%d, byteStart=%d, byteSize=%d, fseek to %d\n", headerSize, byteStart, byteSize, headerSize+byteStart);
 mustRead(f, bits, byteSize);
 *retBits = bits;
+uglyf("readBitsIntoBuf 4\n");
 *retPartOffset = byteStart*8;
+uglyf("readBitsIntoBuf 5\n");
 }
 
 boolean allBitsSetInFile(FILE *f, int headerSize, int bitStart, int bitEnd)
@@ -353,6 +361,7 @@ static void fetchMissingBlocks(struct udcFile *file, int startBlock, int blockCo
 	int blockSize)
 /* Fetch missing blocks from remote and put them into file. */
 {
+uglyf("fetch 13.1 startBlock %d, blockCount %d, blockSize %d\n", startBlock, blockCount, blockSize);
 /* TODO: rework this so that it just fetches something like up to 64k at a time,
  * and locks/updates/unlocks the bitmap around each one of these fetches. */
 struct dyString *dataFileName = fileNameInCacheDir(file, sparseDataName);
@@ -370,6 +379,7 @@ static void fetchMissingBits(struct udcFile *file, struct udcBitmap *bits,
 	bits64 start, bits64 end)
 /* Scan through relevant parts of bitmap, fetching blocks we don't already have. */
 {
+uglyf("missing 1 - file %p, bits %p, start %llu, end %llu\n", file, bits, start, end);
 /* Fetch relevant part of bitmap into memory */
 int partOffset;
 Bits *b;
@@ -395,15 +405,18 @@ for (;;)
 
 if (dirty)
     {
+uglyf("missing 6\n");
     /* Update bitmap on disk.... */
     int byteStart = start/8;
     int byteEnd = (end+7)/8;
     int byteSize = byteEnd - byteStart;
     fseek(bits->f, byteStart + udcBitmapHeaderSize, SEEK_SET);
     mustWrite(bits->f, b, byteSize);
+uglyf("missing 7\n");
     }
 
 freeMem(b);
+uglyf("missing 9\n");
 }
 
 boolean udcCacheContains(struct udcFile *file, bits64 offset, int size)
@@ -428,6 +441,7 @@ return result;
 void udcFetchMissing(struct udcFile *file, bits64 start, bits64 end)
 /* Fetch missing pieces of data from file */
 {
+uglyf("fetch 1 %p %llu %llu\n", file, start, end);
 /* Ping server for file size and last modification time. */
 struct udcRemoteFileInfo info;
 if (!file->prot->fetchInfo(file->url, &info))
@@ -449,13 +463,15 @@ if (bits != NULL)
 if (bits == NULL)
     {
     udcBitmapCreate(file, info.updateTime, info.size);
-    struct udcBitmap *bits = udcBitmapOpen(fileName->string);
+    bits = udcBitmapOpen(fileName->string);
     if (bits == NULL)
         internalErr();
     }
 
 /* Call lower level routine to finish up job. */
+uglyf("fetch 13 - file %p, bits %p, start %llu, end %llu\n", file, bits, start, end);
 fetchMissingBits(file, bits, start, end);
+uglyf("fetch 14\n");
 
 /* Clean up */
 udcBitmapClose(&bits);
@@ -474,6 +490,7 @@ if (!udcCacheContains(file, offset, size))
 void udcRead(struct udcFile *file, void *buf, int size)
 /* Read a block from file. */
 {
+uglyf("ok 2.1 file %p, buf %p, size %d\n", file, buf, size);
 if (file->offset < file->startData || file->offset + size > file->endData)
     {
     udcCachePreload(file, file->offset, size);
@@ -487,6 +504,7 @@ void testCache(char *sourceUrl, bits64 offset, bits64 size, char *outFile)
 /* testCache - Experiments with file cacher.. */
 {
 /* Open up cache and file. */
+uglyf("ok 1 offset %llu, size %llu\n", offset, size);
 struct udcFile *file = udcFileOpen(sourceUrl);
 
 /* Read data and write it back out */
