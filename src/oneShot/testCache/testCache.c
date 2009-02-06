@@ -36,7 +36,7 @@
 #include "sig.h"
 
 
-static char const rcsid[] = "$Id: testCache.c,v 1.2 2009/02/06 00:35:52 kent Exp $";
+static char const rcsid[] = "$Id: testCache.c,v 1.3 2009/02/06 02:16:58 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -314,27 +314,96 @@ return file;
 void udcFileClose(struct udcFile **pFile)
 /* Close down cached file. */
 {
+freez(pFile);
 }
 
-boolean allBitsSetInFile(FILE *f, int headerSize, int bitStart, int bitEnd)
-/* Return TRUE if all bits in file between start and end are set. */
+void readBitsIntoBuf(FILE *f, int headerSize, int bitStart, int bitEnd,
+	Bits **retBits, int *retPartOffset)
+/* Do some bit-to-byte offset conversions and read in all the bytes that
+ * have information in the bits we're interested in. */
 {
-int bitSize = bitEnd - bitStart;
 int byteStart = bitStart/8;
 int byteEnd = (bitEnd+7)/8;
 int byteSize = byteEnd - byteStart;
 Bits *bits = needLargeMem(byteSize);
 fseek(f, headerSize + byteStart, SEEK_SET);
 mustRead(f, bits, byteSize);
+*retBits = bits;
+*retPartOffset = byteStart*8;
+}
 
-int partOffset = byteStart*8;
+boolean allBitsSetInFile(FILE *f, int headerSize, int bitStart, int bitEnd)
+/* Return TRUE if all bits in file between start and end are set. */
+{
+int partOffset;
+Bits *bits;
+readBitsIntoBuf(f, headerSize, bitStart, bitEnd, &bits, &partOffset);
+
 int partBitStart = bitStart - partOffset;
 int partBitEnd = bitEnd - partOffset;
+int bitSize = bitEnd - bitStart;
 int nextClearBit = bitFindClear(bits, partBitStart, bitSize);
 boolean allSet = (nextClearBit >= partBitEnd);
 
 freeMem(bits);
 return allSet;
+}
+
+static void fetchMissingBlocks(struct udcFile *file, int startBlock, int blockCount,
+	int blockSize)
+/* Fetch missing blocks from remote and put them into file. */
+{
+/* TODO: rework this so that it just fetches something like up to 64k at a time,
+ * and locks/updates/unlocks the bitmap around each one of these fetches. */
+struct dyString *dataFileName = fileNameInCacheDir(file, sparseDataName);
+bits64 startPos = (bits64)startBlock * blockSize;
+bits64 bufSize = (bits64)blockCount * blockSize;
+void *buf  = needLargeMem(bufSize);
+file->prot->fetchData(file->url, startPos, bufSize, buf);
+FILE *f = mustOpen(dataFileName->string, "r+");
+fseek(f, startPos, SEEK_SET);
+mustWrite(f, buf, bufSize);
+carefulClose(&f);
+}
+
+static void fetchMissingBits(struct udcFile *file, struct udcBitmap *bits,
+	bits64 start, bits64 end)
+/* Scan through relevant parts of bitmap, fetching blocks we don't already have. */
+{
+/* Fetch relevant part of bitmap into memory */
+int partOffset;
+Bits *b;
+readBitsIntoBuf(bits->f, udcBitmapHeaderSize, start, end, &b, &partOffset);
+
+/* Loop around first skipping set bits, then fetching clear bits. */
+boolean dirty = FALSE;
+int e = end - partOffset;
+int s = start - partOffset;
+for (;;)
+    {
+    int nextClearBit = bitFindClear(b, s, e);
+    if (nextClearBit >= e)
+        break;
+    int nextSetBit = bitFindSet(b, nextClearBit+1, e);
+    int clearSize =  nextSetBit - nextClearBit;
+    fetchMissingBlocks(file, nextClearBit + partOffset, clearSize, bits->blockSize);
+    bitSetRange(b, nextClearBit, clearSize);
+    dirty = TRUE;
+    if (nextSetBit >= e)
+        break;
+    }
+
+if (dirty)
+    {
+    /* Update bitmap on disk.... */
+    int byteStart = start/8;
+    int byteEnd = (end+7)/8;
+    int byteSize = byteEnd - byteStart;
+    fseek(bits->f, byteStart + udcBitmapHeaderSize, SEEK_SET);
+    mustWrite(bits->f, b, byteSize);
+    }
+
+freeMem(b);
 }
 
 boolean udcCacheContains(struct udcFile *file, bits64 offset, int size)
@@ -355,25 +424,30 @@ dyStringFree(&fileName);
 return result;
 }
 
-static void fetchMissingBits(struct udcFile *file, struct udcBitmap *bits,
-	bits64 start, bits64 end)
-/* Scan through relevant parts of bitmap, fetching blocks we don't already have. */
-{
-}
-
 
 void udcFetchMissing(struct udcFile *file, bits64 start, bits64 end)
 /* Fetch missing pieces of data from file */
 {
-/* Get bitmap associated with file, creating a new one if need be. */
-boolean result = FALSE;
+/* Ping server for file size and last modification time. */
+struct udcRemoteFileInfo info;
+if (!file->prot->fetchInfo(file->url, &info))
+    errAbort("Remote file %s doesn't seem to exist", file->url);
+
+/* Get bitmap and compare timestamp.  Delete bitmap if it's out of date. */
 struct dyString *fileName = fileNameInCacheDir(file, bitmapName);
 struct udcBitmap *bits = udcBitmapOpen(fileName->string);
+if (bits != NULL)
+    {
+    if (bits->remoteUpdate != info.updateTime || bits->fileSize != info.size)
+	{
+        udcBitmapClose(&bits);
+	remove(fileName->string);
+	}
+    }
+
+/* If need be create new bitmap. */
 if (bits == NULL)
     {
-    struct udcRemoteFileInfo info;
-    if (!file->prot->fetchInfo(file->url, &info))
-	errAbort("Remote file %s doesn't seem to exist", file->url);
     udcBitmapCreate(file, info.updateTime, info.size);
     struct udcBitmap *bits = udcBitmapOpen(fileName->string);
     if (bits == NULL)
