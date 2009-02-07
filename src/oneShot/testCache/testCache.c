@@ -36,7 +36,7 @@
 #include "sig.h"
 
 
-static char const rcsid[] = "$Id: testCache.c,v 1.7 2009/02/06 22:58:29 kent Exp $";
+static char const rcsid[] = "$Id: testCache.c,v 1.8 2009/02/07 01:25:28 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -96,6 +96,7 @@ struct udcFile
     FILE *fSparse;		/* File handle for sparse data file. */
     bits64 startData;		/* Start of area in file we know to have data. */
     bits64 endData;		/* End of area in file we know to have data. */
+    bits32 bitmapVersion;	/* Version of associated bitmap we were opened with. */
     };
 
 struct udcBitmap
@@ -105,6 +106,7 @@ struct udcBitmap
     bits32 blockSize;		/* Number of bytes per block of file. */
     bits64 remoteUpdate;	/* Remote last update time. */
     bits64 fileSize;		/* File size */
+    bits32 version;		/* Version - increments each time cache is stale. */
     bits64 localUpdate;		/* Time we last fetched new data into cache. */
     bits64 localAccess;		/* Time we last accessed data. */
     boolean isSwapped;		/* If true need to swap all bytes on read. */
@@ -127,27 +129,27 @@ memcpy(path+dirLen+1, fileName, dirLen);
 return path;
 }
 
-void udcNewCreateBitmapAndSparse(struct udcFile *file, bits64 remoteUpdate, bits64 remoteSize)
+void udcNewCreateBitmapAndSparse(struct udcFile *file, bits64 remoteUpdate, bits64 remoteSize,
+	bits32 version)
 /* Create a new bitmap file around the given remoteUpdate time. */
 {
-uglyf("udcNewCreateBitmapAndSparse(%s %llu %llu)\n", file->url, remoteUpdate, remoteSize);
+uglyf("udcNewCreateBitmapAndSparse(%s %llu %llu %u)\n", file->url, remoteUpdate, remoteSize, version);
 FILE *f = mustOpen(file->bitmapFileName, "wb");
 bits32 sig = udcBitmapSig;
 bits32 blockSize = udcBlockSize;
 bits64 reserved64 = 0;
+bits32 reserved32 = 0;
 int blockCount = (remoteSize + udcBlockSize - 1)/udcBlockSize;
 int bitmapSize = bitToByteSize(blockCount);
 int i;
-
-// #define bitToByteSize(bitSize) ((bitSize+7)/8)
-// /* Convert number of bits to number of bytes needed to store bits. */
 
 /* Write out fixed part of header. */
 writeOne(f, sig);
 writeOne(f, blockSize);
 writeOne(f, remoteUpdate);
 writeOne(f, remoteSize);
-writeOne(f, reserved64);
+writeOne(f, version);
+writeOne(f, reserved32);
 writeOne(f, reserved64);
 writeOne(f, reserved64);
 writeOne(f, reserved64);
@@ -193,11 +195,19 @@ if (magic != udcBitmapSig)
     }
 
 /* Allocate bitmap object, fill it in, and return it. */
+bits32 reserved32;
+bits64 reserved64;
 struct udcBitmap *bits;
 AllocVar(bits);
 bits->blockSize = readBits32(f, isSwapped);
 bits->remoteUpdate = readBits64(f, isSwapped);
 bits->fileSize = readBits64(f, isSwapped);
+bits->version = readBits32(f, isSwapped);
+reserved32 = readBits32(f, isSwapped);
+reserved64 = readBits64(f, isSwapped);
+reserved64 = readBits64(f, isSwapped);
+reserved64 = readBits64(f, isSwapped);
+reserved64 = readBits64(f, isSwapped);
 bits->localUpdate = status.st_mtime;
 bits->localAccess = status.st_atime;
 bits->isSwapped = isSwapped;
@@ -227,6 +237,7 @@ int udcDataViaLocal(char *url, bits64 offset, int size, void *buffer)
 * Returns number of bytes actually read.  Does an errAbort on
 * error.  Typically will be called with size in the 8k - 64k range. */
 {
+/* Need to check time stamp here. */
 uglyf("reading remote data - %d bytes at %lld - on %s\n", size, offset, url);
 FILE *f = mustOpen(url, "rb");
 fseek(f, offset, SEEK_SET);
@@ -283,26 +294,33 @@ static void setInitialCachedDataBounds(struct udcFile *file)
  * startData, and endData.  If the case is stale it makes fresh empty
  * cacheDir/sparseData and cacheDir/bitmap files. */
 {
+bits32 version = 0;
+
 /* Get existing bitmap, and if it's stale clean up. */
 struct udcBitmap *bits = udcBitmapOpen(file->bitmapFileName);
 if (bits != NULL)
     {
+    version = bits->version;
     if (bits->remoteUpdate != file->updateTime || bits->fileSize != file->size)
 	{
         udcBitmapClose(&bits);
 	remove(file->bitmapFileName);
 	remove(file->sparseFileName);
+	++version;
+	uglyf("removing stale version, new version %d\n", version);
 	}
     }
 
 /* If no bitmap, then create one, and also an empty sparse data file. */
 if (bits == NULL)
     {
-    udcNewCreateBitmapAndSparse(file, file->updateTime, file->size);
+    udcNewCreateBitmapAndSparse(file, file->updateTime, file->size, version);
     bits = udcBitmapOpen(file->bitmapFileName);
     if (bits == NULL)
         internalErr();
     }
+
+file->bitmapVersion = bits->version;
 
 /* Read in a little bit from bitmap while we have it open to see if we have anything cached. */
 if (file->size > 0)
@@ -394,7 +412,6 @@ void readBitsIntoBuf(FILE *f, int headerSize, int bitStart, int bitEnd,
 int byteStart = bitStart/8;
 int byteEnd = (bitEnd+7)/8;
 int byteSize = byteEnd - byteStart;
-uglyf("Reading bits representing blocks %d-%d, byteStart=%d, byteEnd=%d, byteSize=%d\n", bitStart, bitEnd, byteStart, byteEnd, byteSize);
 Bits *bits = needLargeMem(byteSize);
 fseek(f, headerSize + byteStart, SEEK_SET);
 mustRead(f, bits, byteSize);
@@ -430,30 +447,11 @@ if (endPos > file->size)
     endPos = file->size;
 if (endPos > startPos)
     {
-    bits64 bufSize = endPos - startPos;
-    bits64 s,e;
-    void *buf = NULL;
-    for (s=startPos; s < endPos; s = e)
-        {
-	/* Figure out bounds of this section. */
-	e = s + udcMaxBytesPerRemoteFetch;
-	if (e > endPos)
-	    e = endPos;
-	bits64 readSize = e - s;
-
-	/* Allocate a buffer the first time through.  The next iteration may require a smaller
-	 * buffer at the end, but not a larger one. */
-	if (buf == NULL)
-	    buf = needLargeMem(readSize);
-
-	/* Fetch the data and then write it right back out. */
-	file->prot->fetchData(file->url, s, readSize, buf);
-	fseek(file->fSparse, s, SEEK_SET);
-	mustWrite(file->fSparse, buf, readSize);
-
-	/* TODO: rework this so that it locks/updates/unlocks the bitmap around each one of 
-	 * these fetches. */
-	}
+    bits64 readSize = endPos - startPos;
+    void *buf = needLargeMem(readSize);
+    file->prot->fetchData(file->url, startPos, readSize, buf);
+    fseek(file->fSparse, startPos, SEEK_SET);
+    mustWrite(file->fSparse, buf, readSize);
     freez(&buf);
     }
 }
@@ -480,8 +478,13 @@ for (;;)
         break;
     int nextSetBit = bitFindSet(b, nextClearBit, e);
     int clearSize =  nextSetBit - nextClearBit;
+
+    int lockErr = flock(fileno(bits->f), LOCK_EX);
+    /* TODO: update bitmap file as well as in memory. */
     fetchMissingBlocks(file, bits, nextClearBit + partOffset, clearSize, bits->blockSize);
     bitSetRange(b, nextClearBit, clearSize);
+    lockErr = flock(fileno(bits->f), LOCK_UN);
+
     dirty = TRUE;
     if (nextSetBit >= e)
         break;
@@ -534,13 +537,42 @@ file->startData = fetchedStart;
 file->endData = fetchedEnd;
 }
 
-void udcCachePreload(struct udcFile *file, bits64 offset, int size)
-/* Make sure that given data is in cache - fetching it remotely if need be. */
+boolean udcCachePreload(struct udcFile *file, bits64 offset, int size)
+/* Make sure that given data is in cache - fetching it remotely if need be. 
+ * Return TRUE on success. */
 {
-struct udcBitmap *bits = udcBitmapOpen(file->bitmapFileName);
-if (!udcCacheContains(file, bits, offset, size))
-    udcFetchMissing(file, bits, offset, offset+size);
-udcBitmapClose(&bits);
+boolean ok = TRUE;
+/* We'll break this operation into blocks of a reasonable size to allow
+ * other processes to get cache access, since we have to lock the cache files. */
+bits64 s,e, endPos=offset+size;
+for (s = offset; s < endPos; s = e)
+    {
+    /* Figure out bounds of this section. */
+    e = s + udcMaxBytesPerRemoteFetch;
+    if (e > endPos)
+	e = endPos;
+    bits64 readSize = e - s;
+
+    struct udcBitmap *bits = udcBitmapOpen(file->bitmapFileName);
+    if (bits->version == file->bitmapVersion)
+	{
+	if (!udcCacheContains(file, bits, s, e-s))
+	    {
+	    int lockErr = flock(fileno(bits->f), LOCK_EX);
+	    udcFetchMissing(file, bits, s, e);
+	    lockErr = flock(fileno(bits->f), LOCK_UN);
+	    }
+	}
+    else
+	{
+	ok = FALSE;
+	uglyf("udcCachePreload version check failed %d vs %d", bits->version, file->bitmapVersion);
+	}
+    udcBitmapClose(&bits);
+    if (!ok)
+        break;
+    }
+return ok;
 }
 
 int udcRead(struct udcFile *file, void *buf, int size)
@@ -553,7 +585,12 @@ if (end > file->size)
 size = end - start;	/* Clip size. */
 if (start < file->startData || end > file->endData)
     {
-    udcCachePreload(file, start, size);
+    uglyf("%llu-%llu is out of existing data range %llu-%llu\n", start, end, file->startData, file->endData);
+    if (!udcCachePreload(file, start, size))
+	{
+	uglyf("udcCachePreload failed");
+        return 0;
+	}
     fseek(file->fSparse, start, SEEK_SET);
     }
 uglyf("Reading %d from localFile at pos %llu\n", size, file->offset);
