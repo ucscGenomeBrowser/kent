@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: hgdpClick.c,v 1.1 2009/02/07 00:11:09 angie Exp $";
+static char const rcsid[] = "$Id: hgdpClick.c,v 1.2 2009/02/07 06:22:31 angie Exp $";
 
 struct hgdpPopInfo
     {
@@ -320,9 +320,11 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     struct hgdpGeo geo;
     hgdpGeoStaticLoad(row+hasBin, &geo);
+    printCustomUrl(tdb, item, TRUE);
     bedPrintPos((struct bed *)&geo, 4, tdb);
     printf("<B>Ancestral Allele:</B> %c<BR>\n", geo.ancestralAllele);
     printf("<B>Derived Allele:</B> %c<BR>\n", geo.derivedAllele);
+    printf("<BR>\n");
     printf("<TABLE><TR><TD>\n");
     hgdpGeoFreqTable(&geo);
     printf("</TD><TD valign=top>\n");
