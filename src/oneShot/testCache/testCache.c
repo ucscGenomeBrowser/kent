@@ -36,7 +36,7 @@
 #include "sig.h"
 
 
-static char const rcsid[] = "$Id: testCache.c,v 1.8 2009/02/07 01:25:28 kent Exp $";
+static char const rcsid[] = "$Id: testCache.c,v 1.9 2009/02/07 01:52:05 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -133,7 +133,6 @@ void udcNewCreateBitmapAndSparse(struct udcFile *file, bits64 remoteUpdate, bits
 	bits32 version)
 /* Create a new bitmap file around the given remoteUpdate time. */
 {
-uglyf("udcNewCreateBitmapAndSparse(%s %llu %llu %u)\n", file->url, remoteUpdate, remoteSize, version);
 FILE *f = mustOpen(file->bitmapFileName, "wb");
 bits32 sig = udcBitmapSig;
 bits32 blockSize = udcBlockSize;
@@ -172,7 +171,6 @@ struct udcBitmap *udcBitmapOpen(char *fileName)
 /* Open up a bitmap file and read and verify header.  Return NULL if file doesn't
  * exist, abort on error. */
 {
-uglyf("udcBitmapOpen(%s)\n", fileName);
 /* Open file, returning NULL if can't. */
 FILE *f = fopen(fileName, "r+b");
 if (f == NULL)
@@ -238,7 +236,7 @@ int udcDataViaLocal(char *url, bits64 offset, int size, void *buffer)
 * error.  Typically will be called with size in the 8k - 64k range. */
 {
 /* Need to check time stamp here. */
-uglyf("reading remote data - %d bytes at %lld - on %s\n", size, offset, url);
+verbose(2, "reading remote data - %d bytes at %lld - on %s\n", size, offset, url);
 FILE *f = mustOpen(url, "rb");
 fseek(f, offset, SEEK_SET);
 int sizeRead = fread(buffer, 1, size, f);
@@ -255,7 +253,7 @@ boolean udcInfoViaLocal(char *url, struct udcRemoteFileInfo *retInfo)
 /* Fill in *retTime with last modified time for file specified in url.
  * Return FALSE if file does not even exist. */
 {
-uglyf("checking remote info on %s\n", url);
+verbose(2, "checking remote info on %s\n", url);
 struct stat status;
 int ret = stat(url, &status);
 if (ret < 0)
@@ -307,7 +305,7 @@ if (bits != NULL)
 	remove(file->bitmapFileName);
 	remove(file->sparseFileName);
 	++version;
-	uglyf("removing stale version, new version %d\n", version);
+	verbose(2, "removing stale version, new version %d\n", version);
 	}
     }
 
@@ -385,7 +383,6 @@ file->cacheDir = needMem(len);
 safef(file->cacheDir, len, "%s/%s/%s", udcRootDir, protocol, afterProtocol);
 
 /* Make directory. */
-uglyf("file->cacheDir=%s\n", file->cacheDir);
 makeDirsOnPath(file->cacheDir);
 
 /* Create file names for bitmap and data portions. */
@@ -497,7 +494,6 @@ if (dirty)
     int byteStart = startBlock/8;
     int byteEnd = (endBlock+7)/8;
     int byteSize = byteEnd - byteStart;
-    uglyf("updating bitmap block %d-%d\n", startBlock, endBlock);
     fseek(bits->f, byteStart + udcBitmapHeaderSize, SEEK_SET);
     mustWrite(bits->f, b, byteSize);
     }
@@ -566,7 +562,8 @@ for (s = offset; s < endPos; s = e)
     else
 	{
 	ok = FALSE;
-	uglyf("udcCachePreload version check failed %d vs %d", bits->version, file->bitmapVersion);
+	verbose(2, "udcCachePreload version check failed %d vs %d", 
+		bits->version, file->bitmapVersion);
 	}
     udcBitmapClose(&bits);
     if (!ok)
@@ -578,22 +575,26 @@ return ok;
 int udcRead(struct udcFile *file, void *buf, int size)
 /* Read a block from file.  Return amount actually read. */
 {
+/* Figure out region of file we're going to read, and clip it against file size. */
 bits64 start = file->offset;
+if (start > file->size)
+    return 0;
 bits64 end = start + size;
 if (end > file->size)
     end = file->size;
-size = end - start;	/* Clip size. */
+size = end - start;
+
+/* If we're outside of the window of file we already know is good, then have to
+ * consult cache on disk, and maybe even fetch data remotely! */
 if (start < file->startData || end > file->endData)
     {
-    uglyf("%llu-%llu is out of existing data range %llu-%llu\n", start, end, file->startData, file->endData);
     if (!udcCachePreload(file, start, size))
 	{
-	uglyf("udcCachePreload failed");
-        return 0;
+	verbose(2, "udcCachePreload failed");
+	return 0;
 	}
     fseek(file->fSparse, start, SEEK_SET);
     }
-uglyf("Reading %d from localFile at pos %llu\n", size, file->offset);
 mustRead(file->fSparse, buf, size);
 file->offset += size;
 return size;
