@@ -20,11 +20,15 @@
  * The bitmap file contains time stamp and size data as well as an array with one bit
  * for each block of the file that has been fetched.  Currently the block size is 8K. */
 
+#include <sys/file.h>
 #include "common.h"
+#include "hash.h"
 #include "obscure.h"
 #include "bits.h"
 #include "portable.h"
 #include "sig.h"
+#include "net.h"
+#include "udc.h"
 
 #define udcBlockSize (8*1024)
 /* All fetch requests are rounded up to block size. */
@@ -175,6 +179,102 @@ retInfo->size = status.st_size;
 return TRUE;
 }
 
+/********* Section for http protocol **********/
+
+int udcDataViaHttp(char *url, bits64 offset, int size, void *buffer)
+/* Fetch a block of data of given size into buffer using the http: protocol.
+ * Returns number of bytes actually read.  Does an errAbort on
+ * error.  Typically will be called with size in the 8k - 64k range. */
+{
+char rangeUrl[1024];
+if (!startsWith("http://",url))
+    {
+    errAbort("Invalid protocol in url [%s] in udcDataViaHttp, only http supported", url); 
+    }
+safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=%lld-%lld"
+  , url
+  , (long long) offset
+  , (long long) offset + size - 1);
+int sd = netUrlOpen(rangeUrl);
+if (sd < 0)
+    errAbort("Couldn't open %s", url);   // do we really want errAbort here?
+
+char *newUrl = NULL;
+int newSd = 0;
+if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
+    errAbort("Couldn't open %s", url);   // do we really want errAbort here?
+
+if (newUrl)  // not sure redirection will work with byte ranges as it is now
+    {
+    freeMem(newUrl); 
+    sd = newSd;
+    }
+
+int rd = 0, total = 0, remaining = size;
+char *buf = (char *)buffer;
+while ((remaining > 0) && ((rd = read(sd, buf, remaining)) > 0))
+    {
+    total += rd;
+    buf += rd;
+    remaining -= rd;
+    }
+if (rd == -1)
+    errnoAbort("error reading socket");
+close(sd);  
+
+return total;
+}
+
+static boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
+/* Sets size and last modified time of URL
+ * and returns status of HEAD GET. */
+{
+struct hash *hash = newHash(0);
+int status = netUrlHead(url, hash);
+if (status != 200) // && status != 302 && status != 301)
+    return FALSE;
+retInfo->size = atoll(hashMustFindVal(hash, "Content-Length:"));
+//Content-Length: 1677
+
+char *lastModString = hashMustFindVal(hash, "Last-Modified:");
+// Last-Modified: Wed, 25 Feb 2004 22:37:23 GMT
+// Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
+
+struct tm tm;
+time_t t;
+
+// TODO: it's very likely that there are other date string patterns
+//  out there that might be encountered.
+if (strptime(lastModString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
+    { /* Handle error */;
+    errAbort("unable to parse last-modified string [%s]", lastModString);
+    }
+
+//printf("year: %d; month: %d; day: %d;\n",
+//        tm.tm_year, tm.tm_mon, tm.tm_mday);
+//printf("hour: %d; minute: %d; second: %d\n",
+//        tm.tm_hour, tm.tm_min, tm.tm_sec);
+//printf("week day: %d; year day: %d\n", tm.tm_wday, tm.tm_yday);
+
+
+tm.tm_isdst = -1;      /* Not set by strptime(); tells mktime()
+                          to determine whether daylight saving time
+                          is in effect */
+t = mktime(&tm);
+if (t == -1)
+    { /* Handle error */;
+    errAbort("mktime failed while parsing last-modified string [%s]", lastModString);
+    }
+
+//printf("seconds since the Epoch: %ld\n", (long) t);"
+
+retInfo->updateTime = t;
+
+hashFree(&hash);
+return status;
+}
+
+
 /********* Non-protocol-specific bits **********/
 
 
@@ -240,7 +340,7 @@ if (f == NULL)
 
 /* Get status info from file. */
 struct stat status;
-int err = fstat(fileno(f), &status);
+fstat(fileno(f), &status);
 
 /* Read signature and decide if byte-swapping is needed. */
 bits32 magic;
@@ -301,6 +401,11 @@ else if (sameString(upToColon, "slow"))
     {
     prot->fetchData = udcDataViaSlow;
     prot->fetchInfo = udcInfoViaSlow;
+    }
+else if (sameString(upToColon, "http"))
+    {
+    prot->fetchData = udcDataViaHttp;
+    prot->fetchInfo = udcInfoViaHttp;
     }
 else
     {
@@ -590,7 +695,6 @@ for (s = offset; s < endPos; s = e)
     e = s + udcMaxBytesPerRemoteFetch;
     if (e > endPos)
 	e = endPos;
-    bits64 readSize = e - s;
 
     struct udcBitmap *bits = udcBitmapOpen(file->bitmapFileName);
     if (bits->version == file->bitmapVersion)
@@ -643,11 +747,11 @@ file->offset += size;
 return size;
 }
 
-int udcSeek(struct udcFile *file, bits64 offset)
+void udcSeek(struct udcFile *file, bits64 offset)
 /* Seek to a particular position in file. */
 {
 file->offset = offset;
-return fseek(file->fSparse, offset, SEEK_SET);
+fseek(file->fSparse, offset, SEEK_SET);
 }
 
 bits64 udcTell(struct udcFile *file)
