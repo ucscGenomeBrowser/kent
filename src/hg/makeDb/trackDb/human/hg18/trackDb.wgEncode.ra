@@ -6283,6 +6283,7 @@ noInherit on
 settingsByView Peaks:configurable=on,minScore=0 RawSignal:configurable=off,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3
+nextItemButton on
 wgEncode 1
 dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 
@@ -7400,7 +7401,6 @@ wgEncode 1
     itemRgb on
     cell K562
 
-
 # HudsonAlpha CNV (wrangler: kate)
 
 track wgEncodeHudsonalphaCnv
@@ -7472,7 +7472,6 @@ type bed 9 +
     subGroups replicate=Rep2 cellType=HepG2
     cell HepG2
     priority 6
-
 
 track		wgEncodeCshlRnaSeq
 compositeTrack	on
@@ -8137,4 +8136,19 @@ wgEncode	1
 	localization	cytosol
 	cell		GM12878
 
-
+track wgEncodeHudsonalphaMethylSeq
+compositeTrack on
+shortLabel HudsonAlpha Methyl-seq
+longLabel ENCODE HudsonAlpha Methyl-seq
+group regulation
+subGroup1	view Views Regions=Regions
+subGroup2	cellType Cell_Line HTC116=HTC116
+dimensions dimensionX=cellType
+sortOrder cellType=+ factor=+ view=+
+dragAndDrop subTracks
+visibilityViewDefaults Regions=dense
+controlledVocabulary encode/cv.ra cellType factor
+priority	0
+type bed 9
+nextItemButton on
+wgEncode 1
