@@ -1,0 +1,31 @@
+track		wgEncodeHudsonalphaMethylSeq
+compositeTrack	on
+shortLabel	HudsonAlpha MethylSeq
+longLabel	ENCODE HudsonAlpha Myers MethylSeq
+group		regulation
+subGroup1	view Views Regions=Regions
+subGroup2	cellType Cell_Line HTC116=HTC116
+dimensions	dimensionX=cellType
+sortOrder	cellType=+ view=+
+controlledVocabulary	encode/cv.ra cellType
+dragAndDrop	subTracks
+visibilityViewDefaults	 Regions=hide
+priority	0
+type		bed 3
+wgEncode	1
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Htc116
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel HTC116 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HTC116 cells)
+    subGroups view=Regions cellType=HTC116
+    type bed 9
+    dateSubmitted 2009-02-06
+    dateUnrestricted 2009-11-06
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 1
+    noInherit on
+    configurable on
+    cell HTC116
+

@@ -1,0 +1,16 @@
+tablename wgEncodeHudsonalphaMethylSeqRegionsRep1Htc116
+view Regions
+type bed 9
+assembly hg18
+files HCT116_hpaII.txt.BED
+downloadOnly 0
+pushQDescription HTC116 Replicate 1
+
+tablename wgEncodeHudsonalphaMethylSeqAlignmentsRep1Htc116
+view Alignments
+type tagAlign
+assembly hg18
+files HCT116_hpaII.txt.peaks
+downloadOnly 1
+pushQDescription HTC116 Replicate 1
+
