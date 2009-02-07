@@ -696,6 +696,8 @@ longLabel Human Genome Diversity Project SNP Population Allele Frequencies
 group varRep
 priority 101
 visibility hide
+url http://hgdp.uchicago.edu/cgi-bin/gbrowse/HGDP/?name=$$
+urlLabel HGDP Selection Browser: 
 type bed 4 +
 
 track snpMap
