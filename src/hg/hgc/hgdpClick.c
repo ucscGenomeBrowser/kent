@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: hgdpClick.c,v 1.2 2009/02/07 06:22:31 angie Exp $";
+static char const rcsid[] = "$Id: hgdpClick.c,v 1.3 2009/02/07 23:14:14 angie Exp $";
 
 struct hgdpPopInfo
     {
@@ -201,13 +201,19 @@ pipelineWait(pl);
 pipelineFree(&pl);
 }
 
-void hgdpGeoImg(struct hgdpGeo *geo)
-/* Generate a PNG image: world map with pie charts for population allele frequencies. */
+static void mustRename(char *oldName, char *newName)
+/* Rename a file or errAbort if there's a problem. */
 {
-// Disable this past hgwdev until we fix the /hive paths...
-if (! hIsPrivateHost())
-    return;
+if (rename(oldName, newName))
+    errAbort("Cannot rename %s to %s", oldName, newName);
+}
 
+static void generateImgFiles(struct hgdpGeo *geo, char finalEpsFile[PATH_LEN],
+			     char finalPdfFile[PATH_LEN], char finalPngFile[PATH_LEN])
+/* Using the frequencies given in geo and the population latitude and longitude
+ * given above, plot allele frequency pie charts for each population on a world map.
+ * Work in a temporary trash dir and then move result files to the given paths. */
+{
 // The Generic Mapping Tools commands must have a writeable ./ and $HOME.
 // Use trashDirFile as a directory name, cd to that and work there.
 char cwd[PATH_LEN];
@@ -275,15 +281,46 @@ pl = pipelineOpen(cmdsPng, pipelineRead, "/dev/null", NULL);
 pipelineWait(pl);
 pipelineFree(&pl);
 
+// Back to our usual working directory and $HOME:
 if (realHome == NULL)
     unsetenv("HOME");
 else
     setenv("HOME", realHome, TRUE);
 chdir(cwd);
-char pngPath[PATH_LEN];
-safef(pngPath, sizeof(pngPath), "%s/%s", dirTn.forCgi, pngFile);
-printf("<A HREF=\"%s\" TARGET=_BLANK><IMG SRC=\"%s\" WIDTH=677 HEIGHT=490></A>\n",
-       pngPath, pngPath);
+
+// Move the result files into place:
+char tmpPath[PATH_LEN];
+safef(tmpPath, sizeof(tmpPath), "%s/%s", dirTn.forCgi, epsFile);
+mustRename(tmpPath, finalEpsFile);
+safef(tmpPath, sizeof(tmpPath), "%s/%s", dirTn.forCgi, pdfFile);
+mustRename(tmpPath, finalPdfFile);
+safef(tmpPath, sizeof(tmpPath), "%s/%s", dirTn.forCgi, pngFile);
+mustRename(tmpPath, finalPngFile);
+}
+
+
+void hgdpGeoImg(struct hgdpGeo *geo)
+/* Generate a PNG image: world map with pie charts for population allele frequencies. */
+{
+// Disable this past hgwdev until we fix the /hive paths...
+if (! hIsPrivateHost())
+    return;
+struct tempName tn;
+trashDirFile(&tn, "hgc", "", "");
+char trashDir[FILENAME_LEN];
+splitPath(tn.forCgi, trashDir, NULL, NULL);
+char geoSnpEpsFile[PATH_LEN], geoSnpPdfFile[PATH_LEN], geoSnpPngFile[PATH_LEN];
+safef(geoSnpEpsFile, sizeof(geoSnpEpsFile), "%shgdpGeo_%s.eps", trashDir, geo->name);
+safef(geoSnpPdfFile, sizeof(geoSnpPdfFile), "%shgdpGeo_%s.pdf", trashDir, geo->name);
+safef(geoSnpPngFile, sizeof(geoSnpPngFile), "%shgdpGeo_%s.png", trashDir, geo->name);
+if (! (fileExists(geoSnpEpsFile) && fileExists(geoSnpPdfFile) && fileExists(geoSnpPngFile)))
+    generateImgFiles(geo, geoSnpEpsFile, geoSnpPdfFile, geoSnpPngFile);
+
+printf("<A HREF=\"%s\" TARGET=_BLANK><IMG SRC=\"%s\" WIDTH=677 HEIGHT=490></A><BR>\n",
+       geoSnpPngFile, geoSnpPngFile);
+printf("<A HREF=\"%s\" TARGET=_BLANK>PDF</A>&nbsp;&nbsp;", geoSnpPdfFile);
+printf("<A HREF=\"%s\" TARGET=_BLANK>EPS</A>&nbsp;&nbsp;", geoSnpEpsFile);
+printf("<A HREF=\"%s\" TARGET=_BLANK>PNG</A><BR>\n", geoSnpPngFile);
 }
 
 void hgdpGeoFreqTable(struct hgdpGeo *geo)
