@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.140 2009/01/27 22:55:25 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.141 2009/02/07 03:09:59 larrym Exp $
 
 use warnings;
 use strict;
@@ -378,10 +378,11 @@ sub validateWithListUtil
 # This is designed to give better feedback to user; ideally we would load the validation list from the .as files
     my ($line, $validateList) = @_;
     my @list = split(/\s+/, $line);
+    my $fieldError = "; saw '" . scalar(@list) . "' fields; expected: '" . @{$validateList} . "'";
     if(@list < @{$validateList}) {
-        return "not enough fields";
+        return "not enough fields" . $fieldError;
     } elsif(@list > @{$validateList}) {
-        return "too many fields";
+        return "too many fields" . $fieldError;
     } else {
         for my $validateField (@{$validateList}) {
             my $val = shift(@list);
@@ -1279,7 +1280,8 @@ if(!@errors) {
         if(defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
 		&& !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})
 		&& !defined($ddfReplicateSets{$key}{VIEWS}{PlusRawSignal})
-		&& !defined($ddfReplicateSets{$key}{VIEWS}{MinusRawSignal})) {
+		&& !defined($ddfReplicateSets{$key}{VIEWS}{MinusRawSignal})
+		&& ($daf->{dataType} ne 'MethylSeq')) {
             if($daf->{dataType} eq 'ChipSeq' && !defined($daf->{medianFragmentLength})) {
                 pushError(\@errors, "Missing medianFragmentLength field; this field is required for dataType '$daf->{dataType}' when RawSignal view is not provided");
             } else {
