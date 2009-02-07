@@ -9,7 +9,7 @@ TEST_INSTALL_DIR = /cluster/data/encode/pipeline/tests
 DOWNLOAD_DIR = /usr/local/apache/htdocs/encode/tests
 
 # Put the working dataType's into DIRS
-DIRS = chipseq
+DIRS = chipseq methylseq
 BAD = badDaf badDdf
 FILES = load.ra trackDb.ra README.txt
 
