@@ -93,6 +93,9 @@
 #define bigBedSig 0x8789F2EA
 /* Signature for a big bed file. */
 
+#define udcBitmapSig 0x4187E2F6
+/* Signature for a url data cache bitmap file. */
+
 #endif /* SIG_H */
 
 
