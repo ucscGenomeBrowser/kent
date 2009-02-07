@@ -31,6 +31,7 @@
 #ifndef WIKITRACK_H
 #include "wikiTrack.h"
 #endif
+#include "hgdpGeo.h"
 
 extern struct cart *cart;	/* User's settings. */
 extern char *seqName;		/* Name of sequence we're working on. */
@@ -314,5 +315,15 @@ void customMafClick(struct sqlConnection *conn,
 
 void doEncodePeak(struct trackDb *tdb, struct customTrack *ct);
 /*  details for encodePeak type tracks.  */
+
+void doHgdpGeo(struct trackDb *tdb, char *item);
+/* Show details page for HGDP SNP with population allele frequencies
+ * plotted on a world map. */
+
+void hgdpGeoImg(struct hgdpGeo *geo);
+/* Generate a PNG image: world map with pie charts for population allele frequencies. */
+
+void hgdpGeoFreqTable(struct hgdpGeo *geo);
+/* Print an HTML table of populations and allele frequencies. */
 
 #endif

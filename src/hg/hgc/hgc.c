@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1501 2009/02/05 08:06:26 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1502 2009/02/07 00:11:10 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14691,9 +14691,36 @@ snp->observed = cloneString(snp125->observed);
 return snp;
 }
 
-void checkForHapmap(struct trackDb *tdb, char *itemName)
+void checkForHgdpGeo(struct sqlConnection *conn, struct trackDb *tdb, char *itemName, int start)
 {
-struct sqlConnection *conn = hAllocConn(database);
+char *hgdpGeoTable = "hgdpGeo"; // make this a trackDb setting
+if (!hTableExists(database, hgdpGeoTable))
+    return;
+struct sqlResult *sr;
+char **row;
+char query[512];
+safef(query, sizeof(query),
+      "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+      hgdpGeoTable, itemName, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hgdpGeo geo;
+    hgdpGeoStaticLoad(row+1, &geo);
+    printf("<B>Human Genome Diversity Project SNP</B><BR>\n");
+    printf("<B>Ancestral Allele:</B> %c<BR>\n", geo.ancestralAllele);
+    printf("<B>Derived Allele:</B> %c<BR>\n", geo.derivedAllele);
+    printf("<TABLE><TR><TD>\n");
+    hgdpGeoFreqTable(&geo);
+    printf("</TD><TD valign=top>\n");
+    hgdpGeoImg(&geo);
+    printf("</TD></TR></TABLE>\n");
+    }
+sqlFreeResult(&sr);
+}
+
+void checkForHapmap(struct sqlConnection *conn, struct trackDb *tdb, char *itemName)
+{
 char query[512];
 if (!hTableExists(database, "hapmapAllelesSummary"))
     return;
@@ -14703,7 +14730,6 @@ if (sqlQuickNum(conn, query) != 1)
     return;
 printf("<BR><B><A HREF=\"%s&hapmapSnps=dense\"> HapMap SNP</A> </B><BR>\n",
        hgTracksPathAndSettings());
-hFreeConn(&conn);
 }
 
 static void printLsSnpPdb(struct sqlConnection *conn, char *pdbId, char *snpId)
@@ -14817,7 +14843,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 sqlFreeResult(&sr);
-checkForHapmap(tdb, itemName);
+checkForHgdpGeo(conn, tdb, itemName, start);
+checkForHapmap(conn, tdb, itemName);
 checkForLsSnpMappings(conn, itemName);
 printSnpAlignment(tdb, snpAlign);
 printTrackHtml(tdb);
@@ -21732,6 +21759,10 @@ else if (startsWith("consIndels", track))
 else if (startsWith(KIDD_EICHLER_DISC_PREFIX, track))
     {
     doKiddEichlerDisc(tdb, item);
+    }
+else if (startsWith("hgdpGeo", track))
+    {
+    doHgdpGeo(tdb, item);
     }
 /* Lowe Lab Stuff */
 #ifdef LOWELAB
