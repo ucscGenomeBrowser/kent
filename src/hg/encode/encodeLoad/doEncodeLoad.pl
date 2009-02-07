@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.54 2009/01/27 23:34:41 tdreszer Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.55 2009/02/07 03:01:09 larrym Exp $
 
 # Usage:
 #
@@ -342,7 +342,7 @@ if(!(-d $downloadDir)) {
     if(!(-d "/cluster/data/encode/pipeline/downloads/$compositeTrack")) {
         mkdir "/cluster/data/encode/pipeline/downloads/$compositeTrack" || die ("Can't create download directory (error: '$!'); please contact your wrangler at: $email\n");
     }
-    link("/cluster/data/encode/pipeline/downloads/$compositeTrack",$downloadDir) || die ("Can't link to download directory (error: '$!'); please contact your wrangler at: $email\n");
+    !system("/bin/ln -s /cluster/data/encode/pipeline/downloads/$compositeTrack $downloadDir") || die ("Can't link to download directory (error: '$!'); please contact your wrangler at: $email\n");
     #mkdir $downloadDir || die ("Can't create download directory (error: '$!'); please contact your wrangler at: $email\n");
 }
 
@@ -390,7 +390,7 @@ for my $key (keys %ra) {
     } elsif ($extendedTypes{$type}) {
         loadBedFromSchema($assembly, $tablename, $files, $type, $pushQ);
         $hgdownload = @files;
-    } elsif ($type =~ /^bed (3|4|5|6|8)$/) {
+    } elsif ($type =~ /^bed (3|4|5|6|8|9)$/) {
         loadBed($assembly, $tablename, $files, $pushQ);
         $hgdownload = @files;
     } elsif ($type =~ /^bedGraph (4)$/) {
