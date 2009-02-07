@@ -44,4 +44,11 @@ bits64 udcTell(struct udcFile *file);
 bits64 udcCleanup(char *cacheDir, double maxDays);
 /* Remove cached files older than maxDays old. */
 
+char *udcDefaultDir();
+/* Get default directory for cache.  Use this for the udcFileOpen call if you
+ * don't have anything better.... */
+
+char *udcSetDefaultDir(char *path);
+/* Set default directory for cache */
+
 #endif /* UDC_H */

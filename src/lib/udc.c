@@ -708,3 +708,18 @@ bits64 result = rCleanup(deleteTime);
 setCurrentDir(curPath);
 return result;
 }
+
+static char *defaultDir = "/tmp/udcCache";
+
+char *udcDefaultDir()
+/* Get default directory for cache */
+{
+return defaultDir;
+}
+
+char *udcSetDefaultDir(char *path)
+/* Set default directory for cache */
+{
+defaultDir = path;
+}
+
