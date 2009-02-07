@@ -32,7 +32,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     snofmake.o snofsig.o spaceSaver.o spacedColumn.o spacedSeed.o \
     splatAli.o sqlList.o sqlNum.o subText.o sufa.o sufx.o synQueue.o \
     tabRow.o textOut.o tokenizer.o trix.o twoBit.o \
-    vGfx.o vGif.o verbose.o \
+    udc.o vGfx.o vGif.o verbose.o \
     wildcmp.o wormdna.o \
     xAli.o xa.o xap.o xenshow.o xmlEscape.o xp.o
 
