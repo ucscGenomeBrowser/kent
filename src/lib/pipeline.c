@@ -321,10 +321,15 @@ if (fd < 0)
 return fd;
 }
 
-static int openWrite(char *fname)
+static int openWrite(char *fname, boolean append)
 /* open a file for write access */
 {
-int fd = open(fname, O_WRONLY|O_CREAT|O_TRUNC, 0666);
+int flags = O_WRONLY|O_CREAT;
+if (append)
+    flags |= O_APPEND;
+else
+    flags |= O_TRUNC;
+int fd = open(fname, flags, 0666);
 if (fd < 0)
     errnoAbort("can't open for write access: %s", fname);
 return fd;
@@ -354,6 +359,8 @@ static void checkOpts(unsigned opts)
 if (((opts & (pipelineRead|pipelineWrite)) == 0)
     || ((opts & (pipelineRead|pipelineWrite)) == (pipelineRead|pipelineWrite)))
     errAbort("must specify one of pipelineRead or pipelineWrite to pipelineOpen");
+if ((opts & pipelineAppend) && ((opts & pipelineWrite) == 0))
+    errAbort("pipelineAppend is valid only in conjunction with pipelineWrite");
 }
 
 struct pipeline *pipelineOpenFd(char ***cmds, unsigned opts,
@@ -378,13 +385,14 @@ struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
  * full documentation */
 {
 int otherEndFd;
-int stderrFd = (stderrFile == NULL) ? STDERR_FILENO : openWrite(stderrFile);
+int stderrFd = (stderrFile == NULL) ? STDERR_FILENO : openWrite(stderrFile, FALSE);
 
 checkOpts(opts);
+boolean append = ((opts & pipelineAppend) != 0);
 if (opts & pipelineRead)
     otherEndFd = (otherEndFile == NULL) ? STDIN_FILENO : openRead(otherEndFile);
 else
-    otherEndFd = (otherEndFile == NULL) ? STDOUT_FILENO : openWrite(otherEndFile);
+    otherEndFd = (otherEndFile == NULL) ? STDOUT_FILENO : openWrite(otherEndFile, append);
 struct pipeline *pl = pipelineOpenFd(cmds, opts, otherEndFd, stderrFd);
 safeClose(&otherEndFd);
 if (stderrFile != NULL)
