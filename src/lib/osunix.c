@@ -13,7 +13,7 @@
 #include "portimpl.h"
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: osunix.c,v 1.38 2009/02/05 20:34:45 kent Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.39 2009/02/07 18:12:20 kent Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -117,7 +117,8 @@ slNameSort(&list);
 return list;
 }
 
-struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, int statErrno)
+struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, int statErrno, 
+	time_t lastAccess)
 /* Return a new fileInfo. */
 {
 int len = strlen(name);
@@ -125,6 +126,7 @@ struct fileInfo *fi = needMem(sizeof(*fi) + len);
 fi->size = size;
 fi->isDir = isDir;
 fi->statErrno = statErrno;
+fi->lastAccess = lastAccess;
 strcpy(fi->name, name);
 return fi;
 }
@@ -195,7 +197,7 @@ while ((de = readdir(d)) != NULL)
 		isDir = TRUE;
 	    if (fullPath)
 		fileName = pathName;
-	    el = newFileInfo(fileName, st.st_size, isDir, statErrno);
+	    el = newFileInfo(fileName, st.st_size, isDir, statErrno, st.st_atime);
 	    slAddHead(&list, el);
 	    }
 	}

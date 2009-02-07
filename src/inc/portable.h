@@ -21,10 +21,12 @@ struct fileInfo
     off_t size;		/* Size in bytes. */
     bool isDir;		/* True if file is a directory. */
     int statErrno;	/* Result of stat (e.g. bad symlink). */
+    time_t lastAccess;  /* Last access time. */
     char name[1];	/* Allocated at run time. */
     };
 
-struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, int statErrno);
+struct fileInfo *newFileInfo(char *name, off_t size, bool isDir, int statErrno, 
+	time_t lastAccess);
 /* Return a new fileInfo. */
 
 struct fileInfo *listDirXExt(char *dir, char *pattern, boolean fullPath, boolean ignoreStatFailures);
