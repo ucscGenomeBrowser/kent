@@ -91,7 +91,6 @@ DIRS = \
 	fixCr \
 	gapSplit \
 	gffPeek \
-	gtfToGenePred \
 	headRest \
 	htmlPics \
 	htmlCheck \
@@ -128,6 +127,7 @@ DIRS = \
 	toUpper \
 	twoBitInfo \
 	twoBitToFa \
+	udcCleanup \
 	undupFa \
 	upper \
 	venn \
@@ -140,6 +140,7 @@ BAD_DIRS= \
 	ccCpLock \
 	est2genomeToPsl \
 	geneStarts \
+	gtfToGenePred \
 	jimgrep \
 	jkShell \
 	dnsInfo \
