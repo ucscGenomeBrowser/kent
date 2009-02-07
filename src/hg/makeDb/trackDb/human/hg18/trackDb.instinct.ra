@@ -229,18 +229,6 @@ expScale 2.0
 expStep 0.1
 groupings lin2008ExpGroups
 
-track lin2008cnv50K
-shortLabel Melanoma 50K CNV (Lin. et.al 2008)
-longLabel Melanoma 50K CNV (Lin et. al 2008)
-group cancerGenomics
-priority 46.2
-visibility hide
-type expRatio
-logicalDb localDb
-expScale 2.0
-expStep 0.1
-groupings lin2008cnv50KGroups
-
 track lin2008cnv250K
 shortLabel Melanoma 250K CNV (Lin. et.al 2008)
 longLabel Melanoma 250K CNV (Lin et. al 2008)
