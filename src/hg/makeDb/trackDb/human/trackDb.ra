@@ -690,6 +690,14 @@ visibility hide
 type bed 3 +
 otherDb panTro1
 
+track hgdpGeo
+shortLabel HGDP Allele Freq
+longLabel Human Genome Diversity Project SNP Population Allele Frequencies
+group varRep
+priority 101
+visibility hide
+type bed 4 +
+
 track snpMap
 shortLabel SNPs
 longLabel Simple Nucleotide Polymorphisms (SNPs)
