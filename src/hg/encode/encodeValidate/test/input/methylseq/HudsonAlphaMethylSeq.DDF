@@ -1,4 +1,3 @@
 files	view	cell	replicate	accession	labVersion
 HCT116_hpaII.txt.BED	Regions	HTC116	1
-HCT116_hpaII.txt.peaks	Alignments	SK-N-MC	1
-
+HCT116_hpaII.txt.peaks	Alignments	HTC116	1
