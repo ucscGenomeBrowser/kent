@@ -186,11 +186,10 @@ int udcDataViaHttp(char *url, bits64 offset, int size, void *buffer)
  * Returns number of bytes actually read.  Does an errAbort on
  * error.  Typically will be called with size in the 8k - 64k range. */
 {
+verbose(2, "reading http data - %d bytes at %lld - on %s\n", size, offset, url);
 char rangeUrl[1024];
 if (!startsWith("http://",url))
-    {
     errAbort("Invalid protocol in url [%s] in udcDataViaHttp, only http supported", url); 
-    }
 safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=%lld-%lld"
   , url
   , (long long) offset
@@ -229,14 +228,20 @@ static boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
 /* Sets size and last modified time of URL
  * and returns status of HEAD GET. */
 {
+verbose(2, "checking http remote info on %s\n", url);
 struct hash *hash = newHash(0);
 int status = netUrlHead(url, hash);
 if (status != 200) // && status != 302 && status != 301)
     return FALSE;
-retInfo->size = atoll(hashMustFindVal(hash, "Content-Length:"));
-//Content-Length: 1677
+char *sizeString = hashFindVal(hash, "Content-Length:");
+if (sizeString == NULL)
+    errAbort("No Content-Length: returned in header for %s, can't proceed, sorry", url);
+retInfo->size = atoll(sizeString);
 
-char *lastModString = hashMustFindVal(hash, "Last-Modified:");
+char *lastModString = hashFindVal(hash, "Last-Modified:");
+if (lastModString == NULL)
+    errAbort("No Last-Modified: returned in header for %s, can't proceed, sorry", url);
+
 // Last-Modified: Wed, 25 Feb 2004 22:37:23 GMT
 // Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
 
@@ -287,7 +292,7 @@ int nameLen = strlen(fileName);
 char *path = needMem(dirLen + nameLen + 2);
 memcpy(path, file->cacheDir, dirLen);
 path[dirLen] = '/';
-memcpy(path+dirLen+1, fileName, dirLen);
+memcpy(path+dirLen+1, fileName, nameLen);
 return path;
 }
 
