@@ -326,4 +326,7 @@ void hgdpGeoImg(struct hgdpGeo *geo);
 void hgdpGeoFreqTable(struct hgdpGeo *geo);
 /* Print an HTML table of populations and allele frequencies. */
 
+void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode);
+/* Wrapper to call printCustomUrlWithLabel using the url setting in trackDb */
+
 #endif
