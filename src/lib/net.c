@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.63 2009/02/04 19:21:52 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.64 2009/02/07 18:53:30 kent Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -240,11 +240,11 @@ if (in != NULL)
 
 void netParseUrl(char *url, struct netParsedUrl *parsed)
 /* Parse a URL into components.   A full URL is made up as so:
- *   http://user:password@hostName:port/file
+ *   http://user:password@hostName:port/file;byterange=0-499
  * This is set up so that the http:// and the port are optional. 
  */
 {
-char *s, *t, *u, *v, *w;
+char *s, *t, *u, *v, *w, *x;
 char buf[1024];
 
 /* Make local copy of URL. */
@@ -270,70 +270,91 @@ else
     }
 
 /* Split off file part. */
+parsed->byteRangeStart = -1;  /* default to no byte range specified */
+parsed->byteRangeEnd = -1;
 u = strchr(s, '/');
 if (u == NULL)
-   strcpy(parsed->file, "/");
+    strcpy(parsed->file, "/");
 else
-   {
-   /* need to encode spaces, but not ! other characters */
-   char *t=replaceChars(u," ","%20");
-   strncpy(parsed->file, t, sizeof(parsed->file));
-   freeMem(t);
-   *u = 0;
-   }
+    {
+    x = strrchr(u, ';');
+    if (x)
+	{
+	if (startsWith(";byterange=", x))
+	    {
+	    char *y=strchr(x, '=');
+	    ++y;
+	    char *z=strchr(y, '-');
+	    if (z)
+		{
+    		++z;
+		*x = 0;
+		// TODO: use something better than atol() ?
+		parsed->byteRangeStart = atoll(y); 
+		parsed->byteRangeEnd = atoll(z);
+	    	}    
+	    }
+	}
+
+    /* need to encode spaces, but not ! other characters */
+    char *t=replaceChars(u," ","%20");
+    strncpy(parsed->file, t, sizeof(parsed->file));
+    freeMem(t);
+    *u = 0;
+    }
 
 
 /* Split off user part */
 v = strchr(s, '@');
 if (v == NULL)
-   {
-   if (sameWord(parsed->protocol,"http"))
-      {
-      strcpy(parsed->user, "");
-      strcpy(parsed->password, "");
-      }
-   if (sameWord(parsed->protocol,"ftp"))
-      {
-      strcpy(parsed->user, "anonymous");
-      strcpy(parsed->password, "x@genome.ucsc.edu");
-      }
-   }
+    {
+    if (sameWord(parsed->protocol,"http"))
+	{
+	strcpy(parsed->user, "");
+	strcpy(parsed->password, "");
+	}
+    if (sameWord(parsed->protocol,"ftp"))
+	{
+	strcpy(parsed->user, "anonymous");
+	strcpy(parsed->password, "x@genome.ucsc.edu");
+	}
+    }
 else
-   {
-   *v = 0;
-   /* split off password part */
-   w = strchr(s, ':');
-   if (w == NULL)
-      {
-      strncpy(parsed->user, s, sizeof(parsed->user));
-      strcpy(parsed->password, "");
-      }
-   else
-      {
-      *w = 0;
-      strncpy(parsed->user, s, sizeof(parsed->user));
-      strncpy(parsed->password, w+1, sizeof(parsed->password));
-      }
-   s = v+1;
-   }
+    {
+    *v = 0;
+    /* split off password part */
+    w = strchr(s, ':');
+    if (w == NULL)
+	{
+	strncpy(parsed->user, s, sizeof(parsed->user));
+	strcpy(parsed->password, "");
+	}
+    else
+	{
+	*w = 0;
+	strncpy(parsed->user, s, sizeof(parsed->user));
+	strncpy(parsed->password, w+1, sizeof(parsed->password));
+	}
+    s = v+1;
+    }
 
 
 /* Save port if it's there.  If not default to 80. */
 t = strchr(s, ':');
 if (t == NULL)
-   {
-   if (sameWord(parsed->protocol,"http"))
-      strcpy(parsed->port, "80");
-   if (sameWord(parsed->protocol,"ftp"))
-      strcpy(parsed->port, "21");
-   }
+    {
+    if (sameWord(parsed->protocol,"http"))
+	strcpy(parsed->port, "80");
+    if (sameWord(parsed->protocol,"ftp"))
+	strcpy(parsed->port, "21");
+    }
 else
-   {
-   *t++ = 0;
-   if (!isdigit(t[0]))
-      errAbort("Non-numeric port name %s", t);
-   strncpy(parsed->port, t, sizeof(parsed->port));
-   }
+    {
+    *t++ = 0;
+    if (!isdigit(t[0]))
+	errAbort("Non-numeric port name %s", t);
+    strncpy(parsed->port, t, sizeof(parsed->port));
+    }
 
 /* What's left is the host. */
 strncpy(parsed->host, s, sizeof(parsed->host));
@@ -601,12 +622,20 @@ if (!sameString(npu.user,""))
     freez(&b64up);
     }
 dyStringAppend(dy, "Accept: */*\r\n");
+if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+    {
+    dyStringPrintf(dy, "Range: bytes=%lld-%lld\r\n"
+	, (long long) npu.byteRangeStart
+	, (long long) npu.byteRangeEnd);
+    }
 write(sd, dy->string, dy->stringSize);
 
 /* Clean up and return handle. */
 dyStringFree(&dy);
 return sd;
 }
+
+
 
 int netOpenHttpExt(char *url, char *method, boolean end)
 /* Return a file handle that will read the url.  If end is not
@@ -760,7 +789,7 @@ while(TRUE)
 	    {
 	    redirect = TRUE;
 	    }
-	else if (!sameString(code, "200"))
+	else if (!(sameString(code, "200") || sameString(code, "206")))
 	    {
 	    warn("%s: %s %s\n", url, code, line);
 	    return FALSE;
@@ -904,6 +933,105 @@ else
     return lf;
     }
 }
+
+#ifdef EXAMPLE_ONLY  /* Real copy of this moved to udc.c */
+int udcDataViaHttp(char *url, bits64 offset, int size, void *buffer)
+/* Fetch a block of data of given size into buffer using the http: protocol.
+ * Returns number of bytes actually read.  Does an errAbort on
+ * error.  Typically will be called with size in the 8k - 64k range. */
+{
+char rangeUrl[1024];
+if (!startsWith("http://",url))
+    {
+    errAbort("Invalid protocol in url [%s] in udcDataViaHttp, only http supported", url); 
+    }
+safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=%lld-%lld"
+  , url
+  , (long long) offset
+  , (long long) offset + size - 1);
+int sd = netUrlOpen(rangeUrl);
+if (sd < 0)
+    errAbort("Couldn't open %s", url);   // do we really want errAbort here?
+
+char *newUrl = NULL;
+int newSd = 0;
+if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
+    errAbort("Couldn't open %s", url);   // do we really want errAbort here?
+
+if (newUrl)  // not sure redirection will work with byte ranges as it is now
+    {
+    freeMem(newUrl); 
+    sd = newSd;
+    }
+
+int rd = 0, total = 0, remaining = size;
+char *buf = (char *)buffer;
+while ((remaining > 0) && ((rd = read(sd, buf, remaining)) > 0))
+    {
+    total += rd;
+    buf += rd;
+    remaining -= rd;
+    }
+if (rd == -1)
+    errnoAbort("error reading socket");
+close(sd);  
+
+return total;
+}
+
+int udcSizeTimeViaHttp(char *url, long long *pSize, time_t *pTime)
+/* Sets size and last modified time of URL
+ * and returns status of HEAD GET. */
+{
+struct hash *hash = newHash(0);
+int status = netUrlHead(url, hash);
+if (status != 200) // && status != 302 && status != 301)
+    {
+    return status;
+    }
+*pSize = atoll(hashMustFindVal(hash, "Content-Length:"));
+//Content-Length: 1677
+
+char *lastModString = hashMustFindVal(hash, "Last-Modified:");
+// Last-Modified: Wed, 25 Feb 2004 22:37:23 GMT
+// Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
+
+#include <time.h>
+
+struct tm tm;
+time_t t;
+
+// TODO: it's very likely that there are other date string patterns
+//  out there that might be encountered.
+if (strptime(lastModString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
+    { /* Handle error */;
+    errAbort("unable to parse last-modified string [%s]", lastModString);
+    }
+
+//printf("year: %d; month: %d; day: %d;\n",
+//        tm.tm_year, tm.tm_mon, tm.tm_mday);
+//printf("hour: %d; minute: %d; second: %d\n",
+//        tm.tm_hour, tm.tm_min, tm.tm_sec);
+//printf("week day: %d; year day: %d\n", tm.tm_wday, tm.tm_yday);
+
+
+tm.tm_isdst = -1;      /* Not set by strptime(); tells mktime()
+                          to determine whether daylight saving time
+                          is in effect */
+t = mktime(&tm);
+if (t == -1)
+    { /* Handle error */;
+    errAbort("mktime failed while parsing last-modified string [%s]", lastModString);
+    }
+
+//printf("seconds since the Epoch: %ld\n", (long) t);"
+
+*pTime = t;
+
+hashFree(&hash);
+return status;
+}
+#endif /* EXAMPLE_ONLY */
 
 struct lineFile *netLineFileOpen(char *url)
 /* Return a lineFile attached to url.  This one

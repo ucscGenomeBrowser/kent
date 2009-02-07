@@ -113,11 +113,13 @@ struct netParsedUrl
    char host[128];	/* Name of host computer - www.yahoo.com, etc. */
    char port[16];       /* Port, usually 80 or 8080. */
    char file[1024];	/* Remote file name/query string, starts with '/' */
+   ssize_t byteRangeStart; /* Start of byte range, use -1 for none */
+   ssize_t byteRangeEnd;   /* End of byte range use -1 for none */
    };
 
 void netParseUrl(char *url, struct netParsedUrl *parsed);
 /* Parse a URL into components.   A full URL is made up as so:
- *   http://hostName:port/file
+ *   http://user:password@hostName:port/file;byterange=0-499
  * This is set up so that the http:// and the port are optional. 
  */
 
@@ -206,6 +208,18 @@ boolean netSkipHttpHeaderLinesHandlingRedirect(int sd, char *url, int *redirecte
  * This routine handles up to 5 steps of redirection.
  * The logic to this routine is also complicated a little to make it work in a pipe, which means we
  * can't attach a lineFile since filling the lineFile buffer reads in more than just the http header. */
+
+int udcDataViaHttp(char *url, bits64 offset, int size, void *buffer);
+/* Fetch a block of data of given size into buffer using the http: protocol.
+ * Returns number of bytes actually read.  Does an errAbort on
+ * error.  Typically will be called with size in the 8k - 64k range. */
+
+time_t udcTimeViaHttp(char *url);
+/* Returns last modified time of URL */
+
+int udcSizeTimeViaHttp(char *url, long long *pSize, time_t *pTime);
+/* Sets size and last modified time of URL
+ * and returns status of HEAD GET. */
 
 #endif /* NET_H */
 
