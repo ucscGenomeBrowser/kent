@@ -48,7 +48,12 @@ char *udcDefaultDir();
 /* Get default directory for cache.  Use this for the udcFileOpen call if you
  * don't have anything better.... */
 
-char *udcSetDefaultDir(char *path);
+void udcSetDefaultDir(char *path);
 /* Set default directory for cache */
+
+#define udcDevicePrefix "udc:"
+/* Prefix used by convention to indicate a file should be accessed via udc.  This is
+ * followed by the local path name or a url, so in common practice you see things like:
+ *     udc:http://genome.ucsc.edu/goldenPath/hg18/tracks/someTrack.bb */
 
 #endif /* UDC_H */

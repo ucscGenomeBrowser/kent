@@ -717,9 +717,10 @@ char *udcDefaultDir()
 return defaultDir;
 }
 
-char *udcSetDefaultDir(char *path)
+void udcSetDefaultDir(char *path)
 /* Set default directory for cache */
 {
 defaultDir = path;
 }
+
 
