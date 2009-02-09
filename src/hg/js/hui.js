@@ -1,5 +1,5 @@
 // JavaScript Especially for hui.c
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.18 2009/02/03 17:49:12 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.19 2009/02/09 19:46:15 tdreszer Exp $
 
 var debugLevel = 0;
 var viewDDtoSubCB = true;
@@ -202,11 +202,10 @@ function compositeCfgRegisterOnchangeAction(prefix)
 function subtrackCfgHideAll(table)
 {
 // hide all the subtrack configuration stuff
-    var div = table.getElementsByTagName("div");
-    for (var ix=0;ix<div.length;ix++) {
-        if (div[ix].id.lastIndexOf(".cfg") == div[ix].id.length - 4)
-        div[ix].style.display = 'none';
-    }
+    $("div[id $= '.cfg']").each( function (i) {
+        $( this ).css('display','none');
+        $( this ).children("input[name$='.childShowCfg']").val("off");
+    });
 }
 
 function subtrackCfgShow(anchor)
@@ -221,8 +220,11 @@ function subtrackCfgShow(anchor)
         if (div[0].style.display == 'none') {
             subtrackCfgHideAll(tbody);
             div[0].style.display = '';
-        } else
+            $( div[0] ).children("input[name$='.childShowCfg']").val("on");
+        } else {
             div[0].style.display = 'none';
+            $( div[0] ).children("input[name$='.childShowCfg']").val("off");
+        }
     }
     return true;
 }
@@ -231,36 +233,20 @@ function showConfigControls(name)
 {
 // Will show configuration controls
 // Config controls not matching name will be hidden
-    var retval = false;
-    if (document.getElementsByTagName)
-    {
-        var list = document.getElementsByTagName('tr');
-        for (var ix=0;ix<list.length;ix++) {
-            var tblRow = list[ix];
-            if(tblRow.id.indexOf("tr_cfg_") == 0) {  // marked as tr containing a cfg's
-                if(tblRow.id.lastIndexOf(name) == 7 && tblRow.id.length == name.length + 7 && tblRow.style.display == 'none') {
-                    tblRow.style.display = '';
-                } else {
-                    tblRow.style.display = 'none';
-                }
-            }
+    var trs  = $("tr[id^='tr_cfg_']")
+    $("input[name$='.showCfg']").val("off"); // Turn all off
+    $( trs ).each( function (i) {
+        if( this.id == 'tr_cfg_'+name && this.style.display == 'none') {
+            $( this ).css('display','');
+            $("input[name$='."+name+".showCfg']").val("on");
         }
-        retval = true;
-        var list = document.getElementsByTagName('table');
-        for (var ix=0;ix<list.length;ix++) {
-            if(list[ix].id.indexOf("subtracks.") == 0)
-                subtrackCfgHideAll(list[ix]);
+        else if( this.style.display == '') {
+            $( this ).css('display','none');
         }
-    }
-    else if (document.all) {
-        if(debugLevel>2)
-            alert("showConfigControls is unimplemented for this browser");
-    } else {
-        // NS 4.x - I gave up trying to get this to work.
-        if(debugLevel>2)
-           alert("showConfigControls is unimplemented for this browser");
-    }
-    return retval;
+    });
+
+    $("table[id^='subtracks.']").each( function (i) { subtrackCfgHideAll(this);} ); // Close the cfg controls in the subtracks
+    return true;
 }
 
 function trAlternateColors(table,cellIx)
