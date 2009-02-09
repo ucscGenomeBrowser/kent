@@ -412,7 +412,7 @@ hPrintf("</TD></TR>\n");
 hPrintf("<TR><TD>");
 hCheckBox("dragZooming", cartUsualBoolean(cart, "dragZooming", FALSE));
 hPrintf("</TD><TD>");
-hPrintf("Drag Selection/Zooming");
+hPrintf("Drag selection/zooming");
 hPrintf("</TD></TR>\n");
 
 
