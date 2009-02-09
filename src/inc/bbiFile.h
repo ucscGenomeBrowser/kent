@@ -57,7 +57,7 @@ struct bbiFile
     {
     struct bbiFile *next;	/* Next in list. */
     char *fileName;		/* Name of file - for better error reporting. */
-    FILE *f;			/* Open file handle. */
+    struct udcFile *udc;	/* Open UDC file handle. */
     bits32 typeSig;		/* bigBedSig or bigWigSig for now. */
     boolean isSwapped;		/* If TRUE need to byte swap everything. */
     struct bptFile *chromBpt;	/* Index of chromosomes. */

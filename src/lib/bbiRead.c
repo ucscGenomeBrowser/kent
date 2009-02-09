@@ -8,6 +8,7 @@
 #include "localmem.h"
 #include "bPlusTree.h"
 #include "cirTree.h"
+#include "udc.h"
 #include "bbiFile.h"
 
 struct bbiZoomLevel *bbiBestZoom(struct bbiZoomLevel *levelList, int desiredReduction)
@@ -46,13 +47,13 @@ struct bbiFile *bbiFileOpen(char *fileName, bits32 sig, char *typeName)
 struct bbiFile *bbi;
 AllocVar(bbi);
 bbi->fileName = cloneString(fileName);
-FILE *f = bbi->f = mustOpen(fileName, "rb");
+struct udcFile *udc = bbi->udc = udcFileOpen(fileName, udcDefaultDir());
 
 /* Read magic number at head of file and use it to see if we are proper file type, and
  * see if we are byte-swapped. */
 bits32 magic;
 boolean isSwapped = bbi->isSwapped = FALSE;
-mustReadOne(f, magic);
+udcMustRead(udc, &magic, sizeof(magic));
 if (magic != sig)
     {
     magic = byteSwap32(magic);
@@ -63,14 +64,14 @@ if (magic != sig)
 bbi->typeSig = sig;
 
 /* Read rest of defined bits of header, byte swapping as needed. */
-bbi->version = readBits16(f, isSwapped);
-bbi->zoomLevels = readBits16(f, isSwapped);
-bbi->chromTreeOffset = readBits64(f, isSwapped);
-bbi->unzoomedDataOffset = readBits64(f, isSwapped);
-bbi->unzoomedIndexOffset = readBits64(f, isSwapped);
+bbi->version = udcReadBits16(udc, isSwapped);
+bbi->zoomLevels = udcReadBits16(udc, isSwapped);
+bbi->chromTreeOffset = udcReadBits64(udc, isSwapped);
+bbi->unzoomedDataOffset = udcReadBits64(udc, isSwapped);
+bbi->unzoomedIndexOffset = udcReadBits64(udc, isSwapped);
 
 /* Skip over reserved area. */
-fseek(f, 32, SEEK_CUR);
+udcSeek(udc, udcTell(udc) + 32);
 
 /* Read zoom headers. */
 int i;
@@ -78,18 +79,18 @@ struct bbiZoomLevel *level, *levelList = NULL;
 for (i=0; i<bbi->zoomLevels; ++i)
     {
     AllocVar(level);
-    level->reductionLevel = readBits32(f, isSwapped);
-    level->reserved = readBits32(f, isSwapped);
-    level->dataOffset = readBits64(f, isSwapped);
-    level->indexOffset = readBits64(f, isSwapped);
+    level->reductionLevel = udcReadBits32(udc, isSwapped);
+    level->reserved = udcReadBits32(udc, isSwapped);
+    level->dataOffset = udcReadBits64(udc, isSwapped);
+    level->indexOffset = udcReadBits64(udc, isSwapped);
     slAddHead(&levelList, level);
     }
 slReverse(&levelList);
 bbi->levelList = levelList;
 
 /* Attach B+ tree of chromosome names and ids. */
-fseek(f, bbi->chromTreeOffset, SEEK_SET);
-bbi->chromBpt =  bptFileAttach(fileName, f);
+udcSeek(udc, bbi->chromTreeOffset);
+bbi->chromBpt =  bptFileAttach(fileName, udc);
 
 return bbi;
 }
@@ -102,8 +103,9 @@ if (bwf != NULL)
     {
     cirTreeFileDetach(&bwf->unzoomedCir);
     slFreeList(&bwf->levelList);
+    slFreeList(&bwf->levelList);
     bptFileDetach(&bwf->chromBpt);
-    carefulClose(&bwf->f);
+    udcFileClose(&bwf->udc);
     freeMem(bwf->fileName);
     freez(pBwf);
     }
@@ -183,8 +185,8 @@ void bbiAttachUnzoomedCir(struct bbiFile *bbi)
 {
 if (bbi->unzoomedCir == NULL)
     {
-    fseek(bbi->f, bbi->unzoomedIndexOffset, SEEK_SET);
-    bbi->unzoomedCir = cirTreeFileAttach(bbi->fileName, bbi->f);
+    udcSeek(bbi->udc, bbi->unzoomedIndexOffset);
+    bbi->unzoomedCir = cirTreeFileAttach(bbi->fileName, bbi->udc);
     }
 }
 
@@ -228,16 +230,16 @@ switch (type)
 static void bbiSummaryOnDiskRead(struct bbiFile *bbi, struct bbiSummaryOnDisk *sum)
 /* Read in summary from file. */
 {
-FILE *f = bbi->f;
+struct udcFile *udc = bbi->udc;
 boolean isSwapped = bbi->isSwapped;
-sum->chromId = readBits32(f, isSwapped);
-sum->start = readBits32(f, isSwapped);
-sum->end = readBits32(f, isSwapped);
-sum->validCount = readBits32(f, isSwapped);
-mustReadOne(f, sum->minVal);
-mustReadOne(f, sum->maxVal);
-mustReadOne(f, sum->sumData);
-mustReadOne(f, sum->sumSquares);
+sum->chromId = udcReadBits32(udc, isSwapped);
+sum->start = udcReadBits32(udc, isSwapped);
+sum->end = udcReadBits32(udc, isSwapped);
+sum->validCount = udcReadBits32(udc, isSwapped);
+udcMustReadOne(udc, sum->minVal);
+udcMustReadOne(udc, sum->maxVal);
+udcMustReadOne(udc, sum->sumData);
+udcMustReadOne(udc, sum->sumSquares);
 }
 
 static struct bbiSummary *bbiSummaryFromOnDisk(struct bbiSummaryOnDisk *in)
@@ -261,16 +263,16 @@ static struct bbiSummary *bbiSummariesInRegion(struct bbiZoomLevel *zoom, struct
 /* Return list of all summaries in region at given zoom level of bbiFile. */
 {
 struct bbiSummary *sumList = NULL, *sum;
-FILE *f = bbi->f;
-fseek(f, zoom->indexOffset, SEEK_SET);
-struct cirTreeFile *ctf = cirTreeFileAttach(bbi->fileName, bbi->f);
+struct udcFile *udc = bbi->udc;
+udcSeek(udc, zoom->indexOffset);
+struct cirTreeFile *ctf = cirTreeFileAttach(bbi->fileName, bbi->udc);
 struct fileOffsetSize *blockList = cirTreeFindOverlappingBlocks(ctf, chromId, start, end);
 if (blockList != NULL)
     {
     struct fileOffsetSize *block;
     for (block = blockList; block != NULL; block = block->next)
         {
-	fseek(f, block->offset, SEEK_SET);
+	udcSeek(udc, block->offset);
 	struct bbiSummaryOnDisk diskSum;
 	int itemSize = sizeof(diskSum);
 	assert(block->size % itemSize == 0);

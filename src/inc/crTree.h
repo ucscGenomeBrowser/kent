@@ -39,7 +39,7 @@ struct crTreeFile
     {
     struct crTreeFile *next;	/* Next in list of index files if any. */
     char *fileName;		/* Name of file - for better error reporting. */
-    FILE *f;			/* Open file handle. */
+    struct udcFile *udc;			/* Open file handle. */
     struct bptFile *chromBpt;	/* Index of chromosomes. */
     struct cirTreeFile *cir;	/* Index of ranges. */
     boolean isSwapped;		/* If TRUE need to byte swap everything. */

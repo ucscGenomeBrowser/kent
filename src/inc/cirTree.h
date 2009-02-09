@@ -16,7 +16,7 @@ struct cirTreeFile
     {
     struct cirTreeFile *next;	/* Next in list of index files if any. */
     char *fileName;		/* Name of file - for error reporting. */
-    FILE *f;			/* Open file pointer. */
+    struct udcFile *udc;			/* Open file pointer. */
     boolean isSwapped;		/* If TRUE need to byte swap everything. */
     bits64 rootOffset;		/* Offset of root block. */
     bits32 blockSize;		/* Size of block. */
@@ -35,7 +35,7 @@ struct cirTreeFile *cirTreeFileOpen(char *fileName);
 void cirTreeFileClose(struct cirTreeFile **pCrt);
 /* Close and free up cirTree file opened with cirTreeFileAttach. */
 
-struct cirTreeFile *cirTreeFileAttach(char *fileName, FILE *f);
+struct cirTreeFile *cirTreeFileAttach(char *fileName, struct udcFile *udc);
 /* Open up r-tree index file on previously open file, with cirTree
  * header at current file position. */
 

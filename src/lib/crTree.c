@@ -32,8 +32,9 @@
 
 #include "common.h"
 #include "hash.h"
-#include "bPlusTree.h"
+#include "udc.h"
 #include "sig.h"
+#include "bPlusTree.h"
 #include "cirTree.h"
 #include "crTree.h"
 
@@ -328,17 +329,17 @@ crTreeFileCreateLow(chromArray, chromCount, itemArray, sizeof(itemArray[0]), ite
 struct crTreeFile *crTreeFileOpen(char *fileName)
 /* Open up r-tree index file - reading headers and verifying things. */
 {
-FILE *f = mustOpen(fileName, "rb");
 /* Open file and allocate structure to hold info from header etc. */
+struct udcFile *udc = udcFileOpen(fileName, udcDefaultDir());
 struct crTreeFile *crt = needMem(sizeof(*crt));
 fileName = crt->fileName = cloneString(fileName);
-crt->f = f;
+crt->udc = udc;
 
 /* Read magic number at head of file and use it to see if we are proper file type, and
  * see if we are byte-swapped. */
 bits32 magic;
 boolean isSwapped = FALSE;
-mustReadOne(f, magic);
+udcMustReadOne(udc, magic);
 if (magic != crTreeSig)
     {
     magic = byteSwap32(magic);
@@ -350,17 +351,17 @@ if (magic != crTreeSig)
 /* Read rest of high level header including notably the offsets to the
  * chromosome and range indexes. */
 bits32 reserved32;
-mustReadOne(f, reserved32);
-crt->chromOffset = readBits64(f, isSwapped);
-crt->cirOffset = readBits64(f, isSwapped);
+udcMustReadOne(udc, reserved32);
+crt->chromOffset = udcReadBits64(udc, isSwapped);
+crt->cirOffset = udcReadBits64(udc, isSwapped);
 
 /* Read in the chromosome index header. */
-fseek(f, crt->chromOffset, SEEK_SET);
-crt->chromBpt = bptFileAttach(fileName, f);
+udcSeek(udc, crt->chromOffset);
+crt->chromBpt = bptFileAttach(fileName, udc);
 
 /* Read in range index header. */
-fseek(f, crt->cirOffset, SEEK_SET);
-crt->cir = cirTreeFileAttach(fileName, f);
+udcSeek(udc, crt->cirOffset);
+crt->cir = cirTreeFileAttach(fileName, udc);
 
 return crt;
 }
@@ -373,7 +374,7 @@ if (crt != NULL)
     {
     cirTreeFileDetach(&crt->cir);
     bptFileDetach(&crt->chromBpt);
-    carefulClose(&crt->f);
+    udcFileClose(&crt->udc);
     freez(&crt->fileName);
     freez(pCrt);
     }

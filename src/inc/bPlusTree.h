@@ -53,7 +53,7 @@ struct bptFile
     {
     struct bptFile *next;	/* Next in list of index files if any. */
     char *fileName;		/* Name of file - for error reporting. */
-    FILE *f;			/* Open file pointer. */
+    struct udcFile *udc;			/* Open file pointer. */
     bits32 blockSize;		/* Size of block. */
     bits32 keySize;		/* Size of keys. */
     bits32 valSize;		/* Size of values. */
@@ -68,7 +68,7 @@ struct bptFile *bptFileOpen(char *fileName);
 void bptFileClose(struct bptFile **pBpt);
 /* Close down and deallocate index file. */
 
-struct bptFile *bptFileAttach(char *fileName, FILE *f);
+struct bptFile *bptFileAttach(char *fileName, struct udcFile *udc);
 /* Open up index file on previously open file, with header at current file position. */
 
 void bptFileDetach(struct bptFile **pBpt);
