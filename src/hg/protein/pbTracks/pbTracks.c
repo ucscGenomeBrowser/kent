@@ -17,7 +17,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.55 2009/01/30 23:38:27 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.56 2009/02/09 18:19:25 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -425,7 +425,7 @@ if (spFindAcc(spConn, proteinID) == NULL)
     answer = sqlGetField(protDbName, "spXref3", "biodatabaseID", cond_str);
     if (sameWord(answer, "3"))
         {
-        errAbort("The corresponding protein %s is no longer available from Swiss-Prot/TrEMBL.", 
+        errAbort("The corresponding protein %s is no longer available from UniProtKB.", 
 		 proteinID);
         }
     else
