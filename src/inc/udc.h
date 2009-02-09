@@ -35,6 +35,24 @@ void udcFileClose(struct udcFile **pFile);
 int udcRead(struct udcFile *file, void *buf, int size);
 /* Read a block from file.  Return amount actually read. */
 
+void udcMustRead(struct udcFile *file, void *buf, int size);
+/* Read a block from file.  Abort if any problem, including EOF before size is read. */
+
+#define udcMustReadOne(file, var) udcMustRead(file, &(var), sizeof(var))
+/* Read one variable from file or die. */
+
+bits64 udcReadBits64(struct udcFile *file, boolean isSwapped);
+/* Read and optionally byte-swap 64 bit entity. */
+
+bits32 udcReadBits32(struct udcFile *file, boolean isSwapped);
+/* Read and optionally byte-swap 32 bit entity. */
+
+bits16 udcReadBits16(struct udcFile *file, boolean isSwapped);
+/* Read and optionally byte-swap 16 bit entity. */
+
+int udcGetChar(struct udcFile *file);
+/* Get next character from file or die trying. */
+
 void udcSeek(struct udcFile *file, bits64 offset);
 /* Seek to a particular (absolute) position in file. */
 

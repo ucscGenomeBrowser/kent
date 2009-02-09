@@ -95,6 +95,21 @@ static char *sparseDataName = "sparseData";
 
 /********* Section for local file protocol **********/
 
+static char *assertLocalUrl(char *url)
+/* Make sure that url is local and return bits past the protocol. */
+{
+if (startsWith("local:", url))
+    url += 6;
+if (url[0] != '/')
+    errAbort("Local urls must start at /");
+if (stringIn("..", url) || stringIn("~", url) || stringIn("//", url) ||
+    stringIn("/./", url) || endsWith("/.", url))
+    {
+    errAbort("relative paths not allowed in local urls (%s)", url);
+    }
+return url;
+}
+
 static int udcDataViaLocal(char *url, bits64 offset, int size, void *buffer)
 /* Fetch a block of data of given size into buffer using the http: protocol.
 * Returns number of bytes actually read.  Does an errAbort on
@@ -102,6 +117,7 @@ static int udcDataViaLocal(char *url, bits64 offset, int size, void *buffer)
 {
 /* Need to check time stamp here. */
 verbose(2, "reading remote data - %d bytes at %lld - on %s\n", size, offset, url);
+url = assertLocalUrl(url);
 FILE *f = mustOpen(url, "rb");
 fseek(f, offset, SEEK_SET);
 int sizeRead = fread(buffer, 1, size, f);
@@ -119,6 +135,7 @@ static boolean udcInfoViaLocal(char *url, struct udcRemoteFileInfo *retInfo)
  * Return FALSE if file does not even exist. */
 {
 verbose(2, "checking remote info on %s\n", url);
+url = assertLocalUrl(url);
 struct stat status;
 int ret = stat(url, &status);
 if (ret < 0)
@@ -126,6 +143,25 @@ if (ret < 0)
 retInfo->updateTime = status.st_mtime;
 retInfo->size = status.st_size;
 return TRUE;
+}
+
+/********* Section for transparent file protocol **********/
+
+static int udcDataViaTransparent(char *url, bits64 offset, int size, void *buffer)
+/* Fetch a block of data of given size into buffer using the http: protocol.
+* Returns number of bytes actually read.  Does an errAbort on
+* error.  Typically will be called with size in the 8k - 64k range. */
+{
+internalErr();	/* Should not get here. */
+return size;
+}
+
+static boolean udcInfoViaTransparent(char *url, struct udcRemoteFileInfo *retInfo)
+/* Fill in *retTime with last modified time for file specified in url.
+ * Return FALSE if file does not even exist. */
+{
+internalErr();	/* Should not get here. */
+return FALSE;
 }
 
 /********* Section for slow local file protocol - simulates network... **********/
@@ -412,6 +448,11 @@ else if (sameString(upToColon, "http"))
     prot->fetchData = udcDataViaHttp;
     prot->fetchInfo = udcInfoViaHttp;
     }
+else if (sameString(upToColon, "transparent"))
+    {
+    prot->fetchData = udcDataViaTransparent;
+    prot->fetchInfo = udcInfoViaTransparent;
+    }
 else
     {
     errAbort("Unrecognized protocol %s in udcProtNew", upToColon);
@@ -474,13 +515,15 @@ udcBitmapClose(&bits);
 }
 
 
-struct udcFile *udcFileOpen(char *url, char *cacheDir)
-/* Open up a cached file. */
+struct udcFile *udcFileMayOpen(char *url, char *cacheDir)
+/* Open up a cached file.  Return NULL if file doesn't exist. */
 {
-/* Parse out protocol.  Make it "local" if none specified. */
+verbose(2, "udcfileOpen(%s, %s)\n", url, cacheDir);
+/* Parse out protocol.  Make it "transparent" if none specified. */
 char *protocol, *afterProtocol;
 char *colon = strchr(url, ':');
 struct udcProtocol *prot;
+boolean isTransparent = FALSE;
 if (colon != NULL)
     {
     int colonPos = colon - url;
@@ -491,24 +534,22 @@ if (colon != NULL)
     }
 else
     {
-    protocol = cloneString("local");
-    if (url[0] != '/')
-        errAbort("Local urls must start at /");
-    if (stringIn("..", url) || stringIn("~", url) || stringIn("//", url) ||
-    	stringIn("/./", url) || endsWith("/.", url))
-	{
-	errAbort("relative paths not allowed in local urls (%s)", url);
-	}
-    afterProtocol = url+1;
+    protocol = cloneString("transparent");
+    afterProtocol = url;
+    isTransparent = TRUE;
     }
 prot = udcProtocolNew(protocol);
 
 /* Figure out if anything exists. */
 struct udcRemoteFileInfo info;
-if (!prot->fetchInfo(url, &info))
+ZeroVar(&info);
+if (!isTransparent)
     {
-    udcProtocolFree(&prot);
-    return NULL;
+    if (!prot->fetchInfo(url, &info))
+	{
+	udcProtocolFree(&prot);
+	return NULL;
+	}
     }
 
 /* Allocate file object and start filling it in. */
@@ -519,21 +560,43 @@ file->protocol = protocol;
 file->prot = prot;
 file->updateTime = info.updateTime;
 file->size = info.size;
-int len = strlen(cacheDir) + 1 + strlen(protocol) + 1 + strlen(afterProtocol) + 1;
-file->cacheDir = needMem(len);
-safef(file->cacheDir, len, "%s/%s/%s", cacheDir, protocol, afterProtocol);
+if (isTransparent)
+    {
+    /* If transparent dummy up things so that the "sparse" file pointer is actually
+     * the file itself, which appears to be completely loaded in cache. */
+    FILE *f = file->fSparse = mustOpen(url, "rb");
+    struct stat status;
+    fstat(fileno(f), &status);
+    file->startData = 0;
+    file->endData = file->size = status.st_size;
+    }
+else
+    {
+    int len = strlen(cacheDir) + 1 + strlen(protocol) + 1 + strlen(afterProtocol) + 1;
+    file->cacheDir = needMem(len);
+    safef(file->cacheDir, len, "%s/%s/%s", cacheDir, protocol, afterProtocol);
 
-/* Make directory. */
-makeDirsOnPath(file->cacheDir);
+    /* Make directory. */
+    makeDirsOnPath(file->cacheDir);
 
-/* Create file names for bitmap and data portions. */
-file->bitmapFileName = fileNameInCacheDir(file, bitmapName);
-file->sparseFileName = fileNameInCacheDir(file, sparseDataName);
+    /* Create file names for bitmap and data portions. */
+    file->bitmapFileName = fileNameInCacheDir(file, bitmapName);
+    file->sparseFileName = fileNameInCacheDir(file, sparseDataName);
 
-/* Figure out a little bit about the extent of the good cached data if any. */
-setInitialCachedDataBounds(file);
-file->fSparse = mustOpen(file->sparseFileName, "rb+");
+    /* Figure out a little bit about the extent of the good cached data if any. */
+    setInitialCachedDataBounds(file);
+    file->fSparse = mustOpen(file->sparseFileName, "rb+");
+    }
 return file;
+}
+
+struct udcFile *udcFileOpen(char *url, char *cacheDir)
+/* Open up a cached file.  Abort if file doesn't exist. */
+{
+struct udcFile *udcFile = udcFileMayOpen(url, cacheDir);
+if (udcFile == NULL)
+    errAbort("Couldn't open %s", url);
+return udcFile;
 }
 
 void udcFileClose(struct udcFile **pFile)
@@ -751,6 +814,54 @@ mustRead(file->fSparse, buf, size);
 file->offset += size;
 return size;
 }
+
+void udcMustRead(struct udcFile *file, void *buf, int size)
+/* Read a block from file.  Abort if any problem, including EOF before size is read. */
+{
+int sizeRead = udcRead(file, buf, size);
+if (sizeRead < size)
+    errAbort("udc couldn't read %d bytes from %s, did read %d", size, file->url, sizeRead);
+}
+
+int udcGetChar(struct udcFile *file)
+/* Get next character from file or die trying. */
+{
+UBYTE b;
+udcMustRead(file, &b, 1);
+return b;
+}
+
+bits64 udcReadBits64(struct udcFile *file, boolean isSwapped)
+/* Read and optionally byte-swap 64 bit entity. */
+{
+bits64 val;
+udcMustRead(file, &val, sizeof(val));
+if (isSwapped)
+    val = byteSwap64(val);
+return val;
+}
+
+bits32 udcReadBits32(struct udcFile *file, boolean isSwapped)
+/* Read and optionally byte-swap 32 bit entity. */
+{
+bits32 val;
+udcMustRead(file, &val, sizeof(val));
+if (isSwapped)
+    val = byteSwap32(val);
+return val;
+}
+
+bits16 udcReadBits16(struct udcFile *file, boolean isSwapped)
+/* Read and optionally byte-swap 16 bit entity. */
+{
+bits16 val;
+udcMustRead(file, &val, sizeof(val));
+if (isSwapped)
+    val = byteSwap16(val);
+return val;
+}
+
+
 
 void udcSeek(struct udcFile *file, bits64 offset)
 /* Seek to a particular position in file. */
