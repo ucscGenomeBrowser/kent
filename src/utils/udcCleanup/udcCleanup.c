@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: udcCleanup.c,v 1.1 2009/02/07 17:42:08 kent Exp $";
+static char const rcsid[] = "$Id: udcCleanup.c,v 1.1.2.1 2009/02/09 23:26:45 mikep Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -30,7 +30,7 @@ void doCleanup(char *cacheDir, char *dayString)
 double maxDays = atof(dayString);
 if (maxDays <= 0)
     errAbort("The maxUnusedDays needs to be a positive value");
-bits64 cleanedBytes = udcCleanup(cacheDir, maxDays);
+bits64 cleanedBytes = udcCleanup(cacheDir, maxDays, FALSE);
 printf("Cleaned up ");
 printLongWithCommas(stdout, cleanedBytes);
 printf(" bytes from files unused for %s days\n", dayString);
