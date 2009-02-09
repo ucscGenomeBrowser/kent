@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.56 2009/02/05 00:21:55 angie Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.57 2009/02/09 19:37:31 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -644,8 +644,9 @@ if (origAssembly)
     }
 }
 
-eCfgType cfgTypeFromTdb(struct trackDb *tdb)
-/* determine what kind of track specific configuration is needed */
+eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary)
+/* determine what kind of track specific configuration is needed,
+   warn if not multi-view compatible */
 {
 eCfgType cType = cfgNone;
 if(startsWith("wigMaf", tdb->type))
@@ -662,6 +663,8 @@ else if(sameWord("bed5FloatScore",       tdb->type)
 else if(sameWord("narrowPeak",tdb->type)
      || sameWord("broadPeak", tdb->type))
     cType = cfgPeak;
+else if(sameWord("genePred",tdb->type))
+        cType = cfgGenePred;
 else if(startsWith("bed ", tdb->type)) // TODO: Only these are configurable so far
     {
     char *words[3];
@@ -669,15 +672,12 @@ else if(startsWith("bed ", tdb->type)) // TODO: Only these are configurable so f
     if (atoi(words[1]) >= 5 && trackDbSetting(tdb, "noScoreFilter") == NULL)
         cType = cfgBedScore;
     }
-else if(sameWord("genePred",tdb->type) && startsWith("wgEncodeSangerGencode", tdb->tableName))
-    {
-    cType = cfgGencode;
-    }
 
-if(cType == cfgNone && !startsWith("bed ", tdb->type) && !startsWith("bigBed", tdb->type) 
-	&& subgroupFind(tdb,"view",NULL))
+if(cType == cfgNone && warnIfNecessary)
     {
-    warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",tdb->type,tdb->tableName);
+    if(!startsWith("bed ", tdb->type) && !startsWith("bigBed", tdb->type)
+    && subgroupFind(tdb,"view",NULL))
+        warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",tdb->type,tdb->tableName);
     }
 return cType;
 }
@@ -765,5 +765,6 @@ boolean trackDbSettingClosestToHomeOn(struct trackDb *tdb, char *name)
 char *setting = trackDbSettingClosestToHome(tdb,name);
 return  (setting && (   sameWord(setting,"on")
                      || sameWord(setting,"true")
-                     || sameWord(setting,"enabled")));
+                     || sameWord(setting,"enabled")
+                     || atoi(setting) != 0));
 }

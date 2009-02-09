@@ -246,11 +246,12 @@ typedef enum _eCfgType
     cfgWig      =2,
     cfgWigMaf   =3,
     cfgPeak     =4,
-    cfgGencode  =5
+    cfgGenePred =5
 } eCfgType;
 
-eCfgType cfgTypeFromTdb(struct trackDb *tdb);
-/* determine what kind of track specific configuration is needed */
+eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary);
+/* determine what kind of track specific configuration is needed,
+   warn if not multi-view compatible */
 
 void trackDbOverride(struct trackDb *td, struct trackDb *overTd);
 /* apply an trackOverride trackDb entry to a trackDb entry */
