@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-##	"$Id: sgdGffToGtf.pl,v 1.2 2009/02/09 16:59:18 hiram Exp $";
+##	"$Id: sgdGffToGtf.pl,v 1.3 2009/02/09 17:57:22 hiram Exp $";
 
 my $argc = scalar(@ARGV);
 
@@ -35,60 +35,17 @@ sub decode($) {
     return($returnstring);
 }
 
-### idOrParent - find ID= or Parent= tag in fields
-###  return ID= value if found, otherwise return Parent= value
-sub idOrParent(@) {
-    my(@localA) = @{(shift)};
-    my $haveId = "";
-    my $haveParent = "";
-    my $size = scalar(@localA);
-    for (my $j = 0; $j < $size; ++$j) {
-	if ($localA[$j] =~ m/^Parent=/i) {
-	    (my $rest, $haveParent) = split('=',$localA[$j],2);
-	} elsif ($localA[$j] =~ m/^Id=/i) {
-	    (my $rest, $haveId) = split('=',$localA[$j],2);
-	}
+#### hashUp - take all the strings in the array, split them on the '='
+####	delimiter, and turn that split into a hash key and value
+sub hashUp(@){
+    my(@f9) = @{(shift)};
+    my $size = scalar(@f9);
+    my %hash9;
+    for (my $i = 0; $i < $size; ++$i) {
+	my ($key, $value) = split('=',$f9[$i],2);
+	$hash9{uc($key)} = $value;
     }
-    if (length($haveId)>0) {
-	return $haveId;
-    } elsif (length($haveParent)<1) {
-	die "can not find ID or parent ?";
-    }
-    return $haveParent;
-}
-
-### returnNote - find Note= tag in fields
-###  return value of Note= if found
-sub returnNote(@) {
-    my(@localA) = @{(shift)};
-    my $haveNote = "";
-    my $size = scalar(@localA);
-    for (my $j = 0; $j < $size; ++$j) {
-	if ($localA[$j] =~ m/^Note=/i) {
-	    (my $rest, $haveNote) = split('=',$localA[$j],2);
-	}
-    }
-    if (length($haveNote)>0) {
-	return $haveNote;
-    }
-    return $haveNote;
-}
-
-### returnAlias - find Alias= tag in fields
-###  return value of Alias= if found
-sub returnAlias(@) {
-    my(@localA) = @{(shift)};
-    my $haveAlias = "";
-    my $size = scalar(@localA);
-    for (my $j = 0; $j < $size; ++$j) {
-	if ($localA[$j] =~ m/^Alias=/i) {
-	    (my $rest, $haveAlias) = split('=',$localA[$j],2);
-	}
-    }
-    if (length($haveAlias)>0) {
-	return $haveAlias;
-    }
-    return $haveAlias;
+    return %hash9;
 }
 
 my $file = shift;
@@ -117,55 +74,59 @@ while (my $line = <FH>) {
 	exit 255;
     }
     my (@field9) = split(';',$fields[8]);
+    my (%field9Hash) = hashUp(\@field9);
     my $field9Items = scalar(@field9);
     if ($fields[2] =~ m/^gene$|^transposable_element_gene$|^pseudogene$/) {
-	for (my $i = 0; $i < $field9Items; ++$i) {
-	    if ($field9[$i] =~ m/^ID=/) {
-		my ($id, $name) = split('=',$field9[$i]);
-		if (exists($geneNames{$name})) {
-		    printf STDERR "duplicate gene name: '$name'\n";
-		    $geneNames{$name} += 1;
-		} else {
-		    $geneNames{$name} = 1;
-		    ++$geneCount;
-		}
+	if (exists($field9Hash{'ID'})) {
+	    my $name = $field9Hash{'ID'};
+	    if (exists($geneNames{$name})) {
+		printf STDERR "duplicate gene name: '$name'\n";
+		$geneNames{$name} += 1;
+	    } else {
+		$geneNames{$name} = 1;
+		++$geneCount;
 	    }
 	}
-    } elsif ($fields[2] =~ m/^CDS$/) {
+    } elsif ($fields[2] =~ m/^CDS$|^five_prime_UTR_intron$|^intron$/) {
+    	if ($fields[2] =~ m/^five_prime_UTR_intron$/) {
+	    $fields[2] = "intron";
+	}
 	for (my $i = 0; $i < 8; ++$i) {
 	    printf "$fields[$i]\t";
 	}
 	my $geneId = "noGeneId";
 	my $transcriptId = "noTranscriptId";
 	my $otherFields = "";
-	for (my $i = 0; $i < $field9Items; ++$i) {
-	    my ($noteType, $rest) = split('=',$field9[$i],2);
+	foreach my $noteType (keys %field9Hash) {
 	    $noteCategories{$noteType} += 1;
-	    if ($field9[$i] =~ m/^Parent=/) {
-		my ($id, $name) = split('=',$field9[$i]);
-		if (!exists($geneNames{$name})) {
-		    printf STDERR "CDS with no 'gene' name: '$name'\n";
-		}
-		$geneId = $name;
-		$exonCount{$name} += 1;
-	    } elsif ($field9[$i] =~ m/^Name=/) {
-		my ($id, $name) = split('=',$field9[$i]);
-		$transcriptId = $name;
+	}
+	if (exists($field9Hash{'PARENT'})) {
+	    my $name = $field9Hash{'PARENT'};
+	    if (!exists($geneNames{$name})) {
+		printf STDERR "CDS with no 'gene' name: '$name'\n";
+	    }
+	    $geneId = $name;
+	    $exonCount{$name} += 1;
+	}
+	if (exists($field9Hash{'NAME'})) {
+	    my $name = $field9Hash{'NAME'};
+	    $transcriptId = $name;
+	}
+	foreach my $key (keys %field9Hash) {
+	    next if ($key =~ m/^NAME$|^PARENT$/);
+	    my $name = $field9Hash{$key};
+	    if (!defined($name) || length($name)<1) {
+	     printf STDERR "#\tundefined name for id: '$key' at line\n";
+		printf STDERR "# '%s'\n", $line;
 	    } else {
-		my ($id, $name) = split('=',$field9[$i]);
-		if (!defined($name) || length($name)<1) {
-		    printf STDERR "#\tundefined name for id: '$id' at line\n";
-		    printf STDERR "# '%s'\n", $line;
-		} else {
-		    $otherFields .= " $id \"";
-		    my $decoded = decode($name);
-		    $decoded =~ s/;/ /g;
-		    $otherFields .= $decoded;
-		    $otherFields .= '";';
-		    $noteTypes{$id} += 1;
-		    if ($id =~ m/^Note$/) {
-			printf DS "%s\t%s\t%s\n", $geneId, $fields[2],$decoded;
-		    }
+		$otherFields .= " $key \"";
+		my $decoded = decode($name);
+		$decoded =~ s/;/ /g;
+		$otherFields .= $decoded;
+		$otherFields .= '";';
+		$noteTypes{$key} += 1;
+		if ($key =~ m/^NOTE$/) {
+		 printf DS "%s\t%s\t%s\n", $geneId, $fields[2],$decoded;
 		}
 	    }
 	}
@@ -184,15 +145,26 @@ while (my $line = <FH>) {
 	}
     } else {
 	printf LO "%s\n", $line;
-	my $name = idOrParent(\@field9);
-	my $note = returnNote(\@field9);
+	my $name = "noName";
+	if (exists($field9Hash{'ID'})) {
+	    $name = $field9Hash{'ID'};
+	} elsif (exists($field9Hash{'PARENT'})) {
+	    $name = $field9Hash{'PARENT'};
+	}
+	my $note = "";
+	if (exists($field9Hash{'NOTE'})) {
+	    $note = $field9Hash{'NOTE'};
+	}
 	my $decoded = "";
 	if (length($note) > 0) {
 	    $decoded = decode($note);
 	    $decoded =~ s/;/ /g;
 	    $note = $decoded;
 	}
-	my $alias = returnAlias(\@field9);
+	my $alias = "";
+	if (exists($field9Hash{'ALIAS'})) {
+	    $alias = $field9Hash{'ALIAS'};
+	}
 	if (length($alias) > 0) {
 	    $decoded = decode($alias);
 	    $decoded =~ s/;/ /g;
