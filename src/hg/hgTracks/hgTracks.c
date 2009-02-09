@@ -43,7 +43,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1550 2009/02/03 18:11:32 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1551 2009/02/09 19:11:52 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2600,6 +2600,12 @@ else if (sameString(type, "wig"))
     tg->customPt = ct;
     tg->labelNextItemButtonable = FALSE;
     }
+else if (sameString(type, "bigWig"))
+    {
+    tg = trackFromTrackDb(tdb);
+    tg->bbiFileName = trackDbSetting(tdb, "dataUrl");
+    tg->labelNextItemButtonable = FALSE;
+    }
 else if (sameString(type, "bedGraph"))
     {
     tg = trackFromTrackDb(tdb);
@@ -2675,7 +2681,7 @@ else if (sameString(type, "encodePeak"))
     }
 else
     {
-    errAbort("Unrecognized custom graph type %s", type);
+    errAbort("Unrecognized custom track type %s", type);
     }
 if (!ct->dbTrack)
     tg->labelNextItemButtonable = FALSE;

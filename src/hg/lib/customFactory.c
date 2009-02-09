@@ -25,7 +25,7 @@
 #include "jsHelper.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.94 2009/01/16 00:04:38 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.95 2009/02/09 19:12:35 kent Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1476,6 +1476,39 @@ static struct customFactory wigFactory =
     wigLoader,
     };
 
+
+/*** Big Wig Factory - for big client-side wiggle tracks ***/
+
+static boolean bigWigRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type, 
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a wig track */
+{
+return (sameType(type, "bigWig"));
+}
+
+static struct customTrack *bigWigLoader(struct customFactory *fac,  
+	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up wiggle data until get next track line. */
+{
+/* Not much to this.  A bigWig has nothing here but a track line. */
+struct hash *settings = track->tdb->settingsHash;
+char *dataUrl = hashFindVal(settings, "dataUrl");
+if (dataUrl == NULL)
+    errAbort("Missing dataUrl setting from track of type=bigWig");
+return track;
+}
+
+static struct customFactory bigWigFactory = 
+/* Factory for wiggle tracks */
+    {
+    NULL,
+    "bigWig",
+    bigWigRecognizer,
+    bigWigLoader,
+    };
+
 /*** Framework for custom factories. ***/
 
 static struct customFactory *factoryList;
@@ -1490,6 +1523,7 @@ if (factoryList == NULL)
      */
     slAddHead(&factoryList, &mafFactory);
     slAddTail(&factoryList, &wigFactory);
+    slAddTail(&factoryList, &bigWigFactory);
     slAddTail(&factoryList, &chromGraphFactory);
     slAddTail(&factoryList, &pslFactory);
     slAddTail(&factoryList, &gtfFactory);

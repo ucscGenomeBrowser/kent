@@ -14,7 +14,7 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bigWigTrack.c,v 1.4 2009/02/04 18:38:03 kent Exp $";
+static char const rcsid[] = "$Id: bigWigTrack.c,v 1.5 2009/02/09 19:11:52 kent Exp $";
 
 static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
@@ -24,21 +24,14 @@ static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 int preDrawZero, preDrawSize;
 struct preDrawElement *preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
 
-/* Figure out bigWig file name. */
-struct sqlConnection *conn = hAllocConn(database);
-char query[256];
-safef(query, sizeof(query), "select fileName from %s", tg->mapName);
-char *wigFileName = sqlQuickString(conn, query);
-if (wigFileName == NULL)
-    errAbort("Missing fileName in %s table", tg->mapName);
-hFreeConn(&conn);
-
 /* Get summary info from bigWig */
 int summarySize = width;
 struct bbiSummaryElement *summary;
 AllocArray(summary, summarySize);
+char *wigFileName = tg->bbiFileName;
 if (bigWigSummaryArrayExtended(wigFileName, chromName, winStart, winEnd, summarySize, summary))
     {
+    /* Convert format to predraw */
     int i;
     for (i=0; i<summarySize; ++i)
         {
@@ -63,7 +56,18 @@ freeMem(summary);
 static void bigWigLoadItems(struct track *tg)
 /* Fill up tg->items with bedGraphItems derived from a bigWig file */
 {
-/* Really nothing to do here. */
+if (tg->bbiFileName == NULL)
+    {
+    /* Figure out bigWig file name. */
+    struct sqlConnection *conn = hAllocConn(database);
+    char query[256];
+    safef(query, sizeof(query), "select fileName from %s", tg->mapName);
+    char *wigFileName = sqlQuickString(conn, query);
+    if (wigFileName == NULL)
+	errAbort("Missing fileName in %s table", tg->mapName);
+    tg->bbiFileName = wigFileName;
+    hFreeConn(&conn);
+    }
 }
 
 void bigWigMethods(struct track *track, struct trackDb *tdb, 

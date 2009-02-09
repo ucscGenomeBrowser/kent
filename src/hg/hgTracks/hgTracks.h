@@ -148,6 +148,8 @@ struct track
     float scaleRange;             /* What to scale samples by to get logical 0-1 */
     double graphUpperLimit, graphLowerLimit;	/* Limits of actual data in window for wigs. */
 
+    char *bbiFileName;		/* File name for bigWig or bigBed. */
+
     int bedSize;		/* Number of fields if a bed file. */
     boolean isBigBed;		/* If a bed, is it a bigBed? */
 
