@@ -27,6 +27,7 @@
 #include "cds.h"
 #include "mafTrack.h"
 #include "wigCommon.h"
+#include "hui.h"
 
 #ifndef GBROWSE
 #include "encode.h"
@@ -125,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.59 2009/02/03 08:19:05 kent Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.60 2009/02/09 19:44:15 tdreszer Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -3856,7 +3857,7 @@ char *table = tg->mapName;
 char *classType = NULL;
 enum acemblyOptEnum ct;
 struct sqlConnection *conn = NULL;
-char query[256];
+char query[1024];
 char **row = NULL;
 struct sqlResult *sr;
 char *classTable = NULL;
@@ -3867,6 +3868,31 @@ classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
 AllocVar(classString);
 if (classTable != NULL && hTableExists(database, classTable))
     {
+    filterBy_t *filterBySet = filterBySetGet(tg->tdb,cart,NULL);
+    if(filterBySet != NULL)
+        {
+        query[0] = 0;
+        boolean passesThroughFilter = FALSE;
+        char *clause = filterBySetClause(filterBySet);
+        if(clause == NULL)
+            passesThroughFilter = TRUE;
+        else
+            {
+            safef(query, sizeof(query),
+                "select class from %s where name = \"%s\" and %s", classTable, lf->name,clause);
+            freeMem(clause);
+
+            conn = hAllocConn(database);
+            sr = sqlGetResult(conn, query);
+            if ((row = sqlNextRow(sr)) != NULL)
+                passesThroughFilter = TRUE;
+            sqlFreeResult(&sr);
+            hFreeConn(&conn);
+            }
+        filterBySetFree(&filterBySet);
+        return passesThroughFilter;
+        }
+
     classString = addSuffix(table, ".type");
     if (sameString(table, "acembly"))
         {
@@ -3875,8 +3901,9 @@ if (classTable != NULL && hTableExists(database, classTable))
         if (ct == acemblyAll)
             return sameClass;
         }
-    else if (classType == NULL)
+    else if (classType == NULL) // FIXME: Bug? All but acembly drop out here
         return TRUE;
+
     conn = hAllocConn(database);
     safef(query, sizeof(query),
          "select class from %s where name = \"%s\"", classTable, lf->name);
@@ -10518,48 +10545,55 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
 	handler = lookupTrackHandler(subTdb->tableName);
 	}
     if (handler != NULL)
-	handler(subtrack);
+	   handler(subtrack);
+
     if (trackDbSettingClosestToHome(subTdb, "noInherit") == NULL)
-	{
-        if (!smart)
-            {
+	   {
+        eCfgType cfgType = cfgTypeFromTdb(subTdb,FALSE);
+        if (!smart && cfgType == cfgNone)      // TODO: Ideally this will go away with ClosestToHome methods
+            {                                  //       For now, limit it to non-multiview compatible types
             /* add cart variables from parent */
             char cartVar[128];
+            char *lastName = "";
             for (hel = hels; hel != NULL; hel = hel->next)
                 {
                 len = strlen(track->mapName);
                 safef(cartVar, sizeof cartVar, "%s.%s",
                                    subTdb->tableName, hel->name+len+1);
-                cartSetString(cart, cartVar, hel->val);
+                if(sameString(hel->name,lastName))   // Allows propagating multi-element settings (as in multi-select)
+                    cartAddString(cart, cartVar, hel->val);
+                else
+                    cartSetString(cart, cartVar, hel->val);
+                lastName = hel->name;
                 }
             }
-	/* add subtrack settings (table, colors, labels, vis & pri) */
-	subtrack->mapName = subTdb->tableName;
-	subtrack->shortLabel = subTdb->shortLabel;
-	subtrack->longLabel = subTdb->longLabel;
-	if (finalR || finalG || finalB)
-	    {
-	    subtrack->color.r = altR;
-	    subtrack->altColor.r = (255+altR)/2;
-	    altR += deltaR;
-	    subtrack->color.g = altG;
-	    subtrack->altColor.g = (255+altG)/2;
-	    altG += deltaG;
-	    subtrack->color.b = altB;
-	    subtrack->altColor.b = (255+altB)/2;
-	    altB += deltaB;
-	    }
-	else
-	    {
-	    subtrack->color.r = subTdb->colorR;
-	    subtrack->color.g = subTdb->colorG;
-	    subtrack->color.b = subTdb->colorB;
-	    subtrack->altColor.r = subTdb->altColorR;
-	    subtrack->altColor.g = subTdb->altColorG;
-	    subtrack->altColor.b = subTdb->altColorB;
-	    }
-	subtrack->priority = subTdb->priority;
-	}
+        /* add subtrack settings (table, colors, labels, vis & pri) */
+        subtrack->mapName = subTdb->tableName;
+        subtrack->shortLabel = subTdb->shortLabel;
+        subtrack->longLabel = subTdb->longLabel;
+        if (finalR || finalG || finalB)
+            {
+            subtrack->color.r = altR;
+            subtrack->altColor.r = (255+altR)/2;
+            altR += deltaR;
+            subtrack->color.g = altG;
+            subtrack->altColor.g = (255+altG)/2;
+            altG += deltaG;
+            subtrack->color.b = altB;
+            subtrack->altColor.b = (255+altB)/2;
+            altB += deltaB;
+            }
+        else
+            {
+            subtrack->color.r = subTdb->colorR;
+            subtrack->color.g = subTdb->colorG;
+            subtrack->color.b = subTdb->colorB;
+            subtrack->altColor.r = subTdb->altColorR;
+            subtrack->altColor.g = subTdb->altColorG;
+            subtrack->altColor.b = subTdb->altColorB;
+            }
+        subtrack->priority = subTdb->priority;
+        }
 
     slAddHead(&track->subtracks, subtrack);
     }
