@@ -6987,8 +6987,8 @@ gClass_Validated_processed 51,153,255
 #gClass_Validated_processed 255,255,0     # Light Yellow
 #gClass_Validated_coding 128,255,00       #  Dark Green:#04B404  4,180,4
 #gClass_Validated_processed 255,255,0     # Light Green:#80FF00  128,255,00
-gClass_Validated_processed_pseudogene 51,0,102
-gClass_Validated_unprocessed_pseudogene 102,0,255
+gClass_Validated_processed_pseudogene 85,34,170
+gClass_Validated_unprocessed_pseudogene 102,17,255
 gClass_Validated_pseudogene 153,102,255
 gClass_Havana_coding 153,51,0
 gClass_Havana_nonsense 223,116,1
@@ -6998,7 +6998,7 @@ gClass_Havana_processed_pseudogene 153,0,102
 gClass_Havana_unprocessed_pseudogene 180,4,174
 gClass_Havana_pseudogene 255,51,255
 #gClass_Havana_pseudogene 247,129,243 # Light Pink
-gClass_Havana_TEC 68,68,68
+gClass_Havana_TEC 102,102,102
 gClass_Havana_polyA 0,0,0
 gClass_Ensembl_coding 223,1,1
 gClass_Ensembl_RNA 254,46,46
