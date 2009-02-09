@@ -7,10 +7,10 @@
 #include "bigWig.h"
 #include "bwgInternal.h"
 
-static char const rcsid[] = "$Id: wigToBigWig.c,v 1.4 2009/02/04 22:27:19 kent Exp $";
+static char const rcsid[] = "$Id: wigToBigWig.c,v 1.5 2009/02/09 02:53:36 kent Exp $";
 
-int blockSize = 1024;
-int itemsPerSlot = 512;
+int blockSize = 256;
+int itemsPerSlot = 1024;
 boolean clipDontDie = FALSE;
 
 void usage()
