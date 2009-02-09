@@ -444,12 +444,14 @@ char *cartGetOrderFromFileAndMsaTable(char *genomeDb, struct cart *cart, char *s
 /* Look in a cart variable that holds the filename that has a list of
  * species to show in a maf file */
 
+char *cartLookUpVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix,char **pVariable);
+/* Returns value or NULL for a cart variable from lowest level on up:
+   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix
+   Optionally fills the non NULL pVariable with the actual name of the variable in the cart */
+#define cartOptionalStringClosestToHome(cart,tdb,compositeLevel,suffix) cartLookUpVariableClosestToHome((cart),(tdb),(compositeLevel),(suffix),NULL)
+
 void cartRemoveVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
 /* Looks for then removes a cart variable from lowest level on up:
-   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
-
-char *cartOptionalStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
-/* Returns value or NULL for a cart string from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 
 char *cartStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
@@ -478,6 +480,10 @@ int cartUsualIntClosestToHome(struct cart *cart, struct trackDb *tdb, boolean co
 
 double cartUsualDoubleClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, double usual);
 /* Returns value or {usual} for a cart fp double from lowest level on up:
+   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
+
+struct slName *cartOptionalSlNameListClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
+/* Return slName list (possibly with multiple values for the same var) from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 #endif /* CART_H */
 

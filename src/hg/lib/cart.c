@@ -22,7 +22,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.102 2009/02/03 23:02:04 tdreszer Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.103 2009/02/09 17:01:06 tdreszer Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -963,7 +963,13 @@ else
 boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual)
 /* Return variable value if it exists or usual if not. */
 {
-return cartUsualInt(cart, var, usual);
+char *s = cartOptionalString(cart, var);
+if (s == NULL)
+    return usual;
+if (sameString(s, "on") || atoi(s) != 0)
+    return TRUE;
+else
+    return FALSE;
 }
 
 boolean cartCgiUsualBoolean(struct cart *cart, char *var, boolean usual)
@@ -1594,7 +1600,7 @@ else
 return dyStringCannibalize(&orderDY);
 }
 
-static char *cartLookUpVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix,char **pVariable)
+char *cartLookUpVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix,char **pVariable)
 /* Returns value or NULL for a cart variable from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix
    Optionally fills the non NULL pVariable with the actual name of the variable in the cart */
@@ -1648,13 +1654,6 @@ if(var != NULL)
     cartRemove(cart,var);
     freeMem(var);
     }
-}
-
-char *cartOptionalStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix)
-/* Returns value or NULL for a cart string from lowest level on up:
-   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
-{
-return cartLookUpVariableClosestToHome(cart,tdb,compositeLevel,suffix,NULL);
 }
 
 char *cartStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix)
@@ -1723,3 +1722,18 @@ if (setting == NULL)
     return usual;
 return atof(setting);
 }
+
+struct slName *cartOptionalSlNameListClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix)
+/* Return slName list (possibly with multiple values for the same var) from lowest level on up:
+   subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
+{
+char *var = NULL;
+(void)cartLookUpVariableClosestToHome(cart,tdb,compositeLevel,suffix,&var);
+if(var == NULL)
+    return NULL;
+
+struct slName *slNames = cartOptionalSlNameList(cart,var);
+freeMem(var);
+return slNames;
+}
+
