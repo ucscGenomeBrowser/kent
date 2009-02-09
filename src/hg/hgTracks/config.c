@@ -410,9 +410,9 @@ hPrintf("Enable track re-ordering");
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
-hCheckBox("dragZooming", cartUsualBoolean(cart, "dragZooming", FALSE));
+hCheckBox("dragZooming", cartUsualBoolean(cart, "dragZooming", TRUE));
 hPrintf("</TD><TD>");
-hPrintf("Drag selection/zooming");
+hPrintf("Enable drag-and-zoom");
 hPrintf("</TD></TR>\n");
 
 
