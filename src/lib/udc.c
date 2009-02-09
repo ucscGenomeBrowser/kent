@@ -878,7 +878,7 @@ return file->offset;
 
     off_t size;		/* Size in bytes. */
 
-bits64 rCleanup(time_t deleteTime)
+bits64 rCleanup(time_t deleteTime, boolean testOnly)
 /* Delete any bitmap or sparseData files last accessed before deleteTime */
 {
 struct fileInfo *file, *fileList = listDirX(".", "*", FALSE);
@@ -888,11 +888,12 @@ for (file = fileList; file != NULL; file = file->next)
     if (file->isDir)
         {
 	setCurrentDir(file->name);
-	bits64 oneResult = rCleanup(deleteTime);
+	bits64 oneResult = rCleanup(deleteTime, testOnly);
 	setCurrentDir("..");
 	if (oneResult > 0)
 	    {
-	    remove(file->name);
+	    if (!testOnly)
+		remove(file->name);
 	    results += oneResult;
 	    results += file->size;
 	    }
@@ -904,8 +905,11 @@ for (file = fileList; file != NULL; file = file->next)
 	    /* Remove all files when get bitmap, so that can ensure they are deleted in 
 	     * right order. */
 	    results += file->size;
-	    remove(bitmapName);
-	    remove(sparseDataName);
+	    if (!testOnly)
+		{
+		remove(bitmapName);
+		remove(sparseDataName);
+		}
 	    }
 	}
     else if (sameString(file->name, sparseDataName))
@@ -917,14 +921,17 @@ for (file = fileList; file != NULL; file = file->next)
 return results;
 }
 
-bits64 udcCleanup(char *cacheDir, double maxDays)
-/* Remove cached files older than maxDays old. */
+bits64 udcCleanup(char *cacheDir, double maxDays, boolean testOnly)
+/* Remove cached files older than maxDays old. If testOnly is set
+ * no clean up is done, but the size of the files that would be
+ * cleaned up is still. */
+
 {
 time_t maxSeconds = maxDays * 24 * 60 * 60;
 char *curPath = cloneString(getCurrentDir());
 setCurrentDir(cacheDir);
 time_t deleteTime = time(NULL) - maxSeconds;
-bits64 result = rCleanup(deleteTime);
+bits64 result = rCleanup(deleteTime, testOnly);
 setCurrentDir(curPath);
 return result;
 }

@@ -27,7 +27,8 @@ struct udcFile;
 /* Handle to a cached file.  Inside of structure mysterious unless you are udc.c. */
 
 struct udcFile *udcFileOpen(char *url, char *cacheDir);
-/* Open up a cached file. */
+/* Open up a cached file.  CacheDir may be null in which case udcDefaultDir() will be
+ * used. */
 
 void udcFileClose(struct udcFile **pFile);
 /* Close down cached file. */
@@ -59,8 +60,10 @@ void udcSeek(struct udcFile *file, bits64 offset);
 bits64 udcTell(struct udcFile *file);
 /* Return current file position. */
 
-bits64 udcCleanup(char *cacheDir, double maxDays);
-/* Remove cached files older than maxDays old. */
+bits64 udcCleanup(char *cacheDir, double maxDays, boolean testOnly);
+/* Remove cached files older than maxDays old. If testOnly is set
+ * no clean up is done, but the size of the files that would be
+ * cleaned up is still. */
 
 char *udcDefaultDir();
 /* Get default directory for cache.  Use this for the udcFileOpen call if you
