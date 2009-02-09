@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.125 2009/01/23 23:28:43 tdreszer Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.126 2009/02/09 02:39:31 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1882,6 +1882,44 @@ fclose(f);
 return trimSpaces(wordBuf);
 }
 
+int fileOffsetSizeCmp(const void *va, const void *vb)
+/* Help sort fileOffsetSize by offset. */
+{
+const struct fileOffsetSize *a = *((struct fileOffsetSize **)va);
+const struct fileOffsetSize *b = *((struct fileOffsetSize **)vb);
+if (a->offset > b->offset)
+    return 1;
+else if (a->offset == b->offset)
+    return 0;
+else
+    return -1;
+}
+
+struct fileOffsetSize *fileOffsetSizeMerge(struct fileOffsetSize *inList)
+/* Returns a new list which is inList transformed to have adjacent blocks
+ * merged.  Best to use this with a sorted list. */
+{
+struct fileOffsetSize *newList = NULL, *newEl = NULL, *oldEl, *nextOld;
+
+for (oldEl = inList; oldEl != NULL; oldEl = nextOld)
+    {
+    nextOld = oldEl->next;
+    if (nextOld != NULL && nextOld->offset < oldEl->offset)
+        errAbort("Unsorted inList in fileOffsetSizeMerge %llu %llu", oldEl->offset, nextOld->offset);
+    if (newEl == NULL || newEl->offset + newEl->size < oldEl->offset)
+        {
+	newEl = CloneVar(oldEl);
+	slAddHead(&newList, newEl);
+	}
+    else
+        {
+	newEl->size = oldEl->offset + oldEl->size - newEl->offset;
+	}
+    }
+slReverse(&newList);
+return newList;
+}
+
 int roundingScale(int a, int p, int q)
 /* returns rounded a*p/q */
 {
@@ -1921,6 +1959,13 @@ if (ret < 0)
 return ret;
 }
 
+void memRead(char **pPt, void *buf, int size)
+/* Copy memory from *pPt to buf, and advance *pPt by size */
+{
+memcpy(buf, *pPt, size);
+*pPt += size;
+}
+
 bits64 byteSwap64(bits64 a)
 /* Return byte-swapped version of a */
 {
@@ -1947,6 +1992,17 @@ if (isSwapped)
 return val;
 }
 
+bits64 memReadBits64(char **pPt, boolean isSwapped)
+/* Read and optionally byte-swap 64 bit entity from memory buffer pointed to by 
+ * *pPt, and advance *pPt past read area. */
+{
+bits64 val;
+memcpy(&val, *pPt, sizeof(val));
+if (isSwapped)
+    val = byteSwap64(val);
+*pPt += sizeof(val);
+return val;
+}
 
 bits32 byteSwap32(bits32 a)
 /* Return byte-swapped version of a */
@@ -1970,6 +2026,18 @@ if (isSwapped)
 return val;
 }
 
+bits32 memReadBits32(char **pPt, boolean isSwapped)
+/* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by 
+ * *pPt, and advance *pPt past read area. */
+{
+bits32 val;
+memcpy(&val, *pPt, sizeof(val));
+if (isSwapped)
+    val = byteSwap32(val);
+*pPt += sizeof(val);
+return val;
+}
+
 bits16 byteSwap16(bits16 a)
 /* Return byte-swapped version of a */
 {
@@ -1987,6 +2055,18 @@ bits16 val;
 mustReadOne(f, val);
 if (isSwapped)
     val = byteSwap16(val);
+return val;
+}
+
+bits16 memReadBits16(char **pPt, boolean isSwapped)
+/* Read and optionally byte-swap 16 bit entity from memory buffer pointed to by 
+ * *pPt, and advance *pPt past read area. */
+{
+bits16 val;
+memcpy(&val, *pPt, sizeof(val));
+if (isSwapped)
+    val = byteSwap16(val);
+*pPt += sizeof(val);
 return val;
 }
 

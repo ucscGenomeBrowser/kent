@@ -907,6 +907,9 @@ void mustRead(FILE *file, void *buf, size_t size);
 #define readOne(file, var) (fread(&(var), sizeof(var), 1, (file)) == 1)
 /* Read one variable from file. Returns FALSE if can't do it. */
 
+#define memReadOne(pPt, var) memRead((pPt), &(var), sizeof(var))
+/* Read one variable from memory. */
+
 void writeString(FILE *f, char *s);
 /* Write a 255 or less character string to a file.
  * This will write the length of the string in the first
@@ -950,6 +953,13 @@ struct fileOffsetSize
    bits64	size;		/* Size of block. */
    };
 
+int fileOffsetSizeCmp(const void *va, const void *vb);
+/* Help sort fileOffsetSize by offset. */
+
+struct fileOffsetSize *fileOffsetSizeMerge(struct fileOffsetSize *inList);
+/* Returns a new list which is inList transformed to have adjacent blocks
+ * merged.  Best to use this with a sorted list. */
+
 int roundingScale(int a, int p, int q);
 /* returns rounded a*p/q */
 
@@ -983,11 +993,18 @@ int  positiveRangeIntersection(int start1, int end1, int start2, int end2);
 /* Return amount of bases two ranges intersect over, 0 if no
  * intersection. */
 
+void memRead(char **pPt, void *buf, int size);
+/* Copy memory from *pPt to buf, and advance *pPt by size */
+
 bits64 byteSwap64(bits64 a);
 /* Swap from intel to sparc order of a 64 bit quantity. */
 
 bits64 readBits64(FILE *f, boolean isSwapped);
 /* Read and optionally byte-swap 64 bit entity. */
+
+bits64 memReadBits64(char **pPt, boolean isSwapped);
+/* Read and optionally byte-swap 64 bit entity from memory buffer pointed to by 
+ * *pPt, and advance *pPt past read area. */
 
 bits32 byteSwap32(bits32 a);
 /* Swap from intel to sparc order of a 32 bit quantity. */
@@ -995,11 +1012,19 @@ bits32 byteSwap32(bits32 a);
 bits32 readBits32(FILE *f, boolean isSwapped);
 /* Read and optionally byte-swap 32 bit entity. */
 
+bits32 memReadBits32(char **pPt, boolean isSwapped);
+/* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by 
+ * *pPt, and advance *pPt past read area. */
+
 bits16 byteSwap16(bits16 a);
 /* Swap from intel to sparc order of a 16 bit quantity. */
 
 bits16 readBits16(FILE *f, boolean isSwapped);
 /* Read and optionally byte-swap 16 bit entity. */
+
+bits16 memReadBits16(char **pPt, boolean isSwapped);
+/* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by 
+ * *pPt, and advance *pPt past read area. */
 
 void removeReturns(char* dest, char* src);
 /* Removes the '\r' character from a string.
