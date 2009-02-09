@@ -37,7 +37,7 @@
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.471 2009/02/03 03:33:35 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.472 2009/02/09 19:42:22 tdreszer Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1143,21 +1143,6 @@ printf("<p><b>Include TSSs for predicted pseudogenes</b> ");
 cartMakeCheckBox(cart, pseudo, FALSE);
 }
 
-void nmdFilterOptions(struct trackDb *tdb)
-/* Filter out NMD targets. */
-{
-char buff[256];
-boolean nmdDefault = FALSE;
-/* Skip if this track doesn't implement this filter. */
-if(differentString(trackDbSettingOrDefault(tdb, "nmdFilter", "off"), "on"))
-    return;
-safef(buff, sizeof(buff), "hgt.%s.nmdFilter", tdb->tableName);
-nmdDefault = cartUsualBoolean(cart, buff, FALSE);
-printf("<p><b>Filter out NMD targets.</b>");
-cgiMakeCheckBox(buff, nmdDefault);
-}
-
-
 void blastSGUi(struct trackDb *tdb)
 {
 char geneName[64];
@@ -1960,15 +1945,6 @@ cgiMakeCheckBox("affyTransfrags.skipDups", skipDups);
 printf(" Remove transfrags that have a BLAT match elsewhere in the genome from display.<br>");
 }
 
-void acemblyUi(struct trackDb *tdb)
-/* Options for filtering the acembly track based on gene class */
-{
-char *acemblyClass = cartUsualString(cart, "acembly.type", acemblyEnumToString(0));
-printf("<p><b>Gene Class: </b>");
-acemblyDropDown("acembly.type", acemblyClass);
-printf("  ");
-}
-
 void ucsfdemoUi(struct trackDb *tdb)
 {
 char **menu;
@@ -2370,65 +2346,57 @@ else if (tdb->type != NULL)
     int wordCount = 0;
     wordCount = chopLine(typeLine, words);
     if (wordCount > 0)
-	{
-	if (sameWord(words[0], "genePred"))
+        {
+	    if (sameWord(words[0], "genePred"))
             {
-            if (sameString(track, "acembly"))
-                acemblyUi(tdb);
-            else if (sameString("wgEncodeSangerGencode", track) || (startsWith("encodeGencode", track) && !sameString("encodeGencodeRaceFrags", track)))
-                gencodeCfgUi(cart,tdb,tdb->tableName,NULL,FALSE);
-            nmdFilterOptions(tdb);
-            if (!sameString(track, "tigrGeneIndex") && !sameString(track, "ensGeneNonCoding") && !sameString(track, "encodeGencodeRaceFrags"))
-		baseColorDrawOptDropDown(cart, tdb);
+            genePredCfgUi(cart,tdb,tdb->tableName,NULL,FALSE);
             }
-	else if (sameWord(words[0], "encodePeak") || sameWord(words[0], "narrowPeak") ||
-		 sameWord(words[0], "broadPeak") || sameWord(words[0], "gappedPeak"))
-	    {
-	    encodePeakUi(tdb, ct);
-	    }
-	else if (sameWord(words[0], "expRatio"))
-	    {
-	    expRatioUi(tdb);
-	    }
-	else if (sameWord(words[0], "array"))
-        /* not quite the same as an "expRatio" type (custom tracks) */
-	    {
-	    expRatioCtUi(tdb);
-	    }
-	/* if bed has score then show optional filter based on score */
-	else if (sameWord(words[0], "bed") && wordCount == 3)
-	    {
-	    /* Note: jaxQTL3 is a bed 8 format track because of
-	     thickStart/thickStart, but there is no valid score.
-	     Similarly, the score field for wgRna track is no long used either.
-	     It originally was usd to depict different RNA types.  But the new
-	     wgRna table has a new field 'type', which is used to store RNA
-	     type info and from which to determine the display color of each entry.
-	    */
-	    int bedFieldCount = atoi(words[1]);
-	    if ((bedFieldCount >= 5 || trackDbSetting(tdb, "scoreMin") != NULL) &&
-		!sameString(track, "jaxQTL3") && !sameString(track, "wgRna") &&
-		!startsWith("encodeGencodeIntron", track))
-		{
-		if (trackDbSetting(tdb, "scoreFilterMax"))
+        else if(sameWord(words[0], "encodePeak") || sameWord(words[0], "narrowPeak")
+             || sameWord(words[0], "broadPeak")  || sameWord(words[0], "gappedPeak"))
+	       {
+	       encodePeakUi(tdb, ct);
+	       }
+        else if (sameWord(words[0], "expRatio"))
+	       {
+	       expRatioUi(tdb);
+	       }
+        else if (sameWord(words[0], "array")) /* not quite the same as an "expRatio" type (custom tracks) */
+            {
+            expRatioCtUi(tdb);
+            }
+        /* if bed has score then show optional filter based on score */
+        else if (sameWord(words[0], "bed") && wordCount == 3)
+            {
+            /* Note: jaxQTL3 is a bed 8 format track because of
+                thickStart/thickStart, but there is no valid score.
+                Similarly, the score field for wgRna track is no long used either.
+                It originally was usd to depict different RNA types.  But the new
+                wgRna table has a new field 'type', which is used to store RNA
+                type info and from which to determine the display color of each entry.
+            */
+            int bedFieldCount = atoi(words[1]);
+            if ((bedFieldCount >= 5 || trackDbSetting(tdb, "scoreMin") != NULL)
+            &&  !sameString(track, "jaxQTL3") && !sameString(track, "wgRna")
+            &&  !startsWith("encodeGencodeIntron", track))
+                {
+                if (trackDbSetting(tdb, "scoreFilterMax"))
                     scoreCfgUi(database, cart,tdb,tdb->tableName,NULL,
                         sqlUnsigned(trackDbSetting(tdb, "scoreFilterMax")),FALSE);
-		else
+                else
                     scoreCfgUi(database, cart,tdb,tdb->tableName,NULL,1000,FALSE);
-		}
-	    }
-        else if (sameWord(words[0], "bed5FloatScore") ||
-                sameWord(words[0], "bed5FloatScoreWithFdr"))
+                }
+            }
+        else if (sameWord(words[0], "bed5FloatScore") || sameWord(words[0], "bed5FloatScoreWithFdr"))
             scoreCfgUi(database, cart,tdb,tdb->tableName,NULL,1000,FALSE);
-	else if (sameWord(words[0], "psl"))
-	    {
-	    if (wordCount == 3)
-		if (sameWord(words[1], "xeno"))
-		    crossSpeciesUi(tdb);
-	    baseColorDrawOptDropDown(cart, tdb);
-	    }
-	}
-    freeMem(typeLine);
+        else if (sameWord(words[0], "psl"))
+            {
+            if (wordCount == 3)
+            if (sameWord(words[1], "xeno"))
+                crossSpeciesUi(tdb);
+            baseColorDrawOptDropDown(cart, tdb);
+            }
+        }
+        freeMem(typeLine);
     }
 if (tdbIsSuperTrack(tdb))
     superTrackUi(tdb);
