@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.57 2009/02/09 19:37:31 tdreszer Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.58 2009/02/09 23:14:11 tdreszer Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -661,7 +661,9 @@ else if(sameWord("bed5FloatScore",       tdb->type)
      || sameWord("bed5FloatScoreWithFdr",tdb->type))
     cType = cfgBedScore;
 else if(sameWord("narrowPeak",tdb->type)
-     || sameWord("broadPeak", tdb->type))
+     || sameWord("broadPeak", tdb->type)
+     || sameWord("encodePeak",tdb->type)
+     || sameWord("gappedPeak",tdb->type))
     cType = cfgPeak;
 else if(sameWord("genePred",tdb->type))
         cType = cfgGenePred;
