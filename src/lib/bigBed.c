@@ -11,6 +11,7 @@
 #include "cirTree.h"
 #include "bPlusTree.h"
 #include "sig.h"
+#include "udc.h"
 #include "bbiFile.h"
 #include "bigBed.h"
 
@@ -394,22 +395,22 @@ bits32 chromId;
 struct fileOffsetSize *blockList = bbiOverlappingBlocks(bbi, bbi->unzoomedCir, 
 	chrom, start, end, &chromId);
 struct fileOffsetSize *block;
-FILE *f = bbi->f;
+struct udcFile *f = bbi->udc;
 boolean isSwapped = bbi->isSwapped;
 struct dyString *dy = dyStringNew(32);
 for (block = blockList; block != NULL; block = block->next)
     {
     bits64 endPos = block->offset + block->size;
-    fseek(f, block->offset, SEEK_SET);
-    while (ftell(f) < endPos)
+    udcSeek(f, block->offset);
+    while (udcTell(f) < endPos)
         {
 	/* Read next record into local variables. */
-	bits32 chr = readBits32(f, isSwapped);
-	bits32 s = readBits32(f, isSwapped);
-	bits32 e = readBits32(f, isSwapped);
+	bits32 chr = udcReadBits32(f, isSwapped);	// Read and discard chromId
+	bits32 s = udcReadBits32(f, isSwapped);
+	bits32 e = udcReadBits32(f, isSwapped);
 	int c;
 	dyStringClear(dy);
-	while ((c = getc(f)) >= 0)
+	while ((c = udcGetChar(f)) >= 0)
 	    {
 	    if (c == 0)
 	        break;

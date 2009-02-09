@@ -46,23 +46,24 @@
 
 #include "common.h"
 #include "sig.h"
+#include "udc.h"
 #include "bPlusTree.h"
 
 /* This section of code deals with locating a value in a b+ tree. */
 
-struct bptFile *bptFileAttach(char *fileName, FILE *f)
+struct bptFile *bptFileAttach(char *fileName, struct udcFile *udc)
 /* Open up index file on previously open file, with header at current file position. */
 {
 /* Open file and allocate structure to hold info from header etc. */
 struct bptFile *bpt = needMem(sizeof(*bpt));
 bpt->fileName = fileName;
-bpt->f = f;
+bpt->udc = udc;
 
 /* Read magic number at head of file and use it to see if we are proper file type, and
  * see if we are byte-swapped. */
 bits32 magic;
 boolean isSwapped = FALSE;
-mustReadOne(f, magic);
+udcMustReadOne(udc, magic);
 if (magic != bptSig)
     {
     magic = byteSwap32(magic);
@@ -72,18 +73,18 @@ if (magic != bptSig)
     }
 
 /* Read rest of defined bits of header, byte swapping as needed. */
-bpt->blockSize = readBits32(f, isSwapped);
-bpt->keySize = readBits32(f, isSwapped);
-bpt->valSize = readBits32(f, isSwapped);
-bpt->itemCount = readBits64(f, isSwapped);
+bpt->blockSize = udcReadBits32(udc, isSwapped);
+bpt->keySize = udcReadBits32(udc, isSwapped);
+bpt->valSize = udcReadBits32(udc, isSwapped);
+bpt->itemCount = udcReadBits64(udc, isSwapped);
 
 /* Skip over reserved bits of header. */
 bits32 reserved32;
-mustReadOne(f, reserved32);
-mustReadOne(f, reserved32);
+udcMustReadOne(udc, reserved32);
+udcMustReadOne(udc, reserved32);
 
 /* Save position of root block of b+ tree. */
-bpt->rootOffset = ftell(f);
+bpt->rootOffset = udcTell(udc);
 
 return bpt;
 }
@@ -97,7 +98,7 @@ freez(pBpt);
 struct bptFile *bptFileOpen(char *fileName)
 /* Open up index file - reading header and verifying things. */
 {
-return bptFileAttach(cloneString(fileName), mustOpen(fileName, "rb"));
+return bptFileAttach(cloneString(fileName), udcFileOpen(fileName, udcDefaultDir()));
 }
 
 void bptFileClose(struct bptFile **pBpt)
@@ -106,7 +107,7 @@ void bptFileClose(struct bptFile **pBpt)
 struct bptFile *bpt = *pBpt;
 if (bpt != NULL)
     {
-    carefulClose(&bpt->f);
+    udcFileClose(&bpt->udc);
     freeMem(bpt->fileName);
     bptFileDetach(pBpt);
     }
@@ -117,16 +118,16 @@ static boolean rFind(struct bptFile *bpt, bits64 blockStart, void *key, void *va
  * true. Otherwise return false. */
 {
 /* Seek to start of block. */
-fseek(bpt->f, blockStart, SEEK_SET);
+udcSeek(bpt->udc, blockStart);
 
 /* Read block header. */
 UBYTE isLeaf;
 UBYTE reserved;
 bits16 i, childCount;
-mustReadOne(bpt->f, isLeaf);
-mustReadOne(bpt->f, reserved);
+udcMustReadOne(bpt->udc, isLeaf);
+udcMustReadOne(bpt->udc, reserved);
 boolean isSwapped = bpt->isSwapped;
-childCount = readBits16(bpt->f, isSwapped);
+childCount = udcReadBits16(bpt->udc, isSwapped);
 
 UBYTE keyBuf[bpt->keySize];   /* Place to put a key, buffered on stack. */
 
@@ -134,8 +135,8 @@ if (isLeaf)
     {
     for (i=0; i<childCount; ++i)
         {
-	mustRead(bpt->f, keyBuf, bpt->keySize);
-	mustRead(bpt->f, val, bpt->valSize);
+	udcMustRead(bpt->udc, keyBuf, bpt->keySize);
+	udcMustRead(bpt->udc, val, bpt->valSize);
 	if (memcmp(key, keyBuf, bpt->keySize) == 0)
 	    return TRUE;
 	}
@@ -144,18 +145,18 @@ if (isLeaf)
 else
     {
     /* Read and discard first key. */
-    mustRead(bpt->f, keyBuf, bpt->keySize);
+    udcMustRead(bpt->udc, keyBuf, bpt->keySize);
 
     /* Scan info for first file offset. */
-    bits64 fileOffset = readBits64(bpt->f, isSwapped);
+    bits64 fileOffset = udcReadBits64(bpt->udc, isSwapped);
 
     /* Loop through remainder. */
     for (i=1; i<childCount; ++i)
 	{
-	mustRead(bpt->f, keyBuf, bpt->keySize);
+	udcMustRead(bpt->udc, keyBuf, bpt->keySize);
 	if (memcmp(key, keyBuf, bpt->keySize) < 0)
 	    break;
-	fileOffset = readBits64(bpt->f, isSwapped);
+	fileOffset = udcReadBits64(bpt->udc, isSwapped);
 	}
     return rFind(bpt, fileOffset, key, val);
     }
@@ -166,24 +167,24 @@ void rTraverse(struct bptFile *bpt, bits64 blockStart, void *context,
 /* Recursively go across tree, calling callback at leaves. */
 {
 /* Seek to start of block. */
-fseek(bpt->f, blockStart, SEEK_SET);
+udcSeek(bpt->udc, blockStart);
 
 /* Read block header. */
 UBYTE isLeaf;
 UBYTE reserved;
 bits16 i, childCount;
-mustReadOne(bpt->f, isLeaf);
-mustReadOne(bpt->f, reserved);
+udcMustReadOne(bpt->udc, isLeaf);
+udcMustReadOne(bpt->udc, reserved);
 boolean isSwapped = bpt->isSwapped;
-childCount = readBits16(bpt->f, isSwapped);
+childCount = udcReadBits16(bpt->udc, isSwapped);
 
 char keyBuf[bpt->keySize], valBuf[bpt->valSize];
 if (isLeaf)
     {
     for (i=0; i<childCount; ++i)
         {
-	mustRead(bpt->f, keyBuf, bpt->keySize);
-	mustRead(bpt->f, valBuf, bpt->valSize);
+	udcMustRead(bpt->udc, keyBuf, bpt->keySize);
+	udcMustRead(bpt->udc, valBuf, bpt->valSize);
 	callback(context, keyBuf, bpt->keySize, valBuf, bpt->valSize);
 	}
     }
@@ -192,8 +193,8 @@ else
     /* Loop through remainder. */
     for (i=0; i<childCount; ++i)
 	{
-	mustRead(bpt->f, keyBuf, bpt->keySize);
-	bits64 fileOffset = readBits64(bpt->f, isSwapped);
+	udcMustRead(bpt->udc, keyBuf, bpt->keySize);
+	bits64 fileOffset = udcReadBits64(bpt->udc, isSwapped);
 	rTraverse(bpt, fileOffset, context, callback);
 	}
     }
