@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.23 2009/02/02 21:30:36 larrym Exp $";
+static char const rcsid[] = "$Id: jsHelper.c,v 1.24 2009/02/09 18:16:37 larrym Exp $";
 
 static boolean jsInited = FALSE;
 static boolean defaultWarningShown = FALSE;
@@ -359,19 +359,15 @@ if(hashLookup(includedFiles, fileName) == NULL)
             {
             char realFileName[2048];
             safef(realFileName, sizeof(realFileName), "%s/%s", fullDirName, fileName);
-            // I'm worried about mirrors failing to install the js directory properly, so we use
-            // fprintf's instead of warns to misconfiguration/missing file errors (for now).
             if(!fileExists(realFileName))
                 {
-                fprintf(stderr, "jsIncludeFile: javascript fileName: %s doesn't exist.\n", realFileName);
-                return;
+                errAbort("jsIncludeFile: javascript file: %s doesn't exist.\n", realFileName);
                 }
             mtime = fileModTime(realFileName);
             }
         else
             {
-            fprintf(stderr, "jsIncludeFile: javascript dirName: %s doesn't exist.\n", fullDirName);
-            return;
+            errAbort("jsIncludeFile: javascript dir: %s doesn't exist.\n", fullDirName);
             }
         }
     hashAdd(includedFiles, fileName, NULL);
