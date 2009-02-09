@@ -183,7 +183,7 @@ for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaR
 }
 
 /* format string for stats output */
-static char *statsFmt = "%s\t%s\t%0.3g\t%0.3g\t%d\t%0.3g\n";
+static char *statsFmt = "%s\t%s\t%0.3g\t%0.3g\t%d\t%0.3g\t%d\t%d\n";
 
 static void outputStats(struct chromAnn* inCa, FILE *outFh,
                         struct chromAnnRef *overlappingRecs)
@@ -192,7 +192,7 @@ static void outputStats(struct chromAnn* inCa, FILE *outFh,
 if (overlappingRecs == NULL)
     {
     // -statsOutputAll and nothing overlapping
-    fprintf(outFh, statsFmt, getPrintId(inCa), "", 0.0, 0.0, 0, 0.0);
+    fprintf(outFh, statsFmt, getPrintId(inCa), "", 0.0, 0.0, 0, 0.0, inCa->totalSize, 0);
     }
 struct chromAnnRef *selectCaRef;
 for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
@@ -201,7 +201,8 @@ for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaR
     unsigned overBases = selectOverlapBases(inCa, selectCa);
     fprintf(outFh, statsFmt, getPrintId(inCa), getPrintId(selectCa),
             selectFracOverlap(inCa, overBases), selectFracOverlap(selectCa, overBases), overBases,
-            selectFracSimilarity(inCa, selectCa, overBases));
+            selectFracSimilarity(inCa, selectCa, overBases),
+            inCa->totalSize,  selectCa->totalSize);
     }
 }
 
@@ -213,7 +214,7 @@ struct chromAnn *selCa;
 while ((selCa = chromAnnMapIterNext(&iter)) != NULL)
     {
     if (!selCa->used)
-        fprintf(outFh, statsFmt, "", getPrintId(selCa), 0.0, 0.0, 0, 0.0);
+        fprintf(outFh, statsFmt, "", getPrintId(selCa), 0.0, 0.0, 0, 0.0, 0, selCa->totalSize);
     }
 }
 
@@ -333,7 +334,7 @@ if (statsOutput)
     if (useAggregate)
         fputs("#inId\t" "inOverlap\t" "inOverBases\t" "inBases\n", outFh);
     else
-        fputs("#inId\t" "selectId\t" "inOverlap\t" "selectOverlap\t" "overBases\t" "similarity\n", outFh);
+        fputs("#inId\t" "selectId\t" "inOverlap\t" "selectOverlap\t" "overBases\t" "similarity\t" "inBases\t" "selectBases\n", outFh);
     }
 
 if (useAggregate)
