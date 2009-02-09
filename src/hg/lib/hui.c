@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.155 2009/02/02 22:10:33 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.156 2009/02/09 19:40:43 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2101,8 +2101,7 @@ int compared = 0;
 for (;compared==0 && colA!=NULL && colB!=NULL;colA=colA->next,colB=colB->next)
     {
     if(colA->value != NULL && colB->value != NULL)
-        compared = colA->fwd ? strcmp(colA->value, colB->value)
-                             : strcmp(colB->value, colA->value);
+        compared = strcmp(colA->value, colB->value) * (colA->fwd? 1: -1);
     }
 if(compared != 0)
     return compared;
@@ -2138,6 +2137,194 @@ if(items != NULL && *items != NULL)
         }
     slFreeList(items);
     }
+}
+
+filterBy_t *filterBySetGet(struct trackDb *tdb, struct cart *cart, char *name)
+/* Gets one or more "filterBy" settings (ClosestToHome).  returns NULL if not found */
+{
+filterBy_t *filterBySet = NULL;
+
+char *setting = trackDbSettingClosestToHome(tdb, FILTER_BY);
+if(setting == NULL)
+    return NULL;
+if( name == NULL )
+    name = tdb->tableName;
+
+setting = cloneString(setting);
+char *filters[10];
+int filterCount = chopLine(setting, filters);
+int ix;
+for(ix=0;ix<filterCount;ix++)
+    {
+    char *filter = cloneString(filters[ix]);
+    filterBy_t *filterBy;
+    AllocVar(filterBy);
+    strSwapChar(filter,':',0);
+    filterBy->column = filter;
+    filter += strlen(filter) + 1;
+    strSwapChar(filter,'=',0);
+    filterBy->title = strSwapChar(filter,'_',' '); // Title does not have underscores
+    filter += strlen(filter) + 1;
+    if(filter[0] == '+') // values are indexes to the string titles
+        {
+        filter += 1;
+        filterBy->useIndex = TRUE;
+        }
+    filterBy->slValues = slNameListFromComma(filter);
+    slAddTail(&filterBySet,filterBy); // Keep them in order (only a few)
+
+    if(cart != NULL)
+        {
+        char suffix[64];
+        safef(suffix, sizeof(suffix), "filterBy.%s", filterBy->column);
+        boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+        if(cartLookUpVariableClosestToHome(cart,tdb,compositeLevel,suffix,&(filterBy->htmlName)))
+            filterBy->slChoices = cartOptionalSlNameList(cart,filterBy->htmlName);
+        }
+    if(filterBy->htmlName == NULL)
+        {
+        int len = strlen(name) + strlen(filterBy->column) + 15;
+        filterBy->htmlName = needMem(len);
+        safef(filterBy->htmlName, len, "%s.filterBy.%s", name,filterBy->column);
+        }
+    }
+freeMem(setting);
+
+return filterBySet;
+}
+
+void filterBySetFree(filterBy_t **filterBySet)
+/* Free a set of filterBy structs */
+{
+if(filterBySet != NULL)
+    {
+    while(*filterBySet != NULL)
+        {
+        filterBy_t *filterBy = slPopHead(filterBySet);
+        if(filterBy->slValues != NULL)
+            slNameFreeList(filterBy->slValues);
+        if(filterBy->slChoices != NULL)
+            slNameFreeList(filterBy->slChoices);
+        if(filterBy->htmlName != NULL)
+            freeMem(filterBy->htmlName);
+        freeMem(filterBy->column);
+        freeMem(filterBy);
+        }
+    }
+}
+
+static char *filterByClause(filterBy_t *filterBy)
+/* returns the "column in (...)" clause for a single filterBy struct */
+{
+int count = slCount(filterBy->slChoices);
+if(count == 0)
+    return NULL;
+if(slNameInList(filterBy->slChoices,"All"))
+    return NULL;
+
+struct dyString *dyClause = newDyString(256);
+dyStringPrintf(dyClause, filterBy->column);
+if(count == 1)
+    dyStringPrintf(dyClause, " = ");
+else
+    dyStringPrintf(dyClause, " in (");
+
+struct slName *slChoice = NULL;
+boolean notFirst = FALSE;
+for(slChoice = filterBy->slChoices;slChoice != NULL;slChoice=slChoice->next)
+    {
+    if(notFirst)
+        dyStringPrintf(dyClause, ",");
+    notFirst = TRUE;
+    if(filterBy->useIndex)
+        dyStringPrintf(dyClause, slChoice->name);
+    else
+        dyStringPrintf(dyClause, "\"%s\"",slChoice->name);
+    }
+if(dyStringLen(dyClause) == 0)
+    {
+    dyStringFree(&dyClause);
+    return NULL;
+    }
+if(count > 1)
+    dyStringPrintf(dyClause, ")");
+
+return dyStringCannibalize(&dyClause);
+}
+
+char *filterBySetClause(filterBy_t *filterBySet)
+/* returns the "column1 in (...) and column2 in (...)" clause for a set of filterBy structs */
+{
+struct dyString *dyClause = newDyString(256);
+boolean notFirst = FALSE;
+filterBy_t *filterBy = NULL;
+
+for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
+    {
+    char *clause = filterByClause(filterBy);
+    if(clause != NULL)
+        {
+        if(notFirst)
+            dyStringPrintf(dyClause, " AND ");
+        dyStringPrintf(dyClause, clause);
+        freeMem(clause);
+        notFirst = TRUE;
+        }
+    }
+if(dyStringLen(dyClause) == 0)
+    {
+    dyStringFree(&dyClause);
+    return NULL;
+    }
+return dyStringCannibalize(&dyClause);
+}
+
+static void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet)
+/* Does the UI for a list of filterBy structure */
+{
+if(filterBySet == NULL)
+    return;
+
+int count = slCount(filterBySet);
+if(count == 1)
+    puts("<BR><TABLE cellpadding=3><TR valign='top'>");
+else
+    puts("<BR><B>Filter by</B> (select multiple categories and items)<TABLE cellpadding=3><TR valign='top'>");
+filterBy_t *filterBy = NULL;
+for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
+    {
+    puts("<TD>");
+    if(count == 1)
+        printf("<B>Filter by %s</B> (select multiple items)<BR>\n",filterBy->title);
+    else
+        printf("<B>%s</B><BR>\n",filterBy->title);
+    int openSize = min(20,slCount(filterBy->slValues)+1);
+    int size = (filterBy->slChoices == NULL || slCount(filterBy->slChoices) == 1 ? 1 : openSize);  //slCount(filterBy->slValues)+1);   // slChoice ??
+#define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onclick='this.size=%d;' onblur='var ix; for(ix=this.selectedIndex+1;ix<this.options.length;ix++) {if(this.options[ix].selected) break;} if(ix == this.options.length) this.size=1; return true;'><BR>\n"
+    printf(MULTI_SELECT_WITH_JS,tdb->tableName,filterBy->column,size,openSize);
+    printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":"") );
+    struct slName *slValue;
+    if(filterBy->useIndex)
+        {
+        int ix=1;
+        for(slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next,ix++)
+            {
+            char varName[32];
+            safef(varName, sizeof(varName), "%d",ix);
+            char *name = strSwapChar(cloneString(slValue->name),'_',' ');
+            printf("<OPTION%s value=%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,varName)?" SELECTED":""),varName,name);
+            freeMem(name);
+            }
+        }
+    else
+        {
+        for(slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next)
+            printf("<OPTION%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,slValue->name)?" SELECTED":""),slValue->name);
+        }
+    }
+puts("</TR></TABLE>");
+
+return;
 }
 
 #define COLOR_BG_DEFAULT        "#FFFEE8"
@@ -2358,7 +2545,7 @@ switch(cType)
                         break;
     case cfgWigMaf:     wigMafCfgUi(cart,tdb,prefix,title,boxed, db);
                         break;
-    case cfgGencode:    gencodeCfgUi(cart,tdb,prefix,title,boxed);
+    case cfgGenePred:   genePredCfgUi(cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites.");
                         break;
@@ -2543,7 +2730,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         }
     else
         {
-        eCfgType cType = cfgTypeFromTdb(subtrack);
+        eCfgType cType = cfgTypeFromTdb(subtrack,FALSE);
         if(trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
             cType = cfgNone;
         membership_t *membership = subgroupMembershipGet(subtrack);
@@ -2585,14 +2772,14 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 int sIx=0;
                 for(sIx=0;sIx<sortOrder->count;sIx++)
                     {
-                    ix = stringArrayIx(sortOrder->column[sIx], membership->subgroups, membership->count);
+                    ix = stringArrayIx(sortOrder->column[sIx], membership->subgroups, membership->count);                        // TODO: Sort needs to expand from subGroups to labels as well
                     if(ix >= 0)
                         {
 #define CFG_SUBTRACK_LINK  "<A NAME=\"a_cfg_%s\"></A><A HREF=\"#a_cfg_%s\" onclick=\"return (subtrackCfgShow(this) == false);\" title=\"Configure Subtrack Settings\">%s</A>\n"
-#define MAKE_CFG_SUBTRACK_LINK(name,title) printf(CFG_SUBTRACK_LINK, (name),(name),(title))
+#define MAKE_CFG_SUBTRACK_LINK(table,title) printf(CFG_SUBTRACK_LINK, (table),(table),(title))
                         printf ("<TD id='%s' nowrap abbr='%s' align='left'>&nbsp;",sortOrder->column[sIx],membership->membership[ix]);
                         if(cType != cfgNone && sameString("view",sortOrder->column[sIx]))
-                            MAKE_CFG_SUBTRACK_LINK(subtrack->tableName,membership->titles[ix]);
+                            MAKE_CFG_SUBTRACK_LINK(subtrack->tableName,membership->titles[ix]);  // FIXME: Currently configurable under sort only supported when multiview
                         else
                             printf("%s\n",membership->titles[ix]);
                         puts ("</TD>");
@@ -2616,8 +2803,12 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             if(cType != cfgNone)
                 {
                 ix = stringArrayIx("view", membership->subgroups, membership->count);
+#define CFG_SUBTRACK_DIV "<DIV id='div.%s.cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
+#define MAKE_CFG_SUBTRACK_DIV(table,cfgVar,open) printf(CFG_SUBTRACK_DIV,(table),((open)?"":" style='display:none'"),(cfgVar),((open)?"on":"off"))
+                safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.childShowCfg",subtrack->tableName);
+                boolean open = cartUsualBoolean(cart, htmlIdentifier,FALSE);
+                MAKE_CFG_SUBTRACK_DIV(subtrack->tableName,htmlIdentifier,open);
                 safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.%s",subtrack->tableName,membership->membership[ix]);
-                printf("<DIV id=\"div.%s.cfg\" style=\"display:none\">\n",subtrack->tableName);
                 cfgByCfgType(cType,db,cart,subtrack,htmlIdentifier,"Subtrack",TRUE);
                 puts("</DIV>\n");
                 }
@@ -3023,7 +3214,7 @@ if(setting)
 cfgEndBox(boxed);
 }
 
-void gencodeCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
+void genePredCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up gencode-specific controls */
 {
 char varName[64];
@@ -3032,17 +3223,48 @@ char *geneLabel = cartUsualStringClosestToHome(cart, tdb,compositeLevel, "label"
 
 cfgBeginBoxAndTitle(boxed, title);
 
-printf("<B>Label:</B> ");
-safef(varName, sizeof(varName), "%s.label", name);
-cgiMakeRadioButton(varName, "gene", sameString("gene", geneLabel));
-printf("%s ", "gene");
-cgiMakeRadioButton(varName, "accession", sameString("accession", geneLabel));
-printf("%s ", "accession");
-cgiMakeRadioButton(varName, "both", sameString("both", geneLabel));
-printf("%s ", "both");
-cgiMakeRadioButton(varName, "none", sameString("none", geneLabel));
-printf("%s ", "none");
+if (sameString(name, "acembly"))
+    {
+    char *acemblyClass = cartUsualStringClosestToHome(cart,tdb,compositeLevel,"type", acemblyEnumToString(0));
+    printf("<p><b>Gene Class: </b>");
+    acemblyDropDown("acembly.type", acemblyClass);
+    printf("  ");
+    }
+else if(sameString("wgEncodeSangerGencode", name)
+|| (startsWith("encodeGencode", name) && !sameString("encodeGencodeRaceFrags", name)))
+    {
+    printf("<B>Label:</B> ");
+    safef(varName, sizeof(varName), "%s.label", name);
+    cgiMakeRadioButton(varName, "gene", sameString("gene", geneLabel));
+    printf("%s ", "gene");
+    cgiMakeRadioButton(varName, "accession", sameString("accession", geneLabel));
+    printf("%s ", "accession");
+    cgiMakeRadioButton(varName, "both", sameString("both", geneLabel));
+    printf("%s ", "both");
+    cgiMakeRadioButton(varName, "none", sameString("none", geneLabel));
+    printf("%s ", "none");
+    }
 
+if(trackDbSettingClosestToHomeOn(tdb, "nmdFilter"))
+    {
+    boolean nmdDefault = FALSE;
+    safef(varName, sizeof(varName), "hgt.%s.nmdFilter", name);
+    nmdDefault = cartUsualBoolean(cart,varName, FALSE);  // TODO: var name (hgt prefix) needs changing before ClosesToHome can be used
+    printf("<p><b>Filter out NMD targets.</b>");
+    cgiMakeCheckBox(varName, nmdDefault);
+    }
+
+if(!sameString(tdb->tableName, "tigrGeneIndex")
+&& !sameString(tdb->tableName, "ensGeneNonCoding")
+&& !sameString(tdb->tableName, "encodeGencodeRaceFrags"))
+    baseColorDrawOptDropDown(cart, tdb);
+
+filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
+if(filterBySet != NULL)
+    {
+    filterBySetCfgUi(tdb,filterBySet);
+    filterBySetFree(&filterBySet);
+    }
 cfgEndBox(boxed);
 }
 
@@ -3505,8 +3727,8 @@ int ix;
 struct trackDb *subtrack;
 char objName[SMALLBUF];
 char javascript[JBUFSIZE];
-#define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"Configure View Settings\">%s</A></B>\n"
-#define MAKE_CFG_LINK(name,title) printf(CFG_LINK, (name),(name),(name),(title))
+#define CFG_LINK  "<B><A NAME=\"a_cfg_%s\"></A><A HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"Configure View Settings\">%s</A><INPUT TYPE=HIDDEN NAME='%s.%s.showCfg' value='%s'></B>\n"
+#define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(name),(title),(tbl),(name),((open)?"on":"off"))
 
 members_t *membersOfView = subgroupMembersGet(parentTdb,"view");
 if(membersOfView == NULL)
@@ -3526,7 +3748,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
         if(differentString(stView,membersOfView->names[ix]))
             continue;
         matchedSubtracks[ix] = subtrack;
-        configurable[ix] = (char)cfgTypeFromTdb(subtrack);
+        configurable[ix] = (char)cfgTypeFromTdb(subtrack,TRUE); // Warns if not multi-view compatible
         // Need to find maximum wig range
         if(configurable[ix] != cfgNone)
             makeCfgRows = TRUE;
@@ -3540,7 +3762,11 @@ for (ix = 0; ix < membersOfView->count; ix++)
     {
     printf("<TD>");
     if(configurable[ix] != cfgNone)
-        MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix]);
+        {
+        safef(objName, sizeof(objName), "%s.%s.showCfg", parentTdb->tableName,membersOfView->names[ix]);
+        boolean open = cartUsualBoolean(cart,objName,FALSE);
+        MAKE_CFG_LINK(membersOfView->names[ix],membersOfView->values[ix],parentTdb->tableName,open);
+        }
     else
         printf("<B>%s</B>\n",membersOfView->values[ix]);
     puts("</TD>");
@@ -3567,7 +3793,9 @@ if(makeCfgRows)
         if(matchedSubtracks[ix] != NULL)
             {
             printf("<TR id=\"tr_cfg_%s\"",membersOfView->names[ix]);
-            if(!compositeViewCfgExpandedByDefault(parentTdb,membersOfView->names[ix],NULL))
+            safef(objName, sizeof(objName), "%s.%s.showCfg", parentTdb->tableName,membersOfView->names[ix]);
+            boolean open = cartUsualBoolean(cart,objName,FALSE);
+            if(!open && !compositeViewCfgExpandedByDefault(parentTdb,membersOfView->names[ix],NULL))
                 printf(" style=\"display:none\"");
             printf("><TD>&nbsp;&nbsp;&nbsp;&nbsp;</TD><TD>");
             safef(objName, sizeof(objName), "%s.%s", parentTdb->tableName,membersOfView->names[ix]);

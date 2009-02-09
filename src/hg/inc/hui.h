@@ -853,8 +853,8 @@ void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, i
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
 
-void gencodeCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
-/* Put up gencode-specific controls */
+void genePredCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
+/* Put up genePred-specific controls */
 
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
 /* UI for maf/wiggle track */
@@ -916,6 +916,26 @@ void sortTdbItemsAndUpdatePriorities(sortableTdbItem **items);
 void sortableTdbItemsFree(sortableTdbItem **items);
 // Frees all memory associated with a list of sortable tdb items
 
+#define FILTER_BY "filterBy"
+typedef struct _filterBy {
+// A single filterBy set (from trackDb.ra filterBy column:Title=value,value [column:Title=value,value,value])
+    struct _filterBy *next;   // SL list
+    char*column;              // field that will be filtered on
+    char*title;               // Title that User sees
+    char*htmlName;            // Name used in HTML/CGI
+    boolean useIndex;         // The returned values should be indexes
+    struct slName *slValues;  // Values that can be filtered on (All is always implied)
+    struct slName *slChoices; // Values that have been chosen
+} filterBy_t;
+
+filterBy_t *filterBySetGet(struct trackDb *tdb, struct cart *cart, char *name);
+/* Gets one or more "filterBy" settings (ClosestToHome).  returns NULL if not found */
+
+void filterBySetFree(filterBy_t **filterBySet);
+/* Free a set of filterBy structs */
+
+char *filterBySetClause(filterBy_t *filterBySet);
+/* returns the "column1 in (...) and column2 in (...)" clause for a set of filterBy structs */
 boolean makeDownloadsLink(struct trackDb *tdb);
 // Make a downloads link (if appropriate and then returns TRUE)
 
