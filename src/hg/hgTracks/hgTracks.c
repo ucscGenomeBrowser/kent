@@ -43,7 +43,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1551 2009/02/09 19:11:52 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1552 2009/02/09 22:24:08 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -88,7 +88,7 @@ char *protDbName;               /* Name of proteome database for this genome. */
 #define MAXCHAINS 50000000
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 int imagePixelHeight = 0;
-boolean dragZooming = FALSE;
+boolean dragZooming = TRUE;
 struct hash *oldVars = NULL;
 
 boolean hideControls = FALSE;		/* Hide all controls? */
@@ -4583,7 +4583,7 @@ else
 initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
-dragZooming = cartUsualBoolean(cart, "dragZooming", FALSE);
+dragZooming = cartUsualBoolean(cart, "dragZooming", TRUE);
 
 /* Do main display. */
 
