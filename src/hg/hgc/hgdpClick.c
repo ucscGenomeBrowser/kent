@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: hgdpClick.c,v 1.3 2009/02/07 23:14:14 angie Exp $";
+static char const rcsid[] = "$Id: hgdpClick.c,v 1.4 2009/02/09 18:52:35 angie Exp $";
 
 struct hgdpPopInfo
     {
@@ -331,7 +331,7 @@ printf("<B>Ancestral Allele Frequencies for %s:</B>\n", geo->name);
 printf("<TABLE CELLPADDING=1 CELLSPACING=0>\n");
 for (i = 0;  i < HGDPGEO_POP_COUNT;  i++)
     {
-    printf("<TR><TD>%s</TD><TD>%f</TD></TR>\n",
+    printf("<TR><TD>%s</TD><TD>%.4f</TD></TR>\n",
 	   pops[i].name, geo->popFreqs[i]);
     }
 printf("</TABLE>\n");
