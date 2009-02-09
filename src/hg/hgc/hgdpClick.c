@@ -3,12 +3,13 @@
 #include "common.h"
 #include "hgc.h"
 #include "hgdpGeo.h"
+#include "hgConfig.h"
 #include "trashDir.h"
 #include "pipeline.h"
 #include "obscure.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: hgdpClick.c,v 1.4 2009/02/09 18:52:35 angie Exp $";
+static char const rcsid[] = "$Id: hgdpClick.c,v 1.5 2009/02/09 22:30:25 angie Exp $";
 
 struct hgdpPopInfo
     {
@@ -151,7 +152,6 @@ static const char *hgdpGeoLabelFormat =
 // Parameters for running the Generic Mapping Tools psxy command to plot pie charts
 // on two maps in one image: Africa+EurAsia (AEA) and Central/South America (AM).
 // These are from scripts written by John Novembre, jnovembre at ucla.
-#define PSXY_PATH "/hive/data/outside/GMT4.3.1/bin/psxy"
 #define PSXY_PIX "-W0.5p"
 #define PSXY_CIRCLE "-Sc"
 #define PSXY_WEDGE "-Sw"
@@ -166,35 +166,31 @@ static const char *hgdpGeoLabelFormat =
 #define AM_X "-X6.85i"
 #define AM_Y "-Y4.25i"
 static char *psxyOrangeAeaCmd[] = 
-    {PSXY_PATH, "", AEA_REGION, AEA_PROJ, PSXY_PIX, PSXY_CONT_PLOT, PSXY_CONT_PS,
+    {"", "", AEA_REGION, AEA_PROJ, PSXY_PIX, PSXY_CONT_PLOT, PSXY_CONT_PS,
      PSXY_CIRCLE, "-Gorange", AEA_X, AEA_Y, NULL};
 static char *psxyPieAeaCmd[] =
-    {PSXY_PATH, "", AEA_REGION, AEA_PROJ, PSXY_PIX, PSXY_CONT_PLOT, PSXY_CONT_PS,
+    {"", "", AEA_REGION, AEA_PROJ, PSXY_PIX, PSXY_CONT_PLOT, PSXY_CONT_PS,
      PSXY_WEDGE, "-Gblue", NULL};
 static char *psxyBlueAeaCmd[] =
-    {PSXY_PATH, "", AEA_REGION, AEA_PROJ, PSXY_PIX, PSXY_CONT_PLOT, PSXY_CONT_PS,
+    {"", "", AEA_REGION, AEA_PROJ, PSXY_PIX, PSXY_CONT_PLOT, PSXY_CONT_PS,
      PSXY_CIRCLE, "-Gblue", NULL};
 static char *psxyOrangeAmCmd[] = 
-    {PSXY_PATH, "", AM_REGION, AM_PROJ, PSXY_PIX, PSXY_CONT_PLOT, PSXY_CONT_PS,
+    {"", "", AM_REGION, AM_PROJ, PSXY_PIX, PSXY_CONT_PLOT, PSXY_CONT_PS,
      PSXY_CIRCLE, "-Gorange", AM_X, AM_Y, NULL};
 static char *psxyPieAmCmd[] =
-    {PSXY_PATH, "", AM_REGION, AM_PROJ, PSXY_PIX, PSXY_CONT_PLOT, PSXY_CONT_PS,
+    {"", "", AM_REGION, AM_PROJ, PSXY_PIX, PSXY_CONT_PLOT, PSXY_CONT_PS,
      PSXY_WEDGE, "-Gblue", NULL};
 static char *psxyBlueAmCmd[] =
-    {PSXY_PATH, "", AM_REGION, AM_PROJ, PSXY_PIX, PSXY_CONT_PLOT,
+    {"", "", AM_REGION, AM_PROJ, PSXY_PIX, PSXY_CONT_PLOT,
      PSXY_CIRCLE, "-Gblue", NULL};
 
-// We use the Generic Mapping Tools ps2raster command to convert the generated
-// Encapsulated PostScript imange to PNG.
-#define PS2RASTER_PATH "/hive/data/outside/GMT4.3.1/bin/ps2raster"
-#define GHOSTSCRIPT_PATH "-G/usr/bin/ghostscript"
-
-static void runCommandAppend(char *cmd[], char *inFile, char *outFile)
+static void runCommandAppend(char *cmd[], char *program, char *inFile, char *outFile)
 /* Use the pipeline module to run a single command pipelineWrite|pipelineAppend. */
 {
 char **cmds[2];
 cmds[0] = cmd;
 cmds[1] = NULL;
+cmd[0] = program;
 cmd[1] = inFile;
 struct pipeline *pl = pipelineOpen(cmds, pipelineWrite|pipelineAppend, outFile, NULL);
 pipelineWait(pl);
@@ -256,12 +252,15 @@ fprintf(fEps, hgdpGeoLabelFormat, geo->name, geo->name,
 	geo->ancestralAllele, geo->ancestralAllele, geo->derivedAllele, geo->derivedAllele);
 fclose(fEps);
 //- run psxy on circle/pie spec trash files for AfrEurAsia and America
-runCommandAppend(psxyOrangeAeaCmd, pieFile, epsFile);
-runCommandAppend(psxyPieAeaCmd, pieFile, epsFile);
-runCommandAppend(psxyBlueAeaCmd, circleFile, epsFile);
-runCommandAppend(psxyOrangeAmCmd, pieFile, epsFile);
-runCommandAppend(psxyPieAmCmd, pieFile, epsFile);
-runCommandAppend(psxyBlueAmCmd, circleFile, epsFile);
+char *psxy = cfgOption("hgc.psxyPath");
+if (isEmpty(psxy))
+    errAbort("How did this get called?  hg.conf doesn't have hgc.psxyPath.");
+runCommandAppend(psxyOrangeAeaCmd, psxy, pieFile, epsFile);
+runCommandAppend(psxyPieAeaCmd, psxy, pieFile, epsFile);
+runCommandAppend(psxyBlueAeaCmd, psxy, circleFile, epsFile);
+runCommandAppend(psxyOrangeAmCmd, psxy, pieFile, epsFile);
+runCommandAppend(psxyPieAmCmd, psxy, pieFile, epsFile);
+runCommandAppend(psxyBlueAmCmd, psxy, circleFile, epsFile);
 
 // Make PDF and PNG:
 struct pipeline *pl;
@@ -274,8 +273,11 @@ pl = pipelineOpen(cmdsPdf, pipelineWrite, "/dev/null", NULL);
 pipelineWait(pl);
 pipelineFree(&pl);
 
-char *ps2RasterPngCmd[] = {PS2RASTER_PATH, GHOSTSCRIPT_PATH, "-P", "-A", "-Tg", "-E150",
-			   epsFile, NULL};
+char *ps2raster = cfgOption("hgc.ps2rasterPath");
+char *ghostscript = cfgOption("hgc.ghostscriptPath");
+char gsOpt[PATH_LEN];
+safef(gsOpt, sizeof(gsOpt), "-G%s", ghostscript);
+char *ps2RasterPngCmd[] = {ps2raster, gsOpt, "-P", "-A", "-Tg", "-E150", epsFile, NULL};
 char **cmdsPng[] = {ps2RasterPngCmd, NULL};
 pl = pipelineOpen(cmdsPng, pipelineRead, "/dev/null", NULL);
 pipelineWait(pl);
@@ -299,11 +301,24 @@ mustRename(tmpPath, finalPngFile);
 }
 
 
+static boolean canMakeImages()
+/* Determine whether we have the necessary command line programs for
+ * creating images above. */
+{
+char *psxy = cfgOption("hgc.psxyPath");
+char *ps2raster = cfgOption("hgc.ps2rasterPath");
+char *ghostscript = cfgOption("hgc.ghostscriptPath");
+if (isEmpty(psxy) || isEmpty(ps2raster) || isEmpty(ghostscript))
+    return FALSE;
+if (!fileExists(psxy) || !fileExists(ps2raster) || !fileExists(ghostscript))
+    return FALSE;
+return TRUE;
+}
+
 void hgdpGeoImg(struct hgdpGeo *geo)
 /* Generate a PNG image: world map with pie charts for population allele frequencies. */
 {
-// Disable this past hgwdev until we fix the /hive paths...
-if (! hIsPrivateHost())
+if (! canMakeImages())
     return;
 struct tempName tn;
 trashDirFile(&tn, "hgc", "", "");
