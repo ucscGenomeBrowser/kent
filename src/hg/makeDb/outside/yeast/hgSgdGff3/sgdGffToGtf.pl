@@ -3,36 +3,93 @@
 use strict;
 use warnings;
 
-##	"$Id: sgdGffToGtf.pl,v 1.1 2009/02/06 21:43:15 hiram Exp $";
+##	"$Id: sgdGffToGtf.pl,v 1.2 2009/02/09 16:59:18 hiram Exp $";
 
 my $argc = scalar(@ARGV);
 
 if ($argc < 1) {
     printf STDERR "/sgdGffToGtf.pl - transform SGD gff format to UCSC gtf\n";
     printf STDERR "usage: ./sgdGffToGtf.pl <file.gff>\n";
-    printf STDERR "\te.g.: ./sgdGffToGtf.pl S.cerevisiae.gff\n";
+    printf STDERR "\te.g.: sgdGffToGtf.pl S.cerevisiae.gff\n";
+    printf STDERR "also creates files:\n";
+    printf STDERR "'otherFeatures.bed', 'leftOvers.gff' and 'descriptions.txt'\n";
     exit 255;
 }
 
 #### decode subroutine found at:
 ####	http://www.troubleshooters.com/codecorn/littperl/perlcgi.htm
-sub decode($)
-  {
-  $_[0] =~ s/\+/ /g;   ### Change + to space
-  my(@parts) = split /%/, $_[0];
-  my($returnstring) = "";
+sub decode($) {
+    $_[0] =~ s/\+/ /g;   ### Change + to space
+    my(@parts) = split /%/, $_[0];
+    my($returnstring) = "";
 
-  (($_[0] =~ m/^\%/) ? (shift(@parts)) : ($returnstring = shift(@parts)));
+    (($_[0] =~ m/^\%/) ? (shift(@parts)) : ($returnstring = shift(@parts)));
 
-  my($part);
-  foreach $part (@parts)
+    my($part);
+    foreach $part (@parts)
     {
     $returnstring .= chr(hex(substr($part,0,2)));
     my($tail) = substr($part,2);
     $returnstring .= $tail if (defined($tail));
     }
-  return($returnstring);
-  }
+    return($returnstring);
+}
+
+### idOrParent - find ID= or Parent= tag in fields
+###  return ID= value if found, otherwise return Parent= value
+sub idOrParent(@) {
+    my(@localA) = @{(shift)};
+    my $haveId = "";
+    my $haveParent = "";
+    my $size = scalar(@localA);
+    for (my $j = 0; $j < $size; ++$j) {
+	if ($localA[$j] =~ m/^Parent=/i) {
+	    (my $rest, $haveParent) = split('=',$localA[$j],2);
+	} elsif ($localA[$j] =~ m/^Id=/i) {
+	    (my $rest, $haveId) = split('=',$localA[$j],2);
+	}
+    }
+    if (length($haveId)>0) {
+	return $haveId;
+    } elsif (length($haveParent)<1) {
+	die "can not find ID or parent ?";
+    }
+    return $haveParent;
+}
+
+### returnNote - find Note= tag in fields
+###  return value of Note= if found
+sub returnNote(@) {
+    my(@localA) = @{(shift)};
+    my $haveNote = "";
+    my $size = scalar(@localA);
+    for (my $j = 0; $j < $size; ++$j) {
+	if ($localA[$j] =~ m/^Note=/i) {
+	    (my $rest, $haveNote) = split('=',$localA[$j],2);
+	}
+    }
+    if (length($haveNote)>0) {
+	return $haveNote;
+    }
+    return $haveNote;
+}
+
+### returnAlias - find Alias= tag in fields
+###  return value of Alias= if found
+sub returnAlias(@) {
+    my(@localA) = @{(shift)};
+    my $haveAlias = "";
+    my $size = scalar(@localA);
+    for (my $j = 0; $j < $size; ++$j) {
+	if ($localA[$j] =~ m/^Alias=/i) {
+	    (my $rest, $haveAlias) = split('=',$localA[$j],2);
+	}
+    }
+    if (length($haveAlias)>0) {
+	return $haveAlias;
+    }
+    return $haveAlias;
+}
 
 my $file = shift;
 
@@ -44,13 +101,16 @@ my %noteCategories;
 
 open (FH,"<$file") or die "can not open $file";
 
-open (OT,">leftOvers.gff") or die "can not write to leftOvers.gff";
+open (LO,">leftOvers.gff") or die "can not write to leftOvers.gff";
+open (OT,"| sort -u | sort -k1,1 -k2,2n > otherFeatures.bed") or die "can not write to otherFeatures.bed";
 open (NT,"|sort -u > notes.txt") or die "can not write to notes.txt";
+open (DS,"|sort -u > descriptions.txt") or die "can not write to descriptions.txt";
 
 while (my $line = <FH>) {
     next if ($line =~ m/^\s*#/);
     chomp $line;
     my (@fields) = split('\t',"$line");
+    next if ($fields[2] eq "chromosome");
     if (scalar(@fields) != 9) {
 	printf STDERR "field count != 9 ? at:\n";
 	printf STDERR "$line\n";
@@ -104,7 +164,7 @@ while (my $line = <FH>) {
 		    $otherFields .= '";';
 		    $noteTypes{$id} += 1;
 		    if ($id =~ m/^Note$/) {
-			printf NT "%s\t%s\t%s\n", $geneId, $fields[2],$decoded;
+			printf DS "%s\t%s\t%s\n", $geneId, $fields[2],$decoded;
 		    }
 		}
 	    }
@@ -123,14 +183,45 @@ while (my $line = <FH>) {
 	    printf "gene_id \"$geneId\"; transcript_id \"$transcriptId\";\n";
 	}
     } else {
-	printf OT "%s\n", $line;
+	printf LO "%s\n", $line;
+	my $name = idOrParent(\@field9);
+	my $note = returnNote(\@field9);
+	my $decoded = "";
+	if (length($note) > 0) {
+	    $decoded = decode($note);
+	    $decoded =~ s/;/ /g;
+	    $note = $decoded;
+	}
+	my $alias = returnAlias(\@field9);
+	if (length($alias) > 0) {
+	    $decoded = decode($alias);
+	    $decoded =~ s/;/ /g;
+	    $alias = $decoded;
+	}
+	my $noteLine = "$fields[1], $fields[2]";
+	if ((length($alias) > 0) && (length($note) > 0)) {
+	    $noteLine = "${alias}, ${note}";
+	} elsif (length($alias) > 0) {
+	    $noteLine = $alias;
+	} elsif (length($note) > 0) {
+	    $noteLine = $note;
+	}
+	if (length($noteLine) > 254) {
+	    printf STDERR "WARN: notes > 254 chars $fields[0], $fields[3], $fields[4], $name, $noteLine\n";
+	    $noteLine = substr($noteLine, 0, 253);
+	}
+	printf OT "%s\t%d\t%d\t%s\t0\t%s\t%s\n",
+	    $fields[0], $fields[3], $fields[4], $name, $fields[6], $noteLine;
+	printf NT "%s\t%s\t%s\n", $name, $fields[2], $noteLine;
     }
 #    print $line;
 }
 
 close (FH);
+close (LO);
 close (OT);
 close (NT);
+close (DS);
 
 printf STDERR "#\tfound $geneCount gene identifiers\n";
 printf STDERR "############################ multiple exons ################\n";
