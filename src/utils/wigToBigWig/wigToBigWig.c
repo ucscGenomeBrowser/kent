@@ -7,7 +7,7 @@
 #include "bigWig.h"
 #include "bwgInternal.h"
 
-static char const rcsid[] = "$Id: wigToBigWig.c,v 1.5 2009/02/09 02:53:36 kent Exp $";
+static char const rcsid[] = "$Id: wigToBigWig.c,v 1.6 2009/02/10 08:18:18 kent Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 1024;
@@ -27,7 +27,7 @@ errAbort(
   "options:\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
-  "   -clipDontDie - If set just issue warning messages rather than dying if wig\n"
+  "   -clip - If set just issue warning messages rather than dying if wig\n"
   "                  file contains items off end of chromosome."
   , blockSize, itemsPerSlot
   );
@@ -36,7 +36,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"blockSize", OPTION_INT},
    {"itemsPerSlot", OPTION_INT},
-   {"clipDontDie", OPTION_BOOLEAN},
+   {"clip", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
-clipDontDie = optionExists("clipDontDie");
+clipDontDie = optionExists("clip");
 if (argc != 4)
     usage();
 wigToBigWig(argv[1], argv[2], argv[3]);
