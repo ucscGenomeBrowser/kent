@@ -3,7 +3,7 @@
 # Saccharomyces cerevisiae
 # Saccharomyces Genome Database, Stanford
 
-#  $Id: sacCer2.txt,v 1.2 2009/02/10 22:19:18 braney Exp $
+#  $Id: sacCer2.txt,v 1.3 2009/02/10 23:56:21 hiram Exp $
 
 #######################################################################
 # Download data  (DONE - 2009-01-30 - Hiram)
@@ -233,6 +233,7 @@ close (FH);
     hgsql sacCer2 -e 'load data local infile "notes.txt" \
           into table sgdOtherDescription;'
 
+############################################################################
 # ADDING SWISSPROT ACCESSION TO KNOWN GENES (DONE - 2009-02-10 - Hiram)
     cd /hive/data/sacCer2/bed/sgdAnnotation
     grep "Swiss-Prot" ../../download/chromosomal_feature/dbxref.tab \
@@ -246,6 +247,7 @@ close (FH);
           into table sgdToSwissProt;'
     hgProtIdToGenePred sacCer2 sgdGene sgdToSwissProt name value
 
+############################################################################
 # CREATE SGD-BASED CLONE TRACK (DONE - 2009-02-10 - Hiram)
     mkdir /hive/data/genomes/sacCer2/bed/sgdClone
     cd /hive/data/genomes/sacCer2/bed/sgdClone
@@ -260,6 +262,7 @@ s/^4/chrIV/; s/^2/chrII/; s/^9/chrIX/; s/^1/chrI/;" > sgdClone.bed
     hgLoadBed sacCer2 sgdClone  sgdClone.bed -tab \
         -sqlTable=$HOME/kent/src/hg/lib/sgdClone.sql
 
+############################################################################
 # AUTO UPDATE GENBANK RUN  (Done - 2009-02-10 - Hiram)
     # align with latest genbank process.
     cd ~/kent/src/hg/makeDb/genbank
@@ -291,15 +294,16 @@ sacCer2.downloadDir = sacCer2
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial sacCer2 &
     #	logFile: var/build/logs/2009.02.10-11:27:42.sacCer2.initalign.log
-XXX - running Tue Feb 10 11:27:55 PST 2009
+    #	real    173m1.570s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ce6
-    #	logFile: var/dbload/hgwdev/logs/2008.05.30-20:29:01.dbload.log
-    #	real    23m8.651s
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad sacCer2
+    #	logFile: var/dbload/hgwdev/logs/2009.02.10-14:25:48.dbload.log
+    #	real    18m21.436s
 
+XXXX TBD
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     cvsup
@@ -309,6 +313,162 @@ XXX - running Tue Feb 10 11:27:55 PST 2009
     cvs ci -m "Added ce6 - C. elegans WS190" \
 	etc/align.dbs etc/hgwdev.dbs
     make etc-update
+
+############################################################################
+# DOING MULTIPLE ALIGNMENT WITH OTHER YEAST  (DONE - 2009-02-10 - Hiram)
+#	the sequences are the same set from 2003 that were used in sacCer1
+#	so, just link to them and rerun the alignment
+# in the directory /cluster/data/sacCer1/bed/otherYeast/align
+    mkdir /hive/data/genomes/sacCer2/bed/otherYeast
+    cd /hive/data/genomes/sacCer2/bed/otherYeast
+    for D in sacBay sacCas sacKlu sacKud sacMik sacPar
+do
+    ln -s ../../../sacCer1/bed/otherYeast/${D} .
+done
+    mkdir align
+    cd align
+    ln -s ../../../../sacCer1/bed/otherYeast/align/sac??? .
+    #	helpful to have 2bit files for chainAntiRepeat
+    for G in sac???
+do
+    faToTwoBit ${G} ${G}.2bit
+done
+
+
+    # Create directory full of size info
+    mkdir sizes
+    for F in sac???
+    do
+	faSize $F -detailed > sizes/$F
+    done
+
+    # Create some working directories
+    mkdir lav axtAll axtBest mafIn mafRawOut mafOut
+
+    # Create little shell script to do blastz alignments
+    cat << '_EOF_' > lastz.csh
+#!/bin/csh -ef
+/cluster/bin/penn/$MACHTYPE/lastz $1 $2 > $3
+'_EOF_'
+    # << happy emacs
+    chmod +x lastz.csh
+
+    # create sacCer2 individual chr.fa files:
+    mkdir sacCer2
+    twoBitInfo ../../../sacCer2.2bit stdout | cut -f1 | while read C
+do
+    twoBitToFa ../../../sacCer2.2bit:${C} sacCer2/${C}.fa
+    echo "${C} done"
+done
+-
+    # Create job spec to do all blastz alignments
+    ls -1 sacCer2/*.fa > sacCer.list
+    ls -1 sac??? > other.list
+    cat << '_EOF_' > template
+#LOOP
+lastz.csh $(path1) $(path2) {check out line+ lav/$(root1).$(root2)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    ssh swarm
+    cd /hive/data/genomes/sacCer2/bed/otherYeast/align
+    gensub2 sacCer.list other.list template jobList
+
+    # Convert from lav to psl
+    for L in lav/*
+do
+    B=`basename $L`
+    echo $B
+    lavToPsl $L stdout | gzip > psl/$B.psl.gz
+done
+
+    #	chaining
+    mkdir -p axtChain/run
+    cd axtChain/run
+    ls -d ../../sac??? | xargs -L 1 basename > species.list
+    cut -f1 ../../../../../chrom.sizes > chrom.list
+
+    cat << '_EOF_' > template
+#LOOP
+chain.csh $(path1) $(path2) {check out line+ $(root1)/$(root2).chain}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 species.list chrom.list template jobList
+    para create jobList
+    para push
+    para time
+# Completed: 108 of 108 jobs
+# CPU time in finished jobs:         73s       1.21m     0.02h    0.00d  0.000 y
+# IO & Wait Time:                  1100s      18.34m     0.31h    0.01d  0.000 y
+# Average job time:                  11s       0.18m     0.00h    0.00d
+# Longest finished job:              12s       0.20m     0.00h    0.00d
+# Submission to last job:            38s       0.63m     0.01h    0.00d
+
+    cd ..
+    #	merge the individual results
+    foreach S (`cat run/species.list`)
+echo $S
+find ./run/${S} -name "*.chain" \
+    | chainMergeSort -inputList=stdin | gzip -c > sacCer2.${S}.all.chain.gz
+end
+    #	split them again to get consistent numbering
+    foreach S (`cat run/species.list`)
+echo $S
+chainSplit chain.${S} sacCer2.${S}.all.chain.gz
+end
+
+    #	netting the chains
+    cat << '_EOF_' > netChains.csh
+#!/bin/csh -ef
+
+set S0 = "../../../../chrom.sizes"
+
+foreach S (`cat run/species.list`)
+    echo $S
+    chainPreNet sacCer2.${S}.all.chain.gz ${S0} ../sizes/${S} stdout \
+    | chainNet stdin -minSpace=1 ${S0} ../sizes/${S} stdout /dev/null \
+        | netSyntenic stdin noClass.${S}.net
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x netChains.csh
+    ./netChains.csh
+
+    cat << '_EOF_' > mkMafs.csh
+#!/bin/csh -ef
+
+set TOP = `pwd`
+set S0 = "/hive/data/genomes/sacCer2/chrom.sizes"
+
+foreach S (`cat run/species.list`)
+    # Make axtNet for download: one .axt per sacCer2 seq.
+    netSplit noClass.${S}.net net.${S}
+    cd ..
+    rm -fr axtNet.${S}
+    mkdir axtNet.${S}
+    foreach f (axtChain/net.${S}/*.net)
+    netToAxt $f axtChain/chain.${S}/$f:t:r.chain \
+      /hive/data/genomes/sacCer2/sacCer2.2bit ${S}.2bit stdout \
+      | axtSort stdin stdout \
+      | gzip -c > axtNet.${S}/$f:t:r.sacCer2.${S}.net.axt.gz
+    end
+
+    # Make mafNet for multiz: one .maf per sacCer2 seq.
+    rm -fr mkdir mafNet.${S}
+    mkdir mafNet.${S}
+    foreach f (axtNet.${S}/*.sacCer2.${S}.net.axt.gz)
+      axtToMaf -tPrefix=sacCer2. -qPrefix=${S}. $f \
+            ${S0} sizes/${S} stdout \
+      | gzip -c > mafNet.${S}/$f:t:r:r:r:r:r.maf.gz
+    end
+    cd ${TOP}
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x mkMafs.csh
+    ./mkMafs.csh
 
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE 2009-02-10 braney )
@@ -474,3 +634,4 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
+###########################################################################
