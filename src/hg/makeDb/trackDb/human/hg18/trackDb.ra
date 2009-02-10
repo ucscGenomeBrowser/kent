@@ -1514,18 +1514,6 @@ type bed 8 .
     color 102,0,153
     priority 2
 
-track affyHuEx1
-shortLabel Affy HuEx 1.0
-longLabel Affymetrix Human Exon 1.0 Probe Sets
-group expression
-priority 0
-visibility hide
-url http://www.affymetrix.com/analysis/netaffx/exon/probe_set.affx?pk=1:$$
-urlLabel Netaffx Link:
-useScore 1
-type bed 6 .
-origAssembly hg17
-
 track tfbsConsSites
 shortLabel TFBS Conserved
 longLabel HMR Conserved Transcription Factor Binding Sites
