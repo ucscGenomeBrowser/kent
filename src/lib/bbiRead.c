@@ -69,9 +69,11 @@ bbi->zoomLevels = udcReadBits16(udc, isSwapped);
 bbi->chromTreeOffset = udcReadBits64(udc, isSwapped);
 bbi->unzoomedDataOffset = udcReadBits64(udc, isSwapped);
 bbi->unzoomedIndexOffset = udcReadBits64(udc, isSwapped);
+bbi->fieldCount = udcReadBits16(udc, isSwapped);
+bbi->definedFieldCount = udcReadBits16(udc, isSwapped);
 
 /* Skip over reserved area. */
-udcSeek(udc, udcTell(udc) + 32);
+udcSeek(udc, udcTell(udc) + 28);
 
 /* Read zoom headers. */
 int i;
@@ -227,6 +229,7 @@ switch (type)
     }
 }
 
+#ifdef UNUSED
 static void bbiSummaryOnDiskRead(struct bbiFile *bbi, struct bbiSummaryOnDisk *sum)
 /* Read in summary from file. */
 {
@@ -241,6 +244,7 @@ udcMustReadOne(udc, sum->maxVal);
 udcMustReadOne(udc, sum->sumData);
 udcMustReadOne(udc, sum->sumSquares);
 }
+#endif /* UNUSED */
 
 static struct bbiSummary *bbiSummaryFromOnDisk(struct bbiSummaryOnDisk *in)
 /* Create a bbiSummary unlinked to anything from input in onDisk format. */
@@ -266,35 +270,40 @@ struct bbiSummary *sumList = NULL, *sum;
 struct udcFile *udc = bbi->udc;
 udcSeek(udc, zoom->indexOffset);
 struct cirTreeFile *ctf = cirTreeFileAttach(bbi->fileName, bbi->udc);
-struct fileOffsetSize *blockList = cirTreeFindOverlappingBlocks(ctf, chromId, start, end);
-if (blockList != NULL)
+struct fileOffsetSize *fragList = cirTreeFindOverlappingBlocks(ctf, chromId, start, end);
+struct fileOffsetSize *block, *blockList = fileOffsetSizeMerge(fragList);
+for (block = blockList; block != NULL; block = block->next)
     {
-    struct fileOffsetSize *block;
-    for (block = blockList; block != NULL; block = block->next)
-        {
-	udcSeek(udc, block->offset);
-	struct bbiSummaryOnDisk diskSum;
-	int itemSize = sizeof(diskSum);
-	assert(block->size % itemSize == 0);
-	int itemCount = block->size / itemSize;
-	int i;
-	for (i=0; i<itemCount; ++i)
+    /* Read info we need into memory. */
+    udcSeek(udc, block->offset);
+    char *blockBuf = needLargeMem(block->size);
+    udcRead(udc, blockBuf, block->size);
+    char *blockPt = blockBuf;
+
+    struct bbiSummaryOnDisk *dSum;
+    int itemSize = sizeof(*dSum);
+    assert(block->size % itemSize == 0);
+    int itemCount = block->size / itemSize;
+    int i;
+    for (i=0; i<itemCount; ++i)
+	{
+	dSum = (void *)blockPt;
+	blockPt += sizeof(*dSum);
+	if (dSum->chromId == chromId)
 	    {
-	    bbiSummaryOnDiskRead(bbi, &diskSum);
-	    if (diskSum.chromId == chromId)
+	    int s = max(dSum->start, start);
+	    int e = min(dSum->end, end);
+	    if (s < e)
 		{
-		int s = max(diskSum.start, start);
-		int e = min(diskSum.end, end);
-		if (s < e)
-		    {
-		    sum = bbiSummaryFromOnDisk(&diskSum);
-		    slAddHead(&sumList, sum);
-		    }
+		sum = bbiSummaryFromOnDisk(dSum);
+		slAddHead(&sumList, sum);
 		}
 	    }
 	}
+    freeMem(blockBuf);
     }
 slFreeList(&blockList);
+slFreeList(&fragList);
 cirTreeFileDetach(&ctf);
 slReverse(&sumList);
 return sumList;

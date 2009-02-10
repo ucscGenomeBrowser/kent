@@ -11,7 +11,9 @@
  *         chromosomeTreeOffset	8 bytes
  *         fullDataOffset	8 bytes
  *	   fullIndexOffset	8 bytes
- *         reserved            32 bytes
+ *         fieldCount           2 bytes (bigBed only)
+ *         definedFieldCount    2 bytes (bigBed only)
+ *         reserved            28 bytes
  *     zoomHeaders		there are zoomLevels number of these
  *         reductionLevel	4 bytes
  *	   reserved		4 bytes
@@ -66,6 +68,8 @@ struct bbiFile
     bits64 chromTreeOffset;	/* Offset to chromosome index. */
     bits64 unzoomedDataOffset;	/* Start of unzoomed data. */
     bits64 unzoomedIndexOffset;	/* Start of unzoomed index. */
+    bits16 fieldCount;		/* Number of columns in bed version. */
+    bits16 definedFieldCount;   /* Number of columns using bed standard definitions. */
     struct cirTreeFile *unzoomedCir;	/* Unzoomed data index in memory - may be NULL. */
     struct bbiZoomLevel *levelList;	/* List of zoom levels. */
     };

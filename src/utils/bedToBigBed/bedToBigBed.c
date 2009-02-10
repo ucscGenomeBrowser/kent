@@ -5,10 +5,11 @@
 #include "options.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.1 2009/02/01 02:28:46 kent Exp $";
+static char const rcsid[] = "$Id: bedToBigBed.c,v 1.2 2009/02/10 22:11:00 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 64;
+int bedFields = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +24,8 @@ errAbort(
   "options:\n"
   "   -blockSize=N - Number of items to bundle in r-tree.  Default %d\n"
   "   -itemsPerSlot=N - Number of data points bundled at lowest level. Default %d\n"
+  "   -bedFields=N - Number of fields that fit standard bed definition.  If undefined\n"
+  "                  assumes all fields in bed are defined.\n"
   , blockSize, itemsPerSlot
   );
 }
@@ -30,13 +33,14 @@ errAbort(
 static struct optionSpec options[] = {
    {"blockSize", OPTION_INT},
    {"itemsPerSlot", OPTION_INT},
+   {"bedFields", OPTION_INT},
    {NULL, 0},
 };
 
 void bedToBigBed(char *inName, char *chromSizes, char *outName)
 /* bedToBigBed - Convert bed file to bigBed.. */
 {
-bigBedFileCreate(inName, chromSizes, blockSize, itemsPerSlot, outName);
+bigBedFileCreate(inName, chromSizes, blockSize, itemsPerSlot, bedFields, outName);
 }
 
 int main(int argc, char *argv[])
@@ -45,6 +49,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
+bedFields = optionInt("bedFields", bedFields);
 if (argc != 4)
     usage();
 bedToBigBed(argv[1], argv[2], argv[3]);

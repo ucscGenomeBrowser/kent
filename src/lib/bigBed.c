@@ -68,7 +68,7 @@ return a->fileOffset;
 
 
 static struct ppBed *ppBedLoadAll(char *fileName, struct hash *chromHash, struct lm *lm, 
-	bits64 *retDiskSize)
+	bits64 *retDiskSize, bits16 *retFieldCount)
 /* Read bed file and return it as list of ppBeds. The whole thing will
  * be allocated in the passed in lm - don't ppBedFreeList or slFree
  * list! */
@@ -77,8 +77,11 @@ struct ppBed *pbList = NULL, *pb;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
 bits64 diskSize = 0;
+int fieldCount = 0;
 while (lineFileNextReal(lf, &line))
     {
+    if (fieldCount == 0)
+        fieldCount = chopByWhite(line, NULL, 0);
     int i;
     char *words[3];
     for (i=0; i<3; ++i)
@@ -103,6 +106,7 @@ while (lineFileNextReal(lf, &line))
     }
 slReverse(&pbList);
 *retDiskSize = diskSize;
+*retFieldCount = fieldCount;
 return pbList;
 }
 
@@ -203,6 +207,8 @@ void bigBedFileCreate(
 	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
 	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
 	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
+	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
+				    * are the defined bed ones. */
 	char *outName)    /* BigBed output file name. */
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
 {
@@ -226,6 +232,7 @@ bits32 reductionAmounts[10];
 bits64 reductionDataOffsetPos[10];
 bits64 reductionDataOffsets[10];
 bits64 reductionIndexOffsets[10];
+bits16 fieldCount;
 
 /* Load in chromosome sizes. */
 struct hash *chromHash = bbiChromSizesFromFile(chromSizes);
@@ -233,7 +240,9 @@ verbose(1, "Read %d chromosomes and sizes from %s\n",  chromHash->elCount, chrom
 
 /* Load and sort input file. */
 bits64 fullSize;
-struct ppBed *pb, *pbList = ppBedLoadAll(inName, chromHash, chromHash->lm, &fullSize);
+struct ppBed *pb, *pbList = ppBedLoadAll(inName, chromHash, chromHash->lm, &fullSize, &fieldCount);
+if (definedFieldCount == 0)
+    definedFieldCount = fieldCount;
 bits64 pbCount = slCount(pbList);
 verbose(1, "Read %llu items from %s\n", pbCount, inName);
 slSort(&pbList, ppBedCmp);
@@ -307,7 +316,9 @@ dataOffsetPos = ftell(f);
 writeOne(f, dataOffset);
 indexOffsetPos = ftell(f);
 writeOne(f, indexOffset);
-for (i=0; i<8; ++i)
+writeOne(f, fieldCount);
+writeOne(f, definedFieldCount);
+for (i=0; i<7; ++i)
     writeOne(f, reserved32);
 
 /* Write summary headers */
