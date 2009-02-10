@@ -7,29 +7,31 @@
 #include "bed.h"
 #include "jksql.h"
 #include "binRange.h"
-#include "chromBins.h"
+#include "hdb.h"
 
 
-static char const rcsid[] = "$Id: freen.c,v 1.84 2008/08/27 22:34:06 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.85 2009/02/10 22:22:08 kent Exp $";
 
 void usage()
 {
 errAbort("freen - test some hairbrained thing.\n"
-         "usage:  freen id \n");
+         "usage:  freen file\n");
 }
 
-void freen(char *id)
+void freen(char *asciiCount)
 /* Test some hair-brained thing. */
 {
-struct chromBins *chromBins = chromBinsNew(NULL);
-struct binKeeper *bk = chromBinsGet(chromBins, "chr1", TRUE);
-printf("%d bins\n", bk->binCount);
+int count = atoi(asciiCount);
+int i;
+for (i=0; i<count; ++i)
+    {
+    printf("%d\t0.1\n", rand()%100);
+    }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-pushCarefulMemHandler(1000000*1024L);
 if (argc != 2)
    usage();
 freen(argv[1]);
