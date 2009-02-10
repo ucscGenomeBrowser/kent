@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "tableStatus.h"
 
-static char const rcsid[] = "$Id: dbSnoop.c,v 1.12 2008/09/11 17:34:23 hiram Exp $";
+static char const rcsid[] = "$Id: dbSnoop.c,v 1.13 2009/02/10 22:21:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -26,6 +26,9 @@ errAbort(
 static struct optionSpec options[] = {
    {"unsplit", OPTION_BOOLEAN},
    {"noNumberCommas", OPTION_BOOLEAN},
+   {"host", OPTION_STRING},
+   {"user", OPTION_STRING},
+   {"password", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -382,12 +385,24 @@ for (group = groupList; group != NULL; group = group->next)
 hashFree(&groupHash);
 }
 
+struct sqlConnection *dbConnect(char *database)
+/* Connect to database, possibly remotely. */
+{
+char *host = optionVal("host", NULL);
+char *user = optionVal("user", NULL);
+char *password = optionVal("password", NULL);
+if (host != NULL || user != NULL || password != NULL)
+    return sqlConnectRemote(host, user, password, database);
+else
+    return sqlConnect(database);
+}
+
 void dbSnoop(char *database, char *output)
 /* dbSnoop - Produce an overview of a database.. */
 {
 FILE *f = mustOpen(output, "w");
-struct sqlConnection *conn = sqlConnect(database);
-struct sqlConnection *conn2 = sqlConnect(database);
+struct sqlConnection *conn = dbConnect(database);
+struct sqlConnection *conn2 = dbConnect(database);
 int majorVersion = sqlMajorVersion(conn);
 int minorVersion = sqlMinorVersion(conn);
 struct sqlResult *sr = sqlGetResult(conn, "show table status");
