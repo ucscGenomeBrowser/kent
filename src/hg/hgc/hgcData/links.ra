@@ -26,7 +26,7 @@ label UniProtKB variant
 acc yes
 
 name UniProtSearch
-url http://us.expasy.org/cgi-bin/sprot-search-ful?SEARCH=%s
+url http://www.uniprot.org/uniprot/?sort=score&query=%s
 label UniProtKB search
 acc yes
 
