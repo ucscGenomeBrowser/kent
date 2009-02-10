@@ -110,7 +110,7 @@ cutters = readGcg(argv[2]);
 overrides = optionVal("overrides", NULL);
 if (overrides)
     loadOverrides(overrides);
-cullCutters(cutters, !optionExists("justPrimary"), includes, excludes, 0);
+cullCutters(&cutters, !optionExists("justPrimary"), includes, 0);
 hgLoadCutters(argv[1], cutters);
 cutterFreeList(&cutters);
 slFreeList(&includes);
