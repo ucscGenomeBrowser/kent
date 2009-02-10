@@ -871,3 +871,44 @@ description Control signal from Naked DNA.
 term Reference_Genome
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
+
+term HTC-116
+type Cell Line
+
+term H9ES
+type Cell Line
+
+term H9ES-E
+type Cell Line
+
+term H9ES-AFP+
+type Cell Line
+
+term H9ES-AFP-
+type Cell Line
+
+term H9ES-EB
+type Cell Line
+
+term H9ES-EBD
+type Cell Line
+
+term H9ES-CM
+type Cell Line
+
+term BG02ES
+type Cell Line
+
+term BG02ES-EBD
+type Cell Line
+
+term HFL11W
+type Cell Line
+
+term HFL24W
+type Cell Line
+
+term HAL
+type Cell Line
+
+
