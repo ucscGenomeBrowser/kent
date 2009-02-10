@@ -4,6 +4,7 @@
 
 #include "common.h"
 #include "splix.h"
+#include "net.h"
 #include <sys/mman.h>
 
 static void *pointerOffset(void *pt, bits64 offset)
@@ -53,7 +54,7 @@ else
 	errnoAbort("Couldn't seek back to start of splix file %s.  "
 		   "Splix files must be random access files, not pipes and the like"
 		   , fileName);
-    if (read(fd, header, h.size) < h.size)
+    if (netReadAll(fd, header, h.size) < h.size)
         errnoAbort("Couldn't read all of splix file %s.", fileName);
     }
 
