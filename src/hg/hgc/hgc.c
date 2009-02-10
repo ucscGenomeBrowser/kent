@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1503 2009/02/09 17:39:13 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1504 2009/02/10 05:13:18 kent Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17400,6 +17400,8 @@ if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
 else if (sameWord(type, "encodePeak"))
     doEncodePeak(ct->tdb, ct);
+else if (sameWord(type, "bigWig"))
+    bigWigCustomClick(ct->tdb);
 else if (ct->wiggle)
     {
     if (ct->dbTrack)

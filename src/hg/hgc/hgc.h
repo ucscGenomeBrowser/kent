@@ -149,6 +149,9 @@ void genericBigWigClick(struct sqlConnection *conn, struct trackDb *tdb,
 	char *item, int start);
 /* Display details for BigWig  tracks. */
 
+void bigWigCustomClick(struct trackDb *tdb);
+/* Display details for BigWig custom tracks. */
+
 void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
 		     char *item, int start, int bedSize);
 /* Handle click in generic bigBed track. */

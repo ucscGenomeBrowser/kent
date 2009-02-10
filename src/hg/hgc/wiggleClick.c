@@ -11,7 +11,7 @@
 #include "customTrack.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: wiggleClick.c,v 1.30 2009/02/03 21:04:04 kent Exp $";
+static char const rcsid[] = "$Id: wiggleClick.c,v 1.31 2009/02/10 05:13:19 kent Exp $";
 
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start)
@@ -207,17 +207,10 @@ printf("<B>Average value</B> %g <B>min</B> %g <B>max</B> %g <B> standard deviati
 	sum/iCount, minVal, maxVal, calcStdFromSums(sum, sumSquares, iCount));
 }
 
-void genericBigWigClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start)
+static void bigWigClick(struct trackDb *tdb, char *fileName)
 /* Display details for BigWig data tracks. */
 {
 char *chrom = cartString(cart, "c");
-
-char query[256];
-safef(query, sizeof(query), "select fileName from %s", tdb->tableName);
-char *fileName = sqlQuickString(conn, query);
-if (fileName == NULL)
-    errAbort("Missing fileName in %s table", tdb->tableName);
 
 /* Open BigWig file and get interval list. */
 struct bbiFile *bbi = bigWigFileOpen(fileName);
@@ -245,3 +238,20 @@ lmCleanup(&lm);
 bbiFileClose(&bbi);
 }
 
+void genericBigWigClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start)
+/* Display details for BigWig built in tracks. */
+{
+char query[256];
+safef(query, sizeof(query), "select fileName from %s", tdb->tableName);
+char *fileName = sqlQuickString(conn, query);
+if (fileName == NULL)
+    errAbort("Missing fileName in %s table", tdb->tableName);
+bigWigClick(tdb, fileName);
+}
+
+void bigWigCustomClick(struct trackDb *tdb)
+/* Display details for BigWig custom tracks. */
+{
+bigWigClick(tdb, trackDbSetting(tdb, "dataUrl"));
+}
