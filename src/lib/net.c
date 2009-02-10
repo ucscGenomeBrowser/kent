@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.65 2009/02/10 21:00:42 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.66 2009/02/10 21:43:14 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -398,18 +398,23 @@ for (;;)
     }
 }
 
-struct dyString *sendFtpCommand(int sd, char *cmd, boolean seeResult, boolean noTimeoutError)
+void sendFtpCommandOnly(int sd, char *cmd)
+/* send command to ftp server */
+{   
+write(sd, cmd, strlen(cmd));
+}
+
+
+struct dyString *receiveFtpReply(int sd, char *cmd, boolean seeResult)
 /* send command to ftp server and check resulting reply code, 
    give error if not desired reply */
-{   
+{
 struct dyString *rs = NULL;
 int reply = 0;
 char buf[4*1024];
 int readSize;
 char *startLastLine = NULL;
 long timeOut = 1000000; /* wait in microsec */
-
-write(sd, cmd, strlen(cmd));
 
 rs = newDyString(4*1024);
 while (1)
@@ -418,9 +423,7 @@ while (1)
 	{
 	if (!readReadyWait(sd, timeOut))
 	    {
-	    if (!noTimeoutError)
-		errAbort("ftp server response timed out > %ld microsec",timeOut);
-	    return rs;
+	    errAbort("ftp server response timed out > %ld microsec",timeOut);
 	    }
 	if ((readSize = read(sd, buf, sizeof(buf))) == 0)
 	    break;
@@ -462,6 +465,15 @@ return rs;
 }
 
 
+
+struct dyString *sendFtpCommand(int sd, char *cmd, boolean seeResult)
+/* send command to ftp server and check resulting reply code, 
+   give error if not desired reply */
+{   
+sendFtpCommandOnly(sd, cmd);
+return receiveFtpReply(sd, cmd, seeResult);
+}
+
 int parsePasvPort(char *rs)
 /* parse PASV reply to get the port and return it */
 {
@@ -501,39 +513,56 @@ sd = netMustConnect(npu.host, atoi(npu.port));
 
 /* don't send a command, just read the welcome msg */
 if (readReadyWait(sd, timeOut))
-    sendFtpCommand(sd, "", FALSE, FALSE);
+    sendFtpCommand(sd, "", FALSE);
 
 safef(cmd,sizeof(cmd),"USER %s\r\n",npu.user);
-sendFtpCommand(sd, cmd, FALSE, FALSE);
+sendFtpCommand(sd, cmd, FALSE);
 
 safef(cmd,sizeof(cmd),"PASS %s\r\n",npu.password);
-sendFtpCommand(sd, cmd, FALSE, FALSE);
+sendFtpCommand(sd, cmd, FALSE);
 
-sendFtpCommand(sd, "TYPE I\r\n", FALSE, FALSE);
+sendFtpCommand(sd, "TYPE I\r\n", FALSE);
 /* 200 Type set to I */
 /* (send the data as binary, so can support compressed files) */
 
-rs = sendFtpCommand(sd, "PASV\r\n", TRUE, FALSE);
+rs = sendFtpCommand(sd, "PASV\r\n", TRUE);
 /* 227 Entering Passive Mode (128,231,210,81,222,250) */
 
 safef(cmd,sizeof(cmd),"RETR %s\r\n", npu.file);
-/* we can't wait for reply because 
-   we need to start the next fetch connect 
-   but then if there is an error e.g. missing file,
-   then we don't see the err msg because we
-   already closed the port and are waiting.
-   And our timeout is long - indefinitely so?
-*/
-sendFtpCommand(sd, cmd, FALSE, TRUE);  
+sendFtpCommandOnly(sd, cmd);  
 
 sdata = netMustConnect(npu.host, parsePasvPort(rs->string));
-
-/* Clean up and return handle. */
-dyStringFree(&rs);
 
 /* Because some FTP servers will kill the data connection
  * as soon as the control connection closes,
  * we have to develop a workaround using a partner process. */
+
+/* see which comes first, an error message on the control conn
+ * or data on the data conn */
+
+int secondsWaited=0;
+while (TRUE)
+    {
+    if (secondsWaited >= 10)
+	{
+	errAbort("ftp server error on cmd=[%s] timed-out waiting for data or error\n",cmd);
+	}
+    timeOut = 1000000; /* wait in microsec */
+    if (readReadyWait(sdata, timeOut))
+	{
+	break;   // we have some data
+	}
+    if (readReadyWait(sd, 0)) /* wait in microsec */
+	{
+	receiveFtpReply(sd, cmd, FALSE);  // this can see an error like bad filename
+	}
+    ++secondsWaited;
+    }
+    
+
+/* Clean up and return handle. */
+dyStringFree(&rs);
+
 
 fflush(stdin);
 fflush(stdout);
