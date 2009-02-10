@@ -8126,13 +8126,239 @@ shortLabel HudsonAlpha Methyl-seq
 longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
 subGroup1	view Views Regions=Regions
-subGroup2	cellType Cell_Line HTC116=HTC116
+subGroup2	cellType Cell_Line HCT-116=HCT-116 H9ES=H9ES H9ES-AFP+=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-EB=H9ES-EB H9ES-CM=H9ES-CM H9ES-EBD=H9ES-EBD BG02ES=BG02ES BG02ES-EBD=BG02ES-EBD HFL11W=HFL11W HFL24W=HFL24W HAL=HAL
 dimensions dimensionX=cellType
-sortOrder cellType=+ factor=+ view=+
+sortOrder cellType=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Regions=dense
 controlledVocabulary encode/cv.ra cellType factor
 priority	0
 type bed 9
 nextItemButton on
+itemRgb on
 wgEncode 1
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel HCT-116 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HCT-116 cells)
+    subGroups view=Regions cellType=HCT-116
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 1
+    noInherit on
+    configurable on
+    cell HCT-116
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel HCT-116 2
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in HCT-116 cells)
+    subGroups view=Regions cellType=HCT-116
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 2
+    noInherit on
+    configurable on
+    cell HCT-116
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9es
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES cells)
+    subGroups view=Regions cellType=H9ES
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    cell H9ES
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-E 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-E cells)
+    subGroups view=Regions cellType=H9ES-E
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 4
+    noInherit on
+    configurable on
+    cell H9ES-E
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafp
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-AFP+ 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-AFP+ cells)
+    subGroups view=Regions cellType=H9ES-AFP+
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 5
+    noInherit on
+    configurable on
+    cell H9ES-AFP+
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafp
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-AFP- 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-AFP- cells)
+    subGroups view=Regions cellType=H9ES-AFP-
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 6
+    noInherit on
+    configurable on
+    cell H9ES-AFP-
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-EB 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-EB cells)
+    subGroups view=Regions cellType=H9ES-EB
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 7
+    noInherit on
+    configurable on
+    cell H9ES-EB
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-CM 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-CM cells)
+    subGroups view=Regions cellType=H9ES-CM
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 8
+    noInherit on
+    configurable on
+    cell H9ES-CM
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-EBD 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-EBD cells)
+    subGroups view=Regions cellType=H9ES-EBD
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 9
+    noInherit on
+    configurable on
+    cell H9ES-EBD
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02es
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel BG02ES 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in BG02ES cells)
+    subGroups view=Regions cellType=BG02ES
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 10
+    noInherit on
+    configurable on
+    cell BG02ES
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel BG02ES-EBD 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in BG02ES-EBD cells)
+    subGroups view=Regions cellType=BG02ES-EBD
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 11
+    noInherit on
+    configurable on
+    cell BG02ES-EBD
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2Bg02esebd
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel BG02ES-EBD 2
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in BG02ES-EBD cells)
+    subGroups view=Regions cellType=BG02ES-EBD
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 12
+    noInherit on
+    configurable on
+    cell BG02ES-EBD
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel HFL11W 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HFL11W cells)
+    subGroups view=Regions cellType=HFL11W
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 13
+    noInherit on
+    configurable on
+    cell HFL11W
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel HFL24W 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HFL24W cells)
+    subGroups view=Regions cellType=HFL24W
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 14
+    noInherit on
+    configurable on
+    cell HFL24W
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Hal
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel HAL 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HAL cells)
+    subGroups view=Regions cellType=HAL
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 15
+    noInherit on
+    configurable on
+    cell HAL
