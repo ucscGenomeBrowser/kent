@@ -1,0 +1,312 @@
+# for emacs: -*- mode: sh; -*-
+
+# Saccharomyces cerevisiae
+# Saccharomyces Genome Database, Stanford
+
+#  $Id: sacCer2.txt,v 1.1 2009/02/10 20:27:13 hiram Exp $
+
+#######################################################################
+# Download data  (DONE - 2009-01-30 - Hiram)
+    mkdir -p /hive/data/genomes/sacCer2/download
+    cd /hive/data/genomes/sacCer2/download
+    #	convert chrom names to something reasonable, they are now roman nums
+    mkdir -p chromosomes
+    # bash scripting follows:
+runOne() {
+N=$1
+C=$2
+    echo ">chr${C}" > chromosomes/chr${C}.fa
+    grep -v "^>" sgd.chromosomes/chr${N}.fsa >> chromosomes/chr${C}.fa
+    echo "done chr${N} -> ${C}"
+}
+
+runOne 01 I
+runOne 02 II
+runOne 03 III
+runOne 04 IV
+runOne 05 V
+runOne 06 VI
+runOne 07 VII
+runOne 08 VIII
+runOne 09 IX
+runOne 10 X
+runOne 11 XI
+runOne 12 XII
+runOne 13 XIII
+runOne 14 XIV
+runOne 15 XV
+runOne 16 XVI
+runOne mt M
+    #	the same sequence again, with the following runOne()
+    #	will product an AGP file:
+runOne() {
+    N=$1
+    C=$2
+    CTG=`head -1 sgd.chromosomes/chr${N}.fsa | sed -e 's/>ref|//; s/|.*//'`
+    size=`faSize  sgd.chromosomes/chr${N}.fsa | head -1 | awk '{print $1}'`
+    echo -e "chr${C}\t1\t$size\t$SEQ\tF\t$CTG\t1\t$size\t+"
+    SEQ=`echo $SEQ | awk '{print $1+1}'`
+}
+    #	plus this echo statement for 2micron:
+    echo -e "2micron\t1\t6318\t${SEQ}\tF\tNC_001398\t1\t6318\t+"
+
+    #	trim the SGD gff file and get UCSC chrom names
+    awk '
+BEGIN { keepGoing = 1 }
+{
+if (match($1, "^##FASTA")) { keepGoing = 0; }
+if (keepGoing) print;
+}
+' chromosomal_feature/saccharomyces_cerevisiae.gff \
+        | sed -e "s/^2-micron/2micron/; s/^chrMito/chrM/" > S.cerevisiae.gff
+
+    #	this program needed to be fixed for this newer gff file format
+    checkSgdSync -verbose=4 -gffRowCount=9 -faExtn=fa \
+	-gffFile=S.cerevisiae.gff \
+	download > sgd.feature.scan.txt 2>&1
+    #	this used to have only a couple, now there are many non-coding
+    #	annotations
+    #    good 6702, bad 371, total 7073
+
+#########################################################################
+
+    cd /hive/data/genomes/sacCer2
+    cat << '_EOF_' > sacCer2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db sacCer2
+scientificName Saccharomyces cerevisiae
+commonName S. cerevisiae
+assemblyDate June 2008
+assemblyLabel SGD June 2008
+orderKey 998
+mitoAcc NC_001224
+#       override the check for max size of 25,000
+mitoSize        90000
+fastaFiles /hive/data/genomes/sacCer2/download/chromosomes/*.fa
+agpFiles /hive/data/genomes/sacCer2/download/sacCer2.agp
+# qualFiles /dev/null
+dbDbSpeciesDir sacCer
+taxId   4932
+'_EOF_'
+    # << happy emacs
+    makeGenomeDb.pl sacCer2.config.ra > makeGenomeDb.log 2>&1
+    #	take the trackDb stuff and check it in
+    #	no need for masked sequence:
+    ln -s sacCer2.unmasked.2bit sacCer2.2bit
+    ln -s `pwd`/sacCer2.2bit /gbdb/sacCer2
+
+
+#########################################################################
+# sacCer2 - S. cerevisiae - Ensembl Genes version 52 (DONE - 2009-02-04 - hiram)
+    ssh swarm
+    cd /hive/data/genomes/sacCer2
+    cat << '_EOF_' > sacCer2.ensGene.ra
+# required db variable
+db sacCer2
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^VIII/chrVIII/; s/^VII/chrVII/; s/^VI/chrVI/; s/^V/chrV/; s/^XIII/chrXIII/; s/^XII/chrXII/; s/^XIV/chrXIV/; s/^XI/chrXI/; s/^XVI/chrXVI/; s/^XV/chrXV/; s/^X/chrX/; s/^III/chrIII/; s/^IV/chrIV/; s/^II/chrII/; s/^IX/chrIX/; s/^I/chrI/; s/^MT/chrM/; s/2-micron/2micron/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl -ensVersion=52 sacCer2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/sacCer2/bed/ensGene.52
+    featureBits sacCer2 ensGene
+    # 8912793 bases of 12162995 (73.278%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2009-02-04 - Hiram)
+    #	repMatch = 1024 * sizeof(sacCer2)/sizeof(hg18)
+    #	4.32 = 1024 * (12162995/2881515245)
+    #	use 10 to be very conservative
+    ssh hgwdev
+    cd /hive/data/genomes/sacCer2
+    blat sacCer2.2bit /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/11.ooc \
+	-repMatch=10
+    #	Wrote 3137 overused 11-mers to 11.ooc
+    #	copy this to scratch data
+    cp -p jkStuff/11.ooc /hive/data/staging/data/sacCer2/sacCer2.11.ooc
+
+#########################################################################
+# work with the SGD annotations (WORKING - 2009-02-04 - Hiram)
+    mkdir /hive/data/genomes/sacCer2/bed/sgdAnnotations
+    cd /hive/data/genomes/sacCer2/bed/sgdAnnotations
+    #	get rid of the FASTA section from their gff file
+    awk '
+BEGIN { keepGoing = 1 }
+{
+if (match($1, "^##FASTA")) { keepGoing = 0; }
+if (keepGoing) print;
+}
+' ../../download/chromosomal_feature/saccharomyces_cerevisiae.gff \
+        | sed -e "s/^2-micron/2micron/; s/^chrMito/chrM/" > S.cerevisiae.gff
+
+#########################################################################
+# CREATING SGD-BASED KNOWN GENES AND OTHER FEATURES (DONE - 2009-02-10 - Hiram)
+    mkdir /hive/data/sacCer2/bed/sgdAnnotations
+    cd /hive/data/sacCer2/bed/sgdAnnotations
+    #	trim the delivered S.cerevisiae.gff file to get rid of the FASTA section
+    #	and fixup the chrM and 2-micron chrom names:
+    awk '
+BEGIN { keepGoing = 1 }
+{
+if (match($1, "^##FASTA")) { keepGoing = 0; }
+if (keepGoing) print;
+}
+' ../../download/chromosomal_feature/saccharomyces_cerevisiae.gff \
+        | sed -e "s/^2-micron/2micron/; s/^chrMito/chrM/" > S.cerevisiae.gff
+
+    #	wrote this perl script to specifically parse this particular instance
+    #	of the sgd gff file.
+    $HOME/kent/src/hg/makeDb/outside/yeast/hgSgdGff3/sgdGffToGtf.pl \
+        S.cerevisiae.gff > sacCer2.sgdGene.gtf 2> sacCer2.gtf.stderr
+    #	This also writes the files:
+    #	-rw-rw-r-- 1  640177 Feb  6 15:01 leftOvers.gff
+    #	-rw-rw-r-- 1  259712 Feb  6 15:01 otherFeatures.bed
+    #	-rw-rw-r-- 1  254996 Feb  6 15:01 notes.txt
+    #	-rw-rw-r-- 1 1214875 Feb  6 15:01 descriptions.txt
+
+    ldHgGene -gtf sacCer2 sgdGene sacCer2.sgdGene.gtf
+    hgLoadBed sacCer2 sgdOther otherFeatures.bed \
+        -tab -sqlTable=$HOME/kent/src/hg/lib/sgdOther.sql
+    #	this perl script will fixup the fasta header lines for
+    #	the chr*.peptides.fsa files to run into hgSgdPep
+    cat << '_EOF_' > filter.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH,">symbol.txt") or die "can not write to symbol.txt";
+
+my $inAnnotation = 0;
+
+while (my $line=<>) {
+    if ($line =~ m/^>Annotated\|/) {
+        $inAnnotation = 1;
+        my (@words) = split('\s+', $line);
+        die "can not find four fields in\n'$line'" if (scalar(@words) < 4);
+        my $name = $words[3];
+        $name =~ s/;.*//;
+        $name =~ s#/.*##;
+        printf ">ORFP:%s\n", $name;
+        printf FH "%s\t", $name;
+        if ("${name};" ne $words[3]) {
+            my $otherName = $words[3];
+            $otherName =~ s#.*/##;
+            $otherName =~ s/;//;
+            printf FH "%s", $otherName;
+#           printf FH " %s", $words[2];
+        } else {
+            printf FH "%s", $name;
+        }
+#       for (my $i = 4; $i < scalar(@words); ++$i) {
+#           printf FH " %s", $words[$i];
+#       }
+        print FH "\n";
+    } elsif ($line =~ m/^>/) {
+        $inAnnotation = 0;
+    } else {
+        if ($inAnnotation) { print $line; }
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x filter.pl
+    zcat \
+../../download/protein_info/hypothetical_peptides/chr*.peptides.20040928.fsa.gz\
+    | ./filter.pl | hgSgdPep  stdin sgdPep.fa symbol.txt
+    hgPepPred sacCer2 generic sgdPep sgdPep.fa
+    hgsql sacCer2 -e 'create table sgdToName ( \
+          name varchar(10) not null, \
+	  value varchar(10) not null, \
+	  PRIMARY KEY(name), \
+	  INDEX (value));'
+    hgsql sacCer2 -e 'load data local infile "symbol.txt" \
+          into table sgdToName;'
+    hgsql sacCer2 < $HOME/kent/src/hg/lib/sgdDescription.sql
+    hgsql sacCer2 -e 'load data local infile "descriptions.txt" \
+          into table sgdDescription;'
+    hgsql sacCer2 < $HOME/kent/src/hg/lib/sgdOtherDescription.sql
+    hgsql sacCer2 -e 'load data local infile "notes.txt" \
+          into table sgdOtherDescription;'
+
+# ADDING SWISSPROT ACCESSION TO KNOWN GENES (DONE - 2009-02-10 - Hiram)
+    cd /hive/data/sacCer2/bed/sgdAnnotation
+    grep "Swiss-Prot" ../../download/chromosomal_feature/dbxref.tab \
+	| awk '{printf("%s\t%s\n", $5, $1);}' > sgdToSwissProt.txt
+    hgsql sacCer2 -e 'create table sgdToSwissProt ( \
+          name varchar(10) not null, \
+	  value varchar(10) not null, \
+	  PRIMARY KEY(name), \
+	  INDEX (value));'
+    hgsql sacCer2 -e 'load data local infile "sgdToSwissProt.txt" \
+          into table sgdToSwissProt;'
+    hgProtIdToGenePred sacCer2 sgdGene sgdToSwissProt name value
+
+# CREATE SGD-BASED CLONE TRACK (DONE - 2009-02-10 - Hiram)
+    mkdir /hive/data/genomes/sacCer2/bed/sgdClone
+    cd /hive/data/genomes/sacCer2/bed/sgdClone
+    # since sacCer1, these coordinates have become 0-relative ?
+    awk -F '\t' '{printf("%d\t%d\t%d\t%s\t%s\n", $3, $4, $5, $2, $1);}' \
+    	../../download/chromosomal_feature/clone.tab \
+	| sed -e \
+"s/^8/chrVIII/; s/^7/chrVII/; s/^6/chrVI/; s/^5/chrV/;
+s/^13/chrXIII/; s/^12/chrXII/; s/^14/chrXIV/; s/^11/chrXI/;
+s/^16/chrXVI/; s/^15/chrXV/; s/^10/chrX/; s/^3/chrIII/;
+s/^4/chrIV/; s/^2/chrII/; s/^9/chrIX/; s/^1/chrI/;" > sgdClone.bed
+    hgLoadBed sacCer2 sgdClone  sgdClone.bed -tab \
+        -sqlTable=$HOME/kent/src/hg/lib/sgdClone.sql
+
+# AUTO UPDATE GENBANK RUN  (Done - 2009-02-10 - Hiram)
+    # align with latest genbank process.
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add sacCer2 just before sacCer1
+
+# sacCer2 S. cerevisiae
+sacCer2.serverGenome = /hive/data/genomes/sacCer2/sacCer2.2bit
+sacCer2.clusterGenome = /scratch/data/sacCer2/sacCer2.2bit
+sacCer2.ooc = no
+sacCer2.maxIntron = 5000
+sacCer2.lift = no
+sacCer2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+sacCer2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+sacCer2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+sacCer2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+sacCer2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+#sacCer2.perChromTables = no  # doesn't work in the browser
+sacCer2.genbank.mrna.xeno.load = no
+sacCer2.refseq.mrna.native.load = no
+sacCer2.downloadDir = sacCer2
+
+    cvs ci -m "Added sacCer2." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial sacCer2 &
+    #	logFile: var/build/logs/2009.02.10-11:27:42.sacCer2.initalign.log
+XXX - running Tue Feb 10 11:27:55 PST 2009
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ce6
+    #	logFile: var/dbload/hgwdev/logs/2008.05.30-20:29:01.dbload.log
+    #	real    23m8.651s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add ce6 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added ce6 - C. elegans WS190" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
