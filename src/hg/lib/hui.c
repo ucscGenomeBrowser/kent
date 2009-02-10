@@ -19,7 +19,7 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.156 2009/02/09 19:40:43 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.157 2009/02/10 01:13:04 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2300,7 +2300,8 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
         printf("<B>%s</B><BR>\n",filterBy->title);
     int openSize = min(20,slCount(filterBy->slValues)+1);
     int size = (filterBy->slChoices == NULL || slCount(filterBy->slChoices) == 1 ? 1 : openSize);  //slCount(filterBy->slValues)+1);   // slChoice ??
-#define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onclick='this.size=%d;' onblur='var ix; for(ix=this.selectedIndex+1;ix<this.options.length;ix++) {if(this.options[ix].selected) break;} if(ix == this.options.length) this.size=1; return true;'><BR>\n"
+//#define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onfucus='this.size=%d;' onblur='var ix; for(ix=this.selectedIndex+1;ix<this.options.length;ix++) {if(this.options[ix].selected) break;} if(ix == this.options.length) this.size=1; return true;'><BR>\n"
+#define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onclick='this.size=%d;'><BR>\n"
     printf(MULTI_SELECT_WITH_JS,tdb->tableName,filterBy->column,size,openSize);
     printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":"") );
     struct slName *slValue;
@@ -2312,7 +2313,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
             char varName[32];
             safef(varName, sizeof(varName), "%d",ix);
             char *name = strSwapChar(cloneString(slValue->name),'_',' ');
-            printf("<OPTION%s value=%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,varName)?" SELECTED":""),varName,name);
+                printf("<OPTION%s value=%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,varName)?" SELECTED":""),varName,name);
             freeMem(name);
             }
         }
@@ -2322,6 +2323,9 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
             printf("<OPTION%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,slValue->name)?" SELECTED":""),slValue->name);
         }
     }
+    // The following is needed to make msie scroll to selected option.
+    //printf("<script type='text/javascript'>$(document).ready(function () { $( 'select[name^=%s.filterBy.]' ).children('option[selected]').each( function(i) { this.selected=true; }); });</script>\n",tdb->tableName);
+    printf("<script type='text/javascript'>onload=function(){ $( 'select[name^=%s.filterBy.]' ).children('option[selected]').each( function(i) { this.selected=true; }); }</script>\n",tdb->tableName);
 puts("</TR></TABLE>");
 
 return;
