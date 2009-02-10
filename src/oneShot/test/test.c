@@ -17,31 +17,17 @@ errAbort(
   );
 }
 
-struct refString
-    {
-    int refCount;
-    int type;
-    char *s;
-    int size;
-    int alloced;
-    bool isConst;
-    };
 
-struct refString refString = {0, 0, "Hello world", 11, 11, TRUE};
-
-void test(char *word, char *line)
+void test(char *word)
 {
-boolean isSame = startsWithWord(word, line);
-printf("'%s' %s first word of '%s.'\n", word,
-    (isSame ? "is" : "isn't"), line);
+printf("%d\n", word[0]);
 }
 
 int main(int argc, char *argv[], char *env[])
 /* Process command line. */
 {
-int i;
-if (argc != 3)
+if (argc != 2)
    usage();
-test(argv[1], argv[2]);
+test(argv[1]);
 return 0;
 }
