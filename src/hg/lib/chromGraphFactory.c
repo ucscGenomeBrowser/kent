@@ -15,7 +15,7 @@
 #include "chromGraphFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.15 2009/01/12 22:36:21 galt Exp $";
+static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.16 2009/02/10 00:47:47 galt Exp $";
 
 #define affy500Table "snpArrayAffy500"
 #define affy6Table "snpArrayAffy6"
@@ -661,6 +661,7 @@ char **row;
 int match = 0, total = 0;
 struct chromGraph *cg;
 struct chromPos *pos;
+
 if (report)
     printf("Loaded %d elements from %s table for mapping.<BR>\n", 
     	hash->elCount, table);
@@ -671,6 +672,9 @@ if (aliasTable != NULL)
 	printf("Loaded %d aliases from %s table as well.<BR>\n", 
 		aliasHash->elCount, aliasTable);
     }
+
+fflush(stdout); // trying to keep browser from timing out
+
 AllocArray(row, colCount);
 Chopper chopper = getChopper(formatType);
 char *line;
@@ -706,15 +710,12 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
 		cg->chrom = pos->chrom;
 		cg->chromStart = pos->pos;
 		cg->val = cppNeedDouble(cpp, row, i);
-		cg->marker = marker;
+		cg->marker = cloneString(marker);
 		slAddHead(&fileEl->cgList, cg);
 		}
 	    }
 	}
-    else
-	{
-	freeMem(marker);
-	}
+    freeMem(marker);
     }
 if (report)
     printf("Mapped %d of %d (%3.1f%%) of markers<BR>\n", match, total, 
