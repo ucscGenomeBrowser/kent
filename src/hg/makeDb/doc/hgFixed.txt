@@ -323,6 +323,18 @@ echo drop table xmMrna | hgsql mm6
    hgsql hgFixed -e "echo delete from rebaseRefs"
    hgsql hgFixed -e "load data local infile 'rebaseRefs.txt' into table rebaseRefs"   
 
+# REBASE 902 (2009) (DONE 2009-02-09, Andy)
+   ssh hgwdev
+   mkdir /hive/data/outside/rebase
+   cd /hive/data/outside/rebase
+   tail -n+15 rebaseRefs.txt | sed '/^$/d; s/^\s\+\([[:digit:]]\+\)\.\s\+\</\1\t/' > tmp
+   mv tmp rebaseRefs.txt
+   hgCutters hgFixed rebase.gcg
+   hgsql hgFixed -e "delete from rebaseRefs"
+   hgsql hgFixed -e "load data local infile 'rebaseRefs.txt' into table rebaseRefs"   
+   mkdir rebase902
+   mv rebase.gcg rebaseRefs.txt rebase902/
+
 # GLADSTONE hESC Novartis microarray data.
    # 1. Download http://www.genmapp.org/temp/humansimpleESC.zip
    # 2. Manually convert using MS access on Bob's laptop to a tab-delimited text file.
