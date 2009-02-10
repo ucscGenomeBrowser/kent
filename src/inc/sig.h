@@ -90,7 +90,7 @@
 #define bigWigSig 0x888FFC26
 /* Signature for a big wig file. */
 
-#define bigBedSig 0x8789F2EA
+#define bigBedSig 0x8789F2EB
 /* Signature for a big bed file. */
 
 #define udcBitmapSig 0x4187E2F6
