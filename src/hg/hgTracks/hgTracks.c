@@ -30,6 +30,7 @@
 #include "wikiTrack.h"
 #include "ctgPos.h"
 #include "bed.h"
+#include "bigBed.h"
 #include "bedCart.h"
 #include "customTrack.h"
 #include "cytoBand.h"
@@ -43,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1552 2009/02/09 22:24:08 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1553 2009/02/10 22:16:52 kent Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2605,6 +2606,24 @@ else if (sameString(type, "bigWig"))
     tg = trackFromTrackDb(tdb);
     tg->bbiFileName = trackDbSetting(tdb, "dataUrl");
     tg->labelNextItemButtonable = FALSE;
+    }
+else if (sameString(type, "bigBed"))
+    {
+    /* Figure out file name from settings. */
+    char *fileName = trackDbSetting(tdb, "dataUrl");
+
+    /* Briefly open file to find field counts, and from that revise the
+     * tdb->type to be more complete. */
+    struct bbiFile *bbi = bigBedFileOpen(fileName);
+    char extra = (bbi->fieldCount > bbi->definedFieldCount ? '+' : '.');
+    char typeBuf[64];
+    safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
+    tdb->type = cloneString(typeBuf);
+    bbiFileClose(&bbi);
+
+    /* Finish wrapping track around tdb. */
+    tg = trackFromTrackDb(tdb);
+    tg->bbiFileName = fileName;
     }
 else if (sameString(type, "bedGraph"))
     {
