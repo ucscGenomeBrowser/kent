@@ -4923,3 +4923,12 @@ TMPDIR=/scratch/tmp
     #	1713323126 bases of 2620346127 (65.385%) in intersection
 
 #############################################################################
+# LIFTOVER TO Rn5 (DONE - 2008-12-14 - Hiram )
+    mkdir /hive/data/genomes/rn4/bed/blat.rn5.2008-12-14
+    cd /hive/data/genomes/rn4/bed/blat.rn5.2008-12-14
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug rn4 rn5
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl rn4 rn5 > do.log 2>&1
+
+#############################################################################
