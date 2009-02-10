@@ -1401,3 +1401,30 @@ nice bin/gbDbLoadStep -drop -initialLoad sacCer1
 # update Oct 26, 2007;  update July 7, 2008
 # loaded by Belinda Giardine, in same manner as hg18 ORegAnno track
 
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2009-02-04 - Hiram)
+    #	repMatch = 1024 * sizeof(sacCer1)/sizeof(hg18)
+    #	4.32 = 1024 * (12156302/2881515245)
+    #	use 10 to be very conservative
+    ssh hgwdev
+    cd /hive/data/genomes/sacCer1
+    blat sacCer1.2bit /dev/null /dev/null -tileSize=11 -makeOoc=11.ooc \
+	-repMatch=10
+    #	Wrote 3145 overused 11-mers to 11.ooc
+    #	copy this to scratch data
+    cp -p 11.ooc /hive/data/staging/data/sacCer1/sacCer1.11.ooc
+    #	make push request to kluster nodes /scratch/data/
+
+#############################################################################
+# LIFTOVER TO SacCer2 (DONE - 2009-01-04 - Hiram )
+    mkdir /hive/data/genomes/sacCer1/bed/blat.sacCer2.2009-02-04
+    cd /hive/data/genomes/sacCer1/bed/blat.sacCer2.2009-02-04
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug sacCer1 sacCer2
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+	-bigClusterHub=pk -dbHost=hgwdev -workhorse=hgwdev \
+	 sacCer1 sacCer2 > do.log 2>&1
+    #	real    3m21.840s
+
+#############################################################################
