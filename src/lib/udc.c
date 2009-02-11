@@ -301,7 +301,7 @@ if (t == -1)
     errAbort("mktime failed while parsing last-modified string [%s]", lastModString);
     }
 
-//printf("seconds since the Epoch: %ld\n", (long) t);"
+//printf("seconds since the Epoch: %lld\n", (long long) t);"
 
 retInfo->updateTime = t;
 
