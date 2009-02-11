@@ -616,6 +616,14 @@ vendorName Santa Cruz Biotech
 vendorId sc-735
 orderUrl http://www.scbt.com/product.php?datasheet=735
 
+term ZNF263
+type Antibody
+targetDescription ZNF263 (NP_005732, 201 a.a. ~ 299 a.a) partial recombinant protein with GST tag.
+antibodyDescription Mouse polyclonal
+vendorName Novus Biologicals
+vendorId H00010127-A01
+orderUrl http://www.novusbio.com/data_sheet/index/H00010127-A01
+
 # ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 term T7Tag
 type ripTgtProtein
