@@ -37,13 +37,6 @@
 #define udcMaxBytesPerRemoteFetch (udcBlockSize * 32)
 /* Very large remote reads are broken down into chunks this size. */
 
-struct udcRemoteFileInfo
-/* Information about a remote file. */
-    {
-    bits64 updateTime;	/* Last update in seconds since 1970 */
-    bits64 size;	/* Remote file size */
-    };
-
 typedef int (*UdcDataCallback)(char *url, bits64 offset, int size, void *buffer);
 /* Type for callback function that fetches file data. */
 
