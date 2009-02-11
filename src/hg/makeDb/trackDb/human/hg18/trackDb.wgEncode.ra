@@ -8126,7 +8126,7 @@ shortLabel HudsonAlpha Methyl-seq
 longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
 subGroup1	view Views Regions=Regions
-subGroup2	cellType Cell_Line HCT-116=HCT-116 H9ES=H9ES H9ES-AFP+=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-EB=H9ES-EB H9ES-CM=H9ES-CM H9ES-EBD=H9ES-EBD BG02ES=BG02ES BG02ES-EBD=BG02ES-EBD HFL11W=HFL11W HFL24W=HFL24W HAL=HAL
+subGroup2	cellType Cell_Line HCT-116=HCT-116 H9ES=H9ES H9ES-AFP+=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-CM=H9ES-CM H9ES-EBD=H9ES-EBD BG02ES=BG02ES BG02ES-EBD=BG02ES-EBD HFL11W=HFL11W HFL24W=HFL24W HAL=HAL
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
@@ -8148,7 +8148,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 1
     noInherit on
     configurable on
     cell HCT-116
@@ -8163,7 +8162,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 2
     noInherit on
     configurable on
     cell HCT-116
@@ -8178,7 +8176,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 3
     noInherit on
     configurable on
     cell H9ES
@@ -8193,7 +8190,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 4
     noInherit on
     configurable on
     cell H9ES-E
@@ -8208,7 +8204,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 5
     noInherit on
     configurable on
     cell H9ES-AFP+
@@ -8223,7 +8218,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 6
     noInherit on
     configurable on
     cell H9ES-AFP-
@@ -8238,7 +8232,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 7
     noInherit on
     configurable on
     cell H9ES-EB
@@ -8253,7 +8246,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 8
     noInherit on
     configurable on
     cell H9ES-CM
@@ -8268,7 +8260,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 9
     noInherit on
     configurable on
     cell H9ES-EBD
@@ -8283,7 +8274,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 10
     noInherit on
     configurable on
     cell BG02ES
@@ -8298,7 +8288,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 11
     noInherit on
     configurable on
     cell BG02ES-EBD
@@ -8313,7 +8302,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 12
     noInherit on
     configurable on
     cell BG02ES-EBD
@@ -8328,7 +8316,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 13
     noInherit on
     configurable on
     cell HFL11W
@@ -8343,7 +8330,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 14
     noInherit on
     configurable on
     cell HFL24W
@@ -8358,7 +8344,6 @@ wgEncode 1
     dateSubmitted 2009-02-10
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
-    priority 15
     noInherit on
     configurable on
     cell HAL
