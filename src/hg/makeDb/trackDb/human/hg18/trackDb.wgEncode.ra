@@ -8150,6 +8150,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell HCT-116
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116
@@ -8164,6 +8165,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell HCT-116
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9es
@@ -8178,6 +8180,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell H9ES
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese
@@ -8192,6 +8195,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell H9ES-E
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafp
@@ -8206,6 +8210,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell H9ES-AFP+
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafp
@@ -8220,6 +8225,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell H9ES-AFP-
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb
@@ -8234,6 +8240,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell H9ES-EB
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm
@@ -8248,6 +8255,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell H9ES-CM
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd
@@ -8262,6 +8270,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell H9ES-EBD
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02es
@@ -8276,6 +8285,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell BG02ES
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd
@@ -8290,6 +8300,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell BG02ES-EBD
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Bg02esebd
@@ -8304,6 +8315,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell BG02ES-EBD
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w
@@ -8318,6 +8330,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell HFL11W
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w
@@ -8332,6 +8345,7 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell HFL24W
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hal
@@ -8346,4 +8360,5 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     configurable on
+    itemRgb on
     cell HAL
