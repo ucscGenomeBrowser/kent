@@ -28,6 +28,7 @@
 #include "portable.h"
 #include "sig.h"
 #include "net.h"
+#include "cheapcgi.h"
 #include "udc.h"
 
 #define udcBlockSize (8*1024)
@@ -514,6 +515,25 @@ if (file->size > 0)
 udcBitmapClose(&bits);
 }
 
+static char *cgiEncodeExceptDirs(char *input)
+/* CGI-encode every char in input except for the / chars. */
+{
+struct dyString *dy = dyStringNew(strlen(input)+16);
+char *s, *e;
+
+for (s = input; s != NULL; s = e)
+    {
+    e = strchr(s, '/');
+    if (e != NULL)
+	*e++ = 0;
+    char *encoded = cgiEncode(s);
+    dyStringAppend(dy, encoded);
+    if (e != NULL)
+        dyStringAppendC(dy, '/');
+    freeMem(encoded);
+    }
+return dyStringCannibalize(&dy);
+}
 
 struct udcFile *udcFileMayOpen(char *url, char *cacheDir)
 /* Open up a cached file.  Return NULL if file doesn't exist. */
@@ -531,11 +551,12 @@ if (colon != NULL)
     afterProtocol = url + colonPos + 1;
     while (afterProtocol[0] == '/')
        afterProtocol += 1;
+    afterProtocol = cgiEncodeExceptDirs(afterProtocol);
     }
 else
     {
     protocol = cloneString("transparent");
-    afterProtocol = url;
+    afterProtocol = cloneString(url);
     isTransparent = TRUE;
     }
 prot = udcProtocolNew(protocol);
@@ -587,6 +608,7 @@ else
     setInitialCachedDataBounds(file);
     file->fSparse = mustOpen(file->sparseFileName, "rb+");
     }
+freeMem(afterProtocol);
 return file;
 }
 
