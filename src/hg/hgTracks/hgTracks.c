@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1553 2009/02/10 22:16:52 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1554 2009/02/11 00:49:43 hiram Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2854,6 +2854,7 @@ return (hTableExists("hgFixed", "cutters") &&
 }
 
 void fr2ScaffoldEnsemblLink(char *archive)
+/* print out Ensembl link to appropriate scaffold there */
 {
     struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr = NULL;
@@ -2988,8 +2989,8 @@ if (ensVersionString[0])
 	{
 	if (sameWord(database,"fr2"))
 	    fr2ScaffoldEnsemblLink(archive);
-	/* see if we are entirely within a single contig */
-	if (hTableExists(database, "ctgPos"))
+	else if (hTableExists(database, "ctgPos"))
+	    /* see if we are entirely within a single contig */
 	    {
 	    struct sqlConnection *conn = hAllocConn(database);
 	    struct sqlResult *sr = NULL;
