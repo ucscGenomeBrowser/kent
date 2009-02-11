@@ -84,7 +84,7 @@ struct udcRemoteFileInfo
     bits64 size;	/* Remote file size */
     };
 
-static boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo);
+boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo);
 /* Sets size and last modified time of URL
  * and returns status of HEAD GET. */
 

@@ -254,7 +254,7 @@ close(sd);
 return total;
 }
 
-static boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
+boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
 /* Sets size and last modified time of URL
  * and returns status of HEAD GET. */
 {
