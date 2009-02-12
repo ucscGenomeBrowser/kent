@@ -99,6 +99,21 @@ url http://www.genetrap.org/cgi-bin/annotation.py?cellline=$$
 urlLabel IGTC Cell Line Annotation: 
 
 track komp
+shortLabel IKMC Genes
+longLabel International Knockout Mouse Consortium Genes
+group genes 
+priority 64.1
+visibility hide
+type bed 12
+noScoreFilter .
+itemRgb on
+urlLabel KOMP Data Coordination Center: 
+url http://www.knockoutmouse.org/search?criteria=$$
+mgiUrlLabel MGI Report: 
+mgiUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+release alpha
+
+track komp
 shortLabel KOMP Genes
 longLabel KnockOut Mouse Project Genes
 group genes 
@@ -111,6 +126,7 @@ urlLabel KOMP Data Coordination Center:
 url http://www.knockoutmouse.org/search?criteria=$$
 mgiUrlLabel MGI Report: 
 mgiUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+release beta
 
 track xenoRefGene
 shortLabel Other RefSeq
