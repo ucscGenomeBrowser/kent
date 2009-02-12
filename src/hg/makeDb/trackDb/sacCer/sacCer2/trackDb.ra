@@ -15,7 +15,7 @@ shortLabel Gap
 longLabel Gap Locations
 priority 11
 group map
-visibility dense
+visibility hide
 type bed 3 +
 
 track testSgdGene
@@ -55,7 +55,7 @@ shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, 7 yeast Multiz Alignment
 group compGeno
 priority 103.4
-visibility hide
+visibility pack
 exonArrows off
 showTopScorers 200
 color 100,50,170
