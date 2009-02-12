@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.66 2009/02/10 21:43:14 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.67 2009/02/12 01:18:00 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -464,8 +464,6 @@ if (!seeResult) dyStringFree(&rs);
 return rs;
 }
 
-
-
 struct dyString *sendFtpCommand(int sd, char *cmd, boolean seeResult)
 /* send command to ftp server and check resulting reply code, 
    give error if not desired reply */
@@ -528,6 +526,12 @@ sendFtpCommand(sd, "TYPE I\r\n", FALSE);
 rs = sendFtpCommand(sd, "PASV\r\n", TRUE);
 /* 227 Entering Passive Mode (128,231,210,81,222,250) */
 
+if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+    {
+    safef(cmd,sizeof(cmd),"REST %lld\r\n", (long long) npu.byteRangeStart);
+    sendFtpCommand(sd, cmd, FALSE);
+    }
+
 safef(cmd,sizeof(cmd),"RETR %s\r\n", npu.file);
 sendFtpCommandOnly(sd, cmd);  
 
@@ -540,7 +544,7 @@ sdata = netMustConnect(npu.host, parsePasvPort(rs->string));
 /* see which comes first, an error message on the control conn
  * or data on the data conn */
 
-int secondsWaited=0;
+int secondsWaited = 0;
 while (TRUE)
     {
     if (secondsWaited >= 10)
@@ -587,15 +591,27 @@ if (pid == 0)
 
     char buf[32768];
     int rd = 0;
+    long long dataPos = 0; 
+    if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+	dataPos = npu.byteRangeStart;
     while((rd = read(sdata, buf, 32768)) > 0) 
 	{
+	if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+	    if ((dataPos + rd) > npu.byteRangeEnd)
+		rd = npu.byteRangeEnd - dataPos + 1;
 	int wt = write(pipefd[1], buf, rd);
 	if (wt == -1)
 	    errnoAbort("error writing ftp data to pipe");
+	dataPos += rd;
+	if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+	    if (dataPos >= npu.byteRangeEnd)
+		break;	    
 	}
     if (rd == -1)
 	errnoAbort("error reading ftp socket");
     close(pipefd[1]);  /* being safe */
+    close(sd);
+    close(sdata);
 
     exit(0);
 
