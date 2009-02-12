@@ -5112,7 +5112,7 @@ useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878_(Tier_1) HEK293b=HEK293(b) HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg K562=K562_(Tier_1) NB4=NB4
-subGroup3 factor Antibody Max=Max NF-E2=NF-E2 Pol2=Pol2 STAT1=STAT1 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input zLarge=Large_Fragment zMNase=MNase zMouseIG=Mouse_IgG zNaked=Naked_DNA
+subGroup3 factor Antibody Max=Max NF-E2=NF-E2 Pol2=Pol2 STAT1=STAT1 ZNF263=ZNF263 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input zLarge=Large_Fragment zMNase=MNase zMouseIG=Mouse_IgG zNaked=Naked_DNA
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder view=+ factor=+ cellType=+
 dragAndDrop subTracks
@@ -5957,6 +5957,61 @@ wgEncode 1
     spanList 1
     cell K562
     antibody Pol2
+
+    track wgEncodeYaleChIPseqPeaksK562Znf263
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Z263 Pk
+    longLabel ENCODE Yale ChIP-Seq Peaks (ZNF263 in K562 cells)
+    subGroups view=Peaks factor=ZNF263 cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-02-11
+    dateUnrestricted 2009-11-11
+    dataVersion ENCODE Feb 2009 Freeze
+    cell K562
+    antibody ZNF263
+
+    track wgEncodeYaleChIPseqSignalK562Znf263
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Z263 Sig
+    longLabel ENCODE Yale ChIP-Seq Signal (ZNF263 in K562 cells)
+    subGroups view=Signal factor=ZNF263 cellType=K562
+    type wig 0.00 2435.00
+    dateSubmitted 2009-02-11
+    dateUnrestricted 2009-11-11
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell K562
+    antibody ZNF263
+
+    track wgEncodeYaleChIPseqRawSignalRep1K562Znf263
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Z263 Raw1
+    longLabel ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (ZNF263 in K562 cells)
+    subGroups view=zRAW factor=ZNF263 cellType=K562
+    type wig 1.00 1685.00
+    dateSubmitted 2009-02-11
+    dateUnrestricted 2009-11-11
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell K562
+    antibody ZNF263
+
+    track wgEncodeYaleChIPseqRawSignalRep2K562Znf263
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Z263 Raw2
+    longLabel ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (ZNF263 in K562 cells)
+    subGroups view=zRAW factor=ZNF263 cellType=K562
+    type wig 1.00 1799.00
+    dateSubmitted 2009-02-11
+    dateUnrestricted 2009-11-11
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell K562
+    antibody ZNF263
 
     track wgEncodeYaleChIPseqPeaksK562Cfos
     release alpha
