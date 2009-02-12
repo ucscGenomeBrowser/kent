@@ -697,6 +697,10 @@ vendorId MA156353 lot 7308-S2(Nov2008)
 orderUrl http://www.bioreagents.com/
 
 # mapAlgorithm : Comparing map algorithms
+term erange3.0
+type mapAlgorithm
+description erange v3.0
+
 term erange3.0beta
 type mapAlgorithm
 description erange v3.0beta
@@ -705,9 +709,13 @@ term blat34
 type mapAlgorithm
 description blat v34
 
-term bowtie0.98
+term bowtie0.981
 type mapAlgorithm
-description bowtie v0.98
+description bowtie v0.981
+
+term bowtie0.981_blat34
+type mapAlgorithm
+description bowtie v0.981 followed by blat v34
 
 # fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 term 1k
