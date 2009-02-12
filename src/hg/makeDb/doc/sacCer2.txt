@@ -3,7 +3,7 @@
 # Saccharomyces cerevisiae
 # Saccharomyces Genome Database, Stanford
 
-#  $Id: sacCer2.txt,v 1.3 2009/02/10 23:56:21 hiram Exp $
+#  $Id: sacCer2.txt,v 1.4 2009/02/12 19:50:19 hiram Exp $
 
 #######################################################################
 # Download data  (DONE - 2009-01-30 - Hiram)
@@ -635,3 +635,292 @@ chainOne $(path1)
     rm -rf blastOut
 #end tblastn
 ###########################################################################
+## 7-Way Multiz (DONE - 2009-02-11 - Hiram)
+    mkdir /hive/data/genomes/sacCer2/bed/multiz7way
+    cd /hive/data/genomes/sacCer2/bed/multiz7way
+
+    #	using the phylogenetic tree as mentioned at:
+    #	http://www.genetics.wustl.edu/saccharomycesgenomes/yeast_phylogeny.html
+    #	and from Jim's note: genomes/sacCer1/bed/otherYeast/README 
+    # ((((((sacCer2 sacPar) sacMik) sacKud) sacBay) sacCas) sacKlu)
+    echo "((((((sacCer2 sacPar) sacMik) sacKud) sacBay) sacCas) sacKlu)" \
+	> tree.nh
+    echo sacCer2 sacPar sacMik sacKud sacBay sacCas sacKlu > species.list
+    mkdir mafLinks
+    for S in sacPar sacMik sacKud sacBay sacCas sacKlu
+do
+    mkdir mafLinks/${S}
+    cd mafLinks/${S}
+    ln -s ../../../otherYeast/align/mafNet.${S}/*.maf.gz .
+    cd ../..
+done
+    find -L ./mafLinks -type f | xargs -L 1 basename \
+	| sed -e "s/.maf.gz//" | sort -u > maf.list
+
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/multiz penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = sacCer2
+set c = $1
+set result = $2
+set run = `pwd`
+set tmp = $run/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/sacCer2/bed/multiz7way/mafLinks
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../tree.nh ../species.list $tmp
+pushd $tmp
+foreach s (`sed -e "s/ $db//" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+    else if (-e $in) then
+        ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $run/tmp/$db
+/bin/rmdir --ignore-fail-on-non-empty $run/tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ ../maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    gensub2 ../maf.list single template jobList
+    para create jobList
+# Completed: 18 of 18 jobs
+# CPU time in finished jobs:        710s      11.83m     0.20h    0.01d  0.000 y
+# IO & Wait Time:                   127s       2.12m     0.04h    0.00d  0.000 y
+# Average job time:                  47s       0.78m     0.01h    0.00d
+# Longest finished job:             105s       1.75m     0.03h    0.00d
+# Submission to last job:           144s       2.40m     0.04h    0.00d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    # load MAF tables
+    ssh hgwdev
+    mkdir -p /gbdb/sacCer2/multiz7way/maf
+    cd /hive/data/genomes/sacCer2/bed/multiz7way/maf
+    ln -s `pwd`/*.maf /gbdb/sacCer2/multiz7way/maf
+
+    # allow the temporary multiz7way.tab file to be created in tmp
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/sacCer2/multiz7way/maf sacCer2 multiz7way
+    #	real    0m4.903s
+    #	Loaded 38795 mafs in 18 files from /gbdb/sacCer2/multiz7way/maf
+    # load summary table
+    time nice -n +19 cat /gbdb/sacCer2/multiz7way/maf/*.maf \
+	| hgLoadMafSummary sacCer2 -mergeGap=1500 multiz7waySummary stdin
+    #	real    0m5.536
+    #	Created 3037 summary blocks from 73806 components and 38795 mafs
+
+#########################################################################
+## phastCons conservation (DONE - 2009-02-11 - Hiram)
+    #	Create SS files for each chromosome:
+    mkdir /hive/data/genomes/sacCer2/bed/multiz7way/phastCons
+    cd /hive/data/genomes/sacCer2/bed/multiz7way/phastCons
+    mkdir SS
+    
+    # split up alignments; no need to use cluster here
+    MAF=/cluster/data/sacCer1/bed/otherYeast/align/mafOut
+    FA=/cluster/data/sacCer1
+    CHROMS="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 M"
+    mkdir -p SS
+    for C in `(cd ../maf; ls *.maf | sed -e "s/.maf//")`
+do
+    echo $C
+    /cluster/bin/phast.build/fromAdam/phast.2008-12-18/bin/msa_view \
+	../maf/${C}.maf -M ../../otherYeast/align/sacCer2/${C}.fa -i MAF \
+	-O sacCer2,sacKud,sacMik,sacPar,sacBay,sacCas,sacKlu \
+	-o SS > SS/${C}.ss
+done
+
+    # produce rough starting model
+    /cluster/bin/phast.build/fromAdam/phast.2008-12-18/bin/msa_view \
+	-i SS --aggregate sacCer2,sacKud,sacMik,sacPar,sacBay,sacCas,sacKlu \
+	-o SS -z SS/*.ss > all.ss
+
+    /cluster/bin/phast.build/fromAdam/phast.2008-12-18/bin/phyloFit \
+	-i SS all.ss \
+	--tree "((((((sacCer2,sacPar),sacMik),sacKud),sacBay),sacCas),sacKlu)" \
+	    -o starting-tree
+
+    # (cheat the branch lengths up a bit, since this represents an
+    # average of conserved and nonconserved sites; we want to
+    # initialize for nonconserved)
+    /cluster/bin/phast.build/fromAdam/phast.2008-12-18/bin/tree_doctor \
+	--scale 2 starting-tree.mod > tmp.mod
+    mv tmp.mod starting-tree.mod 
+
+    # also get average GC content of aligned regions
+    /cluster/bin/phast.build/fromAdam/phast.2008-12-18/bin/msa_view \
+	-i SS all.ss --summary-only
+#descrip.                      A          C          G          T        G+C  length   all_gaps  some_gaps
+#all.ss                   0.3056     0.1950     0.1948     0.3047     0.3898   13130139          0    2122279
+
+    # save some I/O and space
+    gzip SS/*.ss
+    
+    # now set up cluster job to estimate model parameters.  See
+    # other make{hg18|mm9}.doc for add'l details
+
+    cat << '_EOF_' > doEstimate.sh
+#!/bin/sh
+zcat SS/$1.ss.gz | \
+	/cluster/bin/phast.build/fromAdam/phast.2008-12-18/bin/phastCons \
+	- starting-tree.mod --gc 0.3898 --nrates 1,1 --no-post-probs \
+	--ignore-missing --expected-lengths 75 --target-coverage 0.5 \
+	--quiet --log $2 --estimate-trees $3
+'_EOF_'
+    # << happy emacs
+    chmod +x doEstimate.sh
+
+    rm -fr LOG TREES
+    mkdir  LOG TREES
+    cat << '_EOF_' > template
+#LOOP
+doEstimate.sh $(root1) {check out line+ LOG/$(root1).log} TREES/$(root1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    (cd SS; ls *.ss.gz) | sed -e "s/.ss.gz//" > chr.list
+    gensub2 chr.list single template jobList
+    para create jobList
+    para push
+    para time
+# Completed: 18 of 18 jobs
+# CPU time in finished jobs:       8152s     135.86m     2.26h    0.09d  0.000 y
+# IO & Wait Time:                   323s       5.39m     0.09h    0.00d  0.000 y
+# Average job time:                 471s       7.85m     0.13h    0.01d
+# Longest finished job:             889s      14.82m     0.25h    0.01d
+# Submission to last job:           895s      14.92m     0.25h    0.01d
+
+    # Now combine parameter estimates.  
+    ls TREES/*.cons.mod > cons.txt
+    /cluster/bin/phast.build/fromAdam/phast.2008-12-18/bin/phyloBoot \
+	--read-mods '*cons.txt' --output-average ave.cons.mod > cons_summary.txt
+    ls TREES/*.noncons.mod > noncons.txt
+    /cluster/bin/phast.build/fromAdam/phast.2008-12-18/bin/phyloBoot \
+	--read-mods '*noncons.txt' --output-average ave.noncons.mod > noncons_summary.txt
+
+    # Now set up cluster job for computing consevation scores and
+    # predicted elements
+    cat << '_EOF_' > doPhastCons.sh
+#!/bin/sh
+
+mkdir -p POSTPROBS ELEMENTS
+chr=$1
+out=$2
+tmpFile=/scratch/tmp/phastCons.$chr
+rm -f $tmpFile
+zcat SS/$chr.ss.gz \
+    | /cluster/bin/phast.build/fromAdam/phast.2008-12-18/bin/phastCons - \
+	ave.cons.mod,ave.noncons.mod --expected-lengths 75 \
+	--target-coverage 0.5 --quiet --seqname $chr --idpref $chr \
+	--viterbi ELEMENTS/$pref.bed --score --require-informative 0 > $tmpFile
+gzip -c $tmpFile > POSTPROBS/$chr.pp.gz
+rm $tmpFile
+'_EOF_'
+    # << happy emacs
+    chmod u+x doPhastCons.sh
+
+    cat << '_EOF_' > run.template
+#LOOP
+doPhastCons.sh $(root1) {check out exists+ POSTPROBS/$(root1).pp.gz} {check out line+ ELEMENTS/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 chr.list single run.template run.jobList
+    rm -fr POSTPROBS ELEMENTS
+    para create run.jobList
+    para push
+    para time
+# Completed: 18 of 18 jobs
+# CPU time in finished jobs:         78s       1.30m     0.02h    0.00d  0.000 y
+# IO & Wait Time:                   658s      10.97m     0.18h    0.01d  0.000 y
+# Average job time:                  41s       0.68m     0.01h    0.00d
+# Longest finished job:              53s       0.88m     0.01h    0.00d
+# Submission to last job:            57s       0.95m     0.02h    0.00d
+
+    # set up phastConsElements track
+    cat ELEMENTS/*.bed | sort -k1,1 -k2,2n | \
+        awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+            /cluster/bin/scripts/lodToBedScore /dev/stdin \
+		> phastConsElements7way.bed
+
+    hgLoadBed sacCer2 phastConsElements7way phastConsElements7way.bed
+    featureBits sacCer2 phastConsElements7way
+# 7762587 bases of 12162995 (63.821%) in intersection
+    #	previously this was:
+    featureBits sacCer1 phastConsElements
+# 7517116 bases of 12156302 (61.837%) in intersection
+
+    mkdir ../downloads
+    mkdir ../downloads/phastCons7way
+    for C in `cat chr.list`
+do
+    cp -p POSTPROBS/${C}.pp.gz \
+	../downloads/phastCons7way/sacCer2.${C}.wigFixed.gz
+done
+
+    #	encode those files into wiggle data
+    zcat ../downloads/phastCons7way/*.wigFixed.gz \
+	| wigEncode stdin phastCons7way.wig phastCons7way.wib
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+
+    # Load gbdb and database with wiggle.
+    cd /hive/data/genomes/sacCer2/bed/multiz7way/phastCons
+    ln -s `pwd`/phastCons7way.wib /gbdb/sacCer2/multiz7way/phastCons7way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/sacCer2/multiz7way sacCer2 \
+	phastCons7way phastCons7way.wig
+
+    #  Create histogram to get an overview of all the data
+    hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=sacCer2 phastCons7way > histogram.data 2>&1
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Yeast sacCer2 Histogram phastCons7way track"
+set xlabel " phastCons7way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
