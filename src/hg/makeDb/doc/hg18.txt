@@ -26140,8 +26140,8 @@ cat > listWig.csh << 'EOF'
     #Converted stdin, upper limit 0.99, lower limit -8.17
     ln -s  /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/primate/wig/phyloP44wayPrimate.wib /gbdb/hg18/multiz44way/phyloP44wayPrimate.wib
     hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 phyloP44wayPrimate phyloP44wayPrimate.wig
-    
-    # get stats
+
+# get stats
     cd run.phyloP/all
     hgWiggle -db=hg18 -verbose=2 -doStats phyloP44wayAll > stats.out
     hgWiggle -db=hg18 -chr=chr20 -rawDataOut phyloP44wayAll | textHistogram -real stdin -minVal=-20 -maxBinCount=30 >&! histo.out
@@ -26161,7 +26161,7 @@ cat > listWig.csh << 'EOF'
     # Downloads
     cd /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP
     cat > listWigsByChrom.csh << 'EOF'
-            setee = $1
+            set c = $1
             foreach d (`ls -d $c/[1-9]* | sort -t/ -k2 -n`)
                 ls -1 $d/*.wig | sort -n -t\. -k3
             end
@@ -26176,7 +26176,6 @@ cat > listWig.csh << 'EOF'
             end
         cd ../downloads
         md5sum *.wigFix.gz > md5sum.txt
-        end
     'EOF'
 
     cd all/wig
@@ -26236,10 +26235,51 @@ csh ../doPhyloPSubtree.csh $(file1) {check out line+ wig/$(dir1)/$(file1).wig} S
     para check
     para push
 
-    # Mostly crashes -- sending error to Adam
-    # GOT HERE
+    para time
+#CPU time in finished jobs:    4949300s   82488.33m  1374.81h   57.28d  0.157 y
+#IO & Wait Time:                143956s    2399.27m    39.99h    1.67d  0.005 y
+#Average job time:                1805s      30.08m     0.50h    0.02d
+#Longest finished job:            2780s      46.33m     0.77h    0.03d
+#Submission to last job:          6447s     107.45m     1.79h    0.07d
 
-    #human LS:  --subtree hg18
+    # process results and load wiggle
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/primate-ls/wig
+    csh ../../listWig.csh | xargs cat | nice wigEncode stdin phyloP44wayPrimateLs.wig phyloP44wayPrimateLs.wib
+    #Converted stdin, upper limit 3.91, lower limit -9.28
+    ln -s  /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/primate-ls/wig/phyloP44wayPrimateLs.wib /gbdb/hg18/multiz44way/phyloP44wayPrimateLs.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 phyloP44wayPrimateLs phyloP44wayPrimateLs.wig
+
+    # glire lineage-specfic
+    cd /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP
+    mkdir glire-ls
+    cd glire-ls
+    cp ../../../4d/44way.all-ancestors.mod tree.mod
+    mkdir wig
+    sed 's/SUBTREE/mm9-oryCun1/' ../template.subtree > template.ls
+    gensub2 ../in.list single template.ls jobList
+    para create jobList
+    # 2823 jobs
+    para try
+    para check
+    para push
+
+    para time
+    #CPU time in finished jobs:    5173192s   86219.87m  1437.00h   59.87d  0.164 y
+    #IO & Wait Time:                145615s    2426.91m    40.45h    1.69d  0.005 y
+    #Average job time:                1884s      31.40m     0.52h    0.02d
+    #Longest finished job:            2721s      45.35m     0.76h    0.03d
+    #Submission to last job:          6883s     114.72m     1.91h    0.08d
+
+    # process results and load wiggle
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/glire-ls/wig
+    csh ../../listWig.csh | xargs cat | nice wigEncode stdin phyloP44wayGlireLs.wig phyloP44wayGlireLs.wib
+    #Converted stdin, upper limit 5.95, lower limit -6.99
+
+    ln -s  /cluster/data/hg18/bed/multiz44way/consPhyloP/run.phyloP/glire-ls/wig/phyloP44wayGlireLs.wib /gbdb/hg18/multiz44way/phyloP44wayGlireLs.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/multiz44way hg18 phyloP44wayGlireLs phyloP44wayGlireLs.wig
+
 
 ######################################################################
 # downloads for 44-way (DONE - 2009-01-09 - Hiram)
