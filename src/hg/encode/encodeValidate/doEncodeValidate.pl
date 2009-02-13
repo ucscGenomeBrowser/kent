@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.153 2009/02/13 21:59:49 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.154 2009/02/13 23:46:02 mikep Exp $
 
 use warnings;
 use strict;
@@ -1651,6 +1651,8 @@ foreach my $ddfLine (@ddfLines) {
     # mysql doesn't allow hyphens in table names and our naming convention doesn't allow underbars; to be
     # safe, we strip non-alphanumerics.
     $tableName =~ s/[^A-Za-z0-9]//g;
+
+    die "Table name [$tableName] too long, must be <= 64 chars, got [".length($tableName)."]\n" if length($tableName) > 64;
 
     if(!$opt_allowReloads) {
         if($db->quickQuery("select count(*) from trackDb where tableName = ?", $tableName)) {
