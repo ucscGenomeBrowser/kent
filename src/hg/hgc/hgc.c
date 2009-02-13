@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1506 2009/02/13 01:31:43 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1507 2009/02/13 01:40:47 tdreszer Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1089,7 +1089,7 @@ for(;ix<cnt;ix++)
     printf("<LI>");
     safef(extra,sizeof(extra),"%s=full",tdb->tableName);
     linkToOtherBrowserExtra(db, chrom, beg, end, extra);
-    printf("%s</A></LI>\n",title);
+    printf("%s</A></LI>\n",strSwapChar(title,'_',' '));
     sqlFreeResult(&sr);
     hFreeConn(&conn);
     }
