@@ -705,7 +705,7 @@ term erange3.0
 type mapAlgorithm
 description erange v3.0
 
-term erange3.0beta
+term erange3.0b
 type mapAlgorithm
 description erange v3.0beta
 
@@ -717,7 +717,7 @@ term bowtie0.981
 type mapAlgorithm
 description bowtie v0.981
 
-term bowtie0.981_blat34
+term bow098blat34
 type mapAlgorithm
 description bowtie v0.981 followed by blat v34
 
