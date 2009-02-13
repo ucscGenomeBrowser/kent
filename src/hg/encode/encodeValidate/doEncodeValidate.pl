@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.141 2009/02/07 03:09:59 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.142 2009/02/13 04:19:13 mikep Exp $
 
 use warnings;
 use strict;
@@ -317,6 +317,10 @@ our %formatCheckers = (
     fastq => \&validateFastQ,
     csfasta => \&validateCsfasta,
     csqual  => \&validateCsqual,
+    rpkm  => \&validateRpkm,
+    fasta  => \&validateFasta,
+    bowtie  => \&validateBowtie,
+    psl  => \&validatePsl,
     cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
     );
 
@@ -845,6 +849,50 @@ sub validateCsqual
     $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
     doTime("done validateCsqual", $line) if $opt_timing;
+    return ();
+}
+
+sub validateRpkm
+{
+    my ($path, $file, $type) = @_;
+    doTime("beginning validateRpkm") if $opt_timing;
+#    my $fh = openUtil($path, $file);
+    my $line = 0;
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateRpkm", $line) if $opt_timing;
+    return ();
+}
+
+sub validateFasta
+{
+    my ($path, $file, $type) = @_;
+    doTime("beginning validateFasta") if $opt_timing;
+#    my $fh = openUtil($path, $file);
+    my $line = 0;
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateFasta", $line) if $opt_timing;
+    return ();
+}
+
+sub validateBowtie
+{
+    my ($path, $file, $type) = @_;
+    doTime("beginning validateBowtie") if $opt_timing;
+#    my $fh = openUtil($path, $file);
+    my $line = 0;
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateBowtie", $line) if $opt_timing;
+    return ();
+}
+
+sub validatePsl
+{
+    my ($path, $file, $type) = @_;
+    doTime("beginning validatePsl") if $opt_timing;
+#    my $fh = openUtil($path, $file);
+    my $line = 0;
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validatePsl", $line) if $opt_timing;
     return ();
 }
 
