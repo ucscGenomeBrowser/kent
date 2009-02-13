@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.144 2009/02/13 11:13:23 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.145 2009/02/13 11:57:04 mikep Exp $
 
 use warnings;
 use strict;
@@ -887,7 +887,8 @@ sub validateFasta
 }
 
 sub validateRpkm
-# Wold lab format, has name and 2 floats 
+# Wold lab format, has gene name and 2 floats 
+#   Allowing Gene name to be composed of any characters but <tab>
 # Example lines:-
 #HBG2    0.583   1973.85
 #RPS20   0.523   1910.01
@@ -901,7 +902,7 @@ sub validateRpkm
         chomp;
         $lineNumber++;
         die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n"
-            unless m/^(\w+)\t(\d+\.\d+)\t(\d+\.\d+)$/;
+            unless m/^([^\t]+)\t(\d+\.\d+)\t(\d+\.\d+)$/;
         last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
