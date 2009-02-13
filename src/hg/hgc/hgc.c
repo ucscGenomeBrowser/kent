@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1505 2009/02/10 22:17:38 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1506 2009/02/13 01:31:43 tdreszer Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1036,6 +1036,68 @@ if (bedSize >= 5 && showTopScorers != NULL)
 }
 
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
+void linkToOtherBrowserExtra(char *otherDb, char *chrom, int start, int end, char *extra);
+
+static void printCompareGenomeLinks(struct trackDb *tdb,char *name)
+/* if "compareGenomeLinks" exists then a table of the same name in n different databases is sought.
+   if a row exist in the other db table matching the current item, then a link is printed */
+{
+char *setting = trackDbSettingClosestToHome(tdb,"compareGenomeLinks");
+if(setting == NULL)
+    return;
+
+char *words[20];
+setting = cloneString(setting);
+int ix=0,cnt = chopLine(setting, words);
+char *tieThatBinds = "name";
+char query[512];
+char extra[128];
+boolean gotOne = FALSE;
+if(strchr(words[0],'=') == NULL)
+    {
+    tieThatBinds = words[0];
+    ix=1;
+    }
+for(;ix<cnt;ix++)
+    {
+    char *db = words[ix];
+    char *title = strchr(words[ix],'=');
+    if(title==NULL)
+        continue;
+    *title = '\0';
+    title++;
+    // Look up in the db to determine if there is a match
+    struct sqlConnection *conn = hAllocConn(db);
+    if(db == NULL)
+        continue;
+
+    safef(query,sizeof(query),"select chrom,chromStart,chromEnd from %s where %s=\"%s\";",tdb->tableName,tieThatBinds,name);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    if(sr == NULL)
+        continue;
+    char **row = sqlNextRow(sr);
+    if(row == NULL)
+        continue;
+    char *chrom = *row++;
+    int beg = atoi(*row++);
+    int end = atoi(*row);
+    if(!gotOne)
+        {
+        gotOne = TRUE;
+        printf("<P>Look up %s in other genomes:\n<UL>\n",name);
+        }
+    printf("<LI>");
+    safef(extra,sizeof(extra),"%s=full",tdb->tableName);
+    linkToOtherBrowserExtra(db, chrom, beg, end, extra);
+    printf("%s</A></LI>\n",title);
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+if(gotOne)
+    {
+    printf("</UL>");
+    }
+}
 
 void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize,
 	boolean onlyDiff, int blockNo);
@@ -1224,6 +1286,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, bedSize);
     bedPrintPos(bed, bedSize, tdb);
+    printCompareGenomeLinks(tdb,bed->name);
     }
 sqlFreeResult(&sr);
 getBedTopScorers(conn, tdb, table, item, start, bedSize);
