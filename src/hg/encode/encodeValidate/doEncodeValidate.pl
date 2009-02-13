@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.151 2009/02/13 19:00:42 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.152 2009/02/13 19:16:08 mikep Exp $
 
 use warnings;
 use strict;
@@ -853,6 +853,12 @@ sub validateCsqual
 }
 
 sub validateFasta
+# Wold lab fasta files; they dont have fastq format. 
+# Sample fasta lines are:
+#>HWI-EAS229_75_30DY0AAXX:7:1:0:949/1
+#NGCGGATGTTCTCAGTGTCCACAGCGCAGGTGAAATAAGGGAAGCAGTAGCGACGCCCATCTCCACGCGCAGCGC
+#>HWI-EAS229_75_30DY0AAXX:7:1:0:1739/1
+#NAGCCATCAGGAAAGCAAGGAGGGGGCATTAAAGGACAATCAAGGGGTTTGGAGGAAGGAGCAGGCCGGAGGCAA
 {
     # Wold lab has fasta files, like fastq format without quality
     my ($path, $file, $type) = @_;
@@ -866,7 +872,7 @@ sub validateFasta
     my $seqName;
     my $seqNameRegEx = "[A-Za-z0-9_.:/-]+";
     my $seqRegEx = "[A-Za-z\n\.~]+";
-    my $states = {firstLine => {REGEX => "\@($seqNameRegEx)", NEXT => 'seqLine'},
+    my $states = {firstLine => {REGEX => ">($seqNameRegEx)", NEXT => 'seqLine'},
                   seqLine => {REGEX => $seqRegEx, NEXT => 'firstLine'}};
     while(<$fh>) {
         chomp;
