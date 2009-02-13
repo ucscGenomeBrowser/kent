@@ -3220,6 +3220,7 @@ track wgEncodeNhgriBip
 release alpha
 shortLabel NHGRI BiP
 longLabel ENCODE Elnitski Bi-directional Promoters
+visibility hide
 group regulation
 type bed 8 +
 dateSubmitted 2009-01-27
@@ -3227,7 +3228,7 @@ dateUnrestricted 2009-10-27
 dataVersion ENCODE Feb 2009 Freeze
 priority 0
 scoreFilterByRange on
-cell Reference_Genome
+compareGenomeLinks name panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
 wgEncode 1
 
 
