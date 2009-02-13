@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.150 2009/02/13 18:52:09 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.151 2009/02/13 19:00:42 mikep Exp $
 
 use warnings;
 use strict;
@@ -966,7 +966,7 @@ sub validatePsl
         next if $lineNumber == 4 and m/^\s+match/;
         next if $lineNumber == 5 and m/^------/;
         die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n" 
-	    unless m/^(\d+)\t(\d+)\t(\d+)\t(\d+)(\d+)\t(\d+)\t(\d+)\t(\d+)\t([+-][+-]?)\t([A-Za-z0-9:>\|\/_-]+)\t(\d+)\t(\d+)\t(\d+)\t(\w+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t([0-9,]+)\t([0-9,]+)\t([0-9,]+)/;
+	    unless m/^(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t([+-][+-]?)\t([A-Za-z0-9:>\|\/_-]+)\t(\d+)\t(\d+)\t(\d+)\t(\w+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t([0-9,]+)\t([0-9,]+)\t([0-9,]+)/;
         last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
