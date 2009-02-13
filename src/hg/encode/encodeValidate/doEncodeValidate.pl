@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.143 2009/02/13 11:08:33 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.144 2009/02/13 11:13:23 mikep Exp $
 
 use warnings;
 use strict;
@@ -1033,7 +1033,9 @@ sub printCompositeTdbSettings {
         for my $key (keys %ddfSets) {
             if(defined($ddfSets{$key}{VIEWS}{$view})) {
 		# Load alignments for all Gingeras labs except CSHL as these are currently 100-400M rows
-                my $downloadOnly = $view eq 'RawData' || $view eq 'RawData2' || ($view eq 'Alignments' and ($daf->{grant} ne "Gingeras" or $daf->{lab} eq "Cshl")) ? 1 : 0;
+                my $downloadOnly = $view eq 'RawData' || $view eq 'RawData2' || 
+			$view eq 'RawData3' || $view eq 'RawData4' || 
+			($view eq 'Alignments' and ($daf->{grant} ne "Gingeras" or $daf->{lab} eq "Cshl")) ? 1 : 0;
                 if(!$downloadOnly) {
                     $setting = $setting . " " . $view . "=" . $view;
                     $visDefault = $visDefault . " " . $view . "=";
