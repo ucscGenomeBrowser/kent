@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.148 2009/02/13 18:21:58 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.149 2009/02/13 18:28:08 mikep Exp $
 
 use warnings;
 use strict;
@@ -913,6 +913,7 @@ sub validateRpkm
 
 sub validateBowtie
 # Unkown format (for download) from Wold lab. 
+# Assume last column is optional
 # Sample lines:-
 # HWI-EAS229_75_30DY0AAXX:7:1:0:1545/1    +       chr1    5983615 NCGTCCATCTCACATCGTCAGGAAAGGGGGAAGCACTGGATGGCTGTGGCCTCACAGGCAGGGAGAGTGGGGTCC     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII 0       0:G>N
 # HWI-EAS229_75_30DY0AAXX:7:1:0:1591/1      -       uc002fcb.1|22|70699936  45      CTATTTCCACCAAGCAGCCAAGCTCAAGGGAATCGGGGAGTACGTGAACATCCGCACAGGGATGCCCTGCCACTN     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII     0       0:T>N]
@@ -928,7 +929,7 @@ sub validateBowtie
         $lineNumber++;
         next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
         die "Failed bowtie validation, file '$file'; line $lineNumber: line=[$_]\n" 
-	    unless $_ =~ m/^([A-Za-z0-9:>_,\.\|\/-]+)\t([+-])\t([A-Za-z0-9:>_,\.\|\/-]+)\t(\d+)\t(\w+)\t(\w+)\t(\d+)\t([A-Za-z0-9:>_,\.\|\/-]+)$/;
+	    unless $_ =~ m/^([A-Za-z0-9:>_,\.\|\/-]+)\t([+-])\t([A-Za-z0-9:>_,\.\|\/-]+)\t(\d+)\t(\w+)\t(\w+)\t(\d+)\t([A-Za-z0-9:>_,\.\|\/-]+)?$/;
         last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
