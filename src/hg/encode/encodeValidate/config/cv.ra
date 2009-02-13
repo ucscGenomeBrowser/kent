@@ -697,6 +697,10 @@ vendorId MA156353 lot 7308-S2(Nov2008)
 orderUrl http://www.bioreagents.com/
 
 # mapAlgorithm : Comparing map algorithms
+term NA
+type mapAlgorithm
+description No algorithm applicable
+
 term erange3.0
 type mapAlgorithm
 description erange v3.0
