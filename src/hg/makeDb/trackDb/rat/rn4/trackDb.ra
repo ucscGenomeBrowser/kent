@@ -14,7 +14,7 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 
 track multiz9way
-shortLabel Conservation 
+shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation
 group compGeno
 priority 101.1
@@ -191,11 +191,11 @@ priority 143.1
 visibility dense
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
+urlLabel dbSNP:
 type bed 6 +
 
 track atom97565
-shortLabel atom97565 
+shortLabel atom97565
 longLabel atom97565 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
 group x
 priority 1.1
@@ -203,7 +203,7 @@ visibility hide
 type bed 6
 
 track atom992
-shortLabel atom992 
+shortLabel atom992
 longLabel atom992 (canFam2=orange,mm8=green,rn4=blue,rheMac2=brick,panTro2=dk blue,hg18=dk green)
 group x
 priority 1.1
@@ -259,3 +259,18 @@ dontCheck (rs[0-9]{3}[0-9]+)
 searchPriority 16
 padding 250
 
+# NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
+track wgEncodeNhgriBip
+release alpha
+shortLabel NHGRI BiP
+longLabel ENCODE Elnitski Bi-directional Promoters
+visibility hide
+group regulation
+type bed 8 +
+dateSubmitted 2009-01-27
+dateUnrestricted 2009-10-27
+dataVersion ENCODE Feb 2009 Freeze
+priority 0
+scoreFilterByRange on
+compareGenomeLinks name hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
+wgEncode 1

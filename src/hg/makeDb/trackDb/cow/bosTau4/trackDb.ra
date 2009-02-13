@@ -52,7 +52,7 @@ maxItems 300
 
 track multiz5way
 shortLabel Conservation
-longLabel 5-Way Multiz Alignment & Conservation 
+longLabel 5-Way Multiz Alignment & Conservation
 group compGeno
 priority 103.4
 visibility pack
@@ -88,3 +88,19 @@ type bed 5 .
 
 track nscanGene override
 informant Cow N-SCAN uses mouse (mm9) as the informant.
+
+# NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
+track wgEncodeNhgriBip
+release alpha
+shortLabel NHGRI BiP
+longLabel ENCODE Elnitski Bi-directional Promoters
+visibility hide
+group regulation
+type bed 8 +
+dateSubmitted 2009-01-27
+dateUnrestricted 2009-10-27
+dataVersion ENCODE Feb 2009 Freeze
+priority 0
+scoreFilterByRange on
+compareGenomeLinks name hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05)
+wgEncode 1
