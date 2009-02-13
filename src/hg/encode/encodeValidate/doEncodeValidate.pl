@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.142 2009/02/13 04:19:13 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.143 2009/02/13 11:08:33 mikep Exp $
 
 use warnings;
 use strict;
@@ -852,47 +852,117 @@ sub validateCsqual
     return ();
 }
 
-sub validateRpkm
-{
-    my ($path, $file, $type) = @_;
-    doTime("beginning validateRpkm") if $opt_timing;
-#    my $fh = openUtil($path, $file);
-    my $line = 0;
-    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateRpkm", $line) if $opt_timing;
-    return ();
-}
-
 sub validateFasta
 {
+    # Wold lab has fasta files, like fastq format without quality
     my ($path, $file, $type) = @_;
     doTime("beginning validateFasta") if $opt_timing;
-#    my $fh = openUtil($path, $file);
+    HgAutomate::verbose(2, "validateFasta($path,$file,$type)\n");
+    return () if $opt_skipValidateFastQ;
+    doTime("beginning validateFasta") if $opt_timing;
+    my $fh = openUtil($path, $file);
     my $line = 0;
+    my $state = 'firstLine';
+    my $seqName;
+    my $seqNameRegEx = "[A-Za-z0-9_.:/-]+";
+    my $seqRegEx = "[A-Za-z\n\.~]+";
+    my $states = {firstLine => {REGEX => "\@($seqNameRegEx)", NEXT => 'seqLine'},
+                  seqLine => {REGEX => $seqRegEx, NEXT => 'firstLine'}};
+    while(<$fh>) {
+        chomp;
+        $line++;
+        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid [validateFasta]";
+        my $regex = $states->{$state}{REGEX};
+        if(/^${regex}$/) {
+	        $state = $states->{$state}{NEXT};
+        } else {
+	         return("$errorPrefix (expecting $state):\nline: $_");
+        }
+        last if($opt_quick && $line >= $quickCount);
+     }
+    $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
     doTime("done validateFasta", $line) if $opt_timing;
     return ();
 }
 
+sub validateRpkm
+# Wold lab format, has name and 2 floats 
+# Example lines:-
+#HBG2    0.583   1973.85
+#RPS20   0.523   1910.01
+#RPLP0   1.312   1800.51
+{
+    my ($path, $file, $type) = @_;
+    doTime("beginning validateRpkm") if $opt_timing;
+    my $lineNumber = 0;
+    my $fh = openUtil($path, $file);
+    while(<$fh>) {
+        chomp;
+        $lineNumber++;
+        die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n"
+            unless m/^(\w+)\t(\d+\.\d+)\t(\d+\.\d+)$/;
+        last if($opt_quick && $lineNumber >= $quickCount);
+    }
+    $fh->close();
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateRpkm", $lineNumber) if $opt_timing;
+    return ();
+}
+
 sub validateBowtie
+# Unkown format (for download) from Wold lab. 
+# Sample line:-
+# HWI-EAS229_75_30DY0AAXX:7:1:0:1545/1    +       chr1    5983615 NCGTCCATCTCACATCGTCAGGAAAGGGGGAAGCACTGGATGGCTGTGGCCTCACAGGCAGGGAGAGTGGGGTCC     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII 0       0:G>N
 {
     my ($path, $file, $type) = @_;
     doTime("beginning validateBowtie") if $opt_timing;
-#    my $fh = openUtil($path, $file);
-    my $line = 0;
+    my $lineNumber = 0;
+    doTime("beginning validateBedGraph") if $opt_timing;
+    my $fh = openUtil($path, $file);
+    while(<$fh>) {
+        chomp;
+        $lineNumber++;
+        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
+        die "Failed bowtie validation, file '$file'; line $lineNumber: line=[$_]\n" 
+	    unless $_ =~ m/^([A-Za-z0-9:>_\/-]+)\t([+-])\t(\w+)\t(\d+)\t(\w+)\t(\w+)\t(\d+)\t([A-Za-z0-9:>_\/-]+)$/;
+        last if($opt_quick && $lineNumber >= $quickCount);
+    }
+    $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validateBowtie", $line) if $opt_timing;
+    doTime("done validateBowtie", $lineNumber) if $opt_timing;
     return ();
 }
 
 sub validatePsl
+# PSL format (for download) from Wold lab. 
+# Sample first 6 lines
+#psLayout version 3
+#
+#match   mis-    rep.    N's     Q gap   Q gap   T gap   T gap   strand  Q               Q       Q       Q       T               T       T       T       block   blockSizes      qStarts  tStarts
+#        match   match           count   bases   count   bases           name            size    start   end     name            size    start   end     count
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+#71      3       0       0       0       0       0       0       -       HWI-EAS229_75_30DY0AAXX:4:1:0:743/1     75      1       75      chr2    242951149       184181032       184181106       1  74,      0,      184181032,      agccttttacagcaacacctttacctctgctagatctttctgtagctcgtctgaagccatgggggctgggtcag,     agccttttccagcaacacctttacctcttctagatctttctgtagctcttctgaagccatgggggctgggtcag,
 {
     my ($path, $file, $type) = @_;
+    my $lineNumber = 0;
     doTime("beginning validatePsl") if $opt_timing;
-#    my $fh = openUtil($path, $file);
-    my $line = 0;
+    my $fh = openUtil($path, $file);
+    while(<$fh>) {
+        chomp;
+        $lineNumber++;
+        next if $lineNumber == 1 and m/^psLayout version \d+/; # check first line 
+        next if $lineNumber == 2 and m/^$/;
+        next if $lineNumber == 3 and m/^match/;
+        next if $lineNumber == 4 and m/^\s+match/;
+        next if $lineNumber == 5 and m/^------/;
+        die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n" 
+	    unless m/^(\d+)\t(\d+)\t(\d+)\t(\d+)(\d+)\t(\d+)\t(\d+)\t(\d+)\t([+-])\t([A-Za-z0-9:>\/_-]+)\t(\d+)\t(\d+)\t(\d+)\t(\w+)\t(\d+)\t(\d+)\t(\d+)$/;
+        last if($opt_quick && $lineNumber >= $quickCount);
+    }
+    $fh->close();
     HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
-    doTime("done validatePsl", $line) if $opt_timing;
+    doTime("done validatePsl", $lineNumber) if $opt_timing;
     return ();
 }
 
