@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.149 2009/02/13 18:28:08 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.150 2009/02/13 18:52:09 mikep Exp $
 
 use warnings;
 use strict;
@@ -940,6 +940,10 @@ sub validateBowtie
 
 sub validatePsl
 # PSL format (for download) from Wold lab. 
+# EXAMPLE FROM http://genome.ucsc.edu/FAQ/FAQformat#format2
+# This adds 2 columns (sequence,<tab>sequence,) to the standard 21 columns
+# Only the first 21 are validated
+#
 # Sample first 6 lines
 #psLayout version 3
 #
@@ -947,6 +951,7 @@ sub validatePsl
 #        match   match           count   bases   count   bases           name            size    start   end     name            size    start   end     count
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #71      3       0       0       0       0       0       0       -       HWI-EAS229_75_30DY0AAXX:4:1:0:743/1     75      1       75      chr2    242951149       184181032       184181106       1  74,      0,      184181032,      agccttttacagcaacacctttacctctgctagatctttctgtagctcgtctgaagccatgggggctgggtcag,     agccttttccagcaacacctttacctcttctagatctttctgtagctcttctgaagccatgggggctgggtcag,
+#72      2       0       0       0       0       0       0       -       HWI-EAS229_75_30DY0AAXX:7:1:0:713/1     75      1       75      chr14   106368585       49540119        49540193        1  74,      0,      49540119,       cgggtgcgggccgagcagttctccgcacctccggtaaaggttcaggaccgggtgatggtctctgcagcagtcag,     ccggtgcgggccgagcagttctccgcacctccggtaaaggtgcaggaccgggtgatggtctctgcagcagtcag,
 {
     my ($path, $file, $type) = @_;
     my $lineNumber = 0;
@@ -961,7 +966,7 @@ sub validatePsl
         next if $lineNumber == 4 and m/^\s+match/;
         next if $lineNumber == 5 and m/^------/;
         die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n" 
-	    unless m/^(\d+)\t(\d+)\t(\d+)\t(\d+)(\d+)\t(\d+)\t(\d+)\t(\d+)\t([+-])\t([A-Za-z0-9:>\|\/_-]+)\t(\d+)\t(\d+)\t(\d+)\t(\w+)\t(\d+)\t(\d+)\t(\d+)$/;
+	    unless m/^(\d+)\t(\d+)\t(\d+)\t(\d+)(\d+)\t(\d+)\t(\d+)\t(\d+)\t([+-][+-]?)\t([A-Za-z0-9:>\|\/_-]+)\t(\d+)\t(\d+)\t(\d+)\t(\w+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t([0-9,]+)\t([0-9,]+)\t([0-9,]+)/;
         last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
