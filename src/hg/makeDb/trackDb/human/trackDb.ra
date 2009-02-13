@@ -729,42 +729,49 @@ type bedGraph 4
     subTrack hgdpHzy
     shortLabel HGDP Hzy Africa
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Africa)
+    color 224, 0, 0
     priority 1
 
     track hgdpHzyMideast
     subTrack hgdpHzy
     shortLabel HGDP Hzy Mideast
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Mideast)
+    color 0,0,200
     priority 2
 
     track hgdpHzyEurope
     subTrack hgdpHzy
     shortLabel HGDP Hzy Europe
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Europe)
+    color 240,144,0
     priority 3
 
     track hgdpHzySAsia
     subTrack hgdpHzy
     shortLabel HGDP Hzy S. Asia
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (S. Asia)
+    color 0,0,0
     priority 4
 
     track hgdpHzyEAsia
     subTrack hgdpHzy
     shortLabel HGDP Hzy E. Asia
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (E. Asia)
+    color 0,200,0
     priority 5
 
     track hgdpHzyOceania
     subTrack hgdpHzy
     shortLabel HGDP Hzy Oceania
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Oceania)
+    color 0,200,200
     priority 6
 
     track hgdpHzyAmericas
     subTrack hgdpHzy
     shortLabel HGDP Hzy Americas
     longLabel Human Genome Diversity Project 3-SNP Moving Average of Heterozygosity (Americas)
+    color 224,192,0
     priority 7
 
 track hgdpIhs
@@ -784,42 +791,49 @@ type bedGraph 4
     subTrack hgdpIhs
     shortLabel HGDP iHS Africa
     longLabel Human Genome Diversity Project iHS (Africa)
+    color 224, 0, 0
     priority 1
 
     track hgdpIhsMideast
     subTrack hgdpIhs
     shortLabel HGDP iHS Mideast
     longLabel Human Genome Diversity Project iHS (Mideast)
+    color 0,0,200
     priority 2
 
     track hgdpIhsEurope
     subTrack hgdpIhs
     shortLabel HGDP iHS Europe
     longLabel Human Genome Diversity Project iHS (Europe)
+    color 240,144,0
     priority 3
 
     track hgdpIhsSAsia
     subTrack hgdpIhs
     shortLabel HGDP iHS S. Asia
     longLabel Human Genome Diversity Project iHS (South Asia)
+    color 0,0,0
     priority 4
 
     track hgdpIhsEAsia
     subTrack hgdpIhs
     shortLabel HGDP iHS E. Asia
     longLabel Human Genome Diversity Project iHS (East Asia)
+    color 0,200,0
     priority 5
 
     track hgdpIhsOceania
     subTrack hgdpIhs
     shortLabel HGDP iHS Oceania
     longLabel Human Genome Diversity Project iHS (Oceania)
+    color 0,200,200
     priority 6
 
     track hgdpIhsAmericas
     subTrack hgdpIhs
     shortLabel HGDP iHS Americas
     longLabel Human Genome Diversity Project iHS (Americas)
+    color 224,192,0
     priority 7
 
 track hgdpXpehh
@@ -839,42 +853,49 @@ type bedGraph 4
     subTrack hgdpXpehh
     shortLabel HGDP XP-EHH Africa
     longLabel Human Genome Diversity Project XP-EHH (Africa)
+    color 224, 0, 0
     priority 1
 
     track hgdpXpehhMideast
     subTrack hgdpXpehh
     shortLabel HGDP XP-EHH Mideast
     longLabel Human Genome Diversity Project XP-EHH (Mideast)
+    color 0,0,200
     priority 2
 
     track hgdpXpehhEurope
     subTrack hgdpXpehh
     shortLabel HGDP XP-EHH Europe
     longLabel Human Genome Diversity Project XP-EHH (Europe)
+    color 240,144,0
     priority 3
 
     track hgdpXpehhSAsia
     subTrack hgdpXpehh
     shortLabel HGDP XP-EHH S. Asia
     longLabel Human Genome Diversity Project XP-EHH (South Asia)
+    color 0,0,0
     priority 4
 
     track hgdpXpehhEAsia
     subTrack hgdpXpehh
     shortLabel HGDP XP-EHH E. Asia
     longLabel Human Genome Diversity Project XP-EHH (East Asia)
+    color 0,200,0
     priority 5
 
     track hgdpXpehhOceania
     subTrack hgdpXpehh
     shortLabel HGDP XP-EHH Oceania
     longLabel Human Genome Diversity Project XP-EHH (Oceania)
+    color 0,200,200
     priority 6
 
     track hgdpXpehhAmericas
     subTrack hgdpXpehh
     shortLabel HGDP XP-EHH Americas
     longLabel Human Genome Diversity Project XP-EHH (Americas)
+    color 224,192,0
     priority 7
 
 track snpMap
