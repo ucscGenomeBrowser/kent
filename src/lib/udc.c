@@ -508,24 +508,46 @@ if (file->size > 0)
 udcBitmapClose(&bits);
 }
 
-static char *cgiEncodeExceptDirs(char *input)
-/* CGI-encode every char in input except for the / chars. */
+static boolean qEscaped(char c)
+/* Returns TRUE if character needs to be escaped in q-encoding. */
 {
-struct dyString *dy = dyStringNew(strlen(input)+16);
-char *s, *e;
+if (isalnum(c))
+    return c == 'Q';
+else
+    return c != '_' && c != '-' && c != '/' && c != '.';
+}
 
-for (s = input; s != NULL; s = e)
+static char *qEncode(char *input)
+/* Do a simple encoding to convert input string into "normal" characters.
+ * Abnormal letters, and '!' get converted into Q followed by two hexadecimal digits. */
+{
+/* First go through and figure out encoded size. */
+int size = 0;
+char *s, *d, c;
+s = input;
+while ((c = *s++) != 0)
     {
-    e = strchr(s, '/');
-    if (e != NULL)
-	*e++ = 0;
-    char *encoded = cgiEncode(s);
-    dyStringAppend(dy, encoded);
-    if (e != NULL)
-        dyStringAppendC(dy, '/');
-    freeMem(encoded);
+    if (qEscaped(c))
+	size += 3;
+    else
+	size += 1;
     }
-return dyStringCannibalize(&dy);
+
+/* Allocate and fill in output. */
+char *output = needMem(size+1);
+s = input;
+d = output;
+while ((c = *s++) != 0)
+    {
+    if (qEscaped(c))
+        {
+	sprintf(d, "Q%02X", (unsigned)c);
+	d += 3;
+	}
+    else
+        *d++ = c;
+    }
+return output;
 }
 
 struct udcFile *udcFileMayOpen(char *url, char *cacheDir)
@@ -544,7 +566,7 @@ if (colon != NULL)
     afterProtocol = url + colonPos + 1;
     while (afterProtocol[0] == '/')
        afterProtocol += 1;
-    afterProtocol = cgiEncodeExceptDirs(afterProtocol);
+    afterProtocol = qEncode(afterProtocol);
     }
 else
     {
@@ -637,7 +659,7 @@ static void readBitsIntoBuf(FILE *f, int headerSize, int bitStart, int bitEnd,
  * have information in the bits we're interested in. */
 {
 int byteStart = bitStart/8;
-int byteEnd = (bitEnd+7)/8;
+int byteEnd = bitToByteSize(bitEnd);
 int byteSize = byteEnd - byteStart;
 Bits *bits = needLargeMem(byteSize);
 fseek(f, headerSize + byteStart, SEEK_SET);
@@ -706,11 +728,8 @@ for (;;)
     int nextSetBit = bitFindSet(b, nextClearBit, e);
     int clearSize =  nextSetBit - nextClearBit;
 
-    int lockErr = flock(fileno(bits->f), LOCK_EX);
-    /* TODO: update bitmap file as well as in memory. */
     fetchMissingBlocks(file, bits, nextClearBit + partOffset, clearSize, bits->blockSize);
     bitSetRange(b, nextClearBit, clearSize);
-    lockErr = flock(fileno(bits->f), LOCK_UN);
 
     dirty = TRUE;
     if (nextSetBit >= e)
@@ -722,7 +741,7 @@ if (dirty)
     {
     /* Update bitmap on disk.... */
     int byteStart = startBlock/8;
-    int byteEnd = (endBlock+7)/8;
+    int byteEnd = bitToByteSize(endBlock);
     int byteSize = byteEnd - byteStart;
     fseek(bits->f, byteStart + udcBitmapHeaderSize, SEEK_SET);
     mustWrite(bits->f, b, byteSize);
@@ -783,11 +802,7 @@ for (s = offset; s < endPos; s = e)
     if (bits->version == file->bitmapVersion)
 	{
 	if (!udcCacheContains(file, bits, s, e-s))
-	    {
-	    int lockErr = flock(fileno(bits->f), LOCK_EX);
 	    udcFetchMissing(file, bits, s, e);
-	    lockErr = flock(fileno(bits->f), LOCK_UN);
-	    }
 	}
     else
 	{
@@ -823,6 +838,9 @@ if (start < file->startData || end > file->endData)
 	verbose(2, "udcCachePreload failed");
 	return 0;
 	}
+    /* Currently only need fseek here.  Would be safer, but possibly
+     * slower to move fseek so it is always executed in front of read, in
+     * case other code is moving around file pointer. */
     fseek(file->fSparse, start, SEEK_SET);
     }
 mustRead(file->fSparse, buf, size);
@@ -891,9 +909,7 @@ bits64 udcTell(struct udcFile *file)
 return file->offset;
 }
 
-    off_t size;		/* Size in bytes. */
-
-bits64 rCleanup(time_t deleteTime, boolean testOnly)
+static bits64 rCleanup(time_t deleteTime, boolean testOnly)
 /* Delete any bitmap or sparseData files last accessed before deleteTime */
 {
 struct fileInfo *file, *fileList = listDirX(".", "*", FALSE);
