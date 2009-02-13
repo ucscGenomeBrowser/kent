@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1507 2009/02/13 01:40:47 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1508 2009/02/13 20:01:49 tdreszer Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1045,33 +1045,37 @@ static void printCompareGenomeLinks(struct trackDb *tdb,char *name)
 char *setting = trackDbSettingClosestToHome(tdb,"compareGenomeLinks");
 if(setting == NULL)
     return;
+struct sqlConnection *conn = hAllocConn(database); // Need only to connect to one db
+if(conn == NULL)
+    return;
 
 char *words[20];
 setting = cloneString(setting);
-int ix=0,cnt = chopLine(setting, words);
-char *tieThatBinds = "name";
+int ix,cnt = chopLine(setting, words);
 char query[512];
 char extra[128];
 boolean gotOne = FALSE;
-if(strchr(words[0],'=') == NULL)
+for(ix=0;ix<cnt;ix++)
     {
-    tieThatBinds = words[0];
-    ix=1;
-    }
-for(;ix<cnt;ix++)
-    {
-    char *db = words[ix];
+    char *db = words[ix];          // db.table.column=title or db.table=title or db=title
+    char *table,*column = "name";
     char *title = strchr(words[ix],'=');
-    if(title==NULL)
+    if(title==NULL)  // Must have title
         continue;
     *title = '\0';
     title++;
-    // Look up in the db to determine if there is a match
-    struct sqlConnection *conn = hAllocConn(db);
-    if(db == NULL)
-        continue;
-
-    safef(query,sizeof(query),"select chrom,chromStart,chromEnd from %s where %s=\"%s\";",tdb->tableName,tieThatBinds,name);
+    if((table = strchr(words[ix],'.')) == NULL)
+        table = tdb->tableName;
+    else
+        {
+        *table++ = '\0';  // assigns before advance
+        if((words[ix] = strchr(table,'.')) != NULL)
+            {
+            *words[ix] = '\0';
+            column = ++words[ix]; // advance before assigns
+            }
+        }
+    safef(query,sizeof(query),"select chrom,chromStart,chromEnd from %s.%s where %s=\"%s\";",db,table,column,name);
     struct sqlResult *sr = sqlGetResult(conn, query);
     if(sr == NULL)
         continue;
@@ -1084,19 +1088,20 @@ for(;ix<cnt;ix++)
     if(!gotOne)
         {
         gotOne = TRUE;
-        printf("<P>Look up %s in other genomes:\n<UL>\n",name);
+        printf("<P>The item \"%s\" has been located in other genomes:\n<UL>\n",name);
         }
     printf("<LI>");
     safef(extra,sizeof(extra),"%s=full",tdb->tableName);
     linkToOtherBrowserExtra(db, chrom, beg, end, extra);
     printf("%s</A></LI>\n",strSwapChar(title,'_',' '));
     sqlFreeResult(&sr);
-    hFreeConn(&conn);
     }
+hFreeConn(&conn);
+freeMem(setting);
 if(gotOne)
-    {
-    printf("</UL>");
-    }
+    printf("</UL>\n");
+else
+    printf("<P>Currently the item \"%s\" has not been located in another genome.\n",name);
 }
 
 void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize,
