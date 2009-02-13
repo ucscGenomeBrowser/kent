@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.152 2009/02/13 19:16:08 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.153 2009/02/13 21:59:49 mikep Exp $
 
 use warnings;
 use strict;
@@ -1031,6 +1031,16 @@ sub ddfKey
     }
 }
 
+sub isDownloadOnly {
+    my ($view, $grant, $lab) = @_;
+    # Dont load any RawData* or Comparative views, 
+    # Dont load Alignments unless they are from Gingeras or Wold labs (RNA folks like to  see their RNAs)
+    # Riken group have RawData and RawData2 because they have colorspace fasta and quality files
+    # Wold group have RawData, RawData2, RawData3, RawData4 
+    return ($view =~ m/^RawData[0-9]?$/ or $view eq 'Comparative' 
+	or ($view eq 'Alignments' and $grant ne "Gingeras" and $grant ne "Wold")) ? 1 : 0;
+}
+
 sub printCompositeTdbSettings {
 # prints out trackDb.ra settings for the composite track
     local *OUT_FILE = shift;
@@ -1047,10 +1057,7 @@ sub printCompositeTdbSettings {
     for my $view (keys %{$daf->{TRACKS}}) {
         for my $key (keys %ddfSets) {
             if(defined($ddfSets{$key}{VIEWS}{$view})) {
-		# Load alignments for all Gingeras labs except CSHL as these are currently 100-400M rows
-                my $downloadOnly = $view eq 'RawData' || $view eq 'RawData2' || 
-			$view eq 'RawData3' || $view eq 'RawData4' || 
-			($view eq 'Alignments' and ($daf->{grant} ne "Gingeras" or $daf->{lab} eq "Cshl")) ? 1 : 0;
+                my $downloadOnly = isDownloadOnly($view, $daf->{grant}, $daf->{lab});
                 if(!$downloadOnly) {
                     $setting = $setting . " " . $view . "=" . $view;
                     $visDefault = $visDefault . " " . $view . "=";
@@ -1652,9 +1659,9 @@ foreach my $ddfLine (@ddfLines) {
     }
 
     # XXXX Move the decision about which views have tracks into the DAF?
-    # Gingeras group need to see their alignments
-    # Riken group have RawData and RawData2 because they have colorspace fasta and quality files
-    my $downloadOnly = $view eq 'RawData' || $view eq 'RawData2'|| $view eq 'Comparative' || ($view eq 'Alignments' and $daf->{grant} ne "Gingeras") ? 1 : 0;
+    # Already this is used in 2 places so made it a function, 
+    # would be better in the DAF except we'd have to go change all the DAFs :(
+    my $downloadOnly = isDownloadOnly($view, $daf->{grant}, $daf->{lab});
 
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "view $view\n";
