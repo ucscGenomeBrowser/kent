@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.147 2009/02/13 17:35:43 mikep Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.148 2009/02/13 18:21:58 mikep Exp $
 
 use warnings;
 use strict;
@@ -916,6 +916,7 @@ sub validateBowtie
 # Sample lines:-
 # HWI-EAS229_75_30DY0AAXX:7:1:0:1545/1    +       chr1    5983615 NCGTCCATCTCACATCGTCAGGAAAGGGGGAAGCACTGGATGGCTGTGGCCTCACAGGCAGGGAGAGTGGGGTCC     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII 0       0:G>N
 # HWI-EAS229_75_30DY0AAXX:7:1:0:1591/1      -       uc002fcb.1|22|70699936  45      CTATTTCCACCAAGCAGCCAAGCTCAAGGGAATCGGGGAGTACGTGAACATCCGCACAGGGATGCCCTGCCACTN     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII     0       0:T>N]
+# HWI-EAS229_75_30DY0AAXX:7:1:0:1766/1    -       chr18   72954304        GCAGCCACCAGAAGCGGGAAGAGGTGAAGACAGAGCCTCCTGCAGAGCTCCCACTCTGCCAACGCCTTGACTTTN     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII 0       0:G>N,59:T>G
 {
     my ($path, $file, $type) = @_;
     doTime("beginning validateBowtie") if $opt_timing;
@@ -927,8 +928,7 @@ sub validateBowtie
         $lineNumber++;
         next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
         die "Failed bowtie validation, file '$file'; line $lineNumber: line=[$_]\n" 
-	    unless $_ =~ m/^([A-Za-z0-9:>_\.\|\/-]+)\t([+-])\t([A-Za-z0-9:>_\.\|\/-]+)\t(\d+)\t(\w+)\t(\w+)\t(\d+)\t([A-Za-z0-9:>_\.\|\/-]+)$/;
-
+	    unless $_ =~ m/^([A-Za-z0-9:>_,\.\|\/-]+)\t([+-])\t([A-Za-z0-9:>_,\.\|\/-]+)\t(\d+)\t(\w+)\t(\w+)\t(\d+)\t([A-Za-z0-9:>_,\.\|\/-]+)$/;
         last if($opt_quick && $lineNumber >= $quickCount);
     }
     $fh->close();
