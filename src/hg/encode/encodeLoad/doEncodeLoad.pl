@@ -9,7 +9,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.55 2009/02/07 03:01:09 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeLoad/doEncodeLoad.pl,v 1.56 2009/02/13 23:36:19 mikep Exp $
 
 # Usage:
 #
@@ -390,7 +390,7 @@ for my $key (keys %ra) {
     } elsif ($extendedTypes{$type}) {
         loadBedFromSchema($assembly, $tablename, $files, $type, $pushQ);
         $hgdownload = @files;
-    } elsif ($type =~ /^bed (3|4|5|6|8|9)$/) {
+    } elsif ($type =~ /^bed (3|4|5|6|8|9|12)$/) {
         loadBed($assembly, $tablename, $files, $pushQ);
         $hgdownload = @files;
     } elsif ($type =~ /^bedGraph (4)$/) {
