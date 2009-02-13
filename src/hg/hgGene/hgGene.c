@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.112 2008/09/09 23:12:42 markd Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.113 2009/02/13 02:38:28 markd Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -203,9 +203,9 @@ struct dyString *description = dyStringNew(0);
 descrBySql = genoQuery(id, "descriptionSql", conn);
 dyStringPrintf(description, "<B>Description:</B> ");
 if (descrBySql != NULL)
-    dyStringPrintf(description, "%s<BR>", descrBySql);
+    dyStringPrintf(description, "%s<BR>\n", descrBySql);
 else
-    dyStringPrintf(description, "%s<BR>", "No description available");
+    dyStringPrintf(description, "%s<BR>\n", "No description available");
 freez(&descrBySql);
 if (summaryTables != NULL)
     {
@@ -225,7 +225,7 @@ if (summaryTables != NULL)
 		}
 	    dyStringPrintf(description, ":</B> %s", summary);
 	    freez(&summary);
-	    dyStringPrintf(description, "<BR>");
+	    dyStringPrintf(description, "<BR>\n");
 	    }
 	}
     }
@@ -243,7 +243,7 @@ hPrintf("%s", description);
 freez(&description);
 
 /* print genome position and size */
-hPrintf("<B>Strand:</B> %s</A>\n", curGenePred->strand);
+hPrintf("<B>Strand:</B> %s\n", curGenePred->strand);
 hPrintf("&nbsp;&nbsp;<B>Genomic Size:</B> %d\n", curGeneEnd - curGeneStart);
 
 /* print exon count(s) */
