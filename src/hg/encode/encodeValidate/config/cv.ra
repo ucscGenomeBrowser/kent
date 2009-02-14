@@ -701,11 +701,11 @@ term NA
 type mapAlgorithm
 description No algorithm applicable
 
-term erange3.0
+term erng3
 type mapAlgorithm
 description erange v3.0
 
-term erange3.0b
+term erng3b
 type mapAlgorithm
 description erange v3.0beta
 
@@ -713,11 +713,11 @@ term blat34
 type mapAlgorithm
 description blat v34
 
-term bowtie0.981
+term bow098
 type mapAlgorithm
 description bowtie v0.981
 
-term bow098blat34
+term bowblt1
 type mapAlgorithm
 description bowtie v0.981 followed by blat v34
 
