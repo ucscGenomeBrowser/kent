@@ -215,7 +215,7 @@ longLabel ENCODE Histone Modifications by Broad Institute ChIP-seq
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878_(Tier1) HUVEC=HUVEC_(Tier2) K562=K562_(Tier1) Kera=Keratinocyte_(Tier2)
-subGroup3 factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2(b)=Pol2(b) zCTRL=Control
+subGroup3 factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2b=Pol2(b) zCTRL=Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 controlledVocabulary encode/cv.ra cellType=GM12878,HUVEC,Keratinocyte,K562 factor
@@ -1319,7 +1319,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC Pol2(b) Pk
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in HUVEC cells)
-    subGroups view=Peaks factor=Pol2(b) cellType=HUVEC
+    subGroups view=Peaks factor=Pol2b cellType=HUVEC
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -1332,7 +1332,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC Pol2(b) Sig
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in HUVEC cells)
-    subGroups view=Signal factor=Pol2(b) cellType=HUVEC
+    subGroups view=Signal factor=Pol2b cellType=HUVEC
     type wig 0.00 8889.75
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -1346,7 +1346,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC Pol2(b) Raw 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in HUVEC cells)
-    subGroups view=zRAW factor=Pol2(b) cellType=HUVEC
+    subGroups view=zRAW factor=Pol2b cellType=HUVEC
     type wig 1.00 6156.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -1360,7 +1360,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC Pol2(b) Raw 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in HUVEC cells)
-    subGroups view=zRAW factor=Pol2(b) cellType=HUVEC
+    subGroups view=zRAW factor=Pol2b cellType=HUVEC
     type wig 1.00 4077.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -1966,7 +1966,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) Pk
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in K562 cells)
-    subGroups view=Peaks factor=Pol2(b) cellType=K562
+    subGroups view=Peaks factor=Pol2b cellType=K562
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -1979,7 +1979,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) Sig
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in K562 cells)
-    subGroups view=Signal factor=Pol2(b) cellType=K562
+    subGroups view=Signal factor=Pol2b cellType=K562
     type wig 0.00 17110.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -1993,7 +1993,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) Raw 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in K562 cells)
-    subGroups view=zRAW factor=Pol2(b) cellType=K562
+    subGroups view=zRAW factor=Pol2b cellType=K562
     type wig 1.00 6599.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -2007,7 +2007,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) Raw 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in K562 cells)
-    subGroups view=zRAW factor=Pol2(b) cellType=K562
+    subGroups view=zRAW factor=Pol2b cellType=K562
     type wig 1.00 13248.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -2613,7 +2613,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera Pol2(b) Pk
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in Keratin cells)
-    subGroups view=Peaks factor=Pol2(b) cellType=Kera
+    subGroups view=Peaks factor=Pol2b cellType=Kera
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
@@ -2626,7 +2626,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera Pol2(b) Sig
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in Keratin cells)
-    subGroups view=Signal factor=Pol2(b) cellType=Kera
+    subGroups view=Signal factor=Pol2b cellType=Kera
     type wig 0.00 5604.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
@@ -2640,7 +2640,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera Pol2(b) Raw 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in Keratin cells)
-    subGroups view=zRAW factor=Pol2(b) cellType=Kera
+    subGroups view=zRAW factor=Pol2b cellType=Kera
     type wig 1.00 2360.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
@@ -2654,7 +2654,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera Pol2(b) Raw 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in Keratin cells)
-    subGroups view=zRAW factor=Pol2(b) cellType=Kera
+    subGroups view=zRAW factor=Pol2b cellType=Kera
     type wig 1.00 1938.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
@@ -3228,7 +3228,7 @@ dateUnrestricted 2009-10-27
 dataVersion ENCODE Feb 2009 Freeze
 priority 0
 scoreFilterByRange on
-compareGenomeLinks name panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
+compareGenomeLinks panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
 wgEncode 1
 
 
