@@ -7517,7 +7517,7 @@ track		wgEncodeCshlRnaSeq
 compositeTrack	on
 shortLabel	Cshl RnaSeq
 longLabel	ENCODE Cshl Gingeras RnaSeq
-group		regulation
+group		expression
 subGroup1       view Views Transfrags=Transfrags
 subGroup2       cellType Cell_Line GM12878=GM12878 K562=K562 prostate=prostate
 subGroup3       localization Localization cell=cell cytosol=cytosol nucleus=nucleus polysome=polysome
@@ -8424,7 +8424,7 @@ track		wgEncodeCaltechRnaSeq
 compositeTrack	on
 shortLabel	Caltech RnaSeq
 longLabel	ENCODE Caltech Wold RnaSeq
-group		regulation
+group		expression
 subGroup1	view Views Alignments=Alignments RawSignal=RawSignal PairedAligns=PairedAligns Splices=Splices
 subGroup2	cellType Cell_Line K562=K562 GM12878=GM12878 
 subGroup3	localization Localization cell=cell 
