@@ -7172,7 +7172,7 @@ wgEncode 1
     longLabel ENCODE GIS PET Alignments (longPolyA in prostate cell cell)
     subGroups view=Alignments cellType=prostate localization=cell rnaExtract=longPolyA
     type bed 6
-	#type		pairedTagAlign
+	#MJP type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
     dateUnrestricted 2009-09-03
@@ -7187,7 +7187,7 @@ wgEncode 1
     longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell cytosol)
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bed 6
-	#type		pairedTagAlign
+	#MJP type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
     dateUnrestricted 2009-09-03
@@ -7202,7 +7202,7 @@ wgEncode 1
     longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell nucleus)
     subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA
     type bed 6
-	#type		pairedTagAlign
+	#MJP type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
     dateUnrestricted 2009-09-03
@@ -7217,7 +7217,7 @@ wgEncode 1
     longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell polysome)
     subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
     type bed 6
-	#type		pairedTagAlign
+	#MJP type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
     dateUnrestricted 2009-09-03
@@ -7351,7 +7351,8 @@ wgEncode 1
     shortLabel longPolyA GM12878 nucleus 
     longLabel ENCODE GIS PET Alignments (longPolyA in GM12878 cell nucleus using )
     subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longPolyA
-    type pairedTagAlign
+    type bed 6
+    # MJP: FIX WHEN THIS IS IMPLEMENTED: type pairedTagAlign
     dateSubmitted 2009-02-16
     dateUnrestricted 2009-11-16
     dataVersion ENCODE Feb 2009 Freeze
@@ -7411,7 +7412,8 @@ wgEncode 1
     shortLabel longPolyA GM12878 cytosol 
     longLabel ENCODE GIS PET Alignments (longPolyA in GM12878 cell cytosol using )
     subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA
-    type pairedTagAlign
+    type bed 6
+    # MJP: FIX WHEN THIS IS IMPLEMENTED: type pairedTagAlign
     dateSubmitted 2009-02-17
     dateUnrestricted 2009-11-17
     dataVersion ENCODE Feb 2009 Freeze
