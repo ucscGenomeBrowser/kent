@@ -174,7 +174,7 @@ return lf;
 void bigBedAddLinkedFeaturesFrom(struct sqlConnection *conn, struct track *track,
 	char *chrom, int start, int end, int scoreMin, int scoreMax, boolean useItemRgb, 
 	int fieldCount, struct linkedFeatures **pLfList)
-/* Read in items in chrom:start-end from bigBed file named in tdb->tableName, convert
+/* Read in items in chrom:start-end from bigBed file named in track->bbiFileName, convert
  * them to linkedFeatures, and add to head of list. */
 {
 struct lm *lm = lmInit(0);
