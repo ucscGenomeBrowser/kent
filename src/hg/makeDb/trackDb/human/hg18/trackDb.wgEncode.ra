@@ -7405,6 +7405,66 @@ wgEncode 1
     localization nucleus
     cell GM12878
 
+    track wgEncodeGisPetAlignmentsGm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet
+    shortLabel longPolyA GM12878 cytosol 
+    longLabel ENCODE GIS PET Alignments (longPolyA in GM12878 cell cytosol using )
+    subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA
+    type pairedTagAlign
+    dateSubmitted 2009-02-17
+    dateUnrestricted 2009-11-17
+    dataVersion ENCODE Feb 2009 Freeze
+    accession SAT2G_version_2.0
+    priority 20
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization cytosol
+    cell GM12878
+
+    track wgEncodeGisPetPlusRawSignalGm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet
+    shortLabel longPolyA GM12878 cytosol  PlusRaw
+    longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in GM12878 cell cytosol using )
+    subGroups view=PlusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
+    type wig 1.00 7729.00
+    dateSubmitted 2009-02-17
+    dateUnrestricted 2009-11-17
+    dataVersion ENCODE Feb 2009 Freeze
+    accession SAT2G_version_2.0
+    priority 18
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization cytosol
+    cell GM12878
+
+    track wgEncodeGisPetMinusRawSignalGm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet
+    shortLabel longPolyA GM12878 cytosol  MinusRaw
+    longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in GM12878 cell cytosol using )
+    subGroups view=MinusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
+    type wig 1.00 8516.00
+    dateSubmitted 2009-02-17
+    dateUnrestricted 2009-11-17
+    dataVersion ENCODE Feb 2009 Freeze
+    accession SAT2G_version_2.0
+    priority 19
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization cytosol
+    cell GM12878
+
 
 # HudsonAlpha Methyl27 (wrangler: larrym)
 
