@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.60 2009/02/09 19:44:15 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.61 2009/02/17 17:51:13 mikep Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -189,7 +189,7 @@ boolean withGuidelines = TRUE;		/* Display guidelines? */
 boolean withNextExonArrows = FALSE;	/* Display next exon navigation buttons near center labels? */
 boolean revCmplDisp = FALSE;          /* reverse-complement display */
 
-boolean measureTiming = FALSE;	/* Flip this on to display timing
+boolean measureTiming = TRUE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
 struct track *trackList = NULL;    /* List of all tracks. */
 struct cart *cart;	/* The cart where we keep persistent variables. */
@@ -10425,7 +10425,7 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	{
 	lastTime = clock1000();
 	if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
-	    errAbort("Error: Null pointer subtrack->loadItems in compositeLoad() for track(%s) subtrack(%s)\n", track->mapName, subtrack->mapName);
+	    errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (is this a new track 'type'?)\n", subtrack->mapName, track->mapName);
         subtrack->loadItems(subtrack);
 	if (measureTiming)
 	    {
