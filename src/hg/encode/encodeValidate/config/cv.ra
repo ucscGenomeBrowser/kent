@@ -894,41 +894,64 @@ description The reference human genome is currently hg18 - March 2006 (NCBI Buil
 
 term HTC-116
 type Cell Line
+description colorectal carcinoma
 
 term H9ES
 type Cell Line
+description H9 human ES cells
+tier 3
 
 term H9ES-E
 type Cell Line
+description H9 Endoderm
+tier 3
 
 term H9ES-AFP+
 type Cell Line
+description H9 AFP+ human ESCells-derived
+tier 3
 
 term H9ES-AFP-
 type Cell Line
+description H9 AFP- human ESCells-derived
+tier 3
 
 term H9ES-EB
 type Cell Line
+description H9 Embryoid Bodies
+tier 3
 
 term H9ES-EBD
 type Cell Line
+description H9 EmbryoidBody-Derived
+tier 3
 
 term H9ES-CM
 type Cell Line
+description H9 Conditioned Medium
+tier 3
 
 term BG02ES
 type Cell Line
+description H9 Conditioned Medium
+tier 3
 
 term BG02ES-EBD
 type Cell Line
+description BG02 EmbryoidBody-Derived
+tier 3
 
 term HFL11W
 type Cell Line
+description Human Fetal Liver 11 weeks
+tier 3
 
 term HFL24W
 type Cell Line
+description Human Fetal Liver 24 weeks
+tier 3
 
 term HAL
 type Cell Line
-
-
+Human Adult Liver
+tier 3
