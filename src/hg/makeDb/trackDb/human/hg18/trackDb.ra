@@ -484,16 +484,16 @@ type bed 4 .
 
     track pgYoruban2
     subTrack pgSnp
-    shortLabel YRI (SOLiD)
-    longLabel Yoruban (PSU Sequencing Using SOLiD)
+    shortLabel YRI - SOLiD
+    longLabel Yoruban - SOLiD (PSU)
     group varRep
     priority 4
     color 128,0,128
 
     track pgYoruban3
     subTrack pgSnp
-    shortLabel YRI (Solexa)
-    longLabel Yoruban (PSU Sequencing Using Solexa)
+    shortLabel YRI - Solexa
+    longLabel Yoruban - Solexa (PSU)
     group varRep
     priority 5
     color 128,0,128
