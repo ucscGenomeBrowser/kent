@@ -468,72 +468,72 @@ type bed 4 .
 
     track pgVenter
     subTrack pgSnp
-    shortLabel Venter SNPs
-    longLabel Venter method 1 SNPs
+    shortLabel Venter
+    longLabel J. Craig Venter - method 1 (JCVI)
     group varRep
     priority 1
     color 128,0,128
 
     track pgWatson
     subTrack pgSnp
-    shortLabel Watson SNPs
-    longLabel Watson SNPs from CSHL
+    shortLabel Watson
+    longLabel James Watson (CSHL)
     group varRep
     priority 2
     color 153,0,0
 
     track pgYoruban2
     subTrack pgSnp
-    shortLabel Yoruban SNPs
-    longLabel Yoruban SNPs from Solid
+    shortLabel YRI (SOLiD)
+    longLabel Yoruban (PSU Sequencing Using SOLiD)
     group varRep
     priority 4
     color 128,0,128
 
     track pgYoruban3
     subTrack pgSnp
-    shortLabel Yoruban SNPs
-    longLabel Yoruban SNPs from Solexa
+    shortLabel YRI (Solexa)
+    longLabel Yoruban (PSU Sequencing Using Solexa)
     group varRep
     priority 5
     color 128,0,128
 
     track pgYh1
     subTrack pgSnp
-    shortLabel Asian SNPs
-    longLabel Asian SNPs from the YanHuang Project
+    shortLabel YanHuang
+    longLabel Han Chinese Individual (YanHuang Project)
     group varRep
     priority 6
     color 0,128,128
 
     track pgNA12878
     subTrack pgSnp
-    shortLabel CEU trio 878
-    longLabel 1000 Genomes CEU trio NA12878
+    shortLabel CEU trio '878
+    longLabel CEU trio daughter NA12878 (1000 Genomes Project)
     group varRep
     priority 7
     color 128,64,0
 
     track pgNA12891
     subTrack pgSnp
-    shortLabel CEU trio 891
-    longLabel 1000 Genomes CEU trio NA12891
+    shortLabel CEU trio '891
+    longLabel CEU trio father NA12891 (1000 Genomes Project)
     group varRep
     priority 8
     color 128,64,0
 
     track pgNA12892
     subTrack pgSnp
-    shortLabel CEU trio 892
-    longLabel 1000 Genomes CEU trio NA12892
+    shortLabel CEU trio '892
+    longLabel CEU trio mother NA12892 (1000 Genomes Project)
     group varRep
     priority 9
     color 128,64,0
 
     track pgNA19240
     subTrack pgSnp
-    shortLabel YRI 9240
-    longLabel 1000 Genomes YRI daughter NA19240
+    shortLabel YRI trio '9240
+    longLabel YRI trio daughter NA19240 (1000 Genomes Project)
     group varRep
     priority 10
     color 128,64,0
