@@ -82,6 +82,9 @@ if ( ! -d $CVS_REPORT_HIST ) then
 	echo "Error: [mode=$mode] could not make directory [$PWD/$CVS_REPORT_HIST] on $HOST [${0}: `date`]"
 	exit 1
     endif
+    mkdir $CVS_REPORT_HIST/branch
+    mkdir $CVS_REPORT_HIST/review
+    mkdir $CVS_REPORT_HIST/kent
 endif
 if ( ! -d $CVS_REPORT_HIST ) then
     echo "Error: [mode=$mode] directory does not exist [$PWD/$CVS_REPORT_HIST] on $HOST [${0}: `date`]"
