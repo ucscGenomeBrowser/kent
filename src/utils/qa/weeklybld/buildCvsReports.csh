@@ -69,6 +69,31 @@ if ( "$2" != "real" ) then
 	exit 0
 endif 
 
+# Keep a history of cvs-reports by creating a new directory, and setting a symlink (cvs-reports-latest) to it. 
+# The webserver has a symlink to this latest one: /usr/local/apache/htdocs/cvs-reports -> /cluster/hive/groups/qa/cvs-reports-latest
+# The script which builds the repoerts (cvs-reports-delta) also has a setting which points to this: 
+#     'CVS_REPORTS_BASE=/hive/groups/qa/cvs-reports-latest'
+set CVS_REPORTS_ROOT=/hive/groups/qa/
+cd $CVS_REPORTS_ROOT
+set CVS_REPORT_HIST=cvs-reports-history/v${BRANCHNN}
+if ( ! -d $CVS_REPORT_HIST ) then
+    mkdir $CVS_REPORT_HIST
+    if ( $status ) then
+	echo "Error: [mode=$mode] could not make directory [$PWD/$CVS_REPORT_HIST] on $HOST [${0}: `date`]"
+	exit 1
+    endif
+endif
+if ( ! -d $CVS_REPORT_HIST ) then
+    echo "Error: [mode=$mode] directory does not exist [$PWD/$CVS_REPORT_HIST] on $HOST [${0}: `date`]"
+    exit 1
+endif
+rm cvs-reports-latest
+ln -s $CVS_REPORT_HIST cvs-reports-latest
+if ( -L cvs-reports-latest != "${CVS_REPORT_HIST}" ) then
+    echo "Error: [mode=$mode] could not make symlink [cvs-reports-latest -> $CVS_REPORTS_ROOT/$CVS_REPORT_HIST] on $HOST [${0}: `date`]"
+    exit 1
+endif
+
 # it will shove itself off into the background anyway!
 cd $WEEKLYBLD
 
