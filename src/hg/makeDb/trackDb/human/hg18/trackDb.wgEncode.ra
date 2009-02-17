@@ -7094,7 +7094,7 @@ shortLabel GIS PET Loc
 longLabel ENCODE GIS Subcellular RNA Localization by Paired End diTag Sequencing
 group expression
 subGroup1 view Views Tags=Tags PlusRawSignal=PlusRawSignal MinusRawSignal=MinusRawSignal Alignments=Alignments
-subGroup2 cellType Cell_Line K562=K562_(Tier1) prostate=Prostate
+subGroup2 cellType Cell_Line K562=K562_(Tier1) GM12878=GM12878_(Tier1) prostate=Prostate
 subGroup3 localization Localization cytosol=Cytosol cell=Cell polysome=Polysome nucleus=Nucleus
 subGroup4 rnaExtract RnaExtract longPolyA=longPolyA
 subGroup4 rnaExtract RnaExtract longPolyA=longPolyA
@@ -7344,6 +7344,66 @@ wgEncode 1
     rnaExtract longPolyA
     localization nucleus
     cell K562
+
+    track wgEncodeGisPetAlignmentsGm12878NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet
+    shortLabel longPolyA GM12878 nucleus 
+    longLabel ENCODE GIS PET Alignments (longPolyA in GM12878 cell nucleus using )
+    subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longPolyA
+    type pairedTagAlign
+    dateSubmitted 2009-02-16
+    dateUnrestricted 2009-11-16
+    dataVersion ENCODE Feb 2009 Freeze
+    accession SAT2G_version_2.0
+    priority 20
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeGisPetPlusRawSignalGm12878NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet
+    shortLabel longPolyA GM12878 nucleus  PlusRaw
+    longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in GM12878 cell nucleus using )
+    subGroups view=PlusRawSignal cellType=GM12878 localization=nucleus rnaExtract=longPolyA
+    type wig 1.00 4978.00
+    dateSubmitted 2009-02-16
+    dateUnrestricted 2009-11-16
+    dataVersion ENCODE Feb 2009 Freeze
+    accession SAT2G_version_2.0
+    priority 18
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeGisPetMinusRawSignalGm12878NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet
+    shortLabel longPolyA GM12878 nucleus  MinusRaw
+    longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in GM12878 cell nucleus using )
+    subGroups view=MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=longPolyA
+    type wig 1.00 9289.00
+    dateSubmitted 2009-02-16
+    dateUnrestricted 2009-11-16
+    dataVersion ENCODE Feb 2009 Freeze
+    accession SAT2G_version_2.0
+    priority 19
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization nucleus
+    cell GM12878
 
 
 # HudsonAlpha Methyl27 (wrangler: larrym)
