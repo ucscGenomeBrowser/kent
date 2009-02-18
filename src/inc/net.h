@@ -209,5 +209,8 @@ boolean netSkipHttpHeaderLinesHandlingRedirect(int sd, char *url, int *redirecte
  * The logic to this routine is also complicated a little to make it work in a pipe, which means we
  * can't attach a lineFile since filling the lineFile buffer reads in more than just the http header. */
 
+boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime);
+/* Return date and size of ftp url file */
+
 #endif /* NET_H */
 

@@ -85,12 +85,20 @@ struct udcRemoteFileInfo
     };
 
 boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo);
-/* Sets size and last modified time of URL
+/* Gets size and last modified time of URL
  * and returns status of HEAD GET. */
 
 int udcDataViaHttp(char *url, bits64 offset, int size, void *buffer);
 /* Fetch a block of data of given size into buffer using the http: protocol.
  * Returns number of bytes actually read.  Does an errAbort on
  * error.  Typically will be called with size in the 8k - 64k range. */
+
+int udcDataViaFtp(char *url, bits64 offset, int size, void *buffer);
+/* Fetch a block of data of given size into buffer using the ftp: protocol.
+ * Returns number of bytes actually read.  Does an errAbort on
+ * error.  Typically will be called with size in the 8k - 64k range. */
+
+boolean udcInfoViaFtp(char *url, struct udcRemoteFileInfo *retInfo);
+/* Gets size and last modified time of FTP URL */
 
 #endif /* UDC_H */

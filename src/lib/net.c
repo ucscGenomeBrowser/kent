@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.67 2009/02/12 01:18:00 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.68 2009/02/18 00:33:25 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -475,7 +475,6 @@ return receiveFtpReply(sd, cmd, seeResult);
 int parsePasvPort(char *rs)
 /* parse PASV reply to get the port and return it */
 {
-char *rsCopy = strdup(rs);
 char *words[7];
 int wordCount;
 char *rsStart = strchr(rs,'(');
@@ -487,9 +486,179 @@ wordCount = chopString(rsStart, ",", words, ArraySize(words));
 if (wordCount != 6)
     errAbort("PASV reply does not parse correctly");
 result = atoi(words[4])*256+atoi(words[5]);    
-freez(&rsCopy);
 return result;
 }    
+
+
+long long parseFtpSIZE(char *rs)
+/* parse reply to SIZE and return it */
+{
+char *words[3];
+int wordCount;
+char *rsStart = rs;
+long long result = 0;
+wordCount = chopString(rsStart, " ", words, ArraySize(words));
+if (wordCount != 2)
+    errAbort("SIZE reply does not parse correctly");
+result = atoll(words[1]);    
+return result;
+}    
+
+
+time_t parseFtpMDTM(char *rs)
+/* parse reply to MDTM and return it
+ * 200 YYYYMMDDhhmmss */
+{
+char spread[] = "YYYY MM DD hh mm ss";
+char *to = spread;
+char *from = NULL;
+char *words[3];
+int wordCount;
+char *rsStart = rs;
+int len = strlen(rs);
+if (len == 0) 
+    return FALSE;
+char *rsLast = rs + len - 1;
+if (*rsLast == '\n')
+    {
+    *rsLast = 0;
+    --rsLast;
+    --len;
+    if (len == 0) 
+	return FALSE;
+    }
+if (*rsLast == '\r')
+    {
+    *rsLast = 0;
+    --rsLast;
+    --len;
+    if (len == 0) 
+	return FALSE;
+    }
+wordCount = chopString(rsStart, " ", words, ArraySize(words));
+if (wordCount != 2)
+    errAbort("MDTM reply does not parse correctly");
+
+//printf("MDTM parse string [%s], length=%lld\n", words[1], (long long) strlen(words[1]));
+
+from = words[1];
+
+*to++ = *from++;
+*to++ = *from++;
+*to++ = *from++;
+*to++ = *from++;
+*to++ = '-';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = '-';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = ' ';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = ':';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = ':';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = 0;
+
+// printf("MDTM to [%s], length=%lld\n", spread, (long long) strlen(spread));
+
+struct tm tm;
+time_t t;
+
+if (strptime(spread, "%Y-%m-%d %H:%M:%S", &tm) == NULL)
+    { /* Handle error */;
+    errAbort("unable to parse MDTM string [%s]", spread);
+    }
+
+//printf("year: %d; month: %d; day: %d;\n",
+//        tm.tm_year, tm.tm_mon, tm.tm_mday);
+//printf("hour: %d; minute: %d; second: %d\n",
+//        tm.tm_hour, tm.tm_min, tm.tm_sec);
+//printf("week day: %d; year day: %d\n", tm.tm_wday, tm.tm_yday);
+
+
+tm.tm_isdst = -1;      /* Not set by strptime(); tells mktime()
+                          to determine whether daylight saving time
+                          is in effect */
+t = mktime(&tm);
+if (t == -1)
+    { /* Handle error */;
+    errAbort("mktime failed while parsing last-modified string [%s]", words[1]);
+    }
+
+//printf("seconds since the Epoch: %lld\n", (long long) t);"
+
+return t;
+}    
+
+
+
+boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime)
+/* Return date and size of ftp url file */
+{
+struct netParsedUrl npu;
+struct dyString *rs = NULL;
+int sd;
+long timeOut = 1000000; /* wait in microsec */
+char cmd[256];
+
+// TODO maybe remove this workaround where udc cache wants info on URL "/" ?
+
+/* Parse the URL and connect. */
+netParseUrl(url, &npu);
+
+if (!sameString(npu.protocol, "ftp"))
+    errAbort("Sorry, can only netOpen ftp's currently");
+
+if (sameString(npu.file,"/"))
+    {
+    *retSize = 0;
+    *retTime = time(NULL);
+    return TRUE;
+    }
+
+sd = netMustConnect(npu.host, atoi(npu.port));
+
+/* Ask remote ftp server for file info. */
+
+/* don't send a command, just read the welcome msg */
+if (readReadyWait(sd, timeOut))
+    sendFtpCommand(sd, "", FALSE);
+
+safef(cmd,sizeof(cmd),"USER %s\r\n", npu.user);
+sendFtpCommand(sd, cmd, FALSE);
+
+safef(cmd,sizeof(cmd),"PASS %s\r\n", npu.password);
+sendFtpCommand(sd, cmd, FALSE);
+
+sendFtpCommand(sd, "TYPE I\r\n", FALSE);  // Not sure this is required for just size/date
+/* 200 Type set to I */
+/* (send the data as binary, so can support compressed files) */
+
+safef(cmd,sizeof(cmd),"SIZE %s\r\n", npu.file);
+rs = sendFtpCommand(sd, cmd, TRUE);
+*retSize = parseFtpSIZE(rs->string);
+/* 200 12345 */
+
+/* Clean up and return handle. */
+dyStringFree(&rs);
+
+safef(cmd,sizeof(cmd),"MDTM %s\r\n", npu.file);
+rs = sendFtpCommand(sd, cmd, TRUE);
+*retTime = parseFtpMDTM(rs->string);
+/* 200 YYYYMMDDhhmmss */
+
+/* Clean up and return handle. */
+dyStringFree(&rs);
+
+close(sd);   
+
+return TRUE;
+}
 
 
 int netGetOpenFtp(char *url)

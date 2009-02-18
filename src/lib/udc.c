@@ -255,7 +255,7 @@ return total;
 }
 
 boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
-/* Sets size and last modified time of URL
+/* Gets size and last modified time of URL
  * and returns status of HEAD GET. */
 {
 verbose(2, "checking http remote info on %s\n", url);
@@ -307,6 +307,55 @@ retInfo->updateTime = t;
 
 hashFree(&hash);
 return status;
+}
+
+
+/********* Section for ftp protocol **********/
+
+int udcDataViaFtp(char *url, bits64 offset, int size, void *buffer)
+/* Fetch a block of data of given size into buffer using the ftp: protocol.
+ * Returns number of bytes actually read.  Does an errAbort on
+ * error.  Typically will be called with size in the 8k - 64k range. */
+{
+verbose(2, "reading ftp data - %d bytes at %lld - on %s\n", size, offset, url);
+char rangeUrl[1024];
+if (!startsWith("ftp://",url))
+    errAbort("Invalid protocol in url [%s] in udcDataViaFtp, only ftp supported", url); 
+safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=%lld-%lld"
+  , url
+  , (long long) offset
+  , (long long) offset + size - 1);
+int sd = netUrlOpen(rangeUrl);
+if (sd < 0)
+    errAbort("Couldn't open %s", url);   // do we really want errAbort here?
+
+int rd = 0, total = 0, remaining = size;
+char *buf = (char *)buffer;
+while ((remaining > 0) && ((rd = read(sd, buf, remaining)) > 0))
+    {
+    total += rd;
+    buf += rd;
+    remaining -= rd;
+    }
+if (rd == -1)
+    errnoAbort("error reading socket");
+close(sd);  
+
+return total;
+}
+
+boolean udcInfoViaFtp(char *url, struct udcRemoteFileInfo *retInfo)
+/* Gets size and last modified time of FTP URL */
+{
+verbose(2, "checking ftp remote info on %s\n", url);
+long long size = 0;
+time_t t;
+boolean ok = netGetFtpInfo(url, &size, &t);
+if (!ok)
+    return FALSE;
+retInfo->size = size;
+retInfo->updateTime = t;
+return TRUE;
 }
 
 
@@ -441,6 +490,11 @@ else if (sameString(upToColon, "http"))
     {
     prot->fetchData = udcDataViaHttp;
     prot->fetchInfo = udcInfoViaHttp;
+    }
+else if (sameString(upToColon, "ftp"))
+    {
+    prot->fetchData = udcDataViaFtp;
+    prot->fetchInfo = udcInfoViaFtp;
     }
 else if (sameString(upToColon, "transparent"))
     {
