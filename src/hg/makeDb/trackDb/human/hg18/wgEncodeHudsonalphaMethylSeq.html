@@ -1,12 +1,19 @@
-<h1>HudsonAlpha Methyl-seq Docs</h1>
+<h1>HudsonAlpha Methyl-seq</h1>
 <a name="Description"></a><h2>Description</h2>
 <p>
-This track shows average methylation status in CpG islands.
-Methylated regions are shown in orange; non-methylated regions
-are shown in blue.
-</p>
+This track shows average methylation status in CpG islands. In general,
+methylation of CpG sites within a promoter causes silencing of the gene
+associated with that promoter.
+
+<h2>Track Conventions</h2>
 <p>
-These regions were assayed via Methyl-seq, a method developed in the Myers
+Methylated regions are shown in <font color="#FF7F00">orange</font> (bed score = 1000); non-methylated regions are
+shown in <font color="#0000FF">blue</font> (bed score = 0). 
+</p>
+
+<a name="Methods"></a><h2>Methods</h2>
+<p>
+CpG regions were assayed via Methyl-seq, a method developed in the Myers
 laboratory to measure the methylation status at CpGs throughout the genome. It
 combines DNA digestion by a methyl-sensitive enzyme HpaII and its
 methyl-insensitive isoschizomer MspI with the Illumina DNA sequencing
@@ -33,7 +40,6 @@ intergenic regions. Sequence tags present in MspI libraries but not in HpaII
 libraries are derived from methylated regions.  Conversely, sequence tags that
 occur in HpaII libraries come from at least partially unmethylated regions.
 </p>
-<a name="Methods"></a><h2>Methods</h2>
 <h3>In vitro differentiation</h3>
 <p>
 We generated definitive endoderm precursor cells from H9 hES cells by treating
