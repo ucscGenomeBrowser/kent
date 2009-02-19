@@ -8602,6 +8602,7 @@ wgEncode 1
     noInherit on
     configurable on
     itemRgb on
+    color 127,0,0
     cell HCT-116
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116
@@ -8617,6 +8618,7 @@ wgEncode 1
     noInherit on
     configurable on
     itemRgb on
+    color 127,0,0
     cell HCT-116
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9es
@@ -8782,6 +8784,7 @@ wgEncode 1
     noInherit on
     configurable on
     itemRgb on
+    color 0,100,0
     cell HFL11W
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w
@@ -8797,6 +8800,7 @@ wgEncode 1
     noInherit on
     configurable on
     itemRgb on
+    color 0,100,0
     cell HFL24W
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1Hal
@@ -8812,8 +8816,8 @@ wgEncode 1
     noInherit on
     configurable on
     itemRgb on
+    color 0,100,0
     cell HAL
-
 
 track		wgEncodeCaltechRnaSeq
 compositeTrack	on
