@@ -3871,7 +3871,7 @@ wgEncode 1
     shortLabel total K562 chromatin  PlusRaw
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell chromatin using )
     subGroups view=PlusRawSignal cellType=K562 localization=chromatin rnaExtract=total
-    type wig WGENCODERIKENCAGEPLUSRAWSIGNALK562CHROMATINTOTAL_MINMAXRANGE
+    type wig 1.00 1042.00
     dateSubmitted 2009-02-18
     dateUnrestricted 2009-11-18
     dataVersion ENCODE Feb 2009 Freeze
@@ -3891,7 +3891,7 @@ wgEncode 1
     shortLabel total K562 chromatin  MinusRaw
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell chromatin using )
     subGroups view=MinusRawSignal cellType=K562 localization=chromatin rnaExtract=total
-    type wig WGENCODERIKENCAGEMINUSRAWSIGNALK562CHROMATINTOTAL_MINMAXRANGE
+    type wig 1.00 752.00
     dateSubmitted 2009-02-18
     dateUnrestricted 2009-11-18
     dataVersion ENCODE Feb 2009 Freeze
@@ -3911,7 +3911,7 @@ wgEncode 1
     shortLabel longPolyA K562 polysome  PlusRaw
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (longPolyA in K562 cell polysome using )
     subGroups view=PlusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
-    type wig WGENCODERIKENCAGEPLUSRAWSIGNALK562POLYSOMELONGPOLYA_MINMAXRANGE
+    type wig 1.00 1588.00
     dateSubmitted 2009-02-18
     dateUnrestricted 2009-11-18
     dataVersion ENCODE Feb 2009 Freeze
@@ -3931,7 +3931,7 @@ wgEncode 1
     shortLabel longPolyA K562 polysome  MinusRaw
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (longPolyA in K562 cell polysome using )
     subGroups view=MinusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
-    type wig WGENCODERIKENCAGEMINUSRAWSIGNALK562POLYSOMELONGPOLYA_MINMAXRANGE
+    type wig 1.00 954.00
     dateSubmitted 2009-02-18
     dateUnrestricted 2009-11-18
     dataVersion ENCODE Feb 2009 Freeze
@@ -3951,7 +3951,7 @@ wgEncode 1
     shortLabel total K562 nucleoplasm  PlusRaw
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell nucleoplasm using )
     subGroups view=PlusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
-    type wig WGENCODERIKENCAGEPLUSRAWSIGNALK562NUCLEOPLASMTOTAL_MINMAXRANGE
+    type wig 1.00 698.00
     dateSubmitted 2009-02-18
     dateUnrestricted 2009-11-18
     dataVersion ENCODE Feb 2009 Freeze
@@ -3971,7 +3971,7 @@ wgEncode 1
     shortLabel total K562 nucleoplasm  MinusRaw
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell nucleoplasm using )
     subGroups view=MinusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
-    type wig WGENCODERIKENCAGEMINUSRAWSIGNALK562NUCLEOPLASMTOTAL_MINMAXRANGE
+    type wig 1.00 397.00
     dateSubmitted 2009-02-18
     dateUnrestricted 2009-11-18
     dataVersion ENCODE Feb 2009 Freeze
