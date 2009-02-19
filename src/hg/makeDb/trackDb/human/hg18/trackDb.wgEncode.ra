@@ -8651,7 +8651,7 @@ wgEncode 1
     itemRgb on
     cell H9ES-E
 
-    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafp
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos
     release alpha
     subTrack wgEncodeHudsonalphaMethylSeq
     shortLabel H9ES-AFP+ 1
@@ -8665,6 +8665,21 @@ wgEncode 1
     configurable on
     itemRgb on
     cell H9ES-AFP+
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-AFP- 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-AFP- cells)
+    subGroups view=Regions cellType=H9ES-AFP-
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    itemRgb on
+    configurable on
+    cell H9ES-AFP-
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafp
     release alpha
