@@ -2844,6 +2844,8 @@ tablesIgnored visiGene
 
 tablesIgnored hgFixed
     omimTitle
+    cutters
+    rebaseRefs
 
 tablesIgnored $gbd
     NIAGene
