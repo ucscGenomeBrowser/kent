@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.156 2009/02/19 22:33:28 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.157 2009/02/20 20:44:22 mikep Exp $
 
 use warnings;
 use strict;
@@ -746,6 +746,11 @@ sub validateFastQ
     #   because this is what Colin Kingswood (Gingeras project)
     #   is getting in the fastq files from GIS for the GisPet project
     #   and they are being sent on to us
+    # Note on "FASTQ Quality scores":-   http://maq.sourceforge.net/qual.shtml
+    # Fastq has 2 different semantics for the score field.
+    # - fastq produced directly from Solexa has a 'solexa' quality score
+    # - fastq defined by Sanger has a 'PHRED' quality score
+    # - The 2 urls above show how to convert between both
     my ($path, $file, $type) = @_;
     HgAutomate::verbose(2, "validateFastQ($path,$file,$type)\n");
     return () if $opt_skipValidateFastQ;
@@ -756,7 +761,7 @@ sub validateFastQ
     my $seqName;
     my $seqNameRegEx = "[A-Za-z0-9_.:/-]+";
     my $seqRegEx = "[A-Za-z\n\.~]+";
-    my $qualRegEx = "[!-~\n]+";
+    my $qualRegEx = "[!-~\n]+"; # ord(!)=33, ord(~)=126
     my $states = {firstLine => {REGEX => "\@($seqNameRegEx)", NEXT => 'seqLine'},
                   seqLine => {REGEX => $seqRegEx, NEXT => 'plusLine'},
                   plusLine => {REGEX => "\\\+([A-Za-z0-9_.:/-]*)", NEXT => 'qualLine'},
