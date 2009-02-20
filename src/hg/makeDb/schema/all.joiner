@@ -41,7 +41,7 @@ set ponAbe ponAbe2
 set priPac priPac1
 set rheMac rheMac2
 set rn rn3,rn4
-set sacCer sacCer1
+set sacCer sacCer1,sacCer2
 set strPur strPur1,strPur2
 set taeGut taeGut1
 set tetNig tetNig1
@@ -83,7 +83,7 @@ set transMapDb anoCar1,bosTau4,calJac1,canFam2,cavPor3,danRer5,equCab2,felCat3,f
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
 databasesChecked $gbd,$otherDb
-databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330
+databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330,customTracks,customTrash
 
 # Define various non-self chains
 set chainDest Hg16,Hg17,Hg18,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar1,Ce2,Ce4,Ce6,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap1,Cb3,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CavPor3,PetMar1,BraFlo1,TaeGut1
@@ -1267,6 +1267,8 @@ identifier knownGeneId dependency
     $kgDb.kgTxInfo.name full
     $kgDb.knownBlastTab.query
     $kgDb.knownBlastTab.target
+    $sacCer.knownBlastTab.query
+    $sacCer.knownBlastTab.target
     $kgDb.knownCanonical.transcript 
     $kgDb.knownGeneMrna.name full
     $kgDb,!hg18,!mm9.knownGeneLink.name
@@ -1623,7 +1625,7 @@ identifier flyBaseGeneId external=FlyBase
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
     $dm,!dm1.flyBase2004Xref.fbgn minCheck=0.90
     $dm,!dm1.pscreen.geneIds comma minCheck=0.95
-    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!sacCer1.dmBlastTab.target minCheck=0.90
+    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!sacCer2.dmBlastTab.target,!sacCer1.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
@@ -1692,7 +1694,7 @@ identifier flyBase2004IdDm external=FlyBase
     $dm,!dm1.flyBaseToDescription.name
     $dm,!dm1.flyP2P.query minCheck=0.98
     $dm,!dm1.flyP2P.target minCheck=0.98
-    hg17,hg18,danRer3,mm7,mm8,mm9,rn3,rn4,ce2,sacCer1.dmBlastTab.target minCheck=0.90
+    hg17,hg18,danRer3,mm7,mm8,mm9,rn3,rn4,ce2,sacCer1.dmBlastTab.target,sacCer2.dmBlastTab.target minCheck=0.90
 
 identifier flyBase2004IdDp external=FlyBase
 "FlyBase Xref as of 2004 for dp3"
@@ -2224,6 +2226,7 @@ identifier blastHg18KGPep04Id
      tetNig1.blastHg18KG.qName
      taeGut1.blastHg18KG.qName
      oryLat2.blastHg18KG.qName
+     sacCer2.blastHg18KG.qName
 
 identifier blastHg18KGRef04Id 
 "hg18 ref 04"
@@ -3274,6 +3277,13 @@ tablesIgnored $rn
     syntenyHuman
 
 tablesIgnored $sacCer
+    chr%_gold
+    chr%_gap
+    2micron_mrna
+    2micron_intronEst
+    2micron_est
+    2micron_gold
+    2micron_gap
     sgdClone
 
 tablesIgnored $tetNig
