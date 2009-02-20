@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.215 2009/02/20 22:40:47 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.216 2009/02/20 23:05:52 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1303,6 +1303,8 @@ table->htmlOnePos = mrnaHtmlOnePos;
 slAddHead(&hgp->tableList, table);
 dyStringPrintf(dy, "%s Alignments in %s", acc, shortLabel);
 table->description = cloneString(dy->string);
+if (startsWith("all_", tableName))
+    tableName += 4;
 table->name = cloneString(tableName);
 slSort(&pslList, pslCmpScore);
 for (psl = pslList; psl != NULL; psl = psl->next)
