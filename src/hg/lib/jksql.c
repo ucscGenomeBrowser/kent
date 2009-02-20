@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.124 2008/12/11 23:32:26 hiram Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.125 2009/02/20 22:19:45 hiram Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -552,7 +552,7 @@ slReverse(&list);
 return list;
 }
 
-static void addDatabaseFields(char *database, struct hash *hash)
+void addDatabaseFields(char *database, struct hash *hash)
 /* Add fields from the one database to hash. */
 {
 struct sqlConnection *conn = sqlConnect(database);

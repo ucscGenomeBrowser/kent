@@ -100,6 +100,9 @@ struct slName *sqlListTables(struct sqlConnection *conn);
 struct slName *sqlListFields(struct sqlConnection *conn, char *table);
 /* Return list of fields in table. */
 
+void addDatabaseFields(char *database, struct hash *hash);
+/* Add fields from the one database to hash. */
+
 struct hash *sqlAllFields(void);
 /* Get hash of all fields in database.table.field format.  */
 
