@@ -2025,6 +2025,19 @@ urlLabel Netaffx Link:
 useScore 1
 type bed 6 .
 
+track affyHumanExon
+shortLabel Affy All Exon
+longLabel Affymetrix All Exon Chips
+group expression
+priority 0
+visibility hide
+type expRatio
+expScale 4.0
+expStep 0.5
+expProbeTable affyHumanExonProbeAnnot
+expTable affyHumanExonExps
+groupings affyHumanExonGroups
+
 # Affy Exon supertrack
         track affyAllExonSuper override
         group expression
