@@ -482,18 +482,18 @@ type bed 4 .
     priority 2
     color 153,0,0
 
-    track pgYoruban2
-    subTrack pgSnp
-    shortLabel YRI '8507, SOLiD
-    longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
-    group varRep
-    priority 4
-    color 128,0,128
+#    track pgYoruban2
+#    subTrack pgSnp
+#    shortLabel YRI '8507, SOLiD
+#    longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
+#    group varRep
+#    priority 4
+#    color 128,0,128
 
     track pgYoruban3
     subTrack pgSnp
-    shortLabel YRI '8507,Solexa
-    longLabel YRI NA18507 Sequenced on the Solexa Platform (PSU)
+    shortLabel YRI '8507
+    longLabel YRI NA18507 (Illumina Cambridge/Solexa, SNPs called by PSU)
     group varRep
     priority 5
     color 128,0,128
