@@ -3316,7 +3316,7 @@ longLabel ENCODE RIKEN RNA Subcellular Localization by CAGE Tags
 group expression
 subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal Alignments=Alignments
 subGroup2 cellType Cell_Line K562=K562 prostate=Prostate
-subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus chromatin=Chromatin nucleoplasm=Nucleoplasm polysome=Polysome
+subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus chromatin=Chromatin nucleoplasm=Nucleoplasm polysome=Polysome nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=longNonPolyA longPolyA=longPolyA total=Total
 dimensions dimensionY=rnaExtract dimensionX=cellType dimensionZ=localization
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
@@ -3719,8 +3719,8 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longPolyA in K562 cell polysome using )
     subGroups view=PlusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
     type bedGraph 4
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 26
     noInherit on
@@ -3736,14 +3736,48 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longPolyA in K562 cell polysome using )
     subGroups view=MinusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
     type bedGraph 4
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 27
     noInherit on
     configurable on
     rnaExtract longPolyA
     localization polysome
+    cell K562
+
+    track wgEncodeRikenCagePlusClustersK562NucleolusTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleolus 
+    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 cell nucleolus using )
+    subGroups view=PlusClusters cellType=K562 localization=nucleolus rnaExtract=total
+    type bedGraph 4
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 26
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization nucleolus
+    cell K562
+
+    track wgEncodeRikenCageMinusClustersK562NucleolusTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleolus 
+    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 cell nucleolus using )
+    subGroups view=MinusClusters cellType=K562 localization=nucleolus rnaExtract=total
+    type bedGraph 4
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 27
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization nucleolus
     cell K562
 
     track wgEncodeRikenCagePlusClustersK562NucleoplasmTotal
@@ -3753,8 +3787,8 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 cell nucleoplasm using )
     subGroups view=PlusClusters cellType=K562 localization=nucleoplasm rnaExtract=total
     type bedGraph 4
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 26
     noInherit on
@@ -3770,8 +3804,8 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 cell nucleoplasm using )
     subGroups view=MinusClusters cellType=K562 localization=nucleoplasm rnaExtract=total
     type bedGraph 4
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 27
     noInherit on
@@ -3787,8 +3821,8 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 cell chromatin using )
     subGroups view=PlusClusters cellType=K562 localization=chromatin rnaExtract=total
     type bedGraph 4
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 26
     noInherit on
@@ -3804,8 +3838,8 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 cell chromatin using )
     subGroups view=MinusClusters cellType=K562 localization=chromatin rnaExtract=total
     type bedGraph 4
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 27
     noInherit on
@@ -3821,14 +3855,31 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (longPolyA in K562 cell polysome using )
     subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
     type bed 6
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 30
     noInherit on
     configurable on
     rnaExtract longPolyA
     localization polysome
+    cell K562
+
+    track wgEncodeRikenCageAlignmentsK562NucleolusTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleolus 
+    longLabel ENCODE RIKEN CAGE Tags (total in K562 cell nucleolus using )
+    subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=total
+    type bed 6
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 30
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization nucleolus
     cell K562
 
     track wgEncodeRikenCageAlignmentsK562NucleoplasmTotal
@@ -3838,8 +3889,8 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (total in K562 cell nucleoplasm using )
     subGroups view=Alignments cellType=K562 localization=nucleoplasm rnaExtract=total
     type bed 6
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 30
     noInherit on
@@ -3855,8 +3906,8 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Tags (total in K562 cell chromatin using )
     subGroups view=Alignments cellType=K562 localization=chromatin rnaExtract=total
     type bed 6
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 30
     noInherit on
@@ -3872,8 +3923,8 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell chromatin using )
     subGroups view=PlusRawSignal cellType=K562 localization=chromatin rnaExtract=total
     type wig 1.00 1042.00
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 28
     noInherit on
@@ -3892,8 +3943,8 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell chromatin using )
     subGroups view=MinusRawSignal cellType=K562 localization=chromatin rnaExtract=total
     type wig 1.00 752.00
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 29
     noInherit on
@@ -3912,8 +3963,8 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (longPolyA in K562 cell polysome using )
     subGroups view=PlusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
     type wig 1.00 1588.00
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 28
     noInherit on
@@ -3932,8 +3983,8 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (longPolyA in K562 cell polysome using )
     subGroups view=MinusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
     type wig 1.00 954.00
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 29
     noInherit on
@@ -3952,8 +4003,8 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell nucleoplasm using )
     subGroups view=PlusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
     type wig 1.00 698.00
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 28
     noInherit on
@@ -3972,8 +4023,8 @@ wgEncode 1
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell nucleoplasm using )
     subGroups view=MinusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
     type wig 1.00 397.00
-    dateSubmitted 2009-02-18
-    dateUnrestricted 2009-11-18
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
     dataVersion ENCODE Feb 2009 Freeze
     priority 29
     noInherit on
@@ -3983,6 +4034,46 @@ wgEncode 1
     maxHeightPixels 100:16:16
     rnaExtract total
     localization nucleoplasm
+    cell K562
+
+    track wgEncodeRikenCagePlusRawSignalK562NucleolusTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleolus  PlusRaw
+    longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell nucleolus using )
+    subGroups view=PlusRawSignal cellType=K562 localization=nucleolus rnaExtract=total
+    type wig 1.00 1389.00
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 28
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract total
+    localization nucleolus
+    cell K562
+
+    track wgEncodeRikenCageMinusRawSignalK562NucleolusTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleolus  MinusRaw
+    longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell nucleolus using )
+    subGroups view=MinusRawSignal cellType=K562 localization=nucleolus rnaExtract=total
+    type wig 1.00 778.00
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 29
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract total
+    localization nucleolus
     cell K562
 
 
