@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.39 2009/02/20 22:22:04 hiram Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.40 2009/02/20 23:21:26 hiram Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -669,7 +669,7 @@ static struct hash *joinerAllFields(struct joiner *joiner)
 struct hash *fullHash = hashNew(18);
 struct hashEl *db, *dbList = hashElListHash(joiner->databasesChecked);
 for (db = dbList; db != NULL; db = db->next)
-    addDatabaseFields(db->name, fullHash);
+    sqlAddDatabaseFields(db->name, fullHash);
 slFreeList(&dbList);
 return fullHash;
 }
