@@ -26662,6 +26662,13 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
 
     hgsql hg18 -e 'update omimGene set name="611016" where name="608636"'
 
+# add additional entries that related to "NR_...." RefSeqs
+
+hgGetNrOmimGene hg18 j.tmp |sort -u j.tmp > omimGeneNR.bed
+
+cat omimGene.bed omimGeneNR.bed |sort -u >omimGeneAll.bed
+hgLoadBed hg18 omimGene omimGeneAll.bed
+
 #############################################################################
 # fox2ClipSeq from Gene Yeo (DONE - 2009-01-08 - Hiram)
     mkdir /hive/data/genomes/hg18/bed/fox2ClipSeq
