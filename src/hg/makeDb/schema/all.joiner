@@ -2517,19 +2517,23 @@ identifier transMapAlnKnownGeneMmId
 # lsSnpPdb tables
 identifier lsSnpPdbProtId
 "lsSnpPdb table protId field"
+    uniProt.extDbRef.acc dupeOk
     hg18.lsSnpPdb.protId
-    hg18.kgXref.spID minCheck=0.98
-    uniProt.extDbRef.acc minCheck=0.98
+
+identifier lsSnpPdbKgId
+"lsSnpPdb table protId field"
+    hg18.kgXref.spID dupeOk
+    hg18.lsSnpPdb.protId
 
 identifier lsSnpPdbPdbId
 "lsSnpPdb table pdbId field"
-    hg18.lsSnpPdb.pdbId
-    uniProt.extDbRef.extAcc1 minCheck=0.98
+    uniProt.extDbRef.extAcc1 dupeOk
+    hg18.lsSnpPdb.pdbId minCheck=0.99
 
 identifier lsSnpPdbSnpId
 "lsSnpPdb table snpId field"
+    hg18.snp129.name dupeOk 
     hg18.lsSnpPdb.snpId
-    hg18.snp129.name minCheck=0.98
 
 
 # Dependencies not already captured in identifiers
