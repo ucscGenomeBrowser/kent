@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.38 2009/01/29 19:39:03 angie Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.39 2009/02/20 22:22:04 hiram Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -660,7 +660,22 @@ if (validations < 1 && oneIdentifier)
     errAbort("Identifier %s not found in %s", oneIdentifier, joiner->fileName);
 }
 
-struct hash *processFieldHash(char *inName, char *outName)
+static struct hash *joinerAllFields(struct joiner *joiner)
+/* Get hash of all fields in database.table.field format.
+ * Similar to sqlAllFields(void) function in jksql.c, but different
+ *	method of creating the list of databases to check.
+ */
+{
+struct hash *fullHash = hashNew(18);
+struct hashEl *db, *dbList = hashElListHash(joiner->databasesChecked);
+for (db = dbList; db != NULL; db = db->next)
+    addDatabaseFields(db->name, fullHash);
+slFreeList(&dbList);
+return fullHash;
+}
+
+static struct hash *processFieldHash(struct joiner *joiner, char *inName,
+    char *outName)
 /* Read in field hash from file if inName is non-NULL, 
  * else read from database.  If outName is non-NULL, 
  * save it to file.  */
@@ -670,7 +685,7 @@ struct hash *fieldHash;
 if (inName != NULL)
     fieldHash = hashWordsInFile(inName, 18);
 else
-    fieldHash = sqlAllFields();
+    fieldHash = joinerAllFields(joiner);
 if (outName != NULL)
     {
     struct hashEl *el, *list = hashElListHash(fieldHash);
@@ -845,7 +860,7 @@ if (checkTimes)
 if (checkFields)
     {
     struct hash *fieldHash;
-    fieldHash = processFieldHash(fieldListIn, fieldListOut);
+    fieldHash = processFieldHash(joiner, fieldListIn, fieldListOut);
     joinerValidateFields(joiner, fieldHash, identifier);
     }
 if (foreignKeys)
