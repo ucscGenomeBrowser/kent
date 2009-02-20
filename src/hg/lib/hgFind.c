@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.216 2009/02/20 23:05:52 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.217 2009/02/20 23:49:03 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2831,7 +2831,10 @@ if (isNotEmpty(hfs->searchType) && searchSpecial(db, hfs, term, hgp, relativeFla
 
 if (isNotEmpty(hfs->xrefTable))
     {
-    if (! hTableOrSplitExists(db, hfs->xrefTable))
+    struct sqlConnection *conn = hAllocConn(db);
+    boolean exists = sqlTableExists(conn, hfs->xrefTable);
+    hFreeConn(&conn);
+    if (! exists)
 	return(FALSE);
     xrefList = getXrefTerms(db, hfs, term);
     }
