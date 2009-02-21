@@ -432,7 +432,6 @@ type genePred xenoRefPep xenoRefMrna
 # Don't change default visibility of mgcGenes; it is open
 # by default at the request of Francis Collins
 track mgcFullMrna
-#track mgcGenes
 shortLabel MGC Genes
 longLabel Mammalian Gene Collection Full ORF mRNAs
 group genes
@@ -449,6 +448,11 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
+
+searchTable mgcFullMrna
+searchType psl
+searchPriority 25
+semiShortCircuit 1
 
 # keep adjacent to MGC
 track orfeomeMrna
@@ -468,6 +472,12 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
+
+searchTable orfeomeMrna
+searchType psl
+searchPriority 25
+semiShortCircuit 1
+
 
 track transMap
 superTrack on
