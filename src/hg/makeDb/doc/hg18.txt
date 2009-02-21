@@ -26569,7 +26569,7 @@ phyloP44wayPrimate
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
 #########################################################################
-# BUILD OMIM RELATED GENES TRACK (Done 12/4/08 Fan)
+# BUILD OMIM RELATED GENES TRACK (done 12/4/08, rebuilt 2/20/09 Fan)
 
 ssh hgwdev
 cd /hive/data/genomes/gs.19/build36/bed
@@ -26639,7 +26639,7 @@ hgLoadSqlTab hg18 fanO4  ~/src/hg/lib/knownGene.sql fanO4.tab
 # finally sort the table and create bed 4 file and load it as the omimGene table
 
 hgsql hg18 -N -e 'select chrom, txStart, txEnd, name from fanO4 order by
-chrom, txStart, txEnd' >omimGene.bed
+chrom, txStart, txEnd' |sort -u >omimGene.bed
 hgLoadBed hg18 omimGene omimGene.bed
 
 # create and load the omimToKnownCanonical table.
@@ -26664,7 +26664,8 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
 
 # add additional entries that related to "NR_...." RefSeqs
 
-hgGetNrOmimGene hg18 j.tmp |sort -u j.tmp > omimGeneNR.bed
+hgGetNrOmimGene hg18 j.tmp 
+sort -u j.tmp > omimGeneNR.bed
 
 cat omimGene.bed omimGeneNR.bed |sort -u >omimGeneAll.bed
 hgLoadBed hg18 omimGene omimGeneAll.bed
