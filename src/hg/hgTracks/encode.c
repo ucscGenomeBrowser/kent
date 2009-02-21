@@ -9,7 +9,7 @@
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encode.c,v 1.16 2009/02/10 01:22:53 aamp Exp $";
+static char const rcsid[] = "$Id: encode.c,v 1.17 2009/02/21 02:49:25 aamp Exp $";
 
 #define SMALLBUF 128
 
@@ -187,7 +187,7 @@ else if (!useScore)
         cartRemoveVariableClosestToHome(cart,tdb,FALSE,ENCODE_PEAK_QVAL_FILTER_SUFFIX);
         qVal = 0;
         }
-    dyStringPrintf(extraWhere, "(pValue >= %f) and (qValue >= %f)", pVal, qVal);
+    dyStringPrintf(extraWhere, "((pValue >= %f) or (pValue = -1)) and ((qValue >= %f) or (qValue = -1))", pVal, qVal);
     }
 
 if (sameString(extraWhere->string, ""))

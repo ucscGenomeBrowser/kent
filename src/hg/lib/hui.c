@@ -18,8 +18,9 @@
 #include "phyloTree.h"
 #include "hgMaf.h"
 #include "customTrack.h"
+#include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.157 2009/02/10 01:13:04 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.158 2009/02/21 02:49:33 aamp Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2532,19 +2533,19 @@ return cartPriorities;
 
 static void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed)
 {
-char *scoreMax;
-int maxScore;
+/* char *scoreMax; */
+/* int maxScore; */
 switch(cType)
     {
     case cfgBedScore:
+/*     case cfgPeak: */
+/*                         scoreMax = trackDbSettingClosestToHome(tdb, "scoreFilterMax"); */
+/*                         maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000); */
+/*                         scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed); */
+/*                         break; */
     case cfgPeak:
-                        scoreMax = trackDbSettingClosestToHome(tdb, "scoreFilterMax");
-                        maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
-                        scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
+                        encodePeakCfgUi(cart,tdb,prefix,title,boxed);
                         break;
-    //case cfgPeak:
-    //                    encodePeakCfgUi(cart,tdb,prefix,title,boxed);
-    //                    break;
     case cfgWig:        wigCfgUi(cart,tdb,prefix,title,boxed);
                         break;
     case cfgWigMaf:     wigMafCfgUi(cart,tdb,prefix,title,boxed, db);
@@ -3131,90 +3132,32 @@ cfgEndBox(boxed);
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
 {
-char option[256];
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
-
-cfgBeginBoxAndTitle(boxed, title);
-
+char varName[256];
 char *setting;
-char *min;
-char *max;
-printf("<TABLE>");
-//setting = trackDbSettingClosestToHome(tdb, SCORE_FILTER);//,"0:1000");
-setting = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,"0:1000");
-if(setting)
+cfgBeginBoxAndTitle(boxed, title);
+puts("<TABLE>");
+setting = trackDbSettingClosestToHome(tdb, "filterPvalQval");
+if (setting)
     {
-    min = strSwapChar(cloneString(setting),':',0);
-    max = min + strlen(min) + 1;
-    puts("<TR><TD align='right'><B>Filter score range:  min:</B><TD align='left'>");
-    safef(option, sizeof(option), "%s.%s", name, SCORE_FILTER _MIN);
-    cgiMakeTextVar(option, cartUsualStringClosestToHome(cart, tdb, compositeLevel, SCORE_FILTER _MIN, min), 4);
-    puts("<TD align='right'><B>max:</B><TD align='left'>");
-    safef(option, sizeof(option), "%s.%s", name, SCORE_FILTER _MAX);
-    cgiMakeTextVar(option, cartUsualStringClosestToHome(cart, tdb, compositeLevel, SCORE_FILTER _MAX, max), 4);
-    puts("<TD align='left'> (0 to 1000)</TR>");
-    }
-//if(trackDbSettingClosestToHome(tdb, SCORE_MIN) != NULL)
-    scoreGrayLevelCfgUi(cart, tdb, name, 1000);
-
-//setting = trackDbSettingClosestToHome(tdb, SIGNAL_FILTER _MIN);//,"0.0");
-setting = trackDbSettingClosestToHomeOrDefault(tdb, SIGNAL_FILTER _MIN,"0.0");
-if(setting)
-    {
-    min = strSwapChar(cloneString(setting),':',0);
-    max = min + strlen(min) + 1;
-    puts("<TR><TD align='right'><B>Minimum Signal value:</B><TD align='left'>");
-    safef(option, sizeof(option), "%s.%s", name, SIGNAL_FILTER _MIN);
-    cgiMakeTextVar(option, cartUsualStringClosestToHome(cart, tdb, compositeLevel, SIGNAL_FILTER _MIN, min), 4);
-    //setting = trackDbSettingClosestToHome(tdb, SIGNAL_FILTER _LIMITS);//,"0.0:100.0");
-    setting = trackDbSettingClosestToHomeOrDefault(tdb, SIGNAL_FILTER _LIMITS,"0.0:100.0");
-    if(setting)
-        {
-        min = strSwapChar(cloneString(setting),':',0);
-        max = min + strlen(min) + 1;
-        printf("<TD align='left' colspan=3> (%s to %s)",min,max);
-        }
-    puts("</TR>");
-    }
-//setting = trackDbSettingClosestToHome(tdb, PVALUE_FILTER _MIN);//,"0.0");
-setting = trackDbSettingClosestToHomeOrDefault(tdb, PVALUE_FILTER _MIN,"0.0");
-if(setting)
-    {
-    min = strSwapChar(cloneString(setting),':',0);
-    max = min + strlen(min) + 1;
     puts("<TR><TD align='right'><B>Minimum P-Value (-log 10):</B><TD align='left'>");
-    safef(option, sizeof(option), "%s.%s", name, PVALUE_FILTER _MIN);
-    cgiMakeTextVar(option, cartUsualStringClosestToHome(cart, tdb, compositeLevel, PVALUE_FILTER _MIN, min), 4);
-    //setting = trackDbSettingClosestToHome(tdb, PVALUE_FILTER _LIMITS);//,"0.0:20.0");
-    setting = trackDbSettingClosestToHomeOrDefault(tdb, PVALUE_FILTER _LIMITS,"0.0:20.0");
-    if(setting)
-        {
-        min = strSwapChar(cloneString(setting),':',0);
-        max = min + strlen(min) + 1;
-        printf("<TD align='left' colspan=3> (%s to %s)",min,max);
-        }
-    puts("</TR>");
-    }
-//setting = trackDbSettingClosestToHome(tdb, QVALUE_FILTER _MIN);//,"0.0");
-setting = trackDbSettingClosestToHomeOrDefault(tdb, QVALUE_FILTER _MIN,"0.0");
-if(setting)
-    {
-    min = strSwapChar(cloneString(setting),':',0);
-    max = min + strlen(min) + 1;
+    safef(varName, sizeof(varName), "%s.%s", name, ENCODE_PEAK_PVAL_FILTER_SUFFIX);
+    cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, ENCODE_PEAK_PVAL_FILTER_SUFFIX, "0.00"), 6);
+    puts("</TD></TR>\n");
     puts("<TR><TD align='right'><B>Minimum Q-Value:</B><TD align='left'>");
-    safef(option, sizeof(option), "%s.%s", name, QVALUE_FILTER _MIN);
-    cgiMakeTextVar(option, cartUsualStringClosestToHome(cart, tdb, compositeLevel, QVALUE_FILTER _MIN, min), 4);
-    //setting = trackDbSettingClosestToHome(tdb, QVALUE_FILTER _LIMITS);//,"0.0:2.0");
-    setting = trackDbSettingClosestToHomeOrDefault(tdb, QVALUE_FILTER _LIMITS,"0.0:2.0");
-    if(setting)
-        {
-        min = strSwapChar(cloneString(setting),':',0);
-        max = min + strlen(min) + 1;
-        printf("<TD align='left' colspan=3> (%s to %s)",min,max);
-        }
-    puts("</TR>");
+    safef(varName, sizeof(varName), "%s.%s", name, ENCODE_PEAK_QVAL_FILTER_SUFFIX);
+    cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, ENCODE_PEAK_QVAL_FILTER_SUFFIX, "0.00"), 6);
+    puts("</TD></TR>\n");    
+    } 
+else
+    {
+    safef(varName, sizeof(varName), "%s.%s", name, ENCODE_PEAK_SCORE_FILTER_SUFFIX);
+    puts("<TR><TD align='right'><B>Minimum score (0-1000):</B><TD align='left'>");
+    cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, ENCODE_PEAK_SCORE_FILTER_SUFFIX, "0"), 4);
+    int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
+    scoreGrayLevelCfgUi(cart, tdb, tdb->tableName, scoreMax);
     }
-    puts("</TABLE>");
+puts("</TABLE>");
 cfgEndBox(boxed);
 }
 
