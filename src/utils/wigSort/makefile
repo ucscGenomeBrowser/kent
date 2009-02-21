@@ -12,3 +12,7 @@ wigSort: $O ${MYLIBS}
 
 clean:
 	rm -f $O
+
+test:
+	wigSort test.wig out.wig
+	diff expected.wig out.wig
