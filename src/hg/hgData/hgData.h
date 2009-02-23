@@ -17,28 +17,55 @@
 #include "chromInfo.h"
 #endif
 
+#ifndef BASEMASKCOMMON_H
+#include "baseMaskCommon.h"
+#endif
+
+#ifndef CHEAPCGI_H
+#include "cheapcgi.h"
+#endif
+
 #ifdef boolean
 #undef boolean
 // common.h defines boolean as int; json.h typedefs boolean as int.
 #include <json/json.h>
 #endif
 
-#define GENOME_VAR "_GENOME_"
-#define GENOME_ARG "genome"
-#define TRACK_VAR "_TRACK_"
-#define TRACK_ARG "track"
-#define TERM_VAR "_TERM_"
-#define TERM_ARG "term"
-#define CHROM_VAR "_CHROM_"
-#define CHROM_ARG "chrom"
-#define START_VAR "_START_"
-#define START_ARG "start"
-#define END_VAR "_END_"
-#define END_ARG "end"
-#define FORMAT_ARG    "format"
+#define PREFIX "/data/"
+#define GENOMES_CMD "genomes"
+#define TRACKS_CMD "tracks"
+#define TRACKS_LIST_CMD "list"
+#define JSON_EXT ".json"
 
+#define GENOME_VAR "{genome}"
+#define GENOME_ARG "genome"
+#define TRACK_VAR "{track}"
+#define TRACK_ARG "track"
+#define TERM_VAR "{term}"
+#define TERM_ARG "term"
+#define CHROM_VAR "{chrom}"
+#define CHROM_ARG "chrom"
+#define START_VAR "{start}"
+#define START_ARG "start"
+#define END_VAR "{end}"
+#define END_ARG "end"
+#define FORMAT_ARG "format"
 #define ANNOJ_FLAT_FMT "annoj_model_flat"
 #define ANNOJ_NESTED_FMT "annoj_model_nested"
+#define ALLCHROMS_ARG "all_chroms"
+
+#define CMD_ARG       "cmd"
+#define ACTION_ARG    "action"
+#define ALLCHROMS_ARG "all_chroms"
+
+#define INFO_ACTION   "info"
+#define ITEM_ACTION   "item"
+#define SEARCH_ACTION "search"
+#define COUNT_ACTION  "count"
+#define RANGE_ACTION  "range"
+
+#define MAX_CHROM_COUNT 10000 // max number of chromosomes to display automatically in genome query
+
 
 #ifndef MJP
 #define MJP(v) verbose((v),"%s[%3d]: ", __func__, __LINE__)

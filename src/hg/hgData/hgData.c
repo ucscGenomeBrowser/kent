@@ -2,34 +2,11 @@
 #include "common.h"
 #include "hgData.h"
 #include "dystring.h"
-#include "cheapcgi.h"
 #include "bedGraph.h"
 #include "bed.h"
 
-#define GENOME_VAR "_GENOME_"
-#define GENOME_ARG "genome"
-#define TRACK_VAR "_TRACK_"
-#define TRACK_ARG "track"
-#define TERM_VAR "_TERM_"
-#define TERM_ARG "term"
-#define CHROM_VAR "_CHROM_"
-#define CHROM_ARG "chrom"
-#define START_VAR "_START_"
-#define START_ARG "start"
-#define END_VAR "_END_"
-#define END_ARG "end"
 
-#define CMD_ARG       "cmd"
-#define ACTION_ARG    "action"
-#define ALLCHROMS_ARG "all_chroms"
-
-#define INFO_ACTION   "info"
-#define ITEM_ACTION   "item"
-#define SEARCH_ACTION "search"
-#define COUNT_ACTION  "count"
-#define RANGE_ACTION  "range"
-
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.8 2009/02/03 22:13:13 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.9 2009/02/23 12:47:31 mikep Exp $";
 
 struct json_object *jsonContact()
 {
@@ -86,29 +63,29 @@ addVariable(vars, TRACK_ARG,  TRACK_VAR,  "Track of genome annotations");
 addVariable(vars, TERM_ARG,   TERM_VAR,   "Generic term variable used in searches, keyword lookup, item lookup, etc.");
 // List of genomes or chromosomes and details for one genome
 json_object_object_add(msg, "resources", res);
-addResource(res, "genome_list", "/data/genome",
+addResource(res, "genome_list", PREFIX GENOMES_CMD,
 	"List of genomes with brief description and genome hierarchy (provides valid " GENOME_VAR " values)", NULL);
-addResource(res, "genome_chroms", "/data/genome/"GENOME_VAR, 
+addResource(res, "genome_chroms", PREFIX GENOMES_CMD "/" GENOME_VAR, 
 	"Detailed information on genome "GENOME_VAR" including names and sizes of all chromosomes "
-	"(or a redirect to a url /data/genome/"GENOME_VAR"/"CHROM_VAR" for information with "
+	"(or a redirect to a url " PREFIX GENOMES_CMD "/" GENOME_VAR "/" CHROM_VAR" for information with "
 	"one randomly selected scaffold if this is genome with too many 'scaffold' chromosomes)",
 	addResourceOption(json_object_new_array(), ALLCHROMS_ARG, 
 	    json_object_get_string(json_object_new_boolean(1)), 
 	    "Force a list of all chromosomes even if there a large number"));
-addResource(res, "genome_one_chrom", "/data/genome/" GENOME_VAR "/" CHROM_VAR, 
+addResource(res, "genome_one_chrom", PREFIX GENOMES_CMD "/" GENOME_VAR  "/" CHROM_VAR, 
 	"Detailed info on genome "GENOME_VAR" including name and size of chromosome " CHROM_VAR, NULL);
 // List of tracks for a genome or information for one track in a genome
-addResource(res, "track_list", "/data/track/info/" GENOME_VAR, 
+addResource(res, "track_list", PREFIX TRACKS_CMD "/info/" GENOME_VAR, 
 	"List of all tracks in genome " GENOME_VAR, NULL);
-addResource(res, "track_info", "/data/track/info/" GENOME_VAR "/" TRACK_VAR, 
+addResource(res, "track_info", PREFIX TRACKS_CMD "/info/" GENOME_VAR "/" TRACK_VAR, 
 	"Information for one track " TRACK_VAR " in genome " GENOME_VAR, NULL);
 // Count of items in a track in a whole chromosome or a range within a chromosome 
-addResource(res, "track_count_chrom", "/data/track/count/"GENOME_VAR"/"TRACK_VAR"/"CHROM_VAR,
+addResource(res, "track_count_chrom", PREFIX TRACKS_CMD "/count/" GENOME_VAR "/" TRACK_VAR "/" CHROM_VAR,
         "Count of items in track "TRACK_VAR" in chrom "CHROM_VAR" in genome " GENOME_VAR, NULL);
-addResource(res, "track_count", "/data/track/count/"GENOME_VAR"/"TRACK_VAR"/"CHROM_VAR"/"START_VAR"/"END_VAR,
+addResource(res, "track_count", PREFIX TRACKS_CMD "/count/" GENOME_VAR "/" TRACK_VAR "/" CHROM_VAR "/" START_VAR "," END_VAR,
         "Count of items in track "TRACK_VAR" in range "CHROM_VAR":"START_VAR"-"END_VAR" in genome " GENOME_VAR, NULL);
 // Set of all items in a track in a whole chromosome or a range within a chromosome 
-addResource(res, "track_range_chrom", "/data/track/range/"GENOME_VAR"/"TRACK_VAR"/"CHROM_VAR,
+addResource(res, "track_range_chrom", PREFIX TRACKS_CMD "/range/" GENOME_VAR "/" TRACK_VAR "/" CHROM_VAR,
         "List of items in track "TRACK_VAR" in chrom "CHROM_VAR" in genome "GENOME_VAR
 	". Default format is a JSON derivative of the UCSC BED format.", 
 	    addResourceOption(
@@ -119,7 +96,7 @@ addResource(res, "track_range_chrom", "/data/track/range/"GENOME_VAR"/"TRACK_VAR
 	    FORMAT_ARG,
             json_object_get_string(json_object_new_string(ANNOJ_NESTED_FMT)),
             "Return data in AnnoJ Nested Model format"));
-addResource(res, "track_range", "/data/track/range/"GENOME_VAR"/"TRACK_VAR"/"CHROM_VAR"/"START_VAR"/"END_VAR,
+addResource(res, "track_range", PREFIX TRACKS_CMD "/range/" GENOME_VAR "/" TRACK_VAR "/" CHROM_VAR "/" START_VAR "," END_VAR,
         "List of items in track "TRACK_VAR" in range "CHROM_VAR":"START_VAR"-"END_VAR" in genome "GENOME_VAR
 	". Default format is a JSON derivative of the UCSC BED format.", 
 	    addResourceOption(
@@ -131,9 +108,9 @@ addResource(res, "track_range", "/data/track/range/"GENOME_VAR"/"TRACK_VAR"/"CHR
             json_object_get_string(json_object_new_string(ANNOJ_NESTED_FMT)),
             "Return data in AnnoJ Nested Model format"));
 // Details for one item in a track in a genome, or a list of all items matching a term
-addResource(res, "track_item", "/data/track/item/"GENOME_VAR"/"TRACK_VAR"/"TERM_VAR,
+addResource(res, "track_item", PREFIX TRACKS_CMD "/item/" GENOME_VAR "/" TRACK_VAR "/" TERM_VAR,
         "Detailed information for item "TERM_VAR" in track "TRACK_VAR" in genome " GENOME_VAR, NULL);
-addResource(res, "track_item", "/data/track/list/"GENOME_VAR"/"TRACK_VAR"/"TERM_VAR,
+addResource(res, "track_item", PREFIX TRACKS_CMD "/list/" GENOME_VAR "/" TRACK_VAR "/" TERM_VAR,
         "List of items matching "TERM_VAR" in track "TRACK_VAR" in genome "GENOME_VAR, NULL);
 // print the usage message
 printf(json_object_to_json_string(msg));
@@ -177,7 +154,7 @@ if (!cmd && !genome && !track)
 //    options:
 //      "all_chroms=true" Force a list of all chromosomes even if there a large number
 //  /data/genome/_GENOME_/_CHROM_  Detailed info on genome _GENOME_ including name and size of chromosome _CHROM_
-else if (sameOk(GENOME_ARG, cmd)) 
+else if (sameOk(GENOMES_CMD, cmd)) 
     {
     dbs = hGetIndexedDbClade(genome); 
     if (!genome)
@@ -189,6 +166,8 @@ else if (sameOk(GENOME_ARG, cmd))
 	{
 	if (!dbs)
 	    ERR_GENOME_NOT_FOUND(genome);
+	// TEST FOR number of chroms 
+	// if (hChromCount(genome) < MAX_CHROM_COUNT || cgiBoolean(ALLCHROMS_ARG)
 	if (chrom)
 	    {
 	    if (!(ci = hGetChromInfo(genome, chrom)))
@@ -212,7 +191,7 @@ else if (sameOk(GENOME_ARG, cmd))
 // List of items in a track in a whole chromosome or a range within a chromosome
 //    /data/track/range/_GENOME_/_TRACK_/_CHROM_
 //    /data/track/range/_GENOME_/_TRACK_/_CHROM_/_START_/_END_
-else if (sameOk(TRACK_ARG, cmd))
+else if (sameOk(TRACKS_CMD, cmd))
     {
     if (!genome)
         ERR_NO_GENOME;
