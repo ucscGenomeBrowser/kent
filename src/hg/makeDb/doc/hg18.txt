@@ -26666,9 +26666,22 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
 
 hgGetNrOmimGene hg18 j.tmp 
 sort -u j.tmp > omimGeneNR.bed
+hgLoadBed hg18 omimGeneNR omimGeneNR.bed
 
 cat omimGene.bed omimGeneNR.bed |sort -u >omimGeneAll.bed
 hgLoadBed hg18 omimGene omimGeneAll.bed
+
+hgsql hg18 -N -e 'select * from omimToKnownCanonical' |sort -u >j.tmp
+hgsql hg18 -N -e \
+'select n.name, i.transcript from  omimGeneNR n, knownCanonical c,
+knownToRefSeq r, refLink l, knownIsoforms i where l.mrnaAcc=r.value and
+binary(n.name)=l.omimId and c.transcript=r.name and c.clusterId=i.clusterId
+and omimId <>0 '\
+|sort -u >omimToKnownGeneNR.tab
+cat j.tmp omimToKnownGeneNR.tab |sort -u >omimToKnownCanonicalNew.tab
+
+hgLoadSqlTab hg18 omimToKnownCanonical  \
+~/src/hg/lib/omimToKnownCanonical.sql omimToKnownCanonicalNew.tab
 
 #############################################################################
 # fox2ClipSeq from Gene Yeo (DONE - 2009-01-08 - Hiram)
