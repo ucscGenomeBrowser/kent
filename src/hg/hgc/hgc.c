@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1508 2009/02/13 20:01:49 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1509 2009/02/23 22:31:52 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -21760,7 +21760,8 @@ else if (sameString("snpArrayAffy250Nsp", track) ||
     }
 else if (sameString("snpArrayIllumina300", track) ||
          sameString("snpArrayIllumina550", track) ||
-	 sameString("snpArrayIllumina650", track))
+	 sameString("snpArrayIllumina650", track) ||
+	 (sameString("snpArrayIllumina1M", track) && (strstr(item, "rs") != NULL) ) )
     {
     doSnpArray(tdb, item, "Illumina");
     }
