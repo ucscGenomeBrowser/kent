@@ -5837,7 +5837,7 @@ chainOne $(path1)
     bzcat BDTNP_all_new* | perl -we \
       'my $fh; \
        while (<>) { \
-         if (/^track .* name="([\w-]+)"/) { \
+         if (/^track .* name="([\w-\.]+)"/) { \
            close($fh) if ($fh); \
            my $name = $1; \
            $name =~ s/_FQ_/_1_/;  $name =~ s/_BQ_/_2_/; \
@@ -5845,6 +5845,8 @@ chainOne $(path1)
              || die "parse:\n$name\n\t"; \
            print "$name\n"; \
            open($fh, ">$name.wig") || die "Cant open >$name.wig: $!\n"; \
+         } elsif (/^track /) { \
+           die "missed a track line:\n$_\n\t"; \
          } else { \
            die "data before track line?  at input line $.:\n$_" if (! $fh); \
            print $fh $_; \
@@ -5876,6 +5878,8 @@ chainOne $(path1)
 #Converted ../bdtnpHkb3Fdr25.wig, upper limit 10.50, lower limit 0.37
 #Converted ../bdtnpMad2Fdr1.wig, upper limit 12.58, lower limit 0.67
 #Converted ../bdtnpMad2Fdr25.wig, upper limit 12.58, lower limit 0.67
+#Converted ../bdtnpMed2Fdr1.wig, upper limit 12.58, lower limit 0.67
+#Converted ../bdtnpMed2Fdr25.wig, upper limit 12.58, lower limit 0.67
 #Converted ../bdtnpPrd1Fdr1.wig, upper limit 13.97, lower limit 0.78
 #Converted ../bdtnpPrd1Fdr25.wig, upper limit 13.97, lower limit 0.78
 #Converted ../bdtnpPrd2Fdr1.wig, upper limit 12.00, lower limit 0.84
