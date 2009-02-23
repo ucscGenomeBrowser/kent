@@ -6,7 +6,7 @@
 #include "genomeRangeTreeFile.h"
 #include "baseMaskCommon.h"
 
-static char const rcsid[] = "$Id: baseMaskCommon.c,v 1.7 2008/09/18 03:51:57 mikep Exp $";
+static char const rcsid[] = "$Id: baseMaskCommon.c,v 1.7.16.1 2009/02/23 12:51:50 mikep Exp $";
 
 //#define MJP verbose(1,"%s[%3d]: ", __func__, __LINE__);
 
@@ -54,7 +54,7 @@ hFreeConn(&conn);
 return ret;
 }
 
-static char *chromTable(char *db, char *table, char *chromDb)
+char *chromTable(char *db, char *table, char *chromDb)
 /* Get chr1_table if it exists, otherwise table. 
  * You can freeMem this when done. */
 {
@@ -112,7 +112,7 @@ if (fileExists(file))
 return statBuf.st_mtime;
 }
 
-static time_t chromTableUpdateTime(char *db, char *table, char *chromDb)
+time_t chromTableUpdateTime(char *db, char *table, char *chromDb)
 /* Find the last update time for table in db.
  * If the table doesnt exist, find a chromosome or scaffold) name from chromDb and 
  * check if the table is split by chromosome.

@@ -3,6 +3,17 @@
 #define BASEMASKCOMMON_H
 
 
+char *chromTable(char *db, char *table, char *chromDb);
+/* Get chr1_table if it exists, otherwise table.
+ * You can freeMem this when done. */
+
+time_t chromTableUpdateTime(char *db, char *table, char *chromDb);
+/* Find the last update time for table in db.
+ * If the table doesnt exist, find a chromosome or scaffold) name from chromDb and
+ * check if the table is split by chromosome.
+ * Errors out if time is not a positive integer.
+ * Returns the table update time. */
+
 void splitDbTable(char *chromDb, char *track, char **pDb, char **pTable);
 /* split the track into db name and table name. 
  * If no db specified then this will be chromDb.
