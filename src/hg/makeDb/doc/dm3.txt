@@ -2742,3 +2742,119 @@ dm3.upstreamMaf = multiz15way /hive/data/genomes/dm3/bed/multiz15way/species.lst
 
 
 #########################################################################
+# LIFTOVER BDTNP DATA FROM DM2 (DONE 1/29/09 angie - REDONE with more data 2/2/09)
+    ssh hgwdev
+    mkdir /hive/data/genomes/dm3/bed/bdtnpChipperLiftOver
+    cd /hive/data/genomes/dm3/bed/bdtnpChipperLiftOver
+    # Original files are varStep with unspecified step=1 -- translate
+    # to bed3, liftOver, and translate back to varStep:
+    foreach f (/hive/data/genomes/dm2/bed/bdtnpChipper/*.wig)
+      echo $f:t:r
+      grep -v ^track $f \
+      | perl -wpe 'chomp; @w = split(/[ \t=]/); \
+          if ($w[0] eq "variableStep") { $chr = $w[2];  $_ = ""; } \
+          elsif (defined $w[1]) { $_ = "$chr\t" . ($w[0]-1) . "\t$w[0]\t$w[1]\n"; }' \
+      | liftOver -bedPlus=4 stdin /hive/data/genomes/dm2/bed/liftOver/dm2ToDm3.over.chain.gz \
+          stdout $f:t:r.unmapped \
+      | sort -k1,1 -k2n,2n \
+      | perl -wpe 'chomp; @w=split("\t"); next unless $w[3]; \
+          print "variableStep chrom=$w[0]\n" if (\!defined $prevChr || $prevChr ne $w[0]); \
+          $_ = "$w[2]\t$w[3]\n";  $prevChr = $w[0];' \
+        > $f:t:r.lo.wig
+    end
+    wc -l *.unmapped | grep -v '^ 0 '
+# 2 bdtnpDl3Fdr25.unmapped
+# 2 total
+    # This is the one unmapped item:
+    cat bdtnpDl3Fdr25.unmapped
+##Deleted in new
+#chrX    3521682 3521683 0.983636307483747
+
+    mkdir wigEncoded
+    cd wigEncoded
+    foreach f (../*Fdr*.lo.wig)
+      wigEncode $f $f:t:r:r.{wig,wib}
+    end
+    # Same output as for dm2, good:
+#Converted ../bdtnpBcd1Fdr1.wig, upper limit 8.14, lower limit 0.80
+#Converted ../bdtnpBcd1Fdr25.wig, upper limit 8.14, lower limit 0.80
+#Converted ../bdtnpBcd2Fdr1.wig, upper limit 10.74, lower limit 0.68
+#Converted ../bdtnpBcd2Fdr25.wig, upper limit 10.74, lower limit 0.68
+#Converted ../bdtnpCad1Fdr1.wig, upper limit 16.20, lower limit 1.06
+#Converted ../bdtnpCad1Fdr25.wig, upper limit 16.20, lower limit 0.48
+#Converted ../bdtnpGt2Fdr1.wig, upper limit 22.22, lower limit 1.21
+#Converted ../bdtnpGt2Fdr25.wig, upper limit 22.22, lower limit 0.49
+#Converted ../bdtnpHb1Fdr1.wig, upper limit 14.38, lower limit 0.92
+#Converted ../bdtnpHb1Fdr25.wig, upper limit 14.38, lower limit 0.86
+#Converted ../bdtnpHb2Fdr1.wig, upper limit 24.25, lower limit 0.88
+#Converted ../bdtnpHb2Fdr25.wig, upper limit 24.25, lower limit 0.78
+#Converted ../bdtnpKni1Fdr1.wig, upper limit 8.08, lower limit 1.78
+#Converted ../bdtnpKni1Fdr25.wig, upper limit 8.08, lower limit 1.01
+#Converted ../bdtnpKni2Fdr1.wig, upper limit 8.44, lower limit 1.07
+#Converted ../bdtnpKni2Fdr25.wig, upper limit 8.44, lower limit 0.76
+#Converted ../bdtnpKr1Fdr1.wig, upper limit 14.47, lower limit 0.68
+#Converted ../bdtnpKr1Fdr25.wig, upper limit 14.47, lower limit 0.68
+#Converted ../bdtnpKr2Fdr1.wig, upper limit 12.92, lower limit 0.66
+#Converted ../bdtnpKr2Fdr25.wig, upper limit 12.92, lower limit 0.66
+#Converted ../bdtnpPolIIFdr1.wig, upper limit 30.86, lower limit 0.93
+#Converted ../bdtnpPolIIFdr25.wig, upper limit 30.86, lower limit 0.70
+#Converted ../bdtnpZ2Fdr1.wig, upper limit 11.49, lower limit 0.95
+#Converted ../bdtnpZ2Fdr25.wig, upper limit 11.49, lower limit 0.79
+#Converted ../bdtnpD1Fdr1.wig, upper limit 20.33, lower limit 0.51
+#Converted ../bdtnpD1Fdr25.wig, upper limit 20.33, lower limit 0.51
+#Converted ../bdtnpDa2Fdr1.wig, upper limit 26.09, lower limit 0.79
+#Converted ../bdtnpDa2Fdr25.wig, upper limit 26.09, lower limit 0.49
+#Converted ../bdtnpDl3Fdr1.wig, upper limit 16.97, lower limit 0.65
+#Converted ../bdtnpDl3Fdr25.wig, upper limit 16.97, lower limit 0.62
+#Converted ../bdtnpFtz3Fdr1.wig, upper limit 16.54, lower limit 1.07
+#Converted ../bdtnpFtz3Fdr25.wig, upper limit 16.54, lower limit 0.84
+#Converted ../bdtnpH1Fdr1.wig, upper limit 18.52, lower limit 0.68
+#Converted ../bdtnpH1Fdr25.wig, upper limit 18.52, lower limit 0.68
+#Converted ../bdtnpH2Fdr1.wig, upper limit 13.23, lower limit 0.68
+#Converted ../bdtnpH2Fdr25.wig, upper limit 13.23, lower limit 0.65
+#Converted ../bdtnpHkb1Fdr1.wig, upper limit 11.84, lower limit 1.03
+#Converted ../bdtnpHkb1Fdr25.wig, upper limit 11.84, lower limit 0.35
+#Converted ../bdtnpHkb2Fdr1.wig, upper limit 10.73, lower limit 0.87
+#Converted ../bdtnpHkb2Fdr25.wig, upper limit 10.73, lower limit 0.33
+#Converted ../bdtnpHkb3Fdr1.wig, upper limit 10.50, lower limit 0.90
+#Converted ../bdtnpHkb3Fdr25.wig, upper limit 10.50, lower limit 0.37
+#Converted ../bdtnpMad2Fdr1.wig, upper limit 12.58, lower limit 0.67
+#Converted ../bdtnpMad2Fdr25.wig, upper limit 12.58, lower limit 0.67
+#Converted ../bdtnpMed2Fdr1.wig, upper limit 12.58, lower limit 0.67
+#Converted ../bdtnpMed2Fdr25.wig, upper limit 12.58, lower limit 0.67
+#Converted ../bdtnpPrd1Fdr1.wig, upper limit 13.97, lower limit 0.78
+#Converted ../bdtnpPrd1Fdr25.wig, upper limit 13.97, lower limit 0.78
+#Converted ../bdtnpPrd2Fdr1.wig, upper limit 12.00, lower limit 0.84
+#Converted ../bdtnpPrd2Fdr25.wig, upper limit 12.00, lower limit 0.84
+#Converted ../bdtnpRun1Fdr1.wig, upper limit 10.02, lower limit 0.60
+#Converted ../bdtnpRun1Fdr25.wig, upper limit 10.02, lower limit 0.60
+#Converted ../bdtnpRun2Fdr1.wig, upper limit 7.58, lower limit 1.16
+#Converted ../bdtnpRun2Fdr25.wig, upper limit 7.58, lower limit 0.58
+#Converted ../bdtnpShn2Fdr1.wig, upper limit 12.62, lower limit 1.19
+#Converted ../bdtnpShn2Fdr25.wig, upper limit 12.62, lower limit 0.81
+#Converted ../bdtnpShn3Fdr1.wig, upper limit 10.28, lower limit 1.09
+#Converted ../bdtnpShn3Fdr25.wig, upper limit 10.28, lower limit 0.95
+#Converted ../bdtnpSlp11Fdr1.wig, upper limit 40.39, lower limit 1.06
+#Converted ../bdtnpSlp11Fdr25.wig, upper limit 40.39, lower limit 0.62
+#Converted ../bdtnpSna1Fdr1.wig, upper limit 8.41, lower limit 0.97
+#Converted ../bdtnpSna1Fdr25.wig, upper limit 8.41, lower limit 0.77
+#Converted ../bdtnpSna2Fdr1.wig, upper limit 14.30, lower limit 0.57
+#Converted ../bdtnpSna2Fdr25.wig, upper limit 14.30, lower limit 0.57
+#Converted ../bdtnpTFIIB1Fdr1.wig, upper limit 21.81, lower limit 0.59
+#Converted ../bdtnpTFIIB1Fdr25.wig, upper limit 21.81, lower limit 0.59
+#Converted ../bdtnpTll1Fdr1.wig, upper limit 16.66, lower limit 0.98
+#Converted ../bdtnpTll1Fdr25.wig, upper limit 16.66, lower limit 0.57
+#Converted ../bdtnpTwi1Fdr1.wig, upper limit 26.11, lower limit 0.77
+#Converted ../bdtnpTwi1Fdr25.wig, upper limit 26.11, lower limit 0.68
+#Converted ../bdtnpTwi2Fdr1.wig, upper limit 26.66, lower limit 0.79
+#Converted ../bdtnpTwi2Fdr25.wig, upper limit 26.66, lower limit 0.55
+
+    mkdir /gbdb/dm3/bdtnp
+    ln -s /hive/data/genomes/dm3/bed/bdtnpChipperLiftOver/wigEncoded/*.wib /gbdb/dm3/bdtnp/
+    cd /hive/data/genomes/dm3/bed/bdtnpChipperLiftOver/wigEncoded
+    foreach f (*.wig)
+      hgLoadWiggle -pathPrefix=/gbdb/dm3/bdtnp dm3 $f:r $f
+    end
+    rm wiggle.tab
+
+
