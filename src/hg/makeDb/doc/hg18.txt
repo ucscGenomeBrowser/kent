@@ -26673,7 +26673,7 @@ hgLoadBed hg18 omimGene omimGeneAll.bed
 
 hgsql hg18 -N -e 'select * from omimToKnownCanonical' |sort -u >j.tmp
 hgsql hg18 -N -e \
-'select n.name, i.transcript from  omimGeneNR n, knownCanonical c,
+'select n.name, c.transcript from  omimGeneNR n, knownCanonical c,
 knownToRefSeq r, refLink l, knownIsoforms i where l.mrnaAcc=r.value and
 binary(n.name)=l.omimId and c.transcript=r.name and c.clusterId=i.clusterId
 and omimId <>0 '\
