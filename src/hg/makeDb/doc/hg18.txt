@@ -21251,7 +21251,8 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 
 
 ############################################################################
-# DGV V6 (DATABASE OF GENOMIC VARIANTS) (DONE 11/12/08 angie)
+# DGV V6 (DATABASE OF GENOMIC VARIANTS) (DONE 2/23/09 angie)
+# DGV V6 with useless thin regions done 11/12/08
 # DGV V5 done 7/16/08
 # DGV V4 done 5/9/08
     ssh hgwdev
@@ -21263,31 +21264,26 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
       http://projects.tcag.ca/variation/downloads/indel.hg18.v6.nov.2008.txt
     # shuffle fields into bed8+
     foreach f (*.v6.*.txt)
-      tail +2 $f \
+      tail -n +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
-         $locChr, $locStart, $locEnd, $ref, $pmid, $method, \
+         undef, undef, undef, $ref, $pmid, $method, \
          undef, undef, undef, undef, $sample) = split("\t"); \
-        die "chr $chr != loc $locChr" if ($chr ne $locChr); \
         $id =~ s/^Variation_//; \
-        $chromStart = $start < $locStart ? $start : $locStart; \
-        $chromEnd = $end > $locEnd ? $end : $locEnd; \
-        $thickStart = $locStart > $start ? $locStart : $start; \
-        $thickEnd = $locEnd < $end ? $locEnd : $end; \
-        $chromStart--;  $thickStart--; \
+        $start--;  \
         $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
         $rgb = "255,128,0"; \
         $rgb = "200,0,0" if ($varType =~ /^Inv/); \
         $rgb = "0,100,0" if ($varType eq "InDel"); \
-        $_ = join("\t", $chr, $chromStart, $chromEnd, $id, 0, "+", \
-                  $thickStart, $thickEnd, $rgb, $landmark, $varType, \
+        $_ = join("\t", $chr, $start, $end, $id, 0, "+", \
+                  $start, $end, $rgb, $landmark, $varType, \
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
     hgsql hg18 -e 'rename table dgv to dgvV5'
     hgLoadBed hg18 dgv *.bed \
       -onServer -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
-#Loaded 27799 elements of size 15
+#Loaded 31615 elements of size 15
 
 
 ############################################################################
@@ -26759,6 +26755,13 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
 #63060562 bases of 2881515245 (2.188%) in intersection
     # hgTables: 49,804 rmskRM327 items (4,805,535 bases) have no overlap with rmsk
 
+    # Added download file 2/5/09:
+    cd /hive/data/genomes/hg18
+    zip -j bigZips/chromOut.RM3.2.7.zip */chr*.RM327.fa.out
+    ln -s /hive/data/genomes/hg18/bigZips/chromOut.RM3.2.7.zip \
+      /usr/local/apache/htdocs/goldenPath/hg18/bigZips/
+
+
 #############################################################################
 #  Initial import of LSSNP data for SNP and hgGene linking (2009-02-02 markd)
 #############################################################################
@@ -26776,4 +26779,144 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
 #############################################################################
 
 
+#############################################################################
+# HGDP GEOGRAPHIC SNP MAPS (DONE 2/5/09 angie)
+    # Project data downloaded and parsed in /hive/data/outside/hgdpGeo,
+    # see makeDb/doc/hgdpGeo.txt.
+    mkdir /hive/data/genomes/hg18/bed/hgdpGeo
+    cd /hive/data/genomes/hg18/bed/hgdpGeo
+    # Make an rsId-sorted snp coords file for joining with the hgdpGeo data.
+    grep -Fwf /hive/data/outside/hgdpGeo/rsIDs.lst \
+      ../snp129/snp129.bed \
+    | awk 'BEGIN{OFS="\t";} {print $4, $1, $2, $3;}' \
+    | sort > snp129Coords.txt
+    wc -l snp129Coords.txt
+#660280 snp129Coords.txt
+    # How many distinct SNPs in there?  (compare to 657000 from HGDP):
+    cut -f 1 snp129Coords.txt |uniq | wc -l
+#656496
 
+    # Join files to make a track table:
+    join -e ERROR -t'	' -o 1.2,1.3,1.4,1.1,2.2,2.3,2.4 \
+      snp129Coords.txt /hive/data/outside/hgdpGeo/hgdpGeoCoordless.txt \
+    | sed -re 's/([AGTC])\*/\1/' \
+    | sort -k1,1 -k2n,2n \
+      > hgdpGeo.tab
+    wc -l hgdpGeo.tab
+#660280 hgdpGeo.tab
+    grep ERROR hgdpGeo.tab | wc -l
+#0
+
+    hgLoadBed hg18 hgdpGeo hgdpGeo.tab \
+      -sqlTable=$HOME/kent/src/hg/lib/hgdpGeo.sql
+#Loaded 660280 elements of size 7
+
+
+#############################################################################
+# HGDP HETEROZYGOSITY (DONE 2/12/09 angie)
+    mkdir /hive/data/genomes/hg18/bed/hgdpHzy
+    cd /hive/data/genomes/hg18/bed/hgdpHzy
+    foreach continent (african americas easia european mideast oceania sasia)
+      wget --timestamping http://hgdp.uchicago.edu/data/hzy/$continent.gff.gz
+    end
+    foreach continent (african americas easia european mideast oceania sasia)
+      set bedGraph = `echo $continent \
+                      | sed -re 's/can$/ca/; s/pean$/pe/; s/asia/Asia/; \
+                                 s/(.*)/hgdpHzy\u\1.bedGraph/'`
+      echo $bedGraph
+      zcat $continent.gff.gz \
+      | awk 'BEGIN{OFS="\t";} {print $1, ($4-1), $5, $6;}' \
+        > $bedGraph
+    end
+    # Using bedGraph, not wig, because there are only 640k datapoints and 
+    # some are over the 10Mbase wiggle item size limit.
+    foreach f (*.bedGraph)
+      hgLoadBed hg18 $f:r $f -bedGraph=4
+    end
+    # All 7 have same size:
+#Loaded 640676 elements of size 4
+
+
+#############################################################################
+# HGDP FST (DONE 2/12/09 angie)
+    mkdir /hive/data/genomes/hg18/bed/hgdpFst
+    cd /hive/data/genomes/hg18/bed/hgdpFst
+    wget --timestamping \
+      http://hgdp.uchicago.edu/data/FST/autosomal_illuminasnps7_pval.gff.gz
+    zcat autosomal_illuminasnps7_pval.gff.gz \
+    | awk 'BEGIN{OFS="\t";} {print $1, ($4-1), $5, $6;}' \
+      > hgdpFst.bedGraph
+    hgLoadBed hg18 hgdpFst hgdpFst.bedGraph -bedGraph=4
+#Loaded 640676 elements of size 4
+
+
+#############################################################################
+# HGDP IHS (DONE 2/13/09 angie)
+    mkdir /hive/data/genomes/hg18/bed/hgdpIhs
+    cd /hive/data/genomes/hg18/bed/hgdpIhs
+    foreach continent (Bantu Americas E.Asia European MiddleEast Oceania S.Asian)
+      wget --timestamping \
+        http://hgdp.uchicago.edu/data/iHS/smoothed$continent.iHS.gff.gz
+      set bedGraph = `echo $continent \
+                      | sed -re 's/Bantu/Africa/; s/pean$/pe/; s/\.Asian?/Asia/; \
+                                 s/MiddleEast/Mideast/; s/(.*)/hgdpIhs\1.bedGraph/'`
+      echo $bedGraph
+      zcat smoothed$continent.iHS.gff.gz \
+      | sed -e 's/^chr23/chrX/' \
+      | awk 'BEGIN{OFS="\t";} {print $1, ($4-1), $5, $6;}' \
+        > $bedGraph
+    end
+    foreach f (*.bedGraph)
+      hgLoadBed hg18 $f:r $f -bedGraph=4
+    end
+#Reading hgdpIhsAfrica.bedGraph
+#Loaded 540438 elements of size 4
+#Reading hgdpIhsAmericas.bedGraph
+#Loaded 422167 elements of size 4
+#Reading hgdpIhsEAsia.bedGraph
+#Loaded 487801 elements of size 4
+#Reading hgdpIhsEurope.bedGraph
+#Loaded 543875 elements of size 4
+#Reading hgdpIhsMideast.bedGraph
+#Loaded 552277 elements of size 4
+#Reading hgdpIhsOceania.bedGraph
+#Loaded 425340 elements of size 4
+#Reading hgdpIhsSAsia.bedGraph
+#Loaded 550231 elements of size 4
+
+
+#############################################################################
+# HGDP XP-EHH (DONE 2/12/09 angie)
+    mkdir /hive/data/genomes/hg18/bed/hgdpXpehh
+    cd /hive/data/genomes/hg18/bed/hgdpXpehh
+    foreach continent (Bantu Americas E.Asia Europe Mideast Oceania S.Asia)
+      wget --timestamping \
+        http://hgdp.uchicago.edu/data/XPEHH/$continent.xpehh.forbrowser.gff.gz
+      set bedGraph = `echo $continent \
+                      | sed -re 's/Bantu/Africa/; s/\.Asia?/Asia/; \
+                                 s/(.*)/hgdpXpehh\1.bedGraph/'`
+      echo $bedGraph
+      zcat $continent.xpehh.forbrowser.gff.gz \
+      | awk 'BEGIN{OFS="\t";} {print $1, ($4-1), $5, $6;}' \
+        > $bedGraph
+    end
+    foreach f (*.bedGraph)
+      hgLoadBed hg18 $f:r $f -bedGraph=4
+    end
+#Reading hgdpXpehhAfrica.bedGraph
+#Loaded 636680 elements of size 4
+#Reading hgdpXpehhAmericas.bedGraph
+#Loaded 636143 elements of size 4
+#Reading hgdpXpehhEAsia.bedGraph
+#Loaded 635799 elements of size 4
+#Reading hgdpXpehhEurope.bedGraph
+#Loaded 636680 elements of size 4
+#Reading hgdpXpehhMideast.bedGraph
+#Loaded 636849 elements of size 4
+#Reading hgdpXpehhOceania.bedGraph
+#Loaded 637418 elements of size 4
+#Reading hgdpXpehhSAsia.bedGraph
+#Loaded 636773 elements of size 4
+
+
+#############################################################################
