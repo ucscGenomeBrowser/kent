@@ -24336,7 +24336,8 @@ See hg18.txt for details.
 
 
 ############################################################################
-# DGV V6 (DATABASE OF GENOMIC VARIANTS) (DONE 11/12/08 angie)
+# DGV V6 (DATABASE OF GENOMIC VARIANTS) (DONE 2/23/09 angie)
+# DGV V6 with useless thin regions done 11/12/08
 # DGV V5 done 8/11/08
 # DGV V4 done 5/9/08
     ssh hgwdev
@@ -24349,31 +24350,26 @@ See hg18.txt for details.
     # shuffle fields into bed8+ (input has one start coord==0, but min 
     # nonzero size of 99 not 100 implies most coords are 1-based):
     foreach f (*.v6.*.txt)
-      tail +2 $f \
+      tail -n +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
-         $locChr, $locStart, $locEnd, $ref, $pmid, $method, \
+         undef, undef, undef, $ref, $pmid, $method, \
          undef, undef, undef, undef, $sample) = split("\t"); \
-        die "chr $chr != loc $locChr" if ($chr ne $locChr); \
         $id =~ s/^Variation_//; \
-        $chromStart = $start < $locStart ? $start : $locStart; \
-        $chromEnd = $end > $locEnd ? $end : $locEnd; \
-        $thickStart = $locStart > $start ? $locStart : $start; \
-        $thickEnd = $locEnd < $end ? $locEnd : $end; \
-        $chromStart-- unless ($chromStart == 0); \
-        $thickStart-- unless ($thickStart == 0); \
+        $start-- unless ($start == 0); \
         $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
         $rgb = "255,128,0"; \
         $rgb = "200,0,0" if ($varType =~ /^Inv/); \
         $rgb = "0,100,0" if ($varType eq "InDel"); \
-        $_ = join("\t", $chr, $chromStart, $chromEnd, $id, 0, "+", \
-                  $thickStart, $thickEnd, $rgb, $landmark, $varType, \
+        $_ = join("\t", $chr, $start, $end, $id, 0, "+", \
+                  $start, $end, $rgb, $landmark, $varType, \
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
     hgsql hg17 -e 'rename table dgv to dgvV5'
     hgLoadBed hg17 dgv *.bed \
       -onServer -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
+#Loaded 17479 elements of size 15
 
 
 ############################################################################
