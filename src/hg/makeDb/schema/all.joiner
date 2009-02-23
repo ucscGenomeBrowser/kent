@@ -1998,7 +1998,7 @@ identifier snpArrayHg18
 identifier snp129ArrayHg18
 "SNP array track for hg18"
     hg18.snp129.name dupeOk
-    hg18.snpArrayIllumina1M.name minCheck=0.92
+    hg18.snpArrayIllumina1M.name minCheck=0.95
 
 identifier snpOrtho126
 "Ortho SNPs for hg18 only (dbSNP 126)"
