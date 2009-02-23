@@ -20,7 +20,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.126 2009/02/20 23:21:25 hiram Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.127 2009/02/23 23:38:08 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -333,11 +333,18 @@ if (monitorFlags)
 return deltaTime;
 }
 
+static char *scConnDb(struct sqlConnection *sc)
+/* Return sc->conn->db, unless it is NULL -- if NULL, return a string for
+ * fprint'd messages. */
+{
+return (sc->conn->db ? sc->conn->db : "db=?");
+}
+
 static void monitorPrintInfo(struct sqlConnection *sc, char *name)
 /* print a monitor message, with connection id and databases. */
 {
 fprintf(stderr, "%.*s%s %ld %s\n", traceIndent, indentStr, name,
-        sc->conn->thread_id, sc->conn->db);
+        sc->conn->thread_id, scConnDb(sc));
 }
 
 static void monitorPrint(struct sqlConnection *sc, char *name,
@@ -347,7 +354,7 @@ static void monitorPrint(struct sqlConnection *sc, char *name,
 {
 va_list args;
 fprintf(stderr, "%.*s%s %ld %s ", traceIndent, indentStr, name,
-        sc->conn->thread_id, sc->conn->db);
+        sc->conn->thread_id, scConnDb(sc));
 va_start(args, format);
 vfprintf(stderr, format, args);
 va_end(args);
@@ -489,7 +496,7 @@ if (sc != NULL)
 }
 
 char* sqlGetDatabase(struct sqlConnection *sc)
-/* Get the database associated with an connection. */
+/* Get the database associated with an connection. Warning: return may be NULL! */
 {
 assert(!sc->isFree);
 return sc->conn->db;
@@ -1042,7 +1049,7 @@ safef(query, sizeof(query), "select * from %s limit 1,1", table);
 if ((sr = sqlUseOrStore(sc, query, mysql_use_result, FALSE)) == NULL)
     {
     fprintf(stderr, "ASH: Got nothing from select on %s.%s.  pid=%ld\n",
-	    sc->conn->db, table, (long)getpid());
+	    scConnDb(sc), table, (long)getpid());
     /* An error here is OK if and only if the table exists and is empty: */
     return (sqlTableSizeIfExists(sc, table) == 0);
     }
@@ -1052,7 +1059,7 @@ else
 sqlFreeResult(&sr);
 if (ret == FALSE)
     fprintf(stderr, "ASH: Error reading result of select on %s.%s!  pid=%ld\n",
-	    sc->conn->db, table, (long)getpid());
+	    scConnDb(sc), table, (long)getpid());
 return ret;
 }
 
