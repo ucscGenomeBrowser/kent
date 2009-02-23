@@ -2882,7 +2882,7 @@ searchName illumina1M
 searchTable snpArrayIllumina1M
 searchType bed
 searchMethod exact
-termRegex ((rs|SNP|GA|[0-9])[0-9]+)
+termRegex ((rs|SNP|GA|cnvi|[0-9])[0-9]+)
 searchPriority 14
 padding 250
 semiShortCircuit 1
