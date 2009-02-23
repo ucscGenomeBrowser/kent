@@ -493,12 +493,16 @@ if ( 'real' == $run ) then
  echo '#  hgsql -h hgwbeta -e DELETE FROM seq WHERE extFile = $val $db'
  echo '# end\n'
 
- echo "4. This script only *copied* rows from the tables on dev to those on beta;"
- echo "  it did not remove them from the tables on dev.  If you determine that"
- echo "  the rows should be removed from the extFile and seq tables on dev,"
- echo "  you will need to do that yourself.  You will find a list of the rows"
- echo "  that can be removed in these two files:\n"
- echo "     XXextFileCopyFromDevXX    XXseqCopyFromDevXX\n"
+ if ( "update" == $type && 1 == "$case" ) then
+   echo "4. This script only *copied* rows from the tables on dev to those on beta;"
+   echo "  it did not remove them from the tables on dev.  If you determine that"
+   echo "  the rows should be removed from the extFile and seq tables on dev,"
+   echo "  you will need to do that yourself.  You will find a list of the rows"
+   echo "  that can be removed in these two files:\n"
+   echo "     XXextFileCopyFromDevXX    XXseqCopyFromDevXX\n"
+  else
+   echo "4. Given your input parameters, there is no step four!\n"
+ endif
 
  echo "5. Before any changes were made on hgwbeta, the extFile and seq tables"
  echo "  were backed up.  If you are sure that everything went fine, you"
