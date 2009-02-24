@@ -15,7 +15,7 @@
 #include "chromGraphFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.16 2009/02/10 00:47:47 galt Exp $";
+static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.17 2009/02/24 19:41:39 galt Exp $";
 
 #define affy500Table "snpArrayAffy500"
 #define affy6Table "snpArrayAffy6"
@@ -24,6 +24,7 @@ static char const rcsid[] = "$Id: chromGraphFactory.c,v 1.16 2009/02/10 00:47:47
 #define illumina300Table "snpArrayIllumina300"
 #define illumina550Table "snpArrayIllumina550"
 #define illumina650Table "snpArrayIllumina650"
+#define illumina1MTable "snpArrayIllumina1M"
 
 #define agilentCgh244ATable "agilentCgh244a"
 
@@ -309,6 +310,17 @@ if (sqlTableExists(conn, table))
     {
     AllocVar(mtr);
     mtr->type = cgfMarkerHumanHap650;
+    mtr->table = table;
+    mtr->query = "select count(*) from %s where name='%s'";
+    slAddHead(&list, mtr);
+    }
+
+/* Illumina 1M recognizer */
+table = illumina1MTable;
+if (sqlTableExists(conn, table))
+    {
+    AllocVar(mtr);
+    mtr->type = cgfMarkerHumanHap1M;
     mtr->table = table;
     mtr->query = "select count(*) from %s where name='%s'";
     slAddHead(&list, mtr);
@@ -801,6 +813,7 @@ else if (sameString(markerType, cgfMarkerAffy500)
       || sameString(markerType, cgfMarkerHumanHap300)
       || sameString(markerType, cgfMarkerHumanHap550)
       || sameString(markerType, cgfMarkerHumanHap650)
+      || sameString(markerType, cgfMarkerHumanHap1M)
       || sameString(markerType, cgfMarkerAgilentCgh244A)
         )
     {
@@ -811,6 +824,7 @@ else if (sameString(markerType, cgfMarkerAffy500)
     if (sameString(markerType, cgfMarkerHumanHap300)) table = illumina300Table;
     if (sameString(markerType, cgfMarkerHumanHap550)) table = illumina550Table;
     if (sameString(markerType, cgfMarkerHumanHap650)) table = illumina650Table;
+    if (sameString(markerType, cgfMarkerHumanHap1M)) table = illumina1MTable;
     if (sameString(markerType, cgfMarkerAgilentCgh244A)) table = agilentCgh244ATable;
     if (!sqlTableExists(conn, table))
         errAbort("Sorry, no data for %s on this assembly.",
@@ -821,7 +835,7 @@ else if (sameString(markerType, cgfMarkerAffy500)
     }
 else
     {
-    errAbort("Unknown identifier format.");
+    errAbort("Unknown identifier format. markerType=%s", markerType);
     }
 if (ok)
     return fileList;

@@ -27,6 +27,7 @@ extern struct customFactory chromGraphFactory;
 #define cgfMarkerHumanHap300 "Illumina HumanHap300 BeadChip"
 #define cgfMarkerHumanHap550 "Illumina HumanHap550 BeadChip"
 #define cgfMarkerHumanHap650 "Illumina HumanHap650 BeadChip"
+#define cgfMarkerHumanHap1M  "Illumina HumanHap1M BeadChip"
 
 #define cgfMarkerAgilentCgh244A "Agilent CGH 244A"
 
