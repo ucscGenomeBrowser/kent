@@ -20,7 +20,9 @@ errAbort(
 
 void test(char *word)
 {
-printf("%d\n", word[0]);
+FILE *f = mustOpen(word, "wb");
+float x = 1.23456;
+mustWrite(f, &x, sizeof(x));
 }
 
 int main(int argc, char *argv[], char *env[])
