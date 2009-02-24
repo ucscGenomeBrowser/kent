@@ -1026,6 +1026,26 @@ bits16 memReadBits16(char **pPt, boolean isSwapped);
 /* Read and optionally byte-swap 32 bit entity from memory buffer pointed to by 
  * *pPt, and advance *pPt past read area. */
 
+double byteSwapDouble(double a);
+/* Return byte-swapped version of a */
+
+double readDouble(FILE *f, boolean isSwapped);
+/* Read and optionally byte-swap double-precision floating point entity. */
+
+double memReadDouble(char **pPt, boolean isSwapped);
+/* Read and optionally byte-swap double-precision floating point entity
+ * from memory buffer pointed to by *pPt, and advance *pPt past read area. */
+
+float byteSwapFloat(float a);
+/* Return byte-swapped version of a */
+
+float readFloat(FILE *f, boolean isSwapped);
+/* Read and optionally byte-swap single-precision floating point entity. */
+
+float memReadFloat(char **pPt, boolean isSwapped);
+/* Read and optionally byte-swap single-precision floating point entity
+ * from memory buffer pointed to by *pPt, and advance *pPt past read area. */
+
 void removeReturns(char* dest, char* src);
 /* Removes the '\r' character from a string.
  * the source and destination strings can be the same,

@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.126 2009/02/09 02:39:31 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.127 2009/02/24 03:29:10 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -2069,6 +2069,81 @@ if (isSwapped)
 *pPt += sizeof(val);
 return val;
 }
+
+double byteSwapDouble(double a)
+/* Return byte-swapped version of a */
+{
+union {double whole; UBYTE bytes[4];} u,v;
+u.whole = a;
+v.bytes[0] = u.bytes[7];
+v.bytes[1] = u.bytes[6];
+v.bytes[2] = u.bytes[5];
+v.bytes[3] = u.bytes[4];
+v.bytes[4] = u.bytes[3];
+v.bytes[5] = u.bytes[2];
+v.bytes[6] = u.bytes[1];
+v.bytes[7] = u.bytes[0];
+return v.whole;
+}
+
+
+double readDouble(FILE *f, boolean isSwapped)
+/* Read and optionally byte-swap double-precision floating point entity. */
+{
+double val;
+mustReadOne(f, val);
+if (isSwapped)
+    val = byteSwapDouble(val);
+return val;
+}
+
+double memReadDouble(char **pPt, boolean isSwapped)
+/* Read and optionally byte-swap double-precision floating point entity
+ * from memory buffer pointed to by *pPt, and advance *pPt past read area. */
+{
+double val;
+memcpy(&val, *pPt, sizeof(val));
+if (isSwapped)
+    val = byteSwapDouble(val);
+*pPt += sizeof(val);
+return val;
+}
+
+float byteSwapFloat(float a)
+/* Return byte-swapped version of a */
+{
+union {float whole; UBYTE bytes[4];} u,v;
+u.whole = a;
+v.bytes[0] = u.bytes[3];
+v.bytes[1] = u.bytes[2];
+v.bytes[2] = u.bytes[1];
+v.bytes[3] = u.bytes[0];
+return v.whole;
+}
+
+
+float readFloat(FILE *f, boolean isSwapped)
+/* Read and optionally byte-swap single-precision floating point entity. */
+{
+float val;
+mustReadOne(f, val);
+if (isSwapped)
+    val = byteSwapFloat(val);
+return val;
+}
+
+float memReadFloat(char **pPt, boolean isSwapped)
+/* Read and optionally byte-swap single-precision floating point entity
+ * from memory buffer pointed to by *pPt, and advance *pPt past read area. */
+{
+float val;
+memcpy(&val, *pPt, sizeof(val));
+if (isSwapped)
+    val = byteSwapFloat(val);
+*pPt += sizeof(val);
+return val;
+}
+
 
 void removeReturns(char *dest, char *src)
 /* Removes the '\r' character from a string.

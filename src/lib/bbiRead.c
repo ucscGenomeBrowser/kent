@@ -52,7 +52,7 @@ struct udcFile *udc = bbi->udc = udcFileOpen(fileName, udcDefaultDir());
 /* Read magic number at head of file and use it to see if we are proper file type, and
  * see if we are byte-swapped. */
 bits32 magic;
-boolean isSwapped = bbi->isSwapped = FALSE;
+boolean isSwapped = FALSE;
 udcMustRead(udc, &magic, sizeof(magic));
 if (magic != sig)
     {
@@ -62,6 +62,7 @@ if (magic != sig)
        errAbort("%s is not a %s file", fileName, typeName);
     }
 bbi->typeSig = sig;
+bbi->isSwapped = isSwapped;
 
 /* Read rest of defined bits of header, byte swapping as needed. */
 bbi->version = udcReadBits16(udc, isSwapped);
@@ -121,14 +122,24 @@ struct fileOffsetSize *bbiOverlappingBlocks(struct bbiFile *bbi, struct cirTreeF
 struct bbiChromIdSize idSize;
 if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
     return NULL;
+if (bbi->isSwapped)
+    idSize.chromId = byteSwap32(idSize.chromId);
 if (retChromId != NULL)
     *retChromId = idSize.chromId;
 return cirTreeFindOverlappingBlocks(ctf, idSize.chromId, start, end);
 }
 
+struct chromNameCallbackContext
+/* Some stuff that the bPlusTree traverser needs for context. */
+    {
+    struct bbiChromInfo *list;		/* The list we are building. */
+    boolean isSwapped;			/* Need to byte-swap things? */
+    };
+
 static void chromNameCallback(void *context, void *key, int keySize, void *val, int valSize)
 /* Callback that captures chromInfo from bPlusTree. */
 {
+struct chromNameCallbackContext *c = context;
 struct bbiChromInfo *info;
 struct bbiChromIdSize *idSize = val;
 assert(valSize == sizeof(*idSize));
@@ -136,17 +147,23 @@ AllocVar(info);
 info->name = cloneStringZ(key, keySize);
 info->id = idSize->chromId;
 info->size = idSize->chromSize;
-struct bbiChromInfo **pList = context;
-slAddHead(pList, info);
+if (c->isSwapped)
+    {
+    info->id = byteSwap32(info->id);
+    info->size = byteSwap32(info->size);
+    }
+slAddHead(&c->list, info);
 }
 
 struct bbiChromInfo *bbiChromList(struct bbiFile *bbi)
 /* Return list of chromosomes. */
 {
-struct bbiChromInfo *list = NULL;
-bptFileTraverse(bbi->chromBpt, &list, chromNameCallback);
-slReverse(&list);
-return list;
+struct chromNameCallbackContext context;
+context.list = NULL;
+context.isSwapped = bbi->isSwapped;
+bptFileTraverse(bbi->chromBpt, &context, chromNameCallback);
+slReverse(&context.list);
+return context.list;
 }
 
 bits32 bbiChromSize(struct bbiFile *bbi, char *chrom)

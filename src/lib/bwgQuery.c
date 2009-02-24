@@ -19,7 +19,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.18 2009/02/10 22:09:37 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.19 2009/02/24 03:29:10 kent Exp $";
 
 struct bbiFile *bigWigFileOpen(char *fileName)
 /* Open up big wig file. */
@@ -126,12 +126,14 @@ struct bbiInterval *bigWigIntervalQuery(struct bbiFile *bwf, char *chrom, bits32
 	struct lm *lm)
 /* Get data for interval.  Return list allocated out of lm. */
 {
+uglyf("bigWigIntervalQuery %s %d %d.  bwf->isSwapped=%d\n", chrom, start, end, bwf->isSwapped);
 if (bwf->typeSig != bigWigSig)
    errAbort("Trying to do bigWigIntervalQuery on a non big-wig file.");
 bbiAttachUnzoomedCir(bwf);
 struct bbiInterval *el, *list = NULL;
 struct fileOffsetSize *blockList = bbiOverlappingBlocks(bwf, bwf->unzoomedCir, 
 	chrom, start, end, NULL);
+uglyf("%d in blockList\n", slCount(blockList));
 struct fileOffsetSize *block;
 struct udcFile *udc = bwf->udc;
 boolean isSwapped = bwf->isSwapped;
@@ -142,6 +144,7 @@ int i;
 struct fileOffsetSize *mergedBlocks = fileOffsetSizeMerge(blockList);
 for (block = mergedBlocks; block != NULL; block = block->next)
     {
+    uglyf("block offset %llu, size %llu\n", block->offset, block->size);
     udcSeek(udc, block->offset);
     char *blockBuf = needLargeMem(block->size);
     udcRead(udc, blockBuf, block->size);
@@ -158,7 +161,7 @@ for (block = mergedBlocks; block != NULL; block = block->next)
 		    {
 		    bits32 s = memReadBits32(&blockPt, isSwapped);
 		    bits32 e = memReadBits32(&blockPt, isSwapped);
-		    memReadOne(&blockPt, val);
+		    val = memReadFloat(&blockPt, isSwapped);
 		    if (s < start) s = start;
 		    if (e > end) e = end;
 		    if (s < e)
@@ -178,7 +181,7 @@ for (block = mergedBlocks; block != NULL; block = block->next)
 		    {
 		    bits32 s = memReadBits32(&blockPt, isSwapped);
 		    bits32 e = s + head.itemSpan;
-		    memReadOne(&blockPt, val);
+		    val = memReadFloat(&blockPt, isSwapped);
 		    if (s < start) s = start;
 		    if (e > end) e = end;
 		    if (s < e)
@@ -198,7 +201,7 @@ for (block = mergedBlocks; block != NULL; block = block->next)
 		bits32 e = s + head.itemSpan;
 		for (i=0; i<head.itemCount; ++i)
 		    {
-		    memReadOne(&blockPt, val);
+		    val = memReadFloat(&blockPt, isSwapped);
 		    bits32 clippedS = s, clippedE = e;
 		    if (clippedS < start) clippedS = start;
 		    if (clippedE > end) clippedE = end;
