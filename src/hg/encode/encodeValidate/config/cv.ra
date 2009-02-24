@@ -616,6 +616,14 @@ vendorName Santa Cruz Biotech
 vendorId sc-735
 orderUrl http://www.scbt.com/product.php?datasheet=735
 
+term TCF4
+type Antibody
+targetDescription TCF4 is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4.
+antibodyDescription Rabbit monoclonal 
+vendorName Cell Signaling Tech
+vendorId H2569S
+orderUrl http://www.cellsignal.com/products/2569.html
+
 term ZNF263
 type Antibody
 targetDescription ZNF263 (NP_005732, 201 a.a. ~ 299 a.a) partial recombinant protein with GST tag.
