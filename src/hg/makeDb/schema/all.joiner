@@ -3289,6 +3289,8 @@ tablesIgnored $sacCer
     2micron_gold
     2micron_gap
     sgdClone
+    sgdToPfam
+    yeastP2P
 
 tablesIgnored $tetNig
     gaze
