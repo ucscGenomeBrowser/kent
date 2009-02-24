@@ -12,7 +12,7 @@
 
 set go=""
 # make lists of substitutions for email addresses
-set counter=( 1 2 3 4 5 6 7 8 9 10 11 12 13 )
+set counter=( 1 2 3 4 5 6 7 8 9 10 11 12 )
 set alias=( andy belinda  brian  brooke bob  fan    jim  jing larry  mark  rachel  zach     )
 set email=( aamp giardine braney rhead  kuhn fanhsu kent jzhu larrym markd hartera jsanborn )
 
@@ -30,8 +30,8 @@ else
 endif
 
 if ( "$HOST" != "hgwdev" ) then
- echo "\n error: you must run this script on dev!\n"
- exit 1
+  echo "\n error: you must run this script on dev!\n"
+  exit 1
 endif
 
 if ( $go != "go" ) then
@@ -47,7 +47,7 @@ echo "  this is a periodic reminder from a QA cronjob.\n" >> Bfile
 hgsql -h hgwbeta -t -e "SELECT dbs, track, reviewer, sponsor, \
   qadate FROM pushQ WHERE priority = 'B' ORDER BY qadate" qapushq >> Bfile
 
-# get lst of all developers and QA involved in B-queue tracks
+# get list of all developers and QA involved in B-queue tracks
 set contacts=`hgsql -N -h hgwbeta -e "SELECT sponsor, reviewer, sponsor FROM pushQ \
   WHERE priority = 'B'" qapushq`
 # clean up list to get unique names
@@ -74,7 +74,9 @@ foreach i ( $counter )
 end
 
 # set contacts="ann kuhn pauline rhead kayla"
+# set contacts="pauline rhead ann kayla"
 
+# cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "test. ignore  " $USER
 cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "B-queue alert" $USER
 rm Bfile
 
