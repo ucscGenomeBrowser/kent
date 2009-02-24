@@ -26671,7 +26671,7 @@ hgsql hg18 -N -e 'select * from omimToKnownCanonical' |sort -u >j.tmp
 hgsql hg18 -N -e \
 'select n.name, c.transcript from  omimGeneNR n, knownCanonical c,
 knownToRefSeq r, refLink l, knownIsoforms i where l.mrnaAcc=r.value and
-binary(n.name)=l.omimId and c.transcript=r.name and c.clusterId=i.clusterId
+binary(n.name)=l.omimId and i.transcript=r.name and c.clusterId=i.clusterId
 and omimId <>0 '\
 |sort -u >omimToKnownGeneNR.tab
 cat j.tmp omimToKnownGeneNR.tab |sort -u >omimToKnownCanonicalNew.tab
