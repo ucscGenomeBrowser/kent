@@ -1,5 +1,5 @@
 // Javascript for use in hgTracks CGI
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.18 2009/01/21 00:12:40 tdreszer Exp $
+// $Header: /projects/compbio/cvsroot/kent/src/hg/js/hgTracks.js,v 1.19 2009/02/24 22:47:21 larrym Exp $
 
 var debug = false;
 var originalPosition;
@@ -92,7 +92,13 @@ function updatePosition(img, selection, singleClick)
     }
     if(singleClick) {
 	var newStart = (winStart + 1) + (startDelta - Math.floor(newWinWidth / 2));
-	var newEnd = (winStart + 1) + (startDelta + Math.floor(newWinWidth / 2));
+        if(newStart < 1) {
+            newStart = 1;
+            newEnd = newWinWidth;
+        } else {
+            // hgTracks gracefully handles overflow past the end of the chrom, so don't worry about that.
+            newEnd = (winStart + 1) + (startDelta + Math.floor(newWinWidth / 2));
+        }
 	newPos = chromName + ":" + newStart + "-" + newEnd;
 	newSize = newEnd - newStart + 1;
     } else {
