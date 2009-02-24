@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.217 2009/02/20 23:49:03 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.218 2009/02/24 22:34:08 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2856,7 +2856,7 @@ return(found);
 char *canonicalRangeExp = 
 		     "^([[:alnum:]._\\-]+)"
 		     "[[:space:]]*:[[:space:]]*"
-		     "([0-9,]+)"
+		     "([-0-9,]+)"
 		     "[[:space:]]*-[[:space:]]*"
 		     "([0-9,]+)$";
 char *gbrowserRangeExp = 
