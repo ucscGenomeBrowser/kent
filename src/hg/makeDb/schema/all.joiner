@@ -1123,8 +1123,10 @@ identifier estAccession typeOf=estOrMrnaAccession
 identifier nativeEstAccession typeOf=estAccession
 "Genbank Native (same organism as database) EST accession"
     $gbd.all_est.qName dupeOk
-    $gbd.est.qName $split full 
-    $gbd,!caeJap1.intronEst.qName $split
+    $gbd,!sacCer2.est.qName $split full 
+    $gbd,!sacCer2,!caeJap1.intronEst.qName $split
+    sacCer2.est.qName splitPrefix=%\_ full 
+    sacCer2.intronEst.qName splitPrefix=%\_
     caeJap1.intronEst.qName 
     $gbd.estOrientInfo.name full 
 
@@ -1267,8 +1269,6 @@ identifier knownGeneId dependency
     $kgDb.kgTxInfo.name full
     $kgDb.knownBlastTab.query
     $kgDb.knownBlastTab.target
-    $sacCer.knownBlastTab.query
-    $sacCer.knownBlastTab.target
     $kgDb.knownCanonical.transcript 
     $kgDb.knownGeneMrna.name full
     $kgDb,!hg18,!mm9.knownGeneLink.name
@@ -1625,7 +1625,7 @@ identifier flyBaseGeneId external=FlyBase
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
     $dm,!dm1.flyBase2004Xref.fbgn minCheck=0.90
     $dm,!dm1.pscreen.geneIds comma minCheck=0.95
-    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!sacCer2.dmBlastTab.target,!sacCer1.dmBlastTab.target minCheck=0.90
+    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!sacCer1,!sacCer2.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
@@ -1694,7 +1694,7 @@ identifier flyBase2004IdDm external=FlyBase
     $dm,!dm1.flyBaseToDescription.name
     $dm,!dm1.flyP2P.query minCheck=0.98
     $dm,!dm1.flyP2P.target minCheck=0.98
-    hg17,hg18,danRer3,mm7,mm8,mm9,rn3,rn4,ce2,sacCer1.dmBlastTab.target,sacCer2.dmBlastTab.target minCheck=0.90
+    hg17,hg18,danRer3,mm7,mm8,mm9,rn3,rn4,ce2,sacCer1,sacCer2.dmBlastTab.target minCheck=0.90
 
 identifier flyBase2004IdDp external=FlyBase
 "FlyBase Xref as of 2004 for dp3"
@@ -1721,6 +1721,7 @@ identifier sgdCodingId typeOf=sgdId dependency
     $sacCer.hgBlastTab.query minCheck=0.999
     $sacCer.mmBlastTab.query
     $sacCer.rnBlastTab.query
+    sacCer2.knownBlastTab.query
     $sacCer.choExpDistance.target minCheck=0.60
     $sacCer.choExpDistance.query minCheck=0.60
     $sacCer.sgdCanonical.transcript
@@ -1739,7 +1740,7 @@ identifier sgdCodingId typeOf=sgdId dependency
 
 identifier sgdNoncodingId typeOf=sgdId
 "Sacchromyces Genome Database Noncoding/Dubious feature ID"
-    $sacCer.sgdOther.name
+    $sacCer.sgdOther.name dupeOk
     $sacCer.sgdOtherDescription.name
 
 # RGD Family Identifiers
@@ -2779,7 +2780,8 @@ type blastTab
     $gbd.knownBlastTab
     $ce.sangerBlastTab
     dm1.bdgpBlastTab
-    $sacCer.sgdBlastTab
+    sacCer1.sgdBlastTab
+    sacCer2.knownBlastTab
 
 type knownCanonical
     $gbd.knownCanonical
