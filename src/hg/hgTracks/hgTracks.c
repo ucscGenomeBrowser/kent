@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1554 2009/02/11 00:49:43 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1555 2009/02/24 20:52:52 angie Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -641,9 +641,6 @@ else
 	if (sameString(psl->tName, chromName) && psl->tStart < winEnd &&
 	    psl->tEnd > winStart)
 	    {
-	    /* Collapse the 2-block PSL into one block for display: */
-	    psl->blockCount = 1;
-	    psl->blockSizes[0] = psl->tEnd - psl->tStart;
 	    struct linkedFeatures *lf =
 		lfFromPslx(psl, 1, FALSE, FALSE, tg);
 	    safecpy(lf->name, sizeof(lf->name), "");
