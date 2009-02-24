@@ -1,4 +1,4 @@
-# Data Agreement File for RNA-seq project $Revision: 1.1 $
+# Data Agreement File for RNA-seq project $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -24,13 +24,41 @@ type             wig
 hasReplicates    yes
 required         no
 
+view             Splices
+longLabelPrefix  Caltech RNA-Seq Map Algorithm Splice Alignments
+type             bed 12
+hasReplicates    yes 
+required         no
+
 view             Alignments
 longLabelPrefix  Caltech RNA-Seq Map Algorithm Alignments
 type             bed 12
-hasReplicates    no
+hasReplicates    yes
+required         no
+
+view             PairedAligns
+longLabelPrefix  Caltech RNA-Seq Map Algorithm Paired Alignments
+type             bed 12
+hasReplicates    yes
 required         no
 
 view             RawData
-type             fastq
+type             fasta
 hasReplicates    yes
 required         no
+
+view             RawData2
+type             rpkm
+hasReplicates    yes
+required         no
+
+view             RawData3
+type             bowtie
+hasReplicates    yes
+required         no
+
+view             RawData4
+type             psl
+hasReplicates    yes
+required         no
+

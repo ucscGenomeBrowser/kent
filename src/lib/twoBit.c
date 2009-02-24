@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.26 2009/01/09 10:15:39 kent Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.27 2009/02/24 01:50:38 kent Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -312,7 +312,7 @@ struct twoBitFile *twoBitOpen(char *fileName)
 {
 struct twoBitFile *tbf = twoBitOpenReadHeader(fileName);
 struct twoBitIndex *index;
-boolean isSwapped = tbf->isSwapped = FALSE;
+boolean isSwapped = tbf->isSwapped;
 int i;
 struct hash *hash;
 FILE *f = tbf->f;

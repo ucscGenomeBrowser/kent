@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: ctd.c,v 1.8 2008/09/03 19:18:49 markd Exp $";
+static char const rcsid[] = "$Id: ctd.c,v 1.9 2009/02/13 02:38:27 markd Exp $";
 
 static boolean ctdExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -77,8 +77,8 @@ while (row != NULL)
     
     printf("<LI><A HREF=\"http://ctd.mdibl.org/detail.go?type=chem&acc=%s\" target=_blank>", 
     	   chemId);
-    printf("%s</B></A>\n", chemId);
-    printf("%s\n", chemName);fflush(stdout);
+    printf("%s</A>\n", chemId);
+    printf("%s\n", chemName);
     printf("</LI>");	
     chemCnt++;
     row = sqlNextRow(sr);

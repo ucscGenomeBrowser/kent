@@ -126,7 +126,7 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
-static char const rcsid[] = "$Id: simpleTracks.c,v 1.60 2009/02/09 19:44:15 tdreszer Exp $";
+static char const rcsid[] = "$Id: simpleTracks.c,v 1.63 2009/02/23 22:57:30 angie Exp $";
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
@@ -9329,6 +9329,48 @@ linkedFeaturesMethods(tg);
 tg->itemName = kiddEichlerItemName;
 }
 
+boolean dgvFilter(struct track *tg, void *item)
+/* For use with filterItems -- return TRUE if item's PubMed ID is in the list
+ * specified by the user. */
+{
+static struct slName *filterPmIds = NULL;
+struct linkedFeatures *lf = item;
+struct sqlConnection *conn = hAllocConn(database);
+char query[512];
+safef(query, sizeof(query), "select pubmedId from %s where name = '%s'",
+      tg->tdb->tableName, lf->name);
+char buf[32];
+char *pmId = sqlQuickQuery(conn, query, buf, sizeof(buf));
+hFreeConn(&conn);
+if (filterPmIds == NULL)
+    {
+    char cartVarName[256];
+    safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterPmId", tg->tdb->tableName);
+    filterPmIds = cartOptionalSlNameList(cart, cartVarName);
+    }
+return slNameInList(filterPmIds, pmId);
+}
+
+void loadDgv(struct track *tg)
+/* Load Database of Genomic Variants items, filtering by pubmedId if specified. */
+{
+loadBed9(tg);
+char cartVarName[256];
+safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterType", tg->tdb->tableName);
+char *incOrExc = cartUsualString(cart, cartVarName, NULL);
+safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterPmId", tg->tdb->tableName);
+struct slName *filterPmIds = cartOptionalSlNameList(cart, cartVarName);
+if (isNotEmpty(incOrExc) && filterPmIds != NULL)
+    filterItems(tg, dgvFilter, incOrExc);
+}
+
+void dgvMethods(struct track *tg)
+/* Database of Genomic Variants. */
+{
+linkedFeaturesMethods(tg);
+tg->loadItems = loadDgv;
+}
+
 void loadGenePred(struct track *tg)
 /* Convert gene pred in window to linked feature. */
 {
@@ -10425,7 +10467,7 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	{
 	lastTime = clock1000();
 	if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
-	    errAbort("Error: Null pointer subtrack->loadItems in compositeLoad() for track(%s) subtrack(%s)\n", track->mapName, subtrack->mapName);
+	    errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (is this a new track 'type'?)\n", subtrack->mapName, track->mapName);
         subtrack->loadItems(subtrack);
 	if (measureTiming)
 	    {
@@ -10985,6 +11027,7 @@ retroRegisterTrackHandlers();
 registerTrackHandler("retroposons", dbRIPMethods);
 registerTrackHandler("kiddEichlerDisc", kiddEichlerMethods);
 registerTrackHandler("kiddEichlerValid", kiddEichlerMethods);
+registerTrackHandler("dgv", dgvMethods);
 
 registerTrackHandler("hapmapSnps", hapmapMethods);
 registerTrackHandler("omicia", omiciaMethods);

@@ -10,7 +10,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.28 2008/09/23 17:33:07 hiram Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.29 2009/02/13 02:38:28 markd Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -328,7 +328,7 @@ hPrintf("</TR>\n<TR>");
 for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
     {
     char *id = otherOrgId(otherOrg, conn, geneId);
-    otherOrgPrintLink(otherOrg, "Gene Details", "&nbsp", TRUE,
+    otherOrgPrintLink(otherOrg, "Gene Details", "&nbsp;", TRUE,
     	id, otherOrg->geneUrl);
     freeMem(id);
     }

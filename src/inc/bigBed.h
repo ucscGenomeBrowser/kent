@@ -50,6 +50,8 @@ void bigBedFileCreate(
 	char *chromSizes, /* Two column tab-separated file: <chromosome> <size>. */
 	int blockSize,	  /* Number of items to bundle in r-tree.  1024 is good. */
 	int itemsPerSlot, /* Number of items in lowest level of tree.  64 is good. */
+	bits16 definedFieldCount,  /* Number of defined bed fields - 3-16 or so.  0 means all fields
+				    * are the defined bed ones. */
 	char *outName);   /* BigBed output file name. */
 /* Convert tab-separated bed file to binary indexed, zoomed bigBed version. */
 

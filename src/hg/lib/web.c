@@ -16,7 +16,7 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: web.c,v 1.157 2009/02/03 22:40:37 hiram Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.158 2009/02/13 02:38:27 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -1104,6 +1104,15 @@ printf("<TD BGCOLOR=\"#"HG_COL_TABLE_LABEL"\"");
 if (colSpan > 1)
     printf(" COLSPAN=%d", colSpan);
 printf("><FONT COLOR=\"#FFFFFF\"><B>%s</B></FONT></TD>", label);
+}
+
+void webPrintWideCenteredLabelCell(char *label, int colSpan)
+/* Print label cell over multiple columns in our colors and centered. */
+{
+printf("<TD BGCOLOR=\"#"HG_COL_TABLE_LABEL"\"");
+if (colSpan > 1)
+    printf(" COLSPAN=%d", colSpan);
+printf("><CENTER><FONT COLOR=\"#FFFFFF\"><B>%s</B></FONT></CENTER></TD>", label);
 }
 
 void webPrintLabelCell(char *label)

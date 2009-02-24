@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.124 2008/09/03 19:18:47 markd Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.125 2009/02/18 22:45:09 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -273,7 +273,7 @@ else if (pslOut)
 	pslxWriteHead(stdout, qType, tType);
     for (psl = pslList; psl != NULL; psl = psl->next)
 	pslTabOut(psl, stdout);
-    printf("</TT></PRE>");
+    printf("</PRE></TT>");
     }
 else
     {
@@ -297,7 +297,7 @@ else
 	    skipChr(psl->tName), psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
 	}
-    printf("</TT></PRE>");
+    printf("</PRE></TT>");
     }
 pslFreeList(&pslList);
 
@@ -538,6 +538,7 @@ pslxWriteHead(f, qType, tType);
 /* Loop through each sequence. */
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
+    printf(" "); fflush(stdout);  /* prevent apache cgi timeout by outputting something */
     hgBotDelay();
     oneSize = realSeqSize(seq, !isTx);
     if (++seqCount > maxSeqCount)

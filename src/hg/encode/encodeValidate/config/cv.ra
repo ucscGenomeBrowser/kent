@@ -616,6 +616,14 @@ vendorName Santa Cruz Biotech
 vendorId sc-735
 orderUrl http://www.scbt.com/product.php?datasheet=735
 
+term ZNF263
+type Antibody
+targetDescription ZNF263 (NP_005732, 201 a.a. ~ 299 a.a) partial recombinant protein with GST tag.
+antibodyDescription Mouse polyclonal
+vendorName Novus Biologicals
+vendorId H00010127-A01
+orderUrl http://www.novusbio.com/data_sheet/index/H00010127-A01
+
 # ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 term T7Tag
 type ripTgtProtein
@@ -689,7 +697,15 @@ vendorId MA156353 lot 7308-S2(Nov2008)
 orderUrl http://www.bioreagents.com/
 
 # mapAlgorithm : Comparing map algorithms
-term erange3.0beta
+term NA
+type mapAlgorithm
+description No algorithm applicable
+
+term erng3
+type mapAlgorithm
+description erange v3.0
+
+term erng3b
 type mapAlgorithm
 description erange v3.0beta
 
@@ -697,9 +713,13 @@ term blat34
 type mapAlgorithm
 description blat v34
 
-term bowtie0.98
+term bow098
 type mapAlgorithm
-description bowtie v0.98
+description bowtie v0.981
+
+term bowblt1
+type mapAlgorithm
+description bowtie v0.981 followed by blat v34
 
 # fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 term 1k
@@ -871,3 +891,67 @@ description Control signal from Naked DNA.
 term Reference_Genome
 type control
 description The reference human genome is currently hg18 - March 2006 (NCBI Build 36.1).
+
+term HTC-116
+type Cell Line
+description colorectal carcinoma
+
+term H9ES
+type Cell Line
+description H9 human ES cells
+tier 3
+
+term H9ES-E
+type Cell Line
+description H9 Endoderm
+tier 3
+
+term H9ES-AFP+
+type Cell Line
+description H9 AFP+ human ESCells-derived
+tier 3
+
+term H9ES-AFP-
+type Cell Line
+description H9 AFP- human ESCells-derived
+tier 3
+
+term H9ES-EB
+type Cell Line
+description H9 Embryoid Bodies
+tier 3
+
+term H9ES-EBD
+type Cell Line
+description H9 EmbryoidBody-Derived
+tier 3
+
+term H9ES-CM
+type Cell Line
+description H9 Conditioned Medium
+tier 3
+
+term BG02ES
+type Cell Line
+description H9 Conditioned Medium
+tier 3
+
+term BG02ES-EBD
+type Cell Line
+description BG02 EmbryoidBody-Derived
+tier 3
+
+term HFL11W
+type Cell Line
+description Human Fetal Liver 11 weeks
+tier 3
+
+term HFL24W
+type Cell Line
+description Human Fetal Liver 24 weeks
+tier 3
+
+term HAL
+type Cell Line
+description Human Adult Liver
+tier 3

@@ -215,7 +215,7 @@ longLabel ENCODE Histone Modifications by Broad Institute ChIP-seq
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878_(Tier1) HUVEC=HUVEC_(Tier2) K562=K562_(Tier1) Kera=Keratinocyte_(Tier2)
-subGroup3 factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2(b)=Pol2(b) zCTRL=Control
+subGroup3 factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2b=Pol2(b) zCTRL=Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
 controlledVocabulary encode/cv.ra cellType=GM12878,HUVEC,Keratinocyte,K562 factor
@@ -225,6 +225,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
+filterPvalQval on
 settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 
     track wgEncodeBroadChipSeqPeaksGm12878Ctcf
@@ -1319,7 +1320,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC Pol2(b) Pk
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in HUVEC cells)
-    subGroups view=Peaks factor=Pol2(b) cellType=HUVEC
+    subGroups view=Peaks factor=Pol2b cellType=HUVEC
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -1332,7 +1333,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC Pol2(b) Sig
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in HUVEC cells)
-    subGroups view=Signal factor=Pol2(b) cellType=HUVEC
+    subGroups view=Signal factor=Pol2b cellType=HUVEC
     type wig 0.00 8889.75
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -1346,7 +1347,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC Pol2(b) Raw 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in HUVEC cells)
-    subGroups view=zRAW factor=Pol2(b) cellType=HUVEC
+    subGroups view=zRAW factor=Pol2b cellType=HUVEC
     type wig 1.00 6156.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -1360,7 +1361,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel HUVEC Pol2(b) Raw 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in HUVEC cells)
-    subGroups view=zRAW factor=Pol2(b) cellType=HUVEC
+    subGroups view=zRAW factor=Pol2b cellType=HUVEC
     type wig 1.00 4077.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -1966,7 +1967,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) Pk
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in K562 cells)
-    subGroups view=Peaks factor=Pol2(b) cellType=K562
+    subGroups view=Peaks factor=Pol2b cellType=K562
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -1979,7 +1980,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) Sig
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in K562 cells)
-    subGroups view=Signal factor=Pol2(b) cellType=K562
+    subGroups view=Signal factor=Pol2b cellType=K562
     type wig 0.00 17110.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -1993,7 +1994,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) Raw 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in K562 cells)
-    subGroups view=zRAW factor=Pol2(b) cellType=K562
+    subGroups view=zRAW factor=Pol2b cellType=K562
     type wig 1.00 6599.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -2007,7 +2008,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel K562 Pol2(b) Raw 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in K562 cells)
-    subGroups view=zRAW factor=Pol2(b) cellType=K562
+    subGroups view=zRAW factor=Pol2b cellType=K562
     type wig 1.00 13248.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-06
@@ -2613,7 +2614,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera Pol2(b) Pk
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in Keratin cells)
-    subGroups view=Peaks factor=Pol2(b) cellType=Kera
+    subGroups view=Peaks factor=Pol2b cellType=Kera
     type broadPeak
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
@@ -2626,7 +2627,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera Pol2(b) Sig
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in Keratin cells)
-    subGroups view=Signal factor=Pol2(b) cellType=Kera
+    subGroups view=Signal factor=Pol2b cellType=Kera
     type wig 0.00 5604.25
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
@@ -2640,7 +2641,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera Pol2(b) Raw 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in Keratin cells)
-    subGroups view=zRAW factor=Pol2(b) cellType=Kera
+    subGroups view=zRAW factor=Pol2b cellType=Kera
     type wig 1.00 2360.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
@@ -2654,7 +2655,7 @@ settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,view
     subTrack wgEncodeBroadChipSeq
     shortLabel Kera Pol2(b) Raw 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in Keratin cells)
-    subGroups view=zRAW factor=Pol2(b) cellType=Kera
+    subGroups view=zRAW factor=Pol2b cellType=Kera
     type wig 1.00 1938.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-07
@@ -2722,6 +2723,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense rRAW=hide
 controlledVocabulary encode/cv.ra cellType=GM12878,K562,Reference_Genome EXP=CTCF,Input
 noInherit on
+filterPvalQval on
 settingsByView Peaks:configurable=on,useScore=0 Signal:configurable=on,viewLimits=0:0.02,viewLimitsMax=0:40,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 SignalBO:configurable=on,viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 rRAW:configurable=ff,defaultViewLimits=0:1,viewLimits=0:112,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 useScore 0
 priority 0
@@ -3220,6 +3222,7 @@ track wgEncodeNhgriBip
 release alpha
 shortLabel NHGRI BiP
 longLabel ENCODE Elnitski Bi-directional Promoters
+visibility hide
 group regulation
 type bed 8 +
 dateSubmitted 2009-01-27
@@ -3227,7 +3230,7 @@ dateUnrestricted 2009-10-27
 dataVersion ENCODE Feb 2009 Freeze
 priority 0
 scoreFilterByRange on
-cell Reference_Genome
+compareGenomeLinks panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) mm9=Mouse_(July_2007) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
 wgEncode 1
 
 
@@ -3315,8 +3318,8 @@ longLabel ENCODE RIKEN RNA Subcellular Localization by CAGE Tags
 group expression
 subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal Alignments=Alignments
 subGroup2 cellType Cell_Line K562=K562 prostate=Prostate
-subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus
-subGroup4 rnaExtract RNA_Extract longNonPolyA=longNonPolyA longPolyA=longPolyA
+subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus chromatin=Chromatin nucleoplasm=Nucleoplasm polysome=Polysome nucleolus=Nucleolus
+subGroup4 rnaExtract RNA_Extract longNonPolyA=longNonPolyA longPolyA=longPolyA total=Total
 dimensions dimensionY=rnaExtract dimensionX=cellType dimensionZ=localization
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 dragAndDrop subTracks
@@ -3711,6 +3714,370 @@ wgEncode 1
     localization nucleus
     cell K562
 
+    track wgEncodeRikenCagePlusClustersK562PolysomeLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 polysome 
+    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longPolyA in K562 cell polysome using )
+    subGroups view=PlusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
+    type bedGraph 4
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 26
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization polysome
+    cell K562
+
+    track wgEncodeRikenCageMinusClustersK562PolysomeLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 polysome 
+    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longPolyA in K562 cell polysome using )
+    subGroups view=MinusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
+    type bedGraph 4
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 27
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization polysome
+    cell K562
+
+    track wgEncodeRikenCagePlusClustersK562NucleolusTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleolus 
+    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 cell nucleolus using )
+    subGroups view=PlusClusters cellType=K562 localization=nucleolus rnaExtract=total
+    type bedGraph 4
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 26
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization nucleolus
+    cell K562
+
+    track wgEncodeRikenCageMinusClustersK562NucleolusTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleolus 
+    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 cell nucleolus using )
+    subGroups view=MinusClusters cellType=K562 localization=nucleolus rnaExtract=total
+    type bedGraph 4
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 27
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization nucleolus
+    cell K562
+
+    track wgEncodeRikenCagePlusClustersK562NucleoplasmTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleoplasm 
+    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 cell nucleoplasm using )
+    subGroups view=PlusClusters cellType=K562 localization=nucleoplasm rnaExtract=total
+    type bedGraph 4
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 26
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization nucleoplasm
+    cell K562
+
+    track wgEncodeRikenCageMinusClustersK562NucleoplasmTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleoplasm 
+    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 cell nucleoplasm using )
+    subGroups view=MinusClusters cellType=K562 localization=nucleoplasm rnaExtract=total
+    type bedGraph 4
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 27
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization nucleoplasm
+    cell K562
+
+    track wgEncodeRikenCagePlusClustersK562ChromatinTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 chromatin 
+    longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 cell chromatin using )
+    subGroups view=PlusClusters cellType=K562 localization=chromatin rnaExtract=total
+    type bedGraph 4
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 26
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization chromatin
+    cell K562
+
+    track wgEncodeRikenCageMinusClustersK562ChromatinTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 chromatin 
+    longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 cell chromatin using )
+    subGroups view=MinusClusters cellType=K562 localization=chromatin rnaExtract=total
+    type bedGraph 4
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 27
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization chromatin
+    cell K562
+
+    track wgEncodeRikenCageAlignmentsK562PolysomeLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 polysome 
+    longLabel ENCODE RIKEN CAGE Tags (longPolyA in K562 cell polysome using )
+    subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
+    type bed 6
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 30
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization polysome
+    cell K562
+
+    track wgEncodeRikenCageAlignmentsK562NucleolusTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleolus 
+    longLabel ENCODE RIKEN CAGE Tags (total in K562 cell nucleolus using )
+    subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=total
+    type bed 6
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 30
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization nucleolus
+    cell K562
+
+    track wgEncodeRikenCageAlignmentsK562NucleoplasmTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleoplasm 
+    longLabel ENCODE RIKEN CAGE Tags (total in K562 cell nucleoplasm using )
+    subGroups view=Alignments cellType=K562 localization=nucleoplasm rnaExtract=total
+    type bed 6
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 30
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization nucleoplasm
+    cell K562
+
+    track wgEncodeRikenCageAlignmentsK562ChromatinTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 chromatin 
+    longLabel ENCODE RIKEN CAGE Tags (total in K562 cell chromatin using )
+    subGroups view=Alignments cellType=K562 localization=chromatin rnaExtract=total
+    type bed 6
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 30
+    noInherit on
+    configurable on
+    rnaExtract total
+    localization chromatin
+    cell K562
+
+    track wgEncodeRikenCagePlusRawSignalK562ChromatinTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 chromatin  PlusRaw
+    longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell chromatin using )
+    subGroups view=PlusRawSignal cellType=K562 localization=chromatin rnaExtract=total
+    type wig 1.00 1042.00
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 28
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract total
+    localization chromatin
+    cell K562
+
+    track wgEncodeRikenCageMinusRawSignalK562ChromatinTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 chromatin  MinusRaw
+    longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell chromatin using )
+    subGroups view=MinusRawSignal cellType=K562 localization=chromatin rnaExtract=total
+    type wig 1.00 752.00
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 29
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract total
+    localization chromatin
+    cell K562
+
+    track wgEncodeRikenCagePlusRawSignalK562PolysomeLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 polysome  PlusRaw
+    longLabel ENCODE RIKEN CAGE Plus Raw Signal (longPolyA in K562 cell polysome using )
+    subGroups view=PlusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
+    type wig 1.00 1588.00
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 28
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization polysome
+    cell K562
+
+    track wgEncodeRikenCageMinusRawSignalK562PolysomeLongpolya
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel longPolyA K562 polysome  MinusRaw
+    longLabel ENCODE RIKEN CAGE Minus Raw Signal (longPolyA in K562 cell polysome using )
+    subGroups view=MinusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
+    type wig 1.00 954.00
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 29
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization polysome
+    cell K562
+
+    track wgEncodeRikenCagePlusRawSignalK562NucleoplasmTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleoplasm  PlusRaw
+    longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell nucleoplasm using )
+    subGroups view=PlusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
+    type wig 1.00 698.00
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 28
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract total
+    localization nucleoplasm
+    cell K562
+
+    track wgEncodeRikenCageMinusRawSignalK562NucleoplasmTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleoplasm  MinusRaw
+    longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell nucleoplasm using )
+    subGroups view=MinusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
+    type wig 1.00 397.00
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 29
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract total
+    localization nucleoplasm
+    cell K562
+
+    track wgEncodeRikenCagePlusRawSignalK562NucleolusTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleolus  PlusRaw
+    longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell nucleolus using )
+    subGroups view=PlusRawSignal cellType=K562 localization=nucleolus rnaExtract=total
+    type wig 1.00 1389.00
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 28
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract total
+    localization nucleolus
+    cell K562
+
+    track wgEncodeRikenCageMinusRawSignalK562NucleolusTotal
+    release alpha
+    subTrack wgEncodeRikenCage
+    shortLabel total K562 nucleolus  MinusRaw
+    longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell nucleolus using )
+    subGroups view=MinusRawSignal cellType=K562 localization=nucleolus rnaExtract=total
+    type wig 1.00 778.00
+    dateSubmitted 2009-02-19
+    dateUnrestricted 2009-11-19
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 29
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract total
+    localization nucleolus
+    cell K562
+
 
 # U. Washington DNAse-seq (wrangler: mikep)
 
@@ -3726,6 +4093,7 @@ sortOrder cellType=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Hotspots=hide Peaks=hide RawSignal=hide
 noInherit on
+filterPvalQval on
 controlledVocabulary encode/cv.ra cellType=GM06990,K562,HeLa-S3,HepG2,SK-N-SH(+RA),Th1
 settingsByView Hotspots:configurable=on Peaks:configurable=on RawSignal:configurable=on,viewLimits=1:10,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
@@ -4142,7 +4510,7 @@ group expression
 subGroup1 view Views Transfrags=Transfrags FilteredTransfrags=FilteredTransfrags RawSignal=RawSignal FilteredRawSignal=FilteredRawSignal
 subGroup2 cellType Cell_Line GM12878=GM12878_(Tier1) K562=K562_(Tier1) prostate=Prostate
 subGroup3 localization Localization cell=Cell nucleus=Nucleus cytosol=Cytosol polysome=Polysome chromatin=Chromatin nucleolus=Nucleolus nucleoplasm=Nucleoplasm
-subGroup4 rnaExtract RnaExtract longNonPolyA=longNonPolyA longPolyA=longPolyA total=total
+subGroup4 rnaExtract RnaExtract longNonPolyA=LongNonPolyA longPolyA=LongPolyA total=Total
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=GM12878,K562,prostate localization rnaExtract
@@ -5112,13 +5480,14 @@ useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878_(Tier_1) HEK293b=HEK293(b) HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg K562=K562_(Tier_1) NB4=NB4
-subGroup3 factor Antibody Max=Max NF-E2=NF-E2 Pol2=Pol2 STAT1=STAT1 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input zLarge=Large_Fragment zMNase=MNase zMouseIG=Mouse_IgG zNaked=Naked_DNA
+subGroup3 factor Antibody Max=Max NF-E2=NF-E2 Pol2=Pol2 STAT1=STAT1 ZNF263=ZNF263 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input zLarge=Large_Fragment zMNase=MNase zMouseIG=Mouse_IgG zNaked=Naked_DNA
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder view=+ factor=+ cellType=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
 controlledVocabulary encode/cv.ra cellType=GM12878,HEK293(b),HeLa-S3_IFNg,HeLa-S3,K562,Max,NB4,NF-E2 factor
 noInherit on
+filterPvalQval on
 settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:configurable=off,viewLimits=0:15,viewLimitsMax=0:14648,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 wgEncode 1
@@ -5958,6 +6327,61 @@ wgEncode 1
     cell K562
     antibody Pol2
 
+    track wgEncodeYaleChIPseqPeaksK562Znf263
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Z263 Pk
+    longLabel ENCODE Yale ChIP-Seq Peaks (ZNF263 in K562 cells)
+    subGroups view=Peaks factor=ZNF263 cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-02-11
+    dateUnrestricted 2009-11-11
+    dataVersion ENCODE Feb 2009 Freeze
+    cell K562
+    antibody ZNF263
+
+    track wgEncodeYaleChIPseqSignalK562Znf263
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Z263 Sig
+    longLabel ENCODE Yale ChIP-Seq Signal (ZNF263 in K562 cells)
+    subGroups view=Signal factor=ZNF263 cellType=K562
+    type wig 0.00 2435.00
+    dateSubmitted 2009-02-11
+    dateUnrestricted 2009-11-11
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell K562
+    antibody ZNF263
+
+    track wgEncodeYaleChIPseqRawSignalRep1K562Znf263
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Z263 Raw1
+    longLabel ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (ZNF263 in K562 cells)
+    subGroups view=zRAW factor=ZNF263 cellType=K562
+    type wig 1.00 1685.00
+    dateSubmitted 2009-02-11
+    dateUnrestricted 2009-11-11
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell K562
+    antibody ZNF263
+
+    track wgEncodeYaleChIPseqRawSignalRep2K562Znf263
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Z263 Raw2
+    longLabel ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (ZNF263 in K562 cells)
+    subGroups view=zRAW factor=ZNF263 cellType=K562
+    type wig 1.00 1799.00
+    dateSubmitted 2009-02-11
+    dateUnrestricted 2009-11-11
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell K562
+    antibody ZNF263
+
     track wgEncodeYaleChIPseqPeaksK562Cfos
     release alpha
     subTrack wgEncodeYaleChIPseq
@@ -6280,6 +6704,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide RawSignal=dense
 controlledVocabulary encode/cv.ra cellType=GM12878,K562,PFSK-1,SK-N-MC factor
 noInherit on
+filterPvalQval on
 settingsByView Peaks:configurable=on,minScore=0 RawSignal:configurable=off,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3
@@ -7038,7 +7463,7 @@ shortLabel GIS PET Loc
 longLabel ENCODE GIS Subcellular RNA Localization by Paired End diTag Sequencing
 group expression
 subGroup1 view Views Tags=Tags PlusRawSignal=PlusRawSignal MinusRawSignal=MinusRawSignal Alignments=Alignments
-subGroup2 cellType Cell_Line K562=K562_(Tier1) prostate=Prostate
+subGroup2 cellType Cell_Line K562=K562_(Tier1) GM12878=GM12878_(Tier1) prostate=Prostate
 subGroup3 localization Localization cytosol=Cytosol cell=Cell polysome=Polysome nucleus=Nucleus
 subGroup4 rnaExtract RnaExtract longPolyA=longPolyA
 subGroup4 rnaExtract RnaExtract longPolyA=longPolyA
@@ -7116,7 +7541,7 @@ wgEncode 1
     longLabel ENCODE GIS PET Alignments (longPolyA in prostate cell cell)
     subGroups view=Alignments cellType=prostate localization=cell rnaExtract=longPolyA
     type bed 6
-	#type		pairedTagAlign
+	#MJP type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
     dateUnrestricted 2009-09-03
@@ -7131,7 +7556,7 @@ wgEncode 1
     longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell cytosol)
     subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
     type bed 6
-	#type		pairedTagAlign
+	#MJP type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
     dateUnrestricted 2009-09-03
@@ -7146,7 +7571,7 @@ wgEncode 1
     longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell nucleus)
     subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA
     type bed 6
-	#type		pairedTagAlign
+	#MJP type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
     dateUnrestricted 2009-09-03
@@ -7161,7 +7586,7 @@ wgEncode 1
     longLabel ENCODE GIS PET Alignments (longPolyA in K562 cell polysome)
     subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
     type bed 6
-	#type		pairedTagAlign
+	#MJP type		pairedTagAlign
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-03
     dateUnrestricted 2009-09-03
@@ -7289,6 +7714,128 @@ wgEncode 1
     localization nucleus
     cell K562
 
+    track wgEncodeGisPetAlignmentsGm12878NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet
+    shortLabel longPolyA GM12878 nucleus 
+    longLabel ENCODE GIS PET Alignments (longPolyA in GM12878 cell nucleus using )
+    subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longPolyA
+    type bed 6
+    # MJP: FIX WHEN THIS IS IMPLEMENTED: type pairedTagAlign
+    dateSubmitted 2009-02-16
+    dateUnrestricted 2009-11-16
+    dataVersion ENCODE Feb 2009 Freeze
+    accession SAT2G_version_2.0
+    priority 20
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeGisPetPlusRawSignalGm12878NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet
+    shortLabel longPolyA GM12878 nucleus  PlusRaw
+    longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in GM12878 cell nucleus using )
+    subGroups view=PlusRawSignal cellType=GM12878 localization=nucleus rnaExtract=longPolyA
+    type wig 1.00 4978.00
+    dateSubmitted 2009-02-16
+    dateUnrestricted 2009-11-16
+    dataVersion ENCODE Feb 2009 Freeze
+    accession SAT2G_version_2.0
+    priority 18
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeGisPetMinusRawSignalGm12878NucleusLongpolya
+    release alpha
+    subTrack wgEncodeGisPet
+    shortLabel longPolyA GM12878 nucleus  MinusRaw
+    longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in GM12878 cell nucleus using )
+    subGroups view=MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=longPolyA
+    type wig 1.00 9289.00
+    dateSubmitted 2009-02-16
+    dateUnrestricted 2009-11-16
+    dataVersion ENCODE Feb 2009 Freeze
+    accession SAT2G_version_2.0
+    priority 19
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization nucleus
+    cell GM12878
+
+    track wgEncodeGisPetAlignmentsGm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet
+    shortLabel longPolyA GM12878 cytosol 
+    longLabel ENCODE GIS PET Alignments (longPolyA in GM12878 cell cytosol using )
+    subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA
+    type bed 6
+    # MJP: FIX WHEN THIS IS IMPLEMENTED: type pairedTagAlign
+    dateSubmitted 2009-02-17
+    dateUnrestricted 2009-11-17
+    dataVersion ENCODE Feb 2009 Freeze
+    accession SAT2G_version_2.0
+    priority 20
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    localization cytosol
+    cell GM12878
+
+    track wgEncodeGisPetPlusRawSignalGm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet
+    shortLabel longPolyA GM12878 cytosol  PlusRaw
+    longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in GM12878 cell cytosol using )
+    subGroups view=PlusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
+    type wig 1.00 7729.00
+    dateSubmitted 2009-02-17
+    dateUnrestricted 2009-11-17
+    dataVersion ENCODE Feb 2009 Freeze
+    accession SAT2G_version_2.0
+    priority 18
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization cytosol
+    cell GM12878
+
+    track wgEncodeGisPetMinusRawSignalGm12878CytosolLongpolya
+    release alpha
+    subTrack wgEncodeGisPet
+    shortLabel longPolyA GM12878 cytosol  MinusRaw
+    longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in GM12878 cell cytosol using )
+    subGroups view=MinusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
+    type wig 1.00 8516.00
+    dateSubmitted 2009-02-17
+    dateUnrestricted 2009-11-17
+    dataVersion ENCODE Feb 2009 Freeze
+    accession SAT2G_version_2.0
+    priority 19
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    localization cytosol
+    cell GM12878
+
 
 # HudsonAlpha Methyl27 (wrangler: larrym)
 
@@ -7306,6 +7853,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Peaks=dense
 controlledVocabulary encode/cv.ra cellType=GM12878,K562,HepG2 factor
 noInherit on
+filterPvalQval on
 settingsByView Peaks:configurable=off
 priority 0
 itemRgb on
@@ -7461,7 +8009,7 @@ track		wgEncodeCshlRnaSeq
 compositeTrack	on
 shortLabel	Cshl RnaSeq
 longLabel	ENCODE Cshl Gingeras RnaSeq
-group		regulation
+group		expression
 subGroup1       view Views Transfrags=Transfrags
 subGroup2       cellType Cell_Line GM12878=GM12878 K562=K562 prostate=prostate
 subGroup3       localization Localization cell=cell cytosol=cytosol nucleus=nucleus polysome=polysome
@@ -8126,13 +8674,741 @@ shortLabel HudsonAlpha Methyl-seq
 longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
 subGroup1	view Views Regions=Regions
-subGroup2	cellType Cell_Line HTC116=HTC116
+subGroup2	cellType Cell_Line HCT-116=HCT-116 H9ES=H9ES H9ES-AFP+=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-CM=H9ES-CM H9ES-EBD=H9ES-EBD BG02ES=BG02ES BG02ES-EBD=BG02ES-EBD HFL11W=HFL11W HFL24W=HFL24W HAL=HAL
 dimensions dimensionX=cellType
-sortOrder cellType=+ factor=+ view=+
+sortOrder cellType=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Regions=dense
 controlledVocabulary encode/cv.ra cellType factor
 priority	0
 type bed 9
 nextItemButton on
+itemRgb on
 wgEncode 1
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel HCT-116 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HCT-116 cells)
+    subGroups view=Regions cellType=HCT-116
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    color 127,0,0
+    cell HCT-116
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel HCT-116 2
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in HCT-116 cells)
+    subGroups view=Regions cellType=HCT-116
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    color 127,0,0
+    cell HCT-116
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9es
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES cells)
+    subGroups view=Regions cellType=H9ES
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    cell H9ES
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-E 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-E cells)
+    subGroups view=Regions cellType=H9ES-E
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    cell H9ES-E
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-AFP+ 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-AFP+ cells)
+    subGroups view=Regions cellType=H9ES-AFP+
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    cell H9ES-AFP+
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-AFP- 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-AFP- cells)
+    subGroups view=Regions cellType=H9ES-AFP-
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    itemRgb on
+    configurable on
+    cell H9ES-AFP-
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafp
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-AFP- 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-AFP- cells)
+    subGroups view=Regions cellType=H9ES-AFP-
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    cell H9ES-AFP-
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-EB 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-EB cells)
+    subGroups view=Regions cellType=H9ES-EB
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    cell H9ES-EB
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-CM 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-CM cells)
+    subGroups view=Regions cellType=H9ES-CM
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    cell H9ES-CM
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel H9ES-EBD 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-EBD cells)
+    subGroups view=Regions cellType=H9ES-EBD
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    cell H9ES-EBD
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02es
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel BG02ES 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in BG02ES cells)
+    subGroups view=Regions cellType=BG02ES
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    cell BG02ES
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel BG02ES-EBD 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in BG02ES-EBD cells)
+    subGroups view=Regions cellType=BG02ES-EBD
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    cell BG02ES-EBD
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep2Bg02esebd
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel BG02ES-EBD 2
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in BG02ES-EBD cells)
+    subGroups view=Regions cellType=BG02ES-EBD
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    cell BG02ES-EBD
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel HFL11W 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HFL11W cells)
+    subGroups view=Regions cellType=HFL11W
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    color 0,100,0
+    cell HFL11W
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel HFL24W 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HFL24W cells)
+    subGroups view=Regions cellType=HFL24W
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    color 0,100,0
+    cell HFL24W
+
+    track wgEncodeHudsonalphaMethylSeqRegionsRep1Hal
+    release alpha
+    subTrack wgEncodeHudsonalphaMethylSeq
+    shortLabel HAL 1
+    longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HAL cells)
+    subGroups view=Regions cellType=HAL
+    type bed 9
+    dateSubmitted 2009-02-10
+    dateUnrestricted 2009-11-10
+    dataVersion ENCODE Feb 2009 Freeze
+    noInherit on
+    configurable on
+    itemRgb on
+    color 0,100,0
+    cell HAL
+
+track		wgEncodeCaltechRnaSeq
+compositeTrack	on
+shortLabel	Caltech RnaSeq
+longLabel	ENCODE Caltech Wold RnaSeq
+group		expression
+subGroup1	view Views Alignments=Alignments RawSignal=RawSignal PairedAligns=PairedAligns Splices=Splices
+subGroup2	cellType Cell_Line K562=K562 GM12878=GM12878 
+subGroup3	localization Localization cell=cell 
+subGroup4	rnaExtract RnaExtract longPolyA=longPolyA 
+subGroup5	mapAlgorithm MapAlgorithm blat34=blat34 bow098=bow098 NA=NA erng3b=erng3b bowblt1=bowblt1 
+dimensions	dimensionX=cellType	dimensionY=mapAlgorithm	
+sortOrder	cellType=+ localization=+ rnaExtract=+ mapAlgorithm=+ view=+
+controlledVocabulary	encode/cv.ra cellType localization rnaExtract mapAlgorithm
+dragAndDrop	subTracks
+visibilityViewDefaults	 Alignments=hide RawSignal=hide PairedAligns=hide Splices=hide 
+priority	0
+type		bed 3
+wgEncode	1
+
+    track wgEncodeCaltechRnaSeqAlignmentsRep1Gm12878CellLongpolyaBow098
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA GM12878 cell bow098 1
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Alignments Replicate 1 (longPolyA in GM12878 cell cell using bow098)
+    subGroups view=Alignments cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 4
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm bow098
+    localization cell
+    cell GM12878
+
+    track wgEncodeCaltechRnaSeqAlignmentsRep2Gm12878CellLongpolyaBow098
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA GM12878 cell bow098 2
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Alignments Replicate 2 (longPolyA in GM12878 cell cell using bow098)
+    subGroups view=Alignments cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 4
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm bow098
+    localization cell
+    cell GM12878
+
+    track wgEncodeCaltechRnaSeqAlignmentsRep1K562CellLongpolyaBow098
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA K562 cell bow098 1
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Alignments Replicate 1 (longPolyA in K562 cell cell using bow098)
+    subGroups view=Alignments cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 4
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm bow098
+    localization cell
+    cell K562
+
+    track wgEncodeCaltechRnaSeqAlignmentsRep2K562CellLongpolyaBow098
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA K562 cell bow098 2
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Alignments Replicate 2 (longPolyA in K562 cell cell using bow098)
+    subGroups view=Alignments cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 4
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm bow098
+    localization cell
+    cell K562
+
+    track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow098
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA GM12878 cell bow098 1
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in GM12878 cell cell using bow098)
+    subGroups view=Splices cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm bow098
+    localization cell
+    cell GM12878
+
+    track wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow098
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA GM12878 cell bow098 2
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 2 (longPolyA in GM12878 cell cell using bow098)
+    subGroups view=Splices cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm bow098
+    localization cell
+    cell GM12878
+
+    track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow098
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA K562 cell bow098 1
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in K562 cell cell using bow098)
+    subGroups view=Splices cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm bow098
+    localization cell
+    cell K562
+
+    track wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow098
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA K562 cell bow098 2
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 2 (longPolyA in K562 cell cell using bow098)
+    subGroups view=Splices cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm bow098
+    localization cell
+    cell K562
+
+    track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA GM12878 cell erng3b Raw 1
+    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (longPolyA in GM12878 cell cell using erng3b)
+    subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=erng3b rnaExtract=longPolyA
+    type wig WGENCODECALTECHRNASEQRAWSIGNALREP1GM12878CELLLONGPOLYAERNG3B_MINMAXRANGE
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 2
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    mapAlgorithm erng3b
+    localization cell
+    cell GM12878
+
+    track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA GM12878 cell erng3b Raw 2
+    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (longPolyA in GM12878 cell cell using erng3b)
+    subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=erng3b rnaExtract=longPolyA
+    type wig WGENCODECALTECHRNASEQRAWSIGNALREP2GM12878CELLLONGPOLYAERNG3B_MINMAXRANGE
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 2
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    mapAlgorithm erng3b
+    localization cell
+    cell GM12878
+
+    track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA K562 cell erng3b Raw 1
+    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (longPolyA in K562 cell cell using erng3b)
+    subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=erng3b rnaExtract=longPolyA
+    type wig WGENCODECALTECHRNASEQRAWSIGNALREP1K562CELLLONGPOLYAERNG3B_MINMAXRANGE
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 2
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    mapAlgorithm erng3b
+    localization cell
+    cell K562
+
+    track wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA K562 cell erng3b Raw 2
+    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (longPolyA in K562 cell cell using erng3b)
+    subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=erng3b rnaExtract=longPolyA
+    type wig WGENCODECALTECHRNASEQRAWSIGNALREP2K562CELLLONGPOLYAERNG3B_MINMAXRANGE
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 2
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    mapAlgorithm erng3b
+    localization cell
+    cell K562
+
+    track wgEncodeCaltechRnaSeqPairedAlignsRep1Gm12878CellLongpolyaBowblt1
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA GM12878 cell bowblt1 1
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Paired Alignments Replicate 1 (longPolyA in GM12878 cell cell using bowblt1)
+    subGroups view=PairedAligns cellType=GM12878 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 5
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm bowblt1
+    localization cell
+    cell GM12878
+
+    track wgEncodeCaltechRnaSeqPairedAlignsRep1K562CellLongpolyaBowblt1
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA K562 cell bowblt1 1
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Paired Alignments Replicate 1 (longPolyA in K562 cell cell using bowblt1)
+    subGroups view=PairedAligns cellType=K562 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 5
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm bowblt1
+    localization cell
+    cell K562
+
+    track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBowblt1
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA GM12878 cell bowblt1 1
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in GM12878 cell cell using bowblt1)
+    subGroups view=Splices cellType=GM12878 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm bowblt1
+    localization cell
+    cell GM12878
+
+    track wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat34
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA GM12878 cell blat34 1
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in GM12878 cell cell using blat34)
+    subGroups view=Splices cellType=GM12878 localization=cell mapAlgorithm=blat34 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm blat34
+    localization cell
+    cell GM12878
+
+    track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBowblt1
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA K562 cell bowblt1 1
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in K562 cell cell using bowblt1)
+    subGroups view=Splices cellType=K562 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm bowblt1
+    localization cell
+    cell K562
+
+    track wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat34
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA K562 cell blat34 1
+    longLabel ENCODE Caltech RNA-Seq Map Algorithm Splice Alignments Replicate 1 (longPolyA in K562 cell cell using blat34)
+    subGroups view=Splices cellType=K562 localization=cell mapAlgorithm=blat34 rnaExtract=longPolyA
+    type bed 12
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 3
+    noInherit on
+    configurable on
+    rnaExtract longPolyA
+    mapAlgorithm blat34
+    localization cell
+    cell K562
+
+    track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBowblt1
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA GM12878 cell bowblt1 Raw 1
+    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (longPolyA in GM12878 cell cell using bowblt1)
+    subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
+    type wig 0.00 2446.53
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 2
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    mapAlgorithm bowblt1
+    localization cell
+    cell GM12878
+
+    track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBowblt1
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA K562 cell bowblt1 Raw 1
+    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (longPolyA in K562 cell cell using bowblt1)
+    subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=bowblt1 rnaExtract=longPolyA
+    type wig WGENCODECALTECHRNASEQRAWSIGNALREP1K562CELLLONGPOLYABOWBLT1_MINMAXRANGE
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 2
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    mapAlgorithm bowblt1
+    localization cell
+    cell K562
+
+    track wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBow098
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA GM12878 cell bow098 Raw 2
+    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (longPolyA in GM12878 cell cell using bow098)
+    subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
+    type wig WGENCODECALTECHRNASEQRAWSIGNALREP2GM12878CELLLONGPOLYABOW098_MINMAXRANGE
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 2
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    mapAlgorithm bow098
+    localization cell
+    cell GM12878
+
+    track wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBow098
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA K562 cell bow098 Raw 2
+    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 2 (longPolyA in K562 cell cell using bow098)
+    subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
+    type wig WGENCODECALTECHRNASEQRAWSIGNALREP2K562CELLLONGPOLYABOW098_MINMAXRANGE
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 2
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    mapAlgorithm bow098
+    localization cell
+    cell K562
+
+    track wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBow098
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA GM12878 cell bow098 Raw 1
+    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (longPolyA in GM12878 cell cell using bow098)
+    subGroups view=RawSignal cellType=GM12878 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
+    type wig 1.00 27138.00
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 2
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    mapAlgorithm bow098
+    localization cell
+    cell GM12878
+
+    track wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBow098
+    release alpha
+    subTrack wgEncodeCaltechRnaSeq
+    shortLabel longPolyA K562 cell bow098 Raw 1
+    longLabel ENCODE Caltech RNA-Seq Raw Signal Replicate 1 (longPolyA in K562 cell cell using bow098)
+    subGroups view=RawSignal cellType=K562 localization=cell mapAlgorithm=bow098 rnaExtract=longPolyA
+    type wig WGENCODECALTECHRNASEQRAWSIGNALREP1K562CELLLONGPOLYABOW098_MINMAXRANGE
+    dateSubmitted 2009-02-13
+    dateUnrestricted 2009-11-13
+    dataVersion ENCODE Feb 2009 Freeze
+    priority 2
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction mean
+    maxHeightPixels 100:16:16
+    rnaExtract longPolyA
+    mapAlgorithm bow098
+    localization cell
+    cell K562
+

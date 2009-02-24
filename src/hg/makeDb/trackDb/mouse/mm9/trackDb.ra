@@ -28,7 +28,7 @@ color 200,100,0
 type bed 6 +
 noScoreFilter .
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
-urlLabel MGI QTL Detail: 
+urlLabel MGI QTL Detail:
 release alpha
 
 track jaxQTLLift
@@ -41,7 +41,7 @@ color 200,100,0
 type bed 6 +
 noScoreFilter .
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
-urlLabel MGI QTL Detail: 
+urlLabel MGI QTL Detail:
 release beta
 
 track jaxRepTranscriptLift
@@ -53,7 +53,7 @@ color 0,0,150
 priority 70.01
 type genePred
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=$$
-urlLabel MGI Gene Detail: 
+urlLabel MGI Gene Detail:
 baseColorUseCds none
 release alpha
 
@@ -66,7 +66,7 @@ color 0,0,150
 priority 70
 type genePred
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=$$
-urlLabel MGI Gene Detail: 
+urlLabel MGI Gene Detail:
 baseColorUseCds none
 release beta
 
@@ -80,7 +80,7 @@ priority 71.01
 type bed 12 +
 noScoreFilter .
 url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
-urlLabel MGI Phenotypic Allele(s): 
+urlLabel MGI Phenotypic Allele(s):
 release alpha
 
 track jaxPhenotypeLift
@@ -93,7 +93,7 @@ priority 71
 type bed 12 +
 noScoreFilter .
 url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
-urlLabel MGI Phenotypic Allele(s): 
+urlLabel MGI Phenotypic Allele(s):
 release beta
 
 track jaxAlleleLift
@@ -107,7 +107,7 @@ priority 72.01
 type bed 12 +
 noScoreFilter .
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
-urlLabel MGI Phenotypic Allele: 
+urlLabel MGI Phenotypic Allele:
 release alpha
 
 track jaxAlleleLift
@@ -121,11 +121,11 @@ priority 72
 type bed 12 +
 noScoreFilter .
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
-urlLabel MGI Phenotypic Allele: 
+urlLabel MGI Phenotypic Allele:
 release beta
 
 track chainSelf
-shortLabel Self Chain 
+shortLabel Self Chain
 longLabel $Organism Chained Self Alignments
 group varRep
 priority 400
@@ -149,7 +149,7 @@ otherDb mm9
 
 track multiz4way
 shortLabel 4-way Multiz
-longLabel 4-Way Multiz Alignment & Conservation 
+longLabel 4-Way Multiz Alignment & Conservation
 group compGeno
 priority 104.2
 visibility hide
@@ -195,14 +195,14 @@ visibility hide
 color 90,0,150
 type bed 6 .
 
-track exoniphy 
-shortLabel Exoniphy 
-longLabel Exoniphy Mouse/Rat/Human/Dog 
-group genes 
-priority 50.9 
-visibility hide 
-color 173,17,162 
-type genePred 
+track exoniphy
+shortLabel Exoniphy
+longLabel Exoniphy Mouse/Rat/Human/Dog
+group genes
+priority 50.9
+visibility hide
+color 173,17,162
+type genePred
 
 track miRNA
 shortLabel miRNA
@@ -218,7 +218,7 @@ urlLabel miRBase:
 
 track multiz30way
 shortLabel Conservation
-longLabel 30-Way Multiz Alignment & Conservation 
+longLabel 30-Way Multiz Alignment & Conservation
 group compGeno
 priority 103.2
 visibility pack
@@ -288,11 +288,11 @@ priority 66
 color 56,108,56
 type genePred
 url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromer_quick_search.pl?db=mm9&query_str=$$
-urlLabel TROMER database detail: 
+urlLabel TROMER database detail:
 
 track sibTxGraph
 shortLabel SIB Alt-Splicing
-longLabel Alternative Splicing Graph from Swiss Institute of Bioinformatics 
+longLabel Alternative Splicing Graph from Swiss Institute of Bioinformatics
 group rna
 priority 74.5
 visibility hide
@@ -304,7 +304,7 @@ idInUrlSql select name from sibTxGraph where id=%s
 track vegaGeneComposite
 compositeTrack on
 shortLabel Vega Genes
-longLabel Vega Annotations 
+longLabel Vega Annotations
 group genes
 priority 37.1
 visibility hide
@@ -316,7 +316,7 @@ url http://vega.sanger.ac.uk/Mus_musculus/transview?transcript=$$
     track vegaGene
     subTrack vegaGeneComposite
     shortLabel Vega Protein Genes
-    longLabel Vega Protein Coding Annotations 
+    longLabel Vega Protein Coding Annotations
     priority 1
     color 0,100,180
 
@@ -334,7 +334,7 @@ longLabel CalTech (Wold Lab) Transcriptome by RNA-Seq
 group regulation
 priority 100
 subGroup1 view Views SPLC=Splices SIG=Signal_Densities
-subGroup2 rep Replicate R1=1 R2=2 
+subGroup2 rep Replicate R1=1 R2=2
 subGroup3 cellType Cell_Type BRAIN=Brain LVR=Liver MSCL=Muscle
 dimensions dimensionY=cellType dimensionX=rep
 dividers cellType
@@ -489,3 +489,19 @@ type bed 3
     autoScaleDefault on
     windowingFunction mean
     maxHeightPixels 64:25:16
+
+# NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
+track wgEncodeNhgriBip
+release alpha
+shortLabel NHGRI BiP
+longLabel ENCODE Elnitski Bi-directional Promoters
+visibility hide
+group regulation
+type bed 8 +
+dateSubmitted 2009-01-27
+dateUnrestricted 2009-10-27
+dataVersion ENCODE Feb 2009 Freeze
+priority 0
+scoreFilterByRange on
+compareGenomeLinks hg18=Human_(March_2006) panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006) rn4=Rat_(November_2004) canFam2=Dog_(May_05) bosTau4=Cow_(October_2007)
+wgEncode 1

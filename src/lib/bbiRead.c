@@ -52,7 +52,7 @@ struct udcFile *udc = bbi->udc = udcFileOpen(fileName, udcDefaultDir());
 /* Read magic number at head of file and use it to see if we are proper file type, and
  * see if we are byte-swapped. */
 bits32 magic;
-boolean isSwapped = bbi->isSwapped = FALSE;
+boolean isSwapped = FALSE;
 udcMustRead(udc, &magic, sizeof(magic));
 if (magic != sig)
     {
@@ -62,6 +62,7 @@ if (magic != sig)
        errAbort("%s is not a %s file", fileName, typeName);
     }
 bbi->typeSig = sig;
+bbi->isSwapped = isSwapped;
 
 /* Read rest of defined bits of header, byte swapping as needed. */
 bbi->version = udcReadBits16(udc, isSwapped);
@@ -69,9 +70,11 @@ bbi->zoomLevels = udcReadBits16(udc, isSwapped);
 bbi->chromTreeOffset = udcReadBits64(udc, isSwapped);
 bbi->unzoomedDataOffset = udcReadBits64(udc, isSwapped);
 bbi->unzoomedIndexOffset = udcReadBits64(udc, isSwapped);
+bbi->fieldCount = udcReadBits16(udc, isSwapped);
+bbi->definedFieldCount = udcReadBits16(udc, isSwapped);
 
 /* Skip over reserved area. */
-udcSeek(udc, udcTell(udc) + 32);
+udcSeek(udc, udcTell(udc) + 28);
 
 /* Read zoom headers. */
 int i;
@@ -119,14 +122,24 @@ struct fileOffsetSize *bbiOverlappingBlocks(struct bbiFile *bbi, struct cirTreeF
 struct bbiChromIdSize idSize;
 if (!bptFileFind(bbi->chromBpt, chrom, strlen(chrom), &idSize, sizeof(idSize)))
     return NULL;
+if (bbi->isSwapped)
+    idSize.chromId = byteSwap32(idSize.chromId);
 if (retChromId != NULL)
     *retChromId = idSize.chromId;
 return cirTreeFindOverlappingBlocks(ctf, idSize.chromId, start, end);
 }
 
+struct chromNameCallbackContext
+/* Some stuff that the bPlusTree traverser needs for context. */
+    {
+    struct bbiChromInfo *list;		/* The list we are building. */
+    boolean isSwapped;			/* Need to byte-swap things? */
+    };
+
 static void chromNameCallback(void *context, void *key, int keySize, void *val, int valSize)
 /* Callback that captures chromInfo from bPlusTree. */
 {
+struct chromNameCallbackContext *c = context;
 struct bbiChromInfo *info;
 struct bbiChromIdSize *idSize = val;
 assert(valSize == sizeof(*idSize));
@@ -134,17 +147,23 @@ AllocVar(info);
 info->name = cloneStringZ(key, keySize);
 info->id = idSize->chromId;
 info->size = idSize->chromSize;
-struct bbiChromInfo **pList = context;
-slAddHead(pList, info);
+if (c->isSwapped)
+    {
+    info->id = byteSwap32(info->id);
+    info->size = byteSwap32(info->size);
+    }
+slAddHead(&c->list, info);
 }
 
 struct bbiChromInfo *bbiChromList(struct bbiFile *bbi)
 /* Return list of chromosomes. */
 {
-struct bbiChromInfo *list = NULL;
-bptFileTraverse(bbi->chromBpt, &list, chromNameCallback);
-slReverse(&list);
-return list;
+struct chromNameCallbackContext context;
+context.list = NULL;
+context.isSwapped = bbi->isSwapped;
+bptFileTraverse(bbi->chromBpt, &context, chromNameCallback);
+slReverse(&context.list);
+return context.list;
 }
 
 bits32 bbiChromSize(struct bbiFile *bbi, char *chrom)
@@ -227,6 +246,7 @@ switch (type)
     }
 }
 
+#ifdef UNUSED
 static void bbiSummaryOnDiskRead(struct bbiFile *bbi, struct bbiSummaryOnDisk *sum)
 /* Read in summary from file. */
 {
@@ -241,6 +261,7 @@ udcMustReadOne(udc, sum->maxVal);
 udcMustReadOne(udc, sum->sumData);
 udcMustReadOne(udc, sum->sumSquares);
 }
+#endif /* UNUSED */
 
 static struct bbiSummary *bbiSummaryFromOnDisk(struct bbiSummaryOnDisk *in)
 /* Create a bbiSummary unlinked to anything from input in onDisk format. */
@@ -266,35 +287,40 @@ struct bbiSummary *sumList = NULL, *sum;
 struct udcFile *udc = bbi->udc;
 udcSeek(udc, zoom->indexOffset);
 struct cirTreeFile *ctf = cirTreeFileAttach(bbi->fileName, bbi->udc);
-struct fileOffsetSize *blockList = cirTreeFindOverlappingBlocks(ctf, chromId, start, end);
-if (blockList != NULL)
+struct fileOffsetSize *fragList = cirTreeFindOverlappingBlocks(ctf, chromId, start, end);
+struct fileOffsetSize *block, *blockList = fileOffsetSizeMerge(fragList);
+for (block = blockList; block != NULL; block = block->next)
     {
-    struct fileOffsetSize *block;
-    for (block = blockList; block != NULL; block = block->next)
-        {
-	udcSeek(udc, block->offset);
-	struct bbiSummaryOnDisk diskSum;
-	int itemSize = sizeof(diskSum);
-	assert(block->size % itemSize == 0);
-	int itemCount = block->size / itemSize;
-	int i;
-	for (i=0; i<itemCount; ++i)
+    /* Read info we need into memory. */
+    udcSeek(udc, block->offset);
+    char *blockBuf = needLargeMem(block->size);
+    udcRead(udc, blockBuf, block->size);
+    char *blockPt = blockBuf;
+
+    struct bbiSummaryOnDisk *dSum;
+    int itemSize = sizeof(*dSum);
+    assert(block->size % itemSize == 0);
+    int itemCount = block->size / itemSize;
+    int i;
+    for (i=0; i<itemCount; ++i)
+	{
+	dSum = (void *)blockPt;
+	blockPt += sizeof(*dSum);
+	if (dSum->chromId == chromId)
 	    {
-	    bbiSummaryOnDiskRead(bbi, &diskSum);
-	    if (diskSum.chromId == chromId)
+	    int s = max(dSum->start, start);
+	    int e = min(dSum->end, end);
+	    if (s < e)
 		{
-		int s = max(diskSum.start, start);
-		int e = min(diskSum.end, end);
-		if (s < e)
-		    {
-		    sum = bbiSummaryFromOnDisk(&diskSum);
-		    slAddHead(&sumList, sum);
-		    }
+		sum = bbiSummaryFromOnDisk(dSum);
+		slAddHead(&sumList, sum);
 		}
 	    }
 	}
+    freeMem(blockBuf);
     }
 slFreeList(&blockList);
+slFreeList(&fragList);
 cirTreeFileDetach(&ctf);
 slReverse(&sumList);
 return sumList;

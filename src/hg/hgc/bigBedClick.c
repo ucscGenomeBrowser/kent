@@ -8,26 +8,23 @@
 #include "hgColors.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bigBedClick.c,v 1.1 2009/02/03 21:37:40 kent Exp $";
+static char const rcsid[] = "$Id: bigBedClick.c,v 1.2 2009/02/10 22:17:39 kent Exp $";
 
 
-void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
+static void bigBedClick(char *fileName, struct trackDb *tdb, 
 		     char *item, int start, int bedSize)
 /* Handle click in generic bigBed track. */
 {
 char *chrom = cartString(cart, "c");
 
-char query[256];
-safef(query, sizeof(query), "select fileName from %s", tdb->tableName);
-char *fileName = sqlQuickString(conn, query);
-if (fileName == NULL)
-    errAbort("Missing fileName in %s table", tdb->tableName);
-
 /* Open BigWig file and get interval list. */
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, winStart, winEnd, lm);
-bbiFileClose(&bbi);
+
+/* Get bedSize if it's not already defined. */
+if (bedSize == 0)
+    bedSize = bbi->definedFieldCount;
 
 /* Find particular item in list - matching start, and item if possible. */
 struct bigBedInterval *bbMatch = NULL, *bb;
@@ -76,6 +73,31 @@ else
     }
 
 lmCleanup(&lm);
+bbiFileClose(&bbi);
 }
 
+void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
+		     char *item, int start, int bedSize)
+/* Handle click in generic bigBed track. */
+{
+char query[256];
+safef(query, sizeof(query), "select fileName from %s", tdb->tableName);
+char *fileName = sqlQuickString(conn, query);
+if (fileName == NULL)
+    errAbort("Missing fileName in %s table", tdb->tableName);
+bigBedClick(fileName, tdb, item, start, bedSize);
+}
 
+void bigBedCustomClick(struct trackDb *tdb)
+/* Display details for BigWig custom tracks. */
+{
+char *fileName = trackDbSetting(tdb, "dataUrl");
+char *item = cartOptionalString(cart, "i");
+int start = cartInt(cart, "o");
+uglyf("fileName=%s, item=%s, start=%d<BR>\n", fileName, item, start);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+uglyf("bbi->fieldCount = %d, ->definedFieldCount=%d<BR>\n", bbi->fieldCount, bbi->definedFieldCount);
+bigBedClick(fileName, tdb, item, start, 0);
+#ifdef SOON
+#endif
+}

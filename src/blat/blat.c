@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.112 2007/11/25 17:17:55 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.113 2009/02/10 21:58:55 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -307,6 +307,8 @@ Bits *qMaskBits = maskQuerySeq(seq, isProt, maskQuery, lcMask);
 struct dnaSeq trimmedSeq;
 ZeroVar(&trimmedSeq);
 trimSeq(seq, &trimmedSeq);
+if (qType == gftRna || qType == gftRnaX)
+   memSwapChar(trimmedSeq.dna, trimmedSeq.size, 'u', 't');
 searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
 *retTotalSize += seq->size;
 *retCount += 1;

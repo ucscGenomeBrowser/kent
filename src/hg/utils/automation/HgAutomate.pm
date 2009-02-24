@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.20 2009/02/04 18:38:25 hiram Exp $
+# $Id: HgAutomate.pm,v 1.21 2009/02/18 18:20:00 hiram Exp $
 package HgAutomate;
 
 use warnings;
@@ -55,12 +55,12 @@ use vars qw( %cluster %clusterFilesystem $defaultDbHost );
       'pk' =>
         { 'enabled' => 1, 'gigaHz' => 2.0, 'ram' => 4,
 	  'hostCount' => 394, },
-#      'memk' =>		# unreliable Feb 2009
-#        { 'enabled' => 1, 'gigaHz' => 1.0, 'ram' => 32,
-#	  'hostCount' => 32, },
-      'kk9' => # Guessing here since the machines are down:
-        { 'enabled' => 0, 'gigaHz' => 1.5, 'ram' => 2,
-	  'hostCount' => 100, },
+      'memk' =>
+        { 'enabled' => 1, 'gigaHz' => 1.0, 'ram' => 32,
+	  'hostCount' => 32, },
+#      'kk9' => # Guessing here since the machines are down:
+#        { 'enabled' => 0, 'gigaHz' => 1.5, 'ram' => 2,
+#	  'hostCount' => 100, },
     );
 
 my @allClusters = (keys %cluster);
@@ -73,10 +73,8 @@ my @allClusters = (keys %cluster);
       'san' =>
         { root => '/san/sanvol1/scratch', clusterLocality => 0.5,
 	  distrHost => ['pk', 'kkstore*'], distrCommand => '',
-	  inputFor => ['pk'], outputFor => ['pk'], },
+	  inputFor => ['pk', 'memk'], outputFor => ['pk', 'memk'], },
     );
-# memk taken out of the poos since it is unreliable Feb 2009
-#         inputFor => ['pk', 'memk'], outputFor => ['pk', 'memk'], },
 
 $defaultDbHost = 'hgwdev';
 
@@ -157,8 +155,7 @@ sub getWarnClusters {
     if ($isInput) {
       return @allClusters;
     } else {
-      return ('hgwdev');
-#      return ('memk');	# memk unreliable Feb 2009
+      return ('memk');
     }
   }
 }
@@ -209,8 +206,8 @@ sub getWorkhorseLoads {
   # swarm and hgwdev are now valid workhorses since they have access to hive.
   confess "Too many arguments" if (scalar(@_) != 0);
   my %horses = ();
-  foreach my $machLine ('swarm', 'kolossus', 'hgwdev') {
-# `ssh -x memk parasol list machines | grep idle` # memk unreliable Feb 2009
+  foreach my $machLine ('swarm', 'kolossus', 'hgwdev',
+	`ssh -x memk parasol list machines | grep idle`) {
     my $mach = $machLine;
     $mach =~ s/[\. ].*//;
     chomp $mach;

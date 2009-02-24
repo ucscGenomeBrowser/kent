@@ -8,6 +8,7 @@ USE_DIRS = $(DIRS)
 DIRS = \
 	hgAar \
 	hgAddLiftOverChain \
+	hgBbiDbLink \
 	hgClonePos \
 	hgCountAlign \
 	hgCtgPos \

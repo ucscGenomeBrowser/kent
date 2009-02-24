@@ -15,7 +15,7 @@
 #include <sys/types.h>
 #include <regex.h>
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.22 2008/10/08 16:56:11 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.23 2009/02/17 20:10:28 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -69,6 +69,7 @@ errAbort(
   "  -verbose=n\n"
   "     2 - show selects against CCDS database\n"
   "     3 - include ignored entries\n"
+  "     4 - include more details\n"
   );
 }
 
@@ -210,7 +211,7 @@ if (errCnt > 0)
 gotCcdsCheckInfo(infoCcds);
 }
 
-static bool selectByStatus()
+static boolean selectByStatus()
 /* check if specific status values should be used in select */
 {
 struct slName *val;
@@ -245,7 +246,7 @@ statValSet = dyStringCannibalize(&buf);
 return statValSet;
 }
 
-static char *mkCommonFrom()
+static char *mkCommonFrom(boolean inclStatus)
 /* Get common FROM clause. WARNING: static return. */
 {
 static char clause[257];
@@ -253,12 +254,13 @@ safecpy(clause, sizeof(clause),
         "Groups, "
         "GroupVersions, "
         "CcdsUids");
-if (selectByStatus())
+if (inclStatus)
     safecat(clause, sizeof(clause), ", CcdsStatusVals");
 return clause;
 }
 
-static char *mkCommonWhere(struct genomeInfo *genome, struct sqlConnection *conn)
+static char *mkCommonWhere(struct genomeInfo *genome, struct sqlConnection *conn,
+                           boolean inclStatus)
 /* Get the common clause.  This is the where clause that selects GroupVersions
  * and CcdsUids that are currently selected by organism, build, and optionally status
  * values. WARNING: static return. */
@@ -274,7 +276,7 @@ safef(clause, sizeof(clause),
       genome->taxonId, genome->ncbiBuild,
       genome->ncbiBuildVersion, genome->ncbiBuildVersion);
 
-if (selectByStatus())
+if (inclStatus)
     {
     char clause2[1025];
     safef(clause2, sizeof(clause2),
@@ -306,15 +308,13 @@ char select[4096];
 safef(select, sizeof(select),
       "SELECT "
       "CcdsUids.ccds_uid, GroupVersions.ccds_version "
-      "FROM %s, Interpretations, InterpretationSubtypes "
+      "FROM %s, CcdsStatusVals, Interpretations, InterpretationSubtypes "
       "WHERE %s "
-      "AND (Interpretations.ccds_uid = CcdsUids.ccds_uid) "
-#if 0 // FIXME: not sure why this breaks query
-      "AND (Interpretations.group_uid = GroupVersions.group_uid) "
-#endif
+      "AND (CcdsStatusVals.ccds_status_val_uid = GroupVersions.ccds_status_val_uid) "
+      "AND (Interpretations.group_version_uid = GroupVersions.group_version_uid) "
       "AND (Interpretations.interpretation_subtype_uid = InterpretationSubtypes.interpretation_subtype_uid) "
       "AND (InterpretationSubtypes.interpretation_subtype = \"Partial match\")",
-      mkCommonFrom(), mkCommonWhere(genome, conn));
+      mkCommonFrom(FALSE), mkCommonWhere(genome, conn, FALSE));
 
 struct sqlResult *sr = sqlGetResult(conn, select);
 char **row;
@@ -324,6 +324,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct hashEl *hel = hashStore(ignoreTbl, ccdsMkId(sqlUnsigned(row[0]), sqlUnsigned(row[1])));
     hel->val = "partial_match";
     cnt++;
+    verbose(4, "    partial_match: %s\n", hel->name);
     }
 sqlFreeResult(&sr);
 verbose(2, "end findPartialMatches: %d partial matches found\n", cnt);
@@ -345,7 +346,7 @@ safef(select, sizeof(select),
       "AND (Interpretations.interpretation_subtype_uid = InterpretationSubtypes.interpretation_subtype_uid) "
       "AND (InterpretationSubtypes.interpretation_subtype in (\"Strand changed\", \"Location changed\", \"Merged\")) "
       "AND (Interpretations.val_description in (\"New CCDS\", \"Merged into\"))",
-      mkCommonFrom(), mkCommonWhere(genome, conn));
+      mkCommonFrom(FALSE), mkCommonWhere(genome, conn, FALSE));
 
 struct sqlResult *sr = sqlGetResult(conn, select);
 char **row;
@@ -353,8 +354,9 @@ int cnt = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct hashEl *hel = hashStore(ignoreTbl, ccdsMkId(sqlUnsigned(row[0]), sqlUnsigned(row[1])));
-    hel->val = "partial_match";
+    hel->val = "replaced";
     cnt++;
+    verbose(4, "    replaced: %s\n", hel->name);
     }
 sqlFreeResult(&sr);
 verbose(2, "end findReplaced: %d replaced CCDS found\n", cnt);
@@ -378,6 +380,7 @@ static char *mkCcdsInfoSelect(struct genomeInfo *genome, struct sqlConnection *c
 /* Construct select to get data for ccdsInfo table.  WARNING: static
  * return. */
 {
+boolean inclStatus = selectByStatus();
 static char select[4096];
 safef(select, sizeof(select),
       "SELECT "
@@ -390,7 +393,7 @@ safef(select, sizeof(select),
       "AND (Accessions_GroupVersions.group_version_uid = GroupVersions.group_version_uid) "
       "AND (Accessions.accession_uid = Accessions_GroupVersions.accession_uid) "
       "AND (Organizations.organization_uid = Accessions.organization_uid)",
-      mkCommonFrom(), mkCommonWhere(genome, conn));
+      mkCommonFrom(inclStatus), mkCommonWhere(genome, conn, inclStatus));
 return select;
 }
 
@@ -507,6 +510,7 @@ static char *mkCcdsGeneSelect(struct genomeInfo *genome, struct sqlConnection *c
 /* Construct select to get data for ccdsGene table.  WARNING: static
  * return. */
 {
+boolean inclStatus = selectByStatus();
 static char select[4096];
 safef(select, sizeof(select),
       "SELECT "
@@ -519,7 +523,7 @@ safef(select, sizeof(select),
       "WHERE %s "
       "AND (Locations.location_uid = Locations_GroupVersions.location_uid) "
       "AND (Locations_GroupVersions.group_version_uid = GroupVersions.group_version_uid)",
-      mkCommonFrom(), mkCommonWhere(genome, conn));
+      mkCommonFrom(inclStatus), mkCommonWhere(genome, conn, inclStatus));
 return select;
 }
 

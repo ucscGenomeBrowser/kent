@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-##	"$Id: sgdGffToGtf.pl,v 1.3 2009/02/09 17:57:22 hiram Exp $";
+##	"$Id: sgdGffToGtf.pl,v 1.4 2009/02/10 20:26:08 hiram Exp $";
 
 my $argc = scalar(@ARGV);
 
@@ -89,7 +89,7 @@ while (my $line = <FH>) {
 	}
     } elsif ($fields[2] =~ m/^CDS$|^five_prime_UTR_intron$|^intron$/) {
     	if ($fields[2] =~ m/^five_prime_UTR_intron$/) {
-	    $fields[2] = "intron";
+	    $fields[2] = "5utr";
 	}
 	for (my $i = 0; $i < 8; ++$i) {
 	    printf "$fields[$i]\t";

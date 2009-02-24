@@ -21,7 +21,7 @@
 #include "versionInfo.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.183 2009/01/17 01:54:54 galt Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.184 2009/02/10 22:26:34 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1893,6 +1893,8 @@ if (sameString(displayCountString, "all"))
 else
     displayCount = atoi(displayCountString);
 colList = getColumns(conn);
+
+/* Main dispatch logic on near.do.XXXX */
 if (cartVarExists(cart, confVarName))
     doConfigure(conn, colList, NULL);
 else if (cartVarExists(cart, colInfoVarName))

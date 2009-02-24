@@ -21,7 +21,7 @@ set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer4
 set flyDb = dm3
-set wormDb = ce4
+set wormDb = ce6
 set yeastDb = sacCer1
 
 # If rebuilding on an existing assembly make tempDb some bogus name like tmpFoo2, otherwise 
@@ -47,7 +47,7 @@ set xdbFa = /cluster/data/$xdb/bed/ucsc.10/ucscGenes.faa
 set ratFa = /cluster/data/$ratDb/bed/blastp/known.faa
 set fishFa = /cluster/data/$fishDb/bed/blastp/ensembl.faa
 set flyFa = /cluster/data/$flyDb/bed/flybase5.3/flyBasePep.fa
-set wormFa = /cluster/data/$wormDb/bed/blastp/wormPep170.faa
+set wormFa = /cluster/data/$wormDb/bed/blastp/wormPep190.faa
 set yeastFa = /cluster/data/$yeastDb/bed/blastp/sgdPep.faa
 
 # Other files needed
@@ -78,7 +78,6 @@ mkdir -p $dir
 cd $dir
 
 if (0) then  # BRACKET
-endif # BRACKET
 
 
 # Get Genbank info
@@ -654,6 +653,13 @@ hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToRefSeq
+
+# Create knownToTreefam table.  This is via a slow perl script that does remote queries of
+# the treefam database..  Takes ~5 hours.  Can and should run it in the background really.
+# Nothing else depends on the result.
+~/kent/src/hg/protein/ensembl2treefam.pl < knownToEnsembl.tab > knownToTreefam.temp
+grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
+hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
      
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
@@ -774,6 +780,7 @@ hgLoadBlastTab $tempDb dmBlastTab $aToB/recipBest.tab
 hgLoadBlastTab $flyDb tfBlastTab $bToA/recipBest.tab
 
 # Us vs. worm
+endif # BRACKET
 cd $dir/hgNearBlastp
 set aToB = run.$tempDb.$wormDb
 set bToA = run.$wormDb.$tempDb
@@ -782,6 +789,7 @@ cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
 hgLoadBlastTab $tempDb ceBlastTab $aToB/recipBest.tab
 hgLoadBlastTab $wormDb tfBlastTab $bToA/recipBest.tab
+exit # BRACKET
 
 # Us vs. yeast
 cd $dir/hgNearBlastp
@@ -1029,7 +1037,6 @@ hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 			    
 
-exit # BRACKET
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....

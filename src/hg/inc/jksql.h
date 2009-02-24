@@ -86,7 +86,7 @@ void sqlDisconnect(struct sqlConnection **pSc);
 /* Close down connection. */
 
 char* sqlGetDatabase(struct sqlConnection *sc);
-/* Get the database associated with an connection. */
+/* Get the database associated with an connection. Warning: return may be NULL! */
 
 char* sqlGetHost(struct sqlConnection *sc);
 /* Get the host associated with an connection. */
@@ -99,6 +99,9 @@ struct slName *sqlListTables(struct sqlConnection *conn);
 
 struct slName *sqlListFields(struct sqlConnection *conn, char *table);
 /* Return list of fields in table. */
+
+void sqlAddDatabaseFields(char *database, struct hash *hash);
+/* Add fields from the one database to hash. */
 
 struct hash *sqlAllFields(void);
 /* Get hash of all fields in database.table.field format.  */

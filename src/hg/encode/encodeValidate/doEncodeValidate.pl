@@ -17,7 +17,7 @@
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit the CVS'ed source at:
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.141 2009/02/07 03:09:59 larrym Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/doEncodeValidate.pl,v 1.157 2009/02/20 20:44:22 mikep Exp $
 
 use warnings;
 use strict;
@@ -67,6 +67,8 @@ our $time0 = time;
 our $timeStart = time;
 our %chromInfo;         # chromInfo from assembly for chrom validation
 our $maxBedRows=50_000_000; # number of rows to allow in a bed-type file
+our %tableNamesUsed;
+our ($grants, $fields, $daf);
 
 
 sub usage {
@@ -121,6 +123,17 @@ sub doTime
     $t = 1 if ($lines>0 and $t<1);
     warn("# $msg : $t secs".($lines>0 ? "  ($lines lines, ".(int($lines/$t))." lines/sec)" : ""));
     $time0 = time;
+}
+
+sub dieTellWrangler
+{
+    my ($msg) = @_;
+    my $email;
+    if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
+        $email = $grants->{$daf->{grant}}{wranglerEmail};
+    }
+    $msg .= "Please contact your wrangler" . (defined($email) ? " at $email" : "") . "\n";
+    die $msg;
 }
 
 ############################################################################
@@ -317,6 +330,10 @@ our %formatCheckers = (
     fastq => \&validateFastQ,
     csfasta => \&validateCsfasta,
     csqual  => \&validateCsqual,
+    rpkm  => \&validateRpkm,
+    fasta  => \&validateFasta,
+    bowtie  => \&validateBowtie,
+    psl  => \&validatePsl,
     cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
     );
 
@@ -729,6 +746,11 @@ sub validateFastQ
     #   because this is what Colin Kingswood (Gingeras project)
     #   is getting in the fastq files from GIS for the GisPet project
     #   and they are being sent on to us
+    # Note on "FASTQ Quality scores":-   http://maq.sourceforge.net/qual.shtml
+    # Fastq has 2 different semantics for the score field.
+    # - fastq produced directly from Solexa has a 'solexa' quality score
+    # - fastq defined by Sanger has a 'PHRED' quality score
+    # - The 2 urls above show how to convert between both
     my ($path, $file, $type) = @_;
     HgAutomate::verbose(2, "validateFastQ($path,$file,$type)\n");
     return () if $opt_skipValidateFastQ;
@@ -739,7 +761,7 @@ sub validateFastQ
     my $seqName;
     my $seqNameRegEx = "[A-Za-z0-9_.:/-]+";
     my $seqRegEx = "[A-Za-z\n\.~]+";
-    my $qualRegEx = "[!-~\n]+";
+    my $qualRegEx = "[!-~\n]+"; # ord(!)=33, ord(~)=126
     my $states = {firstLine => {REGEX => "\@($seqNameRegEx)", NEXT => 'seqLine'},
                   seqLine => {REGEX => $seqRegEx, NEXT => 'plusLine'},
                   plusLine => {REGEX => "\\\+([A-Za-z0-9_.:/-]*)", NEXT => 'qualLine'},
@@ -848,6 +870,135 @@ sub validateCsqual
     return ();
 }
 
+sub validateFasta
+# Wold lab fasta files; they dont have fastq format. 
+# Sample fasta lines are:
+#>HWI-EAS229_75_30DY0AAXX:7:1:0:949/1
+#NGCGGATGTTCTCAGTGTCCACAGCGCAGGTGAAATAAGGGAAGCAGTAGCGACGCCCATCTCCACGCGCAGCGC
+#>HWI-EAS229_75_30DY0AAXX:7:1:0:1739/1
+#NAGCCATCAGGAAAGCAAGGAGGGGGCATTAAAGGACAATCAAGGGGTTTGGAGGAAGGAGCAGGCCGGAGGCAA
+{
+    # Wold lab has fasta files, like fastq format without quality
+    my ($path, $file, $type) = @_;
+    doTime("beginning validateFasta") if $opt_timing;
+    HgAutomate::verbose(2, "validateFasta($path,$file,$type)\n");
+    return () if $opt_skipValidateFastQ;
+    doTime("beginning validateFasta") if $opt_timing;
+    my $fh = openUtil($path, $file);
+    my $line = 0;
+    my $state = 'firstLine';
+    my $seqName;
+    my $seqNameRegEx = "[A-Za-z0-9_.:/-]+";
+    my $seqRegEx = "[A-Za-z\n\.~]+";
+    my $states = {firstLine => {REGEX => ">($seqNameRegEx)", NEXT => 'seqLine'},
+                  seqLine => {REGEX => $seqRegEx, NEXT => 'firstLine'}};
+    while(<$fh>) {
+        chomp;
+        $line++;
+        my $errorPrefix = "Invalid $type file; line $line in file '$file' is invalid [validateFasta]";
+        my $regex = $states->{$state}{REGEX};
+        if(/^${regex}$/) {
+	        $state = $states->{$state}{NEXT};
+        } else {
+	         return("$errorPrefix (expecting $state):\nline: $_");
+        }
+        last if($opt_quick && $line >= $quickCount);
+     }
+    $fh->close();
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateFasta", $line) if $opt_timing;
+    return ();
+}
+
+sub validateRpkm
+# Wold lab format, has gene name and 2 floats 
+#   Allowing Gene name to be composed of any characters but <tab>
+# Example lines:-
+#HBG2    0.583   1973.85
+#RPS20   0.523   1910.01
+#RPLP0   1.312   1800.51
+{
+    my ($path, $file, $type) = @_;
+    doTime("beginning validateRpkm") if $opt_timing;
+    my $lineNumber = 0;
+    my $fh = openUtil($path, $file);
+    while(<$fh>) {
+        chomp;
+        $lineNumber++;
+        die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n"
+            unless m/^([^\t]+)\t(\d+\.\d+)\t(\d+\.\d+)$/;
+        last if($opt_quick && $lineNumber >= $quickCount);
+    }
+    $fh->close();
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateRpkm", $lineNumber) if $opt_timing;
+    return ();
+}
+
+sub validateBowtie
+# Unkown format (for download) from Wold lab. 
+# Assume last column is optional
+# Sample lines:-
+# HWI-EAS229_75_30DY0AAXX:7:1:0:1545/1    +       chr1    5983615 NCGTCCATCTCACATCGTCAGGAAAGGGGGAAGCACTGGATGGCTGTGGCCTCACAGGCAGGGAGAGTGGGGTCC     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII 0       0:G>N
+# HWI-EAS229_75_30DY0AAXX:7:1:0:1591/1      -       uc002fcb.1|22|70699936  45      CTATTTCCACCAAGCAGCCAAGCTCAAGGGAATCGGGGAGTACGTGAACATCCGCACAGGGATGCCCTGCCACTN     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII     0       0:T>N]
+# HWI-EAS229_75_30DY0AAXX:7:1:0:1766/1    -       chr18   72954304        GCAGCCACCAGAAGCGGGAAGAGGTGAAGACAGAGCCTCCTGCAGAGCTCCCACTCTGCCAACGCCTTGACTTTN     IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII 0       0:G>N,59:T>G
+{
+    my ($path, $file, $type) = @_;
+    doTime("beginning validateBowtie") if $opt_timing;
+    my $lineNumber = 0;
+    doTime("beginning validateBedGraph") if $opt_timing;
+    my $fh = openUtil($path, $file);
+    while(<$fh>) {
+        chomp;
+        $lineNumber++;
+        next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
+        die "Failed bowtie validation, file '$file'; line $lineNumber: line=[$_]\n" 
+	    unless $_ =~ m/^([A-Za-z0-9:>_,\.\|\/-]+)\t([+-])\t([A-Za-z0-9:>_,\.\|\/-]+)\t(\d+)\t(\w+)\t(\w+)\t(\d+)\t([A-Za-z0-9:>_,\.\|\/-]+)?$/;
+        last if($opt_quick && $lineNumber >= $quickCount);
+    }
+    $fh->close();
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validateBowtie", $lineNumber) if $opt_timing;
+    return ();
+}
+
+sub validatePsl
+# PSL format (for download) from Wold lab. 
+# EXAMPLE FROM http://genome.ucsc.edu/FAQ/FAQformat#format2
+# This adds 2 columns (sequence,<tab>sequence,) to the standard 21 columns
+# Only the first 21 are validated
+#
+# Sample first 6 lines
+#psLayout version 3
+#
+#match   mis-    rep.    N's     Q gap   Q gap   T gap   T gap   strand  Q               Q       Q       Q       T               T       T       T       block   blockSizes      qStarts  tStarts
+#        match   match           count   bases   count   bases           name            size    start   end     name            size    start   end     count
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------
+#71      3       0       0       0       0       0       0       -       HWI-EAS229_75_30DY0AAXX:4:1:0:743/1     75      1       75      chr2    242951149       184181032       184181106       1  74,      0,      184181032,      agccttttacagcaacacctttacctctgctagatctttctgtagctcgtctgaagccatgggggctgggtcag,     agccttttccagcaacacctttacctcttctagatctttctgtagctcttctgaagccatgggggctgggtcag,
+#72      2       0       0       0       0       0       0       -       HWI-EAS229_75_30DY0AAXX:7:1:0:713/1     75      1       75      chr14   106368585       49540119        49540193        1  74,      0,      49540119,       cgggtgcgggccgagcagttctccgcacctccggtaaaggttcaggaccgggtgatggtctctgcagcagtcag,     ccggtgcgggccgagcagttctccgcacctccggtaaaggtgcaggaccgggtgatggtctctgcagcagtcag,
+{
+    my ($path, $file, $type) = @_;
+    my $lineNumber = 0;
+    doTime("beginning validatePsl") if $opt_timing;
+    my $fh = openUtil($path, $file);
+    while(<$fh>) {
+        chomp;
+        $lineNumber++;
+        next if $lineNumber == 1 and m/^psLayout version \d+/; # check first line 
+        next if $lineNumber == 2 and m/^$/;
+        next if $lineNumber == 3 and m/^match/;
+        next if $lineNumber == 4 and m/^\s+match/;
+        next if $lineNumber == 5 and m/^------/;
+        die "Failed $type validation, file '$file'; line $lineNumber: line=[$_]\n" 
+	    unless m/^(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t([+-][+-]?)\t([A-Za-z0-9:>\|\/_-]+)\t(\d+)\t(\d+)\t(\d+)\t(\w+)\t(\d+)\t(\d+)\t(\d+)\t(\d+)\t([0-9,]+)\t([0-9,]+)\t([0-9,]+)/;
+        last if($opt_quick && $lineNumber >= $quickCount);
+    }
+    $fh->close();
+    HgAutomate::verbose(2, "File \'$file\' passed $type validation\n");
+    doTime("done validatePsl", $lineNumber) if $opt_timing;
+    return ();
+}
+
 
 ############################################################################
 # Misc subroutines
@@ -898,6 +1049,16 @@ sub ddfKey
     }
 }
 
+sub isDownloadOnly {
+    my ($view, $grant, $lab) = @_;
+    # Dont load any RawData* or Comparative views, 
+    # Dont load Alignments unless they are from Gingeras or Wold labs (RNA folks like to  see their RNAs)
+    # Riken group have RawData and RawData2 because they have colorspace fasta and quality files
+    # Wold group have RawData, RawData2, RawData3, RawData4 
+    return ($view =~ m/^RawData[0-9]?$/ or $view eq 'Comparative' 
+	or ($view eq 'Alignments' and $grant ne "Gingeras" and $grant ne "Wold")) ? 1 : 0;
+}
+
 sub printCompositeTdbSettings {
 # prints out trackDb.ra settings for the composite track
     local *OUT_FILE = shift;
@@ -914,8 +1075,7 @@ sub printCompositeTdbSettings {
     for my $view (keys %{$daf->{TRACKS}}) {
         for my $key (keys %ddfSets) {
             if(defined($ddfSets{$key}{VIEWS}{$view})) {
-		# Load alignments for all Gingeras labs except CSHL as these are currently 100-400M rows
-                my $downloadOnly = $view eq 'RawData' || $view eq 'RawData2' || ($view eq 'Alignments' and ($daf->{grant} ne "Gingeras" or $daf->{lab} eq "Cshl")) ? 1 : 0;
+                my $downloadOnly = isDownloadOnly($view, $daf->{grant}, $daf->{lab});
                 if(!$downloadOnly) {
                     $setting = $setting . " " . $view . "=" . $view;
                     $visDefault = $visDefault . " " . $view . "=";
@@ -1086,8 +1246,8 @@ if(!$opt_validateDaf) {
 }
 
 # labs is now in fact the list of grants (labs are w/n grants, and are not currently validated).
-my $grants = Encode::getGrants($configPath);
-my $fields = Encode::getFields($configPath);
+$grants = Encode::getGrants($configPath);
+$fields = Encode::getFields($configPath);
 
 if($opt_validateDaf) {
     if(-f $submitDir) {
@@ -1099,7 +1259,7 @@ if($opt_validateDaf) {
     exit(0);
 }
 
-my $daf = Encode::getDaf($submitDir, $grants, $fields);
+$daf = Encode::getDaf($submitDir, $grants, $fields);
 
 my $db = HgDb->new(DB => $daf->{assembly});
 $db->getChromInfo(\%chromInfo);
@@ -1446,6 +1606,9 @@ foreach my $ddfLine (@ddfLines) {
         for my $var (@variables) {
             my $val = $hash{$var};
             $val = ucfirst(lc($val));
+            # trailing + => Plus, - => Neg (e.g. H9ES-AFP+)
+            $val =~ s/\+$/Pos/;
+            $val =~ s/\-$/Neg/;
             $tableName = $tableName . $val;
         }
 
@@ -1510,6 +1673,12 @@ foreach my $ddfLine (@ddfLines) {
     # safe, we strip non-alphanumerics.
     $tableName =~ s/[^A-Za-z0-9]//g;
 
+    die "Table name [$tableName] too long, must be <= 64 chars, got [".length($tableName)."]\n" if length($tableName) > 64;
+
+    if($tableNamesUsed{$tableName}++) {
+        dieTellWrangler("System Error: identical tableName '$tableName' was generated by multiple data sets\n");
+    }
+
     if(!$opt_allowReloads) {
         if($db->quickQuery("select count(*) from trackDb where tableName = ?", $tableName)) {
             die "view '$view' has already been loaded as track '$tableName'\nPlease contact your wrangler if you need to reload this data\n";
@@ -1517,9 +1686,9 @@ foreach my $ddfLine (@ddfLines) {
     }
 
     # XXXX Move the decision about which views have tracks into the DAF?
-    # Gingeras group need to see their alignments
-    # Riken group have RawData and RawData2 because they have colorspace fasta and quality files
-    my $downloadOnly = $view eq 'RawData' || $view eq 'RawData2'|| $view eq 'Comparative' || ($view eq 'Alignments' and $daf->{grant} ne "Gingeras") ? 1 : 0;
+    # Already this is used in 2 places so made it a function, 
+    # would be better in the DAF except we'd have to go change all the DAFs :(
+    my $downloadOnly = isDownloadOnly($view, $daf->{grant}, $daf->{lab});
 
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "view $view\n";

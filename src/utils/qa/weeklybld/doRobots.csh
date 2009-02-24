@@ -52,7 +52,7 @@ echo "disabled doSearchRobot.csh [${0}: `date`]"
 
 # need to create a mini-sandbox to build these robot utilities
 #echo "disabled doJavaUtilBuild.csh [${0}: `date`]"
-ssh hgwdev $WEEKLYBLD/doJavaUtilBuild.csh
+ssh -n hgwdev $WEEKLYBLD/doJavaUtilBuild.csh
 set err = $status
 if ( $err ) then
     echo "error running doJavaUtilBuild.csh: $err [${0}: `date`]" 
@@ -60,7 +60,7 @@ if ( $err ) then
 endif 
 
 #echo "disabled doTrackCheckRobot.csh [${0}: `date`]"
-ssh hgwdev $WEEKLYBLD/doTrackCheckRobot.csh
+ssh -n hgwdev $WEEKLYBLD/doTrackCheckRobot.csh
 set err = $status
 if ( $err ) then
     echo "error running doTrackCheckRobot.csh: $err [${0}: `date`]" 
@@ -69,7 +69,7 @@ endif
 
 # note this uses java and ant, so it will not work on beta, so run from dev instead
 #echo "disabled doLiftOverTestRobot.csh [${0}: `date`]"
-ssh hgwdev $WEEKLYBLD/doLiftOverTestRobot.csh
+ssh -n hgwdev $WEEKLYBLD/doLiftOverTestRobot.csh
 set err = $status
 if ( $err ) then
     echo "error running doLiftOverTestRobot.csh: $err [${0}: `date`]" 

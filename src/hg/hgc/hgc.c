@@ -220,7 +220,7 @@
 #include "mammalPsg.h"
 #include "lsSnpPdbChimera.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1503 2009/02/09 17:39:13 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1509 2009/02/23 22:31:52 fanhsu Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1036,6 +1036,73 @@ if (bedSize >= 5 && showTopScorers != NULL)
 }
 
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
+void linkToOtherBrowserExtra(char *otherDb, char *chrom, int start, int end, char *extra);
+
+static void printCompareGenomeLinks(struct trackDb *tdb,char *name)
+/* if "compareGenomeLinks" exists then a table of the same name in n different databases is sought.
+   if a row exist in the other db table matching the current item, then a link is printed */
+{
+char *setting = trackDbSettingClosestToHome(tdb,"compareGenomeLinks");
+if(setting == NULL)
+    return;
+struct sqlConnection *conn = hAllocConn(database); // Need only to connect to one db
+if(conn == NULL)
+    return;
+
+char *words[20];
+setting = cloneString(setting);
+int ix,cnt = chopLine(setting, words);
+char query[512];
+char extra[128];
+boolean gotOne = FALSE;
+for(ix=0;ix<cnt;ix++)
+    {
+    char *db = words[ix];          // db.table.column=title or db.table=title or db=title
+    char *table,*column = "name";
+    char *title = strchr(words[ix],'=');
+    if(title==NULL)  // Must have title
+        continue;
+    *title = '\0';
+    title++;
+    if((table = strchr(words[ix],'.')) == NULL)
+        table = tdb->tableName;
+    else
+        {
+        *table++ = '\0';  // assigns before advance
+        if((words[ix] = strchr(table,'.')) != NULL)
+            {
+            *words[ix] = '\0';
+            column = ++words[ix]; // advance before assigns
+            }
+        }
+    safef(query,sizeof(query),"select chrom,chromStart,chromEnd from %s.%s where %s=\"%s\";",db,table,column,name);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    if(sr == NULL)
+        continue;
+    char **row = sqlNextRow(sr);
+    if(row == NULL)
+        continue;
+    char *chrom = *row++;
+    int beg = atoi(*row++);
+    int end = atoi(*row);
+    if(!gotOne)
+        {
+        gotOne = TRUE;
+        printf("<P>The item \"%s\" has been located in other genomes:\n<UL>\n",name);
+        }
+    printf("<LI>");
+    safef(extra,sizeof(extra),"%s=full",tdb->tableName);
+    linkToOtherBrowserExtra(db, chrom, beg, end, extra);
+    printf("%s</A></LI>\n",strSwapChar(title,'_',' '));
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+freeMem(setting);
+if(gotOne)
+    printf("</UL>\n");
+else
+    printf("<P>Currently the item \"%s\" has not been located in another genome.\n",name);
+}
 
 void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize,
 	boolean onlyDiff, int blockNo);
@@ -1224,6 +1291,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, bedSize);
     bedPrintPos(bed, bedSize, tdb);
+    printCompareGenomeLinks(tdb,bed->name);
     }
 sqlFreeResult(&sr);
 getBedTopScorers(conn, tdb, table, item, start, bedSize);
@@ -17400,6 +17468,10 @@ if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
 else if (sameWord(type, "encodePeak"))
     doEncodePeak(ct->tdb, ct);
+else if (sameWord(type, "bigWig"))
+    bigWigCustomClick(ct->tdb);
+else if (sameWord(type, "bigBed"))
+    bigBedCustomClick(ct->tdb);
 else if (ct->wiggle)
     {
     if (ct->dbTrack)
@@ -21688,7 +21760,8 @@ else if (sameString("snpArrayAffy250Nsp", track) ||
     }
 else if (sameString("snpArrayIllumina300", track) ||
          sameString("snpArrayIllumina550", track) ||
-	 sameString("snpArrayIllumina650", track))
+	 sameString("snpArrayIllumina650", track) ||
+	 (sameString("snpArrayIllumina1M", track) && (strstr(item, "rs") != NULL) ) )
     {
     doSnpArray(tdb, item, "Illumina");
     }

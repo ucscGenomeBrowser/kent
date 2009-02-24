@@ -25,7 +25,7 @@
 #include "jsHelper.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.95 2009/02/09 19:12:35 kent Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.96 2009/02/10 22:12:08 kent Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1509,6 +1509,39 @@ static struct customFactory bigWigFactory =
     bigWigLoader,
     };
 
+/*** Big Bed Factory - for big client-side BED tracks ***/
+
+static boolean bigBedRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type, 
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a wig track */
+{
+return (sameType(type, "bigBed"));
+}
+
+static struct customTrack *bigBedLoader(struct customFactory *fac,  
+	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up big bed data until get next track line. */
+{
+/* Not much to this.  A bigBed has nothing here but a track line. */
+struct hash *settings = track->tdb->settingsHash;
+char *dataUrl = hashFindVal(settings, "dataUrl");
+if (dataUrl == NULL)
+    errAbort("Missing dataUrl setting from track of type=bigBed");
+return track;
+}
+
+static struct customFactory bigBedFactory = 
+/* Factory for bigBed tracks */
+    {
+    NULL,
+    "bigBed",
+    bigBedRecognizer,
+    bigBedLoader,
+    };
+
+
 /*** Framework for custom factories. ***/
 
 static struct customFactory *factoryList;
@@ -1529,6 +1562,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &gtfFactory);
     slAddTail(&factoryList, &gffFactory);
     slAddTail(&factoryList, &bedFactory);
+    slAddTail(&factoryList, &bigBedFactory);
     slAddTail(&factoryList, &bedGraphFactory);
     slAddTail(&factoryList, &microarrayFactory);
     slAddTail(&factoryList, &coloredExonFactory);

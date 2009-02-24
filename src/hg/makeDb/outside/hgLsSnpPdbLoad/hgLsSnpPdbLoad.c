@@ -4,7 +4,7 @@
 #include "jksql.h"
 #include "lsSnpPdb.h"
 
-static char const rcsid[] = "$Id: hgLsSnpPdbLoad.c,v 1.2 2009/02/03 07:11:41 markd Exp $";
+static char const rcsid[] = "$Id: hgLsSnpPdbLoad.c,v 1.3 2009/02/20 22:49:31 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -37,13 +37,14 @@ static char *createSql =
     "    index(pdbId),"
     "    index(snpId));";
 
+
 static void buildLsSnpPdb(char *lsSnpProf, char *lsSnpDb, char *tabFile)
 /* fetch LSSNP data and create an lsSnpPdb format tab file  */
 {
 struct sqlConnection *conn = sqlConnectProfile(lsSnpProf, lsSnpDb);
 FILE *fh = mustOpen(tabFile, "w");
 char *query =
-    "SELECT pr.accession,ps.pdb_id,pstr.struct_type,ps.chain,SNP.name,ps.snp_position "
+    "SELECT distinct pr.accession,ps.pdb_id,pstr.struct_type,ps.chain,SNP.name,ps.snp_position "
     "FROM Protein pr,PDB_SNP ps, SNP, PDB_Structure pstr "
     "WHERE (ps.snp_id = SNP.snp_id) AND (pr.prot_id = ps.prot_id) "
     "AND (pstr.pdb_id = ps.pdb_id)";

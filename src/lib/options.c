@@ -12,7 +12,7 @@
 #include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.24 2005/12/12 04:03:40 kent Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.25 2009/02/12 01:13:52 galt Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -138,7 +138,9 @@ if (arg[0] == '-' && (arg[1] == 0 || isspace(arg[1])))
 
 /* It's nice to be able to use url's in the command line, but they
  * may have = in them... */
-if (startsWith("http://", arg))
+if (startsWith("http://", arg)
+ || startsWith("https://", arg)
+ || startsWith("ftp://", arg))
     return FALSE;
 
 name = arg;

@@ -30,6 +30,7 @@
 #include "wikiTrack.h"
 #include "ctgPos.h"
 #include "bed.h"
+#include "bigBed.h"
 #include "bedCart.h"
 #include "customTrack.h"
 #include "cytoBand.h"
@@ -43,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1552 2009/02/09 22:24:08 larrym Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1554 2009/02/11 00:49:43 hiram Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2606,6 +2607,24 @@ else if (sameString(type, "bigWig"))
     tg->bbiFileName = trackDbSetting(tdb, "dataUrl");
     tg->labelNextItemButtonable = FALSE;
     }
+else if (sameString(type, "bigBed"))
+    {
+    /* Figure out file name from settings. */
+    char *fileName = trackDbSetting(tdb, "dataUrl");
+
+    /* Briefly open file to find field counts, and from that revise the
+     * tdb->type to be more complete. */
+    struct bbiFile *bbi = bigBedFileOpen(fileName);
+    char extra = (bbi->fieldCount > bbi->definedFieldCount ? '+' : '.');
+    char typeBuf[64];
+    safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
+    tdb->type = cloneString(typeBuf);
+    bbiFileClose(&bbi);
+
+    /* Finish wrapping track around tdb. */
+    tg = trackFromTrackDb(tdb);
+    tg->bbiFileName = fileName;
+    }
 else if (sameString(type, "bedGraph"))
     {
     tg = trackFromTrackDb(tdb);
@@ -2835,6 +2854,7 @@ return (hTableExists("hgFixed", "cutters") &&
 }
 
 void fr2ScaffoldEnsemblLink(char *archive)
+/* print out Ensembl link to appropriate scaffold there */
 {
     struct sqlConnection *conn = hAllocConn(database);
     struct sqlResult *sr = NULL;
@@ -2969,8 +2989,8 @@ if (ensVersionString[0])
 	{
 	if (sameWord(database,"fr2"))
 	    fr2ScaffoldEnsemblLink(archive);
-	/* see if we are entirely within a single contig */
-	if (hTableExists(database, "ctgPos"))
+	else if (hTableExists(database, "ctgPos"))
+	    /* see if we are entirely within a single contig */
 	    {
 	    struct sqlConnection *conn = hAllocConn(database);
 	    struct sqlResult *sr = NULL;

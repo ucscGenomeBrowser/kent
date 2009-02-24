@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.64 2009/02/07 18:53:30 kent Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.68 2009/02/18 00:33:25 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -398,18 +398,23 @@ for (;;)
     }
 }
 
-struct dyString *sendFtpCommand(int sd, char *cmd, boolean seeResult, boolean noTimeoutError)
+void sendFtpCommandOnly(int sd, char *cmd)
+/* send command to ftp server */
+{   
+write(sd, cmd, strlen(cmd));
+}
+
+
+struct dyString *receiveFtpReply(int sd, char *cmd, boolean seeResult)
 /* send command to ftp server and check resulting reply code, 
    give error if not desired reply */
-{   
+{
 struct dyString *rs = NULL;
 int reply = 0;
 char buf[4*1024];
 int readSize;
 char *startLastLine = NULL;
 long timeOut = 1000000; /* wait in microsec */
-
-write(sd, cmd, strlen(cmd));
 
 rs = newDyString(4*1024);
 while (1)
@@ -418,9 +423,7 @@ while (1)
 	{
 	if (!readReadyWait(sd, timeOut))
 	    {
-	    if (!noTimeoutError)
-		errAbort("ftp server response timed out > %ld microsec",timeOut);
-	    return rs;
+	    errAbort("ftp server response timed out > %ld microsec",timeOut);
 	    }
 	if ((readSize = read(sd, buf, sizeof(buf))) == 0)
 	    break;
@@ -461,11 +464,17 @@ if (!seeResult) dyStringFree(&rs);
 return rs;
 }
 
+struct dyString *sendFtpCommand(int sd, char *cmd, boolean seeResult)
+/* send command to ftp server and check resulting reply code, 
+   give error if not desired reply */
+{   
+sendFtpCommandOnly(sd, cmd);
+return receiveFtpReply(sd, cmd, seeResult);
+}
 
 int parsePasvPort(char *rs)
 /* parse PASV reply to get the port and return it */
 {
-char *rsCopy = strdup(rs);
 char *words[7];
 int wordCount;
 char *rsStart = strchr(rs,'(');
@@ -477,9 +486,179 @@ wordCount = chopString(rsStart, ",", words, ArraySize(words));
 if (wordCount != 6)
     errAbort("PASV reply does not parse correctly");
 result = atoi(words[4])*256+atoi(words[5]);    
-freez(&rsCopy);
 return result;
 }    
+
+
+long long parseFtpSIZE(char *rs)
+/* parse reply to SIZE and return it */
+{
+char *words[3];
+int wordCount;
+char *rsStart = rs;
+long long result = 0;
+wordCount = chopString(rsStart, " ", words, ArraySize(words));
+if (wordCount != 2)
+    errAbort("SIZE reply does not parse correctly");
+result = atoll(words[1]);    
+return result;
+}    
+
+
+time_t parseFtpMDTM(char *rs)
+/* parse reply to MDTM and return it
+ * 200 YYYYMMDDhhmmss */
+{
+char spread[] = "YYYY MM DD hh mm ss";
+char *to = spread;
+char *from = NULL;
+char *words[3];
+int wordCount;
+char *rsStart = rs;
+int len = strlen(rs);
+if (len == 0) 
+    return FALSE;
+char *rsLast = rs + len - 1;
+if (*rsLast == '\n')
+    {
+    *rsLast = 0;
+    --rsLast;
+    --len;
+    if (len == 0) 
+	return FALSE;
+    }
+if (*rsLast == '\r')
+    {
+    *rsLast = 0;
+    --rsLast;
+    --len;
+    if (len == 0) 
+	return FALSE;
+    }
+wordCount = chopString(rsStart, " ", words, ArraySize(words));
+if (wordCount != 2)
+    errAbort("MDTM reply does not parse correctly");
+
+//printf("MDTM parse string [%s], length=%lld\n", words[1], (long long) strlen(words[1]));
+
+from = words[1];
+
+*to++ = *from++;
+*to++ = *from++;
+*to++ = *from++;
+*to++ = *from++;
+*to++ = '-';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = '-';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = ' ';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = ':';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = ':';
+*to++ = *from++;
+*to++ = *from++;
+*to++ = 0;
+
+// printf("MDTM to [%s], length=%lld\n", spread, (long long) strlen(spread));
+
+struct tm tm;
+time_t t;
+
+if (strptime(spread, "%Y-%m-%d %H:%M:%S", &tm) == NULL)
+    { /* Handle error */;
+    errAbort("unable to parse MDTM string [%s]", spread);
+    }
+
+//printf("year: %d; month: %d; day: %d;\n",
+//        tm.tm_year, tm.tm_mon, tm.tm_mday);
+//printf("hour: %d; minute: %d; second: %d\n",
+//        tm.tm_hour, tm.tm_min, tm.tm_sec);
+//printf("week day: %d; year day: %d\n", tm.tm_wday, tm.tm_yday);
+
+
+tm.tm_isdst = -1;      /* Not set by strptime(); tells mktime()
+                          to determine whether daylight saving time
+                          is in effect */
+t = mktime(&tm);
+if (t == -1)
+    { /* Handle error */;
+    errAbort("mktime failed while parsing last-modified string [%s]", words[1]);
+    }
+
+//printf("seconds since the Epoch: %lld\n", (long long) t);"
+
+return t;
+}    
+
+
+
+boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime)
+/* Return date and size of ftp url file */
+{
+struct netParsedUrl npu;
+struct dyString *rs = NULL;
+int sd;
+long timeOut = 1000000; /* wait in microsec */
+char cmd[256];
+
+// TODO maybe remove this workaround where udc cache wants info on URL "/" ?
+
+/* Parse the URL and connect. */
+netParseUrl(url, &npu);
+
+if (!sameString(npu.protocol, "ftp"))
+    errAbort("Sorry, can only netOpen ftp's currently");
+
+if (sameString(npu.file,"/"))
+    {
+    *retSize = 0;
+    *retTime = time(NULL);
+    return TRUE;
+    }
+
+sd = netMustConnect(npu.host, atoi(npu.port));
+
+/* Ask remote ftp server for file info. */
+
+/* don't send a command, just read the welcome msg */
+if (readReadyWait(sd, timeOut))
+    sendFtpCommand(sd, "", FALSE);
+
+safef(cmd,sizeof(cmd),"USER %s\r\n", npu.user);
+sendFtpCommand(sd, cmd, FALSE);
+
+safef(cmd,sizeof(cmd),"PASS %s\r\n", npu.password);
+sendFtpCommand(sd, cmd, FALSE);
+
+sendFtpCommand(sd, "TYPE I\r\n", FALSE);  // Not sure this is required for just size/date
+/* 200 Type set to I */
+/* (send the data as binary, so can support compressed files) */
+
+safef(cmd,sizeof(cmd),"SIZE %s\r\n", npu.file);
+rs = sendFtpCommand(sd, cmd, TRUE);
+*retSize = parseFtpSIZE(rs->string);
+/* 200 12345 */
+
+/* Clean up and return handle. */
+dyStringFree(&rs);
+
+safef(cmd,sizeof(cmd),"MDTM %s\r\n", npu.file);
+rs = sendFtpCommand(sd, cmd, TRUE);
+*retTime = parseFtpMDTM(rs->string);
+/* 200 YYYYMMDDhhmmss */
+
+/* Clean up and return handle. */
+dyStringFree(&rs);
+
+close(sd);   
+
+return TRUE;
+}
 
 
 int netGetOpenFtp(char *url)
@@ -501,39 +680,62 @@ sd = netMustConnect(npu.host, atoi(npu.port));
 
 /* don't send a command, just read the welcome msg */
 if (readReadyWait(sd, timeOut))
-    sendFtpCommand(sd, "", FALSE, FALSE);
+    sendFtpCommand(sd, "", FALSE);
 
 safef(cmd,sizeof(cmd),"USER %s\r\n",npu.user);
-sendFtpCommand(sd, cmd, FALSE, FALSE);
+sendFtpCommand(sd, cmd, FALSE);
 
 safef(cmd,sizeof(cmd),"PASS %s\r\n",npu.password);
-sendFtpCommand(sd, cmd, FALSE, FALSE);
+sendFtpCommand(sd, cmd, FALSE);
 
-sendFtpCommand(sd, "TYPE I\r\n", FALSE, FALSE);
+sendFtpCommand(sd, "TYPE I\r\n", FALSE);
 /* 200 Type set to I */
 /* (send the data as binary, so can support compressed files) */
 
-rs = sendFtpCommand(sd, "PASV\r\n", TRUE, FALSE);
+rs = sendFtpCommand(sd, "PASV\r\n", TRUE);
 /* 227 Entering Passive Mode (128,231,210,81,222,250) */
 
+if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+    {
+    safef(cmd,sizeof(cmd),"REST %lld\r\n", (long long) npu.byteRangeStart);
+    sendFtpCommand(sd, cmd, FALSE);
+    }
+
 safef(cmd,sizeof(cmd),"RETR %s\r\n", npu.file);
-/* we can't wait for reply because 
-   we need to start the next fetch connect 
-   but then if there is an error e.g. missing file,
-   then we don't see the err msg because we
-   already closed the port and are waiting.
-   And our timeout is long - indefinitely so?
-*/
-sendFtpCommand(sd, cmd, FALSE, TRUE);  
+sendFtpCommandOnly(sd, cmd);  
 
 sdata = netMustConnect(npu.host, parsePasvPort(rs->string));
-
-/* Clean up and return handle. */
-dyStringFree(&rs);
 
 /* Because some FTP servers will kill the data connection
  * as soon as the control connection closes,
  * we have to develop a workaround using a partner process. */
+
+/* see which comes first, an error message on the control conn
+ * or data on the data conn */
+
+int secondsWaited = 0;
+while (TRUE)
+    {
+    if (secondsWaited >= 10)
+	{
+	errAbort("ftp server error on cmd=[%s] timed-out waiting for data or error\n",cmd);
+	}
+    timeOut = 1000000; /* wait in microsec */
+    if (readReadyWait(sdata, timeOut))
+	{
+	break;   // we have some data
+	}
+    if (readReadyWait(sd, 0)) /* wait in microsec */
+	{
+	receiveFtpReply(sd, cmd, FALSE);  // this can see an error like bad filename
+	}
+    ++secondsWaited;
+    }
+    
+
+/* Clean up and return handle. */
+dyStringFree(&rs);
+
 
 fflush(stdin);
 fflush(stdout);
@@ -558,15 +760,27 @@ if (pid == 0)
 
     char buf[32768];
     int rd = 0;
+    long long dataPos = 0; 
+    if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+	dataPos = npu.byteRangeStart;
     while((rd = read(sdata, buf, 32768)) > 0) 
 	{
+	if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+	    if ((dataPos + rd) > npu.byteRangeEnd)
+		rd = npu.byteRangeEnd - dataPos + 1;
 	int wt = write(pipefd[1], buf, rd);
 	if (wt == -1)
 	    errnoAbort("error writing ftp data to pipe");
+	dataPos += rd;
+	if ((npu.byteRangeStart != -1) && (npu.byteRangeEnd != -1))
+	    if (dataPos >= npu.byteRangeEnd)
+		break;	    
 	}
     if (rd == -1)
 	errnoAbort("error reading ftp socket");
     close(pipefd[1]);  /* being safe */
+    close(sd);
+    close(sdata);
 
     exit(0);
 
@@ -934,104 +1148,6 @@ else
     }
 }
 
-#ifdef EXAMPLE_ONLY  /* Real copy of this moved to udc.c */
-int udcDataViaHttp(char *url, bits64 offset, int size, void *buffer)
-/* Fetch a block of data of given size into buffer using the http: protocol.
- * Returns number of bytes actually read.  Does an errAbort on
- * error.  Typically will be called with size in the 8k - 64k range. */
-{
-char rangeUrl[1024];
-if (!startsWith("http://",url))
-    {
-    errAbort("Invalid protocol in url [%s] in udcDataViaHttp, only http supported", url); 
-    }
-safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=%lld-%lld"
-  , url
-  , (long long) offset
-  , (long long) offset + size - 1);
-int sd = netUrlOpen(rangeUrl);
-if (sd < 0)
-    errAbort("Couldn't open %s", url);   // do we really want errAbort here?
-
-char *newUrl = NULL;
-int newSd = 0;
-if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
-    errAbort("Couldn't open %s", url);   // do we really want errAbort here?
-
-if (newUrl)  // not sure redirection will work with byte ranges as it is now
-    {
-    freeMem(newUrl); 
-    sd = newSd;
-    }
-
-int rd = 0, total = 0, remaining = size;
-char *buf = (char *)buffer;
-while ((remaining > 0) && ((rd = read(sd, buf, remaining)) > 0))
-    {
-    total += rd;
-    buf += rd;
-    remaining -= rd;
-    }
-if (rd == -1)
-    errnoAbort("error reading socket");
-close(sd);  
-
-return total;
-}
-
-int udcSizeTimeViaHttp(char *url, long long *pSize, time_t *pTime)
-/* Sets size and last modified time of URL
- * and returns status of HEAD GET. */
-{
-struct hash *hash = newHash(0);
-int status = netUrlHead(url, hash);
-if (status != 200) // && status != 302 && status != 301)
-    {
-    return status;
-    }
-*pSize = atoll(hashMustFindVal(hash, "Content-Length:"));
-//Content-Length: 1677
-
-char *lastModString = hashMustFindVal(hash, "Last-Modified:");
-// Last-Modified: Wed, 25 Feb 2004 22:37:23 GMT
-// Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
-
-#include <time.h>
-
-struct tm tm;
-time_t t;
-
-// TODO: it's very likely that there are other date string patterns
-//  out there that might be encountered.
-if (strptime(lastModString, "%a, %d %b %Y %H:%M:%S %Z", &tm) == NULL)
-    { /* Handle error */;
-    errAbort("unable to parse last-modified string [%s]", lastModString);
-    }
-
-//printf("year: %d; month: %d; day: %d;\n",
-//        tm.tm_year, tm.tm_mon, tm.tm_mday);
-//printf("hour: %d; minute: %d; second: %d\n",
-//        tm.tm_hour, tm.tm_min, tm.tm_sec);
-//printf("week day: %d; year day: %d\n", tm.tm_wday, tm.tm_yday);
-
-
-tm.tm_isdst = -1;      /* Not set by strptime(); tells mktime()
-                          to determine whether daylight saving time
-                          is in effect */
-t = mktime(&tm);
-if (t == -1)
-    { /* Handle error */;
-    errAbort("mktime failed while parsing last-modified string [%s]", lastModString);
-    }
-
-//printf("seconds since the Epoch: %ld\n", (long) t);"
-
-*pTime = t;
-
-hashFree(&hash);
-return status;
-}
-#endif /* EXAMPLE_ONLY */
 
 struct lineFile *netLineFileOpen(char *url)
 /* Return a lineFile attached to url.  This one

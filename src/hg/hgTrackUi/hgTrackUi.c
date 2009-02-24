@@ -32,12 +32,13 @@
 #include "expRecord.h"
 #include "wikiTrack.h"
 #include "pcrResult.h"
+#include "dgv.h"
 #include "transMapStuff.h"
 
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.472 2009/02/09 19:42:22 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.473 2009/02/23 22:55:04 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2154,6 +2155,49 @@ if (target != NULL)
 baseColorDrawOptDropDown(cart, tdb);
 }
 
+void dgvUi(struct trackDb *tdb)
+/* Database of Genomic Variants: filter by publication. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[256];
+safef(query, sizeof(query),
+      "select reference,pubMedId from %s group by pubMedId order by reference;", tdb->tableName);
+sr = sqlGetResult(conn, query);
+printf("<BR><B>Filter by publication reference:</B>\n");
+char cartVarName[256];
+safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterType", tdb->tableName);
+boolean isExclude = sameString("exclude", cartUsualString(cart, cartVarName, "exclude"));
+cgiMakeRadioButton(cartVarName, "exclude", isExclude);
+printf("exclude\n");
+cgiMakeRadioButton(cartVarName, "include", !isExclude);
+printf("include<BR>\n");
+safef (cartVarName, sizeof(cartVarName), "hgt_%s_filterPmId", tdb->tableName);
+struct slName *checked = cartOptionalSlNameList(cart, cartVarName);
+#define MAX_DGV_REFS 128
+char *labelArr[MAX_DGV_REFS], *valueArr[MAX_DGV_REFS];
+int refCount = 0;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *ref = row[0];
+    char *pmId = row[1];
+    char label[512];
+    safef(label, sizeof(label),
+	  "<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed"
+	  "&list_uids=%s&dopt=Abstract&tool=genome.ucsc.edu\" TARGET=_BLANK>%s</A>", pmId, ref);
+    labelArr[refCount] = cloneString(label);
+    valueArr[refCount++] = cloneString(pmId);
+    if (refCount >= MAX_DGV_REFS)
+	errAbort("dgvUi: %s has too many references (max %d)", tdb->tableName, MAX_DGV_REFS);
+    }
+sqlFreeResult(&sr);
+jsMakeCheckboxGroupSetClearButton(cartVarName, TRUE);
+jsMakeCheckboxGroupSetClearButton(cartVarName, FALSE);
+cgiMakeCheckboxGroupWithVals(cartVarName, labelArr, valueArr, refCount, checked, 4);
+hFreeConn(&conn);
+}
+
 
 void superTrackUi(struct trackDb *superTdb)
 /* List tracks in this collection, with visibility controls and UI links */
@@ -2338,6 +2382,8 @@ else if (sameString(track, "hapmapSnps"))
     hapmapSnpsUi(tdb);
 else if (sameString(track, "switchDbTss"))
     switchDbScoreUi(tdb);
+else if (sameString(track, "dgv") || (startsWith("dgvV", track) && isdigit(track[4])))
+    dgvUi(tdb);
 else if (tdb->type != NULL)
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */

@@ -219,13 +219,18 @@ char varName[65];
 
 while ((next = strchr(next, '$')) != NULL)
     {
+    if (dest == NULL)
+        dest = dyStringNew(strlen(src));
+    dyStringAppendN(dest, start, next-start);
     if (*(next+1) == '$')
-        next +=2;  // $$ is a literal
+        {
+        // $$ is a literal $
+        dyStringAppendC(dest, '$');
+        start = next = next + 2;
+        }
     else
         {
-        if (dest == NULL)
-            dest = dyStringNew(strlen(src));
-        dyStringAppendN(dest, start, next-start);
+        // variable reference
         start = next = parseVarName(desc, next, varName, sizeof(varName));
         substVar(desc, tdb, database, varName, dest);
         }

@@ -68,7 +68,7 @@ if {($whichReport != "branch") && ($whichReport != "review")} {
 }
 
 # this is the base
-set CVS_REPORTS_BASE /hive/groups/qa/cvs-reports/
+set CVS_REPORTS_BASE /hive/groups/qa/cvs-reports-latest/
 set CVS_REPORTS_DIR $CVS_REPORTS_BASE/$whichReport
 
 # this is the cvs sandbox used (now shared by branch and review versions of cvs-reports)

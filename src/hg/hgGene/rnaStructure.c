@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: rnaStructure.c,v 1.9 2006/07/01 08:32:33 kent Exp $";
+static char const rcsid[] = "$Id: rnaStructure.c,v 1.10 2009/02/13 02:38:28 markd Exp $";
 
 static void rnaTrashDirsInit(char **tables, int count)
 /*	create trash directories if necessary */
@@ -53,7 +53,7 @@ webPrintLabelCell("Region");
 webPrintLabelCell("Fold Energy");
 webPrintLabelCell("Bases");
 webPrintLabelCell("Energy/Base");
-webPrintWideLabelCell("<CENTER>Display As</CENTER>", 3);
+webPrintWideCenteredLabelCell("Display As", 3);
 for (side = 0; side < ArraySize(names); ++side)
     {
     char *table = tables[side];

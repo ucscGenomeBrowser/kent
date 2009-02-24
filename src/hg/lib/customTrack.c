@@ -26,7 +26,7 @@
 #include "trashDir.h"
 #include "jsHelper.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.174 2008/09/03 19:19:21 markd Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.175 2009/02/13 01:34:07 galt Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -290,11 +290,22 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     {
     if (isDefaultTrack(ct))
         {
-        char *p = skipToNumeric(ct->tdb->shortLabel);
-        if (*p)
-            seqNum = sqlSigned(skipToNumeric(ct->tdb->shortLabel));
-        else
-            seqNum = 1;
+	char *p = ct->tdb->shortLabel;
+	seqNum = 0;
+	while (seqNum == 0)
+	    {
+	    p = skipToNumeric(p);
+	    if (*p)
+		{
+		char *q = skipNumeric(p);
+		if (*q)
+		    p = q;
+		else
+		    seqNum = sqlSigned(p);
+		}
+	    else
+		seqNum = 1;
+	    }
         maxFound = max(seqNum, maxFound);
         }
     }

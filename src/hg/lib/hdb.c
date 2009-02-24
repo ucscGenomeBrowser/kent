@@ -36,7 +36,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.394 2009/02/05 00:19:13 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.395 2009/02/18 22:11:45 markd Exp $";
 
 #ifdef LOWELAB
 #define DEFAULT_PROTEINS "proteins060115"
@@ -466,16 +466,17 @@ return sqlConnCacheProfileAlloc(hdbCc, profileName, db);
 char *getTrackProfileName(struct trackDb *tdb)
 /* get profile is associated with a track, return it, otherwise NULL */
 {
-// FIXME: logicalDb will not work in the long term, remove when this
-// functionality is dropped
-return trackDbSetting(tdb, "logicalDb");
+// FIXME: locicalDb is an old name used by the cancer browser
+char *p =  trackDbSetting(tdb, "dbProfile");
+if (p == NULL)
+    p = trackDbSetting(tdb, "logicalDb");
+return p;
 }
 
 struct sqlConnection *hAllocConnTrack(char *db, struct trackDb *tdb)
 /* Get free connection for accessing tables associated with the specified
  * track and database. If none is available, allocate a new one. */
 {
-// FIXME: this will go away
 return hAllocConnProfile(getTrackProfileName(tdb), db);
 }
 

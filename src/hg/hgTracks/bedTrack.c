@@ -9,22 +9,25 @@
 #include "bigBed.h"
 #include "hgTracks.h"
 
-struct bbiFile *bigBedFromTable(struct sqlConnection *conn, char *table)
-/* Return open file from table containing nothing much but file name. */
+static char *bbiNameFromTable(struct sqlConnection *conn, char *table)
+/* Return file name from little table. */
 {
 char query[256];
 safef(query, sizeof(query), "select fileName from %s", table);
 char *fileName = sqlQuickString(conn, query);
 if (fileName == NULL)
     errAbort("Missing fileName in %s table", table);
-return bigBedFileOpen(fileName);
+return fileName;
 }
 
-struct bigBedInterval *bigBedSelectRange(struct sqlConnection *conn, char *table,
+struct bigBedInterval *bigBedSelectRange(struct sqlConnection *conn, struct track *track,
 	char *chrom, int start, int end, struct lm *lm)
 /* Return list of intervals in range. */
 {
-struct bbiFile *bbi = bigBedFromTable(conn, table);
+char *fileName = track->bbiFileName;
+if (fileName == NULL)
+    track->bbiFileName = fileName = bbiNameFromTable(conn, track->mapName);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct bigBedInterval *result = bigBedIntervalQuery(bbi, chrom, start, end, lm);
 bbiFileClose(&bbi);
 return result;
@@ -79,7 +82,7 @@ if ((setting = trackDbSettingClosestToHome(tg->tdb, "filterTopScorers")) != NULL
 if (tg->isBigBed)
     {
     struct lm *lm = lmInit(0);
-    struct bigBedInterval *bb, *bbList = bigBedSelectRange(conn, tg->mapName, 
+    struct bigBedInterval *bb, *bbList = bigBedSelectRange(conn, tg, 
     							   chromName, winStart, winEnd, lm);
     char *bedRow[32];
     char startBuf[16], endBuf[16];
@@ -168,14 +171,15 @@ bedFree(pBed);
 return lf;
 }
 
-void bigBedAddLinkedFeaturesFrom(struct sqlConnection *conn, struct trackDb *tdb,
+void bigBedAddLinkedFeaturesFrom(struct sqlConnection *conn, struct track *track,
 	char *chrom, int start, int end, int scoreMin, int scoreMax, boolean useItemRgb, 
 	int fieldCount, struct linkedFeatures **pLfList)
-/* Read in items in chrom:start-end from bigBed file named in tdb->tableName, convert
+/* Read in items in chrom:start-end from bigBed file named in track->bbiFileName, convert
  * them to linkedFeatures, and add to head of list. */
 {
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bb, *bbList = bigBedSelectRange(conn, tdb->tableName, chrom, start, end, lm);
+struct trackDb *tdb = track->tdb;
+struct bigBedInterval *bb, *bbList = bigBedSelectRange(conn, track, chrom, start, end, lm);
 char *bedRow[32];
 char startBuf[16], endBuf[16];
 
@@ -205,7 +209,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     {
-    bigBedAddLinkedFeaturesFrom(conn, tdb, chromName, winStart, winEnd,
+    bigBedAddLinkedFeaturesFrom(conn, tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 9, &lfList);
     }
 else
@@ -255,7 +259,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     {
-    bigBedAddLinkedFeaturesFrom(conn, tdb, chromName, winStart, winEnd,
+    bigBedAddLinkedFeaturesFrom(conn, tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 8, &lfList);
     }
 else
@@ -456,10 +460,8 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     {
-    bigBedAddLinkedFeaturesFrom(conn, tdb, chromName, winStart, winEnd,
+    bigBedAddLinkedFeaturesFrom(conn, tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 12, &lfList);
-#ifdef SOON
-#endif /* SOON */
     }
 else
     {
