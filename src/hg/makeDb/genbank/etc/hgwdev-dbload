@@ -16,7 +16,7 @@ databases=`gbGetDatabases etc/hgwdev.dbs`
 buildTime=var/build/build.time
 
 # workdir is a local dir
-workdir=/scratch/tmp/genbank
+workdir=/data/tmp/genbank
 
 exec $gbRoot/etc/dbload $opts $gbRoot "$databases" $buildTime $workdir
 
