@@ -38,7 +38,7 @@
 #define RANGE_CMD   "range"
 #define SEARCH_CMD  "search"
 #define META_SEARCH_CMD "meta_search"
-#define JSON_EXT    ".json"
+#define JSON_EXT    "" //".json"
 #define CMD_ARG     "cmd"
 
 #define GENOME_VAR "{genome}"
@@ -213,6 +213,7 @@ struct json_object *addTrackUrl(struct json_object *o, char *url_name, char *gen
 // Genome must be supplied if track is supplied, otherwise can be NULL
 // Track can be NULL
 // Returns object o
+
 struct json_object *addCountUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom, int start, int end);
 // Add a count url to object o with name 'url_name'.
 // Genome required if chrom specified, otherwise can be NULL
@@ -232,7 +233,7 @@ struct coords navigate(int start, int end, int chromSize);
 // Calculate navigation coordinates including window left, window right
 // Zoom in 10x, Zoom out 10x
 
-void printUsage();
+void printUsage(time_t modified);
 
 
 #endif /* HGDATA_H */
