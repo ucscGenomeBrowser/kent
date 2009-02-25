@@ -19,7 +19,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bwgQuery.c,v 1.19 2009/02/24 03:29:10 kent Exp $";
+static char const rcsid[] = "$Id: bwgQuery.c,v 1.20 2009/02/25 09:25:55 kent Exp $";
 
 struct bbiFile *bigWigFileOpen(char *fileName)
 /* Open up big wig file. */
@@ -126,14 +126,12 @@ struct bbiInterval *bigWigIntervalQuery(struct bbiFile *bwf, char *chrom, bits32
 	struct lm *lm)
 /* Get data for interval.  Return list allocated out of lm. */
 {
-uglyf("bigWigIntervalQuery %s %d %d.  bwf->isSwapped=%d\n", chrom, start, end, bwf->isSwapped);
 if (bwf->typeSig != bigWigSig)
    errAbort("Trying to do bigWigIntervalQuery on a non big-wig file.");
 bbiAttachUnzoomedCir(bwf);
 struct bbiInterval *el, *list = NULL;
 struct fileOffsetSize *blockList = bbiOverlappingBlocks(bwf, bwf->unzoomedCir, 
 	chrom, start, end, NULL);
-uglyf("%d in blockList\n", slCount(blockList));
 struct fileOffsetSize *block;
 struct udcFile *udc = bwf->udc;
 boolean isSwapped = bwf->isSwapped;
@@ -144,7 +142,6 @@ int i;
 struct fileOffsetSize *mergedBlocks = fileOffsetSizeMerge(blockList);
 for (block = mergedBlocks; block != NULL; block = block->next)
     {
-    uglyf("block offset %llu, size %llu\n", block->offset, block->size);
     udcSeek(udc, block->offset);
     char *blockBuf = needLargeMem(block->size);
     udcRead(udc, blockBuf, block->size);
