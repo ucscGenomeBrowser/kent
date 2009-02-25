@@ -47,7 +47,7 @@ frames multiz7wayFrames
 # irows on
 summary multiz7waySummary
 speciesOrder sacPar sacMik sacKud sacBay sacCas sacKlu
-treeImage phylo/sacCer2.7way.gif
+treeImage phylo/sacCer2_7way.gif
 html multizYeast
 
 track phastConsElements7way
