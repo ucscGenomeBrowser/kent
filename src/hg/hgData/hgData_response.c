@@ -2,7 +2,7 @@
 #include "common.h"
 #include "hgData.h"
 
-static char const rcsid[] = "$Id: hgData_response.c,v 1.1.2.3 2009/02/25 11:26:22 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_response.c,v 1.1.2.4 2009/02/25 19:17:47 mikep Exp $";
 
 char *http_status1xx[] = {"Continue", "Switching Protocols"};
 
@@ -41,7 +41,7 @@ char mod[1024];
 struct tm* tm_mod = gmtime(&modified);
 if (!tm_mod)
     errAbort("Error converting time (%d)\n", (int)modified);
-char *fmt = "%a, %d %b %Y %H:%M:%S %z";  // format: "Tue, 24 Feb 2009 18:13:29 GMT"
+char *fmt = "%a, %d %b %Y %H:%M:%S GMT";  // format: "Tue, 24 Feb 2009 18:13:29 GMT"
 if (!strftime(mod, sizeof(mod), fmt, tm_mod))
     errAbort("Error formatting 2xx Last-Modified date header using format %s for time %d\n", fmt, (int)modified);
 if (status200 < 0 || status200 >= sizeof(http_status2xx))
