@@ -31,11 +31,15 @@
 #include <json/json.h>
 #endif
 
-#define PREFIX "/data/"
+#define PREFIX      "/g/"
 #define GENOMES_CMD "genomes"
-#define TRACKS_CMD "tracks"
-#define TRACKS_LIST_CMD "list"
-#define JSON_EXT ".json"
+#define TRACKS_CMD  "tracks"
+#define COUNT_CMD   "count"
+#define RANGE_CMD   "range"
+#define SEARCH_CMD  "search"
+#define META_SEARCH_CMD "meta_search"
+#define JSON_EXT    ".json"
+#define CMD_ARG     "cmd"
 
 #define GENOME_VAR "{genome}"
 #define GENOME_ARG "genome"
@@ -54,15 +58,7 @@
 #define ANNOJ_NESTED_FMT "annoj_model_nested"
 #define ALLCHROMS_ARG "all_chroms"
 
-#define CMD_ARG       "cmd"
-#define ACTION_ARG    "action"
 #define ALLCHROMS_ARG "all_chroms"
-
-#define INFO_ACTION   "info"
-#define ITEM_ACTION   "item"
-#define SEARCH_ACTION "search"
-#define COUNT_ACTION  "count"
-#define RANGE_ACTION  "range"
 
 #define MAX_CHROM_COUNT 10000 // max number of chromosomes to display automatically in genome query
 
@@ -75,7 +71,7 @@
 // - for example, if app asks for JSON, send this: 
 //#define okSendHeader() fprintf(stdout,"Content-type: application/json\n\n") // this triggers download by browser client
 // - otherwise if browser, then send same content but this type:
-#define okSendHeader(format) fprintf(stdout,"Content-type: %s\n\n", ((format) ? (format) : "application/json"))
+//#define okSendHeader(format) fprintf(stdout,"Content-type: %s\n\n", ((format) ? (format) : "application/json"))
 
 // Error responses
 #define ERR_INVALID_COMMAND(cmd) errClientCode(400, "Invalid request %s", (cmd))
@@ -93,11 +89,17 @@
 #define ERR_BAD_FORMAT(format) errClientStatus(420, "Request error", "Format %s is not supported", (format))
 #define ERR_BAD_ACTION(action, track, db) errClientStatus(420, "Request error", "Action %s unknown for track %s in genome %s", (action), (track), (db))
 #define ERR_BAD_TRACK_TYPE(track, type) errClientStatus(420, "Request error", "Track %s of type %s is not supported", (track), (type))
+#define ERR_NOT_IMPLEMENTED(feature) errClientStatus(420, "Request error", "Feature %s not implemented", (feature))
 
 /* Global Variables */
 char quoteBuf[1024];
 
 /* Structs */
+
+struct coords {
+  int len, mid, left, right, leftIn10x, rightIn10x, leftOut10x, rightOut10x;
+};
+
 struct dbDbClade
 /* Description of annotation database including clade */
     {
@@ -114,18 +116,28 @@ struct dbDbClade
     };
 
 /* functions */
+char *nullOrVal(char *val);
+// return the value if not null, or else the string "(null)"
 
-struct chromInfo *getAllChromInfo(char *db);
-/* Query db.chromInfo for all chrom info. */
+char *etag(time_t modified);
+// Convert modification time to ETag
+// Uses global which does not need to be freed but is overwritten after each call
 
-void dbDbCladeFreeList(struct dbDbClade **pList);
-/* Free a list of dynamically allocated dbDbClade's */
+time_t strToTime(char *time, char *format);
+// Convert human time to unix time using format
 
-struct dbDbClade *hGetIndexedDbClade(char *db);
-/* Get list of active genome databases and clade
- * Only get details for one 'db' unless NULL
- * in which case get all genome databases.
- * Dispose of this with dbDbCladeFreeList. */
+boolean notModifiedResponse(char *reqEtag, time_t reqModified, time_t modified);
+// Returns TRUE if request is not modified and sends a 304 Not Modified HTTP header
+// Otherwise request is modified so return FALSE
+
+void okSendHeader(time_t modified);
+// Send a 200 OK header with Last-Modified date (and ETag based on this) if supplied
+
+void send2xxHeader(int status, char *content, time_t modified);
+// Send a 2xx header with Last-Modified date (and ETag based on this) if supplied
+
+void send3xxHeader(int status, char *content, time_t modified);
+// Send a 3xx header with Last-Modified date (and ETag based on this) if supplied
 
 void errClientStatus(int code, char *status, char *format, ...);
 // create a HTTP response code 400-499 and status, 
@@ -139,7 +151,35 @@ void errClient(char *format, ...);
 // create a HTTP response code "400 Bad Request",
 // and format specifying the error message content
 
+///////////////////////
 
+struct chromInfo *getAllChromInfo(char *db);
+/* Query db.chromInfo for all chrom info. */
+
+void dbDbCladeFreeList(struct dbDbClade **pList);
+/* Free a list of dynamically allocated dbDbClade's */
+
+struct dbDbClade *hGetIndexedDbClade(char *db);
+/* Get list of active genome databases and clade
+ * Only get details for one 'db' unless NULL
+ * in which case get all genome databases.
+ * Dispose of this with dbDbCladeFreeList. */
+
+time_t hGetLatestUpdateTimeDbClade();
+// return the latest time that any of the relevant tables were changed
+
+time_t hGetLatestUpdateTimeChromInfo(char *db);
+// return the latest time that the chromInfo table was changed
+
+time_t oneTrackDbUpdateTime(char *db, char *tblSpec);
+/* get latest update time for a trackDb table, including handling profiles:tbl. 
+ * Returns 0 if table doesnt exist
+  */
+
+time_t trackDbLatestUpdateTime(char *db);
+/* Get latest update time from each trackDb table. */
+
+////////////////////////
 void printItemAsAnnoj(char *db, char *track, char *type, char *term);
 // print out a description for a track item
 
@@ -148,23 +188,51 @@ void printItem(char *db, char *track, char *type, char *term);
 
 //////////////////
 
-void printGenomes(struct dbDbClade *db, struct chromInfo *ci);
+void printGenomes(struct dbDbClade *db, struct chromInfo *ci, time_t modified);
 // print an array of all genomes in list,
 // print genome hierarchy for all genomes
-// if ci is not null, print array of chromosomes in ci list
+// if only one genome in list, 
+//   print array of chromosomes in ci list (or empty list if null)
+// modified is latest update (unix) time of all relevant tables 
 
-void printTrackInfo(char *genome, struct trackDb *tdb, struct hTableInfo *hti);
+void printTrackInfo(char *genome, struct trackDb *tdb, struct hTableInfo *hti, time_t modified);
 // Print genome and track information for the genome
 // If only one track is specified, print full details including html description page
 //
 // tracks => {_genome_ => [{ _track_name_ => {_track_details_},... }] }
 // groups => {_genome_ => [{_group_name_ => [{_track_name_: _track_priority_},... ]}] }
 
+struct json_object *addGenomeUrl(struct json_object *o, char *url_name, char *genome, char *chrom);
+// Add a genome url to object o with name 'url_name'.
+// Genome required if chrom specified, otherwise can be NULL
+// Chrom can be NULL
+// Returns object o
 
-void printBedCount(char *genome, char *track, char *chrom, int start, int end, struct hTableInfo *hti, int n);
-void printBed(char *genome, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti, int n, struct bed *b, char *format);
+struct json_object *addTrackUrl(struct json_object *o, char *url_name, char *genome, char *track);
+// Add a track url to object o with name 'url_name'.
+// Genome must be supplied if track is supplied, otherwise can be NULL
+// Track can be NULL
+// Returns object o
+struct json_object *addCountUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom, int start, int end);
+// Add a count url to object o with name 'url_name'.
+// Genome required if chrom specified, otherwise can be NULL
+// Chrom can be NULL
+// Returns object o
 
+struct json_object *addRangeUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom, int start, int end);
+// Add a range url to object o with name 'url_name'.
+// Genome required if chrom specified, otherwise can be NULL
+// Chrom can be NULL
+// Returns object o
 
+void printBedCount(char *genome, char *track, char *chrom, int start, int end, int chromSize, struct hTableInfo *hti, int n, time_t modified);
+void printBed(char *genome, char *track, char *type, char *chrom, int start, int end, int chromSize, struct hTableInfo *hti, int n, struct bed *b, char *format, time_t modified);
+
+struct coords navigate(int start, int end, int chromSize);
+// Calculate navigation coordinates including window left, window right
+// Zoom in 10x, Zoom out 10x
+
+void printUsage();
 
 
 #endif /* HGDATA_H */
