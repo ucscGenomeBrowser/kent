@@ -5,7 +5,7 @@ ChIP-Seq</h1>
 in the given cell types as identified by ChIP-Seq&nbsp;[1]. The ChIP-Seq method
 uses formaldehyde to cross-link DNA associated proteins to genomic DNA within
 living cells. The cross-linked cells are lysed and sonicated, releasing small
-soluble chromatin fragments. The chromatin fragments bound by a specific or
+soluble chromatin fragments. The chromatin fragments bound by specific or
 general transcription factors are immunoprecipitated by using an antibody
 directed against a specific transcription factor of interest. After reversing
 the chemical cross-links, the recovered DNA fragments are ligated to specific
@@ -27,31 +27,28 @@ transcription factor binding</li>
 </ul>
 </p>
 <a name="Methods"></a><h2> Methods </h2>
-<h3>Chromatin immunoprecipitation (ChIP)</h3>
 <p>Cross-linked chromatin was immunoprecipitated with antibody according to the
-protocol posted at <a href="http://myers.hudsonalpha.org/content/protocols.html"
-title="http://myers.hudsonalpha.org/content/protocols.html"
-rel="nofollow">http://myers.hudsonalpha.org/content/protocols.html</a>.
+protocol posted <a href="http://myers.hudsonalpha.org/content/protocols.html"
+TARGET=_blank title="http://myers.hudsonalpha.org/content/protocols.html"
+rel="nofollow">here</a>.
 We tested biological replicates from each cell line.  
 </p>
-<h3>DNA library construction and sequencing (Seq)</h3>
 <p>We generated libraries from DNA fragments recovered from immunoprecipitation
-and total input chromatin according to the protocol posted at
+and total input chromatin according to the protocol posted
 <a href="http://myers.hudsonalpha.org/content/protocols.html"
-title="http://myers.hudsonalpha.org/content/protocols.html"
-rel="nofollow">http://myers.hudsonalpha.org/content/protocols.html</a>.  We
+TARGET=_blank title="http://myers.hudsonalpha.org/content/protocols.html"
+rel="nofollow">here</a>.  We
 sequenced these libraries with an Illumina Genome Analyzer (GA1) according to
 the manufacturer's recommendations.
 </p>
 
-<h3>Processing and analysis software used</h3>
 <p>Sequence data produced by the Illumina data pipeline software were quality
 filtered and then mapped to hg18 using its integrated Eland software; only the
 first 25 bp of reads were used for alignment; up to two mismatches were
 tolerated; multiply mapped reads were discarded. To identify likely binding
 sites, Peak Calling was applied on the aligned sequence data sets using
 quantitative enrichment of sequence tags
-(<a href="http://mendel.stanford.edu/sidowlab/downloads/quest"
+(<a href="http://mendel.stanford.edu/sidowlab/downloads/quest" TARGET=_blank
 title="http://mendel.stanford.edu/sidowlab/downloads/quest">QuEST</a>)&nbsp;[2].
 QuEST is based on the kernel density estimation approach, which uses ChIP-Seq
 data to determine positions where protein complexes contact DNA. QuEST uses
@@ -64,8 +61,8 @@ positions in the reference genome corresponding to local maxima of the CDP with
 sufficient enrichment compared to the control data.
 </p>
 
-<h3> Validation of ChIP-Seq </h3>
-</p><p>Quantitative polymerase chain reaction (qPCR) assays can be used to
+<h3> Validation</h3>
+<p>Quantitative polymerase chain reaction (qPCR) assays can be used to
 validate the transcription factor binding sites found using ChIP-Seq. Regions
 of enriched read density reported by QuEST are reported as a single genomic
 coordinate (peak) for each enriched region. These peaks are ranked according
@@ -82,19 +79,23 @@ the average qPCR replicates&nbsp;[2].
 </p>
 
 <a name="Credits"></a><h2> Credits </h2>
+<p>These data were provided by the <a href='http://myers.hudsonalpha.org/'
+TARGET=_blank>Myers Lab</a> at the <a href='http://www.hudsonalpha.org/'
+TARGET=_blank>HudsonAlpha Institute for Biotechnology</a>.</p>
 <a name="References"></a><h2> References </h2>
 <p><a name='1'>1</a>. 
 Johnson DS, Mortazavi A, Myers RM, Wold B.
-<a href='http://www.sciencemag.org/cgi/content/full/316/5830/1497'>Genome-wide
-mapping of in vivo protein-DNA interactions</a>.
+<a href='http://www.sciencemag.org/cgi/content/full/316/5830/1497'
+TARGET=_blank>Genome-wide mapping of in vivo protein-DNA interactions</a>.
 Science. 2007 Jun 8;316(5830):1497-502. See also: Fields S.
-<a href='http://www.sciencemag.org/cgi/content/full/316/5830/1441'>Molecular
-biology. Site-seeing by sequencing</a>. Science. 2007 Jun 8;316(5830):1441-2.
+<a href='http://www.sciencemag.org/cgi/content/full/316/5830/1441'
+TARGET=_blank>Molecular biology. Site-seeing by sequencing</a>.
+Science. 2007 Jun 8;316(5830):1441-2.
 </p>
 <p><a name='2'>2</a>.
 Valouev A, Johnson DS, Sundquist A, Medina C, Anton E, Batzoglou S, Myers RM,
 Sidow A.
-<a href='http://www.nature.com/nmeth/journal/v5/n9/abs/nmeth.1246.html'>Genome-wide
-analysis of transcription factor binding sites based on ChIP-Seq data</a>.
-Nat Methods. 2008 Aug 17. 
+<a href='http://www.nature.com/nmeth/journal/v5/n9/abs/nmeth.1246.html'
+TARGET=_blank>Genome-wide analysis of transcription factor binding sites based
+on ChIP-Seq data</a>. Nat Methods. 2008 Aug 17. 
 </p>
