@@ -2,7 +2,7 @@
 #include "common.h"
 #include "hgData.h"
 
-static char const rcsid[] = "$Id: hgData_response.c,v 1.1.2.5 2009/02/25 20:12:16 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_response.c,v 1.1.2.6 2009/02/25 22:15:58 mikep Exp $";
 
 char *http_status1xx[] = {"Continue", "Switching Protocols"};
 
@@ -33,7 +33,8 @@ printf("Status: %d %s\n", status, message);
 if (modified)
     {
     printf("ETag: %s\n", etag(modified));
-    printf("Last-Modified: %s\n", gmtimeToStr(modified, "%a, %d %b %Y %H:%M:%S GMT"));
+    if (status!=304)
+	printf("Last-Modified: %s\n", gmtimeToStr(modified, "%a, %d %b %Y %H:%M:%S GMT"));
     }
 //printf("Date: %s\n", localtime());
 //printf("Accept-Encoding: compress, gzip\n"); // check x-gzip etc.
