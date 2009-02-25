@@ -266,7 +266,7 @@ termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489&termName=promyelocytic%20leukemia%20cell%20line
 tier 3
 
-term NT2/D1
+term NT2-D1
 type Cell Line
 description malignant pluripotent embryonal carcinoma (Ntera2)
 vendorName ATCC
