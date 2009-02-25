@@ -11,10 +11,61 @@
 #include <json/json.h>                                                     
 #endif                                                                     
 
-static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.5 2009/02/03 22:13:14 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.6 2009/02/25 11:22:30 mikep Exp $";
+
+// /tracks                                            [list of all tracks in all genomes]
+// /tracks/{genome}                                   [list of tracks for {genome}]
+// /tracks/{track}/{genome}                           [track details for {track} in {genome}]
+
+time_t oneTrackDbUpdateTime(char *db, char *tblSpec)
+/* get latest update time for a trackDb table, including handling profiles:tbl. 
+ * Returns 0 if table doesnt exist
+  */
+{
+char *tbl;
+struct sqlConnection *conn = hAllocConnProfileTbl(db, tblSpec, &tbl);
+time_t latest = sqlTableUpdateTime(conn, tbl);
+hFreeConn(&conn);
+return latest;
+}
+
+time_t trackDbLatestUpdateTime(char *db)
+/* Get latest update time from each trackDb table. */
+{
+struct slName *tableList = hTrackDbList(), *one;
+time_t latest = 0;
+for (one = tableList; one != NULL; one = one->next)
+    {
+    latest = max(latest, oneTrackDbUpdateTime(db, one->name));
+    }
+slNameFreeList(&tableList);
+return latest;
+}
 
 
-static struct json_object *jsonOneTrack(struct trackDb *tdb)
+struct json_object *addTrackUrl(struct json_object *o, char *url_name, char *genome, char *track)
+// Add a track url to object o with name 'url_name'.
+// Genome must be supplied if track is supplied, otherwise can be NULL
+// Track can be NULL
+// Returns object o
+{
+char url[1024];
+if (genome)
+    {
+    if (track)
+	safef(url, sizeof(url), PREFIX TRACKS_CMD "/%s/%s%s", track, genome, JSON_EXT);
+    else
+	safef(url, sizeof(url), PREFIX TRACKS_CMD "/%s%s", genome, JSON_EXT);
+    }
+  else
+    {
+    safef(url, sizeof(url), PREFIX TRACKS_CMD "%s", JSON_EXT);
+    }
+json_object_object_add(o, url_name, json_object_new_string(url));
+return o;
+}
+
+static struct json_object *jsonOneTrack(struct trackDb *tdb, char *genome)
 // Brief information about a single track
 {
 char *url;
@@ -26,26 +77,27 @@ json_object_object_add(t, "type", json_object_new_string(tdb->type)); /* Track t
 json_object_object_add(t, "short_label", json_object_new_string(tdb->shortLabel)); /* Short label displayed on left */
 json_object_object_add(t, "long_label", json_object_new_string(tdb->longLabel)); /* Long label displayed in middle */
 url = replaceChars(tdb->url, "$$", TERM_VAR);
-json_object_object_add(t, "item_url", strlen(url) ? json_object_new_string(url) : NULL); /* URL to link to when they click on an item */
+json_object_object_add(t, "url_item", strlen(url) ? json_object_new_string(url) : NULL); /* URL to link to when they click on an item */
 freez(&url);
+addTrackUrl(t, "url_self", genome, tdb->tableName);
 json_object_object_add(t, "parent_track", tdb->parentName ? json_object_new_string(tdb->parentName) : NULL); /* set if this is a supertrack member */
 return t;
 }
 
-static void jsonAddOneTrackFull(struct json_object *arr, struct trackDb *tdb, struct hTableInfo *hti)
+static void jsonAddOneTrackFull(struct json_object *arr, struct trackDb *tdb, struct hTableInfo *hti, char *genome)
 // Detailed information for a single track added to the array 'arr'
 {
 struct json_object *item = json_object_new_object();
 struct json_object *view = json_object_new_object();
 struct json_object *props = json_object_new_object();
-struct json_object *t = jsonOneTrack(tdb);
+struct json_object *t = jsonOneTrack(tdb, genome);
 struct json_object *restList = json_object_new_array();
 int i;
 json_object_array_add(arr, item); /* add this item to the array */
 json_object_object_add(item, tdb->tableName, t); 
-json_object_object_add(item, "view_properties", view); 
-json_object_object_add(item, "table_properties", props); 
-json_object_object_add(t, "description_html", json_object_new_string(tdb->html)); /* Some html to display about the track */
+json_object_object_add(t, "view_properties", view); 
+json_object_object_add(t, "table_properties", props); 
+//json_object_object_add(t, "description_html", json_object_new_string(tdb->html)); /* Some html to display about the track */
 // properties of the view
 json_object_object_add(view, "color_r", json_object_new_int(tdb->colorR)); /* Color red component 0-255 */
 json_object_object_add(view, "color_g", json_object_new_int(tdb->colorG)); /* Color green component 0-255 */
@@ -54,9 +106,9 @@ json_object_object_add(view, "alt_color_r", json_object_new_int(tdb->altColorR))
 json_object_object_add(view, "alt_color_g", json_object_new_int(tdb->altColorG)); /* Light color green component 0-255 */
 json_object_object_add(view, "alt_color_b", json_object_new_int(tdb->altColorB)); /* Light color blue component 0-255 */
 json_object_object_add(view, "use_score", json_object_new_boolean(tdb->useScore)); /* true if use score, false if not */
-// tdb->settings crashes the json print output.
+// tdb->settings crashes the json print output for some reason to do with embedded '%s'.
 // need to instead figure out how to get all the individual settings from settings hash, if we care. 
-//json_object_object_add(view, "settings", json_object_new_string(tdb->settings)); /* Name/value pairs for track-specific stuff */
+json_object_object_add(view, "settings", json_object_new_string("")); //json_object_new_string(tdb->settings ? tdb->settings : "")); /* Name/value pairs for track-specific stuff */
 //    struct hash *settingsHash;  /* Hash for settings. Not saved in database.  Don't use directly, rely on trackDbSetting to access. */
 json_object_object_add(view, "restrict_count", json_object_new_int(tdb->restrictCount)); /* Number of chromosomes this is on (0=all though!) */
 json_object_object_add(view, "restrict_list", restList); /* List of chromosomes this is on ([]=all though!) */
@@ -71,7 +123,7 @@ if (hti)
     }
 }
 
-static void jsonAddTracks(struct json_object *arr, struct trackDb *tdb)
+static void jsonAddTracks(struct json_object *arr, struct trackDb *tdb, char *genome)
 // Add brief information for every track to the array 'arr'
 //   Format: [{ _track_name_ => {_track_details_},... }]
 {
@@ -79,7 +131,7 @@ struct json_object *item;
 for ( ; tdb ; tdb = tdb->next)
     {
     item = json_object_new_object();
-    json_object_object_add(item, tdb->tableName, jsonOneTrack(tdb));
+    json_object_object_add(item, tdb->tableName, jsonOneTrack(tdb, genome));
     json_object_array_add(arr, item);
     }
 }
@@ -116,7 +168,7 @@ for (t = tdb ; t ; t = t->next)
 freeHash(&hGrp);
 }
 
-void printTrackInfo(char *genome, struct trackDb *tdb, struct hTableInfo *hti)
+void printTrackInfo(char *genome, struct trackDb *tdb, struct hTableInfo *hti, time_t modified)
 // Print genome and track information for the genome 
 // If only one track is specified, print full details including html description page
 // 
@@ -130,16 +182,21 @@ struct json_object *groupGen  = json_object_new_object();
 struct json_object *group     = json_object_new_object();
 // add a genome object under the main 'tracks' and 'genome' objects
 // add tracks and groups under their genome object
+addTrackUrl(i, "url_self", genome, NULL);
+addTrackUrl(i, "url_tracks", NULL, NULL);
+addGenomeUrl(i, "url_genomes", NULL, NULL);
+addGenomeUrl(i, "url_genome", genome, NULL);
 json_object_object_add(i, "tracks", trackGen);
 json_object_object_add(i, "groups", groupGen);
 json_object_object_add(trackGen, genome, trackArr);
 json_object_object_add(groupGen, genome, group);
 // add tracks to the track array
 if (tdb && slCount(tdb)==1)
-    jsonAddOneTrackFull(trackArr, tdb, hti);
+    jsonAddOneTrackFull(trackArr, tdb, hti, genome);
 else
-    jsonAddTracks(trackArr, tdb);
+    jsonAddTracks(trackArr, tdb, genome);
 jsonAddGroups(group, tdb);
+okSendHeader(modified);
 printf(json_object_to_json_string(i));
 json_object_put(i);
 }
