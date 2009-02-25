@@ -5,7 +5,7 @@
 #include "chromInfo.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgData_db.c,v 1.1.2.3 2009/02/03 05:19:11 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_db.c,v 1.1.2.4 2009/02/25 11:22:56 mikep Exp $";
 
 static struct dbDbClade *dbDbCladeLoad(char **row)
 /* Load a dbDbClade from row fetched with select * from dbDb
@@ -97,6 +97,27 @@ sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 slReverse(&dbList);
 return dbList;
+}
+
+time_t hGetLatestUpdateTimeDbClade()
+// return the latest time that any of the relevant tables were changed
+{
+struct sqlConnection *conn = hConnectCentral();
+time_t latest = max( max(
+    sqlTableUpdateTime(conn, "dbDb"), 
+    sqlTableUpdateTime(conn, "genomeClade")), 
+    sqlTableUpdateTime(conn, "clade"));
+hDisconnectCentral(&conn);
+return latest;
+}
+
+time_t hGetLatestUpdateTimeChromInfo(char *db)
+// return the latest time that the chromInfo table was changed
+{
+struct sqlConnection *conn = hAllocConn(db);
+time_t latest = sqlTableUpdateTime(conn, "chromInfo");
+hFreeConn(&conn);
+return latest;
 }
 
 struct chromInfo *getAllChromInfo(char *db)
