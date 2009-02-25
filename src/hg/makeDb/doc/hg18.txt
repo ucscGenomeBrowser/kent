@@ -26565,7 +26565,7 @@ phyloP44wayPrimate
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
 #########################################################################
-# BUILD OMIM RELATED GENES TRACK (done 12/4/08, rebuilt 2/20/09 Fan)
+# BUILD OMIM RELATED GENES TRACK (complete rebuild, 2/24/09 Fan)
 
 ssh hgwdev
 cd /hive/data/genomes/gs.19/build36/bed
@@ -26584,7 +26584,7 @@ cat x.sql |sed -e 's/PRIMARY KEY(numbering)/KEY(omimId)/' >omimGeneMap.sql
 hgLoadSqlTab -warn hg18 omimGeneMap omimGeneMap.sql genemap.tab
 
 # got warning on 3 records, just ignore them
-Warning: load of omimGeneMap did not go as planned: 11456 record(s), 0 row(s) skipped, 3 warning(s) loading genemap.tab
+Warning: load of omimGeneMap did not go as planned: 11750 record(s), 0 row(s) skipped, 3 warning(s) loading genemap.tab
 
 rm x.c x.h
 cd ..
@@ -26598,7 +26598,7 @@ hgLoadSqlTab -warn hg18 omimMorbidMap omimMorbidMap.sql mobidmap.tab
 # the gene name for this new table.  Please note the alignId field still holds the KG ID.
 
 hgsql hg18 -N -e \
-'select omimId, kg.* from knownGene kg, kgXref x, refLink l where refseq != "" and omimId != 0 and mrnaAcc=refseq and kg.name=kgId ' \
+'select omimId, kg.* from knownGene kg, knownToRefSeq kr, refLink l where omimId != 0 and mrnaAcc=kr.value and kg.name=kr.name ' \
 |cut -f 1,3-13 >o1.tab
 
 # collect more OMIM related genes via the MIM external DB links from UniProt
@@ -26634,8 +26634,7 @@ hgLoadSqlTab hg18 fanO4  ~/src/hg/lib/knownGene.sql fanO4.tab
 
 # finally sort the table and create bed 4 file and load it as the omimGene table
 
-hgsql hg18 -N -e 'select chrom, txStart, txEnd, name from fanO4 order by
-chrom, txStart, txEnd' |sort -u >omimGene.bed
+hgsql hg18 -N -e 'select chrom, txStart, txEnd, name from fanO4 order by chrom, txStart, txEnd' |sort -u >omimGene.bed
 hgLoadBed hg18 omimGene omimGene.bed
 
 # create and load the omimToKnownCanonical table.
@@ -26657,28 +26656,6 @@ hgLoadSqlTab hg18 omimToKnownCanonical  \
 # Livia (apache@vital-it.ch ) from ExPASy.
 
     hgsql hg18 -e 'update omimGene set name="611016" where name="608636"'
-
-# add additional entries that related to "NR_...." RefSeqs
-
-hgGetNrOmimGene hg18 j.tmp 
-sort -u j.tmp > omimGeneNR.bed
-hgLoadBed hg18 omimGeneNR omimGeneNR.bed
-
-cat omimGene.bed omimGeneNR.bed |sort -u >omimGeneAll.bed
-hgLoadBed hg18 omimGene omimGeneAll.bed
-
-hgsql hg18 -N -e 'select * from omimToKnownCanonical' |sort -u >j.tmp
-hgsql hg18 -N -e \
-'select n.name, c.transcript from  omimGeneNR n, knownCanonical c,
-knownToRefSeq r, refLink l, knownIsoforms i where l.mrnaAcc=r.value and
-binary(n.name)=l.omimId and i.transcript=r.name and c.clusterId=i.clusterId
-and omimId <>0 '\
-|sort -u >omimToKnownGeneNR.tab
-cat j.tmp omimToKnownGeneNR.tab |sort -u >omimToKnownCanonicalNew.tab
-
-hgLoadSqlTab hg18 omimToKnownCanonical  \
-~/src/hg/lib/omimToKnownCanonical.sql omimToKnownCanonicalNew.tab
-
 #############################################################################
 # fox2ClipSeq from Gene Yeo (DONE - 2009-01-08 - Hiram)
     mkdir /hive/data/genomes/hg18/bed/fox2ClipSeq
