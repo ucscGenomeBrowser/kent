@@ -16,11 +16,12 @@
  *    ra=cv.ra       : Path to cv.ra file (default cv_file())
  *    type=TypeName  : Type to display
  *    tier=N         : If type="Cell Line" then this is the tier to display
+ *    bgcolor=RRGGBB : Change background color (hex digits)
  */
 
 //#define HANDLE_IMPLICIT_CONTROL
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.17 2009/01/09 18:49:55 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.18 2009/02/25 18:26:03 kate Exp $";
 
 static char *cv_file()
 {
@@ -32,6 +33,7 @@ if(!fileExists(filePath))
     errAbort("Error: can't locate cv.ra; %s doesn't exist\n", filePath);
 return filePath;
 }
+
 
 int termCmp(const void *va, const void *vb)
 /* Compare controlled vocab based on term value */
@@ -201,7 +203,17 @@ else if (sameString(type,"Cell Line"))
         }
     ++(*total);
     puts("<TR>");
-    printf("  <TD>%s</TD>\n", term);
+
+    /* add link to protocol doc if it exists */
+#define PROTOCOL_DIR "/ENCODE/protocols/cell/"
+    char protocolUrl[PATH_LEN];
+    safef(protocolUrl, sizeof(protocolUrl), "%s/%s_protocol.doc", PROTOCOL_DIR, term);
+    char protocolFile[PATH_LEN];
+    safef(protocolFile, sizeof(protocolFile), "%s%s", hDocumentRoot(), protocolUrl);
+    if (fileExists(protocolFile))
+        printf(" <TD><A STYLE=\"text-decoration:none\"HREF=%s TARGET=_BLANK>%s</A></TD>\n", protocolUrl, term);
+    else
+        printf("  <TD>%s</TD>\n", term);
     s = hashFindVal(ra, "tier");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
     s = hashFindVal(ra, "description");
@@ -349,6 +361,9 @@ int main(int argc, char *argv[])
 /* Process command line */
 {
 cgiSpoof(&argc, argv);
+char *bgColor = cgiOptionalString("bgcolor");
+if (bgColor)
+    htmlSetBgColor(strtol(bgColor, 0, 16));
 htmShell("ENCODE Controlled Vocabulary", doMiddle, "get");
 return 0;
 }
