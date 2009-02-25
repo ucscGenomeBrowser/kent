@@ -4,7 +4,7 @@
 //#include "dystring.h"
 
 
-static char const rcsid[] = "$Id: hgData_index.c,v 1.1.2.5 2009/02/25 20:12:16 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_index.c,v 1.1.2.6 2009/02/25 22:16:31 mikep Exp $";
 
 struct json_object *jsonContact()
 {
@@ -47,8 +47,7 @@ return opts;
 void printUsage(char *reqEtag, time_t reqModified)
 {
 // dont need to continue if this changes to this file have not been committed
-time_t modified = strToTime("$Date: 2009/02/25 20:12:16 $", "$" "Date: %Y/%m/%d %T " "$");// careful CVS doesnt mangle format
-verbose(2,"Modified time=%d etag=[%s]\n", (int)modified, etag(modified));
+time_t modified = strToTime("$Date: 2009/02/25 22:16:31 $", "$" "Date: %Y/%m/%d %T " "$");// careful CVS doesnt mangle format
 if (notModifiedResponse(reqEtag, reqModified, modified))
     return;
 struct json_object *msg = json_object_new_object();

@@ -5,7 +5,7 @@
 #include "bedGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.12 2009/02/25 19:28:36 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.13 2009/02/25 22:16:31 mikep Exp $";
 
 void doGet()
 {
@@ -17,10 +17,9 @@ struct dbDbClade *dbs = NULL;
 struct hTableInfo *hti = NULL;
 struct bed *b = NULL;
 //char *authorization = getenv("Authorization");
+//verboseSetLevel(2);
 char *reqEtag = getenv("ETag");
-verbose(2,"before strToTime(%s)\n", getenv("Modified"));
 time_t reqModified = strToTime(getenv("Modified"), "%a, %d %b %Y %H:%M:%S GMT");// Thu, 08 Jan 2009 17:45:18 GMT
-verbose(2,"after strToTime(%s) -> %d\n", getenv("Modified"), (int) reqModified);
 char *cmd = cgiOptionalString(CMD_ARG);
 char *format = cgiOptionalString(FORMAT_ARG);
 char *genome = cgiOptionalString(GENOME_ARG);
@@ -36,11 +35,6 @@ int typeWords;
 time_t modified = 0;
 AllocVar(thisTime);
 AllocVar(latestTime);
-if (verboseLevel()>1)
-    printf("method=[%s] uri=[%s] params=[%s] query_string=[%s] http_accept=[%s] path_info=[%s] script_name=[%s] path_translated=[%s] \n", 
-      cgiRequestMethod(), cgiRequestUri(), cgiUrlString()->string, getenv("QUERY_STRING"), getenv("HTTP_ACCEPT"), getenv("PATH_INFO"), getenv("SCRIPT_NAME"), getenv("PATH_TRANSLATED"));
-if (verboseLevel()>1)
-    printf("query_string=[%s] Authorized=[%s] ETag=[%s] Modified=[%s] \n", getenv("QUERY_STRING"), getenv("Authorized"), getenv("ETag"), getenv("MODIFIED"));
 // list information about all active genome databases
 if (!cmd && !genome && !track)
     {
