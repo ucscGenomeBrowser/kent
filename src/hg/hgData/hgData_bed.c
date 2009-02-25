@@ -5,19 +5,46 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.8 2009/02/03 22:13:14 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.9 2009/02/25 11:24:00 mikep Exp $";
 
-static struct json_object *jsonBedCount(char *genome, char *track, char *chrom, int start, int end, struct hTableInfo *hti, int n)
+
+struct json_object *addCountUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom, int start, int end)
+// Add a count url to object o with name 'url_name'.
+// Genome required if chrom specified, otherwise can be NULL
+// Chrom can be NULL
+// Returns object o
+{
+char url[1024];
+safef(url, sizeof(url), PREFIX COUNT_CMD "/%s/%s/%s/%d-%d%s", track, genome, chrom, start, end, JSON_EXT);
+json_object_object_add(o, url_name, json_object_new_string(url));
+return o;
+}
+
+struct json_object *addRangeUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom, int start, int end)
+// Add a range url to object o with name 'url_name'.
+// Genome required if chrom specified, otherwise can be NULL
+// Chrom can be NULL
+// Returns object o
+{
+char url[1024];
+safef(url, sizeof(url), PREFIX RANGE_CMD "/%s/%s/%s/%d-%d%s", track, genome, chrom, start, end, JSON_EXT);
+json_object_object_add(o, url_name, json_object_new_string(url));
+return o;
+}
+
+static struct json_object *jsonBedCount(char *genome, char *track, char *chrom, int start, int end, int chromSize, struct hTableInfo *hti, int n)
 {
 struct json_object *b = json_object_new_object();
 struct json_object *props = json_object_new_object();
-json_object_object_add(b, "properties", props);
 json_object_object_add(b, "genome", json_object_new_string(genome));
 json_object_object_add(b, "track", json_object_new_string(track));
 json_object_object_add(b, "chrom", json_object_new_string(chrom));
 json_object_object_add(b, "start", json_object_new_int(start));
 json_object_object_add(b, "end", json_object_new_int(end));
+json_object_object_add(b, "size", json_object_new_int(end-start));
 json_object_object_add(b, "row_count", json_object_new_int(n));
+json_object_object_add(b, "chrom_size", json_object_new_int(chromSize));
+json_object_object_add(b, "properties", props);
 if (hti)
     {
     json_object_object_add(props, "has_CDS", json_object_new_boolean(hti->hasCDS));
@@ -183,18 +210,36 @@ for (t = b ; t ; t = t->next)
 return data;
 }
 
-void printBedCount(char *genome, char *track, char *chrom, int start, int end, struct hTableInfo *hti, int n)
+
+void printBedCount(char *genome, char *track, char *chrom, int start, int end, int chromSize, struct hTableInfo *hti, int n, time_t modified)
 {
 struct json_object *d = json_object_new_object();
-json_object_object_add(d, "track", jsonBedCount(genome, track, chrom, start, end, hti, n));
+struct coords c = navigate(start, end, chromSize);
+json_object_object_add(d, "track", jsonBedCount(genome, track, chrom, start, end, chromSize, hti, n));
+addCountUrl(d, "url_self", track, genome, chrom, start, end);
+addCountUrl(d, "url_count_left", track, genome, chrom, c.left, start);
+addCountUrl(d, "url_count_right", track, genome, chrom, end, c.right);
+addCountUrl(d, "url_count_zoom_in10x", track, genome, chrom, c.leftIn10x, c.rightIn10x);
+addCountUrl(d, "url_count_zoom_out10x", track, genome, chrom, c.leftOut10x, c.rightOut10x);
+addRangeUrl(d, "url_range", track, genome, chrom, start, end);
+addRangeUrl(d, "url_range_left", track, genome, chrom, c.left, start);
+addRangeUrl(d, "url_range_right", track, genome, chrom, end, c.right);
+addRangeUrl(d, "url_range_zoom_in10x", track, genome, chrom, c.leftIn10x, c.rightIn10x);
+addRangeUrl(d, "url_range_zoom_out10x", track, genome, chrom, c.leftOut10x, c.rightOut10x);
+addGenomeUrl(d, "url_genome", genome, NULL);
+addGenomeUrl(d, "url_genomes", NULL, NULL);
+addTrackUrl(d, "url_track", genome, track);
+addTrackUrl(d, "url_tracks", genome, NULL);
+okSendHeader(modified);
 printf(json_object_to_json_string(d));
 json_object_put(d);
 }
 
-void printBed(char *genome, char *track, char *type, char *chrom, int start, int end, struct hTableInfo *hti, int n, struct bed *b, char *format)
+void printBed(char *genome, char *track, char *type, char *chrom, int start, int end, int chromSize, struct hTableInfo *hti, int n, struct bed *b, char *format, time_t modified)
 {
 struct json_object *d = json_object_new_object();
-json_object_object_add(d, "track", jsonBedCount(genome, track, chrom, start, end, hti, n));
+struct coords c = navigate(start, end, chromSize);
+json_object_object_add(d, "track", jsonBedCount(genome, track, chrom, start, end, chromSize, hti, n));
 if (format==NULL)
     json_object_object_add(d, "bed", jsonBed(hti, b));
 else if (sameOk(format, ANNOJ_FLAT_FMT))
@@ -203,6 +248,21 @@ else if (sameOk(format, ANNOJ_NESTED_FMT))
     json_object_object_add(d, format, jsonBedAsAnnojNested(hti, b));
 else
     ERR_BAD_FORMAT(format);
+addCountUrl(d, "url_count", track, genome, chrom, start, end);
+addCountUrl(d, "url_count_left", track, genome, chrom, c.left, start);
+addCountUrl(d, "url_count_right", track, genome, chrom, end, c.right);
+addCountUrl(d, "url_count_zoom_in10x", track, genome, chrom, c.leftIn10x, c.rightIn10x);
+addCountUrl(d, "url_count_zoom_out10x", track, genome, chrom, c.leftOut10x, c.rightOut10x);
+addRangeUrl(d, "url_self", track, genome, chrom, start, end);
+addRangeUrl(d, "url_range_left", track, genome, chrom, c.left, start);
+addRangeUrl(d, "url_range_right", track, genome, chrom, end, c.right);
+addRangeUrl(d, "url_range_zoom_in10x", track, genome, chrom, c.leftIn10x, c.rightIn10x);
+addRangeUrl(d, "url_range_zoom_out10x", track, genome, chrom, c.leftOut10x, c.rightOut10x);
+addGenomeUrl(d, "url_genome", genome, NULL);
+addGenomeUrl(d, "url_genomes", NULL, NULL);
+addTrackUrl(d, "url_track", genome, track);
+addTrackUrl(d, "url_tracks", genome, NULL);
+okSendHeader(modified);
 printf(json_object_to_json_string(d));
 json_object_put(d);
 }
