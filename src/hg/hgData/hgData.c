@@ -5,7 +5,7 @@
 #include "bedGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.11 2009/02/25 19:20:17 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.12 2009/02/25 19:28:36 mikep Exp $";
 
 void doGet()
 {
@@ -44,9 +44,8 @@ if (verboseLevel()>1)
 // list information about all active genome databases
 if (!cmd && !genome && !track)
     {
-    modified = strToTime("$Date: 2009/02/25 19:20:17 $", "$Date: 2009/02/25 19:20:17 $");
-    if (!notModifiedResponse(reqEtag, reqModified, modified))
-	printUsage(modified);
+    // get modified time from CVS $Date field in file where code resides
+    printUsage(reqEtag, reqModified);
     }
 else if (sameOk(GENOMES_CMD, cmd)) 
     {

@@ -233,7 +233,7 @@ struct coords navigate(int start, int end, int chromSize);
 // Calculate navigation coordinates including window left, window right
 // Zoom in 10x, Zoom out 10x
 
-void printUsage(time_t modified);
+void printUsage(char *reqEtag, time_t reqModified);
 
 
 #endif /* HGDATA_H */
