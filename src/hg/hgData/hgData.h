@@ -126,6 +126,9 @@ char *etag(time_t modified);
 time_t strToTime(char *time, char *format);
 // Convert human time to unix time using format
 
+char *gmtimeToStr(time_t time, char *format);
+// Convert unix time to human time using format
+
 boolean notModifiedResponse(char *reqEtag, time_t reqModified, time_t modified);
 // Returns TRUE if request is not modified and sends a 304 Not Modified HTTP header
 // Otherwise request is modified so return FALSE
@@ -133,11 +136,15 @@ boolean notModifiedResponse(char *reqEtag, time_t reqModified, time_t modified);
 void okSendHeader(time_t modified);
 // Send a 200 OK header with Last-Modified date (and ETag based on this) if supplied
 
-void send2xxHeader(int status, char *content, time_t modified);
-// Send a 2xx header with Last-Modified date (and ETag based on this) if supplied
+void send2xxHeader(int status, time_t modified, char *contentType);
+// Send a 2xx header 
+// If modified > 0 sets Last-Modified date (and ETag based on this)
+// if contentType is NULL, defaults to Content-Type: application/json
 
-void send3xxHeader(int status, char *content, time_t modified);
+void send3xxHeader(int status, time_t modified, char *contentType);
 // Send a 3xx header with Last-Modified date (and ETag based on this) if supplied
+// If modified > 0 sets Last-Modified date (and ETag based on this)
+// if contentType is NULL, defaults to Content-Type: application/json
 
 void errClientStatus(int code, char *status, char *format, ...);
 // create a HTTP response code 400-499 and status, 

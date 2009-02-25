@@ -4,7 +4,7 @@
 #include "hdb.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgData_common.c,v 1.1.2.3 2009/02/25 11:24:37 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_common.c,v 1.1.2.4 2009/02/25 20:12:16 mikep Exp $";
 
 struct coords navigate(int start, int end, int chromSize)
 // Calculate navigation coordinates including window left, window right
@@ -26,9 +26,9 @@ char *etag(time_t modified)
 // Convert modification time to ETag
 // Uses global which does not need to be freed but is overwritten after each call
 {
-static char _etag[1000];
-safef(_etag, sizeof(_etag), "%x", (unsigned)modified);
-return _etag;
+static char etagBuf[1000];
+safef(etagBuf, sizeof(etagBuf), "%x", (unsigned)modified);
+return etagBuf;
 }
 
 time_t strToTime(char *time, char *format)
@@ -45,6 +45,18 @@ freez(&tmpTime);
 if (modified < 0)
     errAbort("Error converting time [%s] to time_t [%d] in strToTime()\n", time, (int)modified);
 return modified;
+}
+
+char *gmtimeToStr(time_t timeVal, char *format)
+// Convert unix time to human time using format
+{
+static char timeBuf[1024];
+struct tm* tmpTime;
+if ((tmpTime = gmtime(&timeVal)) == NULL )
+    errAbort("Error converting time %d to GMT time\n", (int)timeVal);
+if (!strftime(timeBuf, sizeof(timeBuf), format, tmpTime))
+    errAbort("Error formatting GMT time %d using format [%s]\n", (int)timeVal, format);
+return timeBuf;
 }
 
 char *nullOrVal(char *val)
