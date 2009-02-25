@@ -4,7 +4,7 @@
 //#include "dystring.h"
 
 
-static char const rcsid[] = "$Id: hgData_index.c,v 1.1.2.1 2009/02/24 09:13:13 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_index.c,v 1.1.2.2 2009/02/25 11:25:05 mikep Exp $";
 
 struct json_object *jsonContact()
 {
@@ -49,7 +49,8 @@ void printUsage()
 struct json_object *msg = json_object_new_object();
 struct json_object *vars = json_object_new_object();
 struct json_object *res = json_object_new_object();
-
+time_t modified = strToTime("$Date: 2009/02/25 11:25:05 $", "$Date: %Y/%m/%d %T ");
+okSendHeader(modified);
 json_object_object_add(msg, "institution", jsonContact());
 // list of standard variables used in genome queries
 json_object_object_add(msg, "variables", vars);
