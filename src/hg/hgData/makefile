@@ -6,7 +6,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgData
 
-O = $A.o hgData_common.o hgData_response.o hgData_db.o hgData_genome.o hgData_track.o hgData_bed.o 
+O = $A.o hgData_index.o hgData_common.o hgData_response.o hgData_db.o hgData_genome.o hgData_track.o hgData_bed.o 
 
 include ../../inc/cgi_build_rules.mk
 
@@ -15,3 +15,4 @@ compile: $O
 	mv ${AOUT} $A${EXE}
 
 .o:	hgData.h
+
