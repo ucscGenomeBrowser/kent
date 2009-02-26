@@ -31,6 +31,10 @@
 #include <json/json.h>
 #endif
 
+#define TRACK_EXPIRES 15*60   // 15 minutes for track data & metadata
+#define GENOME_EXPIRES 60*60  // 60 minutes for genomes 
+#define INDEX_EXPIRES 60*60   // 60 minutes for index page
+
 #define PREFIX      "/g/"
 #define GENOMES_CMD "genomes"
 #define TRACKS_CMD  "tracks"
@@ -121,29 +125,36 @@ char *nullOrVal(char *val);
 
 char *etag(time_t modified);
 // Convert modification time to ETag
-// Uses global which does not need to be freed but is overwritten after each call
+// Returned value must be freed by caller
 
 time_t strToTime(char *time, char *format);
 // Convert human time to unix time using format
 
 char *gmtimeToStr(time_t time, char *format);
 // Convert unix time to human time using format
+// Returned value must be freed by caller
+
+char *gmtimeToHttpStr(time_t timeVal);
+// Convert unix time to human time using HTTP format
+// Returned value must be freed by caller
 
 boolean notModifiedResponse(char *reqEtag, time_t reqModified, time_t modified);
 // Returns TRUE if request is not modified and sends a 304 Not Modified HTTP header
 // Otherwise request is modified so return FALSE
 
-void okSendHeader(time_t modified);
-// Send a 200 OK header with Last-Modified date (and ETag based on this) if supplied
+void okSendHeader(time_t modified, int expireSecs);
+// Send a 200 OK header
+// If modified > 0, set Last-Modified date (and ETag) based on this
+// If expireSecs > 0, set Expires header to now+expireSecs
 
-void send2xxHeader(int status, time_t modified, char *contentType);
-// Send a 2xx header 
-// If modified > 0 sets Last-Modified date (and ETag based on this)
+void send2xxHeader(int status, time_t modified, int expireSecs, char *contentType);
+// Send a 2xx header
+// If modified > 0 set Last-Modified date (and ETag based on this)
 // if contentType is NULL, defaults to Content-Type: application/json
 
-void send3xxHeader(int status, time_t modified, char *contentType);
-// Send a 3xx header with Last-Modified date (and ETag based on this) if supplied
-// If modified > 0 sets Last-Modified date (and ETag based on this)
+void send3xxHeader(int status, time_t modified, int expireSecs, char *contentType);
+// Send a 3xx header
+// If modified > 0 set Last-Modified date (and ETag based on this)
 // if contentType is NULL, defaults to Content-Type: application/json
 
 void errClientStatus(int code, char *status, char *format, ...);

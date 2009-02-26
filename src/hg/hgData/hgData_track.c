@@ -11,7 +11,7 @@
 #include <json/json.h>                                                     
 #endif                                                                     
 
-static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.6 2009/02/25 11:22:30 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.7 2009/02/26 08:00:19 mikep Exp $";
 
 // /tracks                                            [list of all tracks in all genomes]
 // /tracks/{genome}                                   [list of tracks for {genome}]
@@ -196,7 +196,7 @@ if (tdb && slCount(tdb)==1)
 else
     jsonAddTracks(trackArr, tdb, genome);
 jsonAddGroups(group, tdb);
-okSendHeader(modified);
+okSendHeader(modified, TRACK_EXPIRES);
 printf(json_object_to_json_string(i));
 json_object_put(i);
 }

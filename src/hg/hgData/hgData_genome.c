@@ -5,7 +5,7 @@
 #include "chromInfo.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgData_genome.c,v 1.1.2.6 2009/02/25 11:23:34 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_genome.c,v 1.1.2.7 2009/02/26 08:00:19 mikep Exp $";
 
 //sqlDateToUnixTime(sqlTableUpdateTime(conn, "dbDb"));
 
@@ -129,7 +129,7 @@ jsonAddHierarchy(g, db);
 if (slCount(db) == 1 && ci)
     jsonAddChroms(g, db->name, ci);
 addGenomeUrl(g, "url_genomes", NULL, NULL);
-okSendHeader(modified);
+okSendHeader(modified, GENOME_EXPIRES);
 printf(json_object_to_json_string(g));
 json_object_put(g);
 }

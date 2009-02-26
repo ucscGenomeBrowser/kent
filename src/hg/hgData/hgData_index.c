@@ -4,7 +4,7 @@
 //#include "dystring.h"
 
 
-static char const rcsid[] = "$Id: hgData_index.c,v 1.1.2.6 2009/02/25 22:16:31 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_index.c,v 1.1.2.7 2009/02/26 08:00:19 mikep Exp $";
 
 struct json_object *jsonContact()
 {
@@ -47,13 +47,14 @@ return opts;
 void printUsage(char *reqEtag, time_t reqModified)
 {
 // dont need to continue if this changes to this file have not been committed
-time_t modified = strToTime("$Date: 2009/02/25 22:16:31 $", "$" "Date: %Y/%m/%d %T " "$");// careful CVS doesnt mangle format
+char *version = "$Date: 2009/02/26 08:00:19 $"; // local time, not GMT
+time_t modified = strToTime(version, "$" "Date: %Y/%m/%d %T " "$");// careful CVS doesnt mangle format
 if (notModifiedResponse(reqEtag, reqModified, modified))
     return;
 struct json_object *msg = json_object_new_object();
 struct json_object *vars = json_object_new_object();
 struct json_object *res = json_object_new_object();
-okSendHeader(modified);
+okSendHeader(modified, INDEX_EXPIRES);
 json_object_object_add(msg, "institution", jsonContact());
 // list of standard variables used in genome queries
 json_object_object_add(msg, "variables", vars);

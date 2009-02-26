@@ -5,7 +5,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.9 2009/02/25 11:24:00 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.10 2009/02/26 08:00:19 mikep Exp $";
 
 
 struct json_object *addCountUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom, int start, int end)
@@ -230,7 +230,7 @@ addGenomeUrl(d, "url_genome", genome, NULL);
 addGenomeUrl(d, "url_genomes", NULL, NULL);
 addTrackUrl(d, "url_track", genome, track);
 addTrackUrl(d, "url_tracks", genome, NULL);
-okSendHeader(modified);
+okSendHeader(modified, TRACK_EXPIRES);
 printf(json_object_to_json_string(d));
 json_object_put(d);
 }
@@ -262,7 +262,7 @@ addGenomeUrl(d, "url_genome", genome, NULL);
 addGenomeUrl(d, "url_genomes", NULL, NULL);
 addTrackUrl(d, "url_track", genome, track);
 addTrackUrl(d, "url_tracks", genome, NULL);
-okSendHeader(modified);
+okSendHeader(modified, TRACK_EXPIRES);
 printf(json_object_to_json_string(d));
 json_object_put(d);
 }
