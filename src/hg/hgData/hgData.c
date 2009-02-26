@@ -5,7 +5,7 @@
 #include "bedGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.13 2009/02/25 22:16:31 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.15 2009/02/26 18:42:22 mikep Exp $";
 
 void doGet()
 {
@@ -77,10 +77,20 @@ else if (sameOk(GENOMES_CMD, cmd))
 	printGenomes(dbs, ci, modified);
 	}
     }
+// /tracks                                            [list of all tracks in all genomes]
+// /tracks/{genome}                                   [list of tracks for {genome}]
+// /tracks/{track}/{genome}                           [track details for {track} in {genome}]
 else if (sameOk(TRACKS_CMD, cmd))
     {
+    verbose(2,"Tracks cmd genome=[%s] track=[%s]\n", genome, track);
     if (genome)
 	{
+	modified = trackDbLatestUpdateTime(genome); // modified date is greatest of all trackDb dates
+	verbose(2,"Tracks genome=[%s]\n", genome);
+	if (!hDbIsActive(genome))
+	    ERR_GENOME_NOT_FOUND(genome);
+	// check if genome.chromInfo has changed 
+	modified = max(modified, hGetLatestUpdateTimeChromInfo(genome));
 	if (track)
 	    {
 	    struct sqlConnection *conn = hAllocConn(genome);
@@ -88,24 +98,29 @@ else if (sameOk(TRACKS_CMD, cmd))
 		ERR_NO_GENOME_DB_CONNECTION(genome);
 	    if (!(tdb = hTrackInfo(conn, track)))
 		ERR_TRACK_INFO_NOT_FOUND(track, genome);
-	    //hParseTableName(genome, tdb->tableName, rootName, parsedChrom);
-	    //if (!(hti = hFindTableInfo(genome, chrom, rootName)))
-	//	ERR_TABLE_NOT_FOUND(tdb->tableName, chrom, rootName, genome);
-	    modified = sqlTableUpdateTime(conn, track); // modified date is track date
+	    modified = max(modified, sqlTableUpdateTime(conn, track)); // check if track has changed
 	    }
-	else
+	if (!notModifiedResponse(reqEtag, reqModified, modified))
 	    {
-	    if (!(tdb = hTrackDb(genome, NULL)))
-		ERR_TRACK_INFO_NOT_FOUND("<any>", genome);
-	    modified = trackDbLatestUpdateTime(genome); // modified date is greatest of all trackDb dates
+	    if (track)
+		{
+		hParseTableName(genome, tdb->tableName, rootName, parsedChrom);
+		if (!(hti = hFindTableInfo(genome, chrom, rootName)))
+		    ERR_TABLE_INFO_NOT_FOUND(tdb->tableName, chrom, rootName, genome);
+		}
+	    else 
+		{
+		if ( !(tdb = hTrackDb(genome, NULL)) )
+		    ERR_TRACK_INFO_NOT_FOUND("<any>", genome);
+		}
+	    printTrackInfo(genome, tdb, hti, modified);
 	    }
 	}
     else
 	{
+	verbose(2,"Not implemented\n");
         ERR_NOT_IMPLEMENTED("List of all tracks in all genomes");
 	}
-    if (!notModifiedResponse(reqEtag, reqModified, modified))
-	printTrackInfo(genome, tdb, hti, modified);
     }
 else if (sameOk(SEARCH_CMD, cmd))
     {
