@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.158 2009/02/21 02:49:33 aamp Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.159 2009/02/26 03:50:06 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2302,7 +2302,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     int openSize = min(20,slCount(filterBy->slValues)+1);
     int size = (filterBy->slChoices == NULL || slCount(filterBy->slChoices) == 1 ? 1 : openSize);  //slCount(filterBy->slValues)+1);   // slChoice ??
 //#define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onfucus='this.size=%d;' onblur='var ix; for(ix=this.selectedIndex+1;ix<this.options.length;ix++) {if(this.options[ix].selected) break;} if(ix == this.options.length) this.size=1; return true;'><BR>\n"
-#define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onclick='this.size=%d;'><BR>\n"
+#define MULTI_SELECT_WITH_JS "<SELECT name='%s.filterBy.%s' multiple=true size=%d onclick='this.size=%d;'class='normalText filterBy'><BR>\n"
     printf(MULTI_SELECT_WITH_JS,tdb->tableName,filterBy->column,size,openSize);
     printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":"") );
     struct slName *slValue;
@@ -2817,7 +2817,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 cfgByCfgType(cType,db,cart,subtrack,htmlIdentifier,"Subtrack",TRUE);
                 puts("</DIV>\n");
                 }
-            printf("<TD>&nbsp;");
+            printf("<TD nowrap>&nbsp;");
             makeSchemaLink(db,subtrack,"schema");
             puts("&nbsp;");
 
@@ -3147,8 +3147,8 @@ if (setting)
     puts("<TR><TD align='right'><B>Minimum Q-Value:</B><TD align='left'>");
     safef(varName, sizeof(varName), "%s.%s", name, ENCODE_PEAK_QVAL_FILTER_SUFFIX);
     cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, ENCODE_PEAK_QVAL_FILTER_SUFFIX, "0.00"), 6);
-    puts("</TD></TR>\n");    
-    } 
+    puts("</TD></TR>\n");
+    }
 else
     {
     safef(varName, sizeof(varName), "%s.%s", name, ENCODE_PEAK_SCORE_FILTER_SUFFIX);
@@ -3725,7 +3725,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
     safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\"", membersOfView->names[ix]);
 
     printf("<TD>");
-    hTvDropDownWithJavascript(objName, tv, parentTdb->canPack,javascript);
+    hTvDropDownClassWithJavascript(objName, tv, parentTdb->canPack,"viewDd normalText",javascript);
     puts(" &nbsp; &nbsp; &nbsp;</TD>");
     // Until the cfg boxes are inserted here, this divorces the relationship
     //if(membersOfView->count > 6 && ix == ((membersOfView->count+1)/2)-1)  // An attempt at 2 rows of cfg's No good!
@@ -3758,86 +3758,50 @@ freeMem(matchedSubtracks);
 return TRUE;
 }
 
-static char *labelWithControlledVocabLink(struct trackDb *parentTdb, char *vocabType, char *label)
+static char *labelWithVocabLink(struct trackDb *parentTdb, struct trackDb *childTdb, char *vocabType, char *label)
 /* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
-   then label will be wrapped with the link to display it.
-   NOTE: returned string is on the stack so use it or loose it. */
+   then label will be wrapped with the link to display it.  Return string is cloned. */
 {
 char *vocab = trackDbSetting(parentTdb, "controlledVocabulary");
 if(vocab == NULL)
     return cloneString(label); // No wrapping!
 
 char *words[15];
-char *prefix=NULL;
-char *suffix=NULL;
 int count,ix;
 boolean found=FALSE;
 if((count = chopByWhite(cloneString(vocab), words,15)) <= 1)
     return cloneString(label);
 for(ix=1;ix<count && !found;ix++)
     {
+#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' TARGET=_BLANK>%s</A>\n"
     if(sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag so all labels are linked
-       break;
-    else if(countChars(words[ix],'=') == 1) // A list of individual vocab words must be matched
+        {
+        int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(words[ix])+strlen(label) + 2;
+        char *link=needMem(sz);
+        safef(link,sz,VOCAB_LINK,words[0],words[ix],label);
+        freeMem(words[0]);
+        return link;
+        }
+    else if(countChars(words[ix],'=') == 1 && childTdb != NULL) // The name of a trackDb setting follows and will be the controlled vocab term
         {
         strSwapChar(words[ix],'=',0);
-        if(sameString(vocabType,words[ix]))  // tags match, but search for label
+        if(sameString(vocabType,words[ix]))  // tags match, but search for term
             {
-            char * lookForSet = words[ix] + strlen(words[ix]) + 1;
-            char * lookFor = NULL;
-            strSwapChar(lookForSet,'_',' '); // Underbar in labels already removed.  Do so in vocab terms
-            while(!found && (lookFor = cloneNextWordByDelimiter(&lookForSet,',')))
+            char * cvSetting = words[ix] + strlen(words[ix]) + 1;
+            char * cvTerm = trackDbSetting(childTdb, cvSetting);
+            if(cvTerm != NULL)
                 {
-                if(sameString(label,lookFor))
-                    found = TRUE;
-                else if(startsWith(lookFor,label) && label[strlen(lookFor)] == ' ')
-                    {
-                    suffix = cloneString(label);
-                    strcpy(suffix,label+strlen(lookFor));
-                    label = lookFor;
-                    found = TRUE;
-                    }
-                else if(endsWith(label,lookFor) && label[strlen(label) - strlen(lookFor) - 1] == ' ')
-                    {
-                    prefix = cloneString(label);
-                    prefix[strlen(label) - strlen(lookFor)] = 0;
-                    label = lookFor;
-                    found = TRUE;
-                    }
+                int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(cvTerm)+strlen(label) + 2;
+                char *link=needMem(sz);
+                safef(link,sz,VOCAB_LINK,words[0],cvTerm,label);
+                freeMem(words[0]);
+                return link;
                 }
             }
         }
     }
-if(ix==count)
-    {
-    freeMem(words[0]);
-    return cloneString(label);
-    }
-
-#define VOCAB_LINK "%s<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' TARGET=_BLANK>%s</A>%s\n"
-int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(vocabType)+2*strlen(label) + 2;
-char *link=NULL;
-char *term = strSwapChar(cloneString(label),' ','_'); // term must be one_word
-if(prefix)
-    {
-    link=needMem(strlen(prefix)+sz);
-    safef(link,sz,VOCAB_LINK,prefix,words[0],term,label,"");
-    freeMem(prefix);
-    }
-else if(suffix)
-    {
-    link=needMem(sz+strlen(suffix));
-    safef(link,sz,VOCAB_LINK,"",words[0],term,label,suffix);
-    freeMem(suffix);
-    }
-else
-    {
-    link=needMem(sz);
-    safef(link,sz,VOCAB_LINK,"",words[0],term,label,"");
-    }
 freeMem(words[0]);
-freeMem(term);
-return link;
+return cloneString(label);
 }
 
 static boolean hCompositeUiByMatrix(char *db, struct cart *cart, struct trackDb *parentTdb, char *formName)
@@ -3868,8 +3832,14 @@ int sizeOfY = dimensionY?dimensionY->count:1;
 int sizeOfZ = dimensionZ?dimensionZ->count:1;
 char cells[sizeOfX][sizeOfY]; // There needs to be atleast one element in dimension
 char cellsZ[sizeOfX];         // The Z dimension is a separate 1D matrix
+struct trackDb *tdbsX[sizeOfX]; // Representative subtracks
+struct trackDb *tdbsY[sizeOfY];
+struct trackDb *tdbsZ[sizeOfZ];
 memset(cells, 0, sizeof(cells));
 memset(cellsZ, 0, sizeof(cellsZ));
+memset(tdbsX, 0, sizeof(tdbsX));
+memset(tdbsY, 0, sizeof(tdbsY));
+memset(tdbsZ, 0, sizeof(tdbsZ));
 for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     ixX = (dimensionX ? -1 : 0 );
@@ -3878,16 +3848,19 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
     if(dimensionX && subgroupFind(subtrack,dimensionX->tag,&value))
         {
         ixX = stringArrayIx(value,dimensionX->names,dimensionX->count);
+        tdbsX[ixX] = subtrack;
         subgroupFree(&value);
         }
     if(dimensionY && subgroupFind(subtrack,dimensionY->tag,&value))
         {
         ixY = stringArrayIx(value,dimensionY->names,dimensionY->count);
+        tdbsY[ixY] = subtrack;
         subgroupFree(&value);
         }
     if(dimensionZ && subgroupFind(subtrack,dimensionZ->tag,&value))
         {
         ixZ = stringArrayIx(value,dimensionZ->names,dimensionZ->count);
+        tdbsZ[ixZ] = subtrack;
         subgroupFree(&value);
         }
     if(ixX > -1 && ixY > -1)
@@ -3937,7 +3910,11 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
         if(dimensionY)
             printf("<TH align='right' WIDTH=\"100\"><EM><B>%s</EM></B>:</TH>", dimensionX->title);
         for (ixX = 0; ixX < dimensionX->count; ixX++)
-            printf("<TH WIDTH=\"100\">%s</TH>",labelWithControlledVocabLink(parentTdb,dimensionX->tag,dimensionX->values[ixX]));
+            {
+            char *label = replaceChars(dimensionX->values[ixX]," (","<BR>(");//
+            printf("<TH WIDTH=\"100\">%s</TH>",labelWithVocabLink(parentTdb,tdbsX[ixX],dimensionX->tag,label));
+            freeMem(label);
+            }
         }
     else if(dimensionY)
         {
@@ -3976,7 +3953,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
             puts("</TH>");
             }
         else if(ixY < dimensionY->count)
-            printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithControlledVocabLink(parentTdb,dimensionY->tag,dimensionY->values[ixY]));
+            printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",labelWithVocabLink(parentTdb,tdbsY[ixY],dimensionY->tag,dimensionY->values[ixY]));
         else
             break;
 
@@ -4042,7 +4019,7 @@ for (subtrack = parentTdb->subtracks; subtrack != NULL; subtrack = subtrack->nex
                 dyStringPrintf(dyJS, javascript);
                 dyStringPrintf(dyJS, " class=\"matrixCB %s\"",dimensionZ->names[ixZ]);
                 cgiMakeCheckBoxJS(objName,alreadySet,dyStringCannibalize(&dyJS));
-                printf("%s",labelWithControlledVocabLink(parentTdb,dimensionZ->tag,dimensionZ->values[ixZ]));
+                printf("%s",labelWithVocabLink(parentTdb,tdbsZ[ixZ],dimensionZ->tag,dimensionZ->values[ixZ]));
                 }
         }
     puts("</TD></TR></TABLE>");
