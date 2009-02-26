@@ -11,7 +11,7 @@
 #include <json/json.h>                                                     
 #endif                                                                     
 
-static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.7 2009/02/26 08:00:19 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.8 2009/02/26 18:41:04 mikep Exp $";
 
 // /tracks                                            [list of all tracks in all genomes]
 // /tracks/{genome}                                   [list of tracks for {genome}]
@@ -84,20 +84,46 @@ json_object_object_add(t, "parent_track", tdb->parentName ? json_object_new_stri
 return t;
 }
 
+static void jsonAddTableInfoOneTrack(struct json_object *o, struct hTableInfo *hti)
+// Add table info such as columns names 
+{
+if (!hti)
+    return;
+json_object_object_add(o, "rootName", json_object_new_string(hti->rootName));
+json_object_object_add(o, "isPos", json_object_new_boolean(hti->isPos));
+json_object_object_add(o, "isSplit", json_object_new_boolean(hti->isSplit));
+json_object_object_add(o, "hasBin", json_object_new_boolean(hti->hasBin));
+json_object_object_add(o, "chromField", json_object_new_string(hti->chromField));
+json_object_object_add(o, "startField", json_object_new_string(hti->startField));
+json_object_object_add(o, "endField", json_object_new_string(hti->endField));
+json_object_object_add(o, "nameField", json_object_new_string(hti->nameField));
+json_object_object_add(o, "scoreField", json_object_new_string(hti->scoreField));
+json_object_object_add(o, "strandField", json_object_new_string(hti->strandField));
+json_object_object_add(o, "cdsStartField", json_object_new_string(hti->cdsStartField));
+json_object_object_add(o, "cdsEndField", json_object_new_string(hti->cdsEndField));
+json_object_object_add(o, "countField", json_object_new_string(hti->countField));
+json_object_object_add(o, "startsField", json_object_new_string(hti->startsField));
+json_object_object_add(o, "endsSizesField", json_object_new_string(hti->endsSizesField));
+json_object_object_add(o, "spanField", json_object_new_string(hti->spanField));
+json_object_object_add(o, "hasCDS", json_object_new_boolean(hti->hasCDS));
+json_object_object_add(o, "hasBlocks", json_object_new_boolean(hti->hasBlocks));
+json_object_object_add(o, "type", json_object_new_string(hti->type));
+}
+
 static void jsonAddOneTrackFull(struct json_object *arr, struct trackDb *tdb, struct hTableInfo *hti, char *genome)
 // Detailed information for a single track added to the array 'arr'
 {
 struct json_object *item = json_object_new_object();
 struct json_object *view = json_object_new_object();
-struct json_object *props = json_object_new_object();
+struct json_object *info = json_object_new_object();
 struct json_object *t = jsonOneTrack(tdb, genome);
 struct json_object *restList = json_object_new_array();
 int i;
 json_object_array_add(arr, item); /* add this item to the array */
 json_object_object_add(item, tdb->tableName, t); 
 json_object_object_add(t, "view_properties", view); 
-json_object_object_add(t, "table_properties", props); 
-//json_object_object_add(t, "description_html", json_object_new_string(tdb->html)); /* Some html to display about the track */
+json_object_object_add(t, "table_properties", info); 
+json_object_object_add(t, "description_html", json_object_new_string(tdb->html)); /* Some html to display about the track */
 // properties of the view
 json_object_object_add(view, "color_r", json_object_new_int(tdb->colorR)); /* Color red component 0-255 */
 json_object_object_add(view, "color_g", json_object_new_int(tdb->colorG)); /* Color green component 0-255 */
@@ -117,9 +143,7 @@ for (i = 0; i < tdb->restrictCount ; ++i)
 // Properties of the table
 if (hti)
     {
-    json_object_object_add(props, "has_CDS", json_object_new_boolean(hti->hasCDS));
-    json_object_object_add(props, "has_blocks", json_object_new_boolean(hti->hasBlocks));
-    json_object_object_add(props, "type", json_object_new_string(hti->type));
+    jsonAddTableInfoOneTrack(info, hti);
     }
 }
 
@@ -192,7 +216,13 @@ json_object_object_add(trackGen, genome, trackArr);
 json_object_object_add(groupGen, genome, group);
 // add tracks to the track array
 if (tdb && slCount(tdb)==1)
+    {
+/*    addCountChromUrl(i, "url_count_chrom", genome, tdb->tableName);
+    addCountUrl(i, "url_count", genome, tdb->tableName);
+    addRangeChromUrl(i, "url_range_chrom", genome, tdb->tableName);
+    addRangeUrl(i, "url_range", genome, tdb->tableName);*/
     jsonAddOneTrackFull(trackArr, tdb, hti, genome);
+    }
 else
     jsonAddTracks(trackArr, tdb, genome);
 jsonAddGroups(group, tdb);
