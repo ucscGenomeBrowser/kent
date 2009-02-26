@@ -4,7 +4,7 @@
 #include "hdb.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgData_common.c,v 1.1.2.5 2009/02/26 08:00:19 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_common.c,v 1.1.2.6 2009/02/26 08:36:31 mikep Exp $";
 
 struct coords navigate(int start, int end, int chromSize)
 // Calculate navigation coordinates including window left, window right
@@ -34,14 +34,13 @@ return cloneString(etagBuf);
 time_t strToTime(char *time, char *format)
 // Convert human time to unix time using format
 {
-struct tm *tmpTime;
-AllocVar(tmpTime);
+struct tm tmpTime;
 if (!time || strlen(time)==0)
     return 0;
-if (!strptime(time, format, tmpTime))
-    errAbort("Error parsing time [%s] using format [%s] in strToTime()\n", time, format);
-time_t modified = mktime(tmpTime);
-freez(&tmpTime);
+char *t = strptime(time, format, &tmpTime);
+if (t==NULL || (t - time) != strlen(time))
+    errAbort("Error parsing time [%s] using format [%s] in strToTime() (processed %d chars)\n", time, format, (int)(t ? (t - time) : 0));
+time_t modified = mktime(&tmpTime);
 if (modified < 0)
     errAbort("Error converting time [%s] to time_t [%d] in strToTime()\n", time, (int)modified);
 return modified;
@@ -59,10 +58,11 @@ char *gmtimeToStr(time_t timeVal, char *format)
 // Returned value must be freed by caller
 {
 char timeBuf[1024];
-struct tm* tmpTime;
-if ((tmpTime = gmtime(&timeVal)) == NULL )
+timeBuf[0] = 0;
+struct tm tmpTime;
+if (gmtime_r(&timeVal, &tmpTime) == NULL )
     errAbort("Error converting time %d to GMT time\n", (int)timeVal);
-if (!strftime(timeBuf, sizeof(timeBuf), format, tmpTime))
+if (!strftime(timeBuf, sizeof(timeBuf), format, &tmpTime))
     errAbort("Error formatting GMT time %d using format [%s]\n", (int)timeVal, format);
 return cloneString(timeBuf);
 }
