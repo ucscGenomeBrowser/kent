@@ -2,7 +2,7 @@
 #include "common.h"
 #include "hgData.h"
 
-static char const rcsid[] = "$Id: hgData_response.c,v 1.1.2.7 2009/02/26 08:00:19 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_response.c,v 1.1.2.8 2009/02/26 08:37:34 mikep Exp $";
 
 char *http_status1xx[] = {"Continue", "Switching Protocols"};
 
@@ -30,10 +30,14 @@ return FALSE;
 static void sendEtagHeader(int status, char *message, time_t modified, int expireSecs, char *contentType)
 {
 printf("Status: %d %s\n", status, message);
+char *d = gmtimeToHttpStr(time(NULL));
+printf("X-UCSC-Date: %s\n", d);
+freez(&d);
 if (expireSecs > 0)
     {
     char *d = gmtimeToHttpStr(time(NULL)+expireSecs);
     printf("Expires: %s\n", d);
+    printf("X-UCSC-Expires: %s\n", d);
     freez(&d);
     }
 if (modified > 0)
@@ -43,6 +47,7 @@ if (modified > 0)
 	{
 	char *d = gmtimeToHttpStr(modified);
 	printf("Last-Modified: %s\n", d);
+	printf("X-UCSC-Last-Modified: %s\n", d);
 	freez(&d);
 	}
     }
