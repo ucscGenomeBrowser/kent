@@ -5,7 +5,7 @@
 #include "hgRelate.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: apacheMonitor.c,v 1.12 2008/09/03 19:21:13 markd Exp $";
+static char const rcsid[] = "$Id: apacheMonitor.c,v 1.13 2009/02/26 17:45:48 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -147,10 +147,9 @@ if (sameString(machine, "hgw8"))
 }
 
 
-void printDatabaseTime()
+void printDatabaseTime(struct sqlConnection *conn)
 {
 char query[512];
-struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 
@@ -159,16 +158,14 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
     errAbort("couldn't get database time\n");
-verbose(1, "\nCurrent date-time = %s\n\n", row[0]);
+verbose(2, "\nCurrent date-time = %s\n\n", row[0]);
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 }
 
-int getUnixTimeNow()
+int getUnixTimeNow(struct sqlConnection *conn)
 /* ask the database for it's unix time (seconds since Jan. 1, 1970) */
 {
 char query[512];
-struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int ret = 0;
@@ -180,17 +177,15 @@ if (row == NULL)
     errAbort("couldn't get current time\n");
 ret = sqlUnsigned(row[0]);
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 return ret;
 }
 
-void readLogs(int secondsNow, boolean write500)
+void readLogs(struct sqlConnection *conn, int secondsNow, boolean write500)
 /* read access_log where time_stamp > startTime */
 /* write error 500 to fileName */
 {
 char fileName[255];
 char query[512];
-struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int startTime = secondsNow - (minutes * 60);
@@ -220,38 +215,34 @@ while ((row = sqlNextRow(sr)) != NULL)
     } 
 sqlFreeResult(&sr);
 if (write500) carefulClose(&outputFileHandle);
-hFreeConn(&conn);
 }
 
-void printBots(int secondsNow)
+void printBots(struct sqlConnection *conn, int secondsNow)
 /* who is faster than a hit every 5 seconds on average? */
 {
 char query[512];
-struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int startTime = secondsNow - (minutes * 60);
 int hits = 0;
 
-verbose(1, "\nheavy hitters overall (all status values, less than 5 seconds between average hits):\n");
+verbose(2, "\nheavy hitters overall (all status values, less than 5 seconds between average hits):\n");
 safef(query, sizeof(query), "select count(*), remote_host from access_log where time_stamp > %d group by remote_host", startTime);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     hits = sqlUnsigned(row[0]);
     if (hits > minutes * 12)
-        verbose(1, "%s\t%s\n", row[0], row[1]);
+        verbose(2, "%s\t%s\n", row[0], row[1]);
     }
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 }
 
 
 
-void desc500(int secondsNow)
+void desc500(struct sqlConnection *conn, int secondsNow)
 {
 char query[512];
-struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int startTime = secondsNow - (minutes * 60);
@@ -264,7 +255,6 @@ if (status500 <= 20)
     while ((row = sqlNextRow(sr)) != NULL)
         verbose(1, "%s\t%s\t%s\t%s\n", row[0], row[1], row[2], row[3]);
     sqlFreeResult(&sr);
-    hFreeConn(&conn);
     return;
     }
 
@@ -274,50 +264,49 @@ row = sqlNextRow(sr);
 if (row != NULL)
     verbose(1, "500 from robots: %s\n", row[0]);
 else
-    verbose(1, "none from robots\n");
+    verbose(2, "none from robots\n");
 sqlFreeResult(&sr);
 
-verbose(1, "\nmachine_ids (non-robots):\n");
+verbose(2, "\nmachine_ids (non-robots):\n");
 safef(query, sizeof(query), "select count(*), machine_id from access_log where time_stamp > %d and status = 500 and "
                             "referer != '-' group by machine_id", startTime);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
-    verbose(1, "%s\t%s\n", row[0], row[1]);
+    verbose(2, "%s\t%s\n", row[0], row[1]);
 sqlFreeResult(&sr);
 
-verbose(1, "\nremote_hosts:\n");
+verbose(2, "\nremote_hosts:\n");
 safef(query, sizeof(query), "select count(*), remote_host from access_log where time_stamp > %d and status = 500 group by remote_host", startTime);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
-    verbose(1, "%s\t%s\n", row[0], row[1]);
+    verbose(2, "%s\t%s\n", row[0], row[1]);
 sqlFreeResult(&sr);
 
-verbose(1, "\ndistinct request_uris:\n");
+verbose(2, "\ndistinct request_uris:\n");
 safef(query, sizeof(query), "select distinct(request_uri) from access_log where time_stamp > %d and status = 500", startTime);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
-    verbose(1, "%s\n", row[0]);
+    verbose(2, "%s\n", row[0]);
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 }
 
 void printMachines()
 {
-verbose(1, "Count by machine: \n");
-verbose(1, "hgw1 = %d\n", hgw1count);
-verbose(1, "hgw2 = %d\n", hgw2count);
-verbose(1, "hgw3 = %d\n", hgw3count);
-verbose(1, "hgw4 = %d\n", hgw4count);
-verbose(1, "hgw5 = %d\n", hgw5count);
-verbose(1, "hgw6 = %d\n", hgw6count);
-verbose(1, "hgw7 = %d\n", hgw7count);
-verbose(1, "hgw8 = %d\n\n", hgw8count);
+verbose(2, "Count by machine: \n");
+verbose(2, "hgw1 = %d\n", hgw1count);
+verbose(2, "hgw2 = %d\n", hgw2count);
+verbose(2, "hgw3 = %d\n", hgw3count);
+verbose(2, "hgw4 = %d\n", hgw4count);
+verbose(2, "hgw5 = %d\n", hgw5count);
+verbose(2, "hgw6 = %d\n", hgw6count);
+verbose(2, "hgw7 = %d\n", hgw7count);
+verbose(2, "hgw8 = %d\n\n", hgw8count);
 }
 
 void printStatus()
 {
-verbose(1, "Count by status: \n");
-verbose(1, "200: %d\n", status200);
+verbose(2, "Count by status: \n");
+verbose(2, "200: %d\n", status200);
 verbose(1, "206: %d\n", status206); 
 verbose(1, "301: %d\n", status301);
 verbose(1, "302: %d\n", status302);
@@ -331,12 +320,11 @@ verbose(1, "414: %d\n", status414);
 verbose(1, "500: %d\n\n", status500);
 }
 
-void store500(int timeNow)
+void store500(struct sqlConnection *conn, int timeNow)
 {
 char localfileName[255];
 char fullfileName[255];
 char tableName[255];
-struct sqlConnection *conn = hAllocConn(database);
 FILE *f;
 
 /* open the file because hgLoadNamedTabFile closes it */
@@ -346,8 +334,6 @@ f = mustOpen(fullfileName, "r");
 safef(tableName, ArraySize(tableName), "status500");
 safef(localfileName, ArraySize(localfileName), "%d", timeNow);
 hgLoadNamedTabFile(conn, "/scratch/apacheMonitor", tableName, localfileName, &f);
-
-hFreeConn(&conn);
 }
 
 void cleanup(int timeNow)
@@ -370,20 +356,28 @@ host = argv[1];
 database = argv[2];
 minutes = atoi(argv[3]);
 
-printDatabaseTime();
-timeNow = getUnixTimeNow();
-readLogs(timeNow, optionExists("store"));
-verbose(1, "Total hits in the last %d minutes = %d\n", minutes, total);
-verbose(1, "Hits from robots = %d\n\n", robotcount);
+user = cfgOptionEnv("HGDB_USER", "db.user");
+password = cfgOptionEnv("HGDB_PASSWORD", "db.password");
+if (user == NULL || password == NULL)
+    errAbort("Both db and password must be defined as environment variables "
+	     "(HGDB_USER, HGDB_PASSWORD) or as hg.conf (db.user, db.password).");
+struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
+
+printDatabaseTime(conn);
+timeNow = getUnixTimeNow(conn);
+readLogs(conn, timeNow, optionExists("store"));
+verbose(2, "Total hits in the last %d minutes = %d\n", minutes, total);
+verbose(2, "Hits from robots = %d\n\n", robotcount);
 printMachines();
 printStatus();
 if (status500 >= 10)
-    desc500(timeNow);
+    desc500(conn, timeNow);
 if (optionExists("store") && status500 > 0)
     {
-    store500(timeNow);
+    store500(conn, timeNow);
     cleanup(timeNow);
     }
-printBots(timeNow);
+printBots(conn, timeNow);
+sqlDisconnect(&conn);
 return 0;
 }
