@@ -2730,83 +2730,89 @@ priority 0
 type bed 3
 wgEncode 1
 
-#    track wgEncodeDukeDNaseSeqPeaksGm12878
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel GM128 DNase Pk
-#    longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM12878 cells)
-#    subGroups view=Peaks EXP=DNase cellType=GM12878
-#    type narrowPeak
-#    useScore 0
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-11-04
-#    dateUnrestricted 2009-08-04
-#    cell GM12878
+    track wgEncodeDukeDNaseSeqPeaksGm12878
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel GM128 DNase Pk
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Peaks (in GM12878 cells)
+    subGroups view=Peaks EXP=DNase cellType=GM12878
+    type narrowPeak
+    useScore 0
+    dateSubmitted 2009-02-25
+    dateUnrestricted 2009-11-25
+    dataVersion ENCODE Feb 2009 Freeze
+    #dataVersion ENCODE Nov 2008 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    cell GM12878
 
-#    track wgEncodeDukeDNaseSeqSignalGm12878
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel GM128 DNase Sig
-#    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in GM12878 cells)
-#    subGroups view=Signal EXP=DNase cellType=GM12878
-#    type wig 0.00 39.64
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-11-04
-#    dateUnrestricted 2009-08-04
-#    spanList 1
-#    cell GM12878
+    track wgEncodeDukeDNaseSeqSignalGm12878
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel GM128 DNase Sig
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Signal (in GM12878 cells)
+    subGroups view=Signal EXP=DNase cellType=GM12878
+    type wig 0.00 4.75
+    dateSubmitted 2009-02-25
+    dateUnrestricted 2009-11-25
+    dataVersion ENCODE Feb 2009 Freeze
+    #dataVersion ENCODE Nov 2008 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    spanList first
+    cell GM12878
 
-#    track wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel GM128 DNase BO
-#    longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12878 cells)
-#    subGroups view=SignalBO EXP=DNase cellType=GM12878
-#    type wig 0.00 417.00
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-11-22
-#    dateUnrestricted 2009-08-22
-#    spanList 1
-#    cell GM12878
+    track wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel GM128 DNase BO
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12878 cells)
+    subGroups view=SignalBO EXP=DNase cellType=GM12878
+    type wig 0.00 417.00
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-22
+    dateUnrestricted 2009-08-22
+    spanList 1
+    cell GM12878
 
-#    track wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel GM128 DNase Raw 1
-#    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in GM12878 cells)
-#    subGroups view=rRAW EXP=DNase cellType=GM12878
-#    type wig 0.00 10.46
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-11-04
-#    dateUnrestricted 2009-08-04
-#    spanList 1
-#    cell GM12878
+    track wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel GM128 DNase Raw 1
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in GM12878 cells)
+    subGroups view=rRAW EXP=DNase cellType=GM12878
+    type wig 0.00 10.46
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
+    dateUnrestricted 2009-08-04
+    spanList 1
+    cell GM12878
 
-#    track wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel GM128 DNase Raw 2
-#    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in GM12878 cells)
-#    subGroups view=rRAW EXP=DNase cellType=GM12878
-#    type wig 0.00 9.77
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-11-04
-#    dateUnrestricted 2009-08-04
-#    spanList 1
-#    cell GM12878
+    track wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel GM128 DNase Raw 2
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in GM12878 cells)
+    subGroups view=rRAW EXP=DNase cellType=GM12878
+    type wig 0.00 9.77
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
+    dateUnrestricted 2009-08-04
+    spanList 1
+    cell GM12878
 
-#    track wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel GM128 DNase Raw 3
-#    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in GM12878 cells)
-#    subGroups view=rRAW EXP=DNase cellType=GM12878
-#    type wig 0.00 39.64
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-11-04
-#    dateUnrestricted 2009-08-04
-#    spanList 1
-#    cell GM12878
+    track wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel GM128 DNase Raw 3
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in GM12878 cells)
+    subGroups view=rRAW EXP=DNase cellType=GM12878
+    type wig 0.00 39.64
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-11-04
+    dateUnrestricted 2009-08-04
+    spanList 1
+    cell GM12878
 
     track wgEncodeUncFAIREseqPeaksGm12878
     release alpha
@@ -2816,8 +2822,11 @@ wgEncode 1
     subGroups view=Peaks EXP=FAIRE cellType=GM12878
     type narrowPeak
     dateSubmitted 2009-02-25
-    dateUnrestricted 2009-08-04
+    dateUnrestricted 2009-11-25
     dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    #dataVersion ENCODE Nov 2008 Freeze
     useScore 0
     cell GM12878
 
@@ -2829,8 +2838,11 @@ wgEncode 1
     subGroups view=Signal EXP=FAIRE cellType=GM12878
     type wig 0.00 4.28
     dateSubmitted 2009-02-25
-    dateUnrestricted 2009-08-04
+    dateUnrestricted 2009-11-25
     dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
 
@@ -2842,8 +2854,11 @@ wgEncode 1
     subGroups view=SignalBO EXP=FAIRE cellType=GM12878
     type wig 0.00 6800.00
     dateSubmitted 2009-02-25
-    dateUnrestricted 2009-08-04
+    dateUnrestricted 2009-11-25
     dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
 
@@ -2855,8 +2870,11 @@ wgEncode 1
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 0.00 37.13
     dateSubmitted 2009-02-25
-    dateUnrestricted 2009-08-04
+    dateUnrestricted 2009-11-25
     dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
 
@@ -2868,8 +2886,11 @@ wgEncode 1
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 0.00 46.48
     dateSubmitted 2009-02-25
-    dateUnrestricted 2009-08-04
+    dateUnrestricted 2009-11-25
     dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
 
@@ -2881,8 +2902,11 @@ wgEncode 1
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 0.00 39.94
     dateSubmitted 2009-02-25
-    dateUnrestricted 2009-08-04
+    dateUnrestricted 2009-11-25
     dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
 
@@ -2897,6 +2921,9 @@ wgEncode 1
     dateSubmitted 2009-02-24
     dateUnrestricted 2009-11-24
     dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    #dataVersion ENCODE Nov 2008 Freeze
     cell GM12878
     antibody CTCF
 
@@ -2908,8 +2935,11 @@ wgEncode 1
     subGroups view=Signal EXP=IP-CTCF cellType=GM12878
     type wig 0.00 11.12
     dateSubmitted 2009-02-24
-    dateUnrestricted 2009-08-04
+    dateUnrestricted 2009-11-24
     dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
     antibody CTCF
@@ -2924,6 +2954,9 @@ wgEncode 1
     dateSubmitted 2009-02-24
     dateUnrestricted 2009-11-24
     dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
     antibody CTCF
@@ -2936,8 +2969,11 @@ wgEncode 1
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 0.00 16.91
     dateSubmitted 2009-02-24
-    dateUnrestricted 2009-08-04
+    dateUnrestricted 2009-11-24
     dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
     antibody CTCF
@@ -2950,8 +2986,11 @@ wgEncode 1
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 0.00 19.41
     dateSubmitted 2009-02-24
-    dateUnrestricted 2009-08-04
+    dateUnrestricted 2009-11-24
     dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
     antibody CTCF
@@ -2964,8 +3003,11 @@ wgEncode 1
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 0.00 17.14
     dateSubmitted 2009-02-24
-    dateUnrestricted 2009-08-04
+    dateUnrestricted 2009-11-24
     dataVersion ENCODE Feb 2009 Freeze
+    #dateSubmitted 2008-11-04
+    #dateUnrestricted 2009-08-04
+    #dataVersion ENCODE Nov 2008 Freeze
     spanList 1
     cell GM12878
     antibody CTCF
@@ -2998,161 +3040,171 @@ wgEncode 1
     cell GM12878
     antibody Input
 
-#    track wgEncodeDukeDNaseSeqPeaksK562
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel K562 DNase Pk
-#    longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in K562 cells)
-#    subGroups view=Peaks EXP=DNase cellType=K562
-#    type narrowPeak
-#    useScore 0
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-12-06
-#    dateUnrestricted 2009-09-06
-#    cell K562
+    track wgEncodeDukeDNaseSeqPeaksK562
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel K562 DNase Pk
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Peaks (in K562 cells)
+    subGroups view=Peaks EXP=DNase cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-02-25
+    dateUnrestricted 2009-11-25
+    dataVersion ENCODE Feb 2009 Freeze
+    #dataVersion ENCODE Nov 2008 Freeze
+    #dateSubmitted 2008-12-06
+    #dateUnrestricted 2009-09-06
+    cell K562
 
-#    track wgEncodeDukeDNaseSeqSignalK562
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel K562 DNase Sig
-#    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in K562 cells)
-#    subGroups view=Signal EXP=DNase cellType=K562
-#    type wig 0.00 3.11
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-12-06
-#    dateUnrestricted 2009-09-06
-#    spanList 1
-#    cell K562
+    track wgEncodeDukeDNaseSeqSignalK562
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel K562 DNase Sig
+    longLabel ENCODE Open Chromatin, Duke DNase-Seq Signal (in K562 cells)
+    subGroups view=Signal EXP=DNase cellType=K562
+    type wig 0.00 1.56
+    dateSubmitted 2009-02-25
+    dateUnrestricted 2009-11-25
+    dataVersion ENCODE Feb 2009 Freeze
+    #dataVersion ENCODE Nov 2008 Freeze
+    #dateSubmitted 2008-12-06
+    #dateUnrestricted 2009-09-06
+    spanList first
+    cell K562
 
-#    track wgEncodeDukeDNaseSeqBaseOverlapSignalK562
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel K562 DNase BO
-#    longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in K562 cells)
-#    subGroups view=SignalBO EXP=DNase cellType=K562
-#    type wig 0.00 445.00
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-12-06
-#    dateUnrestricted 2009-09-06
-#    spanList 1
-#    cell K562
+    track wgEncodeDukeDNaseSeqBaseOverlapSignalK562
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel K562 DNase BO
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in K562 cells)
+    subGroups view=SignalBO EXP=DNase cellType=K562
+    type wig 0.00 445.00
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-12-06
+    dateUnrestricted 2009-09-06
+    spanList 1
+    cell K562
 
-#    track wgEncodeDukeDNaseSeqRawSignalRep1K562
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel K562 DNase Raw 1
-#    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in K562 cells)
-#    subGroups view=rRAW EXP=DNase cellType=K562
-#    type wig 0.00 12.92
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-12-06
-#    dateUnrestricted 2009-09-06
-#    spanList 1
-#    cell K562
+    track wgEncodeDukeDNaseSeqRawSignalRep1K562
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel K562 DNase Raw 1
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in K562 cells)
+    subGroups view=rRAW EXP=DNase cellType=K562
+    type wig 0.00 12.92
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-12-06
+    dateUnrestricted 2009-09-06
+    spanList 1
+    cell K562
 
-#    track wgEncodeDukeDNaseSeqRawSignalRep2K562
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel K562 DNase Raw 2
-#    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in K562 cells)
-#    subGroups view=rRAW EXP=DNase cellType=K562
-#    type wig 0.00 37.72
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-12-06
-#    dateUnrestricted 2009-09-06
-#    spanList 1
-#    cell K562
+    track wgEncodeDukeDNaseSeqRawSignalRep2K562
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel K562 DNase Raw 2
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in K562 cells)
+    subGroups view=rRAW EXP=DNase cellType=K562
+    type wig 0.00 37.72
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-12-06
+    dateUnrestricted 2009-09-06
+    spanList 1
+    cell K562
 
-#    track wgEncodeDukeDNaseSeqRawSignalRep3K562
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel K562 DNase Raw 3
-#    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in K562 cells)
-#    subGroups view=rRAW EXP=DNase cellType=K562
-#    type wig 0.00 34.81
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-12-06
-#    dateUnrestricted 2009-09-06
-#    spanList 1
-#    cell K562
+    track wgEncodeDukeDNaseSeqRawSignalRep3K562
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel K562 DNase Raw 3
+    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in K562 cells)
+    subGroups view=rRAW EXP=DNase cellType=K562
+    type wig 0.00 34.81
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-12-06
+    dateUnrestricted 2009-09-06
+    spanList 1
+    cell K562
 
-#    track wgEncodeUncFAIREseqPeaksK562
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel K562 FAIRE Pk
-#    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in K562 cells)
-#    subGroups view=Peaks EXP=FAIRE cellType=K562
-#    type narrowPeak
-#    useScore 0
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-12-06
-#    dateUnrestricted 2009-09-06
-#    cell K562
+    track wgEncodeUncFAIREseqPeaksK562
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel K562 FAIRE Pk
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Peaks (in K562 cells)
+    subGroups view=Peaks EXP=FAIRE cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-02-25
+    dateUnrestricted 2009-11-25
+    dataVersion ENCODE Feb 2009 Freeze
+    #dataVersion ENCODE Nov 2008 Freeze
+    #dateSubmitted 2008-12-06
+    #dateUnrestricted 2009-09-06
+    cell K562
 
-#    track wgEncodeUncFAIREseqSignalK562
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel K562 FAIRE Sig
-#    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in K562 cells)
-#    subGroups view=Signal EXP=FAIRE cellType=K562
-#    type wig 0.00 31.50
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-12-06
-#    dateUnrestricted 2009-09-06
-#    spanList 1
-#    cell K562
+    track wgEncodeUncFAIREseqSignalK562
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel K562 FAIRE Sig
+    longLabel ENCODE Open Chromatin, UNC FAIRE-Seq Signal (in K562 cells)
+    subGroups view=Signal EXP=FAIRE cellType=K562
+    type wig 0.00 1.10
+    dateSubmitted 2009-02-25
+    dateUnrestricted 2009-11-25
+    dataVersion ENCODE Feb 2009 Freeze
+    #dataVersion ENCODE Nov 2008 Freeze
+    #dateSubmitted 2008-12-06
+    #dateUnrestricted 2009-09-06
+    spanList first
+    cell K562
 
-#    track wgEncodeUncFAIREseqBaseOverlapSignalK562
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel K562 FAIRE BO
-#    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
-#    subGroups view=SignalBO EXP=FAIRE cellType=K562
-#    type wig 0.00 8719.00
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-12-06
-#    dateUnrestricted 2009-09-06
-#    spanList 1
-#    cell K562
+    track wgEncodeUncFAIREseqBaseOverlapSignalK562
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel K562 FAIRE BO
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
+    subGroups view=SignalBO EXP=FAIRE cellType=K562
+    type wig 0.00 8719.00
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-12-06
+    dateUnrestricted 2009-09-06
+    spanList 1
+    cell K562
 
-#    track wgEncodeUncFAIREseqRawSignalRep1K562
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel K562 FAIRE Raw 1
-#    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 1 (in K562 cells)
-#    subGroups view=rRAW EXP=FAIRE cellType=K562
-#    type wig 0.00 74.86
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-12-06
-#    dateUnrestricted 2009-09-06
-#    spanList 1
-#    cell K562
+    track wgEncodeUncFAIREseqRawSignalRep1K562
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel K562 FAIRE Raw 1
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 1 (in K562 cells)
+    subGroups view=rRAW EXP=FAIRE cellType=K562
+    type wig 0.00 74.86
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-12-06
+    dateUnrestricted 2009-09-06
+    spanList 1
+    cell K562
 
-#    track wgEncodeUncFAIREseqRawSignalRep2K562
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel K562 FAIRE Raw 2
-#    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 2 (in K562 cells)
-#    subGroups view=rRAW EXP=FAIRE cellType=K562
-#    type wig 0.00 63.65
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-12-06
-#    dateUnrestricted 2009-09-06
-#    spanList 1
-#    cell K562
+    track wgEncodeUncFAIREseqRawSignalRep2K562
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel K562 FAIRE Raw 2
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 2 (in K562 cells)
+    subGroups view=rRAW EXP=FAIRE cellType=K562
+    type wig 0.00 63.65
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-12-06
+    dateUnrestricted 2009-09-06
+    spanList 1
+    cell K562
 
-#    track wgEncodeUncFAIREseqRawSignalRep3K562
-#    release alpha
-#    subTrack wgEncodeChromatinMap
-#    shortLabel K562 FAIRE Raw 3
-#    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 3 (in K562 cells)
-#    subGroups view=rRAW EXP=FAIRE cellType=K562
-#    type wig 0.00 67.60
-#    dataVersion ENCODE Nov 2008 Freeze
-#    dateSubmitted 2008-12-06
-#    dateUnrestricted 2009-09-06
-#    spanList 1
-#    cell K562
+    track wgEncodeUncFAIREseqRawSignalRep3K562
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel K562 FAIRE Raw 3
+    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 3 (in K562 cells)
+    subGroups view=rRAW EXP=FAIRE cellType=K562
+    type wig 0.00 67.60
+    dataVersion ENCODE Nov 2008 Freeze
+    dateSubmitted 2008-12-06
+    dateUnrestricted 2009-09-06
+    spanList 1
+    cell K562
 
     track wgEncodeUtaustinChIPseqSignalK562Input
     release alpha
@@ -5706,7 +5758,7 @@ wgEncode 1
     shortLabel GM128 Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal (Input in GM12878 cells)
     subGroups view=zRAW factor=zCTRL cellType=GM12878
-    type wig 1.00 1488.00
+    type wig 1.00 7237.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-25
     dateUnrestricted 2009-08-25
