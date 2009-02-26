@@ -11,7 +11,7 @@
 #include <json/json.h>                                                     
 #endif                                                                     
 
-static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.8 2009/02/26 18:41:04 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.9 2009/02/26 20:12:18 mikep Exp $";
 
 // /tracks                                            [list of all tracks in all genomes]
 // /tracks/{genome}                                   [list of tracks for {genome}]
@@ -84,47 +84,43 @@ json_object_object_add(t, "parent_track", tdb->parentName ? json_object_new_stri
 return t;
 }
 
-static void jsonAddTableInfoOneTrack(struct json_object *o, struct hTableInfo *hti)
-// Add table info such as columns names 
+void jsonAddTableInfoOneTrack(struct json_object *o, struct hTableInfo *hti)
+// Add table info such as columns names keyed off 'table_properties'
 {
+struct json_object *p = json_object_new_object();
+json_object_object_add(o, "table_properties", p);
 if (!hti)
     return;
-json_object_object_add(o, "rootName", json_object_new_string(hti->rootName));
-json_object_object_add(o, "isPos", json_object_new_boolean(hti->isPos));
-json_object_object_add(o, "isSplit", json_object_new_boolean(hti->isSplit));
-json_object_object_add(o, "hasBin", json_object_new_boolean(hti->hasBin));
-json_object_object_add(o, "chromField", json_object_new_string(hti->chromField));
-json_object_object_add(o, "startField", json_object_new_string(hti->startField));
-json_object_object_add(o, "endField", json_object_new_string(hti->endField));
-json_object_object_add(o, "nameField", json_object_new_string(hti->nameField));
-json_object_object_add(o, "scoreField", json_object_new_string(hti->scoreField));
-json_object_object_add(o, "strandField", json_object_new_string(hti->strandField));
-json_object_object_add(o, "cdsStartField", json_object_new_string(hti->cdsStartField));
-json_object_object_add(o, "cdsEndField", json_object_new_string(hti->cdsEndField));
-json_object_object_add(o, "countField", json_object_new_string(hti->countField));
-json_object_object_add(o, "startsField", json_object_new_string(hti->startsField));
-json_object_object_add(o, "endsSizesField", json_object_new_string(hti->endsSizesField));
-json_object_object_add(o, "spanField", json_object_new_string(hti->spanField));
-json_object_object_add(o, "hasCDS", json_object_new_boolean(hti->hasCDS));
-json_object_object_add(o, "hasBlocks", json_object_new_boolean(hti->hasBlocks));
-json_object_object_add(o, "type", json_object_new_string(hti->type));
+json_object_object_add(p, "rootName", json_object_new_string(hti->rootName));
+json_object_object_add(p, "isPos", json_object_new_boolean(hti->isPos));
+json_object_object_add(p, "isSplit", json_object_new_boolean(hti->isSplit));
+json_object_object_add(p, "hasBin", json_object_new_boolean(hti->hasBin));
+json_object_object_add(p, "chromField", json_object_new_string(hti->chromField));
+json_object_object_add(p, "startField", json_object_new_string(hti->startField));
+json_object_object_add(p, "endField", json_object_new_string(hti->endField));
+json_object_object_add(p, "nameField", json_object_new_string(hti->nameField));
+json_object_object_add(p, "scoreField", json_object_new_string(hti->scoreField));
+json_object_object_add(p, "strandField", json_object_new_string(hti->strandField));
+json_object_object_add(p, "cdsStartField", json_object_new_string(hti->cdsStartField));
+json_object_object_add(p, "cdsEndField", json_object_new_string(hti->cdsEndField));
+json_object_object_add(p, "countField", json_object_new_string(hti->countField));
+json_object_object_add(p, "startsField", json_object_new_string(hti->startsField));
+json_object_object_add(p, "endsSizesField", json_object_new_string(hti->endsSizesField));
+json_object_object_add(p, "spanField", json_object_new_string(hti->spanField));
+json_object_object_add(p, "hasCDS", json_object_new_boolean(hti->hasCDS));
+json_object_object_add(p, "hasBlocks", json_object_new_boolean(hti->hasBlocks));
+json_object_object_add(p, "type", json_object_new_string(hti->type));
 }
 
-static void jsonAddOneTrackFull(struct json_object *arr, struct trackDb *tdb, struct hTableInfo *hti, char *genome)
-// Detailed information for a single track added to the array 'arr'
+static void jsonAddViewInfoOneTrack(struct json_object *o, struct trackDb *tdb)
+// Add view info keyed off 'view_properties'
 {
-struct json_object *item = json_object_new_object();
-struct json_object *view = json_object_new_object();
-struct json_object *info = json_object_new_object();
-struct json_object *t = jsonOneTrack(tdb, genome);
-struct json_object *restList = json_object_new_array();
 int i;
-json_object_array_add(arr, item); /* add this item to the array */
-json_object_object_add(item, tdb->tableName, t); 
-json_object_object_add(t, "view_properties", view); 
-json_object_object_add(t, "table_properties", info); 
-json_object_object_add(t, "description_html", json_object_new_string(tdb->html)); /* Some html to display about the track */
-// properties of the view
+struct json_object *view = json_object_new_object();
+struct json_object *restList = json_object_new_array();
+json_object_object_add(o, "view_properties", view); 
+if (!tdb)
+    return;
 json_object_object_add(view, "color_r", json_object_new_int(tdb->colorR)); /* Color red component 0-255 */
 json_object_object_add(view, "color_g", json_object_new_int(tdb->colorG)); /* Color green component 0-255 */
 json_object_object_add(view, "color_b", json_object_new_int(tdb->colorB)); /* Color blue component 0-255 */
@@ -140,11 +136,18 @@ json_object_object_add(view, "restrict_count", json_object_new_int(tdb->restrict
 json_object_object_add(view, "restrict_list", restList); /* List of chromosomes this is on ([]=all though!) */
 for (i = 0; i < tdb->restrictCount ; ++i)
     json_object_array_add(restList, json_object_new_string(tdb->restrictList[i]));
-// Properties of the table
-if (hti)
-    {
-    jsonAddTableInfoOneTrack(info, hti);
-    }
+}
+
+static void jsonAddOneTrackFull(struct json_object *arr, struct trackDb *tdb, struct hTableInfo *hti, char *genome)
+// Detailed information for a single track added to the array 'arr'
+{
+struct json_object *item = json_object_new_object();
+struct json_object *t = jsonOneTrack(tdb, genome);
+json_object_array_add(arr, item); /* add this item to the array */
+json_object_object_add(item, tdb->tableName, t); 
+json_object_object_add(t, "description_html", json_object_new_string(tdb->html));
+jsonAddViewInfoOneTrack(t, tdb);
+jsonAddTableInfoOneTrack(t, hti);
 }
 
 static void jsonAddTracks(struct json_object *arr, struct trackDb *tdb, char *genome)
