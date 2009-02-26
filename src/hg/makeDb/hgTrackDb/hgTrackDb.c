@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.49 2009/02/02 22:06:39 tdreszer Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.50 2009/02/26 04:07:21 tdreszer Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -515,7 +515,7 @@ for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->
     // Does this container need to be sorted?
     if(needsSorting && slCount(itemsToSort))
         {
-        verbose(1,"Sorting '%s' with %d items\n",tdbContainer->tableName,slCount(itemsToSort));
+        verbose(2,"Sorting '%s' with %d items\n",tdbContainer->tableName,slCount(itemsToSort));
         sortTdbItemsAndUpdatePriorities(&itemsToSort);
         countOfSortedContainers++;
         }
