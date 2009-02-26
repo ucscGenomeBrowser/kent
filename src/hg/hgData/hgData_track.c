@@ -11,7 +11,7 @@
 #include <json/json.h>                                                     
 #endif                                                                     
 
-static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.11 2009/02/26 21:33:16 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.12 2009/02/26 21:48:39 mikep Exp $";
 
 // /tracks                                            [list of all tracks in all genomes]
 // /tracks/{genome}                                   [list of tracks for {genome}]
@@ -110,7 +110,7 @@ json_object_object_add(p, "hasBin", json_object_new_boolean(hti->hasBin));
 json_object_object_add(p, "hasCDS", json_object_new_boolean(hti->hasCDS));
 json_object_object_add(p, "hasBlocks", json_object_new_boolean(hti->hasBlocks));
 json_object_object_add(p, "type", json_object_new_string(hti->type));
-jsonTableAddField(f, "chromField", hti->chromField);
+//jsonTableAddField(f, "chromField", hti->chromField); // queries are by chrom only
 jsonTableAddField(f, "startField", hti->startField);
 jsonTableAddField(f, "endField", hti->endField);
 jsonTableAddField(f, "nameField", hti->nameField);

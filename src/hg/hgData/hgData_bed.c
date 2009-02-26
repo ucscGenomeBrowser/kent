@@ -5,7 +5,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.12 2009/02/26 21:17:44 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.13 2009/02/26 21:48:39 mikep Exp $";
 
 static struct json_object *addRangeOrCountFullUrl(struct json_object *o, boolean isCount, char *url_name, char *track, char *genome, char *chrom, boolean addStartEnd, int start, int end)
 // Add a count url to object o with name 'url_name'.
@@ -216,35 +216,35 @@ struct bed *t;
 int i;
 for (t = b ; t ; t = t->next)
     {
-    struct json_object *r = json_object_new_object();
-    json_object_array_add(data, r); // add this row to the array
+    struct json_object *r = json_object_new_array();
+    json_object_array_add(data, r); // add this row to the data array
     if (hti->startField[0] != 0)
-	json_object_object_add(r, "s", json_object_new_int(t->chromStart));
+	json_object_array_add(r, json_object_new_int(t->chromStart));
     if (hti->endField[0] != 0)
-	json_object_object_add(r, "e", json_object_new_int(t->chromEnd));
+	json_object_array_add(r, json_object_new_int(t->chromEnd));
     if (hti->nameField[0] != 0)
-	json_object_object_add(r, "name", json_object_new_string(t->name));
+	json_object_array_add(r, json_object_new_string(t->name));
     if (hti->scoreField[0] != 0)
-	json_object_object_add(r, "score", json_object_new_int(t->score));
+	json_object_array_add(r, json_object_new_int(t->score));
     if (hti->strandField[0] != 0)
-	json_object_object_add(r, "strand", json_object_new_string(t->strand));
+	json_object_array_add(r, json_object_new_string(t->strand));
     if (hti->cdsStartField[0] != 0)
-	json_object_object_add(r, "thickS", json_object_new_int(t->thickStart));
+	json_object_array_add(r, json_object_new_int(t->thickStart));
     if (hti->cdsEndField[0] != 0)
-	json_object_object_add(r, "thickE", json_object_new_int(t->thickEnd));
+	json_object_array_add(r, json_object_new_int(t->thickEnd));
     if (hti->countField[0] != 0)
-	json_object_object_add(r, "blocks", json_object_new_int(t->blockCount));
+	json_object_array_add(r, json_object_new_int(t->blockCount));
     if (hti->startsField[0] != 0)
 	{
 	arr = json_object_new_array();
-	json_object_object_add(r, "starts", arr);
+	json_object_array_add(r, arr);
 	for (i=0 ; i< t->blockCount; ++i)
 	    json_object_array_add(arr, json_object_new_int(t->chromStarts[i]));
 	}
     if (hti->endsSizesField[0] != 0)
 	{
 	arr = json_object_new_array();
-	json_object_object_add(r, "sizes", arr);
+	json_object_array_add(r, arr);
 	for (i=0 ; i< t->blockCount; ++i)
 	    json_object_array_add(arr, json_object_new_int(t->blockSizes[i]));
 	}
@@ -288,11 +288,11 @@ struct json_object *d = json_object_new_object();
 struct coords c = navigate(start, end, chromSize);
 json_object_object_add(d, "track", jsonBedCount(genome, track, chrom, start, end, chromSize, hti, n));
 if (format==NULL)
-    json_object_object_add(d, "bed", jsonBed(hti, b));
+    json_object_object_add(d, "data", jsonBed(hti, b));
 else if (sameOk(format, ANNOJ_FLAT_FMT))
-    json_object_object_add(d, format, jsonBedAsAnnojFlat(hti, b));
+    json_object_object_add(d, "data", jsonBedAsAnnojFlat(hti, b));
 else if (sameOk(format, ANNOJ_NESTED_FMT))
-    json_object_object_add(d, format, jsonBedAsAnnojNested(hti, b));
+    json_object_object_add(d, "data", jsonBedAsAnnojNested(hti, b));
 else
     ERR_BAD_FORMAT(format);
 addRangeUrl(d, "url_self", track, genome, chrom, start, end);
