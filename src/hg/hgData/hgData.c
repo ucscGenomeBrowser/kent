@@ -5,7 +5,7 @@
 #include "bedGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.15 2009/02/26 18:42:22 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.16 2009/02/26 20:10:00 mikep Exp $";
 
 void doGet()
 {
@@ -77,20 +77,14 @@ else if (sameOk(GENOMES_CMD, cmd))
 	printGenomes(dbs, ci, modified);
 	}
     }
-// /tracks                                            [list of all tracks in all genomes]
-// /tracks/{genome}                                   [list of tracks for {genome}]
-// /tracks/{track}/{genome}                           [track details for {track} in {genome}]
 else if (sameOk(TRACKS_CMD, cmd))
     {
-    verbose(2,"Tracks cmd genome=[%s] track=[%s]\n", genome, track);
     if (genome)
 	{
-	modified = trackDbLatestUpdateTime(genome); // modified date is greatest of all trackDb dates
-	verbose(2,"Tracks genome=[%s]\n", genome);
 	if (!hDbIsActive(genome))
 	    ERR_GENOME_NOT_FOUND(genome);
-	// check if genome.chromInfo has changed 
-	modified = max(modified, hGetLatestUpdateTimeChromInfo(genome));
+	// modified date is greatest of all trackDb dates or genome.chromInfo 
+	modified = max(trackDbLatestUpdateTime(genome), hGetLatestUpdateTimeChromInfo(genome));
 	if (track)
 	    {
 	    struct sqlConnection *conn = hAllocConn(genome);
@@ -118,7 +112,6 @@ else if (sameOk(TRACKS_CMD, cmd))
 	}
     else
 	{
-	verbose(2,"Not implemented\n");
         ERR_NOT_IMPLEMENTED("List of all tracks in all genomes");
 	}
     }
@@ -130,52 +123,54 @@ else if (sameOk(META_SEARCH_CMD, cmd))
     }
 else if (sameOk(COUNT_CMD, cmd) || sameOk(RANGE_CMD, cmd))
     {
-    // queries which require track+genome+chrom
+    if (!genome)
+	ERR_NO_GENOME;
+    if (!hDbIsActive(genome))
+	ERR_GENOME_NOT_FOUND(genome);
+    // check all trackDbs and genome.chromInfo for changes
+    modified = max(trackDbLatestUpdateTime(genome), hGetLatestUpdateTimeChromInfo(genome));
     if (!track)
 	ERR_NO_TRACK;
     if (!(tdb = hTrackDbForTrack(genome, track)))
 	ERR_TRACK_NOT_FOUND(track, genome);
     struct sqlConnection *conn = hAllocConn(genome);
-    modified = sqlTableUpdateTime(conn, track); // modified date is track date
-    hParseTableName(genome, tdb->tableName, rootName, parsedChrom);
-    if (!chrom)
-	ERR_NO_CHROM;
-    if (!(ci = hGetChromInfo(genome, chrom)))
-	ERR_CHROM_NOT_FOUND(genome, chrom);
-    if (start<0)
-	start = 0;
-    if (end<0)
-	end = 0;
-    if (end==0)
-	end = ci->size; // MJP FIXME: potential overflow problem, int <- unsigned
-    if (!(hti = hFindTableInfo(genome, chrom, rootName)))
-	ERR_TABLE_NOT_FOUND(tdb->tableName, chrom, rootName, genome);
-    // test how many rows we are about to receive
-    int n = hGetBedRangeCount(genome, tdb->tableName, chrom, start, end, NULL);
-    if (sameOk(COUNT_CMD, cmd))
+    modified = max(modified, sqlTableUpdateTime(conn, track)); // check if track is modified
+    if (!notModifiedResponse(reqEtag, reqModified, modified))
 	{
-	if (differentString(track, tdb->tableName))
-	    errAbort("track name (%s) does not match table name (%s)\n", track, tdb->tableName);
-	if (!notModifiedResponse(reqEtag, reqModified, modified))
+	hParseTableName(genome, tdb->tableName, rootName, parsedChrom);
+	if (!chrom)
+	    ERR_NO_CHROM;
+	if (!(ci = hGetChromInfo(genome, chrom)))
+	    ERR_CHROM_NOT_FOUND(genome, chrom);
+	if (start<0)
+	    start = 0;
+	if (end<0)
+	    end = 0;
+	if (end==0)
+	    end = ci->size; // MJP FIXME: potential overflow problem, int <- unsigned
+	if (!(hti = hFindTableInfo(genome, chrom, rootName)))
+	    ERR_TABLE_NOT_FOUND(tdb->tableName, chrom, rootName, genome);
+	// test how many rows we are about to receive
+	int n = hGetBedRangeCount(genome, tdb->tableName, chrom, start, end, NULL);
+	if (sameOk(COUNT_CMD, cmd))
+	    {
+	    if (differentString(track, tdb->tableName))
+		errAbort("track name (%s) does not match table name (%s)\n", track, tdb->tableName);
 	    printBedCount(genome, track, chrom, start, end, ci->size, hti, n, modified);
-	}
-    else if (sameOk(RANGE_CMD, cmd))
-	{
-	typeWords = chopByWhite(tdb->type, trackType, sizeof(trackType));
-	if (sameOk(trackType[0], "bed") || sameOk(trackType[0], "genePred"))  // need to test table type is supported format
+	    }
+	else if (sameOk(RANGE_CMD, cmd))
 	    {
-	    b = hGetBedRange(genome, tdb->tableName, chrom, start, end, NULL);
-	    if (!notModifiedResponse(reqEtag, reqModified, modified))
+	    typeWords = chopByWhite(tdb->type, trackType, sizeof(trackType));
+	    if (sameOk(trackType[0], "bed") || sameOk(trackType[0], "genePred"))  // need to test table type is supported format
+		{
+		b = hGetBedRange(genome, tdb->tableName, chrom, start, end, NULL);
 		printBed(genome, track, tdb->type, chrom, start, end, ci->size, hti, n, b, format, modified);
+		}
+	    else
+		{
+		ERR_BAD_TRACK_TYPE(track, tdb->type);
+		}
 	    }
-	else
-	    {
-	    ERR_BAD_TRACK_TYPE(track, tdb->type);
-	    }
-	}
-    else
-	{
-	errAbort("command %s unknown\n", cmd);
 	}
     }
 else
