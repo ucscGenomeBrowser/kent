@@ -5,7 +5,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.10 2009/02/26 08:00:19 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.11 2009/02/26 20:11:35 mikep Exp $";
 
 
 struct json_object *addCountUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom, int start, int end)
@@ -35,7 +35,6 @@ return o;
 static struct json_object *jsonBedCount(char *genome, char *track, char *chrom, int start, int end, int chromSize, struct hTableInfo *hti, int n)
 {
 struct json_object *b = json_object_new_object();
-struct json_object *props = json_object_new_object();
 json_object_object_add(b, "genome", json_object_new_string(genome));
 json_object_object_add(b, "track", json_object_new_string(track));
 json_object_object_add(b, "chrom", json_object_new_string(chrom));
@@ -44,13 +43,7 @@ json_object_object_add(b, "end", json_object_new_int(end));
 json_object_object_add(b, "size", json_object_new_int(end-start));
 json_object_object_add(b, "row_count", json_object_new_int(n));
 json_object_object_add(b, "chrom_size", json_object_new_int(chromSize));
-json_object_object_add(b, "properties", props);
-if (hti)
-    {
-    json_object_object_add(props, "has_CDS", json_object_new_boolean(hti->hasCDS));
-    json_object_object_add(props, "has_blocks", json_object_new_boolean(hti->hasBlocks));
-    json_object_object_add(props, "type", json_object_new_string(hti->type));
-    }
+jsonAddTableInfoOneTrack(b, hti);
 return b;
 }
 
