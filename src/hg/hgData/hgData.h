@@ -206,6 +206,8 @@ void printItem(char *db, char *track, char *type, char *term);
 // print out a description for a track item
 
 //////////////////
+void jsonAddTableInfoOneTrack(struct json_object *o, struct hTableInfo *hti);
+// Add table info such as columns names keyed off 'table_properties'
 
 void printGenomes(struct dbDbClade *db, struct chromInfo *ci, time_t modified);
 // print an array of all genomes in list,
