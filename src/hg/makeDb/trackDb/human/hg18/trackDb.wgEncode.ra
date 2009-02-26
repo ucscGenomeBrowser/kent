@@ -218,7 +218,7 @@ subGroup2 cellType Cell_Line GM12878=GM12878_(Tier1) HUVEC=HUVEC_(Tier2) K562=K5
 subGroup3 factor Factor CTCF=CTCF H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H4K20me1=H4K20me1 Pol2b=Pol2(b) zCTRL=Control
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+
-controlledVocabulary encode/cv.ra cellType=GM12878,HUVEC,Keratinocyte,K562 factor
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
 priority 0
@@ -2721,7 +2721,7 @@ sortOrder cellType=+ EXP=+ view=+
 dimensions dimensionX=cellType dimensionY=EXP
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense rRAW=hide
-controlledVocabulary encode/cv.ra cellType=GM12878,K562,Reference_Genome EXP=CTCF,Input
+controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
 filterPvalQval on
 settingsByView Peaks:configurable=on,useScore=0 Signal:configurable=on,viewLimits=0:0.02,viewLimitsMax=0:40,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 SignalBO:configurable=on,viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 rRAW:configurable=ff,defaultViewLimits=0:1,viewLimits=0:112,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
@@ -2730,83 +2730,83 @@ priority 0
 type bed 3
 wgEncode 1
 
-    track wgEncodeDukeDNaseSeqPeaksGm12878
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase Pk
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM12878 cells)
-    subGroups view=Peaks EXP=DNase cellType=GM12878
-    type narrowPeak
-    useScore 0
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    cell GM12878
+#    track wgEncodeDukeDNaseSeqPeaksGm12878
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel GM128 DNase Pk
+#    longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM12878 cells)
+#    subGroups view=Peaks EXP=DNase cellType=GM12878
+#    type narrowPeak
+#    useScore 0
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-11-04
+#    dateUnrestricted 2009-08-04
+#    cell GM12878
 
-    track wgEncodeDukeDNaseSeqSignalGm12878
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase Sig
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in GM12878 cells)
-    subGroups view=Signal EXP=DNase cellType=GM12878
-    type wig 0.00 39.64
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    spanList 1
-    cell GM12878
+#    track wgEncodeDukeDNaseSeqSignalGm12878
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel GM128 DNase Sig
+#    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in GM12878 cells)
+#    subGroups view=Signal EXP=DNase cellType=GM12878
+#    type wig 0.00 39.64
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-11-04
+#    dateUnrestricted 2009-08-04
+#    spanList 1
+#    cell GM12878
 
-    track wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase BO
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12878 cells)
-    subGroups view=SignalBO EXP=DNase cellType=GM12878
-    type wig 0.00 417.00
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-22
-    dateUnrestricted 2009-08-22
-    spanList 1
-    cell GM12878
+#    track wgEncodeDukeDNaseSeqBaseOverlapSignalGm12878
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel GM128 DNase BO
+#    longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12878 cells)
+#    subGroups view=SignalBO EXP=DNase cellType=GM12878
+#    type wig 0.00 417.00
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-11-22
+#    dateUnrestricted 2009-08-22
+#    spanList 1
+#    cell GM12878
 
-    track wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase Raw 1
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in GM12878 cells)
-    subGroups view=rRAW EXP=DNase cellType=GM12878
-    type wig 0.00 10.46
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    spanList 1
-    cell GM12878
+#    track wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel GM128 DNase Raw 1
+#    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in GM12878 cells)
+#    subGroups view=rRAW EXP=DNase cellType=GM12878
+#    type wig 0.00 10.46
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-11-04
+#    dateUnrestricted 2009-08-04
+#    spanList 1
+#    cell GM12878
 
-    track wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase Raw 2
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in GM12878 cells)
-    subGroups view=rRAW EXP=DNase cellType=GM12878
-    type wig 0.00 9.77
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    spanList 1
-    cell GM12878
+#    track wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel GM128 DNase Raw 2
+#    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in GM12878 cells)
+#    subGroups view=rRAW EXP=DNase cellType=GM12878
+#    type wig 0.00 9.77
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-11-04
+#    dateUnrestricted 2009-08-04
+#    spanList 1
+#    cell GM12878
 
-    track wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase Raw 3
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in GM12878 cells)
-    subGroups view=rRAW EXP=DNase cellType=GM12878
-    type wig 0.00 39.64
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
-    spanList 1
-    cell GM12878
+#    track wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel GM128 DNase Raw 3
+#    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in GM12878 cells)
+#    subGroups view=rRAW EXP=DNase cellType=GM12878
+#    type wig 0.00 39.64
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-11-04
+#    dateUnrestricted 2009-08-04
+#    spanList 1
+#    cell GM12878
 
     track wgEncodeUncFAIREseqPeaksGm12878
     release alpha
@@ -2815,10 +2815,10 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in GM12878 cells)
     subGroups view=Peaks EXP=FAIRE cellType=GM12878
     type narrowPeak
-    useScore 0
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
+    dateSubmitted 2009-02-25
     dateUnrestricted 2009-08-04
+    dataVersion ENCODE Feb 2009 Freeze
+    useScore 0
     cell GM12878
 
     track wgEncodeUncFAIREseqSignalGm12878
@@ -2827,10 +2827,10 @@ wgEncode 1
     shortLabel GM128 FAIRE Sig
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in GM12878 cells)
     subGroups view=Signal EXP=FAIRE cellType=GM12878
-    type wig 0.00 18.37
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
+    type wig 0.00 4.28
+    dateSubmitted 2009-02-25
     dateUnrestricted 2009-08-04
+    dataVersion ENCODE Feb 2009 Freeze
     spanList 1
     cell GM12878
 
@@ -2840,10 +2840,10 @@ wgEncode 1
     shortLabel GM128 FAIRE BO
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in GM12878 cells)
     subGroups view=SignalBO EXP=FAIRE cellType=GM12878
-    type wig 0.00 5342.00
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-21
-    dateUnrestricted 2009-08-21
+    type wig 0.00 6800.00
+    dateSubmitted 2009-02-25
+    dateUnrestricted 2009-08-04
+    dataVersion ENCODE Feb 2009 Freeze
     spanList 1
     cell GM12878
 
@@ -2853,10 +2853,10 @@ wgEncode 1
     shortLabel GM128 FAIRE Raw 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 1 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
-    type wig 0.00 22.93
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
+    type wig 0.00 37.13
+    dateSubmitted 2009-02-25
     dateUnrestricted 2009-08-04
+    dataVersion ENCODE Feb 2009 Freeze
     spanList 1
     cell GM12878
 
@@ -2866,10 +2866,10 @@ wgEncode 1
     shortLabel GM128 FAIRE Raw 2
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 2 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
-    type wig 0.00 50.40
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
+    type wig 0.00 46.48
+    dateSubmitted 2009-02-25
     dateUnrestricted 2009-08-04
+    dataVersion ENCODE Feb 2009 Freeze
     spanList 1
     cell GM12878
 
@@ -2879,10 +2879,10 @@ wgEncode 1
     shortLabel GM128 FAIRE Raw 3
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 3 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
-    type wig 0.00 112.28
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
+    type wig 0.00 39.94
+    dateSubmitted 2009-02-25
     dateUnrestricted 2009-08-04
+    dataVersion ENCODE Feb 2009 Freeze
     spanList 1
     cell GM12878
 
@@ -2894,9 +2894,9 @@ wgEncode 1
     subGroups view=Peaks EXP=IP-CTCF cellType=GM12878
     type narrowPeak
     useScore 0
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
-    dateUnrestricted 2009-08-04
+    dateSubmitted 2009-02-24
+    dateUnrestricted 2009-11-24
+    dataVersion ENCODE Feb 2009 Freeze
     cell GM12878
     antibody CTCF
 
@@ -2906,10 +2906,24 @@ wgEncode 1
     shortLabel GM128 CTCF Sig
     longLabel ENCODE Open Chromatin, UT ChIP-seq Signal (CTCF in GM12878 cells)
     subGroups view=Signal EXP=IP-CTCF cellType=GM12878
-    type wig 0.00 14.01
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
+    type wig 0.00 11.12
+    dateSubmitted 2009-02-24
     dateUnrestricted 2009-08-04
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList 1
+    cell GM12878
+    antibody CTCF
+
+    track wgEncodeUtaChIPseqBaseOverlapSignalGm12878Ctcf
+    release alpha
+    subTrack wgEncodeChromatinMap
+    shortLabel GM128 CTCF BO
+    longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in GM12878 cells)
+    subGroups view=SignalBO EXP=IP-CTCF cellType=GM12878
+    type wig 0.00 1956.00
+    dateSubmitted 2009-02-24
+    dateUnrestricted 2009-11-24
+    dataVersion ENCODE Feb 2009 Freeze
     spanList 1
     cell GM12878
     antibody CTCF
@@ -2920,10 +2934,10 @@ wgEncode 1
     shortLabel GM128 CTCF Raw 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
-    type wig 0.00 6.71
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
+    type wig 0.00 16.91
+    dateSubmitted 2009-02-24
     dateUnrestricted 2009-08-04
+    dataVersion ENCODE Feb 2009 Freeze
     spanList 1
     cell GM12878
     antibody CTCF
@@ -2934,10 +2948,10 @@ wgEncode 1
     shortLabel GM128 CTCF Raw 2
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
-    type wig 0.00 7.24
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
+    type wig 0.00 19.41
+    dateSubmitted 2009-02-24
     dateUnrestricted 2009-08-04
+    dataVersion ENCODE Feb 2009 Freeze
     spanList 1
     cell GM12878
     antibody CTCF
@@ -2948,10 +2962,10 @@ wgEncode 1
     shortLabel GM128 CTCF Raw 3
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 3 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
-    type wig 0.00 14.01
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-11-04
+    type wig 0.00 17.14
+    dateSubmitted 2009-02-24
     dateUnrestricted 2009-08-04
+    dataVersion ENCODE Feb 2009 Freeze
     spanList 1
     cell GM12878
     antibody CTCF
@@ -2984,161 +2998,161 @@ wgEncode 1
     cell GM12878
     antibody Input
 
-    track wgEncodeDukeDNaseSeqPeaksK562
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel K562 DNase Pk
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in K562 cells)
-    subGroups view=Peaks EXP=DNase cellType=K562
-    type narrowPeak
-    useScore 0
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    cell K562
+#    track wgEncodeDukeDNaseSeqPeaksK562
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel K562 DNase Pk
+#    longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in K562 cells)
+#    subGroups view=Peaks EXP=DNase cellType=K562
+#    type narrowPeak
+#    useScore 0
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-12-06
+#    dateUnrestricted 2009-09-06
+#    cell K562
 
-    track wgEncodeDukeDNaseSeqSignalK562
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel K562 DNase Sig
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in K562 cells)
-    subGroups view=Signal EXP=DNase cellType=K562
-    type wig 0.00 3.11
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    spanList 1
-    cell K562
+#    track wgEncodeDukeDNaseSeqSignalK562
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel K562 DNase Sig
+#    longLabel ENCODE Open Chromatin, Duke DNase-seq Signal (in K562 cells)
+#    subGroups view=Signal EXP=DNase cellType=K562
+#    type wig 0.00 3.11
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-12-06
+#    dateUnrestricted 2009-09-06
+#    spanList 1
+#    cell K562
 
-    track wgEncodeDukeDNaseSeqBaseOverlapSignalK562
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel K562 DNase BO
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in K562 cells)
-    subGroups view=SignalBO EXP=DNase cellType=K562
-    type wig 0.00 445.00
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    spanList 1
-    cell K562
+#    track wgEncodeDukeDNaseSeqBaseOverlapSignalK562
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel K562 DNase BO
+#    longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in K562 cells)
+#    subGroups view=SignalBO EXP=DNase cellType=K562
+#    type wig 0.00 445.00
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-12-06
+#    dateUnrestricted 2009-09-06
+#    spanList 1
+#    cell K562
 
-    track wgEncodeDukeDNaseSeqRawSignalRep1K562
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel K562 DNase Raw 1
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in K562 cells)
-    subGroups view=rRAW EXP=DNase cellType=K562
-    type wig 0.00 12.92
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    spanList 1
-    cell K562
+#    track wgEncodeDukeDNaseSeqRawSignalRep1K562
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel K562 DNase Raw 1
+#    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in K562 cells)
+#    subGroups view=rRAW EXP=DNase cellType=K562
+#    type wig 0.00 12.92
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-12-06
+#    dateUnrestricted 2009-09-06
+#    spanList 1
+#    cell K562
 
-    track wgEncodeDukeDNaseSeqRawSignalRep2K562
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel K562 DNase Raw 2
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in K562 cells)
-    subGroups view=rRAW EXP=DNase cellType=K562
-    type wig 0.00 37.72
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    spanList 1
-    cell K562
+#    track wgEncodeDukeDNaseSeqRawSignalRep2K562
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel K562 DNase Raw 2
+#    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in K562 cells)
+#    subGroups view=rRAW EXP=DNase cellType=K562
+#    type wig 0.00 37.72
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-12-06
+#    dateUnrestricted 2009-09-06
+#    spanList 1
+#    cell K562
 
-    track wgEncodeDukeDNaseSeqRawSignalRep3K562
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel K562 DNase Raw 3
-    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in K562 cells)
-    subGroups view=rRAW EXP=DNase cellType=K562
-    type wig 0.00 34.81
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    spanList 1
-    cell K562
+#    track wgEncodeDukeDNaseSeqRawSignalRep3K562
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel K562 DNase Raw 3
+#    longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in K562 cells)
+#    subGroups view=rRAW EXP=DNase cellType=K562
+#    type wig 0.00 34.81
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-12-06
+#    dateUnrestricted 2009-09-06
+#    spanList 1
+#    cell K562
 
-    track wgEncodeUncFAIREseqPeaksK562
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel K562 FAIRE Pk
-    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in K562 cells)
-    subGroups view=Peaks EXP=FAIRE cellType=K562
-    type narrowPeak
-    useScore 0
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    cell K562
+#    track wgEncodeUncFAIREseqPeaksK562
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel K562 FAIRE Pk
+#    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in K562 cells)
+#    subGroups view=Peaks EXP=FAIRE cellType=K562
+#    type narrowPeak
+#    useScore 0
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-12-06
+#    dateUnrestricted 2009-09-06
+#    cell K562
 
-    track wgEncodeUncFAIREseqSignalK562
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel K562 FAIRE Sig
-    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in K562 cells)
-    subGroups view=Signal EXP=FAIRE cellType=K562
-    type wig 0.00 31.50
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    spanList 1
-    cell K562
+#    track wgEncodeUncFAIREseqSignalK562
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel K562 FAIRE Sig
+#    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Signal (in K562 cells)
+#    subGroups view=Signal EXP=FAIRE cellType=K562
+#    type wig 0.00 31.50
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-12-06
+#    dateUnrestricted 2009-09-06
+#    spanList 1
+#    cell K562
 
-    track wgEncodeUncFAIREseqBaseOverlapSignalK562
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel K562 FAIRE BO
-    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
-    subGroups view=SignalBO EXP=FAIRE cellType=K562
-    type wig 0.00 8719.00
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    spanList 1
-    cell K562
+#    track wgEncodeUncFAIREseqBaseOverlapSignalK562
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel K562 FAIRE BO
+#    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
+#    subGroups view=SignalBO EXP=FAIRE cellType=K562
+#    type wig 0.00 8719.00
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-12-06
+#    dateUnrestricted 2009-09-06
+#    spanList 1
+#    cell K562
 
-    track wgEncodeUncFAIREseqRawSignalRep1K562
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel K562 FAIRE Raw 1
-    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 1 (in K562 cells)
-    subGroups view=rRAW EXP=FAIRE cellType=K562
-    type wig 0.00 74.86
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    spanList 1
-    cell K562
+#    track wgEncodeUncFAIREseqRawSignalRep1K562
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel K562 FAIRE Raw 1
+#    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 1 (in K562 cells)
+#    subGroups view=rRAW EXP=FAIRE cellType=K562
+#    type wig 0.00 74.86
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-12-06
+#    dateUnrestricted 2009-09-06
+#    spanList 1
+#    cell K562
 
-    track wgEncodeUncFAIREseqRawSignalRep2K562
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel K562 FAIRE Raw 2
-    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 2 (in K562 cells)
-    subGroups view=rRAW EXP=FAIRE cellType=K562
-    type wig 0.00 63.65
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    spanList 1
-    cell K562
+#    track wgEncodeUncFAIREseqRawSignalRep2K562
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel K562 FAIRE Raw 2
+#    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 2 (in K562 cells)
+#    subGroups view=rRAW EXP=FAIRE cellType=K562
+#    type wig 0.00 63.65
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-12-06
+#    dateUnrestricted 2009-09-06
+#    spanList 1
+#    cell K562
 
-    track wgEncodeUncFAIREseqRawSignalRep3K562
-    release alpha
-    subTrack wgEncodeChromatinMap
-    shortLabel K562 FAIRE Raw 3
-    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 3 (in K562 cells)
-    subGroups view=rRAW EXP=FAIRE cellType=K562
-    type wig 0.00 67.60
-    dataVersion ENCODE Nov 2008 Freeze
-    dateSubmitted 2008-12-06
-    dateUnrestricted 2009-09-06
-    spanList 1
-    cell K562
+#    track wgEncodeUncFAIREseqRawSignalRep3K562
+#    release alpha
+#    subTrack wgEncodeChromatinMap
+#    shortLabel K562 FAIRE Raw 3
+#    longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 3 (in K562 cells)
+#    subGroups view=rRAW EXP=FAIRE cellType=K562
+#    type wig 0.00 67.60
+#    dataVersion ENCODE Nov 2008 Freeze
+#    dateSubmitted 2008-12-06
+#    dateUnrestricted 2009-09-06
+#    spanList 1
+#    cell K562
 
     track wgEncodeUtaustinChIPseqSignalK562Input
     release alpha
@@ -3248,7 +3262,7 @@ dimensions dimensionX=cellType dimensionY=promoter
 sortOrder view=+ cellType=+ promoter=+
 dragAndDrop subTracks
 visibilityViewDefaults SI=dense EB=dense
-controlledVocabulary encode/cv.ra cellType=K562,HeLa-S3 promoter
+controlledVocabulary encode/cv.ra cellType=cell promoter=promoter
 noInherit on
 settingsByView SI:configurable=on,scoreFilterByRange=on EB:configurable=on,scoreFilterByRange=on
 dataVersion ENCODE Nov 2008 Freeze
@@ -3324,7 +3338,7 @@ dimensions dimensionY=rnaExtract dimensionX=cellType dimensionZ=localization
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults PlusClusters=dense MinusClusters=dense PlusRawSignal=hide MinusRawSignal=hide Alignments=hide
-controlledVocabulary encode/cv.ra cellType localization rnaExtract
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on
 settingsByView Alignments:configurable=on PlusClusters:configurable=on MinusClusters:configurable=on PlusRawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean MinusRawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
@@ -3717,7 +3731,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersK562PolysomeLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longPolyA K562 polysome 
+    shortLabel longPolyA K562 polysome
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longPolyA in K562 cell polysome using )
     subGroups view=PlusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
     type bedGraph 4
@@ -3734,7 +3748,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersK562PolysomeLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longPolyA K562 polysome 
+    shortLabel longPolyA K562 polysome
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longPolyA in K562 cell polysome using )
     subGroups view=MinusClusters cellType=K562 localization=polysome rnaExtract=longPolyA
     type bedGraph 4
@@ -3751,7 +3765,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersK562NucleolusTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 nucleolus 
+    shortLabel total K562 nucleolus
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 cell nucleolus using )
     subGroups view=PlusClusters cellType=K562 localization=nucleolus rnaExtract=total
     type bedGraph 4
@@ -3768,7 +3782,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersK562NucleolusTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 nucleolus 
+    shortLabel total K562 nucleolus
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 cell nucleolus using )
     subGroups view=MinusClusters cellType=K562 localization=nucleolus rnaExtract=total
     type bedGraph 4
@@ -3785,7 +3799,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 nucleoplasm 
+    shortLabel total K562 nucleoplasm
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 cell nucleoplasm using )
     subGroups view=PlusClusters cellType=K562 localization=nucleoplasm rnaExtract=total
     type bedGraph 4
@@ -3802,7 +3816,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 nucleoplasm 
+    shortLabel total K562 nucleoplasm
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 cell nucleoplasm using )
     subGroups view=MinusClusters cellType=K562 localization=nucleoplasm rnaExtract=total
     type bedGraph 4
@@ -3819,7 +3833,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusClustersK562ChromatinTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 chromatin 
+    shortLabel total K562 chromatin
     longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 cell chromatin using )
     subGroups view=PlusClusters cellType=K562 localization=chromatin rnaExtract=total
     type bedGraph 4
@@ -3836,7 +3850,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusClustersK562ChromatinTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 chromatin 
+    shortLabel total K562 chromatin
     longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 cell chromatin using )
     subGroups view=MinusClusters cellType=K562 localization=chromatin rnaExtract=total
     type bedGraph 4
@@ -3853,7 +3867,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsK562PolysomeLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longPolyA K562 polysome 
+    shortLabel longPolyA K562 polysome
     longLabel ENCODE RIKEN CAGE Tags (longPolyA in K562 cell polysome using )
     subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=longPolyA
     type bed 6
@@ -3870,7 +3884,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsK562NucleolusTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 nucleolus 
+    shortLabel total K562 nucleolus
     longLabel ENCODE RIKEN CAGE Tags (total in K562 cell nucleolus using )
     subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=total
     type bed 6
@@ -3887,7 +3901,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 nucleoplasm 
+    shortLabel total K562 nucleoplasm
     longLabel ENCODE RIKEN CAGE Tags (total in K562 cell nucleoplasm using )
     subGroups view=Alignments cellType=K562 localization=nucleoplasm rnaExtract=total
     type bed 6
@@ -3904,7 +3918,7 @@ wgEncode 1
     track wgEncodeRikenCageAlignmentsK562ChromatinTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 chromatin 
+    shortLabel total K562 chromatin
     longLabel ENCODE RIKEN CAGE Tags (total in K562 cell chromatin using )
     subGroups view=Alignments cellType=K562 localization=chromatin rnaExtract=total
     type bed 6
@@ -4094,7 +4108,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Hotspots=hide Peaks=hide RawSignal=hide
 noInherit on
 filterPvalQval on
-controlledVocabulary encode/cv.ra cellType=GM06990,K562,HeLa-S3,HepG2,SK-N-SH(+RA),Th1
+controlledVocabulary encode/cv.ra cellType=cell
 settingsByView Hotspots:configurable=on Peaks:configurable=on RawSignal:configurable=on,viewLimits=1:10,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3 +
@@ -4513,7 +4527,7 @@ subGroup3 localization Localization cell=Cell nucleus=Nucleus cytosol=Cytosol po
 subGroup4 rnaExtract RnaExtract longNonPolyA=LongNonPolyA longPolyA=LongPolyA total=Total
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary encode/cv.ra cellType=GM12878,K562,prostate localization rnaExtract
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults Transfrags=hide FilteredTransfrags=hide RawSignal=hide FilteredRawSignal=dense
 noInherit on
@@ -5359,7 +5373,7 @@ subGroup3 ripAntibody RipAntibody Nov_69522=Nov_69522 Sig_P6246=Sig_P6246 SC_526
 subGroup4 ripTgtProtein RipTgtProtein T7Tag=T7Tag PABPC1=PABPC1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1
 dimensions dimensionX=cellType dimensionY=ripAntibody dimensionZ=ripTgtProtein
 sortOrder cellType=+ ripAntibody=+ ripTgtProtein=+ view=+
-controlledVocabulary encode/cv.ra cellType=GM12878,K562 ripAntibody ripTgtProtein
+controlledVocabulary encode/cv.ra cellType=cell ripAntibody=ripAntibody ripTgtProtein=ripTgtProtein
 dragAndDrop subTracks
 visibilityViewDefaults RbpAssocRna=dense
 noInherit on
@@ -5479,13 +5493,13 @@ type bed 3
 useScore 1
 origAssembly hg18
 subGroup1 view Views Peaks=Peaks Signal=Signal zRAW=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878_(Tier_1) HEK293b=HEK293(b) HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg K562=K562_(Tier_1) NB4=NB4
-subGroup3 factor Antibody Max=Max NF-E2=NF-E2 Pol2=Pol2 STAT1=STAT1 ZNF263=ZNF263 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input zLarge=Large_Fragment zMNase=MNase zMouseIG=Mouse_IgG zNaked=Naked_DNA
+subGroup2 cellType Cell_Line GM12878=GM12878_(Tier_1) HCT116=HCT-116 HEK293b=HEK293(b) HeLa=HeLa-S3 HeLa-IF=HeLa-S3_IFNg K562=K562_(Tier_1) NB4=NB4
+subGroup3 factor Antibody Max=Max NF-E2=NF-E2 Pol2=Pol2 STAT1=STAT1 TCF4=TCF4 ZNF263=ZNF263 c-Fos=c-Fos c-Jun=c-Jun c-Myc=c-Myc zCTRL=Input zLarge=Large_Fragment zMNase=MNase zMouseIG=Mouse_IgG zNaked=Naked_DNA
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder view=+ factor=+ cellType=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
-controlledVocabulary encode/cv.ra cellType=GM12878,HEK293(b),HeLa-S3_IFNg,HeLa-S3,K562,Max,NB4,NF-E2 factor
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
 filterPvalQval on
 settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:configurable=off,viewLimits=0:15,viewLimitsMax=0:14648,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
@@ -5523,7 +5537,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Max
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 Max Raw 1
+    shortLabel GM128 Max Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Max in GM12878 cells)
     subGroups view=zRAW factor=Max cellType=GM12878
     type wig 1.00 4163.00
@@ -5537,7 +5551,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Max
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 Max Raw 2
+    shortLabel GM128 Max Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Max in GM12878 cells)
     subGroups view=zRAW factor=Max cellType=GM12878
     type wig 1.00 3671.00
@@ -5578,10 +5592,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 Pol2 Raw 1
+    shortLabel GM128 Pol2 Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in GM12878 cells)
     subGroups view=zRAW factor=Pol2 cellType=GM12878
-    type wig 1.00 1653.00
+    type wig  1.00 2874.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26
     dateUnrestricted 2009-08-26
@@ -5592,10 +5606,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 Pol2 Raw 2
+    shortLabel GM128 Pol2 Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in GM12878 cells)
     subGroups view=zRAW factor=Pol2 cellType=GM12878
-    type wig 1.00 993.00
+    type wig 1.00 1832.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26
     dateUnrestricted 2009-08-26
@@ -5633,7 +5647,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Gm12878Cfos
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 c-Fos Rw 1
+    shortLabel GM128 c-Fos Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (c-Fos in GM12878 cells)
     subGroups view=zRAW factor=c-Fos cellType=GM12878
     type wig 1.00 1507.00
@@ -5647,7 +5661,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Gm12878Cfos
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 c-Fos Rw 2
+    shortLabel GM128 c-Fos Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (c-Fos in GM12878 cells)
     subGroups view=zRAW factor=c-Fos cellType=GM12878
     type wig 1.00 1828.00
@@ -5661,7 +5675,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Gm12878Cfos
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel GM128 c-Fos Rw 3
+    shortLabel GM128 c-Fos Raw3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (c-Fos in GM12878 cells)
     subGroups view=zRAW factor=c-Fos cellType=GM12878
     type wig 1.00 1740.00
@@ -5700,6 +5714,89 @@ wgEncode 1
     cell GM12878
     antibody Input
 
+    track wgEncodeYaleChIPseqPeaksHct116Tcf4
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel HCT116 TCF4 Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Peaks (TCF4 in HCT-116 cells)
+    subGroups view=Peaks factor=TCF4 cellType=HCT116
+    type narrowPeak
+    dateSubmitted 2009-02-24
+    dateUnrestricted 2009-11-24
+    dataVersion ENCODE Feb 2009 Freeze
+    cell HCT-116
+    antibody TCF4
+
+    track wgEncodeYaleChIPseqSignalHct116Tcf4
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel HCT116 TCF4 Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (TCF4 in HCT-116 cells)
+    subGroups view=Signal factor=TCF4 cellType=HCT116
+    type wig 0.00 4900.00
+    dateSubmitted 2009-02-24
+    dateUnrestricted 2009-11-24
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell HCT-116
+    antibody TCF4
+
+    track wgEncodeYaleChIPseqRawSignalRep1Hct116Tcf4
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel HCT116 TCF4 Raw1
+    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (TCF4 in HCT-116 cells)
+    subGroups view=zRAW factor=TCF4 cellType=HCT116
+    type wig 1.00 5626.00
+    dateSubmitted 2009-02-24
+    dateUnrestricted 2009-11-24
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell HCT-116
+    antibody TCF4
+
+    track wgEncodeYaleChIPseqRawSignalRep2Hct116Tcf4
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel HCT116 TCF4 Raw2
+    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (TCF4 in HCT-116 cells)
+    subGroups view=zRAW factor=TCF4 cellType=HCT116
+    type wig 1.00 2567.00
+    dateSubmitted 2009-02-24
+    dateUnrestricted 2009-11-24
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell HCT-116
+    antibody TCF4
+
+    track wgEncodeYaleChIPseqSignalHct116Input
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel HCT116 Input Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (Input in HCT-116 cells)
+    subGroups view=Signal factor=zCTRL cellType=HCT116
+    type wig 0.00 3439.00
+    dateSubmitted 2009-02-24
+    dateUnrestricted 2009-11-24
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell HCT-116
+    antibody Input
+
+    track wgEncodeYaleChIPseqRawSignalHct116Input
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel HCT116 Input Raw
+    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal (Input in HCT-116 cells)
+    subGroups view=zRAW factor=zCTRL cellType=HCT116
+    type wig 1.00 6763.00
+    dateSubmitted 2009-02-24
+    dateUnrestricted 2009-11-24
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell HCT-116
+    antibody Input
+
     track wgEncodeYaleChIPseqPeaksHek293Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
@@ -5730,10 +5827,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Hek293Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HEK293 Pol2 Rw 1
+    shortLabel HEK293 Pol2 Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in HEK293 cells)
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
-    type wig 1.00 1605.00
+    type wig 1.00 2217.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14
     dateUnrestricted 2009-10-14
@@ -5744,10 +5841,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Hek293Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HEK293 Pol2 Rw 2
+    shortLabel HEK293 Pol2 Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in HEK293 cells)
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
-    type wig 1.00 908.00
+    type wig  1.00 1345.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14
     dateUnrestricted 2009-10-14
@@ -5758,10 +5855,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Hek293Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HEK293 Pol2 Rw 3
+    shortLabel HEK293 Pol2 Raw3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (Pol2 in HEK293 cells)
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
-    type wig 1.00 1592.00
+    type wig 1.00 2119.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14
     dateUnrestricted 2009-10-14
@@ -5789,7 +5886,7 @@ wgEncode 1
     shortLabel HEK293 Input Raw
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal (Input in HEK293 cells)
     subGroups view=zRAW factor=zCTRL cellType=HEK293b
-    type wig 1.00 2937.00
+    type wig 1.00 13075.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14
     dateUnrestricted 2009-10-14
@@ -5832,7 +5929,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa Pol2 Raw 1
+    shortLabel HeLa Pol2 Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in HeLa cells)
     subGroups view=zRAW factor=Pol2 cellType=HeLa
     type wig 1.00 3673.00
@@ -5848,7 +5945,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa Pol2 Raw 2
+    shortLabel HeLa Pol2 Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in HeLa cells)
     subGroups view=zRAW factor=Pol2 cellType=HeLa
     type wig 1.00 6153.00
@@ -5864,7 +5961,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Helas3Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa Pol2 Raw 3
+    shortLabel HeLa Pol2 Raw3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (Pol2 in HeLa cells)
     subGroups view=zRAW factor=Pol2 cellType=HeLa
     type wig 1.00 4989.00
@@ -5941,10 +6038,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Largefragment
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa LgFrag Rw 1
+    shortLabel HeLa LgFrag Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Large_Frag in HeLa cells)
     subGroups view=zRAW factor=zLarge cellType=HeLa
-    type wig 1.00 2345.00
+    type wig 1.00 4879.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
     dateUnrestricted 2009-10-15
@@ -5955,10 +6052,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Largefragment
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa LgFrag Rw 2
+    shortLabel HeLa LgFrag Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Large_Frag in HeLa cells)
     subGroups view=zRAW factor=zLarge cellType=HeLa
-    type wig 1.00 1186.00
+    type wig 1.00 3795.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
     dateUnrestricted 2009-10-15
@@ -5983,10 +6080,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mnase
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa MNase Raw 1
+    shortLabel HeLa MNase Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (MNase in HeLa cells)
     subGroups view=zRAW factor=zMNase cellType=HeLa
-    type wig 1.00 5827.00
+    type wig 1.00 9859.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16
     dateUnrestricted 2009-10-16
@@ -5997,10 +6094,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mnase
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa MNase Raw 2
+    shortLabel HeLa MNase Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (MNase in HeLa cells)
     subGroups view=zRAW factor=zMNase cellType=HeLa
-    type wig 1.00 4709.00
+    type wig 1.00 12929.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16
     dateUnrestricted 2009-10-16
@@ -6038,10 +6135,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Mouseigg
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa MusIgG Rw 1
+    shortLabel HeLa MusIgG Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Mouse_IgG in HeLa cells)
     subGroups view=zRAW factor=zMouseIG cellType=HeLa
-    type wig 1.00 1800.00
+    type wig 1.00 5841.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
     dateUnrestricted 2009-10-15
@@ -6052,10 +6149,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Mouseigg
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa MusIgG Rw 2
+    shortLabel HeLa MusIgG Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Mouse_IgG in HeLa cells)
     subGroups view=zRAW factor=zMouseIG cellType=HeLa
-    type wig 1.00 1679.00
+    type wig 1.00 7220.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-15
     dateUnrestricted 2009-10-15
@@ -6080,10 +6177,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Helas3Nakeddna
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa DNA Raw 1
+    shortLabel HeLa DNA Raw1
     longLabel ENCODE Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Naked_DNA in HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
-    type wig 1.00 1652.00
+    type wig 1.00 7798.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16
     dateUnrestricted 2009-10-16
@@ -6094,10 +6191,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Helas3Nakeddna
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa DNA Raw 2
+    shortLabel HeLa DNA Raw2
     longLabel ENCODE Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Naked_DNA in HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
-    type wig 1.00 1721.00
+    type wig 1.00 5002.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16
     dateUnrestricted 2009-10-16
@@ -6108,10 +6205,10 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Helas3Nakeddna
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel HeLa DNA Raw 3
+    shortLabel HeLa DNA Raw3
     longLabel ENCODE Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (Naked_DNA in HeLa cells)
     subGroups view=zRAW factor=zNaked cellType=HeLa
-    type wig 1.00 1331.00
+    type wig 1.00 4462.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-16
     dateUnrestricted 2009-10-16
@@ -6216,6 +6313,61 @@ wgEncode 1
     color 112,103,174
     accession GSE12782
 
+    track wgEncodeYaleChIPseqPeaksK562Max
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Max Pk
+    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Peaks (Max in K562 cells)
+    subGroups view=Peaks factor=Max cellType=K562
+    type narrowPeak
+    dateSubmitted 2009-02-25
+    dateUnrestricted 2009-11-25
+    dataVersion ENCODE Feb 2009 Freeze
+    cell K562
+    antibody Max
+
+    track wgEncodeYaleChIPseqSignalK562Max
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Max Sig
+    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Signal (Max in K562 cells)
+    subGroups view=Signal factor=Max cellType=K562
+    type wig 0.00 8817.00
+    dateSubmitted 2009-02-25
+    dateUnrestricted 2009-11-25
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell K562
+    antibody Max
+
+    track wgEncodeYaleChIPseqRawSignalRep1K562Max
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Max Raw1
+    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 1 (Max in K562 cells)
+    subGroups view=zRAW factor=Max cellType=K562
+    type wig 1.00 6997.00
+    dateSubmitted 2009-02-25
+    dateUnrestricted 2009-11-25
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell K562
+    antibody Max
+
+    track wgEncodeYaleChIPseqRawSignalRep2K562Max
+    release alpha
+    subTrack wgEncodeYaleChIPseq
+    shortLabel K562 Max Raw2
+    longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-Seq Raw Signal Replicate 2 (Max in K562 cells)
+    subGroups view=zRAW factor=Max cellType=K562
+    type wig 1.00 4951.00
+    dateSubmitted 2009-02-25
+    dateUnrestricted 2009-11-25
+    dataVersion ENCODE Feb 2009 Freeze
+    spanList first
+    cell K562
+    antibody Max
+
     track wgEncodeYaleChIPseqPeaksK562Nfe2
     release alpha
     subTrack wgEncodeYaleChIPseq
@@ -6246,7 +6398,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Nfe2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 NF-E2 Raw 1
+    shortLabel K562 NF-E2 Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (NF-E2 in K562 cells)
     subGroups view=zRAW factor=NF-E2 cellType=K562
     type wig 1.00 10629.00
@@ -6260,7 +6412,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Nfe2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 NF-E2 Raw 2
+    shortLabel K562 NF-E2 Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (NF-E2 in K562 cells)
     subGroups view=zRAW factor=NF-E2 cellType=K562
     type wig 1.00 9043.00
@@ -6302,7 +6454,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Pol2 Raw 1
+    shortLabel K562 Pol2 Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in K562 cells)
     subGroups view=zRAW factor=Pol2 cellType=K562
     type wig 1.00 9783.00
@@ -6316,7 +6468,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 Pol2 Raw 2
+    shortLabel K562 Pol2 Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in K562 cells)
     subGroups view=zRAW factor=Pol2 cellType=K562
     type wig 1.00 8446.00
@@ -6360,7 +6512,7 @@ wgEncode 1
     shortLabel K562 Z263 Raw1
     longLabel ENCODE Yale ChIP-Seq Raw Signal Replicate 1 (ZNF263 in K562 cells)
     subGroups view=zRAW factor=ZNF263 cellType=K562
-    type wig 1.00 1685.00
+    type wig 1.00 2478.00
     dateSubmitted 2009-02-11
     dateUnrestricted 2009-11-11
     dataVersion ENCODE Feb 2009 Freeze
@@ -6374,7 +6526,7 @@ wgEncode 1
     shortLabel K562 Z263 Raw2
     longLabel ENCODE Yale ChIP-Seq Raw Signal Replicate 2 (ZNF263 in K562 cells)
     subGroups view=zRAW factor=ZNF263 cellType=K562
-    type wig 1.00 1799.00
+    type wig 1.00 2247.00
     dateSubmitted 2009-02-11
     dateUnrestricted 2009-11-11
     dataVersion ENCODE Feb 2009 Freeze
@@ -6412,7 +6564,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Cfos
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Fos Raw 1
+    shortLabel K562 c-Fos Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (c-Fos in K562 cells)
     subGroups view=zRAW factor=c-Fos cellType=K562
     type wig 1.00 6107.00
@@ -6426,7 +6578,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Cfos
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Fos Raw 2
+    shortLabel K562 c-Fos Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (c-Fos in K562 cells)
     subGroups view=zRAW factor=c-Fos cellType=K562
     type wig 1.00 3561.00
@@ -6440,7 +6592,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3K562Cfos
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Fos Raw 3
+    shortLabel K562 c-Fos Raw3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (c-Fos in K562 cells)
     subGroups view=zRAW factor=c-Fos cellType=K562
     type wig 1.00 3921.00
@@ -6481,7 +6633,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Cjun
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Jun Raw 1
+    shortLabel K562 c-Jun Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (c-Jun in K562 cells)
     subGroups view=zRAW factor=c-Jun cellType=K562
     type wig 1.00 11614.00
@@ -6495,7 +6647,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Cjun
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Jun Raw 2
+    shortLabel K562 c-Jun Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (c-Jun in K562 cells)
     subGroups view=zRAW factor=c-Jun cellType=K562
     type wig 1.00 5368.00
@@ -6536,7 +6688,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1K562Cmyc
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Myc Raw 1
+    shortLabel K562 c-Myc Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (c-Myc in K562 cells)
     subGroups view=zRAW factor=c-Myc cellType=K562
     type wig 1.00 1590.00
@@ -6550,7 +6702,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2K562Cmyc
     release alpha
     subTrack wgEncodeYaleChIPseq
-    shortLabel K562 c-Myc Raw 2
+    shortLabel K562 c-Myc Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (c-Myc in K562 cells)
     subGroups view=zRAW factor=c-Myc cellType=K562
     type wig 1.00 1603.00
@@ -6620,7 +6772,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep1Nb4Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel NB4 Pol2 Raw 1
+    shortLabel NB4 Pol2 Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in NB4 cells)
     subGroups view=zRAW factor=Pol2 cellType=NB4
     type wig 1.00 10895.00
@@ -6634,7 +6786,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep2Nb4Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel NB4 Pol2 Raw 2
+    shortLabel NB4 Pol2 Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in NB4 cells)
     subGroups view=zRAW factor=Pol2 cellType=NB4
     type wig 1.00 5847.00
@@ -6648,7 +6800,7 @@ wgEncode 1
     track wgEncodeYaleChIPseqRawSignalRep3Nb4Pol2
     release alpha
     subTrack wgEncodeYaleChIPseq off
-    shortLabel NB4 Pol2 Raw 3
+    shortLabel NB4 Pol2 Raw3
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 3 (Pol2 in NB4 cells)
     subGroups view=zRAW factor=Pol2 cellType=NB4
     type wig 1.00 4034.00
@@ -6702,7 +6854,7 @@ dimensions dimensionX=cellType dimensionY=factor
 sortOrder view=+ factor=+ cellType=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide RawSignal=dense
-controlledVocabulary encode/cv.ra cellType=GM12878,K562,PFSK-1,SK-N-MC factor
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
 filterPvalQval on
 settingsByView Peaks:configurable=on,minScore=0 RawSignal:configurable=off,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
@@ -7469,7 +7621,7 @@ subGroup4 rnaExtract RnaExtract longPolyA=longPolyA
 subGroup4 rnaExtract RnaExtract longPolyA=longPolyA
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary encode/cv.ra cellType=K562,prostate localization rnaExtract
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults Alignments=hide Tags=hide
 noInherit on
@@ -7717,7 +7869,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsGm12878NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA GM12878 nucleus 
+    shortLabel longPolyA GM12878 nucleus
     longLabel ENCODE GIS PET Alignments (longPolyA in GM12878 cell nucleus using )
     subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longPolyA
     type bed 6
@@ -7778,7 +7930,7 @@ wgEncode 1
     track wgEncodeGisPetAlignmentsGm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA GM12878 cytosol 
+    shortLabel longPolyA GM12878 cytosol
     longLabel ENCODE GIS PET Alignments (longPolyA in GM12878 cell cytosol using )
     subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type bed 6
@@ -7851,7 +8003,7 @@ dimensions dimensionX=cellType dimensionY=replicate
 sortOrder cellType=+ replicate=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Peaks=dense
-controlledVocabulary encode/cv.ra cellType=GM12878,K562,HepG2 factor
+controlledVocabulary encode/cv.ra cellType=cell
 noInherit on
 filterPvalQval on
 settingsByView Peaks:configurable=off
@@ -7947,7 +8099,7 @@ subGroup1 cellType Cell_Line GM12878=GM12878_(Tier1) K562=K562_(Tier1) HepG2=Hep
 subGroup2 replicate Replicate Rep1=Rep1 Rep2=Rep2
 dimensions dimensionX=cellType dimensionY=replicate
 dragAndDrop subTracks
-controlledVocabulary encode/cv.ra cellType=GM12878,K562,HepG2
+controlledVocabulary encode/cv.ra cellType=cell
 type bed 9 +
 
     track wgEncodeHudsonalphaCnvGM12878Rep1
@@ -8016,7 +8168,7 @@ subGroup3       localization Localization cell=cell cytosol=cytosol nucleus=nucl
 subGroup4       rnaExtract RnaExtract short=short
 dimensions	dimensionX=cellType	dimensionY=localization	dimensionZ=rnaExtract
 sortOrder	cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary	encode/cv.ra cellType localization rnaExtract
+controlledVocabulary	encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop	subTracks
 visibilityViewDefaults	 Transfrags=hide
 priority	0
@@ -8679,7 +8831,7 @@ dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Regions=dense
-controlledVocabulary encode/cv.ra cellType factor
+controlledVocabulary encode/cv.ra cellType=cell
 priority	0
 type bed 9
 nextItemButton on
@@ -8937,15 +9089,15 @@ shortLabel	Caltech RnaSeq
 longLabel	ENCODE Caltech Wold RnaSeq
 group		expression
 subGroup1	view Views Alignments=Alignments RawSignal=RawSignal PairedAligns=PairedAligns Splices=Splices
-subGroup2	cellType Cell_Line K562=K562 GM12878=GM12878 
-subGroup3	localization Localization cell=cell 
-subGroup4	rnaExtract RnaExtract longPolyA=longPolyA 
-subGroup5	mapAlgorithm MapAlgorithm blat34=blat34 bow098=bow098 NA=NA erng3b=erng3b bowblt1=bowblt1 
-dimensions	dimensionX=cellType	dimensionY=mapAlgorithm	
+subGroup2	cellType Cell_Line K562=K562 GM12878=GM12878
+subGroup3	localization Localization cell=cell
+subGroup4	rnaExtract RnaExtract longPolyA=longPolyA
+subGroup5	mapAlgorithm MapAlgorithm blat34=blat34 bow098=bow098 NA=NA erng3b=erng3b bowblt1=bowblt1
+dimensions	dimensionX=cellType	dimensionY=mapAlgorithm
 sortOrder	cellType=+ localization=+ rnaExtract=+ mapAlgorithm=+ view=+
-controlledVocabulary	encode/cv.ra cellType localization rnaExtract mapAlgorithm
+controlledVocabulary	encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract mapAlgorithm=mapAlgorithm
 dragAndDrop	subTracks
-visibilityViewDefaults	 Alignments=hide RawSignal=hide PairedAligns=hide Splices=hide 
+visibilityViewDefaults	 Alignments=hide RawSignal=hide PairedAligns=hide Splices=hide
 priority	0
 type		bed 3
 wgEncode	1
