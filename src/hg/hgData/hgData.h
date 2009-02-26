@@ -90,10 +90,11 @@
 #define ERR_TRACK_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track %s not found in genome %s", (track), (db))
 #define ERR_TRACK_INFO_NOT_FOUND(track, db) errClientStatus(420, "Request error", "Track info for %s not found in genome %s", (track), (db))
 #define ERR_TABLE_NOT_FOUND(table, chrom, tableRoot, db) errClientStatus(420, "Request error", "Table %s not found using chrom %s and tableRoot %s in genome %s", (table), (chrom), (tableRoot), (db))
+#define ERR_TABLE_INFO_NOT_FOUND(table, chrom, tableRoot, db) errClientStatus(420, "Request error", "Table information for %s not found using chrom %s and tableRoot %s in genome %s", (table), (chrom), (tableRoot), (db))
 #define ERR_BAD_FORMAT(format) errClientStatus(420, "Request error", "Format %s is not supported", (format))
 #define ERR_BAD_ACTION(action, track, db) errClientStatus(420, "Request error", "Action %s unknown for track %s in genome %s", (action), (track), (db))
 #define ERR_BAD_TRACK_TYPE(track, type) errClientStatus(420, "Request error", "Track %s of type %s is not supported", (track), (type))
-#define ERR_NOT_IMPLEMENTED(feature) errClientStatus(420, "Request error", "Feature %s not implemented", (feature))
+#define ERR_NOT_IMPLEMENTED(feature) errClientStatus(420, "Request error", "Not implemented: %s", (feature))
 
 /* Global Variables */
 char quoteBuf[1024];
