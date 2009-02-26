@@ -5,7 +5,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.13 2009/02/26 21:48:39 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.14 2009/02/26 23:58:04 mikep Exp $";
 
 static struct json_object *addRangeOrCountFullUrl(struct json_object *o, boolean isCount, char *url_name, char *track, char *genome, char *chrom, boolean addStartEnd, int start, int end)
 // Add a count url to object o with name 'url_name'.
@@ -287,14 +287,6 @@ void printBed(char *genome, char *track, char *type, char *chrom, int start, int
 struct json_object *d = json_object_new_object();
 struct coords c = navigate(start, end, chromSize);
 json_object_object_add(d, "track", jsonBedCount(genome, track, chrom, start, end, chromSize, hti, n));
-if (format==NULL)
-    json_object_object_add(d, "data", jsonBed(hti, b));
-else if (sameOk(format, ANNOJ_FLAT_FMT))
-    json_object_object_add(d, "data", jsonBedAsAnnojFlat(hti, b));
-else if (sameOk(format, ANNOJ_NESTED_FMT))
-    json_object_object_add(d, "data", jsonBedAsAnnojNested(hti, b));
-else
-    ERR_BAD_FORMAT(format);
 addRangeUrl(d, "url_self", track, genome, chrom, start, end);
 // generic count/range URL templates
 addCountUrl(d, "url_count", track, genome, NULL, -1, -1);
@@ -314,6 +306,14 @@ addGenomeUrl(d, "url_genome", genome, NULL);
 addGenomeUrl(d, "url_genomes", NULL, NULL);
 addTrackUrl(d, "url_track", genome, track);
 addTrackUrl(d, "url_tracks", genome, NULL);
+if (format==NULL)
+    json_object_object_add(d, "data", jsonBed(hti, b));
+else if (sameOk(format, ANNOJ_FLAT_FMT))
+    json_object_object_add(d, "data", jsonBedAsAnnojFlat(hti, b));
+else if (sameOk(format, ANNOJ_NESTED_FMT))
+    json_object_object_add(d, "data", jsonBedAsAnnojNested(hti, b));
+else
+    ERR_BAD_FORMAT(format);
 okSendHeader(modified, TRACK_EXPIRES);
 printf(json_object_to_json_string(d));
 json_object_put(d);
