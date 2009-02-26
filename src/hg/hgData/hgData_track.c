@@ -11,7 +11,7 @@
 #include <json/json.h>                                                     
 #endif                                                                     
 
-static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.9 2009/02/26 20:12:18 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.10 2009/02/26 21:17:44 mikep Exp $";
 
 // /tracks                                            [list of all tracks in all genomes]
 // /tracks/{genome}                                   [list of tracks for {genome}]
@@ -220,10 +220,10 @@ json_object_object_add(groupGen, genome, group);
 // add tracks to the track array
 if (tdb && slCount(tdb)==1)
     {
-/*    addCountChromUrl(i, "url_count_chrom", genome, tdb->tableName);
-    addCountUrl(i, "url_count", genome, tdb->tableName);
-    addRangeChromUrl(i, "url_range_chrom", genome, tdb->tableName);
-    addRangeUrl(i, "url_range", genome, tdb->tableName);*/
+    addCountUrl(i, "url_count", tdb->tableName, genome, NULL, -1, -1);
+    addRangeUrl(i, "url_range", tdb->tableName, genome, NULL, -1, -1);
+    addCountChromUrl(i, "url_count_chrom", tdb->tableName, genome, NULL);
+    addRangeChromUrl(i, "url_range_chrom", tdb->tableName, genome, NULL);
     jsonAddOneTrackFull(trackArr, tdb, hti, genome);
     }
 else

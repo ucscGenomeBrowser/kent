@@ -4,7 +4,7 @@
 #include "hdb.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgData_common.c,v 1.1.2.6 2009/02/26 08:36:31 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_common.c,v 1.1.2.7 2009/02/26 21:17:44 mikep Exp $";
 
 struct coords navigate(int start, int end, int chromSize)
 // Calculate navigation coordinates including window left, window right
@@ -73,3 +73,8 @@ char *nullOrVal(char *val)
 return val ? val : "(null)";
 }
 
+char *valOrVariable(char *val, char *variable)
+// Return val if not NULL, else return variable
+{
+    return val ? val : variable;
+}

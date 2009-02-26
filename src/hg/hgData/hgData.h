@@ -124,6 +124,9 @@ struct dbDbClade
 char *nullOrVal(char *val);
 // return the value if not null, or else the string "(null)"
 
+char *valOrVariable(char *val, char *variable);
+// Return val if not NULL, else return variable
+
 char *etag(time_t modified);
 // Convert modification time to ETag
 // Returned value must be freed by caller
@@ -235,8 +238,21 @@ struct json_object *addTrackUrl(struct json_object *o, char *url_name, char *gen
 // Track can be NULL
 // Returns object o
 
+struct json_object *addCountChromUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom);
+// Add a count url to object o with name 'url_name'.
+// Genome required if chrom specified, otherwise can be NULL
+// Chrom can be NULL
+// Returns object o
+
 struct json_object *addCountUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom, int start, int end);
 // Add a count url to object o with name 'url_name'.
+// Genome required if chrom specified, otherwise can be NULL
+// Chrom can be NULL
+// If start or end not required specify -1 
+// Returns object o
+
+struct json_object *addRangeChromUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom);
+// Add a range url to object o with name 'url_name'.
 // Genome required if chrom specified, otherwise can be NULL
 // Chrom can be NULL
 // Returns object o
@@ -245,6 +261,7 @@ struct json_object *addRangeUrl(struct json_object *o, char *url_name, char *tra
 // Add a range url to object o with name 'url_name'.
 // Genome required if chrom specified, otherwise can be NULL
 // Chrom can be NULL
+// If start or end not required specify -1 
 // Returns object o
 
 void printBedCount(char *genome, char *track, char *chrom, int start, int end, int chromSize, struct hTableInfo *hti, int n, time_t modified);

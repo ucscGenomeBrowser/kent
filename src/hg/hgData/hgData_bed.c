@@ -5,31 +5,80 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.11 2009/02/26 20:11:35 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_bed.c,v 1.1.2.12 2009/02/26 21:17:44 mikep Exp $";
 
-
-struct json_object *addCountUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom, int start, int end)
+static struct json_object *addRangeOrCountFullUrl(struct json_object *o, boolean isCount, char *url_name, char *track, char *genome, char *chrom, boolean addStartEnd, int start, int end)
 // Add a count url to object o with name 'url_name'.
 // Genome required if chrom specified, otherwise can be NULL
 // Chrom can be NULL
 // Returns object o
 {
 char url[1024];
-safef(url, sizeof(url), PREFIX COUNT_CMD "/%s/%s/%s/%d-%d%s", track, genome, chrom, start, end, JSON_EXT);
+if (!addStartEnd)
+    safef(url, sizeof(url), PREFIX "%s/%s/%s/%s%s", 
+	(isCount ? COUNT_CMD : RANGE_CMD),
+	valOrVariable(track, TRACK_VAR), 
+	valOrVariable(genome, GENOME_VAR),
+	valOrVariable(chrom, CHROM_VAR),
+	JSON_EXT);
+else if (start < 0 || end < 0)
+    safef(url, sizeof(url), PREFIX "%s/%s/%s/%s/%s-%s%s", 
+	(isCount ? COUNT_CMD : RANGE_CMD),
+	valOrVariable(track, TRACK_VAR), 
+	valOrVariable(genome, GENOME_VAR),
+	valOrVariable(chrom, CHROM_VAR),
+	START_VAR,
+	END_VAR,
+	JSON_EXT);
+else
+    safef(url, sizeof(url), PREFIX "%s/%s/%s/%s/%d-%d%s", 
+	(isCount ? COUNT_CMD : RANGE_CMD),
+	valOrVariable(track, TRACK_VAR), 
+	valOrVariable(genome, GENOME_VAR),
+	valOrVariable(chrom, CHROM_VAR),
+	start,
+	end,
+	JSON_EXT);
 json_object_object_add(o, url_name, json_object_new_string(url));
 return o;
+}
+
+struct json_object *addCountChromUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom)
+// Add a count url to object o with name 'url_name'.
+// Genome required if chrom specified, otherwise can be NULL
+// Chrom can be NULL
+// Returns object o
+{
+return addRangeOrCountFullUrl(o, TRUE, url_name, track, genome, chrom, FALSE, -1, -1);
+}
+
+struct json_object *addCountUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom, int start, int end)
+// Add a count url to object o with name 'url_name'.
+// Genome required if chrom specified, otherwise can be NULL
+// Chrom can be NULL
+// If start or end not required specify -1 
+// Returns object o
+{
+return addRangeOrCountFullUrl(o, TRUE, url_name, track, genome, chrom, TRUE, start, end);
+}
+
+struct json_object *addRangeChromUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom)
+// Add a range url to object o with name 'url_name'.
+// Genome required if chrom specified, otherwise can be NULL
+// Chrom can be NULL
+// Returns object o
+{
+return addRangeOrCountFullUrl(o, FALSE, url_name, track, genome, chrom, FALSE, -1, -1);
 }
 
 struct json_object *addRangeUrl(struct json_object *o, char *url_name, char *track, char *genome, char *chrom, int start, int end)
 // Add a range url to object o with name 'url_name'.
 // Genome required if chrom specified, otherwise can be NULL
 // Chrom can be NULL
+// If start or end not required specify -1 
 // Returns object o
 {
-char url[1024];
-safef(url, sizeof(url), PREFIX RANGE_CMD "/%s/%s/%s/%d-%d%s", track, genome, chrom, start, end, JSON_EXT);
-json_object_object_add(o, url_name, json_object_new_string(url));
-return o;
+return addRangeOrCountFullUrl(o, FALSE, url_name, track, genome, chrom, TRUE, start, end);
 }
 
 static struct json_object *jsonBedCount(char *genome, char *track, char *chrom, int start, int end, int chromSize, struct hTableInfo *hti, int n)
@@ -210,11 +259,16 @@ struct json_object *d = json_object_new_object();
 struct coords c = navigate(start, end, chromSize);
 json_object_object_add(d, "track", jsonBedCount(genome, track, chrom, start, end, chromSize, hti, n));
 addCountUrl(d, "url_self", track, genome, chrom, start, end);
+// generic count/range URL templates
+addCountUrl(d, "url_count", track, genome, NULL, -1, -1);
+addRangeUrl(d, "url_range", track, genome, NULL, -1, -1);
+addCountChromUrl(d, "url_count_chrom", track, genome, NULL);
+addRangeChromUrl(d, "url_range_chrom", track, genome, NULL);
+// Navigation URLs
 addCountUrl(d, "url_count_left", track, genome, chrom, c.left, start);
 addCountUrl(d, "url_count_right", track, genome, chrom, end, c.right);
 addCountUrl(d, "url_count_zoom_in10x", track, genome, chrom, c.leftIn10x, c.rightIn10x);
 addCountUrl(d, "url_count_zoom_out10x", track, genome, chrom, c.leftOut10x, c.rightOut10x);
-addRangeUrl(d, "url_range", track, genome, chrom, start, end);
 addRangeUrl(d, "url_range_left", track, genome, chrom, c.left, start);
 addRangeUrl(d, "url_range_right", track, genome, chrom, end, c.right);
 addRangeUrl(d, "url_range_zoom_in10x", track, genome, chrom, c.leftIn10x, c.rightIn10x);
@@ -241,12 +295,17 @@ else if (sameOk(format, ANNOJ_NESTED_FMT))
     json_object_object_add(d, format, jsonBedAsAnnojNested(hti, b));
 else
     ERR_BAD_FORMAT(format);
-addCountUrl(d, "url_count", track, genome, chrom, start, end);
+addRangeUrl(d, "url_self", track, genome, chrom, start, end);
+// generic count/range URL templates
+addCountUrl(d, "url_count", track, genome, NULL, -1, -1);
+addRangeUrl(d, "url_range", track, genome, NULL, -1, -1);
+addCountChromUrl(d, "url_count_chrom", track, genome, NULL);
+addRangeChromUrl(d, "url_range_chrom", track, genome, NULL);
+// Navigation URLs
 addCountUrl(d, "url_count_left", track, genome, chrom, c.left, start);
 addCountUrl(d, "url_count_right", track, genome, chrom, end, c.right);
 addCountUrl(d, "url_count_zoom_in10x", track, genome, chrom, c.leftIn10x, c.rightIn10x);
 addCountUrl(d, "url_count_zoom_out10x", track, genome, chrom, c.leftOut10x, c.rightOut10x);
-addRangeUrl(d, "url_self", track, genome, chrom, start, end);
 addRangeUrl(d, "url_range_left", track, genome, chrom, c.left, start);
 addRangeUrl(d, "url_range_right", track, genome, chrom, end, c.right);
 addRangeUrl(d, "url_range_zoom_in10x", track, genome, chrom, c.leftIn10x, c.rightIn10x);
