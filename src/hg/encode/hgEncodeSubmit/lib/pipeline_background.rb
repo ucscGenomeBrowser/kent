@@ -341,16 +341,18 @@ module PipelineBackground
     fullPath = my_join(uploadDir,relativePath)
     Dir.entries(fullPath).each do
       |f| 
+      if (f == ".") or (f == "..")
+        next
+      end
       fullName = my_join(fullPath,f)
+      FileUtils.chmod 0775, fullName  # avoid problems from weird perms inside the archive
       if (File.ftype(fullName) == "directory")
-        if (f != ".") and (f != "..")
-          newRelativePath = my_join(relativePath,f)
-          newDir = my_join(projectDir, newRelativePath)
-	  unless File.exists?(newDir)
-	    Dir.mkdir(newDir,0775)
-	  end
-          process_archive(project, archive_id, projectDir, uploadDir, newRelativePath)
-        end
+        newRelativePath = my_join(relativePath,f)
+        newDir = my_join(projectDir, newRelativePath)
+	unless File.exists?(newDir)
+	  Dir.mkdir(newDir,0775)
+	end
+        process_archive(project, archive_id, projectDir, uploadDir, newRelativePath)
       else 
         if File.ftype(fullName) == "file"
    
