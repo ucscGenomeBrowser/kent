@@ -5,7 +5,7 @@
 #include "chromInfo.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgData_genome.c,v 1.1.2.7 2009/02/26 08:00:19 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_genome.c,v 1.1.2.8 2009/02/27 11:28:43 mikep Exp $";
 
 //sqlDateToUnixTime(sqlTableUpdateTime(conn, "dbDb"));
 
@@ -16,16 +16,16 @@ struct json_object *addGenomeUrl(struct json_object *o, char *url_name, char *ge
 // Returns object o
 {
 char url[1024];
-if (genome)
+if (genome && *genome)
   {
-  if (chrom)
-      safef(url, sizeof(url), PREFIX GENOMES_CMD "/%s/%s%s", genome, chrom, JSON_EXT);
+  if (chrom && *chrom)
+      safef(url, sizeof(url), PREFIX GENOMES_CMD "/%s/%s", genome, chrom);
   else
-      safef(url, sizeof(url), PREFIX GENOMES_CMD "/%s%s", genome, JSON_EXT);
+      safef(url, sizeof(url), PREFIX GENOMES_CMD "/%s", genome);
   json_object_object_add(o, url_name, json_object_new_string(url));
   }
 else
-  json_object_object_add(o, url_name, json_object_new_string(PREFIX GENOMES_CMD JSON_EXT));
+  json_object_object_add(o, url_name, json_object_new_string(PREFIX GENOMES_CMD));
 return o;
 }
 
@@ -35,11 +35,11 @@ static struct json_object *jsonAddOneGenome(struct json_object *o, struct dbDbCl
 // return o
 {
 struct json_object *g = json_object_new_object();
-char *chrom;
+char *defChrom;
 int start=0, end=0;
-hgParseChromRange(NULL, db->defaultPos, &chrom, &start, &end);
-if (!chrom)
-    chrom = cloneString(db->defaultPos);
+hgParseChromRange(NULL, db->defaultPos, &defChrom, &start, &end);
+if (!defChrom)
+    defChrom = cloneString(db->defaultPos);
 json_object_object_add(o, db->name, g);
 json_object_object_add(g, "name", json_object_new_string(db->name));
 json_object_object_add(g, "organism", json_object_new_string(db->organism));
@@ -49,12 +49,12 @@ json_object_object_add(g, "source_name", json_object_new_string(db->sourceName))
 json_object_object_add(g, "description", json_object_new_string(db->description));
 json_object_object_add(g, "genome", json_object_new_string(db->genome));
 json_object_object_add(g, "clade", json_object_new_string(db->clade));
-json_object_object_add(g, "default_chrom", json_object_new_string(chrom));
+json_object_object_add(g, "default_chrom", json_object_new_string(defChrom));
 json_object_object_add(g, "default_start", json_object_new_int(start));
 json_object_object_add(g, "default_end", json_object_new_int(end));
 addGenomeUrl(g, "url_self", db->name, NULL);
-addTrackUrl(g, "url_tracks", db->name, NULL);
-freez(&chrom);
+addTrackUrl(g, "url_track_list_genome", db->name, NULL);
+freez(&defChrom);
 return o;
 }
 
@@ -117,18 +117,27 @@ for ( ; ci ; ci = ci->next)
 return c;
 }
 
-void printGenomes(struct dbDbClade *db, struct chromInfo *ci, time_t modified)
+void printGenomes(char *genome, char *chrom, struct dbDbClade *db, struct chromInfo *ci, time_t modified)
 // print an array of all genomes in list,
 // print genome hierarchy for all genomes
 // if only one genome in list, 
 //   print array of chromosomes in ci list (or empty list if null)
 // modified is latest update (unix) time of all relevant tables 
 {
-struct json_object *g = jsonAddGenomes(json_object_new_object(), db);
+struct json_object *g = json_object_new_object();
+addGenomeUrl(g, "url_self", genome, chrom);
+addGenomeUrl(g, "url_genome_list", NULL, NULL);
+if (genome && *genome)
+    {
+    addGenomeUrl(g, "url_genome_chroms", genome, NULL);
+    addTrackUrl(g, "url_track_list_genome", genome, NULL);
+    if (chrom && *chrom)
+	addGenomeUrl(g, "url_genome_one_chrom", genome, chrom);
+    }
+jsonAddGenomes(g, db);
 jsonAddHierarchy(g, db);
-if (slCount(db) == 1 && ci)
-    jsonAddChroms(g, db->name, ci);
-addGenomeUrl(g, "url_genomes", NULL, NULL);
+if (genome && *genome)
+    jsonAddChroms(g, genome, ci);
 okSendHeader(modified, GENOME_EXPIRES);
 printf(json_object_to_json_string(g));
 json_object_put(g);

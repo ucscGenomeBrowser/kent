@@ -11,7 +11,7 @@
 #include <json/json.h>                                                     
 #endif                                                                     
 
-static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.12 2009/02/26 21:48:39 mikep Exp $";
+static char const rcsid[] = "$Id: hgData_track.c,v 1.1.2.13 2009/02/27 11:29:15 mikep Exp $";
 
 // /tracks                                            [list of all tracks in all genomes]
 // /tracks/{genome}                                   [list of tracks for {genome}]
@@ -53,13 +53,13 @@ char url[1024];
 if (genome)
     {
     if (track)
-	safef(url, sizeof(url), PREFIX TRACKS_CMD "/%s/%s%s", track, genome, JSON_EXT);
+	safef(url, sizeof(url), PREFIX TRACKS_CMD "/%s/%s", genome, track);
     else
-	safef(url, sizeof(url), PREFIX TRACKS_CMD "/%s%s", genome, JSON_EXT);
+	safef(url, sizeof(url), PREFIX TRACKS_CMD "/%s", genome);
     }
   else
     {
-    safef(url, sizeof(url), PREFIX TRACKS_CMD "%s", JSON_EXT);
+    safef(url, sizeof(url), PREFIX TRACKS_CMD "%s", "");
     }
 json_object_object_add(o, url_name, json_object_new_string(url));
 return o;
@@ -207,7 +207,7 @@ for (t = tdb ; t ; t = t->next)
 freeHash(&hGrp);
 }
 
-void printTrackInfo(char *genome, struct trackDb *tdb, struct hTableInfo *hti, time_t modified)
+void printTrackInfo(char *genome, char *track, struct trackDb *tdb, struct hTableInfo *hti, time_t modified)
 // Print genome and track information for the genome 
 // If only one track is specified, print full details including html description page
 // 
@@ -219,25 +219,27 @@ struct json_object *trackGen  = json_object_new_object();
 struct json_object *trackArr  = json_object_new_array();
 struct json_object *groupGen  = json_object_new_object();
 struct json_object *group     = json_object_new_object();
+if (*track)
+    {
+    addTrackUrl(i, "url_self", genome, tdb->tableName);
+    addCountUrl(i, "url_count", tdb->tableName, genome, NULL, -1, -1);
+    addCountChromUrl(i, "url_count_chrom", tdb->tableName, genome, NULL);
+    addRangeUrls(i, tdb->tableName, genome, NULL, -1, -1);
+    }
+else
+    addTrackUrl(i, "url_self", genome, NULL);
+addTrackUrl(i, "url_track_list", genome, NULL);
+addGenomeUrl(i, "url_genome_list", NULL, NULL);
+addGenomeUrl(i, "url_genome_chroms", genome, NULL);
 // add a genome object under the main 'tracks' and 'genome' objects
 // add tracks and groups under their genome object
-addTrackUrl(i, "url_self", genome, NULL);
-addTrackUrl(i, "url_tracks", NULL, NULL);
-addGenomeUrl(i, "url_genomes", NULL, NULL);
-addGenomeUrl(i, "url_genome", genome, NULL);
 json_object_object_add(i, "tracks", trackGen);
 json_object_object_add(i, "groups", groupGen);
 json_object_object_add(trackGen, genome, trackArr);
 json_object_object_add(groupGen, genome, group);
 // add tracks to the track array
-if (tdb && slCount(tdb)==1)
-    {
-    addCountUrl(i, "url_count", tdb->tableName, genome, NULL, -1, -1);
-    addRangeUrl(i, "url_range", tdb->tableName, genome, NULL, -1, -1);
-    addCountChromUrl(i, "url_count_chrom", tdb->tableName, genome, NULL);
-    addRangeChromUrl(i, "url_range_chrom", tdb->tableName, genome, NULL);
+if (*track)
     jsonAddOneTrackFull(trackArr, tdb, hti, genome);
-    }
 else
     jsonAddTracks(trackArr, tdb, genome);
 jsonAddGroups(group, tdb);
