@@ -5,7 +5,7 @@
 #include "bedGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgData.c,v 1.1.2.16 2009/02/26 20:10:00 mikep Exp $";
+static char const rcsid[] = "$Id: hgData.c,v 1.1.2.17 2009/02/27 11:30:39 mikep Exp $";
 
 void doGet()
 {
@@ -20,12 +20,12 @@ struct bed *b = NULL;
 //verboseSetLevel(2);
 char *reqEtag = getenv("ETag");
 time_t reqModified = strToTime(getenv("Modified"), "%a, %d %b %Y %H:%M:%S GMT");// Thu, 08 Jan 2009 17:45:18 GMT
-char *cmd = cgiOptionalString(CMD_ARG);
-char *format = cgiOptionalString(FORMAT_ARG);
-char *genome = cgiOptionalString(GENOME_ARG);
-char *track = cgiOptionalString(TRACK_ARG);
+char *cmd = cgiUsualString(CMD_ARG, "");
+char *format = cgiUsualString(FORMAT_ARG, "");
+char *genome = cgiUsualString(GENOME_ARG, "");
+char *track = cgiUsualString(TRACK_ARG, "");
 //char *term = cgiOptionalString(TERM_ARG);
-char *chrom = cgiOptionalString(CHROM_ARG);
+char *chrom = cgiUsualString(CHROM_ARG, "");
 int start = cgiOptionalInt(START_ARG, 0);
 int end = cgiOptionalInt(END_ARG, 0);
 char rootName[HDB_MAX_TABLE_STRING];
@@ -36,7 +36,7 @@ time_t modified = 0;
 AllocVar(thisTime);
 AllocVar(latestTime);
 // list information about all active genome databases
-if (!cmd && !genome && !track)
+if (!*cmd)
     {
     // get modified time from CVS $Date field in file where code resides
     printUsage(reqEtag, reqModified);
@@ -45,7 +45,7 @@ else if (sameOk(GENOMES_CMD, cmd))
     {
     // check for changes in dbDb, genomeClade, clade
     modified = hGetLatestUpdateTimeDbClade();
-    if (genome)
+    if (*genome)
 	{
 	if (!hDbIsActive(genome))
 	    ERR_GENOME_NOT_FOUND(genome);
@@ -54,11 +54,11 @@ else if (sameOk(GENOMES_CMD, cmd))
     // send 304 not modified if all looks OK
     if (!notModifiedResponse(reqEtag, reqModified, modified))
 	{
-	if (genome)
+	if (*genome)
 	    {
 	    if (!(dbs = hGetIndexedDbClade(genome)))
 		ERR_GENOME_NOT_FOUND(genome);
-	    if (chrom)
+	    if (*chrom)
 		{
 		if (!(ci = hGetChromInfo(genome, chrom)))
 		    ERR_CHROM_NOT_FOUND(genome, chrom);
@@ -74,18 +74,18 @@ else if (sameOk(GENOMES_CMD, cmd))
 		ERR_NO_GENOMES_FOUND;
 	// TEST FOR number of chroms 
 	// if (hChromCount(genome) < MAX_CHROM_COUNT || cgiBoolean(ALLCHROMS_ARG)
-	printGenomes(dbs, ci, modified);
+	printGenomes(genome, chrom, dbs, ci, modified);
 	}
     }
 else if (sameOk(TRACKS_CMD, cmd))
     {
-    if (genome)
+    if (*genome)
 	{
 	if (!hDbIsActive(genome))
 	    ERR_GENOME_NOT_FOUND(genome);
 	// modified date is greatest of all trackDb dates or genome.chromInfo 
 	modified = max(trackDbLatestUpdateTime(genome), hGetLatestUpdateTimeChromInfo(genome));
-	if (track)
+	if (*track)
 	    {
 	    struct sqlConnection *conn = hAllocConn(genome);
 	    if (!conn)
@@ -96,7 +96,7 @@ else if (sameOk(TRACKS_CMD, cmd))
 	    }
 	if (!notModifiedResponse(reqEtag, reqModified, modified))
 	    {
-	    if (track)
+	    if (*track)
 		{
 		hParseTableName(genome, tdb->tableName, rootName, parsedChrom);
 		if (!(hti = hFindTableInfo(genome, chrom, rootName)))
@@ -107,7 +107,7 @@ else if (sameOk(TRACKS_CMD, cmd))
 		if ( !(tdb = hTrackDb(genome, NULL)) )
 		    ERR_TRACK_INFO_NOT_FOUND("<any>", genome);
 		}
-	    printTrackInfo(genome, tdb, hti, modified);
+	    printTrackInfo(genome, track, tdb, hti, modified);
 	    }
 	}
     else
@@ -123,13 +123,17 @@ else if (sameOk(META_SEARCH_CMD, cmd))
     }
 else if (sameOk(COUNT_CMD, cmd) || sameOk(RANGE_CMD, cmd))
     {
-    if (!genome)
+    if (!*genome)
 	ERR_NO_GENOME;
     if (!hDbIsActive(genome))
 	ERR_GENOME_NOT_FOUND(genome);
+    if (*format && 
+	  (differentString(format, ANNOJ_FLAT_FMT) && 
+	   differentString(format, ANNOJ_NESTED_FMT)))
+	ERR_BAD_FORMAT(format);
     // check all trackDbs and genome.chromInfo for changes
     modified = max(trackDbLatestUpdateTime(genome), hGetLatestUpdateTimeChromInfo(genome));
-    if (!track)
+    if (!*track)
 	ERR_NO_TRACK;
     if (!(tdb = hTrackDbForTrack(genome, track)))
 	ERR_TRACK_NOT_FOUND(track, genome);
@@ -138,7 +142,7 @@ else if (sameOk(COUNT_CMD, cmd) || sameOk(RANGE_CMD, cmd))
     if (!notModifiedResponse(reqEtag, reqModified, modified))
 	{
 	hParseTableName(genome, tdb->tableName, rootName, parsedChrom);
-	if (!chrom)
+	if (!*chrom)
 	    ERR_NO_CHROM;
 	if (!(ci = hGetChromInfo(genome, chrom)))
 	    ERR_CHROM_NOT_FOUND(genome, chrom);
