@@ -225,8 +225,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-filterPvalQval on
-settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView Peaks:pValueFilter=0.0,qValueFilter=0.0 Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 
     track wgEncodeBroadChipSeqPeaksGm12878Ctcf
     release alpha
@@ -2723,8 +2722,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense rRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
-filterPvalQval on
-settingsByView Peaks:useScore=0 Signal:viewLimits=0:0.02,viewLimitsMax=0:40,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 SignalBO:viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:112,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+settingsByView Peaks:pValueFilter=0.0,qValueFilter=0.0,useScore=0 Signal:viewLimits=0:0.02,viewLimitsMax=0:29.05,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 SignalBO:viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:4163,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 useScore 0
 priority 0
 type bed 3
@@ -2737,7 +2735,6 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, Duke DNase-Seq Peaks (in GM12878 cells)
     subGroups view=Peaks EXP=DNase cellType=GM12878
     type narrowPeak
-    useScore 0
     dateSubmitted 2009-02-25
     dateUnrestricted 2009-11-25
     dataVersion ENCODE Feb 2009 Freeze
@@ -2827,7 +2824,6 @@ wgEncode 1
     #dateSubmitted 2008-11-04
     #dateUnrestricted 2009-08-04
     #dataVersion ENCODE Nov 2008 Freeze
-    useScore 0
     cell GM12878
 
     track wgEncodeUncFAIREseqSignalGm12878
@@ -2917,7 +2913,6 @@ wgEncode 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in GM12878 cells)
     subGroups view=Peaks EXP=IP-CTCF cellType=GM12878
     type narrowPeak
-    useScore 0
     dateSubmitted 2009-02-24
     dateUnrestricted 2009-11-24
     dataVersion ENCODE Feb 2009 Freeze
@@ -4129,9 +4124,8 @@ sortOrder cellType=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Hotspots=hide Peaks=hide RawSignal=hide
 noInherit on
-filterPvalQval on
 controlledVocabulary encode/cv.ra cellType=cell
-settingsByView RawSignal:viewLimits=1:10,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView Peaks:pValueFilter=0.0,qValueFilter=0.0 Hotspots:pValueFilter=0.0,qValueFilter=0.0 RawSignal:viewLimits=1:10,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3 +
 wgEncode 1
@@ -5488,8 +5482,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
-filterPvalQval on
-settingsByView Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,viewLimitsMax=0:14648,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+settingsByView Peaks:qValueFilter=0.0 Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,viewLimitsMax=0:14648,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 wgEncode 1
 
@@ -6843,8 +6836,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Peaks=hide RawSignal=dense
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
-filterPvalQval on
-settingsByView Peaks:minScore=0 RawSignal:viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView Peaks:pValueFilter=0.0,qValueFilter=0.0,minScore=0 RawSignal:viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3
 nextItemButton on
@@ -7986,7 +7978,7 @@ dragAndDrop subTracks
 visibilityViewDefaults Peaks=dense
 controlledVocabulary encode/cv.ra cellType=cell
 noInherit on
-filterPvalQval on
+settingsByView Peaks:pValueFilter=0.0,qValueFilter=0.0
 priority 0
 itemRgb on
 type bed 12
