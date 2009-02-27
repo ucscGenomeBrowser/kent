@@ -44,7 +44,7 @@
 #include "encode.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1555 2009/02/24 20:52:52 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1556 2009/02/27 18:47:52 hiram Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -2169,6 +2169,14 @@ else if (sameWord(scientificName, "Ciona intestinalis"))
     if (stringIn("chr0", chrName))
 	{
 	char *fixupName = replaceChars(chrName, "chr0", "chr"); 
+	name = fixupName;
+	}
+    }
+else if (sameWord(scientificName, "Saccharomyces cerevisiae"))
+    {
+    if (stringIn("2micron", chrName))
+	{
+	char *fixupName = replaceChars(chrName, "2micron", "2-micron"); 
 	name = fixupName;
 	}
     }
