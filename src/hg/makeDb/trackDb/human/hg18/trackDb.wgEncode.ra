@@ -3703,7 +3703,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562CytosolLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longPolyA K562 cytosol  PlusRaw
+    shortLabel longPolyA K562 cytosol PlusRaw
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (longPolyA in K562 cell cytosol using )
     subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 64144.00
@@ -3723,7 +3723,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalK562CytosolLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longPolyA K562 cytosol  MinusRaw
+    shortLabel longPolyA K562 cytosol MinusRaw
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (longPolyA in K562 cell cytosol using )
     subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 65162.00
@@ -3743,7 +3743,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562NucleusLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longPolyA K562 nucleus  PlusRaw
+    shortLabel longPolyA K562 nucleus PlusRaw
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (longPolyA in K562 cell nucleus using )
     subGroups view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 65282.00
@@ -3763,7 +3763,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalK562NucleusLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longPolyA K562 nucleus  MinusRaw
+    shortLabel longPolyA K562 nucleus MinusRaw
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (longPolyA in K562 cell nucleus using )
     subGroups view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 49208.00
@@ -3987,7 +3987,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562ChromatinTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 chromatin  PlusRaw
+    shortLabel total K562 chromatin PlusRaw
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell chromatin using )
     subGroups view=PlusRawSignal cellType=K562 localization=chromatin rnaExtract=total
     type wig 1.00 1042.00
@@ -4007,7 +4007,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalK562ChromatinTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 chromatin  MinusRaw
+    shortLabel total K562 chromatin MinusRaw
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell chromatin using )
     subGroups view=MinusRawSignal cellType=K562 localization=chromatin rnaExtract=total
     type wig 1.00 752.00
@@ -4027,7 +4027,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562PolysomeLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longPolyA K562 polysome  PlusRaw
+    shortLabel longPolyA K562 polysome PlusRaw
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (longPolyA in K562 cell polysome using )
     subGroups view=PlusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
     type wig 1.00 1588.00
@@ -4047,7 +4047,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalK562PolysomeLongpolya
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel longPolyA K562 polysome  MinusRaw
+    shortLabel longPolyA K562 polysome MinusRaw
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (longPolyA in K562 cell polysome using )
     subGroups view=MinusRawSignal cellType=K562 localization=polysome rnaExtract=longPolyA
     type wig 1.00 954.00
@@ -4067,7 +4067,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 nucleoplasm  PlusRaw
+    shortLabel total K562 nucleoplasm PlusRaw
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell nucleoplasm using )
     subGroups view=PlusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
     type wig 1.00 698.00
@@ -4087,7 +4087,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 nucleoplasm  MinusRaw
+    shortLabel total K562 nucleoplasm MinusRaw
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell nucleoplasm using )
     subGroups view=MinusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
     type wig 1.00 397.00
@@ -4107,7 +4107,7 @@ wgEncode 1
     track wgEncodeRikenCagePlusRawSignalK562NucleolusTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 nucleolus  PlusRaw
+    shortLabel total K562 nucleolus PlusRaw
     longLabel ENCODE RIKEN CAGE Plus Raw Signal (total in K562 cell nucleolus using )
     subGroups view=PlusRawSignal cellType=K562 localization=nucleolus rnaExtract=total
     type wig 1.00 1389.00
@@ -4127,7 +4127,7 @@ wgEncode 1
     track wgEncodeRikenCageMinusRawSignalK562NucleolusTotal
     release alpha
     subTrack wgEncodeRikenCage
-    shortLabel total K562 nucleolus  MinusRaw
+    shortLabel total K562 nucleolus MinusRaw
     longLabel ENCODE RIKEN CAGE Minus Raw Signal (total in K562 cell nucleolus using )
     subGroups view=MinusRawSignal cellType=K562 localization=nucleolus rnaExtract=total
     type wig 1.00 778.00
@@ -4179,14 +4179,14 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        16
-        noInherit       on
-        configurable    on
-        spanList        first
-        windowingFunction maximum
-        maxHeightPixels 100:50:16
-        viewLimits      1:150
-    cell            HepG2
+    priority 16
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction maximum
+    maxHeightPixels 100:50:16
+    viewLimits 1:150
+    cell HepG2
 
     track wgEncodeUwDnaseSeqHotspotsRep2Hepg2
     release alpha
@@ -4198,9 +4198,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        13
-        noInherit       on
-        configurable    on
+    priority 13
+    noInherit on
+    configurable on
     cell HepG2
 
     track wgEncodeUwDnaseSeqRawSignalRep2Gm06990
@@ -4213,13 +4213,13 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        16
-        noInherit       on
-        configurable    on
-        spanList        first
-        windowingFunction maximum
-        maxHeightPixels 100:50:16
-        viewLimits      1:150
+    priority 16
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction maximum
+    maxHeightPixels 100:50:16
+    viewLimits 1:150
     cell GM06990
 
     track wgEncodeUwDnaseSeqHotspotsRep2Gm06990
@@ -4232,9 +4232,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        13
-        noInherit       on
-        configurable    on
+    priority 13
+    noInherit on
+    configurable on
     cell GM06990
 
     track wgEncodeUwDnaseSeqRawSignalRep1K562
@@ -4247,13 +4247,13 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        16
-        noInherit       on
-        configurable    on
-        spanList        first
-        windowingFunction maximum
-        maxHeightPixels 100:50:16
-        viewLimits      1:150
+    priority 16
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction maximum
+    maxHeightPixels 100:50:16
+    viewLimits 1:150
     cell K562
 
     track wgEncodeUwDnaseSeqRawSignalRep2K562
@@ -4266,13 +4266,13 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        16
-        noInherit       on
-        configurable    on
-        spanList        first
-        windowingFunction maximum
-        maxHeightPixels 100:50:16
-        viewLimits      1:150
+    priority 16
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction maximum
+    maxHeightPixels 100:50:16
+    viewLimits 1:150
     cell K562
 
     track wgEncodeUwDnaseSeqPeaksK562
@@ -4285,9 +4285,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        14
-        noInherit       on
-        configurable    on
+    priority 14
+    noInherit on
+    configurable on
     cell K562
 
     track wgEncodeUwDnaseSeqHotspotsRep1K562
@@ -4300,9 +4300,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        13
-        noInherit       on
-        configurable    on
+    priority 13
+    noInherit on
+    configurable on
     cell K562
 
     track wgEncodeUwDnaseSeqHotspotsRep2K562
@@ -4315,9 +4315,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        13
-        noInherit       on
-        configurable    on
+    priority 13
+    noInherit on
+    configurable on
     cell K562
 
     track wgEncodeUwDnaseSeqRawSignalRep1Sknshra
@@ -4330,13 +4330,13 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        16
-        noInherit       on
-        configurable    on
-        spanList        first
-        windowingFunction maximum
-        maxHeightPixels 100:50:16
-        viewLimits      1:150
+    priority 16
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction maximum
+    maxHeightPixels 100:50:16
+    viewLimits 1:150
     cell SK-N-SH(+RA)
 
     track wgEncodeUwDnaseSeqPeaksSknshra
@@ -4349,9 +4349,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        14
-        noInherit       on
-        configurable    on
+    priority 14
+    noInherit on
+    configurable on
     cell SK-N-SH(+RA)
 
     track wgEncodeUwDnaseSeqHotspotsRep1Sknshra
@@ -4364,9 +4364,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        13
-        noInherit       on
-        configurable    on
+    priority 13
+    noInherit on
+    configurable on
     cell SK-N-SH(+RA)
 
     track wgEncodeUwDnaseSeqRawSignalRep1Hepg2
@@ -4379,13 +4379,13 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        16
-        noInherit       on
-        configurable    on
-        spanList        first
-        windowingFunction maximum
-        maxHeightPixels 100:50:16
-        viewLimits      1:150
+    priority 16
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction maximum
+    maxHeightPixels 100:50:16
+    viewLimits 1:150
     cell HepG2
 
     track wgEncodeUwDnaseSeqPeaksHepg2
@@ -4398,9 +4398,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        14
-        noInherit       on
-        configurable    on
+    priority 14
+    noInherit on
+    configurable on
     cell HepG2
 
     track wgEncodeUwDnaseSeqHotspotsRep1Hepg2
@@ -4413,9 +4413,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        13
-        noInherit       on
-        configurable    on
+    priority 13
+    noInherit on
+    configurable on
     cell HepG2
 
     track wgEncodeUwDnaseSeqRawSignalRep1Th1
@@ -4428,13 +4428,13 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        16
-        noInherit       on
-        configurable    on
-        spanList        first
-        windowingFunction maximum
-        maxHeightPixels 100:50:16
-        viewLimits      1:150
+    priority 16
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction maximum
+    maxHeightPixels 100:50:16
+    viewLimits 1:150
     cell Th1
 
     track wgEncodeUwDnaseSeqPeaksTh1
@@ -4447,9 +4447,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        14
-        noInherit       on
-        configurable    on
+    priority 14
+    noInherit on
+    configurable on
     cell Th1
 
     track wgEncodeUwDnaseSeqHotspotsRep1Th1
@@ -4462,9 +4462,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        13
-        noInherit       on
-        configurable    on
+    priority 13
+    noInherit on
+    configurable on
     cell Th1
 
     track wgEncodeUwDnaseSeqRawSignalRep1Helas3
@@ -4477,13 +4477,13 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        16
-        noInherit       on
-        configurable    on
-        spanList        first
-        windowingFunction maximum
-        maxHeightPixels 100:50:16
-        viewLimits      1:150
+    priority 16
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction maximum
+    maxHeightPixels 100:50:16
+    viewLimits 1:150
     cell HeLa-S3
 
     track wgEncodeUwDnaseSeqPeaksHelas3
@@ -4496,9 +4496,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        14
-        noInherit       on
-        configurable    on
+    priority 14
+    noInherit on
+    configurable on
     cell HeLa-S3
 
     track wgEncodeUwDnaseSeqHotspotsRep1Helas3
@@ -4511,9 +4511,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        13
-        noInherit       on
-        configurable    on
+    priority 13
+    noInherit on
+    configurable on
     cell HeLa-S3
 
     track wgEncodeUwDnaseSeqRawSignalRep1Gm06990
@@ -4526,13 +4526,13 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        16
-        noInherit       on
-        configurable    on
-        spanList        first
-        windowingFunction maximum
-        maxHeightPixels 100:50:16
-        viewLimits      1:150
+    priority 16
+    noInherit on
+    configurable on
+    spanList first
+    windowingFunction maximum
+    maxHeightPixels 100:50:16
+    viewLimits 1:150
     cell GM06990
 
     track wgEncodeUwDnaseSeqPeaksGm06990
@@ -4545,9 +4545,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        14
-        noInherit       on
-        configurable    on
+    priority 14
+    noInherit on
+    configurable on
     cell GM06990
 
     track wgEncodeUwDnaseSeqHotspotsRep1Gm06990
@@ -4560,9 +4560,9 @@ scoreMin 500
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-12-09
     dateUnrestricted 2009-09-09
-        priority        13
-        noInherit       on
-        configurable    on
+    priority 13
+    noInherit on
+    configurable on
     cell GM06990
 
 
@@ -5283,7 +5283,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipRawSignalK562ChromatinTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel total K562 chromatin  Raw
+    shortLabel total K562 chromatin Raw
     longLabel ENCODE (total in K562 cell chromatin using )
     subGroups view=RawSignal cellType=K562 localization=chromatin rnaExtract=total
     type wig -61688.00 55955.00
@@ -5337,7 +5337,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipRawSignalK562NucleolusTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel total K562 nucleolus  Raw
+    shortLabel total K562 nucleolus Raw
     longLabel ENCODE (total in K562 cell nucleolus using )
     subGroups view=RawSignal cellType=K562 localization=nucleolus rnaExtract=total
     type wig -63262.00 58632.00
@@ -5357,7 +5357,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipRawSignalK562NucleolusTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel total K562 nucleolus  Raw
+    shortLabel total K562 nucleolus Raw
     longLabel ENCODE (total in K562 cell nucleolus using )
     subGroups view=RawSignal cellType=K562 localization=nucleolus rnaExtract=total
     type wig -63262.00 58632.00
@@ -5394,7 +5394,7 @@ wgEncode 1
     track wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal
     release alpha
     subTrack wgEncodeAffyRnaChip
-    shortLabel total K562 nucleoplasm  Raw
+    shortLabel total K562 nucleoplasm Raw
     longLabel ENCODE (total in K562 cell nucleoplasm using )
     subGroups view=RawSignal cellType=K562 localization=nucleoplasm rnaExtract=total
     type wig -52041.00 55384.00
@@ -5647,7 +5647,7 @@ wgEncode 1
     shortLabel GM128 Pol2 Raw1
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 1 (Pol2 in GM12878 cells)
     subGroups view=zRAW factor=Pol2 cellType=GM12878
-    type wig  1.00 2874.00
+    type wig 1.00 2874.00
     dataVersion ENCODE Nov 2008 Freeze
     dateSubmitted 2008-11-26
     dateUnrestricted 2009-08-26
@@ -5896,7 +5896,7 @@ wgEncode 1
     shortLabel HEK293 Pol2 Raw2
     longLabel ENCODE TFBS, Yale/UCD/Harv. ChIP-seq Raw Signal Rep 2 (Pol2 in HEK293 cells)
     subGroups view=zRAW factor=Pol2 cellType=HEK293b
-    type wig  1.00 1345.00
+    type wig 1.00 1345.00
     dataVersion ENCODE Feb 2009 Freeze
     dateSubmitted 2009-01-14
     dateUnrestricted 2009-10-14
@@ -7940,7 +7940,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSignalGm12878NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA GM12878 nucleus  PlusRaw
+    shortLabel longPolyA GM12878 nucleus PlusRaw
     longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in GM12878 cell nucleus using )
     subGroups view=PlusRawSignal cellType=GM12878 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 4978.00
@@ -7961,7 +7961,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSignalGm12878NucleusLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA GM12878 nucleus  MinusRaw
+    shortLabel longPolyA GM12878 nucleus MinusRaw
     longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in GM12878 cell nucleus using )
     subGroups view=MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=longPolyA
     type wig 1.00 9289.00
@@ -8001,7 +8001,7 @@ wgEncode 1
     track wgEncodeGisPetPlusRawSignalGm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA GM12878 cytosol  PlusRaw
+    shortLabel longPolyA GM12878 cytosol PlusRaw
     longLabel ENCODE GIS PET Raw Signal (plus strand) (longPolyA in GM12878 cell cytosol using )
     subGroups view=PlusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 7729.00
@@ -8022,7 +8022,7 @@ wgEncode 1
     track wgEncodeGisPetMinusRawSignalGm12878CytosolLongpolya
     release alpha
     subTrack wgEncodeGisPet
-    shortLabel longPolyA GM12878 cytosol  MinusRaw
+    shortLabel longPolyA GM12878 cytosol MinusRaw
     longLabel ENCODE GIS PET Raw Signal (minus strand) (longPolyA in GM12878 cell cytosol using )
     subGroups view=MinusRawSignal cellType=GM12878 localization=cytosol rnaExtract=longPolyA
     type wig 1.00 8516.00
@@ -8209,682 +8209,682 @@ type bed 9 +
     cell HepG2
     priority 6
 
-track		wgEncodeCshlRnaSeq
-compositeTrack	on
-shortLabel	Cshl RnaSeq
-longLabel	ENCODE Cshl Gingeras RnaSeq
-group		expression
-subGroup1       view Views Transfrags=Transfrags
-subGroup2       cellType Cell_Line GM12878=GM12878 K562=K562 prostate=prostate
-subGroup3       localization Localization cell=cell cytosol=cytosol nucleus=nucleus polysome=polysome
-subGroup4       rnaExtract RnaExtract short=short
-dimensions	dimensionX=cellType	dimensionY=localization	dimensionZ=rnaExtract
-sortOrder	cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary	encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
-dragAndDrop	subTracks
-visibilityViewDefaults	 Transfrags=hide
-priority	0
-type		bed 3
-wgEncode	1
+track wgEncodeCshlRnaSeq
+compositeTrack on
+shortLabel Cshl RnaSeq
+longLabel ENCODE Cshl Gingeras RnaSeq
+group expression
+subGroup1 view Views Transfrags=Transfrags
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=prostate
+subGroup3 localization Localization cell=cell cytosol=cytosol nucleus=nucleus polysome=polysome
+subGroup4 rnaExtract RnaExtract short=short
+dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
+sortOrder cellType=+ localization=+ rnaExtract=+ view=+
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
+dragAndDrop subTracks
+visibilityViewDefaults Transfrags=hide
+priority 0
+type bed 3
+wgEncode 1
 
-	track		wgEncodeCshlRnaSeqTransfragsProstateCellShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short prostate cell
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in prostate cell cell using )
-	subGroups	view=Transfrags cellType=prostate localization=cell rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:7:45
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cell
-	cell		prostate
+    track wgEncodeCshlRnaSeqTransfragsProstateCellShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short prostate cell
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in prostate cell cell using )
+    subGroups view=Transfrags cellType=prostate localization=cell rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:7:45
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cell
+    cell prostate
 
-	track		wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
-	subGroups	view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:13:14
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:13:14
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
-	subGroups	view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:13:14
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:13:14
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
-	subGroups	view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:13:14
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:13:14
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
-	subGroups	view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:13:14
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:13:14
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
-	subGroups	view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:13:14
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:13:14
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
-	subGroups	view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:13:14
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:13:14
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
-	subGroups	view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:13:14
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:13:14
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
-	subGroups	view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:13:14
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:13:14
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
-	subGroups	view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:13:14
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
+    subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:13:14
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
-	subGroups	view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:45:29
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:45:29
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
-	subGroups	view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:45:29
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:45:29
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
-	subGroups	view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:45:29
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:45:29
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
-	subGroups	view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:45:29
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:45:29
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
-	subGroups	view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:45:29
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:45:29
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
-	subGroups	view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:45:29
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:45:29
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
-	subGroups	view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:45:29
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:45:29
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
-	subGroups	view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:45:29
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:45:29
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
-	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:7:2
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:7:2
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
-	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:7:2
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:7:2
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
-	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:7:2
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:7:2
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
-	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:7:2
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:7:2
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
-	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:7:2
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:7:2
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
-	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:7:2
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:7:2
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
-	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:7:2
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:7:2
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
-	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:7:2
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:7:2
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
-	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:7:2
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:7:2
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
-	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:7:2
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:7:2
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
-	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:7:2
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:7:2
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
-	subGroups	view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 15:7:2
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
+    subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 15:7:2
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
-	subGroups	view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 16:27:44
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 16:27:44
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
-	subGroups	view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 16:27:44
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 16:27:44
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
-	subGroups	view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 16:27:44
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 16:27:44
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
-	subGroups	view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 16:27:44
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 16:27:44
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
-	subGroups	view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 16:27:44
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 16:27:44
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
-	subGroups	view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 16:27:44
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 16:27:44
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
-	subGroups	view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 16:27:44
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 16:27:44
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
-	subGroups	view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 16:27:44
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 16:27:44
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 nucleus
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
-	subGroups	view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 16:27:44
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	nucleus
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 nucleus
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
+    subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 16:27:44
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization nucleus
+    cell GM12878
 
-	track		wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 polysome
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell polysome using )
-	subGroups	view=Transfrags cellType=K562 localization=polysome rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 18:4:26
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	polysome
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 polysome
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell polysome using )
+    subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 18:4:26
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization polysome
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 polysome
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell polysome using )
-	subGroups	view=Transfrags cellType=K562 localization=polysome rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 18:4:26
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	polysome
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 polysome
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell polysome using )
+    subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 18:4:26
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization polysome
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short K562 polysome
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in K562 cell polysome using )
-	subGroups	view=Transfrags cellType=K562 localization=polysome rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 18:4:26
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	polysome
-	cell		K562
+    track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short K562 polysome
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell polysome using )
+    subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 18:4:26
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization polysome
+    cell K562
 
-	track		wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
-	subTrack	wgEncodeCshlRnaSeq
-	shortLabel	short GM12878 cytosol
-	longLabel	ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
-	subGroups	view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
-	type		broadPeak
-	dateSubmitted	2008-12-18 18:14:52
-	dateReleased	2009-09-18
-	priority	1
-	noInherit	on
-	configurable	on
-	rnaExtract	short
-	localization	cytosol
-	cell		GM12878
+    track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
+    subTrack wgEncodeCshlRnaSeq
+    shortLabel short GM12878 cytosol
+    longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
+    subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
+    type broadPeak
+    dateSubmitted 2008-12-18 18:14:52
+    dateReleased 2009-09-18
+    priority 1
+    noInherit on
+    configurable on
+    rnaExtract short
+    localization cytosol
+    cell GM12878
 
 track wgEncodeHudsonalphaMethylSeq
 compositeTrack on
 shortLabel HudsonAlpha Methyl-seq
 longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
-subGroup1	view Views Regions=Regions
-subGroup2	cellType Cell_Line HCT-116=HCT-116 H9ES=H9ES H9ES-AFP+=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-CM=H9ES-CM H9ES-EBD=H9ES-EBD BG02ES=BG02ES BG02ES-EBD=BG02ES-EBD HFL11W=HFL11W HFL24W=HFL24W HAL=HAL
+subGroup1 view Views Regions=Regions
+subGroup2 cellType Cell_Line HCT-116=HCT-116 H9ES=H9ES H9ES-AFP+=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-CM=H9ES-CM H9ES-EBD=H9ES-EBD BG02ES=BG02ES BG02ES-EBD=BG02ES-EBD HFL11W=HFL11W HFL24W=HFL24W HAL=HAL
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 dragAndDrop subTracks
 visibilityViewDefaults Regions=dense
 controlledVocabulary encode/cv.ra cellType=cell
-priority	0
+priority 0
 type bed 9
 nextItemButton on
 itemRgb on
@@ -9135,24 +9135,24 @@ wgEncode 1
     color 0,100,0
     cell HAL
 
-track		wgEncodeCaltechRnaSeq
-compositeTrack	on
-shortLabel	Caltech RnaSeq
-longLabel	ENCODE Caltech Wold RnaSeq
-group		expression
-subGroup1	view Views Alignments=Alignments RawSignal=RawSignal PairedAligns=PairedAligns Splices=Splices
-subGroup2	cellType Cell_Line K562=K562 GM12878=GM12878
-subGroup3	localization Localization cell=cell
-subGroup4	rnaExtract RnaExtract longPolyA=longPolyA
-subGroup5	mapAlgorithm MapAlgorithm blat34=blat34 bow098=bow098 NA=NA erng3b=erng3b bowblt1=bowblt1
-dimensions	dimensionX=cellType	dimensionY=mapAlgorithm
-sortOrder	cellType=+ localization=+ rnaExtract=+ mapAlgorithm=+ view=+
-controlledVocabulary	encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract mapAlgorithm=mapAlgorithm
-dragAndDrop	subTracks
-visibilityViewDefaults	 Alignments=hide RawSignal=hide PairedAligns=hide Splices=hide
-priority	0
-type		bed 3
-wgEncode	1
+track wgEncodeCaltechRnaSeq
+compositeTrack on
+shortLabel Caltech RnaSeq
+longLabel ENCODE Caltech Wold RnaSeq
+group expression
+subGroup1 view Views Alignments=Alignments RawSignal=RawSignal PairedAligns=PairedAligns Splices=Splices
+subGroup2 cellType Cell_Line K562=K562 GM12878=GM12878
+subGroup3 localization Localization cell=cell
+subGroup4 rnaExtract RnaExtract longPolyA=longPolyA
+subGroup5 mapAlgorithm MapAlgorithm blat34=blat34 bow098=bow098 NA=NA erng3b=erng3b bowblt1=bowblt1
+dimensions dimensionX=cellType dimensionY=mapAlgorithm
+sortOrder cellType=+ localization=+ rnaExtract=+ mapAlgorithm=+ view=+
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract mapAlgorithm=mapAlgorithm
+dragAndDrop subTracks
+visibilityViewDefaults Alignments=hide RawSignal=hide PairedAligns=hide Splices=hide
+priority 0
+type bed 3
+wgEncode 1
 
     track wgEncodeCaltechRnaSeqAlignmentsRep1Gm12878CellLongpolyaBow098
     release alpha
