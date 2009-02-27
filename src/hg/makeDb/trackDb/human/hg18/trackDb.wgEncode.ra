@@ -226,7 +226,7 @@ type bed 3
 wgEncode 1
 noInherit on
 filterPvalQval on
-settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,viewLimitsMax=1:21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 
     track wgEncodeBroadChipSeqPeaksGm12878Ctcf
     release alpha
@@ -2724,7 +2724,7 @@ visibilityViewDefaults Peaks=hide Signal=dense rRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell EXP=antibody
 noInherit on
 filterPvalQval on
-settingsByView Peaks:configurable=on,useScore=0 Signal:configurable=on,viewLimits=0:0.02,viewLimitsMax=0:40,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 SignalBO:configurable=on,viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 rRAW:configurable=ff,defaultViewLimits=0:1,viewLimits=0:112,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+settingsByView Peaks:useScore=0 Signal:viewLimits=0:0.02,viewLimitsMax=0:40,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 SignalBO:viewLimits=0.5:2,viewLimitsMax=0:8719,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 rRAW:defaultViewLimits=0:1,viewLimits=0:112,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 useScore 0
 priority 0
 type bed 3
@@ -3316,7 +3316,7 @@ dragAndDrop subTracks
 visibilityViewDefaults SI=dense EB=dense
 controlledVocabulary encode/cv.ra cellType=cell promoter=promoter
 noInherit on
-settingsByView SI:configurable=on,scoreFilterByRange=on EB:configurable=on,scoreFilterByRange=on
+settingsByView SI:scoreFilterByRange=on EB:scoreFilterByRange=on
 dataVersion ENCODE Nov 2008 Freeze
 priority 0
 type bed 3
@@ -3392,7 +3392,7 @@ dragAndDrop subTracks
 visibilityViewDefaults PlusClusters=dense MinusClusters=dense PlusRawSignal=hide MinusRawSignal=hide Alignments=hide
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on
-settingsByView Alignments:configurable=on PlusClusters:configurable=on MinusClusters:configurable=on PlusRawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean MinusRawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3
 wgEncode 1
@@ -3610,7 +3610,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 16
     noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -3627,7 +3626,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 17
     noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -3644,7 +3642,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 16
     noInherit on
-    configurable on
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -3661,7 +3658,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 17
     noInherit on
-    configurable on
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -3678,7 +3674,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 20
     noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cytosol
     cell K562
@@ -3695,7 +3690,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 20
     noInherit on
-    configurable on
     rnaExtract longPolyA
     localization nucleus
     cell K562
@@ -3712,7 +3706,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 18
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -3732,7 +3725,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 19
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -3752,7 +3744,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 18
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -3772,7 +3763,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 19
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -3792,7 +3782,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 26
     noInherit on
-    configurable on
     rnaExtract longPolyA
     localization polysome
     cell K562
@@ -3809,7 +3798,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 27
     noInherit on
-    configurable on
     rnaExtract longPolyA
     localization polysome
     cell K562
@@ -3826,7 +3814,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 26
     noInherit on
-    configurable on
     rnaExtract total
     localization nucleolus
     cell K562
@@ -3843,7 +3830,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 27
     noInherit on
-    configurable on
     rnaExtract total
     localization nucleolus
     cell K562
@@ -3860,7 +3846,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 26
     noInherit on
-    configurable on
     rnaExtract total
     localization nucleoplasm
     cell K562
@@ -3877,7 +3862,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 27
     noInherit on
-    configurable on
     rnaExtract total
     localization nucleoplasm
     cell K562
@@ -3894,7 +3878,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 26
     noInherit on
-    configurable on
     rnaExtract total
     localization chromatin
     cell K562
@@ -3911,7 +3894,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 27
     noInherit on
-    configurable on
     rnaExtract total
     localization chromatin
     cell K562
@@ -3928,7 +3910,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 30
     noInherit on
-    configurable on
     rnaExtract longPolyA
     localization polysome
     cell K562
@@ -3945,7 +3926,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 30
     noInherit on
-    configurable on
     rnaExtract total
     localization nucleolus
     cell K562
@@ -3962,7 +3942,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 30
     noInherit on
-    configurable on
     rnaExtract total
     localization nucleoplasm
     cell K562
@@ -3979,7 +3958,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 30
     noInherit on
-    configurable on
     rnaExtract total
     localization chromatin
     cell K562
@@ -3996,7 +3974,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 28
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -4016,7 +3993,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 29
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -4036,7 +4012,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 28
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -4056,7 +4031,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 29
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -4076,7 +4050,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 28
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -4096,7 +4069,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 29
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -4116,7 +4088,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 28
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -4136,7 +4107,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 29
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -4161,7 +4131,7 @@ visibilityViewDefaults Hotspots=hide Peaks=hide RawSignal=hide
 noInherit on
 filterPvalQval on
 controlledVocabulary encode/cv.ra cellType=cell
-settingsByView Hotspots:configurable=on Peaks:configurable=on RawSignal:configurable=on,viewLimits=1:10,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView RawSignal:viewLimits=1:10,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3 +
 wgEncode 1
@@ -4181,7 +4151,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 16
     noInherit on
-    configurable on
     spanList first
     windowingFunction maximum
     maxHeightPixels 100:50:16
@@ -4200,7 +4169,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 13
     noInherit on
-    configurable on
     cell HepG2
 
     track wgEncodeUwDnaseSeqRawSignalRep2Gm06990
@@ -4215,7 +4183,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 16
     noInherit on
-    configurable on
     spanList first
     windowingFunction maximum
     maxHeightPixels 100:50:16
@@ -4234,7 +4201,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 13
     noInherit on
-    configurable on
     cell GM06990
 
     track wgEncodeUwDnaseSeqRawSignalRep1K562
@@ -4249,7 +4215,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 16
     noInherit on
-    configurable on
     spanList first
     windowingFunction maximum
     maxHeightPixels 100:50:16
@@ -4268,7 +4233,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 16
     noInherit on
-    configurable on
     spanList first
     windowingFunction maximum
     maxHeightPixels 100:50:16
@@ -4287,7 +4251,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 14
     noInherit on
-    configurable on
     cell K562
 
     track wgEncodeUwDnaseSeqHotspotsRep1K562
@@ -4302,7 +4265,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 13
     noInherit on
-    configurable on
     cell K562
 
     track wgEncodeUwDnaseSeqHotspotsRep2K562
@@ -4317,7 +4279,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 13
     noInherit on
-    configurable on
     cell K562
 
     track wgEncodeUwDnaseSeqRawSignalRep1Sknshra
@@ -4332,7 +4293,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 16
     noInherit on
-    configurable on
     spanList first
     windowingFunction maximum
     maxHeightPixels 100:50:16
@@ -4351,7 +4311,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 14
     noInherit on
-    configurable on
     cell SK-N-SH(+RA)
 
     track wgEncodeUwDnaseSeqHotspotsRep1Sknshra
@@ -4366,7 +4325,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 13
     noInherit on
-    configurable on
     cell SK-N-SH(+RA)
 
     track wgEncodeUwDnaseSeqRawSignalRep1Hepg2
@@ -4381,7 +4339,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 16
     noInherit on
-    configurable on
     spanList first
     windowingFunction maximum
     maxHeightPixels 100:50:16
@@ -4400,7 +4357,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 14
     noInherit on
-    configurable on
     cell HepG2
 
     track wgEncodeUwDnaseSeqHotspotsRep1Hepg2
@@ -4415,7 +4371,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 13
     noInherit on
-    configurable on
     cell HepG2
 
     track wgEncodeUwDnaseSeqRawSignalRep1Th1
@@ -4430,7 +4385,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 16
     noInherit on
-    configurable on
     spanList first
     windowingFunction maximum
     maxHeightPixels 100:50:16
@@ -4449,7 +4403,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 14
     noInherit on
-    configurable on
     cell Th1
 
     track wgEncodeUwDnaseSeqHotspotsRep1Th1
@@ -4464,7 +4417,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 13
     noInherit on
-    configurable on
     cell Th1
 
     track wgEncodeUwDnaseSeqRawSignalRep1Helas3
@@ -4479,7 +4431,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 16
     noInherit on
-    configurable on
     spanList first
     windowingFunction maximum
     maxHeightPixels 100:50:16
@@ -4498,7 +4449,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 14
     noInherit on
-    configurable on
     cell HeLa-S3
 
     track wgEncodeUwDnaseSeqHotspotsRep1Helas3
@@ -4513,7 +4463,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 13
     noInherit on
-    configurable on
     cell HeLa-S3
 
     track wgEncodeUwDnaseSeqRawSignalRep1Gm06990
@@ -4528,7 +4477,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 16
     noInherit on
-    configurable on
     spanList first
     windowingFunction maximum
     maxHeightPixels 100:50:16
@@ -4547,7 +4495,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 14
     noInherit on
-    configurable on
     cell GM06990
 
     track wgEncodeUwDnaseSeqHotspotsRep1Gm06990
@@ -4562,7 +4509,6 @@ scoreMin 500
     dateUnrestricted 2009-09-09
     priority 13
     noInherit on
-    configurable on
     cell GM06990
 
 
@@ -4583,7 +4529,7 @@ controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExt
 dragAndDrop subTracks
 visibilityViewDefaults Transfrags=hide FilteredTransfrags=hide RawSignal=hide FilteredRawSignal=dense
 noInherit on
-settingsByView Transfrags:configurable=on FilteredTransfrags:configurable=on RawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean FilteredRawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView RawSignal:maxHeightPixels=100:16:16,windowingFunction=mean FilteredRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3
 wgEncode 1
@@ -5238,7 +5184,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 45
     noInherit on
-    configurable on
     rnaExtract total
     localization chromatin
     cell K562
@@ -5255,7 +5200,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 46
     noInherit on
-    configurable on
     rnaExtract total
     localization chromatin
     cell K562
@@ -5272,7 +5216,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 47
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5292,7 +5235,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 48
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5312,7 +5254,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 45
     noInherit on
-    configurable on
     rnaExtract total
     localization nucleolus
     cell K562
@@ -5329,7 +5270,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 45
     noInherit on
-    configurable on
     rnaExtract total
     localization nucleolus
     cell K562
@@ -5346,7 +5286,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 48
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5366,7 +5305,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 48
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5386,7 +5324,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 45
     noInherit on
-    configurable on
     rnaExtract total
     localization nucleoplasm
     cell K562
@@ -5403,7 +5340,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 48
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -5429,7 +5365,6 @@ controlledVocabulary encode/cv.ra cellType=cell ripAntibody=ripAntibody ripTgtPr
 dragAndDrop subTracks
 visibilityViewDefaults RbpAssocRna=dense
 noInherit on
-settingsByView RbpAssocRna:configurable=on
 priority 0
 type bed 3
 wgEncode 1
@@ -5554,7 +5489,7 @@ visibilityViewDefaults Peaks=hide Signal=dense zRAW=hide
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
 filterPvalQval on
-settingsByView Peaks:configurable=on Signal:configurable=on,viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:configurable=off,viewLimits=0:15,viewLimitsMax=0:14648,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
+settingsByView Signal:viewLimits=0:78,viewLimitsMax=0:20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,viewLimitsMax=0:14648,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
 dataVersion ENCODE Nov 2008 and Feb 2008 Freezes
 wgEncode 1
 
@@ -6909,7 +6844,7 @@ visibilityViewDefaults Peaks=hide RawSignal=dense
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 noInherit on
 filterPvalQval on
-settingsByView Peaks:configurable=on,minScore=0 RawSignal:configurable=off,viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
+settingsByView Peaks:minScore=0 RawSignal:viewLimits=1:137,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3
 nextItemButton on
@@ -7677,7 +7612,7 @@ controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExt
 dragAndDrop subTracks
 visibilityViewDefaults Alignments=hide Tags=hide
 noInherit on
-settingsByView Tags:configurable=on PlusRawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean MinusRawSignal:configurable=on,maxHeightPixels=100:16:16,windowingFunction=mean Alignments:configurable=on
+settingsByView PlusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean MinusRawSignal:maxHeightPixels=100:16:16,windowingFunction=mean
 priority 0
 type bed 3
 wgEncode 1
@@ -7932,7 +7867,6 @@ wgEncode 1
     accession SAT2G_version_2.0
     priority 20
     noInherit on
-    configurable on
     rnaExtract longPolyA
     localization nucleus
     cell GM12878
@@ -7950,7 +7884,6 @@ wgEncode 1
     accession SAT2G_version_2.0
     priority 18
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -7971,7 +7904,6 @@ wgEncode 1
     accession SAT2G_version_2.0
     priority 19
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -7993,7 +7925,6 @@ wgEncode 1
     accession SAT2G_version_2.0
     priority 20
     noInherit on
-    configurable on
     rnaExtract longPolyA
     localization cytosol
     cell GM12878
@@ -8011,7 +7942,6 @@ wgEncode 1
     accession SAT2G_version_2.0
     priority 18
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -8032,7 +7962,6 @@ wgEncode 1
     accession SAT2G_version_2.0
     priority 19
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -8058,7 +7987,6 @@ visibilityViewDefaults Peaks=dense
 controlledVocabulary encode/cv.ra cellType=cell
 noInherit on
 filterPvalQval on
-settingsByView Peaks:configurable=off
 priority 0
 itemRgb on
 type bed 12
@@ -8237,7 +8165,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cell
     cell prostate
@@ -8252,7 +8179,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell K562
@@ -8267,7 +8193,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell K562
@@ -8282,7 +8207,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell K562
@@ -8297,7 +8221,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell K562
@@ -8312,7 +8235,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell K562
@@ -8327,7 +8249,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell K562
@@ -8342,7 +8263,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell K562
@@ -8357,7 +8277,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell K562
@@ -8372,7 +8291,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell K562
@@ -8387,7 +8305,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell GM12878
@@ -8402,7 +8319,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell GM12878
@@ -8417,7 +8333,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell GM12878
@@ -8432,7 +8347,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell GM12878
@@ -8447,7 +8361,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell GM12878
@@ -8462,7 +8375,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell GM12878
@@ -8477,7 +8389,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell GM12878
@@ -8492,7 +8403,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell GM12878
@@ -8507,7 +8417,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell K562
@@ -8522,7 +8431,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell K562
@@ -8537,7 +8445,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell K562
@@ -8552,7 +8459,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell K562
@@ -8567,7 +8473,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell K562
@@ -8582,7 +8487,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell K562
@@ -8597,7 +8501,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell K562
@@ -8612,7 +8515,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell K562
@@ -8627,7 +8529,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell K562
@@ -8642,7 +8543,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell K562
@@ -8657,7 +8557,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell K562
@@ -8672,7 +8571,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell K562
@@ -8687,7 +8585,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell GM12878
@@ -8702,7 +8599,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell GM12878
@@ -8717,7 +8613,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell GM12878
@@ -8732,7 +8627,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell GM12878
@@ -8747,7 +8641,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell GM12878
@@ -8762,7 +8655,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell GM12878
@@ -8777,7 +8669,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell GM12878
@@ -8792,7 +8683,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell GM12878
@@ -8807,7 +8697,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization nucleus
     cell GM12878
@@ -8822,7 +8711,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization polysome
     cell K562
@@ -8837,7 +8725,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization polysome
     cell K562
@@ -8852,7 +8739,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization polysome
     cell K562
@@ -8867,7 +8753,6 @@ wgEncode 1
     dateReleased 2009-09-18
     priority 1
     noInherit on
-    configurable on
     rnaExtract short
     localization cytosol
     cell GM12878
@@ -8901,7 +8786,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     color 127,0,0
     cell HCT-116
@@ -8917,7 +8801,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     color 127,0,0
     cell HCT-116
@@ -8933,7 +8816,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     cell H9ES
 
@@ -8948,7 +8830,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     cell H9ES-E
 
@@ -8963,7 +8844,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     cell H9ES-AFP+
 
@@ -8979,7 +8859,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
     itemRgb on
-    configurable on
     cell H9ES-AFP-
 
     track wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafp
@@ -8993,7 +8872,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     cell H9ES-AFP-
 
@@ -9008,7 +8886,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     cell H9ES-EB
 
@@ -9023,7 +8900,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     cell H9ES-CM
 
@@ -9038,7 +8914,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     cell H9ES-EBD
 
@@ -9053,7 +8928,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     cell BG02ES
 
@@ -9068,7 +8942,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     cell BG02ES-EBD
 
@@ -9083,7 +8956,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     cell BG02ES-EBD
 
@@ -9098,7 +8970,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     color 0,100,0
     cell HFL11W
@@ -9114,7 +8985,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     color 0,100,0
     cell HFL24W
@@ -9130,7 +9000,6 @@ wgEncode 1
     dateUnrestricted 2009-11-10
     dataVersion ENCODE Feb 2009 Freeze
     noInherit on
-    configurable on
     itemRgb on
     color 0,100,0
     cell HAL
@@ -9166,7 +9035,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 4
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm bow098
     localization cell
@@ -9184,7 +9052,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 4
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm bow098
     localization cell
@@ -9202,7 +9069,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 4
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm bow098
     localization cell
@@ -9220,7 +9086,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 4
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm bow098
     localization cell
@@ -9238,7 +9103,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 3
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm bow098
     localization cell
@@ -9256,7 +9120,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 3
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm bow098
     localization cell
@@ -9274,7 +9137,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 3
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm bow098
     localization cell
@@ -9292,7 +9154,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 3
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm bow098
     localization cell
@@ -9310,7 +9171,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 2
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -9331,7 +9191,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 2
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -9352,7 +9211,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 2
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -9373,7 +9231,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 2
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -9394,7 +9251,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 5
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm bowblt1
     localization cell
@@ -9412,7 +9268,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 5
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm bowblt1
     localization cell
@@ -9430,7 +9285,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 3
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm bowblt1
     localization cell
@@ -9448,7 +9302,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 3
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm blat34
     localization cell
@@ -9466,7 +9319,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 3
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm bowblt1
     localization cell
@@ -9484,7 +9336,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 3
     noInherit on
-    configurable on
     rnaExtract longPolyA
     mapAlgorithm blat34
     localization cell
@@ -9502,7 +9353,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 2
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -9523,7 +9373,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 2
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -9544,7 +9393,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 2
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -9565,7 +9413,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 2
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -9586,7 +9433,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 2
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
@@ -9607,7 +9453,6 @@ wgEncode 1
     dataVersion ENCODE Feb 2009 Freeze
     priority 2
     noInherit on
-    configurable on
     spanList first
     windowingFunction mean
     maxHeightPixels 100:16:16
