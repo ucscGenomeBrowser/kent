@@ -231,7 +231,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksGm12878Ctcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 CTCF Pk
+    shortLabel GM128 CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in GM12878 cells)
     subGroups view=Peaks factor=CTCF cellType=GM12878
     type broadPeak
@@ -244,7 +244,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalGm12878Ctcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 CTCF Sig
+    shortLabel GM128 CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in GM12878 cells)
     subGroups view=Signal factor=CTCF cellType=GM12878
     type wig 0.00 14530.00
@@ -258,7 +258,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878Ctcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 CTCF Raw 1
+    shortLabel GM128 CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in GM12878 cells)
     subGroups view=zRAW factor=CTCF cellType=GM12878
     type wig 1.00 10017.00
@@ -272,7 +272,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878Ctcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 CTCF Raw 2
+    shortLabel GM128 CTCF 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in GM12878 cells)
     subGroups view=zRAW factor=CTCF cellType=GM12878
     type wig 1.00 6886.00
@@ -286,7 +286,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me1 Pk
+    shortLabel GM128 H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in GM12878 cells)
     subGroups view=Peaks factor=H3K04me1 cellType=GM12878
     type broadPeak
@@ -299,7 +299,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalGm12878H3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me1 Sig
+    shortLabel GM128 H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in GM12878 cells)
     subGroups view=Signal factor=H3K04me1 cellType=GM12878
     type wig 0.00 9323.50
@@ -313,7 +313,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me1 Raw 1
+    shortLabel GM128 H3K4me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in GM12878 cells)
     subGroups view=zRAW factor=H3K04me1 cellType=GM12878
     type wig 1.00 5673.00
@@ -327,7 +327,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me1 Raw 2
+    shortLabel GM128 H3K4me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in GM12878 cells)
     subGroups view=zRAW factor=H3K04me1 cellType=GM12878
     type wig 1.00 5022.00
@@ -341,7 +341,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me2 Pk
+    shortLabel GM128 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in GM12878 cells)
     subGroups view=Peaks factor=H3K04me2 cellType=GM12878
     type broadPeak
@@ -354,7 +354,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalGm12878H3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me2 Sig
+    shortLabel GM128 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in GM12878 cells)
     subGroups view=Signal factor=H3K04me2 cellType=GM12878
     type wig 0.00 15071.00
@@ -368,7 +368,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me2 Raw 1
+    shortLabel GM128 H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in GM12878 cells)
     subGroups view=zRAW factor=H3K04me2 cellType=GM12878
     type wig 1.00 14054.00
@@ -382,7 +382,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me2 Raw 2
+    shortLabel GM128 H3K4me2 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in GM12878 cells)
     subGroups view=zRAW factor=H3K04me2 cellType=GM12878
     type wig 1.00 2470.00
@@ -396,7 +396,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksGm12878H3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me3 Pk
+    shortLabel GM128 H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in GM12878 cells)
     subGroups view=Peaks factor=H3K04me3 cellType=GM12878
     type broadPeak
@@ -409,7 +409,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalGm12878H3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me3 Sig
+    shortLabel GM128 H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in GM12878 cells)
     subGroups view=Signal factor=H3K04me3 cellType=GM12878
     type wig 0.00 100593.50
@@ -423,7 +423,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me3 Raw 1
+    shortLabel GM128 H3K4me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K04me3 cellType=GM12878
     type wig 1.00 65341.00
@@ -437,7 +437,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K4me3 Raw 2
+    shortLabel GM128 H3K4me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K04me3 cellType=GM12878
     type wig 1.00 4691.00
@@ -451,7 +451,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksGm12878H3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K9ac Pk
+    shortLabel GM128 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in GM12878 cells)
     subGroups view=Peaks factor=H3K09ac cellType=GM12878
     type broadPeak
@@ -464,7 +464,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalGm12878H3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K9ac Sig
+    shortLabel GM128 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in GM12878 cells)
     subGroups view=Signal factor=H3K09ac cellType=GM12878
     type wig 0.00 8338.25
@@ -478,7 +478,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K9ac Raw 1
+    shortLabel GM128 H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in GM12878 cells)
     subGroups view=zRAW factor=H3K09ac cellType=GM12878
     type wig 1.00 5305.00
@@ -492,7 +492,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K9ac Raw 2
+    shortLabel GM128 H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in GM12878 cells)
     subGroups view=zRAW factor=H3K09ac cellType=GM12878
     type wig 1.00 4291.00
@@ -506,7 +506,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksGm12878H4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H4K20me1 Pk
+    shortLabel GM128 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in GM12878 cells)
     subGroups view=Peaks factor=H4K20me1 cellType=GM12878
     type broadPeak
@@ -519,7 +519,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalGm12878H4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H4K20me1 Sig
+    shortLabel GM128 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in GM12878 cells)
     subGroups view=Signal factor=H4K20me1 cellType=GM12878
     type wig 0.00 10750.00
@@ -533,7 +533,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H4K20me1 Raw 1
+    shortLabel GM128 H4K20me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in GM12878 cells)
     subGroups view=zRAW factor=H4K20me1 cellType=GM12878
     type wig 1.00 6918.00
@@ -547,7 +547,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H4K20me1 Raw 2
+    shortLabel GM128 H4K20me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in GM12878 cells)
     subGroups view=zRAW factor=H4K20me1 cellType=GM12878
     type wig 1.00 5568.00
@@ -561,7 +561,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksGm12878H3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27ac Pk
+    shortLabel GM128 H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in GM12878 cells)
     subGroups view=Peaks factor=H3K27ac cellType=GM12878
     type broadPeak
@@ -574,7 +574,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalGm12878H3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27ac Sig
+    shortLabel GM128 H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in GM12878 cells)
     subGroups view=Signal factor=H3K27ac cellType=GM12878
     type wig 0.00 473622.75
@@ -588,7 +588,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27ac Raw 1
+    shortLabel GM128 H3K27ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in GM12878 cells)
     subGroups view=zRAW factor=H3K27ac cellType=GM12878
     type wig 1.00 65477.00
@@ -602,7 +602,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27ac Raw 2
+    shortLabel GM128 H3K27ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in GM12878 cells)
     subGroups view=zRAW factor=H3K27ac cellType=GM12878
     type wig 1.00 3640.00
@@ -616,7 +616,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksGm12878H3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27me3 Pk
+    shortLabel GM128 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in GM12878 cells)
     subGroups view=Peaks factor=H3K27me3 cellType=GM12878
     type broadPeak
@@ -629,7 +629,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalGm12878H3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27me3 Sig
+    shortLabel GM128 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in GM12878 cells)
     subGroups view=Signal factor=H3K27me3 cellType=GM12878
     type wig 0.00 60338.25
@@ -643,7 +643,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27me3 Raw 1
+    shortLabel GM128 H3K27me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K27me3 cellType=GM12878
     type wig 1.00 65374.00
@@ -657,7 +657,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K27me3 Raw 2
+    shortLabel GM128 H3K27me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K27me3 cellType=GM12878
     type wig 1.00 4241.00
@@ -671,7 +671,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksGm12878H3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K36me3 Pk
+    shortLabel GM128 H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in GM12878 cells)
     subGroups view=Peaks factor=H3K36me3 cellType=GM12878
     type broadPeak
@@ -684,7 +684,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalGm12878H3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K36me3 Sig
+    shortLabel GM128 H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in GM12878 cells)
     subGroups view=Signal factor=H3K36me3 cellType=GM12878
     type wig 0.00 15797.75
@@ -698,7 +698,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K36me3 Raw 1
+    shortLabel GM128 H3K36me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K36me3 cellType=GM12878
     type wig 1.00 13112.00
@@ -712,7 +712,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 H3K36me3 Raw 2
+    shortLabel GM128 H3K36me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in GM12878 cells)
     subGroups view=zRAW factor=H3K36me3 cellType=GM12878
     type wig 1.00 5241.00
@@ -726,7 +726,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalGm12878Control
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 WCE Sig
+    shortLabel GM128 WCE
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (GM12878 WCE Control)
     subGroups view=Signal factor=zCTRL cellType=GM12878
     type wig 0.00 13725.50
@@ -740,7 +740,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1Gm12878Control
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 WCE Raw 1
+    shortLabel GM128 WCE 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (GM12878 WCE Control)
     subGroups view=zRAW factor=zCTRL cellType=GM12878
     type wig 1.00 8512.00
@@ -754,7 +754,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2Gm12878Control
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel GM128 WCE Raw 2
+    shortLabel GM128 WCE 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (GM12878 WCE Control)
     subGroups view=zRAW factor=zCTRL cellType=GM12878
     type wig 1.00 7182.00
@@ -768,7 +768,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksHuvecCtcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC CTCF Pk
+    shortLabel HUVEC CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in HUVEC cells)
     subGroups view=Peaks factor=CTCF cellType=HUVEC
     type broadPeak
@@ -781,7 +781,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalHuvecCtcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC CTCF Sig
+    shortLabel HUVEC CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in HUVEC cells)
     subGroups view=Signal factor=CTCF cellType=HUVEC
     type wig 0.00 7013.25
@@ -795,7 +795,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1HuvecCtcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC CTCF Raw 1
+    shortLabel HUVEC CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in HUVEC cells)
     subGroups view=zRAW factor=CTCF cellType=HUVEC
     type wig 1.00 6968.00
@@ -809,7 +809,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2HuvecCtcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC CTCF Raw 2
+    shortLabel HUVEC CTCF 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in HUVEC cells)
     subGroups view=zRAW factor=CTCF cellType=HUVEC
     type wig 1.00 3205.00
@@ -823,7 +823,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K4me1 Pk
+    shortLabel HUVEC H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in HUVEC cells)
     subGroups view=Peaks factor=H3K04me1 cellType=HUVEC
     type broadPeak
@@ -836,7 +836,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalHuvecH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K4me1 Sig
+    shortLabel HUVEC H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in HUVEC cells)
     subGroups view=Signal factor=H3K04me1 cellType=HUVEC
     type wig 0.00 5259.25
@@ -850,7 +850,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K4me1 Raw 1
+    shortLabel HUVEC H3K4me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me1 cellType=HUVEC
     type wig 1.00 5158.00
@@ -864,7 +864,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K4me1 Raw 2
+    shortLabel HUVEC H3K4me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me1 cellType=HUVEC
     type wig 1.00 875.00
@@ -878,7 +878,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K4me2 Pk
+    shortLabel HUVEC H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in HUVEC cells)
     subGroups view=Peaks factor=H3K04me2 cellType=HUVEC
     type broadPeak
@@ -891,7 +891,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalHuvecH3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K4me2 Sig
+    shortLabel HUVEC H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in HUVEC cells)
     subGroups view=Signal factor=H3K04me2 cellType=HUVEC
     type wig 0.00 7088.00
@@ -905,7 +905,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K4me2 Raw 1
+    shortLabel HUVEC H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me2 cellType=HUVEC
     type wig 1.00 7163.00
@@ -919,7 +919,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K4me2 Raw 2
+    shortLabel HUVEC H3K4me2 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me2 cellType=HUVEC
     type wig 1.00 3502.00
@@ -933,7 +933,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksHuvecH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K4me3 Pk
+    shortLabel HUVEC H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in HUVEC cells)
     subGroups view=Peaks factor=H3K04me3 cellType=HUVEC
     type broadPeak
@@ -946,7 +946,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalHuvecH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K4me3 Sig
+    shortLabel HUVEC H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in HUVEC cells)
     subGroups view=Signal factor=H3K04me3 cellType=HUVEC
     type wig 0.00 9954.75
@@ -960,7 +960,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K4me3 Raw 1
+    shortLabel HUVEC H3K4me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me3 cellType=HUVEC
     type wig 1.00 9994.00
@@ -974,7 +974,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K4me3 Raw 2
+    shortLabel HUVEC H3K4me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in HUVEC cells)
     subGroups view=zRAW factor=H3K04me3 cellType=HUVEC
     type wig 1.00 5437.00
@@ -988,7 +988,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksHuvecH3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K9ac Pk
+    shortLabel HUVEC H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in HUVEC cells)
     subGroups view=Peaks factor=H3K09ac cellType=HUVEC
     type broadPeak
@@ -1001,7 +1001,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalHuvecH3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K9ac Sig
+    shortLabel HUVEC H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in HUVEC cells)
     subGroups view=Signal factor=H3K09ac cellType=HUVEC
     type wig 0.00 8831.00
@@ -1015,7 +1015,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K9ac Raw 1
+    shortLabel HUVEC H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in HUVEC cells)
     subGroups view=zRAW factor=H3K09ac cellType=HUVEC
     type wig 1.00 8827.00
@@ -1029,7 +1029,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K9ac Raw 2
+    shortLabel HUVEC H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in HUVEC cells)
     subGroups view=zRAW factor=H3K09ac cellType=HUVEC
     type wig 1.00 1340.00
@@ -1043,7 +1043,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksHuvecH3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K9me1 Pk
+    shortLabel HUVEC H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1 in HUVEC cells)
     subGroups view=Peaks factor=H3K09me1 cellType=HUVEC
     type broadPeak
@@ -1056,7 +1056,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalHuvecH3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K9me1 Sig
+    shortLabel HUVEC H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1 in HUVEC cells)
     subGroups view=Signal factor=H3K09me1 cellType=HUVEC
     type wig 0.00 6743.75
@@ -1070,7 +1070,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K9me1 Raw 1
+    shortLabel HUVEC H3K9me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9me1 in HUVEC cells)
     subGroups view=zRAW factor=H3K09me1 cellType=HUVEC
     type wig 1.00 5977.00
@@ -1084,7 +1084,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K9me1 Raw 2
+    shortLabel HUVEC H3K9me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9me1 in HUVEC cells)
     subGroups view=zRAW factor=H3K09me1 cellType=HUVEC
     type wig 1.00 1956.00
@@ -1098,7 +1098,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksHuvecH3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K27ac Pk
+    shortLabel HUVEC H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in HUVEC cells)
     subGroups view=Peaks factor=H3K27ac cellType=HUVEC
     type broadPeak
@@ -1111,7 +1111,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalHuvecH3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K27ac Sig
+    shortLabel HUVEC H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in HUVEC cells)
     subGroups view=Signal factor=H3K27ac cellType=HUVEC
     type wig 0.00 4855.00
@@ -1125,7 +1125,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K27ac Raw 1
+    shortLabel HUVEC H3K27ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in HUVEC cells)
     subGroups view=zRAW factor=H3K27ac cellType=HUVEC
     type wig 1.00 3753.00
@@ -1139,7 +1139,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K27ac Raw 2
+    shortLabel HUVEC H3K27ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in HUVEC cells)
     subGroups view=zRAW factor=H3K27ac cellType=HUVEC
     type wig 1.00 4291.00
@@ -1153,7 +1153,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksHuvecH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K27me3 Pk
+    shortLabel HUVEC H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in HUVEC cells)
     subGroups view=Peaks factor=H3K27me3 cellType=HUVEC
     type broadPeak
@@ -1166,7 +1166,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalHuvecH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K27me3 Sig
+    shortLabel HUVEC H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in HUVEC cells)
     subGroups view=Signal factor=H3K27me3 cellType=HUVEC
     type wig 0.00 7453.25
@@ -1180,7 +1180,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K27me3 Raw 1
+    shortLabel HUVEC H3K27me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in HUVEC cells)
     subGroups view=zRAW factor=H3K27me3 cellType=HUVEC
     type wig 1.00 6723.00
@@ -1194,7 +1194,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K27me3 Raw 2
+    shortLabel HUVEC H3K27me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in HUVEC cells)
     subGroups view=zRAW factor=H3K27me3 cellType=HUVEC
     type wig 1.00 2059.00
@@ -1208,7 +1208,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksHuvecH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K36me3 Pk
+    shortLabel HUVEC H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in HUVEC cells)
     subGroups view=Peaks factor=H3K36me3 cellType=HUVEC
     type broadPeak
@@ -1221,7 +1221,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalHuvecH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K36me3 Sig
+    shortLabel HUVEC H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in HUVEC cells)
     subGroups view=Signal factor=H3K36me3 cellType=HUVEC
     type wig 0.00 7456.25
@@ -1235,7 +1235,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K36me3 Raw 1
+    shortLabel HUVEC H3K36me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in HUVEC cells)
     subGroups view=zRAW factor=H3K36me3 cellType=HUVEC
     type wig 1.00 7162.00
@@ -1249,7 +1249,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H3K36me3 Raw 2
+    shortLabel HUVEC H3K36me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in HUVEC cells)
     subGroups view=zRAW factor=H3K36me3 cellType=HUVEC
     type wig 1.00 6629.00
@@ -1263,7 +1263,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksHuvecH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H4K20me1 Pk
+    shortLabel HUVEC H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in HUVEC cells)
     subGroups view=Peaks factor=H4K20me1 cellType=HUVEC
     type broadPeak
@@ -1276,7 +1276,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalHuvecH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H4K20me1 Sig
+    shortLabel HUVEC H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in HUVEC cells)
     subGroups view=Signal factor=H4K20me1 cellType=HUVEC
     type wig 0.00 15868.50
@@ -1290,7 +1290,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1HuvecH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H4K20me1 Raw 1
+    shortLabel HUVEC H4K20me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in HUVEC cells)
     subGroups view=zRAW factor=H4K20me1 cellType=HUVEC
     type wig 1.00 15917.00
@@ -1304,7 +1304,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2HuvecH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC H4K20me1 Raw 2
+    shortLabel HUVEC H4K20me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in HUVEC cells)
     subGroups view=zRAW factor=H4K20me1 cellType=HUVEC
     type wig 1.00 2494.00
@@ -1318,7 +1318,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksHuvecPol2b
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC Pol2(b) Pk
+    shortLabel HUVEC Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in HUVEC cells)
     subGroups view=Peaks factor=Pol2b cellType=HUVEC
     type broadPeak
@@ -1331,7 +1331,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalHuvecPol2b
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC Pol2(b) Sig
+    shortLabel HUVEC Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in HUVEC cells)
     subGroups view=Signal factor=Pol2b cellType=HUVEC
     type wig 0.00 8889.75
@@ -1345,7 +1345,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1HuvecPol2b
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC Pol2(b) Raw 1
+    shortLabel HUVEC Pol2(b) 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in HUVEC cells)
     subGroups view=zRAW factor=Pol2b cellType=HUVEC
     type wig 1.00 6156.00
@@ -1359,7 +1359,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2HuvecPol2b
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC Pol2(b) Raw 2
+    shortLabel HUVEC Pol2(b) 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in HUVEC cells)
     subGroups view=zRAW factor=Pol2b cellType=HUVEC
     type wig 1.00 4077.00
@@ -1373,7 +1373,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalHuvecControl
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC control Sig
+    shortLabel HUVEC control
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (control in HUVEC cells)
     subGroups view=Signal factor=zCTRL cellType=HUVEC
     type wig 0.00 16710.75
@@ -1387,7 +1387,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1HuvecControl
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC control Raw 1
+    shortLabel HUVEC control 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (control in HUVEC cells)
     subGroups view=zRAW factor=zCTRL cellType=HUVEC
     type wig 1.00 17736.00
@@ -1401,7 +1401,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2HuvecControl
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel HUVEC control Raw 2
+    shortLabel HUVEC control 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (control in HUVEC cells)
     subGroups view=zRAW factor=zCTRL cellType=HUVEC
     type wig 1.00 2790.00
@@ -1415,7 +1415,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksK562Ctcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 CTCF Pk
+    shortLabel K562 CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in K562 cells)
     subGroups view=Peaks factor=CTCF cellType=K562
     type broadPeak
@@ -1428,7 +1428,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalK562Ctcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 CTCF Sig
+    shortLabel K562 CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in K562 cells)
     subGroups view=Signal factor=CTCF cellType=K562
     type wig 0.00 13401.75
@@ -1442,7 +1442,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1K562Ctcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 CTCF Raw 1
+    shortLabel K562 CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in K562 cells)
     subGroups view=zRAW factor=CTCF cellType=K562
     type wig 1.00 7149.00
@@ -1456,7 +1456,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2K562Ctcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 CTCF Raw 2
+    shortLabel K562 CTCF 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in K562 cells)
     subGroups view=zRAW factor=CTCF cellType=K562
     type wig 1.00 9663.00
@@ -1470,7 +1470,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksK562H3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K4me1 Pk
+    shortLabel K562 H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in K562 cells)
     subGroups view=Peaks factor=H3K04me1 cellType=K562
     type broadPeak
@@ -1483,7 +1483,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalK562H3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K4me1 Sig
+    shortLabel K562 H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in K562 cells)
     subGroups view=Signal factor=H3K04me1 cellType=K562
     type wig 0.00 8682.25
@@ -1497,7 +1497,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K4me1 Raw 1
+    shortLabel K562 H3K4me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in K562 cells)
     subGroups view=zRAW factor=H3K04me1 cellType=K562
     type wig 1.00 4238.00
@@ -1511,7 +1511,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K4me1 Raw 2
+    shortLabel K562 H3K4me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in K562 cells)
     subGroups view=zRAW factor=H3K04me1 cellType=K562
     type wig 1.00 5992.00
@@ -1525,7 +1525,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksK562H3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K4me2 Pk
+    shortLabel K562 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in K562 cells)
     subGroups view=Peaks factor=H3K04me2 cellType=K562
     type broadPeak
@@ -1538,7 +1538,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalK562H3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K4me2 Sig
+    shortLabel K562 H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in K562 cells)
     subGroups view=Signal factor=H3K04me2 cellType=K562
     type wig 0.00 5002.00
@@ -1552,7 +1552,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K4me2 Raw 1
+    shortLabel K562 H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in K562 cells)
     subGroups view=zRAW factor=H3K04me2 cellType=K562
     type wig 1.00 2072.00
@@ -1566,7 +1566,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K4me2 Raw 2
+    shortLabel K562 H3K4me2 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in K562 cells)
     subGroups view=zRAW factor=H3K04me2 cellType=K562
     type wig 1.00 4060.00
@@ -1580,7 +1580,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksK562H3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K4me3 Pk
+    shortLabel K562 H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in K562 cells)
     subGroups view=Peaks factor=H3K04me3 cellType=K562
     type broadPeak
@@ -1593,7 +1593,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalK562H3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K4me3 Sig
+    shortLabel K562 H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in K562 cells)
     subGroups view=Signal factor=H3K04me3 cellType=K562
     type wig 0.00 16145.25
@@ -1607,7 +1607,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K4me3 Raw 1
+    shortLabel K562 H3K4me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in K562 cells)
     subGroups view=zRAW factor=H3K04me3 cellType=K562
     type wig 1.00 11553.00
@@ -1621,7 +1621,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K4me3 Raw 2
+    shortLabel K562 H3K4me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in K562 cells)
     subGroups view=zRAW factor=H3K04me3 cellType=K562
     type wig 1.00 7133.00
@@ -1635,7 +1635,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksK562H3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K9ac Pk
+    shortLabel K562 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in K562 cells)
     subGroups view=Peaks factor=H3K09ac cellType=K562
     type broadPeak
@@ -1648,7 +1648,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalK562H3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K9ac Sig
+    shortLabel K562 H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in K562 cells)
     subGroups view=Signal factor=H3K09ac cellType=K562
     type wig 0.00 17517.00
@@ -1662,7 +1662,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K9ac Raw 1
+    shortLabel K562 H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in K562 cells)
     subGroups view=zRAW factor=H3K09ac cellType=K562
     type wig 1.00 9931.00
@@ -1676,7 +1676,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K9ac Raw 2
+    shortLabel K562 H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in K562 cells)
     subGroups view=zRAW factor=H3K09ac cellType=K562
     type wig 1.00 13285.00
@@ -1690,7 +1690,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksK562H3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K9me1 Pk
+    shortLabel K562 H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1 in K562 cells)
     subGroups view=Peaks factor=H3K09me1 cellType=K562
     type broadPeak
@@ -1703,7 +1703,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalK562H3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K9me1 Sig
+    shortLabel K562 H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1 in K562 cells)
     subGroups view=Signal factor=H3K09me1 cellType=K562
     type wig 0.00 27376.00
@@ -1717,7 +1717,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K9me1 Raw 1
+    shortLabel K562 H3K9me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9me1 in K562 cells)
     subGroups view=zRAW factor=H3K09me1 cellType=K562
     type wig 1.00 14561.00
@@ -1731,7 +1731,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K9me1 Raw 2
+    shortLabel K562 H3K9me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9me1 in K562 cells)
     subGroups view=zRAW factor=H3K09me1 cellType=K562
     type wig 1.00 16644.00
@@ -1745,7 +1745,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksK562H3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K27ac Pk
+    shortLabel K562 H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in K562 cells)
     subGroups view=Peaks factor=H3K27ac cellType=K562
     type broadPeak
@@ -1758,7 +1758,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalK562H3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K27ac Sig
+    shortLabel K562 H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in K562 cells)
     subGroups view=Signal factor=H3K27ac cellType=K562
     type wig 0.00 9215.25
@@ -1772,7 +1772,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K27ac Raw 1
+    shortLabel K562 H3K27ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in K562 cells)
     subGroups view=zRAW factor=H3K27ac cellType=K562
     type wig 1.00 6647.00
@@ -1786,7 +1786,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K27ac Raw 2
+    shortLabel K562 H3K27ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in K562 cells)
     subGroups view=zRAW factor=H3K27ac cellType=K562
     type wig 1.00 4622.00
@@ -1800,7 +1800,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksK562H3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K27me3 Pk
+    shortLabel K562 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in K562 cells)
     subGroups view=Peaks factor=H3K27me3 cellType=K562
     type broadPeak
@@ -1813,7 +1813,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalK562H3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K27me3 Sig
+    shortLabel K562 H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in K562 cells)
     subGroups view=Signal factor=H3K27me3 cellType=K562
     type wig 0.00 17135.00
@@ -1827,7 +1827,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K27me3 Raw 1
+    shortLabel K562 H3K27me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in K562 cells)
     subGroups view=zRAW factor=H3K27me3 cellType=K562
     type wig 1.00 13354.00
@@ -1841,7 +1841,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K27me3 Raw 2
+    shortLabel K562 H3K27me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in K562 cells)
     subGroups view=zRAW factor=H3K27me3 cellType=K562
     type wig 1.00 7235.00
@@ -1855,7 +1855,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksK562H3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K36me3 Pk
+    shortLabel K562 H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in K562 cells)
     subGroups view=Peaks factor=H3K36me3 cellType=K562
     type broadPeak
@@ -1868,7 +1868,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalK562H3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K36me3 Sig
+    shortLabel K562 H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in K562 cells)
     subGroups view=Signal factor=H3K36me3 cellType=K562
     type wig 0.00 10114.25
@@ -1882,7 +1882,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1K562H3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K36me3 Raw 1
+    shortLabel K562 H3K36me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in K562 cells)
     subGroups view=zRAW factor=H3K36me3 cellType=K562
     type wig 1.00 11433.00
@@ -1896,7 +1896,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2K562H3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H3K36me3 Raw 2
+    shortLabel K562 H3K36me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in K562 cells)
     subGroups view=zRAW factor=H3K36me3 cellType=K562
     type wig 1.00 7087.00
@@ -1910,7 +1910,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksK562H4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H4K20me1 Pk
+    shortLabel K562 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in K562 cells)
     subGroups view=Peaks factor=H4K20me1 cellType=K562
     type broadPeak
@@ -1923,7 +1923,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalK562H4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H4K20me1 Sig
+    shortLabel K562 H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in K562 cells)
     subGroups view=Signal factor=H4K20me1 cellType=K562
     type wig 0.00 16178.00
@@ -1937,7 +1937,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1K562H4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H4K20me1 Raw 1
+    shortLabel K562 H4K20me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in K562 cells)
     subGroups view=zRAW factor=H4K20me1 cellType=K562
     type wig 1.00 2268.00
@@ -1951,7 +1951,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2K562H4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 H4K20me1 Raw 2
+    shortLabel K562 H4K20me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in K562 cells)
     subGroups view=zRAW factor=H4K20me1 cellType=K562
     type wig 1.00 16566.00
@@ -1965,7 +1965,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksK562Pol2b
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 Pol2(b) Pk
+    shortLabel K562 Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in K562 cells)
     subGroups view=Peaks factor=Pol2b cellType=K562
     type broadPeak
@@ -1978,7 +1978,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalK562Pol2b
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 Pol2(b) Sig
+    shortLabel K562 Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in K562 cells)
     subGroups view=Signal factor=Pol2b cellType=K562
     type wig 0.00 17110.00
@@ -1992,7 +1992,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1K562Pol2b
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 Pol2(b) Raw 1
+    shortLabel K562 Pol2(b) 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in K562 cells)
     subGroups view=zRAW factor=Pol2b cellType=K562
     type wig 1.00 6599.00
@@ -2006,7 +2006,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2K562Pol2b
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 Pol2(b) Raw 2
+    shortLabel K562 Pol2(b) 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in K562 cells)
     subGroups view=zRAW factor=Pol2b cellType=K562
     type wig 1.00 13248.00
@@ -2020,7 +2020,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalK562Control
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 control Sig
+    shortLabel K562 control
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (control in K562 cells)
     subGroups view=Signal factor=zCTRL cellType=K562
     type wig 0.00 23372.25
@@ -2034,7 +2034,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1K562Control
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 control Raw 1
+    shortLabel K562 control 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (K562 WCE control)
     subGroups view=zRAW factor=zCTRL cellType=K562
     type wig 1.00 15525.00
@@ -2048,7 +2048,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2K562Control
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel K562 control Raw 2
+    shortLabel K562 control 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (K562 WCE control)
     subGroups view=zRAW factor=zCTRL cellType=K562
     type wig 1.00 10925.00
@@ -2062,7 +2062,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksNhekCtcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera CTCF Pk
+    shortLabel Kera CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF in Keratin cells)
     subGroups view=Peaks factor=CTCF cellType=Kera
     type broadPeak
@@ -2075,7 +2075,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalNhekCtcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera CTCF Sig
+    shortLabel Kera CTCF
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF in Keratin cells)
     subGroups view=Signal factor=CTCF cellType=Kera
     type wig 0.00 4674.50
@@ -2089,7 +2089,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1NhekCtcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera CTCF Raw 1
+    shortLabel Kera CTCF 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (CTCF in Keratin cells)
     subGroups view=zRAW factor=CTCF cellType=Kera
     type wig 1.00 4288.00
@@ -2103,7 +2103,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2NhekCtcf
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel CTCF Kera Raw 2
+    shortLabel CTCF Kera 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (CTCF in Keratin cells)
     subGroups view=zRAW factor=CTCF cellType=Kera
     type wig 1.00 1316.00
@@ -2117,7 +2117,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksNhekH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K4me1 Pk
+    shortLabel Kera H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1 in Keratin cells)
     subGroups view=Peaks factor=H3K04me1 cellType=Kera
     type broadPeak
@@ -2130,7 +2130,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalNhekH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K4me1 Sig
+    shortLabel Kera H3K4me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1 in Keratin cells)
     subGroups view=Signal factor=H3K04me1 cellType=Kera
     type wig 0.00 4240.50
@@ -2144,7 +2144,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K4me1 Raw 1
+    shortLabel Kera H3K4me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me1 in Keratin cells)
     subGroups view=zRAW factor=H3K04me1 cellType=Kera
     type wig 1.00 4868.00
@@ -2158,7 +2158,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K4me1 Raw 2
+    shortLabel Kera H3K4me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me1 in Keratin cells)
     subGroups view=zRAW factor=H3K04me1 cellType=Kera
     type wig 1.00 593.00
@@ -2172,7 +2172,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksNhekH3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K4me2 Pk
+    shortLabel Kera H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2 in Keratin cells)
     subGroups view=Peaks factor=H3K04me2 cellType=Kera
     type broadPeak
@@ -2185,7 +2185,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalNhekH3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K4me2 Sig
+    shortLabel Kera H3K4me2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2 in Keratin cells)
     subGroups view=Signal factor=H3K04me2 cellType=Kera
     type wig 0.00 3789.50
@@ -2199,7 +2199,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K4me2 Raw 1
+    shortLabel Kera H3K4me2 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me2 in Keratin cells)
     subGroups view=zRAW factor=H3K04me2 cellType=Kera
     type wig 1.00 3324.00
@@ -2213,7 +2213,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me2
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K4me2 Raw 2
+    shortLabel Kera H3K4me2 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me2 in Keratin cells)
     subGroups view=zRAW factor=H3K04me2 cellType=Kera
     type wig 1.00 2225.00
@@ -2227,7 +2227,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksNhekH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K4me3 Pk
+    shortLabel Kera H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3 in Keratin cells)
     subGroups view=Peaks factor=H3K04me3 cellType=Kera
     type broadPeak
@@ -2240,7 +2240,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalNhekH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K4me3 Sig
+    shortLabel Kera H3K4me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3 in Keratin cells)
     subGroups view=Signal factor=H3K04me3 cellType=Kera
     type wig 0.00 12229.50
@@ -2254,7 +2254,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K4me3 Raw 1
+    shortLabel Kera H3K4me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K4me3 in Keratin cells)
     subGroups view=zRAW factor=H3K04me3 cellType=Kera
     type wig 1.00 15514.00
@@ -2268,7 +2268,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K4me3 Raw 2
+    shortLabel Kera H3K4me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K4me3 in Keratin cells)
     subGroups view=zRAW factor=H3K04me3 cellType=Kera
     type wig 1.00 2050.00
@@ -2282,7 +2282,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksNhekH3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K9ac Pk
+    shortLabel Kera H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac in Keratin cells)
     subGroups view=Peaks factor=H3K09ac cellType=Kera
     type broadPeak
@@ -2295,7 +2295,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalNhekH3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K9ac Sig
+    shortLabel Kera H3K9ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac in Keratin cells)
     subGroups view=Signal factor=H3K09ac cellType=Kera
     type wig 0.00 3816.00
@@ -2309,7 +2309,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K9ac Raw 1
+    shortLabel Kera H3K9ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9ac in Keratin cells)
     subGroups view=zRAW factor=H3K09ac cellType=Kera
     type wig 1.00 3068.00
@@ -2323,7 +2323,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k9ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K9ac Raw 2
+    shortLabel Kera H3K9ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9ac in Keratin cells)
     subGroups view=zRAW factor=H3K09ac cellType=Kera
     type wig 1.00 1329.00
@@ -2337,7 +2337,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksNhekH3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K9me1 Pk
+    shortLabel Kera H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1 in Keratin cells)
     subGroups view=Peaks factor=H3K09me1 cellType=Kera
     type broadPeak
@@ -2350,7 +2350,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalNhekH3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K9me1 Sig
+    shortLabel Kera H3K9me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1 in Keratin cells)
     subGroups view=Signal factor=H3K09me1 cellType=Kera
     type wig 0.00 6121.25
@@ -2364,7 +2364,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K9me1 Raw 1
+    shortLabel Kera H3K9me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K9me1 in Keratin cells)
     subGroups view=zRAW factor=H3K09me1 cellType=Kera
     type wig 1.00 5283.00
@@ -2378,7 +2378,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k9me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K9me1 Raw 2
+    shortLabel Kera H3K9me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K9me1 in Keratin cells)
     subGroups view=zRAW factor=H3K09me1 cellType=Kera
     type wig 1.00 1890.00
@@ -2392,7 +2392,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksNhekH3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K27ac Pk
+    shortLabel Kera H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac in Keratin cells)
     subGroups view=Peaks factor=H3K27ac cellType=Kera
     type broadPeak
@@ -2405,7 +2405,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalNhekH3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K27ac Sig
+    shortLabel Kera H3K27ac
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac in Keratin cells)
     subGroups view=Signal factor=H3K27ac cellType=Kera
     type wig 0.00 45249.50
@@ -2419,7 +2419,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K27ac Raw 1
+    shortLabel Kera H3K27ac 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27ac in Keratin cells)
     subGroups view=zRAW factor=H3K27ac cellType=Kera
     type wig 1.00 57869.00
@@ -2433,7 +2433,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k27ac
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K27ac Raw 2
+    shortLabel Kera H3K27ac 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27ac in Keratin cells)
     subGroups view=zRAW factor=H3K27ac cellType=Kera
     type wig 1.00 2101.00
@@ -2447,7 +2447,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksNhekH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K27me3 Pk
+    shortLabel Kera H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3 in Keratin cells)
     subGroups view=Peaks factor=H3K27me3 cellType=Kera
     type broadPeak
@@ -2460,7 +2460,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalNhekH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K27me3 Sig
+    shortLabel Kera H3K27me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3 in Keratin cells)
     subGroups view=Signal factor=H3K27me3 cellType=Kera
     type wig 0.00 5062.25
@@ -2474,7 +2474,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K27me3 Raw 1
+    shortLabel Kera H3K27me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K27me3 in Keratin cells)
     subGroups view=zRAW factor=H3K27me3 cellType=Kera
     type wig 1.00 4744.00
@@ -2488,7 +2488,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k27me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K27me3 Raw 2
+    shortLabel Kera H3K27me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K27me3 in Keratin cells)
     subGroups view=zRAW factor=H3K27me3 cellType=Kera
     type wig 1.00 1257.00
@@ -2502,7 +2502,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksNhekH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K36me3 Pk
+    shortLabel Kera H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3 in Keratin cells)
     subGroups view=Peaks factor=H3K36me3 cellType=Kera
     type broadPeak
@@ -2515,7 +2515,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalNhekH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K36me3 Sig
+    shortLabel Kera H3K36me3
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3 in Keratin cells)
     subGroups view=Signal factor=H3K36me3 cellType=Kera
     type wig 0.00 4663.25
@@ -2529,7 +2529,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1NhekH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K36me3 Raw 1
+    shortLabel Kera H3K36me3 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H3K36me3 in Keratin cells)
     subGroups view=zRAW factor=H3K36me3 cellType=Kera
     type wig 1.00 4566.00
@@ -2543,7 +2543,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2NhekH3k36me3
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H3K36me3 Raw 2
+    shortLabel Kera H3K36me3 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H3K36me3 in Keratin cells)
     subGroups view=zRAW factor=H3K36me3 cellType=Kera
     type wig 1.00 711.00
@@ -2557,7 +2557,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksNhekH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H4K20me1 Pk
+    shortLabel Kera H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1 in Keratin cells)
     subGroups view=Peaks factor=H4K20me1 cellType=Kera
     type broadPeak
@@ -2570,7 +2570,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalNhekH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H4K20me1 Sig
+    shortLabel Kera H4K20me1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1 in Keratin cells)
     subGroups view=Signal factor=H4K20me1 cellType=Kera
     type wig 0.00 7443.75
@@ -2584,7 +2584,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1NhekH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H4K20me1 Raw 1
+    shortLabel Kera H4K20me1 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (H4K20me1 in Keratin cells)
     subGroups view=zRAW factor=H4K20me1 cellType=Kera
     type wig 1.00 7374.00
@@ -2598,7 +2598,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2NhekH4k20me1
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera H4K20me1 Raw 2
+    shortLabel Kera H4K20me1 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (H4K20me1 in Keratin cells)
     subGroups view=zRAW factor=H4K20me1 cellType=Kera
     type wig 1.00 3335.00
@@ -2612,7 +2612,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqPeaksNhekPol2b
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera Pol2(b) Pk
+    shortLabel Kera Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b) in Keratin cells)
     subGroups view=Peaks factor=Pol2b cellType=Kera
     type broadPeak
@@ -2625,7 +2625,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalNhekPol2b
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera Pol2(b) Sig
+    shortLabel Kera Pol2(b)
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b) in Keratin cells)
     subGroups view=Signal factor=Pol2b cellType=Kera
     type wig 0.00 5604.25
@@ -2639,7 +2639,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1NhekPol2b
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera Pol2(b) Raw 1
+    shortLabel Kera Pol2(b) 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (Pol2(b) in Keratin cells)
     subGroups view=zRAW factor=Pol2b cellType=Kera
     type wig 1.00 2360.00
@@ -2653,7 +2653,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2NhekPol2b
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera Pol2(b) Raw 2
+    shortLabel Kera Pol2(b) 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (Pol2(b) in Keratin cells)
     subGroups view=zRAW factor=Pol2b cellType=Kera
     type wig 1.00 1938.00
@@ -2667,7 +2667,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqSignalNhekControl
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera control Sig
+    shortLabel Kera control
     longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (control in Keratin cells)
     subGroups view=Signal factor=zCTRL cellType=Kera
     type wig 0.00 13497.25
@@ -2681,7 +2681,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep1NhekControl
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera control Raw 1
+    shortLabel Kera control 1
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 1 (control in Keratin cells)
     subGroups view=zRAW factor=zCTRL cellType=Kera
     type wig 1.00 12234.00
@@ -2695,7 +2695,7 @@ settingsByView Signal:viewLimits=1:20,viewLimitsMax=-1:473622.75,autoScale=off,m
     track wgEncodeBroadChipSeqRawSignalRep2NhekControl
     release alpha
     subTrack wgEncodeBroadChipSeq
-    shortLabel Kera control Raw 2
+    shortLabel Kera control 2
     longLabel ENCODE Histone Mods, Broad ChIP-seq Raw Signal Rep 2 (control in Keratin cells)
     subGroups view=zRAW factor=zCTRL cellType=Kera
     type wig 1.00 3360.00
@@ -8137,6 +8137,7 @@ type bed 9 +
     cell HepG2
     priority 6
 
+
 track wgEncodeCshlRnaSeq
 compositeTrack on
 shortLabel Cshl RnaSeq
@@ -8157,7 +8158,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsProstateCellShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short prostate cell
+    shortLabel prostate cell
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in prostate cell cell using )
     subGroups view=Transfrags cellType=prostate localization=cell rnaExtract=short
     type broadPeak
@@ -8171,7 +8172,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleus
+    shortLabel K562 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8185,7 +8186,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleus
+    shortLabel K562 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8199,7 +8200,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleus
+    shortLabel K562 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8213,7 +8214,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleus
+    shortLabel K562 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8227,7 +8228,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleus
+    shortLabel K562 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8241,7 +8242,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleus
+    shortLabel K562 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8255,7 +8256,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleus
+    shortLabel K562 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8269,7 +8270,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleus
+    shortLabel K562 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8283,7 +8284,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 nucleus
+    shortLabel K562 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell nucleus using )
     subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8297,7 +8298,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 cytosol
+    shortLabel GM12878 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8311,7 +8312,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 cytosol
+    shortLabel GM12878 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8325,7 +8326,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 cytosol
+    shortLabel GM12878 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8339,7 +8340,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 cytosol
+    shortLabel GM12878 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8353,7 +8354,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 cytosol
+    shortLabel GM12878 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8367,7 +8368,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 cytosol
+    shortLabel GM12878 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8381,7 +8382,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 cytosol
+    shortLabel GM12878 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8395,7 +8396,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 cytosol
+    shortLabel GM12878 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8409,7 +8410,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8423,7 +8424,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8437,7 +8438,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8451,7 +8452,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8465,7 +8466,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8479,7 +8480,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8493,7 +8494,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8507,7 +8508,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8521,7 +8522,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8535,7 +8536,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8549,7 +8550,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8563,7 +8564,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 cytosol
+    shortLabel K562 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell cytosol using )
     subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8577,7 +8578,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 nucleus
+    shortLabel GM12878 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8591,7 +8592,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 nucleus
+    shortLabel GM12878 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8605,7 +8606,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 nucleus
+    shortLabel GM12878 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8619,7 +8620,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 nucleus
+    shortLabel GM12878 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8633,7 +8634,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 nucleus
+    shortLabel GM12878 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8647,7 +8648,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 nucleus
+    shortLabel GM12878 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8661,7 +8662,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 nucleus
+    shortLabel GM12878 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8675,7 +8676,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 nucleus
+    shortLabel GM12878 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8689,7 +8690,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878NucleusShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 nucleus
+    shortLabel GM12878 nucleus
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell nucleus using )
     subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
     type broadPeak
@@ -8703,7 +8704,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 polysome
+    shortLabel K562 polysome
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell polysome using )
     subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=short
     type broadPeak
@@ -8717,7 +8718,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 polysome
+    shortLabel K562 polysome
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell polysome using )
     subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=short
     type broadPeak
@@ -8731,7 +8732,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsK562PolysomeShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short K562 polysome
+    shortLabel K562 polysome
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in K562 cell polysome using )
     subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=short
     type broadPeak
@@ -8745,7 +8746,7 @@ wgEncode 1
 
     track wgEncodeCshlRnaSeqTransfragsGm12878CytosolShort
     subTrack wgEncodeCshlRnaSeq
-    shortLabel short GM12878 cytosol
+    shortLabel GM12878 cytosol
     longLabel ENCODE CSHL RNA-Seq Transfrags (short in GM12878 cell cytosol using )
     subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
     type broadPeak
@@ -8756,6 +8757,7 @@ wgEncode 1
     rnaExtract short
     localization cytosol
     cell GM12878
+
 
 track wgEncodeHudsonalphaMethylSeq
 compositeTrack on
