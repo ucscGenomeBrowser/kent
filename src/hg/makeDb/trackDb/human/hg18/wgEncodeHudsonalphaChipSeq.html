@@ -2,7 +2,8 @@
 ChIP-Seq</h1>
 <a name="Description"></a><h2> Description </h2>
 <p>These tracks display binding sites of the specified transcription factors
-in the given cell types as identified by ChIP-Seq&nbsp;[1]. The ChIP-Seq method
+in the given cell types as identified by ChIP-Seq (see Johnson DS,
+<em>et al.</em>, 2007 and Fields S, 2007).  The ChIP-Seq method
 uses formaldehyde to cross-link DNA associated proteins to genomic DNA within
 living cells. The cross-linked cells are lysed and sonicated, releasing small
 soluble chromatin fragments. The chromatin fragments bound by specific or
@@ -49,7 +50,8 @@ tolerated; multiply mapped reads were discarded. To identify likely binding
 sites, Peak Calling was applied on the aligned sequence data sets using
 quantitative enrichment of sequence tags
 (<a href="http://mendel.stanford.edu/sidowlab/downloads/quest" TARGET=_blank
-title="http://mendel.stanford.edu/sidowlab/downloads/quest">QuEST</a>)&nbsp;[2].
+title="http://mendel.stanford.edu/sidowlab/downloads/quest">QuEST</a>). (See
+Valouev A, <em>et al.</em>, 2008.)
 QuEST is based on the kernel density estimation approach, which uses ChIP-Seq
 data to determine positions where protein complexes contact DNA. QuEST uses
 data in the form of genome coordinates ('tags') obtained from mapping several
@@ -61,7 +63,7 @@ positions in the reference genome corresponding to local maxima of the CDP with
 sufficient enrichment compared to the control data.
 </p>
 
-<h3> Validation</h3>
+<h2> Validation</h2>
 <p>Quantitative polymerase chain reaction (qPCR) assays can be used to
 validate the transcription factor binding sites found using ChIP-Seq. Regions
 of enriched read density reported by QuEST are reported as a single genomic
@@ -75,7 +77,7 @@ performed qPCR assays on biological replicate ChIP samples on both cell lines
 and recovered total input chromatin DNA. We calculated enrichment as a ratio of
 amount of target DNA over the average of a pair of negative control primers. We
 considered an assay as positive when it had a two-fold or greater enrichment of
-the average qPCR replicates&nbsp;[2].
+the average qPCR replicates (see Valouev A, <em>et al.</em>, 2008).
 </p>
 
 <a name="Credits"></a><h2> Credits </h2>
@@ -83,19 +85,21 @@ the average qPCR replicates&nbsp;[2].
 TARGET=_blank>Myers Lab</a> at the <a href='http://www.hudsonalpha.org/'
 TARGET=_blank>HudsonAlpha Institute for Biotechnology</a>.</p>
 <a name="References"></a><h2> References </h2>
-<p><a name='1'>1</a>. 
+<p> 
 Johnson DS, Mortazavi A, Myers RM, Wold B.
 <a href='http://www.sciencemag.org/cgi/content/full/316/5830/1497'
 TARGET=_blank>Genome-wide mapping of in vivo protein-DNA interactions</a>.
-Science. 2007 Jun 8;316(5830):1497-502. See also: Fields S.
-<a href='http://www.sciencemag.org/cgi/content/full/316/5830/1441'
-TARGET=_blank>Molecular biology. Site-seeing by sequencing</a>.
-Science. 2007 Jun 8;316(5830):1441-2.
+<em>Science</em>. 2007 Jun 8;316(5830):1497-502.
 </p>
-<p><a name='2'>2</a>.
+<p>
+Fields S. <a href='http://www.sciencemag.org/cgi/content/full/316/5830/1441'
+TARGET=_blank>Molecular biology. Site-seeing by sequencing</a>.
+<em>Science</em>. 2007 Jun 8;316(5830):1441-2.
+</p>
+<p>
 Valouev A, Johnson DS, Sundquist A, Medina C, Anton E, Batzoglou S, Myers RM,
 Sidow A.
 <a href='http://www.nature.com/nmeth/journal/v5/n9/abs/nmeth.1246.html'
 TARGET=_blank>Genome-wide analysis of transcription factor binding sites based
-on ChIP-Seq data</a>. Nat Methods. 2008 Aug 17. 
+on ChIP-Seq data</a>. <em>Nat Methods</em>. 2008 Sep;5(9):829-834. Epub 2008 Aug 17. 
 </p>
