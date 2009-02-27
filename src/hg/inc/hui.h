@@ -850,6 +850,25 @@ void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, i
 /* If scoreMin has been set, let user select the shade of gray for that score, in case
  * the default is too light to see or darker than necessary. */
 
+struct dyString *dyAddFilterAsInt(struct cart *cart, struct trackDb *tdb,
+       struct dyString *extraWhere,char *filter,char *defaultVal, char*field, boolean *and);
+/* creates the where clause condition to support numeric int filter range.
+   Filters are expected to follow
+        {fiterName}: trackDb min:max values
+        {filterName}Min: cart variable
+        {filterName}Max: cart variable Optional (and considered non-existent if -99)
+        {filterName}Limits: trackDb allowed range "0:1000" Optional
+   The and param allows stringing multiple where clauses together */
+
+struct dyString *dyAddFilterAsDouble(struct cart *cart, struct trackDb *tdb,
+       struct dyString *extraWhere,char *filter,char *defaultVal, char*field, boolean *and);
+/* creates the where clause condition to support  numeric double filters.
+   Filters are expected to follow
+        {fiterName}: trackDb min value;
+        {filterName}Min: cart variable;
+        {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
+   The and param allows stringing multiple where clauses together */
+
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
 
