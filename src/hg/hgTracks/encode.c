@@ -3,13 +3,14 @@
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
+#include "hui.h"
 #include "hgTracks.h"
 #include "customTrack.h"
 #include "encode.h"
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encode.c,v 1.17 2009/02/21 02:49:25 aamp Exp $";
+static char const rcsid[] = "$Id: encode.c,v 1.18 2009/02/27 19:08:45 tdreszer Exp $";
 
 #define SMALLBUF 128
 
@@ -154,41 +155,15 @@ lf->components = sfList;
 return lf;
 }
 
+
 static char *encodePeakFilter(char *trackName, struct trackDb *tdb, boolean isCustom)
 {
 struct dyString *extraWhere = newDyString(128);
-boolean useScore = FALSE;
-if (!trackDbSettingClosestToHomeOn(tdb, "filterPvalQval"))
-    useScore = TRUE;
-if (useScore && cartVarExistsAnyLevel(cart,tdb,FALSE,ENCODE_PEAK_SCORE_FILTER_SUFFIX))
-    {
-    int score = cartUsualIntClosestToHome(cart,tdb,FALSE,ENCODE_PEAK_SCORE_FILTER_SUFFIX, -1);
-    if ((score < 0) || (score > 1000))
-        {
-        warn("invalid score %d set in filter for track %s", score, trackName);
-        cartRemoveVariableClosestToHome(cart,tdb,FALSE,ENCODE_PEAK_SCORE_FILTER_SUFFIX);
-        }
-    else
-    	dyStringPrintf(extraWhere, "(score >= %d)", score);
-    }
-else if (!useScore)
-    {
-    double pVal = cartUsualDoubleClosestToHome(cart,tdb,FALSE,ENCODE_PEAK_PVAL_FILTER_SUFFIX, 0);
-    if (pVal < 0)
-        {
-        warn("invalid p-value %lf set in filter for track %s", pVal, trackName);
-        cartRemoveVariableClosestToHome(cart,tdb,FALSE,ENCODE_PEAK_PVAL_FILTER_SUFFIX);
-        pVal = 0;
-        }
-    double qVal = cartUsualDoubleClosestToHome(cart,tdb,FALSE,ENCODE_PEAK_QVAL_FILTER_SUFFIX, 0);
-    if ((qVal < 0) || (qVal > 1))
-        {
-        warn("invalid q-value %lf set in filter for track %s", qVal, trackName);
-        cartRemoveVariableClosestToHome(cart,tdb,FALSE,ENCODE_PEAK_QVAL_FILTER_SUFFIX);
-        qVal = 0;
-        }
-    dyStringPrintf(extraWhere, "((pValue >= %f) or (pValue = -1)) and ((qValue >= %f) or (qValue = -1))", pVal, qVal);
-    }
+boolean and = FALSE;
+extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,SCORE_FILTER,"0:1000","score",&and);
+extraWhere = dyAddFilterAsDouble(cart,tdb,extraWhere,SIGNAL_FILTER,NULL,"signalValue",&and);
+extraWhere = dyAddFilterAsDouble(cart,tdb,extraWhere,PVALUE_FILTER,NULL,"pValue",&and);
+extraWhere = dyAddFilterAsDouble(cart,tdb,extraWhere,QVALUE_FILTER,NULL,"qValue",&and);
 
 if (sameString(extraWhere->string, ""))
     return NULL;

@@ -20,7 +20,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.159 2009/02/26 03:50:06 tdreszer Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.160 2009/02/27 19:07:45 tdreszer Exp $";
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -2533,16 +2533,15 @@ return cartPriorities;
 
 static void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed)
 {
-/* char *scoreMax; */
-/* int maxScore; */
 switch(cType)
     {
     case cfgBedScore:
-/*     case cfgPeak: */
-/*                         scoreMax = trackDbSettingClosestToHome(tdb, "scoreFilterMax"); */
-/*                         maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000); */
-/*                         scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed); */
-/*                         break; */
+                        {
+                        char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
+                        int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
+                        scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
+                        }
+                        break;
     case cfgPeak:
                         encodePeakCfgUi(cart,tdb,prefix,title,boxed);
                         break;
@@ -3129,36 +3128,179 @@ if (scoreCtString != NULL)
 cfgEndBox(boxed);
 }
 
+static void showScoreLimits(struct trackDb *tdb, char *preText,char *scoreName,char *defaults)
+{
+char scoreLimitName[64];
+safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _LIMITS);
+char *setting = trackDbSettingClosestToHomeOrDefault(tdb, scoreLimitName,defaults);
+if(setting)
+    {
+    char *min = strSwapChar(cloneString(setting),':',0);
+    char *max = min + strlen(min) + 1;
+    printf("%s(%s to %s)",(preText!=NULL?preText:""),min,max);
+    freeMem(min);
+    }
+}
+static boolean showScoreFilter(struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
+                               boolean compositeLevel,char *name, char *title, char *label,
+                               char *scoreName,char *defaults,char *limitsDefault)
+/* Shows a score filter control with minimum value and optional range */
+{
+char *setting = trackDbSettingClosestToHomeOrDefault(tdb, scoreName,defaults);//"0.0");
+if(setting)
+    {
+    if(*opened == FALSE)
+        {
+        cfgBeginBoxAndTitle(boxed, title);
+        puts("<TABLE>");
+        *opened = TRUE;
+        }
+    printf("<TR><TD align='right'><B>%s:</B><TD align='left'>",label);
+    char varName[256];
+    safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MIN);
+    cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), setting), 4);
+    showScoreLimits(tdb,"<TD align='left' colspan=3> ",scoreName,limitsDefault);
+    puts("</TR>");
+    return TRUE;
+    }
+return FALSE;
+}
+struct dyString *dyAddFilterAsInt(struct cart *cart, struct trackDb *tdb,
+       struct dyString *extraWhere,char *filter,char *defaultVal, char*field, boolean *and)
+/* creates the where clause condition to support numeric int filter range.
+   Filters are expected to follow
+        {fiterName}: trackDb min:max values
+        {filterName}Min: cart variable
+        {filterName}Max: cart variable Optional (and considered non-existent if -99)
+        {filterName}Limits: trackDb allowed range "0:1000" Optional
+   The and param allows stringing multiple where clauses together */
+{
+char *setting = trackDbSettingClosestToHome(tdb, filter);
+if(setting)
+    {
+    boolean invalid = FALSE;
+    char filterLimitName[64];
+    safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _LIMITS);
+    setting = trackDbSettingClosestToHomeOrDefault(tdb, filterLimitName,defaultVal);
+    safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MAX);
+    int max = cartUsualIntClosestToHome(cart,tdb,FALSE,filterLimitName, 0);
+    safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MIN);
+    int min = cartUsualIntClosestToHome(cart,tdb,FALSE,filterLimitName, -99);
+    if(setting)
+        {
+        char *minStr = strSwapChar(cloneString(setting),':',0);
+        char *maxStr = minStr + strlen(minStr) + 1;
+        if(min < atof(minStr) || min > atof(maxStr)
+        || (max != -99 && (max < atof(minStr) || max > atof(maxStr))))
+            {
+            invalid = TRUE;
+            if(max == -99)
+                warn("invalid filter by %s: %d is outside of range (%s to %s) for track %s", field, min, minStr, maxStr, tdb->tableName);
+            else
+                warn("invalid filter by %s: min:%d and max:%d is outside of range (%s to %s) for track %s", field, min, max, minStr, maxStr, tdb->tableName);
+            }
+        freeMem(minStr);
+        if(invalid)
+            {
+            cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
+            safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MAX);  // Remake name
+            cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
+            }
+        else
+            {
+            if(max == -99)
+                    dyStringPrintf(extraWhere, "%s(%s >= %d)", (*and?" and ":""),field,min);
+            else
+                    dyStringPrintf(extraWhere, "%s(%s BETWEEN %d and %d)", (*and?" and ":""),field,min,max);
+            *and=TRUE;
+            }
+        }
+    }
+return extraWhere;
+}
+
+struct dyString *dyAddFilterAsDouble(struct cart *cart, struct trackDb *tdb,
+       struct dyString *extraWhere,char *filter,char *defaultVal, char*field, boolean *and)
+/* creates the where clause condition to support  numeric double filters.
+   Filters are expected to follow
+        {fiterName}: trackDb min value;
+        {filterName}Min: cart variable;
+        {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
+   The and param allows stringing multiple where clauses together */
+{
+char *setting = trackDbSettingClosestToHome(tdb, filter);
+if(setting)
+    {
+    boolean invalid = FALSE;
+    char filterLimitName[64];
+    safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _LIMITS);
+    setting = trackDbSettingClosestToHomeOrDefault(tdb, filterLimitName,defaultVal);
+    safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MIN);
+    double value = cartUsualDoubleClosestToHome(cart,tdb,FALSE,filterLimitName, 0);
+    if(setting)
+        {
+        char *minStr = strSwapChar(cloneString(setting),':',0);
+        char *maxStr = minStr + strlen(minStr) + 1;
+        if(value < atof(minStr) || value > atof(maxStr))
+            {
+            invalid = TRUE;
+            warn("invalid filter by %s: %lf is outside of range (%s to %s) for track %s", field, value, minStr, maxStr, tdb->tableName);
+            }
+        freeMem(minStr);
+        }
+    else if (value < 0)
+        {
+        warn("invalid filter by %s: %lf is less than 0 for track %s", field,value, tdb->tableName);
+        invalid = TRUE;
+        }
+    if(invalid)
+        cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
+    else
+        {
+        dyStringPrintf(extraWhere, "%s((%s >= %f) or (%s = -1))", (*and?" and ":""),field,value,field);
+        *and=TRUE;
+        }
+    }
+return extraWhere;
+}
+
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
 {
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
-char varName[256];
-char *setting;
-cfgBeginBoxAndTitle(boxed, title);
-puts("<TABLE>");
-setting = trackDbSettingClosestToHome(tdb, "filterPvalQval");
-if (setting)
+boolean opened = FALSE;
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Q-Value",          QVALUE_FILTER,NULL,NULL);//,"0.0",NULL);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum P-Value (-log 10)",PVALUE_FILTER,NULL,NULL);//,"0.0",NULL);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Signal value",     SIGNAL_FILTER,NULL,NULL);//,"0.0",NULL);
+
+char *setting = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,NULL);//"0:1000");
+if(setting)
     {
-    puts("<TR><TD align='right'><B>Minimum P-Value (-log 10):</B><TD align='left'>");
-    safef(varName, sizeof(varName), "%s.%s", name, ENCODE_PEAK_PVAL_FILTER_SUFFIX);
-    cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, ENCODE_PEAK_PVAL_FILTER_SUFFIX, "0.00"), 6);
-    puts("</TD></TR>\n");
-    puts("<TR><TD align='right'><B>Minimum Q-Value:</B><TD align='left'>");
-    safef(varName, sizeof(varName), "%s.%s", name, ENCODE_PEAK_QVAL_FILTER_SUFFIX);
-    cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, ENCODE_PEAK_QVAL_FILTER_SUFFIX, "0.00"), 6);
-    puts("</TD></TR>\n");
+    if(!opened)
+        {
+        cfgBeginBoxAndTitle(boxed, title);
+        puts("<TABLE>");
+        opened = TRUE;
+        }
+    char varName[256];
+    char *min = strSwapChar(cloneString(setting),':',0);
+    char *max = min + strlen(min) + 1;
+    puts("<TR><TD align='right'><B>Filter score range:  min:</B><TD align='left'>");
+    safef(varName, sizeof(varName), "%s.%s%s", name, SCORE_FILTER,_MIN);
+    cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), min), 4);
+    puts("<TD align='right'><B>max:</B><TD align='left'>");
+    safef(varName, sizeof(varName), "%s.%s%s", name, SCORE_FILTER,_MAX);
+    cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, varName + (strlen(name) + 1), max), 4);
+    showScoreLimits(tdb, "<TD align='left' colspan=3> ",SCORE_FILTER,"0:1000");
+    puts("</TR>");
+    if(trackDbSettingClosestToHome(tdb, SCORE_MIN) != NULL)
+        scoreGrayLevelCfgUi(cart, tdb, name, 1000);
     }
-else
+if(opened)
     {
-    safef(varName, sizeof(varName), "%s.%s", name, ENCODE_PEAK_SCORE_FILTER_SUFFIX);
-    puts("<TR><TD align='right'><B>Minimum score (0-1000):</B><TD align='left'>");
-    cgiMakeTextVar(varName, cartUsualStringClosestToHome(cart, tdb, compositeLevel, ENCODE_PEAK_SCORE_FILTER_SUFFIX, "0"), 4);
-    int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
-    scoreGrayLevelCfgUi(cart, tdb, tdb->tableName, scoreMax);
+    puts("</TABLE>");
+    cfgEndBox(boxed);
     }
-puts("</TABLE>");
-cfgEndBox(boxed);
 }
 
 void genePredCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
