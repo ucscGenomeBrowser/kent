@@ -608,7 +608,7 @@ orderUrl http://store.crpinc.com/pdfdatasheet.aspx?catalogno=MMS-128P
 vendorName Covance
 vendorId MMS-128P
 
-term SREBP1
+term SREBP1A
 type Antibody
 targetDescription Sterol regulatory element binding transcription factor 1
 antibodyDescription Rabbit polyclonal
