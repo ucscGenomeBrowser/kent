@@ -2778,7 +2778,7 @@ wgEncode 1
     track wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase Raw 1
+    shortLabel GM128 DNase 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in GM12878 cells)
     subGroups view=rRAW EXP=DNase cellType=GM12878
     type wig 0.00 10.46
@@ -2791,7 +2791,7 @@ wgEncode 1
     track wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase Raw 2
+    shortLabel GM128 DNase 2
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in GM12878 cells)
     subGroups view=rRAW EXP=DNase cellType=GM12878
     type wig 0.00 9.77
@@ -2804,7 +2804,7 @@ wgEncode 1
     track wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 DNase Raw 3
+    shortLabel GM128 DNase 3
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in GM12878 cells)
     subGroups view=rRAW EXP=DNase cellType=GM12878
     type wig 0.00 39.64
@@ -2865,7 +2865,7 @@ wgEncode 1
     track wgEncodeUncFAIREseqRawSignalRep1Gm12878
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 FAIRE Raw 1
+    shortLabel GM128 FAIRE 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 1 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 0.00 37.13
@@ -2881,7 +2881,7 @@ wgEncode 1
     track wgEncodeUncFAIREseqRawSignalRep2Gm12878
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 FAIRE Raw 2
+    shortLabel GM128 FAIRE 2
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 2 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 0.00 46.48
@@ -2897,7 +2897,7 @@ wgEncode 1
     track wgEncodeUncFAIREseqRawSignalRep3Gm12878
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 FAIRE Raw 3
+    shortLabel GM128 FAIRE 3
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 3 (in GM12878 cells)
     subGroups view=rRAW EXP=FAIRE cellType=GM12878
     type wig 0.00 39.94
@@ -2964,7 +2964,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 CTCF Raw 1
+    shortLabel GM128 CTCF 1
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 1 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 0.00 16.91
@@ -2981,7 +2981,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 CTCF Raw 2
+    shortLabel GM128 CTCF 2
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 2 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 0.00 19.41
@@ -2998,7 +2998,7 @@ wgEncode 1
     track wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel GM128 CTCF Raw 3
+    shortLabel GM128 CTCF 3
     longLabel ENCODE Open Chromatin, UT ChIP-seq Raw Signal Rep 3 (CTCF in GM12878 cells)
     subGroups view=rRAW EXP=IP-CTCF cellType=GM12878
     type wig 0.00 17.14
@@ -3087,7 +3087,7 @@ wgEncode 1
     track wgEncodeDukeDNaseSeqRawSignalRep1K562
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel K562 DNase Raw 1
+    shortLabel K562 DNase 1
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 1 (in K562 cells)
     subGroups view=rRAW EXP=DNase cellType=K562
     type wig 0.00 12.92
@@ -3100,7 +3100,7 @@ wgEncode 1
     track wgEncodeDukeDNaseSeqRawSignalRep2K562
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel K562 DNase Raw 2
+    shortLabel K562 DNase 2
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 2 (in K562 cells)
     subGroups view=rRAW EXP=DNase cellType=K562
     type wig 0.00 37.72
@@ -3113,7 +3113,7 @@ wgEncode 1
     track wgEncodeDukeDNaseSeqRawSignalRep3K562
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel K562 DNase Raw 3
+    shortLabel K562 DNase 3
     longLabel ENCODE Open Chromatin, Duke DNase-seq Raw Signal Rep 3 (in K562 cells)
     subGroups view=rRAW EXP=DNase cellType=K562
     type wig 0.00 34.81
@@ -3170,7 +3170,7 @@ wgEncode 1
     track wgEncodeUncFAIREseqRawSignalRep1K562
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel K562 FAIRE Raw 1
+    shortLabel K562 FAIRE 1
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 1 (in K562 cells)
     subGroups view=rRAW EXP=FAIRE cellType=K562
     type wig 0.00 74.86
@@ -3183,7 +3183,7 @@ wgEncode 1
     track wgEncodeUncFAIREseqRawSignalRep2K562
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel K562 FAIRE Raw 2
+    shortLabel K562 FAIRE 2
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 2 (in K562 cells)
     subGroups view=rRAW EXP=FAIRE cellType=K562
     type wig 0.00 63.65
@@ -3196,7 +3196,7 @@ wgEncode 1
     track wgEncodeUncFAIREseqRawSignalRep3K562
     release alpha
     subTrack wgEncodeChromatinMap
-    shortLabel K562 FAIRE Raw 3
+    shortLabel K562 FAIRE 3
     longLabel ENCODE Open Chromatin, UNC FAIRE-seq Raw Signal Rep 3 (in K562 cells)
     subGroups view=rRAW EXP=FAIRE cellType=K562
     type wig 0.00 67.60
@@ -6830,7 +6830,7 @@ wgEncode 1
 
 track wgEncodeHudsonalphaChipSeq
 compositeTrack on
-shortLabel HudsonAlpha TFBS
+shortLabel HAIB TFBS
 longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
 group regulation
 # subGroup1 view Views Sites=Sites Counts=Counts
@@ -7974,7 +7974,7 @@ wgEncode 1
 
 track wgEncodeHudsonalphaMethyl27
 compositeTrack on
-shortLabel HudsonAlpha Met
+shortLabel HAIB Methyl27
 longLabel ENCODE HudsonAlpha CpG Methylation by Illumina Methyl27
 group regulation
 subGroup1 view Views Peaks=Peaks
@@ -7995,7 +7995,7 @@ wgEncode 1
     track wgEncodeHudsonalphaMethyl27HepG2r1
     release alpha
     subTrack wgEncodeHudsonalphaMethyl27
-    shortLabel Methyl27HepG2r1
+    shortLabel HepG2 Methyl27 1
     longLabel ENCODE HudsonAlpha Methyl27 HepG2 replicate 1
     subGroups view=Peaks replicate=RP1 cellType=HepG2
     type bed 12
@@ -8007,7 +8007,7 @@ wgEncode 1
     track wgEncodeHudsonalphaMethyl27HepG2r2
     release alpha
     subTrack wgEncodeHudsonalphaMethyl27
-    shortLabel Methyl27HepG2r1
+    shortLabel HepG2 Methyl27 2
     longLabel ENCODE HudsonAlpha Methyl27 HepG2 replicate 2
     subGroups view=Peaks replicate=RP2 cellType=HepG2
     type bed 12
@@ -8020,7 +8020,7 @@ wgEncode 1
     track wgEncodeHudsonalphaMethyl27GM12878r1
     release alpha
     subTrack wgEncodeHudsonalphaMethyl27
-    shortLabel Methyl27GM12878r1
+    shortLabel GM128 Methyl27 1
     longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 1
     subGroups view=Peaks replicate=RP1 cellType=GM12878
     type bed 12
@@ -8032,7 +8032,7 @@ wgEncode 1
     track wgEncodeHudsonalphaMethyl27GM12878r2
     release alpha
     subTrack wgEncodeHudsonalphaMethyl27
-    shortLabel Methyl27GM12878r1
+    shortLabel GM128 Methyl27 2
     longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 2
     subGroups view=Peaks replicate=RP2 cellType=GM12878
     type bed 12
@@ -8044,7 +8044,7 @@ wgEncode 1
     track wgEncodeHudsonalphaMethyl27K562r1
     release alpha
     subTrack wgEncodeHudsonalphaMethyl27
-    shortLabel Methyl27K562r1
+    shortLabel K562 Methyl27 1
     longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 1
     subGroups view=Peaks replicate=RP1 cellType=K562
     type bed 12
@@ -8056,7 +8056,7 @@ wgEncode 1
     track wgEncodeHudsonalphaMethyl27K562r2
     release alpha
     subTrack wgEncodeHudsonalphaMethyl27
-    shortLabel Methyl27K562r1
+    shortLabel K562 Methyl27 2
     longLabel ENCODE HudsonAlpha Methyl27 GM12878 replicate 2
     subGroups view=Peaks replicate=RP2 cellType=K562
     type bed 12
@@ -8085,7 +8085,7 @@ type bed 9 +
     track wgEncodeHudsonalphaCnvGM12878Rep1
     release alpha
     subTrack wgEncodeHudsonalphaCnv
-    shortLabel GM128 CNV Rep1
+    shortLabel GM12878 CNV 1
     longLabel ENCODE Copy Number Variation (GM12878 cells, Rep1)
     subGroups replicate=Rep1 cellType=GM12878
     cell GM12878
@@ -8095,14 +8095,14 @@ type bed 9 +
     track wgEncodeHudsonalphaCnvGM12878Rep2
     release alpha
     subTrack wgEncodeHudsonalphaCnv
-    shortLabel GM128 CNV Rep2
+    shortLabel GM12878 CNV 2
     longLabel ENCODE Copy Number Variation (GM12878 cells, Rep2)
     subGroups replicate=Rep2 cellType=GM12878
     cell GM12878
     priority 2
 
     track wgEncodeHudsonalphaCnvK562Rep1
-    shortLabel K562 CNV Rep1
+    shortLabel K562 CNV 1
     longLabel ENCODE Copy Number Variation (K562 cells, Rep1)
     release alpha
     subTrack wgEncodeHudsonalphaCnv
@@ -8111,7 +8111,7 @@ type bed 9 +
     priority 3
 
     track wgEncodeHudsonalphaCnvK562Rep2
-    shortLabel K562 CNV Rep2
+    shortLabel K562 CNV 2
     longLabel ENCODE Copy Number Variation (K562 cells, Rep2)
     release alpha
     subTrack wgEncodeHudsonalphaCnv
@@ -8120,7 +8120,7 @@ type bed 9 +
     priority 4
 
     track wgEncodeHudsonalphaCnvHepG2Rep1
-    shortLabel HepG2 CNV Rep1
+    shortLabel HepG2 CNV 1
     longLabel ENCODE Copy Number Variation (HepG2 cells, Rep1)
     release alpha
     subTrack wgEncodeHudsonalphaCnv
@@ -8129,7 +8129,7 @@ type bed 9 +
     priority 5
 
     track wgEncodeHudsonalphaCnvHepG2Rep2
-    shortLabel HepG2 CNV Rep2
+    shortLabel HepG2 CNV 2
     longLabel ENCODE Copy Number Variation (HepG2 cells, Rep2)
     release alpha
     subTrack wgEncodeHudsonalphaCnv
@@ -8761,7 +8761,7 @@ wgEncode 1
 
 track wgEncodeHudsonalphaMethylSeq
 compositeTrack on
-shortLabel HudsonAlpha Methyl-seq
+shortLabel HAIB Methyl-seq
 longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
 subGroup1 view Views Regions=Regions
